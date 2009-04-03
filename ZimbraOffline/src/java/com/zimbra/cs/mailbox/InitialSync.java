@@ -893,7 +893,15 @@ public class InitialSync {
                 OfflineLog.offline.warn("initial: no blob available for contact " + id);
             }
         }
-        ParsedContact pc = new ParsedContact(fields, blob);
+        
+        ParsedContact pc;
+        try {
+            pc = new ParsedContact(fields, blob);
+        } catch (ServiceException e) {
+            OfflineLog.offline.debug("contact parse error: "  + elt.toString());
+            OfflineLog.offline.warn("unable to parse contact entry. item skipped: " + e.getMessage());
+            return;
+        }
 
         CreateContact redo = new CreateContact(ombx.getId(), folderId, pc, tags);
         redo.setContactId(id);
