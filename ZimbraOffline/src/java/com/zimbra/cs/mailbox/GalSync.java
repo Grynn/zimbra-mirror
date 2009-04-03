@@ -39,6 +39,7 @@ import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.index.queryparser.ParseException;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
+import com.zimbra.common.util.Pair;
 
 import org.dom4j.ElementHandler;
 import org.dom4j.ElementPath;
@@ -53,10 +54,12 @@ public class GalSync {
         private OfflineAccount galAccount;
         private boolean fullSync;
         private boolean trace;        
-        private LocalMailbox galMbox;
+        private Mailbox galMbox;
         private Mailbox.OperationContext context;
         private Exception exception = null;       
         private String token = null;
+        private int syncFolder;
+        private int dropFolder;
         
         public SaxHandler(OfflineAccount galAccount, boolean fullSync, boolean trace) {
             this.galAccount = galAccount;
@@ -70,6 +73,10 @@ public class GalSync {
         
         public Exception getException() {
             return exception;
+        }
+        
+        public int getDropFolder() {
+            return dropFolder;
         }
         
         public void onStart(ElementPath elPath) { //TODO: add trace logging; 
@@ -86,11 +93,14 @@ public class GalSync {
             }
 
             try {
-                galMbox = (LocalMailbox) MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
+                galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
                 context = new Mailbox.OperationContext(galMbox);
                 if (fullSync) {
-                    OfflineLog.offline.debug("Offline GAL full sync requested. Clearing current GAL folder: " + galAccount.getName());
-                    galMbox.emptyFolder(context, Mailbox.ID_FOLDER_CONTACTS, true);
+                    OfflineLog.offline.debug("Offline GAL full sync requested: " + galAccount.getName());
+                    Pair<Integer, Integer> pair = OfflineGal.getSyncFolders(galMbox, context);
+                    syncFolder = pair.getSecond().intValue();
+                    dropFolder = pair.getFirst().intValue();
+                    galMbox.emptyFolder(context, syncFolder, false);
                 }
             } catch (ServiceException e) {
                 exception = e;
@@ -139,7 +149,7 @@ public class GalSync {
                     String ctime, mtime;
                     if (fullSync || ((ctime = map.get("createTimeStamp")) != null &&
                         (mtime = map.get("modifyTimeStamp")) != null && mtime.equals(ctime))) {
-                        galMbox.createContact(context, contact, Mailbox.ID_FOLDER_CONTACTS, null);
+                        galMbox.createContact(context, contact, syncFolder, null);
                         OfflineLog.offline.debug("Offline GAL contact created: dn=" + dn);
                     } else {
                         byte[] types = new byte[1];
@@ -151,7 +161,7 @@ public class GalSync {
                                 galMbox.modifyContact(context, zqr.getNext().getItemId(), contact);
                                 OfflineLog.offline.debug("Offline GAL contact modified: dn=" + dn);
                             } else {
-                                galMbox.createContact(context, contact, Mailbox.ID_FOLDER_CONTACTS, null);
+                                galMbox.createContact(context, contact, syncFolder, null);
                                 OfflineLog.offline.debug("Offline GAL contact created: dn=" + dn);
                             }
                         } finally {
@@ -243,9 +253,6 @@ public class GalSync {
         
         OfflineAccount galAccount = ensureGalAccountExists(account);
         long lastFullSync = galAccount.getLongAttr(OfflineConstants.A_offlineGalAccountLastFullSync, 0);
-        if (isOnRequest && lastFullSync > 0)
-            return;
-        
         syncMan.syncStart(target);
         
         /* TODO: allow graceful shutdown of this thread once offline improves its shutdown routines
@@ -263,11 +270,24 @@ public class GalSync {
         String galAcctId = account.getAttr(OfflineConstants.A_offlineGalAccountId, false);
         OfflineProvisioning prov = (OfflineProvisioning)Provisioning.getInstance();
         OfflineAccount galAcct;
-        if (galAcctId != null && galAcctId.length() > 0 && (galAcct = (OfflineAccount)prov.get(AccountBy.id, galAcctId)) != null)
-            return galAcct;
-            
-        galAcct = prov.createGalAccount(account);
-        OfflineLog.offline.info("Offline GAL mailbox created: " + galAcct.getName());
+        if (galAcctId == null || galAcctId.length() == 0 || (galAcct = (OfflineAccount)prov.get(AccountBy.id, galAcctId)) == null) {
+            galAcct = prov.createGalAccount(account);
+            OfflineLog.offline.info("Offline GAL mailbox created: " + galAcct.getName());
+        }
+        
+        // ensure second alternating contact folder is created as well
+        Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAcct.getId(), false);
+        Mailbox.OperationContext octxt = new Mailbox.OperationContext(galMbox);
+        try {
+            galMbox.getFolderByPath(octxt, OfflineGal.SECOND_GAL_FOLDER);
+        } catch (MailServiceException.NoSuchItemException e) {
+            try {
+                galMbox.createFolder(octxt, OfflineGal.SECOND_GAL_FOLDER, (byte)0, MailItem.TYPE_CONTACT);
+            } catch (ServiceException se) {
+                prov.deleteGalAccount(account);
+                throw se;
+            }
+        }
         return galAcct;
     }
     
@@ -306,8 +326,14 @@ public class GalSync {
         OfflineProvisioning prov = (OfflineProvisioning)Provisioning.getInstance();
         prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountSyncToken, token);
         if (fullSync) {
+            Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
+            Mailbox.OperationContext octxt = new Mailbox.OperationContext(galMbox);
+            galMbox.emptyFolder(octxt, handler.getDropFolder(), false);
+                
             prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastFullSync,
                 Long.toString(System.currentTimeMillis()));
         }
-    }    
+    }
+    
+    
 }

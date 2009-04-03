@@ -27,11 +27,12 @@ import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.index.queryparser.ParseException;
 import com.zimbra.cs.mailbox.Contact;
-import com.zimbra.cs.mailbox.LocalMailbox;
+import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
+import com.zimbra.common.util.Pair;
 
 public class OfflineGal {
 
@@ -45,8 +46,10 @@ public class OfflineGal {
     public static final String A_zimbraCalResType = "zimbraCalResType";
     public static final String A_zimbraCalResLocationDisplayName = "zimbraCalResLocationDisplayName";
     
+    public static final String SECOND_GAL_FOLDER = "Contacts2";
+    
     private OfflineAccount mAccount;
-    private LocalMailbox mGalMbox = null;
+    private Mailbox mGalMbox = null;
     private Mailbox.OperationContext mOpContext = null;
     
     public OfflineGal(OfflineAccount account) {
@@ -57,7 +60,7 @@ public class OfflineGal {
         return mAccount;
     }
     
-    public LocalMailbox getGalMailbox() {
+    public Mailbox getGalMailbox() {
         return mGalMbox;
     }
         
@@ -74,7 +77,7 @@ public class OfflineGal {
         mGalMbox = null;
         
         if (galAcctId != null && galAcctId.length() > 0)
-            mGalMbox = (LocalMailbox)MailboxManager.getInstance().getMailboxByAccountId(galAcctId, false);
+            mGalMbox = MailboxManager.getInstance().getMailboxByAccountId(galAcctId, false);
         if (mGalMbox == null)
             throw OfflineServiceException.MISSING_GAL_MAILBOX(mAccount.getName());
        
@@ -82,20 +85,28 @@ public class OfflineGal {
         types[0] = MailItem.TYPE_CONTACT;
         mOpContext = new Mailbox.OperationContext(mGalMbox);
         
+        Folder fstFolder = mGalMbox.getFolderById(mOpContext, Mailbox.ID_FOLDER_CONTACTS);
+        Folder sndFolder = mGalMbox.getFolderByPath(mOpContext, SECOND_GAL_FOLDER);
+        Folder currFolder = fstFolder.getItemCount() > sndFolder.getItemCount() ? fstFolder : sndFolder;
+        
+        name = name.trim();
         String[] searchFields = {Contact.A_firstName, Contact.A_lastName, Contact.A_fullName,
             Contact.A_email, Contact.A_email2, Contact.A_email3};
-        String query = "";
-        for (int i = 0; i < searchFields.length; i++)
-            query = query + (i > 0 ? " OR #" : "#") + searchFields[i] + ":\"" + name + "*\"";
-        
-        if (type.equals(CTYPE_ACCOUNT)) {
-            query = "(" + query + ") AND #" + Contact.A_type + ":" + CTYPE_ACCOUNT;
-        } else {
-            query += " OR #" + A_zimbraCalResLocationDisplayName + ":\"" + name + "*\"";          
-            if (type.equals(CTYPE_RESOURCE))
-                query = "(" + query + ") AND #" + Contact.A_type + ":" + CTYPE_RESOURCE;
+        String query = "in:\"" + currFolder.getName() + "\"";
+        if (name.length() > 0 && !name.equals(".")) {
+            String qname = ":\"" + name + "*\"";
+            query += " AND (";
+            for (int i = 0; i < searchFields.length; i++)
+                query = query + (i > 0 ? " OR #" : "#") + searchFields[i] + qname;
+            if (!type.equals(CTYPE_ACCOUNT))
+                query = query + " OR #" + A_zimbraCalResLocationDisplayName + qname;
+            query += ")";
         }
-            
+        if (type.equals(CTYPE_ACCOUNT))
+            query = query + " AND #" + Contact.A_type + ":" + CTYPE_ACCOUNT;
+        else if (type.equals(CTYPE_RESOURCE))
+            query = query + " AND #" + Contact.A_type + ":" + CTYPE_RESOURCE;
+    
         try  {
             return mGalMbox.search(mOpContext, query, types, SortBy.SCORE_DESCENDING, limit);
         } catch (ParseException e) {
@@ -147,5 +158,15 @@ public class OfflineGal {
         } finally {
             zqr.doneWithSearchResults();
         }
+    }
+    
+    // Return: first  - id of current GAL folder, second - id of previous GAL folder
+    public static Pair<Integer, Integer> getSyncFolders(Mailbox galMbox, Mailbox.OperationContext context) throws ServiceException {
+        Folder fstFolder = galMbox.getFolderById(context, Mailbox.ID_FOLDER_CONTACTS);
+        Folder sndFolder = galMbox.getFolderByPath(context, SECOND_GAL_FOLDER);
+        int fstId = fstFolder.getId();
+        int sndId = sndFolder.getId();
+        return fstFolder.getItemCount() > 0 ? new Pair<Integer, Integer>(new Integer(fstId), new Integer(sndId)) :
+            new Pair<Integer, Integer>(new Integer(sndId), new Integer(fstId));
     }
 }
