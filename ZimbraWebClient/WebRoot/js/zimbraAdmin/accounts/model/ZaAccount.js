@@ -1182,27 +1182,28 @@ function(by, val) {
 	this.attrs = new Object();
 	this.initFromJS(resp.account[0]);
 
-	soapDoc = AjxSoapDoc.create("GetMailboxRequest", ZaZimbraAdmin.URN, null);
-	var mbox = soapDoc.set("mbox", "");
-	mbox.setAttribute("id", this.attrs[ZaItem.A_zimbraId]);
-	try {
-		//var getMbxCommand = new ZmCsfeCommand();
-		params = new Object();
-		params.soapDoc = soapDoc;	
-		var reqMgrParams ={
-			controller:ZaApp.getInstance().getCurrentController()
+	if(!AjxUtil.isEmpty(this.attrs[ZaAccount.A_mailHost])) {
+		soapDoc = AjxSoapDoc.create("GetMailboxRequest", ZaZimbraAdmin.URN, null);
+		var mbox = soapDoc.set("mbox", "");
+		mbox.setAttribute("id", this.attrs[ZaItem.A_zimbraId]);
+		try {
+			//var getMbxCommand = new ZmCsfeCommand();
+			params = new Object();
+			params.soapDoc = soapDoc;	
+			var reqMgrParams ={
+				controller:ZaApp.getInstance().getCurrentController()
+			}
+			resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetMailboxResponse;
+			
+			if(resp && resp.mbox && resp.mbox[0]) {
+				this.attrs[ZaAccount.A2_mbxsize] = resp.mbox[0].s;
+			}
+		} catch (ex) {
+			//show the error and go on
+			//we should not stop the Account from loading if some of the information cannot be acces
+			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccount.prototype.load", null, false);
 		}
-		resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetMailboxResponse;
-		
-		if(resp && resp.mbox && resp.mbox[0]) {
-			this.attrs[ZaAccount.A2_mbxsize] = resp.mbox[0].s;
-		}
-	} catch (ex) {
-		//show the error and go on
-		//we should not stop the Account from loading if some of the information cannot be acces
-		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccount.prototype.load", null, false);
-	}
-				
+	}				
 	this[ZaAccount.A2_confirmPassword] = null;
 	
 	var autoDispName;
