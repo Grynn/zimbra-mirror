@@ -177,7 +177,7 @@ function() {
 
 ZaMTA.prototype.initFromJS = function (obj, summary) {
 	this.name = obj.name;
-	this.id = obj.name;
+	this.id = obj.id;
 	if(obj.queue) {
 		var cnt = obj.queue.length;
 		for (var ix=0; ix < cnt; ix++) {
