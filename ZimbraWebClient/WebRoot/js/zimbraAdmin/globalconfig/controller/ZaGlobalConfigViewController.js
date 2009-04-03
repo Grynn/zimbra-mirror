@@ -212,27 +212,32 @@ function () {
 		a == ZaGlobalConfig.A_zimbraGalLdapFilterDef || /^_/.test(a) || a == ZaGlobalConfig.A_zimbraMtaBlockedExtension || a == ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension)
 			continue;
 
-		if (this._currentObject.attrs[a] != tmpObj.attrs[a] ) {
-			mods[a] = tmpObj.attrs[a];
+
+		if ((this._currentObject.attrs[a] != tmpObj.attrs[a]) && !(this._currentObject.attrs[a] == undefined && tmpObj.attrs[a] === "")) {
+			if(tmpObj.attrs[a] instanceof Array) {
+                if (!this._currentObject.attrs[a]) 
+                	this._currentObject.attrs[a] = [] ;
+                	
+                if( tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf()) {
+					mods[a] = tmpObj.attrs[a];
+				}
+			} else {
+				mods[a] = tmpObj.attrs[a];
+			}				
 		}
 	}
 	//check if blocked extensions are changed
-	var extIds = new Array();
-	if((tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] instanceof AjxVector) && tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] && tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].size()) {
-		var cnt = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].size();
-		for(var i = 0; i < cnt; i ++) {
-			extIds.push(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].get(i));
-		}
-		if((cnt > 0 && (!this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] || !this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].length))
-		|| (extIds.join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].join(""))) {
-			mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = extIds;
+	if(!AjxUtil.isEmpty(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])) {
+		if(
+			(
+				(!this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] || !this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].length))
+				|| (tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].join(""))
+			) {
+			mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension];
 		} 
 		if(cnt==0)
 			mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = "";	
-	} else if( 
-			(!tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] || 
-				(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] instanceof AjxVector && tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].size()<1)
-			) && (this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] && this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].length)	) {
+	} else if (AjxUtil.isEmpty(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])  && !AjxUtil.isEmpty(this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])) {
 		mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = "";
 	}		
 	
