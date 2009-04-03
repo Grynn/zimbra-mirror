@@ -105,6 +105,7 @@ sub save_jvm_core($$) {
                 qx($JMAP -heap:format=b $JAVA core.$mailboxd_pid);
             }
         }
+        unlink("core.$mailboxd_pid");
     } elsif (!$HAVE_GCORE) {
         logmsg "'gcore' (gdb) is not installed, will not collect JVM coredump\n";
     }
