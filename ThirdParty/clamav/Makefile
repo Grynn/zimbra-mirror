@@ -10,7 +10,7 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-CLAMAV_VERSION ?= 0.94.2
+CLAMAV_VERSION ?= 0.95
 
 CLAMAV_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/clamav/clamav-$(CLAMAV_VERSION).tgz
@@ -20,7 +20,7 @@ all: allclean build tar
 build:
 	(tar xzf src/clamav-$(CLAMAV_VERSION).tar.gz; \
 	cd clamav-$(CLAMAV_VERSION); \
-	patch -N -g0 -p1 < ../patches/fix-configure-93; \
+	patch -N -g0 -p1 < ../patches/fix-configure-95.patch; \
 	CFLAGS="-g -O2" \
 	./configure --prefix=/opt/zimbra/clamav-$(CLAMAV_VERSION) --mandir=/opt/zimbra/clamav-$(CLAMAV_VERSION)/man \
 	--with-user=zimbra --with-group=zimbra --disable-zlib-vcheck --disable-gcc-vcheck --disable-clamav; \
