@@ -261,6 +261,13 @@ public class SetHeaderFilter implements Filter {
             return;
         }
         
+        // CalDAV service discovery (bug 35008). 
+        // redirect any WebDAV request sent to the root URI "/" to "/dav/"
+        if (req.getPathInfo() == null && req.getMethod().equals("PROPFIND")) {
+        	resp.sendRedirect("/dav/");
+        	return;
+        }
+        
         String uri = req.getRequestURI();
 
         // before we check whether we can compress, let's check
