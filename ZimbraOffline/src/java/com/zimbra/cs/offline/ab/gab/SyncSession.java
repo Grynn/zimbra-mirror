@@ -45,6 +45,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.logging.Logger;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -53,6 +55,7 @@ import java.io.IOException;
 public class SyncSession {
     private final LocalData localData;
     private final GabService service;
+    private boolean reset;
 
     private static class Stats {
         int added, updated, deleted;
@@ -97,6 +100,11 @@ public class SyncSession {
     private void syncData() throws IOException, ServiceException {
         Mailbox mbox = localData.getMailbox();
         SyncState state = localData.loadState();
+        if (state == null) {
+            LOG.info("Sync state version change - resetting contact data");
+            state = new SyncState();
+            reset = true;
+        }
         // Get remote changes since last sync
         String rev = state.getLastRevision();
         DateTime lastSyncTime = rev != null ? DateTime.parseDateTime(rev) : null;
@@ -108,14 +116,19 @@ public class SyncSession {
         List<SyncRequest> contactRequests;
         int seq = state.getLastModSequence();
         synchronized (mbox) {
-            // Get local changes since last sync
-            Map<Integer, Change> contactChanges = localData.getContactChanges(seq);
+            // Get local changes since last sync (none if resetting)
+            Map<Integer, Change> contactChanges = reset ?
+                new HashMap<Integer, Change>() : localData.getContactChanges(seq);
             // Process remote contact changes
             processRemoteChanges(contacts.getEntries(), contactChanges, photos);
             // Process local changes and determine changes to push
             contactRequests = processLocalChanges(contactChanges.values());
             // Update local contact group changes
             processGroups(groups.getEntries());
+            // If resetting, then remove local contacts deleted remotely
+            if (reset) {
+                localData.deleteMissingContacts(getRemoteIds(contacts.getEntries()));
+            }
             state.setLastModSequence(mbox.getLastChangeID());
         }
         // Push local changes to remote
@@ -125,6 +138,14 @@ public class SyncSession {
             LOG.debug("Contact sync had %d error(s)", errors);
         }
         localData.saveState(state);
+    }
+
+    private Set<String> getRemoteIds(List<ContactEntry> entries) {
+        Set<String> ids = new HashSet<String>(entries.size());
+        for (ContactEntry entry : entries) {
+            ids.add(entry.getId());
+        }
+        return ids;
     }
 
     private void processGroups(List<ContactGroupEntry> entries)
@@ -141,8 +162,7 @@ public class SyncSession {
             }
         }
         // Get all contact mappings and update contact group dlist information
-        Collection<DataSourceItem> mappings =
-            localData.getAllMappingsInFolder(Mailbox.ID_FOLDER_CONTACTS);
+        Collection<DataSourceItem> mappings = localData.getAllContactMappings();
         for (DataSourceItem dsi : mappings) {
             if (Gab.isContactId(dsi.remoteId)) {
                 ContactEntry contact = getEntry(dsi, ContactEntry.class);
@@ -284,11 +304,12 @@ public class SyncSession {
                 stats.deleted++;
             } else if (!changes.containsKey(itemId)) {
                 // Remote contact was updated with no local change
-                ContactEntry lastEntry = getEntry(dsi, ContactEntry.class);
-                if (!entry.getUpdated().equals(lastEntry.getUpdated())) {
+                ContactEntry lastEntry = reset ? null : getEntry(dsi, ContactEntry.class);
+                if (reset || !entry.getUpdated().equals(lastEntry.getUpdated())) {
                     // Only update local entry if remote contact is different
-                    // from what we last pushed. This avoids modifying contacts
-                    // whose changes have just been pushed.
+                    // from what we last pushed (or we are resetting data).
+                    // This avoids modifying contacts whose changes have just
+                    // been pushed.
                     Contact contact = localData.getContact(itemId);
                     ParsedContact pc = new ParsedContact(contact);
                     ContactData cd = new ContactData(entry);

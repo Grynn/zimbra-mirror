@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
 
 public final class LocalData {
     private final OfflineDataSource ds;
@@ -148,16 +149,11 @@ public final class LocalData {
         }
     }
 
-    public Collection<DataSourceItem> getAllMappingsInFolder(int folderId)
+    public Collection<DataSourceItem> getAllContactMappings()
         throws ServiceException {
-        return DbDataSource.getAllMappingsInFolder(ds, folderId);
+        return DbDataSource.getAllMappingsInFolder(ds, Mailbox.ID_FOLDER_CONTACTS);
     }
 
-    public Collection<DataSourceItem> getMappingsForRemoteIdPrefix(int folderId, String prefix)
-        throws ServiceException {
-        return DbDataSource.getAllMappingsForRemoteIdPrefix(ds, folderId, prefix);
-    }
-    
     public Contact getContact(int id) throws ServiceException {
         return mbox.getContactById(CONTEXT, id);
     }
@@ -186,6 +182,15 @@ public final class LocalData {
         }
     }
 
+    public void deleteMissingContacts(Set<String> remoteIds) throws ServiceException {
+        for (DataSourceItem dsi : getAllContactMappings()) {
+            if (!remoteIds.contains(dsi.remoteId)) {
+                deleteMapping(dsi.itemId);
+                deleteContact(dsi.itemId);
+            }
+        }
+    }
+    
     public ContactGroup getContactGroup(int id) throws ServiceException {
         try {
             Contact contact = getContact(id);
@@ -220,15 +225,17 @@ public final class LocalData {
 
     public SyncState loadState() throws ServiceException {
         Metadata md = mbox.getConfig(CONTEXT, key);
-        if (md != null && !SyncState.isCompatibleVersion(md)) {
-            log.info("Sync state version change - resetting address book data");
-            resetData();
-            md = null;
+        if (md == null) {
+            log.debug("Created initial sync state for data source '%s'", ds.getName());
+            return new SyncState();
         }
-        SyncState ss = new SyncState();
-        ss.load(md);
-        log.debug("Loaded sync state for data source '%s': %s", ds.getName(), ss);
-        return ss;
+        if (SyncState.isCompatibleVersion(md)) {
+            SyncState ss = new SyncState();
+            ss.load(md);
+            log.debug("Loaded sync state for data source '%s': %s", ds.getName(), ss);
+            return ss;
+        }
+        return null;
     }
 
     public void saveState(SyncState ss) throws ServiceException {

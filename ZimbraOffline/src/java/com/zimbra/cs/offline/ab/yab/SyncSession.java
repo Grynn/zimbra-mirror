@@ -48,6 +48,9 @@ import java.util.List;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Collections;
+import java.util.Set;
+import java.util.HashSet;
 import java.io.IOException;
 
 import org.w3c.dom.Document;
@@ -78,8 +81,13 @@ public class SyncSession {
     }
 
     public void sync() throws IOException, YabException, ServiceException {
-        Mailbox mbox = localData.getMailbox();
         SyncState ss = localData.loadState();
+        if (ss == null) {
+            LOG.info("Sync state version change - resetting contact data");
+            reset();
+            return;
+        }
+        Mailbox mbox = localData.getMailbox();
         SyncRequest req;
         synchronized (mbox) {
             getLocalChanges(ss);
@@ -105,6 +113,48 @@ public class SyncSession {
         }
     }
 
+    /*
+     * Reset address book data. Replace local with remote contact data, but
+     * preserve non-Yahoo related contact fields. Also, remove all local
+     * contacts which have been deleted remotely, and reset sync state.
+     *
+     * Reset is done after a metadata version change or irrecoverable sync
+     * error. Reset does not depend on metadata format since the data is
+     * completely replaced.
+     */
+    private void reset() throws IOException, YabException, ServiceException {
+        // Fetch all remote contacts and merge with local data
+        Mailbox mbox = localData.getMailbox();
+        contactChanges = Collections.emptyMap();
+        SyncRequest req = getSyncRequest(0);
+        SyncResponse res = (SyncResponse) req.send();
+        synchronized (mbox) {
+            processContactResults(req.getEvents());
+            List<SyncResponseEvent> events = res.getEvents();
+            if (!events.isEmpty()) {
+                // Categories are not returned unless there are contact changes
+                processEvents(events);
+                processCategories(res.getCategories());
+            }
+            // Remove contacts which no longer exist remotely
+            localData.deleteMissingContacts(getRemoteIds(events));
+            SyncState ss = new SyncState();
+            // Save new sync state 
+            ss.setLastRevision(String.valueOf(res.getRevision()));
+            ss.setLastModSequence(mbox.getLastChangeID());
+        }
+    }
+
+    private static Set<String> getRemoteIds(List<SyncResponseEvent> events) {
+        Set<String> ids = new HashSet<String>(events.size());
+        for (SyncResponseEvent event : events) {
+            if (event.isAddContact() || event.isUpdateContact()) {
+                ids.add(RemoteId.contactId(event.getContactId()).toString());
+            }
+        }
+        return ids;
+    }
+    
     private void getLocalChanges(SyncState ss) throws ServiceException {
         contactChanges = localData.getContactChanges(ss.getLastModSequence());
         LOG.debug("Found %d local contact changes", contactChanges.size());
@@ -237,8 +287,7 @@ public class SyncSession {
             groups.put(cat.getId(), new ContactGroup(cat.getName()));
         }
         // Get all contact mappings and update contact group dlist information
-        Collection<DataSourceItem> mappings =
-            localData.getAllMappingsInFolder(Mailbox.ID_FOLDER_CONTACTS);
+        Collection<DataSourceItem> mappings = localData.getAllContactMappings();
         for (DataSourceItem dsi : mappings) {
             if (dsi.remoteId != null) {
                 RemoteId rid = RemoteId.parse(dsi.remoteId);
