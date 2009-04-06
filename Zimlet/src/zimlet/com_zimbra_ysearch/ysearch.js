@@ -1,4 +1,4 @@
-.c/*
+/*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Zimlets
  * Copyright (C) 2008, 2009 Zimbra, Inc.
