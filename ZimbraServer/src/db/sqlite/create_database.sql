@@ -327,6 +327,7 @@ END%
 -- Tracks local MailItem created from remote objects via DataSource
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.data_source_item (
    item_id         INTEGER UNSIGNED NOT NULL PRIMARY KEY,
+   folder_id       INTEGER UNSIGNED NOT NULL DEFAULT 0,
    data_source_id  CHAR(36) NOT NULL,
    remote_id       VARCHAR(255) NOT NULL,
    metadata        MEDIUMTEXT,

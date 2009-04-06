@@ -62,6 +62,9 @@ public class DbOfflineMigration {
             case 53:
                 migrateFromVersion53(conn, isTestRun);
                 break;
+            case 61:
+                migrateFromVersion61(conn, isTestRun);
+                break;
             default:
             	throw new DbUnsupportedVersionException();
             }
@@ -313,7 +316,7 @@ public class DbOfflineMigration {
         }
 	}
 	
-		private void migrateFromOfflineVersion1(Connection conn, boolean isTestRun) throws Exception {
+	private void migrateFromOfflineVersion1(Connection conn, boolean isTestRun) throws Exception {
         PreparedStatement stmt = null;
         boolean isSuccess = false;
         try {
@@ -340,6 +343,58 @@ public class DbOfflineMigration {
         }
 	}
 	
+	private void migrateFromVersion61(Connection conn, boolean isTestRun) throws Exception {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        boolean isSuccess = false;
+        ArrayList<String> mboxgroups = new ArrayList<String>();
+        try {
+            stmt = conn.prepareStatement("SELECT schemaname FROM SYS.SYSSCHEMAS");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+            	String name = rs.getString(1);
+            	if (name.toLowerCase().startsWith("mboxgroup"))
+            		mboxgroups.add(name);
+            }
+            rs.close();
+            stmt.close();
+
+            for (String mboxgroup : mboxgroups) {
+            	String dsitem = mboxgroup + ".data_source_item";
+            	String mitem = mboxgroup + ".mail_item";
+            	String dsitemid = dsitem + ".item_id";
+            	String mitemid = mitem + ".id";
+            	
+                String stmtStr = 
+                	"ALTER TABLE " + dsitem +
+            		   " ADD COLUMN folder_id INTEGER NOT NULL DEFAULT 0";
+                stmt = conn.prepareStatement(stmtStr);
+                stmt.executeUpdate();
+                stmt.close();
+                stmtStr = 
+                	"UPDATE " + dsitem +
+                	  " SET folder_id = " +
+                	  " (SELECT folder_id FROM " + mitem + " WHERE " + dsitemid + " = " + mitemid + ")";
+                stmt = conn.prepareStatement(stmtStr);
+                stmt.executeUpdate();
+                stmt.close();
+            }
+            
+            stmt = conn.prepareStatement("UPDATE zimbra.config set value='62' where name='db.version'");
+            stmt.executeUpdate();
+            stmt.close();
+            
+            isSuccess = true;
+        } finally {
+        	DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+            if (isTestRun || !isSuccess)
+            	conn.rollback();
+            else
+            	conn.commit();
+        }
+	}
+		
 	public static void main(String[] args) throws Exception {
 		System.setProperty("zimbra.config", "/opt/zimbra/zdesktop dev/conf/localconfig.xml");
 		

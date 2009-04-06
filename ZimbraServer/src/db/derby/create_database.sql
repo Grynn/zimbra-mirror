@@ -227,6 +227,7 @@ CREATE TABLE ${DATABASE_NAME}.data_source_item (
    mailbox_id     INTEGER NOT NULL,
    data_source_id CHAR(36) NOT NULL,
    item_id        INTEGER NOT NULL,
+   folder_id      INTEGER NOT NULL DEFAULT 0,
    remote_id      VARCHAR(255) NOT NULL,
    metadata       CLOB,
    

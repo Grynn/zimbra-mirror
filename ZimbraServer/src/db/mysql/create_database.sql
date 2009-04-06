@@ -170,6 +170,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.data_source_item (
    mailbox_id     INTEGER UNSIGNED NOT NULL,
    data_source_id CHAR(36) NOT NULL,
    item_id        INTEGER UNSIGNED NOT NULL,
+   folder_id      INTEGER UNSIGNED NOT NULL DEFAULT 0,
    remote_id      VARCHAR(255) BINARY NOT NULL,
    metadata       MEDIUMTEXT,
    
