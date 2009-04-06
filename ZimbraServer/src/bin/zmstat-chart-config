@@ -493,7 +493,12 @@ _HERE_
          showMovingAvg="true">
     <plot data="$partition:tps" legend="$partition tps"/>
   </chart>
+_HERE_
   
+
+            }
+        }
+        print <<'_HERE_';
   <chart title="Host $ZIMBRA_HOSTNAME: Disk Usage"
          category="IO"
          height="400"
@@ -502,10 +507,7 @@ _HERE_
          yAxis="% used">
     <groupplot data="disk_pct_used" groupBy="path" />
   </chart>
-
 _HERE_
-            }
-        }
     }
 }
 
