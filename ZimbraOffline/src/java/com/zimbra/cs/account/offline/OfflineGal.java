@@ -29,6 +29,7 @@ import com.zimbra.cs.index.queryparser.ParseException;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
@@ -86,8 +87,12 @@ public class OfflineGal {
         mOpContext = new Mailbox.OperationContext(mGalMbox);
         
         Folder fstFolder = mGalMbox.getFolderById(mOpContext, Mailbox.ID_FOLDER_CONTACTS);
-        Folder sndFolder = mGalMbox.getFolderByPath(mOpContext, SECOND_GAL_FOLDER);
-        Folder currFolder = fstFolder.getItemCount() > sndFolder.getItemCount() ? fstFolder : sndFolder;
+        Folder currFolder = fstFolder;
+        try {
+            Folder sndFolder = mGalMbox.getFolderByPath(mOpContext, SECOND_GAL_FOLDER);
+            if (fstFolder.getItemCount() < sndFolder.getItemCount())
+                currFolder = sndFolder;
+        } catch (MailServiceException.NoSuchItemException e) {}
         
         name = name.trim();
         String[] searchFields = {Contact.A_firstName, Contact.A_lastName, Contact.A_fullName,
