@@ -267,6 +267,8 @@ if (regFile.exists()) {
 
 context.setVariable("instanceId", guid);
 context.setVariable("joinDevProg", dev);
+context.setVariable("autoCheckUpdates", true);
+
 return true;</string>
                           </void>
                         </object>
@@ -3672,6 +3674,37 @@ return (new File(instDir + "/localstore.json.bak")).exists();</condition>
                   </action>
                 </beans>
               </group>
+              <action name="Set autoCheckUpdates" id="289510" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>String prefsFile = (String)context.getVariable("sys.installationDir") + "/profile/prefs.js";
+
+try {
+    BufferedReader reader = new BufferedReader(new FileReader(prefsFile));
+    String line;
+     while ((line = reader.readLine()) != null) {     
+         if (line.indexOf("app.update.enabled") &gt; 0) {
+             if (line.indexOf("false") &gt; 0 || line.indexOf("False") &gt; 0 || line.indexOf("FALSE") &gt; 0) {                                  
+                 context.setVariable("autoCheckUpdates", false);
+             }
+             break;    
+         }
+     }
+} catch (Exception e) {}
+
+return true;</string>
+                          </void>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
               <action name="delete old mailbox and zdesktop logs" id="289313" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -3906,6 +3939,70 @@ return true;</string>
             </actions>
             <formComponents />
           </screen>
+          <screen name="Update Options" id="289491" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="3" finishScreen="false">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.FormScreen">
+                  <void property="subTitle">
+                    <string>${i18n:installer.UpdatesSubTitle}</string>
+                  </void>
+                  <void property="title">
+                    <string>${i18n:installer.UpdatesTitle}</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>!Boolean.getBoolean("offline_update")</condition>
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents>
+              <formComponent name="Auto check updates" id="289494" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                      <void property="checkboxText">
+                        <string>${i18n:installer.AutoCheckUpdates}</string>
+                      </void>
+                      <void property="variableName">
+                        <string>autoCheckUpdates</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript>((JCheckBox)configurationObject).setSelected(context.getBooleanVariable("autoCheckUpdates"));
+</initScript>
+              </formComponent>
+              <formComponent name="John Dev Prog" id="289492" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                      <void property="checkboxText">
+                        <string>${i18n:installer.JoinDevProg}</string>
+                      </void>
+                      <void property="variableName">
+                        <string>joinDevProgChecked</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript>((JCheckBox)configurationObject).setSelected(Boolean.valueOf((String) context.getVariable("joinDevProg")))</initScript>
+              </formComponent>
+              <formComponent name="John Dev Prog Note" id="289493" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
+                      <void property="labelHtml">
+                        <string>${i18n:installer.JoinDevProgNote}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+              </formComponent>
+            </formComponents>
+          </screen>
           <screen name="" id="9" beanClass="com.install4j.runtime.beans.screens.FinishedScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="true">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
@@ -3931,7 +4028,26 @@ return true;</string>
             <preActivation />
             <postActivation />
             <actions>
-              <action name="set dev flag in installation info" id="288209" beanClass="com.install4j.runtime.beans.actions.text.AppendToFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="Set auto update option" id="289502" beanClass="com.install4j.runtime.beans.actions.text.AppendToFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.AppendToFileAction">
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>profile/user.js</string>
+                        </object>
+                      </void>
+                      <void property="text">
+                        <string>
+user_pref("app.update.enabled", ${installer:autoCheckUpdates});
+</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="set dev flag in installation info" id="289503" beanClass="com.install4j.runtime.beans.actions.text.AppendToFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.text.AppendToFileAction">
@@ -3946,18 +4062,20 @@ return true;</string>
                     </object>
                   </java>
                 </serializedBean>
-                <condition>String s = context.getBooleanVariable("joinDevProgChecked") ? "true" : "false";
-context.setVariable("joinDevProg", s);
+                <condition>if (!Boolean.getBoolean("offline_update")) {
+    String s = context.getBooleanVariable("joinDevProgChecked") ? "true" : "false";
+    context.setVariable("joinDevProg", s);
+}
 return true;</condition>
               </action>
-              <group name="set update url" id="288204" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+              <group name="set update url" id="289504" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.groups.ActionGroup" />
                   </java>
                 </serializedBean>
                 <beans>
-                  <action name="set ausUrl" id="288205" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                  <action name="set ausUrl" id="289505" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                     <serializedBean>
                       <java class="java.beans.XMLDecoder">
                         <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -3983,7 +4101,7 @@ return true;</string>
                     </serializedBean>
                     <condition />
                   </action>
-                  <action name="macos - preferences.js" id="288206" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                  <action name="macos - preferences.js" id="289506" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                     <serializedBean>
                       <java class="java.beans.XMLDecoder">
                         <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
@@ -4003,7 +4121,7 @@ return true;</string>
                     </serializedBean>
                     <condition>Util.isMacOS()</condition>
                   </action>
-                  <action name="win32 - preferences.js" id="288207" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                  <action name="win32 - preferences.js" id="289507" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                     <serializedBean>
                       <java class="java.beans.XMLDecoder">
                         <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
@@ -4023,7 +4141,7 @@ return true;</string>
                     </serializedBean>
                     <condition>Util.isWindows()</condition>
                   </action>
-                  <action name="linux - preferences.js" id="288208" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                  <action name="linux - preferences.js" id="289508" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                     <serializedBean>
                       <java class="java.beans.XMLDecoder">
                         <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
@@ -4238,33 +4356,6 @@ return true;</string>
                       </void>
                       <void property="variableName">
                         <string>launch</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <initScript />
-              </formComponent>
-              <formComponent name="John Dev Prog" id="288210" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
-                      <void property="checkboxText">
-                        <string>${i18n:installer.JoinDevProg}</string>
-                      </void>
-                      <void property="variableName">
-                        <string>joinDevProgChecked</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <initScript>((JCheckBox)configurationObject).setSelected(Boolean.valueOf((String) context.getVariable("joinDevProg")))</initScript>
-              </formComponent>
-              <formComponent name="John Dev Prog Note" id="288215" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
-                      <void property="labelHtml">
-                        <string>${i18n:installer.JoinDevProgNote}</string>
                       </void>
                     </object>
                   </java>
