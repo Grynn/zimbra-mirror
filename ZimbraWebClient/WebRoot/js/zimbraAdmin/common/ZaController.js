@@ -178,7 +178,6 @@ function(msg, ex, noExecReset,style)  {
 	
         if (!this._errorDialog.isPoppedUp()) {
             this._errorDialog.popup();
-            this._errorDialog._showDetail();
         }
     }
 
