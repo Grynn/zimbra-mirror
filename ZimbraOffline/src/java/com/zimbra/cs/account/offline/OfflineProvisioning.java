@@ -1152,12 +1152,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         
         if (acct != null)
         	attrs = acct.getAttrs();
-        if (attrs == null)
+        
+        String name = null;
+        if (attrs != null)
+            name = (String)attrs.get(A_mail);
+        
+        if (name == null) { // either attrs == null or A_mail attr is missing...
+            if (acct != null && keyType != AccountBy.adminName) // in case account entry is somehow corrupted in DB, delete it
+                DbOfflineDirectory.deleteDirectoryEntry(EntryType.ACCOUNT, acct.getId());
         	return null;
-
-        String name = (String)attrs.get(A_mail);
-        if (name == null)
-        	return null;
+        }
         
         if (includeSyncStatus) {
 	        //There are attributes we don't persist into DB.  This is where we add them:

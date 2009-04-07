@@ -343,8 +343,10 @@ public class DbOfflineDirectory {
             Map<String,Object> attrs = new HashMap<String,Object>();
             while (rs.next())
                 OfflineProvisioning.addToMap(attrs, rs.getString(1), rs.getString(2));
-            if (attrs.isEmpty())
+            if (attrs.isEmpty()) {
+                deleteDirectoryEntry(entryId); // remove dangling directory entry
                 return null;
+            }
             return attrs;
         } catch (SQLException e) {
             throw ServiceException.FAILURE("fetching " + etype + " (" + lookupKey + "=" + lookupValue + ")", e);
@@ -377,8 +379,10 @@ public class DbOfflineDirectory {
             Map<String,Object> attrs = new HashMap<String,Object>();
             while (rs.next())
                 OfflineProvisioning.addToMap(attrs, rs.getString(1), rs.getString(2));
-            if (attrs.isEmpty())
+            if (attrs.isEmpty()) {
+                deleteDirectoryLeaf(parent, entryId); // remove dangling directory leaf entry
                 return null;
+            }
             return attrs;
         } catch (SQLException e) {
             throw ServiceException.FAILURE("fetching " + etype + ": " + parent.getName() + '/' + lookupValue, e);
@@ -593,6 +597,23 @@ public class DbOfflineDirectory {
         }
     }
 
+    public static void deleteDirectoryEntry(int entryId) throws ServiceException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DbPool.getConnection();
+            stmt = conn.prepareStatement("DELETE FROM zimbra.directory WHERE entry_id = ?");
+            stmt.setInt(1, entryId);
+            stmt.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("deleting entry " + Integer.toString(entryId), e);
+        } finally {
+            DbPool.closeStatement(stmt);
+            DbPool.quietClose(conn);
+        }
+    }
+    
     public static void deleteDirectoryLeaf(EntryType etype, NamedEntry parent, String id, boolean markChanged) throws ServiceException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -626,6 +647,25 @@ public class DbOfflineDirectory {
             conn.commit();
         } catch (SQLException e) {
             throw ServiceException.FAILURE("deleting " + etype + ": " + parent.getName() + '/' + id, e);
+        } finally {
+            DbPool.closeStatement(stmt);
+            DbPool.quietClose(conn);
+        }
+    }
+    
+    public static void deleteDirectoryLeaf(NamedEntry parent, int entryId) throws ServiceException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DbPool.getConnection();
+            int parentId = getIdForParent(conn, parent);
+            stmt = conn.prepareStatement("DELETE FROM zimbra.directory_leaf WHERE parent_id = ? AND entry_id = ?");
+            stmt.setInt(1, parentId);
+            stmt.setInt(2, entryId);
+            stmt.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("deleting entry " + parent.getName() + '/' + Integer.toString(entryId), e);
         } finally {
             DbPool.closeStatement(stmt);
             DbPool.quietClose(conn);
