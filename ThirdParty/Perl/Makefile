@@ -92,6 +92,8 @@ PERL_LIBS 	:= \
 	Net::LDAP \
 	Net::Server \
 	Unix::Syslog \
+	Parallel::ForkManager \
+	Package::Constants \
 	IO::Compress::Base \
 	IO::Compress::Zlib \
 	Compress::Raw::Zlib \
