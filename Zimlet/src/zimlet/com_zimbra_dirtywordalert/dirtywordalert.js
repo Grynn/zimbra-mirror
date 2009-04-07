@@ -26,7 +26,7 @@ com_zimbra_dirtywordalert.prototype.constructor = com_zimbra_dirtywordalert;
 
 com_zimbra_dirtywordalert.prototype.init =
 function() {
-	this.turnONdirtywordalertZimlet = this.getUserProperty("turnONdirtywordalertZimlet") == "true";
+	this.turnONdirtywordalertZimletNew = this.getUserProperty("turnONdirtywordalertZimletNew") == "true";
 };
 
 com_zimbra_dirtywordalert.prototype.initializeRegEx =
@@ -43,7 +43,7 @@ function() {
 
 com_zimbra_dirtywordalert.prototype.emailErrorCheck =
 function(mail, boolAndErrorMsgArray) {
-	if (!this.turnONdirtywordalertZimlet)
+	if (!this.turnONdirtywordalertZimletNew)
 		return;
 
 	this.initializeRegEx();
@@ -117,8 +117,8 @@ function() {
 	this.pView = new DwtComposite(this.getShell());
 	this.pView.getHtmlElement().innerHTML = this.createPrefView();
 
-	if (this.getUserProperty("turnONdirtywordalertZimlet") == "true") {
-		document.getElementById("turnONdirtywordalertZimlet_chkbx").checked = true;
+	if (this.getUserProperty("turnONdirtywordalertZimletNew") == "true") {
+		document.getElementById("turnONdirtywordalertZimletNew_chkbx").checked = true;
 	}
 	this.pbDialog = this._createDialog({title:"'Dirty words in compose Alert' Zimlet Preferences", view:this.pView, standardButtons:[DwtDialog.OK_BUTTON]});
 	this.pbDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListner));
@@ -130,7 +130,7 @@ function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='turnONdirtywordalertZimlet_chkbx'  type='checkbox'/>Enable 'Dirty words in compose Alert' Zimlet (Changing this would refresh browser)";
+	html[i++] = "<input id='turnONdirtywordalertZimletNew_chkbx'  type='checkbox'/>Enable 'Dirty words in compose Alert' Zimlet (Changing this would refresh browser)";
 	html[i++] = "</DIV>";
 	return html.join("");
 };
@@ -138,14 +138,14 @@ function() {
 com_zimbra_dirtywordalert.prototype._okBtnListner =
 function() {
 	this._reloadRequired = false;
-	if (document.getElementById("turnONdirtywordalertZimlet_chkbx").checked) {
-		if (!this.turnONdirtywordalertZimlet) {
+	if (document.getElementById("turnONdirtywordalertZimletNew_chkbx").checked) {
+		if (!this.turnONdirtywordalertZimletNew) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("turnONdirtywordalertZimlet", "true", true);
+		this.setUserProperty("turnONdirtywordalertZimletNew", "true", true);
 	} else {
-		this.setUserProperty("turnONdirtywordalertZimlet", "false", true);
-		if (this.turnONdirtywordalertZimlet)
+		this.setUserProperty("turnONdirtywordalertZimletNew", "false", true);
+		if (this.turnONdirtywordalertZimletNew)
 			this._reloadRequired = true;
 	}
 	this.pbDialog.popdown();
