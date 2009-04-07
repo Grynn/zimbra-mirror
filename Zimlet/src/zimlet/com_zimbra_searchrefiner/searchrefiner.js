@@ -285,7 +285,7 @@ function() {
 		return;
 
 	this.wasTriggeredBySearchBtn = false;
-	this._refineMainDiv = document.getElementById("zov__Mail").appendChild(document.createElement('div'));
+	this._refineMainDiv = document.getElementById(ZmId.WIDGET_OVERVIEW+"__"+ZmAppAccordionController.ID+":"+appCtxt.getActiveAccount().name).appendChild(document.createElement('div'));
 	this._refineMainDiv.id = "sr_mainDivId";
 	this._refineMainDiv.style.display = "none";
 	this._refineMainDiv.innerHTML = this._headerHTML() + this._narrowedByHTML() + this._getAllSectionsHTML();
@@ -430,7 +430,7 @@ com_zimbra_searchrefiner.show = function() {
 	var sr = document.getElementById("sr_mainDivId");
 	sr.style.display = "block";
 	sr.style.zIndex = 500;
-	var treeHdrs = document.getElementById("zov__Mail").childNodes;
+	var treeHdrs = document.getElementById(ZmId.WIDGET_OVERVIEW+"__"+ZmAppAccordionController.ID+":"+appCtxt.getActiveAccount().name).childNodes;
 	for (var i = 0; i < treeHdrs.length; i++) {
 		if (treeHdrs[i].id != "sr_mainDivId") {
 			treeHdrs[i].style.display = "none";
@@ -442,7 +442,7 @@ com_zimbra_searchrefiner.hide = function() {
 	var sr = document.getElementById("sr_mainDivId");
 	sr.style.display = "none";
 	sr.style.zIndex = 100;
-	var treeHdrs = document.getElementById("zov__Mail").childNodes;
+	var treeHdrs = document.getElementById(ZmId.WIDGET_OVERVIEW+"__"+ZmAppAccordionController.ID+":"+appCtxt.getActiveAccount().name).childNodes;
 	for (var i = 0; i < treeHdrs.length; i++) {
 		if (treeHdrs[i].id != "sr_mainDivId") {
 			treeHdrs[i].style.display = "block";
