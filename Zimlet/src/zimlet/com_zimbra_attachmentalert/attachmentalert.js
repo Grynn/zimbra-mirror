@@ -131,7 +131,7 @@ function() {
 	if (this.getUserProperty("turnONAttachmentAlertZimletNew") == "true") {
 		document.getElementById("turnONAttachmentAlertZimletNew_chkbx").checked = true;
 	}
-	this.pbDialog = this._createDialog({title:"'Dirty words in compose Alert' Zimlet Preferences", view:this.pView, standardButtons:[DwtDialog.OK_BUTTON]});
+	this.pbDialog = this._createDialog({title:"'Attachment Alert in compose' Zimlet Preferences", view:this.pView, standardButtons:[DwtDialog.OK_BUTTON]});
 	this.pbDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListner));
 	this.pbDialog.popup();
 };
