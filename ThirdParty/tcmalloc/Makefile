@@ -43,7 +43,7 @@ ifeq ($(BUILD_PLATFORM), UBUNTU8_64)
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-TCMALLOC_VERSION ?= 1.0
+TCMALLOC_VERSION ?= 1.1
 TCMALLOC_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/tcmalloc/tcmalloc-$(TCMALLOC_VERSION).tgz
 
 all: allclean build tar
@@ -54,13 +54,9 @@ build:
 	CFLAGS="-g -O2" \
 	CPPFLAGS="-I/usr/include" \
 	CXXFLAGS="-I/usr/include" \
-	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION) $(CONF_OPS); \
-	make tcmalloc_minimal_unittest tcmalloc_minimal_large_unittest \
-             addressmap_unittest atomicops_unittest frag_unittest \
-             low_level_alloc_unittest markidle_unittest memalign_unittest \
-             packed_cache_test stacktrace_unittest system_alloc_unittest \
-             thread_dealloc_unittest; \
-	 make install)
+	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION) --enable-minimal $(CONF_OPS); \
+	make; \
+	make install)
 	(cd $(ZIMBRA_HOME); ln -s tcmalloc-$(TCMALLOC_VERSION) tcmalloc)
 
 tar:
