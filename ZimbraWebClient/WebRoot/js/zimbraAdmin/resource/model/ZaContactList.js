@@ -29,15 +29,19 @@ ZaContactList.prototype.getContactList =
 function (str, callback){
 	try {
 		var params = {};
-		
+		var busyId = Dwt.getNextId ();
 		params.attrs = [ZaAccount.A_displayname, ZaAccount.A_mail, ZaAccount.A_telephoneNumber].join();
 		params.types = ZaSearch.ACCOUNTS ;
 		params.sortBy = ZaAccount.A_displayname;
 		params.query = ZaSearch.getSearchByDisplayNameQuery(str) ;
 		params.applyCos = "0";
-		myCallback = new AjxCallback(this, this.getDataCallback, callback);
+		myCallback = new AjxCallback(this, this.getDataCallback, {callback:callback,busyId:busyId});
 		params.callback = myCallback;
 		params.controller = ZaApp.getInstance().getCurrentController () ;
+		params.showBusy = true;
+		params.busyMsg = ZaMsg.BUSY_SEARCHING;
+		params.skipCallbackIfCancelled = true; 
+		params.busyId = busyId;		
 		ZaSearch.searchDirectory(params);
 	}	catch (ex){
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaContactList.prototype.getContactList");	
@@ -72,8 +76,12 @@ function(match, inputFieldXFormItem) {
 }; 
 
 ZaContactList.prototype.getDataCallback = 
-function(callback, resp){
+function(params, resp){
 	try {
+		var callback = params.callback;
+		if(params.busyId)
+			ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
+			
 		if(!resp) {
 			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaContactList.prototype.getDataCallback"));
 		}

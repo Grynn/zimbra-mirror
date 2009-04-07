@@ -51,7 +51,8 @@ ZaController.changeActionsStateMethods["ZaAccountListController"] = new Array();
 
 
 ZaAccountListController.prototype.show = function (doPush) {
-	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush});
+	var busyId = Dwt.getNextId();
+	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush,busyId:busyId});
 	
 	var searchParams = {
 			query:this._currentQuery ,
@@ -62,8 +63,13 @@ ZaAccountListController.prototype.show = function (doPush) {
 			limit:this.RESULTSPERPAGE,
 			attrs:this.fetchAttrs,
 			callback:callback,
-			controller: this
+			controller: this,
+			showBusy:true,
+			busyId:busyId,
+			busyMsg:ZaMsg.BUSY_SEARCHING,
+			skipCallbackIfCancelled:false
 	}
+	
 	ZaSearch.searchDirectory(searchParams);
 }
 

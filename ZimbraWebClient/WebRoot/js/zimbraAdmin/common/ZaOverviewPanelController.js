@@ -114,14 +114,15 @@ function (ev) {
 
 
 ZaOverviewPanelController.prototype.searchDomains = function() {
-	var callback = new AjxCallback(this, this.domainSearchCallback);
+	var busyId = Dwt.getNextId () ;
+	var callback = new AjxCallback(this, this.domainSearchCallback,{busyId:busyId});
 	var domainListController = ZaApp.getInstance().getDomainListController ();
 	
     //if(ZaSettings.DOMAINS_ENABLED)
 		domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
 	/*else
 		domainListController._currentQuery = "" ;*/  
-                                                               
+                                                  
 	var searchParams = {
 			query: domainListController._currentQuery, 
 			types:[ZaSearch.DOMAINS],
@@ -130,14 +131,21 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 			sortAscending:"1",
 			limit:ZaDomain.MAXSEARCHRESULTS,
 			callback:callback,
-			controller: this
+			controller: this,
+			showBusy:true,
+			busyId:busyId,
+			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
+			skipCallbackIfCancelled:true			
 	}
 	ZaSearch.searchDirectory(searchParams);
 }
 
 ZaOverviewPanelController.prototype.domainSearchCallback = 
-function (resp) {
+function (params,resp) {
 	try {
+		if(params.busyId)
+			ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
+				
 		if(!resp) {
 			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaOverviewPanelController.prototype.domainSearchCallback"));
 		}

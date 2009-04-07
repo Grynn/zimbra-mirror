@@ -125,10 +125,13 @@ function(ev, noPopView, func, obj, params) {
 ZaListViewController.prototype.searchCallback =
 function(params, resp) {
 	try {
-		if(!resp) {
+		if(params.busyId)
+			ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
+			
+		if(!resp && !this._currentRequest.cancelled) {
 			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.searchCallback"));
 		}
-		if(resp.isException()) {
+		if(resp && resp.isException() && !this._currentRequest.cancelled) {
 			ZaSearch.handleTooManyResultsException(resp.getException(), "ZaListViewController.prototype.searchCallback");
 			this._list = new ZaItemList(params.CONS);	
 			this._searchTotal = 0;
@@ -137,14 +140,17 @@ function(params, resp) {
 				this._show(this._list);			
 			else
 				this._updateUI(this._list);
-		}else{
+		} else {
 			ZaSearch.TOO_MANY_RESULTS_FLAG = false;
-			var response = resp.getResponse().Body.SearchDirectoryResponse;
-			this._list = new ZaItemList(params.CONS);	
-			this._list.loadFromJS(response);	
-			this._searchTotal = response.searchTotal;
-			var limit = params.limit ? params.limit : this.RESULTSPERPAGE; 
-			this.numPages = Math.ceil(this._searchTotal/params.limit);
+			this._list = new ZaItemList(params.CONS);
+			this._searchTotal = 0;
+			if(resp && !resp.isException()) {
+				var response = resp.getResponse().Body.SearchDirectoryResponse;
+				this._list.loadFromJS(response);	
+				this._searchTotal = response.searchTotal;
+				var limit = params.limit ? params.limit : this.RESULTSPERPAGE; 
+				this.numPages = Math.ceil(this._searchTotal/params.limit);
+			}
 			if(params.show)
 				this._show(this._list, params.openInNewTab, params.openInSearchTab);			
 			else

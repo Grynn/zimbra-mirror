@@ -135,7 +135,8 @@ function (value, event, form){
 ZaSearchBuilderController.filterDomains =
 function (value, event, form) {
 	this.setInstanceValue (value);
-	var callback = new AjxCallback(this, ZaSearchBuilderController.optionFilterCallback);
+	var busyId = Dwt.getNextId();
+	var callback = new AjxCallback(this, ZaSearchBuilderController.optionFilterCallback, {busyId:busyId});
 	var searchParams = {
 			query: "(" + ZaDomain.A_domainName + "=*" + value + "*)", 
 			types: [ZaSearch.DOMAINS],
@@ -146,7 +147,11 @@ function (value, event, form) {
 			//sortAscending:"0",
 			//limit: 20,
 			callback:callback,
-			controller: ZaApp.getInstance().getCurrentController()
+			controller: ZaApp.getInstance().getCurrentController(),
+			showBusy:true,
+			busyId:busyId,
+			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
+			skipCallbackIfCancelled:true			
 	}
 	ZaSearch.searchDirectory(searchParams);
 }
@@ -207,8 +212,11 @@ function (value) {
 }
 
 ZaSearchBuilderController.optionFilterCallback =
-function (resp) {
+function (params,resp) {
 	DBG.println(AjxDebug.DBG3, "Check for the filter results ... ") ;
+	if(params.busyId)
+			ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
+	
 	var form = this.getForm ();
 	try {
 		if(!resp) {

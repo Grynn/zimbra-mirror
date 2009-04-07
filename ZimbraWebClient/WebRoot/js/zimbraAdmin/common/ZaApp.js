@@ -436,7 +436,8 @@ function(viewId) {
 }
 
 ZaApp.prototype.searchDomains = function(query) {
-	var callback = new AjxCallback(this, this.domainSearchCallback, null);
+	var busyId = Dwt.getNextId () ;
+	var callback = new AjxCallback(this, this.domainSearchCallback, {busyId:busyId});
 	var searchParams = {
 			query:query, 
 			types:[ZaSearch.DOMAINS],
@@ -445,13 +446,18 @@ ZaApp.prototype.searchDomains = function(query) {
 			sortAscending:"1",
 			limit:ZaDomain.MAXSEARCHRESULTS,
 			callback:callback,
-			controller: this.getCurrentController()
+			controller: this.getCurrentController(),
+			showBusy:true,
+			busyId:busyId,
+			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
+			skipCallbackIfCancelled:true			
 	}
 	ZaSearch.searchDirectory(searchParams);
 }
 
 ZaApp.prototype.scheduledSearchDomains = function(domainItem) {
-	var callback = new AjxCallback(this, this.domainSearchCallback, domainItem);
+	var busyId = Dwt.getNextId () ;
+	var callback = new AjxCallback(this, this.domainSearchCallback, {domainItem:domainItem, busyId:busyId});
 	var searchParams = {
 			query: this._domainQuery, 
 			types:[ZaSearch.DOMAINS],
@@ -460,15 +466,24 @@ ZaApp.prototype.scheduledSearchDomains = function(domainItem) {
 			sortAscending:"1",
 			limit:ZaDomain.MAXSEARCHRESULTS,
 			callback:callback,
-			controller: this.getCurrentController()
+			controller: this.getCurrentController(),
+			showBusy:true,
+			busyId:busyId,
+			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
+			skipCallbackIfCancelled:true			
 	}
 	ZaSearch.searchDirectory(searchParams);
 //	DBG.println(AjxDebug.DBG1, "Searching for domains "+ ev.keyCode +" char code " + (new Date()).getTime());
 }
 
 ZaApp.prototype.domainSearchCallback = 
-function (domainItem, resp) {
+function (params, resp) {
+	var domainItem = params.domainItem ? params.domainItem : null; 
+		
 	try {
+		if(params.busyId)
+			this._appCtxt.getShell().setBusy(false, params.busyId);
+			
 		if(!resp) {
 			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.searchCallback"));
 		}

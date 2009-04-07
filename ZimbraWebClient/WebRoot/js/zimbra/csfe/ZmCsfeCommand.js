@@ -159,7 +159,7 @@ function(request) {
  */
 ZmCsfeCommand.prototype.invoke =
 function(params) {
-
+	this.cancelled = false;
 	if (!(params && (params.soapDoc || params.jsonObj))) { return; }
 
 	var requestStr = ZmCsfeCommand.getRequestStr(params);
@@ -385,7 +385,9 @@ function(params) {
 ZmCsfeCommand.prototype._runCallback =
 function(params, result) {
 	if (!result) { return; }
-
+	if(this.cancelled && params.skipCallbackIfCancelled)
+		return;
+		
 	var response;
 	if (result instanceof ZmCsfeResult) {
 		response = result; // we already got an exception and packaged it
@@ -536,7 +538,7 @@ function(response, params) {
 ZmCsfeCommand.prototype.cancel =
 function() {
 	if (!this._rpcId) { return; }
-
+	this.cancelled = true;
 	var req = AjxRpc.getRpcRequestById(this._rpcId);
 	if (req) {
 		req.cancel();

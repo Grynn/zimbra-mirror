@@ -164,7 +164,10 @@ function (params) {
 	if(params.callback) {
 		cmdParams.asyncMode = true;
 		cmdParams.callback = params.callback;
+		cmdParams.skipCallbackIfCancelled = params.skipCallbackIfCancelled;
 	}
+	
+	
 	try {
 		//only returned for synchronous calls
 		return ZaRequestMgr.invoke(cmdParams, params);
@@ -206,7 +209,12 @@ ZaSearch.findAccount = function(by, val) {
 	return list.getArray()[0];
 }
 
-ZaSearch.prototype.dynSelectDataCallback = function (callback, resp) {
+ZaSearch.prototype.dynSelectDataCallback = function (params, resp) {
+	var callback = params.callback;
+	
+	if(params.busyId)
+		ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
+	
 	if(!callback)	
 		return;
 	try {
@@ -226,7 +234,12 @@ ZaSearch.prototype.dynSelectDataCallback = function (callback, resp) {
 	}
 }
 
-ZaSearch.prototype.dynSelectSearchCosesCallback = function (callback, resp) {
+ZaSearch.prototype.dynSelectSearchCosesCallback = function (params, resp) {
+	var callback = params.callback;
+	
+	if(params.busyId)
+		ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
+
 	if(!callback)	
 		return;
 	try {
@@ -255,16 +268,20 @@ ZaSearch.prototype.dynSelectSearchAccounts = function (callArgs) {
 		var value = callArgs["value"];
 		var event = callArgs["event"];
 		var callback = callArgs["callback"];
-		
+		var busyId = Dwt.getNextId ();
 		
 		var params = new Object();
-		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, callback);
+		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, {callback:callback,busyId:busyId });
 		params.types = [ZaSearch.ACCOUNTS, ZaSearch.DLS];
 		params.callback = dataCallback;
 		params.sortBy = ZaAccount.A_name;
 		params.query = ZaSearch.getSearchByNameQuery(value, params.types);
 		params.controller = ZaApp.getInstance().getCurrentController();
-		ZaSearch.searchDirectory(params);
+		params.showBusy = true;
+		params.busyId = busyId;
+		params.busyMsg = ZaMsg.BUSY_SEARCHING;
+		params.skipCallbackIfCancelled = true; 		
+		ZaSearch.searchDirectory(params);		
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchAccounts");		
 	}
@@ -279,15 +296,20 @@ ZaSearch.prototype.dynSelectSearchGroups = function (callArgs) {
 		var event = callArgs["event"];
 		var callback = callArgs["callback"];
 		var extraLdapQuery = callArgs["extraLdapQuery"];
+		var busyId = Dwt.getNextId ();
 		
 		var params = new Object();
-		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, callback);
+		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, {callback:callback,busyId:busyId});
 		params.types = [ZaSearch.DLS];
         params.callback = dataCallback;
 		params.sortBy = ZaAccount.A_name;
 		params.query = ZaSearch.getSearchByNameQuery(value, params.types);
         if (extraLdapQuery) params.query = "(&" + extraLdapQuery + params.query + ")" ; 
         params.controller = ZaApp.getInstance().getCurrentController();
+		params.busyId = busyId;
+		params.showBusy = true;
+		params.busyMsg = ZaMsg.BUSY_SEARCHING;
+		params.skipCallbackIfCancelled = true; 		
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchGroups");		
@@ -302,14 +324,19 @@ ZaSearch.prototype.dynSelectSearchDomains = function (callArgs) {
 		var value = callArgs["value"];
 		var event = callArgs["event"];
 		var callback = callArgs["callback"];
+		var busyId = Dwt.getNextId();
 				
 		var params = new Object();
-		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, callback);
+		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, {callback:callback,busyId:busyId});
 		params.types = [ZaSearch.DOMAINS];
 		params.callback = dataCallback;
 		params.sortBy = ZaDomain.A_domainName;
 		params.query = ZaSearch.getSearchDomainByNameQuery(value);
 		params.controller = ZaApp.getInstance().getCurrentController();
+		params.showBusy = true;
+		params.busyId = busyId;
+		params.busyMsg = ZaMsg.BUSY_SEARCHING_DOMAINS;
+		params.skipCallbackIfCancelled = true; 		
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchDomains");		
@@ -324,14 +351,19 @@ ZaSearch.prototype.dynSelectSearchCoses = function (callArgs) {
 		var value = callArgs["value"];
 		var event = callArgs["event"];
 		var callback = callArgs["callback"];
+		var busyId = Dwt.getNextId();
 				
 		var params = new Object();
-		dataCallback = new AjxCallback(this, this.dynSelectSearchCosesCallback, callback);
+		dataCallback = new AjxCallback(this, this.dynSelectSearchCosesCallback, {callback:callback,busyId:busyId});
 		params.types = [ZaSearch.COSES];
 		params.callback = dataCallback;
 		params.sortBy = ZaCos.A_name;
 		params.query = ZaSearch.getSearchCosByNameQuery(value);
 		params.controller = ZaApp.getInstance().getCurrentController();
+		params.showBusy = true;
+		params.busyId = busyId;
+		params.busyMsg = ZaMsg.BUSY_SEARCHING_COSES;
+		params.skipCallbackIfCancelled = true;		
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchCoses");		

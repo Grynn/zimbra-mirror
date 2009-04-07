@@ -1746,9 +1746,9 @@ ZaDomain.getTotalLimitsPerAccountTypes = function (cosMaxAccounts) {
 ZaDomain.searchAccountsInDomain =
 function (domainName) {
     if (domainName) {
-        var controller = ZaApp.getInstance().getSearchListController() ;
-        var callback =  new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true});
-//        controller._currentQuery = "(|(zimbraMailDeliveryAddress=*@" + domainName +")(zimbraMailAlias=*@"+ domainName+"))" ;
+        var controller = ZaApp.getInstance().getSearchListController();
+        var busyId = Dwt.getNextId();
+        var callback =  new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true,busyId:busyId});
         controller._currentQuery = "" ;
         var searchTypes = [ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.ALIASES, ZaSearch.RESOURCES] ;
 
@@ -1760,7 +1760,11 @@ function (domainName) {
                 types:searchTypes,
                 attrs:ZaSearch.standardAttributes,
                 callback:callback,
-                controller: controller
+                controller: controller,
+				showBusy:true,
+				busyId:busyId,
+				busyMsg:ZaMsg.BUSY_SEARCHING,
+				skipCallbackIfCancelled:true                
         }
         ZaSearch.searchDirectory(searchParams);
     }else {

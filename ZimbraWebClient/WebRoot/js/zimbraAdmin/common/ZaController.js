@@ -178,6 +178,7 @@ function(msg, ex, noExecReset,style)  {
 	
         if (!this._errorDialog.isPoppedUp()) {
             this._errorDialog.popup();
+            this._errorDialog._showDetail();
         }
     }
 
@@ -439,7 +440,7 @@ function(ex, method, params, restartOnError, obj) {
 				}
 			}
 			if(!gotit)	
-				this.popupErrorDialog(ZaMsg.SERVER_ERROR, ex, true);		
+				this.popupErrorDialog(ZaMsg.ERROR_UNKNOWN, ex, true);		
 		}
 	}
 }
@@ -950,10 +951,9 @@ ZaController.prototype._showAccountsView = function (defaultType, ev) {
 };
 
 ZaController.prototype.cancelBusyOverlay =
-function () {
+function (params) {
 	if (this._currentRequest) {
 		this._currentRequest.cancel() ;
 	}
-	this._shell.setBusy(false) ;
-	//FIXME: need to cancel the request also.	
+	ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);	
 }

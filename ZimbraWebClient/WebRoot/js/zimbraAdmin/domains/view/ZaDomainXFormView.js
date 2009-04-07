@@ -489,15 +489,20 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 							var value = callArgs["value"];
 							var event = callArgs["event"];
 							var callback = callArgs["callback"];
-	
+							var busyId = Dwt.getNextId();
+							
 							var params = new Object();
-							dataCallback = new AjxCallback(this, ZaSearch.prototype.dynSelectDataCallback, callback);
+							dataCallback = new AjxCallback(this, ZaSearch.prototype.dynSelectDataCallback, {callback:callback, busyId:busyId});
 							params.types = [ZaSearch.ACCOUNTS, ZaSearch.DLS];
 							params.callback = dataCallback;
 							params.sortBy = ZaAccount.A_name;
 							params.domain = this.name;
 							params.query = ZaSearch.getSearchByNameQuery(value,params.types);
 							params.controller = ZaApp.getInstance().getCurrentController();
+							params.showBusy = true;
+							params.busyMsg = ZaMsg.BUSY_SEARCHING;
+							params.busyId = busyId;
+							params.skipCallbackIfCancelled = true; 							
 							ZaSearch.searchDirectory(params);
 						} catch (ex) {
 							this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataFetcher");		

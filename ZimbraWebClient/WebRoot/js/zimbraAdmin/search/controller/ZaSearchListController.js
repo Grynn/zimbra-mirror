@@ -51,7 +51,8 @@ ZaController.initToolbarMethods["ZaSearchListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaSearchListController"] = new Array();
 ZaController.changeActionsStateMethods["ZaSearchListController"] = new Array();
 ZaSearchListController.prototype.show = function (doPush) {
-	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush});
+	var busyId = Dwt.getNextId();
+	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush, busyId:busyId});
 	/*
 	if (this._currentQuery == null) {
 		this._currentQuery =  (ZaSearch._currentQuery ? ZaSearch._currentQuery : "");
@@ -66,7 +67,11 @@ ZaSearchListController.prototype.show = function (doPush) {
 			limit:this.RESULTSPERPAGE,
 			attrs:this.fetchAttrs,
 			callback:callback,
-			controller: this
+			controller: this,
+			showBusy:true,
+			busyId:busyId,
+			busyMsg:ZaMsg.BUSY_SEARCHING,
+			skipCallbackIfCancelled:true			
 	}
 	ZaSearch.searchDirectory(searchParams);
 }
@@ -170,19 +175,20 @@ function () {
 /*********** Search Field Callback */
 ZaSearchListController.prototype._searchFieldCallback =
 function(params) {
-	var callback;
 	var controller = this;
-	callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,show:true});
-	
 	if(controller.setSearchTypes)
 		controller.setSearchTypes(params.types);
 	
 	controller._currentQuery = params.query ;
-		
-	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true});
+	var busyId = Dwt.getNextId();	
+	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId});
 	var searchParams = {
 			query:params.query, 
 			types:params.types,
+			showBusy:true,
+			busyId:busyId,
+			busyMsg:ZaMsg.BUSY_SEARCHING,
+			skipCallbackIfCancelled:true,
 			sortBy:params.sortBy,
 			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
 			sortAscending:this._currentSortOrder,

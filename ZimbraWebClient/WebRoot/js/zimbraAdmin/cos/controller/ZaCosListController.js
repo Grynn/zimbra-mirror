@@ -35,7 +35,8 @@ ZaController.changeActionsStateMethods["ZaCosListController"] = new Array();
 //ZaCosListController.COS_VIEW = "ZaCosListController.COS_VIEW";
 
 ZaCosListController.prototype.show = function (doPush) {
-	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush});
+	var busyId = Dwt.getNextId () ;
+	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush,busyId:busyId});
 	
 	var searchParams = {
 			query:this._currentQuery ,
@@ -46,7 +47,11 @@ ZaCosListController.prototype.show = function (doPush) {
 			limit:this.RESULTSPERPAGE,
 			callback:callback,
 			attrs:this.fetchAttrs,
-			controller: this
+			controller: this,
+			showBusy:true,
+			busyId:busyId,
+			busyMsg:ZaMsg.BUSY_SEARCHING_COSES,
+			skipCallbackIfCancelled:true			
 	}
 	ZaSearch.searchDirectory(searchParams);
 }

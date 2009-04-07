@@ -19,12 +19,12 @@ ZaRequestMgr.invoke = function (csfeParams, params) {
 	var command = new ZmCsfeCommand();
 	var controller = (params != null ? params.controller : null) ;
 	var delay = 500;
-	var id = Dwt.getNextId () ;
+	var id = params.busyId ? params.busyId : Dwt.getNextId () ;
 	//add the busy icon for the synchronous calls
-	if (!csfeParams.asyncMode && controller) {
+	if (!csfeParams.asyncMode && controller || (params.showBusy && controller)) {
 		controller._shell.setBusyDialogText(params.busyMsg != null ? params.busyMsg :ZaMsg.splashScreenLoading);
 		controller._currentRequest = command ; //_currentRequest obj will be used in the cancel operation
-		var cancelCallback = new AjxCallback(controller, controller.cancelBusyOverlay );
+		var cancelCallback = new AjxCallback(controller, controller.cancelBusyOverlay, params );
 		if (AjxEnv.hasFirebug) console.log("Set busy for dialog " + id) ;
 		controller._shell.setBusy(true, id, true, delay, cancelCallback);
 	}
@@ -39,7 +39,7 @@ ZaRequestMgr.invoke = function (csfeParams, params) {
 			return 	response;
 		}	
 	}catch (ex) {
-		if (!csfeParams.asyncMode && controller) {
+		if (!csfeParams.asyncMode && controller  || (params.showBusy && controller)) {
 			controller._shell.setBusy(false, id); //remove the busy overlay
 		}
 		throw ex ;	

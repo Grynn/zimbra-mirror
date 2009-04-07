@@ -37,7 +37,8 @@ ZaController.initPopupMenuMethods["ZaDomainListController"] = new Array();
 ZaController.changeActionsStateMethods["ZaDomainListController"] = new Array(); 
 
 ZaDomainListController.prototype.show = function (doPush) {
-	var callback = new AjxCallback(this, this.searchCallback, {limit:ZaDomain.RESULTSPERPAGE,CONS:ZaDomain,show:doPush});
+	var busyId = Dwt.getNextId();
+	var callback = new AjxCallback(this, this.searchCallback, {limit:ZaDomain.RESULTSPERPAGE,CONS:ZaDomain,show:doPush, busyId:busyId});
 	var searchParams = {
 			query:this._currentQuery, 
 			types:[ZaSearch.DOMAINS],
@@ -46,7 +47,11 @@ ZaDomainListController.prototype.show = function (doPush) {
 			sortAscending:"1",
 			limit:this.RESULTSPERPAGE,
 			callback:callback,
-			controller: this
+			controller: this,
+			showBusy:true,
+			busyId:busyId,
+			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
+			skipCallbackIfCancelled:true		
 	}
 	ZaSearch.searchDirectory(searchParams);
 }
