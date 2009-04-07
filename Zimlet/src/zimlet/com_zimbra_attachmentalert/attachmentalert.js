@@ -27,24 +27,24 @@ com_zimbra_attachmentalert.prototype.constructor = com_zimbra_attachmentalert;
 
 com_zimbra_attachmentalert.prototype.init =
 function() {
-	this.turnONAttachmentAlertZimlet = this.getUserProperty("turnONAttachmentAlertZimlet") == "true";
+	this.turnONAttachmentAlertZimletNew = this.getUserProperty("turnONAttachmentAlertZimletNew") == "true";
 };
 
 com_zimbra_attachmentalert.prototype.initializeRegEx =
 function() {
-	if (this._dWordsRegEx)
+	if (this._attachWordsRegEx)
 		return;
 
-	this._dWordsList = ["attach"];
-	this._dWordsRegEx = [];
-	for (var n = 0; n < this._dWordsList.length; n++) {
-		this._dWordsRegEx.push(new RegExp("\\b" + this._dWordsList[n], "ig"));
+	this._attachWordsList = ["attach"];
+	this._attachWordsRegEx = [];
+	for (var n = 0; n < this._attachWordsList.length; n++) {
+		this._attachWordsRegEx.push(new RegExp("\\b" + this._attachWordsList[n], "ig"));
 	}
 };
 
 com_zimbra_attachmentalert.prototype.emailErrorCheck =
 function(mail, boolAndErrorMsgArray) {
-	if (!this.turnONAttachmentAlertZimlet)
+	if (!this.turnONAttachmentAlertZimletNew)
 		return;
 
 	//check if we have some attachments..
@@ -62,33 +62,34 @@ function(mail, boolAndErrorMsgArray) {
 	if (mail.isReplied || mail.isForwarded) {
 		this._createIgnoreList(mail._origMsg);
 	}
-	var dWordsThatExists = "";
+	var attachWordsThatExists = "";
 	var newMailContent = mail.textBodyContent;
 
 	//if we have word like attachment? ignore(it could be a question)
 	if(/\battach.*\?/.test(newMailContent)) {
 	 return;
 	}
-
-	for (var k = 0; k < this._dWordsRegEx.length; k++) {
-		var dWord = this._dWordsRegEx[k];
-		var newMailArry = newMailContent.match(dWord);
+	var hasattachWordStr = false;
+	for (var k = 0; k < this._attachWordsRegEx.length; k++) {
+		var attachWord = this._attachWordsRegEx[k];
+		var newMailArry = newMailContent.match(attachWord);
 		if (!newMailArry)
 			continue;
 
 		var newMailLen = newMailArry.length;
-		//if the number of dwords in the new mail is same as origMail, skip it
-		if (this._ignoreWords[dWord] != undefined) {
-			if (newMailLen <= this._ignoreWords[dWord]) {
-				hasDWordStr = false;
+		//if the number of attachWords in the new mail is same as origMail, skip it
+		if (this._ignoreWords[attachWord] != undefined) {
+			if (newMailLen <= this._ignoreWords[attachWord]) {
+				hasattachWordStr = false;
 				continue;
 			}
 		}
-		hasDWordStr = true;
+		hasattachWordStr = true;
 		break;
+		
 	}
 
-	if (!hasDWordStr)
+	if (!hasattachWordStr)
 		return null;
 
 	//there is a word "attach*" in new mail but not in old-mail
@@ -99,13 +100,13 @@ function(mail, boolAndErrorMsgArray) {
 com_zimbra_attachmentalert.prototype._createIgnoreList =
 function(origMail) {
 	var bodyContent = origMail.getBodyContent();
-	for (var k = 0; k < this._dWordsRegEx.length; k++) {
-		var dWord = this._dWordsRegEx[k];
-		var mailArry = bodyContent.match(dWord);
+	for (var k = 0; k < this._attachWordsRegEx.length; k++) {
+		var attachWord = this._attachWordsRegEx[k];
+		var mailArry = bodyContent.match(attachWord);
 		if (!mailArry)
 			continue;
 
-		this._ignoreWords[dWord] = mailArry.length;
+		this._ignoreWords[attachWord] = mailArry.length;
 	}
 };
 
@@ -127,8 +128,8 @@ function() {
 	this.pView = new DwtComposite(this.getShell());
 	this.pView.getHtmlElement().innerHTML = this.createPrefView();
 
-	if (this.getUserProperty("turnONAttachmentAlertZimlet") == "true") {
-		document.getElementById("turnONAttachmentAlertZimlet_chkbx").checked = true;
+	if (this.getUserProperty("turnONAttachmentAlertZimletNew") == "true") {
+		document.getElementById("turnONAttachmentAlertZimletNew_chkbx").checked = true;
 	}
 	this.pbDialog = this._createDialog({title:"'Dirty words in compose Alert' Zimlet Preferences", view:this.pView, standardButtons:[DwtDialog.OK_BUTTON]});
 	this.pbDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListner));
@@ -140,7 +141,7 @@ function() {
     var html = new Array();
     var i = 0;
     html[i++] = "<DIV>";
-    html[i++] = "<input id='turnONAttachmentAlertZimlet_chkbx'  type='checkbox'/>Enable 'Attachment Alert' Zimlet (Changing this would refresh browser)";
+    html[i++] = "<input id='turnONAttachmentAlertZimletNew_chkbx'  type='checkbox'/>Enable 'Attachment Alert' Zimlet (Changing this would refresh browser)";
     html[i++] = "</DIV>";
     return html.join("");
 };
@@ -149,14 +150,14 @@ function() {
 com_zimbra_attachmentalert.prototype._okBtnListner =
 function() {
 	this._reloadRequired = false;
-	if (document.getElementById("turnONAttachmentAlertZimlet_chkbx").checked) {
-		if (!this.turnONAttachmentAlertZimlet) {
+	if (document.getElementById("turnONAttachmentAlertZimletNew_chkbx").checked) {
+		if (!this.turnONAttachmentAlertZimletNew) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("turnONAttachmentAlertZimlet", "true", true);
+		this.setUserProperty("turnONAttachmentAlertZimletNew", "true", true);
 	} else {
-		this.setUserProperty("turnONAttachmentAlertZimlet", "false", true);
-		if (this.turnONAttachmentAlertZimlet)
+		this.setUserProperty("turnONAttachmentAlertZimletNew", "false", true);
+		if (this.turnONAttachmentAlertZimletNew)
 			this._reloadRequired = true;
 	}
 	this.pbDialog.popdown();
