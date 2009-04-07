@@ -4,14 +4,18 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Help Search</title>
+<title>Disk Space Avability Alert</title>
 <link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
 <!--
 if (navigator.appName !="Netscape")
 {   document.write("<link rel='stylesheet' href='../default.css'>");}
 //-->
 </script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<style type="text/css">
+<!--
+ul.whs1 { list-style:disc; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
 <!--
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
@@ -42,8 +46,7 @@ if (window.gbWhTopic)
 {
 	if (window.addTocInfo)
 	{
-	addTocInfo("Searching\nHelp Search");
-addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+	addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -72,31 +75,17 @@ else
 
 //-->
 </script>
-<h1>Help Search</h1>
-<p>Help Search is a powerful unified search to quickly find answers to 
- common questions. When you enter a search query in the search field and 
- click <span style="font-weight: bold;"><B>Help Search</B></span>, Zimbra's wiki, 
- forums, our bug tracking database, and documents are searched. The results 
- are displayed in a new window with links to the information.</p>
-<h2>What is searched</h2>
-<p>The results displayed are based on whether ZCS is the network edition 
- or the open source edition, if applicable.</p>
-<p>Zimbra Wiki - Articles developed by Zimbra support and the community 
- that covers common problems and procedures. Articles that are marked as 
- certified have been verified by Zimbra as being correct information.</p>
-<p>Zimbra Forums - Zimbra community share technical information of a general 
- nature here. Users ask questions about ZCS and the community responds.</p>
-<p>Zimbra Documentation - All published Zimbra official documentation posted 
- to the Zimbra website is searched</p>
-<p>Bug tracking database - &nbsp;&nbsp;Zimbra's bug tracking 
- tool, Bugzilla, is searched. </p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>. </p>
-<p>&nbsp;</p>
+<h1>Disk Space Availability Alert</h1>
+<p>ZCS sends an email warning to the administrator's mailbox when the free 
+ disk space on mailbox servers is reaching a disk-full threshold. </p>
+<p>The default disk full values are:</p>
+<ul type="disc" class="whs1">
+	<li class=P><p>Warning threshold is 85%</p></li>
+	<li class=P><p>Critical warning threshold is 95%</p></li>
+</ul>
+<p>When the disk reaches the warning threshold, an email alert is sent 
+ every 10 minutes.</p>
+<p>When you receive these email message you should immediately </p>
 <script type="text/javascript" language="javascript1.2">
 <!--
 highlightSearch();
