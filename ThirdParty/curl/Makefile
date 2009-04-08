@@ -40,6 +40,7 @@ build:
 	cd curl-$(CURL_VERSION); \
 	make ca-bundle; \
 	patch -N -g0 -p1 < ../patches/krb5.patch; \
+	patch -N -g0 -p1 < ../patches/custom-openssl.patch; \
 	LD_RUN_PATH=/opt/zimbra/openssl-$(OPENSSL_VERSION):/opt/zimbra/heimdal-$(HEIMDAL_VERSION)/lib \
 	CFLAGS="-g -O2" \
 	./configure --prefix=$(ZIMBRA_HOME)/curl-$(CURL_VERSION) --disable-ldap --disable-ldaps \
