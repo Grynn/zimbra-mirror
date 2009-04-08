@@ -17,7 +17,6 @@ cn: zimbra
 sn: zimbra
 zimbraAccountStatus: active
 zimbraIsAdminAccount: TRUE
-zimbraIsSystemAdminAccount: TRUE
 zimbraIsSystemResource: TRUE
 zimbraId: e0fafd89-1360-11d9-8661-000a95d98ef2
 description: The master zimbra admin account
