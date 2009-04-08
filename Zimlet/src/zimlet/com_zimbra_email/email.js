@@ -36,6 +36,9 @@ function() {
 	} else {
 		this._newTooltipHint = ZmMsg.leftClickComposeHint + "<br>" + ZmMsg.rightClickHint;
 	}
+
+    this._yahooSocialEnabled = this.getBoolConfig("yahooSocialEnabled");
+    
 };
 
 Com_Zimbra_Email.prototype._getRoster =
@@ -186,9 +189,12 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	var toolTip;
 
 	// @yahoo.com love
-	var parts = addr.split("@");
-	var domain = (parts.length > 0) ? parts[1] : null;
-	var isYahoo = (domain && domain == "yahoo.com");
+    var isYahoo = false;
+    if(this._yahooSocialEnabled){
+        var parts = addr.split("@");
+        var domain = (parts.length > 0) ? parts[1] : null;
+        isYahoo = (domain && domain == "yahoo.com");
+    }
 
 	var contactList = AjxDispatcher.run("GetContacts");
 	var contact = contactList ? contactList.getContactByEmail(addr) : null;
@@ -386,13 +392,15 @@ function(spanElement, contentObjText, matchContext, ev) {
 	var addr = (contentObjText instanceof AjxEmailAddress)
 		? contentObjText.address : contentObjText;
 
-	/*var parts = addr.split("@");
-	var domain = (parts.length > 0) ? parts[1] : null;
-	if (domain && domain == "yahoo.com") {
-		var yProfileUrl = "http://profiles.yahoo.com/" + parts[0];
-		window.open(yProfileUrl, "_blank");
-		return;
-	}*/
+    if(this._yahooSocialEnabled){
+        var parts = addr.split("@");
+        var domain = (parts.length > 0) ? parts[1] : null;
+        if (domain && domain == "yahoo.com") {
+            var yProfileUrl = "http://profiles.yahoo.com/" + parts[0];
+            window.open(yProfileUrl, "_blank");
+            return;
+        }
+    }
 
 	var contactList = AjxDispatcher.run("GetContacts");
 	var contact = contactList ? contactList.getContactByEmail(addr) : null;
