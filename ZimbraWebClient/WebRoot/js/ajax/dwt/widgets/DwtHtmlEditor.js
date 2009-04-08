@@ -45,7 +45,7 @@ DwtHtmlEditor = function(params) {
 	this._htmlModeInited = false;
 
 	this._initialize();
-}
+};
 
 DwtHtmlEditor.PARAMS = ["parent", "className", "posStyle", "content", "mode", "blankIframeSrc"];
 
@@ -748,7 +748,7 @@ function() {
 	 } else {
 		this._initTextMode();
 	}
-}
+};
 
 DwtHtmlEditor.prototype.TEXTAREA_CLASSNAME = "DwtHtmlEditorTextArea";
 DwtHtmlEditor.prototype._initTextMode =
@@ -767,20 +767,16 @@ function(ignorePendingContent) {
 		this._pendingContent = null;
 	}
 	return textArea;
-}
+};
 
 DwtHtmlEditor.prototype._initHtmlMode =
 function(content) {
-        this._pendingContent = content || "";
+	this._pendingContent = content || "";
 	this._keyEvent = new DwtKeyEvent();
 	this._stateEvent = new DwtHtmlEditorStateEvent();
 	this._stateEvent.dwtObj = this;
 	this._updateStateAction = new AjxTimedAction(this, this._updateState);
-	return this._createIFrameEl();
-}
 
-DwtHtmlEditor.prototype._createIFrameEl =
-function() {
 	var htmlEl = this.getHtmlElement();
 	this._iFrameId = "iframe_" + Dwt.getNextId();
 	var iFrame = document.createElement("iframe");
@@ -790,13 +786,10 @@ function() {
 	iFrame.setAttribute("frameborder", "0", false);
 	iFrame.setAttribute("vspace", "0", false);
 	iFrame.setAttribute("autocomplete", "off", false);
-// 	iFrame.setAttribute("marginwidth", "0", false);
-// 	iFrame.setAttribute("marginheight", "0", false);
 
-        var cont = AjxCallback.simpleClosure(this._finishHtmlModeInit, this);
-        setTimeout(cont, DwtHtmlEditor._INITDELAY);
+	var cont = AjxCallback.simpleClosure(this._finishHtmlModeInit, this);
+	setTimeout(cont, DwtHtmlEditor._INITDELAY);
 
-//	if (AjxEnv.isIE && location.protocol == "https:")
 	iFrame.src = this._blankIframeSrc || "";
 	htmlEl.appendChild(iFrame);
 
@@ -805,42 +798,40 @@ function() {
 
 DwtHtmlEditor.prototype._finishHtmlModeInit =
 function() {
-        var doc = this._getIframeDoc();
+	var doc = this._getIframeDoc();
 
 	try {
 		// in case safari3 hasn't init'd BODY tag yet
-                if (AjxEnv.isSafari && doc.body == null) {
+		if (AjxEnv.isSafari && doc.body == null) {
 			doc.open();
 			doc.write("<html><head></head><body></body></html>");
 			doc.close();
 		}
-        } catch (ex) {
+	} catch (ex) {
 		DBG.println("XXX: Error initializing HTML mode :XXX");
 		return;
 	}
 
-        if (AjxEnv.isGeckoBased) {
-                doc.open();
-                doc.write(DwtHtmlEditor.INIT_HTML);
-                doc.close();
-        }
+	if (AjxEnv.isGeckoBased) {
+		doc.open();
+		doc.write(DwtHtmlEditor.INIT_HTML);
+		doc.close();
+	}
 
-        function cont(doc) {
-                this._enableDesignMode(doc);
-                this._setContentOnTimer();
-	        this._updateState();
-	        this._htmlModeInited = true;
-	        this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
-                // this.focus();
-        };
+	function cont(doc) {
+		this._enableDesignMode(doc);
+		this._setContentOnTimer();
+		this._updateState();
+		this._htmlModeInited = true;
+		this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
+	};
 
-        if (AjxEnv.isIE) {
-                // IE needs a timeout
-                setTimeout(AjxCallback.simpleClosure(cont, this, doc),
-                           DwtHtmlEditor._INITDELAY);
-        } else {
-	        cont.call(this, doc);
-        }
+	if (AjxEnv.isIE) {
+		// IE needs a timeout
+		setTimeout(AjxCallback.simpleClosure(cont, this, doc), DwtHtmlEditor._INITDELAY);
+	} else {
+		cont.call(this, doc);
+	}
 };
 
 DwtHtmlEditor.prototype._focus =
@@ -851,12 +842,12 @@ function() {
 DwtHtmlEditor.prototype._getIframeDoc =
 function() {
 	return this._iFrameId ? Dwt.getIframeDoc(document.getElementById(this._iFrameId)) : null;
-}
+};
 
 DwtHtmlEditor.prototype._getIframeWin =
 function() {
 	return Dwt.getIframeWindow(document.getElementById(this._iFrameId));
-}
+};
 
 DwtHtmlEditor.prototype._getParentElement =
 function() {
@@ -864,13 +855,14 @@ function() {
 		var iFrameDoc = this._getIframeDoc();
 		var selection = iFrameDoc.selection;
 		var range = selection.createRange();
-		if (selection.type == "None" || selection.type == "Text")
+		if (selection.type == "None" || selection.type == "Text") {
 			// If selection is None still have a parent element
 			return selection.createRange().parentElement();
-		else if (selection.type == "Control")
+		}
+		if (selection.type == "Control") {
 			return selection.createRange().item(0);
-		else
-			return iFrameDoc.body;
+		}
+		return iFrameDoc.body;
 	} else {
 		try {
 			var range = this._getRange();
@@ -885,15 +877,16 @@ function() {
 			return null;
 		}
 	}
-}
+};
 
 DwtHtmlEditor.prototype.getNearestElement =
 function(tagName) {
 	try {
 		var p = this._getParentElement();
 		tagName = tagName.toLowerCase();
-		while (p && p.nodeName.toLowerCase() != tagName)
+		while (p && p.nodeName.toLowerCase() != tagName) {
 			p = p.parentNode;
+		}
 		return p;
 	} catch(ex) {
 		return null;
@@ -922,17 +915,8 @@ function(node, pos, inclusive) {
 	}
 };
 
-DwtHtmlEditor.prototype._forceRedraw = function() {
-// this doesn't work :(
-// 	var save_collapse = table.style.borderCollapse;
-// 	table.style.borderCollapse = "collapse";
-// 	table.style.borderCollapse = "separate";
-// 	table.style.borderCollapse = save_collapse;
-
-// this works but wrecks the caret position
-//	var body = this._getIframeDoc().body;
-//	body.innerHTML = body.innerHTML;
-
+DwtHtmlEditor.prototype._forceRedraw =
+function() {
 	var body = this._getIframeDoc().body;
 	body.style.display = "none";
 	var self = this;
@@ -943,7 +927,8 @@ DwtHtmlEditor.prototype._forceRedraw = function() {
 	}, 10);
 };
 
-DwtHtmlEditor.prototype.getSelectedCells = function() {
+DwtHtmlEditor.prototype.getSelectedCells =
+function() {
 	var cells = null;
 	var sel = this._getSelection();
 	var range, i = 0;
