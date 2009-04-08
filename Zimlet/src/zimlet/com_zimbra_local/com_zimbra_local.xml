@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_local" version="2.0" description="Integrates Yahoo! Local">
+<zimlet name="com_zimbra_local" version="3.0" description="Integrates Yahoo! Local">
 	<include>local.js</include>
     <include>yahoomaps.js</include>
     <include>upcoming.js</include>
