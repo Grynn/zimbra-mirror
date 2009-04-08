@@ -136,7 +136,6 @@ DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.TEXT_UNDERLINE]		= DwtHtmlEditor.UND
 DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.JUSTIFY_LEFT]		= DwtHtmlEditor.JUSTIFY_LEFT;
 DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.JUSTIFY_CENTER]		= DwtHtmlEditor.JUSTIFY_CENTER;
 DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.JUSTIFY_RIGHT]		= DwtHtmlEditor.JUSTIFY_RIGHT;
-DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.JUSTIFY_FULL]		= DwtHtmlEditor.JUSTIFY_FULL;
 DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.HEADER1]			= DwtHtmlEditor._STYLES[1];
 DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.HEADER2]			= DwtHtmlEditor._STYLES[2];
 DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.HEADER3]			= DwtHtmlEditor._STYLES[3];

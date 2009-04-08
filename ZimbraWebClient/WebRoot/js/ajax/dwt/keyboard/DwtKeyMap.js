@@ -113,7 +113,6 @@ DwtKeyMap.HEADER4			= "Header4";
 DwtKeyMap.HEADER5			= "Header5";
 DwtKeyMap.HEADER6			= "Header6";
 DwtKeyMap.JUSTIFY_CENTER	= "CenterJustify";
-DwtKeyMap.JUSTIFY_FULL		= "FullJustify";
 DwtKeyMap.JUSTIFY_LEFT		= "LeftJustify";
 DwtKeyMap.JUSTIFY_RIGHT		= "RightJustify";
 DwtKeyMap.NEXT				= "Next";
