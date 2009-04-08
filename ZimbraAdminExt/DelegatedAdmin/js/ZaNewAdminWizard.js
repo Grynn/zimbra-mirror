@@ -10,7 +10,7 @@ ZaNewAdmin = function () {
     this._init () ;
     this.type = ZaItem.NEW_ADMIN ;
     this.attrs = {} ;
-    this.attrs[ZaAccount.A_zimbraIsAdminAccount] = "TRUE" ;
+    this.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] = "TRUE" ;
 }
 
 ZaNewAdmin.prototype = new ZaItem ;
@@ -30,9 +30,9 @@ ZaNewAdmin.getMyXModel = function () {
            { id: ZaAccount.A2_confirmPassword, type:_STRING_, ref: ZaAccount.A2_confirmPassword},
            { id: ZaAccount.A_zimbraPasswordMustChange, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
                     ref:"attrs/" + ZaAccount.A_zimbraPasswordMustChange},
-           { id: ZaAccount.A_zimbraIsSystemAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaAccount.A_zimbraIsSystemAdminAccount},
-           { id:ZaAccount.A_zimbraIsAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
-            ref:"attrs/"+ZaAccount.A_zimbraIsAdminAccount},
+           { id: ZaAccount.A_zimbraIsAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaAccount.A_zimbraIsAdminAccount},
+           { id:ZaAccount.A_zimbraIsDelegatedAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
+            ref:"attrs/"+ZaAccount.A_zimbraIsDelegatedAdminAccount},
            ZaAccount.adminRolesModelItem,  ZaAccount.adminAccountModelItem,
            { id:ZaDistributionList.A_isAdminGroup, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
                 ref:"attrs/" + ZaDistributionList.A_isAdminGroup},
@@ -58,13 +58,13 @@ ZaNewAdmin.createAdmin = function (tmpObj) {
             attr.setAttribute("n", ZaAccount.A_zimbraPasswordMustChange) ;
         }
         //add the admin attribute
-        if (tmpObj.attrs[ZaAccount.A_zimbraIsSystemAdminAccount]
-                && tmpObj.attrs[ZaAccount.A_zimbraIsSystemAdminAccount] == "TRUE") {
-            var attr = soapDoc.set("a", tmpObj.attrs[ZaAccount.A_zimbraIsSystemAdminAccount]);
-            attr.setAttribute("n", ZaAccount.A_zimbraIsSystemAdminAccount) ;
+        if (tmpObj.attrs[ZaAccount.A_zimbraIsAdminAccount]
+                && tmpObj.attrs[ZaAccount.A_zimbraIsAdminAccount] == "TRUE") {
+            var attr = soapDoc.set("a", tmpObj.attrs[ZaAccount.A_zimbraIsAdminAccount]);
+            attr.setAttribute("n", ZaAccount.A_zimbraIsAdminAccount) ;
         } else {
             var attr = soapDoc.set("a", "TRUE");
-            attr.setAttribute("n", ZaAccount.A_zimbraIsAdminAccount) ;
+            attr.setAttribute("n", ZaAccount.A_zimbraIsDelegatedAdminAccount) ;
             
         }
     } else if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.DL) {
@@ -416,17 +416,17 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
                 visibilityChecks:[],
                 enableDisableChecks:[],
                 msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd,trueValue:"TRUE", falseValue:"FALSE"},
-            {ref:ZaAccount.A_zimbraIsSystemAdminAccount, type:_CHECKBOX_,
+            {ref:ZaAccount.A_zimbraIsAdminAccount, type:_CHECKBOX_,
                 msgName:ZaMsg.NAD_IsSystemAdminAccount,label:ZaMsg.NAD_IsSystemAdminAccount,
                 visibilityChecks:[],
                 enableDisableChecks:[],
                 elementChanged :
                 function(elementValue,instanceValue, event) {
                     if(elementValue == "TRUE") {
-                        this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsAdminAccount);
+                        this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsDelegatedAdminAccount);
 
                     } else{
-                        this.setInstanceValue("TRUE", ZaAccount.A_zimbraIsAdminAccount);                        
+                        this.setInstanceValue("TRUE", ZaAccount.A_zimbraIsDelegatedAdminAccount);                        
                     }
                     this.getForm().itemChanged(this, elementValue, event);
                     this.getForm().parent._button[DwtWizardDialog.NEXT_BUTTON].setEnabled((!(elementValue && elementValue == "TRUE")));

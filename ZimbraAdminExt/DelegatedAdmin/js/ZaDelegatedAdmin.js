@@ -5,12 +5,12 @@
 ZaDelegatedAdmin = function () {};
 
 if (ZaAccount) {
-    ZaAccount.A_zimbraIsAdminAccount = "zimbraIsAdminAccount" ;
+    ZaAccount.A_zimbraIsDelegatedAdminAccount = "zimbraIsDelegatedAdminAccount" ;
     ZaAccount.A2_adminRoles = "adminRoles" ;
     ZaAccount.adminRolesModelItem = {ref: ZaAccount.A2_adminRoles ,id: ZaAccount.A2_adminRoles,
                                     type: _LIST_, listItem:{type:_EMAIL_ADDRESS_}} ;
-    ZaAccount.adminAccountModelItem = {id:ZaAccount.A_zimbraIsAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
-            ref:"attrs/"+ZaAccount.A_zimbraIsAdminAccount} ;
+    ZaAccount.adminAccountModelItem = {id:ZaAccount.A_zimbraIsDelegatedAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
+            ref:"attrs/"+ZaAccount.A_zimbraIsDelegatedAdminAccount} ;
     ZaAccount.myXModel.items.push (ZaAccount.adminAccountModelItem) ;
 
     //admin roles model item
@@ -69,15 +69,15 @@ if (ZaAccount) {
 
     ZaAccount.getAdminChkBoxItem = function () {
         var adminChkBox = {
-            ref:ZaAccount.A_zimbraIsAdminAccount,type:_CHECKBOX_,
+            ref:ZaAccount.A_zimbraIsDelegatedAdminAccount,type:_CHECKBOX_,
             label:ZaMsg.NAD_IsAdmin,
             bmolsnr:true,
             elementChanged :
             function(elementValue,instanceValue, event) {
                 if(elementValue == "TRUE") {
-                    var isSystemAdmin = this.getInstanceValue(ZaAccount.A_zimbraIsSystemAdminAccount) ;
+                    var isSystemAdmin = this.getInstanceValue(ZaAccount.A_zimbraIsAdminAccount) ;
                     if ( isSystemAdmin && isSystemAdmin == "TRUE" )
-                        this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsSystemAdminAccount);
+                        this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsAdminAccount);
                 }
                     this.getForm().itemChanged(this, elementValue, event);
             },
@@ -105,8 +105,8 @@ if (ZaAccount) {
            repeatInstance:"",
            showAddButton:true, showAddOnNextRow:true, addButtonWidth: 50, addButtonLabel:com_zimbra_delegatedadmin.NAD_Add,
            showRemoveButton:true , removeButtonWidth: 50, removeButtonLabel:com_zimbra_delegatedadmin.NAD_Remove,
-           visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsAdminAccount]==\'TRUE\' "],
-           visibilityChangeEventSources: [ZaAccount.A_zimbraIsAdminAccount] ,
+           visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount]==\'TRUE\' "],
+           visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount] ,
            onRemove:ZaAccount.onAdminRoleRemove,
            items:[adminRoleField]
        }
@@ -145,7 +145,7 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
                var tmpGrouperItems = tmpItems[i].items;
                var cnt2 = tmpGrouperItems.length;
                for(var j=0;j<cnt2;j++) {
-                   if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_zimbraIsSystemAdminAccount) {
+                   if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_zimbraIsAdminAccount) {
                        //add  Admin checkbox
                        xFormObject.items[2].items[0].items[i].items.splice(j+1,0, adminChkBox, adminRolesItem);
                        
@@ -153,9 +153,9 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
                        tmpGrouperItems[j].elementChanged =
 								function(elementValue,instanceValue, event) {
 									if(elementValue == "TRUE") {
-                                        var isAdmin = this.getInstanceValue(ZaAccount.A_zimbraIsAdminAccount) ;
+                                        var isAdmin = this.getInstanceValue(ZaAccount.A_zimbraIsDelegatedAdminAccount) ;
                                         if ( isAdmin && isAdmin == "TRUE" )
-                                            this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsAdminAccount);
+                                            this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsDelegatedAdminAccount);
 								    }
 								    this.getForm().itemChanged(this, elementValue, event);
 								};
@@ -190,7 +190,7 @@ if (ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
                var tmpGrouperItems = tmpItems[i].items;
                var cnt2 = tmpGrouperItems.length;
                for(var j=0;j<cnt2;j++) {
-                   if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_zimbraIsSystemAdminAccount) {
+                   if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_zimbraIsAdminAccount) {
                        //add  Admin checkbox
                       tmpItems[i].items.splice(j+1,0, adminChkBox, adminRolesItem);
 
@@ -198,9 +198,9 @@ if (ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
                        tmpGrouperItems[j].elementChanged =
 								function(elementValue,instanceValue, event) {
 									if(elementValue == "TRUE") {
-                                        var isAdmin = this.getInstanceValue(ZaAccount.A_zimbraIsAdminAccount) ;
+                                        var isAdmin = this.getInstanceValue(ZaAccount.A_zimbraIsDelegatedAdminAccount) ;
                                         if ( isAdmin && isAdmin == "TRUE" )
-                                            this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsAdminAccount);
+                                            this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsDelegatedAdminAccount);
 								    }
 								    this.getForm().itemChanged(this, elementValue, event);
 								};
@@ -217,8 +217,8 @@ if (ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 
 ZaDelegatedAdmin.accountViewMethod =
 function (entry) {
-    if (entry.attrs[ZaAccount.A_zimbraIsAdminAccount]
-            && entry.attrs[ZaAccount.A_zimbraIsAdminAccount] == "TRUE" ) {
+    if (entry.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount]
+            && entry.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] == "TRUE" ) {
         this._view._containedObject[ZaAccount.A2_adminRoles] = [] ;
         //Get the isAdminAccount DLs from the directMemberList
         var allDirectMemberOfs = this._view._containedObject [ZaAccount.A2_memberOf] [ZaAccount.A2_directMemberList] ;

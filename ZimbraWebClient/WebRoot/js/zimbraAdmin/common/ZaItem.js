@@ -799,7 +799,7 @@ ZaItem.deepCloneListItem = function (sourceValue) {
  * Method of XFormItem
  */
 ZaItem.hasReadPermission = function (refToCheck) {
-	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsSystemAdminAccount] == 'TRUE')
+	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE')
 		return true;
 	
 	var instance = this.getInstance();
@@ -823,7 +823,7 @@ XFormItem.prototype.hasReadPermission = ZaItem.hasReadPermission;
  * Method of XFormItem
  */
 ZaItem.hasWritePermission = function (refToCheck) {
-	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsSystemAdminAccount] == 'TRUE')
+	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE')
 		return true;
 	
 	var instance = this.getInstance();
@@ -847,7 +847,7 @@ XFormItem.prototype.hasWritePermission = ZaItem.hasWritePermission;
  * Method of XFormItem
  */
 ZaItem.hasRight = function (right) {
-	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsSystemAdminAccount] == 'TRUE')
+	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE')
 		return true;
 		
 	var instance = this.getInstance();

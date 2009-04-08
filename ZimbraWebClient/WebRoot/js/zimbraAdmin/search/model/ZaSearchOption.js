@@ -40,7 +40,7 @@ ZaSearchOption.A_basic_zimbraId = ZaItem.A_zimbraId ;
 ZaSearchOption.A_basic_status = ZaAccount.A_accountStatus ;
 
 ZaSearchOption.A_objTypeAccount = "option_" + ZaSearch.ACCOUNTS ;
-ZaSearchOption.A_objTypeAccountAdmin = ZaAccount.A_zimbraIsSystemAdminAccount ;
+ZaSearchOption.A_objTypeAccountAdmin = ZaAccount.A_zimbraIsAdminAccount ;
 ZaSearchOption.A_enableAccountLastLoginTime_From = "enable_" + ZaAccount.A_zimbraLastLogonTimestamp + "_From" ;
 ZaSearchOption.A_enableAccountLastLoginTime_To = "enable_" + ZaAccount.A_zimbraLastLogonTimestamp + "_To" ;
 ZaSearchOption.A_includeNeverLoginedAccounts = "include_never_login_accounts" ;
