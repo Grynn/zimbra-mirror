@@ -1185,17 +1185,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             mAccountCache.put(acct);
         }
 
-    	// mountpoint remote account
-    	String pxyAcctId;
-    	if ((pxyAcctId = (String)attrs.get(A_offlineMountpointProxyAccountId)) != null) {
-    	    Server server;
-    	    synchronized (mSyncServerCache) {
-    	        server = mSyncServerCache.get((String)attrs.get(A_zimbraMailHost));
-    	    }
-    	    if (server == null)
-    	        loadRemoteSyncServer(pxyAcctId, acct.getId());
-    	}
-    	
+    	String pxyAcctId = (String)attrs.get(A_offlineMountpointProxyAccountId);
+    	if (pxyAcctId != null) // is offline mountpoint account..
+    	    loadRemoteSyncServer(pxyAcctId, acct, (String)attrs.get(A_zimbraMailHost));
+    	        	
         return acct;
     }
 
@@ -2298,17 +2291,26 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return newOrder;
     }
     
-    protected void loadRemoteSyncServer(String acctId, String mptAcctId) throws ServiceException {
+    protected void loadRemoteSyncServer(String acctId, Account mptAcct, String mptMailHost) throws ServiceException {        
         Account account = get(AccountBy.id, acctId);
         if (account == null)
             throw AccountServiceException.NO_SUCH_ACCOUNT(acctId);
-        
         String uri = account.getAttr(OfflineConstants.A_offlineRemoteServerUri);
         if (uri == null) {
             OfflineLog.offline.warn("offline account missing RemoteServerUri attr: " + account.getName());
             throw AccountServiceException.INVALID_ATTR_VALUE(OfflineConstants.A_offlineRemoteServerUri + " is null", null);            
         }        
         String key = (OfflineConstants.SYNC_SERVER_PREFIX + uri).toLowerCase();
+        
+        if (!key.equals(mptMailHost.toLowerCase())) // offline account's remote server has been changed...
+            setAccountAttribute(mptAcct, A_zimbraMailHost, key);
+   
+        Server server;
+        synchronized (mSyncServerCache) {
+            server = mSyncServerCache.get(key);
+        }
+        if (server != null)
+            return;
 
         boolean ssl = uri.startsWith("https://");            
         String port = ssl ? "443" : "80";
@@ -2337,12 +2339,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(Provisioning.A_zimbraAdminPort, port);
         attrs.put(Provisioning.A_zimbraMailMode, ssl ? "https" : "http");
 
-        Server server = new Server(key, key, attrs, null, this);
+        server = new Server(key, key, attrs, null, this);
         synchronized(mSyncServerCache) {
             mSyncServerCache.put(key, server);
         }
         
-        setMountpointAccountId((OfflineAccount)account, mptAcctId);
+        setMountpointAccountId((OfflineAccount)account, mptAcct.getId());
     }
         
     @Override
