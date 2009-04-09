@@ -72,7 +72,7 @@ public final class Ab {
     public static byte[] getContent(Contact contact, Attachment attach)
         throws ServiceException {
         try {
-            return attach.getContent(contact);
+            return attach.getContent();
         } catch (Exception e) {
             throw ServiceException.FAILURE(
                 "Unable to get photo attachment for item id " + contact.getId(), e);
