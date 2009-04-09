@@ -768,9 +768,9 @@ ZaDistributionList.publishShare = function (shares, unpublish, callback) {
 	var elOwner = soapDoc.set("owner", ownerId, elShare);
 	elOwner.setAttribute("by", "id");
 	if(unpublish)
-		elShare.setAttribute("action", "add");
-	else
 		elShare.setAttribute("action", "remove");
+	else
+		elShare.setAttribute("action", "add");
 		
 	for(var i=0; i<cnt; i++) {
 		var elFolder = soapDoc.set("folder", "", elShare);
