@@ -202,7 +202,7 @@ ZaRight.getSystemRightsByTargetType = function (targetType)  {
  */
 ZaRight.prototype.dynSelectRightNames = function (callArgs) {
 	try {
-		var value = callArgs["value"];
+		var value = callArgs["value"] || "";
 		var event = callArgs["event"];
 		var callback = callArgs["callback"];
 		var extraLdapQuery = callArgs["extraLdapQuery"];
@@ -211,13 +211,14 @@ ZaRight.prototype.dynSelectRightNames = function (callArgs) {
         var targetType = form.getInstance()[ZaGrant.A_target_type] ;
         var systemRightsByTarget = ZaRight.getSystemRightsByTargetType (targetType) ;
 
-        if (systemRightsByTarget)
-        //filter the choices by user input
         var choices = [];
-        for (var i = 0; i < systemRightsByTarget.length; i ++) {
-//            if (systemRightsByTarget[i].indexOf (value) > 0) {
-               if (systemRightsByTarget[i].indexOf (value) == 0) {    //start with
-                choices.push(systemRightsByTarget[i])   ;
+        if (systemRightsByTarget) {
+            //filter the choices by user input
+            for (var i = 0; i < systemRightsByTarget.length; i ++) {
+    //            if (systemRightsByTarget[i].indexOf (value) > 0) {
+                if (systemRightsByTarget[i].toLowerCase().indexOf (value.toLowerCase()) == 0) {    //start with
+                    choices.push(systemRightsByTarget[i])   ;
+                }
             }
         }
         callback.run(choices) ;
