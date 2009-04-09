@@ -32,6 +32,35 @@ ZaPublishShareXDialog.prototype = new ZaXDialog;
 ZaPublishShareXDialog.prototype.constructor = ZaPublishShareXDialog;
 ZaXDialog.XFormModifiers["ZaPublishShareXDialog"] = new Array();
 
+/**
+* sets the object contained in the view
+**/
+ZaPublishShareXDialog.prototype.setObject =
+function(entry) {
+	this._containedObject = {attrs:{}};
+	
+	if(entry.rights)
+		this._containedObject.rights = entry.rights;
+
+	if(entry.setAttrs)
+		this._containedObject.setAttrs = entry.setAttrs;
+	
+	if(entry.getAttrs)
+		this._containedObject.getAttrs = entry.getAttrs;
+		
+	if(entry._defaultValues)
+		this._containedObject._defaultValues = entry._defaultValues;
+		
+	this._containedObject.name = entry.name;
+	this._containedObject.type = entry.type;
+	this._containedObject.id = entry.id;	
+	this._containedObject[ZaDistributionList.A2_share_selection_cache] = new Array();
+	this._containedObject[ZaDistributionList.A2_share_selection_cache]._version = 1;
+	this._containedObject[ZaDistributionList.A2_sharesPool] = new Array();
+	this._containedObject[ZaDistributionList.A2_sharesPool]._version = 1;	
+	this._localXForm.setInstance(this._containedObject);
+}
+
 ZaPublishShareXDialog.publishSelectedButtonListener = function () {
 	var form = this.getForm();
 	var dl = this.getInstance();
@@ -56,6 +85,12 @@ ZaPublishShareXDialog.publishShareCallback = function () {
 	}
 	list._version = oldList ? oldList._version+1 : 2;
 	this.getModel().setInstanceValue(dl,ZaDistributionList.A2_sharesPool,list);
+	
+	var newSelectionCache = new Array();
+	var oldSelectionCache = this.getModel().getInstanceValue(dl,ZaDistributionList.A2_share_selection_cache);
+	if(oldSelectionCache)
+		newSelectionCache._version = oldSelectionCache._version+1;
+	this.getModel().setInstanceValue(dl,ZaDistributionList.A2_share_selection_cache,newSelectionCache);
 }
 
 ZaPublishShareXDialog.findSharesButtonListener = function () {

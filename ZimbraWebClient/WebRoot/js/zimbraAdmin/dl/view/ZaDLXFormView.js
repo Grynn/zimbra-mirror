@@ -401,7 +401,6 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 
 ZaDLXFormView.prototype.setObject = 
 function (entry) {
-    entry.modifyObject () ;  
     this._containedObject = {attrs:{}};
 
 	this._containedObject[ZaDistributionList.A2_memberList] = new Array();
@@ -533,12 +532,27 @@ function (ev) {
 	}		
 }
 
+ZaDLXFormView.publishShareCallback = function () {
+	var tmp = new ZaDistributionList(this.getModel().getInstanceValue(this.getInstance(), "id"),this.getModel().getInstanceValue(this.getInstance(), ZaAccount.A_name));
+	tmp.getPublishedShareInfo();
+	var tmpArr = tmp[ZaDistributionList.A2_publishedShares] ? tmp[ZaDistributionList.A2_publishedShares].getArray() : [];
+	var oldArr = this.getModel().getInstanceValue(this.getInstance(),ZaDistributionList.A2_publishedShares);
+	if(!AjxUtil.isEmpty(oldArr)) {
+		tmpArr._version = oldArr._version + 1;
+	} else {
+		tmpArr._version = 1;
+	}
+	this.getModel().setInstanceValue(this.getInstance(),ZaDistributionList.A2_publishedShares,tmpArr);	
+	if(this.parent.publishShareDlg)
+		this.parent.publishShareDlg.popdown();
+}
+
 ZaDLXFormView.publishNewShareButtonListener = function () {
 	var instance = this.getInstance();
 	var formPage = this.getForm().parent;
 	if(!formPage.publishShareDlg) {
 		formPage.publishShareDlg = new ZaPublishShareXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "550px", "300px",ZaMsg.Share_PublishNewTitle);
-		//formPage.publishShareDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDLXFormView.publishShare, this.getForm(), null);						
+		formPage.publishShareDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDLXFormView.publishShareCallback, this.getForm(), null);						
 	}
 	
 	formPage.publishShareDlg.setObject(instance);
@@ -564,6 +578,13 @@ ZaDLXFormView.unpublishShareCallback = function () {
 	}
 	list._version = oldList ? oldList._version+1 : 2;
 	this.getModel().setInstanceValue(dl,ZaDistributionList.A2_publishedShares,list);
+	
+	var newSelectionCache = new Array();
+	var oldSelectionCache = this.getModel().getInstanceValue(dl,ZaDistributionList.A2_published_share_selection_cache);
+	if(oldSelectionCache)
+		newSelectionCache._version = oldSelectionCache._version+1;
+	this.getModel().setInstanceValue(dl,ZaDistributionList.A2_published_share_selection_cache,newSelectionCache);
+	
 }
 
 ZaDLXFormView.deleteAliasButtonListener = function () {
@@ -1125,7 +1146,8 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 						{type:_CELLSPACER_},
 						{type:_DWT_BUTTON_, label:ZaMsg.Shares_UnPublish,width:"150px",
 							id:"deleteShareButton",onActivate:"ZaDLXFormView.upublishShareButtonListener.call(this,event)",
-							enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.PUBLISH_SHARE_RIGHT]]
+							enableDisableChangeEventSources:[ZaDistributionList.A2_published_share_selection_cache],
+							enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.PUBLISH_SHARE_RIGHT],[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_published_share_selection_cache]]
 						},
 						{type:_CELLSPACER_}							
 					]

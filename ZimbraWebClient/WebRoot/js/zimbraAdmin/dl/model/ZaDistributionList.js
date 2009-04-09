@@ -686,9 +686,9 @@ ZaDistributionList.prototype.getPublishedShareInfo = function () {
 		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_GET_SHARES
 	};
-	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetPublishedShareInfoResponse;	
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetPublishedShareInfoResponse;
+	this[ZaDistributionList.A2_publishedShares] = new ZaItemList(ZaShare);	
 	if(!AjxUtil.isEmpty(resp.share)) {
-		this[ZaDistributionList.A2_publishedShares] = new ZaItemList(ZaShare);
 		this[ZaDistributionList.A2_publishedShares].loadFromJS(resp);
 	}
 	//GetShareInfoRequest	
