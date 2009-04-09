@@ -246,11 +246,12 @@ ZaNewAdminWizard.prototype.goPage = function (pageKey) {
                     || pageKey == ZaNewAdminWizard.STEP_NEW_GROUP) {
 
 
-    } else if (pageKey == ZaNewAdminWizard.STEP_PERMISSION
-            || pageKey == ZaNewAdminWizard.STEP_UI_COMPONENTS) {
+    } else if (pageKey == ZaNewAdminWizard.STEP_PERMISSION) {
         cancel = prev = false ;
-    } else if (pageKey == ZaNewAdminWizard.STEP_FINISH) {
-        next = prev = cancel = false ;
+    } else if ( pageKey == ZaNewAdminWizard.STEP_UI_COMPONENTS ) {
+        cancel = false ;
+    } else if ( pageKey == ZaNewAdminWizard.STEP_FINISH) {
+        next  = cancel = false ;
     }
 
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(prev);
