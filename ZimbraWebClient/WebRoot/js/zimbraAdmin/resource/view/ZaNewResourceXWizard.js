@@ -321,8 +321,14 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 					  enableDisableChecks:[]
 					  });
 		
+	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, 
+						enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
+						enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],						
+						msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring, 
+						labelCssClass:"xform_label", align:_LEFT_,labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE"});
+
 	setupGroup.items.push({ref:ZaResource.A2_schedulePolicy, type:_OSELECT1_, msgName:ZaMsg.NAD_ResType,
-						visibilityChecks:[[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoDeclineRecurring]],
+						visibilityChecks:[[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoAcceptDecline]],
 						enableDisableChecks:[],
 						label:ZaMsg.NAD_SchedulePolicy, labelLocation:_LEFT_, width: "300px", 
 						elementChanged: function(elementValue,instanceValue, event) {
@@ -345,13 +351,6 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 		enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],			
 		labelLocation:_LEFT_, cssClass:"admin_xform_number_input"});	
 								
-	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, 
-						enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
-						enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],						
-						msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring, 
-						labelCssClass:"xform_label", align:_LEFT_,labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE"});
-					
-	
 	setupGroup.items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
 						visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_mailHost]],
 						items: [

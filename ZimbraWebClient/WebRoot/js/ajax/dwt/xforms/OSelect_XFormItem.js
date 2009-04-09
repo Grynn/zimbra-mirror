@@ -153,22 +153,19 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	menu.className = this.getMenuCssClass();
 	menu.innerHTML = this.getChoicesHTML();	
 	var bounds;
-	bounds = this.getBounds(this.getElement().childNodes[0]);
-
-	var w = DwtShell.getShell(window).getSize();
+	//bounds = this.getBounds(this.getElement().childNodes[0]);
+	bounds = this.getBounds(this.getElement());
+		
+	var w =DwtShell.getShell(window).getSize();
 	var wh = w.y;
 	var WINDOW_GUTTER = 8;
 	menu.style.left = parseInt(bounds.left);
 	menu.style.top = parseInt(bounds.top) + parseInt(bounds.height) - 1;
 	var choices = this.getNormalizedChoices();
 	if(choices && choices.values) {
-	//	menu.style.width = bounds.width;
 		menu.style.overflow="hidden";
-//		menu.style.height = (parseInt(bounds.height-3)*choices.values.length)+3;
-//        menu.style.height = (17*choices.values.length)+3;
         var visibleChoices = choices.values.length - choices.totalInvisibleChoices;
         menu.style.height = (19*visibleChoices)+3;
-
     }
 
 	var value = this.getInstanceValue();
@@ -186,13 +183,18 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	var mBounds = this.getBounds(menu);
 	var menuHeight = mBounds.height;
 	var menuTop = mBounds.top;
-
+	if (AjxEnv.isIE) {
+		menu.style.width = parseInt(bounds.width)+2;
+		menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 1;
+	} else {
+		menu.style.width = parseInt(bounds.width)-3;
+		menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 4;
+	}
 	if(menuHeight + menuTop > wh - WINDOW_GUTTER) {
 		//menu does not fit downwards - check if it fits upwards
 		if((bounds.top - menuHeight) > WINDOW_GUTTER) {
 			//yes - it fits upwards
-			menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width);
-			menu.style.width = parseInt(bounds.width);	
+			
 			menu.style.top = bounds.top - menuHeight;			
 			menu.getElementsByTagName("table")[0].className = this.getChoiceTableCssClass();				
 		} else {
@@ -211,14 +213,11 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 				menu.style.height = wh-WINDOW_GUTTER-parseInt(menu.style.top);								
 				this.menuDirection = OSelect1_XFormItem.MENU_DIR_DOWN;
 			}
-			menu.style.width = parseInt(bounds.width)+2;					
 			menu.style.overflow="auto";	
 			menu.getElementsByTagName("table")[0].className = this.getChoiceScrollTableCssClass();
 			menu.getElementsByTagName("table")[0].width="100%";
 		} 
 	} else {
-		menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width);
-		menu.style.width = parseInt(bounds.width);	
 		menu.getElementsByTagName("table")[0].className = this.getChoiceTableCssClass();
 	}
 	menu.style.zIndex = 1000000;
@@ -405,7 +404,7 @@ OSelect1_XFormItem.prototype.getBounds = function(anElement, containerElement) {
 	var myBounds = new Object();
 	myBounds.left = 0;
 	myBounds.top = 0;
-	myBounds.width = anElement.offsetWidth;
+	myBounds.width = anElement.clientWidth;
 	myBounds.height = anElement.offsetHeight;
 
 	if(!containerElement) {
@@ -620,7 +619,7 @@ OSelect1_XFormItem.prototype.getItemNumFromEvent = function (event) {
 OSelect1_XFormItem.prototype.getChoiceElements = function (itemNum) {
 	if (itemNum == null || itemNum == -1) return null;
 	try {
-		return this.getForm().getElement(this.getId() + "_menu_table").getElementsByTagName("div")[itemNum];
+		return this.getForm().getElement([this.getId(), "_choice_",itemNum].join(""));
 	} catch (e) {
 		return null;
 	}
@@ -730,7 +729,7 @@ OSelect1_XFormItem.prototype.getNoteCssClass = function () {
 }
 
 OSelect1_XFormItem.prototype.outputChoicesHTMLStart = function(html) {
-	html.append("<table cellspacing=0 cellpadding=0 id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
+	html.append("<table cellspacing=0 cellpadding=0 id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">");
 	
 }
 OSelect1_XFormItem.prototype.outputChoicesHTMLEnd = function(html) {
@@ -740,7 +739,7 @@ OSelect1_XFormItem.prototype.outputChoicesHTMLEnd = function(html) {
 OSelect1_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass) {
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
 	//try DIVs
-	return AjxBuffer.concat("<tr><td><div class=", cssClass, 
+	return AjxBuffer.concat("<tr><td><div id=\"", this.getId(), "_choice_", itemNum, "\" ", "class=", cssClass, 
 			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
 			" onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",
 			" onclick=\"",ref, ".onChoiceClick(", itemNum,", event||window.event)\"",
@@ -805,10 +804,10 @@ OSelect_XFormItem.prototype.choicesChangeLsnr = function () {
 }
 
 OSelect_XFormItem.prototype.outputChoicesHTMLStart = function(html) {
-	html.append("<table id=", this.getId(),"_menu_table width=100% cellspacing=2 cellpadding=0>\r");
+	html.append("<table id=", this.getId(),"_menu_table width=100% cellspacing=2 cellpadding=0>");
 }
 OSelect_XFormItem.prototype.outputChoicesHTMLEnd = function(html) {
-	html.append("</table>\r");
+	html.append("</table>");
 }
 
 
@@ -985,7 +984,7 @@ OSelect_Check_XFormItem.prototype.getChoiceHTML = function (itemNum, value, labe
 		">",
 		"<table cellspacing=0 cellpadding=0><tr><td><input type=checkbox id='",id,"_choiceitem_",itemNum,"'></td><td>",
 				label,
-		"</td></tr></table></tr>\r"
+		"</td></tr></table></tr>"
 	);
 }
 

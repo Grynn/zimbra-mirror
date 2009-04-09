@@ -959,7 +959,7 @@ XFormItem.prototype.outputContainerTDStartHTML = function (html,  colSpan, rowSp
 } 
 
 XFormItem.prototype.outputContainerTDEndHTML = function (html) {
-	html.append("\r", "</td id=\"",  this.getId(), "___container\">\r");
+	html.append("</td id=\"",  this.getId(), "___container\">");
 } 
 
 
@@ -969,11 +969,11 @@ XFormItem.prototype.outputContainerTDEndHTML = function (html) {
 // for items that are effectively elements (or are drawn by something other than this form)
 // NOTE: you can pass in any random CSS properties you want in cssStyle
 XFormItem.prototype.outputElementDivStart = function (html) {
-	html.append( "<div id=", this.getId(), this.getCssString(), " xform_type='elementDiv'>\r");
+	html.append( "<div id=", this.getId(), this.getCssString(), " xform_type='elementDiv'>");
 }
 
 XFormItem.prototype.outputElementDivEnd = function (html) {
-	html.append("\r", "</div id=\"", this.getId(), "\">");
+	html.append("</div id=\"", this.getId(), "\">");
 }
 
 //
@@ -1013,7 +1013,7 @@ XFormItem.prototype.outputLabelCellHTML = function (html,  rowSpan, labelLocatio
 		if (this.getRequired()) {
 			html.append("<span class='redAsteric'>*</span>");
 		}
-		html.append("</td>\r");
+		html.append("</td>");
 	}
 
 
@@ -2732,9 +2732,9 @@ Select1_XFormItem.prototype.outputHTML = function (html,  currentCol) {
 		"<select id=\"", this.getId(), "\" ", this.getCssString(), 
 			(this.getMultiple() ? "multiple " : ""), 
 			this.getChangeHandlerHTML(), this.getFocusHandlerHTML(),
-		">\r",
+		">",
 			this.getChoicesHTML(),
-		"\r", "</select>"
+		"</select>"
 		);
 	this.cleanChoiceDisplay();
 }
@@ -3135,17 +3135,17 @@ Case_XFormItem.prototype._outputHTML = function () {
 		var cellpadding = this.getInheritedProperty("cellpadding");		
 		html.append("<table cellspacing=",cellspacing," cellpadding=",cellpadding," ",  
 				(XForm._showBorder ? "border=1" : "border=0"),
-				" id=\"", this.getId(),"_table\" ", this.getTableCssString(),">\r");
+				" id=\"", this.getId(),"_table\" ", this.getTableCssString(),">");
 		if (colSizes != null) {
-			html.append(" <colgroup>\r");
+			html.append(" <colgroup>");
 			for (var i = 0; i < colSizes.length; i++) {
 				var size = colSizes[i];
 				if (size < 1) size = size * 100 + "%";
-				html.append("<col width=", size, ">\r");
+				html.append("<col width=", size, ">");
 			}
-			html.append("</colgroup>\r");
+			html.append("</colgroup>");
 		}
-		html.append("<tbody>\r");
+		html.append("<tbody>");
 	}
 	//output HTML for all child elements
 	form.outputItemList(this.getItems(), this, html, this.getNumCols(), 0, true, true);
