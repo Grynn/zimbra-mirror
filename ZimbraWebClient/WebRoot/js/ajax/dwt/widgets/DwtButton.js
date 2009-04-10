@@ -251,6 +251,13 @@ function(enabled) {
 	if (enabled != this._enabled) {
 		DwtLabel.prototype.setEnabled.call(this, enabled); // handles image/text
         if (enabled) {
+			// bug fix #36253 - HACK for IE. ARGH!!!
+			var el = (AjxEnv.isIE) ? this.getHtmlElement().firstChild : null;
+			if (el) {
+				var cname = el.className;
+				el.className = "";
+				el.className = cname;
+			}
 			this._addMouseListeners();
 			// set event handler for pull down menu if applicable
 			if (this._menu) {
