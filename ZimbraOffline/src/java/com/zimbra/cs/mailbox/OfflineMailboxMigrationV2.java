@@ -85,7 +85,7 @@ class OfflineMailboxMigrationV2 {
 		ImapFolder imapFolder = DbImapFolder.getImapFolders(mbox, ds).getByItemId(folderId);
 		if (imapFolder != null) {
 			DbImapFolder.deleteImapFolder(mbox, ds, imapFolder);
-			DbImapFolder.createImapFolder(mbox, ds, -imapFolder.getItemId(), imapFolder.getLocalPath(), imapFolder.getRemotePath(), imapFolder.getUidValidity());
+			DbImapFolder.createImapFolder(mbox, ds, -imapFolder.getItemId(), imapFolder.getLocalPath(), imapFolder.getRemoteId(), imapFolder.getUidValidity());
 		}
 	}
 }

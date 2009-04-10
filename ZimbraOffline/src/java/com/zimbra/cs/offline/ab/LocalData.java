@@ -141,7 +141,7 @@ public final class LocalData {
             md = new Metadata();
             md.put(key, data);
         }
-        DataSourceItem dsi = new DataSourceItem(itemId, remoteId, md);
+        DataSourceItem dsi = new DataSourceItem(-1, itemId, remoteId, md);
         if (DbDataSource.hasMapping(ds, itemId)) {
             DbDataSource.updateMapping(ds, dsi);
         } else {
