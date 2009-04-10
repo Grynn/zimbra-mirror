@@ -62,6 +62,18 @@ checkrunning()
 	fi
 }
 
+checkListening()
+{
+  SEARCHTIMEOUT=30 #timelimit for ldapsearch
+  /opt/zimbra/openldap/bin/ldapsearch -x -l $SEARCHTIMEOUT -b "" -s base -H ${bind_url} >/dev/null 2>&1
+  if [ $? -ne 0 ]; then
+    LISTENING=0
+  else
+    LISTENING=1
+  fi
+
+}
+
 doDebugStart() {
   TIMEOUT=60 # timelimit for command
 	sudo /opt/zimbra/libexec/zmslapd -l LOCAL0 -4 -u zimbra -h "${bind_url} ldapi:///" \
@@ -131,6 +143,17 @@ start()
 		echo "slapd already running: pid $PID"
 		exit 1
 	fi
+    for ((i =0; i < 6; i++)); do
+      checkListening
+      if [ $LISTENING = 1 ]; then
+        break
+      fi
+      sleep 5
+    done
+    if [ $LISTENING = 0 ]; then
+      echo "Error: Unable to check that slapd is listening to connections"
+      exit 1
+    fi
 }
 
 stop()
