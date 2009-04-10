@@ -75,7 +75,20 @@ ZaPublishShareXDialog.publishAllButtonListener = function () {
 	ZaDistributionList.publishShare.call(dl,shares,false,new AjxCallback(form,ZaPublishShareXDialog.publishShareCallback));		
 }
 
-ZaPublishShareXDialog.publishShareCallback = function () {
+ZaPublishShareXDialog.publishShareCallback = function (respObj) {
+	if(respObj.isException && respObj.isException()) {
+		ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(),"ZaPublishShareXDialog.publishShareCallback", null, false);
+	} else if(respObj.getResponse().Body.BatchResponse.Fault) {
+		var fault = respObj.getResponse().Body.BatchResponse.Fault;
+		if(fault instanceof Array)
+			fault = fault[0];
+					
+		if (fault) {
+			// JS response with fault
+			var ex = ZmCsfeCommand.faultToEx(fault);
+			ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaDLXFormView.unpublishShareCallback", null, false);
+		}
+	}
 	var dl = this.getInstance();
 	var owner = this.getModel().getInstanceValue(dl,ZaDistributionList.A2_sharesOwner);
 	var oldList = this.getModel().getInstanceValue(dl,ZaDistributionList.A2_sharesPool);

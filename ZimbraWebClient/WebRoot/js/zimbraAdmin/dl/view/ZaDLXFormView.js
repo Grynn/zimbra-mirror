@@ -566,7 +566,22 @@ ZaDLXFormView.upublishShareButtonListener = function () {
 	ZaDistributionList.publishShare.call(dl,shares,true, new AjxCallback(form,ZaDLXFormView.unpublishShareCallback));		
 }
 
-ZaDLXFormView.unpublishShareCallback = function () {
+ZaDLXFormView.unpublishShareCallback = function (respObj) {
+	
+	if(respObj.isException && respObj.isException()) {
+		ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(),"ZaDLXFormView.unpublishShareCallback", null, false);
+	} else if(respObj.getResponse().Body.BatchResponse.Fault) {
+		var fault = respObj.getResponse().Body.BatchResponse.Fault;
+		if(fault instanceof Array)
+			fault = fault[0];
+			
+		if (fault) {
+			// JS response with fault
+			var ex = ZmCsfeCommand.faultToEx(fault);
+			ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaDLXFormView.unpublishShareCallback", null, false);
+		}
+	}
+	
 	var dl = this.getInstance();
 	var oldList = this.getModel().getInstanceValue(dl,ZaDistributionList.A2_publishedShares);
 	ZaDistributionList.prototype.getPublishedShareInfo.call(dl);
@@ -1144,7 +1159,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 							enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.PUBLISH_SHARE_RIGHT]]
 						},
 						{type:_CELLSPACER_},
-						{type:_DWT_BUTTON_, label:ZaMsg.Shares_UnPublish,width:"150px",
+						{type:_DWT_BUTTON_, label:ZaMsg.Shares_UnPublish,width:"210px",
 							id:"deleteShareButton",onActivate:"ZaDLXFormView.upublishShareButtonListener.call(this,event)",
 							enableDisableChangeEventSources:[ZaDistributionList.A2_published_share_selection_cache],
 							enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.PUBLISH_SHARE_RIGHT],[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_published_share_selection_cache]]

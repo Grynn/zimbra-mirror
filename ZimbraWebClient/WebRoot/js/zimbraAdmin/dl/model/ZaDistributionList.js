@@ -760,19 +760,25 @@ ZaDistributionList.publishShare = function (shares, unpublish, callback) {
 		if(shares[i][ZaShare.A_ownerId] !=ownerId)
 			throw (new ZmCsfeException("Invalid parameter", AjxException.INVALID_PARAM, "ZaDistributionList.publishShare", "trying to publish shares from multiple owners in one call"));
 	}
-	var soapDoc = AjxSoapDoc.create("PublishShareInfoRequest", ZaZimbraAdmin.URN, null);
-	var dl = soapDoc.set("dl", this.id);
-	dl.setAttribute("by", "id");
 	
-	var elShare = soapDoc.set("share", "");
-	var elOwner = soapDoc.set("owner", ownerId, elShare);
-	elOwner.setAttribute("by", "id");
-	if(unpublish)
-		elShare.setAttribute("action", "remove");
-	else
-		elShare.setAttribute("action", "add");
+	var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+	soapDoc.setMethodAttribute("onerror", "stop");	
+	for(var i=0; i<cnt; i++) {		
 		
-	for(var i=0; i<cnt; i++) {
+		var publishSoapDoc = soapDoc.set("PublishShareInfoRequest",  null, null, ZaZimbraAdmin.URN);
+
+		var dl = soapDoc.set("dl", this.id,publishSoapDoc);
+		dl.setAttribute("by", "id");
+		
+		var elShare = soapDoc.set("share", "",publishSoapDoc);
+		var elOwner = soapDoc.set("owner", ownerId, elShare);
+		elOwner.setAttribute("by", "id");
+		if(unpublish)
+			elShare.setAttribute("action", "remove");
+		else
+			elShare.setAttribute("action", "add");
+			
+
 		var elFolder = soapDoc.set("folder", "", elShare);
 		elFolder.setAttribute("pathOrId", shares[i][ZaShare.A_folderId]);
 	}
