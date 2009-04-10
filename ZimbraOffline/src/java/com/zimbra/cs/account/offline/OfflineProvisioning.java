@@ -756,11 +756,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     public synchronized OfflineAccount createGalAccount(OfflineAccount mainAcct) throws ServiceException {
-        Map<String, Object> attrs = new HashMap<String, Object>();
+        deleteGalAccount(mainAcct); // cleanup any left-over entry, if any
 
         String id = UUID.randomUUID().toString();
         String name = mainAcct.getName() + OfflineConstants.GAL_ACCOUNT_SUFFIX;
         
+        Map<String, Object> attrs = new HashMap<String, Object>();
         attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );
         attrs.put(A_zimbraMailHost, "localhost");
         attrs.put(A_uid, id);
@@ -1089,17 +1090,24 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
         
     public synchronized void deleteGalAccount(OfflineAccount mainAcct) throws ServiceException {
+        OfflineAccount galAcct = null;
+        
         String galAcctId = mainAcct.getAttr(OfflineConstants.A_offlineGalAccountId, false);        
-        if (galAcctId == null || galAcctId.length() == 0)
-            return;
-        setAccountAttribute(mainAcct, OfflineConstants.A_offlineGalAccountId, "");
+        if (galAcctId != null && galAcctId.length() > 0) {
+            setAccountAttribute(mainAcct, OfflineConstants.A_offlineGalAccountId, "");
+            galAcct = (OfflineAccount)get(AccountBy.id, galAcctId);
+        }
+        if (galAcct == null) {
+            galAcct = (OfflineAccount)get(AccountBy.name, mainAcct.getName() + OfflineConstants.GAL_ACCOUNT_SUFFIX);  
+            if (galAcct == null)
+                return;
+        }
 
-        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(galAcctId, false);      
+        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(galAcct.getId(), false);      
         if (mbox != null)
         	((DesktopMailbox)mbox).deleteMailbox(false);
-        OfflineAccount galAcct = (OfflineAccount)get(AccountBy.id, galAcctId);
-        if (galAcct != null)
-            deleteOfflineAccount(galAcctId);
+        
+        deleteOfflineAccount(galAcct.getId());
     }
     
     private void deleteMountpointAccounts(String mainAcctId) throws ServiceException {
