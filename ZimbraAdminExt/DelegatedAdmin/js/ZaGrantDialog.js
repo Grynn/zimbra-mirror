@@ -126,7 +126,7 @@ function() {
                        enableDisableChecks:[[ZaGrantDialog.rightTypeListener, "system"]],
                        enableDisableChangeEventSources:[ZaGrant.A_right_type],
                        labelLocation:_LEFT_ ,
-                       emptyText:ZaMsg.enterSearchTerm,
+                       emptyText:com_zimbra_delegatedadmin.searchTermRight,
                        choices: this.systemRightsChoices, 
 //                       inputPreProcessor:ZaGrantDialog.preProcessRightNames,
                        dataFetcherClass:ZaRight ,

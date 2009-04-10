@@ -262,7 +262,7 @@ OSelect1_XFormItem.prototype.hideMenu = function () {
 		var form = this.getForm();
 		var formElement = form.getHtmlElement();
 		if (formElement.detachEvent) {
-			window.event.cancelBubble = true;
+			if (window.event != null) window.event.cancelBubble = true;
 			formElement.detachEvent("onmousewheel", OSelect1_XFormItem._mouseWheelHideMenu);
 			OSelect1_XFormItem._mouseWheelEventAttached = false;
 			OSelect1_XFormItem._mouseWheelCurrentSelect = null;

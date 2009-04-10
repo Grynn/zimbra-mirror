@@ -203,9 +203,9 @@ ZaRight.getSystemRightsByTargetType = function (targetType)  {
 ZaRight.prototype.dynSelectRightNames = function (callArgs) {
 	try {
 		var value = callArgs["value"] || "";
-		var event = callArgs["event"];
+		//var event = callArgs["event"];
 		var callback = callArgs["callback"];
-		var extraLdapQuery = callArgs["extraLdapQuery"];
+		//var extraLdapQuery = callArgs["extraLdapQuery"];
 		var form = callArgs["form"];
 		
         var targetType = form.getInstance()[ZaGrant.A_target_type] ;
@@ -221,10 +221,12 @@ ZaRight.prototype.dynSelectRightNames = function (callArgs) {
                 }
             }
         }
-        callback.run(choices) ;
+
+        if (callback)
+            callback.run(choices) ;
         
     } catch (ex) {
-		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectRightNames");
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaRight.prototype.dynSelectRightNames");
 	}
 }
 
