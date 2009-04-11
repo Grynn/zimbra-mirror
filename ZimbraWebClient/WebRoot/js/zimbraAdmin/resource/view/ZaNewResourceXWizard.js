@@ -322,33 +322,24 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 					  });
 		
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, 
-						enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
-						enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],						
 						msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring, 
 						labelCssClass:"xform_label", align:_LEFT_,labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE"});
 
 	setupGroup.items.push({ref:ZaResource.A2_schedulePolicy, type:_OSELECT1_, msgName:ZaMsg.NAD_ResType,
-						visibilityChecks:[[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoAcceptDecline]],
-						enableDisableChecks:[],
+						visibilityChecks:[[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoAcceptDecline],[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoDeclineIfBusy]],
 						label:ZaMsg.NAD_SchedulePolicy, labelLocation:_LEFT_, width: "300px", 
-						elementChanged: function(elementValue,instanceValue, event) {
-							if(elementValue==ZaResource.SCHEDULE_POLICY_MANUAL) {
-								this.getInstance().attrs[ZaResource.A_zimbraCalResAutoDeclineRecurring]="FALSE";
-							}
-							this.getForm().itemChanged(this, elementValue, event);
-						},
 						choices:ZaResource.schedulePolicyChoices});	
 						
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxNumConflictsAllowed, type:_TEXTFIELD_,
 		msgName:ZaMsg.zimbraCalResMaxNumConflictsAllowed, label:ZaMsg.zimbraCalResMaxNumConflictsAllowed,
-		enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
-		enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],			
+		enableDisableChecks:[ZaResource.isAutoDeclineEnabled,[XForm.checkInstanceValue,ZaResource.A_zimbraCalResAutoDeclineRecurring,"FALSE"]],
+		enableDisableChangeEventSources:[ZaResource.A_zimbraCalResAutoDeclineRecurring,ZaResource.A2_schedulePolicy],			
 		labelLocation:_LEFT_, cssClass:"admin_xform_number_input"});		
 		
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxPercentConflictsAllowed, type:_TEXTFIELD_,
 		msgName:ZaMsg.zimbraCalResMaxPercentConflictsAllowed, label:ZaMsg.zimbraCalResMaxPercentConflictsAllowed,
-		enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
-		enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],			
+		enableDisableChecks:[ZaResource.isAutoDeclineEnabled,[XForm.checkInstanceValue,ZaResource.A_zimbraCalResAutoDeclineRecurring,"FALSE"]],
+		enableDisableChangeEventSources:[ZaResource.A_zimbraCalResAutoDeclineRecurring,ZaResource.A2_schedulePolicy],			
 		labelLocation:_LEFT_, cssClass:"admin_xform_number_input"});	
 								
 	setupGroup.items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,

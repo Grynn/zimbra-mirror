@@ -86,9 +86,10 @@ ZaResource.ACCOUNT_STATUS_CLOSED = "closed";
 ZaResource.RESOURCE_TYPE_LOCATION = "Location";
 ZaResource.RESOURCE_TYPE_EQUIPMENT = "Equipment";
 
-ZaResource.SCHEDULE_POLICY_ACCEPT_ALL = "acceptAll";
-ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY = "acceptUnlessBusy";
-ZaResource.SCHEDULE_POLICY_MANUAL = "acceptDeclineManual";
+ZaResource.SCHEDULE_POLICY_TT = "scheduleTT";
+ZaResource.SCHEDULE_POLICY_FT = "scheduleFT";
+ZaResource.SCHEDULE_POLICY_TF = "scheduleTF";
+ZaResource.SCHEDULE_POLICY_FF = "scheduleFF";
 
 //this attributes are not used in the XML object, but is used in the model
 ZaResource.A2_schedulePolicy = "schedulePolicy";
@@ -351,49 +352,37 @@ function (resource) {
 
 //set the ldap attributes according to the schedule policy values
 //the ldap attrs are "zimbraCalResAutoAcceptDecline" & "zimbraCalResAutoDeclineIfBusy";
-/*
-ZaResource.prototype.setSchedulePolicyFromLdapAttrs =
-function(){
-	if (this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] == "TRUE" ){
-		if (this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] == "TRUE") {
-			this[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY ;
-		}else if (this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] == "FALSE"){
-			this[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_ACCEPT_ALL
-		}else {
-			//invalid value
-		}
-	}else{
-		//delegation
-	}
-};*/
 
 ZaResource.prototype.setSchedulePolicyFromLdapAttrs =
 function () {
 	if (this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] == "TRUE" && this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] == "TRUE"){
-		this[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY ;
+		this[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_TT ;
 	} else if (this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] == "TRUE" && this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] == "FALSE") {
-		this[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_ACCEPT_ALL;
+		this[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_TF;
 	} else if (this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] == "FALSE" && this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] == "FALSE") {
-		this[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_MANUAL;
+		this[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_FF;
+	}  else if (this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] == "FALSE" && this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] == "TRUE") {
+		this[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_FT;
 	}
 	
 }
 
+
 ZaResource.prototype.setLdapAttrsFromSchedulePolicy =
 function (){
-	if (this[ZaResource.A2_schedulePolicy] == ZaResource.SCHEDULE_POLICY_ACCEPT_ALL ){
+	if (this[ZaResource.A2_schedulePolicy] == ZaResource.SCHEDULE_POLICY_TT ){
 		this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] = "TRUE";
-		this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] = "FALSE";		
-	} else if (this[ZaResource.A2_schedulePolicy] == ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY){
+		this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] = "TRUE";		
+	} else if (this[ZaResource.A2_schedulePolicy] == ZaResource.SCHEDULE_POLICY_TF){
 		this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] = "TRUE";
-		this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] = "TRUE";
-	} else if (this[ZaResource.A2_schedulePolicy] == ZaResource.SCHEDULE_POLICY_MANUAL) {
+		this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] = "FALSE";
+	} else if (this[ZaResource.A2_schedulePolicy] == ZaResource.SCHEDULE_POLICY_FT) {
 		this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] = "FALSE";
-		this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] = "FALSE";	
-		this.attrs[ZaResource.A_zimbraCalResAutoDeclineRecurring] = "FALSE";	
+		this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] = "TRUE";		
+	} else if (this[ZaResource.A2_schedulePolicy] == ZaResource.SCHEDULE_POLICY_FF) {
+		this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] = "FALSE";
+		this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] = "FALSE";		
 	}
-	
-	//for delegation: this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] = "FALSE";
 };
 
 /**
@@ -624,17 +613,6 @@ ZaResource._RESOURCE_TYPE = new Object();
 ZaResource._RESOURCE_TYPE [ ZaResource.RESOURCE_TYPE_LOCATION] = ZaMsg.resType_location;
 ZaResource._RESOURCE_TYPE [ ZaResource.RESOURCE_TYPE_EQUIPMENT] = ZaMsg.resType_equipment;
 
-ZaResource.getSchedulePolicyLabel = 
-function(val) {
-	var desc = ZaResource._SCHEDULE_POLICY_LABEL [val];
-	return (desc == null) ? val : desc;
-}
-
-ZaResource._SCHEDULE_POLICY_LABEL = new Object();
-ZaResource._SCHEDULE_POLICY_LABEL[ ZaResource.SCHEDULE_POLICY_ACCEPT_ALL] = ZaMsg.resScheduleAcceptAll;
-ZaResource._SCHEDULE_POLICY_LABEL[ ZaResource.SCHEDULE_POLICY_MANUAL] = ZaMsg.resScheduleManual;
-ZaResource._SCHEDULE_POLICY_LABEL[ ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY] = ZaMsg.resScheduleAcceptUnlessBusy;
-
 ZaResource.initMethod = function () {
 	this.attrs = new Object();
 	this.id = "";
@@ -657,8 +635,9 @@ ZaResource.isLocation = function () {
 	return (this.getInstanceValue(ZaResource.A_zimbraCalResType).toLowerCase() ==  ZaResource.RESOURCE_TYPE_LOCATION.toLowerCase());
 }
 
-ZaResource.isSchedulePolicyNotManual = function () {
-	return (this.getInstanceValue(ZaResource.A2_schedulePolicy) != ZaResource.SCHEDULE_POLICY_MANUAL);
+ZaResource.isAutoDeclineEnabled = function () {
+	return (this.getInstanceValue(ZaResource.A2_schedulePolicy) == ZaResource.SCHEDULE_POLICY_TT ||
+	 this.getInstanceValue(ZaResource.A2_schedulePolicy) == ZaResource.SCHEDULE_POLICY_FT);
 }
 
 ZaResource.accountStatusChoices = [
@@ -669,14 +648,14 @@ ZaResource.accountStatusChoices = [
 	];	
 
 ZaResource.resTypeChoices = [
-		{value:ZaResource.RESOURCE_TYPE_LOCATION, label:ZaResource.getResTypeLabel ( ZaResource.RESOURCE_TYPE_LOCATION)}, 
-		{value:ZaResource.RESOURCE_TYPE_EQUIPMENT, label:ZaResource.getResTypeLabel ( ZaResource.RESOURCE_TYPE_EQUIPMENT)}
+		{value:ZaResource.RESOURCE_TYPE_LOCATION, label:ZaMsg.resType_location}, 
+		{value:ZaResource.RESOURCE_TYPE_EQUIPMENT, label:ZaMsg.resType_equipment}
 	];	
 	
 ZaResource.schedulePolicyChoices = [
-		{value:ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY, label:ZaResource.getSchedulePolicyLabel ( ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY)},
-		{value:ZaResource.SCHEDULE_POLICY_ACCEPT_ALL, label:ZaResource.getSchedulePolicyLabel ( ZaResource.SCHEDULE_POLICY_ACCEPT_ALL)},
-		{value:ZaResource.SCHEDULE_POLICY_MANUAL, label:ZaResource.getSchedulePolicyLabel ( ZaResource.SCHEDULE_POLICY_MANUAL)}
-		
+		{value:ZaResource.SCHEDULE_POLICY_TT, label:ZaMsg.resScheduleTT},
+		{value:ZaResource.SCHEDULE_POLICY_FT, label:ZaMsg.resScheduleFT},
+		{value:ZaResource.SCHEDULE_POLICY_TF, label:ZaMsg.resScheduleTF},
+		{value:ZaResource.SCHEDULE_POLICY_FF, label:ZaMsg.resScheduleFF}
 	];
 

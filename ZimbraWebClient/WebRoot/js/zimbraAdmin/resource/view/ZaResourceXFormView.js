@@ -127,10 +127,7 @@ function (index, form) {
 ZaResourceXFormView.myXFormModifier = function(xFormObject) {	
 
 	var domainName;
-	/*if(ZaSettings.DOMAINS_ENABLED && ZaApp.getInstance().getDomainList().size() > 0)
-		domainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
-	else*/ 
-		domainName = ZaSettings.myDomainName;
+	domainName = ZaSettings.myDomainName;
 
 	//get the image according to the type
 	var imgChoices = [ 	{value:ZaResource.RESOURCE_TYPE_LOCATION, label: "Location_32"},
@@ -169,12 +166,6 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
                     label:ZaMsg.NAD_ResourceName, labelLocation:_LEFT_, width: "200px" },
                 {ref:ZaResource.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_ResAccountName,label:ZaMsg.NAD_ResAccountName,
                     labelLocation:_LEFT_
-                    /*elementChanged: function(elementValue,instanceValue, event) {
-                                //disable the autodisplayname whenever user does some action on the account name
-                                this.getInstance()[ZaResource.A2_autodisplayname] = "FALSE";
-                                form.itemChanged(this, elementValue, event);
-                                //this.setInstanceValue(value);
-                            }*/
                 }]
         };
         var setupGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_ResourceSetupGrouper, id:"resource_form_setup_group",
@@ -229,33 +220,29 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
             msgName:ZaMsg.NAD_ResourceStatus,label:ZaMsg.NAD_ResourceStatus,
             labelLocation:_LEFT_, choices:ZaResource.accountStatusChoices});
 
+        setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_,
+            msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring,
+            trueValue:"TRUE", falseValue:"FALSE"});
+            
         setupGroup.items.push({ref:ZaResource.A2_schedulePolicy, type:_OSELECT1_,
                 msgName:ZaMsg.NAD_ResType,label:ZaMsg.NAD_SchedulePolicy,
-                elementChanged: function(elementValue,instanceValue, event) {
-                    if(elementValue==ZaResource.SCHEDULE_POLICY_MANUAL) {
-                        this.getInstance().attrs[ZaResource.A_zimbraCalResAutoDeclineRecurring]="FALSE";
-                    }
-                    this.getForm().itemChanged(this, elementValue, event);
-                },
+                visibilityChecks:[[XFormItem.prototype.hasWritePermission,ZaResource.A_zimbraCalResAutoAcceptDecline],[XFormItem.prototype.hasWritePermission,ZaResource.A_zimbraCalResAutoDeclineIfBusy]],
+                enableDisableChecks:[[XFormItem.prototype.hasReadPermission,ZaResource.A_zimbraCalResAutoAcceptDecline],[XFormItem.prototype.hasReadPermission,ZaResource.A_zimbraCalResAutoDeclineIfBusy]],
                 labelLocation:_LEFT_, width: "300px", choices:ZaResource.schedulePolicyChoices});
 
         setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxNumConflictsAllowed, type:_TEXTFIELD_,
             msgName:ZaMsg.zimbraCalResMaxNumConflictsAllowed, label:ZaMsg.zimbraCalResMaxNumConflictsAllowed,
-            enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
-            enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],
+            enableDisableChecks:[ZaResource.isAutoDeclineEnabled,[XForm.checkInstanceValue,ZaResource.A_zimbraCalResAutoDeclineRecurring,"FALSE"]],
+            enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy,ZaResource.A_zimbraCalResAutoDeclineRecurring],
             labelLocation:_LEFT_, cssClass:"admin_xform_number_input"});
 
         setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxPercentConflictsAllowed, type:_TEXTFIELD_,
             msgName:ZaMsg.zimbraCalResMaxPercentConflictsAllowed, label:ZaMsg.zimbraCalResMaxPercentConflictsAllowed,
-            enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
-            enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],
+            enableDisableChecks:[ZaResource.isAutoDeclineEnabled,[XForm.checkInstanceValue,ZaResource.A_zimbraCalResAutoDeclineRecurring,"FALSE"]],
+            enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy,ZaResource.A_zimbraCalResAutoDeclineRecurring],
             labelLocation:_LEFT_, cssClass:"admin_xform_number_input"});
 
-        setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_,
-            msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring,
-            enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
-            enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],
-            trueValue:"TRUE", falseValue:"FALSE"});
+
 
         var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper, id:"resource_form_password_group",
             colSizes:["275px","*"],numCols:2,items:[
