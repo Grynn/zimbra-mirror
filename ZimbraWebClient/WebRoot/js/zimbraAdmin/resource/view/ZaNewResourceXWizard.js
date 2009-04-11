@@ -170,7 +170,7 @@ function(entry) {
 
 	//set the default value of resource type and schedule policy
 	this._containedObject.attrs[ZaResource.A_zimbraCalResType] = ZaResource.RESOURCE_TYPE_LOCATION;
-	this._containedObject[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY;
+	this._containedObject[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_TT;
 	this._containedObject.attrs[ZaResource.A_accountStatus] = ZaResource.ACCOUNT_STATUS_ACTIVE;
 	this._containedObject[ZaResource.A2_autodisplayname] = "TRUE";
 	this._containedObject[ZaResource.A2_autoMailServer] = "TRUE";
@@ -332,13 +332,13 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 						
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxNumConflictsAllowed, type:_TEXTFIELD_,
 		msgName:ZaMsg.zimbraCalResMaxNumConflictsAllowed, label:ZaMsg.zimbraCalResMaxNumConflictsAllowed,
-		enableDisableChecks:[ZaResource.isAutoDeclineEnabled,[XForm.checkInstanceValue,ZaResource.A_zimbraCalResAutoDeclineRecurring,"FALSE"]],
+		enableDisableChecks:[ZaResource.isAutoDeclineEnabled,[XForm.checkInstanceValueNot,ZaResource.A_zimbraCalResAutoDeclineRecurring,"TRUE"]],
 		enableDisableChangeEventSources:[ZaResource.A_zimbraCalResAutoDeclineRecurring,ZaResource.A2_schedulePolicy],			
 		labelLocation:_LEFT_, cssClass:"admin_xform_number_input"});		
 		
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxPercentConflictsAllowed, type:_TEXTFIELD_,
 		msgName:ZaMsg.zimbraCalResMaxPercentConflictsAllowed, label:ZaMsg.zimbraCalResMaxPercentConflictsAllowed,
-		enableDisableChecks:[ZaResource.isAutoDeclineEnabled,[XForm.checkInstanceValue,ZaResource.A_zimbraCalResAutoDeclineRecurring,"FALSE"]],
+		enableDisableChecks:[ZaResource.isAutoDeclineEnabled,[XForm.checkInstanceValueNot,ZaResource.A_zimbraCalResAutoDeclineRecurring,"TRUE"]],
 		enableDisableChangeEventSources:[ZaResource.A_zimbraCalResAutoDeclineRecurring,ZaResource.A2_schedulePolicy],			
 		labelLocation:_LEFT_, cssClass:"admin_xform_number_input"});	
 								
