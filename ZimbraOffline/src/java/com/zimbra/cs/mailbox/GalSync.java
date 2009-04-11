@@ -95,12 +95,14 @@ public class GalSync {
             try {
                 galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
                 context = new Mailbox.OperationContext(galMbox);
+                Pair<Integer, Integer> pair = OfflineGal.getSyncFolders(galMbox, context);
                 if (fullSync) {
                     OfflineLog.offline.debug("Offline GAL full sync requested: " + galAccount.getName());
-                    Pair<Integer, Integer> pair = OfflineGal.getSyncFolders(galMbox, context);
                     syncFolder = pair.getSecond().intValue();
                     dropFolder = pair.getFirst().intValue();
                     galMbox.emptyFolder(context, syncFolder, false);
+                } else {
+                    syncFolder = pair.getFirst().intValue();
                 }
             } catch (ServiceException e) {
                 exception = e;
