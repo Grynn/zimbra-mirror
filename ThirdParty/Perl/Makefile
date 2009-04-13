@@ -22,7 +22,7 @@ LESS    := $(shell which less)
 WGET    := $(shell which wget)
 MAKE    := $(shell which make)
 SED     := $(shell which sed)
-CMIRROR	?= http://buildmaster.lab.zimbra.com/cpan/
+CMIRROR	?= http://buildmaster.lab.zimbra.com:8080/cpan/
 
 BDB_VERSION ?= 4.7.25.3
 SSL_VERSION ?= 0.9.8k
