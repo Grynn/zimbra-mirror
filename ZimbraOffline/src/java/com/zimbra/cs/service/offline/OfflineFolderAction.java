@@ -71,10 +71,12 @@ public class OfflineFolderAction extends FolderAction {
         boolean quietWhenOffline = !operation.equals(OP_GRANT) && !operation.equals(OP_REVOKE);
         Element parent = request.getParent();
         boolean fromBatch = parent != null && parent.getName().equals("BatchRequest");
-        boolean isNew = (ombx.getChangeMask(octxt, id, MailItem.TYPE_FOLDER) & Change.MODIFIED_CONFLICT) != 0;
-        
-        // before doing anything, make sure all data sources are pushed to the server
-        ombx.sync(true, traceOn);
+ 
+        boolean isNew = ombx.pushNewFolder(octxt, id);       
+        if (operation.equals(OP_REFRESH) || operation.equals(OP_IMPORT)) {
+            // before doing anything, make sure all data sources are pushed to the server
+            ombx.sync(true, traceOn);
+        }
         
         // if it's a newly created folder, id must have been re-numbered after the sync. so we need to fix it in this request
         if (isNew) {
@@ -87,8 +89,11 @@ public class OfflineFolderAction extends FolderAction {
         if (fromBatch && response != null)
             response.detach();
         
-        // and get a head start on the sync of the newly-pulled-in messages
-        ombx.sync(true, traceOn);
+        if (operation.equals(OP_REFRESH) || operation.equals(OP_IMPORT)) {
+            // and get a head start on the sync of the newly-pulled-in messages
+            ombx.sync(true, traceOn);
+        }
+        
         return response;
     }
 }

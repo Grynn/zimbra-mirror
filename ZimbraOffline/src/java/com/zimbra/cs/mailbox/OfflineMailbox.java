@@ -854,4 +854,10 @@ public class OfflineMailbox extends DesktopMailbox {
         config.put(id, ver);
     	setConfig(null, VERSIONS_KEY, config);
     }
+    
+    public boolean pushNewFolder(OperationContext octxt, int id) throws ServiceException {
+        if ((getChangeMask(octxt, id, MailItem.TYPE_FOLDER) & Change.MODIFIED_CONFLICT) == 0)
+            return false;
+        return PushChanges.syncFolder(this, id);
+    }
 }

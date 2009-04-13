@@ -173,6 +173,10 @@ public class PushChanges {
         return new PushChanges(ombx).sync(isOnRequest);
     }
 
+    public static boolean syncFolder(OfflineMailbox ombx, int id) throws ServiceException {
+        return new PushChanges(ombx).syncFolder(id);
+    }
+    
     private boolean sync(boolean isOnRequest) throws ServiceException {
         //deal with archiving first
         List<Integer> archived = new ArrayList<Integer>();
