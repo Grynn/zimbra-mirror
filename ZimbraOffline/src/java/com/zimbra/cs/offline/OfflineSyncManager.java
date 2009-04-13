@@ -38,6 +38,7 @@ import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.RemoteServiceException;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.service.ServiceException.Argument;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
@@ -60,6 +61,7 @@ import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.ab.gab.GDataServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
+import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.yauth.AuthenticationException;
@@ -430,8 +432,16 @@ public class OfflineSyncManager {
         if (exception instanceof SoapFaultException && ((SoapFaultException)exception).getCode().equals(MailServiceException.MAINTENANCE))
         	return true;
     	
-        if (exception instanceof ServiceException && ((ServiceException)exception).getCode().equals(ServiceException.RESOURCE_UNREACHABLE))
-        	return true;
+        if (exception instanceof ServiceException) {
+        	ServiceException e = (ServiceException)exception;
+        	if (e.getCode().equals(ServiceException.RESOURCE_UNREACHABLE)) {
+        		if (e.getArgs() != null)
+        			for (Argument arg : e.getArgs())
+        				if (UserServlet.HTTP_STATUS_CODE.equals(arg.mName) && arg.mValue.startsWith("5"))
+        					return false;
+        		return true;
+        	}
+        }
         
         Throwable cause = SystemUtil.getInnermostException(exception);
         return cause instanceof java.net.UnknownHostException ||
