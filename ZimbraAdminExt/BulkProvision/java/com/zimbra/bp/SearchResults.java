@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -89,7 +90,7 @@ public class SearchResults {
                     line[j+m] = entry.getAttr(ACCOUNT_ATTRS[j], "") ;
                 }
                 
-                ZimbraLog.extensions.debug("Adding entry content : " + line.toString() );
+                ZimbraLog.extensions.debug("Adding entry content : " + Arrays.toString(line));
                 writer.writeNext(line);
             }
 

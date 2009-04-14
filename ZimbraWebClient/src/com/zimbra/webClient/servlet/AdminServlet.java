@@ -75,7 +75,7 @@ public class AdminServlet extends ZimbraServlet {
                 //      Set the headers.
                 //set the Content-Type header to a nonstandard value to avoid the browser to do something automatically
                resp.setHeader("Expires", "Tue, 24 Jan 2000 20:46:50 GMT");
-               resp.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+//               resp.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
                resp.setContentType("application/x-download");
                resp.setHeader("Content-Disposition", "attachment; filename=" + filename + ".csr");
 
