@@ -12,7 +12,13 @@
 # Software distributed under the License is distributed on an "AS IS"
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 # ***** END LICENSE BLOCK *****
-# 
+#
+
+ID=$(id -un)
+if [ x"$ID" != "xzimbra" ]; then
+  echo "$0 must be run as user zimbra"
+  exit 1
+fi 
 
 source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars -f zimbra_home
