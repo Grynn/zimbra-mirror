@@ -14,10 +14,6 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-if [ x`whoami` != xzimbra ]; then
-    echo Error: must be run as zimbra user
-  exit 1
-fi
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
@@ -68,7 +64,7 @@ case "$1" in
 
     ${zimbra_home}/libexec/logswatch --config-file=${configfile} \
       --use-cpan-file-tail --pid-file=${pidfile}\
-      --script-dir=/tmp -t /var/log/zimbra.log > $logfile 2>&1 &
+      --script-dir=/tmp -t /var/log/zimbra-stats.log > $logfile 2>&1 &
     for ((i=0; i < 30; i++)); do
       checkrunning
       if [ $running = 1 ]; then

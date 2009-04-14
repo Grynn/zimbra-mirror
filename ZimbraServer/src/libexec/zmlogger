@@ -21,7 +21,7 @@ use Zimbra::Mon::Zmstat;
 use RRDs;
 use DBI;
 use FileHandle;
-use vars qw ($logger_directory $logger_rrd_directory $logger_unprocessed_log);
+use vars qw ($logger_directory $logger_rrd_directory);
 
 my @CREATE_DDL = (
     q{CREATE TABLE IF NOT EXISTS hosts (
@@ -269,7 +269,6 @@ sub init() {
     Zimbra::Mon::Zmstat::getLocalConfig();
     $logger_directory = $Zimbra::Mon::Zmstat::LC{logger_data_directory};
     $logger_rrd_directory   = "$logger_directory/rrds";
-    $logger_unprocessed_log = "$logger_directory/unprocessed.log";
 
     mkdir($logger_directory)     if (! -d $logger_directory);
     mkdir($logger_rrd_directory) if (! -d $logger_rrd_directory);
@@ -349,13 +348,6 @@ sub run() {
             ($csv_file, $csv_confirm, $headers, $data) = @match;
             die "$csv_file != $csv_confirm" if ($csv_file ne $csv_confirm);
         } else {
-            if (! -f $logger_unprocessed_log || !$opened) {
-                close(UNPROCESSED);
-                open(UNPROCESSED, ">$logger_unprocessed_log") || warn $!;
-                autoflush UNPROCESSED 1;
-                $opened = 1;
-            }
-            print UNPROCESSED "$line\n";
             next;
         }
         my $hostid = get_host_id($dbh,$host);

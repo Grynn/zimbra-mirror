@@ -19,17 +19,18 @@ use strict;
 use warnings;
 use Zimbra::Mon::Zmstat;
 use Zimbra::Mon::Logger;
+use Fcntl qw(SEEK_SET);
 
-use vars qw($logger_unprocessed_log $logger_processing_log $logger_directory);
+use vars qw($logger_directory $log_file);
 
 # Exit if software-only node.
 exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
 
 my $zimbra_home = "/opt/zimbra";
 my $pid_file = "${zimbra_home}/log/zmlogprocess.pid";
+my $state_file = "${zimbra_home}/log/zmlogprocess.state";
 $logger_directory = getLocalConfig("logger_data_directory");
-$logger_unprocessed_log = "$logger_directory/unprocessed.log";
-$logger_processing_log  = "$logger_directory/zmlogprocessing.log";
+$log_file = '/var/log/zimbra.log';
 
 sub checkPID {
   # try to avoid multiple instances
@@ -46,6 +47,40 @@ sub checkPID {
       exit;
     }
   }
+}
+
+sub checkState() {
+    my $state = -1;
+    if (! -f $state_file) {
+        updateState();
+        warn("$state_file not found, updated");
+        exit;
+    } else {
+        my $mtime = (stat(_))[9];
+        my $size = (stat($log_file))[7];
+        my $now = time();
+        my $delta = $now - $mtime;
+        if ($delta > 60 * 30) { # 30 minute time, cron happens every 5 minutes
+            warn("$state_file is stale, $delta seconds old, skipping cycle");
+            updateState();
+            exit;
+        }
+
+        open(STATE, "<$state_file") || die $!;
+        $state = <STATE>;
+        close (STATE);
+
+        $state = 0 if ($size < $state);
+    }
+    $state;
+}
+
+sub updateState() {
+    my $size = (stat($log_file))[7];
+    open(STATE, ">$state_file") || die $!;
+    print STATE $size;
+    close(STATE);
+    $size;
 }
 
 sub updatePID {
@@ -91,19 +126,24 @@ sub counter_add($$$$) {
 }
 
 sub run() {
-    return if ! -f $logger_unprocessed_log;
     checkPID();
     updatePID();
-    unlink($logger_processing_log) if -f $logger_processing_log; # must be stale
-    rename($logger_unprocessed_log, $logger_processing_log);
-    open(LOG, "<$logger_processing_log") || die $!;
+    my $offset = checkState();
+    my $state  = updateState();
+    open(LOG, "<$log_file") || die $!;
 
     my $logregex = qr/(^.{15}) ((\d+\.\d+\.\d+\.\d+) \S+|(\S+)) ([^[]+)(\[(\d+)\])?: (.*)$/o;
     my %host_data;
     my %seen_qid;
+    seek(LOG, $offset, SEEK_SET);
     while (<LOG>) {
+        my $pos = tell(LOG);
+        last if ($pos >= $state);
+
         my ($log_date, $host, $ip, $name, $app, undef, $pid, $msg) =
                 ($_ =~ m/$logregex/);
+        next if (!defined($log_date)); # skip incomplete lines
+
         $host = ((defined($ip) && $ip ne "") ? $ip : $name);
 
         if ($app eq 'clamd') {
@@ -151,7 +191,6 @@ sub run() {
     }
 
     unlink($pid_file);
-    unlink($logger_processing_log);
 }
 
 run();

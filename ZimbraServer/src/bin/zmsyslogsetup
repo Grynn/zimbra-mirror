@@ -25,9 +25,11 @@ platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 
 if [ x"$(uname -s 2> /dev/null)" = "xDarwin" ]; then
 	logfile="/var/log/zimbra.log"
+	statsfile="/var/log/zimbra-stats.log"
 	LOCALHOST=`hostname`
 else
 	logfile="-/var/log/zimbra.log"
+	statsfile="/var/log/zimbra-stats.log"
 	LOCALHOST=`hostname --fqdn`
 fi
 LOGHOST=`su - zimbra -c '/opt/zimbra/bin/zmprov -l gacf | egrep "^zimbraLogHostname"'`
@@ -57,10 +59,13 @@ if [ "x$platform" = "xopenSUSE_10.2" ]; then
 	cp -f /etc/syslog-ng/syslog-ng.conf /etc/syslog-ng/syslog-ng.conf.bak
 	grep -v zimbra /etc/syslog-ng/syslog-ng.conf > /tmp/syslog-ng.conf
 	echo 'filter f_local0       { facility(local0); }; # zimbra' >> /tmp/syslog-ng.conf
+	echo 'filter f_local1       { facility(local1); }; # zimbra' >> /tmp/syslog-ng.conf
 	echo 'destination zmail { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra ' >> /tmp/syslog-ng.conf
+	echo 'destination zmstats { file("/var/log/zimbra-stats.log" owner("zimbra") ); }; # zimbra ' >> /tmp/syslog-ng.conf
 	echo 'log { source(src); filter(f_mail); destination(zmail); }; # zimbra' >> /tmp/syslog-ng.conf
 	echo 'destination local0 { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra' >> /tmp/syslog-ng.conf
 	echo 'log { source(src); filter(f_local0); destination(local0); }; # zimbra' >> /tmp/syslog-ng.conf
+	echo 'log { source(src); filter(f_local1); destination(zmstats); }; # zimbra' >> /tmp/syslog-ng.conf
 	echo 'filter f_auth       { facility(auth); }; # zimbra' >> /tmp/syslog-ng.conf
 	echo 'destination zmauth { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra' >> /tmp/syslog-ng.conf
 	echo 'log { source(src); filter(f_auth); destination(zmauth); }; # zimbra' >> /tmp/syslog-ng.conf
@@ -70,6 +75,7 @@ if [ "x$platform" = "xopenSUSE_10.2" ]; then
 		sed -i -e 's/syslogd/syslog-ng/' /etc/logrotate.d/zimbra
 	fi
 	touch /var/log/zimbra.log
+	touch /var/log/zimbra-stats.log
 	exit 0
 fi
 
@@ -77,10 +83,13 @@ if [ x$platform = "xSuSE10" -o "x$platform" = "xSLES10_64" -o "x$platform" = "xS
 	cp -f /etc/syslog-ng/syslog-ng.conf.in /etc/syslog-ng/syslog-ng.conf.in.bak
 	grep -v zimbra /etc/syslog-ng/syslog-ng.conf.in > /tmp/syslog-ng.conf.in
 	echo 'filter f_local0       { facility(local0); }; # zimbra' >> /tmp/syslog-ng.conf.in
+	echo 'filter f_local1       { facility(local1); }; # zimbra' >> /tmp/syslog-ng.conf.in
 	echo 'destination zmail { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra ' >> /tmp/syslog-ng.conf.in
+	echo 'destination zmstats { file("/var/log/zimbra-stats.log" owner("zimbra") ); }; # zimbra ' >> /tmp/syslog-ng.conf.in
 	echo 'log { source(src); filter(f_mail); destination(zmail); }; # zimbra' >> /tmp/syslog-ng.conf.in
 	echo 'destination local0 { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra' >> /tmp/syslog-ng.conf.in
 	echo 'log { source(src); filter(f_local0); destination(local0); }; # zimbra' >> /tmp/syslog-ng.conf.in
+	echo 'log { source(src); filter(f_local1); destination(zmstats); }; # zimbra' >> /tmp/syslog-ng.conf.in
 	echo 'filter f_auth       { facility(auth); }; # zimbra' >> /tmp/syslog-ng.conf.in
 	echo 'destination zmauth { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra' >> /tmp/syslog-ng.conf.in
 	echo 'log { source(src); filter(f_auth); destination(zmauth); }; # zimbra' >> /tmp/syslog-ng.conf.in
@@ -90,28 +99,34 @@ if [ x$platform = "xSuSE10" -o "x$platform" = "xSLES10_64" -o "x$platform" = "xS
 		sed -i -e 's/syslogd/syslog-ng/' /etc/logrotate.d/zimbra
 	fi
 	touch /var/log/zimbra.log
+	touch /var/log/zimbra-stats.log
 	exit 0
 fi
 
 cp -f /etc/syslog.conf /etc/syslog.conf.bak
 
 # Remove existing entries that we may have added.
-grep -v "^local0\.\*" /etc/syslog.conf > /tmp/syslog.zimbra
+grep -v "^local0\.\*" /etc/syslog.conf | grep -v "^local1\.\*" > /tmp/syslog.zimbra
 sed -i -e '/^auth\.\* /d' /tmp/syslog.zimbra
 sed -i -e 's/;local0.none//g' /tmp/syslog.zimbra
+sed -i -e 's/;local1.none//g' /tmp/syslog.zimbra
 sed -i -e 's/;auth.none//g' /tmp/syslog.zimbra
 
 # Don't log local0 and auth twice 
-sed -i -e 's/^*.info/*.info;local0.none;auth.none/' /tmp/syslog.zimbra
+sed -i -e 's/^*.info/*.info;local0.none;local1.none;auth.none/' /tmp/syslog.zimbra
 
 if [ $TYPE = "remote" ]; then
       echo "local0.*                @$LOGHOST" >> /tmp/syslog.zimbra
+      echo "local1.*                @$LOGHOST" >> /tmp/syslog.zimbra
       echo "auth.*                  @$LOGHOST" >> /tmp/syslog.zimbra
 fi
 echo "local0.*                $logfile" >> /tmp/syslog.zimbra
+echo "local1.*                $statsfile" >> /tmp/syslog.zimbra
 echo "auth.*                  $logfile" >> /tmp/syslog.zimbra
 touch /var/log/zimbra.log
+touch /var/log/zimbra-stats.log
 chown zimbra:zimbra /var/log/zimbra.log
+chown zimbra:zimbra /var/log/zimbra-stats.log
 chmod 644 /var/log/zimbra.log
 
 egrep -v "^mail.*($LOGHOST|zimbra)" /tmp/syslog.zimbra > /tmp/syslog.zimbra2
