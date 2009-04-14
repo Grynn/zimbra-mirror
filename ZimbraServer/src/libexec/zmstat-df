@@ -125,7 +125,7 @@ while (1) {
                            $stat->{path}, $stat->{disk}, $stat->{disk_use},
                            $stat->{disk_space}, $stat->{disk_pct_used});
         $LOGFH->print("$line\n");
-        Zimbra::Mon::Logger::Log( "info", "zmstat df.csv: ${HEADING}:: $line"); 
+        Zimbra::Mon::Logger::LogStats( "info", "zmstat df.csv: ${HEADING}:: $line"); 
     }
     $LOGFH->flush();
     $ROTATE_DEFER = 0;

@@ -69,7 +69,7 @@ sub logStatus {
 			next;
 		}
 		my ($service, $stat) = split ' ', $s, 2;
-		Zimbra::Mon::Logger::Log( "info", "$dt, STATUS: ${hostname}: $service: $stat" );
+		Zimbra::Mon::Logger::LogStats( "info", "$dt, STATUS: ${hostname}: $service: $stat" );
 	}
   alarm(0);
 }
@@ -94,6 +94,6 @@ sub clearPid {
 }
 
 sub catchAlarm {
-		Zimbra::Mon::Logger::Log( "info", "zmstatuslog timeout after $TIMEOUT seconds"); 
+		Zimbra::Mon::Logger::LogStats( "info", "zmstatuslog timeout after $TIMEOUT seconds"); 
     exit 1;
 }

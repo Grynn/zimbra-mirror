@@ -210,7 +210,7 @@ if (!$isMac) {
         # Don't allow rotation in signal handler while we're writing.
         $ROTATE_DEFER = 1;
         $LOGFH->print("$tstamp, $cpuinfo\n");
-        Zimbra::Mon::Logger::Log( "info", "zmstat cpu.csv: ${HEADING}:: $tstamp, $cpuinfo"); 
+        Zimbra::Mon::Logger::LogStats( "info", "zmstat cpu.csv: ${HEADING}:: $tstamp, $cpuinfo"); 
         $LOGFH->flush();
         $ROTATE_DEFER = 0;
         if ($ROTATE_NOW) {
@@ -261,7 +261,7 @@ if (!$isMac) {
         $ROTATE_DEFER = 1;
         my $values = join(', ', @vals);
         $LOGFH->print("$tstamp, $values\n");
-        Zimbra::Mon::Logger::Log( "info", "zmstat-cpu: ${HEADING}:: $tstamp, $values"); 
+        Zimbra::Mon::Logger::LogStats( "info", "zmstat-cpu: ${HEADING}:: $tstamp, $values"); 
         $LOGFH->flush();
         $ROTATE_DEFER = 0;
         if ($ROTATE_NOW) {

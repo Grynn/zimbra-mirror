@@ -187,7 +187,7 @@ sub run() {
             push(@data, $hdata->{$c});
         }
         my $data = join(',', @data);
-        Zimbra::Mon::Logger::Log("info", "MTA: $host: ${columns}:: $data");
+        Zimbra::Mon::Logger::LogStats("info", "MTA: $host: ${columns}:: $data");
     }
 
     unlink($pid_file);

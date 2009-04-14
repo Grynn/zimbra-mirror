@@ -125,7 +125,7 @@ while (1) {
     # Don't allow rotation in signal handler while we're writing.
     $ROTATE_DEFER = 1;
     $LOGFH->print("$tstamp, $kb, $msgs\n");
-    Zimbra::Mon::Logger::Log( "info", "zmstat mtaqueue.csv: ${HEADING}:: $tstamp, $kb, $msgs"); 
+    Zimbra::Mon::Logger::LogStats( "info", "zmstat mtaqueue.csv: ${HEADING}:: $tstamp, $kb, $msgs"); 
     $LOGFH->flush();
     $ROTATE_DEFER = 0;
     if ($ROTATE_NOW) {

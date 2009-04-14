@@ -133,7 +133,7 @@ while (1) {
     eval {
     	my $values = getValues($tstamp);
         $LOGFH->print("$values\n");
-        Zimbra::Mon::Logger::Log( "info", "zmstat mysql.csv: ${HEADING}:: $values"); 
+        Zimbra::Mon::Logger::LogStats( "info", "zmstat mysql.csv: ${HEADING}:: $values"); 
         $LOGFH->flush();
     };
     if ($@) {

@@ -256,7 +256,7 @@ while (1) {
         my $values = join(', ', @vals);
         $LOGFH->print("$tstamp, $values\n");
         my $fn = $xtended ? "io-x.csv" : "io.csv";
-        Zimbra::Mon::Logger::Log( "info", "zmstat $fn: ${HEADING}:: $tstamp, $values"); 
+        Zimbra::Mon::Logger::LogStats( "info", "zmstat $fn: ${HEADING}:: $tstamp, $values"); 
         $LOGFH->flush();
         $ROTATE_DEFER = 0;
         if ($ROTATE_NOW) {
