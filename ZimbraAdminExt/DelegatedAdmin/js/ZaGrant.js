@@ -259,7 +259,8 @@ ZaGrant.myXModel = {
         {id: ZaGrant.A_target_type, ref: ZaGrant.A_target_type, type: _STRING_, choices: ZaZimbraRights.targetType },
         {id: ZaGrant.A_target, type:_STRING_, ref: ZaGrant.A_target, required: true } ,
         {id: ZaGrant.A_right_type, type:_ENUM_, ref: ZaGrant.A_right_type, required:true, choices: ZaGrant.RIGHT_TYPE_CHOICES },
-
+        {id: ZaGrant.A2_grantsList, type:_LIST_, ref: ZaGrant.A2_grantsList},
+        {id: ZaGrant.A2_grantsListSelectedItems, type:_LIST_, ref: ZaGrant.A2_grantsListSelectedItems},
         {id: ZaGrant.A_inline_right, ref: ZaGrant.A_inline_right, type: _OBJECT_, items: [
                 {id: ZaGrant.A_inline_verb, type: _STRING_, ref: ZaGrant.A_inline_verb, choices: ZaGrant.INLINE_VERB_TYPE_CHOICES},
                 {id: ZaGrant.A_inline_target_type, type: _STRING_, ref: ZaGrant.A_inline_target_type, choices: ZaZimbraRights.inlineTargetType},
@@ -268,7 +269,7 @@ ZaGrant.myXModel = {
         }
     ]
 };
-
+           
 
 ZaGrant.globalGrantsListTreeListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("Show the global grants lists ...") ;
