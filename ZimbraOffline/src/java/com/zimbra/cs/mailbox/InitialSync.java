@@ -891,6 +891,10 @@ public class InitialSync {
                 		acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass()).getSecond();
             } catch (MailServiceException.NoSuchItemException nsie) {
                 OfflineLog.offline.warn("initial: no blob available for contact " + id);
+            } catch (Exception x) {
+            	SyncExceptionHandler.checkRecoverableException("InitialSync.syncContact", x);
+            	SyncExceptionHandler.syncContactFailed(ombx, id, x);
+            	return;
             }
         }
         
@@ -1085,17 +1089,15 @@ public class InitialSync {
             for (Header hdr : response.getFirst())
                 headers.put(hdr.getName(), hdr.getValue());
             
-            try {
-            	saveMessage(response.getSecond(), headers, id, folderId, type);
-            } catch (Exception x) {
-            	SyncExceptionHandler.checkRecoverableException("InitialSync.syncMessage", x);
-	        	SyncExceptionHandler.syncMessageFailed(ombx, id, x);
-	        }
+            saveMessage(response.getSecond(), headers, id, folderId, type);
         } catch (MailServiceException.NoSuchItemException nsie) {
             OfflineLog.offline.info("initial: message " + id + " has been deleted; skipping");
         } catch (IOException e) {
             OfflineLog.offline.error("initial: can't retrieve message from " + url, e);
             throw ServiceException.FAILURE("can't retrieve message from " + url, e);
+        } catch (Exception x) {
+        	SyncExceptionHandler.checkRecoverableException("InitialSync.syncMessage", x);
+        	SyncExceptionHandler.syncMessageFailed(ombx, id, x);
         }
     }
     
@@ -1299,6 +1301,10 @@ public class InitialSync {
         	OfflineLog.offline.warn("initial: no blob available for document " + itemIdStr);
         } catch (IOException e) {
         	OfflineLog.offline.warn("initial: can't download Document:  " + itemIdStr);
+        } catch (Exception x) {
+        	SyncExceptionHandler.checkRecoverableException("InitialSync.syncDocument", x);
+        	SyncExceptionHandler.syncDocumentFailed(ombx, Integer.parseInt(itemIdStr), x);
+        	return;
         }
 
         try {
@@ -1442,7 +1448,7 @@ public class InitialSync {
             	OfflineLog.offline.debug("initial: created document (" + id + "): " + doc.getName());
             }
     	} catch (Exception x) {
-    		//SyncExceptionHandler.checkRecoverableException("InitialSync.syncDocument", x);
+    		SyncExceptionHandler.checkRecoverableException("InitialSync.syncDocument", x);
     		SyncExceptionHandler.syncDocumentFailed(ombx, id, x);
         } finally {
         	if (rs != null)
