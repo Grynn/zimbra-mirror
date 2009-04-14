@@ -51,7 +51,7 @@ function (){
 	DBG.println("upload uri = " + uri);
 	var html = new Array();
 	var idx = 0;
-	html[idx++] = "<div style='overflow:auto'><form method='POST' action='";
+	html[idx++] = "<div style='overflow:hidden'><form method='POST' action='";
 	html[idx++] = uri;
 	html[idx++] = "' id='";
 	html[idx++] = ZaZimletDeployXWizard.ZimletUploadFormId;
@@ -179,7 +179,7 @@ ZaZimletDeployXWizard.prototype.uploadCallback = function (status, attId) {
 		if ((status == AjxPost.SC_OK) && (attId != null)) {
 			instance[ZaZimlet.A_attachmentId] = attId;
 			instance[ZaZimlet.A_statusMsg] = ZaMsg.ZMLT_UploadZimletSuccessMsg;
-			ZaZimlet.deploy( ZaZimlet.ACTION_DEPLOY_ALL,attId,new AjxCallback(this, this.deployZimletClbck));			
+			ZaZimlet.deploy( {action:ZaZimlet.ACTION_DEPLOY_ALL,attId:attId,flushCache:instance[ZaZimlet.A_flushCache]},new AjxCallback(this, this.deployZimletClbck));			
 		} else {
 			// handle errors during attachment upload.
 			instance[ZaZimlet.A_deployStatus] = ZaZimlet.STATUS_FAILED;
@@ -194,7 +194,7 @@ ZaZimletDeployXWizard.prototype.uploadCallback = function (status, attId) {
 ZaZimletDeployXWizard.prototype.getDeploymentStatus = function () {
 	try {
 		var instance = this._localXForm.getInstance();
-		ZaZimlet.deploy(ZaZimlet.ACTION_DEPLOY_STATUS,instance[ZaZimlet.A_attachmentId],new AjxCallback(this, this.deployZimletClbck));					
+		ZaZimlet.deploy({action:ZaZimlet.ACTION_DEPLOY_STATUS,attId:instance[ZaZimlet.A_attachmentId]},new AjxCallback(this, this.deployZimletClbck));					
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.getDeploymentStatus");	
 	}	
@@ -263,10 +263,13 @@ ZaZimletDeployXWizard.progressIsNotFailed = function () {
 
 ZaZimletDeployXWizard.myXFormModifier = function(xFormObject) {
 	var case1 = {
-		type:_CASE_, numCols:1,caseKey:1,align:_LEFT_,valign:_TOP_,
+		type:_CASE_, numCols:2,caseKey:1,align:_LEFT_,valign:_TOP_,width:"520px",cssStyle:"overflow:hidden",
 		items: [
-			{ type:_OUTPUT_, value: ZaMsg.ZMLT_uploadTitle, align: _LEFT_},
-			{ type:_OUTPUT_, value: this.getUploadFormHtml() }
+			{ type:_OUTPUT_, value: ZaMsg.ZMLT_uploadTitle, align: _LEFT_,colSpan:2},
+			{ type:_OUTPUT_, value: this.getUploadFormHtml() ,colSpan:2,width:"480px"},
+			{type:_SPACER_, colSpan:2},
+			{ type:_CHECKBOX_,ref:ZaZimlet.A_flushCache,label:ZaMsg.ZMLT_flushCache,visibilityChecks:[], enableDisableChecks:[]},
+			{type:_SPACER_, colSpan:2}
 		]
 	};
 	var case2 = {
@@ -280,8 +283,6 @@ ZaZimletDeployXWizard.myXFormModifier = function(xFormObject) {
 					  ref:ZaZimlet.A_statusMsg,
 					  visibilityChecks:[[XForm.checkInstanceValue,ZaZimlet.A_deployStatus,ZaZimlet.STATUS_FAILED]],
 					  visibilityChangeEventSources:[ZaZimlet.A_deployStatus],
-					 // relevant:"(ZaZimlet.STATUS_FAILED == instance[ZaZimlet.A_deployStatus])",
-					 // relevantBehavior:_HIDE_,
 					  align:_CENTER_
 					},						
 					{type:_DWT_ALERT_,style: DwtAlert.INFORMATION, 
@@ -289,9 +290,7 @@ ZaZimletDeployXWizard.myXFormModifier = function(xFormObject) {
 						content: null,width:"400px",
 						ref:ZaZimlet.A_statusMsg,
 						visibilityChecks:[ZaZimletDeployXWizard.progressIsNotFailed],
-						visibilityChangeEventSources:[ZaZimlet.A_deployStatus],
-//						relevant:"(ZaZimlet.STATUS_FAILED != instance[ZaZimlet.A_deployStatus])",
-//						relevantBehavior:_HIDE_,								
+						visibilityChangeEventSources:[ZaZimlet.A_deployStatus],					
 						align:_CENTER_
 					},						
 					{type:_DWT_ALERT_,style: DwtAlert.INFORMATION, 
@@ -300,8 +299,6 @@ ZaZimletDeployXWizard.myXFormModifier = function(xFormObject) {
 						ref:ZaZimlet.A_progress,
 						visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaZimlet.A_progress]],
 						visibilityChangeEventSources:[ZaZimlet.A_progress],
-//						relevant:"(instance[ZaZimlet.A_progress]!=null)",
-//						relevantBehavior:_HIDE_,								
 						align:_CENTER_
 					}					
 				]

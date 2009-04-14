@@ -59,6 +59,7 @@ ZaZimlet.ACTION_DEPLOY_ALL = "deployAll";
 ZaZimlet.ACTION_DEPLOY_LOCAL = "deployLocal";
 ZaZimlet.ACTION_DEPLOY_STATUS = "status";
 ZaZimlet.A_progress = "progress";
+ZaZimlet.A_flushCache = "flushCache";
 ZaZimlet.prototype.toString = function() {
 	return this.name;
 }
@@ -198,12 +199,19 @@ ZaZimlet.prototype.refresh =
 function() {
 	this.load();	
 }
-
-ZaZimlet.deploy = function (action,attId, callback) {
+/**
+ * @param attrs {action:deployall|deploylocal|status,attId:"",flushCache:true|false}
+ */
+ZaZimlet.deploy = function (params,callback) {
+	var action = params.action ? params.action : ZaZimlet.ACTION_DEPLOY_ALL;
+	var attId = params.attId ? params.attId : null;
+	var flushCache = params.flushCache ? params.flushCache : "0";
 	var soapDoc = AjxSoapDoc.create("DeployZimletRequest", ZaZimbraAdmin.URN, null);
-	if(action)
-		soapDoc.getMethod().setAttribute("action", action);		
-		
+	soapDoc.getMethod().setAttribute("action", action);	
+	
+	if(action != ZaZimlet.ACTION_DEPLOY_STATUS)	
+		soapDoc.getMethod().setAttribute("flush", flushCache);
+	
 	var contentEl = soapDoc.set("content", "");
 	if(attId) {
 		contentEl.setAttribute("aid", attId);
@@ -244,7 +252,8 @@ ZaItem.loadMethods["ZaZimlet"].push(ZaZimlet.loadMethod);
 
 ZaZimlet.myXModel = { 
 	items:[
-        { id:ZaZimlet.A_name, ref:ZaZimlet.A_name, type: _STRING_ },    
+        { id:ZaZimlet.A_name, ref:ZaZimlet.A_name, type: _STRING_ },
+        { id:ZaZimlet.A_flushCache,ref:ZaZimlet.A_flushCache,type: _ENUM_, choices:ZaModel.BOOLEAN_CHOICES2},
         { id:ZaZimlet.A_zimbraZimletDescription, ref:"attrs/" + ZaZimlet.A_zimbraZimletDescription, type: _STRING_ },
         { id:ZaZimlet.A_zimbraZimletEnabled, ref:"attrs/" + ZaZimlet.A_zimbraZimletEnabled, type: _ENUM_,  choices:ZaModel.BOOLEAN_CHOICES} 
     ]
