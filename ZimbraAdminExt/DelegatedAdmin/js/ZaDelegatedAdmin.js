@@ -23,6 +23,17 @@ if (ZaAccount) {
 
         this.setInstanceValue(value);
 
+        //check if the value is valid admin group
+        var adminGroupChoices = this.getChoices () ;
+        if (adminGroupChoices && adminGroupChoices.getChoiceByValue(value) != null) {
+             var adminGroupId = adminGroupChoices.getChoiceByValue(value).id ;
+        } else {
+            this.setError(com_zimbra_delegatedadmin.ERROR_INVALID_ADMIN_ROLE);
+            var event = new DwtXFormsEvent(form, this, value);
+            form.notifyListeners(DwtEvent.XFORMS_VALUE_ERROR, event);
+            return ;
+        }
+        
          //add this value to the  direct member
         if (!this.getInstance () [ZaAccount.A2_memberOf]) {
             this.getInstance () [ZaAccount.A2_memberOf] = {} ;          
@@ -35,7 +46,7 @@ if (ZaAccount) {
         var directMemberOfList = this.getInstance () [ZaAccount.A2_memberOf] [ZaAccount.A2_directMemberList] ;
         if (value && value.length > 0 && ZaUtil.findValueInObjArrByPropertyName(directMemberOfList, value, "name") < 0){
             directMemberOfList.push ({
-                id: this.getChoices().getChoiceByValue(value).id,
+                id: adminGroupId,
                 name: value
             }) ;
 
