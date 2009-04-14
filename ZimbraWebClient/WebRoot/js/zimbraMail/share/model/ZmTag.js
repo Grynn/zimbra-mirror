@@ -127,3 +127,9 @@ function(obj) {
 	var child = ZmTag.createFromJs(this, obj, this.tree, true);
 	child._notify(ZmEvent.E_CREATE);
 };
+
+ZmTag.prototype.supportsSharing =
+function() {
+	// tags cannot be shared
+	return false;
+};
