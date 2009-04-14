@@ -286,7 +286,7 @@ public abstract class DesktopMailbox extends Mailbox {
 	
 	@Override
     public synchronized void alterTag(OperationContext octxt, int itemId, byte type, int tagId, boolean addTag) throws ServiceException {
-        if (tagId == Flag.ID_FLAG_SYNC) {
+        if (tagId == Flag.ID_FLAG_SYNC && addTag) {
         	Folder folder = getFolderById(itemId);
         	if ((folder.getFlagBitmask() & Flag.ID_FLAG_SYNCFOLDER) == 0)
         		throw MailServiceException.MODIFY_CONFLICT();
