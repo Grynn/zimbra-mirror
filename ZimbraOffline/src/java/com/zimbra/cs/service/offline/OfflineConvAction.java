@@ -19,9 +19,11 @@ import java.util.Map;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
+import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.OfflineMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
+import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.service.mail.ConvAction;
 import com.zimbra.cs.service.mail.ItemAction;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -31,36 +33,58 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.soap.ZimbraSoapContext;
 
 public class OfflineConvAction extends ConvAction {
+    
+    private static String OFFLINECONV_MBOX = "OfflineConv_MBox";
+    private static String OFFLINECONV_TOACCT = "OfflineConv_ToAcct";
+    
     @Override
-    public void postProxy(Element request, Element response, Map<String, Object> context) throws ServiceException {
+    public void preProxy(Element request, Map<String, Object> context) throws ServiceException {
         Element act = request.getOptionalElement(MailConstants.E_ACTION);
         String op;
         if (act == null || (op = act.getAttribute(MailConstants.A_OPERATION, null)) == null ||
             (!op.equals(ItemAction.OP_MOVE) && !op.equals(ItemAction.OP_COPY)))
             return;
-        
-        OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();        
-        String id = act.getAttribute(MailConstants.A_FOLDER, null);
+
+        String id;
         int pos;
-        if (id == null || (pos = id.indexOf(":")) <= 0)
-            return;
-        String toAcctId = id.substring(0, pos);
-        Account toAcct = prov.get(Provisioning.AccountBy.id, toAcctId);
-        if (toAcct == null || !prov.isSyncAccount(toAcct))
-            return;
-        
-        act = response.getOptionalElement(MailConstants.E_ACTION);
-        if (act == null || (id = act.getAttribute(MailConstants.A_ID, null)) == null || (pos = id.indexOf(":")) <= 0)
+        OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+        if ((id = act.getAttribute(MailConstants.A_ID, null)) == null || (pos = id.indexOf(":")) <= 0)
             return;
         String fromAcctId = id.substring(0, pos);
         Account fromAcct = prov.get(Provisioning.AccountBy.id, fromAcctId);
-        if (fromAcct == null || !prov.isMountpointAccount(fromAcct))
-            return;            
-     
+        if (fromAcct == null || !prov.isMountpointAccount(fromAcct)) // source is not a mountpoint...
+            return;
+        
+        id = act.getAttribute(MailConstants.A_FOLDER, null);
+        if (id == null || (pos = id.indexOf(":")) <= 0)
+            return;
+        String toAcctId = id.substring(0, pos);
+        int folderId = Integer.parseInt(id.substring(pos + 1));
+        OfflineAccount toAcct = (OfflineAccount)prov.get(Provisioning.AccountBy.id, toAcctId);
+        if (toAcct == null || !prov.isSyncAccount(toAcct))
+            return;
+        context.put(OFFLINECONV_TOACCT, toAcct);
+                      
         ZimbraSoapContext ctxt = getZimbraSoapContext(context);
         Mailbox mbox = getRequestedMailbox(ctxt);
         if (!(mbox instanceof OfflineMailbox))
             throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
-        ((OfflineMailbox)mbox).sync(true, ((OfflineAccount)toAcct).isDebugTraceEnabled());
+        OfflineMailbox ombx = (OfflineMailbox)mbox;
+        context.put(OFFLINECONV_MBOX, ombx);
+        
+        OperationContext octxt = getOperationContext(ctxt, context);
+        Folder folder = ombx.getFolderById(octxt, folderId);
+        if (ombx.pushNewFolder(octxt, folderId)) {
+            String newId = Integer.toString(ombx.getFolderByName(octxt, folder.getParentId(), folder.getName()).getId());
+            act.addAttribute(MailConstants.A_FOLDER, toAcctId + ":" + newId);
+        }
+    }
+    
+    @Override
+    public void postProxy(Element request, Element response, Map<String, Object> context) throws ServiceException {
+        OfflineMailbox ombx = (OfflineMailbox)context.get(OFFLINECONV_MBOX);
+        if (ombx == null)
+            return;
+        ombx.sync(true, ((OfflineAccount)context.get(OFFLINECONV_TOACCT)).isDebugTraceEnabled());
     }
 }
