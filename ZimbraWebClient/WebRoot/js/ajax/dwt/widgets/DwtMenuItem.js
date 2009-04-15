@@ -334,6 +334,7 @@ DwtMenuItem.prototype.__handleItemSelect = function(event) {
 
 DwtMenuItem.prototype.__handleSubMenuMouseOver = function(event) {
     this.setDisplayState(DwtControl.HOVER);
+	this.parent._hoveredItem = this;
 };
 
 DwtMenuItem._mouseOverListener =
@@ -342,15 +343,24 @@ function(ev) {
 	if (!menuItem) { return false; }
 	if (menuItem._style & DwtMenuItem.SEPARATOR_STYLE) { return false; }
     DwtButton._mouseOverListener(ev, menuItem);
+	menuItem.parent._hoveredItem = menuItem;
     menuItem.parent._popdownSubmenus();
     if (menuItem._menu && !ev.ersatz) {
         menuItem._popupMenu(menuItem._hoverDelay);
     }
 };
 
+DwtMenuItem._mouseOutListener =
+function(ev) {
+	DwtButton._mouseOutListener(ev);
+	if (ev.dwtObj) {
+		ev.dwtObj.parent._hoveredItem = null;
+	}
+};
+
 DwtMenuItem._listeners = {};
 DwtMenuItem._listeners[DwtEvent.ONMOUSEOVER] = new AjxListener(null, DwtMenuItem._mouseOverListener);
-DwtMenuItem._listeners[DwtEvent.ONMOUSEOUT] = new AjxListener(null, DwtButton._mouseOutListener);
+DwtMenuItem._listeners[DwtEvent.ONMOUSEOUT] = new AjxListener(null, DwtMenuItem._mouseOutListener);
 DwtMenuItem._listeners[DwtEvent.ONMOUSEDOWN] = new AjxListener(null, DwtButton._mouseDownListener);
 DwtMenuItem._listeners[DwtEvent.ONMOUSEUP] = new AjxListener(null, DwtButton._mouseUpListener);
 DwtMenuItem._listeners[DwtEvent.ONMOUSEENTER] = new AjxListener(null, DwtMenuItem._mouseOverListener);

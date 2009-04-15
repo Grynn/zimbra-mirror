@@ -709,8 +709,9 @@ function() {
 	var a = this._children.getArray();
 	var s = this._children.size();
 	for (var i = 0; i < s; i++) {
-		if ((a[i] instanceof DwtMenuItem) && !(a[i].isStyle(DwtMenuItem.SEPARATOR_STYLE)))
+		if ((a[i] instanceof DwtMenuItem) && !(a[i].isStyle(DwtMenuItem.SEPARATOR_STYLE))) {
 			a[i]._popdownMenu();
+		}
 	}
 	this.setZIndex(Dwt.Z_HIDDEN);
 	this.setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
@@ -770,6 +771,13 @@ function() {
 	
 	// set the current item (used in kb nav) to null
 	this.__currentItem = null;
+
+	// Undo highlight if there's a hovered-over item
+	if (this._hoveredItem) {
+		var ev = new DwtMouseEvent();
+		ev.dwtObj = this._hoveredItem;
+		DwtButton._mouseOutListener(ev);
+	}
 	
 	// Take our tabgroup out of play
 	DwtShell.getShell(window).getKeyboardMgr().popTabGroup(this._tabGroup);	
