@@ -423,8 +423,17 @@ function(itemArray) {
 	}
 };
 
+/**
+ * Adds a row for the given item to the list view.
+ *
+ * @param item			[object]	data item
+ * @param index			[int]*		index at which to add item to list and list view
+ * @param skipNotify	[boolean]*	if true, do not notify listeners
+ * @param itemIndex		[int]*		index at which to add item to list, if different
+ * 									from the one for the list view
+ */
 DwtListView.prototype.addItem =
-function(item, index, skipNotify) {
+function(item, index, skipNotify, itemIndex) {
 	if (!this._list) {
 		this._list = new AjxVector();
 	}
@@ -434,7 +443,7 @@ function(item, index, skipNotify) {
 		this._resetList();
 	}
 
-	this._list.add(item, index);
+	this._list.add(item, (itemIndex != null) ? itemIndex : index);
 	var div = this._createItemHtml(item);
 	if (div) {
 		if (div instanceof Array) {
