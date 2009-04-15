@@ -53,6 +53,7 @@ public abstract class DesktopMailbox extends Mailbox {
 	        new Thread(new Runnable() {
 				public void run() {
 					try {
+						Thread.sleep(15000);
 						deleteThisMailbox();
 					} catch (Exception x) {
 						OfflineLog.offline.error("Deleting mailbox %s mailbox", accountId, x);
