@@ -179,11 +179,9 @@ function (target/*, fullRecursion*/) {
 
 ZaItem.prototype.parseTargetsRightsFromJS = function(targetObj) {
 	if(targetObj) {
+		this.rights = {};
 		if(targetObj.right && targetObj.right instanceof Array) {
 			var rights = targetObj.right;
-			if(!this.rights)
-				this.rights = {};
-				
 			for(var r in rights) {
 				this.rights[rights[r].n] = true;
 			}
