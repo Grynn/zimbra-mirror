@@ -25,7 +25,15 @@
  */
 ZaGrantDialog = function(parent,  app, title, by) {
     if (arguments.length == 0) return;
-    this._standardButtons = [ DwtDialog.CANCEL_BUTTON, DwtDialog.OK_BUTTON];
+    this._standardButtons = [ DwtDialog.CANCEL_BUTTON];
+    var helpButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.HELP_BUTTON, ZaMsg.TBB_Help,
+            DwtDialog.ALIGN_LEFT, new AjxCallback(this, this._helpButtonListener));
+    var addMoreButton = new DwtDialog_ButtonDescriptor(ZaGrantDialog.ADD_MORE_BUTTON , com_zimbra_delegatedadmin.btAddMore,
+                DwtDialog.ALIGN_RIGHT, null);
+    var addFinishButton = new DwtDialog_ButtonDescriptor(ZaGrantDialog.ADD_FINISH_BUTTON, com_zimbra_delegatedadmin.btAddFinish,
+            DwtDialog.ALIGN_RIGHT, null);
+    this._extraButtons = [helpButton,addMoreButton,addFinishButton];
+
     ZaXDialog.call(this, parent,null,  title, "400px", "200px");
     if (!by) by = ZaGrant.A_target ;
     this.by = by;
@@ -39,6 +47,9 @@ ZaGrantDialog = function(parent,  app, title, by) {
 
 ZaGrantDialog.prototype = new ZaXDialog;
 ZaGrantDialog.prototype.constructor = ZaGrantDialog;
+
+ZaGrantDialog.ADD_FINISH_BUTTON = ++DwtDialog.LAST_BUTTON;
+ZaGrantDialog.ADD_MORE_BUTTON = ++DwtDialog.LAST_BUTTON;
 
 ZaGrantDialog.prototype.getMyXForm =
 function() {
@@ -60,7 +71,7 @@ function() {
                        // make it type _DYNSELECT_
                        { ref: ZaGrant.A_grantee, type: _DYNSELECT_, label: com_zimbra_delegatedadmin.Label_grantee_name ,
                            visibilityChecks:[],labelLocation:_LEFT_ ,
-                           emptyText:ZaMsg.enterSearchTerm,
+                           emptyText:com_zimbra_delegatedadmin.searchTermGrantee,
                            choices: this.granteeNameChoices,
                            onChange: ZaGrantDialog.setGranteeChanged,
                            dataFetcherClass:ZaSearch ,
@@ -216,12 +227,12 @@ ZaGrantDialog.prototype.setGranteeType = function (resp) {
     }
 }
 
-
-ZaGrantDialog.grantRight = function () {
-    if(this.parent.grantRightDlg) {
+ZaGrantDialog.grantRightMethod = function () {
+     if(this.parent.grantRightDlg) {
 		var obj = this.parent.grantRightDlg.getObject();
         var instance = this.getInstance();
         var currentGrantList = instance [ZaGrant.A2_grantsList] || [];
+        //TODO: add an auto-dim message or diable all the fields
 
         //this.parent.setDirty(true);
         //GrantRights Right here, instead of populating to the account modification saving time
@@ -231,14 +242,29 @@ ZaGrantDialog.grantRight = function () {
             //TODO: test if the grant exists in the current list already
             currentGrantList.push(obj) ;
             this.getModel().setInstanceValue(this.getInstance(), ZaGrant.A2_grantsList, currentGrantList);
-            this.parent.grantRightDlg.popdown();
+            return true ;
         }
     }
+
+    return false ;
 }
 
-ZaGrantDialog.grantGlobalGrant = function () {
-    //add grant
+ZaGrantDialog.grantRight = function () {
+    if (ZaGrantDialog.grantRightMethod.call (this)){
+        this.parent.grantRightDlg.popdown();
+    }    
+}
 
+ZaGrantDialog.grantMoreRight = function () {
+   if (ZaGrantDialog.grantRightMethod.call (this)){
+       var dialog = this.parent.grantRightDlg ;
+       var obj = dialog.getObject() ;
+       obj [ZaGrant.A_right] = "" ; 
+       dialog.setObject (obj) ;
+   }
+}
+
+ZaGrantDialog.grantGlobalGrantMethod = function () {
     if(this.grantRightDlg) {
 		var obj = this.grantRightDlg.getObject();
 
@@ -249,13 +275,27 @@ ZaGrantDialog.grantGlobalGrant = function () {
         if (ZaGrant.grantMethod (obj)) {
             //TODO: test if the grant exists in the current list already
             this.fireCreationEvent(obj);
-            this.grantRightDlg.popdown();
+            return true;
         }
     }
-    // update the global grant list
+
+    return false ;
+}
 
 
-    
+ZaGrantDialog.grantGlobalGrant = function () {
+    if (ZaGrantDialog.grantGlobalGrantMethod.call (this)){
+        this.grantRightDlg.popdown();
+    }
+}
+
+ZaGrantDialog.grantMoreGlobalGrant = function () {
+    if (ZaGrantDialog.grantGlobalGrantMethod.call (this)){
+       var dialog = this.grantRightDlg ;
+       var obj = dialog.getObject() ;
+       obj [ZaGrant.A_right] = "" ;
+       dialog.setObject (obj) ;
+   }
 }
 
 ZaGrantDialog.rightTypeListener =  function (type) {

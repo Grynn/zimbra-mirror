@@ -193,7 +193,8 @@ function(ev) {
 		this.grantRightDlg = new ZaGrantDialog (
                 ZaApp.getInstance().getAppCtxt().getShell(),
                 ZaApp.getInstance(), com_zimbra_delegatedadmin.Title_grant_rights);
-		this.grantRightDlg.registerCallback(DwtDialog.OK_BUTTON, ZaGrantDialog.grantGlobalGrant, this, null);
+		this.grantRightDlg.registerCallback(ZaGrantDialog.ADD_FINISH_BUTTON, ZaGrantDialog.grantGlobalGrant, this, null);
+        this.grantRightDlg.registerCallback(ZaGrantDialog.ADD_MORE_BUTTON, ZaGrantDialog.grantMoreGlobalGrant, this, null);
 	}
 
 	var obj = {};
