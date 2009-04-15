@@ -89,7 +89,7 @@ _USAGE_
 $| = 1;
 
 $LOGFILE = getLogFilePath('df.csv');
-my $interval = getZmstatInterval();
+my $interval = $Zimbra::Mon::Zmstat::LC{'zmstat_disk_interval'};
 my $opts_good = GetOptions(
     'interval=i' => \$interval,
     'log=s' => \$LOGFILE,
