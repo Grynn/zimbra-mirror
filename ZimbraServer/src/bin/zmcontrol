@@ -281,6 +281,7 @@ sub doShutdown {
 		if ($_ eq "mta" && !(-d "/opt/zimbra/postfix/libexec") ) { next; }
 		if ($_ eq "snmp" && !(-f "/opt/zimbra/bin/zmswatchctl") ) { next; }
 		if ($_ eq "mailbox" && !(-d "/opt/zimbra/db/data") ) { next; }
+		if ($_ eq "convertd" && !(-l "/opt/zimbra/keyview") ) { next; }
 		print "\tStopping $_...";
     unless (-x "$allservices{$_}") {
       print "skipped.\n\t\t$allservices{$_} missing or not executable.\n";
