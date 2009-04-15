@@ -270,37 +270,8 @@ function () {
 		}                                       
 	}
 
-	var writeACLs = false;	
-	//var changeStatus = false;	
-	var permsToRevoke = [];
-	//check if any notebook permissions are changed
-	if(tmpObj[ZaDomain.A_allNotebookACLS]._version > 0) {
-		writeACLs = true;	
-		var cnt = this._currentObject[ZaDomain.A_allNotebookACLS].length;
-		for(var i = 0; i < cnt; i++) {
-			if(this._currentObject[ZaDomain.A_allNotebookACLS][i].gt == ZaDomain.A_NotebookUserACLs ||
-				this._currentObject[ZaDomain.A_allNotebookACLS][i].gt == ZaDomain.A_NotebookGroupACLs ||
-				this._currentObject[ZaDomain.A_allNotebookACLS][i].gt == ZaDomain.A_NotebookDomainACLs)	{
-				var cnt2 = tmpObj[ZaDomain.A_allNotebookACLS].length;
-				var foundUser = false;
-				for(var j = 0; j < cnt2; j++) {
-					if(tmpObj[ZaDomain.A_allNotebookACLS][j].name == this._currentObject[ZaDomain.A_allNotebookACLS][i].name) {
-						foundUser = true;
-						break;
-					}
-				}
-				if(!foundUser && this._currentObject[ZaDomain.A_allNotebookACLS][i].zid) {
-					permsToRevoke.push(this._currentObject[ZaDomain.A_allNotebookACLS][i].zid);
-				}
-			}
-		
-		}
-	}
-
-	if(haveSmth || writeACLs || catchAllChanged) {
+	if(haveSmth || catchAllChanged) {
 		try { 
-/*			var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
-			soapDoc.setMethodAttribute("onerror", "stop");*/		
 			if(renameNotebookAccount) {
 				var account = new ZaAccount();
 				account.load(ZaAccount.A_name,this._currentObject.attrs[ZaDomain.A_zimbraNotebookAccount]);
@@ -340,36 +311,6 @@ function () {
 					return false;
 				}
             }
-			if(writeACLs) {
-				if(permsToRevoke.length>0) {
-					ZaDomain.revokeNotebookACLs(permsToRevoke, this.saveChangesCallback);
-				}				
-				var accountName = tmpObj[ZaDomain.A_NotebookAccountName] ? tmpObj[ZaDomain.A_NotebookAccountName] : tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount];					
-				ZaDomain.grantNotebookACLs(tmpObj, accountName, this.saveChangesCallback);				
-			}
-			/*var command = new ZmCsfeCommand();
-			var params = new Object();
-			
-			if(writeACLs) {
-				if(permsToRevoke.length>0) {
-					ZaDomain.getRevokeACLsrequest(permsToRevoke, soapDoc);
-				}
-				params.accountName = tmpObj[ZaDomain.A_NotebookAccountName] ? tmpObj[ZaDomain.A_NotebookAccountName] : tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount];					
-				ZaDomain.getNotebookACLsRequest	(tmpObj,soapDoc);
-				
-			}
-	
-
-			params.soapDoc = soapDoc;	
-			var callback = new AjxCallback(this, this.saveChangesCallback);	
-			params.asyncMode = true;
-			params.callback = callback;			
-			var reqMgrParams = {
-				controller : ZaApp.getInstance().getCurrentController(),
-				busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
-			}	
-			ZaRequestMgr.invoke(params, reqMgrParams);*/			
-			//command.invoke(params);
 			return true;
 		} catch (ex) {
 			this._handleException(ex,"ZaDomainController.prototype._saveChanges");
@@ -386,10 +327,6 @@ function () {
 	this._currentObject = new ZaDomain();
 	
 	this._currentObject.getAttrs = {all:true};
-	/*this._currentObject.setAttrs = {all:true};
-	this._currentObject.rights = {};
-	this._currentObject._defaultValues = {attrs:{}};*/
-	
 	this._currentObject.loadNewObjectDefaults();
 	this._showNewDomainWizard();
 }

@@ -643,7 +643,6 @@ ZaDomain.getNotebookACLsRequestOld = function (obj, soapDoc) {
 						continue;
 						
 					var folderActionRequest = soapDoc.set("FolderActionRequest", null, null, "urn:zimbraMail");
-				//	folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");
 					var actionEl = soapDoc.set("action", "",folderActionRequest);	
 					actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
 					actionEl.setAttribute("op", "grant");					
@@ -659,7 +658,6 @@ ZaDomain.getNotebookACLsRequestOld = function (obj, soapDoc) {
 				}
 			} else {
 				var folderActionRequest = soapDoc.set("FolderActionRequest", null, null, "urn:zimbraMail");
-				//folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
 				var actionEl = soapDoc.set("action", "",folderActionRequest);
 				actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
 				actionEl.setAttribute("op", "grant");	
