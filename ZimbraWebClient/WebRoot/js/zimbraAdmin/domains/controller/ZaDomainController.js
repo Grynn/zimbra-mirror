@@ -207,6 +207,33 @@ function(ev) {
 	return;
 }
 
+ZaDomainController.prototype.saveChangesCallback = 
+function(params, resp) {
+	try {
+		if(params.busyId)
+			ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
+			
+		if(!resp && !this._currentRequest.cancelled) {
+			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaDomainController.prototype.saveChangesCallback"));
+		} else if(resp.isException && resp.isException()) {
+			throw(resp.getException());
+		} else if(respObj.getResponse().Body.BatchResponse && respObj.getResponse().Body.BatchResponse.Fault) {
+			var fault = respObj.getResponse().Body.BatchResponse.Fault;
+			if(fault instanceof Array)
+				fault = fault[0];
+					
+			if (fault) {
+				// JS response with fault
+				var ex = ZmCsfeCommand.faultToEx(fault);
+				throw(ex);
+			}
+		}
+		
+	} catch (ex) {
+		this._handleException(ex, "ZaDomainController.prototype.saveChangesCallback");	
+	}		
+}
+
 ZaDomainController.prototype._saveChanges = 
 function () {
 	var tmpObj = this._view.getObject();
@@ -242,82 +269,7 @@ function () {
 			}
 		}                                       
 	}
-    
-   /*	if(ZaSettings.ZIMLETS_ENABLED) {
-		if(tmpObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] != null) {
-			var tmpMods = [];
-			if(!(tmpObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] instanceof Array)) {
-				tmpMods = [tmpObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets]];
-			} else {
-				var cnt = tmpObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets].length;
-				tmpMods = [];
-				for(var i = 0; i < cnt; i++) {
-					tmpMods.push(tmpObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets][i]);
-				}
-			}
-			if(isNew) {
-				mods[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = tmpMods;
-            } else {
-				//check if changed
-				if(this._currentObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] != null) {
-					if(this._currentObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] instanceof Array) {
-						if(tmpMods.join(",") != this._currentObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets].join(",")) {
-							mods[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = tmpMods;
-                        }
-					} else if (tmpMods.join(",") != [this._currentObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets]].join(",")) {
-						mods[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = tmpMods;
-                    }
-				} else {
-					mods[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = tmpMods;
-				}
-			}
-		} else if(this._currentObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] != null) {
-			mods[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = "";
-		}
 
-        if (mods[ZaDomain.A_zimbraZimletDomainAvailableZimlets] != null) {
-            haveSmth = true ;
-        }
-    }*/
-    /*
-	if(tmpObj.attrs[ZaDomain.A_notes] != this._currentObject.attrs[ZaDomain.A_notes]) {
-		mods[ZaDomain.A_notes] = tmpObj.attrs[ZaDomain.A_notes] ;
-		haveSmth = true;
-	}
-	if(tmpObj.attrs[ZaDomain.A_description] != this._currentObject.attrs[ZaDomain.A_description]) {
-		mods[ZaDomain.A_description] = tmpObj.attrs[ZaDomain.A_description] ;
-		haveSmth = true;
-	}
-	if(tmpObj.attrs[ZaDomain.A_domainDefaultCOSId] != this._currentObject.attrs[ZaDomain.A_domainDefaultCOSId]) {
-		mods[ZaDomain.A_domainDefaultCOSId] = tmpObj.attrs[ZaDomain.A_domainDefaultCOSId] ;
-		haveSmth = true;
-	}	
-
-	if(tmpObj.attrs[ZaDomain.A_zimbraPublicServiceHostname] != this._currentObject.attrs[ZaDomain.A_zimbraPublicServiceHostname]) {
-		mods[ZaDomain.A_zimbraPublicServiceHostname] = tmpObj.attrs[ZaDomain.A_zimbraPublicServiceHostname] ;
-		haveSmth = true;
-	}	
-	
-	if(tmpObj.attrs[ZaDomain.A_domainMaxAccounts] != this._currentObject.attrs[ZaDomain.A_domainMaxAccounts]) {
-		mods[ZaDomain.A_domainMaxAccounts] = tmpObj.attrs[ZaDomain.A_domainMaxAccounts] ;
-		haveSmth = true;
-	}
-	
-	if(tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname].join(",").valueOf() !=  this._currentObject.attrs[ZaDomain.A_zimbraVirtualHostname].join(",").valueOf()) {
-		mods[ZaDomain.A_zimbraVirtualHostname] = tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname] ;
-		haveSmth = true;		
-	}
-	if(tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount] != this._currentObject.attrs[ZaDomain.A_zimbraNotebookAccount]) {
-		mods[ZaDomain.A_zimbraNotebookAccount] = tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount] ;
-		haveSmth = true;
-		renameNotebookAccount = true;
-	}	
-	
-	if(tmpObj.attrs[ZaDomain.A_zimbraDomainStatus] != this._currentObject.attrs[ZaDomain.A_zimbraDomainStatus]) {
-		mods[ZaDomain.A_zimbraDomainStatus] = tmpObj.attrs[ZaDomain.A_zimbraDomainStatus] ;
-		haveSmth = true;
-	}
-	*/
 	var writeACLs = false;	
 	//var changeStatus = false;	
 	var permsToRevoke = [];
@@ -347,8 +299,8 @@ function () {
 
 	if(haveSmth || writeACLs || catchAllChanged) {
 		try { 
-			var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
-			soapDoc.setMethodAttribute("onerror", "stop");		
+/*			var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+			soapDoc.setMethodAttribute("onerror", "stop");*/		
 			if(renameNotebookAccount) {
 				var account = new ZaAccount();
 				account.load(ZaAccount.A_name,this._currentObject.attrs[ZaDomain.A_zimbraNotebookAccount]);
@@ -381,31 +333,21 @@ function () {
             }
 
 			if(haveSmth) {
-                var modifyDomainRequest = soapDoc.set("ModifyDomainRequest", null, null, ZaZimbraAdmin.URN);
-				soapDoc.set("id", this._currentObject.id,modifyDomainRequest);
-				for (var aname in mods) {
-					//multy value attribute
-					if(mods[aname] instanceof Array) {
-						var cnt = mods[aname].length;
-						if(cnt) {
-							for(var ix=0; ix <cnt; ix++) {
-								if(mods[aname][ix]) { //if there is an empty element in the array - don't send it
-									var attr = soapDoc.set("a", mods[aname][ix],modifyDomainRequest);
-									attr.setAttribute("n", aname);
-								}
-							}
-						} else {
-							var attr = soapDoc.set("a", "",modifyDomainRequest);
-							attr.setAttribute("n", aname);
-						}
-					} else {		
-						var attr = soapDoc.set("a", mods[aname],modifyDomainRequest);
-						attr.setAttribute("n", aname);
-					}
+				try {	
+					this._currentObject.modify(mods, tmpObj);
+				} catch (ex) {
+					this._handleException(ex, "ZaAccountViewController.prototype._saveChanges", null, false);	
+					return false;
 				}
             }
-	
-			var command = new ZmCsfeCommand();
+			if(writeACLs) {
+				if(permsToRevoke.length>0) {
+					ZaDomain.revokeNotebookACLs(permsToRevoke, this.saveChangesCallback);
+				}				
+				var accountName = tmpObj[ZaDomain.A_NotebookAccountName] ? tmpObj[ZaDomain.A_NotebookAccountName] : tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount];					
+				ZaDomain.grantNotebookACLs(tmpObj, accountName, this.saveChangesCallback);				
+			}
+			/*var command = new ZmCsfeCommand();
 			var params = new Object();
 			
 			if(writeACLs) {
@@ -426,7 +368,7 @@ function () {
 				controller : ZaApp.getInstance().getCurrentController(),
 				busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
 			}	
-			ZaRequestMgr.invoke(params, reqMgrParams);			
+			ZaRequestMgr.invoke(params, reqMgrParams);*/			
 			//command.invoke(params);
 			return true;
 		} catch (ex) {
@@ -614,37 +556,6 @@ function (resp) {
 	} 
 }
 
-ZaDomainController.prototype.saveChangesCallback = 
-function (resp) {
-	if(!resp)
-		return;
-	if(resp.isException()) {
-		this._handleException(resp.getException(), "ZaDomainController.prototype.setNotebookAclsCallback", null, false);
-		return;
-	} 
-	var response;
-	if(resp.getResponse)
-		response = resp.getResponse().Body.BatchResponse;
-	else
-		response = resp.Body.BatchResponse;
-	
-	if(response.Fault) {
-		for(var ix in response.Fault) {
-			var ex = ZmCsfeCommand.faultToEx(response.Fault[ix], "ZaDomainController.prototype.saveChangesCallback");
-			this._handleException(ex, "ZaDomainController.prototype.saveChangesCallback", null, false);
-		}
-	}
-	if(response.ModifyDomainResponse && response.ModifyDomainResponse[0].domain && response.ModifyDomainResponse[0].domain[0]) {
-		this._currentObject.initFromJS(response.ModifyDomainResponse[0].domain[0]);
-    } else {
-		this._currentObject.refresh(false);
-	}	
-
-	this._view.setObject(this._currentObject);
-	this.fireChangeEvent(this._currentObject);
-
-    ZaDomain.putDomainToCache(this._currentObject);
-}
 
 ZaDomainController.prototype._finishDomainNotebookListener =
 function(ev) {

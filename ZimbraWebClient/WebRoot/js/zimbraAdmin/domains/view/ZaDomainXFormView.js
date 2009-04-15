@@ -117,6 +117,7 @@ function(entry) {
 			var _newAclObj = {};
 			_newAclObj.gt=aclObj.gt;
 			_newAclObj.name = aclObj.name;
+			_newAclObj.zid = aclObj.zid;
 			_newAclObj.acl = {r:0,w:0,i:0,d:0,a:0,x:0};
 			for (var a in aclObj.acl) {
 				_newAclObj.acl[a] = aclObj.acl[a];
@@ -265,32 +266,77 @@ function () {
 	formPage.addAclDlg.popup();
 }
 
+ZaDomainXFormView.modifyAclCallback = 
+function (params,resp) {
+	try {
+		if(params.busyId)
+			ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);	
+		
+		if(!resp && !ZaApp.getInstance().getCurrentController()._currentRequest.cancelled) {
+			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaDomainController.prototype.saveChangesCallback"));
+		} else if(resp.isException && resp.isException()) {
+			throw(resp.getException());
+		} else if(resp.getResponse().Body && resp.getResponse().Body.BatchResponse && resp.getResponse().Body.BatchResponse.Fault) {
+			var fault = resp.getResponse().Body.BatchResponse.Fault;
+			if(fault instanceof Array)
+				fault = fault[0];
+					
+			if (fault) {
+				// JS response with fault
+				var ex = ZmCsfeCommand.faultToEx(fault);
+				throw(ex);
+			}
+		}
+			
+		var domain = new ZaDomain();
+		var instance = this.getInstance();
+		domain.attrs[ZaDomain.A_zimbraNotebookAccount] = this.getModel().getInstanceValue(this.getInstance(),ZaDomain.A_zimbraNotebookAccount);
+		domain.attrs[ZaDomain.A_zimbraDomainStatus] = this.getModel().getInstanceValue(this.getInstance(),ZaDomain.A_zimbraDomainStatus);
+		domain.id = this.getInstance().id;
+		domain.attrs[ZaItem.A_zimbraId] = this.getModel().getInstanceValue(this.getInstance(),ZaItem.A_zimbraId);
+		domain.name = this.getInstance().name;
+		ZaDomain.loadNotebookACLs.call(domain);
+		var oldArray = this.getModel().getInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS);
+		if(oldArray) {
+			domain[ZaDomain.A_allNotebookACLS]._version = oldArray._version + 1;
+		} else
+			domain[ZaDomain.A_allNotebookACLS]._version = 1;
+		
+		this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS,domain[ZaDomain.A_allNotebookACLS]);	
+	} catch (ex) {
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomainXFormView.modifyAclCallback");
+	}
+}
+
 ZaDomainXFormView.addAcl = 
 function () {
 	if(this.parent.addAclDlg) {
 		this.parent.addAclDlg.popdown();
 		var obj = this.parent.addAclDlg.getObject();
-		var aclsArr = this.getInstance()[ZaDomain.A_allNotebookACLS];
-		var cnt = aclsArr.length;
-		var foundObj = false;
-		for(var i = 0; i < cnt; i++) {
-			if(aclsArr[i].name == obj.name && aclsArr[i].gt == obj.gt) {
-				for(var a in obj.acl) {
-					if(obj.acl[a]) {
-						aclsArr[i].acl[a] = obj.acl[a];
-					}
-				}
-				foundObj = true;
-				break;
-			}
-		}
-		if(!foundObj) {
-			aclsArr.push(obj);
-		}
-		aclsArr._version++;
-		this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS,aclsArr);
-		//this.refresh();
-		this.parent.setDirty(true);	
+
+		var accountName = this.getModel().getInstanceValue(this.getInstance(),ZaDomain.A_zimbraNotebookAccount);
+		var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+		soapDoc.setMethodAttribute("onerror", "stop");		
+		ZaDomain.getGrantNotebookACLsRequest(obj,soapDoc);
+
+		var params = new Object();
+	
+		if(accountName)
+			params.accountName = accountName;
+			
+		var busyId = Dwt.getNextId();
+		params.soapDoc = soapDoc;		
+		params.asyncMode = true;	
+		params.busyId = busyId;
+		params.callback = new AjxCallback(this,ZaDomainXFormView.modifyAclCallback,[params]);	
+
+		var reqMgrParams = {
+			showBusy:true,
+			busyId:busyId,
+			controller : ZaApp.getInstance().getCurrentController(),
+			busyMsg : ZaMsg.BUSY_MODIFY_FOLDER_PERMISSIONS
+		}	
+		ZaRequestMgr.invoke(params, reqMgrParams);		
 	}	
 }
 
@@ -323,17 +369,38 @@ function () {
 		var obj = this.parent.editAclDlg.getObject();
 		var aclSelection = this.getModel().getInstanceValue(this.getInstance(),ZaDomain.A2_acl_selection_cache);
 		var dirty = false;
-		if(obj.name != aclSelection[0].name) {
-			dirty = true;
-		} else {
-			for(var a in obj.acl) {
-				if(obj.acl[a] != aclSelection[0].acl[a]) {
-					dirty = true;
-					break;
-				}
+		for(var a in obj.acl) {
+			if(obj.acl[a] != aclSelection[0].acl[a]) {
+				dirty = true;
+				break;
 			}
 		}
 		if(dirty) {
+			var accountName = this.getModel().getInstanceValue(this.getInstance(),ZaDomain.A_zimbraNotebookAccount);
+			var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+			soapDoc.setMethodAttribute("onerror", "stop");		
+			ZaDomain.getGrantNotebookACLsRequest(obj,soapDoc);
+	
+			var params = new Object();
+		
+			if(accountName)
+				params.accountName = accountName;
+				
+			var busyId = Dwt.getNextId();
+			params.soapDoc = soapDoc;		
+			params.asyncMode = true;	
+			params.busyId = busyId;
+			params.callback = new AjxCallback(this,ZaDomainXFormView.modifyAclCallback,[params]);	
+	
+			var reqMgrParams = {
+				showBusy:true,
+				busyId:busyId,
+				controller : ZaApp.getInstance().getCurrentController(),
+				busyMsg : ZaMsg.BUSY_MODIFY_FOLDER_PERMISSIONS
+			}	
+			ZaRequestMgr.invoke(params, reqMgrParams);					
+		}
+		/*if(dirty) {
 			aclSelection = [];
 			aclSelection[0] = obj;
 			var allNoteBookACLs = this.getModel().getInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS);
@@ -350,26 +417,56 @@ function () {
 				}
 			}
 			this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A2_acl_selection_cache,aclSelection);
-			this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS,newNoteBookACLs);
-			this.parent.setDirty(true);	
-		}		
+			//this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS,newNoteBookACLs);
+			
+			
+			//this.parent.setDirty(true);	
+		}		*/
 	}
 }
 
 ZaDomainXFormView.deleteButtonListener = 
 function () {
-	var instance = this.getInstance();
 	var aclSelectionCache = this.getInstanceValue(ZaDomain.A2_acl_selection_cache);
 	if(AjxUtil.isEmpty(aclSelectionCache))
 		return;
+	var cnt = aclSelectionCache.length;
+	if(cnt > 0) {
+		var accountName = this.getModel().getInstanceValue(this.getInstance(),ZaDomain.A_zimbraNotebookAccount);
+		var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+		soapDoc.setMethodAttribute("onerror", "stop");
+		var accountName = this.getModel().getInstanceValue(this.getInstance(),ZaDomain.A_zimbraNotebookAccount);
+		ZaDomain.getRevokeNotebookACLsRequest(aclSelectionCache,soapDoc);
 		
-	var allNoteBookACLs = this.getInstanceValue(ZaDomain.A_allNotebookACLS);
+		var params = new Object();
+		if(accountName)
+			params.accountName = accountName;
+
+		var busyId = Dwt.getNextId();
+		
+		params.soapDoc = soapDoc;		
+		params.asyncMode = true;	
+		params.busyId = busyId;
+		params.callback = new AjxCallback(this,ZaDomainXFormView.modifyAclCallback,[params]);	
+		var reqMgrParams = {
+			showBusy:true,
+			busyId:busyId,
+			controller : ZaApp.getInstance().getCurrentController(),
+			busyMsg : ZaMsg.BUSY_MODIFY_FOLDER_PERMISSIONS
+		}	
+		ZaRequestMgr.invoke(params, reqMgrParams);					
+	}
+	
+	
+	
+	/*var allNoteBookACLs = this.getInstanceValue(ZaDomain.A_allNotebookACLS);
 
 	if(AjxUtil.isEmpty(allNoteBookACLs))
 		return;
 
 	var newNoteBookACLs = AjxUtil.arraySubstract(allNoteBookACLs,aclSelectionCache,ZaDomain.compareACLs);
 	newNoteBookACLs._version = allNoteBookACLs._version+1;
+	*/
 	/*var cnt = allNoteBookACLs.length;
 
 	for(var i=0; i<cnt;i++) {
@@ -397,10 +494,10 @@ function () {
 		}
 	}*/
 	
-	this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS,newNoteBookACLs);
+	//this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS,newNoteBookACLs);
 	//instance[ZaDomain.A_allNotebookACLS]._version++; 
 	//this.getForm().refresh();
-	this.getForm().parent.setDirty(true);	
+	//this.getForm().parent.setDirty(true);	
 }
 
 ZaDomainXFormView.onFormFieldChanged = 

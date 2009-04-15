@@ -368,9 +368,9 @@ ZaItem.prototype.load = function (by, val, skipRights, expandDefaults) {
 	val = val ? val : this.id;
 	//load rights
 	if(!skipRights) {
-		this.rights = null;
-		this.getAttrs = null;
-		this.setAttrs = null;
+		this.rights = {};
+		this.getAttrs = {};
+		this.setAttrs = {};
 		this.loadEffectiveRights(by,val,expandDefaults);
 	}		
 	//Instrumentation code start
@@ -819,6 +819,10 @@ ZaItem.hasReadPermission = function (refToCheck) {
 	return ((instance.getAttrs.all === true) || (instance.getAttrs[refPath] === true));
 }
 XFormItem.prototype.hasReadPermission = ZaItem.hasReadPermission;
+OSelect1_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
+Checkbox_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
+Textfield_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
+Select1_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 /**
  * Method of XFormItem
  */
@@ -843,6 +847,11 @@ ZaItem.hasWritePermission = function (refToCheck) {
 	return ((instance.setAttrs.all === true) || (instance.setAttrs[refPath] === true));
 }
 XFormItem.prototype.hasWritePermission = ZaItem.hasWritePermission;
+Textfield_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+OSelect1_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+Checkbox_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+Select1_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+
 /**
  * Method of XFormItem
  */

@@ -704,13 +704,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				}
 				return newValue;
 			},
-			visibilityChecks:[XFormItem.prototype.hasReadPermission]	
+			visibilityChecks:[ZaItem.hasReadPermission]	
 	});
 
-	headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer,visibilityChecks:[XFormItem.prototype.hasReadPermission]});
-	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_accountStatus, label:ZaMsg.NAD_AccountStatus, labelLocation:_LEFT_, choices:this.accountStatusChoices,visibilityChecks:[XFormItem.prototype.hasReadPermission]});
-	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_name, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false,visibilityChecks:[XFormItem.prototype.hasReadPermission]});
-	headerItems.push({type:_OUTPUT_,ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID,visibilityChecks:[XFormItem.prototype.hasReadPermission]});
+	headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer,visibilityChecks:[ZaItem.hasReadPermission]});
+	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_accountStatus, label:ZaMsg.NAD_AccountStatus, labelLocation:_LEFT_, choices:this.accountStatusChoices,visibilityChecks:[ZaItem.hasReadPermission]});
+	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_name, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false,visibilityChecks:[ZaItem.hasReadPermission]});
+	headerItems.push({type:_OUTPUT_,ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID,visibilityChecks:[ZaItem.hasReadPermission]});
 	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A2_mbxsize, label:ZaMsg.usedQuota + ":",
 						getDisplayValue:function() {
 							var val = this.getInstanceValue();
@@ -729,7 +729,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							var val = this.getInstanceValue();
 							return ZaAccount.getLastLoginTime(val) ;
 						},
-						visibilityChecks:[XFormItem.prototype.hasReadPermission]	
+						visibilityChecks:[ZaItem.hasReadPermission]	
 					 });
     //assigned quota
     headerItems.push ({type:_OUTPUT_,ref:ZaAccount.A2_quota, label:ZaMsg.assignedQuota + ":",
@@ -855,7 +855,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					}
 				},
 				{type:_GROUP_, numCols:3, nowrap:true, width:200, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_,
-					visibilityChecks:[[XFormItem.prototype.hasReadPermission,ZaAccount.A_displayname]],
+					visibilityChecks:[[ZaItem.hasReadPermission,ZaAccount.A_displayname]],
 					items: [
 						{ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:null,	cssClass:"admin_xform_name_input", width:150,
 							enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autodisplayname,"FALSE"],ZaItem.hasWritePermission],
@@ -1727,7 +1727,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 										msgName:ZaMsg.NAD_zimbraPrefMailForwardingAddress,
 										label:ZaMsg.NAD_zimbraPrefMailForwardingAddress+":", labelLocation:_LEFT_,
 										align:_LEFT_,
-										visibilityChecks:[XFormItem.prototype.hasReadPermission],
+										visibilityChecks:[ZaItem.hasReadPermission],
 										enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureMailForwardingEnabled,"TRUE"]],
 										enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureMailForwardingEnabled, ZaAccount.A_COSId]										
 									},
@@ -1748,7 +1748,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
                                 {ref:ZaAccount.A_zimbraMailForwardingAddress, type:_DWT_LIST_, height:"200", width:"350px",
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 									headerList:null,onSelection:ZaAccountXFormView.fwdAddrSelectionListener,label:ZaMsg.NAD_EditFwdGroup,
-									visibilityChecks:[XFormItem.prototype.hasReadPermission]
+									visibilityChecks:[ZaItem.hasReadPermission]
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
 									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",

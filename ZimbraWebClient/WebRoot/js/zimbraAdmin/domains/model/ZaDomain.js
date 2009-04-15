@@ -154,7 +154,6 @@ ZaDomain.A_SyncUseBindPassword = "syncusebindpassword";
 ZaDomain.A_GALTestSearchResults = "galtestsearchresults";
 ZaDomain.A_NotebookTemplateDir = "templatedir";
 ZaDomain.A_NotebookTemplateFolder = "templatefolder";
-ZaDomain.A_NotebookAccountName = "noteBookAccountName";
 ZaDomain.A_NotebookAccountPassword = "noteBookAccountPassword";
 ZaDomain.A_NotebookAccountPassword2 = "noteBookAccountPassword2";
 ZaDomain.A_CreateNotebook = "createNotebook";
@@ -603,40 +602,33 @@ function (obj, callback) {
 
 }
 
-ZaDomain.getRevokeACLsrequest = function (permsToRevoke, soapDoc) {
-	var cnt = 	permsToRevoke.length;
+ZaDomain.getRevokeNotebookACLsRequest = function (permsToRevoke, soapDoc) {
+	var cnt = permsToRevoke.length;
 	for(var i = 0; i < cnt; i++) {
-		var folderActionRequest = soapDoc.set("FolderActionRequest", null, null, "urn:zimbraMail");
-		//folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
+		var folderActionRequest = soapDoc.set("FolderActionRequest", null, null, "urn:zimbraMail");			
 		var actionEl = soapDoc.set("action", "",folderActionRequest);
 		actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
 		actionEl.setAttribute("op", "!grant");	
-		actionEl.setAttribute("zid", permsToRevoke[i]);				
+		actionEl.setAttribute("zid", permsToRevoke[i].zid);				
 	}
 }
 
-ZaDomain.getNotebookACLsRequest = function (obj, soapDoc) {
-	if(obj[ZaDomain.A_allNotebookACLS]) {
-		var cnt = obj[ZaDomain.A_allNotebookACLS].length;
-		for(var i = 0; i < cnt; i++) {
-			var folderActionRequest = soapDoc.set("FolderActionRequest", null, null, "urn:zimbraMail");
-			//folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
-			var actionEl = soapDoc.set("action", "",folderActionRequest);
-			actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
-			actionEl.setAttribute("op", "grant");	
-			var grantEl = soapDoc.set("grant", "",actionEl);	
-			grantEl.setAttribute("gt", obj[ZaDomain.A_allNotebookACLS][i].gt);
-			if(obj[ZaDomain.A_allNotebookACLS][i].name) {
-				grantEl.setAttribute("d", obj[ZaDomain.A_allNotebookACLS][i].name);
-			}
-			var perms = "";
-			for(var a in obj[ZaDomain.A_allNotebookACLS][i].acl) {
-				if(obj[ZaDomain.A_allNotebookACLS][i].acl[a]==1)
-					perms+=a;
-			}
-			grantEl.setAttribute("perm", perms);				
-		}
+ZaDomain.getGrantNotebookACLsRequest = function (obj, soapDoc) {
+	var folderActionRequest = soapDoc.set("FolderActionRequest", null, null, "urn:zimbraMail");
+	var actionEl = soapDoc.set("action", "",folderActionRequest);
+	actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
+	actionEl.setAttribute("op", "grant");	
+	var grantEl = soapDoc.set("grant", "",actionEl);	
+	grantEl.setAttribute("gt", obj.gt);
+	if(obj.name) {
+		grantEl.setAttribute("d", obj.name);
 	}
+	var perms = "";
+	for(var a in obj.acl) {
+		if(obj.acl[a]==1)
+			perms+=a;
+	}
+	grantEl.setAttribute("perm", perms);				
 }
 
 ZaDomain.getNotebookACLsRequestOld = function (obj, soapDoc) {
@@ -694,7 +686,7 @@ ZaDomain.setNotebookACLs = function (obj, callback) {
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;
-	params.accountName = obj[ZaDomain.A_NotebookAccountName] ? obj[ZaDomain.A_NotebookAccountName] : obj.attrs[ZaDomain.A_zimbraNotebookAccount];
+	params.accountName = obj.attrs[ZaDomain.A_zimbraNotebookAccount];
 			
 	if(callback) {
 		params.asyncMode = true;
@@ -712,8 +704,8 @@ ZaDomain.initNotebook = function (obj, callback, controller) {
 		}
 	}
 	
-	if(obj[ZaDomain.A_NotebookAccountName]) {
-		var attr = soapDoc.set("name", obj[ZaDomain.A_NotebookAccountName]);
+	if(obj.attrs[ZaDomain.A_zimbraNotebookAccount]) {
+		var attr = soapDoc.set("name", obj.attrs[ZaDomain.A_zimbraNotebookAccount]);
 		if(obj[ZaDomain.A_NotebookAccountPassword]) {
 			soapDoc.set("password", obj[ZaDomain.A_NotebookAccountPassword]);			
 		}
@@ -958,41 +950,6 @@ ZaDomain.prototype.setStatus = function (newStatus) {
 * @param mods - map of modified attributes that will be sent to the server
 * modifies object's information in the database
 **/
-/*
-ZaDomain.prototype.modify =
-function(mods,overWriteACLs) {
-	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", ZaZimbraAdmin.URN, null);
-	soapDoc.set("id", this.id);
-	for (var aname in mods) {
-		//multy value attribute
-		if(mods[aname] instanceof Array) {
-			var cnt = mods[aname].length;
-			if(cnt) {
-				for(var ix=0; ix <cnt; ix++) {
-					if(mods[aname][ix]) { //if there is an empty element in the array - don't send it
-						var attr = soapDoc.set("a", mods[aname][ix],modifyDomainRequest);
-						attr.setAttribute("n", aname);
-					}
-				}
-			} else {
-				var attr = soapDoc.set("a", "",modifyDomainRequest);
-				attr.setAttribute("n", aname);
-			}
-		} else {		
-			var attr = soapDoc.set("a", mods[aname],modifyDomainRequest);
-			attr.setAttribute("n", aname);
-		}
-	}
-	var params = new Object();
-	params.soapDoc = soapDoc;
-	var reqMgrParams = {
-		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
-	}	
-	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
-	this.initFromJS(resp.domain[0]);	
-}*/
-
 ZaDomain.modifyMethod =
 function(mods) {
 	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", ZaZimbraAdmin.URN, null);
@@ -1005,16 +962,16 @@ function(mods) {
 			if(cnt) {
 				for(var ix=0; ix <cnt; ix++) {
 					if(mods[aname][ix]) { //if there is an empty element in the array - don't send it
-						var attr = soapDoc.set("a", mods[aname][ix],modifyDomainRequest);
+						var attr = soapDoc.set("a", mods[aname][ix]);
 						attr.setAttribute("n", aname);
 					}
 				}
 			} else {
-				var attr = soapDoc.set("a", "",modifyDomainRequest);
+				var attr = soapDoc.set("a", "");
 				attr.setAttribute("n", aname);
 			}
 		} else {		
-			var attr = soapDoc.set("a", mods[aname],modifyDomainRequest);
+			var attr = soapDoc.set("a", mods[aname]);
 			attr.setAttribute("n", aname);
 		}
     }
@@ -1026,7 +983,6 @@ function(mods) {
 	}	
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
 	this.refresh(false,true);
-//	this.initFromJS(resp.domain[0]);
 	ZaDomain.putDomainToCache(this);
 }
 ZaItem.modifyMethods["ZaDomain"].push(ZaDomain.modifyMethod);
@@ -1161,12 +1117,6 @@ ZaDomain.prototype.parseNotebookFolderAcls = function (resp) {
 							return (this.gt+":"+this.name+":"+this.grantObj.toString());
 						}
 					});
-				/*if(this.notebookAcls[grant.gt] && (this.notebookAcls[grant.gt] instanceof Array)) {
-					this.notebookAcls[grant.gt].push({acl:grantObj, name:grant.d, gt:grant.gt});
-				} else {
-					this.notebookAcls[grant.gt] = grantObj;
-				}*/
-				
 			}
 			this[ZaDomain.A_allNotebookACLS]._version = 0;
 			
@@ -1305,6 +1255,28 @@ function(by, val) {
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
 	this.initFromJS(resp.domain[0]);
 
+    /*if(this.attrs[ZaDomain.A_zimbraDomainStatus] != ZaDomain.DOMAIN_STATUS_MAINTENANCE && this.attrs[ZaDomain.A_zimbraDomainStatus] != ZaDomain.DOMAIN_STATUS_SUSPENDED) {                                                                                    
+	    if(this.attrs[ZaDomain.A_zimbraNotebookAccount]) {
+			var soapDoc = AjxSoapDoc.create("GetFolderRequest", "urn:zimbraMail", null);
+			var getFolderCommand = new ZmCsfeCommand();
+			var params = new Object();
+			params.soapDoc = soapDoc;
+			params.accountName = this.attrs[ZaDomain.A_zimbraNotebookAccount];
+		
+			var folderEl = soapDoc.set("folder", "");
+			folderEl.setAttribute("l", ZaDomain.WIKI_FOLDER_ID);	
+			try {
+				this.parseNotebookFolderAcls(getFolderCommand.invoke(params));
+			} catch (ex) {
+				ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.loadMethod", null, false);
+			}
+		}
+    }*/
+	//this._defaultValues = ZaApp.getInstance().getGlobalConfig();	
+}
+ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadMethod);
+
+ZaDomain.loadNotebookACLs = function(by, val) {
     if(this.attrs[ZaDomain.A_zimbraDomainStatus] != ZaDomain.DOMAIN_STATUS_MAINTENANCE && this.attrs[ZaDomain.A_zimbraDomainStatus] != ZaDomain.DOMAIN_STATUS_SUSPENDED) {                                                                                    
 	    if(this.attrs[ZaDomain.A_zimbraNotebookAccount]) {
 			var soapDoc = AjxSoapDoc.create("GetFolderRequest", "urn:zimbraMail", null);
@@ -1322,9 +1294,8 @@ function(by, val) {
 			}
 		}
     }
-	//this._defaultValues = ZaApp.getInstance().getGlobalConfig();	
 }
-ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadMethod);
+ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadNotebookACLs);
 
 ZaDomain.loadCatchAll = function () {
 	if((this.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] && this.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] == "TRUE")
@@ -1456,7 +1427,6 @@ ZaDomain.myXModel = {
 		},		
 		{id:ZaDomain.A_NotebookTemplateDir, type:_STRING_, ref:ZaDomain.A_NotebookTemplateDir},
 		{id:ZaDomain.A_NotebookTemplateFolder, type:_STRING_, ref:ZaDomain.A_NotebookTemplateFolder},
-		{id:ZaDomain.A_NotebookAccountName, type:_STRING_},
 		{id:ZaDomain.A_NotebookAccountPassword, type:_STRING_},
 		{id:ZaDomain.A_NotebookAccountPassword2, type:_STRING_},		
 		{id:ZaDomain.A_CreateNotebook, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},

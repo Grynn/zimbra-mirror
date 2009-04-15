@@ -49,7 +49,7 @@ MLifetime_XModelItem.prototype.validateType = function (value) {
 **/
 Lifetime_XFormItem = function() {}
 XFormItemFactory.createItemType("_LIFETIME_", "lifetime", Lifetime_XFormItem, Composite_XFormItem);
-Lifetime_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
+Lifetime_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Lifetime_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 Lifetime_XFormItem.prototype.items = [
 	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_, cssClass:"admin_xform_number_input", 
@@ -100,7 +100,7 @@ Lifetime_XFormItem.prototype.items = [
 
 Lifetime1_XFormItem = function() {}
 XFormItemFactory.createItemType("_LIFETIME1_", "lifetime1", Lifetime1_XFormItem, Composite_XFormItem);
-Lifetime1_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
+Lifetime1_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Lifetime1_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 Lifetime1_XFormItem.prototype.items = [
 	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,cssClass:"admin_xform_number_input", 

@@ -142,8 +142,8 @@ ZaDomainNotebookXWizard.prototype.setObject = function (entry) {
 		}
 	}	
 			
-	if(!this._containedObject[ZaDomain.A_NotebookAccountName] && this._containedObject.attrs[ZaDomain.A_domainName])
-		this._containedObject[ZaDomain.A_NotebookAccountName] = ZaDomain.DEF_WIKI_ACC + "@" + this._containedObject.attrs[ZaDomain.A_domainName];
+	if(!this._containedObject[ZaDomain.A_zimbraNotebookAccount] && this._containedObject.attrs[ZaDomain.A_domainName])
+		this._containedObject[ZaDomain.A_zimbraNotebookAccount] = ZaDomain.DEF_WIKI_ACC + "@" + this._containedObject.attrs[ZaDomain.A_domainName];
 
 	
 	this._containedObject[ZaModel.currentStep] = 1;
@@ -165,7 +165,7 @@ ZaDomainNotebookXWizard.myXFormModifier = function(xFormObject) {
 			items: [
 				{type:_CASE_,caseKey:1,
 					items: [
-						{ref:ZaDomain.A_NotebookAccountName, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_,visibilityChecks:[],enableDisableChecks:[]},						
+						{ref:ZaDomain.A_zimbraNotebookAccount, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_,visibilityChecks:[],enableDisableChecks:[]},						
 						{ref:ZaDomain.A_NotebookAccountPassword, type:_SECRET_, label:ZaMsg.Domain_NotebookAccountPassword, labelLocation:_LEFT_,visibilityChecks:[],enableDisableChecks:[]},
 						{ref:ZaDomain.A_NotebookAccountPassword2, type:_SECRET_, label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_,visibilityChecks:[],enableDisableChecks:[]}
 					]

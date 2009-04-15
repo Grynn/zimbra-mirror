@@ -1312,11 +1312,11 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 						{ref:ZaDomain.A_CreateNotebook, type:_CHECKBOX_, label:ZaMsg.Domain_CreateNotebook, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,
 							onChange:function(value, event, form){
 								this.setInstanceValue(value);
-								if(!this.getInstance()[ZaDomain.A_NotebookAccountName])
-									this.getInstance()[ZaDomain.A_NotebookAccountName]=ZaDomain.DEF_WIKI_ACC+"@"+this.getInstance().attrs[ZaDomain.A_domainName];
+								if(!this.getInstanceValue(ZaDomain.A_zimbraNotebookAccount))
+									this.setInstanceValue(ZaDomain.DEF_WIKI_ACC+"@"+this.getInstanceValue(ZaDomain.A_domainName), ZaDomain.A_zimbraNotebookAccount);
 							}
 						},
-						{ref:ZaDomain.A_NotebookAccountName, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_, 
+						{ref:ZaDomain.A_zimbraNotebookAccount, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_, 
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_CreateNotebook,"TRUE"]],
 							enableDisableChangeEventSources:[ZaDomain.A_CreateNotebook]							
 						},						
