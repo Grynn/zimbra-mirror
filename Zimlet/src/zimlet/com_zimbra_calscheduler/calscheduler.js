@@ -268,7 +268,7 @@ CalSchedulerView = function(parent, controller) {
 	}
 
 	this._fbCallback = new AjxCallback(this, this._handleResponseFreeBusy);
-	this._kbMgr = appCtxt.getShell().getKeyboardMgr();
+	this._kbMgr = appCtxt.getKeyboardMgr();
 
 	//view related var
 	this._columns = {};

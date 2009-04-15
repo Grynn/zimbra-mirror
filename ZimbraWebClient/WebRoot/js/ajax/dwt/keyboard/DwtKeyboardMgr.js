@@ -333,6 +333,13 @@ function(timeout) {
 	this.__keyTimeout = timeout;
 };
 
+// Clears the key sequence. The next key event will begin a new one.
+DwtKeyboardMgr.prototype.clearKeySeq =
+function() {
+	this.__killKeySeqTimedActionId = -1;
+	this.__keySequence.length = 0;
+};
+
 /**
  * Enables/disables keyboard nav.
  * 
@@ -726,10 +733,10 @@ function(ev) {
 
 	switch (handled) {
 		case DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED:
-			kbMgr.__keySequence.length = 0;
+			kbMgr.clearKeySeq();
 		 	return kbMgr.__processKeyEvent(ev, kev, true);
 		case DwtKeyboardMgr.__KEYSEQ_HANDLED:
-			kbMgr.__keySequence.length = 0;
+			kbMgr.clearKeySeq();
 		case DwtKeyboardMgr.__KEYSEQ_PENDING:
 		 	return kbMgr.__processKeyEvent(ev, kev, false);
 	}
@@ -786,8 +793,7 @@ DwtKeyboardMgr.prototype.__killKeySequenceAction =
 function() {
 //	DBG.println("kbnav", "DwtKeyboardMgr.__killKeySequenceAction: " + this.__mapName);
 	this.__dispatchKeyEvent(this.__hdlr, this.__ev, true);
-	this.__killKeySeqTimedActionId = -1;
-	this.__keySequence.length = 0;
+	this.clearKeySeq();
 };
 
 /**
