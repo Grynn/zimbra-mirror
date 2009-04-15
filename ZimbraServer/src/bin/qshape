@@ -15,4 +15,11 @@
 # 
 source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars
+
+ID=$(id -un)
+if [ x"$ID" != "xzimbra" ]; then
+  echo "$0 must be run as user zimbra."
+  exit 1
+fi
+
 sudo /opt/zimbra/postfix/sbin/qshape.pl "$@"
