@@ -870,19 +870,6 @@ function () {
 	if(cnt == 1) {
 		var item = this._contentView.getSelection()[0];
 		if(item) {
-			/*opsArray1.push(ZaOperation.EDIT);
-			opsArray1.push(ZaOperation.DELETE);
-			if(item.type == ZaItem.ALIAS) {
-				opsArray1.push(ZaOperation.MOVE_ALIAS);
-				opsArray1.push(ZaOperation.VIEW_MAIL);
-			} else if(item.type == ZaItem.ACCOUNT) {
-				opsArray1.push(ZaOperation.VIEW_MAIL);
-				opsArray1.push(ZaOperation.CHNG_PWD);
-			} else if(item.type == ZaItem.RESOURCE) {
-				opsArray1.push(ZaOperation.CHNG_PWD);
-				opsArray1.push(ZaOperation.VIEW_MAIL);
-			}*/
-
             if (item.type == ZaItem.ALIAS || item.type == ZaItem.DL) {
                 if(this._toolbarOperations[ZaOperation.CHNG_PWD]) {
                     this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;
@@ -916,28 +903,38 @@ function () {
                 	    
             }
 			if (item.type == ZaItem.ACCOUNT) {
-				if(AjxUtil.isEmpty(item.rights)) {
+				var enable = false;
+				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+					enable = true;
+				} else if (AjxUtil.isEmpty(item.rights)) {
 					item.loadEffectiveRights("id", item.id, false);
-				} 
-				if(!item.rights[ZaAccount.VIEW_MAIL_RIGHT]) {
-					 if(this._popupOperations[ZaOperation.VIEW_MAIL])
-					 	this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
-					 
-					 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
-					 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+				}
+				if(!enable) {
+					if(!item.rights[ZaAccount.VIEW_MAIL_RIGHT]) {
+						 if(this._popupOperations[ZaOperation.VIEW_MAIL])
+						 	this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
+						 
+						 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
+						 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+					}
 				}
 			} else if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT))  {
 				var targetObj = item.getAliasTargetObj() ;
-				if(AjxUtil.isEmpty(targetObj.rights)) {
+				var enable = false;
+				if (ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+					enable = true;
+				} else if (AjxUtil.isEmpty(targetObj.rights)) {
 					targetObj.loadEffectiveRights("id", item.id, false);
-				} 
-				if(!targetObj.rights[ZaAccount.VIEW_MAIL_RIGHT]) {
-					 if(this._popupOperations[ZaOperation.VIEW_MAIL])
-					 	this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
-					 
-					 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
-					 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
-				}				
+				}
+				if(!enable) {
+					if(!targetObj.rights[ZaAccount.VIEW_MAIL_RIGHT]) {
+						 if(this._popupOperations[ZaOperation.VIEW_MAIL])
+						 	this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
+						 
+						 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
+						 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+					}				
+				}
 			}
         } else {
 			if(this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
