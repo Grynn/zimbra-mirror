@@ -310,7 +310,7 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 	(cd $(DEST_BIN_DIR); \
 	tar cfz $(PERL_BIN_TGZ_DEST) sa-compile sa-learn sa-update spamassassin spamc spamd); \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
-	chmod -R a+w $(PERL_TGZ_DEST_DIR)
+	chmod -R a+w $(PERL_TGZ_DEST_DIR)/*
 
 
 tarball:
@@ -321,7 +321,7 @@ tarball:
 	(cd $(DEST_BIN_DIR); \
 	tar cfz $(PERL_BIN_TGZ_DEST) sa-compile sa-learn sa-update spamassassin spamc spamd; \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi)
-	chmod -R a+w $(PERL_TGZ_DEST_DIR)
+	chmod -R a+w $(PERL_TGZ_DEST_DIR)/*
 
 $(PERL_TGZ_DEST_DIR):
 	mkdir -p $@
