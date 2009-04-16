@@ -158,9 +158,12 @@ case "$1" in
   
   'status')
     checkrunning
+    echo -n "clamd is "
     if [ $running = 1 ]; then
+      echo "running."
       exit 0
     else
+      echo "not runnning."
       exit 1
     fi
   ;;
