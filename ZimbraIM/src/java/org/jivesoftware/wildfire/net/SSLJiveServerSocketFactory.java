@@ -18,12 +18,16 @@ import org.jivesoftware.util.Log;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.security.KeyStore;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Securue socket factory wrapper allowing simple setup of all security
@@ -32,12 +36,13 @@ import java.security.KeyStore;
  * @author Iain Shigeoka
  */
 public class SSLJiveServerSocketFactory extends SSLServerSocketFactory {
+    
 
     public static SSLServerSocketFactory getInstance(String algorithm,
                                                      KeyStore keystore,
-                                                     KeyStore truststore) throws
-            IOException {
-
+                                                     KeyStore truststore,
+                                                     String[] excludedCipherSuites) 
+    throws IOException {
         try {
             SSLContext sslcontext = SSLContext.getInstance(algorithm);
             SSLServerSocketFactory factory;
@@ -47,10 +52,30 @@ public class SSLJiveServerSocketFactory extends SSLServerSocketFactory {
             trustFactory.init(truststore);
 
             sslcontext.init(keyFactory.getKeyManagers(),
-                    trustFactory.getTrustManagers(),
+                            trustFactory.getTrustManagers(),
                     new java.security.SecureRandom());
             factory = sslcontext.getServerSocketFactory();
-            return new SSLJiveServerSocketFactory(factory);
+            
+            // compute the enabled cypher suites from the list of disabled ones
+            String[] enabledCipherSuites = null;
+            {
+                if (excludedCipherSuites != null && excludedCipherSuites.length > 0) {
+                    List<String> excludedCiphers = Arrays.asList(excludedCipherSuites);
+                    String[] defaultCipherSuites = factory.getDefaultCipherSuites();
+                    List<String> enabledCiphers = new ArrayList<String>(Arrays.asList(defaultCipherSuites));
+                    
+                    for (String cipher : excludedCiphers) {
+                        if (enabledCiphers.contains(cipher)) {
+                            enabledCiphers.remove(cipher);
+                        }
+                    }
+                    if (enabledCiphers.size() == 0)
+                        throw new IOException("no enabled cipher suites after excluding cipher suites " + excludedCipherSuites);
+                    enabledCipherSuites = enabledCiphers.toArray(new String[enabledCiphers.size()]);
+                }
+            }
+            
+            return new SSLJiveServerSocketFactory(factory, enabledCipherSuites);
         }
         catch (Exception e) {
             Log.error(e);
@@ -58,42 +83,41 @@ public class SSLJiveServerSocketFactory extends SSLServerSocketFactory {
         }
     }
     
-    public static SSLServerSocketFactory getInstance(SSLContext sslcontext) throws
-            IOException {
+    private SSLServerSocketFactory sFactory;
+    private String[] mEnabledCipherSuites;
 
-        try {
-            SSLServerSocketFactory factory = sslcontext.getServerSocketFactory();
-            return new SSLJiveServerSocketFactory(factory);
-        }
-        catch (Exception e) {
-            Log.error(e);
-            throw new IOException(e.getMessage());
-        }
-    }
-
-    private SSLServerSocketFactory factory;
-
-    private SSLJiveServerSocketFactory(SSLServerSocketFactory factory) {
-        this.factory = factory;
+    private SSLJiveServerSocketFactory(SSLServerSocketFactory factory, String[] enabledCipherSuites) {
+        this.sFactory = factory;
+        mEnabledCipherSuites = enabledCipherSuites;
     }
 
     public ServerSocket createServerSocket(int i) throws IOException {
-        return factory.createServerSocket(i);
+        return initSocket(sFactory.createServerSocket(i));
+    }
+    
+    private ServerSocket initSocket(ServerSocket ss) throws IOException {
+        SSLServerSocket sslServerSocket = (SSLServerSocket)ss;
+        if (mEnabledCipherSuites != null)
+            sslServerSocket.setEnabledCipherSuites(mEnabledCipherSuites);
+        return ss;
     }
 
     public ServerSocket createServerSocket(int i, int i1) throws IOException {
-        return factory.createServerSocket(i, i1);
+        return initSocket(sFactory.createServerSocket(i, i1));
     }
 
     public ServerSocket createServerSocket(int i, int i1, InetAddress inetAddress) throws IOException {
-        return factory.createServerSocket(i, i1, inetAddress);
+        return initSocket(sFactory.createServerSocket(i, i1, inetAddress));
     }
 
     public String[] getDefaultCipherSuites() {
-        return factory.getDefaultCipherSuites();
+        if (mEnabledCipherSuites == null)
+        return sFactory.getDefaultCipherSuites();
+    else
+        return mEnabledCipherSuites;
     }
 
     public String[] getSupportedCipherSuites() {
-        return factory.getSupportedCipherSuites();
+        return sFactory.getSupportedCipherSuites();
     }
 }

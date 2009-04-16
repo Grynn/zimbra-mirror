@@ -41,6 +41,7 @@ import org.jivesoftware.wildfire.filetransfer.DefaultFileTransferManager;
 import org.jivesoftware.wildfire.handler.*;
 import org.jivesoftware.wildfire.muc.MultiUserChatServer;
 import org.jivesoftware.wildfire.muc.spi.MultiUserChatServerImpl;
+import org.jivesoftware.wildfire.net.SSLConfig;
 import org.jivesoftware.wildfire.net.ServerTrafficCounter;
 import org.jivesoftware.wildfire.roster.RosterManager;
 import org.jivesoftware.wildfire.spi.*;
@@ -60,6 +61,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.net.ssl.SSLServerSocketFactory;
 
 /**
  * The main XMPP server that will load, initialize and start all the server's
@@ -159,7 +162,8 @@ public class XMPPServer {
     /**
      * Creates a server and starts it.
      */
-    public XMPPServer(LocationManager locMgr, List<String> domainNames /*, PropertyProvider localConfig, PropertyProvider globalProperties*/) {
+    public XMPPServer(String[] sslExcludedCiphers, 
+                      LocationManager locMgr, List<String> domainNames /*, PropertyProvider localConfig, PropertyProvider globalProperties*/) {
         // We may only have one instance of the server running on the JVM
         if (instance != null) {
             throw new IllegalStateException("A server is already running");
@@ -167,6 +171,9 @@ public class XMPPServer {
         mLocationManager = locMgr;
         
         instance = this;
+        
+        SSLConfig.init(sslExcludedCiphers);
+        
         start(domainNames);
     }
 

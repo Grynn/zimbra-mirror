@@ -98,6 +98,8 @@ public class TLSWrapper {
                 */
             tlsEngine = tlsContext.createSSLEngine();
             tlsEngine.setUseClientMode(clientMode);
+            tlsEngine.setEnabledCipherSuites(SSLConfig.getDefaultCipherSuites());
+
             SSLSession session = tlsEngine.getSession();
 
             netBuffSize = session.getPacketBufferSize();

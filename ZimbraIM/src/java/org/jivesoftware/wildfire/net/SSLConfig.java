@@ -24,9 +24,13 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.KeyStore;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -65,8 +69,8 @@ public class SSLConfig {
             }
         }
     };    
-
-    static {
+    
+    public static void init(String[] excludedCipherSuites) {
         String algorithm = IMConfig.XMPP_SOCKET_SSL_ALGORITHM.getString();
         String storeType = IMConfig.XMPP_SOCKET_SSL_STORETYPE.getString();
 
@@ -101,7 +105,7 @@ public class SSLConfig {
                                 trustFactory.getTrustManagers(),
                                 new java.security.SecureRandom());
                 
-                sslServerSocketFactory = (SSLJiveServerSocketFactory)SSLJiveServerSocketFactory.getInstance(algorithm, keyStore, trustStore);
+                sslServerSocketFactory = (SSLJiveServerSocketFactory)SSLJiveServerSocketFactory.getInstance(algorithm, keyStore, trustStore, excludedCipherSuites);
             }
             {
                 SSLContext sslcontext = SSLContext.getInstance(algorithm);
@@ -134,7 +138,7 @@ public class SSLConfig {
             sslServerSocketFactory = null;
         }
     }
-
+    
     public static String getKeyPassword() {
         return keypass;
     }
@@ -142,7 +146,7 @@ public class SSLConfig {
     public static String getTrustPassword() {
         return trustpass;
     }
-
+    
     public static String[] getDefaultCipherSuites() {
         String[] suites;
         if (sslServerSocketFactory == null) {
@@ -191,7 +195,7 @@ public class SSLConfig {
             throw new IOException(e.getMessage());
         }
     }
-
+    
     public static ServerSocket createServerSocket(int port, InetAddress ifAddress) throws
             IOException {
         if (sslServerSocketFactory == null) {
@@ -216,4 +220,7 @@ public class SSLConfig {
         return sslSocketFactory.createSocket();
     }
     
+    public static void main(String[] args) {
+        
+    }
 }

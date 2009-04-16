@@ -111,6 +111,7 @@ public class NioSocketConnection extends SocketConnection {
             
             SSLFilter filter = new SSLFilter(tlsContext);
             filter.setUseClientMode(clientMode);
+            filter.setEnabledCipherSuites(SSLConfig.getDefaultCipherSuites());
             
             mIoSession.getFilterChain().addAfter("org.apache.mina.common.ExecutorThreadModel", "tls", filter);
             
