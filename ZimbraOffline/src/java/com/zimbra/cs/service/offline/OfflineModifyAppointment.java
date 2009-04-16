@@ -25,6 +25,6 @@ import com.zimbra.cs.service.mail.ModifyAppointment;
 public class OfflineModifyAppointment extends ModifyAppointment {
     @Override
     public void preProxy(Element request, Map<String, Object> context) throws ServiceException {        
-        OfflineCalendarProxy.uploadAttachments(request, getZimbraSoapContext(context).getRequestedAccountId());
+        OfflineProxyHelper.uploadAttachments(request, getZimbraSoapContext(context).getRequestedAccountId());
     }
 }
