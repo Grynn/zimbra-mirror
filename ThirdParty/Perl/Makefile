@@ -95,7 +95,7 @@ PERL_LIBS 	:= \
 	Parallel::ForkManager \
 	Package::Constants \
 	IO::Compress::Base \
-	IO::Compress::Zlib \
+	IO::Compress::Gzip \
 	Compress::Raw::Zlib \
 	P/PM/PMQS/Compress-Zlib-1.42.tar.gz \
 	Archive::Tar \
