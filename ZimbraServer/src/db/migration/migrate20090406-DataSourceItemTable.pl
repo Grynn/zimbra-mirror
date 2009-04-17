@@ -33,7 +33,7 @@ sub updateDataSourceItemTable() {
   Migrate::logSql("Updating data_source_item table for ".$group.".");
   
   my $sql = <<CREATE_TABLE_EOF;
-DROP TABLE $group.data_source_Item;
+DROP TABLE IF EXISTS $group.data_source_Item;
 CREATE TABLE IF NOT EXISTS $group.data_source_item (
    mailbox_id     INTEGER UNSIGNED NOT NULL,
    data_source_id CHAR(36) NOT NULL,
