@@ -122,12 +122,12 @@ function() {
 ZmBatchCommand.prototype.run =
 function(callback, errorCallback) {
 
-	// Invoke each command so that it hands us its SOAP doc, response callback, and
-	// error callback
-    for (var i = 0; i < this._cmds.length; i++) {
+	// Invoke each command so that it hands us its SOAP doc, response callback,
+	// and error callback
+	for (var i = 0; i < this._cmds.length; i++) {
 		var cmd = this._cmds[i];
 		cmd.run(this);
-        this.curId++;
+		this.curId++;
 	}
 
 	var params = {
@@ -142,37 +142,45 @@ function(callback, errorCallback) {
 	if (this._useJson) {
 		var jsonObj = {BatchRequest:{_jsns:"urn:zimbra", onerror:this._onError}};
 		var batchRequest = jsonObj.BatchRequest;
-	    var size = this.size();
-	    if (size) {
-		    for (var i = 0; i < size; i++) {
-		    	var request = this._requests[i];
-		    	request.requestId = i;
-		    	var methodName = ZmCsfeCommand.getMethodName(request);
-		    	if (!batchRequest[methodName]) {
-		    		batchRequest[methodName] = [];
-		    	}
+		var size = this.size();
+		if (size && this._requests.length) {
+			for (var i = 0; i < size; i++) {
+				var request = this._requests[i];
+				request.requestId = i;
+				var methodName = ZmCsfeCommand.getMethodName(request);
+				if (!batchRequest[methodName]) {
+					batchRequest[methodName] = [];
+				}
 				request[methodName].requestId = i;
-		    	batchRequest[methodName].push(request[methodName]);
-		    }
-	    }
-	    params.jsonObj = jsonObj;
-	} else {
+				batchRequest[methodName].push(request[methodName]);
+			}
+			params.jsonObj = jsonObj;
+		}
+	}
+	else {
 		var batchSoapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 		batchSoapDoc.setMethodAttribute("onerror", this._onError);
 		// Add each command's request element to the BatchRequest, and set its ID
-	    var size = this.size();
-	    for (var i = 0; i < size; i++) {
-			var soapDoc = this._requests[i];
-			var reqEl = soapDoc.getMethod();
-			reqEl.setAttribute("requestId", i);
-			var node = batchSoapDoc.adoptNode(reqEl);
-			batchSoapDoc.getMethod().appendChild(node);
+		var size = this.size();
+		if (size > 0) {
+			for (var i = 0; i < size; i++) {
+				var soapDoc = this._requests[i];
+				var reqEl = soapDoc.getMethod();
+				reqEl.setAttribute("requestId", i);
+				var node = batchSoapDoc.adoptNode(reqEl);
+				batchSoapDoc.getMethod().appendChild(node);
+			}
+			params.soapDoc = batchSoapDoc;
 		}
-		params.soapDoc = batchSoapDoc;
 	}
 
-	// Issue the BatchRequest
-	appCtxt.getAppController().sendRequest(params);
+	// Issue the BatchRequest *but* only when there's something to request
+	if (params.jsonObj || params.soapDoc) {
+		appCtxt.getAppController().sendRequest(params);
+	}
+	else if (callback) {
+		callback.run();
+	}
 };
 
 ZmBatchCommand.prototype._handleResponseRun =
