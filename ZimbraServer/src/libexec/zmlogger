@@ -18,11 +18,13 @@ use lib qw(/opt/zimbra/zimbramon/lib);
 use strict;
 use warnings;
 use Zimbra::Mon::Zmstat;
+use Zimbra::Mon::LoggerSchema;
 use RRDs;
 use DBI;
 use FileHandle;
-use vars qw ($logger_directory $logger_rrd_directory);
+use vars qw ($logger_directory $logger_rrd_directory $CURRENT_VERSION);
 
+$CURRENT_VERSION = 1;
 my @CREATE_DDL = (
     q{CREATE TABLE IF NOT EXISTS hosts (
         id           INTEGER PRIMARY KEY,
@@ -265,6 +267,33 @@ sub create_schema($) {
     }
 }
 
+sub upgrade_schema($) {
+    my $dbh = shift @_;
+
+    my $version = 0;
+    my @rows = $dbh->selectrow_array("SELECT version FROM config");
+    my @upgrade = ();
+    if (!@rows) {
+        warn "Schema version not found, upgrading";
+        @upgrade = @LOGGER_SCHEMA_UPGRADE;
+    } else {
+        $version = $rows[0];
+        @upgrade = ($version + 1) == $#LOGGER_SCHEMA_UPGRADE ?
+            ($LOGGER_SCHEMA_UPGRADE[$#LOGGER_SCHEMA_UPGRADE]) :
+            @LOGGER_SCHEMA_UPGRADE[$version + 1, $#LOGGER_SCHEMA_UPGRADE];
+    }
+
+    foreach my $upgrade (@upgrade) {
+        print "upgrade version\n";
+        foreach my $st (@$upgrade) {
+        print "$st\n";
+            $dbh->do($st) || die $dbh->err;
+        }
+    }
+
+    die;
+}
+
 sub init() {
     Zimbra::Mon::Zmstat::getLocalConfig();
     $logger_directory = $Zimbra::Mon::Zmstat::LC{logger_data_directory};
@@ -277,6 +306,7 @@ sub init() {
             "dbi:SQLite:dbname=$logger_directory/logger.sqlitedb", "", "")
                     || die $!;
     create_schema($dbh);
+    upgrade_schema($dbh);
     $dbh;
 }
 
