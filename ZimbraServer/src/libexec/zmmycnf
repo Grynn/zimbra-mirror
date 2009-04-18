@@ -75,6 +75,7 @@ innodb_file_per_table
 innodb_open_files         = ${mysql_table_cache}
 innodb_max_dirty_pages_pct = 10
 innodb_flush_method       = O_DIRECT
+innodb_flush_log_at_trx_commit = 0
 
 [mysqld_safe]
 
