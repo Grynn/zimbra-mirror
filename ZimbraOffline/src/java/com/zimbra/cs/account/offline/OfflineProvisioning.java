@@ -617,14 +617,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     private void testCalDav(String localPart, String domain, String password) throws ServiceException {
         String username = null;
-        String service = domain;
+        String service;
       
         if (domain.equals("yahoo.com") || domain.equals("ymail.com") || domain.equals("rocketmail.com")) {
             if (domain.equals("yahoo.com"))
                 username = localPart;
             service = "yahoo.com";
-        } else if (!domain.equals("gmail.com")) {
-            return;
+        } else {
+            service = "gmail.com";
         }
         if (username == null)
             username = localPart + "@" + domain;
@@ -2147,7 +2147,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 		                throw ServiceException.INVALID_REQUEST("must be valid email address: "+ ds.getEmailAddress(), null);
 		            String localPart = parts[0];
 		            String domainFromEmail = parts[1];
-		            domainFromEmail = IDNUtil.toAsciiDomainName(domain);
+		            domainFromEmail = IDNUtil.toAsciiDomainName(domainFromEmail);
 	                testCalDav(localPart, domainFromEmail, decrypted);
 	            }
 	            
