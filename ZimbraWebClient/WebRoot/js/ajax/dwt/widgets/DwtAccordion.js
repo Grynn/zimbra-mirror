@@ -202,7 +202,9 @@ function(width, height) {
 	var body = document.getElementById(this._htmlElId + "_body_" + this._currentItemId);
 	if (body) {
 		Dwt.setSize(body, width, newHeight);
-		Dwt.setSize(body.firstChild, width, newHeight);
+		if (body.firstChild) {
+			Dwt.setSize(body.firstChild, width, newHeight);
+		}
 	}
 };
 
