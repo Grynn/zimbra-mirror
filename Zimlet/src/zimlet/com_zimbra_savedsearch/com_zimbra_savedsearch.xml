@@ -1,0 +1,15 @@
+<zimlet name="com_zimbra_savedsearch" version="0.1" description="Automatically creates Saved Search after certain repeated searches">
+  <include>savedsearch.js</include>
+  <includeCSS>savedsearch.css</includeCSS>
+  <handlerObject>com_zimbra_savedsearch</handlerObject>
+
+  <zimletPanelItem label="Auto Saved Search" icon="savedsearch-panelIcon">
+    <toolTipText>Automatically creates Saved Search after certain repeated searches</toolTipText>
+  </zimletPanelItem>
+
+  <userProperties>
+   <property type="string" name="savedsearch_searchhistory"  value=""/>
+   <property type="string" name="savedsearch_maximumrepeat"  value="5"/>
+   <property type="string" name="turnONAutoSavedSearch" value="false"/>
+  </userProperties>
+</zimlet>
