@@ -1,0 +1,17 @@
+.Imgholidaycalendars-panelIcon {
+  background: url("holidaycalendars.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.hcals_sectionDiv{
+background:#FFFFFF;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+}
+.hcals_HdrDiv{
+background:#000066;
+color:#FFFFFF;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+font-size:200%;
+}
