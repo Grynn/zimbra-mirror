@@ -1,0 +1,9 @@
+<zimlet name="com_zimbra_rssfeeds" version="0.1" description="Quickly add pre-selected RSS Feeds about breaking news, politics, technology and Business">
+  <include>rssfeeds.js</include>
+  <includeCSS>rssfeeds.css</includeCSS>
+  <handlerObject>com_zimbra_rssfeeds</handlerObject>
+
+  <zimletPanelItem label="RSS Feeds" icon="rssfeeds-panelIcon">
+    <toolTipText>Quickly add pre-selected RSS Feeds about breaking news, politics, technology and Business</toolTipText>
+  </zimletPanelItem>
+</zimlet>
