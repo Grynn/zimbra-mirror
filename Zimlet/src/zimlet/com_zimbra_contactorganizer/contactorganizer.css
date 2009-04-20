@@ -1,0 +1,40 @@
+.Imgco-panelIcon {
+  background: url("co-icon.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+.corg_texthidden {
+display:none
+}
+.corg_shown {
+display:block
+}
+.corg_processbarBackground {
+position: absolute;
+top: 50px; 
+width: 490px; 
+height: 15px; 
+background-color: white; 
+font-size: 1px;
+}
+
+.corg_processbarForeground {
+position: absolute;
+top: 50px; 
+width: 5px; 
+height: 15px; 
+background-color: green; 
+font-size: 1px;
+}
+
+
+.corg_sectionDiv{
+background:#FFFFFF;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+}
+.corg_hdrDiv{
+font-size: 12px;
+font-weight: bold;
+}
+

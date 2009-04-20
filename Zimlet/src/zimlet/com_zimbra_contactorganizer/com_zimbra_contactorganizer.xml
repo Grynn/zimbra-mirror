@@ -1,0 +1,10 @@
+<zimlet name="com_zimbra_contactorganizer" version="0.1" description="Helps organizing(moving,deleting,tagging and filing) all or specified set of contacts">
+	<include>contactorganizer.js</include>
+	<includeCSS>contactorganizer.css</includeCSS>
+	<resource>co.gif</resource>
+	<handlerObject>Com_Zimbra_contactOrganizer</handlerObject>
+
+	<zimletPanelItem label="Contact Organizer" icon="co-panelIcon">
+		<toolTipText>Helps organizing (moving,deleting,tagging and filing) all or specified set of contacts</toolTipText>
+	</zimletPanelItem>
+</zimlet>
