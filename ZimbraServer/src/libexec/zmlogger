@@ -290,8 +290,6 @@ sub upgrade_schema($) {
             $dbh->do($st) || die $dbh->err;
         }
     }
-
-    die;
 }
 
 sub init() {
