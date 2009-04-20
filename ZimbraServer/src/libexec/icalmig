@@ -20,7 +20,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.27";
+my $version = "1.28";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -56,6 +56,8 @@ my $tzx_tz="NOTZ";
 #used for debug purpose
 $icalfile="" if ($DEBUG);
 
+#for recurring DAILY exceptions
+my $STAT_CANCELLED = 3;
 #used as const values for pattern calcualtions.
 my $DAILY = 1,
 my $WEEKLY = 7,
@@ -759,7 +761,7 @@ sub processfile
           my $mstrdtstart=$masterrec->{'DTSTART'};
           $mstrdtstart=~ s/DTSTART/RDATE/;
           my $rdarr;
-          $rdarr = ($masterrec->{'RDATE'});
+          $rdarr = $masterrec->{'RDATE'};
           for my $key ( sort keys %$rdarr)
           {
             if($key lt $mstrdtstart)
@@ -802,7 +804,7 @@ sub processfile
               if ($createPatternRRULE)
               {
                 my $dlctr=0;my $wkctr=0; my $bwkctr=0;
-                $rdarray= ($masterrec->{'RDATE'});
+                $rdarray= $masterrec->{'RDATE'};
                 #Add master date too in rdarray for pattern calculation.
                 #It WILL be removed after pattern calculation
                 my $tmdts= $masterrec->{'DTSTART'};
@@ -846,6 +848,7 @@ sub processfile
                 my $isweekendpresent=0; my $wkday; my $weekendcount=0;
                 my $prvwkday=0;my $jstcrosswend=0;
                 my $weekenddaypassed=0;
+
                 my @weekday_arr;
                 %week_day_arr_list=();
                 my $startwkday=-1;my $endwkday=-1;
@@ -985,11 +988,11 @@ sub processfile
                       &log_message("occurrence attendees changed \nmaster-attendees:@mattendeearr \nrecur-attendee:@iattenarr");
                     }
                     #if description changed, create exceptions
-                    if ($mdescription ne $idescription)
+                    if (($mdescription ne $idescription) && (defined($mdescription)))
                     {
                       $isdescchanged=1;
                       $ltd_exlist{$rsdt}=0;
-                      &log_message("occurrence description changed->master-summary:$mdescription recur-summary:$idescription");
+                      &log_message("occurrence description changed->master-description:$mdescription recur-description:$idescription");
                     }
                     
                     #delta days
@@ -1080,18 +1083,18 @@ sub processfile
                   &log_message("occurrence attendees changed \nmaster-attendees:@mattendeearr \n recur-attendee:@iattenarr");
                 }
                 #if description changed, create exceptions
-                if ($mdescription ne $idescription)
+                if (($mdescription ne $idescription) && (defined($mdescription)))
                 {
                   $isdescchanged=1;
                   $ltd_exlist{$rndt}=0;
-                  &log_message("occurrence description changed->master-summary:$mdescription recur-summary:$idescription");
+                  &log_message("occurrence description changed->master-description:$mdescription recur-description:$idescription");
                 }
                 #***************************
                 #delete master dtstart from rdarray which was added for pattern
                 #calculation before
                 delete($rdarray->{$tmdts});
                 
-                my $rdpattern=0; my $freq; my $interval; my $rdcnt;
+                my $rdpattern=0; my $freq="NONE"; my $interval; my $rdcnt;
                 $rdcnt= keys (%$rdarray);#-1;
                 if (!$rdcnt)
                 {
@@ -1186,28 +1189,26 @@ sub processfile
 	                #2. if weekdays has changed due to meeting has moved to another day,
 	                #   create complete series exception.
 	                if (($rdpattern)&& ($isweekdayok))
-	                    #&& ($isrdtimeok)
-	                    #&& (!$islocchanged) &&(!$issmrychanged) &&(!$isattndchanged)
-	                    #&& (!$isdescchanged))
 	                {
+                    my $daily_exception_created=0;
+                    my $ridx= rindex($firstrdate,':');
+                    if($ridx<0)
+                    {
+                      &log_message("No expected(:) delimiter found.Qutiing!!!") ;
+                      die "No expected(:) delimeter found. Quitting!!!";
+                    }
+                     
+                    my $fdt= substr($firstrdate,$ridx+1);
+                    my $ldt = substr($lastrdate,$ridx+1);
 	                  if ($freq eq "DAILY")
 	                  {
-	                    #create RRULE for exceptions
-	                    my $ridx= rindex($firstrdate,':');
-	                    if($ridx<0)
-	                    {
-	                      &log_message("No expected(:) delimiter found.Qutiing!!!") ;
-	                      die "No expected(:) delimeter found. Quitting!!!";
-	                    }
-	                    my $fdt= substr($firstrdate,$ridx+1);
-	                    my $ldt = substr($lastrdate,$ridx+1);
-	                    #total weekend days present
+                      #total weekend days present
 	                    my $wkenddayspresent=keys(%weekenddate_list);
-	                    #total weekend days crossed
+                      #total weekend days crossed
 	                    my $wkenddaycrossed= ($weekendcount*2);
-	                    #delta days
-	                    #if weekdays present, take complete day difference
-	                    if($wkenddaycrossed eq $wkenddayspresent)#($isweekendpresent)
+                      #delta days
+	                    #if weekenddays present, take complete day difference
+	                    if($wkenddaycrossed eq $wkenddayspresent)
 	                    {
 	                      $delta_days=get_date_diff($fdt, $ldt)+1;
 	                    }
@@ -1215,16 +1216,47 @@ sub processfile
 	                    {
 	                      #no addition of exception count in delta_days
 	                      $delta_days=get_date_diff($fdt, $ldt)+1;
-	                      #deduct weekend count*2 and $weekenddaypassed, if just saturday has passed
-	                      $delta_days = $delta_days - ($weekendcount*2)-$weekenddaypassed;
-	                      #add weekend days in limited exception list for exception creation
-	                      if($wkenddayspresent>0)
-	                      {
-	                        for my $wek1 ( sort keys %weekenddate_list )
-	                        {
-	                          $ltd_exlist{$wek1}=0;
-	                        }
-	                      }
+                       
+                        #Doesnt work with ZCO
+                        #deduct weekend days count, if weekend days are present. They will be
+                        #created as exception
+	                      #$delta_days = $delta_days - get_weekenddayscountByDateRange($fdt,$ldt) ;
+                       
+                        #Add master rec date to rdaary for complete date range
+                        my $tmdts= $masterrec->{'DTSTART'};
+                        $tmdts=~ s/DTSTART/RDATE/;
+                        push @{$rdarray->{$tmdts}},$tmdts;
+                        
+                        my %missing_days_list= get_missingdays_list($fdt, $ldt, $rdarray);
+                        #delete master rec rdate
+                        delete($rdarray->{$tmdts});
+
+                        #if some intermidiate day is missing from range, create exception
+                        #and set its status as CANCELLED
+                        if (keys(%missing_days_list)>0)
+                        {
+                          $delta_days = $delta_days-(keys(%missing_days_list));
+                          for my $md ( sort keys %missing_days_list )
+                          {
+                            $ltd_exlist{$md}=$STAT_CANCELLED; #STATUS:CANCELLED
+                          }
+                        }
+                        # Doesn't work with ZCO. Comment it.
+                        #add weekend days in limited exception list for exception creation
+	                      #if($wkenddayspresent>0)
+	                      #{
+	                      #  for my $wek1 ( sort keys %weekenddate_list )
+	                      #  {
+                        #    #if ($fdt eq get_datepart_from_icsdt($wek1))
+                        #    #{
+                        #      #$delta_days++;
+                        #    #}
+	                      #    #$ltd_exlist{$wek1}=0;
+                        #    $ltd_exlist{$wek1}=2; #2 for STATUS:CONFIRMED
+	                      #  }
+	                      #}
+                       
+                        $daily_exception_created=1;
 	                    }
 	                  }
 	                  else
@@ -1234,17 +1266,32 @@ sub processfile
 	                  my $bywkday=";BYDAY=MO,TU,WE,TH,FR";
 	                  my $newrrule= "RRULE:FREQ=$freq;COUNT=$delta_days;INTERVAL=$interval";
                     my $teststr="";
-	                  if($freq eq "DAILY")#&&(!$isweekendpresent))
+	                  if($freq eq "DAILY")
 	                  {
-                      $bywkday=&get_byday(\%week_day_arr_list);
+                      if($daily_exception_created)
+                      {
+                        #do nothing. Let it be complete wekeday BYDAY
+                        $bywkday=&get_byday(\%week_day_arr_list,0);#1);
+                      }
+                      else
+                      {
+                        $bywkday=&get_byday(\%week_day_arr_list,0);
+                      }
 	                    #set it to weekly instead of DAILY to avoid server side bug#30094
-	                    $newrrule= "RRULE:FREQ=WEEKLY;COUNT=$delta_days;INTERVAL=$interval".$bywkday;
+	                    #$newrrule= "RRULE:FREQ=WEEKLY;COUNT=$delta_days;INTERVAL=$interval".$bywkday;
+                      $ldt=trim($ldt);
+                      $newrrule="RRULE:FREQ=WEEKLY;UNTIL=$ldt;INTERVAL=$interval".$bywkday;
                       $teststr="DAILY";
 	                  }
                     elsif($freq eq "WEEKLY")
 	                  {
-                      $bywkday=&get_byday(\%week_day_arr_list);
-                      $newrrule= "RRULE:FREQ=WEEKLY;COUNT=$delta_days;INTERVAL=$interval".$bywkday;
+                      $bywkday=&get_byday(\%week_day_arr_list,0);
+                      my $tridx= rindex($firstrdate,':');
+                      my $tfdt= substr($firstrdate,$tridx+1);
+	                    my $tldt = substr($lastrdate,$tridx+1);
+                      my $nweeks=get_weeks_by_date_range($tfdt,$tldt)+1;
+                      &log_message("date range weeks: $nweeks");
+                      $newrrule= "RRULE:FREQ=WEEKLY;COUNT=$nweeks;INTERVAL=$interval".$bywkday;
                     }
 	                  print_outfile("$newrrule");
 	                  &log_message($teststr." New RRULE: $newrrule.");
@@ -1390,16 +1437,25 @@ sub processfile
         {
           my $wdc =$ltd_exlist{$srdtkey};
           my $ctoccurrence=1;
+          #store rec date for resetting the date in case of $STAT_CANCELLED
+          my $tsrdtkey=$srdtkey;
           #if only weekday changed and weekdays are OK then skip it.
           if (($wdc ==1)&&($isweekdayok))
           {
             $ctoccurrence=0;
           }
+          #if any daily meeting is missing from range, use master record
+          #replace its DTSTART/DTEND and Recurrence-id by missing event's date
+          elsif($wdc == $STAT_CANCELLED)
+          {
+            $srdtkey = "DTSTART".$recidfmtstr.$mstrdtstart;
+          }
           if ($ctoccurrence)
           {
             my $occurrec=$srtd_newrecarr{$srdtkey}[0];
-            #only for recurrences
-            if (!$occurrec->{'MASTER_VEVENT'})
+            $srdtkey = $tsrdtkey;
+            #only for recurrences or if any daily meeting is cancelled
+            if ((!$occurrec->{'MASTER_VEVENT'}) || ($wdc == $STAT_CANCELLED))
             {
               &log_message("Creating limited Recurrence:");
               my @occurrecdata= @{$occurrec->{'RECDATA'}};
@@ -1409,22 +1465,47 @@ sub processfile
 
                 if ($str =~/^DTSTART/)
                 {
+                  if ($wdc == $STAT_CANCELLED)
+                  {
+                    $str=replaceicsdatetimeby($str,$srdtkey);
+                  }
                   my $tzdtst= $str;
                   $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
                   $tzdtst =get_offset_datetime($tzdtst);
                   print_outfile("$tzdtst");
                   &log_message("New DTSATRT:$tzdtst");
+
+                  if(($occurrec->{'MASTER_VEVENT'}) &&($wdc==$STAT_CANCELLED))
+                  {
+                    #create RECURRENCE_ID
+                    my $recdt= $tzdtst;
+                    $recdt=~ s/DTSTART/RECURRENCE-ID/;
+                    print_outfile("$recdt");
+                  }
                 }
                 elsif ($str =~/^DTEND/)
                 {
+                  if ($wdc == $STAT_CANCELLED)
+                  {
+                    $str=replaceicsdatetimeby($str,$srdtkey);
+                  }
                   my $tzdten= $str;
                   $tzdten=~ s/DTEND/DTEND$TZTag/;
                   $tzdten =get_offset_datetime($tzdten);
                   print_outfile("$tzdten");
                   &log_message("New DTEND: $tzdten");
+
+                  if($wdc == $STAT_CANCELLED) #STATUS:CANCELLED
+                  {
+                    print_outfile("STATUS:CANCELLED");
+                  }
                 }
                 elsif($str =~/^RECURRENCE-ID/)
                 {
+                  if ($wdc == $STAT_CANCELLED)
+                  {
+                    $str=replaceicsdatetimeby($str,$srdtkey);
+                  }
                   my $rndtt; my $rntime;
                   if(!$isrdtimeok)
                   {
@@ -1446,6 +1527,17 @@ sub processfile
                 elsif($str =~/^CREATED/)
                 {
                  #do nothing
+                }
+                elsif ($str =~/^RDATE/)
+                {
+                  #do nothing.. will be case of wdc=$STAT_CANCELLED (3)
+                }
+                elsif ($str =~/^STATUS/)
+                {
+                  if($wdc != $STAT_CANCELLED)
+                  {
+                    print_outfile("$str");
+                  }
                 }
                 elsif ($str =~/^UID/)
                 {
@@ -1620,6 +1712,53 @@ sub sed_settaskstatus
   my $sedcmd = "sed -i '/PERCENT-COMPLETE:100/ a STATUS:COMPLETED' $icalfile$newfileext";
   &log_message("sed command: $sedcmd");
   system $sedcmd;
+}
+
+sub get_missingdays_list
+{
+  my $fdt= shift;
+  my $ldt= shift;
+  my $trdarray = shift;
+
+  my %retlist=();
+  my $tfdt;
+  my $i=0;
+  my $rdprefix;
+  foreach my $rdate (sort keys %$trdarray)
+  {
+    my $tidx= rindex($rdate,':');
+    $rdprefix = substr($rdate,0,$tidx+1);
+    last;
+  }
+  
+  do
+  {
+    $tfdt=get_date_by_days($fdt,$i);
+    my $rdt=$rdprefix.$tfdt;
+    my $tt = $trdarray->{$rdt};
+    my $found=0;
+    foreach my $trdt (sort keys %$trdarray)
+    {
+      if(trim($trdt) eq trim($rdt))
+      {
+        $found=1;
+        last;
+      }
+    }
+    if(!$found)
+    {
+      $rdt =~ s/RDATE/DTSTART/;
+      $retlist{$rdt} =3;
+    }
+    #if (!(exists ($trdarray->{$rdt})))
+    #{
+    #  $rdt =~ s/RDATE/DTSTART/;
+    #  $retlist{$rdt} =3;
+    #}
+    $i++;
+  }while ($tfdt < $ldt);
+  
+  return  %retlist;
 }
 
 sub get_adjusted_recurrenceID_date
@@ -2004,6 +2143,7 @@ sub get_week_num {
 sub get_byday
 {
   my $week_day_arr_list=shift;
+  my $without_WKEND = shift;
   my $bywkday=";BYDAY=";
   my @srtdarr=("","","","","","","");
   foreach my $pdkey (keys %$week_day_arr_list)
@@ -2015,6 +2155,10 @@ sub get_byday
   {
     if($srtdarr[$k] ne "")
     {
+      if(($without_WKEND) && (($srtdarr[$k] eq "SA") || ($srtdarr[$k] eq "SU")))
+      {
+        next;
+      }
       if ($oneadded)
       {
         $bywkday =  $bywkday.",".$srtdarr[$k];
@@ -2310,6 +2454,23 @@ sub get_weekday_str
   return $strwkday;
 }
 
+#replace the ics date time by new date time
+#input icsdt e.g. DTSTART;TZID=(GMT+03.00) Kuwait / Riyadh:20090411T190000,
+#       newdt =  20090411T190000
+sub replaceicsdatetimeby
+{
+  my $oldicsdt= shift;
+  my $newdt=shift;
+  
+  my $tidx= rindex($oldicsdt,':');
+  my $ndt = substr($oldicsdt,0,$tidx);
+  
+  $tidx = rindex($newdt,':');
+  $newdt=substr($newdt,$tidx+1,(length($newdt)-$tidx));
+  
+  $ndt = $ndt.':'.$newdt;
+  return $ndt;
+}
 #get date part from RADTE or DTSTART format string
 #input param: ics date
 sub get_datepart_from_icsdt
@@ -2340,6 +2501,15 @@ sub get_date_by_days
     $newdt = $newdt.'T'.$darr[1];
   }
   return $newdt;
+}
+
+sub get_weeks_by_date_range
+{
+  my $fdt= shift;
+  my $ldt= shift;
+  my $days=get_date_diff($fdt, $ldt);
+  my $nweeks= ($days / 7);
+  return $nweeks;
 }
 
 #takes dates in yyyymmdd/yyyymmddThhmmss format and return number of days
@@ -2536,6 +2706,39 @@ sub rtrim($)
 sub Add_METHOD_PUBLISH
 {
   print_outfile("METHOD:PUBLISH");
+}
+
+#get weekend days(SA N SU) lying in between two dates
+sub get_weekenddayscountByDateRange
+{
+  my $fdt=shift;
+  my $ldt = shift;
+  my $retval=0;
+
+  $fdt = get_date($fdt);
+  my $yr1= substr($fdt,0,4);
+  my $mm1= substr($fdt,4,2);
+  my $dd1= substr($fdt,6,2);
+  
+  $ldt = get_date($ldt);
+  my $yr2= substr($ldt,0,4);
+  my $mm2= substr($ldt,4,2);
+  my $dd2= substr($ldt,6,2);
+
+  my $y2=0, my $m2=0, my $d2=0; my $tdays=0;
+  while (!(($yr2 == $y2) && ($mm2 == $m2) && ($dd2 == $d2)))
+  {
+    ($y2, $m2, $d2)= Add_Delta_Days($yr1,$mm1,$dd1, $tdays);
+
+    my $dowk = Day_of_Week($y2,$m2,$d2);
+    #if SA or SU
+    if(($dowk == 6) || ($dowk== 7))
+    {
+      $retval++;
+    }
+    $tdays++;
+  }
+  return $retval;
 }
 #*********TimeZone processing*****************>>>>>>>>>>>
 
