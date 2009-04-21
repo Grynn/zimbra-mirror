@@ -155,8 +155,8 @@ sub runRemoteCommand {
 sub doStatus {
 	$services = getEnabledServices();
   alarm($timeout);
-  my (undef, $statusfile) = tempfile("zmcontrol.status.XXXXX", DIR=>"/tmp",  OPEN=>0);
-  my (undef, $errfile) = tempfile("zmcontrol.error.XXXXX", DIR=>"/tmp",  OPEN=>0);
+  my (undef, $statusfile) = tempfile("zmcontrol.status.XXXXX", DIR=>"$zimbra_tmp_directory",  OPEN=>0);
+  my (undef, $errfile) = tempfile("zmcontrol.error.XXXXX", DIR=>"$zimbra_tmp_directory",  OPEN=>0);
 	if (scalar(keys %$services) == 0) {
 		print "Cannot determine services - exiting\n";
 		return 1;
