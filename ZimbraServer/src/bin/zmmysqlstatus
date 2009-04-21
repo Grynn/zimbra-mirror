@@ -26,12 +26,15 @@ my $database = "zimbra";
 my $mySqlCommand = "mysql";
 my $verbose = 0;
 my $usage = 0;
+my $zimbra_tmp_directory="/tmp";
 
 if (-f "/opt/zimbra/bin/zmlocalconfig") {
     $password = `zmlocalconfig -s -m nokey zimbra_mysql_password`;
     chomp $password;
     $user = `zmlocalconfig -m nokey zimbra_mysql_user`;
     chomp $user;
+    $zimbra_tmp_directory = `zmlocalconfig -s -m nokey zimbra_tmp_directory`;
+    chomp $zimbra_tmp_directory;
 }
 
 GetOptions("verbose" => \$verbose, "user=s" => \$user, "password=s" => \$password,
@@ -230,7 +233,7 @@ sub runSql($) {
     # close(LASTSCRIPT);
 
     # Run the mysql command and redirect output to a temp file
-    my (undef, $tempFile) = tempfile("zmmysqlstatus.XXXX", DIR=>"/tmp",  OPEN=>1);
+    my (undef, $tempFile) = tempfile("zmmysqlstatus.XXXX", DIR=>"$zimbra_tmp_directory",  OPEN=>1);
     my $command = "$mySqlCommand --user=$user --password=$password " .
         "--database=$database --batch --skip-column-names";
     open(MYSQL, "| $command > $tempFile") || die "Unable to run $command";
