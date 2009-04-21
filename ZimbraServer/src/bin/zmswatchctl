@@ -22,6 +22,7 @@ fi
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
     zimbra_home \
+    zimbra_tmp_directory \
     zimbra_log_directory
 
 configfile=${zimbra_home}/conf/swatchrc
@@ -65,9 +66,13 @@ case "$1" in
       exit 0
     fi
 
+    if [ ! -d ${zimbra_tmp_directory} ]; then
+      mkdir -p ${zimbra_tmp_directory} > /dev/null 2>&1
+    fi
+
     ${zimbra_home}/libexec/swatch --config-file=${configfile} \
       --use-cpan-file-tail \
-      --script-dir=/tmp -t /var/log/zimbra.log > $logfile 2>&1 &
+      --script-dir=${zimbra_tmp_directory} -t /var/log/zimbra.log > $logfile 2>&1 &
     pid=$!
     if [ "x$pid" != 'x' ]; then
       if [ -f $logfile ]; then

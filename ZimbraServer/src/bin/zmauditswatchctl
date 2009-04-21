@@ -23,6 +23,7 @@ source `dirname $0`/zmshutil || exit 1
 zmsetvars \
     zimbra_home \
     zimbra_log_directory \
+    zimbra_tmp_directory \
     zimbra_swatch_acct_threshold \
     zimbra_swatch_ip_threshold \
     zimbra_swatch_ipacct_threshold \
@@ -105,10 +106,14 @@ case "$1" in
       echo "${configfile} template not found."
       exit 1
     fi
+
+    if [ ! -d ${zimbra_tmp_directory} ]; then
+      mkdir -p ${zimbra_tmp_directory} > /dev/null 2>&1
+    fi
        
     ${zimbra_home}/libexec/auditswatch --config-file=${configfile} \
       --use-cpan-file-tail \
-      --script-dir=/tmp \
+      --script-dir=${zimbra_tmp_directory} \
       --tail-file /opt/zimbra/log/audit.log > $logfile 2>&1 &
     pid=$!
     if [ "x$pid" != 'x' ]; then
