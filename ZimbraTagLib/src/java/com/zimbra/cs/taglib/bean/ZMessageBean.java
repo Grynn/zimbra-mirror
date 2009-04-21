@@ -21,11 +21,7 @@ import com.zimbra.cs.zclient.ZMessage;
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
 import com.zimbra.cs.zclient.ZShare;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -106,6 +102,8 @@ public class ZMessageBean {
     public String getDisplaySentDate() { return DateUtil.toRFC822Date(getSentDate()); }
 
     public String getMessageIdHeader() { return mMsg.getMessageIdHeader(); }
+
+    public Map<String,String> getRequestHeader() { return mMsg.getRequestHeader(); }
     
     public List<ZEmailAddress> getEmailAddresses() { return mMsg.getEmailAddresses(); }
     

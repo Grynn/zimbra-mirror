@@ -39,7 +39,7 @@ public class GetMessageTag extends ZimbraSimpleTag {
     private boolean mRaw;
     private String mPart;
     private ZMailboxBean mMailbox;
-
+    private String mReqHdrs;
     
     public void setVar(String var) { this.mVar = var; }
     
@@ -55,7 +55,9 @@ public class GetMessageTag extends ZimbraSimpleTag {
     public void setRaw(boolean raw) { this.mRaw = raw; }
     public void setNeuterimages(boolean neuter) { this.mNeuterimages = neuter; }
     public void setPart(String part) { this.mPart = part; }
-    
+
+    public void setRequestHeaders(String reqhdrs) { this.mReqHdrs = reqhdrs; }
+
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
         try {
@@ -68,6 +70,7 @@ public class GetMessageTag extends ZimbraSimpleTag {
             params.setNeuterImages(mNeuterimages);
             params.setRawContent(mRaw);
             params.setPart(mPart);
+            params.setReqHeaders(mReqHdrs);
             ZMessage message = mbox.getMessage(params);
             jctxt.setAttribute(mVar, new ZMessageBean(message),  PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {

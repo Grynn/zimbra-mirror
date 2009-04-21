@@ -1278,6 +1278,14 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
 
+        <attribute>
+            <description>list of comma-separated headernames to get</description>
+            <name>requestHeaders</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
     </tag>
 
     <tag>
