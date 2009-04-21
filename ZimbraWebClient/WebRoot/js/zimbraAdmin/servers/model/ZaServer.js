@@ -921,3 +921,32 @@ ZaServer.initMethod = function () {
 	this.name="";
 }
 ZaItem.initMethods["ZaServer"].push(ZaServer.initMethod);
+
+ZaServer.flushCache = function (params) {
+	var soapDoc = AjxSoapDoc.create("FlushCacheRequest", ZaZimbraAdmin.URN, null);
+	var elCache = soapDoc.set("cache", null);
+	
+	var type = "";
+	if(params.flushSkin)
+		type +="skin";
+	if(params.flushLocale)	
+		type +="locale";
+	if(params.flushZimlet)	
+		type +="zimlet";
+		
+	elCache.setAttribute("type", type);		
+	
+	var reqMgrParams = {
+		controller : ZaApp.getInstance().getCurrentController(),
+		busyMsg : ZaMsg.BUSY_FLUSH_CACHE,
+		busyId:params.busyId
+	}
+	
+	var reqParams = {
+		soapDoc: soapDoc,
+		targetServer: params.serverList[params.ix].attrs[ZaItem.A_zimbraId],
+		asyncMode: params.callback ? true : false,
+		callback: params.callback ? params.callback : null,
+	}
+	ZaRequestMgr.invoke(reqParams, reqMgrParams) ;
+}

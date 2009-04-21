@@ -63,11 +63,13 @@ function(list, openInNewTab) {
 ZaServerListController.initToolbarMethod =
 function () {
    	this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerListController.prototype._editButtonListener));    	
+   	this._toolbarOperations[ZaOperation.FLUSH_CACHE] = new ZaOperation(ZaOperation.FLUSH_CACHE, ZaMsg.SERTBB_FlushCache, ZaMsg.SERTBB_FlushCache_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._flushCacheButtonListener));
    	//this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._deleteButtonListener)));    	    	
 	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
 	this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
 	
 	this._toolbarOrder.push(ZaOperation.EDIT);
+	this._toolbarOrder.push(ZaOperation.FLUSH_CACHE);
 	this._toolbarOrder.push(ZaOperation.NONE);	
 	this._toolbarOrder.push(ZaOperation.HELP);					
 }
@@ -75,7 +77,8 @@ ZaController.initToolbarMethods["ZaServerListController"].push(ZaServerListContr
 
 ZaServerListController.initPopupMenuMethod =
 function () {
-   	this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerListController.prototype._editButtonListener));    	
+   	this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerListController.prototype._editButtonListener));
+	this._popupOperations[ZaOperation.FLUSH_CACHE] = new ZaOperation(ZaOperation.FLUSH_CACHE, ZaMsg.SERTBB_FlushCache, ZaMsg.SERTBB_FlushCache_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._flushCacheButtonListener));   	    	
    	//this._popupOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._deleteButtonListener));    	    	
 }
 ZaController.initPopupMenuMethods["ZaServerListController"].push(ZaServerListController.initPopupMenuMethod);
@@ -111,17 +114,32 @@ ZaServerListController.prototype._createUI = function () {
 	}	
 }
 
-
-/*
-ZaServerListController.prototype.refresh = 
-function() {
+ZaServerListController.prototype._flushCacheButtonListener = 
+function(ev) {
 	try {
-		this._contentView.set(ZaApp.getInstance().getServerList(true).getVector());
+		if(this._contentView.getSelectionCount()>0) {
+			var arrItems = this._contentView.getSelection();
+			if(arrItems && arrItems.length) {
+				if(!ZaApp.getInstance().dialogs["flushCacheDialog"]) {
+					ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container, "400px", "380px", ZaMsg.FlushCacheDlgTitle);
+				}
+				srvList = [];
+				srvList._version = 1;
+				for(var i=0;i<arrItems.length;i++) {
+					var srv = arrItems[i];
+					srv["status"] = 0;
+					srvList.push(srv);
+				}
+				obj = {statusMessage:null,flushZimlet:true,flushSkin:true,flushLocale:true,serverList:srvList,status:0};
+				ZaApp.getInstance().dialogs["flushCacheDialog"].setObject(obj);
+				ZaApp.getInstance().dialogs["flushCacheDialog"].popup();
+			}
+		}	
 	} catch (ex) {
-		this._handleException(ex, ZaServerListController.prototype.refresh, null, false);
+		this._handleException(ex, "ZaServerListController.prototype._flushCacheButtonListener", null, false);
 	}
+	return;
 }
-*/
 
 ZaServerListController.prototype.set = 
 function(serverList) {
@@ -340,7 +358,7 @@ function () {
 	this._removeConfirmMessageDialog.popdown();
 }
 
-ZaServerListController.changeActionsState = 
+ZaServerListController.changeActionsStateMethod = 
 function () {
 	if(this._contentView) {
 		var cnt = this._contentView.getSelectionCount();
@@ -357,6 +375,12 @@ function () {
 				
 			if(this._popupOperations[ZaOperation.EDIT])	
 				this._popupOperations[ZaOperation.EDIT].enabled = false;
+
+			if(this._toolbarOperations[ZaOperation.FLUSH_CACHE])	
+				this._toolbarOperations[ZaOperation.FLUSH_CACHE].enabled = false;
+				
+			if(this._popupOperations[ZaOperation.FLUSH_CACHE])	
+				this._popupOperations[ZaOperation.FLUSH_CACHE].enabled = false;
 				
 		}
 	}

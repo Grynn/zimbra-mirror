@@ -127,6 +127,8 @@ AjxPackage.require("zimbraAdmin.servers.view.ZaServerVolumesListView");
 AjxPackage.require("zimbraAdmin.servers.view.ZaEditVolumeXDialog");
 AjxPackage.require("zimbraAdmin.servers.view.ZaProxyPortWarningXDialog");
 AjxPackage.require("zimbraAdmin.servers.view.ZaServerListView");
+AjxPackage.require("zimbraAdmin.servers.view.ZaServerMiniListView");
+AjxPackage.require("zimbraAdmin.servers.view.ZaFlushCacheXDialog");
 AjxPackage.require("zimbraAdmin.servers.view.ZaServerXFormView");
 AjxPackage.require("zimbraAdmin.adminext.view.ZaAdminExtListView");
 AjxPackage.require("zimbraAdmin.zimlets.view.ZaZimletListView");
