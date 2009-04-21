@@ -520,7 +520,7 @@ public class tarFormatter implements EventNotifier
 {
     private static final String ztozlogFile="ztozlog";
     private static final String tarMigVersion="1.0";
-    private static final String ztozconfigFile="ztozmig.conf";
+    private static final String ztozconfigFile="zmztozmig.conf";
     private static final String ztoz_default_configpath="/opt/zimbra/conf/";
     private String configFile="";
     private ZCSPLogger tarformatter_Logger;
@@ -797,7 +797,7 @@ public class tarFormatter implements EventNotifier
         System.out.println("-v --version                    Prints version");
         System.out.println("-h --help                       Shows help");
         System.out.println("-f --ConfigFile                 Config file path");
-        System.out.println("                                [default file -> /opt/zimbra/conf/ztozmig.conf]");
+        System.out.println("                                [default file -> /opt/zimbra/conf/zmztozmig.conf]");
         System.out.println("-d --debug                      prints versbose debug messages");        
     }
     

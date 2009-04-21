@@ -14,7 +14,7 @@ Options details:
 -v --version                    Prints version
 -h --help                       Shows help
 -f --ConfigFile                 Config file path
-                                [default file -> /opt/zimbra/conf/ztozmig.conf]
+                                [default file -> /opt/zimbra/conf/zmztozmig.conf]
 -d --debug                      prints versbose debug messages
 
 Important Notes:

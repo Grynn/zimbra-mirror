@@ -119,6 +119,7 @@
   <target name="clean.module.ztozprov" description="cleanup module">
     <delete dir="${ztozprov.output.dir}"/>
     <delete dir="${ztozprov.testoutput.dir}"/>
+    <delete dir="${basedir}/build"/>
   </target>
 
   <target name="init" description="Build initialization">
@@ -130,7 +131,7 @@
   <target name="all" depends="init, clean, compile.module.ztozprov" description="build all"/>
 
   <target name="zmzimbratozimbramig" depends="all">
-    <mkdir dir="${basedir}/jars"/>
-    <jar manifest="${basedir}/MANIFEST.MF" destfile="${basedir}/jars/zmzimbratozimbramig.jar" basedir="${basedir}/out/production/ztozprov"/>
+    <mkdir dir="${basedir}/build"/>
+    <jar manifest="${basedir}/MANIFEST.MF" destfile="${basedir}/build/zmzimbratozimbramig.jar" basedir="${basedir}/out/production/ztozprov"/>
   </target>
 </project>
