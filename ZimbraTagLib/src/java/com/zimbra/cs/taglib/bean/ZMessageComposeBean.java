@@ -776,9 +776,9 @@ public class ZMessageComposeBean {
 
         if (action == Action.REPLY || action == Action.REPLY_ALL ||
                 action == Action.INVITE_ACCEPT || action == Action.INVITE_DECLINE || action == Action.INVITE_TENTATIVE)
-            replyInclude(msg, content, mailbox.getPrefs(), pc);
+            replyInclude(msg, content, mailbox.getPrefs(), pc, isText);
         else if (action == Action.FORWARD)
-            forwardInclude(msg, content, mailbox.getPrefs(), pc);
+            forwardInclude(msg, content, mailbox.getPrefs(), pc, isText);
         else if (action == Action.NEW && req.getParameter("body") != null)
             content.append(req.getParameter("body"));
 
@@ -1169,19 +1169,22 @@ public class ZMessageComposeBean {
         return org;
     }
 
-    private void forwardInclude(ZMessageBean msg, StringBuilder content, ZPrefs prefs, PageContext pc) {
+    private void forwardInclude(ZMessageBean msg, StringBuilder content, ZPrefs prefs, PageContext pc, boolean isText) {
         if (prefs.getForwardIncludeAsAttachment()) {
             mMessageAttachments = new ArrayList<MessageAttachment>();
             mMessageAttachments.add(new MessageAttachment(msg.getId(), msg.getSubject()));
         } else if (prefs.getForwardIncludeBody()) {
             content.append(CRLF).append(CRLF).append(I18nUtil.getLocalizedMessage(pc, "ZM_forwardedMessage")).append(CRLF);
-            content.append(getQuotedHeaders(msg, pc)).append(CRLF);
+            String qHdr = getQuotedHeaders(msg, pc);
+            if(!isText) { qHdr = BeanUtils.htmlEncode(qHdr); }
+            content.append(qHdr).append(CRLF);
             ZMimePartBean body = msg.getBody();
             content.append(body == null ? "" : body.getContent());
             content.append(CRLF);
             addAttachments(msg, true);
         } else if (prefs.getForwardIncludeBodyWithPrefx()) {
             String org = getQuotedDisplay(msg);
+            if(!isText) { org = BeanUtils.htmlEncode(getQuotedDisplay(msg)); }
             content.append(CRLF).append(CRLF).append(I18nUtil.getLocalizedMessage(pc, "ZM_forwardPrefix", new Object[] {org})).append(CRLF);
             content.append(getQuotedBody(msg, prefs));
             content.append(CRLF);
@@ -1189,18 +1192,21 @@ public class ZMessageComposeBean {
         }
     }
 
-    private void replyInclude(ZMessageBean msg, StringBuilder content, ZPrefs prefs, PageContext pc) {
+    private void replyInclude(ZMessageBean msg, StringBuilder content, ZPrefs prefs, PageContext pc, boolean isText) {
         if (prefs.getReplyIncludeNone()) {
             // nothing to see, move along
         } else if (prefs.getReplyIncludeBody()) {
             content.append(CRLF).append(CRLF).append(I18nUtil.getLocalizedMessage(pc, "ZM_originalMessage")).append(CRLF);
-            content.append(getQuotedHeaders(msg, pc)).append(CRLF);
+            String qHdr = getQuotedHeaders(msg, pc);
+            if(!isText) { qHdr = BeanUtils.htmlEncode(qHdr); }
+            content.append(qHdr).append(CRLF);
             ZMimePartBean body = msg.getBody();
             content.append(body == null ? "" : body.getContent());
             content.append(CRLF);
             addAttachments(msg, false);
         } else if (prefs.getReplyIncludeBodyWithPrefx()) {
             String org = getQuotedDisplay(msg);
+            if(!isText) { org = BeanUtils.htmlEncode(getQuotedDisplay(msg)); }
             content.append(CRLF).append(CRLF).append(I18nUtil.getLocalizedMessage(pc, "ZM_replyPrefix", new Object[] {org})).append(CRLF);
             content.append(getQuotedBody(msg, prefs));
             content.append(CRLF);
