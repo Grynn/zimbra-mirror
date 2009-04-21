@@ -27,7 +27,8 @@ use Zimbra::Mon::Logger;
 
 use Getopt::Std;
 use File::Temp qw/ tempfile /;
-my (undef, $zmcontrolLogfile) = tempfile("zmcontrol.out.XXXXX", DIR=>"/tmp",  OPEN=>0);
+my $zimbra_tmp_directory=getLocalConfig("zimbra_tmp_directory");
+my (undef, $zmcontrolLogfile) = tempfile("zmcontrol.out.XXXXX", DIR=>"$zimbra_tmp_directory",  OPEN=>0);
 
 my $timeout = 180;
 $SIG{ALRM} = sub { print "Timeout after $timeout seconds\n"; exit(1) };
