@@ -36,6 +36,7 @@ our %saved = ();
 my $zimbra_home = getLocalConfig("zimbra_home");
 my $cur_rootdn_passwd = getLocalConfig("ldap_root_password");
 my $ldap_starttls_supported = getLocalConfig("ldap_starttls_supported");
+my $zimbra_tmp_directory = getLocalConfig("zimbra_tmp_directory");
 
 getopts('arlnph',\%options) or die "Unable to set options\n";
 
@@ -95,7 +96,7 @@ if ( $options{r}) {
     $mesg = $ldap->modify('uid=zmreplica,cn=admins,cn=zimbra',
                            replace => [ userPassword => $password] );
     my $infile = "$zimbra_home/conf/zimbra.ldif";
-    my $outfile = "/tmp/zimbra.ldif.$$";
+    my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
     my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
     my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
     my $entry;
@@ -137,7 +138,7 @@ if ( $options{r}) {
     $mesg = $ldap->modify('uid=zmpostfix,cn=appaccts,cn=zimbra',
                            replace => [ userPassword => $password ] );
     my $infile = "$zimbra_home/conf/zimbra.ldif";
-    my $outfile = "/tmp/zimbra.ldif.$$";
+    my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
     my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
     my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
     my $entry;
@@ -179,7 +180,7 @@ if ( $options{r}) {
     $mesg = $ldap->modify('uid=zmamavis,cn=appaccts,cn=zimbra',
                            replace  => [ userPassword => $password ] );
     my $infile = "$zimbra_home/conf/zimbra.ldif";
-    my $outfile = "/tmp/zimbra.ldif.$$";
+    my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
     my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
     my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
     my $entry;
@@ -221,7 +222,7 @@ if ( $options{r}) {
     $mesg = $ldap->modify('uid=zmnginx,cn=appaccts,cn=zimbra',
                            replace  => [ userPassword => $password ] );
     my $infile = "$zimbra_home/conf/zimbra.ldif";
-    my $outfile = "/tmp/zimbra.ldif.$$";
+    my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
     my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
     my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
     my $entry;
@@ -264,7 +265,7 @@ if ( $options{r}) {
     $mesg = $ldap->modify("$zimbra_ldap_userdn",
                            replace => [ userPassword => $password ] );
     my $infile = "$zimbra_home/conf/zimbra.ldif";
-    my $outfile = "/tmp/zimbra.ldif.$$";
+    my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
     my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
     my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
     my $entry;
