@@ -137,7 +137,7 @@ function enableSpellCheck(myEditor) {
 			alert('The spell checking service is unavailable.');
 			this.endSpellCheck();
 		} else if (!data.data.length) {
-			alert('The spelling is correct.');
+			alert('No spelling mistakes found.');
 			this.endSpellCheck();
 		} else {
 			var html = this._getDoc().body.innerHTML;
