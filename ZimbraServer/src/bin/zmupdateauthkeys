@@ -18,7 +18,8 @@ source `dirname $0`/../bin/zmshutil || exit 1
 
 zmsetvars \
 	zimbra_home \
-	zimbra_server_hostname
+	zimbra_server_hostname \
+	zimbra_tmp_directory
 
 getPubKey() {
 	server=$1
@@ -63,7 +64,11 @@ zmprov="/opt/zimbra/bin/zmprov -l"
 
 authkeysfile="${zimbra_home}/.ssh/authorized_keys"
 
-tempkeysfile="/tmp/auth_keys.tmp"
+if [ ! -d ${zimbra_tmp_directory} ]; then
+  mkdir -p ${zimbra_tmp_directory} > /dev/null 2>&1
+fi
+
+tempkeysfile="${zimbra_tmp_directory}/auth_keys.tmp"
 
 if [ -f $authkeysfile ]; then
 	authkeys=`cat ${authkeysfile}`
