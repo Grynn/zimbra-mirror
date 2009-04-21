@@ -70,3 +70,117 @@ function() {
 	return this._controllers[ZaZimbraAdmin._GLOBAL_GRANTS_LIST_VIEW];
 }
 
+
+//Add the View Rights toolbar button
+ZaOperation.VIEW_EFFECTIVE_RIGHTS = ++ ZA_OP_INDEX ;
+if (ZaController.initToolbarMethods["ZaAccountListController"]) {
+    ZaAccountListController.initExtraToolbarMethod = function () {
+        this._toolbarOperations [ZaOperation.VIEW_EFFECTIVE_RIGHTS] =
+                new ZaOperation(ZaOperation.VIEW_EFFECTIVE_RIGHTS, com_zimbra_delegatedadmin.ACTBB_ViewRights,
+                        com_zimbra_delegatedadmin.ACTBB_ViewRights_tt, "RightObject", "RightObjectDis",
+                        new AjxListener(this, ZaDelegatedAdminExt._viewRightsListener)
+                        );
+        if (this._defaultType == ZaItem.ACCOUNT || this._defaultType == ZaItem.DL) {
+            for (var i=0; i < this._toolbarOrder.length; i ++) {
+                if (this._toolbarOrder[i] == ZaOperation.NONE) {
+                    this._toolbarOrder.splice(i,0,ZaOperation.VIEW_EFFECTIVE_RIGHTS) ;
+                    break ;
+                }
+            }
+        }
+
+    }
+
+    ZaController.initToolbarMethods["ZaAccountListController"].push(ZaAccountListController.initExtraToolbarMethod);
+}
+
+ZaDelegatedAdminExt._viewRightsListener =
+ function (ev) {
+     console.log("View All the effective rights now ...") ;
+ }
+
+ZaDelegatedAdminExt.changeActionsStateMethod =
+function () {
+	var cnt = this._contentView.getSelectionCount();
+	if(cnt == 1) {
+		var item = this._contentView.getSelection()[0];
+		if(item) {
+            if (item.type != ZaItem.ACCOUNT && item.type != ZaItem.DL) {
+                if(this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS]) {
+                    this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
+                }
+            } else if (item.attrs [ZaAccount.A_zimbraIsDelegatedAdminAccount] != "TRUE"
+                    && item.attrs [ZaDistributionList.A_isAdminGroup] != "TRUE") {
+                //we don't need to show the rights for system admin account since it has all the rights
+                //we don't show the non-admin accounts since they have no rights.
+                if(this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS]) {
+                    this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
+                }
+            }
+        } else {
+			if(this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS]) {
+                this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
+            }
+		}
+	} else {
+		if(this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS]) {
+			this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
+		}
+	}
+}
+ZaController.changeActionsStateMethods["ZaAccountListController"].push(ZaDelegatedAdminExt.changeActionsStateMethod);
+
+//Add the view rights button to the account view
+if (ZaController.initToolbarMethods["ZaAccountViewController"]) {
+    ZaDelegatedAdminExt.initExtraAccountViewToolbarMethod =
+    function () {
+        this._toolbarOperations [ZaOperation.VIEW_EFFECTIVE_RIGHTS] =
+                new ZaOperation(ZaOperation.VIEW_EFFECTIVE_RIGHTS, com_zimbra_delegatedadmin.ACTBB_ViewRights,
+                        com_zimbra_delegatedadmin.ACTBB_ViewRights_tt, "RightObject", "RightObjectDis",
+                        new AjxListener(this, ZaDelegatedAdminExt._viewRightsListener)
+                        );
+        this._toolbarOrder.push(ZaOperation.VIEW_EFFECTIVE_RIGHTS);
+
+    }
+    ZaController.initToolbarMethods["ZaAccountViewController"].push(ZaDelegatedAdminExt.initExtraAccountViewToolbarMethod);
+}
+
+ZaDelegatedAdminExt.changeAccountViewActionStateMethod = function () {
+    if(!this._currentObject)
+            return;
+
+    if (this._currentObject.attrs [ZaAccount.A_zimbraIsDelegatedAdminAccount] != "TRUE") {
+        this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;   
+    }
+}
+ZaController.changeActionsStateMethods["ZaAccountViewController"].push(ZaDelegatedAdminExt.changeAccountViewActionStateMethod);
+
+//add the view rights button to the DL view
+if (ZaController.initToolbarMethods["ZaDLController"]) {
+    ZaDelegatedAdminExt.initExtraDLViewToolbarMethod =
+    function () {
+        this._toolbarOperations [ZaOperation.VIEW_EFFECTIVE_RIGHTS] =
+                new ZaOperation(ZaOperation.VIEW_EFFECTIVE_RIGHTS, com_zimbra_delegatedadmin.ACTBB_ViewRights,
+                        com_zimbra_delegatedadmin.ACTBB_ViewRights_tt, "RightObject", "RightObjectDis",
+                        new AjxListener(this, ZaDelegatedAdminExt._viewRightsListener)
+                        );
+        this._toolbarOrder.push(ZaOperation.VIEW_EFFECTIVE_RIGHTS);
+
+    }
+    ZaController.initToolbarMethods["ZaDLController"].push(ZaDelegatedAdminExt.initExtraDLViewToolbarMethod);
+}
+
+ZaDelegatedAdminExt.changeDLViewActionStateMethod = function () {
+    if(!this._currentObject)
+            return;
+
+    if (this._currentObject.attrs [ZaDistributionList.A_isAdminGroup] != "TRUE") {
+        this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
+    }
+}
+ZaController.changeActionsStateMethods["ZaDLController"].push(ZaDelegatedAdminExt.changeDLViewActionStateMethod);
+
+
+
+
+

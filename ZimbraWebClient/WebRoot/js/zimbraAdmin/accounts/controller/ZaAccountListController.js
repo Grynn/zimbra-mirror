@@ -36,7 +36,7 @@ ZaAccountListController = function(appCtxt, container) {
 	this.searchTypes = [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES];
 	this.pages = new Object();
 	this._searchPanel = null;
-	this._searchField = null;
+	this._searchField = null;                                          
 	this._defaultType = ZaItem.ACCOUNT;
 	this._helpURL = ZaAccountListController.helpURL;
 	this.objType = ZaEvent.S_ACCOUNT;	
@@ -61,7 +61,7 @@ ZaAccountListController.prototype.show = function (doPush) {
 			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
 			sortAscending:this._currentSortOrder,
 			limit:this.RESULTSPERPAGE,
-			attrs:this.fetchAttrs,
+            attrs: [this.fetchAttrs, "zimbraIsDelegatedAdminAccount", "zimbraIsAdminGroup"].join(),
 			callback:callback,
 			controller: this,
 			showBusy:true,
