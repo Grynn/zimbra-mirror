@@ -853,7 +853,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	if (account == null)
     		account = createLocalAccount();
     	
-    	String uri = "http://localhost:7633/desktop/login.jsp?at=" + OfflineLC.zdesktop_installation_key.value();
+    	String uri = "http://127.0.0.1:" + LC.zimbra_admin_service_port.value() + "/desktop/login.jsp?at=" + OfflineLC.zdesktop_installation_key.value();    	
     	String webappUri = account.getAttr(A_offlineWebappUri, null);
     	if (webappUri == null || !webappUri.equals(uri))
     	    setAccountAttribute(account, A_offlineWebappUri, uri);

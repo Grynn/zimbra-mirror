@@ -587,7 +587,7 @@ public class OfflineSyncManager {
 	}
 	
 	private synchronized void confirmServiceOpen() {
-        String uri = LC.zimbra_admin_service_scheme.value() + "localhost"+ ":" + LC.zimbra_admin_service_port.value() +
+        String uri = LC.zimbra_admin_service_scheme.value() + "127.0.0.1"+ ":" + LC.zimbra_admin_service_port.value() +
         		     ZimbraServlet.ADMIN_SERVICE_URI;
         for (int i = 0; i < 24; ++i) {
 		    try {

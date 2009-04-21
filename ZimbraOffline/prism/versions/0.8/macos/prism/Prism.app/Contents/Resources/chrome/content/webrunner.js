@@ -334,7 +334,7 @@ var WebRunner = {
         //var linkDomain = this._tld.getBaseDomain(this._ios.newURI(aLink.href, null, null).QueryInterface(Ci.nsIURL));
         //var currentDomain = this._tld.getBaseDomain(this._getBrowser().currentURI);
         //if (linkDomain == currentDomain)
-        if ((aLink.href.indexOf("http://") == 0 && aLink.href.indexOf("http://localhost") != 0) ||
+        if ((aLink.href.indexOf("http://") == 0 && aLink.href.indexOf("http://localhost") != 0 && aLink.href.indexOf("http://127.0.0.1") != 0) ||
             aLink.href.indexOf("https://") == 0 || aLink.href.indexOf("ftp://") == 0) {
           isExternal = true;
         }

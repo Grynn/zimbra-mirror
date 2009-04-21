@@ -22,7 +22,7 @@ public class ConfigServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 8124246834674440988L;
 
-    private static final String LOCALHOST_URL_PREFIX = "http://localhost:";
+    private static final String LOCALHOST_URL_PREFIX = "http://127.0.0.1:";
     
     public static String LOCALHOST_SOAP_URL;
     public static String LOCALHOST_ADMIN_URL;

@@ -38,7 +38,7 @@ import com.zimbra.cs.zclient.ZMailbox;
 
 public class OfflineServlet extends HttpServlet {
 
-    private static final String LOCALHOST_URL_PREFIX = "http://localhost:";
+    private static final String LOCALHOST_URL_PREFIX = "http://127.0.0.1:";
     
     private static String LOCALHOST_SOAP_URL;
     private static String LOCALHOST_ADMIN_URL;

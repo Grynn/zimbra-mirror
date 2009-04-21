@@ -122,6 +122,6 @@ public class PageBean {
 	}
 	
 	public static String getBaseUri() {
-		return "http://localhost:" + LC.zimbra_admin_service_port.value();
+		return "http://127.0.0.1:" + LC.zimbra_admin_service_port.value();
 	}
 }

@@ -293,7 +293,7 @@ var WebRunner = {
 
   _getBaseDomain : function(aUri) {
     try {
-      if (aUri.host == "localhost") {
+      if (aUri.host == "localhost" || aUri.host == "127.0.0.1") {
         return aUri.host;
       }
       else {

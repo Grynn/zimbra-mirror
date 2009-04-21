@@ -14,12 +14,11 @@
 		<param-value>0</param-value>
 	</context-param>
 
-    <!-- =============
 	<context-param>
 	   <param-name>zimbra.soap.url</param-name>
-	   <param-value>http://localhost:@port@/service/soap</param-value>
+	   <param-value>http://127.0.0.1:@port@/service/soap</param-value>
 	</context-param>
-    -->
+
 	<context-param>
 	   <param-name>zimbra.jsp.session.timeout</param-name>
 	   <param-value>900</param-value>
