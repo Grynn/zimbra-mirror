@@ -362,13 +362,40 @@ ZaServerListController.changeActionsStateMethod =
 function () {
 	if(this._contentView) {
 		var cnt = this._contentView.getSelectionCount();
-		 if (cnt > 1){
+		var enableFlush = true;
+		var servers = this._contentView.getSelection();
+		if(servers) {
+			var cnt = servers.length;
+			for(var i=0; i<cnt; i++) {
+				if(!servers[i].attrs[ZaServer.A_zimbraMailboxServiceEnabled] || !servers[i].attrs[ZaServer.A_zimbraMailboxServiceInstalled]) {
+					enableFlush = false;
+					break;
+				} 
+					
+			}
+		}
+		if(cnt == 1) {
+			if(!enableFlush) {
+				if(this._toolbarOperations[ZaOperation.FLUSH_CACHE])	
+					this._toolbarOperations[ZaOperation.FLUSH_CACHE].enabled = false;
+					
+				if(this._popupOperations[ZaOperation.FLUSH_CACHE])	
+					this._popupOperations[ZaOperation.FLUSH_CACHE].enabled = false;
+			}
+		} else if (cnt > 1){
 			if(this._toolbarOperations[ZaOperation.EDIT])	
 				this._toolbarOperations[ZaOperation.EDIT].enabled = false;
 				
 			if(this._popupOperations[ZaOperation.EDIT])	
 				this._popupOperations[ZaOperation.EDIT].enabled = false;
 				
+			if(!enableFlush) {
+				if(this._toolbarOperations[ZaOperation.FLUSH_CACHE])	
+					this._toolbarOperations[ZaOperation.FLUSH_CACHE].enabled = false;
+					
+				if(this._popupOperations[ZaOperation.FLUSH_CACHE])	
+					this._popupOperations[ZaOperation.FLUSH_CACHE].enabled = false;
+			}
 		} else if (cnt <1) {
 			if(this._toolbarOperations[ZaOperation.EDIT])	
 				this._toolbarOperations[ZaOperation.EDIT].enabled = false;

@@ -54,6 +54,12 @@ function(entry) {
 ZaServerController.changeActionsStateMethod = function () {
 	if(this._toolbarOperations[ZaOperation.SAVE])
 		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+		
+	if(this._toolbarOperations[ZaOperation.FLUSH_CACHE]) {
+		if(!this._currentObject.attrs[ZaServer.A_zimbraMailboxServiceEnabled] || !this._currentObject.attrs[ZaServer.A_zimbraMailboxServiceInstalled]) {
+			this._toolbarOperations[ZaOperation.FLUSH_CACHE].enabled = false;
+		}
+	}
 }
 ZaController.changeActionsStateMethods["ZaServerController"].push(ZaServerController.changeActionsStateMethod);
 
@@ -116,10 +122,12 @@ function (nextViewCtrlr, func, params) {
 **/
 ZaServerController.initToolbarMethod = 
 function () {
-	this._toolbarOrder.push(ZaOperation.SAVE);
+	this._toolbarOrder.push(ZaOperation.SAVE);	
+	this._toolbarOrder.push(ZaOperation.FLUSH_CACHE);	
 	this._toolbarOrder.push(ZaOperation.DOWNLOAD_SERVER_CONFIG);
 	this._toolbarOrder.push(ZaOperation.CLOSE);			
 	this._toolbarOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
+   	this._toolbarOperations[ZaOperation.FLUSH_CACHE] = new ZaOperation(ZaOperation.FLUSH_CACHE, ZaMsg.SERTBB_FlushCache, ZaMsg.SERTBB_FlushCache_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerController.prototype.flushCacheButtonListener));	
 	this._toolbarOperations[ZaOperation.DOWNLOAD_SERVER_CONFIG]=new ZaOperation(ZaOperation.DOWNLOAD_SERVER_CONFIG,ZaMsg.TBB_DownloadConfig, ZaMsg.SERTBB_DownloadConfig_tt, "DownloadServerConfig", "DownloadServerConfig", new AjxListener(this, this.downloadConfigButtonListener));	
 	this._toolbarOperations[ZaOperation.CLOSE]=new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));    	
 }
@@ -612,3 +620,25 @@ ZaServerController.prototype.downloadConfigButtonListener =
 function(ev) {
 	window.open(["/service/collectconfig/?host=",this._currentObject.attrs[ZaServer.A_ServiceHostname]].join(""));
 }
+
+ZaServerController.prototype.flushCacheButtonListener = 
+function(ev) {
+	try {
+		if(!ZaApp.getInstance().dialogs["flushCacheDialog"]) {
+			ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container, "400px", "380px", ZaMsg.FlushCacheDlgTitle);
+		}
+		srvList = [];
+		srvList._version = 1;
+		var srv = this._currentObject;
+		srv["status"] = 0;
+		srvList.push(srv);
+	
+		obj = {statusMessage:null,flushZimlet:true,flushSkin:true,flushLocale:true,serverList:srvList,status:0};
+		ZaApp.getInstance().dialogs["flushCacheDialog"].setObject(obj);
+		ZaApp.getInstance().dialogs["flushCacheDialog"].popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaServerController.prototype.flushCacheButtonListener", null, false);
+	}
+	return;
+}
+
