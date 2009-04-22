@@ -22,9 +22,8 @@ use Zimbra::Mon::LoggerSchema;
 use RRDs;
 use DBI;
 use FileHandle;
-use vars qw ($logger_directory $logger_rrd_directory $CURRENT_VERSION);
+use vars qw ($logger_directory $logger_rrd_directory);
 
-$CURRENT_VERSION = 1;
 my @CREATE_DDL = (
     q{CREATE TABLE IF NOT EXISTS hosts (
         id           INTEGER PRIMARY KEY,
@@ -113,6 +112,52 @@ sub get_next_rrd_fileno($$) {
     (@ary > 0 && defined($ary[0])) ? $ary[0] + 1 : 0;
 }
 
+sub get_col_types($$$$) {
+    my ($dbh, $csv, $columns, $real_columns) = @_;
+
+    my $sth = $dbh->prepare(q{
+        SELECT col_type, col_interval FROM rrd_column_type
+        WHERE csv_file = ? AND col_name = ?
+    });
+
+    my %col_types;
+    my $i;
+    for ($i = 0; $i < @$real_columns; $i++) {
+        my $c = $real_columns->[$i];
+        $c =~ s/^.*::(.*)$/$1/;
+        $sth->bind_param(1, $csv);
+        $sth->bind_param(2, $c);
+        $sth->execute();
+        die $sth->err if ($sth->err);
+        my $r = $sth->fetchall_arrayref({});
+        $sth->finish();
+        my $type;
+        my $interval;
+        if (@$r > 0) {
+            $type     = $r->[0]->{'col_type'};
+            $interval = $r->[0]->{'col_interval'};
+        } else {
+            $type     = 'G';
+            $interval = 30;
+        }
+        if ($type eq 'G') {
+            $type = 'GAUGE';
+        } elsif ($type eq 'A') {
+            $type = 'ABSOLUTE';
+        } elsif ($type eq 'C') {
+            $type = 'COUNTER';
+        } elsif ($type eq 'D') {
+            $type = 'DERIVED';
+        }
+        print "$c = $$columns[$i]\n";
+        $col_types{$columns->[$i]} = {
+            type     => $type,
+            interval => $interval,
+        }
+    }
+    \%col_types;
+}
+
 sub insert_rrd_column_map($$$$$) {
     my ($dbh, $hostid, $csv, $headersref, $dataref) = @_;
     my $rrd_file_no = get_next_rrd_fileno($dbh, $hostid);
@@ -123,7 +168,8 @@ sub insert_rrd_column_map($$$$$) {
     });
     my $colnumber = 1;
     my @columns = ();
-    my %truncated;
+    my @real_columns = ();
+    my %truncated; # makes sure that the col19 name hasn't been used already
 
     ($headersref, undef) = prune_data($headersref, $dataref);
     for (my $i = 0; $i < @$headersref; $i++) {
@@ -139,9 +185,10 @@ sub insert_rrd_column_map($$$$$) {
         die $sth->err if ($sth->err);
         $sth->finish();
         push(@columns, $col19);
+        push(@real_columns, $column);
         $colnumber++;
     }
-    create_rrd($hostid, $rrd_file_no, \@columns);
+    create_rrd($hostid, $rrd_file_no, \@columns, $dbh, $csv, \@real_columns);
     @columns;
 }
 # TODO figure out how to determine GAUGE vs COUNTER types (fortunately, almost
@@ -155,14 +202,18 @@ sub create_structure($$$$$) {
     return get_structure($dbh, $hostid, $csv);
 }
 
-sub create_rrd($$$) {
-    my ($hostid, $rrd_file_no, $columns) = @_;
+sub create_rrd($$$$$$) {
+    my ($hostid, $rrd_file_no, $columns, $dbh, $csv, $real_columns) = @_;
     my $rrd_file = get_rrd_file($hostid, $rrd_file_no);
+    my $types = get_col_types($dbh, $csv, $columns, $real_columns);
     my @ds = ();
     my @rra = ();
     foreach my $c (@$columns) {
-        push(@ds, "DS:$c:GAUGE:1200:U:U");
+        my $type     = $types->{$c}->{'type'};
+        my $interval = $types->{$c}->{'interval'} * 2;
+        push(@ds, "DS:$c:$type:$interval:U:U");
     }
+    print "@ds\n";
     @rra = (
         "RRA:AVERAGE:0.9999:1:20160",   # 30s:1 week
         "RRA:AVERAGE:0.9999:10:10080",  # 5min:5 weeks
@@ -248,11 +299,14 @@ sub insert_data($$$$$$) {
         my $rrd_file = get_rrd_file($hostid, $fileno);
         if (! -f $rrd_file) {
             my @rrd_columns;
+            my @real_columns;
             foreach my $c (keys %$structure) {
+                push(@real_columns, $c)
+                        if ($fileno == $structure->{$c}->{'rrd_file'});
                 push(@rrd_columns, $structure->{$c}->{'col_name_19'})
                         if ($fileno == $structure->{$c}->{'rrd_file'});
             }
-            create_rrd($hostid, $fileno, \@rrd_columns);
+            create_rrd($hostid, $fileno, \@rrd_columns, $dbh, $csv_file, \@real_columns);
         }
         RRDs::update($rrd_file, "N:$update");
         my $err = RRDs::error();
@@ -274,19 +328,20 @@ sub upgrade_schema($) {
     my @rows = $dbh->selectrow_array("SELECT version FROM config");
     my @upgrade = ();
     if (!@rows) {
-        warn "Schema version not found, upgrading";
+        warn "Schema version not found, upgrading to version $#LOGGER_SCHEMA_UPGRADE";
         @upgrade = @LOGGER_SCHEMA_UPGRADE;
     } else {
         $version = $rows[0];
-        @upgrade = ($version + 1) == $#LOGGER_SCHEMA_UPGRADE ?
-            ($LOGGER_SCHEMA_UPGRADE[$#LOGGER_SCHEMA_UPGRADE]) :
-            @LOGGER_SCHEMA_UPGRADE[$version + 1, $#LOGGER_SCHEMA_UPGRADE];
+        if ($version < $#LOGGER_SCHEMA_UPGRADE) {
+            print "Upgrading schema version $version to $#LOGGER_SCHEMA_UPGRADE\n";
+            @upgrade = ($version + 1) == $#LOGGER_SCHEMA_UPGRADE ?
+                ($LOGGER_SCHEMA_UPGRADE[$#LOGGER_SCHEMA_UPGRADE]) :
+                @LOGGER_SCHEMA_UPGRADE[$version + 1, $#LOGGER_SCHEMA_UPGRADE];
+        }
     }
 
     foreach my $upgrade (@upgrade) {
-        print "upgrade version\n";
         foreach my $st (@$upgrade) {
-        print "$st\n";
             $dbh->do($st) || die $dbh->err;
         }
     }
