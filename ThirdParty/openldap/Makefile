@@ -62,6 +62,7 @@ build:
 	--enable-overlays=mod \
 	--enable-debug \
 	--without-gssapi \
+	--enable-spasswd \
 	--enable-crypt; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) depend; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) $(MAKE) $(MAKEARGS); \
