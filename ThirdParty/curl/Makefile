@@ -45,6 +45,8 @@ build:
 	patch -N -g0 -p1 < ../patches/krb5.patch; \
 	patch -N -g0 -p1 < ../patches/custom-openssl.patch; \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) \
+	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(HEIMDAL_LIB_DIR) -L$(CURL_LIB_DIR) \
+		-R$(OPENSSL_LIB_DIR) -R$(HEIMDAL_LIB_DIR) -R$(CURL_LIB_DIR)" \
 	CFLAGS="-g -O2" \
 	./configure --prefix=$(ZIMBRA_HOME)/curl-$(CURL_VERSION) --disable-ldap --disable-ldaps \
 		--with-gssapi=/opt/zimbra/heimdal-$(HEIMDAL_VERSION) \
