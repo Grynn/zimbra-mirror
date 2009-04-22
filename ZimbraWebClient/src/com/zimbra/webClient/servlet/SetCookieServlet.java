@@ -116,8 +116,9 @@ public class SetCookieServlet extends ZCServlet
         } catch (IllegalStateException is){
 	    // do nothing
         } catch (Exception ex) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             ex.printStackTrace ();
+            if (!resp.isCommitted())
+            	resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }    
 

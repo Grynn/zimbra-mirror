@@ -38,8 +38,9 @@ public class Forward extends ZCServlet
 	    ServletContext sc = getServletConfig().getServletContext();
 	    sc.getRequestDispatcher(url).forward(req, resp);
 	} catch (Exception ex) {
-	    resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	    ex.printStackTrace ();
+		if (!resp.isCommitted())
+			resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	}
     }    
 }
