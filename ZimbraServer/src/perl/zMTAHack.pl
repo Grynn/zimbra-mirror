@@ -27,7 +27,7 @@ $SIG{CHLD} = 'IGNORE';  # zombie prevention
 my $server = new Net::SMTP::Server('localhost', 25) ||
   croak("[$$] Unable to handle client connection: $!\n");
 
-my $zimbra_hostname  = 'jylee-imac.zimbra.com'; # $ENV{"ZIMBRA_HOSTNAME"};
+my $zimbra_hostname  = $ENV{"ZIMBRA_HOSTNAME"};
 
 if (!defined($zimbra_hostname)) {
     die "\"ZIMBRA_HOSTNAME\" must be set and must contain the Zimbra Server which you want to route email to";
