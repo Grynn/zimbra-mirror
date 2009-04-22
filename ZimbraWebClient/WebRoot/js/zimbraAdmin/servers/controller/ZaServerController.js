@@ -625,7 +625,7 @@ ZaServerController.prototype.flushCacheButtonListener =
 function(ev) {
 	try {
 		if(!ZaApp.getInstance().dialogs["flushCacheDialog"]) {
-			ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container, "400px", "380px", ZaMsg.FlushCacheDlgTitle);
+			ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container);
 		}
 		srvList = [];
 		srvList._version = 1;

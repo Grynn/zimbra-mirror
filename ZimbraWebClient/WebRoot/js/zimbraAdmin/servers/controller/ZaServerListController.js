@@ -121,7 +121,7 @@ function(ev) {
 			var arrItems = this._contentView.getSelection();
 			if(arrItems && arrItems.length) {
 				if(!ZaApp.getInstance().dialogs["flushCacheDialog"]) {
-					ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container, "400px", "380px", ZaMsg.FlushCacheDlgTitle);
+					ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container);
 				}
 				srvList = [];
 				srvList._version = 1;

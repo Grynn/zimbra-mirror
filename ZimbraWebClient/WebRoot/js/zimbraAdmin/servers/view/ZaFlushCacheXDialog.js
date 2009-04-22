@@ -22,10 +22,10 @@
 * @param h
 * @param title
 **/
-ZaFlushCacheXDialog = function(parent, w, h, title) {
+ZaFlushCacheXDialog = function(parent) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON];	
-	ZaXDialog.call(this, parent,null, title, w, h);
+	ZaXDialog.call(this, parent,null, ZaMsg.FlushCacheDlgTitle, "480px", "380px","ZaFlushCacheXDialog");
 	this._containedObject = {};
 	this.initForm(ZaServer.volumeObjModel,this.getMyXForm());
 }
@@ -36,14 +36,14 @@ ZaFlushCacheXDialog.prototype.constructor = ZaFlushCacheXDialog;
 ZaFlushCacheXDialog.flushingServerModel = {
 	type:_OBJECT_,
 	items:[
-		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
+		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/"+ZaItem.A_zimbraId},
 		{id:"status", type:_NUMBER_,ref:"status"},
 		{id:ZaServer.A_name, ref:"attrs/" + ZaServer.A_name, type:_STRING_},
-		{id:ZaServer.A_ServiceHostname, ref:"attrs/" +  ZaServer.A_ServiceHostname, type:_HOSTNAME_OR_IP_, maxLength: 256 },
-		{id:ZaServer.A_zimbraMailProxyServiceEnabled, ref:"attrs/"+ZaServer.A_zimbraMailProxyServiceEnabled, type: _ENUM_, choices: [false,true] },
-		{id:ZaServer.A_zimbraMailboxServiceInstalled, ref:"attrs/"+ZaServer.A_zimbraMailboxServiceInstalled, type: _ENUM_, choices: [false,true] }
+		{id:ZaServer.A_ServiceHostname, ref:"attrs/"+ZaServer.A_ServiceHostname, type:_HOSTNAME_OR_IP_, maxLength:256},
+		{id:ZaServer.A_zimbraMailProxyServiceEnabled, ref:"attrs/"+ZaServer.A_zimbraMailProxyServiceEnabled, type:_ENUM_, choices:[false,true]},
+		{id:ZaServer.A_zimbraMailboxServiceInstalled, ref:"attrs/"+ZaServer.A_zimbraMailboxServiceInstalled, type:_ENUM_, choices:[false,true]}
 	]
-}
+};
 
 ZaFlushCacheXDialog.xModel = {
 	items: [
@@ -55,7 +55,7 @@ ZaFlushCacheXDialog.xModel = {
 		{id:"status", type:_NUMBER_,ref:"status"}
 
 	]	
-}
+};
 
 ZaFlushCacheXDialog.flushCacheCalback = 
 function (params, resp) {
@@ -136,7 +136,7 @@ ZaFlushCacheXDialog.prototype.getMyXForm =
 function() {	
 	var srvHeaderList = []; 
 	var sortable=1;
-	srvHeaderList[0] = new ZaListHeaderItem(ZaServer.A_ServiceHostname, ZaMsg.SLV_ServiceHName_col, null, 250, sortable++, ZaServer.A_ServiceHostname, true, true);
+	srvHeaderList[0] = new ZaListHeaderItem(ZaServer.A_ServiceHostname, ZaMsg.SLV_ServiceHName_col, null, "auto", sortable++, ZaServer.A_ServiceHostname, true, true);
 	srvHeaderList[1] = new ZaListHeaderItem("status", ZaMsg.STV_Status_col, null, 40, sortable++, "status", true, true);
 	
 	var xFormObject = {
@@ -148,7 +148,7 @@ function() {
 						  style: DwtAlert.WARNING,
 						  iconVisible: true, 
 						  content: ZaMsg.Alert_FlushCache,
-						  align:_CENTER_, valign:_MIDDLE_,colSpan:"*",width:"90%",
+						  align:_CENTER_, valign:_MIDDLE_,colSpan:2,width:"90%",
 						  visibilityChecks:[]
 					},
 					{ type: _DWT_ALERT_,
@@ -156,12 +156,12 @@ function() {
 						  iconVisible: true, 
 						  content: null,
 						  ref:"statusMessage",
-						  align:_CENTER_, valign:_MIDDLE_,colSpan:"*",width:"90%",
+						  align:_CENTER_, valign:_MIDDLE_,colSpan:2,width:"90%",
 						  visibilityChecks:[[XForm.checkInstanceValueNotEmty,"statusMessage"]],
 						  visibilityChangeEventSources:["statusMessage"],bmolsnr:true
 					},
-					{ref:"serverList", type:_DWT_LIST_, labelLocation:_LEFT_,  height:"120", width:"100%",colSpan:"*",
-						headerList:srvHeaderList,
+					{ref:"serverList", type:_DWT_LIST_, labelLocation:_NONE_, label:null,  height:"120", width:"100%",colSpan:2,
+						headerList:srvHeaderList,align:_CENTER_,
 						visibilityChecks:[],enableDisableChecks:[],widgetClass:ZaServerMiniListView,valueChangeEventSources:["serverList"]
 					},
 					{ref:"flushZimlet",

@@ -946,7 +946,7 @@ ZaServer.flushCache = function (params) {
 		soapDoc: soapDoc,
 		targetServer: params.serverList[params.ix].attrs[ZaItem.A_zimbraId],
 		asyncMode: params.callback ? true : false,
-		callback: params.callback ? params.callback : null,
+		callback: params.callback ? params.callback : null
 	}
 	ZaRequestMgr.invoke(reqParams, reqMgrParams) ;
 }
