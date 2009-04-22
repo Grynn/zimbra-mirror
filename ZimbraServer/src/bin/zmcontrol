@@ -35,7 +35,7 @@ $SIG{ALRM} = sub { print "Timeout after $timeout seconds\n"; exit(1) };
 my $now = time();
 my $cache_file = "${zimbra_home}/log/.zmcontrol.cache";
 my $localHostName = getHostName();
-my $ldapMasterHere = isLdapMaster();
+my $ldapHere = isLdapLocal();
 my $services;
 my %devicesChecked;
 my %startorder = ( 
@@ -211,7 +211,7 @@ sub doStartup {
 	print "Host $localHostName\n";
 	my $rc = 0;
 	my $rrc = 0;
-	if ($ldapMasterHere) {
+	if ($ldapHere) {
 		my $ldapStopped = 0xffff & system("/opt/zimbra/bin/ldap status > /dev/null 2>&1");
 		if ($ldapStopped) {
 			$rrc = startLdap();
@@ -377,8 +377,8 @@ sub getEnabledServices {
   return \%s;
 }
 
-sub isLdapMaster {
-	return (getLocalConfig("ldap_is_master") =~ /true/i);
+sub isLdapLocal {
+  return((index(getLocalConfig("ldap_url"), getLocalConfig("zimbra_server_hostname")) != -1) ? 1 : 0);
 }
 
 sub getHostName {
