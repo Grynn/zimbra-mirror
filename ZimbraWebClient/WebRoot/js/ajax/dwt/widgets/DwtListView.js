@@ -2287,6 +2287,8 @@ function() {
 
 DwtListView.prototype._focus =
 function() {
+	if (this.size() == 0) { return; }
+
 	if (this._kbAnchor) {
 		Dwt.addClass(this._kbAnchor, this._kbFocusClass);
 	} else {
