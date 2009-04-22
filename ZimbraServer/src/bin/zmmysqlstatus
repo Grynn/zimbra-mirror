@@ -26,7 +26,7 @@ my $database = "zimbra";
 my $mySqlCommand = "mysql";
 my $verbose = 0;
 my $usage = 0;
-my $zimbra_tmp_directory="/tmp";
+my $zimbra_tmp_directory="/tmp/zimbra";
 
 if (-f "/opt/zimbra/bin/zmlocalconfig") {
     $password = `zmlocalconfig -s -m nokey zimbra_mysql_password`;
