@@ -11,6 +11,10 @@ HEIMDAL_VERSION ?= 1.2.1
 OPENSSL_VERSION ?= 0.9.8k
 CURL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/curl/curl-$(CURL_VERSION).tgz
 
+OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
+HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
+CURL_LIB_DIR ?= $(ZIMBRA_HOME)/curl-$(CURL_VERSION)/lib
+
 LIB_DIR := /usr/lib
 
 ifeq ($(BUILD_PLATFORM), RHEL4_64)
@@ -38,10 +42,9 @@ all: allclean build tar
 build:
 	(tar xzf src/curl-$(CURL_VERSION).tar.gz; \
 	cd curl-$(CURL_VERSION); \
-	make ca-bundle; \
 	patch -N -g0 -p1 < ../patches/krb5.patch; \
 	patch -N -g0 -p1 < ../patches/custom-openssl.patch; \
-	LD_RUN_PATH=/opt/zimbra/openssl-$(OPENSSL_VERSION):/opt/zimbra/heimdal-$(HEIMDAL_VERSION)/lib \
+	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) \
 	CFLAGS="-g -O2" \
 	./configure --prefix=$(ZIMBRA_HOME)/curl-$(CURL_VERSION) --disable-ldap --disable-ldaps \
 		--with-gssapi=/opt/zimbra/heimdal-$(HEIMDAL_VERSION) \
@@ -49,8 +52,8 @@ build:
 		--with-ca-bundle=/opt/zimbra/curl-$(CURL_VERSION)/share/curl/ca-bundle.crt \
 		--with-zlib=/usr/lib64 \
 		--with-libidn=/usr/lib64;\
-	$(MAKE) $(MAKEARGS); \
-	$(MAKE) $(MAKEARGS) install; \
+	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) $(MAKE) $(MAKEARGS); \
+	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) $(MAKE) $(MAKEARGS) install; \
 	$(MAKE) ca-bundle; \
 	mkdir -p $(ZIMBRA_HOME)/curl-$(CURL_VERSION)/share/curl; \
 	cp -f lib/ca-bundle.crt $(ZIMBRA_HOME)/curl-$(CURL_VERSION)/share/curl/ca-bundle.crt)
