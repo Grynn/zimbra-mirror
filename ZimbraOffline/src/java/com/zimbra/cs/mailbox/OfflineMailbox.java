@@ -812,7 +812,7 @@ public class OfflineMailbox extends DesktopMailbox {
     
     public Pair<Integer,Integer> sendMailItem(MailItem item) throws ServiceException {
     	OfflineAccount acct = getOfflineAccount();
-    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH) + "/~"+ URLUtil.urlEscape(item.getPath());
+    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH) + "/~"+ URLUtil.urlEscape(item.getPath()) + "?lbfums=1";
     	try {
     		Pair<Header[], HttpInputStream> resp = 
     			UserServlet.putMailItem(getAuthToken(), 
