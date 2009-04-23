@@ -26,12 +26,12 @@ import javax.naming.*;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.common.util.ZimbraCookie;
 
+@SuppressWarnings("serial")
 public class SetCookieServlet extends ZCServlet
 {
     
     private static final String PARAM_AUTH_TOKEN = "authToken";
     private static final String PARAM_REMEMBER_ME = "rememberMe";
-    private static final String PARAM_QUERY_STRING_TO_CARRY = "qs";
     private static final String PARAM_AUTH_TOKEN_LIFETIME = "atl";
     private static final String DEFAULT_MAIL_URL = "/zimbra/mail";
     
@@ -116,7 +116,7 @@ public class SetCookieServlet extends ZCServlet
         } catch (IllegalStateException is){
 	    // do nothing
         } catch (Exception ex) {
-            ex.printStackTrace ();
+        	ZimbraLog.webclient.warn("exception setting cookie", ex);
             if (!resp.isCommitted())
             	resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
