@@ -294,12 +294,15 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Element;
 
 String appId = context.getApplicationId();
+String servicePort = "7633";
 
 ApplicationRegistry.ApplicationInfo[] appInfoList = ApplicationRegistry.getApplicationInfoById(appId);
 boolean installed = (appInfoList != null &amp;&amp; appInfoList.length &gt; 0);
 
 String pver = (String) context.getVariable("prevVersion");
-if (installed &amp;&amp; (pver == null || pver.length() == 0)) {
+boolean noPrevVer = (pver == null || pver.length() == 0);
+
+if (installed) {
     File instDir = appInfoList[0].getInstallationDirectory();
     File confFile = new File(instDir.getAbsolutePath() + "/conf/localconfig.xml");
     String ver = "0.0";
@@ -316,12 +319,16 @@ if (installed &amp;&amp; (pver == null || pver.length() == 0)) {
             NamedNodeMap nm = nodeList.item(i).getAttributes();           
             Node name = nm.getNamedItem("name");
             if (name == null)
-                continue;            
-            if (name.getNodeValue().equals("zdesktop_version")) {
+                continue;
+            
+            if (noPrevVer &amp;&amp; name.getNodeValue().equals("zdesktop_version")) {
                 ver = ((Element)nodeList.item(i)).getElementsByTagName("value").item(0)
                     .getChildNodes().item(0).getNodeValue();
-            } else if (name.getNodeValue().equals("zdesktop_buildid")) {
+            } else if (noPrevVer &amp;&amp; name.getNodeValue().equals("zdesktop_buildid")) {
                 build = ((Element)nodeList.item(i)).getElementsByTagName("value").item(0)
+                    .getChildNodes().item(0).getNodeValue();
+            } else if (name.getNodeValue().equals("zimbra_admin_service_port")) {
+                servicePort = ((Element)nodeList.item(i)).getElementsByTagName("value").item(0)
                     .getChildNodes().item(0).getNodeValue();
             }
         }
@@ -331,6 +338,8 @@ if (installed &amp;&amp; (pver == null || pver.length() == 0)) {
         Util.showMessage(e.getMessage()); 
     }               
 }
+
+context.setVariable("servicePort", servicePort);
 
 return installed;</string>
                           </void>
@@ -2133,6 +2142,45 @@ try {
             <postActivation />
             <actions />
             <formComponents>
+              <formComponent name="Set service port" id="289590" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="initialText">
+                        <string>${installer:servicePort}</string>
+                      </void>
+                      <void property="inputVerifier">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>boolean valid = true;
+try {
+    int port = Integer.parseInt(text);
+    if (port &lt;= 1024 || port &gt;= 65536)
+        valid = false;
+} catch (Exception e) {
+    valid = false;
+}
+
+if (!valid) {
+    Util.showMessage(context.getMessage("installer.ServicePortWarn"), javax.swing.JOptionPane.WARNING_MESSAGE);
+    return false;
+}
+
+return true;</string>
+                          </void>
+                        </object>
+                      </void>
+                      <void property="labelText">
+                        <string>${i18n:installer.ServicePort}</string>
+                      </void>
+                      <void property="variableName">
+                        <string>servicePort</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+              </formComponent>
               <formComponent name="Add a desktop link" id="5392" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -2190,6 +2238,115 @@ try {
                 </serializedBean>
                 <condition>Boolean.getBoolean("offline_update")</condition>
               </action>
+              <group name="Set service port" id="289591" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup" />
+                  </java>
+                </serializedBean>
+                <beans>
+                  <action name="jetty.xml" id="289592" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>jetty/etc/jetty.xml</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>"jetty.port" default="${installer:servicePort}"</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>"jetty.port" default="7633"</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition />
+                  </action>
+                  <action name="service web.xml" id="289593" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>jetty/webapps/service/WEB-INF/web.xml</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>servicePort "${installer:servicePort}"</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>servicePort "7633"</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition />
+                  </action>
+                  <action name="zimbra web.xml" id="289594" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>jetty/webapps/zimbra/WEB-INF/web.xml</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>servicePort "${installer:servicePort}"</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>servicePort "7633"</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition />
+                  </action>
+                  <action name="localconfig.xml" id="289596" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>conf/localconfig.xml</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>servicePort "${installer:servicePort}"</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>servicePort "7633"</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition />
+                  </action>
+                  <action name="webapp.ini" id="289595" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>zdesktop.webapp/webapp.ini</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>127.0.0.1:${installer:servicePort}</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>127.0.0.1:7633</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition />
+                  </action>
+                </beans>
+              </group>
               <group name="win32" id="288585" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -3230,8 +3387,9 @@ return instDir.indexOf(" ") &gt;= 0;
 
 org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
+String port = (String)context.getVariable("servicePort");
 org.apache.commons.httpclient.HttpClient client = new org.apache.commons.httpclient.HttpClient();
-String url = "http://127.0.0.1:7633/service/admin/soap";
+String url = "http://127.0.0.1:" + port + "/service/admin/soap";
 org.apache.commons.httpclient.methods.GetMethod get = new org.apache.commons.httpclient.methods.GetMethod(url);
 
 boolean isServiceUp = false;
@@ -3265,7 +3423,8 @@ boolean hasFailures = false;
 for (int i = 0; i &lt; zimlets.length; ++i) {
     try {
         com.zimbra.cs.zimlet.ZimletUtil.deployZimletBySoap(zimlets[i].getAbsolutePath(),
-            "http://127.0.0.1:7633/service/admin/soap/", "http://127.0.0.1:7633/service/upload?fmt=raw",
+            "http://127.0.0.1:" + port + "/service/admin/soap/", 
+            "http://127.0.0.1:" + port + "/service/upload?fmt=raw",
             "zimbra", (String)context.getVariable("instanceId"));
         zimlets[i].delete();
     } catch (Exception x) {

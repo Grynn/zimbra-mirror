@@ -655,11 +655,10 @@
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
 			<arg line="-e zdesktop_buildid=${offline.buildid}" />
 		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e zimbra_admin_service_port=${param.port}" />
-		</java>
 		
+		<replace file="${dist.dir}/conf/localconfig.xml" token="&lt;localconfig&gt;" value="&lt;!DOCTYPE localconfig [ &lt;!ENTITY servicePort &quot;${param.port}&quot;&gt; ]&gt;&#10;&lt;localconfig&gt;"/>
+		<replace file="${dist.dir}/conf/localconfig.xml" token="@port@" value="&amp;servicePort;"/>
+
 		<mkdir dir="${dist.dir}/log"/>
 		<mkdir dir="${dist.dir}/store"/>
 		<mkdir dir="${dist.dir}/index"/>
@@ -831,17 +830,6 @@
 		<chmod dir="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/" perm="ugo+x" includes="*/**"/> 
 		<chmod file="${dist.dir}/macos/prism/Prism.app/Contents/MacOS/prism" perm="ugo+x"/> 
 		<chmod file="${dist.dir}/linux/prism/prism" perm="ugo+x"/>
-
-		<!-- copy over patched branding stuff from build dir DELETE ME !!!!!!!!!!!!!!!!!! -->
-		<copy todir="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" overwrite="true">
-			<fileset dir="${build.dir}/prism" includes="*/**"/>
-		</copy>
-		<copy todir="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org" overwrite="true">
-			<fileset dir="${build.dir}/prism" includes="*/**"/>
-		</copy>
-		<copy todir="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org" overwrite="true">
-			<fileset dir="${build.dir}/prism" includes="*/**"/>
-		</copy>
 
 		<!-- fix things that are specific to each platform -->
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
