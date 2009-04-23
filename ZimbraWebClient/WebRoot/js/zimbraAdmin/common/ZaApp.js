@@ -363,9 +363,7 @@ function (viewId) {
 ZaApp.prototype.getServerListController =
 function() {
 	if (this._controllers[ZaZimbraAdmin._SERVERS_LIST_VIEW] == null) {
-		this._controllers[ZaZimbraAdmin._SERVERS_LIST_VIEW] = new ZaServerListController(this._appCtxt, this._container, this);
-		this._controllers[ZaZimbraAdmin._SERVERS_LIST_VIEW].addServerRemovalListener(new AjxListener(this, ZaApp.prototype.handleServerRemoval));	
-		this._controllers[ZaZimbraAdmin._SERVERS_LIST_VIEW].addServerRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleServerRemoval));							
+		this._controllers[ZaZimbraAdmin._SERVERS_LIST_VIEW] = new ZaServerListController(this._appCtxt, this._container, this);								
 	}
 	return this._controllers[ZaZimbraAdmin._SERVERS_LIST_VIEW];
 }
@@ -816,40 +814,6 @@ function (ev) {
 	}
 }
 
-/**
-* @param ev
-* This listener is invoked by any controller that can remove an ZaServer object
-**/
-ZaApp.prototype.handleServerRemoval = 
-function (ev) {
-	if(ev) {
-		if(!this._serverList) {
-			this._serverList=ZaServer.getAll();
-		} else {
-			//remove the ZaCos from the controlled list
-			var detls = ev.getDetails();
-			if(detls && (detls instanceof Array)) {
-				for (var key in detls) {
-					this._serverList.remove(detls[key]);
-				}
-			} else if(detls && (detls instanceof ZaServer)) {
-				this._serverList.remove(ev.getDetails());
-			}
-		}
-		if(this._serverChoices == null) {
-			this._serverChoices = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, ZaServer.A_ServiceHostname, ZaServer.A_ServiceHostname);
-		} else {	
-			this._serverChoices.setChoices(this._serverList.getArray());
-			this._serverChoices.dirtyChoices();
-		}		
-		
-		this._serverMap = new Object();
-		var cnt = this._serverList.getArray().length;
-		for (var i = 0; i < cnt; i ++) {
-			this._serverMap[this._serverList.getArray()[i].id] = this._serverList.getArray()[i];
-		}		
-	}
-}
 /**
 * @param ev
 * This listener is invoked by ZaDomainController or any other controller that can remove an ZaDomain object

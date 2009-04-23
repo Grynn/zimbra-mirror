@@ -853,11 +853,13 @@ Select1_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 /**
  * Method of XFormItem
  */
-ZaItem.hasRight = function (right) {
+ZaItem.hasRight = function (right, instance) {
 	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE')
 		return true;
 		
-	var instance = this.getInstance();
+	if(!instance)
+		instance = this.getInstance();
+		
 	if (!instance.rights)
 		return false;
 	

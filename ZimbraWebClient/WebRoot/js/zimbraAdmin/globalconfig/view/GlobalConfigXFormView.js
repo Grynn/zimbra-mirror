@@ -609,8 +609,15 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
                 {type: _ZATABCASE_, caseKey:_tab8,
 					colSizes:["auto"],numCols:1,id:"global_skin_tab",
 				 	items: [
-                        {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Color_Settings,//colSizes:["175px","*"],
+                        {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Color_Settings,
                             items: [
+								{ type: _DWT_ALERT_,
+									style: DwtAlert.INFO,
+									iconVisible: true, 
+									content: ZaMsg.Domain_flush_cache_q,
+									colSpan:2,
+									visibilityChecks:[],ref:null
+								},                            
                                 {ref:ZaGlobalConfig.A_zimbraSkinForegroundColor,
                                     type:_DWT_COLORPICKER_,
                                     label:ZaMsg.NAD_zimbraSkinForegroundColor,

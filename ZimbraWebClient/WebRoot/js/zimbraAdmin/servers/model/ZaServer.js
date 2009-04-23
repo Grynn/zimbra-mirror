@@ -201,6 +201,8 @@ ZaServer.DOT_TO_CIDR["255.255.255.252"] = 30;
 ZaServer.DOT_TO_CIDR["255.255.255.254"] = 31;
 ZaServer.DOT_TO_CIDR["255.255.255.255"] = 32;
 
+ZaServer.FLUSH_CACHE_RIGHT = "flushCache";
+
 ZaServer.isValidPostfixSubnetString = function(mask) {
 	//is this a CIDR
 	var pos = mask.indexOf("/");
@@ -629,20 +631,6 @@ function() {
 	return this._toolTip;
 }
 
-ZaServer.prototype.remove = 
-function() {
-	var soapDoc = AjxSoapDoc.create("DeleteServerRequest", ZaZimbraAdmin.URN, null);
-	soapDoc.set("id", this.id);
-	//var command = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	var reqMgrParams = {
-		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : ZaMsg.BUSY_DELETE_SERVER
-	}
-	var resp = ZaRequestMgr.invoke(params, reqMgrParams);	
-}
-
 ZaServer.prototype.refresh = 
 function() {
 	this.load();	
@@ -707,7 +695,6 @@ function(by, val) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaServer.loadNIFS");
 	}
 }
-
 ZaItem.loadMethods["ZaServer"].push(ZaServer.loadNIFS);
 
 ZaServer.prototype.initFromJS = function(server) {

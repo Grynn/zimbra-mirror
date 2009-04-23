@@ -984,8 +984,14 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			items:[
             	{type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Color_Settings, colSizes:["275px","*"],
 					items: [
+						{ type: _DWT_ALERT_,
+							style: DwtAlert.INFO,
+							iconVisible: true, 
+							content: ZaMsg.Domain_Chameleon_Note,
+							colSpan:2,
+							visibilityChecks:[],ref:null
+						},
                     	{ref:ZaDomain.A_zimbraSkinForegroundColor,
-                            //type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_,
                             type: _SUPER_DWT_COLORPICKER_,
                             label:ZaMsg.NAD_zimbraSkinForegroundColor,
                             labelLocation:_LEFT_,
@@ -994,15 +1000,13 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
                             onChange:ZaTabView.onFormFieldChanged
                         }  ,
                         {ref:ZaDomain.A_zimbraSkinBackgroundColor,
-                            //type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_,
                             type: _SUPER_DWT_COLORPICKER_,
                             label:ZaMsg.NAD_zimbraSkinBackgroundColor,
                             labelLocation:_LEFT_,  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             buttonImage: "Color", width: "50px" ,
                             onChange:ZaTabView.onFormFieldChanged
                         }  ,
-                        {ref:ZaDomain.A_zimbraSkinSecondaryColor,
-                            //type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_, 
+                        {ref:ZaDomain.A_zimbraSkinSecondaryColor, 
                             type: _SUPER_DWT_COLORPICKER_,
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             label:ZaMsg.NAD_zimbraSkinSecondaryColor,
@@ -1011,7 +1015,6 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
                             onChange:ZaTabView.onFormFieldChanged
                         },
                         {ref:ZaDomain.A_zimbraSkinSelectionColor,
-                            //type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_,
                             type: _SUPER_DWT_COLORPICKER_,
                             label:ZaMsg.NAD_zimbraSkinSelectionColor,
                             labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,

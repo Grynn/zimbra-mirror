@@ -56,7 +56,7 @@ ZaServerController.changeActionsStateMethod = function () {
 		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
 		
 	if(this._toolbarOperations[ZaOperation.FLUSH_CACHE]) {
-		if(!this._currentObject.attrs[ZaServer.A_zimbraMailboxServiceEnabled] || !this._currentObject.attrs[ZaServer.A_zimbraMailboxServiceInstalled]) {
+		if(!ZaItem.hasRight(ZaServer.FLUSH_CACHE_RIGHT,this._currentObject) || !this._currentObject.attrs[ZaServer.A_zimbraMailboxServiceEnabled] || !this._currentObject.attrs[ZaServer.A_zimbraMailboxServiceInstalled]) {
 			this._toolbarOperations[ZaOperation.FLUSH_CACHE].enabled = false;
 		}
 	}

@@ -220,93 +220,6 @@ function (list) {
 	}
 }
 
-/**
-* @param ev
-* This listener is invoked by any controller that can create an ZaServer object
-**/
-ZaOverviewPanelController.prototype.handleServerCreation = 
-function (ev) {
-	if(ev) {
-		//add the new ZaDomain to the controlled list
-		if(ev.getDetails()) {
-			var newServer = ev.getDetails();
-			var ti1 = new DwtTreeItem(this._serversTi);			
-			ti1.setText(newServer.name);	
-			ti1.setImage("Server");
-			ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SERVER_VIEW);
-			ti1.setData(ZaOverviewPanelController._OBJ_ID, newServer.id);
-			this._serversMap[newServer.id] = ti1;
-
-			var ti2 = new DwtTreeItem(this._statisticsTi);			
-			ti2.setText(newServer.name);	
-			ti2.setImage("StatisticsByServer");
-			ti2.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._STATISTICS_BY_SERVER);
-			ti2.setData(ZaOverviewPanelController._OBJ_ID, newServer.id);
-			this._serversStatsMap[newServer.id] = ti2;
-
-	
-		}
-	}
-}
-/**
-* @param ev
-* This listener is invoked by any controller that can change an ZaServer object
-* the purpose of this listener is to keep labels of Servers sub tree nodes and 
-* Server Statistics sub tree nodes in sync with Servers
-**/
-ZaOverviewPanelController.prototype.handleServerChange =
-function (ev) {
-	if(ev) {
-		var detls = ev.getDetails();	
-		if(detls instanceof Array) {	
-			if(detls && detls["obj"]) {
-				if(this._serversMap[detls["obj"].id])
-					this._serversMap[detls["obj"].id].setText(detls["obj"].name);
-				if(this._serversStatsMap[detls["obj"].id])
-					this._serversStatsMap[detls["obj"].id].setText(detls["obj"].name);		
-			}
-		}else if (detls){
-			if(this._serversMap[detls.id])
-				this._serversMap[detls.id].setText(detls.name);
-			if(this._serversStatsMap[detls.id])
-				this._serversStatsMap[detls.id].setText(detls.name);	
-		}
-	}
-}
-
-/**
-* @param ev
-* This listener is invoked by any controller that can remove an ZaServer object
-**/
-ZaOverviewPanelController.prototype.handleServerRemoval = 
-function (ev) {
-	if(ev) {
-		var detls = ev.getDetails();		
-		if(detls) {
-			if(detls instanceof Array) {
-				for (var key in detls) {
-					if((detls[key] instanceof ZaServer)) {
-					 	if(this._serversMap[detls[key].id]) {
-							this._serversTi.removeChild(this._serversMap[detls[key].id]);		
-						}
-					 	if(this._serversStatsMap[detls[key].id]) {
-							this._statisticsTi.removeChild(this._serversStatsMap[detls[key].id]);								
-						}
-						
-					}
-				}
-			} else if(detls instanceof ZaServer) {
-				if(this._serversMap[detls.id]) {
-					this._serversTi.removeChild(this._serversMap[detls.id]);		
-				}
-				if(this._serversStatsMap[detls.id]) {
-					this._statisticsTi.removeChild(this._serversStatsMap[detls.id]);		
-				}				
-			}
-		}
-	}
-}
-
 ZaOverviewPanelController.prototype.setCurrentDomain = 
 function (newDomain) {
 	this._currentDomain = newDomain;
@@ -803,6 +716,14 @@ ZaOverviewPanelController.statsByServerTreeListener = function (ev) {
 	}*/
 }
 
+ZaOverviewPanelController.statsTreeListener = function (ev) {
+	if(ZaApp.getInstance().getCurrentController()) {
+		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getGlobalStatsController(),ZaGlobalStatsController.prototype.show, null);
+	} else {					
+		ZaApp.getInstance().getGlobalStatsController().show();
+	}
+}
+
 ZaOverviewPanelController.globalSettingsTreeListener = function (ev) {
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getGlobalConfigViewController(),ZaGlobalConfigViewController.prototype.show, ZaApp.getInstance().getGlobalConfig());
@@ -811,13 +732,7 @@ ZaOverviewPanelController.globalSettingsTreeListener = function (ev) {
 	}
 }
 
-ZaOverviewPanelController.statsTreeListener = function (ev) {
-	if(ZaApp.getInstance().getCurrentController()) {
-		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getGlobalStatsController(),ZaGlobalStatsController.prototype.show, null);
-	} else {					
-		ZaApp.getInstance().getGlobalStatsController().show();
-	}
-}
+
 
 ZaOverviewPanelController.statusTreeListener = function (ev) {
 	if(ZaApp.getInstance().getCurrentController()) {

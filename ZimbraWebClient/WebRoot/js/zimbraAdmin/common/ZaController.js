@@ -696,6 +696,12 @@ function () {
 		ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();	
 }
 
+
+ZaController.prototype.closeCnfrmDelDlg = 
+function () {
+	if(ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"])
+		ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].popdown();	
+}
 /**
 * public getToolBar
 * @return reference to the toolbar

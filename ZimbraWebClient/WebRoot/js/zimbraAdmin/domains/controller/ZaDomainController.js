@@ -207,33 +207,6 @@ function(ev) {
 	return;
 }
 
-ZaDomainController.prototype.saveChangesCallback = 
-function(params, resp) {
-	try {
-		if(params.busyId)
-			ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
-			
-		if(!resp && !this._currentRequest.cancelled) {
-			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaDomainController.prototype.saveChangesCallback"));
-		} else if(resp.isException && resp.isException()) {
-			throw(resp.getException());
-		} else if(respObj.getResponse().Body.BatchResponse && respObj.getResponse().Body.BatchResponse.Fault) {
-			var fault = respObj.getResponse().Body.BatchResponse.Fault;
-			if(fault instanceof Array)
-				fault = fault[0];
-					
-			if (fault) {
-				// JS response with fault
-				var ex = ZmCsfeCommand.faultToEx(fault);
-				throw(ex);
-			}
-		}
-		
-	} catch (ex) {
-		this._handleException(ex, "ZaDomainController.prototype.saveChangesCallback");	
-	}		
-}
-
 ZaDomainController.prototype._saveChanges = 
 function () {
 	var tmpObj = this._view.getObject();
@@ -242,7 +215,8 @@ function () {
     var	isNew = (!tmpObj.id) ? true : false;
     var renameNotebookAccount = false;
     var catchAllChanged = false ;
-
+	var skinChanged = false;
+	
     if (!(AjxUtil.isEmpty(tmpObj[ZaAccount.A_zimbraMailCatchAllAddress]) && AjxUtil.isEmpty(this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress])) 
     	&& (tmpObj[ZaAccount.A_zimbraMailCatchAllAddress] != this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress])) {
          catchAllChanged = true ;
@@ -266,6 +240,12 @@ function () {
 			} else if(tmpObj.attrs[a] != this._currentObject.attrs[a]) {
 				mods[a] = tmpObj.attrs[a];
 				haveSmth = true;
+				if(a == ZaDomain.A_zimbraSkinForegroundColor || a == ZaDomain.A_zimbraSkinBackgroundColor || 
+					a == ZaDomain.A_zimbraSkinSecondaryColor || a == ZaDomain.A_zimbraSkinSelectionColor ||
+					a == ZaDomain.A_zimbraSkinLogoURL || a == ZaDomain.A_zimbraSkinLogoLoginBanner || 
+					a == ZaDomain.A_zimbraSkinLogoAppBanner) {
+					skinChanged = true;
+				}				
 			}
 		}                                       
 	}
@@ -311,6 +291,34 @@ function () {
 					return false;
 				}
             }
+            if(skinChanged) {
+            	//get domains
+            	try {
+            		var mbxSrvrs = ZaApp.getInstance().getMailServers();
+            		var serverList = [];
+            		var cnt = mbxSrvrs.length;
+            		for(var i=0; i<cnt; i++) {
+            			if(ZaItem.hasRight(ZaServer.FLUSH_CACHE_RIGHT,mbxSrvrs[i])) {
+            				serverList.push(mbxSrvrs[i]);
+            			}
+            		}
+            		
+            		if(serverList.length > 0) {
+						ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].setMessage(ZaMsg.Domain_flush_cache_q, DwtMessageDialog.INFO_STYLE);
+						ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.openFlushCacheDlg, this, [serverList]);		
+						ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDelDlg, this, null);				
+						ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].popup();             			
+            		}
+            		
+            	} catch (ex) {
+					if (ex.code ==  ZmCsfeException.SVC_PERM_DENIED) {
+						return;
+					} else {
+						throw (ex);
+					}           		
+            	}
+           	
+            }
 			return true;
 		} catch (ex) {
 			this._handleException(ex,"ZaDomainController.prototype._saveChanges");
@@ -320,7 +328,20 @@ function () {
 	}
 }
 
-
+ZaDomainController.prototype.openFlushCacheDlg = 
+function (serverList) {
+	ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].popdown(); 
+	if(!ZaApp.getInstance().dialogs["flushCacheDialog"]) {
+		ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container);
+	}
+	serverList._version = 1;
+	/*for(var i=0;i<serverList.length;i++) {
+		serverList[i]["status"] = 0;
+	}*/
+	obj = {statusMessage:null,flushZimlet:false,flushSkin:true,flushLocale:false,serverList:serverList,status:0};
+	ZaApp.getInstance().dialogs["flushCacheDialog"].setObject(obj);
+	ZaApp.getInstance().dialogs["flushCacheDialog"].popup();
+}
 
 ZaDomainController.prototype.newDomain = 
 function () {

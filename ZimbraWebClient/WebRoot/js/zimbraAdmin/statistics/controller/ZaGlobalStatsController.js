@@ -31,16 +31,42 @@ ZaGlobalStatsController = function(appCtxt, container) {
 
 ZaGlobalStatsController.prototype = new ZaController();
 ZaGlobalStatsController.prototype.constructor = ZaGlobalStatsController;
-ZaController.setViewMethods["ZaGlobalStatsController"] = [];
-//ZaGlobalStatsController.STATUS_VIEW = "ZaGlobalStatsController.STATUS_VIEW";
 
+/**
+ * This array contains function references. The functions referenced in this array will be called by ZaController.prototype._setView method
+ * @see ZaController#_setView
+ */
+ZaController.setViewMethods["ZaGlobalStatsController"] = [];
+
+/**
+ * 'show' method iof every controller s responsible for two actions:
+ *  - calling _setView method
+ *  - instantiating data object and feeding the data to the view controlled by this controller
+ * see also: {@link ZaController#_setView}, {@link ZaApp#pushView} 
+ * 
+ */
 ZaGlobalStatsController.prototype.show = 
 function() {
+	/**
+	 * this call will create the view object {@link ZaGlobalStatsView } @see ZaController#_setView
+	 */
 	this._setView();
+	/**
+	 * This call will push the view on top of the visible stack of views
+	 */
 	ZaApp.getInstance().pushView(this.getContentViewId());
+	
+	/**
+	 * this statement creates a data object. In most of other cases, we will use a special model class such as ZaServer, ZaDomain, etc
+	 * however, in this case, the data object does not have any special features to be encapsulated
+	 **/
 	var item=new Object();
 	try {		
+		
 		item[ZaModel.currentTab] = "1"
+		/**
+		 * This statement feeds the data to the view @see ZaGlobalStatsView#setObject
+		 */
 		this._contentView.setObject(item);
 	} catch (ex) {
 		this._handleException(ex, "ZaGlobalConfigViewController.prototype.show", null, false);
@@ -48,13 +74,31 @@ function() {
 	this._currentObject = item;	
 }
 
-
+/**
+ * We do not directly overwrite ZaController.prototype._setView method of ZaController class,
+ * instead we add function references to ZaController.setViewMethods map 
+ * @see ZaController#setViewMethods
+ * @see ZaController#_setView
+ */
 ZaGlobalStatsController.setViewMethod =
 function() {	
     if (!this._contentView) {
+    	/**
+    	 * This call instantiates ZaGlobalStatsView
+    	 */
 		this._contentView  = new this.tabConstructor(this._container);
+		
+		/**
+		 * This object tells ZaAppViewMgr which components to put on the screen for this view. 
+		 * Usualy, these are: toolbar and the view contents.
+		 */
 		var elements = new Object();
 
+		/**
+		 * Appearance of the toolbar is controlled by two maps:
+		 *  - this._toolbarOperations is a map of ZaOperation instances
+		 *  - this._toolbarOrder is an array that controls the order of the buttons in the toolbar
+		 */
 		this._toolbarOperations[ZaOperation.REFRESH] = new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshListener));
 		this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
 		this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));				
@@ -73,11 +117,22 @@ function() {
 			tabId: this.getContentViewId(),
 			tab: this.getMainTab()
 		}
+		
+		/**
+		 * This statement will tell the view manager to make the view visible
+		 */
 		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-		this._UICreated = true;
+		
+		/**
+		 * We need this in order to be able to get a handle of this controler instance
+		 */
 		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;		
 	}
 }
+/**
+ * This statement adds ZaGlobalStatsController.setViewMethod method to the map of methods that will be called by ZaController.prototype._setView 
+ * whenever this._setView();
+ */
 ZaController.setViewMethods["ZaGlobalStatsController"].push(ZaGlobalStatsController.setViewMethod);
 
 

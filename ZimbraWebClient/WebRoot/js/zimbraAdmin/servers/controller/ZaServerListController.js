@@ -44,27 +44,18 @@ function(list, openInNewTab) {
 	} 	
 	if (list != null)
 		this._contentView.set(list.getVector());
-	
-	//ZaApp.getInstance().pushView(ZaZimbraAdmin._SERVERS_LIST_VIEW);			
+				
 	ZaApp.getInstance().pushView(this.getContentViewId());
-	this._removeList = new Array();
 	if (list != null)
 		this._list = list;
 		
 	this.changeActionsState();		
-	/*
-	if (openInNewTab) {//when a ctrl shortcut is pressed
-		
-	}else{ //open in the main tab
-		this.updateMainTab ("Server") ;	
-	}*/
 }
 
 ZaServerListController.initToolbarMethod =
 function () {
    	this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerListController.prototype._editButtonListener));    	
-   	this._toolbarOperations[ZaOperation.FLUSH_CACHE] = new ZaOperation(ZaOperation.FLUSH_CACHE, ZaMsg.SERTBB_FlushCache, ZaMsg.SERTBB_FlushCache_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._flushCacheButtonListener));
-   	//this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._deleteButtonListener)));    	    	
+   	this._toolbarOperations[ZaOperation.FLUSH_CACHE] = new ZaOperation(ZaOperation.FLUSH_CACHE, ZaMsg.SERTBB_FlushCache, ZaMsg.SERTBB_FlushCache_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._flushCacheButtonListener));	
 	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
 	this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
 	
@@ -78,8 +69,7 @@ ZaController.initToolbarMethods["ZaServerListController"].push(ZaServerListContr
 ZaServerListController.initPopupMenuMethod =
 function () {
    	this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerListController.prototype._editButtonListener));
-	this._popupOperations[ZaOperation.FLUSH_CACHE] = new ZaOperation(ZaOperation.FLUSH_CACHE, ZaMsg.SERTBB_FlushCache, ZaMsg.SERTBB_FlushCache_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._flushCacheButtonListener));   	    	
-   	//this._popupOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._deleteButtonListener));    	    	
+	this._popupOperations[ZaOperation.FLUSH_CACHE] = new ZaOperation(ZaOperation.FLUSH_CACHE, ZaMsg.SERTBB_FlushCache, ZaMsg.SERTBB_FlushCache_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._flushCacheButtonListener));   	    	    	    	
 }
 ZaController.initPopupMenuMethods["ZaServerListController"].push(ZaServerListController.initPopupMenuMethod);
 
@@ -103,8 +93,7 @@ ZaServerListController.prototype._createUI = function () {
 		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
-		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);					
+		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));								
 			
 		this._UICreated = true;
 		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
@@ -167,77 +156,6 @@ function (ev) {
 	}
 }
 
-/**
-* @param ev
-* This listener is invoked by ZaServerController or any other controller that can create an ZaServer object
-**/
-ZaServerListController.prototype.handleServerCreation = 
-function (ev) {
-	if(ev) {
-		//add the new ZaServer to the controlled list
-		if(ev.getDetails()) {
-			if (this._list) this._list.add(ev.getDetails());
-			if (this._contentView) this._contentView.setUI();
-			if(ZaApp.getInstance().getCurrentController() == this) {
-				this.show();			
-			}
-		}
-	}
-}
-
-/**
-* @param ev
-* This listener is invoked by ZaServerController or any other controller that can remove an ZaServer object
-**/
-ZaServerListController.prototype.handleServerRemoval = 
-function (ev) {
-	if(ev) {
-		//add the new ZaAccount to the controlled list
-		if(ev.getDetails()) {
-			if (this._list) this._list.remove(ev.getDetails());
-			if (this._contentView ) this._contentView.setUI();
-			if(ZaApp.getInstance().getCurrentController() == this) {
-				this.show();			
-			}
-		}
-	}
-}
-
-/**
-* Adds listener to removal of an ZaServer 
-* @param listener
-**/
-ZaServerListController.prototype.addServerRemovalListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
-}
-
-/*
-// refresh button was pressed
-ZaServerListController.prototype._refreshButtonListener =
-function(ev) {
-	this.refresh();
-}
-*/
-
-/**
-*	Private method that notifies listeners to that the controlled ZaServer (are) removed
-* 	@param details
-*/
-ZaServerListController.prototype._fireServerRemovalEvent =
-function(details) {
-	try {
-		if (this._evtMgr.isListenerRegistered(ZaEvent.E_REMOVE)) {
-			var evt = new ZaEvent(ZaEvent.S_SERVER);
-			evt.set(ZaEvent.E_REMOVE, this);
-			evt.setDetails(details);
-			this._evtMgr.notifyListeners(ZaEvent.E_REMOVE, evt);
-		}
-	} catch (ex) {
-		this._handleException(ex, ZaServerListController.prototype._fireServerRemovalEvent, details, false);	
-	}
-}
-
 
 // new button was pressed
 ZaServerListController.prototype._newButtonListener =
@@ -280,84 +198,6 @@ function(ev) {
 	}
 }
 
-/**
-* This listener is called when the Delete button is clicked. 
-**/
-ZaServerListController.prototype._deleteButtonListener =
-function(ev) {
-	this._removeList = new Array();
-	if(this._contentView.getSelectionCount() > 0) {
-		var arrItems = this._contentView.getSelection();
-		var cnt = arrItems.length;
-		for(var key =0; key < cnt; key++) {
-			if(arrItems[key]) {
-				this._removeList.push(arrItems[key]);		
-			}
-		}
-	}
-	if(this._removeList.length) {
-		dlgMsg = ZaMsg.Q_DELETE_SERVERS;
-		dlgMsg += "<br>";
-		for(var key in this._removeList) {
-			if(i > 19) {
-				dlgMsg += "<li>...</li>";
-				break;
-			}
-			dlgMsg += "<li>";
-			if(this._removeList[key].name.length > 50) {
-				//split it
-				var endIx = 49;
-				var beginIx = 0; //
-				while(endIx < this._removeList[key].name.length) { //
-					dlgMsg +=  this._removeList[key].name.slice(beginIx, endIx); //
-					beginIx = endIx + 1; //
-					if(beginIx >= (this._removeList[key].name.length) ) //
-						break;
-					
-					endIx = ( this._removeList[key].name.length <= (endIx + 50) ) ? this._removeList[key].name.length-1 : (endIx + 50);
-					dlgMsg +=  "<br>";	
-				}
-			} else {
-				dlgMsg += this._removeList[key].name;
-			}
-			dlgMsg += "</li>";
-			i++;
-		}
-		this._removeConfirmMessageDialog.setMessage(dlgMsg,DwtMessageDialog.INFO_STYLE);
-		this._removeConfirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaServerListController.prototype._deleteServersCallback, this);
-		this._removeConfirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaServerListController.prototype._donotDeleteServersCallback, this);		
-		this._removeConfirmMessageDialog.popup();
-	}
-}
-
-ZaServerListController.prototype._deleteServersCallback = 
-function () {
-	var successRemList=new Array();
-	for(var key in this._removeList) {
-		if(this._removeList[key]) {
-			try {
-				this._removeList[key].remove();
-				successRemList.push(this._removeList[key]);					
-			} catch (ex) {
-				this._removeConfirmMessageDialog.popdown();
-				this._handleException(ex, ZaServerListController.prototype._deleteServersCallback, null, false);
-				return;
-			}
-		}
-		if (this._list) this._list.remove(this._removeList[key]); //remove from the list
-	}
-	this._fireServerRemovalEvent(successRemList); 		
-	this._removeConfirmMessageDialog.popdown();
-	if (this._contentView) this._contentView.setUI();
-	this.show();
-}
-
-ZaServerListController.prototype._donotDeleteServersCallback = 
-function () {
-	this._removeList = new Array();
-	this._removeConfirmMessageDialog.popdown();
-}
-
 ZaServerListController.changeActionsStateMethod = 
 function () {
 	if(this._contentView) {
@@ -367,7 +207,7 @@ function () {
 		if(servers) {
 			var cnt = servers.length;
 			for(var i=0; i<cnt; i++) {
-				if(!servers[i].attrs[ZaServer.A_zimbraMailboxServiceEnabled] || !servers[i].attrs[ZaServer.A_zimbraMailboxServiceInstalled]) {
+				if(!ZaItem.hasRight(ZaServer.FLUSH_CACHE_RIGHT,servers[i]) || !servers[i].attrs[ZaServer.A_zimbraMailboxServiceEnabled] || !servers[i].attrs[ZaServer.A_zimbraMailboxServiceInstalled]) {
 					enableFlush = false;
 					break;
 				} 
