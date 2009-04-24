@@ -44,8 +44,7 @@
         ${zdf:doRequest(abean)}
         <c:set var="bean" value="${abean}" scope="request"/>
         <c:set var="betaNote">
-          <fmt:message key='BetaNoteCommon'>
-            <fmt:param><fmt:message key='BetaNoteAOL'/></fmt:param>
+          <fmt:message key='BetaNoteAOL'>
             <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
           </fmt:message>
         </c:set>
@@ -72,8 +71,7 @@
             </ol>
         </c:set>
         <c:set var="betaNote">
-          <fmt:message key='BetaNoteCommon'>
-            <fmt:param><fmt:message key='BetaNoteGmail'/></fmt:param>
+          <fmt:message key='BetaNoteGmail'>
             <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
           </fmt:message>
         </c:set>
@@ -85,8 +83,7 @@
         ${zdf:doRequest(ibean)}
         <c:set var="bean" value="${ibean}" scope="request"/>
         <c:set var="betaNote">
-          <fmt:message key='BetaNoteCommon'>
-            <fmt:param><fmt:message key='BetaNoteIMAP'/></fmt:param>
+          <fmt:message key='BetaNoteIMAP'>
             <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
           </fmt:message>
         </c:set>
@@ -108,8 +105,7 @@
             </fmt:message>
         </c:set>
         <c:set var="betaNote">
-          <fmt:message key='BetaNoteCommon'>
-            <fmt:param><fmt:message key='BetaNoteLive'/></fmt:param>
+          <fmt:message key='BetaNoteLive'>
             <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
           </fmt:message>
         </c:set>
@@ -121,8 +117,7 @@
         ${zdf:doRequest(mbean)}
         <c:set var="bean" value="${mbean}" scope="request"/>
         <c:set var="betaNote">
-          <fmt:message key='BetaNoteCommon'>
-            <fmt:param><fmt:message key='BetaNoteExchange'/></fmt:param>
+          <fmt:message key='BetaNoteExchange'>
             <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
           </fmt:message>
         </c:set>
@@ -134,8 +129,7 @@
         ${zdf:doRequest(pbean)}
         <c:set var="bean" value="${pbean}" scope="request"/>
         <c:set var="betaNote">
-          <fmt:message key='BetaNoteCommon'>
-            <fmt:param><fmt:message key='BetaNotePOP'/></fmt:param>
+          <fmt:message key='BetaNotePOP'>
             <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
           </fmt:message>
         </c:set>
@@ -157,8 +151,7 @@
             </fmt:message>
         </c:set>
         <c:set var="betaNote">
-          <fmt:message key='BetaNoteCommon'>
-            <fmt:param><fmt:message key='BetaNoteYahoo'/></fmt:param>
+          <fmt:message key='BetaNoteYahoo'>
             <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
           </fmt:message>
         </c:set>
