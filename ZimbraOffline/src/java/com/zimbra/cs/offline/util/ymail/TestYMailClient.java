@@ -309,7 +309,7 @@ public class TestYMailClient {
 
     private MimeMessage getMessage(long uid) throws IOException, MessagingException {
         Body body = getMessageData(uid, "BODY.PEEK[]").getBodySections()[0];
-        return new MimeMessage(null, body.getInputStream());
+        return new MimeMessage(null, body.getImapData().getInputStream());
     }
 
     private BodyStructure getBodyStructure(long uid) throws IOException {
@@ -328,7 +328,7 @@ public class TestYMailClient {
     // Finds UID of message matching specified UMID
     private long findUid(String mid, long startUid) throws IOException {
         for (MessageData md : imc.uidFetch(startUid + ":*", "BODY.PEEK[HEADER]").values()) {
-            String header = md.getBodySections()[0].getData().toString();
+            String header = md.getBodySections()[0].getImapData().toString();
             Matcher matcher = UMID.matcher(header);
             if (matcher.find() && matcher.group(1).equals(mid)) {
                 return md.getUid();
