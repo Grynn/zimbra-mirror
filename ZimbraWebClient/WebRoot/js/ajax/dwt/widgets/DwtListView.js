@@ -359,6 +359,7 @@ function(list, defaultColumnSort, noResultsOk) {
 	if (this._selectedItems) {
 		this._selectedItems.removeAll();
 	}
+	this._rightSelItem = null
 	this.sortingEnabled = true;
 	this._resetList();
 	this._list = list;
@@ -477,6 +478,9 @@ function(item, skipNotify) {
         }
     }
 	this._selectedItems.remove(itemEl);
+	if (this._rightSelItem == itemEl) {
+		this._rightSelItem = null;
+	}
 	this._parentEl.removeChild(itemEl);
 	if (this._list) {
 		this._list.remove(item);
@@ -542,9 +546,13 @@ function(listener) {
 
 DwtListView.prototype.removeAll =
 function(skipNotify) {
-	if (this._parentEl) this._parentEl.innerHTML = "";
-	if (this._selectedItems) this._selectedItems.removeAll();
-	this._selAnchor = this._kbAnchor = null;
+	if (this._parentEl) {
+		this._parentEl.innerHTML = "";
+	}
+	if (this._selectedItems) {
+		this._selectedItems.removeAll();
+	}
+	this._rightSelItem = this._selAnchor = this._kbAnchor = null;
 
 	if (!skipNotify && this._evtMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
 		this._evtMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
@@ -559,7 +567,7 @@ function() {
         Dwt.delClass(a[i], this._styleRe);
     }
     this._selectedItems.removeAll();
-	this._selAnchor = null;
+	this._rightSelItem = this._selAnchor = null;
 
 	if (this._kbAnchor != null && this.hasFocus()) {
 		Dwt.addClass(this._kbAnchor, this._kbFocusClass);
@@ -1991,7 +1999,9 @@ function() {
 		var cDiv = this._parentEl.removeChild(this._parentEl.firstChild);
 		this._data[cDiv.id] = null;
 	}
-	if (this._selectedItems) this._selectedItems.removeAll();
+	if (this._selectedItems) {
+		this._selectedItems.removeAll();
+	}
 	this._rightSelItem = null;
 };
 
