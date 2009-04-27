@@ -54,6 +54,7 @@ public class XmailBean extends MailBean {
     private static final String hdomain = "hotmail.com";
     private static final String mdomain = "msn.com";
     private static final String ydomain = "yahoo.com";
+    private static final String yjpdomain = "yahoo.co.jp";
     private static final String ymdomain = "ymail.com";
     private static final String yrmdomain = "rocketmail.com";
 
@@ -223,7 +224,8 @@ public class XmailBean extends MailBean {
             }
             if (verb.isAdd()) {
                 if (email.endsWith('@' + ydomain) ||
-		    email.endsWith('@' + ymdomain) ||
+		    email.endsWith('@' + yjpdomain) ||
+                    email.endsWith('@' + ymdomain) ||
 		    email.endsWith('@' + yrmdomain)) {
                     if (dsType == DataSource.Type.imap) {
                         dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain,

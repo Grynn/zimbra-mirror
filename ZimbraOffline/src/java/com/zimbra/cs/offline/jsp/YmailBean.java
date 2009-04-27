@@ -37,7 +37,8 @@ public class YmailBean extends ImapBean {
 		    username = email;
 	    }
 	}
-	host = "zimbra.imap.mail.yahoo.com";
+	host = email.endsWith("@yahoo.co.jp") ? "zimbra.imap.mail.yahoo.co.jp" :
+	    "zimbra.imap.mail.yahoo.com";
 	isSsl = true;
 	port = "993";
 	super.doRequest();

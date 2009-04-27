@@ -620,7 +620,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         String username = null;
         String service;
       
-        if (domain.equals("yahoo.com") || domain.equals("ymail.com") || domain.equals("rocketmail.com")) {
+        if (domain.equals("yahoo.com") || domain.equals("ymail.com") ||
+            domain.equals("rocketmail.com") || domain.equals("yahoo.co.jp")) {
             if (domain.equals("yahoo.com"))
                 username = localPart;
             service = "yahoo.com";
