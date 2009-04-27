@@ -51,6 +51,7 @@ import com.zimbra.cs.offline.util.OfflineUtil;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.util.yauth.AuthenticationException;
+import com.zimbra.cs.util.yauth.MetadataTokenStore;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -719,6 +720,15 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             mAccountCache.remove(account);
             deleteAccount(accountId);
             throw e;
+        }
+
+        // Bug 31998: If Yahoo then copy auth tokens from test data source to
+        // new data source and clear original tokens
+        if (testDs.isYahoo()) {
+            Mailbox mbox = testDs.getMailbox();
+            MetadataTokenStore.copyTokens(mbox, ds.getMailbox());
+            MetadataTokenStore.clearTokens(mbox);
+            OfflineYAuth.deleteRawAuthManager(mbox);
         }
         
         return account;
