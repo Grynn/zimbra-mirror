@@ -153,6 +153,15 @@ DwtMenuItem.prototype.setImage = function(imageInfo) {
 	this.parent._iconItemAdded(this);
 }
 
+DwtMenuItem.prototype.setText =
+function(text) {
+	DwtButton.prototype.setText.call(this, text);
+	if (this.parent.isPoppedUp()) {
+		// resize menu if we reset text on the fly
+		this.parent.render();
+	}
+};
+
 DwtMenuItem.prototype.setMenu = function(menuOrCallback, shouldToggle, followIconStyle) {
 	DwtButton.prototype.setMenu.call(this, menuOrCallback, shouldToggle, followIconStyle);
 	this.parent._submenuItemAdded(this);
@@ -292,10 +301,10 @@ function() {
     }
 };
 
-DwtMenuItem.prototype._isMenuPoppedup =
+DwtMenuItem.prototype._isMenuPoppedUp =
 function() {
 	var menu = this.getMenu();
-	return (menu && menu.isPoppedup()) ? true : false;
+	return (menu && menu.isPoppedUp()) ? true : false;
 }
 
 
@@ -326,7 +335,7 @@ DwtMenuItem.prototype.__handleItemSelect = function(event) {
         return;
     }
     if (!this.isStyle(DwtMenuItem.CASCADE_STYLE)) {
-		if (!this._menu || !this._menu.isPoppedup || !this._menu.isPoppedup()) {
+		if (!this._menu || !this._menu.isPoppedUp || !this._menu.isPoppedUp()) {
 			DwtMenu.closeActiveMenu();
 		}
     }

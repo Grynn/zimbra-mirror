@@ -538,7 +538,7 @@ DwtButton.prototype._toggleMenu =
 function () {
 	if (this._shouldToggleMenu){
         var menu = this.getMenu();
-        if (!menu.isPoppedup()){
+        if (!menu.isPoppedUp()){
 			this.popup();
 			this._menuUp = true;
 		} else {
@@ -641,7 +641,7 @@ function(ev) {
      * If menu is there and already popped up, do pop it down first and then proceed.
      */
 
-    if (obj && obj.getMenu() && obj.getMenu().isPoppedup()){
+    if (obj && obj.getMenu() && obj.getMenu().isPoppedUp()){
         obj.getMenu().popdown();
     }
 

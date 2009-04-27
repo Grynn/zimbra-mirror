@@ -88,10 +88,10 @@ DwtMenu = function(params) {
 
 	if (params.style != DwtMenu.BAR_STYLE) {
 		this.setZIndex(Dwt.Z_HIDDEN);
- 		this._isPoppedup = false;		
+ 		this._isPoppedUp = false;
 	} else {
-		DwtMenu._activeMenuIds.add(htmlElement.id);
-		this._isPoppedup = true;
+		DwtMenu._activeMenuIds.add(htmlElement.id, null, true);
+		this._isPoppedUp = true;
  	}
 	this._popdownAction = new AjxTimedAction(this, this._doPopdown);
 	this._popdownActionId = -1;
@@ -222,9 +222,9 @@ function(style) {
 	return null;
 }
 
-DwtMenu.prototype.isPoppedup =
+DwtMenu.prototype.isPoppedUp =
 function() {
-	return this._isPoppedup;
+	return this._isPoppedUp;
 }
 
 DwtMenu.prototype.popup =
@@ -235,7 +235,7 @@ function(msec, x, y, kbGenerated) {
 		AjxTimedAction.cancelAction(this._popdownActionId);
 		this._popdownActionId = -1;
 	} else {
-		if (this._isPoppedup || (this._popupActionId != -1 && msec && msec > 0)) {
+		if (this._isPoppedUp || (this._popupActionId != -1 && msec && msec > 0)) {
 			return;
 		} else if (this._popupActionId != -1){
 			AjxTimedAction.cancelAction(this._popupActionId);
@@ -259,7 +259,7 @@ function(msec) {
 		AjxTimedAction.cancelAction(this._popupActionId);	
 		this._popupActionId = -1;
 	} else {
-		if (!this._isPoppedup || this._popdownActionId != -1) 
+		if (!this._isPoppedUp || this._popdownActionId != -1)
 			return;
 		if (msec == null || msec == 0)
 			this._doPopdown();
@@ -267,6 +267,78 @@ function(msec) {
 			this._popdownActionId = AjxTimedAction.scheduleAction(this._popdownAction, msec);
 	}
 }
+
+DwtMenu.prototype.render =
+function(x, y) {
+
+	var windowSize = this.shell.getSize();
+	var mySize = this.getSize();
+
+	// bug 9583 - can't query border size so just subtract generic padding
+	windowSize.y -= 10 + (AjxEnv.isIE ? 20 : 0);
+	windowSize.x -= 20;
+
+	var isPopup = (this._style == DwtMenu.POPUP_STYLE || this._style == DwtMenu.DROPDOWN_STYLE);
+	if (isPopup) {
+		var space = windowSize.y;
+		var newY = null;
+		var rows = this._table.rows;
+		var numRows = rows.length;
+		var height = mySize.y;
+		var requiredSpace = space - 25; // Account for space on top & bottom of menu.
+		for (var i = numRows - 1; i >= 0; i--) {
+			height -= Dwt.getSize(rows[i]).y;
+			if (height < requiredSpace) {
+				break;
+			}
+		}
+		var count = i + 1;
+		for (var j = count; j < numRows; j++) {
+			var row = rows[(j - count) % count];
+			var cell = row.insertCell(-1);
+			cell.className = "DwtMenuCascadeCell";
+			var child = rows[j].cells[0].firstChild;
+			while (child != null) {
+				cell.appendChild(child);
+				child = child.nextSibling;
+			}
+		}
+		for (j = rows.length - 1; j >= count; j--) {
+			this._table.deleteRow(count);
+		}
+		var offset = numRows % count;
+		if (offset > 0) {
+			for (var j = offset; j < count; j++) {
+				var row = rows[j];
+				var cell = row.insertCell(-1);
+				cell.className = "DwtMenuCascadeCell";
+				cell.empty = true;
+				cell.innerHTML = "&nbsp;";
+			}
+		}
+
+		mySize = this.getSize();
+		if (newY) {
+			y = newY - mySize.y;
+		}
+	}
+
+	// Popup menu type
+	var newX = ((x + mySize.x) >= windowSize.x) ? (windowSize.x - mySize.x) : x;
+	var newY = ((y + mySize.y) >= windowSize.y) ? (windowSize.y - mySize.y) : y;
+	this.setLocation(newX, isPopup ? newY : y);
+	this.setSize("auto", isPopup || y + mySize.y < windowSize.y - 5 ? "auto" : windowSize.y - y - 5);
+
+	// NOTE: This hack is needed for FF/Moz because the containing div
+	//	   allows the inner table to overflow. When the menu cascades
+	//	   and the menu items get pushed off of the visible area, the
+	//	   div's border doesn't surround the menu items. This hack
+	//	   forces the outer div's width to surround the table.
+	if ((AjxEnv.isGeckoBased || AjxEnv.isSafari || (this._origStyle == DwtMenu.CALENDAR_PICKER_STYLE)) && this._table) {
+		var htmlEl = this.getHtmlElement();
+		htmlEl.style.width = mySize.x + "px";
+	}
+};
 
 DwtMenu.prototype.getKeyMapName = 
 function() {
@@ -572,63 +644,10 @@ function(val) {
 
 DwtMenu.prototype._doPopup =
 function(x, y, kbGenerated) {
-	var windowSize = this.shell.getSize();
-	var mySize = this.getSize();
 
-	// bug 9583 - can't query border size so just subtract generic padding
-	windowSize.y -= 10 + (AjxEnv.isIE ? 20 : 0);
-	windowSize.x -= 20;
+	this.render(x, y);
 
 	var isPopup = (this._style == DwtMenu.POPUP_STYLE || this._style == DwtMenu.DROPDOWN_STYLE);
-	if (isPopup) {
-		var space = windowSize.y;
-		var newY = null;
-		var rows = this._table.rows;
-		var numRows = rows.length;
-		var height = mySize.y;
-		var requiredSpace = space - 25; // Account for space on top & bottom of menu.
-		for (var i = numRows - 1; i >= 0; i--) {
-			height -= Dwt.getSize(rows[i]).y;
-			if (height < requiredSpace) {
-				break;
-			}
-		}
-		var count = i + 1;
-		for (var j = count; j < numRows; j++) {
-			var row = rows[(j - count) % count];
-			var cell = row.insertCell(-1);
-			cell.className = "DwtMenuCascadeCell";
-			var child = rows[j].cells[0].firstChild;
-			while (child != null) {
-				cell.appendChild(child);
-				child = child.nextSibling;
-			}
-		}
-		for (j = rows.length - 1; j >= count; j--) {
-			this._table.deleteRow(count);
-		}
-		var offset = numRows % count;
-		if (offset > 0) {
-			for (var j = offset; j < count; j++) {
-				var row = rows[j];
-				var cell = row.insertCell(-1);
-				cell.className = "DwtMenuCascadeCell";
-				cell.empty = true;
-				cell.innerHTML = "&nbsp;";
-			}
-		}
-		
-		mySize = this.getSize();
-		if (newY) {
-			y = newY - mySize.y;
-		}
-	}
-
-	// Popup menu type
-	var newX = ((x + mySize.x) >= windowSize.x) ? (windowSize.x - mySize.x) : x;
-	var newY = ((y + mySize.y) >= windowSize.y) ? (windowSize.y - mySize.y) : y;
-	this.setLocation(newX, isPopup ? newY : y);
-	this.setSize("auto", isPopup || y + mySize.y < windowSize.y - 5 ? "auto" : windowSize.y - y - 5);
 	this.setScrollStyle(isPopup ? Dwt.CLIP : Dwt.SCROLL);
 	
 	this.notifyListeners(DwtEvent.POPUP, this);
@@ -643,7 +662,7 @@ function(x, y, kbGenerated) {
 	var zIndex = DwtBaseDialog.getActiveDialog() ? Dwt.Z_DIALOG_MENU : Dwt.Z_MENU;
 	this.setZIndex(zIndex);
 	this._popupActionId = -1;
-	this._isPoppedup = true;
+	this._isPoppedUp = true;
 	
 	if (AjxEnv.isIE && this._outsideListener) {
 		this.shell._setEventHdlrs([DwtEvent.ONMOUSEDOWN,DwtEvent.ONMOUSEWHEEL]);
@@ -660,9 +679,9 @@ function(x, y, kbGenerated) {
 		}
 	}
 
-	DwtMenu._activeMenuIds.add(this._htmlElId);
+	DwtMenu._activeMenuIds.add(this._htmlElId, null, true);
 	DwtMenu._activeMenuIds.sort();	
-	DwtMenu._activeMenus.add (this);
+	DwtMenu._activeMenus.add(this, null, true);
 	
 	// Capture events only if we are not a sub-menu. Event capturing is to catch mouse-events outside
 	// of our framework (esp. vital when DWT is being used in existing HTML content)
@@ -671,16 +690,6 @@ function(x, y, kbGenerated) {
 		this._capturing = true;
 	} else {
 		this._capturing = false;
-	}
-	
-	// NOTE: This hack is needed for FF/Moz because the containing div
-	//	   allows the inner table to overflow. When the menu cascades
-	//	   and the menu items get pushed off of the visible area, the
-	//	   div's border doesn't surround the menu items. This hack
-	//	   forces the outer div's width to surround the table.
-	if ((AjxEnv.isGeckoBased || AjxEnv.isSafari || (this._origStyle == DwtMenu.CALENDAR_PICKER_STYLE)) && this._table) {
-		var htmlEl = this.getHtmlElement();
-		htmlEl.style.width = mySize.x + "px";
 	}
 	
 	// Put our tabgroup in play
@@ -735,7 +744,7 @@ function() {
 	DwtMenu._activeMenuIds.remove(this._htmlElId);
 	DwtMenu._activeMenus.remove(this);
 	this._popdownActionId = -1;
-	this._isPoppedup = false;
+	this._isPoppedUp = false;
 
 	if (this._capturing && (DwtMouseEventCapture.getId() == "DwtMenu")) {
 		this._menuCapObj.release();
@@ -788,7 +797,7 @@ function(){
 	var a = this._children.getArray();
 	var s = this._children.size();
 	for (var i = 0; i < s; i++) {
-		if (a[i]._isMenuPoppedup())
+		if (a[i]._isMenuPoppedUp())
 			return a[i];
 	}
 	return null;
@@ -830,7 +839,7 @@ function(ev) {
 		//it should remove all the active menus 
 		var cMenu = null ;
 		do {
-			cMenu = DwtMenu._activeMenus.getLast() ;
+			cMenu = DwtMenu._activeMenus.getLast();
 			if (cMenu!= null && cMenu instanceof DwtMenu) cMenu.popdown();
 		} while (cMenu != null) ;
 	}
