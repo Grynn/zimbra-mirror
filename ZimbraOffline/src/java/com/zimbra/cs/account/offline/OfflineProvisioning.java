@@ -473,7 +473,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     @Override
-    public synchronized Account restoreAccount(String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {
+    public synchronized Account restoreAccount(String emailAddress, String password, Map<String, Object> attrs,
+            Map<String, Object> origAttrs) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("restoreAccount");
     }
     
