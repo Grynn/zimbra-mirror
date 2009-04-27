@@ -2247,26 +2247,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public void deleteXMPPComponent(XMPPComponent comp) throws ServiceException {
         throw ServiceException.FAILURE("unsupported", null);
     }
-    
-    @Override
-    public RightCommand.ACL getGrants(String targetType, TargetBy targetBy, String target) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("getGrants");
-    }
-    
-    @Override
-    public void grantRight(String targetType, TargetBy targetBy, String target,
-             String granteeType, GranteeBy granteeBy, String grantee,
-             String right, RightModifier rightModifier) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("grantRight");
-    }
-    
-    @Override
-    public void revokeRight(String targetType, TargetBy targetBy, String target,
-              String granteeType, GranteeBy granteeBy, String grantee,
-              String right, RightModifier rightModifier) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("revokeRight");
-    }
-
 
     @Override
     public void flushCache(CacheEntryType type, CacheEntry[] entries) throws ServiceException {
