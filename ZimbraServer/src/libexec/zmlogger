@@ -149,7 +149,6 @@ sub get_col_types($$$$) {
         } elsif ($type eq 'D') {
             $type = 'DERIVED';
         }
-        print "$c = $$columns[$i]\n";
         $col_types{$columns->[$i]} = {
             type     => $type,
             interval => $interval,
@@ -210,10 +209,9 @@ sub create_rrd($$$$$$) {
     my @rra = ();
     foreach my $c (@$columns) {
         my $type     = $types->{$c}->{'type'};
-        my $interval = $types->{$c}->{'interval'} * 2;
+        my $interval = $types->{$c}->{'interval'} * 4;
         push(@ds, "DS:$c:$type:$interval:U:U");
     }
-    print "@ds\n";
     @rra = (
         "RRA:AVERAGE:0.9999:1:20160",   # 30s:1 week
         "RRA:AVERAGE:0.9999:10:10080",  # 5min:5 weeks

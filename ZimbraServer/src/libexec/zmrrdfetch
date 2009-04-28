@@ -110,15 +110,32 @@ sub dump_data($$$$) {
         print join(",", @r) . "\n";
     }
 }
-sub list_files($) {
-    my $dbh = shift @_;
-    my $sth = $dbh->prepare("SELECT DISTINCT(csv_file) FROM rrds");
+sub list_files($$$) {
+    my ($dbh, $host, $csv) = @_;
+    my $sth;
+    if (defined($host) && defined($csv)) {
+        $sth = $dbh->prepare(q{
+            SELECT DISTINCT(col_name) FROM rrds JOIN hosts
+            ON rrds.host_id = hosts.id
+            WHERE zm_hostname = ? AND csv_file = ?
+        });
+        $sth->bind_param(1, $host);
+        $sth->bind_param(2, $csv);
+    } elsif (defined($host)) {
+        $sth = $dbh->prepare(q{
+            SELECT DISTINCT(csv_file) FROM rrds JOIN hosts
+            ON rrds.host_id = hosts.id
+            WHERE zm_hostname = ?
+        });
+        $sth->bind_param(1, $host);
+    } else {
+        $sth = $dbh->prepare("SELECT DISTINCT(csv_file) FROM rrds");
+    }
     $sth->execute;
     die $sth->err if $sth->err;
     my $ref = $sth->fetchall_arrayref([0]);
-    print "Statistics are gathered from the following sources:\n\n";
-    foreach my $file (@$ref) {
-        print "    " . $file->[0] . "\n";
+    foreach my $row (@$ref) {
+        print $row->[0] . "\n";
     }
     exit;
 }
@@ -128,9 +145,8 @@ sub list_hosts($) {
     $sth->execute;
     die $sth->err if $sth->err;
     my $ref = $sth->fetchall_arrayref([0]);
-    print "Statistics are gathered from the following hosts:\n\n";
-    foreach my $host (@$ref) {
-        print "    " . $host->[0] . "\n";
+    foreach my $row (@$ref) {
+        print $row->[0] . "\n";
     }
     exit;
 }
@@ -146,10 +162,10 @@ sub run() {
     my $dbh = DBI->connect(
             "dbi:SQLite:dbname=$logger_directory/logger.sqlitedb", "", "");
 
-    list_files($dbh) if exists $options{l};
+    list_files($dbh, $options{h}, $options{f}) if exists $options{l};
     list_hosts($dbh) if exists $options{n};
 
-    die "-f option is required" if (!exists $options{f});
+    usage() if (!exists $options{f});
 
     $hostid = gethostid($dbh, $options{h}) if (exists $options{h});
     my $structure = getdatastructure($dbh, $filename, $hostid);
@@ -164,6 +180,22 @@ sub run() {
         dump_data($hostid, $structure, $start, $end);
     }
     $dbh->disconnect;
+}
+
+sub usage() {
+    print STDERR <<'EOF';
+
+Usage: zmrrdfetch -f group [-h hostname] [-s time] [-e time] [-l] [-n]
+    -f        - group name to retrieve stats for
+    -h        - hostname to filter returned stats from -f
+    -s        - start time, rrd syntax
+    -e        - end time, rrd syntax
+    -l        - list groups
+                with -h - lists groups for specified host
+                with -h and -f - list columns for specified host
+    -n        - list hostnames
+EOF
+    exit 1;
 }
 
 run();
