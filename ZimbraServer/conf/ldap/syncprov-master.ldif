@@ -55,4 +55,4 @@ olcOverlay: accesslog
 olcAccessLogDB: cn=accesslog
 olcAccessLogOps: writes
 olcAccessLogSuccess: TRUE
-olcAccessLogPurge: 07+00:00  01+00:00
+olcAccessLogPurge: 01+00:00  00+04:00
