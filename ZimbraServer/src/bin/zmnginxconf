@@ -12,6 +12,11 @@ my $fh;
 my %options = undef;
 my $sprefix = "";
 
+if ( !-l "/opt/zimbra/nginx" ) {
+  print "Nginx not installed, exiting\n";
+  exit 1;
+}
+
 sub printusage()
 {
     print STDERR "\n";
