@@ -1,28 +1,21 @@
-/*
- * ***** BEGIN LICENSE BLOCK *****
- * Zimbra Collaboration Suite Web Client
- * Copyright (C) 2008 Zimbra, Inc.
- * 
- * The contents of this file are subject to the Yahoo! Public License
- * Version 1.0 ("License"); you may not use this file except in
- * compliance with the License.  You may obtain a copy of the License at
- * http://www.zimbra.com/license.
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * ***** END LICENSE BLOCK *****
- */
-/*
-Copyright (c) 2007, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-version: 2.3.1
-*/
-/*
-Copyright (c) 2007, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-*/
+<%@ tag body-content="scriptless" %>
+<%@ taglib prefix="zm" uri="com.zimbra.zm" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
+<%@ taglib prefix="app" uri="com.zimbra.htmlclient" %>
+<zm:getMailbox var="mailbox"/>
+    <c:choose>
+    <c:when test="${not empty mailbox.prefs.locale}">
+        <fmt:setLocale value='${mailbox.prefs.locale}' scope='request' />
+    </c:when>
+
+    <c:otherwise>
+        <fmt:setLocale value='${pageContext.request.locale}' scope='request' />
+    </c:otherwise>
+    </c:choose>
+    <fmt:setBundle basename="/messages/ZhMsg" scope='request' />
+<script type="text/javascript">
 function enableSpellCheck(myEditor) {
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
@@ -49,13 +42,13 @@ function enableSpellCheck(myEditor) {
             }
         }
 		if (list) {
-			body.innerHTML = '<strong>Suggestions:</strong><br>';
+			body.innerHTML = '<strong><fmt:message key="spellcheckSuggestionsLabel"/></strong><br>';
 			var ul = document.createElement('ul');
 			ul.className = 'yui-spellcheck-list';
 			body.appendChild(ul);
 			ul.innerHTML = list;
 		} else {
-			body.innerHTML = "No suggestions"
+			body.innerHTML = "<fmt:message key="spellcheckNoSuggestions"/>";
 		}
 
 		Event.on(ul, 'click', function(ev) {
@@ -88,7 +81,7 @@ function enableSpellCheck(myEditor) {
             }
         }, this, true);
 
-        win.setHeader('Spelling Suggestions');
+        win.setHeader('<fmt:message key="spellcheckSpellingSuggestions"/>');
         win.setBody(body);
         this.openWindow(win);
 
@@ -134,10 +127,10 @@ function enableSpellCheck(myEditor) {
         //Change this code to suit your backend checker
         var data = eval('(' + o.responseText + ')');
 		if (!data || !data.available) {
-			alert('The spell checking service is unavailable.');
+			alert('<fmt:message key="spellcheckServiceUnavailableMessage"/>');
 			this.endSpellCheck();
 		} else if (!data.data.length) {
-			alert('No spelling mistakes found.');
+			alert('<fmt:message key="spellcheckNoMistakesFound"/>');
 			this.endSpellCheck();
 		} else {
 			var html = this._getDoc().body.innerHTML;
@@ -210,3 +203,4 @@ function enableSpellCheck(myEditor) {
         }, this, true);
     }, myEditor, true);
 };
+</script>
