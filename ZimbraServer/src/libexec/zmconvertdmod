@@ -41,7 +41,7 @@ if ($id ne "zimbra") {
   exit (1);
 }
 
-if (!isInstalled("zimbra-ldap") || !isInstalled("zimbra-convertd")) {
+if (!isInstalled("zimbra-ldap") && !isInstalled("zimbra-convertd")) {
   print "Can only be run when ldap or convertd are installed\n";
   exit 0;
 }
