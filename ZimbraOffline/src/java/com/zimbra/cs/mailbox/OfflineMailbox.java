@@ -752,7 +752,6 @@ public class OfflineMailbox extends DesktopMailbox {
         try {
             transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
             transport.setTimeout(timeout);
-            transport.setRetryCount(1);
             if (requiresAuth)
                 transport.setAuthToken(getAuthToken());
             transport.setRequestProtocol(SoapProtocol.Soap12);
@@ -792,10 +791,8 @@ public class OfflineMailbox extends DesktopMailbox {
             	mSessionId = transport.getSessionId();
 
             return response;
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw ServiceException.PROXY_ERROR(e, uri);
-        } finally {
-            transport.shutdown();
         }
     }
     
