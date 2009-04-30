@@ -30,6 +30,7 @@ import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.LocalMailbox;
+import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.Message;
@@ -217,7 +218,7 @@ public class OfflineDataSource extends DataSource {
 			return localPath.equalsIgnoreCase("/Inbox");
 		try {
 			Mailbox mbox = getMailbox();
-			Folder folder = mbox.getFolderByPath(new Mailbox.OperationContext(mbox), localPath);
+			Folder folder = mbox.getFolderByPath(new OperationContext(mbox), localPath);
 			if (folder != null)
 				return isSyncEnabled(folder);
             else

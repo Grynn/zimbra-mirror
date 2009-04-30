@@ -33,6 +33,7 @@ import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
+import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.common.util.Pair;
 
 public class OfflineGal {
@@ -51,7 +52,7 @@ public class OfflineGal {
     
     private OfflineAccount mAccount;
     private Mailbox mGalMbox = null;
-    private Mailbox.OperationContext mOpContext = null;
+    private OperationContext mOpContext = null;
     
     public OfflineGal(OfflineAccount account) {
         mAccount = account;
@@ -65,7 +66,7 @@ public class OfflineGal {
         return mGalMbox;
     }
         
-    public Mailbox.OperationContext getOpContext() {
+    public OperationContext getOpContext() {
         return mOpContext;
     }
     
@@ -84,7 +85,7 @@ public class OfflineGal {
        
         byte[] types = new byte[1];
         types[0] = MailItem.TYPE_CONTACT;
-        mOpContext = new Mailbox.OperationContext(mGalMbox);
+        mOpContext = new OperationContext(mGalMbox);
         
         Folder fstFolder = mGalMbox.getFolderById(mOpContext, Mailbox.ID_FOLDER_CONTACTS);
         Folder currFolder = fstFolder;
@@ -166,7 +167,7 @@ public class OfflineGal {
     }
     
     // Return: first  - id of current GAL folder, second - id of previous GAL folder
-    public static Pair<Integer, Integer> getSyncFolders(Mailbox galMbox, Mailbox.OperationContext context) throws ServiceException {
+    public static Pair<Integer, Integer> getSyncFolders(Mailbox galMbox, OperationContext context) throws ServiceException {
         Folder fstFolder = galMbox.getFolderById(context, Mailbox.ID_FOLDER_CONTACTS);
         Folder sndFolder = galMbox.getFolderByPath(context, SECOND_GAL_FOLDER);
         int fstId = fstFolder.getId();

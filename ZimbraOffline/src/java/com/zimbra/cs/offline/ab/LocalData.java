@@ -20,6 +20,7 @@ import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Metadata;
+import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.offline.OfflineLog;
@@ -47,7 +48,7 @@ public final class LocalData {
     private static final String KEY_GAB = "GAB";
     private static final String KEY_YAB = "YAB";
 
-    public static final Mailbox.OperationContext CONTEXT =
+    public static final OperationContext CONTEXT =
         new OfflineMailbox.OfflineContext();
 
     public LocalData(OfflineDataSource ds) throws ServiceException {

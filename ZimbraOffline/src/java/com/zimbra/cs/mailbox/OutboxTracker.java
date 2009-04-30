@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 
 class OutboxTracker {
 	

@@ -55,7 +55,7 @@ public class GalSync {
         private boolean fullSync;
         private boolean trace;        
         private Mailbox galMbox;
-        private Mailbox.OperationContext context;
+        private OperationContext context;
         private Exception exception = null;       
         private String token = null;
         private int syncFolder;
@@ -94,7 +94,7 @@ public class GalSync {
 
             try {
                 galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
-                context = new Mailbox.OperationContext(galMbox);
+                context = new OperationContext(galMbox);
                 Pair<Integer, Integer> pair = OfflineGal.getSyncFolders(galMbox, context);
                 if (fullSync) {
                     OfflineLog.offline.debug("Offline GAL full sync requested: " + galAccount.getName());
@@ -279,7 +279,7 @@ public class GalSync {
         
         // ensure second alternating contact folder is created as well
         Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAcct.getId(), false);
-        Mailbox.OperationContext octxt = new Mailbox.OperationContext(galMbox);
+        OperationContext octxt = new OperationContext(galMbox);
         try {
             galMbox.getFolderByPath(octxt, OfflineGal.SECOND_GAL_FOLDER);
         } catch (MailServiceException.NoSuchItemException e) {
@@ -329,7 +329,7 @@ public class GalSync {
         prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountSyncToken, token);
         if (fullSync) {
             Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
-            Mailbox.OperationContext octxt = new Mailbox.OperationContext(galMbox);
+            OperationContext octxt = new OperationContext(galMbox);
             galMbox.emptyFolder(octxt, handler.getDropFolder(), false);
                 
             prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastFullSync,
