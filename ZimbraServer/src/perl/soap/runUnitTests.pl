@@ -46,7 +46,10 @@ END_OF_USAGE
     die $usage;
 }
 
-my $z = ZimbraSoapTest->new($user, $host, $pw);
+my %soapargs;
+$soapargs{'TIMEOUT'} = 10 * 60;
+
+my $z = ZimbraSoapTest->new($user, $host, $pw, \%soapargs);
 $z->doAdminAuth();
 
 my $d = new XmlDoc;

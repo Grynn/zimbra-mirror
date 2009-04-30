@@ -65,6 +65,9 @@ public class DbOfflineMigration {
             case 61:
                 migrateFromVersion61(conn, isTestRun);
                 break;
+            case 62:
+                migrateFromVersion62(conn, isTestRun);
+                break;
             default:
             	throw new DbUnsupportedVersionException();
             }
@@ -394,6 +397,29 @@ public class DbOfflineMigration {
             	conn.commit();
         }
 	}
+	
+    private void migrateFromVersion62(Connection conn, boolean isTestRun) throws Exception {
+        PreparedStatement stmt = null;
+        boolean isSuccess = false;
+        try {
+            stmt = conn.prepareStatement("ALTER TABLE zimbra.mailbox ADD COLUMN highest_index VARCHAR(21)");
+            stmt.executeUpdate();
+            stmt.close();
+           
+            stmt = conn.prepareStatement("UPDATE zimbra.config set value='63' where name='db.version'");
+            stmt.executeUpdate();
+            stmt.close();
+            
+            isSuccess = true;
+        } finally {
+            DbPool.closeStatement(stmt);
+            if (isTestRun || !isSuccess)
+                conn.rollback();
+            else
+                conn.commit();
+        }
+    }
+    
 		
 	public static void main(String[] args) throws Exception {
 		System.setProperty("zimbra.config", "/opt/zimbra/zdesktop dev/conf/localconfig.xml");

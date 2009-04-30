@@ -79,6 +79,7 @@ CREATE TABLE mailbox (
    last_soap_access   INTEGER NOT NULL DEFAULT 0,
    new_messages       INTEGER NOT NULL DEFAULT 0,
    idx_deferred_count INTEGER NOT NULL DEFAULT 0,
+   highest_indexed     VARCHAR(21), -- mod_content of highest item in the index
 
    CONSTRAINT pk_mailbox PRIMARY KEY (id),
    CONSTRAINT ui_mailbox_account_id UNIQUE (account_id),

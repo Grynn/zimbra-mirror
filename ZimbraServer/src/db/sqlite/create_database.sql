@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mailbox (
    tracking_imap       BOOLEAN NOT NULL DEFAULT 0,
    last_soap_access    INTEGER UNSIGNED NOT NULL DEFAULT 0,
    new_messages        INTEGER UNSIGNED NOT NULL DEFAULT 0,
-   idx_deferred_count  INTEGER UNSIGNED NOT NULL DEFAULT 0
+   idx_deferred_count  INTEGER UNSIGNED NOT NULL DEFAULT 0,
+   highest_indexed     VARCHAR(21) -- mod_content of highest item in the index
 )%
 
 -- -----------------------------------------------------------------------
