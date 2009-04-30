@@ -83,6 +83,8 @@ PERL_LIBS 	:= \
 	D/DO/DONEILL/MIME-tools-5.427.tar.gz \
 	SOAP::Lite \
 	Net::Telnet \
+	Config::IniFiles \
+	Cache::FastMmap \
 	Device::SerialPort \
 	Date::Calc \
 	Date::Manip \
