@@ -52,6 +52,7 @@ public class XmailBean extends MailBean {
     private static final String adomain = "aol.com";
     private static final String gdomain = "gmail.com";
     private static final String hdomain = "hotmail.com";
+    private static final String ldomain = "live.com";
     private static final String mdomain = "msn.com";
     private static final String ydomain = "yahoo.com";
     private static final String yjpdomain = "yahoo.co.jp";
@@ -251,7 +252,7 @@ public class XmailBean extends MailBean {
                         setError(getMessage("AOLMustUseImap"));
                     }
                 } else if (email.endsWith('@' + hdomain) ||
-                    email.endsWith('@' + mdomain)) {
+                    email.endsWith('@' + mdomain) || email.endsWith('@' + mdomain)) {
                     if (dsType == DataSource.Type.live || dsType == DataSource.Type.pop3) {
                         dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain,
                             hdomain);
