@@ -104,6 +104,8 @@
                 <include name="gdata-core-*.jar"/>
                 <include name="gdata-client-*.jar"/>
                 <include name="gdata-contacts-*.jar"/>
+	        <include name="google-collect-*.jar"/>
+                <include name="jsr305.jar"/>
         </fileset>
 
 	<path id="all.java.path">
