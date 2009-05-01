@@ -51,7 +51,8 @@ my %SIMPLE_COMMANDS = (
    "zmqstat deferred" => "sudo /opt/zimbra/libexec/zmqstat deferred",
    "zmqstat corrupt"  => "sudo /opt/zimbra/libexec/zmqstat corrupt",
    "zmcollectconfigfiles" => "tar cv /opt/zimbra/conf | gzip -cf",
-   "zmcollectldapzimbra" => "/opt/zimbra/openldap/sbin/slapcat -F /opt/zimbra/data/ldap/config -b '' -s cn=zimbra | gzip -cf",      
+   "zmcollectldapzimbra" => "/opt/zimbra/openldap/sbin/slapcat -F /opt/zimbra/data/ldap/config -b '' -s cn=zimbra | gzip -cf",
+   "zmschedulebackup" => "/opt/zimbra/bin/zmschedulebackup"      
 );
 
 my %REGEX_CHECKED_COMMANDS = (
