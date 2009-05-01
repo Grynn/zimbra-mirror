@@ -20,7 +20,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.28";
+my $version = "1.30";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -63,7 +63,7 @@ my $DAILY = 1,
 my $WEEKLY = 7,
 my $BIWEEKLY=14,
 my $MONTHLY=28,
-my $MATCHPC=90,
+my $MATCHPC=100,
 
 #default values
 #set 1 to delete RDATEs else 0 for no delete
@@ -948,7 +948,7 @@ sub processfile
                     
                     #check for if master date time is equal to rdate time component
                     my $rsttime= $sdt;
-                    if (!istime_equal(get_offset_datetime($msttime),get_offset_datetime($sdt)))
+                    if (!istime_equal(($msttime),($sdt)))
                     {
                       $isrdtimeok = 0;
                       $ltd_exlist{$rsdt}=0;
@@ -1038,7 +1038,7 @@ sub processfile
                   $ltd_exlist{$rndt}=1;
                 }
                 #check for if master date time is equal to rdate time component
-                if (!istime_equal(get_offset_datetime($msttime),get_offset_datetime($ndt)))
+                if (!istime_equal(($msttime),($ndt)))
                 {
                   $isrdtimeok = 0;
                   $ltd_exlist{$rndt}=0;
@@ -1852,12 +1852,15 @@ sub get_monthly_rrule
     my %mthwknumlist=();
     my %mnth_wknum_wkdayhash=();
     my %wknum_wkdayhash=();
+    my $yr= 0;
+    my $mm= 0;
+    my $dt= 0;
     foreach my $yrmonthdate (sort keys %yrmonthdates)
     {
-      my $yr= substr($yrmonthdate,0,4);
-      my $mm= substr($yrmonthdate,4,2);
-      my $dt= substr($yrmonthdate,6,2);
-
+      $yr= substr($yrmonthdate,0,4);
+      $mm= substr($yrmonthdate,4,2);
+      $dt= substr($yrmonthdate,6,2);
+      
       #for year end checking
       if ($mm < $prvmm)
       {
@@ -1868,11 +1871,6 @@ sub get_monthly_rrule
         }
         $prvyr = $prvyr+1;
         $prvmm = 1;
-      }
-      else
-      {
-        $prvyr = $yr;
-        $prvmm = $mm;
       }
       
       if (($prvyr ne 0)&&($continue))
@@ -1922,6 +1920,10 @@ sub get_monthly_rrule
           &log_message("year-mm: $yr,$mm Weeknum: $wknum");
         }#end else
       }#end if ($prvyr...)
+
+      #set prev params
+      $prvyr = $yr;
+      $prvmm = $mm;
     }#end foreach my $yrmonthdate
 
     my $fwkn_wkd_hashref;
@@ -1972,9 +1974,24 @@ sub get_monthly_rrule
               {
                 $continue =0;
               }
+              
               if (exists $fwkn_wkd_hashref->{$wkn})
               {
-                if ($fwkn_wkd_hashref->{$wkn} !=$swkn_wkd_hashref->{$wkn})
+                foreach my $iwkn (keys %$swkn_wkd_hashref)
+                {
+                  if(($wkn % 7) == ($iwkn % 7))
+                  {
+                    if ($fwkn_wkd_hashref->{$wkn} == $swkn_wkd_hashref->{$iwkn})
+                    {
+                      $continue = 2;
+                    }
+                  }
+                }
+                if ($continue == 2)
+                {
+                  $continue =1;
+                }
+                else
                 {
                   $continue =0;
                 }
@@ -2847,7 +2864,7 @@ sub Get_TZoffset
   }
   else #else check date for STANDARD or DAYLIGHT time segment
   {
-    my $dt=get_date($iicsdt);
+    my $dt=$iicsdt;#get_date($iicsdt);
     my $stdbd=$iTzRec->{'STDBYDAY'};
     my $stdbm=$iTzRec->{'STDBYMONTH'};
     my $yr=get_year($dt);
@@ -2859,7 +2876,9 @@ sub Get_TZoffset
     my $dylbm=$iTzRec->{'DYLBYMONTH'};
     my $dyldt= Get_Date_By_Weekday_Month_Year($dylbd,$dylbm,$yr);
     #&log_message("$dyldt");
-    if(IsDateInSTANDARDTZRange($stddt,$dyldt,$dt))
+    
+    my $std_offset= $iTzRec->{'STDTZOFFSETTO'};
+    if(IsDateInSTANDARDTZRange($stddt,$dyldt,$dt,$std_offset))
     {
       #STANDARD TZ
       $tzoffset= $iTzRec->{'STDTZOFFSETTO'};
@@ -2887,7 +2906,8 @@ sub Get_TZoffset
 }
 
 #find if dates are in given range
-#Input date1, date2, date to test
+#Input date1, date2, date to test and standard TZ offset to test if local date
+  #doesnt move to previous TZ after adjustment
 #date can be in format of icsdt e.g. 20080402T120000, 20080903
 #returns 1 if in range or 0 if not in range
 sub IsDateInSTANDARDTZRange
@@ -2896,6 +2916,11 @@ sub IsDateInSTANDARDTZRange
   my $stddt=shift;
   my $dyldt=shift;
   my $ms_date=shift;
+  my $std_offset=shift;
+  #adjust date to see if it doesnt move back to another TimeZone
+  #e.g. 1st day of daylight can move back to last day of standard
+  #after applying offset
+  $ms_date = get_DeltaDHMS($ms_date,$std_offset);
 
   my $sdt = substr($stddt,6,2);
   my $smth= substr($stddt,4,2);
