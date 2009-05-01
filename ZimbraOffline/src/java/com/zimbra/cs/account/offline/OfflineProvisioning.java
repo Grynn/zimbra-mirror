@@ -577,8 +577,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	DataSourceManager.test(ds);
     	} catch (ServiceException x) {
         	Throwable t = SystemUtil.getInnermostException(x);
+            if (x instanceof RemoteServiceException)
+            	throw x;
             if (t instanceof LoginException)
-            	throw RemoteServiceException.AUTH_FAILURE(t.getMessage(), t);
+                throw RemoteServiceException.AUTH_FAILURE(t.getMessage(), t);
             if (t instanceof AuthenticationException)
             	throw (AuthenticationException)t;
             if (t instanceof com.google.gdata.util.ServiceException)
