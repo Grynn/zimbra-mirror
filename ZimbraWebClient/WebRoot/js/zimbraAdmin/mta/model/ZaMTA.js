@@ -155,6 +155,7 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 ZaMTA.getAll = function () {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", ZaZimbraAdmin.URN, null);	
 	soapDoc.getMethod().setAttribute("service", "mta");
+	soapDoc.getMethod().setAttribute("applyConfig", "false");
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.asyncMode=false;

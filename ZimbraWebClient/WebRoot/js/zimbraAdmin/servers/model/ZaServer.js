@@ -424,6 +424,7 @@ ZaServer.prototype.toString = function() {
 ZaServer.getAll =
 function() {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", ZaZimbraAdmin.URN, null);	
+	soapDoc.getMethod().setAttribute("applyConfig", "false");
 //	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;
@@ -643,6 +644,7 @@ function(by, val) {
 	var soapDoc = AjxSoapDoc.create("GetServerRequest", ZaZimbraAdmin.URN, null);
 	var elBy = soapDoc.set("server", _val);
 	elBy.setAttribute("by", _by);
+	soapDoc.getMethod().setAttribute("applyConfig", "false");
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	

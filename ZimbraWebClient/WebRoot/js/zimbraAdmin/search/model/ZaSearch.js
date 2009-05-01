@@ -139,7 +139,15 @@ function (params) {
 
 	if(params.applyCos)	
 		soapDoc.getMethod().setAttribute("applyCos", params.applyCos);
+	else 
+		soapDoc.getMethod().setAttribute("applyCos", false);
+		
 	
+	if(params.applyConfig)
+		soapDoc.getMethod().setAttribute("applyConfig", params.applyConfig);
+	else
+		soapDoc.getMethod().setAttribute("applyConfig", "false");
+		
 	if(params.domain)  {
 		soapDoc.getMethod().setAttribute("domain", params.domain);
         ZaSearch._domain = params.domain;

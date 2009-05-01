@@ -1240,6 +1240,7 @@ function(by, val) {
 		}*/];
 
 	var soapDoc = AjxSoapDoc.create("GetDomainRequest", ZaZimbraAdmin.URN, null);
+	soapDoc.getMethod().setAttribute("applyConfig", "false");
 	var elBy = soapDoc.set("domain", val);
 	elBy.setAttribute("by", by);
 	//var getDomainCommand = new ZmCsfeCommand();
