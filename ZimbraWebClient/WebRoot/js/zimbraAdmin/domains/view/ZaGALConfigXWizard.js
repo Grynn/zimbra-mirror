@@ -42,6 +42,17 @@ ZaGALConfigXWizard = function(parent) {
 		{label:ZaMsg.GALServerType_ldap, value:ZaDomain.GAL_ServerType_ldap},
 		{label:ZaMsg.GALServerType_ad, value:ZaDomain.GAL_ServerType_ad} 
 	];
+	this.TAB_INDEX = 0;
+	
+	ZaGALConfigXWizard.GALMODE_STEP = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.GAL_CONFIG_STEP_1 = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.GAL_CONFIG_STEP_2 = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1 = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_2 = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.GAL_TEST_STEP = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.GAL_TEST_RESULT_STEP = ++this.TAB_INDEX;
+		
 	this.initForm(ZaDomain.myXModel,this.getMyXForm());		
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaGALConfigXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaGALConfigXWizard.prototype.handleXFormChange));	
@@ -54,14 +65,7 @@ ZaGALConfigXWizard.prototype = new ZaXWizardDialog;
 ZaGALConfigXWizard.prototype.constructor = ZaGALConfigXWizard;
 ZaXDialog.XFormModifiers["ZaGALConfigXWizard"] = new Array();
 
-ZaGALConfigXWizard.GALMODE_STEP = 1;
-ZaGALConfigXWizard.GAL_CONFIG_STEP_1 = 2;
-ZaGALConfigXWizard.GAL_CONFIG_STEP_2 = 3;
-ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1 = 4;
-ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_2 = 5;
-ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP = 6;
-ZaGALConfigXWizard.GAL_TEST_STEP = 7;
-ZaGALConfigXWizard.GAL_TEST_RESULT_STEP = 8;
+
 
 
 ZaGALConfigXWizard.prototype.handleXFormChange = 

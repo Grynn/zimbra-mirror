@@ -1008,7 +1008,7 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
         if (tabBar && switchGroup) {
 
             if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_ACCT_LIMIT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-                var tabIx = tabBar.choices.length + 1;
+                var tabIx = ++this.TAB_INDEX;
                 tabBar.choices.push({value:tabIx, label: com_zimbra_delegatedadmin.TT_account_limits}) ;
 
                 var caseItem =

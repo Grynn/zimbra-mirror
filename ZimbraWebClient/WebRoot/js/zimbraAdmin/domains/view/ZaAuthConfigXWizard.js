@@ -51,6 +51,15 @@ ZaAuthConfigXWizard = function(parent) {
 		{label:ZaMsg.AuthTest_check_INVALID_SEARCH_FILTER, value:ZaDomain.Check_INVALID_SEARCH_FILTER},
 		{label:ZaMsg.AuthTest_check_FAILURE, value:ZaDomain.Check_FAILURE}												
 	];
+	this.TAB_INDEX = 0;	
+
+	ZaAuthConfigXWizard.AUTH_MODE_STEP = ++this.TAB_INDEX;
+	ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1 = ++this.TAB_INDEX;
+	ZaAuthConfigXWizard.AUTH_CONFIG_STEP_2 = ++this.TAB_INDEX;
+	ZaAuthConfigXWizard.AUTH_CONFIG_STEP_3 = ++this.TAB_INDEX;
+	ZaAuthConfigXWizard.AUTH_TEST_STEP = ++this.TAB_INDEX;
+	ZaAuthConfigXWizard.AUTH_TEST_RESULT_STEP = ++this.TAB_INDEX;
+		
 	this.initForm(ZaDomain.myXModel,this.getMyXForm());		
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaAuthConfigXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaAuthConfigXWizard.prototype.handleXFormChange));	
@@ -62,12 +71,6 @@ ZaAuthConfigXWizard.prototype = new ZaXWizardDialog;
 ZaAuthConfigXWizard.prototype.constructor = ZaAuthConfigXWizard;
 ZaXDialog.XFormModifiers["ZaAuthConfigXWizard"] = new Array();
 
-ZaAuthConfigXWizard.AUTH_MODE_STEP = 1;
-ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1 = 2;
-ZaAuthConfigXWizard.AUTH_CONFIG_STEP_2 = 3;
-ZaAuthConfigXWizard.AUTH_CONFIG_STEP_3 = 4;
-ZaAuthConfigXWizard.AUTH_TEST_STEP = 5;
-ZaAuthConfigXWizard.AUTH_TEST_RESULT_STEP = 6;
 
 ZaAuthConfigXWizard.prototype.handleXFormChange = 
 function () {

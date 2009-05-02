@@ -24,13 +24,17 @@
 ZaNewResourceXWizard = function(parent) {
 	ZaXWizardDialog.call(this, parent,null, ZaMsg.NCD_NewResTitle, "700px", "300px","ZaNewResourceXWizard");
 	
-	this.stepChoices = [
-		{label:ZaMsg.TABT_ResourceProperties, value:1},
-		{label:ZaMsg.TABT_ResLocationContact, value:2}
-	];
-	
-	this._lastStep = this.stepChoices.length;
 
+
+	this.TAB_INDEX = 0;
+	ZaNewResourceXWizard.step1 = ++this.TAB_INDEX;
+	ZaNewResourceXWizard.step2 = ++this.TAB_INDEX;
+	
+	this.stepChoices = [
+		{label:ZaMsg.TABT_ResourceProperties, value:ZaNewResourceXWizard.step1},
+		{label:ZaMsg.TABT_ResLocationContact, value:ZaNewResourceXWizard.step2}
+	];
+	this._lastStep = this.stepChoices.length;	
 	this.initForm(ZaResource.myXModel,this.getMyXForm());	
    
 	this._localXForm.setController(ZaApp.getInstance());	
@@ -219,7 +223,7 @@ function(value, event, form) {
     return value;
 }
 
-ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {	
+ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 	var domainName;
 	/*if(ZaSettings.DOMAINS_ENABLED && ZaApp.getInstance().getDomainList().size() > 0)
 		domainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
@@ -375,7 +379,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 			{ref:ZaResource.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes, labelLocation:_LEFT_}
 		]
 	};
-	var case1 = {type:_CASE_, numCols:1, caseKey:1, align:_LEFT_, valign:_TOP_,
+	var case1 = {type:_CASE_, numCols:1, caseKey:ZaNewResourceXWizard.step1, align:_LEFT_, valign:_TOP_,
 		items:[nameGroup,setupGroup,passwordGroup,notesGroup]
 	
 	};	
@@ -383,8 +387,9 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 
 	cases.push(case1);
 
+		
 	var defaultWidth = 250;	
-	var case2={type:_CASE_, numCols:1,  caseKey:2,
+	var case2={type:_CASE_, numCols:1,  caseKey:ZaNewResourceXWizard.step2,
 					items: [
 					   {type:_ZAWIZGROUP_, 
 							items:[

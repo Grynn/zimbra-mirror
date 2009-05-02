@@ -23,13 +23,14 @@
 **/
 ZaZimletXFormView = function(parent) {
 	ZaTabView.call(this, parent,"ZaZimletXFormView");	
+	this.TAB_INDEX = 0;	
 	this.initForm(ZaZimlet.myXModel,this.getMyXForm());
 }
 
 ZaZimletXFormView.prototype = new ZaTabView();
 ZaZimletXFormView.prototype.constructor = ZaZimletXFormView;
 ZaTabView.XFormModifiers["ZaZimletXFormView"] = new Array();
-ZaZimletXFormView.TAB_INDEX=0;
+
 
 /**
 * Sets the object contained in the view

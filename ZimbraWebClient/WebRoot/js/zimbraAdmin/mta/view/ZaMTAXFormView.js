@@ -22,7 +22,14 @@
 **/
 ZaMTAXFormView = function(parent) {
 	ZaTabView.call(this, parent, "ZaMTAXFormView");	
-		
+
+	this.TAB_INDEX = 0;
+	ZaMTAXFormView._tab1 = ++this.TAB_INDEX;
+	ZaMTAXFormView._tab2 = ++this.TAB_INDEX;	
+	ZaMTAXFormView._tab3 = ++this.TAB_INDEX;	
+	ZaMTAXFormView._tab4 = ++this.TAB_INDEX;	
+	ZaMTAXFormView._tab5 = ++this.TAB_INDEX;	
+			
 	this.initForm(ZaMTA.myXModel,this.getMyXForm());
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaMTAXFormView.prototype.handleXFormChange));	
 	this._localXForm.setController(ZaApp.getInstance());
@@ -31,12 +38,7 @@ ZaMTAXFormView = function(parent) {
 ZaMTAXFormView.prototype = new ZaTabView();
 ZaMTAXFormView.prototype.constructor = ZaMTAXFormView;
 ZaTabView.XFormModifiers["ZaMTAXFormView"] = new Array();
-ZaMTAXFormView.TAB_INDEX=1;
-	ZaMTAXFormView._tab1 = ZaMTAXFormView.TAB_INDEX++;
-	ZaMTAXFormView._tab2 = ZaMTAXFormView.TAB_INDEX++;	
-	ZaMTAXFormView._tab3 = ZaMTAXFormView.TAB_INDEX++;	
-	ZaMTAXFormView._tab4 = ZaMTAXFormView.TAB_INDEX++;	
-	ZaMTAXFormView._tab5 = ZaMTAXFormView.TAB_INDEX++;	
+
 
 ZaMTAXFormView.tabChoices = new XFormChoices([{value:ZaMTAXFormView._tab1, label:ZaMsg.PQV_Tab_Deferred},
 				{value:ZaMTAXFormView._tab2, label:ZaMsg.PQV_Tab_IncomingQ},

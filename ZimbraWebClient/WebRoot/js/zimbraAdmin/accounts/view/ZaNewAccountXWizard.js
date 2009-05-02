@@ -77,7 +77,18 @@ ZaNewAccountXWizard = function(parent) {
 	}
 	this._lastStep = this.stepChoices.length;
 	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
-
+	this.TAB_INDEX = 0;	
+	
+	ZaNewAccountXWizard.GENERAL_STEP = ++this.TAB_INDEX;
+	ZaNewAccountXWizard.CONTACT_STEP = ++this.TAB_INDEX;
+	ZaNewAccountXWizard.ALIASES_STEP = ++this.TAB_INDEX;
+	ZaNewAccountXWizard.FORWARDING_STEP = ++this.TAB_INDEX;
+	ZaNewAccountXWizard.FEATURES_STEP = ++this.TAB_INDEX;
+	ZaNewAccountXWizard.PREFS_STEP = ++this.TAB_INDEX;
+	ZaNewAccountXWizard.SKINS_STEP = ++this.TAB_INDEX;
+	ZaNewAccountXWizard.ZIMLETS_STEP = ++this.TAB_INDEX;
+	ZaNewAccountXWizard.ADVANCED_STEP = ++this.TAB_INDEX;
+		
 	this.initForm(ZaAccount.myXModel,this.getMyXForm());	
 //    DBG.timePt(AjxDebug.PERF, "finished initForm");
    
@@ -88,15 +99,7 @@ ZaNewAccountXWizard = function(parent) {
 	
 	this._domains = {} ;
 }
-ZaNewAccountXWizard.GENERAL_STEP = 1;
-ZaNewAccountXWizard.CONTACT_STEP = 2;
-ZaNewAccountXWizard.ALIASES_STEP = 3;
-ZaNewAccountXWizard.FORWARDING_STEP = 4;
-ZaNewAccountXWizard.FEATURES_STEP = 5;
-ZaNewAccountXWizard.PREFS_STEP = 6;
-ZaNewAccountXWizard.SKINS_STEP = 7;
-ZaNewAccountXWizard.ZIMLETS_STEP = 8;
-ZaNewAccountXWizard.ADVANCED_STEP = 9;
+
 
 ZaNewAccountXWizard.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 ZaNewAccountXWizard.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);

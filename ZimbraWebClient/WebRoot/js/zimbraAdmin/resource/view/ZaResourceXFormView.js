@@ -23,7 +23,7 @@
 **/
 ZaResourceXFormView = function(parent) {
 	ZaTabView.call(this, parent,"ZaResourceXFormView");	
-		
+	this.TAB_INDEX = 0;		
 	this.initForm(ZaResource.myXModel,this.getMyXForm());
 	this._localXForm.setController(ZaApp.getInstance());	
 	this._helpURL = ZaResourceXFormView.helpURL;	
@@ -147,8 +147,8 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 						getDisplayValue: ZaResource.getResTypeLabel,visibilityChecks:[ZaItem.hasReadPermission] });	
 
 	var tabChoices = new Array();
-	var _tab1 = 1;
-	var _tab2 = 2;				
+	var _tab1 = ++this.TAB_INDEX;
+	var _tab2 = ++this.TAB_INDEX;	
 	
 //	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_PROPERTIES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
         tabChoices.push({value:_tab1, label:ZaMsg.TABT_ResourceProperties});

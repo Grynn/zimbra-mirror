@@ -29,7 +29,7 @@ ZaDomainNotebookXWizard = function(parent, w, h) {
 		{label:ZaMsg.TABT_Domain_AdvancedAcl, value:3},					
 		{label:ZaMsg.TABT_NotebookConfigComplete, value:4}		
 	];
-
+	this.TAB_INDEX = 0;	
 	this.initForm(ZaDomain.myXModel,this.getMyXForm());		
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaDomainNotebookXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaDomainNotebookXWizard.prototype.handleXFormChange));	
@@ -157,20 +157,25 @@ function() {
 }
 
 ZaDomainNotebookXWizard.myXFormModifier = function(xFormObject) {
+	var _tab1 = ++this.TAB_INDEX;
+	var _tab2 = ++this.TAB_INDEX;
+	var _tab3 = ++this.TAB_INDEX;	
+	var _tab4 = ++this.TAB_INDEX;
+	
 	xFormObject.items = [
 		{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep]},
 		{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},		
 		{type: _SWITCH_,width:500,
 			items: [
-				{type:_CASE_,caseKey:1,
+				{type:_CASE_,caseKey:_tab1,
 					items: [
 						{ref:ZaDomain.A_zimbraNotebookAccount, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_,visibilityChecks:[],enableDisableChecks:[]},						
 						{ref:ZaDomain.A_NotebookAccountPassword, type:_SECRET_, label:ZaMsg.Domain_NotebookAccountPassword, labelLocation:_LEFT_,visibilityChecks:[],enableDisableChecks:[]},
 						{ref:ZaDomain.A_NotebookAccountPassword2, type:_SECRET_, label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_,visibilityChecks:[],enableDisableChecks:[]}
 					]
 				},
-				{type:_CASE_, caseKey:2,
+				{type:_CASE_, caseKey:_tab2,
 				   items:[								
 						{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.ACL_Dom+":",labelLocation:_LEFT_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
@@ -188,7 +193,7 @@ ZaDomainNotebookXWizard.myXFormModifier = function(xFormObject) {
 						}
 					]
 				},
-				{type:_CASE_, caseKey:3,
+				{type:_CASE_, caseKey:_tab3,
 				   items:[	
 						{type:_ZAWIZ_TOP_GROUPER_, numCols:1,colSpan:2,label:ZaMsg.Domain_PerGrp_Acl,							
 							items:[
@@ -242,7 +247,7 @@ ZaDomainNotebookXWizard.myXFormModifier = function(xFormObject) {
 						}							
 				   ]
 				},
-				{type:_CASE_, caseKey:4,
+				{type:_CASE_, caseKey:_tab4,
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.Domain_Documents_Config_Complete,visibilityChecks:[],enableDisableChecks:[]}
 					]

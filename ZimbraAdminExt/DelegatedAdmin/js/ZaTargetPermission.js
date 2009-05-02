@@ -271,7 +271,7 @@ ZaTargetPermission.targetXFormModifier = function (xFormObject) {
         if (!uiEnabled) return ;
     }
    
-    var tabBar, switchGroup ;
+    var tabIx, tabBar, switchGroup ;
     for (var i=0; i < xFormObject.items.length; i ++) {
         if (xFormObject.items[i].type == _TAB_BAR_) {
             tabBar = xFormObject.items[i] ;
@@ -283,7 +283,7 @@ ZaTargetPermission.targetXFormModifier = function (xFormObject) {
     }
 
     if (tabBar && switchGroup) {
-        var tabIx = tabBar.choices.length + 1;
+        tabIx = ++this.TAB_INDEX;
         tabBar.choices.push({value:tabIx, label: com_zimbra_delegatedadmin.Tab_permission}) ;
     }
 
