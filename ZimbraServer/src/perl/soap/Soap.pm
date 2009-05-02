@@ -250,7 +250,7 @@ sub doAuthByName {
   $d->start('AuthRequest', $namespace);
   {
     $d->add('account', undef, { by => "name"}, $acctName);
-    $d->add('name', undef, undef, $acctName);
+#    $d->add('name', undef, undef, $acctName);
     $d->add('password', undef, undef, $passwd);
     
   } $d->end();
