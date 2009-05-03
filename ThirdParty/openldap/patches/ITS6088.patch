@@ -1,11 +1,5 @@
-Index: cache.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/cache.c,v
-retrieving revision 1.200
-retrieving revision 1.202
-diff -u -p -r1.200 -r1.202
---- cache.c	1 May 2009 02:36:39 -0000	1.200
-+++ cache.c	2 May 2009 22:47:25 -0000	1.202
+--- openldap-2.4.16/servers/slapd/back-bdb/cache.c	1 May 2009 02:36:39 -0000	1.200
++++ openldap-2.4.16/servers/slapd/back-bdb/cache.c	2 May 2009 22:47:25 -0000	1.202
 @@ -64,6 +64,7 @@ bdb_cache_entryinfo_new( Cache *cache )
  			ei = cache->c_eifree;
  			cache->c_eifree = ei->bei_lrunext;

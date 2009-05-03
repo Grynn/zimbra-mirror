@@ -1,11 +1,5 @@
-Index: cache.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/cache.c,v
-retrieving revision 1.199
-retrieving revision 1.200
-diff -u -p -r1.199 -r1.200
---- cache.c	19 Mar 2009 05:06:37 -0000	1.199
-+++ cache.c	1 May 2009 02:36:39 -0000	1.200
+--- openldap-2.4.16/servers/slapd/back-bdb/cache.c	19 Mar 2009 05:06:37 -0000	1.199
++++ openldap-2.4.16/servers/slapd/back-bdb/cache.c	1 May 2009 02:36:39 -0000	1.200
 @@ -1345,6 +1345,9 @@ bdb_cache_delete_cleanup(
  {
  	/* Enter with ei locked */

@@ -1,5 +1,5 @@
---- openldap-2.3.39/servers/slapd/back-bdb/filterindex.c.orig	2007-11-10 14:24:33.000000000 -0800
-+++ openldap-2.3.39/servers/slapd/back-bdb/filterindex.c	2007-11-10 14:25:30.000000000 -0800
+--- openldap-2.4.16/servers/slapd/back-bdb/filterindex.c.orig	2007-11-10 14:24:33.000000000 -0800
++++ openldap-2.4.16/servers/slapd/back-bdb/filterindex.c	2007-11-10 14:25:30.000000000 -0800
 @@ -640,7 +640,7 @@
  		&db, &mask, &prefix );
  
