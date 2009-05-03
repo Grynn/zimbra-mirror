@@ -31,7 +31,6 @@ import com.zimbra.common.util.Log;
 import com.zimbra.common.service.ServiceException;
 import com.google.gdata.client.http.HttpGDataRequest;
 import com.google.gdata.data.contacts.ContactEntry;
-import com.google.gdata.data.contacts.ContactFeed;
 import com.google.gdata.data.contacts.GroupMembershipInfo;
 import com.google.gdata.data.contacts.ContactGroupEntry;
 import com.google.gdata.data.contacts.ContactGroupFeed;
@@ -107,27 +106,38 @@ public class SyncSession {
         }
         // Get remote changes since last sync
         String rev = state.getLastRevision();
-        DateTime lastSyncTime = rev != null ? DateTime.parseDateTime(rev) : null;
-        ContactFeed contacts = service.getContacts(lastSyncTime, null);
-        Map<String, Attachment> photos = getContactPhotos(contacts.getEntries());
-        DateTime updated = contacts.getUpdated();
-        ContactGroupFeed groups = service.getGroups(null, updated);
-        state.setLastRevision(updated.toString());
+        DateTime lastRev = rev != null ? DateTime.parseDateTime(rev) : null;
+        List<ContactEntry> contacts = service.getContacts(lastRev, null).getEntries();
+        // Check for contact changes
+        Map<String, Attachment> photos = null;
+        ContactGroupFeed groups = null;
+        if (!contacts.isEmpty()) {
+            photos = getContactPhotos(contacts);
+            lastRev = new DateTime(getLastUpdated(contacts) + 1);
+            state.setLastRevision(lastRev.toString());
+            groups = service.getGroups(null, lastRev);
+        } else {
+            LOG.debug("Found %d remote contact change(s)", contacts.size());
+        }
         List<SyncRequest> contactRequests;
         int seq = state.getLastModSequence();
         synchronized (mbox) {
             // Get local changes since last sync (none if resetting)
             Map<Integer, Change> contactChanges = reset ?
                 new HashMap<Integer, Change>() : localData.getContactChanges(seq);
-            // Process remote contact changes
-            processRemoteChanges(contacts.getEntries(), contactChanges, photos);
+            // Process any remote contact changes
+            if (!contacts.isEmpty()) {
+                processRemoteChanges(contacts, contactChanges, photos);
+            }
             // Process local changes and determine changes to push
             contactRequests = processLocalChanges(contactChanges.values());
-            // Update local contact group changes
-            processGroups(groups.getEntries());
+            // Process remote group changes
+            if (groups != null) {
+                processGroups(groups.getEntries());
+            }
             // If resetting, then remove local contacts deleted remotely
             if (reset) {
-                localData.deleteMissingContacts(getRemoteIds(contacts.getEntries()));
+                localData.deleteMissingContacts(getRemoteIds(contacts));
             }
             state.setLastModSequence(mbox.getLastChangeID());
         }
@@ -140,6 +150,17 @@ public class SyncSession {
         localData.saveState(state);
     }
 
+    private static long getLastUpdated(List<ContactEntry> contacts) {
+        long updated = 0;
+        for (ContactEntry contact : contacts) {
+            long time = contact .getUpdated().getValue();
+            if (time > updated) {
+                updated = time;
+            }
+        }
+        return updated;
+    }
+    
     private Set<String> getRemoteIds(List<ContactEntry> entries) {
         Set<String> ids = new HashSet<String>(entries.size());
         for (ContactEntry entry : entries) {
@@ -247,8 +268,7 @@ public class SyncSession {
 
             }
         }
-        LOG.debug("Retrieved %d contact photos for %d contact entries",
-                  photos.size(), entries.size());
+        LOG.debug("Found %d contact photo changes", photos.size());
         return photos;
     }
 
@@ -270,7 +290,7 @@ public class SyncSession {
                                       Map<Integer, Change> changes,
                                       Map<String, Attachment> photos)
         throws ServiceException, IOException {
-        LOG.debug("Processing %d remote contact changes", entries.size());
+        LOG.debug("Found %d remote contact change(s)", entries.size());
         Stats stats = new Stats();
         for (ContactEntry entry : entries) {
             DataSourceItem dsi = localData.getReverseMapping(entry.getId());
@@ -344,7 +364,7 @@ public class SyncSession {
 
     private List<SyncRequest> processLocalChanges(Collection<Change> changes)
         throws ServiceException {
-        LOG.debug("Processing %d local contact changes", changes.size());
+        LOG.debug("Found %d local contact changes", changes.size());
         List<SyncRequest> reqs = new ArrayList<SyncRequest>();
         for (Change change : changes) {
             SyncRequest req = processLocalChange(change);
