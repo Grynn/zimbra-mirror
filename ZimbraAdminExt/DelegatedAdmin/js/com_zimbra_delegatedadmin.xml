@@ -22,6 +22,10 @@
     <include>ZaGlobalGrantListViewController.js</include>
 
     <include>ZaNewAdminWizard.js</include>
+
+    <include>ZaEffectiveRights.js</include>
+    <include>ZaEffectiveRightXFormView.js</include>
+    <include>ZaEffectiveRightsViewController.js</include>
     
     <include>ZaDelegatedAdminExt.js</include>
     <disableUIUndeploy>TRUE</disableUIUndeploy>

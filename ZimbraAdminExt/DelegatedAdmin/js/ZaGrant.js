@@ -47,7 +47,8 @@ ZaGrant.A_inline_attr = "inline_attr" ;
 ZaGrant.A2_grantsList = "grantsList" ;
 ZaGrant.A2_grantsListSelectedItems = "grantsListSelectedItems" ;
 
-ZaGrant.GRANTEE_TYPE = ["usr", "grp"] ;
+ZaGrant.GRANTEE_TYPE = { usr: "usr", grp: "grp" };
+ZaGrant.GRANTEE_TYPE_CHOICES = ["usr", "grp"] ;
 
 ZaGrant.RIGHT_TYPE_CHOICES =[
     {value:"system", label:com_zimbra_delegatedadmin.Col_system_right},
@@ -65,72 +66,95 @@ ZaGrant.getGlobalGrantsList = function () {
 	return list;
 }
 
+/** Used to load all the grants on a target */
 ZaGrant.loadMethod = function (by, val, type) {
-    var soapDoc = AjxSoapDoc.create("GetGrantsRequest", ZaZimbraAdmin.URN, null);
+    var params = { target: {} };
     if (!type) type = this.type ;
-    
-    var elTarget ;
-    if (type == ZaItem.GLOBAL_GRANT || type == ZaItem.GLOBAL_CONFIG)  {
-        elTarget = soapDoc.set(ZaGrant.A_target, "") ;
-    } else {
-        elTarget = soapDoc.set(ZaGrant.A_target, val) ;
-        elTarget.setAttribute ("by", by) ;
-    }
-    elTarget.setAttribute ("type", type ) ;
 
-    var ctler =  ZaApp.getInstance().getCurrentController();
+    if (type == ZaItem.GLOBAL_GRANT || type == ZaItem.GLOBAL_CONFIG)  {
+        params.target.val =  "" ;
+    } else {
+        params.target.val = val ;
+        params.target.by = by ;
+    }
+    params.target.type =  type  ;
+    ZaGrant.load.call (this, params) ;
+}
+/*
+  params.target - targets info
+  params.target.by - name or id
+  params.target.val - target name or id
+  params.target.type - target type
+
+  params.grantee - grantee info
+  parmas.grantee.by - name or id
+  params.grantee.val - grantee name or id
+  params.grantee.all -
+    whether to include grants granted to groups the specified grantee belongs to.
+      1: include (default)
+      0: do not include
+  params.grantee.type - grantee type    
+ */
+ZaGrant.load = function (params) {
+    var soapDoc = AjxSoapDoc.create("GetGrantsRequest", ZaZimbraAdmin.URN, null);
+    var elTarget, elGrantee ; 
+
+    if (params.target != null) {
+        if ((params.target.type == ZaItem.GLOBAL_GRANT)
+                || (params.target.type == ZaItem.GLOBAL_CONFIG))  {
+            elTarget = soapDoc.set(ZaGrant.A_target, "") ;
+        } else {
+            elTarget = soapDoc.set(ZaGrant.A_target, params.target.val) ;
+            elTarget.setAttribute ("by", params.target.by) ;
+        }
+        elTarget.setAttribute ("type", params.target.type ) ;
+    }
+
+    if (params.grantee != null) {
+        elGrantee = soapDoc.set(ZaGrant.A_grantee, params.grantee.val) ;
+        elGrantee.setAttribute ("by", params.grantee.by) ;
+        elGrantee.setAttribute ("type", params.grantee.type ) ;
+
+        if (params.grantee.all != null) {
+            elGrantee.setAttribute ("all", params.grantee.all ) ;            
+        }
+    }
     
+    var ctler =  ZaApp.getInstance().getCurrentController();
     try {
-        var params = new Object();
-        params.soapDoc = soapDoc;
+        var reqParams = new Object();
+        reqParams.soapDoc = soapDoc;
         var reqMgrParams = {
             controller: ctler ,
             busyMsg: com_zimbra_delegatedadmin.BUSY_GET_GRANTS
         } ;
 
-        var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetGrantsResponse ;
+        var resp = ZaRequestMgr.invoke(reqParams, reqMgrParams).Body.GetGrantsResponse ;
         var grants = resp.grant ;
         var grantList = [] ;
         if (grants != null) {
             for (var i = 0; i < grants.length; i++) {
                 var grant = new ZaGrant () ;
+                var grantTarget = grants[i].target[0] ; 
+                grant [ZaGrant.A_target] = grantTarget.name ;
+                grant [ZaGrant.A_target_id] = grantTarget.id ;
+                grant [ZaGrant.A_target_type] = grantTarget.type ;
 
-                /*if (by == "id") {
-                    grant [ZaGrant.A_target_id] = val ;                    
-                } else if (by == "name") {
-                    grant [ZaGrant.A_target] = val ;
-                } else if (type == "global") {
-                    grant [ZaGrant.A_target] = "global" ;                    
-                } */
+                var grantRight = grants[i].right [0] ;
+                grant [ZaGrant.A_deny] = grantRight[ZaGrant.A_deny] ? "1" : "0" ;
+                grant [ZaGrant.A_canDelegate] = grantRight[ZaGrant.A_canDelegate] ? "1" : "0" ;
+                grant [ZaGrant.A_right] = grantRight["_content"] ;
 
-                if (type == ZaItem.GLOBAL_GRANT || type == ZaItem.GLOBAL_CONFIG) {
-                    grant [ZaGrant.A_target] = type ;
-                } else {
-                    grant [ZaGrant.A_target] = this.name ;
-                    grant [ZaGrant.A_target_id] = this.id ;
-                }
-                grant [ZaGrant.A_target_type] = type ;
+                var grantGrantee = grants[i].grantee [0] ;
+                grant [ZaGrant.A_grantee] = grantGrantee ["name"] ;
+                grant [ZaGrant.A_grantee_type] = grantGrantee ["type"] ;
+                grant [ZaGrant.A_grantee_id] = grantGrantee.id ;
                 
-                for (var key in grants[i]) {
-                    if (key == "deny") {
-                        grant [ZaGrant.A_deny] = grants[i][key] ? "1" : "0" ;
-                    } else if (key == ZaGrant.A_canDelegate) {
-                        grant [ZaGrant.A_canDelegate] = grants[i][key] ? "1" : "0" ;
-                    } else if (key == "name") {
-                        grant [ZaGrant.A_grantee] = grants[i][key] ;
-                    } else if (key == "type") {
-                        grant [ZaGrant.A_grantee_type] = grants[i][key] ;
-                    } else if (key == "right") {
-                        grant [ZaGrant.A_right] = grants[i][key] ;
-                    } else if (key == "id") {
-                        grant [ZaGrant.A_grantee_id] = grants[i][key] ;
-                    }
-                }
                 grantList.push (grant) ;
             }
         }
 
-        if (type == "global") {
+        if (params.target.type == ZaItem.GLOBAL_GRANT) {
             return grantList ;
         } else {
             this [ZaGrant.A2_grantsList] = grantList ;

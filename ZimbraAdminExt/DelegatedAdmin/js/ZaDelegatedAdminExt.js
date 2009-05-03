@@ -96,7 +96,17 @@ if (ZaController.initToolbarMethods["ZaAccountListController"]) {
 
 ZaDelegatedAdminExt._viewRightsListener =
  function (ev) {
-     console.log("View All the effective rights now ...") ;
+//     console.log("View All the effective rights now ...") ;
+     var selectedItems = this._contentView.getSelection() ; 
+     if (selectedItems && selectedItems.length == 1 ) {
+
+        var item = selectedItems [0] ;
+        var effectiveRights = new ZaEffectiveRights (item);
+
+        effectiveRights.load ();
+        var erCtrl = new ZaEffectiveRightsViewController (this._appCtxt, this._container) ; 
+        erCtrl.show (effectiveRights, true);
+     }
  }
 
 ZaDelegatedAdminExt.changeActionsStateMethod =
@@ -152,7 +162,7 @@ ZaDelegatedAdminExt.changeAccountViewActionStateMethod = function () {
     if (this._currentObject.attrs [ZaAccount.A_zimbraIsDelegatedAdminAccount] != "TRUE") {
         this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;   
     }
-}
+}             
 ZaController.changeActionsStateMethods["ZaAccountViewController"].push(ZaDelegatedAdminExt.changeAccountViewActionStateMethod);
 
 //add the view rights button to the DL view

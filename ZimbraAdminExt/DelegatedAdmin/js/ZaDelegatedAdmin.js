@@ -256,7 +256,7 @@ if (ZaDistributionList) {
         {id:ZaDistributionList.A_isAdminGroup, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
             ref:"attrs/"+ZaDistributionList.A_isAdminGroup}) ;
 }
-
+     
 
 if (ZaTabView.XFormModifiers["ZaDLXFormView"]) {
    ZaDelegatedAdmin.DLXFormModifier = function (xFormObject) {

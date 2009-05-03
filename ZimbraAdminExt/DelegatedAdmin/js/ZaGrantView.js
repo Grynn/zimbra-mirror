@@ -45,7 +45,7 @@ ZaGrantView.myXFormModifier = function(xFormObject) {
                    labelLocation:_LEFT_ },
                { ref: ZaGrant.A_grantee_type, type:_OSELECT1_, label: com_zimbra_delegatedadmin.Label_grantee_type ,
                    visibilityChecks:[],
-                   labelLocation:_LEFT_, choices: ZaGrant.GRANTEE_TYPE
+                   labelLocation:_LEFT_, choices: ZaGrant.GRANTEE_TYPE_CHOICES
                },
                {ref: ZaGrant.A_right, type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_right_name,
                    visibilityChecks:[],

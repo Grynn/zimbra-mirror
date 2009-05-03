@@ -308,7 +308,7 @@ function(by, val, withConfig) {
 	params.asyncMode = false;
 	var reqMgrParams = {
 		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : ZaMsg.BUSY_GET_RIGHT
+		busyMsg : com_zimbra_delegatedadmin.BUSY_GET_RIGHT
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams);
     this.initFromJS(resp.Body.GetRightResponse.right[0]);
