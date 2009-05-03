@@ -33,7 +33,7 @@ import com.google.gdata.client.http.HttpGDataRequest;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.GroupMembershipInfo;
 import com.google.gdata.data.contacts.ContactGroupEntry;
-import com.google.gdata.data.contacts.ContactGroupFeed;
+import com.google.gdata.data.contacts.SystemGroup;
 import com.google.gdata.data.BaseEntry;
 import com.google.gdata.data.DateTime;
 import com.google.gdata.data.extensions.Email;
@@ -54,6 +54,7 @@ import java.io.IOException;
 public class SyncSession {
     private final LocalData localData;
     private final GabService service;
+    private String myContactsUrl;
     private boolean reset;
 
     private static class Stats {
@@ -110,30 +111,32 @@ public class SyncSession {
         List<ContactEntry> contacts = service.getContacts(lastRev, null).getEntries();
         // Check for contact changes
         Map<String, Attachment> photos = null;
-        ContactGroupFeed groups = null;
         if (!contacts.isEmpty()) {
             photos = getContactPhotos(contacts);
             lastRev = new DateTime(getLastUpdated(contacts) + 1);
             state.setLastRevision(lastRev.toString());
-            groups = service.getGroups(null, lastRev);
         } else {
             LOG.debug("Found %d remote contact change(s)", contacts.size());
         }
-        List<SyncRequest> contactRequests;
+        List<ContactGroupEntry> groups = service.getGroups(null, lastRev).getEntries();
+        // Get the system group for all new contacts
+        myContactsUrl = getSystemGroupUrl(groups, "Contacts");
+        LOG.debug("System group 'My Contacts' url = " + myContactsUrl);
         int seq = state.getLastModSequence();
+        List<SyncRequest> contactRequests;
         synchronized (mbox) {
             // Get local changes since last sync (none if resetting)
             Map<Integer, Change> contactChanges = reset ?
                 new HashMap<Integer, Change>() : localData.getContactChanges(seq);
             // Process any remote contact changes
-            if (!contacts.isEmpty()) {
+            if (!contacts.isEmpty()) {     
                 processRemoteChanges(contacts, contactChanges, photos);
             }
             // Process local changes and determine changes to push
             contactRequests = processLocalChanges(contactChanges.values());
             // Process remote group changes
-            if (groups != null) {
-                processGroups(groups.getEntries());
+            if (!contacts.isEmpty()) {
+                processGroups(groups);
             }
             // If resetting, then remove local contacts deleted remotely
             if (reset) {
@@ -160,7 +163,17 @@ public class SyncSession {
         }
         return updated;
     }
-    
+
+    private static String getSystemGroupUrl(List<ContactGroupEntry> groups, String name) {
+        for (ContactGroupEntry group : groups) {
+            SystemGroup sg = group.getSystemGroup();
+            if (sg != null && sg.getId().equals(name)) {
+                return group.getId();
+            }
+        }
+        return null;
+    }
+
     private Set<String> getRemoteIds(List<ContactEntry> entries) {
         Set<String> ids = new HashSet<String>(entries.size());
         for (ContactEntry entry : entries) {
@@ -341,10 +354,7 @@ public class SyncSession {
             }
         } else if (!deleted) {
             // Add a new contact, but only if the contact is a member of at
-            // least one group. All user added contacts are members of the
-            // system group "My Contacts", whereas "Suggested Contacts" created
-            // automatically by Gmail do not have a contact group and are
-            // excluded.
+            // least one group (not an "auto-contact").
             if (entry.hasGroupMembershipInfos()) {
                 ContactData cd = new ContactData(entry);
                 ParsedContact pc = cd.newParsedContact(photos.get(editUrl));
@@ -377,20 +387,21 @@ public class SyncSession {
     
     private SyncRequest processLocalChange(Change change)
         throws ServiceException {
-        // For ADD and UPDATE, group membership info will be set later after
-        // we've pushed contact group changes, since until then we will not
-        // know the entry id for a newly added group.
         int id = change.getItemId();
         if (change.isAdd() || change.isUpdate()) {
             Contact contact = localData.getContact(id);
             if (ContactGroup.isContactGroup(contact)) {
-                // Delete mapping so contact group will no longer be sync'd
+                // Delete mapping so contact group will no longer be synced
                 localData.deleteMapping(id);
             } else {
                 ContactData cd = new ContactData(contact);
                 SyncRequest req;
                 if (change.isAdd()) {
-                    req = SyncRequest.insert(this, id, cd.newContactEntry());
+                    ContactEntry entry = cd.newContactEntry();
+                    GroupMembershipInfo gmi = new GroupMembershipInfo();
+                    gmi.setHref(myContactsUrl);
+                    entry.addGroupMembershipInfo(gmi);
+                    req = SyncRequest.insert(this, id, entry);
                 } else {
                     ContactEntry entry = getEntry(id, ContactEntry.class);
                     cd.updateContactEntry(entry);
