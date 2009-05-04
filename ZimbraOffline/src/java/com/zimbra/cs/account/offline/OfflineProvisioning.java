@@ -198,8 +198,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         modifyAttrs(e, attrs, checkImmutable, allowCallback, e instanceof Account && isSyncAccount((Account)e));
     }
 
-    @SuppressWarnings("unchecked")
     synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback, boolean markChanged) throws ServiceException {
+        modifyAttrs(e, attrs, checkImmutable, allowCallback, markChanged, false);
+    }
+    
+    @SuppressWarnings("unchecked")
+    synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback, boolean markChanged, boolean skipAttrMgr) throws ServiceException {
         EntryType etype = EntryType.typeForEntry(e);
         if (etype == null)
             throw OfflineServiceException.UNSUPPORTED("modifyAttrs(" + e.getClass().getSimpleName() + ")");
@@ -234,8 +238,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             }
         }
 
-        Map<String, Object> context = new HashMap<String, Object>();
-        AttributeManager.getInstance().preModify(attrs, e, context, false, checkImmutable, allowCallback);
+        Map<String, Object> context = null;
+        if (!skipAttrMgr) {
+            context = new HashMap<String, Object>();
+            AttributeManager.getInstance().preModify(attrs, e, context, false, checkImmutable, allowCallback);
+        }
 
         boolean isAccountSetup = attrs.remove(A_offlineAccountSetup) != null;
         
@@ -250,7 +257,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
         reload(e);
 
-        AttributeManager.getInstance().postModify(attrs, e, context, false, allowCallback);
+        if (!skipAttrMgr)
+            AttributeManager.getInstance().postModify(attrs, e, context, false, allowCallback);
         
 //        if (isAccountSetup && etype == EntryType.ACCOUNT) {
 //        	if (e.getBooleanAttr(A_offlineEnableTrace, false))
@@ -260,13 +268,17 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 //        }
     }
     
+    public void setAccountAttribute(Account account, String key, Object value) throws ServiceException {
+        setAccountAttribute(account, key, value, false);
+    }
+    
     /*
      * Special way to set a single Account attribute that doesn't mark the account dirty.
      */
-    public void setAccountAttribute(Account account, String key, Object value) throws ServiceException {
+    public void setAccountAttribute(Account account, String key, Object value, boolean skipAttrMgr) throws ServiceException {
     	Map<String, Object> attrs = new HashMap<String, Object>(1);
     	attrs.put(key, value);
-    	modifyAttrs(account, attrs, false, true, false);
+    	modifyAttrs(account, attrs, false, true, false, skipAttrMgr);
     }
     
     /*
@@ -2305,7 +2317,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         String key = (OfflineConstants.SYNC_SERVER_PREFIX + uri).toLowerCase();
         
         if (!key.equals(mptMailHost.toLowerCase())) // offline account's remote server has been changed...
-            setAccountAttribute(mptAcct, A_zimbraMailHost, key);
+            setAccountAttribute(mptAcct, A_zimbraMailHost, key, true);
    
         Server server;
         synchronized (mSyncServerCache) {
