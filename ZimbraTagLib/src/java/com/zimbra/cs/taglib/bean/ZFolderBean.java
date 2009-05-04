@@ -14,6 +14,8 @@
  */
 package com.zimbra.cs.taglib.bean;
 
+import com.zimbra.common.soap.VoiceConstants;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZFolder.Color;
 import com.zimbra.cs.zclient.ZFolder.View;
@@ -21,7 +23,6 @@ import com.zimbra.cs.zclient.ZGrant;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMountpoint;
 import com.zimbra.cs.zclient.ZSearchFolder;
-import com.zimbra.common.soap.VoiceConstants;
 
 import java.util.List;
 
@@ -240,7 +241,7 @@ public class  ZFolderBean {
                 ((ZMountpoint) mFolder ).getCanonicalRemoteId() : null;
     }
 
-    public boolean getIsFeed() { return mFolder.getRemoteURL() != null; }
+    public boolean getIsFeed() { return !StringUtil.isNullOrEmpty(mFolder.getRemoteURL()); }
 
     public String getCanonicalId() { return (mFolder instanceof ZMountpoint) ? ((ZMountpoint)mFolder).getCanonicalRemoteId() : mFolder.getId(); }
 
