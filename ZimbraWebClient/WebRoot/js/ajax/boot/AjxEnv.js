@@ -58,6 +58,7 @@ function() {
 	AjxEnv.isSafari = false;
 	AjxEnv.isSafari2 = false;
 	AjxEnv.isSafari3 = false;
+    AjxEnv.isSafari4 = false;
 	AjxEnv.isSafari3up = false;
 	AjxEnv.isCamino = false;
 	AjxEnv.isChrome = false;
@@ -185,6 +186,7 @@ function() {
 		AjxEnv.isFirefox3up		= (AjxEnv.isFirefox && browserVersion >= 3.0);
 		AjxEnv.isSafari2		= (AjxEnv.isSafari && browserVersion >= 2.0 && browserVersion < 3.0);
 		AjxEnv.isSafari3		= (AjxEnv.isSafari && browserVersion >= 3.0 && browserVersion < 4.0) || AjxEnv.isChrome;
+        AjxEnv.isSafari4        = (AjxEnv.isSafari && browserVersion >= 4.0);
 		AjxEnv.isSafari3up		= (AjxEnv.isSafari && browserVersion >= 3.0) || AjxEnv.isChrome;
 
 		AjxEnv.browser = "[unknown]";

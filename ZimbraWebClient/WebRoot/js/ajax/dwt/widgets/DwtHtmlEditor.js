@@ -244,7 +244,7 @@ function(src) {
 
 DwtHtmlEditor.prototype.isHtmlEditingSupported =
 function() {
-	return (!!(AjxEnv.isGeckoBased || AjxEnv.isIE || AjxEnv.isSafari3));
+	return (!!(AjxEnv.isGeckoBased || AjxEnv.isIE || AjxEnv.isSafari3up));
 }
 
 /**
@@ -1557,7 +1557,7 @@ function(iFrameDoc) {
  		if (AjxEnv.isGeckoBased && (AjxEnv.isLinux || AjxEnv.isMac))
  			this._registerEditorEventHandlers(document.getElementById(this._iFrameId), iFrameDoc);
 	} catch (ex) {
-		// Gecko may take some time to enable design mode..
+		// Gecko may take some time to enable design mode..        
 		if (AjxEnv.isGeckoBased || AjxEnv.isSafari) {
 			var ta = new AjxTimedAction(this, this._enableDesignMode, [iFrameDoc]);
 			AjxTimedAction.scheduleAction(ta, 10);
