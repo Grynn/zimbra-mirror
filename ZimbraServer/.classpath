@@ -113,5 +113,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.15.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/sqlitejdbc-v054.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/memcached-2.3.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

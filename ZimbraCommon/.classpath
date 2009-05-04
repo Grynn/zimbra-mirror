@@ -94,6 +94,7 @@
 	<classpathentry kind="lib" path="jars/jcommon-1.0.0.jar"/>
 	<classpathentry kind="lib" path="jars/json.jar" sourcepath="/ThirdParty/json/src/java"/>
 	<classpathentry kind="lib" path="jars/ant-1.7.0-ziputil-patched.jar"/>
+	<classpathentry kind="lib" path="jars/memcached-2.3.1.jar"/>
 	<classpathentry kind="lib" path="jars/testng-5.8-jdk15.jar" sourcepath="/ThirdParty/testng-5.8/src/main"/>
 	<classpathentry kind="lib" path="jars/apache-jsieve-0.2.jar" sourcepath="/ThirdParty/apache-jsieve-0.2/src/main/java">
 		<attributes>
