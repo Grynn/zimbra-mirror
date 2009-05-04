@@ -20,7 +20,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.30";
+my $version = "1.31";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -148,6 +148,10 @@ while ($ARGV[0] =~ /^-(.+)/)
   elsif (lc($switch) eq lc("YearlyException"))
   {
     $YearlyException =1;
+  }
+  elsif ($switch eq "d")
+  {
+    $DEBUG=1;
   }
   else
   {
@@ -945,10 +949,9 @@ sub processfile
                       $isweekdayok=0;
                       $ltd_exlist{$rsdt}=1;
                     }
-                    
                     #check for if master date time is equal to rdate time component
                     my $rsttime= $sdt;
-                    if (!istime_equal(($msttime),($sdt)))
+                    if (!istime_equal(get_offset_datetime($msttime),get_offset_datetime($sdt)))
                     {
                       $isrdtimeok = 0;
                       $ltd_exlist{$rsdt}=0;
@@ -1038,7 +1041,7 @@ sub processfile
                   $ltd_exlist{$rndt}=1;
                 }
                 #check for if master date time is equal to rdate time component
-                if (!istime_equal(($msttime),($ndt)))
+                if (!istime_equal(get_offset_datetime($msttime),get_offset_datetime($ndt)))
                 {
                   $isrdtimeok = 0;
                   $ltd_exlist{$rndt}=0;
@@ -1511,10 +1514,13 @@ sub processfile
                   {
                     $rndtt=$occurrec->{'DTSTART'};
                     $rndtt=~ s/DTSTART$recidfmtstr//;
+                    
+                    my $adndtstart=get_offset_datetime($ndtstart);
+                    $rntime = get_time($adndtstart);
+                    
                     $rndtt=get_date($rndtt);
-                    $rntime = get_time($ndtstart);
                     $rndtt= "RECURRENCE-ID$TZTag$recidfmtstr$rndtt"."T$rntime";
-                    $rndtt =get_offset_datetime($rndtt);
+                    $rndtt=~ s/TZID:/TZID=/;
                   }
                   else
                   {
@@ -2875,7 +2881,7 @@ sub Get_TZoffset
     my $dylbd=$iTzRec->{'DYLBYDAY'};
     my $dylbm=$iTzRec->{'DYLBYMONTH'};
     my $dyldt= Get_Date_By_Weekday_Month_Year($dylbd,$dylbm,$yr);
-    #&log_message("$dyldt");
+    #&log_message("Standard Starts at: $stddt DayLight Starts at: $dyldt");
     
     my $std_offset= $iTzRec->{'STDTZOFFSETTO'};
     if(IsDateInSTANDARDTZRange($stddt,$dyldt,$dt,$std_offset))
@@ -2887,6 +2893,10 @@ sub Get_TZoffset
     {
       #DAYLIGHT TZ
       $tzoffset= $iTzRec->{'DYLTZOFFSETTO'};
+    }
+    if($DEBUG)
+    {
+      #&log_message("Standard Starts at: $stddt DayLight Starts at: $dyldt Offset: $tzoffset");
     }
   }
   my $newTzoffset;
