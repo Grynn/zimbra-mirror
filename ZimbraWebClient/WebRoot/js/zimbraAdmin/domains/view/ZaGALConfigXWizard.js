@@ -442,7 +442,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
 						},
 						{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", repeatInstance:"", showAddButton:true, showRemoveButton:true,  
 							addButtonLabel:ZaMsg.Domain_AddURL,
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
+							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
 							visibilityChangeEventSources:[ZaDomain.A_GALServerType],								 
 							
 							removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
