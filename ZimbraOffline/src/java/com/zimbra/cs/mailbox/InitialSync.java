@@ -1177,13 +1177,13 @@ public class InitialSync {
             if (type == MailItem.TYPE_CHAT)
                 msg = ombx.createChat(new OfflineContext(redo), pm, folderId, flags, tags); //FIXME: do we ever need shared context for chat delivery?
             else {
-                SharedDeliveryContext sharedDeliveryCtxt = null;
+                DeliveryContext sharedDeliveryCtxt = null;
                 if (data != null) {
-                    sharedDeliveryCtxt = new SharedDeliveryContext();
+                    sharedDeliveryCtxt = new DeliveryContext();
                 } else {
                     List<Integer> onebox = new ArrayList<Integer>();
                     onebox.add(ombx.getId());
-                    sharedDeliveryCtxt = new SharedDeliveryContext(false, onebox);
+                    sharedDeliveryCtxt = new DeliveryContext(false, onebox);
                 }
                 msg = ombx.addMessage(new OfflineContext(redo), pm, folderId, true, flags, tags, convId, ":API:", null, sharedDeliveryCtxt);
             }
