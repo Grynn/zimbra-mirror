@@ -114,6 +114,9 @@
         <jsp:setProperty name="mbean" property="locale" value="${pageContext.request.locale}"/>
         ${zdf:doRequest(mbean)}
         <c:set var="bean" value="${mbean}" scope="request"/>
+        <c:set var="help">
+        <fmt:message key='MSENote'/>
+        </c:set>
         <c:set var="beta">
             <fmt:message key='BetaNoteExchange'>
                 <fmt:param>${betaLink}</fmt:param>
@@ -157,7 +160,7 @@
         <c:set var="bean" value="${zbean}" scope="request"/>    
         <c:set var="help">
 	    <fmt:message key='ToLearnZCS'>
-	        <fmt:param><a href="http://www.zimbra.com" target="_blank"><fmt:message key='Zimbra'/></a></fmt:param>
+	        <fmt:param><a href="http://www.zimbra.com" target="_blank">www.zimbra.com</a></fmt:param>
             </fmt:message>
         </c:set>
     </c:when>
