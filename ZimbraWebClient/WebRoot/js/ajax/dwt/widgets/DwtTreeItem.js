@@ -503,11 +503,8 @@ function(className) {
 	var treeItemEl = this.getHtmlElement();
 	
 	var newClassName = this._origClassName	 + " " + className;
-	if(treeItemTableEl) {
-		treeItemTableEl.className =  newClassName;
-		if(treeItemDivEl) {
-			treeItemDivEl.className = newClassName
-		}		
+	if(treeItemDivEl) {
+		treeItemDivEl.className = newClassName
 	}else if (treeItemEl) {
 		treeItemEl.className =  className;
 	}	
