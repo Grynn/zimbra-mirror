@@ -155,7 +155,7 @@ function(html, idx, item, onlyServiceInfo, serviceName) {
 			html[idx++] = this._headerList[i]._width;
 			html[idx++] = " aligh=left>";
 			if (onlyServiceInfo) {
-				if(((new Date()).getTime()/1000 - item.timestamp) > 21*60*60/1000) {
+				if(((new Date()).getTime()- item.timestamp) > 21*60*1000) {
 					html[idx++] = "<span class='ZaStaleData'>";
 					html[idx++] = AjxStringUtil.htmlEncode(item.time);
 					html[idx++] = "&nbsp;";

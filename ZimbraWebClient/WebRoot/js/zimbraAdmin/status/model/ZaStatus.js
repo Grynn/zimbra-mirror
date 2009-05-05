@@ -68,38 +68,43 @@ ZaStatus.initMethod = function () {
 }
 ZaItem.initMethods["ZaStatus"].push(ZaStatus.initMethod);
 
-ZaStatus.prototype.initFromJS = 
+ZaStatus.prototype.initFromJS =
 function(obj) {
-	if(obj.status && obj.status instanceof Array) {
+    var tzId = obj.timezone[0].id;
+    if(obj.status && obj.status instanceof Array) {
 		var statusArray = obj.status;
-		var cnt = statusArray.length;
-		var formatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.MEDIUM, AjxDateFormat.SHORT);
-		for(var i=0; i < cnt; i++) {
-			var serverName = statusArray[i].server;
-			if(!this.serverMap[serverName]) {
-				this.serverMap[serverName] = new Object();
-				this.serverMap[serverName].name = serverName;
-				this.serverMap[serverName].id = Dwt.getNextId();
-				this.serverMap[serverName].serviceMap = null;
-				this.serverMap[serverName].status = 1;
-				this.statusVector.add(this.serverMap[serverName]);
-			}	
-			var serviceName = statusArray[i].service;
-			if(serviceName) {
-
-				if(!this.serverMap[serverName].serviceMap)
-					this.serverMap[serverName].serviceMap = new Object();
-					
-				this.serverMap[serverName].serviceMap[serviceName] = new Object();
-				this.serverMap[serverName].serviceMap[serviceName].status = statusArray[i]._content;
-				this.serverMap[serverName].serviceMap[serviceName].timestamp = statusArray[i].t;
-				this.serverMap[serverName].serviceMap[serviceName].time = formatter.format(new Date(Number(statusArray[i].t)*1000));
-				if(this.serverMap[serverName].serviceMap[serviceName].status != 1) {
-					this.serverMap[serverName].status = 0;
-				}
-			}
+        var cnt = statusArray.length;
+        var formatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.MEDIUM, AjxDateFormat.SHORT);
+        for(var i=0; i < cnt; i++) {
+        	var serverName = statusArray[i].server;
+            if(!this.serverMap[serverName]) {
+            	this.serverMap[serverName] = new Object();
+                this.serverMap[serverName].name = serverName;
+                this.serverMap[serverName].id = Dwt.getNextId();
+                this.serverMap[serverName].serviceMap = null;
+                this.serverMap[serverName].status = 1;
+                this.statusVector.add(this.serverMap[serverName]);
+            }
+            var serviceName = statusArray[i].service;
+            if(serviceName) {
+            	if(!this.serverMap[serverName].serviceMap)
+                  	this.serverMap[serverName].serviceMap = new Object();
+                var seconds = Number(statusArray[i].t);
+                var millis = seconds*1000;                   
+                var gmtSeconds = seconds - AjxTimezone.getOffset(AjxTimezone.DEFAULT_RULE)*60;                                
+                var serverSeconds = gmtSeconds+AjxTimezone.getOffset(tzId,(new Date(millis)))*60;                                
+                this.serverMap[serverName].serviceMap[serviceName] = new Object();
+                this.serverMap[serverName].serviceMap[serviceName].status = statusArray[i]._content;
+                this.serverMap[serverName].serviceMap[serviceName].timestamp = millis;
+                var serverMillis = serverSeconds*1000;
+                this.serverMap[serverName].serviceMap[serviceName].time = formatter.format(new Date(serverMillis));
+                //this.serverMap[serverName].serviceMap[serviceName].time = formatter.format(new Date(Number(statusArray[i].t)*1000));
+                if(this.serverMap[serverName].serviceMap[serviceName].status != 1) {
+                	this.serverMap[serverName].status = 0;
+                }
+            }
 		}
-	}	
+    }
 }
 
 ZaStatus.prototype.getStatusVector = 
