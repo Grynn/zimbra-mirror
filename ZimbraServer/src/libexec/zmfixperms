@@ -81,13 +81,25 @@ printMsg() {
 }
 
 # NOT ${zimbra_home}/{store,backup,index}
-chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/a* ${zimbra_home}/[c-hj-ot-z]* ${zimbra_home}/s[a-su-z]* 2> /dev/null
-
-chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/.viminfo ${zimbra_home}/.ldaprc ${zimbra_home}/.bash* ${zimbra_home}/.exrc 2> /dev/null
+if [ ${extended} = "yes" ]; then
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/a* ${zimbra_home}/[c-hj-ot-z]* ${zimbra_home}/s[a-su-z]* 2> /dev/null
+fi
 
 if [ -d ${zimbra_home} ]; then
   chown ${root_user}:${root_group} ${zimbra_home}
   chmod 755 ${zimbra_home}
+
+  if [ -f ${zimbra_home}/.viminfo ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/.viminfo
+  fi
+
+  if [ -f ${zimbra_home}/.ldaprc ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/.ldaprc
+  fi
+
+  if [ -f ${zimbra_home}/.exrc ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/.exrc
+  fi
 
   if [ -d ${zimbra_home}/libexec ]; then
     chown -R ${root_user}:${root_group} ${zimbra_home}/libexec
