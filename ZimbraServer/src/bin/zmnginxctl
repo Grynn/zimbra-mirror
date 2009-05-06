@@ -69,8 +69,7 @@ case "$1" in
     fi
 
     if [ ! -f ${configfile} ]; then
-      echo "failed."
-      echo "${configfile} generation failed."
+      echo "failed.  ${configfile} is missing."
       exit 1
     fi
 
