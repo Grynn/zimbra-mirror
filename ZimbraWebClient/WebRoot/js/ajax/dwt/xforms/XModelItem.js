@@ -379,7 +379,7 @@ XModelItem.prototype.validateEmailAddress = function(value) {
 		   // set the name, so that on refresh, we don't display old data.
 			throw this.getModel().getErrorMessage("invalidEmailAddr");
 		 } else {
-			if((value.lastIndexOf ("@")!=value.indexOf ("@")) || (value.indexOf ("@")<0)) {
+			if(!AjxUtil.isValidEmailNonReg(value)) {
 			   throw this.getModel().getErrorMessage("invalidEmailAddr");
 			}
 	  	 }

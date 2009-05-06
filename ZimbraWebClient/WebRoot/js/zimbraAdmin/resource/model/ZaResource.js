@@ -123,7 +123,7 @@ function(tmpObj) {
 	}
 	
 	/*if(!AjxUtil.EMAIL_SHORT_RE.test(tmpObj.name) ) {*/
-	if(tmpObj.name.lastIndexOf ("@")!=tmpObj.name.indexOf ("@")) {
+	if(!AjxUtil.isValidEmailNonReg(tmpObj.name)) {
 		//show error msg
 		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_INVALID);
 		return false;
@@ -575,10 +575,10 @@ ZaResource.myXModel = {
 			constraints: {type:"method", value:
 			   function (value, form, formItem, instance) {				   
 				   if (value){
-					  	if(value.lastIndexOf ("@")==value.indexOf ("@")) {
+					  	if(AjxUtil.isValidEmailNonReg(value)) {
 						   return value;
 					   } else {
-						   throw ZaMsg.RES_ErrorInvalidContactEmail;
+						   throw ZaMsg.ErrorInvalidEmailAddress;
 					   }
 				   }
 			   }

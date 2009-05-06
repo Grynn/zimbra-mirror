@@ -284,7 +284,7 @@ function(tmpObj) {
 		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_INVALID);
 		return false;
 	}*/
-	if(tmpObj.name.lastIndexOf ("@")!=tmpObj.name.indexOf ("@")) {
+	if(!AjxUtil.isValidEmailNonReg(tmpObj.name)) {
 		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_INVALID);
 		return false;		
 	}
@@ -1363,7 +1363,19 @@ ZaAccount.myXModel = {
     	{id:ZaAccount.A2_errorMessage, ref:ZaAccount.A2_errorMessage, type:_STRING_},
     	{id:ZaAccount.A2_warningMessage, ref:ZaAccount.A2_warningMessage, type:_STRING_},
         {id:ZaAccount.A2_domainLeftAccounts, ref:ZaAccount.A2_domainLeftAccounts, type:_STRING_},
-        {id:ZaAccount.A_name, type:_STRING_, ref:"name", required:true},
+        {id:ZaAccount.A_name, type:_STRING_, ref:"name", required:true, 
+        	constraints: {type:"method", value:
+			   function (value, form, formItem, instance) {				   
+				   if (value){
+					  	if(AjxUtil.isValidEmailNonReg(value)) {
+						   return value;
+					   } else {
+						   throw ZaMsg.ErrorInvalidEmailAddress;
+					   }
+				   }
+			   }
+			}
+        },
         {id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
         {id:ZaAccount.A_uid, type:_STRING_, ref:"attrs/"+ZaAccount.A_uid},
         {id:ZaAccount.A_accountName, type:_STRING_, ref:"attrs/"+ZaAccount.A_accountName},

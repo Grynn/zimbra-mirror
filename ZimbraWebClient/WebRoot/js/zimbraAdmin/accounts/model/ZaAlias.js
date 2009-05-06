@@ -118,7 +118,19 @@ ZaAlias.myXModel = {
 	    {id:"getAttrs",type:_LIST_},
     	{id:"setAttrs",type:_LIST_},
     	{id:"rights",type:_LIST_},
-		{id:ZaAccount.A_name, type:_STRING_, ref:"name"},
+		{id:ZaAccount.A_name, type:_STRING_, ref:"name", 
+			constraints: {type:"method", value:
+			   function (value, form, formItem, instance) {				   
+				   if (value){
+					  	if(AjxUtil.isValidEmailNonReg(value)) {
+						   return value;
+					   } else {
+						   throw ZaMsg.ErrorInvalidEmailAddress;
+					   }
+				   }
+			   }
+			}
+		},
 		{id:ZaAlias.A_AliasTargetId, type:_STRING_, ref:ZaAlias.A_AliasTargetId},
 		{id:ZaAlias.A_targetType, type:_STRING_, ref:ZaAlias.A_targetType},
 		{id:ZaAlias.A_targetAccount, type:_STRING_, ref:ZaAlias.A_targetAccount},		

@@ -565,7 +565,7 @@ ZaDistributionList.checkValues = function(tmpObj) {
 	}
 
 	
-	if(tmpObj.name.lastIndexOf ("@")!=tmpObj.name.indexOf ("@")) {
+	if(!AjxUtil.isValidEmailNonReg(tmpObj.name)) {
 		//show error msg
 		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_DL_NAME_INVALID);
 		return false;
@@ -939,22 +939,16 @@ ZaDistributionList.myXModel = {
 		{id:ZaDistributionList.A2_removeList, type:_LIST_},
 		{id:ZaDistributionList.A2_optionalAdd, type:_STRING_},
 		{id:ZaAccount.A_name, type:_STRING_,  required:true,
-		 constraints: {type:"method", value:
-					   function (value, form, formItem, instance) {
-						   var parts = value.split('@');
-						   if (parts[0] == null || parts[0] == ""){
-							   // set the name, so that on refresh, we don't display old data.
-							   throw ZaMsg.DLXV_ErrorNoListName;
-						   } else {
-							   //var re = ZaDistributionList._validEmailPattern;
-							   //if (AjxUtil.EMAIL_SHORT_RE.test(value)) {
-							   if(value.lastIndexOf ("@")==value.indexOf ("@")) {
-								   return value;
-							   } else {
-								   throw ZaMsg.DLXV_ErrorInvalidListName;
-							   }
-						   }
+			constraints: {type:"method", value:
+			   function (value, form, formItem, instance) {				   
+				   if (value){
+					  	if(AjxUtil.isValidEmailNonReg(value)) {
+						   return value;
+					   } else {
+						   throw ZaMsg.ErrorInvalidEmailAddress;
 					   }
+				   }
+			   }
 			}
 		},
 		{id:ZaDistributionList.A2_members, type:_LIST_},

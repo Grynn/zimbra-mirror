@@ -77,6 +77,11 @@ function(s, nameOnly) {
 		: AjxUtil.EMAIL_FULL_RE.test(s);
 };
 
+AjxUtil.isValidEmailNonReg = 
+function(s) {
+	return ((s.indexOf ("@") > 0) && (s.lastIndexOf ("@") == s.indexOf ("@")) && (s.indexOf (".@") < 0));
+};
+
 AjxUtil.SIZE_GIGABYTES = "GB";
 AjxUtil.SIZE_MEGABYTES = "MB";
 AjxUtil.SIZE_KILOBYTES = "KB";
