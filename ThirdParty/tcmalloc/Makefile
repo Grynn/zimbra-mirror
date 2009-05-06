@@ -57,7 +57,8 @@ build:
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION) --enable-minimal $(CONF_OPS); \
 	make; \
 	make install)
-	(cd $(ZIMBRA_HOME); ln -s tcmalloc-$(TCMALLOC_VERSION) tcmalloc)
+	(cd $(ZIMBRA_HOME); ln -s tcmalloc-$(TCMALLOC_VERSION) tcmalloc; \
+	rmdir $(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION)/bin)
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/tcmalloc
