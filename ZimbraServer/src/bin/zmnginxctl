@@ -68,6 +68,12 @@ case "$1" in
       ${zimbra_home}/libexec/zmmtaconfig imapproxy > /dev/null 2>&1
     fi
 
+    if [ ! -f ${configfile} ]; then
+      echo "failed."
+      echo "${configfile} generation failed."
+      exit 1
+    fi
+
     sudo ${zimbra_home}/${servicename}/sbin/${servicename} -c ${configfile}
     for ((i=0; i < 30; i++)); do
       checkrunning
