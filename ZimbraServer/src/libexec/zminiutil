@@ -18,30 +18,33 @@
 
 use strict;
 use Getopt::Long;
+use POSIX qw(strftime);
 
-my %keys = ();
-my @lines = ();
 my %opt = ();
 
 sub usage {
     my $message = shift;
     if (defined($message)) {
         print "Error: $message\n";
-	exit 1;
+        exit 1;
     } else {
-    print<<EOF;
+        print<<EOF;
 Usage: 
-  zminiutil [--help] --(list|isset|get|set|unset) \\
+  zminiutil [--help] \\
+    --backup=backup-suffix \\
+    --(list|isset|get|set|setmin|setmax|unset) \\
     --section=s --key=k [--value=v] inifile
 
 Eg:
-  zminiutil --isset --section=serverd --key=locking srv.cnf
-  zminiutil --get   --section=serverd --key=max-fds srv.cnf
-  zminiutil --set   --section=serverd --key=locking < srv.cnf
-  zminiutil --set   --section=serverd --key=max-fds --value=2048 srv.cnf
-  zminiutil --unset --section=serverd --key=buffersz < srv.cnf
+  zminiutil --isset  --section=sec --key=lock srv.cnf
+  zminiutil --get    --section=sec --key=fds srv.cnf
+  zminiutil --backup=.bvx --set    --section=sec --key=lock srv.cnf
+  zminiutil --backup=.baz --set    --section=sec --key=fds --value=12 srv.cnf
+  zminiutil --backup=.bar --setmin --section=sec --key=foo --value=12 srv.cnf
+  zminiutil --backup=.foo --setmax --section=sec --key=foo --value=12 srv.cnf
+  zminiutil --backup=.foz --unset  --section=sec --key=bsz srv.cnf
 EOF
-	exit 0;
+         exit 0;
     }
 }
 
@@ -53,7 +56,10 @@ GetOptions
      'isset'     => \$opt{isset},
      'list'      => \$opt{list},
      'set'       => \$opt{set},
+     'setmin'    => \$opt{setmin},
+     'setmax'    => \$opt{setmax},
      'unset'     => \$opt{unset},
+     'backup=s'  => \$opt{backup},
      'section=s' => \$opt{section},
      'key=s'     => \$opt{key},
      'value=s'   => \$opt{value}
@@ -66,15 +72,41 @@ $op++ if defined $opt{get};
 $op++ if defined $opt{isset};
 $op++ if defined $opt{list};
 $op++ if defined $opt{set};
+$op++ if defined $opt{setmin};
+$op++ if defined $opt{setmax};
 $op++ if defined $opt{unset};
-usage("one of --(list|isset|get|set|unset) must be specified") if $op < 1;
-usage("only one of --(list|isset|get|set|unset) must be specified") if $op > 1;
-usage("--key not specified") if (!defined($opt{key}) && !defined($opt{list}));
-usage("--section not specified") if (!defined($opt{section}) && !defined($opt{list}));
 
-if (defined($opt{value}) && !defined($opt{set})) {
-    usage("--value can only be specified with --set");
-}
+usage("one of [list|isset|get|set|setmin|setmax|unset] must be specified") 
+    if $op < 1;
+
+usage("only one of [list|isset|get|set|setmin|setmax|unset] must be specified")
+    if $op > 1;
+
+usage("--key not specified") 
+    if (!defined($opt{key}) && !defined($opt{list}));
+
+usage("--section not specified") 
+    if (!defined($opt{section}) && !defined($opt{list}));
+
+usage("--value can only be specified with [set|setmin|setmax]")
+    if (defined($opt{value}) && 
+	!(defined($opt{set})||defined($opt{setmin})||defined($opt{setmax})));
+
+usage("--value must be specified with [setmin|setmax]")
+    if (!defined($opt{value}) && 
+	(defined($opt{setmin}) || defined($opt{setmax})));
+
+usage("--backup must be specified with [set|setmin|setmax|unset]")
+    if (!defined($opt{backup}) && 
+	(defined($opt{set}) || defined($opt{setmin}) || 
+	 defined($opt{setmax}) || defined($opt{set})));
+
+usage("one inifile must be specified") 
+    if ($#ARGV != 0);
+
+usage("--value must be a number")
+    if ((defined($opt{setmin}) || defined($opt{setmax})) &&
+	$opt{value} !~ /^[+-]?\d+$/);
 
 #
 # Debug print key/value
@@ -87,61 +119,89 @@ sub dp($$) {
     print "<undef>" if (!defined($v)); 
     print "\n";
 }
+
+#
+# Parse the INI file and return it as an array, one array element per
+# line.
+#
+sub parseFile($) {
+    my $file = shift;
+    open(INPUTFILE, "$file") || die "can't open file $file: $!";
+
+    my @lines = ();
+    my $currentSection = undef;
+
+  LINE: 
+    while (<INPUTFILE>) {
+        my %line = ();
+        $line{content} = $_;
+        push(@lines, \%line);
+
+        # look for a new section definition
+        my ($section) = m/^\s*[[](\s*\w*\s*)[]]\s*(|\x23.*)$/; # \x23=#
+        if (defined($section)) {
+            print "parse: new section=$section\n\n" if ($opt{debug});
+            $currentSection = $section;
+            $line{newSection} = $section;
+            next LINE;
+        }
         
-#
-# Parse
-#
-my $currentSection = undef;
-while (<>) {
-    my %line = ();
-    $line{content} = $_;
-    push(@lines, \%line);
-
-    # look for a new section definition
-    my ($section) = m/^\s*[[](\s*\w*\s*)[]]\s*(|\x23.*)$/; # \x23=#
-    if (defined($section)) {
-        print "parse: new section=$section\n\n" if ($opt{debug});
-        $currentSection = $section;
-        $line{newSection} = $section;
-        next;
+        # look for empty or comment lines and avoid parsing those
+        if (/^\s*(|\x23.*)$/) {
+            next LINE;
+        }
+        
+        my ($keyPre, $key, $keyPost, $equals, $valuePre, $value, $valuePost) =
+            m/^(\s*)([^=\s]*)(\s*)(=?)(\s*)([^\s]*)(\s*(|\x23.*))$/;
+        dp('==== content', $_);
+        $line{section}   = $currentSection; dp('section',   $currentSection);
+        $line{keyPre}    = $keyPre;         dp('keyPre',    $keyPre); 
+        $line{key}       = $key;            dp('key',       $key);
+        $line{keyPost}   = $keyPost;        dp('keyPost',   $keyPost); 
+        $line{equals}    = $equals;         dp('equals',    $equals);
+        $line{valuePre}  = $valuePre;       dp('valuePre',  $valuePre); 
+        $line{value}     = $value;          dp('value',     $value);
+        $line{valuePost} = $valuePost;      dp('valuePost', $valuePost);
     }
-
-    # look for empty or comment lines and avoid parsing those
-    if (/^\s*(|\x23.*)$/) {
-        next;
-    }
-
-    my ($keyPre, $key, $keyPost, $equals, $valuePre, $value, $valuePost) =
-        m/^(\s*)([^=\s]*)(\s*)(=?)(\s*)([^\s]*)(\s*(|\x23.*))$/;
-    dp('==== content', $_);
-    $line{section}   = $currentSection; dp('section',   $currentSection);
-    $line{keyPre}    = $keyPre;         dp('keyPre',    $keyPre); 
-    $line{key}       = $key;            dp('key',       $key);
-    $line{keyPost}   = $keyPost;        dp('keyPost',   $keyPost); 
-    $line{equals}    = $equals;         dp('equals',    $equals);
-    $line{valuePre}  = $valuePre;       dp('valuePre',  $valuePre); 
-    $line{value}     = $value;          dp('value',     $value);
-    $line{valuePost} = $valuePost;      dp('valuePost', $valuePost);
-    if (defined($line{section}) && defined($line{key})) {
-        my $compoundKey = $line{section} . "->" . $line{key};
-        $keys{$compoundKey} = $value;
-    }
+    close(INPUTFILE);
+    return \@lines;
 }
 
 #
-# OP == LIST
-#
+# main
+#        
+my $inputFile = $ARGV[0];
+my $time = strftime("%Y%m%d%H%M%S", localtime);
+my $outputFile = $inputFile . ".modify." . $$ . $time; # created if needed
+my $backupFile = $inputFile . $opt{backup}; # created if needed
+
+my $linesRef = parseFile($inputFile);
+die "error parsing file $inputFile" if (!defined($linesRef));
+
+my @lines = @{$linesRef};
+
+my $fullKey;
+if (defined($opt{section}) && defined($opt{key})) {
+    $fullKey = $opt{section} . "->" . $opt{key};
+}
+
+my %keys = ();
+foreach my $line (@lines) {
+    if (defined($line->{section}) && defined($line->{key})) {
+	my $compoundKey = $line->{section} . "->" . $line->{key};
+	$keys{$compoundKey} = $line->{value};
+    }
+}
+
+### LIST
 if (defined $opt{list}) {
     for my $k (sort keys %keys) {
-        print $k, '=', $keys{$k}, "\n";
+	print $k, '=', $keys{$k}, "\n";
     }
     exit 0;
 }
 
-#
-# OP == GET
-#
-my $fullKey = $opt{section} . "->" . $opt{key};
+### GET
 if (defined $opt{get}) {
     if (defined $keys{$fullKey}) {
 	print $keys{$fullKey}, "\n";
@@ -151,46 +211,71 @@ if (defined $opt{get}) {
     }
 }
 
-#
-# OP == ISSET
-#
+### ISSET
 if (defined $opt{isset}) {
-    exit 0 if defined $keys{$fullKey};
-    exit 1;
-}
+    if (defined $keys{$fullKey}) {
+	exit 0; 
+    } else {
+	exit 1;
+    }
+} 
 
-#
-# OP == SET or UNSET
-#
+### SET/SETMIN/SETMAX/UNSET
+open(BACKUPFILE, ">$backupFile") || die "can't open backup file: $backupFile: $!";
+open(OUTPUTFILE, ">$outputFile") || die "can't open temp file: $outputFile: $!";
 LINE: for my $line (@lines) {
+    print BACKUPFILE $line->{content};
+    
     # Set a previously undefined key at start of its section
-    if (defined($line->{newSection}) &&
-        defined($opt{set}) &&
-        ($line->{newSection} eq $opt{section}) &&
-	!defined($keys{$fullKey}))
+    if (!defined($keys{$fullKey})
+	&& (defined($opt{set})||defined($opt{setmin})||defined($opt{setmax}))
+	&& defined($line->{newSection}) 
+	&& ($line->{newSection} eq $opt{section}))
     {
-        print $line->{content}; # the section header
-	print "\n", $opt{key};
-	print " = ", $opt{value} if defined $opt{value};
-	print "\n";
+	print OUTPUTFILE $line->{content}; # the section header
+	print OUTPUTFILE "\n", $opt{key};
+	print OUTPUTFILE " = ", $opt{value} if defined $opt{value};
+	print OUTPUTFILE "\n";
 	next LINE;
     }
-
-    # Modify existing key
+    
+    # Modify an existing key
     if (defined($line->{key}) && ($line->{key} eq $opt{key}) &&
-        defined($line->{section}) && ($line->{section} eq $opt{section}))
+	defined($line->{section}) && ($line->{section} eq $opt{section}))
     {
-        ### UNSET
+	### UNSET
 	next LINE if defined $opt{unset};
 
-        ### REPLACE
-        if (defined($opt{set})) {       
-	    print $opt{key};
-	    print " = ", $opt{value} if defined $opt{value};
-	    print "\n";
+	### REPLACE WITH NEW
+	if (defined($opt{set})) {
+	    print OUTPUTFILE $opt{key};
+	    print OUTPUTFILE " = ", $opt{value} if defined $opt{value};
+	    print OUTPUTFILE "\n";
+	    next LINE;
+	}
+	
+	if ($line->{value} !~ /^[+-]?\d+$/) {
+	    $line->{value} = 0;
+	}
+
+	### REPLACE IF SMALLER
+	if (defined($opt{setmin}) && ($opt{value} > $line->{value})) {
+	    print OUTPUTFILE $opt{key};
+	    print OUTPUTFILE " = ", $opt{value} if defined $opt{value};
+	    print OUTPUTFILE "\n";
+	    next LINE;
+	}
+	    
+	### REPLACE IF BIGGER
+	if (defined($opt{setmax}) && ($opt{value} < $line->{value})) {
+	    print OUTPUTFILE $opt{key};
+	    print OUTPUTFILE " = ", $opt{value} if defined $opt{value};
+	    print OUTPUTFILE "\n";
 	    next LINE;
 	}
     }
-    print $line->{content};
+    print OUTPUTFILE $line->{content};
 }
-
+close(OUTPUTFILE);
+close(BACKUPFILE);
+rename($outputFile, $inputFile) || die "can't rename $outputFile, $inputFile: $!";

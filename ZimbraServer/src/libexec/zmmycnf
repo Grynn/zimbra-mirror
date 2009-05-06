@@ -18,15 +18,28 @@ source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars -f
 
 #
-# Memory for use by MySQL.
 #
-memkb=$(zmsysmemkb)
-((mymem=memkb * 1024 * mysql_memory_percent / 100))
+# Usage: zmmycnf [--innodb-buffer-pool-memory-percent number].  
+# 
+# We don't error check - if you provide wrong arguments we default the
+# buffer pool percent to keep things simple for the installer.
+#
+bufferPoolPercent=25
+if [ "x$1" = "x--innodb-buffer-pool-memory-percent" ];
+then
+    if echo "$2" | grep -q "^[0-9]*$"
+    then
+        if [ $2 -gt 1 -a $2 -lt 100 ]; then
+            bufferPoolPercent=$2
+        fi
+    fi
+fi
 
 #
-# Allocate 75% of memory that mysql can use to buffer pool.
+# Calculate innodb buffer pool size
 #
-((computed_innodb_buffer_pool_size = mymem * 75 / 100))
+memKB=$(zmsysmemkb)
+((bufferPoolSize=memKB * 1024 * bufferPoolPercent / 100))
 
 #
 # Tell the JDBC driver how many mysql active connections to use.
@@ -61,20 +74,22 @@ max_connections   = 110
 # We do a lot of writes, query cache turns out to be not useful.
 query_cache_type = 0
 
-sort_buffer_size = ${mysql_sort_buffer_size}
-read_buffer_size = ${mysql_read_buffer_size}
+sort_buffer_size = 1048576
+read_buffer_size = 1048576
 
-# Increase the size of the table cache, since each mailbox has its
-# own set of tables
-table_cache = ${mysql_table_cache}
+# (Num mailbox groups * Num tables in each group) + padding
+table_cache = 1200
 
-innodb_buffer_pool_size   = ${computed_innodb_buffer_pool_size}
-innodb_log_file_size      = ${mysql_innodb_log_file_size}
-innodb_log_buffer_size    = ${mysql_innodb_log_buffer_size}
+innodb_buffer_pool_size        = ${bufferPoolSize}
+innodb_log_file_size           = 104857600
+innodb_log_buffer_size         = 8388608
 innodb_file_per_table
-innodb_open_files         = ${mysql_table_cache}
-innodb_max_dirty_pages_pct = 10
-innodb_flush_method       = O_DIRECT
+
+# Value is: 200 + max_connections + 2 * table_cache
+innodb_open_files              = 2710
+
+innodb_max_dirty_pages_pct     = 10
+innodb_flush_method            = O_DIRECT
 innodb_flush_log_at_trx_commit = 0
 
 [mysqld_safe]
