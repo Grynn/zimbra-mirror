@@ -13,14 +13,22 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.memcached;
+package com.zimbra.common.util.memcached;
 
-// list of all memcached key prefixes used by ZCS
-public class MemcachedKeyPrefix {
+/**
+ * Memcached key that supports optional prefix
+ */
+public interface MemcachedKey {
 
-    private static final String DELIMITER = ":";
+    /**
+     * Returns the memcached key prefix.  Can be null.
+     * @return
+     */
+    public String getKeyPrefix();
 
-    public static final String CALENDAR_LIST        = "zmCalsList" + DELIMITER;
-    public static final String CTAGINFO             = "zmCtagInfo" + DELIMITER;
-    public static final String CALDAV_CTAG_RESPONSE = "zmCtagResp" + DELIMITER;
+    /**
+     * Returns the memcached key value, without prefix.
+     * @return
+     */
+    public String getKeyValue();
 }

@@ -13,14 +13,17 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.memcached;
+package com.zimbra.common.util.memcached;
 
-// list of all memcached key prefixes used by ZCS
-public class MemcachedKeyPrefix {
+import com.zimbra.common.service.ServiceException;
 
-    private static final String DELIMITER = ":";
+/**
+ * Serializes an object of type V to String, and deserializes a String to a V object.
+ *
+ * @param <V>
+ */
+public interface MemcachedSerializer<V> {
 
-    public static final String CALENDAR_LIST        = "zmCalsList" + DELIMITER;
-    public static final String CTAGINFO             = "zmCtagInfo" + DELIMITER;
-    public static final String CALDAV_CTAG_RESPONSE = "zmCtagResp" + DELIMITER;
+    public String serialize(V value) throws ServiceException;
+    public V deserialize(String str) throws ServiceException;
 }
