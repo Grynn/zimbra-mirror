@@ -514,16 +514,11 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyUpHdlr =
 function(ev) {
-	if (DwtKeyboardMgr.__shell._blockInput) { return false; }
-	ev = DwtUiEvent.getEvent(ev, this);
-	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
-	var kev = DwtShell.keyEvent;
-	kev.setFromDhtmlEvent(ev);
-	
-	if (kbMgr.__kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
-//		DBG.println("kbnav", "DwtKeyboardMgr.__keyUpHdlr: KEY UP BLOCKED");
-		return kbMgr.__processKeyEvent(ev, kev, false);
-	 } 
+	if (AjxEnv.isMac && AjxEnv.isGeckoBased && ev.keyCode == 0) {
+		return DwtKeyboardMgr.__keyDownHdlr(ev);
+	} else {
+		return DwtKeyboardMgr.__handleKeyEvent(ev);
+	}
 };
 
 /**
@@ -531,9 +526,30 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyPressHdlr =
 function(ev) {
+	return DwtKeyboardMgr.__handleKeyEvent(ev);
+};
+
+/**
+ * @private
+ */
+DwtKeyboardMgr.__handleKeyEvent =
+function(ev) {
+
 	if (DwtKeyboardMgr.__shell._blockInput) { return false; }
+
+	if (ev.type == "keypress") {
+		DwtKeyEvent.geckoCheck(ev);
+	}
+
 	ev = DwtUiEvent.getEvent(ev, this);
-	return DwtKeyboardMgr.__keyUpHdlr(ev);
+//	DBG.println("kbnav", [ev.type, ev.keyCode, ev.charCode, ev.which].join(" / "));
+	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
+	var kev = DwtShell.keyEvent;
+	kev.setFromDhtmlEvent(ev);
+
+	if (kbMgr.__kbEventStatus != DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) {
+		return kbMgr.__processKeyEvent(ev, kev, false);
+	}
 };
 
 /*
@@ -614,12 +630,13 @@ DwtKeyboardMgr.__keyDownHdlr =
 function(ev) {
 	if (DwtKeyboardMgr.__shell._blockInput) { return false; }
 	ev = DwtUiEvent.getEvent(ev, this);
+//	DBG.println("kbnav", [ev.type, ev.keyCode, ev.charCode, ev.which].join(" / "));
 	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 	if (!kbMgr || !kbMgr.__checkStatus()) { return false; }
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
-	var keyCode = kev.keyCode;
-//	DBG.println("kbnav", "kbNav: key down: " + keyCode);
+	var keyCode = DwtKeyEvent.getCharCode(ev);
+//	DBG.println("kbnav", "kbNav: " + keyCode);
 
 	// Popdown any tooltip
 	DwtKeyboardMgr.__shell.getToolTip().popdown();
