@@ -15,6 +15,7 @@
 package com.zimbra.cs.offline;
 
 import com.zimbra.cs.mailbox.MailSender;
+import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.offline.util.ymail.YMailClient;
 import com.zimbra.cs.offline.util.ymail.YMailException;
 import com.zimbra.cs.offline.util.OfflineYAuth;
@@ -52,7 +53,8 @@ public class YMailSender extends MailSender {
     }
 
     @Override
-    protected Collection<Address> sendMessage(MimeMessage mm,
+    protected Collection<Address> sendMessage(Mailbox mbox,
+                               MimeMessage mm,
                                boolean ignoreFailedAddresses,
                                RollbackData[] rollback) throws IOException {
         try {

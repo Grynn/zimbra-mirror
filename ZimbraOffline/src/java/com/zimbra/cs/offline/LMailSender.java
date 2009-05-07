@@ -26,6 +26,7 @@ import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 
 import com.zimbra.cs.mailbox.MailSender;
+import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
@@ -61,7 +62,7 @@ public class LMailSender extends MailSender {
     }
 
     @Override
-    protected Collection<Address> sendMessage(MimeMessage mm, boolean ignoreFailedAddresses,
+    protected Collection<Address> sendMessage(Mailbox mbox, MimeMessage mm, boolean ignoreFailedAddresses,
         RollbackData[] rollback) throws IOException, SafeMessagingException {
         try {
         	Address[] rcpts = mm.getAllRecipients();
