@@ -26,11 +26,12 @@ public class AmailBean extends ImapBean {
 	domain = Domain;
 	if (verb != null && (verb.isAdd() || verb.isModify()) && !isEmpty(email)) {
 	    if (email.indexOf('@') < 0)
-		email += '@' + domain;
-	    if (email.endsWith("@" + domain))
-		username = email.substring(0, email.length() - 1 -  domain.length());
-            else
-		addInvalid("email");
+	    	email += '@' + domain;
+	    int atSign = email.indexOf("@aol.");
+	    if (atSign > 0)
+	    	username = email.substring(0, atSign);
+        else
+        	addInvalid("email");
         }
 	host = "imap.aol.com";
 	isSsl = false;
