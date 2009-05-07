@@ -114,6 +114,10 @@ if [ -d ${zimbra_home} ]; then
   if [ -d ${zimbra_home}/lib ]; then
     chown -R ${root_user}:${root_group} ${zimbra_home}/lib
   fi
+
+  if [ -d ${zimbra_home}/conf ]; then
+    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf
+  fi
 fi
 
 # fix the temp directory
