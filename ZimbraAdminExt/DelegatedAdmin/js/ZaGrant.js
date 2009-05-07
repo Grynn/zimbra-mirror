@@ -78,7 +78,7 @@ ZaGrant.loadMethod = function (by, val, type) {
         params.target.by = by ;
     }
     params.target.type =  type  ;
-    ZaGrant.load.call (this, params) ;
+    return ZaGrant.load.call (this, params) ;
 }
 /*
   params.target - targets info

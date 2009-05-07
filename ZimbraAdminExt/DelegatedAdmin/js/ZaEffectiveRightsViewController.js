@@ -67,7 +67,7 @@ function(entry) {
 
 			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations, this._toolbarOrder);
 
-	  		this._contentView = this._view = new this.tabConstructor(this._container);
+	  		this._contentView = this._view = new this.tabConstructor(this._container, entry);
 			var elements = new Object();
 			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
@@ -86,6 +86,7 @@ function(entry) {
 		ZaApp.getInstance().pushView(this.getContentViewId()) ;
 
        	entry[ZaModel.currentTab] = "1";
+        entry[ZaEffectiveRights.A2_account_currentTab] = "10" ;
 		this._currentObject = entry;
 		this._view.setObject(entry);
 	} catch (ex) {

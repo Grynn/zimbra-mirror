@@ -240,7 +240,7 @@ ZaGrantDialog.grantRightMethod = function () {
         // 2. reduce the load of the server during the account modification time
         if (ZaGrant.grantMethod (obj)) {
             //TODO: test if the grant exists in the current list already
-            currentGrantList.push(obj) ;
+            currentGrantList.push(ZaUtil.deepCloneObject (obj)) ;
             this.getModel().setInstanceValue(this.getInstance(), ZaGrant.A2_grantsList, currentGrantList);
             return true ;
         }
@@ -274,7 +274,7 @@ ZaGrantDialog.grantGlobalGrantMethod = function () {
         // 2. reduce the load of the server during the account modification time
         if (ZaGrant.grantMethod (obj)) {
             //TODO: test if the grant exists in the current list already
-            this.fireCreationEvent(obj);
+            this.fireCreationEvent(ZaUtil.deepCloneObject (obj));
             return true;
         }
     }

@@ -114,3 +114,22 @@ ZaUtil.compareObjects = function(obj1, obj2) {
 	if (obj1.name < obj2.name)
 		return -1;	
 }
+
+ZaUtil.deepCloneObject = function (obj) {
+    var newObj = {};
+    if (obj) {
+        for (var key in obj) {
+            var v = obj [key] ;
+            if (v instanceof Array || v instanceof Object){
+                newObj [key] = ZaUtil.deepCloneObject (v) ;
+            }  else {
+                newObj [key] = v ;
+            }
+        }
+
+    }else {
+        return null ;
+    }
+
+    return newObj ;
+}
