@@ -43,7 +43,7 @@ ifeq ($(BUILD_PLATFORM), UBUNTU8_64)
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-TCMALLOC_VERSION ?= 1.1
+TCMALLOC_VERSION ?= 1.2
 TCMALLOC_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/tcmalloc/tcmalloc-$(TCMALLOC_VERSION).tgz
 
 all: allclean build tar
