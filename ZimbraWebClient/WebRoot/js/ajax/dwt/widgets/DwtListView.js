@@ -481,6 +481,9 @@ function(item, skipNotify) {
 	if (this._rightSelItem == itemEl) {
 		this._rightSelItem = null;
 	}
+	if (this._kbAnchor == itemEl) {
+		this._kbAnchor = null;
+	}
 	this._parentEl.removeChild(itemEl);
 	if (this._list) {
 		this._list.remove(item);
