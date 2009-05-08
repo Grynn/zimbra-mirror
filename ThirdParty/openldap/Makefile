@@ -17,7 +17,7 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 LDAP_RELEASE ?= 2.4.16
-LDAP_PATCH_LEVEL ?= 8z
+LDAP_PATCH_LEVEL ?= 9z
 LDAP_VERSION ?= $(LDAP_RELEASE).$(LDAP_PATCH_LEVEL)
 LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-$(LDAP_VERSION).tgz
 LDAP_LIB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-clibs-$(LDAP_VERSION).tgz
@@ -42,6 +42,7 @@ build:
 	patch -g0 -N -p1 < ../patches/ITS5037.patch; \
 	patch -g0 -N -p1 < ../patches/ITS5464.patch; \
 	patch -g0 -N -p1 < ../patches/leopard.fix; \
+	patch -g0 -N -p1 < ../patches/alock.patch; \
 	patch -g0 -N -p1 < ../patches/dn2id.patch; \
 	patch -g0 -N -p1 < ../patches/ITS6074.patch; \
 	patch -g0 -N -p1 < ../patches/ITS6080.patch; \
