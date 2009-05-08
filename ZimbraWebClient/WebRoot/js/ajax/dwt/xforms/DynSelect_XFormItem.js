@@ -201,6 +201,7 @@ DynSelect_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 			this._width = element.offsetWidth;
 			element.innerHTML = "";
 		}
+		 this.hideElement("tempInput",false);
 	}
 
 	

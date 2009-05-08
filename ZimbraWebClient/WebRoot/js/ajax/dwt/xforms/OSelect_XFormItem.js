@@ -649,6 +649,7 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 			element.size = inputSize;
 			element.className = this.getDisplayCssClass();
 			this._width = element.offsetWidth+20;
+			element.readonly = true;
 		} else {
 			var element = this.getElement("tempDiv");
 			if(!element) 
@@ -660,6 +661,7 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 			this._width = element.offsetWidth+20;
 			element.innerHTML = "";
 		}
+		this.hideElement("tempInput",false);
 	}
 
 	
