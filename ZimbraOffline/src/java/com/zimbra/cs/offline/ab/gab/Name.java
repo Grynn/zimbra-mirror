@@ -30,17 +30,22 @@ public class Name {
         Name name = new Name();
         List<String> parts = getParts(spec);
         int size = parts.size();
-        if (size == 0) return null;
-        String part = parts.get(0);
-        if (size > 1 && part.matches(PREFIX)) {
-            name.prefix = part;
-            parts = parts.subList(1, size--);
-        }
-        name.last = parts.get(--size);
-        if (size > 0) {
+        if (size == 0) {
+            return null;
+        } else if (size == 1) {
             name.first = parts.get(0);
-            if (size > 1) {
-                name.middle = join(parts.subList(1, size));
+        } else {
+            String part = parts.get(0);
+            if (part.matches(PREFIX)) {
+                name.prefix = part;
+                parts = parts.subList(1, size--);
+            }
+            name.last = parts.get(--size);
+            if (size > 0) {
+                name.first = parts.get(0);
+                if (size > 1) {
+                    name.middle = join(parts.subList(1, size));
+                }
             }
         }
         return name;

@@ -203,8 +203,7 @@ public class SyncSession {
                 if (contact.hasGroupMembershipInfos() && contact.hasEmailAddresses()) {
                     Email email = getPrimaryEmail(contact);
                     for (GroupMembershipInfo gmi : contact.getGroupMembershipInfos()) {
-                        boolean deleted = Boolean.TRUE.equals(gmi.getDeleted());
-                        if (!deleted) {
+                        if (!isDeleted(gmi)) {
                             ContactGroup group = groups.get(gmi.getHref());
                             if (group != null) {
                                 group.addEmail(email.getAddress());
@@ -229,6 +228,10 @@ public class SyncSession {
         LOG.debug("Processed remote contact group changes: " + stats);
     }
 
+    private static boolean isDeleted(GroupMembershipInfo gmi) {
+        return Boolean.TRUE.equals(gmi.getDeleted());
+    }
+    
     private Email getPrimaryEmail(ContactEntry contact) {
         if (contact.hasEmailAddresses()) {
             for (Email email : contact.getEmailAddresses()) {
@@ -349,23 +352,31 @@ public class SyncSession {
                     cd.updateParsedContact(pc, photos.get(editUrl));
                     localData.modifyContact(itemId, pc);
                     updateEntry(itemId, entry);
+                    int newFolderId = getLocalFolderId(entry);
+                    if (contact.getFolderId() != newFolderId) {
+                        localData.moveContact(itemId, newFolderId);
+                    }
                     stats.updated++;
                 }
             }
         } else if (!deleted) {
-            // Add a new contact, but only if the contact is a member of at
-            // least one group (not an "auto-contact").
-            if (entry.hasGroupMembershipInfos()) {
-                ContactData cd = new ContactData(entry);
-                ParsedContact pc = cd.newParsedContact(photos.get(editUrl));
-                Contact contact = localData.createContact(pc);
-                updateEntry(contact.getId(), entry);
-                stats.added++;
-            } else {
-                LOG.debug("Skipping contact with id %s because it has no groups",
-                          entry.getId());
+            ContactData cd = new ContactData(entry);
+            ParsedContact pc = cd.newParsedContact(photos.get(editUrl));
+            Contact contact = localData.createContact(pc, getLocalFolderId(entry));
+            updateEntry(contact.getId(), entry);
+            stats.added++;
+        }
+    }
+
+    private int getLocalFolderId(ContactEntry entry) {
+        if (entry.hasGroupMembershipInfos()) {
+            for (GroupMembershipInfo gmi : entry.getGroupMembershipInfos()) {
+                if (!Boolean.TRUE.equals(gmi.getDeleted()) && myContactsUrl.equals(gmi.getHref())) {
+                    return Mailbox.ID_FOLDER_CONTACTS;
+                }
             }
         }
+        return Mailbox.ID_FOLDER_AUTO_CONTACTS;
     }
 
     private static String getEditUrl(BaseEntry entry) {
@@ -398,13 +409,12 @@ public class SyncSession {
                 SyncRequest req;
                 if (change.isAdd()) {
                     ContactEntry entry = cd.newContactEntry();
-                    GroupMembershipInfo gmi = new GroupMembershipInfo();
-                    gmi.setHref(myContactsUrl);
-                    entry.addGroupMembershipInfo(gmi);
+                    updateGroupMembershipInfos(entry, contact);
                     req = SyncRequest.insert(this, id, entry);
                 } else {
                     ContactEntry entry = getEntry(id, ContactEntry.class);
                     cd.updateContactEntry(entry);
+                    updateGroupMembershipInfos(entry, contact);
                     req = SyncRequest.update(this, id, entry);
                 }
                 Attachment photo = Ab.getPhoto(contact);
@@ -427,6 +437,26 @@ public class SyncSession {
             }
         }
         return null;
+    }
+
+    private void updateGroupMembershipInfos(ContactEntry entry, Contact contact) {
+        if (entry.hasGroupMembershipInfos()) {
+            for (GroupMembershipInfo gmi : entry.getGroupMembershipInfos()) {
+                if (myContactsUrl.equals(gmi.getHref())) {
+                    gmi.setDeleted(isAutoContact(contact));
+                    return;
+                }
+            }
+        }
+        if (!isAutoContact(contact)) {
+            GroupMembershipInfo gmi = new GroupMembershipInfo();
+            gmi.setHref(myContactsUrl);
+            entry.addGroupMembershipInfo(gmi);
+        }
+    }
+
+    private static boolean isAutoContact(Contact contact) {
+        return contact.getFolderId() == Mailbox.ID_FOLDER_AUTO_CONTACTS;
     }
 
     private void pushContactChanges(List<SyncRequest> reqs)

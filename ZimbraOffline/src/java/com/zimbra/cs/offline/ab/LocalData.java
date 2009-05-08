@@ -85,13 +85,13 @@ public final class LocalData {
         for (int id : getModifiedContacts(seq)) {
             int folderId = getContact(id).getFolderId();
             if (hasMapping(id)) {
-                if (folderId != Mailbox.ID_FOLDER_CONTACTS) {
+                if (isContactsFolder(folderId)) {
+                    changes.put(id, Change.update(id));
+                } else {
                     // Delete contact moved outside of contacts folder
                     changes.put(id, Change.delete(id));
-                } else {
-                    changes.put(id, Change.update(id));
                 }
-            } else if (folderId == Mailbox.ID_FOLDER_CONTACTS) {
+            } else if (isContactsFolder(folderId)) {
                 changes.put(id, Change.add(id));
             }
         }
@@ -102,7 +102,16 @@ public final class LocalData {
         }
         return changes;
     }
+
+    private boolean isContactsFolder(int id) {
+        return id == Mailbox.ID_FOLDER_CONTACTS ||
+               id == Mailbox.ID_FOLDER_AUTO_CONTACTS && syncAutoContacts();
+    }
     
+    private boolean syncAutoContacts() {
+        return ds.isGmail();
+    }
+
     private boolean hasMapping(int id) throws ServiceException {
         return DbDataSource.hasMapping(ds, id);
     }
@@ -152,6 +161,7 @@ public final class LocalData {
 
     public Collection<DataSourceItem> getAllContactMappings()
         throws ServiceException {
+        // Excludes auto-contacts which have no groups
         return DbDataSource.getAllMappingsInFolder(ds, Mailbox.ID_FOLDER_CONTACTS);
     }
 
@@ -160,8 +170,11 @@ public final class LocalData {
     }
 
     public Contact createContact(ParsedContact pc) throws ServiceException {
-        Contact contact = mbox.createContact(
-            CONTEXT, pc, Mailbox.ID_FOLDER_CONTACTS, null);
+        return createContact(pc, Mailbox.ID_FOLDER_CONTACTS);
+    }
+    
+    public Contact createContact(ParsedContact pc, int folderId) throws ServiceException {
+        Contact contact = mbox.createContact(CONTEXT, pc, folderId, null);
         log.debug("Created new contact: id = %d", contact.getId());
         return contact;
     }
@@ -175,7 +188,7 @@ public final class LocalData {
         try {
             Contact contact = getContact(id);
             // Don't delete contacts moved outside contact folder
-            if (contact.getFolderId() == Mailbox.ID_FOLDER_CONTACTS) {
+            if (isContactsFolder(contact.getFolderId())) {
                 mbox.delete(CONTEXT, id, MailItem.TYPE_CONTACT);
                 log.debug("Deleted contact: id = %d", id);
             }
@@ -183,6 +196,11 @@ public final class LocalData {
         }
     }
 
+    public void moveContact(int id, int targetFolderId) throws ServiceException {
+        log.debug("Moving contact id %d -> folder %d", id, targetFolderId);
+        mbox.move(null, id, MailItem.TYPE_CONTACT, targetFolderId);
+    }
+    
     public void deleteMissingContacts(Set<String> remoteIds) throws ServiceException {
         for (DataSourceItem dsi : getAllContactMappings()) {
             if (!remoteIds.contains(dsi.remoteId)) {
@@ -248,6 +266,9 @@ public final class LocalData {
         log.info("Resetting address book data for data source: %s", ds.getName());
         synchronized (mbox) {
             mbox.emptyFolder(CONTEXT, Mailbox.ID_FOLDER_CONTACTS, true);
+            if (syncAutoContacts()) {
+                mbox.emptyFolder(CONTEXT, Mailbox.ID_FOLDER_AUTO_CONTACTS, true);
+            }
             mbox.setConfig(CONTEXT, key, null);
             DbDataSource.deleteAllMappingsInFolder(ds, Mailbox.ID_FOLDER_CONTACTS);
         }
