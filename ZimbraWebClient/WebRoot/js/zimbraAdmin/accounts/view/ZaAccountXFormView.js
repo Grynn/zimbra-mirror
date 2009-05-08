@@ -1508,6 +1508,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									
 								{ref:ZaAccount.A_zimbraAllowFromAddress,
 									type:_REPEAT_,
+									nowrap:false,labelWrap:true,
 									label:ZaMsg.NAD_zimbraAllowFromAddress,
 									labelLocation:_LEFT_, 
 									addButtonLabel:ZaMsg.NAD_AddAddress, 
