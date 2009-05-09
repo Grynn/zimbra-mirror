@@ -814,7 +814,8 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 						    },								       
 							{type:_CELLSPACER_}									
 						]
-					}
+					},
+					{type:_SPACER_, height:"5"}
 			    ]
 		    },
 			{type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.DLXV_GroupLabelAddMembers,	
