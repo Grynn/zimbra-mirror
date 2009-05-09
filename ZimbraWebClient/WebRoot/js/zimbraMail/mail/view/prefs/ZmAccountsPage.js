@@ -847,7 +847,7 @@ function(id, section, value) {
 	var setup = ZmAccountsPage.PREFS[id];
 	if (!setup) return;
 	if (!control) {
-		section.value = value;
+		setup.value = value;
 		return;
 	}
 
@@ -902,7 +902,7 @@ function(id, section) {
 	var setup = ZmAccountsPage.PREFS[id];
 	if (!setup) return null;
 	if (!control) {
-		return section.value || (id == "DOWNLOAD_TO" && ZmAccountsPage.DOWNLOAD_TO_FOLDER);
+		return setup.value || (id == "DOWNLOAD_TO" && ZmAccountsPage.DOWNLOAD_TO_FOLDER);
 	}
 
 	var value = null;
@@ -1515,8 +1515,7 @@ function(email) {
 
 ZmAccountsPage.prototype._handleTypeChange =
 function(evt) {
-	var radio = this._currentSection.controls["ACCOUNT_TYPE"];
-	var type = ZmAccountsListView.TYPES[radio.getSelectedValue()] || "???";
+	var type = ZmAccountsListView.TYPES[this._getControlValue("ACCOUNT_TYPE")] || "???";
 	this._accountListView.setCellContents(this._currentAccount, ZmItem.F_TYPE, type);
 	this._handleTypeOrSslChange(evt);
 };
@@ -1559,12 +1558,10 @@ function() {
 
 ZmAccountsPage.prototype._handleTypeOrSslChange =
 function(evt) {
-	var controls = this._currentSection.controls;
-
 	var dataSource = this._currentAccount;
+	var section = this._currentSection;
 	if (dataSource._new) {
-		var control = controls["ACCOUNT_TYPE"];
-		var type = control && control.getSelectedValue();
+		var type = this._getControlValue("ACCOUNT_TYPE", section);
 		if (!type) {
 			type = appCtxt.get(ZmSetting.POP_ACCOUNTS_ENABLED) ? ZmAccount.POP : ZmAccount.IMAP;
 		}
@@ -1575,8 +1572,8 @@ function(evt) {
 		this._setControlEnabled("DOWNLOAD_TO", this._currentSection, isPop);
 	}
 
-	var ssl = controls["SSL"];
-	dataSource.connectionType = ssl && ssl.isSelected() ? ZmDataSource.CONNECT_SSL : ZmDataSource.CONNECT_CLEAR;
+	var ssl = this._getControlValue("SSL", section);
+	dataSource.connectionType = ssl ? ZmDataSource.CONNECT_SSL : ZmDataSource.CONNECT_CLEAR;
 	dataSource.port = dataSource.getDefaultPort();
 	this._setPortControls(dataSource.type, dataSource.connectionType, dataSource.port);
 };
