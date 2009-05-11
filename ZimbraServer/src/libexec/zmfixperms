@@ -55,7 +55,9 @@ components="\
   keyview \
   libtool \
   logger/mysql \
+  memcached \
   mysql \
+  net-snmp \
   openldap \
   openssl \
   perdition \
@@ -124,9 +126,27 @@ if [ -d ${zimbra_home} ]; then
     chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/.exrc
   fi
 
+  if [ -f ${zimbra_home}/.bash_profile ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/.bash_profile
+  fi
+
+  if [ -f ${zimbra_home}/.bashrc ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/.bashrc
+  fi
+
+  if [ -d ${zimbra_home}/contrib ]; then
+    chown -R ${root_user}:${root_group} ${zimbra_home}/contrib
+    chmod 755 ${zimbra_home}/contrib/* 2> /dev/null
+  fi
+
   if [ -d ${zimbra_home}/libexec ]; then
     chown -R ${root_user}:${root_group} ${zimbra_home}/libexec
     chmod 755 ${zimbra_home}/libexec/* 2> /dev/null
+  fi
+
+  if [ -d ${zimbra_home}/logger ]; then
+    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/logger
+    chmod 755 ${zimbra_home}/logger/* 2> /dev/null
   fi
 
   if [ -d ${zimbra_home}/bin ]; then
@@ -200,10 +220,11 @@ for i in ${components}; do
   fi
 done
 
-if [ -d ${zimbra_home}/jdk1.6.0_04 ]; then
-  printMsg "Fixing ownership and permissions on ${zimbra_home}/java"
-	chown -R ${root_user}:${root_group} ${zimbra_home}/jdk1.6.0_04
-fi
+for i in ${zimbra_home}/jdk*; do
+  printMsg "Fixing ownership and permissions on ${i}"
+  chown -R ${root_user}:${root_group} ${i}
+  chmod 755 ${i}
+done
 
 if [ -d ${zimbra_home}/lib ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/lib"
