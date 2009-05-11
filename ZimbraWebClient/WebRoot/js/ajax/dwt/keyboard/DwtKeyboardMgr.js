@@ -514,6 +514,7 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyUpHdlr =
 function(ev) {
+	ev = DwtUiEvent.getEvent(ev);
 	if (AjxEnv.isMac && AjxEnv.isGeckoBased && ev.keyCode == 0) {
 		return DwtKeyboardMgr.__keyDownHdlr(ev);
 	} else {
@@ -526,6 +527,7 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyPressHdlr =
 function(ev) {
+	ev = DwtUiEvent.getEvent(ev);
 	return DwtKeyboardMgr.__handleKeyEvent(ev);
 };
 
