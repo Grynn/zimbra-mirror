@@ -68,12 +68,12 @@ class GabService {
         }
     }
 
-    public ContactFeed getContacts(DateTime updatedMin, DateTime updatedMax)
+    public ContactFeed getContactFeed(DateTime updatedMin, DateTime updatedMax)
         throws IOException, ServiceException {
         return getFeed(contactFeedUrl, ContactFeed.class, updatedMin, updatedMax);
     }
 
-    public ContactGroupFeed getGroups(DateTime updatedMin, DateTime updatedMax)
+    public ContactGroupFeed getGroupFeed(DateTime updatedMin, DateTime updatedMax)
         throws IOException, ServiceException {
         return getFeed(groupFeedUrl, ContactGroupFeed.class, updatedMin, updatedMax);
     }

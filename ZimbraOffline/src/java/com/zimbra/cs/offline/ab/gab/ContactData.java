@@ -31,11 +31,11 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Arrays;
-import java.util.Iterator;
 
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.offline.ab.Ab;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.common.service.ServiceException;
 
 import static com.zimbra.cs.mailbox.Contact.*;
@@ -91,6 +91,7 @@ public class ContactData {
     public void updateParsedContact(ParsedContact pc, Attachment photo)
         throws ServiceException {
         setFileAs();
+        // OfflineLog.gab.debug("updateParsedContact: " + fields);
         pc.modify(fields, photo != null ? Arrays.asList(photo) : null);
     }
 
@@ -405,14 +406,14 @@ public class ContactData {
     }
 
     private void set(String name, String value) {
-        if (value != null) {
-            fields.put(name, value);
-        } else {
-            fields.remove(name);
-        }
+        fields.put(name, normalize(value));
     }
 
     private String get(String name) {
-        return fields.get(name);
+        return normalize(fields.get(name));
+    }
+
+    private String normalize(String value) {
+        return value != null && value.length() > 0 ? value : null;
     }
 }

@@ -78,7 +78,7 @@ public class SyncRequest {
 
     public void execute() throws ServiceException, IOException {
         if (session.isTraceEnabled()) {
-            LOG.debug("Executing %s request for item id %d:\n%s", type, itemId,
+            LOG.debug("Executing %s request for itemid %d:\n%s", type, itemId,
                       service.pp(entry));
         }
         try {
@@ -88,6 +88,8 @@ public class SyncRequest {
                 if (photoData != null && isContact()) {
                     service.addPhoto((ContactEntry) entry, photoData, photoType);
                 }
+                LOG.debug("Finished executing INSERT request for itemid %d: updated = %s",
+                          itemId, entry.getUpdated());
                 break;
             case UPDATE:
                 entry = service.update(entry);
@@ -99,6 +101,8 @@ public class SyncRequest {
                         service.deletePhoto(ce);
                     }
                 }
+                LOG.debug("Finished executing UPDATE request for itemid %d: updated = %s",
+                          itemId, entry.getUpdated());
                 break;
             case DELETE:
                 service.delete(entry);

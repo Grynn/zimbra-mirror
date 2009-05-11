@@ -55,6 +55,9 @@ public class SyncSession {
     private final LocalData localData;
     private final GabService service;
     private String myContactsUrl;
+    Map<Integer, Change> localChanges;
+    Map<Integer, ContactEntry> remoteContacts;
+    Map<String, Attachment> photos;
     private boolean reset;
 
     private static class Stats {
@@ -105,20 +108,17 @@ public class SyncSession {
             state = new SyncState();
             reset = true;
         }
-        // Get remote changes since last sync
+        // Get remote contact and group changes
         String rev = state.getLastRevision();
         DateTime lastRev = rev != null ? DateTime.parseDateTime(rev) : null;
-        List<ContactEntry> contacts = service.getContacts(lastRev, null).getEntries();
-        // Check for contact changes
-        Map<String, Attachment> photos = null;
+        List<ContactEntry> contacts = service.getContactFeed(lastRev, null).getEntries();
+        LOG.debug("Found %d remote contact change(s)", contacts.size());
         if (!contacts.isEmpty()) {
             photos = getContactPhotos(contacts);
             lastRev = new DateTime(getLastUpdated(contacts) + 1);
             state.setLastRevision(lastRev.toString());
-        } else {
-            LOG.debug("Found %d remote contact change(s)", contacts.size());
         }
-        List<ContactGroupEntry> groups = service.getGroups(null, lastRev).getEntries();
+        List<ContactGroupEntry> groups = service.getGroupFeed(null, lastRev).getEntries();
         // Get the system group for all new contacts
         myContactsUrl = getSystemGroupUrl(groups, "Contacts");
         LOG.debug("System group 'My Contacts' url = " + myContactsUrl);
@@ -126,14 +126,15 @@ public class SyncSession {
         List<SyncRequest> contactRequests;
         synchronized (mbox) {
             // Get local changes since last sync (none if resetting)
-            Map<Integer, Change> contactChanges = reset ?
+            localChanges = reset ?
                 new HashMap<Integer, Change>() : localData.getContactChanges(seq);
+            remoteContacts = new HashMap<Integer, ContactEntry>(contacts.size());
             // Process any remote contact changes
             if (!contacts.isEmpty()) {     
-                processRemoteChanges(contacts, contactChanges, photos);
+                processRemoteContacts(contacts);
             }
             // Process local changes and determine changes to push
-            contactRequests = processLocalChanges(contactChanges.values());
+            contactRequests = processLocalContactChanges(localChanges.values());
             // Process remote group changes
             if (!contacts.isEmpty()) {
                 processGroups(groups);
@@ -302,16 +303,15 @@ public class SyncSession {
         return service.getPhoto(entry);
     }
     
-    private void processRemoteChanges(List<ContactEntry> entries,
-                                      Map<Integer, Change> changes,
-                                      Map<String, Attachment> photos)
+    private void processRemoteContacts(List<ContactEntry> entries)
         throws ServiceException, IOException {
         LOG.debug("Found %d remote contact change(s)", entries.size());
+        remoteContacts = new HashMap<Integer, ContactEntry>(entries.size());
         Stats stats = new Stats();
         for (ContactEntry entry : entries) {
             DataSourceItem dsi = localData.getReverseMapping(entry.getId());
             try {
-                processRemoteChange(entry, dsi, changes, photos, stats);
+                processRemoteContact(entry, dsi, stats);
             } catch (ServiceException e) {
                 localData.syncContactFailed(e, dsi.itemId, service.pp(entry));
             }
@@ -319,11 +319,7 @@ public class SyncSession {
         LOG.debug("Processed remote contact changes: " + stats);
     }
 
-    private void processRemoteChange(ContactEntry entry,
-                                     DataSourceItem dsi,
-                                     Map<Integer, Change> changes,
-                                     Map<String, Attachment> photos,
-                                     Stats stats)
+    private void processRemoteContact(ContactEntry entry, DataSourceItem dsi, Stats stats)
         throws IOException, ServiceException {
         if (isTraceEnabled()) {
             LOG.debug("Processing remote contact entry:\n%s", service.pp(entry));
@@ -336,38 +332,43 @@ public class SyncSession {
             if (deleted) {
                 localData.deleteContact(itemId);
                 localData.deleteMapping(itemId);
-                changes.remove(itemId);
+                localChanges.remove(itemId);
                 stats.deleted++;
-            } else if (!changes.containsKey(itemId)) {
-                // Remote contact was updated with no local change
-                ContactEntry lastEntry = reset ? null : getEntry(dsi, ContactEntry.class);
-                if (reset || !entry.getUpdated().equals(lastEntry.getUpdated())) {
-                    // Only update local entry if remote contact is different
-                    // from what we last pushed (or we are resetting data).
-                    // This avoids modifying contacts whose changes have just
-                    // been pushed.
-                    Contact contact = localData.getContact(itemId);
-                    ParsedContact pc = new ParsedContact(contact);
-                    ContactData cd = new ContactData(entry);
-                    cd.updateParsedContact(pc, photos.get(editUrl));
-                    localData.modifyContact(itemId, pc);
-                    updateEntry(itemId, entry);
-                    int newFolderId = getLocalFolderId(entry);
-                    if (contact.getFolderId() != newFolderId) {
-                        localData.moveContact(itemId, newFolderId);
-                    }
-                    stats.updated++;
+            } else if (localChanges.containsKey(itemId)) {
+                // If there is a conflict then local change wins
+                LOG.debug("Not importing update for contact %s since local change exists", entry.getId());
+            } else if (reset || isChanged(dsi, entry)) {
+                // Only import contact change if remote contact is different
+                // from what we last pushed or we are resetting local data.
+                Contact contact = localData.getContact(itemId);
+                ParsedContact pc = new ParsedContact(contact);
+                ContactData cd = new ContactData(entry);
+                cd.updateParsedContact(pc, photos.get(editUrl));
+                localData.modifyContact(itemId, pc);
+                updateEntry(itemId, entry);
+                int newFolderId = getLocalFolderId(entry);
+                if (contact.getFolderId() != newFolderId) {
+                    localData.moveContact(itemId, newFolderId);
                 }
+                stats.updated++;
             }
+            remoteContacts.put(itemId, entry);
         } else if (!deleted) {
             ContactData cd = new ContactData(entry);
             ParsedContact pc = cd.newParsedContact(photos.get(editUrl));
             Contact contact = localData.createContact(pc, getLocalFolderId(entry));
             updateEntry(contact.getId(), entry);
+            remoteContacts.put(contact.getId(), entry);
             stats.added++;
         }
     }
 
+    private boolean isChanged(DataSourceItem dsi, ContactEntry entry)
+        throws ServiceException {
+        ContactEntry oldEntry = getEntry(dsi, ContactEntry.class);
+        return oldEntry == null || !oldEntry.getUpdated().equals(entry.getUpdated());
+    }
+    
     private int getLocalFolderId(ContactEntry entry) {
         if (entry.hasGroupMembershipInfos()) {
             for (GroupMembershipInfo gmi : entry.getGroupMembershipInfos()) {
@@ -383,12 +384,12 @@ public class SyncSession {
         return entry.getEditLink().getHref();
     }
 
-    private List<SyncRequest> processLocalChanges(Collection<Change> changes)
+    private List<SyncRequest> processLocalContactChanges(Collection<Change> changes)
         throws ServiceException {
         LOG.debug("Found %d local contact changes", changes.size());
         List<SyncRequest> reqs = new ArrayList<SyncRequest>();
         for (Change change : changes) {
-            SyncRequest req = processLocalChange(change);
+            SyncRequest req = processLocalContactChange(change);
             if (req != null) {
                 reqs.add(req);
             }
@@ -396,7 +397,7 @@ public class SyncSession {
         return reqs;
     }
     
-    private SyncRequest processLocalChange(Change change)
+    private SyncRequest processLocalContactChange(Change change)
         throws ServiceException {
         int id = change.getItemId();
         if (change.isAdd() || change.isUpdate()) {
@@ -412,7 +413,7 @@ public class SyncSession {
                     updateGroupMembershipInfos(entry, contact);
                     req = SyncRequest.insert(this, id, entry);
                 } else {
-                    ContactEntry entry = getEntry(id, ContactEntry.class);
+                    ContactEntry entry = getContactEntry(id);
                     cd.updateContactEntry(entry);
                     updateGroupMembershipInfos(entry, contact);
                     req = SyncRequest.update(this, id, entry);
@@ -494,11 +495,13 @@ public class SyncSession {
         }
     }
 
-    private <T extends BaseEntry> T getEntry(int itemId, Class<T> entryClass)
-        throws ServiceException {
-        return getEntry(localData.getMapping(itemId), entryClass);
+    // Get latest contact entry from retrieved contacts or restore from metadata
+    private ContactEntry getContactEntry(int itemId) throws ServiceException {
+        ContactEntry entry = remoteContacts.get(itemId);
+        return entry != null ?
+            entry : getEntry(localData.getMapping(itemId), ContactEntry.class);
     }
-
+    
     private <T extends BaseEntry> T getEntry(DataSourceItem dsi, Class<T> entryClass)
         throws ServiceException {
         // LOG.debug("Loading contact data for item id = %d", dsi.itemId);
