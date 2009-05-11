@@ -263,7 +263,7 @@ public class  ZFolderBean {
 
     public boolean getIsConversationMoveTarget() {
         return (getIsMessageView() || getIsConversationView() || getIsNullView()) &&
-                !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null) &&
+                !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || !StringUtil.isNullOrEmpty(getRemoteURL())) &&
                 !getId().equals(ZFolder.ID_CHATS);
     }
 
