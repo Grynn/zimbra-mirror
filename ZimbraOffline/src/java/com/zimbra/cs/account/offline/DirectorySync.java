@@ -194,8 +194,13 @@ public class DirectorySync {
             ZFilterRules rules = zmbx.getFilterRules(true);
             Element e = new XMLElement(MailConstants.SAVE_RULES_REQUEST); //dummy element
             rules.toElement(e);
-            RuleManager.setXMLRules(acct, e.getElement(MailConstants.E_FILTER_RULES));
-            OfflineLog.offline.debug("dsync: pulled %d filter rules: %s", rules.getRules().size(), acct.getName());
+            try {
+            	RuleManager.setXMLRules(acct, e.getElement(MailConstants.E_FILTER_RULES));
+            	OfflineLog.offline.debug("dsync: pulled %d filter rules: %s", rules.getRules().size(), acct.getName());
+            } catch (ServiceException x) {
+            	//bug 37422
+            	OfflineLog.offline.warn("dsync: pulled %d filter rules:\n%s", rules.getRules().size(), e.prettyPrint(), x);
+            }
         }
     }
 
