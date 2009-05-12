@@ -73,6 +73,7 @@ public final class LocalData {
 
     public boolean hasLocalChanges() throws ServiceException {
         SyncState ss = loadState();
+        if (ss == null) return true;
         int seq = ss.getLastModSequence();
         return seq <= 0 || getModifiedContacts(seq).size() > 0 ||
             getTombstones(seq, MailItem.TYPE_CONTACT).size() > 0;
