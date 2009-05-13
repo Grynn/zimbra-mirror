@@ -60,6 +60,7 @@ pid-file     = ${mysql_pidfile}
 bind-address = ${mysql_bind_address}
 port         = ${mysql_port}
 user         = ${zimbra_mysql_user}
+tmpdir       = ${zimbra_tmp_directory}
 
 external-locking
 
