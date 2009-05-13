@@ -2,42 +2,42 @@
 
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:em="http://www.mozilla.org/2004/em-rdf#">
-  <Description about="urn:mozilla:install-manifest">
-    <em:id>zimbradnd@zimbra.com</em:id>
-    <em:version>1.1.0</em:version>
-    <em:type>2</em:type>
-    <em:iconURL>chrome://zimbradnd/skin/zimbra.png</em:iconURL>
+    <Description about="urn:mozilla:install-manifest">
+        <em:id>zimbradnd@zimbra.com</em:id>
+        <em:version>1.1.0</em:version>
+        <em:type>2</em:type>
+        <em:iconURL>chrome://zimbradnd/skin/zimbra.png</em:iconURL>
 
-    <em:updateURL>http://files.zimbra.com/update.rdf</em:updateURL>
-    <em:updateKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDOJ7rTnNcHay09ZTXAYt2EhHAsuY4q8o/xrFwbocBwf5Xs+viu/fehIspdW3+mE4CsekVLN8s2mrccMu53+iHpyfjm9R0zlhvsIg6YcP4FP1GaYh05aSm53B/HH+KkfcziYe+53860yy1P80mELJhG+pR1e3wMDS2x+dDxYiElDQIDAQAB</em:updateKey>
+        <em:updateURL>http://files.zimbra.com/update.rdf</em:updateURL>
+        <em:updateKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDOJ7rTnNcHay09ZTXAYt2EhHAsuY4q8o/xrFwbocBwf5Xs+viu/fehIspdW3+mE4CsekVLN8s2mrccMu53+iHpyfjm9R0zlhvsIg6YcP4FP1GaYh05aSm53B/HH+KkfcziYe+53860yy1P80mELJhG+pR1e3wMDS2x+dDxYiElDQIDAQAB</em:updateKey>
 
-    <em:targetApplication>
-      <!-- Firefox -->
-      <Description>
-        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-        <em:minVersion>1.5</em:minVersion>
+        <em:targetApplication>
+            <!-- Firefox -->
+            <Description>
+                <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+                <em:minVersion>1.5</em:minVersion>
 
-        <em:maxVersion>3.0.*</em:maxVersion>
-      </Description>
-    </em:targetApplication>
+                <em:maxVersion>3.0.*</em:maxVersion>
+            </Description>
+        </em:targetApplication>
 
-    <em:targetApplication>
-      <!-- Prism -->
-      <Description>
-        <em:id>prism@developer.mozilla.org</em:id>
+        <em:targetApplication>
+            <!-- Toolkit -->
+            <Description>
+                <em:id>toolkit@mozilla.org</em:id>
+                <em:minVersion>1.9a1</em:minVersion>
+                <em:maxVersion>1.9.1b1pre</em:maxVersion>
+            </Description>
+        </em:targetApplication>
 
-        <em:minVersion>0.8</em:minVersion>
-        <em:maxVersion>1.0.*</em:maxVersion>
-      </Description>
-    </em:targetApplication>
 
-    <em:appManaged>true</em:appManaged>
+        <em:appManaged>true</em:appManaged>
 
-    <!-- front-end metadata -->
+        <!-- front-end metadata -->
 
-    <em:name>ZimbraDnD</em:name>
-    <em:description>Zimbra Extension - Drag and Drop</em:description>
-    <em:creator>support@zimbra.com</em:creator>
-    <em:homepageURL>http://www.zimbra.com</em:homepageURL>
-  </Description>
+        <em:name>ZimbraDnD</em:name>
+        <em:description>Zimbra Extension - Drag and Drop</em:description>
+        <em:creator>support@zimbra.com</em:creator>
+        <em:homepageURL>http://www.zimbra.com</em:homepageURL>
+    </Description>
 </RDF>

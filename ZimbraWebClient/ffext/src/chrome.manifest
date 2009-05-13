@@ -1,4 +1,5 @@
-overlay	chrome://browser/content/browser.xul	chrome://zimbradnd/content/overlay.xul
 content	zimbradnd	jar:chrome/zimbradnd.jar!/content/
-
 skin	zimbradnd	classic/1.0	jar:chrome/zimbradnd.jar!/skin/
+
+overlay chrome://webrunner/content/webrunner.xul chrome://zimbradnd/content/overlay.xul
+overlay	chrome://browser/content/browser.xul	chrome://zimbradnd/content/overlay.xul
