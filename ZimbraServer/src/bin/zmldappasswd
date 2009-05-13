@@ -22,6 +22,7 @@
 use strict;
 use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Util::Common;
+use File::Path;
 use Getopt::Std;
 use Net::LDAP;
 use Net::LDAP::LDIF;
@@ -37,6 +38,10 @@ my $zimbra_home = getLocalConfig("zimbra_home");
 my $cur_rootdn_passwd = getLocalConfig("ldap_root_password");
 my $ldap_starttls_supported = getLocalConfig("ldap_starttls_supported");
 my $zimbra_tmp_directory = getLocalConfig("zimbra_tmp_directory");
+
+if ( !-d $zimbra_tmp_directory ) {
+  File::Path::mkpath("$zimbra_tmp_directory");
+}
 
 getopts('arlnph',\%options) or die "Unable to set options\n";
 

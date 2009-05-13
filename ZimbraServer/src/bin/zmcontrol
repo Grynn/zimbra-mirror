@@ -15,6 +15,7 @@
 # 
 
 use strict;
+
 my $id = `id -u -n`;
 chomp $id;
 if ($id ne "zimbra") {die "Run as the zimbra user!\n";}
@@ -27,7 +28,14 @@ use Zimbra::Mon::Logger;
 
 use Getopt::Std;
 use File::Temp qw/ tempfile /;
+use File::Path;
+
 my $zimbra_tmp_directory=getLocalConfig("zimbra_tmp_directory");
+
+if ( !-d $zimbra_tmp_directory ) {
+  File::Path::mkpath("$zimbra_tmp_directory");
+}
+
 my (undef, $zmcontrolLogfile) = tempfile("zmcontrol.out.XXXXX", DIR=>"$zimbra_tmp_directory",  OPEN=>0);
 
 my $timeout = 180;

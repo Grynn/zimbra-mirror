@@ -17,6 +17,7 @@ use strict;
 use Getopt::Std;
 use POSIX qw(strftime);
 use File::Spec;
+use File::Path;
 
 use vars qw(
     $VERSION $PID_FILE $DEFAULT_DEST $JMAP $JAVA $DEFAULT_TIMEOUT
@@ -31,6 +32,11 @@ if (-f "/opt/zimbra/bin/zmlocalconfig") {
   $zimbra_tmp_directory=`zmlocalconfig -s -m nokey zimbra_tmp_directory`;
   chomp($zimbra_tmp_directory);
 }
+
+if (!-d $zimbra_tmp_directory) {
+  File::Path::mkpath("$zimbra_tmp_directory");
+}
+
 $DEFAULT_DEST = "$zimbra_tmp_directory/zmdiaglog-$ZMHOSTNAME." . $$;
 $DEFAULT_TIMEOUT = 120;
 $PID_FILE = '/opt/zimbra/log/zmmailboxd_java.pid';

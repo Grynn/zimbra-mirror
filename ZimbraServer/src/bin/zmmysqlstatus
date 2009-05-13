@@ -17,7 +17,8 @@
 use strict;
 use Getopt::Long;
 use English;
-use File::Temp qw / tempfile /;
+use File::Path;
+use File::Temp qw/ tempfile /;
 
 # Options
 my $user = "zimbra";
@@ -26,7 +27,7 @@ my $database = "zimbra";
 my $mySqlCommand = "mysql";
 my $verbose = 0;
 my $usage = 0;
-my $zimbra_tmp_directory="/tmp/zimbra";
+my $zimbra_tmp_directory="/tmp/zimbra"
 
 if (-f "/opt/zimbra/bin/zmlocalconfig") {
     $password = `zmlocalconfig -s -m nokey zimbra_mysql_password`;
@@ -35,6 +36,10 @@ if (-f "/opt/zimbra/bin/zmlocalconfig") {
     chomp $user;
     $zimbra_tmp_directory = `zmlocalconfig -s -m nokey zimbra_tmp_directory`;
     chomp $zimbra_tmp_directory;
+}
+
+if ( !-d $zimbra_tmp_directory ) {
+  File::Path::mkpath("$zimbra_tmp_directory");
 }
 
 GetOptions("verbose" => \$verbose, "user=s" => \$user, "password=s" => \$password,
