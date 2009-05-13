@@ -142,6 +142,7 @@ public class SyncSession {
             // Save new sync state 
             ss.setLastRevision(String.valueOf(res.getRevision()));
             ss.setLastModSequence(mbox.getLastChangeID());
+            localData.saveState(ss);
         }
     }
 
