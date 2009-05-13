@@ -229,7 +229,7 @@ Dwt._Z_INC = 1;
 
 
 /** @private */
-Dwt.__nextId = 1;
+Dwt.__nextId = {};
 
 /**
  * This method is used to generate a unique id to be used for an HTML element's id
@@ -239,9 +239,11 @@ Dwt.__nextId = 1;
  * @type String
  */
 Dwt.getNextId =
-function() {
-	return "DWT" + Dwt.__nextId++;
-}
+function(prefix) {
+	if (arguments.length == 0) prefix = "DWT";
+	if (!Dwt.__nextId[prefix]) Dwt.__nextId[prefix] = 1;
+	return prefix+Dwt.__nextId[prefix]++;
+};
 /**
  * @deprecated
  * The association between an element and a control is now via DwtControl.ALL_BY_ID,
