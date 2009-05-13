@@ -130,7 +130,7 @@ public class  ZFolderBean {
      * 
      * @return remote url
      */
-    public String getRemoteURL() { return mFolder.getRemoteURL(); }
+    public String getRemoteURL() { return StringUtil.isNullOrEmpty(mFolder.getRemoteURL()) ? null : mFolder.getRemoteURL(); }
     
     /**
      * for remote folders, the access rights the authenticated user has on the folder.

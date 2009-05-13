@@ -71,6 +71,7 @@ public class SearchContext {
     public boolean getIsConversationSearch() { return ZSearchParams.TYPE_CONVERSATION.equals(mTypes); }
     public boolean getIsMessageSearch() { return ZSearchParams.TYPE_MESSAGE.equals(mTypes); }
     public boolean getIsContactSearch() { return ZSearchParams.TYPE_CONTACT.equals(mTypes); }
+    public boolean getIsGALSearch() { return ZSearchParams.TYPE_GAL.equals(mTypes); }
     public boolean getIsTaskSearch() { return ZSearchParams.TYPE_TASK.equals(mTypes); }    
     public boolean getIsBriefcaseSearch() { return ZSearchParams.TYPE_BRIEFCASE.equals(mTypes); }
     public boolean getIsWikiSearch() { return ZSearchParams.TYPE_WIKI.equals(mTypes); }
