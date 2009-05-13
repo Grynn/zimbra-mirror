@@ -472,28 +472,3 @@
  int bdb_cache_find_id(
  	Operation *op,
  	DB_TXN	*tid,
---- openldap-2.4.16/servers/slapd/back-bdb/search.c	29 Apr 2009 01:55:18 -0000	1.246.2.22
-+++ openldap-2.4.16/servers/slapd/back-bdb/search.c	6 May 2009 17:58:17 -0000
-@@ -569,10 +569,6 @@ dn2entry_retry:
- #ifdef SLAP_ZONE_ALLOC
- 	slap_zn_runlock(bdb->bi_cache.c_zctx, e);
- #endif
--	if ( e != e_root ) {
--		bdb_cache_return_entry_r(bdb, e, &lock);
--	}
--	e = NULL;
- 
- 	/* select candidates */
- 	if ( op->oq_search.rs_scope == LDAP_SCOPE_BASE ) {
-@@ -595,6 +591,11 @@ cand_retry:
- 		}
- 	}
- 
-+	if ( e != e_root ) {
-+		bdb_cache_return_entry_r(bdb, e, &lock);
-+	}
-+	e = NULL;
-+
- 	/* start cursor at beginning of candidates.
- 	 */
- 	cursor = 0;
