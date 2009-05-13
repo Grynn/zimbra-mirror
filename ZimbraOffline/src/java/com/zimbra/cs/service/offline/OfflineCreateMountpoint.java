@@ -45,15 +45,6 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
         Mailbox mbox = getRequestedMailbox(ctxt);
         if (!(mbox instanceof OfflineMailbox))
             throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
-        OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-                       
-        Element eLink = request.getElement(MailConstants.E_MOUNT);
-        String zid = eLink.getAttribute(MailConstants.A_ZIMBRA_ID, null);
-        if (zid != null) {
-            OfflineAccount acct = (OfflineAccount)prov.get(Provisioning.AccountBy.id, zid);
-            if (acct != null)
-                prov.checkMountpointAccount(acct, ctxt.getRequestedAccountId());
-        }
         
         Element response = super.handle(request, context);
         
@@ -69,7 +60,7 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
         int remoteId = (int) eMount.getAttributeLong(MailConstants.A_REMOTE_ID);
         int mod_content = (int) eMount.getAttributeLong(MailConstants.A_REVISION, -1);
         
-        prov.createMountpointAccount(ownerName, ownerId, ((OfflineMailbox)mbox).getOfflineAccount(), false);
+        OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ((OfflineMailbox)mbox).getOfflineAccount());
         CreateMountpoint redo = new CreateMountpoint(mbox.getId(), parentId, name, ownerId, remoteId, view, flags, color);
         redo.setId(id);
         redo.setChangeId(mod_content);

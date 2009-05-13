@@ -122,10 +122,6 @@
   <desc>id of the offline acount through which access to mountpoints is proxied</desc>
 </attr>
 
-<attr name="offlineMountpointAccountIds" type="string" cardinality="single" optionalIn="account">
-  <desc>comma-seperated list of ids of remote accounts that have mountpoints with an offline account</desc>
-</attr>
-
 <attr name="zimbraDataSourceDomain" type="string" cardinality="single" optionalIn="dataSource">
   <desc>data source domain, only for well known data sources</desc>
 </attr>

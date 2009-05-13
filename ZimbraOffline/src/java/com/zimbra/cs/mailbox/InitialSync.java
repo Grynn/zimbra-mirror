@@ -525,17 +525,7 @@ public class InitialSync {
             
             ownerId = elt.getAttribute(MailConstants.A_ZIMBRA_ID);
             remoteId = (int)elt.getAttributeLong(MailConstants.A_REMOTE_ID);
-            try {
-                OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ombx.getOfflineAccount(), true);
-            } catch (OfflineServiceException e) {
-                if (e.getCode().equals(OfflineServiceException.MOUNT_OP_UNSUPPORTED) || 
-                    e.getCode().equals(OfflineServiceException.MOUNT_EXISTING_ACCT)) {
-                    OfflineLog.offline.warn(e.getMessage() + ": " + name);
-                    return;
-                } else {
-                    throw e;
-                }
-            }
+            OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ombx.getOfflineAccount());
             
             redo = new CreateMountpoint(ombx.getId(), parentId, name, ownerId, remoteId, view, flags, color);
             ((CreateMountpoint)redo).setId(id);

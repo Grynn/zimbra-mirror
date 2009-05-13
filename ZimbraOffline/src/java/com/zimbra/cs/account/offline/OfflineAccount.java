@@ -190,6 +190,11 @@ public class OfflineAccount extends Account {
     	return super.getMultiAttr(name);
 	}
 
+    // only change an attribute of a cached OfflineAccount object; the change is not committed to database
+    public void setCachedAttr(String key, String value) {
+        super.getRawAttrs().put(key, value);
+    }
+    
     public String getRemotePassword() {
     	return getAttr(OfflineProvisioning.A_offlineRemotePassword);
     }

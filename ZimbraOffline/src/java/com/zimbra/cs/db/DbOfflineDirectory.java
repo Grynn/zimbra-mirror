@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zimbra.common.util.Pair;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.NamedEntry;
@@ -318,14 +319,14 @@ public class DbOfflineDirectory {
                 ids.add(rs.getString(1));
             return ids;
         } catch (SQLException e) {
-            throw ServiceException.FAILURE("listing all entries of type " + etype, e);
+            throw ServiceException.FAILURE("searching all entries of type " + etype, e);
         } finally {
             DbPool.closeResults(rs);
             DbPool.closeStatement(stmt);
             DbPool.quietClose(conn);
         }
     }
-
+    
     public static Map<String,Object> readDirectoryEntry(EntryType etype, String lookupKey, String lookupValue) throws ServiceException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -613,7 +614,7 @@ public class DbOfflineDirectory {
             DbPool.quietClose(conn);
         }
     }
-    
+        
     public static void deleteDirectoryLeaf(EntryType etype, NamedEntry parent, String id, boolean markChanged) throws ServiceException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -670,5 +671,102 @@ public class DbOfflineDirectory {
             DbPool.closeStatement(stmt);
             DbPool.quietClose(conn);
         }
+    }
+    
+    public static class GranterEntry {
+        public String name;
+        public String id;
+        public String granteeId;
+        
+        public GranterEntry(String n, String i, String gi) {
+            name = n;
+            id = i;
+            granteeId = gi;
+        }
+    }
+    
+    public static void createGranterEntry(String name, String id, String granteeId) throws ServiceException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DbPool.getConnection();
+            stmt = conn.prepareStatement("INSERT INTO zimbra.directory_granter (granter_name, granter_id, grantee_id) VALUES (?, ?, ?)");
+            stmt.setString(1, name);
+            stmt.setString(2, id);
+            stmt.setString(3, granteeId);
+            stmt.executeUpdate();
+            stmt.close();
+            conn.commit();
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("creating granter entry: " + name + ", " + id + ", " + granteeId, e);
+        } finally {
+            DbPool.closeStatement(stmt);
+            DbPool.quietClose(conn);
+        }
+    }
+    
+    public static GranterEntry readGranter(String name, String granteeId) throws ServiceException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = DbPool.getConnection();
+            stmt = conn.prepareStatement("SELECT granter_name, granter_id, grantee_id FROM zimbra.directory_granter" +
+                " WHERE " + Db.equalsSTRING("granter_name") + " AND grantee_id = ?");
+            stmt.setString(1, name.toUpperCase());
+            stmt.setString(2, granteeId);
+            
+            rs = stmt.executeQuery();
+            return rs.next() ? new GranterEntry(rs.getString(1), rs.getString(2), rs.getString(3)) : null;
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("reading granter: " + name + ", " + granteeId, e);
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+            DbPool.quietClose(conn);
+        }         
+    }
+    
+    public static List<GranterEntry> searchGranter(String by, String pattern) throws ServiceException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String column = by.equalsIgnoreCase("id") ? "granter_id" : "granter_name";
+        try {
+            conn = DbPool.getConnection();
+            stmt = conn.prepareStatement("SELECT granter_name, granter_id, grantee_id FROM zimbra.directory_granter" +
+                " WHERE " + Db.likeSTRING(column));
+            stmt.setString(1, pattern.toUpperCase());
+            
+            rs = stmt.executeQuery();            
+            List<GranterEntry> ents = new ArrayList<GranterEntry>();
+            while (rs.next())
+                ents.add(new GranterEntry(rs.getString(1), rs.getString(2), rs.getString(3)));
+            return ents;
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("searching granters: " + by + " like " + pattern, e);
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+            DbPool.quietClose(conn);
+        }        
+    }
+    
+    public static void deleteGranterByGrantee(String granteeId) throws ServiceException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DbPool.getConnection();
+            stmt = conn.prepareStatement("DELETE FROM zimbra.directory_granter WHERE grantee_id = ?");
+            stmt.setString(1, granteeId);
+            
+            stmt.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("deleting granter by grantee id: " + granteeId, e);
+        } finally {
+            DbPool.closeStatement(stmt);
+            DbPool.quietClose(conn);
+        }        
     }
 }

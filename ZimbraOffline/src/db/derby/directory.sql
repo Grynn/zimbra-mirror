@@ -71,3 +71,16 @@ CREATE TABLE directory_leaf_attrs (
 
 CREATE INDEX i_dleafattr_entry_id_name ON directory_leaf_attrs(entry_id, name);
 CREATE INDEX i_dleafattr_name ON directory_leaf_attrs(name);
+
+CREATE TABLE directory_granter (
+   granter_name  VARCHAR(128) NOT NULL,
+   granter_id    CHAR(36) NOT NULL,
+   grantee_id    CHAR(36) NOT NULL,
+
+   CONSTRAINT pk_dgranter PRIMARY KEY (granter_name, grantee_id)
+);
+
+CREATE INDEX i_dgranter_gter_name ON directory_granter(granter_name);
+CREATE INDEX i_dgranter_gter_id ON directory_granter(granter_id);
+CREATE INDEX i_dgranter_gtee_id ON directory_granter(grantee_id);
+

@@ -73,7 +73,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_offlineDeletedDataSource = "offlineDeletedDataSource";
     public static final String A_offlineDeletedSignature = "offlineDeletedSignature";
     public static final String A_offlineMountpointProxyAccountId = "offlineMountpointProxyAccountId";
-    public static final String A_offlineMountpointAccountIds = "offlineMountpointAccountIds";
     public static final String A_zimbraPrefMailtoHandlerEnabled = "zimbraPrefMailtoHandlerEnabled";
     public static final String A_zimbraPrefMailtoAccountId = "zimbraPrefMailtoAccountId";
     public static final String A_zimbraPrefMailToasterEnabled = "zimbraPrefMailToasterEnabled";
@@ -128,6 +127,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private final List<MimeTypeInfo> mMimeTypes;
     private final Map<String, Zimlet> mZimlets;
     private final NamedEntryCache<Account> mAccountCache;
+    private final NamedEntryCache<Account> mGranterCache;
     private final Map<String, Server> mSyncServerCache; 
 
     private boolean mHasDirtyAccounts = true;
@@ -140,6 +140,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         mZimlets      = OfflineZimlet.instantiateAll(this);
         mSyncServerCache = new HashMap<String, Server>();
         mAccountCache = new NamedEntryCache<Account>(LC.ldap_cache_account_maxsize.intValue(), LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
+        mGranterCache = new NamedEntryCache<Account>(LC.ldap_cache_account_maxsize.intValue(), LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
     }
     
     public ZMailbox newZMailbox(OfflineAccount account, String serviceUri) throws ServiceException {
@@ -806,49 +807,43 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return galAcct;
     }
 
-    private void setMountpointAccountId(OfflineAccount account, String mptAcctId) throws ServiceException {
-        String ids = account.getAttr(A_offlineMountpointAccountIds, null);
-        String newIds = null;
-        if (ids == null)
-            newIds = mptAcctId;
-        else if (ids.indexOf(mptAcctId) == -1)
-            newIds = ids + "," + mptAcctId;
-        if (newIds != null)
-            setAccountAttribute(account, A_offlineMountpointAccountIds, newIds);
-    }
-    
-    public void checkMountpointAccount(OfflineAccount mptAcct, String reqAcctId) throws ServiceException {
-        if (!isMountpointAccount(mptAcct))
-            throw OfflineServiceException.MOUNT_EXISTING_ACCT();
-        String pxyAcctId = mptAcct.getAttr(A_offlineMountpointProxyAccountId);
-        if (!pxyAcctId.equals(reqAcctId))
-            throw OfflineServiceException.MOUNT_OP_UNSUPPORTED(); 
-    }
-    
-    public synchronized OfflineAccount createMountpointAccount(String name, String id, OfflineAccount account, boolean check) throws ServiceException {
-        OfflineAccount mptAcct = (OfflineAccount)get(Provisioning.AccountBy.id, id);
-        if (mptAcct != null) {
-            if (check)
-                checkMountpointAccount(mptAcct, account.getId());
-        } else {
-            Map<String, Object> attrs = new HashMap<String, Object>();
-            attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );       
-            attrs.put(A_zimbraMailHost, OfflineConstants.SYNC_SERVER_PREFIX + account.getAttr(OfflineConstants.A_offlineRemoteServerUri));
-            attrs.put(A_uid, id);
-            attrs.put(A_mail, name);
-            attrs.put(A_zimbraId, id);
-            attrs.put(A_cn, id);
-            attrs.put(A_sn, id);
-            attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
-            attrs.put(A_offlineMountpointProxyAccountId, account.getId());
-
-            setDefaultAccountAttributes(attrs);
-
-            mptAcct = (OfflineAccount)createAccountInternal(name, id, attrs, false, true);
+    public synchronized void createMountpointAccount(String name, String id, OfflineAccount account) throws ServiceException {
+        String granteeId = account.getId();
+        DbOfflineDirectory.GranterEntry ge = DbOfflineDirectory.readGranter(name, granteeId);
+        if (ge == null) {
+            DbOfflineDirectory.createGranterEntry(name, id, granteeId);       
+            makeGranter(name, id, account);
         }
-          
-        setMountpointAccountId(account, mptAcct.getId());
-        return mptAcct;
+    }
+    
+    private DbOfflineDirectory.GranterEntry lookupGranter(String by, String key) throws ServiceException {
+        List<DbOfflineDirectory.GranterEntry> ents = DbOfflineDirectory.searchGranter(by, key);
+        return ents.isEmpty() ? null : ents.get(0);
+    }
+    
+    private OfflineAccount makeGranter(String name, String id, String granteeId) throws ServiceException {
+        OfflineAccount grantee = (OfflineAccount)get(Provisioning.AccountBy.id, granteeId);
+        if (grantee == null)
+            throw OfflineServiceException.MOUNT_INVALID_GRANTEE();
+        return makeGranter(name, id, grantee);
+    }
+        
+    private OfflineAccount makeGranter(String name, String id, OfflineAccount grantee) throws ServiceException {
+        Map<String, Object> attrs = new HashMap<String, Object>();
+        attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );       
+        attrs.put(A_zimbraMailHost, ""); // the right value is set in loadRemoteSyncServer()
+        attrs.put(A_uid, id);
+        attrs.put(A_mail, name);
+        attrs.put(A_zimbraId, id);
+        attrs.put(A_cn, id);
+        attrs.put(A_sn, id);
+        attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
+        attrs.put(A_offlineMountpointProxyAccountId, grantee.getId());        
+        setDefaultAccountAttributes(attrs);
+        
+        OfflineAccount acct = new OfflineAccount(name, id, attrs, mDefaultCos.getAccountDefaults(), getLocalAccount());
+        mGranterCache.put(acct);
+        return acct;
     }
     
     private static final String LOCAL_ACCOUNT_UID = "local";
@@ -1093,7 +1088,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public synchronized void deleteAccount(String zimbraId) throws ServiceException {       
         deleteGalAccount(zimbraId);
-        deleteMountpointAccounts(zimbraId);
+        DbOfflineDirectory.deleteGranterByGrantee(zimbraId);
         deleteOfflineAccount(zimbraId);
         
         cachedaccountIds = null;
@@ -1134,21 +1129,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	((DesktopMailbox)mbox).deleteMailbox(false);
         
         deleteOfflineAccount(galAcct.getId());
-    }
-    
-    private void deleteMountpointAccounts(String mainAcctId) throws ServiceException {
-        OfflineAccount mainAcct = (OfflineAccount)get(AccountBy.id, mainAcctId);
-        String ids;
-        if (mainAcct == null || (ids = mainAcct.getAttr(A_offlineMountpointAccountIds, null)) == null)
-            return;       
-        
-        String[] idList = ids.split(",");
-        for (String id : idList) {
-            Account acct = get(Provisioning.AccountBy.id, id);        
-            if (acct != null && isMountpointAccount(acct))
-                deleteOfflineAccount(id);
-        }
-    }        
+    }       
     
     @Override
     public synchronized void renameAccount(String zimbraId, String newName) throws ServiceException {
@@ -1163,14 +1144,23 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private synchronized Account get(boolean includeSyncStatus, AccountBy keyType, String key) throws ServiceException {
         Account acct = null;
         Map<String,Object> attrs = null;
+        DbOfflineDirectory.GranterEntry granter = null;
         if (keyType == AccountBy.id) {
-            if ((acct = mAccountCache.getById(key)) == null)
+            if ((acct = mAccountCache.getById(key)) == null) {
             	attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_zimbraId, key);
+            
+            	if (attrs == null && (acct = mGranterCache.getById(key)) == null)
+            	    granter = lookupGranter("id", key);
+            }
         } else if (keyType == AccountBy.name) {
         	if (key.equals(LOCAL_ACCOUNT_NAME))
         		return getLocalAccount();
-            if ((acct = mAccountCache.getByName(key)) == null)
+            if ((acct = mAccountCache.getByName(key)) == null) {
             	attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_offlineDn, key);
+            
+                if (attrs == null && (acct = mGranterCache.getByName(key)) == null)
+                    granter = lookupGranter("name", key);
+            }
         } else if (keyType == AccountBy.adminName) {
             if ((acct = mAccountCache.getByName(key)) == null && key.equals(LC.zimbra_ldap_user.value())) {
                 attrs = new HashMap<String,Object>(7);
@@ -1183,6 +1173,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 attrs.put(A_zimbraIsAdminAccount, TRUE);
             }
         }
+        
+        if (granter != null)
+            acct = makeGranter(granter.name, granter.id, granter.granteeId);
         
         if (acct != null)
         	attrs = acct.getAttrs();
@@ -1219,13 +1212,13 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             mAccountCache.put(acct);
         }
 
-    	String pxyAcctId = (String)attrs.get(A_offlineMountpointProxyAccountId);
-    	if (pxyAcctId != null) // is offline mountpoint account..
-    	    loadRemoteSyncServer(pxyAcctId, acct, (String)attrs.get(A_zimbraMailHost));
+    	String granteeId = (String)attrs.get(A_offlineMountpointProxyAccountId);
+    	if (granteeId != null) // is offline mountpoint account..
+    	    loadRemoteSyncServer((OfflineAccount)acct, granteeId);
     	        	
         return acct;
     }
-
+    
     @Override
     public synchronized List<NamedEntry> searchAccounts(String query, String[] returnAttrs, String sortAttr, boolean sortAscending, int flags) throws ServiceException {
         throw new UnsupportedOperationException();
@@ -2305,21 +2298,20 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return newOrder;
     }
     
-    protected void loadRemoteSyncServer(String acctId, Account mptAcct, String mptMailHost) throws ServiceException {        
-        Account account = get(AccountBy.id, acctId);
-        if (account == null)
-            throw AccountServiceException.NO_SUCH_ACCOUNT(acctId);
-        String uri = account.getAttr(OfflineConstants.A_offlineRemoteServerUri);
+    protected void loadRemoteSyncServer(OfflineAccount granter, String granteeId) throws ServiceException {        
+        Account grantee = get(AccountBy.id, granteeId);
+        if (grantee == null)
+            throw AccountServiceException.NO_SUCH_ACCOUNT(granteeId);
+        String uri = grantee.getAttr(OfflineConstants.A_offlineRemoteServerUri);
         if (uri == null) {
-            OfflineLog.offline.warn("offline account missing RemoteServerUri attr: " + account.getName());
+            OfflineLog.offline.warn("offline account missing RemoteServerUri attr: " + grantee.getName());
             throw AccountServiceException.INVALID_ATTR_VALUE(OfflineConstants.A_offlineRemoteServerUri + " is null", null);            
         }        
-        String key = (OfflineConstants.SYNC_SERVER_PREFIX + uri).toLowerCase();
-        
-        if (!key.equals(mptMailHost.toLowerCase())) // offline account's remote server has been changed...
-            setAccountAttribute(mptAcct, A_zimbraMailHost, key, true);
+        String mailHost = OfflineConstants.SYNC_SERVER_PREFIX + uri;
+        granter.setCachedAttr(A_zimbraMailHost, mailHost);
    
         Server server;
+        String key = mailHost.toLowerCase();
         synchronized (mSyncServerCache) {
             server = mSyncServerCache.get(key);
         }
@@ -2343,7 +2335,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(Provisioning.A_cn, host);
         attrs.put(Provisioning.A_zimbraServiceHostname, host);
         attrs.put(Provisioning.A_zimbraSmtpHostname, host);
-        attrs.put(Provisioning.A_zimbraId, account.getId());
+        attrs.put(Provisioning.A_zimbraId, grantee.getId());
         attrs.put("zimbraServiceEnabled", "mailbox");
         attrs.put("zimbraServiceInstalled", "mailbox");
         if (ssl)
@@ -2357,8 +2349,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         synchronized(mSyncServerCache) {
             mSyncServerCache.put(key, server);
         }
-        
-        setMountpointAccountId((OfflineAccount)account, mptAcct.getId());
     }
         
     @Override
