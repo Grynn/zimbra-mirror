@@ -35,6 +35,7 @@ function() {
 	if (pv != "") {
 		if (pv.indexOf(this._currentVersion) == -1) {//if current version isnt present, then add it
 			pv = this._currentVersion + "::" + pv;
+			pv = this._get5PrevVersions(pv);
 			this.setUserProperty("supporttool_previousVersions", pv, true);
 		}
 		this._prevVersions = pv.split("::");
@@ -47,6 +48,16 @@ function() {
 	this._createVersionNameValueArray();
 };
 
+com_zimbra_supporttool.prototype._get5PrevVersions =
+function(pv) {
+	var arry = pv.split("::");
+	var versions = new Array();
+	for(var i = 0; i < arry.length && i < 5; i++) {
+		versions.push(arry[i]);
+	}
+
+	return versions.join("::");		
+};
 
 //depricated - we now use appCtxt.getSettings().getInfoResponse.version in .init to get the version. 
 //but, if that breaks, call this method instead
