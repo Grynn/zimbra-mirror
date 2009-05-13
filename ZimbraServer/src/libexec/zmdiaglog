@@ -234,7 +234,7 @@ sub run() {
     my $timeout     = $options{'t'};
     
     if (! -d $destination) {
-        qx(mkdir -p $destination); # would use mkdir() but no -p
+        File::Path::mkpath("$destination"); 
     }
     my (undef, undef,$uid,$gid) = getpwnam('zimbra');
 

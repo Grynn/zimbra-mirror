@@ -15,9 +15,11 @@
 #
 #Convert Oracle Corporate Time iCal file to Zimbra adoptable format
 #
+use strict;
 use Cwd;
 use Date::Calc qw(:all);
-use strict;
+use File::Path;
+
 my $DEBUG = 0;
 #global constants
 my $version = "1.31";
@@ -220,14 +222,16 @@ sub Initialize
   &log_message("$icalfile opened successfully.");
   
   #check for log file path (specially for Windows OS)
-  my $createdir="mkdir -p $logfilepath";
   if (-d $logfilepath)
   {
     &log_message("$logfilepath exists\n");
   }
   else
   {
-    &log_message("mkdir failed\n") unless system($createdir);
+    eval { File::Path::mkpath($logfilepath) };
+    if ($@) {
+      &log_message("Couldn't create $logfilepath: $@\n");
+    }
   }
   
   #open logfile
