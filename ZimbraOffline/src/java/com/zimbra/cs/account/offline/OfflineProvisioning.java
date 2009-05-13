@@ -841,7 +841,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_offlineMountpointProxyAccountId, grantee.getId());        
         setDefaultAccountAttributes(attrs);
         
-        OfflineAccount acct = new OfflineAccount(name, id, attrs, mDefaultCos.getAccountDefaults(), getLocalAccount());
+        OfflineAccount acct = new OfflineAccount(name, id, attrs, mDefaultCos.getAccountDefaults(), getLocalAccount(), this);
         mGranterCache.put(acct);
         return acct;
     }
