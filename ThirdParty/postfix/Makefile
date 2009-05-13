@@ -31,7 +31,7 @@ ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 endif     
 
 SYSTEM_LIB := /usr/lib
-BDB_VERSION ?= 4.7.25.3
+BDB_VERSION ?= 4.7.25.4
 
 POSTFIX_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix/postfix-$(POSTFIX_VERSION).tgz

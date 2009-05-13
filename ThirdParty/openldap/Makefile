@@ -23,7 +23,7 @@ LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openld
 LDAP_LIB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-clibs-$(LDAP_VERSION).tgz
 
 CYRUS_VERSION ?= 2.1.22.3z
-BDB_VERSION ?= 4.7.25.3
+BDB_VERSION ?= 4.7.25.4
 OPENSSL_VERSION ?= 0.9.8k
 LIBTOOL_VERSION ?= 2.2.6a
 

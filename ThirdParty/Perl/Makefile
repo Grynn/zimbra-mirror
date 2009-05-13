@@ -24,7 +24,7 @@ MAKE    := $(shell which make)
 SED     := $(shell which sed)
 CMIRROR	?= http://buildmaster.lab.zimbra.com:8080/cpan/
 
-BDB_VERSION ?= 4.7.25.3
+BDB_VERSION ?= 4.7.25.4
 SSL_VERSION ?= 0.9.8k
 LDAP_VERSION ?= 2.4.16.9z
 BDB_INC ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
