@@ -216,7 +216,7 @@ for i in ${components}; do
   if [ -L ${zimbra_home}/${i} ]; then
     printMsg "Fixing ownership and permissions on ${zimbra_home}/${i}"
     chown ${root_user}:${root_group} ${zimbra_home}/${i}-* 2> /dev/null
-	  chown ${root_user}:${root_group} ${zimbra_home}/${i}/* 2> /dev/null
+	  chown -R ${root_user}:${root_group} ${zimbra_home}/${i}/* 2> /dev/null
   fi
 done
 
