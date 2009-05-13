@@ -63,7 +63,7 @@ esac
 export JAVA_HOME=${zimbra_java_home}
 
 if [ "x${zimbra_tmp_directory}" = "x" ]; then
-  zimbra_tmp_directory=/tmp/zimbra
+  zimbra_tmp_directory=$zimbra_home/data/tmp
 fi
 
 if [ ! -d ${zimbra_tmp_directory} ]; then

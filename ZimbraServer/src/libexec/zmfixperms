@@ -193,11 +193,11 @@ if [ -d ${zimbra_home} ]; then
 fi
 
 # fix the temp directory
-if [ ! -d /tmp/zimbra ]; then
-  mkdir -p /tmp/zimbra
+if [ ! -d ${zimbra_home}/data/tmp ]; then
+  mkdir -p ${zimbra_home}/data/tmp
 fi
-chown ${zimbra_user}:${zimbra_group} /tmp/zimbra
-chmod 755 /tmp/zimbra
+chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/tmp
+chmod 755 ${zimbra_home}/data/tmp
 
 if [ -f ${zimbra_home}/.install_history ]; then
   chmod 644 ${zimbra_home}/.install_history
