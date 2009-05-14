@@ -178,33 +178,6 @@ DynSelect_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 				" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"", "size=",inputSize,
 				this.getMouseoutHandlerHTML(),
 				">"].join("");
-	
-	if (this.getWidth() == "auto") {
-		if(this.getInheritedProperty("editable") && !AjxEnv.isIE) {
-			var element = this.getElement("tempInput");
-			if(!element) 
-				element = this.createElement("tempInput", null, "input", "MENU CONTENTS");
-			element.style.left = -1000;
-			element.style.top = -1000;
-			element.type="text";
-			element.size = inputSize;
-			element.className = this.getDisplayCssClass();
-			this._width = element.offsetWidth;
-		} else {
-			var element = this.getElement("tempDiv");
-			if(!element) 
-				element = this.createElement("tempDiv", null, "div", "MENU CONTENTS");
-			element.style.left = -1000;
-			element.style.top = -1000;
-			element.className = this.getMenuCssClass();
-			element.innerHTML = this.getChoicesHTML();
-			this._width = element.offsetWidth;
-			element.innerHTML = "";
-		}
-		 this.hideElement("tempInput",false);
-	}
-
-	
 
 	HTMLoutput.append(
 		"<div id=", id, this.getCssString(),
@@ -223,8 +196,7 @@ DynSelect_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 DynSelect_XFormItem.prototype.getMouseoutHandlerHTML =
 function () {
 	var formId = this.getFormGlobalRef(), 
-		itemId = this.getId()
-		;
+		itemId = this.getId();
 	
 	var onMouseoutAction = "";
 	

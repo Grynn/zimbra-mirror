@@ -154,8 +154,11 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	menu.innerHTML = this.getChoicesHTML();	
 	var bounds;
 	//bounds = this.getBounds(this.getElement().childNodes[0]);
-	bounds = this.getBounds(this.getElement());
-		
+	if(this.getInheritedProperty("editable")) {
+		bounds = this.getBounds(this.getDisplayElement());
+	} else {
+		bounds = this.getBounds(this.getElement());
+	}
 	var w =DwtShell.getShell(window).getSize();
 	var wh = w.y;
 	var WINDOW_GUTTER = 8;
@@ -184,11 +187,21 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	var menuHeight = mBounds.height;
 	var menuTop = mBounds.top;
 	if (AjxEnv.isIE) {
-		menu.style.width = parseInt(bounds.width)+2;
-		menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 1;
+		if(this.getInheritedProperty("editable")) {
+			menu.style.width = parseInt(bounds.width)+4;
+			menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 1;			
+		} else {
+			menu.style.width = parseInt(bounds.width)+2;
+			menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 1;
+		}
 	} else {
-		menu.style.width = parseInt(bounds.width)-3;
-		menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 4;
+		if(this.getInheritedProperty("editable")) {
+			menu.style.width = parseInt(bounds.width)-5;
+			menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 6;
+		} else {
+			menu.style.width = parseInt(bounds.width)-3;
+			menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width) - 4;			
+		}
 	}
 	if(menuHeight + menuTop > wh - WINDOW_GUTTER) {
 		//menu does not fit downwards - check if it fits upwards
@@ -638,11 +651,12 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 					" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"", "size=",inputSize,
 					">"].join("");
 	}
+	
 	if (this.getWidth() == "auto") {
 		if(this.getInheritedProperty("editable") && !AjxEnv.isIE) {
 			var element = this.getElement("tempInput");
 			if(!element) 
-				element = this.createElement("tempInput", null, "input", "MENU CONTENTS");
+				element = this.createElement("tempInput", null, "input");
 			element.style.left = -1000;
 			element.style.top = -1000;
 			element.type="text";
@@ -650,6 +664,7 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 			element.className = this.getDisplayCssClass();
 			this._width = element.offsetWidth+20;
 			element.readonly = true;
+			this.hideElement("tempInput",false);			
 		} else {
 			var element = this.getElement("tempDiv");
 			if(!element) 
@@ -661,7 +676,7 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 			this._width = element.offsetWidth+20;
 			element.innerHTML = "";
 		}
-		this.hideElement("tempInput",false);
+
 	}
 
 	

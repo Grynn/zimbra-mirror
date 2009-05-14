@@ -896,7 +896,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 			
 
 			setupGroup.items.push(
-				{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
+				{type:_GROUP_, numCols:3,colSizes:["156px","22px","100px"], nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
 					visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_COSId]],
 					items: [
 						{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, choices:this.cosChoices,
@@ -905,6 +905,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
 							visibilityChecks:[],
 							bmolsnr:true,
+							width:"auto",
 							toolTipContent:ZaMsg.tt_StartTypingCOSName,
 							dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
 							onChange:ZaAccount.setCosChanged,
