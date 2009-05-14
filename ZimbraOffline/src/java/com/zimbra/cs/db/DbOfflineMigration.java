@@ -89,6 +89,8 @@ public class DbOfflineMigration {
 	            switch (oldOfflineDbVersion) {
 	            case 1:
 	            	migrateFromOfflineVersion1(conn, isTestRun);
+	            case 2:
+	                migrateFromOfflineVersion2(conn, isTestRun);
 	            	break;
 	            default:
 	            	throw new DbUnsupportedVersionException();
@@ -344,6 +346,60 @@ public class DbOfflineMigration {
             else
             	conn.commit();
         }
+	}
+	
+	private void migrateFromOfflineVersion2(Connection conn, boolean isTestRun) throws Exception {
+        PreparedStatement stmt = null;
+        PreparedStatement stmt2 = null;
+        ResultSet rs = null;
+        boolean isSuccess = false;        
+        try {
+            stmt = conn.prepareStatement("CREATE TABLE zimbra.directory_granter (granter_name VARCHAR(128) NOT NULL, " + 
+                "granter_id CHAR(36) NOT NULL, grantee_id CHAR(36) NOT NULL, CONSTRAINT pk_dgranter PRIMARY KEY(granter_name, grantee_id))");
+            stmt.executeUpdate();
+            stmt.close();
+            stmt = conn.prepareStatement("CREATE INDEX i_dgranter_gter_name ON zimbra.directory_granter(granter_name)");
+            stmt.executeUpdate();
+            stmt.close();
+            stmt = conn.prepareStatement("CREATE INDEX i_dgranter_gter_id ON zimbra.directory_granter(granter_id)");
+            stmt.executeUpdate();
+            stmt.close();
+            stmt = conn.prepareStatement("CREATE INDEX i_dgranter_gtee_id ON zimbra.directory_granter(grantee_id)");
+            stmt.executeUpdate();            
+            stmt.close();
+            
+            stmt = conn.prepareStatement("SELECT zimbra.directory.entry_name, zimbra.directory.zimbra_id, zimbra.directory_attrs.value, " + 
+                "zimbra.directory.entry_id FROM zimbra.directory, zimbra.directory_attrs WHERE " + 
+                "UPPER(zimbra.directory_attrs.name)='OFFLINEMOUNTPOINTPROXYACCOUNTID' AND zimbra.directory.entry_id=zimbra.directory_attrs.entry_id");
+            rs = stmt.executeQuery();
+            while(rs.next()) {
+                stmt2 = conn.prepareStatement("INSERT INTO zimbra.directory_granter(granter_name, granter_id, grantee_id) VALUES(?, ?, ?)");
+                stmt2.setString(1, rs.getString(1));
+                stmt2.setString(2, rs.getString(2));
+                stmt2.setString(3, rs.getString(3));
+                stmt2.executeUpdate();
+                stmt2.close();
+            
+                stmt2 = conn.prepareStatement("DELETE FROM zimbra.directory where entry_id = ?");
+                stmt2.setInt(1, rs.getInt(4));
+                stmt2.executeUpdate();
+                stmt2.close();
+            }
+            
+            stmt = conn.prepareStatement("UPDATE zimbra.config SET value='3' WHERE name='offline.db.version'");
+            stmt.executeUpdate();            
+            stmt.close();
+            
+            isSuccess = true;
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+            DbPool.closeStatement(stmt2);
+            if (isTestRun || !isSuccess)
+                conn.rollback();
+            else
+                conn.commit();
+        }        
 	}
 	
 	private void migrateFromVersion61(Connection conn, boolean isTestRun) throws Exception {

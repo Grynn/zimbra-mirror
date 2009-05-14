@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zimbra.common.util.Pair;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.NamedEntry;
