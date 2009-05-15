@@ -194,7 +194,11 @@ ZaItem.prototype.parseTargetsRightsFromJS = function(targetObj) {
 
 		if(!this.setAttrs)
 			this.setAttrs = {};
-											
+		
+		if(AjxUtil.isEmpty(targetObj.getAttrs)) {
+			this.getAttrs = null;
+			return;
+		}									
 		if(targetObj.getAttrs && targetObj.getAttrs instanceof Array && 
 			targetObj.getAttrs[0]) {
 			if(targetObj.getAttrs[0].a && targetObj.getAttrs[0].a instanceof Array) {
@@ -370,7 +374,10 @@ ZaItem.prototype.load = function (by, val, skipRights, expandDefaults) {
 		this.getAttrs = {};
 		this.setAttrs = {};
 		this.loadEffectiveRights(by,val,expandDefaults);
-	}		
+	}	
+	if(!this.getAttrs) {
+		return;
+	}	
 	//Instrumentation code start
 	if(ZaItem.loadMethods[this._iKeyName]) {
 		var methods = ZaItem.loadMethods[this._iKeyName];
