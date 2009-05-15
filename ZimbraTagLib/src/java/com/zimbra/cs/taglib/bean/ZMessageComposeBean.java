@@ -1378,7 +1378,7 @@ public class ZMessageComposeBean {
 
     public List<ZEmailAddress> getResourcesAddrs() throws ServiceException{
         if (mResources != null && mResources.length() > 0) {
-            return ZEmailAddress.parseAddresses(mAttendees, ZEmailAddress.EMAIL_TYPE_TO);
+            return ZEmailAddress.parseAddresses(mResources, ZEmailAddress.EMAIL_TYPE_TO);
         }
         return null;
     }
