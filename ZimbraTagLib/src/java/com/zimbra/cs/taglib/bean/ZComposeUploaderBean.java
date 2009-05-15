@@ -16,6 +16,7 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean.MessageAttachment;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Provisioning;
@@ -42,6 +43,7 @@ import java.util.Map.Entry;
 public class ZComposeUploaderBean {
 
     public static final String F_attendees = "attendees";
+    public static final String F_resources = "resources";
     public static final String F_apptFolderId = "apptFolderId";
     public static final String F_location = "location";
     public static final String F_timeZone = "timeZone";
@@ -95,11 +97,13 @@ public class ZComposeUploaderBean {
     public static final String F_addCc = "addCc";
     public static final String F_addBcc = "addBcc";
     public static final String F_addAttendees = "addAttendees";
+    public static final String F_addResources = "addResources";
 
     public static final String F_pendingTo = "pendingTo";
     public static final String F_pendingCc = "pendingCc";
     public static final String F_pendingBcc = "pendingBcc";
     public static final String F_pendingAttendees = "pendingAttendees";
+	public static final String F_pendingResources = "pendingResources";
 
     public static final String F_actionSend = "actionSend";
     public static final String F_actionSave = "actionSave";
@@ -167,6 +171,8 @@ public class ZComposeUploaderBean {
     private String mPendingCc;
     private String mPendingBcc;
     private String mPendingAttendees;
+    private String mPendingResources;
+
     private Map<String,List<String>> mParamValues;
     private HashMap<String, String> mOrigRepeatParams;
 
@@ -200,7 +206,7 @@ public class ZComposeUploaderBean {
 
     private ZMessageComposeBean getComposeBean(PageContext pageContext, List<FileItem> items, ZMailbox mailbox) throws ServiceException {
         ZMessageComposeBean compose = new ZMessageComposeBean(pageContext);
-        StringBuilder addTo = null, addCc = null, addBcc = null, addAttendees = null;
+        StringBuilder addTo = null, addCc = null, addBcc = null, addAttendees = null, addResources = null;
 
         for (FileItem item : items) {
             if (!item.isFormField()) {
@@ -237,7 +243,11 @@ public class ZComposeUploaderBean {
                     if (addAttendees == null) addAttendees = new StringBuilder();
                     if (addAttendees.length() > 0) addAttendees.append(", ");
                     addAttendees.append(value);
-                } else if (name.equals(F_pendingTo)) {
+                } else if (name.equals(F_addResources)) {
+                    if (addResources == null) addResources = new StringBuilder();
+                    if (addResources.length() > 0) addResources.append(", ");
+                    addResources.append(value);
+				} else if (name.equals(F_pendingTo)) {
                     mPendingTo = value;
                 } else if (name.equals(F_pendingCc)) {
                     mPendingCc = value;
@@ -245,7 +255,9 @@ public class ZComposeUploaderBean {
                     mPendingBcc = value;
                 } else if (name.equals(F_pendingAttendees)) {
                     mPendingAttendees = value;
-                } else if (name.startsWith("orig_repeat")) {
+                } else if (name.equals(F_pendingResources)) {
+                    mPendingResources = value;
+				} else if (name.startsWith("orig_repeat")) {
                     mOrigRepeatParams.put(name, value);
                 } else {
                     // normalize action params from image submits
@@ -304,6 +316,7 @@ public class ZComposeUploaderBean {
         compose.setTaskPercentComplete(getParam(F_taskPercentComplete));
 
         compose.setAttendees(getParam(F_attendees));
+        compose.setResources(getParam(F_resources));
         compose.setInviteId(getParam(F_invId));
         compose.setCompNum(getParam(F_compNum));
         compose.setExceptionInviteId(getParam(F_exInvId));
@@ -366,15 +379,19 @@ public class ZComposeUploaderBean {
             if (mPendingCc != null) compose.setCc(addToList(compose.getCc(), mPendingCc));
             if (mPendingBcc != null) compose.setBcc(addToList(compose.getBcc(), mPendingBcc));
             if (mPendingAttendees != null) compose.setAttendees(addToList(compose.getAttendees(), mPendingAttendees));
-            if (addTo != null) compose.setTo(addToList(compose.getTo(), addTo.toString()));
+            if (mPendingResources != null) compose.setResources(addToList(compose.getResources(), mPendingResources));
+			if (addTo != null) compose.setTo(addToList(compose.getTo(), addTo.toString()));
             if (addCc != null) compose.setCc(addToList(compose.getCc(), addCc.toString()));
             if (addBcc != null) compose.setBcc(addToList(compose.getBcc(), addBcc.toString()));
             if (addAttendees != null) compose.setAttendees(addToList(compose.getAttendees(), addAttendees.toString()));
+			if (addResources != null) compose.setResources(addToList(compose.getResources(), addResources.toString()));
         } else {
             if (addTo != null) mPendingTo = addToList(mPendingTo, addTo.toString());
             if (addCc != null) mPendingCc = addToList(mPendingCc, addCc.toString());
             if (addBcc != null) mPendingBcc = addToList(mPendingBcc, addBcc.toString());
             if (addAttendees != null) mPendingAttendees = addToList(mPendingAttendees, addAttendees.toString());
+			if (addResources != null) mPendingResources = addToList(mPendingResources, addResources.toString());
+
         }
 
         if (getIsRepeatEdit()) {
@@ -499,7 +516,32 @@ public class ZComposeUploaderBean {
 
     public String getPendingAttendees() { return mPendingAttendees; }
 
+    public String getPendingResources() { return mPendingResources; }
+
     public String getContactLocation() { return getParam(F_contactLocation); }
+
+    public List<ZEmailAddress>  getPendingAttendeesList() {
+        try{
+            if(mPendingAttendees != null && mPendingAttendees.length() > 0){
+                return ZEmailAddress.parseAddresses(mPendingAttendees, ZEmailAddress.EMAIL_TYPE_TO);
+            }
+        }catch (Exception e){
+            ZimbraLog.webclient.debug("Parse attendees failed for:" + mPendingAttendees);
+        }
+        return null;
+    }
+
+    public List<ZEmailAddress>  getPendingResourcesList() {
+        try{
+            if(mPendingResources != null && mPendingResources.length() > 0){
+                return ZEmailAddress.parseAddresses(mPendingResources, ZEmailAddress.EMAIL_TYPE_TO);
+            }
+        }catch (Exception e){
+            ZimbraLog.webclient.debug("Parse resources failed for:" + mPendingResources);
+        }
+        return null;
+    }
+
     
     private static ServletFileUpload getUploader(boolean limitByFileUploadMaxSize) {
         DiskFileItemFactory dfif = new DiskFileItemFactory();

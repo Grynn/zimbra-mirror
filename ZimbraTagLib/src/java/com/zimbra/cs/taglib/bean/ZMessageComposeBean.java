@@ -95,6 +95,7 @@ public class ZMessageComposeBean {
     public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND, DRAFT, APPT_NEW, APPT_EDIT, APPT_CANCEL, INVITE_ACCEPT, INVITE_DECLINE, INVITE_TENTATIVE }
 
     private String mAttendees;
+    private String mResources;
     private String mApptFolderId;
     private String mLocation;
     private String mTimeZone;
@@ -239,6 +240,9 @@ public class ZMessageComposeBean {
 
     public void setAttendees(String attendees) { mAttendees = attendees; }
     public String getAttendees() { return mAttendees; }
+
+    public void setResources(String resources) { mResources = resources; }
+    public String getResources() { return mResources; }
 
     public void setLocation(String location) { mLocation = location; }
     public String getLocation() { return mLocation; }
@@ -965,6 +969,7 @@ public class ZMessageComposeBean {
         setLocation(req.getParameter(ZComposeUploaderBean.F_location));
         setAllDay("1".equals(req.getParameter(ZComposeUploaderBean.F_allDay)));
         setAttendees(req.getParameter(ZComposeUploaderBean.F_attendees));
+        setResources(req.getParameter(ZComposeUploaderBean.F_resources));
         setFreeBusyStatus(paramInit(req, ZComposeUploaderBean.F_freeBusyStatus, ZInvite.ZFreeBusyStatus.B.name()));
         setTimeZone(paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneId()));
         setApptFolderId(ZFolder.ID_CALENDAR);
@@ -1019,11 +1024,18 @@ public class ZMessageComposeBean {
 
         if (!appt.getAttendees().isEmpty()) {
             StringBuilder sb = new StringBuilder();
+            StringBuilder rs = new StringBuilder();
             for (ZAttendee attendee : appt.getAttendees()) {
-                if (sb.length() > 0) sb.append(", ");
-                sb.append(attendee.getEmailAddress().getFullAddress());
+                if(attendee.getCalendarUserType().isResource()){
+                    if (rs.length() > 0) rs.append(", ");
+                    rs.append(attendee.getEmailAddress().getFullAddress());
+                }else{
+                    if (sb.length() > 0) sb.append(", ");
+                    sb.append(attendee.getEmailAddress().getFullAddress());
+                }
             }
             setAttendees(sb.toString());
+            setResources(rs.toString());
         }
 
         setClassProp(appt.getClassProp().name());
@@ -1357,6 +1369,20 @@ public class ZMessageComposeBean {
     </comp></inv>
 
      */
+    public List<ZEmailAddress> getAttendeesAddrs() throws ServiceException{
+        if (mAttendees != null && mAttendees.length() > 0) {
+            return ZEmailAddress.parseAddresses(mAttendees, ZEmailAddress.EMAIL_TYPE_TO);
+        }
+        return null;
+    }
+
+    public List<ZEmailAddress> getResourcesAddrs() throws ServiceException{
+        if (mResources != null && mResources.length() > 0) {
+            return ZEmailAddress.parseAddresses(mAttendees, ZEmailAddress.EMAIL_TYPE_TO);
+        }
+        return null;
+    }
+
     public ZInvite toInvite(ZMailbox mailbox, ZMessageBean message) throws ServiceException {
         ZInvite existingInvite = message != null ? message.getInvite() : null;
         ZInvite invite = new ZInvite();
@@ -1415,6 +1441,20 @@ public class ZMessageComposeBean {
                 ZAttendee attendee = new ZAttendee();
                 attendee.setAddress(addr.getAddress());
                 attendee.setRole(ZRole.REQ);
+                attendee.setParticipantStatus(ZParticipantStatus.NE);
+                attendee.setRSVP(true);
+                if (addr.getPersonal() != null) attendee.setPersonalName(addr.getPersonal());
+                comp.getAttendees().add(attendee);
+            }
+        }
+        if (mResources != null && mResources.length() > 0) {
+            List<ZEmailAddress> addrs =
+                    ZEmailAddress.parseAddresses(mResources, ZEmailAddress.EMAIL_TYPE_TO);
+            for (ZEmailAddress addr : addrs) {
+                ZAttendee attendee = new ZAttendee();
+                attendee.setAddress(addr.getAddress());
+                attendee.setRole(ZRole.NON);
+                attendee.setCalendarUserType(ZInvite.ZCalendarUserType.RES);
                 attendee.setParticipantStatus(ZParticipantStatus.NE);
                 attendee.setRSVP(true);
                 if (addr.getPersonal() != null) attendee.setPersonalName(addr.getPersonal());
@@ -1832,6 +1872,9 @@ da body
 
         if (mAttendees != null && mAttendees.length() > 0)
             addrs.addAll(ZEmailAddress.parseAddresses(mAttendees, ZEmailAddress.EMAIL_TYPE_TO));
+
+        if (mResources != null && mResources.length() > 0)
+                    addrs.addAll(ZEmailAddress.parseAddresses(mResources, ZEmailAddress.EMAIL_TYPE_TO));
 
         ZOutgoingMessage m = new ZOutgoingMessage();
         
