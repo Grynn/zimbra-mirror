@@ -16,15 +16,19 @@ BDB_VERSION ?= $(BDB_RELEASE).$(BDB_PATCH_LEVEL)
 BDB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/bdb/bdb-$(BDB_VERSION).tgz
 BDB_LIB_DIR ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib
 
-CONFIG_FLAG :=
+CONFIG_FLAG := --enable-posixmutexes --with-mutex=POSIX/pthreads
 
-ifneq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	CONFIG_FLAG := --enable-posixmutexes --with-mutex=POSIX/pthreads
+ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
+	CONFIG_FLAG :=
+endif
+ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
+	CONFIG_FLAG := 
 endif
 
 all: allclean build tar
 
 build:
+	@echo "Building for Platform $(BUILD_PLATFORM)"
 	(tar xzf src/db-$(BDB_RELEASE).tar.gz; \
 	mv db-$(BDB_RELEASE) db-$(BDB_VERSION); \
 	cd db-$(BDB_VERSION); \
