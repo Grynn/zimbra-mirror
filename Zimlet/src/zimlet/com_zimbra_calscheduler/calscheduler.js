@@ -2345,7 +2345,7 @@ function(newSlot, startTime, endTime) {
 
 CalSchedulerView.prototype.getNextSearchSlot =
 function(newStartTime, duration) {
-   var newStartDate = this.getNextPossibleDay(newStartTime);
+   var newStartDate = this.getNextPossibleDay(newStartTime, duration);
    //newStartDate = this.roundBySearchTimeSelection(newStartDate);
 
     DBG.println("new Start Date : " + newStartDate);
@@ -2363,13 +2363,13 @@ function(newStartTime, duration) {
 * @param newStartTime	[time]          start search time
 */
 CalSchedulerView.prototype.getNextPossibleDay =
-function(newStartTime) {
+function(newStartTime, duration) {
     var newStartDate = new Date(newStartTime);
     var newDayOfWeek = newStartDate.getDay();
     for(var i=newDayOfWeek; i<this._weeklyCheckboxes.length; i++) {
         newDayOfWeek = newStartDate.getDay();
         if(this._weeklyCheckboxes[i].checked) {
-            var sd = this.roundBySearchTimeSelection(newStartDate);
+            var sd = this.roundBySearchTimeSelection(newStartDate, duration);
             if(sd) {
                 return sd;
             }
@@ -2395,16 +2395,22 @@ function(newStartDate) {
 
 
 CalSchedulerView.prototype.roundBySearchTimeSelection =
-function(startDate) {
+function(startDate, duration) {
     if(!startDate) {
         return null;
     }
     var searchStartDate = this._startSearchTimeSelect.getValue(new Date(startDate));
     var searchEndDate = this._endSearchTimeSelect.getValue(new Date(startDate));
 
-    if(startDate.getTime() < searchStartDate.getTime()) {
+    var searchStartTime = searchStartDate.getTime();
+    var searchEndTime = searchEndDate.getTime();
+
+    var startTime = startDate.getTime();
+    var endTime = startTime + duration;
+
+    if(startTime <= searchStartTime && endTime <= searchEndTime ) {
         return searchStartDate;
-    }else if(startDate.getTime() > searchEndDate.getTime()) {
+    }else if(startTime >= searchEndTime) {
         return null;
     }else {
         return startDate;
