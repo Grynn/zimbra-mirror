@@ -21,7 +21,7 @@
 * @param app {ZaApp}
 * @author Greg Solovyev
 **/
-ZaAccountXFormView = function(parent) {
+ZaAccountXFormView = function(parent, entry) {
 	ZaTabView.call(this, parent,  "ZaAccountXFormView");	
 	this.accountStatusChoices = [
 		{value:ZaAccount.ACCOUNT_STATUS_ACTIVE, label:ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_ACTIVE)},
@@ -36,7 +36,7 @@ ZaAccountXFormView = function(parent) {
 	this._domains = {} ;
 	//console.time("ZaAccountXFormView.initForm");
 	//DBG.timePt(AjxDebug.PERF, "started initForm");
-	this.initForm(ZaAccount.myXModel,this.getMyXForm());
+	this.initForm(ZaAccount.myXModel,this.getMyXForm(entry), entry);
 	//console.timeEnd("ZaAccountXFormView.initForm");
 	//DBG.timePt(AjxDebug.PERF, "finished initForm");
 }
@@ -682,13 +682,150 @@ ZaAccountXFormView.isAccountTypeSet = function () {
 	 return !ZaAccount.isAccountTypeSet(this.getInstance());
 }
 
+ZaAccountXFormView.CONTACT_TAB_ATTRS = [ZaAccount.A_telephoneNumber,
+		ZaAccount.A_company, 
+		ZaAccount.A_street, 
+		ZaAccount.A_city, 
+		ZaAccount.A_state,
+		ZaAccount.A_zip,
+		ZaAccount.A_country];
+
+ZaAccountXFormView.CONTACT_TAB_RIGHTS = [];
+
+ZaAccountXFormView.MEMBEROF_TAB_ATTRS = [];		
+ZaAccountXFormView.MEMBEROF_TAB_RIGHTS = [ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT];
+
+ZaAccountXFormView.FEATURE_TAB_ATTRS = [ZaAccount.A_zimbraFeatureMailEnabled,
+	ZaAccount.A_zimbraFeatureContactsEnabled,
+	ZaAccount.A_zimbraFeatureCalendarEnabled,
+	ZaAccount.A_zimbraFeatureTasksEnabled,
+	ZaAccount.A_zimbraFeatureNotebookEnabled,
+	ZaAccount.A_zimbraFeatureBriefcasesEnabled,
+	ZaAccount.A_zimbraFeatureIMEnabled,
+	ZaAccount.A_zimbraFeatureOptionsEnabled,
+	ZaAccount.A_zimbraFeatureTaggingEnabled,
+	ZaAccount.A_zimbraFeatureSharingEnabled,
+	ZaAccount.A_zimbraFeatureChangePasswordEnabled,
+	ZaAccount.A_zimbraFeatureSkinChangeEnabled,
+	ZaAccount.A_zimbraFeatureHtmlComposeEnabled,
+	ZaAccount.A_zimbraFeatureShortcutAliasesEnabled,
+	ZaAccount.A_zimbraFeatureGalEnabled,
+	ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled,
+	ZaAccount.A_zimbraFeatureMailPriorityEnabled,
+	ZaAccount.A_zimbraFeatureFlaggingEnabled,
+	ZaAccount.A_zimbraImapEnabled,
+	ZaAccount.A_zimbraPop3Enabled,
+	ZaAccount.A_zimbraFeatureImapDataSourceEnabled,
+	ZaAccount.A_zimbraFeaturePop3DataSourceEnabled,
+	ZaAccount.A_zimbraFeatureConversationsEnabled,
+	ZaAccount.A_zimbraFeatureFiltersEnabled,
+	ZaAccount.A_zimbraFeatureOutOfOfficeReplyEnabled,
+	ZaAccount.A_zimbraFeatureNewMailNotificationEnabled,
+	ZaAccount.A_zimbraFeatureMailPollingIntervalPreferenceEnabled,
+	ZaAccount.A_zimbraFeatureIdentitiesEnabled,
+	ZaAccount.A_zimbraFeatureGroupCalendarEnabled,
+	ZaAccount.A_zimbraFeatureInstantNotify,
+	ZaAccount.A_zimbraFeatureAdvancedSearchEnabled,
+	ZaAccount.A_zimbraFeatureSavedSearchesEnabled,
+	ZaAccount.A_zimbraFeatureInitialSearchPreferenceEnabled];
+
+ZaAccountXFormView.FEATURE_TAB_RIGHTS = [];
+ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
+	ZaAccount.A_zimbraPrefUseTimeZoneListInCalendar,
+	ZaAccount.A_zimbraPrefCalendarUseQuickAdd,
+	ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal,
+	ZaAccount.A_zimbraPrefCalendarApptReminderWarningTime,
+	ZaAccount.A_zimbraPrefTimeZoneId,
+	ZaAccount.A_zimbraPrefContactsPerPage,
+	ZaAccount.A_zimbraPrefGalAutoCompleteEnabled,
+	ZaAccount.A_zimbraPrefAutoAddAddressEnabled,
+	ZaAccount.A_prefMailSignature,
+	ZaAccount.A_zimbraMailSignatureMaxLength,
+	ZaAccount.A_zimbraPrefMailSignatureStyle,
+	ZaAccount.A_prefMailSignatureEnabled,
+	ZaAccount.A_zimbraPrefForwardReplyInOriginalFormat,
+	ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor,
+	ZaAccount.A_zimbraPrefHtmlEditorDefaultFontFamily,
+	ZaAccount.A_zimbraPrefHtmlEditorDefaultFontSize,
+	ZaAccount.A_zimbraPrefComposeFormat,
+	ZaAccount.A_zimbraPrefComposeInNewWindow,
+	ZaAccount.A_zimbraAllowFromAddress,
+	ZaAccount.A_zimbraAllowAnyFromAddress,
+	ZaAccount.A_prefSaveToSent,
+	ZaAccount.A_zimbraPrefOutOfOfficeReply,
+	ZaAccount.A_zimbraPrefNewMailNotificationAddress,
+	ZaAccount.A_zimbraPrefNewMailNotificationEnabled,
+	ZaAccount.A_zimbraMailMinPollingInterval,
+	ZaAccount.A_zimbraPrefMailPollingInterval,
+	ZaAccount.A_zimbraPrefMailDefaultCharset,
+	ZaAccount.A_zimbraPrefMailItemsPerPage,
+	ZaAccount.A_zimbraPrefGroupMailBy,
+	ZaAccount.A_zimbraPrefDisplayExternalImages,
+	ZaAccount.A_zimbraPrefMessageViewHtmlPreferred,
+	ZaAccount.A_zimbraPrefLocale,
+	ZaAccount.A_zimbraJunkMessagesIndexingEnabled,
+	ZaAccount.A_zimbraPrefShowSelectionCheckbox,
+	ZaAccount.A_zimbraPrefWarnOnExit,
+	ZaAccount.A_zimbraPrefUseKeyboardShortcuts,
+	ZaAccount.A_zimbraPrefImapSearchFoldersEnabled,
+	ZaAccount.A_zimbraPrefShowSearchString,
+	ZaAccount.A_zimbraPrefMailInitialSearch,
+	ZaAccount.A_zimbraPrefClientType
+];
+ZaAccountXFormView.PREFERENCES_TAB_RIGHTS = [];	
+
+ZaAccountXFormView.ALIASES_TAB_ATTRS = [ZaAccount.A_zimbraMailAlias];
+ZaAccountXFormView.ALIASES_TAB_RIGHTS = [ZaAccount.ADD_ACCOUNT_ALIAS_RIGHT, ZaAccount.REMOVE_ACCOUNT_ALIAS_RIGHT];
+
+ZaAccountXFormView.FORWARDING_TAB_ATTRS = [ZaAccount.A_zimbraFeatureMailForwardingEnabled,
+	ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled,
+	ZaAccount.A_zimbraMailForwardingAddress];
+ZaAccountXFormView.FORWARDING_TAB_RIGHTS = [];
+
+ZaAccountXFormView.INTEROP_TAB_ATTRS = [ZaAccount.A_zimbraForeignPrincipal];
+ZaAccountXFormView.INTEROP_TAB_RIGHTS = [];
+
+ZaAccountXFormView.SKIN_TAB_ATTRS = [ZaAccount.A_zimbraPrefSkin,ZaAccount.A_zimbraAvailableSkin];
+ZaAccountXFormView.SKIN_TAB_RIGHTS = [];
+
+ZaAccountXFormView.ZIMLET_TAB_ATTRS = [ZaAccount.A_zimbraZimletAvailableZimlets];
+ZaAccountXFormView.ZIMLET_TAB_RIGHTS = [];
+
+ZaAccountXFormView.ADVANCED_TAB_ATTRS = [ZaAccount.A_zimbraAttachmentsBlocked,
+	ZaAccount.A_zimbraMailQuota,
+	ZaAccount.A_zimbraContactMaxNumEntries,
+	ZaAccount.A_zimbraQuotaWarnPercent,
+	ZaAccount.A_zimbraQuotaWarnInterval,
+	ZaAccount.A_zimbraQuotaWarnMessage,
+	ZaAccount.A_zimbraPasswordLocked,
+	ZaAccount.A_zimbraMinPwdLength,
+	ZaAccount.A_zimbraMaxPwdLength,
+	ZaAccount.A_zimbraPasswordMinUpperCaseChars,
+	ZaAccount.A_zimbraPasswordMinLowerCaseChars,
+	ZaAccount.A_zimbraPasswordMinPunctuationChars,
+	ZaAccount.A_zimbraPasswordMinNumericChars,
+	ZaAccount.A_zimbraMinPwdAge,
+	ZaAccount.A_zimbraMaxPwdAge,
+	ZaAccount.A_zimbraEnforcePwdHistory,
+	ZaAccount.A_zimbraPasswordLockoutEnabled,
+	ZaAccount.A_zimbraPasswordLockoutMaxFailures,
+	ZaAccount.A_zimbraPasswordLockoutDuration,
+	ZaAccount.A_zimbraPasswordLockoutFailureLifetime,
+	ZaAccount.A_zimbraAdminAuthTokenLifetime,
+	ZaAccount.A_zimbraAuthTokenLifetime,
+	ZaAccount.A_zimbraMailIdleSessionTimeout,
+	ZaAccount.A_zimbraMailMessageLifetime,
+	ZaAccount.A_zimbraMailTrashLifetime,
+	ZaAccount.A_zimbraMailSpamLifetime,
+	ZaAccount.A_zimbraFreebusyExchangeUserOrg];
+ZaAccountXFormView.ADVANCED_TAB_RIGHTS = [];
 
 /**
 * This method is added to the map {@link ZaTabView#XFormModifiers}
 * @param xFormObject {Object} a definition of the form. This method adds/removes/modifies xFormObject to construct
 * an Account view. 
 **/
-ZaAccountXFormView.myXFormModifier = function(xFormObject) {	
+ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {	
 	
 	var domainName;
 	try {
@@ -753,52 +890,60 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					});
 
     this.tabChoices = new Array();
+	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8, _tab9, _tab10, _tab11;
 	
-	var _tab1 = ++this.TAB_INDEX;
-	var _tab2 = ++this.TAB_INDEX;	
-	var _tab3 = ++this.TAB_INDEX;	
-	var _tab4 = ++this.TAB_INDEX;	
-	var _tab5 = ++this.TAB_INDEX;		
-	var _tab6 = ++this.TAB_INDEX;			
-	var _tab7 = ++this.TAB_INDEX;	
-	var _tab8 = ++this.TAB_INDEX;			
-	var _tab9 = ++this.TAB_INDEX;		
-	var _tab10 = ++this.TAB_INDEX;
-    var _tab11 = ++this.TAB_INDEX;
+	_tab1 = ++this.TAB_INDEX;
+	this.tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
 		
-	//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_GENERAL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
-		this.tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.CONTACT_TAB_ATTRS, ZaAccountXFormView.CONTACT_TAB_RIGHTS)) {
+		_tab2 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab2, label:ZaMsg.TABT_ContactInfo});	
+	}
+		
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.MEMBEROF_TAB_ATTRS, ZaAccountXFormView.MEMBEROF_TAB_RIGHTS)) {
+		_tab3 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});	
+	}
+
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.FEATURE_TAB_ATTRS, ZaAccountXFormView.FEATURE_TAB_RIGHTS)) {
+		_tab4 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Features});	
+	}
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CONTACT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])		
-		this.tabChoices.push({value:_tab2, label:ZaMsg.TABT_ContactInfo});
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.PREFERENCES_TAB_ATTRS, ZaAccountXFormView.PREFERENCES_TAB_RIGHTS)) {
+		_tab5 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Preferences});	
+	}
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_MEMBEROF_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
-		this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});
-
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_FEATURES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
-		this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Features});
-					
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_PREFS_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
-		this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Preferences});
-
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ALIASES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
-		this.tabChoices.push({value:_tab6, label:ZaMsg.TABT_Aliases});
-
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_FORWARDING_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
-		this.tabChoices.push({value:_tab7, label:ZaMsg.TABT_Forwarding});
-
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_INTEROP_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) 
-        this.tabChoices.push({value: _tab8, label: ZaMsg.TABT_Interop}) ;
-
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
-		this.tabChoices.push({value:_tab9, label:ZaMsg.TABT_Themes});
-
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ZIMLET_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) 
-		this.tabChoices.push({value:_tab10, label:ZaMsg.TABT_Zimlets});
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.ALIASES_TAB_ATTRS, ZaAccountXFormView.ALIASES_TAB_RIGHTS)) {
+		_tab6 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab6, label:ZaMsg.TABT_Aliases});	
+	}
 			
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ADVANCED_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
-		this.tabChoices.push({value:_tab11, label:ZaMsg.TABT_Advanced});
-
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.FORWARDING_TAB_ATTRS, ZaAccountXFormView.FORWARDING_TAB_RIGHTS)) {
+		_tab7 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab7, label:ZaMsg.TABT_Forwarding});	
+	}
+				
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.INTEROP_TAB_ATTRS, ZaAccountXFormView.INTEROP_TAB_RIGHTS)) {
+		_tab8 = ++this.TAB_INDEX;
+		this.tabChoices.push({value: _tab8, label: ZaMsg.TABT_Interop}) ;	
+	}
+		
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.SKIN_TAB_ATTRS, ZaAccountXFormView.SKIN_TAB_RIGHTS)) {
+		_tab9 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab9, label:ZaMsg.TABT_Themes});	
+	}
+	 			
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.ZIMLET_TAB_ATTRS, ZaAccountXFormView.ZIMLET_TAB_RIGHTS)) {
+		_tab10 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab10, label:ZaMsg.TABT_Zimlets});	
+	}
+		
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.ADVANCED_TAB_ATTRS, ZaAccountXFormView.ADVANCED_TAB_RIGHTS)) {
+		_tab11 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab11, label:ZaMsg.TABT_Advanced});	
+	}
 
 	var cases = [];
 	//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_GENERAL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
@@ -1019,7 +1164,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 		case1.items = case1Items;
 		cases.push(case1);
 	//}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CONTACT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(_tab2) {
 		var case2={type:_ZATABCASE_, numCols:1, caseKey:_tab2, 
 					items: [
 						{type:_ZAGROUP_, 
@@ -1052,7 +1197,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	var indirectMemberOfHeaderList = new ZaAccountMemberOfsourceHeaderList(ZaAccountMemberOfsourceHeaderList.INDIRECT);
 	var nonMemberOfHeaderList = new ZaAccountMemberOfsourceHeaderList(ZaAccountMemberOfsourceHeaderList.NON);
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_MEMBEROF_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(_tab3) {
 		//MemberOf Tab
 		var case3={type:_ZATABCASE_, numCols:2, caseKey:_tab3, colSizes: ["50%","50%"],
 					items: [
@@ -1215,7 +1360,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				
 		cases.push(case3);		
 	}				
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_FEATURES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(_tab4) {
 		cases.push({type:_ZATABCASE_,id:"account_form_features_tab",  numCols:1, width:"100%", caseKey:_tab4, 
 				items: [
 					{ type: _DWT_ALERT_,
@@ -1342,7 +1487,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				]
 			});
 	}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_PREFS_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(_tab5) {
 		var prefItems = [
 						{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_general_header",
 							items: [
@@ -1675,7 +1820,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	}
 
 
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ALIASES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(_tab6) {
 		cases.push({type:_ZATABCASE_, id:"account_form_aliases_tab", width:"100%", numCols:1,colSizes:["auto"],
 					caseKey:_tab6, 
 					items: [
@@ -1715,7 +1860,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_FORWARDING_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(_tab7) {
 		cases.push({type:_ZATABCASE_,id:"account_form_forwarding_tab", width:"100%", numCols:1,colSizes:["auto"],
 					caseKey:_tab7,  
 					items: [
@@ -1793,7 +1938,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_INTEROP_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(_tab8) {
 		cases.push({type:_ZATABCASE_, id:"account_form_interop_tab", width:"100%", numCols:1,colSizes:["auto"],
 					caseKey:_tab8, 
 					items: [
@@ -1839,7 +1984,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(_tab9) {
 		cases.push({type:_ZATABCASE_, id:"account_form_themes_tab", numCols:1,
             caseKey:_tab9,
 			items:[
@@ -1866,7 +2011,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 		});
 	}	
 
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ZIMLET_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(_tab10) {
 		cases.push({type:_ZATABCASE_, id:"account_form_zimlets_tab", numCols:1,
             caseKey:_tab10, 
 			items:[
@@ -1886,7 +2031,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 			] 
 		});
 	}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ADVANCED_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(_tab11) {
 		cases.push({type:_ZATABCASE_, id:"account_form_advanced_tab", numCols:1,
 					caseKey:_tab11, 
 					items: [

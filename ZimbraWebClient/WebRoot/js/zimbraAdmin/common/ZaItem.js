@@ -49,6 +49,8 @@ ZaItem.MAILQ = "mailque";
 ZaItem.A_objectClass = "objectClass";
 ZaItem.A_zimbraId = "zimbraId";
 ZaItem.A_cn = "cn" ;
+ZaItem.A_zimbraACE = "zimbraACE";
+
 /* Translation of  the attribute names to the screen names */
 ZaItem._ATTR = new Object();
 ZaItem._ATTR[ZaItem.A_zimbraId] = ZaMsg.attrDesc_zimbraId;
@@ -821,11 +823,13 @@ ZaItem.deepCloneListItem = function (sourceValue) {
 /**
  * Method of XFormItem
  */
-ZaItem.hasReadPermission = function (refToCheck) {
+ZaItem.hasReadPermission = function (refToCheck, instance) {
 	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE')
 		return true;
 	
-	var instance = this.getInstance();
+	if(!instance)
+		instance = this.getInstance();
+	
 	if (!instance.getAttrs)
 		return false;
 	

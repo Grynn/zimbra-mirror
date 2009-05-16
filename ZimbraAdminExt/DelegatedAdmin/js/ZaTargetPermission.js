@@ -244,13 +244,13 @@ ZaTargetPermission.getGrantsListXFormItem = function (params) {
 }
 
 
-ZaTargetPermission.targetXFormModifier = function (xFormObject) {
+ZaTargetPermission.targetXFormModifier = function (xFormObject, entry) {
 
     //check if the UI component is enabled
-    if (! ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-        var uiEnabled  = false ;
-        if (this instanceof ZaAccountXFormView) {
-            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.ACCOUNTS_PERM_TAB] ;
+//    if (! ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+        var uiEnabled  = ZaTabView.isTAB_ENABLED(entry,[ZaItem.A_zimbraACE], []);
+        /*if (this instanceof ZaAccountXFormView) {
+            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.ACCOUNTS_PERM_TAB] ; 
         } else if (this instanceof ZaDLXFormView) {
             uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.DL_PERM_TAB] ;
         } else if (this instanceof ZaResourceXFormView) {
@@ -265,11 +265,11 @@ ZaTargetPermission.targetXFormModifier = function (xFormObject) {
             uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.SERVER_PERM_TAB] ;
         } else if (this instanceof ZaZimletXFormView) {
             uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.ZIMLET_PERM_TAB] ;
-        }
+        }*/
 
 
         if (!uiEnabled) return ;
-    }
+  //  }
    
     var tabIx, tabBar, switchGroup ;
     for (var i=0; i < xFormObject.items.length; i ++) {

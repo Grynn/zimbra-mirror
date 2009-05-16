@@ -339,7 +339,7 @@ ZaSettings.OVERVIEW_MONITORING_ITEMS = [ZaSettings.GLOBAL_STATS_VIEW,ZaSettings.
 //Account view tabs
 ZaSettings.ACCOUNTS_GENERAL_TAB = "accountsGeneralTab";
 
-ZaSettings.ACCOUNTS_CONTACT_TAB = "accountsContactTab";
+/*ZaSettings.ACCOUNTS_CONTACT_TAB = "accountsContactTab";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_CONTACT_TAB, label: ZaMsg.UI_Comp_AccountsContactTab });
 
 ZaSettings.ACCOUNTS_MEMBEROF_TAB = "accountsMemberOfTab";
@@ -368,7 +368,7 @@ ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_ZIMLET_TAB, label
 
 ZaSettings.ACCOUNTS_ADVANCED_TAB = "accountsAdvancedTab";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_ADVANCED_TAB, label: ZaMsg.UI_Comp_AccountsAdvancedTab });
-
+*/
 
 //Distribution list view tabs
 ZaSettings.DL_MEMBERS_TAB = "dlMembersTab";

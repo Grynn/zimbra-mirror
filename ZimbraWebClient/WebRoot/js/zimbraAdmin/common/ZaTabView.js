@@ -64,12 +64,12 @@ ZaTabView.DEFAULT_TAB = 1;
 * @param xFormMetaData - XForm metadata that describes the form
 **/
 ZaTabView.prototype.initForm = 
-function (xModelMetaData, xFormMetaData) {
+function (xModelMetaData, xFormMetaData, entry) {
 	if(xModelMetaData == null || xFormMetaData == null)
 		throw new AjxException(ZaMsg.ERROR_METADATA_NOT_DEFINED, AjxException.INVALID_PARAM, "DwtXWizardDialog.prototype._initForm");
 
 	this._localXModel = new XModel(xModelMetaData);
-	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this);
+	this._localXForm = new XForm(xFormMetaData, this._localXModel, entry, this);
 	this._localXForm.setController(ZaApp.getInstance());
 	this._localXForm.draw();
 	this.formChangeListener = new AjxListener(this, ZaTabView.prototype.setDirty,[true]) ;
@@ -90,7 +90,7 @@ ZaTabView.prototype.setBounds = function (x, y, width, height) {
 /**
 * @return XForm definition for this view's XForm
 **/
-ZaTabView.prototype.getMyXForm = function () {
+ZaTabView.prototype.getMyXForm = function (entry) {
 	var xFormObject = new Object();
 	//Instrumentation code start
 	if(ZaTabView.XFormModifiers[this._iKeyName]) {
@@ -98,7 +98,7 @@ ZaTabView.prototype.getMyXForm = function () {
 		var cnt = methods.length;
 		for(var i = 0; i < cnt; i++) {
 			if(typeof(methods[i]) == "function") {
-				methods[i].call(this,xFormObject);
+				methods[i].call(this,xFormObject,entry);
 			}
 		}
 	}	
@@ -231,16 +231,6 @@ function () {
 	return this._isDirty;
 }
 
-/*
-ZaTabView.onFormFieldChanged = 
-function (value, event, form) {
-    if (this.getInstanceValue() != value) { //only set dirty when value is actually changed
-        form.parent.setDirty(true);
-    }
-    this.setInstanceValue(value);
-	return value;
-}*/
-
 ZaTabView.prototype.getTabToolTip =
 function () {
 	if (this._containedObject && this._containedObject.name && this._containedObject.type) {
@@ -285,3 +275,34 @@ function () {
 	return ZaApp.getInstance().getTabGroup().getTabById(this.__internalId) ;
 }
 
+/**
+ * This method checks if a tab or a view should be enabled based on given list of attributes and rights.
+ * If current admin has read permission on any of the attribues, or has any of the provided rights the method returns TRUE
+ */
+ZaTabView.isTAB_ENABLED = function (entry, attrsArray, rightsArray) {
+	if(!entry)
+		return true;
+		
+	if(!attrsArray && !rightsArray)
+		return true;
+		
+	if(attrsArray) {
+		var cntAttrs = attrsArray.length;
+		for(var i=0; i< cntAttrs; i++) {
+			if(ZaItem.hasReadPermission(attrsArray[i],entry)) {
+				return true;
+			}
+		}
+	} 
+	
+	if(rightsArray) {
+		var cntRights = rightsArray.length;
+		for(var i=0; i< cntRights; i++) {
+			if(ZaItem.hasRight(rightsArray[i],entry)) {
+				return true;
+			}
+		}
+	}
+	
+	return false; 
+}

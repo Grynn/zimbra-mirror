@@ -260,6 +260,9 @@ ZaAccount.GET_MBX_DUMP_RIGHT = "getMailboxDump";
 ZaAccount.VIEW_MAIL_RIGHT = "adminLoginAs";
 ZaAccount.ADD_ACCOUNT_ALIAS_RIGHT = "addAccountAlias";
 ZaAccount.REMOVE_ACCOUNT_ALIAS_RIGHT = "removeAccountAlias";
+ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT = "getAccountMembership";
+ZaAccount.GET_MAILBOX_INFO_RIGHT = "getMailboxInfo";
+ZaAccount.GET_ACCOUNT_INFO_RIGHT = "getAccountInfo";
 
 ZaAccount.checkValues = 
 function(tmpObj) {
@@ -1182,7 +1185,7 @@ function(by, val) {
 	this.attrs = new Object();
 	this.initFromJS(resp.account[0]);
 
-	if(!AjxUtil.isEmpty(this.attrs[ZaAccount.A_mailHost])) {
+	if(!AjxUtil.isEmpty(this.attrs[ZaAccount.A_mailHost]) && ZaItem.hasRight(ZaAccount.GET_MAILBOX_INFO_RIGHT,this)) {
 		soapDoc = AjxSoapDoc.create("GetMailboxRequest", ZaZimbraAdmin.URN, null);
 		var mbox = soapDoc.set("mbox", "");
 		mbox.setAttribute("id", this.attrs[ZaItem.A_zimbraId]);
@@ -1231,17 +1234,22 @@ function(by, val) {
 	}
 	
 	//Make a GetAccountMembershipRequest
-	this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getAccountMemberShip(val, by ) ;
-	this[ZaAccount.A2_directMemberList + "_more"] = 
+	if(ZaItem.hasRight(ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT,this)) {
+		this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getAccountMemberShip(val, by ) ;
+		this[ZaAccount.A2_directMemberList + "_more"] = 
 			(this[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
-	this[ZaAccount.A2_indirectMemberList + "_more"] = 
+		this[ZaAccount.A2_indirectMemberList + "_more"] = 
 			(this[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
+	}
 }
 
 ZaItem.loadMethods["ZaAccount"].push(ZaAccount.loadMethod);
 
 ZaAccount.loadInfoMethod = 
 function(by, val) {
+	if(!ZaItem.hasRight(ZaAccount.GET_ACCOUNT_INFO_RIGHT,this))
+		return;
+		
 	var soapDoc = AjxSoapDoc.create("GetAccountInfoRequest", ZaZimbraAdmin.URN, null);
 
 	var elBy = soapDoc.set("account", val);
@@ -1341,25 +1349,16 @@ function (newPassword) {
 	//Instrumentation code end
 }
 ZaAccount.changePasswordMethods.push(ZaAccount.changePasswordMethod);
-/*
-ZaAccount.prototype.getMyCosID = function (ins, current, ref) {
-	if(!AjxUtil.isEmpty(this.attrs[ZaAccount.A_COSId])) {
-		return this.attrs[ZaAccount.A_COSId];
-	} else {
-		var cos = ZaCos.getDefaultCos4Account(this.name);
-		return cos.id;
-	}
-}*/
 
 /**
 * ZaAccount.myXModel - XModel for XForms
 **/
-
 ZaAccount.myXModel = {
     items: [
     	{id:"getAttrs",type:_LIST_},
     	{id:"setAttrs",type:_LIST_},
     	{id:"rights",type:_LIST_},
+    	{id:ZaItem.A_zimbraACE, ref:"attrs/" + ZaItem.A_zimbraACE, type:_LIST_},
     	{id:ZaAccount.A2_errorMessage, ref:ZaAccount.A2_errorMessage, type:_STRING_},
     	{id:ZaAccount.A2_warningMessage, ref:ZaAccount.A2_warningMessage, type:_STRING_},
         {id:ZaAccount.A2_domainLeftAccounts, ref:ZaAccount.A2_domainLeftAccounts, type:_STRING_},
