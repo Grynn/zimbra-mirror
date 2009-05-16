@@ -179,6 +179,7 @@ function (target/*, fullRecursion*/) {
 
 ZaItem.prototype.parseTargetsRightsFromJS = function(targetObj) {
 	if(targetObj) {
+		this.noAttrsAvailable = true;
 		this.rights = {};
 		if(targetObj.right && targetObj.right instanceof Array) {
 			var rights = targetObj.right;
@@ -203,43 +204,60 @@ ZaItem.prototype.parseTargetsRightsFromJS = function(targetObj) {
 			targetObj.getAttrs[0]) {
 			if(targetObj.getAttrs[0].a && targetObj.getAttrs[0].a instanceof Array) {
 				var getAttrs = targetObj.getAttrs[0].a;
+				this.noAttrsAvailable = false;
 				for (var a in getAttrs) {
 					this.getAttrs[getAttrs[a].n] = true;
 					if(getAttrs[a]["default"] && getAttrs[a]["default"][0] && getAttrs[a]["default"][0].v && getAttrs[a]["default"][0].v instanceof Array) {
 						var cnt = getAttrs[a]["default"][0].v.length; 
-						for(var i = 0; i<cnt;i++) { 
-							this._defaultValues.attrs[getAttrs[a].n] = getAttrs[a]["default"][0].v[i]._content;
+						if(cnt == 1) {
+							this._defaultValues.attrs[getAttrs[a].n] = getAttrs[a]["default"][0].v[0]._content;
+						} else if (cnt >1) {
+							this._defaultValues.attrs[getAttrs[a].n] = new Array();
+							for(var i = 0; i<cnt;i++) { 
+								this._defaultValues.attrs[getAttrs[a].n][i] = getAttrs[a]["default"][0].v[i]._content;
+							}
 						}
 					}
 				}
 			} 
 			if (targetObj.getAttrs[0].all){
-				this.getAttrs.all = true; 	
+				this.getAttrs.all = true;
+				this.noAttrsAvailable = false; 	
 			}
-		}			
+		} 
+				
 		if(targetObj.setAttrs && targetObj.setAttrs instanceof Array && 
 			targetObj.setAttrs[0]) {
-
+				
 			if(targetObj.setAttrs[0].a && targetObj.setAttrs[0].a instanceof Array) {
 				var setAttrs = targetObj.setAttrs[0].a;
+				if(!this.getAttrs)
+					this.getAttrs = {};
+					
+				this.noAttrsAvailable = false;
 				for (var a in setAttrs) {
 					this.setAttrs[setAttrs[a].n] = true;
 					this.getAttrs[setAttrs[a].n] = true;
 					if(setAttrs[a]["default"] && setAttrs[a]["default"][0] && setAttrs[a]["default"][0].v && setAttrs[a]["default"][0].v instanceof Array) {
 						var cnt = setAttrs[a]["default"][0].v.length; 
-						for(var i = 0; i<cnt;i++) { 
-							this._defaultValues.attrs[setAttrs[a].n] = setAttrs[a]["default"][0].v[i]._content;
+						if(cnt==1) {
+							this._defaultValues.attrs[setAttrs[a].n] = setAttrs[a]["default"][0].v[0]._content;
+						} else if (cnt > 1) {
+							this._defaultValues.attrs[setAttrs[a].n] = new Array();
+							for(var i = 0; i<cnt;i++) { 
+								this._defaultValues.attrs[setAttrs[a].n][i] = setAttrs[a]["default"][0].v[i]._content;
+							}
 						}
 					}					
 				}
 			} 
 			if(targetObj.setAttrs[0].all) {
+				this.noAttrsAvailable = false;
 				this.setAttrs.all = true;
 				this.getAttrs.all = true; 	
 			}
-		}	
+		} 
 	}
-	
 }
 
 ZaItem.prototype.initEffectiveRightsFromJS = function(resp) {
@@ -375,7 +393,7 @@ ZaItem.prototype.load = function (by, val, skipRights, expandDefaults) {
 		this.setAttrs = {};
 		this.loadEffectiveRights(by,val,expandDefaults);
 	}	
-	if(!this.getAttrs) {
+	if(this.noAttrsAvailable) {
 		return;
 	}	
 	//Instrumentation code start

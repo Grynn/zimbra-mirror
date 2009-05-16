@@ -747,7 +747,7 @@ function(refresh) {
 ZaApp.prototype.getInstalledSkins = 
 function(refresh) {
     try {
-    return this.getGlobalConfig(refresh).attrs[ZaGlobalConfig.A_zimbraInstalledSkin];
+    	return this.getGlobalConfig(refresh).attrs[ZaGlobalConfig.A_zimbraInstalledSkin];
     }catch (e) {
         return null ;
     }

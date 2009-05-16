@@ -147,6 +147,12 @@ function(entry) {
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 	
+    //check the account type here 
+    var domainName = ZaAccount.getDomain (this._containedObject.name) ;
+    var domainObj =  ZaDomain.getDomainByName (domainName) ;
+    this._containedObject[ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
+    this._containedObject[ZaAccount.A2_currentAccountType] = entry[ZaAccount.A2_currentAccountType]  ;
+	
 	if(entry.getAttrs[ZaAccount.AzimbraAvailableSkin] || entry.getAttrs.all) {
 		var skins = entry.attrs[ZaAccount.A_zimbraAvailableSkin];
 		if(skins != null && skins != "") {
@@ -183,29 +189,37 @@ function(entry) {
 		
 		//get sll Zimlets
 		var allZimlets = ZaZimlet.getAll("extension");
-		if(allZimlets == null) {
-			allZimlets = [];
-		} 
-		
-		if(allZimlets instanceof ZaItemList || allZimlets instanceof AjxVector)
+
+		if(!AjxUtil.isEmpty(allZimlets) && allZimlets instanceof ZaItemList || allZimlets instanceof AjxVector)
 			allZimlets = allZimlets.getArray();
-		
-		//convert objects to strings	
-		var cnt = allZimlets.length;
-		var _tmpZimlets = [];
-		for(var i=0; i<cnt; i++) {
-			var zimlet = allZimlets[i];
-			_tmpZimlets.push(zimlet.name);
+
+		if(AjxUtil.isEmpty(allZimlets)) {
+			
+			if(domainObj && domainObj.attrs && !AjxUtil.isEmpty(domainObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets])) {
+				//if we cannot get all zimlets try getting them from domain
+				allZimlets = domainObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets];
+			} else if(entry._defaultValues && entry._defaultValues.attrs && !AjxUtil.isEmpty(entry._defaultValues.attrs[ZaAccount.A_zimbraZimletAvailableZimlets])) {
+				//if we cannot get all zimlets from domain either, just use whatever came in "defaults" which would be what the COS value is
+				allZimlets = entry._defaultValues.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
+			} else {
+				allZimlets = [];
+			}
+			ZaAccountXFormView.zimletChoices.setChoices(allZimlets);
+			ZaAccountXFormView.zimletChoices.dirtyChoices();
+			
+		} else {
+			//convert objects to strings	
+			var cnt = allZimlets.length;
+			var _tmpZimlets = [];
+			for(var i=0; i<cnt; i++) {
+				var zimlet = allZimlets[i];
+				_tmpZimlets.push(zimlet.name);
+			}
+			ZaAccountXFormView.zimletChoices.setChoices(_tmpZimlets);
+			ZaAccountXFormView.zimletChoices.dirtyChoices();
 		}
-		ZaAccountXFormView.zimletChoices.setChoices(_tmpZimlets);
-		ZaAccountXFormView.zimletChoices.dirtyChoices();		
 	}
 
-    //check the account type here 
-    var domainName = ZaAccount.getDomain (this._containedObject.name) ;
-    var domainObj =  ZaDomain.getDomainByName (domainName) ;
-    this._containedObject[ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
-    this._containedObject[ZaAccount.A2_currentAccountType] = entry[ZaAccount.A2_currentAccountType]  ;
 
     this.modifyContainedObject () ;
 
