@@ -49,7 +49,7 @@ public class CalSearchJSONTag extends ZimbraSimpleTag {
             JspContext ctxt = getJspContext();
             PageContext pageContext = (PageContext) ctxt;
             String url = ZJspSession.getSoapURL(pageContext);
-            String remoteAddr = pageContext.getRequest().getRemoteAddr();
+            String remoteAddr = ZJspSession.getRemoteAddr(pageContext);
             Element e = ZMailbox.getBootstrapCalSearchJSON(url, remoteAddr, mAuthToken, mItemsPerPage, mTypes);
 
 			// Replace "</script>" with "</scr" + "ipt>" because html parsers recognize the close script tag.

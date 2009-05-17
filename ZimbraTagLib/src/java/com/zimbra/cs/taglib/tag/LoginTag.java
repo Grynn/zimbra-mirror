@@ -96,7 +96,7 @@ public class LoginTag extends ZimbraSimpleTag {
 
             ZMailbox.Options options = new ZMailbox.Options();
 
-            options.setClientIp(pageContext.getRequest().getRemoteAddr());
+            options.setClientIp(ZJspSession.getRemoteAddr(pageContext));
 
             options.setNoSession(true);
             

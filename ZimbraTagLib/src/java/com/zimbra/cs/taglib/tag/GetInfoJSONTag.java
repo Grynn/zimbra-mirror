@@ -45,7 +45,7 @@ public class GetInfoJSONTag extends ZimbraSimpleTag {
             JspContext ctxt = getJspContext();
             PageContext pageContext = (PageContext) ctxt;
             String url = ZJspSession.getSoapURL(pageContext);
-            String remoteAddr = pageContext.getRequest().getRemoteAddr();
+            String remoteAddr = ZJspSession.getRemoteAddr(pageContext);
             Element e = ZMailbox.getBootstrapJSON(url, remoteAddr, mAuthToken, mDoSearch, mItemsPerPage, mTypes);
 			ctxt.setAttribute(mVar, e.toString(),  PageContext.REQUEST_SCOPE);
         } catch (ServiceException e) {

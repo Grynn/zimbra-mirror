@@ -16,6 +16,7 @@ package com.zimbra.cs.taglib;
 
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.RemoteIP;
 import com.zimbra.cs.taglib.bean.BeanUtils;
 import com.zimbra.cs.zclient.ZAuthResult;
 import com.zimbra.cs.zclient.ZFolder;
@@ -86,6 +87,7 @@ public class ZJspSession {
 
     private static final String sAdminUrl = BeanUtils.getEnvString("adminUrl", null);
 
+    private static final RemoteIP.TrustedIPs sTrustedIPs = new RemoteIP.TrustedIPs(BeanUtils.getEnvString("trustedIPs", "").split(" "));
 
     public static boolean secureAuthTokenCookie(HttpServletRequest request) {
         String initMode = request.getParameter(Q_ZINITMODE);
@@ -408,7 +410,7 @@ public class ZJspSession {
         } else {
             // see if we can get a mailbox from the auth token
             ZMailbox.Options options = new ZMailbox.Options(authToken, getSoapURL(context));
-            options.setClientIp(context.getRequest().getRemoteAddr());
+            options.setClientIp(getRemoteAddr(context));
 
             //options.setAuthAuthToken(true);
             ZMailbox mbox = ZMailbox.getMailbox(options);
@@ -427,7 +429,7 @@ public class ZJspSession {
             options.setAuthAuthToken(false);
             options.setTargetAccount(targetAccountId);
             options.setTargetAccountBy(Provisioning.AccountBy.id);
-            options.setClientIp(context.getRequest().getRemoteAddr());
+            options.setClientIp(getRemoteAddr(context));
             return ZMailbox.getMailbox(options);
         }
     }
@@ -442,7 +444,7 @@ public class ZJspSession {
             options.setAuthAuthToken(false);
             options.setTargetAccount(targetAccountId);
             options.setTargetAccountBy(Provisioning.AccountBy.id);
-            options.setClientIp(context.getRequest().getRemoteAddr());
+            options.setClientIp(getRemoteAddr(context));
             return ZMailbox.getMailbox(options);
         }
     }
@@ -483,6 +485,12 @@ public class ZJspSession {
         } catch (Exception e) {
             // ignore if the session is already gone
         }
+    }
+    
+    public static String getRemoteAddr(PageContext context) {
+        HttpServletRequest req = (HttpServletRequest)context.getRequest();
+        RemoteIP remoteIp = new RemoteIP(req, sTrustedIPs);
+        return remoteIp.getRequestIP();
     }
 
 }
