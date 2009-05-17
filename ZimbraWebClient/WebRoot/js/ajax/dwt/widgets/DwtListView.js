@@ -359,7 +359,7 @@ function(list, defaultColumnSort, noResultsOk) {
 	if (this._selectedItems) {
 		this._selectedItems.removeAll();
 	}
-	this._rightSelItem = null
+	this._rightSelItem = null;
 	this.sortingEnabled = true;
 	this._resetList();
 	this._list = list;
@@ -1744,7 +1744,9 @@ function(next) {
 		Dwt.addClass(this._kbAnchor, this._kbFocusClass);
 	}
 
-	this._scrollList(this._kbAnchor);
+	if (this._kbAnchor) {
+		this._scrollList(this._kbAnchor);
+	}
 };
 
 DwtListView.prototype._itemSelected =
