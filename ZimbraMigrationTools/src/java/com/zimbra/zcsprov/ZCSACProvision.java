@@ -220,7 +220,7 @@ public class ZCSACProvision
         {
             prog_logger.log(Level.WARNING, "GetAccountInfoByName Failed: "+name);
         }
-        if(dump_all)
+        if((retval !=null)&&(dump_all))
         {
             prog_logger.log(Level.INFO, "Success in GetAccountInfoByName: "+name);
         }

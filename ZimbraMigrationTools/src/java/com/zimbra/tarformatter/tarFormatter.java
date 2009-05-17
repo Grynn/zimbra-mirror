@@ -75,6 +75,7 @@ class tarMigrator implements Runnable
     private ZMSoapSession zmsession;
     private HttpSession httpsession;
     private ZCSACProvision zcsacprov;
+    private String dest_accountid;
 
     public tarMigrator(ZtoZImportParams migparams,ZCSPLogger tarmig_logger)
     {
@@ -83,6 +84,7 @@ class tarMigrator implements Runnable
         ExcThreadCount=0;
         tarMigtime=0;
         debugmsg=false;
+        dest_accountid="";
     }
 
     public static synchronized void incr_exec_count()
@@ -415,7 +417,8 @@ class tarMigrator implements Runnable
                 }
                 //
                 tarmig_log.log(Level.INFO,"Going to download TarredMailBox "+"("+userAccount+")");
-                if(GetTarredMailBox(userAccount,accountLog))
+                if((IsAccountExists(userInfoArr[0]+"@"+targetDomain,accountLog))&&
+                   (GetTarredMailBox(userAccount,accountLog)))
                 {
                     tarmig_log.log(Level.INFO,"Download TarredMailBox Finsihed "+"("+userAccount+").");
 
@@ -451,21 +454,7 @@ class tarMigrator implements Runnable
                             //if not empty, modify ZimbraMailTransport
                             if(!(isEmpty(tarMigparams.ZimbraMailTransport)))
                             {
-                                ZCSProvParams zcsprovparams;
-                                zcsprovparams=new ZCSProvParams();
-                                zcsprovparams.zcsurl =tarMigparams.TargetZCSServer;
-                                zcsprovparams.adminname = tarMigparams.TrgtAdminUser;
-                                zcsprovparams.adminpwd = tarMigparams.TrgtAdminPwd;
-                                zcsprovparams.zcsport = tarMigparams.TrgtZCSPort;
-                                zcsacprov= new ZCSACProvision(zcsprovparams,accountLog);
-                                zcsacprov.Init();
-                                if(tarMigparams.debug_mig)
-                                {
-                                    zcsacprov.enable_dump_all();
-                                }
-                                String accntId=zcsacprov.GetAccountIDByName(userInfoArr[0]+"@"+targetDomain);
-                                debug_msg(tarmig_log,"AccountID: "+accntId);
-                                if(!zcsacprov.ModifyAccountMailTransport(accntId,tarMigparams.ZimbraMailTransport))
+                                if(!zcsacprov.ModifyAccountMailTransport(dest_accountid,tarMigparams.ZimbraMailTransport))
                                 {
                                     tarmig_log.log(Level.SEVERE,"ModifyAccountMailTransport Failed: "+userInfoArr[0]+"@"+targetDomain);
                                 }
@@ -494,6 +483,10 @@ class tarMigrator implements Runnable
                 else
                 {
                     tarmig_log.log(Level.SEVERE,"Download TarredMailBox Error"+"("+userAccount+").");
+                    if(dest_accountid==null)
+                    {
+                        tarmig_log.log(Level.SEVERE,"User "+userAccount+" does not exists.");   
+                    }
                     incr_err_count();
                 }
                 incr_processed_account_count();
@@ -503,6 +496,30 @@ class tarMigrator implements Runnable
                 tarMig_Logger.close(userAccount);
             }
         }
+    }
+
+    boolean IsAccountExists(String fqusername,Logger accountLog)
+    {
+        boolean retval=true;
+        ZCSProvParams zcsprovparams;
+        zcsprovparams=new ZCSProvParams();
+        zcsprovparams.zcsurl =tarMigparams.TargetZCSServer;
+        zcsprovparams.adminname = tarMigparams.TrgtAdminUser;
+        zcsprovparams.adminpwd = tarMigparams.TrgtAdminPwd;
+        zcsprovparams.zcsport = tarMigparams.TrgtZCSPort;
+        zcsacprov= new ZCSACProvision(zcsprovparams,accountLog);
+        zcsacprov.Init();
+        if(tarMigparams.debug_mig)
+        {
+            zcsacprov.enable_dump_all();
+        }
+        dest_accountid=zcsacprov.GetAccountIDByName(fqusername);
+        if(dest_accountid ==null)
+        {
+            retval=false;    
+        }
+        debug_msg(tarmig_log,"AccountID: "+dest_accountid);
+        return retval;
     }
 
     public static void print_summary()
