@@ -518,6 +518,10 @@ public class ZComposeUploaderBean {
 
     public String getPendingResources() { return mPendingResources; }
 
+    public void setPendingAttendees(String mPendingAttendees) { this.mPendingAttendees = mPendingAttendees; }
+
+    public void setPendingResources(String mPendingresources) { this.mPendingResources = mPendingresources; }
+
     public String getContactLocation() { return getParam(F_contactLocation); }
 
     public List<ZEmailAddress>  getPendingAttendeesList() {
@@ -542,7 +546,51 @@ public class ZComposeUploaderBean {
         return null;
     }
 
-    
+    public List<ZEmailAddress>  getAllAttendeesAndResourcesList() {
+        List<ZEmailAddress> l1 = getPendingAttendeesList();
+        List<ZEmailAddress> l2 = getPendingResourcesList();
+        List<ZEmailAddress> l3 = null;
+        List<ZEmailAddress> l4 = null;
+
+        try{
+            l3 = getCompose().getAttendeesAddrs();
+        }catch (ServiceException se ){
+            ZimbraLog.webclient.debug("compose bean getAttendiesAddrs failed");
+        }
+        try{
+            l4 = getCompose().getResourcesAddrs();
+        }catch (ServiceException se ){
+            ZimbraLog.webclient.debug("compose bean getResourcesAddrs failed");            
+        }
+        if(l1 != null){
+            if(l2 != null){
+                l1.addAll(l2);
+            }
+            if(l3 != null){
+                l1.addAll(l3);
+            }
+            if(l4 != null){
+                l1.addAll(l4);
+            }
+            return l1;
+        }else if(l2 != null){
+            if(l3 != null){
+                l2.addAll(l3);
+            }
+            if(l4 != null){
+                l2.addAll(l4);
+            }
+            return l2;
+        }else if(l3 != null){
+            if(l4 != null){
+                l3.addAll(l4);
+            }
+            return l3;
+        }else{
+            return l4;
+        }
+    }
+
     private static ServletFileUpload getUploader(boolean limitByFileUploadMaxSize) {
         DiskFileItemFactory dfif = new DiskFileItemFactory();
         ServletFileUpload upload;
