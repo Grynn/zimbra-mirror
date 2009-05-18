@@ -22,7 +22,7 @@ use File::Path;
 
 my $DEBUG = 0;
 #global constants
-my $version = "1.31";
+my $version = "1.32";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -865,7 +865,7 @@ sub processfile
                   #for weekend present check and passed weekend calculations
                   my $twdidx= rindex($k1,':');
                   my $tk1= substr($k1,$twdidx+1);
-                  $wkday= get_weekday($tk1);
+                  $wkday= get_weekday(get_offset_datetime($tk1));
                   #store start weekday for weekly pattern calculation
                   if ($startwkday eq -1)
                   {
