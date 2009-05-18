@@ -17,7 +17,7 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 LDAP_RELEASE ?= 2.4.16
-LDAP_PATCH_LEVEL ?= 10z
+LDAP_PATCH_LEVEL ?= 11z
 LDAP_VERSION ?= $(LDAP_RELEASE).$(LDAP_PATCH_LEVEL)
 LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-$(LDAP_VERSION).tgz
 LDAP_LIB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-clibs-$(LDAP_VERSION).tgz
@@ -50,6 +50,7 @@ build:
 	patch -g0 -N -p1 < ../patches/ITS6095.patch; \
 	patch -g0 -N -p1 < ../patches/ITS6095-2.patch; \
 	patch -g0 -N -p1 < ../patches/ITS6111.patch; \
+	patch -g0 -N -p1 < ../patches/syncinfo.patch; \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(OPENLDAP_CLIB_DIR) -L$(LIBTOOL_LIB_DIR) \
 		 -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(OPENLDAP_CLIB_DIR) -R$(LIBTOOL_LIB_DIR)" \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) \
