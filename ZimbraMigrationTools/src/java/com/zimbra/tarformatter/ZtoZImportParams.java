@@ -41,7 +41,9 @@ public class ZtoZImportParams
     public String SourceServerURI;
     public String TrgtServerURI;
     public ArrayList<String> AccountsList;
+    public ArrayList<String> DomainList;
     public boolean debug_mig;
+    public boolean IsAllAccounts;
 
     ZtoZImportParams()
     {
@@ -63,6 +65,8 @@ public class ZtoZImportParams
         DomainMap =new HashMap<String,String>();
         SourceServerURI="";
         AccountsList=new ArrayList<String>();
+        DomainList = new ArrayList<String>();
         debug_mig=false;
+        IsAllAccounts=false;
     }
 }

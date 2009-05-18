@@ -19,6 +19,7 @@ package com.zimbra.zcsprov;
 import java.util.logging.*;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.ArrayList;
 import javax.xml.soap.*;
 
 import com.zimbra.auth.*;
@@ -368,7 +369,65 @@ public class ZMSoapSession
         }
         return retval;
     }
-    
+
+    public ArrayList<String> GetMultipleAttributeList(String element, String attr)
+    {
+         ArrayList<String> AttrValList=null;
+        try
+        {
+            AttrValList=GetMultipleAttributeList(response.getSOAPBody().getFirstChild(),element,attr);
+        }
+        catch(SOAPException se)
+        {
+            session_logger.log(Level.SEVERE,ZCSUtils.stack2string(se));
+            session_logger.log(Level.SEVERE,se.getMessage());
+        }
+        return AttrValList;
+    }
+
+    private ArrayList<String> GetMultipleAttributeList(Node nd, String element, String attr)
+    {
+        ArrayList<String> AttrValList= new ArrayList<String>();  
+        String retval=null;
+        try
+        {
+            SOAPElement msgElement = (SOAPElement)nd;
+            String locname=msgElement.getLocalName();
+            if (locname.compareTo(element)==0)
+            {
+                retval=msgElement.getAttribute(attr);
+                AttrValList.add(retval);
+            }
+
+            if (nd.hasChildNodes())
+            {
+                NodeList ndlist= nd.getChildNodes();
+                int ndlen=ndlist.getLength();
+                for (int i=0;i<ndlen;i++)
+                {
+                    SOAPElement imsgElement = (SOAPElement)ndlist.item(i);
+                    String ilocname=imsgElement.getLocalName();
+                    if (ilocname.compareTo(element)==0)
+                    {
+                        retval=imsgElement.getAttribute(attr);
+                        AttrValList.add(retval);
+                    }
+                    if(ndlist.item(i).hasChildNodes())
+                    {
+                        Node tnd= ndlist.item(i);
+                        GetMultipleAttributeList(tnd,element,attr);
+                    }
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            session_logger.log(Level.SEVERE,"GetMultipleAttributeList Exception: "+e.getMessage());
+            session_logger.log(Level.SEVERE,ZCSUtils.stack2string(e));
+        }
+        return AttrValList;
+    }
+
     private void dump_soap(String info, SOAPMessage msg)
     {
         ZCSUtils.dump_soap_message(info,msg);

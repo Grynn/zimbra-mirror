@@ -27,6 +27,7 @@ import com.zimbra.common.ZCSProvParams;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.io.*;
 
 class AccountsList
@@ -508,6 +509,10 @@ class tarMigrator implements Runnable
         zcsprovparams.adminpwd = tarMigparams.TrgtAdminPwd;
         zcsprovparams.zcsport = tarMigparams.TrgtZCSPort;
         zcsacprov= new ZCSACProvision(zcsprovparams,accountLog);
+        if(tarMigparams.debug_mig)
+        {
+            zcsacprov.enable_dump_all();   
+        }
         zcsacprov.Init();
         if(tarMigparams.debug_mig)
         {
@@ -536,7 +541,7 @@ class tarMigrator implements Runnable
 public class tarFormatter implements EventNotifier
 {
     private static final String ztozlogFile="ztozlog";
-    private static final String tarMigVersion="1.0";
+    private static final String tarMigVersion="1.1";
     private static final String ztozconfigFile="zmztozmig.conf";
     private static final String ztoz_default_configpath="/opt/zimbra/conf/";
     private String configFile="";
@@ -608,6 +613,38 @@ public class tarFormatter implements EventNotifier
             tarfmt_log = tarformatter_Logger.get_logger(ztozlogFile);
             tarfmt_log.log(Level.INFO,"ConfigFile: "+configFile);
             tarfmt_log.log(Level.INFO,"Version: "+tarMigVersion);
+        }
+        if(tarfmtparams.IsAllAccounts)
+        {
+            //No domains found to migrate
+            if(tarfmtparams.DomainList.size()==0)
+            {
+                tarfmt_log.log(Level.SEVERE,"No Domains found to create account list for migration.");
+                tarfmt_log.log(Level.SEVERE,"Accounts=all option needs 'Domains' parameter.");
+                return false;
+            }
+            Iterator DomainItr = tarfmtparams.DomainList.iterator();
+            while(DomainItr.hasNext())
+            {
+                String Domain= (String)DomainItr.next();
+                tarfmt_log.log(Level.INFO,"Processing Domain: "+Domain);
+                System.out.println("Creating account list....");
+                ZCSProvParams zcsprovparams;
+                zcsprovparams=new ZCSProvParams();
+                zcsprovparams.zcsurl =tarfmtparams.SourceZCSServer;
+                zcsprovparams.adminname = tarfmtparams.SrcAdminUser;
+                zcsprovparams.adminpwd = tarfmtparams.SrcAdminPwd;
+                zcsprovparams.zcsport = tarfmtparams.SrcZCSPort;
+                ZCSACProvision zcsacprov= new ZCSACProvision(zcsprovparams,tarfmt_log);
+                if(tarfmtparams.debug_mig)
+                {
+                    zcsacprov.enable_dump_all();
+                }
+                zcsacprov.Init();
+                tarfmtparams.AccountsList=zcsacprov.GetDomainAllAccountList(Domain);
+                AccountsList.SetAccountList(tarfmtparams.AccountsList);
+                System.out.println("Accounts list created.");
+            }
         }
         return retval;
     }
@@ -791,17 +828,31 @@ public class tarFormatter implements EventNotifier
                 System.out.println("Domain map is not in correct format.");
             }
         }
+        else if(attr[0].trim().compareToIgnoreCase("Domains")==0)
+        {
+            tarfmtparams.DomainList.add(attr[1].trim());
+            for(int i=1;i<params.length;i++)
+            {
+                tarfmtparams.DomainList.add(params[i].trim());
+            }
+        }
         else if(attr[0].trim().compareToIgnoreCase("Accounts")==0)
         {
             String AllAccounts=attr[1];
-            String AccountsArr[]= AllAccounts.split(",");
-
-            tarfmtparams.AccountsList.add(attr[1].trim());
-            for(int i=1;i<params.length;i++)
+            //fetch all accounts and prepare the account list 
+            if(AllAccounts.compareToIgnoreCase("all")==0)
             {
-                tarfmtparams.AccountsList.add(params[i].trim());
+                tarfmtparams.IsAllAccounts=true;
             }
-            AccountsList.SetAccountList(tarfmtparams.AccountsList);
+            else //read from config file
+            {
+                tarfmtparams.AccountsList.add(attr[1].trim());
+                for(int i=1;i<params.length;i++)
+                {
+                    tarfmtparams.AccountsList.add(params[i].trim());
+                }
+                AccountsList.SetAccountList(tarfmtparams.AccountsList);
+            }                                                                      
         }
     }
 

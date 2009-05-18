@@ -19,6 +19,7 @@ package com.zimbra.zcsprov;
 import java.util.logging.*;
 import java.util.Iterator;
 import java.util.HashMap;
+import java.util.ArrayList;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
@@ -182,7 +183,81 @@ public class ZCSAccounts
         }
         return retval;
     }
-    
+
+    public ArrayList<String> GetAllAccountsList(String stdomain)
+    {
+        ArrayList<String> iAccountList=null;
+        try
+        {
+            SOAPMessage request = zmcusession.get_requestObjectWithZmHeader();
+            SOAPPart sp = request.getSOAPPart();
+            SOAPEnvelope se = (SOAPEnvelope)sp.getEnvelope();
+            SOAPBody body = se.getBody();
+
+            //create SOAP Body
+            /*<SearchDirectoryRequest types="accounts" domain="test.iam.com" limit="5"
+            sortBy="name" sortAscending="1" applyConfig="false" applyCos="false" offset="0"
+            attrs="name" xmlns="urn:zimbraAdmin">*/
+            Name bodyName = se.createName("SearchDirectoryRequest", "","urn:zimbraAdmin");
+            SOAPElement bodyElement = body.addBodyElement(bodyName);
+
+            Name netypes = se.createName("types");
+            bodyElement.addAttribute(netypes, "accounts");
+
+            Name nedomain = se.createName("domain");
+            bodyElement.addAttribute(nedomain, stdomain);
+
+            Name nesortBy = se.createName("sortBy");
+            bodyElement.addAttribute(nesortBy, "name");
+
+            Name nesortAscending = se.createName("sortAscending");
+            bodyElement.addAttribute(nesortAscending, "1");
+
+            Name neapplyConfig = se.createName("applyConfig");
+            bodyElement.addAttribute(neapplyConfig, "false");
+
+            Name neapplyCos = se.createName("applyCos");
+            bodyElement.addAttribute(neapplyCos, "false");
+
+            Name neoffset = se.createName("offset");
+            bodyElement.addAttribute(neoffset, "0");
+
+            Name neattrs = se.createName("attrs");
+            bodyElement.addAttribute(neattrs, "name");                       
+
+            //add <account by="id">3a4f022a-3f86-4b77-be25-dce1cdad7213</account>
+            Name naquery = se.createName("query");
+            SOAPElement seacct = bodyElement.addChildElement(naquery);
+            seacct.addTextNode("(objectclass=zimbraAccount)");
+
+             //Save the message
+            request.saveChanges();
+
+            //get Response
+            if (zmcusession.send_request(request))
+            {
+                String sfault=zmcusession.FindNodeValue("faultstring");
+                if (sfault!=null)
+                {
+                    cu_logger.log(Level.SEVERE,"SearchDirectoryRequest Failed: "+sfault);
+                }
+                else
+                {
+                    iAccountList=zmcusession.GetMultipleAttributeList("account","name");
+                }
+            }
+            else
+            {
+                zmcusession.dump_response("GetAccountRequest Failed ");
+            }
+        }
+        catch(Exception e)
+        {
+            cu_logger.log(Level.SEVERE,"GetAccountRequest Excpetion: "+e.getMessage());
+            cu_logger.log(Level.SEVERE, ZCSUtils.stack2string(e));
+        }
+        return iAccountList;
+    }
     public boolean ModifyAccount(String Request,String zimbraid,HashMap<String, String> attrs)
     {
         boolean retval =false;

@@ -298,5 +298,12 @@ public class ZCSACProvision
         }
         return retval;
     }
+
+    public ArrayList<String> GetDomainAllAccountList(String stDomain)
+    {
+        ArrayList<String> iArList=null;
+        iArList=zcsaccounts.GetAllAccountsList(stDomain);
+        return iArList;
+    }
 }
 
