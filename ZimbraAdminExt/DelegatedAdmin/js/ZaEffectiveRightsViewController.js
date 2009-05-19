@@ -86,7 +86,8 @@ function(entry) {
 		ZaApp.getInstance().pushView(this.getContentViewId()) ;
 
        	entry[ZaModel.currentTab] = "1";
-        entry[ZaEffectiveRights.A2_account_currentTab] = "10" ;
+        entry[ZaModel.currentTab +"_1" ] = "1" ; //second row index
+        entry[ZaModel.currentTab +"_1" +"_1"] = "1" ; //third row index
 		this._currentObject = entry;
 		this._view.setObject(entry);
 	} catch (ex) {

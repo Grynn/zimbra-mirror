@@ -133,3 +133,24 @@ ZaUtil.deepCloneObject = function (obj) {
 
     return newObj ;
 }
+
+/**
+ * combine the object array property values
+ *
+ * an example:
+ * var objArr =
+ * [
+ *      {name: "abc"},
+ *      {name:"efg}
+ * ]
+ *
+ * ZaUtil.join(objArr, "name", ":") => "abc:efg" 
+ */
+ZaUtil.join = function (objArray, key, delimiter) {
+    if (objArray == null) return "" ;
+    var strArr = [] ;
+    for (var i=0; i < objArray.length; i ++) {
+        strArr.push (objArray[i][key]) ;
+    }
+    return strArr.join(delimiter) ;
+}
