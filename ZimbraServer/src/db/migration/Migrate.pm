@@ -238,9 +238,9 @@ sub runLoggerSql(@) {
 
     my @output;
     if ($? != 0) {
-		# Hack for missing config
-		push @output, 0;
-		return @output;
+      # Hack for missing config
+      push @output, 0;
+      return @output;
     }
 
     # Process output
@@ -389,7 +389,7 @@ sub log($) {
   my ($input) = @_;
   Migrate::logSql($input);
   my $output = scalar(localtime()).": $input\n";
-  print $output;
+  print "$output";
 }
 
 sub logSql($) {
