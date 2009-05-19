@@ -269,7 +269,7 @@ function (ev) {
 
 ZaAppTab.prototype.closeTab =
 function() {
-	if (this._actionMenu && this._actionMenu.isPoppedup()) {
+	if (this._actionMenu && this._actionMenu.isPoppedUp()) {
 		this._actionMenu.popdown();
 	} 
 	
@@ -293,7 +293,7 @@ function() {
 ZaAppTab.prototype.closeOtherTabs =
 function () {
 	
-	if (this._actionMenu && this._actionMenu.isPoppedup()) {
+	if (this._actionMenu && this._actionMenu.isPoppedUp()) {
 		this._actionMenu.popdown();
 	}
 	 
@@ -327,7 +327,7 @@ function () {
 
 ZaAppTab.prototype.closeAllTabs =
 function () {
-	if (this._actionMenu && this._actionMenu.isPoppedup()) {
+	if (this._actionMenu && this._actionMenu.isPoppedUp()) {
 		this._actionMenu.popdown();
 	} 
 	

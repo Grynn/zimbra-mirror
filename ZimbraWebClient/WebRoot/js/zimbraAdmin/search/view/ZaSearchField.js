@@ -204,7 +204,7 @@ ZaSearchField.prototype.showSavedSearchMenus =
 function () {
 	//if (this._savedSearchMenu) this._savedSearchMenu.popdown(); //force popdown
 	
-	if (this._savedSearchMenu && this._savedSearchMenu.isPoppedup()) {
+	if (this._savedSearchMenu && this._savedSearchMenu.isPoppedUp()) {
 		return ;
 	}
 	if (ZaSearch.SAVED_SEARCHES.length <= 0 || ZaSearch._savedSearchToBeUpdated) {
@@ -307,7 +307,7 @@ function (ev) {
 	var callback = new AjxCallback (this, this.modifySavedSearchCallback) ;
 	
 	/*
-	if (this._savedSearchMenu && this._savedSearchMenu.isPoppedup()) {
+	if (this._savedSearchMenu && this._savedSearchMenu.isPoppedUp()) {
 		callback = new AjxCallback (this, this.showSavedSearchMenus) ;
 	}else{
 		var overviewPanelCtrl = ZaApp.getInstance().getOverviewPanelController() ;
@@ -342,12 +342,12 @@ function (refresh) {
 ZaSearchField.prototype.updateSavedSearchMenu =
 function () {
 	
-	var isPoppedup = false ;
+	var isPoppedUp = false ;
 	this._queryFieldElement = this._localXForm.getItemsById(ZaSearch.A_query)[0].getElement(); 
 	var b = Dwt.getBounds(this._queryFieldElement);
 	
 	if (this._savedSearchMenu) {
-		isPopup = this._savedSearchMenu.isPoppedup();
+		isPopup = this._savedSearchMenu.isPoppedUp();
 		this._savedSearchMenu.popdown() ;
 		this._savedSearchMenu.dispose();	
 	}
@@ -367,7 +367,7 @@ function () {
 		mItem.getHtmlElement().style.overflow = "hidden";
 	}
 	
-	if (isPoppedup) this.popupSavedSearch();
+	if (isPoppedUp) this.popupSavedSearch();
 }
 
 //only show or hide the advanced search options
