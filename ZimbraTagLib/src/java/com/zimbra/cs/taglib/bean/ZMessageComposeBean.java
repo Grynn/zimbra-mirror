@@ -173,7 +173,7 @@ public class ZMessageComposeBean {
     private String mInReplyTo; // original message-id header
     private String mDraftId; // id of draft we are editting
     private List<MessageAttachment> mMessageAttachments;
-    private Map<String,Boolean> mCheckedAttachmentNames = new HashMap<String, Boolean>();
+    private Map<String,String> mCheckedAttachmentNames = new HashMap<String, String>();
     private List<ZMimePartBean> mOriginalAttachments;
     private List<FileItem> mFileItems = new ArrayList<FileItem>();
     private String mUploadedAttachmentId;
@@ -334,8 +334,8 @@ public class ZMessageComposeBean {
     public void setDraftId(String id) { mDraftId = id; }
     public String getDraftId() { return mDraftId; }
 
-    public Map<String,Boolean> getCheckedAttachmentNames() { return mCheckedAttachmentNames; }
-    public void setCheckedAttachmentName(String name) { mCheckedAttachmentNames.put(name,  true); }
+    public Map<String,String> getCheckedAttachmentNames() { return mCheckedAttachmentNames; }
+    public void setCheckedAttachmentName(String name,String id) { mCheckedAttachmentNames.put(name,  id); }
 
     public String getUploadedAttachment() { return mUploadedAttachmentId; }
     public void setUploadedAttachment(String id) { mUploadedAttachmentId = id; }
@@ -1236,7 +1236,7 @@ public class ZMessageComposeBean {
         setOrignalAttachments(attachments);
         if (checked) {
             for (ZMimePartBean part : attachments) {
-                setCheckedAttachmentName(part.getPartName());
+                setCheckedAttachmentName(part.getPartName(),(part.getContentId() == null || part.getContentId().equals("") ? "true" : part.getContentId()));
             }
         }
     }
@@ -1888,13 +1888,12 @@ da body
 
         if (mCheckedAttachmentNames != null && mCheckedAttachmentNames.size() > 0) {
             List<AttachedMessagePart> attachments = new ArrayList<AttachedMessagePart>();
-            for (Map.Entry<String,Boolean> entry : mCheckedAttachmentNames.entrySet()) {
-                if (entry.getValue()) {
-                    String mid = (mDraftId != null && mDraftId.length() > 0) ? mDraftId : mMessageId;
-                    if (mid != null && mid.length() > 0) {
-                        attachments.add(new AttachedMessagePart(mid, entry.getKey()));
-                    }
+            for (Map.Entry<String,String> entry : mCheckedAttachmentNames.entrySet()) {
+                String mid = (mDraftId != null && mDraftId.length() > 0) ? mDraftId : mMessageId;
+                if (mid != null && mid.length() > 0) {
+                    attachments.add(new AttachedMessagePart(mid, entry.getKey(),(entry.getValue() != null && !entry.getValue().equals("true") ? entry.getValue() : null)));
                 }
+            }
             }
             m.setMessagePartsToAttach(attachments);
         }
@@ -1929,12 +1928,32 @@ da body
         boolean hasText = mContent != null;
 
         if (hasHtml && hasText) {
-            m.setMessagePart(new MessagePart(ZMimePartBean.CT_MULTI_ALT,
-                    new MessagePart(ZMimePartBean.CT_TEXT_PLAIN, mContent),
-                    new MessagePart(ZMimePartBean.CT_TEXT_HTML, mHtmlContent)
-                    ));
+            List<AttachedMessagePart> inlineAttachments = m.getInlineMessagePartsToAttach();
+            if(inlineAttachments != null && inlineAttachments.size() > 0){
+                MessagePart html = new MessagePart(ZMimePartBean.CT_TEXT_HTML, mHtmlContent, inlineAttachments);
+            	MessagePart related = new MessagePart(ZMimePartBean.CT_MULTI_RELATED, html);                                
+			 	m.setMessagePart(new MessagePart(ZMimePartBean.CT_MULTI_ALT,
+	                    new MessagePart(ZMimePartBean.CT_TEXT_PLAIN, mContent),
+	                    related)
+	                    );
+            }else{
+				 m.setMessagePart(new MessagePart(ZMimePartBean.CT_MULTI_ALT,
+		                    new MessagePart(ZMimePartBean.CT_TEXT_PLAIN, mContent),
+		                    new MessagePart(ZMimePartBean.CT_TEXT_HTML, mHtmlContent)
+		                    ));
+            }
+
         } else if (hasHtml) {
-            m.setMessagePart(new MessagePart(ZMimePartBean.CT_TEXT_HTML, mContent != null ? mContent : ""));
+
+            List<AttachedMessagePart> inlineAttachments = m.getInlineMessagePartsToAttach();
+            if(inlineAttachments != null && inlineAttachments.size() > 0){
+
+                MessagePart html = new MessagePart(ZMimePartBean.CT_TEXT_HTML, mContent != null ? mContent : "", inlineAttachments);
+            	MessagePart related = new MessagePart(ZMimePartBean.CT_MULTI_RELATED, html);                                
+			 	m.setMessagePart(new MessagePart(ZMimePartBean.CT_MULTI_ALT,related));
+            }else{
+            	m.setMessagePart(new MessagePart(ZMimePartBean.CT_TEXT_HTML, mContent != null ? mContent : ""));
+			}
         } else {
             m.setMessagePart(new MessagePart(mContentType, mContent != null ? mContent : ""));
         }

@@ -140,7 +140,7 @@ public class SaveDraftTag extends ZimbraSimpleTag {
             if (mAttachments != null && mAttachments.length() > 0) {
                 attachments = new ArrayList<AttachedMessagePart>();
                 for (String partName : mAttachments.split(",")) {
-                    attachments.add(new AttachedMessagePart(mMessageId, partName));
+                    attachments.add(new AttachedMessagePart(mMessageId, partName, null));
                 }
             } else {
                 attachments = null;

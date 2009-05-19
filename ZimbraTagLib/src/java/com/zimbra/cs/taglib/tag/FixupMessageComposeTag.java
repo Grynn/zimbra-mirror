@@ -41,7 +41,7 @@ public class FixupMessageComposeTag extends ZimbraSimpleTag {
         mCompose.setOrignalAttachments(attachments);
         if (mNewAttachments) {
             for (ZMimePartBean part : attachments) {
-                mCompose.setCheckedAttachmentName(part.getPartName());
+                mCompose.setCheckedAttachmentName(part.getPartName(),(part.getContentId() == null || part.getContentId().equals("") ? "true" : part.getContentId()));
             }
         }
     }
