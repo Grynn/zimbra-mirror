@@ -14,9 +14,19 @@
 # ***** END LICENSE BLOCK *****
 # 
 
+if [ x`whoami` != "xzimbra" ]; then
+  echo "Error: must be run as user zimbra"
+  exit 1
+fi
+
+usage() {
+  echo "$0 [--help] [--sql_root_pw <password>] [--mysql_memory_percent 30]"
+  echo "  --sql_root_pw defaults to random password if not specified."
+  echo "  --mysql_memory_percent defaults to 30 percent if not specified."
+}
+
 source `dirname $0`/../bin/zmshutil || exit 1
 zmsetvars -f
-sql_root_pw=$1
 
 #
 # Sanity checks
@@ -29,6 +39,41 @@ zmassert -x ${zimbra_home}/bin/zmmypasswd
 zmassert -x ${mysql_directory}/bin/mysql_install_db
 zmassert -r ${zimbra_db_directory}/db.sql
 zmassert -r ${zimbra_db_directory}/versions-init.sql
+
+for opt in "$@"; do
+  case "$opt" in
+    -help|--help|-h|--help)
+      usage
+      exit 0
+      shift
+      ;;
+    -verbose|--verbose|-v|--v)
+      verbose=yes
+      shift
+      ;;
+    --sql_root_pw)
+      shift
+      sql_root_pw=$1
+      shift
+      ;;
+    --mysql_memory_percent)
+      shift
+      mysql_memory_percent=$1
+      shift
+      ;;
+    --*|-*)
+      echo "Unknown option $opt"
+      usage
+      exit 1
+      shift
+      ;;
+  esac
+done
+
+mysql_memory_percent=${mysql_memory_percent:=30}
+if [ x"$verbose" = "xyes" ]; then
+  echo "mysql_memory_percent=$mysql_memory_percent"
+fi
 
 #
 # Create necessary directories
@@ -44,7 +89,8 @@ mkdir -p ${zimbra_log_directory}
 #
 echo '*' Generating mysql config ${mysql_mycnf}
 rm -f ${mysql_mycnf}
-${zimbra_home}/libexec/zmmycnf > ${mysql_mycnf}
+${zimbra_home}/libexec/zmmycnf --innodb-buffer-pool-memory-percent \
+  $mysql_memory_percent > ${mysql_mycnf}
 
 #
 # Create database
@@ -119,3 +165,4 @@ ${zimbra_home}/bin/mysqladmin -u root --password= password ${mysql_root_password
 
 echo '*' Changing mysql zimbra user password
 ${zimbra_home}/bin/zmmypasswd ${zimbra_mysql_password}
+
