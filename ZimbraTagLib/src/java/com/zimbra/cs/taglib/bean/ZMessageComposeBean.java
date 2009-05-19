@@ -1894,7 +1894,6 @@ da body
                     attachments.add(new AttachedMessagePart(mid, entry.getKey(),(entry.getValue() != null && !entry.getValue().equals("true") ? entry.getValue() : null)));
                 }
             }
-            }
             m.setMessagePartsToAttach(attachments);
         }
 
