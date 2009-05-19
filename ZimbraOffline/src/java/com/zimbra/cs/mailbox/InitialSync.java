@@ -1319,7 +1319,7 @@ public class InitialSync {
             
             try {
                 ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
-                ombx.addDocumentRevision(new OfflineContext(player), id, type, pd);
+                ombx.addDocumentRevision(new OfflineContext(player), id, pd);
             } catch (MailServiceException.NoSuchItemException nsie) {
                 ombx.createDocument(new OfflineContext(player), folderId, pd, type);
             }
@@ -1405,7 +1405,7 @@ public class InitialSync {
 
                 try {
                     ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
-                    ombx.addDocumentRevision(new OfflineContext(player), id, doc.getType(), pd);
+                    ombx.addDocumentRevision(new OfflineContext(player), id, pd);
                 } catch (MailServiceException.NoSuchItemException nsie) {
                     try {
                         ombx.createDocument(new OfflineContext(player), doc.getFolderId(), pd, doc.getType());
