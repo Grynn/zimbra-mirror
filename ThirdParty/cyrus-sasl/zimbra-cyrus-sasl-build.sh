@@ -7,7 +7,7 @@
 # SMakefile is probably the source for the rpm spec.
 #
 package=cyrus-sasl
-release=2.1.22
+release=2.1.23
 patchlevel=3z
 cyrus_version=${release}.${patchlevel}
 src=${package}-${cyrus_version}
@@ -30,7 +30,7 @@ curl_lib_dir=/opt/zimbra/curl-${curl_version}/lib
 rm -fr build
 mkdir build
 cd build
-tar xfz ../src/cyrus-sasl-2.1.22.tar.gz  -C .
+tar xfz ../src/cyrus-sasl-2.1.23.tar.gz  -C .
 chmod -R +w ${package}-${release}
 mv ${package}-${release} ${src}
 
