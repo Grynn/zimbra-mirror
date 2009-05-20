@@ -452,7 +452,7 @@ sub modifyAccountData($) {
     $result = $ldap->search(base => $ldap_base,
       scope =>'sub',
       attrs => ['1.1'],
-      filter => "(&(|(objectClass=zimbraAccount)(objectClass=zimbraDistributionList))(zimbraMailHost=$c{zimbra_server_hostname}))");
+      filter => "(&(objectClass=zimbraAccount)(zimbraMailHost=$c{zimbra_server_hostname}))");
     return $result if ($result->code());
     foreach my $entry ($result->all_entries) {
       print "Updating zimbraMailHost for ", $entry->dn(), "...";
@@ -466,7 +466,7 @@ sub modifyAccountData($) {
     $result = $ldap->search(base => $ldap_base,
       scope =>'sub',
       attrs => ['zimbraMailTransport'],
-      filter => "(&(|(objectClass=zimbraAccount)(objectClass=zimbraDistributionList))(zimbraMailTransport=*:$c{zimbra_server_hostname}:*))");
+      filter => "(&(objectClass=zimbraAccount)(zimbraMailTransport=*:$c{zimbra_server_hostname}:*))");
     return $result if ($result->code());
     foreach my $entry ($result->all_entries) {
       print "Updating zimbraMailTransport for ", $entry->dn(), "...";
