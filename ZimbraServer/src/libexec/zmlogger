@@ -119,6 +119,10 @@ sub get_col_types($$$$) {
         SELECT col_type, col_interval FROM rrd_column_type
         WHERE csv_file = ? AND col_name = ?
     });
+    my $fallback_sth = $dbh->prepare(q{
+    	SELECT col_type, col_interval FROM rrd_column_type
+    	WHERE csv_file = ? AND col_name = '*'
+    });
 
     my %col_types;
     my $i;
@@ -137,8 +141,18 @@ sub get_col_types($$$$) {
             $type     = $r->[0]->{'col_type'};
             $interval = $r->[0]->{'col_interval'};
         } else {
-            $type     = 'G';
-            $interval = 30;
+        	$fallback_sth->bind_param(1, $csv);
+        	$fallback_sth->execute();
+        	die $sth->err if ($sth->err);
+        	$r = $fallback_sth->fetchall_arrayref({});
+        	$fallback_sth->finish();
+        	if (@$r > 0) {
+                $type     = $r->[0]->{'col_type'};
+                $interval = $r->[0]->{'col_interval'};
+        	} else {
+                $type     = 'G';
+                $interval = 30;
+        	}
         }
         if ($type eq 'G') {
             $type = 'GAUGE';
@@ -209,7 +223,7 @@ sub create_rrd($$$$$$) {
     my @rra = ();
     foreach my $c (@$columns) {
         my $type     = $types->{$c}->{'type'};
-        my $interval = $types->{$c}->{'interval'} * 4;
+        my $interval = $types->{$c}->{'interval'} * 2;
         push(@ds, "DS:$c:$type:$interval:U:U");
     }
     @rra = (
@@ -298,11 +312,13 @@ sub insert_data($$$$$$) {
         if (! -f $rrd_file) {
             my @rrd_columns;
             my @real_columns;
-            foreach my $c (keys %$structure) {
-                push(@real_columns, $c)
-                        if ($fileno == $structure->{$c}->{'rrd_file'});
-                push(@rrd_columns, $structure->{$c}->{'col_name_19'})
-                        if ($fileno == $structure->{$c}->{'rrd_file'});
+            my @struct = values %$structure;
+            @struct = sort { $a->{'col_num'} <=> $b->{'col_num'} } @struct;
+            foreach my $c (@struct) {
+                push(@real_columns, $c->{'col_name'})
+                        if ($fileno == $c->{'rrd_file'});
+                push(@rrd_columns, $c->{'col_name_19'})
+                        if ($fileno == $c->{'rrd_file'});
             }
             create_rrd($hostid, $fileno, \@rrd_columns, $dbh, $csv_file, \@real_columns);
         }
