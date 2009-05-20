@@ -315,7 +315,7 @@ sub modifyAccountData($) {
     return 1;
   } else {
     print("ldap bind done for $c{zimbra_ldap_userdn}\n") if ($verbose > 1);
-    print("Updating zimbraMailHost attribute\n") if ($verbose > 1);
+    print("Updating zimbraMailHost attributes\n") if ($verbose > 1);
     $result = $ldap->search(base => $ldap_base,
       scope =>'sub',
       attrs => ['1.1'],
@@ -326,6 +326,22 @@ sub modifyAccountData($) {
       $result = $ldap->modify(
         $entry->dn,
         replace => {zimbraMailHost => "$server"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
+    print("Updating zimbraMailTransport attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $ldap_base,
+      scope =>'sub',
+      attrs => ['zimbraMailTransport'],
+      filter => "(&(|(objectClass=zimbraAccount)(objectClass=zimbraDistributionList))(zimbraMailTransport=*:$c{zimbra_server_hostname}:*))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraMailTransport for ", $entry->dn(), "...";
+      my $value=$entry->get_value("zimbraMailTransport");
+      $value =~ s/$c{zimbra_server_hostname}/$server/g;
+      $result = $ldap->modify(
+        $entry->dn,
+        replace => {zimbraMailTransport => "$value"},
         );
       print ($result->code() ? "failed.\n" : "done.\n");
     }
