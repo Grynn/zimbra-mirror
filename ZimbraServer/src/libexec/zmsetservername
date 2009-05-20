@@ -285,22 +285,6 @@ sub modifyServerName($) {
         );
       print ($result->code() ? "failed.\n" : "done.\n");
     }
-    print("Updating zimbraArchiveMailFrom attribute\n") if ($verbose > 1);
-    $result = $ldap->search(base => $config_base,
-      scope =>'base',
-      attrs => ['zimbraArchiveMailFrom'],
-      filter => "(&(objectClass=zimbraGlobalConfig)(zimbraArchiveMailFrom=*\@$c{zimbra_server_hostname}))");
-    return $result if ($result->code());
-    foreach my $entry ($result->all_entries) {
-      print "Updating zimbraArchiveMailFrom for ", $entry->dn(), "...";
-      my $value=$entry->get_value("zimbraArchiveMailFrom");
-      $value =~ s/$c{zimbra_server_hostname}/$server/g;
-      $result = $ldap->modify(
-        $entry->dn,
-        replace => {zimbraArchiveMailFrom => "$value"},
-        );
-      print ($result->code() ? "failed.\n" : "done.\n");
-    }
   }
   $result = $ldap->unbind;
   return 0;
