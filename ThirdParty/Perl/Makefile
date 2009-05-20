@@ -184,6 +184,10 @@ ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	DEST_BIN_DIR	:=	$(DEST_DIR)/usr/bin
 endif
 
+ifeq ($(BUILD_PLATFORM), MACOSX)
+	DEST_BIN_DIR  :=	$(DEST_DIR)/usr/bin
+endif
+
 # TARGETS
 
 CLEAN_TARGETS	=	\
