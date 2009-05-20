@@ -54,10 +54,11 @@ function(data, isException, header) {
 */
 ZmCsfeResult.prototype.getResponse =
 function() {
-	if (this._isException)
+	if (this._isException) {
 		throw this._data;
-	else
+	} else {
 		return this._data;
+	}
 };
 
 /**

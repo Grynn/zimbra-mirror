@@ -184,23 +184,53 @@ function(params) {
 			return (!params.returnXml) ? (this._getResponseData(response, params)) : response;
 		}
 	} catch (ex) {
-		if (!(ex && (ex instanceof ZmCsfeException || ex instanceof AjxSoapException || ex instanceof AjxException))) {
-			var newEx = new ZmCsfeException();
-			newEx.method = params.methodNameStr;
-			newEx.detail = ex ? ex.toString() : "undefined exception";
-			newEx.code = ZmCsfeException.UNKNOWN_ERROR;
-			newEx.msg = "Unknown Error";
-			ex = newEx;
-		}
-		if (params.asyncMode) {
-			rpcCallback.run(new ZmCsfeResult(ex, true));
-		} else {
-			throw ex;
-		}
+		this._handleException(ex, params, rpcCallback);
 	}
 };
 
-ZmCsfeCommand.getRequestStr = function(params) {
+/**
+ * Sends a REST request to the server via GET and returns the response.
+ *
+ * @param params			[hash]				hash of params:
+ *        restUri			[string]			REST URI to send the request to
+ *        asyncMode			[boolean]*			If true, request sent asynchronously
+ *        callback			[AjxCallback]*		Callback to run when response is received (async mode)
+ */
+ZmCsfeCommand.prototype.invokeRest =
+function(params) {
+
+	if (!(params && params.restUri)) { return; }
+
+	var rpcCallback;
+	try {
+		this._st = new Date();
+		if (params.asyncMode) {
+			rpcCallback = new AjxCallback(this, this._runCallback, [params]);
+			this._rpcId = AjxRpc.invoke(null, params.restUri, null, rpcCallback, true);
+		} else {
+			var response = AjxRpc.invoke(null, params.restUri, null, null, true);
+			return response.text;
+		}
+	} catch (ex) {
+		this._handleException(ex, params, rpcCallback);
+	}
+};
+
+/**
+ * Cancels this request (which must be async).
+ */
+ZmCsfeCommand.prototype.cancel =
+function() {
+	if (!this._rpcId) { return; }
+	this.cancelled = true;
+	var req = AjxRpc.getRpcRequestById(this._rpcId);
+	if (req) {
+		req.cancel();
+	}
+};
+
+ZmCsfeCommand.getRequestStr =
+function(params) {
 	return 	params.soapDoc ? ZmCsfeCommand._getSoapRequestStr(params) : ZmCsfeCommand._getJsonRequestStr(params);
 };
 
@@ -385,9 +415,8 @@ function(params) {
 ZmCsfeCommand.prototype._runCallback =
 function(params, result) {
 	if (!result) { return; }
-	if(this.cancelled && params.skipCallbackIfCancelled)
-		return;
-		
+	if (this.cancelled && params.skipCallbackIfCancelled) {	return; }
+
 	var response;
 	if (result instanceof ZmCsfeResult) {
 		response = result; // we already got an exception and packaged it
@@ -416,6 +445,7 @@ function(response, params) {
 
 	var result = new ZmCsfeResult();
 	var xmlResponse = false;
+	var restResponse = Boolean(params.restUri);
 	var respDoc = null;
 
 	// check for un-parseable HTML error response from server
@@ -432,7 +462,7 @@ function(response, params) {
 
 	if (typeof(response.text) == "string" && response.text.indexOf("{") == 0) {
 		respDoc = response.text;
-	} else {
+	} else if (!restResponse) {
 		// an XML response if we requested one, or a fault
 		try {
 			xmlResponse = true;
@@ -474,12 +504,12 @@ function(response, params) {
 		DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</H4>"].join(""), linkName);
 	}
 
-	var obj = {};
+	var obj = restResponse ? response.text : {};
 
 	if (xmlResponse) {
 		DBG.printXML(AjxDebug.DBG1, respDoc.getXml());
 		obj = respDoc._xmlDoc.toJSObject(true, false, true);
-	} else {
+	} else if (!restResponse) {
 		try {
 			eval("obj=" + respDoc);
 		} catch (ex) {
@@ -499,7 +529,7 @@ function(response, params) {
 
 	DBG.dumpObj(AjxDebug.DBG1, obj, -1);
 
-	var fault = obj.Body.Fault;
+	var fault = obj && obj.Body && obj.Body.Fault;
 	if (fault) {
 		// JS response with fault
 		var ex = ZmCsfeCommand.faultToEx(fault, params);
@@ -532,33 +562,19 @@ function(response, params) {
 	return params.asyncMode ? result : obj;
 };
 
-/**
- * Cancels this request (which must be async).
- */
-ZmCsfeCommand.prototype.cancel =
-function() {
-	if (!this._rpcId) { return; }
-	this.cancelled = true;
-	var req = AjxRpc.getRpcRequestById(this._rpcId);
-	if (req) {
-		req.cancel();
+ZmCsfeCommand.prototype._handleException =
+function(ex, params, callback) {
+	if (!(ex && (ex instanceof ZmCsfeException || ex instanceof AjxSoapException || ex instanceof AjxException))) {
+		var newEx = new ZmCsfeException();
+		newEx.method = params.methodNameStr || params.restUri;
+		newEx.detail = ex ? ex.toString() : "undefined exception";
+		newEx.code = ZmCsfeException.UNKNOWN_ERROR;
+		newEx.msg = "Unknown Error";
+		ex = newEx;
 	}
-};
-
-// DEPRECATED - instead, use instance method invoke() above
-ZmCsfeCommand.invoke =
-function(soapDoc, noAuthToken, serverUri, targetServer, useXml, noSession, changeToken) {
-	DBG.println(AjxDebug.DBG1, "Warning: use of deprecated method ZmCsfeCommand.invoke()");
-	var command = new ZmCsfeCommand();
-	var cmdParams = {
-		soapDoc:soapDoc,
-		noAuthToken:noAuthToken,
-		serverUri:serverUri,
-		targetServer:targetServer,
-		useXml:useXml,
-		noSession:noSession,
-		changeToken:changeToken,
-		asyncMode:false
-	};
-	return command.invoke(cmdParams);
+	if (params.asyncMode) {
+		callback.run(new ZmCsfeResult(ex, true));
+	} else {
+		throw ex;
+	}
 };
