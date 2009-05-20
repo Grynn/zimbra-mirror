@@ -199,7 +199,7 @@ sub modifyServerName($) {
     print("Updating zimbraServiceHostname attribute\n") if ($verbose > 1);
     $result = $ldap->search(base => $server_base,
       scope =>'one',
-      attrs => ['zimbraServiceHostname'],
+      attrs => ['1.1'],
       filter => "(&(objectClass=zimbraServer)(zimbraServiceHostname=$c{zimbra_server_hostname}))");
     return $result if ($result->code());
     foreach my $entry ($result->all_entries) {
@@ -285,6 +285,22 @@ sub modifyServerName($) {
         );
       print ($result->code() ? "failed.\n" : "done.\n");
     }
+    print("Updating zimbraArchiveMailFrom attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $config_base,
+      scope =>'base',
+      attrs => ['zimbraArchiveMailFrom'],
+      filter => "(&(objectClass=zimbraGlobalConfig)(zimbraArchiveMailFrom=*\@$c{zimbra_server_hostname}))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraArchiveMailFrom for ", $entry->dn(), "...";
+      my $value=$entry->get_value("zimbraArchiveMailFrom");
+      $value =~ s/$c{zimbra_server_hostname}/$server/g;
+      $result = $ldap->modify(
+        $entry->dn,
+        replace => {zimbraArchiveMailFrom => "$value"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
   }
   $result = $ldap->unbind;
   return 0;
@@ -318,6 +334,7 @@ sub modifyAccountData($) {
     print("Updating zimbraMailHost attribute\n") if ($verbose > 1);
     $result = $ldap->search(base => $ldap_base,
       scope =>'sub',
+      attrs => ['1.1'],
       filter => "(zimbraMailHost=$c{zimbra_server_hostname})");
     return $result if ($result->code());
     foreach my $entry ($result->all_entries) {
@@ -331,15 +348,24 @@ sub modifyAccountData($) {
     print("Updating mail attribute\n") if ($verbose > 1);
     $result = $ldap->search(base => $ldap_base,
       scope =>'sub',
+      attrs => ['mail'],
       filter => "(mail=*\@$c{zimbra_server_hostname})");
     return $result if ($result->code());
     foreach my $entry ($result->all_entries) {
       print "Updating mail for ", $entry->dn(), "...";
-      $result = $ldap->modify(
-        $entry->dn,
-        replace => {zimbraMailHost => "$server"},
-        );
-      print ($result->code() ? "failed.\n" : "done.\n");
+      my @value=$entry->get_value("mail");
+      foreach my $val (@value) {
+        if ($val =~ /$c{zimbra_server_hostname}/) {
+          my $new_val= $val;
+          $new_val =~ s/$c{zimbra_server_hostname}/$server/g;
+          $result = $ldap->modify(
+            $entry->dn,
+            add => {mail => "$new_val"},
+            delete => {mail => "$val"},
+            );
+          print ($result->code() ? "failed.\n" : "done.\n");
+        }
+      }
     }
   }
   $result = $ldap->unbind;
