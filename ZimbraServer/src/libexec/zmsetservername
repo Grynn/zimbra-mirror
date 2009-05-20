@@ -156,6 +156,7 @@ sub modifyServerName($) {
   my ($server) = @_;
   my $config_base = "cn=config,cn=zimbra";
   my $server_base = "cn=servers,cn=zimbra";
+  my $cos_base = "cn=cos,cn=zimbra";
   my $zimbra_base = "cn=zimbra";
   my $root_base = "";
   my $ldap;
@@ -385,6 +386,35 @@ sub modifyServerName($) {
         $entry->dn,
         add => {zimbraLogHostname => "$server"},
         delete => {zimbraLogHostname => "$c{zimbra_server_hostname}"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
+    print("Updating zimbraPublicServiceHostname attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $root_base,
+      scope =>'sub',
+      attrs => ['1.1'],
+      filter => "(&(|(objectClass=zimbraDomain)(objectClass=zimbraGlobalConfig))(zimbraPublicServiceHostname=$c{zimbra_server_hostname}))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraPublicServiceHostname for ", $entry->dn(), "...";
+      $result = $ldap->modify(
+        $entry->dn,
+        replace => {zimbraPublicServiceHostname => "$server"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
+    print("Updating zimbraServerHostPool attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $cos_base,
+      scope =>'one',
+      attrs => ['1.1'],
+      filter => "(&(objectClass=zimbraCOS)(zimbraServerHostPool=$c{zimbra_server_hostname}))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraServerHostPool for ", $entry->dn(), "...";
+      $result = $ldap->modify(
+        $entry->dn,
+        add => {zimbraServerHostPool => "$server"},
+        delete => {zimbraServerHostPool => "$c{zimbra_server_hostname}"},
         );
       print ($result->code() ? "failed.\n" : "done.\n");
     }
