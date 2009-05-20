@@ -225,7 +225,7 @@ sub modifyServerName($) {
     $result = $ldap->search(base => $config_base,
       scope =>'base',
       attrs => ['1.1'],
-      filter => "(&(objectClass=zimbraServer)(zimbraMtaAuthHost=$c{zimbra_server_hostname}))");
+      filter => "(&(objectClass=zimbraGlobalConfig)(zimbraMtaAuthHost=$c{zimbra_server_hostname}))");
     return $result if ($result->code());
     foreach my $entry ($result->all_entries) {
       print "Updating zimbraMtaAuthHost for ", $entry->dn(), "...";
@@ -298,6 +298,49 @@ sub modifyServerName($) {
       $result = $ldap->modify(
         $entry->dn,
         replace => {zimbraWebClientAdminReference => "$value"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
+    print("Updating zimbraVirtualHostname attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $root_base,
+      scope =>'sub',
+      attrs => ['zimbraVirtualHostname'],
+      filter => "(&(objectClass=zimbraDomain)(zimbraVirtualHostname=$c{zimbra_server_hostname}))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraVirtualHostname for ", $entry->dn(), "...";
+      $result = $ldap->modify(
+        $entry->dn,
+        add => {zimbraVirtualHostname => "$server"},
+        delete => {zimbraVirtualHostname => "$c{zimbra_server_hostname}"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
+    print("Updating zimbraDNSCheckHostname attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $root_base,
+      scope =>'sub',
+      attrs => ['1.1'],
+      filter => "(&(|(objectClass=zimbraDomain)(objectClass=zimbraGlobalConfig))(zimbraDNSCheckHostname=$c{zimbra_server_hostname}))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraDNSCheckHostname for ", $entry->dn(), "...";
+      $result = $ldap->modify(
+        $entry->dn,
+        replace => {zimbraDNSCheckHostname => "$server"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
+    print("Updating zimbraDataSourceHost attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $root_base,
+      scope =>'sub',
+      attrs => ['1.1'],
+      filter => "(&(objectClass=zimbraDataSource)(zimbraDataSourceHost=$c{zimbra_server_hostname}))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraDataSourceHost for ", $entry->dn(), "...";
+      $result = $ldap->modify(
+        $entry->dn,
+        replace => {zimbraDataSourceHost => "$server"},
         );
       print ($result->code() ? "failed.\n" : "done.\n");
     }
