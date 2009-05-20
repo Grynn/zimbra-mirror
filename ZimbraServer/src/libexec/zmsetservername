@@ -104,9 +104,6 @@ if (!$usersonly) {
   }
 
   $c{zimbraServiceEnabled} = getLdapServerConfig("zimbraServiceEnabled");
-  $c{zimbraLogHostName} = getLdapGlobalConfig("zimbraLogHostname");
-  setLdapGlobalConfig("zimbraLogHostname", $newServerName)
-    if ("$c{zimbraLogHostname}" eq "$c{zimbra_server_hostname}");
 
   modifyServerName($newServerName);
 
