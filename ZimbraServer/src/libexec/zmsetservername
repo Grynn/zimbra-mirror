@@ -22,13 +22,14 @@ use Net::LDAP::LDIF;
 use Getopt::Long;
 
 my (%c,%loaded,%saved,$rc);
-my ($oldServerName, $newServerName, $help, $verbose, $force, $skipusers);
+my ($oldServerName, $newServerName, $help, $verbose, $force, $skipusers, $usersonly);
 
 GetOptions("help" => \$help, 
     "oldname=s" => \$oldServerName,
     "newname=s" => \$newServerName,
     "force" => \$force,
     "skipusers" => \$skipusers,
+    "usersonly" => \$usersonly,
     "verbose+" => \$verbose);
 
 &usage if ($help or !$newServerName);
@@ -72,66 +73,68 @@ $c{ldap_is_master} = getLocalConfig("ldap_is_master");
 $c{ldap_master_url} = getLocalConfig("ldap_master_url");
 $c{ldap_starttls_supported} = getLocalConfig("ldap_starttls_supported");
 
-
 # ***** Main *****
 
-print "Renaming $c{zimbra_server_hostname} to $newServerName\n";
-print "Shutting down zimbra...";
-my $rc = runCommand("$c{zimbra_home}/bin/zmcontrol stop");
-print (($rc==0) ? "done.\n" : "failed.\n");
+if (!$usersonly) {
+  print "Renaming $c{zimbra_server_hostname} to $newServerName\n";
+  print "Shutting down zimbra...";
+  my $rc = runCommand("$c{zimbra_home}/bin/zmcontrol stop");
+  print (($rc==0) ? "done.\n" : "failed.\n");
 
 
-updateLocalConfig("ldap_master_url");
-updateLocalConfig("ldap_url");
-updateLocalConfig("ldap_host");
-updateLocalConfig("av_notify_user");
-updateLocalConfig("av_notify_domain");
-updateLocalConfig("snmp_trap_host");
-updateLocalConfig("smtp_source");
-updateLocalConfig("smtp_destination");
-updateLocalConfig("zimbra_server_hostname");
+  updateLocalConfig("ldap_master_url");
+  updateLocalConfig("ldap_url");
+  updateLocalConfig("ldap_host");
+  updateLocalConfig("av_notify_user");
+  updateLocalConfig("av_notify_domain");
+  updateLocalConfig("snmp_trap_host");
+  updateLocalConfig("smtp_source");
+  updateLocalConfig("smtp_destination");
+  updateLocalConfig("zimbra_server_hostname");
 
-if (lc($c{ldap_is_master}) eq "true") {
-  print "Starting ldap...";
-  $rc = runCommand("$c{zimbra_home}/bin/ldap start");
-  if ($rc==0) {
-    print "done.\n";
-  } else {
-    print "failed.\n";
-    exit 1;
+  if (lc($c{ldap_is_master}) eq "true") {
+    print "Starting ldap...";
+    $rc = runCommand("$c{zimbra_home}/bin/ldap start");
+    if ($rc==0) {
+      print "done.\n";
+    } else {
+      print "failed.\n";
+      exit 1;
+    }
   }
-}
 
-$c{zimbraLogHostName} = getLdapGlobalConfig("zimbraLogHostName");
-$c{zimbraServiceEnabled} = getLdapServerConfig("zimbraServiceEnabled");
-setLdapGlobalConfig("zimbraLogHostName", $newServerName)
-  if ("$c{zimbraLogHostName}" eq "$c{zimbra_server_hostname}");
+  $c{zimbraServiceEnabled} = getLdapServerConfig("zimbraServiceEnabled");
+  $c{zimbraLogHostName} = getLdapGlobalConfig("zimbraLogHostname");
+  setLdapGlobalConfig("zimbraLogHostname", $newServerName)
+    if ("$c{zimbraLogHostname}" eq "$c{zimbra_server_hostname}");
 
-modifyServerName($newServerName);
+  modifyServerName($newServerName);
 
-if (!$skipusers) {
+  if (!$skipusers) {
+    modifyAccountData($newServerName);
+  }
+
+  print "Services: $c{zimbraServerEnabled}\n";
+  # Reinitialize mta config
+  if (index($c{zimbraServiceEnabled}, "mta") != -1) {
+    $c{ldap_host} = getLocalConfig("ldap_host");
+    $c{ldap_port} = getLocalConfig("ldap_port");
+    print "Reinitializing the mta config...";
+    $rc = runCommand("$c{zimbra_home}/libexec/zmmtainit $c{ldap_host} $c{ldap_port}");
+    print (($rc==0) ? "done.\n" : "failed.\n");
+  }
+
+  # Reinitialize swatchrc
+  if (index($c{zimbraServiceEnabled}, "snmp") != -1) {
+    print "Reinitializing the snmp config...";
+    $rc = runCommand("$c{zimbra_home}/libexec/zmsnmpinit");
+    print (($rc==0) ? "done.\n" : "failed.\n");
+  }
+
+  # Regenerate Self-signed certs
+} else {
   modifyAccountData($newServerName);
 }
-
-print "Services: $c{zimbraServerEnabled}\n";
-# Reinitialize mta config
-if (index($c{zimbraServiceEnabled}, "mta") != -1) {
-  $c{ldap_host} = getLocalConfig("ldap_host");
-  $c{ldap_port} = getLocalConfig("ldap_port");
-  print "Reinitializing the mta config...";
-  $rc = runCommand("$c{zimbra_home}/libexec/zmmtainit $c{ldap_host} $c{ldap_port}");
-  print (($rc==0) ? "done.\n" : "failed.\n");
-
-}
-
-# Reinitialize swatchrc
-if (index($c{zimbraServiceEnabled}, "snmp") != -1) {
-  print "Reinitializing the snmp config...";
-  $rc = runCommand("$c{zimbra_home}/libexec/zmsnmpinit");
-  print (($rc==0) ? "done.\n" : "failed.\n");
-}
-
-# Regenerate Self-signed certs
 
 
 exit 0;
@@ -147,6 +150,8 @@ sub usage {
   print " --oldServerName <oldname>: Previous name for the server.  Defaults to LC zimbra_server_hostname.\n";
   print " --newServerName <newname>: New name for the server.\n";
   print " --skipusers: Skips modifying the user database with the new server.\n"; 
+  print " --usersonly: Only updates the user database.  This way, you can run once to do all the server\n";
+  print "              updates, and then a second time to update the accounts.  Likely requires --force.\n";
   print " --verbose: Set the verbosity level.  Can be specified multiple times to increase the level.\n";
   print "\n";
   exit 0; 
