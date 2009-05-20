@@ -216,7 +216,7 @@ ZaRight.prototype.dynSelectRightNames = function (callArgs) {
             //filter the choices by user input
             for (var i = 0; i < systemRightsByTarget.length; i ++) {
     //            if (systemRightsByTarget[i].indexOf (value) > 0) {
-                if (systemRightsByTarget[i].toLowerCase().indexOf (value.toLowerCase()) == 0) {    //start with
+                if (systemRightsByTarget[i].toLowerCase().indexOf (value.toLowerCase()) >= 0) {    //start with
                     choices.push(systemRightsByTarget[i])   ;
                 }
             }
