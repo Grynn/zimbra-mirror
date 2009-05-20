@@ -1,0 +1,152 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+if [ x`whoami` != xzimbra ]; then
+  echo Error: must be run as zimbra user
+  exit 1
+fi
+
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+  zimbra_home \
+  zimbra_log_directory
+  cbpolicyd_pid_file
+  cbpolicyd_db_file
+
+pidfile=$(cbpolicyd_pid_file:=${zimbra_log_directory}/cbpolicyd.pid)
+dbfile=$(cbpolicyd_db_file:=${zimbra_home}/data/cbpolicyd/db/cbpolicyd.sqlitedb)
+
+rewriteconfig() {
+  /opt/zimbra/libexec/zmmtaconfig cbpolicyd > /dev/null 2>&1
+}
+
+getpid() {
+  if [ -f $pidfile ]; then
+    PID=`cat $pidfile`
+  fi
+}
+
+checkrunning() {
+  getpid
+  if [ "x$PID" = "x" ]; then
+    RUNNING=0
+    if [ -f $pidfile ]; then
+      rm -f $pidfile
+    fi
+  else
+    kill -0 $PID 2> /dev/null
+    if [ $? != 0 ]; then
+      PID=""
+      RUNNING=0
+    else
+      RUNNING=1
+    fi
+  fi
+}
+
+
+#
+# Main
+#
+case "$1" in
+  'start')
+    checkrunning
+  
+    echo -n "Starting policyd..."
+    if [ $RUNNING = 1 ]; then
+      echo "policyd is already running."
+      exit 0
+    else
+      if [ ! -d /opt/zimbra/data/cbpolicyd/db ]; then
+        mkdir /opt/zimbra/data/cbpolicyd/db
+        if [ ! -f ${dbfile} ]; then
+          ${zimbra_home}/libexec/zmcbpolicydinit
+        fi
+      fi
+      if [ x$2 = "x" ]; then
+        rewriteconfig
+      fi
+      ${zimbra_home}/cluebringer/bin/cbpolicyd --config ${zimbra_home}/conf/cbpolicyd 2> /dev/null
+      for ((i=0; i < 30; i++)); do
+        checkrunning
+        if [ $RUNNING = 1 ]; then 
+          break
+        fi  
+        sleep 1
+      done
+      if [ "x$PID" = "x" ]; then
+        echo "failed."
+      else 
+        echo "done."
+      fi 
+    fi
+  ;;
+
+  'kill')
+    $0 stop
+  ;;
+
+  'stop')
+    checkrunning
+    echo -n "Stopping policyd..."
+    if [ $RUNNING = 0 ]; then
+      echo "policyd is not running."
+      exit 0
+    else 
+      kill -TERM $PID 2> /dev/null
+      for ((i=0; i < 300; i++)); do
+        sleep 5
+        kill -0 $PID 2> /dev/null
+        if [ $? != 0 ]; then
+          echo " done."
+          exit 0
+        fi
+      done
+      kill -TERM $PID 2> /dev/null
+      if [ $? = 0 ]; then
+        echo " failed to stop $PID"
+        exit 1
+      else 
+        echo " done."
+      fi
+    fi
+    exit 0
+  ;;
+    
+  'restart'|'reload')
+    $0 stop
+    $0 start
+  ;;
+  
+  'status')
+    checkrunning
+    echo -n "policyd is "
+    if [ $RUNNING = 0 ]; then
+      echo "not running."
+      exit 1
+    else
+      echo "running."
+      exit 0
+    fi
+  ;;
+    
+  *)
+    echo "Usage: $0 start|stop|kill|reload|restart|status"
+    exit 1
+  ;;
+esac
