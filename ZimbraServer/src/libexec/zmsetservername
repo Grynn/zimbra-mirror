@@ -157,6 +157,7 @@ sub modifyServerName($) {
   my $config_base = "cn=config,cn=zimbra";
   my $server_base = "cn=servers,cn=zimbra";
   my $zimbra_base = "cn=zimbra";
+  my $root_base = "";
   my $ldap;
   unless($ldap = Net::LDAP->new($c{ldap_master_url})) {
     print ("Unable to contact $c{ldap_master_url}: $!\n");
@@ -269,8 +270,23 @@ sub modifyServerName($) {
         }
       }
     }
+    print("Updating zimbraSmtpHostname attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $root_base,
+      scope =>'sub',
+      attrs => ['1.1'],
+      filter => "(&(|(objectClass=zimbraServer)(objectClass=zimbraGlobalConfig)(objectClass=zimbraDomain))(zimbraSmtpHostname=$c{zimbra_server_hostname}))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraSsmtpHostname for ", $entry->dn(), "...";
+      $result = $ldap->modify(
+        $entry->dn,
+        add => {zimbraSmtpHostname => "$server"},
+        delete => {zimbraSmtpHostname => "$c{zimbra_server_hostname}"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
     print("Updating zimbraWebClientAdminReference attribute\n") if ($verbose > 1);
-    $result = $ldap->search(base => $zimbra_base,
+    $result = $ldap->search(base => $root_base,
       scope =>'sub',
       attrs => ['zimbraWebClientAdminReference'],
       filter => "(&(|(objectClass=zimbraDomain)(objectClass=zimbraGlobalConfig))(zimbraWebClientAdminReference=*://$c{zimbra_server_hostname}:*))");
