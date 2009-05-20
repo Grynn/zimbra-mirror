@@ -112,7 +112,7 @@ ZaController.initToolbarMethods["ZaRightViewController"].push(ZaRightViewControl
 */
 ZaRightViewController.setViewMethod =
 function(entry) {
-	entry.load();
+	entry.load(null, null, true);
 	if(!this._UICreated) {
 		this._createUI();
 	}
