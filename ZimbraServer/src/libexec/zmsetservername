@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/perl
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # Zimbra Collaboration Suite Server
-# Copyright (C) 2005, 2006, 2007, 2008 Zimbra, Inc.
+# Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
 # 
 # The contents of this file are subject to the Yahoo! Public License
 # Version 1.0 ("License"); you may not use this file except in
@@ -12,137 +12,492 @@
 # Software distributed under the License is distributed on an "AS IS"
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 # ***** END LICENSE BLOCK *****
-#
+# 
+use strict;
+use lib qw(/opt/zimbra/zimbramon/lib /opt/zimbra/libexec/scripts);
+use Net::DNS;
+use Socket;
+use Net::LDAP;
+use Net::LDAP::LDIF;
+use Getopt::Long;
 
-ID=$(id -un)
-if [ x"$ID" != "xzimbra" ]; then
-  echo "$0 must be run as user zimbra"
-  exit 1
-fi 
+my (%c,%loaded,%saved,$rc);
+my ($oldServerName, $newServerName, $help, $verbose, $force, $skipusers);
 
-source /opt/zimbra/bin/zmshutil || exit 1
-zmsetvars -f zimbra_home
+GetOptions("help" => \$help, 
+    "oldname=s" => \$oldServerName,
+    "newname=s" => \$newServerName,
+    "force" => \$force,
+    "skipusers" => \$skipusers,
+    "verbose+" => \$verbose);
 
-usage() {
-	echo "Usage: $0 <servername>"
-	echo "Change the name of the Zimbra server"
-	exit 1
+&usage if ($help or !$newServerName);
+
+$c{zmlocalconfig}="/opt/zimbra/bin/zmlocalconfig";
+$c{zimbra_home} = getLocalConfig("zimbra_home");
+$c{zmprov}="$c{zimbra_home}/bin/zmprov -l --";
+
+if ($oldServerName) {
+  $c{zimbra_server_hostname} = $oldServerName;
+} else {
+  $c{zimbra_server_hostname} = getLocalConfig("zimbra_server_hostname");
 }
 
-case "$1" in
-  help|-help|--help)
-    usage
-    ;;
-  *)
-    NAME=$1
-    ;;
-esac
+if ($c{zimbra_server_hostname} eq $newServerName) {
+  print "Hostname is already $newServerName.\n";
+  exit 0 unless $force;
+}
 
-if [ "x$NAME" = "x" ]; then
-  usage
-fi
+if (!$force) {
+  my $dns=1;
+  my $res = Net::DNS::Resolver->new;
+  my $answer = $res->search($newServerName);
+  if (!defined($answer)) {
+    print "Warning: Hostname $newServerName is not resolvable via DNS\n";
+    $dns=0;
+  }
+  if (!$dns) {
+    my @a=gethostbyname("$newServerName");
+    my $iaddr=splice(@a,4);
+    if (!defined($iaddr)) {
+      print "Error: Hostname $newServerName is not resolvable via /etc/hosts or DNS.\n";
+      exit 0;
+    }
+  }
+}
 
-echo $NAME | egrep '^-' > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-  usage
-fi
+$c{zimbra_ldap_userdn} = getLocalConfig("zimbra_ldap_userdn");
+$c{zimbra_ldap_password} = getLocalConfig("zimbra_ldap_password");
+$c{ldap_is_master} = getLocalConfig("ldap_is_master");
+$c{ldap_master_url} = getLocalConfig("ldap_master_url");
+$c{ldap_starttls_supported} = getLocalConfig("ldap_starttls_supported");
 
 
-SERVICES=`${zimbra_home}/bin/zmprov -l gs ${zimbra_server_hostname} | sed -ne '/^zimbraServiceEnabled/ s/zimbraServiceEnabled: //p'`
+# ***** Main *****
 
-${zimbra_home}/bin/zmcontrol stop
-sleep 10
+print "Renaming $c{zimbra_server_hostname} to $newServerName\n";
+print "Shutting down zimbra...";
+my $rc = runCommand("$c{zimbra_home}/bin/zmcontrol stop");
+print (($rc==0) ? "done.\n" : "failed.\n");
 
-if [ "x${ldap_is_master}" = "xtrue" ]; then
-	ldap start
-fi
 
-${zimbra_home}/bin/ldapsearch -H ${ldap_master_url} -w ${zimbra_ldap_password} -D "${zimbra_ldap_userdn}" -b '' -x -LLL "(cn=${zimbra_server_hostname})" | sed -e "s/${zimbra_server_hostname}/${NAME}/g" > /tmp/server.ldif
+updateLocalConfig("ldap_master_url");
+updateLocalConfig("ldap_url");
+updateLocalConfig("ldap_host");
+updateLocalConfig("av_notify_user");
+updateLocalConfig("av_notify_domain");
+updateLocalConfig("snmp_trap_host");
+updateLocalConfig("smtp_source");
+updateLocalConfig("smtp_destination");
+updateLocalConfig("zimbra_server_hostname");
 
-${zimbra_home}/bin/ldapsearch -H ${ldap_master_url} -w ${zimbra_ldap_password} -D "${zimbra_ldap_userdn}" -b '' -x -LLL "(zimbraMailHost=${zimbra_server_hostname})" dn > /tmp/users.ldif
+if (lc($c{ldap_is_master}) eq "true") {
+  print "Starting ldap...";
+  $rc = runCommand("$c{zimbra_home}/bin/ldap start");
+  if ($rc==0) {
+    print "done.\n";
+  } else {
+    print "failed.\n";
+    exit 1;
+  }
+}
 
-cat /dev/null > /tmp/newusers.ldif
-while read i; do
-if [ "x$i" != "x" ]; then
-cat >> /tmp/newusers.ldif <<EOF
-$i
-changetype: modify
-replace: zimbraMailHost
-zimbraMailHost: ${NAME}
--
-replace: zimbraMailTransport
-zimbraMailTransport: lmtp:${NAME}:7025
--
+$c{zimbraLogHostName} = getLdapGlobalConfig("zimbraLogHostName");
+$c{zimbraServiceEnabled} = getLdapServerConfig("zimbraServiceEnabled");
+setLdapGlobalConfig("zimbraLogHostName", $newServerName)
+  if ("$c{zimbraLogHostName}" eq "$c{zimbra_server_hostname}");
 
-EOF
-fi
-done < /tmp/users.ldif
+modifyServerName($newServerName);
 
-${zimbra_home}/openldap/bin/ldapmodify -c -H ${ldap_master_url} -w ${zimbra_ldap_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/newusers.ldif -v
+if (!$skipusers) {
+  modifyAccountData($newServerName);
+}
 
-${zimbra_home}/openldap/bin/ldapdelete -H ${ldap_master_url} -w ${zimbra_ldap_password} -D "${zimbra_ldap_userdn}" -x "cn=${zimbra_server_hostname},cn=servers,cn=zimbra"
+print "Services: $c{zimbraServerEnabled}\n";
+# Reinitialize mta config
+if (index($c{zimbraServiceEnabled}, "mta") != -1) {
+  $c{ldap_host} = getLocalConfig("ldap_host");
+  $c{ldap_port} = getLocalConfig("ldap_port");
+  print "Reinitializing the mta config...";
+  $rc = runCommand("$c{zimbra_home}/libexec/zmmtainit $c{ldap_host} $c{ldap_port}");
+  print (($rc==0) ? "done.\n" : "failed.\n");
 
-${zimbra_home}/openldap/bin/ldapadd -a -H ${ldap_master_url} -w ${zimbra_ldap_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/server.ldif
+}
 
-LHN=`${zimbra_home}/bin/zmprov -l gcf zimbraLogHostName | sed -e 's/zimbraLogHostName: //'`
-if [ x$LHN = x${zimbra_server_hostname} ]; then
-	${zimbra_home}/bin/zmprov -l mcf zimbraLogHostName ${NAME}
-fi
+# Reinitialize swatchrc
+if (index($c{zimbraServiceEnabled}, "snmp") != -1) {
+  print "Reinitializing the snmp config...";
+  $rc = runCommand("$c{zimbra_home}/libexec/zmsnmpinit");
+  print (($rc==0) ? "done.\n" : "failed.\n");
+}
 
-zmlocalconfig -e zimbra_server_hostname=${NAME}
+# Regenerate Self-signed certs
 
-foo=`echo ${ldap_master_url} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
-if [ "x{$foo}" != "x${ldap_master_url}" ]; then
-	zmlocalconfig -e ldap_master_url=$foo
-	ldap_master_url=$foo
-fi
 
-foo=`echo ${ldap_url} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
-if [ "x{$foo}" != "x${ldap_url}" ]; then
-	zmlocalconfig -e ldap_url=$foo
-	ldap_url=$foo
-fi
+exit 0;
+# ***** End Main *****
 
-foo=`echo ${ldap_host} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
-if [ "x{$foo}" != "x${ldap_host}" ]; then
-	zmlocalconfig -e ldap_host=$foo
-	ldap_host=$foo
-fi
-foo=`echo ${smtp_destination} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
-if [ "x{$foo}" != "x${smtp_destination}" ]; then
-	zmlocalconfig -e smtp_destination=$foo
-	smtp_destination=$foo
-fi
-foo=`echo ${av_notify_user} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
-if [ "x{$foo}" != "x${av_notify_user}" ]; then
-	zmlocalconfig -e av_notify_user=$foo
-	av_notify_user=$foo
-fi
-foo=`echo ${snmp_trap_host} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
-if [ "x{$foo}" != "x${snmp_trap_host}" ]; then
-	zmlocalconfig -e snmp_trap_host=$foo
-	snmp_trap_host=$foo
-fi
-foo=`echo ${smtp_source} | sed -e "s|${zimbra_server_hostname}|${NAME}|g"`
-if [ "x{$foo}" != "x${smtp_source}" ]; then
-	zmlocalconfig -e smtp_source=$foo
-	smtp_source=$foo
-fi
+# ***** Subroutines *****
+sub usage {
+  print "\n";
+  print "Usage: $0 [-h] [-f] [-s] [-o <prev servername] [-v+] -n <servername>\n";
+  print "Changes the name of the local zimbra server.\n";
+  print " --help: print this usage statement.\n";
+  print " --force: Force the rename, bypassing safety checks.\n";
+  print " --oldServerName <oldname>: Previous name for the server.  Defaults to LC zimbra_server_hostname.\n";
+  print " --newServerName <newname>: New name for the server.\n";
+  print " --skipusers: Skips modifying the user database with the new server.\n"; 
+  print " --verbose: Set the verbosity level.  Can be specified multiple times to increase the level.\n";
+  print "\n";
+  exit 0; 
+}
 
-# resource the vars
-zmsetvars -f
+sub modifyServerName($) {
+  my ($server) = @_;
+  my $config_base = "cn=config,cn=zimbra";
+  my $server_base = "cn=servers,cn=zimbra";
+  my $zimbra_base = "cn=zimbra";
+  my $ldap;
+  unless($ldap = Net::LDAP->new($c{ldap_master_url})) {
+    print ("Unable to contact $c{ldap_master_url}: $!\n");
+    return 1;
+  }
+  my $result;
+  if ($c{ldap_master_url} !~ /^ldaps/i) {
+    if ($c{ldap_starttls_supported}) {
+      $result = $ldap->start_tls(
+        verify => 'none',
+        capath => "$c{zimbra_home}/conf/ca",
+        ) or die "start_tls: $@";
+      $result->code && die "TLS: " . $result->error . "\n";
+    }
+  }
+  $result = $ldap->bind($c{zimbra_ldap_userdn}, 
+    password => $c{zimbra_ldap_password});
+  if ($result->code()) {
+    print("ldap bind failed for $c{zimbra_ldap_userdn}\n");
+    return 1;
+  } else {
+    print("ldap bind done for $c{zimbra_ldap_userdn}\n") if ($verbose > 1);
+    print "Searching for ldap server entry...";
+    $result = $ldap->search(base => $server_base, 
+      scope => 'one', 
+      filter => "(cn=$c{zimbra_server_hostname})");
+    print ($result->code() ? "failed.\n" : "done.\n");
+    return $result if ($result->code());
 
-# rewrite the ldap-*.cf file for postfix
-echo $SERVICES | grep -q mta
-if [ $? == 0 ]; then
-  echo -n "Reinitializing the mta config..."
-  ${zimbra_home}/libexec/zmmtainit ${ldap_host} ${ldap_port}
-  echo "done."
-fi
+    # Rename server entry
+    foreach my $entry ($result->all_entries) {
+      print "Renaming ", $entry->dn(), "...";
+      $result = $ldap->moddn(
+        $entry->dn,
+        newrdn=>"cn=$server",
+        deleteoldrdn => 1
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
+    print("Updating zimbraServiceHostname attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $server_base,
+      scope =>'one',
+      attrs => ['zimbraServiceHostname'],
+      filter => "(&(objectClass=zimbraServer)(zimbraServiceHostname=$c{zimbra_server_hostname}))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraServiceHostname for ", $entry->dn(), "...";
+      $result = $ldap->modify(
+        $entry->dn,
+        replace => {zimbraServiceHostname => "$server"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
+    print("Updating zimbraMtaAuthHost attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $server_base,
+      scope =>'one',
+      attrs => ['cn'],
+      filter => "(&(objectClass=zimbraServer)(zimbraMtaAuthHost=$c{zimbra_server_hostname}))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraMtaAuthHost for ", $entry->dn(), "...";
+      addLdapServerConfig($entry->get_value("cn"), "zimbraMtaAuthHost", "$server");
+      removeLdapServerConfig($entry->get_value("cn"), "zimbraMtaAuthHost","$c{zimbra_server_hostname}");
+    }
+    $result = $ldap->search(base => $config_base,
+      scope =>'base',
+      attrs => ['1.1'],
+      filter => "(&(objectClass=zimbraServer)(zimbraMtaAuthHost=$c{zimbra_server_hostname}))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraMtaAuthHost for ", $entry->dn(), "...";
+      addLdapGlobalConfig("zimbraMtaAuthHost", "$server");
+      removeGlobalConfig("zimbraMtaAuthHost","$c{zimbra_server_hostname}");
+    }
+    print("Updating zimbraConvertdURL attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $zimbra_base,
+      scope =>'sub',
+      attrs => ['zimbraConvertdURL'],
+      filter => "(&(|(objectClass=zimbraServer)(objectClass=zimbraGlobalConfig))(zimbraConvertdURL=*://$c{zimbra_server_hostname}:*))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraConvertdURL for ", $entry->dn(), "...";
+      my $value=$entry->get_value("zimbraConvertdURL");
+      $value =~ s/$c{zimbra_server_hostname}/$server/g;
+      $result = $ldap->modify(
+        $entry->dn,
+        replace => {zimbraConvertdURL => "$value"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
+    print("Updating zimbraSpellCheckURL attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $zimbra_base,
+      scope =>'sub',
+      attrs => ['zimbraSpellCheckURL'],
+      filter => "(&(|(objectClass=zimbraServer)(objectClass=zimbraGlobalConfig))(zimbraSpellCheckURL=*://$c{zimbra_server_hostname}:*))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraSpellCheckURL for ", $entry->dn(), "...";
+      my @value=$entry->get_value("zimbraSpellCheckURL");
+      foreach my $val (@value) {
+        if ($val =~ /$c{zimbra_server_hostname}/) {
+          my $new_val= $val;
+          $new_val =~ s/$c{zimbra_server_hostname}/$server/g;
+          $result = $ldap->modify(
+            $entry->dn,
+            add => {zimbraSpellCheckURL => "$new_val"},
+            delete => {zimbraSpellCheckURL => "$val"},
+            );
+          print ($result->code() ? "failed.\n" : "done.\n");
+        }
+      }
+    }
+    print("Updating zimbraWebClientAdminReference attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $zimbra_base,
+      scope =>'sub',
+      attrs => ['zimbraWebClientAdminReference'],
+      filter => "(&(|(objectClass=zimbraDomain)(objectClass=zimbraGlobalConfig))(zimbraWebClientAdminReference=*://$c{zimbra_server_hostname}:*))");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraWebClientAdminReference for ", $entry->dn(), "...";
+      my $value=$entry->get_value("zimbraWebClientAdminReference");
+      $value =~ s/$c{zimbra_server_hostname}/$server/g;
+      $result = $ldap->modify(
+        $entry->dn,
+        replace => {zimbraWebClientAdminReference => "$value"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
+  }
+  $result = $ldap->unbind;
+  return 0;
+}
 
-# rewrite swatchrc
-echo $SERVICES | grep -q snmp
-if [ $? == 0 ]; then
-  echo -n "Reinitializing snmp config..."
-  ${zimbra_home}/libexec/zmsnmpinit
-fi
+sub modifyAccountData($) {
+  my ($server) = @_;
+  my $ldap_base = "";
+  my $ldap;
+  unless($ldap = Net::LDAP->new($c{ldap_master_url})) {
+    print ("Unable to contact $c{ldap_master_url}: $!\n");
+    return 1;
+  }
+  my $result;
+  if ($c{ldap_master_url} !~ /^ldaps/i) {
+    if ($c{ldap_starttls_supported}) {
+      $result = $ldap->start_tls(
+        verify => 'none',
+        capath => "$c{zimbra_home}/conf/ca",
+        ) or die "start_tls: $@";
+      $result->code && die "TLS: " . $result->error . "\n";
+    }
+  }
+  $result = $ldap->bind($c{zimbra_ldap_userdn}, 
+    password => $c{zimbra_ldap_password});
+  if ($result->code()) {
+    print("ldap bind failed for $c{zimbra_ldap_userdn}");
+    return 1;
+  } else {
+    print("ldap bind done for $c{zimbra_ldap_userdn}\n") if ($verbose > 1);
+    print("Updating zimbraMailHost attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $ldap_base,
+      scope =>'sub',
+      filter => "(zimbraMailHost=$c{zimbra_server_hostname})");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating zimbraMailHost for ", $entry->dn(), "...";
+      $result = $ldap->modify(
+        $entry->dn,
+        replace => {zimbraMailHost => "$server"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
+    print("Updating mail attribute\n") if ($verbose > 1);
+    $result = $ldap->search(base => $ldap_base,
+      scope =>'sub',
+      filter => "(mail=*\@$c{zimbra_server_hostname})");
+    return $result if ($result->code());
+    foreach my $entry ($result->all_entries) {
+      print "Updating mail for ", $entry->dn(), "...";
+      $result = $ldap->modify(
+        $entry->dn,
+        replace => {zimbraMailHost => "$server"},
+        );
+      print ($result->code() ? "failed.\n" : "done.\n");
+    }
+  }
+  $result = $ldap->unbind;
+  return 0;
+}
+
+sub updateLocalConfig($) {
+  my ($key) = @_;
+  my $tmpval = getLocalConfig($key);
+  my $newval = $tmpval;
+  $newval =~ s/$c{zimbra_server_hostname}/$newServerName/g;
+  return if ($tmpval eq $newval);
+  my $rc = setLocalConfig($key, $newval) ;
+  return $tmpval if ($rc==0);
+}
+
+sub getLocalConfig {
+  my ($key,$force) = @_;
+
+  return $loaded{lc}{$key}
+    if (exists $loaded{lc}{$key} && !$force);
+  print "Getting local config $key=";
+  my $val = `$c{zmlocalconfig} -x -s -m nokey ${key} 2> /dev/null`;
+  chomp $val;
+  $loaded{lc}{$key} = $val;
+  print "$val\n"; 
+  return $val;
+}
+
+sub setLocalConfig {
+  my $key = shift;
+  my $val = shift;
+
+  if (exists $saved{lc}{$key} && $saved{lc}{$key} eq $val) {
+    return;
+  }
+  $saved{lc}{$key} = $val;
+  $loaded{lc}{$key} = $val;
+  print "Setting local config $key=$val\n";
+  runCommand("$c{zmlocalconfig} -f -e ${key}=\'${val}\' 2> /dev/null");
+}
+
+sub setLdapServerConfig($$$) {
+  my ($hn,$key,$val) = @_;
+  return 
+    if (exists $saved{gs}{$key} && $saved{gs}{$key} eq $val);
+  if ($val eq "") {
+      $val="\'\'";
+  }
+  $loaded{gs}{$key} = $val;
+  $saved{gs}{$key} = $val;
+  print "Setting server config $key=$val\n" if ($verbose > 0);
+  runCommand("$c{zmprov} ms $hn $key $val");
+}
+
+sub removeLdapServerConfig($$$) {
+  my ($hn,$key,$val) = @_;
+  print "Removing server config $key=$val\n" if ($verbose > 0);
+  runCommand("$c{zmprov} ms $hn -$key $val");
+}
+
+sub addLdapServerConfig($$$) {
+  my ($hn,$key,$val) = @_;
+  print "Adding server config $key=$val\n" if ($verbose > 0);
+  runCommand("$c{zmprov} ms $hn +$key $val");
+}
+
+sub getLdapServerConfig($$) {
+  my ($key,$hn) = @_;
+  $hn = $c{zimbra_server_hostname} if ($hn eq ""); 
+  my $val;
+  return $loaded{gs}{$hn}{$key}
+    if (exists $loaded{gs}{$hn}{$key});
+
+  print "$loaded{gs}{$hn}{$key}\n";
+
+  print "Running $c{zmprov} gs $hn\n" if ($verbose > 1);
+  unless (open(ZMPROV, "$c{zmprov} gs $hn 2> /dev/null|")) {
+    print "Failed to get server config for $hn.\n";
+    return;
+  }
+  my @CONFIG = <ZMPROV>;
+  unless (close(ZMPROV)) {
+    print "Failed to get server config for $hn. $@\n";
+    return;
+  }
+
+  while (scalar(@CONFIG) > 0)  {
+    chomp(my $line = shift(@CONFIG));
+    my ($k, $v) = $line =~ m/^(\w+):\s(.*)/;
+    while ($CONFIG[0] !~ m/^\w+:\s.*/ && scalar(@CONFIG) > 0) {
+      chomp($v .= shift(@CONFIG));
+    }
+
+    next if ($k =~ m/cn|objectClass/);
+    $loaded{gs}{$hn}{$k} .= 
+      (($loaded{gs}{$hn}{$k} eq "") ? "$v" : " $v");;
+  }
+
+  return $loaded{gs}{$hn}{$key};
+}
+
+sub setLdapGlobalConfig($$) {
+  my ($key,$val) = @_;
+  return 
+    if (exists $saved{gcf}{$key} && $saved{gcf}{$key} eq $val);
+  if ($val eq "") {
+      $val="\'\'";
+  }
+  $loaded{gcf}{$key} = $val;
+  $saved{gcf}{$key} = $val;
+  print "Setting global config $key=$val\n" if ($verbose > 0);
+  runCommand("$c{zmprov} mcf $key $val");
+}
+
+sub removeLdapGlobalConfig($$) {
+  my ($key,$val) = @_;
+  print "Removing global config $key=$val\n" if ($verbose > 0);
+  runCommand("$c{zmprov} mcf -$key $val");
+}
+
+sub addLdapGlobalConfig($$) {
+  my ($key,$val) = @_;
+  print "Adding global config $key=$val\n" if ($verbose > 0);
+  runCommand("$c{zmprov} mcf +$key $val");
+}
+
+sub getLdapGlobalConfig($) {
+  my ($key) = @_;
+  my ($val); 
+  return $loaded{gcf}{$key}
+    if (exists $loaded{gcf}{$key});
+
+  print "Getting global config $key=";
+  open(ZMPROV, "$c{zmprov} gcf $key|");
+  my @CONFIG = <ZMPROV>;
+  close(ZMPROV);
+
+  while (scalar(@CONFIG) > 0)  {
+    chomp(my $line = shift(@CONFIG));
+    my ($k, $v) = $line =~ m/^(\w+):\s(.*)/;
+    while ($CONFIG[0] !~ m/^\w+:\s.*/ && scalar(@CONFIG) > 0) {
+      chomp($v .= shift(@CONFIG));
+    }
+
+    next if ($k =~ m/cn|objectClass/);
+    $val .= (($val eq "") ? "$v" : " $v") if ($k eq $key);
+    $loaded{gcf}{$k} .= 
+      (($loaded{gcf}{$k} eq "") ? "$v" : " $v");;
+  }
+  print "$loaded{gcf}{$key}\n";
+  return $loaded{gcf}{$key};
+}
+
+sub runCommand {
+  my $cmd = shift;
+  my $rc;
+  $rc = 0xffff & system("$cmd > /dev/null 2>&1 ");
+  return $rc;
+}
+
