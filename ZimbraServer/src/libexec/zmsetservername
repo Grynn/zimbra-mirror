@@ -329,28 +329,6 @@ sub modifyAccountData($) {
         );
       print ($result->code() ? "failed.\n" : "done.\n");
     }
-    print("Updating mail attribute\n") if ($verbose > 1);
-    $result = $ldap->search(base => $ldap_base,
-      scope =>'sub',
-      attrs => ['mail'],
-      filter => "(&(|(objectClass=zimbraAccount)(objectClass=zimbraDistributionList))(mail=*\@$c{zimbra_server_hostname}))");
-    return $result if ($result->code());
-    foreach my $entry ($result->all_entries) {
-      print "Updating mail for ", $entry->dn(), "...";
-      my @value=$entry->get_value("mail");
-      foreach my $val (@value) {
-        if ($val =~ /$c{zimbra_server_hostname}/) {
-          my $new_val= $val;
-          $new_val =~ s/$c{zimbra_server_hostname}/$server/g;
-          $result = $ldap->modify(
-            $entry->dn,
-            add => {mail => "$new_val"},
-            delete => {mail => "$val"},
-            );
-          print ($result->code() ? "failed.\n" : "done.\n");
-        }
-      }
-    }
   }
   $result = $ldap->unbind;
   return 0;
