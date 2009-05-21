@@ -466,6 +466,9 @@ public abstract class DesktopMailbox extends Mailbox {
 		//do nothing
 	}
 	
+	@Override
+	protected void updateRssDataSource(Folder folder) {} //bug 38129, to suppress creation of datasource
+	
 	protected abstract void syncOnTimer();
 
 	public abstract boolean isAutoSyncDisabled();
