@@ -291,11 +291,16 @@ ZaTargetPermission.targetXFormModifier = function (xFormObject, entry) {
         {type:_ZATABCASE_, id:"target_form_permission_tab", numCols:1, colSizes:["700px"],
             caseKey:  tabIx,
             items:[
+                {type: _SPACER_, height: 10},
+                {type: _DWT_ALERT_, containerCssStyle: "width:400px;",
+				    style: DwtAlert.INFORMATION, iconVisible: false,
+                    content: com_zimbra_delegatedadmin.HELP_NOTES_ACL },
                 {type:_TOP_GROUPER_, label: com_zimbra_delegatedadmin.Label_permission,
                     id:"permission_grouper",
                     colSizes:["700px"],numCols:1,
                     items: ZaTargetPermission.getGrantsListXFormItem () 
-                }
+                } 
+
             ]
         } ;
 

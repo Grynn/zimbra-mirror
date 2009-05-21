@@ -52,10 +52,15 @@ ZaUIComponent.accountTargetXFormModifier = function (xFormObject, entry) {
     var caseItem = {type:_ZATABCASE_, id:"target_form_ui_comp_tab", numCols:1, colSizes:["800px"],
             caseKey:  tabIx,
             items:[
+                {type: _SPACER_, height: 10},    
+                { type: _DWT_ALERT_, containerCssStyle: "width:400px;",
+				    style: DwtAlert.INFORMATION, iconVisible: false,
+                    content: com_zimbra_delegatedadmin.HELP_NOTES_UI_COMP },
                 {type:_TOP_GROUPER_, label: com_zimbra_delegatedadmin.Label_ui_comp, id:"ui_comp_grouper",
                     colSizes:["800px"],numCols:1 ,
                     items : ZaUIComponent.getUIComponentsXFormItem ()
                 }
+
             ]
     };
 
