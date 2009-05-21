@@ -60,7 +60,7 @@ command=\"/opt/zimbra/libexec/zmrcd\" ${key}"
 
 keyattr="zimbraSshPublicKey"
 
-zmprov="/opt/zimbra/bin/zmprov -l"
+zmprov="/opt/zimbra/bin/zmprov -m -l"
 
 authkeysfile="${zimbra_home}/.ssh/authorized_keys"
 
