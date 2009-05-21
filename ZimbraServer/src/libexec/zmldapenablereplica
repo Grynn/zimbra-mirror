@@ -195,7 +195,7 @@ EOF
 
 enableLdapService() {
 	echo -n "Enabling LDAP service on ${zimbra_server_hostname}..."
-	SERVICES=`${zimbra_home}/bin/zmprov -l gs ${zimbra_server_hostname} | sed -ne '/^zimbraServiceEnabled/ s/zimbraServiceEnabled: //p'`
+	SERVICES=`${zimbra_home}/bin/zmprov -m -l gs ${zimbra_server_hostname} | sed -ne '/^zimbraServiceEnabled/ s/zimbraServiceEnabled: //p'`
 	echo $SERVICES | grep -q ldap
 	if [ $? -ne 0 ]; then
 		echo -n "..."
@@ -203,7 +203,7 @@ enableLdapService() {
 		for s in $SERVICES; do
 			NEWSERVICES="$NEWSERVICES zimbraServiceEnabled $s"
 		done
-		${zimbra_home}/bin/zmprov -l ms ${zimbra_server_hostname} $NEWSERVICES
+		${zimbra_home}/bin/zmprov -m -l ms ${zimbra_server_hostname} $NEWSERVICES
 	fi
 	echo "succeeded"
 }
