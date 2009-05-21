@@ -71,11 +71,13 @@ my $ssha_password = $ctx->generate;
 # Get the LDAP Master
 my $ldap_master = getLocalConfig("ldap_master_url");
 
+my $ldap;
+
 print "Updating local config and directory\n";
 if (! $options{r}) {
-  my $ldap = Net::LDAP->new("$ldap_master")  or  die "$@";
+  $ldap = Net::LDAP->new("$ldap_master")  or  die "$@";
 } else {
-  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/')  or  die "$@";
+  $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/')  or  die "$@";
 }
 
 # startTLS Operation, add later
