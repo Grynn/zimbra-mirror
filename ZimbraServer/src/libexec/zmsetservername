@@ -38,6 +38,11 @@ $c{zmlocalconfig}="/opt/zimbra/bin/zmlocalconfig";
 $c{zimbra_home} = getLocalConfig("zimbra_home");
 $c{zmprov}="$c{zimbra_home}/bin/zmprov -l --";
 
+if ($usersonly && !$oldServerName) {
+  print "--usersonly requries --oldServerName.\n";
+  exit 0;
+}
+
 if ($oldServerName) {
   $c{zimbra_server_hostname} = $oldServerName;
 } else {
