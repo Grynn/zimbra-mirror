@@ -35,6 +35,7 @@ import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.PartSource;
 
@@ -1965,12 +1966,24 @@ da body
             for (FileItem item : mFileItems) {
                 if (item.getSize() > 0) num++;
             }
-            Part[] parts = new Part[num];
+            Part[] parts = new Part[num*3];
             int i=0;
+            int j=0;
             for (FileItem item : mFileItems) {
-                if (item.getSize() > 0 )
-                    parts[i++] = new FilePart(item.getFieldName(), new UploadPartSource(item), item.getContentType(), "utf-8");
+                if (item.getSize() > 0 ){
+                    String name = item.getName();
+                    try{
+                        name = new String(item.getName().getBytes(),"UTF-8");
+                    }catch(Exception e){
+                        name = item.getName();
+                    }
+
+                    parts[i++] = new StringPart("_charset_", "UTF-8","UTF-8");
+                    parts[i++] = new StringPart("filename"+j++, name,"UTF-8");
+                    parts[i++] = new FilePart(item.getFieldName(), new UploadPartSource(item), item.getContentType(), "UTF-8");
+                }
             }
+
             try {
                 if(parts.length > 0) {
                     attachmentUploadId = mailbox.uploadAttachments(parts, 1000 * 60);  //TODO get timeout from config
