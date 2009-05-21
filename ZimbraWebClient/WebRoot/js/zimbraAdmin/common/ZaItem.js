@@ -198,7 +198,7 @@ ZaItem.prototype.parseTargetsRightsFromJS = function(targetObj) {
 		if(!this.setAttrs)
 			this.setAttrs = {};
 		
-		if(AjxUtil.isEmpty(targetObj.getAttrs)) {
+		if(AjxUtil.isEmpty(targetObj.getAttrs) && AjxUtil.isEmpty(targetObj.setAttrs)) {
 			this.getAttrs = null;
 			return;
 		}									
