@@ -140,10 +140,7 @@ ZaController.initToolbarMethods["ZaServerController"].push(ZaServerController.in
 ZaServerController.setViewMethod =
 function(entry) {
 	entry.load();
-	if(!this._UICreated) {
-		this._createUI();
-	} 
-//	ZaApp.getInstance().pushView(ZaZimbraAdmin._SERVER_VIEW);
+	this._createUI(entry);
 	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._view.setDirty(false);
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
@@ -155,8 +152,8 @@ ZaController.setViewMethods["ZaServerController"].push(ZaServerController.setVie
 * @method _createUI
 **/
 ZaServerController.prototype._createUI =
-function () {
-	this._contentView = this._view = new this.tabConstructor(this._container);
+function (entry) {
+	this._contentView = this._view = new this.tabConstructor(this._container, entry);
 
 	this._initToolbar();
 	//always add Help button at the end of the toolbar
@@ -169,7 +166,6 @@ function () {
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-    //ZaApp.getInstance().createView(ZaZimbraAdmin._SERVER_VIEW, elements);
     var tabParams = {
 		openInNewTab: true,
 		tabId: this.getContentViewId()
@@ -190,6 +186,9 @@ function () {
 
 ZaServerController.prototype.validateMyNetworks = 
 function (params) {
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraMtaMyNetworks,this._currentObject))
+		this.runValidationStack(params);
+		
 	var obj = this._view.getObject();
 	//find local networks
 	var locals = [];
@@ -326,6 +325,9 @@ ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServ
 
 ZaServerController.prototype.validateMTA =
 function (params) {
+	if(!ZaItem.hasWritePermission(ZaServer.A_SmtpHostname,this._currentObject))
+		this.runValidationStack(params);
+	
 	var obj = this._view.getObject();
 	if((!obj.attrs[ZaServer.A_SmtpHostname] || obj.attrs[ZaServer.A_SmtpHostname] == "") && (this._currentObject.attrs[ZaServer.A_SmtpHostname] != null && this._currentObject.attrs[ZaServer.A_SmtpHostname] != "")) {
 		if(ZaApp.getInstance().dialogs["confirmMessageDialog"])
@@ -350,6 +352,9 @@ ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServ
 
 ZaServerController.prototype.validateVolumeChanges = 
 function (params) {
+	if(!ZaItem.hasRight(ZaServer.MANAGE_VOLUME_RIGHT,this._currentObject))
+		this.runValidationStack(params);
+		
 	var obj = this._view.getObject();
 	if(obj[ZaServer.A_RemovedVolumes] && obj[ZaServer.A_RemovedVolumes].length > 0 ) {
 		if(ZaApp.getInstance().dialogs["confirmMessageDialog"])
@@ -389,6 +394,9 @@ ZaServerController.changeProxyPorts = function () {
 }
 ZaServerController.prototype.validateImapBindPort =
 function (params) {
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraImapBindPort,this._currentObject))
+		this.runValidationStack(params);
+			
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
 
@@ -439,6 +447,9 @@ ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServ
 
 ZaServerController.prototype.validatePop3BindPort =
 function (params) {
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraPop3BindPort,this._currentObject))
+		this.runValidationStack(params);
+	
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
 
@@ -463,6 +474,9 @@ ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServ
 
 ZaServerController.prototype.validatePop3SSLBindPort =
 function (params) {
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraPop3SSLBindPort,this._currentObject))
+		this.runValidationStack(params);
+			
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
 
@@ -487,6 +501,9 @@ ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServ
 
 ZaServerController.prototype.validateImapProxyBindPort =
 function (params) {
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraImapProxyBindPort,this._currentObject))
+		this.runValidationStack(params);
+	
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
 
@@ -512,6 +529,9 @@ ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServ
 
 ZaServerController.prototype.validateImapSSLProxyBindPort =
 function (params) {
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraImapSSLProxyBindPort,this._currentObject))
+		this.runValidationStack(params);
+	
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
 
@@ -537,6 +557,9 @@ ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServ
 
 ZaServerController.prototype.validatePop3ProxyBindPort =
 function (params) {
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraPop3ProxyBindPort,this._currentObject))
+		this.runValidationStack(params);
+	
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
 
@@ -561,6 +584,9 @@ ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServ
 
 ZaServerController.prototype.validatePop3SSLProxyBindPort =
 function (params) {
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraPop3SSLProxyBindPort,this._currentObject))
+		this.runValidationStack(params);
+	
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
 

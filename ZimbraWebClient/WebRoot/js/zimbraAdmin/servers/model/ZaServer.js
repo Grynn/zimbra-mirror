@@ -202,6 +202,7 @@ ZaServer.DOT_TO_CIDR["255.255.255.254"] = 31;
 ZaServer.DOT_TO_CIDR["255.255.255.255"] = 32;
 
 ZaServer.FLUSH_CACHE_RIGHT = "flushCache";
+ZaServer.MANAGE_VOLUME_RIGHT = "manageVolume";
 
 ZaServer.isValidPostfixSubnetString = function(mask) {
 	//is this a CIDR
@@ -730,7 +731,7 @@ ZaServer.prototype.initFromJS = function(server) {
 
 ZaServer.prototype.getCurrentVolumes =
 function () {
-	if(!this.id)
+	if(!this.id || !ZaItem.hasRight(ZaServer.MANAGE_VOLUME_RIGHT,this))
 		return;
 	var soapDoc = AjxSoapDoc.create("GetCurrentVolumesRequest", ZaZimbraAdmin.URN, null);
 	//var command = new ZmCsfeCommand();
@@ -762,7 +763,7 @@ function () {
 ZaServer.prototype.getMyVolumes = 
 function() {
 	this[ZaServer.A_Volumes] = new Array();
-	if(!this.id)
+	if(!this.id || !ZaItem.hasRight(ZaServer.MANAGE_VOLUME_RIGHT,this))
 		return;
 	var soapDoc = AjxSoapDoc.create("GetAllVolumesRequest", ZaZimbraAdmin.URN, null);
 	//var command = new ZmCsfeCommand();

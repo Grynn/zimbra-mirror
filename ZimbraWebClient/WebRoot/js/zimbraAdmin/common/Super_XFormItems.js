@@ -269,6 +269,8 @@ Super_XFormItem.prototype.bmolsnr = true;
 Super_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Super_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 Super_XFormItem.checkIfOverWriten = function() {
+	if(!ZaItem.hasWritePermission.call(this))
+		return false;
 	if(this.getModelItem() && this.getModelItem().getLocalValue(this.getInstance())==null)
 		return false;
 	else if (this.getModelItem() &&  (this.getModelItem().getLocalValue(this.getInstance()) instanceof AjxVector) && 
@@ -1527,6 +1529,36 @@ XFormItemFactory.createItemType("_ZAGROUP_", "zagroup", ZAGroup_XFormItem, Group
 ZAGroup_XFormItem.prototype.numCols = 2;
 ZAGroup_XFormItem.prototype.colSizes = ["275px","275px"];
 ZAGroup_XFormItem.prototype.cssStyle = "margin-top:20px;margin-bottom:0px;padding-bottom:0px;";
+ZAGroup_XFormItem.isGroupVisible = function(entry, attrsArray, rightsArray) {
+	if(!entry)
+		entry = this.getInstance();
+
+	if(!entry)
+		return true;
+		
+	if(!attrsArray && !rightsArray)
+		return true;
+		
+	if(attrsArray) {
+		var cntAttrs = attrsArray.length;
+		for(var i=0; i< cntAttrs; i++) {
+			if(ZaItem.hasReadPermission(attrsArray[i],entry) || ZaItem.hasWritePermission(attrsArray[i],entry)) {
+				return true;
+			}
+		}
+	} 
+	
+	if(rightsArray) {
+		var cntRights = rightsArray.length;
+		for(var i=0; i< cntRights; i++) {
+			if(ZaItem.hasRight(rightsArray[i],entry)) {
+				return true;
+			}
+		}
+	}
+	
+	return false; 
+}
 
 ZAWizGroup_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZAWIZGROUP_", "zawizgroup", ZAWizGroup_XFormItem, Group_XFormItem);
