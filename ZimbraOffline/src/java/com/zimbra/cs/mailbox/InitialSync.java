@@ -78,9 +78,7 @@ import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.ContentServlet;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.formatter.SyncFormatter;
-import com.zimbra.cs.service.formatter.TarFormatter;
 import com.zimbra.cs.service.formatter.ZipFormatter;
-import com.zimbra.cs.service.mail.FolderAction;
 import com.zimbra.cs.service.mail.SetCalendarItem;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.service.mail.SetCalendarItem.SetCalendarItemParseResult;
@@ -951,6 +949,22 @@ public class InitialSync {
             syncMessagesAsZip(ids, type);
     }
     
+    private static byte[] readTarEntry(TarInputStream tis, TarEntry te) throws
+        IOException {
+        if (te == null)
+            return null;
+        
+        int dsz = (int)te.getSize();
+        byte[] data;
+        
+        if (dsz == 0)
+            return null;
+        data = new byte[dsz];
+        if (tis.read(data, 0, dsz) != dsz)
+            throw new IOException("archive read err");
+        return data;
+    }
+
     private void syncMessagesAsTgz(List<Integer> ids, byte type) throws ServiceException {
         UserServlet.HttpInputStream in = null;
         
@@ -980,7 +994,7 @@ public class InitialSync {
                 tis = new TarInputStream(new GZIPInputStream(in), "UTF-8");
                 while ((te = tis.getNextEntry()) != null) {
                     if (te.getName().endsWith(".meta")) {
-                        ItemData itemData = new ItemData(TarFormatter.readTarEntry(tis, te));
+                        ItemData itemData = new ItemData(readTarEntry(tis, te));
                         UnderlyingData ud = itemData.ud;
                         assert (ud.type == type);
                         assert (ud.getBlobDigest() != null);
@@ -1365,7 +1379,7 @@ public class InitialSync {
                     continue;
                 }
 
-                ItemData itemData = new ItemData(TarFormatter.readTarEntry(tis, te));
+                ItemData itemData = new ItemData(readTarEntry(tis, te));
                 UnderlyingData ud = itemData.ud;
                 
                 MailItem item = MailItem.constructItem(ombx, ud);  // metadata only
