@@ -34,7 +34,7 @@ ZaGrant.A_grantee_id = "grantee_id" ;
 ZaGrant.A_grantee_type = "grantee_type" ;
 ZaGrant.A_right = "right" ;
 ZaGrant.A_deny = "deny" ;
-ZaGrant.A_canDelegate = "canDelegate";
+ZaGrant.A_canDelegate = "canDelegate";                       
 ZaGrant.A_target = "target" ;
 ZaGrant.A_target_id = "target_id" ;
 ZaGrant.A_target_type = "target_type"
@@ -46,6 +46,9 @@ ZaGrant.A_inline_attr = "inline_attr" ;
 
 ZaGrant.A2_grantsList = "grantsList" ;
 ZaGrant.A2_grantsListSelectedItems = "grantsListSelectedItems" ;
+
+ZaGrant.A3_directGrantsList = "directGrantsList" ;
+ZaGrant.A3_indirectGrantsList = "indirectGrantsList" ;
 
 ZaGrant.GRANTEE_TYPE = { usr: "usr", grp: "grp" };
 ZaGrant.GRANTEE_TYPE_CHOICES = ["usr", "grp"] ;
@@ -81,6 +84,8 @@ ZaGrant.loadMethod = function (by, val, type) {
     return ZaGrant.load.call (this, params) ;
 }
 /*
+  params.isAllGrants - whether it is a call to get all the granted ACE of an grantee on all the targets 
+
   params.target - targets info
   params.target.by - name or id
   params.target.val - target name or id
@@ -154,14 +159,14 @@ ZaGrant.load = function (params) {
             }
         }
 
-        if (params.target.type == ZaItem.GLOBAL_GRANT) {
+        if (( params.target && params.target.type == ZaItem.GLOBAL_GRANT) || params.isAllGrants) {
             return grantList ;
         } else {
             this [ZaGrant.A2_grantsList] = grantList ;
         }
     }catch (ex) {
         if (ctler) { //at the initialization time, the controller may not be initialized yet
-            ctler.popupErrorDialog (com_zimbra_delegatedadmin.error_grant_right + ex.msg , ex) ;
+            ctler.popupErrorDialog (com_zimbra_delegatedadmin.error_get_permission + ex.msg , ex) ;
         }
     }
 }

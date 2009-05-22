@@ -26,7 +26,10 @@
     <include>ZaEffectiveRights.js</include>
     <include>ZaEffectiveRightXFormView.js</include>
     <include>ZaEffectiveRightsViewController.js</include>
-    
+
+    <include>ZaAllGrantsViewController.js</include>
+    <include>ZaAllGrantsXFormView.js</include>
+
     <include>ZaDelegatedAdminExt.js</include>
     <disableUIUndeploy>TRUE</disableUIUndeploy>
 </zimlet>

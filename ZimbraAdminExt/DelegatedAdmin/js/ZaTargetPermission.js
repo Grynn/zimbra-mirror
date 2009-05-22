@@ -96,24 +96,33 @@ function(width, by) {
 	var sortable=1;
     if (!width) width = 700;
     if (!by) by = ZaGrant.A_target ;
-    if (by == ZaGrant.A_target) {
-        headerList[0] = new ZaListHeaderItem(ZaGrant.A_grantee, com_zimbra_delegatedadmin.Col_grantee_name,
+    var index = 0 ;
+    if (by == ZaGrant.A_target ) {
+        headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_grantee, com_zimbra_delegatedadmin.Col_grantee_name,
                 null, width/4 + 50, null, ZaGrant.A_grantee, true, true);
-        headerList[1] = new ZaListHeaderItem(ZaGrant.A_grantee_type, com_zimbra_delegatedadmin.Col_grantee_type,
+        headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_grantee_type, com_zimbra_delegatedadmin.Col_grantee_type,
                 null, width/4 - 80, null  , ZaGrant.A_grantee_type, true, true);
-    } else if (by  == ZaGrant.A_grantee) {
-        headerList[0] = new ZaListHeaderItem(ZaGrant.A_target, com_zimbra_delegatedadmin.Col_target_name,
+    } else if (by  == ZaGrant.A_grantee ) {
+        headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_target, com_zimbra_delegatedadmin.Col_target_name,
                 null, width/4 + 50, null, ZaGrant.A_target, true, true);
-        headerList[1] = new ZaListHeaderItem(ZaGrant.A_target_type, com_zimbra_delegatedadmin.Col_target_type,
+        headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_target_type, com_zimbra_delegatedadmin.Col_target_type,
                 null, width/4 - 80, null  , ZaGrant.A_target_type, true, true);
+    } else if ( by == "all")  {
+        headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_grantee, com_zimbra_delegatedadmin.Col_grantee_name,
+                     null, 200, null, ZaGrant.A_grantee, true, true);
+        headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_target, com_zimbra_delegatedadmin.Col_target_name,
+                null, 200, null, ZaGrant.A_target, true, true);
+        headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_target_type, com_zimbra_delegatedadmin.Col_target_type,
+                null, 100, null  , ZaGrant.A_target_type, true, true);
     }
-    headerList[2] = new ZaListHeaderItem(ZaGrant.A_right, com_zimbra_delegatedadmin.Col_grant_right_name,
+
+    headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_right, com_zimbra_delegatedadmin.Col_grant_right_name,
                         null, 150, null , ZaGrant.A_right, true, true);
 
-    headerList[3] = new ZaListHeaderItem(ZaGrant.A_canDelegate, com_zimbra_delegatedadmin.Col_canDelegate,
+    headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_canDelegate, com_zimbra_delegatedadmin.Col_canDelegate,
                     null, 80, null , ZaGrant.A_canDelegate, true, true);
 
-    headerList[4] = new ZaListHeaderItem(ZaGrant.A_deny, com_zimbra_delegatedadmin.Col_deny,
+    headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_deny, com_zimbra_delegatedadmin.Col_deny,
                 null, null, null , ZaGrant.A_deny, true, true);
 
     return headerList;
@@ -320,7 +329,8 @@ function (entry) {
 
 
 //add model and xform to the target's main view as a new tab - permissions
-ZaTargetPermission.grantListSelectItem = { ref: ZaGrant.A2_grantsListSelectedItems, type:_LIST_ }
+ZaTargetPermission.grantListSelectItem = {
+    ref: ZaGrant.A2_grantsListSelectedItems, id: ZaGrant.A2_grantsListSelectedItems, type:_LIST_ }
 
 //Domain Target
 if (ZaDomain) {

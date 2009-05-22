@@ -75,17 +75,25 @@ function() {
 
 //Add the View Rights toolbar button
 ZaOperation.VIEW_EFFECTIVE_RIGHTS = ++ ZA_OP_INDEX;
+ZaOperation.CONFIG_GRANTS = ++ ZA_OP_INDEX ;
 if (ZaController.initToolbarMethods["ZaAccountListController"]) {
     ZaAccountListController.initExtraToolbarMethod = function () {
         this._toolbarOperations [ZaOperation.VIEW_EFFECTIVE_RIGHTS] =
-        new ZaOperation(ZaOperation.VIEW_EFFECTIVE_RIGHTS, com_zimbra_delegatedadmin.ACTBB_ViewRights,
-                com_zimbra_delegatedadmin.ACTBB_ViewRights_tt, "RightObject", "RightObjectDis",
+        new ZaOperation(ZaOperation.VIEW_EFFECTIVE_RIGHTS, com_zimbra_delegatedadmin.bt_config_grants,
+                com_zimbra_delegatedadmin.bt_config_grants_tt, "GlobalPermission", "GlobalPermissionDis",
+                new AjxListener(this, ZaDelegatedAdminExt._configGrantsListener)
+                );
+
+        this._toolbarOperations [ZaOperation.CONFIG_GRANTS] =
+        new ZaOperation(ZaOperation.CONFIG_GRANTS, com_zimbra_delegatedadmin.ACTBB_ViewRights,
+                com_zimbra_delegatedadmin.ACTBB_ViewRights_tt,"RightObject", "RightObjectDis",
                 new AjxListener(this, ZaDelegatedAdminExt._viewRightsListener)
                 );
+
         if (this._defaultType == ZaItem.ACCOUNT || this._defaultType == ZaItem.DL) {
             for (var i = 0; i < this._toolbarOrder.length; i ++) {
                 if (this._toolbarOrder[i] == ZaOperation.NONE) {
-                    this._toolbarOrder.splice(i, 0, ZaOperation.VIEW_EFFECTIVE_RIGHTS);
+                    this._toolbarOrder.splice(i, 0, ZaOperation.VIEW_EFFECTIVE_RIGHTS, ZaOperation.CONFIG_GRANTS);
                     break;
                 }
             }
@@ -116,6 +124,57 @@ function (ev) {
     }
 }
 
+ZaDelegatedAdminExt._configGrantsListener =
+function (ev) {
+    var item ;
+    if (this instanceof ZaAccountListController) {
+        var selectedItems = this._contentView.getSelection() ;
+        if (selectedItems && selectedItems.length == 1) {
+            item = selectedItems [0];
+        }
+    } else if (this instanceof ZaAccountViewController || this instanceof ZaDLController) {
+        item = this._currentObject;
+    }
+
+    if (item != null) {
+        var allGrants = {} ;
+        allGrants[ZaGrant.A_grantee] = item.name;
+        allGrants[ZaGrant.A_grantee_id] = item.id;        
+        allGrants[ZaGrant.A2_grantsListSelectedItems] = [];
+        allGrants[ZaGrant.A3_directGrantsList] = [];
+        allGrants[ZaGrant.A3_indirectGrantsList] = [];
+
+        var granteeType ;
+        if (item.type == ZaItem.ACCOUNT) {
+            granteeType = ZaGrant.GRANTEE_TYPE.usr ;
+        }  else if (item.type == ZaItem.DL) {
+            granteeType = ZaGrant.GRANTEE_TYPE.grp ;
+        }
+
+        var params = {
+            isAllGrants: true ,
+            grantee: {
+                type: granteeType ,
+                all: "1",
+                val: item.name,
+                by: "name"
+            }
+        };
+        var allGrantsList = ZaGrant.load (params) ;
+        for (var i = 0; i < allGrantsList.length; i ++) {
+
+            if ( allGrantsList[i][ZaGrant.A_grantee] == allGrants[ZaGrant.A_grantee] ) {
+                allGrants[ZaGrant.A3_directGrantsList].push (allGrantsList[i]) ;
+            } else {
+                allGrants[ZaGrant.A3_indirectGrantsList].push (allGrantsList[i]) ;               
+            }
+        }
+
+        var erCtrl = new ZaAllGrantsViewController (this._appCtxt, this._container) ;
+        erCtrl.show(allGrants, true);
+    }
+}
+
 ZaDelegatedAdminExt.changeActionsStateMethod =
 function () {
     var cnt = this._contentView.getSelectionCount();
@@ -126,6 +185,10 @@ function () {
                 if (this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS]) {
                     this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
                 }
+
+                if (this._toolbarOperations[ZaOperation.CONFIG_GRANTS]) {
+                    this._toolbarOperations[ZaOperation.CONFIG_GRANTS].enabled = false;
+                }
             } else if (item.attrs [ZaAccount.A_zimbraIsDelegatedAdminAccount] != "TRUE"
                     && item.attrs [ZaDistributionList.A_isAdminGroup] != "TRUE") {
                 //we don't need to show the rights for system admin account since it has all the rights
@@ -133,15 +196,27 @@ function () {
                 if (this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS]) {
                     this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
                 }
+
+                if (this._toolbarOperations[ZaOperation.CONFIG_GRANTS]) {
+                    this._toolbarOperations[ZaOperation.CONFIG_GRANTS].enabled = false;
+                }
             }
         } else {
             if (this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS]) {
                 this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
             }
+
+            if (this._toolbarOperations[ZaOperation.CONFIG_GRANTS]) {
+                this._toolbarOperations[ZaOperation.CONFIG_GRANTS].enabled = false;
+            }
         }
     } else {
         if (this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS]) {
             this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
+        }
+
+        if (this._toolbarOperations[ZaOperation.CONFIG_GRANTS]) {
+            this._toolbarOperations[ZaOperation.CONFIG_GRANTS].enabled = false;
         }
     }
 }
@@ -158,6 +233,13 @@ if (ZaController.initToolbarMethods["ZaAccountViewController"]) {
                 );
         this._toolbarOrder.push(ZaOperation.VIEW_EFFECTIVE_RIGHTS);
 
+        this._toolbarOperations [ZaOperation.CONFIG_GRANTS] =
+        new ZaOperation(ZaOperation.CONFIG_GRANTS, com_zimbra_delegatedadmin.bt_config_grants,
+                com_zimbra_delegatedadmin.bt_config_grants_tt, "GlobalPermission", "GlobalPermissionDis",
+                new AjxListener(this, ZaDelegatedAdminExt._configGrantsListener)
+                );
+
+        this._toolbarOrder.push(ZaOperation.CONFIG_GRANTS);
     }
     ZaController.initToolbarMethods["ZaAccountViewController"].push(ZaDelegatedAdminExt.initExtraAccountViewToolbarMethod);
 }
@@ -168,6 +250,7 @@ ZaDelegatedAdminExt.changeAccountViewActionStateMethod = function () {
 
     if (this._currentObject.attrs [ZaAccount.A_zimbraIsDelegatedAdminAccount] != "TRUE") {
         this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
+        this._toolbarOperations[ZaOperation.CONFIG_GRANTS].enabled = false;
     }
 }
 ZaController.changeActionsStateMethods["ZaAccountViewController"].push(ZaDelegatedAdminExt.changeAccountViewActionStateMethod);
@@ -183,8 +266,16 @@ if (ZaController.initToolbarMethods["ZaDLController"]) {
                 );
         this._toolbarOrder.push(ZaOperation.VIEW_EFFECTIVE_RIGHTS);
 
+       this._toolbarOperations [ZaOperation.CONFIG_GRANTS] =
+        new ZaOperation(ZaOperation.CONFIG_GRANTS, com_zimbra_delegatedadmin.bt_config_grants,
+                com_zimbra_delegatedadmin.bt_config_grants_tt,"GlobalPermission", "GlobalPermissionDis",
+                new AjxListener(this, ZaDelegatedAdminExt._configGrantsListener)
+                );
+        this._toolbarOrder.push(ZaOperation.CONFIG_GRANTS);
+
     }
     ZaController.initToolbarMethods["ZaDLController"].push(ZaDelegatedAdminExt.initExtraDLViewToolbarMethod);
+
 }
 
 ZaDelegatedAdminExt.changeDLViewActionStateMethod = function () {
@@ -193,6 +284,7 @@ ZaDelegatedAdminExt.changeDLViewActionStateMethod = function () {
 
     if (this._currentObject.attrs [ZaDistributionList.A_isAdminGroup] != "TRUE") {
         this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
+        this._toolbarOperations[ZaOperation.CONFIG_GRANTS].enabled = false;
     }
 }
 ZaController.changeActionsStateMethods["ZaDLController"].push(ZaDelegatedAdminExt.changeDLViewActionStateMethod);
