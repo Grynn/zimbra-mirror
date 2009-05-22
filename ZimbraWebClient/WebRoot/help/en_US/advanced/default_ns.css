@@ -59,6 +59,10 @@ P {
    margin-top:1pt; 
    font-size:10pt; 
    margin-bottom:6pt; 
+   border-left-style:None; 
+   border-right-style:None; 
+   border-top-style:None; 
+   border-bottom-style:None; 
    font-family:Arial;  }
 LI.P { 
       font-size:10pt;  }

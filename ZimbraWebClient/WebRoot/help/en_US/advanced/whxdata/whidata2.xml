@@ -1,6 +1,87 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="private calendar event" >
+  <topic name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
+<key name="public/private calendar events" >
+  <topic name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
+<key name="Query language description" >
+  <topic name="Query language description" url="Search/query_language_description.htm" />
+</key>
+<key name="quick add" >
+  <topic name="Using Quick to Create an Appointment" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="Quick search" >
+  <topic name="Quick search" url="Search/Quick_search.htm" />
+</key>
+<key name="QuickAdd" >
+  <topic name="Using QuickAdd to Create an Appointment" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="reading pane" >
+  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="reading pane, turning on or off" >
+  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="receiving mail" >
+  <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="Recovering" >
+  <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="deleted mail messages" >
+    <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="recurring appointments, changing" >
+  <topic name="Changing recurring appointments" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="remember me on this computer" >
+  <topic name="Logging on and off" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="reminders" >
+  <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="Replying" >
+  <topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
+  <key name="mail messages" >
+    <topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
+  </key>
+</key>
+<key name="resend" >
+  <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="reserving rooms and equipment" >
+  <topic name="Scheduling Resources" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="resource" >
+  <topic name="Scheduling Resources" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="return receipt" >
+  <topic name="Requesting a Return Receipt" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
+</key>
+<key name="revoke calendar privileges" >
+  <topic name="Delegating Calendar Access" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="revoke shared mail folders access" >
+  <topic name="Revoking a access to a shared folder" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="revoking permissions on address book" >
+  <topic name="Sharing your Address Book" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="revoking shared task list" >
+  <topic name="Share your Task list" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="rich text editor for Document pages" >
+  <topic name="Using the rich text editor" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="right click" >
+  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="Right-click menus" >
+  <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
 <key name="roles" >
   <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
 </key>
@@ -48,6 +129,12 @@
 <key name="searching for a message" >
   <topic name="Searching for messages" url="Search/_search__vs.__search_for_.htm" />
 </key>
+<key name="send files from Briefcase" >
+  <topic name="Send Files from your Briefcase" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
+</key>
+<key name="session expires" >
+  <topic name="If your session expires" url="Userspecific/if_your_session_expires.htm" />
+</key>
 <key name="setting a forwarding address" >
   <topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
@@ -59,6 +146,9 @@
 </key>
 <key name="sharing address books" >
   <topic name="Sharing your Address Book" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="sharing briefcase folders" >
+  <topic name="Sharing your Briefcase" url="Briefcase/Sharing_your_Briefcase.htm" />
 </key>
 <key name="sharing folders" >
   <topic name="Sharing a folder" url="Sharing/Sharing_a_folder.htm" />
@@ -78,9 +168,6 @@
 </key>
 <key name="signatures, adding automatically" >
   <topic name="Creating Personas" url="Userspecific/Creating_Personas.htm" />
-</key>
-<key name="sorting contents pane columns" >
-  <topic name="Sorting conversations" url="Navigation_folders_and_tips/sorting_conversations.htm" />
 </key>
 <key name="sorting incoming email" >
   <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
@@ -119,9 +206,6 @@
 <key name="tool tips" >
   <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
-<key name="Traditional View" >
-  <topic name="Traditional View" url="Navigation_folders_and_tips/Traditional_View.htm" />
-</key>
 <key name="Trash folder" >
   <topic name="Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
@@ -149,6 +233,9 @@
 <key name="view, calendar" >
   <topic name="About Zimbra Calendar" url="Calendar/About_Calendar.htm" />
 </key>
+<key name="white list" >
+  <topic name="Filtering Junk Mail" url="filters/Filtering_Junk_Mail.htm" />
+</key>
 <key name="wildcard, using in search" >
   <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
 </key>
@@ -160,6 +247,7 @@
 </key>
 <key name="Zimlets" >
   <topic name="About Zimlets" url="Zimlets/About_Zimlets.htm" />
+  <topic name="Managing your Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
 
 </indexdata>

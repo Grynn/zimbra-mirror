@@ -1,15 +1,27 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <ftstdata>
-<topic name="Traditional View" url="Navigation_folders_and_tips/Traditional_View.htm" />
+<topic name="Categorizing your mail messages" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+<topic name="Creating custom folders" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+<topic name="Customize your view" url="Navigation_folders_and_tips/Customize_your_view.htm" />
+<topic name="Customizing your initial email page" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
+<topic name="Deleting folders" url="Navigation_folders_and_tips/deleting_folders.htm" />
+<topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
+<topic name="System Folders" url="Navigation_folders_and_tips/inbox_folder.htm" />
+<topic name="Keyboard Shortcut Keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+<topic name="Moving mail messages between folders" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+<topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+<topic name="Renaming folders" url="Navigation_folders_and_tips/renaming_folders.htm" />
+<topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
 <topic name="Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
+<topic name="New in 6.0" url="New_in_6.0.htm" />
 <topic name="purging messages" url="reading_mail/archiving_old_messages.htm" />
 <topic name="Displaying HTML in email messages" url="reading_mail/displaying_html_in_email_messages.htm" />
 <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-<topic name="Importing and Exporting Folders" url="reading_mail/Importing_Folders.htm" />
 <topic name="Marking mail as unread" url="reading_mail/marking_mail_as_unread.htm" />
 <topic name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
 <topic name="Printing a mail message" url="reading_mail/printing_a_mail_message.htm" />
+<topic name="Reading mail" url="reading_mail/reading_mail.htm" />
 <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
 <topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
@@ -23,12 +35,12 @@
 <topic name="Search examples" url="Search/search_examples.htm" />
 <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
 <topic name="Using * as a wildcard in Search" url="Search/Using_Wildcard_in_Search.htm" />
+<topic name="Managing items you share" url="Sharing/Managing_items_you_share.htm" />
 <topic name="Sharing a folder" url="Sharing/Sharing_a_folder.htm" />
 <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
 <topic name="Deleting tags" url="Tags_and_flags/deleting_tags.htm" />
 <topic name="Flagging an email message" url="Tags_and_flags/Flagging_an_email_message.htm" />
 <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
-<topic name="About Tasks" url="Tasks/About_Tasks.htm" />
 <topic name="Add a task" url="Tasks/Add_a_task.htm" />
 <topic name="Change a task" url="Tasks/Change_a_task.htm" />
 <topic name="Create tasks folders" url="Tasks/Create_tasks_folders.htm" />
@@ -43,24 +55,24 @@
 <topic name="Changing Your Preferences" url="Userspecific/Changing_Your_User_Options.htm" />
 <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
 <topic name="Creating Personas" url="Userspecific/Creating_Personas.htm" />
+<topic name="If your session expires" url="Userspecific/if_your_session_expires.htm" />
 <topic name="Logging on and off" url="Userspecific/logging_on_and_off.htm" />
 <topic name="Managing your account identities" url="Userspecific/Mail_Identities.htm" />
 <topic name="Accessing your external accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
 <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
 <topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
-<topic name="Setting your Account preferences for using persona" url="Userspecific/Setting_your_Account_preferences_for_using_persona.htm" />
 <topic name="Setting your address book preferences" url="Userspecific/Setting_your_address_book_preferences.htm" />
 <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
 <topic name="Setting your general preferences" url="Userspecific/Setting_your_general_preferences.htm" />
 <topic name="Setting your mail preferences" url="Userspecific/Setting_your_mail_preferences.htm" />
 <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
-<topic name="Restore Default Preferences" url="Userspecific/the__restore_defaults__button.htm" />
 <topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
 <topic name="Using Shortcuts to navigate" url="Userspecific/Using_Shortcuts_to_navigate.htm" />
 <topic name="Vacation message" url="Userspecific/vacation_message.htm" />
 <topic name="version" url="version.htm" />
 <topic name="About Zimlets" url="Zimlets/About_Zimlets.htm" />
+<topic name="Managing your Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
 
 </ftstdata>  

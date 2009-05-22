@@ -1,17 +1,17 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <fts>
-<chunkinfo url="whfwdata0.xml" first="!" last="bob"/>
-<chunkinfo url="whfwdata1.xml" first="body" last="dal"/>
-<chunkinfo url="whfwdata2.xml" first="dat" last="fin"/>
-<chunkinfo url="whfwdata3.xml" first="finaliz" last="kept"/>
-<chunkinfo url="whfwdata4.xml" first="key" last="onto"/>
-<chunkinfo url="whfwdata5.xml" first="open" last="reply"/>
-<chunkinfo url="whfwdata6.xml" first="report" last="suit"/>
-<chunkinfo url="whfwdata7.xml" first="sup" last="without"/>
-<chunkinfo url="whfwdata8.xml" first="wmv" last="ó"/>
+<chunkinfo url="whfwdata0.xml" first="!" last="befor"/>
+<chunkinfo url="whfwdata1.xml" first="begin" last="correctnes"/>
+<chunkinfo url="whfwdata2.xml" first="correspond" last="except"/>
+<chunkinfo url="whfwdata3.xml" first="exchang" last="inbox"/>
+<chunkinfo url="whfwdata4.xml" first="inc" last="multipl"/>
+<chunkinfo url="whfwdata5.xml" first="must" last="prevent"/>
+<chunkinfo url="whfwdata6.xml" first="preview" last="sent"/>
+<chunkinfo url="whfwdata7.xml" first="separat" last="tre"/>
+<chunkinfo url="whfwdata8.xml" first="treat" last="ó"/>
 
 <tchunkinfo first="0" last="98" url="whftdata0.xml" />
-<tchunkinfo first="99" last="159" url="whftdata1.xml" />
+<tchunkinfo first="99" last="171" url="whftdata1.xml" />
 
 </fts>
