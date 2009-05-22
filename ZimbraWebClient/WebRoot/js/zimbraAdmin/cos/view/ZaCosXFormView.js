@@ -20,10 +20,10 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaCosXFormView = function(parent) {
+ZaCosXFormView = function(parent, entry) {
 	ZaTabView.call(this, parent,"ZaCosXFormView");
 	this.TAB_INDEX = 0;	
-	this.initForm(ZaCos.myXModel,this.getMyXForm());
+	this.initForm(ZaCos.myXModel,this.getMyXForm(entry), entry);
 }
 
 ZaCosXFormView.prototype = new ZaTabView();
@@ -141,22 +141,7 @@ function(entry) {
         }
 
         if(entry.getAttrs[ZaCos.A_zimbraZimletAvailableZimlets] || entry.getAttrs.all) {
-            var zimlets = entry.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
-            if(zimlets != null && zimlets != "") {
-                if (AjxUtil.isString(zimlets))	 {
-                    this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = [zimlets];
-                } else {
-                    var cnt = zimlets.length;
-                    this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = [];
-                    for(var i = 0; i < cnt; i ++) {
-                        this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets].push(zimlets[i]);
-                    }
-                }
-            } else
-                this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = null;
-
-
-            //get sll Zimlets
+            //get all Zimlets
             var allZimlets = ZaZimlet.getAll(ZaZimlet.EXCLUDE_EXTENSIONS);
             if(allZimlets == null) {
                 allZimlets = [];
@@ -210,16 +195,129 @@ ZaCosXFormView.isMailFeatureEnabled = function () {
 	return (this.getInstanceValue(ZaCos.A_zimbraFeatureMailEnabled) == "TRUE");
 }
 
-ZaCosXFormView.myXFormModifier = function(xFormObject) {	
+ZaCosXFormView.FEATURE_TAB_ATTRS = [ZaCos.A_zimbraFeatureMailEnabled,
+	ZaCos.A_zimbraFeatureContactsEnabled,
+	ZaCos.A_zimbraFeatureCalendarEnabled,
+	ZaCos.A_zimbraFeatureTasksEnabled,
+	ZaCos.A_zimbraFeatureNotebookEnabled,
+	ZaCos.A_zimbraFeatureBriefcasesEnabled,
+	ZaCos.A_zimbraFeatureIMEnabled,
+	ZaCos.A_zimbraFeatureOptionsEnabled,
+	ZaCos.A_zimbraFeatureTaggingEnabled,
+	ZaCos.A_zimbraFeatureSharingEnabled,
+	ZaCos.A_zimbraFeatureChangePasswordEnabled,
+	ZaCos.A_zimbraFeatureSkinChangeEnabled,
+	ZaCos.A_zimbraFeatureHtmlComposeEnabled,
+	ZaCos.A_zimbraFeatureShortcutAliasesEnabled,
+	ZaCos.A_zimbraFeatureGalEnabled,
+	ZaCos.A_zimbraFeatureGalAutoCompleteEnabled,
+	ZaCos.A_zimbraFeatureMailPriorityEnabled,
+	ZaCos.A_zimbraFeatureFlaggingEnabled,
+	ZaCos.A_zimbraImapEnabled,
+	ZaCos.A_zimbraPop3Enabled,
+	ZaCos.A_zimbraFeatureImapDataSourceEnabled,
+	ZaCos.A_zimbraFeaturePop3DataSourceEnabled,
+	ZaCos.A_zimbraFeatureConversationsEnabled,
+	ZaCos.A_zimbraFeatureFiltersEnabled,
+	ZaCos.A_zimbraFeatureOutOfOfficeReplyEnabled,
+	ZaCos.A_zimbraFeatureNewMailNotificationEnabled,
+	ZaCos.A_zimbraFeatureMailPollingIntervalPreferenceEnabled,
+	ZaCos.A_zimbraFeatureIdentitiesEnabled,
+	ZaCos.A_zimbraFeatureGroupCalendarEnabled,
+	ZaCos.A_zimbraFeatureInstantNotify,
+	ZaCos.A_zimbraFeatureAdvancedSearchEnabled,
+	ZaCos.A_zimbraFeatureSavedSearchesEnabled,
+	ZaCos.A_zimbraFeatureInitialSearchPreferenceEnabled];
+
+ZaCosXFormView.FEATURE_TAB_RIGHTS = [];
+
+ZaCosXFormView.PREFERENCES_TAB_ATTRS = [
+	ZaCos.A_zimbraPrefUseTimeZoneListInCalendar,
+	ZaCos.A_zimbraPrefCalendarUseQuickAdd,
+	ZaCos.A_zimbraPrefCalendarAlwaysShowMiniCal,
+	ZaCos.A_zimbraPrefCalendarApptReminderWarningTime,
+	ZaCos.A_zimbraPrefTimeZoneId,
+	ZaCos.A_zimbraPrefContactsPerPage,
+	ZaCos.A_zimbraPrefGalAutoCompleteEnabled,
+	ZaCos.A_zimbraPrefAutoAddAddressEnabled,
+	ZaCos.A_prefMailSignature,
+	ZaCos.A_zimbraMailSignatureMaxLength,
+	ZaCos.A_zimbraPrefMailSignatureStyle,
+	ZaCos.A_prefMailSignatureEnabled,
+	ZaCos.A_zimbraPrefForwardReplyInOriginalFormat,
+	ZaCos.A_zimbraPrefHtmlEditorDefaultFontColor,
+	ZaCos.A_zimbraPrefHtmlEditorDefaultFontFamily,
+	ZaCos.A_zimbraPrefHtmlEditorDefaultFontSize,
+	ZaCos.A_zimbraPrefComposeFormat,
+	ZaCos.A_zimbraPrefComposeInNewWindow,
+	ZaCos.A_zimbraAllowFromAddress,
+	ZaCos.A_zimbraAllowAnyFromAddress,
+	ZaCos.A_prefSaveToSent,
+	ZaCos.A_zimbraPrefOutOfOfficeReply,
+	ZaCos.A_zimbraPrefNewMailNotificationAddress,
+	ZaCos.A_zimbraPrefNewMailNotificationEnabled,
+	ZaCos.A_zimbraMailMinPollingInterval,
+	ZaCos.A_zimbraPrefMailPollingInterval,
+	ZaCos.A_zimbraPrefMailDefaultCharset,
+	ZaCos.A_zimbraPrefMailItemsPerPage,
+	ZaCos.A_zimbraPrefGroupMailBy,
+	ZaCos.A_zimbraPrefDisplayExternalImages,
+	ZaCos.A_zimbraPrefMessageViewHtmlPreferred,
+	ZaCos.A_zimbraPrefLocale,
+	ZaCos.A_zimbraJunkMessagesIndexingEnabled,
+	ZaCos.A_zimbraPrefShowSelectionCheckbox,
+	ZaCos.A_zimbraPrefWarnOnExit,
+	ZaCos.A_zimbraPrefUseKeyboardShortcuts,
+	ZaCos.A_zimbraPrefImapSearchFoldersEnabled,
+	ZaCos.A_zimbraPrefShowSearchString,
+	ZaCos.A_zimbraPrefMailInitialSearch,
+	ZaCos.A_zimbraPrefClientType
+];
+ZaCosXFormView.PREFERENCES_TAB_RIGHTS = [];	
+
+ZaCosXFormView.SKIN_TAB_ATTRS = [ZaCos.A_zimbraPrefSkin,ZaCos.A_zimbraAvailableSkin];
+ZaCosXFormView.SKIN_TAB_RIGHTS = [];
+
+ZaCosXFormView.ZIMLET_TAB_ATTRS = [ZaCos.A_zimbraZimletAvailableZimlets];
+ZaCosXFormView.ZIMLET_TAB_RIGHTS = [];
+
+ZaCosXFormView.SERVERPOOL_TAB_ATTRS = [ZaCos.A_zimbraMailHostPool];
+ZaCosXFormView.SERVERPOOL_TAB_RIGHTS = [];
+
+ZaCosXFormView.ADVANCED_TAB_ATTRS = [ZaCos.A_zimbraAttachmentsBlocked,
+	ZaCos.A_zimbraMailQuota,
+	ZaCos.A_zimbraContactMaxNumEntries,
+	ZaCos.A_zimbraQuotaWarnPercent,
+	ZaCos.A_zimbraQuotaWarnInterval,
+	ZaCos.A_zimbraQuotaWarnMessage,
+	ZaCos.A_zimbraPasswordLocked,
+	ZaCos.A_zimbraMinPwdLength,
+	ZaCos.A_zimbraMaxPwdLength,
+	ZaCos.A_zimbraPasswordMinUpperCaseChars,
+	ZaCos.A_zimbraPasswordMinLowerCaseChars,
+	ZaCos.A_zimbraPasswordMinPunctuationChars,
+	ZaCos.A_zimbraPasswordMinNumericChars,
+	ZaCos.A_zimbraMinPwdAge,
+	ZaCos.A_zimbraMaxPwdAge,
+	ZaCos.A_zimbraEnforcePwdHistory,
+	ZaCos.A_zimbraPasswordLockoutEnabled,
+	ZaCos.A_zimbraPasswordLockoutMaxFailures,
+	ZaCos.A_zimbraPasswordLockoutDuration,
+	ZaCos.A_zimbraPasswordLockoutFailureLifetime,
+	ZaCos.A_zimbraAdminAuthTokenLifetime,
+	ZaCos.A_zimbraAuthTokenLifetime,
+	ZaCos.A_zimbraMailIdleSessionTimeout,
+	ZaCos.A_zimbraMailMessageLifetime,
+	ZaCos.A_zimbraMailTrashLifetime,
+	ZaCos.A_zimbraMailSpamLifetime,
+	ZaCos.A_zimbraFreebusyExchangeUserOrg];
+ZaCosXFormView.ADVANCED_TAB_RIGHTS = [];
+
+ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {	
     this.tabChoices = new Array();
 	
 	var _tab1 = ++this.TAB_INDEX;
-	var _tab2 = ++this.TAB_INDEX;	
-	var _tab3 = ++this.TAB_INDEX;	
-	var _tab4 = ++this.TAB_INDEX;	
-	var _tab5 = ++this.TAB_INDEX;		
-	var _tab6 = ++this.TAB_INDEX;			
-	var _tab7 = ++this.TAB_INDEX;
+	var _tab2, _tab3, _tab4, _tab5, _tab6, _tab7;
 	
 	var headerItems = [	{type:_AJX_IMAGE_, src:"COS_32", label:null},
 							{type:_OUTPUT_, ref:ZaCos.A_name, label:null,cssClass:"AdminTitle", rowSpan:2},				
@@ -227,24 +325,36 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							
 	this.tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_FEATURE_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+    if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.FEATURE_TAB_ATTRS, ZaCosXFormView.FEATURE_TAB_RIGHTS)) {
+        _tab2 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab2, label:ZaMsg.TABT_Features});
-
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_PREF_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+    }
+    
+    if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.PREFERENCES_TAB_ATTRS, ZaCosXFormView.PREFERENCES_TAB_RIGHTS)) {
+    	_tab3 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_Preferences});
-
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_THEME_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+    }
+    
+    if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.SKIN_TAB_ATTRS, ZaCosXFormView.SKIN_TAB_RIGHTS)) {
+       	_tab4 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Themes});
-
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_ZIMLET_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+    }
+    
+    if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.ZIMLET_TAB_ATTRS, ZaCosXFormView.ZIMLET_TAB_RIGHTS)) {
+		_tab5 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Zimlets});
+    }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_SERVERPOOL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+    if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.SERVERPOOL_TAB_ATTRS, ZaCosXFormView.SERVERPOOL_TAB_RIGHTS)) {
+    	_tab6 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab6, label:ZaMsg.TABT_ServerPool});
+    }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_ADVANCE_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+    if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.ADVANCED_TAB_ATTRS, ZaCosXFormView.ADVANCED_TAB_RIGHTS)) {
+    	_tab7 = ++this.TAB_INDEX;
         this.tabChoices.push({value:_tab7, label:ZaMsg.TABT_Advanced});
-
+    }
+    
 	var cases = [];
 	var case1 = {type:_ZATABCASE_,caseKey:_tab1,numCols:1,colSizes:["auto"]};
 
@@ -264,7 +374,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 	case1.items = case1Items;
 	cases.push(case1);
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_FEATURE_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+    if(_tab2) {
         var case2 = {type:_ZATABCASE_,caseKey:_tab2,numCols:1,colSizes:["auto"],id:"cos_form_features_tab"};
 
         var case2Items = [
@@ -348,7 +458,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
         cases.push(case2);
     }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_PREF_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+    if(_tab3) {
         var case3 = {type:_ZATABCASE_,caseKey:_tab3, id:"cos_for_prefs_tab",numCols:1};
         var case3Items = [
         {type:_SPACER_,height:"10px", colSpan: "*" },
@@ -542,7 +652,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
         cases.push(case3);
     }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_THEME_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+    if(_tab4) {
         var case4 = {type:_ZATABCASE_, numCols:1, caseKey:_tab4};
         var case4Items = [
             {type:_ZAGROUP_,items:[							{
@@ -570,7 +680,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
         cases.push(case4);
     }
     
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_ZIMLET_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+    if(_tab5) {
         var case5 = {type:_ZATABCASE_, caseKey:_tab5};
         var case5Items = [
             {type:_ZAGROUP_, numCols:1,colSizes:["auto"],
@@ -592,7 +702,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
         cases.push(case5);
     }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_SERVERPOOL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+    if(_tab6) {
         var case6 = {type:_ZATABCASE_, numCols:1,caseKey:_tab6};
         var case6Items = [
             {type:_ZAGROUP_, numCols:1,colSizes:["auto"],
@@ -615,7 +725,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
         cases.push(case6);
     }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_ADVANCE_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+    if(_tab7) {
         var case7 = {type:_ZATABCASE_, numCols:1, colSizes:["auto"], caseKey:_tab7, id:"cos_form_advanced_tab"};
         var case7Items = [
             {type:_ZA_TOP_GROUPER_, id:"cos_attachment_settings",

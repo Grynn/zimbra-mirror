@@ -465,67 +465,65 @@ function () {
 		mods[ZaCos.A_zimbraMailHostPool] = "";
 	}
 
-	if(ZaSettings.SKIN_PREFS_ENABLED) {
-		if(tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] != null) {
-			var tmpMods = [];
-			if(!(tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] instanceof Array)) {
-				tmpMods = [tmpObj.attrs[ZaCos.A_zimbraAvailableSkin]];
-			} else {
-				var cnt = tmpObj.attrs[ZaCos.A_zimbraAvailableSkin].length;
-				tmpMods = [];
-				for(var i = 0; i < cnt; i++) {
-					tmpMods.push(tmpObj.attrs[ZaCos.A_zimbraAvailableSkin][i]);
-				}
+	if(tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] != null) {
+		var tmpMods = [];
+		if(!(tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] instanceof Array)) {
+			tmpMods = [tmpObj.attrs[ZaCos.A_zimbraAvailableSkin]];
+		} else {
+			var cnt = tmpObj.attrs[ZaCos.A_zimbraAvailableSkin].length;
+			tmpMods = [];
+			for(var i = 0; i < cnt; i++) {
+				tmpMods.push(tmpObj.attrs[ZaCos.A_zimbraAvailableSkin][i]);
 			}
+		}
 			//check if changed
-			if(this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin] != null) {
-				if(this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin] instanceof Array) {
-					if(tmpMods.join(",") != this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin].join(",")) {
-						mods[ZaCos.A_zimbraAvailableSkin] = tmpMods;
-					}
-				} else if (tmpMods.join(",") != [this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin]].join(",")) {
+		if(this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin] != null) {
+			if(this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin] instanceof Array) {
+				if(tmpMods.join(",") != this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin].join(",")) {
 					mods[ZaCos.A_zimbraAvailableSkin] = tmpMods;
 				}
-			} else {
+			} else if (tmpMods.join(",") != [this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin]].join(",")) {
 				mods[ZaCos.A_zimbraAvailableSkin] = tmpMods;
 			}
-		} else if(this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin] != null) {
-			mods[ZaCos.A_zimbraAvailableSkin] = "";
+		} else {
+			mods[ZaCos.A_zimbraAvailableSkin] = tmpMods;
 		}
+	} else if(this._currentObject.attrs[ZaCos.A_zimbraAvailableSkin] != null) {
+		mods[ZaCos.A_zimbraAvailableSkin] = "";
 	}
 		
-	if(ZaSettings.ZIMLETS_ENABLED) {
-		if(tmpObj.attrs[ZaCos.A_zimbraZimletAvailableZimlets] != null) {
-			var tmpMods = [];
-			if(!(tmpObj.attrs[ZaCos.A_zimbraZimletAvailableZimlets] instanceof Array)) {
-				tmpMods = [tmpObj.attrs[ZaCos.A_zimbraZimletAvailableZimlets]];
-			} else {
-				var cnt = tmpObj.attrs[ZaCos.A_zimbraZimletAvailableZimlets].length;
-				tmpMods = [];
-				for(var i = 0; i < cnt; i++) {
-					tmpMods.push(tmpObj.attrs[ZaAccount.A_zimbraZimletAvailableZimlets][i]);
-				}
+
+	if(tmpObj.attrs[ZaCos.A_zimbraZimletAvailableZimlets] != null) {
+		var tmpMods = [];
+		if(!(tmpObj.attrs[ZaCos.A_zimbraZimletAvailableZimlets] instanceof Array)) {
+			tmpMods = [tmpObj.attrs[ZaCos.A_zimbraZimletAvailableZimlets]];
+		} else {
+			var cnt = tmpObj.attrs[ZaCos.A_zimbraZimletAvailableZimlets].length;
+			tmpMods = [];
+			for(var i = 0; i < cnt; i++) {
+				tmpMods.push(tmpObj.attrs[ZaAccount.A_zimbraZimletAvailableZimlets][i]);
 			}
-			if(isNew) {
-				mods[ZaCos.A_zimbraZimletAvailableZimlets] = tmpMods;
-			} else {
-				//check if changed
-				if(this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] != null) {
-					if(this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] instanceof Array) {
-						if(tmpMods.join(",") != this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets].join(",")) {
-							mods[ZaCos.A_zimbraZimletAvailableZimlets] = tmpMods;
-						}
-					} else if (tmpMods.join(",") != [this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets]].join(",")) {
+		}
+		if(isNew) {
+			mods[ZaCos.A_zimbraZimletAvailableZimlets] = tmpMods;
+		} else {
+			//check if changed
+			if(this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] != null) {
+				if(this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] instanceof Array) {
+					if(tmpMods.join(",") != this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets].join(",")) {
 						mods[ZaCos.A_zimbraZimletAvailableZimlets] = tmpMods;
 					}
-				} else {
+				} else if (tmpMods.join(",") != [this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets]].join(",")) {
 					mods[ZaCos.A_zimbraZimletAvailableZimlets] = tmpMods;
-				}			
-			}
-		} else if(this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] != null) {
-			mods[ZaCos.A_zimbraZimletAvailableZimlets] = "";
+				}
+			} else {
+				mods[ZaCos.A_zimbraZimletAvailableZimlets] = tmpMods;
+			}			
 		}
+	} else if(this._currentObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] != null) {
+		mods[ZaCos.A_zimbraZimletAvailableZimlets] = "";
 	}
+	
 		
 	//check if need to rename
 	if(!isNew) {

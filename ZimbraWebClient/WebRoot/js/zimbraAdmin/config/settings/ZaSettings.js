@@ -364,26 +364,6 @@ ZaSettings.DOMAIN_WIKI_WIZ = "domainWikiWizard";
 ZaSettings.DOMAIN_CHECK_MX_WIZ = "domainCheckMXWiz";
 
 //COS View
-ZaSettings.COS_GENERAL_TAB = "cosGeneralTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.COS_GENERAL_TAB, label: ZaMsg.UI_Comp_cosGeneralTab });
-
-ZaSettings.COS_FEATURE_TAB = "cosFeatureTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.COS_FEATURE_TAB, label: ZaMsg.UI_Comp_cosFeatureTab });
-
-ZaSettings.COS_PREF_TAB = "cosPreferenceTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.COS_PREF_TAB, label: ZaMsg.UI_Comp_cosPreferenceTab });
-
-ZaSettings.COS_THEME_TAB = "cosThemeTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.COS_THEME_TAB, label: ZaMsg.UI_Comp_cosThemeTab });
-
-ZaSettings.COS_ZIMLET_TAB = "cosZimletTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.COS_ZIMLET_TAB, label: ZaMsg.UI_Comp_cosZimletTab });
-
-ZaSettings.COS_SERVERPOOL_TAB = "cosServerPoolTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.COS_SERVERPOOL_TAB, label: ZaMsg.UI_Comp_cosServerPoolTab });
-
-ZaSettings.COS_ADVANCE_TAB = "cosAdvancedTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.COS_ADVANCE_TAB, label: ZaMsg.UI_Comp_cosAdvancedTab });
 
 //Server View
 ZaSettings.SERVER_GENERAL_TAB = "serverGeneralTab" ;
