@@ -54,7 +54,6 @@ components="\
   httpd \
   keyview \
   libtool \
-  logger/mysql \
   memcached \
   mysql \
   net-snmp \
