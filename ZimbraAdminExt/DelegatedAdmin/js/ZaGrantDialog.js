@@ -93,9 +93,10 @@ function() {
                     items: [
                          { ref: ZaGrant.A_grantee, type: _OUTPUT_ ,
                             label: com_zimbra_delegatedadmin.Label_grantee_name },
+                       /*
                         { ref: ZaGrant.A_grantee_type, type:_OUTPUT_,
                             label: com_zimbra_delegatedadmin.Label_grantee_type   },
-
+                         */
                        { ref: ZaGrant.A_target_type, type: _OSELECT1_, choices: ZaZimbraRights.targetType,
                            label: com_zimbra_delegatedadmin.Label_target_type ,
                            visibilityChecks:[]

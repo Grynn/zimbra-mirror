@@ -28,6 +28,7 @@ ZaAllGrantsXFormView.getXModel = function () {
         items: [
             {id: ZaGrant.A_grantee, type: _EMAIL_ADDRESS_, ref: ZaGrant.A_grantee, required: true },
             {id: ZaGrant.A_grantee_id, type: _STRING_, ref: ZaGrant.A_grantee_id },
+            {id: ZaGrant.A_grantee_type, type:_STRING_, ref:  ZaGrant.A_grantee_type, required: true, choices: ZaGrant.GRANT_TYPE},
             {id: ZaGrant.A2_grantsListSelectedItems, ref: ZaGrant.A2_grantsListSelectedItems, type:_LIST_ },
             {id: ZaGrant.A3_directGrantsList, type:_LIST_, ref: ZaGrant.A3_directGrantsList,
                     listItems: { type: _OBJECT_, items:
@@ -66,8 +67,9 @@ ZaAllGrantsXFormView.prototype.getMyXForm = function() {
     headerItems.push({type:_OUTPUT_, ref:ZaGrant.A_grantee_id, labelLocation:_LEFT_,label:com_zimbra_delegatedadmin.Col_admin_id + ": ",visibilityChecks:[ZaItem.hasReadPermission]});
 
     var tabIndex = 0 ;
+    this.directGrantsTabId = ++tabIndex ; 
     var tabChoices = [
-        {value: ++tabIndex, label: com_zimbra_delegatedadmin.lb_tab_directGrants },
+        {value: this.directGrantsTabId, label: com_zimbra_delegatedadmin.lb_tab_directGrants },
         {value: ++tabIndex, label: com_zimbra_delegatedadmin.lb_tab_indirectGrants }
     ] ;
 
@@ -126,6 +128,7 @@ ZaAllGrantsXFormView.prototype.getMyXForm = function() {
         {
             type:_TAB_BAR_,
             ref:ZaModel.currentTab,
+            onChange: ZaAllGrantsXFormView.changeTab,
             choices:tabChoices,
             cssClass:"ZaTabBar",
             id:"xform_tabbar"
@@ -166,14 +169,22 @@ function () {
     } else {
         return "";
     }
-}
+} ;
 
+ZaAllGrantsXFormView.changeTab  = function (value, event, form)
+{
+    var instance = form.getInstance() ;
+    var controller = ZaApp.getInstance ().getCurrentController () ;
+    var addBt = controller._toolbar.getButton (ZaOperation.NEW)  ;
+    var deleteBt = controller._toolbar.getButton (ZaOperation.DELETE );
+    
+    if (value == form.parent.directGrantsTabId) {
+        //enable add and delete button
+        deleteBt.setEnabled (true) ;
+    } else {
+        //disable add and delete button
+        deleteBt.setEnabled (false) ;
+    }
 
-
-
-
-    //--------------------------------------------------------------------------------------------------------
-    //
-
-
-
+    this.setInstanceValue(value);
+} ;

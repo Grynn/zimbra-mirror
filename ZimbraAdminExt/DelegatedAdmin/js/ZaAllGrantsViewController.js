@@ -4,6 +4,9 @@ ZaAllGrantsViewController = function (appCtxt, container) {
     this._helpURL = ZaAllGrantsViewController.helpURL;
 
     this.tabConstructor = ZaAllGrantsXFormView;
+
+    this.addCreationListener(new AjxListener(this, this.handleGrantCreation));
+    this.addRemovalListener(new AjxListener(this, this.handleGrantRemoval));
 }
 
 ZaAllGrantsViewController.prototype = new ZaXFormViewController();
@@ -52,12 +55,80 @@ function () {
 }
 ZaController.initToolbarMethods["ZaAllGrantsViewController"].push(ZaAllGrantsViewController.initToolbarMethod);
 
+
+ZaAllGrantsViewController.prototype.addFinishGrant = function () {
+    if (ZaGrantDialog.grantGlobalGrantMethod.call (this)){
+        this.grantRightDlg.popdown();
+    }
+}
+
+ZaAllGrantsViewController.prototype.addMoreGrant = function () {
+    if (ZaGrantDialog.grantGlobalGrantMethod.call (this)){
+       var dialog = this.grantRightDlg ;
+       var obj = dialog.getObject() ;
+       obj [ZaGrant.A_right] = "" ;
+       dialog.setObject (obj) ;
+   }
+}
+
 ZaAllGrantsViewController.prototype.addGrantsListener = function () {
-    console.log("Add Grants ...");
+    var newGrant = new ZaGrant();
+	if(!this.grantRightDlg) {
+		this.grantRightDlg = new ZaGrantDialog (
+                ZaApp.getInstance().getAppCtxt().getShell(),
+                ZaApp.getInstance(), com_zimbra_delegatedadmin.Title_grant_rights, ZaGrant.A_grantee);
+		this.grantRightDlg.registerCallback(ZaGrantDialog.ADD_FINISH_BUTTON, this.addFinishGrant, this, null);
+        this.grantRightDlg.registerCallback(ZaGrantDialog.ADD_MORE_BUTTON, this.addMoreGrant, this, null);
+	} ;
+
+	var obj = {};
+	obj[ZaGrant.A_grantee] = this._currentObject [ZaGrant.A_grantee];
+    obj[ZaGrant.A_grantee_type] = this._currentObject [ZaGrant.A_grantee_type];
+
+    obj.setAttrs = {} ;
+    obj.setAttrs.all = true ;
+    this.grantRightDlg.setObject(obj);
+	this.grantRightDlg.popup();
+}
+
+
+ZaAllGrantsViewController.prototype.revokeGrant = function () {
+    var form = this._contentView._localXForm ;
+    var directGrantsListViewItem = form.getItemsById (ZaGrant.A3_directGrantsList) [0] ;
+    var selectedGrants = directGrantsListViewItem.getSelection();
+    if (selectedGrants && selectedGrants.length > 0) {
+        for (var i = 0; i < selectedGrants.length; i ++) {
+// TODO: when multiselection enabled, we need a progress dialog to show the progress
+            if (ZaGrant.revokeMethod (selectedGrants[i])) {
+// fire the removal event.
+                this.fireRemovalEvent (selectedGrants[i]) ;
+            } else {
+                break ; //jump out if failed.
+            }
+        }
+    }
+
+    this.revokeRightDlg.popdown () ;
 }
 
 ZaAllGrantsViewController.prototype.deleteGrantsListener = function () {
-    console.log("Delete Grants ...");
+    var form = this._contentView._localXForm ;
+    var directGrantsListViewItem = form.getItemsById (ZaGrant.A3_directGrantsList) [0] ;
+
+    var selectedGrant = directGrantsListViewItem.getSelection();
+    if (selectedGrant && selectedGrant.length > 0) {
+        if(!this.revokeRightDlg) {
+            this.revokeRightDlg = new ZaMsgDialog (
+                    ZaApp.getInstance().getAppCtxt().getShell(),
+                    null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
+        }
+        this.revokeRightDlg.registerCallback(DwtDialog.YES_BUTTON, this.revokeGrant, this, null);
+        var confirmMsg =  com_zimbra_delegatedadmin.confirm_delete_grants + ZaTargetPermission.getDlMsgFromGrant(selectedGrant) ;
+        this.revokeRightDlg.setMessage (confirmMsg,  DwtMessageDialog.INFO_STYLE) ;
+        this.revokeRightDlg.popup ();
+    } else {
+        ZaApp.getInstance().getCurrentController().popupMsgDialog (com_zimbra_delegatedadmin.no_grant_selected_msg) ;
+    }
 }
 
 /**
@@ -103,3 +174,45 @@ function(entry) {
     }
 }
 ZaController.setViewMethods["ZaAllGrantsViewController"].push(ZaAllGrantsViewController.setViewMethod);
+
+
+
+/**
+* @param ev
+* This listener is invoked by ZaGrantController or any other controller that can create an ZaGrant object
+**/
+ZaAllGrantsViewController.prototype.handleGrantCreation =
+function (ev) {
+	if(ev) {
+		//add the new ZaGrant to the controlled list
+        var grant = ev.getDetails() ;
+		if (grant != null) {
+            var directGrantsList = this._currentObject [ZaGrant.A3_directGrantsList] ;
+            directGrantsList.push (grant) ;
+
+			if (this._contentView)  {
+                var xform = this._contentView._localXForm ;
+                xform.setInstanceValue (directGrantsList,ZaGrant.A3_directGrantsList ) ;
+            }
+		}
+	}
+}
+
+/**
+* @param ev
+* This listener is invoked by ZaGrantController or any other controller that can remove an ZaGrant object
+**/
+ZaAllGrantsViewController.prototype.handleGrantRemoval =
+function (ev) {
+	if(ev) {
+        var grant = ev.getDetails() ;
+              if (grant != null) {
+              var directGrantsList = this._currentObject [ZaGrant.A3_directGrantsList] ;
+              AjxUtil.arrayRemove (directGrantsList, grant) ;
+              if (this._contentView)  {
+                var xform = this._contentView._localXForm ;
+                xform.setInstanceValue (directGrantsList,ZaGrant.A3_directGrantsList ) ;
+              }                    
+		}
+	}
+}

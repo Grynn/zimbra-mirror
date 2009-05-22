@@ -139,7 +139,7 @@ function (ev) {
     if (item != null) {
         var allGrants = {} ;
         allGrants[ZaGrant.A_grantee] = item.name;
-        allGrants[ZaGrant.A_grantee_id] = item.id;        
+        allGrants[ZaGrant.A_grantee_id] = item.id;
         allGrants[ZaGrant.A2_grantsListSelectedItems] = [];
         allGrants[ZaGrant.A3_directGrantsList] = [];
         allGrants[ZaGrant.A3_indirectGrantsList] = [];
@@ -150,6 +150,7 @@ function (ev) {
         }  else if (item.type == ZaItem.DL) {
             granteeType = ZaGrant.GRANTEE_TYPE.grp ;
         }
+        allGrants[ZaGrant.A_grantee_type] = granteeType ;
 
         var params = {
             isAllGrants: true ,
