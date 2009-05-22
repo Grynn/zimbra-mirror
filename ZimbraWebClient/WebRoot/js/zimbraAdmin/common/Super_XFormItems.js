@@ -271,6 +271,7 @@ Super_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 Super_XFormItem.checkIfOverWriten = function() {
 	if(!ZaItem.hasWritePermission.call(this))
 		return false;
+		
 	if(this.getModelItem() && this.getModelItem().getLocalValue(this.getInstance())==null)
 		return false;
 	else if (this.getModelItem() &&  (this.getModelItem().getLocalValue(this.getInstance()) instanceof AjxVector) && 

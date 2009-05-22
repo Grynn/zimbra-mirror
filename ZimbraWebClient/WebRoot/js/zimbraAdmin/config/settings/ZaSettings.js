@@ -363,30 +363,7 @@ ZaSettings.DOMAIN_AUTH_WIZ = "domainAuthWizard";
 ZaSettings.DOMAIN_WIKI_WIZ = "domainWikiWizard";
 ZaSettings.DOMAIN_CHECK_MX_WIZ = "domainCheckMXWiz";
 
-//COS View
-
-//Server View
-ZaSettings.SERVER_GENERAL_TAB = "serverGeneralTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_GENERAL_TAB, label: ZaMsg.UI_Comp_serverGeneralTab });
-
-ZaSettings.SERVER_SERVICE_TAB = "serverServiceTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_SERVICE_TAB, label: ZaMsg.UI_Comp_serverServiceTab });
-
-ZaSettings.SERVER_MTA_TAB = "serverMTATab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_MTA_TAB, label: ZaMsg.UI_Comp_serverMTATab });
-
-ZaSettings.SERVER_IMAP_TAB = "serverIMAPTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_IMAP_TAB, label: ZaMsg.UI_Comp_serverIMAPTab });
-
-ZaSettings.SERVER_POP_TAB = "serverPopTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_POP_TAB, label: ZaMsg.UI_Comp_serverPopTab });
-
-ZaSettings.SERVER_VOLUME_TAB = "serverVolumeTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_VOLUME_TAB, label: ZaMsg.UI_Comp_serverVolumeTab });
-
 //Gobal Config View
-ZaSettings.CONFIG_GENERAL_TAB = "configGeneralTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_GENERAL_TAB, label: ZaMsg.UI_Comp_configGeneralTab });
 
 ZaSettings.CONFIG_ATTACHMENT_TAB = "configAttachmentTab" ;
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_ATTACHMENT_TAB, label: ZaMsg.UI_Comp_configAttachmentTab });
