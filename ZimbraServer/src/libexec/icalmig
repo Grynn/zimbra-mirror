@@ -22,7 +22,7 @@ use File::Path;
 
 my $DEBUG = 0;
 #global constants
-my $version = "1.32";
+my $version = "1.33";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -1749,7 +1749,7 @@ sub get_missingdays_list
     my $found=0;
     foreach my $trdt (sort keys %$trdarray)
     {
-      if(trim($trdt) eq trim($rdt))
+      if(trim(get_date(get_datepart_from_icsdt($trdt))) eq get_date(get_datepart_from_icsdt(trim($rdt))))
       {
         $found=1;
         last;
@@ -2504,9 +2504,16 @@ sub get_datepart_from_icsdt
 {
   my $icsdate= shift;
   my $tidx= rindex($icsdate,':');
-  my $ndt = substr($icsdate,$tidx+1);
-  my $ldt = substr($icsdate,0,$tidx);
-  return $ndt;
+  if($tidx == -1)
+  {
+    return $icsdate;
+  }
+  else
+  {
+    my $ndt = substr($icsdate,$tidx+1);
+    my $ldt = substr($icsdate,0,$tidx);
+    return $ndt;
+  }
 }
 
 #get date by adding days into date
