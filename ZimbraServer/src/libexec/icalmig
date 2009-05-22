@@ -22,7 +22,7 @@ use File::Path;
 
 my $DEBUG = 0;
 #global constants
-my $version = "1.33";
+my $version = "1.34";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -1792,6 +1792,7 @@ sub get_monthly_rrule
   my $prvcalcdt;
   my $mthlyctr=0;
   my $tot_ctr=0;
+  my $mth_date=0;
   #check for recurrence by fix dates
   foreach my $rdate (sort keys %$srtd_darray)
   {
@@ -1799,12 +1800,13 @@ sub get_monthly_rrule
     my $month=get_month($rdate);
     my $year = get_year($rdate);
     my $days = Days_in_Month($year,$month);
+    $mth_date=get_date_part($rdate);
     #Get next month date by adding month days
     my $nxtmthdate=get_date_by_days($rdate,$days);
     #check if calculated next month date is equal to $srtd_darray date
     if (!$frstround)
     {
-      if ($prvcalcdt eq $rdate)
+      if ($prvcalcdt == $rdate)
       {
         $mthlyctr++;
       }
@@ -1819,7 +1821,7 @@ sub get_monthly_rrule
   if($tot_ctr eq ($mthlyctr+1))
   {
     $mthlyctr++;
-    my $mthlyRrule="RRULE:FREQ=MONTHLY;INTERVAL=1;COUNT=$mthlyctr";
+    my $mthlyRrule="RRULE:FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=$mth_date;COUNT=$mthlyctr";
     return $mthlyRrule;
   }
   else #check for recurrence by fix days e.g. first monday, 3rd saturday of month etc
