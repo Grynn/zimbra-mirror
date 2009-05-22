@@ -13,7 +13,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-ZaNewAccountXWizard = function(parent) {
+ZaNewAccountXWizard = function(parent, entry) {
 	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_NewAccTitle, "700px", "300px","ZaNewAccountXWizard");
 	this.accountStatusChoices = [
 		{value:ZaAccount.ACCOUNT_STATUS_ACTIVE, label:ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_ACTIVE)},
@@ -23,75 +23,8 @@ ZaNewAccountXWizard = function(parent) {
         {value:ZaAccount.ACCOUNT_STATUS_MAINTENANCE, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_MAINTENANCE)}
 	];
 
-	this.stepChoices = [];
-	var stepCounter = 0;
-	
-//	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_GENERAL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		stepCounter++;
-		ZaNewAccountXWizard.GENERAL_STEP = stepCounter;
-		this.stepChoices.push({value:ZaNewAccountXWizard.GENERAL_STEP, label:ZaMsg.TABT_GeneralPage});
-//	}
-	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CONTACT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		stepCounter++;
-		ZaNewAccountXWizard.CONTACT_STEP = stepCounter;
-		this.stepChoices.push({value:ZaNewAccountXWizard.CONTACT_STEP, label:ZaMsg.TABT_ContactInfo});
-	}
-		
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ALIASES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		stepCounter++;
-		ZaNewAccountXWizard.ALIASES_STEP = stepCounter;
-		this.stepChoices.push({value:ZaNewAccountXWizard.ALIASES_STEP, label:ZaMsg.TABT_Aliases});
-	}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_FORWARDING_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		stepCounter++;
-		ZaNewAccountXWizard.FORWARDING_STEP = stepCounter;		
-		this.stepChoices.push({value:ZaNewAccountXWizard.FORWARDING_STEP, label:ZaMsg.TABT_Forwarding});
-	}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_FEATURES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		stepCounter++;
-		ZaNewAccountXWizard.FEATURES_STEP = stepCounter;		
-		this.stepChoices.push({value:ZaNewAccountXWizard.FEATURES_STEP, label:ZaMsg.TABT_Features});
-	}				
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_PREFS_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		stepCounter++;
-		ZaNewAccountXWizard.PREFS_STEP = stepCounter;	
-		this.stepChoices.push({value:ZaNewAccountXWizard.PREFS_STEP, label:ZaMsg.TABT_Preferences});
-	}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		stepCounter++;
-		ZaNewAccountXWizard.SKINS_STEP = stepCounter;		
-		this.stepChoices.push({value:ZaNewAccountXWizard.SKINS_STEP, label:ZaMsg.TABT_Themes});
-	}
-	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ZIMLET_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		stepCounter++;
-		ZaNewAccountXWizard.ZIMLETS_STEP = stepCounter;			
-		this.stepChoices.push({value:ZaNewAccountXWizard.ZIMLETS_STEP, label:ZaMsg.TABT_Zimlets});
-	}
-		
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ADVANCED_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		stepCounter++;
-		ZaNewAccountXWizard.ADVANCED_STEP = stepCounter;			
-		this.stepChoices.push({value:ZaNewAccountXWizard.ADVANCED_STEP, label:ZaMsg.TABT_Advanced});
-	}
-	this._lastStep = this.stepChoices.length;
-	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
-	this.TAB_INDEX = 0;	
-	
-	ZaNewAccountXWizard.GENERAL_STEP = ++this.TAB_INDEX;
-	ZaNewAccountXWizard.CONTACT_STEP = ++this.TAB_INDEX;
-	ZaNewAccountXWizard.ALIASES_STEP = ++this.TAB_INDEX;
-	ZaNewAccountXWizard.FORWARDING_STEP = ++this.TAB_INDEX;
-	ZaNewAccountXWizard.FEATURES_STEP = ++this.TAB_INDEX;
-	ZaNewAccountXWizard.PREFS_STEP = ++this.TAB_INDEX;
-	ZaNewAccountXWizard.SKINS_STEP = ++this.TAB_INDEX;
-	ZaNewAccountXWizard.ZIMLETS_STEP = ++this.TAB_INDEX;
-	ZaNewAccountXWizard.ADVANCED_STEP = ++this.TAB_INDEX;
-		
-	this.initForm(ZaAccount.myXModel,this.getMyXForm());	
-//    DBG.timePt(AjxDebug.PERF, "finished initForm");
-   
+	this.initForm(ZaAccount.myXModel,this.getMyXForm(entry), entry);	
+  
 	this._localXForm.setController();	
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewAccountXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaNewAccountXWizard.prototype.handleXFormChange));	
@@ -416,258 +349,265 @@ function(value, event, form) {
     return value;
 }
 
-ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {	
+ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {	
 	var domainName = ZaSettings.myDomainName;
 
 	var emptyAlias = "@" + domainName;
 	var cases = new Array();
 
-		var case1 = {type:_CASE_, tabGroupKey:ZaNewAccountXWizard.GENERAL_STEP, caseKey:ZaNewAccountXWizard.GENERAL_STEP, numCols:1,  align:_LEFT_, valign:_TOP_};
-		var case1Items = [ 
-			 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts,
-	                visibilityChecks:[ZaNewAccountXWizard.isDomainLeftAccountsAlertVisible],
-	                visibilityChangeEventSources:[ZaAccount.A2_domainLeftAccounts,ZaAccount.A2_accountTypes],
-				    bmolsnr:true,	
-                    containerCssStyle: "width:400px;",
-					style: DwtAlert.WARNING, iconVisible: false
-			 },
-			{type: _DWT_ALERT_, ref: ZaAccount.A2_warningMessage,
-	                visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaAccount.A2_warningMessage]],
-	                visibilityChangeEventSources:[ZaAccount.A2_warningMessage],
-	                bmolsnr:true,
-					containerCssStyle: "width:400px;",
-					style: DwtAlert.WARNING, iconVisible: false
-			 },
-			{type: _DWT_ALERT_, ref: ZaAccount.A2_errorMessage,
-	                visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaAccount.A2_errorMessage]],
-	                visibilityChangeEventSources:[ZaAccount.A2_errorMessage],
-	                bmolsnr:true,
-					containerCssStyle: "width:400px;",
-					style: DwtAlert.CRITICAL, iconVisible: false
-			 },
-	        //account types group
-	        {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountTypeGrouper, id:"account_wiz_type_group",
-	                colSpan: "*", numCols: 1, colSizes: ["100%"],
-	                visibilityChecks:[ZaNewAccountXWizard.isAccountTypeGrouperVisible],
-	                visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
-	                items: [
-	                    {type: _DWT_ALERT_, 
-	                    	visibilityChecks:[ZaNewAccountXWizard.isAccountTypeSet],
-	                        visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
-	                        containerCssStyle: "width:400px;",
-	                        style: DwtAlert.CRITICAL, iconVisible: false ,
-	                        content: ZaMsg.ERROR_ACCOUNT_TYPE_NOT_SET
-	                    },                                                                      
-	                    { type: _OUTPUT_, id: ZaNewAccountXWizard.accountTypeItemId,
-	                        getDisplayValue: ZaAccount.getAccountTypeOutput,
-	                        valueChangeEventSources:[ZaAccount.A_name,ZaAccount.A_COSId,ZaAccount.A2_accountTypes,ZaAccount.A2_currentAccountType],
-	                        //center the elements
-	                        cssStyle: "width: 600px; margin-left: auto; margin-right: auto;"
-	                    }
-	               ]
-	        },
-	        {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_wiz_name_group",numCols:2,
-				items:[
-				{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
-					labelLocation:_LEFT_,forceUpdate:true,
-                    bmolsnr: true,
-                    onChange: ZaAccount.setDomainChanged,visibilityChecks:[],enableDisableChecks:[]
-				},
-				{ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName, 
-					labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
-					elementChanged: function(elementValue,instanceValue, event) {
-						if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-							ZaAccount.generateDisplayName.call(this, this.getInstance(), elementValue, this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials] );
-						}
-						this.getForm().itemChanged(this, elementValue, event);
+	this.stepChoices = [];
+	this.TAB_INDEX = 0;	
+	ZaNewAccountXWizard.GENERAL_STEP = ++this.TAB_INDEX;
+	this.stepChoices.push({value:ZaNewAccountXWizard.GENERAL_STEP, label:ZaMsg.TABT_GeneralPage});
+	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
+	var case1 = {type:_CASE_, tabGroupKey:ZaNewAccountXWizard.GENERAL_STEP, caseKey:ZaNewAccountXWizard.GENERAL_STEP, numCols:1,  align:_LEFT_, valign:_TOP_};
+	var case1Items = [ 
+		 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts,
+                visibilityChecks:[ZaNewAccountXWizard.isDomainLeftAccountsAlertVisible],
+                visibilityChangeEventSources:[ZaAccount.A2_domainLeftAccounts,ZaAccount.A2_accountTypes],
+			    bmolsnr:true,	
+                containerCssStyle: "width:400px;",
+				style: DwtAlert.WARNING, iconVisible: false
+		 },
+		{type: _DWT_ALERT_, ref: ZaAccount.A2_warningMessage,
+                visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaAccount.A2_warningMessage]],
+                visibilityChangeEventSources:[ZaAccount.A2_warningMessage],
+                bmolsnr:true,
+				containerCssStyle: "width:400px;",
+				style: DwtAlert.WARNING, iconVisible: false
+		 },
+		{type: _DWT_ALERT_, ref: ZaAccount.A2_errorMessage,
+                visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaAccount.A2_errorMessage]],
+                visibilityChangeEventSources:[ZaAccount.A2_errorMessage],
+                bmolsnr:true,
+				containerCssStyle: "width:400px;",
+				style: DwtAlert.CRITICAL, iconVisible: false
+		 },
+        //account types group
+        {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountTypeGrouper, id:"account_wiz_type_group",
+                colSpan: "*", numCols: 1, colSizes: ["100%"],
+                visibilityChecks:[ZaNewAccountXWizard.isAccountTypeGrouperVisible],
+                visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
+                items: [
+                    {type: _DWT_ALERT_, 
+                    	visibilityChecks:[ZaNewAccountXWizard.isAccountTypeSet],
+                        visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
+                        containerCssStyle: "width:400px;",
+                        style: DwtAlert.CRITICAL, iconVisible: false ,
+                        content: ZaMsg.ERROR_ACCOUNT_TYPE_NOT_SET
+                    },                                                                      
+                    { type: _OUTPUT_, id: ZaNewAccountXWizard.accountTypeItemId,
+                        getDisplayValue: ZaAccount.getAccountTypeOutput,
+                        valueChangeEventSources:[ZaAccount.A_name,ZaAccount.A_COSId,ZaAccount.A2_accountTypes,ZaAccount.A2_currentAccountType],
+                        //center the elements
+                        cssStyle: "width: 600px; margin-left: auto; margin-right: auto;"
+                    }
+               ]
+        },
+        {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_wiz_name_group",numCols:2,
+			items:[
+			{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
+				labelLocation:_LEFT_,forceUpdate:true,
+                bmolsnr: true,
+                onChange: ZaAccount.setDomainChanged,visibilityChecks:[],enableDisableChecks:[]
+			},
+			{ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName, 
+				labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
+				elementChanged: function(elementValue,instanceValue, event) {
+					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
+						ZaAccount.generateDisplayName.call(this, this.getInstance(), elementValue, this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials] );
 					}
-				},
-				{ref:ZaAccount.A_initials, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Initials,label:ZaMsg.NAD_Initials, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:50,
-					elementChanged: function(elementValue,instanceValue, event) {
-						if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-							ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],elementValue);
-						}
-						this.getForm().itemChanged(this, elementValue, event);
-					}
-				},
-				{ref:ZaAccount.A_lastName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_LastName,label:ZaMsg.NAD_LastName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
-					elementChanged: function(elementValue,instanceValue, event) {
-						if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-							ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);
-						}
-						this.getForm().itemChanged(this, elementValue, event);
-					}
-				},
-				{type:_GROUP_, numCols:3, nowrap:true, width:200, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName, 
-					labelLocation:_LEFT_, visibilityChecks:[[ZaItem.hasReadPermission,ZaAccount.A_displayname]],
-					items: [
-						{ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:null,	cssClass:"admin_xform_name_input", width:150, 
-							enableDisableChecks:[ZaNewAccountXWizard.isAutoDisplayname,ZaItem.hasWritePermission],
-							enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname],bmolsnr:true,
-							visibilityChecks:[]
-						},
-						{ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
-							elementChanged: function(elementValue,instanceValue, event) {
-								if(elementValue=="TRUE") {
-									ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials]);	
-								}
-								this.getForm().itemChanged(this, elementValue, event);
-							},
-							visibilityChecks:[],
-							enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_displayname]]
-						}
-					]
-				},
-				{ref:ZaAccount.A_zimbraMailCanonicalAddress, type:_TEXTFIELD_,width:250,
-					msgName:ZaMsg.NAD_CanonicalFrom,label:ZaMsg.NAD_CanonicalFrom, labelLocation:_LEFT_, align:_LEFT_
-				},
-				{ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_,
-				  msgName:ZaMsg.NAD_zimbraHideInGal,label:ZaMsg.NAD_zimbraHideInGal, trueValue:"TRUE", falseValue:"FALSE"
+					this.getForm().itemChanged(this, elementValue, event);
 				}
-			]}
-		];
-	
-		var setupGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountSetupGrouper, id:"account_wiz_setup_group", 
-			numCols:2,
-			items: [
-				{ref:ZaAccount.A_accountStatus, type:_OSELECT1_, msgName:ZaMsg.NAD_AccountStatus,
-					label:ZaMsg.NAD_AccountStatus, 
-					labelLocation:_LEFT_, choices:this.accountStatusChoices
+			},
+			{ref:ZaAccount.A_initials, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Initials,label:ZaMsg.NAD_Initials, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:50,
+				elementChanged: function(elementValue,instanceValue, event) {
+					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
+						ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],elementValue);
+					}
+					this.getForm().itemChanged(this, elementValue, event);
 				}
-			]
-		}
-			
-
-		setupGroup.items.push(
-			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
-				visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_COSId]],
+			},
+			{ref:ZaAccount.A_lastName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_LastName,label:ZaMsg.NAD_LastName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
+				elementChanged: function(elementValue,instanceValue, event) {
+					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
+						ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);
+					}
+					this.getForm().itemChanged(this, elementValue, event);
+				}
+			},
+			{type:_GROUP_, numCols:3, nowrap:true, width:200, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName, 
+				labelLocation:_LEFT_, visibilityChecks:[[ZaItem.hasReadPermission,ZaAccount.A_displayname]],
 				items: [
-					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, 
-						inputPreProcessor:ZaAccountXFormView.preProcessCOS,
-						toolTipContent:ZaMsg.tt_StartTypingCOSName,
-						onChange:ZaAccount.setCosChanged,
-						emptyText:ZaMsg.enterSearchTerm,						
-						enableDisableChecks:[ZaNewAccountXWizard.isAutoCos],
-						enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
-						visibilityChecks:[],
-						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
-						choices:this.cosChoices,
-						dataFetcherClass:ZaSearch,
-						editable:true,
-						getDisplayValue:function(newValue) {
-							// dereference through the choices array, if provided
-							//newValue = this.getChoiceLabel(newValue);
-							if(ZaItem.ID_PATTERN.test(newValue)) {
-								var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
-								if(cos)
-									newValue = cos.name;
-							} 
-							if (newValue == null) {
-								newValue = "";
-							} else {
-								newValue = "" + newValue;
-							}
-							return newValue;
-						}
+					{ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:null,	cssClass:"admin_xform_name_input", width:150, 
+						enableDisableChecks:[ZaNewAccountXWizard.isAutoDisplayname,ZaItem.hasWritePermission],
+						enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname],bmolsnr:true,
+						visibilityChecks:[]
 					},
-					{ref:ZaAccount.A2_autoCos, type:_CHECKBOX_, 
-						msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,
-						trueValue:"TRUE", falseValue:"FALSE" ,
+					{ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
 						elementChanged: function(elementValue,instanceValue, event) {
 							if(elementValue=="TRUE") {
-								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app);	
+								ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials]);	
 							}
 							this.getForm().itemChanged(this, elementValue, event);
 						},
-						visibilityChecks:[]
+						visibilityChecks:[],
+						enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_displayname]]
 					}
 				]
-			});
+			},
+			{ref:ZaAccount.A_zimbraMailCanonicalAddress, type:_TEXTFIELD_,width:250,
+				msgName:ZaMsg.NAD_CanonicalFrom,label:ZaMsg.NAD_CanonicalFrom, labelLocation:_LEFT_, align:_LEFT_
+			},
+			{ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_,
+			  msgName:ZaMsg.NAD_zimbraHideInGal,label:ZaMsg.NAD_zimbraHideInGal, trueValue:"TRUE", falseValue:"FALSE"
+			}
+		]}
+	];
+
+	var setupGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountSetupGrouper, id:"account_wiz_setup_group", 
+		numCols:2,
+		items: [
+			{ref:ZaAccount.A_accountStatus, type:_OSELECT1_, msgName:ZaMsg.NAD_AccountStatus,
+				label:ZaMsg.NAD_AccountStatus, 
+				labelLocation:_LEFT_, choices:this.accountStatusChoices
+			}
+		]
+	}
 		
-		setupGroup.items.push({ref:ZaAccount.A_zimbraIsAdminAccount, type:_CHECKBOX_,
-								msgName:ZaMsg.NAD_IsSystemAdminAccount,label:ZaMsg.NAD_IsSystemAdminAccount,
-								bmolsnr:true, trueValue:"TRUE", falseValue:"FALSE"
-							});
-							
-		setupGroup.items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
-							visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_mailHost]],
-							items: [
-								{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, editable:false, choices: ZaApp.getInstance().getServerListChoices(), 
-									enableDisableChecks:[ZaAccount.isAutoMailServer],
-									enableDisableChangeEventSources:[ZaAccount.A2_autoMailServer],
-									visibilityChecks:[],
-									tableCssStyle: "height: 15px"
-							  	},
-								{ref:ZaAccount.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
-									visibilityChecks:[],
-									enableDisableChecks:[]
-								}
-							]
+
+	setupGroup.items.push(
+		{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
+			visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_COSId]],
+			items: [
+				{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, 
+					inputPreProcessor:ZaAccountXFormView.preProcessCOS,
+					toolTipContent:ZaMsg.tt_StartTypingCOSName,
+					onChange:ZaAccount.setCosChanged,
+					emptyText:ZaMsg.enterSearchTerm,						
+					enableDisableChecks:[ZaNewAccountXWizard.isAutoCos],
+					enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
+					visibilityChecks:[],
+					dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
+					choices:this.cosChoices,
+					dataFetcherClass:ZaSearch,
+					editable:true,
+					getDisplayValue:function(newValue) {
+						// dereference through the choices array, if provided
+						//newValue = this.getChoiceLabel(newValue);
+						if(ZaItem.ID_PATTERN.test(newValue)) {
+							var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
+							if(cos)
+								newValue = cos.name;
+						} 
+						if (newValue == null) {
+							newValue = "";
+						} else {
+							newValue = "" + newValue;
+						}
+						return newValue;
+					}
+				},
+				{ref:ZaAccount.A2_autoCos, type:_CHECKBOX_, 
+					msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,
+					trueValue:"TRUE", falseValue:"FALSE" ,
+					elementChanged: function(elementValue,instanceValue, event) {
+						if(elementValue=="TRUE") {
+							ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app);	
+						}
+						this.getForm().itemChanged(this, elementValue, event);
+					},
+					visibilityChecks:[]
+				}
+			]
+		});
+	
+	setupGroup.items.push({ref:ZaAccount.A_zimbraIsAdminAccount, type:_CHECKBOX_,
+							msgName:ZaMsg.NAD_IsSystemAdminAccount,label:ZaMsg.NAD_IsSystemAdminAccount,
+							bmolsnr:true, trueValue:"TRUE", falseValue:"FALSE"
 						});
 						
-		case1Items.push(setupGroup);
-		
-		var passwordGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_wiz_password_group", 
-			numCols:2,visibilityChecks:[],
-			items:[
-			{ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,
-				label:ZaMsg.NAD_Password, labelLocation:_LEFT_, 
-				visibilityChecks:[],enableDisableChecks:[], 
-				cssClass:"admin_xform_name_input"
-			},
-			{ref:ZaAccount.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,
-				label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_,
-				visibilityChecks:[],enableDisableChecks:[],  
-				cssClass:"admin_xform_name_input"
-			},
-			{ref:ZaAccount.A_zimbraPasswordMustChange,  type:_CHECKBOX_,
-				msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd,trueValue:"TRUE", falseValue:"FALSE"}
-			]
-		};
-		case1Items.push(passwordGroup);														
+	setupGroup.items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
+						visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_mailHost]],
+						items: [
+							{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, editable:false, choices: ZaApp.getInstance().getServerListChoices(), 
+								enableDisableChecks:[ZaAccount.isAutoMailServer],
+								enableDisableChangeEventSources:[ZaAccount.A2_autoMailServer],
+								visibilityChecks:[],
+								tableCssStyle: "height: 15px"
+						  	},
+							{ref:ZaAccount.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
+								visibilityChecks:[],
+								enableDisableChecks:[]
+							}
+						]
+					});
+					
+	case1Items.push(setupGroup);
 	
-	    var new_acct_timezone_group = {
-	         type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_TimezoneGrouper, id: "account_wiz_timezone_group",
-	         visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefTimeZoneId]],
-	         numCols: 2,
-	         items: [
-	                   /*
-	                {ref:"default_timezone", type:_CHECKBOX_, msgName:"default",
-	                    label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
-	                    elementChanged: function(elementValue,instanceValue, event) {
-	                        if(elementValue=="TRUE") {
-	                            ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials]);
-	                        }
-	                        this.getForm().itemChanged(this, elementValue, event);
-	                    }
-	              }     */
-	            {ref:ZaAccount.A_zimbraPrefTimeZoneId, type:_SELECT1_, msgName:ZaMsg.NAD_zimbraPrefTimeZoneId,
-	                 label:ZaMsg.NAD_zimbraPrefTimeZoneId+":", labelLocation:_LEFT_ }
-	         ]
-	    }
-	
-	    case1Items.push (new_acct_timezone_group) ;
-	    
-	
-	
-	    var notesGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_wiz_notes_group",
-			numCols:2,
-		 	items:[
-	
-			{ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,
-				label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"
-			},
-			{ref:ZaAccount.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,
-				label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em"
-			}
-			]
-		};
-	
-		case1Items.push(notesGroup);
-		case1.items = case1Items;
-		cases.push(case1);
-	//}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CONTACT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {	
+	var passwordGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_wiz_password_group", 
+		numCols:2,visibilityChecks:[],
+		items:[
+		{ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,
+			label:ZaMsg.NAD_Password, labelLocation:_LEFT_, 
+			visibilityChecks:[],enableDisableChecks:[], 
+			cssClass:"admin_xform_name_input"
+		},
+		{ref:ZaAccount.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,
+			label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_,
+			visibilityChecks:[],enableDisableChecks:[],  
+			cssClass:"admin_xform_name_input"
+		},
+		{ref:ZaAccount.A_zimbraPasswordMustChange,  type:_CHECKBOX_,
+			msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd,trueValue:"TRUE", falseValue:"FALSE"}
+		]
+	};
+	case1Items.push(passwordGroup);														
+
+    var new_acct_timezone_group = {
+         type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_TimezoneGrouper, id: "account_wiz_timezone_group",
+         visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefTimeZoneId]],
+         numCols: 2,
+         items: [
+                   /*
+                {ref:"default_timezone", type:_CHECKBOX_, msgName:"default",
+                    label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
+                    elementChanged: function(elementValue,instanceValue, event) {
+                        if(elementValue=="TRUE") {
+                            ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials]);
+                        }
+                        this.getForm().itemChanged(this, elementValue, event);
+                    }
+              }     */
+            {ref:ZaAccount.A_zimbraPrefTimeZoneId, type:_SELECT1_, msgName:ZaMsg.NAD_zimbraPrefTimeZoneId,
+                 label:ZaMsg.NAD_zimbraPrefTimeZoneId+":", labelLocation:_LEFT_ }
+         ]
+    }
+
+    case1Items.push (new_acct_timezone_group) ;
+    
+
+
+    var notesGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_wiz_notes_group",
+		numCols:2,
+	 	items:[
+
+		{ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,
+			label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"
+		},
+		{ref:ZaAccount.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,
+			label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em"
+		}
+		]
+	};
+
+	case1Items.push(notesGroup);
+	case1.items = case1Items;
+	cases.push(case1);
+
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.CONTACT_TAB_ATTRS, ZaAccountXFormView.CONTACT_TAB_RIGHTS)) {
+		ZaNewAccountXWizard.CONTACT_STEP = ++this.TAB_INDEX;
+		this.stepChoices.push({value:ZaNewAccountXWizard.CONTACT_STEP, label:ZaMsg.TABT_ContactInfo});
 		var case2={type:_CASE_, caseKey:ZaNewAccountXWizard.CONTACT_STEP, tabGroupKey:ZaNewAccountXWizard.CONTACT_STEP, numCols:1, 
 						items: [
 							{type:_ZAWIZGROUP_, 
@@ -696,7 +636,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		cases.push(case2);
 	}
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ALIASES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.ALIASES_TAB_ATTRS, ZaAccountXFormView.ALIASES_TAB_RIGHTS)) {
+		ZaNewAccountXWizard.ALIASES_STEP = ++this.TAB_INDEX;
+		this.stepChoices.push({value:ZaNewAccountXWizard.ALIASES_STEP, label:ZaMsg.TABT_Aliases});
 		cases.push({type:_CASE_, tabGroupKey:ZaNewAccountXWizard.ALIASES_STEP, caseKey:ZaNewAccountXWizard.ALIASES_STEP, numCols:1, 
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.NAD_AccountAliases},
@@ -707,7 +649,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							removeButtonLabel:ZaMsg.NAD_RemoveAlias,
 							removeButtonCSSStyle: "margin-left: 50px",
 							items: [
-								{ref:".", type:_EMAILADDR_, label:null}
+								{ref:".", type:_EMAILADDR_, label:null, enableDisableChecks:[]}
 							]
 						}
 					]
@@ -721,7 +663,10 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 				}
 
 
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_FORWARDING_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.FORWARDING_TAB_ATTRS, ZaAccountXFormView.FORWARDING_TAB_RIGHTS)) {
+		ZaNewAccountXWizard.FORWARDING_STEP = ++this.TAB_INDEX;		
+		this.stepChoices.push({value:ZaNewAccountXWizard.FORWARDING_STEP, label:ZaMsg.TABT_Forwarding});
+
 		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.FORWARDING_STEP, tabGroupKey:ZaNewAccountXWizard.FORWARDING_STEP, numCols:2,colSizes:["200px","auto"], 
 					id:"account_form_forwarding_step",
 					items: [
@@ -763,14 +708,17 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							removeButtonLabel:ZaMsg.NAD_RemoveAddress,
 							nowrap:false,labelWrap:true,
 							items: [
-								{ref:".", type:_TEXTFIELD_, label:null, width:250}
+								{ref:".", type:_TEXTFIELD_, label:null, width:250, enableDisableChecks:[]}
 							]
 						}
 					]
 				});				
-	}	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_FEATURES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		cases.push({type:_CASE_,caseKey:ZaNewAccountXWizard.FEATURES_STEP, tabGroupKey:ZaNewAccountXWizard.FEATURES_STEP,id:"account_form_features_step",
+	};
+		
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.FEATURE_TAB_ATTRS, ZaAccountXFormView.FEATURE_TAB_RIGHTS)) {
+		ZaNewAccountXWizard.FEATURES_STEP = ++this.TAB_INDEX;		
+		this.stepChoices.push({value:ZaNewAccountXWizard.FEATURES_STEP, label:ZaMsg.TABT_Features});
+		var featuresCase = {type:_CASE_,caseKey:ZaNewAccountXWizard.FEATURES_STEP, tabGroupKey:ZaNewAccountXWizard.FEATURES_STEP,id:"account_form_features_step",
 				numCols:1, width:"100%",
 				items: [
 					{ type: _DWT_ALERT_,
@@ -778,8 +726,14 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 					  style: DwtAlert.WARNING,
 					  iconVisible: false, 
 					  content: ZaMsg.NAD_CheckFeaturesInfo
-					},				
-					{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraMajorFeature, id:"account_wiz_features_major", colSizes:["auto"],numCols:1,
+					}
+				]
+		}; 
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureMailEnabled,ZaAccount.A_zimbraFeatureContactsEnabled,
+			ZaAccount.A_zimbraFeatureCalendarEnabled,ZaAccount.A_zimbraFeatureTasksEnabled,ZaAccount.A_zimbraFeatureTasksEnabled,
+			ZaAccount.A_zimbraFeatureNotebookEnabled,ZaAccount.A_zimbraFeatureBriefcasesEnabled,ZaAccount.A_zimbraFeatureIMEnabled,
+			ZaAccount.A_zimbraFeatureOptionsEnabled],[])) {
+			featuresCase.items.push({type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraMajorFeature, id:"account_wiz_features_major", colSizes:["auto"],numCols:1,
 						items:[	
 							{ref:ZaAccount.A_zimbraFeatureMailEnabled,
 								type:_SUPER_WIZ_CHECKBOX_, 
@@ -815,8 +769,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								checkBoxLabel:ZaMsg.NAD_zimbraFeatureOptionsEnabled,  
 								trueValue:"TRUE", falseValue:"FALSE"}	
 						]
-					},	
-					{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraGeneralFeature, id:"account_wiz_features_general",
+					});
+		};
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureTaggingEnabled,ZaAccount.A_zimbraFeatureSharingEnabled,
+			ZaAccount.A_zimbraFeatureChangePasswordEnabled,ZaAccount.A_zimbraFeatureSkinChangeEnabled,
+			ZaAccount.A_zimbraFeatureHtmlComposeEnabled,ZaAccount.A_zimbraFeatureShortcutAliasesEnabled,
+			ZaAccount.A_zimbraFeatureGalEnabled,ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled],[])) {
+			featuresCase.items.push({type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraGeneralFeature, id:"account_wiz_features_general",
 						 colSizes:["auto"],numCols:1,
 						items:[							
 							{ref:ZaAccount.A_zimbraFeatureTaggingEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureTaggingEnabled,checkBoxLabel:ZaMsg.NAD_FeatureTaggingEnabled, trueValue:"TRUE", falseValue:"FALSE"},
@@ -835,8 +794,15 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							{ref:ZaAccount.A_zimbraFeatureGalEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureGalEnabled,checkBoxLabel:ZaMsg.NAD_FeatureGalEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureGalAutoCompleteEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureGalAutoCompleteEnabled,  trueValue:"TRUE", falseValue:"FALSE"}
 						]
-					},	
-					{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraMailFeature, id:"account_wiz_features_mail",
+					});
+			
+		};		
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureMailPriorityEnabled,ZaAccount.A_zimbraFeatureFlaggingEnabled,
+			ZaAccount.A_zimbraImapEnabled,ZaAccount.A_zimbraPop3Enabled,ZaAccount.A_zimbraFeatureImapDataSourceEnabled,
+			ZaAccount.A_zimbraFeaturePop3DataSourceEnabled,ZaAccount.A_zimbraFeatureConversationsEnabled,ZaAccount.A_zimbraFeatureFiltersEnabled,
+			ZaAccount.A_zimbraFeatureOutOfOfficeReplyEnabled,ZaAccount.A_zimbraFeatureNewMailNotificationEnabled,ZaAccount.A_zimbraFeatureMailPollingIntervalPreferenceEnabled, 
+			ZaAccount.A_zimbraFeatureIdentitiesEnabled],[])) {
+			featuresCase.items.push({type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraMailFeature, id:"account_wiz_features_mail",
 						colSizes:["auto"],numCols:1,
 					 	enableDisableChecks:[ZaAccountXFormView.isMailFeatureEnabled],
 						enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureMailEnabled, ZaAccount.A_COSId],
@@ -883,43 +849,72 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								trueValue:"TRUE", falseValue:"FALSE"
 							}
 						]
-					},
-					{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraCalendarFeature, id:"account_wiz_features_calendar",
-					 	colSizes:["auto"],numCols:1,
-					 	enableDisableChecks:[ZaAccountXFormView.isCalendarFeatureEnabled],
-						enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureCalendarEnabled,ZaAccount.A_COSId],
-						items:[		
-							{ref:ZaAccount.A_zimbraFeatureGroupCalendarEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureGroupCalendarEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureGroupCalendarEnabled, trueValue:"TRUE", falseValue:"FALSE"}		
-						]
-					},
-					{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraIMFeature, id:"account_wiz_features_im",
+					});
+			
+		};
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureGroupCalendarEnabled],[])) {
+			featuresCase.items.push(
+				{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraCalendarFeature, id:"account_wiz_features_calendar",
+				 	colSizes:["auto"],numCols:1,
+				 	enableDisableChecks:[ZaAccountXFormView.isCalendarFeatureEnabled],
+					enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureCalendarEnabled,ZaAccount.A_COSId],
+					items:[		
+						{ref:ZaAccount.A_zimbraFeatureGroupCalendarEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureGroupCalendarEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureGroupCalendarEnabled, trueValue:"TRUE", falseValue:"FALSE"}		
+					]
+				}
+			);
+		};
+		
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureIMEnabled],[])) {
+			featuresCase.items.push(
+				{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraIMFeature, id:"account_wiz_features_im",
 					 	colSizes:["auto"],numCols:1,
 						visibilityChecks:[ZaAccountXFormView.isIMFeatureEnabled],
 						visibilityChangeEventSources:[ZaAccount.A_zimbraFeatureIMEnabled,ZaAccount.A_COSId],
 						items:[			
 							{ref:ZaAccount.A_zimbraFeatureInstantNotify, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureInstantNotify,checkBoxLabel:ZaMsg.NAD_zimbraFeatureInstantNotify, trueValue:"TRUE", falseValue:"FALSE"}											
 						]
-					},
-					{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraSearchFeature, id:"account_wiz_features_search",
+				}
+			);
+		};
+		
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureAdvancedSearchEnabled,
+			ZaAccount.A_zimbraFeatureAdvancedSearchEnabled,ZaAccount.A_zimbraFeatureSavedSearchesEnabled,
+			ZaAccount.A_zimbraFeatureInitialSearchPreferenceEnabled],[])) {
+			featuresCase.items.push(
+				{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraSearchFeature, id:"account_wiz_features_search",
 					 colSizes:["auto"],numCols:1,
 						items:[						
 							{ref:ZaAccount.A_zimbraFeatureAdvancedSearchEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureAdvancedSearchEnabled,checkBoxLabel:ZaMsg.NAD_FeatureAdvancedSearchEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureSavedSearchesEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureSavedSearchesEnabled,checkBoxLabel:ZaMsg.NAD_FeatureSavedSearchesEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureInitialSearchPreferenceEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_FeatureInitialSearchPreferenceEnabled,checkBoxLabel:ZaMsg.NAD_FeatureInitialSearchPreferenceEnabled, trueValue:"TRUE", falseValue:"FALSE"}
 						]
-					}
-				]
-				});
+				}
+			);
+		};
+				
+		cases.push(featuresCase);
 	}	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_PREFS_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		var prefItems = [
-				{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_general_header",
+	
+	
+	
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.PREFERENCES_TAB_ATTRS, ZaAccountXFormView.PREFERENCES_TAB_RIGHTS)) {
+		ZaNewAccountXWizard.PREFS_STEP = ++this.TAB_INDEX;	
+		this.stepChoices.push({value:ZaNewAccountXWizard.PREFS_STEP, label:ZaMsg.TABT_Preferences});
+
+		var prefItems = [ ];
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefImapSearchFoldersEnabled,ZaAccount.A_zimbraPrefShowSearchString,
+			ZaAccount.A_zimbraPrefUseKeyboardShortcuts,ZaAccount.A_zimbraPrefMailInitialSearch,
+			ZaAccount.A_zimbraPrefWarnOnExit,ZaAccount.A_zimbraPrefShowSelectionCheckbox,
+			ZaAccount.A_zimbraJunkMessagesIndexingEnabled,ZaAccount.A_zimbraPrefLocale],[])) {
+			
+			prefItems.push({type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_general_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_GeneralOptions}
 							],
 							cssStyle:"padding-top:5px; padding-bottom:5px"
-						},
-						{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_general",colSizes:["auto"],numCols:1,
+						});
+			prefItems.push({type:_ZA_PLAIN_GROUPER_, id:"account_prefs_general",colSizes:["auto"],numCols:1,
 							items :[
 								{ref:ZaAccount.A_zimbraPrefImapSearchFoldersEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled,checkBoxLabel:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraPrefShowSearchString, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefShowSearchString,checkBoxLabel:ZaMsg.NAD_zimbraPrefShowSearchString,trueValue:"TRUE", falseValue:"FALSE"},
@@ -945,14 +940,17 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
                                     label:ZaMsg.NAD_zimbraPrefLocale, labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS}
 
                             ]
-						},	
-						{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_mail_header",
+						});
+		}
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefMessageViewHtmlPreferred,ZaAccount.A_zimbraPrefDisplayExternalImages,
+			ZaAccount.A_zimbraPrefGroupMailBy,ZaAccount.A_zimbraPrefMailItemsPerPage,ZaAccount.A_zimbraPrefMailDefaultCharset],[])) {				
+			prefItems.push({type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_mail_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_MailOptions}
 							],
 							cssStyle:"padding-top:5px; padding-bottom:5px"
-						},
-						{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_mail_general",colSizes:["200px","400px"],numCols:2,
+						});
+			prefItems.push({type:_ZA_PLAIN_GROUPER_, id:"account_prefs_mail_general",colSizes:["200px","400px"],numCols:2,
 
 							items :[
 								{ref:ZaAccount.A_zimbraPrefMessageViewHtmlPreferred, 
@@ -978,7 +976,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraPrefMailDefaultCharset, type:_SUPERWIZ_SELECT1_, msgName:ZaMsg.NAD_zimbraPrefMailDefaultCharset,
 									label:ZaMsg.NAD_zimbraPrefMailDefaultCharset, labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS}
 							]
-						},
+						});
+		}
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefMailPollingInterval,ZaAccount.A_zimbraMailMinPollingInterval,
+			ZaAccount.A_zimbraPrefNewMailNotificationEnabled,ZaAccount.A_zimbraPrefNewMailNotificationAddress,ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled,
+			ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled,ZaAccount.A_zimbraPrefOutOfOfficeCacheDuration,
+			ZaAccount.A_zimbraPrefOutOfOfficeReply],[])) {				
+			prefItems.push(				
 						{type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_receiving",
 							label:ZaMsg.NAD_MailOptionsReceiving,
 							items :[
@@ -1026,8 +1030,11 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									enableDisableChangeEvantSources:[ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled]
 								}
 							]
-						},						
-						{type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",
+						});
+		}
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_prefSaveToSent,ZaAccount.A_zimbraAllowAnyFromAddress, 
+			ZaAccount.A_zimbraAllowFromAddress],[])) {				
+			prefItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsSending,
 							items :[
 								{ref:ZaAccount.A_prefSaveToSent,  
@@ -1057,15 +1064,21 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									showAddOnNextRow:true, 
 									removeButtonLabel:ZaMsg.NAD_RemoveAddress,								
 									items: [
-										{ref:".", type:_TEXTFIELD_, label:null, width:"200px"}
+										{ref:".", type:_TEXTFIELD_, label:null, width:"200px", enableDisableCheks:[]}
 									],
 									nowrap:false,labelWrap:true,
 									visibilityChecks:[ZaAccountXFormView.isSendingFromAnyAddressDisAllowed],
 									visibilityChangeEventSources:[ZaAccount.A_zimbraAllowAnyFromAddress, ZaAccount.A_COSId]										
 								}
 							]
-						},
-						{type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_composing",borderCssClass:"LowPadedTopGrouperBorder",
+						});
+		}
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefComposeInNewWindow,ZaAccount.A_zimbraPrefComposeFormat,
+			ZaAccount.A_zimbraPrefHtmlEditorDefaultFontFamily,ZaAccount.A_zimbraPrefHtmlEditorDefaultFontSize,
+			ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor,ZaAccount.A_zimbraPrefForwardReplyInOriginalFormat,
+			ZaAccount.A_prefMailSignatureEnabled,ZaAccount.A_zimbraPrefMailSignatureStyle,
+			ZaAccount.A_zimbraMailSignatureMaxLength,ZaAccount.A_prefMailSignature],[])) {				
+			prefItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_composing",borderCssClass:"LowPadedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsComposing,
 							items :[																										
 								{ref:ZaAccount.A_zimbraPrefComposeInNewWindow, 
@@ -1123,8 +1136,10 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									enableDisableChecks:[ZaAccountXFormView.isMailSignatureEnabled]									
 								}
 							]
-						},
-						{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_contacts_header",
+						});
+		}		
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefAutoAddAddressEnabled,ZaAccount.A_zimbraPrefGalAutoCompleteEnabled,ZaAccount.A_zimbraPrefContactsPerPage],[])) {				
+			prefItems.push({type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_contacts_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_ContactsOptions}
 							],
@@ -1140,9 +1155,11 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraPrefGalAutoCompleteEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefGalAutoCompleteEnabled,checkBoxLabel:ZaMsg.NAD_zimbraPrefGalAutoCompleteEnabled, trueValue:"TRUE", falseValue:"FALSE"},	
 								{ref:ZaAccount.A_zimbraPrefContactsPerPage, type:_SUPERWIZ_SELECT1_, msgName:ZaMsg.NAD_PrefContactsPerPage,label:ZaMsg.NAD_PrefContactsPerPage+":", labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, valueLabel:null}		
 							]
-						},
-
-						{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_calendar_header",
+						});
+		}
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefTimeZoneId,ZaAccount.A_zimbraPrefCalendarApptReminderWarningTime,
+			ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal,ZaAccount.A_zimbraPrefCalendarUseQuickAdd,ZaAccount.A_zimbraPrefUseTimeZoneListInCalendar],[])) {				
+			prefItems.push({type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_calendar_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_CalendarOptions}
 							],
@@ -1156,13 +1173,16 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraPrefCalendarUseQuickAdd, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_useQuickAdd,checkBoxLabel:ZaMsg.NAD_useQuickAdd, trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraPrefUseTimeZoneListInCalendar, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefUseTimeZoneListInCalendar,checkBoxLabel:ZaMsg.NAD_zimbraPrefUseTimeZoneListInCalendar,trueValue:"TRUE", falseValue:"FALSE"}
 							]
-						}							
-					];
+						});							
+		}			
 		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.PREFS_STEP, tabGroupKey:ZaNewAccountXWizard.PREFS_STEP, 
 					numCols:1, width:"100%", items :prefItems});
 	}	
 
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.SKIN_TAB_ATTRS, ZaAccountXFormView.SKIN_TAB_RIGHTS)) {
+		ZaNewAccountXWizard.SKINS_STEP = ++this.TAB_INDEX;		
+		this.stepChoices.push({value:ZaNewAccountXWizard.SKINS_STEP, label:ZaMsg.TABT_Themes});
+
 		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.SKINS_STEP, tabGroupKey:ZaNewAccountXWizard.SKINS_STEP, id:"account_form_themes_step", numCols:1, width:"100%",  
 						items: [	
 							{type:_GROUP_, 
@@ -1190,7 +1210,10 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		});			
 	}
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ZIMLET_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])  {
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.ZIMLET_TAB_ATTRS, ZaAccountXFormView.ZIMLET_TAB_RIGHTS)) {
+		ZaNewAccountXWizard.ZIMLETS_STEP = ++this.TAB_INDEX;			
+		this.stepChoices.push({value:ZaNewAccountXWizard.ZIMLETS_STEP, label:ZaMsg.TABT_Zimlets});
+
 		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.ZIMLETS_STEP, tabGroupKey:ZaNewAccountXWizard.ZIMLETS_STEP, id:"account_form_zimlets_step", numCols:1, width:"100%", 
 						items: [	
 							{type:_ZAWIZGROUP_, numCols:1,colSizes:["auto"], 
@@ -1207,10 +1230,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		});			
 	}
 		
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ADVANCED_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.ADVANCED_STEP, tabGroupKey:ZaNewAccountXWizard.ADVANCED_STEP, id:"account_form_advanced_step", numCols:1, width:"100%", 
-						items: [
-						{type:_ZAWIZ_TOP_GROUPER_, id:"account_attachment_settings",colSizes:["auto"],numCols:1,
+	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.ADVANCED_TAB_ATTRS, ZaAccountXFormView.ADVANCED_TAB_RIGHTS)) {
+		ZaNewAccountXWizard.ADVANCED_STEP = ++this.TAB_INDEX;			
+		this.stepChoices.push({value:ZaNewAccountXWizard.ADVANCED_STEP, label:ZaMsg.TABT_Advanced});
+		advancedCaseItems = [];
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraAttachmentsBlocked],[])) {				
+			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_attachment_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_AttachmentsGrouper,						
 							items :[
 								{ref:ZaAccount.A_zimbraAttachmentsBlocked, type:_SUPER_WIZ_CHECKBOX_, 
@@ -1220,8 +1245,11 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									trueValue:"TRUE", falseValue:"FALSE"
 								}
 							]
-						},
-						{type:_ZAWIZ_TOP_GROUPER_, id:"account_quota_settings",colSizes:["250px","200px","150px"],numCols:3,
+						});
+		}
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraMailQuota,ZaAccount.A_zimbraContactMaxNumEntries,
+			ZaAccount.A_zimbraQuotaWarnPercent,ZaAccount.A_zimbraQuotaWarnInterval,ZaAccount.A_zimbraQuotaWarnMessage],[])) {						
+			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_quota_settings",colSizes:["250px","200px","150px"],numCols:3,
 							label:ZaMsg.NAD_QuotaGrouper,						
 							items: [
 								{ref:ZaAccount.A_zimbraMailQuota, type:_SUPERWIZ_TEXTFIELD_, 
@@ -1249,8 +1277,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								}
 							]
-						},
-						{type:_ZAWIZ_TOP_GROUPER_,id:"account_password_settings",colSizes:["auto"],numCols:1,
+						});
+		}
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPasswordLocked,ZaAccount.A_zimbraMinPwdLength,
+			ZaAccount.A_zimbraMaxPwdLength,ZaAccount.A_zimbraPasswordMinUpperCaseChars,ZaAccount.A_zimbraPasswordMinLowerCaseChars,
+			ZaAccount.A_zimbraPasswordMinPunctuationChars,ZaAccount.A_zimbraPasswordMinNumericChars,
+			ZaAccount.A_zimbraMinPwdAge,ZaAccount.A_zimbraMaxPwdAge,ZaAccount.A_zimbraEnforcePwdHistory],[])) {						
+			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_,id:"account_password_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_PasswordGrouper,				
 							items: [
 								{ref:ZaAccount.A_zimbraPasswordLocked, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_PwdLocked,checkBoxLabel:ZaMsg.NAD_PwdLocked, 
@@ -1300,8 +1333,11 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraMaxPwdAge, type:_SUPERWIZ_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passMaxAge,txtBoxLabel:ZaMsg.NAD_passMaxAge+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"},
 								{ref:ZaAccount.A_zimbraEnforcePwdHistory, type:_SUPERWIZ_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passEnforceHistory,txtBoxLabel:ZaMsg.NAD_passEnforceHistory+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"}
 							]
-						},
-						{type:_ZAWIZ_TOP_GROUPER_, id:"password_lockout_settings",colSizes:["250px","200px","150px"],numCols:3,
+						});
+		}
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_zimbraPasswordLockoutMaxFailures,
+			ZaAccount.A_zimbraPasswordLockoutDuration,ZaAccount.A_zimbraPasswordLockoutFailureLifetime],[])) {						
+			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"password_lockout_settings",colSizes:["250px","200px","150px"],numCols:3,
 							label:ZaMsg.NAD_FailedLoginGrouper,							
 							items :[
 
@@ -1341,8 +1377,11 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									nowrap:false,labelWrap:true
 								}								
 							]
-						},
-						{type:_ZAWIZ_TOP_GROUPER_, colSizes:["auto"],numCols:1,
+						});
+		}
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraAdminAuthTokenLifetime,ZaAccount.A_zimbraAuthTokenLifetime,
+			ZaAccount.A_zimbraMailIdleSessionTimeout,ZaAccount.A_zimbraMailMessageLifetime,ZaAccount.A_zimbraMailTrashLifetime,ZaAccount.A_zimbraMailSpamLifetime],[])) {
+			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_TimeoutGrouper,	id:"timeout_settings",
 							items: [
 								{ref:ZaAccount.A_zimbraAdminAuthTokenLifetime,
@@ -1374,11 +1413,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									msgName:ZaMsg.NAD_MailSpamLifetime,
 									txtBoxLabel:ZaMsg.NAD_MailSpamLifetime}
 							]
-						}					
-			
-					]
-					});									
+						});
+		}					
+		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.ADVANCED_STEP, tabGroupKey:ZaNewAccountXWizard.ADVANCED_STEP, id:"account_form_advanced_step", numCols:1, width:"100%", 
+				items:advancedCaseItems});
 	}
+	this._lastStep = this.stepChoices.length;
 	xFormObject.items = [
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices, valueChangeEventSources:[ZaModel.currentStep]},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},

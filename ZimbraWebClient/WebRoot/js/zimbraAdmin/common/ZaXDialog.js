@@ -128,7 +128,7 @@ function(entry) {
 *  ZaXDialog
 **/
 ZaXDialog.prototype.getMyXForm = 
-function() {	
+function(entry) {	
 	var xFormObject = new Object();
 	//Instrumentation code start
 	if(ZaXDialog.XFormModifiers[this._iKeyName]) {
@@ -136,7 +136,7 @@ function() {
 		var cnt = methods.length;
 		for(var i = 0; i < cnt; i++) {
 			if(typeof(methods[i]) == "function") {
-				methods[i].call(this,xFormObject);
+				methods[i].call(this,xFormObject,entry);
 			}
 		}
 	}	

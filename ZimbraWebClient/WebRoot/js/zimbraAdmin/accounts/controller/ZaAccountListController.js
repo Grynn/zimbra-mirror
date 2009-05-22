@@ -401,7 +401,7 @@ function(ev) {
 		newAccount._defaultValues = {attrs:{}};*/
 		//newAccount.rights[ZaAccount.RENAME_ACCOUNT_RIGHT] = true;				
 		if(!ZaApp.getInstance().dialogs["newAccountWizard"])
-			ZaApp.getInstance().dialogs["newAccountWizard"] = new ZaNewAccountXWizard(this._container);	
+			ZaApp.getInstance().dialogs["newAccountWizard"] = new ZaNewAccountXWizard(this._container,newAccount);	
         else { //update the account type if needed
             ZaApp.getInstance().dialogs["newAccountWizard"].updateAccountType () ;    
         }

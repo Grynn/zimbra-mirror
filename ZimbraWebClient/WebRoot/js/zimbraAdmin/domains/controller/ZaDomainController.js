@@ -156,9 +156,8 @@ ZaController.changeActionsStateMethods["ZaAccountViewController"].push(ZaAccount
 ZaDomainController.setViewMethod =
 function(entry) {
 	entry.load("name", entry.attrs[ZaDomain.A_domainName],false,true);
-	if(!this._UICreated) {
-		this._createUI();
-	} 
+	this._createUI(entry);
+ 
 	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._view.setDirty(false);
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
@@ -170,8 +169,8 @@ ZaController.setViewMethods["ZaDomainController"].push(ZaDomainController.setVie
 * @method _createUI
 **/
 ZaDomainController.prototype._createUI =
-function () {
-	this._contentView = this._view = new this.tabConstructor(this._container);
+function (entry) {
+	this._contentView = this._view = new this.tabConstructor(this._container, entry);
 
 	this._initToolbar();
 	//always add Help button at the end of the toolbar
@@ -210,9 +209,16 @@ function(ev) {
 ZaDomainController.prototype._saveChanges = 
 function () {
 	var tmpObj = this._view.getObject();
+	//Check the data
+	if(tmpObj.attrs == null ) {
+		//show error msg
+		this._errorDialog.setMessage(ZaMsg.ERROR_UNKNOWN, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._errorDialog.popup();		
+		return false;	
+	}
+	
 	var mods = new Object();
 	var haveSmth = false; //what is this variable for?
-    var	isNew = (!tmpObj.id) ? true : false;
     var renameNotebookAccount = false;
     var catchAllChanged = false ;
 	var skinChanged = false;
@@ -223,16 +229,19 @@ function () {
     }
 
 
-	for(var a in tmpObj.attrs) {
-		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName || a == ZaDomain.A_domainType)
+	for (var a in tmpObj.attrs) {
+		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName || a == ZaDomain.A_domainType) {
 			continue;
+		}
 		
 		if (!(AjxUtil.isEmpty(this._currentObject.attrs[a]) && AjxUtil.isEmpty(tmpObj.attrs[a]))) {
 			if(tmpObj.attrs[a] instanceof Array) {
-					if((this._currentObject.attrs[a] && tmpObj.attrs[a]
-						&& tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf())
-                        || (this._currentObject.attrs[a] == null && tmpObj.attrs[a] != null)
-                        || (this._currentObject.attrs[a] != null && (tmpObj.attrs[a] == null || tmpObj.attrs[a].length == 0)) )
+					if(
+						!(this._currentObject.attrs[a] instanceof Array) 
+						|| (this._currentObject.attrs[a] && tmpObj.attrs[a] && tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf())
+                  		|| (this._currentObject.attrs[a] == null && tmpObj.attrs[a] != null)
+                    	|| (this._currentObject.attrs[a] != null && (tmpObj.attrs[a] == null || tmpObj.attrs[a].length == 0)) 
+                    )
                     {
 						mods[a] = tmpObj.attrs[a];
 						haveSmth = true;
@@ -355,7 +364,7 @@ function () {
 ZaDomainController.prototype._showNewDomainWizard = 
 function () {
 	try {
-		this._newDomainWizard = ZaApp.getInstance().dialogs["newDomainWizard"] = new ZaNewDomainXWizard(this._container);	
+		this._newDomainWizard = ZaApp.getInstance().dialogs["newDomainWizard"] = new ZaNewDomainXWizard(this._container, this._currentObject);	
 		this._newDomainWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishNewButtonListener, this, null);			
 		this._newDomainWizard.setObject(this._currentObject);
 		this._newDomainWizard.popup();

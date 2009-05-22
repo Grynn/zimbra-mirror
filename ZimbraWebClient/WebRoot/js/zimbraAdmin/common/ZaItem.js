@@ -853,11 +853,13 @@ Select1_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 /**
  * Method of XFormItem
  */
-ZaItem.hasWritePermission = function (refToCheck) {
+ZaItem.hasWritePermission = function (refToCheck,instance) {
 	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE')
 		return true;
+
+	if(!instance)
+		instance = this.getInstance();
 	
-	var instance = this.getInstance();
 	if (!instance.setAttrs)
 		return false;
 	

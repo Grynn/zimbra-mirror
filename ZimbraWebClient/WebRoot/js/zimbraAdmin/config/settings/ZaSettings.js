@@ -336,40 +336,6 @@ ZaSettings.OVERVIEW_ADDRESSES_ITEMS = [ZaSettings.ACCOUNT_LIST_VIEW,ZaSettings.A
 ZaSettings.OVERVIEW_TOOLS_ITEMS = [ZaSettings.MAILQ_VIEW];
 ZaSettings.OVERVIEW_MONITORING_ITEMS = [ZaSettings.GLOBAL_STATS_VIEW,ZaSettings.GLOBAL_STATUS_VIEW,ZaSettings.SERVER_STATS_VIEW];
 
-//Account view tabs
-ZaSettings.ACCOUNTS_GENERAL_TAB = "accountsGeneralTab";
-
-/*ZaSettings.ACCOUNTS_CONTACT_TAB = "accountsContactTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_CONTACT_TAB, label: ZaMsg.UI_Comp_AccountsContactTab });
-
-ZaSettings.ACCOUNTS_MEMBEROF_TAB = "accountsMemberOfTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_MEMBEROF_TAB, label: ZaMsg.UI_Comp_AccountsMemberofTab });
-
-ZaSettings.ACCOUNTS_PREFS_TAB = "accountsPrefsTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_PREFS_TAB, label: ZaMsg.UI_Comp_AccountsPrefsTab });
-
-ZaSettings.ACCOUNTS_FEATURES_TAB = "accountsFeaturesTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_FEATURES_TAB, label: ZaMsg.UI_Comp_AccountsFeaturesTab });
-
-ZaSettings.ACCOUNTS_ALIASES_TAB = "accountsAliasesTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_ALIASES_TAB, label: ZaMsg.UI_Comp_AccountsAliasesTab });
-
-ZaSettings.ACCOUNTS_FORWARDING_TAB = "accountsForwardingTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_FORWARDING_TAB, label: ZaMsg.UI_Comp_AccountsForwardingTab });
-
-ZaSettings.ACCOUNTS_INTEROP_TAB = "accountsInteropTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_INTEROP_TAB, label: ZaMsg.UI_Comp_AccountsInteropTab });
-
-ZaSettings.ACCOUNTS_SKIN_TAB = "accountsSkinTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_SKIN_TAB, label: ZaMsg.UI_Comp_AccountsSkinsTab });
-
-ZaSettings.ACCOUNTS_ZIMLET_TAB = "accountsZimletTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_ZIMLET_TAB, label: ZaMsg.UI_Comp_AccountsZimletsTab });
-
-ZaSettings.ACCOUNTS_ADVANCED_TAB = "accountsAdvancedTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_ADVANCED_TAB, label: ZaMsg.UI_Comp_AccountsAdvancedTab });
-*/
-
 //Distribution list view tabs
 ZaSettings.DL_MEMBERS_TAB = "dlMembersTab";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_MEMBERS_TAB, label: ZaMsg.UI_Comp_DLMembersTab });
@@ -382,47 +348,14 @@ ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_ALIASES_TAB, label: ZaM
 ZaSettings.DL_SHARES_TAB = "dlSharesTab";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_SHARES_TAB, label: ZaMsg.UI_Comp_DLSharesTab });
 
-//Resource View Tabs
-ZaSettings.RESOURCE_PROPERTIES_TAB = "resourcePropertiesTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.RESOURCE_PROPERTIES_TAB, label: ZaMsg.UI_Comp_ResourcePropTab });
-ZaSettings.RESOURCE_CONTACT_INFO_TAB = "resourceContactTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.RESOURCE_CONTACT_INFO_TAB, label: ZaMsg.UI_Comp_ResourceContactTab });
-
 //Miscelaneous operations
 
 //Account operations
 ZaSettings.ACCOUNTS_CHPWD = "accountsChangePassword";
 ZaSettings.MOVE_ALIAS = "moveAlias";
 ZaSettings.ACCOUNTS_REINDEX = "accountsReindex";
-//ZaSettings.ACCOUNTS_VIEW_MAIL = "accountsViewMail";
 ZaSettings.ACCOUNTS_ASSIGN_SERVER = "accountsAssignServer";
 ZaSettings.ACCOUNTS_RESTORE = "accountsRestore"; //this should be in bnr extension
-//ZaSettings.ACCOUNTS_CREATE = "accountsCreate"; //this should be in bnr extension
-
-//Domain view tabs
-ZaSettings.DOMAIN_GENERAL_TAB = "domainGeneralTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_GENERAL_TAB, label: ZaMsg.UI_Comp_DomainGeneralTab });
-
-ZaSettings.DOMAIN_GAL_TAB = "domainGALTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_GAL_TAB, label: ZaMsg.UI_Comp_DomainGALTab });
-
-ZaSettings.DOMAIN_AUTH_TAB = "domainAuthTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_AUTH_TAB, label: ZaMsg.UI_Comp_DomainAuthTab });
-
-ZaSettings.DOMAIN_VIRTUAL_HOST_TAB = "domainVirtualHostTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_VIRTUAL_HOST_TAB, label: ZaMsg.UI_Comp_DomainVHTab });
-
-ZaSettings.DOMAIN_WIKI_TAB = "domainWikiTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_WIKI_TAB, label: ZaMsg.UI_Comp_DomainDocumentsTab });
-
-ZaSettings.DOMAIN_INTEROP_TAB = "domainInteropTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_INTEROP_TAB, label: ZaMsg.UI_Comp_DomainInteropTab });
-
-ZaSettings.DOMAIN_ZIMLETS_TAB = "domainZimletsTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_ZIMLETS_TAB, label: ZaMsg.UI_Comp_DomainZimletsTab });
-
-ZaSettings.DOMAIN_SKIN_TAB = "domainSkinsTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_SKIN_TAB, label: ZaMsg.UI_Comp_DomainThemesTab});
 
 //Domain operations  - it might be duplicated to domain view tabs
 ZaSettings.DOMAIN_GAL_WIZ = "domainGALWizard";
@@ -538,7 +471,6 @@ ZaSettings.ACCOUNTS_RESTORE_ENABLED = true;
 
 ZaSettings.SKIN_PREFS_ENABLED = true;
 ZaSettings.LICENSE_ENABLED = true;
-ZaSettings.ZIMLETS_ENABLED = true;
 ZaSettings.ADMIN_ZIMLETS_ENABLED = true;
 ZaSettings.SAVE_SEARCH_ENABLED = true ;
 

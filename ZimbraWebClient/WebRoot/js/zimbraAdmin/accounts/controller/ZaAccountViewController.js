@@ -255,7 +255,7 @@ function () {
 		}
 	}
 
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(ZaTabView.isTAB_ENABLED(this._currentObject,ZaAccountXFormView.SKIN_TAB_ATTRS, ZaAccountXFormView.SKIN_TAB_RIGHTS)) {
 		if(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] != null) {
 			if(!(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof Array)) {
 				mods[ZaAccount.A_zimbraAvailableSkin] = [tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin]];
@@ -271,7 +271,7 @@ function () {
 		}
 	}
 		
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ZIMLET_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(ZaTabView.isTAB_ENABLED(this._currentObject,ZaAccountXFormView.ZIMLET_TAB_ATTRS, ZaAccountXFormView.ZIMLET_TAB_RIGHTS)) {
 		if(tmpObj.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] != null) {
 			if(!(tmpObj.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] instanceof Array)) {
 				mods[ZaAccount.A_zimbraZimletAvailableZimlets] = [tmpObj.attrs[ZaAccount.A_zimbraZimletAvailableZimlets]];
@@ -306,7 +306,7 @@ function () {
 	//add-remove aliases
 	var tmpObjCnt = -1;
 	var currentObjCnt = -1;
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ALIASES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(ZaTabView.isTAB_ENABLED(this._currentObject,ZaAccountXFormView.ALIASES_TAB_ATTRS, ZaAccountXFormView.ALIASES_TAB_RIGHTS)) {
 		if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias]) {
 			if(typeof tmpObj.attrs[ZaAccount.A_zimbraMailAlias] == "string") {
 				var tmpStr = tmpObj.attrs[ZaAccount.A_zimbraMailAlias];
@@ -462,7 +462,7 @@ function(ev) {
 		newAccount.loadNewObjectDefaults("name", ZaSettings.myDomainName);
 		newAccount.getAttrs = {all:true};		
 		if(!ZaApp.getInstance()._newAccountWizard)
-			ZaApp.getInstance()._newAccountWizard = new ZaNewAccountXWizard(this._container);
+			ZaApp.getInstance()._newAccountWizard = new ZaNewAccountXWizard(this._container,newAccount);
         else { //update the account type if needed
             ZaApp.getInstance()._newAccountWizard.updateAccountType () ;    
         }

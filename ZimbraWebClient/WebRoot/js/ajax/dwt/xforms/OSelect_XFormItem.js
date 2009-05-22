@@ -1055,3 +1055,22 @@ OSelect_Check_XFormItem.prototype.selectAll = function (ev) {
 OSelect_Check_XFormItem.prototype.deselectAll = function (ev) {
 	this.getForm().itemChanged(this, [], ev);
 }
+
+OSelect_Check_XFormItem.prototype.updateElement = function (values) {
+	var element = this.getElement();
+	element.innerHTML = this.getChoicesHTML();
+
+	if (values) {	
+		if(this.getMultiple()) {
+			if (typeof values == "string") values = values.split(",");
+			for (var i = 0; i < values.length; i++) {
+				var itemNum = this.getChoiceNum(values[i]);
+				if (itemNum != -1) this.hiliteChoice(itemNum);
+			}
+		} else {
+			var itemNum = this.getChoiceNum(values);
+			if (itemNum != -1) this.hiliteChoice(itemNum);
+		}
+	}
+    this.updateEnabledDisabled();
+}

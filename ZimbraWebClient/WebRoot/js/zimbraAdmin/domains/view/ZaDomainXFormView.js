@@ -20,7 +20,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaDomainXFormView = function(parent) {
+ZaDomainXFormView = function(parent, entry) {
 	ZaTabView.call(this, parent,"ZaDomainXFormView");	
 	this.GALModes = [
 		{label:ZaMsg.GALMode_internal, value:ZaDomain.GAL_Mode_internal},
@@ -40,7 +40,7 @@ ZaDomainXFormView = function(parent) {
 	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
 	this.catchAllChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
 	this.TAB_INDEX = 0;	
-	this.initForm(ZaDomain.myXModel,this.getMyXForm());
+	this.initForm(ZaDomain.myXModel,this.getMyXForm(entry),entry);
 }
 
 ZaDomainXFormView.prototype = new ZaTabView();
@@ -86,9 +86,8 @@ function(entry) {
 	
 	for (var a in entry.attrs) {
         var modelItem = this._localXForm.getModel().getItem(a) ;
-        if ((modelItem != null && modelItem.type == _LIST_)
-           || (entry.attrs[a] != null && entry.attrs[a] instanceof Array))
-        {  //need deep clone
+        if ((modelItem != null && modelItem.type == _LIST_) || (entry.attrs[a] != null && entry.attrs[a] instanceof Array)) {  
+        	//need deep clone
             this._containedObject.attrs [a] =
                     ZaItem.deepCloneListItem (entry.attrs[a]);
         } else {
@@ -127,18 +126,9 @@ function(entry) {
 		}	
 	}
 
-    if(ZaSettings.ZIMLETS_ENABLED) {
-		var zimlets = entry.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets];
-		if(zimlets != null && zimlets != "") {
-			if (AjxUtil.isString(zimlets))	 {
-				zimlets = [zimlets];
-			}
-			this._containedObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = zimlets;
-		} else
-			this._containedObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = null;
+    if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.ZIMLETS_TAB_ATTRS, ZaDomainXFormView.ZIMLETS_TAB_RIGHTS)) {
 
-
-		//get sll Zimlets
+		//get all Zimlets
 		var allZimlets = ZaZimlet.getAll(ZaZimlet.EXCLUDE_EXTENSIONS);
 		if(allZimlets == null) {
 			allZimlets = [];
@@ -527,7 +517,33 @@ function(value, form) {
 	return val;
 }
 
-ZaDomainXFormView.myXFormModifier = function(xFormObject) {	
+ZaDomainXFormView.GAL_TAB_ATTRS = [ZaDomain.A_GalMode,ZaDomain.A_GalMaxResults,ZaDomain.A_GALServerType,ZaDomain.A_GalLdapFilter,
+	ZaDomain.A_zimbraGalAutoCompleteLdapFilter,ZaDomain.A_GalLdapSearchBase,ZaDomain.A_GalLdapURL,ZaDomain.A_GalLdapBindDn];
+ZaDomainXFormView.GAL_TAB_RIGHTS = [];
+
+ZaDomainXFormView.AUTH_TAB_ATTRS = [ZaDomain.A_AuthMech,ZaDomain.A_AuthLdapUserDn,ZaDomain.A_AuthLdapURL,
+	ZaDomain.A_zimbraAuthLdapStartTlsEnabled,ZaDomain.A_AuthLdapSearchFilter,ZaDomain.A_AuthLdapSearchBase,
+	ZaDomain.A_AuthUseBindPassword,ZaDomain.A_AuthLdapSearchBindDn];
+ZaDomainXFormView.AUTH_TAB_RIGHTS = [];
+
+ZaDomainXFormView.VH_TAB_ATTRS = [ZaDomain.A_zimbraVirtualHostname];
+ZaDomainXFormView.VH_TAB_RIGHTS = [];
+
+ZaDomainXFormView.WIKI_TAB_ATTRS = [ZaDomain.A_zimbraNotebookAccount,ZaDomain.A_allNotebookACLS];
+ZaDomainXFormView.WIKI_TAB_RIGHTS = [];
+
+ZaDomainXFormView.INTEROP_TAB_ATTRS = [ZaDomain.A_zimbraFreebusyExchangeURL, ZaDomain.A_zimbraFreebusyExchangeAuthScheme,
+	ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ZaDomain.A_zimbraFreebusyExchangeAuthPassword,ZaDomain.A_zimbraFreebusyExchangeUserOrg];
+ZaDomainXFormView.INTEROP_TAB_RIGHTS = [];
+
+ZaDomainXFormView.ZIMLETS_TAB_ATTRS = [ZaDomain.A_zimbraZimletDomainAvailableZimlets];
+ZaDomainXFormView.ZIMLETS_TAB_RIGHTS = [];
+
+ZaDomainXFormView.SKIN_TAB_ATTRS = [ZaDomain.A_zimbraSkinForegroundColor, ZaDomain.A_zimbraSkinBackgroundColor,ZaDomain.A_zimbraSkinSecondaryColor,
+	ZaDomain.A_zimbraSkinSelectionColor];
+ZaDomainXFormView.SKIN_TAB_RIGHTS = [];
+
+ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {	
 	xFormObject.tableCssStyle="width:100%;overflow:auto;";
 	
 	var headerList = new Array();
@@ -689,7 +705,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			
 	switchGroup.items.push(case1);
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_GAL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {	
+	if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.GAL_TAB_ATTRS, ZaDomainXFormView.GAL_TAB_RIGHTS)) {	
 		tabIx = ++this.TAB_INDEX;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_GAL});
 		var case2 = {type:_ZATABCASE_, caseKey:tabIx,
@@ -734,7 +750,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		};
 		switchGroup.items.push(case2);
 	}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_AUTH_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) 	{
+	if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.AUTH_TAB_ATTRS, ZaDomainXFormView.AUTH_TAB_RIGHTS)) {
 		tabIx = ++this.TAB_INDEX;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_Authentication});
 		var case3 = {type:_ZATABCASE_, caseKey:tabIx, 
@@ -786,7 +802,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		};
 		switchGroup.items.push(case3);	
 	}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_VIRTUAL_HOST_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])	{
+	if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.VH_TAB_ATTRS, ZaDomainXFormView.VH_TAB_RIGHTS)) {
 		tabIx = ++this.TAB_INDEX;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_VirtualHost});
 		var case4 = {type:_ZATABCASE_, caseKey:tabIx,
@@ -823,7 +839,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		};
 		switchGroup.items.push(case4);	
 	}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_WIKI_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])	{
+	if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.WIKI_TAB_ATTRS, ZaDomainXFormView.WIKI_TAB_RIGHTS)) {
 		tabIx = ++this.TAB_INDEX;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_Notebook});
 		var case5 = {type:_ZATABCASE_, caseKey:tabIx,cssStyle:"padding-left:10px",
@@ -908,7 +924,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		switchGroup.items.push(case5);
 	}
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_INTEROP_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {	
+	if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.INTEROP_TAB_ATTRS, ZaDomainXFormView.INTEROP_TAB_RIGHTS)) {	
         tabIx = ++this.TAB_INDEX;
         tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Interop});
         var case6 = {type: _ZATABCASE_, caseKey:tabIx,
@@ -955,7 +971,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		switchGroup.items.push(case6);	
 	}   
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_ZIMLETS_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.ZIMLETS_TAB_ATTRS, ZaDomainXFormView.ZIMLETS_TAB_RIGHTS)) {
 		tabIx = ++this.TAB_INDEX;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Zimlets});
        	var case7 = {type:_ZATABCASE_, id:"account_form_zimlets_tab", numCols:1,
@@ -976,7 +992,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
     	switchGroup.items.push(case7);
 	}
     //domain skin properties
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.SKIN_TAB_ATTRS, ZaDomainXFormView.SKIN_TAB_RIGHTS)) {
 		tabIx = ++this.TAB_INDEX;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Themes});
        	var case8 = {type:_ZATABCASE_, id:"domain_form_skin_tab", colSizes:["auto"],numCols:1,

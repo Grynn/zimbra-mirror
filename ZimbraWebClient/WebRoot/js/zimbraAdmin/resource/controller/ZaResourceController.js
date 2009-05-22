@@ -67,9 +67,7 @@ ZaController.changeActionsStateMethods["ZaResourceController"].push(ZaResourceCo
 
 ZaResourceController.setViewMethod =
 function (entry)	{
-    if (!this._UICreated) {
-		this._createUI();
-	} 	
+	this._createUI(entry);
 	try {
 		//ZaApp.getInstance().pushView(ZaZimbraAdmin._RESOURCE_VIEW);
 		ZaApp.getInstance().pushView(this.getContentViewId());
@@ -151,7 +149,7 @@ ZaResourceController.prototype._createUI =
 function () {
 	//create accounts list view
 	// create the menu operations/listeners first	
-	this._contentView = this._view = new this.tabConstructor(this._container);
+	this._contentView = this._view = new this.tabConstructor(this._container, entry);
 
     this._initToolbar();
 	//always add Help button at the end of the toolbar    

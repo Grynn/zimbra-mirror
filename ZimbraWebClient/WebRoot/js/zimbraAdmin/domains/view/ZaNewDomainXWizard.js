@@ -20,7 +20,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaNewDomainXWizard = function(parent) {
+ZaNewDomainXWizard = function(parent, entry) {
 	ZaXWizardDialog.call(this, parent, null, ZaMsg.NDD_Title, "650px", "300px","ZaNewDomainXWizard");
 
 	this.stepChoices = [
@@ -73,29 +73,8 @@ ZaNewDomainXWizard = function(parent) {
 		{label:ZaMsg.AuthTest_check_INVALID_SEARCH_FILTER, value:ZaDomain.Check_INVALID_SEARCH_FILTER},
 		{label:ZaMsg.AuthTest_check_FAILURE, value:ZaDomain.Check_FAILURE}												
 	];
-	this.TAB_INDEX = 0;
-	
-	ZaNewDomainXWizard.GENERAL_STEP = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.GALMODE_STEP = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.GAL_CONFIG_STEP_1 = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.GAL_CONFIG_STEP_2 = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.GAL_SYNC_CONFIG_STEP_1 = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.GAL_SYNC_CONFIG_STEP_2 = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.GAL_CONFIG_SUM_STEP = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.GAL_TEST_STEP = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.GAL_TEST_RESULT_STEP = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.AUTH_MODE_STEP = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.AUTH_CONFIG_STEP_1 = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.AUTH_CONFIG_STEP_2 = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.AUTH_CONFIG_STEP_3 = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.AUTH_TEST_STEP = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.AUTH_TEST_RESULT_STEP = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.VHOST_STEP = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.NOTEBOOK_STEP = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.NOTEBOOK_ACL_STEP = ++this.TAB_INDEX;
-	ZaNewDomainXWizard.CONFIG_COMPLETE_STEP = ++this.TAB_INDEX;
 		
-	this.initForm(ZaDomain.myXModel,this.getMyXForm());		
+	this.initForm(ZaDomain.myXModel,this.getMyXForm(entry), entry);		
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewDomainXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaNewDomainXWizard.prototype.handleXFormChange));	
 	this.lastErrorStep=0;
@@ -105,26 +84,6 @@ ZaNewDomainXWizard = function(parent) {
 ZaNewDomainXWizard.prototype = new ZaXWizardDialog;
 ZaNewDomainXWizard.prototype.constructor = ZaNewDomainXWizard;
 ZaXDialog.XFormModifiers["ZaNewDomainXWizard"] = new Array();
-
-ZaNewDomainXWizard.GENERAL_STEP = 1;
-ZaNewDomainXWizard.GALMODE_STEP = 2;
-ZaNewDomainXWizard.GAL_CONFIG_STEP_1 = 3;
-ZaNewDomainXWizard.GAL_CONFIG_STEP_2 = 4;
-ZaNewDomainXWizard.GAL_SYNC_CONFIG_STEP_1 = 5;
-ZaNewDomainXWizard.GAL_SYNC_CONFIG_STEP_2 = 6;
-ZaNewDomainXWizard.GAL_CONFIG_SUM_STEP = 7;
-ZaNewDomainXWizard.GAL_TEST_STEP = 8;
-ZaNewDomainXWizard.GAL_TEST_RESULT_STEP = 9;
-ZaNewDomainXWizard.AUTH_MODE_STEP = 10;
-ZaNewDomainXWizard.AUTH_CONFIG_STEP_1 = 11;
-ZaNewDomainXWizard.AUTH_CONFIG_STEP_2 = 12;
-ZaNewDomainXWizard.AUTH_CONFIG_STEP_3 = 13;
-ZaNewDomainXWizard.AUTH_TEST_STEP = 14;
-ZaNewDomainXWizard.AUTH_TEST_RESULT_STEP = 15;
-ZaNewDomainXWizard.VHOST_STEP = 16;
-ZaNewDomainXWizard.NOTEBOOK_STEP = 17;
-ZaNewDomainXWizard.NOTEBOOK_ACL_STEP = 18;
-ZaNewDomainXWizard.CONFIG_COMPLETE_STEP = 19;
 
 ZaNewDomainXWizard.prototype.handleXFormChange = 
 function () {
@@ -704,7 +663,31 @@ ZaNewDomainXWizard.isAuthMechNotZimbra = function () {
 	return (this.getInstanceValue(ZaDomain.A_AuthMech) != ZaDomain.AuthMech_zimbra);
 }
 
-ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
+ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
+	
+	this.TAB_INDEX = 0;
+	
+	ZaNewDomainXWizard.GENERAL_STEP = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.GALMODE_STEP = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.GAL_CONFIG_STEP_1 = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.GAL_CONFIG_STEP_2 = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.GAL_SYNC_CONFIG_STEP_1 = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.GAL_SYNC_CONFIG_STEP_2 = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.GAL_CONFIG_SUM_STEP = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.GAL_TEST_STEP = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.GAL_TEST_RESULT_STEP = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.AUTH_MODE_STEP = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.AUTH_CONFIG_STEP_1 = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.AUTH_CONFIG_STEP_2 = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.AUTH_CONFIG_STEP_3 = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.AUTH_TEST_STEP = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.AUTH_TEST_RESULT_STEP = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.VHOST_STEP = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.NOTEBOOK_STEP = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.NOTEBOOK_ACL_STEP = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.CONFIG_COMPLETE_STEP = ++this.TAB_INDEX;
+
+	
 	var resultHeaderList = new Array();
 	resultHeaderList[0] = new ZaListHeaderItem("email", ZaMsg.ALV_Name_col, null, "116px", null, "email", true, true);
 	resultHeaderList[1] = new ZaListHeaderItem("fullName", ZaMsg.ALV_FullName_col, null, "116px", null, "fullName", true, true);

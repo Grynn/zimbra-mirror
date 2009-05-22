@@ -460,6 +460,10 @@ ZaItem.loadMethods["ZaResource"].push(ZaResource.loadMethod);
 
 ZaResource.loadInfoMethod = 
 function(by, val, withCos) {
+
+	if(!ZaItem.hasRight(ZaAccount.GET_ACCOUNT_INFO_RIGHT,this))
+		return;
+	
 	var soapDoc = AjxSoapDoc.create("GetAccountInfoRequest", ZaZimbraAdmin.URN, null);
 
 	var elBy = soapDoc.set("account", val);
@@ -536,7 +540,19 @@ ZaResource.myXModel = {
 	items: [
 		{id:ZaResource.A_name, type:_STRING_, ref:"name", required:true},
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId}, 	
-		{id:ZaResource.A_mail, type:_STRING_, ref:"attrs/"+ZaResource.A_mail}, //email address
+		{id:ZaResource.A_mail, type:_STRING_, ref:"attrs/"+ZaResource.A_mail,
+		     constraints: {type:"method", value:
+			   function (value, form, formItem, instance) {				   
+				   if (value){
+					  	if(AjxUtil.isValidEmailNonReg(value)) {
+						   return value;
+					   } else {
+						   throw ZaMsg.ErrorInvalidEmailAddress;
+					   }
+				   }
+			   }
+			}
+		}, //email address
 		{id:ZaResource.A2_schedulePolicy, type:_STRING_, ref:ZaResource.A2_schedulePolicy},
 		{id:ZaResource.A_password, type:_STRING_, ref:"attrs/"+ZaAccount.A_password},
 		{id:ZaResource.A2_confirmPassword, type:_STRING_},						 		
