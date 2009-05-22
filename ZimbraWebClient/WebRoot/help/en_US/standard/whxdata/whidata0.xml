@@ -40,11 +40,6 @@
 <key name="conversation view" >
   <topic name="Managing how email is displayed" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
-<key name="Conversations" >
-  <key name="Sorting" >
-    <topic name="Sorting conversations" url="Navigation_folders_and_tips/sorting_conversations.htm" />
-  </key>
-</key>
 <key name="creating a search query" >
   <topic name="Using Search" url="Search/b_Using_Search.htm" />
 </key>
@@ -92,6 +87,12 @@
 </key>
 <key name="logging off" >
   <topic name="Logging on and off" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="mail" >
+  <topic name="Reading mail" url="reading_mail/reading_mail.htm" />
+  <key name="Reading" >
+    <topic name="Reading mail" url="reading_mail/reading_mail.htm" />
+  </key>
 </key>
 <key name="mail notification" >
   <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
@@ -176,9 +177,6 @@
 </key>
 <key name="signature, automatically add" >
   <topic name="Automatically adding your signature" url="Userspecific/b_Automatically_adding_your_signature.htm" />
-</key>
-<key name="sorting contents pane columns" >
-  <topic name="Sorting conversations" url="Navigation_folders_and_tips/sorting_conversations.htm" />
 </key>
 <key name="sorting tasks" >
   <topic name="Sorting tasks " url="Tasks/Sorting_tasks_.htm" />
