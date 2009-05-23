@@ -156,6 +156,7 @@ ZaGlobalConfig.A2_common_extension_selection = "common_extension_selection";
 ZaGlobalConfig.__configInstance = null;
 ZaGlobalConfig.isDirty = true;
 
+ZaGlobalConfig.CHECK_EXCHANGE_AUTH_CONFIG_RIGHT = "checkExchangeAuthConfig"
 ZaGlobalConfig.getInstance = function(refresh) {
 	if(refresh || ZaGlobalConfig.isDirty || !ZaGlobalConfig.__configInstance) {
 		ZaGlobalConfig.__configInstance = new ZaGlobalConfig();

@@ -20,10 +20,10 @@
 * @param app
 * @author Greg Solovyev
 **/
-GlobalConfigXFormView = function(parent) {
+GlobalConfigXFormView = function(parent, entry) {
 	ZaTabView.call(this, parent, "GlobalConfigXFormView");
 	this.TAB_INDEX = 0;	
-	this.initForm(ZaGlobalConfig.myXModel,this.getMyXForm());
+	this.initForm(ZaGlobalConfig.myXModel,this.getMyXForm(entry), entry);
 }
 
 GlobalConfigXFormView.prototype = new ZaTabView();
@@ -143,17 +143,34 @@ GlobalConfigXFormView.addNewExt = function() {
 	this.getForm().parent.setDirty(true);
 }
 
-GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
-	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
-	var _tab1 = ++this.TAB_INDEX;
-	var _tab2 = ++this.TAB_INDEX;	
-	var _tab3 = ++this.TAB_INDEX;	
-	var _tab4 = ++this.TAB_INDEX;	
-	var _tab5 = ++this.TAB_INDEX;		
-	var _tab6 = ++this.TAB_INDEX;	
-	var _tab7 = ++this.TAB_INDEX;		
-	var _tab8 = ++this.TAB_INDEX;	
+GlobalConfigXFormView.ATTACHMENTS_TAB_ATTRS = [ZaGlobalConfig.A_zimbraMtaBlockedExtension,ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension];
+GlobalConfigXFormView.ATTACHMENTS_TAB_RIGHTS = [];
 
+GlobalConfigXFormView.MTA_TAB_ATTRS = [ZaGlobalConfig.A_zimbraMtaAuthEnabled, ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, ZaGlobalConfig.A_zimbraSmtpHostname,
+	ZaGlobalConfig.A_zimbraSmtpPort, ZaGlobalConfig.A_zimbraMtaRelayHost, ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled];
+GlobalConfigXFormView.MTA_TAB_RIGHTS = [];
+
+GlobalConfigXFormView.IMAP_TAB_ATTRS = [ZaGlobalConfig.A_zimbraImapServerEnabled, ZaGlobalConfig.A_zimbraImapSSLServerEnabled, ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled,
+	ZaGlobalConfig.A_zimbraImapNumThreads];
+GlobalConfigXFormView.IMAP_TAB_RIGHTS = [];
+
+GlobalConfigXFormView.POP_TAB_ATTRS = [ZaGlobalConfig.A_zimbraPop3ServerEnabled, ZaGlobalConfig.A_zimbraPop3SSLServerEnabled, ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled,
+	ZaGlobalConfig.A_zimbraPop3NumThreads];
+GlobalConfigXFormView.POP_TAB_RIGHTS = [];
+
+GlobalConfigXFormView.ASAV_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSpamKillPercent, ZaGlobalConfig.A_zimbraSpamTagPercent, ZaGlobalConfig.A_zimbraSpamSubjectTag,
+	ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, ZaGlobalConfig.A_zimbraVirusWarnRecipient];
+GlobalConfigXFormView.ASAV_TAB_RIGHTS = [];
+
+GlobalConfigXFormView.INTEROP_TAB_ATTRS = [ZaGlobalConfig.A_zimbraFreebusyExchangeURL, ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme, ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername,
+	ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg];
+GlobalConfigXFormView.INTEROP_TAB_RIGHTS = [ZaGlobalConfig.CHECK_EXCHANGE_AUTH_CONFIG_RIGHT];
+
+
+GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
+	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
+	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8;
+	_tab1 = ++this.TAB_INDEX;
     var tabBarChoices = [{value:1, label:ZaMsg.TABT_GeneralPage}] ;
     var case1 = {type:_ZATABCASE_, caseKey:_tab1,
 				colSizes:["auto"],numCols:1,
@@ -195,7 +212,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 			};    
     var switchItems = [case1] ;
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CONFIG_ATTACHMENT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+    if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.ATTACHMENTS_TAB_ATTRS, ZaServerXFormView.ATTACHMENTS_TAB_RIGHTS)) {
+    	_tab2 = ++this.TAB_INDEX;
         tabBarChoices.push ({value:2, label:ZaMsg.NAD_Tab_Attachments});
         var case2 = 	{type:_ZATABCASE_, caseKey:_tab2, id:"gs_form_attachment_tab", numCols:2, colSizes: ["50%","50%"], items:[
  				{type: _GROUP_,  id:"attachment_settings", width: "98%", numCols: 2, colSpan:2, colSizes:[100, "*"], items: [
@@ -287,7 +305,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
         switchItems.push (case2) ;
     }
     
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CONFIG_MTA_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+    if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.MTA_TAB_ATTRS, ZaServerXFormView.MTA_TAB_RIGHTS)) {
+    	_tab3 = ++this.TAB_INDEX;
+
         tabBarChoices.push ({value:3, label:ZaMsg.NAD_Tab_MTA});
         var case3 = 		{type:_ZATABCASE_, caseKey:_tab3,
 					colSizes:["auto"],numCols:1,id:"global_mta_tab",
@@ -400,7 +420,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
         switchItems.push (case3) ;
     }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CONFIG_IMAP_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+    if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.IMAP_TAB_ATTRS, ZaServerXFormView.IMAP_TAB_RIGHTS)) {
+    	_tab4 = ++this.TAB_INDEX;
+
         tabBarChoices.push ({value:4, label:ZaMsg.NAD_Tab_IMAP});
         var case4 ={type:_ZATABCASE_, caseKey:_tab4,
 					colSizes:["auto"],numCols:1,id:"global_imap_tab",
@@ -460,7 +482,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
         switchItems.push (case4) ;
     }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CONFIG_POP_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+    if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.POP_TAB_ATTRS, ZaServerXFormView.POP_TAB_RIGHTS)) {
+    	_tab5 = ++this.TAB_INDEX;
+
         tabBarChoices.push ({value:5, label:ZaMsg.NAD_Tab_POP});
         var case5 = 		{type:_ZATABCASE_, caseKey:_tab5,
 					colSizes:["auto"],numCols:1,id:"global_pop_tab",
@@ -517,7 +541,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
         switchItems.push (case5) ;
     }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CONFIG_AS_AV_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.ASAV_TAB_ATTRS, ZaServerXFormView.ASAV_TAB_RIGHTS)) {
+    	_tab6 = ++this.TAB_INDEX;
+
         tabBarChoices.push ({value:6, label:ZaMsg.NAD_Tab_ASAV});
         var case6 = 	// anti-spam
 				{type: _ZATABCASE_, caseKey:_tab6,
@@ -562,7 +588,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
         switchItems.push (case6) ;
     }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CONFIG_INTEROP_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+  	if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.INTEROP_TAB_ATTRS, ZaServerXFormView.INTEROP_TAB_RIGHTS)) {
+    	_tab7 = ++this.TAB_INDEX;
+
         tabBarChoices.push ({value:7, label:ZaMsg.TABT_Interop});
         var case7 = 		// Interop
 				{type: _ZATABCASE_, caseKey:_tab7,
@@ -590,7 +618,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
                                   {   type:_CELLSPACER_ },
                                   {
                                       type: _DWT_BUTTON_ , colSpan: 2, label: ZaMsg.Check_Settings, width: "15em",
-                                      onActivate: ZaItem.checkInteropSettings
+                                      onActivate: ZaItem.checkInteropSettings, enableDisableChecks:[[ZaItem.hasRight,ZaGlobalConfig.CHECK_EXCHANGE_AUTH_CONFIG_RIGHT,ZaZimbraAdmin.currentAdminAccount]]
                                   } ,
                                   {   type:_CELLSPACER_ }
                                  ]
@@ -603,7 +631,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
         switchItems.push (case7) ;
     }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CONFIG_THEMES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+  	if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.THEMES_TAB_ATTRS, ZaServerXFormView.THEMES_TAB_RIGHTS)) {
+    	_tab8 = ++this.TAB_INDEX;
+
         tabBarChoices.push ({value:8, label:ZaMsg.TABT_Themes});
         var case8 =             //skin properties
                 {type: _ZATABCASE_, caseKey:_tab8,

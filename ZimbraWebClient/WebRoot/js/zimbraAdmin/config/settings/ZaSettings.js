@@ -363,29 +363,6 @@ ZaSettings.DOMAIN_AUTH_WIZ = "domainAuthWizard";
 ZaSettings.DOMAIN_WIKI_WIZ = "domainWikiWizard";
 ZaSettings.DOMAIN_CHECK_MX_WIZ = "domainCheckMXWiz";
 
-//Gobal Config View
-
-ZaSettings.CONFIG_ATTACHMENT_TAB = "configAttachmentTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_ATTACHMENT_TAB, label: ZaMsg.UI_Comp_configAttachmentTab });
-
-ZaSettings.CONFIG_MTA_TAB = "configMTATab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_MTA_TAB, label: ZaMsg.UI_Comp_configMTATab });
-
-ZaSettings.CONFIG_IMAP_TAB = "configIMAPTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_IMAP_TAB, label: ZaMsg.UI_Comp_configIMAPTab });
-
-ZaSettings.CONFIG_POP_TAB = "configPOPTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_POP_TAB, label: ZaMsg.UI_Comp_configPOPTab });
-
-ZaSettings.CONFIG_AS_AV_TAB = "configAntiSpamVirusTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_AS_AV_TAB, label: ZaMsg.UI_Comp_configAsAvTab });
-
-ZaSettings.CONFIG_INTEROP_TAB = "configInteropTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_INTEROP_TAB, label: ZaMsg.UI_Comp_configInteropTab });
-
-ZaSettings.CONFIG_THEMES_TAB = "configThemesTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_THEMES_TAB, label: ZaMsg.UI_Comp_configThemesTab });
-
 //Global Server Statistics View
 ZaSettings.GLOBAL_STATS_MSG_COUNT_TAB = "globalServerStatsMsgCountTab" ;
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATS_MSG_COUNT_TAB, label: ZaMsg.UI_Comp_globalStatsMsgCountTab });
