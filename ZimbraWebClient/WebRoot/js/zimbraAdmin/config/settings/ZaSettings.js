@@ -373,6 +373,9 @@ ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATS_MSG_VOL_TAB, 
 ZaSettings.GLOBAL_STATS_MSG_ASAV_TAB = "globalServerStatsASAVTab" ;
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATS_MSG_ASAV_TAB, label: ZaMsg.UI_Comp_globalStatsMsgASAVTab });
 
+ZaSettings.GLOBAL_ADVANCED_STATS_TAB = "globalAdvancedStatsTab" ;
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_ADVANCED_STATS_TAB, label: ZaMsg.UI_Comp_globalAdvancedStatsTab });
+
 //Individual Server Statistics View
 ZaSettings.SERVER_STATS_MSG_COUNT_TAB = "perServerStatsMsgCountTab" ;
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_MSG_COUNT_TAB, label: ZaMsg.UI_Comp_serverStatsMsgCountTab });

@@ -40,6 +40,11 @@ ZaGlobalStatsView = function(parent) {
         this._spamPage = new ZaGlobalSpamActivityPage(this);
         this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);
     }
+    
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_ADVANCED_STATS_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]){
+        this._advancedPage = new ZaGlobalAdvancedStatsPage(this);
+        this.addTab(ZaMsg.TABT_Advanced_Stats, this._advancedPage);
+    }
 }
 
 ZaGlobalStatsView.prototype = new DwtTabView;
@@ -55,6 +60,7 @@ ZaGlobalStatsView.prototype.setObject = function (entry) {
 	this._msgCountPage.setObject(entry);
 	this._msgsVolumePage.setObject(entry);
 	this._spamPage.setObject(entry);
+	this._advancedPage.setObject(entry);
 }
 
 ZaGlobalStatsView.prototype.getTitle = 

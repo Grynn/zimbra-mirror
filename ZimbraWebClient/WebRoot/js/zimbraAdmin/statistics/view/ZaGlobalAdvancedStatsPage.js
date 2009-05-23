@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
- * Copyright (C) 2005, 2006, 2007, 2008 Zimbra, Inc.
+ * Copyright (C) 2009 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
@@ -14,13 +14,13 @@
  */
 
 /**
-* @class ZaGlobalMessageCountPage 
-* @contructor ZaGlobalMessageCountPage
+* @class ZaGlobalAdvancedStatsPage 
+* @contructor ZaGlobalAdvancedStatsPage
 * @param parent
 * @param app
-* @author Greg Solovyev
+* @author Perry Nguyen
 **/
-ZaGlobalMessageCountPage = function(parent) {
+ZaGlobalAdvancedStatsPage = function(parent) {
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
 	this._app = ZaApp.getInstance();
@@ -29,34 +29,34 @@ ZaGlobalMessageCountPage = function(parent) {
 	this.setScrollStyle(DwtControl.SCROLL);	
 }
  
-ZaGlobalMessageCountPage.prototype = new DwtTabViewPage;
-ZaGlobalMessageCountPage.prototype.constructor = ZaGlobalMessageCountPage;
+ZaGlobalAdvancedStatsPage.prototype = new DwtTabViewPage;
+ZaGlobalAdvancedStatsPage.prototype.constructor = ZaGlobalAdvancedStatsPage;
 
-ZaGlobalMessageCountPage.prototype.toString = 
+ZaGlobalAdvancedStatsPage.prototype.toString = 
 function() {
-	return "ZaGlobalMessageCountPage";
+	return "ZaGlobalAdvancedStatsPage";
 }
 
-ZaGlobalMessageCountPage.prototype.showMe =  function(refresh) {
+ZaGlobalAdvancedStatsPage.prototype.showMe =  function(refresh) {
 	DwtTabViewPage.prototype.showMe.call(this);	
 	if(refresh) {
 		this.setObject();
 	}
 }
 
-ZaGlobalMessageCountPage.getDataTipText = function (item, index, series) {
-    var text = series.displayName + " at " + YAHOO.util.Date.format(item.timestamp, { format: "%I:%M" }) + "\n" + ZaGlobalMessageCountPage.formatLabel(item[series.yField]);
+ZaGlobalAdvancedStatsPage.getDataTipText = function (item, index, series) {
+    var text = series.displayName + " at " + YAHOO.util.Date.format(item.timestamp, { format: "%I:%M" }) + "\n" + ZaGlobalAdvancedStatsPage.formatLabel(item[series.yField]);
     return text;
 }
 /* must be global for getDataTipText */
-ZaGlobalMessageCountPage.formatLabel = function (value) {
+ZaGlobalAdvancedStatsPage.formatLabel = function (value) {
     return YAHOO.util.Number.format(value, { thousandsSeparator: ",", decimalPlaces: 0});
 }
-ZaGlobalMessageCountPage.formatTimeLabel = function (value) {
+ZaGlobalAdvancedStatsPage.formatTimeLabel = function (value) {
     return YAHOO.util.Date.format(value, { format: "%I:%M %p" });
 }
 
-ZaGlobalMessageCountPage.plotChart = function (id, fields, colDef, newData) {
+ZaGlobalAdvancedStatsPage.plotChart = function (id, fields, colDef, newData) {
     var yAxis = new YAHOO.widget.NumericAxis();
     var max = 0;
     for (var i = 0; i < colDef.length; i++) {
@@ -70,13 +70,13 @@ ZaGlobalMessageCountPage.plotChart = function (id, fields, colDef, newData) {
     // doesn't work right in 2.7.0
     //yAxis.scale = "logarithmic";
     yAxis.maximum = max + 10;
-    yAxis.labelFunction = ZaGlobalMessageCountPage.formatLabel;
+    yAxis.labelFunction = ZaGlobalAdvancedStatsPage.formatLabel;
     var timeAxis = new YAHOO.widget.TimeAxis();
-    timeAxis.labelFunction = ZaGlobalMessageCountPage.formatTimeLabel;
+    timeAxis.labelFunction = ZaGlobalAdvancedStatsPage.formatTimeLabel;
     var seriesDef = colDef;
     
     var data_source = new YAHOO.util.DataSource(newData);
-    ZaGlobalMessageCountPage.CHART_DATA_SOURCE = data_source;
+    ZaGlobalAdvancedStatsPage.CHART_DATA_SOURCE = data_source;
     data_source.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
     data_source.responseSchema = { fields: fields };
     var div = document.getElementById("loggerchart" + id);
@@ -87,19 +87,19 @@ ZaGlobalMessageCountPage.plotChart = function (id, fields, colDef, newData) {
               series: seriesDef,
               yAxis: yAxis,
               xAxis: timeAxis,
-              dataTipFunction: ZaGlobalMessageCountPage.getDataTipText,
+              dataTipFunction: ZaGlobalAdvancedStatsPage.getDataTipText,
               style: { legend: { display: "bottom" } }
             }
     );
     
 }
 
-ZaGlobalMessageCountPage.prototype.setObject =
+ZaGlobalAdvancedStatsPage.prototype.setObject =
 function (data) {
     // no-op
 }
 
-ZaGlobalMessageCountPage.serverSelected = function(evt, id) {
+ZaGlobalAdvancedStatsPage.serverSelected = function(evt, id) {
     var select = evt.target;
     
     var hostname = select[select.selectedIndex].value;
@@ -112,7 +112,7 @@ ZaGlobalMessageCountPage.serverSelected = function(evt, id) {
     
     var groupSelect = document.getElementById("select-group" + id);
     var statGroups = soapResponse.hostname[0].stats;
-    ZaGlobalMessageCountPage.clearSelect(groupSelect);
+    ZaGlobalAdvancedStatsPage.clearSelect(groupSelect);
     for (var i = 0, j = statGroups.length; i < j; i++) {
         var option = document.createElement("option");
         if (i == 0) option.selected = "selected";
@@ -120,16 +120,16 @@ ZaGlobalMessageCountPage.serverSelected = function(evt, id) {
         option.textContent = statGroups[i].name;
         groupSelect.appendChild(option);
     }
-    ZaGlobalMessageCountPage.groupSelected({ target: groupSelect }, id);
+    ZaGlobalAdvancedStatsPage.groupSelected({ target: groupSelect }, id);
     
 }
 
-ZaGlobalMessageCountPage.clearSelect = function (node) {
+ZaGlobalAdvancedStatsPage.clearSelect = function (node) {
     var options = node.getElementsByTagName("option");
     for (var i = node.childNodes.length; i > 0; i--)
         node.removeChild(node.childNodes.item(i - 1));
 }
-ZaGlobalMessageCountPage.groupSelected = function(evt, id) {
+ZaGlobalAdvancedStatsPage.groupSelected = function(evt, id) {
     var select = evt.target;
     
     var serverSelect = document.getElementById("select-servers", id);
@@ -146,7 +146,7 @@ ZaGlobalMessageCountPage.groupSelected = function(evt, id) {
     
     var counterSelect = document.getElementById("select-counter" + id);
     var statCounters = soapResponse.hostname[0].stats[0].values[0].stat;
-    ZaGlobalMessageCountPage.clearSelect(counterSelect);
+    ZaGlobalAdvancedStatsPage.clearSelect(counterSelect);
     for (var i = 0, j = statCounters.length; i < j; i++) {
         var option = document.createElement("option");
         if (i == 0) option.selected = "selected";
@@ -156,7 +156,7 @@ ZaGlobalMessageCountPage.groupSelected = function(evt, id) {
     }
 }
 
-ZaGlobalMessageCountPage.groupSelected = function(evt, id) {
+ZaGlobalAdvancedStatsPage.groupSelected = function(evt, id) {
     var select = evt.target;
     
     var serverSelect = document.getElementById("select-servers" + id);
@@ -173,7 +173,7 @@ ZaGlobalMessageCountPage.groupSelected = function(evt, id) {
     
     var counterSelect = document.getElementById("select-counter" + id);
     var statCounters = soapResponse.hostname[0].stats[0].values[0].stat;
-    ZaGlobalMessageCountPage.clearSelect(counterSelect);
+    ZaGlobalAdvancedStatsPage.clearSelect(counterSelect);
     for (var i = 0, j = statCounters.length; i < j; i++) {
         var option = document.createElement("option");
         if (i == 0) option.selected = "selected";
@@ -183,7 +183,7 @@ ZaGlobalMessageCountPage.groupSelected = function(evt, id) {
     }
 }
 
-ZaGlobalMessageCountPage.counterSelected = function(event, id) {
+ZaGlobalAdvancedStatsPage.counterSelected = function(event, id) {
     var select = event.target;
     
     var serverSelect = document.getElementById("select-servers" + id);
@@ -246,20 +246,20 @@ ZaGlobalMessageCountPage.counterSelected = function(event, id) {
     }
 
     //document.getElementById("for-testing").textContent = newData.length + " :: " + AjxStringUtil.objToString(newData);
-    ZaGlobalMessageCountPage.plotChart(id, fields, colDef, newData);
+    ZaGlobalAdvancedStatsPage.plotChart(id, fields, colDef, newData);
 }
 
-ZaGlobalMessageCountPage.showhide = function(id) {
+ZaGlobalAdvancedStatsPage.showhide = function(id) {
     var e = document.getElementById(id);
     e.style.display = e.style.display == "none" ? "block" : "none";
 }
 
-ZaGlobalMessageCountPage.removeChild = function(id) {
+ZaGlobalAdvancedStatsPage.removeChild = function(id) {
     var e = document.getElementById(id);
     e.parentNode.removeChild(e);
 }
 
-ZaGlobalMessageCountPage.insertChartHTML = function(element) {
+ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	var id = Math.random();
 	var form = document.createElement("form");
 	form.style.margin = "5px 20px";
@@ -282,7 +282,7 @@ ZaGlobalMessageCountPage.insertChartHTML = function(element) {
 	select = document.createElement("select");
 	select.id = "select-servers" + id;
 	select.name = "servers";
-	select.onchange = function(evt) { ZaGlobalMessageCountPage.serverSelected(evt, id); }
+	select.onchange = function(evt) { ZaGlobalAdvancedStatsPage.serverSelected(evt, id); }
 	td.vAlign = "top";
 	td.appendChild(label);
 	td.appendChild(select);
@@ -294,7 +294,7 @@ ZaGlobalMessageCountPage.insertChartHTML = function(element) {
 	select = document.createElement("select");
 	select.id = "select-group" + id;
 	select.name = "groups";
-	select.onchange = function(evt) { ZaGlobalMessageCountPage.groupSelected(evt, id); }
+	select.onchange = function(evt) { ZaGlobalAdvancedStatsPage.groupSelected(evt, id); }
 	td.vAlign = "top";
 	td.appendChild(label);
 	td.appendChild(select);
@@ -308,7 +308,7 @@ ZaGlobalMessageCountPage.insertChartHTML = function(element) {
 	select.name = "counters";
 	select.multiple = true;
 	select.size = 5;
-	select.onchange = function(evt) { ZaGlobalMessageCountPage.counterSelected(evt, id); }
+	select.onchange = function(evt) { ZaGlobalAdvancedStatsPage.counterSelected(evt, id); }
 	td.vAlign = "top";
 	td.appendChild(label);
 	td.appendChild(select);
@@ -351,7 +351,7 @@ ZaGlobalMessageCountPage.insertChartHTML = function(element) {
 	var span;
 	a = document.createElement("a");
 	a.href = "#";
-	a.onclick = function () { ZaGlobalMessageCountPage.showhide("loggertable" + id); }
+	a.onclick = function () { ZaGlobalAdvancedStatsPage.showhide("loggertable" + id); }
 	a.textContent = "Toggle Form";
 	form.appendChild(a);
 	
@@ -362,7 +362,7 @@ ZaGlobalMessageCountPage.insertChartHTML = function(element) {
 	a.href = "#";
 	a.onclick = function () {
 	    var s = document.getElementById("select-counter" + id);
-	    ZaGlobalMessageCountPage.counterSelected({ target: s }, id);
+	    ZaGlobalAdvancedStatsPage.counterSelected({ target: s }, id);
     }
 	a.textContent = "Update Chart";
 	form.appendChild(a);
@@ -372,8 +372,8 @@ ZaGlobalMessageCountPage.insertChartHTML = function(element) {
 	a = document.createElement("a");
 	a.href = "#";
 	a.onclick = function () {
-	    ZaGlobalMessageCountPage.removeChild("loggerform" + id);
-	    ZaGlobalMessageCountPage.removeChild("loggerchart" + id);
+	    ZaGlobalAdvancedStatsPage.removeChild("loggerform" + id);
+	    ZaGlobalAdvancedStatsPage.removeChild("loggerchart" + id);
     }
 	a.textContent = "Remove Chart";
 	form.appendChild(a);
@@ -389,7 +389,7 @@ ZaGlobalMessageCountPage.insertChartHTML = function(element) {
     var csfeParams = { soapDoc: soapRequest };
     var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
     var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
-    ZaGlobalMessageCountPage.clearSelect(serversSelect);
+    ZaGlobalAdvancedStatsPage.clearSelect(serversSelect);
     for (var i = 0, j = soapResponse.hostname.length; i < j; i++) {
         var option = document.createElement("option");
         if (i == 0) option.selected = "selected";
@@ -397,10 +397,10 @@ ZaGlobalMessageCountPage.insertChartHTML = function(element) {
         option.textContent = soapResponse.hostname[i].hn;
         serversSelect.appendChild(option);
     }
-    ZaGlobalMessageCountPage.serverSelected({ target: serversSelect }, id);
+    ZaGlobalAdvancedStatsPage.serverSelected({ target: serversSelect }, id);
 }
 
-ZaGlobalMessageCountPage.prototype._createHtml = 
+ZaGlobalAdvancedStatsPage.prototype._createHtml = 
 function () {
 	DwtTabViewPage.prototype._createHtml.call(this);
 	var element = this.getHtmlElement();
@@ -408,8 +408,8 @@ function () {
 	div.style.padding = "20px";
 	var a = document.createElement("a");
 	a.textContent = "Add chart";
-	a.onclick = function () { ZaGlobalMessageCountPage.insertChartHTML(element); };
+	a.onclick = function () { ZaGlobalAdvancedStatsPage.insertChartHTML(element); };
 	div.appendChild(a);
 	element.appendChild(div);
-	ZaGlobalMessageCountPage.insertChartHTML(element);
+	ZaGlobalAdvancedStatsPage.insertChartHTML(element);
 }

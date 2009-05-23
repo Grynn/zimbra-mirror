@@ -158,6 +158,7 @@ AjxPackage.require("zimbraAdmin.statistics.view.ZaGlobalStatsView");
 AjxPackage.require("zimbraAdmin.statistics.view.ZaGlobalMessageVolumePage");
 AjxPackage.require("zimbraAdmin.statistics.view.ZaGlobalMessageCountPage");
 AjxPackage.require("zimbraAdmin.statistics.view.ZaGlobalSpamActivityPage");
+AjxPackage.require("zimbraAdmin.statistics.view.ZaGlobalAdvancedStatsPage");
 
 AjxPackage.require("zimbraAdmin.statistics.view.ZaServerStatsView");
 AjxPackage.require("zimbraAdmin.statistics.view.ZaServerMessageVolumePage");
