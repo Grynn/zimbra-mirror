@@ -44,372 +44,62 @@ ZaGlobalMessageCountPage.prototype.showMe =  function(refresh) {
 	}
 }
 
-ZaGlobalMessageCountPage.getDataTipText = function (item, index, series) {
-    var text = series.displayName + " at " + YAHOO.util.Date.format(item.timestamp, { format: "%I:%M" }) + "\n" + ZaGlobalMessageCountPage.formatLabel(item[series.yField]);
-    return text;
-}
-/* must be global for getDataTipText */
-ZaGlobalMessageCountPage.formatLabel = function (value) {
-    return YAHOO.util.Number.format(value, { thousandsSeparator: ",", decimalPlaces: 0});
-}
-ZaGlobalMessageCountPage.formatTimeLabel = function (value) {
-    return YAHOO.util.Date.format(value, { format: "%I:%M %p" });
-}
-
-ZaGlobalMessageCountPage.plotChart = function (id, fields, colDef, newData) {
-    var yAxis = new YAHOO.widget.NumericAxis();
-    var max = 0;
-    for (var i = 0; i < colDef.length; i++) {
-        colDef[i].style = { size: 3, lineSize: 1 };
-    }
-    for (var i = 0; i < newData.length; i++) {
-        for (var j = 0; j < colDef.length; j++) {
-            max = Math.max(max, newData[i][colDef[j].yField]);
-        }
-    }
-    // doesn't work right in 2.7.0
-    //yAxis.scale = "logarithmic";
-    yAxis.maximum = max + 10;
-    yAxis.labelFunction = ZaGlobalMessageCountPage.formatLabel;
-    var timeAxis = new YAHOO.widget.TimeAxis();
-    timeAxis.labelFunction = ZaGlobalMessageCountPage.formatTimeLabel;
-    var seriesDef = colDef;
-    
-    var data_source = new YAHOO.util.DataSource(newData);
-    ZaGlobalMessageCountPage.CHART_DATA_SOURCE = data_source;
-    data_source.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-    data_source.responseSchema = { fields: fields };
-    var div = document.getElementById("loggerchart" + id);
-    div.style.height = "200px";
-    new YAHOO.widget.LineChart("loggerchart" + id, data_source,
-            { xField: "timestamp",
-              wmode: "transparent",
-              series: seriesDef,
-              yAxis: yAxis,
-              xAxis: timeAxis,
-              dataTipFunction: ZaGlobalMessageCountPage.getDataTipText,
-              style: { legend: { display: "bottom" } }
-            }
-    );
-    
-}
-
 ZaGlobalMessageCountPage.prototype.setObject =
-function (data) {
-    // no-op
-}
-
-ZaGlobalMessageCountPage.serverSelected = function(evt, id) {
-    var select = evt.target;
-    
-    var hostname = select[select.selectedIndex].value;
-    
-    var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
-    soapRequest.set("hostname", { "!hn": hostname });
-    var csfeParams = { soapDoc: soapRequest };
-    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
-    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
-    
-    var groupSelect = document.getElementById("select-group" + id);
-    var statGroups = soapResponse.hostname[0].stats;
-    ZaGlobalMessageCountPage.clearSelect(groupSelect);
-    for (var i = 0, j = statGroups.length; i < j; i++) {
-        var option = document.createElement("option");
-        if (i == 0) option.selected = "selected";
-        option.value = statGroups[i].name;
-        option.textContent = statGroups[i].name;
-        groupSelect.appendChild(option);
-    }
-    ZaGlobalMessageCountPage.groupSelected({ target: groupSelect }, id);
-    
-}
-
-ZaGlobalMessageCountPage.clearSelect = function (node) {
-    var options = node.getElementsByTagName("option");
-    for (var i = node.childNodes.length; i > 0; i--)
-        node.removeChild(node.childNodes.item(i - 1));
-}
-ZaGlobalMessageCountPage.groupSelected = function(evt, id) {
-    var select = evt.target;
-    
-    var serverSelect = document.getElementById("select-servers", id);
-    var hostname = serverSelect[serverSelect.selectedIndex].value;
-    var group = select[select.selectedIndex].value;
-    
-    var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
-    soapRequest.set("hostname", { "!hn": hostname });
-    var child = soapRequest.set("stats", { "!name" : group });
-    soapRequest.set(null, "get-counters", child);
-    var csfeParams = { soapDoc: soapRequest };
-    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
-    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
-    
-    var counterSelect = document.getElementById("select-counter" + id);
-    var statCounters = soapResponse.hostname[0].stats[0].values[0].stat;
-    ZaGlobalMessageCountPage.clearSelect(counterSelect);
-    for (var i = 0, j = statCounters.length; i < j; i++) {
-        var option = document.createElement("option");
-        if (i == 0) option.selected = "selected";
-        option.value = statCounters[i].name;
-        option.textContent = statCounters[i].name;
-        counterSelect.appendChild(option);
-    }
-}
-
-ZaGlobalMessageCountPage.groupSelected = function(evt, id) {
-    var select = evt.target;
-    
-    var serverSelect = document.getElementById("select-servers" + id);
-    var hostname = serverSelect[serverSelect.selectedIndex].value;
-    var group = select[select.selectedIndex].value;
-    
-    var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
-    soapRequest.set("hostname", { "!hn": hostname });
-    var child = soapRequest.set("stats", { "!name" : group });
-    soapRequest.set(null, "123", child);
-    var csfeParams = { soapDoc: soapRequest };
-    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
-    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
-    
-    var counterSelect = document.getElementById("select-counter" + id);
-    var statCounters = soapResponse.hostname[0].stats[0].values[0].stat;
-    ZaGlobalMessageCountPage.clearSelect(counterSelect);
-    for (var i = 0, j = statCounters.length; i < j; i++) {
-        var option = document.createElement("option");
-        if (i == 0) option.selected = "selected";
-        option.value = statCounters[i].name;
-        option.textContent = statCounters[i].name;
-        counterSelect.appendChild(option);
-    }
-}
-
-ZaGlobalMessageCountPage.counterSelected = function(event, id) {
-    var select = event.target;
-    
-    var serverSelect = document.getElementById("select-servers" + id);
-    var hostname = serverSelect[serverSelect.selectedIndex].value;
-    var groupSelect = document.getElementById("select-group" + id);
-    var group = groupSelect[groupSelect.selectedIndex].value;
-    
-    var selected = [];
-    var index = 0;
-    for (var i = 0; i < select.options.length; i++) {
-        if (select.options[i].selected)
-            selected[index++] = select.options[i].value;
-    }
-    if (selected.length == 0)
-        return;
-    
-    var startTime = document.getElementById("input-start-time" + id).value;
-    var endTime = document.getElementById("input-end-time" + id).value;
-    var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
-    soapRequest.set("hostname", { "!hn": hostname });
-    soapRequest.set("startTime", { "!time": startTime });
-    soapRequest.set("endTime", { "!time": endTime });
-    var child = soapRequest.set("stats", { "!name" : group });
-    var csfeParams = { soapDoc: soapRequest };
-    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
-    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
-    
-    var values = soapResponse.hostname[0].stats[0].values;
-    
-    var newData = [];
-    
-    for (var i = 0; i < values.length; i++) {
-        var ts = new Date(values[i].t * 1000);
-        var record = { timestamp: ts };
-        for (var j = 0; j < values[i].stat.length; j++) {
-            if (selected.indexOf(values[i].stat[j].name) != -1) {
-                record[values[i].stat[j].name] = values[i].stat[j].value;
-            }
-        }
-        // skip missing values, we can't assume it's a zero or last value
-        var skipRec = false;
-        for (var j = 0; j < selected.length; j++) {
-            if (!record[selected[j]]) {
-                //record[selected[j]] = 0;
-                skipRec = true;
-                break;
-            }
-        }
-        if (!skipRec) {
-            newData.push(record);
-        }
-    }
-    var colDef = [];
-    for (var i = 0; i < selected.length; i++) {
-        colDef.push({ displayName: selected[i], yField: selected[i] });
-    }
-    var fields = [ "timestamp" ];
-    for (var i = 0; i < selected.length; i++) {
-        fields.push(selected[i]);
-    }
-
-    //document.getElementById("for-testing").textContent = newData.length + " :: " + AjxStringUtil.objToString(newData);
-    ZaGlobalMessageCountPage.plotChart(id, fields, colDef, newData);
-}
-
-ZaGlobalMessageCountPage.showhide = function(id) {
-    var e = document.getElementById(id);
-    e.style.display = e.style.display == "none" ? "block" : "none";
-}
-
-ZaGlobalMessageCountPage.removeChild = function(id) {
-    var e = document.getElementById(id);
-    e.parentNode.removeChild(e);
-}
-
-ZaGlobalMessageCountPage.insertChartHTML = function(element) {
-	var id = Math.random();
-	var form = document.createElement("form");
-	form.style.margin = "5px 20px";
-	form.id = "loggerform" + id;
-	form.onsubmit = "return false;";
-	form.action = "#";
-	
-	var table = document.createElement("table");
-	table.id = "loggertable" + id;
-	
-	var label;
-	var tr;
-	var td;
-	var select;
-	tr = document.createElement("tr");
-	td = document.createElement("td");
-	label = document.createElement("label");
-	label.htmlFor = "select-servers" + id;
-	label.textContent = "Server:";
-	select = document.createElement("select");
-	select.id = "select-servers" + id;
-	select.name = "servers";
-	select.onchange = function(evt) { ZaGlobalMessageCountPage.serverSelected(evt, id); }
-	td.vAlign = "top";
-	td.appendChild(label);
-	td.appendChild(select);
-	tr.appendChild(td);
-	td = document.createElement("td");
-	label = document.createElement("label");
-	label.htmlFor = "select-group" + id;
-	label.textContent = "Group:";
-	select = document.createElement("select");
-	select.id = "select-group" + id;
-	select.name = "groups";
-	select.onchange = function(evt) { ZaGlobalMessageCountPage.groupSelected(evt, id); }
-	td.vAlign = "top";
-	td.appendChild(label);
-	td.appendChild(select);
-	tr.appendChild(td);
-	td = document.createElement("td");
-	label = document.createElement("label");
-	label.htmlFor = "select-counter" + id;
-	label.textContent = "Counters:";
-	select = document.createElement("select");
-	select.id = "select-counter" + id;
-	select.name = "counters";
-	select.multiple = true;
-	select.size = 5;
-	select.onchange = function(evt) { ZaGlobalMessageCountPage.counterSelected(evt, id); }
-	td.vAlign = "top";
-	td.appendChild(label);
-	td.appendChild(select);
-	tr.appendChild(td);
-	table.appendChild(tr);
-	
-	var input;
-	tr = document.createElement("tr");
-	td = document.createElement("td");
-	label = document.createElement("label");
-	label.htmlFor = "input-start-time" + id;
-	label.textContent = "Start:";
-	input = document.createElement("input");
-	input.id = "input-start-time" + id;
-	input.type = "text";
-	input.name = "startTime";
-	input.value = "now-1d";
-	td.appendChild(label);
-	td.appendChild(input);
-	td.valign = "top";
-	tr.appendChild(td);
-	td = document.createElement("td");
-	label = document.createElement("label");
-	label.htmlFor = "input-end-time" + id;
-	label.textContent = "end:";
-	input = document.createElement("input");
-	input.id = "input-end-time" + id;
-	input.type = "text";
-	input.name = "endTime";
-	input.value = "now";
-	td.appendChild(label);
-	td.appendChild(input);
-	td.valign = "top";
-	tr.appendChild(td);
-	table.appendChild(tr);
-	
-	form.appendChild(table);
-	
-	var a;
-	var span;
-	a = document.createElement("a");
-	a.href = "#";
-	a.onclick = function () { ZaGlobalMessageCountPage.showhide("loggertable" + id); }
-	a.textContent = "Toggle Form";
-	form.appendChild(a);
-	
-	span = document.createElement("span");
-	span.textContent = " | ";
-	form.appendChild(span);
-	a = document.createElement("a");
-	a.href = "#";
-	a.onclick = function () {
-	    var s = document.getElementById("select-counter" + id);
-	    ZaGlobalMessageCountPage.counterSelected({ target: s }, id);
-    }
-	a.textContent = "Update Chart";
-	form.appendChild(a);
-	span = document.createElement("span");
-	span.textContent = " | ";
-	form.appendChild(span);
-	a = document.createElement("a");
-	a.href = "#";
-	a.onclick = function () {
-	    ZaGlobalMessageCountPage.removeChild("loggerform" + id);
-	    ZaGlobalMessageCountPage.removeChild("loggerchart" + id);
-    }
-	a.textContent = "Remove Chart";
-	form.appendChild(a);
-	
-	var div = document.createElement("div");
-	div.style.padding = "20px";
-	div.id = "loggerchart" + id;
-	element.appendChild(form);
-	element.appendChild(div);
-	
-    var serversSelect = document.getElementById("select-servers" + id);
-    var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
-    var csfeParams = { soapDoc: soapRequest };
-    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
-    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
-    ZaGlobalMessageCountPage.clearSelect(serversSelect);
-    for (var i = 0, j = soapResponse.hostname.length; i < j; i++) {
-        var option = document.createElement("option");
-        if (i == 0) option.selected = "selected";
-        option.value = soapResponse.hostname[i].hn;
-        option.textContent = soapResponse.hostname[i].hn;
-        serversSelect.appendChild(option);
-    }
-    ZaGlobalMessageCountPage.serverSelected({ target: serversSelect }, id);
+function () {
+	var imgElement = document.getElementById(this._hourImgID);
+	var newSrc = ["/service/statsimg/mta.ALL.hour.Message_Count.gif?rand=",Math.random()].join("");
+	if(imgElement) {
+		imgElement.src = newSrc;
+	}
+	imgElement = document.getElementById(this._dayImgID);	
+	newSrc = ["/service/statsimg/mta.ALL.day.Message_Count.gif?rand=",Math.random()].join("");			
+	if(imgElement) {
+		imgElement.src = newSrc;
+	}
+	imgElement = document.getElementById(this._monthImgID);		
+	newSrc = ["/service/statsimg/mta.ALL.month.Message_Count.gif?rand=",Math.random()].join("");			
+	if(imgElement) {
+		imgElement.src = newSrc;
+	}			
+	imgElement = document.getElementById(this._yearImgID);		
+	newSrc = ["/service/statsimg/mta.ALL.year.Message_Count.gif?rand=",Math.random()].join("");			
+	if(imgElement) {
+		imgElement.src = newSrc;
+	}			
 }
 
 ZaGlobalMessageCountPage.prototype._createHtml = 
 function () {
 	DwtTabViewPage.prototype._createHtml.call(this);
-	var element = this.getHtmlElement();
-	var div = document.createElement("div");
-	div.style.padding = "20px";
-	var a = document.createElement("a");
-	a.textContent = "Add chart";
-	a.onclick = function () { ZaGlobalMessageCountPage.insertChartHTML(element); };
-	div.appendChild(a);
-	element.appendChild(div);
-	ZaGlobalMessageCountPage.insertChartHTML(element);
+	var idx = 0;
+	var html = new Array(50);
+	this._hourImgID = Dwt.getNextId();
+	this._dayImgID = Dwt.getNextId();
+	this._monthImgID = Dwt.getNextId();		
+	this._yearImgID = Dwt.getNextId();	
+	html[idx++] = "<h3 style='padding-left: 10px'>" + ZaMsg.Stats_MC_Header + "</h3>" ;	
+	html[idx++] = "<div style='width:70ex;'>";	
+	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left'>";	
+	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left'>";
+	html[idx++] = "<img src='#' alt='" + ZaMsg.Stats_Unavailable + "' id='" + this._hourImgID + "'>";	
+	html[idx++] = "</td></tr>";
+	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDay) + "</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left'>";
+	html[idx++] = "<img src='#'  alt='" + ZaMsg.Stats_Unavailable + "' id='" + this._dayImgID + "'>";	
+	html[idx++] = "</td></tr>";
+	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsMonth) + "</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left'>";
+	html[idx++] = "<img src='#'  alt='" + ZaMsg.Stats_Unavailable + "' id='" + this._monthImgID + "'>";	
+	html[idx++] = "</td></tr>";
+	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";		
+	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsYear) + "</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left'>";
+	html[idx++] = "<img src='#'  alt='" + ZaMsg.Stats_Unavailable + "' id='" + this._yearImgID + "'>";
+	html[idx++] = "</td></tr>";
+	html[idx++] = "</table>";
+	html[idx++] = "</div>";
+	this.getHtmlElement().innerHTML = html.join("");
 }
+
