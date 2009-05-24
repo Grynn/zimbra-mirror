@@ -18,6 +18,7 @@ package com.zimbra.bp;
 
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.service.account.ToXML;
+import com.zimbra.cs.service.admin.AdminAccessControl;
 import com.zimbra.cs.service.admin.GetDomain;
 import com.zimbra.cs.service.admin.GetCos;
 import com.zimbra.common.service.ServiceException;
@@ -28,9 +29,12 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.IOException;
 import java.io.FileOutputStream;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Arrays;
+import java.util.Set;
+
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -48,6 +52,7 @@ public class SearchResults {
     public static String ATTR_zimbraCOSId = "zimbraCOSId" ;
 //    public static String ATTR_zimbraId = "zimbraId" ;
     public static String [] ACCOUNT_ATTRS = {ATTR_displayName, ATTR_zimbraAccountStatus, ATTR_zimbraCOSId } ;
+    private static Set<String> ACCOUNT_ATTRS_SET = new HashSet<String>(Arrays.asList(ACCOUNT_ATTRS));
 
     /**
      * The CSV file format will be
@@ -59,9 +64,14 @@ public class SearchResults {
      */
     public static void writeSearchResultOutputStream (OutputStream out, String query, String domain, String types)
     throws ServiceException{
+        
+        // TODO: pass in an AuthToken to writeSearchResultOutputStream and delete 
+        // the next line
+        AuthToken authToken = null;
+        
         try {
             CSVWriter writer = new CSVWriter(new OutputStreamWriter (out) ) ;
-            List entryList = getSearchResults(query, domain, types );
+            List entryList = getSearchResults(authToken, query, domain, types ); 
             int noCols = 6 ;
             for (int i = 0 ; i < entryList.size(); i ++) {
                 String [] line = new String [noCols] ;
@@ -101,7 +111,7 @@ public class SearchResults {
         }
     }
 
-    public static List getSearchResults (String query, String domain, String types)
+    public static List getSearchResults (AuthToken authToken, String query, String domain, String types)
     throws ServiceException {
 
         if (query == null) query = "";
@@ -136,13 +146,20 @@ public class SearchResults {
 //            options.setSortAttr(sortBy);
         options.setConvertIDNToAscii(true);
         List accounts = prov.searchDirectory(options, false);
+        
+        // check rights and only returns allowed entries
+        AdminAccessControl aac = AdminAccessControl.newAdminAccessControl(authToken);
+        AdminAccessControl.SearchDirectoryRightChecker rightChecker = 
+            new AdminAccessControl.SearchDirectoryRightChecker(aac, prov, ACCOUNT_ATTRS_SET);
+        accounts = rightChecker.getAllowed(accounts);
+        
         return accounts ;
 
     }
 
-    public static void main (String [] args) {
+    public static void main (String [] args) throws ServiceException {
         try {
-//            List accounts = getSearchResults("", "ccaomac.zimbra.com", "accounts, aliases, aliases, resources, domains, coses" );
+            // List accounts = getSearchResults("", "ccaomac.zimbra.com", "accounts, aliases, aliases, resources, domains, coses" );
             FileOutputStream fo = new FileOutputStream ("/tmp/sr_out") ;
             writeSearchResultOutputStream(fo, "", null, "accounts, distributionlists, aliases, resources,domains") ;
         }catch (Exception e) {
