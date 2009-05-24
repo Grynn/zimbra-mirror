@@ -36,14 +36,14 @@ import com.zimbra.cs.session.PendingModifications.Change;
 
 public class DbOfflineMailbox {
 
-    public static void renumberItem(MailItem item, int newId, int mod_content) throws ServiceException {
+    public static void renumberItem(MailItem item, int newId) throws ServiceException {
         if (Db.supports(Db.Capability.ON_UPDATE_CASCADE))
-            renumberItemCascade(item, newId, mod_content);
+            renumberItemCascade(item, newId);
         else
-            renumberItemManual(item, newId, mod_content);
+            renumberItemManual(item, newId);
     }
 
-    public static void renumberItemManual(MailItem item, int newId, int mod_content) throws ServiceException {
+    public static void renumberItemManual(MailItem item, int newId) throws ServiceException {
         Mailbox mbox = item.getMailbox();
         Connection conn = mbox.getOperationConnection();
         byte type = item.getType();
@@ -56,11 +56,10 @@ public class DbOfflineMailbox {
                     "(mailbox_id, id, type, parent_id, folder_id, index_id, imap_id, date, size, volume_id, blob_digest," +
                     " unread, flags, tags, sender, subject, name, metadata, mod_metadata, change_date, mod_content, change_mask) " +
                     "(SELECT mailbox_id, ?, type, parent_id, folder_id, index_id, imap_id, date, size, volume_id, blob_digest," +
-                    " unread, flags, tags, sender, subject, name, metadata, mod_metadata, change_date, ?, change_mask" +
+                    " unread, flags, tags, sender, subject, name, metadata, mod_metadata, change_date, mod_content, change_mask" +
                     " FROM " + table + " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?)");
             int pos = 1;
             stmt.setInt(pos++, newId);
-            stmt.setInt(pos++, mod_content);
             stmt.setInt(pos++, mbox.getId());
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
@@ -151,7 +150,7 @@ public class DbOfflineMailbox {
         }
     }
 
-    public static void renumberItemCascade(MailItem item, int newId, int mod_content) throws ServiceException {
+    public static void renumberItemCascade(MailItem item, int newId) throws ServiceException {
         Mailbox mbox = item.getMailbox();
         Connection conn = mbox.getOperationConnection();
         byte type = item.getType();
@@ -159,11 +158,10 @@ public class DbOfflineMailbox {
         PreparedStatement stmt = null;
         try {
             stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(item) +
-                    " SET id = ?, mod_content = ?" +
+                    " SET id = ?" +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
             int pos = 1;
             stmt.setInt(pos++, newId);
-            stmt.setInt(pos++, mod_content);
             stmt.setInt(pos++, mbox.getId());
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
@@ -250,23 +248,17 @@ public class DbOfflineMailbox {
         }
     }
 
-    public static void setChangeIds(MailItem item, int date, int mod_content, int change_date, int mod_metadata) throws ServiceException {
+    public static void setDate(MailItem item, int date) throws ServiceException {
         Mailbox mbox = item.getMailbox();
         Connection conn = mbox.getOperationConnection();
 
         PreparedStatement stmt = null;
         try {
             stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(item) +
-                    " SET date = ?, mod_content = ?, change_date = ?, mod_metadata = ?" +
+                    " SET date = ?" +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
             int pos = 1;
             stmt.setInt(pos++, date);
-            stmt.setInt(pos++, mod_content);
-            if (change_date > 0)
-                stmt.setInt(pos++, change_date);
-            else
-                stmt.setNull(pos++, Types.INTEGER);
-            stmt.setInt(pos++, mod_metadata);
             stmt.setInt(pos++, mbox.getId());
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();

@@ -166,10 +166,6 @@
   <desc>whether to auto-enable sync on all server folders</desc>
 </attr>
 
-<attr name="zimbraDataSourceLeaveOnServer" type="boolean" cardinality="single" optionalIn="dataSource">
-  <desc>whether to leave POP3 messages on server</desc>
-</attr>
-
 <attr name="zimbraDataSourceCalendarFolderId" type="string" cardinality="single" optionalIn="dataSource">
   <desc>root folder for for calendar</desc>
 </attr>

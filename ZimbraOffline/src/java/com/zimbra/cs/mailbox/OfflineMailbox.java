@@ -297,10 +297,6 @@ public class OfflineMailbox extends DesktopMailbox {
     }
 
     synchronized boolean renumberItem(OperationContext octxt, int id, byte type, int newId) throws ServiceException {
-        return renumberItem(octxt, id, type, newId, -1);
-    }
-
-    synchronized boolean renumberItem(OperationContext octxt, int id, byte type, int newId, int mod_content) throws ServiceException {
         if (id == newId)
             return true;
         else if (id <= 0 || newId <= 0)
@@ -310,9 +306,6 @@ public class OfflineMailbox extends DesktopMailbox {
         try {
             beginTransaction("renumberItem", octxt);
             MailItem item = getItemById(id, type);
-
-            if (mod_content < 0)
-                mod_content = item.getSavedSequence();
 
             // changing a message's item id needs to purge its Conversation (virtual or real)
             if (item instanceof Message)
@@ -327,7 +320,7 @@ public class OfflineMailbox extends DesktopMailbox {
 
                 // copy blob to new id (note that item.getSavedSequence() may change again later)
                 try {
-                    MailboxBlob newBlob = StoreManager.getInstance().link(mblob.getBlob(), this, newId, mod_content, item.getVolumeId());
+                    MailboxBlob newBlob = StoreManager.getInstance().link(mblob.getBlob(), this, newId, item.getSavedSequence(), item.getVolumeId());
                     markOtherItemDirty(newBlob);
                 } catch (IOException ioe) {
                     throw ServiceException.FAILURE("could not link blob for renumbered item (" + id + " => " + newId + ")", ioe);
@@ -336,9 +329,8 @@ public class OfflineMailbox extends DesktopMailbox {
 
             // update the id in the database and in memory
             markItemDeleted(item.getType(), id);
-            DbOfflineMailbox.renumberItem(item, newId, mod_content);
+            DbOfflineMailbox.renumberItem(item, newId);
             item.mId = item.mData.id = newId;
-            item.mData.modContent = mod_content;
             item.markItemCreated();
 
             // remove the old item from the cache, as it's gone now...
@@ -525,9 +517,9 @@ public class OfflineMailbox extends DesktopMailbox {
         }
     }
 
-    synchronized void syncChangeIds(OperationContext octxt, int itemId, byte type, int date, int mod_content, int change_date, int mod_metadata)
+    synchronized void syncDate(OperationContext octxt, int itemId, byte type, int date)
     throws ServiceException {
-        if (date < 0 && mod_content < 0 && change_date < 0 && mod_metadata < 0)
+        if (date < 0)
             return;
 
         boolean success = false;
@@ -537,43 +529,16 @@ public class OfflineMailbox extends DesktopMailbox {
             MailItem item = getItemById(itemId, type);
             markItemModified(item, Change.INTERNAL_ONLY);
 
-            // resolve the defaulting to find out the real new values
-            date = (date < 0 ? (int) (item.getDate() / 1000) : date);
-            mod_content = (mod_content < 0 ? item.getSavedSequence() : mod_content);
-            change_date = (change_date < 0 ? (int) (item.getChangeDate() / 1000) : change_date);
-            mod_metadata = (mod_metadata < 0 ? item.getModifiedSequence() : mod_metadata);
-
-            if (date == item.getDate() && mod_content == item.getSavedSequence() && change_date == item.getChangeDate() && mod_metadata == item.getModifiedSequence()) {
+            if (date == item.getDate()) {
                 success = true;
                 return;
             }
 
-            // update the database if amything's changed ...
-            DbOfflineMailbox.setChangeIds(item, date, mod_content, change_date, mod_metadata);
-
-            // ... update the filename on the item's blob if necessary ...
-            boolean blobAffected = mod_content != item.getSavedSequence() && item.getDigest() != null && !item.getDigest().equals("");
-            if (blobAffected) {
-                MailboxBlob mblob = item.getBlob();
-
-                // mark old blob as disposable
-                item.markBlobForDeletion();
-                item.mBlob = null;
-
-                // and link to new blob
-                try {
-                    MailboxBlob newBlob = StoreManager.getInstance().link(mblob.getBlob(), this, item.getId(), mod_content, item.getVolumeId());
-                    markOtherItemDirty(newBlob);
-                } catch (IOException ioe) {
-                    throw ServiceException.FAILURE("could not link blob for item (" + itemId + ") with new change id (" + item.getSavedSequence() + " => " + mod_content + ")", ioe);
-                }
-            }
+            // update the database
+            DbOfflineMailbox.setDate(item, date);
 
             // ... and update the in-memory item as well
             item.mData.date = date;
-            item.mData.modContent = mod_content;
-            item.mData.dateChanged = change_date;
-            item.mData.modMetadata = mod_metadata;
 
             success = true;
         } finally {

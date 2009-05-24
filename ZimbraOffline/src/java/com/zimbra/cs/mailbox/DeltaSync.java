@@ -406,10 +406,7 @@ public class DeltaSync {
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
 
-        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE, -1000) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION, -1);
 
         String query = elt.getAttribute(MailConstants.A_QUERY);
         String searchTypes = elt.getAttribute(MailConstants.A_SEARCH_TYPES);
@@ -442,7 +439,7 @@ public class DeltaSync {
             if ((change_mask & Change.MODIFIED_QUERY) == 0)
                 ombx.modifySearchFolder(sContext, id, query, searchTypes, sort);
             ombx.syncMetadata(sContext, id, MailItem.TYPE_SEARCHFOLDER, parentId, flags, 0, color);
-            ombx.syncChangeIds(sContext, id, MailItem.TYPE_SEARCHFOLDER, date, mod_content, timestamp, changeId);
+            ombx.syncDate(sContext, id, MailItem.TYPE_SEARCHFOLDER, date);
 
             if (elt.getAttributeBool(InitialSync.A_RELOCATED, false))
                 ombx.setChangeMask(sContext, id, MailItem.TYPE_SEARCHFOLDER, change_mask | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
@@ -459,10 +456,7 @@ public class DeltaSync {
 
         ACL acl = getInitialSync().parseACL(elt.getOptionalElement(MailConstants.E_ACL));
 
-        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE, -1000) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION, -1);
 
         synchronized (ombx) {
             // deal with the case where the referenced folder doesn't exist
@@ -498,7 +492,7 @@ public class DeltaSync {
             if (itemType == MailItem.TYPE_FOLDER) {
                 // don't care about current feed syncpoint; sync can't be done offline
                 ombx.syncMetadata(sContext, id, MailItem.TYPE_FOLDER, parentId, flags, 0, color);
-                ombx.syncChangeIds(sContext, id, MailItem.TYPE_FOLDER, date, mod_content, timestamp, changeId);
+                ombx.syncDate(sContext, id, MailItem.TYPE_FOLDER, date);
             }
 
             if (elt.getAttributeBool(InitialSync.A_RELOCATED, false))
@@ -595,10 +589,7 @@ public class DeltaSync {
         String name = elt.getAttribute(MailConstants.A_NAME);
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
 
-        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
         synchronized (ombx) {
             Tag tag = getTag(id);
@@ -638,7 +629,7 @@ public class DeltaSync {
                 ombx.rename(sContext, id, MailItem.TYPE_TAG, name);
             if ((change_mask & Change.MODIFIED_COLOR) == 0)
                 ombx.setColor(sContext, id, MailItem.TYPE_TAG, color);
-            ombx.syncChangeIds(sContext, id, MailItem.TYPE_TAG, date, mod_content, timestamp, changeId);
+            ombx.syncDate(sContext, id, MailItem.TYPE_TAG, date);
 
             if (elt.getAttributeBool(InitialSync.A_RELOCATED, false))
                 ombx.setChangeMask(sContext, id, MailItem.TYPE_TAG, change_mask | Change.MODIFIED_NAME);
@@ -758,10 +749,7 @@ public class DeltaSync {
         }
         assert(hasBlob == ((flags & Flag.BITMASK_ATTACHED) != 0));
 
-        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
         byte[] blob = null;
         if (hasBlob) {
@@ -781,7 +769,7 @@ public class DeltaSync {
             if ((change_mask & Change.MODIFIED_CONTENT) == 0 && pc != null)
                 ombx.modifyContact(sContext, id, pc);
             ombx.syncMetadata(sContext, id, MailItem.TYPE_CONTACT, folderId, flags, tags, color);
-            ombx.syncChangeIds(sContext, id, MailItem.TYPE_CONTACT, date, mod_content, timestamp, changeId);
+            ombx.syncDate(sContext, id, MailItem.TYPE_CONTACT, date);
         }
         OfflineLog.offline.debug("delta: updated contact (" + id + "): " + cn.getFileAsString());
     }
@@ -805,22 +793,12 @@ public class DeltaSync {
 	        long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
 	        int convId = (int) elt.getAttributeLong(MailConstants.A_CONV_ID);
 	
-	        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
-	        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
 	        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
-	        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
-	
-	        // double-check to make sure that it's just a metadata change
-	//        if (mod_content != msg.getSavedSequence() || date != msg.getDate() / 1000) {
-	//            // content changed; must re-download body
-	//            getInitialSync().syncMessage(id, folderId);
-	//            return;
-	//        }
 	
 	        synchronized (ombx) {
 	            ombx.setConversationId(sContext, id, convId <= 0 ? -id : convId);
 	            ombx.syncMetadata(sContext, id, type, folderId, flags, tags, color);
-	            ombx.syncChangeIds(sContext, id, type, date, mod_content, timestamp, changeId);
+	            ombx.syncDate(sContext, id, type, date);
 	        }
 	        OfflineLog.offline.debug("delta: updated " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
     	} catch (Exception x) {

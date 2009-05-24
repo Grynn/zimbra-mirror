@@ -680,7 +680,7 @@ public class PushChanges {
             Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_SEARCHFOLDER, name, parentId);
             if (create) {
                 // make sure the old item matches the new item...
-                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_SEARCHFOLDER, createData.getFirst(), createData.getSecond()))
+                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_SEARCHFOLDER, createData.getFirst()))
                 	return true;
                 id = createData.getFirst();
             }
@@ -752,7 +752,7 @@ public class PushChanges {
             Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_FOLDER, name, parentId);
             if (create) {
                 // make sure the old item matches the new item...
-                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_FOLDER, createData.getFirst(), createData.getSecond()))
+                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_FOLDER, createData.getFirst()))
                 	return true;
                 id = createData.getFirst();
             }
@@ -819,7 +819,7 @@ public class PushChanges {
                         ombx.renumberItem(sContext, newId, MailItem.TYPE_TAG, renumber);
                 }
                 // make sure the old item matches the new item...
-                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_TAG, newId, createData.getSecond()))
+                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_TAG, newId))
                 	return true;
                 id = newId;
             }
@@ -960,7 +960,7 @@ public class PushChanges {
             Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_CONTACT, null, folderId);
             if (create) {
                 // make sure the old item matches the new item...
-                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_CONTACT, createData.getFirst(), createData.getSecond()))
+                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_CONTACT, createData.getFirst()))
                 	return true;
                 id = createData.getFirst();
             }
@@ -1039,7 +1039,7 @@ public class PushChanges {
 		int newid = (int)w.getAttributeLong(MailConstants.A_ID);
 		int ver = (int)w.getAttributeLong(MailConstants.A_VERSION);
 		if (create) {
-            if (!ombx.renumberItem(sContext, id, MailItem.TYPE_WIKI, newid, ver))
+            if (!ombx.renumberItem(sContext, id, MailItem.TYPE_WIKI, newid))
             	return true;
 		}
 		ombx.setSyncedVersionForMailItem("" + id, ver);
@@ -1073,7 +1073,7 @@ public class PushChanges {
     			checkDocumentSyncConflict(item);
     		Pair<Integer,Integer> resp = ombx.sendMailItem(item);
             if (create) {
-                if (!ombx.renumberItem(sContext, id, type, resp.getFirst(), resp.getSecond()))
+                if (!ombx.renumberItem(sContext, id, type, resp.getFirst()))
                 	return true;
     		}
     		ombx.setSyncedVersionForMailItem("" + item.getId(), resp.getSecond());
@@ -1183,7 +1183,7 @@ public class PushChanges {
             Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_MESSAGE, null, folderId);
             if (create) {
                 // make sure the old item matches the new item...
-                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_MESSAGE, createData.getFirst(), createData.getSecond()))
+                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_MESSAGE, createData.getFirst()))
                 	return true;
                 id = createData.getFirst();
             }
@@ -1278,7 +1278,7 @@ public class PushChanges {
 				//Instead, we just let it bounce back as a calendar update from server.
 				//mod sequence will always be bounced back in the next sync so we'll set there.
 				if (serverItemId != id) { //new item
-					if (!ombx.renumberItem(sContext, id, type, serverItemId, -1))
+					if (!ombx.renumberItem(sContext, id, type, serverItemId))
 						return true;
 				}
 				id = serverItemId;
