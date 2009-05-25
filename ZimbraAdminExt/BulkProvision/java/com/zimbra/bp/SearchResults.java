@@ -148,7 +148,7 @@ public class SearchResults {
         List accounts = prov.searchDirectory(options, false);
         
         // check rights and only returns allowed entries
-        AdminAccessControl aac = AdminAccessControl.newAdminAccessControl(authToken);
+        AdminAccessControl aac = AdminAccessControl.getAdminAccessControl(authToken);
         AdminAccessControl.SearchDirectoryRightChecker rightChecker = 
             new AdminAccessControl.SearchDirectoryRightChecker(aac, prov, ACCOUNT_ATTRS_SET);
         accounts = rightChecker.getAllowed(accounts);
