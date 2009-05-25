@@ -62,12 +62,12 @@ public class SearchResults {
      * @param domain
      * @param types
      */
-    public static void writeSearchResultOutputStream (OutputStream out, String query, String domain, String types)
+    public static void writeSearchResultOutputStream (
+            OutputStream out, String query, String domain, String types, AuthToken token)
     throws ServiceException{
         
-        // TODO: pass in an AuthToken to writeSearchResultOutputStream and delete 
         // the next line
-        AuthToken authToken = null;
+        AuthToken authToken = token;
         
         try {
             CSVWriter writer = new CSVWriter(new OutputStreamWriter (out) ) ;
@@ -161,7 +161,7 @@ public class SearchResults {
         try {
             // List accounts = getSearchResults("", "ccaomac.zimbra.com", "accounts, aliases, aliases, resources, domains, coses" );
             FileOutputStream fo = new FileOutputStream ("/tmp/sr_out") ;
-            writeSearchResultOutputStream(fo, "", null, "accounts, distributionlists, aliases, resources,domains") ;
+            writeSearchResultOutputStream(fo, "", null, "accounts, distributionlists, aliases, resources,domains", null) ;
         }catch (Exception e) {
             e.printStackTrace();
         }
