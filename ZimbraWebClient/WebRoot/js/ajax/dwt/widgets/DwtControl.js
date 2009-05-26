@@ -740,6 +740,7 @@ function(x, y, width, height) {
 		this.__controlEvent.oldY = bds.y;
 		this.__controlEvent.oldWidth = bds.width;
 		this.__controlEvent.oldHeight = bds.height;
+        //TODO: notifyListeners() called atleast 3 times. Should minimize the calls.
 		this.setLocation(x, y);
 		this.setSize(width, height);
 		bds = Dwt.getBounds(htmlElement);
