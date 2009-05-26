@@ -24,6 +24,12 @@ use Getopt::Long;
 my (%c,%loaded,%saved,$rc);
 my ($oldServerName, $newServerName, $help, $verbose, $force, $skipusers, $usersonly);
 
+my (undef, undef,$uid,$gid) = getpwnam('zimbra');
+if ($> ne $uid) {
+  print "Must be run as user zimbra.";
+  &usage
+}
+
 GetOptions("help" => \$help, 
     "oldname=s" => \$oldServerName,
     "newname=s" => \$newServerName,
@@ -33,6 +39,8 @@ GetOptions("help" => \$help,
     "verbose+" => \$verbose);
 
 &usage if ($help or !$newServerName);
+
+
 
 $c{zmlocalconfig}="/opt/zimbra/bin/zmlocalconfig";
 $c{zimbra_home} = getLocalConfig("zimbra_home");
