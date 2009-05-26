@@ -14,7 +14,7 @@
  */
 
 /**
-* @class ZaServerDiskStatsPage
+* @class ZaServerDiskStatsPage 
 * @contructor ZaServerDiskStatsPage
 * @param parent
 * @param app
@@ -24,165 +24,82 @@ ZaServerDiskStatsPage = function(parent) {
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
 
+	//this._createHTML();
 	this.initialized=false;
-	this._rendered = false;
+	this.setScrollStyle(DwtControl.SCROLL);	
 }
-
+ 
 ZaServerDiskStatsPage.prototype = new DwtTabViewPage;
 ZaServerDiskStatsPage.prototype.constructor = ZaServerDiskStatsPage;
 
-ZaServerDiskStatsPage.prototype.toString = function() {
+ZaServerDiskStatsPage.prototype.toString = 
+function() {
 	return "ZaServerDiskStatsPage";
-};
-
-ZaServerDiskStatsPage.prototype.setObject = function (item) {
-	this._server = item;
-	if(this._rendered) {
-		this._view.getInstance().currentTab = 1;
-		var ims = this._view.getItemsById('images');
-		for (var i = 0 ; i < ims.length; ++i ){
-			ims[i].dirtyDisplay();
-		}
-		this._view.refresh();		
-	}
-};
-
-ZaServerDiskStatsPage.prototype.showMe = function () {
-	DwtTabViewPage.prototype.showMe.call(this);
-	if (!this._rendered) {
-		var instance = {currentTab:1};
-		var xModelObj = new XModel({id:"currentTab", type:_UNTYPED_});
-		this._view = new XForm(this._getXForm(), xModelObj, instance, this);
-		this._view.setController(this);
-		this._view.draw();
-		this._rendered = true;
-	}	
 }
 
-
-ZaServerDiskStatsPage.prototype.writeImageHtml = function (periodInt) {
-	var periodString = "hour";
-	var serverName = this._server.name;
-	var periodString = this._getPeriodString(periodInt);
-		
-	return AjxBuffer.concat("<img  alt='" + ZaMsg.Stats_Unavailable + "' src='/service/statsimg/disk." , serverName ,
-							".", periodString,".Disk_Usage_0.gif?nodef=1&rand=", Math.random(), "' onload='javascript:ZaServerDiskStatsPage.callMethod(\"",
-							this.__internalId , "\",ZaServerDiskStatsPage.prototype.loadNextImage,[this.parentNode," ,
-							periodInt , ", 0])' onerror='javascript:AjxCore.objectWithId(", this.__internalId ,
-							").stopLoadingImages(this,0)'><br>");
-};
-
-ZaServerDiskStatsPage.prototype.loadNextImage = function (parent, periodInt, count) {
-	// let's stop at some arbitrarily high number, so that we don't get caught for some
-	// reason in an infinite loop
- 	if (count >= 50) {
- 		return;
- 	}
-	++count;
-	var server = this._server.name;
-	var periodString = this._getPeriodString(periodInt);
-	var img = Dwt.parseHtmlFragment(AjxBuffer.concat("<img  alt='" + ZaMsg.Stats_Unavailable + "' src='/service/statsimg/disk.", server, ".", periodString, ".Disk_Usage_", 
-													 count, ".gif?nodef=1&rand=", Math.random(), "' onload='javascript:ZaServerDiskStatsPage.callMethod(\"",
-													 this.__internalId,"\",ZaServerDiskStatsPage.prototype.loadNextImage,",
-													 "[this.parentNode,",periodInt ,",", count, "])'",
-													 "onerror='javascript:ZaServerDiskStatsPage.callMethod(", this.__internalId ,
-													 ",ZaServerDiskStatsPage.prototype.stopLoadingImages,[this,",count,"])'><br>"));
-
-	parent.appendChild(img);
-	parent.appendChild(document.createElement('br'));
-	parent.appendChild(document.createElement('br'));
-};
-
-
-
-ZaServerDiskStatsPage.callMethod = function (id, method, argsArray) {
-	var obj = DwtControl.fromElementId(id)
-	return method.apply(obj,argsArray);
-};
-
-ZaServerDiskStatsPage.prototype.stopLoadingImages = function (imgObj, count) {
-	if (count == 0) {
-		imgObj.onerror = null;
-		imgObj.onload = null;
-		imgObj.src = "/service/statsimg/data_not_available.gif";
-	} else {
-		imgObj.style.display = "none";
+ZaServerDiskStatsPage.prototype.showMe =  function(refresh) {
+	DwtTabViewPage.prototype.showMe.call(this);	
+	if(refresh && this._currentObject) {
+		this.setObject(this._currentObject);
 	}
-};
-
-
-ZaServerDiskStatsPage.prototype._getPeriodString = function (periodInt){
-	switch (periodInt) {
-	case 1:
-		return "hour";
-	case 2:
-		return "day";
-	case 3:
-		return "month";
-	case 4:
-		return "year";
+	if (this._currentObject) {
+	    var item = this._currentObject;
+        if (!this._disks) {
+            var counters = ZaGlobalAdvancedStatsPage.getCounters(item.name, 'df.csv');
+            var diskKeys = {};
+            for (var i = 0; i < counters.length; i++) {
+                var disk = counters[i].split("::");
+                diskKeys[disk[0]] = 1;
+            }
+            var disks = [];
+            for (var i in diskKeys)
+                disks.push(i);
+            this._disks = disks;
+        }
+        
+        var columns = [];
+        for (var i = 0; i < disks.length; i++) {
+            columns.push(disks[i] + "::disk_pct_used");
+        }
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-48hours', item.name, 'df.csv', columns, 'now-48h', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-30days', item.name, 'df.csv', columns, 'now-30d', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-60days', item.name, 'df.csv', columns, 'now-60d', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-year', item.name, 'df.csv', columns, 'now-1y', 'now');
 	}
-	return null;
-};
+}
 
-ZaServerDiskStatsPage.prototype._getXForm = function () {
-	if (this._xform != null) return this._xform;
+ZaServerDiskStatsPage.prototype.setObject =
+function (item) {
+	this._currentObject = item;	
+}
 
-	this._xform = {
-		x_showBorder:1,
-	    numCols:1, 
-	    cssClass:"ZaServerDiskStatsPage", 
-		tableCssStyle:"width:100%",
-	    itemDefaults:{ },
-	    items:[
-		   {type:_SPACER_, height:"10px", colSpan:"*",id:"xform_header" },
-		
-		   {type:_TAB_BAR_,  ref:ZaModel.currentTab, colSpan:"*",
-		    choices:[
-			     {value:1, label:ZaMsg.TABT_StatsDataLastHour},
-			     {value:2, label:ZaMsg.TABT_StatsDataLastDay},
-			     {value:3, label:ZaMsg.TABT_StatsDataLastMonths},
-			     {value:4, label:ZaMsg.TABT_StatsDataLastYear}
-			    ],
-		    cssClass:"ZaTabBar", id:"xform_tabbar"
-		   },
-
-		   {type:_SWITCH_, align:_LEFT_, valign:_TOP_, 
-		    items:[
-			   {type:_ZATABCASE_, caseKey:1, align:_LEFT_, valign:_TOP_, 
-			   		cssStyle: "position: absolute; overflow: auto;",
-			    items:[
-				   {type:_SPACER_, height:10, colSpan:"*" },
-				   {ref: "images", type:_OUTPUT_ ,  getDisplayValue:"return this.getFormController().writeImageHtml(1)"}
-				   ]
-			   },
-			   {type:_ZATABCASE_,  caseKey:2, align:_LEFT_, valign:_TOP_, 
-			    	cssStyle: "position: absolute; overflow: auto;",
-			    items:[
-				   {type:_SPACER_, height:10, colSpan:"*" },
-				   {ref: "images",type:_OUTPUT_ , getDisplayValue:"return this.getFormController().writeImageHtml(2)"}
-				   ]
-			   },
-
-			   {type:_ZATABCASE_,  caseKey:3, align:_LEFT_, valign:_TOP_, 
-			    	cssStyle: "position: absolute; overflow: auto;",
-			    items:[
-				   {type:_SPACER_, height:10, colSpan:"*" },
-				   {ref: "images", type:_OUTPUT_ , getDisplayValue:"return this.getFormController().writeImageHtml(3)"}
-				   ]
-			   },
-			   {type:_ZATABCASE_,  caseKey:4, align:_LEFT_, valign:_TOP_, 
-			    	cssStyle: "position: absolute; overflow: auto;",
-			    items:[
-				   {type:_SPACER_, height:10, colSpan:"*" },
-				   {ref: "images",type:_OUTPUT_ , getDisplayValue:"return this.getFormController().writeImageHtml(4)"}
-				   ]
-			   }
-			   ]
-		   }
-		   ]
-	};
-		   
-
-	return this._xform;
-};
+ZaServerDiskStatsPage.prototype._createHtml = 
+function () {
+    var idx = 0;
+    var html = new Array(50);
+	DwtTabViewPage.prototype._createHtml.call(this);
+	//html[idx++] = "<h3 style='padding-left: 10px'>" + ZaMsg.Stats_MC_Header + "</h3>" ;
+	html[idx++] = "<div>";	
+	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left' style='width: 90%'>";	
+	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left'>";
+	html[idx++] = "<div id='loggerchartserver-disk-stat-48hours'></div>";	
+	html[idx++] = "</td></tr>";
+	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDay) + "</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left'>";
+	html[idx++] = "<div id='loggerchartserver-disk-stat-30days'></div>";	
+	html[idx++] = "</td></tr>";
+	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsMonth) + "</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left'>";
+	html[idx++] = "<div id='loggerchartserver-disk-stat-60days'></div>";	
+	html[idx++] = "</td></tr>";
+	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";		
+	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsYear) + "</td></tr>";	
+	html[idx++] = "<tr valign='top'><td align='left'>";
+	html[idx++] = "<div id='loggerchartserver-disk-stat-year'></div>";
+	html[idx++] = "</td></tr>";
+	html[idx++] = "</table>";
+	html[idx++] = "</div>";
+	this.getHtmlElement().innerHTML = html.join("");
+}
