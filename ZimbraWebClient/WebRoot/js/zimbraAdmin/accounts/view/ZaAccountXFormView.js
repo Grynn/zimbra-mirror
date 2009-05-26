@@ -152,12 +152,24 @@ function(entry) {
     this._containedObject[ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
     this._containedObject[ZaAccount.A2_currentAccountType] = entry[ZaAccount.A2_currentAccountType]  ;
 	
-	if(entry.getAttrs[ZaAccount.AzimbraAvailableSkin] || entry.getAttrs.all) {
+	if(entry.getAttrs[ZaAccount.A_zimbraAvailableSkin] || entry.getAttrs.all) {
 		var skins = ZaApp.getInstance().getInstalledSkins();
-		if(skins == null) {
-			skins = [];
-		} else if (AjxUtil.isString(skins))	 {
-			skins = [skins];
+		
+		if(AjxUtil.isEmpty(skins)) {
+			
+			if(domainObj && domainObj.attrs && !AjxUtil.isEmpty(domainObj.attrs[ZaDomain.A_zimbraAvailableSkin])) {
+				//if we cannot get all zimlets try getting them from domain
+				skins = domainObj.attrs[ZaDomain.A_zimbraAvailableSkin];
+			} else if(entry._defaultValues && entry._defaultValues.attrs && !AjxUtil.isEmpty(entry._defaultValues.attrs[ZaAccount.A_zimbraAvailableSkin])) {
+				//if we cannot get all zimlets from domain either, just use whatever came in "defaults" which would be what the COS value is
+				skins = entry._defaultValues.attrs[ZaAccount.A_zimbraAvailableSkin];
+			} else {
+				skins = [];
+			}
+		} else {
+			if (AjxUtil.isString(skins))	 {
+				skins = [skins];
+			}
 		}
 		
 		ZaAccountXFormView.themeChoices.setChoices(skins);
@@ -674,7 +686,8 @@ ZaAccountXFormView.CONTACT_TAB_RIGHTS = [];
 ZaAccountXFormView.MEMBEROF_TAB_ATTRS = [];		
 ZaAccountXFormView.MEMBEROF_TAB_RIGHTS = [ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT];
 
-ZaAccountXFormView.FEATURE_TAB_ATTRS = [ZaAccount.A_zimbraFeatureMailEnabled,
+ZaAccountXFormView.FEATURE_TAB_ATTRS = [ZaAccount.A_zimbraFeatureReadReceiptsEnabled,
+	ZaAccount.A_zimbraFeatureMailEnabled,
 	ZaAccount.A_zimbraFeatureContactsEnabled,
 	ZaAccount.A_zimbraFeatureCalendarEnabled,
 	ZaAccount.A_zimbraFeatureTasksEnabled,
@@ -710,6 +723,8 @@ ZaAccountXFormView.FEATURE_TAB_ATTRS = [ZaAccount.A_zimbraFeatureMailEnabled,
 
 ZaAccountXFormView.FEATURE_TAB_RIGHTS = [];
 ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
+	ZaAccount.A_zimbraPrefReadReceiptsToAddress,
+	ZaAccount.A_zimbraPrefMailSendReadReceipts,
 	ZaAccount.A_zimbraPrefUseTimeZoneListInCalendar,
 	ZaAccount.A_zimbraPrefCalendarUseQuickAdd,
 	ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal,
@@ -1432,6 +1447,12 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								msgName:ZaMsg.NAD_FeatureIdentitiesEnabled,
 								checkBoxLabel:ZaMsg.NAD_FeatureIdentitiesEnabled,  
 								trueValue:"TRUE", falseValue:"FALSE"
+							},
+							{ref:ZaAccount.A_zimbraFeatureReadReceiptsEnabled,
+								type:_SUPER_CHECKBOX_, 
+								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+								checkBoxLabel:ZaMsg.zimbraFeatureReadReceiptsEnabled,  
+								trueValue:"TRUE", falseValue:"FALSE"
 							}							
 						]
 					},
@@ -1598,7 +1619,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.NAD_zimbraPrefNewMailNotificationAddress,
 									label:ZaMsg.NAD_zimbraPrefNewMailNotificationAddress, 
 									labelLocation:_LEFT_,
-									enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraPrefNewMailNotificationEnabled,"TRUE"]],
+									enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraPrefNewMailNotificationEnabled,"TRUE"],
+										[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefNewMailNotificationAddress]],
 									enableDisableChangeEventSources:[ZaAccount.A_zimbraPrefNewMailNotificationEnabled],
 									nowrap:false,labelWrap:true
 								},
@@ -1620,9 +1642,29 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									label:ZaMsg.NAD_zimbraPrefOutOfOfficeReply, labelLocation:_LEFT_, 
 									labelCssStyle:"vertical-align:top", 
 									width:"30em",
-									enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled,"TRUE"]],
+									enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled,"TRUE"],
+										[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefOutOfOfficeReply]],
 									enableDisableChangeEvantSources:[ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled]
-								}
+								},
+								{ref:ZaAccount.A_zimbraPrefMailSendReadReceipts, 
+									type:_SUPER_SELECT1_,
+									labelCssStyle:"width:175px", colSizes:["375px","190px"],
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									label:ZaMsg.zimbraPrefMailSendReadReceipts, 
+									enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureReadReceiptsEnabled,"TRUE"],
+										[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefMailSendReadReceipts]],
+									enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureReadReceiptsEnabled]						
+								},
+								{ref:ZaAccount.A_zimbraPrefReadReceiptsToAddress, 
+									type:_TEXTFIELD_, 
+									msgName:ZaMsg.NAD_zimbraPrefReadReceiptsToAddress,
+									label:ZaMsg.zimbraPrefReadReceiptsToAddress, 
+									labelLocation:_LEFT_,
+									enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureReadReceiptsEnabled,"TRUE"],
+										[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefReadReceiptsToAddress]],
+									enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureReadReceiptsEnabled],
+									nowrap:false,labelWrap:true
+								}								
 							]
 						},						
 						{type:_ZA_TOP_GROUPER_, colSizes:["175px","auto"], id:"account_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",
@@ -1680,6 +1722,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaAccount.A_zimbraPrefComposeFormat, 
 									//colSpan:2,
 									type:_SUPER_SELECT1_, 
+									nowrap:false,labelWrap:true,
 									labelCssStyle:"width:175px", colSizes:["375px","190px"],
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_zimbraPrefComposeFormat,

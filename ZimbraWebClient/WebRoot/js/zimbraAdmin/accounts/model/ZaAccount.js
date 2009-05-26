@@ -153,8 +153,11 @@ ZaAccount.A_zimbraPrefOutOfOfficeCacheDuration = "zimbraPrefOutOfOfficeCacheDura
 ZaAccount.A_zimbraPrefMailDefaultCharset = "zimbraPrefMailDefaultCharset";
 ZaAccount.A_zimbraPrefLocale ="zimbraPrefLocale" ;
 ZaAccount.A_zimbraJunkMessagesIndexingEnabled = "zimbraJunkMessagesIndexingEnabled" ;
+ZaAccount.A_zimbraPrefMailSendReadReceipts = "zimbraPrefMailSendReadReceipts";
+ZaAccount.A_zimbraPrefReadReceiptsToAddress = "zimbraPrefReadReceiptsToAddress";
 
 //features
+ZaAccount.A_zimbraFeatureReadReceiptsEnabled = "zimbraFeatureReadReceiptsEnabled";
 ZaAccount.A_zimbraFeatureMailPriorityEnabled = "zimbraFeatureMailPriorityEnabled";
 ZaAccount.A_zimbraFeatureInstantNotify = "zimbraFeatureInstantNotify";
 ZaAccount.A_zimbraFeatureImapDataSourceEnabled = "zimbraFeatureImapDataSourceEnabled";
@@ -1490,10 +1493,11 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefDisplayExternalImages, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefDisplayExternalImages, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefOutOfOfficeCacheDuration, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraPrefOutOfOfficeCacheDuration},
         {id:ZaAccount.A_zimbraJunkMessagesIndexingEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraJunkMessagesIndexingEnabled, choices:ZaModel.BOOLEAN_CHOICES},
-
+        {id:ZaAccount.A_zimbraPrefMailSendReadReceipts, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailSendReadReceipts, choices:ZaModel.SEND_READ_RECEPIT_CHOICES},
+		{id:ZaAccount.A_zimbraPrefReadReceiptsToAddress, type:_EMAIL_ADDRESS_, ref:"attrs/"+ZaAccount.A_zimbraPrefReadReceiptsToAddress},
         //features
         {id:ZaAccount.A_zimbraFeatureMailPriorityEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureMailPriorityEnabled, choices:ZaModel.BOOLEAN_CHOICES},
-
+		{id:ZaAccount.A_zimbraFeatureReadReceiptsEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureReadReceiptsEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureImapDataSourceEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureImapDataSourceEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeaturePop3DataSourceEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeaturePop3DataSourceEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureIdentitiesEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureIdentitiesEnabled, choices:ZaModel.BOOLEAN_CHOICES},
@@ -1666,6 +1670,82 @@ function (value, event, form){
         			throw (ex);
         		}
 			}
+			
+			if(instance.getAttrs[ZaAccount.A_zimbraAvailableSkin] || instance.getAttrs.all) {
+				var skins = ZaApp.getInstance().getInstalledSkins();
+				
+				if(AjxUtil.isEmpty(skins)) {
+					if(domainObj && domainObj.attrs && !AjxUtil.isEmpty(domainObj.attrs[ZaDomain.A_zimbraAvailableSkin])) {
+						//if we cannot get all zimlets try getting them from domain
+						skins = domainObj.attrs[ZaDomain.A_zimbraAvailableSkin];
+					} else if(instance._defaultValues && instance._defaultValues.attrs && !AjxUtil.isEmpty(instance._defaultValues.attrs[ZaAccount.A_zimbraAvailableSkin])) {
+						//if we cannot get all zimlets from domain either, just use whatever came in "defaults" which would be what the COS value is
+						skins = instance._defaultValues.attrs[ZaAccount.A_zimbraAvailableSkin];
+					} else {
+						skins = [];
+					}
+				} else {
+					if (AjxUtil.isString(skins))	 {
+						skins = [skins];
+					}
+				}
+				if(ZaNewAccountXWizard.themeChoices) {
+					ZaNewAccountXWizard.themeChoices.setChoices(skins);
+					ZaNewAccountXWizard.themeChoices.dirtyChoices();
+				}		
+				
+				if(ZaAccountXFormView.themeChoices) {
+					ZaAccountXFormView.themeChoices.setChoices(skins);
+					ZaAccountXFormView.themeChoices.dirtyChoices();
+				}		
+				
+			}	
+	
+			if(instance.getAttrs[ZaAccount.A_zimbraZimletAvailableZimlets] || instance.getAttrs.all) {
+				//get sll Zimlets
+				var allZimlets = ZaZimlet.getAll("extension");
+		
+				if(!AjxUtil.isEmpty(allZimlets) && allZimlets instanceof ZaItemList || allZimlets instanceof AjxVector)
+					allZimlets = allZimlets.getArray();
+		
+				if(AjxUtil.isEmpty(allZimlets)) {
+					
+					if(domainObj && domainObj.attrs && !AjxUtil.isEmpty(domainObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets])) {
+						//if we cannot get all zimlets try getting them from domain
+						allZimlets = domainObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets];
+					} else if(instance._defaultValues && instance._defaultValues.attrs && !AjxUtil.isEmpty(instance._defaultValues.attrs[ZaAccount.A_zimbraZimletAvailableZimlets])) {
+						allZimlets = instance._defaultValues.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
+					} else {
+						allZimlets = [];
+					}
+					if(ZaNewAccountXWizard.zimletChoices) {
+						ZaNewAccountXWizard.zimletChoices.setChoices(allZimlets);
+						ZaNewAccountXWizard.zimletChoices.dirtyChoices();
+					}
+					
+					if(ZaAccountXFormView.zimletChoices) {
+						ZaAccountXFormView.zimletChoices.setChoices(allZimlets);
+						ZaAccountXFormView.zimletChoices.dirtyChoices();
+					}					
+					
+				} else {
+					//convert objects to strings	
+					var cnt = allZimlets.length;
+					var _tmpZimlets = [];
+					for(var i=0; i<cnt; i++) {
+						var zimlet = allZimlets[i];
+						_tmpZimlets.push(zimlet.name);
+					}
+					if(ZaNewAccountXWizard.zimletChoices) {
+						ZaNewAccountXWizard.zimletChoices.setChoices(_tmpZimlets);
+						ZaNewAccountXWizard.zimletChoices.dirtyChoices();
+					}
+					if(ZaAccountXFormView.zimletChoices) {
+						ZaAccountXFormView.zimletChoices.setChoices(_tmpZimlets);
+						ZaAccountXFormView.zimletChoices.dirtyChoices();
+					}					
+				}
+			}				
 			form.refresh();
 		}
                    

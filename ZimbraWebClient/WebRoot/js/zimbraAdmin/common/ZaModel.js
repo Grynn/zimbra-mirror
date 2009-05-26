@@ -57,6 +57,13 @@ ZaModel.getComposeFormatChoices =   function () {
 
 ZaModel.COMPOSE_FORMAT_CHOICES = ZaModel.getComposeFormatChoices ;
 
+ZaModel.SEND_READ_RECEIPT_ALWAYS = "always";
+ZaModel.SEND_READ_RECEIPT_NEVER = "never";
+ZaModel.SEND_READ_RECEIPT_PROMPT = "prompt";
+
+ZaModel.SEND_READ_RECEPIT_CHOICES = [{value:ZaModel.SEND_READ_RECEIPT_ALWAYS,label:ZaMsg.SEND_READ_RECEIPT_ALWAYS},
+{value:ZaModel.SEND_READ_RECEIPT_NEVER,label:ZaMsg.SEND_READ_RECEIPT_NEVER},{value:ZaModel.SEND_READ_RECEIPT_PROMPT,label:ZaMsg.SEND_READ_RECEIPT_PROMPT}];
+
 ZaModel.getGroupMailByChoices = function () {
     return [{value:"conversation", label:ZaMsg.Conversation}, {value:"message", label:ZaMsg.Message}];
 }
