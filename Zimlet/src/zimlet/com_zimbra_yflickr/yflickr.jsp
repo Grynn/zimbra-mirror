@@ -1,4 +1,4 @@
-<!--
+<%--
  * ***** BEGIN LICENSE BLOCK *****
  * 
  * Zimbra Collaboration Suite Zimlets
@@ -13,7 +13,9 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * 
  * ***** END LICENSE BLOCK *****
--->
+--%>
+<%@ page buffer="8kb" autoFlush="true" %>
+<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ page language="java" import="org.apache.commons.httpclient.*, org.apache.commons.httpclient.methods.*, javax.servlet.*, com.zimbra.common.util.*"%>
 <%@ page language="java" import="java.net.*, java.util.*, com.zimbra.common.util.*, com.zimbra.cs.util.NetUtil, com.zimbra.cs.servlet.ZimbraServlet"%>
 <%@ page language="java" import="java.io.*, org.apache.commons.httpclient.methods.multipart.*"%>
@@ -56,7 +58,7 @@ java.io.File, java.lang.Exception" %>
     String url = FURL + "?api_key=" + api_key + "&auth_token=" + auth_token + "&api_sig=" + api_sig + "&user_id=" + user_id;
     // System.out.println ("[Yflickr] Uploading to URL " + url);
 
-    ServletOutputStream os = response.getOutputStream();
+    //ServletOutputStream os = response.getOutputStream();
     /* response.setStatus(200);
     response.setContentType("text/plain");
     os.println ("url=" + url);
@@ -135,8 +137,11 @@ java.io.File, java.lang.Exception" %>
     } catch (Exception e) {
         response.setContentType ("text/plain");
     }
-
-    ByteUtil.copy (mpm.getResponseBodyAsStream(), false, os, false);
-
-    mpm.releaseConnection();
+    try{
+        //ByteUtil.copy (mpm.getResponseBodyAsStream(), false, os, false);
+        out.print(mpm.getResponseBodyAsString());
+        mpm.releaseConnection();
+    }catch (Exception e){
+        
+    }
 %>

@@ -204,6 +204,13 @@ div.Yflickr_viewstate_header
     text-align: center;
 }
 
+.Yflickr_hCenter img
+{
+    width:250px;
+    height:175px;
+    overflow:Scroll;
+}
+
 .Yflickr_hLeft
 {
     display:block;
