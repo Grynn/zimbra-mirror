@@ -1975,6 +1975,8 @@ da body
                     try{
                         name = new String(item.getName().getBytes(),"UTF-8");
                     }catch(Exception e){
+                        System.out.println("Failed to get UTF8 name for "+ name);  /* TODO: need logging infra */
+                        e.printStackTrace();
                         name = item.getName();
                     }
 
