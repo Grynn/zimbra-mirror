@@ -56,6 +56,58 @@ ZaGlobalAdvancedStatsPage.formatTimeLabel = function (value) {
     return YAHOO.util.Date.format(value, { format: "%I:%M %p" });
 }
 
+ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, columns, start, end) {
+    var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
+    soapRequest.set("hostname", { "!hn": hostname });
+    soapRequest.set("startTime", { "!time": start });
+    soapRequest.set("endTime", { "!time": end });
+    var child = soapRequest.set("stats", { "!name" : group });
+    var csfeParams = { soapDoc: soapRequest };
+    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
+    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
+    
+    if (!soapResponse.hostname || !soapResponse.hostname[0].stats) {
+        var e = document.getElementById(id);
+        e.textContent = "no data available";
+        return;
+    }
+    var values = soapResponse.hostname[0].stats[0].values;
+    
+    var newData = [];
+    
+    for (var i = 0; i < values.length; i++) {
+        var ts = new Date(values[i].t * 1000);
+        var record = { timestamp: ts };
+        for (var j = 0; j < values[i].stat.length; j++) {
+            if (columns.indexOf(values[i].stat[j].name) != -1) {
+                record[values[i].stat[j].name] = values[i].stat[j].value;
+            }
+        }
+        // skip missing values, we can't assume it's a zero or last value
+        var skipRec = false;
+        for (var j = 0; j < columns.length; j++) {
+            if (!record[columns[j]]) {
+                //record[columns[j]] = 0;
+                skipRec = true;
+                break;
+            }
+        }
+        if (!skipRec) {
+            newData.push(record);
+        }
+    }
+    var colDef = [];
+    for (var i = 0; i < columns.length; i++) {
+        colDef.push({ displayName: columns[i], yField: columns[i] });
+    }
+    var fields = [ "timestamp" ];
+    for (var i = 0; i < columns.length; i++) {
+        fields.push(columns[i]);
+    }
+
+    //document.getElementById("for-testing").textContent = newData.length + " :: " + AjxStringUtil.objToString(newData);
+    ZaGlobalAdvancedStatsPage.plotChart(id, fields, colDef, newData);
+}
 ZaGlobalAdvancedStatsPage.plotChart = function (id, fields, colDef, newData) {
     var yAxis = new YAHOO.widget.NumericAxis();
     var max = 0;
@@ -411,5 +463,5 @@ function () {
 	a.onclick = function () { ZaGlobalAdvancedStatsPage.insertChartHTML(element); };
 	div.appendChild(a);
 	element.appendChild(div);
-	ZaGlobalAdvancedStatsPage.insertChartHTML(element);
+	//ZaGlobalAdvancedStatsPage.insertChartHTML(element);
 }

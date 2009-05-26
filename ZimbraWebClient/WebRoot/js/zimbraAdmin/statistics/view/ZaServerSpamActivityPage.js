@@ -49,26 +49,10 @@ function (item) {
 	this._currentObject = item;		
 	if(item) {
 		if(item.attrs && item.attrs[ZaServer.A_ServiceHostname]) {
-			var imgElement = document.getElementById(this._hourImgID);
-			var newSrc = ["/service/statsimg/amavis.", item.name, ".hour.Spam_Activity.gif?rand=",Math.random()].join("");
-			if(imgElement) {
-				imgElement.src = newSrc;
-			}
-			imgElement = document.getElementById(this._dayImgID);	
-			newSrc = ["/service/statsimg/amavis.", item.name, ".day.Spam_Activity.gif?rand=",Math.random()].join("");			
-			if(imgElement) {
-				imgElement.src = newSrc;
-			}
-			imgElement = document.getElementById(this._monthImgID);		
-			newSrc = ["/service/statsimg/amavis.", item.name, ".month.Spam_Activity.gif?rand=",Math.random()].join("");			
-			if(imgElement) {
-				imgElement.src = newSrc;
-			}			
-			imgElement = document.getElementById(this._yearImgID);		
-			newSrc = ["/service/statsimg/amavis.", item.name, ".year.Spam_Activity.gif?rand=",Math.random()].join("");			
-			if(imgElement) {
-				imgElement.src = newSrc;
-			}			
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-48hours', item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], 'now-48h', 'now');
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-30days', item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], 'now-30d', 'now');
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-60days', item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], 'now-60d', 'now');
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-year', item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], 'now-1y', 'now');
 		}
 	}
 }
@@ -87,21 +71,21 @@ function () {
 	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left'>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<img src='#' alt='" + ZaMsg.Stats_Unavailable + "'  id='" + this._hourImgID + "'>";	
+	html[idx++] = "<div id='server-message-asav-48hours'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDay) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<img src='#'  alt='" + ZaMsg.Stats_Unavailable + "' id='" + this._dayImgID + "'>";	
+	html[idx++] = "<div id='server-message-asav-30days'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsMonth) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<img src='#'  alt='" + ZaMsg.Stats_Unavailable + "' id='" + this._monthImgID + "'>";	
+	html[idx++] = "<div id='server-message-asav-60days'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";		
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsYear) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<img src='#'  alt='" + ZaMsg.Stats_Unavailable + "' id='" + this._yearImgID + "'>";
+	html[idx++] = "<div id='server-message-asav-year'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "</table>";
 	html[idx++] = "</div>";
