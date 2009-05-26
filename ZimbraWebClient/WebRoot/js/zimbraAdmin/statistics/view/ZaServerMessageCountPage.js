@@ -42,15 +42,18 @@ ZaServerMessageCountPage.prototype.showMe =  function(refresh) {
 	if(refresh && this._currentObject) {
 		this.setObject(this._currentObject);
 	}
+	if (this._currentObject) {
+	    var item = this._currentObject;
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-48hours', item.name, 'zmmtastats', [ 'mta_count' ], 'now-48h', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-30days', item.name, 'zmmtastats', [ 'mta_count' ], 'now-30d', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-60days', item.name, 'zmmtastats', [ 'mta_count' ], 'now-60d', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-year', item.name, 'zmmtastats', [ 'mta_count' ], 'now-1y', 'now');
+	}
 }
 
 ZaServerMessageCountPage.prototype.setObject =
 function (item) {
 	this._currentObject = item;	
-	ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-48hours', item.name, 'zmmtastats', [ 'mta_count' ], 'now-48h', 'now');
-	ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-30days', item.name, 'zmmtastats', [ 'mta_count' ], 'now-30d', 'now');
-	ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-60days', item.name, 'zmmtastats', [ 'mta_count' ], 'now-60d', 'now');
-	ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-year', item.name, 'zmmtastats', [ 'mta_count' ], 'now-1y', 'now');
 }
 
 ZaServerMessageCountPage.prototype._createHtml = 
@@ -59,25 +62,25 @@ function () {
     var html = new Array(50);
 	DwtTabViewPage.prototype._createHtml.call(this);
 	html[idx++] = "<h3 style='padding-left: 10px'>" + ZaMsg.Stats_MC_Header + "</h3>" ;
-	html[idx++] = "<div style='width:70ex;'>";	
-	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left'>";	
+	html[idx++] = "<div>";	
+	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left' style='width: 90%'>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='server-message-count-48hours'></div>";	
+	html[idx++] = "<div id='loggerchartserver-message-count-48hours'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDay) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='server-message-count-30days'></div>";	
+	html[idx++] = "<div id='loggerchartserver-message-count-30days'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsMonth) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='server-message-count-60days'></div>";	
+	html[idx++] = "<div id='loggerchartserver-message-count-60days'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";		
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsYear) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<div id='server-message-count-year'></div>";
+	html[idx++] = "<div id='loggerchartserver-message-count-year'></div>";
 	html[idx++] = "</td></tr>";
 	html[idx++] = "</table>";
 	html[idx++] = "</div>";

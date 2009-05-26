@@ -42,6 +42,10 @@ ZaGlobalAdvancedStatsPage.prototype.showMe =  function(refresh) {
 	if(refresh) {
 		this.setObject();
 	}
+	if (!this._chartHtmlShown) {
+        ZaGlobalAdvancedStatsPage.insertChartHTML(this.getHtmlElement());
+        this._chartHtmlShown = true;
+	}
 }
 
 ZaGlobalAdvancedStatsPage.getDataTipText = function (item, index, series) {
@@ -56,6 +60,80 @@ ZaGlobalAdvancedStatsPage.formatTimeLabel = function (value) {
     return YAHOO.util.Date.format(value, { format: "%I:%M %p" });
 }
 
+ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, start, end) {
+    var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
+    soapRequest.set("startTime", { "!time": start });
+    soapRequest.set("endTime", { "!time": end });
+    var child = soapRequest.set("stats", { "!name" : group });
+    var csfeParams = { soapDoc: soapRequest };
+    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
+    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
+    
+    if (!soapResponse.hostname || !soapResponse.hostname[0].stats) {
+        var e = document.getElementById("loggerchart" + id);
+        e.textContent = "no data available";
+        return;
+    }
+    var data = {};
+    if (soapResponse.hostname) {
+        for (var i = 0; i < soapResponse.hostname.length; i++) {
+            if (!soapResponse.hostname[i].stats) continue;
+            var stats = soapResponse.hostname[i].stats;
+            if (!stats[0].values) continue;
+            for (var j = 0; j < stats[0].values.length; j++) {
+                var setOrIncrement = false;
+                if (!data[stats[0].values[j].t]) {
+                    data[stats[0].values[j].t] = {};
+                    setOrIncrement = true;
+                }
+                for (var m = 0; m < stats[0].values[j].stat.length; m++) {
+                    if (setOrIncrement)
+                        data[stats[0].values[j].t][stats[0].values[j].stat[m].name] = stats[0].values[j].stat[m].value;
+                    else
+                        data[stats[0].values[j].t][stats[0].values[j].stat[m].name] += stats[0].values[j].stat[m].value;
+                }
+            }
+        }
+    }
+    
+    var newData = [];
+    for (var i in data) {
+        record = { timestamp: new Date(i * 1000) };
+        for (var j in data[i]) {
+            record[j] = data[i][j];
+        }
+        // skip missing values, we can't assume it's a zero or lost value
+        var skipRec = false;
+        for (var j = 0; j < columns.length; j++) {
+            if (!record[columns[j]]) {
+                //record[columns[j]] = 0;
+                skipRec = true;
+                break;
+            }
+        }
+        if (!skipRec) {
+            newData.push(record);
+        }
+    }
+    if (newData.length < 1) {
+        var e = document.getElementById("loggerchart" + id);
+        e.textContent = "no data available";
+        return;
+    }
+
+    var colDef = [];
+    for (var i = 0; i < columns.length; i++) {
+        colDef.push({ displayName: columns[i], yField: columns[i] });
+    }
+    var fields = [ "timestamp" ];
+    for (var i = 0; i < columns.length; i++) {
+        fields.push(columns[i]);
+    }
+
+    //document.getElementById("for-testing").textContent = newData.length + " :: " + AjxStringUtil.objToString(newData);
+    ZaGlobalAdvancedStatsPage.plotChart(id, fields, colDef, newData);
+}
+
 ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, columns, start, end) {
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
     soapRequest.set("hostname", { "!hn": hostname });
@@ -67,7 +145,7 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
     var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
     
     if (!soapResponse.hostname || !soapResponse.hostname[0].stats) {
-        var e = document.getElementById(id);
+        var e = document.getElementById("loggerchart" + id);
         e.textContent = "no data available";
         return;
     }
@@ -96,6 +174,11 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
             newData.push(record);
         }
     }
+    if (newData.length < 1) {
+        var e = document.getElementById("loggerchart" + id);
+        e.textContent = "no data available";
+        return;
+    }
     var colDef = [];
     for (var i = 0; i < columns.length; i++) {
         colDef.push({ displayName: columns[i], yField: columns[i] });
@@ -108,6 +191,7 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
     //document.getElementById("for-testing").textContent = newData.length + " :: " + AjxStringUtil.objToString(newData);
     ZaGlobalAdvancedStatsPage.plotChart(id, fields, colDef, newData);
 }
+
 ZaGlobalAdvancedStatsPage.plotChart = function (id, fields, colDef, newData) {
     var yAxis = new YAHOO.widget.NumericAxis();
     var max = 0;
@@ -254,51 +338,7 @@ ZaGlobalAdvancedStatsPage.counterSelected = function(event, id) {
     
     var startTime = document.getElementById("input-start-time" + id).value;
     var endTime = document.getElementById("input-end-time" + id).value;
-    var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
-    soapRequest.set("hostname", { "!hn": hostname });
-    soapRequest.set("startTime", { "!time": startTime });
-    soapRequest.set("endTime", { "!time": endTime });
-    var child = soapRequest.set("stats", { "!name" : group });
-    var csfeParams = { soapDoc: soapRequest };
-    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
-    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
-    
-    var values = soapResponse.hostname[0].stats[0].values;
-    
-    var newData = [];
-    
-    for (var i = 0; i < values.length; i++) {
-        var ts = new Date(values[i].t * 1000);
-        var record = { timestamp: ts };
-        for (var j = 0; j < values[i].stat.length; j++) {
-            if (selected.indexOf(values[i].stat[j].name) != -1) {
-                record[values[i].stat[j].name] = values[i].stat[j].value;
-            }
-        }
-        // skip missing values, we can't assume it's a zero or last value
-        var skipRec = false;
-        for (var j = 0; j < selected.length; j++) {
-            if (!record[selected[j]]) {
-                //record[selected[j]] = 0;
-                skipRec = true;
-                break;
-            }
-        }
-        if (!skipRec) {
-            newData.push(record);
-        }
-    }
-    var colDef = [];
-    for (var i = 0; i < selected.length; i++) {
-        colDef.push({ displayName: selected[i], yField: selected[i] });
-    }
-    var fields = [ "timestamp" ];
-    for (var i = 0; i < selected.length; i++) {
-        fields.push(selected[i]);
-    }
-
-    //document.getElementById("for-testing").textContent = newData.length + " :: " + AjxStringUtil.objToString(newData);
-    ZaGlobalAdvancedStatsPage.plotChart(id, fields, colDef, newData);
+    ZaGlobalAdvancedStatsPage.plotQuickChart(id, hostname, group, selected, startTime, endTime);
 }
 
 ZaGlobalAdvancedStatsPage.showhide = function(id) {

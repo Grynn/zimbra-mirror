@@ -42,30 +42,15 @@ ZaGlobalMessageVolumePage.prototype.showMe =  function(refresh) {
 	if(refresh) {
 		this.setObject();
 	}
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-volume-48hours', 'zmmtastats', [ 'mta_volume' ], 'now-48h', 'now');
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-volume-30days', 'zmmtastats', [ 'mta_volume' ], 'now-30d', 'now');
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-volume-60days', 'zmmtastats', [ 'mta_volume' ], 'now-60d', 'now');
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-volume-year', 'zmmtastats', [ 'mta_volume' ], 'now-1y', 'now');
 }
 
 ZaGlobalMessageVolumePage.prototype.setObject =
 function () {
-	var imgElement = document.getElementById(this._hourImgID);
-	var newSrc = ["/service/statsimg/mta.ALL.hour.Message_Bytes.gif?rand=",Math.random()].join("");
-	if(imgElement) {
-		imgElement.src = newSrc;
-	}
-	imgElement = document.getElementById(this._dayImgID);	
-	newSrc = ["/service/statsimg/mta.ALL.day.Message_Bytes.gif?rand=",Math.random()].join("");			
-	if(imgElement) {
-		imgElement.src = newSrc;
-	}
-	imgElement = document.getElementById(this._monthImgID);		
-	newSrc = ["/service/statsimg/mta.ALL.month.Message_Bytes.gif?rand=",Math.random()].join("");		
-	if(imgElement) {
-		imgElement.src = newSrc;
-	}			
-	imgElement = document.getElementById(this._yearImgID);		
-	newSrc = ["/service/statsimg/mta.ALL.year.Message_Bytes.gif?rand=",Math.random()].join("");		
-	if(imgElement) {
-		imgElement.src = newSrc;
-	}			
+    // noop
 }
 
 ZaGlobalMessageVolumePage.prototype._createHtml = 
@@ -73,30 +58,26 @@ function () {
 	DwtTabViewPage.prototype._createHtml.call(this);
 	var idx = 0;
 	var html = new Array(50);
-	this._hourImgID = Dwt.getNextId();
-	this._dayImgID = Dwt.getNextId();
-	this._monthImgID = Dwt.getNextId();		
-	this._yearImgID = Dwt.getNextId();	
 	html[idx++] = "<h3 style='padding-left: 10px'>" + ZaMsg.Stats_MV_Header + "</h3>" ;	
-	html[idx++] = "<div style='width:70ex;'>";	
-	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left'>";	
+	html[idx++] = "<div>";	
+	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left' style='width: 90%'>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<img src='#' alt='" + ZaMsg.Stats_Unavailable + "' id='" + this._hourImgID + "'>";	
+	html[idx++] = "<div id='loggerchartglobal-message-volume-48hours'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDay) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<img src='#' alt='" + ZaMsg.Stats_Unavailable + "' id='" + this._dayImgID + "'>";	
+	html[idx++] = "<div id='loggerchartglobal-message-volume-30days'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsMonth) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<img src='#' alt='" + ZaMsg.Stats_Unavailable + "' id='" + this._monthImgID + "'>";	
+	html[idx++] = "<div id='loggerchartglobal-message-volume-60days'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";		
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsYear) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<img src='#' alt='" + ZaMsg.Stats_Unavailable + "' id='" + this._yearImgID + "'>";
+	html[idx++] = "<div id='loggerchartglobal-message-volume-year'></div>";	
 	html[idx++] = "</td></tr>";
 	html[idx++] = "</table>";
 	html[idx++] = "</div>";
