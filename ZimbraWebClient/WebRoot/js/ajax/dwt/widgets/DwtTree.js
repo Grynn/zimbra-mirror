@@ -165,11 +165,7 @@ function(treeItem, skipNotify, kbNavEvent, noFocus) {
 	this._selectedItems.add(treeItem);
 
 	// Expand all parent nodes, and then set item selected
-	var parent = treeItem.parent;
-	while(parent instanceof DwtTreeItem) {
-		parent.setExpanded(true);
-		parent = parent.parent;
-	}
+	this._expandUp(treeItem);
 	if (treeItem._setSelected(true, noFocus) && !skipNotify) {
 		this._notifyListeners(DwtEvent.SELECTION, [treeItem], DwtTree.ITEM_SELECTED, null, this._selEv, kbNavEvent);
 	}
@@ -191,6 +187,17 @@ function() {
 	this.getHtmlElement().appendChild(sep);
 };
 
+// Expand parent chain from given item up to root
+DwtTree.prototype._expandUp =
+function(item) {
+	var parent = item.parent;
+	while (parent instanceof DwtTreeItem) {
+		parent.setExpanded(true);
+		parent.setVisible(true);
+		parent = parent.parent;
+	}
+};
+
 DwtTree.prototype._addItem =
 function(item, index) {
 	this._children.add(item, index);
@@ -201,10 +208,10 @@ function(item, index) {
 	} else {
 		thisHtmlElement.insertBefore(item.getHtmlElement(), thisHtmlElement.childNodes[index]);	
 	}
-	this._clearTreeItemList();
 };
 
-DwtTree.prototype.sort = function(cmp) {
+DwtTree.prototype.sort =
+function(cmp) {
         this._children.sort(cmp);
         var df = document.createDocumentFragment();
         this._children.foreach(function(item, i){
@@ -219,7 +226,6 @@ function(child) {
 	this._children.remove(child);
 	this._selectedItems.remove(child);
 	this.getHtmlElement().removeChild(child.getHtmlElement());
-	this._clearTreeItemList();
 };
 
 /**
@@ -243,7 +249,7 @@ function(next) {
 	var curItem = (sel && sel.length) ? sel[0] : null;
 
 	var nextItem = null, idx = -1;
-	var list = this._getTreeItemList();
+	var list = this.getTreeItemList(true);
 	if (curItem) {
 		for (var i = 0, len = list.length; i < len; i++) {
 			var ti = list[i];
@@ -263,35 +269,30 @@ function(next) {
 };
 
 /**
- * Creates a flat list of this tree's visible and selectable items, going depth-first.
+ * Creates a flat list of this tree's items, going depth-first.
+ *
+ * @param visible	[boolean]*		if true, only include visible/selectable items
  */
-DwtTree.prototype._getTreeItemList =
-function() {
-	if (!(this._treeItemList && this._treeItemList.length)) {
-		var list = [];
-		this._treeItemList = this._addToList(list);
-	}
-	return this._treeItemList;
+DwtTree.prototype.getTreeItemList =
+function(visible) {
+	return this._addToList([], visible);
 };
 
 DwtTree.prototype._addToList =
-function(list, treeItem) {
-	if (treeItem && treeItem._selectionEnabled) {
+function(list, visible, treeItem) {
+	if (treeItem && !treeItem._isSeparator &&
+		(!visible || (treeItem.getVisible() && treeItem._selectionEnabled))) {
+
 		list.push(treeItem);
 	}
-	if (!treeItem || treeItem._expanded) {
+	if (!treeItem || !visible || treeItem._expanded) {
 		var parent = treeItem || this;
 		var children = parent.getChildren ? parent.getChildren() : [];
 		for (var i = 0; i < children.length; i++) {
-			this._addToList(list, children[i]);
+			this._addToList(list, visible, children[i]);
 		}
 	}
 	return list;
-};
-
-DwtTree.prototype._clearTreeItemList =
-function() {
-	this._treeItemList = null;
 };
 
 /**
@@ -388,7 +389,6 @@ function(item, ev, skipNotify) {
 	if (!skipNotify) {
 		this._notifyListeners(DwtEvent.TREE, [item], DwtTree.ITEM_EXPANDED, ev, DwtShell.treeEvent);
 	}
-	this._clearTreeItemList();
 };
 
 DwtTree.prototype._itemCollapsed =
@@ -424,8 +424,6 @@ function(item, ev, skipNotify) {
 			this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_SELECTED, ev, this._selEv);
 		}
 	}
-
-	this._clearTreeItemList();
 };
 
 DwtTree.prototype._notifyListeners =
