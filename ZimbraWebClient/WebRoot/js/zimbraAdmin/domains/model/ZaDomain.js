@@ -200,6 +200,7 @@ ZaDomain.A_zimbraFreebusyExchangeAuthScheme  = "zimbraFreebusyExchangeAuthScheme
 ZaDomain.A_zimbraFreebusyExchangeURL ="zimbraFreebusyExchangeURL";
 ZaDomain.A_zimbraFreebusyExchangeUserOrg = "zimbraFreebusyExchangeUserOrg" ;
 
+ZaDomain.A_zimbraAvailableSkin = "zimbraAvailableSkin";
 ZaDomain.A_zimbraZimletDomainAvailableZimlets = "zimbraZimletDomainAvailableZimlets" ;
 //hosted attributes
 ZaDomain.A_zimbraDomainCOSMaxAccounts = "zimbraDomainCOSMaxAccounts" ;

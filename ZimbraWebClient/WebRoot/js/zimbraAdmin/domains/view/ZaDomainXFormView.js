@@ -517,19 +517,19 @@ function(value, form) {
 	return val;
 }
 
-ZaDomainXFormView.GAL_TAB_ATTRS = [ZaDomain.A_GalMode,ZaDomain.A_GalMaxResults,ZaDomain.A_GALServerType,ZaDomain.A_GalLdapFilter,
+ZaDomainXFormView.GAL_TAB_ATTRS = [ZaDomain.A_GalMode,ZaDomain.A_GalMaxResults,ZaDomain.A_GalLdapFilter,
 	ZaDomain.A_zimbraGalAutoCompleteLdapFilter,ZaDomain.A_GalLdapSearchBase,ZaDomain.A_GalLdapURL,ZaDomain.A_GalLdapBindDn];
 ZaDomainXFormView.GAL_TAB_RIGHTS = [];
 
 ZaDomainXFormView.AUTH_TAB_ATTRS = [ZaDomain.A_AuthMech,ZaDomain.A_AuthLdapUserDn,ZaDomain.A_AuthLdapURL,
 	ZaDomain.A_zimbraAuthLdapStartTlsEnabled,ZaDomain.A_AuthLdapSearchFilter,ZaDomain.A_AuthLdapSearchBase,
-	ZaDomain.A_AuthUseBindPassword,ZaDomain.A_AuthLdapSearchBindDn];
+	ZaDomain.A_AuthLdapSearchBindDn];
 ZaDomainXFormView.AUTH_TAB_RIGHTS = [];
 
 ZaDomainXFormView.VH_TAB_ATTRS = [ZaDomain.A_zimbraVirtualHostname];
 ZaDomainXFormView.VH_TAB_RIGHTS = [];
 
-ZaDomainXFormView.WIKI_TAB_ATTRS = [ZaDomain.A_zimbraNotebookAccount,ZaDomain.A_allNotebookACLS];
+ZaDomainXFormView.WIKI_TAB_ATTRS = [ZaDomain.A_zimbraNotebookAccount];
 ZaDomainXFormView.WIKI_TAB_RIGHTS = [];
 
 ZaDomainXFormView.INTEROP_TAB_ATTRS = [ZaDomain.A_zimbraFreebusyExchangeURL, ZaDomain.A_zimbraFreebusyExchangeAuthScheme,
