@@ -91,7 +91,7 @@ public class OfflineAccessManager extends AccessManager {
 	
 	@Override
 	public boolean isGeneralAdmin(AuthToken at) {
-	    return true;
+		return at.isAdmin();
 	}
 	
 	@Override
