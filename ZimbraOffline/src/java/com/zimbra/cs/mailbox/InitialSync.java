@@ -40,6 +40,7 @@ import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.tar.TarEntry;
 import com.zimbra.common.util.tar.TarInputStream;
+import com.zimbra.common.util.zip.ZipShort;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
@@ -78,7 +79,6 @@ import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.ContentServlet;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.formatter.SyncFormatter;
-import com.zimbra.cs.service.formatter.ZipFormatter;
 import com.zimbra.cs.service.mail.SetCalendarItem;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.service.mail.SetCalendarItem.SetCalendarItemParseResult;
@@ -904,9 +904,24 @@ public class InitialSync {
             USE_SYNC_FORMATTER.put(SyncFormatter.QP_NOHDR, "1");
         }
 
+    private static final byte[] ZIP_EXTRA_FIELD_HEADER_ID_X_ZIMBRA_HEADERS = { (byte) 0xFF, (byte) 0xFF };
+        
     private Map<String, String> recoverHeadersFromBytes(byte[] hdrBytes) {
         Map<String, String> headers = new HashMap<String, String>();
-        byte[] bytes = ZipFormatter.parseXZimbraHeadersBytes(hdrBytes);
+        byte[] bytes = hdrBytes;
+            
+        // If it starts with 0xFFFF [len] it is the new-style data.  If it doesn't, it must be
+        // old-style data from when we weren't doing zip extra field correctly.
+        if (hdrBytes != null && hdrBytes.length >= 4) {
+            if (hdrBytes[0] == ZIP_EXTRA_FIELD_HEADER_ID_X_ZIMBRA_HEADERS[0] &&
+                hdrBytes[1] == ZIP_EXTRA_FIELD_HEADER_ID_X_ZIMBRA_HEADERS[1]) {
+                int len = ZipShort.getValue(hdrBytes, 2);
+                if (len == hdrBytes.length - 4) {
+                    bytes = new byte[len];
+                    System.arraycopy(hdrBytes, 4, bytes, 0, len);
+                }
+            }
+        }
         if (bytes != null && bytes.length > 0) {
             String[] keyVals = new String(bytes).split("\r\n");
             for (String hdr : keyVals) {
