@@ -86,6 +86,8 @@ public class CalendarParserImpl implements CalendarParser {
             tokeniser.wordChars(WORD_CHAR_START, WORD_CHAR_END);
             tokeniser.whitespaceChars(WHITESPACE_CHAR_START,
                     WHITESPACE_CHAR_END);
+            tokeniser.whitespaceChars(0x007F, 0x009F);  // utf-16 whitespaces
+            tokeniser.wordChars(0x00A0, 0x00FF);  // utf-16 word chars
             tokeniser.ordinaryChar(':');
             tokeniser.ordinaryChar(';');
             tokeniser.ordinaryChar('=');
