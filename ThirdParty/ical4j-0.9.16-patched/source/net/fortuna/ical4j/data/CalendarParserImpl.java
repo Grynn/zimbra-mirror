@@ -232,6 +232,9 @@ public class CalendarParserImpl implements CalendarParser {
             log.debug("Property [" + name + "]");
         }
 
+        if (name == null)
+            throw new ParserException("Missing property name at line " + tokeniser.lineno());
+
         handler.startProperty(name);
 
         parseParameterList(tokeniser, handler);
