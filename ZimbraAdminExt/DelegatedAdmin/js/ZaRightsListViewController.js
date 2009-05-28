@@ -20,7 +20,7 @@ ZaRightsListViewController = function(appCtxt, container) {
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();
 
-	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_rights/managing_rights.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "da_process/rights.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 }
 
 ZaRightsListViewController.prototype = new ZaListViewController();

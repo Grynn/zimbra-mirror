@@ -20,7 +20,7 @@ ZaGlobalGrantListViewController = function(appCtxt, container) {
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();
 
-	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_grants/managing_global_grants.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "da_process/da_global_acl.htm?locid="+AjxEnv.DEFAULT_LOCALE;
     this.addCreationListener(new AjxListener(this, this.handleGrantCreation));
     this.addRemovalListener(new AjxListener(this, this.handleGrantRemoval));			
 }

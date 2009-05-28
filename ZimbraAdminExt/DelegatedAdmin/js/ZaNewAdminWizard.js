@@ -187,6 +187,7 @@ ZaNewAdminWizard = function (parent) {
     ];
     this.initForm (ZaNewAdmin.getMyXModel (), this.getMyXForm ()) ;
     this._localXForm.setController(ZaApp.getInstance());
+    this._helpURL = location.pathname + ZaUtil.HELP_URL + "da_process/admin_wizard.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 }
 
 ZaNewAdminWizard.prototype = new ZaXWizardDialog;
