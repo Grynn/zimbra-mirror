@@ -669,14 +669,13 @@ ZaOverviewPanelController.cosTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.domainTreeListener = function (ev) {
-	//var domain = new ZaDomain();
-	//domain.name = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
-	//domain.attrs[ZaDomain.A_domainName]=ev.item.getData(ZaOverviewPanelController._OBJ_ID);
-	//domain.name = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
-	//domain.load("name",ev.item.getData(ZaOverviewPanelController._OBJ_ID));	
+	var domain = new ZaDomain();
+	domain.id = ev.item.getData(ZaOverviewPanelController._OBJ_ID);	
+	domain.attrs[ZaItem.A_zimbraId] = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getDomainController(),
-		 ZaDomainController.prototype.show,ZaApp.getInstance().getDomainList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+		 ZaDomainController.prototype.show, 
+		 domain /*ZaApp.getInstance().getDomainList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID))*/);
 	} else {	
 						
 		ZaApp.getInstance().getDomainController().show(domain);
@@ -684,18 +683,25 @@ ZaOverviewPanelController.domainTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.serverTreeListener = function (ev) {
+	var server = new ZaServer();
+	server.id = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
+	server.attrs[ZaItem.A_zimbraId] = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
 //	DBG.println(AjxDebug.DBG1, "ZaOverviewPanelController.serverTreeListener called");
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getServerController(),
 		 ZaServerController.prototype.show,
-		 ZaApp.getInstance().getServerList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+		 server /*ZaApp.getInstance().getServerList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID))*/);
 	} else {					
 		ZaApp.getInstance().getServerController().show(ZaApp.getInstance().getServerList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 	}
 }
 
 ZaOverviewPanelController.statsByServerTreeListener = function (ev) {
-	var currentServer = ZaApp.getInstance().getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
+	var currentServer = new ZaServer();
+	currentServer.id = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
+	currentServer.attrs[ZaItem.A_zimbraId] = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
+	currentServer.load("id", currentServer.id, false, true);
+	//ZaApp.getInstance().getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
 	var curController = ZaApp.getInstance().getCurrentController() ;
 	if(curController) {
 		curController.switchToNextView(ZaApp.getInstance().getServerStatsController(), ZaServerStatsController.prototype.show,currentServer);

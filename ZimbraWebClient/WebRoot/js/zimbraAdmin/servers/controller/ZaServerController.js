@@ -139,7 +139,7 @@ ZaController.initToolbarMethods["ZaServerController"].push(ZaServerController.in
 */
 ZaServerController.setViewMethod =
 function(entry) {
-	entry.load();
+	entry.load("id", entry.id, false, true);
 	this._createUI(entry);
 	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._view.setDirty(false);

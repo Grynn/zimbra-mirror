@@ -155,7 +155,7 @@ ZaController.changeActionsStateMethods["ZaAccountViewController"].push(ZaAccount
 */
 ZaDomainController.setViewMethod =
 function(entry) {
-	entry.load("name", entry.attrs[ZaDomain.A_domainName],false,true);
+	entry.load("id", entry.id,false,true);
 	this._createUI(entry);
  
 	ZaApp.getInstance().pushView(this.getContentViewId());

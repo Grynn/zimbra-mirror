@@ -422,6 +422,41 @@ ZaServer.prototype.toString = function() {
 	return this.name;
 }
 
+ZaServer.getServerByName = 
+function(serverName) {
+	if(!serverName)
+		return null;
+	var server = ZaServer.staticServerByNameCacheTable[serverName];
+	if(!server) {
+		domain = new ZaServer();
+		try {
+			server.load("name", serverName, false, true);
+		} catch (ex) {
+            throw (ex);
+        }
+
+		ZaServer.putServeToCache(server);
+	} 
+	return server;	
+} 
+
+ZaServer.getServerById = 
+function (serverId) {
+	if(!serverId)
+		return null;
+		
+	var server = ZaServer.staticServerByIdCacheTable[serverId];
+	if(!server) {
+		server = new ZaServer();
+		try {
+			server.load("id", serverId, false, true);
+		} catch (ex) {
+			throw (ex);
+		}
+		ZaServer.putServeToCache(server);
+	}
+	return server;
+}
 ZaServer.getAll =
 function() {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", ZaZimbraAdmin.URN, null);	
@@ -657,7 +692,7 @@ function(by, val) {
 	resp = ZaRequestMgr.invoke(params, reqMgrParams);		
 	this.initFromJS(resp.Body.GetServerResponse.server[0]);
 	
-	this._defaultValues = ZaApp.getInstance().getGlobalConfig();
+	//this._defaultValues = ZaApp.getInstance().getGlobalConfig();
 
 	if(this.attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
 		this.getMyVolumes();

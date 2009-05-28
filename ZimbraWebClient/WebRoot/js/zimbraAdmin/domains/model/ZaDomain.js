@@ -1220,7 +1220,7 @@ function (domId) {
 		}
 		ZaDomain.putDomainToCache(domain);
 	}
-	return domId;
+	return domain;
 }
 
 ZaDomain.loadMethod = 
