@@ -144,7 +144,7 @@ if [ -d ${zimbra_home} ]; then
   fi
 
   if [ -d ${zimbra_home}/logger ]; then
-    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/logger
+    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/logger 2> /dev/null
     chmod 755 ${zimbra_home}/logger/* 2> /dev/null
   fi
 
