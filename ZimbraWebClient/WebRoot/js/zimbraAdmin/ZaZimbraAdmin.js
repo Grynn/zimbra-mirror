@@ -134,9 +134,39 @@ function(domain) {
 		
 	ZmCsfeCommand.setServerUri(location.protocol+"//" + domain + ZaSettings.CSFE_SERVER_URI);
 	ZmCsfeCommand.setCookieName(ZaZimbraAdmin._COOKIE_NAME);
+
+	var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+	soapDoc.setMethodAttribute("onerror", "continue");
 	
-	//License information will be load after the login and in the com_zimbra_license.js
-	ZaServerVersionInfo.load();
+	if (!ZaServerVersionInfo._loaded){
+		var versionInfoReq = soapDoc.set("GetVersionInfoRequest", null, null, ZaZimbraAdmin.URN);
+	}	
+
+	var domainInfoReq = soapDoc.set("GetDomainInfoRequest", null, null, ZaZimbraAdmin.URN);
+	var elBy = soapDoc.set("domain", location.hostname, domainInfoReq);
+	elBy.setAttribute("by", "virtualHostname");
+	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	params.noAuthToken = true;
+	var resp = command.invoke(params).Body.BatchResponse;		
+	
+	if(resp.GetVersionInfoResponse && resp.GetVersionInfoResponse[0]) {
+		var versionResponse = resp.GetVersionInfoResponse[0];
+		ZaServerVersionInfo.buildDate = ZaServerVersionInfo._parseDateTime(versionResponse.info[0].buildDate);
+		ZaServerVersionInfo.host = versionResponse.info[0].host;
+		ZaServerVersionInfo.release = versionResponse.info[0].release;
+		ZaServerVersionInfo.version = versionResponse.info[0].version;
+		ZaServerVersionInfo._loaded = true;
+	}	
+
+	if(resp.GetDomainInfoResponse && resp.GetDomainInfoResponse[0]) {
+		var domainInfoResponse = resp.GetDomainInfoResponse[0];
+    	var obj = {};
+    	ZaItem.prototype.initFromJS.call(obj, domainInfoResponse.domain[0]);
+    	ZaZimbraAdmin.zimbraAdminLoginURL = obj.attrs["zimbraAdminConsoleLoginURL"] ;
+	}
 	// Create the global app context
 	var appCtxt = new ZaAppCtxt();
 

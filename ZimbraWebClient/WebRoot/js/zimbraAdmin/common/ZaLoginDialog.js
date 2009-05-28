@@ -18,7 +18,10 @@ ZaLoginDialog = function(parent, zIndex, className, appCtxt) {
     DwtBaseDialog.call(this, parent, className, ZaMsg.login, zIndex);
 
     //check the zimbraAdminConsoleLoginURL
-    this._zimbraAdminLoginURL = this.getLoginURL();
+   // if(ZaZimbraAdmin.zimbraAdminLoginURL)
+    this._zimbraAdminLoginURL = ZaZimbraAdmin.zimbraAdminLoginURL;
+    /*else
+    	this._zimbraAdminLoginURL = this.getLoginURL();*/
     
     //license expiration warning won't show before login.
 	//var licenseStatus = ZaZimbraAdmin.getLicenseStatus();
