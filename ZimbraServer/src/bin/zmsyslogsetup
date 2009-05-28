@@ -38,7 +38,7 @@ if [ x"$(uname -s 2> /dev/null)" = "xDarwin" ]; then
 	LOCALHOST=`hostname`
 else
 	logfile="-/var/log/zimbra.log"
-	statsfile="/var/log/zimbra-stats.log"
+	statsfile="-/var/log/zimbra-stats.log"
 	LOCALHOST=`hostname --fqdn`
 fi
 LOGHOST=`su - zimbra -c '/opt/zimbra/bin/zmprov -l gacf | egrep "^zimbraLogHostname"'`
