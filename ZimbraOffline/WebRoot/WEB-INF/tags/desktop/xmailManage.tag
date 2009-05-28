@@ -87,7 +87,7 @@ function SetSmtpPort() {
 </c:if>
         <tr id="emailRow">
             <td class="${zdf:isValid(bean, 'email') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='EmailAddress'/></td>
-            <td><input class="ZField" type="text" id="email" name="email" value="${bean.email}"></td>
+            <td><input class="ZField" type="text" id="email" name="email" value="${bean.email}" ${empty bean.accountId ? '' : 'disabled'}></td>
         </tr>
 <c:if test="${bean.serverConfigSupported}">    
     <c:if test="${bean.usernameRequired}">    

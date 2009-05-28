@@ -197,6 +197,7 @@ function OnDelete() {
 
 function OnSubmit() {
     zd.enable("accountName");
+    zd.enable("email");
     zd.enable("password");
     if (document.getElementById("port"))
 	zd.enable("port");
