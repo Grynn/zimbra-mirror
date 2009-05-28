@@ -53,7 +53,11 @@ ZaSettings.postInit = function() {
 ZaSettings.initRights = function () {
 	ZaSettings.ENABLED_UI_COMPONENTS=[];
 	ZaZimbraAdmin.currentAdminAccount = new ZaAccount();
-	ZaZimbraAdmin.currentAdminAccount.load("name", ZaZimbraAdmin.currentUserLogin,false,true);
+	if(ZaZimbraAdmin.currentAdminId) {
+		ZaZimbraAdmin.currentAdminAccount.load("id", ZaZimbraAdmin.currentAdminId,false,true);
+	} else {
+		ZaZimbraAdmin.currentAdminAccount.load("name", ZaZimbraAdmin.currentUserLogin,false,true);
+	}
 	if(AjxUtil.isEmpty(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents])) {
 		ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [];
 		//if this is a system admin account - enable access to all UI elements

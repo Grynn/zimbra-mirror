@@ -1168,45 +1168,39 @@ function() {
 
 ZaAccount.loadMethod = 
 function(by, val) {
-	var soapDoc = AjxSoapDoc.create("GetAccountRequest", ZaZimbraAdmin.URN, null);
-	soapDoc.getMethod().setAttribute("applyCos", "0");
-	var elBy = soapDoc.set("account", val);
-	elBy.setAttribute("by", by);
-
-	//var getAccCommand = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	var reqMgrParams = {
-		controller:ZaApp.getInstance().getCurrentController()
-	}
-	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAccountResponse;
-	this.attrs = new Object();
-	this.initFromJS(resp.account[0]);
-
+	var soapDoc, params, resp;
 	//batch the rest of the requests
 	soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 	soapDoc.setMethodAttribute("onerror", "continue");	
+
+	if(by=="id") {
+		this.id = by;
+		this.attrs[ZaItem.A_zimbraId] = val;
+		var getAccDoc = soapDoc.set("GetAccountRequest", null, null, ZaZimbraAdmin.URN);
+		getAccDoc.setAttribute("applyCos", "0");
+		var elBy = soapDoc.set("account", val, getAccDoc);
+		elBy.setAttribute("by", by);		
+	} else {
+		var getAccDoc = AjxSoapDoc.create("GetAccountRequest", ZaZimbraAdmin.URN, null);
+		getAccDoc.getMethod().setAttribute("applyCos", "0");
+		var elBy = getAccDoc.set("account", val);
+		elBy.setAttribute("by", by);
+
+		//var getAccCommand = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = getAccDoc;	
+		var reqMgrParams = {
+			controller:ZaApp.getInstance().getCurrentController()
+		}
+		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAccountResponse;
+		this.attrs = new Object();
+		this.initFromJS(resp.account[0]);
+	}
 	
 	if(!AjxUtil.isEmpty(this.attrs[ZaAccount.A_mailHost]) && ZaItem.hasRight(ZaAccount.GET_MAILBOX_INFO_RIGHT,this)) {
 		var getMailboxReq = soapDoc.set("GetMailboxRequest", null, null, ZaZimbraAdmin.URN);
 		var mbox = soapDoc.set("mbox", "", getMailboxReq);
 		mbox.setAttribute("id", this.attrs[ZaItem.A_zimbraId]);
-		/*try {
-			params = new Object();
-			params.soapDoc = soapDoc;	
-			var reqMgrParams ={
-				controller:ZaApp.getInstance().getCurrentController()
-			}
-			resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetMailboxResponse;
-			
-			if(resp && resp.mbox && resp.mbox[0]) {
-				this.attrs[ZaAccount.A2_mbxsize] = resp.mbox[0].s;
-			}
-		} catch (ex) {
-			//show the error and go on
-			//we should not stop the Account from loading if some of the information cannot be acces
-			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccount.prototype.load", null, false);
-		}*/
 	}				
 	this[ZaAccount.A2_confirmPassword] = null;
 	
@@ -1246,6 +1240,12 @@ function(by, val) {
 				}
 			} else {
 				var batchResp = respObj.Body.BatchResponse;
+				
+				if(batchResp.GetAccountResponse) {
+					resp = batchResp.GetAccountResponse[0];
+					this.initFromJS(resp.account[0]);
+				}
+				
 				if(batchResp.GetMailboxResponse) {
 					resp = batchResp.GetMailboxResponse[0];
 					if(resp && resp.mbox && resp.mbox[0]) {

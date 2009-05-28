@@ -389,6 +389,9 @@ function (resp) {
                 ZaSettings.myDomainName = emailChunks[1];
             }
         }
+        
+        ZaZimbraAdmin.currentAdminId = resp.Body.GetInfoResponse.id;
+        
 		if (resp.Body.GetInfoResponse.attrs){
 			if(resp.Body.GetInfoResponse.attrs.attr && resp.Body.GetInfoResponse.attrs.attr instanceof Array) {
 				var attrsArr = resp.Body.GetInfoResponse.attrs.attr;
