@@ -24,9 +24,13 @@ export JAVA_HOME=${mailboxd_java_home}
 if [ ! -d ${mailboxd_directory} ]; then
   exit 0
 fi
+
+if [ ! -d ${zimbra_home}/mysql ]; then
+  exit 0
+fi
+
 zmassert -d ${mailboxd_java_home}
 zmassert -d ${mailboxd_directory}
-zmassert -d ${zimbra_home}/mysql
 
 #
 # Memory for use by JVM
