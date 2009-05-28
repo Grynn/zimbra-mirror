@@ -54,6 +54,30 @@ ZaAccountMemberOfListView.modelItems = [
 ZaAccount.myXModel.items = ZaAccount.myXModel.items.concat(ZaAccountMemberOfListView.modelItems);
 ZaDistributionList.myXModel.items = ZaDistributionList.myXModel.items.concat(ZaAccountMemberOfListView.modelItems);
 
+ZaAccountMemberOfListView.parseGetAccMembershipResponse =
+function(resp) {
+	var directML = [];
+	var indirectML = [];
+	var nonML = [];	
+	if (resp.dl && (resp.dl instanceof Array)){
+		var dls = resp.dl ;
+		var n = resp.dl.length ;
+		for (var i=0, d=0, m=0; m < n; m++ ){
+			if (dls[m].via && (dls[m].via.length >0)){ //indirect dl
+				indirectML[i] = { name: dls[m].name, id: dls[m].id, via: dls[m].via} ;
+				i ++ ;
+			} else{
+				directML[d] = { name: dls[m].name, id: dls[m].id } ;
+                var attrs = ZaItem.initAttrsFromJS (dls[m]) ;
+                if (attrs["zimbraIsAdminGroup"] != null) {
+                	directML[d]["zimbraIsAdminGroup"] = attrs["zimbraIsAdminGroup"] ; 
+                }
+                d ++ ;
+			}
+		}
+	}
+	return {directMemberList: directML,indirectMemberList: indirectML,nonMemberList: nonML};	
+}
 /**
  * @param app
  * @param val {account value corresponding to by}

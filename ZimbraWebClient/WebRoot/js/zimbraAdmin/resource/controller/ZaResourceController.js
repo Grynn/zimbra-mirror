@@ -146,7 +146,7 @@ function(ev) {
 
 //private and protected methods
 ZaResourceController.prototype._createUI = 
-function () {
+function (entry) {
 	//create accounts list view
 	// create the menu operations/listeners first	
 	this._contentView = this._view = new this.tabConstructor(this._container, entry);

@@ -54,7 +54,7 @@ ZaResource.A_accountStatus = ZaAccount.A_accountStatus;
 ZaResource.A_notes = ZaAccount.A_notes;
 ZaResource.A_mailHost = ZaAccount.A_mailHost;
 ZaResource.A_COSId = ZaAccount.A_COSId;
-ZaResource.A_zimbraDomainName = ZaAccount.A_zimbraDomainName;
+//ZaResource.A_zimbraDomainName = ZaAccount.A_zimbraDomainName;
 ZaResource.A_zimbraMinPwdLength = ZaAccount.A_zimbraMinPwdLength;
 ZaResource.A_zimbraMaxPwdLength = ZaAccount.A_zimbraMaxPwdLength;
 

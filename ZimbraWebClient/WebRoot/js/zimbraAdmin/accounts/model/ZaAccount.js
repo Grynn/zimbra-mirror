@@ -82,7 +82,7 @@ ZaAccount.A_zimbraMailAlias="zimbraMailAlias";
 ZaAccount.A_zimbraMailForwardingAddress="zimbraMailForwardingAddress";
 ZaAccount.A_zimbraPasswordMustChange="zimbraPasswordMustChange";
 ZaAccount.A_zimbraPasswordLocked="zimbraPasswordLocked";
-ZaAccount.A_zimbraDomainName = "zimbraDomainName";
+//ZaAccount.A_zimbraDomainName = "zimbraDomainName";
 ZaAccount.A_zimbraContactMaxNumEntries = "zimbraContactMaxNumEntries";
 ZaAccount.A_zimbraAttachmentsBlocked = "zimbraAttachmentsBlocked";
 ZaAccount.A_zimbraQuotaWarnPercent = "zimbraQuotaWarnPercent";
@@ -1169,11 +1169,6 @@ function() {
 ZaAccount.loadMethod = 
 function(by, val) {
 	var soapDoc = AjxSoapDoc.create("GetAccountRequest", ZaZimbraAdmin.URN, null);
-	/*if(withCos) {
-		soapDoc.getMethod().setAttribute("applyCos", "1");	
-	} else {
-		soapDoc.getMethod().setAttribute("applyCos", "0");		
-	}*/
 	soapDoc.getMethod().setAttribute("applyCos", "0");
 	var elBy = soapDoc.set("account", val);
 	elBy.setAttribute("by", by);
@@ -1188,12 +1183,15 @@ function(by, val) {
 	this.attrs = new Object();
 	this.initFromJS(resp.account[0]);
 
+	//batch the rest of the requests
+	soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+	soapDoc.setMethodAttribute("onerror", "continue");	
+	
 	if(!AjxUtil.isEmpty(this.attrs[ZaAccount.A_mailHost]) && ZaItem.hasRight(ZaAccount.GET_MAILBOX_INFO_RIGHT,this)) {
-		soapDoc = AjxSoapDoc.create("GetMailboxRequest", ZaZimbraAdmin.URN, null);
-		var mbox = soapDoc.set("mbox", "");
+		var getMailboxReq = soapDoc.set("GetMailboxRequest", null, null, ZaZimbraAdmin.URN);
+		var mbox = soapDoc.set("mbox", "", getMailboxReq);
 		mbox.setAttribute("id", this.attrs[ZaItem.A_zimbraId]);
-		try {
-			//var getMbxCommand = new ZmCsfeCommand();
+		/*try {
 			params = new Object();
 			params.soapDoc = soapDoc;	
 			var reqMgrParams ={
@@ -1208,9 +1206,84 @@ function(by, val) {
 			//show the error and go on
 			//we should not stop the Account from loading if some of the information cannot be acces
 			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccount.prototype.load", null, false);
-		}
+		}*/
 	}				
 	this[ZaAccount.A2_confirmPassword] = null;
+	
+	//Make a GetAccountMembershipRequest
+	if(ZaItem.hasRight(ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT,this)) {
+		var getAccMembershipReq = soapDoc.set("GetAccountMembershipRequest", null, null, ZaZimbraAdmin.URN);
+		var account = soapDoc.set("account", this.attrs[ZaItem.A_zimbraId], getAccMembershipReq);
+		account.setAttribute("by","id");		
+	}
+	
+	if(ZaItem.hasRight(ZaAccount.GET_ACCOUNT_INFO_RIGHT,this)) {
+		var getAccInfoReq = soapDoc.set("GetAccountInfoRequest", null, null, ZaZimbraAdmin.URN);
+		var account = soapDoc.set("account", this.attrs[ZaItem.A_zimbraId], getAccInfoReq);
+		account.setAttribute("by","id");		
+	}
+	
+	if(ZaItem.hasRight(ZaAccount.GET_ACCOUNT_INFO_RIGHT,this) || ZaItem.hasRight(ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT,this) ||
+	(!AjxUtil.isEmpty(this.attrs[ZaAccount.A_mailHost]) && ZaItem.hasRight(ZaAccount.GET_MAILBOX_INFO_RIGHT,this)) ) {
+		try {
+			params = new Object();
+			params.soapDoc = soapDoc;	
+			var reqMgrParams ={
+				controller:ZaApp.getInstance().getCurrentController()
+			}
+			var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
+			if(respObj.isException && respObj.isException()) {
+				ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaAccount.loadMethod", null, false);
+			} else if(respObj.Body.BatchResponse.Fault) {
+				var fault = respObj.getResponse().Body.BatchResponse.Fault;
+				if(fault instanceof Array)
+					fault = fault[0];
+			
+				if (fault) {
+					// JS response with fault
+					var ex = ZmCsfeCommand.faultToEx(fault);
+					ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaAccount.loadMethod", null, false);
+				}
+			} else {
+				var batchResp = respObj.Body.BatchResponse;
+				if(batchResp.GetMailboxResponse) {
+					resp = batchResp.GetMailboxResponse[0];
+					if(resp && resp.mbox && resp.mbox[0]) {
+						this.attrs[ZaAccount.A2_mbxsize] = resp.mbox[0].s;
+					}
+				}
+				
+				if(batchResp.GetAccountMembershipResponse) {
+					resp = batchResp.GetAccountMembershipResponse[0];
+					this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.parseGetAccMembershipResponse(resp) ;
+					this[ZaAccount.A2_directMemberList + "_more"] = 
+						(this[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
+					this[ZaAccount.A2_indirectMemberList + "_more"] = 
+						(this[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
+				}
+				
+				if(batchResp.GetAccountInfoResponse) {
+					resp = batchResp.GetAccountInfoResponse[0];
+					if(resp[ZaAccount.A2_publicMailURL] && resp[ZaAccount.A2_publicMailURL][0])
+						this[ZaAccount.A2_publicMailURL] = resp[ZaAccount.A2_publicMailURL][0]._content;
+					
+					if(resp[ZaAccount.A2_adminSoapURL] && resp[ZaAccount.A2_adminSoapURL][0])
+						this[ZaAccount.A2_adminSoapURL] = resp[ZaAccount.A2_adminSoapURL][0]._content;
+					
+					if(resp[ZaAccount.A2_soapURL] && resp[ZaAccount.A2_soapURL][0])
+						this[ZaAccount.A2_soapURL] = resp[ZaAccount.A2_soapURL][0]._content;
+				
+				    if (resp.cos && resp.cos.id)
+				        this[ZaAccount.A2_currentAccountType] = resp.cos.id ;					
+				}
+			}
+		} catch (ex) {
+			//show the error and go on
+			//we should not stop the Account from loading if some of the information cannot be acces
+			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccount.prototype.load", null, false);
+		}	
+	}
+
 	
 	var autoDispName;
 	if(this.attrs[ZaAccount.A_firstName])
@@ -1236,18 +1309,10 @@ function(by, val) {
 		this[ZaAccount.A2_autodisplayname] = "FALSE";
 	}
 	
-	//Make a GetAccountMembershipRequest
-	if(ZaItem.hasRight(ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT,this)) {
-		this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getAccountMemberShip(val, by ) ;
-		this[ZaAccount.A2_directMemberList + "_more"] = 
-			(this[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
-		this[ZaAccount.A2_indirectMemberList + "_more"] = 
-			(this[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
-	}
 }
 
 ZaItem.loadMethods["ZaAccount"].push(ZaAccount.loadMethod);
-
+/*
 ZaAccount.loadInfoMethod = 
 function(by, val) {
 	if(!ZaItem.hasRight(ZaAccount.GET_ACCOUNT_INFO_RIGHT,this))
@@ -1279,12 +1344,7 @@ function(by, val) {
 }
 
 ZaItem.loadMethods["ZaAccount"].push(ZaAccount.loadInfoMethod);
-
-/*ZaAccount.prototype.refresh = 
-function(withCos) {
-	this.load("id", this.id, withCos);
-	
-}*/
+*/
 
 /**
 * public rename; 
@@ -1427,7 +1487,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraMailForwardingAddress, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraMailForwardingAddress, listItem:{type:_EMAIL_ADDRESS_}},
         {id:ZaAccount.A_zimbraPasswordMustChange, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPasswordMustChange},
         {id:ZaAccount.A_zimbraPasswordLocked, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPasswordLocked, choices:ZaModel.BOOLEAN_CHOICES},
-        {id:ZaAccount.A_zimbraDomainName, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraDomainName},
+       // {id:ZaAccount.A_zimbraDomainName, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraDomainName},
         {id:ZaAccount.A_zimbraContactMaxNumEntries, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraContactMaxNumEntries, maxInclusive:2147483647, minInclusive:0},
         {id:ZaAccount.A_zimbraAttachmentsBlocked, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraAttachmentsBlocked, choices:ZaModel.BOOLEAN_CHOICES},
 
