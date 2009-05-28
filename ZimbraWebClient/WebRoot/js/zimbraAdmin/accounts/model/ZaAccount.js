@@ -1235,7 +1235,7 @@ function(by, val) {
 			if(respObj.isException && respObj.isException()) {
 				ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaAccount.loadMethod", null, false);
 			} else if(respObj.Body.BatchResponse.Fault) {
-				var fault = respObj.getResponse().Body.BatchResponse.Fault;
+				var fault = respObj.Body.BatchResponse.Fault;
 				if(fault instanceof Array)
 					fault = fault[0];
 			

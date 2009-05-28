@@ -693,47 +693,83 @@ function(by, val) {
 	this.initFromJS(resp.Body.GetServerResponse.server[0]);
 	
 	//this._defaultValues = ZaApp.getInstance().getGlobalConfig();
-
-	if(this.attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
-		this.getMyVolumes();
-		this.getCurrentVolumes();
-	}
+	soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+	soapDoc.setMethodAttribute("onerror", "continue");	
+	
+	if(this.attrs[ZaServer.A_zimbraMailboxServiceEnabled] && ZaItem.hasRight(ZaServer.MANAGE_VOLUME_RIGHT,this)) {
+		var getAllVols = soapDoc.set("GetAllVolumesRequest", null, null, ZaZimbraAdmin.URN);
+		var getCurrentVols = soapDoc.set("GetCurrentVolumesRequest", null, null, ZaZimbraAdmin.URN);
+	}				
+	var getAllVols = soapDoc.set("GetServerNIfsRequest", null, null, ZaZimbraAdmin.URN);
+	var server = soapDoc.set("server", _val, getAllVols);
+	server.setAttribute("by", _by);
+	try {
+		params = new Object();
+		params.soapDoc = soapDoc;	
+		params.asyncMode = false;
+		params.targetServer = this.id;
+		var reqMgrParams = {
+			controller : ZaApp.getInstance().getCurrentController(),
+			busyMsg : ZaMsg.BUSY_GET_SERVER
+		}
+		
+		var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
+		this[ZaServer.A_Volumes] = new Array();
+		
+		if(respObj.isException && respObj.isException()) {
+			ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaServer.loadMethod", null, false);
+		} 
+		if (respObj.Body.BatchResponse) {
+			if(respObj.Body.BatchResponse.Fault) {
+				var fault = respObj.Body.BatchResponse.Fault;
+				if(fault instanceof Array)
+					fault = fault[0];
+			
+				if (fault) {
+					// JS response with fault
+					var ex = ZmCsfeCommand.faultToEx(fault);
+					ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaServer.loadMethod", null, false);
+				}
+			} 
+		
+			var batchResp = respObj.Body.BatchResponse;
+			if(batchResp.GetAllVolumesResponse) {
+				resp = batchResp.GetAllVolumesResponse[0];
+				this.parseMyVolumes(resp);
+			}
+				
+			if(batchResp.GetCurrentVolumesResponse) {
+				resp = batchResp.GetCurrentVolumesResponse[0];
+				this.parseCurrentVolumesResponse(resp);
+			}
+				
+			if(batchResp.GetServerNIfsResponse) {
+				resp = batchResp.GetServerNIfsResponse[0];
+				this.parseNIFsResponse(resp);
+			}
+		}
+	} catch (ex) {
+		//show the error and go on
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaServer.loadMethod", null, false);
+	}		
 }
 
 ZaItem.loadMethods["ZaServer"].push(ZaServer.loadMethod);
 
-ZaServer.loadNIFS = 
-function(by, val) {
-	var _by = by ? by : "id";
-	var _val = val ? val : this.id
-	var soapDoc = AjxSoapDoc.create("GetServerNIfsRequest", ZaZimbraAdmin.URN, null);
-	var elBy = soapDoc.set("server", _val);
-	elBy.setAttribute("by", _by);
-	//var command = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	params.asyncMode = false;
-	var reqMgrParams = {
-		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : ZaMsg.BUSY_GET_SERVER
-	}
-	try {
-		resp = ZaRequestMgr.invoke(params, reqMgrParams);
-		if(resp.Body.GetServerNIfsResponse && resp.Body.GetServerNIfsResponse.ni) {
-			var NIs = resp.Body.GetServerNIfsResponse.ni;
-			var cnt = NIs.length;
-			this.nifs = [];
-			for(var i=0;i<cnt;i++) {
-				var ni = {};
-				ZaItem.prototype.initFromJS.call(ni, NIs[i]);
-				this.nifs.push(ni);
-			}
+ZaServer.prototype.parseNIFsResponse = 
+function(resp) {
+	if(resp && resp.ni) {
+		var NIs = resp.ni;
+		var cnt = NIs.length;
+		this.nifs = [];
+		for(var i=0;i<cnt;i++) {
+			var ni = {};
+			ZaItem.prototype.initFromJS.call(ni, NIs[i]);
+			this.nifs.push(ni);
 		}
-	} catch (ex) {
-		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaServer.loadNIFS");
 	}
 }
-ZaItem.loadMethods["ZaServer"].push(ZaServer.loadNIFS);
+//ZaItem.loadMethods["ZaServer"].push(ZaServer.loadNIFS);
 
 ZaServer.prototype.initFromJS = function(server) {
 	ZaItem.prototype.initFromJS.call(this, server);
@@ -764,23 +800,8 @@ ZaServer.prototype.initFromJS = function(server) {
 	this[ZaServer.A_showVolumes] = this.attrs[ZaServer.A_zimbraMailboxServiceEnabled];
 }
 
-ZaServer.prototype.getCurrentVolumes =
-function () {
-	if(!this.id || !ZaItem.hasRight(ZaServer.MANAGE_VOLUME_RIGHT,this))
-		return;
-	var soapDoc = AjxSoapDoc.create("GetCurrentVolumesRequest", ZaZimbraAdmin.URN, null);
-	//var command = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	params.asyncMode = false;
-	params.targetServer = this.id;
-	var reqMgrParams = {
-		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : ZaMsg.BUSY_GET_VOL
-	}
-	resp = ZaRequestMgr.invoke(params, reqMgrParams);		
-	var resp = resp.Body.GetCurrentVolumesResponse;
-	
+ZaServer.prototype.parseCurrentVolumesResponse =
+function (resp) {
 	var volumes = resp.volume;
 	if(volumes) {
 		var cnt = volumes.length;
@@ -795,47 +816,15 @@ function () {
 	}
 }
 
-ZaServer.prototype.getMyVolumes = 
-function() {
-	this[ZaServer.A_Volumes] = new Array();
-	if(!this.id || !ZaItem.hasRight(ZaServer.MANAGE_VOLUME_RIGHT,this))
-		return;
-	var soapDoc = AjxSoapDoc.create("GetAllVolumesRequest", ZaZimbraAdmin.URN, null);
-	//var command = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	params.asyncMode = false;
-	params.targetServer = this.id;
-	
-	var reqMgrParams = {
-		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : ZaMsg.BUSY_GET_ALL_VOL
-	}
-	resp = ZaRequestMgr.invoke(params, reqMgrParams);		
-	var resp = resp.Body.GetAllVolumesResponse;
-
+ZaServer.prototype.parseMyVolumes = 
+function(resp) {
 	var volumes = resp.volume;
 	if(volumes) {
 		var cnt = volumes.length;
 		for (var i=0; i< cnt;  i++) {
 			this[ZaServer.A_Volumes].push(volumes[i]);	
 		}
-	}/*
-	
-	var children = respNode.childNodes;
-	for (var i=0; i< children.length;  i++) {
-		var child = children[i];
-		if(child.nodeName == 'volume') {
-			var volume = new Object();		
-			volume[ZaServer.A_VolumeId] = child.getAttribute(ZaServer.A_VolumeId);
-			volume[ZaServer.A_VolumeName] = child.getAttribute(ZaServer.A_VolumeName);
-			volume[ZaServer.A_VolumeRootPath] = child.getAttribute(ZaServer.A_VolumeRootPath);			
-			volume[ZaServer.A_VolumeCompressBlobs] = child.getAttribute(ZaServer.A_VolumeCompressBlobs);
-			volume[ZaServer.A_VolumeCompressionThreshold] = child.getAttribute(ZaServer.A_VolumeCompressionThreshold);			
-			volume[ZaServer.A_VolumeType] = child.getAttribute(ZaServer.A_VolumeType);						
-			this[ZaServer.A_Volumes].push(volume);
-		}
-	}*/
+	}
 }
 
 ZaServer.compareVolumesByName = function (a,b) {
