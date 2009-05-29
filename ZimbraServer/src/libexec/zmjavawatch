@@ -1,0 +1,138 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Getopt::Long;
+
+sub readProcTaskStats($) {
+    my $pid = shift;
+    my %usage = ();
+    open(TASKS, "find /proc/$pid/task -type d -maxdepth 1 -mindepth 1|") 
+	|| die "find on /proc/$pid/task failed: $!";
+    while (<TASKS>) {
+	chomp;
+	open(STAT, "$_/stat");
+	my $stat = <STAT>;
+	my @items = split(/ /, $stat);
+	my $userTicks = $items[13];
+	my $systemTicks = $items[14];
+	my $threadId = $items[0];
+	$usage{$threadId} = $userTicks + $systemTicks;
+	close(STAT);
+    }
+    close(TASKS);
+    return %usage;
+}
+
+sub captureThreadDump($$$) {
+    my $pid = shift;
+    my $log = shift;
+    my $wait = shift; 
+    my $ret;
+
+    open(FILE, "<$log") || warn "can't open: ", $log, ": $!\n";
+    seek(FILE, 0, 2); # seek to end
+    my $offsetBeforeKill = tell(FILE); # get position at end
+    $ret = kill(3, $pid); # send signal to thread dump
+    sleep($wait); # wait for thread dump to complete
+    $ret = seek(FILE, $offsetBeforeKill, 0); # reset EOF from earlier seek
+    my @result = ();
+    my $tdl;
+    while ($tdl = <FILE>) {
+	push @result, $tdl;
+    }
+    close(FILE);
+    #for (my $i = 0; $i < $#result; $i++) { print $i, ":", $result[$i]; }
+    return @result;
+}
+
+sub usage() {
+    print<<EOF;
+
+zmjavawatch is simple script to find out which threads are consuming
+CPU.  It is not a profiler, but is useful to track down runaway
+threads.  Stack back traces are captured after CPU accounting and
+hence may show threads that have since become idle.  The following
+options are supported:
+
+    --help                   show usage
+    --pid=int                java process id to watch (default: 
+                             mailboxd pid)
+    --count=int              iterations to run for (default: 4)
+    --watch-delay=sec        delay between iterations (default 15s)
+    --thread-dump-delay=sec  time to wait for JVM to complete writing 
+                             thread dump complete (default: 1s)
+    --thread-dump-file=path  stderr of JVM process where thread dumps
+                             are written (default: zmmailboxd.out)
+EOF
+   exit
+}
+
+$| = 0;
+my %ARG = ();
+GetOptions("help" => \$ARG{HELP},
+	   "pid=i" => \$ARG{PID},
+           "count=i" => \$ARG{COUNT},
+	   "watch-delay=i" => \$ARG{DELAY},
+	   "thread-dump-delay=i" => \$ARG{TWAIT},
+	   "thread-dump-file=s" => \$ARG{LOG}) || usage();
+
+my $DEFAULT_PID = `cat '/opt/zimbra/log/zmmailboxd_java.pid'`;
+chomp($DEFAULT_PID);
+usage() if (defined $ARG{HELP});
+$ARG{PID} = $DEFAULT_PID if (!defined $ARG{PID});
+$ARG{DELAY} = 15 if (!defined $ARG{DELAY});
+$ARG{DELAY} = 5 if (defined $ARG{DELAY} && $ARG{DELAY} < 5);
+$ARG{COUNT} = 4 if (!defined $ARG{COUNT});
+$ARG{LOG} = '/opt/zimbra/log/zmmailboxd.out' if (!defined $ARG{LOG});
+$ARG{TWAIT} = 1 if (!defined $ARG{TWAIT});
+
+print "# PID = ", $ARG{PID}, "\n";
+print "# COUNT = ", $ARG{COUNT}, "\n";
+print "# WATCH DELAY = ", $ARG{DELAY}, "\n";
+print "# THREAD DUMP DELAY = ", $ARG{TWAIT}, "\n";
+print "# THREAD DUMP FILE = ", $ARG{LOG}, "\n";
+
+my %last;
+my $firstTime = 1;
+ITER: for (my $i = 0; $i <= $ARG{COUNT}; $i++) {
+    my %current = readProcTaskStats($ARG{PID});
+    if ($firstTime) {
+	%last = %current;
+	sleep($ARG{DELAY});
+	$firstTime = 0;
+	next ITER;
+    } 
+
+    my %diff = ();
+    foreach my $tid (keys %current) {
+	my $diff = $current{$tid};
+	if (defined($last{$tid})) {
+	    $diff = $current{$tid} - $last{$tid};
+	}
+	if ($diff > 0) {
+	    $diff{$tid} = $diff;
+	}
+    }
+    my @threadDump = captureThreadDump($ARG{PID}, $ARG{LOG}, $ARG{TWAIT});
+    print "\n", '--', `date`;
+    foreach my $tid (sort { $diff{$b} <=> $diff{$a} } keys %diff) {
+	my $hexTid = sprintf("0x%x", $tid);
+	print "Thread $tid ($hexTid) ticks ", $diff{$tid}, "\n";
+	my $threadStartFound = 0;
+	my $pattern = " nid=$hexTid ";
+      LINE:
+	foreach my $line (@threadDump) {
+	    if ($line =~ m/$pattern/) {
+		$threadStartFound = 1;
+	    }
+	    if ($threadStartFound) { 
+		print $line;
+		if ($line =~ /^\s*$/) {
+		    last LINE;
+		}
+	    }
+	}
+    }
+    %last = %current;
+    sleep($ARG{DELAY});
+}
