@@ -47,6 +47,7 @@ components="\
   aspell \
   bdb \
   clamav \
+  convertd \
   curl \
   cyrus-sasl \
   dspam \
@@ -58,10 +59,13 @@ components="\
   mysql \
   net-snmp \
   openldap \
+  openldap-clibs \
   openssl \
   perdition \
   snmp \
   tcmalloc \
+  zimbramon/bin \
+  zimbramon/crontabs \
   zimbramon/rrdtool \
 "
   
@@ -143,6 +147,14 @@ if [ -d ${zimbra_home} ]; then
     chmod 755 ${zimbra_home}/libexec/* 2> /dev/null
   fi
 
+  if [ -d ${zimbra_home}/log ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/log
+    if [ -f ${zimbra_home}/log/.hotspot_compiler ]; then
+      chown ${root_user}:${root_group} ${zimbra_home}/log/.hotspot_compiler
+      chmod 444 ${zimbra_home}/.hotspot_compiler
+    fi
+  fi
+
   if [ -d ${zimbra_home}/logger ]; then
     chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/logger 2> /dev/null
     chmod 755 ${zimbra_home}/logger/* 2> /dev/null
@@ -216,6 +228,9 @@ for i in ${components}; do
     printMsg "Fixing ownership and permissions on ${zimbra_home}/${i}"
     chown ${root_user}:${root_group} ${zimbra_home}/${i}-* 2> /dev/null
 	  chown -R ${root_user}:${root_group} ${zimbra_home}/${i}/* 2> /dev/null
+  elif [ -d ${zimbra_home}/${i} ]; then
+    printMsg "Fixing ownership and permissions on ${zimbra_home}/${i}"
+	  chown -R ${root_user}:${root_group} ${zimbra_home}/${i} 2> /dev/null
   fi
 done
 
@@ -288,6 +303,9 @@ if [ -L ${zimbra_home}/amavisd ]; then
     mkdir -p ${zimbra_home}/data/amavisd/.spamassassin
   fi  
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/amavisd
+  if [ -d ${zimbra_home}/amavisd/.spamassassin ]; then
+    chown -R ${root_user}:${root_group} ${zimbra_home}/amavisd/.spamassassin
+  fi
 fi
 
 
