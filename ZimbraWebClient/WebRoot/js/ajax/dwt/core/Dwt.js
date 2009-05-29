@@ -202,6 +202,11 @@ Dwt.DND_DROP_COPY = 1;
  */
 Dwt.DND_DROP_MOVE = 2;
 
+/**
+ * Ballpark figure for width of a scrollbar 
+ */
+Dwt.SCROLLBAR_WIDTH = 22;
+
 
 // Keys used for retrieving data
 // TODO JSDoc

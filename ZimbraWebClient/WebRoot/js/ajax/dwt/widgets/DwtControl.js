@@ -2219,12 +2219,15 @@ function(params, ev) {
 		var realTop = containerTop + container.scrollTop;
 		var scroll = container.scrollTop;
 		var diff = ev.docY - realTop; // do we need to scroll up?
-		var scrollAmt = (diff <= params.threshold) ? -1 * params.amount : 0;
+		// account for horizontal scrollbar
+		var threshold = (container.clientWidth < container.scrollWidth) ? params.threshold + Dwt.SCROLLBAR_WIDTH :
+																		  params.threshold;
+		var scrollAmt = (diff <= threshold) ? -1 * params.amount : 0;
 		if (scrollAmt == 0) {
 			var containerH = Dwt.getSize(container, DwtPoint.tmp).y;
 			var containerBottom = realTop + containerH;
 			diff = containerBottom - ev.docY; // do we need to scroll down?
-			scrollAmt = (diff <= params.threshold) ? params.amount : 0;
+			scrollAmt = (diff <= threshold) ? params.amount : 0;
 		}
 		container._scrollAmt = scrollAmt;
 		if (scrollAmt) {
@@ -2613,8 +2616,7 @@ function(ev) {
 		} else {
 			obj.__lastDestDwtObj = null;
 			var destDwtObj = mouseEv.dwtObj;
-			if (destDwtObj != null && destDwtObj._dropTarget != null &&
-				obj.__dropAllowed && destDwtObj != obj) {
+			if (destDwtObj && destDwtObj._dropTarget &&	obj.__dropAllowed && destDwtObj != obj) {
 				destDwtObj._drop(mouseEv);
 				destDwtObj._dropTarget._drop(obj._dragSource._getData(), mouseEv);
 				obj._dragSource._endDrag();
@@ -2623,7 +2625,7 @@ function(ev) {
 			} else {
 				DwtControl.__badDrop(obj, mouseEv);
 			}
-			if (destDwtObj._dndScrollCallback) {
+			if (destDwtObj && destDwtObj._dndScrollCallback) {
 				destDwtObj._dndScrollCallback.run(mouseEv);
 			}
 			mouseEv._stopPropagation = true;
