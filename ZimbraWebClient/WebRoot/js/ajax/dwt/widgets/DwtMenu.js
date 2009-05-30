@@ -34,6 +34,9 @@
  *        style			[constant]*			menu style
  *        className		[string]*			CSS class
  *        posStyle		[constant]*			positioning style
+ *        cascade		[boolean]*			should menu cascade (i.e. multiple columns).
+ *        									If not specified, default is true
+ *        									for backwards compatibility.
  */
 DwtMenu = function(params) {
 	if (arguments.length == 0) { return; }
@@ -57,10 +60,18 @@ DwtMenu = function(params) {
 	}
 	params.className = params.className || "DwtMenu";
 
+	this._cascade = params.cascade == null || params.cascade;
+
 	// Hack to force us to hang off of the shell for positioning.
 	params.parent = (parent instanceof DwtShell) ? parent : parent.shell;
 	DwtComposite.call(this, params);
 	this.parent = parent;
+
+	var isPopup = (this._style == DwtMenu.POPUP_STYLE || this._style == DwtMenu.DROPDOWN_STYLE);
+	if (isPopup && !this._cascade) {
+		this.setScrollStyle(DwtControl.SCROLL);
+	}
+
 	if (!parent) { return; }
 
 	var events = AjxEnv.isIE ? [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP] :
@@ -127,9 +138,9 @@ DwtMenu = function(params) {
 	// keystrokes in the menu.
 	this._tabGroup = new DwtTabGroup(this.toString(), true);
 	this._tabGroup.addMember(this);
-}
+};
 
-DwtMenu.PARAMS = ["parent", "style", "className", "posStyle"];
+DwtMenu.PARAMS = ["parent", "style", "className", "posStyle", "cascade"];
 
 DwtMenu.prototype = new DwtComposite;
 DwtMenu.prototype.constructor = DwtMenu;
@@ -137,7 +148,7 @@ DwtMenu.prototype.constructor = DwtMenu;
 DwtMenu.prototype.toString = 
 function() {
 	return "DwtMenu";
-}
+};
 
 DwtMenu.BAR_STYLE = 1;
 DwtMenu.POPUP_STYLE = 2;
@@ -168,27 +179,27 @@ function() {
 DwtMenu.prototype.addPopupListener =
 function(listener) {
 	this.addListener(DwtEvent.POPUP, listener);
-}
+};
 
 DwtMenu.prototype.removePopupListener = 
 function(listener) {
 	this.removeListener(DwtEvent.POPUP, listener);
-}
+};
 
 DwtMenu.prototype.addPopdownListener = 
 function(listener) {
 	this.addListener(DwtEvent.POPDOWN, listener);
-}
+};
 
 DwtMenu.prototype.removePopdownListener = 
 function(listener) {
 	this.removeListener(DwtEvent.POPDOWN, listener);
-}
+};
 
 DwtMenu.prototype.getItem =
 function(index) {
 	return this._children.get(index);
-}
+};
 
 DwtMenu.prototype.getItemById =
 function(key, id) {
@@ -199,17 +210,17 @@ function(key, id) {
 			return items[i];
 	}
 	return null;
-}
+};
 
 DwtMenu.prototype.getItemCount =
 function() {
 	return this._children.size();
-}
+};
 
 DwtMenu.prototype.getItems =
 function() {
 	return this._children.getArray();
-}
+};
 
 DwtMenu.prototype.getSelectedItem =
 function(style) {
@@ -220,12 +231,12 @@ function(style) {
 			return mi;
 	}
 	return null;
-}
+};
 
 DwtMenu.prototype.isPoppedUp =
 function() {
 	return this._isPoppedUp;
-}
+};
 
 DwtMenu.prototype.popup =
 function(msec, x, y, kbGenerated) {
@@ -249,7 +260,7 @@ function(msec, x, y, kbGenerated) {
 			this._popupActionId = AjxTimedAction.scheduleAction(this._popupAction, msec);
 		}
 	}
-}
+};
 
 DwtMenu.prototype.popdown =
 function(msec) {
@@ -266,7 +277,7 @@ function(msec) {
 		else
 			this._popdownActionId = AjxTimedAction.scheduleAction(this._popdownAction, msec);
 	}
-}
+};
 
 DwtMenu.prototype.render =
 function(x, y) {
@@ -279,7 +290,8 @@ function(x, y) {
 	windowSize.x -= 20;
 
 	var isPopup = (this._style == DwtMenu.POPUP_STYLE || this._style == DwtMenu.DROPDOWN_STYLE);
-	if (isPopup) {
+	var isCascade = this._cascade;
+	if (isPopup && isCascade) {
 		var space = windowSize.y;
 		var newY = null;
 		var rows = this._table.rows;
@@ -322,12 +334,20 @@ function(x, y) {
 			y = newY - mySize.y;
 		}
 	}
+	else if (isPopup && !isCascade) {
+		if (y + mySize.y > windowSize.y) {
+			mySize.y = windowSize.y - y;
+		}
+	}
 
 	// Popup menu type
-	var newX = ((x + mySize.x) >= windowSize.x) ? (windowSize.x - mySize.x) : x;
-	var newY = ((y + mySize.y) >= windowSize.y) ? (windowSize.y - mySize.y) : y;
-	this.setLocation(newX, isPopup ? newY : y);
-	this.setSize("auto", isPopup || y + mySize.y < windowSize.y - 5 ? "auto" : windowSize.y - y - 5);
+	var newX = x + mySize.x >= windowSize.x ? windowSize.x - mySize.x : x;
+	var newY = isPopup && y + mySize.y >= windowSize.y ? windowSize.y - mySize.y : y;
+	this.setLocation(newX, newY);
+
+	var newW = "auto";
+	var newH = (isPopup && isCascade) || y + mySize.y < windowSize.y - 5 ? "auto" : windowSize.y - y - 5;
+	this.setSize(newW, newH);
 
 	// NOTE: This hack is needed for FF/Moz because the containing div
 	//	   allows the inner table to overflow. When the menu cascades
@@ -336,7 +356,7 @@ function(x, y) {
 	//	   forces the outer div's width to surround the table.
 	if ((AjxEnv.isGeckoBased || AjxEnv.isSafari || (this._origStyle == DwtMenu.CALENDAR_PICKER_STYLE)) && this._table) {
 		var htmlEl = this.getHtmlElement();
-		htmlEl.style.width = mySize.x + "px";
+		htmlEl.style.width = (mySize.x + (isPopup && !isCascade ? 10 : 0)) + "px";
 	}
 };
 
@@ -396,17 +416,17 @@ function(actionCode, ev) {
 	}
 	
 	return true;
-}
+};
 
 DwtMenu.prototype._focus =
 function() {
 	//DBG.println(AjxDebug.DBG1, "DwtMenu.prototype._focus");
-}
+};
 
 DwtMenu.prototype._blur =
 function() {
 	//DBG.println(AjxDebug.DBG1, "DwtMenu.prototype._blur");
-}
+};
 
 
 
@@ -425,7 +445,7 @@ function(dwtObj) {
 DwtMenu.prototype.setAssociatedElementId =
 function(id){
 	this._associatedElId = id;
-}
+};
 
 /*
 * Checks a menu item (the menu must be radio or checkbox style). The menu item
@@ -446,7 +466,7 @@ function(field, value, skipNotify) {
 	 	if (val == value)
 			item.setChecked(true, skipNotify);
 	}
-}
+};
 
 /**
  * Programmatically selects a menu item. The item can be specified with an index,
@@ -507,7 +527,7 @@ function(child) {
 		}
 	}
 	this._children.remove(child);
-}
+};
 
 DwtMenu.prototype.addChild = 
 function(child) {
@@ -517,7 +537,7 @@ function(child) {
 	if (Dwt.instanceOf(child, "DwtColorPicker") || Dwt.instanceOf(child, "DwtCalendar") ||
 	    (this._style == DwtMenu.GENERIC_WIDGET_STYLE))
 		this._addItem(child);
-}
+};
 
 // All children are added now, including menu items. Previously, it wasn't
 // reparenting and that was preventing the menu items from using templates
@@ -544,7 +564,7 @@ function(item, index) {
 		col.vAlign = "middle";
 		var spc = row.insertCell(-1);
 		spc.nowrap = true;
-		spc.width = "7px"
+		spc.width = "7px";
 	} else {
 		// If item we're adding is check/radio style, and its the first such
 		// item in the menu, then we must instruct our other children to add 
@@ -575,22 +595,22 @@ function(child, skipNotify) {
 			break;
 		}
 	}
-}
+};
 
 DwtMenu.prototype._menuHasCheckedItems =
 function() {
 	return this._menuItemsHaveChecks;
-}
+};
 
 DwtMenu.prototype._menuHasItemsWithIcons =
 function() {
 	return this._menuItemsHaveIcons;
-}
+};
 
 DwtMenu.prototype._menuHasSubmenus =
 function() {
 	return (this._menuItemsWithSubmenus > 0);
-}
+};
 
 /* Once an icon is added to any menuItem, then the menu will be considered
  * to contain menu items with icons in perpetuity */
@@ -598,7 +618,7 @@ DwtMenu.prototype._iconItemAdded =
 function(item) {
 	if (!this._menuItemsHaveIcons) Dwt.addClass(this.getHtmlElement(), DwtMenu.HAS_ICON);
 	this._menuItemsHaveIcons = true;
-}
+};
 
 /* Once an check/radio is added to any menuItem, then the menu will be considered
  * to contain checked items in perpetuity */
@@ -611,7 +631,7 @@ DwtMenu.prototype._submenuItemAdded =
 function() {
 	Dwt.addClass(this.getHtmlElement(), DwtMenu.HAS_SUBMENU);
 	this._menuItemsWithSubmenus++;
-}
+};
 
 DwtMenu.prototype._submenuItemRemoved =
 function() {
@@ -625,7 +645,7 @@ function() {
 	if (this._menuItemsWithSubmenus == 0) {
 		Dwt.delClass(this.getHtmlElement(), DwtMenu.HAS_SUBMENU);
 	}
-}
+};
 
 DwtMenu.prototype._popdownSubmenus = function() {
 	var sz = this._children.size();
@@ -648,7 +668,8 @@ function(x, y, kbGenerated) {
 	this.render(x, y);
 
 	var isPopup = (this._style == DwtMenu.POPUP_STYLE || this._style == DwtMenu.DROPDOWN_STYLE);
-	this.setScrollStyle(isPopup ? Dwt.CLIP : Dwt.SCROLL);
+	var isCascade = this._cascade;
+	this.setScrollStyle(isPopup && isCascade ? Dwt.CLIP : Dwt.SCROLL);
 	
 	this.notifyListeners(DwtEvent.POPUP, this);
 
@@ -801,7 +822,7 @@ function(){
 			return a[i];
 	}
 	return null;
-}
+};
 
 /* Note that a hack has been added to DwtHtmlEditor to call this method when the 
  * editor gets focus. The reason for this is that the editor uses an Iframe 
@@ -857,7 +878,7 @@ function(ev) {
 	DwtMenu._outsideMouseDownListener(mouseEv);
 	DwtUiEvent.setBehaviour(ev, false, true);
 	return true;
-}
+};
 
 DwtMenu._capMouseWheelHdlr = function(ev) {
 	return DwtMenu._capMouseDownHdlr(ev);
