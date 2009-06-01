@@ -423,6 +423,13 @@ createCA() {
     IS_NEW_CA=$1 #Allow the scripts to overwrite the existing csr
     shift
   fi
+
+  if [ x"${1}" = "x-subject" ]; then
+    shift
+    SUBJECT="$1"
+    shift
+    echo "Subject: $SUBJECT"
+  fi
   
   if [ ! -f ${zimbra_ca_ssl_conf} -o x"${IS_NEW_CA}" = "x-new" ]; then
     createConf "${zimbra_ca_ssl_conf}" "$subject_alt_names"
@@ -1442,7 +1449,7 @@ migrate () {
 usage () {
   echo "Usage: "
   echo "  $0 -help"
-  echo "  $0 createca [-new]"
+  echo "  $0 createca [-new] [-subject subject]"
   echo "  $0 deployca"
   echo "  $0 createcsr <self|comm> [-new] [-subject subject] [-subjectAltNames \"host1,host2\"]"
   echo "  $0 createcrt [-new] [-days validation days] [-subject subject] [-subjectAltNames \"host1,host2\"]"
@@ -1499,7 +1506,7 @@ elif [ x"$ACTION" = "xviewstagedcrt" -o x"$ACTION" = "xviewcrt" ]; then
 elif [ x"$ACTION" = "xviewcsr" ]; then
   showcsr  $@
 elif [ x"$ACTION" = "xcreateca" ]; then
-  createCA $@
+  createCA "$@"
 elif [ x"$ACTION" = "xdeployca" ]; then
   deployCA $@
 elif [ x"$ACTION" = "xcreatecsr" ]; then
