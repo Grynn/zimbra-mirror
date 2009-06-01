@@ -64,7 +64,6 @@ DwtMenuItem = function(params) {
 
     // add listeners if not menu item separator
 	if (!(style & DwtMenuItem.SEPARATOR_STYLE)) {
-		this._subMenuMouseOverListener = new AjxListener(this, this.__handleSubMenuMouseOver);
 		this.addSelectionListener(new AjxListener(this, this.__handleItemSelect));
 	}
 }
@@ -288,7 +287,6 @@ function(delay, kbGenerated) {
 		//y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
 	}
 	//this.setLocation(x, y);
-    menu.addListener(DwtEvent.ONMOUSEOVER, this._subMenuMouseOverListener);
     menu.popup(delay, x, y, kbGenerated);
 };
 
@@ -297,7 +295,6 @@ function() {
     var menu = this.getMenu();
     if (menu) {
         menu.popdown();
-        menu.removeListener(DwtEvent.ONMOUSEOVER, this._subMenuMouseOverListener);
     }
 };
 
@@ -312,7 +309,8 @@ function() {
 // Private methods
 //
 
-DwtMenuItem.prototype.__handleItemSelect = function(event) {
+DwtMenuItem.prototype.__handleItemSelect =
+function(event) {
 	this.setDisplayState(DwtControl.NORMAL);
     if (this.isStyle(DwtMenuItem.CHECK_STYLE)) {
         this._setChecked(!this._itemChecked, null, true);
@@ -341,19 +339,20 @@ DwtMenuItem.prototype.__handleItemSelect = function(event) {
     }
 };
 
-DwtMenuItem.prototype.__handleSubMenuMouseOver = function(event) {
-    this.setDisplayState(DwtControl.HOVER);
-	this.parent._hoveredItem = this;
-};
-
 DwtMenuItem._mouseOverListener =
 function(ev) {
 	var menuItem = ev.dwtObj;
 	if (!menuItem) { return false; }
+	var menu = menuItem.parent;
+	if (menu._hoveredItem) {
+		var mouseEv = new DwtMouseEvent();
+		mouseEv.dwtObj = menu._hoveredItem;
+		DwtButton._mouseOutListener(mouseEv);
+	}
 	if (menuItem._style & DwtMenuItem.SEPARATOR_STYLE) { return false; }
     DwtButton._mouseOverListener(ev, menuItem);
-	menuItem.parent._hoveredItem = menuItem;
-    menuItem.parent._popdownSubmenus();
+	menu._hoveredItem = menuItem;
+    menu._popdownSubmenus();
     if (menuItem._menu && !ev.ersatz) {
         menuItem._popupMenu(menuItem._hoverDelay);
     }
@@ -361,9 +360,12 @@ function(ev) {
 
 DwtMenuItem._mouseOutListener =
 function(ev) {
+	var menuItem = ev.dwtObj;
+	var submenu = menuItem && menuItem.getMenu();
+	if (submenu && submenu.isPoppedUp()) { return; }
 	DwtButton._mouseOutListener(ev);
-	if (ev.dwtObj) {
-		ev.dwtObj.parent._hoveredItem = null;
+	if (menuItem) {
+		menuItem.parent._hoveredItem = null;
 	}
 };
 
