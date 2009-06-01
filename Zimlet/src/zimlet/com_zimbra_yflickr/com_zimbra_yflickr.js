@@ -765,13 +765,13 @@ Com_Zimbra_Yflickr.prototype.deselectAllPhotos = function()
  */
 Com_Zimbra_Yflickr.prototype.doneAttachPhotos = function ()
 {
-    // locate the composer control and set up the callback handler
-    var composer = appCtxt.getApp(ZmApp.MAIL).getComposeController();
-    var callback = new AjxCallback (this,composer._handleResponseSaveDraftListener);
+    // locate the compose controller and set up the callback handler
+    var cc = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
+    var callback = new AjxCallback (cc,cc._handleResponseSaveDraftListener);
 
     // build up the attachment list 
     attachment_list = this.attachment_ids.join(",");
-    composer.sendMsg(attachment_list,ZmComposeController.DRAFT_TYPE_MANUAL,callback);
+    cc.sendMsg(attachment_list,ZmComposeController.DRAFT_TYPE_MANUAL,callback);
 
     // and clean up all the photosets
     this.deselectAllPhotos();
