@@ -303,8 +303,8 @@ else
 	PCREH="pcre.h"
 fi
 
-echo "	Checking pcre.h"
 if [[ $PLAT != "MACOSX"* ]]; then
+	echo "	Checking pcre.h"
 	if [ ! -f "/usr/include/$PCREH" ]; then
 		echo "Error: /usr/include/$PCREH not found"
 		exit 1;
