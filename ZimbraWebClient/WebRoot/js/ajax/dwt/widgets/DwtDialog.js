@@ -457,8 +457,10 @@ function(html, idx) {
 DwtDialog.prototype._buttonListener =
 function(ev, args) {
 	var obj = DwtControl.getTargetControl(ev);
-	var buttonId = obj.buttonId;
-	this._runCallbackForButtonId(buttonId, args);
+	var buttonId = (obj && obj.buttonId) || this._enterButtonId;
+	if (buttonId) {
+		this._runCallbackForButtonId(buttonId, args);
+	}
 };
 
 DwtDialog.prototype._runCallbackForButtonId =
