@@ -105,8 +105,7 @@ ZaAllGrantsXFormView.prototype.getMyXForm = function() {
             }
     ] ;
 
-    var ffTableStyle = "width:100%;overflow:visible;position:absolute;" ;
-    var tableStyle = 	AjxEnv.isIE  ? ffTableStyle + "height:100%;" : ffTableStyle ;
+    var tableStyle = "width:100%;overflow:visible;position:absolute;" ;
 
     xFormObject.tableCssStyle = tableStyle;
     xFormObject.items = [
