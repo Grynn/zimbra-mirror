@@ -32,7 +32,7 @@ public class CheckCrumbTag extends ZimbraSimpleTag {
         try {
             ZMailbox mbox = getMailbox();
             String validCrumb = mbox.getAccountInfo(false).getCrumb();
-            if (validCrumb != null && !validCrumb.equals(mCrumb))
+            if (validCrumb == null || !validCrumb.equals(mCrumb))
                 throw ZTagLibException.INVALID_CRUMB("missing valid crumb", null);
         } catch (ServiceException e) {
             throw new JspTagException(e.getMessage(), e);
