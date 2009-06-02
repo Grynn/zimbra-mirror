@@ -352,7 +352,7 @@ if(ZaTabView.XFormModifiers["ZaCosXFormView"]) {
 
 if (ZaDomain) {
 	ZaDomain.A_domainMaxAccounts = "zimbraDomainMaxAccounts";
-	ZaDomain.myXModel.items.push({id:ZaDomain.A_domainMaxAccounts, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_domainMaxAccounts,minInclusive:0});
+	ZaDomain.myXModel.items.push({id:ZaDomain.A_domainMaxAccounts, type:_INT_, ref:"attrs/" + ZaDomain.A_domainMaxAccounts,minInclusive:0});
 }
 
 
@@ -371,7 +371,7 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
         var model = { items:
           [
             {id:"cos", type:_STRING_, ref:"cos"},
-            {id:"limits", type:_NUMBER_, ref:"limits",minInclusive:0}
+            {id:"limits", type:_INT_, ref:"limits",minInclusive:0}
           ]};
         return model ;
     }
@@ -595,7 +595,7 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
           [
             {id:"feature", type:_STRING_, ref:"feature",
                     choices:ZaCos.MAJOR_FEATURES_CHOICES},
-            {id:"limits", type:_NUMBER_, ref:"limits" ,minInclusive:0}
+            {id:"limits", type:_INT_, ref:"limits" ,minInclusive:0}
           ]};
         return model ;
     }

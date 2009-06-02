@@ -620,7 +620,16 @@ XModelItem.prototype.validateNumber = function(value) {
 	return nvalue;
 }
 
+XModel.registerErrorMessage("notAnInteger",		 AjxMsg.notAnInteger);
+XModelItem.prototype.validateInt = function (value) {
+    var fvalue = this.validateNumber (value) ; //parseFloat value
+    var nvalue = parseInt (value) ;   //parseInt value
+    if (nvalue != fvalue ) {
+        throw this.getModel().getErrorMessage("notAnInteger", value) ;        
+    }
 
+    return nvalue ;
+}
 
 
 //
@@ -782,7 +791,11 @@ XModelItemFactory.createItemType("_NUMBER_", "number", Number_XModelItem);
 Number_XModelItem.prototype.validateType = XModelItem.prototype.validateNumber;
 Number_XModelItem.prototype.getDefaultValue = function () {	return 0; };
 
-
+//XModelItem class: "int"
+Integer_XModelItem = function(){}
+XModelItemFactory.createItemType("_INT_", "int", Integer_XModelItem);
+Integer_XModelItem.prototype.validateType = XModelItem.prototype.validateInt;
+Integer_XModelItem.prototype.getDefaultValue = function () {	return 0; };
 
 
 
