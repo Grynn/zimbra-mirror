@@ -61,6 +61,8 @@ DwtTreeItem = function(params) {
 	this._extraInfo = params.extraInfo;
 	this._textParam = params.text;
 	this._deferred = params.deferred;
+	this._expandNodeImage = params.expandNodeImage || "NodeExpanded";
+	this._collapseNodeImage = params.collapseNodeImage || "NodeCollapsed";
 	this._itemChecked = false;
 	this._initialized = false;
 	this._selectionEnabled = true;
@@ -420,6 +422,14 @@ function(actionCode, ev) {
 	return true;
 };
 
+DwtTreeItem.prototype.addNodeIconListeners =
+function() {
+	var imgEl = AjxImg.getImageElement(this._nodeCell);
+	if (imgEl) {
+		Dwt.setHandler(imgEl, DwtEvent.ONMOUSEDOWN, DwtTreeItem._nodeIconMouseDownHdlr);
+		Dwt.setHandler(imgEl, DwtEvent.ONMOUSEUP, DwtTreeItem._nodeIconMouseUpHdlr);
+	}
+};
 
 DwtTreeItem.prototype._initialize =
 function(index, realizeDeferred) {
@@ -453,12 +463,8 @@ function(index, realizeDeferred) {
 	if (this._nodeCell) {
 		this._nodeCell.style.width = this._nodeCell.style.height = DwtTreeItem._NODECELL_DIM;
 		if (this._children.size() > 0) {
-			AjxImg.setImage(this._nodeCell, "NodeCollapsed");
-			var imgEl = AjxImg.getImageElement(this._nodeCell);
-			if (imgEl) {
-				Dwt.setHandler(imgEl, DwtEvent.ONMOUSEDOWN, DwtTreeItem._nodeIconMouseDownHdlr);
-				Dwt.setHandler(imgEl, DwtEvent.ONMOUSEUP, DwtTreeItem._nodeIconMouseUpHdlr);
-			}
+			AjxImg.setImage(this._nodeCell, this._collapseNodeImage);
+			this.addNodeIconListeners();
 		}
 	}
 
@@ -504,7 +510,7 @@ function(className) {
 	
 	var newClassName = this._origClassName	 + " " + className;
 	if(treeItemDivEl) {
-		treeItemDivEl.className = newClassName
+		treeItemDivEl.className = newClassName;
 	}else if (treeItemEl) {
 		treeItemEl.className =  className;
 	}	
@@ -531,7 +537,7 @@ function(child, index) {
 	// If we are initialized, then we need to add a expansion node
 	if (this._initialized && this._children.size() == 0) {
 		if (this._nodeCell) {
-			AjxImg.setImage(this._nodeCell, "NodeCollapsed");
+			AjxImg.setImage(this._nodeCell, this._collapseNodeImage);
 			var imgEl = AjxImg.getImageElement(this._nodeCell);
 			if (imgEl) {
 				Dwt.setHandler(imgEl, DwtEvent.ONMOUSEDOWN, DwtTreeItem._nodeIconMouseDownHdlr);
@@ -543,12 +549,13 @@ function(child, index) {
 };
 
 DwtTreeItem.prototype.addChild =
-function(child) { /* do nothing since we add to the DOM our own way */ }
+function(child) { /* do nothing since we add to the DOM our own way */ };
 
 DwtTreeItem.prototype._addItem =
 function(item, index, realizeDeferred) {
-	if (!this._children.contains(item))
+	if (!this._children.contains(item)) {
 		this._children.add(item, index);
+	}
 
 	if (this._childDiv == null) {
 		this._childDiv = document.createElement("div");
@@ -558,19 +565,22 @@ function(item, index, realizeDeferred) {
 			this._childDiv.className = "DwtTreeItemLevel1ChildDiv";
 		}
 		this.getHtmlElement().appendChild(this._childDiv);
-		if (!this._expanded) 
+		if (!this._expanded) {
 			this._childDiv.style.display = "none";
+		}
 	}
 
 	if (realizeDeferred && this._nodeCell) {
 		if (AjxImg.getImageClass(this._nodeCell) == AjxImg.getClassForImage("Blank_16")) {
-			if (this._expanded)
-				AjxImg.setImage(this._nodeCell, "NodeExpanded");
-			else
-				AjxImg.setImage(this._nodeCell, "NodeCollapsed");
+			if (this._expanded) {
+				AjxImg.setImage(this._nodeCell, this._expandNodeImage);
+			} else {
+				AjxImg.setImage(this._nodeCell, this._collapseNodeImage);
+			}
 			var imgEl = AjxImg.getImageElement(this._nodeCell);
-			if (imgEl)
+			if (imgEl) {
 				Dwt.setHandler(imgEl, DwtEvent.ONMOUSEDOWN, DwtTreeItem._nodeIconMouseDownHdlr);
+			}
 		}
 	}
 
@@ -583,7 +593,8 @@ function(item, index, realizeDeferred) {
 	}
 };
 
-DwtTreeItem.prototype.sort = function(cmp) {
+DwtTreeItem.prototype.sort =
+function(cmp) {
 	this._children.sort(cmp);
 	if (this._childDiv) {
 		this._setChildElOrder();
@@ -592,7 +603,8 @@ DwtTreeItem.prototype.sort = function(cmp) {
 	}
 };
 
-DwtTreeItem.prototype._setChildElOrder = function(cmp) {
+DwtTreeItem.prototype._setChildElOrder =
+function(cmp) {
 	var df = document.createDocumentFragment();
 	this._children.foreach(function(item, i) {
 		df.appendChild(item.getHtmlElement());
@@ -692,7 +704,7 @@ function(expand, ev, skipNotify) {
 		this._expanded = false;
 		this._childDiv.style.display = "none";
 		if (this._nodeCell) {
-			AjxImg.setImage(this._nodeCell, "NodeCollapsed");
+			AjxImg.setImage(this._nodeCell, this._collapseNodeImage);
 		}
 		this._tree._itemCollapsed(this, ev, skipNotify);
 	} else {
@@ -702,7 +714,7 @@ function(expand, ev, skipNotify) {
 		this._expanded = true;
 		this._childDiv.style.display = "block";
 		if (this._nodeCell) {
-			AjxImg.setImage(this._nodeCell, "NodeExpanded");
+			AjxImg.setImage(this._nodeCell, this._expandNodeImage);
 		}
 		this._tree._itemExpanded(this, ev, skipNotify);
 	}	
