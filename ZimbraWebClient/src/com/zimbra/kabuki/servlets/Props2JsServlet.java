@@ -143,20 +143,24 @@ public class Props2JsServlet
 
                     public void warning(String message, String sourceName,
                                         int line, String lineSource, int lineOffset) {
-                        if (line < 0) {
-                            warn("\n" + message);
-                        } else {
-                            warn("\n" + line + ':' + lineOffset + ':' + message);
-                        }
+						if (Props2JsServlet.this.isWarnEnabled()) {
+							if (line < 0) {
+								warn("\n" + message);
+							} else {
+								warn("\n" + line + ':' + lineOffset + ':' + message);
+							}
+						}
                     }
 
                     public void error(String message, String sourceName,
                                       int line, String lineSource, int lineOffset) {
-                        if (line < 0) {
-                            Props2JsServlet.this.error("\n" + message);
-                        } else {
-                            Props2JsServlet.this.error("\n" + line + ':' + lineOffset + ':' + message);
-                        }
+						if (Props2JsServlet.this.isErrorEnabled()) {
+							if (line < 0) {
+								Props2JsServlet.this.error("\n" + message);
+							} else {
+								Props2JsServlet.this.error("\n" + line + ':' + lineOffset + ':' + message);
+							}
+						}
                     }
 
                     public EvaluatorException runtimeError(String message, String sourceName,
@@ -191,7 +195,9 @@ public class Props2JsServlet
 			resp.setContentType("application/x-javascript");
 		}
 		catch (Exception e) {
-			error(e.getMessage());
+			if (isErrorEnabled()) {
+				error(e.getMessage());
+			}
 		}
 		out.write(buffer);
         out.flush();
@@ -201,10 +207,23 @@ public class Props2JsServlet
     // Protected methods
     //
 
+	protected boolean isWarnEnabled() {
+		return true;
+	}
+	protected boolean isErrorEnabled() {
+		return true;
+	}
+	protected boolean isDebugEnabled() {
+		return true;
+	}
+
 	protected void warn(String message) {
 		System.err.println(message);
 	}
 	protected void error(String message) {
+		System.err.println(message);
+	}
+	protected void debug(String message) {
 		System.err.println(message);
 	}
 
@@ -274,7 +293,7 @@ public class Props2JsServlet
         //
         //   .../keys/ZmKeys.js
         //
-        //       then the basedir is "/keys/".
+        // then the basedir is "/keys/".
         //
         // NOTE: The <url-pattern>s in the web.xml file restricts
         //       which URLs map to this servlet so there's no risk
@@ -286,8 +305,17 @@ public class Props2JsServlet
         String filenames = uri.substring(uri.lastIndexOf('/') + 1);
         String classnames = filenames.substring(0, filenames.indexOf('.'));
         StringTokenizer tokenizer = new StringTokenizer(classnames, ",");
+		if (isDebugEnabled()) {
+			for (List<String> basenames : basenamePatterns) {
+				debug("!!! basenames: "+basenames);
+			}
+			debug("!!! basedir:   "+basedir);
+		}
         while (tokenizer.hasMoreTokens()) {
             String classname = tokenizer.nextToken();
+			if (isDebugEnabled()) {
+				debug("!!! classname: "+classname);
+			}
             load(req, out, locale, basenamePatterns, basedir, classname);
         }
 

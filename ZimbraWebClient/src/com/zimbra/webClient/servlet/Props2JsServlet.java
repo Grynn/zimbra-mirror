@@ -63,11 +63,24 @@ public class Props2JsServlet extends com.zimbra.kabuki.servlets.Props2JsServlet 
 	// com.zimbra.kabuki.servlets.Props2JsServlet methods
 	//
 
+	protected boolean isWarnEnabled() {
+		return ZimbraLog.webclient.isWarnEnabled();
+	}
+	protected boolean isErrorEnabled() {
+		return ZimbraLog.webclient.isErrorEnabled();
+	}
+	protected boolean isDebugEnabled() {
+		return ZimbraLog.webclient.isDebugEnabled();
+	}
+
 	protected void warn(String message) {
 		ZimbraLog.webclient.warn(message);
 	}
 	protected void error(String message) {
 		ZimbraLog.webclient.error(message);
+	}
+	protected void debug(String message) {
+		ZimbraLog.webclient.debug(message);
 	}
 
 } // class Props2JsServlet
