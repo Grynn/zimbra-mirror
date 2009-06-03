@@ -201,7 +201,8 @@ ZaItem.prototype.parseTargetsRightsFromJS = function(targetObj) {
 		if(AjxUtil.isEmpty(targetObj.getAttrs) && AjxUtil.isEmpty(targetObj.setAttrs)) {
 			this.getAttrs = null;
 			return;
-		}									
+		}
+		this.attrsToGet = [];									
 		if(targetObj.getAttrs && targetObj.getAttrs instanceof Array && 
 			targetObj.getAttrs[0]) {
 			if(targetObj.getAttrs[0].a && targetObj.getAttrs[0].a instanceof Array) {
@@ -209,6 +210,7 @@ ZaItem.prototype.parseTargetsRightsFromJS = function(targetObj) {
 				this.noAttrsAvailable = false;
 				for (var a in getAttrs) {
 					this.getAttrs[getAttrs[a].n] = true;
+					this.attrsToGet.push(getAttrs[a].n);
 					if(getAttrs[a]["default"] && getAttrs[a]["default"][0] && getAttrs[a]["default"][0].v && getAttrs[a]["default"][0].v instanceof Array) {
 						var cnt = getAttrs[a]["default"][0].v.length; 
 						if(cnt == 1) {

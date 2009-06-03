@@ -82,7 +82,6 @@ ZaAccount.A_zimbraMailAlias="zimbraMailAlias";
 ZaAccount.A_zimbraMailForwardingAddress="zimbraMailForwardingAddress";
 ZaAccount.A_zimbraPasswordMustChange="zimbraPasswordMustChange";
 ZaAccount.A_zimbraPasswordLocked="zimbraPasswordLocked";
-//ZaAccount.A_zimbraDomainName = "zimbraDomainName";
 ZaAccount.A_zimbraContactMaxNumEntries = "zimbraContactMaxNumEntries";
 ZaAccount.A_zimbraAttachmentsBlocked = "zimbraAttachmentsBlocked";
 ZaAccount.A_zimbraQuotaWarnPercent = "zimbraQuotaWarnPercent";
@@ -1178,11 +1177,17 @@ function(by, val) {
 		this.attrs[ZaItem.A_zimbraId] = val;
 		var getAccDoc = soapDoc.set("GetAccountRequest", null, null, ZaZimbraAdmin.URN);
 		getAccDoc.setAttribute("applyCos", "0");
+		if(!this.getAttrs.all && !AjxUtil.isEmpty(this.attrsToGet)) {
+			getAccDoc.setAttribute("attrs", this.attrsToGet.join(","));
+		}
 		var elBy = soapDoc.set("account", val, getAccDoc);
 		elBy.setAttribute("by", by);		
 	} else {
 		var getAccDoc = AjxSoapDoc.create("GetAccountRequest", ZaZimbraAdmin.URN, null);
 		getAccDoc.getMethod().setAttribute("applyCos", "0");
+		if(!this.getAttrs.all && !AjxUtil.isEmpty(this.attrsToGet)) {
+			getAccDoc.getMethod().setAttribute("attrs", this.attrsToGet.join(","));
+		}
 		var elBy = getAccDoc.set("account", val);
 		elBy.setAttribute("by", by);
 
@@ -1487,7 +1492,6 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraMailForwardingAddress, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraMailForwardingAddress, listItem:{type:_EMAIL_ADDRESS_}},
         {id:ZaAccount.A_zimbraPasswordMustChange, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPasswordMustChange},
         {id:ZaAccount.A_zimbraPasswordLocked, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPasswordLocked, choices:ZaModel.BOOLEAN_CHOICES},
-       // {id:ZaAccount.A_zimbraDomainName, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraDomainName},
         {id:ZaAccount.A_zimbraContactMaxNumEntries, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraContactMaxNumEntries, maxInclusive:2147483647, minInclusive:0},
         {id:ZaAccount.A_zimbraAttachmentsBlocked, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraAttachmentsBlocked, choices:ZaModel.BOOLEAN_CHOICES},
 

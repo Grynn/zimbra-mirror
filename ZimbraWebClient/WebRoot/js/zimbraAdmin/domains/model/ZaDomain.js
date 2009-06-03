@@ -309,6 +309,7 @@ function() {
 		types:[ZaSearch.DOMAINS],
 		sortBy:ZaDomain.A_domainName,
 		offset:"0",
+		attrs:[ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId],
 		sortAscending:"1",
 		limit:ZaDomain.MAXSEARCHRESULTS,
 		ignoreTooManyResultsException: true,
@@ -1244,6 +1245,10 @@ function(by, val) {
 	soapDoc.getMethod().setAttribute("applyConfig", "false");
 	var elBy = soapDoc.set("domain", val);
 	elBy.setAttribute("by", by);
+	if(!this.getAttrs.all && !AjxUtil.isEmpty(this.attrsToGet)) {
+		soapDoc.setMethodAttribute("attrs", this.attrsToGet.join(","));
+	}
+	
 	//var getDomainCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	

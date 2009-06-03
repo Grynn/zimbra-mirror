@@ -615,7 +615,9 @@ ZaDistributionList.prototype.getMembers = function (by, val, limit) {
 			limit = ZaDistributionList.MEMBER_QUERY_LIMIT;
 			
 		soapDoc.setMethodAttribute("limit", limit);
-
+		if(!this.getAttrs.all && !AjxUtil.isEmpty(this.attrsToGet)) {
+			soapDoc.setMethodAttribute("attrs", this.attrsToGet.join(","));
+		}
         if (!this.memPagenum) this.memPagenum = 1 ; //by default, first page.
         var offset = (this.memPagenum-1)*limit;
 		soapDoc.setMethodAttribute("offset", offset);

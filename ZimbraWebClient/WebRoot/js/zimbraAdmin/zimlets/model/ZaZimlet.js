@@ -238,6 +238,9 @@ function(by, val) {
 	var soapDoc = AjxSoapDoc.create("GetZimletRequest", ZaZimbraAdmin.URN, null);
 	var elZimlet = soapDoc.set("zimlet", "");
 	elZimlet.setAttribute("name", _val);
+	if(!this.getAttrs.all && !AjxUtil.isEmpty(this.attrsToGet)) {
+		soapDoc.setMethodAttribute("attrs", this.attrsToGet.join(","));
+	}	
 	var params = {};
 	params.soapDoc = soapDoc;	
 	params.asyncMode = false;

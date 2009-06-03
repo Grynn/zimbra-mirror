@@ -191,6 +191,9 @@ function (by, val) {
 	var soapDoc = AjxSoapDoc.create("GetCosRequest", ZaZimbraAdmin.URN, null);
 	var el = soapDoc.set("cos", val);
 	el.setAttribute("by", by);
+	if(!this.getAttrs.all && !AjxUtil.isEmpty(this.attrsToGet)) {
+		soapDoc.getMethod().setAttribute("attrs", this.attrsToGet.join(","));
+	}	
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	

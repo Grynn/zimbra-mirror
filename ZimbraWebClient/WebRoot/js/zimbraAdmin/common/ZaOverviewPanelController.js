@@ -118,11 +118,7 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 	var callback = new AjxCallback(this, this.domainSearchCallback,{busyId:busyId});
 	var domainListController = ZaApp.getInstance().getDomainListController ();
 	
-    //if(ZaSettings.DOMAINS_ENABLED)
-		domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
-	/*else
-		domainListController._currentQuery = "" ;*/  
-                                                  
+	domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
 	var searchParams = {
 			query: domainListController._currentQuery, 
 			types:[ZaSearch.DOMAINS],
@@ -135,7 +131,8 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 			showBusy:true,
 			busyId:busyId,
 			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
-			skipCallbackIfCancelled:true			
+			skipCallbackIfCancelled:true,
+			attrs:[ZaDomain.A_domainName,ZaItem.A_zimbraId]			
 	}
 	ZaSearch.searchDirectory(searchParams);
 }
@@ -750,9 +747,9 @@ ZaOverviewPanelController.statusTreeListener = function (ev) {
 
 ZaOverviewPanelController.serverListTreeListener = function (ev) {
 	if(ZaApp.getInstance().getCurrentController()) {
-		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getServerListController(), ZaServerListController.prototype.show, ZaServer.getAll());
+		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getServerListController(), ZaServerListController.prototype.show, ZaServer.getAll([ZaServer.A_description, ZaServer.A_ServiceHostname, ZaItem.A_zimbraId]));
 	} else {					
-		ZaApp.getInstance().getServerListController().show(ZaServer.getAll());
+		ZaApp.getInstance().getServerListController().show(ZaServer.getAll([ZaServer.A_description, ZaServer.A_ServiceHostname, ZaItem.A_zimbraId]));
 	}
 }
 
@@ -760,17 +757,14 @@ ZaOverviewPanelController.domainListTreeListener = function (ev) {
 	var domainListController = ZaApp.getInstance().getDomainListController ();
 	
 	//if we do not have access to domains we will only get our own domain in response anyway, so no need to add a query
-	//if(ZaSettings.DOMAINS_ENABLED)
-		domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
-	/*else
-		domainListController._currentQuery = "" ;*/
+	domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
 			
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(domainListController, ZaDomainListController.prototype.show, true);
 	} else {					
 		domainListController.show(true);
 	}
-	//this.searchDomains();
+
 	this._modifySearchMenuButton(ZaItem.DOMAIN) ;
 }
 

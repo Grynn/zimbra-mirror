@@ -54,7 +54,6 @@ ZaResource.A_accountStatus = ZaAccount.A_accountStatus;
 ZaResource.A_notes = ZaAccount.A_notes;
 ZaResource.A_mailHost = ZaAccount.A_mailHost;
 ZaResource.A_COSId = ZaAccount.A_COSId;
-//ZaResource.A_zimbraDomainName = ZaAccount.A_zimbraDomainName;
 ZaResource.A_zimbraMinPwdLength = ZaAccount.A_zimbraMinPwdLength;
 ZaResource.A_zimbraMaxPwdLength = ZaAccount.A_zimbraMaxPwdLength;
 
@@ -434,6 +433,9 @@ function(by, val, withCos) {
 	} else {
 		soapDoc.getMethod().setAttribute("applyCos", "0");		
 	}
+	if(!this.getAttrs.all && !AjxUtil.isEmpty(this.attrsToGet)) {
+		soapDoc.setMethodAttribute("attrs", this.attrsToGet.join(","));
+	}	
 	var elBy = soapDoc.set("calresource", val);
 	elBy.setAttribute("by", by);
 

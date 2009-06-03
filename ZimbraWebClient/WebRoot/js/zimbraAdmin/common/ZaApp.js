@@ -448,7 +448,8 @@ ZaApp.prototype.searchDomains = function(query) {
 			showBusy:true,
 			busyId:busyId,
 			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
-			skipCallbackIfCancelled:true			
+			skipCallbackIfCancelled:true,
+			attrs:[ZaDomain.A_domainName, ZaItem.A_zimbraId]			
 	}
 	ZaSearch.searchDirectory(searchParams);
 }
@@ -468,7 +469,8 @@ ZaApp.prototype.scheduledSearchDomains = function(domainItem) {
 			showBusy:true,
 			busyId:busyId,
 			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
-			skipCallbackIfCancelled:true			
+			skipCallbackIfCancelled:true,
+			attrs:[ZaDomain.A_domainName, ZaItem.A_zimbraId]			
 	}
 	ZaSearch.searchDirectory(searchParams);
 //	DBG.println(AjxDebug.DBG1, "Searching for domains "+ ev.keyCode +" char code " + (new Date()).getTime());
@@ -583,7 +585,7 @@ function (refresh) {
 ZaApp.prototype.getMailServers =
 function(refresh) {
 	if (refresh || this._serverList == null) {
-		this._serverList = ZaServer.getAll();
+		this._serverList = ZaServer.getAll([ZaServer.A_ServiceHostname, ZaServer.A_description, ZaServer.A_zimbraServiceEnabled, ZaServer.A_zimbraServiceInstalled, ZaItem.A_zimbraId]);
 	}
 	var resArray = new Array();
 	var tmpArray = this._serverList.getArray();

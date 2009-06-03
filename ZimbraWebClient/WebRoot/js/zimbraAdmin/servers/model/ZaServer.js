@@ -458,13 +458,16 @@ function (serverId) {
 	return server;
 }
 ZaServer.getAll =
-function() {
+function(attrs) {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", ZaZimbraAdmin.URN, null);	
 	soapDoc.getMethod().setAttribute("applyConfig", "false");
 //	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;
-	params.asyncMode=false;	
+	params.asyncMode=false;
+	if(attrs) {
+		soapDoc.setMethodAttribute("attrs", attrs.join(","));
+	}	
 	var reqMgrParams = {
 		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_GET_ALL_SERVER
@@ -680,7 +683,11 @@ function(by, val) {
 	var soapDoc = AjxSoapDoc.create("GetServerRequest", ZaZimbraAdmin.URN, null);
 	var elBy = soapDoc.set("server", _val);
 	elBy.setAttribute("by", _by);
-	soapDoc.getMethod().setAttribute("applyConfig", "false");
+	soapDoc.setMethodAttribute("applyConfig", "false");
+	if(!this.getAttrs.all && !AjxUtil.isEmpty(this.attrsToGet)) {
+		soapDoc.setMethodAttribute("attrs", this.attrsToGet.join(","));
+	}	
+	
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	

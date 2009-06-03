@@ -168,6 +168,9 @@ ZaGlobalConfig.getInstance = function(refresh) {
 ZaGlobalConfig.loadMethod = 
 function(by, val) {
 	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", ZaZimbraAdmin.URN, null);
+	if(!this.getAttrs.all && !AjxUtil.isEmpty(this.attrsToGet)) {
+		soapDoc.setMethodAttribute("attrs", this.attrsToGet.join(","));
+	}	
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	

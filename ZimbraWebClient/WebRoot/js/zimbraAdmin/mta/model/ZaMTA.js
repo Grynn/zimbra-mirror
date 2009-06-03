@@ -159,7 +159,8 @@ ZaMTA.getAll = function () {
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.asyncMode=false;
-	params.soapDoc = soapDoc;	
+	params.soapDoc = soapDoc;
+	soapDoc.setMethodAttribute("attrs", [ZaServer.A_ServiceHostname, ZaServer.A_description, ZaServer.A_zimbraServiceEnabled, ZaServer.A_zimbraServiceInstalled, ZaItem.A_zimbraId].join(","));	
 	var reqMgrParams = {
 		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_GET_ALL_SERVER

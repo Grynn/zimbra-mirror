@@ -180,17 +180,6 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							{ref: ZaGlobalConfig.A_zimbraGalMaxResults, type:_INPUT_,
 							  label: ZaMsg.NAD_GalMaxResults, width: "5em"
 							},
-							/*{ref: ZaGlobalConfig.A_zimbraDefaultDomainName, type:_OSELECT1_,
-								label: ZaMsg.NAD_DefaultDomainName, //width: "10em",
-								choices:EmailAddr_XFormItem.domainChoices,editable:true,
-            	            	keyUp:function(newValue, ev) {
-        	                        var n = "";
-            	                    if (newValue)
-                	                    n = String(newValue).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
-	                	          	var query = "(zimbraDomainName=" + n + "*)";
-                        	        this.getForm().getController().searchDomains(query);
-                            	}
-							},*/
 							{ref:ZaGlobalConfig.A_zimbraDefaultDomainName, type:_DYNSELECT_,
 								label: ZaMsg.NAD_DefaultDomainName,
 								toolTipContent:ZaMsg.tt_StartTypingDomainName,
