@@ -35,6 +35,7 @@ import com.zimbra.common.soap.SoapHttpTransport;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -576,12 +577,12 @@ public class OfflineMailbox extends DesktopMailbox {
             boolean unread = (flags & Flag.BITMASK_UNREAD) > 0;
             flags &= ~Flag.BITMASK_UNREAD;
 
-            int prevIndexId = item.getIndexId();
+            String prevIndexId = item.getIndexId();
             if (item instanceof Folder) {
                 oldFolderPath = ((Folder) item).getPath();
             }
             item.move(getFolderById(folderId));
-            if (prevIndexId != item.getIndexId()) {
+            if (!StringUtil.equal(prevIndexId, item.getIndexId())) {
                 queueForIndexing(item, false, null);
             }
             
