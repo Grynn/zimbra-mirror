@@ -25,6 +25,7 @@ import com.zimbra.common.soap.SoapTransport;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.util.DateUtil;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.util.yauth.Auth;
@@ -180,7 +181,7 @@ public class YMailClient {
     private Element getComposeMessage(MimeMessage mm)
         throws MessagingException, IOException {
         Element cm = new Element.XMLElement("message");
-        addElement(cm, "subject", mm.getSubject());
+        addElement(cm, "subject", Mime.getSubject(mm));
         Address[] from = mm.getFrom();
         if (from == null || from.length == 0) {
             throw new IllegalArgumentException("Missing 'From' header field");
