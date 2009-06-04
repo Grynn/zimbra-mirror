@@ -468,8 +468,8 @@ function(node) {
 		var child = children[i];
 		if (child.nodeName != 'a') continue;
 		var name = child.getAttribute("n");
-		var permDenied = child.getAttribute("permDenied");
-		if(permDenied && permDenied==1)
+		var pd = child.getAttribute("pd");
+		if(pd && pd==1)
 			continue;
 			
 		if (child.firstChild != null) {
@@ -508,7 +508,7 @@ function (obj) {
 	if(obj.a) {
 		var len = obj.a.length;
 		for(var ix = 0; ix < len; ix++) {
-			if(obj.a[ix].permDenied)
+			if(obj.a[ix].pd)
 				continue;
 				
 			if(!this.attrs[[obj.a[ix].n]]) {
@@ -523,7 +523,7 @@ function (obj) {
 	}
 	if(obj._attrs) {
 		for (var ix in obj._attrs) {
-			if(obj._attrs[ix].permDenied)
+			if(obj._attrs[ix].pd)
 				continue;
 							
 			if(!this.attrs[ix]) {
@@ -547,7 +547,7 @@ function (obj) {
 	if(obj.a) {
 		var len = obj.a.length;
 		for(var ix = 0; ix < len; ix++) {
-			if(obj.a[ix].permDenied)
+			if(obj.a[ix].pd)
 				continue;
 			
 			if(!attrs[[obj.a[ix].n]]) {
@@ -562,7 +562,7 @@ function (obj) {
 	}
 	if(obj._attrs) {
 		for (var ix in obj._attrs) {
-			if(obj._attrs[ix].permDenied)
+			if(obj._attrs[ix].pd)
 				continue;
 							
 			if(!attrs[ix]) {
