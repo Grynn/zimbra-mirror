@@ -131,10 +131,11 @@ sub getLocalConfig {
 sub sendEmailReport {
   my $msg = shift;
 
-  my $subject =  "Database Integrity check report";
   my $from_address = getLocalConfig("smtp_source");
   my $to_address = getLocalConfig("smtp_destination");
+  my $server = getLocalConfig("zimbra_server_hostname");
   my $smtphost = getLdapConfigValue("zimbraSmtpHostname");
+  my $subject =  "Database Integrity check report for $server";
   return if (scalar @$msg == 0);
   print "Sending daily report to $to_address via $smtphost\n" if $debug;
   eval { 
