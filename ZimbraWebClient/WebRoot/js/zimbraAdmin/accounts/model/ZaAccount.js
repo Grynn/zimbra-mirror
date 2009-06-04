@@ -99,6 +99,7 @@ ZaAccount.A_zimbraMailIdleSessionTimeout = "zimbraMailIdleSessionTimeout";
 ZaAccount.A_zimbraAvailableSkin = "zimbraAvailableSkin";
 ZaAccount.A_zimbraZimletAvailableZimlets = "zimbraZimletAvailableZimlets";
 //prefs
+ZaAccount.A_zimbraPrefCalendarForwardInvitesTo = "zimbraPrefCalendarForwardInvitesTo";
 ZaAccount.A_zimbraPrefClientType = "zimbraPrefClientType";
 ZaAccount.A_zimbraPrefTimeZoneId = "zimbraPrefTimeZoneId";
 ZaAccount.A_zimbraAllowAnyFromAddress = "zimbraAllowAnyFromAddress";
@@ -250,6 +251,7 @@ ZaAccount.A2_accountTypes = "accountTypes" ; //used to save the account types av
 ZaAccount.A2_currentAccountType = "currentAccountType" ; //used to save the current account type - cos id
 ZaAccount.A2_alias_selection_cache = "alias_selection_cache";
 ZaAccount.A2_fwdAddr_selection_cache = "fwdAddr_selection_cache";
+ZaAccount.A2_calFwdAddr_selection_cache = "fwdAddr_selection_cache";
 ZaAccount.A2_fp_selection_cache = "fp_selection_cache"; 
 ZaAccount.A2_errorMessage = "errorMessage";
 ZaAccount.A2_warningMessage = "warningMessage";
@@ -1082,6 +1084,7 @@ function(node) {
 	this.id = node.getAttribute("id");
 	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 	this.attrs[ZaAccount.A_zimbraMailForwardingAddress] = new Array();
+	this.attrs[ZaAccount.A_zimbraPrefCalendarForwardInvitesTo] = new Array();
 	this.attrs[ZaAccount.A_zimbraAllowFromAddress] = new Array();
     this.attrs[ZaAccount.A_zimbraForeignPrincipal ] = [];
     var children = node.childNodes;
@@ -1117,6 +1120,7 @@ function (account) {
 	var len = account.a.length;
 	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 	this.attrs[ZaAccount.A_zimbraMailForwardingAddress] = new Array();	
+	this.attrs[ZaAccount.A_zimbraPrefCalendarForwardInvitesTo] = new Array();	
 	this.attrs[ZaAccount.A_zimbraAllowFromAddress] = new Array();
     this.attrs[ZaAccount.A_zimbraForeignPrincipal ] = [];
     for(var ix = 0; ix < len; ix++) {
@@ -1490,6 +1494,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraMailAlias, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraMailAlias, listItem:{type:_EMAIL_ADDRESS_}},
         {id:ZaAccount.A_zimbraForeignPrincipal, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraForeignPrincipal, listItem:{type:_STRING_}},
         {id:ZaAccount.A_zimbraMailForwardingAddress, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraMailForwardingAddress, listItem:{type:_EMAIL_ADDRESS_}},
+		{id:ZaAccount.A_zimbraPrefCalendarForwardInvitesTo, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarForwardInvitesTo, listItem:{type:_EMAIL_ADDRESS_}},        
         {id:ZaAccount.A_zimbraPasswordMustChange, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPasswordMustChange},
         {id:ZaAccount.A_zimbraPasswordLocked, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPasswordLocked, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraContactMaxNumEntries, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraContactMaxNumEntries, maxInclusive:2147483647, minInclusive:0},
@@ -1607,6 +1612,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A2_autoCos, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A2_alias_selection_cache, type:_LIST_},
         {id:ZaAccount.A2_fwdAddr_selection_cache, type:_LIST_},
+        {id:ZaAccount.A2_calFwdAddr_selection_cache, type:_LIST_},
         {id:ZaAccount.A2_fp_selection_cache, type:_LIST_},
         {id:ZaAccount.A_zimbraHideInGal, type:_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraHideInGal, choices:ZaModel.BOOLEAN_CHOICES},
 

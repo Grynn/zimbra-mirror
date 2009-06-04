@@ -419,6 +419,14 @@ ZaAccountXFormView.isDeleteFwdAddrEnabled = function () {
 	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaAccount.A2_fwdAddr_selection_cache)));
 }
 
+ZaAccountXFormView.isEditCalFwdAddrEnabled = function () {
+	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaAccount.A2_calFwdAddr_selection_cache)) && this.getInstanceValue(ZaAccount.A2_calFwdAddr_selection_cache).length==1);
+}
+
+ZaAccountXFormView.isDeleteCalFwdAddrEnabled = function () {
+	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaAccount.A2_calFwdAddr_selection_cache)));
+}
+
 ZaAccountXFormView.deleteFwdAddrButtonListener = function () {
 	var instance = this.getInstance();	
 	if(instance[ZaAccount.A2_fwdAddr_selection_cache] != null) {
@@ -441,6 +449,28 @@ ZaAccountXFormView.deleteFwdAddrButtonListener = function () {
 	this.getForm().parent.setDirty(true);
 }
 
+ZaAccountXFormView.deleteCalFwdAddrButtonListener = function () {
+	var instance = this.getInstance();	
+	if(instance[ZaAccount.A2_calFwdAddr_selection_cache] != null) {
+		var cnt = instance[ZaAccount.A2_calFwdAddr_selection_cache].length;
+		if(cnt && instance.attrs[ZaAccount.A_zimbraPrefCalendarForwardInvitesTo]) {
+			var arr = instance.attrs[ZaAccount.A_zimbraPrefCalendarForwardInvitesTo];
+			for(var i=0;i<cnt;i++) {
+				var cnt2 = arr.length-1;				
+				for(var k=cnt2;k>=0;k--) {
+					if(arr[k]==instance.fwdAddr_selection_cache[i]) {
+						arr.splice(k,1);
+						break;	
+					}
+				}
+			}
+			this.getModel().setInstanceValue(instance, ZaAccount.A_zimbraPrefCalendarForwardInvitesTo, arr);
+			this.getModel().setInstanceValue(instance, ZaAccount.A2_calFwdAddr_selection_cache, []);	
+		}
+	}
+	this.getForm().parent.setDirty(true);
+}
+
 ZaAccountXFormView.fwdAddrSelectionListener = 
 function (ev) {
 	var arr = this.widget.getSelection();	
@@ -455,17 +485,31 @@ function (ev) {
 	}	
 }
 
+ZaAccountXFormView.calFwdAddrSelectionListener = 
+function (ev) {
+	var arr = this.widget.getSelection();	
+	if(arr && arr.length) {
+		arr.sort();
+		this.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_calFwdAddr_selection_cache, arr);	
+	} else {
+		this.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_calFwdAddr_selection_cache, []);
+	}	
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaAccountXFormView.editFwdAddrButtonListener.call(this);
+	}	
+}
+
 ZaAccountXFormView.editFwdAddrButtonListener =
 function () {
 	var instance = this.getInstance();
-	if(instance.fwdAddr_selection_cache && instance.fwdAddr_selection_cache[0]) {	
+	if(instance[ZaAccount.A2_fwdAddr_selection_cache] && instance[ZaAccount.A2_fwdAddr_selection_cache][0]) {	
 		var formPage = this.getForm().parent;
 		if(!formPage.editFwdAddrDlg) {
 			formPage.editFwdAddrDlg = new ZaEditFwdAddrXDialog(ZaApp.getInstance().getAppCtxt().getShell(),"400px", "150px",ZaMsg.Edit_FwdAddr_Title);
 			formPage.editFwdAddrDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.updateFwdAddr, this.getForm(), null);						
 		}
 		var obj = {};
-		obj[ZaAccount.A_name] = instance.fwdAddr_selection_cache[0];
+		obj[ZaAccount.A_name] = instance[ZaAccount.A2_fwdAddr_selection_cache][0];
 		var cnt = instance.attrs[ZaAccount.A_zimbraMailForwardingAddress].length;
 		for(var i=0;i<cnt;i++) {
 			if(instance.fwdAddr_selection_cache[0]==instance.attrs[ZaAccount.A_zimbraMailForwardingAddress][i]) {
@@ -479,6 +523,29 @@ function () {
 	}
 }
 
+ZaAccountXFormView.editCalFwdAddrButtonListener =
+function () {
+	var instance = this.getInstance();
+	if(instance[ZaAccount.A2_calFwdAddr_selection_cache] && instance[ZaAccount.A2_calFwdAddr_selection_cache][0]) {	
+		var formPage = this.getForm().parent;
+		if(!formPage.editCalFwdAddrDlg) {
+			formPage.editCalFwdAddrDlg = new ZaEditFwdAddrXDialog(ZaApp.getInstance().getAppCtxt().getShell(),"400px", "150px",ZaMsg.Edit_FwdAddr_Title);
+			formPage.editCalFwdAddrDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.updateCalFwdAddr, this.getForm(), null);						
+		}
+		var obj = {};
+		obj[ZaAccount.A_name] = instance[ZaAccount.A2_calFwdAddr_selection_cache][0];
+		var cnt = instance.attrs[ZaAccount.A_zimbraPrefCalendarForwardInvitesTo].length;
+		for(var i=0;i<cnt;i++) {
+			if(instance.fwdAddr_selection_cache[0]==instance.attrs[ZaAccount.A_zimbraPrefCalendarForwardInvitesTo][i]) {
+				obj[ZaAlias.A_index] = i;
+				break;		
+			}
+		}
+		
+		formPage.editCalFwdAddrDlg.setObject(obj);
+		formPage.editCalFwdAddrDlg.popup();		
+	}
+}
 ZaAccountXFormView.updateFwdAddr = function () {
 	if(this.parent.editFwdAddrDlg) {
 		this.parent.editFwdAddrDlg.popdown();
@@ -489,6 +556,21 @@ ZaAccountXFormView.updateFwdAddr = function () {
 			this.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_fwdAddr_selection_cache, []);
 			arr[obj[ZaAlias.A_index]] = obj[ZaAccount.A_name];
 			this.getModel().setInstanceValue(instance, ZaAccount.A_zimbraMailForwardingAddress, arr);
+			this.parent.setDirty(true);	
+		}
+	}
+}
+
+ZaAccountXFormView.updateCalFwdAddr = function () {
+	if(this.parent.editCalFwdAddrDlg) {
+		this.parent.editCalFwdAddrDlg.popdown();
+		var obj = this.parent.editCalFwdAddrDlg.getObject();
+		var instance = this.getInstance();
+		var arr = instance.attrs[ZaAccount.A_zimbraPrefCalendarForwardInvitesTo];
+		if(obj[ZaAlias.A_index] >=0 && arr[obj[ZaAlias.A_index]] != obj[ZaAccount.A_name] ) {
+			this.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_calFwdAddr_selection_cache, []);
+			arr[obj[ZaAlias.A_index]] = obj[ZaAccount.A_name];
+			this.getModel().setInstanceValue(instance, ZaAccount.A_zimbraPrefCalendarForwardInvitesTo, arr);
 			this.parent.setDirty(true);	
 		}
 	}
@@ -510,6 +592,22 @@ function () {
 	formPage.addFwdAddrDlg.popup();		
 }
 
+ZaAccountXFormView.addCalFwdAddrButtonListener =
+function () {
+	var instance = this.getInstance();
+	var formPage = this.getForm().parent;
+	if(!formPage.addCalFwdAddrDlg) {
+		formPage.addCalFwdAddrDlg = new ZaEditFwdAddrXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "400px", "150px",ZaMsg.Add_FwdAddr_Title);
+		formPage.addCalFwdAddrDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.addCalFwdAddr, this.getForm(), null);						
+	}
+	
+	var obj = {};
+	obj[ZaAccount.A_name] = "";
+	obj[ZaAlias.A_index] = - 1;
+	formPage.addCalFwdAddrDlg.setObject(obj);
+	formPage.addCalFwdAddrDlg.popup();		
+}
+
 ZaAccountXFormView.addFwdAddr  = function () {
 	if(this.parent.addFwdAddrDlg) {
 		this.parent.addFwdAddrDlg.popdown();
@@ -519,6 +617,20 @@ ZaAccountXFormView.addFwdAddr  = function () {
 			arr.push(obj[ZaAccount.A_name]);
 			this.getModel().setInstanceValue(this.getInstance(), ZaAccount.A_zimbraMailForwardingAddress, arr);
 			this.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_fwdAddr_selection_cache, []);
+			this.parent.setDirty(true);
+		}
+	}
+}
+
+ZaAccountXFormView.addCalFwdAddr  = function () {
+	if(this.parent.addCalFwdAddrDlg) {
+		this.parent.addCalFwdAddrDlg.popdown();
+		var obj = this.parent.addCalFwdAddrDlg.getObject();
+		if(obj[ZaAccount.A_name] && obj[ZaAccount.A_name].length>1) {
+			var arr = this.getInstance().attrs[ZaAccount.A_zimbraPrefCalendarForwardInvitesTo];
+			arr.push(obj[ZaAccount.A_name]);
+			this.getModel().setInstanceValue(this.getInstance(), ZaAccount.A_zimbraPrefCalendarForwardInvitesTo, arr);
+			this.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_calFwdAddr_selection_cache, []);
 			this.parent.setDirty(true);
 		}
 	}
@@ -773,7 +885,8 @@ ZaAccountXFormView.ALIASES_TAB_RIGHTS = [ZaAccount.ADD_ACCOUNT_ALIAS_RIGHT, ZaAc
 
 ZaAccountXFormView.FORWARDING_TAB_ATTRS = [ZaAccount.A_zimbraFeatureMailForwardingEnabled,
 	ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled,
-	ZaAccount.A_zimbraMailForwardingAddress];
+	ZaAccount.A_zimbraMailForwardingAddress,
+	ZaAccount.A_zimbraPrefCalendarForwardInvitesTo];
 ZaAccountXFormView.FORWARDING_TAB_RIGHTS = [];
 
 ZaAccountXFormView.INTEROP_TAB_ATTRS = [ZaAccount.A_zimbraForeignPrincipal];
@@ -1913,21 +2026,48 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 										enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureMailForwardingEnabled,"TRUE"]],
 										enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureMailForwardingEnabled, ZaAccount.A_COSId]										
 									},
-								  	{type:_SPACER_}								
+								  	{type:_SPACER_}
 								]
 						  	}
 							
 						]},
 						{type:_ZA_PLAIN_GROUPER_, id:"account_form_forwarding_group",
-							 numCols:2,label:null,colSizes:["275px","425px"],
+							numCols:2,label:null,colSizes:["275px","425px"],
 							items :[
+								{ref:ZaAccount.A_zimbraPrefCalendarForwardInvitesTo, type:_DWT_LIST_, height:"100", width:"350px",
+									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
+									headerList:null,onSelection:ZaAccountXFormView.fwdAddrSelectionListener,label:ZaMsg.zimbraPrefCalendarForwardInvitesTo,
+									visibilityChecks:[ZaItem.hasReadPermission]
+								},
+								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
+									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+									items: [
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
+											onActivate:"ZaAccountXFormView.deleteCalFwdAddrButtonListener.call(this);",
+											enableDisableChecks:[ZaAccountXFormView.isDeleteCalFwdAddrEnabled,[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefCalendarForwardInvitesTo]],
+											enableDisableChangeEventSources:[ZaAccount.A2_calFwdAddr_selection_cache]
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
+											onActivate:"ZaAccountXFormView.editCalFwdAddrButtonListener.call(this);",
+											enableDisableChecks:[ZaAccountXFormView.isEditCalFwdAddrEnabled,[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefCalendarForwardInvitesTo]],
+											enableDisableChangeEventSources:[ZaAccount.A2_calFwdAddr_selection_cache]
+										},
+										{type:_CELLSPACER_},
+	                                       {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+											enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefCalendarForwardInvitesTo]],                                        
+											onActivate:"ZaAccountXFormView.addCalFwdAddrButtonListener.call(this);"
+										}
+									]
+								},							
                                {type: _DWT_ALERT_, colSpan: 2,
-                                            containerCssStyle: "padding:10px;padding-top: 0px; width:100%;",
-                                            style: DwtAlert.WARNING,
-                                            iconVisible: true,
-                                            content: ZaMsg.Alert_Bouncing_Reveal_Hidden_Adds
-                                        },
-                                {ref:ZaAccount.A_zimbraMailForwardingAddress, type:_DWT_LIST_, height:"200", width:"350px",
+                                   containerCssStyle: "padding:10px;padding-top: 0px; width:100%;",
+                                   style: DwtAlert.WARNING,
+                                   iconVisible: true,
+                                   content: ZaMsg.Alert_Bouncing_Reveal_Hidden_Adds
+                                },
+                                {ref:ZaAccount.A_zimbraMailForwardingAddress, type:_DWT_LIST_, height:"100", width:"350px",
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 									headerList:null,onSelection:ZaAccountXFormView.fwdAddrSelectionListener,label:ZaMsg.NAD_EditFwdGroup,
 									visibilityChecks:[ZaItem.hasReadPermission]
