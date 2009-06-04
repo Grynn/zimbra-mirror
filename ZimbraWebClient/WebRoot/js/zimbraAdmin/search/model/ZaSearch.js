@@ -272,7 +272,7 @@ ZaSearch.prototype.dynSelectSearchCosesCallback = function (params, resp) {
 /**
  * @argument callArgs {value, event, callback}
  */
-ZaSearch.prototype.dynSelectSearchAccounts = function (callArgs) {
+ZaSearch.prototype.dynSelectSearch = function (callArgs) {
 	try {
 		var value = callArgs["value"];
 		var event = callArgs["event"];
@@ -281,7 +281,10 @@ ZaSearch.prototype.dynSelectSearchAccounts = function (callArgs) {
 		
 		var params = new Object();
 		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, {callback:callback,busyId:busyId });
-		params.types = [ZaSearch.ACCOUNTS, ZaSearch.DLS];
+		params.types = callArgs.types ? callArgs.types : [ZaSearch.ACCOUNTS, ZaSearch.DLS];
+		if(!AjxUtil.isEmpty(callArgs.attrs)) {
+			params.attrs = callArgs.attrs;
+		}
 		params.callback = dataCallback;
 		params.sortBy = ZaAccount.A_name;
 		params.query = ZaSearch.getSearchByNameQuery(value, params.types);
@@ -292,7 +295,7 @@ ZaSearch.prototype.dynSelectSearchAccounts = function (callArgs) {
 		params.skipCallbackIfCancelled = true; 		
 		ZaSearch.searchDirectory(params);		
 	} catch (ex) {
-		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchAccounts");		
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearch");		
 	}
 }
 

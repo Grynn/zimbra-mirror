@@ -134,7 +134,9 @@ function() {
 								style: DwtAlert.INFORMATION
 							},						
 							{type:_DYNSELECT_, ref:ZaSearch.A_selected, dataFetcherClass:ZaSearch, 
-								dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts,
+								dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,
+								dataFetcherTypes:[ZaSearch.ACCOUNTS, ZaSearch.RESOURCES, ZaSearch.DLS],
+								dataFetcherAttrs:[ZaItem.A_zimbraId, ZaItem.A_cn, ZaAccount.A_name, ZaAccount.A_displayname, ZaAccount.A_mail],
 								toolTipContent:ZaMsg.tt_StartTypingAccountName,
 								width:"200px", inputSize:30, editable:true, forceUpdate:true,
 								choices:new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, "name", "name"),

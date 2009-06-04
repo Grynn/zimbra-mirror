@@ -55,7 +55,9 @@ function() {
 					items:[
 						{ref:".", type:_STATIC_ADDR_ACL_, label:null, labelLocation:_NONE_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
-							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts
+							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,
+							dataFetcherTypes:[ZaSearch.ACCOUNTS],
+							dataFetcherAttrs:[ZaItem.A_zimbraId, ZaItem.A_cn, ZaAccount.A_name, ZaAccount.A_displayname, ZaAccount.A_mail]
 						}						
 					]
 				},

@@ -59,7 +59,9 @@ function() {
 						{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
 							toolTipContent:ZaMsg.tt_StartTypingAccountName,
-							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts
+							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,
+							dataFetcherTypes:[ZaSearch.ACCOUNTS],
+							dataFetcherAttrs:[ZaItem.A_zimbraId, ZaItem.A_cn, ZaAccount.A_name, ZaAccount.A_displayname, ZaAccount.A_mail]
 						}						
 					]
 				},

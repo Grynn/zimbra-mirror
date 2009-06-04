@@ -140,7 +140,9 @@ ZaPublishShareXDialog.myXFormModifier = function(xFormObject) {
 			{ref:ZaDistributionList.A2_sharesOwner, type:_DYNSELECT_,editable:true,width:"200px", inputSize:30, label:ZaMsg.Shares_OwnersEmailAddress,
 				dataFetcherClass:ZaSearch,
 				toolTipContent:ZaMsg.tt_StartTypingAccountName,
-				dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts,visibilityChecks:[],enableDisableChecks:[]
+				dataFetcherTypes:[ZaSearch.ACCOUNTS],
+				dataFetcherAttrs:[ZaItem.A_zimbraId, ZaItem.A_cn, ZaAccount.A_name, ZaAccount.A_displayname, ZaAccount.A_mail],
+				dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,visibilityChecks:[],enableDisableChecks:[]
 			},
 			{type:_DWT_BUTTON_, label:ZaMsg.Shares_FindShares, width:80, 
 			   enableDisableChangeEventSources:[ZaDistributionList.A2_sharesOwner],

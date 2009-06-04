@@ -1393,7 +1393,9 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 											visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
 											onChange:null,
 											forceUpdate:true,
-											dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts
+											dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,
+											dataFetcherTypes:[ZaSearch.ACCOUNTS],
+											dataFetcherAttrs:[ZaItem.A_zimbraId, ZaItem.A_cn, ZaAccount.A_name, ZaAccount.A_displayname, ZaAccount.A_mail]
 										}
 									]
 								}
