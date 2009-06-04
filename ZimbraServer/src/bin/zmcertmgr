@@ -251,7 +251,7 @@ createCAKey() {
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
   ${openssl} req -batch -subj "${SUBJECT}" \
     -config ${zimbra_ca_ssl_conf} \
-    -new -newkey rsa:1024 -nodes  \
+    -new -newkey rsa:${KEYSIZE} -nodes  \
     -out ${zimbra_ca_csr} \
     -keyout ${zimbra_ca_key} > ${tmpfile} 2>&1
 
@@ -423,12 +423,22 @@ createCA() {
     IS_NEW_CA=$1 #Allow the scripts to overwrite the existing csr
     shift
   fi
+  
+  if [ x"$1" = "x-keysize" ]; then
+    shift
+    KEYSIZE="$1"
+    shift
+  else 
+    KEYSIZE=1024
+  fi
+  #echo "createCA: RSA keysize: $KEYSIZE"
+  
 
   if [ x"${1}" = "x-subject" ]; then
     shift
     SUBJECT="$1"
     shift
-    echo "Subject: $SUBJECT"
+    #echo "subj=$SUBJECT"
   fi
   
   if [ ! -f ${zimbra_ca_ssl_conf} -o x"${IS_NEW_CA}" = "x-new" ]; then
@@ -820,7 +830,7 @@ createServerCertReq() {
   echo -n "** Creating server cert request ${current_csr}..."
 
   ${openssl} req -new -nodes -out ${current_csr} -keyout ${current_key} \
-    -newkey rsa:1024 -config ${zimbra_cert_ssl_conf} \
+    -newkey rsa:${KEYSIZE} -config ${zimbra_cert_ssl_conf} \
     -subj "${SUBJECT}" -batch > ${tmpfile} 2>&1
 
   if [ $? != 0 ]; then
@@ -856,11 +866,20 @@ createCert() {
     echo "Validation days: $validation_days"
   fi
 
+  if [ x"$1" = "x-keysize" ]; then
+    shift
+    KEYSIZE="$1"
+    shift
+  else 
+    KEYSIZE=1024
+  fi
+  #echo "createCert: RSA keysize: $KEYSIZE"
+
   if [ x"${1}" = "x-subject" ]; then
     shift
     SUBJECT="$1"
     shift
-    echo "Subject: $SUBJECT"
+    #echo "subj=$SUBJECT"
   fi
 
   if [ x"${1}" = "x-allserver" ]; then
@@ -901,10 +920,10 @@ createCert() {
 
   if [ x"${ALLSERVERS}" = "x-allserver" ]; then
     subject_alt_names=`su - zimbra -c "${zimbra_home}/bin/zmprov -m -l gas | xargs "`
-    createCSR self -new 
+    createCSR self -new -keysize ${KEYSIZE}
     shift
   elif [ ! -s "${server_csr}" -o x"${IS_NEW_CRT}" = "x-new" ]; then
-    createCSR self ${IS_NEW_CRT}
+    createCSR self ${IS_NEW_CRT} -keysize ${KEYSIZE}
   fi
 
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
@@ -1210,18 +1229,27 @@ createCSR() {
     shift
   fi
 
+  if [ x"$1" = "x-keysize" ]; then
+    shift
+    KEYSIZE="$1"
+    shift
+  else 
+    KEYSIZE=1024
+  fi
+  #echo "CreateCSR: RSA keysize: $KEYSIZE"
+
   if [ "x${1}" != "x" ]; then 
     if [ "x${1}" = "x-subject" ]; then
       shift
       if [ "x${1}" != "x" -a "x$(echo ${1} | cut -c1)" != "x-" ]; then
         SUBJECT="${1}"
-        echo "subj=$SUBJECT"
+        #echo "subj=$SUBJECT"
         shift
       fi
     fi
     if [ "x$(echo ${1} | cut -c1)" != "x-" ]; then
       SUBJECT="${1}"
-      echo "subj=$SUBJECT"
+      #echo "subj=$SUBJECT"
       shift
     fi
   fi
@@ -1247,7 +1275,7 @@ createCSR() {
   
   backupSSLDirs ${zimbra_ssl_directory}
   initSSLDirs
-  createCA
+  createCA -keysize ${KEYSIZE}
   createServerCertReq $type
   
   if [ x"$type" = "xcomm" ]; then 
@@ -1449,10 +1477,10 @@ migrate () {
 usage () {
   echo "Usage: "
   echo "  $0 -help"
-  echo "  $0 createca [-new] [-subject subject]"
+  echo "  $0 createca [-new] [-keysize 1024] [-subject subject]"
   echo "  $0 deployca"
-  echo "  $0 createcsr <self|comm> [-new] [-subject subject] [-subjectAltNames \"host1,host2\"]"
-  echo "  $0 createcrt [-new] [-days validation days] [-subject subject] [-subjectAltNames \"host1,host2\"]"
+  echo "  $0 createcsr <self|comm> [-new] [-keysize 1024] [-subject subject] [-subjectAltNames \"host1,host2\"]"
+  echo "  $0 createcrt [-new] [-days validation days] [-keysize 1024] [-subject subject] [-subjectAltNames \"host1,host2\"]"
   echo "  $0 deploycrt <self>"
   echo "  $0 deploycrt <comm> [certfile] [ca_chain_file]"
   echo "  $0 savecrt"
@@ -1474,6 +1502,7 @@ usage () {
   echo "     commercial  ${commercial_key}"
   echo "-  Default <subject>"
   echo "     \"$SUBJECT\""
+  echo "-  Default RSA <keysize> is 1024."
   echo "-  Default <validation_days> is 365. "
   echo "-  Default <csr_file> is ${zimbra_csr}"
   echo "-  deploycrt self installs the certificates using self signed csr in ${zimbra_self_cert_directory}"
