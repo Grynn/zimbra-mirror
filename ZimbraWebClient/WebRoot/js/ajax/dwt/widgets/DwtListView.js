@@ -124,7 +124,7 @@ DwtListView.TYPE_LIST_ITEM 			= "2";
 DwtListView.TYPE_HEADER_SASH 		= "3";
 DwtListView.DEFAULT_LIMIT			= 25;
 DwtListView.MAX_REPLENISH_THRESHOLD	= 10;
-DwtListView.MIN_COLUMN_WIDTH		= 10;
+DwtListView.MIN_COLUMN_WIDTH		= 20;
 DwtListView.COL_MOVE_THRESHOLD		= 3;
 DwtListView.ROW_CLASS				= "Row";
 DwtListView.ROW_CLASS_ODD			= "RowEven";
@@ -209,6 +209,10 @@ function(defaultColumnSort) {
 
 		this._headerHash[field] = headerCol;
 		this._headerIdHash[id] = headerCol;
+
+		if (headerCol._variable) {
+			this._variableHeaderCol = headerCol;
+		}
 
 		if (!headerCol._visible) { continue; }
 		
@@ -2079,7 +2083,9 @@ function(ev) {
 		Dwt.setSize(this._headerSash, Dwt.DEFAULT, this.getSize().y);
 		Dwt.setPosition(this._headerSash, Dwt.ABSOLUTE_STYLE); 
 		Dwt.setZIndex(this._headerSash, Dwt.Z_DND);
-		Dwt.setLocation(this._headerSash, Dwt.DEFAULT, 0);
+		var sashLoc = this._getHeaderSashLocation();
+		this._headerSashFudgeX = sashLoc.x;
+		Dwt.setLocation(this._headerSash, Dwt.DEFAULT, sashLoc.y);
 
 		this._headerSash.className = "DwtListView-ColumnSash";
 		this.getHtmlElement().appendChild(this._headerSash);
@@ -2091,7 +2097,14 @@ function(ev) {
 	// always update the sash's position
 	var parent = this._getParentForColResize();
 	var loc = Dwt.toWindow(parent.getHtmlElement(), 0 ,0);
-	Dwt.setLocation(this._headerSash, ev.docX-loc.x);
+	Dwt.setLocation(this._headerSash, (ev.docX - loc.x) + this._headerSashFudgeX);
+};
+
+DwtListView.prototype._getHeaderSashLocation =
+function() {
+	this._tmpPoint.x = 0;
+	this._tmpPoint.y = 0;
+	return this._tmpPoint;
 };
 
 DwtListView.prototype._handleColHeaderDrop = 
@@ -2184,33 +2197,38 @@ function(ev) {
 
 	// find out where the user dropped the sash and update column width
 	var headerIdx = this._getItemData(this._clickDiv, "index");
-	if (headerIdx >= 0 && headerIdx < this._headerList.length) {
-		// always add/remove width from the last column
-		var lastColumnIndex = this._getLastColumnIndex();
-		var lastColumnWidth = (lastColumnIndex) ? this._calcRelativeWidth(lastColumnIndex) : null;
-		var columnWidth = this._calcRelativeWidth(headerIdx);
+	if (headerIdx == null) { return false; }
 
-		if (lastColumnWidth && columnWidth) {
-			var delta = ev.docX - this._headerSashX;
-			var newLastColumnWidth = lastColumnWidth - delta;
-			var newColumnWidth = columnWidth + delta;
-
-			if (newLastColumnWidth > DwtListView.MIN_COLUMN_WIDTH &&
-				newColumnWidth  > DwtListView.MIN_COLUMN_WIDTH &&
-				newColumnWidth != columnWidth)
-			{
-				this._headerList[lastColumnIndex]._width = "auto";
-				this._headerList[headerIdx]._width = newColumnWidth;
-
-				this._relayout();
-				this._resetColWidth();
-
-				return true;
-			}
+	var delta = ev.docX - this._headerSashX;
+	var col1 = this._headerList[headerIdx];
+	var col2 = this._variableHeaderCol;
+	if (col1 == col2) {
+		var index = this._getNextResizeableColumnIndex(col2._index);
+		if (index != null) {
+			col2 = this._headerList[index];
+		} else {
+			return false;
+		}
+	} else if (!col2) {
+		var index = this._getNextResizeableColumnIndex(col1._index);
+		if (index != null) {
+			col2 = this._headerList[index];
+		} else {
+			return false;
 		}
 	}
+	col1._width = Math.max(col1._width + delta, DwtListView.MIN_COLUMN_WIDTH);
+	col2._width = Math.max(this._calcRelativeWidth(col2._index) - delta, DwtListView.MIN_COLUMN_WIDTH);
 
-	return false;
+	var index = this._getNextResizeableColumnIndex(-1, [col1._index, col2._index]);
+	if (index != null) {
+		this._headerList[index]._width = "auto";
+	}
+
+	this._relayout();
+	this._resetColWidth();
+
+	return true;
 };
 
 DwtListView.prototype._calcRelativeWidth =
@@ -2268,6 +2286,38 @@ function() {
 		}
 	}
 	return lastColIdx;
+};
+
+/**
+ * Returns the index of the next resizeable (and visible) column after the one
+ * with the given index. If it doesn't find one to the right, starts over at the
+ * first column.
+ *
+ * @param start		[int]		index of reference column
+ * @param exclude	[array]		list of indices to exclude
+ */
+DwtListView.prototype._getNextResizeableColumnIndex =
+function(start, exclude) {
+
+	exclude = exclude ? AjxUtil.arrayAsHash(exclude) : {};
+	exclude[start] = true;
+	if (this._headerList) {
+		for (var i = start + 1; i < this._headerList.length; i++) {
+			var col = this._headerList[i];
+			if (exclude[i]) { continue; }
+			if (col._visible && col._resizeable) {
+				return i;
+			}
+		}
+		for (var i = 0; i < start; i++) {
+			if (exclude[i]) { continue; }
+			var col = this._headerList[i];
+			if (col._visible && col._resizeable) {
+				return i;
+			}
+		}
+	}
+	return null;
 };
 
 DwtListView.prototype._relayout =
@@ -2377,6 +2427,8 @@ DwtListHeaderItem = function(params) {
 	var w = parseInt(params.width);
 	if (isNaN(w) || !w) {
 		this._width = "auto";
+		this._variable = true;
+		this._resizeable = true;
 	} else if (String(w) == String(params.width)) {
 		this._width = w;
 	} else {

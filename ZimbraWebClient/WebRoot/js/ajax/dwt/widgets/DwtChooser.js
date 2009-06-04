@@ -1084,3 +1084,19 @@ DwtChooserListView.prototype._sortColumn =
 function(columnItem, ascending) {
 	this._chooserParent.search(columnItem, ascending);
 };
+
+DwtChooserListView.prototype._getHeaderSashLocation =
+function() {
+
+	var el = this.getHtmlElement();
+	if (Dwt.getPosition(el) == Dwt.ABSOLUTE_STYLE) {
+		return DwtListView.prototype._getHeaderSashLocation.call(this);
+	}
+
+	var thisLoc = Dwt.toWindow(el, 0, 0);
+	var contLoc = Dwt.toWindow(this._chooserParent.getHtmlElement(), 0, 0);
+	this._tmpPoint.x = thisLoc.x - contLoc.x;
+	this._tmpPoint.y = thisLoc.y - contLoc.y;
+
+	return this._tmpPoint;
+};
