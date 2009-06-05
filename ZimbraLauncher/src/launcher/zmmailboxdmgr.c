@@ -153,7 +153,7 @@ NewArgEnsureCapacity(int thisManyMore)
     /* the -1 here is so we have room to stick a NULL to terminate newArgv */
     if ((newArgCapacity - 1) <= (newArgCount + thisManyMore)) {
 	newArgCapacity = newArgCapacity * 2;
-	newArgv = (char **)realloc(newArgv, newArgCapacity);
+	newArgv = (char **)realloc(newArgv, sizeof(*newArgv) * newArgCapacity);
     }
 }
 

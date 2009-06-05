@@ -59,7 +59,7 @@ LAUNCHER_CFLAGS += -DZIMBRA_USE_TOMCAT=1
 endif
 
 $(BUILD)/zmmailboxdmgr: $(SRC)/launcher/zmmailboxdmgr.c
-	gcc $(MACDEF) $(LAUNCHER_CFLAGS) -Wall -Wmissing-prototypes -o $@ $<
+	gcc $(MACDEF) $(LAUNCHER_CFLAGS) -g -Wall -Wmissing-prototypes -o $@ $<
 
 $(BUILD)/zmmailboxdmgr.unrestricted: $(SRC)/launcher/zmmailboxdmgr.c
 	gcc $(MACDEF) $(LAUNCHER_CFLAGS) -DUNRESTRICTED_JVM_ARGS -Wall -Wmissing-prototypes -o $@ $<
