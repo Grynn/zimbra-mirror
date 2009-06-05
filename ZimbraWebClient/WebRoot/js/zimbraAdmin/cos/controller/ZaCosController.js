@@ -49,8 +49,14 @@ function(entry) {
 }
 
 ZaCosController.changeActionsStateMethod = function () {
+	if(!ZaItem.hasRight(ZaCos.DELETE_COS_RIGHT,this._currentObject))	{
+		this._toolbarOperations[ZaOperation.DELETE].enabled = false;
+	}
+	
+
 	if(this._toolbarOperations[ZaOperation.SAVE])
 		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+		
 }
 ZaController.changeActionsStateMethods["ZaCosController"].push(ZaCosController.changeActionsStateMethod);
 
@@ -61,33 +67,33 @@ ZaController.changeActionsStateMethods["ZaCosController"].push(ZaCosController.c
 ZaCosController.setViewMethod =
 function(entry) {
 	try {
-      //  if (!entry._app) entry._app = this._app ;
-           //create toolbar
-		if(!this._UICreated) {
-			this._initToolbar();
-			//always add Help button at the end of the toolbar		
-			this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-			this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
-			this._toolbarOrder.push(ZaOperation.NONE);
-			this._toolbarOrder.push(ZaOperation.HELP);	
-			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder);
-	
-		  	
-		  	this._contentView = this._view = new this.tabConstructor(this._container,  entry);
-			var elements = new Object();
-			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;			  	
-		    //ZaApp.getInstance().createView(ZaZimbraAdmin._COS_VIEW, elements);
-		    var tabParams = {
-				openInNewTab: true,
-				tabId: this.getContentViewId()
-			}  	
-		    ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-			this._UICreated = true;
-			ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
-	  	}
-	
-		//ZaApp.getInstance().pushView(ZaZimbraAdmin._COS_VIEW);
+		entry[ZaModel.currentTab] = "1"
+		if(entry.id)
+			entry.load("id", entry.id);
+			
+		this._currentObject = entry;
+		
+         //create toolbar
+		this._initToolbar();
+		//always add Help button at the end of the toolbar		
+		this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
+		this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
+		this._toolbarOrder.push(ZaOperation.NONE);
+		this._toolbarOrder.push(ZaOperation.HELP);	
+		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder);
+
+	  	this._contentView = this._view = new this.tabConstructor(this._container,  entry);
+		var elements = new Object();
+		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;			  	
+
+	    var tabParams = {
+			openInNewTab: true,
+			tabId: this.getContentViewId()
+		}  	
+	    ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
+		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
+
 		ZaApp.getInstance().pushView(this.getContentViewId());
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 		if(!entry.id || (entry.name == "default")) {
@@ -96,16 +102,12 @@ function(entry) {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
 		}	
 		this._view.setDirty(false);
-		entry[ZaModel.currentTab] = "1"
-		if(entry.id)
-			entry.load("id", entry.id);
-			
 	  	this._view.setObject(entry);
 
 	} catch (ex) {
 		this._handleException(ex, "ZaCosController.prototype._setView", null, false);	
 	}
-	this._currentObject = entry;
+	
 }
 ZaController.setViewMethods["ZaCosController"].push(ZaCosController.setViewMethod);
 
@@ -122,9 +124,11 @@ function () {
 	this._toolbarOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.COSTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
 	this._toolbarOperations[ZaOperation.CLOSE]=new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.COSTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));    	
    	this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
-	this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosController.prototype._newButtonListener, [true]));
-	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
 	
+	if(ZaItem.hasRight(ZaCos.CREATE_COS_RIGHT, ZaZimbraAdmin.currentAdminAccount)) {
+		this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosController.prototype._newButtonListener, [true]));		
+	}	
+	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
 	this._toolbarOrder.push(ZaOperation.SAVE);
 	this._toolbarOrder.push(ZaOperation.CLOSE);
 	this._toolbarOrder.push(ZaOperation.SEP);

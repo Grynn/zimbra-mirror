@@ -240,13 +240,13 @@ function () {
     this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
 	this._popupOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener));
 	
-	if((ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CHPWD] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) && this._defaultType == ZaItem.ACCOUNT) {
+	if(this._defaultType == ZaItem.ACCOUNT) {
 		this._popupOperations[ZaOperation.CHNG_PWD] = new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener));
 	}
 
 	this._popupOperations[ZaOperation.VIEW_MAIL] = new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, ZaAccountListController.prototype._viewMailListener));		
 
-	if((ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.MOVE_ALIAS] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) && this._defaultType == ZaItem.ALIAS) {	
+	if(this._defaultType == ZaItem.ALIAS) {	
 		this._popupOperations[ZaOperation.MOVE_ALIAS] = new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener));
 	}		    	
 }
@@ -258,67 +258,48 @@ ZaController.initPopupMenuMethods["ZaAccountListController"].push(ZaAccountListC
 ZaAccountListController.initToolbarMethod =
 function () {
 	// first button in the toolbar is a menu.
-	/*if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CREATE] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] || 
-		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIASES_CREATE] || 
-		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCES_CREATE] ||
-		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_CREATE]
-		) {*/
+	var newMenuOpList = new Array();
 	
-		var newMenuOpList = new Array();
-		
-		//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CREATE] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			newMenuOpList.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener));
-		//}
-		
-		//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_CREATE_RIGHT] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.ALTBB_New_menuItem, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener));
-		//}
-			
-		//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_CREATE_RIGHT] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "Group", "GroupDis", this._newDLListener));
-		//}
-		
-		//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCES_CREATE_RIGHT] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.RESTBB_New_menuItem, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener));
-		//}
-			
-		if(this._defaultType == ZaItem.ACCOUNT || this._defaultType == ZaItem.ALIAS) {
-			this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener, 
+	newMenuOpList.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener));
+	newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.ALTBB_New_menuItem, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener));
+	newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "Group", "GroupDis", this._newDLListener));
+	newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.RESTBB_New_menuItem, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener));
+	if(this._defaultType == ZaItem.ACCOUNT || this._defaultType == ZaItem.ALIAS) {
+		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener, 
+								   ZaOperation.TYPE_MENU, newMenuOpList);
+    } else if (this._defaultType == ZaItem.ALIAS) {
+		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener, 
+								   ZaOperation.TYPE_MENU, newMenuOpList);
+    }else if(this._defaultType == ZaItem.RESOURCE) {
+		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener, 
 									   ZaOperation.TYPE_MENU, newMenuOpList);
-	    } else if (this._defaultType == ZaItem.ALIAS) {
-			this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener, 
+    	
+    } else if(this._defaultType == ZaItem.DL) {    	
+		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Group", "GroupDis", this._newDLListener, 
 									   ZaOperation.TYPE_MENU, newMenuOpList);
-	    }else if(this._defaultType == ZaItem.RESOURCE) {
-			this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener, 
-										   ZaOperation.TYPE_MENU, newMenuOpList);
-	    	
-	    } else if(this._defaultType == ZaItem.DL) {    	
-			this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Group", "GroupDis", this._newDLListener, 
-										   ZaOperation.TYPE_MENU, newMenuOpList);
-	    	
-	    } 
-	//}
+    	
+    } 
 	
     this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
 	this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener));
 	
-	if((ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CHPWD] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) && this._defaultType == ZaItem.ACCOUNT) {
+	if(this._defaultType == ZaItem.ACCOUNT) {
 		this._toolbarOperations[ZaOperation.CHNG_PWD] = new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener));
 	}
 	this._toolbarOperations[ZaOperation.VIEW_MAIL] = new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, ZaAccountListController.prototype._viewMailListener));		
 
-	if((ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.MOVE_ALIAS] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) && this._defaultType == ZaItem.ALIAS) {	
+	if(this._defaultType == ZaItem.ALIAS) {	
 		this._toolbarOperations[ZaOperation.MOVE_ALIAS] = new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener));		    	
 	}
 	
 	this._toolbarOrder.push(ZaOperation.NEW_MENU);
 	this._toolbarOrder.push(ZaOperation.EDIT);
 	this._toolbarOrder.push(ZaOperation.DELETE);
-	if((ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CHPWD] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) && this._defaultType == ZaItem.ACCOUNT) {
+	if(this._defaultType == ZaItem.ACCOUNT) {
 		this._toolbarOrder.push(ZaOperation.CHNG_PWD);
 	}
 	this._toolbarOrder.push(ZaOperation.VIEW_MAIL);
-	if((ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.MOVE_ALIAS] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) && this._defaultType == ZaItem.ALIAS) {
+	if(this._defaultType == ZaItem.ALIAS) {
 		this._toolbarOrder.push(ZaOperation.MOVE_ALIAS);
 	}
 	this._toolbarOrder.push(ZaOperation.NONE);	
@@ -923,6 +904,20 @@ function () {
 						 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
 						 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
 					}
+					if(!item.rights[ZaAccount.DELETE_ACCOUNT_RIGHT]) {
+						 if(this._popupOperations[ZaOperation.DELETE])
+						 	this._popupOperations[ZaOperation.DELETE].enabled = false;
+						 
+						 if(this._toolbarOperations[ZaOperation.DELETE])
+						 	this._toolbarOperations[ZaOperation.DELETE].enabled = false;   
+					}	
+					if(!item.rights[ZaAccount.SET_PASSWORD_RIGHT]) {
+						 if(this._popupOperations[ZaOperation.CHNG_PWD])
+						 	this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+						 
+						 if(this._toolbarOperations[ZaOperation.CHNG_PWD])
+						 	this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;   
+					}										
 				}
 			} else if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT))  {
 				var targetObj = item.getAliasTargetObj() ;
@@ -939,7 +934,21 @@ function () {
 						 
 						 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
 						 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
-					}				
+					}	
+					if(!targetObj.rights[ZaAccount.DELETE_ACCOUNT_RIGHT]) {
+						 if(this._popupOperations[ZaOperation.DELETE])
+						 	this._popupOperations[ZaOperation.DELETE].enabled = false;
+						 
+						 if(this._toolbarOperations[ZaOperation.DELETE])
+						 	this._toolbarOperations[ZaOperation.DELETE].enabled = false;   
+					}
+					if(!targetObj.rights[ZaAccount.SET_PASSWORD_RIGHT]) {
+						 if(this._popupOperations[ZaOperation.CHNG_PWD])
+						 	this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+						 
+						 if(this._toolbarOperations[ZaOperation.CHNG_PWD])
+						 	this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;   
+					}					
 				}
 			}
         } else {

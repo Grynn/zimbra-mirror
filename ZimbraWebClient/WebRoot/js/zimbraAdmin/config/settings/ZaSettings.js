@@ -352,15 +352,6 @@ ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_ALIASES_TAB, label: ZaM
 ZaSettings.DL_SHARES_TAB = "dlSharesTab";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_SHARES_TAB, label: ZaMsg.UI_Comp_DLSharesTab });
 
-//Miscelaneous operations
-
-//Account operations
-ZaSettings.ACCOUNTS_CHPWD = "accountsChangePassword";
-ZaSettings.MOVE_ALIAS = "moveAlias";
-ZaSettings.ACCOUNTS_REINDEX = "accountsReindex";
-ZaSettings.ACCOUNTS_ASSIGN_SERVER = "accountsAssignServer";
-ZaSettings.ACCOUNTS_RESTORE = "accountsRestore"; //this should be in bnr extension
-
 //Domain operations  - it might be duplicated to domain view tabs
 ZaSettings.DOMAIN_GAL_WIZ = "domainGALWizard";
 ZaSettings.DOMAIN_AUTH_WIZ = "domainAuthWizard";
@@ -407,8 +398,6 @@ ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_QUOTA_TAB, la
 
 //Resources operations
 //ZaSettings.RESOURCES_CREATE_RIGHT = "createResource";
-
-ZaSettings.ACCOUNTS_RESTORE_ENABLED = true;
 
 ZaSettings.SKIN_PREFS_ENABLED = true;
 ZaSettings.LICENSE_ENABLED = true;

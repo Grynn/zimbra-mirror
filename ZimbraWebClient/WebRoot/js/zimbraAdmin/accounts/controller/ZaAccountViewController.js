@@ -68,14 +68,11 @@ function () {
 	this._toolbarOperations[ZaOperation.NEW_WIZARD] = new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountViewController.prototype._newButtonListener));   			    	
 	this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));    	    	
 	
-	//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_VIEW_MAIL] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		this._toolbarOperations[ZaOperation.VIEW_MAIL] = new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._viewMailListener));		
-		this._toolbarOrder.push(ZaOperation.VIEW_MAIL);
-	//}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_REINDEX] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		this._toolbarOperations[ZaOperation.REINDEX_MAILBOX] = new ZaOperation(ZaOperation.REINDEX_MAILBOX, ZaMsg.ACTBB_ReindexMbx, ZaMsg.ACTBB_ReindexMbx_tt, "ReindexMailboxes", "ReindexMailboxes", new AjxListener(this, ZaAccountViewController.prototype._reindexMbxListener));
-		this._toolbarOrder.push(ZaOperation.REINDEX_MAILBOX);
-	}					
+	this._toolbarOperations[ZaOperation.VIEW_MAIL] = new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._viewMailListener));		
+	this._toolbarOrder.push(ZaOperation.VIEW_MAIL);
+	this._toolbarOperations[ZaOperation.REINDEX_MAILBOX] = new ZaOperation(ZaOperation.REINDEX_MAILBOX, ZaMsg.ACTBB_ReindexMbx, ZaMsg.ACTBB_ReindexMbx_tt, "ReindexMailboxes", "ReindexMailboxes", new AjxListener(this, ZaAccountViewController.prototype._reindexMbxListener));
+	this._toolbarOrder.push(ZaOperation.REINDEX_MAILBOX);
+					
 }
 ZaController.initToolbarMethods["ZaAccountViewController"].push(ZaAccountViewController.initToolbarMethod);
 
@@ -150,11 +147,12 @@ ZaAccountViewController.changeActionsStateMethod = function () {
 		this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
 	}
 
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_REINDEX] || 
-		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		if(!ZaItem.hasRight(ZaAccount.REINDEX_MBX_RIGHT,this._currentObject))	{
-			this._toolbarOperations[ZaOperation.REINDEX_MAILBOX].enabled = false;
-		}
+	if(!ZaItem.hasRight(ZaAccount.DELETE_ACCOUNT_RIGHT,this._currentObject))	{
+		this._toolbarOperations[ZaOperation.DELETE].enabled = false;
+	}
+
+	if(!ZaItem.hasRight(ZaAccount.REINDEX_MBX_RIGHT,this._currentObject))	{
+		this._toolbarOperations[ZaOperation.REINDEX_MAILBOX].enabled = false;
 	}
 	if(this._toolbarOperations[ZaOperation.SAVE])	
 		this._toolbarOperations[ZaOperation.SAVE].enabled = false;

@@ -70,8 +70,10 @@ function (list, openInNewTab, openInSearchTab) {
 
 ZaCosListController.initPopupMenuMethod =
 function () {
-   	this._popupOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosListController.prototype._newButtonListener));
-   	this._popupOperations[ZaOperation.DUPLICATE]=new ZaOperation(ZaOperation.DUPLICATE,ZaMsg.TBB_Duplicate, ZaMsg.COSTBB_Duplicate_tt, "DuplicateCOS", "DuplicateCOSDis", new AjxListener(this, ZaCosListController.prototype._duplicateButtonListener));    	
+	if(ZaItem.hasRight(ZaCos.CREATE_COS_RIGHT, ZaZimbraAdmin.currentAdminAccount)) {
+   		this._popupOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosListController.prototype._newButtonListener));
+   		this._popupOperations[ZaOperation.DUPLICATE]=new ZaOperation(ZaOperation.DUPLICATE,ZaMsg.TBB_Duplicate, ZaMsg.COSTBB_Duplicate_tt, "DuplicateCOS", "DuplicateCOSDis", new AjxListener(this, ZaCosListController.prototype._duplicateButtonListener));
+	}
    	this._popupOperations[ZaOperation.EDIT]=new ZaOperation(ZaOperation.EDIT,ZaMsg.TBB_Edit, ZaMsg.COSTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaCosListController.prototype._editButtonListener));    	    	
 	this._popupOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaCosListController.prototype._deleteButtonListener));   		
 }
@@ -82,8 +84,10 @@ ZaController.initPopupMenuMethods["ZaCosListController"].push(ZaCosListControlle
 **/
 ZaCosListController.initToolbarMethod =
 function () {
-	this._toolbarOrder.push(ZaOperation.NEW);
-	this._toolbarOrder.push(ZaOperation.DUPLICATE);
+	if(ZaItem.hasRight(ZaCos.CREATE_COS_RIGHT, ZaZimbraAdmin.currentAdminAccount)) {
+		this._toolbarOrder.push(ZaOperation.NEW);
+		this._toolbarOrder.push(ZaOperation.DUPLICATE);
+	}
 	this._toolbarOrder.push(ZaOperation.EDIT);
 	this._toolbarOrder.push(ZaOperation.DELETE);
 	this._toolbarOrder.push(ZaOperation.NONE);	
@@ -91,8 +95,9 @@ function () {
 	this._toolbarOrder.push(ZaOperation.PAGE_FORWARD);
 	this._toolbarOrder.push(ZaOperation.HELP);
 		
-	
-   	this._toolbarOperations[ZaOperation.NEW] = new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosListController.prototype._newButtonListener));
+	if(ZaItem.hasRight(ZaCos.CREATE_COS_RIGHT, ZaZimbraAdmin.currentAdminAccount)) {
+   		this._toolbarOperations[ZaOperation.NEW] = new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosListController.prototype._newButtonListener));
+	}
    	this._toolbarOperations[ZaOperation.DUPLICATE] = new ZaOperation(ZaOperation.DUPLICATE, ZaMsg.TBB_Duplicate, ZaMsg.COSTBB_Duplicate_tt, "DuplicateCOS", "DuplicateCOSDis", new AjxListener(this, ZaCosListController.prototype._duplicateButtonListener));    	
    	this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.COSTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaCosListController.prototype._editButtonListener));    	    	
 	this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaCosListController.prototype._deleteButtonListener));   		
@@ -394,7 +399,7 @@ ZaCosListController.changeActionsStateMethod =
 function (enableArray,disableArray) {
 	if(!this._contentView)
 		return;
-		
+	
 	var cnt = this._contentView.getSelectionCount();
 	var hasDefault = false;
 	if(cnt >= 1) {
@@ -420,12 +425,23 @@ function (enableArray,disableArray) {
 				if(this._popupOperations[ZaOperation.DELETE]) {
 					this._popupOperations[ZaOperation.DELETE].enabled=false;
 				}
+			} else {
+				if (AjxUtil.isEmpty(item.rights)) {
+					item.loadEffectiveRights("id", item.id, false);
+				}
+				if(!item.rights[ZaAccount.DELETE_COS_RIGHT]) {
+					if(this._toolbarOperations[ZaOperation.DELETE]) {
+						this._toolbarOperations[ZaOperation.DELETE].enabled=false;
+					}
+					
+					if(this._popupOperations[ZaOperation.DELETE]) {
+						this._popupOperations[ZaOperation.DELETE].enabled=false;
+					}
+				}
 			}
 		}
 	} else if (cnt > 1){
-		if(!hasDefault) {
-			//enableArray.push(ZaOperation.DELETE);
-		} else {
+		if(hasDefault) {
 			if(this._toolbarOperations[ZaOperation.DELETE]) {
 				this._toolbarOperations[ZaOperation.DELETE].enabled=false;
 			}		
@@ -434,14 +450,14 @@ function (enableArray,disableArray) {
 				this._popupOperations[ZaOperation.DELETE].enabled=false;
 			}					
 		}
-		if(this._toolbarOperations[ZaOperation.DUPLICATE]) {
+		if(this._toolbarOperations[ZaOperation.DUPLICATE] && this._toolbarOperations[ZaOperation.DUPLICATE].enabled) {
 			this._toolbarOperations[ZaOperation.DUPLICATE].enabled=false;
 		}		
 		if(this._toolbarOperations[ZaOperation.EDIT]) {
 			this._toolbarOperations[ZaOperation.EDIT].enabled=false;
 		}
 		
-		if(this._popupOperations[ZaOperation.DUPLICATE]) {
+		if(this._popupOperations[ZaOperation.DUPLICATE] && this._toolbarOperations[ZaOperation.DUPLICATE].enabled) {
 			this._popupOperations[ZaOperation.DUPLICATE].enabled=false;
 		}		
 		if(this._popupOperations[ZaOperation.EDIT]) {
@@ -454,7 +470,7 @@ function (enableArray,disableArray) {
 		if(this._toolbarOperations[ZaOperation.DELETE]) {
 			this._toolbarOperations[ZaOperation.DELETE].enabled=false;
 		}	
-		if(this._toolbarOperations[ZaOperation.DUPLICATE]) {
+		if(this._toolbarOperations[ZaOperation.DUPLICATE] && this._toolbarOperations[ZaOperation.DUPLICATE].enabled) {
 			this._toolbarOperations[ZaOperation.DUPLICATE].enabled=false;
 		}
 
@@ -464,7 +480,7 @@ function (enableArray,disableArray) {
 		if(this._popupOperations[ZaOperation.DELETE]) {
 			this._popupOperations[ZaOperation.DELETE].enabled=false;
 		}	
-		if(this._popupOperations[ZaOperation.DUPLICATE]) {
+		if(this._popupOperations[ZaOperation.DUPLICATE] && this._toolbarOperations[ZaOperation.DUPLICATE].enabled) {
 			this._popupOperations[ZaOperation.DUPLICATE].enabled=false;
 		}		
 	}

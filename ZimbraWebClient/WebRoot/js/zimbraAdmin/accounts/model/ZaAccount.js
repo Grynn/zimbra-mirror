@@ -260,6 +260,7 @@ ZaAccount.A2_warningMessage = "warningMessage";
 ZaAccount.SET_PASSWORD_RIGHT = "setAccountPassword";
 ZaAccount.RENAME_ACCOUNT_RIGHT = "renameAccount";
 ZaAccount.REINDEX_MBX_RIGHT = "reindexMailbox";
+ZaAccount.DELETE_ACCOUNT_RIGHT = "deleteAccount";
 ZaAccount.GET_MBX_DUMP_RIGHT = "getMailboxDump";
 ZaAccount.VIEW_MAIL_RIGHT = "adminLoginAs";
 ZaAccount.ADD_ACCOUNT_ALIAS_RIGHT = "addAccountAlias";
@@ -1157,10 +1158,7 @@ function() {
 		html[idx++] = "</table></div></td></tr>";
 		html[idx++] = "<tr></tr>";
 		idx = this._addRow(ZaMsg.NAD_ZimbraID, this.id, html, idx);
-		
-		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ASSIGN_SERVER] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_mailHost], html, idx);
-		}
+		idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_mailHost], html, idx);
 		html[idx++] = "</table>";
 		this._toolTip = html.join("");
 	}

@@ -181,7 +181,8 @@ ZaCos.MAJOR_FEATURES_CHOICES = [
 ];
 
 ZaCos.RENAME_COS_RIGHT = "renameCos";
-
+ZaCos.CREATE_COS_RIGHT = "createCos";
+ZaCos.DELETE_COS_RIGHT = "deleteCos";
 //internal attributes - do not send these to the server
 //ZaCos.A_zimbraMailAllServersInternal = "allserversarray";
 //ZaCos.A_zimbraMailHostPoolInternal = "hostpoolarray";

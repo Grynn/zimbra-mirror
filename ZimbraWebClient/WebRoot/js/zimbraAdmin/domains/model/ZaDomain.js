@@ -245,9 +245,7 @@ ZaDomain.RIGHT_CREATE_TOP_DOMAIN = "createTopDomain";
 ZaDomain.RIGHT_DELETE_DOMAIN = "deleteDomain";
 ZaDomain.RIGHT_RENAME_DOMAIN = "renameDomain";
 ZaDomain.RIGHT_CREATE_SUB_DOMAIN = "createSubDomain";
-ZaDomain.RIGHT_CONFIGURE_GAL = "configureExternalGAL";
-ZaDomain.RIGHT_CONFIGURE_AUTH = "configureExternaAuth";
-ZaDomain.RIGHT_INIT_NOTEBOOK = "initNotebook";
+ZaDomain.RIGHT_CREATE_ACCOUNT = "createAccount";
 
 ZaDomain.cacheCounter = 0;
 ZaDomain.staticDomainByNameCacheTable = {};
@@ -544,10 +542,34 @@ function(tmpObj) {
 	return newDomain;
 }
 
-ZaDomain.prototype.canConfigureWiki = function () {
-	if(this.rights || !this.getAttrs)
-		return false;
-	if(this.rights[ZaDomain.RIGHT_INIT_NOTEBOOK] && (this.setAttrs.all || this.setAttrs[ZaDomain.A_zimbraNotebookAccount]))
+ZaDomain.canConfigureAuth = function (obj) {
+	return (ZaItem.hasWritePermission(ZaDomain.A_AuthMech,obj) 
+		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapURL,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapUserDn,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapSearchBase,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapSearchFilter,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapSearchBindDn,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapSearchBindPassword,obj));
+}
+ZaDomain.canConfigureGal = function (obj) {
+	return (ZaItem.hasWritePermission(ZaDomain.A_GalMode,obj) 
+		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapURL,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapSearchBase,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapBindDn,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapBindDn,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapBindPassword,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapFilter,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalAutoCompleteLdapFilter,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapURL,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapSearchBase,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapFilter,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapAuthMech,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapBindDn,obj)
+		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapBindPassword,obj));
+}
+
+ZaDomain.canConfigureWiki = function (obj) {
+	if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ACCOUNT,obj) && ZaItem.hasWritePermission(ZaDomain.A_zimbraNotebookAccount,obj))
 		return true;
 }
 
