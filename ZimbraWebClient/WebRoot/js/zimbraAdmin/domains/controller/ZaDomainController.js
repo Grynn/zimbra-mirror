@@ -66,15 +66,6 @@ ZaDomainController.changeActionsStateMethod = function () {
 		if(this._toolbarOperations[ZaOperation.INIT_NOTEBOOK])
 			this._toolbarOperations[ZaOperation.INIT_NOTEBOOK].enabled = false;
 	} else {
-		if(!ZaItem.hasRight(ZaDomain.RIGHT_DELETE_DOMAIN,this._currentObject))	{
-			if(this._toolbarOperations[ZaOperation.DELETE])
-				this._toolbarOperations[ZaOperation.DELETE].enabled = false;
-		}
-		
-		if(!ZaItem.hasRight(ZaDomain.RIGHT_DELETE_DOMAIN,this._currentObject))	{
-			if(this._toolbarOperations[ZaOperation.DELETE])
-				this._toolbarOperations[ZaOperation.DELETE].enabled = false;
-		}
 
 		if(this._toolbarOperations[ZaOperation.GAL_WIZARD] && !ZaDomain.canConfigureGal(this._currentObject)) {
 			this._toolbarOperations[ZaOperation.GAL_WIZARD].enabled = false;
@@ -117,9 +108,11 @@ function () {
 		this._toolbarOrder.push(ZaOperation.NEW);		
 	}
 
-	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
-	this._toolbarOrder.push(ZaOperation.DELETE);		    	    	
-
+	if(ZaItem.hasRight(ZaDomain.RIGHT_DELETE_DOMAIN,this._currentObject))	{
+		this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
+		this._toolbarOrder.push(ZaOperation.DELETE);		    	    	
+	}
+		
     this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS]=new ZaOperation(ZaOperation.VIEW_DOMAIN_ACCOUNTS,ZaMsg.Domain_view_accounts, ZaMsg.Domain_view_accounts_tt, "Search", "SearchDis", new AjxListener(this, this.viewAccountsButtonListener));
     this._toolbarOrder.push(ZaOperation.VIEW_DOMAIN_ACCOUNTS);
 
