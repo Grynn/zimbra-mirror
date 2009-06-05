@@ -738,19 +738,20 @@ function (listArr) {
 			}
 			dlgMsg += "<li>";
 			var szAccName = listArr[key].attrs[ZaAccount.A_displayname] ? listArr[key].attrs[ZaAccount.A_displayname] : listArr[key].name;
-			if(szAccName.length > 50) {
-				//split it
-				var endIx = 49;
-				var beginIx = 0; //
-				while(endIx < szAccName.length) { //
-					dlgMsg +=  szAccName.slice(beginIx, endIx); //
-					beginIx = endIx + 1; //
-					if(beginIx >= (szAccName.length) ) //
-						break;
-					
-					endIx = ( szAccName.length <= (endIx + 50) ) ? szAccName.length-1 : (endIx + 50);
-					dlgMsg +=  "<br>";	
-				}
+            if(szAccName.length > 50) {
+                var beginIx = 0;
+                var endIx = 50;
+				do {
+                    if (endIx >= szAccName.length) {
+                        dlgMsg +=  szAccName.slice(beginIx);     
+                    } else {
+                        dlgMsg +=  szAccName.slice(beginIx, endIx);
+                    }
+					beginIx = endIx;
+					endIx += 50 ;
+                    
+					dlgMsg +=  "<br />";	
+				} while (beginIx < szAccName.length) ;
 			} else {
 				dlgMsg += szAccName;
 			}
