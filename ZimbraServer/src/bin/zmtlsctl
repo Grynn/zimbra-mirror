@@ -148,6 +148,23 @@ updateJettyConfig() {
       exit 1
     fi
 
+    origfile=${mailboxd_conf_directory}/service.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
     origfile=${jetty_web_xml}/zimbra.web.xml.in
     tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
     if [ $? = 0 -a -s "${tempfile}" ]; then
@@ -190,6 +207,23 @@ updateJettyConfig() {
       echo -n "Updating ${origfile}..."
 		  sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
 			  -e 's/\(.*HTTPBEGIN\).*/\1/' -e 's/.*\(HTTPEND.*\)/\1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
+    origfile=${mailboxd_conf_directory}/service.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
 			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
       if [ $? = 0 ]; then
         echo "done."
@@ -258,6 +292,23 @@ updateJettyConfig() {
       exit 1
     fi
 
+    origfile=${mailboxd_conf_directory}/service.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*REDIRECTBEGIN\).*/\1 -->/' -e 's/.*\(REDIRECTEND.*\)/<!-- \1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
     origfile=${jetty_web_xml}/zimbra.web.xml.in
     tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
     if [ $? = 0 -a -s "${tempfile}" ]; then
@@ -300,6 +351,23 @@ updateJettyConfig() {
       echo -n "Updating ${origfile}..."
 		  sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
 			  -e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
+    origfile=${mailboxd_conf_directory}/service.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
 			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
       if [ $? = 0 ]; then
         echo "done."
