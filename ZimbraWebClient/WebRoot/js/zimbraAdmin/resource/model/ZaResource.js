@@ -124,7 +124,7 @@ function(tmpObj) {
 	/*if(!AjxUtil.EMAIL_SHORT_RE.test(tmpObj.name) ) {*/
 	if(!AjxUtil.isValidEmailNonReg(tmpObj.name)) {
 		//show error msg
-		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_INVALID);
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_RESOURCE_EMAIL_INVALID);
 		return false;
 	}
 	
