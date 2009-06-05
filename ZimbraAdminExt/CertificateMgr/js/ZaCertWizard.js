@@ -726,7 +726,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				style: DwtAlert.WARNING, iconVisible: false,
 				content: com_zimbra_cert_manager.CSR_EXISTS_WARNING 
 		 }, 
-		{type: _GROUP_ , colSpan:2, numCols: 2, colSizes:["150px","*"],
+		{type: _GROUP_ , colSpan:2, numCols: 2, colSizes:["150px","300px"],
 			  items :[
 				{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["150px","*"], items: [
 						{ type:_SPACER_, height: 10},
@@ -853,7 +853,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	case_gen_csr.items = case_gen_csr_items;
 	cases.push(case_gen_csr);
 
-	var case_upload_cert={type:_CASE_, numCols:2, colSizes:["200px","*"], 
+	var case_upload_cert={type:_CASE_, numCols:1, colSizes:["450px"],
 //					relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_UPLOAD_CERT ",
 					tabGroupKey:ZaCertWizard.STEP_UPLOAD_CERT, caseKey:ZaCertWizard.STEP_UPLOAD_CERT,
                     items: [
@@ -881,7 +881,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				};
 	cases.push(case_upload_cert);
 	
-	var case_install_cert = {type:_CASE_, numCols:2, colSizes:["200px", "*"],
+	var case_install_cert = {type:_CASE_, numCols:2, colSizes:["200px", "350px"],
                     tabGroupKey:ZaCertWizard.STEP_INSTALL_CERT, caseKey:ZaCertWizard.STEP_INSTALL_CERT,
         //        relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_INSTALL_CERT",
 					align:_LEFT_, valign:_TOP_};
@@ -935,7 +935,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 //            relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_CSR_CONFIRM",
 			align:_LEFT_, valign:_TOP_ , 
 			items :[
-				{type: _GROUP_ , colSpan:2, numCols: 2, colSizes:["200px","*"],
+				{type: _GROUP_ , colSpan:2, numCols: 2, colSizes:["200px","350px"],
 //				relevant: " instance[ZaCert.A_csr_exists]  ",
 //				relevantBehavior: _HIDE_,
 				visibilityChecks:["instance[ZaCert.A_csr_exists] == true"],
@@ -976,7 +976,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 						}	
 					]
 				},
-				{type: _GROUP_ , colSpan:2, numCols: 1, colSizes:["*"],
+				{type: _GROUP_ , colSpan:2, numCols: 1, colSizes:["400px"],
 //					relevant: " ! instance[ZaCert.A_csr_exists]  ",
 //					relevantBehavior: _HIDE_, 
 					visibilityChecks:["!instance[ZaCert.A_csr_exists] "],
@@ -1000,7 +1000,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 
     var contentW = 450 ;
     if (AjxEnv.isIE) {
-        var contentW = 500 ;
+        contentW = 500 ;
     }
     xFormObject.items = [
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep,
