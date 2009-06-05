@@ -540,10 +540,22 @@ function (newName) {
 **/
 ZaResource.myXModel = { 
 	items: [
-		{id:ZaResource.A_name, type:_STRING_, ref:"name", required:true},
+		{id:ZaResource.A_name, type:_STRING_, ref:"name", required:true,
+			constraints: {type:"method", value:
+			   function (value, form, formItem, instance) {				   
+				   if (value){
+					  	if(AjxUtil.isValidEmailNonReg(value)) {
+						   return value;
+					   } else {
+						   throw ZaMsg.ErrorInvalidEmailAddress;
+					   }
+				   }
+			   }
+			}
+		},
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId}, 	
 		{id:ZaResource.A_mail, type:_STRING_, ref:"attrs/"+ZaResource.A_mail,
-		     constraints: {type:"method", value:
+			constraints: {type:"method", value:
 			   function (value, form, formItem, instance) {				   
 				   if (value){
 					  	if(AjxUtil.isValidEmailNonReg(value)) {
