@@ -357,4 +357,13 @@ ZaRight.initMethod = function () {
 }
 ZaItem.initMethods["ZaRight"].push(ZaRight.initMethod);
 
+ZaRight.compareTargetTypeAsc = function (a, b) {
+    return ZaItem.compareAttrAsc(a, b, ZaRight.A_targetType) ;
+}
+
+ZaRight.compareTargetTypeDesc = function (a, b) {
+    return ZaItem.compareAttrDesc(a, b, ZaRight.A_targetType) ;
+}
+
+
 

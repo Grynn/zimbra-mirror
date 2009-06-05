@@ -111,6 +111,14 @@ function(a,b) {
 
 ZaItem.compareAttr = 
 function(a, b, attr) {
+    if (a.attrs[attr] == null) {
+        return -1 ;
+    }
+
+    if (b.attrs[attr] == null) {
+        return 1 ;    
+    }
+
 	if (a.attrs[attr] < b.attrs[attr])
 		return -1;
 	if (a.attrs[attr] > b.attrs[attr])
@@ -118,6 +126,27 @@ function(a, b, attr) {
 	else
 		return 0;
 }
+
+ZaItem.compareAttrAsc = ZaItem.compareAttr
+
+ZaItem.compareAttrDesc =
+function(a, b, attr) {
+	if (a.attrs[attr] == null) {
+        return 1 ;
+    }
+
+    if (b.attrs[attr] == null) {
+        return -1 ;    
+    }
+
+    if (a.attrs[attr] < b.attrs[attr])
+		return 1;
+	if (a.attrs[attr] > b.attrs[attr])
+		return -1;
+	else
+		return 0;
+}
+
 
 /**
 * Item Factory

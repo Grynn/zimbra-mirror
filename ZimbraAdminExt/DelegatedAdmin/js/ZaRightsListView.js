@@ -1,5 +1,3 @@
-
-
 ZaRightsListView = function(parent) {
     if (arguments.length == 0) return;
 	var className = null;
@@ -63,13 +61,38 @@ function() {
 	headerList[0] = new ZaListHeaderItem(ZaRight.A_name, com_zimbra_delegatedadmin.Col_right_name,
             null, 200, sortable++, ZaRight.A_name, true, true);
 
-	headerList[1] = new ZaListHeaderItem(ZaRight.A_type, com_zimbra_delegatedadmin.Col_right_type,
-            null, 100, sortable ++  , ZaRight.A_type, true, true);
+    headerList[1] = new ZaListHeaderItem(ZaRight.A_targetType, com_zimbra_delegatedadmin.Col_target_type,
+                null, 150, sortable ++  , ZaRight.A_targetType, true, true);
 
-    headerList[2] = new ZaListHeaderItem(ZaRight.A_desc, com_zimbra_delegatedadmin.Col_right_desc,
-                null, null, null , ZaRight.A_desc, true, true);
+    headerList[2] = new ZaListHeaderItem(ZaRight.A_type, com_zimbra_delegatedadmin.Col_right_type,
+            null, 100, null  , ZaRight.A_type, true, true);
+
+    headerList[3] = new ZaListHeaderItem(ZaRight.A_desc, com_zimbra_delegatedadmin.Col_right_desc,
+        null, null, null , ZaRight.A_desc, true, true);
 
     return headerList;
+}
+
+ZaRightsListView.prototype._sortColumn =
+function(columnItem, bSortAsc) {
+    var sortField = columnItem.getSortField() ;
+    var sortFunc ;
+    if (sortField == ZaRight.A_name) {
+        if (bSortAsc) {
+            sortFunc = ZaItem.compareNamesAsc;
+        } else {
+            sortFunc = ZaItem.compareNamesDesc ;
+        }
+    } else if (sortField == ZaRight.A_targetType) {
+        if (bSortAsc) {
+            sortFunc = ZaRight.compareTargetTypeAsc;
+        } else {
+            sortFunc = ZaRight.compareTargetTypeDesc ;
+        }
+    }
+
+	this._list.sort(sortFunc);
+    this.setUI();
 }
 
 
