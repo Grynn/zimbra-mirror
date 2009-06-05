@@ -879,6 +879,8 @@ function (dl) {
 		}
 	}
 	
+	if(this.attrs[ZaAccount.A_description] && !(this.attrs[ZaAccount.A_description] instanceof Array))
+		this.attrs[ZaAccount.A_description] = [this.attrs[ZaAccount.A_description]];
 }
 
 ZaDistributionList.compareTwoMembers = function (val1, val2) {

@@ -28,7 +28,7 @@ ZaDLXFormView = function(parent) {
 	];
 	this.TAB_INDEX = 0;
 	this.initForm(ZaDistributionList.myXModel,this.getMyXForm());
-	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaDLXFormView.prototype.handleXFormChange));
+	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_CHANGED, new AjxListener(this, ZaDLXFormView.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaDLXFormView.prototype.handleXFormChange));	
 }
 
@@ -50,6 +50,8 @@ function () {
 ZaDLXFormView.prototype.handleXFormChange = function (ev) {
 	if(ev && this._localXForm.hasErrors()) { 
 		ZaApp.getInstance().getCurrentController()._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+	} else {
+		ZaApp.getInstance().getCurrentController()._toolbar.getButton(ZaOperation.SAVE).setEnabled(true);
 	}
 }
 
