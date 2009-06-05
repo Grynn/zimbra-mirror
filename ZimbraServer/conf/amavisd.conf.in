@@ -126,7 +126,7 @@ $myhostname = '@@zimbra_server_hostname@@';  # must be a fully-qualified domain 
 %%uncomment SERVICE:archiving%%$archive_quarantine_method = 'smtp:[127.0.0.1]:10025';
 
 # $final_virus_destiny      = D_DISCARD;
-# $final_banned_destiny     = D_BOUNCE;
+$final_banned_destiny     = D_BOUNCE;
 $final_spam_destiny       = D_DISCARD;
 # $final_bad_header_destiny = D_PASS;
 
@@ -139,6 +139,7 @@ $final_spam_destiny       = D_DISCARD;
 
 
 $warnvirusrecip = %%binary VAR:zimbraVirusWarnRecipient%%;
+$warnbannedrecip = %%binary VAR:zimbraMtaBlockedExtensionWarnRecipient%%;
 # SOME OTHER VARIABLES WORTH CONSIDERING (see amavisd.conf-default for all)
 
 # $warnbadhsender,
@@ -171,37 +172,8 @@ $warnvirusrecip = %%binary VAR:zimbraVirusWarnRecipient%%;
 # for $banned_namepath_re, a new-style of banned table, see amavisd.conf-sample
 
 $banned_filename_re = new_RE(
-# qr'^UNDECIPHERABLE$',  # is or contains any undecipherable components
-
-  # block certain double extensions anywhere in the base name
-  #qr'\.[^./]*[A-Za-z][^./]*\.(exe|vbs|pif|scr|bat|cmd|com|cpl|dll)\.?$'i,
-
-# qr'\{[0-9a-z]{4,}(-[0-9a-z]{4,}){0,7}\}?'i,  # Class ID extensions - CLSID
-
-#  qr'^application/x-msdownload$'i,                  # block these MIME types
-#  qr'^application/x-msdos-program$'i,
-#  qr'^application/hta$'i,
-
-# qr'^(application/x-msmetafile|image/x-wmf)$'i,    # Windows Metafile MIME
-# qr'^\.wmf$',                            # Windows Metafile file(1) type
-
-# qr'^message/partial$'i,         # rfc2046 MIME type
-# qr'^message/external-body$'i,   # rfc2046 MIME type
-
-# [ qr'^\.(Z|gz|bz2)$'           => 0 ],  # allow any in Unix-compressed
-  [ qr'^\.(rpm|cpio|tar)$'       => 0 ],  # allow any in Unix-type archives
-# [ qr'^\.(zip|rar|arc|arj|zoo)$'=> 0 ],  # allow any within such archives
-
-  #qr'.\.(exe|vbs|pif|scr|bat|cmd|com|cpl)$'i, # banned extension - basic
-# qr'.\.(ade|adp|app|bas|bat|chm|cmd|com|cpl|crt|emf|exe|fxp|grp|hlp|hta|
-#        inf|ins|isp|js|jse|lnk|mda|mdb|mde|mdw|mdt|mdz|msc|msi|msp|mst|
-#        ops|pcd|pif|prg|reg|scr|sct|shb|shs|vb|vbe|vbs|
-#        wmf|wsc|wsf|wsh)$'ix,  # banned ext - long
-
-# qr'.\.(mim|b64|bhx|hqx|xxe|uu|uue)$'i,  # banned extension - WinZip vulnerab.
-
-  #qr'^\.(exe-ms)$',                       # banned file(1) types
-# qr'^\.(exe|lha|tnef|cab|dll)$',         # banned file(1) types
+  # banned extension - basic
+  %%uncomment VAR:zimbraMtaBlockedExtension%%qr'.\.(%%list VAR:zimbraMtaBlockedExtension |%%)$'i, 
 );
 # See http://support.microsoft.com/default.aspx?scid=kb;EN-US;q262631
 # and http://www.cknow.com/vtutor/vtextensions.htm
