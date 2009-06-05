@@ -151,7 +151,7 @@ if [ -d ${zimbra_home} ]; then
     chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/log
     if [ -f ${zimbra_home}/log/.hotspot_compiler ]; then
       chown ${root_user}:${root_group} ${zimbra_home}/log/.hotspot_compiler
-      chmod 444 ${zimbra_home}/.hotspot_compiler
+      chmod 444 ${zimbra_home}/log/.hotspot_compiler
     fi
   fi
 
