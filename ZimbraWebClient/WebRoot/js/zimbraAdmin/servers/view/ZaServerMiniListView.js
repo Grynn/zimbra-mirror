@@ -53,7 +53,7 @@ function(server) {
 	this.associateItemWithElement(server, div, DwtListView.TYPE_LIST_ITEM);
 	
 	var idx = 0;
-	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
 	html[idx++] = "<tr>";
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {

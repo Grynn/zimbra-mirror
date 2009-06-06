@@ -63,7 +63,7 @@ function(zimlet, now, isDragProxy) {
 	this.associateItemWithElement(zimlet, div, DwtListView.TYPE_LIST_ITEM);
 	
 	var idx = 0;
-	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
 	html[idx++] = "<tr>";
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
@@ -98,9 +98,9 @@ function() {
 	var sortable=1;
 	headerList[0] = new ZaListHeaderItem(ZaZimlet.A_name, ZaMsg.CLV_Name_col, null, "200px", sortable++, "name", true, true);
 
-	headerList[1] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletDescription, ZaMsg.DLV_Description_col, null, "250px", null, ZaZimlet.A_zimbraZimletDescription, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletDescription, ZaMsg.DLV_Description_col, null, "auto", null, ZaZimlet.A_zimbraZimletDescription, true, true);
 
-	headerList[2] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletEnabled, ZaMsg.ALV_Status_col, null, "250px", null, ZaZimlet.A_zimbraZimletEnabled, true, true);	
+	headerList[2] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletEnabled, ZaMsg.ALV_Status_col, null, "120px", null, ZaZimlet.A_zimbraZimletEnabled, true, true);	
 		
 	return headerList;
 }

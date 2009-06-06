@@ -63,7 +63,7 @@ function(cos, no, isDragProxy) {
 	this.associateItemWithElement(cos, div, DwtListView.TYPE_LIST_ITEM);
 	
 	var idx = 0;
-	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
 	html[idx++] = "<tr>";
 
 
@@ -93,9 +93,9 @@ function() {
 	var headerList = new Array();
 	var sortable = 1;
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	headerList[0] = new ZaListHeaderItem(ZaCos.A_name, ZaMsg.CLV_Name_col, null, 200, sortable++, ZaCos.A_name, true, true);
+	headerList[0] = new ZaListHeaderItem(ZaCos.A_name, ZaMsg.CLV_Name_col, null, "200px", sortable++, ZaCos.A_name, true, true);
 
-	headerList[1] = new ZaListHeaderItem(ZaCos.A_description, ZaMsg.CLV_Description_col, null, 200, null, null, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaCos.A_description, ZaMsg.CLV_Description_col, null, "auto", null, null, true, true);
 	
 	return headerList;
 }

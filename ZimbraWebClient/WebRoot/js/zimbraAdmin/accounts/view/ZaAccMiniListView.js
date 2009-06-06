@@ -46,7 +46,7 @@ function(account, now, isDragProxy) {
 	this.associateItemWithElement(account, div, DwtListView.TYPE_LIST_ITEM);
 	
 	var idx = 0;
-	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
 
 	html[idx++] = "<tr>";
 	if(typeof(account)=="string") {

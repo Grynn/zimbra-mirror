@@ -872,10 +872,10 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
                 acct_type_col_display = com_zimbra_delegatedadmin.Col_account_type ;
         }
         acctLimitsHeaderList[0] = new ZaListHeaderItem("cos", acct_type_col_display, null, 200, null, null, true, true);
-        acctLimitsHeaderList[1] = new ZaListHeaderItem("limits", ZaMsg.Col_Limit, null, null, null, null, true, true);
+        acctLimitsHeaderList[1] = new ZaListHeaderItem("limits", ZaMsg.Col_Limit, null, "auto", null, null, true, true);
 
         featureMaxHeaderList[0] = new ZaListHeaderItem("feature",  ZaMsg.TABT_Features , null, 200, null, null, true, true);
-        featureMaxHeaderList[1] = new ZaListHeaderItem("limits", ZaMsg.Col_Limit, null, null, null, null, true, true);
+        featureMaxHeaderList[1] = new ZaListHeaderItem("limits", ZaMsg.Col_Limit, null, "auto", null, null, true, true);
 
 
 

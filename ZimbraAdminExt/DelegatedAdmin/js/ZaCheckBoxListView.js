@@ -35,7 +35,7 @@ function(item, now, isDragProxy) {
 	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
 
 	var idx = 0;
-	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
 
     //add the checkboxes
     html[idx++] = "<tr align='left' width=20><td>" ;
@@ -70,7 +70,7 @@ function() {
 	headerList[0] = new ZaListHeaderItem("admin_role_name", com_zimbra_delegatedadmin.Col_comp_name,
             null, 200, null, "admin_role_name", true, true);
 	headerList[1] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col,
-            null, null, null  , ZaAccount.A_description, true, true);
+            null, "auto", null  , ZaAccount.A_description, true, true);
 
     return headerList;
 }

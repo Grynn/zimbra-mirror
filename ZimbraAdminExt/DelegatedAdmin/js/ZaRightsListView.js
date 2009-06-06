@@ -37,7 +37,7 @@ function(right, now, isDragProxy) {
 	this.associateItemWithElement(right, div, DwtListView.TYPE_LIST_ITEM);
 
 	var idx = 0;
-	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
 	html[idx++] = "<tr>";
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
@@ -68,7 +68,7 @@ function() {
             null, 100, null  , ZaRight.A_type, true, true);
 
     headerList[3] = new ZaListHeaderItem(ZaRight.A_desc, com_zimbra_delegatedadmin.Col_right_desc,
-        null, null, null , ZaRight.A_desc, true, true);
+        null, "auto", null , ZaRight.A_desc, true, true);
 
     return headerList;
 }
@@ -136,7 +136,7 @@ function(right) {
 	this.associateItemWithElement(right, div, DwtListView.TYPE_LIST_ITEM);
 
 	var idx = 0;
-	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
 	html[idx++] = "<tr>";
 
     html[idx++] = "<td align='left'><nobr>";
@@ -191,7 +191,7 @@ function(attrName) {
 	this.associateItemWithElement(attrName, div, DwtListView.TYPE_LIST_ITEM);
 
 	var idx = 0;
-	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
 	html[idx++] = "<tr>";
 
     html[idx++] = "<td align='left'><nobr>";

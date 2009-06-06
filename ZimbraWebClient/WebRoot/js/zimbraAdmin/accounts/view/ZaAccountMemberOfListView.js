@@ -663,7 +663,7 @@ ZaAccountMemberOfListView.prototype._createItemHtml = function (group, now, isDr
 	this.associateItemWithElement(group, div, DwtListView.TYPE_LIST_ITEM);
 	
 	var idx = 0;
-	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
 
 	html[idx++] = "<tr>";
 	if(this._headerList) {
@@ -844,7 +844,7 @@ ZaAccountMemberOfsourceHeaderList = function(type) {
 	*/
 	if (type == ZaAccountMemberOfsourceHeaderList.INDIRECT) { 																							
 		sourceHeaderList[1] = new ZaListHeaderItem(ZaAccountMemberOfListView.A_via,   	ZaMsg.Group_via,   	
-	 											null, null,  null,  ZaAccountMemberOfListView.A_via, false, true);
+	 											null, "auto",  null,  ZaAccountMemberOfListView.A_via, false, true);
 	}
 	
 	return sourceHeaderList ;
