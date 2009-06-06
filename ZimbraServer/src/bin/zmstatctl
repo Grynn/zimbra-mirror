@@ -49,6 +49,9 @@ sub getProcList() {
     if ($all || arrayContains(\@services, 'mailbox')) {
         push(@procs, 'mailbox', 'mysql', 'convertd');
     }
+    if ($all || arrayContains(\@services, 'imapproxy')) {
+        push(@procs, 'nginx');
+    }
     if ($all || arrayContains(\@services, 'ldap')) {
         push(@procs, 'ldap');
     }
@@ -107,12 +110,14 @@ if (!$isMac) {
 }
 my $TOOL_MYSQL = 'zmstat-mysql';
 my $TOOL_CONVERTD = 'zmstat-convertd';
+my $TOOL_NGINX = 'zmstat-nginx';
 my $TOOL_MTAQUEUE = 'zmstat-mtaqueue';
 
 my $cmd = $ARGV[0];
 if (defined($cmd)) {
     if ($cmd eq 'start') {
         my $procs = getProcList();
+        my $doNginx = $procs =~ /\bnginx\b/;
         my $doMysql = -x getZimbraHome() . "/mysql/libexec/mysqld" ? 1 : 0;
         my $doMtaQueue = -x getZimbraHome() . "/postfix/sbin/postqueue" ? 1 : 0;
         my $outfile = getZmstatRoot() . "/zmstat.out";
@@ -138,6 +143,11 @@ if (defined($cmd)) {
         }
         if ($doMtaQueue) {
             my $cmd = "$toolpath/$TOOL_MTAQUEUE";
+            print "Invoking: $cmd\n";
+            system("$cmd >> $outfile 2>&1 &");
+        }
+        if ($doNginx) {
+            my $cmd = "$toolpath/$TOOL_NGINX";
             print "Invoking: $cmd\n";
             system("$cmd >> $outfile 2>&1 &");
         }
