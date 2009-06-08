@@ -222,6 +222,14 @@ while (1) {
   # check for config changes
   compareKeys();
 
+  # try again if one of the lookups failed
+  if ($state->{anyFailed}) {
+    logMsg(0, "Configuration inconsistancy detected.") if $state->{forced};
+    logMsg(1, "Sleeping...Configuration inconsistancy detected.");
+    sleep 5;
+    next;
+  }
+
   # build a combined list of changes.
   compileActions();
 
@@ -788,11 +796,18 @@ sub compareKeys {
       }
     }
   } 
+  my ($stoppedServices,$totalServices);
   foreach my $service (keys %{$state->{current}->{services}}) {
+    $totalServices++;
     if (! lookUpConfig("SERVICE", $service)) {
+      $stoppedServices++;
       logMsg(2, "service $service was disabled need to stop");
       $state->{current}->{restarts}->{$service} = 0;
     }
+  }
+  if ($stoppedServices == $totalServices && $totalServices > 1) {
+    logMsg(2, "$ref->{desc} All services detected disabled. Incrementing anyFailed to prevent rewrite.");
+    $state->{anyFailed}++;
   }
   foreach my $service (keys %{$state->{serviceconfig}}) {
     unless (defined $state->{current}->{services}->{$service}) {
