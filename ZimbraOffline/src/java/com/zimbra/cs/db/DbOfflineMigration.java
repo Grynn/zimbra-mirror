@@ -61,10 +61,8 @@ public class DbOfflineMigration {
                 //fall-through
             case 53:
                 migrateFromVersion53(conn, isTestRun);
-                break;
             case 61:
                 migrateFromVersion61(conn, isTestRun);
-                break;
             case 62:
                 migrateFromVersion62(conn, isTestRun);
                 break;
@@ -147,7 +145,7 @@ public class DbOfflineMigration {
 	}
 	
     private static final String sql53to54 =
-        "SET SCHEMA zimbra;\n;"+
+        "SET SCHEMA zimbra;\n"+
         "DROP TABLE IF EXISTS zimbra.jiveVersion;\n"+
         "DROP TABLE IF EXISTS zimbra.mucRoom;\n"+
         "DROP TABLE IF EXISTS zimbra.mucRoomProp;\n"+
