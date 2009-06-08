@@ -806,7 +806,7 @@ sub compareKeys {
     }
   }
   if ($stoppedServices == $totalServices && $totalServices > 1) {
-    logMsg(2, "$ref->{desc} All services detected disabled. Incrementing anyFailed to prevent rewrite.");
+    logMsg(2, "All services detected disabled. Incrementing anyFailed to prevent rewrite.");
     $state->{anyFailed}++;
   }
   foreach my $service (keys %{$state->{serviceconfig}}) {
