@@ -185,6 +185,8 @@ sub insert_rrd_column_map($$$$$) {
     my %truncated; # makes sure that the col19 name hasn't been used already
 
     ($headersref, undef) = prune_data($headersref, $dataref);
+    return if @$headersref == 0;
+
     for (my $i = 0; $i < @$headersref; $i++) {
         my $column = $headersref->[$i];
         my $col19  = map_col_for_rrd(\%truncated, $column);
@@ -243,7 +245,7 @@ sub map_col_for_rrd($$) {
 
     $col =~ s#[^a-zA-Z0-9_]#_#g;
     if (length $col > 19) {
-        $col =~ s/^(.{18}).*/$1/;
+        $col =~ s/^(.{17}).*/$1/;
         if (exists $truncated->{$col}) {
             $col = $col . ++$truncated->{$col};
         } else {
@@ -280,6 +282,7 @@ sub add_columns($$$$$$) {
 sub insert_data($$$$$$) {
     my ($dbh, $hostid, $csv_file, $structure, $headersref, $dataref) = @_;
     ($headersref, $dataref) = prune_data($headersref, $dataref);
+    return if @$headersref == 0;
     my %rrd_updates;
     $structure = add_columns($dbh, $hostid, $csv_file,
                              $structure, $headersref, $dataref);
