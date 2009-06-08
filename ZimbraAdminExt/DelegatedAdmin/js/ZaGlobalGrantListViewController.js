@@ -53,7 +53,7 @@ function(list, openInNewTab) {
 2) update the paging information.
 
  */
-ZaListViewController.prototype._updateUI =
+ZaGlobalGrantListViewController.prototype._updateUI =
 function() {
     if (!this._list) return ;
 
