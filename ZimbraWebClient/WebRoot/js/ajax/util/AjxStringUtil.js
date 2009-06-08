@@ -1085,6 +1085,25 @@ function(sourceUri) {
 	return uri;
 };
 
+/**
+ *	Parse the query string (part after the "?") and return it as a hash of key/value pairs.
+ */
+AjxStringUtil.parseQueryString =
+function() {
+
+	var location = "" + window.location;
+	var idx = location.indexOf("?");
+	if (idx == -1) { return null; }
+	var qs = location.substring(idx + 1).replace(/#.*$/, '');
+	var list = qs.split("&");
+	var params = {};
+	for (var i = 0; i < list.length; i++) {
+		var pair = list[i].split("=");
+		params[pair[0]] = pair[1];
+	}
+	return params;
+};
+
 AjxStringUtil._SPECIAL_CHARS = /["\\\x00-\x1f]/g;
 AjxStringUtil._CHARS = {
 	'\b': '\\b',
