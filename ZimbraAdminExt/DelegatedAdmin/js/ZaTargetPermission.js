@@ -577,7 +577,7 @@ function (grantsList) {
                 dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_target_name + ": " + "</td>";
                 var targetName = grant[ZaGrant.A_target] ;
                 if (grant[ZaGrant.A_target_type] == ZaItem.GLOBAL_GRANT) {
-                    targetName = com_zimbra_delegatedadmin.val_global_grant  ;
+                    targetName = ZaGrant.GLOBAL_TARGET_NAME  ;
                 } else if (grant[ZaGrant.A_target_type] == ZaItem.GLOBAL_CONFIG) {
                     targetName = ZaMsg.OVP_global ; 
                 }

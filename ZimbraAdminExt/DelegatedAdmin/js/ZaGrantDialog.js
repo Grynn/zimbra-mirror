@@ -239,11 +239,12 @@ ZaGrantDialog.grantRightMethod = function () {
         //GrantRights Right here, instead of populating to the account modification saving time
         // Advantages: 1. Avoid the double grants during the saving time
         // 2. reduce the load of the server during the account modification time
-        if (ZaGrant.grantMethod (obj)) {
-            //TODO: test if the grant exists in the current list already
-            currentGrantList.push(ZaUtil.deepCloneObject (obj)) ;
-            this.getModel().setInstanceValue(this.getInstance(), ZaGrant.A2_grantsList, currentGrantList);
-            return true ;
+        if ( ZaGrant.isGrantExists (currentGrantList, obj) != 1) { 
+            if (ZaGrant.grantMethod (obj)) {
+                currentGrantList.push(ZaUtil.deepCloneObject (obj)) ;
+                this.getModel().setInstanceValue(this.getInstance(), ZaGrant.A2_grantsList, currentGrantList);
+                return true ;
+            }
         }
     }
 
@@ -268,16 +269,17 @@ ZaGrantDialog.grantMoreRight = function () {
 ZaGrantDialog.grantGlobalGrantMethod = function () {
     if(this.grantRightDlg) {
 		var obj = this.grantRightDlg.getObject();
-
+        var currentGrantList = this.getList().getArray () ;
         //this.parent.setDirty(true);
         //GrantRights Right here, instead of populating to the account modification saving time
         // Advantages: 1. Avoid the double grants during the saving time
         // 2. reduce the load of the server during the account modification time
-        if (ZaGrant.grantMethod (obj)) {
-            //TODO: test if the grant exists in the current list already
-            this.fireCreationEvent(ZaUtil.deepCloneObject (obj));
-            return true;
-        }
+       if ( ZaGrant.isGrantExists (currentGrantList, obj) != 1) {
+            if (ZaGrant.grantMethod (obj)) {
+                this.fireCreationEvent(ZaUtil.deepCloneObject (obj));
+                return true;
+            }
+       }
     }
 
     return false ;

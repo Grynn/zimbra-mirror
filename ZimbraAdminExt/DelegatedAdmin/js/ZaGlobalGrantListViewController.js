@@ -261,7 +261,7 @@ function(ev) {
 	}
 
 	var obj = {};
-	obj[ZaGrant.A_target] = com_zimbra_delegatedadmin.val_global_grant;
+	obj[ZaGrant.A_target] = ZaGrant.GLOBAL_TARGET_NAME;
     obj[ZaGrant.A_target_type] = "global" ;
 
     obj.setAttrs = {} ;

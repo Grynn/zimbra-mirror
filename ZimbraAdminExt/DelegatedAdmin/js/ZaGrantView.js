@@ -38,7 +38,7 @@ ZaGrantView.myXFormModifier = function(xFormObject) {
             items: [
                { type: _SPACER_ },
                //target is always com_zimbra_delegatedadmin.val_global_grant for global grants     
-               { type: _OUTPUT_ , value: com_zimbra_delegatedadmin.val_global_grant, label: com_zimbra_delegatedadmin.Label_target_name },
+               { type: _OUTPUT_ , value: ZaGrant.GLOBAL_TARGET_NAME, label: com_zimbra_delegatedadmin.Label_target_name },
                // make it type _DYNSELECT_
                { ref: ZaGrant.A_grantee, type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_grantee_name ,
                    visibilityChecks:[],
