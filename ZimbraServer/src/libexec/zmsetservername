@@ -45,6 +45,7 @@ GetOptions("help" => \$help,
 $c{zmlocalconfig}="/opt/zimbra/bin/zmlocalconfig";
 $c{zimbra_home} = getLocalConfig("zimbra_home");
 $c{zmprov}="$c{zimbra_home}/bin/zmprov -l --";
+$c{zmcertmgr}="$c{zimbra_home}/bin/zmcertmgr";
 
 if ($usersonly && !$oldServerName) {
   print "--usersonly requries --oldServerName.\n";
@@ -56,6 +57,8 @@ if ($oldServerName) {
 } else {
   $c{zimbra_server_hostname} = getLocalConfig("zimbra_server_hostname");
 }
+
+$c{ldap_is_master} = getLocalConfig("ldap_is_master");
 
 if ($c{zimbra_server_hostname} eq $newServerName) {
   print "Hostname is already $newServerName.\n";
@@ -142,6 +145,12 @@ if (!$usersonly) {
   }
 
   # Regenerate Self-signed certs
+  if (!-f "$c{zimbra_home}/ssl/zimbra/commercial/commercial.crt") {
+    if($c{ldap_is_master}) {
+      runCommand("$c{zmcertmgr} createca -new");
+    }
+    runCommand("$c{zmcertmgr} createcrt self -new");
+  }
 } else {
   modifyAccountData($newServerName);
 }
