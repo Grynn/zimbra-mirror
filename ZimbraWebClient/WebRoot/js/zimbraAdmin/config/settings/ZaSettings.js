@@ -95,11 +95,11 @@ ZaSettings.initRights = function () {
 		//not implemented yet
 	}	
 	
-/*	var comps = ZaSettings.getUIComponents() ;
+	var comps = ZaSettings.getUIComponents() ;
     var cnt = comps.length;
     for(var i=0;i<cnt;i++) {
-        ZaSettings.ENABLED_UI_COMPONENTS[comps[i]._content] = true;
-    }*/
+      ZaSettings.ENABLED_UI_COMPONENTS[comps[i]._content] = true;
+    }
 }
 ZaSettings.initMethods.push(ZaSettings.initRights);
 
