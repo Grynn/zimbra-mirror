@@ -17,18 +17,13 @@
 package com.zimbra.zcsprov;
 
 import java.util.List;
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.*;
 import java.security.Security;
 
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.*;
+import org.apache.commons.httpclient.params.HttpClientParams;
 
 import org.w3c.dom.*;
 
@@ -47,6 +42,7 @@ public class HttpSession
     private List<NameValuePair> reqparams; 
     private boolean IsPost;
     private ByteArrayOutputStream ibaos;
+    private FileInputStream fileinput;
     private Transformer transformer;
     private ByteArrayOutputStream baos;
     private int Statuscode;
@@ -55,6 +51,7 @@ public class HttpSession
         IsPost=false;
         queryparams=null;
         reqparams= null;
+        fileinput=null;
         transformer = createTransformer();
         baos = new ByteArrayOutputStream(4096);
         httpclient =new HttpClient();
@@ -103,6 +100,19 @@ public class HttpSession
     public void SetRequestHeader(List<NameValuePair> rparams)
     {
         reqparams = rparams;
+    }
+
+    public void SetFileStream(String stfile) throws FileNotFoundException
+    {
+        try
+        {
+            fileinput = new FileInputStream(stfile);
+        }
+        catch (FileNotFoundException fex)
+        {
+            fileinput=null;
+            throw fex;
+        }
     }
     
     public void SetRequestBody(ByteArrayOutputStream baos)
@@ -156,7 +166,14 @@ public class HttpSession
         }
         if(IsPost)
         {
-            ((PostMethod)hmethod).setRequestBody(new ByteArrayInputStream(ibaos.toByteArray()));
+            if (fileinput!=null)
+            {
+                ((PostMethod)hmethod).setRequestBody(fileinput);
+            }
+            else
+            {
+                ((PostMethod)hmethod).setRequestBody(new ByteArrayInputStream(ibaos.toByteArray()));
+            }
 
         }          
         return hmethod;
@@ -184,6 +201,40 @@ public class HttpSession
             throw new IllegalStateException("Could not serialize document", e);
         }
         return baos.toString();
+    }
+
+    public void UploadFile()
+    {
+        String url="https://10.66.118.107:7071/home/test2@zcs1.zmexch.in.zimbra.com?fmt=tgz";
+        String fPath="C:\\Zimbra_Work\\YZYMigration\\ZCSProvisioning\\zcsprov\\mailboxdumps\\test2.tgz";
+        //"C:\\Zimbra_Work\\YZYMigration\\ZCSProvisioning\\zcsprov\\mailboxdumps\\test2.tgz"
+        PostMethod postMethod = new PostMethod(url);
+        httpclient.setConnectionTimeout(0);
+        //Cookie mycookie = new Cookie()
+        postMethod.setRequestHeader("Cookie","ZM_ADMIN_AUTH_TOKEN=0_3dcf8ae7df711b79f720661326cb75600d819652_69643d33363a39333061643238332d313534622d343761312d626130642d3566316262306533396362383b6578703d31333a313234343333353438323435333b61646d696e3d313a313b747970653d363a7a696d6272613b");
+        File f = new File(fPath);
+        System.out.println("File Length = " + f.length());
+
+        FileInputStream fis = null;
+                try {
+                        fis = new FileInputStream(f);
+                } catch (FileNotFoundException exc) {
+                        // TODO Auto-generated catch block
+                        exc.printStackTrace();
+                }
+        postMethod.setRequestBody(fis);
+        postMethod.setRequestHeader("Content-type",
+            "application/x-compressed");
+
+        try {
+                httpclient.executeMethod(postMethod);
+
+                } catch (Exception exce) {
+                        // TODO Auto-generated catch block
+                        exce.printStackTrace();
+                }
+        System.out.println("statusLine>>>" + postMethod.getStatusLine());
+        postMethod.releaseConnection();        
     }
 }
 

@@ -20,6 +20,7 @@ import java.util.logging.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.List;
 import javax.xml.soap.*;
 
 import com.zimbra.auth.*;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
+import org.apache.commons.httpclient.NameValuePair;
 
 public class ZMSoapSession 
 {
@@ -511,7 +513,8 @@ public class ZMSoapSession
     {
         return delegateAuthToken;
     }
-    //returns token or null, if failed
+
+    //use for ZCS files upload. returns content aid token or null, if failed
     public String Upload_FileToZCS(String zcsurl, String file)
     {
         final String lineEnd = "\r\n";
@@ -616,7 +619,289 @@ public class ZMSoapSession
         }
         return responseFromServer;
     }
-    
+
+    //Upload files(e.g. tar mailbox) to rest urls using HttpURLConnection
+    //Needs Admin auth token
+    public boolean Upload_FileToZCS_2(String zcsurl, String file,String ContentType,Logger ufzlog,
+                                      double[] exc_array,int inst_number,boolean debug)
+    {
+        final int maxBufferSize = 1*1024*1024;
+        boolean retval=false;
+        HttpURLConnection httpconn = null;
+        DataOutputStream dos = null;
+        int bytesRead, bytesAvailable, bufferSize;
+        double totalbytes_uploaded=0;
+        byte[] buffer;
+        String urlString = zcsurl;
+        ufzlog.log(Level.INFO,"File Upload URL: "+urlString);
+        ufzlog.log(Level.INFO,"File Path: "+file);
+        
+        try
+        {
+            File nFile = new File(file);
+            FileInputStream fileInputStream = new FileInputStream(nFile);
+            // open a URL connection to the Servlet
+            URL url = new URL(urlString);
+            // Open a HTTP connection to the URL
+            httpconn = (HttpURLConnection) url.openConnection();
+            // Allow Inputs
+            httpconn.setDoInput(true);
+            // Allow Outputs
+            httpconn.setDoOutput(true);
+            // Don't use a cached copy.
+            httpconn.setUseCaches(false);
+            // Use a post method.
+            httpconn.setRequestMethod("POST");
+            httpconn.setRequestProperty("Connection", "Keep-Alive");
+            httpconn.setRequestProperty("Cookie", "ZM_ADMIN_AUTH_TOKEN="+iauth_token);
+            httpconn.setRequestProperty("Content-Type", ContentType);
+            session_logger.log(Level.INFO,"File Size: "+String.valueOf(nFile.length()));
+            httpconn.setAllowUserInteraction(false);
+            //set chunked stream mode else will get out of memory exception for larger uploads
+            httpconn.setChunkedStreamingMode(maxBufferSize);
+            dos = new DataOutputStream( httpconn.getOutputStream() );
+            // create a buffer of maximum upload size
+            bytesAvailable = fileInputStream.available();
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            buffer = new byte[bufferSize];
+
+            // read file and write it to outstream...
+            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+            String outstr="";
+            while (bytesRead > 0)
+            {
+                dos.write(buffer, 0, bufferSize);
+                totalbytes_uploaded += bufferSize;
+                bytesAvailable = fileInputStream.available();
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+                //update console****>>>>>
+                outstr="";
+                exc_array[inst_number-1]=(totalbytes_uploaded/1000);
+                for (int j=0;j<exc_array.length;j++)
+                {
+                    outstr=outstr+"  "+Double.toString(exc_array[j]);
+                }
+                //System.out.print("Upload (KBytes): "+outstr);
+                UpDateConsole.SetUploadInfo(outstr);
+                UpDateConsole.PrintConsole();
+                //**************<<<<<<<<<<<
+            }
+            // close streams
+            fileInputStream.close();
+            dos.flush();
+            dos.close();
+            retval=true;
+        }
+        catch (MalformedURLException ex)
+        {
+            ufzlog.log(Level.SEVERE,"Upload_FileToZCS Exception:"+ex);
+            ufzlog.log(Level.SEVERE,ZCSUtils.stack2string(ex));
+        }
+        catch (IOException ioe)
+        {
+            ufzlog.log(Level.SEVERE,"Upload_FileToZCS Exception:"+ioe);
+            ufzlog.log(Level.SEVERE,ZCSUtils.stack2string(ioe));
+        }
+
+        //Check Response
+        if(retval)
+        {
+            retval=false;
+            try
+            {
+                String RespMessage=httpconn.getResponseMessage();
+                ufzlog.log(Level.INFO,"Response Message: "+RespMessage);
+                int RespCode = httpconn.getResponseCode();
+                if(RespCode == 200)
+                {
+                    retval = true;
+                }
+            }
+            catch(NullPointerException nex)
+            {
+                ufzlog.log(Level.SEVERE,"Upload_FileToZCS NullPointerException exception: "+nex);
+                ufzlog.log(Level.SEVERE,ZCSUtils.stack2string(nex));
+            }
+            catch (Exception ex)
+            {
+                ufzlog.log(Level.SEVERE,"Upload_FileToZCS exception: "+ex);
+                ufzlog.log(Level.SEVERE,ZCSUtils.stack2string(ex));
+            }
+        }
+        return retval;
+    }
+
+    public boolean UploadFileUsingHttpSession(String url, String stfile, String ContentType)
+    {
+        boolean retval=true;
+        HttpSession httpsession = new HttpSession();
+        httpsession.SetPostMethod(true);
+        try
+        {
+            httpsession.SetFileStream(stfile);
+        }
+        catch(FileNotFoundException fex)
+        {
+            session_logger.log(Level.SEVERE,"UploadFile exception: "+fex);
+            retval=false;
+        }
+
+        List<NameValuePair> rparams = new ArrayList <NameValuePair>();
+        NameValuePair param1 = new NameValuePair("Cookie", "ZM_ADMIN_AUTH_TOKEN="+iauth_token);
+        rparams.add(param1);
+        NameValuePair param2 = new NameValuePair("Content-type",ContentType);
+        rparams.add(param2);
+        httpsession.SetRequestHeader(rparams);
+        InputStream is= httpsession.Send(url);
+        if(is!=null)
+        {
+            //do nothing   
+        }
+        else
+        {
+            retval=false;
+        }
+        return retval;
+    }
+
+    public boolean Download_FileDFromZCS(String zcsurl,String filetodownload,int instance_number,
+                                         double[] exc_array,Logger gtmbLog,boolean debug)
+    {
+        boolean retval=false;
+        HttpSession httpsession = new HttpSession();
+        httpsession.SetPostMethod(false);
+        String uri=zcsurl;
+        InputStream istr= httpsession.Send(uri);
+        if (istr!=null)
+        {
+            try
+            {
+                retval=writeToFile(filetodownload,istr,true,
+                        instance_number,exc_array,gtmbLog,debug);
+            }
+            catch(Exception ex)
+            {
+                gtmbLog.log(Level.SEVERE,ZCSUtils.stack2string(ex));
+                gtmbLog.log(Level.SEVERE,"Exception in mailbox download"+" ("+filetodownload+") ");
+                retval=false;
+            }
+        }
+        else
+        {
+            gtmbLog.log(Level.SEVERE,"FATAL:Source Mail box"+"("+filetodownload+")"+" stream couldn't be found.");
+        }
+       
+        return retval;
+    }
+
+
+private boolean writeToFile(String fileName, InputStream iStream,
+        boolean createDir,int instance_number,double[] exc_array,Logger wflog,boolean debug)
+        throws IOException
+    {
+        boolean retval =true;
+        String me = "FileUtils.WriteToFile";
+        if (fileName == null)
+        {
+            throw new IOException(me + ": filename is null");
+        }
+        if (iStream == null)
+        {
+            throw new IOException(me + ": InputStream is null");
+        }
+
+        File theFile = new File(fileName);
+
+        // Check if a file exists.
+        if (theFile.exists())
+        {
+            String msg =
+                theFile.isDirectory() ? "directory" :
+                    (! theFile.canWrite() ? "not writable" : null);
+            if (msg != null)
+            {
+                throw new IOException(me + ": file '" + fileName + "' is " + msg);
+            }
+        }
+
+        // Create directory for the file, if requested.
+        if (createDir && theFile.getParentFile() != null)
+        {
+            theFile.getParentFile().mkdirs();
+        }
+
+        // Save InputStream to the file.
+        BufferedOutputStream fOut = null;
+        double biTotBytesWritten=0;
+        StringBuilder s = new StringBuilder();
+        int y = 0;
+        try
+        {
+            fOut = new BufferedOutputStream(new FileOutputStream(theFile));
+            byte[] buffer = new byte[32 * 1024];
+            int bytesRead = 0;
+            long bytdiff=0; double prevbyt=0;
+            long update_afterMB=1*1024*1024;
+            String outstr="";
+            while ((bytesRead = iStream.read(buffer)) != -1)
+            {
+                outstr="";
+                biTotBytesWritten+= bytesRead;
+                fOut.write(buffer, 0, bytesRead);
+                //update console****>>>>>
+                exc_array[instance_number-1]=(biTotBytesWritten/1000);
+                for (int j=0;j<exc_array.length;j++)
+                {
+                    outstr=outstr+"  "+Double.toString(exc_array[j]);
+                }
+                if((biTotBytesWritten - prevbyt)>update_afterMB)
+                {
+                    UpDateConsole.SetDownloadInfo(outstr);
+                    UpDateConsole.PrintConsole();
+                    prevbyt=biTotBytesWritten;
+                }
+                //******<<<<<<<<<<<<<<<<<<<
+            }
+            UpDateConsole.SetDownloadInfo(outstr);
+            UpDateConsole.PrintConsole();
+
+            wflog.log(Level.SEVERE,"Download Finished("+fileName+")"+ ": Total KBytes downloaded: "+(biTotBytesWritten/1000));
+        }
+        catch (Exception e)
+        {
+            retval=false;
+            wflog.log(Level.SEVERE,"Download error("+fileName+"): "+ e.toString()+
+                    ": Total KBytes downloaded: "+(biTotBytesWritten/1000));
+            throw new IOException(me + " failed, got: " + e.toString());
+        }
+        finally
+        {
+            close(iStream, fOut);
+        }
+        return retval;
+    }
+
+    private void close(InputStream iStream, OutputStream oStream)
+            throws IOException
+    {
+        try
+        {
+            if (iStream != null)
+            {
+                iStream.close();
+            }
+        }
+        finally
+        {
+            if (oStream != null)
+            {
+                oStream.close();
+            }
+        }
+    }
+
     private void print_inputstream(DataInputStream is)
     {
         try
@@ -633,5 +918,23 @@ public class ZMSoapSession
         {
             System.out.println("print_inputstream Exception: "+ioex);
         }
+    }
+}
+
+class UpDateConsole
+{
+    private static String Downloadinfo="NA";
+    private static String Uploadinfo="NA";
+    public static void SetDownloadInfo(String info)
+    {
+        Downloadinfo= info;
+    }
+    public static void SetUploadInfo(String info)
+    {
+        Uploadinfo = info;
+    }
+    public static void PrintConsole()
+    {
+        System.out.print("\rDownload(KB): "+ Downloadinfo+"  Upload(KB): "+Uploadinfo);
     }
 }
