@@ -91,18 +91,22 @@ function(listener) {
 /**
  * Adds a member to the tab group.
  * 
- * @param {DwtControl|DwtTabGroup|HTMLElement} member	member to be added
+ * @param {DwtControl|DwtTabGroup|HTMLElement} member	member(s) to be added
  * @param {Int} index Index at which to add the member. If omitted, the member
  * 		will be added to the end of the tab group (optional)
  */
 DwtTabGroup.prototype.addMember =
 function(member, index) {
 	if (!member) {return;}
-	this.__members.add(member, index);
-	
-	// If adding a tab group, register me as its parent
-	if (member instanceof DwtTabGroup) {
-		member.newParent(this);
+	var members = (member instanceof Array) ? member : [member];
+
+	for (var i = 0, len = members.length; i < len; i++) {
+		this.__members.add(members[i], index);
+
+		// If adding a tab group, register me as its parent
+		if (members[i] instanceof DwtTabGroup) {
+			members[i].newParent(this);
+		}
 	}
 };
 
@@ -409,6 +413,11 @@ function(debugLevel) {
 	this.__dump(this, debugLevel);
 };
 
+DwtTabGroup.prototype.size =
+function() {
+	return this.__members.size();
+};
+
 /**
  * Returns the previous member in the tag group.
  * @private
@@ -590,7 +599,7 @@ function(tg, debugLevel, level) {
 	for (var i = 0; i < sz; i++) {
 		if (a[i] instanceof DwtTabGroup) {
 			tg.__dump(a[i], debugLevel, level + 1);
-		} else if (a[i] instanceof DwtControl) {
+		} else if (a[i].toString) {
 			DBG.println(debugLevel, levelIndent + "   " + a[i].toString());
 		} else {
 			DBG.println(debugLevel, levelIndent + "   " + a[i].tagName);
