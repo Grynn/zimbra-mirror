@@ -22,7 +22,7 @@ use File::Path;
 
 my $DEBUG = 0;
 #global constants
-my $version = "1.35";
+my $version = "1.36";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -2288,6 +2288,7 @@ sub get_weekly_rrule
   
   #check how many pattern days found
   my $HasWkendException=0;
+  my $excp_ctr=0;
   foreach my $pdkey (keys %awkdaypattern_list)
   {
     my $tpattern =0;
@@ -2302,7 +2303,7 @@ sub get_weekly_rrule
         my @twdarr =@{$wkdaylist->{$pdkey}};
         for (my $j=0;$j<$#twdarr+1;$j++)
         {
-          $twkltd_exlist->[$j]=$twdarr[$j];
+          $twkltd_exlist->[$excp_ctr++]=$twdarr[$j];
           $HasWkendException=1;
           $occur_ctr--;
         }
