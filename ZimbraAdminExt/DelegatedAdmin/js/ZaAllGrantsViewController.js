@@ -55,31 +55,21 @@ function () {
 }
 ZaController.initToolbarMethods["ZaAllGrantsViewController"].push(ZaAllGrantsViewController.initToolbarMethod);
 
-
-ZaAllGrantsViewController.prototype.addFinishGrant = function () {
-    if (ZaGrantDialog.grantGlobalGrantMethod.call (this)){
-        this.grantRightDlg.popdown();
-    }
-}
-
-ZaAllGrantsViewController.prototype.addMoreGrant = function () {
-    if (ZaGrantDialog.grantGlobalGrantMethod.call (this)){
-       var dialog = this.grantRightDlg ;
-       var obj = dialog.getObject() ;
-       obj [ZaGrant.A_right] = "" ;
-       dialog.setObject (obj) ;
-   }
-}
-
 ZaAllGrantsViewController.prototype.addGrantsListener = function () {
     var newGrant = new ZaGrant();
 	if(!this.grantRightDlg) {
 		this.grantRightDlg = new ZaGrantDialog (
                 ZaApp.getInstance().getAppCtxt().getShell(),
-                ZaApp.getInstance(), com_zimbra_delegatedadmin.Title_grant_rights, ZaGrant.A_grantee);
-		this.grantRightDlg.registerCallback(ZaGrantDialog.ADD_FINISH_BUTTON, this.addFinishGrant, this, null);
-        this.grantRightDlg.registerCallback(ZaGrantDialog.ADD_MORE_BUTTON, this.addMoreGrant, this, null);
+                ZaApp.getInstance(), com_zimbra_delegatedadmin.Title_grant_rights,
+                ZaGrant.A_grantee);
 	} ;
+
+    this.grantRightDlg.registerCallback(ZaGrantDialog.ADD_FINISH_BUTTON,
+                ZaGrantDialog.prototype.grantRight,
+                this.grantRightDlg, [this._contentView._localXForm, false]);
+        this.grantRightDlg.registerCallback(ZaGrantDialog.ADD_MORE_BUTTON,
+               ZaGrantDialog.prototype.grantRight,
+                this.grantRightDlg, [this._contentView._localXForm, true]);
 
 	var obj = {};
 	obj[ZaGrant.A_grantee] = this._currentObject [ZaGrant.A_grantee];

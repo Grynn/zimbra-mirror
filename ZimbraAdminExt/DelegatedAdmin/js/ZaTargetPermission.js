@@ -177,7 +177,7 @@ ZaGrantsListView.revokeGlobalGrant = function () {
         for (var i = 0; i < selectedGrants.length; i ++) {
 // TODO: when multiselection enabled, we need a progress dialog to show the progress
             if (ZaGrant.revokeMethod (selectedGrants[i])) {
-// fire the removal event.               
+                // fire the removal event.               
                 this.fireRemovalEvent (selectedGrants[i]) ;
             } else {
                 break ; //jump out if failed.
@@ -230,18 +230,18 @@ ZaTargetPermission.getGrantsListXFormItem = function (params) {
         multiselect: false  //TODO: enable multiselect in the future
     } ;
 
-    var marginLeft = ( w - 220 ) / 2 ;
+    var marginLeft = ( w - 340 ) / 2 ;
     var grantsListButtonsItem =
-    {type:_GROUP_, numCols:3, colSizes:["100px","20px","*"],  height: 30,
+    {type:_GROUP_, numCols:5, colSizes:["100px","20px","100px","20px","100px"],  height: 30,
         cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left: " + marginLeft + "; margin-right:auto;",
         items: [
             {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_grant,width:"100px",
-                onActivate:"ZaTargetPermission.grantButtonListener.call (this, '" + by +"');",
-                align: _RIGHT_},
+                onActivate:"ZaTargetPermission.grantButtonListener.call (this, '" + by +"');"},
             {type:_CELLSPACER_},
-//                            {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px" },
-//                            {type:_CELLSPACER_},
-            {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_revoke,width:"100px", align: _LEFT_ ,
+            {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
+                onActivate:"ZaTargetPermission.editButtonListener.call (this, '" + by +"');"},
+            {type:_CELLSPACER_},
+            {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_revoke,width:"100px",// align: _LEFT_ ,
                 enableDisableChangeEventSources: [ZaGrant.A2_grantsListSelectedItems, ZaGrant.A2_grantsList] ,
                 enableDisableChecks:[ZaGrantsListView.isDeleteEnabled],
                 onActivate:"ZaTargetPermission.revokeButtonListener.call(this);"
@@ -509,9 +509,10 @@ function (by) {
                 ZaApp.getInstance().getAppCtxt().getShell(),
                 ZaApp.getInstance(), com_zimbra_delegatedadmin.Title_grant_rights, by);
 		formPage.grantRightDlg.registerCallback(ZaGrantDialog.ADD_FINISH_BUTTON,
-                ZaGrantDialog.grantRight, this.getForm(), null);
+                ZaGrantDialog.prototype.grantRight,
+                formPage.grantRightDlg, [this.getForm(), false]);
         formPage.grantRightDlg.registerCallback(ZaGrantDialog.ADD_MORE_BUTTON,
-                ZaGrantDialog.grantMoreRight, this.getForm(), null);
+                ZaGrantDialog.prototype.grantRight, formPage.grantRightDlg, [this.getForm(), true]);
 	}
 
 	var obj = {};
@@ -519,7 +520,7 @@ function (by) {
        var targetType = instance.type ;
        obj[ZaGrant.A_target_type] = targetType ;
         if (targetType == ZaItem.GLOBAL_CONFIG) {
-            obj[ZaGrant.A_target] = ZaMsg.OVP_global ;
+            obj[ZaGrant.A_target] = ZaGrant.GLOBAL_CONFIG_TARGET_NAME ;
         }else{
             obj[ZaGrant.A_target] = instance.name;
             obj[ZaGrant.A_target_id] = instance.id ;
@@ -553,7 +554,8 @@ ZaTargetPermission.revokeButtonListener = function () {
                     ZaApp.getInstance().getAppCtxt().getShell(),
                     null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
         }
-        formPage.revokeRightDlg.registerCallback(DwtDialog.YES_BUTTON, ZaGrantsListView.revokeRight, form, null);
+        formPage.revokeRightDlg.registerCallback(DwtDialog.YES_BUTTON,
+                ZaGrantsListView.revokeRight, form, null);
         var confirmMsg =  com_zimbra_delegatedadmin.confirm_delete_grants
                 + ZaTargetPermission.getDlMsgFromGrant(selectedGrant) ;
         formPage.revokeRightDlg.setMessage (confirmMsg,  DwtMessageDialog.INFO_STYLE) ;
@@ -562,6 +564,41 @@ ZaTargetPermission.revokeButtonListener = function () {
         ZaApp.getInstance().getCurrentController().popupMsgDialog (com_zimbra_delegatedadmin.no_grant_selected_msg) ;
     }
 }
+
+ZaTargetPermission.editButtonListener = function (by, isGlobalGrant) {
+    var instance = this.getInstance();
+    var form = this.getForm () ;
+    var formPage = form.parent;
+    var selectedGrant = form.getItemsById (ZaGrant.A2_grantsList) [0].getSelection() ;
+    if (selectedGrant && selectedGrant.length == 1) {
+        if(!formPage.editRigthDlg) {
+            formPage.editRigthDlg = new ZaGrantDialog (
+                    ZaApp.getInstance().getAppCtxt().getShell(),
+                    ZaApp.getInstance(), com_zimbra_delegatedadmin.Title_edit_rights, by, true);
+        }
+
+        formPage.editRigthDlg.registerCallback(ZaGrantDialog.EDIT_FINISH_BUTTON,
+                ZaGrantDialog.prototype.editRightAndFinish, formPage.editRigthDlg, 
+                [form, selectedGrant[0], isGlobalGrant]);
+
+        var obj = ZaUtil.deepCloneObject (selectedGrant[0], ["_evtMgr"]);
+        if (obj[ZaGrant.A_right].indexOf("get.") == 0 || obj[ZaGrant.A_right].indexOf("set.")== 0) {
+            obj[ZaGrant.A_right_type] = "inline" ;
+            obj [ZaGrant.A_inline_right] = ZaGrantDialog.getInlineRightAttrsByName (obj[ZaGrant.A_right]) ;
+        } else { //if it is not "inline", it must be "system"
+            obj[ZaGrant.A_right_type] = "system" ;    
+        }
+
+//        obj.setAttrs = {} ;
+//        obj.setAttrs.all = true ;  
+        formPage.editRigthDlg.setObject(obj);
+        formPage.editRigthDlg.popup();
+    } else {
+        ZaApp.getInstance().getCurrentController().popupMsgDialog (
+                com_zimbra_delegatedadmin.no_grant_selected_msg) ;
+    }
+}
+
 
 ZaTargetPermission.getDlMsgFromGrant =
 function (grantsList) {
@@ -579,7 +616,7 @@ function (grantsList) {
                 if (grant[ZaGrant.A_target_type] == ZaItem.GLOBAL_GRANT) {
                     targetName = ZaGrant.GLOBAL_TARGET_NAME  ;
                 } else if (grant[ZaGrant.A_target_type] == ZaItem.GLOBAL_CONFIG) {
-                    targetName = ZaMsg.OVP_global ; 
+                    targetName = ZaGrant.GLOBAL_CONFIG_TARGET_NAME; 
                 }
                 dlgMsg += "<td>" + targetName + "</td>" ;
             } else if (key ==ZaGrant.A_grantee)  {

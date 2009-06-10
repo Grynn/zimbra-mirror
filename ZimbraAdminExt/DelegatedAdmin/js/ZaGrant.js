@@ -59,6 +59,7 @@ ZaGrant.RIGHT_TYPE_CHOICES =[
 ];
 
 ZaGrant.GLOBAL_TARGET_NAME = "globalacltarget" ;
+ZaGrant.GLOBAL_CONFIG_TARGET_NAME = "globalconfig";
 
 ZaGrant.INLINE_VERB_TYPE_CHOICES = [
     {value:"set", label:com_zimbra_delegatedadmin.Col_inline_verb_set},
@@ -331,73 +332,4 @@ ZaGrant.grantsOvTreeModifier = function (tree) {
         }
     }
 }
-
-/*
-  @return : 0 -- doesn't exist
-            1 -- exist
-            2 -- exist, but modifying deny/delegate attribute of an existing ACL
- */
-ZaGrant.isGrantExists = function (currentGrantList, obj) {
-    for (var i = 0; i < currentGrantList.length; i ++ ) {
-        var cGrant = currentGrantList[i] ;
-        var compKeys = [ZaGrant.A_grantee, ZaGrant.A_grantee_type,
-                       ZaGrant.A_target, ZaGrant.A_target_type,
-                       ZaGrant.A_right ] ;
-        var isExist = 1 ;
-        for (var j =0; j < compKeys.length; j ++) {
-            var k = compKeys[j] ;
-            var cv =  cGrant[k] ;
-            var v = obj[k] ;
-
-           if (cv != v) {
-                isExist = 0 ;
-                break ;
-            }
-        }
-
-        if (isExist == 1) {
-            //check if changing the delegate/deny attr
-            var compKeys = [ZaGrant.A_canDelegate, ZaGrant.A_deny] ;
-            for (var j =0; j < compKeys.length; j ++) {
-                var k = compKeys[j] ;
-                var cv =  cGrant[k] ;
-                var v = obj[k] ;
-
-                var cpositive = (cv == "1") ;
-                var opositive = (v == "1") ;
-                if (cpositive != opositive) {
-                    isExist = 2 ;
-                    break ;
-                }
-            }
-        }
-
-        if (isExist == 1) {
-            //popup information dialog
-            var msgDialog = ZaApp.getInstance ()._appCtxt.getMsgDialog () ;
-            msgDialog.setMessage(com_zimbra_delegatedadmin.grant_exist_msg
-                + ZaTargetPermission.getDlMsgFromGrant([obj])) ;
-            msgDialog.popup () ;
-            return isExist ;
-        } else if (isExist == 2) {
-            //popup confirm deny/delegated attr change
-            /*  This is actually edit right, we will add it when we allow edit of the rights
-            if(!ZaApp.getInstance().dialogs["ConfirmMessageDialog"])
-                ZaApp.getInstance().dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
-            .registerCallback(DwtDialog.YES_BUTTON, ZaGrantsListView.revokeRight, form, null);
-        var confirmMsg =  com_zimbra_delegatedadmin.confirm_delete_grants
-                + ZaTargetPermission.getDlMsgFromGrant(selectedGrant) ;
-        formPage.revokeRightDlg.setMessage (confirmMsg,  DwtMessageDialog.INFO_STYLE) ;
-        formPage.revokeRightDlg.popup (); */
-
-            return isExist ;
-        }
-    }
-
-    return 0 ; //doesn't exist at all
-}
-
-
-
-
 

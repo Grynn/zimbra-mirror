@@ -123,7 +123,7 @@ ZaGlobalGrantListViewController.initToolbarMethod =
 function () {
 
     this._toolbarOrder.push(ZaOperation.NEW);
-//    this._toolbarOrder.push(ZaOperation.EDIT);
+    this._toolbarOrder.push(ZaOperation.EDIT);
     this._toolbarOrder.push(ZaOperation.DELETE);
     this._toolbarOrder.push(ZaOperation.NONE);
 
@@ -132,7 +132,7 @@ function () {
     this._toolbarOrder.push(ZaOperation.HELP);
 
     this._toolbarOperations[ZaOperation.NEW] = new ZaOperation(ZaOperation.NEW, com_zimbra_delegatedadmin.Bt_grant, com_zimbra_delegatedadmin.Grant_New_tt, "GlobalPermission", "GlobalPermissionDis", new AjxListener(this, ZaGlobalGrantListViewController.prototype._newButtonListener));
-//    this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit,com_zimbra_delegatedadmin.RIGHT_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaGlobalGrantListViewController.prototype._editButtonListener));
+    this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit,com_zimbra_delegatedadmin.Grant_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaGlobalGrantListViewController.prototype._editButtonListener));
    	this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, com_zimbra_delegatedadmin.Bt_revoke, com_zimbra_delegatedadmin.Grant_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaGlobalGrantListViewController.prototype._deleteButtonListener));
 	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
     this._toolbarOperations[ZaOperation.PAGE_BACK] = new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Previous, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, this._prevPageListener));
@@ -149,7 +149,7 @@ ZaController.initToolbarMethods["ZaGlobalGrantListViewController"].push(ZaGlobal
 ZaGlobalGrantListViewController.initPopupMenuMethod =
 function () {
    	this._popupOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, com_zimbra_delegatedadmin.Bt_revoke, com_zimbra_delegatedadmin.Grant_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaGlobalGrantListViewController.prototype._deleteButtonListener));
-//    this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaGlobalGrantListViewController.prototype._deleteButtonListener));
+    this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit,com_zimbra_delegatedadmin.Grant_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaGlobalGrantListViewController.prototype._editButtonListener));
 
 }
 ZaController.initPopupMenuMethods["ZaGlobalGrantListViewController"].push(ZaGlobalGrantListViewController.initPopupMenuMethod);
@@ -256,9 +256,14 @@ function(ev) {
 		this.grantRightDlg = new ZaGrantDialog (
                 ZaApp.getInstance().getAppCtxt().getShell(),
                 ZaApp.getInstance(), com_zimbra_delegatedadmin.Title_grant_rights);
-		this.grantRightDlg.registerCallback(ZaGrantDialog.ADD_FINISH_BUTTON, ZaGrantDialog.grantGlobalGrant, this, null);
-        this.grantRightDlg.registerCallback(ZaGrantDialog.ADD_MORE_BUTTON, ZaGrantDialog.grantMoreGlobalGrant, this, null);
 	}
+
+    this.grantRightDlg.registerCallback(ZaGrantDialog.ADD_FINISH_BUTTON,
+            ZaGrantDialog.prototype.grantRight, this.grantRightDlg,
+            [this, false, true]);
+    this.grantRightDlg.registerCallback(ZaGrantDialog.ADD_MORE_BUTTON,
+            ZaGrantDialog.prototype.grantRight, this.grantRightDlg,
+            [this, true, true]);
 
 	var obj = {};
 	obj[ZaGrant.A_target] = ZaGrant.GLOBAL_TARGET_NAME;
@@ -269,6 +274,42 @@ function(ev) {
     this.grantRightDlg.setObject(obj);
 	this.grantRightDlg.popup();
 }
+
+/**
+* This listener is called when the Edit button is clicked.
+* It call ZaGrantController.show method
+* in order to display the Grant View
+**/
+ZaGlobalGrantListViewController.prototype._editButtonListener =
+function(ev) {
+	if(this._contentView.getSelectionCount() == 1) {
+		var item = this._contentView.getSelection()[0];
+        if(!this.editRigthDlg) {
+            this.editRigthDlg = new ZaGrantDialog (
+                    ZaApp.getInstance().getAppCtxt().getShell(),
+                    ZaApp.getInstance(), com_zimbra_delegatedadmin.Title_edit_rights,
+                    ZaGrant.A_target, true);
+        }
+
+        this.editRigthDlg.registerCallback(ZaGrantDialog.EDIT_FINISH_BUTTON,
+                ZaGrantDialog.prototype.editRightAndFinish, this.editRigthDlg,
+                [this, item, true]);
+
+        var obj = ZaUtil.deepCloneObject (item, ["_evtMgr"]);
+        if (obj[ZaGrant.A_right].indexOf("get.") == 0 || obj[ZaGrant.A_right].indexOf("set.")== 0) {
+            obj[ZaGrant.A_right_type] = "inline" ;
+            obj [ZaGrant.A_inline_right] = ZaGrantDialog.getInlineRightAttrsByName (obj[ZaGrant.A_right]) ;
+        } else { //if it is not "inline", it must be "system"
+            obj[ZaGrant.A_right_type] = "system" ;
+        }
+        obj[ZaGrant.A_target] = ZaGrant.GLOBAL_TARGET_NAME;
+        obj[ZaGrant.A_target_type] = "global" ;
+
+        this.editRigthDlg.setObject(obj);
+        this.editRigthDlg.popup();
+	}
+}
+
 
 /**
 * This listener is called when the Delete button is clicked.
@@ -298,7 +339,7 @@ function(ev) {
 **/
 ZaGlobalGrantListViewController.prototype._listSelectionListener =
 function(ev) {
-	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) { //TODO: edit the item
 		/*
         if(ev.item) {
 			this._selectedItem = ev.item;
@@ -314,18 +355,6 @@ function (ev) {
 	this.changeActionsState();
 	this._actionMenu.popup(0, ev.docX, ev.docY);
 }
-/**
-* This listener is called when the Edit button is clicked.
-* It call ZaGrantController.show method
-* in order to display the Grant View
-**/
-ZaGlobalGrantListViewController.prototype._editButtonListener =
-function(ev) {
-	if(this._contentView.getSelectionCount() == 1) {
-		var item = this._contentView.getSelection()[0];
-		ZaApp.getInstance().getGrantViewController().show(item);
-	}
-}
 
 ZaGlobalGrantListViewController.changeActionsStateMethod =
 function () {
@@ -338,12 +367,24 @@ function () {
 			if(this._popupOperations[ZaOperation.DELETE])
 				this._popupOperations[ZaOperation.DELETE].enabled = true;
 
+             if(this._toolbarOperations[ZaOperation.EDIT])
+                 this._toolbarOperations[ZaOperation.EDIT].enabled = true;
+
+             if(this._popupOperations[ZaOperation.EDIT])
+                 this._popupOperations[ZaOperation.EDIT].enabled = true;
+
 		} else {
 			if(this._toolbarOperations[ZaOperation.DELETE])
 				this._toolbarOperations[ZaOperation.DELETE].enabled = false;
 
 			if(this._popupOperations[ZaOperation.DELETE])
 				this._popupOperations[ZaOperation.DELETE].enabled = false;
+
+           if(this._toolbarOperations[ZaOperation.EDIT])
+				this._toolbarOperations[ZaOperation.EDIT].enabled = false;
+
+			if(this._popupOperations[ZaOperation.EDIT])
+				this._popupOperations[ZaOperation.EDIT].enabled = false;  
 
 		}
 	}

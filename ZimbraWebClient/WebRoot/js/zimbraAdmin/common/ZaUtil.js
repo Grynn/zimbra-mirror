@@ -115,12 +115,17 @@ ZaUtil.compareObjects = function(obj1, obj2) {
 		return -1;	
 }
 
-ZaUtil.deepCloneObject = function (obj) {
+ZaUtil.deepCloneObject = function (obj, ignoredProperties) {
     var newObj = {};
     if (obj) {
         for (var key in obj) {
+            if (ignoredProperties && ignoredProperties.length > 0) {
+                if (ZaUtil.findValueInArray(ignoredProperties, key) >=0) {
+                    continue ;
+                }
+            }
             var v = obj [key] ;
-            if (v instanceof Array || v instanceof Object){
+            if (v!= null && (v instanceof Array || typeof (v) == "object")){
                 newObj [key] = ZaUtil.deepCloneObject (v) ;
             }  else {
                 newObj [key] = v ;

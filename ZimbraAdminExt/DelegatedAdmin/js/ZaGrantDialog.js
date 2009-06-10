@@ -23,7 +23,7 @@
  *             if by target, target name and type are not modifiable
  *             if by grantee, grantee name and type are not modifiable
  */
-ZaGrantDialog = function(parent,  app, title, by) {
+ZaGrantDialog = function(parent,  app, title, by, isEditDialog) {
     if (arguments.length == 0) return;
     this._standardButtons = [ DwtDialog.CANCEL_BUTTON];
     var helpButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.HELP_BUTTON, ZaMsg.TBB_Help,
@@ -32,11 +32,26 @@ ZaGrantDialog = function(parent,  app, title, by) {
                 DwtDialog.ALIGN_RIGHT, null);
     var addFinishButton = new DwtDialog_ButtonDescriptor(ZaGrantDialog.ADD_FINISH_BUTTON, com_zimbra_delegatedadmin.btAddFinish,
             DwtDialog.ALIGN_RIGHT, null);
-    this._extraButtons = [helpButton,addMoreButton,addFinishButton];
+
+    var editFinishButton = new DwtDialog_ButtonDescriptor(ZaGrantDialog.EDIT_FINISH_BUTTON, com_zimbra_delegatedadmin.btEditFinish,
+            DwtDialog.ALIGN_RIGHT, null);
+
+    if (isEditDialog) {
+         this._extraButtons = [helpButton, editFinishButton];
+    } else {
+        this._extraButtons = [helpButton,addMoreButton,addFinishButton];
+    }
 
     ZaXDialog.call(this, parent,null,  title, "400px", "200px");
     if (!by) by = ZaGrant.A_target ;
     this.by = by;
+
+    if (this.by == ZaGrant.A_target) {
+        this.grantListPropertyName = ZaGrant.A2_grantsList ;  //for target permission grants list view
+    } else if (this.by == ZaGrant.A_grantee) {
+        this.grantListPropertyName = ZaGrant.A3_directGrantsList ;    //for AllGrantsView
+    }
+
     this._containedObject = {};
 
     this.systemRightsChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
@@ -50,6 +65,8 @@ ZaGrantDialog.prototype.constructor = ZaGrantDialog;
 
 ZaGrantDialog.ADD_FINISH_BUTTON = ++DwtDialog.LAST_BUTTON;
 ZaGrantDialog.ADD_MORE_BUTTON = ++DwtDialog.LAST_BUTTON;
+ZaGrantDialog.EDIT_FINISH_BUTTON = ++DwtDialog.LAST_BUTTON;
+
 
 ZaGrantDialog.prototype.getMyXForm =
 function() {
@@ -228,78 +245,183 @@ ZaGrantDialog.prototype.setGranteeType = function (resp) {
     }
 }
 
-ZaGrantDialog.grantRightMethod = function () {
-     if(this.parent.grantRightDlg) {
-		var obj = this.parent.grantRightDlg.getObject();
-        var instance = this.getInstance();
-        var currentGrantList = instance [ZaGrant.A2_grantsList] || [];
-        //TODO: add an auto-dim message or diable all the fields
+/**
+ *
+ * @param parent: ZaGlobalGrantListViewController for global grants, form for other grants
+ * @param isMore
+ * @param isGlobalGrant
+ */
+ZaGrantDialog.prototype.grantRightMethod = function (parent, isMore, isGlobalGrant) {
+    var obj = this.getObject();
+    var args = {
+       newGrant: obj,
+       isGlobalGrant: isGlobalGrant,
+       isMoreGrants: isMore ,
+       parent: parent 
+    } ;
 
-        //this.parent.setDirty(true);
-        //GrantRights Right here, instead of populating to the account modification saving time
-        // Advantages: 1. Avoid the double grants during the saving time
-        // 2. reduce the load of the server during the account modification time
-        if ( ZaGrant.isGrantExists (currentGrantList, obj) != 1) { 
-            if (ZaGrant.grantMethod (obj)) {
+    //get the currentGrantList
+    var currentGrantList ;
+    if (isGlobalGrant) {
+        currentGrantList = parent.getList().getArray () ;
+    } else {
+        //parent is the xfrom ,
+        var instance = parent.getInstance();
+        currentGrantList = instance [this.grantListPropertyName] || [];
+    }
+    args.grantList = currentGrantList ;
+
+    //GrantRights Right here, instead of populating to the account modification saving time
+    // Advantages: 1. Avoid the double grants during the saving time
+    // 2. reduce the load of the server during the account modification time
+     if ( this.isGrantExists(args) < 0) {
+        if (ZaGrant.grantMethod (obj)) {
+            if (isGlobalGrant) {
+                parent.fireCreationEvent(ZaUtil.deepCloneObject (obj));
+            } else {
                 currentGrantList.push(ZaUtil.deepCloneObject (obj)) ;
-                this.getModel().setInstanceValue(this.getInstance(), ZaGrant.A2_grantsList, currentGrantList);
-                return true ;
+                parent.getModel().setInstanceValue(instance, this.grantListPropertyName, currentGrantList);
+            }
+            return true ;
+        }
+    }
+}
+
+ZaGrantDialog.prototype.grantRight = function (parent, isMore, isGlobalGrant) {
+    if (this.grantRightMethod(parent, isMore, isGlobalGrant)){
+        if (isMore) {
+           var obj = this.getObject() ;
+           obj [ZaGrant.A_right] = "" ;
+           this.setObject (obj) ;
+        }else{
+            this.popdown();
+        }
+    }    
+}
+
+//the method for the "Edit and Finish" button in edit grant dialog.
+//It requires revoke the old grant first
+ZaGrantDialog.prototype.editRightAndFinish = function (parent, selectedGrant, isGlobalGrant) {
+      var args = {
+          isEditAndFinish: true ,
+          parent: parent,
+          isGlobalGrant: isGlobalGrant
+      } ;
+
+      if (isGlobalGrant) {
+        args.grantList = parent.getList().getArray () ;
+      } else {
+        args.grantList = parent.getInstance() [this.grantListPropertyName] ;
+      }
+
+      args.newGrant = this.getObject () ;
+    
+      if(!ZaApp.getInstance().dialogs["EditGrantConfirmDialog"]) {
+          ZaApp.getInstance().dialogs["EditGrantConfirmDialog"] = new ZaMsgDialog(
+                  ZaApp.getInstance().getAppCtxt().getShell(), null,
+                  [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
+      }
+      ZaApp.getInstance().dialogs["EditGrantConfirmDialog"].registerCallback(
+              DwtDialog.YES_BUTTON, ZaGrantDialog.prototype.editRightAndFinishCallback,
+              this, [parent, selectedGrant, args]);
+
+      var confirmMsg =  com_zimbra_delegatedadmin.confirm_edit_grants  + "<br /><br />"
+          + com_zimbra_delegatedadmin.confirm_edit_grants_existing_acl
+          + ZaTargetPermission.getDlMsgFromGrant([selectedGrant])
+          + com_zimbra_delegatedadmin.confirm_edit_grants_new_acl
+          + ZaTargetPermission.getDlMsgFromGrant([args.newGrant]) ;
+      ZaApp.getInstance().dialogs["EditGrantConfirmDialog"].setMessage (confirmMsg,  DwtMessageDialog.INFO_STYLE) ;
+      ZaApp.getInstance().dialogs["EditGrantConfirmDialog"].popup ();
+}
+
+ZaGrantDialog.prototype.editRightAndFinishCallback = function  (parent, selectedGrant, args) {
+    var currentGrantList = args.grantList ;
+    var isGlobalGrant = args.isGlobalGrant ;
+    var newGrant = args.newGrant ;
+
+     //1.revoke the edit target
+    if (ZaGrant.revokeMethod (selectedGrant)) {
+        if (isGlobalGrant) {
+             parent.fireRemovalEvent (selectedGrant) ;
+        } else {
+            for (var j = 0; j < currentGrantList.length; j ++) {
+                if (selectedGrant == currentGrantList[j] ) {
+                    currentGrantList.splice(j, 1) ;
+                }
+            }
+//            currentGrantList.splice(currentGrantIndex, 1) ;
+            parent.getModel().setInstanceValue(parent.getInstance(), this.grantListPropertyName, currentGrantList);
+        }
+
+        //2. popdown the informational dialog
+        ZaApp.getInstance().dialogs["EditGrantConfirmDialog"].popdown ();
+
+        //3. add the new target
+        if ( this.isGrantExists (args) < 0) {
+            if (ZaGrant.grantMethod (newGrant)) {
+                if (args.isGlobalGrant) {
+                    parent.fireCreationEvent(ZaUtil.deepCloneObject (newGrant));
+                } else {
+                    currentGrantList.push(ZaUtil.deepCloneObject (newGrant)) ;
+                    parent.getModel().setInstanceValue(parent.getInstance(), this.grantListPropertyName, currentGrantList);
+                }
+            }
+        }
+
+        //4. popdown teh edit dialog
+        this.popdown ();
+    }
+}
+
+/**
+ *
+ * @param args : {
+ *         grantList - currentGrantList
+ *         currentGrantIndex - index of the grant to be revoked/edited
+ *         newGrant - new grant object
+ *         isMoreGrants - is more grants ? -> decide if we want to popdown the add grants dialog
+ *         isGlobalGrant - is global grants ? -> decide if it is a global grants, so we can have differnt methods to refresh the list and popdown the dialog.
+ *         isEditAndFinish - is it triggered by the edit and finish button of the Edit Dailog 
+          }
+ */
+ZaGrantDialog.prototype.editRightMethod = function (args) {
+
+    var currentGrantList = args.grantList ;
+    var currentGrantIndex = args.currentGrantIndex  ;
+    var newGrant = args.newGrant ;
+    var isMoreGrants = args.isMoreGrants ;
+    var isGlobalGrant = args.isGlobalGrant  ;
+    var isEditFinish = args.isEditAndFinish ;
+    var parent = args.parent ;
+
+    if (ZaGrant.revokeMethod (currentGrantList[currentGrantIndex])){
+        if (isGlobalGrant) {
+             parent.fireRemovalEvent (currentGrantList[currentGrantIndex]) ;
+        } else {
+            currentGrantList.splice(currentGrantIndex, 1) ;
+            parent.getModel().setInstanceValue(parent.getInstance(), this.grantListPropertyName, currentGrantList);
+        }
+        if (ZaGrant.grantMethod (newGrant)) {
+            if (isGlobalGrant) {
+                parent.fireCreationEvent(ZaUtil.deepCloneObject (newGrant));
+            }else{
+                currentGrantList.push(ZaUtil.deepCloneObject (newGrant)) ;
+                parent.getModel().setInstanceValue(parent.getInstance(), this.grantListPropertyName, currentGrantList);
             }
         }
     }
 
-    return false ;
-}
+    ZaApp.getInstance().dialogs["EditGrantConfirmDialog"].popdown ();
 
-ZaGrantDialog.grantRight = function () {
-    if (ZaGrantDialog.grantRightMethod.call (this)){
-        this.parent.grantRightDlg.popdown();
-    }    
-}
-
-ZaGrantDialog.grantMoreRight = function () {
-   if (ZaGrantDialog.grantRightMethod.call (this)){
-       var dialog = this.parent.grantRightDlg ;
-       var obj = dialog.getObject() ;
-       obj [ZaGrant.A_right] = "" ; 
-       dialog.setObject (obj) ;
-   }
-}
-
-ZaGrantDialog.grantGlobalGrantMethod = function () {
-    if(this.grantRightDlg) {
-		var obj = this.grantRightDlg.getObject();
-        var currentGrantList = this.getList().getArray () ;
-        //this.parent.setDirty(true);
-        //GrantRights Right here, instead of populating to the account modification saving time
-        // Advantages: 1. Avoid the double grants during the saving time
-        // 2. reduce the load of the server during the account modification time
-       if ( ZaGrant.isGrantExists (currentGrantList, obj) != 1) {
-            if (ZaGrant.grantMethod (obj)) {
-                this.fireCreationEvent(ZaUtil.deepCloneObject (obj));
-                return true;
-            }
-       }
-    }
-
-    return false ;
-}
-
-
-ZaGrantDialog.grantGlobalGrant = function () {
-    if (ZaGrantDialog.grantGlobalGrantMethod.call (this)){
-        this.grantRightDlg.popdown();
+    if (isMoreGrants) {
+        var obj = this.getObject() ;
+        obj [ZaGrant.A_right] = "" ;
+        this.setObject (obj) ;
+    } else {
+        this.popdown () ;
     }
 }
 
-ZaGrantDialog.grantMoreGlobalGrant = function () {
-    if (ZaGrantDialog.grantGlobalGrantMethod.call (this)){
-       var dialog = this.grantRightDlg ;
-       var obj = dialog.getObject() ;
-       obj [ZaGrant.A_right] = "" ;
-       dialog.setObject (obj) ;
-   }
-}
 
 ZaGrantDialog.rightTypeListener =  function (type) {
     var rightType = this.getInstanceValue(ZaGrant.A_right_type) ;
@@ -321,5 +443,104 @@ ZaGrantDialog.getInlineRightName = function (instance) {
     var attr = this.getInstanceValue (ZaGrant.A_inline_right + "/" + ZaGrant.A_inline_attr) || "";
 
     return verb +"." + targetType + "." + attr ;
-
 }
+
+ZaGrantDialog.getInlineRightAttrsByName = function (inlineRightName) {
+
+    var arr = inlineRightName.split(".") ;
+    if (arr.length == 3) {
+        var inlineAttrs = {} ;
+        inlineAttrs[ZaGrant.A_inline_verb] = arr [0] ;
+        inlineAttrs[ZaGrant.A_inline_target_type] = arr [1] ;
+        inlineAttrs[ZaGrant.A_inline_attr] = arr [2] ;
+    } else {
+        ZaApp.getInstance().getCurrentController().popupErrorDialog(
+                    com_zimbra_delegatedadmin.error_invalid_inline_right)
+    }
+
+    return inlineAttrs ;
+}
+
+
+/*
+  @param: {
+            grantList: the current grant list ,
+            newGrant: the new grant obj in the grant dialog
+            isGlobalGrant: whether it is for the global grant
+            isMoreGrants: whether it is for more grants
+            isEditAndFinish : whether it is from the "edit and finish" button from edit right dialog
+         } ;
+
+  @return : -1 -- doesn't exist
+            >=0 -- exist
+ */
+ZaGrantDialog.prototype.isGrantExists = function (args) {
+    var currentGrantList = args.grantList ;
+    var obj = args.newGrant ;
+    for (var i = 0; i < currentGrantList.length; i ++ ) {
+        var cGrant = currentGrantList[i] ;
+        var compKeys = [ZaGrant.A_grantee, ZaGrant.A_grantee_type,
+                       ZaGrant.A_target, ZaGrant.A_target_type,
+                       ZaGrant.A_right ] ;
+        var isExist = i ;
+        for (var j =0; j < compKeys.length; j ++) {
+            var k = compKeys[j] ;
+            var cv =  cGrant[k] ;
+            var v = obj[k] ;
+
+           if (cv != v) {
+                isExist = -1 ;
+                break ;
+            }
+        }
+
+        if (isExist >= 0) {
+             var isDelegateDenyChange = false ;
+            //check if changing the delegate/deny attr
+            var compKeys = [ZaGrant.A_canDelegate, ZaGrant.A_deny] ;
+            for (var j =0; j < compKeys.length; j ++) {
+                var k = compKeys[j] ;
+                var cv =  cGrant[k] ;
+                var v = obj[k] ;
+
+                var cpositive = (cv == "1") ;
+                var opositive = (v == "1") ;
+                if (cpositive != opositive) {
+                    isDelegateDenyChange  = true ;
+                    break ;
+                }
+            }
+            if (isDelegateDenyChange) {
+                //popup confirm deny/delegated attr change
+                if(!ZaApp.getInstance().dialogs["EditGrantConfirmDialog"]) {
+                    ZaApp.getInstance().dialogs["EditGrantConfirmDialog"] = new ZaMsgDialog(
+                            ZaApp.getInstance().getAppCtxt().getShell(), null,
+                            [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
+                }
+                args.currentGrantIndex = i ;
+                ZaApp.getInstance().dialogs["EditGrantConfirmDialog"].registerCallback(
+                        DwtDialog.YES_BUTTON, ZaGrantDialog.prototype.editRightMethod, this, [args]);
+
+                var confirmMsg =  com_zimbra_delegatedadmin.confirm_edit_grants  + "<br /><br />"
+                    + com_zimbra_delegatedadmin.confirm_edit_grants_existing_acl
+                    + ZaTargetPermission.getDlMsgFromGrant([currentGrantList[i]])
+                    + com_zimbra_delegatedadmin.confirm_edit_grants_new_acl
+                    + ZaTargetPermission.getDlMsgFromGrant([obj]) ;
+                ZaApp.getInstance().dialogs["EditGrantConfirmDialog"].setMessage (confirmMsg,  DwtMessageDialog.INFO_STYLE) ;
+                ZaApp.getInstance().dialogs["EditGrantConfirmDialog"].popup ();
+
+                return i ;
+            } else {
+                //popup information dialog
+                var msgDialog = ZaApp.getInstance ()._appCtxt.getMsgDialog () ;
+                msgDialog.setMessage(com_zimbra_delegatedadmin.grant_exist_msg
+                    + ZaTargetPermission.getDlMsgFromGrant([obj])) ;
+                msgDialog.popup () ;
+                return isExist ;
+            }
+        }
+    }
+
+    return -1 ; //doesn't exist at all
+}
+
