@@ -16,27 +16,20 @@
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars
-
-#
-# Expected by catalina scripts
-#
-export JAVA_HOME=${mailboxd_java_home}
-if [ ! -d ${mailboxd_directory} ]; then
-  exit 0
-fi
-
-if [ ! -d ${zimbra_home}/mysql ]; then
-  exit 0
-fi
-
-zmassert -d ${mailboxd_java_home}
 zmassert -d ${mailboxd_directory}
+zmassert -d ${zimbra_home}/mysql
+zmassert -d ${zimbra_java_home}
 
 #
-# Memory for use by JVM
+# Memory for use by JVM.  Defaults should come from local config, but
+# just in case...
 #
+mailboxd_java_heap_memory_percent=${mailboxd_java_heap_memory_percent:=30}
+mailboxd_java_heap_new_size_percent=${mailboxd_java_heap_new_size_percent:=25}
 memkb=$(zmsysmemkb)
-jm=`expr $memkb '*' ${mailboxd_java_heap_memory_percent} / 100 / 1024`
+javaXmx=$(expr ${memkb} '*' ${mailboxd_java_heap_memory_percent} / 100 / 1024)
+javaXms=${javaXmx}
+javaXmn=$(expr ${javaXmx} '*' ${mailboxd_java_heap_new_size_percent} / 100)
 
 #
 # Expand war files.
@@ -103,7 +96,8 @@ case "$1" in
       fi
       echo -n "Starting mailboxd..."
       sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
-        -Xms${jm}m -Xmx${jm}m ${mailboxd_java_options} < /dev/null > /dev/null 2>&1
+        ${mailboxd_java_options} -Xms${javaXms}m -Xmx${javaXmx}m \
+        -Xmn${javaXmn}m < /dev/null > /dev/null 2>&1
       status=$?
       if [ $status = 0 ]; then
         echo "done."
@@ -114,19 +108,13 @@ case "$1" in
     ;;
 
     'kill'|'stop')
-
       echo -n "Stopping mailboxd..."
       sudo ${zimbra_home}/libexec/zmmailboxdmgr status
       if [ $? != 0 ]; then
         echo "mailboxd is not running."
         exit 0
       fi
-      lines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
-      sudo ${zimbra_home}/libexec/zmmailboxdmgr threaddump
-      sleep 2
-      newlines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
-      difflines=`expr $newlines - $lines`
-      tail -${difflines} ${zimbra_home}/log/zmmailboxd.out > ${zimbra_home}/log/stacktrace.$$
+      ${zimbra_home}/bin/zmthrdump -i -o ${zimbra_home}/log/stacktrace.$$.$(date +%Y%m%d%H%M%S)
       sudo ${zimbra_home}/libexec/zmmailboxdmgr stop 
       if [ $? = 0 ]; then
         echo "done."
