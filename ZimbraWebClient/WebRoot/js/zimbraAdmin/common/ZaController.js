@@ -48,7 +48,7 @@ ZaController = function(appCtxt, container,iKeyName) {
    	this._toolbarOrder = new Array();
    	this._popupOperations = new Array();	    
 }
-
+ZaController.CLICK_DELAY = 150;
 ZaController.prototype.initDialogs = function (refresh) {
 
 	if(ZaApp.getInstance()) {
@@ -861,6 +861,9 @@ function (itemId, tabConstructor) {
 
 ZaController.prototype.changeActionsState =
 function () {
+	if(this.changeAcStateAcId)
+		this.changeAcStateAcId = null;
+		
 	for(var i in  this._toolbarOperations) {
 		if(this._toolbarOperations[i] instanceof ZaOperation) {
 			this._toolbarOperations[i].enabled = true;

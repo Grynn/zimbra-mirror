@@ -467,11 +467,16 @@ function(ev) {
 ZaAccountListController.prototype._listSelectionListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		//console.log("double click");
 		if(ev.item) {
+			//console.log("edit item");
 			this._editItem(ev.item);
 		}
 	} else {
-		this.changeActionsState();
+		//console.log("single click");
+		var act = new AjxTimedAction(this,ZaController.prototype.changeActionsState,[ev]);
+		this.changeAcStateAcId = AjxTimedAction.scheduleAction(act,ZaController.CLICK_DELAY);
+		//this.changeActionsState();
 	}
 }
 
@@ -496,6 +501,10 @@ function(ev) {
 }
 
 ZaAccountListController.prototype._editItem = function (item) {
+	if(this.changeAcStateAcId) {
+		AjxTimedAction.cancelAction(this.changeAcStateAcId);
+		this.changeAcStateAcId = null;
+	}	
 	//check if the item already open in a tab
 	var itemId = item.id ;
 	if((item.type == ZaItem.ALIAS) && item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
