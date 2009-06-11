@@ -144,15 +144,8 @@ public class DbOfflineMigration {
         }
 	}
 	
-    private static final String sql53to54 =
-        "SET SCHEMA zimbra;\n"+
-        "DROP TABLE IF EXISTS zimbra.jiveVersion;\n"+
-        "DROP TABLE IF EXISTS zimbra.mucRoom;\n"+
-        "DROP TABLE IF EXISTS zimbra.mucRoomProp;\n"+
-        "DROP TABLE IF EXISTS zimbra.mucAffiliation;\n"+
-        "DROP TABLE IF EXISTS zimbra.mucMember;\n"+
-        "DROP TABLE IF EXISTS zimbra.mucConversationLog;\n"+
-        "CREATE TABLE mucRoom (\n"+
+    private static final String sql53to60_createMucRoom =
+        "CREATE TABLE zimbra.mucRoom (\n"+
         "   service               VARCHAR(255)    NOT NULL,\n"+
         "   roomID                BIGINT          NOT NULL,\n"+
         "   creationDate          CHAR(15)        NOT NULL,\n"+
@@ -178,29 +171,33 @@ public class DbOfflineMigration {
         "   canRegister           SMALLINT        NOT NULL,\n"+
         "\n"+
         "   CONSTRAINT pk_mucRoom PRIMARY KEY (service,name)\n"+
-        ");\n"+
-        "\n"+
-        "CREATE INDEX mucRoom_roomid_idx ON mucRoom(service,roomID);\n"+
-        "\n"+
-        "CREATE TABLE mucRoomProp (\n"+
+        ")";
+    
+    private static final String sql53to60_createMucRoomIdx = 
+        "CREATE INDEX mucRoom_roomid_idx ON zimbra.mucRoom(service,roomID)";
+    
+    private static final String sql53to60_createMucRoomProp =
+        "CREATE TABLE zimbra.mucRoomProp (\n"+
         "   service               VARCHAR(255)    NOT NULL,\n"+
         "   roomID                BIGINT          NOT NULL,\n"+
         "   name                  VARCHAR(100)    NOT NULL,\n"+
         "   propValue             CLOB            NOT NULL,\n"+
         "\n"+
         "   CONSTRAINT pk_mucRoomProp PRIMARY KEY (service,roomID, name)\n"+
-        ");\n"+
-        "\n"+
-        "CREATE TABLE mucAffiliation (\n"+
+        ")";
+    
+    private static final String sql53to60_createMucAffiliation =
+        "CREATE TABLE zimbra.mucAffiliation (\n"+
         "   service               VARCHAR(255)    NOT NULL,\n"+
         "   roomID                BIGINT          NOT NULL,\n"+
         "   jid                   VARCHAR(32672)  NOT NULL,\n"+
         "   affiliation           SMALLINT        NOT NULL,\n"+
         "\n"+
         "   CONSTRAINT pk_mucAffiliation PRIMARY KEY (service,roomID, jid)\n"+
-        ");\n"+
-        "\n"+
-        "CREATE TABLE mucMember (\n"+
+        ")";
+    
+    private static final String sql53to60_createMucMember =
+        "CREATE TABLE zimbra.mucMember (\n"+
         "   service               VARCHAR(255)    NOT NULL,\n"+
         "   roomID                BIGINT          NOT NULL,\n"+
         "   jid                   VARCHAR(32672)  NOT NULL,\n"+
@@ -212,9 +209,10 @@ public class DbOfflineMigration {
         "   faqentry              VARCHAR(100),\n"+
         "\n"+
         "   CONSTRAINT pk_mucMember PRIMARY KEY (service,roomID, jid)\n"+
-        ");\n"+
-        "\n"+
-        "CREATE TABLE mucConversationLog (\n"+
+        ")";
+    
+    private static final String sql53to60_createMucConversationLog =
+        "CREATE TABLE zimbra.mucConversationLog (\n"+
         "   service               VARCHAR(255)    NOT NULL,\n"+
         "   roomID                BIGINT          NOT NULL,\n"+
         "   sender                CLOB            NOT NULL,\n"+
@@ -222,10 +220,10 @@ public class DbOfflineMigration {
         "   time                  CHAR(15)        NOT NULL,\n"+
         "   subject               VARCHAR(255),\n"+
         "   body                  CLOB\n"+
-        ");\n"+
-        "\n"+
-        "CREATE INDEX mucLog_time_idx ON mucConversationLog(time);\n";
-        
+        ")";
+    
+    private static final String sql53to60_createMucLogIdx =
+        "CREATE INDEX mucLog_time_idx ON zimbra.mucConversationLog(time)";        
     
 	private void migrateFromVersion52(Connection conn, boolean isTestRun) throws Exception {
         PreparedStatement stmt = null;
@@ -299,19 +297,28 @@ public class DbOfflineMigration {
         }
 	}
 	
-	private void migrateFromVersion53(Connection conn, boolean isTestRun) throws Exception {
-        PreparedStatement stmt = null;
+	private void migrateFromVersion53(Connection conn, boolean isTestRun) throws Exception {        	    
         boolean isSuccess = false;
         try {
-            stmt = conn.prepareStatement(sql53to54);
-            stmt.executeUpdate();
-            stmt.close();
-            stmt = conn.prepareStatement("UPDATE zimbra.config set value='60' where name='db.version'");
-            stmt.executeUpdate();
-            stmt.close();
+            dropTableIfExists(conn, "zimbra.jiveVersion");
+            dropTableIfExists(conn, "zimbra.mucRoom");
+            dropTableIfExists(conn, "zimbra.mucRoomProp");
+            dropTableIfExists(conn, "zimbra.mucAffiliation");
+            dropTableIfExists(conn, "zimbra.mucMember");
+            dropTableIfExists(conn, "zimbra.mucConversationLog");
+            
+            executeUpdateStatement(conn, sql53to60_createMucRoom);
+            executeUpdateStatement(conn, sql53to60_createMucRoomIdx);
+            executeUpdateStatement(conn, sql53to60_createMucRoomProp);
+            executeUpdateStatement(conn, sql53to60_createMucAffiliation);
+            executeUpdateStatement(conn, sql53to60_createMucMember);
+            executeUpdateStatement(conn, sql53to60_createMucConversationLog);
+            executeUpdateStatement(conn, sql53to60_createMucLogIdx);
+            
+            executeUpdateStatement(conn, "UPDATE zimbra.config set value='60' where name='db.version'");
+            
             isSuccess = true;
         } finally {
-            DbPool.closeStatement(stmt);
             if (isTestRun || !isSuccess)
                 conn.rollback();
             else
@@ -474,7 +481,27 @@ public class DbOfflineMigration {
         }
     }
     
-		
+    // derby does not support "drop table if exists...", so have to do this programmatically
+	private void dropTableIfExists(Connection conn, String table) throws Exception {
+	    try {
+	        executeUpdateStatement(conn, "DROP TABLE " + table);
+	    } catch (SQLException e) {
+	        if (!e.getSQLState().equals("42Y55")) // derby error - table does not exist
+	            throw e;
+	    }
+	}
+	
+	private void executeUpdateStatement(Connection conn, String sql) throws Exception {
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
+            stmt.close();
+        } finally {
+            DbPool.closeStatement(stmt);
+        }	    
+	}
+	
 	public static void main(String[] args) throws Exception {
 		System.setProperty("zimbra.config", "/opt/zimbra/zdesktop dev/conf/localconfig.xml");
 		
