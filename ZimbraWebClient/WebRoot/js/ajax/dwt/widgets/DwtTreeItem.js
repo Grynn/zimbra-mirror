@@ -30,6 +30,7 @@
  *        deferred				[boolean]*			If true, postpone initialization until needed.
  *        className				[string]*			CSS class
  *        posStyle				[constant]*			positioning style
+ *        selectable			[boolean]*			if true, this item is selectable
  *        forceNotifySelection	[boolean]*			force notify selection even if checked style
  *        forceNotifyAction		[boolean]*			force notify action even if checked style
  *        singleClickAction		[boolean]*			true if an action is performed in single click
@@ -65,7 +66,7 @@ DwtTreeItem = function(params) {
 	this._collapseNodeImage = params.collapseNodeImage || "NodeCollapsed";
 	this._itemChecked = false;
 	this._initialized = false;
-	this._selectionEnabled = true;
+	this._selectionEnabled = Boolean(params.selectable !== false);
 	this._forceNotifySelection = Boolean(params.forceNotifySelection);
 	this._actionEnabled = true;
 	this._forceNotifyAction = Boolean(params.forceNotifyAction);

@@ -40,7 +40,6 @@ DwtHeaderTreeItem = function(params) {
 	this._button = params.button;
 	this._noNodeCell = params.noNodeCell;
 	DwtTreeItem.call(this, params);
-	this._selectable = params.selectable;
 };
 
 DwtHeaderTreeItem.prototype = new DwtTreeItem;
