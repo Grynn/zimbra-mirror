@@ -104,7 +104,6 @@ YMEmoticonsPicker.prototype.getDefaultSmiley = YMEmoticonsPicker.getDefaultSmile
 
 YMEmoticonsPicker.prototype._createEmoticonsPicker = function(parent){
 	this._createEmoticonsTable();
-	this.setSize("250px",Dwt.DEFAULT);
 	this._registerHandlers();
 };
 
@@ -131,17 +130,28 @@ YMEmoticonsPicker.prototype.getSmiley = function(id){
 
 YMEmoticonsPicker.EMOTICONS_PER_ROW = 10;
 YMEmoticonsPicker.prototype._createEmoticonsTable = function(){
-
 	var idx = 0;
 	var html = [];
 	var counter  = 0;
-	html[idx++] = "<table cellpadding='2' cellspacing='3' border='0' align='center' width='250px'><tr>";
+	var totalWidth = 0;
+	var maxWidth = 0;
+	var width = 0;
+	var height =0;
 	for(var smiley in YMEmoticonsPicker.SMILEYS){
-		if( counter != 0 && !(counter%10) ) html[idx++] = "</tr><tr>";
-		html[idx++] = "<td id='" + smiley + "' style='background-color:#FFFFFF' width='18' height='18'>";
-		html[idx++] = "<img height='18' width='18' src='"+ YMEmoticonsPicker.SMILEYS[smiley].src+"'/>";
+		if( counter != 0 && !(counter%10) ){ 
+			html[idx++] = "</tr><tr>";
+			if(totalWidth > maxWidth) {
+				maxWidth = totalWidth;
+			}
+			totalWidth = 0;
+		}
+		width = YMEmoticonsPicker.SMILEYS[smiley].width;
+		height = YMEmoticonsPicker.SMILEYS[smiley].height;
+		html[idx++] = ["<td style='background-color:#FFFFFF;' align=\"center\" valign=\"middle\" id='", smiley , "' >"].join("");
+		html[idx++] = ["<img  height='", height, "' width='", width, "' src='", YMEmoticonsPicker.SMILEYS[smiley].src, "'/>"].join("");
 		html[idx++] = "</td>";
 		counter++;
+		totalWidth = totalWidth + width;
 	}
 	var blankcells = (counter-1)%10;
 	if( blankcells > 0 ){
@@ -149,12 +159,13 @@ YMEmoticonsPicker.prototype._createEmoticonsTable = function(){
 	}
 	html[idx++] = "</table>"
 
-	this.getHtmlElement().innerHTML = html.join("");
+	var firstLine = ["<table  cellpadding='2' cellspacing='3' border='0' align='center' width='", maxWidth, "px'><tr>"].join("");
+
+	this.getHtmlElement().innerHTML =  [firstLine, html.join("")].join("");
 
 };
 
 YMEmoticonsPicker.prototype._registerHandlers = function(){
-
 	var table = this.getHtmlElement().firstChild;
 	Dwt.associateElementWithObject(table, this);
 	var rows = table.rows;
