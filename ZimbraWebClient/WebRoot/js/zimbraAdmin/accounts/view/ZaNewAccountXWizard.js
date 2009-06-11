@@ -23,7 +23,7 @@ ZaNewAccountXWizard = function(parent, entry) {
         {value:ZaAccount.ACCOUNT_STATUS_MAINTENANCE, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_MAINTENANCE)}
 	];
 
-	this.initForm(ZaAccount.myXModel,this.getMyXForm(entry), entry);	
+	this.initForm(ZaAccount.myXModel,this.getMyXForm(entry), null);	
   
 	this._localXForm.setController();	
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewAccountXWizard.prototype.handleXFormChange));

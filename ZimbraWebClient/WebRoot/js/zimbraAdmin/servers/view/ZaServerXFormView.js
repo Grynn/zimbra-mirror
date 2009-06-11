@@ -23,7 +23,7 @@
 ZaServerXFormView = function(parent, entry) {
 	ZaTabView.call(this, parent, "ZaServerXFormView");	
 	this.TAB_INDEX = 0;
-	this.initForm(ZaServer.myXModel,this.getMyXForm(entry), entry);
+	this.initForm(ZaServer.myXModel,this.getMyXForm(entry), null);
 	this._localXForm.setController(ZaApp.getInstance());
 }
 

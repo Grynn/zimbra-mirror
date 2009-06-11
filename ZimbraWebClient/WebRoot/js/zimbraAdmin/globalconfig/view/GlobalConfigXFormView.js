@@ -23,7 +23,7 @@
 GlobalConfigXFormView = function(parent, entry) {
 	ZaTabView.call(this, parent, "GlobalConfigXFormView");
 	this.TAB_INDEX = 0;	
-	this.initForm(ZaGlobalConfig.myXModel,this.getMyXForm(entry), entry);
+	this.initForm(ZaGlobalConfig.myXModel,this.getMyXForm(entry), null);
 }
 
 GlobalConfigXFormView.prototype = new ZaTabView();

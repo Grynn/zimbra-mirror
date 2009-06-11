@@ -91,6 +91,9 @@ function(entry) {
 		this._toolbarOrder.push(ZaOperation.HELP);
 		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations, this._toolbarOrder);
 		
+		if(!entry[ZaModel.currentTab])
+			entry[ZaModel.currentTab] = "1";
+	
   		this._contentView = this._view = new this.tabConstructor(this._container,entry);
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;

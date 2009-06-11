@@ -74,7 +74,7 @@ ZaNewDomainXWizard = function(parent, entry) {
 		{label:ZaMsg.AuthTest_check_FAILURE, value:ZaDomain.Check_FAILURE}												
 	];
 		
-	this.initForm(ZaDomain.myXModel,this.getMyXForm(entry), entry);		
+	this.initForm(ZaDomain.myXModel,this.getMyXForm(entry), null);		
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewDomainXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaNewDomainXWizard.prototype.handleXFormChange));	
 	this.lastErrorStep=0;

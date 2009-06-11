@@ -40,7 +40,7 @@ ZaDomainXFormView = function(parent, entry) {
 	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
 	this.catchAllChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
 	this.TAB_INDEX = 0;	
-	this.initForm(ZaDomain.myXModel,this.getMyXForm(entry),entry);
+	this.initForm(ZaDomain.myXModel,this.getMyXForm(entry), null);
 }
 
 ZaDomainXFormView.prototype = new ZaTabView();

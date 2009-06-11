@@ -23,7 +23,7 @@
 ZaCosXFormView = function(parent, entry) {
 	ZaTabView.call(this, parent,"ZaCosXFormView");
 	this.TAB_INDEX = 0;	
-	this.initForm(ZaCos.myXModel,this.getMyXForm(entry), entry);
+	this.initForm(ZaCos.myXModel,this.getMyXForm(entry), null);
 }
 
 ZaCosXFormView.prototype = new ZaTabView();

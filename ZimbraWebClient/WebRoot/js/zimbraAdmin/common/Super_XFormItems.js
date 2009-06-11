@@ -1620,7 +1620,7 @@ ZATabCase_XFormItem.prototype.getCustomHeight = function () {
 				tabBarHeight = formTabBar.getElement().clientHeight ? formTabBar.getElement().clientHeight : formTabBar.getElement().offsetHeight;				
 			}
 		}
-		if(totalHeight<=0)
+		if(totalHeight<=0 || totalHeight < (headerHeight + tabBarHeight + 2))
 			return "100%";
 		else
 			return totalHeight - headerHeight - tabBarHeight - 2;

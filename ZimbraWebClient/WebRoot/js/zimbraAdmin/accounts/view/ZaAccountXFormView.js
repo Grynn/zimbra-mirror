@@ -36,7 +36,7 @@ ZaAccountXFormView = function(parent, entry) {
 	this._domains = {} ;
 	//console.time("ZaAccountXFormView.initForm");
 	//DBG.timePt(AjxDebug.PERF, "started initForm");
-	this.initForm(ZaAccount.myXModel,this.getMyXForm(entry), entry);
+	this.initForm(ZaAccount.myXModel,this.getMyXForm(entry), null);
 	//console.timeEnd("ZaAccountXFormView.initForm");
 	//DBG.timePt(AjxDebug.PERF, "finished initForm");
 }
