@@ -120,9 +120,9 @@ updateSyslogNG() {
   if [ -f "/etc/logrotate.d/zimbra" ]; then
     sed -i -e 's/syslogd/syslog-ng/' /etc/logrotate.d/zimbra
   fi
-  touch $logfile $statsfile
-  chown zimbra:zimbra ${logfile} ${statsfile}
-  chmod 644 ${logfile} ${statsfile}
+  touch /var/log/zimbra.log /var/log/zimbra-stats.log 
+  chown zimbra:zimbra /var/log/zimbra.log  /var/log/zimbra-stats.log
+  chmod 644 /var/log/zimbra.log /var/log/zimbra-stats.log
   echo "done."
 }
 
@@ -164,9 +164,9 @@ updateSyslog() {
   echo "local1.*                $statsfile" >> ${tmpfile}
   echo "auth.*                  $logfile" >> ${tmpfile}
 
-  touch ${logfile} ${statsfile}
-  chown zimbra:zimbra ${logfile} ${statsfile}
-  chmod 644 ${logfile} ${statsfile}
+  touch /var/log/zimbra.log /var/log/zimbra-stats.log 
+  chown zimbra:zimbra /var/log/zimbra.log  /var/log/zimbra-stats.log
+  chmod 644 /var/log/zimbra.log /var/log/zimbra-stats.log
 
   # create a safe temp file and make sure we have enough space to fill it
   tmpfile2=$(mktemp ${zimbra_tmp_directory}/syslog.conf.XXXXXX) && cp -f ${syslogconf} ${tmpfile2}
