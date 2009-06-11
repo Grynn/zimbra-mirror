@@ -116,10 +116,13 @@ function() {
                          */
                        { ref: ZaGrant.A_target_type, type: _OSELECT1_, choices: ZaZimbraRights.targetType,
                            label: com_zimbra_delegatedadmin.Label_target_type ,
+                           onChange: ZaGrantDialog.setTargetTypeChanged ,
                            visibilityChecks:[]
                        },
                        { ref: ZaGrant.A_target, type: _TEXTFIELD_,
                            label: com_zimbra_delegatedadmin.Label_target_name ,
+                           enableDisableChecks:[ZaGrantDialog.targetTypeListener],
+                           enableDisableChangeEventSources:[ZaGrant.A_target_type],
                            visibilityChecks:[]
                        }
                    ]
@@ -193,6 +196,32 @@ ZaGrantDialog.setGranteeChanged = function (value, event, form) {
 		form.notifyListeners(DwtEvent.XFORMS_VALUE_ERROR, event);
 		return;
 	} 
+}
+
+ZaGrantDialog.setTargetTypeChanged = function (value, event, form) {
+	var oldVal = this.getInstanceValue();
+	if(oldVal == value)
+		return;
+
+	this.setInstanceValue(value);
+    var targetName ;
+    if (value == ZaItem.GLOBAL_CONFIG) {
+       targetName = ZaGrant.GLOBAL_CONFIG_TARGET_NAME
+    } else if (value == ZaItem.GLOBAL_GRANT)  {
+       targetName = ZaGrant.GLOBAL_TARGET_NAME ;
+    } else {
+        targetName = "" ;
+    }
+    
+    this.setInstanceValue (targetName, ZaGrant.A_target) ;
+    var targetElement = this.getForm().getItemsById (ZaGrant.A_target) ;
+    for (var i = 0; i < targetElement.length ; i ++) {
+        if (targetElement[i].getIsVisible) {  //there are two elements refer to ZaGrant.A_target, we only update the visible one.
+            targetElement[i].updateElement (targetName) ;
+        }
+    }
+    
+//    this.getForm().getItemsById (ZaGrant.A_target)[0].updateElement (targetName);
 }
 
 ZaGrantDialog.prototype.updateGranteeType = function (grantee) {
@@ -426,6 +455,15 @@ ZaGrantDialog.prototype.editRightMethod = function (args) {
 ZaGrantDialog.rightTypeListener =  function (type) {
     var rightType = this.getInstanceValue(ZaGrant.A_right_type) ;
     return (rightType == type) ;
+}
+
+ZaGrantDialog.targetTypeListener =  function () {
+    var targetType = this.getInstanceValue(ZaGrant.A_target_type) ;
+    var enableTargetField = true ;
+    if (targetType == null || targetType == ZaItem.GLOBAL_GRANT || targetType == ZaItem.GLOBAL_CONFIG) {
+        enableTargetField = false ;
+    }
+    return enableTargetField ;    
 }
 
 ZaGrantDialog.composeInlineRight = function (value, event, form) {
