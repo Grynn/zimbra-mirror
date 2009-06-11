@@ -47,7 +47,8 @@ ZaGrant.A_inline_attr = "inline_attr" ;
 ZaGrant.A2_grantsList = "grantsList" ;
 ZaGrant.A2_grantsListSelectedItems = "grantsListSelectedItems" ;
 
-ZaGrant.A3_directGrantsList = "directGrantsList" ;
+//ZaGrant.A3_directGrantsList = "directGrantsList" ;
+ZaGrant.A3_directGrantsList = ZaGrant.A2_grantsList ;     //grantsList is the directList, use the same name to avoid the extra programming work for new Admin wizard and config grants view.
 ZaGrant.A3_indirectGrantsList = "indirectGrantsList" ;
 
 ZaGrant.GRANTEE_TYPE = { usr: "usr", grp: "grp" };
