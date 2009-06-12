@@ -102,7 +102,7 @@ function() {
 
 }
 
-ZaListViewController.prototype._nextPageListener =
+ZaGlobalGrantListViewController.prototype._nextPageListener =
 function (ev) {
 	if(this._currentPageNum < this.numPages) {
 		this._currentPageNum++;
@@ -110,7 +110,7 @@ function (ev) {
     this._updateUI () ;
 }
 
-ZaListViewController.prototype._prevPageListener =
+ZaGlobalGrantListViewController.prototype._prevPageListener =
 function (ev) {
 	if(this._currentPageNum > 1) {
 		this._currentPageNum--;
