@@ -2009,7 +2009,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								checkBoxLabel:ZaMsg.NAD_zimbraFeatureMailForwardingEnabled,  
 								trueValue:"TRUE", falseValue:"FALSE"
 							},
-							{type:_GROUP_,numCols:3,colSpan:3,colSizes:["275px","275px","150px"], 
+							{type:_GROUP_,numCols:3,colSpan:3,colSizes:["275px","auto"], 
 						  		items:[					  	
 									{ref:ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled, 
 										type:_ZA_CHECKBOX_, 
@@ -2018,9 +2018,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 										trueValue:"TRUE", falseValue:"FALSE"
 									},	
 									{type:_SPACER_},						
-									{ref:ZaAccount.A_zimbraPrefMailForwardingAddress, type:_TEXTFIELD_, width:230,
-										msgName:ZaMsg.NAD_zimbraPrefMailForwardingAddress,
-										label:ZaMsg.NAD_zimbraPrefMailForwardingAddress+":", labelLocation:_LEFT_,
+									{ref:ZaAccount.A_zimbraPrefMailForwardingAddress, type:_TEXTAREA_,width:"350px",
+										label:ZaMsg.NAD_zimbraPrefMailForwardingAddress, 
+										msgName:ZaMsg.NAD_zimbraPrefMailForwardingAddressMsg,
+										labelLocation:_LEFT_,
 										align:_LEFT_,
 										visibilityChecks:[ZaItem.hasReadPermission],
 										enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureMailForwardingEnabled,"TRUE"]],

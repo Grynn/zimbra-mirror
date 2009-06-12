@@ -595,13 +595,13 @@ function(tmpObj) {
 	if(tmpObj.attrs[ZaAccount.A_passEnforceHistory])
 		tmpObj.attrs[ZaAccount.A_passEnforceHistory] = parseInt(tmpObj.attrs[ZaAccount.A_passEnforceHistory]);
 		
-	if((!tmpObj.attrs[ZaAccount.A_zimbraMailForwardingAddress] || tmpObj.attrs[ZaAccount.A_zimbraMailForwardingAddress].length<1) && !tmpObj.attrs[ZaAccount.A_zimbraPrefMailForwardingAddress] && tmpObj.attrs[ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled]=="TRUE") {
+	/*if((!tmpObj.attrs[ZaAccount.A_zimbraMailForwardingAddress] || tmpObj.attrs[ZaAccount.A_zimbraMailForwardingAddress].length<1) && !tmpObj.attrs[ZaAccount.A_zimbraPrefMailForwardingAddress] && tmpObj.attrs[ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled]=="TRUE") {
 		//show error msg
 		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_NO_FWD_REQ_LOCALDELIV);
 
 		return false;
 		
-	}
+	}*/
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		//check that current theme is part of selected themes
 		var currentTheme = tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] ? tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] : tmpObj._defaultValues.attrs[ZaCos.A_zimbraPrefSkin];
@@ -1552,7 +1552,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefGroupMailBy, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefGroupMailBy, choices:ZaModel.GROUP_MAIL_BY_CHOICES},
         {id:ZaAccount.A_zimbraPrefMessageViewHtmlPreferred, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefMessageViewHtmlPreferred, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefNewMailNotificationAddress, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefNewMailNotificationAddress},
-        {id:ZaAccount.A_zimbraPrefMailForwardingAddress, type:_EMAIL_ADDRESS_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailForwardingAddress},
+        {id:ZaAccount.A_zimbraPrefMailForwardingAddress, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailForwardingAddress},
         {id:ZaAccount.A_zimbraPrefNewMailNotificationEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefNewMailNotificationEnabled},
         {id:ZaAccount.A_zimbraPrefOutOfOfficeReply, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefOutOfOfficeReply},
         {id:ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled},
