@@ -1172,7 +1172,7 @@ function(by, val) {
 	var soapDoc, params, resp;
 	//batch the rest of the requests
 	soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
-	soapDoc.setMethodAttribute("onerror", "continue");	
+    soapDoc.setMethodAttribute("onerror", "continue");
 
 	if(by=="id") {
 		this.id = by;
@@ -1223,7 +1223,9 @@ function(by, val) {
 		var account = soapDoc.set("account", this.attrs[ZaItem.A_zimbraId], getAccInfoReq);
 		account.setAttribute("by","id");		
 	}
-	
+
+    var hasError = false ;
+    var lastException  ;
 	if(ZaItem.hasRight(ZaAccount.GET_ACCOUNT_INFO_RIGHT,this) || ZaItem.hasRight(ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT,this) ||
 	(!AjxUtil.isEmpty(this.attrs[ZaAccount.A_mailHost]) && ZaItem.hasRight(ZaAccount.GET_MAILBOX_INFO_RIGHT,this)) ) {
 		try {
@@ -1235,7 +1237,9 @@ function(by, val) {
 			var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
 			if(respObj.isException && respObj.isException()) {
 				ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaAccount.loadMethod", null, false);
-			} else if(respObj.Body.BatchResponse.Fault) {
+			    hasError  = true ;
+                lastException = ex ;
+            } else if(respObj.Body.BatchResponse.Fault) {
 				var fault = respObj.Body.BatchResponse.Fault;
 				if(fault instanceof Array)
 					fault = fault[0];
@@ -1244,7 +1248,9 @@ function(by, val) {
 					// JS response with fault
 					var ex = ZmCsfeCommand.faultToEx(fault);
 					ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaAccount.loadMethod", null, false);
-				}
+                    hasError = true ;
+                    lastException = ex ;
+                }
 			} else {
 				var batchResp = respObj.Body.BatchResponse;
 				
@@ -1288,9 +1294,14 @@ function(by, val) {
 			//show the error and go on
 			//we should not stop the Account from loading if some of the information cannot be acces
 			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccount.prototype.load", null, false);
-		}	
+		    hasError = true ;
+            lastException = ex ;
+        }
 	}
 
+    if (hasError) {
+        throw lastException ;
+    }
 	
 	var autoDispName;
 	if(this.attrs[ZaAccount.A_firstName])
