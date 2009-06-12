@@ -146,7 +146,11 @@ function(params, resp) {
 			this._searchTotal = 0;
 			if(resp && !resp.isException()) {
 				var response = resp.getResponse().Body.SearchDirectoryResponse;
-				this._list.loadFromJS(response);	
+				this._list.loadFromJS(response);
+				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
+					var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
+					AjxTimedAction.scheduleAction(act, 150)
+				}	
 				this._searchTotal = response.searchTotal;
 				var limit = params.limit ? params.limit : this.RESULTSPERPAGE; 
 				this.numPages = Math.ceil(this._searchTotal/params.limit);

@@ -554,7 +554,7 @@ function(ev) {
 	if(this._contentView.getSelectionCount()==1) {
 		this._chngPwdDlg = new ZaAccChangePwdXDlg(ZaApp.getInstance().getAppCtxt().getShell(), "400px","90px");
 		var item = this._contentView.getSelection()[0];
-		item.loadEffectiveRights("id", item.id);
+		item.loadEffectiveRights("id", item.id, false);
 		this._chngPwdDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountListController._changePwdOKCallback, this, item);				
 		this._chngPwdDlg.setTitle(ZaMsg.CHNP_Title + " (" + item.name + ")");
 		var obj = new Object();
@@ -903,7 +903,9 @@ function () {
 				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
 					enable = true;
 				} else if (AjxUtil.isEmpty(item.rights)) {
+					//console.log("loading effective rights for a list item");
 					item.loadEffectiveRights("id", item.id, false);
+					//console.log("loaded rights for a list item");
 				}
 				if(!enable) {
 					if(!item.rights[ZaAccount.VIEW_MAIL_RIGHT]) {
