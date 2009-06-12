@@ -334,18 +334,30 @@ ZaNewAdminWizard.prototype.createNewAdmin = function () {
 
 ZaNewAdminWizard.prototype.finishWizard = function () {
     var cStep = this._containedObject[ZaModel.currentStep] ;
+    var isNewAdminCreated = false ;
     if (cStep == ZaNewAdminWizard.STEP_NEW_ACCOUNT
             || cStep == ZaNewAdminWizard.STEP_NEW_GROUP) {
         //create the account
-        this.createNewAdmin () ;
+        isNewAdminCreated = this.createNewAdmin () ;
     } else if (cStep == ZaNewAdminWizard.STEP_PERMISSION ) {
         //do thing since the permissions are saved already
+        isNewAdminCreated = true ;
     } else if (cStep == ZaNewAdminWizard.STEP_UI_COMPONENTS ) {
+        isNewAdminCreated = true ;
         //save the UI components by modifyAccount or modifyDL
         ZaNewAdmin.modifyAdmin(this._containedObject) ; 
     }
 
-    this.popdown () ;
+    if (isNewAdminCreated) {
+        //refresh the account list view.
+        if (this._containedObject.type == ZaItem.ACCOUNT) {
+            ZaApp.getInstance().getAccountListController().fireCreationEvent(this._containedObject);
+        }else if (this._containedObject.type == ZaItem.DL) {
+            ZaApp.getInstance().getDistributionListController().fireChangeEvent(this._containedObject);
+        }
+        this.popdown () ;
+    }
+
 }
 
 
