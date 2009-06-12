@@ -119,7 +119,10 @@ function(entry) {
 				// Data corruption may cause anexception. We should catch it here in order to display the form anyway.
 			this._handleException(ex, null, null, false);
 			if (ex.code ==  ZmCsfeException.SVC_PERM_DENIED) {
-				ZaApp.getInstance().popView();
+                if (this._contentView && this.getContentViewId()) {
+				    //only pop the view when the view is actually created.
+                    ZaApp.getInstance().popView();
+                }
 				return ;
 				
 			}
