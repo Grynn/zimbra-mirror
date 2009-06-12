@@ -282,7 +282,8 @@ function () {
 	
 	//transfer the fields from the tmpObj to the _currentObject
 	for (var a in tmpObj.attrs) {
-		if(a == ZaResource.A_password || a == ZaItem.A_objectClass ||  a==ZaResource.A_mail || a == ZaItem.A_zimbraId) {
+		if(a == ZaResource.A_password || a == ZaItem.A_objectClass ||  a==ZaResource.A_mail
+                || a == ZaItem.A_zimbraId || a == ZaItem.A_zimbraACE) {
 			continue;
 		}	
 		//check if the value has been modified

@@ -607,7 +607,8 @@ ZaServer.modifyMethod = function (tmpObj) {
 	//get the list of changed fields
 	var mods = new Object();
 	for (var a in tmpObj.attrs) {
-		if(a == ZaItem.A_objectClass || /^_/.test(a) || a == ZaServer.A_zimbraServiceInstalled)
+		if(a == ZaItem.A_objectClass || /^_/.test(a) || a == ZaServer.A_zimbraServiceInstalled
+                || a == ZaItem.A_zimbraACE)
 			continue;
 		
 		if (this.attrs[a] != tmpObj.attrs[a] ) {

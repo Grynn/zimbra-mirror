@@ -257,7 +257,8 @@ ZaDistributionList.modifyMethod = function(mods, obj) {
 	soapDoc.set("id", this.id);
 	//transfer the fields from the tmpObj to the _currentObject
 	for (var a in obj.attrs) {
-		if(a == ZaItem.A_objectClass || a==ZaAccount.A_mail || a == ZaItem.A_zimbraId || a == ZaAccount.A_zimbraMailAlias) {
+		if(a == ZaItem.A_objectClass || a==ZaAccount.A_mail || a == ZaItem.A_zimbraId
+                || a == ZaAccount.A_zimbraMailAlias || a == ZaItem.A_zimbraACE) {
 			continue;
 		}	
 		//check if the value has been modified

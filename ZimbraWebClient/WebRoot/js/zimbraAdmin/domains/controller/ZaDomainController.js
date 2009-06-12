@@ -220,7 +220,8 @@ function () {
 
 
 	for (var a in tmpObj.attrs) {
-		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName || a == ZaDomain.A_domainType) {
+		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName || a == ZaDomain.A_domainType
+                || a == ZaItem.A_zimbraACE) {
 			continue;
 		}
 		
