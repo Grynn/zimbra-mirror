@@ -26,7 +26,7 @@ ZaItemList = function(constructor) {
 	if(constructor)
 		this._constructor = constructor;
 
-	
+	this.loadedRights = false;
 	this._vector = new ZaItemVector();
 	this._idHash = new Object();
 }
@@ -248,7 +248,8 @@ ZaItemList.prototype.loadEffectiveRights = function() {
 				this.getItemById(resp.target[0].id).initEffectiveRightsFromJS(resp);
 			}
 		}
-	}		
+	}
+	this.loadedRights = true;		
 }
 /**
 * Grab the IDs out of a list of items, and return them as both a string and a hash.

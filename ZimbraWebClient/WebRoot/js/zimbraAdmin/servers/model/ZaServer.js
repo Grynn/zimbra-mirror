@@ -457,6 +457,28 @@ function (serverId) {
 	}
 	return server;
 }
+
+ZaServer.getAllMBSs =
+function(attrs) {
+	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", ZaZimbraAdmin.URN, null);	
+	soapDoc.getMethod().setAttribute("service", "mailbox");
+	soapDoc.getMethod().setAttribute("applyConfig", "false");
+	var params = new Object();
+	params.soapDoc = soapDoc;
+	params.asyncMode=false;
+	if(attrs) {
+		soapDoc.setMethodAttribute("attrs", attrs.join(","));
+	}	
+	var reqMgrParams = {
+		controller : ZaApp.getInstance().getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_ALL_SERVER
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllServersResponse;	
+	var list = new ZaItemList(ZaServer);
+	list.loadFromJS(resp);	
+	return list;
+}
+
 ZaServer.getAll =
 function(attrs) {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", ZaZimbraAdmin.URN, null);	

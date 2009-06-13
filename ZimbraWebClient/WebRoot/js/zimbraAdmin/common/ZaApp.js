@@ -570,8 +570,30 @@ ZaApp.prototype.getServerList =
 function(refresh) {
 	if (refresh || this._serverList == null) {
 		this._serverList = ZaServer.getAll();
+		
+		if(this._serverList) {
+			var tmpArray = this._serverList.getArray();
+			this._mbsList = ZaItemList(ZaServer);
+			if(tmpArray) {
+				var resArray = new Array();
+				var cnt = tmpArray.length;
+				for(var i=0;i>cnt;i++) {
+					if(tmpArray[i].attrs[ZaServer.A_zimbraMailboxServiceInstalled]) {
+						this._mbsList.add(tmpArray[i]);
+					}
+				}
+			}
+		}
 	}
 	return this._serverList;	
+}
+
+ZaApp.prototype.getMbsList =
+function(refresh) {
+	if (refresh || this._mbsList == null) {
+		this._mbsList = ZaServer.getAllMBSs();
+	}
+	return this._mbsList;	
 }
 
 ZaApp.prototype.getPostQList = 
@@ -584,11 +606,12 @@ function (refresh) {
 
 ZaApp.prototype.getMailServers =
 function(refresh) {
-	if (refresh || this._serverList == null) {
-		this._serverList = ZaServer.getAll([ZaServer.A_ServiceHostname, ZaServer.A_description, ZaServer.A_zimbraServiceEnabled, ZaServer.A_zimbraServiceInstalled, ZaItem.A_zimbraId]);
+	if (refresh || this._mbsList == null) {
+		this._mbsList = ZaServer.getAllMBSs([ZaServer.A_ServiceHostname, ZaServer.A_description, ZaServer.A_zimbraServiceEnabled, ZaServer.A_zimbraServiceInstalled, ZaItem.A_zimbraId]);
+		//this._serverList = ZaServer.getAll([ZaServer.A_ServiceHostname, ZaServer.A_description, ZaServer.A_zimbraServiceEnabled, ZaServer.A_zimbraServiceInstalled, ZaItem.A_zimbraId]);
 	}
 	var resArray = new Array();
-	var tmpArray = this._serverList.getArray();
+	var tmpArray = this._mbsList.getArray();
 	var cnt = tmpArray.length;
 	for(var i = 0; i < cnt; i++) {
 		if(tmpArray[i].attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
@@ -597,24 +620,6 @@ function(refresh) {
 	}
 	return resArray;
 }
-
-
-
-ZaApp.prototype.getClusterServerChoices = 
-function(refresh){
-	if (refresh || this._clusterServerList == null) {
-		this._clusterServerList = ZaClusterStatus.getServerList();
-	}
-	if (refresh || this._clusterServerChoices == null) {
-		if (this._clusterServerChoices == null ) {
-			this._clusterServerChoices = new XFormChoices(this._clusterServerList, XFormChoices.OBJECT_LIST, "name", "name");
-		} else {
-			this._clusterServerChoices.setChoices(this._clusterServerList);
-			this._clusterServerChoices.dirtyChoices();
-		}
-	}
-	return this._clusterServerChoices;
-};
 
 ZaApp.prototype.getServerListChoices =
 function(refresh) {
