@@ -86,17 +86,17 @@ function (itemValue, grantee, targets, type, isByDomain) {
 
     var html = [] ;
     html.push ("<table><colgroup><col width=150/><col width=500/></colgroup><tbody>") ;
-    html.push("<tr><td style='font-weight: bold'>" +  com_zimbra_delegatedadmin.lb_grantee + "</td><td style='white-space: wrap'>" + grantee + "</td></tr>") ;
-    html.push("<tr><td style='font-weight: bold'>" +  com_zimbra_delegatedadmin.lb_targets + "</td><td>" + targetsLabel + "</td></tr>") ;
+    html.push("<tr><td style='font-weight: bold; vertical-align: top ;'>" +  com_zimbra_delegatedadmin.lb_grantee + "</td><td style='white-space: wrap; background-color: #ACC0DD !important;'>" + grantee + "</td></tr>") ;
+    html.push("<tr><td style='font-weight: bold; vertical-align: top ;'>" +  com_zimbra_delegatedadmin.lb_targets + "</td><td style='background-color: #ACC0DD !important;'>" + targetsLabel + "</td></tr>") ;
 
     if (rights.length > 0)
-        html.push("<tr><td style='font-weight: bold'>" +  com_zimbra_delegatedadmin.lb_rights + "</td><td>" + rights.join( ", ") + "</td></tr>") ;
+        html.push("<tr><td style='font-weight: bold; vertical-align: top ;'>" +  com_zimbra_delegatedadmin.lb_rights + "</td><td style='background-color: #ACC0DD !important;'>" + rights.join( ", ") + "</td></tr>") ;
 
     if (getAttrs.length >0) {
-        html.push("<tr><td style='font-weight: bold'>" +  com_zimbra_delegatedadmin.lb_readable_attrs + "</td><td>" + getAttrs.join(", ") + "</td></tr>") ;
+        html.push("<tr><td style='font-weight: bold; vertical-align: top ;'>" +  com_zimbra_delegatedadmin.lb_readable_attrs + "</td><td style='background-color: #ACC0DD !important;'>" + getAttrs.join(", ") + "</td></tr>") ;
     }
     if (setAttrs.length > 0)
-        html.push("<tr><td style='font-weight: bold'>" +  com_zimbra_delegatedadmin.lb_modifiable_attrs + "</td><td>" + setAttrs.join(", ") + "</td></tr>") ;
+        html.push("<tr><td style='font-weight: bold; vertical-align: top ;'>" +  com_zimbra_delegatedadmin.lb_modifiable_attrs + "</td><td style='background-color: #ACC0DD !important;'>" + setAttrs.join(", ") + "</td></tr>") ;
 
     html.push ("</tbody></table>") ;
     return html.join("");
