@@ -234,6 +234,7 @@ sub getCalendarFolders($$) {
     for (split(/\n/, $response)) {
         if (m{\s*\d+\s+appo\s+\d+\s+\d+\s+(/.*?)$}) {
             my $folder = $1;
+            $folder =~ s/\s\(\)//;
             # ignore shared folders \(\S+\)$
             push(@appo_folders, $folder) if ($folder !~ m{\(\s*\S+\s*\)$})
         }
@@ -677,6 +678,9 @@ sub at {
     foreach my $domain (@domains) {
         $found = $attrs{'a'} =~ /\@$domain$/i if (!$found);
     }
+    if (exists($attrs{'cutype'}) && $attrs{'cutype'} eq 'RES') {
+        $found = 0; # don't check resources
+    }   
     if ($found) {
         $itemRef->{'attendeesList'}->{$attrs{'a'}} = {
             rsvp => $attrs{'rsvp'}, role => $attrs{'role'},
