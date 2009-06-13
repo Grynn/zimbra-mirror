@@ -90,11 +90,6 @@ public class OfflineAccessManager extends AccessManager {
 	}
 	
 	@Override
-	public boolean isGeneralAdmin(AuthToken at) {
-		return at.isAdmin();
-	}
-	
-	@Override
 	public boolean canDo(AuthToken grantee, Entry target, Right rightNeeded, boolean asAdmin, boolean defaultGrant) {
 	    return defaultGrant;
 	}
