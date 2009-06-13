@@ -128,6 +128,9 @@ updateSyslogNG() {
 
 updateSyslog() {
   syslogconf=/etc/syslog.conf
+  if [ -f "/etc/rsyslog.conf" ]; then
+    syslogconf=/etc/rsyslog.conf
+  fi
 
   # create a safe temp file and make sure we have enough space to fill it
   tmpfile=$(mktemp ${zimbra_tmp_directory}/syslog.conf.XXXXXX) && cp -f ${syslogconf} ${tmpfile}
@@ -191,7 +194,7 @@ if [ -f "/etc/syslog-ng/syslog-ng.conf" \
   updateSyslogNG
 fi
 
-if [ -f "/etc/syslog.conf" ]; then
+if [ -f "/etc/syslog.conf" -o -f "/etc/rsyslog.conf" ]; then
   updateSyslog
 fi
 
@@ -213,6 +216,12 @@ if [ x"$platform" = "xUBUNTU6" -o x"$platform" = "xUBUNTU6_64" \
     /etc/init.d/sysklogd restart > /dev/null 2>&1 
   else 
     echo "Unable to restart syslog.  Please do it manually."
+  fi
+elif [ x"$platform" = "xF10" -o x"$platform" = "xF10_64" ]; then
+  if [ -e "/etc/init.d/rsyslog" ]; then
+    /etc/init.d/rsyslog restart> /dev/null 2>&1
+  else
+    echo "Unable to restart rsyslog.  Please do it manually."
   fi
 else 
   killall -HUP syslogd
