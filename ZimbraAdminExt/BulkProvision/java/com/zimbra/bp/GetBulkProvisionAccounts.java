@@ -216,15 +216,11 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
                 h.put(domainName, count + 1);
             }
         }
-        
-        Set<String> attrRightNeeded = needGetAttrsRight();
 
         for (Enumeration<String> keys = h.keys(); keys.hasMoreElements();){
             String domainName = keys.nextElement();
             Domain domain = prov.get(Provisioning.DomainBy.name, domainName);
             if (domain != null) {
-                checkDomainRight(zsc, domain, attrRightNeeded);
-                
                 String domainMaxAccounts = domain.getAttr("zimbraDomainMaxAccounts") ;
                 if (domainMaxAccounts != null && domainMaxAccounts.length() > 0) {
                     int limit = Integer.parseInt(domainMaxAccounts) ;
@@ -350,16 +346,13 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
         return (int) b & 0xFF;
       }
       
-      private Set<String> needGetAttrsRight() {
-          Set<String> attrsNeeded = new HashSet<String>();
-          attrsNeeded.add(Provisioning.A_zimbraDomainMaxAccounts);
-          return attrsNeeded;
-      }
-      
       @Override
       public void docRights(List<AdminRight> relatedRights, List<String> notes) {
           relatedRights.add(Admin.R_createAccount);
-          notes.add("Needs rigths to get " + Provisioning.A_zimbraDomainMaxAccounts + "on domain");
+          relatedRights.add(Admin.R_listAccount);
+          
+          notes.add("Only accounts on which the authed admin has " + Admin.R_listAccount.getName() +
+                  " right will appear in the uploaded CSV to be provisioned.");
       }      
        
     /*
