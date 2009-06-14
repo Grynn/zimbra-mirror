@@ -190,7 +190,7 @@ elif [ x$PLAT = "xMANDRIVA2006" ]; then
 	export PERL5LIB=${PERLLIB}
 fi
 
-if [ x$PLAT = "xSLES10_64" -o x$PLAT = "xRHEL4_64" -o x$PLAT = "xRHEL5_64" -o x$PLAT="xF10_64" ]; then
+if [ x$PLAT = "xSLES10_64" -o x$PLAT = "xRHEL4_64" -o x$PLAT = "xRHEL5_64" -o x$PLAT = "xF10_64" ]; then
 	LIBDIR="/usr/lib64"
 else
 	LIBDIR="/usr/lib"
