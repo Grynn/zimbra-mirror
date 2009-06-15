@@ -463,7 +463,7 @@ public class DbOfflineMigration {
         PreparedStatement stmt = null;
         boolean isSuccess = false;
         try {
-            stmt = conn.prepareStatement("ALTER TABLE zimbra.mailbox ADD COLUMN highest_index VARCHAR(21)");
+            stmt = conn.prepareStatement("ALTER TABLE zimbra.mailbox ADD COLUMN highest_indexed VARCHAR(21)");
             stmt.executeUpdate();
             stmt.close();
            
