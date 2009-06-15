@@ -28,6 +28,7 @@ my $cpustatCsv = 'cpu.csv';
 my $fdstatCsv = 'fd.csv';
 my $dfstatCsv = 'df.csv';
 my $pstatCsv = 'proc.csv';
+my $allpstatCsv = "allprocs.csv";
 my $vmstatCsv = 'vm.csv';
 my $iostatxCsv = 'io-x.csv';
 my $iostatCsv = 'io.csv';
@@ -747,42 +748,22 @@ sub mailboxdConfig() {
 _HERE_
 }
 
-sub convertdConfig() {
+sub allpstatsConfig() {
     print <<_HERE_;
-  <!-- Convertd Stats -->
-  <chart title="Host $ZIMBRA_HOSTNAME: convertd: CPU time used"
-         category="convertd"
-         infile="$convertdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_convertd_cputime.png"
+  <!-- allprocs Stats -->
+  <chart title="Host $ZIMBRA_HOSTNAME: Process CPU Time (Top 10 avg)"
+         category="CPU"
+         infile="$allpstatCsv"
+         outfile="${ZIMBRA_HOSTNAME}_allpstats_cputime.png"
          yAxis="cputime (seconds)"
+         allowLogScale="false"
+         height="400"
+         topPlots="10"
+         topPlotsType="avg"
          showRaw="false"
          showMovingAvg="true">
-    <plot data="cputime" legend="total cputime" divisor="100"/>
-    <plot data="utime" legend="user time" divisor="100"/>
-    <plot data="stime" legend="system time" divisor="100"/>
+    <groupplot data="cputime" groupBy="process"/>
   </chart>
-  
-  <chart title="Host $ZIMBRA_HOSTNAME: convertd: Resident Memory"
-         category="convertd"
-         infile="$convertdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_convertd_rss.png"
-         yAxis="MB"
-         showRaw="false"
-         showMovingAvg="true">
-    <plot data="rss" legend="convertd rss" divisor="1024"/>
-  </chart>
-  
-  <chart title="Host $ZIMBRA_HOSTNAME: convertd: Processes and Threads"
-         category="convertd"
-         infile="$convertdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_convertd_procs_threads.png"
-         yAxis="count"
-         showRaw="false"
-         showMovingAvg="true">
-    <plot data="processes" legend="processes"/>
-    <plot data="threads" legend="threads"/>
-  </chart>
-
 _HERE_
 }
 
@@ -981,6 +962,7 @@ vmstatConfig();
 iostatConfig();
 if (!$isMac) {
     getFDstatConfig();
+    allpstatsConfig();
 }
 if ($HAS_MAILBOX) {
     mailboxdConfig();
