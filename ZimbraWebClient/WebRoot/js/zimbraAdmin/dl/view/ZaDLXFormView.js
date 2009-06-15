@@ -44,7 +44,7 @@ function () {
 
 ZaDLXFormView.prototype.getTabIcon =
 function () {
-	return "Group" ;
+	return "DistributionList" ;
 }
 
 ZaDLXFormView.prototype.handleXFormChange = function (ev) {

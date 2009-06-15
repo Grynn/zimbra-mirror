@@ -97,21 +97,30 @@ function(account, now, isDragProxy) {
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 			switch(account.type) {
 				case ZaItem.ACCOUNT:
-					html[idx++] = AjxImg.getImageHtml("Account");
+					if(account.attrs[ZaAccount.A_zimbraIsAdminAccount]=="TRUE" ) {
+						html[idx++] = AjxImg.getImageHtml("AdminUser");
+					} else if (account.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] == "TRUE") {
+						html[idx++] = AjxImg.getImageHtml("DomainAdminUser");
+					} else {
+						html[idx++] = AjxImg.getImageHtml("Account");
+					}
 				break;
 				case ZaItem.DL:
-					html[idx++] = AjxImg.getImageHtml("Group");				
+					if (account.attrs[ZaDistributionList.A_isAdminGroup] == "TRUE") {
+					    html[idx++] = AjxImg.getImageHtml("Group");
+                    }else {
+                        html[idx++] = AjxImg.getImageHtml("DistributionList");
+                    }	
 				break;
 				case ZaItem.ALIAS:
 					html[idx++] = AjxImg.getImageHtml("AccountAlias");				
 				break;	
 				case ZaItem.RESOURCE:
 					if (account.attrs[ZaResource.A_zimbraCalResType] == ZaResource.RESOURCE_TYPE_LOCATION){
-						html[idx++] = AjxImg.getImageHtml("Location");	
+						html[idx++] = AjxImg.getImageHtml("Location");
 					}else {//equipment or other resource types
-						html[idx++] = AjxImg.getImageHtml("Resource");	
-					}	
-					//html[idx++] = AjxImg.getImageHtml("Resource");				
+						html[idx++] = AjxImg.getImageHtml("Resource");
+					}						
 				break;	
 				case ZaItem.DOMAIN:
 					html[idx++] = AjxImg.getImageHtml("Domain");		

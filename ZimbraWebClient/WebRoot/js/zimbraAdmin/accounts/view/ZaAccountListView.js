@@ -66,15 +66,15 @@ function () {
 	var cc = ZaApp.getInstance().getControllerById (this.__internalId) ;
 	switch (cc._defaultType) {
 		case ZaItem.DL :
-			icon = "Group"; break ;
+			icon = "DistributionList"; break ;
 		case ZaItem.ALIAS :
 			icon = "AccountAlias" ; break ;
-		case ZaItem.RESOURCE : 
-			icon = "Resource" ; break ;	
+		case ZaItem.RESOURCE :
+			icon = "Resource" ; break ;
 		default :
 			icon = "Account" ;
-	}	
-	
+	}
+
 	return icon ;
 }
 
@@ -89,32 +89,36 @@ function(account, now, isDragProxy) {
 	div[DwtListView._SELECTED_STYLE_CLASS] = div[DwtListView._STYLE_CLASS] + "-" + DwtCssStyle.SELECTED;
 	div.className = div[DwtListView._STYLE_CLASS];
 	this.associateItemWithElement(account, div, DwtListView.TYPE_LIST_ITEM);
-	
+
 	var idx = 0;
 	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
 
 	html[idx++] = "<tr>";
-	
+
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
 		var field = this._headerList[i]._field;
 		var IEWidth = this._headerList[i]._width + 4 ;
-		
+
 		if(field == "type") {
 			// type
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 			switch(account.type) {
 				case ZaItem.ACCOUNT:
-					if(account.attrs[ZaAccount.A_zimbraIsAdminAccount]=="TRUE") {
+					if(account.attrs[ZaAccount.A_zimbraIsAdminAccount]=="TRUE" ) {
 						html[idx++] = AjxImg.getImageHtml("AdminUser");
-					}/* else if (ZaAccount.A_zimbraIsDomainAdminAccount && account.attrs[ZaAccount.A_zimbraIsDomainAdminAccount]=="TRUE") {
+					} else if (account.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] == "TRUE") {
 						html[idx++] = AjxImg.getImageHtml("DomainAdminUser");
-					}*/ else {
+					} else {
 						html[idx++] = AjxImg.getImageHtml("Account");
-					}	
+					}
 				break;
 				case ZaItem.DL:
-					html[idx++] = AjxImg.getImageHtml("Group");				
+                    if (account.attrs[ZaDistributionList.A_isAdminGroup] == "TRUE") {
+					    html[idx++] = AjxImg.getImageHtml("Group");
+                    }else {
+                        html[idx++] = AjxImg.getImageHtml("DistributionList");
+                    }
 				break;
 				case ZaItem.ALIAS:
 					html[idx++] = AjxImg.getImageHtml("AccountAlias");				
@@ -124,8 +128,7 @@ function(account, now, isDragProxy) {
 						html[idx++] = AjxImg.getImageHtml("Location");	
 					}else {//equipment or other resource types
 						html[idx++] = AjxImg.getImageHtml("Resource");	
-					}	
-					//html[idx++] = AjxImg.getImageHtml("Resource");				
+					}		
 				break;											
 				default:
 					html[idx++] = account.type;

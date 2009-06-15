@@ -468,7 +468,7 @@ ZaSearchField.prototype.aliasFilterSelected = function (ev) {
 ZaSearchField.prototype.dlFilterSelected = function (ev) {
 	this.resetSearchFilter();
 	//ev.item.parent.parent.setImage(ev.item.getImage());
-	this.setIconForSearchMenuButton ("Group");
+	this.setIconForSearchMenuButton ("DistributionList");
 	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
 	this.setTooltipForSearchButton (ZaMsg.searchForDLs);	
 }
@@ -496,7 +496,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 	var newMenuOpList = new Array();
 
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ACCOUNTS, ZaMsg.SearchFilter_Accounts, ZaMsg.searchForAccounts, "Account", "AccountDis", new AjxListener(this,this.accFilterSelected)));	
-	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_DLS, ZaMsg.SearchFilter_DLs, ZaMsg.searchForDLs, "Group", "GroupDis", new AjxListener(this,this.dlFilterSelected)));		
+	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_DLS, ZaMsg.SearchFilter_DLs, ZaMsg.searchForDLs, "DistributionList", "DistributionListDis", new AjxListener(this,this.dlFilterSelected)));		
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALIASES, ZaMsg.SearchFilter_Aliases, ZaMsg.searchForAliases, "AccountAlias", "AccountAlias", new AjxListener(this, this.aliasFilterSelected)));		
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_RESOURCES, ZaMsg.SearchFilter_Resources, ZaMsg.searchForResources, "Resource", "ResourceDis", new AjxListener(this, this.resFilterSelected)));		
 	//if(ZaSettings.DOMAINS_ENABLED) {

@@ -5,7 +5,6 @@
 ZaDelegatedAdmin = function () {};
 
 if (ZaAccount) {
-    ZaAccount.A_zimbraIsDelegatedAdminAccount = "zimbraIsDelegatedAdminAccount" ;
     ZaAccount.A2_adminRoles = "adminRoles" ;
     ZaAccount.adminRolesModelItem = {ref: ZaAccount.A2_adminRoles ,id: ZaAccount.A2_adminRoles,
                                     type: _LIST_, listItem:{type:_EMAIL_ADDRESS_}} ;
@@ -252,7 +251,6 @@ if (ZaController.setViewMethods["ZaAccountViewController"]) {
 }
 
 if (ZaDistributionList) {
-    ZaDistributionList.A_isAdminGroup = "zimbraIsAdminGroup" ;
     ZaDistributionList.myXModel.items.push (
         {id:ZaDistributionList.A_isAdminGroup, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
             ref:"attrs/"+ZaDistributionList.A_isAdminGroup}) ;

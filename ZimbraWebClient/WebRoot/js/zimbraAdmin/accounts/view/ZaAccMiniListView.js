@@ -66,7 +66,7 @@ function(account, now, isDragProxy) {
 							html[idx++] = AjxImg.getImageHtml("Account");
 						break;
 						case ZaItem.DL:
-							html[idx++] = AjxImg.getImageHtml("Group");				
+							html[idx++] = AjxImg.getImageHtml("DistributionList");				
 						break;
 						case ZaItem.ALIAS:
 							html[idx++] = AjxImg.getImageHtml("AccountAlias");				

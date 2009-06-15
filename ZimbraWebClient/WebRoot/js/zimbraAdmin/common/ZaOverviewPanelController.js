@@ -344,7 +344,7 @@ function() {
 		if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 			this.dlTi = ti = new DwtTreeItem(this._addressesTi);
 			ti.setText(ZaMsg.OVP_distributionLists);
-			ti.setImage("Group");
+			ti.setImage("DistributionList");
 			ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW);
 		}
 		

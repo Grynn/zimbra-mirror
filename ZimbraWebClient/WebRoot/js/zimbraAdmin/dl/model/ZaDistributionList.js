@@ -82,6 +82,7 @@ ZaDistributionList.A2_nonMemberList = "nonMemberList";
 ZaDistributionList.A2_alias_selection_cache = "alias_selection_cache";
 ZaDistributionList.A2_share_selection_cache = "shares_selection_cache";
 ZaDistributionList.A2_published_share_selection_cache = "published_shares_selection_cache";
+ZaDistributionList.A_isAdminGroup = "zimbraIsAdminGroup" ;
 
 ZaDistributionList._dlStatus = {
 	enabled  : ZaMsg.DL_Status_enabled ,

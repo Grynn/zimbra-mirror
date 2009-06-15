@@ -87,24 +87,6 @@ function (list, openInNewTab, openInSearchTab) {
 	}else{
 		ZaApp.getInstance().updateTab(this.getMainTab(), ZaApp.getInstance()._currentViewId );
 	}
-	
-	/*
-	if (openInNewTab) {
-		
-	}else{
-		var icon ;
-		switch (this._defaultType) {
-			case ZaItem.DL :
-				icon = "Group"; break ;
-			case ZaItem.ALIAS :
-				icon = "AccountAlias" ; break ;
-			case ZaItem.RESOURCE : 
-				icon = "Resource" ; break ;	
-			default :
-				icon = "Account" ;
-		}
-		this.updateMainTab (icon);
-	}*/
 }
 
 ZaAccountListController.prototype.setDefaultType = function (type) {
@@ -141,7 +123,7 @@ function () {
 				this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.ACTBB_ChngPwd_tt);
 		} else if (type == ZaItem.DL) {
 			newButton.setToolTipContent(ZaMsg.DLTBB_New_tt);
-			newButton.setImage("Group");
+			newButton.setImage("DistributionList");
 			newButton.addSelectionListener(this._newDLListener);
 			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.DLTBB_Edit_tt);
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.DLTBB_Delete_tt);
@@ -262,7 +244,7 @@ function () {
 	
 	newMenuOpList.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener));
 	newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.ALTBB_New_menuItem, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener));
-	newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "Group", "GroupDis", this._newDLListener));
+	newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "DistributionList", "DistributionListDis", this._newDLListener));
 	newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.RESTBB_New_menuItem, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener));
 	if(this._defaultType == ZaItem.ACCOUNT || this._defaultType == ZaItem.ALIAS) {
 		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener, 
@@ -275,7 +257,7 @@ function () {
 									   ZaOperation.TYPE_MENU, newMenuOpList);
     	
     } else if(this._defaultType == ZaItem.DL) {    	
-		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Group", "GroupDis", this._newDLListener, 
+		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "DistributionList", "DistributionListDis", this._newDLListener, 
 									   ZaOperation.TYPE_MENU, newMenuOpList);
     	
     } 
