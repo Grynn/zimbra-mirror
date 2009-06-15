@@ -22,7 +22,7 @@ use File::Path;
 
 my $DEBUG = 0;
 #global constants
-my $version = "1.36";
+my $version = "1.37";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -1298,7 +1298,11 @@ sub processfile
 	                    my $tldt = substr($lastrdate,$tridx+1);
                       my $nweeks=get_weeks_by_date_range($tfdt,$tldt)+1;
                       &log_message("date range weeks: $nweeks");
-                      $nweeks = $nweeks - int($nweeks / $interval);
+                      #adjust weeknums for interval>1
+                      if($interval>1)
+                      {
+                        $nweeks = $nweeks - int($nweeks / $interval);
+                      }
                       $newrrule= "RRULE:FREQ=WEEKLY;COUNT=$nweeks;INTERVAL=$interval".$bywkday;
                     }
 	                  print_outfile("$newrrule");
