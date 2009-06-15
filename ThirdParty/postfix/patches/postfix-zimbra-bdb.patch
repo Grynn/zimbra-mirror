@@ -1,6 +1,6 @@
---- postfix-2.4.2-RC1/makedefs.orig	2007-05-25 15:19:38.000000000 -0700
-+++ postfix-2.4.2-RC1/makedefs	2007-05-25 15:20:46.000000000 -0700
-@@ -238,7 +238,10 @@
+--- postfix-2.6.2/makedefs.orig	2009-06-15 12:26:45.000000000 -0700
++++ postfix-2.6.2/makedefs	2009-06-15 12:27:31.000000000 -0700
+@@ -254,7 +254,10 @@
  		;;
      Linux.2*)	SYSTYPE=LINUX2
  		# Postfix no longer needs DB 1.85 compatibility
