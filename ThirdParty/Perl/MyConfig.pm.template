@@ -7,6 +7,7 @@ $CPAN::Config = {
   'cpan_home' => q[@@BUILD_ROOT@@/.cpan],
   'curl' => q[@@CURL@@],
   'dontload_hash' => {  },
+  'dontload_list' => [q[Archive::Tar]],
   'ftp' => q[@@FTP@@],
   'ftp_passive' => q[1],
   'ftp_proxy' => q[],
