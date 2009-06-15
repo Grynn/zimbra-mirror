@@ -93,13 +93,13 @@ DwtTabView.prototype.getTabGroupMember = function() {
 * public method addTab. Note that this method does not automatically update the tabs panel.
 **/
 DwtTabView.prototype.addTab =
-function (title, tabViewOrCallback, buttonId) {
+function (title, tabViewOrCallback, buttonId, index) {
 	var tabKey = this._tabIx++;	
 
 	// create tab entry
 	this._tabs[tabKey] = {
 		title: title,
-		button: this._tabBar.addButton(tabKey, title, buttonId)
+		button: this._tabBar.addButton(tabKey, title, buttonId, index)
 	};
 
 	// add the page
@@ -540,8 +540,8 @@ function(tabKey, listener) {
 * @param tabTitle
 **/
 DwtTabBar.prototype.addButton =
-function(tabKey, tabTitle, id) {
-	var b = this._buttons[tabKey] = new DwtTabButton(this, id);
+function(tabKey, tabTitle, id, index) {
+	var b = this._buttons[tabKey] = new DwtTabButton(this, id, index);
 	
 	this._buttons[tabKey].addSelectionListener(new AjxListener(this, DwtTabBar._setActiveTab));
 
@@ -642,9 +642,9 @@ function(ev) {
 * @class
 * @constructor
 **/
-DwtTabButton = function(parent, id) {
+DwtTabButton = function(parent, id, index) {
 	if (arguments.length == 0) return;
-	DwtButton.call(this, {parent:parent, className:"ZTab", id:id});
+	DwtButton.call(this, {parent:parent, className:"ZTab", id:id, index:index});
 };
 
 DwtTabButton.prototype = new DwtButton;
