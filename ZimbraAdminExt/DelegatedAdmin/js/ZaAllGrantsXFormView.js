@@ -158,7 +158,7 @@ function () {
 
 ZaAllGrantsXFormView.prototype.getTabIcon =
 function () {
-    return "GlobalPermission";
+    return "Permission";
 }
 
 ZaAllGrantsXFormView.prototype.getTabTitle =

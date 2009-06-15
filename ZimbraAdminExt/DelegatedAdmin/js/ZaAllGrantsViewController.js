@@ -39,7 +39,7 @@ function () {
 
     this._toolbarOperations[ZaOperation.NEW] = new ZaOperation(ZaOperation.NEW,
             com_zimbra_delegatedadmin.Bt_grant, com_zimbra_delegatedadmin.Grant_New_tt,
-            "GlobalPermission", "GlobalPermissionDis",
+            "Permission", "PermissionDis",
             new AjxListener(this, this.addGrantsListener));
 
     this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE,

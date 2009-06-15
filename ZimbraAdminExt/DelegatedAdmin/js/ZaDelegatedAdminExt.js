@@ -80,7 +80,7 @@ if (ZaController.initToolbarMethods["ZaAccountListController"]) {
     ZaAccountListController.initExtraToolbarMethod = function () {
         this._toolbarOperations [ZaOperation.VIEW_EFFECTIVE_RIGHTS] =
         new ZaOperation(ZaOperation.VIEW_EFFECTIVE_RIGHTS, com_zimbra_delegatedadmin.bt_config_grants,
-                com_zimbra_delegatedadmin.bt_config_grants_tt, "GlobalPermission", "GlobalPermissionDis",
+                com_zimbra_delegatedadmin.bt_config_grants_tt, "Permission", "PermissionDis",
                 new AjxListener(this, ZaDelegatedAdminExt._configGrantsListener)
                 );
 
@@ -236,7 +236,7 @@ if (ZaController.initToolbarMethods["ZaAccountViewController"]) {
 
         this._toolbarOperations [ZaOperation.CONFIG_GRANTS] =
         new ZaOperation(ZaOperation.CONFIG_GRANTS, com_zimbra_delegatedadmin.bt_config_grants,
-                com_zimbra_delegatedadmin.bt_config_grants_tt, "GlobalPermission", "GlobalPermissionDis",
+                com_zimbra_delegatedadmin.bt_config_grants_tt, "Permission", "PermissionDis",
                 new AjxListener(this, ZaDelegatedAdminExt._configGrantsListener)
                 );
 
@@ -269,7 +269,7 @@ if (ZaController.initToolbarMethods["ZaDLController"]) {
 
        this._toolbarOperations [ZaOperation.CONFIG_GRANTS] =
         new ZaOperation(ZaOperation.CONFIG_GRANTS, com_zimbra_delegatedadmin.bt_config_grants,
-                com_zimbra_delegatedadmin.bt_config_grants_tt,"GlobalPermission", "GlobalPermissionDis",
+                com_zimbra_delegatedadmin.bt_config_grants_tt,"Permission", "PermissionDis",
                 new AjxListener(this, ZaDelegatedAdminExt._configGrantsListener)
                 );
         this._toolbarOrder.push(ZaOperation.CONFIG_GRANTS);
