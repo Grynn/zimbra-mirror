@@ -78,6 +78,7 @@ public class ZComposeUploaderBean {
     public static final String F_subject = "subject";
     public static final String F_priority = "priority";
     public static final String F_messageAttachment = "messageAttachment";
+    public static final String F_documentAttachment = "documentAttachment";
     public static final String F_originalAttachment = "originalAttachment";
     public static final String F_uploadedAttachment = "uploadedAttachment";
     public static final String F_body = "body";
@@ -223,6 +224,15 @@ public class ZComposeUploaderBean {
                     String id = i == -1 ? value : value.substring(0, i);
                     String subject = i == -1 ? null : value.substring(i+1);
                     compose.getMessageAttachments().add(new MessageAttachment(id, subject));
+                }else if (name.equals(F_documentAttachment)) {
+                    String[] vals = value.split(",");
+                    for(int i=0;vals != null && i < vals.length; i++){
+                        if(vals[i] == null || vals[i].equals("")) continue;
+                        int j = vals[i].indexOf(':');
+                        String id = j == -1 ? vals[i] : vals[i].substring(0, j);
+                        String subject = j == -1 ? null : vals[i].substring(j+1);
+                        compose.getDocumentAttachments().add(new ZMessageComposeBean.DocumentAttachment(id, subject));
+                    }
                 } else if (name.equals(F_originalAttachment)) {
                     String[] nameId = value.split(",");
                     if(nameId.length > 1 ){

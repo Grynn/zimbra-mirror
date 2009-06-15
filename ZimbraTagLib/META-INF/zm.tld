@@ -4970,6 +4970,40 @@
     </tag>
 
     <tag>
+        <description>Save attachments as documents to a briefcase folder</description>
+        <name>saveAttachmentsToBriefcase</name>
+        <tag-class>com.zimbra.cs.taglib.tag.msg.SaveAttachmentsToBriefcaseTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+             <description>
+                 Name of the exported scoped variable for the result.
+             </description>
+             <name>var</name>
+             <required>true</required>
+         </attribute>
+        <attribute>
+            <description>Message id</description>
+            <name>mid</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                Part id 
+            </description>
+            <name>partId</name>
+            <rtexprvalue>true</rtexprvalue>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>Briefcase folder id</description>
+            <name>folderId</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <description>
             Move an item to a folder.
         </description>

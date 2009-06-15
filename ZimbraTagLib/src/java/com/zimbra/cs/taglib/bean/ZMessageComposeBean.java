@@ -88,6 +88,18 @@ public class ZMessageComposeBean {
         public String getId() { return mId; }
         public String getSubject() { return mSubject; }
     }
+    public static class DocumentAttachment {
+        private String Id;
+        private String mSubject;
+
+        public DocumentAttachment(String id, String subject) {
+            Id = id;
+            mSubject = subject;
+        }
+
+        public String getId() { return Id; }
+        public String getSubject() { return mSubject; }
+    }
     
     public static String RT_BASIC = "BASIC";
     
@@ -174,6 +186,7 @@ public class ZMessageComposeBean {
     private String mInReplyTo; // original message-id header
     private String mDraftId; // id of draft we are editting
     private List<MessageAttachment> mMessageAttachments;
+    private List<DocumentAttachment> mDocumentAttachments;
     private Map<String,String> mCheckedAttachmentNames = new HashMap<String, String>();
     private List<ZMimePartBean> mOriginalAttachments;
     private List<FileItem> mFileItems = new ArrayList<FileItem>();
@@ -190,6 +203,7 @@ public class ZMessageComposeBean {
 
     public ZMessageComposeBean(PageContext pageContext) {
         mMessageAttachments = new ArrayList<MessageAttachment>();
+        mDocumentAttachments = new ArrayList<DocumentAttachment>();
         mOriginalAttachments = new ArrayList<ZMimePartBean>();
         mDateFormat = I18nUtil.getLocalizedMessage(pageContext, "CAL_APPT_EDIT_DATE_FORMAT");
     }
@@ -350,6 +364,9 @@ public class ZMessageComposeBean {
 
     public void setMessageAttachments(List<MessageAttachment> attachments) { mMessageAttachments = attachments; }
     public List<MessageAttachment> getMessageAttachments() { return mMessageAttachments; }
+
+    public void setDocumentAttachments(List<DocumentAttachment> attachments) { mDocumentAttachments = attachments; }
+    public List<DocumentAttachment> getDocumentAttachments() { return mDocumentAttachments; }
 
     public String getRepeatBasicType() { return mRepeatBasicType; }
     public void setRepeatBasicType(String repeatBasicType) { mRepeatBasicType = repeatBasicType; }
@@ -1885,6 +1902,14 @@ da body
                 messages.add(ma.getId());
             }
             m.setMessageIdsToAttach(messages);
+        }
+
+        if (mDocumentAttachments != null && mDocumentAttachments.size() > 0) {
+            List<String> docs = new ArrayList<String>();
+            for (DocumentAttachment doc : mDocumentAttachments) {
+                docs.add(doc.getId());
+            }
+            m.setDocIdsToAttach(docs);
         }
 
         if (mCheckedAttachmentNames != null && mCheckedAttachmentNames.size() > 0) {
