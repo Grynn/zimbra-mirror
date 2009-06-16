@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_coloredemails" version="0.2" description="Changes color of the emails in the list based on sender's email or tag name">
+<zimlet name="com_zimbra_coloredemails" version="0.5" description="Changes color of the emails in the list based on sender's email or tag name">
   <include>coloredemails.js</include>
   <includeCSS>coloredemails.css</includeCSS>
   <handlerObject>com_zimbra_coloredemails</handlerObject>

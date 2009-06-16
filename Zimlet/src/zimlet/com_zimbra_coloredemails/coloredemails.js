@@ -27,6 +27,7 @@ function() {
 	if (!this.turnColoredEmailsZimletON) {
 		return;
 	}
+
 	this._initializeVariables();
 	this._resetView();
 };
@@ -36,6 +37,7 @@ function() {
 	this._defaultEmail = "joe@sender.com";
 	this._cEmail_manualAddedEmailsArray = [];
 	this._cEmail_autoAddedEmailsArray = [];
+	this._colorChangedDueToTag = false;
 
 	this.uprop_cEmail_manualAddedEmails = this.getUserProperty("cEmail_manualAddedEmails");
 	this.uprop_cEmail_autoAddedEmails = this.getUserProperty("cEmail_autoAddedEmails");
@@ -53,17 +55,17 @@ function() {
 
 com_zimbra_coloredemails.prototype._saveAutoAddedEmails =
 function() {
-	if (this.uprop_cEmail_autoAddedEmails.split(",").length >= 500) {
+	if (this.uprop_cEmail_autoAddedEmails.split(",").length >= 25) {
 		var tmp = this.uprop_cEmail_autoAddedEmails.split(",");
 		var str = "";
-		for (var i = 0; i < 250; i++) {//strip 250 old emails, so we dont need to do this every time after we touch 500
+		for (var i = 0; i < 25; i++) {
 			if (str == "")
 				str = AjxStringUtil.trim(tmp[i]);
 			else
 				str = str + ", " + AjxStringUtil.trim(tmp[i]);
 		}
 	}
-	this.setUserProperty("cEmail_autoAddedEmails", this.uprop_cEmail_autoAddedEmails, true);
+	this.setUserProperty("cEmail_autoAddedEmails", str, true);
 };
 
 com_zimbra_coloredemails.prototype._setEmails =
@@ -74,14 +76,16 @@ function(storeArray, userProp) {
 			var tmp = arry[i].split(":");
 			if (tmp[0] == this._defaultEmail)
 				continue;
+
+			var eml = AjxStringUtil.trim(tmp[0]).toLowerCase();
 			if (tmp.length == 3) {
 				var bg = AjxStringUtil.trim(tmp[2]);
 				if (bg == "white" || bg == "#FFFFFF")//if background is white, ignore it
-					storeArray[AjxStringUtil.trim(tmp[0])] = " style=\"color: " + AjxStringUtil.trim(tmp[1]) + ";\" ";
+					storeArray[eml] = " style=\"color: " + AjxStringUtil.trim(tmp[1]) + ";\" ";
 				else
-					storeArray[AjxStringUtil.trim(tmp[0])] = " style=\"color: " + AjxStringUtil.trim(tmp[1]) + ";background-color: " + bg + ";\" ";
+					storeArray[eml] = " style=\"color: " + AjxStringUtil.trim(tmp[1]) + ";background-color: " + bg + ";\" ";
 			} else if (tmp.length == 2) {
-				storeArray[AjxStringUtil.trim(tmp[0])] = " style=\"color: " + AjxStringUtil.trim(tmp[1]) + ";\" ";
+					storeArray[eml] = " style=\"color: " + AjxStringUtil.trim(tmp[1]) + ";\" ";
 			}
 		} catch(e) {
 		}
@@ -94,14 +98,22 @@ function(eml) {
 	var colors = [ "#FF0000","#CC6600","#006600","#6600CC","#660000","#009900","#666666","#330000","#663333","#000099","#330033","#CC33CC","#6666CC","#CC9933","#CC0000","#006600"];
 	var randomnumber = Math.floor(Math.random() * colors.length);
 	if (this.uprop_cEmail_autoAddedEmails.indexOf(eml) == -1) {
-		this.uprop_cEmail_autoAddedEmails = eml + ":" + colors[randomnumber] + ", " + this.uprop_cEmail_autoAddedEmails;
+		if(this.uprop_cEmail_autoAddedEmails == "")
+			this.uprop_cEmail_autoAddedEmails = eml + ":" + colors[randomnumber] + ", ";
+		else
+			this.uprop_cEmail_autoAddedEmails =  this.uprop_cEmail_autoAddedEmails + ", " +  eml + ":" + colors[randomnumber] ;
+
 		this._cEmail_autoAddedEmailsArray[eml] = " style=\"color: " + colors[randomnumber] + ";\" ";
 	}
+
 };
+
 
 com_zimbra_coloredemails.prototype.onTagAction =
 function(items, tag, doTag) {//basically refreshes the view to reflect new colors
 	if (!this.turnColoredEmailsZimletON)
+		return;
+	if(!this._colorChangedDueToTag)
 		return;
 
 	try {
@@ -111,6 +123,7 @@ function(items, tag, doTag) {//basically refreshes the view to reflect new color
 		}
 	} catch(e) {
 	}
+	this._colorChangedDueToTag = false;
 };
 
 
@@ -134,9 +147,13 @@ function(item, field) {
 	try {
 		if (item.type == ZmId.ITEM_CONV) {
 			var arry = item.participants.getArray();
-			eml = arry[arry.length - 1].address;
+			if(arry.length >0) {
+				eml = arry[arry.length - 1].address;
+			}
 		} else if (item.type == ZmId.ITEM_MSG) {
-			eml = item.getAddress(AjxEmailAddress.FROM).address;
+			var obj = item.getAddress(AjxEmailAddress.FROM);
+			if(obj)
+				eml = obj.address;
 		} else {
 			return null;
 		}
@@ -157,19 +174,23 @@ function(item, field) {
 	if (tagName != "") {//if we might need to color based on tagName
 		var colorsByTag = this._cEmail_manualAddedEmailsArray[tagName];
 		if (colorsByTag) {
+			this._colorChangedDueToTag = true;
 			return colorsByTag;
 		}
 	}
-
+	var eml =  AjxStringUtil.trim(eml).toLowerCase();//trim and ignore case
 	var colors = this._cEmail_manualAddedEmailsArray[eml];
 	if (colors) {
 		return colors;
-	}
+	} 
 
 	if (this.uprop_cEmail_autoAssociateChkbx) {//if we need to auto-associate
 		this._autoAddEmail(eml);
 		if (this.uprop_cEmail_useAutoAssociatedEmailsChkbx) {//if we need to color auto-added email...
-			return  this._cEmail_autoAddedEmailsArray[eml];//this will be populated by this._autoAddEmail
+			if(!this._cEmail_autoAddedEmailsArray[eml])
+				return "";
+			else
+				return  this._cEmail_autoAddedEmailsArray[eml];//this will be populated by this._autoAddEmail
 		}
 	}
 
@@ -184,8 +205,12 @@ com_zimbra_coloredemails.prototype.doubleClicked = function() {
 com_zimbra_coloredemails.prototype.singleClicked = function() {
 	this._showPreferenceDlg();
 };
+
 com_zimbra_coloredemails.prototype.doDrop =
 function(msg) {
+	if(msg instanceof Array)
+		msg = msg[0];
+
 	if (this.turnColoredEmailsZimletON) {
 		this._showPreferenceDlg();
 		var tagName = "";
@@ -315,7 +340,6 @@ function() {
 	html[i++] = "</TABLE>";
 	html[i++] = "</DIV>";
 	return html.join("");
-
 };
 
 com_zimbra_coloredemails.prototype._showHideDetails =
@@ -449,8 +473,8 @@ function() {
 	}
 
 	this.setUserProperty("cEmail_manualAddedEmails", document.getElementById("cEmail_manualAddedEmails").value, true);
-	this.setUserProperty("cEmail_autoAddedEmails", document.getElementById("cEmail_autoAddedEmails").value, true);
-
+	this.uprop_cEmail_autoAddedEmails = document.getElementById("cEmail_autoAddedEmails").value;
+	this._saveAutoAddedEmails();
 	//reset the values and run getMsg to instantly reflect the changes
 	this._cEmail_manualAddedEmailsArray = [];
 	this._setEmails(this._cEmail_manualAddedEmailsArray, document.getElementById("cEmail_manualAddedEmails").value);
