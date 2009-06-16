@@ -719,8 +719,6 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 		
 	var case_gen_csr_items = [
 		{type: _DWT_ALERT_, colSpan:2,
-//                relevant: "instance[ZaCert.A_csr_exists] == true ",
-//				relevantBehavior: _HIDE_ ,
                 visibilityChecks:["instance[ZaCert.A_csr_exists] == true "],
                 containerCssStyle: "width:400px;",
 				style: DwtAlert.WARNING, iconVisible: false,
@@ -736,8 +734,6 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					]
 				},
 				{ref: ZaCert.A_force_new_csr, type: _CHECKBOX_ , label: com_zimbra_cert_manager.FORCE_NEW_CSR , 
-//					relevant: " instance[ZaCert.A_csr_exists] == true ",
-//					relevantBehavior: _HIDE_,
 					visibilityChecks:[" instance[ZaCert.A_csr_exists] == true "],
                     onChange: function (value, event, form) {
 						this.setInstanceValue (value) ;
@@ -745,19 +741,15 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 						form.refresh();
 					},
 					trueValue:"TRUE", falseValue:"FALSE", msgName:com_zimbra_cert_manager.FORCE_NEW_CSR },
-				{ ref: ZaCert.A_commonName, type:_TEXTFIELD_, width: 150, 
-//					relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
-//					relevantBehavior: _DISABLE_,
+				{ ref: ZaCert.A_commonName, type:_TEXTFIELD_, width: 150,
 					visibilityChecks:[],
-                    enableDisableChecks:[" !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') "],
-				    enableDisableChangeEvantSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
+                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
+				    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
                     label: com_zimbra_cert_manager.CERT_INFO_CN},
 				{ ref: ZaCert.A_use_wildcard_server_name, type:_CHECKBOX_, 
-//						relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
-//						relevantBehavior: _DISABLE_,
 						visibilityChecks:[],
-                        enableDisableChecks:[" !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') "],
-				        enableDisableChangeEvantSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
+                        enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
+				        enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
                         label: com_zimbra_cert_manager.Use_Wildcard_Server_Name,
 						onChange: function (value, event, form) {
 							if (AjxEnv.hasFirebug) console.log("use wildcard: " + value) ;
@@ -771,46 +763,34 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
  						}
 				},	
 				{ ref: ZaCert.A_countryName, type:_TEXTFIELD_, width: 150, 
-//					relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
-//					relevantBehavior: _DISABLE_,
                     visibilityChecks:[],
-                    enableDisableChecks:[" !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') "],
-                    enableDisableChangeEvantSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
+                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
                     label: com_zimbra_cert_manager.CERT_INFO_C},
 				{ ref: ZaCert.A_state, type:_TEXTFIELD_, width: 150, 
-//					relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
-//					relevantBehavior: _DISABLE_,
                     visibilityChecks:[],
-                    enableDisableChecks:[" !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') "],
-                    enableDisableChangeEvantSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
+                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
 					label: com_zimbra_cert_manager.CERT_INFO_ST},
 				{ ref: ZaCert.A_city, type:_TEXTFIELD_, width: 150, 
-//					relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
-//					relevantBehavior: _DISABLE_,
                     visibilityChecks:[],
-                    enableDisableChecks:[" !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') "],
-                    enableDisableChangeEvantSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
+                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
 					label: com_zimbra_cert_manager.CERT_INFO_L},
-				{ ref: ZaCert.A_organization, type:_TEXTFIELD_, width: 150, 
-//					relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
-//					relevantBehavior: _DISABLE_,
+				{ ref: ZaCert.A_organization, type:_TEXTFIELD_, width: 150,
                     visibilityChecks:[],
-                    enableDisableChecks:[" !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') "],
-                    enableDisableChangeEvantSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
+                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
 					label: com_zimbra_cert_manager.CERT_INFO_O},
-				{ ref: ZaCert.A_organizationUnit, type:_TEXTFIELD_, width: 150, 
-//					relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
-//					relevantBehavior: _DISABLE_,
+				{ ref: ZaCert.A_organizationUnit, type:_TEXTFIELD_, width: 150,
                     visibilityChecks:[],
-                    enableDisableChecks:[" !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') "],
-                    enableDisableChangeEvantSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
+                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
+                    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
 					label: com_zimbra_cert_manager.CERT_INFO_OU},
 				 { ref: ZaCert.A_subject_alt,
-//					relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
-//					relevantBehavior: _DISABLE_,
                      visibilityChecks:[],
-                     enableDisableChecks:[" !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') "],
-                     enableDisableChangeEvantSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
+                     enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
+                     enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
 					type:_REPEAT_,
 					label:com_zimbra_cert_manager.CERT_INFO_SubjectAltName,
 					labelLocation:_LEFT_, 
@@ -827,12 +807,9 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					removeButtonLabel:com_zimbra_cert_manager.NAD_Remove,								
 					items: [
 						{ref:".", type:_TEXTFIELD_, 
-						//label:com_zimbra_cert_manager.CERT_INFO_SubjectAltName,
-//						relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
-//						relevantBehavior: _DISABLE_,
                         visibilityChecks:[],
-                        enableDisableChecks:[" !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') "],
-                        enableDisableChangeEvantSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
+                        enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
+                        enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
                         onChange:function (value, event, form) {
 							this.setInstanceValue(value);
 						},
@@ -1012,4 +989,10 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 };
 ZaXDialog.XFormModifiers["ZaCertWizard"].push(ZaCertWizard.myXFormModifier);
 
+ZaCertWizard.isCSRFieldsEnabled = function () {
+    var isCSRExist = this.getInstanceValue(ZaCert.A_csr_exists)  ;
+    var isForceNewCSR = this.getInstanceValue(ZaCert.A_force_new_csr)  ;
 
+	return ( (!isCSRExist) || (isForceNewCSR == "TRUE")) ;
+}
+   
