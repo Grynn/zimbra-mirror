@@ -200,8 +200,8 @@ ZaNewAdminWizard.STEP_INDEX = 1;
 ZaNewAdminWizard.STEP_START = ZaNewAdminWizard.STEP_INDEX ++ ;
 ZaNewAdminWizard.STEP_NEW_ACCOUNT = ZaNewAdminWizard.STEP_INDEX ++ ;
 ZaNewAdminWizard.STEP_NEW_GROUP = ZaNewAdminWizard.STEP_INDEX ++ ;
-ZaNewAdminWizard.STEP_PERMISSION = ZaNewAdminWizard.STEP_INDEX ++ ;
 ZaNewAdminWizard.STEP_UI_COMPONENTS = ZaNewAdminWizard.STEP_INDEX ++ ;
+ZaNewAdminWizard.STEP_PERMISSION = ZaNewAdminWizard.STEP_INDEX ++ ;
 ZaNewAdminWizard.STEP_FINISH = ZaNewAdminWizard.STEP_INDEX ++ ;
 
 //add the new admin button to the new menu list
@@ -247,11 +247,10 @@ ZaNewAdminWizard.prototype.goPage = function (pageKey) {
         finish = false ;
     } else if (pageKey == ZaNewAdminWizard.STEP_NEW_ACCOUNT
                     || pageKey == ZaNewAdminWizard.STEP_NEW_GROUP) {
-
-
-    } else if (pageKey == ZaNewAdminWizard.STEP_PERMISSION) {
+            //no change
+    } else if (pageKey == ZaNewAdminWizard.STEP_UI_COMPONENTS) {
         cancel = prev = false ;
-    } else if ( pageKey == ZaNewAdminWizard.STEP_UI_COMPONENTS ) {
+    } else if ( pageKey == ZaNewAdminWizard.STEP_PERMISSION ) {
         cancel = false ;
     } else if ( pageKey == ZaNewAdminWizard.STEP_FINISH) {
         next  =  false ;
@@ -271,8 +270,8 @@ function() {
 	if (cStep == ZaNewAdminWizard.STEP_NEW_ACCOUNT
             || cStep == ZaNewAdminWizard.STEP_NEW_GROUP) {
 		prevStep = ZaNewAdminWizard.STEP_START ;
-    }else if (cStep == ZaNewAdminWizard.STEP_UI_COMPONENTS) {
-		prevStep = ZaNewAdminWizard.STEP_PERMISSION ;
+    }else if (cStep == ZaNewAdminWizard.STEP_PERMISSION) {
+		prevStep = ZaNewAdminWizard.STEP_UI_COMPONENTS ;
     }else if (cStep == ZaNewAdminWizard.STEP_FINISH) {
         prevStep = ZaNewAdminWizard.STEP_UI_COMPONENTS ;            
     }
@@ -292,25 +291,23 @@ function() {
         }
     } else if (cStep == ZaNewAdminWizard.STEP_NEW_ACCOUNT
             || cStep == ZaNewAdminWizard.STEP_NEW_GROUP) {
-
         if (this.createNewAdmin()) {
-            nextStep = ZaNewAdminWizard.STEP_PERMISSION ;
+            nextStep = ZaNewAdminWizard.STEP_UI_COMPONENTS ;
+            //init the zimbraAdminConsoleUIComponents
+            this._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [];
+            //get the inherited ui components
+            ZaUIComponent.accountObjectModifer.call(this) ;
         } else {
             return false ;
         }
-    } else if (cStep == ZaNewAdminWizard.STEP_PERMISSION ) {
-
-        nextStep = ZaNewAdminWizard.STEP_UI_COMPONENTS ;
-        //init the zimbraAdminConsoleUIComponents
-        this._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [];
-        //get the inherited ui components
-        ZaUIComponent.accountObjectModifer.call(this) ;
     } else if (cStep == ZaNewAdminWizard.STEP_UI_COMPONENTS ) {
         if (ZaNewAdmin.modifyAdmin(this._containedObject)) {
-            nextStep = ZaNewAdminWizard.STEP_FINISH ;
-        }else{
+            nextStep = ZaNewAdminWizard.STEP_PERMISSION ;
+        }else {
             return false ;
         }
+    } else if (cStep == ZaNewAdminWizard.STEP_PERMISSION ) {
+        nextStep = ZaNewAdminWizard.STEP_FINISH ;
     } 
 
     this.goPage(nextStep);
@@ -409,7 +406,7 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
         type: _CASE_,  numCols:2, height: 250,
         tabGroupKey:ZaNewAdminWizard.STEP_NEW_ACCOUNT, caseKey:ZaNewAdminWizard.STEP_NEW_ACCOUNT,
         items: [
-            {ref:ZaAccount.A_name, type:_EMAILADDR_,    required:true,
+           {ref:ZaAccount.A_name, type:_EMAILADDR_,    required:true,
                  msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
                  labelLocation:_LEFT_,forceUpdate:true,
                 visibilityChecks:[],
@@ -490,6 +487,12 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
             tabGroupKey:ZaNewAdminWizard.STEP_UI_COMPONENTS, caseKey:ZaNewAdminWizard.STEP_UI_COMPONENTS,
             items:[
                     {type: _GROUP_, numCols:2, colSizes:[200, "*"],items: [
+                        {type: _DWT_ALERT_, content: com_zimbra_delegatedadmin.msg_admin_created,
+                            colSpan: "*",
+                            visibilityChecks:[],
+                           containerCssStyle: "width:500px;",
+                           style: DwtAlert.INFORMATION, iconVisible: false
+                        },                    
                         {type:_OUTPUT_, ref: ZaAccount.A_name , label: ZaMsg.NAD_AccountName},
                         {type:_SPACER_, height: 10}    
                         ]
