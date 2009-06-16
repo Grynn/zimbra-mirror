@@ -326,7 +326,7 @@ public class ZContactBean implements Comparable {
         if (getIsGroup())
             return "contacts/ImgGroup.gif";
         else if (getIsGalContact())
-            return "contacts/ImgGALContact.gif";
+            return "startup/ImgGALContact.gif";
         else
             return "contacts/ImgContact.gif";
     }
