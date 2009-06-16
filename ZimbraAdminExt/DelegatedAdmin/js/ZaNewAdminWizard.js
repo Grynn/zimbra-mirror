@@ -95,7 +95,9 @@ ZaNewAdmin.createAdmin = function (tmpObj) {
                         AjxException.SERVER_ERROR, "ZaNewAdmin.createAdmin", "Unknow object type" ));
         }
 
-        if (createdAdmin.name == tmpObj.name) {
+        if (createdAdmin.name && tmpObj.name
+             && createdAdmin.name.toLowerCase() == tmpObj.name.toLowerCase()) {    //account name is case insensitive
+                 tmpObj.name = createdAdmin.name ;
                  tmpObj.id = createdAdmin.id ;
                  tmpObj.type = tmpObj[ZaNewAdmin.A_admin_type] ;
         } else {
@@ -151,11 +153,11 @@ ZaNewAdmin.modifyAdmin = function (tmpObj) {
     try {
         var respBody = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body ;
         if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.ACCOUNT) {
-            if (respBody.ModifyAccountResponse.account[0].name == tmpObj.name) {
+            if (respBody.ModifyAccountResponse.account[0].name.toLowerCase() == tmpObj.name.toLowerCase()) {
                 return true ;
             }
         } else if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.DL) {
-            if (respBody.ModifyDistributionListResponse.dl[0].name == tmpObj.name) {
+            if (respBody.ModifyDistributionListResponse.dl[0].name.toLowerCase() == tmpObj.name.toLowerCase()) {
                 return true ;
             }
         }
@@ -252,7 +254,7 @@ ZaNewAdminWizard.prototype.goPage = function (pageKey) {
     } else if ( pageKey == ZaNewAdminWizard.STEP_UI_COMPONENTS ) {
         cancel = false ;
     } else if ( pageKey == ZaNewAdminWizard.STEP_FINISH) {
-        next  = cancel = false ;
+        next  =  false ;
     }
 
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(prev);
@@ -346,6 +348,8 @@ ZaNewAdminWizard.prototype.finishWizard = function () {
         isNewAdminCreated = true ;
         //save the UI components by modifyAccount or modifyDL
         ZaNewAdmin.modifyAdmin(this._containedObject) ; 
+    } else if (cStep == ZaNewAdminWizard.STEP_FINISH) {
+        isNewAdminCreated = true ;        
     }
 
     if (isNewAdminCreated) {
@@ -357,7 +361,6 @@ ZaNewAdminWizard.prototype.finishWizard = function () {
         }
         this.popdown () ;
     }
-
 }
 
 
