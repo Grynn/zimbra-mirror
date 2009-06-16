@@ -34,6 +34,7 @@ com_zimbra_searchrefiner.prototype.onKeyPressSearchField =
 function() {
 	this.onSearchButtonClick();
 };
+
 com_zimbra_searchrefiner.prototype.onSearchButtonClick =
 function() {
 	//if we are not searching for mail/conv, dont do anything
@@ -120,7 +121,7 @@ com_zimbra_searchrefiner.prototype._processResult = function(array, isPartialRes
 	}
 	this.createRefinerView();
 
-	com_zimbra_searchrefiner.show();
+	this.show();
 
 	if(!isPartialResult)
 		this.wasTriggeredBySearchBtn = false;
@@ -233,7 +234,6 @@ function(id) {
 	this._narrowedSearch[id] = searchVal;
 	this._hideOrShowSections();
 	this.searchAgain();
-
 };
 
 com_zimbra_searchrefiner.prototype.searchAgain =
@@ -262,6 +262,7 @@ function() {
 //------------------------------------------------------------------------------------------
 //			CREATE SEARCH-REFINER VIEW
 //------------------------------------------------------------------------------------------
+
 com_zimbra_searchrefiner.prototype.createRefinerView =
 function() {
 	if (!this._refineMore) {
@@ -284,16 +285,26 @@ function() {
 	if (this.isZmletUIInitialized)
 		return;
 
+	this.overviewTreeHtml = appCtxt.getAppViewMgr().getCurrentViewComponent(ZmAppViewMgr.C_TREE).getHtmlElement();
+	var treeSkinDiv = document.getElementById("skin_container_tree");
+	this._refineMainDiv = document.createElement('div');
+	treeSkinDiv.appendChild(this._refineMainDiv);
 	this.wasTriggeredBySearchBtn = false;
-	this._refineMainDiv = document.getElementById(ZmId.WIDGET_OVERVIEW+"__"+ZmAppAccordionController.ID+":"+appCtxt.getActiveAccount().name).appendChild(document.createElement('div'));
 	this._refineMainDiv.id = "sr_mainDivId";
+	this._refineMainDiv.style.position = "absolute";
+	this._refineMainDiv.style.overflow = "auto";
+	this._refineMainDiv.style.backgroundColor = "white";
+	this._refineMainDiv.style.width = "100%";
+	this._refineMainDiv.style.height =  "100%";
 	this._refineMainDiv.style.display = "none";
+
 	this._refineMainDiv.innerHTML = this._headerHTML() + this._narrowedByHTML() + this._getAllSectionsHTML();
+	document.getElementById("sr_closeButtonDiv").onclick = AjxCallback.simpleClosure(this.hide, this);
 	this.isZmletUIInitialized = true;//set this to true
 };
 
 com_zimbra_searchrefiner.prototype._headerHTML = function() {
-	return "<div class='overviewHeader'><TABLE><TD width=90%><B>Narrow Results<\B></TD><TD  align=\"right\"><DIV onclick=\"com_zimbra_searchrefiner.hide()\" class='ImgClose'></DIV></TD></TABLE></div>";
+	return "<div class='overviewHeader'><TABLE><TD width=90%><B>Narrow Results<\B></TD><TD  align=\"right\"><DIV  id='sr_closeButtonDiv' class='ImgClose'></DIV></TD></TABLE></div>";
 };
 
 com_zimbra_searchrefiner.prototype._narrowedByHTML = function() {
@@ -426,30 +437,33 @@ function(uniqueArry, origArry) {
 //------------------------------------------------------------------------------------------
 //			SHOW/HIDE FOLDER,TAG ETC FOLDER-HEADERS
 //------------------------------------------------------------------------------------------
-com_zimbra_searchrefiner.show = function() {
+com_zimbra_searchrefiner.prototype.onShowView =
+function(viewId, isNewView) {
+	if(viewId.indexOf(ZmId.VIEW_COMPOSE) == -1) {
+		this.hide();
+	}
+};
+
+com_zimbra_searchrefiner.prototype.show =
+function(ev) {	
 	var sr = document.getElementById("sr_mainDivId");
 	sr.style.display = "block";
 	sr.style.zIndex = 500;
-	var treeHdrs = document.getElementById(ZmId.WIDGET_OVERVIEW+"__"+ZmAppAccordionController.ID+":"+appCtxt.getActiveAccount().name).childNodes;
-	for (var i = 0; i < treeHdrs.length; i++) {
-		if (treeHdrs[i].id != "sr_mainDivId") {
-			treeHdrs[i].style.display = "none";
-		}
-	}
+	this.overviewTreeHtml.style.display = "none";
+
 };
 
-com_zimbra_searchrefiner.hide = function() {
+com_zimbra_searchrefiner.prototype.hide =
+function(ev) {
+	if (!this.isZmletUIInitialized)
+		return;
+
 	var sr = document.getElementById("sr_mainDivId");
 	sr.style.display = "none";
 	sr.style.zIndex = 100;
-	var treeHdrs = document.getElementById(ZmId.WIDGET_OVERVIEW+"__"+ZmAppAccordionController.ID+":"+appCtxt.getActiveAccount().name).childNodes;
-	for (var i = 0; i < treeHdrs.length; i++) {
-		if (treeHdrs[i].id != "sr_mainDivId") {
-			treeHdrs[i].style.display = "block";
-		}
-	}
-};
+	this.overviewTreeHtml.style.display = "block";
 
+};
 
 //------------------------------------------------------------------------------------------
 //			SHOW PREFERENCES DIALOG
