@@ -143,7 +143,7 @@ GlobalConfigXFormView.addNewExt = function() {
 	this.getForm().parent.setDirty(true);
 }
 
-GlobalConfigXFormView.ATTACHMENTS_TAB_ATTRS = [ZaGlobalConfig.A_zimbraMtaBlockedExtension,ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension];
+GlobalConfigXFormView.ATTACHMENTS_TAB_ATTRS = [ZaGlobalConfig.A_zimbraMtaBlockedExtensionWarnRecipient, ZaGlobalConfig.A_zimbraMtaBlockedExtension,ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension];
 GlobalConfigXFormView.ATTACHMENTS_TAB_RIGHTS = [];
 
 GlobalConfigXFormView.MTA_TAB_ATTRS = [ZaGlobalConfig.A_zimbraMtaAuthEnabled, ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, ZaGlobalConfig.A_zimbraSmtpHostname,
@@ -209,6 +209,10 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 					{ref:ZaGlobalConfig.A_zimbraAttachmentsBlocked, type: _CHECKBOX_,
 				  		label: ZaMsg.NAD_GlobalRemoveAllAttachments,
 				  		trueValue: "TRUE", falseValue: "FALSE"
+					},
+					{ ref: ZaGlobalConfig.A_zimbraMtaBlockedExtensionWarnRecipient, type: _CHECKBOX_,
+					  label: ZaMsg.zimbraMtaBlockedExtensionWarnRecipient,
+					  trueValue:"TRUE", falseValue:"FALSE"
 					}
 				 ]},
 				 {type:_GROUP_, width: "98%", numCols: 1,
