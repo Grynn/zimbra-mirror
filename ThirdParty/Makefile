@@ -52,7 +52,7 @@ HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
 
 HTTPD_VERSION ?= 2.2.11
 
-POSTFIX_VERSION ?= 2.5.6.3z
+POSTFIX_VERSION ?= 2.6.2.2z
 
 DIRS := openssl \
 	mysql \
