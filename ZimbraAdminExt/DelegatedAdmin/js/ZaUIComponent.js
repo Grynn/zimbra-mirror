@@ -148,7 +148,7 @@ if (ZaTabView.ObjectModifiers["ZaDLXFormView"]){
 
 if (ZaTabView.XFormModifiers["ZaAccountXFormView"]){
     ZaSettings.ACCOUNT_UI_COMP_TAB = "accountUIComponentsTab" ;
-    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNT_UI_COMP_TAB, label: com_zimbra_delegatedadmin.UI_Comp_AccountsUICompTab });
+//    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNT_UI_COMP_TAB, label: com_zimbra_delegatedadmin.UI_Comp_AccountsUICompTab });
     ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaUIComponent.accountTargetXFormModifier);
 }
 
@@ -163,7 +163,7 @@ if (ZaItem.ObjectModifiers["ZaDistributionList"]){
 
 if (ZaTabView.XFormModifiers["ZaDLXFormView"]){
     ZaSettings.DL_UI_COMP_TAB = "dlUIComponentsTab" ;
-    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_UI_COMP_TAB, label: com_zimbra_delegatedadmin.UI_Comp_dlUICompTab });
+//    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_UI_COMP_TAB, label: com_zimbra_delegatedadmin.UI_Comp_dlUICompTab });
     ZaTabView.XFormModifiers["ZaDLXFormView"].push(ZaUIComponent.accountTargetXFormModifier);
 }
 
