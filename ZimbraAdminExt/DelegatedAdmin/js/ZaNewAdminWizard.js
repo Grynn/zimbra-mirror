@@ -214,7 +214,7 @@ ZaNewAdminWizard.initToolbarMethod = function () {
         var menuOpList = newMenu.menuOpList ;
         menuOpList.push(new ZaOperation(
                 ZaOperation.NEW_WIZARD, com_zimbra_delegatedadmin.ADMINBB_New_menuItem,
-                com_zimbra_delegatedadmin.ADMINBB_New_tt, "Account", "AccountDis", this._newAdminListener));
+                com_zimbra_delegatedadmin.ADMINBB_New_tt, "DomainAdminUser", "DomainAdminUserDis", this._newAdminListener));
     }
 }
 ZaController.initToolbarMethods["ZaAccountListController"].push(ZaNewAdminWizard.initToolbarMethod);
@@ -463,7 +463,8 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
                         enableDisableChecks:[]
                         //TODO: may need the onchange method
 //              onChange: ZaAccount.setDomainChanged
-                    }
+                    } ,
+                    ZaAccount.getAdminRolesItem ()   
             ]
     }
     cases.push (case_group) ;

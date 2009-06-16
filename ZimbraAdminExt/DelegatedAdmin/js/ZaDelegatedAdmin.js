@@ -116,8 +116,9 @@ if (ZaAccount) {
            showAddButton:true, showAddOnNextRow:true, addButtonWidth: 50,
            addButtonLabel:com_zimbra_delegatedadmin.NAD_Add,
            showRemoveButton:true , removeButtonWidth: 50, removeButtonLabel:com_zimbra_delegatedadmin.NAD_Remove,
-           visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount]==\'TRUE\' "],
-           visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount] ,
+           visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount]==\'TRUE\' " +
+                             "|| instance.attrs[ZaDistributionList.A_isAdminGroup]==\'TRUE\' "],
+           visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount, ZaDistributionList.A_isAdminGroup] ,
            onRemove:ZaAccount.onAdminRoleRemove,
            items:[adminRoleField]
        }
