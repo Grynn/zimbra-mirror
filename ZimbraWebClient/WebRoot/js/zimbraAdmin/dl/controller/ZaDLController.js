@@ -49,19 +49,14 @@ function(entry, openInNewTab, skipRefresh) {
 
 ZaDLController.setViewMethod =
 function (entry)	{
-    if (!this._UICreated) {
-		this._createUI();
-	} 	
 	try {
-		//ZaApp.getInstance().pushView(ZaZimbraAdmin._DL_VIEW);
+	    entry.refresh (false,true) ;
+		this._createUI(entry);
 		ZaApp.getInstance().pushView(this.getContentViewId());
 		if(!entry.id) {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 		} else {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
-//			entry.getMembers();
-//          Allow stacks of functions to be loaded for the view, especially useful to load the permission tab
-            entry.refresh () ;
         }
 		this._view.setDirty(false);
 		entry[ZaModel.currentTab] = "1";
@@ -128,10 +123,10 @@ function(openInNewTab, ev) {
 
 //private and protected methods
 ZaDLController.prototype._createUI = 
-function () {
+function (entry) {
 	//create accounts list view
 	// create the menu operations/listeners first	
-	this._contentView = this._view = new this.tabConstructor(this._container);
+	this._contentView = this._view = new this.tabConstructor(this._container, entry);
 
     this._initToolbar();
 	//always add Help button at the end of the toolbar    

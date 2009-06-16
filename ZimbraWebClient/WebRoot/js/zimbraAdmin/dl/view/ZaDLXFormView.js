@@ -20,14 +20,14 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaDLXFormView = function(parent) {
+ZaDLXFormView = function(parent, entry) {
 	ZaTabView.call(this, parent, "ZaDLXFormView");
 	this.dlStatusChoices = [
 		{value:"enabled", label:ZaMsg.DL_Status_enabled}, 
 		{value:"disabled", label:ZaMsg.DL_Status_disabled}
 	];
 	this.TAB_INDEX = 0;
-	this.initForm(ZaDistributionList.myXModel,this.getMyXForm());
+	this.initForm(ZaDistributionList.myXModel,this.getMyXForm(entry));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_CHANGED, new AjxListener(this, ZaDLXFormView.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaDLXFormView.prototype.handleXFormChange));	
 }
@@ -704,7 +704,20 @@ ZaDLXFormView.isDeleteAliasEnabled = function () {
 	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaDistributionList.A2_alias_selection_cache)));
 }
 
-ZaDLXFormView.myXFormModifier = function(xFormObject) {	
+ZaDLXFormView.NOTES_TAB_ATTRS = [ZaAccount.A_notes];
+ZaDLXFormView.NOTES_TAB_RIGHTS = [];
+
+ZaDLXFormView.MEMBEROF_TAB_ATTRS = [];
+ZaDLXFormView.MEMBEROF_TAB_RIGHTS = [ZaDistributionList.GET_DL_MEMBERSHIP_RIGHT];
+
+ZaDLXFormView.ALIASES_TAB_ATTRS = [ZaAccount.A_zimbraMailAlias];
+ZaDLXFormView.ALIASES_TAB_RIGHTS = [ZaDistributionList.ADD_DL_ALIAS_RIGHT,ZaDistributionList.REMOVE_DL_ALIAS_RIGHT];
+
+ZaDLXFormView.SHARES_TAB_ATTRS = [];
+ZaDLXFormView.SHARES_TAB_RIGHTS = [ZaDistributionList.GET_DL_SHARE_INFO_RIGHT,ZaDistributionList.PUBLISH_SHARE_RIGHT];
+
+
+ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {	
 	var sourceHeaderList = new Array();
 	var sortable=1;
 	sourceHeaderList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "34px", sortable++, "objectClass", true, true);
@@ -721,25 +734,29 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
     
     this.tabChoices = new Array();
 	
-	var _tab1 = ++this.TAB_INDEX;
-	var _tab2 = ++this.TAB_INDEX;	
-	var _tab3 = ++this.TAB_INDEX;	
-	var _tab4 = ++this.TAB_INDEX;
-	var _tab5 = ++this.TAB_INDEX;	
-	
+	var _tab1, _tab2, _tab3, _tab4, _tab5;
+	_tab1 = ++this.TAB_INDEX;
 	this.tabChoices.push({value:_tab1, label:ZaMsg.DLXV_TabMembers});
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_NOTES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) 
-        this.tabChoices.push({value:_tab2, label:ZaMsg.DLXV_TabNotes});
+	if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.NOTES_TAB_ATTRS, ZaDLXFormView.NOTES_TAB_RIGHTS)) {
+		_tab2 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab2, label:ZaMsg.DLXV_TabNotes});	
+	}
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_MEMBEROF_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
-        this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});
+	if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.MEMBEROF_TAB_ATTRS, ZaDLXFormView.MEMBEROF_TAB_RIGHTS)) {
+		_tab3 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});	
+	}
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_ALIASES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
-        this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Aliases});
+	if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.ALIASES_TAB_ATTRS, ZaDLXFormView.ALIASES_TAB_RIGHTS)) {
+		_tab4 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Aliases});	
+	}
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_SHARES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
-        this.tabChoices.push({value:_tab5, label:ZaMsg.Share_TabTitle});
+	if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.SHARES_TAB_ATTRS, ZaDLXFormView.SHARES_TAB_RIGHTS)) {
+		_tab5 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab5, label:ZaMsg.Share_TabTitle});	
+	}
     	
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
 	xFormObject.numCols=5;
@@ -895,7 +912,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 
 		cases.push(case1);
 		
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_NOTES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {				
+	if(_tab2) {				
 		var case2 = 
 		{type:_ZATABCASE_, caseKey:_tab2, colSizes:[10, "auto"], colSpan:"*",
 			items:[
@@ -909,7 +926,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 		};
 		cases.push(case2);
 	}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_MEMBEROF_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {	
+	if(_tab3) {	
 		var case3 = {type:_ZATABCASE_, numCols:2, colSpan:"*", caseKey:_tab3, colSizes: ["50%", "50%"],
 			items: [
 				//layout rapper around the direct/indrect list						
@@ -1086,7 +1103,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 		cases.push(case3);
 	}		
 				
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_ALIASES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(_tab4) {
 		var case4 = {type:_ZATABCASE_, width:"100%", numCols:1, colSizes:["auto"],caseKey:_tab4,
 		items: [
 				{type:_ZA_TOP_GROUPER_, borderCssClass:"LowPadedTopGrouperBorder",
@@ -1125,7 +1142,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 		cases.push(case4);
 	}
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_SHARES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(_tab5) {
 		var shareHeaderList = new Array();
 		shareHeaderList[0] = new ZaListHeaderItem(ZaShare.A_folderPath, ZaMsg.Shares_FolderPath, null, "100px", null, null, false, true);
 		shareHeaderList[1] = new ZaListHeaderItem(ZaShare.A_ownerName, ZaMsg.Shares_OwnerName, null, "106px", null, null, false, true);

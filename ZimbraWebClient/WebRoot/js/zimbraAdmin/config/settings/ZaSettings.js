@@ -340,18 +340,6 @@ ZaSettings.OVERVIEW_ADDRESSES_ITEMS = [ZaSettings.ACCOUNT_LIST_VIEW,ZaSettings.A
 ZaSettings.OVERVIEW_TOOLS_ITEMS = [ZaSettings.MAILQ_VIEW];
 ZaSettings.OVERVIEW_MONITORING_ITEMS = [ZaSettings.GLOBAL_STATS_VIEW,ZaSettings.GLOBAL_STATUS_VIEW,ZaSettings.SERVER_STATS_VIEW];
 
-//Distribution list view tabs
-ZaSettings.DL_MEMBERS_TAB = "dlMembersTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_MEMBERS_TAB, label: ZaMsg.UI_Comp_DLMembersTab });
-ZaSettings.DL_NOTES_TAB = "dlNotesOfTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_NOTES_TAB, label: ZaMsg.UI_Comp_DLNotesTab });
-ZaSettings.DL_MEMBEROF_TAB = "dlMemberOfTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_MEMBEROF_TAB, label: ZaMsg.UI_Comp_DLMemberOfTab });
-ZaSettings.DL_ALIASES_TAB = "dlAliasesTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_ALIASES_TAB, label: ZaMsg.UI_Comp_DLAliasTab });
-ZaSettings.DL_SHARES_TAB = "dlSharesTab";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_SHARES_TAB, label: ZaMsg.UI_Comp_DLSharesTab });
-
 //Domain operations  - it might be duplicated to domain view tabs
 ZaSettings.DOMAIN_GAL_WIZ = "domainGALWizard";
 ZaSettings.DOMAIN_AUTH_WIZ = "domainAuthWizard";
