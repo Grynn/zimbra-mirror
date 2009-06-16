@@ -806,7 +806,7 @@ ZaDistributionList.publishShare = function (shares, unpublish, callback) {
 }
 
 ZaDistributionList.removeDeletedMembers = function (mods, obj, dl, finishedCallback) {
-	if(!ZaItem.hasRight(ZaDistributionList.REMOVE_DL_MEMBER_RIGHT)) {
+	if(!ZaItem.hasRight(ZaDistributionList.REMOVE_DL_MEMBER_RIGHT, obj)) {
 		if(finishedCallback && finishedCallback instanceof AjxCallback) {
 			finishedCallback.run();
 		}
@@ -837,7 +837,7 @@ ZaDistributionList.removeDeletedMembers = function (mods, obj, dl, finishedCallb
 ZaItem.modifyMethods["ZaDistributionList"].push(ZaDistributionList.removeDeletedMembers);
 
 ZaDistributionList.addNewMembers = function (mods, obj, dl, finishedCallback) {
-	if(!ZaItem.hasRight(ZaDistributionList.ADD_DL_MEMBER_RIGHT)) {
+	if(!ZaItem.hasRight(ZaDistributionList.ADD_DL_MEMBER_RIGHT,obj)) {
 		if(finishedCallback && finishedCallback instanceof AjxCallback) {
 			finishedCallback.run();
 		}

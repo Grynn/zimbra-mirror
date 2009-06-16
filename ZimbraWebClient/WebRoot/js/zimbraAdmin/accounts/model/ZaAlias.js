@@ -231,7 +231,7 @@ function (val, targetType) {
  */
 ZaAlias.prototype.getAliasTargetObj =
 function () {
-	var targetObj ; 
+	var targetObj;
 	var targetType = this.attrs[ZaAlias.A_targetType] ;
 	var targetName = this.attrs[ZaAlias.A_targetAccount] ;
 	var targetId = this.attrs[ZaAlias.A_AliasTargetId] ;
@@ -247,4 +247,25 @@ function () {
 	targetObj.load("name", targetName, false, true);
 	
 	return targetObj ;
+}
+
+ZaAlias.prototype.initEffectiveRightsFromJS = function(resp) {
+	if(!this.targetObj) {
+		var targetType = this.attrs[ZaAlias.A_targetType] ;
+		var targetName = this.attrs[ZaAlias.A_targetAccount] ;
+		var targetId = this.attrs[ZaAlias.A_AliasTargetId] ;
+
+		if (targetType == ZaAlias.TARGET_TYPE_DL) {
+			this.targetObj = new ZaDistributionList(targetId, targetName) ;
+		} else if (targetType == ZaAlias.TARGET_TYPE_ACCOUNT) {
+			this.targetObj = new ZaAccount();
+			this.targetObj.id = targetId;
+			this.targetObj.name = targetName;
+			if(!this.targetObj.attrs)
+				this.targetObj.attrs = {};
+			this.targetObj.attrs[ZaItem.A_cn] = targetName;
+			this.targetObj.attrs[ZaItem.A_zimbraId] = targetId;
+		}
+	}
+	this.targetObj.initEffectiveRightsFromJS(resp);
 }

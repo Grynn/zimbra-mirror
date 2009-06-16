@@ -29,6 +29,7 @@ ZaItemList = function(constructor) {
 	this.loadedRights = false;
 	this._vector = new ZaItemVector();
 	this._idHash = new Object();
+	this._targetIdHash = new Object();
 }
 
 ZaItemList.prototype = new ZaModel;
@@ -42,9 +43,13 @@ function() {
 ZaItemList.prototype.replace =
 function (item, index) {
 	this._vector.replace(item, index);
-if (item.id) {
+	if (item.id) {
 		this._idHash[item.id] = item;
-	}	
+	}
+	if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
+		this._targetIdHash[item.attrs[ZaAlias.A_AliasTargetId]] = item;
+	}
+		
 }
 
 ZaItemList.prototype.replaceItem =
@@ -52,6 +57,10 @@ function (item) {
 	if (item.id) {
 		this._idHash[item.id] = item;
 	}
+	if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
+		this._targetIdHash[item.attrs[ZaAlias.A_AliasTargetId]] = item;
+	}
+	
 }
 
 
@@ -67,6 +76,9 @@ function(item, index) {
 	if (item.id) {
 		this._idHash[item.id] = item;
 	}
+	if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
+		this._targetIdHash[item.attrs[ZaAlias.A_AliasTargetId]] = item;
+	}
 }
 
 /**
@@ -79,6 +91,11 @@ function(item) {
 	this._vector.remove(item);
 	if (item.id)
 		delete this._idHash[item.id];
+		
+	if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId] && this._targetIdHash[item.attrs[ZaAlias.A_AliasTargetId]]) {
+		 delete this._targetIdHash[item.attrs[ZaAlias.A_AliasTargetId]];
+	}
+		
 }
 
 /**
@@ -120,7 +137,8 @@ function() {
 */
 ZaItemList.prototype.getItemById =
 function(id) {
-	return this._idHash[id];
+	return this._idHash[id] ? this._idHash[id] : 
+		this._targetIdHash[id] ? this._targetIdHash[id] : null;
 }
 
 /**
@@ -132,6 +150,11 @@ function() {
 	for (var id in this._idHash)
 		this._idHash[id] = null;
 	this._idHash = new Object();
+
+	for (var id in this._targetIdHash)
+		this._targetIdHash[id] = null;
+	
+	this._targetIdHash = null;
 }
 
 /**
@@ -209,14 +232,22 @@ ZaItemList.prototype.loadEffectiveRights = function() {
 	soapDoc.setMethodAttribute("onerror", "continue");	
 	
 	for(var i=0; i < cnt; i++) {
-		if(arr[i].id && arr[i].loadEffectiveRights && arr[i].type) {
+		if(arr[i].id && arr[i].loadEffectiveRights && arr[i].type &&
+			(arr[i].type == ZaItem.ACCOUNT || arr[i].type == ZaItem.DL || arr[i].type == ZaItem.RESOURCE
+			|| arr[i].type == ZaItem.DOMAIN || arr[i].type == ZaItem.COS || arr[i].type == ZaItem.ZIMLET)) {
 			var getEffRightsDoc = soapDoc.set("GetEffectiveRightsRequest", null, null, ZaZimbraAdmin.URN);
-			getEffRightsDoc.setAttribute("applyCos", "0");
 			var elTarget = soapDoc.set("target", arr[i].id, getEffRightsDoc);
 			elTarget.setAttribute("by","id");
 			elTarget.setAttribute("type", arr[i].type);
 			var elGrantee = soapDoc.set("grantee", ZaZimbraAdmin.currentUserId, getEffRightsDoc);
 			elGrantee.setAttribute("by","id");			
+		} else if (arr[i].type == ZaItem.ALIAS && arr[i].attrs[ZaAlias.A_AliasTargetId]) {
+			var getEffRightsDoc = soapDoc.set("GetEffectiveRightsRequest", null, null, ZaZimbraAdmin.URN);
+			var elTarget = soapDoc.set("target", arr[i].attrs[ZaAlias.A_AliasTargetId], getEffRightsDoc);
+			elTarget.setAttribute("by","id");
+			elTarget.setAttribute("type", arr[i].attrs[ZaAlias.A_targetType]);
+			var elGrantee = soapDoc.set("grantee", ZaZimbraAdmin.currentUserId, getEffRightsDoc);
+			elGrantee.setAttribute("by","id");						
 		}
 	}
 	params = new Object();

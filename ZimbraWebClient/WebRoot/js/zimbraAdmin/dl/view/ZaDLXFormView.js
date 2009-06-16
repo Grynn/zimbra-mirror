@@ -1119,18 +1119,18 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 							items: [
 								{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
 									onActivate:"ZaDLXFormView.deleteAliasButtonListener.call(this);",id:"deleteAliasButton",
-									enableDisableChecks:[ZaDLXFormView.isDeleteAliasEnabled,[XFormItem.prototype.hasRight,ZaAccount.REMOVE_DL_ALIAS_RIGHT]],
+									enableDisableChecks:[ZaDLXFormView.isDeleteAliasEnabled,[XFormItem.prototype.hasRight,ZaDistributionList.REMOVE_DL_ALIAS_RIGHT]],
 									enableDisableChangeEventSources:[ZaDistributionList.A2_alias_selection_cache]
 								},
 								{type:_CELLSPACER_},
 								{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
 									enableDisableChangeEventSources:[ZaDistributionList.A2_alias_selection_cache],
-									enableDisableChecks:[ZaDLXFormView.isEditAliasEnabled,[XFormItem.prototype.hasRight,ZaAccount.REMOVE_DL_ALIAS_RIGHT],[XFormItem.prototype.hasRight,ZaAccount.ADD_DL_ALIAS_RIGHT]],
+									enableDisableChecks:[ZaDLXFormView.isEditAliasEnabled,[XFormItem.prototype.hasRight,ZaDistributionList.REMOVE_DL_ALIAS_RIGHT],[XFormItem.prototype.hasRight,ZaAccount.ADD_DL_ALIAS_RIGHT]],
 									onActivate:"ZaDLXFormView.editAliasButtonListener.call(this);",id:"editAliasButton"
 								},
 								{type:_CELLSPACER_},
 								{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
-									enableDisableChecks:[[XFormItem.prototype.hasRight,ZaAccount.ADD_DL_ALIAS_RIGHT]],
+									enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_ALIAS_RIGHT]],
 									onActivate:"ZaDLXFormView.addAliasButtonListener.call(this);"
 								}
 							]
