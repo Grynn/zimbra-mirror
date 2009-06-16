@@ -182,9 +182,9 @@ ZaCert.certsServerListTreeListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("Show the server lists ...") ;
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(
-			ZaApp.getInstance().getCertsServerListController(),ZaCertsServerListController.prototype.show, ZaServer.getAll(ZaApp.getInstance()));
+			ZaApp.getInstance().getCertsServerListController(),ZaCertsServerListController.prototype.show, ZaServer.getAll());
 	} else {					
-		ZaApp.getInstance().getCertsServerListController().show(ZaServer.getAll(ZaApp.getInstance()));
+		ZaApp.getInstance().getCertsServerListController().show(ZaServer.getAll());
 	}
 }
 
