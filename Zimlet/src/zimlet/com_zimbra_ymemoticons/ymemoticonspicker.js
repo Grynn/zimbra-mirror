@@ -13,13 +13,17 @@
  * ***** END LICENSE BLOCK *****
  */
 
-YMEmoticonsPickerButton = function(params){
+YMEmoticonsPickerButton = function(params, popBelow){
 
 	if (arguments.length == 0) return;
 	params.actionTiming = DwtButton.ACTION_MOUSEUP;
     DwtToolBarButton.call(this, params);
 	this.setEmoticon();
-    this.setMenu(new AjxCallback(this, this._createMenu), false, false, true);
+	if(popBelow && popBelow == true)
+		this.setMenu(new AjxCallback(this, this._createMenu), false, false, false);
+	else
+		this.setMenu(new AjxCallback(this, this._createMenu), false, false, true);
+
 };
 
 YMEmoticonsPickerButton.prototype = new DwtToolBarButton;
@@ -104,6 +108,7 @@ YMEmoticonsPicker.prototype.getDefaultSmiley = YMEmoticonsPicker.getDefaultSmile
 
 YMEmoticonsPicker.prototype._createEmoticonsPicker = function(parent){
 	this._createEmoticonsTable();
+	//this.setSize("250px",Dwt.DEFAULT);
 	this._registerHandlers();
 };
 
@@ -128,7 +133,7 @@ YMEmoticonsPicker.prototype.getSmiley = function(id){
 	return YMEmoticonsPicker.SMILEYS[id];
 };
 
-YMEmoticonsPicker.EMOTICONS_PER_ROW = 10;
+YMEmoticonsPicker.EMOTICONS_PER_ROW = 11;
 YMEmoticonsPicker.prototype._createEmoticonsTable = function(){
 	var idx = 0;
 	var html = [];
@@ -138,7 +143,7 @@ YMEmoticonsPicker.prototype._createEmoticonsTable = function(){
 	var width = 0;
 	var height =0;
 	for(var smiley in YMEmoticonsPicker.SMILEYS){
-		if( counter != 0 && !(counter%10) ){ 
+		if( counter != 0 && !(counter % YMEmoticonsPicker.EMOTICONS_PER_ROW) ){ 
 			html[idx++] = "</tr><tr>";
 			if(totalWidth > maxWidth) {
 				maxWidth = totalWidth;
@@ -148,15 +153,12 @@ YMEmoticonsPicker.prototype._createEmoticonsTable = function(){
 		width = YMEmoticonsPicker.SMILEYS[smiley].width;
 		height = YMEmoticonsPicker.SMILEYS[smiley].height;
 		html[idx++] = ["<td style='background-color:#FFFFFF;' align=\"center\" valign=\"middle\" id='", smiley , "' >"].join("");
-		html[idx++] = ["<img  height='", height, "' width='", width, "' src='", YMEmoticonsPicker.SMILEYS[smiley].src, "'/>"].join("");
+		html[idx++] = ["<img  height='", height, "' width='", width, "' src='", YMEmoticonsPicker.SMILEYS[smiley].src, "'","  title='", YMEmoticonsPicker.SMILEYS[smiley].alt,"  ",YMEmoticonsPicker.SMILEYS[smiley].text,"'","  />"].join("");
 		html[idx++] = "</td>";
 		counter++;
 		totalWidth = totalWidth + width;
 	}
-	var blankcells = (counter-1)%10;
-	if( blankcells > 0 ){
-		html[idx++] = "<td colspan='"+blankcells+"'></td></tr>";
-	}
+
 	html[idx++] = "</table>"
 
 	var firstLine = ["<table  cellpadding='2' cellspacing='3' border='0' align='center' width='", maxWidth, "px'><tr>"].join("");

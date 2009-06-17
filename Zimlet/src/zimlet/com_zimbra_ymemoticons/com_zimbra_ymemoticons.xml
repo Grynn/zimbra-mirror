@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_ymemoticons" version="2.0" description="ymemoticons - Yahoo! Emoticons">
+<zimlet name="com_zimbra_ymemoticons" version="2.5" description="ymemoticons - Yahoo! Emoticons" target="main compose-window">
   <!-- note: since we probably can't bundle the Yahoo icons with
        Zimbra, this Zimlet links to them directly on the Yahoo
        website.  See http://messenger.yahoo.com/emoticons.php -->
@@ -6,5 +6,19 @@
   <include>ymemoticons.js</include>
   <include>smileys.js</include>
   <include>ymemoticonspicker.js</include>
+   <includeCSS>yemoticons.css</includeCSS>
   <handlerObject>Com_Zimbra_YMEmoticons</handlerObject>
+
+  <zimletPanelItem label="Emoticons" icon="yemoticons-panelIcon">
+    <toolTipText>Yahoo! Emoticons</toolTipText>
+		<contextMenu>
+			<menuItem label="Temporarily disable in Mail" id="YE_TEMP_DISABLE"/>
+			<menuItem label="Preferences" id="YE_PREFERENCES"/>
+		</contextMenu>
+  </zimletPanelItem>
+
+ <userProperties>
+   <property type="string" name="yemoticons_enableInMail" value="true"/>
+ </userProperties>
+
 </zimlet>
