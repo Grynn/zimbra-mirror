@@ -6,9 +6,20 @@
     postrotate
       killall -HUP syslogd 2> /dev/null || true
       su - zimbra -c "/opt/zimbra/bin/zmswatchctl restart" > /dev/null 2>&1 || true
-      su - zimbra -c "/opt/zimbra/bin/zmlogswatchctl restart" > /dev/null 2>&1 || true
     endscript
     compress
+}
+
+/var/log/zimbra-stats.log {
+    daily
+    missingok
+    notifempty
+    create 0644 zimbra zimbra
+    postrotate
+      killall -HUP syslogd 2> /dev/null || true
+      su - zimbra -c "/opt/zimbra/bin/zmlogswatchctl restart" > /dev/null 2>&1 || true
+    endscript
+    rotate 0
 }
 
 /opt/zimbra/log/myslow.log {
