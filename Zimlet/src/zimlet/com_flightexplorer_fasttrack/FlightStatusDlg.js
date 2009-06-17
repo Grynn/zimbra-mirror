@@ -43,9 +43,8 @@ function FlightStatusDlg(parent, className, zimlet) {
 	
 	Dwt.setSize(this._flightCodeInputField.getInputElement(), "50px", "22px");	
 	this._flightCodeInputField.reparentHtmlElement(this.flightCodeInputCellid);
-			
-	this._tabGroup.addMember(this._flightNumInputField);
-	this._tabGroup.addMember(this._flightCodeInputField);	
+	//this._tabGroup.addMember(this._flightNumInputField);
+	//this._tabGroup.addMember(this._flightCodeInputField);	
 }
 
 FlightStatusDlg.prototype = new ZmDialog;
@@ -74,7 +73,7 @@ FlightStatusDlg.prototype._okButtonListener = function () {
 
 FlightStatusDlg.prototype.popdown =
 function() {
-//	this.shell.getKeyboardMgr().enable(true);
+	this._tabGroup.removeAllMembers();
 	appCtxt.getShell().setCursor("default");
 	ZmDialog.prototype.popdown.call(this);
 }

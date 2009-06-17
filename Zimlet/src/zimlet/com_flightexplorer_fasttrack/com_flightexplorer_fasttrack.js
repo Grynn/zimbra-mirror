@@ -522,6 +522,11 @@ function(startDate) {
 	} else {
 		startDate.setMinutes(0);
 	}
+
+	if (this._apptComposeController == undefined) {//load calendar package when we are creating appt for the first time(since login)
+		this._apptComposeController = AjxDispatcher.run("GetApptComposeController");
+	}
+
 	var newAppt = new ZmAppt();
 	newAppt.setStartDate(startDate);
 
