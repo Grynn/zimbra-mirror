@@ -45,12 +45,9 @@ public class OfflineServiceProxy extends DocumentHandler {
             else
                 throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
         }
-        
-        Element parent = request.getParent();
-        boolean fromBatch = parent != null && parent.getName().equals("BatchRequest");
-        
+                
         Element response = ((OfflineMailbox)mbox).proxyRequest(request, ctxt.getResponseProtocol(), mQuiet, mOp);
-        if (fromBatch && response != null)
+        if (response != null)
             response.detach();
         
         if (mQuiet && response == null)

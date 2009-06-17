@@ -69,8 +69,6 @@ public class OfflineFolderAction extends FolderAction {
         OfflineMailbox ombx = (OfflineMailbox) mbox;
         boolean traceOn = ombx.getOfflineAccount().isDebugTraceEnabled();
         boolean quietWhenOffline = !operation.equals(OP_GRANT) && !operation.equals(OP_REVOKE);
-        Element parent = request.getParent();
-        boolean fromBatch = parent != null && parent.getName().equals("BatchRequest");
  
         boolean isNew = ombx.pushNewFolder(octxt, id);       
         if (operation.equals(OP_REFRESH) || operation.equals(OP_IMPORT)) {
@@ -86,7 +84,7 @@ public class OfflineFolderAction extends FolderAction {
         
         // proxy this operation to the remote server
         Element response = ombx.proxyRequest(request, zsc.getResponseProtocol(), quietWhenOffline, operation);
-        if (fromBatch && response != null)
+        if (response != null)
             response.detach();
         
         if (operation.equals(OP_REFRESH) || operation.equals(OP_IMPORT)) {
