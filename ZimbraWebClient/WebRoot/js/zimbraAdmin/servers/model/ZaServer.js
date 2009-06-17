@@ -737,7 +737,9 @@ function(by, val) {
 		params = new Object();
 		params.soapDoc = soapDoc;	
 		params.asyncMode = false;
-		params.targetServer = this.id;
+		if(this.attrs && this.attrs[ZaServer.A_zimbraMailboxServiceInstalled] && this.attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
+			params.targetServer = this.id;
+		}
 		var reqMgrParams = {
 			controller : ZaApp.getInstance().getCurrentController(),
 			busyMsg : ZaMsg.BUSY_GET_SERVER
