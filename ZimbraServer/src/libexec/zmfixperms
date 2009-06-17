@@ -173,6 +173,14 @@ if [ -d ${zimbra_home} ]; then
     chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/wiki
   fi
 
+  if [ -d ${zimbra_home}/convertd ]; then
+    if [ !-d ${zimbra_home}/convertd/convert ]; then
+      mkdir -p ${zimbra_home}/convertd/convert
+    fi
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/convertd/convert
+    chmod 755 ${zimbra_home}/convertd/convert
+  fi
+
   if [ -d ${zimbra_home}/conf ]; then
     printMsg "Fixing ownership and permissions on ${zimbra_home}/conf"
     chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf
