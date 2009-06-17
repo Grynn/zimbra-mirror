@@ -31,8 +31,8 @@ import java.io.IOException;
 public final class OfflineYAuth {
     private static final String APPID = OfflineLC.zdesktop_yauth_appid.value();
     
-    private static final Map<Integer, RawAuthManager> rams =
-        new HashMap<Integer, RawAuthManager>();
+    private static final Map<Long, RawAuthManager> rams =
+        new HashMap<Long, RawAuthManager>();
 
     public static Authenticator newAuthenticator(DataSource ds)
         throws ServiceException {
@@ -65,22 +65,22 @@ public final class OfflineYAuth {
         }
     }
     
-    public static RawAuthManager getRawAuthManager(Mailbox mb)
+    public static RawAuthManager getRawAuthManager(Mailbox mbox)
         throws ServiceException {
         synchronized (rams) {
-            int id = mb.getId();
+            long id = mbox.getId();
             RawAuthManager ram = rams.get(id);
             if (ram == null) {
-                ram = new RawAuthManager(new MetadataTokenStore(mb));
+                ram = new RawAuthManager(new MetadataTokenStore(mbox));
                 rams.put(id, ram);
             }
             return ram;
         }
     }
 
-    public static void deleteRawAuthManager(Mailbox mb) {
+    public static void deleteRawAuthManager(Mailbox mbox) {
         synchronized (rams) {
-            rams.remove(mb.getId());
+            rams.remove(mbox.getId());
         }
     }
 }

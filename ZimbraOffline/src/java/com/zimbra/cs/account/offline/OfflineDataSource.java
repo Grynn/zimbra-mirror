@@ -229,7 +229,7 @@ public class OfflineDataSource extends DataSource {
 		return isSyncEnabledByDefault(localPath);
 	}
 
-    public boolean isSaveToSent() {
+    @Override public boolean isSaveToSent() {
         return getType() == Type.pop3 || knownService == null || knownService.saveToSent;
     }
 
@@ -250,7 +250,7 @@ public class OfflineDataSource extends DataSource {
     private static final Map<Object, SyncState> sSyncStateMap =
         Collections.synchronizedMap(new LinkedHashMap<Object, SyncState>() {
             @SuppressWarnings("unchecked")
-            protected boolean removeEldestEntry(Map.Entry eldest) {
+            @Override protected boolean removeEldestEntry(Map.Entry eldest) {
                 return size() > MAX_ENTRIES;
             }
         });
@@ -289,8 +289,7 @@ public class OfflineDataSource extends DataSource {
         }
     }
 
-    @Override
-    public void clearSyncState(int folderId) {
+    @Override public void clearSyncState(int folderId) {
         Object key = key(folderId);
         OfflineLog.offline.debug("clearSyncState: folder %d, key = %s", folderId, key);
         if (key != null) {
@@ -300,15 +299,14 @@ public class OfflineDataSource extends DataSource {
 
     private Object key(int folderId) {
         try {
-            int mailboxId = getMailbox().getId();
-            return (long) mailboxId << 32 | (folderId & 0xffffffffL);
+            long mailboxId = getMailbox().getId();
+            return mailboxId << 32 | (folderId & 0xffffffffL);
         } catch (ServiceException e) {
             return null;
         }
     }
 
-    @Override
-    public void reportError(int itemId, String error, Exception e) {
+    @Override public void reportError(int itemId, String error, Exception e) {
         String data = "";
         try {
             // If this is a message, then indicate folder name

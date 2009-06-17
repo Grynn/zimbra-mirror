@@ -60,7 +60,7 @@ public class DbOfflineMailbox {
                     " FROM " + table + " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?)");
             int pos = 1;
             stmt.setInt(pos++, newId);
-            stmt.setInt(pos++, mbox.getId());
+            pos = DbMailItem.setMailboxId(stmt, mbox, pos);
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
             stmt.close();
@@ -73,7 +73,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "item_id = ?");
                 pos = 1;
                 stmt.setInt(pos++, newId);
-                stmt.setInt(pos++, mbox.getId());
+                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
                 stmt.setInt(pos++, item.getId());
                 stmt.executeUpdate();
                 stmt.close();
@@ -86,7 +86,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "conv_id = ?");
                 pos = 1;
                 stmt.setInt(pos++, newId);
-                stmt.setInt(pos++, mbox.getId());
+                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
                 stmt.setInt(pos++, item.getId());
                 stmt.executeUpdate();
                 stmt.close();
@@ -99,7 +99,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "item_id = ?");
                 pos = 1;
                 stmt.setInt(pos++, newId);
-                stmt.setInt(pos++, mbox.getId());
+                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
                 stmt.setInt(pos++, item.getId());
                 stmt.executeUpdate();
                 stmt.close();
@@ -112,7 +112,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "folder_id = ?");
                 pos = 1;
                 stmt.setInt(pos++, newId);
-                stmt.setInt(pos++, mbox.getId());
+                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
                 stmt.setInt(pos++, item.getId());
                 stmt.executeUpdate();
                 stmt.close();
@@ -125,7 +125,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "parent_id = ?");
                 pos = 1;
                 stmt.setInt(pos++, newId);
-                stmt.setInt(pos++, mbox.getId());
+                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
                 stmt.setInt(pos++, item.getId());
                 stmt.executeUpdate();
                 stmt.close();
@@ -135,7 +135,7 @@ public class DbOfflineMailbox {
             stmt = conn.prepareStatement("DELETE FROM " + DbMailItem.getMailItemTableName(mbox) +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
             pos = 1;
-            stmt.setInt(pos++, mbox.getId());
+            pos = DbMailItem.setMailboxId(stmt, mbox, pos);
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
             stmt.close();
@@ -162,7 +162,7 @@ public class DbOfflineMailbox {
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
             int pos = 1;
             stmt.setInt(pos++, newId);
-            stmt.setInt(pos++, mbox.getId());
+            pos = DbMailItem.setMailboxId(stmt, mbox, pos);
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
             stmt.close();
@@ -174,7 +174,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "folder_id = ?");
                 pos = 1;
                 stmt.setInt(pos++, newId);
-                stmt.setInt(pos++, mbox.getId());
+                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
                 stmt.setInt(pos++, item.getId());
                 stmt.executeUpdate();
                 stmt.close();
@@ -187,7 +187,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "parent_id = ?");
                 pos = 1;
                 stmt.setInt(pos++, newId);
-                stmt.setInt(pos++, mbox.getId());
+                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
                 stmt.setInt(pos++, item.getId());
                 stmt.executeUpdate();
                 stmt.close();
@@ -217,7 +217,7 @@ public class DbOfflineMailbox {
                 int pos = 1;
                 stmt.setLong(pos++, ~tag.getBitmask());
                 stmt.setLong(pos++, newMask);
-                stmt.setInt(pos++, mbox.getId());
+                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
                 stmt.setLong(pos++, tag.getBitmask());
                 stmt.executeUpdate();
             } else {
@@ -227,7 +227,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + Db.bitmaskAND("tags") + " AND NOT " + Db.bitmaskAND("tags"));
                 int pos = 1;
                 stmt.setLong(pos++, newMask);
-                stmt.setInt(pos++, mbox.getId());
+                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
                 stmt.setLong(pos++, tag.getBitmask());
                 stmt.setLong(pos++, newMask);
                 stmt.executeUpdate();
@@ -239,7 +239,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + Db.bitmaskAND("tags"));
                 pos = 1;
                 stmt.setLong(pos++, tag.getBitmask());
-                stmt.setInt(pos++, mbox.getId());
+                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
                 stmt.setLong(pos++, tag.getBitmask());
                 stmt.executeUpdate();
             }
@@ -259,7 +259,7 @@ public class DbOfflineMailbox {
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
             int pos = 1;
             stmt.setInt(pos++, date);
-            stmt.setInt(pos++, mbox.getId());
+            pos = DbMailItem.setMailboxId(stmt, mbox, pos);
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -280,7 +280,7 @@ public class DbOfflineMailbox {
                     " FROM " + DbMailItem.getMailItemTableName(ombx) + Db.forceIndex("i_change_mask") +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask IS NOT NULL");
             int pos = 1;
-            stmt.setInt(pos++, ombx.getId());
+            pos = DbMailItem.setMailboxId(stmt, ombx, pos);
 
             rs = stmt.executeQuery();
             while (rs.next())
@@ -293,34 +293,33 @@ public class DbOfflineMailbox {
             DbPool.closeStatement(stmt);
         }
     }
-    
-	public static Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(OfflineMailbox ombx)
-			throws ServiceException {
-		Connection conn = ombx.getOperationConnection();
-		
-		Map<Integer, Pair<Integer, Integer>> result = new HashMap<Integer, Pair<Integer, Integer>>();
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = conn.prepareStatement("SELECT id, change_mask, flags" +
-					" FROM " + DbMailItem.getMailItemTableName(ombx) + Derby.forceIndex("i_change_mask") +
-					" WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask IS NOT NULL");
-			int pos = 1;
-			stmt.setInt(pos++, ombx.getId());
-		
-			rs = stmt.executeQuery();
-			while (rs.next())
-				result.put(rs.getInt(1), new Pair<Integer, Integer>(rs.getInt(2), rs.getInt(3)));
-			return result;
-		} catch (SQLException e) {
-			throw ServiceException.FAILURE("getting changed item ids for ombx "
-					+ ombx.getId(), e);
-		} finally {
-			DbPool.closeResults(rs);
-			DbPool.closeStatement(stmt);
-		}
-	}
-    
+
+    public static Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(OfflineMailbox ombx)
+    throws ServiceException {
+        Connection conn = ombx.getOperationConnection();
+
+        Map<Integer, Pair<Integer, Integer>> result = new HashMap<Integer, Pair<Integer, Integer>>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement("SELECT id, change_mask, flags" +
+                    " FROM " + DbMailItem.getMailItemTableName(ombx) + Derby.forceIndex("i_change_mask") +
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask IS NOT NULL");
+            int pos = 1;
+            pos = DbMailItem.setMailboxId(stmt, ombx, pos);
+
+            rs = stmt.executeQuery();
+            while (rs.next())
+                result.put(rs.getInt(1), new Pair<Integer, Integer>(rs.getInt(2), rs.getInt(3)));
+            return result;
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("getting changed item ids for ombx " + ombx.getId(), e);
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+        }
+    }
+
     public static List<Pair<Integer, Integer>> getSimpleUnreadChanges(OfflineMailbox ombx, boolean isUnread) throws ServiceException {
     	Connection conn = ombx.getOperationConnection();
     	List<Pair<Integer, Integer>> readList = new ArrayList<Pair<Integer, Integer>>();
@@ -331,7 +330,7 @@ public class DbOfflineMailbox {
                     " FROM " + DbMailItem.getMailItemTableName(ombx) +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type IN (?, ?) AND change_mask=? AND unread=?");
             int pos = 1;
-            stmt.setInt(pos++, ombx.getId());
+            pos = DbMailItem.setMailboxId(stmt, ombx, pos);
             stmt.setShort(pos++, MailItem.TYPE_MESSAGE);
             stmt.setShort(pos++, MailItem.TYPE_CHAT);
             stmt.setInt(pos++, Change.MODIFIED_UNREAD);
@@ -361,7 +360,7 @@ public class DbOfflineMailbox {
                     " FROM " + DbMailItem.getMailItemTableName(ombx) +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type IN (?, ?, ?, ?, ?) AND change_mask=?");
             int pos = 1;
-            stmt.setInt(pos++, ombx.getId());
+            pos = DbMailItem.setMailboxId(stmt, ombx, pos);
             stmt.setShort(pos++, MailItem.TYPE_CONTACT);
             stmt.setShort(pos++, MailItem.TYPE_MESSAGE);
             stmt.setShort(pos++, MailItem.TYPE_CHAT);
@@ -401,7 +400,7 @@ public class DbOfflineMailbox {
                     " FROM " + DbMailItem.getMailItemTableName(ombx) +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id IN" + DbUtil.suitableNumberOfVariables(ids.length));
             int pos = 1;
-            stmt.setInt(pos++, ombx.getId());
+            pos = DbMailItem.setMailboxId(stmt, ombx, pos);
             for (int id : ids)
                 stmt.setInt(pos++, id);
             
@@ -431,7 +430,7 @@ public class DbOfflineMailbox {
                     " FROM " + DbMailItem.getMailItemTableName(ombx) +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id IN" + DbUtil.suitableNumberOfVariables(ids.length));
             int pos = 1;
-            stmt.setInt(pos++, ombx.getId());
+            pos = DbMailItem.setMailboxId(stmt, ombx, pos);
             for (int id : ids)
                 stmt.setInt(pos++, id);
             
@@ -462,7 +461,7 @@ public class DbOfflineMailbox {
                     " FROM " + DbMailItem.getMailItemTableName(mbox) +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
             int pos = 1;
-            stmt.setInt(pos++, mbox.getId());
+            pos = DbMailItem.setMailboxId(stmt, mbox, pos);
             stmt.setInt(pos++, item.getId());
 
             rs = stmt.executeQuery();
@@ -491,7 +490,7 @@ public class DbOfflineMailbox {
                 stmt.setNull(pos++, Types.INTEGER);
             else
                 stmt.setInt(pos++, mask);
-            stmt.setInt(pos++, mbox.getId());
+            pos = DbMailItem.setMailboxId(stmt, mbox, pos);
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -512,7 +511,7 @@ public class DbOfflineMailbox {
                 stmt = conn.prepareStatement("SELECT change_mask FROM " + DbMailItem.getMailItemTableName(item) +
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
                 int pos = 1;
-                stmt.setInt(pos++, mbox.getId());
+                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
                 stmt.setInt(pos++, item.getId());
                 rs = stmt.executeQuery();
                 if (rs.next())
@@ -529,7 +528,7 @@ public class DbOfflineMailbox {
             stmt.setInt(pos++, mask);
             if (Db.supports(Db.Capability.BITWISE_OPERATIONS))
                 stmt.setInt(pos++, mask);
-            stmt.setInt(pos++, mbox.getId());
+            pos = DbMailItem.setMailboxId(stmt, mbox, pos);
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -548,7 +547,7 @@ public class DbOfflineMailbox {
                     " SET change_mask = NULL" +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change IS NOT NULL");
             int pos = 1;
-            stmt.setInt(pos++, ombx.getId());
+            pos = DbMailItem.setMailboxId(stmt, ombx, pos);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw ServiceException.FAILURE("clearing change records for items " + ids, e);
@@ -573,7 +572,7 @@ public class DbOfflineMailbox {
                 stmt = conn.prepareStatement("SELECT sequence, ids FROM " + DbMailItem.getTombstoneTableName(ombx) +
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type = ? AND (ids = ? OR ids LIKE ? OR ids LIKE ? OR ids LIKE ?)");
                 int pos = 1;
-                stmt.setInt(pos++, ombx.getId());
+                pos = DbMailItem.setMailboxId(stmt, ombx, pos);
                 stmt.setByte(pos++, type);
                 stmt.setString(pos++, "" + id);
                 stmt.setString(pos++, "%," + id);
@@ -586,7 +585,7 @@ public class DbOfflineMailbox {
                 stmt = conn.prepareStatement("SELECT sequence, ids FROM " + DbMailItem.getTombstoneTableName(ombx) +
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type = ?");
                 int pos = 1;
-                stmt.setInt(pos++, ombx.getId());
+                pos = DbMailItem.setMailboxId(stmt, ombx, pos);
                 stmt.setByte(pos++, type);
                 rs = stmt.executeQuery();
 
@@ -620,7 +619,7 @@ public class DbOfflineMailbox {
                     stmt = conn.prepareStatement("DELETE FROM " + DbMailItem.getTombstoneTableName(ombx) +
                             " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "sequence = ? AND type = ?");
                     int pos = 1;
-                    stmt.setInt(pos++, ombx.getId());
+                    pos = DbMailItem.setMailboxId(stmt, ombx, pos);
                     stmt.setInt(pos++, sequence);
                     stmt.setByte(pos++, type);
                     stmt.executeUpdate();
@@ -635,7 +634,7 @@ public class DbOfflineMailbox {
                             " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "sequence = ? AND type = ?");
                     int pos = 1;
                     stmt.setString(pos++, sb.toString());
-                    stmt.setInt(pos++, ombx.getId());
+                    pos = DbMailItem.setMailboxId(stmt, ombx, pos);
                     stmt.setInt(pos++, sequence);
                     stmt.setByte(pos++, type);
                     stmt.executeUpdate();
@@ -657,7 +656,7 @@ public class DbOfflineMailbox {
             stmt = conn.prepareStatement("DELETE FROM " + DbMailItem.getTombstoneTableName(ombx) +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "sequence <= ?");
             int pos = 1;
-            stmt.setInt(pos++, ombx.getId());
+            pos = DbMailItem.setMailboxId(stmt, ombx, pos);
             stmt.setInt(pos++, token);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -675,7 +674,7 @@ public class DbOfflineMailbox {
         	stmt = conn.prepareStatement("UPDATE mailbox SET account_id = ? WHERE id = ?");
             int pos = 1;
             stmt.setString(pos++, newAccountId);
-            stmt.setInt(pos++, mbox.getId());
+            pos = DbMailItem.setMailboxId(stmt, mbox, pos);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw ServiceException.FAILURE("failed to replace account ID on mailbox " + mbox.getId() , e);

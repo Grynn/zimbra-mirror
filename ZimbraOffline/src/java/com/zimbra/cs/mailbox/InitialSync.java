@@ -1178,9 +1178,7 @@ public class InitialSync {
                 if (data != null) {
                     sharedDeliveryCtxt = new DeliveryContext();
                 } else {
-                    List<Integer> onebox = new ArrayList<Integer>();
-                    onebox.add(ombx.getId());
-                    sharedDeliveryCtxt = new DeliveryContext(false, onebox);
+                    sharedDeliveryCtxt = new DeliveryContext(false, Arrays.asList(ombx.getId()));
                 }
                 msg = ombx.addMessage(new OfflineContext(redo), pm, folderId, true, flags, tags, convId, ":API:", null, sharedDeliveryCtxt);
             }

@@ -80,7 +80,7 @@ CREATE TABLE current_volumes (
 -- -----------------------------------------------------------------------
 
 CREATE TABLE mailbox (
-   id                  INTEGER UNSIGNED NOT NULL PRIMARY KEY,
+   id                  BIGINT UNSIGNED NOT NULL PRIMARY KEY,
    account_id          VARCHAR(127) NOT NULL UNIQUE,  -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
    last_backup_at      INTEGER UNSIGNED,              -- last full backup time, UNIX-style timestamp
    comment             VARCHAR(255)                   -- usually the main email address originally associated with the mailbox
@@ -118,7 +118,7 @@ CREATE TABLE table_maintenance (
    maintenance_date    DATETIME NOT NULL,
    last_optimize_date  DATETIME,
    num_rows            INTEGER UNSIGNED NOT NULL,
-  
+
    PRIMARY KEY (table_name, database_name)
 );
 
@@ -168,7 +168,7 @@ END;
 
 -- Mobile Devices
 CREATE TABLE mobile_devices (
-   mailbox_id          INTEGER UNSIGNED NOT NULL,
+   mailbox_id          BIGINT UNSIGNED NOT NULL,
    device_id           VARCHAR(64) NOT NULL,
    device_type         VARCHAR(64) NOT NULL,
    user_agent          VARCHAR(64),

@@ -20,7 +20,7 @@ PRAGMA encoding = "UTF-8"%
 -- -----------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mailbox (
-   id                  INTEGER UNSIGNED NOT NULL PRIMARY KEY,
+   id                  BIGINT UNSIGNED NOT NULL PRIMARY KEY,
    account_id          VARCHAR(127) NOT NULL UNIQUE,  -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
    index_volume_id     INTEGER NOT NULL,
    item_id_checkpoint  INTEGER UNSIGNED NOT NULL DEFAULT 0,
