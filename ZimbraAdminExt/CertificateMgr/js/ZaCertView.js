@@ -32,7 +32,7 @@ function () {
 
 ZaCertView.prototype.getTabTitle = 
 function () {
-	return com_zimbra_cert_manager.Cert_view_title;
+	return com_zimbra_cert_manager.Cert_view_title + ": "  + this.getTargetServerName();
 }
 
 ZaCertView.prototype.getTabToolTip =
@@ -57,7 +57,7 @@ ZaCertView.prototype._setUI = function (certs) {
 	html.push("<div style='padding-left:10px;'>") ;
 	html.push("<h2>" + com_zimbra_cert_manager.CERT_server_name + this.getTargetServerName() + "</h2>");
 
-	if (certs.cert) {
+	if (certs && certs.cert) {
 		for (var i=0; i < certs.cert.length; i ++) {
 			var currentCert = certs.cert[i];
 			var certType = currentCert.type ;
@@ -101,10 +101,15 @@ ZaCertView.prototype.getCertTable = function (cert) {
 		html.push (com_zimbra_cert_manager.Cert_Service_Unavailable);
 	}
 	return html.join("");
-}
+}                             
 
 ZaCertView.prototype.set = function (certs, targetServerId) {
 	if (AjxEnv.hasFirebug) console.log ("Set the certs") ;
+    //this._containedObject is used to check if the item tab exists already
+    if (!this._containedObject) this._containedObject = {} ;
+    this._containedObject.certs = certs ;
+    this._containedObject.id = targetServerId ;
+
 	this.setTargetServerId(targetServerId);
 	this._setUI (certs);
 }

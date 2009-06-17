@@ -18,15 +18,15 @@ ZaController.initPopupMenuMethods["ZaCertViewController"] = new Array();
 
 ZaCertViewController.prototype.show = 
 function(certs, targetServerId) {
-	if (!this._UICreated) {
-		this._createUI();
-	} 	
-	
-	if (certs != null) {
-		this._contentView.set(certs, targetServerId);
-	}	
-	
-	this._app.pushView(this.getContentViewId());
+    var viewConstructor = ZaCertView ;
+    if ( !this.selectExistingTabByItemId(targetServerId, viewConstructor)) {
+		if (!this._UICreated) {
+            this._createUI();
+        }
+                               
+        this._contentView.set(certs, targetServerId);
+        this._app.pushView(this.getContentViewId());
+    }
 }
 
 

@@ -176,7 +176,7 @@ ZaCert.certOvTreeModifier = function (tree) {
 		}
 	}
 }
-
+                         
 //When the certs tree item is clicked
 ZaCert.certsServerListTreeListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("Show the server lists ...") ;
@@ -196,11 +196,11 @@ ZaCert.certsServerNodeTreeListener = function (ev) {
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(
 			ZaApp.getInstance().getCertViewController(),
-			ZaCertViewController.prototype.show, 
+			ZaCertViewController.prototype.show,
 			[ZaCert.getCerts(ZaApp.getInstance(), serverNodeId), serverNodeId]);
-	} else {					
+	} else {
 		ZaApp.getInstance().getCertViewController().show(
-			ZaCert.getCerts(ZaApp.getInstance(), serverNodeId), 
+			ZaCert.getCerts(ZaApp.getInstance(), serverNodeId),
 			serverNodeId);
 	}
 }

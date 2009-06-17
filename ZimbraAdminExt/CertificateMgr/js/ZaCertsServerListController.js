@@ -119,7 +119,7 @@ function(ev) {
 	}
 	ZaCert.launchNewCertWizard.call (this, serverId) ;
 }
-
+                                    
 ZaCertsServerListController.prototype.viewCertListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("View the certificates ... ") ;
 	ZaApp.getInstance().getCertViewController().show(
