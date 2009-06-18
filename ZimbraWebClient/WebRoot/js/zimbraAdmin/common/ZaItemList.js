@@ -234,7 +234,8 @@ ZaItemList.prototype.loadEffectiveRights = function() {
 	for(var i=0; i < cnt; i++) {
 		if(arr[i].id && arr[i].loadEffectiveRights && arr[i].type &&
 			(arr[i].type == ZaItem.ACCOUNT || arr[i].type == ZaItem.DL || arr[i].type == ZaItem.RESOURCE
-			|| arr[i].type == ZaItem.DOMAIN || arr[i].type == ZaItem.COS || arr[i].type == ZaItem.ZIMLET)) {
+			|| arr[i].type == ZaItem.DOMAIN || arr[i].type == ZaItem.COS || arr[i].type == ZaItem.ZIMLET
+			|| arr[i].type == ZaItem.SERVER)) {
 			var getEffRightsDoc = soapDoc.set("GetEffectiveRightsRequest", null, null, ZaZimbraAdmin.URN);
 			var elTarget = soapDoc.set("target", arr[i].id, getEffRightsDoc);
 			elTarget.setAttribute("by","id");
