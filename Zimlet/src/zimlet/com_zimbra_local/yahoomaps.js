@@ -398,6 +398,7 @@ function(event) {
 
 YahooMaps._addAppt =
 function(params){
+    var apptCC = AjxDispatcher.run("GetApptComposeController");
 	var appt = new ZmAppt();
 	appt.setName(params.name);
 	var isValidStartTime = YahooMaps._isValidTime(params.starttime);
@@ -426,7 +427,6 @@ function(params){
 	].join("");
 	appt.setTextNotes((params.description||"") + directions);
 
-	var apptCC = AjxDispatcher.run("GetApptComposeController");
 	apptCC.show(appt);
 };
 
