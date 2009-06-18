@@ -24,6 +24,7 @@ ZaRightView.prototype.getTabIcon = function () {
 ZaRightView.prototype.setObject =
 function (entry) {
     this._containedObject = entry ;
+    this._containedObject.id = entry.name ;
     this._localXForm.setInstance(this._containedObject) ;
     //update the tab
     this.updateTab();

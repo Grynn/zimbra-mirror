@@ -37,7 +37,7 @@ ZaXFormViewController.preSaveValidationMethods["ZaRightViewController"] = new Ar
 */
 ZaRightViewController.prototype.show =
 function(entry) {
-	if (! this.selectExistingTabByItemId(entry.id)){
+	if (! this.selectExistingTabByItemId(entry.name)){
 		this._setView(entry, true);
 		//this.setDirty(false);
 	}
