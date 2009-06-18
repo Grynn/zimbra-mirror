@@ -26,7 +26,9 @@ ZaController.initToolbarMethods["ZaAllGrantsViewController"] = new Array();
 
 ZaAllGrantsViewController.prototype.show =
 function(entry, openInNewTab, skipRefresh) {
-    this._setView(entry, openInNewTab, skipRefresh);
+    if ( !this.selectExistingTabByItemId(entry[ZaGrant.A_grantee_id])) {
+        this._setView(entry, openInNewTab, skipRefresh);
+    }
 }
 
 ZaAllGrantsViewController.initToolbarMethod =

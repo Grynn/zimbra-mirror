@@ -28,6 +28,7 @@ function(entry) {
     this._containedObject = {};
 
     this._containedObject = entry;
+    this._containedObject.id = entry.grantee.id ;
 
     this._localXForm.setInstance(this._containedObject);
     this.updateTab();

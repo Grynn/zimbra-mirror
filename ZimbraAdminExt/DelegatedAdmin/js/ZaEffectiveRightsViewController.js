@@ -24,7 +24,9 @@ ZaController.initToolbarMethods["ZaEffectiveRightsViewController"] = new Array()
 
 ZaEffectiveRightsViewController.prototype.show =
 function(entry, openInNewTab, skipRefresh) {
-	this._setView(entry, openInNewTab, skipRefresh);
+    if ( !this.selectExistingTabByItemId(entry.grantee.id)) {
+        this._setView(entry, openInNewTab, skipRefresh);
+    }
 }
 
 ZaEffectiveRightsViewController.initToolbarMethod =

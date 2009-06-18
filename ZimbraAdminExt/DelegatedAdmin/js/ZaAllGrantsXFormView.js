@@ -9,10 +9,13 @@ ZaTabView.XFormModifiers["ZaAllGrantsXFormView"] = new Array();
 
 ZaAllGrantsXFormView.prototype.setObject =
 function(entry) {
-    this._containedObject = entry;
+    if (entry != null) {
+        this._containedObject = entry;
+        this._containedObject.id = entry [ZaGrant.A_grantee_id] ;    
 
-    this._localXForm.setInstance(this._containedObject);
-    this.updateTab();
+        this._localXForm.setInstance(this._containedObject);
+        this.updateTab();
+    }
 }
 
 
