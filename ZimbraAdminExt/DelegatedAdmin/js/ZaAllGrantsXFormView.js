@@ -179,13 +179,16 @@ ZaAllGrantsXFormView.changeTab  = function (value, event, form)
     var controller = ZaApp.getInstance ().getCurrentController () ;
     var addBt = controller._toolbar.getButton (ZaOperation.NEW)  ;
     var deleteBt = controller._toolbar.getButton (ZaOperation.DELETE );
-    
+    var editBt = controller._toolbar.getButton (ZaOperation.EDIT);
+
     if (value == form.parent.directGrantsTabId) {
         //enable add and delete button
         deleteBt.setEnabled (true) ;
+        editBt.setEnabled (true) ;
     } else {
         //disable add and delete button
         deleteBt.setEnabled (false) ;
+        editBt.setEnabled (false) ;
     }
 
     this.setInstanceValue(value);

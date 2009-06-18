@@ -565,6 +565,8 @@ ZaTargetPermission.revokeButtonListener = function () {
     }
 }
 
+//@by: grantee or target
+//@isGlobalGrant : is from global grant list view or not
 ZaTargetPermission.editButtonListener = function (by, isGlobalGrant) {
     var instance = this.getInstance();
     var form = this.getForm () ;

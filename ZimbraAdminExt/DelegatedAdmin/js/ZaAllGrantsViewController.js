@@ -35,6 +35,7 @@ ZaAllGrantsViewController.initToolbarMethod =
 function () {
 
     this._toolbarOrder.push(ZaOperation.NEW);
+    this._toolbarOrder.push(ZaOperation.EDIT);
     this._toolbarOrder.push(ZaOperation.DELETE);
     this._toolbarOrder.push(ZaOperation.SEP);
     this._toolbarOrder.push(ZaOperation.CLOSE);
@@ -44,9 +45,14 @@ function () {
             "Permission", "PermissionDis",
             new AjxListener(this, this.addGrantsListener));
 
+    this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT,
+            ZaMsg.TBB_Edit,com_zimbra_delegatedadmin.Grant_Edit_tt,
+            "Properties", "PropertiesDis",
+            new AjxListener(this, this.editGrantsListener));
+
     this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE,
             com_zimbra_delegatedadmin.Bt_revoke, com_zimbra_delegatedadmin.Grant_Delete_tt,
-            "Delete", "DeleteDis",
+    "Delete", "DeleteDis",
             new AjxListener(this, this.deleteGrantsListener));
 
     this._toolbarOperations[ZaOperation.CLOSE] = new ZaOperation(ZaOperation.CLOSE,
@@ -56,6 +62,37 @@ function () {
     this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
 }
 ZaController.initToolbarMethods["ZaAllGrantsViewController"].push(ZaAllGrantsViewController.initToolbarMethod);
+
+ZaAllGrantsViewController.prototype.editGrantsListener = function () {
+    var form = this._contentView._localXForm ;
+    var directGrantsListViewItem = form.getItemsById (ZaGrant.A3_directGrantsList) [0] ;
+
+    var selectedGrants = directGrantsListViewItem.getSelection();
+    if (selectedGrants && selectedGrants.length == 1) {
+        var item = selectedGrants [0] ;
+        if(!this.editRigthDlg) {
+            this.editRigthDlg = new ZaGrantDialog (
+                    ZaApp.getInstance().getAppCtxt().getShell(),
+                    ZaApp.getInstance(), com_zimbra_delegatedadmin.Title_edit_rights,
+                    ZaGrant.A_grantee, true);
+        }
+
+        this.editRigthDlg.registerCallback(ZaGrantDialog.EDIT_FINISH_BUTTON,
+                ZaGrantDialog.prototype.editRightAndFinish, this.editRigthDlg,
+                [form, item, false]);
+
+        var obj = ZaUtil.deepCloneObject (item, ["_evtMgr"]);
+        if (obj[ZaGrant.A_right].indexOf("get.") == 0 || obj[ZaGrant.A_right].indexOf("set.")== 0) {
+            obj[ZaGrant.A_right_type] = "inline" ;
+            obj [ZaGrant.A_inline_right] = ZaGrantDialog.getInlineRightAttrsByName (obj[ZaGrant.A_right]) ;
+        } else { //if it is not "inline", it must be "system"
+            obj[ZaGrant.A_right_type] = "system" ;
+        }
+
+        this.editRigthDlg.setObject(obj);
+        this.editRigthDlg.popup();
+    }
+}
 
 ZaAllGrantsViewController.prototype.addGrantsListener = function () {
     var newGrant = new ZaGrant();
