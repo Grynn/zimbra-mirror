@@ -463,7 +463,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 	];
 
 	var setupGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountSetupGrouper, id:"account_wiz_setup_group", 
-		numCols:2,
+		numCols:2,colSizes:["200px","400px"],
 		items: [
 			{ref:ZaAccount.A_accountStatus, type:_OSELECT1_, msgName:ZaMsg.NAD_AccountStatus,
 				label:ZaMsg.NAD_AccountStatus, 
