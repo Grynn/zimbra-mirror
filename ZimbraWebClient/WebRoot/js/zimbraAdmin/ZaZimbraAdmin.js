@@ -420,6 +420,10 @@ function (resp) {
 	                //get the zimbraPrefLocale
 	                ZaZimbraAdmin.LOCALE = prefs["zimbraPrefLocale"] ;
 	            }
+
+                if (prefs && prefs[ZaAccount.A_zimbraPrefAdminConsoleWarnOnExit]) {
+                    ZaZimbraAdmin.isWarnOnExit = (prefs[ZaAccount.A_zimbraPrefAdminConsoleWarnOnExit] == "TRUE") ;
+                }
 	        }
 		}
     }
@@ -762,10 +766,12 @@ function(msg) {
 /** This method is used for the download link hack to avoid the exit warning message **/
 ZaZimbraAdmin.unloadHackCallback =
 function() {
-	ZaZimbraAdmin.setOnbeforeunload (null) ;
-	var f = function() { ZaZimbraAdmin.setOnbeforeunload(ZaZimbraAdmin._confirmExitMethod); };
-	var t = new AjxTimedAction(null, f);
-	AjxTimedAction.scheduleAction(t, 3000);
+    if (ZaZimbraAdmin.isWarnOnExit) { //hack is only needed when we are set to warn on exit
+        ZaZimbraAdmin.setOnbeforeunload (null) ;
+        var f = function() { ZaZimbraAdmin.setOnbeforeunload(ZaZimbraAdmin._confirmExitMethod); };
+        var t = new AjxTimedAction(null, f);
+        AjxTimedAction.scheduleAction(t, 3000);
+    }
 };
 
 

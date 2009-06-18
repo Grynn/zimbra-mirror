@@ -269,7 +269,8 @@ ZaCosXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaCos.A_zimbraJunkMessagesIndexingEnabled,
 	ZaCos.A_zimbraPrefShowSelectionCheckbox,
 	ZaCos.A_zimbraPrefWarnOnExit,
-	ZaCos.A_zimbraPrefUseKeyboardShortcuts,
+	ZaCos.A_zimbraPrefAdminConsoleWarnOnExit,
+    ZaCos.A_zimbraPrefUseKeyboardShortcuts,
 	ZaCos.A_zimbraPrefImapSearchFoldersEnabled,
 	ZaCos.A_zimbraPrefShowSearchString,
 	ZaCos.A_zimbraPrefMailInitialSearch,
@@ -495,6 +496,10 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     msgName:ZaMsg.NAD_zimbraPrefWarnOnExit,label:ZaMsg.NAD_zimbraPrefWarnOnExit,
                     trueValue:"TRUE", falseValue:"FALSE"
                 },
+                {ref:ZaCos.A_zimbraPrefAdminConsoleWarnOnExit, type:_CHECKBOX_,
+                    msgName:ZaMsg.NAD_zimbraPrefAdminConsoleWarnOnExit,label:ZaMsg.NAD_zimbraPrefAdminConsoleWarnOnExit,
+                    trueValue:"TRUE", falseValue:"FALSE"
+                },  
                 {ref:ZaCos.A_zimbraPrefShowSelectionCheckbox, type:_CHECKBOX_,
                     msgName:ZaMsg.NAD_zimbraPrefShowSelectionCheckbox,label:ZaMsg.NAD_zimbraPrefShowSelectionCheckbox,
                     trueValue:"TRUE", falseValue:"FALSE"

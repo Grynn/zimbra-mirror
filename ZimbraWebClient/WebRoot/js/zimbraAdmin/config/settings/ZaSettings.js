@@ -44,8 +44,10 @@ ZaSettings.postInit = function() {
 		}
 	}	
 
-	appController._launchApp();	
-	ZaZimbraAdmin.setOnbeforeunload(ZaZimbraAdmin._confirmExitMethod);
+	appController._launchApp();
+    if (ZaZimbraAdmin.isWarnOnExit) {
+	    ZaZimbraAdmin.setOnbeforeunload(ZaZimbraAdmin._confirmExitMethod);
+    }
 	ZaSettings.initialized = true;
 	ZaSettings.initializing = false;
 };
