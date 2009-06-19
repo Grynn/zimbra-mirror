@@ -364,13 +364,13 @@ function (filter, key, value, op) {
 		//ignored 			
 					
 	}else if (key == ZaSearchOption.A_objTypeAccount) {
-		if (value == "TRUE") filter.push(ZaSearch.ACCOUNTS);
+		if (value == "TRUE" && (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])) filter.push(ZaSearch.ACCOUNTS);
 	}else if (key == ZaSearchOption.A_objTypeDl) {
-		if (value == "TRUE")  filter.push(ZaSearch.DLS);
-	}else if (key == ZaSearchOption.A_objTypeAlias) {
-		if (value == "TRUE")  filter.push(ZaSearch.ALIASES);
+		if (value == "TRUE"  && (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]))  filter.push(ZaSearch.DLS);
+	}else if (key == ZaSearchOption.A_objTypeAlias ) {
+		if (value == "TRUE" && (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]))  filter.push(ZaSearch.ALIASES);
 	}else if (key == ZaSearchOption.A_objTypeResource) {
-		if (value == "TRUE")  filter.push(ZaSearch.RESOURCES);
+		if (value == "TRUE" && (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) )  filter.push(ZaSearch.RESOURCES);
 	/*}else if (key == ZaSearchOption.A_objTypeDomain) {
 		if (value == "TRUE")  filter.push(ZaSearch.DOMAINS);*/
 	}else if (key == ZaSearchOption.A_objTypeAccountAdmin) {

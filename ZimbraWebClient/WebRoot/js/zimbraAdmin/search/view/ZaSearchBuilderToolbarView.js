@@ -37,9 +37,20 @@ ZaSearchBuilderToolbarView = function(parent){
 	this._toolbarOperations [ZaOperation.CLOSE] = new ZaOperation (ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.tt_advanced_search_close, "Close", "CloseDis", new AjxListener(this, this.closeHndlr));
 	
 	this._toolbarOrder.push(ZaOperation.SEARCH_BY_BASIC);
-	this._toolbarOrder.push(ZaOperation.SEARCH_BY_ADDESS_TYPE);
-	this._toolbarOrder.push(ZaOperation.SEARCH_BY_DOMAIN);
-	this._toolbarOrder.push(ZaOperation.SEARCH_BY_SERVER);
+	
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] 
+		|| ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW]
+		|| ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW]
+		|| ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW]
+		|| ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW])
+		this._toolbarOrder.push(ZaOperation.SEARCH_BY_ADDESS_TYPE);
+	
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+		this._toolbarOrder.push(ZaOperation.SEARCH_BY_DOMAIN);
+	
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+		this._toolbarOrder.push(ZaOperation.SEARCH_BY_SERVER);
+		
 	this._toolbarOrder.push(ZaOperation.SEARCH_BY_ADVANCED);
 	this._toolbarOrder.push(ZaOperation.SEP);
 	this._toolbarOrder.push(ZaOperation.SEARCH_BY_REMOVE_ALL);

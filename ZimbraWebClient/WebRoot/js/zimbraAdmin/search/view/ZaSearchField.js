@@ -511,7 +511,6 @@ ZaSearchField.prototype._getMyXForm = function() {
 		tableCssStyle:"width:100%;padding:2px;",numCols:7,width:"100%",
 		colSizes:["59", "*", Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.search, true, 0), Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.help_search, true, 0), "28", "12", Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.advanced_search, false, 0)],
 		items: [
-//			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
 			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, 
 				name: "searchMenuButton",
 				toolTipContent:ZaMsg.searchToolTip, 
@@ -534,35 +533,35 @@ ZaSearchField.prototype._getMyXForm = function() {
 					//cssClass:"search_input", 
 					cssStyle:"overflow: hidden;", width:"100%"
 				},
-				/*
-				{type:_OUTPUT_, value: AjxImg.getImageHtml("SelectPullDownArrow"),
-					onClick:ZaSearchField.prototype.showSavedSearchButtonHndlr,
-					onMouseOver: ZaSearchField.prototype.showSavedSearchTooltip,
-						name: "showSavedSearchButton" } */
-				
 				{type:_DWT_BUTTON_, label:"", toolTipContent:ZaMsg.tt_savedSearch, 
 					icon: "SelectPullDownArrow", name: "showSavedSearchButton",
 					onActivate:  ZaSearchField.prototype.showSavedSearchButtonHndlr,
-					cssClass: "ZaShowSavedSearchArrowButton" }	
-				]
-			},
+					cssClass: "ZaShowSavedSearchArrowButton",
+					visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"] 
+				}	
+			]},
 					
 			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:"Search", name: "searchButton",
-					onActivate:ZaSearchField.srchButtonHndlr, 
-					cssStyle: AjxEnv.isIE ? "marginLeft: 2px;" : "marginLeft: 5px;",
-					cssClass:"DwtToolbarButton"},
+				onActivate:ZaSearchField.srchButtonHndlr, 
+				cssStyle: AjxEnv.isIE ? "marginLeft: 2px;" : "marginLeft: 5px;",
+				cssClass:"DwtToolbarButton"
+			},
 			
 			{type:_DWT_BUTTON_, label: ZaMsg.help_search , toolTipContent:ZaMsg.tt_help_search, icon:"Help", name: "helpSearchButton",
 				cssStyle:"overflow: hidden" ,	
                 onActivate:ZaSearchField.helpSrchButtonHndlr, cssClass:"DwtToolbarButton"},
 			//Save button
 			{type:_DWT_BUTTON_, label: null , toolTipContent:ZaMsg.tt_save_search, icon:"Save", name: "saveSearchButton",
-					onActivate:ZaSearchField.saveSrchButtonHndlr, cssClass:"DwtToolbarButton"},		
+				onActivate:ZaSearchField.saveSrchButtonHndlr, cssClass:"DwtToolbarButton",
+				visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"] 
+			},		
 			{type: _OUTPUT_, value: ZaToolBar.getSeparatorHtml() },
 			{type:_DWT_BUTTON_, label:ZaMsg.advanced_search, toolTipContent: ZaMsg.tt_advanced_search_open, name: "searchBuildButton",
 				cssStyle:"overflow: hidden" ,	
                 onActivate:ZaSearchField.advancedButtonHndlr,
-					cssClass: "DwtToolbarButton ZaAdvancedSearchButton" }
+                visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW])"],
+				cssClass: "DwtToolbarButton ZaAdvancedSearchButton" 
+			}
 			
 		]
 	};

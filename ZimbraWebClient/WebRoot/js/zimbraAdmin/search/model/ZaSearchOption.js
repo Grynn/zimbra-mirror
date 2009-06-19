@@ -234,28 +234,28 @@ function (optionId, height){
 			label: ZaMsg.SearchFilter_Accounts, 
 			align: _LEFT_, labelLocation:_RIGHT_, 
 			onChange: ZaSearchBuilderController.handleOptions,
-			enableDisableChecks:[],visibilityChecks:[]
+			enableDisableChecks:[],visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"]
 		 },
 		 { type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeDl,
 			trueValue:"TRUE", falseValue:"FALSE",
 			label: ZaMsg.SearchFilter_DLs, 
 			align: _LEFT_, labelLocation:_RIGHT_, 
 			onChange: ZaSearchBuilderController.handleOptions,
-			enableDisableChecks:[],visibilityChecks:[]
+			enableDisableChecks:[],visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"]
 		 },
 		 { type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeAlias,
 			trueValue:"TRUE", falseValue:"FALSE",
 			label: ZaMsg.SearchFilter_Aliases, 
 			align: _LEFT_, labelLocation:_RIGHT_, 
 			onChange: ZaSearchBuilderController.handleOptions,
-			enableDisableChecks:[],visibilityChecks:[]
+			enableDisableChecks:[],visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"]
 		 },
 		 { type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeResource,
 			trueValue:"TRUE", falseValue:"FALSE",
 			label: ZaMsg.SearchFilter_Resources, 
 			align: _RIGHT_, labelLocation:_RIGHT_, 
 			onChange: ZaSearchBuilderController.handleOptions,
-			enableDisableChecks:[],visibilityChecks:[]
+			enableDisableChecks:[],visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"]
 		 }/** Hide the domain search for now,
 		 { type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeDomain,
 			trueValue:"TRUE", falseValue:"FALSE",
