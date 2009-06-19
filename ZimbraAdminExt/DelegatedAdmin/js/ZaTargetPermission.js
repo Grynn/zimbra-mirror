@@ -66,13 +66,19 @@ function(grant, now, isDragProxy) {
 		var field = this._headerList[i]._field;
 
         html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-        if (field == ZaGrant.A_deny || field == ZaGrant.A_canDelegate) {
-            if (grant [field] && grant [field] == "1") {
-                html[idx++] = ZaMsg.Yes ;
-            }else {
-                html[idx++] = ZaMsg.No ;    
+        if (field == ZaGrant.A_right) {
+            if (grant[ZaGrant.A_deny] && grant[ZaGrant.A_deny] == "1") {
+                html[idx++] = "-" ;
             }
 
+            if (grant[ZaGrant.A_canDelegate] && grant[ZaGrant.A_canDelegate] == "1") {
+                html[idx++] = "+" ;
+            }
+
+            html[idx ++] = grant[field] ;
+
+        } else if (field == ZaGrant.A_deny || field == ZaGrant.A_canDelegate) {
+            continue ;
         }  else {
             var value = grant [field] ;
             if (field == ZaGrant.A_grantee) {
@@ -117,14 +123,14 @@ function(width, by) {
     }
 
     headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_right, com_zimbra_delegatedadmin.Col_grant_right_name,
-                        null, 150, null , ZaGrant.A_right, true, true);
+                        null, "auto", null , ZaGrant.A_right, true, true);
 
-    headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_canDelegate, com_zimbra_delegatedadmin.Col_canDelegate,
+  /*  headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_canDelegate, com_zimbra_delegatedadmin.Col_canDelegate,
                     null, 80, null , ZaGrant.A_canDelegate, true, true);
 
     headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_deny, com_zimbra_delegatedadmin.Col_deny,
                 null, "auto", null , ZaGrant.A_deny, true, true);
-
+    */
     return headerList;
 }
 
