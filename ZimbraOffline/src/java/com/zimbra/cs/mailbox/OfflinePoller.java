@@ -23,7 +23,7 @@ import com.zimbra.cs.offline.OfflineSyncManager;
 
 public class OfflinePoller implements Runnable {
 	
-	private OfflineMailbox ombx;
+	private ZcsMailbox ombx;
 	
 	private String setId;
 	private String lastSequence;
@@ -32,7 +32,7 @@ public class OfflinePoller implements Runnable {
 	private boolean isPolling;
 	private boolean hasChanges;
 	
-	OfflinePoller(OfflineMailbox ombx) {
+	OfflinePoller(ZcsMailbox ombx) {
 		this.ombx = ombx;
 		Thread t = new Thread(this, "offline-poller-" + ombx.getAccountName());
 		t.setDaemon(true); //no obvious shutdown hook point

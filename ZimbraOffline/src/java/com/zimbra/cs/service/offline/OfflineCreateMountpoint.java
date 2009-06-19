@@ -28,9 +28,9 @@ import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.OfflineMailbox;
+import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
-import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
+import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
 import com.zimbra.cs.redolog.op.CreateMountpoint;
 import com.zimbra.soap.ZimbraSoapContext;
 
@@ -43,7 +43,7 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext ctxt = getZimbraSoapContext(context);
         Mailbox mbox = getRequestedMailbox(ctxt);
-        if (!(mbox instanceof OfflineMailbox))
+        if (!(mbox instanceof ZcsMailbox))
             throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
         
         Element response = super.handle(request, context);
@@ -60,7 +60,7 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
         int remoteId = (int) eMount.getAttributeLong(MailConstants.A_REMOTE_ID);
         int mod_content = (int) eMount.getAttributeLong(MailConstants.A_REVISION, -1);
         
-        OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ((OfflineMailbox)mbox).getOfflineAccount());
+        OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ((ZcsMailbox)mbox).getOfflineAccount());
         CreateMountpoint redo = new CreateMountpoint(mbox.getId(), parentId, name, ownerId, remoteId, view, flags, color);
         redo.setId(id);
         redo.setChangeId(mod_content);

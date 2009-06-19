@@ -23,7 +23,7 @@ import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
-import com.zimbra.cs.mailbox.OfflineMailbox;
+import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.OperationContext;
@@ -58,7 +58,7 @@ public class OfflineFolderAction extends FolderAction {
         int id = Integer.parseInt(folderId);
         Folder folder = mbox.getFolderById(octxt, id);
         
-        if (!(mbox instanceof OfflineMailbox)) {
+        if (!(mbox instanceof ZcsMailbox)) {
             // load rss feed locally for non-zimbra accounts        
             if ((operation.equals(OP_REFRESH) || operation.equals(OP_IMPORT)) && !folder.getUrl().equals(""))
                 return super.handle(request, context);
@@ -66,7 +66,7 @@ public class OfflineFolderAction extends FolderAction {
                 throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
         }
 
-        OfflineMailbox ombx = (OfflineMailbox) mbox;
+        ZcsMailbox ombx = (ZcsMailbox) mbox;
         boolean traceOn = ombx.getOfflineAccount().isDebugTraceEnabled();
         boolean quietWhenOffline = !operation.equals(OP_GRANT) && !operation.equals(OP_REVOKE);
  

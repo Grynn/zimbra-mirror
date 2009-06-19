@@ -25,6 +25,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.mailbox.DataSourceMailbox;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.Folder;
@@ -34,6 +35,7 @@ import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.Message;
+import com.zimbra.cs.mailbox.SyncMailbox;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.GMailImport;
@@ -185,7 +187,7 @@ public class OfflineDataSource extends DataSource {
 
     @Override
     public String matchKnownRemotePath(String localPath) {
-    	if (DesktopMailbox.isInArchive(localPath))
+    	if (SyncMailbox.isInArchive(localPath))
     		return ""; //empty means to ignore
         KnownFolder kf = getKnownFolderByLocalPath(localPath);
         return kf == null ? null : kf.remotePath;
@@ -336,7 +338,7 @@ public class OfflineDataSource extends DataSource {
 
     @Override
     public boolean checkPendingMessages() throws ServiceException {
-        LocalMailbox mbox = (LocalMailbox) getMailbox();
+    	DataSourceMailbox mbox = (DataSourceMailbox) getMailbox();
         return mbox.getFolderById(null, LocalMailbox.ID_FOLDER_OUTBOX).getSize() > 0 &&
                mbox.sendPendingMessages(true) > 0;
     }

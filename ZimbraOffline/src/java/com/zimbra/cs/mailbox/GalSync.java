@@ -187,13 +187,13 @@ public class GalSync {
     }
      
     private static class SyncThread extends Thread {
-        private OfflineMailbox ombx;
+        private ZcsMailbox ombx;
         private String user;        
         private OfflineAccount galAccount;
         private long lastFullSync;
         private boolean traceOn;
         
-        public SyncThread(OfflineMailbox ombx, String user, OfflineAccount galAccount, long lastFullSync, boolean traceOn) {
+        public SyncThread(ZcsMailbox ombx, String user, OfflineAccount galAccount, long lastFullSync, boolean traceOn) {
             this.ombx = ombx;
             this.user = user;            
             this.galAccount = galAccount;
@@ -222,7 +222,7 @@ public class GalSync {
         }
     };
     
-    public static void sync(OfflineMailbox ombx, boolean isOnRequest) throws ServiceException {        
+    public static void sync(ZcsMailbox ombx, boolean isOnRequest) throws ServiceException {        
         OfflineSyncManager syncMan = OfflineSyncManager.getInstance();        
         String user = ombx.getRemoteUser();
         String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;
@@ -293,7 +293,7 @@ public class GalSync {
         return galAcct;
     }
     
-    private static void syncGal(OfflineMailbox mbox, OfflineAccount galAccount, long lastFullSync, boolean traceEnabled)
+    private static void syncGal(ZcsMailbox mbox, OfflineAccount galAccount, long lastFullSync, boolean traceEnabled)
         throws ServiceException, IOException, ParseException {                
         String syncToken = galAccount.getAttr(OfflineConstants.A_offlineGalAccountSyncToken);
         long interval = OfflineLC.zdesktop_gal_refresh_interval_days.longValue();        

@@ -60,11 +60,11 @@ public class MailboxSync {
     private int mLastSyncedItem;
     private String mSyncToken; //during initial sync, this token is set to the peek-forward delta token.  it's reset to initial token at the end of initial sync
     
-    private OfflineMailbox ombx;
+    private ZcsMailbox ombx;
     
     private OfflinePoller poller;
 
-    MailboxSync(OfflineMailbox ombx) throws ServiceException {
+    MailboxSync(ZcsMailbox ombx) throws ServiceException {
     	this.ombx = ombx;
     	poller = new OfflinePoller(ombx);
     	

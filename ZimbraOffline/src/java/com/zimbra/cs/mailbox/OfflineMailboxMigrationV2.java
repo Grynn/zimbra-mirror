@@ -46,7 +46,7 @@ class OfflineMailboxMigrationV2 {
 	 *    appointment.
 	 */
 	static void doMigration(DesktopMailbox mbox) throws ServiceException {
-		if (!(mbox instanceof LocalMailbox))
+		if (!(mbox instanceof DataSourceMailbox))
 			return;
 		
 		OfflineAccount account = mbox.getOfflineAccount();

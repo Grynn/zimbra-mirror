@@ -20,7 +20,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
-import com.zimbra.cs.mailbox.OfflineMailbox;
+import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.service.mail.ImportData;
@@ -36,9 +36,9 @@ public class OfflineImportData extends ImportData {
 
         ZimbraSoapContext zsc = getZimbraSoapContext(context);
         Mailbox mbox = getRequestedMailbox(zsc);
-        if (!(mbox instanceof OfflineMailbox))
+        if (!(mbox instanceof ZcsMailbox))
             throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
-        OfflineMailbox ombx = (OfflineMailbox) mbox;
+        ZcsMailbox ombx = (ZcsMailbox) mbox;
 
         // before doing anything, make sure all data sources are pushed to the server
         ombx.sync(true, false);

@@ -45,7 +45,7 @@ import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.mailbox.Contact.Attachment;
 import com.zimbra.cs.mailbox.InitialSync.InviteMimeLocator;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
-import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
+import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedContact;
@@ -65,9 +65,9 @@ import com.zimbra.cs.zclient.ZMailbox;
 public class PushChanges {
 	
 	private static class LocalInviteMimeLocator implements InviteMimeLocator {
-		OfflineMailbox ombx;
+		ZcsMailbox ombx;
 		
-		public LocalInviteMimeLocator(OfflineMailbox ombx) {
+		public LocalInviteMimeLocator(ZcsMailbox ombx) {
 			this.ombx = ombx;
 		}
 		
@@ -147,10 +147,10 @@ public class PushChanges {
 
     private static final OfflineContext sContext = new OfflineContext();
     
-    private final OfflineMailbox ombx;
+    private final ZcsMailbox ombx;
     private ZMailbox mZMailbox = null;
 
-    private PushChanges(OfflineMailbox mbox) {
+    private PushChanges(ZcsMailbox mbox) {
         ombx = mbox;
     }
 
@@ -169,11 +169,11 @@ public class PushChanges {
     }
 
 
-    public static boolean sync(OfflineMailbox ombx, boolean isOnRequest) throws ServiceException {
+    public static boolean sync(ZcsMailbox ombx, boolean isOnRequest) throws ServiceException {
         return new PushChanges(ombx).sync(isOnRequest);
     }
 
-    public static boolean syncFolder(OfflineMailbox ombx, int id) throws ServiceException {
+    public static boolean syncFolder(ZcsMailbox ombx, int id) throws ServiceException {
         return new PushChanges(ombx).syncFolder(id);
     }
     
@@ -512,7 +512,7 @@ public class PushChanges {
         return totalSent;
     }
     
-    public static int sendPendingMessages(OfflineMailbox ombx, boolean isOnRequest) throws ServiceException {
+    public static int sendPendingMessages(ZcsMailbox ombx, boolean isOnRequest) throws ServiceException {
     	return new PushChanges(ombx).sendPendingMessages(isOnRequest);
     }
     
@@ -1054,7 +1054,7 @@ public class PushChanges {
     	MailItem item = null;
     	boolean create = false;
     	synchronized (ombx) {
-            if (id > OfflineMailbox.FIRST_OFFLINE_ITEM_ID) {
+            if (id > ZcsMailbox.FIRST_OFFLINE_ITEM_ID) {
             	create = true;
             }
         	item = ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);

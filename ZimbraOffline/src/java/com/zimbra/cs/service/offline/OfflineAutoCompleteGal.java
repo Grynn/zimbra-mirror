@@ -24,7 +24,7 @@ import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineGal;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.OfflineMailbox;
+import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
@@ -42,7 +42,7 @@ public class OfflineAutoCompleteGal extends DocumentHandler {
             throw ServiceException.PERM_DENIED("auto complete GAL disabled");
         
         Mailbox mbox = getRequestedMailbox(ctxt);
-        if (!(mbox instanceof OfflineMailbox))
+        if (!(mbox instanceof ZcsMailbox))
             throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
         
         Element response;
@@ -56,7 +56,7 @@ public class OfflineAutoCompleteGal extends DocumentHandler {
             
             (new OfflineGal((OfflineAccount)account)).searchAccounts(response, name, limit);                                   
         } else { // proxy mode
-            response = ((OfflineMailbox)mbox).proxyRequest(request, ctxt.getResponseProtocol(), true, "auto-complete GAL");
+            response = ((ZcsMailbox)mbox).proxyRequest(request, ctxt.getResponseProtocol(), true, "auto-complete GAL");
             if (response == null) {
                 response = ctxt.createElement(AccountConstants.AUTO_COMPLETE_GAL_RESPONSE);
                 response.addAttribute(AccountConstants.A_MORE, false);

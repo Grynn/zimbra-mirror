@@ -36,7 +36,7 @@ public class OfflineMailboxManager extends MailboxManager {
         super();
     }
 
-    /** Returns a new {@link OfflineMailbox} object to wrap the given data. */
+    /** Returns a new {@link ZcsMailbox} object to wrap the given data. */
     @Override
     protected Mailbox instantiateMailbox(MailboxData data) throws ServiceException {
     	return DesktopMailbox.newMailbox(data);

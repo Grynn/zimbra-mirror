@@ -21,7 +21,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.OfflineMailbox;
+import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.service.mail.ConvAction;
@@ -67,9 +67,9 @@ public class OfflineConvAction extends ConvAction {
                       
         ZimbraSoapContext ctxt = getZimbraSoapContext(context);
         Mailbox mbox = getRequestedMailbox(ctxt);
-        if (!(mbox instanceof OfflineMailbox))
+        if (!(mbox instanceof ZcsMailbox))
             throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
-        OfflineMailbox ombx = (OfflineMailbox)mbox;
+        ZcsMailbox ombx = (ZcsMailbox)mbox;
         context.put(OFFLINECONV_MBOX, ombx);
         
         OperationContext octxt = getOperationContext(ctxt, context);
@@ -82,7 +82,7 @@ public class OfflineConvAction extends ConvAction {
     
     @Override
     public void postProxy(Element request, Element response, Map<String, Object> context) throws ServiceException {
-        OfflineMailbox ombx = (OfflineMailbox)context.get(OFFLINECONV_MBOX);
+        ZcsMailbox ombx = (ZcsMailbox)context.get(OFFLINECONV_MBOX);
         if (ombx == null)
             return;
         ombx.sync(true, ((OfflineAccount)context.get(OFFLINECONV_TOACCT)).isDebugTraceEnabled());

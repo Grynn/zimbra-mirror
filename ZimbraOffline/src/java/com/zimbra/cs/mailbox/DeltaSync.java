@@ -29,7 +29,7 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
-import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
+import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
@@ -43,12 +43,12 @@ public class DeltaSync {
 
     private static final OfflineContext sContext = new OfflineContext();
 
-    private final OfflineMailbox ombx;
+    private final ZcsMailbox ombx;
     private final MailboxSync mMailboxSync;
     private final Set<Integer> mSyncRenames = new HashSet<Integer>();
     private InitialSync isync;
 
-    DeltaSync(OfflineMailbox mbox) {
+    DeltaSync(ZcsMailbox mbox) {
         ombx = mbox;
         mMailboxSync = ombx.getMailboxSync();
     }
@@ -59,7 +59,7 @@ public class DeltaSync {
         isync = initial;
     }
 
-    OfflineMailbox getMailbox() {
+    ZcsMailbox getMailbox() {
         return ombx;
     }
 
@@ -70,7 +70,7 @@ public class DeltaSync {
     }
 
 
-    public static String sync(OfflineMailbox ombx) throws ServiceException {
+    public static String sync(ZcsMailbox ombx) throws ServiceException {
         return new DeltaSync(ombx).sync();
     }
 

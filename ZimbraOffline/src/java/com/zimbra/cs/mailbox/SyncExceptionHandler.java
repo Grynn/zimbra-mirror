@@ -56,12 +56,12 @@ public class SyncExceptionHandler {
 			throw ServiceException.FAILURE(message, exception); // let it bubble in case it's server issue so we interrupt sync to retry later
 	}
 	
-	static void syncMessageFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
+	static void syncMessageFailed(ZcsMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, exception);
 	}
 	
 	private static final int MESSAGE_DATA_LIMIT = 4* 1024 * 1024;
-	public static void syncMessageFailed(OfflineMailbox ombx, int itemId, ParsedMessage pm, Exception exception) throws ServiceException {
+	public static void syncMessageFailed(ZcsMailbox ombx, int itemId, ParsedMessage pm, Exception exception) throws ServiceException {
 		ByteArrayOutputStream bao = new ByteArrayOutputStream();
         InputStream msgStream = null; 
 		try {
@@ -75,11 +75,11 @@ public class SyncExceptionHandler {
         }
 	}
 
-	static void syncCalendarFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
+	static void syncCalendarFailed(ZcsMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, CALENDAR_SYNC_FAILED, exception);
 	}
 
-	static void syncCalendarFailed(OfflineMailbox ombx, int itemId, String xml, Exception exception) throws ServiceException {
+	static void syncCalendarFailed(ZcsMailbox ombx, int itemId, String xml, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, CALENDAR_SYNC_FAILED, xml, xml.length(), exception);
 	}
 
@@ -91,19 +91,19 @@ public class SyncExceptionHandler {
 		saveFailureReport(dmbx, itemId, CONTACT_SYNC_FAILED, xml, xml.length(), exception);
 	}
 	
-    static void localDeleteFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
+    static void localDeleteFailed(ZcsMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, DELETE_ITEM_FAILED, exception);
 	}
 	
-	static void pushItemFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
+	static void pushItemFailed(ZcsMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, PUSH_ITEM_FAILED, exception);
 	}
 	
-	static String sendMailFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
+	static String sendMailFailed(ZcsMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		return saveFailureReport(ombx, itemId, SEND_MAIL_FAILED, exception);
 	}
 	
-	static void syncDocumentFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
+	static void syncDocumentFailed(ZcsMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, DOCUMENT_SYNC_FAILED, exception);
 	}
 
@@ -203,7 +203,7 @@ public class SyncExceptionHandler {
     	String editor;
     }
     
-    static void logDocumentEditConflict(DesktopMailbox dmbx, MailItem item, ArrayList<Revision> revisions) {
+    static void logDocumentEditConflict(SyncMailbox dmbx, MailItem item, ArrayList<Revision> revisions) {
     	Date now = new Date();
     	String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
     	String subject = "Edit conflict on "+item.getName()+" ("+timestamp+")";
@@ -230,7 +230,7 @@ public class SyncExceptionHandler {
 		
     		//save failure alert to "Sync Failures" folder
     		ParsedMessage pm = new ParsedMessage(mm, true);
-    		dmbx.addMessage(new OfflineMailbox.OfflineContext(), pm, DesktopMailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
+    		dmbx.addMessage(new ZcsMailbox.OfflineContext(), pm, DesktopMailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
 		} catch (Exception e) {
 			OfflineLog.offline.warn("can't save failure report", e);
     	}
@@ -250,7 +250,7 @@ public class SyncExceptionHandler {
 		
     		//save failure alert to "Sync Failures" folder
     		ParsedMessage pm = new ParsedMessage(mm, true);
-    		dmbx.addMessage(new OfflineMailbox.OfflineContext(), pm, DesktopMailbox.ID_FOLDER_FAILURE, true, Flag.BITMASK_UNREAD, null);
+    		dmbx.addMessage(new ZcsMailbox.OfflineContext(), pm, DesktopMailbox.ID_FOLDER_FAILURE, true, Flag.BITMASK_UNREAD, null);
 		} catch (Exception e) {
 			OfflineLog.offline.warn("can't save failure report for id=" + id, e);
     	}

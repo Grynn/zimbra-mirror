@@ -20,7 +20,8 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
-import com.zimbra.cs.mailbox.OfflineMailbox;
+import com.zimbra.cs.mailbox.SyncMailbox;
+import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
@@ -41,10 +42,10 @@ public class OfflineSync extends DocumentHandler {
         
         boolean isDebugTraceOn = request.getAttributeBool("debug", false);
         
-        if (mbox instanceof OfflineMailbox)
-        	((OfflineMailbox)mbox).sync(true, isDebugTraceOn);
-        else if (mbox instanceof LocalMailbox)
-        	((LocalMailbox)mbox).sync(true, isDebugTraceOn);
+        if (mbox instanceof SyncMailbox)
+        	((SyncMailbox)mbox).sync(true, isDebugTraceOn);
+        else
+        	assert false;
 
         return zsc.createElement(OfflineConstants.SYNC_RESPONSE);
     }

@@ -64,7 +64,7 @@ public class OfflineMailSender extends MailSender {
                 identity = Provisioning.getInstance().getDefaultIdentity(authuser);
             String identityId = identity == null ? null : identity.getAttr(Provisioning.A_zimbraPrefIdentityId);
             int draftId = mbox.saveDraft(octxt, pm, Mailbox.ID_AUTO_INCREMENT, (origMsgId != null ? origMsgId.toString(acct) : null), replyType, identityId).getId();
-            mbox.move(octxt, draftId, MailItem.TYPE_MESSAGE, OfflineMailbox.ID_FOLDER_OUTBOX);
+            mbox.move(octxt, draftId, MailItem.TYPE_MESSAGE, ZcsMailbox.ID_FOLDER_OUTBOX);
 
             // we can now purge the uploaded attachments
             if (uploads != null)

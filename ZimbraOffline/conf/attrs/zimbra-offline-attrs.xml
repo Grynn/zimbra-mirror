@@ -122,10 +122,6 @@
   <desc>id of the offline acount through which access to mountpoints is proxied</desc>
 </attr>
 
-<attr name="zimbraDataSourceDomain" type="string" cardinality="single" optionalIn="dataSource">
-  <desc>data source domain, only for well known data sources</desc>
-</attr>
-
 <attr name="zimbraDataSourceSmtpHost" type="string" cardinality="single" optionalIn="dataSource">
   <desc>host of smtp associated with this data source</desc>
 </attr>

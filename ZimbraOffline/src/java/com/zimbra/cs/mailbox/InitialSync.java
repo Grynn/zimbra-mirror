@@ -52,7 +52,7 @@ import com.zimbra.cs.account.offline.OfflineAccount.Version;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.MailItem.UnderlyingData;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
-import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
+import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import com.zimbra.cs.mailbox.calendar.ZAttendee;
 import com.zimbra.cs.mime.Mime;
@@ -98,9 +98,9 @@ public class InitialSync {
     }
     
     private static class RemoteInviteMimeLocator implements InviteMimeLocator {
-        OfflineMailbox ombx;
+        ZcsMailbox ombx;
         
-        public RemoteInviteMimeLocator(OfflineMailbox mbox) {
+        public RemoteInviteMimeLocator(ZcsMailbox mbox) {
             this.ombx = mbox;
         }
         
@@ -119,13 +119,13 @@ public class InitialSync {
 
     private static final OfflineContext sContext = new OfflineContext();
 
-    private final OfflineMailbox ombx;
+    private final ZcsMailbox ombx;
     private final MailboxSync mMailboxSync;
     private DeltaSync dsync;
     private Element syncResponse;
     private boolean interrupted;
 
-    InitialSync(OfflineMailbox mbox) {
+    InitialSync(ZcsMailbox mbox) {
         ombx = mbox;
         mMailboxSync = ombx.getMailboxSync();
     }
@@ -136,7 +136,7 @@ public class InitialSync {
         dsync = delta;
     }
 
-    OfflineMailbox getMailbox() {
+    ZcsMailbox getMailbox() {
         return ombx;
     }
 
@@ -146,7 +146,7 @@ public class InitialSync {
         return dsync;
     }
 
-    public static String sync(OfflineMailbox ombx) throws ServiceException {
+    public static String sync(ZcsMailbox ombx) throws ServiceException {
         return new InitialSync(ombx).sync();
     }
 
@@ -171,7 +171,7 @@ public class InitialSync {
         return token;
     }
 
-    public static String resume(OfflineMailbox ombx) throws ServiceException {
+    public static String resume(ZcsMailbox ombx) throws ServiceException {
         return new InitialSync(ombx).resume();
     }
 
@@ -592,7 +592,7 @@ public class InitialSync {
         }
     }
 
-    static List<Element> fetchContacts(OfflineMailbox ombx, String ids) throws ServiceException {
+    static List<Element> fetchContacts(ZcsMailbox ombx, String ids) throws ServiceException {
         try {
             Element request = new Element.XMLElement(MailConstants.GET_CONTACTS_REQUEST);
             request.addAttribute(MailConstants.A_SYNC, true);

@@ -26,10 +26,11 @@ import java.util.Map;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Pair;
 import com.zimbra.cs.db.DbPool.Connection; 
+import com.zimbra.cs.mailbox.ChangeTrackingMailbox;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.OfflineMailbox;
+import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.Tag;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.session.PendingModifications.Change;
@@ -269,7 +270,7 @@ public class DbOfflineMailbox {
         }
     }
 
-    public static TypedIdList getChangedItems(OfflineMailbox ombx) throws ServiceException {
+    public static TypedIdList getChangedItems(ChangeTrackingMailbox ombx) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
 
         TypedIdList result = new TypedIdList();
@@ -293,34 +294,34 @@ public class DbOfflineMailbox {
             DbPool.closeStatement(stmt);
         }
     }
-
-    public static Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(OfflineMailbox ombx)
-    throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
-
-        Map<Integer, Pair<Integer, Integer>> result = new HashMap<Integer, Pair<Integer, Integer>>();
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt = conn.prepareStatement("SELECT id, change_mask, flags" +
-                    " FROM " + DbMailItem.getMailItemTableName(ombx) + Derby.forceIndex("i_change_mask") +
-                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask IS NOT NULL");
-            int pos = 1;
+    
+	public static Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(ChangeTrackingMailbox ombx)
+			throws ServiceException {
+		Connection conn = ombx.getOperationConnection();
+		
+		Map<Integer, Pair<Integer, Integer>> result = new HashMap<Integer, Pair<Integer, Integer>>();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.prepareStatement("SELECT id, change_mask, flags" +
+					" FROM " + DbMailItem.getMailItemTableName(ombx) + Derby.forceIndex("i_change_mask") +
+					" WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask IS NOT NULL");
+			int pos = 1;
             pos = DbMailItem.setMailboxId(stmt, ombx, pos);
-
-            rs = stmt.executeQuery();
-            while (rs.next())
-                result.put(rs.getInt(1), new Pair<Integer, Integer>(rs.getInt(2), rs.getInt(3)));
-            return result;
-        } catch (SQLException e) {
+		
+			rs = stmt.executeQuery();
+			while (rs.next())
+				result.put(rs.getInt(1), new Pair<Integer, Integer>(rs.getInt(2), rs.getInt(3)));
+			return result;
+		} catch (SQLException e) {
             throw ServiceException.FAILURE("getting changed item ids for ombx " + ombx.getId(), e);
-        } finally {
-            DbPool.closeResults(rs);
-            DbPool.closeStatement(stmt);
-        }
-    }
-
-    public static List<Pair<Integer, Integer>> getSimpleUnreadChanges(OfflineMailbox ombx, boolean isUnread) throws ServiceException {
+		} finally {
+			DbPool.closeResults(rs);
+			DbPool.closeStatement(stmt);
+		}
+	}
+    
+    public static List<Pair<Integer, Integer>> getSimpleUnreadChanges(ChangeTrackingMailbox ombx, boolean isUnread) throws ServiceException {
     	Connection conn = ombx.getOperationConnection();
     	List<Pair<Integer, Integer>> readList = new ArrayList<Pair<Integer, Integer>>();
         PreparedStatement stmt = null;
@@ -350,7 +351,7 @@ public class DbOfflineMailbox {
         }
     }
     
-    public static Map<Integer, List<Pair<Integer, Integer>>> getFolderMoveChanges(OfflineMailbox ombx) throws ServiceException {
+    public static Map<Integer, List<Pair<Integer, Integer>>> getFolderMoveChanges(ChangeTrackingMailbox ombx) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
         Map<Integer, List<Pair<Integer, Integer>>> changes = new HashMap<Integer, List<Pair<Integer, Integer>>>();
         PreparedStatement stmt = null;
@@ -390,7 +391,7 @@ public class DbOfflineMailbox {
         }
     }
     
-    public static Map<Integer, Integer> getItemModSequences(OfflineMailbox ombx, int[] ids) throws ServiceException {
+    public static Map<Integer, Integer> getItemModSequences(ChangeTrackingMailbox ombx, int[] ids) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
         Map<Integer, Integer> changes = new HashMap<Integer, Integer>();
         PreparedStatement stmt = null;
@@ -420,7 +421,7 @@ public class DbOfflineMailbox {
         }
     }
     
-    public static Map<Integer, Integer> getItemFolderIds(OfflineMailbox ombx, int[] ids) throws ServiceException {
+    public static Map<Integer, Integer> getItemFolderIds(ChangeTrackingMailbox ombx, int[] ids) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
         Map<Integer, Integer> result = new HashMap<Integer, Integer>();
         PreparedStatement stmt = null;
@@ -538,7 +539,7 @@ public class DbOfflineMailbox {
         }
     }
 
-    public static void clearChangeRecords(OfflineMailbox ombx, List<Integer> ids) throws ServiceException {
+    public static void clearChangeRecords(ZcsMailbox ombx, List<Integer> ids) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
 
         PreparedStatement stmt = null;
@@ -556,12 +557,12 @@ public class DbOfflineMailbox {
         }
     }
 
-    public static boolean isTombstone(OfflineMailbox ombx, int id, byte type) throws ServiceException {
+    public static boolean isTombstone(ChangeTrackingMailbox ombx, int id, byte type) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
         return !getMatchingTombstones(conn, ombx, id, type).isEmpty();
     }
 
-    private static List<Pair<Integer, String>> getMatchingTombstones(Connection conn, OfflineMailbox ombx, int id, byte type) throws ServiceException {
+    private static List<Pair<Integer, String>> getMatchingTombstones(Connection conn, ChangeTrackingMailbox ombx, int id, byte type) throws ServiceException {
         List<Pair<Integer, String>> matches = new ArrayList<Pair<Integer, String>>();
 
         PreparedStatement stmt = null;
@@ -605,7 +606,7 @@ public class DbOfflineMailbox {
         }
     }
 
-    public static void removeTombstone(OfflineMailbox ombx, int id, byte type) throws ServiceException {
+    public static void removeTombstone(ChangeTrackingMailbox ombx, int id, byte type) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
         String itemId = Integer.toString(id);
 
@@ -648,7 +649,7 @@ public class DbOfflineMailbox {
         }
     }
 
-    public static void clearTombstones(OfflineMailbox ombx, int token) throws ServiceException {
+    public static void clearTombstones(ChangeTrackingMailbox ombx, int token) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
 
         PreparedStatement stmt = null;

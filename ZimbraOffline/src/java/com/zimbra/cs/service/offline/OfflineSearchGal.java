@@ -24,7 +24,7 @@ import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineGal;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.OfflineMailbox;
+import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
@@ -41,7 +41,7 @@ public class OfflineSearchGal extends DocumentHandler {
             throw ServiceException.PERM_DENIED("GAL disabled");
         
         Mailbox mbox = getRequestedMailbox(ctxt);
-        if (!(mbox instanceof OfflineMailbox))
+        if (!(mbox instanceof ZcsMailbox))
             return getResponseElement(ctxt);
         
         Element response;
@@ -54,7 +54,7 @@ public class OfflineSearchGal extends DocumentHandler {
 
             (new OfflineGal((OfflineAccount)account)).searchAccounts(response, name);                  
         } else { // proxy mode
-            response = ((OfflineMailbox)mbox).proxyRequest(request, ctxt.getResponseProtocol(), true, "search GAL");
+            response = ((ZcsMailbox)mbox).proxyRequest(request, ctxt.getResponseProtocol(), true, "search GAL");
             if (response == null) {
                 response = ctxt.createElement(AccountConstants.SEARCH_GAL_RESPONSE);
                 response.addAttribute(AccountConstants.A_MORE, false);

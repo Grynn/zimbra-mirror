@@ -27,17 +27,15 @@ import com.zimbra.common.util.SystemUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
-import com.zimbra.cs.account.accesscontrol.RightCommand;
-import com.zimbra.cs.account.accesscontrol.RightModifier;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.SyncErrorManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
-import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
-import com.zimbra.cs.mailbox.OfflineMailbox;
+import com.zimbra.cs.mailbox.SyncMailbox;
+import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mime.MimeTypeInfo;
 import com.zimbra.cs.offline.Offline;
@@ -563,7 +561,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             OfflineLog.offline.error("error initializing account " + emailAddress, e);
             Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(account.getId(), false);
             if (mbox != null) {
-                ((DesktopMailbox)mbox).deleteMailbox(false);
+                ((SyncMailbox)mbox).deleteMailbox(false);
             }
             mAccountCache.remove(account);
             deleteAccount(zgi.getId());
@@ -1126,7 +1124,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(galAcct.getId(), false);      
         if (mbox != null)
-        	((DesktopMailbox)mbox).deleteMailbox(false);
+        	((SyncMailbox)mbox).deleteMailbox(false);
         
         deleteOfflineAccount(galAcct.getId());
     }       
@@ -2356,7 +2354,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         Account account = get(AccountBy.id, acctId);
         if (isSyncAccount(account) || isMountpointAccount(account)) {
             String id = isMountpointAccount(account) ? account.getAttr(A_offlineMountpointProxyAccountId) : acctId;
-            OfflineMailbox ombx = (OfflineMailbox)MailboxManager.getInstance().getMailboxByAccountId(id, false);
+            ZcsMailbox ombx = (ZcsMailbox)MailboxManager.getInstance().getMailboxByAccountId(id, false);
             return ombx.getAuthToken().getValue();
         } else {
             return null;

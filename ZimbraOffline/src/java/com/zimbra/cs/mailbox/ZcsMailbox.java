@@ -19,7 +19,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,7 +58,7 @@ import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.StoreManager;
 
-public class OfflineMailbox extends DesktopMailbox {
+public class ZcsMailbox extends ChangeTrackingMailbox {
 
     public static class OfflineContext extends OperationContext {
         public OfflineContext()                 { super((RedoableOp) null); }
@@ -77,7 +76,7 @@ public class OfflineMailbox extends DesktopMailbox {
 
     private static final OfflineAccount.Version MIN_ZCS_VER_PUSH = new OfflineAccount.Version("5.0.6");
     
-    OfflineMailbox(MailboxData data) throws ServiceException {
+    ZcsMailbox(MailboxData data) throws ServiceException {
         super(data);
     }
 
@@ -195,18 +194,6 @@ public class OfflineMailbox extends DesktopMailbox {
     @Override int getInitialItemId() {
         // locally-generated items must be differentiable from authentic, server-blessed ones
         return FIRST_OFFLINE_ITEM_ID;
-    }
-
-    @Override boolean isTrackingSync() {
-        return !(getOperationContext() instanceof OfflineContext);
-    }
-
-    @Override public boolean isTrackingImap() {
-        return false;
-    }
-
-    @Override public boolean checkItemChangeID(int modMetadata, int modContent) {
-        return true;
     }
 
     @Override MailItem getItemById(int id, byte type) throws ServiceException {
@@ -373,149 +360,6 @@ public class OfflineMailbox extends DesktopMailbox {
             return;
         }
         delete(octxt, folderId, MailItem.TYPE_FOLDER);
-    }
-
-    synchronized boolean isPendingDelete(OperationContext octxt, int itemId, byte type) throws ServiceException {
-        boolean success = false;
-        try {
-            beginTransaction("isPendingDelete", octxt);
-
-            boolean result = DbOfflineMailbox.isTombstone(this, itemId, type);
-            success = true;
-            return result;
-        } finally {
-            endTransaction(success);
-        }
-    }
-
-    synchronized void removePendingDelete(OperationContext octxt, int itemId, byte type) throws ServiceException {
-        boolean success = false;
-        try {
-            beginTransaction("removePendingDelete", octxt);
-
-            DbOfflineMailbox.removeTombstone(this, itemId, type);
-            success = true;
-        } finally {
-            endTransaction(success);
-        }
-    }
-
-    synchronized TypedIdList getLocalChanges(OperationContext octxt) throws ServiceException {
-        boolean success = false;
-        try {
-            beginTransaction("getLocalChanges", octxt);
-
-            TypedIdList result = DbOfflineMailbox.getChangedItems(this);
-            success = true;
-            return result;
-        } finally {
-            endTransaction(success);
-        }
-    }
-    
-    synchronized Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(OperationContext octxt) throws ServiceException {
-        boolean success = false;
-        try {
-            beginTransaction("getChangeMasksAndFlags", octxt);
-
-            Map<Integer, Pair<Integer, Integer>> result = DbOfflineMailbox.getChangeMasksAndFlags(this);
-            success = true;
-            return result;
-        } finally {
-            endTransaction(success);
-        }
-    }
-    
-    synchronized List<Pair<Integer, Integer>> getSimpleUnreadChanges(OperationContext octxt, boolean isUnread) throws ServiceException {
-        boolean success = false;
-        try {
-            beginTransaction("getSimpleUnreadChanges", octxt);
-
-            List<Pair<Integer, Integer>> result = DbOfflineMailbox.getSimpleUnreadChanges(this, isUnread);
-            success = true;
-            return result;
-        } finally {
-            endTransaction(success);
-        }
-    }
-    
-    synchronized Map<Integer, List<Pair<Integer, Integer>>> getFolderMoveChanges(OperationContext octxt) throws ServiceException {
-        boolean success = false;
-        try {
-            beginTransaction("getFolderMoveChanges", octxt);
-
-            Map<Integer, List<Pair<Integer, Integer>>> result = DbOfflineMailbox.getFolderMoveChanges(this);
-            success = true;
-            return result;
-        } finally {
-            endTransaction(success);
-        }
-    }
-    
-    synchronized Map<Integer, Integer> getItemModSequences(OperationContext octxt, int[] ids) throws ServiceException {
-        boolean success = false;
-        try {
-            beginTransaction("getItemModSequences", octxt);
-
-            Map<Integer, Integer> result = DbOfflineMailbox.getItemModSequences(this, ids);
-            success = true;
-            return result;
-        } finally {
-            endTransaction(success);
-        }
-    }
-    
-    synchronized Map<Integer, Integer> getItemFolderIds(OperationContext octxt, int[] ids) throws ServiceException {
-        boolean success = false;
-        try {
-            beginTransaction("getItemFolderIds", octxt);
-
-            Map<Integer, Integer> result = DbOfflineMailbox.getItemFolderIds(this, ids);
-            success = true;
-            return result;
-        } finally {
-            endTransaction(success);
-        }
-    }
-
-    public synchronized int getChangeMask(OperationContext octxt, int id, byte type) throws ServiceException {
-        boolean success = false;
-        try {
-            beginTransaction("getChangeMask", octxt);
-
-            MailItem item = getItemById(id, type);
-            int mask = DbOfflineMailbox.getChangeMask(item);
-            success = true;
-            return mask;
-        } catch (NoSuchItemException nsie) {
-            return 0;
-        } finally {
-            endTransaction(success);
-        }
-    }
-
-    synchronized void setChangeMask(OfflineContext octxt, int id, byte type, int mask) throws ServiceException {
-        boolean success = false;
-        try {
-            beginTransaction("setChangeMask", octxt);
-
-            MailItem item = getItemById(id, type);
-            DbOfflineMailbox.setChangeMask(item, mask);
-            success = true;
-        } finally {
-            endTransaction(success);
-        }
-    }
-
-    synchronized void clearTombstones(OperationContext octxt, int token) throws ServiceException {
-        boolean success = false;
-        try {
-            beginTransaction("clearTombstones", octxt);
-            DbOfflineMailbox.clearTombstones(this, token);
-            success = true;
-        } finally {
-            endTransaction(success);
-        }
     }
 
     synchronized void syncDate(OperationContext octxt, int itemId, byte type, int date)
@@ -823,4 +667,7 @@ public class OfflineMailbox extends DesktopMailbox {
             return false;
         return PushChanges.syncFolder(this, id);
     }
+    
+	@Override
+	protected void updateRssDataSource(Folder folder) {} //bug 38129, to suppress creation of datasource
 }

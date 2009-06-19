@@ -19,7 +19,7 @@ import java.util.Map;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.OfflineMailbox;
+import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
@@ -39,14 +39,14 @@ public class OfflineServiceProxy extends DocumentHandler {
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext ctxt = getZimbraSoapContext(context);
         Mailbox mbox = getRequestedMailbox(ctxt);
-        if (!(mbox instanceof OfflineMailbox)) {
+        if (!(mbox instanceof ZcsMailbox)) {
             if (mHandleLocal)
                 return getResponseElement(ctxt);
             else
                 throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
         }
                 
-        Element response = ((OfflineMailbox)mbox).proxyRequest(request, ctxt.getResponseProtocol(), mQuiet, mOp);
+        Element response = ((ZcsMailbox)mbox).proxyRequest(request, ctxt.getResponseProtocol(), mQuiet, mOp);
         if (response != null)
             response.detach();
         
