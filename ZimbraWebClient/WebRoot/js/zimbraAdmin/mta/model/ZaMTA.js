@@ -95,6 +95,8 @@ ZaMTA.ActionDelete = "delete";
 ZaMTA.ActionHold = "hold";
 ZaMTA.ActionRelease = "release";
 
+ZaMTA.MANAGE_MAIL_QUEUE_RIGHT = "manageMailQueue";
+
 ZaMTA.prototype.getTabToolTip =
 function () {
 	return ZaMsg.tt_tab_MTA + " " + this.type + " " + this.name ;
@@ -167,8 +169,21 @@ ZaMTA.getAll = function () {
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllServersResponse;	
 	var list = new ZaItemList(ZaMTA);
+	var retVal = new ZaItemList(ZaMTA);
 	list.loadFromJS(resp);	
-	return list;	
+	if(!list.loadedRights)
+		list.loadEffectiveRights();
+	
+	var servers = list.getArray();
+	var cnt = servers.length;
+	for(var i = 0; i < cnt; i++) {
+		if(ZaItem.hasRight(ZaMTA.MANAGE_MAIL_QUEUE_RIGHT, servers[i])) {
+			retVal.add(servers[i]);
+		}
+	}
+	
+	retVal.loadedRights = list.loadedRights;
+	return retVal;	
 }
 
 
@@ -180,6 +195,9 @@ function() {
 ZaMTA.prototype.initFromJS = function (obj, summary) {
 	this.name = obj.name;
 	this.id = obj.id;
+	if(obj.a) {
+		ZaItem.prototype.initFromJS.call(this,obj);
+	}
 	if(obj.queue) {
 		var cnt = obj.queue.length;
 		for (var ix=0; ix < cnt; ix++) {

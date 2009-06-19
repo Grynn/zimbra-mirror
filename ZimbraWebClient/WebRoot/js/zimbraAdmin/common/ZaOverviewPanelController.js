@@ -261,8 +261,7 @@ function (appCtxt, container) {
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])	
 		this._cosMap = new Object();
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.MAILQ_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
-		this._mailqMap = new Object();
+	this._mailqMap = new Object();
 		
 	if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) 
 		this._savedSearchMapArr = [] ;
@@ -283,8 +282,9 @@ function() {
 	var tree = this._overviewPanel.getFolderTree();
 	var l = new AjxListener(this, this._overviewTreeListener);
 	tree.addSelectionListener(l);
+	var mtaList = ZaApp.getInstance().getPostQList().getArray();
 	var showAddresses = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI];
-	var showTools = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI];
+	var showTools = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] || (mtaList && mtaList.length);
 	var showConfig = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI];
 	var showMonitoring = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI];
 	if(!showAddresses) {
@@ -527,15 +527,13 @@ function() {
 		this._toolsTi.enableSelection(false);	
 		this._toolsTi.setText(ZaMsg.OVP_tools);
 		this._toolsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._TOOLS);
-		
-		this._postqTi = new DwtTreeItem(this._toolsTi);
-		this._postqTi.setText(ZaMsg.OVP_postq);
-		this._postqTi.setImage("Queue");
-		this._postqTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSTQ_VIEW);
-		
+				
 		try {
-			//add server statistics nodes
-			var mtaList = ZaApp.getInstance().getPostQList().getArray();
+			this._postqTi = new DwtTreeItem(this._toolsTi);
+			this._postqTi.setText(ZaMsg.OVP_postq);
+			this._postqTi.setImage("Queue");
+			this._postqTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSTQ_VIEW);
+	
 			if(mtaList && mtaList.length) {
 				var cnt = mtaList.length;
 				for(var ix=0; ix< cnt; ix++) {
