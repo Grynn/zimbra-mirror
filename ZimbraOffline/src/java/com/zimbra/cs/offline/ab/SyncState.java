@@ -37,14 +37,15 @@ public class SyncState {
             throw new IllegalStateException("Incompatible sync version");
         }
         lastModSequence = (int) md.getLong(KEY_SEQUENCE);
-        lastRevision = md.get(KEY_REVISION);
+        lastRevision = md.get(KEY_REVISION, null);
     }
 
     Metadata getMetadata() {
         Metadata md = new Metadata();
         md.put(KEY_VERSION, VERSION);
         md.put(KEY_SEQUENCE, lastModSequence);
-        md.put(KEY_REVISION, lastRevision);
+        if (lastRevision != null)
+            md.put(KEY_REVISION, lastRevision);
         return md;
     }
 
