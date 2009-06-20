@@ -1,0 +1,13 @@
+.Imgtasksreminder-panelIcon {
+  background: url("tasksreminder.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+
+.tskreminder_cardHdrDiv{
+background:#FFFFFC;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+}
+
