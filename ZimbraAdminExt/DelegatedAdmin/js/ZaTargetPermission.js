@@ -107,12 +107,12 @@ function(width, by) {
         headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_grantee, com_zimbra_delegatedadmin.Col_grantee_name,
                 null, width/4 + 50, null, ZaGrant.A_grantee, true, true);
         headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_grantee_type, com_zimbra_delegatedadmin.Col_grantee_type,
-                null, width/4 - 80, null  , ZaGrant.A_grantee_type, true, true);
+                null, width/4, null  , ZaGrant.A_grantee_type, true, true);
     } else if (by  == ZaGrant.A_grantee ) {
         headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_target, com_zimbra_delegatedadmin.Col_target_name,
                 null, width/4 + 50, null, ZaGrant.A_target, true, true);
         headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_target_type, com_zimbra_delegatedadmin.Col_target_type,
-                null, width/4 - 80, null  , ZaGrant.A_target_type, true, true);
+                null, width/4, null  , ZaGrant.A_target_type, true, true);
     } else if ( by == "all")  {
         headerList[index ++] = new ZaListHeaderItem(ZaGrant.A_grantee, com_zimbra_delegatedadmin.Col_grantee_name,
                      null, 200, null, ZaGrant.A_grantee, true, true);

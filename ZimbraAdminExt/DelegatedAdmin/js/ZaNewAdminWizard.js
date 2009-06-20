@@ -17,6 +17,9 @@ ZaNewAdmin.prototype = new ZaItem ;
 ZaNewAdmin.prototype.constructor = ZaNewAdmin ;
 
 ZaNewAdmin.A_admin_type = "new_admin_type" ;
+ZaNewAdmin.A_default_domain_admin_grp = "default_da_grp" ;
+ZaNewAdmin.A_proposedGrantsList = "proposedGrantsList" ;
+//ZaNewAdminWizard.A_proposedGrantsListCheckbox = "proposedGrantsListCheckbox" ;
 
 ZaNewAdmin.getMyXModel = function () {
    return {
@@ -36,11 +39,21 @@ ZaNewAdmin.getMyXModel = function () {
            ZaAccount.adminRolesModelItem,  ZaAccount.adminAccountModelItem,
            { id:ZaDistributionList.A_isAdminGroup, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
                 ref:"attrs/" + ZaDistributionList.A_isAdminGroup},
+           {id: ZaNewAdmin.A_default_domain_admin_grp, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, 
+               ref: ZaNewAdmin.A_default_domain_admin_grp},
+            ZaNewAdmin.getProposedGrantsListItem () ,
            ZaTargetPermission.grantListItem ,
            ZaUIComponent.UIComponentsItem,
            ZaUIComponent.InheritedUIComponentsItem
        ]
    }
+}
+
+ZaNewAdmin.getProposedGrantsListItem = function () {
+    var proposedGrantsListItem = ZaUtil.deepCloneObject (ZaTargetPermission.grantListItem) ;
+    proposedGrantsListItem.id = ZaNewAdmin.A_proposedGrantsList ;
+    proposedGrantsListItem.ref = ZaNewAdmin.A_proposedGrantsList ;
+    return proposedGrantsListItem ;
 }
 
 ZaNewAdmin.createAdmin = function (tmpObj) {
@@ -65,7 +78,6 @@ ZaNewAdmin.createAdmin = function (tmpObj) {
         } else {
             var attr = soapDoc.set("a", "TRUE");
             attr.setAttribute("n", ZaAccount.A_zimbraIsDelegatedAdminAccount) ;
-            
         }
     } else if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.DL) {
         //create admin group
@@ -184,6 +196,7 @@ ZaNewAdminWizard = function (parent) {
         {label: com_zimbra_delegatedadmin.NA_Wizard_new_admin_acct, value: ZaNewAdminWizard.STEP_NEW_ACCOUNT },
         {label: com_zimbra_delegatedadmin.NA_Wizard_new_admin_dl, value: ZaNewAdminWizard.STEP_NEW_GROUP },
         {label: com_zimbra_delegatedadmin.NA_Wizard_set_permission, value: ZaNewAdminWizard.STEP_PERMISSION },
+        {label: com_zimbra_delegatedadmin.NA_Wizard_set_permission, value: ZaNewAdminWizard.STEP_PROPOSED_GRANTS },
         {label: com_zimbra_delegatedadmin.NA_Wizard_config_ui, value: ZaNewAdminWizard.STEP_UI_COMPONENTS },
         {label: com_zimbra_delegatedadmin.NA_Wizard_finish_summary, value: ZaNewAdminWizard.STEP_FINISH }
     ];
@@ -201,8 +214,10 @@ ZaNewAdminWizard.STEP_START = ZaNewAdminWizard.STEP_INDEX ++ ;
 ZaNewAdminWizard.STEP_NEW_ACCOUNT = ZaNewAdminWizard.STEP_INDEX ++ ;
 ZaNewAdminWizard.STEP_NEW_GROUP = ZaNewAdminWizard.STEP_INDEX ++ ;
 ZaNewAdminWizard.STEP_UI_COMPONENTS = ZaNewAdminWizard.STEP_INDEX ++ ;
+ZaNewAdminWizard.STEP_PROPOSED_GRANTS = ZaNewAdminWizard.STEP_INDEX ++ ;
 ZaNewAdminWizard.STEP_PERMISSION = ZaNewAdminWizard.STEP_INDEX ++ ;
 ZaNewAdminWizard.STEP_FINISH = ZaNewAdminWizard.STEP_INDEX ++ ;
+
 
 //add the new admin button to the new menu list
 ZaNewAdminWizard.initToolbarMethod = function () {
@@ -249,11 +264,13 @@ ZaNewAdminWizard.prototype.goPage = function (pageKey) {
                     || pageKey == ZaNewAdminWizard.STEP_NEW_GROUP) {
             //no change
     } else if (pageKey == ZaNewAdminWizard.STEP_UI_COMPONENTS) {
-        cancel = prev = false ;
+        prev = false ;
     } else if ( pageKey == ZaNewAdminWizard.STEP_PERMISSION ) {
         cancel = false ;
     } else if ( pageKey == ZaNewAdminWizard.STEP_FINISH) {
         next  =  false ;
+    } else if (pageKey == ZaNewAdminWizard.STEP_PROPOSED_GRANTS) {
+        this._localXForm.setInstanceValue(this._containedObject[ZaNewAdmin.A_proposedGrantsList], ZaNewAdmin.A_proposedGrantsList);
     }
 
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(prev);
@@ -271,9 +288,16 @@ function() {
             || cStep == ZaNewAdminWizard.STEP_NEW_GROUP) {
 		prevStep = ZaNewAdminWizard.STEP_START ;
     }else if (cStep == ZaNewAdminWizard.STEP_PERMISSION) {
-		prevStep = ZaNewAdminWizard.STEP_UI_COMPONENTS ;
+        if (this._containedObject [ZaNewAdmin.A_proposedGrantsList] &&
+                    this._containedObject [ZaNewAdmin.A_proposedGrantsList].length > 0){
+		    prevStep = ZaNewAdminWizard.STEP_PROPOSED_GRANTS ;
+        } else {
+            prevStep =  ZaNewAdminWizard.STEP_UI_COMPONENTS ;
+        }
+    }else if (cStep == ZaNewAdminWizard.STEP_PROPOSED_GRANTS) {
+        prevStep = ZaNewAdminWizard.STEP_UI_COMPONENTS ;
     }else if (cStep == ZaNewAdminWizard.STEP_FINISH) {
-        prevStep = ZaNewAdminWizard.STEP_UI_COMPONENTS ;            
+        prevStep = ZaNewAdminWizard.STEP_PERMISSION ;            
     }
 
     this.goPage(prevStep);
@@ -286,32 +310,118 @@ function() {
 	if (cStep == ZaNewAdminWizard.STEP_START) {
         if (this._containedObject[ZaNewAdmin.A_admin_type] == ZaItem.ACCOUNT) {
             nextStep = ZaNewAdminWizard.STEP_NEW_ACCOUNT ;
+            this._containedObject[ZaNewAdmin.A_default_domain_admin_grp] = "FALSE" ;
         } else if  (this._containedObject[ZaNewAdmin.A_admin_type] == ZaItem.DL) {
             nextStep = ZaNewAdminWizard.STEP_NEW_GROUP ;
+            this._containedObject[ZaNewAdmin.A_default_domain_admin_grp] = "TRUE" ;
         }
     } else if (cStep == ZaNewAdminWizard.STEP_NEW_ACCOUNT
             || cStep == ZaNewAdminWizard.STEP_NEW_GROUP) {
         if (this.createNewAdmin()) {
             nextStep = ZaNewAdminWizard.STEP_UI_COMPONENTS ;
-            //init the zimbraAdminConsoleUIComponents
-            this._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [];
             //get the inherited ui components
             ZaUIComponent.accountObjectModifer.call(this) ;
+
+            //init the zimbraAdminConsoleUIComponents
+            if (this._containedObject[ZaNewAdmin.A_default_domain_admin_grp] == "TRUE") {
+                this._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [
+                    ZaSettings.ACCOUNT_LIST_VIEW ,
+                    ZaSettings.DL_LIST_VIEW,
+                    ZaSettings.ALIAS_LIST_VIEW,
+                    ZaSettings.RESOURCE_LIST_VIEW,
+                    ZaSettings.DOMAIN_LIST_VIEW    
+                ];
+            } else {
+                this._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [];
+            }
+
         } else {
             return false ;
         }
     } else if (cStep == ZaNewAdminWizard.STEP_UI_COMPONENTS ) {
         if (ZaNewAdmin.modifyAdmin(this._containedObject)) {
-            nextStep = ZaNewAdminWizard.STEP_PERMISSION ;
+
+            //set the proposed grants value
+            if (this._containedObject [ZaNewAdmin.A_default_domain_admin_grp] == "TRUE")  {
+                this.setProposedGrants () ;
+            }
+
+            if (this._containedObject [ZaNewAdmin.A_proposedGrantsList] &&
+                    this._containedObject [ZaNewAdmin.A_proposedGrantsList].length > 0){
+                nextStep = ZaNewAdminWizard.STEP_PROPOSED_GRANTS ;
+            }else{
+                nextStep = ZaNewAdminWizard.STEP_PERMISSION ;
+            }
         }else {
             return false ;
         }
-    } else if (cStep == ZaNewAdminWizard.STEP_PERMISSION ) {
+    } else if (cStep == ZaNewAdminWizard.STEP_PROPOSED_GRANTS) {
+        //TODO: Create the proposed grants
+        nextStep = ZaNewAdminWizard.STEP_PERMISSION ;
+    }else if (cStep == ZaNewAdminWizard.STEP_PERMISSION ) {
         nextStep = ZaNewAdminWizard.STEP_FINISH ;
     } 
 
     this.goPage(nextStep);
 }
+
+ZaNewAdminWizard.prototype.setProposedGrants = function () {
+    var proposedGrantsList = this._containedObject [ZaNewAdmin.A_proposedGrantsList] = [] ;
+
+    var domainAdminRight = {} ;
+    domainAdminRight [ZaGrant.A_grantee] = this._containedObject [ZaAccount.A_name] ;
+    domainAdminRight [ZaGrant.A_grantee_id] = this._containedObject.id ;
+    domainAdminRight [ZaGrant.A_grantee_type] = ZaGrant.GRANTEE_TYPE.grp ;
+    domainAdminRight [ZaGrant.A_right] = "domainAdminRights" ;
+    domainAdminRight [ZaGrant.A_right_type] = "combo" ;
+    domainAdminRight [ZaGrant.A_target] = ZaAccount.getDomain (this._containedObject.name) ;
+    domainAdminRight [ZaGrant.A_target_type] = ZaItem.DOMAIN ;
+    if (!this.isGrantGranted(domainAdminRight))  {
+        proposedGrantsList.push(domainAdminRight) ;
+    }
+
+    var domainAdminZimletRight = {} ;
+    domainAdminZimletRight [ZaGrant.A_grantee] = this._containedObject [ZaAccount.A_name] ;
+    domainAdminZimletRight [ZaGrant.A_grantee_id] = this._containedObject.id ;
+    domainAdminZimletRight [ZaGrant.A_grantee_type] = ZaGrant.GRANTEE_TYPE.grp ;
+    domainAdminZimletRight [ZaGrant.A_right] = "domainAdminZimletRights" ;
+    domainAdminZimletRight [ZaGrant.A_right_type] = "combo" ;
+    domainAdminZimletRight [ZaGrant.A_target] = ZaGrant.GLOBAL_TARGET_NAME;
+    domainAdminZimletRight [ZaGrant.A_target_type] = ZaItem.GLOBAL_GRANT ;
+    if (!this.isGrantGranted(domainAdminZimletRight))  {
+        proposedGrantsList.push(domainAdminZimletRight) ;
+    }
+}
+
+ZaNewAdminWizard.prototype.isGrantGranted = function (grant) {
+    var currentGrantList = this._containedObject[ZaGrant.A2_grantsList] ;
+    if (currentGrantList && currentGrantList.length > 0) {
+        for (var i = 0; i < currentGrantList.length; i ++ ) {
+            var cGrant = currentGrantList[i] ;
+            var compKeys = [ZaGrant.A_grantee, 
+                           ZaGrant.A_target, ZaGrant.A_target_type,
+                           ZaGrant.A_right ] ;
+            var isExist = i ;
+            for (var j =0; j < compKeys.length; j ++) {
+                var k = compKeys[j] ;
+                var cv =  cGrant[k] ;
+                var v = grant[k] ;
+
+               if (cv != v) {
+                    isExist = -1 ;
+                    break ;
+                }
+            }
+
+            if (isExist >= 0) {
+                return true ;
+            }
+        }
+    }
+
+    return false ;
+}
+
 
 ZaNewAdminWizard.prototype.createNewAdmin = function () {
    //check if the account exists already
@@ -347,6 +457,9 @@ ZaNewAdminWizard.prototype.finishWizard = function () {
         ZaNewAdmin.modifyAdmin(this._containedObject) ; 
     } else if (cStep == ZaNewAdminWizard.STEP_FINISH) {
         isNewAdminCreated = true ;        
+    } else if (cStep == ZaNewAdminWizard.STEP_PROPOSED_GRANTS) {
+        isNewAdminCreated = true;
+        //TODO create the proposed grants
     }
 
     if (isNewAdminCreated) {
@@ -380,8 +493,7 @@ ZaNewAdminWizard.prototype.setObject = function (entry)  {
     }
 
     this._containedObject[ZaModel.currentStep] = ZaNewAdminWizard.STEP_START ;
-    this._localXForm.setInstance (this._containedObject) ;    
-
+    this._localXForm.setInstance (this._containedObject) ;   
 }
 
 ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
@@ -464,7 +576,10 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
                         //TODO: may need the onchange method
 //              onChange: ZaAccount.setDomainChanged
                     } ,
-                    ZaAccount.getAdminRolesItem ()   
+                {ref: ZaNewAdmin.A_default_domain_admin_grp ,  type:_CHECKBOX_, visibilityChecks:[],
+                enableDisableChecks:[],label:com_zimbra_delegatedadmin.LB_Default_admin_group,trueValue:"TRUE", falseValue:"FALSE" },
+
+                ZaAccount.getAdminRolesItem ()   
             ]
     }
     cases.push (case_group) ;
@@ -504,6 +619,31 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
             ZaUIComponent.getUIComponentsXFormItem(220));
     cases.push (case_ui_comp) ;
 
+    var case_proposed_grants = {
+        type: _CASE_,  numCols: 1,
+        tabGroupKey:ZaNewAdminWizard.STEP_PROPOSED_GRANTS, caseKey:ZaNewAdminWizard.STEP_PROPOSED_GRANTS ,
+        items:[
+                {type:_OUTPUT_, ref: ZaAccount.A_name , valueChangeEventSources:[ZaAccount.A_name],
+                    getDisplayValue: function (newValue) {
+                        return  AjxMessageFormat.format(
+                                com_zimbra_delegatedadmin.Help_proposed_grantsList,[newValue]) ;
+                    }
+                } ,
+                { type: _SPACER_ , height: 10 },    
+                {
+                    ref: ZaNewAdmin.A_proposedGrantsList, id: ZaNewAdmin.A_proposedGrantsList, type: _DWT_LIST_,
+// doesn't work in list view:   valueChangeEventSources:[ZaNewAdmin.A_proposedGrantsList], 
+                    width:530, height: 200,
+                    cssClass: "DLSource", widgetClass: ZaGrantsListView,
+                    headerList: ZaGrantsListView._getHeaderList (530, ZaGrant.A_grantee),
+                    hideHeader: false ,
+//                    onSelection:ZaGrantsListView.grantSelectionListener,
+                    multiselect: false  //TODO: enable multiselect in the future
+                } 
+        ]
+    }
+    cases.push (case_proposed_grants) ;
+
     var case_finish = {
             type: _CASE_,
             tabGroupKey:ZaNewAdminWizard.STEP_FINISH, caseKey:ZaNewAdminWizard.STEP_FINISH,
@@ -540,6 +680,7 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
 }
 ZaXDialog.XFormModifiers["ZaNewAdminWizard"].push(ZaNewAdminWizard.myXFormModifier);
 
+//TODO : create a ZaProposedGrantsList to allow adding checkbox to the list
 
 
 
