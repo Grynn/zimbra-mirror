@@ -438,6 +438,18 @@ public class Template {
                 out.print("\\n");
                 continue;
             }
+            else if (c == '\r') {
+	            out.print("\\r");
+	            continue;
+            }
+            else if (c == '\t') {
+	            out.print("\\t");
+	            continue;
+            }
+	        else if (c == '\\') {
+	            out.print("\\\\");
+	            continue;
+            }
             out.print(c);
         }
     }
