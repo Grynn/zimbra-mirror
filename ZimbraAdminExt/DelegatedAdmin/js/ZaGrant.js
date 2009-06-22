@@ -176,7 +176,7 @@ ZaGrant.load = function (params) {
 }
 
 //GrantRightRequest, triggered by the GrantDialog actions
-ZaGrant.grantMethod = function (obj) {
+ZaGrant.grantMethod = function (obj, callback) {
     if (AjxEnv.hasFirebug)
       console.log("Grant Rights ...") ;
 //    var tempObj = ZaApp.getInstance().getCurrentController ()._view.GetObject ();
@@ -201,12 +201,16 @@ ZaGrant.grantMethod = function (obj) {
     try {
         var params = new Object();
         params.soapDoc = soapDoc;
+        if (callback) {
+            params.asyncMode = true;
+		    params.callback = callback;
+        }
         var reqMgrParams = {
             controller: ctler ,
             busyMsg: com_zimbra_delegatedadmin.BUSY_GRANTING_RIGHT
         } ;
 
-        resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GrantRightResponse ;
+        ZaRequestMgr.invoke(params, reqMgrParams);
 
         return true ;
     }catch (ex) {
