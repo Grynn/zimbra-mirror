@@ -413,8 +413,8 @@ function() {
                     ZaSettings.ACCOUNT_LIST_VIEW ,
                     ZaSettings.DL_LIST_VIEW,
                     ZaSettings.ALIAS_LIST_VIEW,
-                    ZaSettings.RESOURCE_LIST_VIEW,
-                    ZaSettings.DOMAIN_LIST_VIEW    
+                    ZaSettings.RESOURCE_LIST_VIEW
+//                    ZaSettings.DOMAIN_LIST_VIEW
                 ];
             } else {
                 this._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [];
@@ -457,7 +457,7 @@ ZaNewAdminWizard.prototype.setProposedGrants = function () {
     domainAdminRight [ZaGrant.A_grantee] = this._containedObject [ZaAccount.A_name] ;
     domainAdminRight [ZaGrant.A_grantee_id] = this._containedObject.id ;
     domainAdminRight [ZaGrant.A_grantee_type] = ZaGrant.GRANTEE_TYPE.grp ;
-    domainAdminRight [ZaGrant.A_right] = "domainAdminRights" ;
+    domainAdminRight [ZaGrant.A_right] = "LegacyAdminConsoleDomainAdminRights" ;
     domainAdminRight [ZaGrant.A_right_type] = "combo" ;
     domainAdminRight [ZaGrant.A_target] = ZaAccount.getDomain (this._containedObject.name) ;
     domainAdminRight [ZaGrant.A_target_type] = ZaItem.DOMAIN ;
@@ -475,7 +475,7 @@ ZaNewAdminWizard.prototype.setProposedGrants = function () {
     domainAdminZimletRight [ZaGrant.A_target_type] = ZaItem.GLOBAL_GRANT ;
     if (!this.isGrantGranted(domainAdminZimletRight))  {
         proposedGrantsList.push(domainAdminZimletRight) ;
-    }
+    } 
 }
 
 ZaNewAdminWizard.prototype.isGrantGranted = function (grant) {

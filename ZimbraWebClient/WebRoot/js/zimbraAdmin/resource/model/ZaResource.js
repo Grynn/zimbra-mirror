@@ -334,7 +334,7 @@ function (resource) {
 	this.attrs = new Object();			
 	this.name = resource.name;
 	this.id = resource.id;
-	var len = resource.a.length;
+	var len = (resource.a ? resource.a.length : 0);
 	for(var ix = 0; ix < len; ix++) {
 		if(!this.attrs[[resource.a[ix].n]]) {
 			this.attrs[[resource.a[ix].n]] = resource.a[ix]._content;

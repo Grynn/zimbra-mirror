@@ -104,6 +104,7 @@ if (ZaAccount) {
             onChange: ZaAccount.changeAdminRoles ,
             emptyText:com_zimbra_delegatedadmin.searchTermAdminGroup,
             enableDisableChecks:[],
+            visibilityChecks: [],
             dataFetcherClass:ZaSearch,editable:true
        }
 
