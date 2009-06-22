@@ -177,8 +177,11 @@ if [ -d ${zimbra_home} ]; then
     if [ ! -d ${zimbra_home}/convertd/convert ]; then
       mkdir -p ${zimbra_home}/convertd/convert
     fi
-    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/convertd/convert
-    chmod 755 ${zimbra_home}/convertd/convert
+    if [ ! -d ${zimbra_home}/convertd/cnvcache ]; then
+      mkdir -p ${zimbra_home}/convertd/cnvcache
+    fi
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/convertd/convert ${zimbra_home}/convertd/cnvcache
+    chmod 755 ${zimbra_home}/convertd/convert ${zimbra_home}/convertd/cnvcache
   fi
 
   if [ -d ${zimbra_home}/conf ]; then
