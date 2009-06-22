@@ -62,6 +62,9 @@ AjxTemplate.compile = function(pkg, authoritative, define, templateText) {
 		} while (m = AjxTemplate.__RE_TEMPLATE.exec(lines));
 	}
 	else {
+		if (define) {
+			AjxPackage.define(pkg);
+		}
 		var func = AjxTemplate.__convertLines(lines);
 		AjxTemplate.register(pkg, func, {}, authoritative);
 	}
@@ -189,6 +192,6 @@ AjxTemplate.__printBufferLine = function(buffer, s1 /* ..., sN */) {
 
 AjxTemplate.__printEscaped = function(buffer, s) {
 	var offset = buffer.length;
-	buffer[offset++] = s.replace(/"/g,"\\\"").replace('\n',"\\n").replace('\r',"\\r");
+	buffer[offset++] = s.replace(/\\/g,"\\\\").replace(/"/g,"\\\"").replace('\n',"\\n").replace('\r',"\\r").replace('\t',"\\t");
 	return offset;
 };
