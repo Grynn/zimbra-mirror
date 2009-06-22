@@ -126,13 +126,21 @@ function SetSmtpPort() {
             </td>
         </tr>
         <tr id="mailSecureRow">
-            <td class="ZFieldLabel"><fmt:message key='Secure'/></td>
+            <td class="ZFieldLabel"><fmt:message key='Security'/></td>
             <td>
                 <table cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td><input class="ZCheckbox" type="checkbox" id="ssl" name="ssl" ${bean.ssl ? 'checked' : ''} onclick="SetPort()"></td>
-                        <td class="ZFieldInfo"><fmt:message key='SecureData'/></td>
-                    </tr>
+                <tr>
+                    <td><input class="ZRadio" type="radio" id="cleartext" name="security" value="cleartext" ${bean.security == 'cleartext' ? 'checked' : ''} onclick="SetPort()"></td>
+                    <td class="ZFieldInfo"><fmt:message key='SecurityNone'/></td>
+                    <td><input class="ZRadio" type="radio" id="ssl" name="security" value="ssl" ${bean.security == 'ssl' ? 'checked' : ''} onclick="SetPort()"></td>
+                    <td class="ZFieldInfo"><fmt:message key='SecuritySsl'/></td>
+<c:if test="${bean.type != 'zimbra'}">                   
+                    <td><input class="ZRadio" type="radio" id="tls" name="security" value="tls" ${bean.security == 'tls' ? 'checked' : ''} onclick="SetPort()"></td>
+                    <td class="ZFieldInfo"><fmt:message key='SecurityTls'/></td>
+                    <td><input class="ZRadio" type="radio" id="tls_if_available" name="security" value="tls_if_available" ${bean.security == 'tls_if_available' ? 'checked' : ''} onclick="SetPort()"></td>
+                    <td class="ZFieldInfo"><fmt:message key='SecurityTlsIfAvailable'/></td>
+</c:if>                    
+                </tr>
                 </table>
             </td>
         </tr>
@@ -154,7 +162,7 @@ function SetSmtpPort() {
             </td>
         </tr>
         <tr id="smtpSecureRow">
-            <td class="ZFieldLabel"><fmt:message key='Secure'/></td>
+            <td class="ZFieldLabel"><fmt:message key='Security'/></td>
             <td>
                 <table cellpadding="0" cellspacing="0">
                     <tr>

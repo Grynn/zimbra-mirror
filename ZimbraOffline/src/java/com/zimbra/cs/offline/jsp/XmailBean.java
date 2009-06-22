@@ -80,7 +80,7 @@ public class XmailBean extends MailBean {
         type = ds.getType().toString();
         host = ds.getHost();
         port = ds.getPort().toString();
-        isSsl = ds.getConnectionType() == DataSource.ConnectionType.ssl;
+        connectionType = ds.getConnectionType();
         isDebugTraceEnabled = ds.isDebugTraceEnabled();
         calendarSyncEnabled = ds.getBooleanAttr(
             OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled, false);
@@ -172,9 +172,7 @@ public class XmailBean extends MailBean {
                         replyToDisplay);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceHost, host);
                     dsAttrs.put(Provisioning.A_zimbraDataSourcePort, port);
-                    dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType,
-                        (isSsl ? ConnectionType.ssl : ConnectionType.cleartext)
-                            .toString());
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, connectionType.toString());
                     dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace,
                         isDebugTraceEnabled ? Provisioning.TRUE :
                         Provisioning.FALSE);

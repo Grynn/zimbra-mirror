@@ -16,6 +16,8 @@
  */
 package com.zimbra.cs.offline.jsp;
 
+import com.zimbra.cs.account.DataSource;
+
 public class YmailBean extends ImapBean {
     public static final String Domain = "yahoo.com";
 
@@ -37,9 +39,9 @@ public class YmailBean extends ImapBean {
 		    username = email;
 	    }
 	}
-	host = email.endsWith("@yahoo.co.jp") ? "zimbra.imap.mail.yahoo.co.jp" :
-	    "zimbra.imap.mail.yahoo.com";
-	isSsl = true;
+	host = email.endsWith("@yahoo.co.jp") ?
+            "zimbra.imap.mail.yahoo.co.jp" : "zimbra.imap.mail.yahoo.com";
+        connectionType = DataSource.ConnectionType.ssl;
 	port = "993";
 	super.doRequest();
     }

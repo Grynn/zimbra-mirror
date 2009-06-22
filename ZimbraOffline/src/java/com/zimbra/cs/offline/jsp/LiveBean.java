@@ -33,7 +33,7 @@ public class LiveBean extends XmailBean {
 	    username = email;
         }
         host = "www.hotmail.com";
-        isSsl = false;
+        connectionType = DataSource.ConnectionType.cleartext;
         port = "80";
         super.doRequest();
     }

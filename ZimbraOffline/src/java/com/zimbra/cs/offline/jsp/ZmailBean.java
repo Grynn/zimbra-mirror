@@ -23,6 +23,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class ZmailBean extends MailBean {
@@ -48,7 +49,8 @@ public class ZmailBean extends MailBean {
 	password = JspConstants.MASKED_PASSWORD;
 	host = account.getAttr(JspConstants.OFFLINE_REMOTE_HOST);
 	port = account.getAttr(JspConstants.OFFLINE_REMOTE_PORT);
-	isSsl = account.getBooleanAttr(JspConstants.OFFLINE_REMOTE_SSL, false);
+	boolean ssl = account.getBooleanAttr(JspConstants.OFFLINE_REMOTE_SSL, false);
+        connectionType = ssl ? connectionType = DataSource.ConnectionType.ssl : DataSource.ConnectionType.cleartext;
 	syncFreqSecs = account.getTimeIntervalSecs(OfflineConstants.A_offlineSyncFreq,
 	    OfflineConstants.DEFAULT_SYNC_FREQ / 1000);
 	isDebugTraceEnabled = account.getBooleanAttr(OfflineConstants.A_offlineEnableTrace, false);
@@ -90,7 +92,7 @@ public class ZmailBean extends MailBean {
             	attrs.put(OfflineConstants.A_offlineSslCertAlias, sslCertAlias);
 		    attrs.put(JspConstants.OFFLINE_REMOTE_HOST, host);
 		    attrs.put(JspConstants.OFFLINE_REMOTE_PORT, port);
-		    attrs.put(JspConstants.OFFLINE_REMOTE_SSL, isSsl ? Provisioning.TRUE : Provisioning.FALSE);
+		    attrs.put(JspConstants.OFFLINE_REMOTE_SSL, isSsl() ? Provisioning.TRUE : Provisioning.FALSE);
 		}
 	    }
 
@@ -128,11 +130,11 @@ public class ZmailBean extends MailBean {
 	if (isEmpty(port))
 		return true;
 	int iPort = Integer.parseInt(port);
-	return (isSsl && iPort == 443) || (!isSsl && iPort == 80);
+	return (isSsl() && iPort == 443) || (!isSsl() && iPort == 80);
     }
 
     private String getRemoteServerUri() {
-	return (isSsl ? "https://" : "http://") + host +
+	return (isSsl() ? "https://" : "http://") + host +
 	    (isDefaultPort() ? "" : ":" + port);
     }
 

@@ -32,7 +32,7 @@ public class GmailBean extends ImapBean {
 	    username = email;
         }
 	host = "imap.gmail.com";
-	isSsl = true;
+        connectionType = DataSource.ConnectionType.ssl;
 	port = "993";
 
 	smtpHost = "smtp.gmail.com";

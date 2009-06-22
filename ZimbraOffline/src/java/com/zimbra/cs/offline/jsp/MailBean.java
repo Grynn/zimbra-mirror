@@ -21,6 +21,8 @@ import java.util.List;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.DataSource.ConnectionType;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -40,8 +42,9 @@ public class MailBean extends FormBean {
 
     protected String host = "";
     protected String port = "";
-    protected boolean isSsl = false;
 
+    protected DataSource.ConnectionType connectionType = ConnectionType.cleartext;
+    
     protected long syncFreqSecs = OfflineConstants.DEFAULT_SYNC_FREQ / 1000;
 
     protected boolean isDebugTraceEnabled;
@@ -109,13 +112,17 @@ public class MailBean extends FormBean {
     public void setPort(String port) {
 	this.port = require(port);
     }
-    
-    public boolean isSsl() {
-	return isSsl;
+
+    public void setSecurity(String security) {
+        connectionType = ConnectionType.valueOf(security);
+    }
+
+    public String getSecurity() {
+        return connectionType.toString();
     }
     
-    public void setSsl(boolean isSsl) {
-	this.isSsl = isSsl;
+    public boolean isSsl() {
+        return connectionType == ConnectionType.ssl;
     }
     
     public boolean isDebugTraceEnabled() {

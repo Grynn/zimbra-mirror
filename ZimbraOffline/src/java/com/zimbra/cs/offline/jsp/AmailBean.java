@@ -16,6 +16,8 @@
  */
 package com.zimbra.cs.offline.jsp;
 
+import com.zimbra.cs.account.DataSource;
+
 public class AmailBean extends ImapBean {
     public static final String Domain = "aol.com";
 
@@ -34,7 +36,7 @@ public class AmailBean extends ImapBean {
         	addInvalid("email");
         }
 	host = "imap.aol.com";
-	isSsl = false;
+	connectionType = DataSource.ConnectionType.cleartext;
 	port = "143";
 
 	smtpHost = "smtp.aol.com";
