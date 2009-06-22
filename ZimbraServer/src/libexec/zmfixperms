@@ -174,7 +174,7 @@ if [ -d ${zimbra_home} ]; then
   fi
 
   if [ -d ${zimbra_home}/convertd ]; then
-    if [ !-d ${zimbra_home}/convertd/convert ]; then
+    if [ ! -d ${zimbra_home}/convertd/convert ]; then
       mkdir -p ${zimbra_home}/convertd/convert
     fi
     chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/convertd/convert
