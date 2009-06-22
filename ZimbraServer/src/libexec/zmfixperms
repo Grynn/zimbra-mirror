@@ -47,7 +47,6 @@ components="\
   aspell \
   bdb \
   clamav \
-  convertd \
   curl \
   cyrus-sasl \
   dspam \
@@ -174,14 +173,16 @@ if [ -d ${zimbra_home} ]; then
   fi
 
   if [ -d ${zimbra_home}/convertd ]; then
-    if [ ! -d ${zimbra_home}/convertd/convert ]; then
-      mkdir -p ${zimbra_home}/convertd/convert
+    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/convertd
+    chmod 755 ${zimbra_home}/convertd
+    if [ -d ${zimbra_home}/convertd/bin ]; then
+      chown -R ${root_user}:${root_group} ${zimbra_home}/convertd/bin
+      chmod 755 ${zimbra_home}/convertd/bin
     fi
-    if [ ! -d ${zimbra_home}/convertd/cnvcache ]; then
-      mkdir -p ${zimbra_home}/convertd/cnvcache
+    if [ -d ${zimbra_home}/convertd/lib ]; then
+      chown -R ${root_user}:${root_group} ${zimbra_home}/convertd/lib
+      chmod 755 ${zimbra_home}/convertd/lib
     fi
-    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/convertd/convert ${zimbra_home}/convertd/cnvcache
-    chmod 755 ${zimbra_home}/convertd/convert ${zimbra_home}/convertd/cnvcache
   fi
 
   if [ -d ${zimbra_home}/conf ]; then
