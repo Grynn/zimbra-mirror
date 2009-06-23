@@ -22,11 +22,11 @@ use Net::LDAP::LDIF;
 use Getopt::Long;
 
 my (%c,%loaded,%saved,$rc);
-my ($oldServerName, $newServerName, $help, $verbose, $force, $skipusers, $usersonly);
+my ($oldServerName, $newServerName, $help, $verbose, $force, $delete, $skipusers, $usersonly);
 
 my (undef, undef,$uid,$gid) = getpwnam('zimbra');
 if ($> ne $uid) {
-  print "Must be run as user zimbra.";
+  print "Must be run as user zimbra.\n";
   &usage
 }
 
@@ -34,6 +34,7 @@ GetOptions("help" => \$help,
     "oldname=s" => \$oldServerName,
     "newname=s" => \$newServerName,
     "force" => \$force,
+    "deletelogger" => \$delete,
     "skipusers" => \$skipusers,
     "usersonly" => \$usersonly,
     "verbose+" => \$verbose);
@@ -88,6 +89,7 @@ $c{zimbra_ldap_password} = getLocalConfig("zimbra_ldap_password");
 $c{ldap_is_master} = getLocalConfig("ldap_is_master");
 $c{ldap_master_url} = getLocalConfig("ldap_master_url");
 $c{ldap_starttls_supported} = getLocalConfig("ldap_starttls_supported");
+$c{zimbra_log_host} = getLdapGlobalConfig("zimbraLogHostname");
 
 # ***** Main *****
 
@@ -144,6 +146,21 @@ if (!$usersonly) {
     print (($rc==0) ? "done.\n" : "failed.\n");
   }
 
+  #remap or delete logger data for the host
+  if (index($c{zimbraServiceEnabled}, "logger") != -1) {
+    if ($delete) {
+      runCommand("$c{zimbra_home}/bin/zmloggerhostmap -d $oldServerName $oldServerName");
+    } else {
+      runCommand("$c{zimbra_home}/bin/zmloggerhostmap $oldServerName $newServerName");
+    }
+  } else {
+    if ($delete) {
+      runCommand("$c{zimbra_home}/libexec/zmrc $c{zimbra_log_host} HOST:$c{zimbra_log_host} zmloggerhostmap -d $oldServerName $oldServerName");
+    } else {
+      runCommand("$c{zimbra_home}/libexec/zmrc $c{zimbra_log_host} HOST:$c{zimbra_log_host} zmloggerhostmap $oldServerName $newServerName");
+    }
+  }
+
   # Regenerate Self-signed certs
   if (!-f "$c{zimbra_home}/ssl/zimbra/commercial/commercial.crt") {
     if($c{ldap_is_master}) {
@@ -162,12 +179,13 @@ exit 0;
 # ***** Subroutines *****
 sub usage {
   print "\n";
-  print "Usage: $0 [-h] [-f] [-s] [-o <prev servername] [-v+] -n <servername>\n";
+  print "Usage: $0 [-h] [-d] [-f] [-s] [-o <prev servername] [-v+] -n <servername>\n";
   print "Changes the name of the local zimbra server.\n";
   print " --help: print this usage statement.\n";
   print " --force: Force the rename, bypassing safety checks.\n";
   print " --oldServerName <oldname>: Previous name for the server.  Defaults to LC zimbra_server_hostname.\n";
   print " --newServerName <newname>: New name for the server.\n";
+  print " --deletelogger: Delete the logger database for the old server.  Default is to remap its data to the new hostname.\n";
   print " --skipusers: Skips modifying the user database with the new server.\n"; 
   print " --usersonly: Only updates the user database.  This way, you can run once to do all the server\n";
   print "              updates, and then a second time to update the accounts.  Likely requires --force.\n";

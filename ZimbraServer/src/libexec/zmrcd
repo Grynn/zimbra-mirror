@@ -52,7 +52,7 @@ my %SIMPLE_COMMANDS = (
    "zmqstat corrupt"  => "sudo /opt/zimbra/libexec/zmqstat corrupt",
    "zmcollectconfigfiles" => "tar cv /opt/zimbra/conf | gzip -cf",
    "zmcollectldapzimbra" => "/opt/zimbra/openldap/sbin/slapcat -F /opt/zimbra/data/ldap/config -b '' -s cn=zimbra | gzip -cf",
-   "zmschedulebackup" => "/opt/zimbra/bin/zmschedulebackup"      
+   "zmschedulebackup" => "/opt/zimbra/bin/zmschedulebackup"
 );
 
 my %REGEX_CHECKED_COMMANDS = (
@@ -75,6 +75,9 @@ my %REGEX_CHECKED_COMMANDS = (
     regex => '[a-zA-Z0-9\\/\\.\\-_:@ ]*',
     # alphanumeric, slash, dot, dash, underscore, colon, at, space
     program => "sudo /opt/zimbra-cluster/bin/zmclustat"},
+   "zmloggerhostmap"  => {
+     regex => '[a-zA-Z0-9\\/\\.\\-_:@ ]*',
+     program=>"/opt/zimbra/bin/zmloggerhostmap",},
 );
 
 my %allhosts = ();
