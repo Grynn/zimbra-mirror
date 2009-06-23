@@ -62,6 +62,7 @@ public class Template {
 	private boolean _authoritative = false;
 	private boolean _define = false;
 	private String[] _filenames = null;
+	private String _format = "js";
 
 	
 	//
@@ -89,6 +90,11 @@ public class Template {
         option = new Option("o", "outputdir", true, "name of directory for resultant files");
         option.setRequired(false);
         _mOptions.addOption(option);
+
+		option = new Option("f", "format", true, "output format, \"js\" or \"properties\" (default: \"js\"");
+		option.setRequired(false);
+		_mOptions.addOption(option);
+		
 	}
 
 
@@ -112,11 +118,18 @@ public class Template {
 	                                String[] filenames,
 	                                boolean authoritative, boolean define)
 	throws IOException {
+		convertFiles(idir, odir, prefix, filenames, "js", authoritative, define);
+	}
+
+	public static void convertFiles(File idir, File odir, String prefix,
+	                                String[] filenames, String format,
+	                                boolean authoritative, boolean define)
+	throws IOException {
 		for (String filename : filenames) {
 			String path = stripExt(filename);
 			String pkg = prefix + path2package(path);
 			File ifile = new File(idir, filename);
-			File ofile = new File(odir, filename+".js");
+			File ofile = new File(odir, filename+"."+format);
 			if (upToDate(ifile, ofile)) {
                 System.out.println(ifile + " is up to date");
                 continue;
@@ -127,7 +140,7 @@ public class Template {
 				pdir.mkdirs();
 			}
 			try {
-				convert(ifile, ofile, pkg, authoritative, define);
+				convert(ifile, ofile, format, pkg, authoritative, define);
 			}
 			catch (IOException e) {
 				System.err.println("error: "+e.getMessage());
@@ -135,13 +148,19 @@ public class Template {
 		}
 	}
 
-
 	public static void convert(File ifile, File ofile, String pkg,
+	                           boolean authoritative, boolean define)
+	throws IOException {
+		convert(ifile, ofile, "js", pkg, authoritative, define);
+	}
+
+	public static void convert(File ifile, File ofile, String format, String pkg,
 	                           boolean authoritative, boolean define)
 	throws IOException {
 	    BufferedReader in = null;
 	    PrintWriter out = null;
 	    try {
+		    boolean isProperties = format.equals("properties");
 	        in = new BufferedReader(new FileReader(ifile));
 	        out = new PrintWriter(new FileWriter(ofile));
 
@@ -153,9 +172,6 @@ public class Template {
 	                Map<String,String> attrs = parseAttrs(matcher.group(1));
 	                String body = matcher.group(2);
 	                String stripWsAttr = attrs.get(A_XML_SPACE);
-	                if (stripWsAttr == null || !stripWsAttr.equals(V_XML_SPACE_PRESERVE)) {
-	                    body = body.replaceAll(S_GT_LINESEP_LT, "><").trim();
-	                }
 	                String packageId = pkg;
 	                String templateId = attrs.get("id");
 	                // NOTE: Template ids can be specified absolutely (i.e.
@@ -171,6 +187,27 @@ public class Template {
 	                    templateId = templateId.replaceAll("^.*#", "");
 	                }
 	                String id = templateId != null && !templateId.equals("") ? packageId+"#"+templateId : packageId;
+		            if (isProperties) {
+			            // TODO: convert to properties
+			            printEscaped(out, id);
+			            if (body.indexOf('\n') == -1) {
+				            out.print(" = ");
+				            printEscaped(out, body);
+			            }
+			            else {
+				            out.print(" =");
+				            String[] bodylines = body.split("\n");
+				            for (String bodyline : bodylines) {
+				                out.print("\\\n\t");
+					            printEscaped(out, bodyline);
+				            }
+			            }
+			            out.println();
+			            continue;
+		            }
+		            if (stripWsAttr == null || !stripWsAttr.equals(V_XML_SPACE_PRESERVE)) {
+		                body = body.replaceAll(S_GT_LINESEP_LT, "><").trim();
+		            }
 	                convertLines(out, id, body, attrs, authoritative);
 		            if (first && define) {
 		                out.print("AjxPackage.define(\"");
@@ -234,7 +271,7 @@ public class Template {
 		File idir = new File(_idir);
 		File odir = new File(_odir);
 
-        convertFiles(idir, odir, _prefix, _filenames, _authoritative, _define);
+        convertFiles(idir, odir, _prefix, _filenames, _format, _authoritative, _define);
 
 	}
 
@@ -267,6 +304,9 @@ public class Template {
 		}
 		if (cl.hasOption("o")) {
 			_odir = cl.getOptionValue("o");
+		}
+		if (cl.hasOption("f")) {
+			_format = cl.getOptionValue("f");
 		}
 
 		_filenames = cl.getArgs();
