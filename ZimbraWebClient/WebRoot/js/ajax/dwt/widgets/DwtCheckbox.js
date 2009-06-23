@@ -31,15 +31,17 @@
  */
 DwtCheckbox = function(params) {
 	if (arguments.length == 0) { return; }
+
 	params = Dwt.getParams(arguments, DwtCheckbox.PARAMS);
 	params.className = params.className || "DwtCheckbox";
+
 	DwtControl.call(this, params);
+
+	this._textPosition = DwtCheckbox.DEFAULT_POSITION;
 	this._initName = params.name;
 	this._initChecked = params.checked;
 	this._createHtml();
-}
-
-DwtCheckbox.PARAMS = ["parent", "style", "name", "checked", "className", "posStyle", "id", "index"];
+};
 
 DwtCheckbox.prototype = new DwtControl;
 DwtCheckbox.prototype.constructor = DwtCheckbox;
@@ -52,19 +54,24 @@ function() {
 //
 // Constants
 //
-
-DwtCheckbox.TEXT_LEFT = "left";
-DwtCheckbox.TEXT_RIGHT = "right";
-
-DwtCheckbox.DEFAULT_POSITION = DwtCheckbox.TEXT_RIGHT;
+DwtCheckbox.PARAMS = [
+	"parent",
+	"style",
+	"name",
+	"checked",
+	"className",
+	"posStyle",
+	"id",
+	"index"
+];
+DwtCheckbox.TEXT_LEFT			= "left";
+DwtCheckbox.TEXT_RIGHT			= "right";
+DwtCheckbox.DEFAULT_POSITION	= DwtCheckbox.TEXT_RIGHT;
 
 //
 // Data
 //
-
 DwtCheckbox.prototype.TEMPLATE = "dwt.Widgets#DwtCheckbox";
-
-DwtCheckbox.prototype._textPosition = DwtCheckbox.DEFAULT_POSITION;
 
 //
 // Public methods
