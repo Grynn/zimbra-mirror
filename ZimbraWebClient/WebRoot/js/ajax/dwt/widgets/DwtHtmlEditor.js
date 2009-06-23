@@ -277,9 +277,9 @@ function(content) {
 	}
 
 	if (this._mode == DwtHtmlEditor.HTML) {
-		// If the html is initialed then go ahead and set the content, else let the
+		// If the html editor is initialized then go ahead and set the content, else let
 		// _finishHtmlModeInit run before we try setting the content
-                this._pendingContent = content ? ((content instanceof AjxVector) ? content[0] : content) : "";
+		this._pendingContent = content || "";
 		if (this._htmlModeInited) {
 			this._setContentOnTimer();
 		} // ELSE: _finishHtmlModeInit is about to run and it'll use _pendingContent
@@ -1570,7 +1570,9 @@ function(iFrameDoc) {
 };
 
 DwtHtmlEditor.prototype._onContentInitialized =
-function() {};
+function() {
+	this._pendingContent = null;
+};
 
 DwtHtmlEditor.prototype._setContentOnTimer =
 function() {
