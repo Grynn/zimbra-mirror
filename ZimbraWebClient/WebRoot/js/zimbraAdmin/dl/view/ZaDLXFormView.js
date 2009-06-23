@@ -192,23 +192,26 @@ function(evt) {
 **/
 ZaDLXFormView.fwdMemButtonHndlr = 
 function(evt) {
-	var fieldObj = this.getForm().parent;
 	var currentPageNum = this.getInstanceValue("/memPagenum")+1;
 	this.setInstanceValue(currentPageNum,"/memPagenum");
-	this.getInstance().getMembers(ZaDistributionList.MEMBER_QUERY_LIMIT);
-	//this.getForm().refresh();
+    var currentObj = ZaApp.getInstance().getCurrentController()._currentObject ;
+    currentObj[ZaDistributionList.A2_memPagenum] = currentPageNum ;
+    var memberList = currentObj.getMembers();
+    this.setInstanceValue(memberList, ZaDistributionList.A2_memberList);    
+    //	ZaDistributionList.prototype.getMembers.call (this,ZaDistributionList.MEMBER_QUERY_LIMIT ) ;
 }
 
-/**
+/**                                                                 
 * method of an XFormItem
 **/
 ZaDLXFormView.backMemButtonHndlr = 
 function(evt) {
-	var fieldObj = this.getForm().parent;
 	var currentPageNum = this.getInstanceValue("/memPagenum")-1;
 	this.setInstanceValue(currentPageNum,"/memPagenum");
-	this.getInstance().getMembers(ZaDistributionList.MEMBER_QUERY_LIMIT);
-	//this.getForm().refresh();
+    var currentObj = ZaApp.getInstance().getCurrentController()._currentObject ;
+    currentObj[ZaDistributionList.A2_memPagenum] = currentPageNum ;
+    var memberList = currentObj.getMembers();
+    this.setInstanceValue(memberList, ZaDistributionList.A2_memberList);	
 }
 /**
 * method of the XForm
@@ -234,11 +237,11 @@ ZaDLXFormView.shouldEnableMemberListButtons = function() {
 	return (ZaDLXFormView.getMemberSelection.call(this).length>0);
 };
 
-/**
+/**                                                                  
 * method of the XForm
 **/
 ZaDLXFormView.shouldEnableRemoveAllButton = function() {
-	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaDistributionList.A2_members)));
+	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaDistributionList.A2_memberList)));
 };
 
 /**
@@ -433,9 +436,9 @@ function (entry) {
 	this._containedObject[ZaDistributionList.A2_removeList] = new Array(); //members to remove
 	this._containedObject[ZaDistributionList.A2_removeList]._version = 1;
 	this._containedObject[ZaDistributionList.A2_poolPagenum] = 1;
-	this._containedObject[ZaDistributionList.A2_poolNumPages] = 1;
+	this._containedObject[ZaDistributionList.A2_poolNumPages] = entry [ZaDistributionList.A2_poolNumPages];
 	this._containedObject[ZaDistributionList.A2_memPagenum] = 1;
-	this._containedObject[ZaDistributionList.A2_memNumPages] = 1;
+	this._containedObject[ZaDistributionList.A2_memNumPages] = entry [ZaDistributionList.A2_memNumPages];
 	this._containedObject[ZaDistributionList.A2_query] = "";
 	//membership related instance variables
 	this._containedObject[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.cloneMemberOf(entry);
@@ -951,7 +954,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 								{type:_SPACER_, height:"5"},
 								{type:_GROUP_, width:"100%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5], 
 									items:[
-										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, width:80, 
+										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, width:80,
 									      enableDisableChangeEventSources:[ZaDistributionList.A2_directMemberList],
 									      enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_directMemberList]],
 										  onActivate:"ZaAccountMemberOfListView.removeAllGroups.call(this,event, ZaAccount.A2_directMemberList)"
@@ -1002,13 +1005,13 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 										{type:_CELLSPACER_},
 										{type:_CELLSPACER_},
 										{type:_CELLSPACER_},
-										{type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis", 	
+										{type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"indirectBackButton", icon:"LeftArrow", disIcon:"LeftArrowDis",
 											onActivate:"ZaAccountMemberOfListView.backButtonHndlr.call(this,event, ZaAccount.A2_indirectMemberList)", 
 											enabeDisableChecks:[[ZaAccountMemberOfListView.shouldEnableBackButton,ZaAccount.A2_indirectMemberList]],
 											enableDisableChangeEventSources:[ZaAccount.A2_indirectMemberList+"_offset"]
 									    },								       
 										{type:_CELLSPACER_},
-										{type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",	
+										{type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"indirectFwdButton", icon:"RightArrow", disIcon:"RightArrowDis",	
 											onActivate:"ZaAccountMemberOfListView.fwdButtonHndlr.call(this,event, ZaAccount.A2_indirectMemberList)", 
 											enabeDisableChecks:[[ZaAccountMemberOfListView.shouldEnableForwardButton,ZaAccount.A2_indirectMemberList]],
 											enableDisableChangeEventSources:[ZaAccount.A2_indirectMemberList+"_offset"]

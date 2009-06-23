@@ -561,14 +561,17 @@ function(event, listItemId){
 			this.setInstanceValue(0,  listItemId + "_more");
 		}
 		this.setInstanceValue(nextOffset,  listItemId + "_offset");
-//		this.getForm().refresh();
+        var directMemberOfList = instance [ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList] ;
+        var indirectMemberOfList = instance [ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList] ; 
+        this.setInstanceValue( directMemberOfList , ZaAccount.A2_directMemberList);
+        this.setInstanceValue( indirectMemberOfList , ZaAccount.A2_indirectMemberList);
 	}
 };
 
 /**
  * search for the dls or groups
  * 
- */
+ */                                       
 ZaAccountMemberOfListView.doSearch=
 function (item, offset){
 	var arr = [] ;

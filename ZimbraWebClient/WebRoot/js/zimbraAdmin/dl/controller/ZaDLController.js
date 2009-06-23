@@ -62,7 +62,6 @@ function (entry)	{
 		entry[ZaModel.currentTab] = "1";
 		this._view.setObject(entry);
 		this._currentObject = entry;
-		
 	} catch (ex) {
 		this._handleException(ex, "ZaDLController.prototype.show", null, false);
 	}	

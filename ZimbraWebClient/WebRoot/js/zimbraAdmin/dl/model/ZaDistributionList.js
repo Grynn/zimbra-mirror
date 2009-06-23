@@ -46,7 +46,7 @@ ZaItem.ObjectModifiers["ZaDistributionList"] = [] ;
 ZaDistributionList.EMAIL_ADDRESS = "ZDLEA";
 ZaDistributionList.DESCRIPTION = "ZDLDESC";
 ZaDistributionList.ID = "ZDLID";
-ZaDistributionList.MEMBER_QUERY_LIMIT = 25;
+ZaDistributionList.MEMBER_QUERY_LIMIT = 25;                  
 ZaDistributionList.A_zimbraGroupId = "zimbraGroupId";
 ZaDistributionList.A_zimbraCreateTimestamp = "zimbraCreateTimestamp";
 
@@ -613,14 +613,13 @@ ZaDistributionList.prototype.getName = function () {
  * Makes a server call to get the distribution list details, if the
  * internal list of members is null
  */
-// TODO -- handle dynamic limit and offset
-ZaDistributionList.prototype.getMembers = function (by, val, limit) {
+ZaDistributionList.prototype.getMembers = function () {
 	//DBG.println("Get members: memberList = " , this._memberList, "$");
 	if (this.id != null) {
 		this._memberList = null;
 		var soapDoc = AjxSoapDoc.create("GetDistributionListRequest", ZaZimbraAdmin.URN, null);
-		if(!limit)
-			limit = ZaDistributionList.MEMBER_QUERY_LIMIT;
+
+		var limit = ZaDistributionList.MEMBER_QUERY_LIMIT;
 			
 		soapDoc.setMethodAttribute("limit", limit);
 		if(!this.getAttrs.all && !AjxUtil.isEmpty(this.attrsToGet)) {
