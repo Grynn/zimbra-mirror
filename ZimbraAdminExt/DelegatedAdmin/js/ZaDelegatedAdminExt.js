@@ -78,14 +78,14 @@ ZaOperation.VIEW_EFFECTIVE_RIGHTS = ++ ZA_OP_INDEX;
 ZaOperation.CONFIG_GRANTS = ++ ZA_OP_INDEX ;
 if (ZaController.initToolbarMethods["ZaAccountListController"]) {
     ZaAccountListController.initExtraToolbarMethod = function () {
-        this._toolbarOperations [ZaOperation.VIEW_EFFECTIVE_RIGHTS] =
-        new ZaOperation(ZaOperation.VIEW_EFFECTIVE_RIGHTS, com_zimbra_delegatedadmin.bt_config_grants,
+        this._toolbarOperations [ZaOperation.CONFIG_GRANTS] =
+        new ZaOperation(ZaOperation.CONFIG_GRANTS, com_zimbra_delegatedadmin.bt_config_grants,
                 com_zimbra_delegatedadmin.bt_config_grants_tt, "Permission", "PermissionDis",
                 new AjxListener(this, ZaDelegatedAdminExt._configGrantsListener)
                 );
 
-        this._toolbarOperations [ZaOperation.CONFIG_GRANTS] =
-        new ZaOperation(ZaOperation.CONFIG_GRANTS, com_zimbra_delegatedadmin.ACTBB_ViewRights,
+        this._toolbarOperations [ZaOperation.VIEW_EFFECTIVE_RIGHTS] =
+        new ZaOperation(ZaOperation.VIEW_EFFECTIVE_RIGHTS, com_zimbra_delegatedadmin.ACTBB_ViewRights,
                 com_zimbra_delegatedadmin.ACTBB_ViewRights_tt,"RightObject", "RightObjectDis",
                 new AjxListener(this, ZaDelegatedAdminExt._viewRightsListener)
                 );
@@ -201,6 +201,8 @@ function () {
                 if (this._toolbarOperations[ZaOperation.CONFIG_GRANTS]) {
                     this._toolbarOperations[ZaOperation.CONFIG_GRANTS].enabled = false;
                 }
+            }else {
+                ZaDelegatedAdminExt.checkRights.call (this, item) ;
             }
         } else {
             if (this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS]) {
@@ -252,6 +254,8 @@ ZaDelegatedAdminExt.changeAccountViewActionStateMethod = function () {
     if (this._currentObject.attrs [ZaAccount.A_zimbraIsDelegatedAdminAccount] != "TRUE") {
         this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
         this._toolbarOperations[ZaOperation.CONFIG_GRANTS].enabled = false;
+    } else {
+        ZaDelegatedAdminExt.checkRights.call (this, this._currentObject) ;
     }
 }
 ZaController.changeActionsStateMethods["ZaAccountViewController"].push(ZaDelegatedAdminExt.changeAccountViewActionStateMethod);
@@ -286,11 +290,38 @@ ZaDelegatedAdminExt.changeDLViewActionStateMethod = function () {
     if (this._currentObject.attrs [ZaDistributionList.A_isAdminGroup] != "TRUE") {
         this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
         this._toolbarOperations[ZaOperation.CONFIG_GRANTS].enabled = false;
+    } else {
+        ZaDelegatedAdminExt.checkRights.call (this, this._currentObject) ;
     }
 }
 ZaController.changeActionsStateMethods["ZaDLController"].push(ZaDelegatedAdminExt.changeDLViewActionStateMethod);
 
+//check whether "View Rights" or "Configure Grants" button should be enabled based on the rights
+ZaDelegatedAdminExt.checkRights = function (item) {
+    if (!item) return ;
+    if (AjxUtil.isEmpty(item.rights)) {
+        item.loadEffectiveRights("id", item.id, false) ;
+    }
 
+    if (((item.type == ZaItem.ACCOUNT) && ZaItem.hasRight(ZaRight.VIEW_RIGHTS_USR_RIGHT, item))
+          || ((item.type == ZaItem.DL) && ZaItem.hasRight(ZaRight.VIEW_RIGHTS_GRP_RIGHT, item))){
+        //good, admin has the right to "view rights" on this target
+//        console.log("Enable View Rights") ;
+    } else if (this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS]) {
+        //no right to "view rights"
+//        console.log("Disable View Rights") ;
+        this._toolbarOperations[ZaOperation.VIEW_EFFECTIVE_RIGHTS].enabled = false;
+    }
+
+    if (ZaItem.hasRight(ZaRight.CONFIG_GRANTS_RIGHT, item)){
+        //good, admin has the right to "view rights" on this target
+//        console.log("Enable Configure Grants") ;
+    } else if (this._toolbarOperations[ZaOperation.CONFIG_GRANTS]) {
+        //no right to "view rights"
+//        console.log("Disable Configure Grants") ;
+        this._toolbarOperations[ZaOperation.CONFIG_GRANTS].enabled = false;
+    }
+}
 
 
 

@@ -48,6 +48,11 @@ ZaRight.A2_selected_rights = "selected_rights";
 
 ZaRight.RIGHT_TYPES = ["preset", "setAttrs", "getAttrs", "combo"];
 
+ZaRight.CONFIG_GRANTS_RIGHT = "viewGrants" ;
+ZaRight.VIEW_RIGHTS_USR_RIGHT = "checkRightUsr" ;
+ZaRight.VIEW_RIGHTS_GRP_RIGHT = "checkRightGrp" ;
+
+
 //@return the lists of rights for the type specified
 ZaRight.getCustomRightsList = function () {
     //TODO: since we can also create the getAttrs and setAttrs rights, we actually need to use the SOAP command to get the lists of rights   
