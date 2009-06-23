@@ -165,6 +165,11 @@ YMEmoticonsPicker.prototype._createEmoticonsTable = function(){
 
 	this.getHtmlElement().innerHTML =  [firstLine, html.join("")].join("");
 
+	if(AjxEnv.isFirefox1_5up && !AjxEnv.isFirefox3up){//for ff2
+		this.setSize("480px", Dwt.DEFAULT);
+	}
+
+
 };
 
 YMEmoticonsPicker.prototype._registerHandlers = function(){
