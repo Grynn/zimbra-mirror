@@ -87,7 +87,6 @@ import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.Blob;
 import com.zimbra.cs.store.StoreManager;
-import com.zimbra.cs.store.Volume;
 import com.zimbra.cs.util.AccountUtil;
 import com.zimbra.soap.ZimbraSoapContext;
 
@@ -816,7 +815,7 @@ public class InitialSync {
         player.setData(parsed.defaultInv, parsed.exceptions, parsed.replies, parsed.nextAlarm);
         if (parsed.defaultInv != null)
             player.setCalendarItemPartStat(parsed.defaultInv.mInv.getPartStat());
-        player.setCalendarItemAttrs(itemId, folderId, Volume.getCurrentMessageVolume().getId());
+        player.setCalendarItemAttrs(itemId, folderId);
         player.start(System.currentTimeMillis());
         
         try {
@@ -1080,7 +1079,7 @@ public class InitialSync {
         
     void syncMessage(int id, int folderId, byte type) throws ServiceException {
         OfflineSyncManager.getInstance().continueOK();
-        
+
         Map<String, String> headers = new HashMap<String, String>();
 
         OfflineAccount acct =ombx.getOfflineAccount();
@@ -1129,10 +1128,10 @@ public class InitialSync {
             if (data.length > DISK_STREAM_THRESHOLD) {
                 OfflineLog.offline.info(
                         "Message id=%d exceeded threshold of %d bytes. Streaming message to disk.", id, DISK_STREAM_THRESHOLD);
-                
+                    
                 SequenceInputStream jointStream = new SequenceInputStream(new ByteArrayInputStream(data), in);
                 CompressedBlobReader reader = new CompressedBlobReader(0);
-                blob = StoreManager.getInstance().storeIncoming(jointStream, 0, null, Volume.getCurrentMessageVolume().getId(), reader);
+                blob = StoreManager.getInstance().storeIncoming(jointStream, 0, reader);
                 data = reader.getData(); // Returns null if the blob was not compressed
                 OfflineLog.offline.info("Message id=%d streamed to disk file %s.", id, blob.getPath());
             }

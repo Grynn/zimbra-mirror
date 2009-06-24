@@ -308,7 +308,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
 
                 // copy blob to new id (note that item.getSavedSequence() may change again later)
                 try {
-                    MailboxBlob newBlob = StoreManager.getInstance().link(mblob.getBlob(), this, newId, item.getSavedSequence(), item.getVolumeId());
+                    MailboxBlob newBlob = StoreManager.getInstance().link(mblob.getBlob(), this, newId, item.getSavedSequence());
                     markOtherItemDirty(newBlob);
                 } catch (IOException ioe) {
                     throw ServiceException.FAILURE("could not link blob for renumbered item (" + id + " => " + newId + ")", ioe);
