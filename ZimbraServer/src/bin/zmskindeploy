@@ -23,7 +23,8 @@ zmsetvars \
   mailboxd_directory
 
 SIMPLE_DATE=`date +%y%m%d%H%M%S`
-BASE_URL=`${BIN_ROOT}/zmprov gacf ZimbraMailURL | sed -e 's/^[^:]*: //'`
+# NOTE: the webapp directory is not affected by zimbraMailURL
+BASE_URL=/zimbra
 
 CP="${mailboxd_directory}/webapps${BASE_URL}/WEB-INF/classes/"
 
