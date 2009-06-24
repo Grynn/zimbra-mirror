@@ -10,6 +10,8 @@ use Getopt::Std;
 Zimbra::Mon::Zmstat::getLocalConfig();
 my $logger_directory     = $Zimbra::Mon::Zmstat::LC{'logger_data_directory'};
 my $logger_rrd_directory = "$logger_directory/rrds";
+my $compressed_row_limit = 500;
+my $primary_resolution   = 30;
 
 sub gethostid($$) {
     my ($dbh, $hostname) = @_;
@@ -64,13 +66,36 @@ sub get_rrd_file($$) {
     my ($hostid, $rrd_file) = @_;
     sprintf "%s/%d-%d.rrd", $logger_rrd_directory, $hostid, $rrd_file;
 }
-sub dump_data($$$$) {
-    my ($hostid, $structure, $start, $end) = @_;
+
+sub get_rra_info($) {
+    my ($sample_file) = @_;
+
+    my $info = RRDs::info($sample_file);
+
+    my $rra_pattern = 'rra[%d].pdp_per_row';
+    my $index = 0;
+    my $rra_not_found = 0;
+    my @rra_resolution;
+    for ($index = 0; !$rra_not_found; $index++) {
+        my $rra_rec = sprintf $rra_pattern, $index;
+        $rra_not_found = !exists($info->{$rra_rec});
+        if (!$rra_not_found) {
+            push(@rra_resolution, $info->{$rra_rec} * 30);
+        }
+    }
+    @rra_resolution;
+}
+
+sub dump_data($$$$$) {
+    my ($hostid, $structure, $start, $end, $compress, $resolution) = @_;
     my %col19col;
     my @start;
     my @end;
+    my @res;
     @start = ("-s", $start) if ($start);
     @end   = ("-e", $end)   if ($end);
+    @res   = ("-r", $resolution) if ($resolution);
+
     my %files;
 
     foreach my $column (keys %$structure) {
@@ -85,7 +110,7 @@ sub dump_data($$$$) {
         next if ! -f $rrd;
         my ($names, $data);
         ($rrd_start, $rrd_step, $names, $data)  =
-                RRDs::fetch($rrd, @start, @end, 'AVERAGE');
+                RRDs::fetch($rrd, @start, @end, @res, 'AVERAGE');
         if (@rows == 0) {
             @rows = @$data;
         } else {
@@ -98,18 +123,36 @@ sub dump_data($$$$) {
         my $err = RRDs::error();
         die $err if $err;
     }
+
+    if ($compress && @rows > $compressed_row_limit) {
+        my @resolutions = get_rra_info(get_rrd_file($hostid, (keys %files)[0]));
+        my $first = $rrd_start;
+        my $last = $rrd_start + (scalar(@rows) * $rrd_step);
+        my $delta = $last - $first;
+        my $resolution = $rrd_step;
+        my $r = scalar @rows;
+        for (my $i = 0; $i < @resolutions && $r > $compressed_row_limit; $i++) {
+            $resolution = $resolutions[$i];
+            $r = int($delta / $resolutions[$i]);
+        }
+        $first = $first - ($first % $resolution);
+        $last  = $last  - ($last  % $resolution);
+        &dump_data($hostid, $structure, $first, $last, 0, $resolution);
+        return;
+    }
     @columns = map { $col19col{$_} } @columns;
     unshift @columns, 'timestamp';
     print join(",", @columns) . "\n";
     my $ts = $rrd_start;
+
     foreach my $row (@rows) {
         my @r = map { defined($_) ? $_ : '' } @$row;
-        #unshift @r, scalar localtime($ts);
         unshift @r, $ts;
         $ts += $rrd_step;
         print join(",", @r) . "\n";
     }
 }
+
 sub list_files($$$) {
     my ($dbh, $host, $csv) = @_;
     my $sth;
@@ -153,7 +196,7 @@ sub list_hosts($) {
 sub run() {
     my %options;
     my $hostid = -1;
-    getopts('f:h:s:e:ln', \%options);
+    getopts('f:h:s:e:lnc', \%options);
 
     my $filename = $options{f};
     my $start    = $options{s};
@@ -174,10 +217,10 @@ sub run() {
         foreach my $host (keys %$structure) {
             print "\nHost: $host\n\n";
             $hostid = gethostid($dbh, $host);
-            dump_data($hostid, $structure->{$host}, $start, $end);
+            dump_data($hostid, $structure->{$host}, $start, $end, $options{c});
         }
     } else {
-        dump_data($hostid, $structure, $start, $end);
+        dump_data($hostid, $structure, $start, $end, $options{c});
     }
     $dbh->disconnect;
 }
@@ -194,6 +237,7 @@ Usage: zmrrdfetch -f group [-h hostname] [-s time] [-e time] [-l] [-n]
                 with -h - lists groups for specified host
                 with -h and -f - list columns for specified host
     -n        - list hostnames
+    -c        - reduce results; try to reduce resultset less than 500 rows
 EOF
     exit 1;
 }

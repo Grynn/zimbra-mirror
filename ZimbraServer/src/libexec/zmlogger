@@ -230,9 +230,9 @@ sub create_rrd($$$$$$) {
     }
     @rra = (
         "RRA:AVERAGE:0.9999:1:20160",   # 30s:1 week
-        "RRA:AVERAGE:0.9999:10:10080",  # 5min:5 weeks
-        "RRA:AVERAGE:0.9999:60:8766",   # 30min:6 months
+        "RRA:AVERAGE:0.9999:10:2016",   # 5 mins:1 week
         "RRA:AVERAGE:0.9999:120:17532", # 1 hour:2 years
+        "RRA:AVERAGE:0.9999:2880:730",  # 1 day:2 years
     );
     RRDs::create($rrd_file, '--start', 'now', '--step', '30', @ds, @rra);
     my $err = RRDs::error();
@@ -359,7 +359,8 @@ sub upgrade_schema($) {
 
     foreach my $upgrade (@upgrade) {
         foreach my $st (@$upgrade) {
-            $dbh->do($st) || die $dbh->err;
+            $dbh->do($st);
+            die $dbh->err if $dbh->err;
         }
     }
 }
