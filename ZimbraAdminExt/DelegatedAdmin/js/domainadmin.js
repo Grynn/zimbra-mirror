@@ -64,8 +64,8 @@ if (ZaCos) {
 
 if(ZaSettings) {
 
-    ZaSettings.DOMAIN_ACCT_LIMIT_TAB = "domainAccountLimitsTab";
-    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_ACCT_LIMIT_TAB, label: com_zimbra_delegatedadmin.UI_Comp_domainAcctLimitsTab});
+//    ZaSettings.DOMAIN_ACCT_LIMIT_TAB = "domainAccountLimitsTab";
+//    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_ACCT_LIMIT_TAB, label: com_zimbra_delegatedadmin.UI_Comp_domainAcctLimitsTab});
 
     ZaDomainAdmin.initSettings = function() {
 	    if (AjxEnv.hasFirebug) console.log("domainadmin.js is modifying ZaSettings");

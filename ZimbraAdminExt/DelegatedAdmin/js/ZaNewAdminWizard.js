@@ -413,7 +413,8 @@ function() {
                     ZaSettings.ACCOUNT_LIST_VIEW ,
                     ZaSettings.DL_LIST_VIEW,
                     ZaSettings.ALIAS_LIST_VIEW,
-                    ZaSettings.RESOURCE_LIST_VIEW
+                    ZaSettings.RESOURCE_LIST_VIEW  ,
+                    ZaSettings.SAVE_SEARCH   
 //                    ZaSettings.DOMAIN_LIST_VIEW
                 ];
             } else {
