@@ -140,6 +140,21 @@ ZaUtil.deepCloneObject = function (obj, ignoredProperties) {
 }
 
 /**
+ * copy an array's content to another array.
+ * Assume all the array elements types are primitive.
+ *
+ * @param srcArr
+ */
+ZaUtil.cloneArray = function (srcArr) {
+    var resultArr = [];
+    for (var i = 0; i < srcArr.length; i ++) {
+        resultArr.push(srcArr[i])  ;
+    }
+
+    return resultArr ;
+}
+
+/**
  * combine the object array property values
  *
  * an example:

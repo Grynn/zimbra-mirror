@@ -52,6 +52,14 @@ ZaRight.CONFIG_GRANTS_RIGHT = "viewGrants" ;
 ZaRight.VIEW_RIGHTS_USR_RIGHT = "checkRightUsr" ;
 ZaRight.VIEW_RIGHTS_GRP_RIGHT = "checkRightGrp" ;
 
+ZaRight.VIEW_RIGHTS = {} ;
+ZaRight.VIEW_RIGHTS [ZaSettings.ACCOUNT_LIST_VIEW] = "AdminConsoleDomainAdminAccountRights" ;
+ZaRight.VIEW_RIGHTS [ZaSettings.DL_LIST_VIEW] = "AdminConsoleDomainAdminDLRights" ;
+ZaRight.VIEW_RIGHTS [ZaSettings.ALIAS_LIST_VIEW] = "AdminConsoleDomainAdminAliasRights" ;
+ZaRight.VIEW_RIGHTS [ZaSettings.RESOURCE_LIST_VIEW] = "AdminConsoleDomainAdminResourceRights" ;
+ZaRight.VIEW_RIGHTS [ZaSettings.SAVE_SEARCH] = "AdminConsoleDomainAdminSaveSearchRights" ;
+
+
 
 //@return the lists of rights for the type specified
 ZaRight.getCustomRightsList = function () {

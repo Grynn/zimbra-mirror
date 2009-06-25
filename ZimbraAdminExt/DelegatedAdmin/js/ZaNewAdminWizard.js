@@ -277,26 +277,6 @@ ZaNewAdminWizard.prototype.goPage = function (pageKey) {
     this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(next);
     this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(finish);
     this._button[DwtDialog.CANCEL_BUTTON].setEnabled(cancel);
-
-    //create the proposedGrants at the step_permission page
-    if (pageKey == ZaNewAdminWizard.STEP_PERMISSION) {
-        if (this._containedObject[ZaNewAdmin.A_proposedGrantsList]
-                && this._containedObject[ZaNewAdmin.A_proposedGrantsList].length > 0) {
-            if (!ZaApp.getInstance().dialogs["createProposedGrantsListStatusDialog"]){
-                ZaApp.getInstance().dialogs["createProposedGrantsListStatusDialog"] =
-                    new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell());
-            }
-            var params = {} ;
-            params.msgs = [] ;
-            params.msgs.push (com_zimbra_delegatedadmin.msg_proposed_grants_created) ;
-            var dialog = ZaApp.getInstance().dialogs["createProposedGrantsListStatusDialog"] ;
-            dialog.setMessage (params.msgs.join("")) ;
-            dialog.popup ();
-
-            params.index = 0 ;
-            this.configProposedGrants(params) ;
-        }
-    }
 }
 
 /**
@@ -308,7 +288,7 @@ ZaNewAdminWizard.prototype.goPage = function (pageKey) {
 ZaNewAdminWizard.prototype.configProposedGrants = function (params) {
     var grant = this._containedObject[ZaNewAdmin.A_proposedGrantsList][params.index] ;
     params.msgs.push (AjxMessageFormat.format(com_zimbra_delegatedadmin.msg_proposed_grants_start,
-            [this.getProposedGrantMsg(grant)])) ;
+            [this.getProposedGrantMsg(grant, params)])) ;
     if (this.isGrantGranted (grant)) {
         params.msgs.push (com_zimbra_delegatedadmin.msg_proposed_grants_skipped) ;
         params.index ++ ;
@@ -328,7 +308,7 @@ ZaNewAdminWizard.prototype.configProposedGrants = function (params) {
 ZaNewAdminWizard.prototype.configProposedGrantsCallback =
 function (params, resp) {
     if (!resp || resp.isException()) {
-        params.msgs.push (com_zimbra_delegatedadmin.msg_proposed_grants_failed) ;
+        params.msgs.push ("<font color='red'>" + com_zimbra_delegatedadmin.msg_proposed_grants_failed + "</font>") ;
     } else {
         params.msgs.push (com_zimbra_delegatedadmin.msg_proposed_grants_granted) ;
         if (!this._containedObject[ZaGrant.A2_grantsList])  {
@@ -350,8 +330,10 @@ function (params, resp) {
     }
 }
 
-ZaNewAdminWizard.prototype.getProposedGrantMsg = function (grant) {
-    var msg = grant[ZaGrant.A_target] + "/" + grant[ZaGrant.A_target_type] + "/";
+ZaNewAdminWizard.prototype.getProposedGrantMsg = function (grant, params) {
+    if (!params.index) params.index = 0 ;
+    var number = params.index + 1; 
+    var msg = number + ") " + grant[ZaGrant.A_target] + "/" + grant[ZaGrant.A_target_type] + "/";
     if (grant[ZaGrant.A_deny]) {
         msg += "-" ;
     }
@@ -409,14 +391,8 @@ function() {
 
             //init the zimbraAdminConsoleUIComponents
             if (this._containedObject[ZaNewAdmin.A_default_domain_admin_grp] == "TRUE") {
-                this._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [
-                    ZaSettings.ACCOUNT_LIST_VIEW ,
-                    ZaSettings.DL_LIST_VIEW,
-                    ZaSettings.ALIAS_LIST_VIEW,
-                    ZaSettings.RESOURCE_LIST_VIEW  ,
-                    ZaSettings.SAVE_SEARCH   
-//                    ZaSettings.DOMAIN_LIST_VIEW
-                ];
+                this._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] =
+                        ZaUtil.cloneArray (ZaNewAdminWizard.LEGACY_DA_VIEW) ;
             } else {
                 this._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [];
             }
@@ -426,12 +402,9 @@ function() {
         }
     } else if (cStep == ZaNewAdminWizard.STEP_UI_COMPONENTS ) {
         if (ZaNewAdmin.modifyAdmin(this._containedObject)) {
-
             //set the proposed grants value
-            if (this._containedObject [ZaNewAdmin.A_default_domain_admin_grp] == "TRUE")  {
-                this.setProposedGrants () ;
-            }
-
+            this.setProposedGrants () ;
+        
             if (this._containedObject [ZaNewAdmin.A_proposedGrantsList] &&
                     this._containedObject [ZaNewAdmin.A_proposedGrantsList].length > 0){
                 nextStep = ZaNewAdminWizard.STEP_PROPOSED_GRANTS ;
@@ -444,6 +417,27 @@ function() {
     } else if (cStep == ZaNewAdminWizard.STEP_PROPOSED_GRANTS) {
         //TODO: Create the proposed grants
         nextStep = ZaNewAdminWizard.STEP_PERMISSION ;
+         //create the proposedGrants at the step_permission page
+//        if (pageKey == ZaNewAdminWizard.STEP_PERMISSION) {
+        if (this._containedObject[ZaNewAdmin.A_proposedGrantsList]
+                && this._containedObject[ZaNewAdmin.A_proposedGrantsList].length > 0) {
+            if (!ZaApp.getInstance().dialogs["createProposedGrantsListStatusDialog"]){
+                ZaApp.getInstance().dialogs["createProposedGrantsListStatusDialog"] =
+                    new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell());
+
+                ZaApp.getInstance().dialogs["createProposedGrantsListStatusDialog"].setSize (600, 120);
+            }
+            var params = {} ;
+            params.msgs = [] ;
+            params.msgs.push (com_zimbra_delegatedadmin.msg_proposed_grants_created) ;
+            var dialog = ZaApp.getInstance().dialogs["createProposedGrantsListStatusDialog"] ;
+            dialog.setMessage (params.msgs.join("")) ;
+            dialog.popup ();
+
+            params.index = 0 ;
+            this.configProposedGrants(params) ;
+        }
+//        }
     }else if (cStep == ZaNewAdminWizard.STEP_PERMISSION ) {
         nextStep = ZaNewAdminWizard.STEP_FINISH ;
     } 
@@ -451,32 +445,115 @@ function() {
     this.goPage(nextStep);
 }
 
-ZaNewAdminWizard.prototype.setProposedGrants = function () {
-    var proposedGrantsList = this._containedObject [ZaNewAdmin.A_proposedGrantsList] = [] ;
+ZaNewAdminWizard.prototype.isLegacyDAView = function () {
+    var selectedViews = this._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] ;
+    if (selectedViews && selectedViews.length == ZaNewAdminWizard.LEGACY_DA_VIEW.length) {
+        for (var i = 0; i < selectedViews.length; i ++ ) {
+            if (ZaUtil.findValueInArray( ZaNewAdminWizard.LEGACY_DA_VIEW, selectedViews [i] ) < 0) {
+                return false ;
+            }
+        }
 
-    var domainAdminRight = {} ;
-    domainAdminRight [ZaGrant.A_grantee] = this._containedObject [ZaAccount.A_name] ;
-    domainAdminRight [ZaGrant.A_grantee_id] = this._containedObject.id ;
-    domainAdminRight [ZaGrant.A_grantee_type] = ZaGrant.GRANTEE_TYPE.grp ;
-    domainAdminRight [ZaGrant.A_right] = "LegacyAdminConsoleDomainAdminRights" ;
-    domainAdminRight [ZaGrant.A_right_type] = "combo" ;
-    domainAdminRight [ZaGrant.A_target] = ZaAccount.getDomain (this._containedObject.name) ;
-    domainAdminRight [ZaGrant.A_target_type] = ZaItem.DOMAIN ;
-    if (!this.isGrantGranted(domainAdminRight))  {
-        proposedGrantsList.push(domainAdminRight) ;
+        return true ;
     }
 
-    var domainAdminZimletRight = {} ;
-    domainAdminZimletRight [ZaGrant.A_grantee] = this._containedObject [ZaAccount.A_name] ;
-    domainAdminZimletRight [ZaGrant.A_grantee_id] = this._containedObject.id ;
-    domainAdminZimletRight [ZaGrant.A_grantee_type] = ZaGrant.GRANTEE_TYPE.grp ;
-    domainAdminZimletRight [ZaGrant.A_right] = "domainAdminZimletRights" ;
-    domainAdminZimletRight [ZaGrant.A_right_type] = "combo" ;
-    domainAdminZimletRight [ZaGrant.A_target] = ZaGrant.GLOBAL_TARGET_NAME;
-    domainAdminZimletRight [ZaGrant.A_target_type] = ZaItem.GLOBAL_GRANT ;
-    if (!this.isGrantGranted(domainAdminZimletRight))  {
-        proposedGrantsList.push(domainAdminZimletRight) ;
-    } 
+    return false ;
+}
+
+ZaNewAdminWizard.LEGACY_DA_VIEW =  [
+                    ZaSettings.ACCOUNT_LIST_VIEW ,
+                    ZaSettings.DL_LIST_VIEW,
+                    ZaSettings.ALIAS_LIST_VIEW,
+                    ZaSettings.RESOURCE_LIST_VIEW  ,
+                    ZaSettings.SAVE_SEARCH
+//                    ZaSettings.DOMAIN_LIST_VIEW
+                ];
+
+ZaNewAdminWizard.prototype.setProposedGrants = function () {
+    var proposedGrantsList = this._containedObject [ZaNewAdmin.A_proposedGrantsList] = [] ;
+    var tmpGrantsList = [] ;
+    if ((this._containedObject [ZaNewAdmin.A_default_domain_admin_grp] == "TRUE")   
+        && this.isLegacyDAView())
+    {
+        var domainAdminRight = {} ;
+        domainAdminRight [ZaGrant.A_grantee] = this._containedObject [ZaAccount.A_name] ;
+        domainAdminRight [ZaGrant.A_grantee_id] = this._containedObject.id ;
+        domainAdminRight [ZaGrant.A_grantee_type] = ZaGrant.GRANTEE_TYPE.grp ;
+        domainAdminRight [ZaGrant.A_right] = "LegacyAdminConsoleDomainAdminRights" ;
+        domainAdminRight [ZaGrant.A_right_type] = "combo" ;
+        domainAdminRight [ZaGrant.A_target] = ZaAccount.getDomain (this._containedObject.name) ;
+        domainAdminRight [ZaGrant.A_target_type] = ZaItem.DOMAIN ;
+        tmpGrantsList.push (domainAdminRight)  ;
+
+        var domainAdminZimletRight = {} ;
+        domainAdminZimletRight [ZaGrant.A_grantee] = this._containedObject [ZaAccount.A_name] ;
+        domainAdminZimletRight [ZaGrant.A_grantee_id] = this._containedObject.id ;
+        domainAdminZimletRight [ZaGrant.A_grantee_type] = ZaGrant.GRANTEE_TYPE.grp ;
+        domainAdminZimletRight [ZaGrant.A_right] = "domainAdminZimletRights" ;
+        domainAdminZimletRight [ZaGrant.A_right_type] = "combo" ;
+        domainAdminZimletRight [ZaGrant.A_target] = ZaGrant.GLOBAL_TARGET_NAME;
+        domainAdminZimletRight [ZaGrant.A_target_type] = ZaItem.GLOBAL_GRANT ;
+        tmpGrantsList.push(domainAdminZimletRight)  ;
+
+   }else{
+        //not the legacy da view, so we will assign the rights based on the view
+        var selectedViews = this._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] ;
+
+        if (selectedViews && selectedViews.length > 0) {
+            for (var i = 0; i < selectedViews.length; i ++ ) {
+                if (ZaRight.VIEW_RIGHTS[selectedViews[i]] != null) {
+                    var viewRight = {} ;
+                    viewRight [ZaGrant.A_right] = ZaRight.VIEW_RIGHTS[selectedViews[i]] ;
+
+                    if (viewRight [ZaGrant.A_right] == null) {
+                        continue ; //this view doesn't need any right;
+                    }
+
+                    viewRight [ZaGrant.A_grantee] = this._containedObject [ZaAccount.A_name] ;
+                    viewRight [ZaGrant.A_grantee_id] = this._containedObject.id  ;
+                    if (this._containedObject.type == ZaItem.ACCOUNT) {
+                       viewRight [ZaGrant.A_grantee_type] = ZaGrant.GRANTEE_TYPE.usr ;
+                    } else if (this._containedObject.type == ZaItem.DL) {
+                       viewRight [ZaGrant.A_grantee_type] = ZaGrant.GRANTEE_TYPE.grp ;
+                    }
+
+                    viewRight [ZaGrant.A_right_type] = "combo" ;
+
+                    if (selectedViews[i] == ZaSettings.ACCOUNT_LIST_VIEW
+                        || selectedViews[i] == ZaSettings.DL_LIST_VIEW
+                        || selectedViews[i] == ZaSettings.ALIAS_LIST_VIEW
+                        || selectedViews[i] == ZaSettings.RESOURCE_LIST_VIEW
+                        || selectedViews[i] == ZaSettings.DOMAIN_LIST_VIEW
+                       ) {
+                        //we use minimum set rights principle to guess what the target is, here we use the domain the admin belongs to
+                        viewRight [ZaGrant.A_target] = ZaAccount.getDomain (this._containedObject.name) ;
+                        viewRight [ZaGrant.A_target_type] = ZaItem.DOMAIN ;
+                    } else if (selectedViews[i] == ZaSettings.COS_LIST_VIEW
+                        || selectedViews[i] == ZaSettings.SERVER_LIST_VIEW
+                        || selectedViews[i] == ZaSettings.ZIMLET_LIST_VIEW
+                        || selectedViews[i] == ZaSettings.ADMIN_ZIMLET_LIST_VIEW
+                        || selectedViews[i] == ZaSettings.GLOBAL_CONFIG_VIEW
+                        || selectedViews[i] == ZaSettings.GLOBAL_STATUS_VIEW
+                        || selectedViews[i] == ZaSettings.GLOBAL_STATS_VIEW ) {
+                        //here the target are mostly global
+                        viewRight [ZaGrant.A_target] = ZaGrant.GLOBAL_TARGET_NAME;
+                        viewRight [ZaGrant.A_target_type] = ZaItem.GLOBAL_GRANT ;
+                    } else {
+                        //this view doesn't need a right or can't decide the target name, so just skip
+                        continue ;
+                    }
+
+                    tmpGrantsList.push(viewRight) ;
+                }
+            }
+        }
+   }
+    
+   for (var i =0 ; i < tmpGrantsList.length; i ++) {
+        if (!this.isGrantGranted(tmpGrantsList[i]))  {
+            proposedGrantsList.push(tmpGrantsList[i]) ;
+        }
+   }
 }
 
 ZaNewAdminWizard.prototype.isGrantGranted = function (grant) {

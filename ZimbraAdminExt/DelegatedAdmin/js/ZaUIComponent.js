@@ -89,7 +89,7 @@ ZaUIComponent.getUIComponentsXFormItem  = function (choiceWidth) {
                {type:_ZIMLET_SELECT_, numCols: 1, colSizes: [ w], choicesWidth: w,
                     selectRef:ZaAccount.A_zimbraAdminConsoleUIComponents,
                     ref:ZaAccount.A_zimbraAdminConsoleUIComponents,
-                   choices:ZaSettings.ALL_UI_COMPONENTS
+                    choices:ZaSettings.ALL_UI_COMPONENTS
                } ,
                { type:_ZIMLET_SELECT_, numCols: 1, colSizes: [ w], choicesWidth: w,
 //                    ref:ZaUIComponent.A_inheritedUIComponents,
