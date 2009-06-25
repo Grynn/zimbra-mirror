@@ -25,12 +25,12 @@ ZaAuthConfigXWizard = function(parent) {
 	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_AuthConfigTitle, "550px", "300px","ZaAuthConfigXWizard");
 
 	this.stepChoices = [
-		{label:ZaMsg.TABT_AuthMode, value:1},				
-		{label:ZaMsg.TABT_AuthSettings, value:2},						
-		{label:ZaMsg.TABT_AuthSettings, value:3},								
-		{label:ZaMsg.TABT_AuthSettings, value:4},										
-		{label:ZaMsg.TABT_TestAuthSettings, value:5},				
-		{label:ZaMsg.TABT_AuthTestResult, value:6}
+		{label:ZaMsg.AuthMode, value:1},				
+		{label:ZaMsg.AuthSettings, value:2},						
+		{label:ZaMsg.AuthSettings, value:3},								
+		{label:ZaMsg.AuthSettings, value:4},										
+		{label:ZaMsg.TestAuthSettings, value:5},				
+		{label:ZaMsg.AuthTestResult, value:6}
 	];
 	
 	this.AuthMechs = [

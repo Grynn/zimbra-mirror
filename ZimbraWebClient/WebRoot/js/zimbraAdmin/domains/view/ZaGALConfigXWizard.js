@@ -23,14 +23,14 @@
 ZaGALConfigXWizard = function(parent) {
 	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_GALConfigTitle, "550px", "300px","ZaGALConfigXWizard");
 	this.stepChoices = [
-		{label:ZaMsg.TABT_GALMode, value:1},
-		{label:ZaMsg.TABT_GALConfiguration, value:2}, 
-		{label:ZaMsg.TABT_GALConfiguration, value:3},		
-		{label:ZaMsg.TABT_GALSyncConfiguration, value:4},
-		{label:ZaMsg.TABT_GALSyncConfiguration, value:5},
-		{label:ZaMsg.TABT_GALConfigSummary, value:6},		
-		{label:ZaMsg.TABT_TestGalConfig, value:7},
-		{label:ZaMsg.TABT_GalTestResult, value:8}	
+		{label:ZaMsg.GALMode, value:1},
+		{label:ZaMsg.GALConfiguration, value:2}, 
+		{label:ZaMsg.GALConfiguration, value:3},		
+		{label:ZaMsg.GALSyncConfiguration, value:4},
+		{label:ZaMsg.GALSyncConfiguration, value:5},
+		{label:ZaMsg.GALConfigSummary, value:6},		
+		{label:ZaMsg.TestGalConfig, value:7},
+		{label:ZaMsg.GalTestResult, value:8}	
 	];
 		
 	this.GALModes = [
