@@ -32,6 +32,14 @@ my $state_file = "${zimbra_home}/log/zmlogprocess.state";
 $logger_directory = getLocalConfig("logger_data_directory");
 $log_file = '/var/log/zimbra.log';
 
+sub listMTA() {
+    open(MTALIST, "zmprov gas mta |") || die $!;
+    my @mtas = <MTALIST>;
+    chomp(@mtas);
+    close(MTALIST);
+    @mtas;
+}
+
 sub checkPID {
   # try to avoid multiple instances
   if (-f ${pid_file} ) {
@@ -113,6 +121,17 @@ sub getLocalConfig {
   return $ENV{$key};
 }
 
+sub init_counters($) {
+    my $data = shift @_;
+    my @mtas = listMTA();
+
+    my @counters = qw(clam_events sendmail_events filter_event filter_virus filter_spam filter_misc mta_count mta_volume);
+    foreach my $mta (@mtas) {
+        foreach my $counter (@counters) {
+            counter_increment($data, $mta, $counter);
+        }
+    }
+}
 sub counter_increment($$$) {
     my ($data, $host, $counter) = @_;
     counter_add($data, $host, $counter, 1);
@@ -121,7 +140,8 @@ sub counter_increment($$$) {
 sub counter_add($$$$) {
     my ($data, $host, $counter, $amount) = @_;
     $data->{$host} = {} if (!exists $data->{$host});
-    $data->{$host}->{$counter}  = 0 if (!exists $data->{$host}->{$counter});
+    # start at -1 because we +1 in init_counters
+    $data->{$host}->{$counter}  = -1 if (!exists $data->{$host}->{$counter});
     $data->{$host}->{$counter} += $amount;
 }
 
@@ -134,6 +154,7 @@ sub run() {
 
     my $logregex = qr/(^.{15}) ((\d+\.\d+\.\d+\.\d+) \S+|(\S+)) ([^[]+)(\[(\d+)\])?: (.*)$/o;
     my %host_data;
+    init_counters(\%host_data);
     my %seen_qid;
     seek(LOG, $offset, SEEK_SET);
     while (<LOG>) {
