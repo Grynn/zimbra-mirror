@@ -167,10 +167,10 @@ if [ x$OVERRIDE = x"no" ]; then
 	fi
 fi
 
-if [ x$PLAT = "xRHEL4" -o x$PLAT = "CentOS4" -o x$PLAT = "xRHEL5" -o x$PLAT = "xCentOS5" -o x$PLAT = "xFC4" -o x$PLAT = "xFC5" -o x$PLAT = "xF7" -o x$PLAT = "xF10" -o x$PLAT = "xRPL1" -o x$PLAT = "xDEBIAN3.1" ]; then
+if [ x$PLAT = "xRHEL4" -o x$PLAT = "CentOS4" -o x$PLAT = "xRHEL5" -o x$PLAT = "xCentOS5" -o x$PLAT = "xFC4" -o x$PLAT = "xFC5" -o x$PLAT = "xF7" -o x$PLAT = "xF10" -o x$PLAT = "xF11" -o x$PLAT = "xRPL1" -o x$PLAT = "xDEBIAN3.1" ]; then
 	export PERLLIB="${PATHDIR}/Perl/zimbramon/lib:${PATHDIR}/Perl/zimbramon/lib/i386-linux-thread-multi"
 	export PERL5LIB=${PERLLIB}
-elif [ x$PLAT = "xRHEL4_64" -o x$PLAT = "xCentOS4_64" -o x$PLAT = "xRHEL5_64" -o x$PLAT = "xF10_64" -o x$PLAT = "xCentOS5_64"  -o x$PLAT = "xSLES10_64" ]; then
+elif [ x$PLAT = "xRHEL4_64" -o x$PLAT = "xCentOS4_64" -o x$PLAT = "xRHEL5_64" -o x$PLAT = "xF10_64" -o x$PLAT = "xF11_64" -o x$PLAT = "xCentOS5_64"  -o x$PLAT = "xSLES10_64" ]; then
 	export PERLLIB="${PATHDIR}/Perl/zimbramon/lib:${PATHDIR}/Perl/zimbramon/lib/x86_64-linux-thread-multi"
 	export PERL5LIB=${PERLLIB}
 elif [ x$PLAT = "xSuSEES9" -o x$PLAT = "xSuSEES10" -o x$PLAT = "xopenSUSE_10.2" -o x$PLAT = "xSuSE10" ]; then
@@ -190,7 +190,7 @@ elif [ x$PLAT = "xMANDRIVA2006" ]; then
 	export PERL5LIB=${PERLLIB}
 fi
 
-if [ x$PLAT = "xSLES10_64" -o x$PLAT = "xRHEL4_64" -o x$PLAT = "xRHEL5_64" -o x$PLAT = "xF10_64" ]; then
+if [ x$PLAT = "xSLES10_64" -o x$PLAT = "xRHEL4_64" -o x$PLAT = "xRHEL5_64" -o x$PLAT = "xF10_64" -o x$PLAT = "xF11_64" ]; then
 	LIBDIR="/usr/lib64"
 else
 	LIBDIR="/usr/lib"
