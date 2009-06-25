@@ -21,16 +21,30 @@
 * @author Greg Solovyev
 **/
 ZaGALConfigXWizard = function(parent) {
-	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_GALConfigTitle, "550px", "300px","ZaGALConfigXWizard");
+	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_GALConfigTitle, "700px", "350px","ZaGALConfigXWizard");
+
+	this.TAB_INDEX = 0;
+	
+	ZaGALConfigXWizard.GALMODE_STEP = ++this.TAB_INDEX;
+	//ZaGALConfigXWizard.GAL_CONFIG_STEP_1 = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.GAL_CONFIG_STEP_2 = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1 = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_2 = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.GAL_TEST_STEP = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.GAL_TEST_RESULT_STEP = ++this.TAB_INDEX;
+	ZaGALConfigXWizard.CONFIG_COMPLETE_STEP = ++this.TAB_INDEX;
+	
 	this.stepChoices = [
-		{label:ZaMsg.GALMode, value:1},
-		{label:ZaMsg.GALConfiguration, value:2}, 
-		{label:ZaMsg.GALConfiguration, value:3},		
-		{label:ZaMsg.GALSyncConfiguration, value:4},
-		{label:ZaMsg.GALSyncConfiguration, value:5},
-		{label:ZaMsg.GALConfigSummary, value:6},		
-		{label:ZaMsg.TestGalConfig, value:7},
-		{label:ZaMsg.GalTestResult, value:8}	
+		{label:ZaMsg.GALMode, value:ZaGALConfigXWizard.GALMODE_STEP},
+		//{label:ZaMsg.GALConfiguration, value:ZaGALConfigXWizard.GAL_CONFIG_STEP_1}, 
+		{label:ZaMsg.GALConfiguration, value:ZaGALConfigXWizard.GAL_CONFIG_STEP_2},		
+		{label:ZaMsg.GALSyncConfiguration, value:ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1},
+		{label:ZaMsg.GALSyncConfiguration, value:ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_2},
+		{label:ZaMsg.GALConfigSummary, value:ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP},		
+		{label:ZaMsg.TestGalConfig, value:ZaGALConfigXWizard.GAL_TEST_STEP},
+		{label:ZaMsg.GalTestResult, value:ZaGALConfigXWizard.GAL_TEST_RESULT_STEP},
+		{label:ZaMsg.DomainConfigComplete, value:ZaGALConfigXWizard.CONFIG_COMPLETE_STEP}	
 	];
 		
 	this.GALModes = [
@@ -42,16 +56,7 @@ ZaGALConfigXWizard = function(parent) {
 		{label:ZaMsg.GALServerType_ldap, value:ZaDomain.GAL_ServerType_ldap},
 		{label:ZaMsg.GALServerType_ad, value:ZaDomain.GAL_ServerType_ad} 
 	];
-	this.TAB_INDEX = 0;
-	
-	ZaGALConfigXWizard.GALMODE_STEP = ++this.TAB_INDEX;
-	ZaGALConfigXWizard.GAL_CONFIG_STEP_1 = ++this.TAB_INDEX;
-	ZaGALConfigXWizard.GAL_CONFIG_STEP_2 = ++this.TAB_INDEX;
-	ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1 = ++this.TAB_INDEX;
-	ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_2 = ++this.TAB_INDEX;
-	ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP = ++this.TAB_INDEX;
-	ZaGALConfigXWizard.GAL_TEST_STEP = ++this.TAB_INDEX;
-	ZaGALConfigXWizard.GAL_TEST_RESULT_STEP = ++this.TAB_INDEX;
+
 		
 	this.initForm(ZaDomain.myXModel,this.getMyXForm());		
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaGALConfigXWizard.prototype.handleXFormChange));
@@ -87,39 +92,33 @@ function(stepNum) {
 		if(stepNum>1)
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 	} else {
-		if(stepNum == 1) {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+		if (stepNum == ZaGALConfigXWizard.GALMODE_STEP) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		} else if (stepNum == 2) {
-			//if internal - enable finish and disable next, its the last step
-			if(this._containedObject.attrs[ZaDomain.A_GalMode]==ZaDomain.GAL_Mode_internal) {
-				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-				this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
-			} else {			//else - enable next and disable finish
-				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-				this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-			}
-			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-		} else if(stepNum == 6) {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+		} else if(stepNum == ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP) {
 			//change next button to "test"
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-		} else if(stepNum == 7) {
+		} else if(stepNum == ZaGALConfigXWizard.GAL_TEST_STEP) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		} else if (stepNum == 8) {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+		} else if (stepNum == ZaGALConfigXWizard.GAL_TEST_RESULT_STEP) {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
-		} else if (stepNum == 5 || stepNum == 4) {
+		} else if (stepNum == ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1 || stepNum == ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_2) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		} else if(stepNum == ZaGALConfigXWizard.CONFIG_COMPLETE_STEP) {
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		} else {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
@@ -221,7 +220,7 @@ function (value, event, form) {
 				form.getInstance().attrs[ZaDomain.A_GalLdapSearchBase] = szSearchBase;
 			}
 		}
-	}
+	} 
 }
 
 ZaGALConfigXWizard.prototype.testSetings =
@@ -305,7 +304,7 @@ function (arg) {
 		}
 	}
 
-	this.goPage(8);
+	this.goPage(ZaGALConfigXWizard.GAL_TEST_RESULT_STEP);
 }
 
 /**
@@ -328,22 +327,30 @@ function(pageNum) {
 
 ZaGALConfigXWizard.prototype.goPrev =
 function () {
-	if(this._containedObject[ZaModel.currentStep] == 8) {
-		//skip 7th step
-		this.goPage(6);
-	} else if (this._containedObject[ZaModel.currentStep] == 6 && this._containedObject.attrs[ZaDomain.A_GALSyncUseGALSearch]=="TRUE") {
-		 this.goPage(4); //skip step 5 if using same settings for sync as for search
+	if(this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GAL_TEST_RESULT_STEP) {
+		this.goPage(ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP);
+	} else if (this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP && this._containedObject.attrs[ZaDomain.A_GALSyncUseGALSearch]=="TRUE") {
+		 this.goPage(ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1); 
+	} else if (this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.CONFIG_COMPLETE_STEP) {
+		if(this._containedObject.attrs[ZaDomain.A_GalMode]==ZaDomain.GAL_Mode_internal) {
+			this.goPage(ZaGALConfigXWizard.GALMODE_STEP);
+		} else {
+			this.goPage(ZaGALConfigXWizard.GAL_TEST_RESULT_STEP);
+		}
 	} else {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this.goPage(this._containedObject[ZaModel.currentStep]-1);
-
 	}
 }
 
 ZaGALConfigXWizard.prototype.goNext = 
 function() {
-	if(this._containedObject[ZaModel.currentStep] == 2 && this._containedObject.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal) {	
+	if(this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GALMODE_STEP && this._containedObject.attrs[ZaDomain.A_GalMode]==ZaDomain.GAL_Mode_internal) {
+		this.goPage(ZaGALConfigXWizard.CONFIG_COMPLETE_STEP);
+	} else if (this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GAL_TEST_RESULT_STEP) {
+		this.goPage(ZaGALConfigXWizard.CONFIG_COMPLETE_STEP);
+	} else if(this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GALMODE_STEP && this._containedObject.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal) {	
 		//check that Filter is provided and at least one server
 		if(!this._containedObject.attrs[ZaDomain.A_GalLdapFilter]) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);			
@@ -353,8 +360,8 @@ function() {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);					
 			return;
 		}
-	} 
-	if(this._containedObject[ZaModel.currentStep] == 3) {
+		this.goPage(ZaGALConfigXWizard.GAL_CONFIG_STEP_2);
+	} else if(this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GAL_CONFIG_STEP_2) {
 		//clear the password if the checkbox is unchecked
 		if(this._containedObject.attrs[ZaDomain.A_UseBindPassword]=="FALSE") {
 			this._containedObject.attrs[ZaDomain.A_GalLdapBindPassword] = null;
@@ -366,20 +373,20 @@ function() {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 			return false;
 		}
-		this.goPage(4);
-	} else if(this._containedObject[ZaModel.currentStep] == 4) { 
+		this.goPage(ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1);
+	} else if(this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1) { 
 		if(this._containedObject.attrs[ZaDomain.A_GALSyncUseGALSearch]=="FALSE") {
-			this.goPage(5);
+			this.goPage(ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_2);
 		} else {
-			this.goPage(6);
+			this.goPage(ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP);
 		}
-	} else if(this._containedObject[ZaModel.currentStep] == 6) {
+	} else if(this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP) {
 		if(!this._containedObject[ZaDomain.A_GALSampleQuery]) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_TERM_REQUIRED);			
 			return;
 		}
  		this.testSetings();
-		this.goPage(7);
+		this.goPage(ZaGALConfigXWizard.GAL_TEST_STEP);
 	} else {
 		this.goPage(this._containedObject[ZaModel.currentStep] + 1);
 	}
@@ -405,65 +412,51 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
 		{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep]},
 		{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},				
-		{type: _SWITCH_,
+		{type: _SWITCH_,width:650,
 			items: [
-				{type:_CASE_, caseKey:ZaGALConfigXWizard.GALMODE_STEP, 
+				{type:_CASE_, caseKey:ZaGALConfigXWizard.GALMODE_STEP,numCols:2,colSizes:["220px","auto"],
 					items: [
 						{ref:ZaDomain.A_GalMode, type:_OSELECT1_, label:ZaMsg.Domain_GalMode, labelLocation:_LEFT_, choices:this.GALModes, onChange:ZaGALConfigXWizard.onGalModeChange},
-						{ref:ZaDomain.A_GalMaxResults, type:_INPUT_, label:ZaMsg.NAD_GalMaxResults, labelLocation:_LEFT_}
+						{ref:ZaDomain.A_GalMaxResults, type:_TEXTFIELD_, label:ZaMsg.NAD_GalMaxResults, labelLocation:_LEFT_},
+						{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","auto"],
+							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal],
+							cssStyle:"overflow:auto",
+							items: [
+								{ref:ZaDomain.A_GALServerType, type:_OSELECT1_, label:ZaMsg.Domain_GALServerType, labelLocation:_LEFT_, choices:this.GALServerTypes, onChange:ZaGALConfigXWizard.onGALServerTypeChange},
+								{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
+									items: [
+										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
+										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerName, width:"200px"},
+										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"5px"},									
+										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerPort,  width:"40px"},	
+										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALUseSSL, width:"40px"}									
+									]
+								},
+								{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,  
+									addButtonLabel:ZaMsg.Domain_AddURL, 
+									removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,
+									showAddOnNextRow:true,
+									items: [
+										{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"3269",ldapPort:"3268",  labelLocation:_NONE_}
+									]
+								},
+								{ref:ZaDomain.A_GalLdapFilter, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, 
+									enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
+									enableDisableChangeEventSources:[ZaDomain.A_GALServerType]
+									
+								},
+								{ref:ZaDomain.A_zimbraGalAutoCompleteLdapFilter, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_zimbraGalAutoCompleteLdapFilter, labelLocation:_LEFT_, 
+									enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
+									enableDisableChangeEventSources:[ZaDomain.A_GALServerType]
+									
+								},						
+								{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_}
+							]
+						}
 					]
 				},
-				{type:_CASE_,
-					caseKey:ZaGALConfigXWizard.GAL_CONFIG_STEP_1,
-					visibilityChangeEventSources:[ZaModel.currentStep],
-					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isDomainModeNotInternal],					
-					items: [
-						{ref:ZaDomain.A_GALServerType, type:_OSELECT1_, label:ZaMsg.Domain_GALServerType, labelLocation:_LEFT_, choices:this.GALServerTypes, 
-							onChange:ZaGALConfigXWizard.onGALServerTypeChange},
-						{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
-							items: [
-								{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
-								{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerName, width:"200px"},
-								{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"5px"},									
-								{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerPort,  width:"40px"},	
-								{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALUseSSL, width:"60px"}									
-							]
-						},
-						{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", repeatInstance:"", showAddButton:true, showRemoveButton:true,  
-							addButtonLabel:ZaMsg.Domain_AddURL, 
-							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ad]],
-							visibilityChangeEventSources:[ZaDomain.A_GALServerType],							
-							
-							removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
-							showAddOnNextRow:true,							
-							items: [
-								{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"3269",ldapPort:"3268",  labelLocation:_NONE_}
-							]
-						},
-						{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", repeatInstance:"", showAddButton:true, showRemoveButton:true,  
-							addButtonLabel:ZaMsg.Domain_AddURL,
-							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
-							visibilityChangeEventSources:[ZaDomain.A_GALServerType],								 
-							
-							removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
-							showAddOnNextRow:true,							
-							items: [
-								{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"636",ldapPort:"389",  labelLocation:_NONE_}
-							]
-						},
-						{ref:ZaDomain.A_GalLdapFilter, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, textWrapping:"soft", 
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
-							enableDisableChangeEventSources:[ZaDomain.A_GALServerType]							
-						},
-						{ref:ZaDomain.A_zimbraGalAutoCompleteLdapFilter, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_zimbraGalAutoCompleteLdapFilter, 
-							labelLocation:_LEFT_, textWrapping:"soft",
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
-							enableDisableChangeEventSources:[ZaDomain.A_GALServerType]								 
-						},						
-						{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_, textWrapping:"soft"}
-					]
-				},
-				{type:_CASE_, 
+				{type:_CASE_, numCols:2,colSizes:["220px","auto"],
 					caseKey:ZaGALConfigXWizard.GAL_CONFIG_STEP_2,
 					visibilityChangeEventSources:[ZaModel.currentStep],
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isDomainModeNotInternal],					
@@ -483,15 +476,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
 						}							
 					]			
 				},				
-				{type:_CASE_, 
-					caseKey:ZaGALConfigXWizard.GAL_CONFIG_STEP_1,
-					visibilityChangeEventSources:[ZaModel.currentStep],
-					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,[XForm.checkInstanceValue,ZaDomain.A_GalMode,ZaDomain.GAL_Mode_internal]],					
-					items: [
-						{type:_OUTPUT_, value:ZaMsg.Domain_GAL_Config_Complete}
-					]
-				}, 
-				{type:_CASE_, 
+				{type:_CASE_, numCols:2,colSizes:["220px","auto"],
 					caseKey:ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1,
 					items: [
 						{ref:ZaDomain.A_GALSyncUseGALSearch, type:_CHECKBOX_, label:ZaMsg.Domain_GALSyncUseGALSearch, 
@@ -549,7 +534,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
 						}						
 					]
 				},
-				{type:_CASE_, 
+				{type:_CASE_, numCols:2,colSizes:["220px","auto"],
 					caseKey:ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_2,
 					visibilityChangeEventSources:[ZaModel.currentStep],
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isDomainModeNotInternal,[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]],
@@ -569,7 +554,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
 						}							
 					]			
 				},				
-				{type:_CASE_, caseKey:ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP,width:"500px",
+				{type:_CASE_, caseKey:ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP,numCols:2,colSizes:["220px","auto"],
 					items: [
 						{ref:ZaDomain.A_GalMode, type:_OUTPUT_, label:ZaMsg.Domain_GalMode, choices:this.GALModes},
 						{ref:ZaDomain.A_GalMaxResults, type:_OUTPUT_, label:ZaMsg.NAD_GalMaxResults},
@@ -644,8 +629,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
 						{type:_OUTPUT_, value:ZaMsg.Domain_GALTestingInProgress}
 					]	
 				}, 
-				{type:_CASE_, caseKey:ZaGALConfigXWizard.GAL_TEST_RESULT_STEP,
-					width:"500px",
+				{type:_CASE_, caseKey:ZaGALConfigXWizard.GAL_TEST_RESULT_STEP,numCols:2,colSizes:["220px","auto"],
 					items: [
 						{type:_ZAWIZ_TOP_GROUPER_, 
 							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALSearchTestResultCode,ZaDomain.Check_OK]] ,
@@ -767,6 +751,11 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
 								}
 							]
 						}
+					]
+				},
+				{type:_CASE_, caseKey:ZaGALConfigXWizard.CONFIG_COMPLETE_STEP,
+					items: [
+						{type:_OUTPUT_, value:ZaMsg.Domain_GalConfig_Complete}
 					]
 				}
 			]	
