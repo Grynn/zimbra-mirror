@@ -524,6 +524,7 @@ ZaNewAdminWizard.prototype.setProposedGrants = function () {
                         || selectedViews[i] == ZaSettings.ALIAS_LIST_VIEW
                         || selectedViews[i] == ZaSettings.RESOURCE_LIST_VIEW
                         || selectedViews[i] == ZaSettings.DOMAIN_LIST_VIEW
+                        || selectedViews[i] == ZaSettings.SAVE_SEARCH     
                        ) {
                         //we use minimum set rights principle to guess what the target is, here we use the domain the admin belongs to
                         viewRight [ZaGrant.A_target] = ZaAccount.getDomain (this._containedObject.name) ;

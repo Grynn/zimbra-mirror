@@ -554,6 +554,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 					icon: "SelectPullDownArrow", name: "showSavedSearchButton",
 					onActivate:  ZaSearchField.prototype.showSavedSearchButtonHndlr,
 					cssClass: "ZaShowSavedSearchArrowButton",
+                    enableDisableChecks: [[ZaSearchField.canViewSavedSearch]],
 					visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"] 
 				}	
 			]},
@@ -574,7 +575,8 @@ ZaSearchField.prototype._getMyXForm = function() {
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		xFormObject.items.push({type:_DWT_BUTTON_, label: null , toolTipContent:ZaMsg.tt_save_search, icon:"Save", name: "saveSearchButton",
 				onActivate:ZaSearchField.saveSrchButtonHndlr, cssClass:"DwtToolbarButton",
-				visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"] 
+                enableDisableChecks: [[ZaSearchField.canSaveSearch]],
+                visibilityChecks:["(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])"] 
 			});	
 	}
 	
@@ -589,6 +591,25 @@ ZaSearchField.prototype._getMyXForm = function() {
 	}
 	return xFormObject;
 };
+
+ZaSearchField.canSaveSearch = function () {
+    if (ZaZimbraAdmin.currentAdminAccount
+            && (ZaZimbraAdmin.currentAdminAccount.setAttrs["zimbraAdminSavedSearches"] === true)) {
+        return true ;    
+    } else {
+        return false ;
+    }
+}
+
+ZaSearchField.canViewSavedSearch = function () {
+    if (ZaZimbraAdmin.currentAdminAccount
+            && (ZaZimbraAdmin.currentAdminAccount.getAttrs["zimbraAdminSavedSearches"] === true)) {
+        return true ;
+    } else {
+        return false ;
+    }
+}
+
 
 /**
 * @param xModelMetaData - XModel metadata that describes data model
