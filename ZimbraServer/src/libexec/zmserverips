@@ -22,11 +22,13 @@ open INTS, "/sbin/ifconfig | grep 'inet ' |";
 foreach (<INTS>) {
   chomp;
   s/.*inet //;
-  s/.bcast[0-9:.]*//ig;
+  s/.addr: //;
+  s/.(bcast|broadcast)[0-9:.\s]*//ig;
+  s/.netmask\s/  Mask:/;
 #  s/\s.*//;
 #  s/[a-zA-Z:]//g;
   next if /^$/;
-  push @interfaces, $_;
+  push @interfaces, "addr:".$_;
 }
 close INTS;
 my %seen;
