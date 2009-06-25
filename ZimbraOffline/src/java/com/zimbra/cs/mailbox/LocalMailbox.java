@@ -17,10 +17,32 @@
 package com.zimbra.cs.mailbox;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
+import com.zimbra.cs.redolog.op.CreateFolder;
 
 public class LocalMailbox extends DesktopMailbox {
+    public LocalMailbox(MailboxData data) throws ServiceException {
+        super(data);
 
-	public LocalMailbox(MailboxData data) throws ServiceException {
-		super(data);
-	}
+        try {
+            getFolderByPath(null, GLOBAL_SEARCHES_PATH);
+        } catch (MailServiceException.NoSuchItemException x) {
+            CreateFolder redo = new CreateFolder(getId(), GLOBAL_SEARCHES_PATH,
+                ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
+                MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR, null);
+            redo.setFolderId(ID_FOLDER_GLOBAL_SEARCHES);
+            redo.start(System.currentTimeMillis());
+            createFolder(new OfflineContext(redo), GLOBAL_SEARCHES_PATH,
+                ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
+                MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR, null);
+        }
+    }
+    
+    @Override protected synchronized void initialize() throws ServiceException {
+        super.initialize();
+        Folder.create(ID_FOLDER_GLOBAL_SEARCHES, this,
+            getFolderById(ID_FOLDER_USER_ROOT), GLOBAL_SEARCHES_PATH,
+            Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_SEARCHFOLDER, 0,
+            MailItem.DEFAULT_COLOR_RGB, null, null);
+    }
 }

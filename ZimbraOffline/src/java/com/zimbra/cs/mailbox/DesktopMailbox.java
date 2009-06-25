@@ -49,6 +49,8 @@ public abstract class DesktopMailbox extends Mailbox {
 	public static final String OUTBOX_PATH = "Outbox";
 	public static final String ARCHIVE_PATH = "Local Folders";
 	public static final String FAILURE_PATH = "Error Reports";
+        public static final String GLOBAL_SEARCHES_PATH = "Global Searches";
+        public static final int ID_FOLDER_GLOBAL_SEARCHES = 251;
 	public static final int ID_FOLDER_FAILURE = 252;
     public static final int ID_FOLDER_ARCHIVE = 253;
     public static final int ID_FOLDER_OUTBOX = 254;
