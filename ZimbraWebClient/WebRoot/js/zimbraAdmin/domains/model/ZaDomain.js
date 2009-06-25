@@ -121,6 +121,9 @@ ZaDomain.A_zimbraGalSyncLdapAuthMech="zimbraGalSyncLdapAuthMech";
 ZaDomain.A_zimbraGalSyncLdapBindDn="zimbraGalSyncLdapBindDn";
 ZaDomain.A_zimbraGalSyncLdapBindPassword="zimbraGalSyncLdapBindPassword";
 
+//GAL Sync accounts
+ZaDomain.A_zimbraGalAccountId = "zimbraGalAccountId";
+
 //Auth
 ZaDomain.A_AuthMech = "zimbraAuthMech";
 ZaDomain.A_AuthLdapURL = "zimbraAuthLdapURL";
@@ -222,6 +225,8 @@ ZaDomain.A_zimbraAdminConsoleLoginMessage = "zimbraAdminConsoleLoginMessage" ;
 ZaDomain.A2_allowClearTextLDAPAuth = "allowClearTextLdapAuth" ;
 
 ZaDomain.A2_acl_selection_cache = "acl_selection_cache";
+ZaDomain.A2_gal_sync_accounts = "gal_sync_accounts";
+
 //result codes returned from Check* requests
 ZaDomain.Check_OK = "check.OK";
 ZaDomain.Check_UNKNOWN_HOST="check.UNKNOWN_HOST";
@@ -1393,7 +1398,6 @@ ZaDomain.myXModel = {
         {id:ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled},    
         {id:ZaDomain.A_zimbraAdminConsoleSkinEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminSkinAddressEnabled},
         {id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},
-//		{id:ZaDomain.A_description, type:_STRING_, ref:"attrs/" + ZaDomain.A_description},
          ZaItem.descriptionModelItem,   
         {id:ZaDomain.A_notes, type:_STRING_, ref:"attrs/" + ZaDomain.A_notes},
 		{id:ZaDomain.A_domainDefaultCOSId, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainDefaultCOSId},		
@@ -1411,7 +1415,9 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_zimbraGalSyncLdapURL, type:_LIST_,  listItem:{type:_SHORT_URL_}, ref:"attrs/" + ZaDomain.A_zimbraGalSyncLdapURL},
 		{id:ZaDomain.A_GalLdapBindDn, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindDn},
 		{id:ZaDomain.A_GalLdapBindPassword, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindPassword},
-		{id:ZaDomain.A_GalLdapBindPasswordConfirm, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindPasswordConfirm},		
+		{id:ZaDomain.A_GalLdapBindPasswordConfirm, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindPasswordConfirm},
+		{id:ZaDomain.A_zimbraGalAccountId, type:_LIST_, listItem:{type:_STRING_}, ref:"attrs/" + ZaDomain.A_zimbraGalAccountId},
+		{id:ZaDomain.A2_gal_sync_accounts, type:_LIST_, listItem:{type:_OBJECT_, items:ZaAccount.myXModel.items}, ref:ZaDomain.A2_gal_sync_accounts},
 		{id:ZaDomain.A_AuthLdapUserDn, type:_STRING_,ref:"attrs/" + ZaDomain.A_AuthLdapUserDn},
 		{id:ZaDomain.A_zimbraAuthLdapStartTlsEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAuthLdapStartTlsEnabled},
 		{id:ZaDomain.A_AuthLDAPServerName, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLDAPServerName},

@@ -218,6 +218,7 @@ ZaAccount.ACCOUNT_STATUS_CLOSED = "closed";
 ZaAccount.ACCOUNT_STATUS_PENDING = "pending" ;
 
 //this attributes are not used in the XML object, but is used in the model
+ZaAccount.A2_datasources = "datasources";
 ZaAccount.A2_confirmPassword = "confirmPassword";
 ZaAccount.A2_mbxsize = "mbxSize";
 ZaAccount.A2_quota = "quota2";
@@ -1200,7 +1201,7 @@ function(by, val) {
 		var reqMgrParams = {
 			controller:ZaApp.getInstance().getCurrentController()
 		}
-		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAccountResponse;
+		resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAccountResponse;
 		this.attrs = new Object();
 		this.initFromJS(resp.account[0]);
 	}
@@ -1225,6 +1226,11 @@ function(by, val) {
 		account.setAttribute("by","id");		
 	}
 
+	if(ZaItem.hasRight(ZaAccount.VIEW_MAIL_RIGHT, this)) {
+		var getDSReq = soapDoc.set("GetDataSourcesRequest", null, null, ZaZimbraAdmin.URN);
+		var elId = soapDoc.set("id", this.attrs[ZaItem.A_zimbraId], getDSReq);
+	}
+	
     var hasError = false ;
     var lastException  ;
 	if(ZaItem.hasRight(ZaAccount.GET_ACCOUNT_INFO_RIGHT,this) || ZaItem.hasRight(ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT,this) ||
@@ -1289,6 +1295,11 @@ function(by, val) {
 				
 				    if (resp.cos && resp.cos.id)
 				        this[ZaAccount.A2_currentAccountType] = resp.cos.id ;					
+				}
+				
+				if(batchResp.GetDataSourcesResponse) {
+					this[ZaAccount.A2_datasources] = new ZaItemList(ZaDataSource);
+					this[ZaAccount.A2_datasources].loadFromJS(batchResp.GetDataSourcesResponse);
 				}
 			}
 		} catch (ex) {
@@ -1634,7 +1645,10 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPasswordLockoutFailureLifetime, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraPasswordLockoutFailureLifetime},
 
         //interop
-        {id:ZaAccount.A_zimbraFreebusyExchangeUserOrg, ref:"attrs/" +  ZaAccount.A_zimbraFreebusyExchangeUserOrg, type:_COS_STRING_}
+        {id:ZaAccount.A_zimbraFreebusyExchangeUserOrg, ref:"attrs/" +  ZaAccount.A_zimbraFreebusyExchangeUserOrg, type:_COS_STRING_},
+        
+        //datasources
+        {id:ZaAccount.A2_datasources, ref:ZaAccount.A2_datasources, type:_LIST_, listItem:{type:_OBJECT_, items:ZaDataSource.myXModel.items}}
     ]
 };
 
@@ -2146,7 +2160,7 @@ ZaAccount.getCatchAllAccount = function (domainName) {
 	  }	
 	  
 	  var resp =  ZaSearch.searchDirectory (searchParams).Body.SearchDirectoryResponse ;
-	  var list = new ZaItemList(ZaAccount, ZaApp.getInstance());
+	  var list = new ZaItemList(ZaAccount);
 	  list.loadFromJS(resp);
 	  var arr = list.getArray();
 	  if(!AjxUtil.isEmpty(arr)) {

@@ -34,6 +34,7 @@ ZaItem.createMethods = new Object();
 ZaItem.removeMethods = new Object();
 
 ZaItem.ACCOUNT = "account";
+ZaItem.DATASOURCE = "dataSource";
 ZaItem.DL = "dl";
 ZaItem.GROUP = "grp";
 ZaItem.ALIAS = "alias";
@@ -177,6 +178,9 @@ function (type) {
 
 		case ZaItem.MAILQ:
 			return new ZaMTA();
+		
+		case ZaItem.DATASOURCE:
+			return new ZaDataSource();
 
 	}
 }

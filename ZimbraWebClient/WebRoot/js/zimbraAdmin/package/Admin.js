@@ -94,6 +94,7 @@ AjxPackage.require("zimbraAdmin.search.controller.ZaSearchListController");
 AjxPackage.require("zimbraAdmin.search.controller.ZaSearchBuilderController");
 
 // model
+AjxPackage.require("zimbraAdmin.accounts.model.ZaDataSource");
 AjxPackage.require("zimbraAdmin.accounts.model.ZaAccount");
 AjxPackage.require("zimbraAdmin.dl.model.ZaDistributionList");
 AjxPackage.require("zimbraAdmin.dl.model.ZaShare");
