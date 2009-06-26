@@ -38,6 +38,7 @@ cd ${src}
 patch -g0 -p1 < ../../sasl-link-order.patch
 patch -g0 -p1 < ../../sasl-darwin.patch
 patch -g0 -p1 < ../../sasl-auth-zimbra.patch
+patch -g0 -p1 < ../../gcc-fix.patch
 rm config/ltconfig config/libtool.m4
 if [ -x /usr/bin/libtoolize ]; then
 	LIBTOOLIZE=/usr/bin/libtoolize
