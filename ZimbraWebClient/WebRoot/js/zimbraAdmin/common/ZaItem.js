@@ -830,13 +830,10 @@ ZaItem.descriptionXFormItem = {
     showAddButton:false,
     showRemoveButton:false,
     showAddOnNextRow:false,
-//    enableDisableChecks:[],
-    visibilityChecks:[],
-    //removeButtonLabel:ZaMsg.NAD_RemoveAddress,
     items: [
         {ref:".", type:_TEXTFIELD_,
-//            enableDisableChecks:[],
-            visibilityChecks:[],
+            enableDisableChecks:[ZaItem.hasWritePermission] ,
+            visibilityChecks:[ZaItem.hasReadPermission],
             width:"30em"}
     ]
 } ;
