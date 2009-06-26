@@ -346,9 +346,13 @@ function (serverList) {
 ZaDomainController.prototype.newDomain = 
 function () {
 	var newName = "";
-	if(this._currentObject)
-		newName = "." + this._currentObject.attrs[ZaDomain.A_domainName];
-		
+	if(!this._currentDomainName) {
+		this._currentDomainName = this._currentObject.attrs[ZaDomain.A_domainName];
+	}	
+	
+	if(this._currentDomainName)
+		newName = "." + this._currentDomainName;
+
 	this._currentObject = new ZaDomain();
 	
 	this._currentObject.getAttrs = {all:true};
@@ -462,7 +466,8 @@ function(ev) {
 ZaDomainController.prototype._finishNewButtonListener =
 function(ev) {
 	try {
-		var domain = ZaDomain.create(this._newDomainWizard.getObject());
+		var obj = this._newDomainWizard.getObject();
+		var domain = ZaItem.create(obj,ZaDomain,"ZaDomain");
 		domain.load("id",domain.id,false,true);
 		if(domain != null) {
 			//if creation took place - fire an DomainChangeEvent
@@ -471,16 +476,14 @@ function(ev) {
 				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);
 					
 			this._newDomainWizard.popdown();		
-			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
+			if(obj[ZaDomain.A_CreateNotebook]=="TRUE") {
 				var params = new Object();
-			//	if(this._newDomainWizard.getObject()[ZaDomain.A_OverwriteNotebookACLs]) {
-					params[ZaDomain.A_OverwriteNotebookACLs] = true;
-					params.obj = this._newDomainWizard.getObject();
-			//	} else
-					params[ZaDomain.A_OverwriteNotebookACLs] = false;
+				params[ZaDomain.A_OverwriteNotebookACLs] = true;
+				params.obj = this._newDomainWizard.getObject();
+				params[ZaDomain.A_OverwriteNotebookACLs] = false;
 					
 				var callback = new AjxCallback(this, this.initNotebookCallback, params);				
-				ZaDomain.initNotebook(this._newDomainWizard.getObject(),callback, this) ;
+				ZaDomain.initNotebook(obj,callback, this) ;
 			}
 		}
 	} catch (ex) {

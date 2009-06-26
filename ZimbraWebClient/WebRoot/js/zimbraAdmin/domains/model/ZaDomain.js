@@ -58,6 +58,7 @@ ZaDomain.ACLLabels = {r:ZaMsg.ACL_R, w:ZaMsg.ACL_W, i:ZaMsg.ACL_I, a:ZaMsg.ACL_A
 ZaItem.loadMethods["ZaDomain"] = new Array();
 ZaItem.initMethods["ZaDomain"] = new Array();
 ZaItem.modifyMethods["ZaDomain"] = new Array();
+ZaItem.createMethods["ZaDomain"] = new Array();
 
 ZaDomain.DOMAIN_STATUS_ACTIVE = "active";
 ZaDomain.DOMAIN_STATUS_MAINTENANCE = "maintenance";
@@ -226,7 +227,9 @@ ZaDomain.A2_allowClearTextLDAPAuth = "allowClearTextLdapAuth" ;
 
 ZaDomain.A2_acl_selection_cache = "acl_selection_cache";
 ZaDomain.A2_gal_sync_accounts = "gal_sync_accounts";
-
+ZaDomain.A2_new_gal_sync_account_name = "new_gal_sync_account_name";
+ZaDomain.A2_new_internal_gal_ds_name = "new_internal_gal_ds_name";
+ZaDomain.A2_new_external_gal_ds_name = "new_external_gal_ds_name";
 //result codes returned from Check* requests
 ZaDomain.Check_OK = "check.OK";
 ZaDomain.Check_UNKNOWN_HOST="check.UNKNOWN_HOST";
@@ -337,8 +340,8 @@ function() {
 * @param name 
 * @return ZaDomain
 **/
-ZaDomain.create =
-function(tmpObj) {
+ZaDomain.createMethod =
+function(tmpObj, newDomain) {
 
 	if(tmpObj.attrs == null) {
 		//show error msg
@@ -520,7 +523,6 @@ function(tmpObj) {
 		attr.setAttribute("n", ZaDomain.A_domainMaxAccounts);	
 	}
 	
-	var newDomain = new ZaDomain();
 	if(tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname]) {
 		if(tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname] instanceof Array) {
 			var cnt = tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname].length;
@@ -543,10 +545,78 @@ function(tmpObj) {
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.CreateDomainResponse;	
 	newDomain.initFromJS(resp.domain[0]);
-
-	return newDomain;
 }
+ZaItem.createMethods["ZaDomain"].push(ZaDomain.createMethod);
 
+ZaDomain.createGalAccounts = function (tmpObj,newDomain) {
+	if(tmpObj[ZaDomain.A2_new_gal_sync_account_name] && 
+		(tmpObj[ZaDomain.A2_new_internal_gal_ds_name] || tmpObj[ZaDomain.A2_new_external_gal_ds_name])) {
+		var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+		soapDoc.setMethodAttribute("onerror", "stop");
+		if(tmpObj[ZaDomain.A2_new_gal_sync_account_name].indexOf("@") < 0) {
+			tmpObj[ZaDomain.A2_new_gal_sync_account_name] = [tmpObj[ZaDomain.A2_new_gal_sync_account_name],"@",tmpObj.attrs[ZaDomain.A_domainName]].join("");
+		}
+		if((tmpObj.attrs[ZaDomain.A_GalMode] == ZaDomain.GAL_Mode_internal || tmpObj.attrs[ZaDomain.A_GalMode] == ZaDomain.GAL_Mode_both)
+			&& tmpObj[ZaDomain.A2_new_gal_sync_account_name] && tmpObj[ZaDomain.A2_new_internal_gal_ds_name]) {
+			var createInternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN); 
+			createInternalDSDoc.setAttribute("name", tmpObj[ZaDomain.A2_new_internal_gal_ds_name]);
+			createInternalDSDoc.setAttribute("type", "zimbra");
+			createInternalDSDoc.setAttribute("domain", tmpObj.attrs[ZaDomain.A_domainName]);		
+			soapDoc.set("account", tmpObj[ZaDomain.A2_new_gal_sync_account_name],createInternalDSDoc).setAttribute("by","name");
+		}
+		
+		if(tmpObj.attrs[ZaDomain.A_GalMode] != ZaDomain.GAL_Mode_internal
+			&& tmpObj[ZaDomain.A2_new_gal_sync_account_name] && tmpObj[ZaDomain.A2_new_external_gal_ds_name]) {
+			var createExternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN); 
+			createExternalDSDoc.setAttribute("name", tmpObj[ZaDomain.A2_new_external_gal_ds_name]);
+			createExternalDSDoc.setAttribute("type", "ldap");		
+			createExternalDSDoc.setAttribute("domain", tmpObj.attrs[ZaDomain.A_domainName]);
+			soapDoc.set("account", tmpObj[ZaDomain.A2_new_gal_sync_account_name],createExternalDSDoc).setAttribute("by","name");
+		}	
+		
+		try {
+			params = new Object();
+			params.soapDoc = soapDoc;	
+			var reqMgrParams ={
+				controller:ZaApp.getInstance().getCurrentController()
+			}
+			var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
+			if(respObj.isException && respObj.isException()) {
+				ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaDomain.createGalAccounts", null, false);
+			    hasError  = true ;
+                lastException = ex ;
+            } else if(respObj.Body.BatchResponse.Fault) {
+				var fault = respObj.Body.BatchResponse.Fault;
+				if(fault instanceof Array)
+					fault = fault[0];
+			
+				if (fault) {
+					// JS response with fault
+					var ex = ZmCsfeCommand.faultToEx(fault);
+					ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaDomain.createGalAccounts", null, false);
+                    hasError = true ;
+                    lastException = ex ;
+                }
+			} else {
+				var batchResp = respObj.Body.BatchResponse;
+			}
+		} catch (ex) {
+			//show the error and go on
+			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.createGalAccounts", null, false);
+		    hasError = true ;
+            lastException = ex ;
+		}			
+	}			
+}
+ZaItem.createMethods["ZaDomain"].push(ZaDomain.createGalAccounts);
+
+ZaDomain.prototype.loadNewObjectDefaults = function (domainBy, domain, cosBy, cos) {
+	ZaItem.prototype.loadNewObjectDefaults.call(this,domainBy, domain, cosBy, cos);
+	this[ZaDomain.A2_new_gal_sync_account_name] = "galsync";
+	this[ZaDomain.A2_new_internal_gal_ds_name] = "zimbra";
+	this[ZaDomain.A2_new_external_gal_ds_name] = "ldap";
+		
+}
 ZaDomain.canConfigureAuth = function (obj) {
 	return (ZaItem.hasWritePermission(ZaDomain.A_AuthMech,obj) 
 		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapURL,obj)
@@ -1417,6 +1487,9 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_GalLdapBindPassword, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindPassword},
 		{id:ZaDomain.A_GalLdapBindPasswordConfirm, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindPasswordConfirm},
 		{id:ZaDomain.A_zimbraGalAccountId, type:_LIST_, listItem:{type:_STRING_}, ref:"attrs/" + ZaDomain.A_zimbraGalAccountId},
+		{id:ZaDomain.A2_new_gal_sync_account_name, type:_STRING_, ref:ZaDomain.A2_new_gal_sync_account_name},
+		{id:ZaDomain.A2_new_internal_gal_ds_name, type:_STRING_, ref:ZaDomain.A2_new_internal_gal_ds_name},
+		{id:ZaDomain.A2_new_external_gal_ds_name, type:_STRING_, ref:ZaDomain.A2_new_external_gal_ds_name},
 		{id:ZaDomain.A2_gal_sync_accounts, type:_LIST_, listItem:{type:_OBJECT_, items:ZaAccount.myXModel.items}, ref:ZaDomain.A2_gal_sync_accounts},
 		{id:ZaDomain.A_AuthLdapUserDn, type:_STRING_,ref:"attrs/" + ZaDomain.A_AuthLdapUserDn},
 		{id:ZaDomain.A_zimbraAuthLdapStartTlsEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAuthLdapStartTlsEnabled},

@@ -595,24 +595,18 @@ ZaController.changeActionsStateMethods["ZaDomainListController"].push(ZaDomainLi
 ZaDomainListController.prototype._finishNewButtonListener =
 function(ev) {
 	try {
-		var domain = ZaDomain.create(this._newDomainWizard.getObject());
+		var obj = this._newDomainWizard.getObject();
+		var domain = ZaItem.create(obj,ZaDomain,"ZaDomain");
 		if(domain != null) {
 			this._newDomainWizard.popdown();
 			//if creation took place - fire an DomainChangeEvent
 			this._fireDomainCreationEvent(domain);
 			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
 				var params = new Object();
-/*				if(this._newDomainWizard.getObject()[ZaDomain.A_OverwriteNotebookACLs]) {
-					params[ZaDomain.A_OverwriteNotebookACLs] = true;*/
-					params.obj = this._newDomainWizard.getObject();
-/*				} else
-					params[ZaDomain.A_OverwriteNotebookACLs] = false;
-*/					
+				params.obj = obj;
 				var callback = new AjxCallback(this, this.initNotebookCallback, params);				
-				ZaDomain.initNotebook(this._newDomainWizard.getObject(),callback, this) ;
+				ZaDomain.initNotebook(obj,callback, this) ;
 			}			
-			
-
 		
 			var evt = new ZaEvent(ZaEvent.S_DOMAIN);
 			evt.set(ZaEvent.E_CREATE, this);
