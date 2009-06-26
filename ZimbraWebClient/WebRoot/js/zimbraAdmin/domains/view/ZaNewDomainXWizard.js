@@ -756,24 +756,20 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 					items: [
 						{ref:ZaDomain.A_GalMode, type:_OSELECT1_, label:ZaMsg.Domain_GalMode, labelLocation:_LEFT_, choices:this.GALModes, onChange:ZaNewDomainXWizard.onGalModeChange},
 						{ref:ZaDomain.A_GalMaxResults, type:_TEXTFIELD_, label:ZaMsg.NAD_GalMaxResults, labelLocation:_LEFT_, width:100},
-						{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","auto"],
+						{type:_GROUP_, label:ZaMsg.Domain_GalSyncAccount, numCols:3,colSizes:["130px", "25px","auto"],
 							items:[
-								{type:_GROUP_, label:ZaMsg.Domain_GalSyncAccount, numCols:3,colSizes:["130px", "25px","auto"],
-									items:[
-										{ref:ZaDomain.A2_new_gal_sync_account_name, width:130, label:null, type:_TEXTFIELD_},
-										{type:_OUTPUT_, value:"@"},
-										{type:_OUTPUT_,ref:ZaDomain.A_domainName,label:null,align:_LEFT_}
-									]
-								},
-								{ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_,
-									visibilityChangeEventSources:[ZaDomain.A_GalMode],
-									visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotExternal]
-								},
-								{ref:ZaDomain.A2_new_external_gal_ds_name, label:ZaMsg.Domain_ExternalGALDSName, type:_TEXTFIELD_,
-									visibilityChangeEventSources:[ZaDomain.A_GalMode],
-									visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal]
-								}
-							]						
+								{ref:ZaDomain.A2_new_gal_sync_account_name, width:130, label:null, type:_TEXTFIELD_},
+								{type:_OUTPUT_, value:"@"},
+								{type:_OUTPUT_,ref:ZaDomain.A_domainName,label:null,align:_LEFT_}
+							]
+						},
+						{ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_,
+							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotExternal]
+						},
+						{ref:ZaDomain.A2_new_external_gal_ds_name, label:ZaMsg.Domain_ExternalGALDSName, type:_TEXTFIELD_,
+							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal]
 						},
 						{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","auto"],
 							visibilityChangeEventSources:[ZaDomain.A_GalMode],
