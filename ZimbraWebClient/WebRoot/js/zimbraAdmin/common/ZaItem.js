@@ -830,6 +830,8 @@ ZaItem.descriptionXFormItem = {
     showAddButton:false,
     showRemoveButton:false,
     showAddOnNextRow:false,
+//    enableDisableChecks:[ZaItem.hasWritePermission] ,
+//    visibilityChecks:[ZaItem.hasReadPermission],
     items: [
         {ref:".", type:_TEXTFIELD_,
             enableDisableChecks:[ZaItem.hasWritePermission] ,
@@ -898,6 +900,8 @@ OSelect1_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Checkbox_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Textfield_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Select1_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
+Repeat_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
+
 /**
  * Method of XFormItem
  */
@@ -928,6 +932,7 @@ Textfield_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 OSelect1_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 Checkbox_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 Select1_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+Repeat_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 
 /**
  * Method of XFormItem

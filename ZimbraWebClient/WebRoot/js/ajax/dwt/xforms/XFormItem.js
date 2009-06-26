@@ -3309,6 +3309,8 @@ Repeat_XFormItem.prototype.alwaysShowAddButton = false;
 Repeat_XFormItem.prototype.showMoveUpButton = false;
 Repeat_XFormItem.prototype.showMoveDownButton = false;
 Repeat_XFormItem.prototype.bmolsnr = true;
+Repeat_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
+Repeat_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
 
 Repeat_XFormItem.haveAnyRows = function () {
 	return (this.getParentItem().getInstanceCount() != 0);
