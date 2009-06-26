@@ -118,6 +118,7 @@ if (ZaAccount) {
             //addButtonWidth: 100, removeButtonWidth: 100,
            addButtonLabel:com_zimbra_delegatedadmin.NAD_Add,
            showRemoveButton:true, removeButtonLabel:com_zimbra_delegatedadmin.NAD_Remove,
+           enableDisableChecks: [],
            visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount]==\'TRUE\' " +
                              "|| instance.attrs[ZaDistributionList.A_isAdminGroup]==\'TRUE\' "],
            visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount, ZaDistributionList.A_isAdminGroup] ,
