@@ -708,7 +708,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},		
 		{type: _SWITCH_,width:650,
 			items: [
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.GENERAL_STEP, colSizes:["220px","auto"],numCols:2,
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.GENERAL_STEP, colSizes:["220px","430px"],numCols:2,
 					items: [
 						{ref:ZaDomain.A_domainName, type:_TEXTFIELD_, label:ZaMsg.Domain_DomainName,labelLocation:_LEFT_, width:200},
 						{ref:ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraPublicServiceHostname,labelLocation:_LEFT_, width:200},						
@@ -752,7 +752,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ref:ZaDomain.A_notes, type:_TEXTAREA_, label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:250}
 					]
 				},
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.GALMODE_STEP,numCols:2,colSizes:["220px","auto"],
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.GALMODE_STEP,numCols:2,colSizes:["220px","430px"],
 					items: [
 						{ref:ZaDomain.A_GalMode, type:_OSELECT1_, label:ZaMsg.Domain_GalMode, labelLocation:_LEFT_, choices:this.GALModes, onChange:ZaNewDomainXWizard.onGalModeChange},
 						{ref:ZaDomain.A_GalMaxResults, type:_TEXTFIELD_, label:ZaMsg.NAD_GalMaxResults, labelLocation:_LEFT_, width:100},
@@ -771,7 +771,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							visibilityChangeEventSources:[ZaDomain.A_GalMode],
 							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal]
 						},
-						{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","auto"],
+						{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","430px"],
 							visibilityChangeEventSources:[ZaDomain.A_GalMode],
 							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal],
 							cssStyle:"overflow:auto",
@@ -846,7 +846,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_}
 					]
 				},*/
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.GAL_CONFIG_STEP_2, colSizes:["220px","auto"],numCols:2,
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.GAL_CONFIG_STEP_2, colSizes:["220px","430px"],numCols:2,
 					visibilityChangeEventSources:[ZaModel.currentStep],
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isDomainModeNotInternal],
 					
@@ -869,7 +869,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						}														
 					]			
 				}, 
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.GAL_SYNC_CONFIG_STEP_1,numCols:2,colSizes:["220px","auto"],
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.GAL_SYNC_CONFIG_STEP_1,numCols:2,colSizes:["220px","430px"],
 					items: [
 						{ref:ZaDomain.A_GALSyncUseGALSearch, type:_CHECKBOX_, label:ZaMsg.Domain_GALSyncUseGALSearch, 
 							labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",
@@ -928,7 +928,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						}						
 					]
 				},
-				{type:_CASE_,numCols:2,colSizes:["220px","auto"], caseKey:ZaNewDomainXWizard.GAL_SYNC_CONFIG_STEP_2,
+				{type:_CASE_,numCols:2,colSizes:["220px","430px"], caseKey:ZaNewDomainXWizard.GAL_SYNC_CONFIG_STEP_2,
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isDomainModeNotInternal,[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]],
 					visibilityChangeEventSources:[ZaModel.currentStep],
 					
@@ -952,7 +952,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 					]			
 				},					
 				
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.GAL_CONFIG_SUM_STEP,numCols:2,colSizes:["220px","auto"], 
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.GAL_CONFIG_SUM_STEP,numCols:2,colSizes:["220px","430px"], 
 					items: [
 						{ref:ZaDomain.A_GalMode, type:_OUTPUT_, label:ZaMsg.Domain_GalMode, choices:this.GALModes},
 						{ref:ZaDomain.A_GalMaxResults, type:_OUTPUT_, label:ZaMsg.NAD_GalMaxResults},
@@ -1036,7 +1036,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						{type:_OUTPUT_, value:ZaMsg.Domain_GALTestingInProgress}
 					]	
 				}, 
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.GAL_TEST_RESULT_STEP, numCols:2,colSizes:["220px","auto"], 
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.GAL_TEST_RESULT_STEP, numCols:2,colSizes:["220px","430px"], 
 					items: [
 						{type:_ZAWIZ_TOP_GROUPER_,
 							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALSearchTestResultCode,ZaDomain.Check_OK]] ,
@@ -1162,7 +1162,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						}
 					]
 				},
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.AUTH_MODE_STEP, numCols:2,colSizes:["220px","auto"],
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.AUTH_MODE_STEP, numCols:2,colSizes:["220px","430px"],
 					items:[
 						{type:_OSELECT1_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs, ref:ZaDomain.A_AuthMech, onChange:ZaNewDomainXWizard.onAuthMechChange},
 						{type:_GROUP_, numCols:2,colSizes:["220px","auto"],colSpan:2,
@@ -1315,7 +1315,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						}							
 					]						
 				},
-				{type:_CASE_, numCols:2,colSizes:["220px","auto"], caseKey:ZaNewDomainXWizard.AUTH_CONFIG_SUM_STEP,
+				{type:_CASE_, numCols:2,colSizes:["220px","430px"], caseKey:ZaNewDomainXWizard.AUTH_CONFIG_SUM_STEP,
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isAuthMechNotZimbra],
 
 					items: [
