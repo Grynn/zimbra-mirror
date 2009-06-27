@@ -415,7 +415,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},				
 		{type: _SWITCH_,width:650,
 			items: [
-				{type:_CASE_, caseKey:ZaGALConfigXWizard.GALMODE_STEP,numCols:2,colSizes:["220px","auto"],
+				{type:_CASE_, caseKey:ZaGALConfigXWizard.GALMODE_STEP,numCols:2,colSizes:["220px","430px"],
 					items: [
 						{ref:ZaDomain.A_GalMode, type:_OSELECT1_, label:ZaMsg.Domain_GalMode, labelLocation:_LEFT_, choices:this.GALModes, onChange:ZaGALConfigXWizard.onGalModeChange},
 						{ref:ZaDomain.A_GalMaxResults, type:_TEXTFIELD_, label:ZaMsg.NAD_GalMaxResults, labelLocation:_LEFT_},
@@ -465,7 +465,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
 							]
 						},
-						{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","auto"],
+						{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","430px"],
 							visibilityChangeEventSources:[ZaDomain.A_GalMode],
 							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal],
 							cssStyle:"overflow:auto",
@@ -503,7 +503,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						}
 					]
 				},
-				{type:_CASE_, numCols:2,colSizes:["220px","auto"],
+				{type:_CASE_, numCols:2,colSizes:["220px","430px"],
 					caseKey:ZaGALConfigXWizard.GAL_CONFIG_STEP_2,
 					visibilityChangeEventSources:[ZaModel.currentStep],
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isDomainModeNotInternal],					
@@ -523,7 +523,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						}							
 					]			
 				},				
-				{type:_CASE_, numCols:2,colSizes:["220px","auto"],
+				{type:_CASE_, numCols:2,colSizes:["220px","430px"],
 					caseKey:ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1,
 					items: [
 						{ref:ZaDomain.A_GALSyncUseGALSearch, type:_CHECKBOX_, label:ZaMsg.Domain_GALSyncUseGALSearch, 
@@ -581,7 +581,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						}						
 					]
 				},
-				{type:_CASE_, numCols:2,colSizes:["220px","auto"],
+				{type:_CASE_, numCols:2,colSizes:["220px","430px"],
 					caseKey:ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_2,
 					visibilityChangeEventSources:[ZaModel.currentStep],
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isDomainModeNotInternal,[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]],
@@ -601,7 +601,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						}							
 					]			
 				},				
-				{type:_CASE_, caseKey:ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP,numCols:2,colSizes:["220px","auto"],
+				{type:_CASE_, caseKey:ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP,numCols:2,colSizes:["220px","430px"],
 					items: [
 						{ref:ZaDomain.A_GalMode, type:_OUTPUT_, label:ZaMsg.Domain_GalMode, choices:this.GALModes},
 						{ref:ZaDomain.A_GalMaxResults, type:_OUTPUT_, label:ZaMsg.NAD_GalMaxResults},
@@ -676,7 +676,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						{type:_OUTPUT_, value:ZaMsg.Domain_GALTestingInProgress}
 					]	
 				}, 
-				{type:_CASE_, caseKey:ZaGALConfigXWizard.GAL_TEST_RESULT_STEP,numCols:2,colSizes:["220px","auto"],
+				{type:_CASE_, caseKey:ZaGALConfigXWizard.GAL_TEST_RESULT_STEP,numCols:2,colSizes:["220px","430px"],
 					items: [
 						{type:_ZAWIZ_TOP_GROUPER_, 
 							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALSearchTestResultCode,ZaDomain.Check_OK]] ,
