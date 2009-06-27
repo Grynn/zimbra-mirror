@@ -295,7 +295,10 @@ ZaSearch.prototype.dynSelectSearch = function (callArgs) {
 		params.showBusy = true;
 		params.busyId = busyId;
 		params.busyMsg = ZaMsg.BUSY_SEARCHING;
-		params.skipCallbackIfCancelled = true; 		
+		params.skipCallbackIfCancelled = true;
+		if(callArgs.domain)
+			params.domain = callArgs.domain;
+			 		
 		ZaSearch.searchDirectory(params);		
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearch");		

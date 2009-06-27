@@ -293,7 +293,7 @@ function(ev) {
 			var item = this._contentView.getSelection()[0];
 			this._currentObject = item;
 			item.load("name", item.attrs[ZaDomain.A_domainName],false,true);
-			this._galWizard = ZaApp.getInstance().dialogs["galWizard"] = new ZaGALConfigXWizard(this._container);	
+			this._galWizard = ZaApp.getInstance().dialogs["galWizard"] = new ZaGALConfigXWizard(this._container,item);	
 			this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishGalButtonListener, this, null);			
 			this._galWizard.setObject(item);
 			this._galWizard.popup();

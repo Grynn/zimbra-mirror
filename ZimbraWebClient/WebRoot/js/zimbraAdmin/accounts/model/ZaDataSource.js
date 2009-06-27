@@ -30,6 +30,10 @@ ZaDataSource = function(noInit) {
 ZaDataSource.prototype = new ZaItem;
 ZaDataSource.prototype.constructor = ZaDataSource;
 
+ZaDataSource.DS_TYPE_GAL = "gal";
+ZaDataSource.GAL_TYPE_ZIMBRA = "zimbra";
+ZaDataSource.GAL_TYPE_LDAP = "ldap";
+
 ZaDataSource.A_zimbraGalLdapAttrMap = "zimbraGalLdapAttrMap";
 ZaDataSource.A_zimbraGalSyncLdapURL = "zimbraGalSyncLdapURL";
 ZaDataSource.A_zimbraGalSyncLdapSearchBase = "zimbraGalSyncLdapSearchBase";
@@ -47,9 +51,11 @@ ZaDataSource.A_zimbraGalLastFailedSyncTimestamp = "zimbraGalLastFailedSyncTimest
 ZaDataSource.A_zimbraGalStatus = "zimbraGalStatus";
 ZaDataSource.A_zimbraGalType = "zimbraGalType";
 ZaDataSource.A_zimbraGalSyncTimestampFormat = "zimbraGalSyncTimestampFormat";
+ZaDataSource.A_zimbraDataSourceType = "zimbraDataSourceType";
 
 ZaDataSource.myXModel = {
     items: [
+    	{id:ZaDataSource.A_zimbraDataSourceType, type:_STRING_, ref:"attrs/" + ZaDataSource.A_zimbraDataSourceType},
     	{id:ZaDataSource.A_zimbraGalType, type:_STRING_, ref:"attrs/" + ZaDataSource.A_zimbraGalType},
     	{id:ZaDataSource.A_zimbraGalSyncLdapURL, type:_LIST_,  listItem:{type:_SHORT_URL_},  ref:"attrs/" + ZaDataSource.A_zimbraGalSyncLdapURL},
     	{id:ZaDataSource.A_zimbraGalSyncLdapFilter, type:_STRING_, ref:"attrs/" + ZaDataSource.A_zimbraGalSyncLdapFilter,required:true},

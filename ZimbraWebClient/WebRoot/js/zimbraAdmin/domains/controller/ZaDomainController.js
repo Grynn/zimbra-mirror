@@ -403,7 +403,7 @@ function (ev) {
 ZaDomainController.prototype._galWizButtonListener =
 function(ev) {
 	try {
-		this._galWizard = ZaApp.getInstance().dialogs["galWizard"] = new ZaGALConfigXWizard(this._container);	
+		this._galWizard = ZaApp.getInstance().dialogs["galWizard"] = new ZaGALConfigXWizard(this._container,this._currentObject);	
 		this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishGalButtonListener, this, null);			
 		this._galWizard.setObject(this._currentObject);
 		this._galWizard.popup();

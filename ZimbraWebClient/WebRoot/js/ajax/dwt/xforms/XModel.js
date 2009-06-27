@@ -167,7 +167,7 @@ XModel.prototype.normalizePath = function (path) {
 		path = path.split("]").join("");
 	}
 	if (path.indexOf(".") > -1) {
-		path = path.split(this.pathDelimiter);
+		path = path.split(/[\/\.]+/);
 		var outputPath = [];
 		for (var i = 0; i < path.length; i++) {
 			var step = path[i];

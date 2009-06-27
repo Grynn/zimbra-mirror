@@ -27,6 +27,7 @@ DynSelect_XFormItem.prototype.dataFetcherMethod = null;
 DynSelect_XFormItem.prototype.dataFetcherObject = null;
 DynSelect_XFormItem.prototype.dataFetcherTypes = null;
 DynSelect_XFormItem.prototype.dataFetcherAttrs = null;
+DynSelect_XFormItem.prototype.dataFetcherDomain = null;
 DynSelect_XFormItem.prototype.emptyText = "";
 DynSelect_XFormItem.prototype.cssClass = "dynselect";
 DynSelect_XFormItem.prototype.edited = false;
@@ -43,6 +44,7 @@ DynSelect_XFormItem.prototype.initFormItem = function () {
 	this.dataFetcherMethod = this.getInheritedProperty("dataFetcherMethod");
 	this.dataFetcherTypes = this.getInheritedProperty("dataFetcherTypes");	
 	this.dataFetcherAttrs = this.getInheritedProperty("dataFetcherAttrs");
+	this.dataFetcherDomain = this.getInheritedProperty("dataFetcherDomain");
 	this.dataFetcherObject = null;
 }
 DynSelect_XFormItem.prototype.changeChoicesCallback = 
@@ -58,10 +60,9 @@ function (data, more, total) {
 	if(AjxUtil.isEmpty(data)) {
 		this.hideMenu();
 	} else {
-		this.showMenu();
+		if(!this.menuUp)
+			this.showMenu();	
 	}
-	if(!this.menuUp)
-		this.showMenu();	
 }
 
 DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
@@ -163,7 +164,7 @@ DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value,lastTy
 	var callback = new AjxCallback(this, this.changeChoicesCallback);
 	var searchByProcessedValue = this.getInheritedProperty("searchByProcessedValue");
 	var callArgs = {event:event, callback:callback, extraLdapQuery:null, form:this.getForm(), types:(this.dataFetcherTypes ? this.dataFetcherTypes : null),
-		attrs:(this.dataFetcherAttrs ? this.dataFetcherAttrs : null)};
+		attrs:(this.dataFetcherAttrs ? this.dataFetcherAttrs : null), domain:(this.dataFetcherDomain ? this.dataFetcherDomain : null)};
 	if(searchByProcessedValue && !AjxUtil.isEmpty(val))	{
 		callArgs["value"] = val;
 		this.dataFetcherMethod.call(this.dataFetcherObject, callArgs);

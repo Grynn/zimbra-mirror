@@ -218,6 +218,8 @@ ZaAccount.ACCOUNT_STATUS_CLOSED = "closed";
 ZaAccount.ACCOUNT_STATUS_PENDING = "pending" ;
 
 //this attributes are not used in the XML object, but is used in the model
+ZaAccount.A2_ldap_ds = "ldap_ds";
+ZaAccount.A2_zimbra_ds = "zimbra_ds";
 ZaAccount.A2_datasources = "datasources";
 ZaAccount.A2_confirmPassword = "confirmPassword";
 ZaAccount.A2_mbxsize = "mbxSize";
@@ -1297,9 +1299,21 @@ function(by, val) {
 				        this[ZaAccount.A2_currentAccountType] = resp.cos.id ;					
 				}
 				
-				if(batchResp.GetDataSourcesResponse) {
+				if(batchResp.GetDataSourcesResponse && batchResp.GetDataSourcesResponse instanceof Array && batchResp.GetDataSourcesResponse[0]) {
 					this[ZaAccount.A2_datasources] = new ZaItemList(ZaDataSource);
-					this[ZaAccount.A2_datasources].loadFromJS(batchResp.GetDataSourcesResponse);
+					this[ZaAccount.A2_datasources].loadFromJS(batchResp.GetDataSourcesResponse[0]);
+					var dss = this[ZaAccount.A2_datasources].getArray(); 
+					if(dss && dss.length) {
+						for(var i=0; i < dss.length; i++) {
+							if(dss[i].attrs[ZaDataSource.A_zimbraDataSourceType] == ZaDataSource.DS_TYPE_GAL) {
+								if(dss[i].attrs[ZaDataSource.A_zimbraGalType] == ZaDataSource.GAL_TYPE_ZIMBRA) {
+									this[ZaAccount.A2_zimbra_ds] = dss[i];
+								} else if(dss[i].attrs[ZaDataSource.A_zimbraGalType] == ZaDataSource.GAL_TYPE_LDAP) {
+									this[ZaAccount.A2_ldap_ds] = dss[i];
+								}
+							}
+						}
+					}
 				}
 			}
 		} catch (ex) {

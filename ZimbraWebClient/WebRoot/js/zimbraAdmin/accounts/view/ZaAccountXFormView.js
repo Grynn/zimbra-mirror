@@ -1092,7 +1092,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 				items:[
 				{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
 					labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true,
-					enableDisableChecks:[[XFormItem.prototype.hasRight,ZaAccount.RENAME_ACCOUNT_RIGHT]],
+					enableDisableChecks:[[ZaItem.hasRight,ZaAccount.RENAME_ACCOUNT_RIGHT]],
 					visibilityChecks:[]
 				},
 				{ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName, 
