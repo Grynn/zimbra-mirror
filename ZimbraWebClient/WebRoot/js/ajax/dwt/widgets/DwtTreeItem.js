@@ -118,6 +118,7 @@ function() {
 	this._itemDiv = null;
 	this._nodeCell = null;
 	this._checkBoxCell = null;
+	this._checkedImg = null;
 	this._checkBox = null;
 	this._imageCell = null;
 	this._textCell = null;
@@ -142,32 +143,28 @@ function(checked, force) {
 		if (this._checkBox != null &&
 			(this._checkBoxCell && Dwt.getVisible(this._checkBoxCell)))
 		{
-			this._checkBox.checked = checked;
-			
-			// NOTE: This hack is needed because IE actively loses the checked
-			//		 state for checkbox elements that are programmatically set
-			//		 before being added to the document tree (or even before
-			//		 layout, from the looks of things).
-			//
-			//		 The following code will demonstrate the bug:
-			//
-			//		 var checkbox = document.createElement("INPUT");
-			//		 checkbox.type = "checkbox";
-			//		 checkbox.checked = true;
-			//		 document.body.appendChild(checkbox);
-			//		 alert(checkbox.checked);
-			if (this._checkBox._ieHack) {
-				if (checked) {
-					var checkbox = document.createElement("<INPUT type='checkbox' checked>");
-					Dwt.setHandler(checkbox, DwtEvent.ONMOUSEDOWN, DwtTreeItem._checkBoxMouseDownHdlr);
-					Dwt.setHandler(checkbox, DwtEvent.ONMOUSEUP, DwtTreeItem._checkBoxMouseUpHdlr);
-					this._checkBox.parentNode.replaceChild(checkbox, this._checkBox);
-					this._checkBox = checkbox;
-				} else {
-					this._checkBox._ieHack = false;
-				}
-			}
+			Dwt.setVisible(this._checkedImg, checked);
 		}
+	}
+};
+
+DwtTreeItem.prototype._handleCheckboxOnclick =
+function(ev) {
+	this.setChecked(!Dwt.getVisible(this._checkedImg));
+
+	ev.item = this;
+	this._tree._itemChecked(this, ev);
+};
+
+/**
+ * Sets the background color for the checkbox widget
+ *
+ * @param className		[String]*		class name defining background color.
+ */
+DwtTreeItem.prototype.setCheckboxBgcolor =
+function(className) {
+	if (this._checkBox && className) {
+		this._checkBox.className = "ZTreeItemCheckbox " + className;
 	}
 };
 
@@ -263,8 +260,7 @@ function() {
 DwtTreeItem.prototype.setText =
 function(text) {
 	if (this._initialized) {
-		if (!text)
-			text = "";
+		if (!text) text = "";
 		this._text = this._textCell.innerHTML = text;
 	} else {
 		this._textParam = text;
@@ -368,7 +364,6 @@ function() {
 DwtTreeItem.prototype.handleKeyAction =
 function(actionCode, ev) {
 
-
 	switch (actionCode) {
 
 		case DwtKeyMap.NEXT: {
@@ -410,10 +405,8 @@ function(actionCode, ev) {
 			this._gotMouseDownRight = true;
 			this._emulateSingleClick({dwtObj:this, target:target, button:DwtMouseEvent.RIGHT,
 									  docX:docX, docY:docY, kbNavEvent:true});
-
 			break;
 		}
-
 
 		default:
 			return false;
@@ -441,10 +434,12 @@ function(index, realizeDeferred) {
 	if (AjxEnv.isSafari) {	// bug fix #25016
 		this._setEventHdlrs([DwtEvent.ONCONTEXTMENU]);
 	}
-	var data = {id:this._htmlElId,
-				divClassName:this._origClassName,
-				isCheckedStyle:this._tree.isCheckedStyle,
-				textClassName:this._textClassName };
+	var data = {
+		id: this._htmlElId,
+		divClassName: this._origClassName,
+		isCheckedStyle: this._tree.isCheckedStyle,
+		textClassName: this._textClassName
+	};
 
 	this._createHtmlFromTemplate(this.TEMPLATE, data);
 
@@ -456,6 +451,7 @@ function(index, realizeDeferred) {
 	this._nodeCell = document.getElementById(data.id + "_nodeCell");
 	this._checkBoxCell = document.getElementById(data.id + "_checkboxCell");
 	this._checkBox = document.getElementById(data.id + "_checkbox");
+	this._checkedImg = document.getElementById(data.id + "_checkboxImg");
 	this._imageCell = document.getElementById(data.id + "_imageCell");
 	this._textCell = document.getElementById(data.id + "_textCell");
 	this._extraCell = document.getElementById(data.id + "_extraCell");
@@ -475,14 +471,8 @@ function(index, realizeDeferred) {
 
 	// initialize checkbox
 	if (this._tree.isCheckedStyle && this._checkBox) {
+		this._checkBox.onclick = AjxCallback.simpleClosure(this._handleCheckboxOnclick, this);
 		this.showCheckBox(this._checkBoxVisible);
-		if (AjxEnv.isIE) {
-			// HACK: See setChecked method for explanation
-			this._checkBox._ieHack = true;
-		}
-		Dwt.setHandler(this._checkBox, DwtEvent.ONMOUSEDOWN, DwtTreeItem._checkBoxMouseDownHdlr);
-		Dwt.setHandler(this._checkBox, DwtEvent.ONMOUSEUP, DwtTreeItem._checkBoxMouseUpHdlr);
-		this._checkBox.checked = this._itemChecked;
 	}
 
 	// initialize icon
@@ -492,9 +482,9 @@ function(index, realizeDeferred) {
 	}
 
 	// initialize text
-	if (this._textCell && this._textParam){
-       this._textCell.innerHTML = this._text = this._textParam;
-    }
+	if (this._textCell && this._textParam) {
+		this._textCell.innerHTML = this._text = this._textParam;
+	}
 	this._expanded = this._selected = this._actioned = false;
 	this._gotMouseDownLeft = this._gotMouseDownRight = false;
 	this._addMouseListeners();
@@ -508,13 +498,13 @@ function(className) {
 	var treeItemTableEl = document.getElementById(id);
 	var treeItemDivEl = document.getElementById(this._htmlElId + "_div");
 	var treeItemEl = this.getHtmlElement();
-	
-	var newClassName = this._origClassName	 + " " + className;
-	if(treeItemDivEl) {
+
+	var newClassName = this._origClassName + " " + className;
+	if (treeItemDivEl) {
 		treeItemDivEl.className = newClassName;
-	}else if (treeItemEl) {
+	} else if (treeItemEl) {
 		treeItemEl.className =  className;
-	}	
+	}
 };
 
 DwtTreeItem.prototype._addMouseListeners =
@@ -560,11 +550,8 @@ function(item, index, realizeDeferred) {
 
 	if (this._childDiv == null) {
 		this._childDiv = document.createElement("div");
-		if (this.parent != this._tree) {
-			this._childDiv.className = "DwtTreeItemChildDiv";
-		} else {
-			this._childDiv.className = "DwtTreeItemLevel1ChildDiv";
-		}
+		this._childDiv.className = (this.parent != this._tree)
+			? "DwtTreeItemChildDiv" : "DwtTreeItemLevel1ChildDiv";
 		this.getHtmlElement().appendChild(this._childDiv);
 		if (!this._expanded) {
 			this._childDiv.style.display = "none";
@@ -573,11 +560,7 @@ function(item, index, realizeDeferred) {
 
 	if (realizeDeferred && this._nodeCell) {
 		if (AjxImg.getImageClass(this._nodeCell) == AjxImg.getClassForImage("Blank_16")) {
-			if (this._expanded) {
-				AjxImg.setImage(this._nodeCell, this._expandNodeImage);
-			} else {
-				AjxImg.setImage(this._nodeCell, this._collapseNodeImage);
-			}
+			AjxImg.setImage(this._nodeCell, this._expanded ? this._expandNodeImage : this._collapseNodeImage);
 			var imgEl = AjxImg.getImageElement(this._nodeCell);
 			if (imgEl) {
 				Dwt.setHandler(imgEl, DwtEvent.ONMOUSEDOWN, DwtTreeItem._nodeIconMouseDownHdlr);
@@ -621,10 +604,10 @@ function() {
 	var table = document.createElement("table");
 	icon.appendChild(table);
 	table.cellSpacing = table.cellPadding = 0;
-		
+
 	var row = table.insertRow(0);
 	var i = 0;
-	
+
 	var c = row.insertCell(i++);
 	c.noWrap = true;
 	if (this._dndImageInfo) {
@@ -632,16 +615,16 @@ function() {
 	} else if (this._imageInfo) {
 		AjxImg.setImage(c, this._imageInfo);
 	}
-	
+
 	c = row.insertCell(i);
-    c.noWrap = true;
-    c.className = this._origClassName;
+	c.noWrap = true;
+	c.className = this._origClassName;
 	if (this._dndText) {
-    	c.innerHTML = this._dndText;
+		c.innerHTML = this._dndText;
 	} else if (this._text) {
-    	c.innerHTML = this._text;
+		c.innerHTML = this._text;
 	}
-	
+
 	this.shell.getHtmlElement().appendChild(icon);
 	Dwt.setZIndex(icon, Dwt.Z_DND);
 	return icon;
@@ -655,8 +638,9 @@ function() {
 
 DwtTreeItem.prototype._dragHover =
 function() {
-	if (this.getNumChildren() > 0 && !this.getExpanded())
+	if (this.getNumChildren() > 0 && !this.getExpanded()) {
 		this.setExpanded(true);
+	}
 };
 
 DwtTreeItem.prototype._dragLeave =
@@ -668,8 +652,9 @@ function(ev) {
 
 DwtTreeItem.prototype._drop =
 function() {
-	if (this._preDragClassName)
+	if (this._preDragClassName) {
 		this._textCell.className = this._preDragClassName;
+	}
 };
 
 DwtTreeItem._nodeIconMouseDownHdlr =
@@ -764,14 +749,14 @@ function(selected, noFocus) {
 		}
 		if (!this._textCell) { return; }
 		if (selected && (this._selectionEnabled || this._forceNotifySelection)) {
-            this._textCell.className = this._selectedClassName;
+			this._textCell.className = this._selectedClassName;
 			if (!noFocus) {
 				this.focus();
 			}
-            return true;
+			return true;
 		} else {
-   			this._textCell.className = this._textClassName;
-            return false;
+			this._textCell.className = this._textClassName;
+			return false;
 		}
 	}
 };
@@ -783,11 +768,15 @@ function(actioned) {
 		if (!this._initialized) {
 			this._initialize();
 		}
+
 		if (!this._textCell) { return; }
+
 		if (actioned && (this._actionEnabled || this._forceNotifyAction) && !this._selected) {
 			this._textCell.className = this._actionedClassName;
 			return true;
-		} else if (!actioned) {
+		}
+
+		if (!actioned) {
 			if (!this._selected) {
 				this._textCell.className = this._textClassName;
 			}
@@ -808,39 +797,11 @@ function() {
 DwtTreeItem.prototype._blur =
 function() {
 	if (!this._textCell) { return; }
-	this._textCell.className = this._selected ? this._selectedClassName : this._textClassName;
+	this._textCell.className = this._selected
+		? this._selectedClassName : this._textClassName;
 };
 
-DwtTreeItem._checkBoxMouseDownHdlr =
-function(ev) {
-	var obj = DwtControl.getTargetControl(ev);
-	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev, obj);
-	mouseEv._stopPropagation = true;
-	mouseEv._returnValue = false;
-	mouseEv.setToDhtmlEvent(ev);
-	DwtTreeItem._processedMouseDown = true;
-	return false;
-};
-
-DwtTreeItem._checkBoxMouseUpHdlr =
-function(ev) {
-	// bug #8168 - dont process mouseup's unless mousedown's have been processed first
-	if (!DwtTreeItem._processedMouseDown) { return; }
-	DwtTreeItem._processedMouseDown = false;
-
-	var obj = DwtControl.getTargetControl(ev);
-	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev, obj);
-	if (mouseEv.button == DwtMouseEvent.LEFT) {
-		mouseEv.dwtObj._itemChecked = !mouseEv.dwtObj._itemChecked;	
-		mouseEv.dwtObj._tree._itemChecked(mouseEv.dwtObj, mouseEv);
-	} else if (mouseEv.button == DwtMouseEvent.RIGHT) {
-		mouseEv.dwtObj._tree._itemActioned(mouseEv.dwtObj, mouseEv);
-	}
-};
-
-DwtTreeItem._mouseDownListener = 
+DwtTreeItem._mouseDownListener =
 function(ev) {
 	var treeItem = ev.dwtObj;
 	if (!treeItem) { return false; }
