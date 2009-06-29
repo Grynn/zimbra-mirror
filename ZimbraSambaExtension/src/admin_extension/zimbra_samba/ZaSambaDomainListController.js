@@ -18,15 +18,17 @@
 * @class ZaSambaDomainListController
 * This is a singleton object that controls all the user interaction with the list of ZaSambaDomain objects
 **/
-function ZaSambaDomainListController(appCtxt, container, app) {
-	ZaListViewController.call(this, appCtxt, container, app,"ZaSambaDomainListController");
+function ZaSambaDomainListController(appCtxt, container) {
+	ZaListViewController.call(this, appCtxt, container,"ZaSambaDomainListController");
+   	this._toolbarOperations = new Object();
+   	this._popupOperations = new Object();
 }
 
 ZaSambaDomainListController.prototype = new ZaListViewController();
 ZaSambaDomainListController.prototype.constructor = ZaSambaDomainListController;
 ZaController.initToolbarMethods["ZaSambaDomainListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaSambaDomainListController"] = new Array();
-
+ZaController.changeActionsStateMethods["ZaSambaDomainListController"] = new Array();
 
 ZaSambaDomainListController.prototype.show = 
 function(list) {
@@ -36,7 +38,7 @@ function(list) {
 	if (list != null)
 		this._contentView.set(list.getVector());
 	
-	this._app.pushView(this.getContentViewId());			
+	ZaApp.getInstance().pushView(this.getContentViewId());			
 
 	this._removeList = new Array();
 	if (list != null)
@@ -47,11 +49,18 @@ function(list) {
 
 ZaSambaDomainListController.initToolbarMethod =
 function () {
-   	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.SERTBB_new_tt, "Domain", "DomainDis", new AjxListener(this, this._newButtonListener)));    			
-   	this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaSambaDomainListController.prototype._editButtonListener)));    	
-   	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaSambaDomainListController.prototype._deleteButtonListener)));    	    	
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
+   	this._toolbarOperations[ZaOperation.NEW] = new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.SERTBB_new_tt, "Domain", "DomainDis", new AjxListener(this, this._newButtonListener));    			
+   	this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaSambaDomainListController.prototype._editButtonListener));    	
+   	this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaSambaDomainListController.prototype._deleteButtonListener));    	    	
+	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
+	this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
+	
+	this._toolbarOrder.push(ZaOperation.NEW);
+	this._toolbarOrder.push(ZaOperation.EDIT);
+	this._toolbarOrder.push(ZaOperation.DELETE);
+	this._toolbarOrder.push(ZaOperation.NONE);
+	this._toolbarOrder.push(ZaOperation.HELP);					
+					
 }
 ZaController.initToolbarMethods["ZaSambaDomainListController"].push(ZaSambaDomainListController.initToolbarMethod);
 
@@ -68,25 +77,22 @@ ZaSambaDomainListController.prototype._createUI = function () {
 		var elements = new Object();
 		this._contentView = new ZaSambaDomainListView(this._container);
 		this._initToolbar();
-		if(this._toolbarOperations && this._toolbarOperations.length) {
-			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-		}
+		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+		
 		this._initPopupMenu();
-		if(this._popupOperations && this._popupOperations.length) {
-			this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
-		}
+		this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		var tabParams = {
 			openInNewTab: false,
 			tabId: this.getContentViewId(),
 			tab: this.getMainTab() 
 		}		
-		this._app.createView(this.getContentViewId(), elements,tabParams);
+		ZaApp.getInstance().createView(this.getContentViewId(), elements,tabParams);
 
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = this._app.dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);											
+		this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);											
 		this._UICreated = true;
 	} catch (ex) {
 		this._handleException(ex, "ZaSambaDomainListController.prototype._createUI", null, false);
@@ -104,8 +110,8 @@ function(sambaDomainList) {
 // new button was pressed
 ZaSambaDomainListController.prototype._newButtonListener =
 function(ev) {
-	var newSambaDomain = new ZaSambaDomain(this._app);
-	this._app.getSambaDomainController().show(newSambaDomain);
+	var newSambaDomain = new ZaSambaDomain();
+	ZaApp.getInstance().getSambaDomainController().show(newSambaDomain);
 }
 
 /**
@@ -117,7 +123,7 @@ function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
 			this._selectedItem = ev.item;
-			this._app.getSambaDomainController().show(ev.item);
+			ZaApp.getInstance().getSambaDomainController().show(ev.item);
 		}
 	} else {
 		this.changeActionsState();	
@@ -138,28 +144,29 @@ ZaSambaDomainListController.prototype._editButtonListener =
 function(ev) {
 	if(this._contentView.getSelectionCount() == 1) {
 		var item = this._contentView.getSelection()[0];
-		this._app.getSambaDomainController().show(item);
+		ZaApp.getInstance().getSambaDomainController().show(item);
 	}
 }
 
-ZaSambaDomainListController.prototype.changeActionsState = 
+ZaSambaDomainListController.changeActionsStateMethod = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
 	if(cnt == 1) {
-		var opsArray = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray, true);
-		this._actionMenu.enable(opsArray, true);
 	} else if (cnt > 1){
-		var opsArray1 = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray1, false);
-		this._actionMenu.enable(opsArray1, false);
+		if(this._toolbarOperations[ZaOperation.EDIT])
+			this._toolbarOperations[ZaOperation.EDIT].enabled = false;
+
+		if(this._popupOperations[ZaOperation.EDIT])
+			this._popupOperations[ZaOperation.EDIT].enabled = false;
 	} else {
-		var opsArray = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray, false);
-		this._actionMenu.enable(opsArray, false);
+		if(this._toolbarOperations[ZaOperation.EDIT])
+			this._toolbarOperations[ZaOperation.EDIT].enabled = false;
+
+		if(this._popupOperations[ZaOperation.EDIT])
+			this._popupOperations[ZaOperation.EDIT].enabled = false;
 	}
 }
-
+ZaController.changeActionsStateMethods["ZaSambaDomainListController"].push(ZaSambaDomainListController.changeActionsStateMethod);
 
 
 /**
@@ -172,7 +179,7 @@ function (ev) {
 		if(ev.getDetails() && this._list) {
 			if (this._list) this._list.add(ev.getDetails());
 			if (this._contentView) this._contentView.setUI();
-			if(this._app.getCurrentController() == this) {
+			if(ZaApp.getInstance().getCurrentController() == this) {
 				this.show();			
 			}
 		}
@@ -189,7 +196,7 @@ function (ev) {
 		if(ev.getDetails() && this._list) {
 			if (this._list) this._list.remove(ev.getDetails());
 			if (this._contentView) this._contentView.setUI();
-			if(this._app.getCurrentController() == this) {
+			if(ZaApp.getInstance().getCurrentController() == this) {
 				this.show();			
 			}
 		}
@@ -209,7 +216,7 @@ function (ev) {
 				this._list.replace(details);
 			}
 			if (this._contentView) this._contentView.setUI();
-			if(this._app.getCurrentController() == this) {
+			if(ZaApp.getInstance().getCurrentController() == this) {
 				this.show();			
 			}
 		}

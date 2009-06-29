@@ -20,11 +20,11 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaPosixGroupXFormView (parent, app) {
-	ZaTabView.call(this, parent, app,"ZaPosixGroupXFormView");	
+function ZaPosixGroupXFormView (parent) {
+	ZaTabView.call(this, parent, "ZaPosixGroupXFormView");	
 		
 	this.initForm(ZaPosixGroup.myXModel,this.getMyXForm());
-	this._localXForm.setController(this._app);
+	this._localXForm.setController();
 }
 
 ZaPosixGroupXFormView.prototype = new ZaTabView();
@@ -34,8 +34,7 @@ ZaTabView.XFormModifiers["ZaPosixGroupXFormView"] = new Array();
 
 ZaPosixGroupXFormView.prototype.setObject = 
 function (entry) {
-	//this._localXForm.setInstance(new ZaBackup(this._app));
-	this._containedObject = new ZaPosixGroup(this._app);
+	this._containedObject = new ZaPosixGroup();
 	this._containedObject.attrs = new Object();
 
 	for(var a in entry) {

@@ -1,11 +1,11 @@
 if(ZaItem) {
 	ZaItem.SAMBA_SAM_ACCOUNT = "sambaSamDomain";
 }
-function ZaSambaGroupMapping(app) {
-	if (arguments.length == 0) return;	
-	ZaItem.call(this, app,"ZaSambaGroupMapping");
+function ZaSambaGroupMapping() {
+		
+	ZaItem.call(this,"ZaSambaGroupMapping");
 	this.type = ZaItem.SAMBA_SAM_ACCOUNT;
-	this._init(app);
+	this._init();
 }
 
 ZaSambaGroupMapping.A_isSpecialNTGroup = "isSpecialNTGroup";
@@ -88,7 +88,7 @@ if(ZaItem.loadMethods["ZaPosixGroup"]) {
 	ZaItem.loadMethods["ZaPosixGroup"].push(ZaSambaGroupMapping.loadMethod);
 }
 
-ZaSambaGroupMapping.initMethod = function (app) {
+ZaSambaGroupMapping.initMethod = function () {
 	this.attrs[ZaItem.A_objectClass].push("sambaGroupMapping");
 }
 if(ZaItem.initMethods["ZaPosixGroup"]) {
@@ -112,7 +112,7 @@ if(ZaTabView.XFormModifiers["ZaPosixGroupXFormView"]) {
 					items: [
 						{type:_ZAGROUP_, 
 							items:[
-								{ref:ZaSambaGroupMapping.A_sambaDomainSID, type:_OSELECT1_, editable:false,choices:this._app.getSambaDomainSIDListChoices(true), msgName:"Samba domain",label:"Samba domain", labelLocation:_LEFT_,
+								{ref:ZaSambaGroupMapping.A_sambaDomainSID, type:_OSELECT1_, editable:false,choices:ZaApp.getInstance().getSambaDomainSIDListChoices(true), msgName:"Samba domain",label:"Samba domain", labelLocation:_LEFT_,
 									onChange:ZaTabView.onFormFieldChanged,
 									elementChanged:function(val,instanceValue, event) {
 										var v = val;

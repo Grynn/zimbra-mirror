@@ -18,8 +18,10 @@
 * @class ZaPosixGroupListController
 * This is a singleton object that controls all the user interaction with the list of ZaPosixGroup objects
 **/
-function ZaPosixGroupListController(appCtxt, container, app) {
-	ZaListViewController.call(this, appCtxt, container, app,"ZaPosixGroupListController");
+function ZaPosixGroupListController(appCtxt, container) {
+	ZaListViewController.call(this, appCtxt, container,"ZaPosixGroupListController");
+   	this._toolbarOperations = new Object();
+   	this._popupOperations = new Object();				
 }
 
 ZaPosixGroupListController.prototype = new ZaListViewController();
@@ -47,18 +49,24 @@ function(list) {
 
 ZaPosixGroupListController.initToolbarMethod =
 function () {
-   	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.SERTBB_new_tt, "NewCOS", "NewCOSDis", new AjxListener(this, this._newButtonListener)));    		
-   	this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, this._editButtonListener)));    	
-    this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this._deleteButtonListener)));    	    	
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
+   	this._toolbarOperations[ZaOperation.NEW] = new ZaOperation(ZaOperation.NEW, zimbra_posixaccount.TBB_NewPosixGrp, zimbra_posixaccount.TBB_NewPosixGrp_tt, "NewCOS", "NewCOSDis", new AjxListener(this, this._newButtonListener));    		
+   	this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, zimbra_posixaccount.TBB_EditPosixGrp, zimbra_posixaccount.TBB_EditPosixGrp_tt, "Properties", "PropertiesDis", new AjxListener(this, this._editButtonListener));    	
+    this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this._deleteButtonListener));    	    	
+	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
+	this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
+	
+	this._toolbarOrder.push(ZaOperation.NEW);
+	this._toolbarOrder.push(ZaOperation.EDIT);
+	this._toolbarOrder.push(ZaOperation.DELETE);
+	this._toolbarOrder.push(ZaOperation.NONE);
+	this._toolbarOrder.push(ZaOperation.HELP);					
 }
 ZaController.initToolbarMethods["ZaPosixGroupListController"].push(ZaPosixGroupListController.initToolbarMethod);
 
 ZaPosixGroupListController.initPopupMenuMethod =
 function () {
-   	this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaPosixGroupListController.prototype._editButtonListener)));    	
-   	this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaPosixGroupListController.prototype._deleteButtonListener)));    	    	
+   	this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaPosixGroupListController.prototype._editButtonListener));    	
+   	this._popupOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaPosixGroupListController.prototype._deleteButtonListener));    	    	
 }
 ZaController.initPopupMenuMethods["ZaPosixGroupListController"].push(ZaPosixGroupListController.initPopupMenuMethod);
 
@@ -68,14 +76,14 @@ ZaPosixGroupListController.prototype._createUI = function () {
 		var elements = new Object();
 		this._contentView = new ZaPosixGroupListView(this._container);
 		this._initToolbar();
-		if(this._toolbarOperations && this._toolbarOperations.length) {
-			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-		}
+		//if(this._toolbarOperations && this._toolbarOperations.length) {
+		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+		//}
 		this._initPopupMenu();
-		if(this._popupOperations && this._popupOperations.length) {
-			this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
-		}
+		//if(this._popupOperations && this._popupOperations.length) {
+		this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
+		//}
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		var tabParams = {
 			openInNewTab: false,
@@ -83,11 +91,10 @@ ZaPosixGroupListController.prototype._createUI = function () {
 			tab: this.getMainTab() 
 		}		
 		ZaApp.getInstance().createView(this.getContentViewId(), elements,tabParams);		
-//		ZaApp.getInstance().createView(ZaZimbraAdmin._POSIX_GROUP_LIST, elements);
 
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);									
+		this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);									
 		this._UICreated = true;
 	} catch (ex) {
 		this._handleException(ex, "ZaPosixGroupListController.prototype._createUI", null, false);
@@ -105,7 +112,7 @@ function(PosixGroupList) {
 // new button was pressed
 ZaPosixGroupListController.prototype._newButtonListener =
 function(ev) {
-	var newPosixGroup = new ZaPosixGroup(this._app);
+	var newPosixGroup = new ZaPosixGroup();
 	ZaApp.getInstance().getPosixGroupController().show(newPosixGroup);
 }
 

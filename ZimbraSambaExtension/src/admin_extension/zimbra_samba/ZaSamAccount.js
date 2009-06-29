@@ -79,7 +79,7 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 					items: [
 						{type:_ZAGROUP_, 
 							items:[
-								{ref:ZaSamAccount.A_sambaDomainSID, type:_OSELECT1_, editable:false,choices:this._app.getSambaDomainSIDListChoices(), msgName:"Samba domain",label:"Samba domain", labelLocation:_LEFT_,
+								{ref:ZaSamAccount.A_sambaDomainSID, type:_OSELECT1_, editable:false,choices:ZaApp.getInstance().getSambaDomainSIDListChoices(), msgName:"Samba domain",label:"Samba domain", labelLocation:_LEFT_,
 									onChange:ZaTabView.onFormFieldChanged,
 									elementChanged:function(val,instanceValue, event) {
 										var v = val;
@@ -160,7 +160,7 @@ if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 					items: [
 						{type:_ZAWIZGROUP_, 
 							items:[
-								{ref:ZaSamAccount.A_sambaDomainSID, type:_OSELECT1_, editable:false,choices:this._app.getSambaDomainSIDListChoices(), msgName:"Samba domain",label:"Samba domain", labelLocation:_LEFT_,
+								{ref:ZaSamAccount.A_sambaDomainSID, type:_OSELECT1_, editable:false,choices:ZaApp.getInstance().getSambaDomainSIDListChoices(), msgName:"Samba domain",label:"Samba domain", labelLocation:_LEFT_,
 									elementChanged:function(val,instanceValue, event) {
 										var v = val;
 										var instance = this.getInstance();
@@ -228,7 +228,7 @@ if(ZaItem.loadMethods["ZaAccount"]) {
 }
 
 ZaSamAccount.createMethod =
-function(tmpObj, account, app) {
+function(tmpObj, account) {
 	if(tmpObj.attrs[ZaAccount.A_password] && tmpObj.attrs[ZaAccount.A_password].length > 0) {
 		var soapDoc = AjxSoapDoc.create("ModifyAccountRequest", "urn:zimbraAdmin", null);
 		soapDoc.set("id", account.id);

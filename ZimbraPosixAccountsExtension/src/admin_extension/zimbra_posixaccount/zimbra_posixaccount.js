@@ -15,12 +15,11 @@ if(ZaItem) {
 	ZaItem.POSIX_ACCOUNT = "posixAccount";
 }
 
-function ZaPosixAccount(app) {
-	if (arguments.length == 0) return;	
-	ZaItem.call(this, app,"ZaPosixAccount");
+function ZaPosixAccount() {	
+	ZaItem.call(this, "ZaPosixAccount");
 	this.type = ZaItem.POSIX_ACCOUNT;
 	this.attrs = [];
-	this._init(app);
+	this._init();
 }
 ZaPosixAccount.prototype = new ZaItem;
 ZaPosixAccount.prototype.constructor = ZaPosixAccount;
@@ -302,9 +301,9 @@ function(viewId) {
 
 zimbra_posixaccount_ext.posixGroupListTreeListener = function (ev) {
 	if(ZaApp.getInstance().getCurrentController()) {
-		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getPosixGroupListController(),ZaPosixGroupListController.prototype.show, ZaPosixGroup.getAll(this._app));
+		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getPosixGroupListController(),ZaPosixGroupListController.prototype.show, ZaPosixGroup.getAll());
 	} else {					
-		ZaApp.getInstance().getPosixGroupListController().show(ZaPosixGroup.getAll(this._app));
+		ZaApp.getInstance().getPosixGroupListController().show(ZaPosixGroup.getAll());
 	}
 }
 

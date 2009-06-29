@@ -26,6 +26,12 @@ ZaItem.initMethods["ZaPosixGroup"] = new Array();
 ZaItem.modifyMethods["ZaPosixGroup"] = new Array();
 ZaItem.createMethods["ZaPosixGroup"] = new Array()
 
+ZaPosixGroup.prototype.loadEffectiveRights = function () {
+	this.getAttrs = {all:true};
+	this.setAttrs = {all:true};
+	this.rights = {};
+}
+
 ZaPosixGroup.loadMethod = function(by, val) {
 	if(!val)
 		return;
@@ -33,18 +39,25 @@ ZaPosixGroup.loadMethod = function(by, val) {
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSuffix);
 	soapDoc.set("query", "(&(objectClass=posixGroup)(cn="+val+"))");	
-	var getSambaDomainsCommand = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse.LDAPEntry[0];
-	this.initFromJS(resp);
+
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;
+
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = zimbra_posixaccount.BUSY_GETTING_POSIX_GROUP ;
+	var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetLDAPEntriesResponse;
+	
+	if(resp && resp.LDAPEntry) {	
+		this.initFromJS(resp.LDAPEntry[0]);
+	}
 }
 
 if(ZaItem.loadMethods["ZaPosixGroup"]) {
 	ZaItem.loadMethods["ZaPosixGroup"].push(ZaPosixGroup.loadMethod);
 }
 
-ZaPosixGroup.initMethod = function (app) {
+ZaPosixGroup.initMethod = function () {
 	this.attrs[ZaItem.A_objectClass].push("posixGroup");
 }
 if(ZaItem.initMethods["ZaPosixGroup"]) {
@@ -113,7 +126,7 @@ function(callback) {
 }
 
 ZaPosixGroup.getAll =
-function(app) {
+function() {
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSuffix);
 	soapDoc.set("query", "objectClass=posixGroup");	
@@ -121,12 +134,12 @@ function(app) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse;
-	var list = new ZaItemList(ZaPosixGroup, app);
+	var list = new ZaItemList(ZaPosixGroup);
 	list.loadFromJS(resp);		
 	return list;
 }
 
-ZaPosixGroup.createMethod = function(tmpObj, group, app) {
+ZaPosixGroup.createMethod = function(tmpObj, group) {
 	//test
 	var soapDoc = AjxSoapDoc.create("CreateLDAPEntryRequest", "urn:zimbraAdmin", null);
 	var dn = [["cn=",tmpObj.attrs["cn"]].join("")];
@@ -167,14 +180,15 @@ ZaPosixGroup.createMethod = function(tmpObj, group, app) {
 	}
 	
 
-
-	var testCommand = new ZmCsfeCommand();
-	var params = new Object();
-
-	params.soapDoc = soapDoc;	
-	var resp = testCommand.invoke(params).Body.CreateLDAPEntryResponse;
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;	
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = zimbra_posixaccount.BUSY_CREATING_POSIX_GROUP ;
+	resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.CreateLDAPEntryResponse;
 	
-	group.initFromJS(resp.LDAPEntry[0]);
+	if(resp.LDAPEntry)		
+		group.initFromJS(resp.LDAPEntry[0]);
 }
 
 
@@ -268,11 +282,20 @@ function(mods) {
 		}
 	}
 	
-	var modifyLDAPEntryCommand = new ZmCsfeCommand();
+	/*var modifyLDAPEntryCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	resp = modifyLDAPEntryCommand.invoke(params).Body.ModifyLDAPEntryResponse;
-	this.initFromJS(resp.LDAPEntry[0]);
+	resp = modifyLDAPEntryCommand.invoke(params).Body.ModifyLDAPEntryResponse;*/
+	
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;	
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = zimbra_posixaccount.BUSY_UPDATING_POSIX_GROUP ;
+	resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.ModifyLDAPEntryResponse;
+	
+	if(resp.LDAPEntry[0])	
+		this.initFromJS(resp.LDAPEntry[0]);
 	//invalidate the original tooltip
 
 	return;

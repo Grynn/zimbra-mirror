@@ -74,7 +74,7 @@ function(callback) {
 }
 
 ZaSambaDomain.getAll =
-function(app) {
+function() {
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", Zambra.ldapSuffix);
 	soapDoc.set("query", "objectClass=sambaDomain");	
@@ -82,7 +82,7 @@ function(app) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse;
-	var list = new ZaItemList(ZaSambaDomain, app);
+	var list = new ZaItemList(ZaSambaDomain);
 	list.loadFromJS(resp);		
 	return list;
 }
@@ -96,7 +96,7 @@ ZaSambaDomain.myXModel = {
 	]
 };
 
-ZaSambaDomain.createMethod = function(tmpObj, group, app) {
+ZaSambaDomain.createMethod = function(tmpObj, group) {
 	//test
 	var soapDoc = AjxSoapDoc.create("CreateLDAPEntryRequest", "urn:zimbraAdmin", null);
 

@@ -20,11 +20,11 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaSambaDomainXFormView (parent, app) {
-	ZaTabView.call(this, parent, app,"ZaSambaDomainXFormView");	
+function ZaSambaDomainXFormView (parent) {
+	ZaTabView.call(this, parent, "ZaSambaDomainXFormView");	
 		
 	this.initForm(ZaSambaDomain.myXModel,this.getMyXForm());
-	this._localXForm.setController(this._app);
+	this._localXForm.setController();
 }
 
 ZaSambaDomainXFormView.prototype = new ZaTabView();
@@ -34,8 +34,7 @@ ZaTabView.XFormModifiers["ZaSambaDomainXFormView"] = new Array();
 
 ZaSambaDomainXFormView.prototype.setObject = 
 function (entry) {
-	//this._localXForm.setInstance(new ZaBackup(this._app));
-	this._containedObject = new ZaSambaDomain(this._app);
+	this._containedObject = new ZaSambaDomain();
 	this._containedObject.attrs = new Object();
 
 	if(entry.id)

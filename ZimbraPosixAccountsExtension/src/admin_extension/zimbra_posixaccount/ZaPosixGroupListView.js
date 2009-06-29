@@ -46,7 +46,7 @@ function() {
 
 ZaPosixGroupListView.prototype.getTitle = 
 function () {
-	return "Manage Samba Domains";
+	return zimbra_posixaccount.PosixGroupsListViewTitle;
 }
 /**
 * Renders a single item as a DIV element.

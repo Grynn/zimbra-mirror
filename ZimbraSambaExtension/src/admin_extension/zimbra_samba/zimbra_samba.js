@@ -155,19 +155,19 @@ function() {
 	return c;
 }
 Zambra.sambaDomainListTreeListener = function (ev) {
-	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getSambaDomainListController(),ZaSambaDomainListController.prototype.show, ZaSambaDomain.getAll(this._app));
+	if(ZaApp.getInstance().getCurrentController()) {
+		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getSambaDomainListController(),ZaSambaDomainListController.prototype.show, ZaSambaDomain.getAll());
 	} else {					
-		this._app.getSambaDomainListController().show(ZaSambaDomain.getAll(this._app));
+		ZaApp.getInstance().getSambaDomainListController().show(ZaSambaDomain.getAll());
 	}
 }
 
 Zambra.sambaDomainTreeListener = function (ev) {
-	var currentSambaDomain = this._app.getSambaDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));	
-	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getSambaDomainController(),ZaSambaDomainController.prototype.show, currentSambaDomain);
+	var currentSambaDomain = ZaApp.getInstance().getSambaDomainList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));	
+	if(ZaApp.getInstance().getCurrentController()) {
+		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getSambaDomainController(),ZaSambaDomainController.prototype.show, currentSambaDomain);
 	} else {					
-		this._app.getSambaDomainController().show(currentSambaDomain);
+		ZaApp.getInstance().getSambaDomainController().show(currentSambaDomain);
 	}
 }
 
@@ -181,7 +181,7 @@ Zambra.ovTreeModifier = function (tree) {
 		
 		try {
 			//add server statistics nodes
-			var sambaDomainList = this._app.getSambaDomainList().getArray();
+			var sambaDomainList = ZaApp.getInstance().getSambaDomainList().getArray();
 			if(sambaDomainList && sambaDomainList.length) {
 				var cnt = sambaDomainList.length;
 				for(var ix=0; ix< cnt; ix++) {
