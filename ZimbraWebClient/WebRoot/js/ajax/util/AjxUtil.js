@@ -397,6 +397,13 @@ AjxUtil.values = function(object) {
     }
     return values;
 };
+AjxUtil.map = function(array, func) {
+	var narray = new Array(array.length);
+	for (var i = 0; i < array.length; i++) {
+		narray[i] = func ? func(array[i]) : array[i];
+	}
+	return narray;
+};
 
 AjxUtil.getFirstElement = function(parent, ename, aname, avalue) {
     for (var child = parent.firstChild; child; child = child.nextSibling) {
