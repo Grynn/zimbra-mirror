@@ -14,4 +14,4 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-exec `dirname $0`/zmjava org.python.util.jython -Dpython.cachedir=/opt/zimbra/data/tmp/jython-cachedir "$@"
+exec `dirname $0`/zmjava -Dpython.cachedir=/opt/zimbra/data/tmp/jython-cachedir -Duser.home=/opt/zimbra/data/tmp org.python.util.jython "$@"

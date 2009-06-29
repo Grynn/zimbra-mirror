@@ -14,4 +14,4 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-exec `dirname $0`/zmjava com.zimbra.cs.account.ProvUtil "$@"
+exec `dirname $0`/zmjava -Duser.home=/opt/zimbra/data/tmp jline.ConsoleRunner com.zimbra.cs.account.ProvUtil "$@"
