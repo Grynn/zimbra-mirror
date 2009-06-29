@@ -50,7 +50,11 @@ function(entry, openInNewTab, skipRefresh) {
 ZaDLController.setViewMethod =
 function (entry)	{
 	try {
-	    entry.refresh (false,true) ;
+        var skipRight = false ;       
+        if (entry.id == null) { //it is a new distribution list, ignore the right checking.
+            skipRight = true ;
+        }
+	    entry.refresh (skipRight,true) ;
 		this._createUI(entry);
 		ZaApp.getInstance().pushView(this.getContentViewId());
 		if(!entry.id) {
@@ -67,7 +71,7 @@ function (entry)	{
 	}	
 };
 ZaController.setViewMethods["ZaDLController"].push(ZaDLController.setViewMethod);
-
+                            
 
 ZaDLController.changeActionsStateMethod = function () {
 	if(this._toolbarOperations[ZaOperation.SAVE])

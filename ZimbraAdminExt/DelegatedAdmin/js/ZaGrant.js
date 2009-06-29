@@ -81,13 +81,17 @@ ZaGrant.loadMethod = function (by, val, type) {
     if (type == ZaItem.GLOBAL_GRANT || type == ZaItem.GLOBAL_CONFIG)  {
         params.target.val =  "" ;
     } else {
+        if (val == null || val.length <= 0)  {
+            //this might be a new DL, no need to load the ACL on the new DL
+            return ;
+        }
         params.target.val = val ;
         params.target.by = by ;
     }
     params.target.type =  type  ;
     return ZaGrant.load.call (this, params) ;
 }
-/*
+/*                                  
   params.isAllGrants - whether it is a call to get all the granted ACE of an grantee on all the targets 
 
   params.target - targets info
