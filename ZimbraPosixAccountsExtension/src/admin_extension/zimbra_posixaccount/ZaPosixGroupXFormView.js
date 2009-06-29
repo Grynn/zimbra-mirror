@@ -71,7 +71,7 @@ function () {
 	return "Posix Groups";
 }
 
-ZaPosixGroupXFormView.myXFormModifier = function(xFormObject) {	
+ZaPosixGroupXFormView.myXFormModifier = function(xFormObject,entry) {	
 	xFormObject.tableCssStyle="width:100%;overflow:auto;";
 	
 	xFormObject.items = [
@@ -94,11 +94,11 @@ ZaPosixGroupXFormView.myXFormModifier = function(xFormObject) {
 		},
 		{type:_SWITCH_, 
 			items:[
-				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 1", 
+				{type:_ZATABCASE_, caseKey:1,  
 					colSizes:["250px","*"],
 					items:[
 						{ ref: ZaPosixGroup.A_cn, type:_TEXTFIELD_, 
-						  label:"Name:",onChange:ZaTabView.onFormFieldChanged
+						  label:zimbra_posixaccount.GroupName,onChange:ZaTabView.onFormFieldChanged
 						},
 						{ref: ZaPosixGroup.A_gidNumber, type:_TEXTFIELD_, 
 						  	label:"gidNumber", cssClass:"admin_xform_number_input",

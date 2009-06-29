@@ -26,7 +26,7 @@ ZaPosixGroupListController.prototype = new ZaListViewController();
 ZaPosixGroupListController.prototype.constructor = ZaPosixGroupListController;
 ZaController.initToolbarMethods["ZaPosixGroupListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaPosixGroupListController"] = new Array();
-
+ZaController.changeActionsStateMethods["ZaPosixGroupListController"] = new Array();
 
 ZaPosixGroupListController.prototype.show = 
 function(list) {
@@ -36,7 +36,7 @@ function(list) {
 	if (list != null)
 		this._contentView.set(list.getVector());
 	
-	this._app.pushView(this.getContentViewId());		
+	ZaApp.getInstance().pushView(this.getContentViewId());		
 
 	this._removeList = new Array();
 	if (list != null)
@@ -82,12 +82,12 @@ ZaPosixGroupListController.prototype._createUI = function () {
 			tabId: this.getContentViewId(),
 			tab: this.getMainTab() 
 		}		
-		this._app.createView(this.getContentViewId(), elements,tabParams);		
-//		this._app.createView(ZaZimbraAdmin._POSIX_GROUP_LIST, elements);
+		ZaApp.getInstance().createView(this.getContentViewId(), elements,tabParams);		
+//		ZaApp.getInstance().createView(ZaZimbraAdmin._POSIX_GROUP_LIST, elements);
 
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = this._app.dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);									
+		this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);									
 		this._UICreated = true;
 	} catch (ex) {
 		this._handleException(ex, "ZaPosixGroupListController.prototype._createUI", null, false);
@@ -106,7 +106,7 @@ function(PosixGroupList) {
 ZaPosixGroupListController.prototype._newButtonListener =
 function(ev) {
 	var newPosixGroup = new ZaPosixGroup(this._app);
-	this._app.getPosixGroupController().show(newPosixGroup);
+	ZaApp.getInstance().getPosixGroupController().show(newPosixGroup);
 }
 
 /**
@@ -118,7 +118,7 @@ function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
 			this._selectedItem = ev.item;
-			this._app.getPosixGroupController().show(ev.item);
+			ZaApp.getInstance().getPosixGroupController().show(ev.item);
 		}
 	} else {
 		this.changeActionsState();	
@@ -139,27 +139,29 @@ ZaPosixGroupListController.prototype._editButtonListener =
 function(ev) {
 	if(this._contentView.getSelectionCount() == 1) {
 		var item = this._contentView.getSelection()[0];
-		this._app.getPosixGroupController().show(item);
+		ZaApp.getInstance().getPosixGroupController().show(item);
 	}
 }
 
-ZaPosixGroupListController.prototype.changeActionsState = 
+ZaPosixGroupListController.changeActionsStateMethod = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
 	if(cnt == 1) {
-		var opsArray = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray, true);
-		this._actionMenu.enable(opsArray, true);
 	} else if (cnt > 1){
-		var opsArray1 = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray1, false);
-		this._actionMenu.enable(opsArray1, false);
+		if(this._toolbarOperations[ZaOperation.EDIT])
+			this._toolbarOperations[ZaOperation.EDIT].enabled = false;
+
+		if(this._popupOperations[ZaOperation.EDIT])
+			this._popupOperations[ZaOperation.EDIT].enabled = false;
 	} else {
-		var opsArray = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray, false);
-		this._actionMenu.enable(opsArray, false);
+		if(this._toolbarOperations[ZaOperation.EDIT])
+			this._toolbarOperations[ZaOperation.EDIT].enabled = false;
+
+		if(this._popupOperations[ZaOperation.EDIT])
+			this._popupOperations[ZaOperation.EDIT].enabled = false;
 	}
 }
+ZaController.changeActionsStateMethods["ZaPosixGroupListController"].push(ZaPosixGroupListController.changeActionsStateMethod);
 
 /**
 * @param ev
@@ -171,7 +173,7 @@ function (ev) {
 		if(ev.getDetails() && this._list) {
 			if (this._list) this._list.add(ev.getDetails());
 			if (this._contentView) this._contentView.setUI();
-			if(this._app.getCurrentController() == this) {
+			if(ZaApp.getInstance().getCurrentController() == this) {
 				this.show();			
 			}
 		}
@@ -188,7 +190,7 @@ function (ev) {
 		if(ev.getDetails() && this._list) {
 			if (this._list) this._list.remove(ev.getDetails());
 			if (this._contentView) this._contentView.setUI();
-			if(this._app.getCurrentController() == this) {
+			if(ZaApp.getInstance().getCurrentController() == this) {
 				this.show();			
 			}
 		}
@@ -208,7 +210,7 @@ function (ev) {
 				this._list.replace(details);
 			}
 			if (this._contentView) this._contentView.setUI();
-			if(this._app.getCurrentController() == this) {
+			if(ZaApp.getInstance().getCurrentController() == this) {
 				this.show();			
 			}
 		}
@@ -231,7 +233,7 @@ function(ev) {
 		}
 	}
 	if(this._removeList.length) {
-		dlgMsg = "Are you sure you want to delete the following group(s)?";
+		dlgMsg = zimbra_posixaccount.DeleteGroupsQuestion;
 		dlgMsg +=  "<br><ul>";
 		var i=0;
 		for(var key in this._removeList) {

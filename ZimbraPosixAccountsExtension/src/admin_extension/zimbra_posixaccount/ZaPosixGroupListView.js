@@ -97,8 +97,8 @@ function() {
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
 	var sortable=1;
 	headerList[0] = new ZaListHeaderItem(ZaPosixGroup.A_gidNumber, "gidNumber", null, 100, null, ZaPosixGroup.A_gidNumber, true, true);
-	headerList[1] = new ZaListHeaderItem(ZaPosixGroup.A_cn, "Domain Name", null, 200, null, ZaPosixGroup.A_cn, true, true);
-	headerList[2] = new ZaListHeaderItem(ZaPosixGroup.A_description, "Description", null, null, null, ZaPosixGroup.A_description, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaPosixGroup.A_cn, zimbra_posixaccount.DomainName, null, 200, null, ZaPosixGroup.A_cn, true, true);
+	headerList[2] = new ZaListHeaderItem(ZaPosixGroup.A_description, zimbra_posixaccount.Description, null, null, null, ZaPosixGroup.A_description, true, true);
 		
 	return headerList;
 }
