@@ -38,7 +38,7 @@ ZaPosixGroup.loadMethod = function(by, val) {
 		
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSuffix);
-	soapDoc.set("query", "(&(objectClass=posixGroup)(cn="+val+"))");	
+	soapDoc.set("query", "(&(objectClass=posixGroup)(" + by + "="+val+"))");	
 
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;
@@ -47,7 +47,7 @@ ZaPosixGroup.loadMethod = function(by, val) {
 	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
 	reqMgrParams.busyMsg = zimbra_posixaccount.BUSY_GETTING_POSIX_GROUP ;
 	var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetLDAPEntriesResponse;
-	
+	this.attrs[ZaPosixGroup.A_memberUid] = [];
 	if(resp && resp.LDAPEntry) {	
 		this.initFromJS(resp.LDAPEntry[0]);
 	}
@@ -88,9 +88,16 @@ ZaPosixGroup.getNextGid = function () {
 	return 	nextId;
 }
 
+ZaPosixGroup.prototype.refresh = function () {
+	this.load("cn", this.name,true,false);
+}
 
 ZaPosixGroup.prototype.initFromJS = function(posixGroup) {
+	this.attrs[ZaPosixGroup.A_memberUid] = [];
 	ZaItem.prototype.initFromJS.call(this, posixGroup);
+	
+	if(this.attrs && this.attrs[ZaPosixGroup.A_memberUid] && !(this.attrs[ZaPosixGroup.A_memberUid] instanceof Array))
+		this.attrs[ZaPosixGroup.A_memberUid] = [this.attrs[ZaPosixGroup.A_memberUid]];
 	
 	if(this.attrs && this.attrs[ZaPosixGroup.A_gidNumber])
 		this.id = this.attrs[ZaPosixGroup.A_gidNumber];
@@ -335,6 +342,6 @@ ZaPosixGroup.myXModel = {
 		{id:ZaPosixGroup.A_cn, type:_STRING_, ref:"attrs/" + ZaPosixGroup.A_cn},	
 		{id:ZaPosixGroup.A_gidNumber, type:_NUMBER_, ref:"attrs/" + ZaPosixGroup.A_gidNumber},
 		{id:ZaPosixGroup.A_description, type:_STRING_, ref:"attrs/" + ZaPosixGroup.A_description},
-		{id:ZaPosixGroup.A_memberUid, type:_LIST_, ref:"attrs/"+ZaPosixGroup.A_memberUid, listItem:{type:_NUMBER_}}
+		{id:ZaPosixGroup.A_memberUid, type:_LIST_, ref:"attrs/"+ZaPosixGroup.A_memberUid, listItem:{type:_STRING_}}
 	]
 };

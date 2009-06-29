@@ -104,7 +104,7 @@ ZaController.initToolbarMethods["ZaPosixGroupController"].push(ZaPosixGroupContr
 ZaPosixGroupController.setViewMethod =
 function(entry) {
 	if(entry.name)
-		entry.load("name", entry.name);
+		entry.load("cn", entry.name);
 		
 	if(!this._UICreated) {
 		this._createUI();

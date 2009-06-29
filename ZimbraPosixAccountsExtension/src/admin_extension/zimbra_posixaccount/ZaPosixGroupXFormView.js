@@ -121,12 +121,12 @@ ZaPosixGroupXFormView.myXFormModifier = function(xFormObject,entry) {
 							label:ZaPosixGroup.A_memberUid,
 							labelLocation:_LEFT_, 
 							align:_LEFT_,
-							repeatInstance:"0", 
+							repeatInstance:"  ", 
 							showAddButton:true, 
 							showRemoveButton:true, 
 							showAddOnNextRow:true, 
 							items: [
-								{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaTabView.onFormFieldChanged,cssClass:"admin_xform_number_input"}
+								{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaTabView.onFormFieldChanged}
 							],
 							onRemove:ZaAccountXFormView.onRepeatRemove,
 						 	relevantBehavior: _HIDE_									
