@@ -560,6 +560,7 @@ ZaDomain.createGalAccounts = function (tmpObj,newDomain) {
 			&& tmpObj[ZaDomain.A2_new_gal_sync_account_name] && tmpObj[ZaDomain.A2_new_internal_gal_ds_name]) {
 			var createInternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN); 
 			createInternalDSDoc.setAttribute("name", tmpObj[ZaDomain.A2_new_internal_gal_ds_name]);
+			createInternalDSDoc.setAttribute("folder", "_"+tmpObj[ZaDomain.A2_new_internal_gal_ds_name]);
 			createInternalDSDoc.setAttribute("type", "zimbra");
 			createInternalDSDoc.setAttribute("domain", tmpObj.attrs[ZaDomain.A_domainName]);		
 			soapDoc.set("account", tmpObj[ZaDomain.A2_new_gal_sync_account_name],createInternalDSDoc).setAttribute("by","name");
@@ -569,6 +570,7 @@ ZaDomain.createGalAccounts = function (tmpObj,newDomain) {
 			&& tmpObj[ZaDomain.A2_new_gal_sync_account_name] && tmpObj[ZaDomain.A2_new_external_gal_ds_name]) {
 			var createExternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN); 
 			createExternalDSDoc.setAttribute("name", tmpObj[ZaDomain.A2_new_external_gal_ds_name]);
+			createExternalDSDoc.setAttribute("folder", "_"+tmpObj[ZaDomain.A2_new_external_gal_ds_name]);
 			createExternalDSDoc.setAttribute("type", "ldap");		
 			createExternalDSDoc.setAttribute("domain", tmpObj.attrs[ZaDomain.A_domainName]);
 			soapDoc.set("account", tmpObj[ZaDomain.A2_new_gal_sync_account_name],createExternalDSDoc).setAttribute("by","name");
@@ -939,6 +941,7 @@ function(tmpObj) {
 			&& tmpObj[ZaDomain.A2_new_internal_gal_ds_name]) {
 			var createInternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN); 
 			createInternalDSDoc.setAttribute("name", tmpObj[ZaDomain.A2_new_internal_gal_ds_name]);
+			createInternalDSDoc.setAttribute("folder", "_"+tmpObj[ZaDomain.A2_new_internal_gal_ds_name]);
 			createInternalDSDoc.setAttribute("type", "zimbra");
 			createInternalDSDoc.setAttribute("domain", tmpObj.attrs[ZaDomain.A_domainName]);		
 			if(tmpObj[ZaDomain.A2_new_gal_sync_account_name]) {
@@ -952,6 +955,7 @@ function(tmpObj) {
 			&& tmpObj[ZaDomain.A2_new_external_gal_ds_name]) {
 			var createExternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN); 
 			createExternalDSDoc.setAttribute("name", tmpObj[ZaDomain.A2_new_external_gal_ds_name]);
+			createExternalDSDoc.setAttribute("folder", "_"+tmpObj[ZaDomain.A2_new_external_gal_ds_name]);
 			createExternalDSDoc.setAttribute("type", "ldap");		
 			createExternalDSDoc.setAttribute("domain", tmpObj.attrs[ZaDomain.A_domainName]);
 			if(tmpObj[ZaDomain.A2_new_gal_sync_account_name]) {
