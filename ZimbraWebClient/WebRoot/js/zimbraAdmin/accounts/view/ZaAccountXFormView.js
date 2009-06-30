@@ -249,13 +249,15 @@ function ()  {
     item.updateElement(ZaAccount.getAccountTypeOutput.call(item, true)) ;
 }
 
+/*
 ZaAccountXFormView.onRepeatRemove = 
 function (index, form) {
-	var list = this.getInstanceValue();
-	if (list == null || typeof(list) == "string" || index >= list.length || index<0) return;
-	list.splice(index, 1);
-	form.parent.setDirty(true);
-}
+	var path = this.getRefPath();
+	this.getModel().removeRow(this.getInstance(), path, index);
+	this.items[index].clearError();
+	this.getForm().setIsDirty(true,this);	
+	//form.parent.setDirty(true);
+}*/
 
 
 ZaAccountXFormView.isSendingFromAnyAddressDisAllowed = function () {
@@ -1820,7 +1822,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									items: [
 										{ref:".", type:_TEXTFIELD_, label:null,width:"200px"}
 									],
-									onRemove:ZaAccountXFormView.onRepeatRemove,
+									//onRemove:ZaAccountXFormView.onRepeatRemove,
 									visibilityChecks:[ZaAccountXFormView.isSendingFromAnyAddressDisAllowed],
 									visibilityChangeEventSources:[ZaAccount.A_zimbraAllowAnyFromAddress, ZaAccount.A_COSId]								
 								}															

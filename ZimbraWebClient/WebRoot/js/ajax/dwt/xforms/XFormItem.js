@@ -3579,15 +3579,18 @@ Repeat_XFormItem.prototype.addRowButtonClicked = function (instanceNum) {
 }
 
 Repeat_XFormItem.prototype.removeRowButtonClicked = function (instanceNum) {
+	var form = this.getForm();
 	if (this.getOnRemoveMethod() ) {
-		this.getOnRemoveMethod().call(this, instanceNum, this.getForm())
+		this.getOnRemoveMethod().call(this, instanceNum, form)
 	} else {
 		var path = this.getRefPath();
 		this.getModel().removeRow(this.getInstance(), path, instanceNum);
 	}
 	this.items[instanceNum].clearError();
-	this.getForm().setIsDirty(true,this);
-
+//	this.getForm().setIsDirty(true,this);
+	
+	var event = new DwtXFormsEvent(form, this, this.getInstanceValue());
+	form.notifyListeners(DwtEvent.XFORMS_VALUE_CHANGED, event);
 }
 
 Repeat_XFormItem.prototype.getOnRemoveMethod = function() {

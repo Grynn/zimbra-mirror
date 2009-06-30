@@ -124,11 +124,12 @@ ZaPosixGroupXFormView.myXFormModifier = function(xFormObject,entry) {
 							repeatInstance:"  ", 
 							showAddButton:true, 
 							showRemoveButton:true, 
-							showAddOnNextRow:true, 
+							showAddOnNextRow:true,
+							//onChange:ZaTabView.onFormFieldChanged, 
 							items: [
-								{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaTabView.onFormFieldChanged}
+								{ref:".", type:_TEXTFIELD_, label:null,width:"200px"}
 							],
-							onRemove:ZaAccountXFormView.onRepeatRemove,
+							//onRemove:ZaAccountXFormView.onRepeatRemove,
 						 	relevantBehavior: _HIDE_									
 						}						
 					]
