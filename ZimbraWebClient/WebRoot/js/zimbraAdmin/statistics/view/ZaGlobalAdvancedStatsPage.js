@@ -49,7 +49,9 @@ ZaGlobalAdvancedStatsPage.prototype.showMe =  function(refresh) {
 }
 
 ZaGlobalAdvancedStatsPage.getDataTipText = function (item, index, series) {
-    var text = series.displayName + " at " + YAHOO.util.Date.format(item.timestamp, { format: "%I:%M" }) + "\n" + ZaGlobalAdvancedStatsPage.formatLabel(item[series.yField]);
+    var text = series.displayName + " at " + YAHOO.util.Date.format(item.timestamp, { format: "%I:%M on %b %e" }) +
+         "\n" +
+         ZaGlobalAdvancedStatsPage.formatLabel(item[series.yField]);
     return text;
 }
 /* must be global for getDataTipText */
@@ -227,7 +229,22 @@ ZaGlobalAdvancedStatsPage.plotChart = function (id, fields, colDef, newData) {
     yAxis.maximum = max + 10;
     yAxis.labelFunction = ZaGlobalAdvancedStatsPage.formatLabel;
     var timeAxis = new YAHOO.widget.TimeAxis();
-    timeAxis.labelFunction = ZaGlobalAdvancedStatsPage.formatTimeLabel;
+    //timeAxis.labelFunction = ZaGlobalAdvancedStatsPage.formatTimeLabel;
+    
+    timeAxis.labelFunction = function (value) {
+        var ts0 = newData[0].timestamp.getTime();
+        var ts1 = newData[newData.length - 1].timestamp.getTime();
+        var delta = (ts1 - ts0) / 1000;
+        
+        var fmt;
+        if (delta > (2 * 24 * 60 * 60)) {
+            fmt = "%b %e";
+        } else {
+            fmt = "%I:%M %p";
+        }
+        return YAHOO.util.Date.format(value, { format: fmt });
+    }
+    
     var seriesDef = colDef;
     
     var data_source = new YAHOO.util.DataSource(newData);
