@@ -1125,12 +1125,14 @@ public class NginxLookupExtension implements ZimbraExtension {
         
         //     AUTH_METHOD  AUTH_USER                  AUTH_PASS  AUTH_PROTOCOL  AUTH_LOGIN_ATTEMPT  CLIENT_IP      SERVER_IP      SERVER_HOST  AUTH_ID                      AUTH_ADMIN_USER            AUTH_ADMIN_PASS
     //  doTest("plain",     "user1",                  "test123",  "imap",        "1",                "10.11.12.13", "127.0.0.1",   null,        null,                        null,                      null,            true);
+        /*
         doTest("gssapi",    "user1",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "zmnginx",                 "zimbra",       true);
         doTest("gssapi",    "user1@phoebe.mac",        null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "zmnginx",                 "zimbra",       true);
         doTest("gssapi",    "user1@ZIMBRA.COM",        null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "zmnginx",                 "zimbra",       true);
         doTest("gssapi",    "user2",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "zmnginx",                 "zimbra",       false);
         doTest("gssapi",    "family-child1-visible",   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "family-parent@ZIMBRA.COM",  "zmnginx",                 "zimbra",       true);
         doTest("gssapi",    "user1",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "zmnginxbogus",            "zimbra",       false);
+        */
         
         /*
         // comcast test
@@ -1148,5 +1150,25 @@ public class NginxLookupExtension implements ZimbraExtension {
         doTest("plain",     "user1",                   null,      "pop3ssl",     "1",                "10.11.12.13", "13.12.11.10", null,        null,                        null,                      null,            true);
         */
         
+        
+        /*
+         * 
+If they are using nginx proxy, there is a hack, and it only works if they turn *off* memcached.
+
+The steps are:
+1. Set virtual IP on the domain to the nginx incoming interface IP
+       zmprov md domain.com zimbraVirtualIPAddress {nginx-IP}
+
+2. Set account's zimbraForeignPrinicipal to user%domain.com@domain.com.  This need to be done on all accounts.
+       zmprov ma user@domain.com zimbraForeignPrincipal user%domain.com@domain.com
+
+3. Set the host query to include the foreign principal
+       zmprov mcf zimbraReverseProxyMailHostQuery '(|(zimbraMailDeliveryAddress=${USER})(zimbraMailAlias=${USER})(zimbraId=${USER})(zimbraForeignPrincipal=${USER}))'
+
+4. Set the addr that contains the right user name to zimbraMailDeliveryAddress.  This will return the correct name user@domain.com to nginx in the Auth-User http header, and then the right name will be passed by nginx to the real IMAP/POP server.
+       zmprov mcf zimbraReverseProxyUserNameAttribute zimbraMailDeliveryAddress
+       
+         */
+        doTest("plain",     "user1%phoebe.mac",        "test123",  "imap",       "1",                "10.11.12.13", "127.0.0.1",   null,        null,                        null,                      null,            true);
    }
 }
