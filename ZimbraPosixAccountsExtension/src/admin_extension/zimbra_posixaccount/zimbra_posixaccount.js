@@ -1,4 +1,3 @@
-DBG.println(AjxDebug.DBG1,"Loaded zimbra_posixaccount.js");
 function zimbra_posixaccount_ext () {
 	
 }
@@ -8,12 +7,15 @@ ZaZimbraAdmin._POSIX_GROUP_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._POSIX_GROUP_LIST] = "PSXGroups_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._POSIX_GROUP_VIEW] = "PSXGroups_view_title";
 if(ZaMsg) {
-	ZaMsg.PSXGroups_view_title = "Manage Posix Groups";
+	ZaMsg.PSXGroups_view_title = zimbra_posixaccount.PosixGroupsListViewTitle;
 }
 
 if(ZaItem) {
 	ZaItem.POSIX_ACCOUNT = "posixAccount";
 }
+
+ZaSettings.POSIX_GROUPS_LIST_VIEW = "posixGroupsListView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.POSIX_GROUPS_LIST_VIEW, label: zimbra_posixaccount.PosixGroups });
 
 function ZaPosixAccount() {	
 	ZaItem.call(this, "ZaPosixAccount");
@@ -317,7 +319,14 @@ zimbra_posixaccount_ext.posixGroupTreeListener = function (ev) {
 }
 	
 zimbra_posixaccount_ext.ovTreeModifier = function (tree) {
-	if(this._configTi) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.POSIX_GROUPS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+		if(!this._configTi) {
+			this._configTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
+			this._configTi.enableSelection(false);
+			this._configTi.setText(ZaMsg.OVP_configuration);
+			this._configTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SYS_CONFIG);		
+		}
+		
 		this._posixGroupTi = new DwtTreeItem(this._configTi);
 		this._posixGroupTi.setText(zimbra_posixaccount.PosixGroups);
 		this._posixGroupTi.setImage("ZimbraIcon");

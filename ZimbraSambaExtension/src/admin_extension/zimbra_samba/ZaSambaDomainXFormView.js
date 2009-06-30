@@ -64,12 +64,7 @@ function (entry) {
 	this.updateTab();		
 }
 
-ZaSambaDomainXFormView.prototype.getTitle = 
-function () {
-	return "Samba Domains";
-}
-
-ZaSambaDomainXFormView.myXFormModifier = function(xFormObject) {	
+ZaSambaDomainXFormView.myXFormModifier = function(xFormObject, entry) {	
 	xFormObject.tableCssStyle="width:100%;overflow:auto;";
 	
 	xFormObject.items = [
@@ -87,16 +82,17 @@ ZaSambaDomainXFormView.myXFormModifier = function(xFormObject) {
 		},	
 		{type:_TAB_BAR_,  ref:ZaModel.currentTab,
 			choices:[
-				{value:1, label:ZaMsg.Domain_Tab_General}				
-			],cssClass:"ZaTabBar", id:"xform_tabbar"
+				{value:1, label:zimbra_samba.SambaDomainTabGeneral}				
+			],
+			cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
 		{type:_SWITCH_, 
 			items:[
-				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 1", 
+				{type:_ZATABCASE_, caseKey:1, 
 					colSizes:["250px","*"],
 					items:[
 						{ ref: ZaSambaDomain.A_sambaDomainName, type:_TEXTFIELD_, 
-						  label:ZaMsg.Domain_DomainName,onChange:ZaTabView.onFormFieldChanged
+						  label:zimbra_samba.Domain_DomainName,onChange:ZaTabView.onFormFieldChanged
 						},
 						{ ref: ZaSambaDomain.A_sambaSID, type:_TEXTFIELD_, 
 						  label:"sambaSID", width:300,

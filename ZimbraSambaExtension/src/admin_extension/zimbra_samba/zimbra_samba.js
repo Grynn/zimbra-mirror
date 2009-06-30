@@ -1,11 +1,9 @@
-DBG.println(AjxDebug.DBG1,"Loaded zimbra_samba.js");
-
 ZaZimbraAdmin._SAMBA_DOMAIN_LIST = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SAMBA_DOMAIN_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._SAMBA_DOMAIN_LIST] = "SMBDomains_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._SAMBA_DOMAIN_VIEW] = "SMBDomains_view_title";
 if(ZaMsg) {
-	ZaMsg.SMBDomains_view_title = "Manage Samba Domains";
+	ZaMsg.SMBDomains_view_title = zimbra_samba.SambaDomainsListViewTitle;
 }
 function Zambra() {
 	
@@ -13,6 +11,9 @@ function Zambra() {
 Zambra.ldapSuffix = "dc=com";
 Zambra.ldapGroupSuffix = "ou=group";
 Zambra.ldapMachineSuffix = "ou=machines";
+
+ZaSettings.SAMBA_DOMAINS_LIST_VIEW = "sambaDomainsListView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SAMBA_DOMAINS_LIST_VIEW, label: zimbra_samba.SambaDomainsListViewTitle });
 
 Zambra.initSettings= function () {
 	try {
@@ -173,9 +174,15 @@ Zambra.sambaDomainTreeListener = function (ev) {
 
 
 Zambra.ovTreeModifier = function (tree) {
-	if(ZaSettings.SYSTEM_CONFIG_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAMBA_DOMAINS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+		if(!this._configTi) {
+			this._configTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
+			this._configTi.enableSelection(false);
+			this._configTi.setText(ZaMsg.OVP_configuration);
+			this._configTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SYS_CONFIG);		
+		}
 		this._sambaTi = new DwtTreeItem(this._configTi);
-		this._sambaTi.setText("Samba Domains");
+		this._sambaTi.setText(zimbra_samba.SambaDomainsListViewTitle);
 		this._sambaTi.setImage("ZimbraIcon");
 		this._sambaTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SAMBA_DOMAIN_LIST);	
 		

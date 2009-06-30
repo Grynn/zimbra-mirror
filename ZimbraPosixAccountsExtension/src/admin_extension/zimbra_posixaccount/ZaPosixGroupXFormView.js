@@ -20,10 +20,10 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaPosixGroupXFormView (parent) {
+function ZaPosixGroupXFormView (parent, entry) {
 	ZaTabView.call(this, parent, "ZaPosixGroupXFormView");	
-		
-	this.initForm(ZaPosixGroup.myXModel,this.getMyXForm());
+	this.TAB_INDEX = 0;	
+	this.initForm(ZaPosixGroup.myXModel,this.getMyXForm(entry),null);
 	this._localXForm.setController();
 }
 
@@ -65,14 +65,15 @@ function (entry) {
 	this.updateTab();	
 }
 
-ZaPosixGroupXFormView.prototype.getTitle = 
-function () {
-	return "Posix Groups";
-}
-
 ZaPosixGroupXFormView.myXFormModifier = function(xFormObject,entry) {	
 	xFormObject.tableCssStyle="width:100%;overflow:auto;";
+
+    this.tabChoices = new Array();
+	var _tab1;
 	
+	_tab1 = ++this.TAB_INDEX;
+	this.tabChoices.push({value:_tab1, label:zimbra_posixaccount.PosixGroupTabGeneral});
+		
 	xFormObject.items = [
 		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
 			items: [
@@ -87,13 +88,12 @@ ZaPosixGroupXFormView.myXFormModifier = function(xFormObject,entry) {
 			cssStyle:"padding-top:5px; padding-left:2px; padding-bottom:5px"
 		},	
 		{type:_TAB_BAR_,  ref:ZaModel.currentTab,
-			choices:[
-				{value:1, label:ZaMsg.Domain_Tab_General}				
-			],cssClass:"ZaTabBar", id:"xform_tabbar"
+			choices:this.tabChoices,
+			cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
 		{type:_SWITCH_, 
 			items:[
-				{type:_ZATABCASE_, caseKey:1,  
+				{type:_ZATABCASE_, caseKey:_tab1,  
 					colSizes:["250px","*"],
 					items:[
 						{ ref: ZaPosixGroup.A_cn, type:_TEXTFIELD_, 
@@ -111,8 +111,8 @@ ZaPosixGroupXFormView.myXFormModifier = function(xFormObject,entry) {
 								return val;
 							}						  
 					  	},
-						{ref:ZaPosixGroup.A_description, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Description,
-							label:ZaMsg.NAD_Description, labelLocation:_LEFT_,
+						{ref:ZaPosixGroup.A_description, type:_TEXTFIELD_, msgName:zimbra_posixaccount.NAD_DescriptionMsg,
+							label:zimbra_posixaccount.NAD_DescriptionLbl, labelLocation:_LEFT_,
 							cssClass:"admin_xform_name_input", 
 							onChange:ZaTabView.onFormFieldChanged
 						},

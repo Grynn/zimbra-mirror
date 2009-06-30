@@ -96,19 +96,19 @@ if(ZaItem.initMethods["ZaPosixGroup"]) {
 }
 
 if(ZaTabView.XFormModifiers["ZaPosixGroupXFormView"]) {
-	ZaSambaGroupMapping.myXFormModifier = function (xFormObject) {
+	ZaSambaGroupMapping.myXFormModifier = function (xFormObject, entry) {
 		var cnt = xFormObject.items.length;
 		var i = 0;
 		for(i = 0; i <cnt; i++) {
 			if(xFormObject.items[i].type=="switch") 
 				break;
 		}
-		cnt = xFormObject.items[i].items.length;
-		var sambaTabIx = cnt+1;
+
+		var sambaTabIx = ++this.TAB_INDEX;
 		
 		var tabBar = xFormObject.items[1] ;
-		tabBar.choices.push({value:sambaTabIx, label:"Samba Group"});		
-		var sambaGroupTab={type:_ZATABCASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + sambaTabIx),
+		tabBar.choices.push({value:sambaTabIx, label:zimbra_samba.SambaGroupTabTitle});		
+		var sambaGroupTab={type:_ZATABCASE_, numCols:1, caseKey:sambaTabIx,
 					items: [
 						{type:_ZAGROUP_, 
 							items:[

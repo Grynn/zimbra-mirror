@@ -23,6 +23,12 @@ ZaItem.initMethods["ZaSambaDomain"] = new Array();
 ZaItem.modifyMethods["ZaSambaDomain"] = new Array();
 ZaItem.createMethods["ZaSambaDomain"] = new Array()
 
+ZaSambaDomain.prototype.loadEffectiveRights = function () {
+	this.getAttrs = {all:true};
+	this.setAttrs = {all:true};
+	this.rights = {};
+}
+
 ZaSambaDomain.loadMethod = function(by, val) {
 	if(!val)
 		return;
@@ -30,11 +36,24 @@ ZaSambaDomain.loadMethod = function(by, val) {
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", Zambra.ldapSuffix);
 	soapDoc.set("query", "(&(objectClass=sambaDomain)(sambaDomainName="+val+"))");	
-	var getSambaDomainsCommand = new ZmCsfeCommand();
+	
+	/*var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse.LDAPEntry[0];
-	this.initFromJS(resp);
+	this.initFromJS(resp);*/
+	
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;
+
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = zimbra_samba.BUSY_GETTING_SAMBA_DOMAIN;
+	var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetLDAPEntriesResponse;
+	if(resp && resp.LDAPEntry) {	
+		this.initFromJS(resp.LDAPEntry[0]);
+	}
+	
 }
 
 if(ZaItem.loadMethods["ZaSambaDomain"]) {
@@ -78,12 +97,25 @@ function() {
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", Zambra.ldapSuffix);
 	soapDoc.set("query", "objectClass=sambaDomain");	
-	var getSambaDomainsCommand = new ZmCsfeCommand();
+
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;	
+	
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = zimbra_samba.BUSY_GETTING_SAMBA_DOMAINS;
+	var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetLDAPEntriesResponse;
+	var list = new ZaItemList(ZaSambaDomain)
+	if(resp) {	
+		list.loadFromJS(resp);
+	}
+		
+/*	var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse;
-	var list = new ZaItemList(ZaSambaDomain);
-	list.loadFromJS(resp);		
+	var list = new ZaItemList(ZaSambaDomain);*/
+			
 	return list;
 }
 
@@ -96,7 +128,7 @@ ZaSambaDomain.myXModel = {
 	]
 };
 
-ZaSambaDomain.createMethod = function(tmpObj, group) {
+ZaSambaDomain.createMethod = function(tmpObj, domain) {
 	//test
 	var soapDoc = AjxSoapDoc.create("CreateLDAPEntryRequest", "urn:zimbraAdmin", null);
 
@@ -138,14 +170,15 @@ ZaSambaDomain.createMethod = function(tmpObj, group) {
 	}
 	
 
-
-	var testCommand = new ZmCsfeCommand();
-	var params = new Object();
-
-	params.soapDoc = soapDoc;	
-	resp = testCommand.invoke(params).Body.CreateLDAPEntryResponse;
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;	
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = zimbra_samba.BUSY_CREATING_SAMBA_DOMAIN;
+	resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.CreateLDAPEntryResponse;
 	
-	group.initFromJS(resp.LDAPEntry[0]);
+	if(resp.LDAPEntry)		
+		domain.initFromJS(resp.LDAPEntry[0]);
 }
 
 
@@ -176,11 +209,20 @@ function(mods) {
 		}
 		soapDoc.set("dn", dn.join(","));
 		soapDoc.set("new_dn", new_dn.join(","));
-		var renameLDAPEntryCommand = new ZmCsfeCommand();
+		
 		var params = new Object();
 		params.soapDoc = soapDoc;	
-		resp = renameLDAPEntryCommand.invoke(params).Body.RenameLDAPEntryResponse;
-		this.initFromJS(resp.LDAPEntry[0]);
+		var reqMgrParams = {
+			controller:ZaApp.getInstance().getCurrentController(),
+			busyMsg: ZaMsg.BUSY_RENAMING_SAMBA_DOMAIN 
+		} ;
+		
+		//resp = modifyAccCommand.invoke(params).Body.ModifyAccountResponse;
+		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.RenameLDAPEntryResponse ;
+		
+		if(resp.LDAPEntry[0])		
+			this.initFromJS(resp.LDAPEntry[0]);
+			
 		this._toolTip = null ;
 	}
 
@@ -234,11 +276,22 @@ function(mods) {
 		}
 	}
 	
-	var modifyLDAPEntryCommand = new ZmCsfeCommand();
+/*	var modifyLDAPEntryCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	resp = modifyLDAPEntryCommand.invoke(params).Body.ModifyLDAPEntryResponse;
-	this.initFromJS(resp.LDAPEntry[0]);
+	this.initFromJS(resp.LDAPEntry[0]);*/
+	
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;	
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = zimbra_samba.BUSY_UPDATING_SAMBA_DOMAIN;
+	resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.ModifyLDAPEntryResponse;
+	
+	if(resp.LDAPEntry[0])	
+		this.initFromJS(resp.LDAPEntry[0]);	
+		
 	return;
 }
 ZaItem.modifyMethods["ZaSambaDomain"].push(ZaSambaDomain.modifyMethod);

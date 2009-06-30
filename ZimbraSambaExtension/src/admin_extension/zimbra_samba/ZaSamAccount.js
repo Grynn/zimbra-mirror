@@ -63,19 +63,19 @@ if(ZaAccount.myXModel && ZaAccount.myXModel.items) {
 
 
 if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
-	ZaSamAccount.AccountXFormModifier= function (xFormObject) {
+	ZaSamAccount.AccountXFormModifier= function (xFormObject, entry) {
 		var cnt = xFormObject.items.length;
 		var i = 0;
 		for(i = 0; i <cnt; i++) {
 			if(xFormObject.items[i].type=="switch") 
 				break;
 		}
-		cnt = xFormObject.items[i].items.length;
+
 		var sambaTabIx = ++this.TAB_INDEX;
 		
 		var tabBar = xFormObject.items[1] ;
-		tabBar.choices.push({value:sambaTabIx, label:"Samba Account"});		
-		var sambaAccountTab={type:_ZATABCASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + sambaTabIx),
+		tabBar.choices.push({value:sambaTabIx, label:zimbra_samba.SambaAccount});		
+		var sambaAccountTab={type:_ZATABCASE_, numCols:1, caseKey:sambaTabIx,
 					items: [
 						{type:_ZAGROUP_, 
 							items:[
@@ -89,15 +89,18 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 										if(myChoices) {
 											var domainName = myChoices.getChoiceByValue(val).name;
 											if(instance) {
-												instance.attrs[ZaSamAccount.A_sambaDomainName] = domainName;
+												this.getModel().setInstanceValue(this.getInstance(),ZaSamAccount.A_sambaDomainName,domainName);
+												//instance.attrs[ZaSamAccount.A_sambaDomainName] = domainName;
 											}
 										}
 										if(instance && !instance[ZaSamAccount.A_isSpecialNTAccount]) {
-											instance.attrs[ZaSamAccount.A_sambaSID]	= val + "-" + 
+											//instance.attrs[ZaSamAccount.A_sambaSID]	
+											var newSid = val + "-" + 
 												(
 													(parseInt(instance.attrs[ZaPosixAccount.A_uidNumber]) ? parseInt(instance.attrs[ZaPosixAccount.A_uidNumber])*2 : parseInt(Zambra.uidBase)) +
 													(parseInt(Zambra.ridBase) ? parseInt(Zambra.ridBase) : 0)
 												);
+											this.getModel().setInstanceValue(this.getInstance(),ZaSamAccount.A_sambaSID,newSid);	
 										}
 										if(form)
 											form.itemChanged(this, val, event);		
@@ -113,13 +116,14 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 												var userRid = chunks.pop();
 												
 												val = chunks.join("-");
-												instance[ZaSamAccount.A_sambaDomainSID] = val;
+												this.getModel().setInstanceValue(this.getInstance(),ZaSamAccount.A_sambaDomainSID,val);
+												//instance[ZaSamAccount.A_sambaDomainSID] = val;
 											}
 										}
 										return val;
 									}
 								},														
-								{ref:ZaSamAccount.A_sambaSID, type:_TEXTFIELD_, msgName:ZaSamAccount.A_sambaSID,label:ZaSamAccount.A_sambaSID, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,width:300},
+								{ref:ZaSamAccount.A_sambaSID, type:_TEXTFIELD_, msgName:ZaSamAccount.A_sambaSID,label:ZaSamAccount.A_sambaSID, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,width:300,bmolsnr:true},
 								{ref:ZaSamAccount.A_sambaAcctFlags, type:_SAMBAACFLAGS_, msgName:ZaSamAccount.A_sambaAcctFlags,label:ZaSamAccount.A_sambaAcctFlags, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
 								{ref:ZaSamAccount.A_sambaDomainName, type:_TEXTFIELD_, msgName:ZaSamAccount.A_sambaDomainName,label:ZaSamAccount.A_sambaDomainName, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},								
 								{ref:ZaSamAccount.A_sambaNTPassword, type:_OUTPUT_, msgName:ZaSamAccount.A_sambaNTPassword,label:ZaSamAccount.A_sambaNTPassword, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
@@ -138,10 +142,10 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 	
 	ZaSamAccount.AccountXWizModifier= function (xFormObject) {
-		var stepCounter = this.stepChoices.length;			
-		ZaNewAccountXWizard.SAMBA_ACC_STEP = stepCounter+1;			
+			
+		ZaNewAccountXWizard.SAMBA_ACC_STEP = ++this.TAB_INDEX;			
 	
-		this.stepChoices.push({value:ZaNewAccountXWizard.SAMBA_ACC_STEP, label:"Samba Account"});
+		this.stepChoices.push({value:ZaNewAccountXWizard.SAMBA_ACC_STEP, label:zimbra_samba.SambaAccount});
 		this._lastStep = this.stepChoices.length;
 
 
@@ -156,11 +160,11 @@ if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 		var gotAdvanced = false;
 		var gotFeatures = false;		
 
-		var sambaAccountStep={type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.SAMBA_ACC_STEP",		
+		var sambaAccountStep={type:_CASE_, numCols:1, caseKey:ZaNewAccountXWizard.SAMBA_ACC_STEP,		
 					items: [
 						{type:_ZAWIZGROUP_, 
 							items:[
-								{ref:ZaSamAccount.A_sambaDomainSID, type:_OSELECT1_, editable:false,choices:ZaApp.getInstance().getSambaDomainSIDListChoices(), msgName:"Samba domain",label:"Samba domain", labelLocation:_LEFT_,
+								{ref:ZaSamAccount.A_sambaDomainSID, type:_OSELECT1_, editable:false,choices:ZaApp.getInstance().getSambaDomainSIDListChoices(), msgName:zimbra_samba.SambaDomain,label:zimbra_samba.SambaDomain, labelLocation:_LEFT_,
 									elementChanged:function(val,instanceValue, event) {
 										var v = val;
 										var instance = this.getInstance();
@@ -169,15 +173,18 @@ if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 										if(myChoices) {
 											var domainName = myChoices.getChoiceByValue(val).name;
 											if(instance) {
-												instance.attrs[ZaSamAccount.A_sambaDomainName] = domainName;
+												this.getModel().setInstanceValue(this.getInstance(),ZaSamAccount.A_sambaDomainName,domainName);
+												//instance.attrs[ZaSamAccount.A_sambaDomainName] = domainName;
 											}
 										}
 										if(instance && !instance[ZaSamAccount.A_isSpecialNTAccount]) {
-											instance.attrs[ZaSamAccount.A_sambaSID]	= val + "-" + 
+											//instance.attrs[ZaSamAccount.A_sambaSID]
+											var newSid = val + "-" + 
 												(
 													(parseInt(instance.attrs[ZaPosixAccount.A_uidNumber]) ? parseInt(instance.attrs[ZaPosixAccount.A_uidNumber])*2 : parseInt(Zambra.uidBase)) +
 													(parseInt(Zambra.ridBase) ? parseInt(Zambra.ridBase) : 0)
 												);
+											this.getModel().setInstanceValue(this.getInstance(),ZaSamAccount.A_sambaSID,newSid);												
 										}
 										if(form)
 											form.itemChanged(this, val, event);		
@@ -193,13 +200,14 @@ if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 												var userRid = chunks.pop();
 												
 												val = chunks.join("-");
-												instance[ZaSamAccount.A_sambaDomainSID] = val;
+												this.getModel().setInstanceValue(this.getInstance(),ZaSamAccount.A_sambaDomainSID,val);
+												//instance[ZaSamAccount.A_sambaDomainSID] = val;
 											}
 										}
 										return val;
 									}
 								},							
-								{ref:ZaSamAccount.A_sambaSID, type:_TEXTFIELD_, msgName:ZaSamAccount.A_sambaSID,label:ZaSamAccount.A_sambaSID, labelLocation:_LEFT_,width:300},
+								{ref:ZaSamAccount.A_sambaSID, type:_TEXTFIELD_, msgName:ZaSamAccount.A_sambaSID,label:ZaSamAccount.A_sambaSID, labelLocation:_LEFT_,width:300, bmolsnr:true},
 								{ref:ZaSamAccount.A_sambaAcctFlags, type:_SAMBAACFLAGS_, msgName:ZaSamAccount.A_sambaAcctFlags,label:ZaSamAccount.A_sambaAcctFlags, labelLocation:_LEFT_},
 								{ref:ZaSamAccount.A_sambaDomainName, type:_TEXTFIELD_, msgName:ZaSamAccount.A_sambaDomainName,label:ZaSamAccount.A_sambaDomainName, labelLocation:_LEFT_},								
 								{ref:ZaSamAccount.A_sambaNTPassword, type:_OUTPUT_, msgName:ZaSamAccount.A_sambaNTPassword,label:ZaSamAccount.A_sambaNTPassword, labelLocation:_LEFT_},
@@ -235,10 +243,16 @@ function(tmpObj, account) {
 
 		var attr = soapDoc.set("a", ZaSambaUtil.hex_md4(tmpObj.attrs[ZaAccount.A_password]));
 		attr.setAttribute("n", ZaSamAccount.A_sambaNTPassword);		
-		var modifyAccCommand = new ZmCsfeCommand();
+		
 		var params = new Object();
 		params.soapDoc = soapDoc;	
-		resp = modifyAccCommand.invoke(params).Body.ModifyAccountResponse;
+		var reqMgrParams = {
+			controller:ZaApp.getInstance().getCurrentController(),
+			busyMsg: ZaMsg.BUSY_MODIFY_ACCOUNT 
+		};
+	
+
+		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyAccountResponse ;
 		account.initFromJS(resp.account[0]);
 		account[ZaAccount.A2_confirmPassword] = null;		
 	}
@@ -255,11 +269,14 @@ function(newPassword) {
 	soapDoc.set("id", this.id);
 
 	var attr = soapDoc.set("a", ZaSambaUtil.hex_md4(newPassword));
-	attr.setAttribute("n", ZaSamAccount.A_sambaNTPassword);		
-	var modifyAccCommand = new ZmCsfeCommand();
+	attr.setAttribute("n", ZaSamAccount.A_sambaNTPassword);
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	resp = modifyAccCommand.invoke(params).Body.ModifyAccountResponse;
+	var reqMgrParams = {
+		controller:ZaApp.getInstance().getCurrentController(),
+		busyMsg: zimbra_samba.BUSY_CHANGING_NT_PASSWORD 
+	};
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyAccountResponse;
 }
 
 if(ZaAccount.changePasswordMethods) {

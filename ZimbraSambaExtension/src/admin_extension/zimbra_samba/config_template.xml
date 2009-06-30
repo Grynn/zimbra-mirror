@@ -3,7 +3,7 @@
    		<property name="gidBase">10000</property>        
    		<property name="uidBase">10000</property>   
 		<property name="ridBase">1000</property>    
-		<property name="ldapSuffix">dc=gregzimbra1,dc=zimbra,dc=com</property>
+		<property name="ldapSuffix">dc=test,dc=com</property>
 		<property name="ldapGroupSuffix">ou=groups</property>
 		<property name="ldapMachineSuffix">ou=machines</property>
     </global>

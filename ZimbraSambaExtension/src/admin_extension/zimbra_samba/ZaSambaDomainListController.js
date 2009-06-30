@@ -66,8 +66,8 @@ ZaController.initToolbarMethods["ZaSambaDomainListController"].push(ZaSambaDomai
 
 ZaSambaDomainListController.initPopupMenuMethod =
 function () {
-   	this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaSambaDomainListController.prototype._editButtonListener)));    	
-   this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaSambaDomainListController.prototype._deleteButtonListener)));    	    	
+   	this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaSambaDomainListController.prototype._editButtonListener));    	
+	this._popupOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaSambaDomainListController.prototype._deleteButtonListener));    	    	
 }
 ZaController.initPopupMenuMethods["ZaSambaDomainListController"].push(ZaSambaDomainListController.initPopupMenuMethod);
 
