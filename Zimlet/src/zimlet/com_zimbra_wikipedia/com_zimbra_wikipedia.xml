@@ -21,7 +21,7 @@
 		</onClick>
 	</contentObject>
 
-	<zimletPanelItem label="Wikipedia" icon="WIKI-panelIcon">
+	<zimletPanelItem label="Wikipedia" icon="Wikipedia-panelIcon">
 		<toolTipText>Click to get Wikipedia search bar.</toolTipText>
 	</zimletPanelItem>
 </zimlet>
