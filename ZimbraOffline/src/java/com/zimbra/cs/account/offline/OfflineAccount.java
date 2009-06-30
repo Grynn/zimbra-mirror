@@ -199,8 +199,12 @@ public class OfflineAccount extends Account {
     	return getAttr(OfflineProvisioning.A_offlineRemotePassword);
     }
 
-    public boolean isSyncAccount() {
-        return OfflineProvisioning.getOfflineInstance().isSyncAccount(this);
+    public boolean isZcsAccount() {
+        return OfflineProvisioning.getOfflineInstance().isZcsAccount(this);
+    }
+    
+    public boolean isExchangeAccount() throws ServiceException {
+    	return OfflineProvisioning.getOfflineInstance().isExchangeAccount(this);
     }
 
     public boolean isLocalAccount() {
@@ -208,7 +212,7 @@ public class OfflineAccount extends Account {
     }
 
     public boolean isDataSourceAccount() {
-        return OfflineProvisioning.getOfflineInstance().isDataSourceAccount(this);
+        return OfflineProvisioning.isDataSourceAccount(this);
     }
     
     public void setLastSyncTimestamp() throws ServiceException {
@@ -220,7 +224,7 @@ public class OfflineAccount extends Account {
     }
     
     private void setLastSyncTimestampInternal(long time) throws ServiceException {
-    	if (isSyncAccount()) {
+    	if (isZcsAccount()) {
             OfflineProvisioning.getOfflineInstance().setAccountAttribute(this, OfflineConstants.A_offlineLastSync, Long.toString(time));
     	} else if (isDataSourceAccount()) {
     		DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(this);

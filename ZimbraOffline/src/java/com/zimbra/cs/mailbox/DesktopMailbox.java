@@ -38,10 +38,11 @@ public abstract class DesktopMailbox extends Mailbox {
     	if (account.isLocalAccount())
     		return new LocalMailbox(data);
     	
-    	if (account.isSyncAccount())
+    	if (account.isZcsAccount())
     		return new ZcsMailbox(data);
     	
-    	//TODO: ExchangeMailbox
+    	if (account.isExchangeAccount())
+    		return new ExchangeMailbox(data);
     	
     	return new DataSourceMailbox(data);
 	}

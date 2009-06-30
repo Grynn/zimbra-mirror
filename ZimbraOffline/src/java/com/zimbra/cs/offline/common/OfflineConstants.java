@@ -73,7 +73,6 @@ public interface OfflineConstants {
     public static final String A_offlineSslCertAlias = "offlineSslCertAlias";
     public static final String A_offlineAccountSetup = "offlineAccountSetup";
                                                          
-    public static final String A_zimbraDataSourceDomain = "zimbraDataSourceDomain";
     public static final String A_zimbraDataSourceSmtpHost = "zimbraDataSourceSmtpHost";
     public static final String A_zimbraDataSourceSmtpPort = "zimbraDataSourceSmtpPort";
     public static final String A_zimbraDataSourceSmtpConnectionType = "zimbraDataSourceSmtpConnectionType";

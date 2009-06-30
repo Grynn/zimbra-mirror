@@ -128,7 +128,7 @@ public class DirectorySync {
 
                 // then, sync the accounts we haven't synced in a while
                 // XXX: we should have a cache and iterate over it -- accounts shouldn't change out from under us
-                for (Account acct : prov.getAllSyncAccounts()) {
+                for (Account acct : prov.getAllZcsAccounts()) {
                     long lastSync = mLastSyncTimes.get(acct.getId()) == null ? 0 : mLastSyncTimes.get(acct.getId());
                     long lastFail = mLastFailTimes.get(acct.getId()) == null ? 0 : mLastFailTimes.get(acct.getId());
                     if (now - lastFail > mFailSyncInterval && now - lastSync > mAccountPollInterval) {

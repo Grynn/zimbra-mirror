@@ -54,7 +54,7 @@ public class OfflineDataSource extends DataSource {
 
     OfflineDataSource(Account acct, DataSource.Type type, String name, String id, Map<String,Object> attrs, Provisioning prov) {
         super(acct, type, name, id, attrs, prov);
-        setServiceName(getAttr(OfflineConstants.A_zimbraDataSourceDomain));
+        setServiceName(getAttr(Provisioning.A_zimbraDataSourceDomain));
     }
 
     void setName(String name) {

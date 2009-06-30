@@ -61,7 +61,7 @@ public class OfflineConvAction extends ConvAction {
         String toAcctId = id.substring(0, pos);
         int folderId = Integer.parseInt(id.substring(pos + 1));
         OfflineAccount toAcct = (OfflineAccount)prov.get(Provisioning.AccountBy.id, toAcctId);
-        if (toAcct == null || !prov.isSyncAccount(toAcct))
+        if (toAcct == null || !prov.isZcsAccount(toAcct))
             return;
         context.put(OFFLINECONV_TOACCT, toAcct);
                       

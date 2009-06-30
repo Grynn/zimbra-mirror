@@ -180,7 +180,7 @@ public class ConsoleBean extends PageBean {
 	    sum.type = ds.getType().toString();
             sum.flavor = ds.getAttr(OfflineConstants.A_offlineAccountFlavor);
 	    if (sum.flavor == null) {
-		String domain = ds.getAttr(OfflineConstants.A_zimbraDataSourceDomain, null);
+		String domain = ds.getAttr(Provisioning.A_zimbraDataSourceDomain, null);
 		if (sum.type.equals("live"))
 		    sum.flavor = "Live";
 		else if (sum.type.equals("pop3"))

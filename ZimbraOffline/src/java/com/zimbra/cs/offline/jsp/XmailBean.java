@@ -52,7 +52,6 @@ public class XmailBean extends MailBean {
     private static final String adomain = "aol.com";
     private static final String gdomain = "gmail.com";
     private static final String hdomain = "hotmail.com";
-    private static final String ldomain = "live.com";
     private static final String mdomain = "msn.com";
     private static final String ydomain = "yahoo.com";
     private static final String yjpdomain = "yahoo.co.jp";
@@ -86,7 +85,7 @@ public class XmailBean extends MailBean {
             OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled, false);
         contactSyncEnabled = ds.getBooleanAttr(
             OfflineConstants.A_zimbraDataSourceContactSyncEnabled, false);
-        domain = ds.getAttr(OfflineConstants.A_zimbraDataSourceDomain, null);
+        domain = ds.getAttr(Provisioning.A_zimbraDataSourceDomain, null);
         smtpHost = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpHost, null);
         smtpPort = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpPort, null);
         isSmtpSsl = "ssl".equals(ds.getAttr(
@@ -184,7 +183,7 @@ public class XmailBean extends MailBean {
                         dsAttrs.put(OfflineConstants.A_zimbraDataSourceContactSyncEnabled,
                             contactSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
                     }
-                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain,
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceDomain,
                         domain);
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost,
                         smtpHost);
@@ -227,7 +226,7 @@ public class XmailBean extends MailBean {
                     email.endsWith('@' + ymdomain) ||
 		    email.endsWith('@' + yrmdomain)) {
                     if (dsType == DataSource.Type.imap) {
-                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain,
+                        dsAttrs.put(Provisioning.A_zimbraDataSourceDomain,
                             ydomain);
                     } else {
                         addInvalid("type");
@@ -235,7 +234,7 @@ public class XmailBean extends MailBean {
                     }
                 } else if (email.endsWith('@' + gdomain)) {
                     if (dsType == DataSource.Type.imap) {
-                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain,
+                        dsAttrs.put(Provisioning.A_zimbraDataSourceDomain,
                             gdomain);
                     } else {
                         addInvalid("type");
@@ -243,7 +242,7 @@ public class XmailBean extends MailBean {
                     }
                 } else if (email.endsWith('@' + adomain)) {
                     if (dsType == DataSource.Type.imap) {
-                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain,
+                        dsAttrs.put(Provisioning.A_zimbraDataSourceDomain,
                             adomain);
                     } else {
                         addInvalid("type");
@@ -252,7 +251,7 @@ public class XmailBean extends MailBean {
                 } else if (email.endsWith('@' + hdomain) ||
                     email.endsWith('@' + mdomain) || email.endsWith('@' + mdomain)) {
                     if (dsType == DataSource.Type.live || dsType == DataSource.Type.pop3) {
-                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain,
+                        dsAttrs.put(Provisioning.A_zimbraDataSourceDomain,
                             hdomain);
                     } else {
                         addInvalid("type");

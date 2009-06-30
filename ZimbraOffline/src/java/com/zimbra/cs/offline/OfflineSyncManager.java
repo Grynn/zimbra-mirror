@@ -557,7 +557,7 @@ public class OfflineSyncManager {
         for (Account dsAccount : dsAccounts) {
             MailboxManager.getInstance().getMailboxByAccount(dsAccount);
         }
-        List<Account> syncAccounts = prov.getAllSyncAccounts();
+        List<Account> syncAccounts = prov.getAllZcsAccounts();
         for (Account syncAccount : syncAccounts) {
             MailboxManager.getInstance().getMailboxByAccount(syncAccount);
         }
@@ -673,7 +673,7 @@ public class OfflineSyncManager {
 
             String user = account.getName();
             Element e = zdsync.addElement(ZDSYNC_ACCOUNT).addAttribute(A_ZDSYNC_NAME, user).addAttribute(A_ZDSYNC_ID, account.getId());
-            if (prov.isSyncAccount(account))
+            if (prov.isZcsAccount(account))
                 getStatus(user).encode(e);
             else if (OfflineProvisioning.isDataSourceAccount(account))
                 getStatus(OfflineProvisioning.getDataSourceName(account)).encode(e);

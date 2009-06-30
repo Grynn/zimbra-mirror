@@ -194,7 +194,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback) throws ServiceException {
-        modifyAttrs(e, attrs, checkImmutable, allowCallback, e instanceof Account && isSyncAccount((Account)e));
+        modifyAttrs(e, attrs, checkImmutable, allowCallback, e instanceof Account && isZcsAccount((Account)e));
     }
 
     synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback, boolean markChanged) throws ServiceException {
@@ -369,7 +369,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         } else if (etype == EntryType.DATASOURCE && e instanceof OfflineDataSource) {
             attrs = DbOfflineDirectory.readDirectoryLeaf(etype, ((OfflineDataSource) e).getAccount(), A_zimbraId, e.getAttr(A_zimbraDataSourceId));
             ((OfflineDataSource) e).setName(e.getAttr(A_zimbraDataSourceName));
-            ((OfflineDataSource) e).setServiceName(e.getAttr(OfflineConstants.A_zimbraDataSourceDomain));
+            ((OfflineDataSource) e).setServiceName(e.getAttr(Provisioning.A_zimbraDataSourceDomain));
         } else if (etype == EntryType.SIGNATURE && e instanceof OfflineSignature) {
             attrs = DbOfflineDirectory.readDirectoryLeaf(etype, ((OfflineSignature) e).getAccount(), A_zimbraId, e.getAttr(A_zimbraSignatureId));
             ((OfflineSignature) e).setName(e.getAttr(A_zimbraSignatureName));
@@ -570,16 +570,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return account;
     }
 
-    public synchronized List<Account> getAllSyncAccounts() throws ServiceException {
+    public synchronized List<Account> getAllZcsAccounts() throws ServiceException {
         List<Account> accounts = getAllAccounts();
         for (Iterator<Account> i = accounts.iterator(); i.hasNext();) {
-            if (!isSyncAccount(i.next()))
+            if (!isZcsAccount(i.next()))
                 i.remove();
         }
         return accounts;
     }
 
-    public boolean isSyncAccount(Account account) {
+    public boolean isZcsAccount(Account account) {
         return account.getAttr(A_offlineRemoteServerUri, null) != null;
     }
 
@@ -779,6 +779,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             dataSources.add(getDataSource(account));
         return dataSources;
     }
+    
+    public boolean isExchangeAccount(Account account) throws ServiceException {
+    	if (!isDataSourceAccount(account))
+    		return false;
+    	return getDataSource(account).getAttr(A_zimbraDataSourceDomain).equals(".msexchange");
+    }
 
     public synchronized OfflineAccount createGalAccount(OfflineAccount mainAcct) throws ServiceException {
         deleteGalAccount(mainAcct); // cleanup any left-over entry, if any
@@ -928,7 +934,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 	            throw e;
 	        }
 
-	    cachedaccountIds = null;    
+	    cachedaccountIds = null;
 	    
         return acct;
     }
@@ -1261,7 +1267,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         for (String zimbraId : DbOfflineDirectory.listAllDirtyEntries(EntryType.ACCOUNT)) {
         	if (!zimbraId.equals(LOCAL_ACCOUNT_ID)) {
 	            Account acct = get(AccountBy.id, zimbraId);
-	            if (acct != null && isSyncAccount(acct))
+	            if (acct != null && isZcsAccount(acct))
 	                dirty.add(acct);
         	}
         }
@@ -1633,7 +1639,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public synchronized Identity createIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
-        return createIdentity(account, name, attrs, isSyncAccount(account));
+        return createIdentity(account, name, attrs, isZcsAccount(account));
     }
     
     @Override
@@ -1679,7 +1685,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public synchronized void deleteIdentity(Account account, String name) throws ServiceException {
-        deleteIdentity(account, name, isSyncAccount(account));
+        deleteIdentity(account, name, isZcsAccount(account));
     }
 
     synchronized void deleteIdentity(Account account, String name, boolean markChanged) throws ServiceException {
@@ -1708,7 +1714,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public synchronized void modifyIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
-        modifyIdentity(account, name, attrs, isSyncAccount(account));
+        modifyIdentity(account, name, attrs, isZcsAccount(account));
     }
 
     synchronized void modifyIdentity(Account account, String name, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -1792,7 +1798,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     
     @Override
     public synchronized Signature createSignature(Account account, String signatureName, Map<String, Object> attrs) throws ServiceException {
-    	return createSignature(account, signatureName, attrs, isSyncAccount(account));
+    	return createSignature(account, signatureName, attrs, isZcsAccount(account));
     }
     
     @Override
@@ -1863,7 +1869,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     
     @Override
     public synchronized void modifySignature(Account account, String signatureId, Map<String, Object> attrs) throws ServiceException {
-        modifySignature(account, signatureId, attrs, isSyncAccount(account));
+        modifySignature(account, signatureId, attrs, isZcsAccount(account));
     }
     
     synchronized void modifySignature(Account account, String signatureId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -1908,7 +1914,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     
     @Override
     public synchronized void deleteSignature(Account account, String signatureId) throws ServiceException {
-        deleteSignature(account, signatureId, isSyncAccount(account));
+        deleteSignature(account, signatureId, isZcsAccount(account));
     }
     
     synchronized void deleteSignature(Account account, String signatureId, boolean markChanged) throws ServiceException {
@@ -1959,12 +1965,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     
     @Override
     public synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs) throws ServiceException {
-        return createDataSource(account, type, name, attrs, false, isSyncAccount(account));
+        return createDataSource(account, type, name, attrs, false, isZcsAccount(account));
     }
 
     @Override
     public synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted) throws ServiceException {
-        return createDataSource(account, type, name, attrs, passwdAlreadyEncrypted, isSyncAccount(account));
+        return createDataSource(account, type, name, attrs, passwdAlreadyEncrypted, isZcsAccount(account));
     }
     
     @Override
@@ -2019,7 +2025,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public synchronized void deleteDataSource(Account account, String dataSourceId) throws ServiceException {
-        deleteDataSource(account, dataSourceId, isSyncAccount(account));
+        deleteDataSource(account, dataSourceId, isZcsAccount(account));
     }
 
     synchronized void deleteDataSource(Account account, String dataSourceId, boolean markChanged) throws ServiceException {
@@ -2075,7 +2081,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     
     @Override
     public void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs) throws ServiceException {
-        modifyDataSource(account, dataSourceId, attrs, isSyncAccount(account));
+        modifyDataSource(account, dataSourceId, attrs, isZcsAccount(account));
     }
 
     void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -2125,7 +2131,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         		if (!isTestNeeded && !decrypted.equals(ds.getDecryptedPassword()))
         			isTestNeeded = true;
         	}
-        	String domain = ds.getAttr(OfflineConstants.A_zimbraDataSourceDomain);
+        	String domain = ds.getAttr(Provisioning.A_zimbraDataSourceDomain);
         	if (ds.getType() != DataSource.Type.live && !"yahoo.com".equals(domain)) {
 	        	if (!isTestNeeded && (!ds.getAttr(A_zimbraDataSourceSmtpHost).equals(attrs.get(A_zimbraDataSourceSmtpHost)) ||
 	        		!ds.getAttr(A_zimbraDataSourceSmtpPort).equals(attrs.get(A_zimbraDataSourceSmtpPort)) ||
@@ -2352,7 +2358,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public String getProxyAuthToken(String acctId) throws ServiceException {
         Account account = get(AccountBy.id, acctId);
-        if (isSyncAccount(account) || isMountpointAccount(account)) {
+        if (isZcsAccount(account) || isMountpointAccount(account)) {
             String id = isMountpointAccount(account) ? account.getAttr(A_offlineMountpointProxyAccountId) : acctId;
             ZcsMailbox ombx = (ZcsMailbox)MailboxManager.getInstance().getMailboxByAccountId(id, false);
             return ombx.getAuthToken().getValue();
