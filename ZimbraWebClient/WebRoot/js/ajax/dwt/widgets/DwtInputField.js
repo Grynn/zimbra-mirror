@@ -304,6 +304,7 @@ function() {
  */
 DwtInputField.prototype.setValue =
 function(value, noValidate) {
+	value = value || "";
 	this._inputField.value = value;
 	if(!noValidate) {
 		value = this._validateInput(value);
