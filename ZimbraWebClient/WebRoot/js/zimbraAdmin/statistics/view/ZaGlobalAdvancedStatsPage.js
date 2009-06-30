@@ -64,74 +64,81 @@ ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, s
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
     soapRequest.set("startTime", { "!time": start });
     soapRequest.set("endTime", { "!time": end });
-    var child = soapRequest.set("stats", { "!name" : group });
-    var csfeParams = { soapDoc: soapRequest };
-    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
-    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
+    var child = soapRequest.set("stats", { "!name" : group, "!limit" : "true" });
     
-    if (!soapResponse.hostname || !soapResponse.hostname[0].stats) {
-        var e = document.getElementById("loggerchart" + id);
-        e.textContent = "no data available";
-        return;
-    }
-    var data = {};
-    if (soapResponse.hostname) {
-        for (var i = 0; i < soapResponse.hostname.length; i++) {
-            if (!soapResponse.hostname[i].stats) continue;
-            var stats = soapResponse.hostname[i].stats;
-            if (!stats[0].values) continue;
-            for (var j = 0; j < stats[0].values.length; j++) {
-                var setOrIncrement = false;
-                if (!data[stats[0].values[j].t]) {
-                    data[stats[0].values[j].t] = {};
-                    setOrIncrement = true;
-                }
-                for (var m = 0; m < stats[0].values[j].stat.length; m++) {
-                    if (setOrIncrement)
-                        data[stats[0].values[j].t][stats[0].values[j].stat[m].name] = stats[0].values[j].stat[m].value;
-                    else
-                        data[stats[0].values[j].t][stats[0].values[j].stat[m].name] += stats[0].values[j].stat[m].value;
+    var cb = function(response) {
+    	if(response.isException && response.isException()) {
+    		ZaApp.getInstance().getCurrentController()._handleException(response.getException(),"ZaGlobalAdvancedStatsPage.plotGlobalQuickChart", null, false);
+    		return;
+    	}
+        var soapResponse = response.getResponse().Body.GetLoggerStatsResponse;
+        if (!soapResponse.hostname || !soapResponse.hostname[0].stats) {
+            var e = document.getElementById("loggerchart" + id);
+            e.textContent = "no data available";
+            return;
+        }
+        var data = {};
+        if (soapResponse.hostname) {
+            for (var i = 0; i < soapResponse.hostname.length; i++) {
+                if (!soapResponse.hostname[i].stats) continue;
+                var stats = soapResponse.hostname[i].stats;
+                if (!stats[0].values) continue;
+                for (var j = 0; j < stats[0].values.length; j++) {
+                    var setOrIncrement = false;
+                    if (!data[stats[0].values[j].t]) {
+                        data[stats[0].values[j].t] = {};
+                        setOrIncrement = true;
+                    }
+                    for (var m = 0; m < stats[0].values[j].stat.length; m++) {
+                        if (setOrIncrement)
+                            data[stats[0].values[j].t][stats[0].values[j].stat[m].name] = stats[0].values[j].stat[m].value;
+                        else
+                            data[stats[0].values[j].t][stats[0].values[j].stat[m].name] += stats[0].values[j].stat[m].value;
+                    }
                 }
             }
         }
-    }
-    
-    var newData = [];
-    for (var i in data) {
-        record = { timestamp: new Date(i * 1000) };
-        for (var j in data[i]) {
-            record[j] = data[i][j];
-        }
-        // skip missing values, we can't assume it's a zero or lost value
-        var skipRec = false;
-        for (var j = 0; j < columns.length; j++) {
-            if (!record[columns[j]]) {
-                //record[columns[j]] = 0;
-                skipRec = true;
-                break;
+        
+        var newData = [];
+        for (var i in data) {
+            record = { timestamp: new Date(i * 1000) };
+            for (var j in data[i]) {
+                record[j] = data[i][j];
+            }
+            // skip missing values, we can't assume it's a zero or lost value
+            var skipRec = false;
+            for (var j = 0; j < columns.length; j++) {
+                if (!record[columns[j]]) {
+                    //record[columns[j]] = 0;
+                    skipRec = true;
+                    break;
+                }
+            }
+            if (!skipRec) {
+                newData.push(record);
             }
         }
-        if (!skipRec) {
-            newData.push(record);
+        if (newData.length < 1) {
+            var e = document.getElementById("loggerchart" + id);
+            e.textContent = "no data available";
+            return;
         }
-    }
-    if (newData.length < 1) {
-        var e = document.getElementById("loggerchart" + id);
-        e.textContent = "no data available";
-        return;
-    }
-
-    var colDef = [];
-    for (var i = 0; i < columns.length; i++) {
-        colDef.push({ displayName: columns[i], yField: columns[i] });
-    }
-    var fields = [ "timestamp" ];
-    for (var i = 0; i < columns.length; i++) {
-        fields.push(columns[i]);
-    }
-
-    //document.getElementById("for-testing").textContent = newData.length + " :: " + AjxStringUtil.objToString(newData);
-    ZaGlobalAdvancedStatsPage.plotChart(id, fields, colDef, newData);
+    
+        var colDef = [];
+        for (var i = 0; i < columns.length; i++) {
+            colDef.push({ displayName: columns[i], yField: columns[i] });
+        }
+        var fields = [ "timestamp" ];
+        for (var i = 0; i < columns.length; i++) {
+            fields.push(columns[i]);
+        }
+    
+        ZaGlobalAdvancedStatsPage.plotChart(id, fields, colDef, newData);
+    };
+    
+    var csfeParams = { soapDoc: soapRequest, asyncMode: true, 'callback': new AjxCallback(cb) };
+    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController() };
+    ZaRequestMgr.invoke(csfeParams, reqMgrParams);
 }
 
 ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, columns, start, end) {
@@ -139,62 +146,69 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
     soapRequest.set("hostname", { "!hn": hostname });
     soapRequest.set("startTime", { "!time": start });
     soapRequest.set("endTime", { "!time": end });
-    var child = soapRequest.set("stats", { "!name" : group });
-    var csfeParams = { soapDoc: soapRequest };
+    var child = soapRequest.set("stats", { "!name" : group, "!limit" : "true" });
+    var cb = function(response) {
+    	if(response.isException && response.isException()) {
+    		ZaApp.getInstance().getCurrentController()._handleException(response.getException(),"ZaGlobalAdvancedStatsPage.plotGlobalQuickChart", null, false);
+    		return;
+    	}
+        var soapResponse = response.getResponse().Body.GetLoggerStatsResponse;
+        
+        if (!soapResponse.hostname || !soapResponse.hostname[0].stats) {
+            var e = document    .getElementById("loggerchart" + id);
+            e.textContent = "no data available";
+            return;
+        }
+        var values = soapResponse.hostname[0].stats[0].values;
+        if (!values) {
+            var e = document.getElementById("loggerchart" + id);
+            e.textContent = "no data available";
+            return;
+        }
+        
+        var newData = [];
+        
+        for (var i = 0; i < values.length; i++) {
+            var ts = new Date(values[i].t * 1000);
+            var record = { timestamp: ts };
+            for (var j = 0; j < values[i].stat.length; j++) {
+                if (columns.indexOf(values[i].stat[j].name) != -1) {
+                    record[values[i].stat[j].name] = values[i].stat[j].value;
+                }
+            }
+            // skip missing values, we can't assume it's a zero or last value
+            var skipRec = false;
+            for (var j = 0; j < columns.length; j++) {
+                if (!record[columns[j]]) {
+                    //record[columns[j]] = 0;
+                    skipRec = true;
+                    break;
+                }
+            }
+            if (!skipRec) {
+                newData.push(record);
+            }
+        }
+        if (newData.length < 1) {
+            var e = document.getElementById("loggerchart" + id);
+            e.textContent = "no data available";
+            return;
+        }
+        var colDef = [];
+        for (var i = 0; i < columns.length; i++) {
+            colDef.push({ displayName: columns[i], yField: columns[i] });
+        }
+        var fields = [ "timestamp" ];
+        for (var i = 0; i < columns.length; i++) {
+            fields.push(columns[i]);
+        }
+    
+        ZaGlobalAdvancedStatsPage.plotChart(id, fields, colDef, newData);
+    };
+    
+    var csfeParams = { soapDoc: soapRequest, asyncMode: true, callback: new AjxCallback(cb) };
     var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
-    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
-    
-    if (!soapResponse.hostname || !soapResponse.hostname[0].stats) {
-        var e = document.getElementById("loggerchart" + id);
-        e.textContent = "no data available";
-        return;
-    }
-    var values = soapResponse.hostname[0].stats[0].values;
-    if (!values) {
-        var e = document.getElementById("loggerchart" + id);
-        e.textContent = "no data available";
-        return;
-    }
-    
-    var newData = [];
-    
-    for (var i = 0; i < values.length; i++) {
-        var ts = new Date(values[i].t * 1000);
-        var record = { timestamp: ts };
-        for (var j = 0; j < values[i].stat.length; j++) {
-            if (columns.indexOf(values[i].stat[j].name) != -1) {
-                record[values[i].stat[j].name] = values[i].stat[j].value;
-            }
-        }
-        // skip missing values, we can't assume it's a zero or last value
-        var skipRec = false;
-        for (var j = 0; j < columns.length; j++) {
-            if (!record[columns[j]]) {
-                //record[columns[j]] = 0;
-                skipRec = true;
-                break;
-            }
-        }
-        if (!skipRec) {
-            newData.push(record);
-        }
-    }
-    if (newData.length < 1) {
-        var e = document.getElementById("loggerchart" + id);
-        e.textContent = "no data available";
-        return;
-    }
-    var colDef = [];
-    for (var i = 0; i < columns.length; i++) {
-        colDef.push({ displayName: columns[i], yField: columns[i] });
-    }
-    var fields = [ "timestamp" ];
-    for (var i = 0; i < columns.length; i++) {
-        fields.push(columns[i]);
-    }
-
-    //document.getElementById("for-testing").textContent = newData.length + " :: " + AjxStringUtil.objToString(newData);
-    ZaGlobalAdvancedStatsPage.plotChart(id, fields, colDef, newData);
+    ZaRequestMgr.invoke(csfeParams, reqMgrParams);
 }
 
 ZaGlobalAdvancedStatsPage.plotChart = function (id, fields, colDef, newData) {
@@ -247,21 +261,26 @@ ZaGlobalAdvancedStatsPage.serverSelected = function(evt, id) {
     
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
     soapRequest.set("hostname", { "!hn": hostname });
-    var csfeParams = { soapDoc: soapRequest };
-    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
-    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
     
-    var groupSelect = document.getElementById("select-group" + id);
-    var statGroups = soapResponse.hostname[0].stats;
-    ZaGlobalAdvancedStatsPage.clearSelect(groupSelect);
-    for (var i = 0, j = statGroups.length; i < j; i++) {
-        var option = document.createElement("option");
-        if (i == 0) option.selected = "selected";
-        option.value = statGroups[i].name;
-        option.textContent = statGroups[i].name;
-        groupSelect.appendChild(option);
-    }
-    ZaGlobalAdvancedStatsPage.groupSelected({ target: groupSelect }, id);
+    var cb = function(response) {
+        var soapResponse = response.getResponse().Body.GetLoggerStatsResponse;
+        var groupSelect = document.getElementById("select-group" + id);
+        var statGroups = soapResponse.hostname[0].stats;
+        ZaGlobalAdvancedStatsPage.clearSelect(groupSelect);
+        for (var i = 0, j = statGroups.length; i < j; i++) {
+            var option = document.createElement("option");
+            if (i == 0) option.selected = "selected";
+            option.value = statGroups[i].name;
+            option.textContent = statGroups[i].name;
+            groupSelect.appendChild(option);
+        }
+        ZaGlobalAdvancedStatsPage.groupSelected({ target: groupSelect }, id);
+    };
+    
+    var csfeParams = { soapDoc: soapRequest, asyncMode: true, callback: new AjxCallback(cb) };
+    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
+    ZaRequestMgr.invoke(csfeParams, reqMgrParams);
+    
     
 }
 
@@ -279,30 +298,34 @@ ZaGlobalAdvancedStatsPage.groupSelected = function(evt, id) {
     
     var counterSelect = document.getElementById("select-counter" + id);
     ZaGlobalAdvancedStatsPage.clearSelect(counterSelect);
-    var statCounters = ZaGlobalAdvancedStatsPage.getCounters(hostname, group);
-    for (var i = 0, j = statCounters.length; i < j; i++) {
-        var option = document.createElement("option");
-        option.value = statCounters[i];
-        option.textContent = statCounters[i];
-        counterSelect.appendChild(option);
-    }
+    ZaGlobalAdvancedStatsPage.getCounters(hostname, group, counterSelect);
+    
 }
 
-ZaGlobalAdvancedStatsPage.getCounters = function(hostname, group) {
+ZaGlobalAdvancedStatsPage.getCounters = function(hostname, group, counterSelect) {
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
     soapRequest.set("hostname", { "!hn": hostname });
     var child = soapRequest.set("stats", { "!name" : group });
     soapRequest.set(null, "get-counters", child);
-    var csfeParams = { soapDoc: soapRequest };
-    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
-    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
+    var cb = function(response) {
+        var soapResponse = response.getResponse().Body.GetLoggerStatsResponse;
+        var statCounters = soapResponse.hostname[0].stats[0].values[0].stat;
+        var counters = [];
+        for (var i = 0, j = statCounters.length; i < j; i++) {
+            counters.push(statCounters[i].name);
+        }
+        for (var i = 0, j = counters.length; i < j; i++) {
+            var option = document.createElement("option");
+            option.value = counters[i];
+            option.textContent = counters[i];
+            counterSelect.appendChild(option);
+        }
+    };
     
-    var statCounters = soapResponse.hostname[0].stats[0].values[0].stat;
-    var counters = [];
-    for (var i = 0, j = statCounters.length; i < j; i++) {
-        counters.push(statCounters[i].name);
-    }
-    return counters;
+    var csfeParams = { soapDoc: soapRequest, asyncMode: true, callback: new AjxCallback(cb) };
+    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
+    ZaRequestMgr.invoke(csfeParams, reqMgrParams);
+    
 }
 
 ZaGlobalAdvancedStatsPage.counterSelected = function(event, id) {
@@ -330,6 +353,7 @@ ZaGlobalAdvancedStatsPage.counterSelected = function(event, id) {
 ZaGlobalAdvancedStatsPage.showhide = function(id) {
     var e = document.getElementById(id);
     e.style.display = e.style.display == "none" ? "block" : "none";
+    return e.style.display != "none";
 }
 
 ZaGlobalAdvancedStatsPage.removeChild = function(id) {
@@ -422,15 +446,18 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	td.valign = "top";
 	tr.appendChild(td);
 	table.appendChild(tr);
-	
+	 
 	form.appendChild(table);
 	
 	var a;
 	var span;
 	a = document.createElement("a");
 	a.href = "#";
-	a.onclick = function () { ZaGlobalAdvancedStatsPage.showhide("loggertable" + id); }
-	a.textContent = "Toggle Form";
+    a.onclick = function (evt) {
+	    var showing = ZaGlobalAdvancedStatsPage.showhide("loggertable" + id);
+	    evt.target.textContent = (showing ? " - " : " + ") + "Chart Settings";
+    }
+	a.textContent = " - Chart Settings";
 	form.appendChild(a);
 	
 	span = document.createElement("span");
@@ -464,18 +491,22 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	
     var serversSelect = document.getElementById("select-servers" + id);
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
-    var csfeParams = { soapDoc: soapRequest };
+    var cb = function(response) {
+        var soapResponse = response.getResponse().Body.GetLoggerStatsResponse;
+        ZaGlobalAdvancedStatsPage.clearSelect(serversSelect);
+        for (var i = 0, j = soapResponse.hostname.length; i < j; i++) {
+            var option = document.createElement("option");
+            if (i == 0) option.selected = "selected";
+            option.value = soapResponse.hostname[i].hn;
+            option.textContent = soapResponse.hostname[i].hn;
+            serversSelect.appendChild(option);
+        }
+        ZaGlobalAdvancedStatsPage.serverSelected({ target: serversSelect }, id);
+    };
+    
+    var csfeParams = { soapDoc: soapRequest, asyncMode: true, callback: new AjxCallback(cb) };
     var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
-    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
-    ZaGlobalAdvancedStatsPage.clearSelect(serversSelect);
-    for (var i = 0, j = soapResponse.hostname.length; i < j; i++) {
-        var option = document.createElement("option");
-        if (i == 0) option.selected = "selected";
-        option.value = soapResponse.hostname[i].hn;
-        option.textContent = soapResponse.hostname[i].hn;
-        serversSelect.appendChild(option);
-    }
-    ZaGlobalAdvancedStatsPage.serverSelected({ target: serversSelect }, id);
+    ZaRequestMgr.invoke(csfeParams, reqMgrParams);
 }
 
 ZaGlobalAdvancedStatsPage.prototype._createHtml = 

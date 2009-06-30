@@ -39,12 +39,10 @@ function() {
 
 ZaGlobalMessageCountPage.prototype.showMe =  function(refresh) {
 	DwtTabViewPage.prototype.showMe.call(this);	
-	if(refresh) {
-        ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-48hours', 'zmmtastats', [ 'mta_count' ], 'now-48h', 'now');
-        ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-30days', 'zmmtastats', [ 'mta_count' ], 'now-30d', 'now');
-        ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-60days', 'zmmtastats', [ 'mta_count' ], 'now-60d', 'now');
-        ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-year', 'zmmtastats', [ 'mta_count' ], 'now-1y', 'now');
-	}
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-48hours', 'zmmtastats', [ 'mta_count' ], 'now-48h', 'now');
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-30days', 'zmmtastats', [ 'mta_count' ], 'now-30d', 'now');
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-60days', 'zmmtastats', [ 'mta_count' ], 'now-60d', 'now');
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-year', 'zmmtastats', [ 'mta_count' ], 'now-1y', 'now');
 }
 
 ZaGlobalMessageCountPage.prototype.setObject =
