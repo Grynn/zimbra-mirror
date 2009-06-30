@@ -298,11 +298,11 @@ ZaGlobalAdvancedStatsPage.groupSelected = function(evt, id) {
     
     var counterSelect = document.getElementById("select-counter" + id);
     ZaGlobalAdvancedStatsPage.clearSelect(counterSelect);
-    ZaGlobalAdvancedStatsPage.getCounters(hostname, group, counterSelect);
+    ZaGlobalAdvancedStatsPage._getCounters(hostname, group, counterSelect);
     
 }
 
-ZaGlobalAdvancedStatsPage.getCounters = function(hostname, group, counterSelect) {
+ZaGlobalAdvancedStatsPage._getCounters = function(hostname, group, counterSelect) {
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
     soapRequest.set("hostname", { "!hn": hostname });
     var child = soapRequest.set("stats", { "!name" : group });
@@ -326,6 +326,24 @@ ZaGlobalAdvancedStatsPage.getCounters = function(hostname, group, counterSelect)
     var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
     ZaRequestMgr.invoke(csfeParams, reqMgrParams);
     
+}
+ZaGlobalAdvancedStatsPage.getCounters = function(hostname, group) {
+    var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
+    soapRequest.set("hostname", { "!hn": hostname });
+    var child = soapRequest.set("stats", { "!name" : group });
+    soapRequest.set(null, "get-counters", child);
+    var cb = function(response) {
+    };
+    
+    var csfeParams = { soapDoc: soapRequest };
+    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
+    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetLoggerStatsResponse;
+    var statCounters = soapResponse.hostname[0].stats[0].values[0].stat;
+    var counters = [];
+    for (var i = 0, j = statCounters.length; i < j; i++) {
+        counters.push(statCounters[i].name);
+    }
+    return counters;
 }
 
 ZaGlobalAdvancedStatsPage.counterSelected = function(event, id) {

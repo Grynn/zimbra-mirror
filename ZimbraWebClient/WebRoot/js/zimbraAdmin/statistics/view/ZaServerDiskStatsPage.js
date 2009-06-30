@@ -58,8 +58,8 @@ ZaServerDiskStatsPage.prototype.showMe =  function(refresh) {
         }
         
         var columns = [];
-        for (var i = 0; i < disks.length; i++) {
-            columns.push(disks[i] + "::disk_pct_used");
+        for (var i = 0; i < this._disks.length; i++) {
+            columns.push(this._disks[i] + "::disk_pct_used");
         }
         ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-48hours', item.name, 'df.csv', columns, 'now-48h', 'now');
         ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-30days', item.name, 'df.csv', columns, 'now-30d', 'now');
