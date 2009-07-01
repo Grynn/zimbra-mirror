@@ -372,6 +372,16 @@ if [ -L ${zimbra_home}/jetty ]; then
     chown -R ${zimbra_user}:${zimbra_group} ${i}
   done
 
+  if [ -d ${zimbra_home}/jetty/lib ]; then
+    find ${zimbra_home}/jetty/lib -type f -name '*.jar' -exec chown ${root_user}:${root_group} {} \; -exec chmod 444 {} \;
+    find ${zimbra_home}/jetty/lib -type d -exec chown ${root_user}:${root_group} {} \; -exec chmod 755 {} \;
+  fi
+
+  if [ -d ${zimbra_home}/jetty/common ]; then
+    find ${zimbra_home}/jetty/common -type f -name '*.jar' -exec chown ${root_user}:${root_group} {} \; -exec chmod 444 {} \;
+    find ${zimbra_home}/jetty/common -type d -exec chown ${root_user}:${root_group} {} \; -exec chmod 755 {} \;
+  fi  
+
 fi
 
 if [ -d ${zimbra_home}/ssl ]; then
