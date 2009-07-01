@@ -593,21 +593,13 @@ ZaSearchField.prototype._getMyXForm = function() {
 };
 
 ZaSearchField.canSaveSearch = function () {
-    if (ZaZimbraAdmin.currentAdminAccount
-            && (ZaZimbraAdmin.currentAdminAccount.setAttrs["zimbraAdminSavedSearches"] === true)) {
-        return true ;    
-    } else {
-        return false ;
-    }
+    return ZaItem.hasWritePermission ("zimbraAdminSavedSearches", 
+            ZaZimbraAdmin.currentAdminAccount) ;
 }
 
 ZaSearchField.canViewSavedSearch = function () {
-    if (ZaZimbraAdmin.currentAdminAccount
-            && (ZaZimbraAdmin.currentAdminAccount.getAttrs["zimbraAdminSavedSearches"] === true)) {
-        return true ;
-    } else {
-        return false ;
-    }
+    return ZaItem.hasReadPermission ("zimbraAdminSavedSearches",
+                ZaZimbraAdmin.currentAdminAccount) ;
 }
 
 
