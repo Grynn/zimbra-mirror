@@ -55,6 +55,7 @@ sub getdatastructure($$$) {
             $hash{$host}->{$colname} = {};
             $hash{$host}->{$colname}->{'col_name_19'} = $row->{'col_name_19'};
             $hash{$host}->{$colname}->{'col_num'}     = $row->{'col_num'};
+            $hash{$host}->{$colname}->{'col_unit'}    = $row->{'col_unit'};
             $hash{$host}->{$colname}->{'rrd_file'}    = $row->{'rrd_file'};
         };
         $ref = \%hash;
@@ -158,9 +159,12 @@ sub list_files($$$) {
     my $sth;
     if (defined($host) && defined($csv)) {
         $sth = $dbh->prepare(q{
-            SELECT DISTINCT(col_name) FROM rrds JOIN hosts
+            SELECT DISTINCT(rrds.col_name), col_unit FROM rrds JOIN hosts
             ON rrds.host_id = hosts.id
-            WHERE zm_hostname = ? AND csv_file = ?
+            LEFT OUTER JOIN rrd_column_type
+            ON rrds.col_name = rrd_column_type.col_name
+               AND rrds.csv_file = rrd_column_type.csv_file
+            WHERE zm_hostname = ? AND rrds.csv_file = ?
         });
         $sth->bind_param(1, $host);
         $sth->bind_param(2, $csv);
@@ -176,9 +180,10 @@ sub list_files($$$) {
     }
     $sth->execute;
     die $sth->err if $sth->err;
-    my $ref = $sth->fetchall_arrayref([0]);
+    my $ref = $sth->fetchall_arrayref([0,1]);
     foreach my $row (@$ref) {
-        print $row->[0] . "\n";
+    	my $line = defined($row->[1]) ? $row->[0] . " :: " . $row->[1] : $row->[0];
+        print $line . "\n";
     }
     exit;
 }
