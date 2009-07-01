@@ -6675,4 +6675,16 @@
 		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
 		<function-signature>java.lang.String unmaskRemoteItemId(com.zimbra.cs.taglib.bean.ZMailboxBean,java.lang.String)</function-signature>
 	</function>
+
+	<function>
+		<name>javaLocaleId</name>
+		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+		<function-signature>java.lang.String javaLocaleId(java.util.Locale)</function-signature>
+	</function>
+
+	<function>
+		<name>browserLocaleId</name>
+		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+		<function-signature>java.lang.String browserLocaleId(java.util.Locale)</function-signature>
+	</function>
 </taglib>

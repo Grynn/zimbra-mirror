@@ -1352,6 +1352,16 @@ public class BeanUtils {
 		}
 		return String.valueOf(container).contains(String.valueOf(object));
 	}
+
+	public static String javaLocaleId(Locale locale) {
+		// NOTE: Java uses has the wrong code for Indonesian
+		// NOTE: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6457127
+		String locid = locale.toString();
+		return locid.startsWith("in") ? locid.replaceAll("^in", "id") : locid;
+	}
+	public static String browserLocaleId(Locale locale) {
+		return javaLocaleId(locale).toLowerCase().replace('_','-');
+	}
 }
 
 class ExtendedDateFormatSymbols extends DateFormatSymbols{
