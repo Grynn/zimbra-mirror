@@ -14,34 +14,6 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 	ENVMOD := env LIBS="-lresolv" 
 endif
 
-ifeq ($(BUILD_PLATFORM), RHEL4_64)
-	CONF_OPS := --enable-frame-pointers
-endif
-
-ifeq ($(BUILD_PLATFORM), CentOS4_64)
-	CONF_OPS := --enable-frame-pointers
-endif
-
-ifeq ($(BUILD_PLATFORM), RHEL5_64)
-	CONF_OPS := --enable-frame-pointers
-endif
-
-ifeq ($(BUILD_PLATFORM), CentOS5_64)
-	CONF_OPS := --enable-frame-pointers
-endif
-
-ifeq ($(BUILD_PLATFORM), SLES10_64)
-	CONF_OPS := --enable-frame-pointers
-endif
-
-ifeq ($(BUILD_PLATFORM), UBUNTU6_64)
-	CONF_OPS := --enable-frame-pointers
-endif
-
-ifeq ($(BUILD_PLATFORM), UBUNTU8_64)
-	CONF_OPS := --enable-frame-pointers
-endif
-
 ZIMBRA_HOME ?= /opt/zimbra
 TCMALLOC_VERSION ?= 1.2
 TCMALLOC_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/tcmalloc/tcmalloc-$(TCMALLOC_VERSION).tgz
