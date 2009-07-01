@@ -490,7 +490,7 @@ _HERE_
          category="IO"
          infile="$iostatCsv"
          outfile="${ZIMBRA_HOSTNAME}_${partFile}_part_iops.png"
-         yAxis="tps/s"
+         yAxis="tps"
          showRaw="false"
          showMovingAvg="true">
     <plot data="$partition:tps" legend="$partition tps"/>
@@ -574,13 +574,12 @@ sub mailboxdConfig() {
     <plot data="innodb_bp_hit_rate" legend="buffer pool hit rate"/>
   </chart>
 
-  <chart title="Host $ZIMBRA_HOSTNAME: MySQL: Database Connections"
+  <chart title="Host $ZIMBRA_HOSTNAME: MySQL: Database Connections In Use"
          category="database"
          infile="$mailboxdCsv"
          outfile="${ZIMBRA_HOSTNAME}_mysql-conns.png"
          yAxis="conns">
-    <plot data="db_pool_size" legend="connection pool size"/>
-    <plot data="mysql_threads_connected" legend="threads connected"/>
+    <plot data="db_pool_size" legend="connections in use"/>
   </chart>
 
   <chart title="Host $ZIMBRA_HOSTNAME: MySQL: Tables Open/Opened"
@@ -633,18 +632,18 @@ sub mailboxdConfig() {
       category="mailboxd"
       infile="$mailboxdCsv"
       outfile="${ZIMBRA_HOSTNAME}_mboxd-lucene-io.png"
-      yAxis="KB"
+      yAxis="KB/s"
       showRaw="false"
       showMovingAvg="true">
-    <plot data="idx_bytes_written" legend="Index writes" divisor="1024"/>
-    <plot data="idx_bytes_read" legend="Index reads" divisor="1024"/>
+    <plot data="idx_bytes_written" legend="Index writes" divisor="61440"/>
+    <plot data="idx_bytes_read" legend="Index reads" divisor="61440"/>
   </chart>
 
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: LMTP Delivery Throughput"
          category="mailboxd"
          infile="$mailboxdCsv"
          outfile="${ZIMBRA_HOSTNAME}_mboxd-lmtp-thruput.png"
-         yAxis="KB"
+         yAxis="KB/s"
          showRaw="false"         
          showMovingAvg="true">
     <plot data="lmtp_rcvd_bytes" legend="received" divisor="61440"/>
@@ -655,7 +654,7 @@ sub mailboxdConfig() {
          category="mailboxd"
          infile="$mailboxdCsv"
          outfile="${ZIMBRA_HOSTNAME}_mboxd-mbox-deliv-rate.png"         
-         yAxis="msgs">
+         yAxis="msgs/s">
       <plot data="lmtp_rcvd_msgs" legend="received msgs" divisor="60"/>
       <plot data="lmtp_dlvd_msgs" legend="delivered msgs" divisor="60" />
       <plot data="lmtp_rcvd_rcpt" legend="received x rcpts" divisor="60" />
