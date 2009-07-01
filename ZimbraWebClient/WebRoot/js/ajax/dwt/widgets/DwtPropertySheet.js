@@ -163,7 +163,9 @@ DwtPropertySheet.prototype.setPropertyVisible = function(id, visible) {
 		}
 		else {
 			var row = prop.row;
-			row.parentNode.removeChild(row);
+			if (row && row.parentNode) {
+				row.parentNode.removeChild(row);
+			}
 		}
 	}
 };
