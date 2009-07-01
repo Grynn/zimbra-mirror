@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    type          TINYINT NOT NULL,           -- 1 = folder, 3 = tag, etc.
    parent_id     INTEGER UNSIGNED,
    folder_id     INTEGER UNSIGNED,
-   index_id      INTEGER UNSIGNED,
+   index_id      VARCHAR(225),
    imap_id       INTEGER UNSIGNED,
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
