@@ -203,7 +203,7 @@ public class OfflineAccount extends Account {
         return OfflineProvisioning.getOfflineInstance().isZcsAccount(this);
     }
     
-    public boolean isExchangeAccount() throws ServiceException {
+    public boolean isExchangeAccount() {
     	return OfflineProvisioning.getOfflineInstance().isExchangeAccount(this);
     }
 

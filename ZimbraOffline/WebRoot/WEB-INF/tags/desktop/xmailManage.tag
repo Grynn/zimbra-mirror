@@ -49,7 +49,7 @@ function SetPort() {
             zd.set("port", zd.isChecked("ssl") ? "995" : "110");
         else if (${bean.type eq 'imap'})
             zd.set("port", zd.isChecked("ssl") ? "993" : "143");
-	else if (${bean.type eq 'zimbra'})
+	else if (${bean.type eq 'zimbra' or bean.type eq 'xsync'})
             zd.set("port", zd.isChecked("ssl") ? "443" : "80");
     }
 }
@@ -66,7 +66,7 @@ function SetSmtpPort() {
 <form name="accountForm" action="${uri}" method="POST" onsubmit="OnSubmit()">
     <input type="hidden" name="accountId" value="${bean.accountId}">
     <input type="hidden" name="accountFlavor" value="${accountFlavor}">
-<c:if test="${bean.type ne 'zimbra' and not empty bean.domain}">
+<c:if test="${bean.type ne 'zimbra' and bean.type ne 'xsync' and not empty bean.domain}">
     <input type="hidden" name="domain" value="${bean.domain}">
 </c:if>
 
@@ -79,7 +79,7 @@ function SetSmtpPort() {
             <td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='AccountName'/></td>
             <td><input class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}" ${empty bean.accountId ? '' : 'disabled'}><td>
         </tr>
-<c:if test="${bean.type ne 'zimbra'}">
+<c:if test="${bean.type ne 'zimbra' and bean.type ne 'xsync'}">
         <tr>
             <td class="ZFieldLabel"><fmt:message key='FullName'/></td>
             <td><input class="ZField" type="text" id="fromDisplay" name="fromDisplay" value="${bean.fromDisplay}"></td>
@@ -134,7 +134,7 @@ function SetSmtpPort() {
                     <td class="ZFieldInfo"><fmt:message key='SecurityNone'/></td>
                     <td><input class="ZRadio" type="radio" id="ssl" name="security" value="ssl" ${bean.security == 'ssl' ? 'checked' : ''} onclick="SetPort()"></td>
                     <td class="ZFieldInfo"><fmt:message key='SecuritySsl'/></td>
-<c:if test="${bean.type != 'zimbra'}">                   
+<c:if test="${bean.type ne 'zimbra' and bean.type ne 'xsync'}">                   
                     <td><input class="ZRadio" type="radio" id="tls" name="security" value="tls" ${bean.security == 'tls' ? 'checked' : ''} onclick="SetPort()"></td>
                     <td class="ZFieldInfo"><fmt:message key='SecurityTls'/></td>
                     <td><input class="ZRadio" type="radio" id="tls_if_available" name="security" value="tls_if_available" ${bean.security == 'tls_if_available' ? 'checked' : ''} onclick="SetPort()"></td>
@@ -244,7 +244,7 @@ function SetSmtpPort() {
             <td>
                 <select class="ZSelectSmall" id="syncFreqSecs" name="syncFreqSecs">
                     <option value="-1" ${bean.syncFreqSecs == -1 ? 'selected' : ''}><fmt:message key='SyncManually'/></option>
-<c:if test="${bean.type eq 'zimbra'}">
+<c:if test="${bean.type eq 'zimbra' or bean.type eq 'xsync'}">
                     <option value="0" ${bean.syncFreqSecs == 0 ? 'selected' : ''}><fmt:message key='SyncNewArrive'/></option>
 </c:if>
                     <option value="60" ${bean.syncFreqSecs == 60 ? 'selected' : ''}><fmt:message key='SyncEveryMin'/></option>

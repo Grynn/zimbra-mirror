@@ -63,6 +63,8 @@
 				<classes dir="../ZimbraCommon/build/classes" />
 				<classes dir="../ZimbraIM/build/classes" />
 				<classes dir="../ZimbraServer/build/classes" />
+				<classes dir="../ZimbraSyncCommon/build/classes" />
+				<classes dir="../ZimbraSyncClient/build/classes" />
 				<!--classes dir="../ThirdParty/javamail/javamail-1.4.1ea/mail/build/classes" /-->
 			</webApp>
 

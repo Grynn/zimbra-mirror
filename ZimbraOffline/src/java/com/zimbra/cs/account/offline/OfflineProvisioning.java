@@ -700,6 +700,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	attrs.put(A_displayName, displayName);
         	attrs.put(A_zimbraPrefFromDisplay, displayName);
         }
+    	String accountFlavor = (String)dsAttrs.get(A_offlineAccountFlavor);
+    	if (accountFlavor != null)
+    		attrs.put(A_offlineAccountFlavor, accountFlavor);
         
         attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );
         attrs.put(A_zimbraMailHost, "localhost");
@@ -780,10 +783,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return dataSources;
     }
     
-    public boolean isExchangeAccount(Account account) throws ServiceException {
-    	if (!isDataSourceAccount(account))
-    		return false;
-    	return getDataSource(account).getAttr(A_zimbraDataSourceDomain).equals(".msexchange");
+    public boolean isExchangeAccount(Account account) {
+    	return "Xsync".equals(account.getAttr(A_offlineAccountFlavor, null));
     }
 
     public synchronized OfflineAccount createGalAccount(OfflineAccount mainAcct) throws ServiceException {
