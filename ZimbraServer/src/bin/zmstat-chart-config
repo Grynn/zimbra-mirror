@@ -500,7 +500,7 @@ _HERE_
 
             }
         }
-        print <<'_HERE_';
+        print <<_HERE_;
   <chart title="Host $ZIMBRA_HOSTNAME: Disk Usage"
          category="IO"
          height="400"
