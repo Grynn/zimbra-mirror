@@ -37,6 +37,9 @@ endif
 ifeq ($(BUILD_PLATFORM), CentOS5_64)
 	ENVMOD := env LIBS="-L/usr/lib64"
 endif
+ifeq ($(BUILD_PLATFORM), F11_64)
+	ENVMOD := env LIBS="-L/usr/lib64"
+endif
 
 all: allclean build tar
 
