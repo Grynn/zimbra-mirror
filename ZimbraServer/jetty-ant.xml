@@ -14,7 +14,6 @@
 			<fileset dir="WebRoot" />
 			<lib dir="${common.jars.dir}" includes="*.jar" excludes="${war.exclude}" />
 			<lib dir="${im.jars.dir}" includes="*.jar" excludes="${war.exclude}" />
-			<classes dir="${config.dir}" includes="sieveConfig.xml" />
 		</war>
 		<mkdir dir="${jetty_webapps}/service" />
 		<unzip dest="${jetty_webapps}/service" src="${jetty_webapps}/service.war" />
