@@ -44,10 +44,10 @@ ZaServerMessageCountPage.prototype.showMe =  function(refresh) {
 	}
 	if (this._currentObject) {
 	    var item = this._currentObject;
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-48hours', item.name, 'zmmtastats', [ 'mta_count' ], 'now-48h', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-30days', item.name, 'zmmtastats', [ 'mta_count' ], 'now-30d', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-60days', item.name, 'zmmtastats', [ 'mta_count' ], 'now-60d', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-year', item.name, 'zmmtastats', [ 'mta_count' ], 'now-1y', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-48hours', item.name, 'zmmtastats', [ 'mta_count' ], [ 'msgs/s' ], 'now-48h', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-30days',  item.name, 'zmmtastats', [ 'mta_count' ], [ 'msgs/s' ], 'now-30d', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-60days',  item.name, 'zmmtastats', [ 'mta_count' ], [ 'msgs/s' ], 'now-60d', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-year',    item.name, 'zmmtastats', [ 'mta_count' ], [ 'msgs/s' ], 'now-1y',  'now');
 	}
 }
 

@@ -49,7 +49,7 @@ ZaGlobalAdvancedStatsPage.prototype.showMe =  function(refresh) {
 }
 
 ZaGlobalAdvancedStatsPage.getDataTipText = function (item, index, series) {
-    var text = series.displayName + " at " + YAHOO.util.Date.format(item.timestamp, { format: "%I:%M on %b %e" }) +
+    var text = series.displayName + " at " + YAHOO.util.Date.format(item.timestamp, { format: "%I:%M %p on %b %e" }) +
          "\n" +
          ZaGlobalAdvancedStatsPage.formatLabel(item[series.yField]);
     return text;
@@ -62,7 +62,7 @@ ZaGlobalAdvancedStatsPage.formatTimeLabel = function (value) {
     return YAHOO.util.Date.format(value, { format: "%I:%M %p" });
 }
 
-ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, start, end) {
+ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, column_units, start, end) {
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
     soapRequest.set("startTime", { "!time": start });
     soapRequest.set("endTime", { "!time": end });
@@ -128,7 +128,11 @@ ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, s
     
         var colDef = [];
         for (var i = 0; i < columns.length; i++) {
-            colDef.push({ displayName: columns[i], yField: columns[i] });
+            var legend = columns[i];
+            if (column_units != null) {
+                legend = legend + " (" + column_units[column_units.length == 1 ? 0 : i] + ")";
+            }
+            colDef.push({ displayName: legend, yField: columns[i] });
         }
         var fields = [ "timestamp" ];
         for (var i = 0; i < columns.length; i++) {
@@ -143,7 +147,7 @@ ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, s
     ZaRequestMgr.invoke(csfeParams, reqMgrParams);
 }
 
-ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, columns, start, end) {
+ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, columns, column_units, start, end) {
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
     soapRequest.set("hostname", { "!hn": hostname });
     soapRequest.set("startTime", { "!time": start });
@@ -198,7 +202,12 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
         }
         var colDef = [];
         for (var i = 0; i < columns.length; i++) {
-            colDef.push({ displayName: columns[i], yField: columns[i] });
+            var legend = columns[i];
+            if (column_units != null) {
+                if ((column_units.length == 1 && column_units[0] != null) || (column_units.length > 1 && column_units[i] != null))
+                    legend = legend + " (" + column_units[column_units.length == 1 ? 0 : i] + ")";
+            }
+            colDef.push({ displayName: legend, yField: columns[i] });
         }
         var fields = [ "timestamp" ];
         for (var i = 0; i < columns.length; i++) {
@@ -217,7 +226,7 @@ ZaGlobalAdvancedStatsPage.plotChart = function (id, fields, colDef, newData) {
     var yAxis = new YAHOO.widget.NumericAxis();
     var max = 0;
     for (var i = 0; i < colDef.length; i++) {
-        colDef[i].style = { size: 3, lineSize: 1 };
+        colDef[i].style = { size: 4, lineSize: 1 };
     }
     for (var i = 0; i < newData.length; i++) {
         for (var j = 0; j < colDef.length; j++) {
@@ -229,24 +238,25 @@ ZaGlobalAdvancedStatsPage.plotChart = function (id, fields, colDef, newData) {
     yAxis.maximum = max + 10;
     yAxis.labelFunction = ZaGlobalAdvancedStatsPage.formatLabel;
     var timeAxis = new YAHOO.widget.TimeAxis();
-    //timeAxis.labelFunction = ZaGlobalAdvancedStatsPage.formatTimeLabel;
     
     timeAxis.labelFunction = function (value) {
         var ts0 = newData[0].timestamp.getTime();
         var ts1 = newData[newData.length - 1].timestamp.getTime();
         var delta = (ts1 - ts0) / 1000;
-        
+    
         var fmt;
         if (delta > (2 * 24 * 60 * 60)) {
             fmt = "%b %e";
         } else {
             fmt = "%I:%M %p";
         }
+        
         return YAHOO.util.Date.format(value, { format: fmt });
     }
     
+    timeAxis.maximum = newData[newData.length - 1].timestamp;
+    timeAxis.minimum = newData[0].timestamp;
     var seriesDef = colDef;
-    
     var data_source = new YAHOO.util.DataSource(newData);
     ZaGlobalAdvancedStatsPage.CHART_DATA_SOURCE = data_source;
     data_source.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
@@ -327,14 +337,13 @@ ZaGlobalAdvancedStatsPage._getCounters = function(hostname, group, counterSelect
     var cb = function(response) {
         var soapResponse = response.getResponse().Body.GetLoggerStatsResponse;
         var statCounters = soapResponse.hostname[0].stats[0].values[0].stat;
-        var counters = [];
         for (var i = 0, j = statCounters.length; i < j; i++) {
-            counters.push(statCounters[i].name);
-        }
-        for (var i = 0, j = counters.length; i < j; i++) {
             var option = document.createElement("option");
-            option.value = counters[i];
-            option.textContent = counters[i];
+            option.value = statCounters[i].name;
+            option.textContent = statCounters[i].name;
+            if (statCounters[i].type) {
+                option.columnUnit = statCounters[i].type;
+            }
             counterSelect.appendChild(option);
         }
     };
@@ -372,17 +381,21 @@ ZaGlobalAdvancedStatsPage.counterSelected = function(event, id) {
     var group = groupSelect[groupSelect.selectedIndex].value;
     
     var selected = [];
+    var units = [];
     var index = 0;
     for (var i = 0; i < select.options.length; i++) {
-        if (select.options[i].selected)
-            selected[index++] = select.options[i].value;
+        if (select.options[i].selected) {
+            selected[index] = select.options[i].value;
+            units[index] = select.options[i].columnUnit ? select.options[i].columnUnit : null;
+            index++;
+        }
     }
     if (selected.length == 0)
         return;
     
     var startTime = document.getElementById("input-start-time" + id).value;
     var endTime = document.getElementById("input-end-time" + id).value;
-    ZaGlobalAdvancedStatsPage.plotQuickChart(id, hostname, group, selected, startTime, endTime);
+    ZaGlobalAdvancedStatsPage.plotQuickChart(id, hostname, group, selected, units, startTime, endTime);
 }
 
 ZaGlobalAdvancedStatsPage.showhide = function(id) {

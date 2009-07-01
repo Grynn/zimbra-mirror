@@ -42,10 +42,10 @@ ZaGlobalMessageVolumePage.prototype.showMe =  function(refresh) {
 	if(refresh) {
 		this.setObject();
 	}
-    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-volume-48hours', 'zmmtastats', [ 'mta_volume' ], 'now-48h', 'now');
-    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-volume-30days', 'zmmtastats', [ 'mta_volume' ], 'now-30d', 'now');
-    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-volume-60days', 'zmmtastats', [ 'mta_volume' ], 'now-60d', 'now');
-    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-volume-year', 'zmmtastats', [ 'mta_volume' ], 'now-1y', 'now');
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-volume-48hours', 'zmmtastats', [ 'mta_volume' ], [ 'bytes/s' ], 'now-48h', 'now');
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-volume-30days',  'zmmtastats', [ 'mta_volume' ], [ 'bytes/s' ], 'now-30d', 'now');
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-volume-60days',  'zmmtastats', [ 'mta_volume' ], [ 'bytes/s' ], 'now-60d', 'now');
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-volume-year',    'zmmtastats', [ 'mta_volume' ], [ 'bytes/s' ], 'now-1y',  'now');
 }
 
 ZaGlobalMessageVolumePage.prototype.setObject =

@@ -61,10 +61,10 @@ ZaServerDiskStatsPage.prototype.showMe =  function(refresh) {
         for (var i = 0; i < this._disks.length; i++) {
             columns.push(this._disks[i] + "::disk_pct_used");
         }
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-48hours', item.name, 'df.csv', columns, 'now-48h', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-30days', item.name, 'df.csv', columns, 'now-30d', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-60days', item.name, 'df.csv', columns, 'now-60d', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-year', item.name, 'df.csv', columns, 'now-1y', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-48hours', item.name, 'df.csv', columns, null, 'now-48h', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-30days',  item.name, 'df.csv', columns, null, 'now-30d', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-60days',  item.name, 'df.csv', columns, null, 'now-60d', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-disk-stat-year',    item.name, 'df.csv', columns, null, 'now-1y',  'now');
 	}
 }
 

@@ -44,10 +44,10 @@ ZaServerSpamActivityPage.prototype.showMe =  function(refresh) {
 	}
 	if (this._currentObject) {
 	    var item = this._currentObject;
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-48hours', item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], 'now-48h', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-30days', item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], 'now-30d', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-60days', item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], 'now-60d', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-year', item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], 'now-1y', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-48hours', item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filter/s' ], 'now-48h', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-30days',  item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filter/s' ], 'now-30d', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-60days',  item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filter/s' ], 'now-60d', 'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-year',    item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filter/s' ], 'now-1y',  'now');
     }
 }
 
