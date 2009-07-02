@@ -86,75 +86,75 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
         Folder.create(ID_FOLDER_ARCHIVE, this, userRoot, ARCHIVE_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, Flag.BITMASK_ARCHIVED, MailItem.DEFAULT_COLOR_RGB, null, null);
     }
-    
+
     @Override synchronized void ensureSystemFolderExists() throws ServiceException {
-    	super.ensureSystemFolderExists();
-		Folder f = null;
-		try {
-			f = getFolderById(ID_FOLDER_ARCHIVE);
-		} catch (MailServiceException.NoSuchItemException x) {}
-		if (f == null) {
-	        CreateFolder redo = new CreateFolder(getId(), ARCHIVE_PATH, ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, Flag.BITMASK_ARCHIVED, MailItem.DEFAULT_COLOR, null);
-	        redo.setFolderId(ID_FOLDER_ARCHIVE);
-	        redo.start(System.currentTimeMillis());
+        super.ensureSystemFolderExists();
+        Folder f = null;
+        try {
+            f = getFolderById(ID_FOLDER_ARCHIVE);
+        } catch (MailServiceException.NoSuchItemException x) {}
+        if (f == null) {
+            CreateFolder redo = new CreateFolder(getId(), ARCHIVE_PATH, ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, Flag.BITMASK_ARCHIVED, MailItem.DEFAULT_COLOR, null);
+            redo.setFolderId(ID_FOLDER_ARCHIVE);
+            redo.start(System.currentTimeMillis());
             createFolder(new OfflineContext(redo), ARCHIVE_PATH, ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, Flag.BITMASK_ARCHIVED, MailItem.DEFAULT_COLOR, null);
-		}
-	}
+        }
+    }
 
     @Override public MailSender getMailSender() {
         return new OfflineMailSender();
     }
-    
-    @Override public boolean isAutoSyncDisabled() {
-    	try {
-    		return getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) < 0;
-    	} catch (ServiceException x) {
-    		OfflineLog.offline.error(x);
-    	}
-    	return true;
-	}
 
-	@Override protected void syncOnTimer() {
-		sync(false, false);
-	}
-	
+    @Override public boolean isAutoSyncDisabled() {
+        try {
+            return getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) < 0;
+        } catch (ServiceException x) {
+            OfflineLog.offline.error(x);
+        }
+        return true;
+    }
+
+    @Override protected void syncOnTimer() {
+        sync(false, false);
+    }
+
     public long getSyncFrequency() throws ServiceException {
         long syncFreq = getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ);
         if (syncFreq > 0)
-        	return syncFreq;
+            return syncFreq;
         else if (syncFreq == 0)
-        	return OfflineConstants.MIN_SYNC_FREQ;
+            return OfflineConstants.MIN_SYNC_FREQ;
         else
-        	return OfflineConstants.DEFAULT_SYNC_FREQ;
+            return OfflineConstants.DEFAULT_SYNC_FREQ;
     }
-    
+
     public boolean isPushEnabled() throws ServiceException {
-    	return getRemoteServerVersion().isAtLeast(MIN_ZCS_VER_PUSH) && getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) == 0;
+        return getRemoteServerVersion().isAtLeast(MIN_ZCS_VER_PUSH) && getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) == 0;
     }
-    
-	public void sync(boolean isOnRequest, boolean isDebugTraceOn) {
-		try {
-			mMailboxSync.sync(isOnRequest, isDebugTraceOn);
-		} catch (ServiceException x) {
-			if (x.getCode().equals(ServiceException.AUTH_EXPIRED)) {
-				OfflineLog.offline.info("auth token expired; reauth and rerun sync.");
-				try {
-					mMailboxSync.sync(isOnRequest, isDebugTraceOn);
-				} catch (ServiceException e) {
-					OfflineLog.offline.error(e);
-				}
-			} else
-	 			OfflineLog.offline.error(x);
-		}
+
+    public void sync(boolean isOnRequest, boolean isDebugTraceOn) {
+        try {
+            mMailboxSync.sync(isOnRequest, isDebugTraceOn);
+        } catch (ServiceException x) {
+            if (x.getCode().equals(ServiceException.AUTH_EXPIRED)) {
+                OfflineLog.offline.info("auth token expired; reauth and rerun sync.");
+                try {
+                    mMailboxSync.sync(isOnRequest, isDebugTraceOn);
+                } catch (ServiceException e) {
+                    OfflineLog.offline.error(e);
+                }
+            } else
+                OfflineLog.offline.error(x);
+        }
     }
 
     MailboxSync getMailboxSync() {
-    	return mMailboxSync;
+        return mMailboxSync;
     }
 
     public ZAuthToken getAuthToken() throws ServiceException {
-    	ZAuthToken authToken = OfflineSyncManager.getInstance().lookupAuthToken(getAccount());
-    	if (authToken == null) {
+        ZAuthToken authToken = OfflineSyncManager.getInstance().lookupAuthToken(getAccount());
+        if (authToken == null) {
             String passwd = getAccount().getAttr(OfflineProvisioning.A_offlineRemotePassword);
 
             Element request = new Element.XMLElement(AccountConstants.AUTH_REQUEST);
@@ -165,10 +165,10 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             // authToken = response.getAttribute(AccountConstants.E_AUTH_TOKEN);
             authToken = new ZAuthToken(response.getElement(AccountConstants.E_AUTH_TOKEN), false);
             long expires = System.currentTimeMillis() + response.getAttributeLong(AccountConstants.E_LIFETIME);
-    		
+
             OfflineSyncManager.getInstance().authSuccess(getAccount(), authToken, expires);
-    	}
-    	return authToken;
+        }
+        return authToken;
     }
 
     String getRemoteUser() throws ServiceException {
@@ -308,7 +308,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
 
                 // copy blob to new id (note that item.getSavedSequence() may change again later)
                 try {
-                    MailboxBlob newBlob = StoreManager.getInstance().link(mblob.getBlob(), this, newId, item.getSavedSequence());
+                    MailboxBlob newBlob = StoreManager.getInstance().link(mblob, this, newId, item.getSavedSequence());
                     markOtherItemDirty(newBlob);
                 } catch (IOException ioe) {
                     throw ServiceException.FAILURE("could not link blob for renumbered item (" + id + " => " + newId + ")", ioe);
@@ -335,12 +335,12 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
 
             success = true;
         } catch (MailServiceException.NoSuchItemException nsie) {
-        	//item deleted from local before sync completes renumbering
-        	OfflineLog.offline.info("item %d deleted from local db before sync completes renumbering to %d", id, newId);
-        	TypedIdList tombstones = new TypedIdList();
-        	tombstones.add(type, newId);
-        	DbMailItem.writeTombstones(this, tombstones);
-        	success = true;
+            //item deleted from local before sync completes renumbering
+            OfflineLog.offline.info("item %d deleted from local db before sync completes renumbering to %d", id, newId);
+            TypedIdList tombstones = new TypedIdList();
+            tombstones.add(type, newId);
+            DbMailItem.writeTombstones(this, tombstones);
+            success = true;
             return false;
         } finally {
             endTransaction(success);
@@ -392,7 +392,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
 
     synchronized void syncMetadata(OperationContext octxt, int itemId, byte type, int folderId, int flags, long tags, byte color)
-    		throws ServiceException {
+    throws ServiceException {
         boolean success = false;
         String oldFolderPath = null;
         try {
@@ -469,18 +469,18 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
      */
     
     @Override
-	void trackChangeNew(MailItem item) throws ServiceException {
+    void trackChangeNew(MailItem item) throws ServiceException {
         if (!isTrackingSync() || !PushChanges.PUSH_TYPES_SET.contains(item.getType()))
             return;
-        
+
         DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_CONFLICT);
     }
 	
     @Override
-	void trackChangeModified(MailItem item, int changeMask) throws ServiceException {
-    	if (!isTrackingSync() || !PushChanges.PUSH_TYPES_SET.contains(item.getType()))
+    void trackChangeModified(MailItem item, int changeMask) throws ServiceException {
+        if (!isTrackingSync() || !PushChanges.PUSH_TYPES_SET.contains(item.getType()))
             return;
-    	
+
         int filter = 0;
         switch (item.getType()) {
             case MailItem.TYPE_MESSAGE:       filter = PushChanges.MESSAGE_CHANGES;     break;
@@ -621,53 +621,53 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     	OfflineAccount acct = getOfflineAccount();
     	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH) + "/~"+ URLUtil.urlEscape(item.getPath()) + "?lbfums=1";
     	try {
-    		Pair<Header[], HttpInputStream> resp = 
-    			UserServlet.putMailItem(getAuthToken(), 
-    											 url, 
-    											 item, 
-    											 acct.getProxyHost(), 
-    											 acct.getProxyPort(), 
-    											 acct.getProxyUser(), 
-    											 acct.getProxyPass());
-    		int id = 0, version = 0;
-    		for (Header h : resp.getFirst()) {
-    			if (h.getName().equals("X-Zimbra-ItemId"))
-    				id = Integer.parseInt(h.getValue());
-    			else if (h.getName().equals("X-Zimbra-Version"))
-    				version = Integer.parseInt(h.getValue());
-    		}
-    		return new Pair<Integer,Integer>(id, version);
+    	    Pair<Header[], HttpInputStream> resp = 
+    	        UserServlet.putMailItem(getAuthToken(), 
+    	                url, 
+    	                item, 
+    	                acct.getProxyHost(), 
+    	                acct.getProxyPort(), 
+    	                acct.getProxyUser(), 
+    	                acct.getProxyPass());
+    	    int id = 0, version = 0;
+    	    for (Header h : resp.getFirst()) {
+    	        if (h.getName().equals("X-Zimbra-ItemId"))
+    	            id = Integer.parseInt(h.getValue());
+    	        else if (h.getName().equals("X-Zimbra-Version"))
+    	            version = Integer.parseInt(h.getValue());
+    	    }
+    	    return new Pair<Integer,Integer>(id, version);
     	} catch (IOException e) {
-            throw ServiceException.PROXY_ERROR(e, url);
+    	    throw ServiceException.PROXY_ERROR(e, url);
     	}
     }
-    
+
     static final String VERSIONS_KEY = "VERSIONS";
-    
+
     public int getLastSyncedVersionForMailItem(int id) throws ServiceException {
         Metadata config = getConfig(null, VERSIONS_KEY);
         if (config == null) {
-        	config = new Metadata();
-        	setConfig(null, VERSIONS_KEY, config);
+            config = new Metadata();
+            setConfig(null, VERSIONS_KEY, config);
         }
-    	return (int)config.getLong("" + id, 0);
+        return (int) config.getLong("" + id, 0);
     }
-    
+
     public void setSyncedVersionForMailItem(String id, int ver) throws ServiceException {
         Metadata config = getConfig(null, VERSIONS_KEY);
         if (config == null)
-        	config = new Metadata();
+            config = new Metadata();
 
         config.put(id, ver);
-    	setConfig(null, VERSIONS_KEY, config);
+        setConfig(null, VERSIONS_KEY, config);
     }
-    
+
     public boolean pushNewFolder(OperationContext octxt, int id) throws ServiceException {
         if ((getChangeMask(octxt, id, MailItem.TYPE_FOLDER) & Change.MODIFIED_CONFLICT) == 0)
             return false;
         return PushChanges.syncFolder(this, id);
     }
     
-	@Override
-	protected void updateRssDataSource(Folder folder) {} //bug 38129, to suppress creation of datasource
+    @Override
+    protected void updateRssDataSource(Folder folder) {} //bug 38129, to suppress creation of datasource
 }
