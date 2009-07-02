@@ -204,18 +204,19 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.ATTACHMENTS_TAB_ATTRS, ZaServerXFormView.ATTACHMENTS_TAB_RIGHTS)) {
     	_tab2 = ++this.TAB_INDEX;
         tabBarChoices.push ({value:2, label:ZaMsg.NAD_Tab_Attachments});
-        var case2 = 	{type:_ZATABCASE_, caseKey:_tab2, id:"gs_form_attachment_tab", numCols:2, colSizes: ["50%","50%"], items:[
- 				{type: _GROUP_,  id:"attachment_settings", width: "98%", numCols: 2, colSpan:2, colSizes:[100, "*"], items: [
+        var case2 = 	
+        {type:_ZATABCASE_, caseKey:_tab2, id:"gs_form_attachment_tab", numCols:2, colSizes: ["50%","50%"], items:[
+ 				{type: _GROUP_,  id:"attachment_settings", width: "98%", numCols: 2, colSpan:2, colSizes:[250, "*"], items: [
 					{ref:ZaGlobalConfig.A_zimbraAttachmentsBlocked, type: _CHECKBOX_,
 				  		label: ZaMsg.NAD_GlobalRemoveAllAttachments,
 				  		trueValue: "TRUE", falseValue: "FALSE"
 					},
 					{ ref: ZaGlobalConfig.A_zimbraMtaBlockedExtensionWarnRecipient, type: _CHECKBOX_,
-					  label: ZaMsg.zimbraMtaBlockedExtensionWarnRecipient,
-					  trueValue:"TRUE", falseValue:"FALSE"
-					}
-				 ]},
-				 {type:_GROUP_, width: "98%", numCols: 1,
+				  		label: ZaMsg.zimbraMtaBlockedExtensionWarnRecipient,
+				  		trueValue:"TRUE", falseValue:"FALSE"
+					}					
+				]},
+				{type:_GROUP_, width: "98%", numCols: 1,
 					items:[
 					    {type:_SPACER_, height:"10"},
         				{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "96%",  //height: 400,
