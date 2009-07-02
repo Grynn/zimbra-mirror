@@ -98,9 +98,9 @@ public class ZmailBean extends MailBean {
 
 	    JspProvStub stub = JspProvStub.getInstance();
 	    if (isAllOK()) {                
+                attrs.put(OfflineConstants.A_offlineAccountFlavor, accountFlavor);
 		if (verb.isAdd()) {
 		    stub.createOfflineAccount(accountName, email, attrs);
-		    attrs.put(OfflineConstants.A_offlineAccountFlavor, accountFlavor);
 		} else {
 		    if (isEmpty(accountId)) {
 			setError(getMessage("AccountIdMissing"));

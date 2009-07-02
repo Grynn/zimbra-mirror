@@ -21,6 +21,7 @@ import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.DataSource.ConnectionType;
@@ -42,8 +43,8 @@ public class XmailBean extends MailBean {
     protected String smtpUsername = "";
     protected String smtpPassword = "";
 
-    protected boolean contactSyncEnabled = false;
     protected boolean calendarSyncEnabled = false;
+    protected boolean contactSyncEnabled = false;
     protected boolean leaveOnServer = false;
     protected boolean syncAllServerFolders = true;
 
@@ -52,6 +53,7 @@ public class XmailBean extends MailBean {
     private static final String adomain = "aol.com";
     private static final String gdomain = "gmail.com";
     private static final String hdomain = "hotmail.com";
+    private static final String ldomain = "live.com";
     private static final String mdomain = "msn.com";
     private static final String ydomain = "yahoo.com";
     private static final String yjpdomain = "yahoo.co.jp";
@@ -60,15 +62,19 @@ public class XmailBean extends MailBean {
 
     @Override
     protected void reload() {
+        Account account;
         DataSource ds;
 
         try {
+            account = JspProvStub.getInstance().getOfflineAccount(accountId);
             ds = JspProvStub.getInstance().getOfflineDataSource(accountId);
         } catch (ServiceException x) {
             setError(x.getMessage());
             return;
         }
-        accountFlavor = ds.getAttr(OfflineConstants.A_offlineAccountFlavor);
+        accountFlavor = account.getAttr(OfflineConstants.A_offlineAccountFlavor);
+        if (accountFlavor == null)
+            accountFlavor = ds.getAttr(OfflineConstants.A_offlineAccountFlavor);
         accountName = ds.getName();
         username = ds.getUsername();
         password = JspConstants.MASKED_PASSWORD;
@@ -153,8 +159,8 @@ public class XmailBean extends MailBean {
                     }
                 }
                 if (isAllOK()) {
-                	dsAttrs.put(OfflineConstants.A_zimbraDataSourceAccountSetup, Provisioning.TRUE);
-                	
+                    dsAttrs.put(OfflineConstants.A_offlineAccountFlavor, accountFlavor);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceAccountSetup, Provisioning.TRUE);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled,
                         Provisioning.TRUE);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceUsername,
@@ -249,7 +255,7 @@ public class XmailBean extends MailBean {
                         setError(getMessage("AOLMustUseImap"));
                     }
                 } else if (email.endsWith('@' + hdomain) ||
-                    email.endsWith('@' + mdomain) || email.endsWith('@' + mdomain)) {
+                    email.endsWith('@' + ldomain) || email.endsWith('@' + mdomain)) {
                     if (dsType == DataSource.Type.live || dsType == DataSource.Type.pop3) {
                         dsAttrs.put(Provisioning.A_zimbraDataSourceDomain,
                             hdomain);
@@ -258,8 +264,6 @@ public class XmailBean extends MailBean {
                         setError(getMessage("LiveMustUseLiveOrPop"));
                     }
                 }
-                dsAttrs.put(OfflineConstants.A_offlineAccountFlavor, accountFlavor);
-                
                 if (isCalendarSyncSupported())
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceCalendarFolderId, ZFolder.ID_CALENDAR);
             }

@@ -804,7 +804,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
         attrs.put(A_offlineGalAccountSyncToken, "");
         attrs.put(A_offlineGalAccountLastFullSync, "0");
-
+        attrs.put(A_offlineAccountFlavor, "Gal");
         setDefaultAccountAttributes(attrs);
 
         OfflineAccount galAcct = (OfflineAccount)createAccountInternal(name, id, attrs, true);
@@ -844,6 +844,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_sn, id);
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
         attrs.put(A_offlineMountpointProxyAccountId, grantee.getId());        
+        attrs.put(A_offlineAccountFlavor, "Granter");
         setDefaultAccountAttributes(attrs);
         
         OfflineAccount acct = new OfflineAccount(name, id, attrs, mDefaultCos.getAccountDefaults(), getLocalAccount(), this);
@@ -868,7 +869,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_displayName, LOCAL_ACCOUNT_DISPLAYNAME);
         attrs.put(A_zimbraPrefFromDisplay, LOCAL_ACCOUNT_DISPLAYNAME);
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
-
+        attrs.put(A_offlineAccountFlavor, "Local");
         setDefaultAccountAttributes(attrs);
 
         return createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true);
@@ -903,6 +904,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     private synchronized Account createAccountInternal(String emailAddress, String accountId, Map<String, Object> attrs, boolean initMailbox, boolean skipAttrMgr) throws ServiceException {
+        String flavor = (String)attrs.get(A_offlineAccountFlavor);
         Map<String,Object> immutable = new HashMap<String, Object>();
         for (String attr : AttributeManager.getInstance().getImmutableAttrs())
             if (attrs.containsKey(attr))
@@ -915,6 +917,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
 
         attrs.putAll(immutable);
+        attrs.put(A_offlineAccountFlavor, flavor);
 
         // create account entry in database
         DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs, false);
@@ -1195,6 +1198,33 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	return null;
         }
         
+        String flavor = attrs == null ? null : (String)attrs.get(A_offlineAccountFlavor);
+        
+        if (flavor == null) {
+            if (keyType == AccountBy.id && key.equals(LOCAL_ACCOUNT_ID)) {
+                flavor = "Local";
+            } else if (acct != null) {
+                try {
+                    String dsName = (String)attrs.get(A_offlineDataSourceName);
+                    String uri = (String)attrs.get(A_offlineRemoteServerUri);
+
+                    if (dsName != null) {
+                        DataSource ds = acct.getDataSourceByName(dsName);
+                        
+                        if (ds != null)
+                            flavor = ds.getAttr(A_offlineAccountFlavor);
+                    } else if (uri != null) {
+                        flavor = "Zimbra";
+                    }
+                } catch (Exception e) {
+                }
+            }
+            if (flavor != null) {
+                setAccountAttribute(acct, A_offlineAccountFlavor, flavor);
+                attrs.put(A_offlineAccountFlavor, flavor);
+            }
+        }
+       
         if (includeSyncStatus) {
 	        //There are attributes we don't persist into DB.  This is where we add them:
 	    	attrs.put(OfflineConstants.A_offlineSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(name).toString());
