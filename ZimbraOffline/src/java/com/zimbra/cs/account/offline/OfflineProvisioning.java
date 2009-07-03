@@ -290,11 +290,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     private void acceptSSLCertAlias(String sslCertAlias) throws ServiceException {
-		try {
-			CustomTrustManager.getInstance().acceptCertificates(sslCertAlias);
-		} catch (GeneralSecurityException x) {
-			throw RemoteServiceException.SSLCERT_NOT_ACCEPTED(x.getMessage(), x);
-		}
+	try {
+            CustomTrustManager.getInstance().acceptCertificates(sslCertAlias);
+        } catch (GeneralSecurityException x) {
+            throw RemoteServiceException.SSLCERT_NOT_ACCEPTED(x.getMessage(), x);
+        }
     }
 
     private void revalidateRemoteLogin(OfflineAccount acct, Map<String, ? extends Object> changes) throws ServiceException {
@@ -714,6 +714,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
 
+        attrs.put(A_zimbraFeatureCalendarEnabled, dsAttrs.get(A_zimbraDataSourceCalendarSyncEnabled));
+        attrs.put(A_zimbraFeatureContactsEnabled, dsAttrs.get(A_zimbraDataSourceContactSyncEnabled));
+        attrs.put(A_zimbraFeatureBriefcasesEnabled, FALSE);
+        attrs.put(A_zimbraFeatureIMEnabled, FALSE);
+        attrs.put(A_zimbraFeatureTasksEnabled, FALSE);
+
         setDefaultAccountAttributes(attrs);
         
         if (testDs.isYahoo()) {
@@ -853,6 +859,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     private static final String LOCAL_ACCOUNT_UID = "local";
+    private static final String LOCAL_ACCOUNT_FLAVOR = "Local";
     private static final String LOCAL_ACCOUNT_NAME = LOCAL_ACCOUNT_UID + "@host.local";
     private static final String LOCAL_ACCOUNT_DISPLAYNAME = "Loading...";
 
@@ -869,7 +876,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_displayName, LOCAL_ACCOUNT_DISPLAYNAME);
         attrs.put(A_zimbraPrefFromDisplay, LOCAL_ACCOUNT_DISPLAYNAME);
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
-        attrs.put(A_offlineAccountFlavor, "Local");
+        attrs.put(A_offlineAccountFlavor, LOCAL_ACCOUNT_FLAVOR);
         setDefaultAccountAttributes(attrs);
 
         return createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true);
@@ -878,7 +885,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public synchronized Account getLocalAccount() throws ServiceException {
     	Account account = get(AccountBy.id, LOCAL_ACCOUNT_ID);
     	if (account == null)
-    		account = createLocalAccount();
+    	    account = createLocalAccount();
     	
     	String uri = "http://127.0.0.1:" + LC.zimbra_admin_service_port.value() + "/desktop/login.jsp?at=" + OfflineLC.zdesktop_installation_key.value();    	
     	String webappUri = account.getAttr(A_offlineWebappUri, null);
@@ -1063,22 +1070,22 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     public static String getSanitizedValue(String key, String value) throws ServiceException {
     	if (value == null) {
-    		return null;
-    	}
-    	if (key.equalsIgnoreCase(A_offlineRemotePassword)) {
-    		return encryptData(value);
-    	}
-    	return value;
+            return null;
+        }
+        if (key.equalsIgnoreCase(A_offlineRemotePassword)) {
+            return encryptData(value);
+        }
+        return value;
     }
 
     public static void addToMap(Map<String,Object> attrs, String key, String value) {
     	if (value != null && key.equalsIgnoreCase(A_offlineRemotePassword)) {
-    		try {
-    			value = decryptData(value);
-    		} catch (ServiceException x) {
-    			OfflineLog.offline.warn("Can't decrypt remote password");
-    		}
-    	}
+            try {
+                value = decryptData(value);
+            } catch (ServiceException x) {
+                OfflineLog.offline.warn("Can't decrypt remote password");
+            }
+        }
     	
         Object existing = attrs.get(key);
         if (existing == null) {
@@ -1197,34 +1204,28 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 DbOfflineDirectory.deleteDirectoryEntry(EntryType.ACCOUNT, acct.getId());
         	return null;
         }
-        
-        String flavor = attrs == null ? null : (String)attrs.get(A_offlineAccountFlavor);
-        
-        if (flavor == null) {
-            if (keyType == AccountBy.id && key.equals(LOCAL_ACCOUNT_ID)) {
-                flavor = "Local";
-            } else if (acct != null) {
-                try {
-                    String dsName = (String)attrs.get(A_offlineDataSourceName);
-                    String uri = (String)attrs.get(A_offlineRemoteServerUri);
 
-                    if (dsName != null) {
-                        DataSource ds = acct.getDataSourceByName(dsName);
-                        
-                        if (ds != null)
-                            flavor = ds.getAttr(A_offlineAccountFlavor);
-                    } else if (uri != null) {
-                        flavor = "Zimbra";
-                    }
-                } catch (Exception e) {
-                }
+        String flavor = attrs == null ? null : (String)attrs.get(A_offlineAccountFlavor);
+
+        // upgrade from 1.0
+        if (acct != null && flavor == null) {
+            if (isLocalAccount(acct)) {
+                flavor = LOCAL_ACCOUNT_FLAVOR;
+            } else if (isDataSourceAccount(acct)) {
+                DataSource ds = getDataSource(acct);
+
+                flavor = ds.getAttr(A_offlineAccountFlavor);
+                attrs.put(A_zimbraFeatureCalendarEnabled, ds.getAttr(A_zimbraDataSourceCalendarSyncEnabled));
+                attrs.put(A_zimbraFeatureContactsEnabled, ds.getAttr(A_zimbraDataSourceContactSyncEnabled));
+            } else if (isZcsAccount(acct)) {
+                flavor = "Zimbra";
             }
             if (flavor != null) {
                 setAccountAttribute(acct, A_offlineAccountFlavor, flavor);
                 attrs.put(A_offlineAccountFlavor, flavor);
             }
         }
-       
+
         if (includeSyncStatus) {
 	        //There are attributes we don't persist into DB.  This is where we add them:
 	    	attrs.put(OfflineConstants.A_offlineSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(name).toString());
@@ -1240,10 +1241,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
     	
     	if (acct != null) {
-    		acct.setAttrs(attrs);
-    	} else {
-        	acct = new OfflineAccount(name, (String) attrs.get(A_zimbraId), attrs, mDefaultCos.getAccountDefaults(),
-        			keyType == AccountBy.id && key.equals(LOCAL_ACCOUNT_ID) ? null : getLocalAccount(), this);
+            acct.setAttrs(attrs);
+        } else {
+            acct = new OfflineAccount(name, (String) attrs.get(A_zimbraId),
+                attrs, mDefaultCos.getAccountDefaults(),
+                keyType == AccountBy.id && key.equals(LOCAL_ACCOUNT_ID) ? null :
+                getLocalAccount(), this);
             mAccountCache.put(acct);
         }
 
@@ -2223,6 +2226,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             mHasDirtyAccounts |= markChanged;
 
             AttributeManager.getInstance().postModify(attrs, ds, context, false, true);
+        }
+        if (!isLocalAccount(account) && isDataSourceAccount(account)) {
+            setAccountAttribute(account, A_zimbraFeatureCalendarEnabled, ds.getAttr(A_zimbraDataSourceCalendarSyncEnabled));
+            setAccountAttribute(account, A_zimbraFeatureContactsEnabled, ds.getAttr(A_zimbraDataSourceContactSyncEnabled));
         }
     }
 
