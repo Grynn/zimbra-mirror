@@ -36,8 +36,6 @@ function() {
 	this._allowFlag = this.getUserProperty("emailReminder_allowFlag") == "true";
 	this._allowDrag = this.getUserProperty("emailReminder_allowDrag") == "true";
 	this.ereminder_showInCompose = this.getUserProperty("ereminder_showInCompose") == "true";
-	if (this.ereminder_showInCompose)
-		this._addReminderBtnToCompose();
 };
 
 com_zimbra_emailreminder.prototype.getEmailFollowupFolderId =
@@ -194,33 +192,27 @@ function(subject) {
 	this._erDialog.popup();
 };
 
-com_zimbra_emailreminder.prototype._addReminderBtnToCompose = function() {
-	if (!appCtxt.get(ZmSetting.MAIL_ENABLED))
-		this._toolbar = true;
+com_zimbra_emailreminder.prototype.initializeToolbar = function(app, toolbar, controller, viewId) {
+	if(viewId.indexOf("COMPOSE") >=0 && this.ereminder_showInCompose)
+		this._addReminderBtnToCompose(toolbar, controller);
+};
 
-	if (this._toolbar)
-		return;
-
-	this._composerCtrl = AjxDispatcher.run("GetComposeController");
-	this._composerCtrl._emailReminderZimlet = this;
-	if (!this._composerCtrl._toolbar) {
-		// initialize the compose controller's toolbar
-		this._composerCtrl._initializeToolBar();
-	}
-	this._toolbar = this._composerCtrl._toolbar;
+com_zimbra_emailreminder.prototype._addReminderBtnToCompose = function(toolbar, controller) {
+	var ID = "EMAIL_REMINDER";
 	// Add button to toolbar
-	if (!this._toolbar.getButton("EMAIL_REMINDER")) {
-		var btn = this._toolbar.createOp(
-			"EMAIL_REMINDER",
+	if (!toolbar.getButton(ID)) {
+		var btn = toolbar.createOp(
+			ID,
 		{
 			text	: "Send & Remind",
 			tooltip : "Sends email and allows creating reminder for that email",
 			index   : 1,
 			image   : "emailreminder-panelIcon"
 		}
-			);
-
-		btn.addSelectionListener(new AjxListener(this, this._createReminderFromCompose));
+		);
+		toolbar.addOp(ID, 2);
+	    btn.addSelectionListener(new AjxListener(this, this._createReminderFromCompose));
+		this._composerCtrl = controller;
 	}
 };
 

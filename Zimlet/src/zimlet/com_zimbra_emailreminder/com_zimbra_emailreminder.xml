@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_emailreminder" version="0.3" description="Email Reminder">
+<zimlet name="com_zimbra_emailreminder" version="0.7" description="Email Reminder" target="main">
   <include>emailreminder.js</include>
   <includeCSS>emailreminder.css</includeCSS>
   <handlerObject>com_zimbra_emailreminder</handlerObject>
