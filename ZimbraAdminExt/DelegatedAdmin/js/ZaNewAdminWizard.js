@@ -183,8 +183,17 @@ ZaNewAdmin.modifyAdmin = function (tmpObj) {
 
 
 ZaNewAdminWizard = function (parent) {
-    ZaXWizardDialog.call(this, parent, null, com_zimbra_delegatedadmin.title_new_admin_wizard, 
-            (AjxEnv.isIE ? "620px" : "570px"), (AjxEnv.isIE ? "330px" :"320px"),"ZaNewAdminWizard");
+
+    var helpButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.HELP_BUTTON, ZaMsg.TBB_Help, DwtDialog.ALIGN_LEFT, new AjxCallback(this, this._helpButtonListener));
+    var nextButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.NEXT_BUTTON, AjxMsg._next, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.goNext));
+    var prevButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.PREV_BUTTON, AjxMsg._prev, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.goPrev));
+    var finishButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.FINISH_BUTTON, AjxMsg._finish, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.finishWizard));
+    var skipButton = new DwtDialog_ButtonDescriptor(ZaNewAdminWizard.SKIP_BUTTON, com_zimbra_delegatedadmin.btSkip, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.skipWizard));
+    var extraButtons = [helpButton,prevButton,nextButton,skipButton, finishButton];
+
+    ZaXWizardDialog.call(this, parent, null, com_zimbra_delegatedadmin.title_new_admin_wizard,
+            (AjxEnv.isIE ? "620px" : "570px"), (AjxEnv.isIE ? "330px" :"320px"),
+            "ZaNewAdminWizard", extraButtons);
 
     this.newAdminTypesChoices = [
         {value: ZaItem.ACCOUNT, label: com_zimbra_delegatedadmin.type_account },
@@ -208,6 +217,7 @@ ZaNewAdminWizard = function (parent) {
 ZaNewAdminWizard.prototype = new ZaXWizardDialog;
 ZaNewAdminWizard.prototype.constructor = ZaNewAdminWizard;
 ZaXDialog.XFormModifiers["ZaNewAdminWizard"] = [] ;
+ZaNewAdminWizard.SKIP_BUTTON = ++DwtDialog.LAST_BUTTON ;
 
 ZaNewAdminWizard.STEP_INDEX = 1;
 ZaNewAdminWizard.STEP_START = ZaNewAdminWizard.STEP_INDEX ++ ;
@@ -217,7 +227,6 @@ ZaNewAdminWizard.STEP_UI_COMPONENTS = ZaNewAdminWizard.STEP_INDEX ++ ;
 ZaNewAdminWizard.STEP_PROPOSED_GRANTS = ZaNewAdminWizard.STEP_INDEX ++ ;
 ZaNewAdminWizard.STEP_PERMISSION = ZaNewAdminWizard.STEP_INDEX ++ ;
 ZaNewAdminWizard.STEP_FINISH = ZaNewAdminWizard.STEP_INDEX ++ ;
-
 
 //add the new admin button to the new menu list
 ZaNewAdminWizard.initToolbarMethod = function () {
@@ -257,6 +266,7 @@ ZaNewAdminWizard.prototype.popup = function () {
 ZaNewAdminWizard.prototype.goPage = function (pageKey) {
     ZaXWizardDialog.prototype.goPage.call(this, pageKey) ;
     var prev = next = finish = cancel = true ;
+    var skip = false ;
     if (pageKey == ZaNewAdminWizard.STEP_START) {
 		prev = false;
         finish = false ;
@@ -270,6 +280,7 @@ ZaNewAdminWizard.prototype.goPage = function (pageKey) {
     } else if ( pageKey == ZaNewAdminWizard.STEP_FINISH) {
         next  =  false ;
     } else if (pageKey == ZaNewAdminWizard.STEP_PROPOSED_GRANTS) {
+        skip = true ;
         this._localXForm.setInstanceValue(this._containedObject[ZaNewAdmin.A_proposedGrantsList], ZaNewAdmin.A_proposedGrantsList);
     }
 
@@ -277,6 +288,9 @@ ZaNewAdminWizard.prototype.goPage = function (pageKey) {
     this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(next);
     this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(finish);
     this._button[DwtDialog.CANCEL_BUTTON].setEnabled(cancel);
+
+    this._button[ZaNewAdminWizard.SKIP_BUTTON].setVisible (skip) ;
+    this._button[ZaNewAdminWizard.SKIP_BUTTON].setEnabled (skip) ;
 }
 
 /**
@@ -479,7 +493,7 @@ ZaNewAdminWizard.prototype.setProposedGrants = function () {
         domainAdminRight [ZaGrant.A_grantee] = this._containedObject [ZaAccount.A_name] ;
         domainAdminRight [ZaGrant.A_grantee_id] = this._containedObject.id ;
         domainAdminRight [ZaGrant.A_grantee_type] = ZaGrant.GRANTEE_TYPE.grp ;
-        domainAdminRight [ZaGrant.A_right] = "LegacyAdminConsoleDomainAdminRights" ;
+        domainAdminRight [ZaGrant.A_right] = "domainAdminConsoleRights" ;
         domainAdminRight [ZaGrant.A_right_type] = "combo" ;
         domainAdminRight [ZaGrant.A_target] = ZaAccount.getDomain (this._containedObject.name) ;
         domainAdminRight [ZaGrant.A_target_type] = ZaItem.DOMAIN ;
@@ -637,6 +651,15 @@ ZaNewAdminWizard.prototype.finishWizard = function () {
     }
 }
 
+ZaNewAdminWizard.prototype.skipWizard = function () {
+    var cStep = this._containedObject[ZaModel.currentStep] ;
+    //skip button should only be enabled and visible at the STEP_PROPOSED_GRANTS
+    var nextStep ;
+	if (cStep == ZaNewAdminWizard.STEP_PROPOSED_GRANTS) {
+        nextStep = ZaNewAdminWizard.STEP_PERMISSION ;
+        this.goPage(nextStep);
+    }
+}
 
 ZaNewAdminWizard.prototype.setObject = function (entry)  {
     this._containedObject = {};
