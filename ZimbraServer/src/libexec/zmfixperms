@@ -136,7 +136,7 @@ if [ -d ${zimbra_home} ]; then
     chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/.bashrc
   fi
 
-  for i in .zmprov_history .zmmailbox_history .zmpython_history .bash_history; do
+  for i in .jline-com.zimbra.cs.account.ProvUtil.history .jline-com.zimbra.cs.zclient.ZMailboxUtil.history .jline-jython.history .bash_history; do
     if [ ! -f ${zimbra_home}/${i} ]; then
       touch ${zimbra_home}/${i}
     fi
