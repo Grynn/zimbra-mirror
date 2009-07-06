@@ -165,13 +165,34 @@ function() {
                        dataFetcherMethod:ZaRight.prototype.dynSelectRightNames,
                        editable: true
                  },
+                 {ref: ZaGrant.A_allow, id: ZaGrant.A_allow,  type: _RADIO_ , label: com_zimbra_delegatedadmin.Col_allow ,
+                     groupname: "radio_grp_deny_delegate" ,
+                     onChange: ZaGrantDialog.changeDenyAllow ,
+                     visibilityChecks:[],  //bmol: true ,
+                     labelLocation:_RIGHT_ /*, trueValue:"1", falseValue:"0" */},
+                 {type: _GROUP_, colSpan: "*", numCols: 3, colSizes: [165, 20,  "*"],
+                     items: [
+                         {type: _CELL_SPACER_ },    
+                         {ref: ZaGrant.A_canDelegate, id: ZaGrant.A_canDelegate,  type: _CHECKBOX_ ,
+                             label: com_zimbra_delegatedadmin.Col_can_grant ,
+                             visibilityChangeEventSources:[ZaGrant.A_allow] ,
+                             visibilityChecks:[[XForm.checkInstanceValue,ZaGrant.A_allow,"1"]],
+                             labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" }
+                      ]
+                 },
+                 {ref: ZaGrant.A_deny, id: ZaGrant.A_deny, type: _RADIO_ , label: com_zimbra_delegatedadmin.Col_deny ,
+                     groupname: "radio_grp_deny_delegate" ,
+                     onChange: ZaGrantDialog.changeDenyAllow ,
+                     visibilityChecks:[], //bmol: true ,
+                     labelLocation:_RIGHT_ /*, trueValue:"1", falseValue:"0"*/ }
 
+                 /*
                  {ref: ZaGrant.A_deny,  type: _CHECKBOX_ , label: com_zimbra_delegatedadmin.Col_deny ,
                    visibilityChecks:[], bmol: true, 
                    labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" } ,
                  {ref: ZaGrant.A_canDelegate,  type: _CHECKBOX_ , label: com_zimbra_delegatedadmin.Col_can_grant ,
                     visibilityChecks:[],
-                    labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" }
+                    labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" } */
               ]
             }
         ]
@@ -322,6 +343,7 @@ ZaGrantDialog.prototype.grantRight = function (parent, isMore, isGlobalGrant) {
            var obj = this.getObject() ;
            obj [ZaGrant.A_right] = "" ;
            this.setObject (obj) ;
+           this.refresh () ;
         }else{
             this.popdown();
         }
@@ -446,6 +468,7 @@ ZaGrantDialog.prototype.editRightMethod = function (args) {
         var obj = this.getObject() ;
         obj [ZaGrant.A_right] = "" ;
         this.setObject (obj) ;
+        this.refresh();
     } else {
         this.popdown () ;
     }
@@ -580,5 +603,40 @@ ZaGrantDialog.prototype.isGrantExists = function (args) {
     }
 
     return -1 ; //doesn't exist at all
+}
+
+ZaGrantDialog.changeDenyAllow = function (value, event, form) {
+    var ref = this.getRef () ;
+//    console.log (ref + "=" + value) ;
+    //set the instance value
+    if (ref == ZaGrant.A_allow) {
+        this.setInstanceValue ("1") ;
+        this.setInstanceValue ("0", ZaGrant.A_deny) ;
+    } else if (ref == ZaGrant.A_deny) {
+        this.setInstanceValue ("1") ;
+        this.setInstanceValue ("0", ZaGrant.A_allow) ;
+        this.setInstanceValue ("0", ZaGrant.A_canDelegate) ;
+    }
+}
+
+//this function is used to make sure the deny/allow radio group can be displayed properly,
+// both at the initialization time and edit time
+ZaGrantDialog.prototype.refresh = function () {
+    var form = this._localXForm ;
+    form.refresh () ; //radio button was not properly set after the refresh, so we refresh here first
+    var instance = form.getInstance () ;
+
+    var isDeny = instance [ZaGrant.A_deny] ;
+    var canDelegated = instance [ZaGrant.A_canDelegate] ;
+
+    if (isDeny == "1") {
+        var denyItem = form.getItemsById(ZaGrant.A_deny) [0] ;
+        denyItem.getElement().checked = true ;
+        form.setInstanceValue ("0", ZaGrant.A_allow) ;
+    } else { //it is allow if not deny
+        var allowItem = form.getItemsById(ZaGrant.A_allow) [0] ;
+        allowItem.getElement().checked = true ;
+        form.setInstanceValue ("1", ZaGrant.A_allow) ;
+    }
 }
 

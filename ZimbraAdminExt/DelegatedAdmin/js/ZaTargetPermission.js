@@ -211,6 +211,7 @@ ZaTargetPermission.grantListItem = {
             {id: ZaGrant.A_grantee_type, type:_LIST_, ref:  ZaGrant.A_grantee_type, required: true, choices: ZaGrant.GRANT_TYPE},
             {id: ZaGrant.A_right, type: _STRING_, ref:  ZaGrant.A_right, required: true },
             {id: ZaGrant.A_canDelegate, type:_ENUM_, ref: ZaGrant.A_canDelegate, choices:ZaModel.BOOLEAN_CHOICES2 },    
+            {id: ZaGrant.A_deny, type:_ENUM_, ref: ZaGrant.A_allow, choices:ZaModel.BOOLEAN_CHOICES2 },           
             {id: ZaGrant.A_deny, type:_ENUM_, ref: ZaGrant.A_deny, choices:ZaModel.BOOLEAN_CHOICES2 }
         ]
     }
@@ -547,6 +548,7 @@ function (by) {
     obj.setAttrs.all = true ;
     formPage.grantRightDlg.setObject(obj);
 	formPage.grantRightDlg.popup();
+    formPage.grantRightDlg.refresh ();
 }
 
 ZaTargetPermission.revokeButtonListener = function () {
@@ -579,14 +581,14 @@ ZaTargetPermission.editButtonListener = function (by, isGlobalGrant) {
     var formPage = form.parent;
     var selectedGrant = form.getItemsById (ZaGrant.A2_grantsList) [0].getSelection() ;
     if (selectedGrant && selectedGrant.length == 1) {
-        if(!formPage.editRigthDlg) {
-            formPage.editRigthDlg = new ZaGrantDialog (
+        if(!formPage.editRightDlg) {
+            formPage.editRightDlg = new ZaGrantDialog (
                     ZaApp.getInstance().getAppCtxt().getShell(),
                     ZaApp.getInstance(), com_zimbra_delegatedadmin.Title_edit_rights, by, true);
         }
 
-        formPage.editRigthDlg.registerCallback(ZaGrantDialog.EDIT_FINISH_BUTTON,
-                ZaGrantDialog.prototype.editRightAndFinish, formPage.editRigthDlg, 
+        formPage.editRightDlg.registerCallback(ZaGrantDialog.EDIT_FINISH_BUTTON,
+                ZaGrantDialog.prototype.editRightAndFinish, formPage.editRightDlg,
                 [form, selectedGrant[0], isGlobalGrant]);
 
         var obj = ZaUtil.deepCloneObject (selectedGrant[0], ["_evtMgr"]);
@@ -599,8 +601,9 @@ ZaTargetPermission.editButtonListener = function (by, isGlobalGrant) {
 
 //        obj.setAttrs = {} ;
 //        obj.setAttrs.all = true ;  
-        formPage.editRigthDlg.setObject(obj);
-        formPage.editRigthDlg.popup();
+        formPage.editRightDlg.setObject(obj);
+        formPage.editRightDlg.popup();
+        formPage.editRightDlg.refresh ();
     } else {
         ZaApp.getInstance().getCurrentController().popupMsgDialog (
                 com_zimbra_delegatedadmin.no_grant_selected_msg) ;

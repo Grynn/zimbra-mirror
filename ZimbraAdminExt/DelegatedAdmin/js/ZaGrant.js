@@ -34,7 +34,8 @@ ZaGrant.A_grantee_id = "grantee_id" ;
 ZaGrant.A_grantee_type = "grantee_type" ;
 ZaGrant.A_right = "right" ;
 ZaGrant.A_deny = "deny" ;
-ZaGrant.A_canDelegate = "canDelegate";                       
+ZaGrant.A_allow = "allow" ;
+ZaGrant.A_canDelegate = "canDelegate";
 ZaGrant.A_target = "target" ;
 ZaGrant.A_target_id = "target_id" ;
 ZaGrant.A_target_type = "target_type"
@@ -154,7 +155,9 @@ ZaGrant.load = function (params) {
                 grant [ZaGrant.A_target_type] = grantTarget.type ;
 
                 var grantRight = grants[i].right [0] ;
+
                 grant [ZaGrant.A_deny] = grantRight[ZaGrant.A_deny] ? "1" : "0" ;
+                grant [ZaGrant.A_allow] = grantRight[ZaGrant.A_deny] ? "0" : "1" ;
                 grant [ZaGrant.A_canDelegate] = grantRight[ZaGrant.A_canDelegate] ? "1" : "0" ;
                 grant [ZaGrant.A_right] = grantRight["_content"] ;
 
@@ -296,6 +299,7 @@ ZaGrant.myXModel = {
         {id: ZaGrant.A_grantee_type, type:_STRING_, ref:  ZaGrant.A_grantee_type, required: true, choices: ZaGrant.GRANT_TYPE},
         {id: ZaGrant.A_right, type: _STRING_, ref:  ZaGrant.A_right, required: true },
         {id: ZaGrant.A_deny, type:_ENUM_, ref: ZaGrant.A_deny, choices:ZaModel.BOOLEAN_CHOICES2 },
+        {id: ZaGrant.A_allow, type:_ENUM_, ref: ZaGrant.A_allow, choices:ZaModel.BOOLEAN_CHOICES2 },
         {id: ZaGrant.A_canDelegate, type:_ENUM_, ref: ZaGrant.A_canDelegate, choices:ZaModel.BOOLEAN_CHOICES2 },
         {id: ZaGrant.A_target_type, ref: ZaGrant.A_target_type, type: _STRING_, choices: ZaZimbraRights.targetType },
         {id: ZaGrant.A_target, type:_STRING_, ref: ZaGrant.A_target, required: true } ,
@@ -341,6 +345,5 @@ ZaGrant.grantsOvTreeModifier = function (tree) {
         }
     }
 }
-
 
 

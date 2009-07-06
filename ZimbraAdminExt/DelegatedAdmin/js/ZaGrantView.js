@@ -50,12 +50,30 @@ ZaGrantView.myXFormModifier = function(xFormObject) {
                {ref: ZaGrant.A_right, type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_right_name,
                    visibilityChecks:[],
                    labelLocation:_LEFT_ },
+                {ref: ZaGrant.A_allow,  type: _RADIO_ , label: com_zimbra_delegatedadmin.Col_allow ,
+                     groupname: "radio_grp_deny_delegate" ,
+                     onChange: ZaGrantDialog.changeDenyAllow ,
+                     visibilityChecks:[],  bmol: true ,
+                     labelLocation:_RIGHT_ /*, trueValue:"1", falseValue:"0" */},
+                 {ref: ZaGrant.A_canDelegate,  type: _CHECKBOX_ , label: com_zimbra_delegatedadmin.Col_can_grant ,
+                     visibilityChangeEventSources:[ZaGrant.A_allow] ,
+                     visibilityChecks:[[XForm.checkInstanceValue,ZaGrant.A_allow,"1"]],
+//                     visibilityChecks:["instance[ZaGrant.A_allow] == \"1\""],
+//                     visibilityChecks:[],
+                     labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" },
+                 {ref: ZaGrant.A_deny,  type: _RADIO_ , label: com_zimbra_delegatedadmin.Col_deny ,
+                     groupname: "radio_grp_deny_delegate" ,
+                     onChange: ZaGrantDialog.changeDenyAllow ,
+                     visibilityChecks:[], bmol: true ,
+                     labelLocation:_RIGHT_ /*, trueValue:"1", falseValue:"0"*/ }
+
+                    /*
                {ref: ZaGrant.A_deny,  type: _CHECKBOX_ , label: com_zimbra_delegatedadmin.Col_deny ,
                    visibilityChecks:[],  
                    labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" } ,
                {ref: ZaGrant.A_canDelegate,  type: _CHECKBOX_ , label: com_zimbra_delegatedadmin.Col_can_grant ,
                    visibilityChecks:[],
-                   labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" }
+                   labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" } */
               ]
             }
         ]

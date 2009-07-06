@@ -42,6 +42,7 @@ ZaAllGrantsXFormView.getXModel = function () {
                             {id: ZaGrant.A_grantee_type, type:_LIST_, ref:  ZaGrant.A_grantee_type, required: true, choices: ZaGrant.GRANT_TYPE},
                             {id: ZaGrant.A_right, type: _STRING_, ref:  ZaGrant.A_right, required: true },
                             {id: ZaGrant.A_canDelegate, type:_ENUM_, ref: ZaGrant.A_canDelegate, choices:ZaModel.BOOLEAN_CHOICES2 },
+                            {id: ZaGrant.A_allow, type:_ENUM_, ref: ZaGrant.A_allow, choices:ZaModel.BOOLEAN_CHOICES2 },
                             {id: ZaGrant.A_deny, type:_ENUM_, ref: ZaGrant.A_deny, choices:ZaModel.BOOLEAN_CHOICES2 }
                         ]
                     }
@@ -55,6 +56,7 @@ ZaAllGrantsXFormView.getXModel = function () {
                             {id: ZaGrant.A_grantee_type, type:_LIST_, ref:  ZaGrant.A_grantee_type, required: true, choices: ZaGrant.GRANT_TYPE},
                             {id: ZaGrant.A_right, type: _STRING_, ref:  ZaGrant.A_right, required: true },
                             {id: ZaGrant.A_canDelegate, type:_ENUM_, ref: ZaGrant.A_canDelegate, choices:ZaModel.BOOLEAN_CHOICES2 },
+                            {id: ZaGrant.A_allow, type:_ENUM_, ref: ZaGrant.A_allow, choices:ZaModel.BOOLEAN_CHOICES2 },
                             {id: ZaGrant.A_deny, type:_ENUM_, ref: ZaGrant.A_deny, choices:ZaModel.BOOLEAN_CHOICES2 }
                         ]
                     }

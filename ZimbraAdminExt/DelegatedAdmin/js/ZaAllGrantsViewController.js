@@ -91,6 +91,7 @@ ZaAllGrantsViewController.prototype.editGrantsListener = function () {
 
         this.editRigthDlg.setObject(obj);
         this.editRigthDlg.popup();
+        this.editRigthDlg.refresh () ;
     }
 }
 
@@ -118,6 +119,7 @@ ZaAllGrantsViewController.prototype.addGrantsListener = function () {
     obj.setAttrs.all = true ;
     this.grantRightDlg.setObject(obj);
 	this.grantRightDlg.popup();
+    this.grantRightDlg.refresh ();
 }
 
 
