@@ -136,6 +136,14 @@ if [ -d ${zimbra_home} ]; then
     chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/.bashrc
   fi
 
+  for i in .zmprov_history .zmmailbox_history .zmpython_history .bash_history; do
+    if [ ! -f ${zimbra_home}/${i} ]; then
+      touch ${zimbra_home}/${i}
+    fi
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/${i}
+    chmod 640 ${zimbra_home}/${i}
+  done
+
   if [ -d ${zimbra_home}/contrib ]; then
     chown -R ${root_user}:${root_group} ${zimbra_home}/contrib
     chmod 755 ${zimbra_home}/contrib/* 2> /dev/null
