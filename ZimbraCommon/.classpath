@@ -96,9 +96,9 @@
 	<classpathentry kind="lib" path="jars/ant-1.7.0-ziputil-patched.jar"/>
 	<classpathentry kind="lib" path="jars/memcached-2.3.1.jar" sourcepath="/ThirdParty/spymemcached/memcached-2.3.1-sources"/>
 	<classpathentry kind="lib" path="jars/testng-5.8-jdk15.jar" sourcepath="/ThirdParty/testng-5.8/src/main"/>
-	<classpathentry kind="lib" path="jars/apache-jsieve-0.2.jar" sourcepath="/ThirdParty/apache-jsieve-0.2/src/main/java">
+	<classpathentry kind="lib" path="jars/apache-jsieve-0.3-zimbra.jar" sourcepath="/ThirdParty/apache-james-jsieve-0.3/apache-jsieve-0.3-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="http://james.apache.org/jsieve/apidocs/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ThirdParty/apache-james-jsieve-0.3/apache-jsieve-0.3-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
