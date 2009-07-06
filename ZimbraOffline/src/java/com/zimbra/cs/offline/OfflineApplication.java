@@ -27,6 +27,11 @@ public class OfflineApplication extends ZimbraApplication {
 	}
 	
 	@Override
+	public String getInstallId() {
+	    return OfflineLC.zdesktop_installation_key.value();
+	}
+	
+	@Override
 	public boolean supports(String className) {
 		return false;
 	}

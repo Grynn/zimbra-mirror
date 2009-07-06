@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
-	<classpathentry kind="lib" sourcepath="/ThirdParty/ant-1.7.0-ziputil-patched/src/java" path="/ZimbraCommon/jars/ant-1.7.0-ziputil-patched.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-1.7.0-ziputil-patched.jar" sourcepath="/ThirdParty/ant-1.7.0-ziputil-patched/src/java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-httpclient-3.0.jar" sourcepath="/ThirdParty/commons-httpclient-3.0/src">
 		<attributes>
@@ -58,5 +58,7 @@
 			<attribute name="javadoc_location" value="http://java.sun.com/products/javabeans/glasgow/javadocs/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSyncClient"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSyncCommon"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
