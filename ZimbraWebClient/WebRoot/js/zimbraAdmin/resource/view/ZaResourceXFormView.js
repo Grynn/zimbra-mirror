@@ -121,6 +121,119 @@ function (index, form) {
 	form.parent.setDirty(true);
 }
 
+ZaResourceXFormView.deleteCalFwdAddrButtonListener = function () {
+	var instance = this.getInstance();	
+	if(instance[ZaResource.A2_calFwdAddr_selection_cache] != null) {
+		var cnt = instance[ZaResource.A2_calFwdAddr_selection_cache].length;
+		if(cnt && instance.attrs[ZaResource.A_zimbraPrefCalendarForwardInvitesTo]) {
+			var arr = instance.attrs[ZaResource.A_zimbraPrefCalendarForwardInvitesTo];
+			for(var i=0;i<cnt;i++) {
+				var cnt2 = arr.length-1;				
+				for(var k=cnt2;k>=0;k--) {
+					if(arr[k]==instance[ZaResource.A2_calFwdAddr_selection_cache][i]) {
+						arr.splice(k,1);
+						break;	
+					}
+				}
+			}
+			this.getModel().setInstanceValue(instance, ZaResource.A_zimbraPrefCalendarForwardInvitesTo, arr);
+			this.getModel().setInstanceValue(instance, ZaResource.A2_calFwdAddr_selection_cache, []);	
+		}
+	}
+	this.getForm().parent.setDirty(true);
+}
+
+ZaResourceXFormView.calFwdAddrSelectionListener = 
+function (ev) {
+	var arr = this.widget.getSelection();	
+	if(arr && arr.length) {
+		arr.sort();
+		this.getModel().setInstanceValue(this.getInstance(), ZaResource.A2_calFwdAddr_selection_cache, arr);	
+	} else {
+		this.getModel().setInstanceValue(this.getInstance(), ZaResource.A2_calFwdAddr_selection_cache, []);
+	}	
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaResourceXFormView.editCalFwdAddrButtonListener.call(this);
+	}	
+}
+
+ZaResourceXFormView.editCalFwdAddrButtonListener =
+function () {
+	var instance = this.getInstance();
+	if(instance[ZaResource.A2_calFwdAddr_selection_cache] && instance[ZaResource.A2_calFwdAddr_selection_cache][0]) {	
+		var formPage = this.getForm().parent;
+		if(!formPage.editCalFwdAddrDlg) {
+			formPage.editCalFwdAddrDlg = new ZaEditFwdAddrXDialog(ZaApp.getInstance().getAppCtxt().getShell(),"400px", "150px",ZaMsg.Edit_FwdAddr_Title);
+			formPage.editCalFwdAddrDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.updateCalFwdAddr, this.getForm(), null);						
+		}
+		var obj = {};
+		obj[ZaAccount.A_name] = instance[ZaAccount.A2_calFwdAddr_selection_cache][0];
+		var cnt = instance.attrs[ZaResource.A_zimbraPrefCalendarForwardInvitesTo].length;
+		for(var i=0;i<cnt;i++) {
+			if(instance[ZaResource.A2_calFwdAddr_selection_cache][0]==instance.attrs[ZaResource.A_zimbraPrefCalendarForwardInvitesTo][i]) {
+				obj[ZaAlias.A_index] = i;
+				break;		
+			}
+		}
+		
+		formPage.editCalFwdAddrDlg.setObject(obj);
+		formPage.editCalFwdAddrDlg.popup();		
+	}
+}
+
+ZaResourceXFormView.updateCalFwdAddr = function () {
+	if(this.parent.editCalFwdAddrDlg) {
+		this.parent.editCalFwdAddrDlg.popdown();
+		var obj = this.parent.editCalFwdAddrDlg.getObject();
+		var instance = this.getInstance();
+		var arr = instance.attrs[ZaResource.A_zimbraPrefCalendarForwardInvitesTo];
+		if(obj[ZaAlias.A_index] >=0 && arr[obj[ZaAlias.A_index]] != obj[ZaResource.A_name] ) {
+			this.getModel().setInstanceValue(this.getInstance(), ZaResource.A2_calFwdAddr_selection_cache, []);
+			arr[obj[ZaAlias.A_index]] = obj[ZaResource.A_name];
+			this.getModel().setInstanceValue(instance, ZaResource.A_zimbraPrefCalendarForwardInvitesTo, arr);
+			this.parent.setDirty(true);	
+		}
+	}
+}
+
+ZaResourceXFormView.addCalFwdAddrButtonListener =
+function () {
+	var instance = this.getInstance();
+	var formPage = this.getForm().parent;
+	if(!formPage.addCalFwdAddrDlg) {
+		formPage.addCalFwdAddrDlg = new ZaEditFwdAddrXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "400px", "150px",ZaMsg.Add_FwdAddr_Title);
+		formPage.addCalFwdAddrDlg.registerCallback(DwtDialog.OK_BUTTON, ZaResourceXFormView.addCalFwdAddr, this.getForm(), null);						
+	}
+	
+	var obj = {};
+	obj[ZaAccount.A_name] = "";
+	obj[ZaAlias.A_index] = - 1;
+	formPage.addCalFwdAddrDlg.setObject(obj);
+	formPage.addCalFwdAddrDlg.popup();		
+}
+
+ZaResourceXFormView.addCalFwdAddr  = function () {
+	if(this.parent.addCalFwdAddrDlg) {
+		this.parent.addCalFwdAddrDlg.popdown();
+		var obj = this.parent.addCalFwdAddrDlg.getObject();
+		if(obj[ZaResource.A_name] && obj[ZaResource.A_name].length>1) {
+			var arr = this.getInstance().attrs[ZaResource.A_zimbraPrefCalendarForwardInvitesTo];
+			arr.push(obj[ZaResource.A_name]);
+			this.getModel().setInstanceValue(this.getInstance(), ZaResource.A_zimbraPrefCalendarForwardInvitesTo, arr);
+			this.getModel().setInstanceValue(this.getInstance(), ZaResource.A2_calFwdAddr_selection_cache, []);
+			this.parent.setDirty(true);
+		}
+	}
+}
+
+ZaResourceXFormView.isEditCalFwdAddrEnabled = function () {
+	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaResource.A2_calFwdAddr_selection_cache)) && this.getInstanceValue(ZaResource.A2_calFwdAddr_selection_cache).length==1);
+}
+
+ZaResourceXFormView.isDeleteCalFwdAddrEnabled = function () {
+	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaResource.A2_calFwdAddr_selection_cache)));
+}
+
 ZaResourceXFormView.CONTACT_TAB_ATTRS = [ZaResource.A_zimbraCalResContactName,
 		ZaResource.A_zimbraCalResContactEmail, 
 		ZaResource.A_zimbraCalResContactPhone, 
@@ -277,6 +390,37 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
         labelLocation:_LEFT_, cssClass:"admin_xform_number_input"});
 
 
+	var fwdInvitesGrpr = {type:_ZA_PLAIN_GROUPER_, id:"resource_form_forwarding_group",
+							numCols:2,label:null,colSizes:["275px","425px"],
+							items :[
+								{ref:ZaResource.A_zimbraPrefCalendarForwardInvitesTo, type:_DWT_LIST_, height:"100", width:"350px",
+									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
+									headerList:null,onSelection:ZaResourceXFormView.calFwdAddrSelectionListener,label:ZaMsg.zimbraPrefCalendarForwardInvitesTo,
+									visibilityChecks:[ZaItem.hasReadPermission]
+								},
+								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
+									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+									items: [
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
+											onActivate:"ZaResourceXFormView.deleteCalFwdAddrButtonListener.call(this);",
+											enableDisableChecks:[ZaResourceXFormView.isDeleteCalFwdAddrEnabled,[ZaItem.hasWritePermission,ZaResource.A_zimbraPrefCalendarForwardInvitesTo]],
+											enableDisableChangeEventSources:[ZaResource.A2_calFwdAddr_selection_cache]
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
+											onActivate:"ZaResourceXFormView.editCalFwdAddrButtonListener.call(this);",
+											enableDisableChecks:[ZaResourceXFormView.isEditCalFwdAddrEnabled,[ZaItem.hasWritePermission,ZaResource.A_zimbraPrefCalendarForwardInvitesTo]],
+											enableDisableChangeEventSources:[ZaResource.A2_calFwdAddr_selection_cache]
+										},
+										{type:_CELLSPACER_},
+	                                       {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+											enableDisableChecks:[[ZaItem.hasWritePermission,ZaResource.A_zimbraPrefCalendarForwardInvitesTo]],                                        
+											onActivate:"ZaResourceXFormView.addCalFwdAddrButtonListener.call(this);"
+										}
+									]
+								}]};
+	 setupGroup.items.push(fwdInvitesGrpr);							
 
     var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper, id:"resource_form_password_group",
         visibilityChecks:[[XFormItem.prototype.hasRight,ZaAccount.SET_PASSWORD_RIGHT]],colSizes:["275px","*"],numCols:2,items:[

@@ -707,7 +707,19 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							items: [
 								{ref:".", type:_TEXTFIELD_, label:null, width:250, enableDisableChecks:[]}
 							]
-						}
+						},
+						{ref:ZaAccount.A_zimbraPrefCalendarForwardInvitesTo, type:_REPEAT_,
+							label:ZaMsg.zimbraPrefCalendarForwardInvitesTo, labelLocation:_LEFT_,labelCssClass:"xform_label",
+							repeatInstance:emptyAlias, 
+							showAddButton:true, showRemoveButton:true, 
+							addButtonLabel:ZaMsg.NAD_AddAddress, 
+							showAddOnNextRow:true,
+							removeButtonLabel:ZaMsg.NAD_RemoveAddress,
+							nowrap:false,labelWrap:true,
+							items: [
+								{ref:".", type:_TEXTFIELD_, label:null, width:250, enableDisableChecks:[]}
+							]
+						}						
 					]
 				});				
 	};

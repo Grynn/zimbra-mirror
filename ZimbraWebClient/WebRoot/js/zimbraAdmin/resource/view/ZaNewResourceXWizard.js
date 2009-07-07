@@ -225,10 +225,9 @@ function(value, event, form) {
 
 ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 	var domainName;
-	/*if(ZaSettings.DOMAINS_ENABLED && ZaApp.getInstance().getDomainList().size() > 0)
-		domainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
-	else*/ 
-		domainName = ZaSettings.myDomainName;
+	domainName = ZaSettings.myDomainName;
+
+	var emptyAlias = "@" + domainName;
 
 	var cases = new Array();
 	
@@ -361,7 +360,19 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 						]
 					}); 
 
-	
+	setupGroup.items.push({ref:ZaResource.A_zimbraPrefCalendarForwardInvitesTo, type:_REPEAT_,
+							label:ZaMsg.zimbraPrefCalendarForwardInvitesTo, labelLocation:_LEFT_,labelCssClass:"xform_label",
+							repeatInstance:emptyAlias, 
+							showAddButton:true, showRemoveButton:true, 
+							addButtonLabel:ZaMsg.NAD_AddAddress, 
+							showAddOnNextRow:true,
+							removeButtonLabel:ZaMsg.NAD_RemoveAddress,
+							nowrap:false,labelWrap:true,
+							items: [
+								{ref:".", type:_TEXTFIELD_, label:null, width:250, enableDisableChecks:[]}
+							]
+						});
+						
 	var passwordGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_wiz_password_group", 
 		numCols:2,
 		items:[

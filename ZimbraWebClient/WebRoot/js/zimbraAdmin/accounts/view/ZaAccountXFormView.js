@@ -438,7 +438,7 @@ ZaAccountXFormView.deleteFwdAddrButtonListener = function () {
 			for(var i=0;i<cnt;i++) {
 				var cnt2 = arr.length-1;				
 				for(var k=cnt2;k>=0;k--) {
-					if(arr[k]==instance.fwdAddr_selection_cache[i]) {
+					if(arr[k]==instance[ZaAccount.A2_fwdAddr_selection_cache][i]) {
 						arr.splice(k,1);
 						break;	
 					}
@@ -460,7 +460,7 @@ ZaAccountXFormView.deleteCalFwdAddrButtonListener = function () {
 			for(var i=0;i<cnt;i++) {
 				var cnt2 = arr.length-1;				
 				for(var k=cnt2;k>=0;k--) {
-					if(arr[k]==instance.fwdAddr_selection_cache[i]) {
+					if(arr[k]==instance[ZaAccount.A2_calFwdAddr_selection_cache][i]) {
 						arr.splice(k,1);
 						break;	
 					}
@@ -497,7 +497,7 @@ function (ev) {
 		this.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_calFwdAddr_selection_cache, []);
 	}	
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
-		ZaAccountXFormView.editFwdAddrButtonListener.call(this);
+		ZaAccountXFormView.editCalFwdAddrButtonListener.call(this);
 	}	
 }
 
@@ -538,7 +538,7 @@ function () {
 		obj[ZaAccount.A_name] = instance[ZaAccount.A2_calFwdAddr_selection_cache][0];
 		var cnt = instance.attrs[ZaAccount.A_zimbraPrefCalendarForwardInvitesTo].length;
 		for(var i=0;i<cnt;i++) {
-			if(instance.fwdAddr_selection_cache[0]==instance.attrs[ZaAccount.A_zimbraPrefCalendarForwardInvitesTo][i]) {
+			if(instance[ZaAccount.A2_calFwdAddr_selection_cache][0]==instance.attrs[ZaAccount.A_zimbraPrefCalendarForwardInvitesTo][i]) {
 				obj[ZaAlias.A_index] = i;
 				break;		
 			}
@@ -2043,8 +2043,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							numCols:2,label:null,colSizes:["275px","425px"],
 							items :[
 								{ref:ZaAccount.A_zimbraPrefCalendarForwardInvitesTo, type:_DWT_LIST_, height:"100", width:"350px",
-									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
-									headerList:null,onSelection:ZaAccountXFormView.fwdAddrSelectionListener,label:ZaMsg.zimbraPrefCalendarForwardInvitesTo,
+									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource",
+									headerList:null,onSelection:ZaAccountXFormView.calFwdAddrSelectionListener,label:ZaMsg.zimbraPrefCalendarForwardInvitesTo,
 									visibilityChecks:[ZaItem.hasReadPermission]
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,

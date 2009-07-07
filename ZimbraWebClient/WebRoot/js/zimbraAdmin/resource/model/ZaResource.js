@@ -57,6 +57,7 @@ ZaResource.A_COSId = ZaAccount.A_COSId;
 ZaResource.A_zimbraMinPwdLength = ZaAccount.A_zimbraMinPwdLength;
 ZaResource.A_zimbraMaxPwdLength = ZaAccount.A_zimbraMaxPwdLength;
 
+ZaResource.A_zimbraPrefCalendarForwardInvitesTo = "zimbraPrefCalendarForwardInvitesTo";
 ZaResource.A_zimbraCalResMaxNumConflictsAllowed = "zimbraCalResMaxNumConflictsAllowed";
 ZaResource.A_zimbraCalResMaxPercentConflictsAllowed = "zimbraCalResMaxPercentConflictsAllowed";
 ZaResource.A_locationDisplayName = "zimbraCalResLocationDisplayName";
@@ -97,6 +98,7 @@ ZaResource.A2_autoMailServer = "automailserver";
 ZaResource.A2_autoCos = "autoCos";
 ZaResource.A2_autoLocationName = "autolocationname";
 ZaResource.A2_myCOS = "mycos";
+ZaResource.A2_calFwdAddr_selection_cache = "calFwdAddr_selection_cache";
 
 ZaResource.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
 ZaResource.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE;
@@ -297,33 +299,6 @@ function(callback) {
 	}
 	this.deleteCommand.invoke(params);		
 }
-/*
-ZaResource.prototype.initFromDom =
-function(node) {
-	this.name = node.getAttribute("name");
-	this.id = node.getAttribute("id");
-	this.attrs[ZaResource.A_zimbraMailAlias] = new Array();
-	this.attrs[ZaResource.A_zimbraMailForwardingAddress] = new Array();
-	var children = node.childNodes;
-	for (var i=0; i< children.length;  i++) {
-		child = children[i];
-		if (child.nodeName != 'a') continue;
-		var name = child.getAttribute("n");
-		if (child.firstChild != null) {
-			var value = child.firstChild.nodeValue;
-			if (name in this.attrs) {
-				var vc = this.attrs[name];
-				if ((typeof vc) == "object") {
-					vc.push(value);
-				} else {
-					this.attrs[name] = [vc, value];
-				}
-			} else {
-				this.attrs[name] = value;
-			}
-		}
-	}
-} */
 
 ZaResource.prototype.initFromJS = 
 function (resource) {
@@ -334,6 +309,7 @@ function (resource) {
 	this.attrs = new Object();			
 	this.name = resource.name;
 	this.id = resource.id;
+	this.attrs[ZaResource.A_zimbraPrefCalendarForwardInvitesTo] = new Array();
 	var len = (resource.a ? resource.a.length : 0);
 	for(var ix = 0; ix < len; ix++) {
 		if(!this.attrs[[resource.a[ix].n]]) {
@@ -616,11 +592,12 @@ ZaResource.myXModel = {
 		},
 		{id:ZaResource.A_zimbraCalResContactPhone, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraCalResContactPhone}, 
 		{id:ZaResource.A_contactInfoAutoComplete, type:_LIST_, ref:"attrs/"+ZaResource.A_contactInfoAutoComplete},
-		
+		{id:ZaResource.A_zimbraPrefCalendarForwardInvitesTo, type:_LIST_, ref:"attrs/"+ZaResource.A_zimbraPrefCalendarForwardInvitesTo, listItem:{type:_EMAIL_ADDRESS_}},
 		{id:ZaResource.A2_autodisplayname, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaResource.A2_autoMailServer, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaResource.A2_autoCos, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-		{id:ZaResource.A2_autoLocationName, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES}
+		{id:ZaResource.A2_autoLocationName, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		{id:ZaAccount.A2_calFwdAddr_selection_cache, type:_LIST_}
 		
 	]
 };
