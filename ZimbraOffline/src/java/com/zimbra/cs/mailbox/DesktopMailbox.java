@@ -123,7 +123,7 @@ public abstract class DesktopMailbox extends Mailbox {
 			f = getFolderById(ID_FOLDER_FAILURE);
 		} catch (MailServiceException.NoSuchItemException x) {}
 		if (f == null) {
-	        CreateFolder redo = new CreateFolder(getId(), FAILURE_PATH, ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
+	        CreateFolder redo = new CreateFolder(getId(), FAILURE_PATH, ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR_RGB, null);
 	        redo.setFolderId(ID_FOLDER_FAILURE);
 	        redo.start(System.currentTimeMillis());
             createFolder(new OfflineContext(redo), FAILURE_PATH, ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);

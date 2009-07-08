@@ -32,7 +32,7 @@ public class LocalMailbox extends DesktopMailbox {
             } catch (MailServiceException.NoSuchItemException x) {
                 CreateFolder redo = new CreateFolder(getId(), GLOBAL_SEARCHES_PATH,
                     ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
-                    MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR, null);
+                    MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR_RGB, null);
                 redo.setFolderId(ID_FOLDER_GLOBAL_SEARCHES);
                 redo.start(System.currentTimeMillis());
                 createFolder(new OfflineContext(redo), GLOBAL_SEARCHES_PATH,
