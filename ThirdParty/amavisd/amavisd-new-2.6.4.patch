@@ -1,0 +1,73 @@
+--- amavisd-new-2.6.4/amavisd.orig	2009-07-08 04:38:19.000000000 -0700
++++ amavisd-new-2.6.4/amavisd	2009-07-08 04:46:49.000000000 -0700
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -T
++#!/usr/bin/perl
+ 
+ #------------------------------------------------------------------------------
+ # This is amavisd-new.
+@@ -391,7 +391,7 @@
+       $spamcontrol_obj
+       $helpers_home $sa_configpath $sa_siteconfigpath
+       $sa_local_tests_only $sa_auto_whitelist $sa_timeout $sa_debug
+-      $dspam $sa_spawned
++      $dspam $sa_spawned $sa_userprefs_file
+     )],
+     'platform' => [qw(
+       $can_truncate $unicode_aware $eol $my_pid
+@@ -859,7 +859,7 @@
+   $spam_quarantine_to       = 'spam-quarantine';
+   $bad_header_quarantine_to = 'bad-header-quarantine';
+   $clean_quarantine_to      = 'clean-quarantine';
+-  $archive_quarantine_to    = 'archive-quarantine';
++  $archive_quarantine_to    = undef;
+ 
+   # similar to $spam_quarantine_to, but the lookup key is the sender address
+   $spam_quarantine_bysender_to = undef;  # dflt: no by-sender spam quarantine
+@@ -1789,9 +1789,9 @@
+     elsif ($errn)        { $msg = "is inaccessible: $!" }
+     elsif (-d _)         { $msg = "is a directory" }
+     elsif (!-f _)        { $msg = "is not a regular file" }
+-    elsif ($> && -o _)   { $msg = "should not be owned by EUID $>"}
++#    elsif ($> && -o _)   { $msg = "should not be owned by EUID $>"}
+     elsif ($> && -w _)   { $msg = "is writable by EUID $>, EGID $)" }
+-    elsif ($owner_uid)   { $msg = "should be owned by root (uid 0) "}
++#    elsif ($owner_uid)   { $msg = "should be owned by root (uid 0) "}
+     if (defined $msg)    { die "Config file \"$config_file\" $msg," }
+     $read_config_files_depth++;  push(@actual_config_files, $config_file);
+     if ($read_config_files_depth >= 100) {
+@@ -9132,8 +9132,8 @@
+           rename($config_file.'.moved', $config_file);
+           $m = 'is writable (confirmed)';
+         }
+-        push(@msg, "Directory of a config file \"$config_file\" $m, ".
+-                   "UID $<, EUID $>, EGID $)" );
++#        push(@msg, "Directory of a config file \"$config_file\" $m, ".
++#                   "UID $<, EUID $>, EGID $)" );
+       }
+       last  if @msg;
+     }
+@@ -12764,6 +12764,15 @@
+     }
+   }  # endfor per_recip_data
+ 
++  if (defined($qar_method) && $qar_method ne '') {  # archiving quarantine on sender
++    my($sender) = $msginfo->sender;
++    if ($sender ne '') {
++      my($q) = lookup(0,$sender,@{ca('archive_quarantine_to_maps')});
++      $q = $sender  if $q ne '' && $qar_method =~ /^bsmtp:/i;  # orig.recip
++      push(@q_tuples, [$qar_method,$q,'Arch'])  if defined $q && $q ne '';
++    }
++  }
++
+   if ($ccat == CC_SPAM) {
+     my($sqbsm) = ca('spam_quarantine_bysender_to_maps');
+     if (@$sqbsm) {  # by-sender spam quarantine (hardly useful, rarely used)
+@@ -22082,6 +22091,7 @@
+     home_dir_for_helpers => $helpers_home,
+     rules_filename       => $sa_configpath,
+     site_rules_filename  => $sa_siteconfigpath,
++    userprefs_filename => $sa_userprefs_file,
+ #   LOCAL_STATE_DIR   => '/var/lib',
+ #   PREFIX            => '/usr/local',
+ #   DEF_RULES_DIR     => '/usr/local/share/spamassassin',
