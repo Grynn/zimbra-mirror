@@ -61,7 +61,7 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
         int mod_content = (int) eMount.getAttributeLong(MailConstants.A_REVISION, -1);
         
         OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ((ZcsMailbox)mbox).getOfflineAccount());
-        CreateMountpoint redo = new CreateMountpoint(mbox.getId(), parentId, name, ownerId, remoteId, view, flags, color);
+        CreateMountpoint redo = new CreateMountpoint(mbox.getId(), parentId, name, ownerId, remoteId, view, flags, new MailItem.Color(color));
         redo.setId(id);
         redo.setChangeId(mod_content);
         try {
