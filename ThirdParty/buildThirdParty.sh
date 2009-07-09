@@ -23,6 +23,7 @@ CLEAN=no
 SYNC=no
 PUBLIC=yes
 OVERRIDE=no
+ZIMBRA=no
 MIRROR="http://cpan.yahoo.com/"
 
 usage() {
@@ -126,6 +127,10 @@ while [ $# -gt 0 ]; do
 			;;
 		-s|--sync)
 			SYNC=yes
+			shift;
+			;;
+		-z|--zimbra)
+			ZIMBRA=yes
 			shift;
 			;;
 		*)
@@ -311,11 +316,20 @@ if [[ $PLAT != "MACOSX"* ]]; then
 	fi
 fi
 
-echo "Cleaning contents of /opt/zimbra"
-if [ -d "/opt/zimbra" ]; then
-  rm -rf /opt/zimbra/* 2>/dev/null
-  rm -rf /opt/zimbra/.* 2>/dev/null
-  mkdir -p /opt/zimbra
+if [ x"$ZIMBRA" = x"no" ]; then
+	echo "Cleaning contents of /opt/zimbra"
+	if [ -d "/opt/zimbra" ]; then
+		rm -rf /opt/zimbra/* 2>/dev/null
+		rm -rf /opt/zimbra/.* 2>/dev/null
+		mkdir -p /opt/zimbra
+	fi
+else
+	if [ -x "/home/build/scripts/setup-build.sh" ]; then
+		/home/build/scripts/setup-build.sh 2>/dev/null
+	else
+		echo "Error: setup-build.sh missing"
+		exit 1;
+	fi
 fi
 
 touch /opt/zimbra/blah 2>/dev/null
