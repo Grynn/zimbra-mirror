@@ -78,7 +78,7 @@ DIRS := openssl \
 	nginx \
 	tcmalloc
 
-LOGFILE := /tmp/ThirdParty.make.log
+LOGFILE := ThirdParty.make.log
 
 all: allclean $(ZIMBRA_HOME) build 
 

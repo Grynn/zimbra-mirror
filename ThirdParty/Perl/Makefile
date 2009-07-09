@@ -6,7 +6,7 @@ PERL_ROOT ?= $(shell pwd)
 P4_ROOT ?= $(shell cd $(PERL_ROOT)/../..; pwd)
 ZIMBRA_HOME ?= /opt/zimbra
 
-LOGFILE ?= /tmp/ThirdParty-Perllibs.log
+LOGFILE ?= ThirdParty-Perllibs.log
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 

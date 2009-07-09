@@ -358,6 +358,6 @@ else
 fi
 
 mkdir -p $PATHDIR/../logs
-cp -f /tmp/ThirdParty.make.log $PATHDIR/../logs
-cp -f /tmp/ThirdParty-Perllibs.log $PATHDIR/../logs
+cp -f ThirdParty.make.log $PATHDIR/../logs
+cp -f Perl/ThirdParty-Perllibs.log $PATHDIR/../logs
 exit 0;
