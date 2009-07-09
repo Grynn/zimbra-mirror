@@ -66,7 +66,7 @@ ZaRight.VIEW_RIGHTS [ZaSettings.ZIMLET_LIST_VIEW] = "adminConsoleZimletRights" ;
 ZaRight.VIEW_RIGHTS [ZaSettings.ADMIN_ZIMLET_LIST_VIEW] = "adminConsoleExtensionRights" ;
 ZaRight.VIEW_RIGHTS [ZaSettings.GLOBAL_CONFIG_VIEW] = "adminConsoleGlobalRights" ;
 
-ZaRight.VIEW_RIGHTS [ZaSettings.SAVE_SEARCH] = "adminConsoleSaveSearchRights" ;
+ZaRight.VIEW_RIGHTS [ZaSettings.SAVE_SEARCH] = "adminConsoleSavedSearchRights" ;
 
 
 
