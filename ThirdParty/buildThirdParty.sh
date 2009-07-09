@@ -325,7 +325,7 @@ if [ x"$ZIMBRA" = x"no" ]; then
 	fi
 else
 	if [ -x "/home/build/scripts/setup-build.sh" ]; then
-		/home/build/scripts/setup-build.sh 2>/dev/null
+		sudo /home/build/scripts/setup-build.sh 2>/dev/null
 	else
 		echo "Error: setup-build.sh missing"
 		exit 1;
