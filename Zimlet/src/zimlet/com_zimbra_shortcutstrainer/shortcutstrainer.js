@@ -219,6 +219,9 @@ function(canvas) {
 
 com_zimbra_shortcutstrainer.prototype.onShowView =
 function(viewId, isNewView) {
+	this.turnOnShortcutsTrainer = this.getUserProperty("turnOnShortcutsTrainer") == "true";
+	if (!this.turnOnShortcutsTrainer)
+		return;
 	if (viewId == undefined) {
 		viewId = appCtxt.getAppViewMgr().getCurrentViewId();
 	}
