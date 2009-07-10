@@ -217,7 +217,7 @@ if [ x"$platform" = "xUBUNTU6" -o x"$platform" = "xUBUNTU6_64" \
   else 
     echo "Unable to restart syslog.  Please do it manually."
   fi
-elif [ x"$platform" = "xF10" -o x"$platform" = "xF10_64" ]; then
+elif [ x"$platform" = "xF10" -o x"$platform" = "xF10_64" -o x"$platform" = "xF11" -o x"$platform" = "xF11_64" ]; then
   if [ -e "/etc/init.d/rsyslog" ]; then
     /etc/init.d/rsyslog restart> /dev/null 2>&1
   else
