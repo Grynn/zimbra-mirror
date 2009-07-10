@@ -439,8 +439,8 @@ if [ -d ${zimbra_home}/clamav/db ]; then
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/clamav/db
 fi
 
-if [ -d ${zimbra_home}/data/clamav/db ]; then
-  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/clamav/db
+if [ -d ${zimbra_home}/data/clamav ]; then
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/clamav
 fi
 
 if [ -L ${zimbra_home}/tomcat ]; then
