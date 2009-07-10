@@ -7,6 +7,9 @@
 <topic name="Setting Password Rules" url="passwords/setting_password_rules.htm" />
 <topic name="Setting and Changing Passwords" url="passwords/setting_passwords.htm" />
 <topic name="LMTP" url="popup_and_hotspots_/lmtp.htm" />
+<topic name="Advanced Search" url="search/advanced_search.htm" />
+<topic name="Help Search" url="search/help_search.htm" />
+<topic name="Using Search" url="search/search.htm" />
 <topic name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
 <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
 <topic name="Making UI Themes available by COS" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />

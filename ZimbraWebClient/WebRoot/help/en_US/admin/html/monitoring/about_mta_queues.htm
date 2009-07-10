@@ -47,7 +47,7 @@ if (window.gbWhTopic)
 	if (window.addTocInfo)
 	{
 	addTocInfo("Monitoring Tools\nAbout MTA Queues");
-addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -95,7 +95,9 @@ else
  they are either delivered successfully or expire and are bounced back 
  to the sender. The reasons for the delivery failures is documented in 
  a file in the defer queue. This queue is scanned frequently to resend 
- the message. &nbsp;</p></li>
+ the message. &nbsp;The default for bounce queue lifetime 
+ is 5 days. This can by changed from the CLI, zmlocalconfig. 
+ See the Administration Guide, CLI appendix.</p></li>
 	<li class=p><p>The <span style="font-weight: bold;"><B>hold</B></span> queue 
  keeps mail that could not be processed. Messages stay in this queue until 
  the administrator moves them. No periodic delivery attempts are made for 

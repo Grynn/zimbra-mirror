@@ -15,8 +15,15 @@ if (navigator.appName !="Netscape")
 <!--
 ul.whs1 { list-style:disc; }
 p.whs2 { x-condition:NET_OS; }
-p.whs3 { font-weight:bold; }
-ol.whs4 { list-style:decimal; }
+p.whs3 { margin-left:40px; }
+p.whs4 { font-weight:bold; }
+p.whs5 { font-weight:bold; margin-left:80px; }
+p.whs6 { font-weight:normal; }
+h6.whs7 { margin-left:40px; }
+ul.whs8 { list-style:decimal; }
+h3.whs9 { x-condition:NET_OS; }
+ol.whs10 { list-style:decimal; }
+ol.whs11 { list-style:lower-alpha; x-condition:NET_OS; }
 -->
 </style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
 <!--
@@ -50,7 +57,7 @@ if (window.gbWhTopic)
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Resources\nCreating a Resource");
-addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -86,7 +93,7 @@ else
  administrator does not need to monitor these mailboxes on a regular basis. 
  The contents of the resource mailboxes are purged according to the restrictions 
  set in the COS for email message and trash lifetime.</p>
-<p>When you create a resource account a directory account is created on 
+<p>When you create a resource account, a directory account is created on 
  the LDAP server. </p>
 <p>When you initially create a resource, you can configure the following:</p>
 <p><span style="font-weight: bold;"><B>Resource name</B></span>. </p>
@@ -111,45 +118,76 @@ else
  is <a href="taking_a_resource_out_of_service.htm">unavailable</a>, the 
  resource is not included in resource list. &nbsp;</p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>Scheduling policy</B></span>. 
- You can select </p></li>
+ The scheduling policy establishes how the resource's calendar is maintained. 
+ </p></li>
+</ul>
+<p class="whs3">Check <span style="font-weight: bold;"><B>Auto 
+ decline all recurring appointments </B></span>when the resource can be scheduled 
+ for only one meeting at a time, no recurring appointments can be scheduled 
+ for this resource. </p>
+<p class="whs3"><span style="margin-left: 40px;">Select one 
+ of the following to handle other types of requests:</span></p>
+<ul type="disc" class="whs1">
 	<ul type="disc" class="whs1">
-		<li class=p><p><span style="font-weight: bold;"><B>Auto-accept appointments 
- unless busy </B></span>to automatically accept appointments unless the resource 
- is already scheduled. The free/busy times can be viewed.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Auto-accept all 
- appointments</B></span> to automatically accept all appointments that are 
- scheduled. &nbsp;In this case free/busy information is 
- not maintained, thus more than one meeting could schedule the resource 
- for the same time. Because the resource always stays free, the suggested 
- use for this policy would be for a frequently used location off premises 
- so that the location address can be included in the invite to attendees. 
- &nbsp;&nbsp;</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Manually accept/decline 
- appointments</B></span> to manage resources manually. &nbsp;A 
- delegated user logs into the resource account and accepts or declines 
- the reservation request for the resource. </p></li>
+		<li class=p><p class="whs4">Auto accept if available, 
+ auto decline on conflict.<span style="font-weight: normal;"> &nbsp;Automatically 
+ accept appointments unless the resource is already scheduled. The free/busy 
+ times can be viewed. You can set up rules about when conflicting meetings 
+ are not declined. </span></p></li>
+		<li class=p><p class="whs4">Manual accept, auto decline 
+ on conflict. <span style="font-weight: normal;">Appointment that creates 
+ a conflict are declined. All other appointments must be manually accepted. 
+ You can set up rules about when conflicting meetings are not declined.</span></p></li>
 	</ul>
-	<li class=p><p>If the schedule policy is <span style="font-weight: bold;"><B>Auto-accept 
- appointments unless busy</B></span>, you can set up<span style="font-weight: bold;"><B> 
- Maximum allowed number of conflicts</B></span> and/or <span style="font-weight: bold;"><B>Maximum 
- allowed percent of conflicts</B></span> to allow a recurring resource to be 
- scheduled even if it is not available for all the requested recurring 
- appointment dates. The resource accepts appointments even if there are 
- conflicts until either the number of conflicts reaches the maximum allowed 
- or the maximum percentage of conflicts allowed is reached. The default 
- is to decline any appointment that creates a conflict. If you set both 
+</ul>
+<p class="whs5"><span style="font-weight: normal;">For 
+ recurring appointments that are enabled with one of the above options, 
+ you can set up a threshold (either as a number of conflicts or a percentage 
+ of all the recurring appointments) to use to partially accept recurring 
+ appointments.</span> &nbsp;</p>
+<ul type="disc" class="whs1">
+	<ul type="disc" class="whs1">
+		<li class=p><p class="whs6"><span style="font-weight: bold;"><B>Auto 
+ accept always. </B></span><span>The resource</span> automatically accept all 
+ appointments that are scheduled. &nbsp;In this case free/busy 
+ information is not maintained, thus more than one meeting could schedule 
+ the resource for the same time. Because the resource always stays free, 
+ the suggested use for this policy would be for a frequently used location 
+ off premises so that the location address can be included in the invite 
+ to attendees. &nbsp;&nbsp;</p></li>
+		<li class=p><p class="whs6"><span style="font-weight: bold;"><B>No 
+ auto accept or decline. </B></span>The resource scheduling policy is to manually 
+ mange the resource. A delegated user logs into the resource account and 
+ accepts or declines the reservation request.</p></li>
+	</ul>
+</ul>
+<h6 class="whs7"><span style="font-weight: bold;"><B>Conflict 
+ Rules</B></span></h6>
+<p class="whs3">For <span style="font-weight: bold;"><B>Auto 
+ accept if available, auto decline on conflict</B></span> and <span style="font-weight: bold;"><B>Manual 
+ accept, auto decline on conflict</B></span>, the scheduling policy can be 
+ set up with conflict rules for recurring appointments. &nbsp;<span 
+ style="font-weight: bold;"><B>Maximum allowed number of conflicts</B></span> 
+ and/or <span style="font-weight: bold;"><B>Maximum allowed percent of conflicts</B></span> 
+ can be configured to allow a recurring resource to be scheduled even if 
+ it is not available for all the requested recurring appointment dates. 
+ The resource accepts appointments even if there are conflicts until either 
+ the number of conflicts reaches the maximum allowed or the maximum percentage 
+ of conflicts allowed is reached. &nbsp;If you set both 
  fields, the resource declines appointments whenever either of the conditions 
- are met.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Auto-decline recurring</B></span> 
- appointments can be checked in addition to selecting a scheduling policy. 
- &nbsp;When this is checked, the resource can be scheduled 
- for only one meeting at a time (no reoccurring meetings).</p></li>
+ is met</p>
+<ul type="disc" class="whs1">
+	<ul><li class=p-note><p class=note>If a resource is invited to a single 
+ instance appointment if the resource scheduling policy is configured to 
+ auto decline, the single instance is always declined. The conflict rules 
+ do not apply.</p></li>
+	</ul>
 	<li style="x-condition: NET_OS;" class=p><p><span style="font-weight: bold;"><B>Mail 
  Server</B></span>. You can specify the mail server where the resource account 
  is created. The default is to have the resource created on any of the 
  servers listed in the <a href="../cos/assigning_accounts_to_different_servers.htm" style="x-condition: NET_OS;">COS server pool</a>. </p></li>
 </ul>
-<p class="whs3">Password.</p>
+<p class="whs4">Password.</p>
 <ul type="disc" class="whs1">
 	<li class=p><p>Enter the password for this account and reenter the 
  password to confirm.</p></li>
@@ -165,7 +203,7 @@ else
  can be used to record any type of information. Details in Notes are not 
  exposed to users.</p></li>
 </ul>
-<p class="whs3">Resource Location/Contact Information.</p>
+<p class="whs4">Resource Location/Contact Information.</p>
 <ul type="disc" class="whs1">
 	<li class=p><p>Resource location includes, site details, capacity and 
  street, city, state address. The information from Building, Floor, and 
@@ -183,7 +221,7 @@ else
  and if the resource is free, the meeting is automatically entered in the 
  resource's calendar. </p>
 <h6>To create a resource</h6>
-<ol type="1" class="whs4">
+<ul type="1" class="whs8">
 	<ol class=whs2 style="list-style: decimal;" type=1>
 		<li class=p><p>Click <span style="font-weight: bold;"><B>Resources, 
  </B></span>in the navigation pane.</p></li>
@@ -200,6 +238,41 @@ else
  checked, you can add a location display name.</p></li>
 		<li class=p><p>Click <span style="font-weight: bold;"><B>Finish</B></span>.</p></li>
 	</ol>
+</ul>
+<h3 class="whs9">Monitoring the Resource Account Calendar</h3>
+<p class="whs2">A resource account can share its resource 
+ calendar so that a specified user can manage the resource calendar. You 
+ can also configure the resource account to forward a copy of the resource's 
+ invitations to this user. &nbsp;When this is set up, 
+ the user that is managing the resource does not need to log on directly 
+ to the account to view the resource calendar. </p>
+<ol type="1" class="whs10">
+	<li style="x-condition: NET_OS;" class=p><p>Create a resource</p></li>
+	<li style="x-condition: NET_OS;" class=p><p>Select the resource from 
+ the Accounts list and click <span style="font-weight: bold;"><B>View Mail</B></span> 
+ to open the resource account.</p></li>
+	<li style="x-condition: NET_OS;" class=p><p>Share the resource's calendar:</p></li>
+	<ol type="a" class="whs11">
+		<li class=p><p>In the Resource account's Calendar view, right-click 
+ on <span style="font-weight: bold;"><B>Calendar</B></span> and select <span style="font-weight: bold;"><B>Share 
+ Calendar with Internal users or groups</B></span></p></li>
+		<li class=p><p>In the <span style="font-weight: bold;"><B>Role</B></span> 
+ section, select either <span style="font-weight: bold;"><B>Manager</B></span> 
+ or <span style="font-weight: bold;"><B>Admin</B></span> to give the user permission 
+ to create, accept or decline invitations and edit the resource calendar. 
+ &nbsp;</p></li>
+		<li class=p><p>Select which message to send to the user to notify 
+ them that the Resource account's Calendar has been shared.</p></li>
+		<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. 
+ </p></li>
+		<li class=p><p>Close the account and return to the administrator 
+ console.</p></li>
+	</ol>
+	<li style="x-condition: NET_OS;" class=p><p>Edit the resource account 
+ and set the forwarding address to be the user account you delegated to 
+ share the resource. A copy of invites are automatically forwarded to the 
+ account. <span style="font-weight: bold;"><B>Note</B></span>: The forwarding 
+ address can be added when you create the resource account as well.</p></li>
 </ol>
 <script type="text/javascript" language="javascript1.2">
 <!--

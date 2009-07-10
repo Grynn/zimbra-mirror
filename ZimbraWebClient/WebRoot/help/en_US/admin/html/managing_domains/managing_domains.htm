@@ -48,7 +48,7 @@ if (window.gbWhTopic)
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Domains\nManaging Domains");
-addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -92,8 +92,8 @@ else
 <ul type="disc" class="whs1">
 	<li class=p><p>Domain <span style="font-weight: bold;"><B>General</B></span> 
  settings, including domain name, description, the number of accounts that 
- can be created on the domain, and default Class of Service assigned to 
- the domain. </p></li>
+ can be created on the domain, default Class of Service assigned to the 
+ domain, and the time zone for accounts provisioned on this domain.</p></li>
 	<li class=p><p>Domain <span style="font-weight: bold;"><B>GAL</B></span> settings. 
  Options are <span style="font-weight: bold;"><B>Internal</B></span> LDAP server, 
  <span style="font-weight: bold;"><B>External</B></span> LDAP server or <span 
@@ -118,16 +118,23 @@ else
  the </span>Themes<span style="font-weight: normal;"> tab to quickly </span><span 
  style="font-weight: normal;">change the colors used for the client interface. 
  See </span><a href="../ui_themes/how_to_customize_theme_colors_and_logos.htm">Quick 
- Customer Color</a>.</p></li>
+ Custom Color</a>.</p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>Account Limits </B></span><span>on 
  the domain. You can set the maximum number of accounts and maximum accounts 
  per COS.</span></p></li>
 </ul>
+<h6>View Accounts on Domains</h6>
+<p>You can view a list of all accounts on a domain. Select the domain and 
+ click <span style="font-weight: bold;"><B>View Accounts</B></span> on the domain 
+ toolbar. The results display in the Content pane. </p>
+<p>You can save the results displayed in the Content pane to a .csv file. 
+ Click <span style="font-weight: bold;"><B>Download</B></span> on the domain toolbar. 
+ The can select the location to save the .csv file.</p>
 <p>To <a href="changing_a_domain_name.htm">change a domain name</a> use 
  the CLI utility, <span class=code>zmprov</span>.</p>
 <p>&nbsp;</p>
 <p>
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'_blank','Configure the Global Address List','using_the_global_address_list_(gal).htm','Configuring Authentication Settings','authentication_settings.htm','Configuring Virtual Hosts','configuring_virtual_hosts.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border=0 height=20 width=96 alt="Related Topics"></a>
+<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'_blank','Configure the Global Address List','using_the_global_address_list_(gal).htm','Configuring Authentication Settings','authentication_settings.htm','Configuring Virtual Hosts','configuring_virtual_hosts.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border=0 height=17 width=81 alt="Related Topics"></a>
 
 
  </p>

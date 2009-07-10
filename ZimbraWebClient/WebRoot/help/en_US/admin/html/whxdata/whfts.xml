@@ -1,16 +1,16 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <fts>
-<chunkinfo url="whfwdata0.xml" first="!" last="bottom"/>
-<chunkinfo url="whfwdata1.xml" first="bounc" last="deposit"/>
-<chunkinfo url="whfwdata2.xml" first="descend" last="hack"/>
-<chunkinfo url="whfwdata3.xml" first="ham" last="member"/>
-<chunkinfo url="whfwdata4.xml" first="memory" last="protocol"/>
-<chunkinfo url="whfwdata5.xml" first="provid" last="spamassassin"/>
-<chunkinfo url="whfwdata6.xml" first="specifi" last="will"/>
-<chunkinfo url="whfwdata7.xml" first="window" last="™"/>
+<chunkinfo url="whfwdata0.xml" first="!" last="blank"/>
+<chunkinfo url="whfwdata1.xml" first="blob" last="delegat"/>
+<chunkinfo url="whfwdata2.xml" first="delet" last="given"/>
+<chunkinfo url="whfwdata3.xml" first="global" last="mak"/>
+<chunkinfo url="whfwdata4.xml" first="man" last="precedenc"/>
+<chunkinfo url="whfwdata5.xml" first="predefin" last="shortnam"/>
+<chunkinfo url="whfwdata6.xml" first="should" last="via"/>
+<chunkinfo url="whfwdata7.xml" first="view" last="™"/>
 
 <tchunkinfo first="0" last="97" url="whftdata0.xml" />
-<tchunkinfo first="98" last="116" url="whftdata1.xml" />
+<tchunkinfo first="98" last="119" url="whftdata1.xml" />
 
 </fts>

@@ -1,6 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="forwarding, disable" >
+  <topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
+</key>
 <key name="free_busy, on 3rd party servers" >
   <topic name="Making Free/Busy View  Available " url="managing_global_settings/making_free_busy_view__available_.htm" />
 </key>
@@ -308,17 +311,20 @@
 <key name="resources, number used" >
   <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
 </key>
+<key name="save search results" >
+  <topic name="Using Search" url="search/search.htm" />
+</key>
 <key name="search" >
-  <topic name="Search for Accounts" url="managing_accounts/search.htm" />
+  <topic name="Search for Accounts" url="search/search.htm" />
 </key>
 <key name="search by login time" >
-  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
 </key>
 <key name="search for administrators" >
-  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
 </key>
 <key name="search, advanced" >
-  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
 </key>
 <key name="secondary volumes" >
   <topic name="Volume Management" url="managing_servers/volume_management.htm" />
@@ -326,9 +332,6 @@
 <key name="self-signed certificates" >
   <topic name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
   <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
-</key>
-<key name="server pool" >
-  <topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
 </key>
 
 </indexdata>

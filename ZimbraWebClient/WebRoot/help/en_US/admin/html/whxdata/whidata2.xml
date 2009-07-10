@@ -1,11 +1,14 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="server pool" >
+  <topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
+</key>
 <key name="server, monitoring" >
   <topic name="Monitoring Zimbra Collaboration Suite" url="managing_servers/monitoring_zimbra_collaboration_suite.htm" />
 </key>
 <key name="server, search" >
-  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
 </key>
 <key name="server, stopping service" >
   <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
@@ -118,6 +121,9 @@
 <key name="users mail" >
   <topic name="Viewing User's Mailbox Content" url="monitoring/viewing_user_s_mailbox_content.htm" />
 </key>
+<key name="view accounts by domain" >
+  <topic name="Viewing Accounts by Domain" url="managing_domains/viewing_accounts_by_domain.htm" />
+</key>
 <key name="viewing mailbox content" >
   <topic name="Viewing User's Mailbox Content" url="monitoring/viewing_user_s_mailbox_content.htm" />
 </key>
@@ -132,6 +138,9 @@
 </key>
 <key name="volume, blob compression" >
   <topic name="Volume Management" url="managing_servers/volume_management.htm" />
+</key>
+<key name="wiping mobile devices" >
+  <topic name="Mobile Device Wipe" url="mobile/mobile_device_wipe.htm" />
 </key>
 <key name="Zimbra Web Client Versions" >
   <topic name="Setting the Default ZWC Login Version" url="managing_accounts/setting_the_devault_zwc_login_version.htm" />

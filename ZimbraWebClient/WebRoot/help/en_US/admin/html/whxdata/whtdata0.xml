@@ -22,12 +22,12 @@
   <item name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
   <item name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
   <item name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
-  <item name="Making Free/Busy View Available" url="managing_global_settings/making_free_busy_view__available_.htm" />
+  <item name="Making Free/Busy Available" url="managing_global_settings/making_free_busy_view__available_.htm" />
 </book>
 <book name="Searching" >
-  <item name="Using Search" url="managing_accounts/search.htm" />
-  <item name="Help Search" url="delegated_admin/help_search.htm" />
-  <item name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+  <item name="Using Search" url="search/search.htm" />
+  <item name="Zimbra Search" url="search/help_search.htm" />
+  <item name="Advanced Search" url="search/advanced_search.htm" />
 </book>
 <book name="Managing Domains" >
   <item name="Managing Domains" url="managing_domains/managing_domains.htm" />
@@ -35,6 +35,7 @@
   <item name="Configuring Authentication Settings" url="managing_domains/authentication_settings.htm" />
   <item name="Configuring Virtual Hosts" url="managing_domains/configuring_virtual_hosts.htm" />
   <item name="How to Configure Authentication" url="managing_domains/how_to_configure_authentication_mode.htm" />
+  <item name="Viewing Accounts by Domain" url="managing_domains/viewing_accounts_by_domain.htm" />
   <item name="Adding a New Domain" url="managing_domains/creating_a_domain.htm" />
   <item name="Changing a Domain Name" url="managing_domains/changing_a_domain_name.htm" />
   <item name="How to Configure GAL" url="managing_domains/how_to_configure_gal.htm" />
@@ -66,6 +67,7 @@
     <item name="Bulk Provisioning" url="managing_accounts/bulk_provisioning.htm" />
     <item name="How to Provision Multiple Accounts" url="managing_accounts/how_to_provision_multiple_accounts.htm" />
     <item name="Editing Accounts" url="managing_accounts/editing_accounts.htm" />
+    <item name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
     <item name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
     <item name="Renaming an Account" url="managing_accounts/renaming_an_account.htm" />
     <item name="Managing Alias Addresses" url="managing_accounts/creating_a_mail_aliases.htm" />

@@ -37,9 +37,9 @@
 <item name="Show_Navigation_Component" value="Show Navigation Component" />
 <item name="Book" value="Book" />
 <item name="Disabled Next" value="&gt;&gt;" />
-<item name="FtsHilitePrompt" value="Highlight search results" />
 <item name="nls_body_empty" value="Sorry, we were unable to find a good answer for your question." />
 <item name="nls_button_go_hint" value="Go Search" />
+<item name="FtsHilitePrompt" value="Highlight search results" />
 <item name="Find" value="Find" />
 <item name="CantOpenURLorFile" value="Can't open URL or file" />
 <item name="Print" value="Print" />
@@ -59,7 +59,7 @@
 <item name="NextTooltip" value="Next Topic" />
 <item name="JS_alert_colorlimitation" value="WebHelp has detected that your display is set to 16 colors. For full WebHelp support, please set your display to use 256 or more colors." />
 <item name="TopicsNotFound" value="No Topics Found." />
-<item name="Show" value="Show" />
+<item name="Show" value="Show TOC" />
 <item name="PreTooltip" value="Previous Topic" />
 <item name="SearchPrompt" value="- Search -" />
 <item name="IndexBtnText" value="Go" />

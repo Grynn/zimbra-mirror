@@ -38,10 +38,10 @@
   <topic name="Adding Zimlets to COS and Accounts" url="zimlets/adding_zimlets_to_cos_and_accounts.htm" />
 </key>
 <key name="accounts, last login time" >
-  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
 </key>
 <key name="accounts, never logged in" >
-  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
 </key>
 <key name="accounts, number used" >
   <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
@@ -77,7 +77,7 @@
   <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
 </key>
 <key name="administrator accounts, search for" >
-  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
 </key>
 <key name="advanced features" >
   <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
@@ -264,7 +264,7 @@
   <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
 </key>
 <key name="domain administrator accounts, search for" >
-  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
 </key>
 <key name="domain documents account" >
   <topic name="Creating Domain Documents Account" url="documents/managing_domain_documents.htm" />
@@ -276,10 +276,16 @@
   <topic name="Adding a New Domain" url="managing_domains/creating_a_domain.htm" />
 </key>
 <key name="domain, search" >
-  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
+</key>
+<key name="domain, view accounts in" >
+  <topic name="Viewing Accounts by Domain" url="managing_domains/viewing_accounts_by_domain.htm" />
 </key>
 <key name="domains" >
   <topic name="Managing Domains" url="managing_domains/managing_domains.htm" />
+</key>
+<key name="download search results" >
+  <topic name="Using Search" url="search/search.htm" />
 </key>
 <key name="edit domain" >
   <topic name="Managing Domains" url="managing_domains/managing_domains.htm" />
@@ -318,15 +324,12 @@
   <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
 </key>
 <key name="find" >
-  <topic name="Search for Accounts" url="managing_accounts/search.htm" />
+  <topic name="Search for Accounts" url="search/search.htm" />
 </key>
 <key name="forwarding address, allowing users to" >
   <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
 </key>
 <key name="forwarding mail" >
-  <topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
-</key>
-<key name="forwarding, disable" >
   <topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
 </key>
 

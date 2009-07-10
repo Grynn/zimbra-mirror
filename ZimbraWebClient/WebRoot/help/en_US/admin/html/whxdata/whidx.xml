@@ -1,8 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="access control for domain Documents accounts" last="forwarding, disable" num="108" />
-<chunkinfo url="whidata1.xml" first="free_busy, on 3rd party servers" last="server pool" num="109" />
-<chunkinfo url="whidata2.xml" first="server, monitoring" last="Zimlets, setting up in COS and accounts" num="51" />
+<chunkinfo url="whidata0.xml" first="access control for domain Documents accounts" last="forwarding mail" num="109" />
+<chunkinfo url="whidata1.xml" first="forwarding, disable" last="self-signed certificates" num="110" />
+<chunkinfo url="whidata2.xml" first="server pool" last="Zimlets, setting up in COS and accounts" num="54" />
 
 </index>

@@ -13,7 +13,7 @@ if (navigator.appName !="Netscape")
 </script>
 <style type="text/css">
 <!--
-ul.whs1 { list-style:disc; }
+ul.whs1 { list-style:disc; list-style-type:disc; list-style-position:outside; }
 p.whs2 { margin-left:40px; }
 -->
 </style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
@@ -47,8 +47,8 @@ if (window.gbWhTopic)
 {
 	if (window.addTocInfo)
 	{
-	addTocInfo("Global Settings\nMaking Free/Busy View Available");
-addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+	addTocInfo("Global Settings\nMaking Free/Busy Available");
+addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -77,86 +77,97 @@ else
 
 //-->
 </script>
-<h1>Making Free/Busy Schedule View Available (Beta)</h1>
-<p>When ZCS is deployed in &nbsp;a mix of ZCS servers 
- and third party email servers and Calendar is an important function of 
- your users, you may want users to be able to see the free/busy scheduling 
- across the mix so that users can efficiently schedule meetings. &nbsp;</p>
-<p>For this release, the Zimbra Free/Busy Module to connect with Microsoft 
- Exchange feature can be configured between ZCS and Microsoft Exchange 
- Servers. The ZCS can pull the free/busy schedule of a user on Exchange 
- and also push the free/busy schedule of a ZCS user to the Exchange server. 
- You configure Global Config, Domain, COS, and Account 
- settings. </p>
+<h1>Making Free/Busy Schedule Available</h1>
+<p>When ZCS is deployed in a mix of ZCS servers and third-party email servers 
+ and Calendar is an important function with your users, you may want users 
+ to be able to see the free/busy scheduling across the mix so that users 
+ can efficiently schedule their meetings. &nbsp;</p>
+<p>ZCS can query the free/busy schedules of users on Microsoft Exchange 
+ 2003/2007 servers and also can propagate the free/busy schedules of ZCS 
+ users to the Exchange server. To set this up, you configure Global Config 
+ or Domain, Class of Service, and Account settings. </p>
+<p>To set Free/Busy interoperability up from the administration console, 
+ configure the following:</p>
+<ul type="disc" class="whs1"><li class=p><p>Either globally or by domain configure the Exchange 
+ server settings in the <span style="font-weight: bold;"><B>Interop</B></span> 
+ tab. </p></li>
+	<li class=p><p>In the global settings or domain <span style="font-weight: bold;"><B>Interop</B></span> 
+ tab or the <span style="font-weight: bold;"><B>Class of Service</B></span> (COS) 
+ <span style="font-weight: bold;"><B>Advanced</B></span> tab, add the <span style="font-weight: bold;"><B>o</B></span> 
+ and <span style="font-weight: bold;"><B>ou</B></span> values 
+ that are in the <span style="font-weight: bold;"><B>legacyExchangeDN</B></span> 
+ attribute for Exchange. These values correspond to the ZCS domain attribute 
+ <span style="font-weight: bold;"><B>zimbraFreebusyExchangeUserOrg</B></span>. 
+ </p></li>
+	<li class=p><p>In the <span style="font-weight: bold;"><B>Accounts Free/Busy 
+ Interop</B></span> tab, configure the foreign principal for the account. The 
+ cn value in the <span style="font-weight: bold;"><B>legacyExchangeDn</B></span> 
+ attribute corresponds to the <span style="font-weight: bold;"><B>zimbraForeignPrincipal</B></span> 
+ attribute. This sets up a mapping from the ZCS account to the corresponding 
+ object in the AD. </p></li>
+</ul>
+<ul><li class=p-note><p class=note>To find these values on the Exchange 
+ server, you can run the Exchange ADSI Edit tool and 
+ search the legacyExchangeDN attribute for o= , ou= , and cn= values. </p></li>
+</ul>
 <h2>Global Config Settings</h2>
-<p>The &nbsp;<span style="font-weight: bold;"><B>Interop 
- </B></span><span>tap</span> is used to configure the Exchange server settings. 
- In order to enable the Exchange free/busy interop implementation, a single 
- AD must be in the system or the Global Catalog must be available and the 
- ZCS server must be able to access the HTTP(S) port 
- of IIS on at least one of the Exchange servers.</p>
+<p>The <span style="font-weight: bold;"><B>Interop </B></span>tap 
+ is used to configure the Exchange server settings.</p>
 <p>You configure the following on the tab:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Exchange server URL. &nbsp;This is 
- the Web interface to the Exchange.</p></li>
+<ul type="disc" class="whs1"><li class=p><p>Exchange server URL. &nbsp;This is the Web interface 
+ to the Exchange.</p></li>
 	<li class=p><p>Exchange authentication scheme, either <span style="font-weight: bold;"><B>Basic</B></span> 
  or <span style="font-weight: bold;"><B>Form</B></span>. </p></li>
-	<ul type="disc" class="whs1">
-		<li class=p><p>Basic is authentication to Exchange via HTTP 
+	<ul type="disc" class="whs1"><li class=p><p>Basic is authentication to Exchange via HTTP 
  basic authentication. </p></li>
 		<li class=p><p>Form is authentication to Exchange as HTML form 
  based authentication.</p></li>
 	</ul>
 </ul>
-<ul type="disc" class="whs1">
-	<li class=p><p>Exchange user name and password . This is the name of 
- the account in Active Directory and password that has access to the public 
- folders.</p></li>
+<ul type="disc" class="whs1"><li class=p><p>Exchange user name and password. This is the 
+ name of the account in Active Directory and password that has access to 
+ the public folders.</p></li>
 </ul>
 <h2>Domain Setting</h2>
 <p>The<span style="font-weight: bold;"><B> Interop </B></span><span>tab</span> 
  is used to configure the Exchange server settings. This information is 
  the basic property of the Exchange server account that has access to the 
  Exchange public folders. In order to enable the Exchange free/busy interop 
- implementation, a &nbsp;single AD must be in the system 
- or the Global Catalog must be available and the ZCS server must be able 
- to access the HTTP(S) port of IIS 
- on at least one of the Exchange servers.</p>
+ implementation, a &nbsp;single AD must be in the system or the Global 
+ Catalog must be available and the ZCS server must be able to access the 
+ HTTP(S) port of IIS on at least 
+ one of the Exchange servers.</p>
 <p>You configure the following on the tab:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Exchange server URL. &nbsp;This is 
- the Web interface to the Exchange public folders.</p></li>
+<ul type="disc" class="whs1"><li class=p><p>Exchange server URL. &nbsp;This is the Web interface 
+ to the Exchange public folders.</p></li>
 	<li class=p><p>Exchange authorization schema, either <span style="font-weight: bold;"><B>Basic</B></span> 
  or <span style="font-weight: bold;"><B>Form</B></span>. </p></li>
-	<ul type="disc" class="whs1">
-		<li class=p><p>Basic is authentication to Exchange via HTTP 
+	<ul type="disc" class="whs1"><li class=p><p>Basic is authentication to Exchange via HTTP 
  basic authentication. </p></li>
 		<li class=p><p>Form is authentication to Exchange as HTML form 
  based authentication.</p></li>
 	</ul>
 </ul>
-<ul type="disc" class="whs1">
-	<li class=p><p>Exchange user name and password . This is the name of 
- the account &nbsp;and password that has access to the 
- public folders.</p></li>
+<ul type="disc" class="whs1"><li class=p><p>Exchange user name and password . This is the 
+ name of the account &nbsp;and password that has access to the public folders.</p></li>
 	<li class=p-note><p class=note>Domain settings overwrite Global settings. 
  </p></li>
 </ul>
 <h2>COS Setting</h2>
 <p>The Free/Busy Interop section of the Advanced tab 
- is used to set the O and OU used in legacyExchangeDN 
+ is used to set the <span style="font-weight: bold;"><B>O</B></span> and <span 
+ style="font-weight: bold;"><B>OU</B></span> used in legacyExchangeDN 
  attribute (i.e. legacyExchangeDN : /o=First 
  Organization/ou=First Administrative Group).</p>
 <h2>Account Settings</h2>
 <p>Two tabs have Free/Busy Interop configuration options. 
  </p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Advanced tab. This is the same as the COS Setting configuration 
- unless you want to change it for a specific account.</p></li>
-	<li class=p><p>Free/Busy Interop tab. This is the 
- tab to configure the foreign principal for the account. &nbsp;This 
- is a mapping from the ZCS account to the corresponding object in the Active 
- Directory. The Zimbra foreign principal maps like this: <span style="font-weight: bold;"><B>legacyExchangeDN 
+<ul type="disc" class="whs1"><li class=p><p>Advanced tab. This is the same as the COS Setting 
+ configuration unless you want to change it for a specific account.</p></li>
+	<li class=p><p>Interop tab. This is the tab to configure 
+ the foreign principal for the account. &nbsp;This is a mapping from the 
+ ZCS account to the corresponding object in the Active Directory. The Zimbra 
+ foreign principal maps like this: <span style="font-weight: bold;"><B>legacyExchangeDN 
  : /o=.../ou=.../cn-Recipient/cn=&lt;Zimbra foreign principal&gt;</B></span>. 
  The Zimbra foreign principal is usually the user's address.</p></li>
 </ul>

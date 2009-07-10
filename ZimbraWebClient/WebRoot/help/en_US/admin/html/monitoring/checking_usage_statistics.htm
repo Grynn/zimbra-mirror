@@ -47,7 +47,7 @@ if (window.gbWhTopic)
 	if (window.addTocInfo)
 	{
 	addTocInfo("Monitoring Tools\nChecking Usage Statistics");
-addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -111,7 +111,12 @@ else
  only one message processed by AS/AV. </p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>Disk</B></span> for a selected 
  server displays the disk space used and the disk space available. The 
- information is displayed for the last hour, day, month and year. &nbsp;</p></li>
+ information is displayed for the last hour, day, month and year. &nbsp;Administrators 
+ are notified when the mailbox server disk is near full. By default, warning 
+ alerts are sent when the threshold is 85% and a critical alert is sent 
+ when the threshold is 95%. The threshold can be modified from the CLI, 
+ zmlocalconfig. &nbsp;See the Administration 
+ Guide, Appendix A CLI.</p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>Mailbox Quota</B></span> 
  displays information about each account sorted by mailbox size in descending 
  order. See <a href="../managing_servers/viewing_mailbox_quotas.htm">Viewing 

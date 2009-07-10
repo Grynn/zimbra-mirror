@@ -13,8 +13,9 @@ if (navigator.appName !="Netscape")
 </script>
 <style type="text/css">
 <!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
+ol.whs1 { list-style:decimal; }
+ul.whs2 { list-style:disc; }
+p.whs3 { margin-left:40px; }
 -->
 </style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
 <!--
@@ -47,8 +48,8 @@ if (window.gbWhTopic)
 {
 	if (window.addTocInfo)
 	{
-	addTocInfo("Managing Domains\nAccount Limits");
-addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+	addTocInfo("Managing Domains\nSetting Account Limits for Domain");
+addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -77,43 +78,71 @@ else
 
 //-->
 </script>
-<h1>Account Limits</h1>
-<p>You can set the following account limits by domain:</p>
-<ul type="disc" class="whs1">
-	<li class=P><p>Maximum number of accounts for a domain</p></li>
-	<li class=P><p>Maximum number of &nbsp;accounts that 
- can be assigned to a specific COS</p></li>
-	<li class=P><p>Maximum number of accounts that can be assigned a specific 
- feature</p></li>
-</ul>
-<p>&nbsp;</p>
-<h6>How to set up account limits</h6>
-<p>By default, no limits are set. <span style="font-weight: bold;"><B>Note</B></span>: 
- entering 0 in these fields also means that no limits are set.</p>
-<ol type="1" class="whs2">
-	<li class=p><p>Select a domain to edit and open the Accounts Limits 
- tab</p></li>
-	<li class=p><p>Each of the following can be set:</p></li>
-	<ul><li style="list-style: disc;" type=disc class=p><p>Enter the number 
- of accounts that can be assigned to this domain. </p></li>
-		<li style="list-style: disc;" type=disc class=p><p>To set the maximum 
- accounts per COS, click <span style="font-weight: bold;"><B>A</B></span><span 
- style="font-weight: bold;"><B>dd</B></span> and in the Class of Service field 
- enter a COS name. This will start auto-complete that shows all COS. &nbsp;Select 
- a COS and in the Limit field, enter the maximum number of accounts allowed. 
- Click <span style="font-weight: bold;"><B>OK</B></span>.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p>To set account 
- limits for specific features, in the Maximum accounts per feature section, 
- click <span style="font-weight: bold;"><B>Add</B></span>. Select a feature from 
- the drop-down and set the limit. Click <span style="font-weight: bold;"><B>OK</B></span>. 
- &nbsp;The Feature limit is counted when a feature is 
- set in an account, overriding the COS setting. For instance, the COS for 
- an account does not enable Instant Messaging. The account is edited to 
- enable Instant Messaging. </p></li>
-	</ul>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span>. 
+<h1>Setting Account Limits for Domains</h1>
+<p>You can limit the number of accounts that can be provisioned on a domain. 
+ &nbsp;The maximum number of accounts allowed on a domain 
+ can be set when the domain is created. &nbsp;You can 
+ also edit the domain settings to set this up or to change the configuration 
+ from the Domain Account Limits tab.</p>
+<p>When the limit is reached, &nbsp;if you &nbsp;provision 
+ a new account, when you try to save the account, you see a message that 
+ the account limit has been reached and you cannot create the account. 
+ &nbsp;Resource, domain wiki, spam and ham accounts are 
+ not counted against the limit you set. </p>
+<ul><li class=P-note><p class=note>To see a list of all accounts on a domain, 
+ select the domain from either the Navigation pane or the domain list in 
+ the Content pane and click <span style="font-weight: bold;"><B>View Accounts</B></span> 
+ from the domain toolbar. The accounts are displayed in the Content pane. 
  </p></li>
+</ul>
+<h2>Limiting COS Usage</h2>
+<p>When multiple Classes of Service (COS) are available, &nbsp;you 
+ can select which classes of service can be configured and how many accounts 
+ on the domain can be assigned to the COS. </p>
+<p>&nbsp;In the Domain Account Limits tab, select the 
+ COSs that be can be assigned to accounts on the domain. Set the maximum 
+ number of accounts that can be assigned the COS. The limits for all COS 
+ cannot exceed the number set for the maximum accounts for the domain.</p>
+<p>If COS usage for a domain is configured, when you create an account 
+ or edit an existing account, the <span style="font-weight: bold;"><B>Account 
+ Type</B></span> section on the <span style="font-weight: bold;"><B>General Information</B></span> 
+ page displays the COSs available for the domain. &nbsp;</p>
+<p>The number of account types assigned is tracked. You can see the number 
+ assigned/number remaining from any account's General Information tab.</p>
+<h6>To set or change the limit on a domain and set the COS limits</h6>
+<ol type="1" class="whs1">
+	<li class=p><p>Select the domain and open for edit.</p></li>
+	<li class=p><p>Open the <span style="font-weight: bold;"><B>Account Limits</B></span> 
+ tab and enter the maximum number &nbsp;of accounts for 
+ the domain in the <span style="font-weight: bold;"><B>Maximum accounts for 
+ this domain</B></span> field.</p></li>
+	<li class=p><p>If you want to configure specific COS for the domain, 
+ click <span style="font-weight: bold;"><B>Add</B></span><span>, otherwise go 
+ to Step 6.</span></p></li>
+	<li class=p><p>In the <span style="font-weight: bold;"><B>Add maximum 
+ accounts</B></span> dialog <span style="font-weight: bold;"><B>Class of Service</B></span> 
+ field</p></li>
+	<ul type="disc" class="whs2">
+		<li class=p><p>Enter the first letters of the COS and then select 
+ the COS from the list that displays. </p></li>
+		<li class=p><p>In the <span style="font-weight: bold;"><B>Limit</B></span> 
+ field, enter the number of accounts that can be created. </p></li>
+		<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. 
+ </p></li>
+	</ul>
 </ol>
+<p class="whs3"><span style="font-weight: bold;"><B>Note:</B></span> 
+ The COS name that displays in the Account Type is taken from the COS Description 
+ field. If that field is blank, the COS name is displayed.</p>
+<ol type="1" class="whs1">
+	<li class=p><p>Add additional COSs as described in step 4. </p></li>
+	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span>. 
+ Click <span style="font-weight: bold;"><B>Close</B></span>.</p></li>
+	<li class=p><p>Click the <span style="font-weight: bold;"><B>Browser Refresh</B></span> 
+ button to update the information in the administration console.</p></li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <script type="text/javascript" language="javascript1.2">
 <!--
 highlightSearch();

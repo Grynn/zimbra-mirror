@@ -43,7 +43,7 @@ if (window.gbWhTopic)
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Accounts\nAccounts\nEditing Accounts");
-addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -125,6 +125,16 @@ else
  Web Client Preferences tab. You can also define a forwarding address that 
  is hidden from the user. When email is received in the account, &nbsp;a 
  copy is sent to the forwarding addresses listed. </p></li>
+		<li style="list-style: disc;" type=disc class=p><p><span style="font-weight: bold;"><B>Free/Busy 
+ Interop</B></span> tab configures the foreign principal for the account. This 
+ is necessary when ZCS is deployed in a mix of ZCS servers and third party 
+ email servers and Calendar is an important feature with your users. This 
+ sets up &nbsp;<a href="../managing_global_settings/making_free_busy_view__available_.htm">free/busy 
+ scheduling</a> across the mix so that users can efficiently schedule meetings. 
+ For this configuration, the cn setting in the legacyExchangeDn 
+ attribute corresponds to the zimbraForeignPrincipal 
+ attribute. This sets up a mapping from the ZCS account to the corresponding 
+ object in the AD. &nbsp;</p></li>
 		<li style="list-style: disc;" type=disc class=p><p><span style="font-weight: bold;"><B>Themes</B></span> 
  tab is where the available and installed themes are listed. &nbsp;See 
  <a href="../ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm">Defining 
@@ -140,7 +150,11 @@ else
  policy</a>, <a href="../passwords/setting_account_lockout_rules.htm">failed 
  login policy</a> and timeout policy 
  for the account.</p></li>
-	</ul>
+		<li style="list-style: disc;" type=disc class=p><p><span style="font-weight: bold;"><B>ACL</B></span> 
+ and <span style="font-weight: bold;"><B>Admin Views</B></span> tabs are used 
+ if the account is a delegated admin account. See Delegated 
+ Administration.</p></li>
+		</ul>
 </ol>
 <ol class=whs2 start=3 style="list-style: decimal;" type=1>
 	<li class=p><p>Click <span style="font-weight: bold;"><B>Save </B></span>to 
