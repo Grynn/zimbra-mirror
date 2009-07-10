@@ -680,47 +680,52 @@ function (domainName, controller) {
 //         		The object is {name: "saved search name", query : "saved search query" }
 ZaSearch.modifySavedSearches =
 function (savedSearchArray, callback) {
-	var soapDoc = AjxSoapDoc.create("ModifyAdminSavedSearchesRequest", ZaZimbraAdmin.URN, null);
-	for (var i=0; i < savedSearchArray.length; i ++) {
-		var cSavedSearch = savedSearchArray[i] ;
-		var el = soapDoc.set("search", cSavedSearch.query) ;
-		el.setAttribute("name", cSavedSearch.name) ;
-	}
-		
-	var command = new ZmCsfeCommand();
-	var cmdParams = new Object();
-	cmdParams.soapDoc = soapDoc;
-	if (callback) {
-		cmdParams.asyncMode = true;
-		cmdParams.callback = callback;
-	}	
-	command.invoke(cmdParams);	
+    if (ZaSearchField.canSaveSearch()){
+        var soapDoc = AjxSoapDoc.create("ModifyAdminSavedSearchesRequest", ZaZimbraAdmin.URN, null);
+        for (var i=0; i < savedSearchArray.length; i ++) {
+            var cSavedSearch = savedSearchArray[i] ;
+            var el = soapDoc.set("search", cSavedSearch.query) ;
+            el.setAttribute("name", cSavedSearch.name) ;
+        }
+            
+        var command = new ZmCsfeCommand();
+        var cmdParams = new Object();
+        cmdParams.soapDoc = soapDoc;
+        if (callback) {
+            cmdParams.asyncMode = true;
+            cmdParams.callback = callback;
+        }
+        command.invoke(cmdParams);
+    }
 }
 
 //get saved searches
 //@param searchNameArr: the array contains all the saved search names whose queries will be returned.
 ZaSearch.getSavedSearches = 
 function (searchNameArr, callback) {
-	var soapDoc = AjxSoapDoc.create("GetAdminSavedSearchesRequest", ZaZimbraAdmin.URN, null);
-	if (searchNameArr) {
-		for (var i=0; i < searchNameArr.length; i ++) {
-			var el = soapDoc.set("search", "") ;
-			el.setAttribute("name", searchNameArr[i]) ;
-		}
-	}
-		
-	var command = new ZmCsfeCommand();
-	var cmdParams = new Object();
-	cmdParams.soapDoc = soapDoc;	
-	if (callback) {
-		cmdParams.asyncMode = true;
-		cmdParams.callback = callback;
-	}
-	return command.invoke(cmdParams);	
+    if (ZaSearchField.canViewSavedSearch()) {
+        var soapDoc = AjxSoapDoc.create("GetAdminSavedSearchesRequest", ZaZimbraAdmin.URN, null);
+        if (searchNameArr) {
+            for (var i=0; i < searchNameArr.length; i ++) {
+                var el = soapDoc.set("search", "") ;
+                el.setAttribute("name", searchNameArr[i]) ;
+            }
+        }
+
+        var command = new ZmCsfeCommand();
+        var cmdParams = new Object();
+        cmdParams.soapDoc = soapDoc;
+        if (callback) {
+            cmdParams.asyncMode = true;
+            cmdParams.callback = callback;
+        }
+        return command.invoke(cmdParams);
+    }
 }
 
 ZaSearch.updateSavedSearch =
 function (resp) {
+
 	if (AjxEnv.hasFirebug) console.debug("Update Saved Search ... ");
 	ZaSearch.SAVED_SEARCHES = [] ;
 	var respObj = resp._data || resp ;
@@ -740,23 +745,25 @@ function (resp) {
 
 ZaSearch.loadPredefinedSearch =
 function () {
-	var currentSavedSearches = ZaSearch.getSavedSearches().Body.GetAdminSavedSearchesResponse.search;
-	
-	if (! currentSavedSearches){//load the predefined searches
-		if (AjxEnv.hasFirebug) console.log("Load the predefined saved searches ...") ;
-		var savedSearchArr = [] ;
-		//if (!ZaSettings.isDomainAdmin) { //admin only searches
-			for (var m=0; m < ZaSearch.getPredefinedSavedSearchesForAdminOnly().length; m++){
-				savedSearchArr.push (ZaSearch.getPredefinedSavedSearchesForAdminOnly()[m]) ;
-			}
-		//}
-		
-		for (var n=0; n < ZaSearch.getPredefinedSavedSearches().length; n ++) {
-			savedSearchArr.push (ZaSearch.getPredefinedSavedSearches()[n]) ;
-		}
-		
-		ZaSearch.modifySavedSearches (savedSearchArr) ;
-	}
+    if (ZaSearchField.canViewSavedSearch()) {
+        var currentSavedSearches = ZaSearch.getSavedSearches().Body.GetAdminSavedSearchesResponse.search;
+
+        if ((! currentSavedSearches) && (ZaSearchField.canSaveSearch())){//load the predefined searches
+            if (AjxEnv.hasFirebug) console.log("Load the predefined saved searches ...") ;
+            var savedSearchArr = [] ;
+            //if (!ZaSettings.isDomainAdmin) { //admin only searches
+                for (var m=0; m < ZaSearch.getPredefinedSavedSearchesForAdminOnly().length; m++){
+                    savedSearchArr.push (ZaSearch.getPredefinedSavedSearchesForAdminOnly()[m]) ;
+                }
+            //}
+
+            for (var n=0; n < ZaSearch.getPredefinedSavedSearches().length; n ++) {
+                savedSearchArr.push (ZaSearch.getPredefinedSavedSearches()[n]) ;
+            }
+
+            ZaSearch.modifySavedSearches (savedSearchArr) ;
+        }
+    }
 }
 
 /**

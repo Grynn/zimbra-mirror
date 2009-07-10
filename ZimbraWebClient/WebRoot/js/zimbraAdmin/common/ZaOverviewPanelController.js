@@ -271,8 +271,8 @@ ZaOverviewPanelController.prototype._setView =
 function() {
 	this._overviewPanel = new ZaOverviewPanel(this._container, "OverviewPanel", DwtControl.ABSOLUTE_STYLE);
 	this._overviewPanel.setScrollStyle(DwtControl.SCROLL);
-	ZaSearch.loadPredefinedSearch() ;
-	this._buildFolderTree();
+    ZaSearch.loadPredefinedSearch() ;
+    this._buildFolderTree();
 	//this._overviewPanel.getFolderTree().setSelection(this._inboxTreeItem);
 	this._overviewPanel.zShow(true);
 }
@@ -616,7 +616,9 @@ function() {
 
     if (this._savedSearchTi) {
         this._savedSearchTi.addSeparator();
-        this._savedSearchTi.setExpanded(true, false);
+        if (this._savedSearchMapArr && this._savedSearchMapArr.length > 0) {
+            this._savedSearchTi.setExpanded(true, false);
+        }
     }
 }
 
