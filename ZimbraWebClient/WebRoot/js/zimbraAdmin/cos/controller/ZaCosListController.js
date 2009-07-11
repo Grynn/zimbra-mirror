@@ -429,7 +429,7 @@ function (enableArray,disableArray) {
 				if (AjxUtil.isEmpty(item.rights)) {
 					item.loadEffectiveRights("id", item.id, false);
 				}
-				if(!item.rights[ZaAccount.DELETE_COS_RIGHT]) {
+				if(!ZaItem.hasRight(ZaCos.DELETE_COS_RIGHT, item)) {
 					if(this._toolbarOperations[ZaOperation.DELETE]) {
 						this._toolbarOperations[ZaOperation.DELETE].enabled=false;
 					}
