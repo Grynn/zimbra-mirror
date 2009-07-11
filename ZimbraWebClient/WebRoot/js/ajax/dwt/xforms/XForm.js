@@ -777,9 +777,13 @@ XForm.prototype.itemChanged = function (id, value, event, quite) {
 
 	// validate value
 	var modelItem = item.getModelItem();
+	var errorCorrected = false;
 	if (modelItem != null) {
 		try {
 			value = modelItem.validate(value, this, item, this.getInstance());
+			if(item.hasError()) {
+				errorCorrected = true;
+			}
 			item.clearError();
 		}
 		catch (message) {
@@ -798,9 +802,12 @@ XForm.prototype.itemChanged = function (id, value, event, quite) {
 		value = onChangeMethod.call(item, value, event, this);
 	} else {
 		var oldVal = item.getInstanceValue();
-		if(oldVal == value)
+		if(oldVal == value) {
+			if(errorCorrected && !quite) 
+				this.notifyListeners(DwtEvent.XFORMS_VALUE_CHANGED, event);
+				
 			return;
-			
+		}	
 		item.setInstanceValue(value);
 	}
 	
