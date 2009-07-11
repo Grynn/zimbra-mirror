@@ -39,6 +39,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_retry_limit;
     public static final KnownKey zdesktop_gal_sync_trace_enabled;
     public static final KnownKey zdesktop_gal_sync_interval_secs;
+    public static final KnownKey zdesktop_gal_sync_group_size;
     public static final KnownKey zdesktop_gal_refresh_interval_days;
     
     public static final KnownKey zdesktop_sync_batch_size;
@@ -167,6 +168,10 @@ public class OfflineLC {
         zdesktop_gal_sync_interval_secs.setDefault("43200");
         zdesktop_gal_sync_interval_secs.setDoc("How often offline GAL is delta-sync'ed. Default every 12 hours.");
 
+        zdesktop_gal_sync_group_size = new KnownKey("zdesktop_gal_sync_group_size");
+        zdesktop_gal_sync_group_size.setDefault("500");
+        zdesktop_gal_sync_group_size.setDoc("Number of entries to be fetch in each GetContactsRequest during GAL sync");
+        
         zdesktop_gal_refresh_interval_days = new KnownKey("zdesktop_gal_refresh_interval_days");
         zdesktop_gal_refresh_interval_days.setDefault("30");
         zdesktop_gal_refresh_interval_days.setDoc("How often offline GAL is full-sync'ed. Default every 30 days.");

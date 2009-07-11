@@ -18,11 +18,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.AdminConstants;
+import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element.XMLElement;
+import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.mime.ParsedContact;
@@ -46,7 +50,7 @@ import org.dom4j.ElementPath;
 
 public class GalSync {
     
-    private static class SaxHandler implements ElementHandler {
+    private static class SyncHandler implements ElementHandler {
         
         public static final String PATH_RESPONSE = "/Envelope/Body/SyncGalResponse";
         public static final String PATH_CN = PATH_RESPONSE + "/cn";
@@ -60,23 +64,29 @@ public class GalSync {
         private String token = null;
         private int syncFolder;
         private int dropFolder;
+        private ArrayList<String> idList = null;
         
-        public SaxHandler(OfflineAccount galAccount, boolean fullSync, boolean trace) {
+        public SyncHandler(OfflineAccount galAccount, boolean fullSync, boolean trace) {
             this.galAccount = galAccount;
             this.fullSync = fullSync;
             this.trace = trace && OfflineLC.zdesktop_gal_sync_trace_enabled.booleanValue();
         }
+             
+        public String getToken() { return token; }        
+        public OfflineAccount getGalAccount() { return galAccount; }             
+        public int getDropFolder() { return dropFolder; }  
+        public Exception getException() { return exception; }              
+        public int getIdCount() { return idList == null ? 0 : idList.size(); }
         
-        public String getToken() {
-            return token;
-        }
-        
-        public Exception getException() {
-            return exception;
-        }
-        
-        public int getDropFolder() {
-            return dropFolder;
+        public String[] removeIds(int count) {
+            if (idList.size() == 0)
+                return null;            
+            int size = Math.min(idList.size(), (count > 0 ? count : 500));
+            String[] ret = new String[size];
+            for (int i = 0; i < size; ++i) {
+                ret[i] = idList.remove(0);
+            }
+            return ret;       
         }
         
         public void onStart(ElementPath elPath) { //TODO: add trace logging; 
@@ -110,6 +120,7 @@ public class GalSync {
             }                                        
         }
                 
+        @SuppressWarnings("unchecked")
         public void onEnd(ElementPath elPath) { //TODO: add trace logging;
             String path = elPath.getPath();
             if (!path.equals(PATH_CN))
@@ -122,67 +133,79 @@ public class GalSync {
             }
                                                         
             org.dom4j.Element row = elPath.getCurrent();
-            String dn = row.attributeValue(AdminConstants.A_ID);           
-            if (dn == null) {
+            String id = row.attributeValue(AdminConstants.A_ID);           
+            if (id == null) {
                 OfflineLog.offline.debug("Offline GAL parse error: cn has no id attribute");
             } else {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put(OfflineConstants.GAL_LDAP_DN, dn); 
-                
                 Iterator itr = row.elementIterator();
-                while(itr.hasNext()) {
-                    org.dom4j.Element child = (org.dom4j.Element) itr.next();
-                    String key = child.attributeValue(AdminConstants.A_N);
-                    
-                    if (!key.equals("objectClass"))  
-                        map.put(key, child.getText());
-                }
-                        
-                String fname, lname;
-                if (map.get(Contact.A_fullName) == null && (fname = map.get(Contact.A_firstName)) != null && 
-                    (lname = map.get(Contact.A_lastName)) != null)
-                    map.put(Contact.A_fullName, fname + " " + lname);            
-                map.put(Contact.A_type, map.get(OfflineGal.A_zimbraCalResType) == null ?
-                    OfflineGal.CTYPE_ACCOUNT : OfflineGal.CTYPE_RESOURCE);
-                        
-                try {
-                    ParsedContact contact = new ParsedContact(map);
-                        
-                    String ctime, mtime;
-                    if (fullSync || ((ctime = map.get("createTimeStamp")) != null &&
-                        (mtime = map.get("modifyTimeStamp")) != null && mtime.equals(ctime))) {
-                        galMbox.createContact(context, contact, syncFolder, null);
-                        OfflineLog.offline.debug("Offline GAL contact created: dn=" + dn);
-                    } else {
-                        byte[] types = new byte[1];
-                        types[0] = MailItem.TYPE_CONTACT;
-                        
-                        ZimbraQueryResults zqr = galMbox.search(context, dn, types, SortBy.NONE, 1);
-                        try {                         
-                            if (zqr.hasNext()) {
-                                galMbox.modifyContact(context, zqr.getNext().getItemId(), contact);
-                                OfflineLog.offline.debug("Offline GAL contact modified: dn=" + dn);
-                            } else {
-                                galMbox.createContact(context, contact, syncFolder, null);
-                                OfflineLog.offline.debug("Offline GAL contact created: dn=" + dn);
-                            }
-                        } finally {
-                            zqr.doneWithSearchResults();
-                        }
+                if (itr.hasNext()) {                                            
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put(OfflineConstants.GAL_LDAP_DN, id);                
+                    while(itr.hasNext()) {
+                        org.dom4j.Element child = (org.dom4j.Element) itr.next();
+                        String key = child.attributeValue(AdminConstants.A_N);                        
+                        if (!key.equals("objectClass"))  
+                            map.put(key, child.getText());
                     }
-                } catch (ServiceException e) {
-                    exception = e;
-                } catch (ParseException e) {
-                    exception = e;
-                } catch (IOException e) {
-                    exception = e;
+                                                        
+                    try {
+                        saveContact(id, map, galMbox);
+                    } catch (ServiceException e) {
+                        exception = e;
+                    } catch (ParseException e) {
+                        exception = e;
+                    } catch (IOException e) {
+                        exception = e;
+                    }
+                    
+                    if (exception != null)
+                        elPath.removeHandler(PATH_CN);
+                } else { // Ids Only
+                    if (idList == null)
+                        idList = new ArrayList<String>();
+                    idList.add(id);
                 }
-                
-                if (exception != null)
-                    elPath.removeHandler(PATH_CN);
             }
             
             row.detach(); // done with this node - prune it off to save memory
+        }
+        
+        public void saveContact(String id, Map<String, String> map, Mailbox galMbox) throws ServiceException, ParseException, IOException {
+            String fullName = map.get(Contact.A_fullName);
+            if (fullName == null) {
+                String fname = map.get(Contact.A_firstName);
+                String lname = map.get(Contact.A_lastName);
+                fullName = fname == null ? "" : fname;
+                if (lname != null)
+                    fullName = fullName + (fullName.length() > 0 ? " " : "") + lname;                   
+                if (fullName.length() > 0)
+                    map.put(Contact.A_fullName, fullName);
+            }           
+            map.put(Contact.A_type, map.get(OfflineGal.A_zimbraCalResType) == null ? OfflineGal.CTYPE_ACCOUNT : OfflineGal.CTYPE_RESOURCE);
+            String entry = "id=" + id + " name=\"" + fullName + "\"";
+            
+            ParsedContact contact = new ParsedContact(map);           
+            String ctime, mtime;
+            if (fullSync || ((ctime = map.get("createTimeStamp")) != null && (mtime = map.get("modifyTimeStamp")) != null && mtime.equals(ctime))) {
+                galMbox.createContact(context, contact, syncFolder, null);
+                OfflineLog.offline.debug("Offline GAL contact created: " + entry);
+            } else {
+                byte[] types = new byte[1];
+                types[0] = MailItem.TYPE_CONTACT;
+                
+                ZimbraQueryResults zqr = galMbox.search(context, id, types, SortBy.NONE, 1);
+                try {                         
+                    if (zqr.hasNext()) {
+                        galMbox.modifyContact(context, zqr.getNext().getItemId(), contact);
+                        OfflineLog.offline.debug("Offline GAL contact modified: " + entry);
+                    } else {
+                        galMbox.createContact(context, contact, syncFolder, null);
+                        OfflineLog.offline.debug("Offline GAL contact created: " + entry);
+                    }
+                } finally {
+                    zqr.doneWithSearchResults();
+                }
+            }
         }
     }
      
@@ -203,32 +226,26 @@ public class GalSync {
         
         public void run() {
             OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
-            String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;            
-            boolean success = true;            
+            String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;                      
             try {
                 OfflineLog.offline.info("Offline GAL sync started: " + user);            
-                syncGal(ombx, galAccount, lastFullSync, traceOn);                            
+                syncGal(ombx, galAccount, lastFullSync, traceOn); 
+                syncMan.syncComplete(target);
+                OfflineLog.offline.info("Offline GAL sync completed successfully: " + user);
             } catch (Exception e) {
                 syncMan.processSyncException(target, "", e, traceOn);
-                success = false;
-            } finally {
-                if (success) {
-                    syncMan.syncComplete(target);
-                    OfflineLog.offline.info("Offline GAL sync completed successfully: " + user);
-                } else {
-                    OfflineLog.offline.info("Offline GAL sync failed: " + user);
-                }
+                OfflineLog.offline.info("Offline GAL sync failed: user=" + user + " err=\"" + e.getMessage() + "\"");
             }
         }
     };
-    
+               
     public static void sync(ZcsMailbox ombx, boolean isOnRequest) throws ServiceException {        
         OfflineSyncManager syncMan = OfflineSyncManager.getInstance();        
         String user = ombx.getRemoteUser();
         String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;
         if (syncMan.getSyncStatus(target) == SyncStatus.running)
             return;
-            
+                    
         if (!isOnRequest) {
             if (!syncMan.retryOK(target))
                 return;
@@ -302,13 +319,14 @@ public class GalSync {
         boolean fullSync = (syncToken == null || syncToken.length() == 0);
         
         XMLElement req = new XMLElement(AccountConstants.SYNC_GAL_REQUEST);
+        req.addAttribute(AccountConstants.A_ID_ONLY, "true");
         if (!fullSync)
             req.addAttribute(AdminConstants.A_TOKEN, syncToken);
                
-        SaxHandler handler =  new SaxHandler(galAccount, fullSync, traceEnabled); 
+        SyncHandler handler =  new SyncHandler(galAccount, fullSync, traceEnabled); 
         HashMap<String, ElementHandler> handlers = new HashMap<String, ElementHandler>();
-        handlers.put(SaxHandler.PATH_RESPONSE, handler);
-        handlers.put(SaxHandler.PATH_CN, handler);
+        handlers.put(SyncHandler.PATH_RESPONSE, handler);
+        handlers.put(SyncHandler.PATH_CN, handler);
         
         mbox.sendRequest(req, true, true, OfflineLC.zdesktop_galsync_request_timeout.intValue(), SoapProtocol.Soap12, handlers);
 
@@ -325,6 +343,17 @@ public class GalSync {
             throw ServiceException.FAILURE("unable to search GAL", null);
         }
         
+
+        while (handler.getIdCount() > 0) {
+            fetchContacts(handler, mbox);
+            
+            if (handler.getIdCount() > 0) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException ie) {}
+            }
+        }
+                      
         OfflineProvisioning prov = (OfflineProvisioning)Provisioning.getInstance();
         prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountSyncToken, token);
         if (fullSync) {
@@ -332,10 +361,37 @@ public class GalSync {
             OperationContext octxt = new OperationContext(galMbox);
             galMbox.emptyFolder(octxt, handler.getDropFolder(), false);
                 
-            prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastFullSync,
-                Long.toString(System.currentTimeMillis()));
+            prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastFullSync, Long.toString(System.currentTimeMillis()));
         }
     }
     
-    
+    private static void fetchContacts(SyncHandler handler, ZcsMailbox mbox) throws ServiceException, ParseException, IOException {
+        String[] ids = handler.removeIds(OfflineLC.zdesktop_gal_sync_group_size.intValue());
+        int length = ids.length;        
+        if (length == 0)
+            return;
+        
+        String idstr = "";
+        for (int i = 0; i < length; ++i) {
+            if (idstr.length() > 0)
+                idstr += ",";
+            idstr += ids[i];
+        }
+            
+        XMLElement req = new XMLElement(MailConstants.GET_CONTACTS_REQUEST);
+        req.addElement(AdminConstants.E_CN).addAttribute(AccountConstants.A_ID, idstr);
+        Element response = mbox.sendRequest(req, true, true, OfflineLC.zdesktop_galsync_request_timeout.intValue(), SoapProtocol.Soap12);
+        
+        Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(handler.getGalAccount().getId(), false);
+        List<Element> contacts = response.listElements(MailConstants.E_CONTACT);
+        for(Element elt : contacts) {
+            String id = elt.getAttribute(AccountConstants.A_ID);
+            Map<String, String> fields = new HashMap<String, String>();
+            for (Element eField : elt.listElements()) {
+                if (!eField.getName().equals("objectClass"))
+                    fields.put(eField.getAttribute(Element.XMLElement.A_ATTR_NAME), eField.getText());
+            }
+            handler.saveContact(id, fields, galMbox);
+        }              
+    }
 }
