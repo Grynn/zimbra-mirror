@@ -429,7 +429,111 @@ function () {
 	var cnt = this._contentView.getSelectionCount();
 	if(cnt == 1) {
 		var item = this._contentView.getSelection()[0];
-		if(!item) {
+		if(item) {
+			if(item.type != ZaItem.ALIAS) {
+				if(this._toolbarOperations[ZaOperation.MOVE_ALIAS]) {
+					this._toolbarOperations[ZaOperation.MOVE_ALIAS].enabled = false;
+				}					
+			}
+            if (item.type == ZaItem.ALIAS || item.type == ZaItem.DL) {
+                if(this._toolbarOperations[ZaOperation.CHNG_PWD]) {
+                    this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;
+                }
+
+                if(this._popupOperations[ZaOperation.CHNG_PWD]) {
+                    this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+                }	
+            }
+
+            if (((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.DL))
+                || (item.type == ZaItem.DL)) {
+                if (this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
+                    this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;                                        
+                }
+
+                if(this._popupOperations[ZaOperation.VIEW_MAIL]) {
+                    this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
+                }
+            }
+
+            if (item.type == ZaItem.DL) {
+                if(this._popupOperations[ZaOperation.MOVE_ALIAS])	{
+                    this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
+                }
+                if(this._popupOperations[ZaOperation.VIEW_MAIL])
+				 	this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
+					 
+				if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
+				 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+                	    
+            }
+			if (item.type == ZaItem.ACCOUNT) {
+				var enable = false;
+				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+					enable = true;
+				} else if (AjxUtil.isEmpty(item.rights)) {
+					//console.log("loading effective rights for a list item");
+					item.loadEffectiveRights("id", item.id, false);
+					//console.log("loaded rights for a list item");
+				}
+				if(!enable) {
+					if(!ZaItem.hasRight(ZaAccount.VIEW_MAIL_RIGHT,item)) {
+						 if(this._popupOperations[ZaOperation.VIEW_MAIL])
+						 	this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
+						 
+						 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
+						 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+					}
+					if(!ZaItem.hasRight(ZaAccount.DELETE_ACCOUNT_RIGHT,item)) {
+						 if(this._popupOperations[ZaOperation.DELETE])
+						 	this._popupOperations[ZaOperation.DELETE].enabled = false;
+						 
+						 if(this._toolbarOperations[ZaOperation.DELETE])
+						 	this._toolbarOperations[ZaOperation.DELETE].enabled = false;   
+					}	
+					if(!ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT, item)) {
+						 if(this._popupOperations[ZaOperation.CHNG_PWD])
+						 	this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+						 
+						 if(this._toolbarOperations[ZaOperation.CHNG_PWD])
+						 	this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;   
+					}										
+				}
+			} else if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT))  {
+				if(!item.targetObj)
+					item.targetObj = item.getAliasTargetObj() ;
+					
+				var enable = false;
+				if (ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+					enable = true;
+				} else if (AjxUtil.isEmpty(item.targetObj.rights)) {
+					item.targetObj.loadEffectiveRights("id", item.id, false);
+				}
+				if(!enable) {
+					if(!ZaItem.hasRight(ZaAccount.VIEW_MAIL_RIGHT,item.targetObj)) {
+						 if(this._popupOperations[ZaOperation.VIEW_MAIL])
+						 	this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
+						 
+						 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
+						 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+					}	
+					if(!ZaItem.hasRight(ZaAccount.DELETE_ACCOUNT_RIGHT,item.targetObj)) {
+						 if(this._popupOperations[ZaOperation.DELETE])
+						 	this._popupOperations[ZaOperation.DELETE].enabled = false;
+						 
+						 if(this._toolbarOperations[ZaOperation.DELETE])
+						 	this._toolbarOperations[ZaOperation.DELETE].enabled = false;   
+					}
+					if(!ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT,item.targetObj)) {
+						 if(this._popupOperations[ZaOperation.CHNG_PWD])
+						 	this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+						 
+						 if(this._toolbarOperations[ZaOperation.CHNG_PWD])
+						 	this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;   
+					}					
+				}
+			}
+        } else {
 			if(this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
 				this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
 			}
@@ -461,59 +565,9 @@ function () {
 			if(this._popupOperations[ZaOperation.DELETE]) {	
 				this._popupOperations[ZaOperation.DELETE].enabled = false;
 			}				
-
-		}
-		if (((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT)) || (item.type == ZaItem.ACCOUNT)) {
-			if(AjxUtil.isEmpty(item.rights)) {
-				item.loadEffectiveRights("id", item.id, false);
-			} 
-			if(!item.rights[ZaAccount.VIEW_MAIL_RIGHT]) {
-				 if(this._popupOperations[ZaOperation.VIEW_MAIL])
-				 	this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
-				 
-				 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
-				 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
-			}
-			if(!item.rights[ZaAccount.DELETE_ACCOUNT_RIGHT]) {
-				 if(this._popupOperations[ZaOperation.DELETE])
-				 	this._popupOperations[ZaOperation.DELETE].enabled = false;
-				 
-				 if(this._toolbarOperations[ZaOperation.DELETE])
-				 	this._toolbarOperations[ZaOperation.DELETE].enabled = false;   
-			}	
-			if(!item.rights[ZaAccount.SET_PASSWORD_RIGHT]) {
-				 if(this._popupOperations[ZaOperation.CHNG_PWD])
-				 	this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
-				 
-				 if(this._toolbarOperations[ZaOperation.CHNG_PWD])
-				 	this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;   
-			}										
-			
-		} 
-        if (((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.DL))
-            || (item.type == ZaItem.DL)) {
-            if (this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
-                this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;                                        
-            }
-
-            if(this._popupOperations[ZaOperation.VIEW_MAIL]) {
-                this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
-            }
-        }
-
-        if (item.type == ZaItem.DL) {
-            if(this._popupOperations[ZaOperation.MOVE_ALIAS])	{
-                this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
-            }
-            if(this._popupOperations[ZaOperation.VIEW_MAIL])
-			 	this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
-				 
-			if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
-			 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
-            	    
-        }		
+		}		
 	} else if (cnt > 1){
-	
+		
 		if(this._toolbarOperations[ZaOperation.EDIT]) {	
 			this._toolbarOperations[ZaOperation.EDIT].enabled = false;
 		}		
