@@ -311,7 +311,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
             {ref:ZaResource.A_displayname, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ResourceName,
                 label:ZaMsg.NAD_ResourceName, labelLocation:_LEFT_, width: "200px" },
             {ref:ZaResource.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_ResAccountName,label:ZaMsg.NAD_ResAccountName,
-                labelLocation:_LEFT_,enableDisableChecks:[[XFormItem.prototype.hasRight,ZaAccount.RENAME_ACCOUNT_RIGHT]],
+                labelLocation:_LEFT_,enableDisableChecks:[[XFormItem.prototype.hasRight,ZaResource.RENAME_CALRES_RIGHT]],
 				visibilityChecks:[]
             }]
     };
@@ -392,6 +392,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 
 	var fwdInvitesGrpr = {type:_ZA_PLAIN_GROUPER_, id:"resource_form_forwarding_group",
 							numCols:2,label:null,colSizes:["275px","425px"],
+							visibilityChecks:[[ZaItem.hasReadPermission,ZaResource.A_zimbraPrefCalendarForwardInvitesTo]],
 							items :[
 								{ref:ZaResource.A_zimbraPrefCalendarForwardInvitesTo, type:_DWT_LIST_, height:"100", width:"350px",
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
@@ -423,7 +424,8 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 	 setupGroup.items.push(fwdInvitesGrpr);							
 
     var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper, id:"resource_form_password_group",
-        visibilityChecks:[[XFormItem.prototype.hasRight,ZaAccount.SET_PASSWORD_RIGHT]],colSizes:["275px","*"],numCols:2,items:[
+        visibilityChecks:[[XFormItem.prototype.hasRight,ZaResource.SET_CALRES_PASSWORD_RIGHT]],
+        colSizes:["275px","*"],numCols:2,items:[
         {ref:ZaResource.A_password, type:_SECRET_,
                 msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password, labelLocation:_LEFT_,
                 cssClass:"admin_xform_name_input", visibilityChecks:[],enableDisableChecks:[]

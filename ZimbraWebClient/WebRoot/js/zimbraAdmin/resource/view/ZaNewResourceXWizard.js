@@ -330,6 +330,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 
 	setupGroup.items.push({ref:ZaResource.A2_schedulePolicy, type:_OSELECT1_, msgName:ZaMsg.NAD_ResType,
 						visibilityChecks:[[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoAcceptDecline],[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoDeclineIfBusy]],
+						enableDisableChecks:[],
 						label:ZaMsg.NAD_SchedulePolicy, labelLocation:_LEFT_, width: "300px", 
 						choices:ZaResource.schedulePolicyChoices});	
 						
@@ -374,10 +375,10 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 						});
 						
 	var passwordGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_wiz_password_group", 
-		numCols:2,
+		numCols:2,visibilityChecks:[],
 		items:[
-			{ref:ZaResource.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"},
-			{ref:ZaResource.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"}
+			{ref:ZaResource.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,label:ZaMsg.NAD_Password, visibilityChecks:[],enableDisableChecks:[], labelLocation:_LEFT_, cssClass:"admin_xform_name_input"},
+			{ref:ZaResource.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,label:ZaMsg.NAD_ConfirmPassword, visibilityChecks:[],enableDisableChecks:[], labelLocation:_LEFT_, cssClass:"admin_xform_name_input"}
 		]
 		
 	}

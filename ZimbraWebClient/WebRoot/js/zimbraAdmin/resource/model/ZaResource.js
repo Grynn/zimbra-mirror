@@ -111,6 +111,14 @@ ZaResource.searchAttributes = AjxBuffer.concat(ZaResource.A_displayname,",",
 											   ZaResource.A_description, ",",
 											   ZaResource.A_zimbraCalResType);
 
+ZaResource.SET_CALRES_PASSWORD_RIGHT = "setCalendarResourcePassword";
+ZaResource.ADD_CALRES_ALIAS_RIGHT = "addCalendarResourceAlias";
+ZaResource.REMOVE_CALRES_ALIAS_RIGHT = "removeCalendarResourceAlias";
+ZaResource.DELETE_CALRES_RIGHT = "deleteCalendarResource";
+ZaResource.GET_CALRES_SHAREINFO_RIGHT = "getCalendarResourceShareInfo";
+ZaResource.LIST_CALRES_RIGHT = "listCalendarResource";
+ZaResource.PUBLISH_CALRES_SHAREINFO = "publishCalendarResourceShareInfo";
+ZaResource.RENAME_CALRES_RIGHT = "renameCalendarResource";
 ZaResource.checkValues = 
 function(tmpObj) {
 	/**
