@@ -569,6 +569,7 @@
 			<isset property="is-unix" />
 			<then>
 				<copy tofile="${zimbra.home.dir}/bin/offline" file="src/bin/offline" overwrite="true"/>
+				<copy tofile="${zimbra.home.dir}/bin/zmjava" file="src/bin/zmjava" overwrite="true"/>
 		        	<chmod perm="a+rx">
 		            		<fileset dir="${zimbra.home.dir}/bin"/>
 		        	</chmod>

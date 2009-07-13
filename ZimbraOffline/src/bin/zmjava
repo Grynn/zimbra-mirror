@@ -1,0 +1,42 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2004, 2005, 2006, 2007, 2008 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+# 
+
+case "`uname`" in
+    CYGWIN*) PATHSEP=";";;
+    *) PATHSEP=":";;
+esac
+
+java_version=$(${zimbra_java_home}/bin/java -version 2>&1 | grep "java version" | sed -e 's/"//g' | awk '{print $NF}' | awk -F_ '{print $1}')
+
+if [ x"$java_version" = "x1.6.0" ]; then
+    java_options="-XX:ErrorFile=${zimbra_home}/log"
+else 
+    java_options=""
+fi 
+
+zimbra_home="`dirname $0`/.."
+zimbra_home=$(cd "${zimbra_home}"; pwd)
+zimbra_java_library_path=${zimbra_home}/lib
+zimbra_java_ext_dirs=${zimbra_home}/lib${PATHSEP}${zimbra_home}/jetty/common/lib${PATHSEP}${zimbra_home}/jetty/lib${PATHSEP}${zimbra_home}/jetty/webapps/service/WEB-INF/lib
+zimbra_local_config=${zimbra_home}/conf/localconfig.xml
+
+exec java -client ${java_options} \
+     "-Dzimbra.home=${zimbra_home}" \
+     "-Djava.library.path=${zimbra_java_library_path}" \
+     "-Djava.ext.dirs=${zimbra_java_ext_dirs}" \
+     "-Dzimbra.config=${zimbra_local_config}" \
+     "$@"
+
