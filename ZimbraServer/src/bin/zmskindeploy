@@ -52,7 +52,17 @@ SKIN_WORK_BASE="${mailboxd_directory}/webapps${BASE_URL}"
 if [ -d "$SKIN_SRC" ]; then
     SKIN_SRC_DIR=`cd $SKIN_SRC && pwd -P`
     SKIN_NAME=`basename $SKIN_SRC`
-    SKIN_WORK_DIR=`cd ${SKIN_WORK_BASE}/skins/${SKIN_NAME} && pwd -P`
+    SKIN_WORK_DIR="${SKIN_WORK_BASE}/skins/${SKIN_NAME}"
+    if [ -d "${SKIN_WORK_DIR}" ]; then
+        SKIN_WORK_DIR=`cd ${SKIN_WORK_DIR} && pwd -P`
+    else
+        if mkdir -p "${SKIN_WORK_DIR}"; then
+            SKIN_WORK_DIR=`cd ${SKIN_WORK_DIR} && pwd -P`
+        else
+            echo "Failed to create ${SKIN_WORK_DIR}" 1>&2
+            exit 1
+        fi
+    fi
 
     if [ "$SKIN_WORK_DIR" != "$SKIN_SRC_DIR" ]; then
         if [ -e "$SKIN_WORK_DIR" ]; then
@@ -92,48 +102,50 @@ TEMPLATES=`find . -type f -name \*.template`
 if [ -n "${TEMPLATES}" ]; then
     echo "Processing templates..."
     sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.templates.Template \
-    	--prefix "${SKIN_NAME}" \
-    	--authoritative \
-    	--inputdir "${SKIN_WORK_DIR}" \
-    	--outputdir "${SKIN_WORK_DIR}" \
-    	-- \
-    	${TEMPLATES} > /dev/null
+        --prefix "${SKIN_NAME}" \
+        --authoritative \
+        --inputdir "${SKIN_WORK_DIR}" \
+        --outputdir "${SKIN_WORK_DIR}" \
+        -- \
+        ${TEMPLATES} > /dev/null
 fi
 
-IMAGE_SUBDIRS=
-for E in `find img -type d -mindepth 1 -maxdepth 1 | grep -v _`; do
+if [ -d img ]; then
+    IMAGE_SUBDIRS=
+    for E in `find img -mindepth 1 -maxdepth 1 -type d | grep -v _`; do
+        if [ -n "${IMAGE_SUBDIRS}" ]; then
+            IMAGE_SUBDIRS="${IMAGE_SUBDIRS};"
+        fi
+        IMAGE_SUBDIRS="${IMAGE_SUBDIRS}${E}"
+    done
+
     if [ -n "${IMAGE_SUBDIRS}" ]; then
-        IMAGE_SUBDIRS="${IMAGE_SUBDIRS};"
+        echo "Processing images..."
+        sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge \
+            --css-path "${BASE_URL}/skins/${SKIN_NAME}/img/" \
+            --css-file "images.css" \
+            --output "${SKIN_DEST_DIR}/img" \
+            --input "${IMAGE_SUBDIRS}" > /dev/null
+        perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/img/images.css"
     fi
-    IMAGE_SUBDIRS="${IMAGE_SUBDIRS}${E}"
-done
 
-if [ -n "${IMAGE_SUBDIRS}" ]; then
-    echo "Processing images..."
-    sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge \
-    	--css-path "${BASE_URL}/skins/${SKIN_NAME}/img/" \
-    	--css-file "images.css" \
-    	--output "${SKIN_DEST_DIR}/img" \
-    	--input "${IMAGE_SUBDIRS}" > /dev/null
-    perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/img/images.css"
+    for LOCID in `find img -mindepth 1 -maxdepth 1 -type d | perl -ne 'print "$1\n" if /_(..(_..)?)$/;' | sort | uniq`; do
+        echo "Processing images for locale ${LOCID}..."
+        IMAGE_SUBDIRS=
+        for E in `ls -d img/*_${LOCID}`; do
+            if [ -n "${IMAGE_SUBDIRS}" ]; then
+                IMAGE_SUBDIRS="${IMAGE_SUBDIRS};"
+            fi
+            IMAGE_SUBDIRS="${IMAGE_SUBDIRS}${E}"
+        done
+        sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge \
+            --css-path "${BASE_URL}/skins/${SKIN_NAME}/img/" \
+            --css-file "images_${LOCID}.css" \
+            --output "${SKIN_DEST_DIR}/img" \
+            --input "${IMAGE_SUBDIRS}" > /dev/null
+        perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/img/images_${LOCID}.css"
+    done
 fi
-
-for LOCID in `find img -type d -mindepth 1 -maxdepth 1 | perl -ne 'print "$1\n" if /_(..(_..)?)$/;' | sort | uniq`; do
-    echo "Processing images for locale ${LOCID}..."
-	IMAGE_SUBDIRS=
-	for E in `ls -d img/*_${LOCID}`; do
-		if [ -n "${IMAGE_SUBDIRS}" ]; then
-			IMAGE_SUBDIRS="${IMAGE_SUBDIRS};"
-		fi
-		IMAGE_SUBDIRS="${IMAGE_SUBDIRS}${E}"
-	done
-	sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge \
-		--css-path "${BASE_URL}/skins/${SKIN_NAME}/img/" \
-		--css-file "images_${LOCID}.css" \
-		--output "${SKIN_DEST_DIR}/img" \
-    	--input "${IMAGE_SUBDIRS}" > /dev/null
-	perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/img/images_${LOCID}.css"
-done
 
 popd > /dev/null
 
