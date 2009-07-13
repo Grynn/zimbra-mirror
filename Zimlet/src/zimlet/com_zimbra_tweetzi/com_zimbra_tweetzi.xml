@@ -1,0 +1,27 @@
+<zimlet name="com_zimbra_tweetzi" version="1.2" description="Twitter and Facebook Zimlet">
+	<include>tweetziTwitter.js</include>
+	<include>tweetziFacebook.js</include>
+	<include>tweetziTweetMeme.js</include>
+	<include>tweetziPreferences.js</include>
+	<include>sha1.js</include>
+	<include>oauth.js</include>
+	<include>md5.js</include>
+	<include>tweetzi.js</include>
+	<includeCSS>tweetzi.css</includeCSS>
+	<resource>tweetzi-icon.gif</resource>
+	<handlerObject>com_zimbra_tweetzi</handlerObject>
+
+	<zimletPanelItem label="tweetzi" icon="tweetzi-panelIcon">
+		<toolTipText>Twitter and Facebook Zimlet</toolTipText>
+	</zimletPanelItem>
+
+	<userProperties>
+		<property type="string" name="tweetzi_twitter_consumer_key" value="Xz2BKOKObTzpLrMXxJo2ww"/>
+		<property type="string" name="tweetzi_twitter_consumer_secret" value="bh4GXLP2pcu7u05ROylHXT7yCfZJfXhmDYSzvRUxI"/>
+		<property type="string" name="tweetzi_facebook_api_key" value="7af6d68c9d453e392c1ed68b27f95506"/>
+		<property type="string" name="tweetzi_facebook_secret" value="498158ba928b7f41ec0f5038f8f3bdd9"/>
+
+	</userProperties>
+</zimlet>
+
+
