@@ -92,7 +92,7 @@ function(result) {
 	var array = result.getResponse().getResults("MSG").getVector().getArray();
 	this._totalMsgArray = this._totalMsgArray.concat(array);
 	if (this._totalMsgArray.length == 0) {//no results
-		com_zimbra_searchrefiner.hide();
+		this.hide();
 		return;
 	}
 	//if we need to do further search with diferent offset go ahead. BUT, if #results is < total expected, start processing(ignore further processing)
