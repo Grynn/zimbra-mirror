@@ -15,7 +15,7 @@
 package com.zimbra.cs.mailbox;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -35,9 +35,13 @@ import com.zimbra.cs.service.util.ItemId;
 
 public class OfflineMailSender extends MailSender {
 
+    public OfflineMailSender() {
+        setTrackBadHosts(false);
+    }
+    
     @Override
-    public ItemId sendMimeMessage(OperationContext octxt, Mailbox mbox, boolean saveToSent, MimeMessage mm,
-                                  List<InternetAddress> newContacts, List<Upload> uploads,
+    public ItemId sendMimeMessage(OperationContext octxt, Mailbox mbox, Boolean saveToSent, MimeMessage mm,
+                                  Collection<InternetAddress> newContacts, Collection<Upload> uploads,
                                   ItemId origMsgId, String replyType, Identity identity,
                                   boolean ignoreFailedAddresses, boolean replyToSender)
     throws ServiceException {
