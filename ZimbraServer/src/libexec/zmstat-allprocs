@@ -163,8 +163,8 @@ sub main() {
             my %stats;
     
     
-            my %names = get_process_names($pid_names);
-            foreach my $name (keys %names) {
+            my @names = get_process_names($pid_names);
+            foreach my $name (@names) {
                 my @pids = get_pids_by_name($pid_names, $name);
 
                 $stats{$name} = {};
