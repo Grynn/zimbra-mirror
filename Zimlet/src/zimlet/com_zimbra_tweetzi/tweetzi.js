@@ -401,8 +401,13 @@ function(params) {
 	var html = [];
 	var i = 0;
 	html[i++] = "<div width=400px  class='tweetzi_cardDiv'>";
-
-	html[i++] = "<DIV  width=400px class='" + hdrClass + "' >";
+	var elStyle = ""
+	if(AjxEnv.isFirefox){
+		elStyle="style='height: 27px;'";
+	} else {
+		elStyle ="style='height: 32px;'";
+	}
+	html[i++] = "<DIV  width=400px "+elStyle+" class='" + hdrClass + "' >";
 	html[i++] = "<table width='100%'>";
 	html[i++] = "<tr><td width='5%' >" + AjxImg.getImageHtml(iconName) + "</td>";
 	html[i++] = "<td width=95%><table><tr><td " + hdrCellStyle + " >" + prettyName + "</td><td id='tweetzi_unreadCountCell" + this.cardIndex + "'></td></tr></table></td>";
