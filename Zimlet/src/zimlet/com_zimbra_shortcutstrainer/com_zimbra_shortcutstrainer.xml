@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_shortcutstrainer" version="1.1" description="Allows you to train and remember most common keyboard shortcuts">
+<zimlet name="com_zimbra_shortcutstrainer" version="1.2" description="Allows you to train and remember most common keyboard shortcuts">
 	<include>shortcutstrainer.js</include>
 	<includeCSS>shortcutstrainer.css</includeCSS>
 	<resource>shortcutstrainer.gif</resource>

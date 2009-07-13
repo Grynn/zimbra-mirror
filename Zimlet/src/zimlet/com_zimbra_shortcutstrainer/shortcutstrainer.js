@@ -236,6 +236,7 @@ function(viewId, isNewView) {
 
 
 	//folders
+	/* folders no longer work
 	if (this._folderListnersAdded == undefined) {
 		try {
 			var accordionController = ZmAppAccordionController.getInstance();
@@ -250,6 +251,7 @@ function(viewId, isNewView) {
 		} catch(e) {
 		}
 	}
+	*/
 
 	if (appCtxt.getCurrentController() == undefined)
 		return;
@@ -257,15 +259,23 @@ function(viewId, isNewView) {
 	//toolbar buttons
 	try {
 		var tb = "";
-		if (viewId.indexOf("COMPOSE") != -1) {
-			tb = appCtxt.getCurrentController()._toolbar;
-		} else {
-			tb = appCtxt.getCurrentController().getCurrentToolbar();
-		}
-
-		var btnArry = tb.getChildren();
-		for (var i = 0; i < btnArry.length; i++) {
-			btnArry[i].addSelectionListener(new AjxListener(this, this.selectionListener));
+		if (viewId.indexOf("COMPOSE") == -1) {
+			if(appCtxt.getCurrentController) {
+				if(appCtxt.getCurrentController()._toolbar){
+					tb = appCtxt.getCurrentController()._toolbar;
+				} else if(appCtxt.getCurrentController().getCurrentToolbar) {
+					tb = appCtxt.getCurrentController().getCurrentToolbar();
+				}
+			}
+			if(tb != "") {		
+				tb = tb[viewId];
+				if(tb) {
+					var btnArry = tb.getChildren();
+					for (var i = 0; i < btnArry.length; i++) {
+						btnArry[i].addSelectionListener(new AjxListener(this, this.selectionListener));
+					}
+				}
+			}
 		}
 
 	} catch(e) {
@@ -275,9 +285,16 @@ function(viewId, isNewView) {
 	//action menu buttons
 	try {
 		if (this.noActionMenuInThisView[viewId] == undefined) {
-			var menuItemsArry = appCtxt.getCurrentController().getActionMenu().getChildren();
-			for (var i = 0; i < menuItemsArry.length; i++) {
-				menuItemsArry[i].addSelectionListener(new AjxListener(this, this.selectionListener));
+			if(appCtxt.getCurrentController().getActionMenu) {
+				var menu = appCtxt.getCurrentController().getActionMenu();
+				if(menu) {
+					var menuItemsArry = menu.getChildren();
+					for (var i = 0; i < menuItemsArry.length; i++) {
+						menuItemsArry[i].addSelectionListener(new AjxListener(this, this.selectionListener));
+					}
+				} else {
+					this.noActionMenuInThisView[viewId] = true;
+				}
 			}
 		}
 	} catch(e) {
