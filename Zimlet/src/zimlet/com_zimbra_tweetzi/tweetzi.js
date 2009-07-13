@@ -512,6 +512,12 @@ function(params) {
 			break;
 		}
 	}
+	if(params.tableId) {
+		var timer = this.tableIdAndTimerMap[params.tableId];
+		if (timer) { //remove update timers
+			clearInterval(timer);
+		}
+	}
 
 	params.row.deleteCell(document.getElementById(params.cellId).cellIndex);
 	this.twitter._updateAllSearches(params.headerName, "delete");
@@ -526,8 +532,11 @@ function(params) {
 	if (type == "ACCOUNT" || type == "FACEBOOK") {
 		this.tableIdAndAccountMap[params.tableId].isDisplayed = false;
 	}
-	if (type == "ACCOUNT" || type == "FACEBOOK" || type == "DIRECT_MSGS" || type == "MENTIONS" || type == "SEARCH" || type == "TREND") { //remove update timers
-		clearInterval(this.tableIdAndTimerMap[params.tableId]);
+	if(params.tableId) {
+		var timer = this.tableIdAndTimerMap[params.tableId];
+		if (timer) { //remove update timers
+			clearInterval(timer);
+		}
 	}
 };
 
