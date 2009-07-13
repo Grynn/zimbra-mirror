@@ -110,21 +110,6 @@ ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,"
 // public methods
 // ==============================================================
 
-/**
- * Removes a list of members
- * This keeps the internal add, and remove lists up to date.
- * @param arr (Array) - array of ZaDistributionListMembers to remove
- * @return boolean (true if at least one member was removed)
- */
-ZaDistributionList.prototype.removeMembers = function (arr) {
-	var removed = this._removeFromList(arr, this._memberList);
-	this._removeFromList(arr, this._addList);
-	if (removed) {
-		this._addToRemoveList(arr, this._removeList);
-	}
-	return removed;
-};
-
 ZaDistributionList.prototype.remove = 
 function(callback) {
 	var soapDoc = AjxSoapDoc.create("DeleteDistributionListRequest", ZaZimbraAdmin.URN, null);
@@ -614,9 +599,7 @@ ZaDistributionList.prototype.getName = function () {
  * internal list of members is null
  */
 ZaDistributionList.prototype.getMembers = function () {
-	//DBG.println("Get members: memberList = " , this._memberList, "$");
 	if (this.id != null) {
-		this._memberList = null;
 		var soapDoc = AjxSoapDoc.create("GetDistributionListRequest", ZaZimbraAdmin.URN, null);
 
 		var limit = ZaDistributionList.MEMBER_QUERY_LIMIT;
@@ -646,12 +629,10 @@ ZaDistributionList.prototype.getMembers = function () {
 			var members = resp.dl[0].dlm;
 			this.numMembers = resp.total;
 			this.memNumPages = Math.ceil(this.numMembers/limit);
+			this[ZaDistributionList.A2_memberList] = new Array();
+			this[ZaDistributionList.A2_origList] = new Array();
 			var len = members ? members.length : 0;
 			if (len > 0) {
-				this[ZaDistributionList.A2_memberList] = new Array();
-				this[ZaDistributionList.A2_origList] = new Array();
-				//this._memberList = new AjxVector();
-				//this._origList = new AjxVector();
 				for (var i =0; i < len; ++i) {
 					var mem = new ZaDistributionListMember(members[i]._content);
 					this[ZaDistributionList.A2_memberList].push(mem);
