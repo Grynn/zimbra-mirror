@@ -17,7 +17,8 @@ Com_Zimbra_Date = function(pattern) {
 	if (arguments.length == 1) {
 		this._generateRegex(pattern);
 	}
-}
+};
+
 Com_Zimbra_Date.prototype = new ZmZimletBase();
 Com_Zimbra_Date.prototype.constructor = Com_Zimbra_Date;
 
@@ -31,29 +32,33 @@ Com_Zimbra_Date.prototype.TYPE = ZmObjectManager.DATE;
 // Public methods
 //
 
-Com_Zimbra_Date.validate = function(day, month, year){
+Com_Zimbra_Date.validate =
+function(day, month, year){
+	//"Day must be between 1 and 31.";
+	if (day < 1 || day > 31) {
+		return false;
+	}
 
-    //"Day must be between 1 and 31.";
-    if (day < 1 || day > 31) {
-        return false;
-    }
-    //"Month must be between 0 and 11."
-    if (month < 0 || month > 11) {
-        return false;
-    }
-    // Make sure month and day of month is valid
-    if ((month == 3 || month == 5 || month == 8 || month == 10) && day == 31) {
-        return  false;
-    }
-    // Check for February date validity (including leap years)
-    if (year && month == 1) {
-        // figure out if "year" is a leap year;
-        var isleap=(year%4==0 && (year%100!=0 || year%400==0));
-        if (day > 29 || (day == 29 && !isleap)) {
-            return false;
-        }
-    }
-    return true;
+	//"Month must be between 0 and 11."
+	if (month < 0 || month > 11) {
+		return false;
+	}
+
+	// Make sure month and day of month is valid
+	if ((month == 3 || month == 5 || month == 8 || month == 10) && day == 31) {
+		return  false;
+	}
+
+	// Check for February date validity (including leap years)
+	if (year && month == 1) {
+		// figure out if "year" is a leap year;
+		var isleap = (year%4 == 0 && (year%100 != 0 || year%400 == 0));
+		if (day > 29 || (day == 29 && !isleap)) {
+			return false;
+		}
+	}
+
+	return true;
 };
 
 Com_Zimbra_Date.prototype.getCurrentDate =
@@ -66,13 +71,15 @@ function(date) {
 // ZmZimletBase methods
 //
 
-Com_Zimbra_Date.prototype.init = function() {
+Com_Zimbra_Date.prototype.init =
+function() {
 	Com_Zimbra_Date.prototype._zimletContext = this._zimletContext;
 	Com_Zimbra_Date.prototype._className = "Object";
 	this._initDateObjectHandlers();
 };
 
-Com_Zimbra_Date.prototype.getActionMenu = function(obj, span, context) {
+Com_Zimbra_Date.prototype.getActionMenu =
+function(obj, span, context) {
 	if (this._zimletContext._contentActionMenu instanceof AjxCallback) {
 		this._zimletContext._contentActionMenu = this._zimletContext._contentActionMenu.run();
 	}
@@ -84,17 +91,12 @@ Com_Zimbra_Date.prototype.getActionMenu = function(obj, span, context) {
 	return this._zimletContext._contentActionMenu;
 };
 
-Com_Zimbra_Date.prototype.menuItemSelected = function(itemId) {
+Com_Zimbra_Date.prototype.menuItemSelected =
+function(itemId) {
 	switch (itemId) {
-		case "DAYVIEW":
-			this._dayViewListener();
-			break;
-		case "NEWAPPT":
-			this._newApptListener();
-			break;
-		case "SEARCHMAIL":
-			this._searchMailListener();
-			break;
+		case "DAYVIEW":		this._dayViewListener(); break;
+		case "NEWAPPT":		this._newApptListener(); break;
+		case "SEARCHMAIL":	this._searchMailListener(); break;
 	}
 };
 
@@ -114,9 +116,10 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	}
 };
 
-Com_Zimbra_Date.prototype.match = function(line, startIndex){
+Com_Zimbra_Date.prototype.match =
+function(line, startIndex) {
 	// is there anything to do?
-	if (!Com_Zimbra_Date.PATTERNS) return null;
+	if (!Com_Zimbra_Date.PATTERNS) { return null; }
 
 	// find first match
 	var match, mapping, rule, re, m, i;
@@ -124,7 +127,7 @@ Com_Zimbra_Date.prototype.match = function(line, startIndex){
 		re = Com_Zimbra_Date.REGEXES[i];
 		re.lastIndex = startIndex;
 		m = re.exec(line);
-		if (m && m[0] && (!match || m[0].length > match[0].length )) { //Longest match wins 
+		if (m && m[0] && (!match || m[0].length > match[0].length )) { // Longest match wins
 			match = m;
 			rule = Com_Zimbra_Date.RULES[i];
 			mapping = re.mapping;
@@ -132,7 +135,7 @@ Com_Zimbra_Date.prototype.match = function(line, startIndex){
 	}
 
 	// did we find anything?
-	if (!match) return null;
+	if (!match) { return null; }
 
 	// replace mapping and calculate date
 	try {
@@ -157,18 +160,16 @@ Com_Zimbra_Date.prototype.match = function(line, startIndex){
 		/***/
 		return null;
 	}
-
 };
 
 //
 // Protected methods
 //
 
-
-
-Com_Zimbra_Date.prototype._initDateObjectHandlers = function() {
+Com_Zimbra_Date.prototype._initDateObjectHandlers =
+function() {
 	// ignore if calendar isn't enabled
-	if (!appCtxt.get(ZmSetting.CALENDAR_ENABLED)) return;
+	if (!appCtxt.get(ZmSetting.CALENDAR_ENABLED)) { return; }
 
 	// initialize constants
 	Com_Zimbra_Date.MAPPINGS = {
@@ -189,8 +190,8 @@ Com_Zimbra_Date.prototype._initDateObjectHandlers = function() {
 	var i, pattern;
 	for (i = 1; pattern = this.getMessage("format"+i+".pattern"); i++) {
 		if (pattern.match(/^###+/)) break; //Minimum three hashes to terminate
-        if (pattern.match(/^#/)) continue; //one hash to skip/disable the pattern
-        Com_Zimbra_Date.PATTERNS.push(pattern);
+		if (pattern.match(/^#/)) continue; //one hash to skip/disable the pattern
+		Com_Zimbra_Date.PATTERNS.push(pattern);
 		Com_Zimbra_Date.RULES.push(this.getMessage("format"+i+".rule"));
 	}
 	for (i = 0; i < Com_Zimbra_Date.DEFAULT_FORMATS.length; i++) {
@@ -271,12 +272,13 @@ function() {
 Com_Zimbra_Date.__replaceKeyword_mapping = null;
 Com_Zimbra_Date.__replaceKeyword_group = -1;
 
-Com_Zimbra_Date.__replaceKeyword = function($0, keyword) {
+Com_Zimbra_Date.__replaceKeyword =
+function($0, keyword) {
 	var MAPPINGS = Com_Zimbra_Date.MAPPINGS;
 
 	// is there anything to do?
 	keyword = keyword.toLowerCase();
-	if (!MAPPINGS[keyword]) return $0;
+	if (!MAPPINGS[keyword]) { return $0; }
 
 	// store keyword mapping
 	var mapping = Com_Zimbra_Date.__replaceKeyword_mapping;
