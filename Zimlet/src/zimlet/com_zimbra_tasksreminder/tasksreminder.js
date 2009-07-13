@@ -35,6 +35,8 @@ com_zimbra_tasksreminder.prototype.init = function() {
 		this.setSearcholders();
 		this.runSearch();
 		this.setUserProperty("taskreminder_lastShownDate", todayStr, true);
+		this._searchField.value = this.prevSearchFieldVal; //reset search-field's value
+
 	}else {
 		return;
 	}		
@@ -47,6 +49,8 @@ function() {
 
 	var aCtxt = appCtxt.isChildWindow ? parentAppCtxt : appCtxt;
 	var tasksApp = aCtxt.getApp(ZmApp.TASKS);
+	AjxDispatcher.run("GetTaskController");
+
 	tasksApp._createDeferredFolders();
 	var folders = appCtxt.getFolderTree().root.children.getArray();
 	if (folders) {
@@ -71,13 +75,16 @@ com_zimbra_tasksreminder.prototype.runSearch = function(response) {
 	_types.add("TASK");
 	var todayDate = new Date();
 	var todayStart = new Date(todayDate.getFullYear(),todayDate.getMonth(), todayDate.getDate());
-	var daysback60 = new Date(todayStart.getTime() - (60 * 24 * 3600 * 1000));
-	var daysback60_normalized = this._normalizeDate(daysback60.getMonth()+1,  daysback60.getDate(), daysback60.getFullYear());
-	appCtxt.getSearchController().search({query: "after:\""+daysback60_normalized+"\" "+ this.searchInFolders, userText: true, limit:200, types:_types, noRender:true,  callback:callbck});
+	var daysback200 = new Date(todayStart.getTime() - (200 * 24 * 3600 * 1000));
+	var daysback200_normalized = this._normalizeDate(daysback200.getMonth()+1,  daysback200.getDate(), daysback200.getFullYear());
+	appCtxt.getSearchController().search({query: "after:\""+daysback200_normalized+"\" "+ this.searchInFolders, userText: true, limit:200, types:_types, noRender:true,  callback:callbck});
 };
 
 com_zimbra_tasksreminder.prototype._handleSearchResponse = function(response) {
 	var tasks = response.getResponse().getResults("TASK").getArray();
+	if(tasks.length == 0) {
+		return;
+	}
 	var taskObjs = new Array();
 	var tmp = new Date();
 	var showReminder = false;
@@ -105,7 +112,8 @@ com_zimbra_tasksreminder.prototype._handleSearchResponse = function(response) {
 
 	if(showReminder) {
 		this._showTasksReminderDialog(taskObjs);
-	}
+	} 
+
 };
 
 
@@ -271,11 +279,22 @@ com_zimbra_tasksreminder.prototype._showPreferenceDlg = function() {
 	}
 	this._preferenceView = new DwtComposite(this.getShell());
 	this._preferenceView.getHtmlElement().innerHTML = this._createPrefView();
-	this._preferenceDialog = this._createDialog({title:"Task Reminder -Zimlet Preferences", view:this._preferenceView, standardButtons:[DwtDialog.OK_BUTTON]});
+	var showAgainDlgBtnId = Dwt.getNextId();
+	var showAgainDlgBtn = new DwtDialog_ButtonDescriptor(showAgainDlgBtnId, ("Show Reminders Again"), DwtDialog.ALIGN_LEFT);
+	this._preferenceDialog = this._createDialog({title:"Task Reminder -Zimlet Preferences", view:this._preferenceView, standardButtons:[DwtDialog.OK_BUTTON], extraButtons:[showAgainDlgBtn]});
+	this._preferenceDialog.setButtonListener(showAgainDlgBtnId, new AjxListener(this, this._showAgainListener));
 	this._preferenceDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListener));
 	this._preferenceDialog.popup();
 	this.setPrefValues();
 
+};
+
+com_zimbra_tasksreminder.prototype._showAgainListener = function() {
+		this._searchField = appCtxt.getSearchController().getSearchToolbar().getSearchField();
+		this.prevSearchFieldVal =this._searchField.value;
+		this.setSearcholders();
+		this.runSearch();
+		this._searchField.value = this.prevSearchFieldVal; //reset search-field's value
 };
 
 com_zimbra_tasksreminder.prototype.setPrefValues = function() {

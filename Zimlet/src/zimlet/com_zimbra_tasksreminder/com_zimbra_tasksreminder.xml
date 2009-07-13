@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_tasksreminder" version="2.0" description="Reminds about upcoming and overdue Tasks, once a day" >
+<zimlet name="com_zimbra_tasksreminder" version="2.1" description="Reminds about upcoming and overdue Tasks, once a day" >
 	<include>tasksreminder.js</include>
 	<includeCSS>tasksreminder.css</includeCSS>
 	<handlerObject>com_zimbra_tasksreminder</handlerObject>
