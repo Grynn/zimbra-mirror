@@ -895,10 +895,18 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 					  ]
 			       },
 			       
-			       {type:_OUTPUT_, value:ZaMsg.DLXV_GroupLabelEnterAddressBelow},
-			       {ref:ZaDistributionList.A2_optionalAdd, type:_TEXTAREA_,width:"98%", height:98,bmolsnr:true},
-			       {type:_SPACER_, height:"5"},
+			       {type:_OUTPUT_, value:ZaMsg.DLXV_GroupLabelEnterAddressBelow,
+			       		visibilityChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]]
+			       },
+			       {ref:ZaDistributionList.A2_optionalAdd, type:_TEXTAREA_,width:"98%", height:98,bmolsnr:true,
+						visibilityChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]],
+						enableDisableChecks:[]
+			       },
+			       {type:_SPACER_, height:"5",
+			       		visibilityChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]]
+			       },
 			       {type:_GROUP_, numCols:2, width:"98%", colSizes:[80,"auto"],
+			       		visibilityChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_MEMBER_RIGHT]],
 						items: [
 							{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromFreeForm, width:"100%",
 								onActivate:"ZaDLXFormView.addFreeFormAddressToMembers.call(this,event)",
