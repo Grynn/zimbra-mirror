@@ -18,9 +18,9 @@
     <Set name="ThreadPool">
       <!-- Default bounded blocking threadpool -->
       <New id="pool" class="org.mortbay.thread.BoundedThreadPool">
-        <Set name="minThreads">5</Set>
-        <Set name="lowThreads">10</Set>
-        <Set name="maxThreads">25</Set>
+        <Set name="minThreads">2</Set>
+        <Set name="lowThreads">3</Set>
+        <Set name="maxThreads">12</Set>
       </New>
     </Set>
 

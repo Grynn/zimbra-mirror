@@ -94,4 +94,7 @@
   <key name="mailboxd_output_rotate_interval">
     <value>0</value>
   </key>
+  <key name="zimbra_index_flush_pool_size">
+    <value>1</value>
+  </key>
 </localconfig>
