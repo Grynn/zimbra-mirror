@@ -408,12 +408,12 @@ function(params){
     else
         appt.setStartDate(YahooMaps._parseDate(params.startdate));
 
-    if(!isValidEndTime && isValidStartTime && params.startdate == params.enddate)
-        appt.setEndDate(YahooMaps._parseDate(params.enddate,params.starttime,1));
+    if(!isValidEndTime && isValidStartTime && (params.startdate == params.enddate || !params.enddate))
+        appt.setEndDate(YahooMaps._parseDate(params.startdate,params.starttime,1));
     else if(!(isValidEndTime && isValidStartTime))
         appt.setEndDate(YahooMaps._parseDate(params.enddate));
     else
-        appt.setEndDate(YahooMaps._parseDate(params.enddate,params.starttime));
+        appt.setEndDate(YahooMaps._parseDate(params.enddate,params.starttime,1));
     
     var directions = [
 		"Direction:\n\n",
