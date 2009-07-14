@@ -193,7 +193,7 @@ public class GalSync {
                 byte[] types = new byte[1];
                 types[0] = MailItem.TYPE_CONTACT;
                 
-                ZimbraQueryResults zqr = galMbox.search(context, id, types, SortBy.NONE, 1);
+                ZimbraQueryResults zqr = galMbox.search(context, "#" + OfflineConstants.GAL_LDAP_DN + ":\"" + id + "\"", types, SortBy.NONE, 1);
                 try {                         
                     if (zqr.hasNext()) {
                         galMbox.modifyContact(context, zqr.getNext().getItemId(), contact);
@@ -387,6 +387,7 @@ public class GalSync {
         for(Element elt : contacts) {
             String id = elt.getAttribute(AccountConstants.A_ID);
             Map<String, String> fields = new HashMap<String, String>();
+            fields.put(OfflineConstants.GAL_LDAP_DN, id);
             for (Element eField : elt.listElements()) {
                 if (!eField.getName().equals("objectClass"))
                     fields.put(eField.getAttribute(Element.XMLElement.A_ATTR_NAME), eField.getText());
