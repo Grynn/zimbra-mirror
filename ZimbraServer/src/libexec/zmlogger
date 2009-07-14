@@ -41,6 +41,22 @@ my @CREATE_DDL = (
     )},
 );
 
+my %hostname_mapped;
+sub map_host($$$) {
+	my ($dbh, $syslog_hostname, $zm_hostname) = @_;
+	
+	return if $syslog_hostname eq $zm_hostname;
+	return if exists $hostname_mapped{$syslog_hostname};
+	
+    my $sth = $dbh->prepare(q{
+        UPDATE hosts SET zm_hostname = ? WHERE dns_hostname = ?
+    });
+    my $rows = $sth->execute($zm_hostname, $syslog_hostname);
+    if (!$sth->err && $rows > 0) {
+    	$hostname_mapped{$syslog_hostname} = $zm_hostname;
+    }
+}
+
 sub get_host_id($$) {
     my $dbh      = shift @_;
     my $hostname = shift@_;
@@ -428,6 +444,9 @@ sub run() {
                 ($csv_file, $headers, $data) = @match;
             } elsif (@match = ($msg =~ m/$zimbramonstatusre/)) {
                 my ($hostname, $service, $status) = @match;
+                my $syslog_hostname = $host;
+                map_host($dbh, $syslog_hostname, $hostname);
+                
                 $host     = $hostname;
                 $csv_file = 'zmstatuslog';
                 $headers  = $service;
