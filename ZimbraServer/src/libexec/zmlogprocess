@@ -19,6 +19,7 @@ use strict;
 use warnings;
 use Zimbra::Mon::Zmstat;
 use Zimbra::Mon::Logger;
+use Date::Parse;
 use Fcntl qw(SEEK_SET);
 
 use vars qw($logger_directory $log_file);
@@ -125,7 +126,7 @@ sub init_counters($) {
     my $data = shift @_;
     my @mtas = listMTA();
 
-    my @counters = qw(clam_events sendmail_events filter_event filter_virus filter_spam filter_misc mta_count mta_volume);
+    my @counters = qw(clam_events sendmail_events filter_event filter_virus filter_spam filter_misc mta_count mta_volume mta_delay);
     foreach my $mta (@mtas) {
         foreach my $counter (@counters) {
             counter_increment($data, $mta, $counter);
@@ -145,6 +146,37 @@ sub counter_add($$$$) {
     $data->{$host}->{$counter} += $amount;
 }
 
+sub counter_qid_add($$$$) {
+    my ($data, $host, $qid, $date) = @_;
+    my $tstamp = str2time($date);
+    
+    $data->{$host} = {}                         if !exists $data->{$host};
+    $data->{$host}->{$qid} = {}                 if !exists $data->{$host}->{$qid};
+    $data->{$host}->{$qid}->{'first'} = $tstamp if !exists $data->{$host}->{$qid}->{'first'};
+    $data->{$host}->{$qid}->{'last'}  = $tstamp;
+}
+
+sub counter_qid_avg($$) {
+    my ($data, $host) = @_;
+    
+    return 0 if !exists $data->{$host};
+    
+    my $hdata = $data->{$host};
+    
+    my $avg = 0;
+    my $count = 0;
+    
+    foreach my $qid (keys %$hdata) {
+    	my $delta = $hdata->{$qid}->{'last'} - $hdata->{$qid}->{'first'};
+    	
+    	$avg = ( ($avg * $count) + $delta ) / ( $count + 1 );
+    	
+    	$count++;
+    }
+    
+    return $avg;
+}
+
 sub run() {
     checkPID();
     updatePID();
@@ -154,6 +186,7 @@ sub run() {
 
     my $logregex = qr/(^.{15}) ((\d+\.\d+\.\d+\.\d+) \S+|(\S+)) ([^[]+)(\[(\d+)\])?: (.*)$/o;
     my %host_data;
+    my %host_qid_data; # hostname -> { qid -> { first, last } }
     init_counters(\%host_data);
     my %seen_qid;
     seek(LOG, $offset, SEEK_SET);
@@ -190,6 +223,7 @@ sub run() {
         } elsif ($app =~ /^postfix/o) {
             if ($msg =~ /^([A-F0-9]+):/) {
                 my $qid = $1;
+            	counter_qid_add(\%host_qid_data, $host, $qid, $log_date);
                 counter_increment(\%host_data, $host, 'mta_count')
                         if (!exists $seen_qid{$qid});
                 $seen_qid{$qid} = 1;
@@ -200,7 +234,10 @@ sub run() {
     }
     close(LOG);
     foreach my $host (keys %host_data) {
+    	my $delay = counter_qid_avg(\%host_qid_data, $host);
         my $hdata = $host_data{$host};
+        $hdata->{'mta_delay'} = $delay;
+        
         my @columns = keys %$hdata;
         my $columns = join(',', @columns);
         my @data;
