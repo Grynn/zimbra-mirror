@@ -714,14 +714,20 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
 
-        attrs.put(A_zimbraFeatureCalendarEnabled, dsAttrs.get(A_zimbraDataSourceCalendarSyncEnabled));
-        attrs.put(A_zimbraFeatureContactsEnabled, dsAttrs.get(A_zimbraDataSourceContactSyncEnabled));
-        attrs.put(A_zimbraFeatureBriefcasesEnabled, FALSE);
-        attrs.put(A_zimbraFeatureIMEnabled, FALSE);
-        attrs.put(A_zimbraFeatureTasksEnabled, FALSE);
-
         setDefaultAccountAttributes(attrs);
         
+        Object syncEnabled = dsAttrs.get(A_zimbraDataSourceCalendarSyncEnabled);
+
+        attrs.put(A_zimbraFeatureCalendarEnabled, syncEnabled == null ? FALSE : syncEnabled);
+        syncEnabled = dsAttrs.get(A_zimbraDataSourceContactSyncEnabled);
+        attrs.put(A_zimbraFeatureContactsEnabled, syncEnabled == null ? FALSE : syncEnabled);
+
+        attrs.put(A_zimbraFeatureBriefcasesEnabled, FALSE);
+        attrs.put(A_zimbraFeatureIMEnabled, FALSE);
+        attrs.put(A_zimbraFeatureNotebookEnabled, FALSE);
+        attrs.put(A_zimbraFeatureTasksEnabled, FALSE);
+        attrs.put(A_zimbraZimletAvailableZimlets, new String[0]);
+
         if (testDs.isYahoo()) {
         	attrs.put(A_zimbraPrefSkin, "yahoo");
         }
@@ -1213,16 +1219,28 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 flavor = LOCAL_ACCOUNT_FLAVOR;
             } else if (isDataSourceAccount(acct)) {
                 DataSource ds = getDataSource(acct);
+                String sync = ds.getBooleanAttr(A_zimbraDataSourceCalendarSyncEnabled, false) ?
+                    TRUE : FALSE;
 
                 flavor = ds.getAttr(A_offlineAccountFlavor);
-                attrs.put(A_zimbraFeatureCalendarEnabled, ds.getAttr(A_zimbraDataSourceCalendarSyncEnabled));
-                attrs.put(A_zimbraFeatureContactsEnabled, ds.getAttr(A_zimbraDataSourceContactSyncEnabled));
+                attrs.put(A_zimbraFeatureCalendarEnabled, sync);
+                setAccountAttribute(acct, A_zimbraFeatureCalendarEnabled, sync);
+                sync = ds.getBooleanAttr(A_zimbraDataSourceContactSyncEnabled, false) ?
+                    TRUE : FALSE;
+                attrs.put(A_zimbraFeatureContactsEnabled, sync);
+                setAccountAttribute(acct, A_zimbraFeatureContactsEnabled, sync);
+                attrs.put(A_zimbraFeatureBriefcasesEnabled, FALSE);
+                setAccountAttribute(acct, A_zimbraFeatureBriefcasesEnabled, FALSE);
+                attrs.put(A_zimbraFeatureNotebookEnabled, FALSE);
+                setAccountAttribute(acct, A_zimbraFeatureNotebookEnabled, FALSE);
+                attrs.put(A_zimbraFeatureTasksEnabled, FALSE);
+                setAccountAttribute(acct, A_zimbraFeatureTasksEnabled, FALSE);
             } else if (isZcsAccount(acct)) {
                 flavor = "Zimbra";
             }
             if (flavor != null) {
-                setAccountAttribute(acct, A_offlineAccountFlavor, flavor);
                 attrs.put(A_offlineAccountFlavor, flavor);
+                setAccountAttribute(acct, A_offlineAccountFlavor, flavor);
             }
         }
 
@@ -2228,8 +2246,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             AttributeManager.getInstance().postModify(attrs, ds, context, false, true);
         }
         if (!isLocalAccount(account) && isDataSourceAccount(account)) {
-            setAccountAttribute(account, A_zimbraFeatureCalendarEnabled, ds.getAttr(A_zimbraDataSourceCalendarSyncEnabled));
-            setAccountAttribute(account, A_zimbraFeatureContactsEnabled, ds.getAttr(A_zimbraDataSourceContactSyncEnabled));
+            setAccountAttribute(account, A_zimbraFeatureCalendarEnabled, ds.getBooleanAttr(A_zimbraDataSourceCalendarSyncEnabled, false) ? TRUE : FALSE);
+            setAccountAttribute(account, A_zimbraFeatureContactsEnabled, ds.getBooleanAttr(A_zimbraDataSourceContactSyncEnabled, false) ? TRUE : FALSE);
         }
     }
 
