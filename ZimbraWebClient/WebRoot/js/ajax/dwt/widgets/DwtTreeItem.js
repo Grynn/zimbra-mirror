@@ -152,6 +152,7 @@ DwtTreeItem.prototype._handleCheckboxOnclick =
 function(ev) {
 	this.setChecked(!Dwt.getVisible(this._checkedImg));
 
+	ev = ev || window.event;
 	ev.item = this;
 	this._tree._itemChecked(this, ev);
 };
