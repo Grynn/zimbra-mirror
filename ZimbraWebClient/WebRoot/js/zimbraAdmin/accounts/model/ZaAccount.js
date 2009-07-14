@@ -83,14 +83,14 @@ ZaAccount.A_zimbraMailForwardingAddress="zimbraMailForwardingAddress";
 ZaAccount.A_zimbraPasswordMustChange="zimbraPasswordMustChange";
 ZaAccount.A_zimbraPasswordLocked="zimbraPasswordLocked";
 ZaAccount.A_zimbraContactMaxNumEntries = "zimbraContactMaxNumEntries";
+ZaAccount.A_zimbraMailForwardingAddressMaxLength = "zimbraMailForwardingAddressMaxLength";
+ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs = "zimbraMailForwardingAddressMaxNumAddrs";
 ZaAccount.A_zimbraAttachmentsBlocked = "zimbraAttachmentsBlocked";
 ZaAccount.A_zimbraQuotaWarnPercent = "zimbraQuotaWarnPercent";
 ZaAccount.A_zimbraQuotaWarnInterval = "zimbraQuotaWarnInterval";
 ZaAccount.A_zimbraQuotaWarnMessage = "zimbraQuotaWarnMessage";
 ZaAccount.A_zimbraIsSystemResource = "zimbraIsSystemResource";
 ZaAccount.A_zimbraExcludeFromCMBSearch = "zimbraExcludeFromCMBSearch";
-ZaAccount.A_zimbraMailForwardingAddressMaxLength = "zimbraMailForwardingAddressMaxLength";
-ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs = "zimbraMailForwardingAddressMaxNumAddrs";
 
 ZaAccount.A_zimbraAdminAuthTokenLifetime  = "zimbraAdminAuthTokenLifetime";
 ZaAccount.A_zimbraAuthTokenLifetime = "zimbraAuthTokenLifetime";
@@ -1440,6 +1440,8 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPasswordMustChange, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPasswordMustChange},
         {id:ZaAccount.A_zimbraPasswordLocked, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPasswordLocked, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraContactMaxNumEntries, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraContactMaxNumEntries, maxInclusive:2147483647, minInclusive:0},
+        {id:ZaAccount.A_zimbraMailForwardingAddressMaxLength, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMailForwardingAddressMaxLength, maxInclusive:2147483647, minInclusive:0},
+        {id:ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs, maxInclusive:2147483647, minInclusive:0},
         {id:ZaAccount.A_zimbraAttachmentsBlocked, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraAttachmentsBlocked, choices:ZaModel.BOOLEAN_CHOICES},
 
         {id:ZaAccount.A_zimbraQuotaWarnPercent, type:_COS_NUMBER_, ref:"attrs/" + ZaAccount.A_zimbraQuotaWarnPercent},

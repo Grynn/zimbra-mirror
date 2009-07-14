@@ -664,7 +664,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		ZaNewAccountXWizard.FORWARDING_STEP = ++this.TAB_INDEX;		
 		this.stepChoices.push({value:ZaNewAccountXWizard.FORWARDING_STEP, label:ZaMsg.TABT_Forwarding});
 
-		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.FORWARDING_STEP, tabGroupKey:ZaNewAccountXWizard.FORWARDING_STEP, numCols:2,colSizes:["200px","auto"], 
+		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.FORWARDING_STEP, tabGroupKey:ZaNewAccountXWizard.FORWARDING_STEP, numCols:2,colSizes:["250px","auto"], 
 					id:"account_form_forwarding_step",
 					items: [
 						{
@@ -1287,9 +1287,21 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		}
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraMailQuota,ZaAccount.A_zimbraContactMaxNumEntries,
 			ZaAccount.A_zimbraQuotaWarnPercent,ZaAccount.A_zimbraQuotaWarnInterval,ZaAccount.A_zimbraQuotaWarnMessage],[])) {						
-			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_quota_settings",colSizes:["250px","200px","150px"],numCols:3,
+			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_quota_settings",colSizes:["260px","190px","150px"],numCols:3,
 							label:ZaMsg.NAD_QuotaGrouper,						
 							items: [
+								{ref:ZaAccount.A_zimbraMailForwardingAddressMaxLength, type:_SUPERWIZ_TEXTFIELD_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraMailForwardingAddressMaxLength,
+									txtBoxLabel:ZaMsg.LBL_zimbraMailForwardingAddressMaxLength, labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input"
+								},
+								{ref:ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs, type:_SUPERWIZ_TEXTFIELD_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraMailForwardingAddressMaxNumAddrs,
+									txtBoxLabel:ZaMsg.LBL_zimbraMailForwardingAddressMaxNumAddrs, labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input"
+								},							
 								{ref:ZaAccount.A_zimbraMailQuota, type:_SUPERWIZ_TEXTFIELD_, 
 									txtBoxLabel:ZaMsg.LBL_zimbraMailQuota, msgName:ZaMsg.MSG_zimbraMailQuota,labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input", 
@@ -1298,7 +1310,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaAccount.A_zimbraContactMaxNumEntries, type:_SUPERWIZ_TEXTFIELD_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraContactMaxNumEntries,
-									txtBoxLabel:ZaMsg.LBL_zimbraContactMaxNumEntries, labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"},
+									txtBoxLabel:ZaMsg.LBL_zimbraContactMaxNumEntries, labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input"
+								},
 								{ref:ZaAccount.A_zimbraQuotaWarnPercent, type:_SUPERWIZ_TEXTFIELD_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									txtBoxLabel:ZaMsg.LBL_zimbraQuotaWarnPercent, msgName:ZaMsg.MSG_zimbraQuotaWarnPercent,labelLocation:_LEFT_, 
@@ -1378,7 +1392,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		}
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_zimbraPasswordLockoutMaxFailures,
 			ZaAccount.A_zimbraPasswordLockoutDuration,ZaAccount.A_zimbraPasswordLockoutFailureLifetime],[])) {						
-			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"password_lockout_settings",colSizes:["250px","200px","150px"],numCols:3,
+			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"password_lockout_settings",colSizes:["260px","190px","150px"],numCols:3,
 							label:ZaMsg.NAD_FailedLoginGrouper,							
 							items :[
 

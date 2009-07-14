@@ -2221,6 +2221,16 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 						{type:_ZA_TOP_GROUPER_, id:"account_quota_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_QuotaGrouper,
 							items: [
+								{ref:ZaAccount.A_zimbraMailForwardingAddressMaxLength, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraMailForwardingAddressMaxLength,
+									txtBoxLabel:ZaMsg.LBL_zimbraMailForwardingAddressMaxLength, labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input"
+								},
+								{ref:ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraMailForwardingAddressMaxNumAddrs,
+									txtBoxLabel:ZaMsg.LBL_zimbraMailForwardingAddressMaxNumAddrs, labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input"
+								},							
 								{ref:ZaAccount.A_zimbraMailQuota, type:_SUPER_TEXTFIELD_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									txtBoxLabel:ZaMsg.LBL_zimbraMailQuota, msgName:ZaMsg.MSG_zimbraMailQuota,labelLocation:_LEFT_, 
@@ -2247,11 +2257,12 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								},
 								{ref:ZaAccount.A_zimbraQuotaWarnMessage, type:_SUPER_TEXTAREA_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
-									txtBoxLabel:ZaMsg.MSG_zimbraQuotaWarnPercent,
-									msgName:ZaMsg.LBL_zimbraQuotaWarnPercent,
+									txtBoxLabel:ZaMsg.MSG_zimbraQuotaWarnMessage,
+									msgName:ZaMsg.LBL_zimbraQuotaWarnMessage,
 									labelCssStyle:"vertical-align:top", textAreaWidth:"250px", 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								}
+								
 							]
 						},
 

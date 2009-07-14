@@ -747,18 +747,37 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
             {type:_ZA_TOP_GROUPER_, id:"cos_quota_settings",
                 label:ZaMsg.NAD_QuotaGrouper,
                 items: [
-                    {ref:ZaCos.A_zimbraMailQuota, type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraMailQuota,label:ZaMsg.LBL_zimbraMailQuota, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
-                    {ref:ZaCos.A_zimbraContactMaxNumEntries, type:_INPUT_, msgName:ZaMsg.MSG_zimbraContactMaxNumEntries,
+                    {ref:ZaCos.A_zimbraMailForwardingAddressMaxLength, type:_TEXTFIELD_, 
+                    	msgName:ZaMsg.MSG_zimbraMailForwardingAddressMaxLength,
+                    	label:ZaMsg.LBL_zimbraMailForwardingAddressMaxLength, 
+                    	labelLocation:_LEFT_, 
+                    	cssClass:"admin_xform_number_input"
+                    },
+                    {ref:ZaCos.A_zimbraMailForwardingAddressMaxNumAddrs, type:_TEXTFIELD_, 
+                    	msgName:ZaMsg.MSG_zimbraMailForwardingAddressMaxNumAddrs,
+                    	label:ZaMsg.LBL_zimbraMailForwardingAddressMaxNumAddrs, 
+                    	labelLocation:_LEFT_, 
+                    	cssClass:"admin_xform_number_input"
+                    },                
+                    {ref:ZaCos.A_zimbraMailQuota, type:_TEXTFIELD_, 
+                    	msgName:ZaMsg.MSG_zimbraMailQuota,
+                    	label:ZaMsg.LBL_zimbraMailQuota, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"
+                    },
+                    {ref:ZaCos.A_zimbraContactMaxNumEntries, type:_TEXTFIELD_, 
+                    	msgName:ZaMsg.MSG_zimbraContactMaxNumEntries,
                     	label:ZaMsg.LBL_zimbraContactMaxNumEntries, 
                     	labelLocation:_LEFT_, 
                     	cssClass:"admin_xform_number_input"
                     },
                     {ref:ZaCos.A_zimbraQuotaWarnPercent, type:_INPUT_, msgName:ZaMsg.MSG_zimbraQuotaWarnPercent,
-                    	label:ZaMsg.LBL_zimbraQuotaWarnPercent, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
+                    	label:ZaMsg.LBL_zimbraQuotaWarnPercent, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"
+                    },
                     {ref:ZaCos.A_zimbraQuotaWarnInterval, type:_LIFETIME_, msgName:ZaMsg.MSG_zimbraQuotaWarnInterval,
-                    	label:ZaMsg.LBL_zimbraQuotaWarnInterval, labelLocation:_LEFT_},
+                    	label:ZaMsg.LBL_zimbraQuotaWarnInterval, labelLocation:_LEFT_
+                    },
                     {ref:ZaCos.A_zimbraQuotaWarnMessage, type:_TEXTAREA_, msgName:ZaMsg.MSG_zimbraQuotaWarnMessage,
-                    	label:ZaMsg.LBL_zimbraQuotaWarnMessage, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top",width: "30em"}
+                    	label:ZaMsg.LBL_zimbraQuotaWarnMessage, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top",width: "30em"
+                    }
                 ]
             },
             {type:_ZA_TOP_GROUPER_,id:"cos_password_settings",
