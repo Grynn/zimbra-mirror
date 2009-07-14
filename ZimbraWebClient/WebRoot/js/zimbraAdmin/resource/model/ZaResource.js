@@ -75,8 +75,9 @@ ZaResource.A_zimbraCalResFloor = "zimbraCalResFloor";
 ZaResource.A_zimbraCalResRoom = "zimbraCalResRoom";
 ZaResource.A_zimbraCalResSite = "zimbraCalResSite";
 ZaResource.A_zimbraCalResType = "zimbraCalResType";
-//ZaResource.A_zimbraMailStatus = "zimbraMailStatus";
 ZaResource.A_contactInfoAutoComplete = "contactInfoAutoComplete";
+ZaResource.A_zimbraMailForwardingAddressMaxLength = "zimbraMailForwardingAddressMaxLength";
+ZaResource.A_zimbraMailForwardingAddressMaxNumAddrs = "zimbraMailForwardingAddressMaxNumAddrs";
 
 ZaResource.ACCOUNT_STATUS_ACTIVE = "active";
 ZaResource.ACCOUNT_STATUS_MAINTENANCE = "maintenance";

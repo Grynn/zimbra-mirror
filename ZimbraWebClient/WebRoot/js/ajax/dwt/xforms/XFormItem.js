@@ -1249,13 +1249,15 @@ XFormItem.prototype.hideElement = function (id,isBlock) {
 
 XFormItem.prototype.createElement = XForm.prototype.createElement;
 
-XFormItem.estimateMyWidth = function (label,withIcon,extraMargin) {
+XFormItem.estimateMyWidth = function (label,withIcon,extraMargin, minimum) {
 	var width = (String(label).length/2)*XForm.FONT_WIDTH1 + (String(label).length/2)*XForm.FONT_WIDTH2 + 14;
 	if(withIcon)
 		width = width + 24;
 	
 	if(extraMargin>0)
-		width = width + extraMargin;	
+		width = width + extraMargin;
+	
+	width = (width >= minimum) ? width : minimum;
 	return [width,"px"].join("");
 }
 
