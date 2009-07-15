@@ -164,9 +164,9 @@ if (!$usersonly) {
   # Regenerate Self-signed certs
   if (!-f "$c{zimbra_home}/ssl/zimbra/commercial/commercial.crt") {
     if($c{ldap_is_master}) {
-      runCommand("$c{zmcertmgr} createca -new");
+      runCommand("sudo $c{zmcertmgr} createca -new");
     }
-    runCommand("$c{zmcertmgr} createcrt self -new");
+    runCommand("sudo $c{zmcertmgr} createcrt self -new");
   }
 } else {
   modifyAccountData($newServerName);
