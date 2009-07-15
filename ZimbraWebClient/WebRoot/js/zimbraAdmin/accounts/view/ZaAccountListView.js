@@ -115,7 +115,7 @@ function(account, now, isDragProxy) {
 				break;
 				case ZaItem.DL:
                     if (account.attrs[ZaDistributionList.A_isAdminGroup] == "TRUE") {
-					    html[idx++] = AjxImg.getImageHtml("Group");
+					    html[idx++] = AjxImg.getImageHtml("DistributionListGroup");
                     }else {
                         html[idx++] = AjxImg.getImageHtml("DistributionList");
                     }
