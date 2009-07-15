@@ -42,7 +42,7 @@ ZaGrantDialog = function(parent,  app, title, by, isEditDialog) {
         this._extraButtons = [helpButton,addMoreButton,addFinishButton];
     }
 
-    ZaXDialog.call(this, parent,null,  title, "400px", "200px");
+    ZaXDialog.call(this, parent,null,  title, "500px", "200px");
     if (!by) by = ZaGrant.A_target ;
     this.by = by;
 
@@ -73,10 +73,10 @@ function() {
     var xFormObject = {
         numCols:1,
         items:[
-             {type:_GROUP_,isTabGroup:true, numCols:2, colSizes: [165, "*"], items: [ //allows tab key iteration
+             {type:_GROUP_,isTabGroup:true, numCols:2, colSizes: [150, "*"], items: [ //allows tab key iteration
                { type: _SPACER_ },
 
-                 {type: _GROUP_, colSpan: "*", numCols:2, colSizes: [165, "*"],
+                 {type: _GROUP_, colSpan: "*", numCols:2, colSizes: [150, "*"],
                      visibilityChecks:["this.getForm().parent.by == 'target'"],
                      items : [
                        { ref: ZaGrant.A_target, type: _OUTPUT_ ,
@@ -87,7 +87,7 @@ function() {
                         */
                        // make it type _DYNSELECT_
                        { ref: ZaGrant.A_grantee, type: _DYNSELECT_, label: com_zimbra_delegatedadmin.Label_grantee_name ,
-                           visibilityChecks:[],labelLocation:_LEFT_ ,
+                           visibilityChecks:[],labelLocation:_LEFT_ ,  inputSize: 50,
                            emptyText:com_zimbra_delegatedadmin.searchTermGrantee,
                            choices: this.granteeNameChoices,
                            onChange: ZaGrantDialog.setGranteeChanged,
@@ -105,7 +105,7 @@ function() {
                      ]
                  },
 
-                 {type: _GROUP_, colSpan: "*", numCols:2, colSizes: [165, "*"],
+                 {type: _GROUP_, colSpan: "*", numCols:2, colSizes: [150, "*"],
                     visibilityChecks:["this.getForm().parent.by == 'grantee'"],
                     items: [
                          { ref: ZaGrant.A_grantee, type: _OUTPUT_ ,
@@ -119,7 +119,7 @@ function() {
                            onChange: ZaGrantDialog.setTargetTypeChanged ,
                            visibilityChecks:[]
                        },
-                       { ref: ZaGrant.A_target, type: _TEXTFIELD_,
+                       { ref: ZaGrant.A_target, type: _TEXTFIELD_,   width:250,
                            label: com_zimbra_delegatedadmin.Label_target_name ,
                            enableDisableChecks:[ZaGrantDialog.targetTypeListener],
                            enableDisableChangeEventSources:[ZaGrant.A_target_type],
@@ -132,7 +132,7 @@ function() {
                    visibilityChecks:[],
                    labelLocation: _LEFT_, choices: ZaGrant.RIGHT_TYPE_CHOICES
                },
-               { type: _GROUP_, colSpan:"*", numCols:2, colSizes: [165, "*"],
+               { type: _GROUP_, colSpan:"*", numCols:2, colSizes: [150, "*"],
                    visibilityChecks: [[ZaGrantDialog.rightTypeListener, "inline"]],
                    visibilityChangeEventSources: [ZaGrant.A_right_type] ,
                    items:
@@ -148,6 +148,7 @@ function() {
                        {ref: ZaGrant.A_inline_right + "/" + ZaGrant.A_inline_attr,
                            visibilityChecks:[],
                            onChange: ZaGrantDialog.composeInlineRight,  required: true,
+                            width:250,
                            type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_inline_attr }
                    ]
                },
@@ -157,7 +158,7 @@ function() {
     //                   visibilityChangeEventSources: [ZaGrant.A_right_type] ,
                        enableDisableChecks:[[ZaGrantDialog.rightTypeListener, "system"]],
                        enableDisableChangeEventSources:[ZaGrant.A_right_type],
-                       labelLocation:_LEFT_ ,
+                       labelLocation:_LEFT_ ,  inputSize: 50,
                        emptyText:com_zimbra_delegatedadmin.searchTermRight,
                        choices: this.systemRightsChoices, 
 //                       inputPreProcessor:ZaGrantDialog.preProcessRightNames,
@@ -170,7 +171,7 @@ function() {
                      onChange: ZaGrantDialog.changeDenyAllow ,
                      visibilityChecks:[],  //bmol: true ,
                      labelLocation:_RIGHT_ /*, trueValue:"1", falseValue:"0" */},
-                 {type: _GROUP_, colSpan: "*", numCols: 3, colSizes: [165, 20,  "*"],
+                 {type: _GROUP_, colSpan: "*", numCols: 3, colSizes: [150, 20,  "*"],
                      items: [
                          {type: _CELL_SPACER_ },    
                          {ref: ZaGrant.A_canDelegate, id: ZaGrant.A_canDelegate,  type: _CHECKBOX_ ,
