@@ -86,8 +86,8 @@ ZaAllGrantsXFormView.prototype.getMyXForm = function() {
             items:[
                     {
                         ref: ZaGrant.A3_directGrantsList, id: ZaGrant.A3_directGrantsList, type: _DWT_LIST_,
-                        width:"100%", 
-                        cssClass: "MBXList", widgetClass: ZaGrantsListView,
+                        width:"100%", widgetClass: ZaGrantsListView,
+//                        cssClass: "MBXList",
                         headerList: ZaGrantsListView._getHeaderList (null, "all"),
                         hideHeader: false ,
                         onSelection:ZaAllGrantsXFormView.grantSelectionListener,
@@ -100,8 +100,8 @@ ZaAllGrantsXFormView.prototype.getMyXForm = function() {
             items:[
                     {
                         ref: ZaGrant.A3_indirectGrantsList, id: ZaGrant.A3_indirectGrantsList, type: _DWT_LIST_,
-                        width:"100%",
-                        cssClass: "MBXList", widgetClass: ZaGrantsListView,
+                        width:"100%", widgetClass: ZaGrantsListView,
+//                        cssClass: "MBXList",
                         headerList: ZaGrantsListView._getHeaderList (null, "all"),
                         hideHeader: false ,
                         multiselect: false  //TODO: enable multiselect in the future

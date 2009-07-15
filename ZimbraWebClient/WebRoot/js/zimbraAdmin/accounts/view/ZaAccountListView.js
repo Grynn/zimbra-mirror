@@ -98,7 +98,7 @@ function(account, now, isDragProxy) {
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
 		var field = this._headerList[i]._field;
-		var IEWidth = this._headerList[i]._width + 4 ;
+		var IEWidth = this._headerList[i]._width  ;
 
 		if(field == "type") {
 			// type
