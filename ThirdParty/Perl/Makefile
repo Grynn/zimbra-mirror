@@ -106,7 +106,6 @@ PERL_LIBS 	:= \
 	Digest::HMAC_MD5 \
 	Convert::TNEF \
 	Convert::UUlib \
-	Convert::BinHex \
 	Net::IP \
 	Net::DNS \
 	File::Tail \
