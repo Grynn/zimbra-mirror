@@ -930,19 +930,12 @@ function(actionCode, ev) {
 			break;
 
 		case DwtKeyMap.SELECT_FIRST:
-			var a = this._list.getArray();
-			if (a && a.length > 1) {
-				this.setSelection(a[0]);
-			}
-			this._scrollList(this._kbAnchor);
-			break;
-
 		case DwtKeyMap.SELECT_LAST:
-			var a = this._list.getArray();
-			if (a && a.length > 1) {
-				this.setSelection(a[a.length - 1]);
+			var item = (actionCode == DwtKeyMap.SELECT_FIRST) ? this._getFirstItem() : this._getLastItem();
+			if (item) {
+				this.setSelection(item);
+				this._scrollList(this._kbAnchor);
 			}
-			this._scrollList(this._kbAnchor);
 			break;
 
 		case DwtKeyMap.ACTION:
@@ -2388,6 +2381,24 @@ function(clear) {
 	if (clear) {
 		this._kbAnchor = null;
 	}
+};
+
+DwtListView.prototype._getFirstItem =
+function() {
+	var a = this._list.getArray();
+	if (a && a.length > 1) {
+		return a[0];
+	}
+	return null;
+};
+
+DwtListView.prototype._getLastItem =
+function() {
+	var a = this._list.getArray();
+	if (a && a.length > 1) {
+		return a[a.length - 1];
+	}
+	return null;
 };
 
 /**
