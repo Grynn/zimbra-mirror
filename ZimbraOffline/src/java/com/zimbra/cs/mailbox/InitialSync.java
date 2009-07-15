@@ -1151,7 +1151,7 @@ public class InitialSync {
                 pm = new ParsedMessage(blob.getFile(), received * 1000L, false);
                 digest = blob.getDigest();
                 pm.setRawDigest(digest);
-                size = blob.getRawSize();
+                size = (int) blob.getRawSize();
             }
         } catch (IOException e) {
             throw MailServiceException.MESSAGE_PARSE_ERROR(e);
