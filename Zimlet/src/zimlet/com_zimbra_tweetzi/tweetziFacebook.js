@@ -7,7 +7,7 @@
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
- * http://www.zimbra.com/license.
+ * https://www.zimbra.com/license.
  *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ function com_zimbra_tweetziFacebook(zimlet) {
 }
 
  com_zimbra_tweetziFacebook.prototype._addFBComment = function(params) {
-	var url = "http://api.facebook.com/restserver.php";
+	var url = "https://api.facebook.com/restserver.php";
 	var account = this.zimlet.tableIdAndAccountMap[params.tableId];
 	var paramsArray = [
 		["method", "Stream.addComment"],
@@ -61,7 +61,7 @@ function (params, response) {
 
 com_zimbra_tweetziFacebook.prototype._publishToFacebook =
 function (params) {
-	var url = "http://api.facebook.com/restserver.php";
+	var url = "https://api.facebook.com/restserver.php";
 	var account = params.account;
 	var paramsArray = [
 		["method", "Stream.publish"],
@@ -93,7 +93,7 @@ function (params, response) {
 
  com_zimbra_tweetziFacebook.prototype._getExtendedPermissionInfo =
 function (params) {
-	var url = "http://api.facebook.com/restserver.php";
+	var url = "https://api.facebook.com/restserver.php";
 	var account = params.account;
 	var paramsArray = [
 		["method", "Users.hasAppPermission"],
@@ -123,20 +123,20 @@ com_zimbra_tweetziFacebook.prototype.authorizeExtendedPermission =
 function(params) {
 	var permission = params.permission;
 	var account = params.account;
-	var url = "http://www.facebook.com/authorize.php?";
+	var url = "https://www.facebook.com/authorize.php?";
 	var params = "version=1.0&ext_perm="+permission+"&api_key="+this.apiKey;
 	window.open(ZmZimletBase.PROXY +AjxStringUtil.urlComponentEncode(url + params), "Authorize facebook", "toolbar=no,menubar=no,width=0.1px,height=0.1px");
 };
 
 com_zimbra_tweetziFacebook.prototype.getExtendedPermForRead =
 function () {
-	var url = "http://www.facebook.com/authorize.php?";
+	var url = "https://www.facebook.com/authorize.php?";
 	var params = "version=1.0&ext_perm=read_stream&api_key="+this.apiKey;
 	window.Open = window.open(url + params, "tfbOpen", "toolbar=no,menubar=no,width=0.1px,height=0.1px");
 };
 com_zimbra_tweetziFacebook.prototype._fbGetStream =
 function (tableId, account) {
-	var url = "http://api.facebook.com/restserver.php";
+	var url = "https://api.facebook.com/restserver.php";
 	var paramsArray = [
 		["method", "Stream.get"],
 		["session_key", account.session_key]
@@ -169,7 +169,7 @@ function () {
 
 com_zimbra_tweetziFacebook.prototype._fbCreateToken =
 function () {
-	var url = "http://api.facebook.com/restserver.php";
+	var url = "https://api.facebook.com/restserver.php";
 	var paramsArray = [
 		["method", "Auth.createToken"]
 	];
@@ -181,7 +181,7 @@ com_zimbra_tweetziFacebook.prototype._fbCreateTokenCallback =
 function (response) {
 	var text = response.text;
 	this.fb_auth_token = eval("(" + text + ")");
-	var url = "http://www.facebook.com/login.php?";
+	var url = "https://www.facebook.com/login.php?";
 	var params = "version=1.0&auth_token=" + this.fb_auth_token + "&api_key="+this.apiKey;
 	window.open(url + params, "", "toolbar=no,menubar=no,width=0.1px,height=0.1px");
 	this.waitingForApproval = true;

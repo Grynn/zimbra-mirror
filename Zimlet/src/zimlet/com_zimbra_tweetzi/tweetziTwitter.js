@@ -102,7 +102,7 @@ function(tableId, account) {
 com_zimbra_tweetziTwitter.prototype.showUserProfile =
 function(screen_name, tweetTableId) {
 	var tableId = this.zimlet._showCard({headerName:screen_name, type:"PROFILE", tweetTableId:tweetTableId, autoScroll:true});
-	var actionUrl = "http://twitter.com/users/show/" + screen_name + ".json";
+	var actionUrl = "https://twitter.com/users/show/" + screen_name + ".json";
 	var entireurl = ZmZimletBase.PROXY + actionUrl;
 	AjxRpc.invoke(null, entireurl, null, new AjxCallback(this, this.showUserProfileHandler, tableId), true);
 
@@ -156,8 +156,8 @@ function(tableId, profileAccnt) {
 };
 
 com_zimbra_tweetziTwitter.prototype._checkIfFollowing = function(params) {
-	//http://twitter.com/friendships/show.xml?source_screen_name=rajaraodv&target_screen_name=techcrunch
-		var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode("http://twitter.com/friendships/show.json?source_screen_name="+params.account.name+"&target_screen_name="+params.profileAccnt.screen_name);
+	//https://twitter.com/friendships/show.xml?source_screen_name=rajaraodv&target_screen_name=techcrunch
+		var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode("https://twitter.com/friendships/show.json?source_screen_name="+params.account.name+"&target_screen_name="+params.profileAccnt.screen_name);
 		AjxRpc.invoke(null, entireurl, null, new AjxCallback(this, this._checkIfFollowingCallback, params), true);
 };
 
@@ -192,7 +192,7 @@ function(origParams) {
 	if(origParams.following)
 		createOrDestroy = "destroy";
 
-	var actionUrl = "http://twitter.com/friendships/"+createOrDestroy+"/" + profileId + ".json";
+	var actionUrl = "https://twitter.com/friendships/"+createOrDestroy+"/" + profileId + ".json";
 	var params = this.getFollowUserParams(actionUrl, origParams.profileId, origParams.account);
 	var hdrs = new Array();
 	hdrs["Content-type"] = "application/x-www-form-urlencoded";
@@ -254,10 +254,10 @@ function(account, message) {
 	if (account.__on == "true") {
 		if(isDM) {
 			data = this.getDMPostUrl(account);
-			actionUrl = "http://twitter.com/direct_messages/new.json";
+			actionUrl = "https://twitter.com/direct_messages/new.json";
 		} else {
 			data = this.getTweetUrl(account);
-			actionUrl = "http://twitter.com/statuses/update.json";
+			actionUrl = "https://twitter.com/statuses/update.json";
 		}
 		var hdrs = new Array();
 		hdrs["Content-type"] = "application/x-www-form-urlencoded";
@@ -274,7 +274,7 @@ function(account) {
 	var data = document.getElementById("tweetzi_statusTextArea").value;
 	var additionalParams  = new Array();
 	additionalParams["status"] = data;
-	params = {account:account, actionUrl:"http://twitter.com/statuses/update.json", http:"POST", additionalParams:additionalParams};
+	params = {account:account, actionUrl:"https://twitter.com/statuses/update.json", http:"POST", additionalParams:additionalParams};
 	return this.getTwitterUrl(params);
 };
 
@@ -294,21 +294,21 @@ function(account) {
 	var additionalParams  = new Array();
 	additionalParams["text"] = data;
 	additionalParams["screen_name"] = toUser;
-	params = {account:account, actionUrl:"http://twitter.com/direct_messages/new.json", http:"POST", additionalParams:additionalParams};
+	params = {account:account, actionUrl:"https://twitter.com/direct_messages/new.json", http:"POST", additionalParams:additionalParams};
 	return this.getTwitterUrl(params);
 };
 
 com_zimbra_tweetziTwitter.prototype.getMentionsUrl =
 function(account) {
 	var additionalParams  = new Array();
-	params = {account:account, actionUrl:"http://twitter.com/statuses/mentions.json", http:"GET", additionalParams:additionalParams};
+	params = {account:account, actionUrl:"https://twitter.com/statuses/mentions.json", http:"GET", additionalParams:additionalParams};
 	return this.getTwitterUrl(params);
 };
 
 com_zimbra_tweetziTwitter.prototype.getDMSentUrl =
 function(account) {
 	var additionalParams  = new Array();
-	params = {account:account, actionUrl:"http://twitter.com/direct_messages.json", http:"GET", additionalParams:additionalParams};
+	params = {account:account, actionUrl:"https://twitter.com/direct_messages.json", http:"GET", additionalParams:additionalParams};
 	return this.getTwitterUrl(params);
 };
 
@@ -408,7 +408,7 @@ function(tableId, response) {
 com_zimbra_tweetziTwitter.prototype.getFriendsTimelineUrl =
 function(account) {
 	var additionalParams  = new Array();
-	params = {account:account, actionUrl:"http://twitter.com/statuses/friends_timeline.json", http:"GET", additionalParams:additionalParams};
+	params = {account:account, actionUrl:"https://twitter.com/statuses/friends_timeline.json", http:"GET", additionalParams:additionalParams};
 	return this.getTwitterUrl(params);
 };
 
@@ -425,7 +425,7 @@ function() {
 	var accessor = { consumerSecret: this.consumerSecret
 		, tokenSecret   : ""};
 	var message = { method: "GET"
-		, action: "http://twitter.com/oauth/request_token"
+		, action: "https://twitter.com/oauth/request_token"
 		, parameters: new Array()
 	};
 	message.parameters.push(["oauth_consumer_key",this.consumerKey]);
@@ -439,7 +439,7 @@ function() {
 	var signatureBaseString = OAuth.SignatureMethod.getBaseString(message);
 	var authorizationHeader = OAuth.getAuthorizationHeader("", message.parameters);
 
-	return "http://twitter.com/oauth/request_token?" + normalizedParams + "&oauth_signature=" + signature;
+	return "https://twitter.com/oauth/request_token?" + normalizedParams + "&oauth_signature=" + signature;
 };
 
 com_zimbra_tweetziTwitter.prototype.getAccessTokenUrl =
@@ -447,7 +447,7 @@ function(pin) {
 	var accessor = { consumerSecret: this.consumerSecret
 		, tokenSecret   : this._oauth_token_secret};
 	var message = { method: "POST"
-		, action: "http://twitter.com/oauth/access_token"
+		, action: "https://twitter.com/oauth/access_token"
 		, parameters: new Array()
 	};
 	message.parameters.push(["oauth_consumer_key",this.consumerKey]);
@@ -462,7 +462,7 @@ function(pin) {
 	var signatureBaseString = OAuth.SignatureMethod.getBaseString(message);
 	var authorizationHeader = OAuth.getAuthorizationHeader("", message.parameters);
 
-	return "http://twitter.com/oauth/access_token?" + normalizedParams + "&oauth_signature=" + signature + "&oauth_verifier=" + pin + "&oauth_token=" + this._oauth_token;
+	return "https://twitter.com/oauth/access_token?" + normalizedParams + "&oauth_signature=" + signature + "&oauth_verifier=" + pin + "&oauth_token=" + this._oauth_token;
 }
 
 com_zimbra_tweetziTwitter.prototype._twitterCallback =
@@ -479,7 +479,7 @@ function(response) {
 		}
 	}
 
-	window.open("http://twitter.com/oauth/authorize?oauth_token=" + AjxStringUtil.urlComponentEncode(this._oauth_token), "", "toolbar=no,menubar=no,width=0.1px,height=0.1px");
+	window.open("https://twitter.com/oauth/authorize?oauth_token=" + AjxStringUtil.urlComponentEncode(this._oauth_token), "", "toolbar=no,menubar=no,width=0.1px,height=0.1px");
 	this._showGetPinDlg();
 };
 
