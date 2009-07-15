@@ -487,7 +487,6 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
 
 	var case_upload_csv = {type:_CASE_, numCols:2, colSizes:["200px","*"],
         tabGroupKey:ZaBulkProvisionWizard.STEP_UPLOAD_CSV, caseKey:ZaBulkProvisionWizard.STEP_UPLOAD_CSV,
-//					relevant:"instance[ZaModel.currentStep] == ZaBulkProvisionWizard.STEP_UPLOAD_CSV ",
 					items: [
 
 						{ type:_GROUP_, id: "CSVUpload",
@@ -514,7 +513,6 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
 
 	var case_provision = {type:_CASE_, numCols:2, colSizes:["200px", "*"], 
         tabGroupKey:ZaBulkProvisionWizard.STEP_PROVISION, caseKey:ZaBulkProvisionWizard.STEP_PROVISION,
-//                      relevant:"instance[ZaModel.currentStep] == ZaBulkProvisionWizard.STEP_PROVISION",
 					align:_LEFT_, valign:_TOP_};
 
     var bpAccountsListHeader = [] ;
@@ -566,7 +564,6 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
 	var case_summary =
 		{type:_CASE_, numCols:1, colSizes:["*"],
             tabGroupKey:ZaBulkProvisionWizard.STEP_SUMMARY, caseKey:ZaBulkProvisionWizard.STEP_SUMMARY,
-//			relevant:"instance[ZaModel.currentStep] == ZaBulkProvisionWizard.STEP_SUMMARY",
 			align:_LEFT_, valign:_TOP_ ,
 			items :[
 				{ type:_OUTPUT_, value: com_zimbra_bulkprovision.summary_download },

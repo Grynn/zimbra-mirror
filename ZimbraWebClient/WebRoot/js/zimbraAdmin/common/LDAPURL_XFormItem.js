@@ -141,9 +141,6 @@ LDAPURL_XFormItem.prototype.items = [
 		}
 	},
 	{type:_CHECKBOX_,width:"40px",containerCssStyle:"width:40px", forceUpdate:true, ref:".", labelLocation:_NONE_, label:null, 
-		relevantBehavior: _DISABLE_,
-//        relevant: "ZaAuthConfigXWizard.allowClearTextLDAPAuth (instance, item)" ,
-        relevant: "instance [ZaDomain.A2_allowClearTextLDAPAuth] != \"FALSE\""  ,
 		visibilityChecks:[],
 	 	enableDisableChecks:[],
 		getDisplayValue:function (itemVal) {

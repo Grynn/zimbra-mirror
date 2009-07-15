@@ -672,7 +672,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 							type:_SUPER_WIZ_CHECKBOX_, colSpan:2,
 							checkBoxLabel:ZaMsg.LBL_zimbraFeatureMailForwardingEnabled,  
-							trueValue:"TRUE", falseValue:"FALSE"
+							trueValue:"TRUE", falseValue:"FALSE",
+							colSizes:["250px","250px","auto"]
 						},
 						{ref:ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled, 
 							type:_CHECKBOX_, 

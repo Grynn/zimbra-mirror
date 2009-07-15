@@ -108,8 +108,6 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 				toolTipContent: com_zimbra_delegatedadmin.tt_DomainAdminMaxMailQuota,
                 visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount]==\'TRUE\' "],
                 visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount]
-                //				relevantBehavior: _HIDE_,
-//				relevant: "instance.attrs[ZaAccount.A_zimbraIsDomainAdminAccount]==\'TRUE\' && (instance[ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed]==\'TRUE\' || (!instance[ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed] && instance.cos[ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed]==\'TRUE\'))"
 			};
 
         var tabs = xFormObject.items[2].items;
@@ -305,7 +303,6 @@ if(ZaTabView.XFormModifiers["ZaCosXFormView"]) {
 					msgName:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,label:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
 					labelLocation:_LEFT_,
 					cssClass:"admin_xform_number_input",
-//					relevant:"instance[ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed]==\'TRUE\'",
 					onChange:ZaTabView.onFormFieldChanged
 				};
 
@@ -1013,7 +1010,6 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
 
                 var caseItem =
                     {type:_ZATABCASE_, id:"account_form_account_limits_tab", numCols:2, colSizes:["300px","*"],
-    //                    relevant:("instance[ZaModel.currentTab] == " + tabIx),
                         caseKey: tabIx,
                         items:[
                            {type:_SPACER_, height: "10px" },

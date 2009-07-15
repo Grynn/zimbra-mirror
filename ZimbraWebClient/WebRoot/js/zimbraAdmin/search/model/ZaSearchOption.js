@@ -261,8 +261,6 @@ function (optionId, height){
 			trueValue:"TRUE", falseValue:"FALSE",
 			label: ZaMsg.SearchFilter_Domains, 
 			align: _RIGHT_, labelLocation:_RIGHT_, 
-			relevant : "form.parent._controller._numberOfDomainOptions <= 0 ",
-			//relevantBehavior : _DISABLE_,
 			onChange: ZaSearchBuilderController.handleOptions
 		 } **/
 	] ;
@@ -353,7 +351,6 @@ function (optionId, height){
 			 		{ref:ZaSearchOption.A_accountLastLoginTime_From, colSpan: "*", type:_DWT_DATETIME_,
 			 			onChange: ZaSearchBuilderController.handleOptions,
 			 			visibilityChecks:[[XForm.checkInstanceValue,ZaSearchOption.A_enableAccountLastLoginTime_From,"TRUE"]],
-			 			//relevant: "instance[ZaSearchOption.A_enableAccountLastLoginTime_From] == 'TRUE'", 
 			 			bmolsnr:true,
                         visibilityChangeEventSources: [ZaSearchOption.A_enableAccountLastLoginTime_From] ,
 			 			label:ZaMsg.search_option_label_from, labelLocation:_LEFT_
@@ -361,7 +358,6 @@ function (optionId, height){
 					{ref:ZaSearchOption.A_accountLastLoginTime_To, colSpan: "*", type:_DWT_DATETIME_,
 			 			onChange: ZaSearchBuilderController.handleOptions,	
 			 			visibilityChecks:[[XForm.checkInstanceValue,ZaSearchOption.A_enableAccountLastLoginTime_To,"TRUE"]],
-			 			//relevant: "instance[ZaSearchOption.A_enableAccountLastLoginTime_To] == 'TRUE'", 
                         visibilityChangeEventSources: [ZaSearchOption.A_enableAccountLastLoginTime_To] ,			 				 				
 			 			bmolsnr:true,
                         label:ZaMsg.search_option_label_to, labelLocation:_LEFT_

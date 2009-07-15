@@ -615,7 +615,6 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	var case_select_server = {
 			type:_CASE_, numCols:2, colSizes:["100px","*"],
             tabGroupKey:ZaCertWizard.STEP_SELECT_SERVER, caseKey:ZaCertWizard.STEP_SELECT_SERVER,
-//			relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_SELECT_SERVER",
 			align:_LEFT_, valign:_TOP_, cssStyle:"padding-left:50px;"
 		};
 	
@@ -641,7 +640,6 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 		
 	var case_user_options = {type:_CASE_, numCols:2, colSizes:["25px","*"], 
             tabGroupKey:ZaCertWizard.STEP_USER_OPTION, caseKey:ZaCertWizard.STEP_USER_OPTION,
-        //			relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_USER_OPTION",
 			align:_LEFT_, valign:_TOP_, cssStyle:"padding-left:50px;"};
 			
 	var case_user_options_items = [
@@ -714,7 +712,6 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 
 	var case_gen_csr = {type:_CASE_, numCols:2, colSizes:["200px","*"], 
 		tabGroupKey:ZaCertWizard.STEP_GEN_CSR, caseKey:ZaCertWizard.STEP_GEN_CSR,
-//        relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_GEN_CSR",
 		align:_LEFT_, valign:_TOP_};
 		
 	var case_gen_csr_items = [
@@ -831,7 +828,6 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	cases.push(case_gen_csr);
 
 	var case_upload_cert={type:_CASE_, numCols:1, colSizes:["450px"],
-//					relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_UPLOAD_CERT ",
 					tabGroupKey:ZaCertWizard.STEP_UPLOAD_CERT, caseKey:ZaCertWizard.STEP_UPLOAD_CERT,
                     items: [
 						{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["200px","*"], items: [
@@ -843,8 +839,6 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 						},
 						{ type:_SPACER_ , height: 10 },
 						{ type:_GROUP_, id: "CertUpload", 
-//							relevant: "instance[ZaCert.A_type_comm] == true",
-//							relevantBehavior: _HIDE_,
                             visibilityChecks:["instance[ZaCert.A_type_comm] == true"],
                             colSpan: 2, numCols: 1, colSizes: "*", items : [
 								{ type:_OUTPUT_, value: com_zimbra_cert_manager.CERT_uploadTitle, align: _LEFT_},
@@ -860,7 +854,6 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	
 	var case_install_cert = {type:_CASE_, numCols:2, colSizes:["200px", "350px"],
                     tabGroupKey:ZaCertWizard.STEP_INSTALL_CERT, caseKey:ZaCertWizard.STEP_INSTALL_CERT,
-        //        relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_INSTALL_CERT",
 					align:_LEFT_, valign:_TOP_};
 	var case_install_certItems = [
 			{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
@@ -868,13 +861,11 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES},
 			{ type:_SPACER_, height: 10},	
 			{type:_OUTPUT_, colSpan: 2, 
-//				relevant: "instance[ZaCert.A_type_self] == true", relevantBehavior: _HIDE_,
                 visibilityChecks:["instance[ZaCert.A_type_self] == true"],
                 value: com_zimbra_cert_manager.CERT_installTitle },
 			{ type:_SPACER_ , height: 10 },
 			{type:_TEXTFIELD_, ref: ZaCert.A_validation_days ,			
 				//Validation_days is not required for comm install
-//				relevant: "instance[ZaCert.A_type_self] == true", relevantBehavior: _HIDE_,
 				visibilityChecks:["instance[ZaCert.A_type_self] == true"],
                 label: com_zimbra_cert_manager.CERT_validate_days
 			}
@@ -886,7 +877,6 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	var case_download_csr = 
 		{type:_CASE_, numCols:1, colSizes:["*"],
             tabGroupKey:ZaCertWizard.STEP_DOWNLOAD_CSR, caseKey:ZaCertWizard.STEP_DOWNLOAD_CSR,
-//            relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_DOWNLOAD_CSR",
 			align:_LEFT_, valign:_TOP_ , 
 			items :[
 				{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["75px","*"], items: [
@@ -909,12 +899,9 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	var case_csr_confirm = 		
 		{type:_CASE_, numCols:1, colSizes:["*"],
             tabGroupKey:ZaCertWizard.STEP_CSR_CONFIRM, caseKey:ZaCertWizard.STEP_CSR_CONFIRM,
-//            relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_CSR_CONFIRM",
 			align:_LEFT_, valign:_TOP_ , 
 			items :[
 				{type: _GROUP_ , colSpan:2, numCols: 2, colSizes:["200px","350px"],
-//				relevant: " instance[ZaCert.A_csr_exists]  ",
-//				relevantBehavior: _HIDE_,
 				visibilityChecks:["instance[ZaCert.A_csr_exists] == true"],
                 items :[
 						{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["200px","*"], items: [
@@ -954,13 +941,9 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					]
 				},
 				{type: _GROUP_ , colSpan:2, numCols: 1, colSizes:["400px"],
-//					relevant: " ! instance[ZaCert.A_csr_exists]  ",
-//					relevantBehavior: _HIDE_, 
 					visibilityChecks:["!instance[ZaCert.A_csr_exists] "],
                     cssStyle:"padding-left:50px;", items: [
 						{type: _DWT_ALERT_, colSpan:2,
-//                            relevant: " !instance[ZaCert.A_csr_exists] ",
-//							relevantBehavior: _HIDE_ ,
                             visibilityChecks:["!instance[ZaCert.A_csr_exists] "],
                             containerCssStyle: "width:400px;",
 							style: DwtAlert.WARNING, iconVisible: false,
