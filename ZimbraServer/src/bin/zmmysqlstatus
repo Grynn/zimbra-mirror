@@ -27,15 +27,14 @@ my $database = "zimbra";
 my $mySqlCommand = "mysql";
 my $verbose = 0;
 my $usage = 0;
-my $zimbra_tmp_directory="/opt/zimbra/data/tmp";
+my $zimbra_tmp_directory;
 
 if (-f "/opt/zimbra/bin/zmlocalconfig") {
-    $password = `zmlocalconfig -s -m nokey zimbra_mysql_password`;
-    chomp $password;
-    $user = `zmlocalconfig -m nokey zimbra_mysql_user`;
-    chomp $user;
-    $zimbra_tmp_directory = `zmlocalconfig -s -m nokey zimbra_tmp_directory`;
-    chomp $zimbra_tmp_directory;
+    $password = getLocalConfig("zimbra_mysql_password");
+    $user = getLocalConfig("zimbra_mysql_user");
+    $zimbra_tmp_directory = getLocalConfig("zimbra_tmp_directory");
+    $zimbra_tmp_directory = "/opt/zimbra/data/tmp"
+      if ($zimbra_tmp_directory eq "");
 }
 
 if ( !-d $zimbra_tmp_directory ) {
@@ -259,6 +258,14 @@ sub runSql($) {
 
     unlink($tempFile);
     return @output;
+}
+
+sub getLocalConfig {
+  my ($key,$force) = @_;
+
+  my $val = `/opt/zimbra/bin/zmlocalconfig -q -x -s -m nokey ${key} 2> /dev/null`;
+  chomp $val;
+  return $val;
 }
 
 sub usage() {
