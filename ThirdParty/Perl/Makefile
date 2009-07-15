@@ -26,7 +26,7 @@ CMIRROR	?= http://buildmaster.lab.zimbra.com:8080/cpan/
 
 BDB_VERSION ?= 4.7.25.4
 SSL_VERSION ?= 0.9.8k
-LDAP_VERSION ?= 2.4.16.11z
+LDAP_VERSION ?= 2.4.17.2z
 BDB_INC ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
 BDB_LIB ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib
 
