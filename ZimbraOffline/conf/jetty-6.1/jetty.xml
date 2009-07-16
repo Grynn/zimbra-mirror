@@ -19,7 +19,7 @@
       <!-- Default bounded blocking threadpool -->
       <New id="pool" class="org.mortbay.thread.BoundedThreadPool">
         <Set name="minThreads">2</Set>
-        <Set name="lowThreads">3</Set>
+        <Set name="lowThreads">2</Set>
         <Set name="maxThreads">12</Set>
       </New>
     </Set>
@@ -38,8 +38,9 @@
           <New id="http" class="org.mortbay.jetty.nio.SelectChannelConnector">
             <Set name="host">127.0.0.1</Set>
             <Set name="port"><SystemProperty name="jetty.port" default="@port@"/></Set>
-            <Set name="maxIdleTime">30000</Set>
-            <Set name="Acceptors">2</Set>
+            <Set name="Acceptors">1</Set>
+            <Set name="maxIdleTime">60000</Set>
+	    <Set name="useDirectBuffers">false</Set>
           </New>
       </Arg>
     </Call>

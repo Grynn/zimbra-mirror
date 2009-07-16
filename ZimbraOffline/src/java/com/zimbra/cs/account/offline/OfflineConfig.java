@@ -39,18 +39,23 @@ class OfflineConfig extends Config {
                 attrs.put(Provisioning.A_cn, "config");
                 attrs.put(Provisioning.A_objectClass, "zimbraGlobalConfig");
                 try {
-                	DbOfflineDirectory.createDirectoryEntry(EntryType.CONFIG, "config", attrs, false);
+                    DbOfflineDirectory.createDirectoryEntry(EntryType.CONFIG, "config", attrs, false);
                 } catch (ServiceException x) {
-                	OfflineLog.offline.error("can't save config", x); //shouldn't really happen.  see bug 34567
+                    OfflineLog.offline.error("can't save config", x); //shouldn't really happen.  see bug 34567
                 }
             }
-           	String[] skins = OfflineLC.zdesktop_skins.value().split("\\s*,\\s*");
+            String[] skins = OfflineLC.zdesktop_skins.value().split("\\s*,\\s*");
             attrs.put(Provisioning.A_zimbraInstalledSkin, skins);
             attrs.put(Provisioning.A_zimbraRedoLogEnabled, OfflineLC.zdesktop_redolog_enabled.booleanValue() ? Provisioning.TRUE : Provisioning.FALSE);
             attrs.put(Provisioning.A_zimbraSmtpSendAddMailer, Provisioning.FALSE);
             attrs.put(Provisioning.A_zimbraNotebookAccount, "local@host.local");
             attrs.put(Provisioning.A_zimbraMtaMaxMessageSize, OfflineLC.zdesktop_upload_size_limit.value());
-            
+
+            attrs.put(Provisioning.A_zimbraMailFileDescriptorCacheSize, OfflineLC.zdesktop_mail_file_descriptor_cache_size.value());
+            attrs.put(Provisioning.A_zimbraMailUncompressedCacheMaxFiles, OfflineLC.zdesktop_mail_uncompressed_cache_max_files.value());
+            attrs.put(Provisioning.A_zimbraMessageCacheSize, OfflineLC.zdesktop_message_cache_size.value());
+            attrs.put(Provisioning.A_zimbraMessageIdDedupeCacheSize, "0");
+
             return new OfflineConfig(attrs, provisioning);
         } catch (ServiceException e) {
             // throw RuntimeException because we're being called at startup...

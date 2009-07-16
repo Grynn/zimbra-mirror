@@ -94,7 +94,28 @@
   <key name="mailboxd_output_rotate_interval">
     <value>0</value>
   </key>
+  <key name="calendar_cache_lru_size">
+    <value>20</value>
+  </key>
   <key name="zimbra_index_flush_pool_size">
     <value>1</value>
+  </key>
+  <key name="zimbra_mailbox_active_cache">
+    <value>50</value>
+  </key>
+  <key name="zimbra_mailbox_inactive_cache">
+    <value>10</value>
+  </key>
+  <key name="zimbra_mailbox_manager_hardref_cache">
+    <value>250</value>
+  </key>
+  <key name="zdesktop_mail_file_descriptor_cache_size">
+    <value>10</value>
+  </key>
+  <key name="zdesktop_mail_uncompressed_cache_max_files">
+    <value>10</value>
+  </key>
+  <key name="zdesktop_message_cache_size">
+    <value>25</value>
   </key>
 </localconfig>
