@@ -93,16 +93,33 @@ ZaController.setViewMethods["ZaResourceController"].push(ZaResourceController.se
 
 ZaResourceController.initToolbarMethod =
 function () {
+	var showNewCalRes = false;
+	if(ZaSettings.HAVE_MORE_DOMAINS || ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+		showNewCalRes = true;
+	} else {
+		var domainList = ZaApp.getInstance().getDomainList().getArray();
+		var cnt = domainList.length;
+		for(var i = 0; i < cnt; i++) {
+			if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_CALRES,domainList[i])) {
+				showNewCalRes = true;
+				break;
+			}	
+		}
+	}		
 	this._toolbarOrder.push(ZaOperation.SAVE);
 	this._toolbarOrder.push(ZaOperation.CLOSE);
 	this._toolbarOrder.push(ZaOperation.SEP);
-	this._toolbarOrder.push(ZaOperation.NEW);
+	if(showNewCalRes) {
+		this._toolbarOrder.push(ZaOperation.NEW);
+	}
 	this._toolbarOrder.push(ZaOperation.DELETE);
 		
    	this._toolbarOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
    	this._toolbarOperations[ZaOperation.CLOSE]=new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));    	
    	this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
-	this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", new AjxListener(this, this.newButtonListener));   			    	
+   	if(showNewCalRes) {
+		this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", new AjxListener(this, this.newButtonListener));   			    	
+   	}
    	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.RESTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));    	    	
 }
 ZaController.initToolbarMethods["ZaResourceController"].push(ZaResourceController.initToolbarMethod);

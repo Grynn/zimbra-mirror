@@ -254,7 +254,9 @@ ZaDomain.RIGHT_DELETE_DOMAIN = "deleteDomain";
 ZaDomain.RIGHT_RENAME_DOMAIN = "renameDomain";
 ZaDomain.RIGHT_CREATE_SUB_DOMAIN = "createSubDomain";
 ZaDomain.RIGHT_CREATE_ACCOUNT = "createAccount";
-
+ZaDomain.RIGHT_CREATE_CALRES = "createCalendarResource";
+ZaDomain.RIGHT_CREATE_DL = "createDistributionList";
+ZaDomain.RIGHT_CREATE_ALIAS = "createAlias";
 ZaDomain.cacheCounter = 0;
 ZaDomain.staticDomainByNameCacheTable = {};
 ZaDomain.staticDomainByIdCacheTable = {};

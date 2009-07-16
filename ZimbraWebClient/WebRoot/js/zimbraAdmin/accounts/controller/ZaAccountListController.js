@@ -241,25 +241,62 @@ ZaAccountListController.initToolbarMethod =
 function () {
 	// first button in the toolbar is a menu.
 	var newMenuOpList = new Array();
+	var showNewAccount = false;
+	var showNewDL = false;
+	var showNewCalRes = false;
+	var showNewAlias = false;
+	if(ZaSettings.HAVE_MORE_DOMAINS || ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+		showNewAccount = true;
+		showNewDL = true;
+		showNewCalRes = true;
+		showNewAlias = true;
+	} else {
+		var domainList = ZaApp.getInstance().getDomainList().getArray();
+		var cnt = domainList.length;
+		for(var i = 0; i < cnt; i++) {
+			if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ACCOUNT,domainList[i])) {
+				showNewAccount = true;
+			}	
+			if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_CALRES,domainList[i])) {
+				showNewCalRes = true;
+			}
+			if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_DL,domainList[i])) {
+				showNewDL = true;
+			}				
+			if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ALIAS,domainList[i])) {
+				showNewAlias = true;
+			}
+			if(showNewAlias && showNewDL && showNewCalRes && showNewAccount) {
+				break;
+			}
+		}
+	}
 	
-	newMenuOpList.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener));
-	newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.ALTBB_New_menuItem, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener));
-	newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "DistributionList", "DistributionListDis", this._newDLListener));
-	newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.RESTBB_New_menuItem, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener));
-	if(this._defaultType == ZaItem.ACCOUNT || this._defaultType == ZaItem.ALIAS) {
+	if(showNewAccount) {
+		newMenuOpList.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener));
+	}
+	if(showNewAlias) {
+		newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.ALTBB_New_menuItem, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener));
+	}
+	if(showNewDL) {
+		newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "DistributionList", "DistributionListDis", this._newDLListener));
+	}
+	if(showNewCalRes) {
+		newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.RESTBB_New_menuItem, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener));
+	}	
+		
+	if(showNewAccount && this._defaultType == ZaItem.ACCOUNT) {
 		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener, 
 								   ZaOperation.TYPE_MENU, newMenuOpList);
-    } else if (this._defaultType == ZaItem.ALIAS) {
+    } else if (showNewAlias && this._defaultType == ZaItem.ALIAS) {
 		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener, 
 								   ZaOperation.TYPE_MENU, newMenuOpList);
-    }else if(this._defaultType == ZaItem.RESOURCE) {
+    }else if(showNewCalRes && this._defaultType == ZaItem.RESOURCE) {
 		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener, 
 									   ZaOperation.TYPE_MENU, newMenuOpList);
-    	
-    } else if(this._defaultType == ZaItem.DL) {    	
+    } else if(showNewDL && this._defaultType == ZaItem.DL) {    	
 		this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "DistributionList", "DistributionListDis", this._newDLListener, 
 									   ZaOperation.TYPE_MENU, newMenuOpList);
-    	
     } 
 	
     this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
@@ -274,7 +311,9 @@ function () {
 		this._toolbarOperations[ZaOperation.MOVE_ALIAS] = new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener));		    	
 	}
 	
-	this._toolbarOrder.push(ZaOperation.NEW_MENU);
+	if(this._toolbarOperations[ZaOperation.NEW_MENU]) {
+		this._toolbarOrder.push(ZaOperation.NEW_MENU);
+	}
 	this._toolbarOrder.push(ZaOperation.EDIT);
 	this._toolbarOrder.push(ZaOperation.DELETE);
 	if(this._defaultType == ZaItem.ACCOUNT) {

@@ -517,6 +517,7 @@ ZaApp.prototype.getDomainList =
 function(refresh) {
 	if (refresh || this._domainList == null) {
 		this._domainList = ZaDomain.getAll();
+		this._domainList.loadEffectiveRights();
 		/*EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
 		EmailAddr_XFormItem.domainChoices.dirtyChoices();*/
 	}

@@ -81,16 +81,33 @@ ZaController.changeActionsStateMethods["ZaDLController"].push(ZaDLController.cha
 
 ZaDLController.initToolbarMethod =
 function () {
+	var showNewDL = false;
+	if(ZaSettings.HAVE_MORE_DOMAINS || ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+		showNewDL = true;
+	} else {
+		var domainList = ZaApp.getInstance().getDomainList().getArray();
+		var cnt = domainList.length;
+		for(var i = 0; i < cnt; i++) {
+			if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_DL,domainList[i])) {
+				showNewDL = true;
+				break;
+			}	
+		}
+	}	
    	this._toolbarOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
    	this._toolbarOperations[ZaOperation.CLOSE]=new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));    	
    	this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
-	this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.DLTBB_New_tt, "DistributionList", "DistributionListDis", new AjxListener(this, this.newButtonListener, [true]));   			    	
+   	if(showNewDL) {
+		this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.DLTBB_New_tt, "DistributionList", "DistributionListDis", new AjxListener(this, this.newButtonListener, [true]));
+   	}   			    	
    	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.DLTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
    	
 	this._toolbarOrder.push(ZaOperation.SAVE);
 	this._toolbarOrder.push(ZaOperation.CLOSE);
 	this._toolbarOrder.push(ZaOperation.SEP);
-	this._toolbarOrder.push(ZaOperation.NEW);
+   	if(showNewDL) {
+		this._toolbarOrder.push(ZaOperation.NEW);
+   	}
 	this._toolbarOrder.push(ZaOperation.DELETE);   	    	    	
 }
 ZaController.initToolbarMethods["ZaDLController"].push(ZaDLController.initToolbarMethod);

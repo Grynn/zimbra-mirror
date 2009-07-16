@@ -55,17 +55,35 @@ function(entry, openInNewTab, skipRefresh) {
 
 ZaAccountViewController.initToolbarMethod =
 function () {
+	var showNewAccount = false;
+	if(ZaSettings.HAVE_MORE_DOMAINS || ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+		showNewAccount = true;
+	} else {
+		var domainList = ZaApp.getInstance().getDomainList().getArray();
+		var cnt = domainList.length;
+		for(var i = 0; i < cnt; i++) {
+			if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ACCOUNT,domainList[i])) {
+				showNewAccount = true;
+				break;
+			}	
+		}
+	}
+		
 	this._toolbarOrder.push(ZaOperation.SAVE);
 	this._toolbarOrder.push(ZaOperation.CLOSE);
 	this._toolbarOrder.push(ZaOperation.SEP);
-	this._toolbarOrder.push(ZaOperation.NEW_WIZARD);
+	if(showNewAccount) {
+		this._toolbarOrder.push(ZaOperation.NEW_WIZARD);
+	}
 	this._toolbarOrder.push(ZaOperation.DELETE);		
 	
 	
 	this._toolbarOperations[ZaOperation.SAVE]= new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
 	this._toolbarOperations[ZaOperation.CLOSE] = new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));    	
 	this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
-	this._toolbarOperations[ZaOperation.NEW_WIZARD] = new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountViewController.prototype._newButtonListener));   			    	
+	if(showNewAccount) {
+		this._toolbarOperations[ZaOperation.NEW_WIZARD] = new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountViewController.prototype._newButtonListener));
+	}   			    	
 	this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));    	    	
 	
 	this._toolbarOperations[ZaOperation.VIEW_MAIL] = new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._viewMailListener));		

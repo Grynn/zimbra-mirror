@@ -153,7 +153,9 @@ function (params,resp) {
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
 			var list = new ZaItemList(ZaDomain);	
 			list.loadFromJS(response);
-
+			if(response.more) {
+				ZaSettings.HAVE_MORE_DOMAINS = true;
+			}
 			this.updateDomainList(list);
 		}
 	} catch (ex) {
@@ -215,6 +217,8 @@ function (list) {
 			this._domainsMap[domainList[ix].id] = ti1;
 		}
 	}
+	list.loadEffectiveRights();
+	ZaApp.getInstance()._domainList = list;
 }
 
 ZaOverviewPanelController.prototype.setCurrentDomain = 
