@@ -635,26 +635,19 @@ function(){
 */
 DwtHtmlEditor.prototype.setMode =
 function(mode, convert) {
-	if (mode == this._mode ||
-		(mode != DwtHtmlEditor.HTML && mode != DwtHtmlEditor.TEXT))
-	{
-		return;
-	}
+
+	if (mode == this._mode || (mode != DwtHtmlEditor.HTML && mode != DwtHtmlEditor.TEXT)) {	return;	}
 
 	var idoc = this._getIframeDoc();
 	this._mode = mode;
 	if (mode == DwtHtmlEditor.HTML) {
 		var textArea = document.getElementById(this._textAreaId);
 		var iFrame;
-		if (this._iFrameId != null) {
-			idoc.body.innerHTML = (convert)
-				? AjxStringUtil.convertToHtml(textArea.value)
-				: textArea.value;
+		if (this._iFrameId) {
+			idoc.body.innerHTML = convert ? AjxStringUtil.convertToHtml(textArea.value)	: textArea.value;
 			iFrame = document.getElementById(this._iFrameId);
 		} else {
-			var content = (convert)
-				? AjxStringUtil.convertToHtml(textArea.value)
-				: textArea.value;
+			var content = convert ? AjxStringUtil.convertToHtml(textArea.value)	: textArea.value;
 			iFrame = this._initHtmlMode(content);
 		}
 
@@ -666,17 +659,7 @@ function(mode, convert) {
 			this._enableDesignMode(idoc);
 		}
 	} else {
-		var textArea = this._textAreaId != null
-			? document.getElementById(this._textAreaId)
-			: this._initTextMode(true);
-
-		// If we have pending content, then an iFrame is being created. This can happen
-		// if the widget is instantiated and immediate setMode is called w/o getting out
-		// to the event loop where _finishHtmlModeInit is triggered
-		var content = (!this._pendingContent)
-			? (idoc.body ? idoc.body.innerHTML : "")
-			: (this._pendingContent || "");
-
+		var textArea = this._textAreaId ? document.getElementById(this._textAreaId)	: this._initTextMode(true);
 		textArea.value = convert ? this._convertHtml2Text() : idoc.innerHTML;
 
 		Dwt.setVisible(document.getElementById(this._iFrameId), false);
@@ -1578,7 +1561,9 @@ DwtHtmlEditor.prototype._setContentOnTimer =
 function() {
 	var iframeDoc = this._getIframeDoc();
 	try {
-		iframeDoc.body.innerHTML = this._pendingContent;
+		if (this._pendingContent != null) {
+			iframeDoc.body.innerHTML = this._pendingContent;
+		}
 		// XXX: mozilla hack
 		if (AjxEnv.isGeckoBased || AjxEnv.isSafari) {
 			this._enableDesignMode(iframeDoc);
