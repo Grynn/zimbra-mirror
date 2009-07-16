@@ -499,13 +499,16 @@ AjxTimezone.DAYLIGHT_RULES = [];
  * <strong>Note:</strong>
  * It looks like the current versions of FF always reflect the current
  * timezone w/o needing to restart the browser.
+ * timezonePreference - optional value used to decide timezone rule in case of conflict 
  */
 AjxTimezone._guessMachineTimezone = 
-function() {
+function(timezonePreference) {
 	var dec1 = new Date(AjxTimezoneData.TRANSITION_YEAR, 11, 1, 0, 0, 0);
 	var jun1 = new Date(AjxTimezoneData.TRANSITION_YEAR, 5, 1, 0, 0, 0);
 	var dec1offset = -dec1.getTimezoneOffset();
 	var jun1offset = -jun1.getTimezoneOffset();
+
+    var matchingRules = [];
 
     // if the offset for jun is the same as the offset in december,
 	// then we have a timezone that doesn't deal with daylight savings.
@@ -514,7 +517,7 @@ function() {
  		for (var i = 0; i < rules.length ; ++i ) {
             var rule = rules[i];
             if (rule.standard.offset == jun1offset) {
-				return rule;
+				 matchingRules.push(rule);
 			}
 		}
 	}
@@ -536,11 +539,24 @@ function() {
                 var d1 = new Date(dtrans[0], dtrans[1]-1, dtrans[2]+2);
                 if (-s1.getTimezoneOffset() == std && -d1.getTimezoneOffset() == dst &&
                     -s0.getTimezoneOffset() == dst && -d0.getTimezoneOffset() == std) {
-                    return rule;
+                    matchingRules.push(rule);
                 }
             }
 		}
 	}
+
+    //when there is a timezone conflict use the preference to find better match
+    if(timezonePreference != null) {
+        for(var i in matchingRules) {
+            if(matchingRules[i].serverId == timezonePreference) {
+                return matchingRules[i];
+            }
+        }
+    }
+
+    if(matchingRules.length > 0) {
+        return matchingRules[0];        
+    }
 
     // generate default rule
     return AjxTimezone._generateDefaultRule();
