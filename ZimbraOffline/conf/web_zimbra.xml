@@ -224,7 +224,8 @@
 				WEB-INF/classes/messages/${name},
 				WEB-INF/classes/keys/${name},
 				WEB-INF/classes/${dir}/${name},
-				../service/zimlet/${name}/${name},
+				../../../zimlets-properties/${name}/${name},
+				../../../zimlets-deployed/${name}/${name},
 				../service/zimlet/_dev/${name}/${name}
 			</param-value>
 		</init-param>
