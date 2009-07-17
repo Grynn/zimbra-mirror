@@ -33,47 +33,50 @@ function() {
 Com_Zimbra_YMaps.URL = "http://api.local.yahoo.com/MapsService/V1/mapImage?appid=ZimbraMail&zoom=4&image_height=245&image_width=345&location=";
 
 // Map image URI cache
-Com_Zimbra_YMaps.CACHE = new Array();
+Com_Zimbra_YMaps.CACHE = [];
 
 // Panel Zimlet Methods
 // Called by the Zimbra framework when the Ymaps panel item was double clicked
-Com_Zimbra_YMaps.prototype.doubleClicked = function() {
+Com_Zimbra_YMaps.prototype.doubleClicked =
+function() {
 	this.singleClicked();
 };
-//Called when clicked on matched text
-Com_Zimbra_YMaps.prototype.clicked = function(spanElem, contentObj, matchContext, canvas) {
-    var url = "http://maps.yahoo.com/maps_result?addr=";
-    var addr = contentObj.replace("\n"," ").replace("\r"," ");
-    canvas = window.open(url+escape(addr));
-}
+
+// Called when clicked on matched text
+Com_Zimbra_YMaps.prototype.clicked =
+function(spanElem, contentObj, matchContext, canvas) {
+	var url = "http://maps.yahoo.com/maps_result?addr=";
+	var addr = contentObj.replace("\n"," ").replace("\r"," ");
+	canvas = window.open(url+escape(addr));
+};
+
 // Called by the Zimbra framework when the Ymaps panel item was clicked
-Com_Zimbra_YMaps.prototype.singleClicked = function() {
-	var editorProps = [
-		{ label 		 : "Address",
-		  name           : "address",
-		  type           : "string",
-		  minLength      : 2,
-		  maxLength      : 200   
-		}
-		];
+Com_Zimbra_YMaps.prototype.singleClicked =
+function() {
+	var editorProps = [{
+		label: "Address",
+		name: "address",
+		type: "string",
+		minLength: 2,
+		maxLength: 200
+	}];
 	if (!this._dlg_propertyEditor) {
 		var view = new DwtComposite(this.getShell());
-		this._propertyEditor = new DwtPropertyEditor(view, true);
-		var pe = this._propertyEditor;
+		var pe = this._propertyEditor = new DwtPropertyEditor(view, true);
 		pe.initProperties(editorProps);
 		var dialog_args = {
-			title : "Yahoo Maps: Enter Address",
-			view  : view
+			title: "Yahoo Maps: Enter Address",
+			view: view
 		};
 		this._dlg_propertyEditor = this._createDialog(dialog_args);
 		var dlg = this._dlg_propertyEditor;
 		pe.setFixedLabelWidth();
 		pe.setFixedFieldWidth();
 		dlg.setButtonListener(DwtDialog.OK_BUTTON,
-				      new AjxListener(this, function() {
-				          if (!pe.validateData()) {return;}
-					      this._getDisplayCustomMap();
-				      }));
+				new AjxListener(this, function() {
+					if (!pe.validateData()) { return; }
+					this._getDisplayCustomMap();
+				}));
 	}
 	this._dlg_propertyEditor.popup();
 };
@@ -89,34 +92,39 @@ function() {
 Com_Zimbra_YMaps.prototype._displayDialogMap = 
 function(address) {
 	var view = new DwtComposite(this.getShell());
+
 	var dialog_args = {
-		view  : view,
-		title : "Yahoo Map"
+		view: view,
+		title: "Yahoo Map",
+		standardButtons: [DwtDialog.OK_BUTTON]
 	};
+
 	var dlg = this._createDialog(dialog_args);
 	dlg.popup();
 	dlg.setButtonListener(DwtDialog.OK_BUTTON,
-		      new AjxListener(this, function() {
-			      dlg.popdown();
-			      dlg.dispose();
-		      }));
-	dlg.setButtonListener(DwtDialog.CANCEL_BUTTON,
-		      new AjxListener(this, function() {
-			      dlg.popdown();
-			      dlg.dispose();
-		      }));
-    var el = view.getHtmlElement();
-    var div = document.createElement("div");
-    el.appendChild(div);
-    this.toolTipPoppedUp(null, address, null, div);
-};
+			new AjxListener(this, function() {
+				dlg.popdown();
+				dlg.dispose();
+			}));
 
+	var div = document.createElement("div");
+	view.getHtmlElement().appendChild(div);
+
+	this.toolTipPoppedUp(null, address, null, div);
+};
 
 // Content Object Methods
 
 Com_Zimbra_YMaps.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
-	canvas.innerHTML = '<center><img width="345" height="245" id="'+ ZmZimletBase.encodeId(obj)+'" src="'+this.getResource('blank_pixel.gif')+'"/></center>';
+	canvas.innerHTML = [
+		'<center><img width="345" height="245" id="',
+		ZmZimletBase.encodeId(obj),
+		'" src="',
+		this.getResource('blank_pixel.gif'),
+		'"/></center>'
+	].join("");
+
 	if (Com_Zimbra_YMaps.CACHE[obj+"img"]) {
 		Com_Zimbra_YMaps._displayImage(Com_Zimbra_YMaps.CACHE[obj+"img"], obj);
 	} else {
@@ -132,7 +140,8 @@ Com_Zimbra_YMaps._displayImage =
 function(img_src, obj) {
 	var imgEl = document.getElementById(ZmZimletBase.encodeId(obj));
 	imgEl.style.backgroundImage = "url("+img_src+")";
-    if(!Com_Zimbra_YMaps.CACHE[obj+"img"]) {
+
+	if (!Com_Zimbra_YMaps.CACHE[obj+"img"]) {
 		Com_Zimbra_YMaps.CACHE[obj+"img"] = img_src;
 	}
 };
@@ -140,9 +149,9 @@ function(img_src, obj) {
 Com_Zimbra_YMaps._callback = 
 function(obj, result) {
 	var r = result.text;
-    var url = r.substring(r.indexOf("http://gws"),r.indexOf("</Result>"));
-    url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
-    Com_Zimbra_YMaps._displayImage(url, obj);
+	var url = r.substring(r.indexOf("http://gws"),r.indexOf("</Result>"));
+	url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
+	Com_Zimbra_YMaps._displayImage(url, obj);
 };
 
 
