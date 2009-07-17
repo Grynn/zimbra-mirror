@@ -190,7 +190,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							  label: ZaMsg.NAD_zimbraScheduledTaskNumThreads, width: "5em"
 							},
 							{ref: ZaGlobalConfig.A_zimbraMailPurgeSleepInterval, type:_LIFETIME_,
-							  label: ZaMsg.NAD_zimbraMailPurgeSleepInterval, width: "5em"
+							  label: ZaMsg.LBL_zimbraMailPurgeSleepInterval, width: "5em"
 							} ,
                           { ref: ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _TEXTFIELD_,
 								  label: ZaMsg.NAD_DOC_MaxUploadSize, width: "6em"
@@ -605,7 +605,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 						  	  label: ZaMsg.NAD_Exchange_Auth_Password, width: "20em"
 						  	},
                             { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg, type: _TEXTFIELD_,
-						  	  label: ZaMsg.NAD_ExchangeUserGroup, width: "20em"
+						  	  label: ZaMsg.LBL_zimbraFreebusyExchangeUserOrg, width: "20em"
 						  	},
 
                               {type: _GROUP_, colSpan:2, numCols:3, colSizes: ["150px", "*", "auto" ], items :[
