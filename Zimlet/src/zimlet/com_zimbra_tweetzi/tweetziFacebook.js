@@ -151,15 +151,17 @@ function (tableId, account) {
 com_zimbra_tweetziFacebook.prototype._getStreamCallback =
 function (tableId, response) {
 	var text = response.text;
-	var jsonObj = eval("(" + text + ")");
-	if(jsonObj.errorCode) {
-		var msgDialog = appCtxt.getMsgDialog();
-		msgDialog.setMessage(jsonObj.error_msg, DwtMessageDialog.WARNING_STYLE);
-		msgDialog.popup();
-		return;
+	if(text.indexOf("Error 500 Connection reset") >= 0) {//if connection reset is shown, then either ignore it(if the user is not in tweetzi) or show warning msg(if the user is using tweetzi)
+		var activeApp = appCtxt.getCurrentApp();
+		if (activeApp.getName() == this.zimlet._tweetziAppName){
+			var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
+			appCtxt.getAppController().setStatusMsg("Could not get facebook stream,  try again by clicking on the Refresh button on the facebook-card", ZmStatusView.LEVEL_WARNING, null, transitions);
+		}
+	} else {
+		var jsonObj = eval("(" + text + ")");
+		this._fb_profiles = jsonObj.profiles;
+		this.zimlet.createCardView(tableId, jsonObj.posts, "FACEBOOK");
 	}
-	this._fb_profiles = jsonObj.profiles;
-	this.zimlet.createCardView(tableId, jsonObj.posts, "FACEBOOK");
 };
 
 com_zimbra_tweetziFacebook.prototype._getFacebookHTML =
