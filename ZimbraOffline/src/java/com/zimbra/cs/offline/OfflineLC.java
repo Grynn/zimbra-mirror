@@ -253,7 +253,7 @@ public class OfflineLC {
         zdesktop_datasource_properties.setDoc("Path to datasource configuration properties file.");
 
         zdesktop_membuf_limit = new KnownKey("zdesktop_membuf_limit");
-        zdesktop_membuf_limit.setDefault("33554432"); // 32 * 1024 * 1024
+        zdesktop_membuf_limit.setDefault("1048576"); // 1 * 1024 * 1024
         zdesktop_membuf_limit.setDoc("Number of bytes to hold in memory before start disk streaming during message sync.");
 
         zdesktop_upload_size_limit = new KnownKey("zdesktop_upload_size_limit");
