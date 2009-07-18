@@ -1119,7 +1119,7 @@ function(by, val) {
     soapDoc.setMethodAttribute("onerror", "continue");
 
 	if(by=="id") {
-		this.id = by;
+		this.id = val;
 		this.attrs[ZaItem.A_zimbraId] = val;
 		var getAccDoc = soapDoc.set("GetAccountRequest", null, null, ZaZimbraAdmin.URN);
 		getAccDoc.setAttribute("applyCos", "0");

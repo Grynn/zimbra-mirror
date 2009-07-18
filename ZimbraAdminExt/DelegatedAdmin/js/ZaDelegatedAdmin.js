@@ -134,12 +134,14 @@ if (ZaAccount) {
 ZaDelegatedAdmin.accountObjectModifer = function () {
     var directMemberOfList = this._containedObject [ZaAccount.A2_memberOf] [ZaAccount.A2_directMemberList] ;
     if (! this._containedObject [ZaAccount.A2_adminRoles]) this._containedObject [ZaAccount.A2_adminRoles] = [];
-    
-    for (var i = 0; i < directMemberOfList.length; i ++) {
-    // TODO: enable it when GetAccountMembershipRequest returns isAdminGroup
-              if (directMemberOfList[i][ZaDistributionList.A_isAdminGroup] == "TRUE")
-                    this._containedObject [ZaAccount.A2_adminRoles].push (directMemberOfList[i].name) ;
-            }
+    if(directMemberOfList && directMemberOfList.length) {
+	    for (var i = 0; i < directMemberOfList.length; i ++) {
+	    // TODO: enable it when GetAccountMembershipRequest returns isAdminGroup
+			if (directMemberOfList[i][ZaDistributionList.A_isAdminGroup] == "TRUE") {
+	        	this._containedObject [ZaAccount.A2_adminRoles].push (directMemberOfList[i].name) ;
+			}
+	    }
+    }
 }
 
 if (ZaTabView.ObjectModifiers["ZaAccountXFormView"]){
