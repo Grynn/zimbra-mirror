@@ -527,7 +527,9 @@ function(refresh) {
 ZaApp.prototype.getSavedSearchList =
 function (refresh) {
 	if (refresh || ZaSearch.SAVED_SEARCHES.length <=0) {
-		ZaSearch.updateSavedSearch (ZaSearch.getSavedSearches()) ;
+        if (ZaSearchField.canViewSavedSearch) {
+		    ZaSearch.updateSavedSearch (ZaSearch.getSavedSearches()) ;
+        }
 	}
 	
 	return ZaSearch.SAVED_SEARCHES ;

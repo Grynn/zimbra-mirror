@@ -728,17 +728,19 @@ function (resp) {
 
 	if (AjxEnv.hasFirebug) console.debug("Update Saved Search ... ");
 	ZaSearch.SAVED_SEARCHES = [] ;
-	var respObj = resp._data || resp ;
-	var searchResults = respObj.Body.GetAdminSavedSearchesResponse.search;
-	
-	if (searchResults) {
-		for (var i=0; i < searchResults.length; i++) {
-			ZaSearch.SAVED_SEARCHES.push ({
-				name: searchResults[i].name,
-				query: searchResults[i]._content
-			})
-		}
-	}
+	if (resp != null) {
+        var respObj = resp._data || resp ;
+        var searchResults = respObj.Body.GetAdminSavedSearchesResponse.search;
+
+        if (searchResults) {
+            for (var i=0; i < searchResults.length; i++) {
+                ZaSearch.SAVED_SEARCHES.push ({
+                    name: searchResults[i].name,
+                    query: searchResults[i]._content
+                })
+            }
+        }
+    }
 	
 	ZaSearch._savedSearchToBeUpdated = false ;
 }
