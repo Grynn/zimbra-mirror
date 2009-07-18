@@ -110,16 +110,59 @@ function(ids, enabled) {
 
 ZaToolBar.prototype.enableAll =
 function(enabled) {
-	for (var i in this._buttons)
+	for (var i in this._buttons) {
 		this._buttons[i].setEnabled(enabled);
+	}
 }
 
 ZaToolBar.prototype.computeHeight =
 function(enabled) {
 	var h = 0;
-	for (var i in this._buttons)
+	for (var i in this._buttons) {
 		h = Math.max(h, this._buttons[i].getSize().y);
+	}
 	return h;
+}
+
+ZaToolBar.prototype.setSize =
+function(width, height) {
+	var sz = this.getSize();
+	if (width != sz.x || height != sz.y) {
+		DwtToolBar.prototype.setSize.apply(this, arguments);
+		this._checkSize(width,height);
+	}
+};
+
+ZaToolBar.prototype._checkSize = function(width, height) {
+	var el = this.getHtmlElement();
+	if(!el) {
+		return;
+	}
+	
+	for (var i in this._buttons) {
+		var b = this._buttons[i];
+		if (!b || !b.getVisible()) { continue; }		
+		if(b._toggleText) {
+			b.setText(b._toggleText);
+			b._toggleText = null;
+		}
+	}	
+	var offset = el.firstChild.offsetWidth;
+	if(offset > width) {	
+		for (var i in this._buttons) {
+			if (!b || !b.getVisible()) { continue; }
+			var b = this._buttons[i];
+			var text = b.getText();
+			if(text) {
+				b._toggleText = text;
+				b.setText("");
+			}
+			offset = el.firstChild.offsetWidth;
+			if(offset <= width) {
+				break;
+			}
+		}
+	}	
 }
 
 ZaToolBar.prototype._createButton =
