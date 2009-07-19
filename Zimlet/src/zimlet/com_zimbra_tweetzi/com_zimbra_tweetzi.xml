@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_tweetzi" version="1.2" description="Twitter and Facebook Zimlet">
+<zimlet name="com_zimbra_tweetzi" version="1.3" description="Twitter and Facebook Zimlet">
 	<include>tweetziTwitter.js</include>
 	<include>tweetziFacebook.js</include>
 	<include>tweetziTweetMeme.js</include>
