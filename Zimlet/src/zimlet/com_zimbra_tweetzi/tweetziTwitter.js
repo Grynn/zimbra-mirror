@@ -439,7 +439,7 @@ function() {
 	var signatureBaseString = OAuth.SignatureMethod.getBaseString(message);
 	var authorizationHeader = OAuth.getAuthorizationHeader("", message.parameters);
 
-	return "https://twitter.com/oauth/request_token?" + normalizedParams + "&oauth_signature=" + signature;
+	return "https://twitter.com/oauth/request_token?" + normalizedParams + "&"+AjxStringUtil.urlComponentEncode("oauth_signature")+"=" + AjxStringUtil.urlComponentEncode(signature);
 };
 
 com_zimbra_tweetziTwitter.prototype.getAccessTokenUrl =
@@ -462,7 +462,12 @@ function(pin) {
 	var signatureBaseString = OAuth.SignatureMethod.getBaseString(message);
 	var authorizationHeader = OAuth.getAuthorizationHeader("", message.parameters);
 
-	return "https://twitter.com/oauth/access_token?" + normalizedParams + "&oauth_signature=" + signature + "&oauth_verifier=" + pin + "&oauth_token=" + this._oauth_token;
+	var url = ["https://twitter.com/oauth/access_token?", normalizedParams, "&",
+	           AjxStringUtil.urlComponentEncode("oauth_signature"), "=",  AjxStringUtil.urlComponentEncode(signature), "&",
+			   AjxStringUtil.urlComponentEncode("oauth_verifier"), "=",  AjxStringUtil.urlComponentEncode(pin), "&",
+	           AjxStringUtil.urlComponentEncode("oauth_token"), "=", AjxStringUtil.urlComponentEncode(this._oauth_token)].join("");
+
+	return url;
 }
 
 com_zimbra_tweetziTwitter.prototype._twitterCallback =

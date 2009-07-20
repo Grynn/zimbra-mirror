@@ -1389,36 +1389,46 @@ function(query) {
 
 com_zimbra_tweetzi.prototype._replaceHash =
 function(text) {
-	var re = new RegExp("[^a-zA-Z0-9_-]#[a-zA-Z0-9_-]+", "g");
-	var m = re.exec(text);
-	if (m == null)
-		return text;
-
-	for (var i = 0; i < m.length; i++) {
-		var word = m[i];
-		word = AjxStringUtil.trim(word);
+	var re = /([^a-zA-Z0-9_-]#[a-zA-Z0-9_-]+)/gm;
+	var newStr = "";
+	var start = 0;
+	while (match = re.exec(text)) {
+		var word = match[0];
+		var end = re.lastIndex;
+		var part = text.substring(start, end);
 		var id = "tweetzi_hashlink_" + Dwt.getNextId();
-		text = text.replace(word, ("<a  href=\"#\" id='" + id + "'>" + word + "</a>"));
+		var url = ["<a  href=\"#\" id='", id, "'>", word, "</a>"].join("");
+		newStr = newStr + part.replace(word, url);
 		this._allHashLinks[id] = {hasHandler:false, word:word};
+		start = end;
 	}
-	return text;
+	var extraStr = "";
+	if(start < text.length) {
+		extraStr = text.substring(start, text.length)
+	}
+	return newStr + extraStr;
 
 };
 
 com_zimbra_tweetzi.prototype._replaceAt =
 function(text, userId, tableId, screen_name) {
-	var re = new RegExp("[^a-zA-Z0-9_-]@[a-zA-Z0-9_-]+", "ig");
-	var m = re.exec(text);
-	if (m == null)
-		return text;
-
-	for (var i = 0; i < m.length; i++) {
-		var word = m[i];
-		word = AjxStringUtil.trim(word);
+	var re = /([^a-zA-Z0-9_-]@[a-zA-Z0-9_-]+)/gm;
+	var newStr = "";
+	var start = 0;
+	while (match = re.exec(text)) {
+		var word = match[0];
+		var end = re.lastIndex;
+		var part = text.substring(start, end);
 		var id = this._getAccountLinkId(userId, tableId, screen_name);
-		text = text.replace(word, "<a href=\"#\" id='" + id + "'>" + word + "</a>");
+		var url = ["<a  href=\"#\" id='", id, "'>", word, "</a>"].join("");
+		newStr = newStr + part.replace(word, url);
+		start = end;
 	}
-	return text;
+	var extraStr = "";
+	if(start < text.length) {
+		extraStr = text.substring(start, text.length)
+	}
+	return newStr + extraStr;
 };
 
 com_zimbra_tweetzi.prototype.addRetweetText = function(rt) {

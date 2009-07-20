@@ -29,7 +29,7 @@ com_zimbra_tweetziPreferences.prototype._showpreferencesDlg = function() {
 		return;
 	}
 	this._preferencesView = new DwtComposite(this.shell);
-	this._preferencesView.setSize(550, 400);
+	this._preferencesView.setSize(550, 300);
 	this._preferencesView.getHtmlElement().style.overflow = "auto";
 	this._preferencesView.getHtmlElement().innerHTML = this._createPreferencesView();
 	this._preferencesDialog = this.zimlet._createDialog({title:"tweetZi Account Preferences", view:this._preferencesView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
@@ -83,6 +83,7 @@ function() {
 
 com_zimbra_tweetziPreferences.prototype._addFacebookBtnListener =
 function() {
+	this.showAddFBInfoDlg();
 	this._setAccountPrefDlgAuthMessage("Press 'Refresh Accounts' after logging into facebook", "blue");
 	this.zimlet.facebook._fbCreateToken();
 };
@@ -149,6 +150,7 @@ function() {
 	html[i++] = "<BR/>";
 	html[i++] = "<BR/>";
 	html[i++] = "<BR/>";
+	/*
 	html[i++] = "<DIV class='tweetzi_yellow' >";
 	html[i++] = "<b>Please Note:</b><BR/><b>For twitter Account</b>, Authorizing the Application automatically provides all permissions.";
 	html[i++] = "<br/><br/><b>For facebook Account</b>, we need you to explicitely grant the following permissions";
@@ -157,6 +159,7 @@ function() {
 	html[i++] = "<br/><b>Remember Me / Offline Permission:</b> By default, facebook authorizes expires after 24 hours of authorization. ";
 	html[i++] = "With this, we get permanent access. <br><br>PS: You can always revoke all facebook/twitter permissions by logging on to facebook/twitter";
 	html[i++] = "</DIV>";
+	*/
 	return html.join("");
 };
 com_zimbra_tweetziPreferences.prototype._updateAccountsTable =
@@ -284,4 +287,44 @@ function() {
 	this.zimlet._updateAllWidgetItems({updateSearchTree:false, updateSystemTree:true, updateAccntCheckboxes:true, searchCards:false});
 	this._preferencesDialog.popdown();
 
+};
+
+
+com_zimbra_tweetziPreferences.prototype.showAddFBInfoDlg = function() {
+	//if zimlet dialog already exists...
+	if (this._getFbInfoDialog) {
+		this._getFbInfoDialog.popup();
+		return;
+	}
+	this._getFbInfoView = new DwtComposite(this.zimlet.getShell());
+	this._getFbInfoView.getHtmlElement().style.overflow = "auto";
+		this._getFbInfoView.setSize(550);
+
+	this._getFbInfoView.getHtmlElement().innerHTML = this._createFbInfoView();
+	var  addFBAccntButtonId = Dwt.getNextId();
+	var addFBAccntButton = new DwtDialog_ButtonDescriptor(addFBAccntButtonId, ("Authorized"), DwtDialog.ALIGN_RIGHT);
+	this._getFbInfoDialog = this.zimlet._createDialog({title:"Facebook Information", view:this._getFbInfoView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this._getFbInfoDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._getFbInfoOKBtnListener));
+	this._getFbInfoDialog.popup();
+};
+
+com_zimbra_tweetziPreferences.prototype._getFbInfoOKBtnListener = function() {
+	this._refreshTableBtnListener();
+	this._getFbInfoDialog.popdown();
+};
+
+com_zimbra_tweetziPreferences.prototype._createFbInfoView =
+function() {
+	var html = new Array();
+	var i = 0;
+	html[i++] = "<DIV class='tweetzi_yellow'>";
+	html[i++] = "<DIV  align=center><H2>Please click OK after logging into facebook.</H2></DIV>";
+	html[i++] = "<BR/><BR/>";
+	html[i++] = "<H3>PLEASE NOTE: We need you to explicitely grant the following 3 permissions:</H3>";
+	html[i++] = "<b>Read Permission:</b> Allows us to display facebook information";
+	html[i++] = "<br/><b>Publish Permission:</b> Allows us to publish or write back to facebook";
+	html[i++] = "<br/><b>Remember Me / Offline Permission:</b> By default, facebook authorizes expires after 24 hours of authorization. ";
+	html[i++] = "With this, we get permanent access. <br><br>PS: You can always revoke all facebook/twitter permissions by logging on to facebook/twitter";
+	html[i++] = "</DIV>";
+	return html.join("");
 };
