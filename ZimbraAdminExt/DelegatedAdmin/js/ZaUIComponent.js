@@ -53,7 +53,7 @@ ZaUIComponent.accountTargetXFormModifier = function (xFormObject, entry) {
             caseKey:  tabIx,
             items:[
                 {type: _SPACER_, height: 10},    
-                { type: _DWT_ALERT_, containerCssStyle: "width:400px;",
+                { type: _DWT_ALERT_, width: "98%",
 				    style: DwtAlert.INFORMATION, iconVisible: false,
                     content: com_zimbra_delegatedadmin.HELP_NOTES_UI_COMP },
                 {type:_TOP_GROUPER_, label: com_zimbra_delegatedadmin.Label_ui_comp, id:"ui_comp_grouper",
