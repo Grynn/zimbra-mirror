@@ -2,7 +2,7 @@
 #
 # ***** BEGIN LICENSE BLOCK *****
 # Zimbra Collaboration Suite Server
-# Copyright (C) 2005, 2006, 2007, 2008 Zimbra, Inc.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009 Zimbra, Inc.
 # 
 # The contents of this file are subject to the Yahoo! Public License
 # Version 1.0 ("License"); you may not use this file except in
@@ -18,7 +18,7 @@ require_once("Zimbra/ServerResponse.php");
 
 $filename = "";
 $text = "";
-$locale = "en_EN";
+$dictionary = "en_EN";
 
 if (isset($_FILES["text"])) {
     $text = file_get_contents($_FILES["text"]);
@@ -26,12 +26,16 @@ if (isset($_FILES["text"])) {
     $text = $_REQUEST["text"];
 }
 
+if (isset($_REQUEST["dictionary"])) {
+    $dictionary = $_REQUEST["dictionary"];
+}
+   
 if (get_magic_quotes_gpc()) {
     $text = stripslashes($text);
 }
 
 if ($text != NULL) {
-    setlocale(LC_ALL, $locale);
+    setlocale(LC_ALL, $dictionary);
 
     // Get rid of double-dashes, since we ignore dashes
     // when splitting words
@@ -44,9 +48,9 @@ if ($text != NULL) {
     $words = preg_split('/[^\w\xc0-\xfd-\']+/', $text);
 	
     // Load dictionary
-    $dictionary = pspell_new($locale);
+    $dictionary = pspell_new($dictionary);
     if ($dictionary == 0) {
-        $msg = "Unable to open Aspell dictionary for locale " . $locale;
+        $msg = "Unable to open dictionary " . $dictionary;
         error_log($msg);
         $response = new ServerResponse();
         $response->addParameter("error", $msg);
@@ -107,6 +111,7 @@ if ($text != NULL) {
 <form action="aspell.php" method="post" enctype="multipart/form-data">
     <p>Type in some words to spell check:</p>
     <textarea NAME="text" ROWS="10" COLS="80"></textarea>
+    <p>Dictionary:<input type="text" name="dictionary" value="<?php print $dictionary; ?>" size="8"/></p>
     <p><input type="submit" /></p>
 </form>
 
