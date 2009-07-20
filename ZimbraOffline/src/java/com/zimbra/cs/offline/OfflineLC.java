@@ -92,8 +92,9 @@ public class OfflineLC {
     public static final KnownKey zdesktop_log_context_filter;
     public static final KnownKey zdesktop_installation_key;
 
-    public static final KnownKey zdesktop_mail_uncompressed_cache_max_files;
     public static final KnownKey zdesktop_mail_file_descriptor_cache_size;
+    public static final KnownKey zdesktop_mail_uncompressed_cache_max_bytes;
+    public static final KnownKey zdesktop_mail_uncompressed_cache_max_files;
     public static final KnownKey zdesktop_message_cache_size;
 
     static void init() {
@@ -317,8 +318,9 @@ public class OfflineLC {
         zdesktop_log_context_filter = new KnownKey("zdesktop_log_context_filter", "name,aname,ip,ua", "comma delimited list of log context items to filter out");
         zdesktop_installation_key = new KnownKey("zdesktop_installation_key", null, "unique key of the installation instance");
 
-        zdesktop_mail_uncompressed_cache_max_files = new KnownKey("zdesktop_mail_uncompressed_cache_max_files", "10", "max number of files in the uncompressed blob cache on disk");
         zdesktop_mail_file_descriptor_cache_size = new KnownKey("zdesktop_mail_file_descriptor_cache_size", "10", "maximum number of file descriptors that are opened for accessing message content");
+        zdesktop_mail_uncompressed_cache_max_bytes = new KnownKey("zdesktop_mail_uncompressed_cache_max_bytes", "20971520", "max number of bytes in the uncompressed blob cache on disk");
+        zdesktop_mail_uncompressed_cache_max_files = new KnownKey("zdesktop_mail_uncompressed_cache_max_files", "20", "max number of files in the uncompressed blob cache on disk");
         zdesktop_message_cache_size = new KnownKey("zdesktop_message_cache_size", "25", "maximum number of JavaMail MimeMessage objects in the message cache");
     }
     
