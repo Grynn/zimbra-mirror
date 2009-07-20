@@ -997,7 +997,7 @@ public class InitialSync {
                         te = tis.getNextEntry(); //message always has a blob
                         if (te != null) {
                             try {
-                                saveMessage(tis, ud.id, ud.folderId, type, ud.date,
+                                saveMessage(tis, te.getSize(), ud.id, ud.folderId, type, ud.date,
                                         Flag.flagsToBitmask(itemData.flags), itemData.tags, ud.parentId);
                                 idSet.remove(ud.id);
                             } catch (Exception x) {
@@ -1062,7 +1062,7 @@ public class InitialSync {
                         }
                     };
                     try {
-                        saveMessage(fin, headers, id, folderId, type);
+                        saveMessage(fin, entry.getSize(), headers, id, folderId, type);
                     } catch (Exception x) {
                         SyncExceptionHandler.checkRecoverableException("InitialSync.syncMessagesAsZip", x);
                         SyncExceptionHandler.syncMessageFailed(ombx, id, x);
@@ -1093,7 +1093,7 @@ public class InitialSync {
             for (Header hdr : response.getFirst())
                 headers.put(hdr.getName(), hdr.getValue());
             
-            saveMessage(response.getSecond(), headers, id, folderId, type);
+            saveMessage(response.getSecond(), response.getSecond().getContentLength(), headers, id, folderId, type);
         } catch (MailServiceException.NoSuchItemException nsie) {
             OfflineLog.offline.info("initial: message " + id + " has been deleted; skipping");
         } catch (IOException e) {
@@ -1105,16 +1105,17 @@ public class InitialSync {
         }
     }
     
-    private void saveMessage(InputStream in, Map<String, String> headers, int id, int folderId, byte type) throws ServiceException {
+    private void saveMessage(InputStream in, long sizeHint, Map<String, String> headers, int id, int folderId, byte type) throws ServiceException {
         int received = (int) (Long.parseLong(headers.get("X-Zimbra-Received")) / 1000);
         int flags = Flag.flagsToBitmask(headers.get("X-Zimbra-Flags"));
         String tags = headers.get("X-Zimbra-Tags");
         int convId = Integer.parseInt(headers.get("X-Zimbra-Conv"));
 
-        saveMessage(in, id, folderId, type, received, flags, tags, convId);
+        saveMessage(in, sizeHint, id, folderId, type, received, flags, tags, convId);
     }
     
-    private void saveMessage(InputStream in, int id, int folderId, byte type, int received, int flags, String tags, int convId) throws ServiceException {
+    private void saveMessage(InputStream in, long sizeHint, int id, int folderId,
+        byte type, int received, int flags, String tags, int convId) throws ServiceException {
         final int DISK_STREAM_THRESHOLD = OfflineLC.zdesktop_membuf_limit.intValue();
         final int READ_BUFFER_SIZE = 8 * 1024;
         
@@ -1124,7 +1125,8 @@ public class InitialSync {
         Blob blob = null;
         byte[] data = null;
         try {
-            data = ByteUtil.readInput(in, READ_BUFFER_SIZE, DISK_STREAM_THRESHOLD + 1);
+            data = ByteUtil.readInput(in, sizeHint == -1 || sizeHint >= Integer.MAX_VALUE ? READ_BUFFER_SIZE : (int)sizeHint,
+                DISK_STREAM_THRESHOLD + 1);
             if (data.length > DISK_STREAM_THRESHOLD) {
                 OfflineLog.offline.info(
                         "Message id=%d exceeded threshold of %d bytes. Streaming message to disk.", id, DISK_STREAM_THRESHOLD);
