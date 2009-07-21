@@ -329,6 +329,7 @@ function() {
 	
 	var nextStep;
 	if (cStep == ZaCertWizard.STEP_SELECT_SERVER) {
+        this._localXForm.setInstanceValue( this._containedObject[ZaCert.A_target_server], ZaCert.A_target_server)
 		nextStep = ZaCertWizard.STEP_USER_OPTION ;
 		this.goPage(nextStep) ;
 	}else if (cStep == ZaCertWizard.STEP_USER_OPTION) {
@@ -646,8 +647,16 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["75px","*"], items: [
 						{ type:_SPACER_, height: 10},
 						{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
-							labelLocation:_LEFT_ , labelCssStyle: "text-align: left" , 
-							label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES}
+							labelLocation:_LEFT_ , labelCssStyle: "text-align: left" ,
+                            bmolsnr: true,
+                            getDisplayValue : function () {
+                                for (var i=0; i <ZaCert.TARGET_SERVER_CHOICES.length; i++ ) {
+                                 if (ZaCert.TARGET_SERVER_CHOICES[i].value == this.getInstanceValue ()){
+                                     return ZaCert.TARGET_SERVER_CHOICES[i].label ; 
+                                 }
+                                }
+                            },
+							label: com_zimbra_cert_manager.lb_target_server, choices:ZaCert.TARGET_SERVER_CHOICES}
 					]
 				},
 				{ type:_SPACER_, height: 10},
@@ -726,7 +735,15 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["150px","*"], items: [
 						{ type:_SPACER_, height: 10},
 						{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
-							labelLocation:_LEFT_ , 
+							labelLocation:_LEFT_ ,
+                             bmolsnr: true,
+                            getDisplayValue : function () {
+                                for (var i=0; i <ZaCert.TARGET_SERVER_CHOICES.length; i++ ) {
+                                 if (ZaCert.TARGET_SERVER_CHOICES[i].value == this.getInstanceValue ()){
+                                     return ZaCert.TARGET_SERVER_CHOICES[i].label ;
+                                 }
+                                }
+                            },
 							label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES}
 					]
 				},
@@ -834,7 +851,16 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 								{ type:_SPACER_, height: 10},
 								{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
 									labelLocation:_LEFT_ , 
-									label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES}
+									bmolsnr: true,
+                                    getDisplayValue : function () {
+                                        for (var i=0; i <ZaCert.TARGET_SERVER_CHOICES.length; i++ ) {
+                                         if (ZaCert.TARGET_SERVER_CHOICES[i].value == this.getInstanceValue ()){
+                                             return ZaCert.TARGET_SERVER_CHOICES[i].label ;
+                                         }
+                                        }
+                                    },
+                                    label: com_zimbra_cert_manager.lb_target_server,
+                                    choices:ZaCert.TARGET_SERVER_CHOICES}
 							]
 						},
 						{ type:_SPACER_ , height: 10 },
@@ -858,7 +884,16 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	var case_install_certItems = [
 			{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
 				labelLocation:_LEFT_ , 
-				label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES},
+				bmolsnr: true,
+                getDisplayValue : function () {
+                    for (var i=0; i <ZaCert.TARGET_SERVER_CHOICES.length; i++ ) {
+                     if (ZaCert.TARGET_SERVER_CHOICES[i].value == this.getInstanceValue ()){
+                         return ZaCert.TARGET_SERVER_CHOICES[i].label ;
+                     }
+                    }
+                },
+                label: com_zimbra_cert_manager.lb_target_server,
+                choices:ZaCert.TARGET_SERVER_CHOICES},
 			{ type:_SPACER_, height: 10},	
 			{type:_OUTPUT_, colSpan: 2, 
                 visibilityChecks:["instance[ZaCert.A_type_self] == true"],
@@ -883,7 +918,16 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 						{ type:_SPACER_, height: 10},
 						{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
 							labelLocation:_LEFT_ , labelCssStyle: "text-align: left" , 
-							label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES}
+							bmolsnr: true,
+                            getDisplayValue : function () {
+                                for (var i=0; i <ZaCert.TARGET_SERVER_CHOICES.length; i++ ) {
+                                 if (ZaCert.TARGET_SERVER_CHOICES[i].value == this.getInstanceValue ()){
+                                     return ZaCert.TARGET_SERVER_CHOICES[i].label ;
+                                 }
+                                }
+                            },
+							label: com_zimbra_cert_manager.lb_target_server,
+                            choices:ZaCert.TARGET_SERVER_CHOICES}
 					]
 				},
 				{ type:_OUTPUT_, value: com_zimbra_cert_manager.CSR_download_msg_1 },
@@ -908,7 +952,16 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 								{ type:_SPACER_, height: 10},
 								{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
 									labelLocation:_LEFT_ , labelCssStyle: "text-align: left" , 
-									label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES}
+									bmolsnr: true,
+                                    getDisplayValue : function () {
+                                        for (var i=0; i <ZaCert.TARGET_SERVER_CHOICES.length; i++ ) {
+                                         if (ZaCert.TARGET_SERVER_CHOICES[i].value == this.getInstanceValue ()){
+                                             return ZaCert.TARGET_SERVER_CHOICES[i].label ;
+                                         }
+                                        }
+                                    },
+                                    label: com_zimbra_cert_manager.lb_target_server,
+                                    choices:ZaCert.TARGET_SERVER_CHOICES}
 							]
 						},
 						{ type: _OUTPUT_, value: com_zimbra_cert_manager.CSR_REVIEW, colSpan: 2 },

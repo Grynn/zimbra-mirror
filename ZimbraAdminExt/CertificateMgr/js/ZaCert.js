@@ -33,7 +33,7 @@ ZaCert.A_use_wildcard_server_name = "user_wildcard_server_name";
 ZaCert.ALL_SERVERS = "--- All Servers ---" ; //Don't modify it, it need to be consistent with server side value
 
 ZaCert.TARGET_SERVER_CHOICES =  [
-		{label:ZaCert.ALL_SERVERS, value: ZaCert.ALL_SERVERS }
+		{label:com_zimbra_cert_manager.lb_ALL_SERVERS, value: ZaCert.ALL_SERVERS }
 		/*,
 		{label: "test1.zimbra.com", value: "test1.zimbra.com" },
 		{label: "test2.zimbra.com", value: "test2.zimbra.com" },
@@ -112,7 +112,7 @@ ZaCert.prototype.modifySubjectAltNames = function () {
 		if (AjxEnv.hasFirebug) console.log("Modifying SubjectAltNames ");
 		if (this[ZaCert.A_target_server] == ZaCert.ALL_SERVERS) {
 			for (var i=0; i < ZaCert.TARGET_SERVER_CHOICES.length; i ++) {
-				if ((ZaCert.TARGET_SERVER_CHOICES[i].label != ZaCert.ALL_SERVERS) && //Not All Servers Value
+				if ((ZaCert.TARGET_SERVER_CHOICES[i].value != ZaCert.ALL_SERVERS) && //Not All Servers Value
 				//the target server name doesn't exist in the current subjectAltName
 				   (ZaUtil.findValueInArray(currentSubjAltNames, ZaCert.TARGET_SERVER_CHOICES[i].label) == -1)){
 					
