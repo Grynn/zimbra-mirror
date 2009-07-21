@@ -62,6 +62,8 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import com.zimbra.cs.mailbox.MailServiceException;
+import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
+import com.yahoo.platform.yui.compressor.CssCompressor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.mail.internet.InternetAddress;
@@ -72,6 +74,11 @@ import java.text.DateFormatSymbols;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.StringReader;
+import java.io.StringWriter;
+
+import org.mozilla.javascript.ErrorReporter;
+import org.mozilla.javascript.EvaluatorException;
 
 public class BeanUtils {
 
@@ -1362,6 +1369,52 @@ public class BeanUtils {
 	public static String browserLocaleId(Locale locale) {
 		return javaLocaleId(locale).toLowerCase().replace('_','-');
 	}
+    public static java.lang.String yuiCompress(java.lang.String s, String type){
+        try{
+            StringWriter out = new StringWriter();
+            StringReader in = new StringReader(s);
+            int linebreakpos = -1;
+            if(type.equalsIgnoreCase("css")){
+               CssCompressor compressor = new CssCompressor(in);
+                in.close(); in = null;
+                compressor.compress(out, linebreakpos);
+                s = out.toString();
+            }else if(type.equalsIgnoreCase("js")){
+                JavaScriptCompressor jsc = new JavaScriptCompressor(in,new ErrorReporter() {
+
+                        public void warning(String message, String sourceName,
+                                int line, String lineSource, int lineOffset) {
+                            if (line < 0) {
+                                System.err.println("\nyuiCompress:[WARNING] " + message);
+                            } else {
+                                System.err.println("\nyuiCompress:[WARNING] " + line + ':' + lineOffset + ':' + message);
+                            }
+                        }
+
+                        public void error(String message, String sourceName,
+                                int line, String lineSource, int lineOffset) {
+                            if (line < 0) {
+                                System.err.println("\nyuiCompress:[ERROR] " + message);
+                            } else {
+                                System.err.println("\nyuiCompress:[ERROR] " + line + ':' + lineOffset + ':' + message);
+                            }
+                        }
+
+                        public EvaluatorException runtimeError(String message, String sourceName,
+                                int line, String lineSource, int lineOffset) {
+                            error(message, sourceName, line, lineSource, lineOffset);
+                            return new EvaluatorException(message);
+                        }
+                    });
+                jsc.compress(out,linebreakpos,true,false,true,false);
+                s = out.toString();
+            }
+        }catch (Exception ex){
+           System.err.println("\nyuiCompress:[EXCEPTION] " + ex);
+           ex.printStackTrace(System.err);
+        }
+        return s;
+    }
 }
 
 class ExtendedDateFormatSymbols extends DateFormatSymbols{

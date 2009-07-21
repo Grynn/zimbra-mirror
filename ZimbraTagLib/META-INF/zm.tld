@@ -6687,4 +6687,10 @@
 		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
 		<function-signature>java.lang.String browserLocaleId(java.util.Locale)</function-signature>
 	</function>
+
+    <function>
+		<name>yuiCompress</name>
+		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+		<function-signature>java.lang.String yuiCompress(java.lang.String,java.lang.String)</function-signature>
+	</function>
 </taglib>
