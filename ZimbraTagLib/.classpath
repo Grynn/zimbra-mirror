@@ -43,5 +43,6 @@
 			<attribute name="javadoc_location" value="http://www.dom4j.org/dom4j-1.5.2/apidocs/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.3.4.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
