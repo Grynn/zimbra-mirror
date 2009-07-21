@@ -65,6 +65,7 @@ ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	PCRE_INCLUDE := -I/opt/zimbra/include
 	PCRE_LIB := -L/opt/zimbra/lib -lpcre
 	FD_SIZE := -DFD_SETSIZE=32768
+	URANDOM := -DPREFERRED_RAND_SOURCE=\"dev:/dev/urandom\"
 endif
 
 INSTALL_PARMS := install_root=/../
@@ -98,6 +99,7 @@ build:
 	-DUSE_SASL_AUTH \
 	-DUSE_CYRUS_SASL \
 	-DHAS_LDAP -DHAS_MYSQL -DUSE_TLS $(DBINC) $(PCRE_DEF) $(PCRE_INCLUDE) $(FD_SIZE) \
+	$(URANDOM) \
 	-DUSE_LDAP_SASL \
 	-I/opt/zimbra/openldap-$(LDAP_VERSION)/include \
 	-I/opt/zimbra/mysql-$(MYSQL_VERSION)/include \
