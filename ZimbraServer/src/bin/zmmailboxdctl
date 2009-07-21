@@ -16,9 +16,13 @@
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars
-zmassert -d ${mailboxd_directory}
+
+if [ -d ${mailboxd_directory} ]; then
 zmassert -d ${zimbra_home}/mysql
 zmassert -d ${zimbra_java_home}
+else
+  exit 0
+fi
 
 #
 # Memory for use by JVM.  Defaults should come from local config, but
