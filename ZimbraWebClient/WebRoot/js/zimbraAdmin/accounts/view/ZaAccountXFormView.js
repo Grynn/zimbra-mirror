@@ -879,7 +879,8 @@ ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaAccount.A_zimbraPrefImapSearchFoldersEnabled,
 	ZaAccount.A_zimbraPrefShowSearchString,
 	ZaAccount.A_zimbraPrefMailInitialSearch,
-	ZaAccount.A_zimbraPrefClientType
+	ZaAccount.A_zimbraPrefClientType,
+	ZaAccount.A_zimbraPrefCalendarInitialView
 ];
 ZaAccountXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -1617,9 +1618,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									type:_SUPER_SELECT1_,
 									labelCssStyle:"width:175px",colSizes:["375px","190px"], 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
-									msgName:ZaMsg.NAD_zzimbraPrefClientType,
+									msgName:ZaMsg.MSG_zimbraPrefClientType,
 									label:ZaMsg.LBL_zimbraPrefClientType, 
-									labelLocation:_LEFT_},
+									labelLocation:_LEFT_
+								},
 								{ref:ZaAccount.A_zimbraPrefMailInitialSearch, type:_SUPER_TEXTFIELD_,
 									colSizes:["175px","375px","190px"], 
 									msgName:ZaMsg.LBL_zimbraPrefMailInitialSearch,
@@ -1948,6 +1950,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaAccount.A_zimbraPrefCalendarApptReminderWarningTime,
 									colSizes:["375px","190px"], labelCssStyle:"width:175px", 
 									type:_SUPER_SELECT1_, msgName:ZaMsg.MSG_zimbraPrefCalendarApptReminderWarningTime,label:ZaMsg.LBL_zimbraPrefCalendarApptReminderWarningTime, labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS},
+								{ref:ZaAccount.A_zimbraPrefCalendarInitialView,
+									type:_SUPER_SELECT1_,
+									labelCssStyle:"width:175px",colSizes:["375px","190px"], 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraPrefCalendarInitialView,
+									label:ZaMsg.LBL_zimbraPrefCalendarInitialView, 
+									labelLocation:_LEFT_
+								},									
 								{ref:ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_SUPER_CHECKBOX_,
 								colSizes:["175px","375px","190px"], resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NLBL_zimbraPrefCalendarAlwaysShowMiniCal,checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal, trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraPrefCalendarUseQuickAdd, 

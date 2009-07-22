@@ -274,7 +274,8 @@ ZaCosXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaCos.A_zimbraPrefImapSearchFoldersEnabled,
 	ZaCos.A_zimbraPrefShowSearchString,
 	ZaCos.A_zimbraPrefMailInitialSearch,
-	ZaCos.A_zimbraPrefClientType
+	ZaCos.A_zimbraPrefClientType,
+	ZaCos.A_zimbraPrefCalendarInitialView
 ];
 ZaCosXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -473,7 +474,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 cssStyle:"padding-top:5px; padding-bottom:5px"
             },
             {type:_ZA_PLAIN_GROUPER_, id:"account_prefs_general", items :[
-                {ref:ZaCos.A_zimbraPrefClientType, type:_OSELECT1_, msgName:ZaMsg.LBL_zimbraPrefClientType,
+                {ref:ZaCos.A_zimbraPrefClientType, type:_OSELECT1_, msgName:ZaMsg.MSG_zimbraPrefClientType,
                     label:ZaMsg.LBL_zimbraPrefClientType, labelLocation:_LEFT_
                 },
                 {ref:ZaCos.A_zimbraPrefShowSearchString, type:_CHECKBOX_,
@@ -642,6 +643,9 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                      labelLocation:_LEFT_,
                      labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
                 },
+                {ref:ZaCos.A_zimbraPrefCalendarInitialView, type:_OSELECT1_, msgName:ZaMsg.MSG_zimbraPrefCalendarInitialView,
+                    label:ZaMsg.LBL_zimbraPrefCalendarInitialView, labelLocation:_LEFT_
+                },                
                 {ref:ZaCos.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_CHECKBOX_,
                     msgName:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal,label:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal,
                     trueValue:"TRUE", falseValue:"FALSE",

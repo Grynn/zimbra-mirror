@@ -436,6 +436,15 @@ ZaSettings.SKIN_DW_DOM_ID = "skin_container_dw" ;
 ZaSettings.SKIN_TABS_DOM_ID = "skin_container_app_tabs" ;
 //ZaSettings.SKIN_LOGIN_MSG_ID = "skin_td_login_msg" ;
 
+ZaSettings.calendarViewChoinces = [
+	{value:"day",label:ZaMsg.CalViewDay},
+	{value:"week",label:ZaMsg.CalViewWeek},
+	{value:"workWeek",label:ZaMsg.CalViewWorkWeek},
+	{value:"month",label:ZaMsg.CalViewMonth},
+	{value:"schedule",label:ZaMsg.CalViewSchedule},
+	{value:"list",label:ZaMsg.CalViewList}
+];
+
 ZaSettings.clientTypeChoices = [
 	{value:"advanced", label:ZaMsg.clientAdvanced},
 	{value:"standard", label:ZaMsg.clientStandard}
