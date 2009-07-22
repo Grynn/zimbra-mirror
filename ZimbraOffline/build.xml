@@ -222,7 +222,20 @@
 		<replace file="${dist.dir}/jetty/webapps/zimbra/skins/_base/base/skin.html" token="&lt;a href='javascript:switchToStandardClient()'&gt;&lt;script&gt;document.write(ZmMsg.switchToStandardClient)&lt;/script&gt;&lt;/a&gt;" value=""/>
 		<!--replace file="${dist.dir}/jetty/webapps/zimbra/skins/_base/base/skin.html" token="ZmMsg.splashScreenAppName" value="ZmMsg.splashScreenOfflineName"/-->
 
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/mobile"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/h"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/m"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/img/admin"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/img/htmlEdit"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/img/im"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/img/mobile"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/portals"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/public/slides"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/public/sounds"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/_sample"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/yahoo2"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/test"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/yui"/>
 
 		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/_base/logos/LoginBanner.png" overwrite="true"/>
 		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/_base/logos/ZimbraInside/LoginBanner.png" overwrite="true"/>
