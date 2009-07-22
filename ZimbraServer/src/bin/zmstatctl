@@ -26,6 +26,7 @@ my $isMac = isMac();
 sub arrayContains($$) {
     my ($arrayRef, $val) = @_;
     foreach my $elem (@$arrayRef) {
+    	chomp($elem);
         if ($elem eq $val) {
             return 1;
         }
