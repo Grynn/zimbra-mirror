@@ -2516,26 +2516,6 @@ return true;</string>
                         </serializedBean>
                         <condition>Util.isMacOS()</condition>
                       </action>
-                      <action name="macos.app extension" id="287308" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                              <void property="file">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
-                                </object>
-                              </void>
-                              <void property="replaceValue">
-                                <string>${installer:sys.installationDir}</string>
-                              </void>
-                              <void property="searchValue">
-                                <string>@install@</string>
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
                       <action name="macos.app prism" id="287309" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                         <serializedBean>
                           <java class="java.beans.XMLDecoder">
@@ -2738,31 +2718,6 @@ return true;</string>
                               <void property="sourceFile">
                                 <object class="java.io.File">
                                   <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
-                      </action>
-                      <action name="desktop/prism-runtime" id="287318" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -2978,31 +2933,6 @@ return true;</string>
                               <void property="sourceFile">
                                 <object class="java.io.File">
                                   <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                      <action name="applications/prism-runtime" id="287328" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -4306,7 +4236,7 @@ return true;</string>
                         <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
                           <void property="file">
                             <object class="java.io.File">
-                              <string>macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
+                              <string>macos/prism/Prism.app/Contents/Resources/defaults/preferences/preferences.js</string>
                             </object>
                           </void>
                           <void property="replaceValue">
@@ -4326,7 +4256,7 @@ return true;</string>
                         <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
                           <void property="file">
                             <object class="java.io.File">
-                              <string>win32/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
+                              <string>win32/prism/defaults/preferences/preferences.js</string>
                             </object>
                           </void>
                           <void property="replaceValue">

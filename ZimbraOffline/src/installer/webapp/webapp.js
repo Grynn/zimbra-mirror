@@ -117,37 +117,14 @@ function load() {
   if ("platform" in window) {
     window.platform.icon().behavior = Ci.nsIApplicationIcon.HIDE_ON_MINIMIZE | Ci.nsIApplicationIcon.HIDE_ON_CLOSE;
 
-    var head = window.document.documentElement.firstChild;
-    var command = window.document.createElement("command");
-    head.appendChild(command);
-    command.id = "about";
-    command.setAttribute("label", bundle.GetStringFromName("AboutDesktop"));
-    command.addEventListener("DOMActivate", function(event) {host.showAbout();}, false);
-    window.platform.icon().menu.addMenuItem("about");
-
-    command = window.document.createElement("command");
-    head.appendChild(command);
-    command.id = "checkForUpdates";
-    command.setAttribute("label", bundle.GetStringFromName("CheckUpdates"));
-    command.addEventListener("DOMActivate", function(event) {checkForUpdates();}, false);
-    window.platform.icon().menu.addMenuItem("checkForUpdates");
-
-    command = window.document.createElement("command");
-    head.appendChild(command);
-    command.id = "shutdownService";
-    command.setAttribute("label", bundle.GetStringFromName("ShutdownService"));
-    command.addEventListener("DOMActivate", function(event) {shutdownService();}, false);
-    window.platform.icon().menu.addMenuItem("shutdownService");
+    window.platform.icon().menu.addMenuItem("about", bundle.GetStringFromName("AboutDesktop"), function(){window.platform.showAbout();});
+    window.platform.icon().menu.addMenuItem("checkForUpdates", bundle.GetStringFromName("CheckUpdates"), function(){checkForUpdates();});
+    window.platform.icon().menu.addMenuItem("shutdownService", bundle.GetStringFromName("ShutdownService"), function(){shutdownService();});
 
     var xulRuntime = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime);
     var os = xulRuntime.OS.toLowerCase();
     if (os == "winnt") {
-      command = window.document.createElement("command");
-      head.appendChild(command);
-      command.id = "quitApp";
-      command.setAttribute("label", bundle.GetStringFromName("Quit"));
-      command.addEventListener("DOMActivate", function(event) {quitApp();}, false);
-      window.platform.icon().menu.addMenuItem("quitApp");
+      window.platform.icon().menu.addMenuItem("quitApp", bundle.GetStringFromName("Quit"), function(){quitApp();});
     }
   }
 }

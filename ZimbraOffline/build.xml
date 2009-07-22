@@ -735,11 +735,11 @@
 		<copy file="src/installer/win32/prism/application.ini" todir="${dist.dir}/win32/prism" overwrite="true"/>
 	</target>
 
-	<property name="prism.version.macos" value="090113"/>
-	<property name="prism.version.win32" value="090113"/>
+	<property name="prism.version.macos" value="090709"/>
+	<property name="prism.version.win32" value="090709"/>
 	<property name="prism.version.linux" value="090113"/>
-	<property name="prism.extroot.macos" value="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org"/>
-	<property name="prism.extroot.win32" value="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org"/>
+	<property name="prism.extroot.macos" value="${dist.dir}/macos/prism/Prism.app/Contents/Resources"/>
+	<property name="prism.extroot.win32" value="${dist.dir}/win32/prism"/>
 	<property name="prism.extroot.linux" value="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org"/>
 
 	<macrodef name="translate-prism-files">
@@ -780,7 +780,7 @@
 			<replace file="@{extroot}/chrome/webrunner/content/about.js" token="@buildid@" value="${offline.buildid}"/>
 
 			<copy tofile="@{extroot}/components/ForceOnline.js" file="prism/components/ForceOnline.js" overwrite="true"/>
-        	<copy tofile="@{extroot}/chrome.manifest" file="prism/i18n/chrome.manifest" overwrite="true"/>
+        	<copy tofile="@{extroot}/chrome/chrome.manifest" file="prism/i18n/chrome.manifest" overwrite="true"/>
 
 			<translate-prism-files extroot="@{extroot}" language="en" country="US"/>
 			<translate-prism-files extroot="@{extroot}" language="fr"/>
@@ -809,7 +809,6 @@
 		<unzip src="${prism.src.dir}/linux/${prism.version.linux}/drop/prism-${prism.version.linux}.linux.zip" dest="${dist.dir}/linux/prism" overwrite="true"/>
 
 		<!-- delete unused refractor extensions from win32 and linux -->
-		<delete dir="${dist.dir}/win32/prism/extensions/refractor@developer.mozilla.org"/>
 		<delete dir="${dist.dir}/linux/prism/extensions/refractor@developer.mozilla.org"/>
 
 		<!-- rename prism executables on win32 and linux to zdclient -->
@@ -823,6 +822,7 @@
 		<patch-prism-files os="linux" version="${prism.version.linux}" extroot="${prism.extroot.linux}"/>
 
 		<!-- use firefox xulrunner to replace the one comes with prism -->
+<!--
 		<delete>
 			<fileset dir="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework"/>
 			<fileset dir="${dist.dir}/win32/prism/xulrunner"/>
@@ -831,6 +831,7 @@
        	<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.macos.zip" dest="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks"/>
        	<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.win32.zip" dest="${dist.dir}/win32/prism"/>
        	<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.linux.zip" dest="${dist.dir}/linux/prism"/>
+-->
 		<copy todir="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/chrome" overwrite="true">
 			<fileset dir="${xulrunner.src.dir}/locales" includes="*.manifest *.jar"/>
 		</copy>
@@ -857,8 +858,8 @@
 		<chmod file="${dist.dir}/linux/prism/prism" perm="ugo+x"/>
 
 		<!-- fix things that are specific to each platform -->
-		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
-		<copy tofile="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
+		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
+		<copy tofile="${dist.dir}/win32/prism/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 	
 		<!-- unzip zimbra drag and drop extension -->

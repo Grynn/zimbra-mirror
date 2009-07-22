@@ -1,74 +1,68 @@
-content branding chrome/webrunner/branding/
-resource prism-runtime .
-content webrunner chrome/webrunner/content/ xpcnativewrappers=no
-skin webrunner classic/1.0 chrome/classic/
-overlay chrome://mozapps/content/downloads/unknownContentType.xul chrome://webrunner/content/unknownContentType.xul
+locale webrunner en-US en-US/
+locale branding en-US en-US/branding/
+locale webapp en-US en-US/webapp/
 
-locale webrunner en-US chrome/en-US/
-locale branding en-US chrome/en-US/branding/
-locale webapp en-US chrome/en-US/webapp/
+locale webrunner fr fr/
+locale branding fr fr/branding/
+locale webapp fr fr/webapp/
 
-locale webrunner fr chrome/fr/
-locale branding fr chrome/fr/branding/
-locale webapp fr chrome/fr/webapp/
+locale webrunner da da/
+locale branding da da/branding/
+locale webapp da da/webapp/
 
-locale webrunner da chrome/da/
-locale branding da chrome/da/branding/
-locale webapp da chrome/da/webapp/
+locale webrunner de de/
+locale branding de de/branding/
+locale webapp de de/webapp/
 
-locale webrunner de chrome/de/
-locale branding de chrome/de/branding/
-locale webapp de chrome/de/webapp/
+locale webrunner en-AU en-AU/
+locale branding en-AU en-AU/branding/
+locale webapp en-AU en-AU/webapp/
 
-locale webrunner en-AU chrome/en-AU/
-locale branding en-AU chrome/en-AU/branding/
-locale webapp en-AU chrome/en-AU/webapp/
+locale webrunner en-GB en-GB/
+locale branding en-GB en-GB/branding/
+locale webapp en-GB en-GB/webapp/
 
-locale webrunner en-GB chrome/en-GB/
-locale branding en-GB chrome/en-GB/branding/
-locale webapp en-GB chrome/en-GB/webapp/
+locale webrunner es-ES es-ES/
+locale branding es-ES es-ES/branding/
+locale webapp es-ES es-ES/webapp/
 
-locale webrunner es-ES chrome/es-ES/
-locale branding es-ES chrome/es-ES/branding/
-locale webapp es-ES chrome/es-ES/webapp/
+locale webrunner it it/
+locale branding it it/branding/
+locale webapp it it/webapp/
 
-locale webrunner it chrome/it/
-locale branding it chrome/it/branding/
-locale webapp it chrome/it/webapp/
+locale webrunner ja ja/
+locale branding ja ja/branding/
+locale webapp ja ja/webapp/
 
-locale webrunner ja chrome/ja/
-locale branding ja chrome/ja/branding/
-locale webapp ja chrome/ja/webapp/
+locale webrunner ko ko/
+locale branding ko ko/branding/
+locale webapp ko ko/webapp/
 
-locale webrunner ko chrome/ko/
-locale branding ko chrome/ko/branding/
-locale webapp ko chrome/ko/webapp/
+locale webrunner nl nl/
+locale branding nl nl/branding/
+locale webapp nl nl/webapp/
 
-locale webrunner nl chrome/nl/
-locale branding nl chrome/nl/branding/
-locale webapp nl chrome/nl/webapp/
+locale webrunner pl pl/
+locale branding pl pl/branding/
+locale webapp pl pl/webapp/
 
-locale webrunner pl chrome/pl/
-locale branding pl chrome/pl/branding/
-locale webapp pl chrome/pl/webapp/
+locale webrunner pt-BR pt-BR/
+locale branding pt-BR pt-BR/branding/
+locale webapp pt-BR pt-BR/webapp/
 
-locale webrunner pt-BR chrome/pt-BR/
-locale branding pt-BR chrome/pt-BR/branding/
-locale webapp pt-BR chrome/pt-BR/webapp/
+locale webrunner ru ru/
+locale branding ru ru/branding/
+locale webapp ru ru/webapp/
 
-locale webrunner ru chrome/ru/
-locale branding ru chrome/ru/branding/
-locale webapp ru chrome/ru/webapp/
+locale webrunner sv sv/
+locale branding sv sv/branding/
+locale webapp sv sv/webapp/
 
-locale webrunner sv chrome/sv/
-locale branding sv chrome/sv/branding/
-locale webapp sv chrome/sv/webapp/
+locale webrunner zh-CN zh-CN/
+locale branding zh-CN zh-CN/branding/
+locale webapp zh-CN zh-CN/webapp/
 
-locale webrunner zh-CN chrome/zh-CN/
-locale branding zh-CN chrome/zh-CN/branding/
-locale webapp zh-CN chrome/zh-CN/webapp/
-
-locale webrunner zh-HK chrome/zh-HK/
-locale branding zh-HK chrome/zh-HK/branding/
-locale webapp zh-HK chrome/zh-HK/webapp/
+locale webrunner zh-HK zh-HK/
+locale branding zh-HK zh-HK/branding/
+locale webapp zh-HK zh-HK/webapp/
 
