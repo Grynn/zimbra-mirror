@@ -400,7 +400,7 @@ sub init() {
 sub run() {
     my $dbh = init();
     my $opened;
-    my $logregex = qr/(^.{15}) ((\d+\.\d+\.\d+\.\d+) \S+|(\S+)) ([^[]+)(\[(\d+)\])?: (.*)$/o;
+    my $logregex = qr/(^.{15}) ((\d+\.\d+\.\d+\.\d+)|(\S+)) ([^[]+)(\[(\d+)\])?: (.*)$/o;
 
     my $fragre = qr/:::(\w{8}-\w{4}-\w{4}-\w{4}-\w{12}):::$/o;
     my $fragnextre = qr/.*:::(\w{8}-\w{4}-\w{4}-\w{4}-\w{12}):::(?!$)/o;

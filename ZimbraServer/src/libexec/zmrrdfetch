@@ -18,28 +18,33 @@ sub gethostid($$) {
     my $sth = $dbh->prepare("SELECT id FROM hosts WHERE zm_hostname = ?");
     $sth->bind_param(1, $hostname);
     $sth->execute;
-    my @row = $sth->fetchrow_array();
+    my $rows = $sth->fetchall_arrayref([0]);
     die $sth->err if $sth->err;
     $sth->finish;
-    return $row[0];
+    return [ map $_->[0], @$rows ];
 }
 
 sub getdatastructure($$$) {
     my ($dbh, $file, $hostid) = @_;
     my $ref = undef;
-    if ($hostid != -1) {
+    if (@$hostid > 0) {
+    	my @placeholders = map('?', @$hostid);
+    	my $ps = join(',', @placeholders);
         my $sth = $dbh->prepare(q{
-            SELECT col_name, col_name_19, col_num, rrd_file FROM rrds
-            WHERE host_id = ? AND csv_file = ?
+            SELECT col_name, col_name_19, col_num, rrd_file, host_id FROM rrds
+            WHERE csv_file = ? AND host_id IN ($ps)
         });
-        $sth->bind_param(1, $hostid);
-        $sth->bind_param(2, $file);
+        $sth->bind_param(1, $file);
+        my $i;
+        for ($i = 0; $i < @$hostid; $i++) {
+            $sth->bind_param($i + 2, int($hostid->[$i]));
+        }
         $sth->execute;
         die $sth->err if $sth->err;
         $ref = $sth->fetchall_hashref('col_name');
     } else {
         my $sth = $dbh->prepare(q{
-            SELECT col_name, col_name_19, col_num, rrd_file, zm_hostname
+            SELECT col_name, col_name_19, col_num, rrd_file, zm_hostname, host_id
             FROM rrds join hosts ON hosts.id = rrds.host_id
             WHERE csv_file = ?
         });
@@ -52,6 +57,8 @@ sub getdatastructure($$$) {
             my $host = $row->{'zm_hostname'};
             my $colname = $row->{'col_name'};
             $hash{$host} = {} if (!exists $hash{$host});
+            $hash{$host}->{'host_id'} = $row->{'host_id'};
+            print "hostid: " . $row->{'host_id'} . "\n";
             $hash{$host}->{$colname} = {};
             $hash{$host}->{$colname}->{'col_name_19'} = $row->{'col_name_19'};
             $hash{$host}->{$colname}->{'col_num'}     = $row->{'col_num'};
@@ -100,6 +107,7 @@ sub dump_data($$$$$) {
     my %files;
 
     foreach my $column (keys %$structure) {
+    	next if $column eq 'host_id';
         $col19col{$structure->{$column}->{'col_name_19'}} = $column;
         $files{$structure->{$column}->{'rrd_file'}} = 1;
     }
@@ -200,7 +208,7 @@ sub list_hosts($) {
 }
 sub run() {
     my %options;
-    my $hostid = -1;
+    my $hostid = [];
     getopts('f:h:s:e:lnc', \%options);
 
     my $filename = $options{f};
@@ -218,14 +226,14 @@ sub run() {
     $hostid = gethostid($dbh, $options{h}) if (exists $options{h});
     my $structure = getdatastructure($dbh, $filename, $hostid);
     die "no structure found for $filename" if (!$structure);
-    if ($hostid == -1) {
+    if (@$hostid == 0) {
         foreach my $host (keys %$structure) {
             print "\nHost: $host\n\n";
-            $hostid = gethostid($dbh, $host);
-            dump_data($hostid, $structure->{$host}, $start, $end, $options{c});
+            dump_data($structure->{$host}->{'host_id'}, $structure->{$host}, $start, $end, $options{c});
         }
     } else {
-        dump_data($hostid, $structure, $start, $end, $options{c});
+    	my $somekey = (keys(%$structure))[0];
+        dump_data($structure->{$somekey}->{'host_id'}, $structure, $start, $end, $options{c});
     }
     $dbh->disconnect;
 }
