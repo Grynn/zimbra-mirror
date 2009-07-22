@@ -112,6 +112,7 @@ ZaCos.A_zimbraPrefMailSendReadReceipts = "zimbraPrefMailSendReadReceipts";
 ZaCos.A_zimbraPrefAdminConsoleWarnOnExit = "zimbraPrefAdminConsoleWarnOnExit" ;
 
 //features
+ZaCos.A_zimbraPrefCalendarFirstDayOfWeek = "zimbraPrefCalendarFirstDayOfWeek"; 
 ZaCos.A_zimbraFeatureReadReceiptsEnabled = "zimbraFeatureReadReceiptsEnabled";
 ZaCos.A_zimbraFeatureMailPriorityEnabled = "zimbraFeatureMailPriorityEnabled";
 ZaCos.A_zimbraFeatureIMEnabled = "zimbraFeatureIMEnabled";
@@ -566,7 +567,8 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraQuotaWarnMessage, type:_STRING_, ref:"attrs/" + ZaCos.A_zimbraQuotaWarnMessage},
 
 //pref
-		{id:ZaCos.A_zimbraPrefCalendarInitialView, type:_COS_ENUM_, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarInitialView, choices:ZaSettings.calendarViewChoinces},
+		{id:ZaCos.A_zimbraPrefCalendarFirstDayOfWeek, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarFirstDayOfWeek, choices:ZaSettings.dayOfWeekChoices},
+		{id:ZaCos.A_zimbraPrefCalendarInitialView, type:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarInitialView, choices:ZaSettings.calendarViewChoinces},
         {id:ZaCos.A_zimbraPrefClientType,type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraPrefClientType, choices:ZaSettings.clientTypeChoices},
         {id:ZaCos.A_zimbraPrefTimeZoneId,type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraPrefTimeZoneId, choices:ZaSettings.timeZoneChoices},
         {id:ZaCos.A_zimbraPrefGroupMailBy, type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraPrefGroupMailBy},

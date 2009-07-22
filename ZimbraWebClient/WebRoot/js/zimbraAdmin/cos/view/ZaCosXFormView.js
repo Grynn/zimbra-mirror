@@ -275,7 +275,8 @@ ZaCosXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaCos.A_zimbraPrefShowSearchString,
 	ZaCos.A_zimbraPrefMailInitialSearch,
 	ZaCos.A_zimbraPrefClientType,
-	ZaCos.A_zimbraPrefCalendarInitialView
+	ZaCos.A_zimbraPrefCalendarInitialView,
+	ZaCos.A_zimbraPrefCalendarFirstDayOfWeek
 ];
 ZaCosXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -639,19 +640,24 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                      labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
                 },
                 {ref:ZaCos.A_zimbraPrefCalendarApptReminderWarningTime, type:_OSELECT1_,
-                     msgName:ZaMsg.MSG_zimbraPrefCalendarApptReminderWarningTime,label:ZaMsg.LBL_zimbraPrefCalendarApptReminderWarningTime,
+                     msgName:ZaMsg.MSG_zimbraPrefCalendarApptReminderWarningTime,
+                     label:ZaMsg.LBL_zimbraPrefCalendarApptReminderWarningTime,
                      labelLocation:_LEFT_,
                      labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
                 },
                 {ref:ZaCos.A_zimbraPrefCalendarInitialView, type:_OSELECT1_, msgName:ZaMsg.MSG_zimbraPrefCalendarInitialView,
                     label:ZaMsg.LBL_zimbraPrefCalendarInitialView, labelLocation:_LEFT_
-                },                
+                },
+				{ref:ZaCos.A_zimbraPrefCalendarFirstDayOfWeek, type:_OSELECT1_,
+                    msgName:ZaMsg.LBL_zimbraPrefCalendarFirstDayOfWeek,
+                    label:ZaMsg.LBL_zimbraPrefCalendarFirstDayOfWeek, labelLocation:_LEFT_,
+                    labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                },                                
                 {ref:ZaCos.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_CHECKBOX_,
                     msgName:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal,label:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal,
                     trueValue:"TRUE", falseValue:"FALSE",
                     labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
                 },
-
                 {ref:ZaCos.A_zimbraPrefCalendarUseQuickAdd, type:_CHECKBOX_, msgName:ZaMsg.NAD_useQuickAdd,
                     label:ZaMsg.LBL_zimbraPrefCalendarUseQuickAdd, trueValue:"TRUE", falseValue:"FALSE"
                 },

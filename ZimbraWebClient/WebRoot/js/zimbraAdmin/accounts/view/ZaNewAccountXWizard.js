@@ -1217,7 +1217,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                                 	msgName:ZaMsg.MSG_zimbraPrefCalendarInitialView,
                                     label:ZaMsg.LBL_zimbraPrefCalendarInitialView, labelLocation:_LEFT_, 
                                     resetToSuperLabel:ZaMsg.NAD_ResetToCOS
-                                },															
+                                },
+                              	{ref:ZaAccount.A_zimbraPrefCalendarFirstDayOfWeek, 
+                              		type:_SUPERWIZ_SELECT1_, 
+                              		msgName:ZaMsg.LBL_zimbraPrefCalendarFirstDayOfWeek,
+                              		label:ZaMsg.LBL_zimbraPrefCalendarFirstDayOfWeek, labelLocation:_LEFT_, 
+                              		resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+                              	},
 								{ref:ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal,checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal, trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraPrefCalendarUseQuickAdd, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefCalendarUseQuickAdd,checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarUseQuickAdd, trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraPrefUseTimeZoneListInCalendar, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefUseTimeZoneListInCalendar,checkBoxLabel:ZaMsg.LBL_zimbraPrefUseTimeZoneListInCalendar,trueValue:"TRUE", falseValue:"FALSE"}

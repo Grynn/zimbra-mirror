@@ -880,7 +880,8 @@ ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaAccount.A_zimbraPrefShowSearchString,
 	ZaAccount.A_zimbraPrefMailInitialSearch,
 	ZaAccount.A_zimbraPrefClientType,
-	ZaAccount.A_zimbraPrefCalendarInitialView
+	ZaAccount.A_zimbraPrefCalendarInitialView,
+	ZaAccount.A_zimbraPrefCalendarFirstDayOfWeek
 ];
 ZaAccountXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -1956,6 +1957,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraPrefCalendarInitialView,
 									label:ZaMsg.LBL_zimbraPrefCalendarInitialView, 
+									labelLocation:_LEFT_
+								},
+								{ref:ZaAccount.A_zimbraPrefCalendarFirstDayOfWeek, 
+									type:_SUPER_SELECT1_,
+									labelCssStyle:"width:175px",colSizes:["375px","190px"], 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraPrefCalendarFirstDayOfWeek,
+									label:ZaMsg.LBL_zimbraPrefCalendarFirstDayOfWeek, 
 									labelLocation:_LEFT_
 								},									
 								{ref:ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_SUPER_CHECKBOX_,

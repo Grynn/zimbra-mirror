@@ -445,6 +445,16 @@ ZaSettings.calendarViewChoinces = [
 	{value:"list",label:ZaMsg.CalViewList}
 ];
 
+ZaSettings.dayOfWeekChoices = [
+	{value:0,label:ZaMsg.Sunday},
+	{value:1,label:ZaMsg.Monday},
+	{value:2,label:ZaMsg.Tuesday},
+	{value:3,label:ZaMsg.Wednesday},
+	{value:4,label:ZaMsg.Thursday},
+	{value:5,label:ZaMsg.Friday},
+	{value:6,label:ZaMsg.Saturday}
+];
+
 ZaSettings.clientTypeChoices = [
 	{value:"advanced", label:ZaMsg.clientAdvanced},
 	{value:"standard", label:ZaMsg.clientStandard}
