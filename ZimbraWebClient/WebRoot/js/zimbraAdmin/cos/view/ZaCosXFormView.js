@@ -244,7 +244,7 @@ ZaCosXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaCos.A_zimbraPrefAutoAddAddressEnabled,
 	ZaCos.A_zimbraPrefMailSignature,
 	ZaCos.A_zimbraMailSignatureMaxLength,
-	ZaCos.A_zimbraPrefMailSignatureStyle,
+	//ZaCos.A_zimbraPrefMailSignatureStyle,
 	ZaCos.A_zimbraPrefMailSignatureEnabled,
 	ZaCos.A_zimbraPrefForwardReplyInOriginalFormat,
 	ZaCos.A_zimbraPrefHtmlEditorDefaultFontColor,
@@ -595,11 +595,11 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     msgName:ZaMsg.LBL_zimbraPrefForwardReplyInOriginalFormat,
                     label:ZaMsg.LBL_zimbraPrefForwardReplyInOriginalFormat, trueValue:"TRUE", falseValue:"FALSE"
                 },
-                {ref:ZaCos.A_zimbraPrefMailSignatureStyle, type:_CHECKBOX_,
+               /* {ref:ZaCos.A_zimbraPrefMailSignatureStyle, type:_CHECKBOX_,
                     msgName:ZaMsg.LBL_zimbraPrefMailSignatureStyle,
                     label:ZaMsg.LBL_zimbraPrefMailSignatureStyle,
                     trueValue:"internet", falseValue:"outlook"
-                },
+                },*/
                 {ref:ZaCos.A_zimbraMailSignatureMaxLength, type:_TEXTFIELD_,
                     msgName:ZaMsg.LBL_zimbraMailSignatureMaxLength,
                     label:ZaMsg.LBL_zimbraMailSignatureMaxLength, labelLocation:_LEFT_,
