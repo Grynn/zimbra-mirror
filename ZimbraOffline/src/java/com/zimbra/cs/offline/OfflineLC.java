@@ -96,6 +96,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_mail_uncompressed_cache_max_bytes;
     public static final KnownKey zdesktop_mail_uncompressed_cache_max_files;
     public static final KnownKey zdesktop_message_cache_size;
+    public static final KnownKey zdesktop_volume_compression_threshold;
 
     static void init() {
         // This method is there to guarantee static initializer of this
@@ -126,7 +127,7 @@ public class OfflineLC {
         zdesktop_skins.setDoc("Comma delimited list of installed skins.");
 	    
         zdesktop_redolog_enabled = new KnownKey("zdesktop_redolog_enabled");
-        zdesktop_redolog_enabled.setDefault("true");
+        zdesktop_redolog_enabled.setDefault("false");
         zdesktop_redolog_enabled.setDoc("Whether to use redolog.  Default false.");
     	
         zdesktop_sync_timer_frequency = new KnownKey("zdesktop_sync_timer_frequency");
@@ -322,6 +323,7 @@ public class OfflineLC {
         zdesktop_mail_uncompressed_cache_max_bytes = new KnownKey("zdesktop_mail_uncompressed_cache_max_bytes", "20971520", "max number of bytes in the uncompressed blob cache on disk");
         zdesktop_mail_uncompressed_cache_max_files = new KnownKey("zdesktop_mail_uncompressed_cache_max_files", "20", "max number of files in the uncompressed blob cache on disk");
         zdesktop_message_cache_size = new KnownKey("zdesktop_message_cache_size", "25", "maximum number of JavaMail MimeMessage objects in the message cache");
+        zdesktop_volume_compression_threshold = new KnownKey("zdesktop_volume_compression_threshold", "131072", "size threshold for blob store compression");
     }
     
     public static String getFullVersion() {

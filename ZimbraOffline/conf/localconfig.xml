@@ -121,4 +121,7 @@
   <key name="zdesktop_message_cache_size">
     <value>25</value>
   </key>
+  <key name="zdesktop_volume_compression_threshold">
+    <value>131072</value>
+  </key>
 </localconfig>
