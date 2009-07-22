@@ -3440,9 +3440,17 @@ return !hasFailures;</string>
                         </object>
                       </void>
                       <void property="text">
-                        <string>user_pref("intl.accept_languages", "@languageId@");
+                        <string>
 user_pref("general.useragent.locale", "@languageId@");
-user_pref("spellchecker.dictionary", "@languageId@");</string>
+user_pref("intl.accept_languages", "@languageId@");
+user_pref("spellchecker.dictionary", "@languageId@");
+user_pref("browser.cache.disk.capacity", "6144");
+user_pref("browser.cache.memory.capacity", "6144");
+user_pref("browser.sessionhistory.max_total_viewers", "2");
+user_pref("config.trim_on_minimize", "true");
+user_pref("network.http.pipelining", "true");
+user_pref("nglayout.initialpaint.delay", "150");
+                        </string>
                       </void>
                     </object>
                   </java>
