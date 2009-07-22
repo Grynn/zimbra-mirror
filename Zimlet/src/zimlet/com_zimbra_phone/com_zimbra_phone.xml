@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_phone" version="2.0" description="Highlights phone numbers, Skype call numbers or add to contacts">
+<zimlet name="com_zimbra_phone" version="2.0" target="main view-window" description="Highlights phone numbers, Skype call numbers or add to contacts">
 	<serverExtension hasKeyword="phone" extensionClass="com.zimbra.cs.zimlet.handler.NANPHandler"/>
 	<include>phone.js</include>
 	<include>templates/Phone.template.js</include>
