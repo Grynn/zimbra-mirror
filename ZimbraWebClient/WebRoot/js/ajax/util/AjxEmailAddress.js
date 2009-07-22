@@ -33,6 +33,7 @@ AjxEmailAddress = function(address, type, name, dispName, isGroup) {
 	this.dispName = dispName;
 	this.type = type || AjxEmailAddress.TO;
 	this.isGroup = isGroup;
+    this.isAjxEmailAddress = true;
 };
 
 AjxEmailAddress.FROM		= "FROM";
@@ -369,6 +370,13 @@ function() {
 	var addr = new AjxEmailAddress(this.address, this.type, this.name, this.dispName);
 	addr.icon = this.icon;
 	return addr;
+};
+
+AjxEmailAddress.copy =
+function(obj){    
+    var addr = new AjxEmailAddress(obj.address, obj.type, obj.name, obj.dispName);
+    addr.icon = obj.icon;
+    return addr;
 };
 
 AjxEmailAddress.prototype._setName =
