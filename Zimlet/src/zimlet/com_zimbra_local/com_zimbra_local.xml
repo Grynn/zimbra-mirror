@@ -17,7 +17,7 @@
 
 	<handlerObject>Com_Zimbra_Local</handlerObject>
 
-	<zimletPanelItem label="${msg.local}" icon="YLogo">
+	<zimletPanelItem label="Local" icon="YLogo">
 		<toolTipText>${msg.panelTooltip}</toolTipText>
 		<contextMenu>
 			<menuItem label="${msg.menuItemSearch}" id="SEARCH" />
