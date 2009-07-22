@@ -101,7 +101,7 @@ olcDbMode: 0600
 olcDbSearchStack: 16
 olcDbShmKey: 0
 olcDbCacheFree: 1
-olcDbDNcacheSize: 20000
+olcDbDNcacheSize: 500000
 structuralObjectClass: olcHdbConfig
 entryUUID: 152ab0a8-333e-102d-8700-d562901af228
 creatorsName: cn=config
