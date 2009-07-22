@@ -49,47 +49,21 @@ Com_Zimbra_SForce.prototype.init = function() {
     if (ZmAssistant && ZmAssistant.register) ZmAssistant.register(asst);
 };
 
-Com_Zimbra_SForce.prototype.onShowView = function(viewId, isNewView) {
-	 if (viewId == ZmId.VIEW_COMPOSE && !this._toolbar){
-        this._initComposeSFToolbar();
-     }
+Com_Zimbra_SForce.prototype.initializeToolbar = function(app, toolbar, controller, viewId) {
+	if(viewId.indexOf("COMPOSE") >=0)
+		this._initComposeSFToolbar(toolbar, controller);
 };
 
-Com_Zimbra_SForce.prototype._initComposeSFToolbar = function() {
-
-        if (!appCtxt.get(ZmSetting.MAIL_ENABLED))
-                this._toolbar = true;
-
-        if (this._toolbar)
-                return;
-
-        // Add the Salesforce Button to the Compose Page
-        this._composerCtrl = AjxDispatcher.run("GetComposeController");
-        this._composerCtrl._sforce = this;
-        if(!this._composerCtrl._toolbar) {
-                // initialize the compose controller's toolbar
-                this._composerCtrl._initializeToolBar();
-        }
-
-        this._toolbar = this._composerCtrl._toolbar;
-        // Add button to toolbar
-        if (!this._toolbar.getButton(Com_Zimbra_SForce.SFORCE)) {
-	        ZmMsg.sforceAdd = "Send & Add";
-	        ZmMsg.sforceTooltip = "Send and add to Salesforce.";
-
-                var btn = this._toolbar.createOp(
-                        Com_Zimbra_SForce.SFORCE,
-                        {
-                                text    : ZmMsg.sforceAdd,
-	    	                tooltip : ZmMsg.sforceTooltip,
-                                index   : 1,
-	    	                image   : "SFORCE-panelIcon"
-                        }
-                );
-
-	        btn.addSelectionListener(new AjxListener(this._composerCtrl, this._sendAddSForce));
-        }
-
+Com_Zimbra_SForce.prototype._initComposeSFToolbar = function(toolbar, controller) {
+	if (!toolbar.getButton(Com_Zimbra_SForce.SFORCE)) {
+		ZmMsg.sforceAdd = "Send & Add";
+		ZmMsg.sforceTooltip = "Send and add to Salesforce.";
+		var btn = toolbar.createOp(Com_Zimbra_SForce.SFORCE, {text:ZmMsg.sforceAdd, tooltip:ZmMsg.sforceTooltip, index:1, image:"SFORCE-panelIcon"});
+		toolbar.addOp(Com_Zimbra_SForce.SFORCE, 2);
+		this._composerCtrl = controller;
+		this._composerCtrl._sforce = this;
+	    btn.addSelectionListener(new AjxListener(this._composerCtrl, this._sendAddSForce));			
+	}
 };
 
 
@@ -930,11 +904,7 @@ Com_Zimbra_SForce.prototype.singleClicked = function() {
 	this.login();
 };
 
-// Com_Zimbra_SForce.prototype.onContactModified = function(contact, mods) {
-// 	for (var i in mods)
-// 		contact[i] = mods[i];
-// 	this.doDrop(contact);	// delegate
-// };
+
 
 /// Called by the Zimbra framework when some menu item that doesn't have an
 /// <actionURL> was selected
