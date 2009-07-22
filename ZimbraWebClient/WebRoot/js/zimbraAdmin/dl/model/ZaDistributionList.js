@@ -255,8 +255,12 @@ ZaDistributionList.modifyMethod = function(mods, obj) {
 				continue; //skip uid, it is changed throw a separate request
 			}
 			if(obj.attrs[a] instanceof Array) {
-	   			if (!this.attrs[a]) 
+	   			if (!this.attrs[a]) {
 	   				this.attrs[a] = [] ;
+                 }else if (!(this.attrs[a] instanceof Array)) {
+                       this.attrs[a] = [this.attrs[a]] ;
+                   }
+
 	       		if( obj.attrs[a].join(",").valueOf() !=  this.attrs[a].join(",").valueOf()) {
 					//mods[a] = obj.attrs[a];
 					var cnt = obj.attrs[a].length;
