@@ -1,0 +1,20 @@
+--- openldap-2.4.17/servers/slapd/connection.c	28 Jun 2009 19:23:59 -0000	1.441
++++ openldap-2.4.17/servers/slapd/connection.c	21 Jul 2009 00:04:46 -0000	1.442
+@@ -249,7 +249,7 @@ int connections_timeout_idle(time_t now)
+ 			i++;
+ 			continue;
+ 		}
+-		if ( c->c_writewaiter ) {
++		if ( c->c_writewaiter && global_writetimeout ) {
+ 			writers = 1;
+ 			if( difftime( c->c_activitytime+global_writetimeout, now) < 0 ) {
+ 				/* close it */
+@@ -260,7 +260,7 @@ int connections_timeout_idle(time_t now)
+ 		}
+ 	}
+ 	connection_done( c );
+-	if ( !writers )
++	if ( old && !writers )
+ 		slapd_clr_writetime( old );
+ 
+ 	return i;
