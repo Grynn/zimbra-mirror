@@ -71,6 +71,13 @@ DwtComboBox.prototype.getTabGroupMember = function() {
 	return this._tabGroup;
 };
 
+DwtComboBox.prototype.addChangeListener = function(listener) {
+	this.addListener(DwtEvent.ONCHANGE, listener);
+};
+DwtComboBox.prototype.removeChangeListener = function(listener) {
+	this.removeListener(DwtEvent.ONCHANGE, listener);
+};
+
 /**
  * Adds an entry to the combo box.
  * 
@@ -199,10 +206,31 @@ function(menu, text) {
 DwtComboBox.prototype._menuItemListener =
 function(ev) {
 	var menuItem = ev.dwtObj;
-	this.input.setValue(menuItem.getText());
+	var ovalue = this.input.getValue();
+	var nvalue = menuItem.getText();
+	this.input.setValue(nvalue);
+
+	// notify our listeners
+	var event = DwtUiEvent.getEvent(ev);
+	event._args = { selectObj: this, newValue: nvalue, oldValue: ovalue };
+	this.notifyListeners(DwtEvent.ONCHANGE, event);
+
 	var input = this.input.getInputElement();
 	input.focus();
 	input.select();
+};
+
+DwtComboBox.prototype._handleKeyDown = function(ev) {
+	this.__ovalue = this.input.getValue();
+	return true;
+};
+
+DwtComboBox.prototype._handleKeyUp = function(ev) {
+	// notify our listeners
+	var event = DwtUiEvent.getEvent(ev);
+	event._args = { selectObj: this, newValue: this.input.getValue(), oldValue: this.__ovalue };
+	this.notifyListeners(DwtEvent.ONCHANGE, event);
+	return true;
 };
 
 DwtComboBox.prototype._updateButton =
@@ -226,7 +254,9 @@ DwtComboBox.prototype._createHtmlFromTemplate = function(templateId, data) {
     
     this.input = new DwtInputField(inputParams);
     this.input.replaceElement(data.id + "_input");
-    
+	this.input.setHandler(DwtEvent.ONKEYDOWN, AjxCallback.simpleClosure(this._handleKeyDown, this));
+	this.input.setHandler(DwtEvent.ONKEYUP, AjxCallback.simpleClosure(this._handleKeyUp, this));
+
     this._button = new DwtComboBoxButton({parent:this});
 	this._button.setMenu(new AjxListener(this, this._createMenu), true);
     this._button.replaceElement(data.id + "_button");

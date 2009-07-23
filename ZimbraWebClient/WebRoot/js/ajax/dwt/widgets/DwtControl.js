@@ -2820,7 +2820,7 @@ DwtControl.__HANDLER[DwtEvent.ONKEYPRESS] = DwtControl.__keyPressHdlr;
 DwtControl.prototype.__initCtrl =
 function() {
 	this.shell = this.parent.shell || this.parent;
-	var htmlElement = this._elRef = document.createElement("div");
+	var htmlElement = this._elRef = this._createElement();
 	// __internalId is for back-compatibility (was side effect of Dwt.associateElementWithObject)
 	this._htmlElId = htmlElement.id = this.__internalId = this._htmlElId || Dwt.getNextId();
 	if (DwtControl.ALL_BY_ID) {
@@ -2845,6 +2845,10 @@ function() {
 
 	// Make sure this is the last thing we do
 	this.parent.addChild(this, this.__index);
+};
+
+DwtControl.prototype._createElement = function() {
+	return document.createElement("DIV")
 };
 
 /**

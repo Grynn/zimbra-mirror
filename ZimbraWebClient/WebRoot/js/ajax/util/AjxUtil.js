@@ -383,16 +383,18 @@ function(array, object, strict) {
 	return -1;
 };
 
-AjxUtil.keys = function(object) {
+AjxUtil.keys = function(object, acceptFunc) {
     var keys = [];
     for (var p in object) {
+	    if (acceptFunc && !acceptFunc(p, object)) continue;
         keys.push(p);
     }
     return keys;
 };
-AjxUtil.values = function(object) {
+AjxUtil.values = function(object, acceptFunc) {
     var values = [];
     for (var p in object) {
+	    if (acceptFunc && !acceptFunc(p, object)) continue;
         values.push(object[p]);
     }
     return values;

@@ -30,6 +30,8 @@ DwtForm = function(params) {
 	};
 
 	// construct form
+	this._dirty = {};
+	this._invalid = {};
 	this.setModel(params.model);
 	this.setForm(params.form);
 	this.reset();
@@ -52,6 +54,14 @@ DwtForm.PARAMS = DwtControl.PARAMS.concat("form", "model");
 //
 
 DwtForm.prototype.setValue = function(id, value, force) {
+	if (id.match(/\./) || id.match(/\[/)) {
+		var parts = id.replace(/\[(\d+)\](\.)?/,".$1$2").split(".");
+		var control = this.getControl(parts[0]);
+		if (Dwt.instanceOf(control, "DwtForm")) {
+			control.setValue(parts.slice(1).join("."), value, force);
+		}
+		return;
+	}
 	var item = this._items[id];
 	if (!item) return;
 	if (!force && value == item.value) return;
@@ -59,6 +69,14 @@ DwtForm.prototype.setValue = function(id, value, force) {
 	this._setControlValue(id, value);
 };
 DwtForm.prototype.getValue = function(id, defaultValue) {
+	if (id.match(/\./) || id.match(/\[/)) {
+		var parts = id.replace(/\[(\d+)\](\.)?/,".$1$2").split(".");
+		var control = this.getControl(parts[0]);
+		if (Dwt.instanceOf(control, "DwtForm")) {
+			return control.getValue(parts.slice(1).join("."));
+		}
+		return null;
+	}
 	var item = this._items[id];
 	if (!item) return;
 	if (item.getter) {
@@ -199,11 +217,14 @@ DwtForm.prototype.getInvalidItems = function() {
 	return AjxUtil.keys(this._invalid);
 };
 
-DwtForm.prototype.setDirty = function(id, dirty) {
+DwtForm.prototype.setDirty = function(id, dirty, skipNotify) {
 	if (typeof id == "boolean") {
 		dirty = arguments[0];
 		for (id in this._items) {
-			this.setDirty(id, dirty);
+			this.setDirty(id, dirty, true);
+		}
+		if (!skipNotify && this._ondirty) {
+			this._call(this._ondirty, ["*"]);
 		}
 		return;
 	}
@@ -213,18 +234,36 @@ DwtForm.prototype.setDirty = function(id, dirty) {
 	else {
 		delete this._dirty[id]; 
 	}
+	if (!skipNotify && this._ondirty) {
+		var item = this._items[id];
+		if (!item.ignore || !this._call(item.ignore)) {
+			this._call(this._ondirty, [id]);
+		}
+	}
 };
 DwtForm.prototype.isDirty = function(id) {
 	if (arguments.length == 0) {
 		for (var id in this._dirty) {
+			var item = this._items[id];
+			if (item.ignore && this._call(item.ignore)) {
+				continue;
+			}
 			return true;
 		}
 		return false;
 	}
-	return id in this._dirty;
+	var item = this._items[id];
+	return item.ignore && this._call(item.ignore) ? false : id in this._dirty;
 };
 DwtForm.prototype.getDirtyItems = function() {
-	return AjxUtil.keys(this._dirty);
+	// NOTE: This avoids needing a closure
+	DwtForm.__acceptDirtyItem.form = this;
+	return AjxUtil.keys(this._dirty, DwtForm.__acceptDirtyItem);
+};
+DwtForm.__acceptDirtyItem = function(id) {
+	var form = arguments.callee.form;
+	var item = form._items[id];
+	return !item.ignore || !form._call(item.ignore);
 };
 
 // convenience control methods
@@ -400,6 +439,7 @@ DwtForm.prototype._createHtmlFromTemplate = function(templateId, data) {
 	this._tabGroup.removeAllMembers();
 	this._onupdate = null;
 	this._onreset = null;
+	this._ondirty = null;
 
 	// create form
 	var form = this.form;
@@ -409,6 +449,7 @@ DwtForm.prototype._createHtmlFromTemplate = function(templateId, data) {
 		// create handlers
 		this._onupdate = DwtForm.__makeFunc(form.onupdate);
 		this._onreset = DwtForm.__makeFunc(form.onreset);
+		this._ondirty = DwtForm.__makeFunc(form.ondirty);
 	}
 
 	// add links to list of controls
@@ -441,11 +482,8 @@ DwtForm.prototype._registerControls = function(itemDefs, parentDef,
 DwtForm.prototype._registerControl = function(itemDef, parentDef,
                                               tabIndexes, params,
                                               parent, defaultType) {
-	parent = parent || this;
-	var id = itemDef.id || [this._htmlElId, Dwt.getNextId()].join("_");
-	var type = itemDef.type = itemDef.type || defaultType;
-
 	// create item entry
+	var id = itemDef.id || [this._htmlElId, Dwt.getNextId()].join("_");
 	var item = this._items[id] = {
 		id:			id, // for convenience
 		def:		itemDef,
@@ -454,17 +492,31 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 		setter:		DwtForm.__makeSetter(itemDef),
 		visible:	DwtForm.__makeFunc(itemDef.visible),
 		enabled:	DwtForm.__makeFunc(itemDef.enabled),
-		validator:	DwtForm.__makeFunc(itemDef.validator)
+		validator:	DwtForm.__makeFunc(itemDef.validator),
+		ignore:		DwtForm.__makeFunc(itemDef.ignore),
+		control:	itemDef.control
 	};
+	// NOTE: This is used internally for indexing of rows
+	if (itemDef.aka) {
+		this._items[id].aka = itemDef.aka;
+		this._items[itemDef.aka] = item;
+	}
+
+	// is control already created?
+	var control = item.control;
+	if (control) {
+		return control;
+	}
 
 	// create control
+	parent = parent || this;
+	var type = itemDef.type = itemDef.type || defaultType;
 	var element = document.getElementById([parent._htmlElId,id].join("_"));
-	var control;
 	if (Dwt.instanceOf(type, "DwtRadioButtonGroup")) {
 		// create control
 		control = new window[type]({});
 		item.control = control;
-//		control._zform_id = id;
+
 		// add children
 		var nparams = {
 			name:  [parent._htmlElId, id].join("_"),
@@ -592,6 +644,7 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 	}
 
 	// add extra params
+	params.formItemDef = itemDef;
 	if (itemDef.params) {
 		for (var p in itemDef.params) {
 			params[p] = itemDef.params[p];
@@ -600,7 +653,6 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 
 	// create control
 	var control = new window[type](params);
-//	control._zform_id = id;
 
 	// init select
 	if (control instanceof DwtSelect) {
@@ -619,7 +671,8 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 
 	// init button, menu item
 	else if (control instanceof DwtButton || control instanceof DwtMenuItem) {
-		control.setImage(itemDef.image);
+		if (itemDef.label) { control.setText(itemDef.label); }
+		if (itemDef.image) { control.setImage(itemDef.image); }
 		if (itemDef.menu) {
 			var isMenu = Dwt.instanceOf(itemDef.menu.type || "DwtMenu", "DwtMenu");
 			var menu;
@@ -636,7 +689,7 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 		}
 		var parentId;
 		if (parent instanceof DwtToolBar || parent instanceof DwtMenu) {
-			parentId = parentDef.id; //parent._zform_id;
+			parentId = parentDef.id;
 		}
 		// handlers
 		var handler = DwtForm.__makeFunc(itemDef.onclick || (parentDef && parentDef.onclick));
@@ -909,8 +962,8 @@ DwtForm.__makeFuncName = function(name, prefix) {
 };
 
 DwtForm.__makeFunc = function(value) {
-	if (value == null || typeof type == "boolean") return null;
-	if (typeof value == "function" && !(value instanceof RegExp)) return value;//return DwtForm.__wrapFunc(value);
+	if (value == null) return null;
+	if (typeof value == "function" && !(value instanceof RegExp)) return value;
 	var body = [
 		"with (this._context) {",
 			"return (",value,");",
@@ -938,4 +991,243 @@ DwtForm.__hack_fixRadioButtonHandler = function(radio) {
 		}
 	};
 	Dwt.setHandler(radio.getInputElement(), DwtEvent.ONCLICK, handler);
+};
+
+//
+// Class: DwtFormRows
+//
+
+// TODO: tab-group
+
+DwtFormRows = function(params) {
+	if (arguments.length == 0) return;
+	this._itemDef = params.formItemDef || {};
+	params.className = params.className || "DwtFormRows";
+	DwtForm.call(this, {
+		id:params.id, parent:params.parent,
+		form:{}, template:this._itemDef.template
+	});
+
+	// save state
+	this._rowDef = this._itemDef.rowitem || {};
+	this._rowCount = 0;
+	this._minRows = this._itemDef.minrows || 1;
+	this._maxRows = this._itemDef.maxrows || Number.MAX_VALUE;
+	if (this._itemDef.rowtemplate) {
+		this.ROW_TEMPLATE = this._itemDef.rowtemplate;
+	}
+
+	// add default rows
+	var itemDefs = this._itemDef.items || [];
+	for (var i = 0; i < itemDefs .length; i++) {
+		this.addRow(itemDefs[i]);
+	}
+
+	// add empty rows to satisfy minimum row count
+	for ( ; i < this._minRows; i++) {
+		this.addRow();
+	}
+
+	// remember listeners
+	this._onaddrow = DwtForm.__makeFunc(this._itemDef.onaddrow);
+	this._onremoverow = DwtForm.__makeFunc(this._itemDef.onremoverow);
+};
+DwtFormRows.prototype = new DwtForm;
+DwtFormRows.prototype.constructor = DwtFormRows;
+
+DwtFormRows.prototype.toString = function() {
+	return "DwtFormRows";
+};
+
+// Data
+
+DwtFormRows.prototype.TEMPLATE = "dwt.Widgets#DwtFormRows";
+DwtFormRows.prototype.ROW_TEMPLATE = "dwt.Widgets#DwtFormRow";
+
+// Public methods
+
+DwtFormRows.prototype.setValue = function(array) {
+	if (arguments.length > 1) {
+		DwtForm.prototype.setValue.apply(this, arguments);
+		return;
+	}
+	// adjust row count
+	for (var i = this._rowCount; i > array.length; i--) {
+		this.removeRow(i-1);
+	}
+	for (var i = this._rowCount; i < array.length; i++) {
+		this.addRow();
+	}
+	// initialize values
+	for (var i = 0; i < array.length; i++) {
+		this.setValue(String(i), array[i]);
+	}
+	for (var i = array.length; i < this._rowCount; i++) {
+		this.setValue(String(i), null);
+	}
+};
+
+DwtFormRows.prototype.getValue = function() {
+	if (arguments.length > 0) {
+		return DwtForm.prototype.getValue.apply(this, arguments);
+	}
+	var array = new Array(this._rowCount);
+	for (var i = 0; i < this._rowCount; i++) {
+		array[i] = this.getValue(String(i));
+	}
+	return array;
+};
+
+DwtFormRows.prototype.getRowCount = function() {
+	return this._rowCount;
+};
+
+DwtFormRows.prototype.addRow = function(itemDef, index) {
+	if (this._rowCount >= this._maxRows) {
+		return;
+	}
+	itemDef = itemDef || (this._rowDef && AjxUtil.createProxy(this._rowDef));
+	if (!itemDef) return;
+
+	itemDef.id = itemDef.id || Dwt.getNextId();
+	itemDef.aka = String(this._rowCount++);
+
+	// create row html
+	var data = { id: [this._htmlElId, itemDef.id].join("_") };
+	var rowHtml = AjxTemplate.expand(this.ROW_TEMPLATE, data);
+
+	var rowsEl = this._rowsEl;
+	rowsEl.appendChild(Dwt.toDocumentFragment(rowHtml, data.id+"_row"));
+	var rowEl = rowsEl.lastChild;
+	if (index != null) {
+		rowsEl.insertBefore(rowEl, rowsEl.childNodes[index]);
+	}
+
+	// create controls
+	var control = this._registerControl(itemDef);
+
+	var addDef = this._itemDef.additem ? AjxUtil.createProxy(this._itemDef.additem) : { image: "Add" };
+	addDef[addDef.id?"aka":"id"] = itemDef.id+"_add";
+	addDef.visible = "this.getRowCount() < this.getMaxRows()";
+	var addButton = this._registerControl(addDef,null,null,null,null,"DwtButton");
+	if (!addDef.onclick) {
+		addButton.addSelectionListener(new AjxListener(this, this._handleAddRow, [itemDef.id]));
+	}
+
+	var removeDef = this._itemDef.removeitem ? AjxUtil.createProxy(this._itemDef.removeitem) : { image: "Remove" };
+	removeDef[removeDef.id?"aka":"id"] = itemDef.id+"_remove";
+	removeDef.visible = "this.getRowCount() > this.getMinRows()";
+	var removeButton = this._registerControl(removeDef,null,null,null,null,"DwtButton");
+	if (!removeDef.onclick) {
+		removeButton.addSelectionListener(new AjxListener(this, this._handleRemoveRow, [itemDef.id]));
+	}
+
+	// remember where we put it
+	var item = this._items[itemDef.id];
+	item._rowEl = rowEl;
+	item._addId= addDef.id;
+	item._removeId = removeDef.id;
+
+	this.update();
+
+	if (this._onaddrow) {
+		this._call(this._onaddrow, [this._rowCount-1]);
+	}
+
+	return control;
+};
+
+DwtFormRows.prototype.removeRow = function(indexOrId) {
+	if (this._rowCount <= this._minRows) {
+		return;
+	}
+	var item = this._items[indexOrId];
+
+	// delete item at specified index
+	delete this._items[item.id];
+	delete this._items[item.aka];
+	var addItem = this._items[item._addId];
+	if (addItem) {
+		this.removeChild(addItem.control);
+		delete item[item._addId];
+		delete item[item.id+"_add"];
+	}
+	var removeItem = this._items[item._removeId];
+	if (removeItem) {
+		this.removeChild(removeItem.control);
+		delete item[item._removeId];
+		delete item[item.id+"_remove"];
+	}
+	if (item.control instanceof DwtControl) {
+		this.removeChild(item.control);
+		delete item.control;
+	}
+
+	// shift everything down one, removing old last row
+	for (var i = Number(item.aka) + 1; i < this._rowCount; i++) {
+		this._items[i-1] = this._items[i];
+		this._items[i-1].aka = String(i-1);
+	}
+	delete this._items[--this._rowCount];
+
+	// remove row element
+	var rowEl = item._rowEl;
+	rowEl.parentNode.removeChild(rowEl);
+	delete item._rowEl;
+
+	this.update();
+
+	if (this._onremoverow) {
+		this._call(this._onremoverow, [this._rowCount]);
+	}
+
+	// TODO: move focus to previous/next row/control???
+};
+
+DwtFormRows.prototype.getMinRows = function() {
+	return this._minRows;
+};
+DwtFormRows.prototype.getMaxRows = function() {
+	return this._maxRows;
+};
+DwtFormRows.prototype.getRowCount = function() {
+	return this._rowCount;
+};
+
+DwtFormRows.prototype.getIndexForRowId = function(rowId) {
+	var children = this._rowsEl.childNodes;
+	for (var i = 0; i < children.length; i++) {
+		if (children[i].id == [this._htmlElId,rowId,"row"].join("_")) {
+			return i;
+		}
+	}
+	return -1;
+};
+
+// Protected methods
+
+DwtFormRows.prototype._handleAddRow = function(rowId) {
+	var index = this.getIndexForRowId(rowId) + 1;
+	this.addRow(null, index);
+};
+
+DwtFormRows.prototype._handleRemoveRow = function(rowId) {
+	this.removeRow(rowId);
+};
+
+// DwtForm methods
+
+DwtFormRows.prototype._setModelValue = function(id, value) {
+	DwtForm.prototype._setModelValue.apply(this, arguments);
+	var item = this._items[id];
+	if (value != item.ovalue && this.parent instanceof DwtForm) {
+		this.parent.setDirty(this._itemDef.id, true);
+	}
+};
+
+// DwtControl methods
+
+DwtFormRows.prototype._createHtmlFromTemplate = function(templateId, data) {
+	DwtForm.prototype._createHtmlFromTemplate.apply(this, arguments);
+	this._rowsEl = document.getElementById(this._htmlElId+"_rows");
 };

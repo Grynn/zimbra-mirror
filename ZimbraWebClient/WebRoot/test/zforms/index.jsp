@@ -44,6 +44,7 @@
 <script src="<c:url value='/js/ajax/boot/AjxTemplateCompiler.js' />"></script>
 <script>
 AjxEnv.DEFAULT_LOCALE = "<%=request.getLocale()%>";
+AjxWindowOpener = {};
 </script>
 <script>
 <jsp:include page="/js/ajax/util/AjxTimezoneData.js" />
@@ -65,7 +66,14 @@ function onLoad() {
 
 	// create sample form
 	eval("form = "+document.getElementById("form.data").value);
+	var before = new Date().getTime();
 	control = new DwtForm({parent:shell, form:form});
+	var after = new Date().getTime();
+
+	control.reset();
+
+	var count = AjxUtil.keys(control._items).length;
+	document.body.appendChild(document.createTextNode("created form with "+count+" controls in "+(after-before)+" milliseconds"));
 
 	// setup tab group
 	var tabGroup = new DwtTabGroup("global-tab-group");
@@ -109,7 +117,7 @@ function showText(text) {
 		{ id: "INVALID", type: "DwtText" },
 		{ id: "UPDATE", type: "DwtButton", label: "Update Form", onclick: "this.update()" },
 		{ id: "RESET", type: "DwtButton", label: "Reset Form", onclick: "this.reset()" },
-		{ id: "CONTROLS", type: "DwtTabView", items: [
+		{ id: "CONTROLS", type: "DwtTabView", onclick: "alert(get('CONTROLS'))", items: [
 			// buttons
 			{ id: "BUTTONS", label: "Buttons", template: "test.zforms#buttons", items: [
 				{ id: "BUTTON1", type: "DwtButton", label: "Click Me" },
@@ -239,6 +247,36 @@ function showText(text) {
 					{ id: "RADIO21" }
 				]},
 				{ id: "RADIOS7_VALUE", type: "DwtText", getter: "get('RADIOS7') || 'None'" }
+			]},
+			// rows
+			{ id: "ROWS", label: "Rows", template: "test.zforms#rows", items: [
+				{ id: "ROWS1", type: "DwtFormRows",
+					rowitem: { type: "DwtInputField", hint: "added row" },
+					items: [
+						{ type: "DwtInputField", hint: "default row 1" },
+						{ type: "DwtInputField", hint: "default row 2" },
+					]
+				},
+				{ id: "ROWS2", type: "DwtFormRows",
+					rowitem: { type: "DwtInputField", hint: "added row" },
+					items: [
+						{ type: "DwtInputField", hint: "default row 1" },
+						{ type: "DwtInputField", hint: "default row 2" },
+					]
+				},
+				{ id: "ROWS3", type: "DwtFormRows",
+					minrows: 2, maxrows: 4,
+					rowitem: { type: "DwtInputField", hint: "added row" }
+				},
+				{ id: "ROWS4", type: "DwtFormRows",
+					additem: { label: "Add" },
+					removeitem: { label: "Remove" },
+					rowitem: { type: "DwtInputField", hint: "added row" },
+					items: [
+						{ type: "DwtInputField", hint: "default row 1" },
+						{ type: "DwtInputField", hint: "default row 2" },
+					]
+				}
 			]},
 			// selects
 			{ id: "SELECTS", label: "Selects", template: "test.zforms#selects", items: [
@@ -480,6 +518,16 @@ function showText(text) {
 		</table>
 		</div>
 	</textarea>
+	<textarea id="test.zforms#rows">
+		<div class="MyTabPage">
+		<table>
+			<tr><th>Add on all:</th><td><div id="\${id}_ROWS1"></div></td></tr>
+			<tr><th>Add on last:</th><td><div id="\${id}_ROWS2"></div></td></tr>
+			<tr><th>Min=2, Max=4:</th><td><div id="\${id}_ROWS3"></div></td></tr>
+			<tr><th>Custom:</th><td><div id="\${id}_ROWS4"></div></td></tr>
+		</table>
+		</div>
+	</textarea>
 	<textarea id="test.zforms#selects">
 		<div class="MyTabPage">
 		<table>
@@ -581,6 +629,20 @@ function showText(text) {
 	</textarea>
 	<textarea id="test.zforms#page3">
 		<h3>Page 3</h3>
+	</textarea>
+	<textarea id="dwt.Widgets#DwtFormRows">
+		<table border=0 cellspacing=3 cellpadding=0>
+			<tbody id="\${id}_rows"></tbody>
+		</table>
+	</textarea>
+	<textarea id="dwt.Widgets#DwtFormRow">
+		<table>
+			<tr id="\${id}_row">
+				<td><div id="\${id}"></div></td>
+				<td><div id="\${id}_remove"></div></td>
+				<td><div id="\${id}_add"></div></td>
+			</tr>
+		</table>
 	</textarea>
 </div>
 <script>
