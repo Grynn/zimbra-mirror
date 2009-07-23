@@ -658,10 +658,20 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, labelLocation:_LEFT_,
                     labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
                 },
-                {ref:ZaCos.A_zimbraPrefCalendarSendInviteDeniedAutoReply, type:_CHECKBOX_,
-                    msgName:ZaMsg.MSG_zimbraPrefCalendarSendInviteDeniedAutoReply,label:ZaMsg.LBL_zimbraPrefCalendarSendInviteDeniedAutoReply,
+                {ref:ZaCos.A_zimbraPrefCalendarReminderSoundsEnabled, 
+                	type:_CHECKBOX_,
+                    msgName:ZaMsg.MSG_zimbraPrefCalendarReminderSoundsEnabled,
+                    label:ZaMsg.LBL_zimbraPrefCalendarReminderSoundsEnabled,
                     trueValue:"TRUE", falseValue:"FALSE",
-                    labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                    labelCssStyle:"white-space:normal;",
+                    nowrap:false,labelWrap:true
+                },                                                
+                {ref:ZaCos.A_zimbraPrefCalendarSendInviteDeniedAutoReply, type:_CHECKBOX_,
+                    msgName:ZaMsg.MSG_zimbraPrefCalendarSendInviteDeniedAutoReply,
+                    label:ZaMsg.LBL_zimbraPrefCalendarSendInviteDeniedAutoReply,
+                    trueValue:"TRUE", falseValue:"FALSE",
+                    labelCssStyle:"white-space:normal;",
+                    nowrap:false,labelWrap:true
                 },                                                
                 {ref:ZaCos.A_zimbraPrefCalendarAutoAddInvites, type:_CHECKBOX_,
                     msgName:ZaMsg.LBL_zimbraPrefCalendarAutoAddInvites,label:ZaMsg.LBL_zimbraPrefCalendarAutoAddInvites,
