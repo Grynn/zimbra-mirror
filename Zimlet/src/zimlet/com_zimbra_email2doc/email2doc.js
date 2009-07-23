@@ -60,7 +60,12 @@ function(msg, response) {
 		this._fldrDlg = appCtxt.getChooseFolderDialog();
 	}
 
-	var params = {description:"Select a Document to save message(s)",treeIds:[ZmOrganizer.NOTEBOOK], overviewId:"ZmListController", title:"Document Overview"};
+	var params = {
+		description:	"Select a Document to save message(s)",
+		treeIds:		[ZmOrganizer.NOTEBOOK],
+		overviewId:		this._fldrDlg.getOverviewId(ZmApp.NOTEBOOK),
+		title:			"Document Overview"
+	};
 	this._selectDocCb = new AjxCallback(this, this._selectDocCallBack, msg);
 
 	ZmController.showDialog(this._fldrDlg, this._selectDocCb, params);

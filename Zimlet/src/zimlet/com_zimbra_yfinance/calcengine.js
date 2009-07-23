@@ -285,7 +285,7 @@ function() {
 	}else{	
 		var copyToDialog = this._copyToDialog = appCtxt.getChooseFolderDialog();
 		var _chooseCb = new AjxCallback(this, this._chooserCallback, [content]);
-		ZmController.showDialog(copyToDialog, _chooseCb, this._getCopyParams());
+		ZmController.showDialog(copyToDialog, _chooseCb, this._getCopyParams(copyToDialog));
 	}	
 };
 
@@ -293,8 +293,12 @@ CalcEngine.prototype._getCopyParams =
 function() {
 	var org = ZmOrganizer.NOTEBOOK;
 	var title = ZmMsg.notebook;
-	return {treeIds:[org], overviewId:"ZmListController",
-			title:title, description:ZmMsg.targetFolder};	
+	return {
+		treeIds:		[org],
+		overviewId:		dlg.getOverviewId(ZmApp.NOTEBOOK),
+		title:			title,
+		description:	ZmMsg.targetFolder
+	};
 };
 
 CalcEngine.prototype._chooserCallback =
