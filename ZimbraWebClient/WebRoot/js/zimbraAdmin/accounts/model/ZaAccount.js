@@ -163,6 +163,7 @@ ZaAccount.A_zimbraPrefReadReceiptsToAddress = "zimbraPrefReadReceiptsToAddress";
 ZaAccount.A_zimbraPrefAdminConsoleWarnOnExit = "zimbraPrefAdminConsoleWarnOnExit" ;
 
 //features
+ZaAccount.A_zimbraPrefCalendarSendInviteDeniedAutoReply = "zimbraPrefCalendarSendInviteDeniedAutoReply";
 ZaAccount.A_zimbraPrefCalendarAutoAddInvites = "zimbraPrefCalendarAutoAddInvites";
 ZaAccount.A_zimbraPrefCalendarApptVisibility = "zimbraPrefCalendarApptVisibility";
 ZaAccount.A_zimbraFeatureReadReceiptsEnabled = "zimbraFeatureReadReceiptsEnabled";
@@ -1463,6 +1464,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefMailSignature, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailSignature},
         {id:ZaAccount.A_zimbraPrefMailSignatureEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefMailSignatureEnabled},
         //preferences
+        {id:ZaAccount.A_zimbraPrefCalendarSendInviteDeniedAutoReply, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarSendInviteDeniedAutoReply, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefCalendarNotifyDelegatedChanges, type:_COS_ENUM_, ref:"attrs/" + ZaAccount.A_zimbraPrefCalendarNotifyDelegatedChanges, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefCalendarFirstDayOfWeek, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarFirstDayOfWeek, choices:ZaSettings.dayOfWeekChoices},
         {id:ZaAccount.A_zimbraPrefCalendarInitialView, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarInitialView, choices:ZaSettings.calendarViewChoinces},

@@ -1232,6 +1232,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                               		label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, labelLocation:_LEFT_, 
                               		resetToSuperLabel:ZaMsg.NAD_ResetToCOS
                               	},
+                              	{ref:ZaAccount.A_zimbraPrefCalendarSendInviteDeniedAutoReply, type:_SUPER_WIZ_CHECKBOX_, 
+                              		resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefCalendarSendInviteDeniedAutoReply,
+                              		checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarSendInviteDeniedAutoReply, 
+                              		trueValue:"TRUE", falseValue:"FALSE",
+                              		nowrap:false,labelWrap:true
+                              	},
 								{ref:ZaAccount.A_zimbraPrefCalendarAutoAddInvites, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefCalendarAutoAddInvites,checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarAutoAddInvites, trueValue:"TRUE", falseValue:"FALSE"},                              	
 								{ref:ZaAccount.A_zimbraPrefCalendarNotifyDelegatedChanges, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefCalendarNotifyDelegatedChanges,checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarNotifyDelegatedChanges, trueValue:"TRUE", falseValue:"FALSE"},                              	
 								{ref:ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal,checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal, trueValue:"TRUE", falseValue:"FALSE"},
