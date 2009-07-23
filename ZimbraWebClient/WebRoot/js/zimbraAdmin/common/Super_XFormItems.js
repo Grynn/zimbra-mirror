@@ -312,7 +312,7 @@ Super_XFormItem.updateCss = function(levels) {
 **/
 Super_AnchorHelper_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_ANCHOR_HELPER_","super_anchor_helper", Super_AnchorHelper_XFormItem, Dwt_Button_XFormItem);
-
+Super_AnchorHelper_XFormItem.prototype.containerCssClass = "xform_container xform_override_btn_contaier";
 // implement the following to actually construct the instance of your widget
 Super_AnchorHelper_XFormItem.prototype.constructWidget = function () {
 	var widget = this.widget = new DwtButton(this.getForm(), this.getCssClass());
@@ -485,7 +485,7 @@ XFormItemFactory.createItemType("_SUPER_CHECKBOX_", "super_checkbox", Super_Chec
 
 SuperWiz_Checkbox_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_WIZ_CHECKBOX_", "super_wiz_checkbox", SuperWiz_Checkbox_XFormItem, Super_Checkbox_XFormItem);
-SuperWiz_Checkbox_XFormItem.prototype.colSizes = ["200px","270px","150px"];
+SuperWiz_Checkbox_XFormItem.prototype.colSizes = ["200px","300px","150px"];
 SuperWiz_Checkbox_XFormItem.prototype.visibilityChecks = [ZaItem.hasWritePermission];
 SuperWiz_Checkbox_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 
