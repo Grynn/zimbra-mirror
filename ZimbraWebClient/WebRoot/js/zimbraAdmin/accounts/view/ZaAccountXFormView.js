@@ -881,7 +881,9 @@ ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaAccount.A_zimbraPrefMailInitialSearch,
 	ZaAccount.A_zimbraPrefClientType,
 	ZaAccount.A_zimbraPrefCalendarInitialView,
-	ZaAccount.A_zimbraPrefCalendarFirstDayOfWeek
+	ZaAccount.A_zimbraPrefCalendarFirstDayOfWeek,
+	ZaAccount.A_zimbraPrefCalendarNotifyDelegatedChanges,
+	ZaAccount.A_zimbraPrefCalendarApptVisibility
 ];
 ZaAccountXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -1966,7 +1968,17 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraPrefCalendarFirstDayOfWeek,
 									label:ZaMsg.LBL_zimbraPrefCalendarFirstDayOfWeek, 
 									labelLocation:_LEFT_
-								},									
+								},
+								{ref:ZaAccount.A_zimbraPrefCalendarApptVisibility, 
+									type:_SUPER_SELECT1_,
+									labelCssStyle:"width:175px",colSizes:["375px","190px"], 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraPrefCalendarApptVisibility,
+									label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, 
+									labelLocation:_LEFT_
+								},
+								{ref:ZaAccount.A_zimbraPrefCalendarNotifyDelegatedChanges, type:_SUPER_CHECKBOX_,
+								colSizes:["175px","375px","190px"], resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NLBL_zimbraPrefCalendarNotifyDelegatedChanges,checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarNotifyDelegatedChanges, trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_SUPER_CHECKBOX_,
 								colSizes:["175px","375px","190px"], resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NLBL_zimbraPrefCalendarAlwaysShowMiniCal,checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal, trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraPrefCalendarUseQuickAdd, 

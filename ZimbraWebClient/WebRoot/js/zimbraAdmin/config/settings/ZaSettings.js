@@ -455,6 +455,11 @@ ZaSettings.dayOfWeekChoices = [
 	{value:6,label:ZaMsg.Saturday}
 ];
 
+ZaSettings.apptVisibilityChoices = [
+	{value:"public",label:ZaMsg.AptVisibilityPublic},
+	{value:"private",label:ZaMsg.AptVisibilityPrivate}
+];
+
 ZaSettings.clientTypeChoices = [
 	{value:"advanced", label:ZaMsg.clientAdvanced},
 	{value:"standard", label:ZaMsg.clientStandard}

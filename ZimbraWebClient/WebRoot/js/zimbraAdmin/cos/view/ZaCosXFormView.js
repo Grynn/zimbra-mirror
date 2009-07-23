@@ -652,7 +652,17 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     msgName:ZaMsg.LBL_zimbraPrefCalendarFirstDayOfWeek,
                     label:ZaMsg.LBL_zimbraPrefCalendarFirstDayOfWeek, labelLocation:_LEFT_,
                     labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
-                },                                
+                },
+				{ref:ZaCos.A_zimbraPrefCalendarApptVisibility, type:_OSELECT1_,
+                    msgName:ZaMsg.LBL_zimbraPrefCalendarApptVisibility,
+                    label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, labelLocation:_LEFT_,
+                    labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                },                
+                {ref:ZaCos.A_zimbraPrefCalendarNotifyDelegatedChanges, type:_CHECKBOX_,
+                    msgName:ZaMsg.LBL_zimbraPrefCalendarNotifyDelegatedChanges,label:ZaMsg.LBL_zimbraPrefCalendarNotifyDelegatedChanges,
+                    trueValue:"TRUE", falseValue:"FALSE",
+                    labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                },
                 {ref:ZaCos.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_CHECKBOX_,
                     msgName:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal,label:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal,
                     trueValue:"TRUE", falseValue:"FALSE",

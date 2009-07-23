@@ -1202,7 +1202,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 						});
 		}
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefTimeZoneId,ZaAccount.A_zimbraPrefCalendarApptReminderWarningTime,
-			ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal,ZaAccount.A_zimbraPrefCalendarUseQuickAdd,ZaAccount.A_zimbraPrefUseTimeZoneListInCalendar],[])) {				
+			ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal,ZaAccount.A_zimbraPrefCalendarUseQuickAdd,ZaAccount.A_zimbraPrefUseTimeZoneListInCalendar,
+			ZaAccount.A_zimbraPrefCalendarInitialView,ZaAccount.A_zimbraPrefCalendarFirstDayOfWeek,ZaAccount.A_zimbraPrefCalendarNotifyDelegatedChanges,
+			ZaAccount.A_zimbraPrefCalendarApptVisibility],[])) {				
 			prefItems.push({type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_calendar_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_CalendarOptions}
@@ -1224,6 +1226,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                               		label:ZaMsg.LBL_zimbraPrefCalendarFirstDayOfWeek, labelLocation:_LEFT_, 
                               		resetToSuperLabel:ZaMsg.NAD_ResetToCOS
                               	},
+                              	{ref:ZaAccount.A_zimbraPrefCalendarApptVisibility, 
+                              		type:_SUPERWIZ_SELECT1_, 
+                              		msgName:ZaMsg.LBL_zimbraPrefCalendarApptVisibility,
+                              		label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, labelLocation:_LEFT_, 
+                              		resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+                              	},
+								{ref:ZaAccount.A_zimbraPrefCalendarNotifyDelegatedChanges, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefCalendarNotifyDelegatedChanges,checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarNotifyDelegatedChanges, trueValue:"TRUE", falseValue:"FALSE"},                              	
 								{ref:ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal,checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarAlwaysShowMiniCal, trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraPrefCalendarUseQuickAdd, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefCalendarUseQuickAdd,checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarUseQuickAdd, trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraPrefUseTimeZoneListInCalendar, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefUseTimeZoneListInCalendar,checkBoxLabel:ZaMsg.LBL_zimbraPrefUseTimeZoneListInCalendar,trueValue:"TRUE", falseValue:"FALSE"}
@@ -1231,7 +1240,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 						});							
 		}			
 		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.PREFS_STEP, tabGroupKey:ZaNewAccountXWizard.PREFS_STEP, 
-					numCols:1, width:"100%", items :prefItems});
+					numCols:1, width:"680", items :prefItems});
 	}	
 
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.SKIN_TAB_ATTRS, ZaAccountXFormView.SKIN_TAB_RIGHTS)) {
@@ -1495,7 +1504,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices, valueChangeEventSources:[ZaModel.currentStep]},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},
-			{type:_SWITCH_, width:650, align:_LEFT_, valign:_TOP_, items:cases}
+			{type:_SWITCH_, width:680, align:_LEFT_, valign:_TOP_, items:cases}
 		];
 };
 ZaXDialog.XFormModifiers["ZaNewAccountXWizard"].push(ZaNewAccountXWizard.myXFormModifier);
