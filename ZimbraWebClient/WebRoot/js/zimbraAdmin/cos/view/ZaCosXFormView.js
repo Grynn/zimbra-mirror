@@ -280,7 +280,8 @@ ZaCosXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaCos.A_zimbraPrefCalendarReminderFlashTitle,
 	ZaCos.A_zimbraPrefCalendarAllowCancelEmailToSelf,
 	ZaCos.A_zimbraPrefCalendarAllowPublishMethodInvite,
-	ZaCos.A_zimbraPrefCalendarToasterEnabled
+	ZaCos.A_zimbraPrefCalendarToasterEnabled,
+	ZaCos.A_zimbraPrefCalendarShowPastDueReminders
 ];
 ZaCosXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -661,6 +662,14 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     msgName:ZaMsg.LBL_zimbraPrefCalendarApptVisibility,
                     label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, labelLocation:_LEFT_,
                     labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                },
+                {ref:ZaCos.A_zimbraPrefCalendarShowPastDueReminders, 
+                	type:_CHECKBOX_,
+                    msgName:ZaMsg.MSG_zimbraPrefCalendarShowPastDueReminders,
+                    label:ZaMsg.LBL_zimbraPrefCalendarShowPastDueReminders,
+                    trueValue:"TRUE", falseValue:"FALSE",
+                    labelCssStyle:"white-space:normal;",
+                    nowrap:false,labelWrap:true
                 },
                 {ref:ZaCos.A_zimbraPrefCalendarToasterEnabled, 
                 	type:_CHECKBOX_,
