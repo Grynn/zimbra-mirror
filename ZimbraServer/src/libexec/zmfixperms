@@ -57,7 +57,6 @@ components="\
   memcached \
   mysql \
   net-snmp \
-  nginx \
   openldap \
   openldap-clibs \
   openssl \
@@ -217,6 +216,12 @@ if [ -d ${zimbra_home} ]; then
       chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/nginx.conf
       chmod 644 ${zimbra_home}/conf/nginx.conf
     fi
+
+    for i in ${zimbra_home}/conf/*-{scm,transport,vad,vam,vmd,vmm}.cf; do
+      printMsg "Fixing ownership and permissions on ${i}"
+      chgrp -f ${postfix_owner} ${i}
+      chmod 640 ${i}
+    done 
   fi
 
   if [ -d ${zimbra_home}/docs ]; then
@@ -325,12 +330,6 @@ if [ -L ${zimbra_home}/dspam ]; then
     mkdir -p ${zimbra_home}/data/dspam
   fi
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/dspam
-
-  if [ -d "${zimbra_home}/dspam/bin" ]; then
-    for i in ${zimbra_home}/dspam/bin/*; do
-      chmod 555 ${i}
-    done
-  fi
 fi
 
 if [ -L ${zimbra_home}/amavisd ]; then
@@ -396,16 +395,6 @@ if [ -L ${zimbra_home}/jetty ]; then
     find ${zimbra_home}/jetty/common -type d -exec chown ${root_user}:${root_group} {} \; -exec chmod 755 {} \;
   fi  
 
-fi
-
-if [ -L ${zimbra_home}/nginx ]; then
-  printMsg "Fixing ownership and permissions on ${zimbra_home}/ssl"
-  if [ -d ${zimbra_home}/nginx/conf ]; then
-    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/nginx/conf
-  fi	
-  if [ -d ${zimbra_home}/nginx/logs ]; then
-    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/nginx/logs
-  fi	
 fi
 
 if [ -d ${zimbra_home}/ssl ]; then
@@ -529,42 +518,6 @@ if [ -d ${zimbra_home}/data/postfix ]; then
   fi
   chown -f ${postfix_owner} ${zimbra_home}/data/postfix
   chown -f ${postfix_owner} ${zimbra_home}/data/postfix/* 2> /dev/null
-fi
-
-if [ -f ${zimbra_home}/conf/ldap-scm.cf ]; then
-  printMsg "Fixing ownership and permissions on ${zimbra_home}/conf/ldap-scm.cf"
-  chgrp -f ${postfix_owner} ${zimbra_home}/conf/ldap-scm.cf
-  chmod 640 ${zimbra_home}/conf/ldap-scm.cf
-fi
-
-if [ -f ${zimbra_home}/conf/ldap-transport.cf ]; then
-  printMsg "Fixing ownership and permissions on ${zimbra_home}/conf/ldap-transport.cf"
-  chgrp -f ${postfix_owner} ${zimbra_home}/conf/ldap-transport.cf
-  chmod 640 ${zimbra_home}/conf/ldap-transport.cf
-fi
-
-if [ -f ${zimbra_home}/conf/ldap-vad.cf ]; then
-  printMsg "Fixing ownership and permissions on ${zimbra_home}/conf/ldap-vad.cf"
-  chgrp -f ${postfix_owner} ${zimbra_home}/conf/ldap-vad.cf
-  chmod 640 ${zimbra_home}/conf/ldap-vad.cf
-fi
-
-if [ -f ${zimbra_home}/conf/ldap-vam.cf ]; then
-  printMsg "Fixing ownership and permissions on ${zimbra_home}/conf/ldap-vam.cf"
-  chgrp -f ${postfix_owner} ${zimbra_home}/conf/ldap-vam.cf
-  chmod 640 ${zimbra_home}/conf/ldap-vam.cf
-fi
-
-if [ -f ${zimbra_home}/conf/ldap-vmd.cf ]; then
-  printMsg "Fixing ownership and permissions on ${zimbra_home}/conf/ldap-vmd.cf"
-  chgrp -f ${postfix_owner} ${zimbra_home}/conf/ldap-vmd.cf
-  chmod 640 ${zimbra_home}/conf/ldap-vmd.cf
-fi
-
-if [ -f ${zimbra_home}/conf/ldap-vmm.cf ]; then
-  printMsg "Fixing ownership and permissions on ${zimbra_home}/conf/ldap-vmm.cf"
-  chgrp -f ${postfix_owner} ${zimbra_home}/conf/ldap-vmm.cf
-  chmod 640 ${zimbra_home}/conf/ldap-vmm.cf
 fi
 
 if [ -d ${zimbra_home}/index -a ${extended} = "yes" ]; then
