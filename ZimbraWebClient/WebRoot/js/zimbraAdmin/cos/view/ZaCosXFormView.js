@@ -277,7 +277,9 @@ ZaCosXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaCos.A_zimbraPrefClientType,
 	ZaCos.A_zimbraPrefCalendarInitialView,
 	ZaCos.A_zimbraPrefCalendarFirstDayOfWeek,
-	ZaCos.A_zimbraPrefCalendarReminderFlashTitle
+	ZaCos.A_zimbraPrefCalendarReminderFlashTitle,
+	ZaCos.A_zimbraPrefCalendarAllowCancelEmailToSelf,
+	ZaCos.A_zimbraPrefCalendarAllowPublishMethodInvite
 ];
 ZaCosXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -659,6 +661,22 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, labelLocation:_LEFT_,
                     labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
                 },
+                {ref:ZaCos.A_zimbraPrefCalendarAllowCancelEmailToSelf, 
+                	type:_CHECKBOX_,
+                    msgName:ZaMsg.MSG_zimbraPrefCalendarAllowCancelEmailToSelf,
+                    label:ZaMsg.LBL_zimbraPrefCalendarAllowCancelEmailToSelf,
+                    trueValue:"TRUE", falseValue:"FALSE",
+                    labelCssStyle:"white-space:normal;",
+                    nowrap:false,labelWrap:true
+                },
+                {ref:ZaCos.A_zimbraPrefCalendarAllowPublishMethodInvite, 
+                	type:_CHECKBOX_,
+                    msgName:ZaMsg.MSG_zimbraPrefCalendarAllowPublishMethodInvite,
+                    label:ZaMsg.LBL_zimbraPrefCalendarAllowPublishMethodInvite,
+                    trueValue:"TRUE", falseValue:"FALSE",
+                    labelCssStyle:"white-space:normal;",
+                    nowrap:false,labelWrap:true
+                },                                
                 {ref:ZaCos.A_zimbraPrefCalendarAllowForwardedInvite, 
                 	type:_CHECKBOX_,
                     msgName:ZaMsg.MSG_zimbraPrefCalendarAllowForwardedInvite,

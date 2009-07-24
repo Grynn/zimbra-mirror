@@ -887,7 +887,9 @@ ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaAccount.A_zimbraPrefCalendarAutoAddInvites,
 	ZaAccount.A_zimbraPrefCalendarReminderSoundsEnabled,
 	ZaAccount.A_zimbraPrefCalendarReminderFlashTitle,
-	ZaAccount.A_zimbraPrefCalendarAllowForwardedInvite
+	ZaAccount.A_zimbraPrefCalendarAllowForwardedInvite,
+	ZaAccount.A_zimbraPrefCalendarAllowPublishMethodInvite,
+	ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf
 ];
 ZaAccountXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -1981,6 +1983,20 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, 
 									labelLocation:_LEFT_
 								},
+								{ref:ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf, type:_SUPER_CHECKBOX_,
+									colSizes:["175px","375px","190px"], resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraPrefCalendarAllowCancelEmailToSelf,
+									checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarAllowCancelEmailToSelf, 
+									trueValue:"TRUE", falseValue:"FALSE",
+									nowrap:false,labelWrap:true
+								},								
+								{ref:ZaAccount.A_zimbraPrefCalendarAllowPublishMethodInvite, type:_SUPER_CHECKBOX_,
+									colSizes:["175px","375px","190px"], resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraPrefCalendarAllowPublishMethodInvite,
+									checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarAllowPublishMethodInvite, 
+									trueValue:"TRUE", falseValue:"FALSE",
+									nowrap:false,labelWrap:true
+								},								
 								{ref:ZaAccount.A_zimbraPrefCalendarAllowForwardedInvite, type:_SUPER_CHECKBOX_,
 									colSizes:["175px","375px","190px"], resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraPrefCalendarAllowForwardedInvite,

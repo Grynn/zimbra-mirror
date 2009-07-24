@@ -1206,7 +1206,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			ZaAccount.A_zimbraPrefCalendarInitialView,ZaAccount.A_zimbraPrefCalendarFirstDayOfWeek,ZaAccount.A_zimbraPrefCalendarNotifyDelegatedChanges,
 			ZaAccount.A_zimbraPrefCalendarApptVisibility,ZaAccount.A_zimbraPrefCalendarReminderSoundsEnabled,
 			ZaAccount.A_zimbraPrefCalendarSendInviteDeniedAutoReply,ZaAccount.A_zimbraPrefCalendarAutoAddInvites,
-			ZaAccount.A_zimbraPrefCalendarAllowForwardedInvite,ZaAccount.A_zimbraPrefCalendarReminderFlashTitle],[])) {				
+			ZaAccount.A_zimbraPrefCalendarAllowForwardedInvite,ZaAccount.A_zimbraPrefCalendarReminderFlashTitle,
+			ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf],[])) {				
 			prefItems.push({type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_calendar_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_CalendarOptions}
@@ -1234,6 +1235,18 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                               		label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, labelLocation:_LEFT_, 
                               		resetToSuperLabel:ZaMsg.NAD_ResetToCOS
                               	},
+                              	{ref:ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf, type:_SUPER_WIZ_CHECKBOX_, 
+                              		resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraPrefCalendarAllowCancelEmailToSelf,
+                              		checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarAllowCancelEmailToSelf, 
+                              		trueValue:"TRUE", falseValue:"FALSE",
+                              		nowrap:false,labelWrap:true
+                              	},                              	
+                              	{ref:ZaAccount.A_zimbraPrefCalendarAllowPublishMethodInvite, type:_SUPER_WIZ_CHECKBOX_, 
+                              		resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraPrefCalendarAllowPublishMethodInvite,
+                              		checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarAllowPublishMethodInvite, 
+                              		trueValue:"TRUE", falseValue:"FALSE",
+                              		nowrap:false,labelWrap:true
+                              	},                              	
                               	{ref:ZaAccount.A_zimbraPrefCalendarAllowForwardedInvite, type:_SUPER_WIZ_CHECKBOX_, 
                               		resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraPrefCalendarAllowForwardedInvite,
                               		checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarAllowForwardedInvite, 
