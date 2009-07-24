@@ -1233,7 +1233,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                               		label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, labelLocation:_LEFT_, 
                               		resetToSuperLabel:ZaMsg.NAD_ResetToCOS
                               	},
-
+                              	{ref:ZaAccount.A_zimbraPrefCalendarReminderFlashTitle, type:_SUPER_WIZ_CHECKBOX_, 
+                              		resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraPrefCalendarReminderFlashTitle,
+                              		checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarReminderFlashTitle, 
+                              		trueValue:"TRUE", falseValue:"FALSE",
+                              		nowrap:false,labelWrap:true
+                              	},
                               	{ref:ZaAccount.A_zimbraPrefCalendarReminderSoundsEnabled, type:_SUPER_WIZ_CHECKBOX_, 
                               		resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefCalendarReminderSoundsEnabled,
                               		checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarReminderSoundsEnabled, 

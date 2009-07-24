@@ -276,7 +276,8 @@ ZaCosXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaCos.A_zimbraPrefMailInitialSearch,
 	ZaCos.A_zimbraPrefClientType,
 	ZaCos.A_zimbraPrefCalendarInitialView,
-	ZaCos.A_zimbraPrefCalendarFirstDayOfWeek
+	ZaCos.A_zimbraPrefCalendarFirstDayOfWeek,
+	ZaCos.A_zimbraPrefCalendarReminderFlashTitle
 ];
 ZaCosXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -658,6 +659,14 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, labelLocation:_LEFT_,
                     labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
                 },
+                {ref:ZaCos.A_zimbraPrefCalendarReminderFlashTitle, 
+                	type:_CHECKBOX_,
+                    msgName:ZaMsg.MSG_zimbraPrefCalendarReminderFlashTitle,
+                    label:ZaMsg.LBL_zimbraPrefCalendarReminderFlashTitle,
+                    trueValue:"TRUE", falseValue:"FALSE",
+                    labelCssStyle:"white-space:normal;",
+                    nowrap:false,labelWrap:true
+                },                                                                
                 {ref:ZaCos.A_zimbraPrefCalendarReminderSoundsEnabled, 
                 	type:_CHECKBOX_,
                     msgName:ZaMsg.MSG_zimbraPrefCalendarReminderSoundsEnabled,

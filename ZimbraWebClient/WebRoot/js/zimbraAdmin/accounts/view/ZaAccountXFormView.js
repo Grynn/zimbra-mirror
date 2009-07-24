@@ -885,7 +885,8 @@ ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaAccount.A_zimbraPrefCalendarNotifyDelegatedChanges,
 	ZaAccount.A_zimbraPrefCalendarApptVisibility,
 	ZaAccount.A_zimbraPrefCalendarAutoAddInvites,
-	ZaAccount.A_zimbraPrefCalendarReminderSoundsEnabled
+	ZaAccount.A_zimbraPrefCalendarReminderSoundsEnabled,
+	ZaAccount.A_zimbraPrefCalendarReminderFlashTitle
 ];
 ZaAccountXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -1978,6 +1979,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraPrefCalendarApptVisibility,
 									label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, 
 									labelLocation:_LEFT_
+								},
+								{ref:ZaAccount.A_zimbraPrefCalendarReminderFlashTitle, type:_SUPER_CHECKBOX_,
+									colSizes:["175px","375px","190px"], resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraPrefCalendarReminderFlashTitle,
+									checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarReminderFlashTitle, 
+									trueValue:"TRUE", falseValue:"FALSE",
+									nowrap:false,labelWrap:true
 								},
 								{ref:ZaAccount.A_zimbraPrefCalendarReminderSoundsEnabled, type:_SUPER_CHECKBOX_,
 									colSizes:["175px","375px","190px"], resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
