@@ -328,7 +328,7 @@ public class GalSync {
         handlers.put(SyncHandler.PATH_RESPONSE, handler);
         handlers.put(SyncHandler.PATH_CN, handler);
         
-        mbox.sendRequest(req, true, true, OfflineLC.zdesktop_galsync_request_timeout.intValue(), SoapProtocol.Soap12, handlers);
+        mbox.sendRequest(req, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12, handlers);
 
         Exception e = handler.getException();
         String token;
@@ -380,7 +380,7 @@ public class GalSync {
             
         XMLElement req = new XMLElement(MailConstants.GET_CONTACTS_REQUEST);
         req.addElement(AdminConstants.E_CN).addAttribute(AccountConstants.A_ID, idstr);
-        Element response = mbox.sendRequest(req, true, true, OfflineLC.zdesktop_galsync_request_timeout.intValue(), SoapProtocol.Soap12);
+        Element response = mbox.sendRequest(req, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12);
         
         Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(handler.getGalAccount().getId(), false);
         List<Element> contacts = response.listElements(MailConstants.E_CONTACT);

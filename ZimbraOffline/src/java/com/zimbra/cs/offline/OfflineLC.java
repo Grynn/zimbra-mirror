@@ -37,8 +37,9 @@ public class OfflineLC {
     public static final KnownKey zdesktop_retry_delay_max;    
     public static final KnownKey zdesktop_client_poll_interval;
     public static final KnownKey zdesktop_retry_limit;
-    public static final KnownKey zdesktop_gal_sync_trace_enabled;
     public static final KnownKey zdesktop_gal_sync_interval_secs;
+    public static final KnownKey zdesktop_gal_sync_request_timeout;
+    public static final KnownKey zdesktop_gal_sync_trace_enabled;
     public static final KnownKey zdesktop_gal_sync_group_size;
     public static final KnownKey zdesktop_gal_refresh_interval_days;
     
@@ -57,7 +58,6 @@ public class OfflineLC {
     public static final KnownKey zdesktop_sync_skip_idlist;
     
     public static final KnownKey zdesktop_request_timeout;
-    public static final KnownKey zdesktop_galsync_request_timeout;
     public static final KnownKey http_so_timeout;
     public static final KnownKey http_connection_timeout;
     public static final KnownKey dns_cache_ttl;
@@ -166,14 +166,18 @@ public class OfflineLC {
         zdesktop_retry_limit.setDefault("2");
         zdesktop_retry_limit.setDoc("Number of times to retry if sync fails. Default 2.");
 
-        zdesktop_gal_sync_trace_enabled = new KnownKey("zdesktop_gal_sync_trace_enabled");
-        zdesktop_gal_sync_trace_enabled.setDefault("false");
-        zdesktop_gal_sync_trace_enabled.setDoc("Whether to enable GAL sync trace logging. Default false");
-	    
         zdesktop_gal_sync_interval_secs = new KnownKey("zdesktop_gal_sync_interval_seconds");
         zdesktop_gal_sync_interval_secs.setDefault("43200");
         zdesktop_gal_sync_interval_secs.setDoc("How often offline GAL is delta-sync'ed. Default every 12 hours.");
 
+        zdesktop_gal_sync_request_timeout = new KnownKey("zdesktop_galsync_request_timeout");
+        zdesktop_gal_sync_request_timeout.setDefault("60000");
+        zdesktop_gal_sync_request_timeout.setDoc("HTTP GAL sync request timeout in milliseconds while waiting for response. A value of zero means no timeout. Default 60 seconds.");
+
+        zdesktop_gal_sync_trace_enabled = new KnownKey("zdesktop_gal_sync_trace_enabled");
+        zdesktop_gal_sync_trace_enabled.setDefault("false");
+        zdesktop_gal_sync_trace_enabled.setDoc("Whether to enable GAL sync trace logging. Default false");
+            
         zdesktop_gal_sync_group_size = new KnownKey("zdesktop_gal_sync_group_size");
         zdesktop_gal_sync_group_size.setDefault("500");
         zdesktop_gal_sync_group_size.setDoc("Number of entries to be fetch in each GetContactsRequest during GAL sync");
@@ -237,10 +241,6 @@ public class OfflineLC {
         zdesktop_request_timeout = new KnownKey("zdesktop_request_timeout");
         zdesktop_request_timeout.setDefault("30000");
         zdesktop_request_timeout.setDoc("HTTP request timeout in milliseconds while waiting for response. A value of zero means no timeout. Default 30000 (30 seconds).");
-
-        zdesktop_galsync_request_timeout = new KnownKey("zdesktop_galsync_request_timeout");
-        zdesktop_galsync_request_timeout.setDefault("60000");
-        zdesktop_galsync_request_timeout.setDoc("HTTP GAL sync request timeout in milliseconds while waiting for response. A value of zero means no timeout. Default 60 seconds.");
 
         http_so_timeout = new KnownKey("http_so_timeout");
         http_so_timeout.setDefault("30000");
