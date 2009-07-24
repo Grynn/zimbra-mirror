@@ -40,6 +40,7 @@ public class DbOfflineMigration {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
+            DbPool.startup();
             conn = DbPool.getConnection();
             stmt = conn.prepareStatement("SELECT value FROM zimbra.config WHERE name = 'db.version'");
             rs = stmt.executeQuery();
@@ -115,6 +116,7 @@ public class DbOfflineMigration {
             DbPool.closeStatement(stmt);
             DbPool.quietClose(conn);
             DbPool.close();
+            DbPool.shutdown();
         }
 	}
 	
@@ -503,7 +505,7 @@ public class DbOfflineMigration {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		System.setProperty("zimbra.config", "/opt/zimbra/zdesktop dev/conf/localconfig.xml");
+		System.setProperty("zimbra.config", "/Users/jjzhuang/zimbra/zdesktop/conf/localconfig.xml");
 		
 		new DbOfflineMigration().testRun();
 	}
