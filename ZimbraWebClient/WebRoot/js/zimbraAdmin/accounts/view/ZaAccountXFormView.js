@@ -891,7 +891,8 @@ ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaAccount.A_zimbraPrefCalendarAllowPublishMethodInvite,
 	ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf,
 	ZaAccount.A_zimbraPrefCalendarToasterEnabled,
-	ZaAccount.A_zimbraPrefCalendarShowPastDueReminders
+	ZaAccount.A_zimbraPrefCalendarShowPastDueReminders,
+	ZaAccount.A_zimbraPrefAppleIcalDelegationEnabled
 ];
 ZaAccountXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -1984,6 +1985,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraPrefCalendarApptVisibility,
 									label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, 
 									labelLocation:_LEFT_
+								},
+								{ref:ZaAccount.A_zimbraPrefAppleIcalDelegationEnabled, type:_SUPER_CHECKBOX_,
+									colSizes:["175px","375px","190px"], resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraPrefAppleIcalDelegationEnabled,
+									checkBoxLabel:ZaMsg.LBL_zimbraPrefAppleIcalDelegationEnabled, 
+									trueValue:"TRUE", falseValue:"FALSE",
+									nowrap:false,labelWrap:true
 								},
 								{ref:ZaAccount.A_zimbraPrefCalendarShowPastDueReminders, type:_SUPER_CHECKBOX_,
 									colSizes:["175px","375px","190px"], resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 

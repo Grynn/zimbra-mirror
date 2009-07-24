@@ -101,6 +101,7 @@ ZaAccount.A_zimbraMailIdleSessionTimeout = "zimbraMailIdleSessionTimeout";
 ZaAccount.A_zimbraAvailableSkin = "zimbraAvailableSkin";
 ZaAccount.A_zimbraZimletAvailableZimlets = "zimbraZimletAvailableZimlets";
 //prefs
+ZaAccount.A_zimbraPrefAppleIcalDelegationEnabled = "zimbraPrefAppleIcalDelegationEnabled";
 ZaAccount.A_zimbraPrefCalendarShowPastDueReminders = "zimbraPrefCalendarShowPastDueReminders";
 ZaAccount.A_zimbraPrefCalendarToasterEnabled = "zimbraPrefCalendarToasterEnabled";
 ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf = "zimbraPrefCalendarAllowCancelEmailToSelf";
@@ -1471,6 +1472,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefMailSignature, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailSignature},
         {id:ZaAccount.A_zimbraPrefMailSignatureEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefMailSignatureEnabled},
         //preferences
+        {id:ZaAccount.A_zimbraPrefAppleIcalDelegationEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefAppleIcalDelegationEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefCalendarShowPastDueReminders, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarShowPastDueReminders, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefCalendarToasterEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarToasterEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf, choices:ZaModel.BOOLEAN_CHOICES},

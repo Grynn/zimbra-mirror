@@ -1208,7 +1208,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			ZaAccount.A_zimbraPrefCalendarSendInviteDeniedAutoReply,ZaAccount.A_zimbraPrefCalendarAutoAddInvites,
 			ZaAccount.A_zimbraPrefCalendarAllowForwardedInvite,ZaAccount.A_zimbraPrefCalendarReminderFlashTitle,
 			ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf,ZaAccount.A_zimbraPrefCalendarToasterEnabled,
-			ZaAccount.A_zimbraPrefCalendarShowPastDueReminders],[])) {				
+			ZaAccount.A_zimbraPrefCalendarShowPastDueReminders,ZaAccount.A_zimbraPrefAppleIcalDelegationEnabled],[])) {				
 			prefItems.push({type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_calendar_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_CalendarOptions}
@@ -1236,6 +1236,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                               		label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, labelLocation:_LEFT_, 
                               		resetToSuperLabel:ZaMsg.NAD_ResetToCOS
                               	},
+                              	{ref:ZaAccount.A_zimbraPrefAppleIcalDelegationEnabled, type:_SUPER_WIZ_CHECKBOX_, 
+                              		resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraPrefAppleIcalDelegationEnabled,
+                              		checkBoxLabel:ZaMsg.LBL_zimbraPrefAppleIcalDelegationEnabled, 
+                              		trueValue:"TRUE", falseValue:"FALSE",
+                              		nowrap:false,labelWrap:true
+                              	},                              	
                               	{ref:ZaAccount.A_zimbraPrefCalendarShowPastDueReminders, type:_SUPER_WIZ_CHECKBOX_, 
                               		resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraPrefCalendarShowPastDueReminders,
                               		checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarShowPastDueReminders, 

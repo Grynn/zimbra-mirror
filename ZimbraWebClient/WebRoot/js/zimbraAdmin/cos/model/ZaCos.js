@@ -69,6 +69,7 @@ ZaCos.A_zimbraZimletAvailableZimlets = "zimbraZimletAvailableZimlets";
 ZaCos.A_zimbraMailForwardingAddressMaxLength = "zimbraMailForwardingAddressMaxLength";
 ZaCos.A_zimbraMailForwardingAddressMaxNumAddrs = "zimbraMailForwardingAddressMaxNumAddrs";
 //prefs
+ZaCos.A_zimbraPrefAppleIcalDelegationEnabled = "zimbraPrefAppleIcalDelegationEnabled";
 ZaCos.A_zimbraPrefCalendarShowPastDueReminders = "zimbraPrefCalendarShowPastDueReminders";
 ZaCos.A_zimbraPrefCalendarToasterEnabled = "zimbraPrefCalendarToasterEnabled";
 ZaCos.A_zimbraPrefCalendarAllowCancelEmailToSelf = "zimbraPrefCalendarAllowCancelEmailToSelf";
@@ -578,6 +579,7 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraQuotaWarnMessage, type:_STRING_, ref:"attrs/" + ZaCos.A_zimbraQuotaWarnMessage},
 
 //pref
+		{id:ZaCos.A_zimbraPrefAppleIcalDelegationEnabled, types:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraPrefAppleIcalDelegationEnabled,  choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaCos.A_zimbraPrefCalendarShowPastDueReminders, types:_ENUM_, ref:"attrs/" + ZaCos.A_zimbraPrefCalendarShowPastDueReminders, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaCos.A_zimbraPrefCalendarToasterEnabled, type:_ENUM_, ref:"attrs/" + ZaCos.A_zimbraPrefCalendarToasterEnabled, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaCos.A_zimbraPrefCalendarAllowCancelEmailToSelf, type:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarAllowCancelEmailToSelf, choices:ZaModel.BOOLEAN_CHOICES},
