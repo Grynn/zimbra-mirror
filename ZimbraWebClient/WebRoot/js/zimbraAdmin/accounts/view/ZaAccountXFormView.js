@@ -889,7 +889,8 @@ ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaAccount.A_zimbraPrefCalendarReminderFlashTitle,
 	ZaAccount.A_zimbraPrefCalendarAllowForwardedInvite,
 	ZaAccount.A_zimbraPrefCalendarAllowPublishMethodInvite,
-	ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf
+	ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf,
+	ZaAccount.A_zimbraPrefCalendarToasterEnabled
 ];
 ZaAccountXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -1983,6 +1984,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, 
 									labelLocation:_LEFT_
 								},
+								{ref:ZaAccount.A_zimbraPrefCalendarToasterEnabled, type:_SUPER_CHECKBOX_,
+									colSizes:["175px","375px","190px"], resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraPrefCalendarToasterEnabled,
+									checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarToasterEnabled, 
+									trueValue:"TRUE", falseValue:"FALSE",
+									nowrap:false,labelWrap:true
+								},								
 								{ref:ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf, type:_SUPER_CHECKBOX_,
 									colSizes:["175px","375px","190px"], resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraPrefCalendarAllowCancelEmailToSelf,

@@ -101,6 +101,7 @@ ZaAccount.A_zimbraMailIdleSessionTimeout = "zimbraMailIdleSessionTimeout";
 ZaAccount.A_zimbraAvailableSkin = "zimbraAvailableSkin";
 ZaAccount.A_zimbraZimletAvailableZimlets = "zimbraZimletAvailableZimlets";
 //prefs
+ZaAccount.A_zimbraPrefCalendarToasterEnabled = "zimbraPrefCalendarToasterEnabled";
 ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf = "zimbraPrefCalendarAllowCancelEmailToSelf";
 ZaAccount.A_zimbraPrefCalendarAllowPublishMethodInvite = "zimbraPrefCalendarAllowPublishMethodInvite";
 ZaAccount.A_zimbraPrefCalendarAllowForwardedInvite = "zimbraPrefCalendarAllowForwardedInvite";
@@ -1469,6 +1470,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefMailSignature, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailSignature},
         {id:ZaAccount.A_zimbraPrefMailSignatureEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefMailSignatureEnabled},
         //preferences
+        {id:ZaAccount.A_zimbraPrefCalendarToasterEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarToasterEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarAllowCancelEmailToSelf, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefCalendarAllowPublishMethodInvite, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarAllowPublishMethodInvite, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefCalendarAllowForwardedInvite, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarAllowForwardedInvite, choices:ZaModel.BOOLEAN_CHOICES},
