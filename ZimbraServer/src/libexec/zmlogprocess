@@ -34,7 +34,7 @@ $logger_directory = getLocalConfig("logger_data_directory");
 $log_file = '/var/log/zimbra.log';
 
 sub listMTA() {
-    open(MTALIST, "zmprov gas mta |") || die $!;
+    open(MTALIST, "${zimbra_home}/bin/zmprov gas mta |") || die $!;
     my @mtas = <MTALIST>;
     chomp(@mtas);
     close(MTALIST);
