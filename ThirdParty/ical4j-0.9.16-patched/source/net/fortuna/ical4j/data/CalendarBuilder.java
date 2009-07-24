@@ -37,10 +37,7 @@ package net.fortuna.ical4j.data;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.text.ParseException;
 
 import net.fortuna.ical4j.model.Calendar;
@@ -72,8 +69,6 @@ import org.apache.commons.logging.LogFactory;
  * @author Ben Fortuna
  */
 public class CalendarBuilder implements ContentHandler {
-    
-    private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
     
     private static Log log = LogFactory.getLog(CalendarBuilder.class);
 
@@ -133,36 +128,19 @@ public class CalendarBuilder implements ContentHandler {
      * @throws IOException
      * @throws ParserException
      */
-    public final Calendar build(final InputStream in) throws IOException,
+    public final Calendar build(final InputStream in, String charset) throws IOException,
             ParserException {
-        return build(new InputStreamReader(in, DEFAULT_CHARSET));
-    }
-
-    /**
-     * Builds an iCalendar model from the specified reader.
-     * An <code>UnfoldingReader</code> is applied to the specified
-     * reader to ensure the data stream is correctly unfolded where
-     * appropriate.
-     *
-     * @param in
-     * @return a calendar
-     * @throws IOException
-     * @throws ParserException
-     */
-    public final Calendar build(final Reader in) throws IOException, ParserException {
-        UnfoldingReader uin = new UnfoldingReader(in);
-
         // re-initialise..
         calendar = null;
         component = null;
         subComponent = null;
         property = null;
         
-        parser.parse(uin, this);
+        parser.parse(in, charset, this);
         
         return calendar;
     }
-    
+
     /* (non-Javadoc)
      * @see net.fortuna.ical4j.data.ContentHandler#endCalendar()
      */

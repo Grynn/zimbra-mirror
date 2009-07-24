@@ -390,7 +390,7 @@ public class VEventTest extends TestCase {
         net.fortuna.ical4j.model.Calendar calendar = null;
 
         try {
-            calendar = builder.build(fin);
+            calendar = builder.build(fin, "utf-8");
         } catch (IOException e) {
             log.warn("File: " + filename, e);
         } catch (ParserException e) {

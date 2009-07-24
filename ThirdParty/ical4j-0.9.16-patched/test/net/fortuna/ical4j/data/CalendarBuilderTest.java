@@ -67,7 +67,7 @@ public class CalendarBuilderTest extends TestCase {
         Calendar calendar = null;
 
         try {
-            calendar = builder.build(fin);
+            calendar = builder.build(fin, "utf-8");
             assertNotNull("File [" + filename + "] invalid", calendar);
 
             try {

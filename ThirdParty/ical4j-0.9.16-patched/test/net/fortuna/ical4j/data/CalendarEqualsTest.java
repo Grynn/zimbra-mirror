@@ -52,7 +52,7 @@ public class CalendarEqualsTest extends TestCase {
         Exception exception = null;
 
         try {
-            calendar = builder.build(fin);
+            calendar = builder.build(fin, "utf-8");
         } catch (IOException e) {
             exception = e;
             errorOccurred = true;
@@ -89,7 +89,7 @@ public class CalendarEqualsTest extends TestCase {
             Calendar reparsedCalendar = null;
 
             try {
-                reparsedCalendar = builder.build(fin);
+                reparsedCalendar = builder.build(fin, "utf-8");
             } catch (IOException e) {
                 exception = e;
                 errorOccurred = true;

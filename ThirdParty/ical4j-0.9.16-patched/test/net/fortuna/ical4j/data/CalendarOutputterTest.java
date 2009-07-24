@@ -10,8 +10,8 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class CalendarOutputterTest extends TestCase {
 
             Calendar calendar = null;
             try {
-                calendar = builder.build(fin);
+                calendar = builder.build(fin, "utf-8");
             } catch (IOException e) {
                 log.error("Error while parsing: " + filename, e);
             } catch (ParserException e) {
@@ -78,7 +78,8 @@ public class CalendarOutputterTest extends TestCase {
                 log.debug(out.toString());
             }
 
-            BufferedReader bin = new BufferedReader(new UnfoldingReader(new FileReader(filename)));
+            BufferedReader bin = new BufferedReader(new InputStreamReader(
+                    new UnfoldingInputStream(new FileInputStream(filename)), "utf-8"));
             StringWriter rout = new StringWriter();
             BufferedWriter bout = new BufferedWriter(rout);
 

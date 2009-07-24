@@ -67,21 +67,14 @@ public class CalendarParserImpl implements CalendarParser {
     /* (non-Javadoc)
      * @see net.fortuna.ical4j.data.CalendarParser#parse(java.io.InputStream, net.fortuna.ical4j.data.ContentHandler)
      */
-    public final void parse(final InputStream in, final ContentHandler handler)
+    public final void parse(final InputStream in, String charset, final ContentHandler handler)
             throws IOException, ParserException {
-        parse(new InputStreamReader(in), handler);
-    }
-
-    /* (non-Javadoc)
-     * @see net.fortuna.ical4j.data.CalendarParser#parse(java.io.Reader, net.fortuna.ical4j.data.ContentHandler)
-     */
-    public final void parse(final Reader in, final ContentHandler handler)
-            throws IOException, ParserException {
-
+        UnfoldingInputStream uis = new UnfoldingInputStream(in);
+        Reader reader = new InputStreamReader(uis, charset);
         StreamTokenizer tokeniser = null;
 
         try {
-            tokeniser = new StreamTokenizer(in);
+            tokeniser = new StreamTokenizer(reader);
             tokeniser.resetSyntax();
             tokeniser.wordChars(WORD_CHAR_START, WORD_CHAR_END);
             tokeniser.whitespaceChars(WHITESPACE_CHAR_START,
@@ -112,12 +105,8 @@ public class CalendarParserImpl implements CalendarParser {
 
                 if (tokeniser != null) {
                     int line = tokeniser.lineno();
-
-                    if (in instanceof UnfoldingReader) {
-                        // need to take unfolded lines into account
-                        line += ((UnfoldingReader) in).getLinesUnfolded();
-                    }
-
+                    // need to take unfolded lines into account
+                    line += uis.getLinesUnfolded();
                     error += " - line: " + line;
                 }
 

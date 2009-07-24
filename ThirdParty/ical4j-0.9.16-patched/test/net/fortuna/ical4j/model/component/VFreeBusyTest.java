@@ -118,7 +118,7 @@ public class VFreeBusyTest extends TestCase {
         FileInputStream fin = new FileInputStream("etc/samples/valid/core.ics");
 
         CalendarBuilder builder = new CalendarBuilder();
-        Calendar calendar = builder.build(fin);
+        Calendar calendar = builder.build(fin, "utf-8");
 
         DateTime startDate = new DateTime(0);
         DateTime endDate = new DateTime();
