@@ -659,6 +659,14 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, labelLocation:_LEFT_,
                     labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
                 },
+                {ref:ZaCos.A_zimbraPrefCalendarAllowForwardedInvite, 
+                	type:_CHECKBOX_,
+                    msgName:ZaMsg.MSG_zimbraPrefCalendarAllowForwardedInvite,
+                    label:ZaMsg.LBL_zimbraPrefCalendarAllowForwardedInvite,
+                    trueValue:"TRUE", falseValue:"FALSE",
+                    labelCssStyle:"white-space:normal;",
+                    nowrap:false,labelWrap:true
+                },                                                                
                 {ref:ZaCos.A_zimbraPrefCalendarReminderFlashTitle, 
                 	type:_CHECKBOX_,
                     msgName:ZaMsg.MSG_zimbraPrefCalendarReminderFlashTitle,

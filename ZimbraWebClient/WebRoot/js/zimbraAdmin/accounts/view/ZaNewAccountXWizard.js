@@ -1205,7 +1205,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal,ZaAccount.A_zimbraPrefCalendarUseQuickAdd,ZaAccount.A_zimbraPrefUseTimeZoneListInCalendar,
 			ZaAccount.A_zimbraPrefCalendarInitialView,ZaAccount.A_zimbraPrefCalendarFirstDayOfWeek,ZaAccount.A_zimbraPrefCalendarNotifyDelegatedChanges,
 			ZaAccount.A_zimbraPrefCalendarApptVisibility,ZaAccount.A_zimbraPrefCalendarReminderSoundsEnabled,
-			ZaAccount.A_zimbraPrefCalendarSendInviteDeniedAutoReply,ZaAccount.A_zimbraPrefCalendarAutoAddInvites],[])) {				
+			ZaAccount.A_zimbraPrefCalendarSendInviteDeniedAutoReply,ZaAccount.A_zimbraPrefCalendarAutoAddInvites,
+			ZaAccount.A_zimbraPrefCalendarAllowForwardedInvite,ZaAccount.A_zimbraPrefCalendarReminderFlashTitle],[])) {				
 			prefItems.push({type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_calendar_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_CalendarOptions}
@@ -1232,6 +1233,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                               		msgName:ZaMsg.LBL_zimbraPrefCalendarApptVisibility,
                               		label:ZaMsg.LBL_zimbraPrefCalendarApptVisibility, labelLocation:_LEFT_, 
                               		resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+                              	},
+                              	{ref:ZaAccount.A_zimbraPrefCalendarAllowForwardedInvite, type:_SUPER_WIZ_CHECKBOX_, 
+                              		resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraPrefCalendarAllowForwardedInvite,
+                              		checkBoxLabel:ZaMsg.LBL_zimbraPrefCalendarAllowForwardedInvite, 
+                              		trueValue:"TRUE", falseValue:"FALSE",
+                              		nowrap:false,labelWrap:true
                               	},
                               	{ref:ZaAccount.A_zimbraPrefCalendarReminderFlashTitle, type:_SUPER_WIZ_CHECKBOX_, 
                               		resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraPrefCalendarReminderFlashTitle,
