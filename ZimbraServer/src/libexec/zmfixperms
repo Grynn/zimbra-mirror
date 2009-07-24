@@ -57,6 +57,7 @@ components="\
   memcached \
   mysql \
   net-snmp \
+  nginx \
   openldap \
   openldap-clibs \
   openssl \
@@ -389,6 +390,16 @@ if [ -L ${zimbra_home}/jetty ]; then
     find ${zimbra_home}/jetty/common -type d -exec chown ${root_user}:${root_group} {} \; -exec chmod 755 {} \;
   fi  
 
+fi
+
+if [ -L ${zimbra_home}/nginx ]; then
+  printMsg "Fixing ownership and permissions on ${zimbra_home}/ssl"
+  if [ -d ${zimbra_home}/nginx/conf ]; then
+    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/nginx/conf
+  fi	
+  if [ -d ${zimbra_home}/nginx/logs ]; then
+    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/nginx/logs
+  fi	
 fi
 
 if [ -d ${zimbra_home}/ssl ]; then
