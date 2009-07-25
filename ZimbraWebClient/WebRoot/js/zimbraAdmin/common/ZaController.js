@@ -542,7 +542,7 @@ function (resp) {
 	 		var response = resp.getResponse();
 	 		var body = response.Body;		
 	 		
-	 		ZmCsfeCommand.setAuthToken(body.AuthResponse.authToken, -1, body.AuthResponse.session.id, true);
+	 		ZmCsfeCommand.setAuthToken(body.AuthResponse.authToken[0]._content, -1, body.AuthResponse.session.id, true);
 	 		
 			//Instrumentation code start
 			if(ZaAuthenticate.processResponseMethods) {
