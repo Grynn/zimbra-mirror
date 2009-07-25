@@ -374,32 +374,7 @@ ZaMTAXFormView.prototype.actionMsgsByQueryCallback = function (args) {
 	removelist = args.removelist;
 	qName = args.qName;
 	field = args.field;
-	//var joinStr = "\" OR \"";
-	/*for(var key in removelist) {
-		if(removelist[key]) {
-			var cnt = removelist[key].length;
-			for(var i = 0; i < cnt; i++) {
-				arr.push(removelist[key][i]);
-			}
-		}
-		
-	}*/
-//	if(arr.length > 0) {
-//		var query = "";
-	/*	if(this.xFormItem) {
-			instance = this.xFormItem.getInstance();
-			var refParts = this.xFormItem.getRef().split("/");
-			qName = refParts[0];
-		} else {
-			instance = this.getInstance();
-			qName = this.getRef();
-		}*/		
-		//var filterName = refParts[1];
-		//query = filterName + ":(\"" + arr.join(joinStr) + "\")";
-		//var query = new Object();
-		//query[field] = arr;
-		this._containedObject.mailQueueAction(qName, action, "query", removelist);
-	//}
+	this._containedObject.mailQueueAction(qName, action, "query", removelist);
 	this.confirmMessageDialog.popdown();
 	if(this.selectActionDialog)
 		this.selectActionDialog.popdown();

@@ -33,8 +33,8 @@ function() {
         items:[
              {type:_GROUP_,isTabGroup:true, numCols:2, colSizes: [100, "*"], items: [ //allows tab key iteration
                { type: _SPACER_ },
-               { ref: ZaRight.A_name, type: _TEXTFIELD_ , label: com_zimbra_delegatedadmin.Col_right_name+ ": " },
-               { ref: ZaRight.A_type, type:_OSELECT1_, label: com_zimbra_delegatedadmin.Col_right_type + ": ",
+               { ref: ZaRight.A_name, type: _TEXTFIELD_ , label: com_zimbra_delegatedadmin.Label_right_name},
+               { ref: ZaRight.A_type, type:_OSELECT1_, label: com_zimbra_delegatedadmin.Label_right_type,
                    labelLocation:_LEFT_, choices: ZaZimbraRights.type  ,
                    onChange: ZaRightSelectionDialog.filterChanged
                },

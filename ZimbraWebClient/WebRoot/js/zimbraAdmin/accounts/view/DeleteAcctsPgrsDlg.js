@@ -113,7 +113,7 @@ function(evt) {
 		this.pollAction = new AjxTimedAction(this, this.deleteOneAccount);		
 		this._currentIndex=0;
 		var obj = new Object();
-		obj[DeleteAcctsPgrsDlg._STATUS] = ZaMsg.NAD_DeleteAccStatus + " " + this._containedObject[this._currentIndex][ZaAccount.A_name];
+		obj[DeleteAcctsPgrsDlg._STATUS] = AjxMessageFormat.format(ZaMsg.NAD_DeleteAccStatus, [this._containedObject[this._currentIndex][ZaAccount.A_name]]);
 		obj[DeleteAcctsPgrsDlg._DELETED_ACCTS] = new Array();
 		this._localXForm.setInstance(obj);
 		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, "50");		
@@ -148,7 +148,7 @@ function (result) {
 		obj[DeleteAcctsPgrsDlg._DELETED_ACCTS].push(this._containedObject[this._currentIndex]);
 		this._currentIndex++;
 		if((this._currentIndex < this._containedObject.length) && !this._aborted) {
-			obj.status = ZaMsg.NAD_DeleteAccStatus + " " + this._containedObject[this._currentIndex][ZaAccount.A_name];
+			obj.status = AjxMessageFormat.format(ZaMsg.NAD_DeleteAccStatus, [this._containedObject[this._currentIndex][ZaAccount.A_name]]);
 			this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, "50");				
 		} else {
 			//done

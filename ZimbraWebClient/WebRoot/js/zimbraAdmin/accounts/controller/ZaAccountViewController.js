@@ -431,20 +431,13 @@ function () {
 			}
 	
 			if(failedAliasesCnt == 1) {
-				this._errorDialog.setMessage(ZaMsg.WARNING_ALIAS_EXISTS + failedAliases, "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
+				this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.WARNING_ALIAS_EXISTS, [failedAliases]), "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
 				this._errorDialog.popup();			
 			} else if(failedAliasesCnt > 1) {
-				this._errorDialog.setMessage(ZaMsg.WARNING_ALIASES_EXIST + failedAliases, "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
+				this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.WARNING_ALIASES_EXIST, [failedAliases]), "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
 				this._errorDialog.popup();			
 			}
 		} catch (ex) {
-			/*for (var prop in ex) {
-				detailStr = detailStr + prop + " - " + ex[prop] + "\n";				
-			}*/
-				
-			/*this._errorDialog.setMessage(ZaMsg.FAILED_ADD_ALIASES, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
-			this._errorDialog.popup();
-			*/
 			this.popupErrorDialog(ZaMsg.FAILED_ADD_ALIASES, ex, true);	
 			return false;
 		}

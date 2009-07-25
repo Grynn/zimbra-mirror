@@ -639,8 +639,8 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 			{ ref: ZaDomain.A_domainName, type:_OUTPUT_,
 			  label:ZaMsg.Domain_ACEName+":",visibilityChecks:[ZaDomainXFormView.hasACEName], visibilityChangeEventSources:[ZaDomain.A_domainName]
 			},
-            {ref:ZaDomain.A_zimbraPrefTimeZoneId, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefTimeZoneId,
-                   label:ZaMsg.NAD_zimbraPrefTimeZoneId+":", labelLocation:_LEFT_,
+            {ref:ZaDomain.A_zimbraPrefTimeZoneId, type:_OSELECT1_, msgName:ZaMsg.MSG_zimbraPrefTimeZoneId,
+                   label:ZaMsg.LBL_zimbraPrefTimeZoneId, labelLocation:_LEFT_,
                    onChange:ZaDomainXFormView.onFormFieldChanged
             }
 
@@ -694,7 +694,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 				}
 		});
 	case1.items.push({ref:ZaDomain.A_zimbraDomainStatus, type:_OSELECT1_, msgName:ZaMsg.Domain_zimbraDomainStatus,
-				label:ZaMsg.Domain_zimbraDomainStatus+":", 
+				label:ZaMsg.LBL_zimbraDomainStatus, 
 				labelLocation:_LEFT_, choices:ZaDomain.domainStatusChoices, onChange:ZaDomainXFormView.onFormFieldChanged});
 
 	case1.items.push({ ref: ZaDomain.A_notes, type:_TEXTAREA_, 
@@ -734,7 +734,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 							visibilityChangeEventSources:[ZaDomain.A_GALServerType]
 						},								
 						{ref:ZaDomain.A_GalLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_},
-						{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,
+						{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.LBL_Domain_GalLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,
 							items:[
 								{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
 							]

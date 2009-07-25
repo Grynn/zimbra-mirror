@@ -278,7 +278,7 @@ function() {
 		html[idx++] = "</td>";
 		html[idx++] = "</table></div></td></tr>";
 		html[idx++] = "<tr></tr>";
-		idx = this._addAttrRow(ZaRight.A_desc, com_zimbra_delegatedadmin.Col_right_desc + ": ", html, idx);
+		idx = this._addAttrRow(ZaRight.A_desc, com_zimbra_delegatedadmin.Label_right_desc, html, idx);
 		html[idx++] = "</table>";
 		this._toolTip = html.join("");
 	}

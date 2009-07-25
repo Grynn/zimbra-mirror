@@ -108,8 +108,8 @@ function (itemValue, grantee, targets, type, isByDomain) {
 ZaEffectiveRightsXFormView.prototype.getMyXForm = function(targets, grantee) {
     var xFormObject = {} ;
     var headerItems = [];
-    headerItems.push({type:_OUTPUT_, ref:ZaEffectiveRights.A_grantee + "/name", labelLocation:_LEFT_,label:com_zimbra_delegatedadmin.Col_grantee_name + ": ",visibilityChecks:[ZaItem.hasReadPermission]});
-    headerItems.push({type:_OUTPUT_, ref:ZaEffectiveRights.A_grantee + "/id", labelLocation:_LEFT_,label:com_zimbra_delegatedadmin.Col_grantee_id + ": ",visibilityChecks:[ZaItem.hasReadPermission]});
+    headerItems.push({type:_OUTPUT_, ref:ZaEffectiveRights.A_grantee + "/name", labelLocation:_LEFT_,label:com_zimbra_delegatedadmin.Label_grantee_name,visibilityChecks:[ZaItem.hasReadPermission]});
+    headerItems.push({type:_OUTPUT_, ref:ZaEffectiveRights.A_grantee + "/id", labelLocation:_LEFT_,label:com_zimbra_delegatedadmin.Label_grantee_id,visibilityChecks:[ZaItem.hasReadPermission]});
     var topTabCases = [] ;
     var topTabChoices = [];
     var topTabIndex = 0 ;

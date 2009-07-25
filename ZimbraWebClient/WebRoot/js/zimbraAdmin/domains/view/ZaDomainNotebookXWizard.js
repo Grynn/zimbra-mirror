@@ -177,17 +177,17 @@ ZaDomainNotebookXWizard.myXFormModifier = function(xFormObject) {
 				},
 				{type:_CASE_, caseKey:_tab2,
 				   items:[								
-						{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.ACL_Dom+":",labelLocation:_LEFT_,
+						{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.LBL_ACL_Dom,labelLocation:_LEFT_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
 							visibilityChecks:[],enableDisableChecks:[]
 						},							
 						{type:_SPACER_, height:10},
-						{ref:ZaDomain.A_NotebookAllACLs, type:_ACL_, label:ZaMsg.ACL_All+":",labelLocation:_LEFT_,
+						{ref:ZaDomain.A_NotebookAllACLs, type:_ACL_, label:ZaMsg.LBL_ACL_All,labelLocation:_LEFT_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
 							visibilityChecks:[],enableDisableChecks:[]
 						},
 						{type:_SPACER_, height:10},
-						{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.ACL_Public+":",labelLocation:_LEFT_,
+						{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.LBL_ACL_Public,labelLocation:_LEFT_,
 							visibleBoxes:{r:true,w:false,a:false,i:false,d:false,x:false},
 							visibilityChecks:[],enableDisableChecks:[]
 						}

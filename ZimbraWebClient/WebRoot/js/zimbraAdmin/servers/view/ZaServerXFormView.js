@@ -531,14 +531,8 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                 {type:_ZA_PLAIN_GROUPER_/*_ZAGROUP_*/, items:[
                     {ref:ZaServer.A_name, type:_OUTPUT_, label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_},
                     ZaItem.descriptionXFormItem,
-                        /*
-                    { ref: ZaServer.A_description, type:_INPUT_,
-                      label:ZaMsg.NAD_Description,cssClass:"admin_xform_name_input",
-                      onChange:ZaServerXFormView.onFormFieldChanged
-                    },    */
                     { ref: ZaServer.A_ServiceHostname, type:_OUTPUT_,
-                      label:ZaMsg.NAD_ServiceHostname+":", cssClass:"admin_xform_name_input"/*,
-                      onChange:ZaServerXFormView.onFormFieldChanged*/
+                      label:ZaMsg.LBL_ServiceHostname, cssClass:"admin_xform_name_input"
                     },
                     { ref: ZaServer.A_LmtpAdvertisedName, type:_INPUT_,
                       label: ZaMsg.NAD_LmtpAdvertisedName, cssClass:"admin_xform_name_input",
@@ -557,8 +551,8 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                     },
                     {ref:ZaServer.A_zimbraMailPurgeSleepInterval, type:_SUPER_LIFETIME_,
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-                            msgName:ZaMsg.NAD_zimbraMailPurgeSleepInterval,
-                            txtBoxLabel:ZaMsg.NAD_zimbraMailPurgeSleepInterval,
+                            msgName:ZaMsg.MSG_zimbraMailPurgeSleepInterval,
+                            txtBoxLabel:ZaMsg.LBL_zimbraMailPurgeSleepInterval,
                             onChange:ZaServerXFormView.onFormFieldChanged
                     },
                     {ref:ZaServer.A_zimbraReverseProxyLookupTarget,
@@ -785,23 +779,20 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 								{ ref: ZaServer.A_ImapSSLBindPort, type:_TEXTFIELD_,
 								  enableDisableChecks:[ZaServerXFormView.getIMAPSSLEnabled,ZaItem.hasReadPermission],
 								  enableDisableChangeEventSources:[ZaServer.A_ImapServerEnabled, ZaServer.A_ImapSSLServerEnabled],
-								  label: ZaMsg.IMAP_SSLPort+":", width: "5em",
-								  onChange: ZaServerXFormView.onFormFieldChanged/*,
-							      resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
+								  label: ZaMsg.LBL_IMAP_SSLPort, width: "5em",
+								  onChange: ZaServerXFormView.onFormFieldChanged
 								},
 								{ ref: ZaServer.A_zimbraImapProxyBindPort, type:_TEXTFIELD_,
 								  enableDisableChecks:[ZaServerXFormView.getMailProxyEnabled,ZaItem.hasReadPermission],
 								  enableDisableChangeEventSources:[ZaServer.A_zimbraMailProxyServiceEnabled, ZaServer.A_zimbraMailProxyServiceInstalled],
-								  label: ZaMsg.IMAP_Proxy_Port+":", width: "5em",
-								  onChange: ZaServerXFormView.onFormFieldChanged/*,
-						      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
+								  label: ZaMsg.LBL_IMAP_Proxy_Port, width: "5em",
+								  onChange: ZaServerXFormView.onFormFieldChanged
 								},
 								{ ref: ZaServer.A_zimbraImapSSLProxyBindPort, type:_TEXTFIELD_,
 								  enableDisableChecks:[ZaServerXFormView.getIMAPSSLProxyEnabled,ZaItem.hasReadPermission],
 								  enableDisableChangeEventSources:[ZaServer.A_zimbraMailProxyServiceEnabled, ZaServer.A_zimbraMailProxyServiceInstalled,ZaServer.A_ImapServerEnabled,ZaServer.A_ImapSSLServerEnabled],
-								  label: ZaMsg.IMAP_SSL_Proxy_Port+":", width: "5em",
-								  onChange: ZaServerXFormView.onFormFieldChanged/*,
-						      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
+								  label: ZaMsg.LBL_IMAP_SSL_Proxy_Port, width: "5em",
+								  onChange: ZaServerXFormView.onFormFieldChanged
 								}
 								]
 							});
@@ -884,38 +875,34 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						      enableDisableChangeEventSources:[ZaServer.A_Pop3ServerEnabled],
 						      enableDisableChecks:[ZaServerXFormView.getPOP3Enabled,ZaItem.hasWritePermission],
 
-							  label: ZaMsg.NAD_POP_Port+":",
+							  label: ZaMsg.LBL_POP_Port,
 							  labelLocation:_LEFT_,
 							  textFieldCssClass:"admin_xform_number_input",
-							  onChange:ZaServerXFormView.onFormFieldChanged/*,
-					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
+							  onChange:ZaServerXFormView.onFormFieldChanged
 						  	},
 
 							{ ref: ZaServer.A_zimbraPop3SSLBindPort, type:_TEXTFIELD_,
 							  visibilityChecks:[ZaServerXFormView.getPOP3SSLEnabled,ZaItem.hasReadPermission],
 							  visibilityChangeEventSources:[ZaServer.A_Pop3SSLServerEnabled, ZaServer.A_Pop3ServerEnabled],
 							  labelLocation:_LEFT_,
-							  label: ZaMsg.NAD_POP_SSL_Port+":",
-							  onChange:ZaServerXFormView.onFormFieldChanged/*,
-					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
+							  label: ZaMsg.LBL_POP_SSL_Port,
+							  onChange:ZaServerXFormView.onFormFieldChanged
 						  	},
 							{ ref: ZaServer.A_zimbraPop3ProxyBindPort, type:_TEXTFIELD_,
 							  visibilityChecks:[ZaServerXFormView.getPOP3ProxyEnabled,ZaItem.hasReadPermission],
 							  visibilityChangeEventSources:[ZaServer.A_zimbraMailProxyServiceEnabled, ZaServer.A_zimbraMailProxyServiceInstalled,ZaServer.A_Pop3ServerEnabled],
 							  labelLocation:_LEFT_,
 							  textFieldCssClass:"admin_xform_number_input",
-							  label: ZaMsg.NAD_POP_proxy_Port+":",
-							  onChange:ZaServerXFormView.onFormFieldChanged/*,
-					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
+							  label: ZaMsg.LBL_POP_proxy_Port,
+							  onChange:ZaServerXFormView.onFormFieldChanged
 						  	},
 							{ ref: ZaServer.A_zimbraPop3SSLProxyBindPort, type:_TEXTFIELD_,
 							  visibilityChecks:[ZaServerXFormView.getPOP3SSLProxyEnabled,ZaItem.hasReadPermission],
 							  visibilityChangeEventSources:[ZaServer.A_zimbraMailProxyServiceEnabled,ZaServer.A_Pop3SSLServerEnabled, ZaServer.A_zimbraMailProxyServiceInstalled,ZaServer.A_Pop3ServerEnabled],
 							  labelLocation:_LEFT_,
-							  label: ZaMsg.NAD_POP_SSL_proxy_Port+":",
+							  label: ZaMsg.LBL_POP_SSL_proxy_Port,
 							  textFieldCssClass:"admin_xform_number_input",
-							  onChange:ZaServerXFormView.onFormFieldChanged/*,
-					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
+							  onChange:ZaServerXFormView.onFormFieldChanged
 							}
 				      	]
 						}
@@ -971,15 +958,13 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 								valueChangeEventSources:[ZaServer.A_Volumes, ZaServer.A_RemovedVolumes],
 								ref:ZaServer.A_CurrentMsgVolumeId,
 								choices:ZaServerXFormView.messageVolChoices,
-								//onChange:ZaServerXFormView.currentVolumeChanged,
-								label:ZaMsg.VM_CurrentMessageVolume+":"
+								label:ZaMsg.LBL_VM_CurrentMessageVolume
 							},
 							{type:_OSELECT1_, editable:false,
 								valueChangeEventSources:[ZaServer.A_Volumes, ZaServer.A_RemovedVolumes],
 								ref:ZaServer.A_CurrentIndexVolumeId,
 								choices:ZaServerXFormView.indexVolChoices,
-								//onChange:ZaServerXFormView.currentVolumeChanged,
-								label:ZaMsg.VM_CurrentIndexVolume+":"
+								label:ZaMsg.LBL_VM_CurrentIndexVolume
 							}
 						]}
 

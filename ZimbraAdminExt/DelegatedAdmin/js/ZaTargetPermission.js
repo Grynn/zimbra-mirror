@@ -622,7 +622,7 @@ function (grantsList) {
             var key = keys [j] ;
             dlgMsg += "<tr>";
              if (key == ZaGrant.A_target)  {
-                dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_target_name + ": " + "</td>";
+                dlgMsg += "<td>" + com_zimbra_delegatedadmin.Label_target_name + "</td>";
                 var targetName = grant[ZaGrant.A_target] ;
                 if (grant[ZaGrant.A_target_type] == ZaItem.GLOBAL_GRANT) {
                     targetName = ZaGrant.GLOBAL_TARGET_NAME  ;
@@ -631,16 +631,16 @@ function (grantsList) {
                 }
                 dlgMsg += "<td>" + targetName + "</td>" ;
             } else if (key ==ZaGrant.A_grantee)  {
-                var label = com_zimbra_delegatedadmin.Col_grantee_name ;
+                var label = com_zimbra_delegatedadmin.Label_grantee_name ;
                 var value = grant[ZaGrant.A_grantee] ;
                 if ( value == null || value.length <= 0) {
-                    label = com_zimbra_delegatedadmin.Col_grantee_id ;
+                    label = com_zimbra_delegatedadmin.Label_grantee_id ;
                     value = grant[ZaGrant.A_grantee_id] ;
                 }
-                dlgMsg += "<td>" + label + ": " + "</td>";
+                dlgMsg += "<td>" + label + "</td>";
                 dlgMsg += "<td>" + value + "</td>" ;
             } else if (key == ZaGrant.A_right) {
-                dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_grant_right_name + ": " + "</td>";
+                dlgMsg += "<td>" + com_zimbra_delegatedadmin.Label_right_name + "</td>";
                 dlgMsg += "<td>"
                         + (grant[ZaGrant.A_canDelegate] == "1" ? "+" : "")
                         + (grant[ZaGrant.A_deny] == "1" ? "-" : "")

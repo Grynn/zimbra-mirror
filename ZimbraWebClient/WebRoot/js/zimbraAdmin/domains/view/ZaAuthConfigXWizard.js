@@ -439,8 +439,8 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 							},
 							{type:_SPACER_, height:10},
 							{type:_OUTPUT_,value:ZaMsg.Domain_AuthProvideLoginPwd, align:_CENTER_, colSpan:"*"},
-							{type:_TEXTFIELD_, label:ZaMsg.Domain_AuthTestUserName+":", ref:ZaDomain.A_AuthTestUserName, alignment:_LEFT_},
-							{type:_SECRET_, label:ZaMsg.Domain_AuthTestPassword+":", ref:ZaDomain.A_AuthTestPassword, alignment:_LEFT_}
+							{type:_TEXTFIELD_, label:ZaMsg.LBL_Domain_AuthTestUserName, ref:ZaDomain.A_AuthTestUserName, alignment:_LEFT_},
+							{type:_SECRET_, label:ZaMsg.LBL_Domain_AuthTestPassword, ref:ZaDomain.A_AuthTestPassword, alignment:_LEFT_}
 						]
 					},
 					{type:_CASE_, caseKey:ZaAuthConfigXWizard.AUTH_TEST_STEP, 
@@ -472,12 +472,12 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 										],										
 										items: [
 											{type:_OUTPUT_, value:ZaMsg.Domain_AuthTestFailed, alignment:_CENTER_, colSpan:2, label:null},
-											{type:_OUTPUT_, ref:ZaDomain.A_AuthTestResultCode, label:ZaMsg.Domain_AuthTestResultCode+":", choices:this.TestResultChoices, alignment:_LEFT_},
-											{type:_OUTPUT_, ref:ZaDomain.A_AuthComputedBindDn, label:ZaMsg.Domain_AuthComputedBindDn+":", alignment:_LEFT_, 
+											{type:_OUTPUT_, ref:ZaDomain.A_AuthTestResultCode, label:ZaMsg.LBL_Domain_AuthTestResultCode, choices:this.TestResultChoices, alignment:_LEFT_},
+											{type:_OUTPUT_, ref:ZaDomain.A_AuthComputedBindDn, label:ZaMsg.LBL_Domain_AuthComputedBindDn, alignment:_LEFT_, 
 												visibilityChangeEventSources:[ZaDomain.A_AuthMech],
 												visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ad]]												
 											},
-											{type:_TEXTAREA_, ref:ZaDomain.A_AuthTestMessage, label:ZaMsg.Domain_AuthTestMessage+":", height:150, alignment:_LEFT_, width:"320px"}
+											{type:_TEXTAREA_, ref:ZaDomain.A_AuthTestMessage, label:ZaMsg.LBL_Domain_AuthTestMessage, height:150, alignment:_LEFT_, width:"320px"}
 										]
 									}
 								]
@@ -503,8 +503,6 @@ ZaAuthConfigXWizard.startTlsEnabledChanged =  function (value, event, form) {
         for (var i=0; i< ldapUrls.length; i++) {
             var ldapUrl = ldapUrls [i] ;
             if (ldapUrl == null || ldapUrl.length <=0) {
-                //remove this empty item
-//                ldapUrls[i] = "ldaps://" + ":" + "636" ;
             }else {
                 //force to use ldaps://
                 ldapUrls[i] = ldapUrl.replace("ldap://", "ldaps://")  ;

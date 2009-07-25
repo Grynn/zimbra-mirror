@@ -197,7 +197,7 @@ ZaNewAdminWizard = function (parent) {
 
     this.newAdminTypesChoices = [
         {value: ZaItem.ACCOUNT, label: com_zimbra_delegatedadmin.type_account },
-        {value: ZaItem.DL, label: com_zimbra_delegatedadmin.NAD_IsAdminGroup}
+        {value: ZaItem.DL, label: com_zimbra_delegatedadmin.IsAdminGroup}
     ];
 
     this.stepChoices = [
@@ -756,7 +756,7 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
             tabGroupKey:ZaNewAdminWizard.STEP_NEW_GROUP, caseKey:ZaNewAdminWizard.STEP_NEW_GROUP,
             items: [
                     {ref:ZaAccount.A_name, type:_EMAILADDR_,
-                        label:ZaMsg.DLXV_LabelListName + ": ",
+                        label:ZaMsg.LBL_LabelListName,
                         labelLocation:_LEFT_,forceUpdate:true,
                         visibilityChecks:[],
                         enableDisableChecks:[]

@@ -268,7 +268,7 @@ if (ZaTabView.XFormModifiers["ZaDLXFormView"]) {
        var adminGroupChkBx =
             {
                 ref: ZaDistributionList.A_isAdminGroup,type:_CHECKBOX_,
-                label:com_zimbra_delegatedadmin.NAD_IsAdminGroup + ": ",
+                label:com_zimbra_delegatedadmin.LBL_IsAdminGroup,
                 labelLocation:_LEFT_,  align:_LEFT_,
 				labelCssClass:"xform_label", cssStyle:"padding-left:0px",
                 enableDisableChecks:[],

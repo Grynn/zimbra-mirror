@@ -68,8 +68,8 @@ ZaAllGrantsXFormView.getXModel = function () {
 ZaAllGrantsXFormView.prototype.getMyXForm = function() {
     var xFormObject = {} ;
     var headerItems = [];
-    headerItems.push({type:_OUTPUT_, ref:ZaGrant.A_grantee , labelLocation:_LEFT_,label:com_zimbra_delegatedadmin.Col_admin_name + ": ",visibilityChecks:[ZaItem.hasReadPermission]});
-    headerItems.push({type:_OUTPUT_, ref:ZaGrant.A_grantee_id, labelLocation:_LEFT_,label:com_zimbra_delegatedadmin.Col_admin_id + ": ",visibilityChecks:[ZaItem.hasReadPermission]});
+    headerItems.push({type:_OUTPUT_, ref:ZaGrant.A_grantee , labelLocation:_LEFT_,label:com_zimbra_delegatedadmin.LBL_admin_name,visibilityChecks:[ZaItem.hasReadPermission]});
+    headerItems.push({type:_OUTPUT_, ref:ZaGrant.A_grantee_id, labelLocation:_LEFT_,label:com_zimbra_delegatedadmin.LBL_admin_id,visibilityChecks:[ZaItem.hasReadPermission]});
 
     var tabIndex = 0 ;
     this.directGrantsTabId = ++tabIndex ; 

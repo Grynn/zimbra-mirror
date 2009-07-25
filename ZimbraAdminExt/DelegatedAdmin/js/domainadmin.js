@@ -411,7 +411,6 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
             items:[
                  {type:_GROUP_,isTabGroup:true, items: [ //allows tab key iteration
                     { type: _SPACER_ },
-                    //{ ref:"cos", type: _INPUT_, label: ZaMsg.Col_Cos + ": " },
                     {ref:"cos", type:_DYNSELECT_,label: ZaMsg.NAD_ClassOfService,
                             visibilityChecks:[],
                             enableDisableChecks:true,
@@ -438,7 +437,7 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
                                 }
                         },
                     { ref: "limits", visibilityChecks:[], enableDisableChecks:true,
-                        type:_INPUT_, label:ZaMsg.Col_Limit + ": " }
+                        type:_INPUT_, label:ZaMsg.Col_Limit}
                   ]
                 }
             ]
@@ -550,7 +549,7 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
 
                if (parseInt(obj.limits) !=  obj.limits) {
                    app.getCurrentController().popupErrorDialog(
-                           AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [ZaMsg.Col_Limit])) ;
+                           AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [ZaMsg.msgCol_Limit])) ;
                    return ;
                }
 
@@ -636,7 +635,7 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
                  {type:_GROUP_,isTabGroup:true, items: [ //allows tab key iteration
                     { type: _SPACER_ },
                     { ref:"feature", type:_OSELECT1_,label: ZaMsg.NAD_Feature, width: 200 },
-                    { ref: "limits", type:_INPUT_, label:ZaMsg.Col_Limit + ": ", width: 200 }
+                    { ref: "limits", type:_INPUT_, label:ZaMsg.Col_Limit, width: 200 }
                   ]
                 }
             ]
@@ -752,7 +751,7 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
 
                 if (parseInt(obj.limits) !=  obj.limits) {
                     app.getCurrentController().popupErrorDialog(
-                            AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [ZaMsg.Col_Limit])) ;
+                            AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [ZaMsg.msgCol_Limit])) ;
                     return ;
                 }
                var instance = this.getInstance();
@@ -869,10 +868,10 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
                 acct_type_col_display = com_zimbra_delegatedadmin.Col_account_type ;
         }
         acctLimitsHeaderList[0] = new ZaListHeaderItem("cos", acct_type_col_display, null, 200, null, null, true, true);
-        acctLimitsHeaderList[1] = new ZaListHeaderItem("limits", ZaMsg.Col_Limit, null, "auto", null, null, true, true);
+        acctLimitsHeaderList[1] = new ZaListHeaderItem("limits", ZaMsg.headerCol_Limit, null, "auto", null, null, true, true);
 
         featureMaxHeaderList[0] = new ZaListHeaderItem("feature",  ZaMsg.TABT_Features , null, 200, null, null, true, true);
-        featureMaxHeaderList[1] = new ZaListHeaderItem("limits", ZaMsg.Col_Limit, null, "auto", null, null, true, true);
+        featureMaxHeaderList[1] = new ZaListHeaderItem("limits", ZaMsg.headerCol_Limit, null, "auto", null, null, true, true);
 
 
 

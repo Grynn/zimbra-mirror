@@ -212,7 +212,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 				  		trueValue: "TRUE", falseValue: "FALSE"
 					},
 					{ ref: ZaGlobalConfig.A_zimbraMtaBlockedExtensionWarnRecipient, type: _CHECKBOX_,
-				  		label: ZaMsg.zimbraMtaBlockedExtensionWarnRecipient,
+				  		label: ZaMsg.LBL_zimbraMtaBlockedExtensionWarnRecipient,
 				  		trueValue:"TRUE", falseValue:"FALSE"
 					}					
 				]},
@@ -337,10 +337,6 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							 		 toolTipContent: ZaMsg.tt_MTA_RelayMTA,
 							 		 onMouseout: "ZaController.hideTooltip"
 								},
-/*								{ref:ZaGlobalConfig.A_zimbraMtaMyNetworks,label:ZaMsg.NAD_MTA_MyNetworks,
-									type:_TEXTFIELD_ ,
-									toolTipContent: ZaMsg.tt_MTA_MyNetworks
-								},*/
 								{ type: _DWT_ALERT_,
 									containerCssStyle: "padding-bottom:0px",
 									style: DwtAlert.INFO,
@@ -454,19 +450,19 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.Global_IMAP_NetworkGrp,
 						  items: [
 							{ ref: ZaGlobalConfig.A_zimbraImapBindPort, type:_TEXTFIELD_,
-							  label: ZaMsg.IMAP_Port+":",
+							  label: ZaMsg.LBL_IMAP_Port,
 							  width: "5em"
 						  	},
 							{ ref: ZaGlobalConfig.A_zimbraImapSSLBindPort, type:_TEXTFIELD_,
-							  label: ZaMsg.IMAP_SSLPort+":",
+							  label: ZaMsg.LBL_IMAP_SSLPort,
 							  width: "5em"
 						  	},
 							{ ref: ZaGlobalConfig.A_zimbraImapProxyBindPort, type:_TEXTFIELD_,
-							  label: ZaMsg.IMAP_Proxy_Port+":",
+							  label: ZaMsg.LBL_IMAP_Proxy_Port,
 							  width: "5em"
 						  	},
 							{ ref: ZaGlobalConfig.A_zimbraImapSSLProxyBindPort, type:_TEXTFIELD_,
-							  label: ZaMsg.IMAP_SSL_Proxy_Port+":",
+							  label: ZaMsg.LBL_IMAP_SSL_Proxy_Port,
 							  width: "5em"
 						  	}
 						  ]
@@ -514,19 +510,19 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.Global_POP_NetworkGrp,
 						  items: [
 							{ ref: ZaGlobalConfig.A_zimbraPop3BindPort, type:_TEXTFIELD_,
-							  label: ZaMsg.NAD_POP_Port+":",
+							  label: ZaMsg.LBL_POP_Port+":",
 							  width: "5em"
 						  	},
 							{ ref: ZaGlobalConfig.A_zimbraPop3SSLBindPort, type:_TEXTFIELD_,
-							  label: ZaMsg.NAD_POP_SSL_Port,
+							  label: ZaMsg.LBL_POP_SSL_Port,
 							 width: "5em"
 						  	},
 							{ ref: ZaGlobalConfig.A_zimbraPop3ProxyBindPort, type:_TEXTFIELD_,
-							  label: ZaMsg.NAD_POP_proxy_Port,
+							  label: ZaMsg.LBL_POP_proxy_Port,
 							  width: "5em"
 						  	},
 							{ ref: ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort, type:_TEXTFIELD_,
-							  label: ZaMsg.NAD_POP_SSL_proxy_Port,
+							  label: ZaMsg.LBL_POP_SSL_proxy_Port,
 							 width: "5em"
 						  	}
 						  ]}*/

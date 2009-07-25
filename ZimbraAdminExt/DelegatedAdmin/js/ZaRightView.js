@@ -95,9 +95,9 @@ ZaRightView.myXFormModifier = function(xFormObject) {
 	xFormObject.items = [
         {type:_GROUP_,  colSpan: "*", numCols: 2, colSizes: [200, "*"],
             items: [
-                { ref: ZaRight.A_name, type: _OUTPUT_ , label: com_zimbra_delegatedadmin.Col_right_name+ ": " },
-                { ref: ZaRight.A_desc, type: _OUTPUT_, label: com_zimbra_delegatedadmin.Col_right_desc + ": " },
-                { ref: ZaRight.A_type, type:_OUTPUT_, label: com_zimbra_delegatedadmin.Col_right_type + ": " },
+                { ref: ZaRight.A_name, type: _OUTPUT_ , label: com_zimbra_delegatedadmin.Label_right_name},
+                { ref: ZaRight.A_desc, type: _OUTPUT_, label: com_zimbra_delegatedadmin.Label_right_desc},
+                { ref: ZaRight.A_type, type:_OUTPUT_, label: com_zimbra_delegatedadmin.Label_right_type},
                 { ref: ZaRight.A_targetType, type:_OUTPUT_,
                     visibilityChecks: [ZaRightView.isShowTargetType],
                     visibilityChangeEventSources: [ZaRight.A_type] ,
@@ -115,7 +115,6 @@ ZaRightView.myXFormModifier = function(xFormObject) {
                   {ref:ZaRight.A_rights, type:_DWT_LIST_, height:200, width:"300px",
                         forceUpdate: true, cssClass: "DLSource",
                         widgetClass: ZaRightsMiniListView,
-    //                        headerList:acctLimitsHeaderList,
                         hideHeader: false
                     } ,
                     {type: _SPACER_, height: 10 }
@@ -132,7 +131,6 @@ ZaRightView.myXFormModifier = function(xFormObject) {
                   {ref:ZaRight.A_attrs, type:_DWT_LIST_, height:"200", width:"300px",
                         forceUpdate: true, cssClass: "DLSource",
                         widgetClass: ZaRightsAttrsListView,
-//                        headerList:ZaRightsAttrsListView._getHeaderList(ZaRight.A_getAttrs),
                         hideHeader: false
                   } ,
                   {type: _SPACER_, height: 10 }
@@ -149,22 +147,9 @@ ZaRightView.myXFormModifier = function(xFormObject) {
                   {ref:ZaRight.A_attrs, type:_DWT_LIST_, height:"200", width:"300px",
                         forceUpdate: true, cssClass: "DLSource",
                         widgetClass: ZaRightsAttrsListView,
-//                        headerList: ZaRightsAttrsListView._getHeaderList(ZaRight.A_setAttrs),
                         hideHeader: false
                   },
                   {type: _SPACER_, height: 10 }
-                    /*  No custom rights are supported,
-                    {type:_CELLSPACER_},
-                    {type:_GROUP_, numCols:5, width:"300px", colSizes:["80px","auto","80px","auto","80px"],
-                        cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
-                        items: [
-                            {type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px"},
-                            {type:_CELLSPACER_},
-                            {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px"},
-                            {type:_CELLSPACER_},
-                            {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px"}
-                        ]
-                    }*/
                 ]
              }
            ]

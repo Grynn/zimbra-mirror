@@ -456,14 +456,12 @@ function(tmpObj) {
 	if(tmpObj.attrs[ZaAccount.A_zimbraMailForwardingAddressMaxLength] != "" && tmpObj.attrs[ZaAccount.A_zimbraMailForwardingAddressMaxLength] !=null && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaAccount.A_zimbraMailForwardingAddressMaxLength])) {
 		//show error msg
 		ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [ZaMsg.MSG_zimbraMailForwardingAddressMaxLength])) ;
-		//ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.MSG_zimbraMailForwardingAddressMaxLength + " ! ");
 		return false;
 	}
 	
 	if(tmpObj.attrs[ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs] != "" && tmpObj.attrs[ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs] !=null && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs])) {
 		//show error msg
 		ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [ZaMsg.MSG_zimbraMailForwardingAddressMaxNumAddrs])) ;		
-//		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.MSG_zimbraMailForwardingAddressMaxNumAddrs + " ! ");
 		return false;
 	}
 	
@@ -757,9 +755,9 @@ function (tmpObj, account) {
 				}
 			}
 			if(failedAliasesCnt == 1) {
-				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.WARNING_ALIAS_EXISTS + failedAliases);
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_ALIAS_EXISTS, [failedAliases]));
 			} else if(failedAliasesCnt > 1) {
-				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.WARNING_ALIASES_EXIST + failedAliases);
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_ALIASES_EXIST, [failedAliases]));
 			}
 		} catch (ex) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.FAILED_ADD_ALIASES, ex);
@@ -1887,10 +1885,6 @@ function (){
 ZaAccount.getLastLoginTime =
 function (serverStr) {
 	if (serverStr) {
-		/*
-		return serverStr.substring (4, 6) + "/" + serverStr.substring(6, 8) + "/" + serverStr.substring(0, 4) +
-				" " + serverStr.substring (8, 10) + ":" + serverStr.substring (10, 12) + ":"
-				+ serverStr.substring (12, 14) ;*/
 		var ajxTKServerStr = serverStr.substring(0,8) + "T" + serverStr.substring(8) ;
 		var curDate = AjxDateUtil.parseServerDateTime(ajxTKServerStr);	
 		var formatter = new AjxDateFormat("MM/dd/yyyy HH:mm:ss");

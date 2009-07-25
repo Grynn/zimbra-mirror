@@ -167,7 +167,7 @@ function (form) {
 		form.parent.popdown();
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.ACCT_EXISTS ) {
-			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.WARNING_ALIAS_EXISTS + " " + newAlias 
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_ALIAS_EXISTS, [newAlias]) 
 					+ "<BR />" + ex.msg );
 		} else if (ex.code == ZmCsfeException.NO_SUCH_DISTRIBUTION_LIST || ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT){
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(

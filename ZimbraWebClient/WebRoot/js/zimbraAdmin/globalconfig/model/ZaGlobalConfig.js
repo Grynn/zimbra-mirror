@@ -286,32 +286,6 @@ LifetimeNumber_XFormItem.prototype.validateType = function(value) {
 }
 
 ZaGlobalConfig.myXModel = {
-	/*getRelayHost: function (model, instance) {
-		if(instance.attrs[ZaGlobalConfig.A_zimbraMtaRelayHost]) {
-			var parts = instance.attrs[ZaGlobalConfig.A_zimbraMtaRelayHost].split(":");
-			if(parts && parts.length)
-				return parts[0];
-			else
-				return instance.attrs[ZaGlobalConfig.A_zimbraMtaRelayHost];
-		} else return "";
-	},
-	getRelayPort: function (model, instance) {
-		if(instance.attrs[ZaGlobalConfig.A_zimbraMtaRelayHost]) {
-			var parts = instance.attrs[ZaGlobalConfig.A_zimbraMtaRelayHost].split(":");
-			if(parts && parts.length >1)
-				return parts[1];
-			else
-				return "";
-		} else return "";
-	},	
-	setRelayPort:function(value, instance, parentValue, ref) {
-		instance.attrsInternal[ZaGlobalConfig.A_zimbraMtaRelayPortInternal] = value;
-		instance.attrs[ZaGlobalConfig.A_zimbraMtaRelayHost] = instance.attrsInternal[ZaGlobalConfig.A_zimbraMtaRelayHostInternal] + ":" + instance.attrsInternal[ZaGlobalConfig.A_zimbraMtaRelayPortInternal];
-	},
-	setRelayHost:function(value, instance, parentValue, ref) {
-		instance.attrsInternal[ZaGlobalConfig.A_zimbraMtaRelayHostInternal] = value;
-		instance.attrs[ZaGlobalConfig.A_zimbraMtaRelayHost] = instance.attrsInternal[ZaGlobalConfig.A_zimbraMtaRelayHostInternal] + ":" + instance.attrsInternal[ZaGlobalConfig.A_zimbraMtaRelayPortInternal];
-	},*/
 	items:[
 	  	// ...other...
 		{ id:ZaGlobalConfig.A_zimbraGalMaxResults, ref:"attrs/" + ZaGlobalConfig.A_zimbraGalMaxResults , type:_NUMBER_, minInclusive: 0 },
@@ -333,11 +307,8 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraMtaMaxMessageSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaMaxMessageSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES, required: true },
 		{ id:ZaGlobalConfig.A_zimbraFileUploadMaxSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES },
 		{ id:ZaGlobalConfig.A_zimbraMtaRelayHost, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRelayHost, type: _HOSTNAME_OR_IP_, maxLength: 256 },
-//		{ id:ZaGlobalConfig.A_zimbraMtaMyNetworks, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaMyNetworks, type: _STRING_, maxLength: 256 },
 		{ id:ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP, ref: "attrs/" + ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		
-//		{ id:ZaGlobalConfig.A_zimbraMtaRelayHostInternal, setterScope:_MODEL_,getterScope:_MODEL_, getter:"getRelayHost", setter:"setRelayHost", ref:"attrsInternal/" + ZaGlobalConfig.A_zimbraMtaRelayHostInternal, type: _HOSTNAME_OR_IP_, maxLength: 256 },		
-//		{ id:ZaGlobalConfig.A_zimbraMtaRelayPortInternal,setterScope:_MODEL_,getterScope:_MODEL_, getter:"getRelayPort", setter:"setRelayPort", ref:"attrsInternal/" + ZaGlobalConfig.A_zimbraMtaRelayPortInternal, type: _PORT_},				
 		{ id:ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 		// -- protocol checks
 		{ id:ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname, type: _ENUM_, choices: [false,true] },

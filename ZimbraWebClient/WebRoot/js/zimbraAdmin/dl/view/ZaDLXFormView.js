@@ -778,7 +778,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 				items:[	
 				    {type:_SPACER_, height:"5"}, 						    
 				    {type: _GROUP_, width: "98%", id: "dl_form_members_general_group", numCols: 2, colSizes:[100, "*"], items: [
-				    		{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.DLXV_LabelListName, label: ZaMsg.DLXV_LabelListName +":", forceUpdate:true, tableCssStyle: "width:100", inputWidth:"100",
+				    		{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.MSG_LabelListName, label: ZaMsg.LBL_LabelListName, forceUpdate:true, tableCssStyle: "width:100", inputWidth:"100",
 								id:"dl_name_field",
 								enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.RENAME_DL_RIGHT]],
 								visibilityChecks:[]
