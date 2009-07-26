@@ -136,9 +136,6 @@ public final class DateField extends Field {
                 month = Xml.getIntValue(child);
             } else if (tag.equals(YEAR)) {
                 year = Xml.getIntValue(child);
-            } else {
-                throw new IllegalArgumentException(
-                    "Invalid '" + getName() + "' field child element: " + tag);
             }
         }
     }

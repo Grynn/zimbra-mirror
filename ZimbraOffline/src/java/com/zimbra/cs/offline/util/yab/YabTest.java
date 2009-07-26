@@ -19,6 +19,8 @@ import junit.framework.Assert;
 import com.zimbra.cs.util.yauth.RawAuthManager;
 import com.zimbra.cs.util.yauth.FileTokenStore;
 import com.zimbra.cs.util.yauth.TokenStore;
+import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.common.util.Log;
 
 import java.io.File;
 import java.util.List;
@@ -44,15 +46,18 @@ public class YabTest {
 
     static {
         BasicConfigurator.configure();
-        Logger.getRootLogger().setLevel(Level.DEBUG);
+        Logger.getRootLogger().setLevel(Level.INFO);
+        OfflineLog.yab.setLevel(Log.Level.debug);
     }
-    
+
+    /*
     static {
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
         System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
         System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
         System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");
     }
+    */
 
     @Before
     public void setUp() throws Exception {
@@ -79,13 +84,22 @@ public class YabTest {
         SyncRequest req = session.createSyncRequest(0);
         SyncResponse res = (SyncResponse) req.send();
         int cid = findContact(res.getAddedContacts(), NAME);
+        if (cid != -1) {
+            req = session.createSyncRequest(res.getRevision());
+            req.addEvent(SyncRequestEvent.removeContact(cid));
+            checkResults((SyncResponse) req.send());
+        }
         // Add new contact
         req = session.createSyncRequest(res.getRevision());
         Contact contact = new Contact();
         contact.addField(NAME);
-        if (cid != -1) {
-            req.addEvent(SyncRequestEvent.removeContact(cid));
-        }
+        AddressField addr = new AddressField();
+        addr.setCity("San Francisco");
+        addr.setCountry("United States");
+        addr.setStreet("1747A Stockton St.");
+        addr.setZip("94144");
+        addr.setFlag(Flag.HOME);
+        contact.addField(addr);
         req.addEvent(SyncRequestEvent.addContact(contact));
         res = (SyncResponse) req.send();
         checkResults(res);
@@ -121,6 +135,6 @@ public class YabTest {
     public static void main(String... args) throws Exception {
         YabTest test = new YabTest();
         test.setUp();
-        test.testSyncRequest();
+        test.testSynchronize();
     }
 }

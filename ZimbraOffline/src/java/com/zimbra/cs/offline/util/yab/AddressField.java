@@ -111,9 +111,6 @@ public final class AddressField extends Field {
                 zip = getTextValue(child);
             } else if (tag.equals(COUNTRY)) {
                 country = getTextValue(child);
-            } else {
-                throw new IllegalArgumentException(
-                    "Invalid 'address' field child element: " + tag);
             }
         }
     }

@@ -144,9 +144,6 @@ public final class NameField extends Field {
                 firstSound = getTextValue(child);
             } else if (tag.equals(LAST_SOUND)) {
                 lastSound = getTextValue(child);
-            } else {
-                throw new IllegalArgumentException(
-                    "Invalid 'name' field child element: " + tag);
             }
         }
     }
