@@ -90,6 +90,15 @@ if [ "x$MODE" = "x" ]; then
 else
 	shift
 fi
+if [ "x$DEBUG" = "x" ]; then
+	DEBUG=`${zimbra_home}/bin/zmprov -l gcf zimbraHttpDebugHandlerEnabled | sed -e 's/zimbraHttpDebugHandlerEnabled: //' | tr A-Z a-z`
+
+	if [ "x$DEBUG" = "x" ]; then
+		DEBUG="false"
+	fi
+else
+	shift
+fi
 
 echo "Setting tls mode to $MODE"
 
@@ -450,6 +459,42 @@ updateJettyConfig() {
       exit 1
     fi
 	fi
+
+	if [ x"$DEBUG" = "xtrue" ]; then
+    origfile=${mailboxd_conf_directory}/jetty.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+	    sed -e 's/\(.*DEBUGBEGIN\).*/\1 -->/' -e 's/.*\(DEBUGEND.*\)/<!-- \1/' \
+		    ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+  else 
+    origfile=${mailboxd_conf_directory}/jetty.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+	    sed -e 's/\(.*DEBUGBEGIN\).*/\1/' -e 's/.*\(DEBUGEND.*\)/\1/' \
+		    ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+  fi
 
   echo -n "Rewriting config files for webxml and mailboxd..."
   ${zimbra_home}/libexec/zmmtaconfig webxml mailbox  > /dev/null 2>&1
