@@ -17,10 +17,15 @@
 source `dirname $0`/zmshutil || exit 1
 zmsetvars
 
-if [ -d ${mailboxd_directory} ]; then
-zmassert -d ${zimbra_home}/mysql
-zmassert -d ${zimbra_java_home}
-else
+if [ ! -d ${mailboxd_directory} ]; then
+  exit 0
+fi
+
+if [ ! -d ${zimbra_home}/mysql ]; then
+  exit 0
+fi
+
+if [ ! -d ${zimbra_java_home} ]; then
   exit 0
 fi
 
