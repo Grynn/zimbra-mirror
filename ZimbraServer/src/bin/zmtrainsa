@@ -120,9 +120,11 @@ zmsetvars \
   zimbra_server_hostname \
   amavis_dspam_enabled \
   zimbra_spam_externalIsSpamAccount \
-  zimbra_spam_externalIsNotSpamAccount
+  zimbra_spam_externalIsNotSpamAccount \
+  zmtrainsa_cleanup_host 
 
 amavis_dspam_enabled=$(echo $amavis_dspam_enabled | tr A-Z a-z)
+zmtrainsa_cleanup_host=$(echo $zmtrainsa_cleanup_host | tr A-Z a-z)
 
 if [ "x${zimbra_spam_externalIsSpamAccount}" = "x" ]; then
   spam_account="-s"
@@ -143,12 +145,16 @@ if [ x$1 = "x" ]; then
 fi
 
 if [ x$1 = "x--cleanup" ]; then
-  timestampit "Starting spam/ham cleanup"
-  mydir=`mktemp -d -t cleanup.XXXXXX` || exit 1
-  ${zimbra_home}/libexec/zmspamextract ${spam_account} -o ${mydir} -d
-  ${zimbra_home}/libexec/zmspamextract ${ham_account} -o ${mydir} -d
-  /bin/rm -rf ${mydir}
-  timestampit "Finished spam/ham cleanup"
+  if [ x${zmtrainsa_cleanup_host} = "xtrue" ]; then
+    timestampit "Starting spam/ham cleanup"
+    mydir=`mktemp -d -t cleanup.XXXXXX` || exit 1
+    ${zimbra_home}/libexec/zmspamextract ${spam_account} -o ${mydir} -d
+    ${zimbra_home}/libexec/zmspamextract ${ham_account} -o ${mydir} -d
+    /bin/rm -rf ${mydir}
+    timestampit "Finished spam/ham cleanup"
+  else 
+    timestampit "Cleanup skipped: $zimbra_server_hostname is not a spam/ham cleanup host."
+  fi
   exit
 fi
 
