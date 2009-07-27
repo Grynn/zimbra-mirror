@@ -1,0 +1,299 @@
+--- openldap-2.4.17/servers/slapd/config.c	20 May 2009 10:42:34 -0000	1.499
++++ openldap-2.4.17/servers/slapd/config.c	25 Jul 2009 21:37:24 -0000	1.501
+@@ -128,6 +128,7 @@ int config_check_vals(ConfigTable *Conf,
+ 	int rc, arg_user, arg_type, arg_syn, iarg;
+ 	unsigned uiarg;
+ 	long larg;
++	unsigned long ularg;
+ 	ber_len_t barg;
+ 	
+ 	if(Conf->arg_type == ARG_IGNORED) {
+@@ -260,6 +261,16 @@ int config_check_vals(ConfigTable *Conf,
+ 					return(ARG_BAD_CONF);
+ 				}
+ 				break;
++			case ARG_ULONG:
++				if ( lutil_atoulx( &ularg, c->argv[1], 0 ) != 0 ) {
++					snprintf( c->cr_msg, sizeof( c->cr_msg ),
++						"<%s> unable to parse \"%s\" as unsigned long",
++						c->argv[0], c->argv[1] );
++					Debug(LDAP_DEBUG_CONFIG|LDAP_DEBUG_NONE, "%s: %s\n",
++						c->log, c->cr_msg, 0);
++					return(ARG_BAD_CONF);
++				}
++				break;
+ 			case ARG_BER_LEN_T: {
+ 				unsigned long	l;
+ 				if ( lutil_atoulx( &l, c->argv[1], 0 ) != 0 ) {
+@@ -308,6 +319,7 @@ int config_check_vals(ConfigTable *Conf,
+ 			case ARG_INT:		c->value_int = iarg;		break;
+ 			case ARG_UINT:		c->value_uint = uiarg;		break;
+ 			case ARG_LONG:		c->value_long = larg;		break;
++			case ARG_ULONG:		c->value_ulong = ularg;		break;
+ 			case ARG_BER_LEN_T:	c->value_ber_t = barg;		break;
+ 		}
+ 	}
+@@ -359,6 +371,7 @@ int config_set_vals(ConfigTable *Conf, C
+ 			case ARG_INT: 		*(int*)ptr = c->value_int;			break;
+ 			case ARG_UINT: 		*(unsigned*)ptr = c->value_uint;			break;
+ 			case ARG_LONG:  	*(long*)ptr = c->value_long;			break;
++			case ARG_ULONG:  	*(unsigned long*)ptr = c->value_ulong;			break;
+ 			case ARG_BER_LEN_T: 	*(ber_len_t*)ptr = c->value_ber_t;			break;
+ 			case ARG_STRING: {
+ 				char *cc = *(char**)ptr;
+@@ -449,6 +462,7 @@ config_get_vals(ConfigTable *cf, ConfigA
+ 		case ARG_INT:	c->value_int = *(int *)ptr; break;
+ 		case ARG_UINT:	c->value_uint = *(unsigned *)ptr; break;
+ 		case ARG_LONG:	c->value_long = *(long *)ptr; break;
++		case ARG_ULONG:	c->value_ulong = *(unsigned long *)ptr; break;
+ 		case ARG_BER_LEN_T:	c->value_ber_t = *(ber_len_t *)ptr; break;
+ 		case ARG_STRING:
+ 			if ( *(char **)ptr )
+@@ -467,6 +481,7 @@ config_get_vals(ConfigTable *cf, ConfigA
+ 		case ARG_INT: bv.bv_len = snprintf(bv.bv_val, sizeof( c->log ), "%d", c->value_int); break;
+ 		case ARG_UINT: bv.bv_len = snprintf(bv.bv_val, sizeof( c->log ), "%u", c->value_uint); break;
+ 		case ARG_LONG: bv.bv_len = snprintf(bv.bv_val, sizeof( c->log ), "%ld", c->value_long); break;
++		case ARG_ULONG: bv.bv_len = snprintf(bv.bv_val, sizeof( c->log ), "%lu", c->value_ulong); break;
+ 		case ARG_BER_LEN_T: bv.bv_len = snprintf(bv.bv_val, sizeof( c->log ), "%ld", c->value_ber_t); break;
+ 		case ARG_ON_OFF: bv.bv_len = snprintf(bv.bv_val, sizeof( c->log ), "%s",
+ 			c->value_int ? "TRUE" : "FALSE"); break;
+--- openldap-2.4.17/servers/slapd/config.h	13 Jul 2009 22:52:45 -0000	1.55
++++ openldap-2.4.17/servers/slapd/config.h	25 Jul 2009 04:47:00 -0000	1.56
+@@ -59,6 +59,7 @@ typedef enum {
+ #define ARG_DN		0x00007000
+ #define ARG_UINT	0x00008000
+ #define ARG_ATDESC	0x00009000
++#define ARG_ULONG	0x0000a000
+ 
+ #define ARGS_SYNTAX	0xffff0000
+ #define ARG_IGNORED	0x00080000
+@@ -134,6 +135,7 @@ typedef struct config_args_s {
+ 		int v_int;
+ 		unsigned v_uint;
+ 		long v_long;
++		unsigned long v_ulong;
+ 		ber_len_t v_ber_t;
+ 		char *v_string;
+ 		struct berval v_bv;
+@@ -167,6 +169,7 @@ typedef struct config_args_s {
+ #define value_int values.v_int
+ #define value_uint values.v_uint
+ #define value_long values.v_long
++#define value_ulong values.v_ulong
+ #define value_ber_t values.v_ber_t
+ #define value_string values.v_string
+ #define value_bv values.v_bv
+--- openldap-2.4.17/servers/slapd/back-bdb/back-bdb.h	8 May 2009 02:48:03 -0000	1.182
++++ openldap-2.4.17/servers/slapd/back-bdb/back-bdb.h	25 Jul 2009 05:13:50 -0000	1.183
+@@ -125,12 +125,12 @@ typedef struct bdb_cache {
+ 	EntryInfo	*c_lruhead;	/* lru - add accessed entries here */
+ 	EntryInfo	*c_lrutail;	/* lru - rem lru entries from here */
+ 	EntryInfo	c_dntree;
+-	unsigned	c_maxsize;
+-	int		c_cursize;
+-	unsigned	c_minfree;
+-	unsigned	c_eimax;
+-	int		c_eiused;	/* EntryInfo's in use */
+-	int		c_leaves;	/* EntryInfo leaf nodes */
++	ID		c_maxsize;
++	ID		c_cursize;
++	ID		c_minfree;
++	ID		c_eimax;
++	ID		c_eiused;	/* EntryInfo's in use */
++	ID		c_leaves;	/* EntryInfo leaf nodes */
+ 	int		c_purging;
+ 	DB_TXN	*c_txn;	/* used by lru cleaner */
+ 	ldap_pvt_thread_rdwr_t c_rwlock;
+@@ -204,8 +204,8 @@ struct bdb_info {
+ 
+ 	ID			bi_lastid;
+ 	ldap_pvt_thread_mutex_t	bi_lastid_mutex;
+-	unsigned	bi_idl_cache_max_size;
+-	int		bi_idl_cache_size;
++	ID	bi_idl_cache_max_size;
++	ID		bi_idl_cache_size;
+ 	Avlnode		*bi_idl_tree;
+ 	bdb_idl_cache_entry_t	*bi_idl_lru_head;
+ 	bdb_idl_cache_entry_t	*bi_idl_lru_tail;
+--- openldap-2.4.17/servers/slapd/back-bdb/cache.c	19 Jun 2009 05:11:01 -0000	1.208
++++ openldap-2.4.17/servers/slapd/back-bdb/cache.c	25 Jul 2009 05:13:50 -0000	1.209
+@@ -689,8 +689,9 @@ bdb_cache_lru_purge( struct bdb_info *bd
+ {
+ 	DB_LOCK		lock, *lockp;
+ 	EntryInfo *elru, *elnext = NULL;
+-	int count, islocked, eimax;
+-	int efree = 0, eifree = 0, eicount, ecount;
++	int islocked;
++	ID eicount, ecount;
++	ID count, efree, eifree = 0;
+ #ifdef LDAP_DEBUG
+ 	int iter;
+ #endif
+@@ -698,24 +699,24 @@ bdb_cache_lru_purge( struct bdb_info *bd
+ 	/* Wait for the mutex; we're the only one trying to purge. */
+ 	ldap_pvt_thread_mutex_lock( &bdb->bi_cache.c_lru_mutex );
+ 
++	if ( bdb->bi_cache.c_cursize > bdb->bi_cache.c_maxsize ) {
++		efree = bdb->bi_cache.c_cursize - bdb->bi_cache.c_maxsize;
++		efree += bdb->bi_cache.c_minfree;
++	} else {
++		efree = 0;
++	}
++
+ 	/* maximum number of EntryInfo leaves to cache. In slapcat
+ 	 * we always free all leaf nodes.
+ 	 */
+-	if ( slapMode & SLAP_TOOL_READONLY )
+-		eimax = 0;
+-	else
+-		eimax = bdb->bi_cache.c_eimax;
+-
+-	efree = bdb->bi_cache.c_cursize - bdb->bi_cache.c_maxsize;
+-	if ( efree < 1 )
+-		efree = 0;
+-	else 
+-		efree += bdb->bi_cache.c_minfree;
+ 
+-	if ( bdb->bi_cache.c_leaves > eimax ) {
++	if ( slapMode & SLAP_TOOL_READONLY ) {
++		eifree = bdb->bi_cache.c_leaves;
++	} else if ( bdb->bi_cache.c_eimax &&
++		bdb->bi_cache.c_leaves > bdb->bi_cache.c_eimax ) {
+ 		eifree = bdb->bi_cache.c_minfree * 10;
+-		if ( eifree >= eimax )
+-			eifree = eimax / 2;
++		if ( eifree >= bdb->bi_cache.c_leaves )
++			eifree /= 2;
+ 	}
+ 
+ 	if ( !efree && !eifree ) {
+@@ -1065,7 +1066,7 @@ load1:
+ 		int purge = 0;
+ 
+ 		if ( bdb->bi_cache.c_cursize > bdb->bi_cache.c_maxsize ||
+-			bdb->bi_cache.c_leaves > bdb->bi_cache.c_eimax ) {
++			( bdb->bi_cache.c_eimax && bdb->bi_cache.c_leaves > bdb->bi_cache.c_eimax )) {
+ 			ldap_pvt_thread_mutex_lock( &bdb->bi_cache.c_count_mutex );
+ 			if ( !bdb->bi_cache.c_purging ) {
+ 				if ( load && !( flag & ID_NOCACHE )) {
+@@ -1074,7 +1075,7 @@ load1:
+ 						purge = 1;
+ 						bdb->bi_cache.c_purging = 1;
+ 					}
+-				} else if ( bdb->bi_cache.c_leaves > bdb->bi_cache.c_eimax ) {
++				} else if ( bdb->bi_cache.c_eimax && bdb->bi_cache.c_leaves > bdb->bi_cache.c_eimax ) {
+ 					purge = 1;
+ 					bdb->bi_cache.c_purging = 1;
+ 				}
+--- openldap-2.4.17/servers/slapd/back-bdb/config.c	21 Jan 2009 23:40:30 -0000	1.113
++++ openldap-2.4.17/servers/slapd/back-bdb/config.c	25 Jul 2009 05:13:50 -0000	1.114
+@@ -61,12 +61,12 @@ static ConfigTable bdbcfg[] = {
+ 			"DESC 'Directory for database content' "
+ 			"EQUALITY caseIgnoreMatch "
+ 			"SYNTAX OMsDirectoryString SINGLE-VALUE )", NULL, NULL },
+-	{ "cachefree", "size", 2, 2, 0, ARG_UINT|ARG_OFFSET,
++	{ "cachefree", "size", 2, 2, 0, ARG_ULONG|ARG_OFFSET,
+ 		(void *)offsetof(struct bdb_info, bi_cache.c_minfree),
+ 		"( OLcfgDbAt:1.11 NAME 'olcDbCacheFree' "
+ 			"DESC 'Number of extra entries to free when max is reached' "
+ 			"SYNTAX OMsInteger SINGLE-VALUE )", NULL, NULL },
+-	{ "cachesize", "size", 2, 2, 0, ARG_UINT|ARG_OFFSET,
++	{ "cachesize", "size", 2, 2, 0, ARG_ULONG|ARG_OFFSET,
+ 		(void *)offsetof(struct bdb_info, bi_cache.c_maxsize),
+ 		"( OLcfgDbAt:1.1 NAME 'olcDbCacheSize' "
+ 			"DESC 'Entry cache size in entries' "
+@@ -109,12 +109,12 @@ static ConfigTable bdbcfg[] = {
+ 		"( OLcfgDbAt:1.5 NAME 'olcDbDirtyRead' "
+ 		"DESC 'Allow reads of uncommitted data' "
+ 		"SYNTAX OMsBoolean SINGLE-VALUE )", NULL, NULL },
+-	{ "dncachesize", "size", 2, 2, 0, ARG_UINT|ARG_OFFSET,
++	{ "dncachesize", "size", 2, 2, 0, ARG_ULONG|ARG_OFFSET,
+ 		(void *)offsetof(struct bdb_info, bi_cache.c_eimax),
+ 		"( OLcfgDbAt:1.12 NAME 'olcDbDNcacheSize' "
+ 			"DESC 'DN cache size' "
+ 			"SYNTAX OMsInteger SINGLE-VALUE )", NULL, NULL },
+-	{ "idlcachesize", "size", 2, 2, 0, ARG_UINT|ARG_OFFSET,
++	{ "idlcachesize", "size", 2, 2, 0, ARG_ULONG|ARG_OFFSET,
+ 		(void *)offsetof(struct bdb_info, bi_idl_cache_max_size),
+ 		"( OLcfgDbAt:1.6 NAME 'olcDbIDLcacheSize' "
+ 		"DESC 'IDL cache size in IDLs' "
+--- openldap-2.4.17/servers/slapd/back-bdb/idl.c	21 Jan 2009 23:40:32 -0000	1.136
++++ openldap-2.4.17/servers/slapd/back-bdb/idl.c	25 Jul 2009 05:13:50 -0000	1.137
+@@ -376,7 +376,7 @@ bdb_idl_cache_put(
+ 	}
+ 	bdb->bi_idl_lru_head = ee;
+ 
+-	if ( ++bdb->bi_idl_cache_size > bdb->bi_idl_cache_max_size ) {
++	if ( bdb->bi_idl_cache_size >= bdb->bi_idl_cache_max_size ) {
+ 		int i;
+ 		ee = bdb->bi_idl_lru_tail;
+ 		for ( i = 0; ee != NULL && i < 10; i++, ee = eprev ) {
+@@ -405,6 +405,7 @@ bdb_idl_cache_put(
+ 		assert( bdb->bi_idl_lru_tail != NULL
+ 			|| bdb->bi_idl_lru_head == NULL );
+ 	}
++	bdb->bi_idl_cache_size++;
+ 	ldap_pvt_thread_mutex_unlock( &bdb->bi_idl_tree_lrulock );
+ 	ldap_pvt_thread_rdwr_wunlock( &bdb->bi_idl_tree_rwlock );
+ }
+--- openldap-2.4.17/servers/slapd/back-bdb/init.c	17 Jun 2009 22:16:30 -0000	1.307
++++ openldap-2.4.17/servers/slapd/back-bdb/init.c	25 Jul 2009 05:13:50 -0000	1.308
+@@ -369,13 +369,10 @@ shm_retry:
+ 	}
+ #endif
+ 
+-	/* Default dncache to 2x entrycache */
+-	if ( bdb->bi_cache.c_maxsize && !bdb->bi_cache.c_eimax ) {
+-		bdb->bi_cache.c_eimax = bdb->bi_cache.c_maxsize * 2;
+-	}
+-
+-	/* dncache must be >= entrycache */
+-	if ( bdb->bi_cache.c_eimax < bdb->bi_cache.c_maxsize ) {
++	/* dncache defaults to 0 == unlimited
++	 * must be >= entrycache
++	 */
++	if ( bdb->bi_cache.c_eimax && bdb->bi_cache.c_eimax < bdb->bi_cache.c_maxsize ) {
+ 		bdb->bi_cache.c_eimax = bdb->bi_cache.c_maxsize;
+ 	}
+ 
+--- openldap-2.4.17/servers/slapd/back-bdb/monitor.c	21 Jan 2009 23:40:32 -0000	1.38
++++ openldap-2.4.17/servers/slapd/back-bdb/monitor.c	27 Jul 2009 16:54:56 -0000	1.40
+@@ -158,17 +158,17 @@ bdb_monitor_update(
+ 	a = attr_find( e->e_attrs, ad_olmBDBEntryCache );
+ 	assert( a != NULL );
+ 	bv.bv_val = buf;
+-	bv.bv_len = snprintf( buf, sizeof( buf ), "%d", bdb->bi_cache.c_cursize );
++	bv.bv_len = snprintf( buf, sizeof( buf ), "%lu", bdb->bi_cache.c_cursize );
+ 	ber_bvreplace( &a->a_vals[ 0 ], &bv );
+ 
+ 	a = attr_find( e->e_attrs, ad_olmBDBDNCache );
+ 	assert( a != NULL );
+-	bv.bv_len = snprintf( buf, sizeof( buf ), "%d", bdb->bi_cache.c_eiused );
++	bv.bv_len = snprintf( buf, sizeof( buf ), "%lu", bdb->bi_cache.c_eiused );
+ 	ber_bvreplace( &a->a_vals[ 0 ], &bv );
+ 
+ 	a = attr_find( e->e_attrs, ad_olmBDBIDLCache );
+ 	assert( a != NULL );
+-	bv.bv_len = snprintf( buf, sizeof( buf ), "%d", bdb->bi_idl_cache_size );
++	bv.bv_len = snprintf( buf, sizeof( buf ), "%lu", bdb->bi_idl_cache_size );
+ 	ber_bvreplace( &a->a_vals[ 0 ], &bv );
+ 	
+ #ifdef BDB_MONITOR_IDX
+--- openldap-2.4.17/doc/man/man5/slapd-bdb.5	17 Jun 2009 22:19:46 -0000	1.49
++++ openldap-2.4.17/doc/man/man5/slapd-bdb.5	25 Jul 2009 05:19:21 -0000	1.51
+@@ -145,11 +145,12 @@ In this case, the modified data is disca
+ will return a different result.
+ .TP
+ .BI dncachesize \ <integer>
+-Specify the maximum number of DNs in the in-memory DN cache. The
+-default is twice the \fBcachesize\fP. Ideally this cache should be
++Specify the maximum number of DNs in the in-memory DN cache.
++Ideally this cache should be
+ large enough to contain the DNs of every entry in the database. If
+ set to a smaller value than the \fBcachesize\fP it will be silently
+-increased to equal the \fBcachesize\fP.
++increased to equal the \fBcachesize\fP. The default value is 0 which
++means unlimited, i.e. the DN cache will grow without bound.
+ 
+ It should be noted that the \fBDN cache\fP is allowed to temporarily
+ grow beyond the configured size. It does this if many entries are 
