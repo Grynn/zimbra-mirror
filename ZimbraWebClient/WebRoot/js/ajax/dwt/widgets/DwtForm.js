@@ -31,6 +31,7 @@ DwtForm = function(params) {
 
 	// construct form
 	this._dirty = {};
+	this._ignore = {};
 	this._invalid = {};
 	this.setModel(params.model);
 	this.setForm(params.form);
@@ -266,6 +267,21 @@ DwtForm.__acceptDirtyItem = function(id) {
 	return !item.ignore || !form._call(item.ignore);
 };
 
+DwtForm.prototype.setIgnore = function(id, ignore) {
+	if (typeof id == "boolean") {
+		this._ignore = {};
+		return;
+	}
+	if (ignore) {
+		this._ignore[id] = true;
+		return;
+	}
+	delete this._ignore[id];
+};
+DwtForm.prototype.isIgnore = function(id) {
+	return id in this._ignore;
+};
+
 // convenience control methods
 
 DwtForm.prototype.set = function(id, value) {
@@ -315,6 +331,7 @@ DwtForm.prototype.validate = function(id) {
 DwtForm.prototype.reset = function() {
 	// init state
 	this._dirty = {};
+	this._ignore = {};
 	this._invalid = {};
 	for (var id in this._items) {
 		var itemDef = this._items[id].def;
@@ -344,14 +361,17 @@ DwtForm.prototype.update = function() {
 			this.setValue(id, this._call(item.getter));
 		}
 	}
-	// now set visible/enabled based on values
+	// now set visible/enabled/ignore based on values
 	for (var id in this._items) {
 		var item = this._items[id];
 		if (item.visible) {
-			this.setVisible(id, this._call(item.visible));
+			this.setVisible(id, Boolean(this._call(item.visible)));
 		}
 		if (item.enabled) {
-			this.setEnabled(id, this._call(item.enabled));
+			this.setEnabled(id, Boolean(this._call(item.enabled)));
+		}
+		if (item.ignore) {
+			this.setIgnore(id, Boolean(this._call(item.ignore)));
 		}
 	}
 	// call handler
@@ -414,6 +434,13 @@ DwtForm.prototype._getControlValue = function(id) {
 	}
 };
 
+DwtForm.prototype._deleteItem = function(id) {
+	delete this._items[id];
+	delete this._dirty[id];
+	delete this._invalid[id];
+	delete this._ignore[id];
+};
+
 // utility
 
 DwtForm.prototype._call = function(func, args) {
@@ -434,7 +461,7 @@ DwtForm.prototype._createHtmlFromTemplate = function(templateId, data) {
 	DwtComposite.prototype._createHtmlFromTemplate.apply(this, arguments);
 
 	// initialize state
-	var controls = [];
+	var tabIndexes = [];
 	this._items = {};
 	this._tabGroup.removeAllMembers();
 	this._onupdate = null;
@@ -445,29 +472,31 @@ DwtForm.prototype._createHtmlFromTemplate = function(templateId, data) {
 	var form = this.form;
 	if (form && form.items) {
 		// create controls
-		this._registerControls(form.items, null, controls);
+		this._registerControls(form.items, null, tabIndexes);
 		// create handlers
 		this._onupdate = DwtForm.__makeFunc(form.onupdate);
 		this._onreset = DwtForm.__makeFunc(form.onreset);
 		this._ondirty = DwtForm.__makeFunc(form.ondirty);
 	}
 
-	// add links to list of controls
+	// add links to list of tabIndexes
 	var links = this.getHtmlElement().getElementsByTagName("A");
 	for (var i = 0; i < links.length; i++) {
 		var link = links[i];
-		if (!link.href) continue;
+		if (!link.href || link.getAttribute("notab") == "true") continue;
 		if (this._items[link.id]) continue;
-		controls.push({
+		tabIndexes.push({
 			tabindex:	link.getAttribute("tabindex") || Number.MAX_VALUE,
 			control:	link
 		});
 	}
 
 	// add controls to tab group
-	controls.sort(DwtForm.__byTabIndex);
-	for (var i = 0; i < controls.length; i++) {
-		this._tabGroup.addMember(controls[i].control);
+	tabIndexes.sort(DwtForm.__byTabIndex);
+	for (var i = 0; i < tabIndexes.length; i++) {
+		var control = tabIndexes[i].control;
+		var member = (control.getTabGroupMember && control.getTabGroupMember()) || control;
+		this._tabGroup.addMember(member);
 	}
 };
 
@@ -554,7 +583,10 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 	}
 
 	// add to list of tab indexes
-	if (tabIndexes && control) {
+	if (itemDef.notab == null) {
+		itemDef.notab = element && element.getAttribute("notab") == "true";
+	}
+	if (tabIndexes && control && !itemDef.notab) {
 		tabIndexes.push({
 			tabindex:	(element && element.getAttribute("tabindex")) || Number.MAX_VALUE,
 			control:	control
@@ -595,7 +627,8 @@ DwtForm.prototype._attachElementHandlers = function(itemDef, parentDef, tabIndex
 		var handler = DwtForm.__makeFunc(itemDef.onchange);
 		element.onchange = AjxCallback.simpleClosure(this._htmlSelect_selectedIndex, this, id, handler, onchange);
 	}
-	else if (type == "button" || name == "button" || type == "reset" || type == "submit") {
+	else if (name == "button" || name == "a" || 
+	         type == "button" || type == "reset" || type == "submit") {
 		// checked
 		var onclick = element.onclick ;
 		var handler = DwtForm.__makeFunc(itemDef.onclick);
@@ -1008,6 +1041,9 @@ DwtFormRows = function(params) {
 		form:{}, template:this._itemDef.template
 	});
 
+	// init state
+	this._rowsTabGroup = new DwtTabGroup(this._htmlElId);
+
 	// save state
 	this._rowDef = this._itemDef.rowitem || {};
 	this._rowCount = 0;
@@ -1046,20 +1082,26 @@ DwtFormRows.prototype.ROW_TEMPLATE = "dwt.Widgets#DwtFormRow";
 
 // Public methods
 
+DwtFormRows.prototype.getTabGroupMember = function() {
+	return this._rowsTabGroup;
+};
+
 DwtFormRows.prototype.setValue = function(array) {
 	if (arguments.length > 1) {
 		DwtForm.prototype.setValue.apply(this, arguments);
 		return;
 	}
 	// adjust row count
-	for (var i = this._rowCount; i > array.length; i--) {
+	var min = Math.max(array.length, this._minRows);
+	for (var i = this._rowCount; i > min; i--) {
 		this.removeRow(i-1);
 	}
-	for (var i = this._rowCount; i < array.length; i++) {
+	var max = Math.min(array.length, this._maxRows);
+	for (var i = this._rowCount; i < max; i++) {
 		this.addRow();
 	}
 	// initialize values
-	for (var i = 0; i < array.length; i++) {
+	for (var i = 0; i < max; i++) {
 		this.setValue(String(i), array[i]);
 	}
 	for (var i = array.length; i < this._rowCount; i++) {
@@ -1104,12 +1146,14 @@ DwtFormRows.prototype.addRow = function(itemDef, index) {
 	}
 
 	// create controls
-	var control = this._registerControl(itemDef);
+	var tabIndexes = [];
+	var control = this._registerControl(itemDef, null, tabIndexes);
 
 	var addDef = this._itemDef.additem ? AjxUtil.createProxy(this._itemDef.additem) : { image: "Add" };
 	addDef[addDef.id?"aka":"id"] = itemDef.id+"_add";
 	addDef.visible = "this.getRowCount() < this.getMaxRows()";
-	var addButton = this._registerControl(addDef,null,null,null,null,"DwtButton");
+	addDef.ignore = true;
+	var addButton = this._registerControl(addDef,null,tabIndexes,null,null,"DwtButton");
 	if (!addDef.onclick) {
 		addButton.addSelectionListener(new AjxListener(this, this._handleAddRow, [itemDef.id]));
 	}
@@ -1117,7 +1161,8 @@ DwtFormRows.prototype.addRow = function(itemDef, index) {
 	var removeDef = this._itemDef.removeitem ? AjxUtil.createProxy(this._itemDef.removeitem) : { image: "Remove" };
 	removeDef[removeDef.id?"aka":"id"] = itemDef.id+"_remove";
 	removeDef.visible = "this.getRowCount() > this.getMinRows()";
-	var removeButton = this._registerControl(removeDef,null,null,null,null,"DwtButton");
+	removeDef.ignore = true;
+	var removeButton = this._registerControl(removeDef,null,tabIndexes,null,null,"DwtButton");
 	if (!removeDef.onclick) {
 		removeButton.addSelectionListener(new AjxListener(this, this._handleRemoveRow, [itemDef.id]));
 	}
@@ -1128,10 +1173,28 @@ DwtFormRows.prototype.addRow = function(itemDef, index) {
 	item._addId= addDef.id;
 	item._removeId = removeDef.id;
 
-	this.update();
+	// create tab group for row
+	var tabGroup = new DwtTabGroup(itemDef.id);
+	tabIndexes.sort(DwtForm.__byTabIndex);
+	for (var i = 0; i < tabIndexes.length; i++) {
+		var control = tabIndexes[i].control;
+		tabGroup.addMember(control.getTabGroupMember() || control);
+	}
 
+	// add to tab group
+	if (index == null || index >= this._rowCount) {
+		this._rowsTabGroup.addMember(tabGroup);
+	}
+	else {
+		var indexItemDef = this._items[String(index)];
+		var indexTabGroup = this._rowsTabGroup.getTabGroupMemberByName(indexItemDef.id);
+		this._rowsTabGroup.addMemberBefore(tabGroup, indexTabGroup);
+	}
+
+	// update display and notify handler
+	this.update();
 	if (this._onaddrow) {
-		this._call(this._onaddrow, [this._rowCount-1]);
+		this._call(this._onaddrow, [index||this._rowCount-1]);
 	}
 
 	return control;
@@ -1141,26 +1204,27 @@ DwtFormRows.prototype.removeRow = function(indexOrId) {
 	if (this._rowCount <= this._minRows) {
 		return;
 	}
-	var item = this._items[indexOrId];
 
 	// delete item at specified index
-	delete this._items[item.id];
+	var item = this._items[indexOrId];
+	if (item.control instanceof DwtControl) {
+		this.removeChild(item.control);
+	}
 	delete this._items[item.aka];
+	this._deleteItem(item.id);
+
+	// delete add item
 	var addItem = this._items[item._addId];
 	if (addItem) {
 		this.removeChild(addItem.control);
-		delete item[item._addId];
-		delete item[item.id+"_add"];
+		this._deleteItem(addItem.id);
 	}
+
+	// delete remove item
 	var removeItem = this._items[item._removeId];
 	if (removeItem) {
 		this.removeChild(removeItem.control);
-		delete item[item._removeId];
-		delete item[item.id+"_remove"];
-	}
-	if (item.control instanceof DwtControl) {
-		this.removeChild(item.control);
-		delete item.control;
+		this._deleteItem(removeItem.id);
 	}
 
 	// shift everything down one, removing old last row
@@ -1168,17 +1232,21 @@ DwtFormRows.prototype.removeRow = function(indexOrId) {
 		this._items[i-1] = this._items[i];
 		this._items[i-1].aka = String(i-1);
 	}
-	delete this._items[--this._rowCount];
+	this._deleteItem(String(--this._rowCount));
 
 	// remove row element
 	var rowEl = item._rowEl;
 	rowEl.parentNode.removeChild(rowEl);
 	delete item._rowEl;
 
-	this.update();
+	// remove from tab group
+	var tabGroup = this._rowsTabGroup.getTabGroupMemberByName(item.id);
+	this._rowsTabGroup.removeMember(tabGroup);
 
+	// update display and notify handler
+	this.update();
 	if (this._onremoverow) {
-		this._call(this._onremoverow, [this._rowCount]);
+		this._call(this._onremoverow, [Number(item.aka)]);
 	}
 
 	// TODO: move focus to previous/next row/control???

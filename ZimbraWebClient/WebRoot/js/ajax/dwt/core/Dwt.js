@@ -644,11 +644,21 @@ function(htmlElement) {
 Dwt.setVisible =
 function(htmlElement, visible) {
     if(visible){
-        var isRow = htmlElement.nodeName.match(/tr/i);
-        var isCell = htmlElement.nodeName.match(/td|th/i);
-        var display = isRow ? Dwt.DISPLAY_TABLE_ROW : (isCell ? Dwt.DISPLAY_TABLE_CELL : Dwt.DISPLAY_BLOCK);
-        htmlElement.style.display = display;
+		if (htmlElement.nodeName.match(/tr/i)) {
+			htmlElement.style.display = Dwt.DISPLAY_TABLE_ROW;
+		}
+		else if (htmlElement.nodeName.match(/td|th/i)) {
+			htmlElement.style.display = Dwt.DISPLAY_TABLE_CELL;
+		}
+		else {
+			htmlElement.style.display = htmlElement.getAttribute("x-display") ||
+										Dwt.DISPLAY_BLOCK;
+		}
     }else{
+	    var display = DwtCssStyle.getComputedStyleObject(htmlElement).display;
+	    if (display != "none") {
+			htmlElement.setAttribute("x-display", display);
+	    }
         htmlElement.style.display = Dwt.DISPLAY_NONE;
     }
 };

@@ -807,7 +807,7 @@ DwtControl.prototype.addClassName = function(className) {
 
 /**
  * Removes a class name from this control's HTML element.  Optionally adds a
- * new class name.
+// * new class name.
  *
  * @param {String} delClass Class to remove
  * @param {String} addClass Class to add (optional)

@@ -33,6 +33,7 @@
  *        initialValue		[string]*			the initial value of the field
  *        size				[int]*				size of the input field (in characters)
  *        rows				[int]*				number of rows (more than 1 means textarea)
+ *        forceMultiRow		[boolean]*			forces use of textarea even if rows == 1
  *        maxLen			[int]*				maximum length (in characters) of the input
  *        errorIconStyle	[constant]*			error icon style
  *        validationStyle	[constant]*			validation type
@@ -81,12 +82,12 @@ DwtInputField = function(params) {
 	var hackBegin = doCursorHack ? "" : Dwt.CARET_HACK_BEGIN;
 	var hackEnd = doCursorHack ? "" : Dwt.CARET_HACK_END;
 	if (this._errorIconStyle == DwtInputField.ERROR_ICON_NONE) {
-		if (params.rows && params.rows > 1) {
+		if (params.forceMultiRow || (params.rows && params.rows > 1)) {
 			var htmlArr = [hackBegin, "<textarea id='", inputFieldId, "' rows=", params.rows];
 			var i = htmlArr.length;
-			if (params.size) {
+			if (params.forceMultiRow || params.size) {
 				htmlArr[i++] = " cols=";
-				htmlArr[i++] = params.size;
+				htmlArr[i++] = params.size || 1;
 			}
 			if (params.wrap) {
 				htmlArr[i++] = " wrap=";
@@ -121,7 +122,7 @@ DwtInputField = function(params) {
 	}
 
 	this._tabGroup = new DwtTabGroup(this._htmlElId);
-	if (this._rows > 1) {
+	if (params.forceMultiRow || this._rows > 1) {
         this._inputField = document.getElementById(inputFieldId);
         this._inputField.onkeyup = DwtInputField._keyUpHdlr;
         this._inputField.onblur = DwtInputField._blurHdlr;
@@ -407,8 +408,8 @@ function() {
 	this.getInputElement().blur();
 };
 
-DwtInputField.prototype.setVisible = 
-function(visible) {
+DwtInputField.prototype.setVisible = function(visible) {
+	DwtComposite.prototype.setVisible.apply(this, arguments);
 	Dwt.setVisible(this.getInputElement(), visible);
 };
 

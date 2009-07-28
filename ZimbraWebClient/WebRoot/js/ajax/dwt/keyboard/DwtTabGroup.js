@@ -460,7 +460,7 @@ function(member, checkEnabled) {
 	if (member instanceof DwtControl) {
 		return (member.getEnabled() && member.getVisible());
 	} else {
-		return !member.disabled;
+		return !member.disabled && Dwt.getVisible(member);
 	}
 };
 
