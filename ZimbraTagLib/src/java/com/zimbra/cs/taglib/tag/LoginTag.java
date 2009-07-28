@@ -14,14 +14,11 @@
  */
 package com.zimbra.cs.taglib.tag;
 
-import java.util.Map;
-
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.HttpUtil;
 import com.zimbra.common.util.ZimbraCookie;
 import com.zimbra.cs.taglib.ZJspSession;
-import com.zimbra.cs.zclient.ZAuthResult;
 import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.http.Cookie;
@@ -33,6 +30,7 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Map;
 
 public class LoginTag extends ZimbraSimpleTag {
     
@@ -126,25 +124,11 @@ public class LoginTag extends ZimbraSimpleTag {
             boolean needRefer = (refer != null && !refer.equalsIgnoreCase(serverName));
 
             if ((mAuthToken == null || mAuthTokenInUrl) && !needRefer) {
-                ZAuthToken zat = mbox.getAuthToken();
-                Map<String, String> cookieMap = zat.cookieMap(false);
-                Integer maxAge = null;
-                if (mRememberMe) {
-                    ZAuthResult authResult = mbox.getAuthResult();
-                    long timeLeft = authResult.getExpires() - System.currentTimeMillis();
-                    if (timeLeft > 0) maxAge = new Integer((int)(timeLeft/1000));
-                } else {
-                    maxAge = new Integer(-1);
-                }
-                for (Map.Entry<String, String> ck : cookieMap.entrySet()) {
-                    Cookie authTokenCookie = new Cookie(ck.getKey(), ck.getValue());
-                    if (maxAge != null)
-                        authTokenCookie.setMaxAge(maxAge.intValue());
-                    ZimbraCookie.setAuthTokenCookieDomainPath(authTokenCookie, ZimbraCookie.PATH_ROOT);
-                    
-                    authTokenCookie.setSecure(ZJspSession.secureAuthTokenCookie(request));
-                    response.addCookie(authTokenCookie);
-                }
+                setCookie(response,
+                        mbox.getAuthToken(),
+                        ZJspSession.secureAuthTokenCookie(request),
+                        mRememberMe,
+                        mbox.getAuthResult().getExpires());
             }
 
             //if (!needRefer)
@@ -159,6 +143,26 @@ public class LoginTag extends ZimbraSimpleTag {
 
         } catch (ServiceException e) {
             throw new JspTagException(e.getMessage(), e);
+        }
+    }
+
+    public static void setCookie(HttpServletResponse response, ZAuthToken zat, boolean secure, boolean rememberMe, long expires) {
+        Map<String, String> cookieMap = zat.cookieMap(false);
+        Integer maxAge = null;
+        if (rememberMe) {
+            long timeLeft = expires - System.currentTimeMillis();
+            if (timeLeft > 0) maxAge = new Integer((int)(timeLeft/1000));
+        } else {
+            maxAge = new Integer(-1);
+        }
+        for (Map.Entry<String, String> ck : cookieMap.entrySet()) {
+            Cookie authTokenCookie = new Cookie(ck.getKey(), ck.getValue());
+            if (maxAge != null)
+                authTokenCookie.setMaxAge(maxAge.intValue());
+            ZimbraCookie.setAuthTokenCookieDomainPath(authTokenCookie, ZimbraCookie.PATH_ROOT);
+
+            authTokenCookie.setSecure(secure);
+            response.addCookie(authTokenCookie);
         }
     }
 }

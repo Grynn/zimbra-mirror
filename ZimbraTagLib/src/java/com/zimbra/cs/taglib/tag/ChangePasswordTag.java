@@ -16,8 +16,10 @@ package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.ZJspSession;
+import com.zimbra.cs.zclient.ZChangePasswordResult;
 import com.zimbra.cs.zclient.ZMailbox;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -30,6 +32,8 @@ public class ChangePasswordTag extends ZimbraSimpleTag {
     private String mPassword;
     private String mNewPassword;
     private String mUrl = null;
+    private boolean mSecure;
+    private boolean mRememberMe;
 
     public void setUsername(String username) { this.mUsername = username; }
 
@@ -38,6 +42,10 @@ public class ChangePasswordTag extends ZimbraSimpleTag {
     public void setNewpassword(String password) { this.mNewPassword = password; }
 
     public void setUrl(String url) { this.mUrl = url; }
+
+    public void setSecure(boolean secure) { this.mSecure = secure; }
+
+    public void setRememberme(boolean rememberMe) { this.mRememberMe = rememberMe; }
 
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
@@ -48,8 +56,16 @@ public class ChangePasswordTag extends ZimbraSimpleTag {
             options.setPassword(mPassword);
             options.setNewPassword(mNewPassword);
             options.setUri(mUrl == null ? ZJspSession.getSoapURL(pageContext): mUrl);
-            ZMailbox.changePassword(options);
+            ZChangePasswordResult cpr = ZMailbox.changePassword(options);
+
+            LoginTag.setCookie((HttpServletResponse)pageContext.getResponse(),
+                    cpr.getAuthToken(),
+                    mSecure,
+                    mRememberMe,
+                    cpr.getExpires());
+ 
         } catch (ServiceException e) {
+
             throw new JspTagException(e.getMessage(), e);
         }
     }
