@@ -37,6 +37,10 @@ ifeq ($(BUILD_PLATFORM), SLES10_64)
 	LIB_DIR := /usr/lib64
 endif
 
+ifeq ($(BUILD_PLATFORM), SLES11_64)
+	LIB_DIR := /usr/lib64
+endif
+
 ifeq ($(BUILD_PLATFORM), F11_64)
 	LIB_DIR := /usr/lib64
 endif

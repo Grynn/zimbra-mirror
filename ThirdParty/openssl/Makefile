@@ -33,6 +33,10 @@ ifeq ($(BUILD_PLATFORM), CentOS5_64)
 	PLAT := linux-x86_64
 endif
 
+ifeq ($(BUILD_PLATFORM), SLES11_64)
+	PLAT := linux-x86_64
+endif
+
 ifeq ($(BUILD_PLATFORM), SLES10_64)
 	PLAT := linux-x86_64
 endif
