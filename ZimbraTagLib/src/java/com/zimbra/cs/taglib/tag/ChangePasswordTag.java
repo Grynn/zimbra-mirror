@@ -32,7 +32,7 @@ public class ChangePasswordTag extends ZimbraSimpleTag {
     private String mPassword;
     private String mNewPassword;
     private String mUrl = null;
-    private boolean mSecure;
+    private boolean mSecure = ZJspSession.isProtocolModeHttps();
     private boolean mRememberMe;
 
     public void setUsername(String username) { this.mUsername = username; }

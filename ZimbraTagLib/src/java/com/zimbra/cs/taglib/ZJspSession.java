@@ -17,11 +17,11 @@ package com.zimbra.cs.taglib;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.RemoteIP;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.taglib.bean.BeanUtils;
 import com.zimbra.cs.zclient.ZAuthResult;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.account.Provisioning;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -93,6 +93,10 @@ public class ZJspSession {
         String initMode = request.getParameter(Q_ZINITMODE);
         boolean currentHttps = request.getScheme().equals(PROTO_HTTPS);
         return MODE_HTTPS || (currentHttps && (initMode == null || initMode.equals(PROTO_HTTPS))); 
+    }
+
+    public static boolean isProtocolModeHttps() {
+        return MODE_HTTPS;
     }
 
     private static void addParam(StringBuilder query, String name, String value) {
