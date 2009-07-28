@@ -1455,11 +1455,19 @@ ZaDomain.loadDataSources = function (by, val) {
 			this.attrs[ZaDomain.A_zimbraGalAccountId] = [this.attrs[ZaDomain.A_zimbraGalAccountId]];
 		}
 		this[ZaDomain.A2_gal_sync_accounts] = [];
-
+		
 		for(var i=0; i< this.attrs[ZaDomain.A_zimbraGalAccountId].length; i++) {
-			var galSyncAccount = new ZaAccount();
-			galSyncAccount.load("id", this.attrs[ZaDomain.A_zimbraGalAccountId][i], false, false);
-			this[ZaDomain.A2_gal_sync_accounts].push(galSyncAccount);
+			try {
+				var galSyncAccount = new ZaAccount();
+				galSyncAccount.load("id", this.attrs[ZaDomain.A_zimbraGalAccountId][i], false, false);
+				this[ZaDomain.A2_gal_sync_accounts].push(galSyncAccount);
+			} catch (ex) {
+				if (ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT) {
+					ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_GALSYNC_ACCOUNT_INVALID,[this.name,this.attrs[ZaDomain.A_zimbraGalAccountId][i]]), ex, true);
+				} else {
+					ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.loadDataSources", null, false);
+				}	
+			}
 		}
 	}
 }
