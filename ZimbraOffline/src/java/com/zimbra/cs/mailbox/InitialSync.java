@@ -14,11 +14,9 @@
  */
 package com.zimbra.cs.mailbox;
 
-import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.SequenceInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,7 +33,6 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.httpclient.Header;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.tar.TarEntry;
@@ -56,7 +53,6 @@ import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import com.zimbra.cs.mailbox.calendar.ZAttendee;
 import com.zimbra.cs.mime.Mime;
-import com.zimbra.cs.mime.CompressedBlobReader;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedDocument;
 import com.zimbra.cs.mime.ParsedMessage;
@@ -86,12 +82,12 @@ import com.zimbra.cs.service.util.ItemData;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.Blob;
+import com.zimbra.cs.store.BufferedStorageCallback;
 import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.util.AccountUtil;
 import com.zimbra.soap.ZimbraSoapContext;
 
 public class InitialSync {
-
     public static interface InviteMimeLocator {
         public byte[] getInviteMime(int calendarItemId, int inviteId) throws ServiceException;
     }
@@ -1116,77 +1112,60 @@ public class InitialSync {
     
     private void saveMessage(InputStream in, long sizeHint, int id, int folderId,
         byte type, int received, int flags, String tags, int convId) throws ServiceException {
-        final int DISK_STREAM_THRESHOLD = OfflineLC.zdesktop_membuf_limit.intValue();
-        final int READ_BUFFER_SIZE = 8 * 1024;
-        
+        Blob blob = null;
+        BufferedStorageCallback callback;
+        byte[] data = null;
+        CreateMessage redo;
+
         if (convId < 0)
             convId = Mailbox.ID_AUTO_INCREMENT;
-        
-        Blob blob = null;
-        byte[] data = null;
         try {
-            data = ByteUtil.readInput(in, sizeHint == -1 || sizeHint >= Integer.MAX_VALUE ? READ_BUFFER_SIZE : (int)sizeHint,
-                DISK_STREAM_THRESHOLD + 1);
-            if (data.length > DISK_STREAM_THRESHOLD) {
-                OfflineLog.offline.info(
-                        "Message id=%d exceeded threshold of %d bytes. Streaming message to disk.", id, DISK_STREAM_THRESHOLD);
-                    
-                SequenceInputStream jointStream = new SequenceInputStream(new ByteArrayInputStream(data), in);
-                CompressedBlobReader reader = new CompressedBlobReader(0);
-                blob = StoreManager.getInstance().storeIncoming(jointStream, 0, reader);
-                data = reader.getData(); // Returns null if the blob was not compressed
-                OfflineLog.offline.info("Message id=%d streamed to disk file %s.", id, blob.getPath());
-            }
-        } catch (IOException e) {
+            callback = new BufferedStorageCallback(sizeHint);
+            blob = StoreManager.getInstance().storeIncoming(in, sizeHint, callback);
+            data = callback.getData();
+            OfflineLog.offline.debug("message id=%d streamed to %s", id,
+                data == null ? blob.getPath() : "memory" );
+        } catch (Exception e) {
             throw ServiceException.FAILURE("Unable to read/write message id=" + id, e);
         }
 
         ParsedMessage pm = null;
-        String digest = null;
-        int size = 0;
+        String digest = callback.getDigest();
+        int size = (int)callback.getSize();
+        
         try {
-            if (data != null) {
-                pm = new ParsedMessage(data, received * 1000L, false);
-                digest = pm.getRawDigest();
-                size = data.length;
-            } else {
+            if (data == null)
                 pm = new ParsedMessage(blob.getFile(), received * 1000L, false);
-                digest = blob.getDigest();
-                pm.setRawDigest(digest);
-                size = (int) blob.getRawSize();
-            }
-        } catch (IOException e) {
-            throw MailServiceException.MESSAGE_PARSE_ERROR(e);
-        }
+            else
+                pm = new ParsedMessage(data, received * 1000L, false);
+            pm.setRawDigest(digest);
+            pm.setRawSize(size);
+            
+            if (type == MailItem.TYPE_CHAT)
+                redo = new CreateChat(ombx.getId(), digest, size, folderId, flags, tags);
+            else
+                redo = new CreateMessage(ombx.getId(), null, received, false, digest, size, folderId, true, flags, tags, null);
+            redo.setMessageId(id);
+            redo.setConvId(convId);
+            redo.start(System.currentTimeMillis());
 
-        CreateMessage redo;
-        if (type == MailItem.TYPE_CHAT)
-            redo = new CreateChat(ombx.getId(), digest, size, folderId, flags, tags);
-        else
-            redo = new CreateMessage(ombx.getId(), null, received, false, digest, size, folderId, true, flags, tags, null);
-        redo.setMessageId(id);
-        redo.setConvId(convId);
-        redo.start(System.currentTimeMillis());
-
-        try {
             // FIXME: not syncing COLOR
             // XXX: need to call with noICal = false
             Message msg;
-            if (type == MailItem.TYPE_CHAT)
-                msg = ombx.createChat(new OfflineContext(redo), pm, folderId, flags, tags); //FIXME: do we ever need shared context for chat delivery?
-            else {
-                DeliveryContext sharedDeliveryCtxt = null;
-                if (data != null) {
-                    sharedDeliveryCtxt = new DeliveryContext();
-                } else {
-                    sharedDeliveryCtxt = new DeliveryContext(false, Arrays.asList(ombx.getId()));
-                }
-                msg = ombx.addMessage(new OfflineContext(redo), pm, folderId, true, flags, tags, convId, ":API:", null, sharedDeliveryCtxt);
+            if (type == MailItem.TYPE_CHAT) {
+                msg = ombx.createChat(new OfflineContext(redo), pm, folderId, flags, tags);
+            } else {
+                DeliveryContext deliveryCtxt = new DeliveryContext();
+
+                deliveryCtxt.setIncomingBlob(blob);
+                msg = ombx.addMessage(new OfflineContext(redo), pm, folderId, true, flags, tags, convId, ":API:", null, deliveryCtxt);
             }
             ombx.syncDate(sContext, id, type, received);
             OfflineLog.offline.debug("initial: created " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
+            StoreManager.getInstance().quietDelete(blob);
             return;
         } catch (IOException e) {
+            StoreManager.getInstance().quietDelete(blob);
             if (e.getMessage() != null && e.getMessage().startsWith("Unable to rename")) {
                 SyncExceptionHandler.syncMessageFailed(ombx, id, pm, e);
                 return;
@@ -1195,9 +1174,11 @@ public class InitialSync {
         } catch (Exception e) {
             if (e instanceof ServiceException && ((ServiceException)e).getCode().equals(MailServiceException.NO_SUCH_FOLDER)) {
                 OfflineLog.offline.debug("initial: moved " + MailItem.getNameForType(type) + " (" + id + ")");
+                StoreManager.getInstance().quietDelete(blob);
                 return; //message moved on server; we'll get that when we do delta
             } else if (!(e instanceof ServiceException) || !((ServiceException)e).getCode().equals(MailServiceException.ALREADY_EXISTS)) {
                 SyncExceptionHandler.syncMessageFailed(ombx, id, pm, e);
+                StoreManager.getInstance().quietDelete(blob);
                 return;
             }
             // fall through...
@@ -1233,6 +1214,8 @@ public class InitialSync {
             return;
         } catch (IOException e) {
             throw ServiceException.FAILURE("storing message " + id, e);
+        } finally {
+            StoreManager.getInstance().quietDelete(blob);
         }
 
         // use this data to generate the XML entry used in message delta sync
