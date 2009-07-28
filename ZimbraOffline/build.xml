@@ -1,19 +1,19 @@
 
 <project name="ZimbraOffline" default="offline-jar">
 
-    <property file="build.properties"/>                                    
+	<property file="build.properties"/>
 	<property environment="env" />
 	<property name="offline.appid" value="4062-5711-9195-4050"/>
 	<property name="offline.name" value="Yahoo! Zimbra Desktop"/>
 	<condition property="offline.relabel" value="ALPHA">
-	    <not><isset property="offline.relabel"/></not>
-	</condition>                                                                           
+		<not><isset property="offline.relabel"/></not>
+	</condition>
 	<condition property="offline.version" value="0.1">
-	    <not><isset property="offline.version"/></not>
+		<not><isset property="offline.version"/></not>
 	</condition>
 	<condition property="offline.buildid" value="1">
-	    <not><isset property="offline.buildid"/></not>
-        </condition>
+		<not><isset property="offline.buildid"/></not>
+	</condition>
 
 	<!-- Properties -->
 
@@ -100,13 +100,13 @@
 	<property name="xulrunner.src.dir" location="../ThirdParty/xulrunner" />
 	<property name="jetty.version" value="6.1.15" />
 
-        <fileset id="gdata.jars" dir="${jars.dir}">
-                <include name="gdata-core-*.jar"/>
-                <include name="gdata-client-*.jar"/>
-                <include name="gdata-contacts-*.jar"/>
-	        <include name="google-collect-*.jar"/>
-                <include name="jsr305.jar"/>
-        </fileset>
+	<fileset id="gdata.jars" dir="${jars.dir}">
+		<include name="gdata-core-*.jar"/>
+		<include name="gdata-client-*.jar"/>
+		<include name="gdata-contacts-*.jar"/>
+		<include name="google-collect-*.jar"/>
+		<include name="jsr305.jar"/>
+	</fileset>
 
 	<path id="all.java.path">
 		<pathelement location="${src.java.dir}" />
@@ -125,7 +125,7 @@
 		<fileset dir="${server.tools.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-        </path>
+	</path>
 
 	<path id="deploy.class.path">
 		<fileset dir="${server.build.dir}/dist/lib/jars">
@@ -180,9 +180,9 @@
 	<target name="offline-war" depends="offline-jar">
 		<unzip src="${server.warfile}" dest="${dist.dir}/jetty/webapps/service" overwrite="true"/>
 		<copy file="${config.dir}/web.xml" todir="${dist.dir}/jetty/webapps/service/WEB-INF" overwrite="true"/>
-                <copy todir="${dist.dir}/jetty/webapps/service/WEB-INF/lib" overwrite="true">
-                        <fileset dir="${build.dir}" includes="${jarfile}"/>
-                </copy>
+		<copy todir="${dist.dir}/jetty/webapps/service/WEB-INF/lib" overwrite="true">
+			<fileset dir="${build.dir}" includes="${jarfile}"/>
+		</copy>
 	</target>
 
 	<target name="offline-zimbra-war">
@@ -376,9 +376,9 @@
 		<copy todir="${dist.dir}/conf/attrs" overwrite="true">
 			<fileset dir="${config.dir}/attrs" />
 		</copy>
-        <copy todir="${dist.dir}/conf/rights" overwrite="true">
-            <fileset dir="${server.config.dir}/rights"/>
-        </copy>
+		<copy todir="${dist.dir}/conf/rights" overwrite="true">
+			<fileset dir="${server.config.dir}/rights"/>
+		</copy>
 		<fixcrlf srcdir="${dist.dir}/conf" eol="unix" includes="**" />
 
 		<copy tofile="${dist.dir}/conf/globs2" file="${server.config.dir}/globs2" overwrite="true" />
@@ -406,14 +406,17 @@
 		<copy tofile="${dist.dir}/lib/derbytools.jar" file="../ZimbraServer/tools/lib/derbytools.jar" overwrite="true" />
 		<copy tofile="${dist.dir}/lib/zdesktop.jar" file="${build.dir}/zdesktop.jar" overwrite="true" />
 
-        <mkdir dir="${dist.dir}/wiki/Templates" />
-        <copy todir="${dist.dir}/wiki/Templates" overwrite="true">
-            <fileset dir="${server.wiki.dir}/Template" />
-        </copy> 
+		<mkdir dir="${dist.dir}/wiki/Templates" />
+		<copy todir="${dist.dir}/wiki/Templates" overwrite="true">
+			<fileset dir="${server.wiki.dir}/Template" />
+		</copy>
 	</target>
 
 	<target name="offline-redeploy-zimlets">
 		<antcall target="offline-build-zimlets"/>
+			<copy todir="${zimbra.home.dir}/zimlets" overwrite="true">
+				<fileset dir="${dist.dir}/zimlets" includes="*.zip" />
+			</copy>
 		<antcall target="offline-deploy-zimlets"/>
 	</target>
 
@@ -478,39 +481,39 @@
 		</waitfor>
 	</target>
 
-    <target name="start-jetty-windows" if="is-windows">
-        <antcall target="start-jetty-java"/>
-    </target>
+	<target name="start-jetty-windows" if="is-windows">
+		<antcall target="start-jetty-java"/>
+	</target>
 
-    <target name="start-jetty-unix" if="is-unix">
-        <exec executable="${zimbra.home.dir}/bin/offline">
-            <arg value="start"/>
-            <env key="ZIMBRA_HOME" value="${zimbra.home.dir}"/>
-        </exec>
-    </target>
+	<target name="start-jetty-unix" if="is-unix">
+		<exec executable="${zimbra.home.dir}/bin/offline">
+			<arg value="start"/>
+			<env key="ZIMBRA_HOME" value="${zimbra.home.dir}"/>
+		</exec>
+	</target>
 
-    <target name="start-jetty" depends="start-jetty-windows,start-jetty-unix"/>
+	<target name="start-jetty" depends="start-jetty-windows,start-jetty-unix"/>
 
-    <target name="stop-jetty-windows" if="is-windows">
-        <antcall target="stop-jetty-java"/>
-    </target>
+	<target name="stop-jetty-windows" if="is-windows">
+		<antcall target="stop-jetty-java"/>
+	</target>
 
-    <target name="stop-jetty-unix" if="is-unix">
-        <if>
-            <available file="${zimbra.home.dir}/bin/offline" type="file"/>
-            <then>
-                <exec executable="${zimbra.home.dir}/bin/offline">
-                    <arg value="stop"/>
-                    <env key="ZIMBRA_HOME" value="${zimbra.home.dir}"/>
-                </exec>
-            </then>
-            <else>
-                <echo>Jetty not installed; skipping jetty stop</echo>
-            </else>
-        </if>
-    </target>
+	<target name="stop-jetty-unix" if="is-unix">
+		<if>
+			<available file="${zimbra.home.dir}/bin/offline" type="file"/>
+			<then>
+				<exec executable="${zimbra.home.dir}/bin/offline">
+					<arg value="stop"/>
+					<env key="ZIMBRA_HOME" value="${zimbra.home.dir}"/>
+				</exec>
+			</then>
+			<else>
+				<echo>Jetty not installed; skipping jetty stop</echo>
+			</else>
+		</if>
+	</target>
 
-    <target name="stop-jetty" depends="stop-jetty-windows,stop-jetty-unix"/>
+	<target name="stop-jetty" depends="stop-jetty-windows,stop-jetty-unix"/>
 
 	<target name="start-jetty-java">
 		<java dir="${jetty.home.dir}" jar="${jetty.home.dir}/start.jar" fork="true" spawn="true">
@@ -546,18 +549,18 @@
 			<param name="param.port" value="7733" />
 		</antcall>
 
-                <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-                        <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-                        <arg line="-e javamail_imap_debug=false" />
-                </java>
-                <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-                        <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-                        <arg line="-e javamail_pop3_debug=false" />
-                </java>
-                <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-                        <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-                        <arg line="-e javamail_smtp_debug=false" />
-                </java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<arg line="-e javamail_imap_debug=false" />
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<arg line="-e javamail_pop3_debug=false" />
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<arg line="-e javamail_smtp_debug=false" />
+		</java>
 
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.request=INFO" value="log4j.logger.zimbra.offline.request=DEBUG"/>
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.response=INFO" value="log4j.logger.zimbra.offline.response=DEBUG"/>
@@ -583,9 +586,9 @@
 			<then>
 				<copy tofile="${zimbra.home.dir}/bin/offline" file="src/bin/offline" overwrite="true"/>
 				<copy tofile="${zimbra.home.dir}/bin/zmjava" file="src/bin/zmjava" overwrite="true"/>
-		        	<chmod perm="a+rx">
-		            		<fileset dir="${zimbra.home.dir}/bin"/>
-		        	</chmod>
+					<chmod perm="a+rx">
+						<fileset dir="${zimbra.home.dir}/bin"/>
+					</chmod>
 				<copy tofile="${zimbra.home.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX.i386" overwrite="true"/>
 				<copy tofile="${zimbra.home.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
 			</then>
@@ -607,12 +610,12 @@
 
 	<target name="offline-build-zimlets">
 		<ant dir="../Zimlet" target="clean" inheritAll="false" />
-                <ant dir="../Zimlet" target="package-zimlets" inheritAll="false" />
-                <ant dir="../Zimlet" target="package-zimlets-offline" inheritAll="false" />
-                <copy todir="${dist.dir}/zimlets" overwrite="true">
-                        <fileset dir="../Zimlet/build/dist/zimlets" includes="*.zip" />
-                        <fileset dir="../Zimlet/build/dist/zimlets-offline" includes="*.zip" />
-                </copy>
+		<ant dir="../Zimlet" target="package-zimlets" inheritAll="false" />
+		<ant dir="../Zimlet" target="package-zimlets-offline" inheritAll="false" />
+		<copy todir="${dist.dir}/zimlets" overwrite="true">
+			<fileset dir="../Zimlet/build/dist/zimlets" includes="*.zip" />
+			<fileset dir="../Zimlet/build/dist/zimlets-offline" includes="*.zip" />
+		</copy>
 	</target>
 
 	<target name="offline-make-dist">
@@ -893,38 +896,38 @@
 		</antcall>
 		<antcall target="offline-install-misc" />
 		<antcall target="offline-prep-prism" />
-        <antcall target="offline-prep-launcher" />
+		<antcall target="offline-prep-launcher" />
 		<antcall target="offline-jspc" />
 	</target>
 
 	<target name="offline-sync-jsp-opt">
-                <copy todir="${jetty.home.dir}/webapps/zimbra/desktop" overwrite="true">
-                        <fileset dir="WebRoot/desktop" includes="**/*"/>
-                </copy>
-                <copy todir="${jetty.home.dir}/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
-                        <fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag" />
-                </copy>
-                <copy todir="${jetty.home.dir}/webapps/zimbra/WEB-INF/classes/desktop" overwrite="true">
-                        <fileset dir="WebRoot/WEB-INF/classes/desktop" includes="*.properties" />
-                </copy>
-                <copy todir="${jetty.home.dir}/webapps/zimbra/WEB-INF/tlds" overwrite="true">
-                        <fileset dir="WebRoot/WEB-INF/tlds" includes="*.tld" />
-                </copy>
+		<copy todir="${jetty.home.dir}/webapps/zimbra/desktop" overwrite="true">
+			<fileset dir="WebRoot/desktop" includes="**/*"/>
+		</copy>
+		<copy todir="${jetty.home.dir}/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
+			<fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag" />
+		</copy>
+		<copy todir="${jetty.home.dir}/webapps/zimbra/WEB-INF/classes/desktop" overwrite="true">
+			<fileset dir="WebRoot/WEB-INF/classes/desktop" includes="*.properties" />
+		</copy>
+		<copy todir="${jetty.home.dir}/webapps/zimbra/WEB-INF/tlds" overwrite="true">
+			<fileset dir="WebRoot/WEB-INF/tlds" includes="*.tld" />
+		</copy>
 	</target>
 
 	<target name="offline-sync-jsp-dist">
-                <copy todir="${dist.dir}/jetty/webapps/zimbra/desktop" overwrite="true">
-                        <fileset dir="WebRoot/desktop" includes="**/*"/>
-                </copy>
-                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
-                        <fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag"/>
-                </copy>
-                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/classes/desktop" overwrite="true">
-                        <fileset dir="WebRoot/WEB-INF/classes/desktop" includes="*.properties"/>
-                </copy>
-                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tlds" overwrite="true">
-                        <fileset dir="WebRoot/WEB-INF/tlds" includes="*.tld"/>
-                </copy>
+		<copy todir="${dist.dir}/jetty/webapps/zimbra/desktop" overwrite="true">
+			<fileset dir="WebRoot/desktop" includes="**/*"/>
+		</copy>
+		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
+			<fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag"/>
+		</copy>
+		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/classes/desktop" overwrite="true">
+			<fileset dir="WebRoot/WEB-INF/classes/desktop" includes="*.properties"/>
+		</copy>
+		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tlds" overwrite="true">
+			<fileset dir="WebRoot/WEB-INF/tlds" includes="*.tld"/>
+		</copy>
 	</target>
 
 	<target name="offline-dev-sync">
