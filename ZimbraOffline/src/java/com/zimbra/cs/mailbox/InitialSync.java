@@ -1014,7 +1014,7 @@ public class InitialSync {
                         SyncExceptionHandler.saveFailureReport(ombx, id, "message missing from server response", null);
                 }
             } catch (IOException x) {
-                OfflineLog.offline.error("Invalid sync format", x);
+                throw ServiceException.FAILURE("TarInputStream", x);
             }
         } finally {
             if (in != null)
