@@ -90,6 +90,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_log_context_filter;
     public static final KnownKey zdesktop_installation_key;
 
+    public static final KnownKey zdesktop_batched_indexing_size;
     public static final KnownKey zdesktop_mail_disk_streaming_threshold;
     public static final KnownKey zdesktop_mail_file_descriptor_cache_size;
     public static final KnownKey zdesktop_mail_uncompressed_cache_max_bytes;
@@ -314,6 +315,7 @@ public class OfflineLC {
         zdesktop_log_context_filter = new KnownKey("zdesktop_log_context_filter", "name,aname,ip,ua", "comma delimited list of log context items to filter out");
         zdesktop_installation_key = new KnownKey("zdesktop_installation_key", null, "unique key of the installation instance");
 
+        zdesktop_batched_indexing_size = new KnownKey("zdesktop_batched_indexing_size", "0", "batch size to use when indexing data");
         zdesktop_mail_disk_streaming_threshold = new KnownKey("zdesktop_mail_disk_streaming_threshold", "1048576", "number of bytes to hold in memory before streaming to disk");
         zdesktop_mail_file_descriptor_cache_size = new KnownKey("zdesktop_mail_file_descriptor_cache_size", "10", "maximum number of file descriptors that are opened for accessing message content");
         zdesktop_mail_uncompressed_cache_max_bytes = new KnownKey("zdesktop_mail_uncompressed_cache_max_bytes", "20971520", "max number of bytes in the uncompressed blob cache on disk");

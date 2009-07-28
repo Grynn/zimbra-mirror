@@ -54,6 +54,7 @@ class OfflineConfig extends Config {
             attrs.put(Provisioning.A_zimbraNotebookAccount, "local@host.local");
             attrs.put(Provisioning.A_zimbraMtaMaxMessageSize, OfflineLC.zdesktop_upload_size_limit.value());
 
+            attrs.put(Provisioning.A_zimbraBatchedIndexingSize, OfflineLC.zdesktop_batched_indexing_size.value());
             attrs.put(Provisioning.A_zimbraMailDiskStreamingThreshold, OfflineLC.zdesktop_mail_disk_streaming_threshold.value());
             attrs.put(Provisioning.A_zimbraMailFileDescriptorCacheSize, OfflineLC.zdesktop_mail_file_descriptor_cache_size.value());
             attrs.put(Provisioning.A_zimbraMailUncompressedCacheMaxBytes, OfflineLC.zdesktop_mail_uncompressed_cache_max_bytes.value());
