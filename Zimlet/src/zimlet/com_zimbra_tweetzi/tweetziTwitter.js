@@ -218,7 +218,7 @@ function(origParams, response) {
 
 com_zimbra_tweetziTwitter.prototype.getFollowUserParams =
 function(actionUrl, profileId, account) {
-	var ts = account.tokenSecret;
+	var ts = account.oauth_token_secret;
 	var ot = account.oauth_token;
 	var accessor = { consumerSecret: this.consumerSecret
 		, tokenSecret   : ts};
@@ -236,7 +236,6 @@ function(actionUrl, profileId, account) {
 	OAuth.SignatureMethod.sign(message, accessor);
 	var normalizedParams = OAuth.SignatureMethod.normalizeParameters(message.parameters);
 	var signature = OAuth.getParameter(message.parameters, "oauth_signature");
-	var signatureBaseString = OAuth.SignatureMethod.getBaseString(message);
 	var authorizationHeader = OAuth.getAuthorizationHeader("", message.parameters);
 
 	var val = this._encodeNormalizedStr(normalizedParams);
@@ -248,7 +247,8 @@ function(actionUrl, profileId, account) {
 com_zimbra_tweetziTwitter.prototype.postToTwitter =
 function(account, message) {
 	var isDM = false;
-	if(message.indexOf("DM @") == 0){//use this to make sure not to send message direct message to FB
+	var data = "";
+	if(message.toLowerCase().indexOf("d @") == 0){//use this to make sure not to send message direct message to FB
 		isDM = true;
 	}
 	if (account.__on == "true") {
@@ -256,25 +256,25 @@ function(account, message) {
 			data = this.getDMPostUrl(account);
 			actionUrl = "https://twitter.com/direct_messages/new.json";
 		} else {
-			data = this.getTweetUrl(account);
-			actionUrl = "https://twitter.com/statuses/update.json";
+			data = this.getUpdateUrl(account);
+			actionUrl = "http://twitter.com/statuses/update.json";
 		}
+		
 		var hdrs = new Array();
 		hdrs["Content-type"] = "application/x-www-form-urlencoded";
 		hdrs["Content-length"] = data.length;
 		hdrs["Connection"] = "close";
-		var entireurl = ZmZimletBase.PROXY + actionUrl;
+		var entireurl = ZmZimletBase.PROXY +  AjxStringUtil.urlComponentEncode(actionUrl);
 		AjxRpc.invoke(data, entireurl, hdrs, new AjxCallback(this, this._postToTweetCallback, account), false);
 	}
 };
 
-
-com_zimbra_tweetziTwitter.prototype.getTweetUrl =
+com_zimbra_tweetziTwitter.prototype.getUpdateUrl =
 function(account) {
 	var data = document.getElementById("tweetzi_statusTextArea").value;
 	var additionalParams  = new Array();
 	additionalParams["status"] = data;
-	params = {account:account, actionUrl:"https://twitter.com/statuses/update.json", http:"POST", additionalParams:additionalParams};
+	params = {account:account, actionUrl:"http://twitter.com/statuses/update.json", http:"POST", additionalParams:additionalParams};
 	return this.getTwitterUrl(params);
 };
 
@@ -314,6 +314,7 @@ function(account) {
 
 com_zimbra_tweetziTwitter.prototype.getTwitterUrl =
 function(params) {
+	var ignoreEncodingArray = new Array();
 	var account = params.account;
 	var actionUrl =  params.actionUrl;
 	var http = params.http;
@@ -321,8 +322,7 @@ function(params) {
 	if(additionalParams == undefined) {
 		additionalParams = new Array();
 	}
-
-	var ts = account.tokenSecret;
+	var ts = account.oauth_token_secret;
 	var ot = account.oauth_token;
 	var accessor = { consumerSecret: this.consumerSecret
 		, tokenSecret   : ts};
@@ -336,34 +336,47 @@ function(params) {
 	message.parameters.push(["oauth_nonce", OAuth.nonce(11)]);
 	message.parameters.push(["oauth_signature_method", "HMAC-SHA1"]);
 	message.parameters.push(["oauth_token", ot]);
+	
+	for(var name  in additionalParams) {
+		message.parameters.push([name, additionalParams[name]]);
+		ignoreEncodingArray.push(name);
+	}
 
 	OAuth.SignatureMethod.sign(message, accessor);
 	var normalizedParams = OAuth.SignatureMethod.normalizeParameters(message.parameters);
 	var signature = OAuth.getParameter(message.parameters, "oauth_signature");
-	var signatureBaseString = OAuth.SignatureMethod.getBaseString(message);
 	var authorizationHeader = OAuth.getAuthorizationHeader("", message.parameters);
 
-	var val = this._encodeNormalizedStr(normalizedParams);
-	additionalParams["oauth_signature"] = signature;
-	var apArray = new Array();
-	for(var name  in additionalParams) {
-		apArray.push(AjxStringUtil.urlComponentEncode(name) + "=" + AjxStringUtil.urlComponentEncode(additionalParams[name]));
-	}
-
-	val = val + "&" + apArray.join("&");
-	return actionUrl+"?"+val;
+	var val = this._encodeNormalizedStr(normalizedParams, ignoreEncodingArray);
+	val = val + "&" + "oauth_signature="+ AjxStringUtil.urlComponentEncode(signature);
+	if(http == "GET")
+		return actionUrl+"?"+val;
+	else
+		return val;
 };
 
 com_zimbra_tweetziTwitter.prototype._encodeNormalizedStr =
-function(normalizedStr) {
+function(normalizedStr, ignoreEncodingArray) {
+	if(!ignoreEncodingArray)
+		ignoreEncodingArray = new Array();
 	var encodStr = "";
 	var tmp1 = normalizedStr.split("&");
 	for (var i = 0; i < tmp1.length; i++) {
 		var tmp2 = tmp1[i].split("=");
+		var name =  tmp2[0];
+		var value =  tmp2[1];
+		var ignoreEncoding = false;
+		for(var j=0; j < ignoreEncodingArray.length; j++){
+			if(ignoreEncodingArray[j] == name){
+				ignoreEncoding = true;
+				break;
+			}
+		}
+
 		if (encodStr == "")
-			encodStr = AjxStringUtil.urlComponentEncode(tmp2[0]) + "=" + AjxStringUtil.urlComponentEncode(tmp2[1]);
+			encodStr = AjxStringUtil.urlComponentEncode(name) + "=" + (ignoreEncoding ? value : AjxStringUtil.urlComponentEncode(value));
 		else
-			encodStr = encodStr + "&" + AjxStringUtil.urlComponentEncode(tmp2[0]) + "=" + AjxStringUtil.urlComponentEncode(tmp2[1]);
+			encodStr = encodStr + "&" + AjxStringUtil.urlComponentEncode(name) + "=" + (ignoreEncoding ? value : AjxStringUtil.urlComponentEncode(value));
 
 	}
 	return encodStr;
@@ -389,6 +402,15 @@ com_zimbra_tweetziTwitter.prototype.friendsTimelineCallback =
 function(tableId, response) {
 	var text = response.text;
 	var jsonObj = eval("(" + text + ")");
+	if(jsonObj.error) {
+		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.FADE_OUT ];
+		appCtxt.getAppController().setStatusMsg("Twitter Server May Be Down: " +jsonObj.error, ZmStatusView.LEVEL_WARNING, null, transitions);
+		var timer = this.zimlet.tableIdAndTimerMap[tableId];
+		if (timer) { //remove update timers
+			clearInterval(timer);
+		}
+		return;
+	}
 	this.zimlet.createCardView(tableId, jsonObj, "ACCOUNT");
 };
 com_zimbra_tweetziTwitter.prototype.mentionsCallback =
@@ -411,7 +433,6 @@ function(account) {
 	params = {account:account, actionUrl:"https://twitter.com/statuses/friends_timeline.json", http:"GET", additionalParams:additionalParams};
 	return this.getTwitterUrl(params);
 };
-
 
 com_zimbra_tweetziTwitter.prototype.performOAuth =
 function() {
@@ -436,7 +457,6 @@ function() {
 	OAuth.SignatureMethod.sign(message, accessor);
 	var normalizedParams = OAuth.SignatureMethod.normalizeParameters(message.parameters);
 	var signature = OAuth.getParameter(message.parameters, "oauth_signature");
-	var signatureBaseString = OAuth.SignatureMethod.getBaseString(message);
 	var authorizationHeader = OAuth.getAuthorizationHeader("", message.parameters);
 
 	return "https://twitter.com/oauth/request_token?" + normalizedParams + "&"+AjxStringUtil.urlComponentEncode("oauth_signature")+"=" + AjxStringUtil.urlComponentEncode(signature);
@@ -459,7 +479,6 @@ function(pin) {
 	OAuth.SignatureMethod.sign(message, accessor);
 	var normalizedParams = OAuth.SignatureMethod.normalizeParameters(message.parameters);
 	var signature = OAuth.getParameter(message.parameters, "oauth_signature");
-	var signatureBaseString = OAuth.SignatureMethod.getBaseString(message);
 	var authorizationHeader = OAuth.getAuthorizationHeader("", message.parameters);
 
 	var url = ["https://twitter.com/oauth/access_token?", normalizedParams, "&",
@@ -484,7 +503,10 @@ function(response) {
 		}
 	}
 
-	window.open("https://twitter.com/oauth/authorize?oauth_token=" + AjxStringUtil.urlComponentEncode(this._oauth_token), "", "toolbar=no,menubar=no,width=0.1px,height=0.1px");
+	var newWin = window.open("https://twitter.com/oauth/authorize?oauth_token=" + AjxStringUtil.urlComponentEncode(this._oauth_token), "", "toolbar=no,menubar=no,width=0.1px,height=0.1px");
+	if (!newWin) {
+		this.setStatusMsg(ZmMsg.popupBlocker, ZmStatusView.LEVEL_CRITICAL);
+	}
 	this._showGetPinDlg();
 };
 
@@ -498,7 +520,7 @@ com_zimbra_tweetziTwitter.prototype._showGetPinDlg = function() {
 	this._getPinView = new DwtComposite(this.zimlet.getShell());
 	this._getPinView.getHtmlElement().style.overflow = "auto";
 	this._getPinView.getHtmlElement().innerHTML = this._createPINView();
-	this._getPinDialog = this.zimlet._createDialog({title:"Twitter PIN", view:this._getPinView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this._getPinDialog = this.zimlet._createDialog({title:"Enter Twitter PIN", view:this._getPinView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this._getPinDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okgetPinBtnListener));
 	this._getPinDialog.popup();
 };
@@ -507,10 +529,15 @@ com_zimbra_tweetziTwitter.prototype._createPINView =
 function() {
 	var html = new Array();
 	var i = 0;
-	html[i++] = "<BR>";
 	html[i++] = "<DIV>";
-	html[i++] = "Enter Twitter PIN:<input id='com_zimbra_twitter_pin_field'  type='text'/>";
+	html[i++] = "<b>Steps to add twitter account:</b><BR/> 1. You will see a twitter.com page opened*. <br/>2. Please Enter your twitter account information over there <br/>";
+	html[i++] = "3. Press Authorize <br>4. twitter will give you a PIN code, like: <b>123213</b> Copy that and paste it below";
 	html[i++] = "</DIV>";
+	html[i++] = "<DIV>";
+	html[i++] = "5. Enter Twitter PIN:<input id='com_zimbra_twitter_pin_field'  type='text'/>";
+	html[i++] = "</DIV>";
+	html[i++] = "<BR/>*If you don't see twitter.com page opened as mentioned in step 1, please check browser's popup blocker";
+
 	return html.join("");
 };
 

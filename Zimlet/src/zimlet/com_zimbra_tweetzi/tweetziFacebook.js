@@ -125,14 +125,20 @@ function(params) {
 	var account = params.account;
 	var url = "https://www.facebook.com/authorize.php?";
 	var params = "version=1.0&ext_perm="+permission+"&api_key="+this.apiKey;
-	window.open(ZmZimletBase.PROXY +AjxStringUtil.urlComponentEncode(url + params), "Authorize facebook", "toolbar=no,menubar=no,width=0.1px,height=0.1px");
+	var newWin = window.open(ZmZimletBase.PROXY +AjxStringUtil.urlComponentEncode(url + params), "Authorize facebook", "toolbar=no,menubar=no,width=0.1px,height=0.1px");
+	if (!newWin) {
+		this.setStatusMsg(ZmMsg.popupBlocker, ZmStatusView.LEVEL_CRITICAL);
+	}
 };
 
 com_zimbra_tweetziFacebook.prototype.getExtendedPermForRead =
 function () {
 	var url = "https://www.facebook.com/authorize.php?";
 	var params = "version=1.0&ext_perm=read_stream&api_key="+this.apiKey;
-	window.Open = window.open(url + params, "tfbOpen", "toolbar=no,menubar=no,width=0.1px,height=0.1px");
+	var newWin = window.Open = window.open(url + params, "tfbOpen", "toolbar=no,menubar=no,width=0.1px,height=0.1px");
+	if (!newWin) {
+		this.setStatusMsg(ZmMsg.popupBlocker, ZmStatusView.LEVEL_CRITICAL);
+	}
 };
 com_zimbra_tweetziFacebook.prototype._fbGetStream =
 function (tableId, account) {
@@ -184,8 +190,11 @@ function (response) {
 	var text = response.text;
 	this.fb_auth_token = eval("(" + text + ")");
 	var url = "https://www.facebook.com/login.php?";
-	var params = "version=1.0&auth_token=" + this.fb_auth_token + "&api_key="+this.apiKey;
-	window.open(url + params, "", "toolbar=no,menubar=no,width=0.1px,height=0.1px");
+	var params = "version=1.0&auth_token=" + this.fb_auth_token + "&api_key="+this.apiKey+"&fbconnect=1";
+	var newWin = window.open(url + params, "", "toolbar=no,menubar=no,width=0.1px,height=0.1px");
+	if (!newWin) {
+		this.setStatusMsg(ZmMsg.popupBlocker, ZmStatusView.LEVEL_CRITICAL);
+	}
 	this.waitingForApproval = true;
 	//this.getSessionTimer = setInterval(AjxCallback.simpleClosure(this._getSessionId, this), 60000);
 }

@@ -1,8 +1,9 @@
-<zimlet name="com_zimbra_tweetzi" version="1.4" description="Twitter and Facebook Zimlet">
+<zimlet name="com_zimbra_tweetzi" version="1.5" description="Twitter and Facebook Zimlet">
 	<include>tweetziTwitter.js</include>
 	<include>tweetziFacebook.js</include>
 	<include>tweetziTweetMeme.js</include>
 	<include>tweetziPreferences.js</include>
+	<include>tweetziDigg.js</include>
 	<include>sha1.js</include>
 	<include>oauth.js</include>
 	<include>md5.js</include>

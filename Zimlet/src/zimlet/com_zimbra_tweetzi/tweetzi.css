@@ -46,6 +46,12 @@
   height: 16px;
   overflow: hidden;
 }
+.Imgtweetzi_diggIcon {
+  background:  transparent url("tweetzi_digg.png") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
 .Imgtweetzi_checkIcon {
   background: url("tweetzi_check.gif") no-repeat 0 0;
   width: 16px;
@@ -87,7 +93,12 @@ border-bottom:1px solid #6E6E6E;
 	color:white;
 	border-top:1px solid #B2B2B2; border-bottom:2px solid #6E6E6E; border-left:1px solid #B2B2B2;border-right:2px solid #6E6E6E;
 }
-
+.tweetzi_diggBg {
+	background-image:url(tweetzi_diggBg1.png);
+	height: 48px;
+	width: 48px;
+	border-top:1px solid #B2B2B2; border-bottom:2px solid #6E6E6E; border-left:1px solid #B2B2B2;border-right:2px solid #6E6E6E;
+}
 .tweetzi_tweetMemeRetweetBg {
 	font-size:12px;font-family:'Lucida Grande',sans-serif;
 	font-weight:bold;
@@ -95,6 +106,12 @@ border-bottom:1px solid #6E6E6E;
 	background:#00A854;
 	border-top:1px solid #B2B2B2; border-bottom:2px solid #6E6E6E; border-left:1px solid #B2B2B2;border-right:2px solid #6E6E6E;
 }
+.tweetzi_diggHdrBg {
+	font-weight:bold;
+	background:#FFFFCC;
+	border-top:1px solid #B2B2B2; border-bottom:2px solid #6E6E6E; border-left:1px solid #B2B2B2;border-right:2px solid #6E6E6E;
+}
+
 .tweetzi_accountBg {
 	font-size:12px;font-family:'Lucida Grande',sans-serif;
 	font-weight:bold;
@@ -103,7 +120,6 @@ border-bottom:1px solid #6E6E6E;
 }
 
 .tweetzi_twitterCardsDiv {
-	background:#E4E4E4;
 	width:100%;
 }
 .tweetzi_profileInnerDiv {
