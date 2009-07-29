@@ -25,7 +25,15 @@ use vars qw($LOGFH $CONSOLE $LOGFILE $ROTATE_NOW $ROTATE_DEFER);
 
 zmstatInit();
 
-my $DF = '/bin/df';
+my $DISK_CRIT_THRESHOLD = getLocalConfig("zmdisklog_critical_threshold") || 95;
+my $DISK_WARN_THRESHOLD = getLocalConfig("zmdisklog_warn_threshold") || 85;
+my $hostname = `/opt/zimbra/bin/zmhostname`;
+chomp $hostname;
+
+my $platform = `/opt/zimbra/libexec/get_plat_tag.sh`;
+chomp $platform;
+
+my $DF = '/bin/df -k';
 my $HEADING = 'timestamp, path, disk, disk_use, disk_space, disk_pct_used';
 
 sub get_df_stat() {
@@ -52,6 +60,7 @@ sub get_df_stat() {
              $pct   = $4;
              $path  = $5;
         }
+        next if $dev !~ m#^/#;
         push(@stats, {
             path => $path,
             disk => $dev,
@@ -113,6 +122,15 @@ waitUntilNiceRoundSecond($interval);
 
 while (1) {
     my @stats = get_df_stat();
+    foreach my $df (@stats) {
+    	my $pct = $df->{'disk_pct_used'};
+    	my $dev = $df->{'disk'};
+    	if ($pct >= $DISK_CRIT_THRESHOLD) {
+            Zimbra::Mon::Logger::Log( "crit", "Disk warning: ${hostname}: $dev at $pct%"); 
+    	} elsif ($pct >= $DISK_WARN_THRESHOLD) {
+            Zimbra::Mon::Logger::Log( "err", "Disk warning: ${hostname}: $dev at $pct%");
+    	}
+    }
     my $tstamp = getTstamp();
     my $currDate = getDate();
     if ($currDate ne $date && !$CONSOLE) {
@@ -134,4 +152,26 @@ while (1) {
         $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
     }
     sleep($interval);
+}
+sub getLocalConfig {
+  my $key = shift;
+  if (defined ($ENV{zmsetvars})) {
+    return $ENV{$key};
+  }
+  open CONF,
+    "/opt/zimbra/bin/zmlocalconfig -q -m shell |" or die "Can't open local config: $!";
+  my @conf = <CONF>;
+  close CONF;
+
+  chomp @conf;
+
+  foreach (@conf) {
+    my ($key, $val) = split '=', $_, 2;
+    $val =~ s/;$//;
+    $val =~ s/'$//;
+    $val =~ s/^'//;
+    $ENV{$key} = $val;
+  }
+  $ENV{zmsetvars} = 'true';
+  return $ENV{$key};
 }
