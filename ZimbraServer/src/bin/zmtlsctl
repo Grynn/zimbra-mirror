@@ -47,6 +47,7 @@ fi
 case "$1" in
   mixed|both|http|https|redirect)
     MODE=$1
+    UPDATE_MAIL_MODE=1
     ;;
   help|--help|-help)
     echo "Usage: $0 [mixed|both|http|https|redirect]"
@@ -75,14 +76,13 @@ if [ "x$zimbra_server_hostname" = "x" ]; then
   exit 1;
 fi
 
-${zimbra_home}/bin/zmprov -l gs ${zimbra_server_hostname} > /dev/null 2>&1
-if [ $? != 0 ]; then
-  echo "ERROR: problem reading config from ldap. Make sure ldap is running."
-  exit 1
-fi
-
 if [ "x$MODE" = "x" ]; then
 	MODE=`${zimbra_home}/bin/zmprov -l gs ${zimbra_server_hostname} 2> /dev/null | grep zimbraMailMode | sed -e 's/zimbraMailMode: //'`
+
+  if [ $? != 0 ]; then
+    echo "ERROR: problem reading config from ldap. Make sure ldap is running."
+    exit 1
+  fi
 
 	if [ "x$MODE" = "x" ]; then
 		MODE="http"
@@ -90,6 +90,7 @@ if [ "x$MODE" = "x" ]; then
 else
 	shift
 fi
+
 if [ "x$DEBUG" = "x" ]; then
 	DEBUG=`${zimbra_home}/bin/zmprov -l gcf zimbraHttpDebugHandlerEnabled | sed -e 's/zimbraHttpDebugHandlerEnabled: //' | tr A-Z a-z`
 
@@ -496,14 +497,6 @@ updateJettyConfig() {
     fi
   fi
 
-  echo -n "Rewriting config files for webxml and mailboxd..."
-  ${zimbra_home}/libexec/zmmtaconfig webxml mailbox  > /dev/null 2>&1
-  if [ $? = 0 ]; then
-    echo "done."
-  else
-    echo "failed."
-    exit 1
-  fi
 }
 
 updateSASLConfig() {
@@ -546,8 +539,11 @@ updateSASLConfig() {
       fi
 		fi
 	fi
-  echo -n "Rewriting config files for cyrus-sasl..."
-  ${zimbra_home}/libexec/zmmtaconfig sasl > /dev/null 2>&1
+}
+
+rewriteConfigs() {
+  echo -n "Rewriting config files for cyrus-sasl, webxml and mailboxd..."
+  ${zimbra_home}/libexec/zmmtaconfig sasl webxml mailbox  > /dev/null 2>&1
   if [ $? = 0 ]; then
     echo "done."
   else
@@ -573,4 +569,8 @@ else
   updateJettyConfig
 fi
 updateSASLConfig
-updateLdap
+rewriteConfigs
+
+if [ x"$UPDATE_MAIL_MODE" = "x1" ]; then
+  updateLdap
+fi
