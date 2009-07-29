@@ -17,7 +17,8 @@ package com.zimbra.cs.offline.ab;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.Contact.Attachment;
 import com.zimbra.common.service.ServiceException;
-import static com.zimbra.cs.mailbox.Contact.*;
+import com.zimbra.common.mailbox.ContactConstants;
+import static com.zimbra.common.mailbox.ContactConstants.*;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -44,15 +45,15 @@ public final class Ab {
         A_imAddress1, A_imAddress2, A_imAddress3);
     
     public static String getFileAs(Map<String, String> fields) {
-        if (!fields.containsKey(Contact.A_firstName) &&
-            !fields.containsKey(Contact.A_lastName)) {
+        if (!fields.containsKey(ContactConstants.A_firstName) &&
+            !fields.containsKey(ContactConstants.A_lastName)) {
             String fileAs;
-            if ((fileAs = fields.get(Contact.A_fullName)) != null ||
-                (fileAs = fields.get(Contact.A_nickname)) != null ||
-                (fileAs = fields.get(Contact.A_email)) != null ||
-                (fileAs = fields.get(Contact.A_email2)) != null ||
-                (fileAs = fields.get(Contact.A_workEmail1)) != null ||
-                (fileAs = fields.get(Contact.A_imAddress1)) != null) {
+            if ((fileAs = fields.get(ContactConstants.A_fullName)) != null ||
+                (fileAs = fields.get(ContactConstants.A_nickname)) != null ||
+                (fileAs = fields.get(ContactConstants.A_email)) != null ||
+                (fileAs = fields.get(ContactConstants.A_email2)) != null ||
+                (fileAs = fields.get(ContactConstants.A_workEmail1)) != null ||
+                (fileAs = fields.get(ContactConstants.A_imAddress1)) != null) {
                 return fileAs;
             }
         }
@@ -61,7 +62,7 @@ public final class Ab {
 
     public static Attachment getPhoto(Contact contact) {
         for (Attachment attachment : contact.getAttachments()) {
-            if (attachment.getName().equalsIgnoreCase(Contact.A_image) &&
+            if (attachment.getName().equalsIgnoreCase(ContactConstants.A_image) &&
                 attachment.getContentType().startsWith("image/")) {
                 return attachment;
             }

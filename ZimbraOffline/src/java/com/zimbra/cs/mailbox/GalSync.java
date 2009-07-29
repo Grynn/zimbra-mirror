@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.AdminConstants;
@@ -171,17 +172,17 @@ public class GalSync {
         }
         
         public void saveContact(String id, Map<String, String> map, Mailbox galMbox) throws ServiceException, ParseException, IOException {
-            String fullName = map.get(Contact.A_fullName);
+            String fullName = map.get(ContactConstants.A_fullName);
             if (fullName == null) {
-                String fname = map.get(Contact.A_firstName);
-                String lname = map.get(Contact.A_lastName);
+                String fname = map.get(ContactConstants.A_firstName);
+                String lname = map.get(ContactConstants.A_lastName);
                 fullName = fname == null ? "" : fname;
                 if (lname != null)
                     fullName = fullName + (fullName.length() > 0 ? " " : "") + lname;                   
                 if (fullName.length() > 0)
-                    map.put(Contact.A_fullName, fullName);
+                    map.put(ContactConstants.A_fullName, fullName);
             }           
-            map.put(Contact.A_type, map.get(OfflineGal.A_zimbraCalResType) == null ? OfflineGal.CTYPE_ACCOUNT : OfflineGal.CTYPE_RESOURCE);
+            map.put(ContactConstants.A_type, map.get(OfflineGal.A_zimbraCalResType) == null ? OfflineGal.CTYPE_ACCOUNT : OfflineGal.CTYPE_RESOURCE);
             String entry = "id=" + id + " name=\"" + fullName + "\"";
             
             ParsedContact contact = new ParsedContact(map);           

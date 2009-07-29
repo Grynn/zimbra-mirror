@@ -38,7 +38,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
-import static com.zimbra.cs.mailbox.Contact.*;
+import static com.zimbra.common.mailbox.ContactConstants.*;
 
 public class ContactData implements Serializable {
     private final Map<String, Field> fields = new HashMap<String, Field>();

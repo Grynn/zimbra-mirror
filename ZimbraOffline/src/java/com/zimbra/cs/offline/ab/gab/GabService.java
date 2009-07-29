@@ -19,6 +19,7 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.ab.Ab;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.Contact.Attachment;
+import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Log;
 import com.google.gdata.client.contacts.ContactsService;
@@ -181,7 +182,7 @@ class GabService {
         byte[] content = Ab.readFully(req.getResponseStream());
         LOG.debug("Retrieved photo for entry %s: size = %d, type = %s",
                   entry.getId(), content.length, ctype.getMediaType());
-        return new Attachment(content, ctype.getMediaType(), Contact.A_image, null);
+        return new Attachment(content, ctype.getMediaType(), ContactConstants.A_image, null);
     }
 
     public void deletePhoto(ContactEntry entry)

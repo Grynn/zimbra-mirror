@@ -16,6 +16,7 @@ package com.zimbra.cs.account.offline;
 
 import java.io.IOException;
 
+import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
@@ -96,8 +97,8 @@ public class OfflineGal {
         } catch (MailServiceException.NoSuchItemException e) {}
         
         name = name.trim();
-        String[] searchFields = {Contact.A_firstName, Contact.A_lastName, Contact.A_fullName,
-            Contact.A_email, Contact.A_email2, Contact.A_email3};
+        String[] searchFields = {ContactConstants.A_firstName, ContactConstants.A_lastName, ContactConstants.A_fullName,
+            ContactConstants.A_email, ContactConstants.A_email2, ContactConstants.A_email3};
         String query = "in:\"" + currFolder.getName() + "\"";
         if (name.length() > 0 && !name.equals(".")) {
             String qname = ":\"" + name + "*\"";
@@ -109,9 +110,9 @@ public class OfflineGal {
             query += ")";
         }
         if (type.equals(CTYPE_ACCOUNT))
-            query = query + " AND #" + Contact.A_type + ":" + CTYPE_ACCOUNT;
+            query = query + " AND #" + ContactConstants.A_type + ":" + CTYPE_ACCOUNT;
         else if (type.equals(CTYPE_RESOURCE))
-            query = query + " AND #" + Contact.A_type + ":" + CTYPE_RESOURCE;
+            query = query + " AND #" + ContactConstants.A_type + ":" + CTYPE_RESOURCE;
     
         try  {
             return mGalMbox.search(mOpContext, query, types, SortBy.SCORE_DESCENDING, limit);
@@ -146,18 +147,18 @@ public class OfflineGal {
                 cn.addAttribute(MailConstants.A_ID, id);
             
                 String val;
-                if ((val = contact.get(Contact.A_firstName)) != null)
-                    cn.addKeyValuePair(Contact.A_firstName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-                if ((val = contact.get(Contact.A_lastName)) != null)
-                    cn.addKeyValuePair(Contact.A_lastName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-                if ((val = contact.get(Contact.A_fullName)) != null)
-                    cn.addKeyValuePair(Contact.A_fullName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-                if ((val = contact.get(Contact.A_email)) != null)
-                    cn.addKeyValuePair(Contact.A_email, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-                if ((val = contact.get(Contact.A_email2)) != null)
-                    cn.addKeyValuePair(Contact.A_email2, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-                if ((val = contact.get(Contact.A_email3)) != null)
-                    cn.addKeyValuePair(Contact.A_email3, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                if ((val = contact.get(ContactConstants.A_firstName)) != null)
+                    cn.addKeyValuePair(ContactConstants.A_firstName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                if ((val = contact.get(ContactConstants.A_lastName)) != null)
+                    cn.addKeyValuePair(ContactConstants.A_lastName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                if ((val = contact.get(ContactConstants.A_fullName)) != null)
+                    cn.addKeyValuePair(ContactConstants.A_fullName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                if ((val = contact.get(ContactConstants.A_email)) != null)
+                    cn.addKeyValuePair(ContactConstants.A_email, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                if ((val = contact.get(ContactConstants.A_email2)) != null)
+                    cn.addKeyValuePair(ContactConstants.A_email2, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                if ((val = contact.get(ContactConstants.A_email3)) != null)
+                    cn.addKeyValuePair(ContactConstants.A_email3, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
             }
                     
             response.addAttribute(AccountConstants.A_MORE, zqr.hasNext());

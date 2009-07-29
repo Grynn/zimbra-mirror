@@ -33,12 +33,14 @@ import java.util.List;
 import java.util.Arrays;
 
 import com.zimbra.cs.mailbox.Contact;
+import com.zimbra.cs.mailbox.Contact.Attachment;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.offline.ab.Ab;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 
-import static com.zimbra.cs.mailbox.Contact.*;
+import static com.zimbra.common.mailbox.ContactConstants.*;
 
 public class ContactData {
     private final Map<String, String> fields = new HashMap<String, String>();
@@ -98,7 +100,7 @@ public class ContactData {
     private void setFileAs() {
         String fileAs = Ab.getFileAs(fields);
         if (fileAs != null) {
-            fields.put(A_fileAs, FA_EXPLICIT + ":" + fileAs);
+            fields.put(A_fileAs, ContactConstants.FA_EXPLICIT + ":" + fileAs);
         }
     }
 

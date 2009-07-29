@@ -14,6 +14,7 @@
  */
 package com.zimbra.cs.taglib.tag.contact;
 
+import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
@@ -32,7 +33,7 @@ public class ContactOpTag extends ZimbraSimpleTag {
     public void addAttr(String name, String value) throws JspTagException {
         if (!mForce) {
             try {
-                Contact.Attr.fromString(name); // make sure it is a known attr name
+                ContactConstants.Attr.fromString(name); // make sure it is a known attr name
             } catch (ServiceException e) {
                 throw new JspTagException(e);
             }
@@ -42,7 +43,7 @@ public class ContactOpTag extends ZimbraSimpleTag {
 
     protected boolean allFieldsEmpty() {
         for (Map.Entry<String,String> entry : mAttrs.entrySet()) {
-            if (entry.getValue() != null && entry.getValue().trim().length() > 0 && !entry.getKey().equalsIgnoreCase(Contact.A_fileAs)){
+            if (entry.getValue() != null && entry.getValue().trim().length() > 0 && !entry.getKey().equalsIgnoreCase(ContactConstants.A_fileAs)){
                 return false;
             }
         }

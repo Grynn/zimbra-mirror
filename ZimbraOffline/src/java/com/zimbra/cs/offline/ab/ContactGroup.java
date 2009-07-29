@@ -16,6 +16,7 @@ package com.zimbra.cs.offline.ab;
 
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mime.ParsedContact;
+import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 
 import java.util.Map;
@@ -31,7 +32,7 @@ public class ContactGroup {
     private final Set<String> emails;
 
     public static boolean isContactGroup(Contact contact) {
-        return Contact.TYPE_GROUP.equals(contact.get(Contact.A_type));
+        return ContactConstants.TYPE_GROUP.equals(contact.get(ContactConstants.A_type));
     }
 
     public ContactGroup(String name) {
@@ -43,9 +44,9 @@ public class ContactGroup {
         if (!isContactGroup(contact)) {
             throw new IllegalArgumentException("Not a contact group: " + contact);
         }
-        name = contact.get(Contact.A_nickname);
+        name = contact.get(ContactConstants.A_nickname);
         emails = new HashSet<String>();
-        String dlist = contact.get(Contact.A_dlist);
+        String dlist = contact.get(ContactConstants.A_dlist);
         if (dlist != null) {
             emails.addAll(Arrays.asList(dlist.trim().split(",")));
         }
@@ -66,10 +67,10 @@ public class ContactGroup {
     public ParsedContact getParsedContact()
         throws ServiceException {
         Map<String, String> fields = new HashMap<String, String>();
-        fields.put(Contact.A_type, Contact.TYPE_GROUP);
-        fields.put(Contact.A_nickname, name);
-        fields.put(Contact.A_fileAs, Contact.FA_EXPLICIT + ":" + name);
-        fields.put(Contact.A_dlist, join(emails, ","));
+        fields.put(ContactConstants.A_type, ContactConstants.TYPE_GROUP);
+        fields.put(ContactConstants.A_nickname, name);
+        fields.put(ContactConstants.A_fileAs, ContactConstants.FA_EXPLICIT + ":" + name);
+        fields.put(ContactConstants.A_dlist, join(emails, ","));
         return new ParsedContact(fields);
     }
     
