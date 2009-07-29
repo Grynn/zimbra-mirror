@@ -116,7 +116,6 @@ public class DbOfflineMigration {
             DbPool.closeStatement(stmt);
             DbPool.quietClose(conn);
             DbPool.close();
-            DbPool.shutdown();
         }
 	}
 	
@@ -507,6 +506,7 @@ public class DbOfflineMigration {
 	public static void main(String[] args) throws Exception {
 		System.setProperty("zimbra.config", "/Users/jjzhuang/zimbra/zdesktop/conf/localconfig.xml");
 		
+		new DbOfflineMigration().testRun();
 		new DbOfflineMigration().testRun();
 	}
 }
