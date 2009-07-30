@@ -115,24 +115,34 @@ var zDnDService = {
 
 var ZimbraDnD = {
 	butEle: null,
+    evtAdded: false,
 	init: function(e) {
-		var oZmCv = e.target;
+        var oZmCv = e.target;
 		var el = e.target.ownerDocument.getElementById('zdnd_tooltip');
 		if (el) {
 			el.style.display = "block";
 		}
-		if (oZmCv.className) {
-		  oZmCv.addEventListener("dragdrop", ZimbraDnD.onDrop, false);
-		}
+        if (oZmCv.className) {
+          oZmCv.addEventListener("dragdrop", ZimbraDnD.onDrop, false);
+          if(!ZimbraDnD.evtAdded) {
+            oZmCv.addEventListener("drop", ZimbraDnD.onDrop, false);
+          }    
+          oZmCv.addEventListener("dragenter", ZimbraDnD.checkDrag, false);
+          oZmCv.addEventListener("dragover", ZimbraDnD.checkDrag, false);
+        }
 		zUploadService.fileInputName = "_attFile_";
 	},
-	onDrop: function(e) {
-		try {
-			nsDragAndDrop.drop(e, zDnDService);
+	onDrop: function(ev) {
+        try {
+			nsDragAndDrop.drop(ev, zDnDService);
+            ZimbraDnD.evtAdded = true;
 		} catch(ex) {
 			// do nothing
 		}
-	}
+	},
+    checkDrag: function(ev) {
+        return ev.dataTransfer.types.contains("application/x-moz-file");
+    }
 };
 
 document.addEventListener("ZimbraDnD", function(e) { ZimbraDnD.init(e); }, false, true);
