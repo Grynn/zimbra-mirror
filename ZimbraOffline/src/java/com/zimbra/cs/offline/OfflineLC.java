@@ -41,6 +41,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_gal_sync_request_timeout;
     public static final KnownKey zdesktop_gal_sync_trace_enabled;
     public static final KnownKey zdesktop_gal_sync_group_size;
+    public static final KnownKey zdesktop_gal_sync_group_interval;
     public static final KnownKey zdesktop_gal_refresh_interval_days;
     
     public static final KnownKey zdesktop_sync_batch_size;
@@ -180,7 +181,11 @@ public class OfflineLC {
             
         zdesktop_gal_sync_group_size = new KnownKey("zdesktop_gal_sync_group_size");
         zdesktop_gal_sync_group_size.setDefault("500");
-        zdesktop_gal_sync_group_size.setDoc("Number of entries to be fetch in each GetContactsRequest during GAL sync");
+        zdesktop_gal_sync_group_size.setDoc("Number of entries to fetch in each GetContactsRequest in GAL sync");
+
+        zdesktop_gal_sync_group_interval = new KnownKey("zdesktop_gal_sync_group_interval");
+        zdesktop_gal_sync_group_interval.setDefault("5000");
+        zdesktop_gal_sync_group_interval.setDoc("Number of milliseconds between each GetContactsRequest in GAL sync");
         
         zdesktop_gal_refresh_interval_days = new KnownKey("zdesktop_gal_refresh_interval_days");
         zdesktop_gal_refresh_interval_days.setDefault("30");

@@ -199,6 +199,12 @@ public class GalSync {
                     if (zqr.hasNext()) {
                         galMbox.modifyContact(context, zqr.getNext().getItemId(), contact);
                         OfflineLog.offline.debug("Offline GAL contact modified: " + entry);
+                        
+                        /* Mailbox search is a CPU intensive task. Sleep 100 milliseconds here to reduce 
+                         * CPU utilization in GAL sync background thread */
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ie) {}
                     } else {
                         galMbox.createContact(context, contact, syncFolder, null);
                         OfflineLog.offline.debug("Offline GAL contact created: " + entry);
@@ -223,6 +229,8 @@ public class GalSync {
             this.galAccount = galAccount;
             this.lastFullSync = lastFullSync;
             this.traceOn = traceOn;
+            
+            setPriority(MIN_PRIORITY);
         }
         
         public void run() {
@@ -350,7 +358,7 @@ public class GalSync {
             
             if (handler.getIdCount() > 0) {
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(OfflineLC.zdesktop_gal_sync_group_interval.longValue());
                 } catch (InterruptedException ie) {}
             }
         }
@@ -390,8 +398,9 @@ public class GalSync {
             Map<String, String> fields = new HashMap<String, String>();
             fields.put(OfflineConstants.GAL_LDAP_DN, id);
             for (Element eField : elt.listElements()) {
-                if (!eField.getName().equals("objectClass"))
-                    fields.put(eField.getAttribute(Element.XMLElement.A_ATTR_NAME), eField.getText());
+                String name = eField.getAttribute(Element.XMLElement.A_ATTR_NAME);
+                if (!name.equals("objectClass"))
+                    fields.put(name, eField.getText());
             }
             handler.saveContact(id, fields, galMbox);
         }              
