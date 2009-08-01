@@ -173,7 +173,7 @@ if [ x$OVERRIDE = x"no" ]; then
 fi
 
 eval `/usr/bin/perl -V:archname`
-export PERLLIB="${PATHDIR}/Perl/zimbramon/lib:${PATHDIR}/Perl/zimbramon/lib/i386-linux-thread-multi"
+export PERLLIB="${PATHDIR}/Perl/zimbramon/lib:${PATHDIR}/Perl/zimbramon/lib/$archname"
 export PERL5LIB=${PERLLIB}
 
 if [ x$PLAT = "xSLES10_64" -o x$PLAT = "xSLES11_64" -o x$PLAT = "xRHEL4_64" -o x$PLAT = "xRHEL5_64" -o x$PLAT = "xF10_64" -o x$PLAT = "xF11_64" ]; then
