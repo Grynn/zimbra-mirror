@@ -38,6 +38,7 @@
  *												previous/next month
  *        readOnly 			[boolean]*			flag indicating that this widget is read-only (should not 
  *												process events such as mouse clicks)
+ *        showWeekNumber	[boolean]*			flag indicating whether widget should show week number 
  */
 DwtCalendar = function(params) {
 	if (arguments.length == 0) { return; }
@@ -48,6 +49,7 @@ DwtCalendar = function(params) {
 	this._skipNotifyOnPage = false;
 	this._hidePrevNextMo = params.hidePrevNextMo;
 	this._readOnly = params.readOnly;
+	this._showWeekNumber = params.showWeekNumber;
 	this._uuid = Dwt.getNextId();
 	var cn = this._origDayClassName = params.className + "Day";
 	this._todayClassName = " " + params.className + "Day-today";
@@ -390,6 +392,11 @@ function(cellId) {
 	return "w:" + cellId + ":" + this._uuid;
 }
 
+DwtCalendar.prototype._getWeekNumberCellId =
+function(cellId) {
+	return "k:" + cellId + ":" + this._uuid;
+}
+
 
 DwtCalendar.prototype._getDaysInMonth =
 function(mo, yr) {
@@ -474,9 +481,10 @@ function() {
 	}
 
 	for (var i = 0; i < 6; i++) {
+
     	for (var j = 0; j < 7; j++) {
  	   		var dayCell = document.getElementById(this._getDayCellId(i * 7 + j));
- 	   		
+
  	   		if (dayCell._isHilited == null)
  	   			dayCell._isHilited = false;
  	   			
@@ -521,6 +529,17 @@ function() {
 			}
 			this._setClassName(dayCell, DwtCalendar._NORMAL);
      	}
+
+
+        if(this._showWeekNumber && kwCell) {
+            var firstDayCell = document.getElementById(this._getDayCellId(i * 7));
+            var kwCellId = this._getWeekNumberCellId('kw' + i * 7);
+            var kwCell = document.getElementById(kwCellId);
+            if(kwCell) {
+                kwCell.innerHTML = AjxDateUtil.getWeekNumber(new Date(firstDayCell._year, firstDayCell._month, firstDayCell._day));
+            }
+        }
+
     }
     
 	this._setTitle(month, year);
@@ -727,8 +746,13 @@ function() {
 	html[idx++] = "<tr><td>";
 	
 	html[idx++] = "<table cellspacing='0' cellpadding='1' width='100%'>";
-	
+
 	html[idx++] = "<tr>";
+
+    if(this._showWeekNumber) {
+        html[idx++] = "<td class='DwtCalendarWeekNoTitle' width='14%' id='" + this._getWeekNumberCellId('kw') + "'>" + AjxMsg.calendarWeekTitle + "</td>" ;
+    }
+
 	for (var i = 0; i < 7; i++) {
 		html[idx++] = "<td class='DwtCalendarDow' width='";
 		html[idx++] = (i < 5 ? "14%" : "15%");
@@ -741,6 +765,9 @@ function() {
     for (var i = 0; i < 6; i++) {
 		// bug fix #3355 - linux fix and bug fix #25564 for Mac
     	html[idx++] = (AjxEnv.isLinux  || AjxEnv.isMac) ? "<tr style='line-height:12px'>" : "<tr>";
+        if(this._showWeekNumber) {
+            html[idx++] = "<td class='DwtCalendarWeekNo' id='" + this._getWeekNumberCellId('kw' + i * 7) + "'>&nbsp;</td>";
+        }
     	for (var j = 0; j < 7; j++) {
     		html[idx++] = "<td id='";
     		html[idx++] = this._getDayCellId(i * 7 + j);

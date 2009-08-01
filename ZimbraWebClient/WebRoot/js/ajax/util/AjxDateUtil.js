@@ -51,6 +51,8 @@ AjxDateUtil._daysPerMonth = {
 	11:31
 };
 
+AjxDateUtil.WEEK_ONE_JAN_DATE = 1;
+
 AjxDateUtil._init =
 function() {
 	AjxDateUtil._dateFormat = AjxDateFormat.getDateInstance(AjxDateFormat.SHORT).clone();
@@ -338,6 +340,63 @@ function (date) {
 AjxDateUtil._getFullYear =
 function(date) {
 	return date.getFullYear();
+};
+
+AjxDateUtil.getFirstDayOfWeek =
+function (dt, startOfWeek) {
+    startOfWeek = startOfWeek || 0;
+    var dayOfWeekIndex = dt.getDay();
+    var dayOfWeek = (dayOfWeekIndex - startOfWeek + 7) % 7;
+    dt.setDate(dt.getDate() - dayOfWeek);
+    return dt;
+};
+
+AjxDateUtil.getWeekNumber =
+function(date, firstDayOfWeek, janDate) {
+
+    // Setup Defaults
+    firstDayOfWeek = firstDayOfWeek || 0;
+    janDate = janDate || AjxDateUtil.WEEK_ONE_JAN_DATE;
+    date = date || new Date();
+
+    date.setHours(12,0,0,0);
+    var targetDate = date,
+            startOfWeek,
+            endOfWeek;
+
+    if (targetDate.getDay() === firstDayOfWeek) {
+        startOfWeek = targetDate;
+    } else {
+        startOfWeek = AjxDateUtil.getFirstDayOfWeek(targetDate, firstDayOfWeek);
+    }
+
+    var startYear = startOfWeek.getFullYear(),
+            startTime = startOfWeek.getTime();
+
+    // DST shouldn't be a problem here, math is quicker than setDate();
+    endOfWeek = new Date(startOfWeek.getTime() + 6*AjxDateUtil.MSEC_PER_DAY);
+
+    var weekNum;
+    if (startYear !== endOfWeek.getFullYear() && endOfWeek.getDate() >= janDate) {
+        // If years don't match, endOfWeek is in Jan. and if the
+        // week has WEEK_ONE_JAN_DATE in it, it's week one by definition.
+        weekNum = 1;
+    } else {
+        // Get the 1st day of the 1st week, and
+        // find how many days away we are from it.
+        var weekOne = (new Date(startYear, 0, janDate));
+        weekOne.setHours(12,0,0,0);
+        var weekOneDayOne = AjxDateUtil.getFirstDayOfWeek(weekOne, firstDayOfWeek);
+
+        // Round days to smoothen out 1 hr DST diff
+        var daysDiff  = Math.round((targetDate.getTime() - weekOneDayOne.getTime())/AjxDateUtil.MSEC_PER_DAY);
+
+        // Calc. Full Weeks
+        var rem = daysDiff % 7;
+        var weeksDiff = (daysDiff - rem)/7;
+        weekNum = weeksDiff + 1;
+    }
+    return weekNum;
 };
 
 AjxDateUtil.getTimeStr = 
