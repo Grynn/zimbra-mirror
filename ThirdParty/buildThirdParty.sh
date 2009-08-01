@@ -172,7 +172,7 @@ if [ x$OVERRIDE = x"no" ]; then
 	fi
 fi
 
-eval `perl -V:archname`
+eval `/usr/bin/perl -V:archname`
 export PERLLIB="${PATHDIR}/Perl/zimbramon/lib:${PATHDIR}/Perl/zimbramon/lib/i386-linux-thread-multi"
 export PERL5LIB=${PERLLIB}
 
