@@ -18,6 +18,7 @@
 function com_zimbra_tweetziPreferences(zimlet) {
 	this.zimlet = zimlet;
 	this.shell = this.zimlet.getShell();
+	this._fbNeedPermCount = 0;
 }
 
 com_zimbra_tweetziPreferences.prototype._showpreferencesDlg = function() {
@@ -172,8 +173,9 @@ function(additionalMsgParams) {
 		authBtn.addSelectionListener(new AjxListener(this, this._authorizeBtnListener, map));
 		document.getElementById(map.divId).appendChild(authBtn.getHtmlElement());
 	}
-	if(additionalMsgParams != undefined && additionalMsgParams.message != undefined){
-		this._setAccountPrefDlgAuthMessage(additionalMsgParams.message, additionalMsgParams.color);
+	if(this._fbNeedPermCount != 0){
+		//this._setAccountPrefDlgAuthMessage(additionalMsgParams.message, additionalMsgParams.color);
+		this._setAccountPrefDlgAuthMessage("Please login to Facebook and Authorize each of '"+this._fbNeedPermCount+"' Permissions. You need to click 'Authorize' button for each permission explicitely("+this._fbNeedPermCount+" times)", "blue");
 	} else {
 		this._setAccountPrefDlgAuthMessage("Accounts have been updated successfully", "green");
 	}
@@ -199,7 +201,16 @@ function(additionalMsgParams) {
 };
 com_zimbra_tweetziPreferences.prototype._authorizeBtnListener =
 function(params) {
-	this._setAccountPrefDlgAuthMessage("Waiting for user Authorization...", "blue");
+	var permName = "";
+	if(params.permission == "read_stream")
+		permName = "read";
+	else if(params.permission == "publish_stream")
+		permName = "write/publish";
+	else if(params.permission == "offline_access")
+		permName = "offline/rememberMe";
+
+	//this._setAccountPrefDlgAuthMessage("Login to Facebook and Authorize Each of 3 Permissions<br/> You need to click each 'Authorize' Button explicitely(up to 3 times)", "blue");
+	this.showAddFBInfoDlg(permName);
 	this.zimlet.facebook.authorizeExtendedPermission(params);
 };
 com_zimbra_tweetziPreferences.prototype._getPrefAccountsTableHTML =
@@ -208,6 +219,7 @@ function() {
 	var html = new Array();
 	var i = 0;
 	var noAccountsFound = true;
+	this._fbNeedPermCount = 0;
 	html[i++] = "<table cellspacing=1>";
 	html[i++] = "<TR><TH>Select</TH><TH>Account Type</TH><TH>Account Name</TH><TH>Read Permission</TH><TH>Write/Publish Permission</TH><TH>Offline/RememberMe Permission</TH>";
 	for (var id in this.zimlet.allAccounts) {
@@ -238,6 +250,7 @@ function() {
 				var id = "tweetzi_pref_authorizeBtn_"+Dwt.getNextId();
 				html[i++] = "<DIV id='"+id+"'></DIV>";
 				this._authorizeDivIdAndAccountMap.push({account:account, permission:"read_stream", divId:id});
+				this._fbNeedPermCount++;
 			}
 		}
 		html[i++] = "</TD>";
@@ -251,6 +264,7 @@ function() {
 				var id = "tweetzi_pref_authorizeBtn_"+Dwt.getNextId();
 				html[i++] = "<DIV id='"+id+"'></DIV>";
 				this._authorizeDivIdAndAccountMap.push({account:account, permission:"publish_stream", divId:id});
+				this._fbNeedPermCount++;
 			}
 		}
 		html[i++] = "</TD>";
@@ -264,6 +278,7 @@ function() {
 				var id = "tweetzi_pref_authorizeBtn_"+Dwt.getNextId();
 				html[i++] = "<DIV id='"+id+"'></DIV>";
 				this._authorizeDivIdAndAccountMap.push({account:account, permission:"offline_access", divId:id});
+				this._fbNeedPermCount++;
 			}
 		}
 		html[i++] = "</TD>";
@@ -290,21 +305,27 @@ function() {
 };
 
 
-com_zimbra_tweetziPreferences.prototype.showAddFBInfoDlg = function() {
+com_zimbra_tweetziPreferences.prototype.showAddFBInfoDlg = function(permName) {
 	//if zimlet dialog already exists...
 	if (this._getFbInfoDialog) {
+		if(permName){
+			document.getElementById("tweetzi_pref_fb_message").innerHTML = "Please grant '"+permName+"' permission by logging on to facebook. Then press 'OK'";
+		}
 		this._getFbInfoDialog.popup();
 		return;
 	}
 	this._getFbInfoView = new DwtComposite(this.zimlet.getShell());
 	this._getFbInfoView.getHtmlElement().style.overflow = "auto";
-		this._getFbInfoView.setSize(550);
+	this._getFbInfoView.setSize(550);
 
 	this._getFbInfoView.getHtmlElement().innerHTML = this._createFbInfoView();
 	var  addFBAccntButtonId = Dwt.getNextId();
 	var addFBAccntButton = new DwtDialog_ButtonDescriptor(addFBAccntButtonId, ("Authorized"), DwtDialog.ALIGN_RIGHT);
 	this._getFbInfoDialog = this.zimlet._createDialog({title:"Facebook Information", view:this._getFbInfoView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this._getFbInfoDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._getFbInfoOKBtnListener));
+	if(permName){
+		document.getElementById("tweetzi_pref_fb_message").innerHTML = "Please grant '"+permName+"' permission by logging on to facebook. Then press 'OK'";
+	}
 	this._getFbInfoDialog.popup();
 };
 
@@ -318,8 +339,8 @@ function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV class='tweetzi_yellow'>";
-	html[i++] = "<DIV  align=center><H2>Please click OK after logging into facebook.</H2></DIV>";
-	html[i++] = "<BR/><BR/>";
+	html[i++] = "<DIV  align=center><H2 id='tweetzi_pref_fb_message'>Please Login to facebook and press 'OK' </H2></DIV>";
+	html[i++] = "<BR/>";
 	html[i++] = "<H3>PLEASE NOTE: We need you to explicitely grant the following 3 permissions:</H3>";
 	html[i++] = "<b>Read Permission:</b> Allows us to display facebook information";
 	html[i++] = "<br/><b>Publish Permission:</b> Allows us to publish or write back to facebook";

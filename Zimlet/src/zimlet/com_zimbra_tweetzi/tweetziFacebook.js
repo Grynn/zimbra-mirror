@@ -216,9 +216,10 @@ function (response) {
 			clearInterval(this.getSessionTimer);
 			var fbStr = this._convertFB_JsonStrToUrlEncodedStr(text);
 			this.manageFacebookAccounts(fbStr);
-			this.zimlet.preferences._setAccountPrefDlgAuthMessage("STEP2. Facebook Authorization Recieved. Please aurhorize other rights", "blue");
-			this.zimlet.preferences._updateAccountsTable({message:"STEP2. Facebook Authorization Recieved. Please aurhorize other rights", color:"blue"});
-			this.zimlet.preferences._updateAllFBPermissions({message:"STEP2. Facebook Authorization Recieved. Please aurhorize other rights", color:"blue"});
+			var authStr = "STEP2. Facebook Authorization Recieved. Press 'Authorize' buttons to authorize other permissions.<br/>PS: You need to click each 'Authorize' Button explicitely(up to 3 times)";
+			this.zimlet.preferences._setAccountPrefDlgAuthMessage(authStr, "blue");
+			this.zimlet.preferences._updateAccountsTable({message:authStr, color:"blue"});
+			this.zimlet.preferences._updateAllFBPermissions({message:authStr, color:"blue"});
 			this.waitingForApproval = false;
 		}
 };

@@ -36,6 +36,7 @@ function() {
 	this._allHashLinks = new Array();
 	this._allReweetLinks = new Array();
 	this._allDMLinks = new Array();
+	this._allTwitterDeleteLinks = new Array();
 	this._allReplyLinks = new Array();
 	this._allFollowLinks = new Array();
 	this._allAccountsLinks = new Array();
@@ -51,8 +52,16 @@ function() {
 	this.loadAllAccountsFromDB();
 	this._objectManager = new ZmObjectManager(new DwtComposite(this.getShell()));
 	this._createtweetziApp();
+	
+	this.tweetZi_emailLastUpdateDate = this.getUserProperty("tweetZi_emailLastUpdateDate");
+	var todayStr = this.twitter._getTodayStr();
+	if(this.tweetZi_emailLastUpdateDate != todayStr) {
+		this.twitter.scanForUpdates();
+		this.setUserProperty("tweetZi_emailLastUpdateDate", todayStr, true);
+	}
 
 };
+
 
 
 com_zimbra_tweetzi.prototype._addTweetButtons =
@@ -320,12 +329,15 @@ function() {
 		html[idx++] = this.allAccounts[id].name;
 		html[idx++] = " &nbsp;&nbsp;&nbsp;&nbsp;";
 	}
+
 	html[idx++] = "</TR></TABLE>";
+
 
 	if (hasAccounts)
 		return html.join("");
-	else
-		return "";
+	else {
+		return "<label style=\"font-size:12px;color:blue;font-weight:bold\">Please Click on 'Preferences' in the left pane to add twitter & facebook accounts</label>";
+	}
 };
 
 com_zimbra_tweetzi.prototype._showCard =
@@ -366,7 +378,7 @@ function(params) {
 	} else if (type == "DIGG") {
 		iconName = "tweetzi_diggIcon";
 		hdrClass = "tweetzi_diggHdrBg";
-	} else if (type == "MENTIONS" || type == "DIRECT_MSGS") {
+	} else if (type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
 		hdrClass = "tweetzi_axnClass tweetzi_twitterColor";
 		prettyName = type.toLowerCase();
 	}else if(type == "TREND") {
@@ -418,7 +430,7 @@ function(params) {
 	html[i++] = "<table width='100%'>";
 	html[i++] = "<tr><td width='5%' >" + AjxImg.getImageHtml(iconName) + "</td>";
 	html[i++] = "<td width=95%><table><tr><td " + hdrCellStyle + " >" + prettyName + "</td><td id='tweetzi_unreadCountCell" + this.cardIndex + "'></td></tr></table></td>";
-	if (type == "ACCOUNT" || type == "SEARCH" || type == "MENTIONS" || type == "DIRECT_MSGS") {
+	if (type == "ACCOUNT" || type == "SEARCH" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
 		html[i++] = "<td width='5%'>";
 		html[i++] = "<img   src=\"" + this.getResource("tweetzi_markread.gif") + "\" id='tweetzi_markAsReadBtn" + this.cardIndex + "' />";
 		html[i++] = "</td>";
@@ -459,7 +471,7 @@ function(params) {
 		var callback = AjxCallback.simpleClosure(this._handleRefreshButton, this, params);
 		document.getElementById("tweetzi_refreshBtn" + this.cardIndex).onclick = callback;
 	}
-	if (type == "ACCOUNT" || type == "SEARCH" || type == "MENTIONS" || type == "DIRECT_MSGS") {
+	if (type == "ACCOUNT" || type == "SEARCH" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
 		var params = {row:row, cellId:card.id, tableId:cardInfoSectionId, headerName:origHeaderName, type:type}
 		var callback = AjxCallback.simpleClosure(this._handleMarkAsReadButton, this, params);
 		document.getElementById("tweetzi_markAsReadBtn" + this.cardIndex).onclick = callback;
@@ -471,7 +483,12 @@ function(params) {
 com_zimbra_tweetzi.prototype._setCardUnreadCount =
 function(tableId, unReadCount) {
 	var cellId = tableId.replace("tweetzi_cardInfoSectionId", "tweetzi_unreadCountCell");
+
+
 	var cell = document.getElementById(cellId);
+	if(cell == null)
+		return;
+
 	if (unReadCount == 0) {
 		cell.className = "";
 		cell.innerHTML = "";
@@ -486,7 +503,7 @@ function(params) {
 	if (params.type == "SEARCH" || params.type == "TREND") {
 		this.twitter.twitterSearch({query:params.headerName, tableId:params.tableId, type:params.type});
 	} else if (params.type == "ACCOUNT") {
-		this.twitter.getFriendsTimeLine(params.tableId, this.tableIdAndAccountMap[params.tableId]);
+		this.twitter.getFriendsTimeLine({tableId: params.tableId, account: this.tableIdAndAccountMap[params.tableId]});
 	} else if (params.type == "TWEETMEME") {
 		this.tweetmeme.tweetMemeSearch({query:params.headerName, tableId:params.tableId});
 	}  else if (params.type == "DIGG") {
@@ -494,9 +511,11 @@ function(params) {
 	}else if (params.type == "FACEBOOK") {
 		this.facebook._fbGetStream(params.tableId, this.tableIdAndAccountMap[params.tableId]);
 	} else if (params.type == "MENTIONS") {
-		this.twitter.getMentions(params.tableId, this.tableIdAndAccountMap[params.tableId]);
+		this.twitter.getMentions({tableId: params.tableId, account: this.tableIdAndAccountMap[params.tableId]});
 	} else if (params.type == "DIRECT_MSGS") {
-		this.twitter.getDirectMessages(params.tableId, this.tableIdAndAccountMap[params.tableId]);
+		this.twitter.getDirectMessages({tableId: params.tableId, account: this.tableIdAndAccountMap[params.tableId]});
+	} else if (params.type == "SENT_MSGS") {
+		this.twitter.getSentMessages({tableId:params.tableId, account:this.tableIdAndAccountMap[params.tableId]});
 	}
 };
 
@@ -521,6 +540,11 @@ function(params) {
 		var account = this.tableIdAndAccountMap[params.tableId];
 		var pId = this.tableIdAndPostIdMap[params.tableId];
 		account.__dmId = pId;
+		this.setUserProperty("tweetzi_AllTwitterAccounts", this.getAllAccountsAsString(), true);	
+	}else if(params.type == "SENT_MSGS") {
+		var account = this.tableIdAndAccountMap[params.tableId];
+		var pId = this.tableIdAndPostIdMap[params.tableId];
+		account.__smId = pId;
 		this.setUserProperty("tweetzi_AllTwitterAccounts", this.getAllAccountsAsString(), true);	
 	}
 	this.createCardView(params.tableId, this.tableIdAndResultsMap[params.tableId], params.type);
@@ -580,7 +604,7 @@ function() {
 
 com_zimbra_tweetzi.prototype._createtweetziApp =
 function() {
-	this._tweetziAppName = this.createApp("tweetZi", "tweetzi_twitterIcon", "Twitter & Facebook");
+	this._tweetziAppName = this.createApp("TweetZi", "tweetzi_twitterIcon", "Twitter & Facebook");
 };
 
 com_zimbra_tweetzi.prototype.appActive = function(appName, active) {
@@ -669,6 +693,8 @@ function() {
 			html[i++] = this._getFolderHTML(folder, expandIconId, childExpandIconId);
 			html[i++] = this._getFolderHTML({name:"@" + folder.account.name + " (mentions)", icon:"tweetzi_twitterIcon", account: folder.account, type:"MENTIONS"}, expandIconId, childExpandIconId, true);
 			html[i++] = this._getFolderHTML({name:"direct messages", icon:"tweetzi_twitterIcon", account: folder.account, type:"DIRECT_MSGS"}, expandIconId, childExpandIconId, true);
+			html[i++] = this._getFolderHTML({name:"sent messages", icon:"tweetzi_twitterIcon", account: folder.account, type:"SENT_MSGS"}, expandIconId, childExpandIconId, true);
+
 		} else {
 			html[i++] = this._getFolderHTML(folder, expandIconId);
 		}
@@ -718,7 +744,7 @@ function(folder, expandIconId, childExpandIconId, isSubFolder) {
 	}
 	html[i++] = "<div class='DwtComposite'>";
 	var id = "";
-	if (folder.type == "ACCOUNT" || folder.type == "DIRECT_MSGS" || folder.type == "MENTIONS" || folder.type == "FACEBOOK") {
+	if (folder.type == "ACCOUNT" || folder.type == "DIRECT_MSGS" || folder.type == "MENTIONS" || folder.type == "SENT_MSGS" || folder.type == "FACEBOOK") {
 		id = "tweetziTreeItem__" + folder.type + "_" + folder.account.type + "_" + folder.account.name;
 		this.treeIdAndAccountMap[id] = folder.account;
 	} else {
@@ -742,7 +768,7 @@ function(folder, expandIconId, childExpandIconId, isSubFolder) {
 		html[i++] = AjxImg.getImageHtml("Blank_16");
 	}
 	html[i++] = "</TD>";
-	if (folder.type == "MENTIONS" || folder.type == "DIRECT_MSGS") {
+	if (folder.type == "MENTIONS" || folder.type == "DIRECT_MSGS" || folder.type == "SENT_MSGS") {
 		html[i++] = "<TD style=\"width:16px;height:16px\" align='center'>";
 		html[i++] = AjxImg.getImageHtml("Blank_16");
 		html[i++] = "</TD>";
@@ -818,7 +844,7 @@ function(ev) {
 	if (el.id.indexOf("tweetziTreeItem__ACCOUNT") == 0) {
 		account = this.treeIdAndAccountMap[el.id];
 		tableId = this._showCard({headerName:label, type:"ACCOUNT", autoScroll:true});
-		this.twitter.getFriendsTimeLine(tableId, account);
+		this.twitter.getFriendsTimeLine({tableId: tableId, account: account});
 		timer = setInterval(AjxCallback.simpleClosure(this.twitter._updateAccountStream, this.twitter, tableId, account), 400000);
 		this.tableIdAndTimerMap[tableId] = timer;
 		this.tableIdAndAccountMap[tableId] = account;
@@ -826,15 +852,22 @@ function(ev) {
 	} else if (el.id.indexOf("tweetziTreeItem__MENTIONS") == 0) {
 		account = this.treeIdAndAccountMap[el.id];
 		tableId = this._showCard({headerName:label, type:"MENTIONS", autoScroll:true});
-		this.twitter.getMentions(tableId, account);
-		timer = setInterval(AjxCallback.simpleClosure(this.twitter.getMentions, this.twitter, tableId, account), 400000);
+		this.twitter.getMentions({tableId: tableId, account: account});
+		timer = setInterval(AjxCallback.simpleClosure(this.twitter.getMentions, this.twitter, {tableId: tableId, account: account}), 400000);
 		this.tableIdAndTimerMap[tableId] = timer;
 		this.tableIdAndAccountMap[tableId] = account;
 	} else if (el.id.indexOf("tweetziTreeItem__DIRECT_MSGS") == 0) {
 		account = this.treeIdAndAccountMap[el.id];
 		tableId = this._showCard({headerName:label, type:"DIRECT_MSGS", autoScroll:true});
-		this.twitter.getDirectMessages(tableId, account);
-		timer = setInterval(AjxCallback.simpleClosure(this.twitter.getDirectMessages, this.twitter, tableId, account), 400000);
+		this.twitter.getDirectMessages({tableId: tableId, account: account});
+		timer = setInterval(AjxCallback.simpleClosure(this.twitter.getDirectMessages, this.twitter, {tableId: tableId, account: account}), 400000);
+		this.tableIdAndTimerMap[tableId] = timer;
+		this.tableIdAndAccountMap[tableId] = account;
+	} else if (el.id.indexOf("tweetziTreeItem__SENT_MSGS") == 0) {
+		account = this.treeIdAndAccountMap[el.id];
+		tableId = this._showCard({headerName:label, type:"SENT_MSGS", autoScroll:true});
+		this.twitter.getSentMessages({tableId: tableId, account: account});
+		timer = setInterval(AjxCallback.simpleClosure(this.twitter.getSentMessages, this.twitter, {tableId: tableId, account: account}), 400000);
 		this.tableIdAndTimerMap[tableId] = timer;
 		this.tableIdAndAccountMap[tableId] = account;
 	} else if (el.id.indexOf("tweetziTreeItem__PREFERENCES") == 0) {
@@ -987,7 +1020,6 @@ function(tableId, jsonObj, type) {
 		document.getElementById(tableId).innerHTML = "<br/><br/><div width=90% align=center><label style=\"color:#0000FF;font-weight:bold;font-size:12px\">No data found</label></div>";
 		return;
 	}
-
 	for (var k = 0; k < jsonObj.length; k++) {
 		var obj = jsonObj[k];
 		var user = "";
@@ -1002,21 +1034,24 @@ function(tableId, jsonObj, type) {
 		var notFollowing = true;
 		var userId = "";
 		var diggCount = "";
-		if (k == 0 && (type == "SEARCH" || type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS")) {
+		if (k == 0 && (type == "SEARCH" || type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS")) {
 			this.tableIdAndResultsMap[tableId] = jsonObj;
 			this.tableIdAndPostIdMap[tableId] = obj.id;
 			if (type == "SEARCH") {
 				var search = this.tableIdAndSearchMap[tableId];
-				pId = search.pId;
+				pId = search.pId ? search.pId : "";
 			} else if (type == "ACCOUNT") {
 				var accnt = this.tableIdAndAccountMap[tableId];
-				pId = accnt.__postId;
+				pId = accnt.__postId ? accnt.__postId : "";
 			}else if (type == "MENTIONS") {
 				var accnt = this.tableIdAndAccountMap[tableId];
-				pId = accnt.__mId;
+				pId = accnt.__mId ? accnt.__mId : "";
 			}else if (type == "DIRECT_MSGS") {
 				var accnt = this.tableIdAndAccountMap[tableId];
-				pId = accnt.__dmId;
+				pId = accnt.__dmId ? accnt.__dmId : "";
+			}else if (type == "SENT_MSGS") {
+				var accnt = this.tableIdAndAccountMap[tableId];
+				pId = accnt.__smId ? accnt.__smId : "";
 			}
 
 		}
@@ -1065,7 +1100,7 @@ function(tableId, jsonObj, type) {
 			imageAnchor = imageAnchor + "</a>";
 			imageAnchor = imageAnchor + "</td>";
 
-		} else if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS") {
+		} else if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
 			user = obj.user ? obj.user : obj.sender; //sender.id is returned in Direct_msgs(instead of user.id)
 			userId = user.id;
 			screen_name = user.screen_name;
@@ -1193,6 +1228,23 @@ function(tableId, jsonObj, type) {
 		html[i++] = "</td>";
 		html[i++] = "<td colspan=2 >";
 
+		if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
+			if(this.twitterAccountNames == undefined) {
+				this.twitterAccountNames = new Array();
+
+					for (var accntId in this.allAccounts) {
+						var accnt = this.allAccounts[accntId];
+						if(accnt.type == "twitter") {
+							this.twitterAccountNames[accnt.name] = true;
+						}
+					}
+			}
+
+			if(this.twitterAccountNames[screen_name]) {
+				html[i++] = "<a href=\"#\" style=\"color:gray\" id='" + this._gettwitterDeleteLinkId(obj.id, tableId) + "'>delete</a>&nbsp;&nbsp;";
+			}		
+		}
+
 		if (type == "ACCOUNT" || type == "SEARCH" || type == "TREND") {
 			html[i++] = "<a href=\"#\" style=\"color:gray\" id='" + this._gettwitterDMLinkId("d @" + screen_name) + "'>dm</a>&nbsp;&nbsp;";
 		}
@@ -1221,7 +1273,7 @@ function(tableId, jsonObj, type) {
 	html[i++] = "Click here to see older messages";
 	html[i++] = "</a></div>";
 	document.getElementById(tableId).innerHTML = html.join("");
-	if (type == "SEARCH" || type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS") {
+	if (type == "SEARCH" || type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
 		this._setCardRowsAsRead(rowIdsToMarkAsRead, showOlderMsgsId);
 		this._setCardUnreadCount(tableId, unReadCount);
 		if (rowIdsToMarkAsRead.length > 0) {
@@ -1236,6 +1288,7 @@ function(tableId, jsonObj, type) {
 	this._addAccountLinkHandlers();
 	this._addHashHandlers();
 	this._addFbCommentLinkHandlers();
+	this._addTwitterDeleteLinkHandlers();
 };
 
 com_zimbra_tweetzi.prototype._setCardRowsAsRead =
@@ -1350,6 +1403,12 @@ function(dm) {
 	return id;
 };
 
+com_zimbra_tweetzi.prototype._gettwitterDeleteLinkId =
+function(postId, tableId) {
+	var id = "tweetzi_twitterDeleteLink_" + Dwt.getNextId();
+	this._allTwitterDeleteLinks[id] = {hasHandler:false, account:this.tableIdAndAccountMap[tableId], tableId:tableId, postId:postId};
+	return id;
+};
 com_zimbra_tweetzi.prototype._getAccountLinkId =
 function(screen_name, tableId) {
 	var id = "tweetzi_accountsLink_" + Dwt.getNextId();
@@ -1397,6 +1456,17 @@ function() {
 		}
 	}
 };
+com_zimbra_tweetzi.prototype._addTwitterDeleteLinkHandlers =
+function() {
+	for (var id in this._allTwitterDeleteLinks) {
+		var obj = this._allTwitterDeleteLinks[id];
+		if (!obj.hasHandler) {
+			document.getElementById(id).onclick = AjxCallback.simpleClosure(this.twitter.deletePost, this.twitter, obj);
+			obj.hasHandler = true;
+		}
+	}
+};
+
 
 com_zimbra_tweetzi.prototype._addFbCommentLinkHandlers =
 function() {
@@ -1480,7 +1550,7 @@ function(text, userId, tableId, screen_name) {
 		var word = match[0];
 		var end = re.lastIndex;
 		var part = text.substring(start, end);
-		var id = this._getAccountLinkId(userId, tableId, screen_name);
+		var id = this._getAccountLinkId(AjxStringUtil.trim(word.replace("@","")), tableId);
 		var url = ["<a  href=\"#\" id='", id, "'>", word, "</a>"].join("");
 		newStr = newStr + part.replace(word, url);
 		start = end;
@@ -1645,7 +1715,7 @@ function(params) {
 				continue;
 			if (account.type == "twitter") {
 				var tableId = this._showCard({headerName:account.name, type:"ACCOUNT", autoScroll:false});
-				this.twitter.getFriendsTimeLine(tableId, account);
+				this.twitter.getFriendsTimeLine({tableId: tableId, account: account});
 			} else if (account.type == "facebook") {
 				var tableId = this._showCard({headerName:account.name, type:"FACEBOOK", autoScroll:false});
 				this.facebook._fbGetStream(tableId, account);

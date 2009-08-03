@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_tweetzi" version="1.5" description="Twitter and Facebook Zimlet">
+<zimlet name="com_zimbra_tweetzi" version="1.6" description="Twitter and Facebook Zimlet">
 	<include>tweetziTwitter.js</include>
 	<include>tweetziFacebook.js</include>
 	<include>tweetziTweetMeme.js</include>
@@ -11,10 +11,6 @@
 	<includeCSS>tweetzi.css</includeCSS>
 	<resource>tweetzi-icon.gif</resource>
 	<handlerObject>com_zimbra_tweetzi</handlerObject>
-
-	<zimletPanelItem label="tweetzi" icon="tweetzi-panelIcon">
-		<toolTipText>Twitter and Facebook Zimlet</toolTipText>
-	</zimletPanelItem>
 
 	<userProperties>
 		<property type="string" name="tweetzi_twitter_consumer_key" value="Xz2BKOKObTzpLrMXxJo2ww"/>
