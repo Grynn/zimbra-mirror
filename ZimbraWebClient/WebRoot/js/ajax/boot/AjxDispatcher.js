@@ -123,7 +123,14 @@ function(pkg) {
  */
 AjxDispatcher.setLoaded =
 function(pkg, loaded) {
-	AjxDispatcher._getPackageData(pkg)._loaded = loaded;
+	var pkgData = AjxDispatcher._getPackageData(pkg);
+	pkgData._loaded = loaded;
+	if (loaded) {
+		var callbacks = pkgData.callback || [];
+		for (var i = 0; i < callbacks.length; i++) {
+			callbacks[i].run();
+		}
+	}
 };
 
 /**
