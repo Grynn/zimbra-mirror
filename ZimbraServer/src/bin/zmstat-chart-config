@@ -707,6 +707,7 @@ sub mailboxdConfig() {
     <plot data="imap_ssl_conn" legend="IMAP SSL"/>
     <plot data="pop_conn" legend="POP"/>
     <plot data="pop_ssl_conn" legend="POP SSL"/>
+    <plot data="soap_sessions" legend="SOAP sessions"/>
   </chart>
 
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Mailbox Get Count"
