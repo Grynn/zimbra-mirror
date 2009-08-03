@@ -29,7 +29,7 @@ olcDbMode: 0600
 olcDbSearchStack: 16
 olcDbShmKey: 0
 olcDbCacheFree: 1
-olcDbDNcacheSize: 20000
+olcDbDNcacheSize: 0
 
 dn: olcOverlay=syncprov,olcDatabase={2}hdb,cn=config
 changetype: add
