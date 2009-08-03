@@ -92,7 +92,7 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.4.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-1.1.6-zimbra.jar" sourcepath="/ThirdParty/mina/mina-1.1.6-zimbra/src-zimbra"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-filter-ssl-1.1.6.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/mysql-connector-java-5.0.3-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.0.3/src"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/mysql-connector-java-5.1.8-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.1.8/src"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/nekohtml.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api.jar">
 		<attributes>
