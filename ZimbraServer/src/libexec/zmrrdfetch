@@ -58,7 +58,6 @@ sub getdatastructure($$$) {
             my $colname = $row->{'col_name'};
             $hash{$host} = {} if (!exists $hash{$host});
             $hash{$host}->{'host_id'} = $row->{'host_id'};
-            print "hostid: " . $row->{'host_id'} . "\n";
             $hash{$host}->{$colname} = {};
             $hash{$host}->{$colname}->{'col_name_19'} = $row->{'col_name_19'};
             $hash{$host}->{$colname}->{'col_num'}     = $row->{'col_num'};
@@ -108,6 +107,7 @@ sub dump_data($$$$$) {
 
     foreach my $column (keys %$structure) {
     	next if $column eq 'host_id';
+    	
         $col19col{$structure->{$column}->{'col_name_19'}} = $column;
         $files{$structure->{$column}->{'rrd_file'}} = 1;
     }

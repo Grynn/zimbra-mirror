@@ -17,10 +17,14 @@
 use lib "/opt/zimbra/zimbramon/lib";
 use strict;
 use warnings;
+use DBI;
 use Zimbra::Mon::Zmstat;
 use Zimbra::Mon::Logger;
 use Date::Parse;
 use Fcntl qw(SEEK_SET);
+
+my $logger_directory     = $Zimbra::Mon::Zmstat::LC{'logger_data_directory'};
+my %hostmap;
 
 use vars qw($logger_directory $log_file);
 
@@ -32,6 +36,22 @@ my $pid_file = "${zimbra_home}/log/zmlogprocess.pid";
 my $state_file = "${zimbra_home}/log/zmlogprocess.state";
 $logger_directory = getLocalConfig("logger_data_directory");
 $log_file = '/var/log/zimbra.log';
+
+sub gethostmap() {
+    my $dbh = DBI->connect(
+            "dbi:SQLite:dbname=$logger_directory/logger.sqlitedb", "", "");
+    my $sth = $dbh->prepare(q{
+        SELECT dns_hostname, zm_hostname from hosts
+    });
+    $sth->execute;
+    die $sth->err if $sth->err;
+    my $data = $sth->fetchall_arrayref({});
+    my %hash;
+    foreach my $row (@$data) {
+    	$hash{$row->{'dns_hostname'}} = $row->{'zm_hostname'};
+    }
+    %hostmap = %hash;
+}
 
 sub listMTA() {
     open(MTALIST, "${zimbra_home}/bin/zmprov gas mta |") || die $!;
@@ -140,6 +160,7 @@ sub counter_increment($$$) {
 
 sub counter_add($$$$) {
     my ($data, $host, $counter, $amount) = @_;
+    $host = $hostmap{$host} if exists $hostmap{$host};
     $data->{$host} = {} if (!exists $data->{$host});
     # start at -1 because we +1 in init_counters
     $data->{$host}->{$counter}  = -1 if (!exists $data->{$host}->{$counter});
@@ -150,6 +171,7 @@ sub counter_qid_add($$$$) {
     my ($data, $host, $qid, $date) = @_;
     my $tstamp = str2time($date);
     
+    $host = $hostmap{$host} if exists $hostmap{$host};
     $data->{$host} = {}                         if !exists $data->{$host};
     $data->{$host}->{$qid} = {}                 if !exists $data->{$host}->{$qid};
     $data->{$host}->{$qid}->{'first'} = $tstamp if !exists $data->{$host}->{$qid}->{'first'};
@@ -159,6 +181,7 @@ sub counter_qid_add($$$$) {
 sub counter_qid_avg($$) {
     my ($data, $host) = @_;
     
+    $host = $hostmap{$host} if exists $hostmap{$host};
     return 0 if !exists $data->{$host};
     
     my $hdata = $data->{$host};
@@ -180,6 +203,7 @@ sub counter_qid_avg($$) {
 sub run() {
     checkPID();
     updatePID();
+    gethostmap();
     my $offset = checkState();
     my $state  = updateState();
     open(LOG, "<$log_file") || die $!;
