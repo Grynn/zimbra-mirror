@@ -559,7 +559,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 //                DirectorySync.getInstance().syncDataSource(this, account, zdsrc);
         } catch (ServiceException e) {
             OfflineLog.offline.error("error initializing account " + emailAddress, e);
-            Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(account.getId(), false);
+            Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account, false);
             if (mbox != null) {
                 ((SyncMailbox)mbox).deleteMailbox(false);
             }
@@ -1145,7 +1145,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 return;
         }
 
-        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(galAcct.getId(), false);      
+        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(galAcct, false);      
         if (mbox != null)
         	((SyncMailbox)mbox).deleteMailbox(false);
         
