@@ -94,6 +94,8 @@ DwtTreeItem = function(params) {
 		parent._addDeferredChild(this, params.index);
 		this._index = params.index;
 	}
+
+	this.setCheckboxBgcolor("ZTreeItemCheckboxDefaultBkgd");
 };
 
 DwtTreeItem.PARAMS = ["parent", "index", "text", "imageInfo", "deferred", "className", "posStyle",
