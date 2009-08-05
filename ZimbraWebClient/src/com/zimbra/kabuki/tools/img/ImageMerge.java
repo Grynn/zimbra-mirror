@@ -35,6 +35,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+//import org.apache.commons.codec.binary.Base64;
 
 /*
  * Program to aggregate n GIFs into single GIF images.  This program
@@ -646,11 +647,40 @@ public class ImageMerge {
 			}
 			_jsOut.print(filename);
 			_jsOut.print("\"");
-			// TODO: generate data url
+			// NOTE: I tried to generate data urls for the overlay images
+			// NOTE: since we can't merge PNGs properly. But this causes
+			// NOTE: a DOM security exception in FF and Saf when used to
+			// NOTE: composite the canvas and request *its* data url.
+//			if (name.endsWith("Overlay")) {
+//				_jsOut.print(",");
+//				_jsOut.print("d:\"");
+//				try {
+//					File file = new File(img.getFilename());
+//					String data = encodeBase64(file);
+//					String type = img.getFilename().replaceAll("^.*\\.(.*)$","$1");
+//					_jsOut.print("data:image/"+type+";base64,");
+//					_jsOut.print(data);
+//				}
+//				catch (IOException e) {
+//					// ignore
+//				}
+//				_jsOut.print("\"");
+//			}
 			_jsOut.print("};");
 			_jsOut.println();
 		}
 	}
+
+//	private String encodeBase64(File file) throws IOException {
+//		InputStream in = new FileInputStream(file);
+//		byte[] data = new byte[(int)file.length()];
+//		int offset = 0;
+//		int count;
+//		while (offset < data.length && (count = in.read(data, offset, data.length-offset)) != -1) {
+//			offset += count;
+//		}
+//		return new String(Base64.encodeBase64(data));
+//	}
 
 	private void processFullColorImages(File aggFile,
 										DecodedFullColorImage originals[],
