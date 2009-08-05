@@ -1176,7 +1176,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 			},
 			
 			{type:_SPACER_, height:"5"},  
-			{type:_ZAALLSCREEN_GROUPER_, numCols:1, width:"98%", label:ZaMsg.PQV_Messages,  
+			{type:_ZAALLSCREEN_GROUPER_, numCols:1, width:"98%", label:ZaMsg.Shares_ListTitle,  
 			items: [
 		    	{ref:ZaDistributionList.A2_publishedShares, bmolsnr:true,
 		    		type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource",onSelection:ZaDLXFormView.shareSelectionListener,
