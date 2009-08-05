@@ -52,20 +52,23 @@ ReindexMailboxXDialog.prototype.popup =
 function () {
 	DwtDialog.prototype.popup.call(this);
 	//get status
-	
+	this._localXForm.setInstance(this._containedObject);
 	if(this._containedObject.mbxId) {
-		ZaAccount.parseReindexResponse(ZaAccount.getReindexStatus(this._containedObject.mbxId),this._containedObject);
+		var callback = new AjxCallback(this, ReindexMailboxXDialog.prototype.getReindexStatusCallBack);
+		ZaAccount.getReindexStatus(this._containedObject.mbxId,callback);
+		//ZaAccount.parseReindexResponse(ZaAccount.getReindexStatus(this._containedObject.mbxId),this._containedObject);
 	}
 		
-	this._localXForm.setInstance(this._containedObject);
-	this._localXForm.refresh();
-	if(this._containedObject.status == "running" || this._containedObject.status == "started") {
+	
+	//this._localXForm.refresh();
+/*	if(this._containedObject.status == "running" || this._containedObject.status == "started") {
 		// schedule next poll
 		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this._containedObject.pollInterval);		
 	} else if(this._pollHandler) {
 		//stop polling
 		AjxTimedAction.cancelAction(this._pollHandler);
 	}
+	*/
 }
 
 ReindexMailboxXDialog.prototype.popdown = 
@@ -107,7 +110,7 @@ function(evt) {
 
 ReindexMailboxXDialog.prototype.getReindexStatusCallBack = 
 function (resp) {
-	ZaAccount.parseReindexResponse(resp,this._containedObject);
+	ZaAccount.parseReindexResponse(resp,this._containedObject,this._localXForm);
 	if((this._containedObject.status == "running" || this._containedObject.status == "started") && this.isPoppedUp()) {
 		// schedule next poll
 		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this._containedObject.pollInterval);		
@@ -117,8 +120,8 @@ function (resp) {
 		this._pollHandler = null;		
 	}
 	
-	this._localXForm.setInstance(this._containedObject);
-	this._localXForm.refresh();	
+	//this._localXForm.setInstance(this._containedObject);
+	//this._localXForm.refresh();	
 }
 
 ReindexMailboxXDialog.prototype.getReindexStatus = 
@@ -147,13 +150,15 @@ function() {
 			 content: null,
 			 ref:ZaReindexMailbox.A_resultMsg,
 			 visibilityChangeEventSources:[ZaReindexMailbox.A_status],
-			 visibilityChecks:[[XForm.checkInstanceValue,ZaReindexMailbox.A_status,"error"]],			  
+			 visibilityChecks:[[XForm.checkInstanceValue,ZaReindexMailbox.A_status,"error"],[XForm.checkInstanceValueNotEmty,ZaReindexMailbox.A_resultMsg]],
+			 valueChangeEventSources:[ZaReindexMailbox.A_resultMsg],			  
 		  	 align:_CENTER_,
 		  	 colSpan:"*"
 			},	
 			{type:_TEXTAREA_,
 				visibilityChangeEventSources:[ZaReindexMailbox.A_status],
-				visibilityChecks:[[XForm.checkInstanceValue,ZaReindexMailbox.A_status,"error"]],
+				visibilityChecks:[[XForm.checkInstanceValue,ZaReindexMailbox.A_status,"error"],[XForm.checkInstanceValueNotEmty,ZaReindexMailbox.A_errorDetail]],
+				valueChangeEventSources:[ZaReindexMailbox.A_errorDetail],
 				ref:ZaReindexMailbox.A_errorDetail, 
 				label:ZaMsg.FAILED_REINDEX_DETAILS,
 				height:"100px", width:"200px",
@@ -164,7 +169,7 @@ function() {
 				colSpan:"*",
  				iconVisible: true,
 				align:_CENTER_,				
-				style: DwtAlert.INFORMATION
+				style: DwtAlert.INFORMATION,bmolsnr:true
 			},
 			{type:_DWT_PROGRESS_BAR_, label:ZaMsg.ReindexMbx_Progress,
 				maxValue:null,
@@ -173,7 +178,7 @@ function() {
 				valign:_CENTER_,
 				align:_CENTER_,	
 				wholeCssClass:"progressbar",
-				progressCssClass:"progressused"
+				progressCssClass:"progressused",bmolsnr:true
 			},		
 			{type:_SPACER_,
 				visibilityChecks:[ReindexMailboxXDialog.isStatusNotError],

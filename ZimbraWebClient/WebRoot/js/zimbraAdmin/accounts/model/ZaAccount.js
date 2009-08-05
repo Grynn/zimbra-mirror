@@ -981,27 +981,40 @@ function (mbxId, callback) {
 }
 
 ZaAccount.parseReindexResponse =
-function (respObj, instance) {
+function (respObj, instance, form) {
 	if(!respObj)
 		return;
 	if(respObj.isException && respObj.isException()) {
 		var errCode = respObj.getException().code;
 		if(errCode && errCode == "service.NOT_IN_PROGRESS") {
-			instance.errorDetail = "";
-			instance.resultMsg = "";	
-			instance.progressMsg = ZaMsg.NAD_ACC_ReindexingNotRunning;
+			form.setInstanceValue("", ZaReindexMailbox.A_errorDetail);
+			form.setInstanceValue("", ZaReindexMailbox.A_resultMsg);
+			form.setInstanceValue(ZaMsg.NAD_ACC_ReindexingNotRunning, ZaReindexMailbox.A_progressMsg);
 			if(instance.numRemaining > 0 || instance.status == "started") {
-				instance.numDone = instance.numTotal;
-				instance.status = "complete";	
-				instance.progressMsg = ZaMsg.NAD_ACC_ReindexingComplete;			
+				form.setInstanceValue(instance.numTotal, ZaReindexMailbox.A_numDone);
+				form.setInstanceValue(ZaMsg.NAD_ACC_ReindexingComplete, ZaReindexMailbox.A_progressMsg);
+				form.setInstanceValue("complete", ZaReindexMailbox.A_status);
 			} else {
-				instance.status = null;
+				form.setInstanceValue(null, ZaReindexMailbox.A_status);
+				//instance.status = null;
 			}
+		} else if(errCode && errCode == ZmCsfeException.EMPTY_RESPONSE) {
+			form.setInstanceValue(ZaMsg.ERROR_RECEIVED_EMPTY_RESPONSE,ZaReindexMailbox.A_resultMsg);
+			form.setInstanceValue(null,ZaReindexMailbox.A_errorDetail);
+			form.setInstanceValue("error", ZaReindexMailbox.A_status);
 		} else {
-			instance.resultMsg = String(ZaMsg.FAILED_REINDEX).replace("{0}", errCode);
-			instance.errorDetail = respObj.getException().detail+"\n"+respObj.getException().msg;
-			instance.status = "error";	
-		
+			var detail = respObj.getException().detail;
+			var msg = respObj.getException().msg;
+			var strBuf = [];
+			if(detail) {
+				strBuf.push(detail);
+			}	
+			if(msg) {
+				strBuf.push(msg);
+			}
+			form.setInstanceValue(AjxMessageFormat.format(ZaMsg.FAILED_REINDEX,[errCode]),ZaReindexMailbox.A_resultMsg);
+			form.setInstanceValue(strBuf.join("\n"),ZaReindexMailbox.A_errorDetail);
+			form.setInstanceValue("error", ZaReindexMailbox.A_status);
 		}
 	} else  {
 		var resp;
@@ -1011,24 +1024,35 @@ function (respObj, instance) {
 			resp = respObj;
 		}
 		if(resp && resp.Body.ReIndexResponse) {
-			instance.status = resp.Body.ReIndexResponse.status;
+			form.setInstanceValue(resp.Body.ReIndexResponse.status, ZaReindexMailbox.A_status);
+
 			if(instance.status == "started") {
-				instance.numDone = 0;
-				instance.progressMsg = ZaMsg.NAD_ACC_ReindexingStarted;							
+				form.setInstanceValue(0, ZaReindexMailbox.A_numDone);
+				form.setInstanceValue(ZaMsg.NAD_ACC_ReindexingStarted, ZaReindexMailbox.A_progressMsg);
 			}
 			if(resp.Body.ReIndexResponse.progress && resp.Body.ReIndexResponse.progress[0]) {
 				var progress = resp.Body.ReIndexResponse.progress[0];
-				instance.numFailed = progress.numFailed;
-				instance.numSucceeded = progress.numSucceeded;				
-				instance.numRemaining = progress.numRemaining;	
-				instance.numTotal = instance.numSucceeded + instance.numFailed + instance.numRemaining;
-				instance.numDone  = instance.numFailed + instance.numSucceeded;					
-				instance.progressMsg = String(ZaMsg.NAD_ACC_ReindexingStatus).replace("{0}", instance.numSucceeded).replace("{1}",instance.numRemaining).replace("{2}", instance.numFailed);				
+				
+				form.setInstanceValue(progress.numFailed, ZaReindexMailbox.A_numFailed);
+				form.setInstanceValue(progress.numSucceeded, ZaReindexMailbox.A_numSucceeded);
+				form.setInstanceValue(progress.numRemaining, ZaReindexMailbox.A_numRemaining);
+				form.setInstanceValue(progress.numSucceeded + progress.numFailed + progress.numRemaining, ZaReindexMailbox.A_numTotal);
+				form.setInstanceValue(progress.numFailed + progress.numSucceeded, ZaReindexMailbox.A_numDone);
+				form.setInstanceValue(AjxMessageFormat.format(ZaMsg.NAD_ACC_ReindexingStatus,[progress.numSucceeded,progress.numRemaining,progress.numFailed]), ZaReindexMailbox.A_progressMsg);
+				
+				//instance.numFailed = progress.numFailed;
+				//instance.numSucceeded = progress.numSucceeded;				
+				//instance.numRemaining = progress.numRemaining;	
+				//instance.numTotal = instance.numSucceeded + instance.numFailed + instance.numRemaining;
+				//instance.numDone  = instance.numFailed + instance.numSucceeded;					
+				//instance.progressMsg = String(ZaMsg.NAD_ACC_ReindexingStatus).replace("{0}", instance.numSucceeded).replace("{1}",instance.numRemaining).replace("{2}", instance.numFailed);				
 				if(instance.status == "cancelled") {
-					instance.progressMsg = instance.progressMsg + "<br>" + ZaMsg.NAD_ACC_ReindexingCancelled;
+					form.setInstanceValue((instance.progressMsg + "<br>" + ZaMsg.NAD_ACC_ReindexingCancelled), ZaReindexMailbox.A_progressMsg);
+					//instance.progressMsg = instance.progressMsg + "<br>" + ZaMsg.NAD_ACC_ReindexingCancelled;
 				}			
 				if(instance.numRemaining == 0) {
-					instance.numDone = instance.numTotal;
+					form.setInstanceValue(instance.numTotal, ZaReindexMailbox.A_numDone);
+					//instance.numDone = instance.numTotal;
 				}					
 			}
 		}
