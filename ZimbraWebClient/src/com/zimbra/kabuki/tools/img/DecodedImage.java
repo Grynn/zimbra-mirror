@@ -74,18 +74,7 @@ public abstract class DecodedImage {
                                String combinedFilename,
                                boolean includeDisableCss,
                                boolean unmerged) {
-        String fileNameBase = mFilename.substring(mFilename.lastIndexOf(File.separator) + 1);
-
-
-	    // Strip the extension.
-        fileNameBase = fileNameBase.substring(0, fileNameBase.lastIndexOf('.'));
-
-	    // Strip any "repeat*" tiling derectives.  (Static layout has no directive.)
-	    if (fileNameBase.endsWith(ImageMerge.LAYOUT_EXTENSIONS[ImageMerge.HORIZ_LAYOUT])
-				|| fileNameBase.endsWith(ImageMerge.LAYOUT_EXTENSIONS[ImageMerge.VERT_LAYOUT])
-				|| fileNameBase.endsWith(ImageMerge.LAYOUT_EXTENSIONS[ImageMerge.TILE_LAYOUT])) {
-		    fileNameBase = fileNameBase.substring(0, fileNameBase.lastIndexOf('.'));
-	    }
+        String fileNameBase = this.getName();
 
         // background image
         String bgImgStr = mPrefix + (unmerged ? getNameAfterBase(mFilename) : combinedFilename) + "?v=@jsVersion@";
@@ -158,6 +147,31 @@ public abstract class DecodedImage {
     }
 
     public abstract void load() throws java.io.IOException, ImageMergeException;
+
+	public String getName() {
+		String fileName = this.getFilename();
+		String fileNameBase = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
+
+		// Strip the extension.
+	    fileNameBase = fileNameBase.substring(0, fileNameBase.lastIndexOf('.'));
+
+		// Strip any "repeat*" tiling derectives.  (Static layout has no directive.)
+		if (fileNameBase.endsWith(ImageMerge.LAYOUT_EXTENSIONS[ImageMerge.HORIZ_LAYOUT])
+				|| fileNameBase.endsWith(ImageMerge.LAYOUT_EXTENSIONS[ImageMerge.VERT_LAYOUT])
+				|| fileNameBase.endsWith(ImageMerge.LAYOUT_EXTENSIONS[ImageMerge.TILE_LAYOUT])) {
+			fileNameBase = fileNameBase.substring(0, fileNameBase.lastIndexOf('.'));
+		}
+
+		return fileNameBase;
+	}
+
+	public int getTop() {
+		return mCombinedRow;
+	}
+	
+	public int getLeft() {
+		return mCombinedColumn;
+	}
 
     public String getFilename() {
         return mFilename;

@@ -39,6 +39,7 @@ public class ImageMergeTask
 	private File _outputDir = null;
 	private String _cssFile = null;
 	private String _cssPath = null;
+	private String _jsFile = null;
 	private File _cacheFile = null;
 
 	// optional
@@ -69,6 +70,10 @@ public class ImageMergeTask
 
 	public void setCssPath(String path) {
 		_cssPath = path;
+	}
+
+	public void setJsFile(String filename) {
+		_jsFile = filename;
 	}
 
 	public void setCacheFile(File file) {
@@ -154,6 +159,11 @@ public class ImageMergeTask
 		if (_cacheFile != null) {
 			argList.add("-f");
 			argList.add(_cacheFile.getAbsolutePath());
+		}
+
+		if (_jsFile != null) {
+			argList.add("-j");
+			argList.add(_jsFile);
 		}
 
 		if (!_layoutStyle.equals("auto")) {

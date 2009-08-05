@@ -60,6 +60,7 @@ public class ImageMerge {
 	private String _outputDirName;
 	private PrintWriter _cssOut;
 	private PrintWriter _cacheFileOut;
+	private PrintWriter _jsOut;
 	private String _cssPath;
 	private boolean _isCopy;
 	private boolean _incDisableCss = false;	// NOTE: deprecated, but not removed in the code
@@ -95,6 +96,10 @@ public class ImageMerge {
 		_mOptions.addOption(option);
 
 		option = new Option("s", "css-file", true, "css file name");
+		option.setRequired(true);
+		_mOptions.addOption(option);
+
+		option = new Option("j", "js-file", true, "JavaScript file name");
 		option.setRequired(true);
 		_mOptions.addOption(option);
 
@@ -159,6 +164,16 @@ public class ImageMerge {
 		} else {
 			explainUsageAndExit();
 		}
+
+		if (cl != null && cl.hasOption("j")) {
+			File jsFile = new File(_outputDirName, cl.getOptionValue("j"));
+			boolean exists = jsFile.exists();
+			OutputStream jsFOS = new FileOutputStream(jsFile, true);
+			if (!exists) {
+				_jsOut = new PrintWriter(jsFOS);
+				_jsOut.println("if (!window.AjxImgData) AjxImgData = {};");
+			}
+		}
 	}
 
 
@@ -210,6 +225,10 @@ public class ImageMerge {
 		_cssOut.close();
 		if (_cacheFileOut != null) {
 			_cacheFileOut.close();
+		}
+
+		if (_jsOut != null) {
+			_jsOut.close();
 		}
 
 		if (ovalue != null) {
@@ -400,8 +419,7 @@ public class ImageMerge {
 				curImage.setCombinedColumn(0);
 				curImage.setCombinedRow(0);
 				// add to the CSS output
-				_cssOut.println(curImage.getCssString(curImage.getWidth(),
-						curImage.getHeight(), combinedFilename, _incDisableCss));
+				printInfo(curImage, curImage.getWidth(), curImage.getHeight(), combinedFilename, false);
 			}
 
 			//TODO: No need to copy files in the new build, but may need to later...
@@ -589,12 +607,48 @@ public class ImageMerge {
 				System.out.println("*** Unmerged file: "+img.getFilename());
 				bad = true;
 			}
-			_cssOut.println(img.getCssString(combinedWidth, combinedHeight, combinedFileName, _incDisableCss, bad));
+			printInfo(img, combinedWidth, combinedHeight, combinedFileName, bad);
 			String thisFile = _cssPath + combinedFileName;
 			if (_cacheFileOut != null && !lastFile.equals(thisFile)) {
 				_cacheFileOut.println("<img alt=\"\" src='" + thisFile + "?v=@jsVersion@'>");
 				lastFile = thisFile;
 			}
+		}
+	}
+
+	private void printInfo(DecodedImage img, int w, int h, String filename, boolean unmerged) {
+		_cssOut.println(img.getCssString(w, h, filename, _incDisableCss, unmerged));
+		String name = img.getName();
+		if (_jsOut != null && (name.endsWith("Overlay") || name.endsWith("Mask"))) {
+			// TODO: should we output the info for all of the images???
+			_jsOut.print("AjxImgData[\"");
+			_jsOut.print(name);
+			_jsOut.print("\"]=");
+			_jsOut.print("{");
+			_jsOut.print("t:");
+			_jsOut.print(-img.getTop());
+			_jsOut.print(",");
+			_jsOut.print("l:");
+			_jsOut.print(img.getLeft());
+			_jsOut.print(",");
+			_jsOut.print("w:");
+			_jsOut.print(img.getWidth());
+			_jsOut.print(",");
+			_jsOut.print("h:");
+			_jsOut.print(img.getHeight());
+			_jsOut.print(",");
+			_jsOut.print("f:\"");
+			if (_cssPath != null) {
+				_jsOut.print(_cssPath);
+				if (!_cssPath.endsWith("/")) {
+					_jsOut.print("/");
+				}
+			}
+			_jsOut.print(filename);
+			_jsOut.print("\"");
+			// TODO: generate data url
+			_jsOut.print("};");
+			_jsOut.println();
 		}
 	}
 
