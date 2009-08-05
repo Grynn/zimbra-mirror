@@ -769,8 +769,8 @@ function(ev) {
 DwtKeyboardMgr.prototype.__dispatchKeyEvent = 
 function(hdlr, ev, forceActionCode) {
 	if (hdlr && hdlr.handleKeyEvent) {
-		hdlr.handleKeyEvent(ev);
-		return DwtKeyboardMgr.__KEYSEQ_HANDLED;
+		var handled = hdlr.handleKeyEvent(ev);
+		return handled ? DwtKeyboardMgr.__KEYSEQ_HANDLED : DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 	}
 	var mapName = (hdlr && hdlr.getKeyMapName) ? hdlr.getKeyMapName() : null;
 	if (!mapName) {
