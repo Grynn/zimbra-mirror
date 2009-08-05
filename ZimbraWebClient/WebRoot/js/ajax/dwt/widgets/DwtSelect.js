@@ -113,19 +113,16 @@ function(element) {
 // other
 
 /**
- * @param option (String or DwtSelectOption ) -- string for the option value
- *                                               or the option object.
- * @param selected (boolen) -- optional argument indicating whether
- *                             the newly added option should be
- *                             set as the selected option.
- * @param value (var) -- if the option parameter is a DwtSelectOption, this
- *                       will override the value already set in the option.
- * @return integer -- A handle to the option added. The handle
- *                    can be used in other api methods.
+ * @param option		[String] or [DwtSelectOption]	string for the option value or the option object.
+ * @param selected		[Boolean]*						Optional. Indicates whether option should be the selected option.
+ * @param value			[Object]						if the option parameter is a DwtSelectOption, this will override the value already set in the option.
+ *
+ * @return 				[Integer]						A handle to the option added. The handle can be used in other api methods.
  */
 DwtSelect.prototype.addOption =
 function(option, selected, value) {
-	if (!option) { return; }
+	if (!option) { return -1; }
+
 	var opt = null;
 	var val = null;
 	if (typeof(option) == 'string') {
@@ -170,9 +167,10 @@ function(option, selected, value) {
     return (this._options.size() - 1);
 };
 
-DwtSelect.prototype.popup = function() {
+DwtSelect.prototype.popup =
+function() {
 	var menu = this.getMenu();
-	if (!menu) return;
+	if (!menu) { return; }
 
 	var selectElement = this._selectEl;
 	var selectBounds = Dwt.getBounds(selectElement);
@@ -191,8 +189,8 @@ DwtSelect.prototype.popup = function() {
 /**
  * Renames an option.
  *
- * @param value	{object} value 		the value of the option to rename
- * @param name	{string} newValue 	the new display value
+ * @param value		[Object]		the value of the option to rename
+ * @param newValue	[String]		the new display value
  */
 DwtSelect.prototype.rename =
 function(value, newValue) {
@@ -210,8 +208,8 @@ function(value, newValue) {
 /**
  * Enables or disables an option.
  *
- * @param value		{object} 	value 		the value of the option to enable/disable
- * @param enabled	{Boolean}	enabled 	true to enable the option
+ * @param value		[Object]		the value of the option to enable/disable
+ * @param enabled	[Boolean]		true to enable the option
  */
 DwtSelect.prototype.enableOption =
 function(value, enabled) {
@@ -233,7 +231,7 @@ function() {
 	}
 	this._options.removeAll();
 	this._optionValuesToIndices = null;
-	this._optionValuesToIndices = new Array();
+	this._optionValuesToIndices = [];
 	this._selectedValue = null;
 	this._selectedOption = null;
 	this._currentSelectionId = -1;
@@ -267,8 +265,14 @@ function(optionHandle) {
 	this.setSelectedOption(optionObj);
 };
 
-DwtSelect.prototype.getOptionCount = function() {
+DwtSelect.prototype.getOptionCount =
+function() {
 	return this._options.size();
+};
+
+DwtSelect.prototype.getOptions =
+function() {
+	return this._options;
 };
 
 DwtSelect.prototype.getOptionWithHandle =
@@ -346,15 +350,17 @@ function(text) {
 	DwtLabel.prototype.setText.call(this, text);
 };
 
-
 DwtSelect.prototype.dispose =
 function() {
 	this._selectEl = null;
 	this._pseudoItemsEl = null;
 	this._containerEl = null;
+
 	DwtButton.prototype.dispose.call(this);
-	if (this._internalObjectId)
+
+	if (this._internalObjectId) {
 		DwtSelect._unassignId(this._internalObjectId);
+	}
 };
 
 //
@@ -382,7 +388,8 @@ function(anId) {
 
 // other
 
-DwtSelect.prototype._createHtmlFromTemplate = function(templateId, data) {
+DwtSelect.prototype._createHtmlFromTemplate =
+function(templateId, data) {
     // wrap params
     var containerTemplateId = DwtSelect._CONTAINER_TEMPLATE;
     var containerData = {
@@ -401,18 +408,16 @@ DwtSelect.prototype._createHtmlFromTemplate = function(templateId, data) {
     this._containerEl = el;
 
     this._selectEl.className = el.className;
-//    this._selectEl.setAttribute("style", el.getAttribute("style"));
 
     el.className = "ZSelectAutoSizingContainer";
     el.setAttribute("style", "");
     if (AjxEnv.isIE) {
         el.style.overflow = "hidden";
     }
-
-//    this.getHtmlElement = new Function("return this._selectEl;"); // avoid closure
 };
 
-DwtSelect.prototype._createMenu = function() {
+DwtSelect.prototype._createMenu =
+function() {
     var menu = new DwtSelectMenu(this);
     for (var i = 0, len = this._options.size(); i < len; ++i) {
 		var mi = new DwtSelectMenuItem(menu);
@@ -434,8 +439,7 @@ DwtSelect.prototype._createMenu = function() {
 	return menu;
 };
 
-
-DwtSelect.prototype._handleOptionSelection = 
+DwtSelect.prototype._handleOptionSelection =
 function(ev) {
 	var menuItem = ev.item;
 	var optionIndex = menuItem._optionIndex;
@@ -488,13 +492,12 @@ function(option) {
 
 DwtSelect.prototype._updateSelection = 
 function(newOption) {
-    var currOption = null;
-    if (this._currentSelectionId != -1)
-        currOption = DwtSelect._getObjectWithId(this._currentSelectionId);
+    var currOption = (this._currentSelectionId != -1)
+		? DwtSelect._getObjectWithId(this._currentSelectionId) : null;
 
-    if (currOption)
+    if (currOption) {
         currOption.deSelect();
-
+	}
     if (newOption) {
 		newOption.select();
 		this._currentSelectionId = newOption.getIdentifier();
@@ -513,8 +516,7 @@ function(newOption) {
 * @constructor
 */
 DwtSelectOptionData = function(value, displayValue, isSelected, selectedValue, image) {
-	if(value == null || displayValue==null) 
-		return null;
+	if (value == null || displayValue == null) { return null; }
 
 	this.value = value;
 	this.displayValue = displayValue;
@@ -618,7 +620,6 @@ function() {
 //
 
 DwtSelectMenu = function(parent) {
-//    DwtMenu.call(this, parent, DwtMenu.DROPDOWN_STYLE, "ZSelectMenu", null, true);
     DwtMenu.call(this, {parent:parent, style:DwtMenu.DROPDOWN_STYLE, className:"DwtMenu", cascade:parent._cascade});
 };
 DwtSelectMenu.prototype = new DwtMenu;
