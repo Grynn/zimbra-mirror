@@ -750,15 +750,15 @@ function(selected, noFocus) {
 		if (!this._initialized) {
 			this._initialize();
 		}
-		if (!this._textCell) { return; }
+		if (!this._itemDiv) { return; }
 		if (selected && (this._selectionEnabled || this._forceNotifySelection)) {
-			this._textCell.className = this._selectedClassName;
+			this._itemDiv.className = this._selectedClassName;
 			if (!noFocus) {
 				this.focus();
 			}
 			return true;
 		} else {
-			this._textCell.className = this._textClassName;
+			this._itemDiv.className = this._origClassName;
 			return false;
 		}
 	}
@@ -772,16 +772,16 @@ function(actioned) {
 			this._initialize();
 		}
 
-		if (!this._textCell) { return; }
+		if (!this._itemDiv) { return; }
 
 		if (actioned && (this._actionEnabled || this._forceNotifyAction) && !this._selected) {
-			this._textCell.className = this._actionedClassName;
+			this._itemDiv.className = this._actionedClassName;
 			return true;
 		}
 
 		if (!actioned) {
 			if (!this._selected) {
-				this._textCell.className = this._textClassName;
+				this._itemDiv.className = this._origClassName;
 			}
 			return false;
 		}
@@ -790,18 +790,18 @@ function(actioned) {
 
 DwtTreeItem.prototype._focus =
 function() {
-	if (!this._textCell) { return; }
+	if (!this._itemDiv) { return; }
 	// focused tree item should always be selected as well
 	if (this._selectionEnabled) {
-		this._textCell.className = this._selectedFocusedClassName;
+		this._itemDiv.className = this._selectedFocusedClassName;
 	}
 };
 
 DwtTreeItem.prototype._blur =
 function() {
-	if (!this._textCell) { return; }
-	this._textCell.className = this._selected
-		? this._selectedClassName : this._textClassName;
+	if (!this._itemDiv) { return; }
+	this._itemDiv.className = this._selected
+		? this._selectedClassName : this._origClassName;
 };
 
 DwtTreeItem._mouseDownListener =
