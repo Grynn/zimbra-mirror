@@ -859,7 +859,7 @@ ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaAccount.A_zimbraPrefComposeInNewWindow,
 	ZaAccount.A_zimbraAllowFromAddress,
 	ZaAccount.A_zimbraAllowAnyFromAddress,
-	ZaAccount.A_prefSaveToSent,
+	ZaAccount.A_zimbraPrefSaveToSent,
 	ZaAccount.A_zimbraPrefOutOfOfficeReply,
 	ZaAccount.A_zimbraPrefNewMailNotificationAddress,
 	ZaAccount.A_zimbraPrefNewMailNotificationEnabled,
@@ -1838,8 +1838,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 										{ref:".", type:_TEXTFIELD_, label:null,width:"200px"}
 									],
 									//onRemove:ZaAccountXFormView.onRepeatRemove,
-									visibilityChecks:[ZaAccountXFormView.isSendingFromAnyAddressDisAllowed],
-									visibilityChangeEventSources:[ZaAccount.A_zimbraAllowAnyFromAddress, ZaAccount.A_COSId]								
+									visibilityChecks:[ZaAccountXFormView.isSendingFromAnyAddressDisAllowed,[ZaItem.hasReadPermission,ZaAccount.A_zimbraAllowFromAddress]],
+									visibilityChangeEventSources:[ZaAccount.A_zimbraAllowAnyFromAddress, ZaAccount.A_zimbraAllowFromAddress, ZaAccount.A_COSId]								
 								}															
 							]
 						},
