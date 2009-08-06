@@ -328,15 +328,19 @@ DwtForm.prototype.validate = function(id) {
 	return !(id in this._invalid);
 };
 
-DwtForm.prototype.reset = function() {
+DwtForm.prototype.reset = function(useCurrentValues) {
 	// init state
 	this._dirty = {};
 	this._ignore = {};
 	this._invalid = {};
 	for (var id in this._items) {
+		var item = this._items[id];
+		if (item.control instanceof DwtForm) {
+			item.control.reset(useCurrentValues);
+		}
 		var itemDef = this._items[id].def;
 		if (!itemDef) continue;
-		this._initControl(itemDef);
+		this._initControl(itemDef, useCurrentValues);
 	}
 	// update values
 	this.update();
@@ -357,6 +361,9 @@ DwtForm.prototype.update = function() {
 	// update all the values first
 	for (var id in this._items) {
 		var item = this._items[id];
+		if (item.control instanceof DwtForm) {
+			item.control.update();
+		}
 		if (item.getter) {
 			this.setValue(id, this._call(item.getter));
 		}
@@ -386,12 +393,11 @@ DwtForm.prototype.update = function() {
 
 DwtForm.prototype._setModelValue = function(id, value) {
 	var item = this._items[id];
-	if (item.setter) {
-		this._call(item.setter, [value]);
-	}
-	item.value = value;
-	this.setDirty(id, value != item.ovalue);
+	item.value = item.setter ? this._call(item.setter, [value]) : value;
+	var dirty = !Boolean(this._call(item.equals, [item.value,item.ovalue]));
+	this.setDirty(id, dirty);
 	this.validate(id);
+	return dirty;
 };
 
 DwtForm.prototype._setControlValue = function(id, value) {
@@ -517,8 +523,10 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 		id:			id, // for convenience
 		def:		itemDef,
 		parentDef:	parentDef,
+		equals:		DwtForm.__makeFunc(itemDef.equals) || DwtForm.__equals,
 		getter:		DwtForm.__makeGetter(itemDef),
 		setter:		DwtForm.__makeSetter(itemDef),
+		value:		itemDef.value,
 		visible:	DwtForm.__makeFunc(itemDef.visible),
 		enabled:	DwtForm.__makeFunc(itemDef.enabled),
 		validator:	DwtForm.__makeFunc(itemDef.validator),
@@ -569,6 +577,12 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 		}
 	}
 	else if (type) {
+		if (Dwt.instanceOf(type, "DwtInputField")) {
+			item.value = item.value || "";
+		}
+		if (Dwt.instanceOf(type, "DwtFormRows")) {
+		    item.equals = DwtFormRows.__equals;
+		}
 		control = item.control = this._createControl(itemDef, parentDef, tabIndexes, params, parent, defaultType);
 	}
 	else if (element) {
@@ -586,7 +600,7 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 	if (itemDef.notab == null) {
 		itemDef.notab = element && element.getAttribute("notab") == "true";
 	}
-	if (tabIndexes && control && !itemDef.notab) {
+	if (tabIndexes && control && !itemDef.notab && !(control instanceof DwtRadioButtonGroup)) {
 		tabIndexes.push({
 			tabindex:	(element && element.getAttribute("tabindex")) || Number.MAX_VALUE,
 			control:	control
@@ -818,11 +832,14 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 	return control;
 };
 
-DwtForm.prototype._initControl = function(itemDef) {
+DwtForm.prototype._initControl = function(itemDef, useCurrentValues) {
 	var id = itemDef.id;
 	if (itemDef.label) this.setLabel(id, itemDef.label);
-	if (itemDef.value) {
-		var item = this._items[id];
+	var item = this._items[id];
+	if (useCurrentValues) {
+		item.ovalue = item.value;
+	}
+	else if (itemDef.value) {
 		if (Dwt.instanceOf(itemDef.type, "DwtRadioButton")) {
 			item.ovalue = item.value = item.control.isSelected();
 		}
@@ -830,6 +847,9 @@ DwtForm.prototype._initControl = function(itemDef) {
 			this.setValue(id, itemDef.value, true);
 			item.ovalue = item.value;
 		}
+	}
+	else {
+		item.ovalue = null;
 	}
 	if (typeof itemDef.enabled == "boolean") this.setEnabled(id, itemDef.enabled);
 	if (typeof itemDef.visible == "boolean") this.setVisible(id, itemDef.visible);
@@ -1005,6 +1025,11 @@ DwtForm.__makeFunc = function(value) {
 	return new Function(body);
 };
 
+DwtForm.__equals = function(a, b) {
+//	console.log("DwtForm.__equals[a=",a,"][b=",b,"]");
+	return a == b;
+};
+
 // Array.sort
 
 DwtForm.__byTabIndex = function(a, b) {
@@ -1046,6 +1071,8 @@ DwtFormRows = function(params) {
 
 	// save state
 	this._rowDef = this._itemDef.rowitem || {};
+//	console.log("DwtFormRows#",params.id,".rowitem.equals = ",this._rowDef.equals);
+	this._equals = DwtForm.__makeFunc(this._rowDef.equals) || DwtForm.__equals; 
 	this._rowCount = 0;
 	this._minRows = this._itemDef.minrows || 1;
 	this._maxRows = this._itemDef.maxrows || Number.MAX_VALUE;
@@ -1272,6 +1299,19 @@ DwtFormRows.prototype.getIndexForRowId = function(rowId) {
 	return -1;
 };
 
+DwtFormRows.__equals = function(a,b) {
+//	console.log("DwtFormRows.__equals[a=",a,"][b=",b,"]");
+	if (a === b) return true;
+	if (!a || !b || a.length != b.length) return false;
+	for (var i = 0; i < a.length; i++) {
+//		console.log("i: ",i,", a[i]: ",a[i],", b[i]: ",b[i]);
+		if (!this._call(this._equals, [a[i],b[i]])) {
+			return false;
+		}
+	}
+	return true;
+};
+
 // Protected methods
 
 DwtFormRows.prototype._handleAddRow = function(rowId) {
@@ -1286,9 +1326,7 @@ DwtFormRows.prototype._handleRemoveRow = function(rowId) {
 // DwtForm methods
 
 DwtFormRows.prototype._setModelValue = function(id, value) {
-	DwtForm.prototype._setModelValue.apply(this, arguments);
-	var item = this._items[id];
-	if (value != item.ovalue && this.parent instanceof DwtForm) {
+	if (DwtForm.prototype._setModelValue.apply(this, arguments)) {
 		this.parent.setDirty(this._itemDef.id, true);
 	}
 };
