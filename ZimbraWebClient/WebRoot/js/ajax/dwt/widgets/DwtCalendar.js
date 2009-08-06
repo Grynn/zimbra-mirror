@@ -532,10 +532,10 @@ function() {
 
 
         if(this._showWeekNumber) {
-            var firstDayCell = document.getElementById(this._getDayCellId(i * 7));
             var kwCellId = this._getWeekNumberCellId('kw' + i * 7);
             var kwCell = document.getElementById(kwCellId);
             if(kwCell) {
+                var firstDayCell = document.getElementById(this._getDayCellId(i * 7));
                 kwCell.innerHTML = AjxDateUtil.getWeekNumber(new Date(firstDayCell._year, firstDayCell._month, firstDayCell._day));
             }
         }
