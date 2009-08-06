@@ -230,7 +230,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 	var emptyAlias = "@" + domainName;
 
 	var cases = new Array();
-	
+	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
 	var nameGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_ResourceNameGrouper, id:"resource_wiz_name_group",numCols:2,
 		items:[
 			{ref:ZaResource.A_displayname, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ResourceName,
@@ -283,12 +283,15 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 					inputPreProcessor:ZaAccountXFormView.preProcessCOS,
 					visibilityChecks:[],
 					emptyText:ZaMsg.enterSearchTerm,
-					enableDisableChecks:[ [XForm.checkInstanceValue,ZaResource.A2_autoCos,"FALSE"]],
+					enableDisableChecks:[[XForm.checkInstanceValue,ZaResource.A2_autoCos,"FALSE"]],
 					enableDisableChangeEventSources:[ZaResource.A2_autoCos],
 					dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
 					toolTipContent:ZaMsg.tt_StartTypingCOSName,
 					onChange:ZaAccount.setCosChanged,
-					dataFetcherClass:ZaSearch,editable:true,getDisplayValue:function(newValue) {
+					choices:this.cosChoices,
+					dataFetcherClass:ZaSearch,
+					editable:true,
+					getDisplayValue:function(newValue) {
 							if(ZaItem.ID_PATTERN.test(newValue)) {
 								var cos = ZaCos.getCosById(newValue);
 								if(cos)
