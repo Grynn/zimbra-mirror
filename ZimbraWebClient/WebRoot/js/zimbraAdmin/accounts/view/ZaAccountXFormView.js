@@ -814,7 +814,7 @@ ZaAccountXFormView.FEATURE_TAB_ATTRS = [ZaAccount.A_zimbraFeatureReadReceiptsEna
 	ZaAccount.A_zimbraFeatureChangePasswordEnabled,
 	ZaAccount.A_zimbraFeatureSkinChangeEnabled,
 	ZaAccount.A_zimbraFeatureHtmlComposeEnabled,
-	ZaAccount.A_zimbraFeatureShortcutAliasesEnabled,
+	//ZaAccount.A_zimbraFeatureShortcutAliasesEnabled,
 	ZaAccount.A_zimbraFeatureGalEnabled,
 	ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled,
 	ZaAccount.A_zimbraFeatureMailPriorityEnabled,
@@ -1550,7 +1550,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							{ref:ZaAccount.A_zimbraFeatureChangePasswordEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureChangePasswordEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureChangePasswordEnabled,trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureSkinChangeEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureSkinChangeEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureSkinChangeEnabled, trueValue:"TRUE", falseValue:"FALSE"}	,
 							{ref:ZaAccount.A_zimbraFeatureHtmlComposeEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureHtmlComposeEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureHtmlComposeEnabled, trueValue:"TRUE", falseValue:"FALSE"},														
-							{ref:ZaAccount.A_zimbraFeatureShortcutAliasesEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureShortcutAliasesEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureShortcutAliasesEnabled, trueValue:"TRUE", falseValue:"FALSE"},
+							//{ref:ZaAccount.A_zimbraFeatureShortcutAliasesEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureShortcutAliasesEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureShortcutAliasesEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureGalEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureGalEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureGalEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled,  trueValue:"TRUE", falseValue:"FALSE"}
 						]

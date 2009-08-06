@@ -783,7 +783,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		};
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureTaggingEnabled,ZaAccount.A_zimbraFeatureSharingEnabled,
 			ZaAccount.A_zimbraFeatureChangePasswordEnabled,ZaAccount.A_zimbraFeatureSkinChangeEnabled,
-			ZaAccount.A_zimbraFeatureHtmlComposeEnabled,ZaAccount.A_zimbraFeatureShortcutAliasesEnabled,
+			//ZaAccount.A_zimbraFeatureHtmlComposeEnabled,ZaAccount.A_zimbraFeatureShortcutAliasesEnabled,
 			ZaAccount.A_zimbraFeatureGalEnabled,ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled],[])) {
 			featuresCase.items.push({type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraGeneralFeature, id:"account_wiz_features_general",
 						 colSizes:["auto"],numCols:1,
@@ -796,11 +796,11 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 								msgName:ZaMsg.LBL_zimbraFeatureHtmlComposeEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureHtmlComposeEnabled, 
 								trueValue:"TRUE", falseValue:"FALSE"},							
-							{ref:ZaAccount.A_zimbraFeatureShortcutAliasesEnabled, 
+							/*{ref:ZaAccount.A_zimbraFeatureShortcutAliasesEnabled, 
 								type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 								msgName:ZaMsg.LBL_zimbraFeatureShortcutAliasesEnabled,
 								checkBoxLabel:ZaMsg.LBL_zimbraFeatureShortcutAliasesEnabled, 
-								trueValue:"TRUE", falseValue:"FALSE"},
+								trueValue:"TRUE", falseValue:"FALSE"},*/
 							{ref:ZaAccount.A_zimbraFeatureGalEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureGalEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureGalEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled,  trueValue:"TRUE", falseValue:"FALSE"}
 						]
