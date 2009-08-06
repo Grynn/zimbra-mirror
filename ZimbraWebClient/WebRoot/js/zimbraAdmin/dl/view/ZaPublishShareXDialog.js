@@ -152,7 +152,7 @@ ZaPublishShareXDialog.myXFormModifier = function(xFormObject) {
 		]},		
 		{type:_SPACER_, height:"5px",colSpan:"*"},	
 		{ref:ZaDistributionList.A2_sharesPool,colSpan:"*", 
-    		type:_DWT_LIST_, height:"150px", width:"500px", cssClass: "DLSource",onSelection:ZaPublishShareXDialog.shareSelectionListener,
+    		type:_DWT_LIST_, height:"150", width:"500", cssClass: "DLSource",onSelection:ZaPublishShareXDialog.shareSelectionListener,
 		 		multiselect:true, bmolsnr:true, widgetClass:ZaSharesListView, headerList:shareHeaderList, visibilityChecks:[], enableDisableChecks:[],emptyText:ZaMsg.Shares_DLNoUnpublishedResults
 		},
 		{type:_SPACER_, height:"5px",colSpan:"*"},
