@@ -531,7 +531,7 @@ function() {
      	}
 
 
-        if(this._showWeekNumber && kwCell) {
+        if(this._showWeekNumber) {
             var firstDayCell = document.getElementById(this._getDayCellId(i * 7));
             var kwCellId = this._getWeekNumberCellId('kw' + i * 7);
             var kwCell = document.getElementById(kwCellId);
