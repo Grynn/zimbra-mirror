@@ -26,7 +26,8 @@ OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
 all: allclean build 
 
 build: 
-ifeq	(MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
+ifneq	(,$(findstring MACOSX,$(BUILD_PLATFORM)))
+	@echo "Building cyrus-sasl for $(BUILD_PLATFORM)"
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl
 	_S_='~' ./zimbra-cyrus-sasl-build.sh
 	(cd build/cyrus-sasl-$(CYRUS_VERSION); $(MAKE) install)
