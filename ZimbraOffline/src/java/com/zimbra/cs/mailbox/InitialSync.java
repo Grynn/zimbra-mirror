@@ -33,6 +33,7 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.httpclient.Header;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.CopyInputStream;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.tar.TarEntry;
@@ -44,6 +45,7 @@ import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.ZimbraNamespace;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineAccount.Version;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -82,7 +84,6 @@ import com.zimbra.cs.service.util.ItemData;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.Blob;
-import com.zimbra.cs.store.BufferedStorageCallback;
 import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.util.AccountUtil;
 import com.zimbra.soap.ZimbraSoapContext;
@@ -1113,27 +1114,27 @@ public class InitialSync {
     private void saveMessage(InputStream in, long sizeHint, int id, int folderId,
         byte type, int received, int flags, String tags, int convId) throws ServiceException {
         Blob blob = null;
-        BufferedStorageCallback callback;
-        byte[] data = null;
+        int bufLen = Provisioning.getInstance().getLocalServer().getMailDiskStreamingThreshold();
+        CopyInputStream cs = new CopyInputStream(in, sizeHint, bufLen, bufLen);
+        byte data[] = null;
+        String digest = null;
+        ParsedMessage pm = null;
         CreateMessage redo;
+        int size = 0;
 
         if (convId < 0)
             convId = Mailbox.ID_AUTO_INCREMENT;
         try {
-            callback = new BufferedStorageCallback(sizeHint);
-            blob = StoreManager.getInstance().storeIncoming(in, sizeHint, callback);
-            data = callback.getData();
+            blob = StoreManager.getInstance().storeIncoming(cs, sizeHint, null);
+            data = cs.getBuffer();
             OfflineLog.offline.debug("message id=%d streamed to %s", id,
                 data == null ? blob.getPath() : "memory" );
         } catch (Exception e) {
             throw ServiceException.FAILURE("Unable to read/write message id=" + id, e);
         }
-
-        ParsedMessage pm = null;
-        String digest = callback.getDigest();
-        int size = (int)callback.getSize();
-        
         try {
+            digest = blob.getDigest();
+            size = (int)blob.getRawSize();
             if (data == null)
                 pm = new ParsedMessage(blob.getFile(), received * 1000L, false);
             else
@@ -1145,6 +1146,7 @@ public class InitialSync {
                 redo = new CreateChat(ombx.getId(), digest, size, folderId, flags, tags);
             else
                 redo = new CreateMessage(ombx.getId(), null, received, false, digest, size, folderId, true, flags, tags, null);
+            cs.release();
             redo.setMessageId(id);
             redo.setConvId(convId);
             redo.start(System.currentTimeMillis());
@@ -1182,6 +1184,8 @@ public class InitialSync {
                 return;
             }
             // fall through...
+        } finally {
+            cs.release();
         }
 
         // if we're here, the message already exists; save new draft if needed, then update metadata
