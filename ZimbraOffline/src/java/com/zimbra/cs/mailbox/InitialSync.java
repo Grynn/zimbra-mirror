@@ -58,6 +58,7 @@ import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedDocument;
 import com.zimbra.cs.mime.ParsedMessage;
+import com.zimbra.cs.mime.ParsedMessageOptions;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
@@ -1135,12 +1136,8 @@ public class InitialSync {
         try {
             digest = blob.getDigest();
             size = (int)blob.getRawSize();
-            if (data == null)
-                pm = new ParsedMessage(blob.getFile(), received * 1000L, false);
-            else
-                pm = new ParsedMessage(data, received * 1000L, false);
-            pm.setRawDigest(digest);
-            pm.setRawSize(size);
+            pm = new ParsedMessage(new ParsedMessageOptions(blob, data,
+                received * 1000L, false));
             
             if (type == MailItem.TYPE_CHAT)
                 redo = new CreateChat(ombx.getId(), digest, size, folderId, flags, tags);
