@@ -79,7 +79,7 @@
 			<attribute name="javadoc_location" value="http://java.sun.com/products/javamail/javadocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/mysql-connector-java-5.1.8-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.1.8/src"/>
+	<classpathentry kind="lib" path="jars/mysql-connector-java-5.0.8-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.0.8/src"/>
 	<classpathentry kind="lib" path="jars/nekohtml.jar"/>
 	<classpathentry kind="lib" path="jars/servlet-api.jar">
 		<attributes>
