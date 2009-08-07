@@ -40,11 +40,12 @@ ZaCert.TARGET_SERVER_CHOICES =  [
 		{label: "admindev2.zimbra.com", value: "admindev2.zimbra.com" }*/
 	];
 
+/* All the cert rights require the system admin rights, so we have no need to expose the view for delegated admin
 if(ZaSettings) {
 	ZaSettings.CERTS_VIEW = "certsView";
 	ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CERTS_VIEW, label: com_zimbra_cert_manager.UI_Comp_certsView });
 	ZaSettings.OVERVIEW_TOOLS_ITEMS.push(ZaSettings.CERTS_VIEW);
-}
+}*/
 
 //Init the ZaCert Object for the new Cert wizard
 ZaCert.prototype.init = function (getCSRResp) {
