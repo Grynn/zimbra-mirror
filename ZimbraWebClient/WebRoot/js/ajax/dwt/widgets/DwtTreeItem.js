@@ -94,8 +94,6 @@ DwtTreeItem = function(params) {
 		parent._addDeferredChild(this, params.index);
 		this._index = params.index;
 	}
-
-	this.setCheckboxBgcolor("ZTreeItemCheckboxDefaultBkgd");
 };
 
 DwtTreeItem.PARAMS = ["parent", "index", "text", "imageInfo", "deferred", "className", "posStyle",
@@ -157,18 +155,6 @@ function(ev) {
 	ev = ev || window.event;
 	ev.item = this;
 	this._tree._itemChecked(this, ev);
-};
-
-/**
- * Sets the background color for the checkbox widget
- *
- * @param className		[String]*		class name defining background color.
- */
-DwtTreeItem.prototype.setCheckboxBgcolor =
-function(className) {
-	if (this._checkBox && className) {
-		this._checkBox.className = "ZTreeItemCheckbox " + className;
-	}
 };
 
 DwtTreeItem.prototype.getExpanded =
@@ -476,6 +462,7 @@ function(index, realizeDeferred) {
 	if (this._tree.isCheckedStyle && this._checkBox) {
 		this._checkBox.onclick = AjxCallback.simpleClosure(this._handleCheckboxOnclick, this);
 		this.showCheckBox(this._checkBoxVisible);
+		this.setChecked(this._tree.isCheckedByDefault, true);
 	}
 
 	// initialize icon

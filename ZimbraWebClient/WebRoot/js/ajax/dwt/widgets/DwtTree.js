@@ -22,12 +22,13 @@
  *
  * @author Ross Dargahi
  * 
- * @param params			[hash]				hash of params:
- *        parent			[DwtComposite] 		parent widget
- *        style 			[constant]*			tree style: DwtTree.SINGLE_STYLE (single selection) or
- * 												DwtTree.MULTI_STYLE (multiselection);
- *        className			[string]*			CSS class
- *        posStyle			[constant]*			positioning style
+ * @param params				[hash]				hash of params:
+ *        parent				[DwtComposite] 		parent widget
+ *        style 				[constant]*			tree style: DwtTree.SINGLE_STYLE (single selection) or
+ * 													DwtTree.MULTI_STYLE (multiselection);
+ *        className				[string]*			CSS class
+ *        posStyle				[constant]*			positioning style
+ *        isCheckedByDefault	[boolean]*			default checked state if tree styles is "checked"
  */
 DwtTree = function(params) {
 	if (arguments.length == 0) { return; }
@@ -51,6 +52,7 @@ DwtTree = function(params) {
 		this._style = style;
 	}
 	this.isCheckedStyle = ((this._style & DwtTree.CHECKEDITEM_STYLE) != 0);
+	this.isCheckedByDefault = params.isCheckedByDefault;
 
 	this._selectedItems = new AjxVector();
 	this._selEv = new DwtSelectionEvent(true);
@@ -293,29 +295,6 @@ function(list, visible, treeItem) {
 		}
 	}
 	return list;
-};
-
-/**
-* Workaround for IE, which resets checkbox state when an element is appended to the DOM.
-* Go through all tree items recursively. If one is checked, make sure the element is checked.
-*
-* @param treeItem	[DwtTreeItem]	checkbox style tree item
-*/
-DwtTree.prototype.setCheckboxes =
-function(treeItem) {
-	if (!this.isCheckedStyle || !AjxEnv.isIE) return;
-	if (treeItem && treeItem._isSeparator) return;
-
-	var items;
-	if (treeItem) {
-		treeItem.setChecked(treeItem.getChecked(), true);
-		items = treeItem.getItems();
-	} else {
-		items = this.getItems();
-	}
-	for (var i = 0; i < items.length; i++) {
-		this.setCheckboxes(items[i]);
-	}
 };
 
 DwtTree.prototype._deselect =
