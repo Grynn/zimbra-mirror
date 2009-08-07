@@ -1190,6 +1190,8 @@ Super_Lifetime_XFormItem.prototype.numCols = 4;
 Super_Lifetime_XFormItem.prototype.colSpan = 4;
 Super_Lifetime_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
 Super_Lifetime_XFormItem.prototype.useParenttable = false;
+Super_Lifetime_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
+Super_Lifetime_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 
 Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
@@ -1299,9 +1301,11 @@ Super_Lifetime1_XFormItem.prototype.numCols = 4;
 Super_Lifetime1_XFormItem.prototype.colSpan = 4;
 Super_Lifetime1_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
 Super_Lifetime1_XFormItem.prototype.useParenttable = false;
+Super_Lifetime1_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
+Super_Lifetime1_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 
 SuperWiz_Lifetime1_XFormItem = function() {}
-SuperWiz_Lifetime1_XFormItem.prototype.visibilityChecks = [ZaItem.hasWritePermission];
+SuperWiz_Lifetime1_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 SuperWiz_Lifetime1_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 
 XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME1_", "superwiz_lifetime1", SuperWiz_Lifetime1_XFormItem, Super_Lifetime1_XFormItem);
@@ -1401,6 +1405,8 @@ Super_Lifetime2_XFormItem.prototype.colSpan = 4;
 Super_Lifetime2_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
 Super_Lifetime2_XFormItem.prototype.useParenttable = false;
 Super_Lifetime2_XFormItem.prototype._stringPart = "d";
+Super_Lifetime2_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
+Super_Lifetime2_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 
 SuperWiz_Lifetime2_XFormItem = function() {}
 XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME2_", "superwiz_lifetime2", SuperWiz_Lifetime2_XFormItem, Super_Lifetime2_XFormItem);
@@ -1486,12 +1492,48 @@ ZATopGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZA_TOP_GROUPER_", "za_top_grouper", ZATopGrouper_XFormItem, TopGrouper_XFormItem);
 ZATopGrouper_XFormItem.prototype.numCols = 2;
 ZATopGrouper_XFormItem.prototype.colSizes = ["275px","auto"];
+ZATopGrouper_XFormItem.isGroupVisible = function(attrsArray, rightsArray,entry) {
+	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE')
+		return true;
 
+	if(!entry)
+		entry = this.getInstance();
+	
+	if(!entry)
+		return false;
+
+	if (!entry.getAttrs)
+		return false;
+			
+	if(!attrsArray && !rightsArray)
+		return true;
+		
+	if(attrsArray) {
+		var cntAttrs = attrsArray.length;
+		for(var i=0; i< cntAttrs; i++) {
+			if(ZaItem.hasReadPermission(attrsArray[i],entry)) {
+				return true;
+			}
+		}
+	} 
+	
+	if(rightsArray) {
+		var cntRights = rightsArray.length;
+		for(var i=0; i< cntRights; i++) {
+			if(ZaItem.hasRight(rightsArray[i],entry)) {
+				return true;
+			}
+		}
+	}
+	
+	return false; 
+}
 ZAPlainGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZA_PLAIN_GROUPER_", "za_plain_grouper", ZAPlainGrouper_XFormItem, Group_XFormItem);
 ZAPlainGrouper_XFormItem.prototype.numCols = 2;
 ZAPlainGrouper_XFormItem.prototype.colSizes = ["275px","auto"];
 ZAPlainGrouper_XFormItem.prototype.cssClass = "PlainGrouperBorder";
+ZAPlainGrouper_XFormItem.isGroupVisible = ZATopGrouper_XFormItem.isGroupVisible;
 
 ZAWizTopGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZAWIZ_TOP_GROUPER_", "zawiz_top_grouper", ZAWizTopGrouper_XFormItem, TopGrouper_XFormItem);

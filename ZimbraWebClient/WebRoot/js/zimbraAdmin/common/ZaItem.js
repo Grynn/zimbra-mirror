@@ -927,6 +927,8 @@ ZaItem.hasWritePermission = function (refToCheck,instance) {
 		
 	return ((instance.setAttrs.all === true) || (instance.setAttrs[refPath] === true));
 }
+
+
 XFormItem.prototype.hasWritePermission = ZaItem.hasWritePermission;
 Textfield_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 OSelect1_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];

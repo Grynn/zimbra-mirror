@@ -1976,21 +1976,25 @@ function () {
 }
  */
 ZaAccount.isEmailRetentionPolicyEnabled = function () {
-    var instance  = this.getInstance () ;
-    var gc   = ZaApp.getInstance().getGlobalConfig();
-    var sc =  ZaApp.getInstance().getServerByName(instance.attrs[ZaAccount.A_mailHost]);
-    var s_mailpurge = sc.attrs[ZaServer.A_zimbraMailPurgeSleepInterval] ;    //always end with [s,m,h,d]
-    var g_mailpurge = gc.attrs[ZaGlobalConfig.A_zimbraMailPurgeSleepInterval] ;
-    if (s_mailpurge === _UNDEFINED_ || s_mailpurge === null)  {
-        if (AjxEnv.hasFirebug) console.log("server setting A_zimbraMailPurgeSleepInterval is NOT set.")
-        if (g_mailpurge != null && ZaUtil.getLifeTimeInSeconds(g_mailpurge) == 0) {
-            return false ;
-        }
-    }else if (ZaUtil.getLifeTimeInSeconds(s_mailpurge) == 0){
-         return false ;
-    }
-
-    return true ;
+	try {
+		var instance  = this.getInstance () ;
+    	var gc   = ZaApp.getInstance().getGlobalConfig();
+    	var sc =  ZaApp.getInstance().getServerByName(instance.attrs[ZaAccount.A_mailHost]);
+    	var s_mailpurge = sc.attrs[ZaServer.A_zimbraMailPurgeSleepInterval] ;    //always end with [s,m,h,d]
+    	var g_mailpurge = gc.attrs[ZaGlobalConfig.A_zimbraMailPurgeSleepInterval] ;
+    	if (s_mailpurge === _UNDEFINED_ || s_mailpurge === null)  {
+        	if (AjxEnv.hasFirebug) console.log("server setting A_zimbraMailPurgeSleepInterval is NOT set.")
+        	if (g_mailpurge != null && ZaUtil.getLifeTimeInSeconds(g_mailpurge) == 0) {
+            	return false ;
+        	}
+    	} else if (ZaUtil.getLifeTimeInSeconds(s_mailpurge) == 0){
+        	return false ;
+    	}
+		
+    	return true ;
+	} catch (ex) {
+		return true;
+   	}
 }
 
 ZaAccount.isEmailRetentionPolicyDisabled = function () {

@@ -2313,6 +2313,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 					items: [
 						{type:_ZA_TOP_GROUPER_, id:"account_attachment_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_AttachmentsGrouper,
+							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        			[ZaAccount.A_zimbraAttachmentsBlocked]]],
 							items :[
 								{ref:ZaAccount.A_zimbraAttachmentsBlocked, type:_SUPER_CHECKBOX_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
@@ -2325,6 +2327,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 
 						{type:_ZA_TOP_GROUPER_, id:"account_quota_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_QuotaGrouper,
+							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        			[ZaAccount.A_zimbraMailForwardingAddressMaxLength,
+                        			ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs,
+                        			ZaAccount.A_zimbraMailQuota,
+                        			ZaAccount.A_zimbraContactMaxNumEntries,
+                        			ZaAccount.A_zimbraQuotaWarnPercent,
+                        			ZaAccount.A_zimbraQuotaWarnInterval,
+                        			ZaAccount.A_zimbraQuotaWarnMessage]]],
 							items: [
 								{ref:ZaAccount.A_zimbraMailForwardingAddressMaxLength, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraMailForwardingAddressMaxLength,
@@ -2373,6 +2383,17 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 
 						{type:_ZA_TOP_GROUPER_,id:"account_password_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_PasswordGrouper,
+							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        			[ZaAccount.A_zimbraPasswordLocked,
+                        			ZaAccount.A_zimbraMinPwdLength,
+                        			ZaAccount.A_zimbraMaxPwdLength,
+                        			ZaAccount.A_zimbraPasswordMinUpperCaseChars,
+                        			ZaAccount.A_zimbraPasswordMinLowerCaseChars,
+                        			ZaAccount.A_zimbraPasswordMinPunctuationChars,
+                        			ZaAccount.A_zimbraPasswordMinNumericChars,
+                        			ZaAccount.A_zimbraMinPwdAge,
+                        			ZaAccount.A_zimbraMaxPwdAge,
+                        			ZaAccount.A_zimbraEnforcePwdHistory]]],
 							items: [
 								{ref:ZaAccount.A_zimbraPasswordLocked, type:_SUPER_CHECKBOX_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
@@ -2418,8 +2439,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraPasswordMinNumericChars,
 									txtBoxLabel:ZaMsg.LBL_zimbraPasswordMinNumericChars, labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input"
-								},
-																
+								},																
 								{ref:ZaAccount.A_zimbraMinPwdAge, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_passMinAge,txtBoxLabel:ZaMsg.LBL_passMinAge, labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"},
 								{ref:ZaAccount.A_zimbraMaxPwdAge, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_passMaxAge,txtBoxLabel:ZaMsg.LBL_passMaxAge, labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"},
 								{ref:ZaAccount.A_zimbraEnforcePwdHistory, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraEnforcePwdHistory,txtBoxLabel:ZaMsg.LBL_zimbraEnforcePwdHistory, labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"}
@@ -2427,6 +2447,11 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 						},
 						{type:_ZA_TOP_GROUPER_, id:"password_lockout_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_FailedLoginGrouper,
+							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        			[ZaAccount.A_zimbraPasswordLockoutEnabled,
+                        			ZaAccount.A_zimbraPasswordLockoutMaxFailures,
+                        			ZaAccount.A_zimbraPasswordLockoutDuration,
+                        			ZaAccount.A_zimbraPasswordLockoutFailureLifetime]]],							
 							items :[
 								{ref:ZaAccount.A_zimbraPasswordLockoutEnabled, 
 									type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
@@ -2471,6 +2496,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 						},
 						{type:_ZA_TOP_GROUPER_, colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_TimeoutGrouper,id:"timeout_settings",
+							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        			[ZaAccount.A_zimbraAdminAuthTokenLifetime,
+                        			ZaAccount.A_zimbraAuthTokenLifetime,
+                        			ZaAccount.A_zimbraMailIdleSessionTimeout]]],							
 							items: [
 								{ref:ZaAccount.A_zimbraAdminAuthTokenLifetime,
 									type:_SUPER_LIFETIME_, 
@@ -2493,6 +2522,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							]
 						},
                         { type:_ZA_TOP_GROUPER_, colSizes:["auto"], numCols:1,
+                        	visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        			[ZaAccount.A_zimbraMailMessageLifetime,
+                        			ZaAccount.A_zimbraMailTrashLifetime,
+                        			ZaAccount.A_zimbraMailSpamLifetime]]],
 							label:ZaMsg.NAD_MailRetentionGrouper, id: "mailretention_settings",
 							items: [
                                 { type: _DWT_ALERT_,
@@ -2504,8 +2537,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
                                   visibilityChangeEventSources:[ZaAccount.A_mailHost]
                                 },
                                 { type: _GROUP_ ,
-                                    enableDisableChecks:[ZaAccount.isEmailRetentionPolicyEnabled],
-                                    enableDisableChangeEventSources:[ZaAccount.A_mailHost],
+                                    visibilityChecks:[ZaAccount.isEmailRetentionPolicyEnabled],
+                                    visibilityChangeEventSources:[ZaAccount.A_mailHost],
                                     items: [
                                         {ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPER_LIFETIME2_,
                                             resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
@@ -2524,6 +2557,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
                         },
                         {type:_ZA_TOP_GROUPER_, colSizes:["auto"],numCols:1,
 								label:ZaMsg.NAD_InteropGrouper,   id: "interop_settings",
+								visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        			[ZaAccount.A_zimbraFreebusyExchangeUserOrg]]],
 							items: [
                                 { ref: ZaAccount.A_zimbraFreebusyExchangeUserOrg, type: _SUPER_TEXTFIELD_,
                                     textFieldWidth: "250px",
