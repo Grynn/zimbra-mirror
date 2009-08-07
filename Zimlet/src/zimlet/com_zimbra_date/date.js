@@ -102,18 +102,43 @@ function(itemId) {
 
 Com_Zimbra_Date.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
-	var cc = AjxDispatcher.run("GetCalController");
-	canvas.innerHTML = cc.getDayToolTipText(matchContext ? matchContext.date : new Date());
+    if(appCtxt.isChildWindow) {
+        var app = this.getOpenerApp(ZmApp.CALENDAR);
+        if(app){
+            canvas.innerHTML = app.getDateToolTip(matchContext ? matchContext.date : new Date());
+        }
+    }else {
+        var cc = AjxDispatcher.run("GetCalController");
+        canvas.innerHTML = cc.getDayToolTipText(matchContext ? matchContext.date : new Date());
+    }
+};
+
+
+Com_Zimbra_Date.prototype.getOpenerApp =
+function(appId) {
+    var openerWindow = window.opener;
+    var wAppCtxt = openerWindow ? openerWindow.appCtxt : null;
+    var app = wAppCtxt ? wAppCtxt.getApp(appId) : null;
+    return app;
 };
 
 Com_Zimbra_Date.prototype.clicked =
 function(spanElement, contentObjText, matchContext, canvas) {
-	var calController = AjxDispatcher.run("GetCalController");
-	var miniCalendar = calController.getMiniCalendar();
-	calController.setDate(matchContext.date, 0, miniCalendar.getForceRollOver());
-	if (!calController._viewVisible) {
-		calController.show(ZmId.VIEW_CAL_DAY);
-	}
+    if(appCtxt.isChildWindow) {
+        var app = this.getOpenerApp(ZmApp.CALENDAR);
+        if(app) {
+            app.showDayView(matchContext.date);
+            window.opener.focus();
+            window.close();
+        }
+    }else {
+        var calController = AjxDispatcher.run("GetCalController");
+        var miniCalendar = calController.getMiniCalendar();
+        calController.setDate(matchContext.date, 0, miniCalendar.getForceRollOver());
+        if (!calController._viewVisible) {
+            calController.show(ZmId.VIEW_CAL_DAY);
+        }
+    }
 };
 
 Com_Zimbra_Date.prototype.match =
