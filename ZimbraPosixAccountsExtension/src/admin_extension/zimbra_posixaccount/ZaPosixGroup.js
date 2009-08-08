@@ -37,7 +37,7 @@ ZaPosixGroup.loadMethod = function(by, val) {
 		return;
 		
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
-	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSuffix);
+	soapDoc.set("ldapSearchBase", zimbra_posixaccount_ext.ldapSuffix);
 	soapDoc.set("query", "(&(objectClass=posixGroup)(" + by + "="+val+"))");	
 
 	var csfeParams = new Object();
@@ -66,7 +66,7 @@ if(ZaItem.initMethods["ZaPosixGroup"]) {
 
 ZaPosixGroup.getNextGid = function () {
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
-	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSuffix);
+	soapDoc.set("ldapSearchBase", zimbra_posixaccount_ext.ldapSuffix);
 	soapDoc.set("query", "(objectClass=posixGroup)");	
 	soapDoc.set("sortBy", ZaPosixGroup.A_gidNumber);	
 	soapDoc.set("sortAscending", "false");		
@@ -74,7 +74,7 @@ ZaPosixGroup.getNextGid = function () {
 	var getPosixGroupsCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var nextId = !isNaN(zimbra_posixaccount.gidBase) ?  parseInt(zimbra_posixaccount.gidBase) + 1 : 10001;
+	var nextId = !isNaN(zimbra_posixaccount_ext.gidBase) ?  parseInt(zimbra_posixaccount_ext.gidBase) + 1 : 10001;
 	try {
 		var resp = getPosixGroupsCommand.invoke(params).Body.GetLDAPEntriesResponse.LDAPEntry[0];
 		if(resp) {
@@ -113,11 +113,11 @@ function(callback) {
 
 	var dn = [["cn=",this.attrs["cn"]].join("")];
 
-	if(zimbra_posixaccount.ldapGroupSuffix)
-		dn.push(zimbra_posixaccount.ldapGroupSuffix);
+	if(zimbra_posixaccount_ext.ldapGroupSuffix)
+		dn.push(zimbra_posixaccount_ext.ldapGroupSuffix);
 		
-	if(zimbra_posixaccount.ldapSuffix)
-		dn.push(zimbra_posixaccount.ldapSuffix);
+	if(zimbra_posixaccount_ext.ldapSuffix)
+		dn.push(zimbra_posixaccount_ext.ldapSuffix);
 		
 
 	soapDoc.set("dn", dn.join(","));	
@@ -135,7 +135,7 @@ function(callback) {
 ZaPosixGroup.getAll =
 function() {
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
-	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSuffix);
+	soapDoc.set("ldapSearchBase", zimbra_posixaccount_ext.ldapSuffix);
 	soapDoc.set("query", "objectClass=posixGroup");	
 	var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();
@@ -151,11 +151,11 @@ ZaPosixGroup.createMethod = function(tmpObj, group) {
 	var soapDoc = AjxSoapDoc.create("CreateLDAPEntryRequest", "urn:zimbraAdmin", null);
 	var dn = [["cn=",tmpObj.attrs["cn"]].join("")];
 
-	if(zimbra_posixaccount.ldapGroupSuffix)
-		dn.push(zimbra_posixaccount.ldapGroupSuffix);
+	if(zimbra_posixaccount_ext.ldapGroupSuffix)
+		dn.push(zimbra_posixaccount_ext.ldapGroupSuffix);
 		
-	if(zimbra_posixaccount.ldapSuffix)
-		dn.push(zimbra_posixaccount.ldapSuffix);
+	if(zimbra_posixaccount_ext.ldapSuffix)
+		dn.push(zimbra_posixaccount_ext.ldapSuffix);
 		
 
 	soapDoc.set("dn", dn.join(","));	
@@ -218,13 +218,13 @@ function(mods) {
 		var dn = [["cn=",this.attrs["cn"]].join("")];		
 		var new_dn = [["cn=",mods["cn"]].join("")];				
 		
-		if(zimbra_posixaccount.ldapGroupSuffix) {
-			dn.push(zimbra_posixaccount.ldapGroupSuffix);
-			new_dn.push(zimbra_posixaccount.ldapGroupSuffix);			
+		if(zimbra_posixaccount_ext.ldapGroupSuffix) {
+			dn.push(zimbra_posixaccount_ext.ldapGroupSuffix);
+			new_dn.push(zimbra_posixaccount_ext.ldapGroupSuffix);			
 		}	
-		if(zimbra_posixaccount.ldapSuffix) {
-			dn.push(zimbra_posixaccount.ldapSuffix);
-			new_dn.push(zimbra_posixaccount.ldapSuffix);		
+		if(zimbra_posixaccount_ext.ldapSuffix) {
+			dn.push(zimbra_posixaccount_ext.ldapSuffix);
+			new_dn.push(zimbra_posixaccount_ext.ldapSuffix);		
 		}
 		soapDoc.set("dn", dn.join(","));
 		soapDoc.set("new_dn", new_dn.join(","));
@@ -252,11 +252,11 @@ function(mods) {
 	var soapDoc = AjxSoapDoc.create("ModifyLDAPEntryRequest", "urn:zimbraAdmin", null);	
 	var dn = [["cn=",this.attrs["cn"]].join("")];
 
-	if(zimbra_posixaccount.ldapGroupSuffix)
-		dn.push(zimbra_posixaccount.ldapGroupSuffix);
+	if(zimbra_posixaccount_ext.ldapGroupSuffix)
+		dn.push(zimbra_posixaccount_ext.ldapGroupSuffix);
 		
-	if(zimbra_posixaccount.ldapSuffix)
-		dn.push(zimbra_posixaccount.ldapSuffix);
+	if(zimbra_posixaccount_ext.ldapSuffix)
+		dn.push(zimbra_posixaccount_ext.ldapSuffix);
 		
 
 	soapDoc.set("dn", dn.join(","));	
