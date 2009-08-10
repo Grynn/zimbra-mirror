@@ -45,6 +45,7 @@ ZaZimbraAdmin.currentUserLogin = "";
 ZaZimbraAdmin.currentUserId = "";
 ZaZimbraAdmin.URN = "urn:zimbraAdmin";
 ZaZimbraAdmin.VIEW_INDEX = 0;
+ZaZimbraAdmin.FIRST_DAY_OF_WEEK = 0;
 
 ZaZimbraAdmin._ADDRESSES = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SEARCHES = ZaZimbraAdmin.VIEW_INDEX++;
@@ -423,6 +424,10 @@ function (resp) {
 
                 if (prefs && prefs[ZaAccount.A_zimbraPrefAdminConsoleWarnOnExit]) {
                     ZaZimbraAdmin.isWarnOnExit = (prefs[ZaAccount.A_zimbraPrefAdminConsoleWarnOnExit] == "TRUE") ;
+                }
+               
+				if (prefs && !AjxUtil.isEmpty(prefs[ZaAccount.A_zimbraPrefCalendarFirstDayOfWeek])) {
+                    ZaZimbraAdmin.FIRST_DAY_OF_WEEK = prefs[ZaAccount.A_zimbraPrefCalendarFirstDayOfWeek];
                 }
 	        }
 		}

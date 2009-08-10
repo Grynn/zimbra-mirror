@@ -4250,46 +4250,28 @@ Dwt_Date_XFormItem.prototype.cssStyle = "width:80px;";
 //	methods
 
 Dwt_Date_XFormItem.prototype.constructWidget = function () {
-
+	var firstDayOfWeek = this.getInheritedProperty("firstDayOfWeek");
 	var widget = new DwtButton(this.getForm());
 	widget.setActionTiming(DwtButton.ACTION_MOUSEDOWN);
 
 	// ONE MENU??
 	var menu = this.menu = new DwtMenu(widget, DwtMenu.CALENDAR_PICKER_STYLE, null, null, this.getForm());
-	widget.setMenu(menu, true)
+	menu.setSize("150");
+	menu._table.width = "100%";
+	widget.setMenu(menu, true);
 	menu.setAssociatedObj(widget);
 
 	// For now, create a new DwtCalendar for each of the buttons, since on
 	// IE, I'm having trouble getting the one calendar to work.
 	// TODO: Figure out the IE problem.
-	var cal = new DwtCalendar(menu);
+	//var cal = new DwtCalendar(menu);
+	var cal = new DwtCalendar({parent:menu,firstDayOfWeek:(!AjxUtil.isEmpty(firstDayOfWeek) ? firstDayOfWeek : 0)});
 	cal._invokingForm = this.getForm();
 	cal._invokingFormItemId = this.getId();
+	cal.setDate(new Date(), true);
 	cal.addSelectionListener(new AjxListener(this, this._calOnChange));
 	widget.__cal = cal;
-	
-	// create a static instance of DwtCalendar that all instances will show
-	//if (window.DwtCalendar && (this.constructor._calendarPopup == null)) {
-		// DO WE NEED TO CONSTRUCT A MENU HERE FIRST???
-		//	CAN THE MENU BE SHARED???
-	//	var cal = this.constructor._calendarPopup = new DwtCalendar(menu);
-	//	cal.addSelectionListener(new AjxListener(this, this._calOnChange));
-	//}
-
-	// We have to add listeners both for the drop down cell, and 
-	// the button proper, to get notified when any part of the 
-	// button is hit.
-	//widget.addSelectionListener(new AjxListener(this, this._prePopup));
-	//widget.addDropDownSelectionListener(new AjxListener(this, this._prePopup));
-	// NOTE: WHEN THE BUTTON IS PRESSED, WE WANT TO CALL:
-	//var cal = this.constructor._calendarPopup;
-	//cal.setDate(this.widget._date, true);
-	//cal._invokingForm = this.getForm();
-	//cal._invokingFormItemId = this.getId();
-	//cal.reparent(event.item.getMenu());
-	//	THEN SHOW THE THING... ???
-
-	return widget;
+	return widget; 
 }
 
 Dwt_Date_XFormItem.prototype.updateWidget = function (newValue) {
@@ -4304,15 +4286,6 @@ Dwt_Date_XFormItem.prototype._calOnChange = function (event) {
 	var cal = event.item;
 	var elemChanged = this.getElementChangedMethod();
 	elemChanged.call(this,value, this.getInstanceValue(), event);	
-};
-
-Dwt_Date_XFormItem.prototype._prePopup = function (event) {
-	var cal = this.constructor._calendarPopup;
-	cal.setDate(this.widget._date, true);
-	cal._invokingForm = this.getForm();
-	cal._invokingFormItemId = this.getId();
-	cal.reparent(event.item.getMenu());
-	event.item._toggleMenu();
 };
 
 Dwt_Date_XFormItem.prototype.getButtonLabel = function (newValue) {

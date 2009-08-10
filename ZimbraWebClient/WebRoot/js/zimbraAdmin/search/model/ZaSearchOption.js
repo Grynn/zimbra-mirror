@@ -346,12 +346,12 @@ function (optionId, height){
 							enableDisableChecks:[],visibilityChecks:[] }
 		 			]
 		 		},
-		 		{type: _GROUP_, colSpan: "*", numCols: 2, colSize: ["40px", "auto"],
+		 		{type: _GROUP_, colSpan: "*", numCols: 2, colSize: ["60px", "auto"],
 		 			items: [
 			 		{ref:ZaSearchOption.A_accountLastLoginTime_From, colSpan: "*", type:_DWT_DATETIME_,
 			 			onChange: ZaSearchBuilderController.handleOptions,
 			 			visibilityChecks:[[XForm.checkInstanceValue,ZaSearchOption.A_enableAccountLastLoginTime_From,"TRUE"]],
-			 			bmolsnr:true,
+			 			bmolsnr:true,firstDayOfWeek:ZaZimbraAdmin.FIRST_DAY_OF_WEEK,
                         visibilityChangeEventSources: [ZaSearchOption.A_enableAccountLastLoginTime_From] ,
 			 			label:ZaMsg.search_option_label_from, labelLocation:_LEFT_
 					},
@@ -359,7 +359,7 @@ function (optionId, height){
 			 			onChange: ZaSearchBuilderController.handleOptions,	
 			 			visibilityChecks:[[XForm.checkInstanceValue,ZaSearchOption.A_enableAccountLastLoginTime_To,"TRUE"]],
                         visibilityChangeEventSources: [ZaSearchOption.A_enableAccountLastLoginTime_To] ,			 				 				
-			 			bmolsnr:true,
+			 			bmolsnr:true,firstDayOfWeek:ZaZimbraAdmin.FIRST_DAY_OF_WEEK,
                         label:ZaMsg.search_option_label_to, labelLocation:_LEFT_
 					}]
 		 		},
