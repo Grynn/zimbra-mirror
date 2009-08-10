@@ -38,7 +38,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/xercesImpl-2.9.1.jar"/>
-	<classpathentry kind="lib" path="jars/ymail.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/log4j-1.2.8.jar" sourcepath="/ThirdParty/jakarta-log4j-1.2.8">
 		<attributes>
 			<attribute name="javadoc_location" value="http://logging.apache.org/log4j/docs/api/"/>
@@ -49,8 +48,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jdom.jar" sourcepath="/ThirdParty/jdom-1.1/src"/>
 	<classpathentry kind="lib" path="jars/gdata-client-1.0.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-client-meta-1.0.jar"/>
-	<classpathentry kind="lib" path="jars/gdata-contacts-2.0.jar"/>
-	<classpathentry kind="lib" path="jars/gdata-contacts-meta-2.0.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-core-1.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.4.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/activation.jar">
@@ -60,5 +57,7 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSyncClient"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSyncCommon"/>
+	<classpathentry kind="lib" path="jars/gdata-contacts-3.0.jar"/>
+	<classpathentry kind="lib" path="jars/gdata-contacts-meta-3.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
