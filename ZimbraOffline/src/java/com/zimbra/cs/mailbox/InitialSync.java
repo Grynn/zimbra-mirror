@@ -33,6 +33,7 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.httpclient.Header;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.BufferStream;
 import com.zimbra.common.util.CopyInputStream;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
@@ -1117,6 +1118,7 @@ public class InitialSync {
         Blob blob = null;
         int bufLen = Provisioning.getInstance().getLocalServer().getMailDiskStreamingThreshold();
         CopyInputStream cs = new CopyInputStream(in, sizeHint, bufLen, bufLen);
+        BufferStream bs = cs.getBufferStream();
         byte data[] = null;
         String digest = null;
         ParsedMessage pm = null;
@@ -1127,7 +1129,7 @@ public class InitialSync {
             convId = Mailbox.ID_AUTO_INCREMENT;
         try {
             blob = StoreManager.getInstance().storeIncoming(cs, sizeHint, null);
-            data = cs.getBuffer();
+            data = bs.isPartial() ? null : bs.getBuffer();
             OfflineLog.offline.debug("message id=%d streamed to %s", id,
                 data == null ? blob.getPath() : "memory" );
         } catch (Exception e) {
