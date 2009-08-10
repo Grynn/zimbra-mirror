@@ -1160,8 +1160,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 					msgName:ZaMsg.NAD_CanonicalFrom,label:ZaMsg.NAD_CanonicalFrom, labelLocation:_LEFT_, align:_LEFT_
 				},
 				{ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_,
-				  msgName:ZaMsg.NAD_zimbraHideInGal,
-				  label:ZaMsg.NAD_zimbraHideInGal, trueValue:"TRUE", falseValue:"FALSE"
+				  msgName:ZaMsg.LBL_zimbraHideInGal,
+				  label:ZaMsg.LBL_zimbraHideInGal, trueValue:"TRUE", falseValue:"FALSE"
 				}
 			]}
 		];

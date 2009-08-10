@@ -795,7 +795,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 							},	
    							{ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_, trueValue:"TRUE", falseValue:"FALSE", align:_LEFT_,
 								visibilityChecks:[],
-                                label:ZaMsg.NAD_zimbraHideInGal, msgName:ZaMsg.NAD_zimbraHideInGal, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px"
+                                label:ZaMsg.LBL_zimbraHideInGal, msgName:ZaMsg.LBL_zimbraHideInGal, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px"
 							}
 						]
 					},
