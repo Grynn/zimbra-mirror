@@ -288,7 +288,7 @@ function() {
 	tree.addSelectionListener(l);
 	var mtaList = ZaApp.getInstance().getPostQList().getArray();
 	var showAddresses = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI];
-	var showTools = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] || (mtaList && mtaList.length);
+	var showTools = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI];
 	var showConfig = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI];
 	var showMonitoring = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI];
 	if(!showAddresses) {
@@ -324,6 +324,14 @@ function() {
 		}
 	}	
 
+	if(!showTools) {
+		for(var i=0;i<ZaSettings.OVERVIEW_TOOLS_ITEMS.length;i++) {
+			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.OVERVIEW_TOOLS_ITEMS[i]]) {
+				showTools = true;
+				break;
+			}
+		}
+	}
 	var ti;
 	if(showAddresses) {
 		this._addressesTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
@@ -531,30 +539,31 @@ function() {
 		this._toolsTi.enableSelection(false);	
 		this._toolsTi.setText(ZaMsg.OVP_tools);
 		this._toolsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._TOOLS);
-				
-		try {
-			this._postqTi = new DwtTreeItem(this._toolsTi);
-			this._postqTi.setText(ZaMsg.OVP_postq);
-			this._postqTi.setImage("Queue");
-			this._postqTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSTQ_VIEW);
-	
-			if(mtaList && mtaList.length) {
-				var cnt = mtaList.length;
-				for(var ix=0; ix< cnt; ix++) {
-					var ti1 = new DwtTreeItem(this._postqTi);			
-					ti1.setText(mtaList[ix].name);	
-					ti1.setImage("Queue");
-					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW);
-					ti1.setData(ZaOverviewPanelController._OBJ_ID, mtaList[ix].id);
-					this._mailqMap[mtaList[ix].id] = ti1;
-				}
-			}
-		} catch (ex) {
-			this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
-		}
+		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.MAILQ_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {		
+			try {
+				this._postqTi = new DwtTreeItem(this._toolsTi);
+				this._postqTi.setText(ZaMsg.OVP_postq);
+				this._postqTi.setImage("Queue");
+				this._postqTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSTQ_VIEW);
 		
-		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._POSTQ_VIEW] = ZaOverviewPanelController.postqTreeListener;				
-		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW] = ZaOverviewPanelController.postqByServerTreeListener;						
+				if(mtaList && mtaList.length) {
+					var cnt = mtaList.length;
+					for(var ix=0; ix< cnt; ix++) {
+						var ti1 = new DwtTreeItem(this._postqTi);			
+						ti1.setText(mtaList[ix].name);	
+						ti1.setImage("Queue");
+						ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW);
+						ti1.setData(ZaOverviewPanelController._OBJ_ID, mtaList[ix].id);
+						this._mailqMap[mtaList[ix].id] = ti1;
+					}
+				}
+			} catch (ex) {
+				this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
+			}
+			
+			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._POSTQ_VIEW] = ZaOverviewPanelController.postqTreeListener;				
+			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW] = ZaOverviewPanelController.postqByServerTreeListener;
+		}						
 	}
 		
 	//SavedSearches Tree	
