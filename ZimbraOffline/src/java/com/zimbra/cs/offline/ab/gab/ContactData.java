@@ -15,17 +15,28 @@
 package com.zimbra.cs.offline.ab.gab;
 
 import com.google.gdata.data.contacts.ContactEntry;
-import com.google.gdata.data.ValueConstruct;
+import com.google.gdata.data.contacts.Nickname;
+import com.google.gdata.data.contacts.Birthday;
 import com.google.gdata.data.TextContent;
-import com.google.gdata.data.TextConstruct;
 import com.google.gdata.data.PlainTextConstruct;
-import com.google.gdata.data.extensions.PostalAddress;
 import com.google.gdata.data.extensions.Email;
 import com.google.gdata.data.extensions.Im;
 import com.google.gdata.data.extensions.Organization;
 import com.google.gdata.data.extensions.PhoneNumber;
 import com.google.gdata.data.extensions.OrgName;
 import com.google.gdata.data.extensions.OrgTitle;
+import com.google.gdata.data.extensions.GivenName;
+import com.google.gdata.data.extensions.AdditionalName;
+import com.google.gdata.data.extensions.FamilyName;
+import com.google.gdata.data.extensions.NamePrefix;
+import com.google.gdata.data.extensions.NameSuffix;
+import com.google.gdata.data.extensions.StructuredPostalAddress;
+import com.google.gdata.data.extensions.Street;
+import com.google.gdata.data.extensions.City;
+import com.google.gdata.data.extensions.Region;
+import com.google.gdata.data.extensions.PostCode;
+import com.google.gdata.data.extensions.Country;
+import com.google.gdata.data.extensions.OrgDepartment;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -36,7 +47,8 @@ import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.Contact.Attachment;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.offline.ab.Ab;
-import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.ab.Address;
+import com.zimbra.cs.offline.ab.Name;
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 
@@ -109,87 +121,38 @@ public class ContactData {
     }
 
     private void importContact(ContactEntry contact) {
-        TextConstruct title = contact.getTitle();
-        if (title != null) {
-            importName(title.getPlainText());
-        }
+        Name name = toName(contact.getName());
+        fields.putAll(name.toContactFields());
         importEmail(contact, 0, A_email);
         importEmail(contact, 1, A_email2);
         importEmail(contact, 2, A_email3);
         importIm(contact, 0, A_imAddress1);
         importIm(contact, 1, A_imAddress2);
         importIm(contact, 2, A_imAddress3);
-        PostalAddress homeAddr = getPostalAddress(contact, PostalAddress.Rel.HOME);
-        if (homeAddr != null) {
-            importHomeAddress(Address.parse(homeAddr.getValue()));
-        } else {
-            importHomeAddress(new Address());
-        }
-        PostalAddress workAddr = getPostalAddress(contact, PostalAddress.Rel.WORK);
-        if (workAddr != null) {
-            importWorkAddress(Address.parse(workAddr.getValue()));
-        } else {
-            importWorkAddress(new Address());
-        }
+        Address homeAddr = toAddress(
+            getStructuredPostalAddress(contact, StructuredPostalAddress.Rel.HOME));
+        fields.putAll(homeAddr.toHomeContactFields());
+        Address workAddr = toAddress(
+            getStructuredPostalAddress(contact, StructuredPostalAddress.Rel.WORK));
+        fields.putAll(workAddr.toWorkContactFields());
+        Address otherAddr = toAddress(
+            getStructuredPostalAddress(contact, StructuredPostalAddress.Rel.OTHER));
+        fields.putAll(otherAddr.toWorkContactFields());
         for (Map.Entry<String, String> e : PHONES.entrySet()) {
             importPhone(contact, e.getKey(), e.getValue());
         }
-        if (contact.hasOrganizations()) {
-            Organization organization = contact.getOrganizations().get(0);
-            set(A_company, getValue(organization.getOrgName()));
-            set(A_jobTitle, getValue(organization.getOrgTitle()));
-        } else {
-            set(A_company, null);
-            set(A_jobTitle, null);
-        }
+        importOrganization(contact);
+        set(A_birthday, contact.hasBirthday() ? contact.getBirthday().getValue() : null);
+        set(A_nickname, contact.hasNickname() ? contact.getNickname().getValue() : null);
+        set(A_notes, null);
         if (contact.getContent() != null) {
             TextContent notes = contact.getTextContent();
             if (notes != null) {
                 set(A_notes, notes.getContent().getPlainText());
-            } else {
-                set(A_notes, null);
             }
         }
     }
 
-    private void exportContact(ContactEntry contact) {
-        exportName(contact);
-        exportEmail(contact, 0, A_email);
-        exportEmail(contact, 1, A_email2);
-        exportEmail(contact, 2, A_email3);
-        exportIm(contact, 0, A_imAddress1);
-        exportIm(contact, 1, A_imAddress2);
-        exportIm(contact, 2, A_imAddress3);
-        exportHomeAddress(contact);
-        exportWorkAddress(contact);
-        for (Map.Entry<String, String> e : PHONES.entrySet()) {
-            exportPhone(contact, e.getKey(), e.getValue());
-        }
-        exportOrganization(contact);
-        String notes = get(A_notes);
-        if (notes != null) {
-            contact.setContent(new PlainTextConstruct(notes));
-        }
-    }
-
-    private void exportOrganization(ContactEntry contact) {
-        String company = get(A_company);
-        String title = get(A_jobTitle);
-        if (company != null || title != null) {
-            Organization org;
-            List<Organization> orgs = contact.getOrganizations();
-            if (orgs.size() > 0) {
-                org = orgs.get(0);
-            } else {
-                org = new Organization();
-                org.setRel(Organization.Rel.WORK);
-                orgs.add(org);
-            }
-            org.setOrgName(new OrgName(company));
-            org.setOrgTitle(new OrgTitle(title));
-        }
-    }
-    
     private void importEmail(ContactEntry contact, int index, String field) {
         if (contact.hasEmailAddresses()) {
             List<Email> emails = contact.getEmailAddresses();
@@ -211,17 +174,6 @@ public class ContactData {
         }
         set(field, null);
     }
-    
-    private PostalAddress getPostalAddress(ContactEntry contact, String type) {
-        if (contact.hasPostalAddresses()) {
-            for (PostalAddress addr : contact.getPostalAddresses()) {
-                if (type.equals(addr.getRel()) && addr.getValue() != null) {
-                    return addr;
-                }
-            }
-        }
-        return null;
-    }
 
     private void importPhone(ContactEntry contact, String type, String field) {
         if (contact.hasPhoneNumbers()) {
@@ -235,31 +187,39 @@ public class ContactData {
         set(field, null);
     }
 
-    private void exportPhone(ContactEntry contact, String type, String field) {
-        String value = get(field);
-        if (value != null) {
-            for (PhoneNumber phone : contact.getPhoneNumbers()) {
-                if (type.equals(phone.getRel())) {
-                    phone.setPhoneNumber(value);
-                    return;
-                }
-            }
-            PhoneNumber phone = new PhoneNumber();
-            phone.setPhoneNumber(value);
-            phone.setRel(type);
-            contact.getPhoneNumbers().add(phone);
+    private void importOrganization(ContactEntry contact) {
+        if (contact.hasOrganizations()) {
+            Organization org = contact.getOrganizations().get(0);
+            set(A_company, org.hasOrgName() ? org.getOrgName().getValue() : null);
+            set(A_jobTitle, org.hasOrgTitle() ? org.getOrgTitle().getValue() : null);
+            set(A_department, org.hasOrgDepartment() ? org.getOrgDepartment().getValue() : null);
+        } else {
+            set(A_company, null);
+            set(A_jobTitle, null);
+            set(A_department, null);
         }
     }
 
-    private void exportName(ContactEntry contact) {
-        Name name = new Name();
-        name.setFirst(get(A_firstName));
-        name.setMiddle(get(A_middleName));
-        name.setLast(get(A_lastName));
-        name.setPrefix(get(A_namePrefix));
-        String title = name.toString();
-        if (title.length() > 0) {
-            contact.setTitle(new PlainTextConstruct(title));
+    private void exportContact(ContactEntry contact) {
+        contact.setName(toGoogleName(Name.fromContactFields(fields)));
+        exportEmail(contact, 0, A_email);
+        exportEmail(contact, 1, A_email2);
+        exportEmail(contact, 2, A_email3);
+        exportIm(contact, 0, A_imAddress1);
+        exportIm(contact, 1, A_imAddress2);
+        exportIm(contact, 2, A_imAddress3);
+        exportAddress(contact, Address.fromHomeContactFields(fields), StructuredPostalAddress.Rel.HOME);
+        exportAddress(contact, Address.fromWorkContactFields(fields), StructuredPostalAddress.Rel.WORK);
+        exportAddress(contact, Address.fromOtherContactFields(fields), StructuredPostalAddress.Rel.OTHER);
+        for (Map.Entry<String, String> e : PHONES.entrySet()) {
+            exportPhone(contact, e.getKey(), e.getValue());
+        }
+        contact.setNickname(new Nickname(get(A_nickname)));
+        contact.setBirthday(new Birthday(get(A_birthday)));
+        exportOrganization(contact);
+        String notes = get(A_notes);
+        if (notes != null) {
+            contact.setContent(new PlainTextConstruct(notes));
         }
     }
 
@@ -292,70 +252,129 @@ public class ContactData {
             }
         }
     }
+
+    private void exportAddress(ContactEntry contact, Address addr, String type) {
+        if (addr.isEmpty()) return;
+        StructuredPostalAddress spa = getStructuredPostalAddress(contact, type);
+        if (spa == null) {
+            spa = new StructuredPostalAddress();
+            spa.setRel(type);
+        } else if (spa.hasFormattedAddress()) {
+            spa.setFormattedAddress(null);
+        }
+        spa.setStreet(addr.hasStreet() ? new Street(addr.getStreet()) : null);
+        spa.setCity(addr.hasCity() ? new City(addr.getCity()) : null);
+        spa.setRegion(addr.hasState() ? new Region(addr.getState()) : null);
+        spa.setPostcode(addr.hasPostalCode() ? new PostCode(addr.getPostalCode()) : null);
+        spa.setCountry(addr.hasCountry() ? new Country(null, addr.getCountry()) : null);
+    }
+
+    private StructuredPostalAddress getStructuredPostalAddress(ContactEntry contact, String type) {
+        if (contact.hasStructuredPostalAddresses()) {
+            for (StructuredPostalAddress addr : contact.getStructuredPostalAddresses()) {
+                if (type.equals(addr.getRel())) {
+                    return addr;
+                }
+            }
+        }
+        return null;
+    }
     
-    private void importHomeAddress(Address addr) {
-        set(A_homeStreet, addr.getStreet());
-        set(A_homeCity, addr.getCity());
-        set(A_homeState, addr.getState());
-        set(A_homePostalCode, addr.getZip());
-        set(A_homeCountry, addr.getCountry());
-    }
-
-    private void importWorkAddress(Address addr) {
-        set(A_workStreet, addr.getStreet());
-        set(A_workCity, addr.getCity());
-        set(A_workState, addr.getState());
-        set(A_workPostalCode, addr.getZip());
-        set(A_workCountry, addr.getCountry());
-    }
-
-    private void exportHomeAddress(ContactEntry contact) {
-        Address addr = new Address();
-        addr.setStreet(get(A_homeStreet));
-        addr.setCity(get(A_homeCity));
-        addr.setState(get(A_homeState));
-        addr.setZip(get(A_homePostalCode));
-        addr.setCountry(get(A_homeCountry));
-        String value = addr.toString();
-        if (value.length() > 0) {
-            PostalAddress pa = getPostalAddress(contact, PostalAddress.Rel.HOME);
-            if (pa == null) {
-                pa = new PostalAddress();
-                pa.setRel(PostalAddress.Rel.HOME);
-                contact.getPostalAddresses().add(pa);
+    private void exportPhone(ContactEntry contact, String type, String field) {
+        String value = get(field);
+        if (value != null) {
+            for (PhoneNumber phone : contact.getPhoneNumbers()) {
+                if (type.equals(phone.getRel())) {
+                    phone.setPhoneNumber(value);
+                    return;
+                }
             }
-            pa.setValue(value);
+            PhoneNumber phone = new PhoneNumber();
+            phone.setPhoneNumber(value);
+            phone.setRel(type);
+            contact.getPhoneNumbers().add(phone);
         }
     }
-
-    private void exportWorkAddress(ContactEntry contact) {
-        Address addr = new Address();
-        addr.setStreet(get(A_workStreet));
-        addr.setCity(get(A_workCity));
-        addr.setState(get(A_workState));
-        addr.setZip(get(A_workPostalCode));
-        addr.setCountry(get(A_workCountry));
-        String value = addr.toString();
-        if (value.length() > 0) {
-            PostalAddress pa = getPostalAddress(contact, PostalAddress.Rel.WORK);
-            if (pa == null) {
-                pa = new PostalAddress();
-                pa.setRel(PostalAddress.Rel.WORK);
-                contact.getPostalAddresses().add(pa);
+    
+    private void exportOrganization(ContactEntry contact) {
+        String company = get(A_company);
+        String title = get(A_jobTitle);
+        String dept = get(A_department);
+        if (company != null || title != null || dept != null) {
+            Organization org;
+            List<Organization> orgs = contact.getOrganizations();
+            if (orgs.size() > 0) {
+                org = orgs.get(0);
+            } else {
+                org = new Organization();
+                org.setRel(Organization.Rel.WORK);
+                orgs.add(org);
             }
-            pa.setValue(value);
+            org.setOrgName(new OrgName(company));
+            org.setOrgTitle(new OrgTitle(title));
+            org.setOrgDepartment(new OrgDepartment(dept));
         }
     }
 
-    private void importName(String spec) {
-        Name name = Name.parse(spec);
-        if (name != null) {
-            set(A_firstName, name.getFirst());
-            set(A_middleName, name.getMiddle());
-            set(A_lastName, name.getLast());
-            set(A_namePrefix, name.getPrefix());
-            set(A_nameSuffix, null);
+    private static Address toAddress(StructuredPostalAddress spa) {
+        Address addr = new Address();
+        if (spa == null) {
+            return addr;
         }
+        if (spa.hasStreet()) {
+            addr.setStreet(spa.getStreet().getValue());
+        }
+        if (spa.hasCity()) {
+            addr.setCity(spa.getCity().getValue());
+        }
+        if (spa.hasRegion()) {
+            addr.setState(spa.getRegion().getValue());
+        }
+        if (spa.hasPostcode()) {
+            addr.setPostalCode(spa.getPostcode().getValue());
+        }
+        if (spa.hasCountry()) {
+            addr.setCountry(spa.getCountry().getValue());
+        }
+        if (addr.isEmpty() && spa.hasFormattedAddress()) {
+            return Address.parse(spa.getFormattedAddress().getValue());
+        }
+        return addr;
+    }
+    
+    private static Name toName(com.google.gdata.data.extensions.Name gname) {
+        Name name = new Name();
+        if (gname == null) return name;
+        name.setFirst(gname.hasGivenName() ? gname.getGivenName().getValue() : null);
+        name.setMiddle(gname.hasAdditionalName() ? gname.getAdditionalName().getValue() : null);
+        name.setLast(gname.hasFamilyName() ? gname.getFamilyName().getValue() : null);
+        name.setPrefix(gname.hasNamePrefix() ? gname.getNamePrefix().getValue() : null);
+        name.setSuffix(gname.hasNameSuffix() ? gname.getNameSuffix().getValue() : null);
+        if (name.isEmpty() && gname.hasFullName()) {
+            return Name.parse(gname.getFullName().getValue());
+        }
+        return name;
+    }
+
+    private static com.google.gdata.data.extensions.Name toGoogleName(Name name) {
+        com.google.gdata.data.extensions.Name gname =
+            new com.google.gdata.data.extensions.Name();
+        if (name.hasFirst()) {
+            gname.setGivenName(new GivenName(name.getFirst(), null));
+        }
+        if (name.hasMiddle()) {
+            gname.setAdditionalName(new AdditionalName(name.getMiddle(), null));
+        }
+        if (name.hasLast()) {
+            gname.setFamilyName(new FamilyName(name.getLast(), null));
+        }
+        if (name.hasPrefix()) {
+            gname.setNamePrefix(new NamePrefix(name.getPrefix()));
+        }
+        if (name.hasSuffix()) {
+            gname.setNameSuffix(new NameSuffix(name.getSuffix()));
+        }
+        return gname;
     }
 
     private static final String ZIM_PREFIX = "zimbra:";
@@ -401,10 +420,6 @@ public class ContactData {
             im.setProtocol(Im.Protocol.MSN);
         }
         return im;
-    }
-
-    private String getValue(ValueConstruct vc) {
-        return vc != null ? vc.getValue() : null;
     }
 
     private void set(String name, String value) {

@@ -14,7 +14,10 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.ab.gab;
+package com.zimbra.cs.offline.ab;
+
+import com.zimbra.cs.offline.ab.Address;
+import com.zimbra.cs.offline.ab.Name;
 
 public class AddressTest {
     private static final String ADDRESSES[] = {

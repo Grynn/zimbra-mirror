@@ -21,7 +21,7 @@ public class SyncState {
     private int lastModSequence;
     private String lastRevision;
 
-    private static final String VERSION = "6";
+    private static final String VERSION = "7";
 
     private static final String KEY_VERSION = "VERSION";
     private static final String KEY_SEQUENCE = "SEQUENCE";

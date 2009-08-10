@@ -17,7 +17,6 @@ package com.zimbra.cs.offline.ab.gab;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.ab.Ab;
-import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.Contact.Attachment;
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;

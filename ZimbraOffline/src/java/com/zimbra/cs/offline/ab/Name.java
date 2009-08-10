@@ -12,20 +12,112 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.ab.gab;
+package com.zimbra.cs.offline.ab;
+
+import static com.zimbra.common.mailbox.ContactConstants.*;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Name {
-    private String prefix;
     private String first;
     private String middle;
     private String last;
+    private String prefix;
+    private String suffix;
 
     private static final String PREFIX = "[A-Za-z]{2,}\\.";
 
+    public Name() {}
+
+    public String getFirst() {
+        return first;
+    }
+
+    public boolean hasFirst() {
+        return first != null;
+    }
+    
+    public void setFirst(String first) {
+        this.first = first;
+    }
+
+    public String getMiddle() {
+        return middle;
+    }
+
+    public boolean hasMiddle() {
+        return middle != null;
+    }
+    
+    public void setMiddle(String middle) {
+        this.middle = middle;
+    }
+
+    public String getLast() {
+        return last;
+    }
+
+    public boolean hasLast() {
+        return last != null;
+    }
+    
+    public void setLast(String last) {
+        this.last = last;
+    }
+        
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public boolean hasPrefix() {
+        return prefix != null;
+    }
+    
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public boolean hasSuffix() {
+        return suffix != null;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
+
+    public boolean isEmpty() {
+        return !hasFirst() && !hasMiddle() && !hasLast() && !hasPrefix() &&
+               !hasSuffix();
+    }
+    
+    public static Name fromContactFields(Map<String, String> fields) {
+        Name name = new Name();
+        name.first = fields.get(A_firstName);
+        name.middle = fields.get(A_middleName);
+        name.last = fields.get(A_lastName);
+        name.prefix = fields.get(A_namePrefix);
+        name.suffix = fields.get(A_nameSuffix);
+        return name;
+    }
+
+    public Map<String, String> toContactFields() {
+        Map<String, String> fields = new HashMap<String, String>();
+        fields.put(A_firstName, first);
+        fields.put(A_middleName, middle);
+        fields.put(A_lastName, last);
+        fields.put(A_namePrefix, prefix);
+        fields.put(A_nameSuffix, suffix);
+        return fields;
+    }
+    
     public static Name parse(String spec) {
         Name name = new Name();
         List<String> parts = getParts(spec);
@@ -73,41 +165,7 @@ public class Name {
         }
         return sb.toString();
     }
-
-    public Name() {}
     
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-
-    public String getFirst() {
-        return first;
-    }
-
-    public void setFirst(String first) {
-        this.first = first;
-    }
-
-    public String getMiddle() {
-        return middle;
-    }
-
-    public void setMiddle(String middle) {
-        this.middle = middle;
-    }
-
-    public String getLast() {
-        return last;
-    }
-
-    public void setLast(String last) {
-        this.last = last;
-    }
-
     public String toString() {
         StringBuffer sb = new StringBuffer();
         if (prefix != null) sb.append(prefix).append(' ');
