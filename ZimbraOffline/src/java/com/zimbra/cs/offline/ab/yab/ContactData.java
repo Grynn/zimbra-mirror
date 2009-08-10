@@ -80,6 +80,7 @@ public class ContactData implements Serializable {
         importField(A_homeStreet, getHomeAddress(zfields));
         importField(A_workStreet, getWorkAddress(zfields));
         importField(A_birthday, getBirthday(zfields));
+        importField(A_otherAnniversary, getAnniversary(zfields));
         for (Map.Entry<String, String> entry : zfields.entrySet()) {
             String name = entry.getKey();
             importField(name, getSimple(name, entry.getValue()));
@@ -101,8 +102,11 @@ public class ContactData implements Serializable {
                 importField(A_workStreet, field);
             }
         } else if (field.isDate()) {
-            if (((DateField) field).isBirthday()) {
+            DateField df = (DateField) field;
+            if (df.isBirthday()) {
                 importField(A_birthday, field);
+            } else if (df.isAnniversary()) {
+                importField(A_otherAnniversary, field);
             }
         } else if (field.isSimple()) {
             String name = getSimpleName((SimpleField) field);
@@ -166,7 +170,20 @@ public class ContactData implements Serializable {
             try {
                 return DateField.birthday(sdf.parse(value));
             } catch (ParseException e) {
-                OfflineLog.yab.warn("Cannot parse birthday field: " + value);
+                OfflineLog.yab.warn("Cannot parse birthday: " + value);
+            }
+        }
+        return null;
+    }
+
+    private static DateField getAnniversary(Map<String, String> fields) {
+        String value = fields.get(A_birthday);
+        if (value != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                return DateField.anniversary(sdf.parse(value));
+            } catch (ParseException e) {
+                OfflineLog.yab.warn("Cannot parse anniversary: " + value);
             }
         }
         return null;
@@ -285,6 +302,9 @@ public class ContactData implements Serializable {
                 break;
             case birthday:
                 fieldDelta.put(A_birthday, toString((DateField) field));
+                break;
+            case otherAnniversary:
+                fieldDelta.put(A_otherAnniversary, toString((DateField) field));
                 break;
             case imAddress1: case imAddress2: case imAddress3: {
                 SimpleField simple = (SimpleField) field;

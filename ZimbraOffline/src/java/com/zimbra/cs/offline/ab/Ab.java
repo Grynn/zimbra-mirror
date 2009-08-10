@@ -38,6 +38,9 @@ public final class Ab {
     public static final List<String> HOME_ADDRESS_FIELDS = Arrays.asList(
         A_homeStreet, A_homeCity, A_homeState, A_homePostalCode, A_homeCountry);
 
+    public static final List<String> OTHER_ADDRESS_FIELDS = Arrays.asList(
+        A_otherStreet, A_otherCity, A_otherState, A_otherPostalCode, A_otherCountry);
+
     public static final List<String> EMAIL_FIELDS = Arrays.asList(
         A_email, A_email2, A_email3);
 
