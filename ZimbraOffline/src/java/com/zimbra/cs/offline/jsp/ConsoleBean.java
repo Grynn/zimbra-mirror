@@ -193,6 +193,8 @@ public class ConsoleBean extends PageBean {
 		    sum.flavor = "MSE";
 		else if (YmailBean.Domain.equals(domain))
 		    sum.flavor = "YMP";
+                else if (MobileMeBean.Domain.equals(domain))
+                    sum.flavor = "MobileMe";
 		else
 		    sum.flavor = "Imap";
 	    }

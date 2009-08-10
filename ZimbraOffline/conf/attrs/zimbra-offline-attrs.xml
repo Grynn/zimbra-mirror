@@ -67,7 +67,7 @@
 </attr>
 
 <attr name="offlineAccountFlavor" type="string" cardinality="single" optionalIn="account" flags="accountInfo">
-  <desc>Flavor of account type (i.e. Ymail, Gmail, Live, Zimbra, Pop, Imap...)</desc>
+  <desc>Flavor of account type (i.e. Ymail, Gmail, Live, MobileMe, Zimbra, Pop, Imap...)</desc>
 </attr>
 
 <attr name="offlineAccountName" type="string" cardinality="single" optionalIn="account">

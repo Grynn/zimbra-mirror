@@ -99,6 +99,23 @@ public class OfflineLC {
     public static final KnownKey zdesktop_message_cache_size;
     public static final KnownKey zdesktop_volume_compression_threshold;
 
+    public static final KnownKey zdesktop_mobileme_domain =
+        new KnownKey("zdesktop_mobileme_domain", "me.com");
+    public static final KnownKey zdesktop_mobileme_imap_host =
+        new KnownKey("zdesktop_mobileme_imap_host", "mail.me.com");
+    public static final KnownKey zdesktop_mobileme_imap_port =
+        new KnownKey("zdesktop_mobileme_imap_port", "993");
+    public static final KnownKey zdesktop_mobileme_imap_connection_type =
+        new KnownKey("zdesktop_mobileme_imap_connection_type", "ssl");
+    public static final KnownKey zdesktop_mobileme_smtp_host =
+        new KnownKey("zdesktop_mobileme_smtp_host", "smtp.me.com");
+    public static final KnownKey zdesktop_mobileme_smtp_port =
+        new KnownKey("zdesktop_mobileme_smtp_port", "587");
+    public static final KnownKey zdesktop_mobileme_smtp_ssl =
+        new KnownKey("zdesktop_mobileme_smtp_ssl", "false");
+    public static final KnownKey zdesktop_mobileme_smtp_auth =
+        new KnownKey("zdesktop_mobileme_smtp_auth", "true");
+
     static void init() {
         // This method is there to guarantee static initializer of this
         // class is run.

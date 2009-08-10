@@ -179,6 +179,18 @@
             </fmt:message>
         </c:set>
     </c:when>
+    <c:when test="${accountFlavor eq 'MobileMe'}">
+        <jsp:useBean id="mmbean" class="com.zimbra.cs.offline.jsp.MobileMeBean" scope="request"/>
+        <jsp:setProperty name="mmbean" property="*"/>
+        <jsp:setProperty name="mmbean" property="locale" value="${pageContext.request.locale}"/>
+        ${zdf:doRequest(mmbean)}
+        <c:set var="bean" value="${mmbean}" scope="request"/>
+        <c:set var="beta">
+            <fmt:message key='BetaNoteMobileMe'>
+                <fmt:param>${betaLink}</fmt:param>
+            </fmt:message>
+        </c:set>
+    </c:when>
     <c:otherwise>
     </c:otherwise>
 </c:choose>
@@ -308,6 +320,7 @@ function onEditLink(id, keep) {
                   <option value="Gmail" <c:if test="${accountFlavor eq 'Gmail'}">selected</c:if> ><fmt:message key='Gmail'/></option>
                   <option value="Live" <c:if test="${accountFlavor eq 'Live'}">selected</c:if> ><fmt:message key='Live'/></option>
                   <option value="AOL" <c:if test="${accountFlavor eq 'AOL'}">selected</c:if> ><fmt:message key='AOL'/></option>
+                  <option value="MobileMe" <c:if test="${accountFlavor eq 'MobileMe'}">selected</c:if> ><fmt:message key='MobileMe'/></option>
                   <option value="Xsync" <c:if test="${accountFlavor eq 'Xsync'}">selected</c:if> ><fmt:message key='Xsync'/></option>
                   <option value="MSE" <c:if test="${accountFlavor eq 'MSE'}">selected</c:if> ><fmt:message key='MSE'/></option>
                   <option value="Imap" <c:if test="${accountFlavor eq 'Imap'}">selected</c:if> ><fmt:message key='Imap'/></option>
