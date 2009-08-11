@@ -119,6 +119,7 @@ PERL_LIBS 	:= \
 	Digest::SHA \
 	Error \
 	Mail::DKIM \
+	K/KH/KHAMPTON/XML-SAX-Base-1.04.tar.gz \
 	XML::SAX::Expat \
 	XML::Simple \
 	IO::Socket::INET6 \
