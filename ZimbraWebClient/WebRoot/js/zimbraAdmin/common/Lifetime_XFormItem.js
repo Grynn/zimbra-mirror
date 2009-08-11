@@ -152,7 +152,6 @@ Lifetime1_XFormItem.prototype.items = [
 Lifetime2_XFormItem = function() {}
 XFormItemFactory.createItemType("_LIFETIME2_", "lifetime2", Lifetime2_XFormItem, Lifetime1_XFormItem);
 
-
 Lifetime2_XFormItem.prototype.items = [
 	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,cssClass:"admin_xform_number_input", 
 		visibilityChecks:[],
