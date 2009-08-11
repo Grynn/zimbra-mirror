@@ -3,12 +3,12 @@
 # ***** BEGIN LICENSE BLOCK *****
 # Zimbra Collaboration Suite Server
 # Copyright (C) 2006, 2007, 2008, 2009 Zimbra, Inc.
-# 
+#
 # The contents of this file are subject to the Yahoo! Public License
 # Version 1.0 ("License"); you may not use this file except in
 # compliance with the License.  You may obtain a copy of the License at
 # http://www.zimbra.com/license.
-# 
+#
 # Software distributed under the License is distributed on an "AS IS"
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 # ***** END LICENSE BLOCK *****
@@ -22,581 +22,77 @@ zmdailyreport - report on email usage
 Usage: zmdailyreport [options]
 
   Options:
-    --user <email_address> Report usage for <email_address> only
     --mail                 Send report via email, default is stdout
-    --now                  Shortcut for midnight to the current time
-    --time <start>,<end>   Default is midnight to midnight of the previous day
-    --help                 Application usage
-
-Start and end times must be in YYYYMMDD[hhmmss] format
+    --help                 This help message
 
 =cut
-
-# For Debugging:
-#use Carp ();
-#$SIG{ __DIE__ } = sub { Carp::confess( @_ ) };
-
-# paranoia: leave warnings off by default in case db data is not "clean"
-#use warnings;
+#    --user <email_address> Report usage for <email_address> only
+#    --time <start>,<end>   Default is midnight to midnight of the previous day
+#    --now                  Shortcut for midnight to the current time
+use warnings;
 use strict;
-
+use Pod::Usage qw(pod2usage);
 use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Util::Common;
 use Zimbra::Mon::Logger;
-
-use DBI;
-use File::Basename qw(basename);
-use FileHandle ();
 use Getopt::Long qw(GetOptions);
 use Mail::Mailer ();
-use Pod::Usage qw(pod2usage);
 use POSIX qw(strftime);
 use Time::Local qw(timelocal);
 
-###
-# Globals
-###
-my ( %Opt, $Debug, $Sql, @Report );
-my $Prog = basename($0);
+my ( %Opt, $Debug );
 
-###
-# Main Processing
-###
 GetOptions( \%Opt, "mailreport", "now", "debug", "user=s", "time=s", "help" )
   or pod2usage( -exitval => 2 );
-
-# set globals
-$Debug = $Opt{debug};
-$Sql   = _getSql();
-
+  
 pod2usage( -exitval => 1, -verbose => 0 ) if ( $Opt{help} );
-pod2usage("$Prog: can only specify one of -now and -time")
-  if ( $Opt{now} and $Opt{time} );
 
-my ( $tStart, $tEnd ) = getTimes( now => $Opt{now}, time => $Opt{time} );
-
-if ( !$tStart and !$tEnd ) {
-    pod2usage("$Prog: unable to determine start and end times");
-}
-elsif ( !$tStart ) {
-    pod2usage("$Prog: unable to determine a start time");
-}
-elsif ( !$tEnd ) {
-    pod2usage("$Prog: unable to determine an end time");
-}
-
-addToReport(
-    "$Prog from $tStart to $tEnd\n",
-    ( $Opt{user} ? "\tfor $Opt{user}\n" : () ),
-);
-
-my $dbh     = connectDb();
-my $msgs    = getMsgIds( start => $tStart, end => $tEnd, user => $Opt{user} );
-my $senders = getSenders( start => $tStart, end => $tEnd );
-my $recips  = getRecipients( start => $tStart, end => $tEnd );
-my $errors  = getErrors( start => $tStart, end => $tEnd );
-
-displayStats(
-    msgs    => $msgs,
-    senders => $senders,
-    recips  => $recips,
-    errors  => $errors
-);
-
-if ( $Opt{mailreport} ) {
-    sendEmailReport( start => $tStart, end => $tEnd, data => \@Report );
-}
-else {
-    print @Report;
-}
-
-###
-# Subroutines
-###
-
-# usage: getTimes( now => $Opt{now}, time => $Opt{time} )
-sub getTimes {
-    my %arg = @_;
-
-    my ( $start, $end );
-    if ( $arg{time} ) {
-        ( $start, $end ) = split( /\s*,\s*/, $arg{time} );
-        $start = timeToSqlTime($start);
-        $end = timeToSqlTime($end) if ($end);
-    }
-    elsif ( $arg{now} ) {
-        $start = tsToSqlTime( time(), 1 );
-        $end   = tsToSqlTime( time(), 0 );
-    }
-    else {    # default to the previous day
-        $start = tsToSqlTime( ( time() - ( 60 * 60 * 24 ) ), 1 );
-        $end = tsToSqlTime( time(), 1 );
-    }
-    return ( $start, $end );
-}
-
-# usage: getMsgIds( start => $datetime, end => $datetime, user => $email )
-# NOTES:
-# - old code sorted messages by arrive_time but that is unnecessary
-sub getMsgIds {
-    my %arg = @_;
-
-    # TODO:
-    # - for additional safety we should quote the user argument
-    # - could support multiple user arguments
-    my $user = $arg{user};
-
-    my ( @where, @bind );
-
-    push( @where, "(sender like '%$user%' or recipient like '%$user%')" )
-      if ($user);
-
-    if ( $arg{start} ) {
-        push( @where, "arrive_time >= ?" );
-        push( @bind,  $arg{start} );
-    }
-    if ( $arg{end} ) {
-        push( @where, "arrive_time <= ?" );
-        push( @bind,  $arg{end} );
-    }
-
-    my $sql = "select distinct(msgid) from mta";
-    $sql .= " where " . join( " and ", @where ) if (@where);
-
-    # get the unique ids (first column) efficiently using bind_columns
-    my @ids;
-    {
-        my $msgid;
-        my $sth = execSelect( $sql, @bind );
-        $sth->bind_columns( \$msgid );
-        while ( $sth->fetch ) { push( @ids, $msgid ); }
-    }
-
-    my ( @msgs, $count );
-    foreach my $id (@ids) {
-        $count++;
-        push( @msgs, traceProcessedMsg($id) );
-    }
-
-    warn("DEBUG: getMsgIds: found $count messages\n") if ($Debug);
-    return \@msgs;
-}
-
-# usage: getSenders( start => $datetime, end => $datetime )
-sub getSenders {
-    my %arg = @_;
-    my $sql =
-        "select s2, count(s2) as C from "
-      . "(select distinct(msgid), sender as s2 from mta "
-      . "where sender is not null and arrive_time >= ? and arrive_time <= ?) "
-      . "as foo group by s2 order by C desc";
-
-    my %data;
-    my $sth = execSelect( $sql, $arg{start}, $arg{end} );
-
-    my ( $sender, $msgcount );
-    $sth->bind_columns( \$sender, \$msgcount );
-    while ( $sth->fetch ) { $data{$sender} = $msgcount; }
-
-    return \%data;
-}
-
-# usage: getRecipients( start => $datetime, end => $datetime )
-sub getRecipients {
-    my %arg = @_;
-    my $sql =
-        "select recipient, count(distinct(msgid)) as C from mta "
-      . "where recipient is not null and arrive_time >= ? and arrive_time <= ?"
-      . " group by recipient order by C desc";
-
-    my %data;
-    my $sth = execSelect( $sql, $arg{start}, $arg{end} );
-
-    my ( $recip, $msgcount );
-    $sth->bind_columns( \$recip, \$msgcount );
-    while ( $sth->fetch ) { $data{$recip} = $msgcount; }
-
-    return \%data;
-}
-
-# usage: getErrors( start => $datetime, end => $datetime )
-# NOTE:
-# - old code sorted by msgid
-# - added sender and recipient in report (bug# 25727)
-sub getErrors {
-    my %arg = @_;
-    my $sql =
-"select distinct(msgid), arrive_time as time, status, statusmsg as msg, sender, recipient from mta"
-      . " where status != 'sent' "
-      . " and arrive_time >= ? and arrive_time <= ? order by arrive_time";
-
-    my $sth = execSelect( $sql, $arg{start}, $arg{end} );
-    my $data = $sth->fetchall_arrayref( {} );
-}
-
-sub displayStats {
-    my %arg = @_;
-    my ( $msgs, $senders, $recips, $errors ) =
-      @arg{qw(msgs senders recips errors)};
-
-    my ( $msgcount, $msgbytes, $numrcpt, $delaytot ) = ( 0, 0, 0, 0 );
-
-    my $categorize = categorizer();
-    foreach my $msg (@$msgs) {
-        $msgcount++;
-
-        # BUG?: sometimes BYTES is NULL/undef in DB
-        if ( $msg->{BYTES} ) {
-            $msgbytes += $msg->{BYTES};
-            $categorize->( $msg->{BYTES} );
-        }
-
-        # Should only have msgId left after avoiding BYTES
-        foreach my $msgId ( keys %$msg ) {
-            next if ( $msgId eq "BYTES" );
-
-            # Loop through IPs for each msgId
-            my $counted = 0;
-            foreach my $fromIP ( keys %{ $msg->{$msgId} } ) {
-
-                my $rlist = $msg->{$msgId}{$fromIP}{recipList};
-
-                # only count recipients once per msgId
-                if ( !$counted ) {
-                    $counted = 1;
-                    $numrcpt += scalar( keys %$rlist );
-                }
-
-                # count delay only once for each ip regardless of recipient
-                foreach my $recip ( keys %$rlist ) {
-                    my $recRef = $rlist->{$recip};
-                    foreach my $lt ( keys %{ $recRef->{leaveTime} } ) {
-                        my $ltRef = $recRef->{leaveTime}{$lt};
-                        $delaytot += $ltRef->{delay};
-                    }
-                    last;
-                }
-            }
-        }
-    }
-
-    if ( !$msgcount ) {
-        addToReport("No messages found\n");
-        return;
-    }
-
-    my $bytesavg = sprintf( "%02.2f", $msgbytes / $msgcount );
-    my $rcptavg  = sprintf( "%02.2f", $numrcpt / $msgcount );
-    my $delayavg = sprintf( "%02.2f", $delaytot / $msgcount );
-    my $uniqrcpt = scalar keys %$recips;
-
-    addToReport(
-"\n$msgcount messages found for $numrcpt total recipients ($uniqrcpt unique)\n"
-    );
-
-    my $dfmt = "\t%15d    %-s\n";
-    my $ffmt = "\t%18.2f %-s\n";
-    addToReport(
-        sprintf( $dfmt, $msgbytes, "total bytes" ),
-        sprintf( $ffmt, $bytesavg, "average bytes/msg" ),
-        sprintf( $ffmt, $rcptavg,  "average recipients/msg" ),
-        sprintf( $ffmt, $delayavg, "average delay/msg (sec)" ),
-    );
-
-    my $cats = $categorize->();
-    my $hfmt = "\t%-13s %10s %15s\n";
-    my $fmt  = "\t%-13s %10d %15.2f\n";
-    my $prev = 0;
-
-    addToReport("\nMessage Size Distribution\n");
-    addToReport( sprintf( $hfmt, "Size Range", "# Msgs", "Size (KiBytes)" ) );
-    foreach my $cat ( sort { $a <=> $b } keys %$cats ) {
-        my $h = $cats->{$cat};
-        my $range = sprintf( "%5s - %5s", $prev, $h->{desc} );
-        addToReport( sprintf( $fmt, $range, $h->{count}, $h->{size} / 1024 ) );
-        $prev = $h->{desc};
-    }
-
-    addToReport("\nErrors\n");
-    foreach my $err (@$errors) {
-        $err->{sender} ||= "<>";
-        addToReport(
-            "@{$err}{qw(time status msg)}\n",
-            "\tfrom=$err->{sender} to=$err->{recipient}\n",
-        );
-    }
-
-    my $numSenders = getLocalConfig("zimbra_mtareport_max_senders") || 50;
-    my $i = 0;
-
-    addToReport("\nMost active senders\n");
-    foreach ( sort { $senders->{$b} <=> $senders->{$a} } keys %$senders ) {
-        last if ( $i++ > $numSenders );
-        addToReport( sprintf( "%9d %12s\n", $senders->{$_}, $_ ) );
-    }
-
-    my $numRecips = getLocalConfig("zimbra_mtareport_max_recipients") || 50;
-    $i = 0;
-
-    addToReport("\nMost active recipients\n");
-    foreach (
-        sort { $recips->{$b} <=> $recips->{$a} }
-        keys %$recips
-      )
-    {
-        last if ( $i++ > $numRecips );
-        addToReport( sprintf( "%9d %12s\n", $recips->{$_}, $_ ) );
-    }
-}
-
-# Data structure:
-# %msg = (
-#   "BYTES"  => <bytes>,
-#   <msgId>  => {
-#     <fromIP> => {
-#       "host"      => <host>,
-#       "sender"    => <sender> || "postmaster",
-#       "prevHost"  => <from_host>,
-#       "prevIp"    => <from_ip>,
-#       "recipList" => {
-#         <recipient> => {
-#           "nextHost"   => <to_host>,
-#           "nextIP"     => <to_IP>,
-#           "arriveTime" => <arrive_time>
-#           "recip"      => <recip>,
-#           "amavisPid"  => <amavis_pid> (IF <bytes>),
-#           "leaveTime"  => {
-#             <leave_time> => {
-#               "status" => <status>,
-#               "statusmsg" => <statusmsg>,
-#               "delay"     => <leave_time - arrive_time>,
-#             },
-#           }
-#         }
-#       }
-#     }
-#   }
-# )
-
-# NOTE: SQL moved out of traceProcessedMsg which is called in a tight loop
-sub _getSql {
-    my $recip_by_msgid = "select distinct(recipient) from mta where msgid=?";
-    my $row_by_msgid_recip =
-        "select arrive_time, leave_time, host, sender,"
-      . " status, statusmsg, from_host, from_ip, to_host, to_ip,"
-      . " bytes, amavis_pid"
-      . " from mta where msgid=? and recipient=?";
-    my $ip_val  = " and from_ip=?";
-    my $ip_null = " and from_ip IS NULL";
-
-    my %sql = (
-        recip_by_msgid_ipval  => $recip_by_msgid . $ip_val,
-        recip_by_msgid_ipnull => $recip_by_msgid . $ip_null,
-
-        row_by_msgid_recip_ipval  => $row_by_msgid_recip . $ip_val,
-        row_by_msgid_recip_ipnull => $row_by_msgid_recip . $ip_null,
-
-        row_amavis_by_msgid_pid =>
-          "select arrive_time, msgid, disposition, status,"
-          . " reason, hits, time, host"
-          . " from amavis where msgid=? and pid=?",
-    );
-
-    return \%sql;
-}
-
-sub traceProcessedMsg {
-    my $msgId = shift;
-
-    #warn("DEBUG: traceProcessedMsg: tracing msg $msgId\n") if ($Debug);
-
-    my $sql = "select distinct(from_IP) from mta where msgid=?";
-    my $sth = execSelect( $sql, $msgId );
-
-    my ( $fromIP, @fromIPs );
-    $sth->bind_columns( \$fromIP );
-    while ( $sth->fetch ) { push( @fromIPs, $fromIP ); }
-
-    my %msg;
-
-    foreach $fromIP (@fromIPs) {
-
-        my ( $sqlRecip, $sqlRow, @bind );
-
-        if ($fromIP) {
-            $sqlRecip = $Sql->{recip_by_msgid_ipval};
-            $sqlRow   = $Sql->{row_by_msgid_recip_ipval};
-            @bind     = ($fromIP);
-        }
-        else {
-            $fromIP   = "";
-            $sqlRecip = $Sql->{recip_by_msgid_ipnull};
-            $sqlRow   = $Sql->{row_by_msgid_recip_ipnull};
-        }
-
-        $sth = execSelect( $sqlRecip, $msgId, @bind );
-
-        my ( $recip, @recips );
-        $sth->bind_columns( \$recip );
-        while ( $sth->fetch ) { push( @recips, $recip ); }
-
-        # initialize hash reference
-        my $frmRef = $msg{$msgId}{$fromIP} = {};
-
-        foreach $recip (@recips) {
-
-            $sth = execSelect( $sqlRow, $msgId, $recip, @bind );
-
-            # initialize hash reference
-            my $recRef = $frmRef->{recipList}{$recip} = {};
-            my $haveFrm = 0;
-
-            while ( my $row = $sth->fetchrow_hashref ) {
-
-                $msg{BYTES} = $row->{bytes};
-
-                # only populate frm data one time per msgId
-                if ( !$haveFrm ) {
-                    $haveFrm = 1;
-                    $frmRef->{host} = $row->{host};
-                    $frmRef->{sender}   = $row->{sender} || "postmaster";
-                    $frmRef->{prevHost} = $row->{from_host};
-                    $frmRef->{prevIp}   = $row->{from_ip};
-                }
-
-                $recRef->{nextHost}   = $row->{to_host};
-                $recRef->{nextIp}     = $row->{to_ip};
-                $recRef->{arriveTime} = $row->{arrive_time};
-                $recRef->{amavisPid}  = $row->{amavis_pid}
-                  if ( defined $row->{bytes} );
-
-                $recRef->{leaveTime}{ $row->{leave_time} } = {
-                    "status"    => $row->{status},
-                    "statusmsg" => $row->{statusmsg},
-                    "delay"     => (
-                        sqlTimeToTs( $row->{leave_time} ) -
-                          sqlTimeToTs( $row->{arrive_time} )
-                    ),
-                };
-            }
-
-            # TODO: remove this?
-            if ( 0 and $Debug and $recRef->{amavisPid} ) {
-                my $sqlAmavis = $Sql->{row_amavis_by_msgid_pid};
-                $sth = execSelect( $sqlAmavis, $msgId, $recRef->{amavisPid} );
-                while ( my $row = $sth->fetchrow_hashref ) {
-                    $recRef->{amavis} = $row;
-                }
-            }
-        }
-    }
-
-    return \%msg;
-}
-
-sub execSelect {
-    my $sql  = shift;
-    my @bind = @_;
-
-    my $sth;
-    eval {
-        $sth = $dbh->prepare_cached($sql);
-        $sth->execute(@bind);
-    };
-    if ($@) {
-        logError( "sql: '$sql'\n",
-            ( @bind ? "bind: " . join( ", ", @bind ) . "\n" : () ) );
-        logError("sql execute failed: $@\n");
-        exit(2);
-    }
-
-    return $sth;
-}
-
-sub connectDb {
-    my $user   = "zimbra";
-    my $pass   = getLocalConfig("zimbra_logger_mysql_password");
-    my $mycnf  = getLocalConfig("logger_mysql_mycnf");
-    my $mysock = getLocalConfig("logger_mysql_socket");
-
-    my $dsn =
-"dbi:mysql:database=zimbra_logger;mysql_read_default_file=$mycnf;mysql_socket=$mysock";
-
-    my $dbh;
-    eval {
-        $dbh =
-          DBI->connect( $dsn, $user, $pass,
-            { RaiseError => 1, FetchHashKeyName => "NAME_lc" } );
-    };
-    if ( $@ or !$dbh ) {
-        logError("DB: Can't connect to $dsn: $@\n");
-        exit(2);
-    }
-
-    return $dbh;
-}
-
-sub tsToSqlTime {
-    my ( $ts, $trunc ) = @_;
-
-    my @T = localtime($ts);
-
-    return (
-        timeToSqlTime(
-            sprintf(
-                "%04d%02d%02d%02d%02d%02d",
-                $T[5] + 1900,
-                $T[4] + 1,
-                $T[3], $T[2], $T[1], $T[0]
-            ),
-            $trunc
-        )
-    );
-}
-
-sub timeToSqlTime {
-    my ( $ts, $trunc ) = @_;
-
-    if ( !defined($ts) or $ts =~ /^\s*$/ ) {
-        return "1000-01-01 00:00:00";
-    }
-
-    # IN: YYYYMMDDHHMMSS
-    # OUT: YYYY-MM-DD HH:MM:SS
-    my $dt = sprintf( "%4d-%02d-%02d ",
-        substr( $ts, 0, 4 ),
-        substr( $ts, 4, 2 ),
-        substr( $ts, 6, 2 ) );
-
-    if ($trunc) {
-        $dt .= "00:00:00";
-    }
-    else {
-        $dt .= sprintf( "%02d:%02d:%02d",
-            substr( $ts, 8,  2 ) ? substr( $ts, 8,  2 ) : 0,
-            substr( $ts, 10, 2 ) ? substr( $ts, 10, 2 ) : 0,
-            substr( $ts, 12, 2 ) ? substr( $ts, 12, 2 ) : 0,
-        );
-    }
-
-    return $dt;
-}
-
-sub sqlTimeToTs {
-    my $sqlTime = shift;
-
-    # 2005-09-18 04:03:33
-    if ($sqlTime) {
-        return timelocal(
-            substr( $sqlTime, 17, 2 ),
-            substr( $sqlTime, 14, 2 ),
-            substr( $sqlTime, 11, 2 ),
-            substr( $sqlTime, 8,  2 ),
-            substr( $sqlTime, 5,  2 ) - 1,
-            substr( $sqlTime, 0,  4 )
-        );
-    }
-    return 0;
+$Debug = $Opt{debug};
+
+my $stdout;
+open($stdout, ">&STDOUT") || die $!;
+pipe(PFIN, PFOUT);
+pipe(MIN, MOUT);
+my $fhin = fileno(PFIN);
+close(STDIN);
+open(STDIN, "<&=$fhin") || die $!;
+
+
+if (fork()) {
+	close(MOUT);
+	my $today = strftime("%b %e ", localtime);
+	open(LOG, "</var/log/zimbra.log") || die $!;
+	my $found = 0;
+	while (<LOG>) {
+		my $line = $_;
+		if ($line =~ /$today/o) {
+   		     print PFOUT $line;
+   		     $found = 1;
+	    } elsif ($found) {
+	    	last; # don't scan any further, we've exhausted today's logs
+	    }
+	}
+	close(LOG);
+	close(PFOUT);
+	
+	my @Report;
+	while (<MIN>) {
+		push(@Report, $_);
+	}
+	close (MIN);
+	
+	if ($Opt{mailreport}) {
+		sendEmailReport(day => $today, data => \@Report);
+	} else {
+		print @Report;
+	}
+} else {
+	close(PFOUT);
+	close(MIN);
+	open(STDOUT, ">&MOUT") || die $!;
+    @ARGV = qw(-u 25 -h 25);
+    do '/opt/zimbra/libexec/pflogsumm.pl';
+    close(STDOUT);
 }
 
 {    # avoid making $LocalConfig global
@@ -637,6 +133,7 @@ sub getLdapConfigValue {
     print "Global: $val\n" if $Debug;
     return $val;
 }
+
 sub getLdapServerConfigValue {
     my $attrib = shift;
 
@@ -656,6 +153,7 @@ sub getLdapServerConfigValue {
     }
     return $val;
 }
+
 sub getLdapGlobalConfigValue {
     my $attrib = shift;
 
@@ -681,7 +179,7 @@ sub sendEmailReport {
 
     my $data = $arg{data};    # @Report data for message body
 
-    my $subject      = "Daily mail report from $arg{start} to $arg{end}";
+    my $subject      = "Daily mail report for $arg{day}";
     my $from_address = getLocalConfig("smtp_source");
     my $to_address   = getLocalConfig("smtp_destination");
     my $smtphost     = getLdapConfigValue("zimbraSmtpHostname") || "localhost";
@@ -707,60 +205,4 @@ sub sendEmailReport {
     else {
         warn("DEBUG: Email report sent to $to_address\n") if ($Debug);
     }
-}
-
-sub addToReport {
-    push( @Report, @_ );
-}
-
-sub logError {
-    my @msg = @_;
-    if ( $Opt{mailreport} && !$Debug ) {
-        my $dt = strftime( "%Y-%m-%d %H:%M:%S", localtime );
-        foreach my $msg (@msg) {
-            Zimbra::Mon::Logger::Log( "err", "$dt, zmdailyreport: $msg" );
-        }
-    }
-    else {
-        print STDERR @msg;
-    }
-}
-
-# categorize messages by size
-sub categorizer {
-    my %buckets = (
-        ( 1024 * 4 )            => "4Ki",
-        ( 1024 * 8 )            => "8Ki",
-        ( 1024 * 16 )           => "16Ki",
-        ( 1024 * 32 )           => "32Ki",
-        ( 1024 * 64 )           => "64Ki",
-        ( 1024 * 128 )          => "128Ki",
-        ( 1024 * 256 )          => "256Ki",
-        ( 1024 * 512 )          => "512Ki",
-        ( 1024 * 1024 * 1 )     => "1Mi",
-        ( 1024 * 1024 * 2 )     => "2Mi",
-        ( 1024 * 1024 * 4 )     => "4Mi",
-        ( 1024 * 1024 * 8 )     => "8Mi",
-        ( 1024 * 1024 * 8 + 1 ) => "+",
-    );
-
-    my @cats = sort { $a <=> $b } keys %buckets;
-    my $max = pop @cats;
-    my %data =
-      map { $_ => { size => 0, count => 0, desc => $buckets{$_} } } @cats, $max;
-
-    return sub {
-        my $mysize = shift;
-        return \%data unless $mysize;
-
-        my $myslot = $max;
-        for my $bucket (@cats) {
-            if ( $mysize <= $bucket ) {
-                $myslot = $bucket;
-                last;
-            }
-        }
-        $data{$myslot}{size} += $mysize;
-        $data{$myslot}{count}++;
-      }
 }
