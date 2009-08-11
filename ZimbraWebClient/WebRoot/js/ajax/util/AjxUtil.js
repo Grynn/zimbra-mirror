@@ -424,7 +424,7 @@ AjxUtil.getFirstElement = function(parent, ename, aname, avalue) {
 /**
  * @param params	[hash]		hash of params:
  *        relative	[boolean]*	if true, return a relative URL
- *        protocol	[string]*	protocol
+ *        protocol	[string]*	protocol (trailing : is optional)
  *        host		[string]*	server hostname
  *        port		[int]*		server port
  *        path		[string]*	URL path
@@ -437,7 +437,10 @@ function(params) {
 	var url = [];
 	var i = 0;
 	if (!params.relative) {
-		var proto = params.protocol || location.protocol; 
+		var proto = params.protocol || location.protocol;
+		if (proto.indexOf(":") == -1) {
+			proto = proto + ":";
+		}
 		url[i++] = proto;
 		url[i++] = "//";
 		url[i++] = params.host || location.hostname;
