@@ -489,7 +489,13 @@ function(create) {
 Com_Zimbra_Email.prototype._handleLoadContact =
 function() {
 	var contact = this._getActionedContact(true);
-	AjxDispatcher.run("GetContactController").show(contact);
+
+	if (window.parentAppCtxt) {
+		var capp = window.parentAppCtxt.getApp(ZmApp.CONTACTS);
+		capp.getContactController().show(contact);
+	} else {
+		AjxDispatcher.run("GetContactController").show(contact);
+	}
 };
 
 Com_Zimbra_Email.prototype._composeListener =
