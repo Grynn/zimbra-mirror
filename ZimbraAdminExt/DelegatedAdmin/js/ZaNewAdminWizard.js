@@ -515,9 +515,9 @@ ZaNewAdminWizard.prototype.setProposedGrants = function () {
 
         if (selectedViews && selectedViews.length > 0) {
             for (var i = 0; i < selectedViews.length; i ++ ) {
-                if (ZaRight.VIEW_RIGHTS[selectedViews[i]] != null) {
+                if (ZaSettings.VIEW_RIGHTS[selectedViews[i]] != null) {
                     var viewRight = {} ;
-                    viewRight [ZaGrant.A_right] = ZaRight.VIEW_RIGHTS[selectedViews[i]] ;
+                    viewRight [ZaGrant.A_right] = ZaSettings.VIEW_RIGHTS[selectedViews[i]] ;
 
                     if (viewRight [ZaGrant.A_right] == null) {
                         continue ; //this view doesn't need any right;
@@ -549,7 +549,9 @@ ZaNewAdminWizard.prototype.setProposedGrants = function () {
                         || selectedViews[i] == ZaSettings.ADMIN_ZIMLET_LIST_VIEW
                         || selectedViews[i] == ZaSettings.GLOBAL_CONFIG_VIEW
                         || selectedViews[i] == ZaSettings.GLOBAL_STATUS_VIEW
-                        || selectedViews[i] == ZaSettings.GLOBAL_STATS_VIEW ) {
+                        || selectedViews[i] == ZaSettings.MAILQ_VIEW
+                        || selectedViews[i] == ZaSettings.XMBX_SEARCH_VIEW 
+                        || selectedViews[i] == ZaSettings.BACKUP_VIEW    ) {
                         //here the target are mostly global
                         viewRight [ZaGrant.A_target] = ZaGrant.GLOBAL_TARGET_NAME;
                         viewRight [ZaGrant.A_target_type] = ZaItem.GLOBAL_GRANT ;

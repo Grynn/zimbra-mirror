@@ -50,25 +50,7 @@ ZaRight.RIGHT_TYPES = ["preset", "setAttrs", "getAttrs", "combo"];
 
 ZaRight.CONFIG_GRANTS_RIGHT = "viewGrants" ;
 ZaRight.VIEW_RIGHTS_USR_RIGHT = "checkRightUsr" ;
-ZaRight.VIEW_RIGHTS_GRP_RIGHT = "checkRightGrp" ;
-
-ZaRight.VIEW_RIGHTS = {} ;
-ZaRight.VIEW_RIGHTS [ZaSettings.ACCOUNT_LIST_VIEW] = "adminConsoleAccountRights" ;
-ZaRight.VIEW_RIGHTS [ZaSettings.DL_LIST_VIEW] = "adminConsoleDLRights" ;
-ZaRight.VIEW_RIGHTS [ZaSettings.ALIAS_LIST_VIEW] = "adminConsoleAliasRights" ;
-ZaRight.VIEW_RIGHTS [ZaSettings.RESOURCE_LIST_VIEW] = "adminConsoleResourceRights" ;
-
-ZaRight.VIEW_RIGHTS [ZaSettings.COS_LIST_VIEW] = "adminConsoleCOSRights" ;
-ZaRight.VIEW_RIGHTS [ZaSettings.DOMAIN_LIST_VIEW] = "adminConsoleDomainRights" ;
-ZaRight.VIEW_RIGHTS [ZaSettings.SERVER_LIST_VIEW] = "adminConsoleServerRights" ;
-ZaRight.VIEW_RIGHTS [ZaSettings.ZIMLET_LIST_VIEW] = "adminConsoleZimletRights" ;
-
-ZaRight.VIEW_RIGHTS [ZaSettings.ADMIN_ZIMLET_LIST_VIEW] = "adminConsoleExtensionRights" ;
-ZaRight.VIEW_RIGHTS [ZaSettings.GLOBAL_CONFIG_VIEW] = "adminConsoleGlobalRights" ;
-
-ZaRight.VIEW_RIGHTS [ZaSettings.SAVE_SEARCH] = "adminConsoleSavedSearchRights" ;
-
-
+ZaRight.VIEW_RIGHTS_GRP_RIGHT = "checkRightGrp" ;       
 
 //@return the lists of rights for the type specified
 ZaRight.getCustomRightsList = function () {

@@ -323,17 +323,17 @@ ZaSettings.GLOBAL_CONFIG_VIEW="globalConfigView";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_CONFIG_VIEW, label: ZaMsg.UI_Comp_globalConfigView });
 ZaSettings.GLOBAL_STATUS_VIEW = "globalServerStatusView";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATUS_VIEW, label: ZaMsg.UI_Comp_GlobalStatusView });
-ZaSettings.GLOBAL_STATS_VIEW = "globalServerStatisticsView";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATS_VIEW, label: ZaMsg.UI_Comp_GlobalStatsView });
+//ZaSettings.GLOBAL_STATS_VIEW = "globalServerStatisticsView";
+//ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATS_VIEW, label: ZaMsg.UI_Comp_GlobalStatsView });
 ZaSettings.SAVE_SEARCH = "saveSearch";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SAVE_SEARCH, label: ZaMsg.UI_Comp_SaveSearch });
 ZaSettings.MAILQ_VIEW = "mailQueue";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.MAILQ_VIEW, label: ZaMsg.UI_Comp_mailQueueView });
 
-
+/*   
 ZaSettings.SERVER_STATS_VIEW = "perServerStatisticsView";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_VIEW, label: ZaMsg.UI_Comp_ServerStatsView });
-
+*/
 
 //List view groups
 ZaSettings.OVERVIEW_CONFIG_ITEMS = [ZaSettings.COS_LIST_VIEW,ZaSettings.ZIMLET_LIST_VIEW,ZaSettings.SERVER_LIST_VIEW,ZaSettings.ADMIN_ZIMLET_LIST_VIEW,
@@ -349,6 +349,7 @@ ZaSettings.DOMAIN_WIKI_WIZ = "domainWikiWizard";
 ZaSettings.DOMAIN_CHECK_MX_WIZ = "domainCheckMXWiz";
 
 //Global Server Statistics View
+/* No need to have the statistics view since they are all system admin only rights
 ZaSettings.GLOBAL_STATS_MSG_COUNT_TAB = "globalServerStatsMsgCountTab" ;
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATS_MSG_COUNT_TAB, label: ZaMsg.UI_Comp_globalStatsMsgCountTab });
 
@@ -379,7 +380,7 @@ ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_SESSION_TAB, 
 
 ZaSettings.SERVER_STATS_QUOTA_TAB = "perServerStatsQuotaTab" ;
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_QUOTA_TAB, label: ZaMsg.UI_Comp_serverStatsQuotaTab });
-
+*/
 //Distribution list operations
 //ZaSettings.DL_CREATE_RIGHT = "createDL";
 
@@ -388,6 +389,25 @@ ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_QUOTA_TAB, la
 
 //Resources operations
 //ZaSettings.RESOURCES_CREATE_RIGHT = "createResource";
+                                            
+ZaSettings.VIEW_RIGHTS = {} ;
+ZaSettings.VIEW_RIGHTS [ZaSettings.ACCOUNT_LIST_VIEW] = "adminConsoleAccountRights" ;
+ZaSettings.VIEW_RIGHTS [ZaSettings.DL_LIST_VIEW] = "adminConsoleDLRights" ;
+ZaSettings.VIEW_RIGHTS [ZaSettings.ALIAS_LIST_VIEW] = "adminConsoleAliasRights" ;
+ZaSettings.VIEW_RIGHTS [ZaSettings.RESOURCE_LIST_VIEW] = "adminConsoleResourceRights" ;
+
+ZaSettings.VIEW_RIGHTS [ZaSettings.COS_LIST_VIEW] = "adminConsoleCOSRights" ;
+ZaSettings.VIEW_RIGHTS [ZaSettings.DOMAIN_LIST_VIEW] = "adminConsoleDomainRights" ;
+ZaSettings.VIEW_RIGHTS [ZaSettings.SERVER_LIST_VIEW] = "adminConsoleServerRights" ;
+ZaSettings.VIEW_RIGHTS [ZaSettings.ZIMLET_LIST_VIEW] = "adminConsoleZimletRights" ;
+
+ZaSettings.VIEW_RIGHTS [ZaSettings.GLOBAL_STATUS_VIEW] = "adminConsoleServerStatusRights" ;
+ZaSettings.VIEW_RIGHTS [ZaSettings.ADMIN_ZIMLET_LIST_VIEW] = "adminConsoleExtensionRights" ;
+ZaSettings.VIEW_RIGHTS [ZaSettings.GLOBAL_CONFIG_VIEW] = "adminConsoleGlobalRights" ;
+ZaSettings.VIEW_RIGHTS [ZaSettings.MAILQ_VIEW] = "adminConsoleMailQueueRights" ;
+
+ZaSettings.VIEW_RIGHTS [ZaSettings.SAVE_SEARCH] = "adminConsoleSavedSearchRights" ;
+
 
 ZaSettings.SKIN_PREFS_ENABLED = true;
 ZaSettings.LICENSE_ENABLED = true;
