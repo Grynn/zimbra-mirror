@@ -80,6 +80,7 @@ PERL_LIBS 	:= \
 	IO::Stringy \
 	MIME::Lite \
 	Mail::Mailer \
+	Convert::BinHex \
 	D/DO/DONEILL/MIME-tools-5.427.tar.gz \
 	SOAP::Lite \
 	Net::Telnet \
