@@ -24,7 +24,6 @@ case "$1" in
 		for i in $SCRIPTS; do
 			/opt/zimbra/bin/$i start $2
 		done
-		stty echo icanon
 	;;
 	stop)
 		for i in $SCRIPTS; do
