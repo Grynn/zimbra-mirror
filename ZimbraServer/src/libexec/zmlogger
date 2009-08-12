@@ -102,6 +102,7 @@ sub prune_data($$) {
     my $column_prefix = '';
     for (my $i = 0; $i < @$headersref; $i++) {
         my $column = $headersref->[$i];
+        next if !defined($dataref->[$i]);
         next if ($column eq $dataref->[$i]);
         next if ($column eq 'timestamp');
         if ($dataref->[$i] !~ /^\d*(\.\d*)?$/) {
