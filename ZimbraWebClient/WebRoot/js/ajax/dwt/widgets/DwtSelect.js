@@ -479,14 +479,19 @@ function(option) {
 	}
     this._updateSelection(option);
 
+    this.autoResize();
+};
+
+DwtSelect.prototype.autoResize =
+function() {
     /* bug: 21041 */
     var divElId = this.getHtmlElement();
     AjxTimedAction.scheduleAction(new AjxTimedAction(this,
-		function(){
-			var divEl = document.getElementById(divElId.id);
-			if (divEl) {
-				divEl.style.width = divEl.childNodes[0].offsetWidth;
-			}
+        function(){
+            var divEl = document.getElementById(divElId.id);
+            if (divEl) {
+                divEl.style.width = divEl.childNodes[0].offsetWidth;
+            }
     }, 200));
 };
 
