@@ -1129,10 +1129,10 @@ DwtFormRows.prototype.setValue = function(array) {
 	}
 	// initialize values
 	for (var i = 0; i < max; i++) {
-		this.setValue(String(i), array[i]);
+		this.setValue(String(i), array[i], true);
 	}
 	for (var i = array.length; i < this._rowCount; i++) {
-		this.setValue(String(i), null);
+		this.setValue(String(i), null, true);
 	}
 };
 
