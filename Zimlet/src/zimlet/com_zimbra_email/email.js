@@ -416,7 +416,7 @@ function(spanElement, contentObjText, matchContext, ev) {
 	{
 		// otherwise, no contact in addrbook means go to contact edit view
 		this._actionObject = contentObjText;
-		this._contactListener();
+		this._contactListener(true);
 	}
 };
 
@@ -451,8 +451,8 @@ function(obj) {
 };
 
 Com_Zimbra_Email.prototype._contactListener =
-function() {
-	var loadCallback = new AjxCallback(this, this._handleLoadContact);
+function(isDirty) {
+	var loadCallback = new AjxCallback(this, this._handleLoadContact, [isDirty]);
 	AjxDispatcher.require(["ContactsCore", "Contacts"], false, loadCallback, null, true);
 };
 
@@ -487,14 +487,14 @@ function(create) {
 };
 
 Com_Zimbra_Email.prototype._handleLoadContact =
-function() {
+function(isDirty) {
 	var contact = this._getActionedContact(true);
 
 	if (window.parentAppCtxt) {
 		var capp = window.parentAppCtxt.getApp(ZmApp.CONTACTS);
-		capp.getContactController().show(contact);
+		capp.getContactController().show(contact, isDirty);
 	} else {
-		AjxDispatcher.run("GetContactController").show(contact);
+		AjxDispatcher.run("GetContactController").show(contact, isDirty);
 	}
 };
 
