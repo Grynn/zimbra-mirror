@@ -61,7 +61,7 @@ ZaAccountListController.prototype.show = function (doPush) {
 			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
 			sortAscending:this._currentSortOrder,
 			limit:this.RESULTSPERPAGE,
-            attrs: [this.fetchAttrs, "zimbraIsDelegatedAdminAccount", "zimbraIsAdminGroup"].join(),
+            attrs: [this.fetchAttrs, ZaAccount.A_zimbraIsDelegatedAdminAccount, ZaAccount.A_zimbraIsAdminAccount, ZaAccount.A_zimbraIsSystemResource].join(),
 			callback:callback,
 			controller: this,
 			showBusy:true,
@@ -681,7 +681,7 @@ function(ev) {
 		}
 		
 		
-		var msg = ZaMsg.dl_warning_delete_accounts_in_tab ; ;
+		var msg = ZaMsg.dl_warning_delete_accounts_in_tab ; 
 		msg += ZaAccountListController.getDlMsgFromList (this._itemsInTabList) ;
 		
 		ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"].setMessage(msg, DwtMessageDialog.WARNING_STYLE);	
@@ -691,7 +691,7 @@ function(ev) {
 				ZaMsgDialog.NO_DELETE_BUTTON, ZaAccountListController.prototype._deleteAccountsInRemoveList, this);		
 		ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"].popup();
 		
-	}else{
+	} else{
 		this._deleteAccountsInRemoveList ();
 	}
 	
@@ -730,7 +730,15 @@ function () {
 			dlgMsg = ZaMsg.Q_DELETE_OBJECTS;
 		}
 		dlgMsg += ZaAccountListController.getDlMsgFromList (this._removeList);
-		
+		var cnt = this._removeList.length;
+		var sysResources = [];
+		for(var i=0; i< cnt; i++) {
+			if(this._removeList[i].attrs[ZaAccount.A_zimbraIsSystemResource] && this._removeList[i].attrs[ZaAccount.A_zimbraIsSystemResource]=="TRUE") {
+				dlgMsg += "<br/>";
+				dlgMsg += ZaMsg.WARN_DELETING_SYSTEM_RESOURCES;
+				break;
+			}
+		}
 		ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].setMessage(dlgMsg,  DwtMessageDialog.INFO_STYLE);
 		ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype._deleteAccountsCallback, this);
 		ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, ZaAccountListController.prototype._donotDeleteAccountsCallback, this);		

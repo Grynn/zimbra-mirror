@@ -889,8 +889,16 @@ ZaReindexMailbox.myXModel = {
 
 ZaAccount.prototype.remove = 
 function(callback) {
-	var soapDoc = AjxSoapDoc.create("DeleteAccountRequest", ZaZimbraAdmin.URN, null);
-	soapDoc.set("id", this.id);
+	var soapDoc;
+	if(this[ZaAccount.A2_ldap_ds] || this[ZaAccount.A2_zimbra_ds]) {
+		soapDoc = AjxSoapDoc.create("DeleteGalSyncAccountRequest", ZaZimbraAdmin.URN, null);
+		var accEl = soapDoc.set("account", this.id);
+		accEl.setAttribute("by", "id");
+	} else {
+		soapDoc = AjxSoapDoc.create("DeleteAccountRequest", ZaZimbraAdmin.URN, null);
+		soapDoc.set("id", this.id);
+	}
+	
 	this.deleteCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
@@ -1457,6 +1465,8 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_mailHost, type:_STRING_, ref:"attrs/"+ZaAccount.A_mailHost},
         {id:ZaAccount.A_COSId, type:_STRING_, ref:"attrs/" + ZaAccount.A_COSId},
         {id:ZaAccount.A_zimbraIsAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraIsAdminAccount},
+        {id:ZaAccount.A_zimbraIsSystemResource, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraIsSystemResource},
+        
         {id:ZaAccount.A_zimbraLastLogonTimestamp, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraLastLogonTimestamp},
         {id:ZaAccount.A_zimbraMaxPwdLength, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMaxPwdLength, maxInclusive:2147483647, minInclusive:0},
         {id:ZaAccount.A_zimbraMinPwdLength, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMinPwdLength, maxInclusive:2147483647, minInclusive:0},

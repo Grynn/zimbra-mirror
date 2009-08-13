@@ -95,6 +95,30 @@ function () {
 ZaController.initToolbarMethods["ZaAccountViewController"].push(ZaAccountViewController.initToolbarMethod);
 
 /**
+* This listener is called when the Delete button is clicked. 
+* member of ZaXFormViewController
+* @param 	ev event object
+**/
+ZaAccountViewController.prototype.deleteButtonListener =
+function(ev) {
+	if(this._currentObject.id) {
+		if(this._currentObject[ZaAccount.A2_zimbra_ds] || this._currentObject[ZaAccount.A2_ldap_ds]) {
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(AjxMessageFormat.format(ZaMsg.WARN_DELETING_GAL_SYNC,[this._currentObject.name]), DwtMessageDialog.WARNING_STYLE);
+		} else if (this._currentObject.attrs[ZaAccount.A_zimbraIsSystemResource] && this._currentObject.attrs[ZaAccount.A_zimbraIsSystemResource]=="TRUE") { 
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(AjxMessageFormat.format(ZaMsg.WARN_DELETING_SYSTEM_RESOURCE,[this._currentObject.name]), DwtMessageDialog.WARNING_STYLE);
+		} else {
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(this.deleteMsg, DwtMessageDialog.INFO_STYLE);
+		}
+		
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.deleteAndGoAway, this, null);		
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDlg, this, null);				
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
+	} else {
+		ZaApp.getInstance().popView();
+	}
+}
+
+/**
 *	@method setViewMethod 
 *	@param entry - isntance of ZaAccount class
 */
