@@ -324,13 +324,17 @@ function(anObj, isXml, isRaw, timestamp, showFuncs) {
 		} else if (isXml) {
 			var xmldoc = new AjxDebugXmlDocument;
 			var doc = xmldoc.create();
-			doc.loadXML(anObj);
-//			if (timestamp) {
-//				html[idx++] = [doc.documentElement.nodeName, this._getTimeStamp(timestamp)].join(" - ");
-//			}
-			html[idx++] = "<div style='border-width:2px; border-style:inset; width:100%; height:300px; overflow:auto'>";
-			html[idx++] = this._createXmlTree(doc, 0);
-			html[idx++] = "</div>";
+			if (doc && doc.loadXML) {
+				doc.loadXML(anObj);
+	//			if (timestamp) {
+	//				html[idx++] = [doc.documentElement.nodeName, this._getTimeStamp(timestamp)].join(" - ");
+	//			}
+				html[idx++] = "<div style='border-width:2px; border-style:inset; width:100%; height:300px; overflow:auto'>";
+				html[idx++] = this._createXmlTree(doc, 0);
+				html[idx++] = "</div>";
+			} else {
+				html[idx++] = "<span>Unable to create XmlDocument to show XML</span>";
+			}
 		} else {
 			html[idx++] = "<div style='border-width:2px; border-style:inset; width:100%; height:300px; overflow:auto'><pre>";
 			html[idx++] = this._dump(anObj, true, showFuncs);

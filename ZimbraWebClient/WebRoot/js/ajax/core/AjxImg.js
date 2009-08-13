@@ -58,7 +58,7 @@ function(parentEl, imageName, useParentEl, _disabled) {
 
 	var overlayName = className+"Overlay";
 	var maskName = className+"Mask";
-	if (color && AjxImgData[overlayName] && AjxImgData[maskName]) {
+	if (color && window.AjxImgData && AjxImgData[overlayName] && AjxImgData[maskName]) {
 		color = (color.match(/^\d$/) ? ZmOrganizer.COLOR_VALUES[color] : color) ||
 				ZmOrganizer.COLOR_VALUES[ZmOrganizer.ORG_DEFAULT_COLOR];
 
