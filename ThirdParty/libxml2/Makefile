@@ -26,16 +26,15 @@ endif
 
 all: allclean build tar
 
-build: $(XML_NAME)-$(XML_VERSION)
-	(cd $(XML_NAME)-$(XML_VERSION); \
+build:
+	(tar xzf src/$(XML_NAME)-$(XML_RELEASE).tar.gz; \
+	mv $(XML_NAME)-$(XML_RELEASE) $(XML_NAME)-$(XML_VERSION); \
+	cd $(XML_NAME)-$(XML_VERSION); \
 	patch -g0 -N -p1 < ../patches/CVE-2009-2414-CVE-2009-2416.patch; \
 	CFLAGS="-g -O2 -fPIC" \
 	./configure $(XML_CONFIGURE); $(MAKE) $(MAKEARGS); $(MAKE) install)
 	(cp -f $(XML_NAME)-$(XML_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
 	(cd $(ZIMBRA_HOME); ln -s $(XML_NAME)-$(XML_VERSION) $(XML_NAME))
-
-$(XML_NAME)-$(XML_VERSION): 
-	tar xzf src/$(XML_NAME)-$(XML_VERSION).tar.gz
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/$(XML_NAME)
