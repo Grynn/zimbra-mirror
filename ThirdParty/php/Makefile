@@ -1,7 +1,7 @@
 PHP_VERSION ?= 5.2.9
 HTTPD_VERSION ?= 2.2.11
 ASPELL_VERSION ?= 0.60.6
-LIBXML2_VERSION ?= 2.6.32
+LIBXML2_VERSION ?= 2.6.32.1
 
 PHP_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(PHP_ROOT)/../..; pwd)
