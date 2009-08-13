@@ -25,25 +25,27 @@ public class LocalMailbox extends DesktopMailbox {
         super(data);
     }
     
-    @Override synchronized boolean finishInitialization() throws ServiceException {
-        if (super.finishInitialization()) {
-            try {
-                getFolderByPath(null, GLOBAL_SEARCHES_PATH);
-            } catch (MailServiceException.NoSuchItemException x) {
-                CreateFolder redo = new CreateFolder(getId(), GLOBAL_SEARCHES_PATH,
-                    ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
-                    MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR_RGB, null);
-                redo.setFolderId(ID_FOLDER_GLOBAL_SEARCHES);
-                redo.start(System.currentTimeMillis());
-                createFolder(new OfflineContext(redo), GLOBAL_SEARCHES_PATH,
-                    ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
-                    MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR, null);
-            }
-            return true;
+    @Override synchronized void ensureSystemFolderExists() throws ServiceException {
+        Folder f = null;
+
+        super.ensureSystemFolderExists();
+        try {
+                f = getFolderById(ID_FOLDER_GLOBAL_SEARCHES);
+        } catch (MailServiceException.NoSuchItemException x) {
         }
-        return false;
+        if (f == null) {
+            CreateFolder redo = new CreateFolder(getId(), GLOBAL_SEARCHES_PATH,
+                ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
+                MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR_RGB, null);
+            
+            redo.setFolderId(ID_FOLDER_GLOBAL_SEARCHES);
+            redo.start(System.currentTimeMillis());
+            createFolder(new OfflineContext(redo), GLOBAL_SEARCHES_PATH,
+                ID_FOLDER_GLOBAL_SEARCHES, Folder.FOLDER_IS_IMMUTABLE,
+                MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR, null);
+        }
     }
-    
+
     @Override protected synchronized void initialize() throws ServiceException {
         super.initialize();
         Folder.create(ID_FOLDER_GLOBAL_SEARCHES, this,

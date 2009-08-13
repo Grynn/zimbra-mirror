@@ -3,9 +3,11 @@ package com.zimbra.cs.mailbox;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -460,5 +462,26 @@ public class DataSourceMailbox extends SyncMailbox {
         } else if (isOnRequest) {
             OfflineLog.offline.debug("sync already in progress");
         }
+    }
+    
+    Set<Folder> getAccessibleFolders(short rights) throws ServiceException {
+        Set<Folder> accessable = super.getAccessibleFolders(rights);
+        boolean all = true;
+        OfflineDataSource ds = (OfflineDataSource)(OfflineProvisioning.
+            getOfflineInstance().getDataSource(getAccount()));
+        Set<Folder> visible = new HashSet<Folder>();
+
+        for (Folder folder : accessable == null ? getFolderById(
+            ID_FOLDER_ROOT).getSubfolderHierarchy() : accessable) {
+            if (folder.getId() > Mailbox.FIRST_USER_ID ||
+                folder.getId() == ID_FOLDER_FAILURE ||
+                folder.getId() == ID_FOLDER_OUTBOX ||
+                folder.getDefaultView() != MailItem.TYPE_MESSAGE ||
+                ds.isSyncCapable(folder))
+                visible.add(folder);
+            else
+                all = false;
+        }
+        return all ? null : visible;
     }
 }
