@@ -1,10 +1,10 @@
-<zimletConfig name="zimbra_samba" version="4">
-    <global>
-   		<property name="gidBase">10000</property>        
-   		<property name="uidBase">10000</property>   
-		<property name="ridBase">1000</property>    
-		<property name="ldapSuffix">dc=test,dc=com</property>
-		<property name="ldapGroupSuffix">ou=groups</property>
-		<property name="ldapMachineSuffix">ou=machines</property>
-    </global>
+<zimletConfig name="zimbra_samba" version="6"> 
+   <global> 
+               <property name="gidBase">1000</property> 
+               <property name="uidBase">1000</property> 
+               <property name="ridBase">1000</property> 
+               <property name="ldapSuffix">dc=test,dc=com</property> 
+               <property name="ldapGroupSuffix">ou=groups</property> 
+               <property name="ldapMachineSuffix">ou=machines</property> 
+   </global> 
 </zimletConfig>
