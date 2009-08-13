@@ -1,5 +1,5 @@
 XML_ROOT := $(shell pwd)
-P4_ROOT ?= $(shell cd $(XMl_ROOT)/../..; pwd)
+P4_ROOT ?= $(shell cd $(XML_ROOT)/../..; pwd)
 MAKE ?= make
 MAKEARGS ?= -j2
 
