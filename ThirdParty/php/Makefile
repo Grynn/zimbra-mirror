@@ -37,7 +37,7 @@ all: allclean build tar
 
 build:
 	tar xzf src/php-$(PHP_VERSION).tar.gz
-	(cd php-$(PHP_VERSION); $(ACEXE) CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file=/opt/zimbra/conf/php.ini --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) --with-libxml-dir=/opt/zimbra/libxml2-$(LIBXML2_VERSION); $(SED); $(MAKE) $(MAKEARGS); $(MAKE) install)
+	(cd php-$(PHP_VERSION); $(ACEXE) CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file-path=/opt/zimbra/conf --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) --with-libxml-dir=/opt/zimbra/libxml2-$(LIBXML2_VERSION); $(SED); $(MAKE) $(MAKEARGS); $(MAKE) install)
 
 clean:
 	rm -rf php-$(PHP_VERSION)
