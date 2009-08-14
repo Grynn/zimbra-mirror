@@ -44,6 +44,7 @@ public class ZtoZImportParams
     public ArrayList<String> DomainList;
     public boolean debug_mig;
     public boolean IsAllAccounts;
+    public String ItemTypes;
 
     ZtoZImportParams()
     {
@@ -68,5 +69,6 @@ public class ZtoZImportParams
         DomainList = new ArrayList<String>();
         debug_mig=false;
         IsAllAccounts=false;
+        ItemTypes="";
     }
 }

@@ -163,8 +163,9 @@ class tarMigrator implements Runnable
         if(zmsrcsession.check_auth())
         {
             debug_msg(gtmbLog,"Auth Token: "+tarMigparams.SourceZCSServer+": "+AuthTokens.get_admin_auth_token(tarMigparams.SourceServerURI));
+            String itemTypes= isEmpty(tarMigparams.ItemTypes)?"":"&types="+tarMigparams.ItemTypes;
             String uri=https+tarMigparams.SourceZCSServer+":"+tarMigparams.SrcZCSPort+httpuri+
-                    username+"?fmt=tgz&authToken="+AuthTokens.get_admin_auth_token(tarMigparams.SourceServerURI);
+                    username+"?fmt=tgz"+itemTypes+"&authToken="+AuthTokens.get_admin_auth_token(tarMigparams.SourceServerURI);
             gtmbLog.log(Level.INFO,"Starting mailbox"+" ("+username+") "+"download...");
             gtmbLog.log(Level.INFO,"Download URL: "+uri);
             retval=zmsrcsession.Download_FileDFromZCS(uri,tarMigparams.WorkingDirectory+username+".tgz",
@@ -731,6 +732,17 @@ public class tarFormatter implements EventNotifier
                 }
                 AccountsList.SetAccountList(tarfmtparams.AccountsList);
             }                                                                      
+        }
+        else if (attr[0].trim().compareToIgnoreCase("types")==0)
+        {
+            tarfmtparams.ItemTypes=attr[1].trim();
+            for(int i=1;i<params.length;i++)
+            {
+                if (params[i].trim().length()>0)
+                {
+                    tarfmtparams.ItemTypes += ","+params[i].trim();
+                }
+            }
         }
     }
 
