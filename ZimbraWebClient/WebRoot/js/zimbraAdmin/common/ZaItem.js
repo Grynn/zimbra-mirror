@@ -378,13 +378,14 @@ ZaItem.prototype.loadEffectiveRights = function (by, val, expandDefaults) {
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
 	var reqMgrParams = {} ;
-	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.controller = (ZaApp.getInstance() && ZaApp.getInstance().getCurrentController()) ? ZaApp.getInstance().getCurrentController() : null;
 	reqMgrParams.busyMsg = ZaMsg.BUSY_REQUESTING_ACCESS_RIGHTS ;
+	
 	try {
 		var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetEffectiveRightsResponse;
 		this.initEffectiveRightsFromJS(resp);
 	} catch (ex) {
-		//not implemented yet
+		throw (ex);
 	}
 }
 
@@ -410,7 +411,7 @@ ZaItem.prototype.loadNewObjectDefaults = function (domainBy, domain, cosBy, cos)
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
 	var reqMgrParams = {} ;
-	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.controller = (ZaApp.getInstance() && ZaApp.getInstance().getCurrentController()) ? ZaApp.getInstance().getCurrentController() : null;
 	reqMgrParams.busyMsg = ZaMsg.BUSY_REQUESTING_ACCESS_RIGHTS ;
 	try {
 		var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetCreateObjectAttrsResponse;

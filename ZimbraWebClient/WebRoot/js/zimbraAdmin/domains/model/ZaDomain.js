@@ -1463,9 +1463,11 @@ ZaDomain.loadDataSources = function (by, val) {
 				this[ZaDomain.A2_gal_sync_accounts].push(galSyncAccount);
 			} catch (ex) {
 				if (ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT) {
-					ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_GALSYNC_ACCOUNT_INVALID,[this.name,this.attrs[ZaDomain.A_zimbraGalAccountId][i]]), ex, true);
+					if(ZaApp.getInstance() && ZaApp.getInstance().getCurrentController())
+						ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_GALSYNC_ACCOUNT_INVALID,[this.name,this.attrs[ZaDomain.A_zimbraGalAccountId][i]]), ex, true);
 				} else {
-					ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.loadDataSources", null, false);
+					if(ZaApp.getInstance() && ZaApp.getInstance().getCurrentController())
+						ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.loadDataSources", null, false);
 				}	
 			}
 		}
