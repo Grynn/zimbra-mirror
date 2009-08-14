@@ -115,6 +115,14 @@ public class BeanUtils {
         return result.toString();
     }
 
+    public static String replaceAll(String org, String find, String replace) {
+        if(org != null && find != null && replace != null){
+            org = org.replaceAll(find,replace);
+        }
+        return org;
+    }
+
+
     public static String getHeaderAddrs(List<ZEmailAddress> addrs, String type) {
         if ( addrs == null) return null;
         StringBuilder sb = new StringBuilder();

@@ -6709,4 +6709,10 @@
 		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
 		<function-signature>java.lang.String yuiCompress(java.lang.String,java.lang.String)</function-signature>
 	</function>
+
+    <function>
+		<name>replaceAll</name>
+		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+		<function-signature>java.lang.String replaceAll(java.lang.String, java.lang.String,java.lang.String)</function-signature>
+	</function>
 </taglib>
