@@ -61,8 +61,22 @@ open(STDIN, "<&=$fhin") || die $!;
 if (fork()) {
 	close(MOUT);
 	my $today = strftime("%b %e ", localtime);
-	open(LOG, "</var/log/zimbra.log") || die $!;
+	
 	my $found = 0;
+	if (open(LOG, "gzip -dc /var/log/zimbra.log.1.gz |")) {
+	    while (<LOG>) {
+		    my $line = $_;
+		    if ($line =~ /$today/o) {
+   		         print PFOUT $line;
+   		         $found = 1;
+	        } elsif ($found) {
+	    	    last; # don't scan any further, we've exhausted today's logs
+	        }
+	    }
+		close(LOG);
+	}
+	open(LOG, "</var/log/zimbra.log") || die $!;
+	$found = 0;
 	while (<LOG>) {
 		my $line = $_;
 		if ($line =~ /$today/o) {
@@ -92,7 +106,9 @@ if (fork()) {
 	open(STDOUT, ">&MOUT") || die $!;
 	my $user_limit = getLocalConfig('zimbra_mtareport_max_users') || 50;
 	my $host_limit = getLocalConfig('zimbra_mtareport_max_hosts') || 50;
-    @ARGV = qw(-u $user_limit -h $host_limit);
+	$user_limit = 50 if $user_limit !~ /^\d+/;
+	$host_limit = 50 if $host_limit !~ /^\d+/;
+    @ARGV = ('-u', $user_limit, '-h', $host_limit);
     do '/opt/zimbra/libexec/pflogsumm.pl';
     close(STDOUT);
 }
