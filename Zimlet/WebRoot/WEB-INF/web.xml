@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+  <display-name>Zimlet Service</display-name>
+  <description>Zimlet repository</description>
+
+    <!--
+  <filter>
+    <filter-name>ZimletFilter</filter-name>
+    <filter-class>com.zimbra.cs.zimlet.ZimletFilter</filter-class>
+    <init-param>
+      <param-name>allowed.ports</param-name>
+      <param-value>80, 443, 7070, 7443, 7071</param-value>
+    </init-param>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>ZimletFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <servlet>
+    <servlet-name>ProxyServlet</servlet-name>
+    <servlet-class>com.zimbra.cs.zimlet.ProxyServlet</servlet-class>
+    <init-param>
+      <param-name>allowed.ports</param-name>
+      <param-value>80, 443, 7070</param-value>
+    </init-param>
+    <load-on-startup>8</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>ZimletResources</servlet-name>
+    <servlet-class>com.zimbra.cs.zimlet.ZimletResources</servlet-class>
+    <init-param>
+      <param-name>allowed.ports</param-name>
+      <param-value>80, 443, 7070, 7443, 7071</param-value>
+    </init-param>
+	<init-param>
+		<description>
+			The temp directory of the resource cache. The servlet creates
+			a "zimletres" sub-directory in the specified directory. So you
+			should NOT append that to the directory.
+			NOTE: The special string "${webapp}" can be used to specify
+			the webapp/service/ directory. It should ONLY be used at the
+			beginning of the parameter value.
+		</description>
+		<param-name>resource-cache-dir</param-name>
+		<param-value>${webapp}/../../work/resource-cache</param-value>
+	</init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ProxyServlet</servlet-name>
+    <url-pattern>/proxy/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>ZimletResources</servlet-name>
+    <url-pattern>/zimlet/*</url-pattern>
+  </servlet-mapping>
+    -->
+</web-app>

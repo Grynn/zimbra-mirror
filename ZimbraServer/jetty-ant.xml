@@ -65,6 +65,9 @@
 			<webApp name="ZimbraWebClient" warfile="${jetty_run_base}/jetty/webapps/zimbra" contextpath="/zimbra">
 				<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
 			</webApp>
+			<webApp name="ZimbraAdmin" warfile="${jetty_run_base}/jetty/webapps/zimbraAdmin" contextpath="/zimbraAdmin">
+				<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
+			</webApp>
 
 		</jetty>
 	</target>

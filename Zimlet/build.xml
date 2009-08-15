@@ -12,12 +12,13 @@
 
     <property name="zimbra.home.dir" location="/opt/zimbra" />
     <property name="jetty.home.dir" location="${zimbra.home.dir}/jetty" />
+    <property name="zimlet.webinf.dir" location="${jetty.home.dir}/webapps/zimlet/WEB-INF" />
     <property name="webserver.name" value="jetty"/>
     <property name="webserver.root.dir" location="${zimbra.home.dir}/${webserver.name}"/>
 
 	<property name="deploy.dir" value="${webserver.root.dir}/webapps"/>
-	<property name="deploy.lib.path" value="/service/WEB-INF"/>
-	<property name="deploy.jsp.path" value="/service/jsp"/>
+	<property name="deploy.lib.path" value="/zimlet/WEB-INF"/>
+	<property name="deploy.jsp.path" value="/zimlet/jsp"/>
 
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
@@ -34,6 +35,7 @@
 	<property name="common.jars.dir" location="${common.dir}/jars" />
 	<property name="common.classes.dir" location="../ZimbraCommon/build/classes" />
 
+    <property name="webinf.dir" location="WebRoot/WEB-INF" />
 	<property name="server.dir" location="../ZimbraServer" />
 	<property name="server.classes.dir" location="${server.dir}/build/classes" />
 	<property name="jars.dir" location="jars" />
@@ -122,6 +124,14 @@
 		/>
 	</target>
 
+    <target name="deploy" depends="deploy-webinf,deploy-zimlets"/>
+	
+    <target name="deploy-webinf">
+        <copy todir="${zimlet.webinf.dir}">
+            <fileset dir="${webinf.dir}" includes="*"/>
+        </copy>
+    </target>
+	
 	<target name="package" depends="jar,package-zimlets">
 		<copy todir="${dist.conf.dir}">
 			<fileset dir="${config.dir}" includes="*"/>
