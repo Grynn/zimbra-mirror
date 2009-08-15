@@ -90,7 +90,9 @@ if (fork()) {
 	close(PFOUT);
 	close(MIN);
 	open(STDOUT, ">&MOUT") || die $!;
-    @ARGV = qw(-u 25 -h 25);
+	my $user_limit = getLocalConfig('zimbra_mtareport_max_users') || 50;
+	my $host_limit = getLocalConfig('zimbra_mtareport_max_hosts') || 50;
+    @ARGV = qw(-u $user_limit -h $host_limit);
     do '/opt/zimbra/libexec/pflogsumm.pl';
     close(STDOUT);
 }
