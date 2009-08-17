@@ -1,7 +1,11 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <ftstdata>
+<topic name="Applying actions to multiple selections" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
+<topic name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+<topic name="Browser use with Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
 <topic name="Categorizing your mail messages" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+<topic name="Changing my default client type for log in" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
 <topic name="Creating custom folders" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
 <topic name="Customize your view" url="Navigation_folders_and_tips/Customize_your_view.htm" />
 <topic name="Customizing your initial email page" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
@@ -55,11 +59,17 @@
 <topic name="Changing Your Preferences" url="Userspecific/Changing_Your_User_Options.htm" />
 <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
 <topic name="Creating Personas" url="Userspecific/Creating_Personas.htm" />
+<topic name="Exporting Items from your account" url="Userspecific/Exporting_Items_from_your_account.htm" />
+<topic name="How to wipe your mobile device" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
+<topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
 <topic name="If your session expires" url="Userspecific/if_your_session_expires.htm" />
+<topic name="Importing and Exporting Items" url="Userspecific/Importing_and_Exporting_Items_.htm" />
 <topic name="Logging on and off" url="Userspecific/logging_on_and_off.htm" />
 <topic name="Managing your account identities" url="Userspecific/Mail_Identities.htm" />
+<topic name="Managing your mobile devices" url="Userspecific/Managing_your_mobile_devices.htm" />
 <topic name="Accessing your external accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
 <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
+<topic name="Sending your free/busy status to others" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
 <topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
 <topic name="Setting your address book preferences" url="Userspecific/Setting_your_address_book_preferences.htm" />
@@ -69,7 +79,6 @@
 <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
 <topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
-<topic name="Using Shortcuts to navigate" url="Userspecific/Using_Shortcuts_to_navigate.htm" />
 <topic name="Vacation message" url="Userspecific/vacation_message.htm" />
 <topic name="version" url="version.htm" />
 <topic name="About Zimlets" url="Zimlets/About_Zimlets.htm" />

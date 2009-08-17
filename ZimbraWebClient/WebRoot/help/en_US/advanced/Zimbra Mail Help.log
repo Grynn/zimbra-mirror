@@ -144,6 +144,8 @@ whskin_frmset01.htm
 Zimbra_User_Help_hha.hhk
 Zimbra_User_Help.hhc
 Zimbra_User_Help.hhk
+Briefcase\Creating_Slide_Presentations_in_Briefcase.htm
+Briefcase\Creating_Spreadsheets_in_Briefcase.htm
 Briefcase\Send_Files_from_your_Briefcase.htm
 Briefcase\Sharing_your_Briefcase.htm
 Briefcase\Working_in_Briefcase.htm
@@ -172,6 +174,7 @@ Calendar\Importing_your_iCal_calendar.htm
 Calendar\Manager_rights_for_shared_Calendars.htm
 Calendar\Marking_an_appointment_as_private.htm
 Calendar\Printing_a_calendar.htm
+Calendar\Receiving_a_permission_denied_message.htm
 Calendar\Responding_to_an_invitation.htm
 Calendar\Scheduling_All_Day_events.htm
 Calendar\Scheduling_meetings.htm
@@ -244,6 +247,7 @@ Navigation_folders_and_tips\applying_actions_to_multiple_selections.htm
 Navigation_folders_and_tips\b_Subscribe_to_RSS_Atom_feeds.htm
 Navigation_folders_and_tips\browser_use_with_liquid_mail.htm
 Navigation_folders_and_tips\categorizing_your_mail_messages.htm
+Navigation_folders_and_tips\Changing_my_default_client_type_for_log_in.htm
 Navigation_folders_and_tips\creating_custom_folders.htm
 Navigation_folders_and_tips\Customize_your_view.htm
 Navigation_folders_and_tips\Customizing_your_initial_email_page.htm
@@ -297,11 +301,17 @@ Userspecific\Changing_your_default_timezone.htm
 Userspecific\Changing_Your_User_Options.htm
 Userspecific\chaning_your_password.htm
 Userspecific\Creating_Personas.htm
+Userspecific\Exporting_Items_from_your_account.htm
+Userspecific\How_to_wipe_your_mobile_device.htm
+Userspecific\if_you_forget_your_password.htm
 Userspecific\if_your_session_expires.htm
+Userspecific\Importing_and_Exporting_Items_.htm
 Userspecific\logging_on_and_off.htm
 Userspecific\Mail_Identities.htm
+Userspecific\Managing_your_mobile_devices.htm
 Userspecific\Managing_your_POP_Accounts.htm
 Userspecific\New_mail_notifications.htm
+Userspecific\Sending_your_free_busy_status_to_others.htm
 Userspecific\Setting_a_Forwarding_Address.htm
 Userspecific\Setting_up_desktop_alerts.htm
 Userspecific\Setting_your_address_book_preferences.htm
@@ -311,7 +321,6 @@ Userspecific\Setting_your_mail_preferences.htm
 Userspecific\Setting_your_preferences_for_the_email_compose_window.htm
 Userspecific\Setting_your_user_preferences.htm
 Userspecific\using_a_signature.htm
-Userspecific\Using_Shortcuts_to_navigate.htm
 Userspecific\vacation_message.htm
 version.htm
 Zimlets\About_Zimlets.htm
@@ -319,6 +328,7 @@ Zimlets\Managing_your_Zimlets.htm
 RoboHHRE.lng
 Zimbra_User_Help.glo
 default.css
+fish-eye_view.png
 contacts2.png
 searchbutton75.png
 tables.png
@@ -330,11 +340,11 @@ calschedule75.png
 newfolder.png
 groupcontasticon.png
 move.png
-IMstatus.png
 briefcase_uploadbutton.png
 createnewnb.png
 message_count.png
 image19.jpg
+yahooimage.png
 overviewpane.png
 paging.png
 tootlips.png
@@ -351,6 +361,7 @@ sharednotebook.png
 movable_sash.png
 image.png
 trash.png
+onlineicon.png
 tag.png
 tradtional_view.png
 click_to_share.png
@@ -358,7 +369,6 @@ basic_search.gif
 attachment.gif
 tag-list.gif
 3paneview.jpg
-downarrow75.png
 composetab.jpg
 free_busy.png
 sharingnotebook.png
@@ -384,12 +394,12 @@ contacts_add_right-click.png
 spreadsheet_icon.png
 rd_blue_right.jpg
 zimbra_logo_big.gif
+addbuddy.png
 briefcase_add_attachment.png
 right-clickmenus80.png
 calendarmultimgtview.gif
 ehlpdhtm.js
 Zimbra_User_Help.ppf
-ss_btn_related_topics.gif
 default_ns.css
 Briefcase\rd_blue_right.jpg
 Calendar\rd_blue_right.jpg
@@ -421,6 +431,9 @@ whxdata\whtdata6.xml
 whxdata\whtdata7.xml
 whxdata\whtdata8.xml
 whxdata\whtdata9.xml
+whxdata\whtdata10.xml
+whxdata\whtdata11.xml
+whxdata\whtdata12.xml
 whxdata\whidata0.xml
 whxdata\whidata1.xml
 whxdata\whidata2.xml
@@ -435,6 +448,7 @@ whxdata\whfwdata5.xml
 whxdata\whfwdata6.xml
 whxdata\whfwdata7.xml
 whxdata\whfwdata8.xml
+whxdata\whfwdata9.xml
 whdata\whtdata0.htm
 whdata\whtdata1.htm
 whdata\whtdata2.htm
@@ -445,6 +459,9 @@ whdata\whtdata6.htm
 whdata\whtdata7.htm
 whdata\whtdata8.htm
 whdata\whtdata9.htm
+whdata\whtdata10.htm
+whdata\whtdata11.htm
+whdata\whtdata12.htm
 whdata\whidata0.htm
 whdata\whidata1.htm
 whdata\whidata2.htm
@@ -459,6 +476,7 @@ whdata\whfwdata5.htm
 whdata\whfwdata6.htm
 whdata\whfwdata7.htm
 whdata\whfwdata8.htm
+whdata\whfwdata9.htm
 whgdata\whlstt0.htm
 whgdata\whlstt1.htm
 whgdata\whlstt2.htm
@@ -482,6 +500,12 @@ whgdata\whlstt19.htm
 whgdata\whlstt20.htm
 whgdata\whlstt21.htm
 whgdata\whlstt22.htm
+whgdata\whlstt23.htm
+whgdata\whlstt24.htm
+whgdata\whlstt25.htm
+whgdata\whlstt26.htm
+whgdata\whlstt27.htm
+whgdata\whlstt28.htm
 whgdata\whlsti0.htm
 whgdata\whlsti1.htm
 whgdata\whlstfl0.htm
@@ -537,6 +561,7 @@ whgdata\whlstf23.htm
 whgdata\whlstf24.htm
 whgdata\whlstf25.htm
 whgdata\whlstf26.htm
+whgdata\whlstf27.htm
 whgdata\whlstg0.htm
 Zimbra_User_Help.htm
 Zimbra_User_Help_csh.htm

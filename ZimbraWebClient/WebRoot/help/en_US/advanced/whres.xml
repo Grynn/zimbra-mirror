@@ -191,7 +191,7 @@
 
 	<paneskin>
 		<background color="#e8dcc1" img="" />
-		<font name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+		<font name="Arial" size="8pt" color="#0051a2" style="Normal" weight="Normal" decoration="none" />
 		<toc>
 			<background color="#f9f9f9" img="" />
 			<icons>
@@ -202,7 +202,7 @@
 			</icons>
 			<fonts>
 				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
 			</fonts>
 			<activebackgroundcolor attr="#cacaca" />
 			<margin attr="" />
@@ -211,7 +211,7 @@
 		<index>
 			<form>
 				<fonts>
-					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+					<title name="Arial" size="8pt" color="#0051a2" style="Normal" weight="Normal" decoration="none" />
 				</fonts>
 				<button normal="" hover="" />
 				<editwith value="20" />
@@ -219,7 +219,7 @@
 			<background color="#f9f9f9" img="" />
 			<fonts>
 				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
 				<empty name="" size="8pt" color="" style="" weight="" decoration="" />
 			</fonts>
 			<activebackgroundcolor attr="#cacaca" />
@@ -229,7 +229,7 @@
 		<fts>
 			<form>
 				<fonts>
-					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+					<title name="Arial" size="8pt" color="#0051a2" style="Normal" weight="Normal" decoration="none" />
 				</fonts>
 				<button normal="" hover="" />
 				<editwith value="20" />
@@ -237,7 +237,7 @@
 			<background color="#f9f9f9" img="" />
 			<fonts>
 				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
 				<error name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
 			</fonts>
 			<activebackgroundcolor attr="#cacaca" />
@@ -248,7 +248,7 @@
 			<background color="#f9f9f9" img="" />
 			<fonts>
 				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
 			</fonts>
 			<activebackgroundcolor attr="#cacaca" />
 			<margin attr="" />

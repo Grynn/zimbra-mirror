@@ -1,17 +1,18 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <fts>
-<chunkinfo url="whfwdata0.xml" first="!" last="befor"/>
-<chunkinfo url="whfwdata1.xml" first="begin" last="correctnes"/>
-<chunkinfo url="whfwdata2.xml" first="correspond" last="except"/>
-<chunkinfo url="whfwdata3.xml" first="exchang" last="inbox"/>
-<chunkinfo url="whfwdata4.xml" first="inc" last="multipl"/>
-<chunkinfo url="whfwdata5.xml" first="must" last="prevent"/>
-<chunkinfo url="whfwdata6.xml" first="preview" last="sent"/>
-<chunkinfo url="whfwdata7.xml" first="separat" last="tre"/>
-<chunkinfo url="whfwdata8.xml" first="treat" last="ó"/>
+<chunkinfo url="whfwdata0.xml" first="!" last="becom"/>
+<chunkinfo url="whfwdata1.xml" first="beep" last="conversation"/>
+<chunkinfo url="whfwdata2.xml" first="convert" last="event"/>
+<chunkinfo url="whfwdata3.xml" first="every" last="if"/>
+<chunkinfo url="whfwdata4.xml" first="ignor" last="might"/>
+<chunkinfo url="whfwdata5.xml" first="migrat" last="playabl"/>
+<chunkinfo url="whfwdata6.xml" first="plu" last="se"/>
+<chunkinfo url="whfwdata7.xml" first="search" last="though"/>
+<chunkinfo url="whfwdata8.xml" first="thre" last="your"/>
+<chunkinfo url="whfwdata9.xml" first="yourself" last="ó"/>
 
 <tchunkinfo first="0" last="98" url="whftdata0.xml" />
-<tchunkinfo first="99" last="171" url="whftdata1.xml" />
+<tchunkinfo first="99" last="180" url="whftdata1.xml" />
 
 </fts>

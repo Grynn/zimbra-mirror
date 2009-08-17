@@ -1,6 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="features of Zimbra Web Client" >
+  <topic name="About Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+</key>
+<key name="files, attaching" >
+  <topic name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
 <key name="Filter Conditions" >
   <topic name="Filter Conditions and Actions Supported" url="filters/filter_conditions_and_actions_supported.htm" />
   <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
@@ -47,6 +53,9 @@
 </key>
 <key name="free/busy, setting permissions to view" >
   <topic name="Setting permissions to see your free/busy information" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
+</key>
+<key name="free/busy, sharing" >
+  <topic name="Sending your free/busy status to others" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
 </key>
 <key name="GAL vs Contacts" >
   <topic name="GAL vs Contacts" url="Contacts/gal_vs_contacts.htm" />
@@ -112,6 +121,10 @@
 </key>
 <key name="importing address books" >
   <topic name="Importing Contacts" url="Contacts/Importing_Contacts.htm" />
+  <topic name="Importing and Exporting Items " url="Userspecific/Importing_and_Exporting_Items_.htm" />
+</key>
+<key name="importing calendars" >
+  <topic name="Importing and Exporting Items " url="Userspecific/Importing_and_Exporting_Items_.htm" />
 </key>
 <key name="importing contacts" >
   <topic name="Importing Contacts" url="Contacts/Importing_Contacts.htm" />
@@ -136,6 +149,9 @@
 </key>
 <key name="keyboard shortcuts" >
   <topic name="ZWC Keyboard Shortcut Keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="list view of calendars" >
+  <topic name="Calendar List View" url="Calendar/Calendar_List_View.htm" />
 </key>
 <key name="local user" >
   <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
@@ -178,6 +194,9 @@
   <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
   <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
+<key name="meetings, permission denied" >
+  <topic name="Receiving a permission denied message" url="Calendar/Receiving_a_permission_denied_message.htm" />
+</key>
 <key name="menus, right-click" >
   <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
@@ -192,6 +211,12 @@
 </key>
 <key name="mini calendar" >
   <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+</key>
+<key name="mobile device" >
+  <topic name="Managing your mobile devices" url="Userspecific/Managing_your_mobile_devices.htm" />
+</key>
+<key name="mobile wipe" >
+  <topic name="How to wipe your mobile device" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </key>
 <key name="Moving" >
   <topic name="Moving mail messages between folders" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
@@ -248,7 +273,11 @@
   <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="password" >
+  <topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
   <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="permission denied with meeting invite" >
+  <topic name="Receiving a permission denied message" url="Calendar/Receiving_a_permission_denied_message.htm" />
 </key>
 <key name="permissions, changing access to notebooks" >
   <topic name="Cancelling access to your Documents wiki folder" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
@@ -262,6 +291,9 @@
 </key>
 <key name="personal distribution lists" >
   <topic name="Creating Group Contact Lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="phone, wipe" >
+  <topic name="Managing your mobile devices" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
 <key name="planning a meeting" >
   <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
@@ -280,43 +312,6 @@
 </key>
 <key name="POP addresses, adding" >
   <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="preferences" >
-  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="preferences, Calendar" >
-  <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-</key>
-<key name="preferences, changing" >
-  <topic name="Changing Your User Options" url="Userspecific/Changing_Your_User_Options.htm" />
-</key>
-<key name="preferences, general tab" >
-  <topic name="Setting your general preferences" url="Userspecific/Setting_your_general_preferences.htm" />
-</key>
-<key name="preferences, view reading pane" >
-  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="preview pane, turning on or off" >
-  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="Printing" >
-  <topic name="Printing a conversation" url="conversations/printing_a_conversation.htm" />
-  <topic name="Printing a mail message" url="reading_mail/printing_a_mail_message.htm" />
-  <key name="mail message" >
-    <topic name="Printing a mail message" url="reading_mail/printing_a_mail_message.htm" />
-  </key>
-</key>
-<key name="printing a calendar" >
-  <topic name="Printing a calendar" url="Calendar/Printing_a_calendar.htm" />
-</key>
-<key name="printing contacts" >
-  <topic name="Printing Contacts" url="Contacts/Printing_Contacts.htm" />
-</key>
-<key name="private appointments" >
-  <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="private appointments, sharing details" >
-  <topic name="Delegating_Calendar_Access" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
 
 </indexdata>

@@ -3,11 +3,13 @@
 <tocdata>
 <book name="Getting Started" >
   <item name="Welcome to Zimbra Web Client" url="Getting_Started/about_liquid_mail.htm" />
-  <item name="New in 6.0" url="New_in_6.0.htm" />
+  <item name="New ZWC Features in 6.0" url="New_in_6.0.htm" />
   <item name="Logging in and out" url="Userspecific/logging_on_and_off.htm" />
+  <item name="Changing my default client type for log in" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Keyboard Shortcut keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
   <item name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
   <item name="Changing your password" url="Userspecific/chaning_your_password.htm" />
+  <item name="Forget your password?" url="Userspecific/if_you_forget_your_password.htm" />
   <item name="If your session expires" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="Navigating Your Mailbox" >
@@ -17,7 +19,6 @@
   <item name="User interface features and shortcuts" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
   <item name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="Applying actions to multiple selections" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
-  <item name="Using shortcuts to navigate" url="Userspecific/Using_Shortcuts_to_navigate.htm" />
   <item name="Using browsers" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
   <item name="Saving your work" url="Userspecific/browser_session_handling.htm" />
   <item name="Viewing the Overview pane" url="Navigation_folders_and_tips/Folders_area.htm" />
@@ -34,10 +35,9 @@
   <item name="Setting a forwarding address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
   <item name="Managing different identities within your account" url="Userspecific/Mail_Identities.htm" />
+  <item name="Managing your Junk Folder" url="filters/Managing_your_Junk_Folder.htm" />
   <item name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Purging email messages" url="reading_mail/archiving_old_messages.htm" />
-  <item name="Sharing  folders" url="Sharing/Sharing_a_folder.htm" />
-  <item name="Managing items you share" url="Sharing/Managing_items_you_share.htm" />
   <book name="Reading Messages" >
     <item name="Reading mail" url="reading_mail/reading_mail.htm" />
     <item name="Reading mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
@@ -72,13 +72,6 @@
   <item name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
   <item name="Forwarding a mail message" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </book>
-<book name="Sharing Mail Folders" >
-  <item name="Sharing mail folders" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
-  <item name="Sharing your mailbox" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-  <item name="Revoking a access to a shared folder" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
-  <item name="Accepting access to the shared mailbox folder" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-  <item name="Working within a shared mail folder" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
-</book>
 <book name="Managing Your Address Books" >
   <item name="Your Address Book" url="Contacts/contacts.htm" />
   <item name="Types of address books available" url="Contacts/gal_vs_contacts.htm" />
@@ -87,7 +80,6 @@
   <item name="Using company address book" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="Adding contacts automatically" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
   <item name="Creating Group Contact Lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
-  <item name="Sharing your address book" url="Contacts/Sharing_your_Address_Book.htm" />
   <item name="Importing address books" url="Contacts/Importing_Contacts.htm" />
   <item name="Exporting address books" url="Contacts/Exporting_Address_Books.htm" />
   <item name="Printing contact names or address books" url="Contacts/Printing_Contacts.htm" />
@@ -107,34 +99,38 @@
   <item name="Exporting your iCal calendar" url="Calendar/Exporting_your_iCal_calendar.htm" />
   <item name="Printing a calendar" url="Calendar/Printing_a_calendar.htm" />
 </book>
-<book name="Sharing Calendars" >
-  <item name="Sharing your calendar" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="Giving admin rights for shared Calendars" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
-  <item name="Giving manager rights for shared Calendars" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
-  <item name="Accepting access to shared calendar" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
-  <item name="Editing meetings on your calendar" url="Calendar/editing_meetings_on_your_calendar.htm" />
-  <item name="Declining a calendar share request" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
-</book>
 <book name="Scheduling Appointments, Meetings and Events" >
-<chunk name="Scheduling Appointments, Meetings and Events" ref="whtdata1.xml" />
-</book>
-<book name="Instant Messaging (Beta)" >
-  <item name="Instant Messaging Basics" url="instant_messaging/Instant_Messaging_Basics.htm" />
-  <item name="Accessing Instant Messaging" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-  <item name="Starting an IM chat" url="instant_messaging/Starting_an_IM_chat.htm" />
-  <item name="Changing status and availability" url="instant_messaging/Changing_status_and_availability.htm" />
-  <item name="Log into other IM clients" url="instant_messaging/Log_into_other_IM_clients.htm" />
-  <item name="Setting IM preferences" url="instant_messaging/Setting_IM_preferences.htm" />
-  <item name="IM Chat Options to customize your chat experience" url="instant_messaging/IM_Chat_Options_to_customize_your_chat_experience.htm" />
+  <item name="About appointments, meetings and events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <item name="Planning a meeting" url="Calendar/About_the_Appointment_Page.htm" />
+  <item name="Creating an appointment" url="Calendar/Scheduling_meetings.htm" />
+  <item name="Seeing free/busy times" url="Calendar/Seeing_free_busy_times.htm" />
+  <item name="Setting permissions to see your free/busy information" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
+  <item name="Sending your free/busy status to others" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+  <item name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <item name="Scheduling resources" url="Calendar/Scheduling_Resources.htm" />
+  <item name="Turning a message into a meeting request" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+  <item name="Using QuickAdd to create an appointment" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+  <item name="Scheduling all-day events" url="Calendar/Scheduling_All_Day_events.htm" />
+  <item name="Creating recurring appointments" url="Calendar/Creating_recurring_appointments.htm" />
+  <item name="Change meeting details on your calendar" url="Calendar/editing_meetings_on_your_calendar.htm" />
+  <item name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+  <item name="Receiving a permission denied message" url="Calendar/Receiving_a_permission_denied_message.htm" />
+  <item name="Responding to a meeting invite" url="Calendar/Responding_to_an_invitation.htm" />
+  <item name="Changing a meeting you organized" url="Calendar/Changing_a_meeting_.htm" />
+  <item name="Deleting an appointment" url="Calendar/Deleting_an_appointment.htm" />
+  <item name="Deleting recurring appointments" url="Calendar/Deleting_recurring_appointments.htm" />
 </book>
 <book name="Using Task Lists" >
-<chunk name="Using Task Lists" ref="whtdata2.xml" />
+<chunk name="Using Task Lists" ref="whtdata1.xml" />
 </book>
 <book name="Working in Documents " >
-<chunk name="Working in Documents " ref="whtdata3.xml" />
+<chunk name="Working in Documents " ref="whtdata2.xml" />
 </book>
 <book name="Using Briefcase" >
-<chunk name="Using Briefcase" ref="whtdata4.xml" />
+<chunk name="Using Briefcase" ref="whtdata3.xml" />
+</book>
+<book name="Sharing Folders" >
+<chunk name="Sharing Folders" ref="whtdata4.xml" />
 </book>
 <book name="Searching for Items" >
 <chunk name="Searching for Items" ref="whtdata5.xml" />
@@ -142,18 +138,23 @@
 <book name="Using Tags and Folders to Organize Email" >
 <chunk name="Using Tags and Folders to Organize Email" ref="whtdata6.xml" />
 </book>
-<book name="Creating Filters " >
-<chunk name="Creating Filters " ref="whtdata7.xml" />
+<book name="Using Mail Filters" >
+<chunk name="Using Mail Filters" ref="whtdata7.xml" />
 </book>
 <book name="Setting Your Preferences" >
 <chunk name="Setting Your Preferences" ref="whtdata8.xml" />
 </book>
-<book name="Managing Your Account" >
-<chunk name="Managing Your Account" ref="whtdata9.xml" />
+<book name="Instant Messaging (Beta)" >
+<chunk name="Instant Messaging (Beta)" ref="whtdata9.xml" />
+</book>
+<book name="Managing your Mobile Device (ZCS Network Edition)" >
+<chunk name="Managing your Mobile Device (ZCS Network Edition)" ref="whtdata10.xml" />
+</book>
+<book name="Saving Your Account Folders" >
+<chunk name="Saving Your Account Folders" ref="whtdata11.xml" />
 </book>
 <book name="Using Zimlets" >
-  <item name="About Zimlets" url="Zimlets/About_Zimlets.htm" />
-  <item name="Managing your Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
+<chunk name="Using Zimlets" ref="whtdata12.xml" />
 </book>
 
 </tocdata>

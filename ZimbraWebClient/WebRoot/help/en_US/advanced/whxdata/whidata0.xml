@@ -117,9 +117,13 @@
 </key>
 <key name="Calendar preferences" >
   <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="calendar view" >
   <topic name="About Zimbra Calendar" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="calendar views" >
+  <topic name="Calendar List View" url="Calendar/Calendar_List_View.htm" />
 </key>
 <key name="calendar, about" >
   <topic name="About Zimbra Calendar" url="Calendar/About_Calendar.htm" />
@@ -313,12 +317,6 @@
 </key>
 <key name="external user" >
   <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
-</key>
-<key name="features of Zimbra Web Client" >
-  <topic name="About Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
-</key>
-<key name="files, attaching" >
-  <topic name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
 
 </indexdata>

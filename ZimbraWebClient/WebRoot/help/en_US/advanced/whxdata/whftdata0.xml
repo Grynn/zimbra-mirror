@@ -1,6 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <ftstdata>
+<topic name="Creating Slide Presentations in Briefcase" url="Briefcase/Creating_Slide_Presentations_in_Briefcase.htm" />
+<topic name="Creating Spreadsheets in Briefcase" url="Briefcase/Creating_Spreadsheets_in_Briefcase.htm" />
 <topic name="Send Files from your Briefcase" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 <topic name="Sharing your Briefcase" url="Briefcase/Sharing_your_Briefcase.htm" />
 <topic name="Working in Briefcase" url="Briefcase/Working_in_Briefcase.htm" />
@@ -29,6 +31,7 @@
 <topic name="Manager rights for shared Calendars" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
 <topic name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
 <topic name="Printing_a_calendar" url="Calendar/Printing_a_calendar.htm" />
+<topic name="Receiving a permission denied message" url="Calendar/Receiving_a_permission_denied_message.htm" />
 <topic name="Responding_to_an_invitation" url="Calendar/Responding_to_an_invitation.htm" />
 <topic name="Scheduling_All_Day_events" url="Calendar/Scheduling_All_Day_events.htm" />
 <topic name="Scheduling_meetings" url="Calendar/Scheduling_meetings.htm" />
@@ -97,8 +100,5 @@
 <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 <topic name="About folders" url="Navigation_folders_and_tips/about_folders.htm" />
-<topic name="Applying actions to multiple selections" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
-<topic name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-<topic name="Browser use with Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
 
 </ftstdata>  

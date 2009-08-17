@@ -1,6 +1,43 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="preferences" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="preferences, Calendar" >
+  <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+</key>
+<key name="preferences, changing" >
+  <topic name="Changing Your User Options" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="preferences, general tab" >
+  <topic name="Setting your general preferences" url="Userspecific/Setting_your_general_preferences.htm" />
+</key>
+<key name="preferences, view reading pane" >
+  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="preview pane, turning on or off" >
+  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="Printing" >
+  <topic name="Printing a conversation" url="conversations/printing_a_conversation.htm" />
+  <topic name="Printing a mail message" url="reading_mail/printing_a_mail_message.htm" />
+  <key name="mail message" >
+    <topic name="Printing a mail message" url="reading_mail/printing_a_mail_message.htm" />
+  </key>
+</key>
+<key name="printing a calendar" >
+  <topic name="Printing a calendar" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="printing contacts" >
+  <topic name="Printing Contacts" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="private appointments" >
+  <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="private appointments, sharing details" >
+  <topic name="Delegating_Calendar_Access" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
 <key name="private calendar event" >
   <topic name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
@@ -22,8 +59,17 @@
 <key name="reading pane" >
   <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
+<key name="reading pane view" >
+  <topic name="Managing your email message view" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="reading pane, turning off/on" >
+  <topic name="Managing your email message view" url="conversations/conversation_list_view.htm" />
+</key>
 <key name="reading pane, turning on or off" >
   <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="reading pane, view" >
+  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="receiving mail" >
   <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
@@ -132,6 +178,9 @@
 <key name="send files from Briefcase" >
   <topic name="Send Files from your Briefcase" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </key>
+<key name="sending free busy status" >
+  <topic name="Sending your free/busy status to others" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+</key>
 <key name="session expires" >
   <topic name="If your session expires" url="Userspecific/if_your_session_expires.htm" />
 </key>
@@ -203,6 +252,9 @@
 <key name="tags, creating" >
   <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
+<key name="three-pane view" >
+  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
 <key name="tool tips" >
   <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
@@ -233,6 +285,9 @@
 <key name="view, calendar" >
   <topic name="About Zimbra Calendar" url="Calendar/About_Calendar.htm" />
 </key>
+<key name="view, calendars by lists" >
+  <topic name="Calendar List View" url="Calendar/Calendar_List_View.htm" />
+</key>
 <key name="white list" >
   <topic name="Filtering Junk Mail" url="filters/Filtering_Junk_Mail.htm" />
 </key>
@@ -241,6 +296,9 @@
 </key>
 <key name="Wildcards" >
   <topic name="Wildcards" url="filters/wildcards.htm" />
+</key>
+<key name="wipe mobile device" >
+  <topic name="Managing your mobile devices" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
 <key name="Zimbra assistant" >
   <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
