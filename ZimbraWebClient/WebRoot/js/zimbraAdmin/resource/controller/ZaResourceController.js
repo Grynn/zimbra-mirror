@@ -308,7 +308,7 @@ function () {
 			if(a==ZaResource.A_uid) {
 				continue; //skip uid, it is changed throw a separate request
 			}
-			if(tmpObj.attrs[a] instanceof Array) {
+			if(tmpObj.attrs[a] instanceof Array && this._currentObject.attrs[a] instanceof Array) {
 				if(tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf()) {
 					mods[a] = tmpObj.attrs[a];
 				}
