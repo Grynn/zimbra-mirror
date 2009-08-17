@@ -767,10 +767,22 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							visibilityChangeEventSources:[ZaDomain.A_GalMode],
 							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotExternal]
 						},
+						{ref:ZaDomain.A2_new_internal_gal_polling_interval, 
+							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
+							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
+							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotExternal]						
+						},							
 						{ref:ZaDomain.A2_new_external_gal_ds_name, label:ZaMsg.Domain_ExternalGALDSName, type:_TEXTFIELD_,
 							visibilityChangeEventSources:[ZaDomain.A_GalMode],
 							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal]
 						},
+						{ref:ZaDomain.A2_new_external_gal_polling_interval, 
+							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
+							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
+							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal]						
+						},						
 						{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","430px"],
 							visibilityChangeEventSources:[ZaDomain.A_GalMode],
 							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal],
