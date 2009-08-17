@@ -14,8 +14,20 @@ if (navigator.appName !="Netscape")
 <style type="text/css">
 <!--
 ol.whs1 { list-style:decimal; }
+p.whs2 { margin-left:0px; }
 -->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+</style><script type="text/javascript" language="JavaScript">
+<!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
+{
+  var strNSS = "<style type='text/css'>";
+  strNSS += "p.whs2 {margin-left:1pt; }";
+  strNSS +="</style>";
+  document.write(strNSS);
+}
+//-->
+</script>
+<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
 <!--
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
@@ -83,7 +95,23 @@ else
  the message toolbar, click <span style="font-weight: bold;"><B>Print</B></span>.</p></li>
 	<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. &nbsp;</p></li>
 </ol>
-<p>&nbsp;</p>
+<p>To change the font size before printing and then send the conversation 
+ to the printer:</p>
+<ol type="1" class="whs1">
+	<li class=p><p>Open the conversation to be printed and on the message 
+ toolbar, click <span style="font-weight: bold;"><B>Print</B></span>. The message 
+ is displayed with the Print dialog.</p></li>
+	<li class=p><p>Click <span style="font-weight: bold;"><B>Cancel</B></span> 
+ on the Print dialog.</p></li>
+	<li class=p><p>On the message print page, click the <span style="font-weight: bold;"><B>Font 
+ size +</B></span> or<span style="font-weight: bold;"><B> -</B></span> links in the 
+ left corner.</p></li>
+	<li class=p><p>On the browser toolbar, click the <span style="font-weight: bold;"><B>Print</B></span> 
+ icon.</p></li>
+	<li class=p><p class="whs2">In the Print dialog, choose 
+ a printer and click <span style="font-weight: bold;"><B>OK</B></span><span>.</span></p></li>
+	<li class=p><p>Close the message window.</p></li>
+</ol>
 <p>&nbsp;</p>
 <script type="text/javascript" language="javascript1.2">
 <!--

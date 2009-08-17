@@ -4,6 +4,7 @@
 <book name="Getting Started" >
   <item name="Getting Start with the Standard Web Client" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
   <item name="Logging in and out" url="Userspecific/logging_on_and_off.htm" />
+  <item name="Changing my default client type for log in" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Keyboard Shortcut keys" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
 </book>
 <book name="Navigating Your Mailbox" >
@@ -44,7 +45,6 @@
 <book name="Managing Your Address Books" >
   <item name="Your Address Books" url="Contacts/b_Your_Address_Books.htm" />
   <item name="Adding new contacts" url="Contacts/b_Adding_new_contacts.htm" />
-  <item name="Linking to a Shared Address Book" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />
   <item name="Exporting a Contact List" url="Contacts/Exporting_a_Contact_List.htm" />
 </book>
 <book name="Managing Your  Calendar" >
@@ -54,9 +54,6 @@
   <item name="Calendar view options" url="Calendar/Calendar_Views.htm" />
   <item name="Importing iCalendars" url="Calendar/Importing_iCalendars.htm" />
   <item name="Cleaning up your Calendar" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
-</book>
-<book name="Sharing Calendars" >
-  <item name="Link to shared calendar" url="Calendar/Link_to_Shared_Calendar.htm" />
 </book>
 <book name="Scheduling Appointments, Meetings and Events" >
   <item name="Planning a meeting" url="Calendar/About_the_Appointment_Page.htm" />
@@ -69,6 +66,14 @@
   <item name="Change a task" url="Tasks/Change_a_task.htm" />
   <item name="Sorting tasks" url="Tasks/Sorting_tasks_.htm" />
 </book>
+<book name="Sharing Folders" >
+  <book name="Sharing Calendars" >
+    <item name="Link to shared calendar" url="Calendar/Link_to_Shared_Calendar.htm" />
+  </book>
+  <book name="Sharing Address Books" >
+    <item name="Linking to a Shared Address Book" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />
+  </book>
+</book>
 <book name="Searching for Items" >
   <item name="Using Search" url="Search/b_Using_Search.htm" />
   <item name="Create and Save a Search Query" url="Search/b_Create_and_Save_a_Search_Query.htm" />
@@ -80,7 +85,7 @@
   <item name="Renaming folders" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <item name="Deleting folders" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
 </book>
-<book name="Creating Filters " >
+<book name="Using Mail Filters" >
   <item name="Filtering your messages" url="filters/bc_Filtering_your_messages.htm" />
   <item name="Filter conditions and actions supported" url="filters/filter_conditions_and_actions_supported.htm" />
 </book>
