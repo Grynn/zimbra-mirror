@@ -181,6 +181,7 @@ managing_accounts\forwarding_mail.htm
 managing_accounts\how_to_provision_multiple_accounts.htm
 managing_accounts\mailbox_usage.htm
 managing_accounts\managing_resource.htm
+managing_accounts\managing_shared_items_with_distribution_lists.htm
 managing_accounts\preferences.htm
 managing_accounts\provisioning_accounts.htm
 managing_accounts\purging_mail_messages.htm
@@ -219,6 +220,7 @@ managing_global_settings\making_free_busy_view__available_.htm
 managing_global_settings\mta_smtp_restrictions.htm
 managing_global_settings\relay_mta_for_external_delivery.htm
 managing_servers\configuring_the_mta_tab_for_servers.htm
+managing_servers\flushing_the_server_cache.htm
 managing_servers\managing_servers.htm
 managing_servers\monitoring_zimbra_collaboration_suite.htm
 managing_servers\session_timeout.htm
@@ -362,7 +364,6 @@ whgdata\whlstt14.htm
 whgdata\whlstt15.htm
 whgdata\whlstt16.htm
 whgdata\whlstt17.htm
-whgdata\whlstt18.htm
 whgdata\whlsti0.htm
 whgdata\whlsti1.htm
 whgdata\whlstfl0.htm

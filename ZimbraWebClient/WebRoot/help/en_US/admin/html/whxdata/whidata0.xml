@@ -131,6 +131,9 @@
 <key name="bulk provisioning" >
   <topic name="Bulk Provisioning" url="managing_accounts/bulk_provisioning.htm" />
 </key>
+<key name="cache, flush" >
+  <topic name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
+</key>
 <key name="Calendar" >
   <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
 </key>
@@ -251,6 +254,9 @@
 <key name="distribution list, number used" >
   <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
 </key>
+<key name="distribution list, sharing" >
+  <topic name="Managing Shared Items with Distribution Lists" url="managing_accounts/managing_shared_items_with_distribution_lists.htm" />
+</key>
 <key name="distribution lists" >
   <topic name="Distribution Lists" url="managing_accounts/distribution_lists.htm" />
 </key>
@@ -322,15 +328,6 @@
 </key>
 <key name="filters" >
   <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
-</key>
-<key name="find" >
-  <topic name="Search for Accounts" url="search/search.htm" />
-</key>
-<key name="forwarding address, allowing users to" >
-  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
-</key>
-<key name="forwarding mail" >
-  <topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
 </key>
 
 </indexdata>

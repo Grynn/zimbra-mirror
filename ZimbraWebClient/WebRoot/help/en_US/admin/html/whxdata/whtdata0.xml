@@ -13,6 +13,7 @@
   <item name="Configuring the MTA Tab for Global Settings" url="managing_global_settings/configuring_the_mta_tab_for_global_settings.htm" />
   <item name="Global Attachment Settings" url="managing_global_settings/global_attachment_settings.htm" />
   <item name="Blocking Mail Attachments" url="managing_global_settings/blocking_attachments_to_email.htm" />
+  <item name="Blocking messages with specific extensions" url="managing_global_settings/blocking_messages_with_specific_extensions.htm" />
   <item name="MTA Protocol and DNS Checks" url="managing_global_settings/mta_smtp_restrictions.htm" />
   <item name="Relay MTA for external delivery" url="managing_global_settings/relay_mta_for_external_delivery.htm" />
   <item name="Configuring IMAP" url="managing_global_settings/configuring_imap.htm" />
@@ -23,6 +24,7 @@
   <item name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
   <item name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
   <item name="Making Free/Busy Available" url="managing_global_settings/making_free_busy_view__available_.htm" />
+  <item name="Installing Certificates" url="tools/installing_certificates.htm" />
 </book>
 <book name="Searching" >
   <item name="Using Search" url="search/search.htm" />
@@ -75,6 +77,7 @@
   </book>
   <book name="Distribution Lists" >
     <item name="Creating Distribution Lists" url="managing_accounts/distribution_lists.htm" />
+    <item name="Managing Shared Items with Distribution Lists" url="managing_accounts/managing_shared_items_with_distribution_lists.htm" />
     <item name="Adding Distribution Lists to an Account" url="managing_accounts/adding_distribution_lists_to_an_account.htm" />
     <item name="Deleting Distribution Lists" url="managing_accounts/delete_distribution_lists.htm" />
   </book>
@@ -113,6 +116,7 @@
   <item name="Setting Up Zimlets in ZCS" url="zimlets/setting_up_zimlets_in_zcs.htm" />
   <item name="Adding Zimlets to COS and Accounts" url="zimlets/adding_zimlets_to_cos_and_accounts.htm" />
   <item name="Removing Zimlets from the Zimbra Server" url="zimlets/removing_zimlets_from_the_zimbra_server.htm" />
+  <item name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
   <item name="Disable Access to Zimlets" url="zimlets/removing_zimlets.htm" />
 </book>
 <book name="Monitoring Tools" >
@@ -122,16 +126,9 @@
   <item name="Daily Mail Reports" url="monitoring/daily_mail_reports.htm" />
   <item name="About MTA Queues" url="monitoring/about_mta_queues.htm" />
   <item name="Monitoring Zimbra Mail Queues" url="monitoring/monitoring_zimbra_mta_mail_queues.htm" />
+  <item name="Disk Space Availability Alert" url="monitoring/disk_space_avability_alert.htm" />
   <item name="Viewing Mailbox Quotas" url="managing_servers/viewing_mailbox_quotas.htm" />
   <item name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
-</book>
-<book name="Working with Themes" >
-  <item name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
-  <item name="Quick Custom Color" url="ui_themes/how_to_customize_theme_colors_and_logos.htm" />
-  <item name="How to customize themes from admin console" url="ui_themes/how_to_customize_themes_and_logos.htm" />
-  <item name="Restricting User Interface Theme Choice" url="ui_themes/restricting_user_interface_theme_choice.htm" />
-  <item name="Making UI Themes available by COS" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
-  <item name="Making UI Themes Available by Account" url="ui_themes/making_ui_themes_available_by_account.htm" />
 </book>
 <book name="Migration Wizards" >
   <item name="Zimbra Migration Wizard for Exchange" url="migration_wizard/mw_using_the_migration_wizard.htm" />

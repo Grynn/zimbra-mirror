@@ -1,6 +1,25 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="search" >
+  <topic name="Search for Accounts" url="search/search.htm" />
+</key>
+<key name="search by login time" >
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
+</key>
+<key name="search for administrators" >
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
+</key>
+<key name="search, advanced" >
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
+</key>
+<key name="secondary volumes" >
+  <topic name="Volume Management" url="managing_servers/volume_management.htm" />
+</key>
+<key name="self-signed certificates" >
+  <topic name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
+  <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
+</key>
 <key name="server pool" >
   <topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
 </key>
@@ -97,6 +116,9 @@
 <key name="themes defining" >
   <topic name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
 </key>
+<key name="themes, flush cache" >
+  <topic name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
+</key>
 <key name="time zone, setting" >
   <topic name="Setting time zones for accounts" url="managing_accounts/setting_time_zones_for_accounts.htm" />
 </key>
@@ -150,6 +172,9 @@
 </key>
 <key name="Zimlets, disabling access to" >
   <topic name="Disable Access to Zimlets" url="zimlets/removing_zimlets.htm" />
+</key>
+<key name="zimlets, flush cache" >
+  <topic name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
 </key>
 <key name="Zimlets, managing" >
   <topic name="Managing Zimlets" url="zimlets/about_zimlets.htm" />

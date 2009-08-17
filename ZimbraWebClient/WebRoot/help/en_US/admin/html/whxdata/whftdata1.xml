@@ -1,6 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <ftstdata>
+<topic name="View Server Status" url="monitoring/view_server_status.htm" />
+<topic name="Viewing User's Mailbox Content" url="monitoring/viewing_user_s_mailbox_content.htm" />
+<topic name="Changing a Password" url="passwords/changing_a_password.htm" />
 <topic name="Changing Locked Out Status" url="passwords/changing_locked_out_status.htm" />
 <topic name="Password Options" url="passwords/password_options.htm" />
 <topic name="Setting Account Lockout Rules" url="passwords/setting_account_lockout_rules.htm" />

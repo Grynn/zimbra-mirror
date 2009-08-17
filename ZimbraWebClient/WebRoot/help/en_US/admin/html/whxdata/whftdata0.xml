@@ -32,6 +32,7 @@
 <topic name="How to Provision Multiple Accounts" url="managing_accounts/how_to_provision_multiple_accounts.htm" />
 <topic name="Mailbox usage" url="managing_accounts/mailbox_usage.htm" />
 <topic name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
+<topic name="Managing Shared Items with Distribution Lists" url="managing_accounts/managing_shared_items_with_distribution_lists.htm" />
 <topic name="Preferences" url="managing_accounts/preferences.htm" />
 <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
 <topic name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
@@ -70,6 +71,7 @@
 <topic name="MTA SMTP Restrictions" url="managing_global_settings/mta_smtp_restrictions.htm" />
 <topic name="Relay MTA for external delivery" url="managing_global_settings/relay_mta_for_external_delivery.htm" />
 <topic name="Configuring the MTA Tab for Servers" url="managing_servers/configuring_the_mta_tab_for_servers.htm" />
+<topic name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
 <topic name="Managing Servers" url="managing_servers/managing_servers.htm" />
 <topic name="Monitoring Servers" url="managing_servers/monitoring_zimbra_collaboration_suite.htm" />
 <topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
@@ -96,8 +98,5 @@
 <topic name="Daily Mail Reports" url="monitoring/daily_mail_reports.htm" />
 <topic name="Disk Space Avability Alert" url="monitoring/disk_space_avability_alert.htm" />
 <topic name="Monitoring Zimbra MTA Mail Queues" url="monitoring/monitoring_zimbra_mta_mail_queues.htm" />
-<topic name="View Server Status" url="monitoring/view_server_status.htm" />
-<topic name="Viewing User's Mailbox Content" url="monitoring/viewing_user_s_mailbox_content.htm" />
-<topic name="Changing a Password" url="passwords/changing_a_password.htm" />
 
 </ftstdata>  
