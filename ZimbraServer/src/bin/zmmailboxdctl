@@ -97,6 +97,10 @@ case "$1" in
         mkdir -p ${mailboxd_directory}/work/service/jsp
         mkdir -p ${mailboxd_directory}/work/zimbra/jsp
         mkdir -p ${mailboxd_directory}/work/zimbraAdmin/jsp
+        if [ ! -d ${mailboxd_directory}/webapps/zimlet/WEB-INF ]; then
+          mkdir -p ${mailboxd_directory}/webapps/zimlet/WEB-INF
+          rewriteWebXml
+        fi
       fi
 
       mailboxd_thread_stack_size=${mailboxd_thread_stack_size:=256k}
