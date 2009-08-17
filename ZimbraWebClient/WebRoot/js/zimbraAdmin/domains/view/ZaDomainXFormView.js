@@ -88,8 +88,7 @@ function(entry) {
         var modelItem = this._localXForm.getModel().getItem(a) ;
         if ((modelItem != null && modelItem.type == _LIST_) || (entry.attrs[a] != null && entry.attrs[a] instanceof Array)) {  
         	//need deep clone
-            this._containedObject.attrs [a] =
-                    ZaItem.deepCloneListItem (entry.attrs[a]);
+            this._containedObject.attrs [a] = ZaItem.deepCloneListItem (entry.attrs[a]);
         } else {
             this._containedObject.attrs[a] = entry.attrs[a];
         }
@@ -166,7 +165,46 @@ function(entry) {
 	}
 	//}
 
-	this._containedObject[ZaDomain.A2_gal_sync_accounts] = entry[ZaDomain.A2_gal_sync_accounts];
+	this._containedObject[ZaDomain.A2_gal_sync_accounts] = [];
+	if(entry[ZaDomain.A2_gal_sync_accounts] && entry[ZaDomain.A2_gal_sync_accounts][0]) {
+		this._containedObject[ZaDomain.A2_gal_sync_accounts][0] = new ZaAccount();
+		this._containedObject[ZaDomain.A2_gal_sync_accounts][0].name = entry[ZaDomain.A2_gal_sync_accounts][0].name;
+		this._containedObject[ZaDomain.A2_gal_sync_accounts][0].id = entry[ZaDomain.A2_gal_sync_accounts][0].id;
+		this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_datasources] = entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_datasources]; 
+		//this._containedObject[ZaDomain.A2_gal_sync_accounts][0].attrs = ZaItem.deepCloneListItem (entry[ZaDomain.A2_gal_sync_accounts][0].attrs);
+		if(entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds]) {
+			this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds] = new ZaDataSource();
+			this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs = [];
+			this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].name = entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].name;
+			this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].id = entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].id;
+			for (var a in entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs) {
+		        var modelItem = this._localXForm.getModel().getItem(a) ;
+		        if (entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs[a] != null && entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs[a] instanceof Array) {  
+		        	//need deep clone
+		            this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs[a] = ZaItem.deepCloneListItem (entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs[a]);
+		        } else {
+		            this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs[a] = entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs[a];
+		        }
+		    }
+		}
+		if(entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds]) {
+			this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds] = new ZaDataSource();
+			this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].name = entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].name;
+			this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].id = entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].id; 
+			this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs = [];
+			for (var a in entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs) {
+		        var modelItem = this._localXForm.getModel().getItem(a) ;
+		        if (entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs[a] != null && entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs[a] instanceof Array) {  
+		        	//need deep clone
+		            this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs [a] = ZaItem.deepCloneListItem (entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs[a]);
+		        } else {
+		            this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs[a] = entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs[a];
+		        }
+		    }		    
+			//this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs = ZaItem.deepCloneListItem (entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs); 
+		}
+	}
+	
     this._localXForm.setInstance(this._containedObject);        
 	this.updateTab();
 }
@@ -733,13 +771,29 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 						[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
 					]
 				},
+				{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval), 
+					type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
+					msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
+					visibilityChecks:[
+						ZaNewDomainXWizard.isDomainModeNotExternal,
+						[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
+					]						
+				},				
 				{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds + ".name"), label:ZaMsg.Domain_ExternalGALDSName, type:_OUTPUT_,
 					visibilityChangeEventSources:[ZaDomain.A_GalMode],
 					visibilityChecks:[
 						ZaNewDomainXWizard.isDomainModeNotInternal,
 						[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
 					]
-				},												
+				},	
+				{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval), 
+					type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
+					msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
+					visibilityChecks:[
+						ZaNewDomainXWizard.isDomainModeNotInternal,
+						[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
+					]						
+				},															
 				{type:_GROUP_, visibilityChecks:[ZaDomainXFormView.isDomainModeNotInternal], visibilityChangeEventSources:[ZaDomain.A_GalMode],useParentTable:true, colSpan:"*",
 					items: [
 						{ref:ZaDomain.A_GALServerType, type:_OUTPUT_, label:ZaMsg.Domain_GALServerType, choices:this.GALServerTypes, labelLocation:_LEFT_},

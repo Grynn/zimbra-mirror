@@ -124,7 +124,7 @@ ZaDomain.A_zimbraGalSyncLdapBindPassword="zimbraGalSyncLdapBindPassword";
 
 //GAL Sync accounts
 ZaDomain.A_zimbraGalAccountId = "zimbraGalAccountId";
-
+ 
 //Auth
 ZaDomain.A_AuthMech = "zimbraAuthMech";
 ZaDomain.A_AuthLdapURL = "zimbraAuthLdapURL";
@@ -230,6 +230,8 @@ ZaDomain.A2_gal_sync_accounts = "gal_sync_accounts";
 ZaDomain.A2_new_gal_sync_account_name = "new_gal_sync_account_name";
 ZaDomain.A2_new_internal_gal_ds_name = "new_internal_gal_ds_name";
 ZaDomain.A2_new_external_gal_ds_name = "new_external_gal_ds_name";
+ZaDomain.A2_new_internal_gal_polling_interval = "new_internal_gal_polling_interval";
+ZaDomain.A2_new_external_gal_polling_interval = "new_external_gal_polling_interval";
 //result codes returned from Check* requests
 ZaDomain.Check_OK = "check.OK";
 ZaDomain.Check_UNKNOWN_HOST="check.UNKNOWN_HOST";
@@ -564,8 +566,10 @@ ZaDomain.createGalAccounts = function (tmpObj,newDomain) {
 			createInternalDSDoc.setAttribute("name", tmpObj[ZaDomain.A2_new_internal_gal_ds_name]);
 			createInternalDSDoc.setAttribute("folder", "_"+tmpObj[ZaDomain.A2_new_internal_gal_ds_name]);
 			createInternalDSDoc.setAttribute("type", "zimbra");
-			createInternalDSDoc.setAttribute("domain", tmpObj.attrs[ZaDomain.A_domainName]);		
+			createInternalDSDoc.setAttribute("domain", tmpObj.attrs[ZaDomain.A_domainName]);
+			//zimbraDataSourcePollingInterval		
 			soapDoc.set("account", tmpObj[ZaDomain.A2_new_gal_sync_account_name],createInternalDSDoc).setAttribute("by","name");
+			soapDoc.set("a", tmpObj[ZaDomain.A2_new_internal_gal_polling_interval],createInternalDSDoc).setAttribute("n",ZaDataSource.A_zimbraDataSourcePollingInterval);
 		}
 		
 		if(tmpObj.attrs[ZaDomain.A_GalMode] != ZaDomain.GAL_Mode_internal
@@ -576,6 +580,7 @@ ZaDomain.createGalAccounts = function (tmpObj,newDomain) {
 			createExternalDSDoc.setAttribute("type", "ldap");		
 			createExternalDSDoc.setAttribute("domain", tmpObj.attrs[ZaDomain.A_domainName]);
 			soapDoc.set("account", tmpObj[ZaDomain.A2_new_gal_sync_account_name],createExternalDSDoc).setAttribute("by","name");
+			soapDoc.set("a", tmpObj[ZaDomain.A2_new_external_gal_polling_interval],createExternalDSDoc).setAttribute("n","zimbraDataSourcePollingInterval");
 		}	
 		
 		try {
@@ -948,9 +953,16 @@ function(tmpObj) {
 			createInternalDSDoc.setAttribute("domain", tmpObj.attrs[ZaDomain.A_domainName]);		
 			if(tmpObj[ZaDomain.A2_new_gal_sync_account_name]) {
 				soapDoc.set("account", tmpObj[ZaDomain.A2_new_gal_sync_account_name],createInternalDSDoc).setAttribute("by","name");
+								
 			} else if (tmpObj[ZaDomain.A2_gal_sync_accounts] && tmpObj[ZaDomain.A2_gal_sync_accounts][0]) {
 				soapDoc.set("account", tmpObj[ZaDomain.A2_gal_sync_accounts][0].name,createInternalDSDoc).setAttribute("by","name");
+
 			}
+			if(tmpObj[ZaDomain.A2_new_internal_gal_polling_interval]) {
+				soapDoc.set("a", tmpObj[ZaDomain.A2_new_internal_gal_polling_interval],createInternalDSDoc).setAttribute("n",ZaDataSource.A_zimbraDataSourcePollingInterval);				
+			}/* else if(tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds] && tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs) {
+								soapDoc.set("a", tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval],createInternalDSDoc).setAttribute("n",ZaDataSource.A_zimbraDataSourcePollingInterval);
+			}*/
 		}
 		
 		if(tmpObj.attrs[ZaDomain.A_GalMode] != ZaDomain.GAL_Mode_internal
@@ -965,8 +977,48 @@ function(tmpObj) {
 			}  else if (tmpObj[ZaDomain.A2_gal_sync_accounts] && tmpObj[ZaDomain.A2_gal_sync_accounts][0]) {
 				soapDoc.set("account", tmpObj[ZaDomain.A2_gal_sync_accounts][0].name,createExternalDSDoc).setAttribute("by","name");
 			}
+			
+			if(tmpObj[ZaDomain.A2_new_external_gal_polling_interval]) {
+				soapDoc.set("a", tmpObj[ZaDomain.A2_new_external_gal_polling_interval],createExternalDSDoc).setAttribute("n",ZaDataSource.A_zimbraDataSourcePollingInterval);				
+			}/* else if(tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds] && tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs) {
+				soapDoc.set("a", tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval],createExternalDSDoc).setAttribute("n",ZaDataSource.A_zimbraDataSourcePollingInterval);
+			}*/
+			
 		}	
 	}
+	if(tmpObj[ZaDomain.A2_gal_sync_accounts] && tmpObj[ZaDomain.A2_gal_sync_accounts][0]) {
+		if(tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds] 
+			&& tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs
+			&& this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds]
+			&& this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs) {
+			if(this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval] !=
+			tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval]) {
+				var modifyDSDoc = soapDoc.set("ModifyDataSourceRequest", null, null, ZaZimbraAdmin.URN);
+				soapDoc.set("id", this[ZaDomain.A2_gal_sync_accounts][0].id, modifyDSDoc);
+				var ds = soapDoc.set("dataSource", null,modifyDSDoc);
+				ds.setAttribute("id", this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].id);
+				var attr = soapDoc.set("a", tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval],ds);
+				attr.setAttribute("n", ZaDataSource.A_zimbraDataSourcePollingInterval);				
+			}
+			
+		}
+		
+		if(tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds] 
+			&& tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs
+			&& this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds]
+			&& this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs) {
+			if(this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval] !=
+			tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval]) {
+				var modifyDSDoc = soapDoc.set("ModifyDataSourceRequest", null, null, ZaZimbraAdmin.URN);
+				soapDoc.set("id", this[ZaDomain.A2_gal_sync_accounts][0].id, modifyDSDoc);
+				var ds = soapDoc.set("dataSource", null,modifyDSDoc);
+				ds.setAttribute("id", this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].id);
+				var attr = soapDoc.set("a", tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval],ds);
+				attr.setAttribute("n", ZaDataSource.A_zimbraDataSourcePollingInterval);
+			}
+			
+		}
+	}	
 	var modifyDomainDoc = soapDoc.set("ModifyDomainRequest", null, null, ZaZimbraAdmin.URN);
 	soapDoc.set("id", this.id,modifyDomainDoc);
 	
@@ -1024,9 +1076,11 @@ function(tmpObj) {
                 lastException = ex ;
             }
 		} else {
-			var batchResp = respObj.Body.BatchResponse;
+/*			var batchResp = respObj.Body.BatchResponse;
 			var resp = batchResp.ModifyDomainResponse[0];	
-			this.initFromJS(resp.domain[0]);
+			this.initFromJS(resp.domain[0]);*/
+			this.refresh(false,true);
+			ZaDomain.putDomainToCache(this);			
 		}
 	} catch (ex) {
 		//show the error and go on
@@ -1119,10 +1173,13 @@ ZaDomain.prototype.setStatus = function (newStatus) {
 * modifies object's information in the database
 **/
 ZaDomain.modifyMethod =
-function(mods) {
-	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", ZaZimbraAdmin.URN, null);
-	soapDoc.set("id", this.id);
-
+function(mods,tmpObj) {
+	var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+	soapDoc.setMethodAttribute("onerror", "stop");
+	
+	var modifyDomainDoc = soapDoc.set("ModifyDomainRequest", null, null, ZaZimbraAdmin.URN);
+	soapDoc.set("id", this.id,modifyDomainDoc);
+	
     for (var aname in mods) {
 		//multy value attribute
 		if(mods[aname] instanceof Array) {
@@ -1130,26 +1187,89 @@ function(mods) {
 			if(cnt) {
 				for(var ix=0; ix <cnt; ix++) {
 					if(mods[aname][ix]) { //if there is an empty element in the array - don't send it
-						var attr = soapDoc.set("a", mods[aname][ix]);
+						var attr = soapDoc.set("a", mods[aname][ix],modifyDomainDoc);
 						attr.setAttribute("n", aname);
 					}
 				}
 			} else {
-				var attr = soapDoc.set("a", "");
+				var attr = soapDoc.set("a", "",modifyDomainDoc);
 				attr.setAttribute("n", aname);
 			}
 		} else {		
-			var attr = soapDoc.set("a", mods[aname]);
+			var attr = soapDoc.set("a", mods[aname],modifyDomainDoc);
 			attr.setAttribute("n", aname);
 		}
     }
-	var params = new Object();
-	params.soapDoc = soapDoc;
-	var reqMgrParams = {
-		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
+    
+	if(tmpObj[ZaDomain.A2_gal_sync_accounts] && tmpObj[ZaDomain.A2_gal_sync_accounts][0]) { 
+		if(tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds] 
+			&& tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs
+			&& this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds]
+			&& this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs) {
+			if(this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval] !=
+			tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval]) {
+				var modifyDSDoc = soapDoc.set("ModifyDataSourceRequest", null, null, ZaZimbraAdmin.URN);
+				soapDoc.set("id", this[ZaDomain.A2_gal_sync_accounts][0].id, modifyDSDoc);
+				var ds = soapDoc.set("dataSource", null,modifyDSDoc);
+				ds.setAttribute("id", this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].id);
+				var attr = soapDoc.set("a", tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval],ds);
+				attr.setAttribute("n", ZaDataSource.A_zimbraDataSourcePollingInterval);				
+			}
+		}
+		
+		if(tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds] 
+			&& tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs
+			&& this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds]
+			&& this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs) {
+			if(this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval] !=
+			tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval]) {
+				var modifyDSDoc = soapDoc.set("ModifyDataSourceRequest", null, null, ZaZimbraAdmin.URN);
+				soapDoc.set("id", this[ZaDomain.A2_gal_sync_accounts][0].id, modifyDSDoc);
+				var ds = soapDoc.set("dataSource", null,modifyDSDoc);
+				ds.setAttribute("id", this[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].id);
+				var attr = soapDoc.set("a", tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_ldap_ds].attrs[ZaDataSource.A_zimbraDataSourcePollingInterval],ds);
+				attr.setAttribute("n", ZaDataSource.A_zimbraDataSourcePollingInterval);
+			}
+		}
 	}	
-	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
+	
+	try {
+		params = new Object();
+		params.soapDoc = soapDoc;	
+		var reqMgrParams ={
+			controller:ZaApp.getInstance().getCurrentController(),
+			busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN,
+			showBusy:true
+		}
+		var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
+		if(respObj.isException && respObj.isException()) {
+			ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaDomain.modifyGalSettings", null, false);
+		    hasError  = true ;
+            lastException = ex ;
+        } else if(respObj.Body.BatchResponse.Fault) {
+			var fault = respObj.Body.BatchResponse.Fault;
+			if(fault instanceof Array)
+				fault = fault[0];
+			
+			if (fault) {
+				// JS response with fault
+				var ex = ZmCsfeCommand.faultToEx(fault);
+				ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaDomain.modifyGalSettings", null, false);
+                hasError = true ;
+                lastException = ex ;
+            }
+		} else {
+			var batchResp = respObj.Body.BatchResponse;
+			var resp = batchResp.ModifyDomainResponse[0];	
+			this.initFromJS(resp.domain[0]);
+		}
+	} catch (ex) {
+		//show the error and go on
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.modifyGalSettings", null, false);
+	    hasError = true ;
+        lastException = ex ;
+	}		    
+
 	this.refresh(false,true);
 	ZaDomain.putDomainToCache(this);
 }
@@ -1587,6 +1707,8 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A2_new_gal_sync_account_name, type:_STRING_, ref:ZaDomain.A2_new_gal_sync_account_name},
 		{id:ZaDomain.A2_new_internal_gal_ds_name, type:_STRING_, ref:ZaDomain.A2_new_internal_gal_ds_name},
 		{id:ZaDomain.A2_new_external_gal_ds_name, type:_STRING_, ref:ZaDomain.A2_new_external_gal_ds_name},
+		{id:ZaDomain.A2_new_internal_gal_polling_interval, type:_MLIFETIME_, ref:ZaDomain.A2_new_internal_gal_polling_interval},
+		{id:ZaDomain.A2_new_external_gal_polling_interval, type:_MLIFETIME_, ref:ZaDomain.A2_new_external_gal_polling_interval},		
 		{id:ZaDomain.A2_gal_sync_accounts, type:_LIST_, listItem:{type:_OBJECT_, items:ZaAccount.myXModel.items}, ref:ZaDomain.A2_gal_sync_accounts},
 		{id:ZaDomain.A_AuthLdapUserDn, type:_STRING_,ref:"attrs/" + ZaDomain.A_AuthLdapUserDn},
 		{id:ZaDomain.A_zimbraAuthLdapStartTlsEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAuthLdapStartTlsEnabled},

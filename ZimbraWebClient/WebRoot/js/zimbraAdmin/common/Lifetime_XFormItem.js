@@ -73,6 +73,7 @@ Lifetime_XFormItem.prototype.items = [
 		},
 		elementChanged:function(numericPart, instanceValue, event) {
 			var val = numericPart + this.getParentItem()._stringPart;
+			this.getParentItem()._numericPart = numericPart;
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		}
 	},
@@ -93,6 +94,7 @@ Lifetime_XFormItem.prototype.items = [
 		},
 		elementChanged:function(stringPart,instanceValue, event) {
 			var val = this.getParentItem()._numericPart + stringPart;
+			this.getParentItem()._stringPart = stringPart;
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		}
 	}

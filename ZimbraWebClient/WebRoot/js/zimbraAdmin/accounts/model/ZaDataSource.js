@@ -52,6 +52,7 @@ ZaDataSource.A_zimbraGalStatus = "zimbraGalStatus";
 ZaDataSource.A_zimbraGalType = "zimbraGalType";
 ZaDataSource.A_zimbraGalSyncTimestampFormat = "zimbraGalSyncTimestampFormat";
 ZaDataSource.A_zimbraDataSourceType = "zimbraDataSourceType";
+ZaDataSource.A_zimbraDataSourcePollingInterval = "zimbraDataSourcePollingInterval";
 
 ZaDataSource.myXModel = {
     items: [
@@ -63,6 +64,7 @@ ZaDataSource.myXModel = {
 		{id:ZaDataSource.A_zimbraGalSyncLdapBindDn, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDataSource.A_zimbraGalSyncLdapBindDn},
 		{id:ZaDataSource.A_zimbraGalSyncLdapBindPassword, type:_STRING_, ref:"attrs/" + ZaDataSource.A_zimbraGalSyncLdapBindPassword},
     	{id:ZaDataSource.A_zimbraGalSyncLdapStartTlsEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDataSource.A_zimbraGalSyncLdapStartTlsEnabled},
-    	{id:ZaDataSource.A_zimbraGalSyncLdapAuthMech, type:_STRING_, ref:"attrs/" + ZaDataSource.A_zimbraGalSyncLdapAuthMech}
+    	{id:ZaDataSource.A_zimbraGalSyncLdapAuthMech, type:_STRING_, ref:"attrs/" + ZaDataSource.A_zimbraGalSyncLdapAuthMech},
+    	{id:ZaDataSource.A_zimbraDataSourcePollingInterval,type:_MLIFETIME_, ref:"attrs/" + ZaDataSource.A_zimbraDataSourcePollingInterval}
     ]
 };
