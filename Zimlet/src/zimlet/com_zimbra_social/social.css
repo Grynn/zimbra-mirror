@@ -1,0 +1,190 @@
+.Imgsocial-panelIcon {
+  background: transparent url("social_twitter.png") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.Imgsocial_twitterIcon {
+  background: transparent url("social_twitter.png") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+.Imgsocial_trendIcon {
+  background: transparent url("chart_bar.png") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.Imgsocial_followMeIcon {
+  background: transparent  url("social_followMe.png") no-repeat 0 0;
+  width: 90px;
+  height: 55px;
+  overflow: hidden;
+}
+
+.Imgsocial_facebookIcon {
+  background:  transparent url("social_fb.png") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.Imgsocial_unFollowIcon {
+  background: transparent url("social_unfollow.png") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+
+.Imgsocial_tweetMemeIcon {
+  background:  transparent url("social_tweetmeme.png") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+.Imgsocial_diggIcon {
+  background:  transparent url("social_digg.png") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+.Imgsocial_checkIcon {
+  background: url("social_check.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+
+.social_cardDiv{
+background:#FFFFFC;
+border-bottom:1px solid #6E6E6E;border-right:1px solid #6E6E6E;
+}
+.social_rowsDiv{
+background:white;
+border-bottom:1px solid #6E6E6E;
+}
+.social_FBCommentRow{
+border-bottom:1px solid #E5EAF1;
+background-color:#ECEFF5;
+}
+
+.social_axnClass {
+	font-size:16px;font-family:'Lucida Grande',sans-serif;
+	overflow:auto;
+	border-top:1px solid #B2B2B2; border-bottom:2px solid #6E6E6E; border-left:1px solid #B2B2B2;border-right:2px solid #6E6E6E;
+	display:block;
+	z-index:9001;
+
+}
+.social_searchColor {
+	background-image:url(social_bkground.gif);
+}
+
+.social_tweetMemeBg {
+	background-image:url(social_bkground.gif);
+	height: 48px;
+	width: 48px;
+	font-size:16px;font-family:'Lucida Grande',sans-serif;
+	font-weight:bold;
+	color:white;
+	border-top:1px solid #B2B2B2; border-bottom:2px solid #6E6E6E; border-left:1px solid #B2B2B2;border-right:2px solid #6E6E6E;
+}
+.social_diggBg {
+	background-image:url(social_diggBg1.png);
+	height: 48px;
+	width: 48px;
+	border-top:1px solid #B2B2B2; border-bottom:2px solid #6E6E6E; border-left:1px solid #B2B2B2;border-right:2px solid #6E6E6E;
+}
+.social_tweetMemeRetweetBg {
+	font-size:12px;font-family:'Lucida Grande',sans-serif;
+	font-weight:bold;
+	color:white;
+	background:#00A854;
+	border-top:1px solid #B2B2B2; border-bottom:2px solid #6E6E6E; border-left:1px solid #B2B2B2;border-right:2px solid #6E6E6E;
+}
+.social_diggHdrBg {
+	font-weight:bold;
+	background:#FFFFCC;
+	border-top:1px solid #B2B2B2; border-bottom:2px solid #6E6E6E; border-left:1px solid #B2B2B2;border-right:2px solid #6E6E6E;
+}
+
+.social_accountBg {
+	font-size:12px;font-family:'Lucida Grande',sans-serif;
+	font-weight:bold;
+	color:white;
+	border-top:0px solid #B2B2B2; border-bottom:2px solid #6E6E6E; border-left:0px solid #B2B2B2;border-right:2px solid #6E6E6E;
+}
+
+.social_twitterCardsDiv {
+	width:100%;
+}
+.social_profileInnerDiv {
+	width:90%;
+	height:100%;
+	background-color:#ffffff;font-weight:bold;
+	margin: 20px;
+}
+div.social_profileInnerDiv td {
+ font-size:12px;font-family:'Lucida Grande',sans-serif;color:black;  font-weight:bold;
+}
+.social_twitterColor {
+	background-image:url(social_twitterBg.gif);
+}
+.social_generalColor {
+background-image:url(social_genrlhdr.png);
+}
+
+.social_facebookColor {
+background-image:url(social_facebookHdr.gif);
+}
+
+
+.social_individualCardClass {
+	font-weight:bold;
+	font-size:16px;font-family:'Lucida Grande',sans-serif;
+	overflow:auto;
+	border-top:1px solid #B2B2B2; border-left:1px solid #B2B2B2; border-bottom:2px solid #6E6E6E;border-right:2px solid #6E6E6E;
+	width: 400px;
+    display:block;
+	z-index:9000;
+	position:relative;
+}
+
+.social_topWgtClass{
+background-image:url(social_bkground.gif);
+border-bottom:1px solid #6E6E6E;border-right:1px solid #6E6E6E;
+}
+.social_yellow{
+background:#FFFFCC;
+border-bottom:1px solid #6E6E6E;border-right:1px solid #6E6E6E;
+}
+.social_white{
+background:#FFFFFF;
+border-bottom:1px solid #6E6E6E;border-right:1px solid #6E6E6E;
+}
+.social_yellowBold{
+background:#FFFFCC;
+color:#3333FF;
+font-weight:bold;
+font-size:12px;
+border-bottom:1px solid #6E6E6E;border-right:1px solid #6E6E6E;
+}
+
+
+.social_steel{
+	background-image:url(social_bkground.gif);
+}
+
+.social_topSxnClass{
+background-image:url(social_bkground.gif);
+border-bottom:1px solid #6E6E6E;border-right:1px solid #6E6E6E;
+}
+
+.social_unReadClass {
+background:#FF0000;color:#FFFFFF;font-weight:bold;font-size:12px;border:1px solid white;
+}
