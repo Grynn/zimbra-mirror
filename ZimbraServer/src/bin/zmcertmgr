@@ -1247,9 +1247,9 @@ createCSR() {
         shift
       fi
     fi
-    if [ "x$(echo ${1} | cut -c1)" != "x-" ]; then
+    if [ "x$(echo ${1} | cut -c1)" != "x-" -a "x${1}" != "x" ]; then
       SUBJECT="${1}"
-      #echo "subj=$SUBJECT"
+      #echo "subj=$1"
       shift
     fi
   fi
