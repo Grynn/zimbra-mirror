@@ -22,7 +22,7 @@ use File::Path;
 
 my $DEBUG = 0;
 #global constants
-my $version = "1.37";
+my $version = "1.38";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -266,6 +266,7 @@ sub Initialize
     my $chtzid = trim($GTZRec->{'TZID'});
     &log_message("Retrieved time zone: $chtzid");
     $TZTag= ";".$chtzid;
+    $TZTag =~ s/TZID:/TZID=/;
   }
 }
 
@@ -435,11 +436,11 @@ sub processfile
     }
     elsif ($_=~/^DTSTART[:;]/)           #store DTSTART
     {
-      $rec->{'DTSTART'} = $_;
+      $rec->{'DTSTART'} = get_offset_datetime($_);
     }
     elsif ($_=~/^DTEND[:;]/)             #store DTEND
     {
-      $rec->{'DTEND'} = $_;
+      $rec->{'DTEND'} = get_offset_datetime($_);
     }
     elsif ($_=~/^LOCATION:/)              #store LOCATION
     {
@@ -461,7 +462,7 @@ sub processfile
     }
     elsif ($_=~/^RECURRENCE-ID[:;]/)  #store RECURRENCE-ID
     {
-      $rec->{'RECURRENCE-ID'}=$_;
+      $rec->{'RECURRENCE-ID'}=get_offset_datetime($_);
       $rec->{'MASTER_VEVENT'}=0;
     }
     elsif ($_=~/^RRULE/)              #check if RRULE is present
@@ -472,7 +473,7 @@ sub processfile
     {
       $rec->{'ISRDATE'}=1;
       $g_isrdate=1;
-      push @{$hrdate{$_}},$_;
+      push @{$hrdate{get_offset_datetime($_)}},get_offset_datetime($_);
       #Case 1.#if RDATEs should be deleted
       if ($deleteRDATE)
       {
@@ -865,7 +866,7 @@ sub processfile
                   #for weekend present check and passed weekend calculations
                   my $twdidx= rindex($k1,':');
                   my $tk1= substr($k1,$twdidx+1);
-                  $wkday= get_weekday(get_offset_datetime($tk1));
+                  $wkday= get_weekday($tk1);
                   #store start weekday for weekly pattern calculation
                   if ($startwkday eq -1)
                   {
@@ -955,7 +956,7 @@ sub processfile
                     }
                     #check for if master date time is equal to rdate time component
                     my $rsttime= $sdt;
-                    if (!istime_equal(get_offset_datetime($msttime),get_offset_datetime($sdt)))
+                    if (!istime_equal($msttime,$sdt))
                     {
                       $isrdtimeok = 0;
                       $ltd_exlist{$rsdt}=0;
@@ -1045,7 +1046,7 @@ sub processfile
                   $ltd_exlist{$rndt}=1;
                 }
                 #check for if master date time is equal to rdate time component
-                if (!istime_equal(get_offset_datetime($msttime),get_offset_datetime($ndt)))
+                if (!istime_equal($msttime,$ndt))
                 {
                   $isrdtimeok = 0;
                   $ltd_exlist{$rndt}=0;
@@ -1367,7 +1368,6 @@ sub processfile
             }
             $orig_mstrsdt=$str;
             $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
-            $tzdtst =get_offset_datetime($tzdtst);
             print_outfile("$tzdtst");
             &log_message("New DTSTART: $tzdtst");
             
@@ -1402,7 +1402,6 @@ sub processfile
             }
             $orig_mstredt=$str;
             $tzdten=~ s/DTEND/DTEND$TZTag/;
-            $tzdten =get_offset_datetime($tzdten);
             print_outfile("$tzdten");
             &log_message("$tzdten");
           }
@@ -1483,7 +1482,6 @@ sub processfile
                   }
                   my $tzdtst= $str;
                   $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
-                  $tzdtst =get_offset_datetime($tzdtst);
                   print_outfile("$tzdtst");
                   &log_message("New DTSATRT:$tzdtst");
 
@@ -1503,7 +1501,6 @@ sub processfile
                   }
                   my $tzdten= $str;
                   $tzdten=~ s/DTEND/DTEND$TZTag/;
-                  $tzdten =get_offset_datetime($tzdten);
                   print_outfile("$tzdten");
                   &log_message("New DTEND: $tzdten");
 
@@ -1523,19 +1520,17 @@ sub processfile
                   {
                     $rndtt=$occurrec->{'DTSTART'};
                     $rndtt=~ s/DTSTART$recidfmtstr//;
-                    
-                    my $adndtstart=get_offset_datetime($ndtstart);
+                    my $adndtstart=$ndtstart;
                     $rntime = get_time($adndtstart);
                     
                     $rndtt=get_date($rndtt);
                     $rndtt= "RECURRENCE-ID$TZTag$recidfmtstr$rndtt"."T$rntime";
-                    $rndtt=~ s/TZID:/TZID=/;
                   }
                   else
                   {
                     $rndtt= $str;
                     $rndtt=~ s/RECURRENCE-ID/RECURRENCE-ID$TZTag/;
-                    $rndtt =get_offset_datetime($rndtt);
+                    $rndtt =$rndtt;
                   }
                   print_outfile("$rndtt");
                 }
@@ -1623,7 +1618,6 @@ sub processfile
                 if(($YearlyException)&&($IsExceptionSeries))
                 {
                   my $rndtstart= "RECURRENCE-ID$TZTag$recidfmtstr$ndtstart";
-                  $rndtstart =get_offset_datetime($rndtstart);
                   print_outfile("$rndtstart");
                   &log_message("New RECURRENCE-$rndtstart");
                 }
@@ -1638,7 +1632,6 @@ sub processfile
                 }
                 my $tzdtst= $str;
                 $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
-                $tzdtst =get_offset_datetime($tzdtst);
                 print_outfile("$tzdtst");
                 &log_message("New DTSATRT:$tzdtst");
 
@@ -1660,7 +1653,6 @@ sub processfile
                 }
                 my $tzdten= $str;
                 $tzdten=~ s/DTEND/DTEND$TZTag/;
-                $tzdten =get_offset_datetime($tzdten);
                 print_outfile("$tzdten");
                 &log_message("New DTEND: $tzdten");
               }
