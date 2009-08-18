@@ -1,0 +1,40 @@
+.Imgbroadsoft-panelIcon {
+  background: url("broadsoft.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+.Imgbroadsoft_phone {
+  background: url("broadsoft_phone") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.broadsoft_sectionDiv{
+background:#FFFFFF;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+}
+.broadsoft_HdrDiv{
+background:#FFFFCC;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+font-size:200%;
+}
+
+.broadsoft_detailsDiv{
+background:#FFFFCC;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+font-size:150%;
+}
+.broadsoft_callLogsDetailsDiv{
+background:#FFFFCC;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+font-size:150%;
+}
+
+.broadsoft_hidden {
+display:none
+}
+.broadsoft_shown {
+display:block
+}
