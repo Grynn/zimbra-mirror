@@ -958,7 +958,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 	                    getLocalAccount());
 	                
 	                mbox.createMountpoint(null, DesktopMailbox.ID_FOLDER_NOTIFICATIONS,
-	                    accountId, accountId, Mailbox.ID_FOLDER_ROOT,
+	                    accountId, accountId, Mailbox.ID_FOLDER_USER_ROOT,
 	                    MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR);
 	            }
 	        } catch (ServiceException e) {

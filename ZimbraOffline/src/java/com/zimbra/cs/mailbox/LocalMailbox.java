@@ -40,8 +40,8 @@ public class LocalMailbox extends DesktopMailbox {
             redo.setFolderId(ID_FOLDER_NOTIFICATIONS);
             redo.start(System.currentTimeMillis());
             createFolder(new OfflineContext(redo), NOTIFICATIONS_PATH,
-                ID_FOLDER_GLOBAL_SEARCHES, Folder.FOLDER_IS_IMMUTABLE,
-                MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR, null);
+                ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
+                MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
         }
         try {
             getFolderById(ID_FOLDER_GLOBAL_SEARCHES);
@@ -53,22 +53,26 @@ public class LocalMailbox extends DesktopMailbox {
             redo.setFolderId(ID_FOLDER_GLOBAL_SEARCHES);
             redo.start(System.currentTimeMillis());
             createFolder(new OfflineContext(redo), GLOBAL_SEARCHES_PATH,
-                ID_FOLDER_GLOBAL_SEARCHES, Folder.FOLDER_IS_IMMUTABLE,
-                MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR, null);
+                ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
+                MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR_RGB, null);
         }
         for (Account account : OfflineProvisioning.getOfflineInstance().getAllAccounts()) {
             try {
                 getFolderByName(null, ID_FOLDER_NOTIFICATIONS, account.getId());
             } catch (NoSuchItemException e) {
                 createMountpoint(null, ID_FOLDER_NOTIFICATIONS, account.getId(),
-                    account.getId(), DesktopMailbox.ID_FOLDER_ROOT,
-                    MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR);
+                    account.getId(), ID_FOLDER_USER_ROOT,
+                    MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB);
             }
         }
     }
 
     @Override protected synchronized void initialize() throws ServiceException {
         super.initialize();
+        Folder.create(ID_FOLDER_NOTIFICATIONS, this,
+            getFolderById(ID_FOLDER_USER_ROOT), NOTIFICATIONS_PATH,
+            Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_UNKNOWN, 0,
+            MailItem.DEFAULT_COLOR_RGB, null, null);
         Folder.create(ID_FOLDER_GLOBAL_SEARCHES, this,
             getFolderById(ID_FOLDER_USER_ROOT), GLOBAL_SEARCHES_PATH,
             Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_SEARCHFOLDER, 0,
