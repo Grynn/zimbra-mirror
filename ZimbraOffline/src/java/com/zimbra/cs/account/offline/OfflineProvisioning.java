@@ -31,9 +31,13 @@ import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.SyncErrorManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
+import com.zimbra.cs.mailbox.DesktopMailbox;
+import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.LocalJMSession;
+import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
+import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.SyncMailbox;
 import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
@@ -540,6 +544,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
         
         attrs.put(A_zimbraPrefClientType, "advanced");
+        attrs.put(A_zimbraPrefAccountTreeOpen , FALSE);
         attrs.put(A_zimbraFeatureSharingEnabled, TRUE);
         
         attrs.remove(A_zimbraChildAccount);
@@ -726,6 +731,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraFeatureIMEnabled, FALSE);
         attrs.put(A_zimbraFeatureNotebookEnabled, FALSE);
         attrs.put(A_zimbraFeatureTasksEnabled, FALSE);
+        attrs.put(A_zimbraPrefAccountTreeOpen , FALSE);
         attrs.put(A_zimbraZimletAvailableZimlets, new String[0]);
 
         if (testDs.isYahoo()) {
@@ -880,9 +886,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_cn, LOCAL_ACCOUNT_UID);
         attrs.put(A_sn, LOCAL_ACCOUNT_UID);
         attrs.put(A_displayName, LOCAL_ACCOUNT_DISPLAYNAME);
-        attrs.put(A_zimbraPrefFromDisplay, LOCAL_ACCOUNT_DISPLAYNAME);
-        attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
         attrs.put(A_offlineAccountFlavor, LOCAL_ACCOUNT_FLAVOR);
+        attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
+        attrs.put(A_zimbraPrefAccountTreeOpen , TRUE);
+        attrs.put(A_zimbraPrefFromDisplay, LOCAL_ACCOUNT_DISPLAYNAME);
         setDefaultAccountAttributes(attrs);
 
         return createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true);
@@ -931,6 +938,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         attrs.putAll(immutable);
         attrs.put(A_offlineAccountFlavor, flavor);
+        attrs.put(A_zimbraPrefSearchTreeOpen, FALSE);
+        attrs.put(A_zimbraPrefTagTreeOpen , FALSE);
 
         // create account entry in database
         DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs, false);
@@ -944,6 +953,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (initMailbox)
 	        try {
 	            MailboxManager.getInstance().getMailboxByAccount(acct);
+	            if (!accountId.equals(LOCAL_ACCOUNT_ID)) {
+	                Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(
+	                    getLocalAccount());
+	                
+	                mbox.createMountpoint(null, DesktopMailbox.ID_FOLDER_NOTIFICATIONS,
+	                    accountId, accountId, Mailbox.ID_FOLDER_ROOT,
+	                    MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR);
+	            }
 	        } catch (ServiceException e) {
 	            OfflineLog.offline.error("error initializing account " + emailAddress, e);
 	            mAccountCache.remove(acct);
@@ -1107,7 +1124,22 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized void deleteAccount(String zimbraId) throws ServiceException {       
+    public synchronized void deleteAccount(String zimbraId) throws ServiceException {
+        Folder fldr;
+        Mailbox mbox;
+        
+        try {
+            mbox = OfflineMailboxManager.getInstance().getMailboxByAccount(
+                getLocalAccount());
+            fldr = mbox.getFolderByName(null, DesktopMailbox.ID_FOLDER_NOTIFICATIONS,
+                zimbraId);
+            mbox.delete(null, fldr.getId(), MailItem.TYPE_MOUNTPOINT);
+        } catch (Exception e) {
+        }
+        mbox = OfflineMailboxManager.getInstance().getMailboxByAccount(
+            mAccountCache.getById(zimbraId));
+        if (mbox instanceof SyncMailbox)
+            ((SyncMailbox)mbox).cancelCurrentTask();
         deleteGalAccount(zimbraId);
         DbOfflineDirectory.deleteGranterByGrantee(zimbraId);
         deleteOfflineAccount(zimbraId);
@@ -1145,7 +1177,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 return;
         }
 
-        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(galAcct, false);      
+        Mailbox mbox = OfflineMailboxManager.getInstance().getMailboxByAccount(galAcct, false);      
         if (mbox != null)
         	((SyncMailbox)mbox).deleteMailbox(false);
         

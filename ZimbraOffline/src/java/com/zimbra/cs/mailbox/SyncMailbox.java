@@ -183,7 +183,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
         OfflineYAuth.deleteRawAuthManager(this);
     }
 	
-	private synchronized void cancelCurrentTask() {
+	public synchronized void cancelCurrentTask() {
 		if (currentTask != null)
 			currentTask.cancel();
 		currentTask = null;

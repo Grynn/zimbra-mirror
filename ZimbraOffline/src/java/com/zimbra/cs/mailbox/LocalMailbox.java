@@ -17,6 +17,9 @@
 package com.zimbra.cs.mailbox;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
 import com.zimbra.cs.redolog.op.CreateFolder;
 
@@ -26,14 +29,23 @@ public class LocalMailbox extends DesktopMailbox {
     }
     
     @Override synchronized void ensureSystemFolderExists() throws ServiceException {
-        Folder f = null;
-
         super.ensureSystemFolderExists();
         try {
-                f = getFolderById(ID_FOLDER_GLOBAL_SEARCHES);
-        } catch (MailServiceException.NoSuchItemException x) {
+            getFolderById(ID_FOLDER_NOTIFICATIONS);
+        } catch (NoSuchItemException e) {
+            CreateFolder redo = new CreateFolder(getId(), NOTIFICATIONS_PATH,
+                ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
+                MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
+            
+            redo.setFolderId(ID_FOLDER_NOTIFICATIONS);
+            redo.start(System.currentTimeMillis());
+            createFolder(new OfflineContext(redo), NOTIFICATIONS_PATH,
+                ID_FOLDER_GLOBAL_SEARCHES, Folder.FOLDER_IS_IMMUTABLE,
+                MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR, null);
         }
-        if (f == null) {
+        try {
+            getFolderById(ID_FOLDER_GLOBAL_SEARCHES);
+        } catch (NoSuchItemException e) {
             CreateFolder redo = new CreateFolder(getId(), GLOBAL_SEARCHES_PATH,
                 ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
                 MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR_RGB, null);
@@ -43,6 +55,15 @@ public class LocalMailbox extends DesktopMailbox {
             createFolder(new OfflineContext(redo), GLOBAL_SEARCHES_PATH,
                 ID_FOLDER_GLOBAL_SEARCHES, Folder.FOLDER_IS_IMMUTABLE,
                 MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR, null);
+        }
+        for (Account account : OfflineProvisioning.getOfflineInstance().getAllAccounts()) {
+            try {
+                getFolderByName(null, ID_FOLDER_NOTIFICATIONS, account.getId());
+            } catch (NoSuchItemException e) {
+                createMountpoint(null, ID_FOLDER_NOTIFICATIONS, account.getId(),
+                    account.getId(), DesktopMailbox.ID_FOLDER_ROOT,
+                    MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR);
+            }
         }
     }
 
