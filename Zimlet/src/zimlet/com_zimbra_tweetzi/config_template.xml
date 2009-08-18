@@ -1,5 +1,0 @@
-<zimletConfig name="com_zimbra_tweetzi" version="1.6">
-    <global>
-        <property name="allowedDomains">twitter.com,*.twitter.com,*.facebook.com,*.tweetmeme.com,api.tr.im,*.digg.com</property>
-    </global>
-</zimletConfig>
