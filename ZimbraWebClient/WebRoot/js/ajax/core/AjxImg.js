@@ -73,7 +73,7 @@ function(parentEl, imageName, useParentEl, _disabled) {
 				"top:",mask.t,";",
 				"left:",mask.l,";"
 			].join("");
-            if(AjxEnv.isIE8up){
+            if(typeof document.documentMode != 'undefined'){ //IE8 is the first one to define this. IE8 can lie when in compat mode, so we need to really know it's it.
                 clip = [
                     'clip:rect(',
                     (-1*mask.t)-1,'px, ',
