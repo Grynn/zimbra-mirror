@@ -64,7 +64,8 @@ function(msg, response) {
 		description:	"Select a Document to save message(s)",
 		treeIds:		[ZmOrganizer.NOTEBOOK],
 		overviewId:		this._fldrDlg.getOverviewId(ZmApp.NOTEBOOK),
-		title:			"Document Overview"
+		title:			"Document Overview",
+		appName:		ZmApp.NOTEBOOK
 	};
 	this._selectDocCb = new AjxCallback(this, this._selectDocCallBack, msg);
 

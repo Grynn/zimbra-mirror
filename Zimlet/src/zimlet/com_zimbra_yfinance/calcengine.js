@@ -297,7 +297,8 @@ function() {
 		treeIds:		[org],
 		overviewId:		dlg.getOverviewId(ZmApp.NOTEBOOK),
 		title:			title,
-		description:	ZmMsg.targetFolder
+		description:	ZmMsg.targetFolder,
+		appName:		ZmApp.NOTEBOOK
 	};
 };
 
