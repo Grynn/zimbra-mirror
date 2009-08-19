@@ -193,8 +193,6 @@ function() {
 }
 
 ZaMTA.prototype.initFromJS = function (obj, summary) {
-	this.name = obj.name;
-	this.id = obj.id;
 	if(obj.a) {
 		ZaItem.prototype.initFromJS.call(this,obj);
 	}

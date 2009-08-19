@@ -58,7 +58,7 @@ function(list, openInNewTab) {
 		}
 		ZaMTA._quecountsArr = new Array();
 		for(i = cnt-1; i >= 0; i--) {
-			tmp[i].load();
+			tmp[i].load("id",tmp[i].id,false,true);
 		}
 	}	
 	//ZaApp.getInstance().pushView(ZaZimbraAdmin._POSTQ_VIEW);			
