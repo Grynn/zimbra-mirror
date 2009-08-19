@@ -471,6 +471,8 @@ public class DataSourceMailbox extends SyncMailbox {
             getOfflineInstance().getDataSource(getAccount()));
         Set<Folder> visible = new HashSet<Folder>();
 
+        if (ds == null)
+            return accessable;
         for (Folder folder : accessable == null ? getFolderById(
             ID_FOLDER_ROOT).getSubfolderHierarchy() : accessable) {
             if (folder.getId() > Mailbox.FIRST_USER_ID ||
