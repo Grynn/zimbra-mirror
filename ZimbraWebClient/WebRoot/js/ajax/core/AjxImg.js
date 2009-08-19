@@ -64,6 +64,7 @@ function(parentEl, imageName, useParentEl, _disabled) {
 
 		var overlay = AjxImgData[overlayName], mask = AjxImgData[maskName];
 		if (AjxEnv.isIE) {
+            var clip = "";
 			var size = [
 				"width:",overlay.w,";",
 				"height:",overlay.h,";"
@@ -72,11 +73,20 @@ function(parentEl, imageName, useParentEl, _disabled) {
 				"top:",mask.t,";",
 				"left:",mask.l,";"
 			].join("");
+            if(AjxEnv.isIE8up){
+                clip = [
+                    'clip:rect(',
+                    (-1*mask.t)-1,'px, ',
+                    overlay.w-1,'px, ',
+                    (mask.t*-1)+overlay.h-1,'px, ',
+                    overlay.l,'px);'
+                ].join('');
+            }
 			parentEl.innerHTML = [
 				"<div style='position:relative;",size,"'>",
 					"<div style='overflow:hidden;position:relative;",size,"'>",
 						"<img src='",mask.f,"' ",
-							 "style='filter:mask(color=",color,");position:absolute;",position,"'>",
+							 "style='filter:mask(color=",color,");position:absolute;",position,clip,"'>",
 					"</div>",
 					"<div class='",overlayName,"' style='",size,";position:absolute;top:0;left:0'></div>",
 				"</div>"
