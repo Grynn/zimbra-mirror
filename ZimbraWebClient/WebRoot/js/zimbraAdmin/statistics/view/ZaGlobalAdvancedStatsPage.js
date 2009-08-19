@@ -57,13 +57,16 @@ ZaGlobalAdvancedStatsPage.getDataTipText = function (item, index, series) {
 }
 /* must be global for getDataTipText */
 ZaGlobalAdvancedStatsPage.formatLabel = function (value) {
-    return YAHOO.util.Number.format(value, { thousandsSeparator: ",", decimalPlaces: 0});
+    return YAHOO.util.Number.format(value, { thousandsSeparator: ",", decimalPlaces: 3});
 }
 ZaGlobalAdvancedStatsPage.formatTimeLabel = function (value) {
     return YAHOO.util.Date.format(value, { format: ZaMsg.NAD_AdvStatsLabelDateFormat });
 }
 
 ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, column_units, start, end) {
+    var chartdiv = document.getElementById("loggerchart" + id);
+    chartdiv.textContent = ZaMsg.NAD_AdvStatsLoadingDataLabel;
+    
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
     soapRequest.set("startTime", { "!time": start });
     soapRequest.set("endTime", { "!time": end });
@@ -144,6 +147,9 @@ ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, c
 }
 
 ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, columns, column_units, start, end) {
+    var chartdiv = document.getElementById("loggerchart" + id);
+    chartdiv.textContent = ZaMsg.NAD_AdvStatsLoadingDataLabel;
+    
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
     soapRequest.set("hostname", { "!hn": hostname });
     soapRequest.set("startTime", { "!time": start });
@@ -370,6 +376,9 @@ ZaGlobalAdvancedStatsPage.getCounters = function(hostname, group) {
 
 ZaGlobalAdvancedStatsPage.counterSelected = function(event, id) {
     var select = event.target;
+    
+    var chartdiv = document.getElementById("loggerchart" + id);
+    chartdiv.textContent = ZaMsg.NAD_AdvStatsLoadingDataLabel;
     
     var serverSelect = document.getElementById("select-servers" + id);
     var hostname = serverSelect[serverSelect.selectedIndex].value;
