@@ -39,13 +39,9 @@ echo "----------------"
 /sbin/ifconfig
 echo "----------------"
 
-if [ x$P = "xMACOSX" -o "x$P" = "xMACOSXx86" ]; then
+if [[ x$P == "xMACOSX"* ]]; then
 	ls -ld /Library/Receipts/zimbra-*
-elif [ "x$P" = "xUBUNTU6" -o "x$P" = "xUBUNTU6_64" ]; then
-	apt-cache show zimbra-core
-elif [ "x$P" = "xUBUNTU8" -o "x$P" = "xUBUNTU8_64" ]; then
-	apt-cache show zimbra-core
-elif [ "x$P" = "DEBIAN4.0" ]; then
+elif [[ "x$P" == "xUBUNTU"* || "x$P" == "DEBIAN"* ]]; then
 	apt-cache show zimbra-core
 else
 	rpm -qi zimbra-core
