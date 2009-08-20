@@ -127,7 +127,7 @@ case "$1" in
         echo "mailboxd is not running."
         exit 0
       fi
-      ${zimbra_home}/bin/zmthrdump -i -o ${zimbra_home}/log/stacktrace.$$.$(date +%Y%m%d%H%M%S)
+      ${zimbra_home}/bin/zmthrdump -i -o ${zimbra_home}/log/stacktrace.$$.$(date +%Y%m%d%H%M%S) 2> /dev/null
       sudo ${zimbra_home}/libexec/zmmailboxdmgr stop 
       if [ $? = 0 ]; then
         echo "done."

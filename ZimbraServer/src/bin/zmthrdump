@@ -110,7 +110,7 @@ $tail = open(TAIL, "tail -F $log_file |") || die "$log_file: unable to tail: $!"
 if (!fork()) {
 	# there seems to be a race condition if we don't wait for tail to start running
 	select(undef, undef, undef, 1.0);
-	kill(3, $pid) || die "$pid: no such process";
+	kill(3, $pid) || die "$pid: $!";
 	exit(0);
 }
 alarm($timeout);
