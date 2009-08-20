@@ -295,6 +295,33 @@ public class DbOfflineMailbox {
         }
     }
     
+    public static Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFolders(ChangeTrackingMailbox ombx)
+            throws ServiceException {
+        Connection conn = ombx.getOperationConnection();
+        
+        Map<Integer, Pair<Integer, Integer>> result = new HashMap<Integer, Pair<Integer, Integer>>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement("SELECT id, change_mask, folder_id" +
+                    " FROM " + DbMailItem.getMailItemTableName(ombx) + Derby.forceIndex("i_change_mask") +
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask IS NOT NULL AND NOT type=?");
+            int pos = 1;
+            pos = DbMailItem.setMailboxId(stmt, ombx, pos);
+            stmt.setByte(pos++, MailItem.TYPE_FOLDER);
+        
+            rs = stmt.executeQuery();
+            while (rs.next())
+                result.put(rs.getInt(1), new Pair<Integer, Integer>(rs.getInt(2), rs.getInt(3)));
+            return result;
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("getting changed item ids and folders for ombx " + ombx.getId(), e);
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+        }
+    }
+    
 	public static Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(ChangeTrackingMailbox ombx)
 			throws ServiceException {
 		Connection conn = ombx.getOperationConnection();
@@ -314,7 +341,7 @@ public class DbOfflineMailbox {
 				result.put(rs.getInt(1), new Pair<Integer, Integer>(rs.getInt(2), rs.getInt(3)));
 			return result;
 		} catch (SQLException e) {
-            throw ServiceException.FAILURE("getting changed item ids for ombx " + ombx.getId(), e);
+            throw ServiceException.FAILURE("getting changed item ids and flags for ombx " + ombx.getId(), e);
 		} finally {
 			DbPool.closeResults(rs);
 			DbPool.closeStatement(stmt);

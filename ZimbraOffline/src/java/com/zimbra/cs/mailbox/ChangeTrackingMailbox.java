@@ -69,6 +69,19 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
     
+    public synchronized Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFolders(OperationContext octxt) throws ServiceException {
+        boolean success = false;
+        try {
+            beginTransaction("getChangeMasksAndFolders", octxt);
+
+            Map<Integer, Pair<Integer, Integer>> result = DbOfflineMailbox.getChangeMasksAndFolders(this);
+            success = true;
+            return result;
+        } finally {
+            endTransaction(success);
+        }
+    }
+    
     synchronized Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(OperationContext octxt) throws ServiceException {
         boolean success = false;
         try {
@@ -150,7 +163,8 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
 
-    synchronized void setChangeMask(OfflineContext octxt, int id, byte type, int mask) throws ServiceException {
+    public synchronized void setChangeMask(OperationContext octxt, int id, byte type, int mask) throws ServiceException {
+        //TODO: make this call always non-tracking
         boolean success = false;
         try {
             beginTransaction("setChangeMask", octxt);
@@ -163,7 +177,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
 
-    synchronized void clearTombstones(OperationContext octxt, int token) throws ServiceException {
+    public synchronized void clearTombstones(OperationContext octxt, int token) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("clearTombstones", octxt);
