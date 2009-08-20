@@ -30,7 +30,7 @@ curl_lib_dir=/opt/zimbra/curl-${curl_version}/lib
 rm -fr build
 mkdir build
 cd build
-tar xfz ../src/cyrus-sasl-2.1.23.tar.gz  -C .
+tar xfz ../src/cyrus-sasl-${release}.tar.gz  -C .
 chmod -R +w ${package}-${release}
 mv ${package}-${release} ${src}
 
