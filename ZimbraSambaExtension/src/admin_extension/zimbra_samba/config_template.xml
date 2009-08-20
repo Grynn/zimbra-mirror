@@ -1,6 +1,6 @@
 <zimletConfig name="zimbra_samba" version="6"> 
    <global> 
-               <property name="gidBase">1000</property> 
+               <property name="gidBase">1001</property> 
                <property name="uidBase">1000</property> 
                <property name="ridBase">1000</property> 
                <property name="ldapSuffix">dc=test,dc=com</property> 

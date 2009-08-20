@@ -36,6 +36,7 @@ ZaPosixGroupController.prototype.constructor = ZaPosixGroupController;
 
 ZaController.initToolbarMethods["ZaPosixGroupController"] = new Array();
 ZaController.setViewMethods["ZaPosixGroupController"] = new Array();
+ZaXFormViewController.preSaveValidationMethods["ZaPosixGroupController"] = new Array();
 /**
 *	@method show
 *	@param entry - isntance of ZaPosixGroup class

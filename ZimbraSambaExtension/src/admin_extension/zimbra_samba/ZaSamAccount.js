@@ -164,7 +164,7 @@ if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 					items: [
 						{type:_ZAWIZGROUP_, 
 							items:[
-								{ref:ZaSamAccount.A_sambaDomainSID, type:_OSELECT1_, editable:false,choices:ZaApp.getInstance().getSambaDomainSIDListChoices(), msgName:zimbra_samba.SambaDomain,label:zimbra_samba.SambaDomain, labelLocation:_LEFT_,
+								{ref:ZaSamAccount.A_sambaDomainSID, type:_OSELECT1_, editable:false,choices:ZaApp.getInstance().getSambaDomainSIDListChoices(), msgName:zimbra_samba.MSG_SambaDomain,label:zimbra_samba.LBL_SambaDomain, labelLocation:_LEFT_,
 									elementChanged:function(val,instanceValue, event) {
 										var v = val;
 										var instance = this.getInstance();

@@ -363,7 +363,7 @@ function(tmpObj, newDomain) {
 	//check values
 	if(!AjxUtil.isEmpty(tmpObj.attrs[ZaDomain.A_GalMaxResults]) && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaDomain.A_GalMaxResults])) {
 		//show error msg
-		ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE , [ZaMsg.NAD_GalMaxResults]));
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR , [ZaMsg.NAD_GalMaxResults]));
 		return null;
 	}
 	

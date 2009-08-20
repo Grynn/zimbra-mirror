@@ -95,6 +95,22 @@ if(ZaItem.initMethods["ZaPosixGroup"]) {
 	ZaItem.initMethods["ZaPosixGroup"].push(ZaSambaGroupMapping.initMethod);
 }
 
+
+ZaSambaGroupMapping.validateSambaGroup =
+function (params) {
+	var obj = this._view.getObject();
+	if(AjxUtil.isEmpty(obj.attrs[ZaSambaGroupMapping.A_sambaGroupType])) {
+		throw new AjxException(AjxMessageFormat.format(zimbra_samba.ERROR_MISSING_VALUE_SAMBA_GROUP,[ZaSambaGroupMapping.A_sambaGroupType]),AjxException.INVALID_PARAM,"ZaSambaGroupMapping.prototype.validateSambaGroup");		
+	} else if (AjxUtil.isEmpty(obj.attrs[ZaSambaGroupMapping.A_sambaSID])) {
+		throw new AjxException(AjxMessageFormat.format(zimbra_samba.ERROR_MISSING_VALUE_SAMBA_GROUP,[ZaSambaGroupMapping.A_sambaSID]),AjxException.INVALID_PARAM,"ZaSambaGroupMapping.prototype.validateSambaGroup");
+	} else {
+		this.runValidationStack(params);
+	}
+}
+if(ZaXFormViewController.preSaveValidationMethods["ZaPosixGroupController"]) {
+	ZaXFormViewController.preSaveValidationMethods["ZaPosixGroupController"].push(ZaSambaGroupMapping.validateSambaGroup);
+}
+
 if(ZaTabView.XFormModifiers["ZaPosixGroupXFormView"]) {
 	ZaSambaGroupMapping.myXFormModifier = function (xFormObject, entry) {
 		var cnt = xFormObject.items.length;
@@ -112,7 +128,7 @@ if(ZaTabView.XFormModifiers["ZaPosixGroupXFormView"]) {
 					items: [
 						{type:_ZAGROUP_, 
 							items:[
-								{ref:ZaSambaGroupMapping.A_sambaDomainSID, type:_OSELECT1_, editable:false,choices:ZaApp.getInstance().getSambaDomainSIDListChoices(true), msgName:"Samba domain",label:"Samba domain", labelLocation:_LEFT_,
+								{ref:ZaSambaGroupMapping.A_sambaDomainSID, type:_OSELECT1_, editable:false,choices:ZaApp.getInstance().getSambaDomainSIDListChoices(true), msgName:zimbra_samba.MSG_SambaDomain,label:zimbra_samba.LBL_SambaDomain, labelLocation:_LEFT_,
 									onChange:ZaTabView.onFormFieldChanged,
 									elementChanged:function(val,instanceValue, event) {
 										var v = val;
@@ -120,13 +136,16 @@ if(ZaTabView.XFormModifiers["ZaPosixGroupXFormView"]) {
 										var form = this.getForm();
 										var myChoices = this.getChoices();
 										if(instance && !instance[ZaSambaGroupMapping.A_isSpecialNTGroup]) {
-											instance.attrs[ZaSambaGroupMapping.A_sambaSID]	= val + "-" + 
+											var newSid	= val + "-" + 
 												(
 													(parseInt(instance.attrs[ZaPosixGroup.A_gidNumber]) ? parseInt(instance.attrs[ZaPosixGroup.A_gidNumber])*2 : parseInt(Zambra.gidBase)) +
 													(parseInt(Zambra.ridBase) ? parseInt(Zambra.ridBase) : 0)
 												);
+											this.getModel().setInstanceValue(this.getInstance(),ZaSambaGroupMapping.A_sambaSID,newSid);	
 										} else if (instance && instance[ZaSambaGroupMapping.A_isSpecialNTGroup]) {
-											instance.attrs[ZaSambaGroupMapping.A_sambaSID]	= val + "-" + instance[ZaSambaGroupMapping.A_specialNTGroupType];
+											var newSid = val + "-" + instance[ZaSambaGroupMapping.A_specialNTGroupType];
+											this.getModel().setInstanceValue(this.getInstance(),ZaSambaGroupMapping.A_sambaSID,newSid);
+											//instance.attrs[ZaSambaGroupMapping.A_sambaSID]	= val + "-" + instance[ZaSambaGroupMapping.A_specialNTGroupType];
 										}
 										if(form)
 											form.itemChanged(this, val, event);		
@@ -142,7 +161,8 @@ if(ZaTabView.XFormModifiers["ZaPosixGroupXFormView"]) {
 												var userRid = chunks.pop();
 												
 												val = chunks.join("-");
-												instance[ZaSambaGroupMapping.A_sambaDomainSID] = val;
+												this.getModel().setInstanceValue(this.getInstance(),ZaSambaGroupMapping.A_sambaDomainSID,val);
+												//instance[ZaSambaGroupMapping.A_sambaDomainSID] = val;
 											}
 										}
 										return val;
@@ -150,16 +170,16 @@ if(ZaTabView.XFormModifiers["ZaPosixGroupXFormView"]) {
 								},	
 								{ref:ZaSambaGroupMapping.A_isSpecialNTGroup, 
 									type:_CHECKBOX_,  
-									msgName:"Special Windows group",
-									label:"Special Windows group",
+									msgName:zimbra_samba.MSG_SpecialWindowsGroup,
+									label:zimbra_samba.LBL_SpecialWindowsGroup,
 									trueValue:1, falseValue:0, 
 									onChange:ZaTabView.onFormFieldChanged,
 								},
 								{ref:ZaSambaGroupMapping.A_specialNTGroupType,
-									relevant:"instance[ZaSambaGroupMapping.A_isSpecialNTGroup]",
-									relevantBehavior:_DISABLE_,
-									type:_OSELECT1_, msgName:"Special Windows group type",
-									label:"Special Windows group type", 
+									visibilityChecks:[[XForm.checkInstanceValue,ZaSambaGroupMapping.A_isSpecialNTGroup,1]],
+									visibilityChangeEventSources:[ZaSambaGroupMapping.A_isSpecialNTGroup],
+									type:_OSELECT1_, msgName:zimbra_samba.MSG_SpecialWindowsGroupType,
+									label:zimbra_samba.LBL_SpecialWindowsGroupType, 
 									labelLocation:_LEFT_, 
 									choices:ZaSambaGroupMapping.specialNTGorupChoices, 
 									onChange:ZaTabView.onFormFieldChanged,
@@ -183,13 +203,14 @@ if(ZaTabView.XFormModifiers["ZaPosixGroupXFormView"]) {
 											var chunks = instance.attrs[ZaSambaGroupMapping.A_sambaSID].split("-");
 											var groupRid = chunks.pop();
 											chunks.push(val);
-											instance.attrs[ZaSambaGroupMapping.A_sambaSID] = chunks.join("-");
+											this.getModel().setInstanceValue(this.getInstance(),ZaSambaGroupMapping.A_sambaSID,chunks.join("-"));
+											//instance.attrs[ZaSambaGroupMapping.A_sambaSID] = chunks.join("-");
 										}			
 										if(form)
 											form.itemChanged(this, val, event);																		
 									}									
 								},								
-								{ref:ZaSambaGroupMapping.A_sambaSID, type:_TEXTFIELD_, msgName:ZaSambaGroupMapping.A_sambaSID,label:ZaSambaGroupMapping.A_sambaSID, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,width:300},
+								{ref:ZaSambaGroupMapping.A_sambaSID, type:_TEXTFIELD_, msgName:ZaSambaGroupMapping.A_sambaSID,label:ZaSambaGroupMapping.A_sambaSID, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,width:300,bmolsnr:true},
 								{ref:ZaSambaGroupMapping.A_sambaGroupType, type:_TEXTFIELD_, msgName:ZaSambaGroupMapping.A_sambaGroupType,label:ZaSambaGroupMapping.A_sambaGroupType, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
 								{ref:ZaSambaGroupMapping.A_displayName, type:_TEXTFIELD_, msgName:ZaSambaGroupMapping.A_displayName,label:ZaSambaGroupMapping.A_displayName, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged}							
 							]

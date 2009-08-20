@@ -38,6 +38,7 @@ ZaAccountViewController.helpURL = location.pathname + ZaUtil.HELP_URL + "managin
 ZaController.changeActionsStateMethods["ZaAccountViewController"] = new Array();
 ZaController.setViewMethods["ZaAccountViewController"] = new Array();
 ZaController.initToolbarMethods["ZaAccountViewController"] = new Array();
+ZaXFormViewController.preSaveValidationMethods["ZaAccountViewController"] = new Array();
 //public methods
 
 /**
