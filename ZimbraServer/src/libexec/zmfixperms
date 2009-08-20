@@ -232,6 +232,7 @@ if [ -d ${zimbra_home} ]; then
     chown -R ${zimbra_user}:${zimbra_group} ${i}
   done
 
+
 fi
 
 # fix the temp directory
@@ -381,6 +382,12 @@ if [ -L ${zimbra_home}/jetty ]; then
   fi
   chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/fbqueue
   chmod 755 ${zimbra_home}/fbqueue
+
+  if [ ! -d ${zimbra_home}/zimlets-deployed ]; then
+    mkdir -p ${zimbra_home}/zimlets-deployed
+  fi
+  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/zimlets-deployed
+  chmod 755 ${zimbra_home}/zimlets-deployed
 
   for i in ${zimbra_home}/jetty/*; do
     chown -R ${zimbra_user}:${zimbra_group} ${i}
