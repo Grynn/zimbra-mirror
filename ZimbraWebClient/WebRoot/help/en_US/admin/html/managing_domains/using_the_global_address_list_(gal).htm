@@ -116,15 +116,18 @@ else
  value entered in Global Settings becomes the default for domains that 
  do not have this value explicitly set. The default is 100 results. </p></li>
 </ul>
-<p>When you configure the GAL, you create a GAL sync account and identify 
- the GAL's data source for the account. If you select Both, you create 
- a GAL sync account and identify the data source &nbsp;for 
- each GAL. The GAL sync account automatically syncs to the &nbsp;LDAP 
- and all GAL contacts are added to the GAL sync account's Address Book. 
- The GAL sync account is updated automatically from the LDAP so that new 
- contact, modified contact and deleted contact information is reflected 
- in the GAL. You should not modify the GAL sync account address book directly. 
- When the GAL syncs to the account, changes you made to the address book 
+<h3>GAL Sync Account</h3>
+<p>When you configure the GAL, you create a GAL sync account and an address 
+ book where the LDAP contact data is sync'ed. If Both 
+ is selected, a GAL sync account and an address book is created for each 
+ LDAP data source. &nbsp;You specify the polling interval 
+ for how often the GAL sync account syncs with the LDAP server. When the 
+ GAL sync account syncs to the LDAP the first time, all GAL contacts from 
+ the LDAP are added to the GAL address book. When the LDAP data source 
+ address book in the GAL sync account syncs, new contact, modified contact 
+ and deleted contact information is synced to the GAL sync account. You 
+ should not modify the GAL sync account address book directly. When the 
+ LDAP syncs the GAL to the account, changes you make to the address book 
  are deleted. </p>
 <h2>About External LDAP Settings</h2>
 <p>You configure the following External LDAP Settings</p>

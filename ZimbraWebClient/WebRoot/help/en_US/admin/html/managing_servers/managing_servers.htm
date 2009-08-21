@@ -79,17 +79,16 @@ else
 //-->
 </script>
 <h1>Managing Servers</h1>
-<p>A server is defined as a machine that has one or more of the Zimbra 
- service packages installed. During the installation, the Zimbra server 
- is automatically registered on the LDAP server. </p>
-<p>Servers are registered during the installation process. You can edit 
- a server's records but you cannot add or delete servers. </p>
+<p>A server is a machine that has one or more of the Zimbra service packages 
+ installed. During the installation, the Zimbra server is automatically 
+ registered on the LDAP server. You can edit a server's records but you 
+ cannot add or delete servers. </p>
 <ul><li class=p-note><p class=note><span style="font-weight: bold;"><B>Note</B></span>: 
  To add server records, use the CLI <span class=code>zmprov</span> 
  command.<span class=code> </span>&nbsp;See the <span 
  style="font-style: italic;"><I>Administration Guide</I></span> for details. </p></li>
 </ul>
-<p>The Server tabs display the following information</p>
+<p>The following information is available from the Server tabs.</p>
 <h3>General tab</h3>
 <ul class=whs1 style="list-style: disc;" type=disc>
 	<li class=p><p class="whs1"><b style="font-weight: bold;"><span 
@@ -157,10 +156,12 @@ else
 	<li class=p><p>Number of threads. The default is 10</p></li>
 	<li class=p><p>SSL for POP3 services</p></li>
 	<li class=p><p>Option for clear text login</p></li>
+	<li class=p><p>Network options for Advertised name and address</p></li>
+	<li class=p><p>POP3 port numbers</p></li>
 </ul>
 <h3>Volumes tab</h3>
-<p>Multiple volumes for message store and index store can be defined for 
- the Zimbra mailbox server </p>
+<p>Multiple <a href="volume_management.htm">volumes for message store and 
+ index store</a> can be defined for the Zimbra mailbox server </p>
 <ul type="disc" class="whs2">
 	<li class=p><p><span style="font-weight: bold;"><B>Volume Name</B></span>. 
  The name of the volume. &nbsp;The initial volumes are 
@@ -181,6 +182,9 @@ else
  style="font-weight: normal;">. The current primary message volume, secondary 
  message volume, and index volume are listed.</span></p></li>
 	</ul>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>
 <a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','Stopping Mailbox Service on a Server','stopping_mailbox_service_on_a_server.htm','Volume Management','volume_management.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border=0 height=17 width=81 alt="Related Topics"></a>
 

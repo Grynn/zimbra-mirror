@@ -14,7 +14,6 @@ if (navigator.appName !="Netscape")
 <style type="text/css">
 <!--
 ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
 -->
 </style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
 <!--
@@ -100,9 +99,9 @@ else
  by a mailbox as its index volume cannot be deleted. </p>
 <h2>Message Volume</h2>
 <p>When a new message is delivered or created, the message is saved in 
- the current message volume. Additional message volumes can be created, 
- but only one is configured as the current volume where new messages are 
- stored. When the volume is full, you can configure a new current message 
+ the primary message volume. Additional secondary message volumes can be 
+ created, but only one is configured as the current volume where new messages 
+ are stored. When the volume is full, you can configure a new current message 
  volume. The current message volume receives all new messages. New messages 
  are never stored in the previous volume.</p>
 <p>A current volume cannot be deleted, and message volumes that have messages 
@@ -121,27 +120,15 @@ else
  When this box is checked, message blobs whose size is above the compression 
  threshold are compressed. If Blob compression is turned on, the disk space 
  used is decreased. </p></li>
-	<li class=P-note><p class=note><span style="font-weight: bold;"><B>Note</B></span>: 
+	<li class=p-note><p class=note><span style="font-weight: bold;"><B>Note</B></span>: 
  &nbsp;Turning on blob compression will also increase 
  memory requirements for the server.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Status</B></span>. This 
- displays &quot;current&quot; when the volume is current. </p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>Compression Threshold</B></span>. 
  Messages larger than the threshold are compressed. The default threshold 
  is 4096 bytes. </p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Current</B></span>. A check 
+ mark is displayed next to volumes that are current. </p></li>
 </ul>
-<h3>Adding a new volume</h3>
-<p>Before adding a new volume, the directory path must already exist. </p>
-<ol start="1" type="1" class="whs2">
-	<li style="list-style: decimal;" type=1 class=p><p>Select the server 
- from the <span style="font-weight: bold;"><B>Servers</B></span> list.</p></li>
-	<li class=p><p>Go to the <span style="font-weight: bold;"><B>Volumes</B></span> 
- tab and click <span style="font-weight: bold;"><B>Add New Volume</B></span>. 
- &nbsp;A new line appears with empty fields.</p></li>
-	<li class=p><p>Enter the volume name, root path for the new volume, 
- and select whether the volume is Index or Message.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span>.</p></li>
-</ol>
 <p>&nbsp;</p>
 <script type="text/javascript" language="javascript1.2">
 <!--

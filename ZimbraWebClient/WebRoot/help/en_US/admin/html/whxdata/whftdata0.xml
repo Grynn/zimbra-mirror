@@ -70,6 +70,7 @@
 <topic name="Making Free/Busy View Available" url="managing_global_settings/making_free_busy_view__available_.htm" />
 <topic name="MTA SMTP Restrictions" url="managing_global_settings/mta_smtp_restrictions.htm" />
 <topic name="Relay MTA for external delivery" url="managing_global_settings/relay_mta_for_external_delivery.htm" />
+<topic name="Adding a New Storage Volume to the Server" url="managing_servers/adding_a_new_storage_volume_to_the_server.htm" />
 <topic name="Configuring the MTA Tab for Servers" url="managing_servers/configuring_the_mta_tab_for_servers.htm" />
 <topic name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
 <topic name="Managing Servers" url="managing_servers/managing_servers.htm" />
@@ -97,6 +98,5 @@
 <topic name="Checking Usage Statistics" url="monitoring/checking_usage_statistics.htm" />
 <topic name="Daily Mail Reports" url="monitoring/daily_mail_reports.htm" />
 <topic name="Disk Space Avability Alert" url="monitoring/disk_space_avability_alert.htm" />
-<topic name="Monitoring Zimbra MTA Mail Queues" url="monitoring/monitoring_zimbra_mta_mail_queues.htm" />
 
 </ftstdata>  
