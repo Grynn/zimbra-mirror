@@ -324,7 +324,8 @@ function(anObj, isXml, isRaw, timestamp, showFuncs) {
 		} else if (isXml) {
 			var xmldoc = new AjxDebugXmlDocument;
 			var doc = xmldoc.create();
-			if (doc && doc.loadXML) {
+			// IE bizarrely throws error if we use doc.loadXML here (bug 40451)
+			if (doc && ("loadXML" in doc)) {
 				doc.loadXML(anObj);
 	//			if (timestamp) {
 	//				html[idx++] = [doc.documentElement.nodeName, this._getTimeStamp(timestamp)].join(" - ");
