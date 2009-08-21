@@ -554,7 +554,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         
         attrs.put(A_zimbraMailQuota, "0");
 
-        Account account = createAccountInternal(emailAddress, zgi.getId(), attrs, true);
+        Account account = createAccountInternal(emailAddress, zgi.getId(), attrs, true, false);
+        
         try {
             // create identity entries in database
             for (ZIdentity zident : zgi.getIdentities())
@@ -564,11 +565,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 //                DirectorySync.getInstance().syncDataSource(this, account, zdsrc);
         } catch (ServiceException e) {
             OfflineLog.offline.error("error initializing account " + emailAddress, e);
-            Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account, false);
-            if (mbox != null) {
-                ((SyncMailbox)mbox).deleteMailbox(false);
-            }
-            mAccountCache.remove(account);
             deleteAccount(zgi.getId());
             throw e;
         }
@@ -734,27 +730,19 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraPrefAccountTreeOpen , getAllAccounts().size() == 0 ? TRUE : FALSE);
         attrs.put(A_zimbraZimletAvailableZimlets, new String[0]);
 
-        if (testDs.isYahoo()) {
-        	attrs.put(A_zimbraPrefSkin, "yahoo");
-        }
+        if (testDs.isYahoo())
+            attrs.put(A_zimbraPrefSkin, "yahoo");
 
-        Account account = createAccountInternal(emailAddress, accountId, attrs, false);
+        Account account = createAccountInternal(emailAddress, accountId, attrs, false, false);
         OfflineDataSource ds = null;
+        
         try {
-        	ds = (OfflineDataSource) createDataSource(account, type, dsName, dsAttrs, true, false);
-        } catch (Exception t) {
-        	OfflineLog.offline.warn("failed creating datasource: " + dsName, t);
-        	deleteAccount(account.getId());
-        }
-        try {
+            ds = (OfflineDataSource) createDataSource(account, type, dsName, dsAttrs, true, false);
             MailboxManager.getInstance().getMailboxByAccount(account);
+            createNotificationMountpoints(accountId);
         } catch (ServiceException e) {
-            OfflineLog.offline.error("error initializing account " + emailAddress, e);
-            if (ds != null) {
-                deleteDataSource(account, ds.getId());
-            }
-            mAccountCache.remove(account);
-            deleteAccount(accountId);
+            OfflineLog.offline.warn("failed creating datasource mailbox: " + dsName, e);
+            deleteAccount(account.getId());
             throw e;
         }
 
@@ -766,7 +754,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             MetadataTokenStore.clearTokens(mbox);
             OfflineYAuth.deleteRawAuthManager(mbox);
         }
-        
         return account;
     }
 
@@ -825,7 +812,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_offlineAccountFlavor, "Gal");
         setDefaultAccountAttributes(attrs);
 
-        OfflineAccount galAcct = (OfflineAccount)createAccountInternal(name, id, attrs, true);
+        OfflineAccount galAcct = (OfflineAccount)createAccountInternal(name, id, attrs, true, false);
         setAccountAttribute(mainAcct, OfflineConstants.A_offlineGalAccountId, galAcct.getId());
         return galAcct;
     }
@@ -892,7 +879,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraPrefFromDisplay, LOCAL_ACCOUNT_DISPLAYNAME);
         setDefaultAccountAttributes(attrs);
 
-        return createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true);
+        return createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true, false);
     }
 
     public synchronized Account getLocalAccount() throws ServiceException {
@@ -919,18 +906,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	return account.getId().equals(LOCAL_ACCOUNT_ID);
     }
 
-    private Account createAccountInternal(String emailAddress, String accountId, Map<String, Object> attrs, boolean initMailbox) throws ServiceException {
-        return createAccountInternal(emailAddress, accountId, attrs, initMailbox, false);
-    }
-    
     private synchronized Account createAccountInternal(String emailAddress, String accountId, Map<String, Object> attrs, boolean initMailbox, boolean skipAttrMgr) throws ServiceException {
+        Map<String, Object> context = null;
         String flavor = (String)attrs.get(A_offlineAccountFlavor);
         Map<String,Object> immutable = new HashMap<String, Object>();
-        for (String attr : AttributeManager.getInstance().getImmutableAttrs())
+        
+        for (String attr : AttributeManager.getInstance().getImmutableAttrs()) {
             if (attrs.containsKey(attr))
                 immutable.put(attr, attrs.remove(attr));
+        }
 
-        Map<String, Object> context = null;
         if (!skipAttrMgr) {
             context = new HashMap<String, Object>();
             AttributeManager.getInstance().preModify(attrs, null, context, true, true);
@@ -950,29 +935,35 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (!skipAttrMgr)
             AttributeManager.getInstance().postModify(attrs, acct, context, true);
 
-        if (initMailbox)
-	        try {
-	            MailboxManager.getInstance().getMailboxByAccount(acct);
-	            if (!accountId.equals(LOCAL_ACCOUNT_ID)) {
-	                Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(
-	                    getLocalAccount());
-	                
-	                mbox.createMountpoint(null, DesktopMailbox.ID_FOLDER_NOTIFICATIONS,
-	                    accountId, accountId, Mailbox.ID_FOLDER_USER_ROOT,
-	                    MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR);
-	            }
-	        } catch (ServiceException e) {
-	            OfflineLog.offline.error("error initializing account " + emailAddress, e);
-	            mAccountCache.remove(acct);
-	            deleteAccount(accountId);
-	            throw e;
-	        }
-
-	    cachedaccountIds = null;
+        if (initMailbox) {
+            try {
+                MailboxManager.getInstance().getMailboxByAccount(acct);
+                createNotificationMountpoints(accountId);
+            } catch (ServiceException e) {
+                OfflineLog.offline.error("error initializing account "
+                    + emailAddress, e);
+                mAccountCache.remove(acct);
+                deleteAccount(accountId);
+                throw e;
+            }
+        }
+        cachedaccountIds = null;
 	    
         return acct;
     }
-    
+
+    private void createNotificationMountpoints(String accountId) throws ServiceException {
+        if (!accountId.equals(LOCAL_ACCOUNT_ID)) {
+            Mailbox mbox = MailboxManager.getInstance().
+                getMailboxByAccount(getLocalAccount());
+
+            mbox.createMountpoint(null,
+                DesktopMailbox.ID_FOLDER_NOTIFICATIONS, accountId,
+                accountId, Mailbox.ID_FOLDER_USER_ROOT,
+                MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB);
+        }
+    }
+
     private static final String A_zimbraMailIdleSessionTimeout = "zimbraMailIdleSessionTimeout";
     private static final String A_zimbraPrefCalendarAlwaysShowMiniCal = "zimbraPrefCalendarAlwaysShowMiniCal";
     private static final String A_zimbraPrefCalendarApptReminderWarningTime = "zimbraPrefCalendarApptReminderWarningTime";
@@ -1143,17 +1134,15 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         deleteGalAccount(zimbraId);
         DbOfflineDirectory.deleteGranterByGrantee(zimbraId);
         deleteOfflineAccount(zimbraId);
-        
         cachedaccountIds = null;
     }
     
     private synchronized void deleteOfflineAccount(String zimbraId) throws ServiceException {
         DbOfflineDirectory.deleteDirectoryEntry(EntryType.ACCOUNT, zimbraId);
-
         Account acct = mAccountCache.getById(zimbraId);
+
         if (acct != null)
             mAccountCache.remove(acct);
-        
         fixAccountsOrder(true);        
     }
 
@@ -1165,8 +1154,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         
     public synchronized void deleteGalAccount(OfflineAccount mainAcct) throws ServiceException {
         OfflineAccount galAcct = null;
-        
         String galAcctId = mainAcct.getAttr(OfflineConstants.A_offlineGalAccountId, false);        
+
         if (galAcctId != null && galAcctId.length() > 0) {
             setAccountAttribute(mainAcct, OfflineConstants.A_offlineGalAccountId, "");
             galAcct = (OfflineAccount)get(AccountBy.id, galAcctId);
