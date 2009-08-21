@@ -43,14 +43,12 @@ import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.httpclient.URLUtil;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
-import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.redolog.op.CreateFolder;
 import com.zimbra.cs.redolog.op.RedoableOp;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.UserServlet.HttpInputStream;
@@ -79,27 +77,6 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     
     ZcsMailbox(MailboxData data) throws ServiceException {
         super(data);
-    }
-
-    @Override protected synchronized void initialize() throws ServiceException {
-        super.initialize();
-        // create Local Folders
-        Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
-        Folder.create(ID_FOLDER_ARCHIVE, this, userRoot, ARCHIVE_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, Flag.BITMASK_ARCHIVED, MailItem.DEFAULT_COLOR_RGB, null, null);
-    }
-
-    @Override synchronized void ensureSystemFolderExists() throws ServiceException {
-        super.ensureSystemFolderExists();
-        Folder f = null;
-        try {
-            f = getFolderById(ID_FOLDER_ARCHIVE);
-        } catch (MailServiceException.NoSuchItemException x) {}
-        if (f == null) {
-            CreateFolder redo = new CreateFolder(getId(), ARCHIVE_PATH, ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, Flag.BITMASK_ARCHIVED, MailItem.DEFAULT_COLOR_RGB, null);
-            redo.setFolderId(ID_FOLDER_ARCHIVE);
-            redo.start(System.currentTimeMillis());
-            createFolder(new OfflineContext(redo), ARCHIVE_PATH, ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, Flag.BITMASK_ARCHIVED, MailItem.DEFAULT_COLOR, null);
-        }
     }
 
     @Override public MailSender getMailSender() {
@@ -393,7 +370,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
 
     synchronized void syncMetadata(OperationContext octxt, int itemId, byte type, int folderId, int flags, long tags, byte color)
-    throws ServiceException {
+        throws ServiceException {
         boolean success = false;
         String oldFolderPath = null;
         try {
@@ -431,7 +408,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 queueForIndexing(item, false, null);
             }
             
-            item.setColor(color);
+            item.setColor(new MailItem.Color(color));
             item.setTags(flags, tags);
             if (getFlagById(Flag.ID_FLAG_UNREAD).canTag(item))
                 item.alterUnread(unread);
@@ -623,13 +600,9 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH) + "/~"+ URLUtil.urlEscape(item.getPath()) + "?lbfums=1";
     	try {
     	    Pair<Header[], HttpInputStream> resp = 
-    	        UserServlet.putMailItem(getAuthToken(), 
-    	                url, 
-    	                item, 
-    	                acct.getProxyHost(), 
-    	                acct.getProxyPort(), 
-    	                acct.getProxyUser(), 
-    	                acct.getProxyPass());
+    	        UserServlet.putMailItem(getAuthToken(), url, item, 
+    	        acct.getProxyHost(), acct.getProxyPort(), 
+    	        acct.getProxyUser(), acct.getProxyPass());
     	    int id = 0, version = 0;
     	    for (Header h : resp.getFirst()) {
     	        if (h.getName().equals("X-Zimbra-ItemId"))

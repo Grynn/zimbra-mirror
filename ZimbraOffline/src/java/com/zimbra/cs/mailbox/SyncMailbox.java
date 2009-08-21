@@ -22,144 +22,153 @@ import com.zimbra.cs.util.ZimbraApplication;
 
 public abstract class SyncMailbox extends DesktopMailbox {
 
-	static class DeletingMailbox extends SyncMailbox {
-		DeletingMailbox(MailboxData data) throws ServiceException {
-			super(data);
-		}
-		
-		@Override synchronized boolean finishInitialization() {
-	        final String accountId = getAccountId();
-	        new Thread(new Runnable() {
-				public void run() {
-					try {
-						Thread.sleep(15000);
-						deleteThisMailbox();
-					} catch (Exception x) {
-						OfflineLog.offline.error("Deleting mailbox %s mailbox", accountId, x);
-					}
-				}
-	        }, "mailbox-reaper:" + accountId).start();
-			return false;
-		}
+    static class DeletingMailbox extends SyncMailbox {
+        DeletingMailbox(MailboxData data) throws ServiceException {
+            super(data);
+        }
 
-		@Override
-		public boolean isAutoSyncDisabled() {return false;}
+        @Override
+        synchronized boolean finishInitialization() {
+            final String accountId = getAccountId();
+            new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        Thread.sleep(15000);
+                        deleteThisMailbox();
+                    } catch (Exception x) {
+                        OfflineLog.offline.error("Deleting mailbox %s mailbox",
+                            accountId, x);
+                    }
+                }
+            }, "mailbox-reaper:" + accountId).start();
+            return false;
+        }
 
-		@Override
-		public void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {}
+        @Override
+        public boolean isAutoSyncDisabled() {
+            return false;
+        }
 
-		@Override
-		protected void syncOnTimer() {}
-	}
-	
-	static final String DELETING_MID_SUFFIX = ":delete";
-	
-	private String accountName;
-	private boolean isDeleting;
-	
-	private Timer timer;
-	private TimerTask currentTask;
+        @Override
+        public void sync(boolean isOnRequest, boolean isDebugTraceOn)
+            throws ServiceException {}
+
+        @Override
+        protected void syncOnTimer() {}
+    }
+
+    static final String DELETING_MID_SUFFIX = ":delete";
+
+    private String accountName;
+    private boolean isDeleting;
+
+    private Timer timer;
+    private TimerTask currentTask;
 	
     Object syncLock = new Object();
     private boolean mSyncRunning;
-    
-	
-	public SyncMailbox(MailboxData data) throws ServiceException {
-		super(data);
-		
-		if (this instanceof DeletingMailbox)
-			accountName = getAccountId();
-		else {
-		    OfflineAccount account = (OfflineAccount)getAccount();
-		    if (account.isDataSourceAccount())
-			    accountName = account.getAttr(OfflineProvisioning.A_offlineDataSourceName);
-		    else
-			    accountName = account.getName();
-	    }
-	}
-	
-	@Override
-	synchronized boolean finishInitialization() throws ServiceException {
-		if (super.finishInitialization()) {
-			initSyncTimer();
-			return true;
-		}
-		return false;
-	}
+
+    public SyncMailbox(MailboxData data) throws ServiceException {
+        super(data);
+
+        if (this instanceof DeletingMailbox) {
+            accountName = getAccountId();
+        } else {
+            OfflineAccount account = (OfflineAccount)getAccount();
+            if (account.isDataSourceAccount())
+                accountName = account
+                    .getAttr(OfflineProvisioning.A_offlineDataSourceName);
+            else
+                accountName = account.getName();
+        }
+    }
+
+    @Override
+    synchronized boolean finishInitialization() throws ServiceException {
+        if (super.finishInitialization()) {
+            initSyncTimer();
+            return true;
+        }
+        return false;
+    }
 
     boolean lockMailboxToSync() {
-    	if (isDeleting() || !OfflineSyncManager.getInstance().isServiceOpen() || OfflineSyncManager.getInstance().isUiLoadingInProgress())
-    		return false;
-    	
-    	if (!mSyncRunning) {
-	    	synchronized (this) {
-	    		if (!mSyncRunning) {
-	    			mSyncRunning = true;
-	    			return true;
-	    		}
-	    	}
-    	}
-    	return false;
+        if (isDeleting() || !OfflineSyncManager.getInstance().isServiceOpen()
+            || OfflineSyncManager.getInstance().isUiLoadingInProgress())
+            return false;
+
+        if (!mSyncRunning) {
+            synchronized (this) {
+                if (!mSyncRunning) {
+                    mSyncRunning = true;
+                    return true;
+                }
+            }
+        }
+        return false;
     }
-    
+
     void unlockMailbox() {
-    	assert mSyncRunning == true;
-    	mSyncRunning = false;
+        assert mSyncRunning == true;
+        mSyncRunning = false;
     }
-	
-	public boolean isDeleting() {
-		return isDeleting;
-	}
-	
-	public String getAccountName() {
-		return accountName;
-	}
 
-	@Override
+    public boolean isDeleting() {
+        return isDeleting;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    @Override
     public void deleteMailbox() throws ServiceException {
-		deleteMailbox(true);
-	}
-	
-	public void deleteMailbox(boolean asynch) throws ServiceException {
-		synchronized (this) {
-			if (isDeleting)
-				return;
-			isDeleting = true;
-			
-			cancelCurrentTask();
+        deleteMailbox(true);
+    }
 
-			beginMaintenance(); //putting mailbox in maintenance will cause sync to stop when writing
-		}
-		
-		synchronized (syncLock) { //wait for any hot sync thread to unwind
-			endMaintenance(true);
-		}
+    public void deleteMailbox(boolean asynch) throws ServiceException {
+        synchronized (this) {
+            if (isDeleting)
+                return;
+            isDeleting = true;
 
-		try {
-			resetSyncStatus();
-		} catch (ServiceException x) {
-			if (!x.getCode().equals(AccountServiceException.NO_SUCH_ACCOUNT))
-				OfflineLog.offline.warn(x);
-		}
-		
+            cancelCurrentTask();
+
+            beginMaintenance(); // putting mailbox in maintenance will cause
+                                // sync to stop when writing
+        }
+
+        synchronized (syncLock) { // wait for any hot sync thread to unwind
+            endMaintenance(true);
+        }
+
+        try {
+            resetSyncStatus();
+        } catch (ServiceException x) {
+            if (!x.getCode().equals(AccountServiceException.NO_SUCH_ACCOUNT))
+                OfflineLog.offline.warn(x);
+        }
+
         if (asynch) {
-        	MailboxManager mm = MailboxManager.getInstance();
-        	synchronized (mm) {
-		        unhookMailboxForDeletion();
-		        mm.markMailboxDeleted(this); //to remove from cache
-        	}
-	        mm.getMailboxById(getId(), true); //the mailbox will now be loaded as a DeletingMailbox
+            MailboxManager mm = MailboxManager.getInstance();
+            synchronized (mm) {
+                unhookMailboxForDeletion();
+                mm.markMailboxDeleted(this); // to remove from cache
+            }
+            mm.getMailboxById(getId(), true); // the mailbox will now be loaded
+                                              // as a DeletingMailbox
         } else {
-        	deleteThisMailbox();
+            deleteThisMailbox();
         }
     }
 	
-	private synchronized String unhookMailboxForDeletion() throws ServiceException {
-		String accountId = getAccountId();
-		if (accountId.endsWith(DELETING_MID_SUFFIX))
-			return accountId;
-		
-		accountId = accountId + ":" + getId() + DELETING_MID_SUFFIX;
+    private synchronized String unhookMailboxForDeletion()
+        throws ServiceException {
+        String accountId = getAccountId();
+        if (accountId.endsWith(DELETING_MID_SUFFIX))
+            return accountId;
+
+        accountId = accountId + ":" + getId() + DELETING_MID_SUFFIX;
         boolean success = false;
         try {
             beginTransaction("replaceAccountId", null);
@@ -167,59 +176,59 @@ public abstract class SyncMailbox extends DesktopMailbox {
             success = true;
             return accountId;
         } finally {
-        	endTransaction(success);
+            endTransaction(success);
         }
-	}
-	
-	void deleteThisMailbox() throws ServiceException {
-		OfflineLog.offline.info("deleting mailbox %s", getAccountId());
-		super.deleteMailbox();
-		OfflineLog.offline.info("mailbox %s deleted", getAccountId());
-	}
-	
-	void resetSyncStatus() throws ServiceException {
-		OfflineSyncManager.getInstance().resetStatus(accountName);
-		((OfflineAccount)getAccount()).resetLastSyncTimestamp();
+    }
+
+    void deleteThisMailbox() throws ServiceException {
+        OfflineLog.offline.info("deleting mailbox %s", getAccountId());
+        super.deleteMailbox();
+        OfflineLog.offline.info("mailbox %s deleted", getAccountId());
+    }
+
+    void resetSyncStatus() throws ServiceException {
+        OfflineSyncManager.getInstance().resetStatus(accountName);
+        ((OfflineAccount)getAccount()).resetLastSyncTimestamp();
         OfflineYAuth.deleteRawAuthManager(this);
     }
-	
-	public synchronized void cancelCurrentTask() {
-		if (currentTask != null)
-			currentTask.cancel();
-		currentTask = null;
-	}
 
-	protected synchronized void initSyncTimer() throws ServiceException {
-		if (((OfflineAccount)getAccount()).isLocalAccount())
-			return;
-		
-		cancelCurrentTask();
-		
-		currentTask = new TimerTask() {
-				public void run() {
-					if (ZimbraApplication.getInstance().isShutdown())
-						return;
-					try {
-						syncOnTimer();
-					} catch (Throwable e) { //don't let exceptions kill the timer
-						if (e instanceof OutOfMemoryError)
-							Zimbra.halt("Caught out of memory error", e);
-						OfflineLog.offline.warn("Caught exception in timer ", e);
-					}
-				}
-			};
-		
-		timer = new Timer("mid=" + getId());
-		timer.schedule(currentTask, 10 * Constants.MILLIS_PER_SECOND, 5 * Constants.MILLIS_PER_SECOND);
-	}
+    public synchronized void cancelCurrentTask() {
+        if (currentTask != null)
+            currentTask.cancel();
+        currentTask = null;
+    }
 
-	protected abstract void syncOnTimer();
+    protected synchronized void initSyncTimer() throws ServiceException {
+        if (((OfflineAccount)getAccount()).isLocalAccount())
+            return;
 
-	public abstract void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException;
-	
-	public abstract boolean isAutoSyncDisabled();
-	
-	
+        cancelCurrentTask();
+
+        currentTask = new TimerTask() {
+            public void run() {
+                if (ZimbraApplication.getInstance().isShutdown())
+                    return;
+                try {
+                    syncOnTimer();
+                } catch (Throwable e) { // don't let exceptions kill the timer
+                    if (e instanceof OutOfMemoryError)
+                        Zimbra.halt("Caught out of memory error", e);
+                    OfflineLog.offline.warn("Caught exception in timer ", e);
+                }
+            }
+        };
+
+        timer = new Timer("mid=" + getId());
+        timer.schedule(currentTask, 10 * Constants.MILLIS_PER_SECOND,
+            5 * Constants.MILLIS_PER_SECOND);
+    }
+
+    protected abstract void syncOnTimer();
+
+    public abstract void sync(boolean isOnRequest, boolean isDebugTraceOn)
+        throws ServiceException;
+
+    public abstract boolean isAutoSyncDisabled();
 	
     /* NOTE: how we deal with archiving
      * 
@@ -269,27 +278,26 @@ public abstract class SyncMailbox extends DesktopMailbox {
                     continue;
                 MailItem item = (MailItem) change.what;
                 if ((item.getId() >= FIRST_USER_ID || item instanceof Tag) && item.getFolderId() != ID_FOLDER_FAILURE) {
-                	String path = item.getPath();
+                    String path = item.getPath();
                     boolean isInArchive = isInArchive(path);
                     boolean isInTrash = isInTrash(path);
-                	if (!isInArchive && !isInTrash || !item.isTagged(Flag.ID_FLAG_ARCHIVED)) { //either not in archive/trash, or newly archived, we need to keep track
-                		trackChangeModified(item, change.why);
+                    if (!isInArchive && !isInTrash || !item.isTagged(Flag.ID_FLAG_ARCHIVED)) { //either not in archive/trash, or newly archived, we need to keep track
+                	trackChangeModified(item, change.why);
                         if (item.getFolderId() == ID_FOLDER_OUTBOX)
-                        	outboxed = true;
+                            outboxed = true;
                 	}
                     
-                	if ((change.why & Change.MODIFIED_FOLDER) != 0) {
-                    	if (isInArchive && !item.isTagged(Flag.ID_FLAG_ARCHIVED)) //moved into archive
-                        	archive(item, true, false);
-                    	else if (!isInArchive && item.isTagged(Flag.ID_FLAG_ARCHIVED)) //moved out of archive
-                        	archive(item, false, isInTrash);
+                    if ((change.why & Change.MODIFIED_FOLDER) != 0) {
+                        if (isInArchive && !item.isTagged(Flag.ID_FLAG_ARCHIVED)) //moved into archive
+                            archive(item, true, false);
+                        else if (!isInArchive && item.isTagged(Flag.ID_FLAG_ARCHIVED)) //moved out of archive
+                            archive(item, false, isInTrash);
                     }
                 }
             }
         }
-        
         if (outboxed) {
-        	OutboxTracker.invalidate(this);
+            OutboxTracker.invalidate(this);
         }
     }
     
@@ -297,11 +305,13 @@ public abstract class SyncMailbox extends DesktopMailbox {
     	// alter \Archived flag, but don't use MailItem.alterSystemFlag() since that would insert more changes into PendingModifications
     	// we are currently looping through.  in any case we don't need to keep track of this particular flag change.
         Flag archivedFlag = getFlagById(Flag.ID_FLAG_ARCHIVED);
-    	DbMailItem.alterTag(archivedFlag, Arrays.asList(item.getId()), toArchive);
-    	if (toArchive)
-    		item.mData.flags |= archivedFlag.getBitmask();
+
+        DbMailItem.alterTag(archivedFlag, Arrays.asList(item.getId()),
+            toArchive);
+        if (toArchive)
+            item.mData.flags |= archivedFlag.getBitmask();
         else
-        	item.mData.flags &= ~archivedFlag.getBitmask();
+            item.mData.flags &= ~archivedFlag.getBitmask();
     }
 
     /**
@@ -312,37 +322,39 @@ public abstract class SyncMailbox extends DesktopMailbox {
      * @param toArchive true to move into archive; false to move out of
      * @throws ServiceException
      */
-    private void archive(MailItem item, boolean toArchive, boolean isTrashing) throws ServiceException {
-    	if (item instanceof Folder) {
-    		TypedIdList ids = DbMailItem.listByFolder((Folder)item, true);
-    		for (byte type : ids.types()) {    			
-    			MailItem[] items = getItemById(ids.getIds(type), type);
-    			for (MailItem i : items) {
-    				if (type == MailItem.TYPE_FOLDER)
-    					archive(i, toArchive, isTrashing);
-    				else
-    					archiveSingleItem(i, toArchive, isTrashing);
-    			}
-    		}
-    	}
-    	archiveSingleItem(item, toArchive, isTrashing);
+    private void archive(MailItem item, boolean toArchive, boolean isTrashing)
+        throws ServiceException {
+        if (item instanceof Folder) {
+            TypedIdList ids = DbMailItem.listByFolder((Folder)item, true);
+            for (byte type : ids.types()) {
+                MailItem[] items = getItemById(ids.getIds(type), type);
+                for (MailItem i : items) {
+                    if (type == MailItem.TYPE_FOLDER)
+                        archive(i, toArchive, isTrashing);
+                    else
+                        archiveSingleItem(i, toArchive, isTrashing);
+                }
+            }
+        }
+        archiveSingleItem(item, toArchive, isTrashing);
     }
-    
-    void archiveSingleItem(MailItem item, boolean toArchive, boolean isTrashing) throws ServiceException {
-    	if (trackChangeArchived(item, toArchive, isTrashing))
-    		alterArchivedFlag(item, toArchive);
+
+    void archiveSingleItem(MailItem item, boolean toArchive, boolean isTrashing)
+        throws ServiceException {
+        if (trackChangeArchived(item, toArchive, isTrashing))
+            alterArchivedFlag(item, toArchive);
     }
-    
+
     public static boolean isInArchive(String path) {
-    	return path.startsWith("/" + ARCHIVE_PATH);
+        return path.startsWith("/" + ARCHIVE_PATH);
     }
-    
+
     public static boolean isInTrash(String path) {
-    	return path.startsWith("/Trash");
+        return path.startsWith("/Trash");
     }
-    
+
     boolean isItemInArchive(MailItem item) {
-    	return (item.getInternalFlagBitmask() & Flag.BITMASK_ARCHIVED) != 0;
+        return (item.getInternalFlagBitmask() & Flag.BITMASK_ARCHIVED) != 0;
     }
 
     void trackChangeNew(MailItem item) throws ServiceException {}
