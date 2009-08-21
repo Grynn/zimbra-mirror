@@ -367,16 +367,20 @@ public class OfflineDataSource extends DataSource {
     	return getType() == Type.imap || getType() == Type.pop3;
     }
     
-    public boolean needsSmtpAuth() {
-    	return isEmail() && !isLive() && !isYahoo();
+    public boolean isSmtpEnabled() {
+        return getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceSmtpEnabled, false);
     }
 
-    public boolean isContactSyncEnabled() {
-        return getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceContactSyncEnabled, false);
+    public boolean needsSmtpAuth() {
+        return isEmail() && isSmtpEnabled() && !isLive() && !isYahoo();
     }
 
     public boolean isCalendarSyncEnabled() {
         return getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceCalendarSyncEnabled, false);
+    }
+
+    public boolean isContactSyncEnabled() {
+        return getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceContactSyncEnabled, false);
     }
 
     public void setContactSyncEnabled(boolean enabled) throws ServiceException {

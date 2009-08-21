@@ -36,6 +36,7 @@ public class XmailBean extends MailBean {
     protected String replyTo = "";
     protected String replyToDisplay = "";
 
+    protected boolean smtpEnabled = true;
     protected String smtpHost = "";
     protected String smtpPort = "25";
     protected boolean isSmtpSsl = false;
@@ -92,6 +93,8 @@ public class XmailBean extends MailBean {
         contactSyncEnabled = ds.getBooleanAttr(
             OfflineConstants.A_zimbraDataSourceContactSyncEnabled, false);
         domain = ds.getAttr(Provisioning.A_zimbraDataSourceDomain, null);
+        smtpEnabled = ds.getBooleanAttr(
+            OfflineConstants.A_zimbraDataSourceSmtpEnabled, true);
         smtpHost = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpHost, null);
         smtpPort = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpPort, null);
         isSmtpSsl = "ssl".equals(ds.getAttr(
@@ -147,7 +150,9 @@ public class XmailBean extends MailBean {
                 if (domain == null)
                     domain = email.substring(email.indexOf('@') + 1);
                 if (isSmtpConfigSupported()) {
-                    if (!isValidHost(smtpHost))
+                    if (isEmpty(smtpHost))
+                        smtpEnabled = false;
+                    else if (!isValidHost(smtpHost))
                         addInvalid("smtpHost");
                     if (!isValidPort(smtpPort))
                         addInvalid("smtpPort");
@@ -191,6 +196,8 @@ public class XmailBean extends MailBean {
                     }
                     dsAttrs.put(Provisioning.A_zimbraDataSourceDomain,
                         domain);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpEnabled,
+                        smtpEnabled ? Provisioning.TRUE : Provisioning.FALSE);
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost,
                         smtpHost);
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpPort,
@@ -350,6 +357,14 @@ public class XmailBean extends MailBean {
 
     public void setReplyToDisplay(String replyToDisplay) {
         this.replyToDisplay = optional(replyToDisplay);
+    }
+
+    public boolean isSmtpEnabled() {
+        return smtpEnabled;
+    }
+
+    public void setSmtpEnabled(boolean isSmtpEnabled) {
+        this.smtpEnabled = isSmtpEnabled;
     }
 
     public String getSmtpHost() {

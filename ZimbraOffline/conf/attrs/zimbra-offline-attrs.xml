@@ -122,6 +122,10 @@
   <desc>id of the offline acount through which access to mountpoints is proxied</desc>
 </attr>
 
+<attr name="zimbraDataSourceSmtpEnabled" type="boolean" cardinality="single" optionalIn="dataSource">
+  <desc>whether oubound mail sending is allowed in this data source</desc>
+</attr>
+
 <attr name="zimbraDataSourceSmtpHost" type="string" cardinality="single" optionalIn="dataSource">
   <desc>host of smtp associated with this data source</desc>
 </attr>

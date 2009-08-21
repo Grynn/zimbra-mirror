@@ -544,7 +544,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
         
         attrs.put(A_zimbraPrefClientType, "advanced");
-        attrs.put(A_zimbraPrefAccountTreeOpen , FALSE);
+        attrs.put(A_zimbraPrefAccountTreeOpen , getAllAccounts().size() == 0 ? TRUE : FALSE);
         attrs.put(A_zimbraFeatureSharingEnabled, TRUE);
         
         attrs.remove(A_zimbraChildAccount);
@@ -731,7 +731,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraFeatureIMEnabled, FALSE);
         attrs.put(A_zimbraFeatureNotebookEnabled, FALSE);
         attrs.put(A_zimbraFeatureTasksEnabled, FALSE);
-        attrs.put(A_zimbraPrefAccountTreeOpen , FALSE);
+        attrs.put(A_zimbraPrefAccountTreeOpen , getAllAccounts().size() == 0 ? TRUE : FALSE);
         attrs.put(A_zimbraZimletAvailableZimlets, new String[0]);
 
         if (testDs.isYahoo()) {
