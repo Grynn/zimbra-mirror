@@ -252,7 +252,10 @@ public class XMPPServer {
      */
     public boolean matchesComponent(JID jid) {
         if (jid != null) {
-            return !isLocal(jid) && mLocationManager.isCloudComponent(jid.toBareJID());
+            return !isLocal(jid) && 
+            ( mLocationManager.isCloudComponent(jid.toBareJID()) || 
+                            this.componentManager.getComponent(jid)!=null); 
+                            
         }
         return false;
     }
