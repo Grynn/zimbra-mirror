@@ -199,6 +199,8 @@ function(defaultColumnSort) {
 	htmlArr[idx++] = "' cellpadding=0 cellspacing=0 border=0 height=100%";
 	htmlArr[idx++] = this._noMaximize ? ">" : " width=100%>";
 	htmlArr[idx++] = "<tr>";
+
+	var numResizeable = 0, resizeableCol;
 	var numCols = this._headerList.length;
 	for (var i = 0; i < numCols; i++) {
 		var headerCol = this._headerList[i];
@@ -321,8 +323,14 @@ function(defaultColumnSort) {
 			if (sashCell) {
 				this.associateItemWithElement(headerCol, sashCell, DwtListView.TYPE_HEADER_SASH, sashId, {index:j});
 			}
+			numResizeable++;
+			resizeableCol = headerCol;
 		}
 		this.associateItemWithElement(headerCol, cell, DwtListView.TYPE_HEADER_ITEM, headerCol._id, {index:j});
+	}
+
+	if (numResizeable == 1) {
+		resizeableCol._resizeable = false;
 	}
 
 	this.headerColCreated = true;
@@ -2100,6 +2108,9 @@ function(ev) {
 
 DwtListView.prototype._getHeaderSashLocation =
 function() {
+	if (!this._tmpPoint) {
+		this._tmpPoint = new DwtPoint();
+	}
 	this._tmpPoint.x = 0;
 	this._tmpPoint.y = 0;
 	return this._tmpPoint;

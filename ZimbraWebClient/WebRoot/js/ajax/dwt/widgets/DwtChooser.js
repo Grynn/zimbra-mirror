@@ -1095,6 +1095,9 @@ function() {
 
 	var thisLoc = Dwt.toWindow(el, 0, 0);
 	var contLoc = Dwt.toWindow(this._chooserParent.getHtmlElement(), 0, 0);
+	if (!this._tmpPoint) {
+		this._tmpPoint = new DwtPoint();
+	}
 	this._tmpPoint.x = thisLoc.x - contLoc.x;
 	this._tmpPoint.y = thisLoc.y - contLoc.y;
 
