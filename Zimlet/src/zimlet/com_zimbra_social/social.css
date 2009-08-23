@@ -55,7 +55,7 @@
 .Imgsocial_checkIcon {
   background: url("social_check.gif") no-repeat 0 0;
   width: 16px;
-  height: 16px;
+  height: 16px;	
   overflow: hidden;
 }
 
@@ -66,7 +66,7 @@ border-bottom:1px solid #6E6E6E;border-right:1px solid #6E6E6E;
 }
 .social_rowsDiv{
 background:white;
-border-bottom:1px solid #6E6E6E;
+border-bottom:1px solid lightgrey;
 }
 .social_FBCommentRow{
 border-bottom:1px solid #E5EAF1;

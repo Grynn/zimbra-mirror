@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_social" version="1.7" description="Social Zimlet: Allows users to access to twitter,facebook,digg,tweetmeme etc social services">
+<zimlet name="com_zimbra_social" version="1.8" description="Social Zimlet: Allows users to access to twitter,facebook,digg,tweetmeme etc social services">
 	<include>socialTwitter.js</include>
 	<include>socialFacebook.js</include>
 	<include>socialTweetMeme.js</include>
@@ -17,6 +17,8 @@
 		<property type="string" name="social_pref_trendsPopularIsOn" value="true"/>
 		<property type="string" name="social_pref_diggPopularIsOn" value="true"/>
 		<property type="string" name="social_pref_SocialMailUpdateOn" value="true"/>
+		<property type="string" name="social_pref_dontShowWelcomeScreenOn" value="false"/>
+
 
 	</userProperties>
 </zimlet>

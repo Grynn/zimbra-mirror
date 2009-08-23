@@ -149,9 +149,9 @@ function (tableId, account) {
 		["session_key", account.session_key]
 	];
 	var params = this._getFBParams(paramsArray, account.secret);
-	if (!tableId)
+	if (!tableId){
 		var tableId = this.zimlet._showCard({headerName:"facebook", type:"FACEBOOK", autScroll:true});
-
+	}
 	this._doPOST(url, params, new AjxCallback(this, this._getStreamCallback, tableId));
 };
 
@@ -232,7 +232,6 @@ function (authToken) {
 	params["connect_display"] = AjxStringUtil.urlComponentEncode("popup");
 	params["next"] = AjxStringUtil.urlComponentEncode("http://www.facebook.com/connect/login_success.html");
 	params["cancel_url"] = AjxStringUtil.urlComponentEncode("http://www.facebook.com/connect/login_failure.html");
-
 	if(authToken){
 		params["auth_token"] = AjxStringUtil.urlComponentEncode(this.fb_auth_token);
 	}

@@ -122,14 +122,25 @@ function(name) {
 com_zimbra_social.prototype._addTweetButtons =
 function() {
 	this.updateButton = new DwtButton({parent:this.getShell()});
-	this.updateButton.setText("update");
+	this.updateButton.setText("Update");
 	this.updateButton.addSelectionListener(new AjxListener(this, this._postToTweetOrFB));
 	document.getElementById("social_updateStatusButton").appendChild(this.updateButton.getHtmlElement());
 
-	var shortenUrlButton = new DwtButton({parent:this.getShell()});
-	shortenUrlButton.setText("shorten url");
-	shortenUrlButton.addSelectionListener(new AjxListener(this, this._shortenUrlButtonListener));
-	document.getElementById("social_shortenUrlButton").appendChild(shortenUrlButton.getHtmlElement());
+	this.cancelButton = new DwtButton({parent:this.getShell()});
+	this.cancelButton.setText("Cancel");
+	this.cancelButton.addSelectionListener(new AjxListener(this, this._cancelPost));
+	document.getElementById("social_cancelPostButton").appendChild(this.cancelButton.getHtmlElement());
+
+
+	var callback = AjxCallback.simpleClosure(this._shortenUrlButtonListener, this);
+	document.getElementById("social_insertShortenedurl").onclick = callback;
+
+	//link thats displayed when no accounts are available
+	if(document.getElementById("social_addAccountLink")) {
+		var callback = AjxCallback.simpleClosure(this.preferences._showManageAccntsDlg, this.preferences);
+		document.getElementById("social_addAccountLink").onclick = callback;
+	}
+
 
 	var searchButton = new DwtButton({parent:this.getShell()});
 	searchButton.setText("twitter search");
@@ -148,6 +159,15 @@ function() {
 		Dwt.setHandler(document.getElementById(this.allAccounts[accntId].checkboxId), DwtEvent.ONCLICK, callback);
 	}
 };
+
+com_zimbra_social.prototype._cancelPost =
+function() {
+	var statusField = document.getElementById("social_statusTextArea");
+	statusField.value = "";
+	statusField.focus();
+	this.showNumberOfLetters();
+};
+
 
 com_zimbra_social.prototype._shortenUrlButtonListener =
 function() {
@@ -271,17 +291,20 @@ function(ev) {
 com_zimbra_social._updateNumberOfLettersField =
 function(count) {
 	var clr = "";
-	if (count > 140) {
-		clr = "red";
-	} else {
+	var left = 140 - count;
+	if (left >= 0) {
 		clr = "green";
+	} else {
+		clr = "red";
 	}
-	var html = [];
-	var idx = 0;
-	html[idx++] = "<label style=\"font-size:14px;color:" + clr + ";font-weight:bold\">";
-	html[idx++] = count;
-	html[idx++] = "</label>";
-	document.getElementById("social_numberOfLettersAllowed").innerHTML = html.join("");
+//	var html = [];
+//	var idx = 0;
+//	html[idx++] = "<label style=\"font-size:20px;color:" + clr + ";font-weight:bold\">";
+//	html[idx++] = left;
+//	html[idx++] = "</label>";
+	document.getElementById("social_numberOfLettersAllowed").innerHTML =left;
+	document.getElementById("social_numberOfLettersAllowed").style.color =clr;
+
 };
 
 com_zimbra_social.prototype.twitterSearchKeyHdlr =
@@ -320,8 +343,10 @@ function() {
 	var html = [];
 	var idx = 0;
 	html[idx++] = "<DIV class='overviewHeader' id='social_topSxn'>";
-	html[idx++] = "<TABLE>";
-	html[idx++] = "<TR><td id='social_updateToCell'>";
+	html[idx++] = "<TABLE width=100%>";
+/*
+	html[idx++] = "<TR>";
+	html[idx++] =	"<td id='social_updateToCell'>";
 	html[idx++] = this._addUpdateToCheckboxes();
 	html[idx++] = "</TD>";
 	html[idx++] = "<TD align=center valign=middle>";
@@ -331,13 +356,25 @@ function() {
 	html[idx++] = "</label>";
 	html[idx++] = "</TD>";
 	html[idx++] = "</tr>";
-	html[idx++] = "<TR><TD style=\"width:100%;\" >";
+*/
+	html[idx++] = "<TR><TD style=\"width:90%;\" >";
 	html[idx++] = "<input  style=\"width:100%;height:25px\" autocomplete=\"off\" id=\"social_statusTextArea\" ></input>";
 	html[idx++] = "</TD>";
-	html[idx++] = "<TD>";
-	html[idx++] = "<div id='social_updateStatusButton' />";
+
+	html[idx++] = "<TD rowspan=2 align=center valign=middle>";
+	html[idx++] = "<table width=100%><tr><td align=center>";
+	html[idx++] = "<label style=\"font-size:18px;color:green;font-weight:bold\" id='social_numberOfLettersAllowed'>140</label>";
+	html[idx++] = "</td></tr><tr><td align=center>";
+	html[idx++] = "<label>Characters Left</label></td></tr></table>";	
 	html[idx++] = "</TD>";
-	html[idx++] = "</TR></TABLE>";
+	html[idx++] = "</TR>";
+
+	html[idx++] = "<TR><TD>";
+	html[idx++] = "<table width=100%><tr><td align=left width=90%><a id='social_insertShortenedurl' href='#'>Insert Shortened URL</a>(bit.ly)</td><td align=right><div id='social_cancelPostButton' />";
+	html[idx++] = "</td><td align=right><div id='social_updateStatusButton' /></td></tr></table>";
+	html[idx++] = "</TD></TR>";
+
+	html[idx++] = 	"</TABLE>";
 	html[idx++] = "</DIV>";
 	html[idx++] = "<DIV id='social_twitterCardsDiv' class='social_twitterCardsDiv DwtPropertyPage'>";
 	html[idx++] = "<table id='social_twitterCardsParentTable' cellspacing=10px>";
@@ -399,7 +436,7 @@ function() {
 	if (hasAccounts)
 		return html.join("");
 	else {
-		return "<label style=\"font-size:12px;color:blue;font-weight:bold\">Please Click on 'Add/Remove Accounts' in the left pane to add twitter & facebook accounts</label>";
+		return "<label style=\"font-size:12px;color:#555555;font-style:italic\">No accounts have been added yet! </label><a id='social_addAccountLink'><label style=\"font-size:12px;color:#3300FF;font-style:italic\">Click here to add one</label></a>";
 	}
 };
 
@@ -508,10 +545,10 @@ function(params) {
 	html[i++] = "<td width='5%'></td>";
 	if (type != "PROFILE") {
 		html[i++] = "<td width='5%'>";
-		html[i++] = "<img  title=\"Refresh this card\" src=\"" + this.getResource("social_refreshBtn.gif") + "\" id='social_refreshBtn" + this.cardIndex + "'/></td>";
+		html[i++] = "<img  title=\"Refresh this feed\" src=\"" + this.getResource("social_refreshBtn.gif") + "\" id='social_refreshBtn" + this.cardIndex + "'/></td>";
 	}
 	html[i++] = "<td width='5%'></td><td width='5%'>";
-	html[i++] = "<img  title=\"Close this card\" src=\"" + this.getResource("social_closeBtn.png") + "\" id='social_closeBtn" + this.cardIndex + "'/></td></tr>";
+	html[i++] = "<img  title=\"Close this feed\" src=\"" + this.getResource("social_closeBtn.png") + "\" id='social_closeBtn" + this.cardIndex + "'/></td></tr>";
 	html[i++] = "</table>";
 	html[i++] = "</DIV>";
 
@@ -675,6 +712,10 @@ com_zimbra_social.prototype.appActive = function(appName, active) {
 		this.appName = appName;
 		this._sociallistViews = [];
 		this.initializeVariables();
+		//welcome dlg
+		if(!this.preferences.social_pref_dontShowWelcomeScreenOn)
+			this.preferences._showWelcomeDlg();
+
 	}
 	else {
 		this._hideApp(appName);
@@ -792,6 +833,8 @@ function() {
 		this.prefFolders = new Array();
 		//this.prefFolders.push({name:"Add/Remove Accounts", icon:"Group", account:"", type:"MANAGE_ACCOUNTS"});
 		this.prefFolders.push({name:"Preferences", icon:"Preferences", account:"", type:"PREFERENCES"});
+		this.prefFolders.push({name:"Help", icon:"Help", account:"", type:"HELP"});
+
 	}
 	this.expandIconAndFolderTreeMap[expandIconId] = new Array();
 	html[i++] = this._getTreeHeaderHTML("Settings", expandIconId);	//header
@@ -982,6 +1025,8 @@ function(ev) {
 		this.preferences._showManageAccntsDlg();
 	} else if (el.id.indexOf("socialTreeItem__PREFERENCES") == 0) {
 		this.preferences._showPreferencesDlg();		
+	} else if (el.id.indexOf("socialTreeItem__HELP") == 0) {
+		this.preferences._showWelcomeDlg();	
 	} else if (el.id.indexOf("socialTreeItem__SEARCH") == 0) {
 		var search = this.treeIdAndSearchMap[el.id];
 		if(	origTarget.className == "ImgClearSearch") {//delete search
@@ -1051,8 +1096,8 @@ function(name) {
 
 com_zimbra_social.prototype.showAppView =
 function() {
-	//get list of twitter searches, facebook stuffs and show the view
-	//-check if the user has turned on twitter and facebook
+
+	this.addTwitterSearchWidget();
 	this.app.setContent(this._constructSkin());
 	this._view = this.app.getController().getView();
 	this._view.addControlListener(new AjxListener(this, this._resizeHandler));//add resize handler
@@ -1060,7 +1105,7 @@ function() {
 	this._dontAutoScroll = true;
 	this._updateAllWidgetItems({updateSearchTree:true, updateSystemTree:true, updateAccntCheckboxes:true, searchCards:true});
 
-	this.addTwitterSearchWidget();
+
 	this._addTweetButtons();
 	this._loadInformation();
 	this._dontAutoScroll = false;
@@ -1071,20 +1116,31 @@ function() {
 	var html = new Array();
 	var idx = 0;
 	html[idx++] = "<DIV >";
-	html[idx++] = "<TABLE cellpadding=0 cellspacing=0 valign='middle'><TR><TD width=90% valign='middle'>";
-	html[idx++] = "<label  valign='middle' style=\"font-size:14px;color:black;font-weight:bold\" id='social_whatareyoudoingLabel'>What are you doing?";
+	html[idx++] = "<TABLE width=100% cellpadding=0 cellspacing=0 valign='middle'><TR>";
+	html[idx++] = "<TD width=16px valign='middle'>";
+	html[idx++] =  AjxImg.getImageHtml("Blank_16");
+	html[idx++] = "</TD>";
+	html[idx++] ="<TD  valign='middle'>";
+	html[idx++] = "<label  valign='middle' width=30% style=\"font-size:14px;color:black;font-weight:bold\" id='social_whatareyoudoingLabel'>What are you doing?";
 	html[idx++] = "</label>";
-	html[idx++] = "</TD><TD valign='middle'>";
-	html[idx++] = "<input   style=\"width:200px;\" type=\"text\" autocomplete=\"off\" id=\"social_searchField\" rows=\"2\" cols=\"40\"></input>";
-	html[idx++] = "</TD><TD valign='middle'>";
-	html[idx++] = "<div  valign='middle' id='social_searchButton' />";
 	html[idx++] = "</TD>";
 	html[idx++] = "<TD width=16px valign='middle'>";
 	html[idx++] =  AjxImg.getImageHtml("Blank_16");
 	html[idx++] = "</TD>";
-	html[idx++] = "<TD valign='middle'>";
-	html[idx++] = "<div  id='social_shortenUrlButton' />";
+	html[idx++] =	"<td width=61% id='social_updateToCell'>";
+	html[idx++] = this._addUpdateToCheckboxes();
 	html[idx++] = "</TD>";
+	html[idx++] =	"<TD valign='middle' align='right'>";
+	html[idx++] = "<input   style=\"width:200px;\" type=\"text\" autocomplete=\"off\" id=\"social_searchField\"></input>";
+	html[idx++] = "</TD><TD valign='middle'>";
+	html[idx++] = "<div  valign='middle' id='social_searchButton' />";
+	html[idx++] = "</TD>";
+	//html[idx++] = "<TD width=16px valign='middle'>";
+	//html[idx++] =  AjxImg.getImageHtml("Blank_16");
+	//html[idx++] = "</TD>";
+	//html[idx++] = "<TD valign='middle'>";
+	//html[idx++] = "<div  id='social_shortenUrlButton' />";
+	//html[idx++] = "</TD>";
 	html[idx++] = "</TR></TABLE>";
 	html[idx++] = "</DIV>";
 	var toolbar = this.app.getToolbar();

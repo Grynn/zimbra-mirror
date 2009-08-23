@@ -657,11 +657,15 @@ function(account) {
 
 com_zimbra_socialTwitter.prototype.performOAuth =
 function() {
+	this._showGetPinDlg();
+};
+
+com_zimbra_socialTwitter.prototype._openOauthAuthorizeURL =
+function() {
 	var url = this.getRequestTokenUrl();
 	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
 	AjxRpc.invoke(null, entireurl, null, new AjxCallback(this, this._twitterCallback), true);
 };
-
 com_zimbra_socialTwitter.prototype.getRequestTokenUrl =
 function() {
 		var pArray =  new Array();
@@ -706,7 +710,6 @@ function(response) {
 	if (!newWin) {
 		appCtxt.getAppController().setStatusMsg(ZmMsg.popupBlocker, ZmStatusView.LEVEL_CRITICAL);
 	}
-	this._showGetPinDlg();
 };
 
 com_zimbra_socialTwitter.prototype._showGetPinDlg = function() {
@@ -721,6 +724,13 @@ com_zimbra_socialTwitter.prototype._showGetPinDlg = function() {
 	this._getPinView.getHtmlElement().innerHTML = this._createPINView();
 	this._getPinDialog = this.zimlet._createDialog({title:"Enter Twitter PIN", view:this._getPinView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this._getPinDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okgetPinBtnListener));
+
+	this.goButton = new DwtButton({parent:this.zimlet.getShell()});
+	this.goButton.setText("Go to Twitter");
+	this.goButton.setImage("social_twitterIcon");
+	this.goButton.addSelectionListener(new AjxListener(this, this._openOauthAuthorizeURL));
+	document.getElementById("social_goToTwitterPage").appendChild(this.goButton.getHtmlElement());
+
 	this._getPinDialog.popup();
 };
 
@@ -728,15 +738,14 @@ com_zimbra_socialTwitter.prototype._createPINView =
 function() {
 	var html = new Array();
 	var i = 0;
-	html[i++] = "<DIV>";
-	html[i++] = "<b>Steps to add twitter account:</b><BR/> 1. By now you should see a twitter.com page opened*. <br/>2. Please Enter your twitter account information over there.<br/>";
-	html[i++] = "3. Press 'Allow' button <br>4. Twitter will give you a 7 digit PIN code, like: <b>1234567</b>, Copy that and paste it below";
-	html[i++] = "</DIV>";
-	html[i++] = "<DIV>";
-	html[i++] = "<B>5. Enter Twitter PIN:<input id='com_zimbra_twitter_pin_field'  type='text'/></B>";
-	html[i++] = "</DIV>";
-	html[i++] = "<BR/>*If you don't see twitter.com page opened as mentioned in step 1, please check browser's popup blocker";
+	html[i++] = "<DIV class='social_yellow'>";
+	html[i++] = "<b>Steps to add twitter account:</b><BR/>1.Click on 'Go to Twitter' button to open Twitter's authorize page<div id='social_goToTwitterPage'> </div><br/>2. Enter your twitter account information over there.<br/>";
+	html[i++] = "3. Press 'Allow' button <br>4. Twitter will give you a 7 digit PIN code, like: <b>1234567</b><BR/>5.  Copy that and paste that PIN below";
+	html[i++] = "<BR/><B>6. Enter Twitter PIN:<input id='com_zimbra_twitter_pin_field'  type='text'/></B>";
+	html[i++] = "<BR/>7.Click OK button<BR/>";
 
+	html[i++] = "<BR/>*If you don't see Twitter.com page opened as mentioned in step 1, please check browser's popup blocker";
+	html[i++] = "</DIV>";
 	return html.join("");
 };
 

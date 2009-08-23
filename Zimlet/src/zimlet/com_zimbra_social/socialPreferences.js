@@ -23,6 +23,7 @@ function com_zimbra_socialPreferences(zimlet) {
 	this.social_pref_trendsPopularIsOn = this.zimlet.getUserProperty("social_pref_trendsPopularIsOn") == "true";
 	this.social_pref_diggPopularIsOn = this.zimlet.getUserProperty("social_pref_diggPopularIsOn") == "true";
 	this.social_pref_SocialMailUpdateOn = this.zimlet.getUserProperty("social_pref_SocialMailUpdateOn") == "true";
+	this.social_pref_dontShowWelcomeScreenOn = this.zimlet.getUserProperty("social_pref_dontShowWelcomeScreenOn") == "true";
 }
 
 com_zimbra_socialPreferences.prototype._showManageAccntsDlg = function() {
@@ -86,7 +87,7 @@ com_zimbra_socialPreferences.prototype._addFacebookBtnListener =
 function() {
 	this.reloginToFB = true;
 	this.showAddFBInfoDlg();
-	this.zimlet.facebook.loginToFB();
+	//this.zimlet.facebook.loginToFB();
 };
 
 com_zimbra_socialPreferences.prototype._deleteAccountBtnListener =
@@ -328,11 +329,24 @@ com_zimbra_socialPreferences.prototype.showAddFBInfoDlg = function(obj) {
 	this._getFbInfoView.getHtmlElement().innerHTML = this._createFbInfoView();
 	var  addFBAccntButtonId = Dwt.getNextId();
 	var addFBAccntButton = new DwtDialog_ButtonDescriptor(addFBAccntButtonId, ("Authorized"), DwtDialog.ALIGN_RIGHT);
-	this._getFbInfoDialog = this.zimlet._createDialog({title:"Facebook Information", view:this._getFbInfoView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this._getFbInfoDialog = this.zimlet._createDialog({title:"Add Facebook Account", view:this._getFbInfoView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this._getFbInfoDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._getFbInfoOKBtnListener));
+
+	this.goButton = new DwtButton({parent:this.zimlet.getShell()});
+	this.goButton.setText("Go to Facebook");
+	this.goButton.setImage("social_facebookIcon");
+	this.goButton.addSelectionListener(new AjxListener(this.zimlet.facebook, this.zimlet.facebook.loginToFB, null));
+	document.getElementById("social_goToFacebookPage").appendChild(this.goButton.getHtmlElement());
+
+	this.loadFbPermBtn = new DwtButton({parent:this.zimlet.getShell()});
+	this.loadFbPermBtn.setText("Load Permissions");
+	this.loadFbPermBtn.setImage("social_facebookIcon");
+	this.loadFbPermBtn.addSelectionListener(new AjxListener(this, this._getFbInfoOKBtnListener, null));
+	document.getElementById("social_loadFBAccountPermissions").appendChild(this.loadFbPermBtn.getHtmlElement());
 
 	this._getFbInfoDialog.popup();
 };
+
 
 com_zimbra_socialPreferences.prototype._getFbInfoOKBtnListener = function() {
 	if(this.reloginToFB) {
@@ -353,14 +367,23 @@ com_zimbra_socialPreferences.prototype._createFbInfoView =
 function() {
 	var html = new Array();
 	var i = 0;
-	html[i++] = "<DIV class='social_yellow'>";
+	html[i++] = "<DIV  class='social_yellow'>";
 	html[i++] = "<H3>Steps to adding facebook account:</H3>";
-	html[i++] = "<B>PART 1: Login and Grant Permissions</B><br/>1. We have opened a facebook page, please Login to facebook <br/> 2. Grant all three permissions(details below) <br/>";
-	html[i++] = "3. After permissions are granted, Facebook will show a page with 'success' written on it, you can close that page. <br/>";
-	html[i++] = "4. Press 'OK' in this dialog <br/><br/> <B>PART 2: Load Permissions to Zimbra</B><br/>5. We have re-opened facebook page to load permissions from facebook <br/>";
-	html[i++] = "6. If you see: 'You may now close this window and return to the application.', close that page";
-	html[i++] = "or else please re-login to facebook<br/>7. Please Click 'OK' again in this dialog box";
+	//html[i++] = "<B>PART 1: Login and Grant Permissions</B><br/>";
+	html[i++] = "1. Click on 'Go To Facebook' to open facebook's authorize page. <div id='social_goToFacebookPage'> </div>";
+	html[i++] = "2. Login to facebook <br/>";
+	html[i++] = "3: After logging in, Facebook will ask you grant or deny 'constant access(Remember Me)' 'Read' and 'Publish/write' permissions<br/>";
+	html[i++] = "4. Please Grant all 3 permissions by pressing Allow buttons<br/>";
+	html[i++] = "5. After permissions are granted, Facebook will show a page with 'success' written on it, close that page. <br/>";
+	//html[i++] = "6. Press 'Done' button. <div id='social_doneAuthorizingAccount'> </div>";
+	//html[i++] = 	"<br/><br/> <B>PART 2: Load Permissions to Zimbra</B><br/>";
+	html[i++] = "6. Click on 'Load Permissions' to load permissions you granted<div id='social_loadFBAccountPermissions'></div>";
+	html[i++] = "7. If you see: 'You may now close this window and return to the application.', close that page";
+	html[i++] = " or else please re-login to facebook<br/>";
+	html[i++] ="8. Please Click 'OK' again in this dialog box";
+	html[i++] = "</DIV>";
 	html[i++] = "<BR/>";
+	html[i++] = "<DIV>";
 	html[i++] = "<H3>Permissions:</H3>";
 	html[i++] = "<b>Read Permission:</b> Allows us to display facebook information";
 	html[i++] = "<br/><b>Publish Permission:</b> Allows us to publish or write back to facebook";
@@ -445,5 +468,64 @@ function() {
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_diggPopularIsOn' /> Show digg's 'Popular in 24 hours' by default</td></tr>";
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_SocialMailUpdateOn' /> Send Social mail with twitter updates (once a day)</td></tr>";
 	html[i++] = "</table>";
+	return html.join("");
+};
+
+com_zimbra_socialPreferences.prototype._setWelCheckboxes = function() {
+	if(this.social_pref_dontShowWelcomeScreenOn)
+		document.getElementById("social_pref_dontShowWelcomeScreenOn").checked = true;
+
+};
+
+
+com_zimbra_socialPreferences.prototype._okWelBtnListener =
+function() {
+	var save = false;
+	var currentVal = document.getElementById("social_pref_dontShowWelcomeScreenOn").checked;
+	if(this.social_pref_dontShowWelcomeScreenOn != currentVal) {
+		this.zimlet.setUserProperty("social_pref_dontShowWelcomeScreenOn", currentVal);
+		save = true;
+	}
+	if(save){
+		this.zimlet.saveUserProperties();
+		appCtxt.getAppController().setStatusMsg("Preferences Saved", ZmStatusView.LEVEL_INFO);
+	}
+	this._getwelDialog.popdown();
+};
+com_zimbra_socialPreferences.prototype._showWelcomeDlg = function() {
+	if (this._getwelDialog) {
+		this._setWelCheckboxes();
+		this._getwelDialog.popup();
+		return;
+	}
+	this._getWelView = new DwtComposite(this.zimlet.getShell());
+	this._getWelView.getHtmlElement().style.overflow = "auto";
+	this._getWelView.getHtmlElement().innerHTML = this._createWelView();
+	this._getwelDialog = this.zimlet._createDialog({title:"Zimbra Social", view:this._getWelView, standardButtons:[DwtDialog.OK_BUTTON]});
+	this._getwelDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okWelBtnListener));
+	this._getwelDialog.popup();
+	this._setWelCheckboxes();
+};
+
+com_zimbra_socialPreferences.prototype._createWelView =
+function() {
+	var html = new Array();
+	var i = 0;
+	html[i++] = "<DIV  class='social_yellow'>";
+	html[i++] = " <h3 align=center>Welcome to Zimbra Social!</h3>";
+	html[i++] = "<b>Getting Started:</b><br/>";
+	html[i++] = "<ul>";
+	html[i++] = "<li>Add your Twitter and Facebook accounts by clicking on 'Add/Remove Accounts'</li>";
+	html[i++] = "</ul><b>Things to do:</b>";
+	html[i++] = "<ul>";
+	html[i++] = "<li>Follow and Send updates to Facebook and Twitter accounts</li>";
+	html[i++] = "<li>Check out Digg for some hot topics in your favourite area and forward them to your friends</li>";
+	html[i++] = "<li>Twitter Search for any topic and see what people are saying on a daily basis(since its auto-saved)</li>";
+	html[i++] = "<li>Use Twitter Trends to always be on top of latest news in Twitter world</li>";
+	html[i++] = "<li>Check out TweetMeme to see what urls people are forwarding(retweeting) each other on Twitter</li>";
+	html[i++] = "</ul>";
+	html[i++] = "Take a <label l style=\"color:blue;text-decoration: underline;font-weight:bold\"><a href='http://www.zimbrablog.com' target=\"_blank\">quick tour</a></label> for extra help";
+	html[i++] = "<br/><br/><input type='checkbox' id='social_pref_dontShowWelcomeScreenOn' /> Don't show me this again";
+	html[i++] = "</DIV>";
 	return html.join("");
 };
