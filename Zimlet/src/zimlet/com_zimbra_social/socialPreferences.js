@@ -524,7 +524,7 @@ function() {
 	html[i++] = "<li>Use Twitter Trends to always be on top of latest news in Twitter world</li>";
 	html[i++] = "<li>Check out TweetMeme to see what urls people are forwarding(retweeting) each other on Twitter</li>";
 	html[i++] = "</ul>";
-	html[i++] = "Take a <label l style=\"color:blue;text-decoration: underline;font-weight:bold\"><a href='http://www.zimbrablog.com' target=\"_blank\">quick tour</a></label> for extra help";
+	html[i++] = "Take a <label l style=\"color:blue;text-decoration: underline;font-weight:bold\"><a href='http://wiki.zimbra.com/index.php?title=Social' target=\"_blank\">quick tour</a></label> for extra help";
 	html[i++] = "<br/><br/><input type='checkbox' id='social_pref_dontShowWelcomeScreenOn' /> Don't show me this again";
 	html[i++] = "</DIV>";
 	return html.join("");
