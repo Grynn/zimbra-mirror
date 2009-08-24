@@ -26,6 +26,7 @@ ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	./configure \
              --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra \
              --with-debug \
+             --with-http_stub_status_module \
              --with-http_ssl_module \
              --with-sasl-inc=/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include \
              --with-mail \
@@ -39,6 +40,7 @@ else
 	./configure \
              --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra \
              --with-debug \
+             --with-http_stub_status_module \
              --with-http_ssl_module \
              --with-sasl-inc=/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include \
              --with-mail \
