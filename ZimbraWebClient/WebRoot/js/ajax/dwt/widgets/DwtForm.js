@@ -408,6 +408,10 @@ DwtForm.prototype._setControlValue = function(id, value) {
 			control.setSelected(value);
 			return;
 		}
+		if (control instanceof DwtMenuItem && control.isStyle(DwtMenuItem.CHECK_STYLE)) {
+			control.setChecked(value, true);
+			return;
+		}
 		if (control.setSelectedValue) { control.setSelectedValue(value); return; }
 		if (control.setValue) { control.setValue(value); return; }
 		if (control.setText && !(control instanceof DwtButton)) { control.setText(value); return; }
