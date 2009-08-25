@@ -63,9 +63,38 @@ ZaGlobalAdvancedStatsPage.formatTimeLabel = function (value) {
     return YAHOO.util.Date.format(value, { format: ZaMsg.NAD_AdvStatsLabelDateFormat });
 }
 
+ZaGlobalAdvancedStatsPage.getTarget = function (evt) {
+    if (evt && evt.target)
+        return evt.target;
+    else
+        return window.event.srcElement;
+}
+
+ZaGlobalAdvancedStatsPage.indexOf = function (ary, item) {
+    if (Array.indexOf)
+        return ary.indexOf(item);
+    else {
+        for (var i=0; i < ary.length; i++) {
+            if (ary[i] == item){
+                return i;
+            }
+        }
+        return -1;
+    }
+}
+
+ZaGlobalAdvancedStatsPage.setText = function (e, text) {
+    var hasInnerText = (document.getElementsByTagName("body")[0].innerText != undefined);
+
+    if (hasInnerText) {
+        e.innerText = text;
+    } else {
+        e.textContent = text;
+    }
+}
 ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, column_units, start, end) {
     var chartdiv = document.getElementById("loggerchart" + id);
-    chartdiv.textContent = ZaMsg.NAD_AdvStatsLoadingDataLabel;
+    ZaGlobalAdvancedStatsPage.setText(chartdiv, ZaMsg.NAD_AdvStatsLoadingDataLabel);
     
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
     soapRequest.set("startTime", { "!time": start });
@@ -80,7 +109,7 @@ ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, c
         var soapResponse = response.getResponse().Body.GetLoggerStatsResponse;
         if (!soapResponse.hostname || !soapResponse.hostname[0].stats) {
             var e = document.getElementById("loggerchart" + id);
-            e.textContent = ZaMsg.NAD_AdvStatsNoDataLabel;
+            ZaGlobalAdvancedStatsPage.setText(e, ZaMsg.NAD_AdvStatsNoDataLabel);
             return;
         }
         var data = {};
@@ -121,7 +150,7 @@ ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, c
         }
         if (newData.length < 1) {
             var e = document.getElementById("loggerchart" + id);
-            e.textContent = ZaMsg.NAD_AdvStatsNoDataLabel;
+            ZaGlobalAdvancedStatsPage.setText(e, ZaMsg.NAD_AdvStatsNoDataLabel);
             return;
         }
     
@@ -148,7 +177,7 @@ ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, c
 
 ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, columns, column_units, start, end) {
     var chartdiv = document.getElementById("loggerchart" + id);
-    chartdiv.textContent = ZaMsg.NAD_AdvStatsLoadingDataLabel;
+    ZaGlobalAdvancedStatsPage.setText(chartdiv, ZaMsg.NAD_AdvStatsLoadingDataLabel);
     
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
     soapRequest.set("hostname", { "!hn": hostname });
@@ -164,13 +193,13 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
         
         if (!soapResponse.hostname || !soapResponse.hostname[0].stats) {
             var e = document    .getElementById("loggerchart" + id);
-            e.textContent = ZaMsg.NAD_AdvStatsNoDataLabel;
+            ZaGlobalAdvancedStatsPage.setText(e, ZaMsg.NAD_AdvStatsNoDataLabel);
             return;
         }
         var values = soapResponse.hostname[0].stats[0].values;
         if (!values) {
             var e = document.getElementById("loggerchart" + id);
-            e.textContent = ZaMsg.NAD_AdvStatsNoDataLabel;
+            ZaGlobalAdvancedStatsPage.setText(e, ZaMsg.NAD_AdvStatsNoDataLabel);
             return;
         }
         
@@ -180,7 +209,7 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
             var ts = new Date(values[i].t * 1000);
             var record = { timestamp: ts };
             for (var j = 0; j < values[i].stat.length; j++) {
-                if (columns.indexOf(values[i].stat[j].name) != -1) {
+                if (ZaGlobalAdvancedStatsPage.indexOf(columns, values[i].stat[j].name) != -1) {
                     record[values[i].stat[j].name] = values[i].stat[j].value;
                 }
             }
@@ -199,7 +228,7 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
         }
         if (newData.length < 1) {
             var e = document.getElementById("loggerchart" + id);
-            e.textContent = ZaMsg.NAD_AdvStatsNoDataLabel;
+            ZaGlobalAdvancedStatsPage.setText(e, ZaMsg.NAD_AdvStatsNoDataLabel);
             return;
         }
         var colDef = [];
@@ -284,7 +313,7 @@ function (data) {
 }
 
 ZaGlobalAdvancedStatsPage.serverSelected = function(evt, id) {
-    var select = evt.target;
+    var select = ZaGlobalAdvancedStatsPage.getTarget(evt);
     
     var hostname = select[select.selectedIndex].value;
     
@@ -300,7 +329,7 @@ ZaGlobalAdvancedStatsPage.serverSelected = function(evt, id) {
             var option = document.createElement("option");
             if (i == 0) option.selected = "selected";
             option.value = statGroups[i].name;
-            option.textContent = statGroups[i].name;
+            ZaGlobalAdvancedStatsPage.setText(option, statGroups[i].name);
             groupSelect.appendChild(option);
         }
         ZaGlobalAdvancedStatsPage.groupSelected({ target: groupSelect }, id);
@@ -319,7 +348,7 @@ ZaGlobalAdvancedStatsPage.clearSelect = function (node) {
         node.removeChild(node.childNodes.item(i - 1));
 }
 ZaGlobalAdvancedStatsPage.groupSelected = function(evt, id) {
-    var select = evt.target;
+    var select = ZaGlobalAdvancedStatsPage.getTarget(evt);
     
     var serverSelect = document.getElementById("select-servers" + id);
     var hostname = serverSelect[serverSelect.selectedIndex].value;
@@ -342,7 +371,7 @@ ZaGlobalAdvancedStatsPage._getCounters = function(hostname, group, counterSelect
         for (var i = 0, j = statCounters.length; i < j; i++) {
             var option = document.createElement("option");
             option.value = statCounters[i].name;
-            option.textContent = statCounters[i].name;
+            ZaGlobalAdvancedStatsPage.setText(option, statCounters[i].name);
             if (statCounters[i].type) {
                 option.columnUnit = statCounters[i].type;
             }
@@ -374,11 +403,11 @@ ZaGlobalAdvancedStatsPage.getCounters = function(hostname, group) {
     return counters;
 }
 
-ZaGlobalAdvancedStatsPage.counterSelected = function(event, id) {
-    var select = event.target;
+ZaGlobalAdvancedStatsPage.counterSelected = function(evt, id) {
+    var select = ZaGlobalAdvancedStatsPage.getTarget(evt);
     
     var chartdiv = document.getElementById("loggerchart" + id);
-    chartdiv.textContent = ZaMsg.NAD_AdvStatsLoadingDataLabel;
+    ZaGlobalAdvancedStatsPage.setText(chartdiv, ZaMsg.NAD_AdvStatsLoadingDataLabel);
     
     var serverSelect = document.getElementById("select-servers" + id);
     var hostname = serverSelect[serverSelect.selectedIndex].value;
@@ -423,6 +452,8 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	form.action = "#";
 	
 	var table = document.createElement("table");
+	var tbody = document.createElement("tbody");
+        table.appendChild(tbody);
 	table.id = "loggertable" + id;
 	
 	var label;
@@ -433,7 +464,7 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	td = document.createElement("td");
 	label = document.createElement("label");
 	label.htmlFor = "select-servers" + id;
-	label.textContent = ZaMsg.NAD_AdvStatsServerLabel;
+	ZaGlobalAdvancedStatsPage.setText(label, ZaMsg.NAD_AdvStatsServerLabel);
 	select = document.createElement("select");
 	select.id = "select-servers" + id;
 	select.name = "servers";
@@ -445,7 +476,7 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	td = document.createElement("td");
 	label = document.createElement("label");
 	label.htmlFor = "select-group" + id;
-	label.textContent = ZaMsg.NAD_AdvStatsGroupLabel;
+	ZaGlobalAdvancedStatsPage.setText(label, ZaMsg.NAD_AdvStatsGroupLabel);
 	select = document.createElement("select");
 	select.id = "select-group" + id;
 	select.name = "groups";
@@ -457,7 +488,7 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	td = document.createElement("td");
 	label = document.createElement("label");
 	label.htmlFor = "select-counter" + id;
-	label.textContent = ZaMsg.NAD_AdvStatsCountersLabel;
+	ZaGlobalAdvancedStatsPage.setText(label, ZaMsg.NAD_AdvStatsCountersLabel);
 	select = document.createElement("select");
 	select.id = "select-counter" + id;
 	select.name = "counters";
@@ -468,14 +499,14 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	td.appendChild(label);
 	td.appendChild(select);
 	tr.appendChild(td);
-	table.appendChild(tr);
+	tbody.appendChild(tr);
 	
 	var input;
 	tr = document.createElement("tr");
 	td = document.createElement("td");
 	label = document.createElement("label");
 	label.htmlFor = "input-start-time" + id;
-	label.textContent = ZaMsg.NAD_AdvStatsStartLabel;
+	ZaGlobalAdvancedStatsPage.setText(label, ZaMsg.NAD_AdvStatsStartLabel);
 	input = document.createElement("input");
 	input.id = "input-start-time" + id;
 	input.type = "text";
@@ -488,7 +519,7 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	td = document.createElement("td");
 	label = document.createElement("label");
 	label.htmlFor = "input-end-time" + id;
-	label.textContent = ZaMsg.NAD_AdvStatsEndLabel;
+	ZaGlobalAdvancedStatsPage.setText(label, ZaMsg.NAD_AdvStatsEndLabel);
 	input = document.createElement("input");
 	input.id = "input-end-time" + id;
 	input.type = "text";
@@ -498,7 +529,7 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	td.appendChild(input);
 	td.valign = "top";
 	tr.appendChild(td);
-	table.appendChild(tr);
+	tbody.appendChild(tr);
 	 
 	form.appendChild(table);
 	
@@ -506,15 +537,16 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	var span;
 	a = document.createElement("a");
 	a.href = "#";
-    a.onclick = function (evt) {
+	a.onclick = function (evt) {
 	    var showing = ZaGlobalAdvancedStatsPage.showhide("loggertable" + id);
-	    evt.target.textContent = (showing ? " - " : " + ") + ZaMsg.NAD_AdvStatsChartSettingsLabel;
-    }
-	a.textContent = " - " + ZaMsg.NAD_AdvStatsChartSettingsLabel;
+            var target = ZaGlobalAdvancedStatsPage.getTarget(evt);
+	    ZaGlobalAdvancedStatsPage.setText(target, (showing ? " - " : " + ") + ZaMsg.NAD_AdvStatsChartSettingsLabel);
+	}
+	ZaGlobalAdvancedStatsPage.setText(a, " - " + ZaMsg.NAD_AdvStatsChartSettingsLabel);
 	form.appendChild(a);
 	
 	span = document.createElement("span");
-	span.textContent = " | ";
+	ZaGlobalAdvancedStatsPage.setText(span, " | ");
 	form.appendChild(span);
 	a = document.createElement("a");
 	a.href = "#";
@@ -522,10 +554,10 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	    var s = document.getElementById("select-counter" + id);
 	    ZaGlobalAdvancedStatsPage.counterSelected({ target: s }, id);
     }
-	a.textContent = ZaMsg.NAD_AdvStatsUpdateChartLabel;
+	ZaGlobalAdvancedStatsPage.setText(a, ZaMsg.NAD_AdvStatsUpdateChartLabel);
 	form.appendChild(a);
 	span = document.createElement("span");
-	span.textContent = " | ";
+	ZaGlobalAdvancedStatsPage.setText(span, " | ");
 	form.appendChild(span);
 	a = document.createElement("a");
 	a.href = "#";
@@ -533,7 +565,7 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	    ZaGlobalAdvancedStatsPage.removeChild("loggerform" + id);
 	    ZaGlobalAdvancedStatsPage.removeChild("loggerchart" + id);
     }
-	a.textContent = ZaMsg.NAD_AdvStatsRemoveChartLabel;
+	ZaGlobalAdvancedStatsPage.setText(a, ZaMsg.NAD_AdvStatsRemoveChartLabel);
 	form.appendChild(a);
 	
 	var div = document.createElement("div");
@@ -551,7 +583,7 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
             var option = document.createElement("option");
             if (i == 0) option.selected = "selected";
             option.value = soapResponse.hostname[i].hn;
-            option.textContent = soapResponse.hostname[i].hn;
+            ZaGlobalAdvancedStatsPage.setText(option, soapResponse.hostname[i].hn);
             serversSelect.appendChild(option);
         }
         ZaGlobalAdvancedStatsPage.serverSelected({ target: serversSelect }, id);
@@ -569,7 +601,7 @@ function () {
 	var div = document.createElement("div");
 	div.style.padding = "20px";
 	var a = document.createElement("a");
-	a.textContent = ZaMsg.NAD_AdvStatsAddChartLabel;
+	ZaGlobalAdvancedStatsPage.setText(a, ZaMsg.NAD_AdvStatsAddChartLabel);
 	a.onclick = function () { ZaGlobalAdvancedStatsPage.insertChartHTML(element); };
 	div.appendChild(a);
 	element.appendChild(div);
