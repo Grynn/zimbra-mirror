@@ -427,7 +427,7 @@ function(itemId, item, ev) {
 		case "SEARCHBUILDER":	this._browseListener();		break;
 		case "NEWEMAIL":		this._composeListener(ev);	break;
 		case "NEWIM":			this._newImListener(ev);	break;
-		case "NEWCONTACT":		this._contactListener();	break;
+		case "NEWCONTACT":		this._contactListener(true);	break;
 		case "ADDTOFILTER":		this._filterListener();		break;
 		case "GOTOURL":			this._goToUrlListener();	break;
 	}
