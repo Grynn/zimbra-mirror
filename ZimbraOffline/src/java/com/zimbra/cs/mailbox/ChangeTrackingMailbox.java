@@ -12,11 +12,18 @@ import com.zimbra.cs.mailbox.util.TypedIdList;
 
 public abstract class ChangeTrackingMailbox extends SyncMailbox {
 
-	public ChangeTrackingMailbox(MailboxData data) throws ServiceException {
-		super(data);
-	}
+    public ChangeTrackingMailbox(MailboxData data) throws ServiceException {
+        super(data);
+    }	
 	
-	
+    @Override protected synchronized void initialize() throws ServiceException {
+        super.initialize();
+        Folder.create(ID_FOLDER_OUTBOX, this,
+            getFolderById(ID_FOLDER_USER_ROOT), OUTBOX_PATH,
+            Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0,
+            MailItem.DEFAULT_COLOR_RGB, null, null);
+    }
+    
     @Override boolean isTrackingSync() {
         return !(getOperationContext() instanceof OfflineContext);
     }

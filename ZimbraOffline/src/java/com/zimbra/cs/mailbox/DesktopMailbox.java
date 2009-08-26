@@ -78,9 +78,6 @@ public abstract class DesktopMailbox extends Mailbox {
         super.initialize();
         // create a system folders
         Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
-        Folder.create(ID_FOLDER_OUTBOX, this, userRoot, OUTBOX_PATH,
-            Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0,
-            MailItem.DEFAULT_COLOR_RGB, null, null);
         Folder.create(ID_FOLDER_FAILURE, this, userRoot, FAILURE_PATH,
             Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0,
             MailItem.DEFAULT_COLOR_RGB, null, null);
