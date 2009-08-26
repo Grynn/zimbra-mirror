@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window id="zmtb-compose-window" title="Compose Message" orient="horizontal" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
+		<script type="application/x-javascript" src="ZMTB_MessageComposer.js"/>
+	<!-- <vbox id="ZimTB-Compose-Box" style="background-color:#333333; padding:5px"> -->
+	  	<vbox style="background-color:white; padding:15px;">
+			<hbox align="center">
+				<image src="chrome://zimbratb/skin/zimbra.gif" />
+				<label style="font-size:20px; font-color:#CCCCCC" value="| Compose New Mail" />
+			</hbox>
+			<separator class="groove" />
+			<label value="To:" />
+			<textbox id="zmc_to" />
+			<label value="CC:" />
+			<textbox id="zmc_cc"/>
+			<!-- <separator class="groove" /> -->
+			<label value="Subject:" />
+			<textbox id="zmc_sub" />
+			<vbox id="zmc_attach" style="border:solid 1px #CCCCCC; margin:4px; height:70px; overflow-y:scroll">
+				<vbox align="center">
+					<label value="Drag attachments here." style="font-size:20px; padding:10px; color:#CCCCCC" align="center"/>
+				</vbox>
+			</vbox>
+			<vbox align="end">
+				<html:input type="file" id="zmc_fileInput" />
+			</vbox>	
+			<html:input type="file" style="display:none" id="zmbrowse"/>
+			<label value="Message:" />
+			<textbox height="150" spellcheck="true" multiline="true" id="zmc_mess" />
+			<hbox>
+				<button label="Send" id="zmc_send" />
+				<button label="Save Draft" id="zmc_save" />
+				<!-- <spacer width="300" /> -->
+				<vbox align="center" width="200"><label id="zmc_error" value="" style="margin-top:10px; font-size:12px; color:red"/></vbox>
+				<button label="Cancel" id="zmc_close" />
+			</hbox>
+		</vbox>
+	<!-- </vbox> -->
+</window>

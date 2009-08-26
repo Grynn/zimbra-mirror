@@ -1,0 +1,42 @@
+<!DOCTYPE window SYSTEM "chrome://zimbratb/locale/zimbratb.dtd">
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="ZimTB-Overlay">
+	<script type="application/x-javascript" src="ZMTB_ApptManager.js"/>
+	<script>
+		window.addEventListener("load", function(){
+			com_zimbra_tb.getRequestManager().addUpdateListener(new ZMTB_ApptManager(com_zimbra_tb.getRequestManager()));
+		}, false);
+	</script>
+	<toolbox id="navigator-toolbox">
+		<!-- <notificationbox id="ZMTB-Appointments" /> -->
+		<vbox id="ZMTB-Appointments" >
+			<hbox id="ZMTB-Appt-Box" class="ZMTB-Appt-Box" hidden="true" align="center">
+					<box class="ZMTB-Appt-Image" />
+					<description class="ZMTB-Appt-Message" />
+					<spacer flex="100"/>
+					<button class="ZMTB-Appt-Button" type="menu" label="Snooze">
+						<menupopup id="ZimTB-Snooze-Menu">
+							<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.1;" value="1"/>
+							<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.5;" value="5"/>
+							<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.10;" value="10"/>
+							<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.15;" value="15"/>
+							<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.30;" value="30"/>
+							<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.45;" value="45"/>
+							<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.60;" value="60"/>
+						</menupopup>
+					</button>
+					<button label="Dismiss" class="ZMTB-Appt-Button ZMTB-Appt-Dismiss" />
+			</hbox>
+		</vbox>
+	</toolbox>
+	<popupset>
+		<menupopup id="ZimTB-Snooze-Menu">
+			<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.1;" value="1"/>
+			<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.5;" value="5"/>
+			<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.10;" value="10"/>
+			<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.15;" value="15"/>
+			<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.30;" value="30"/>
+			<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.45;" value="45"/>
+			<menuitem class="ZimTB-Snooze-Choice" label="&zmtb.snoozemenu.60;" value="60"/>
+		</menupopup>
+	</popupset>
+</overlay>

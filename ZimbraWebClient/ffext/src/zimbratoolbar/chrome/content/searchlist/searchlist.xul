@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "chrome://zimbratb/locale/zimbratb.dtd">
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<script type="application/x-javascript" src="ZMTB_SearchList.js"/>
+	<script>
+		window.addEventListener("load", function(){
+			new ZMTB_SearchList(com_zimbra_tb);
+		}, false);
+	</script>
+	<toolbar id="ZimTB-Toolbar">
+		<toolbarseparator/>
+		<toolbaritem id="ZimTB-SearchList-TBItem" >
+			<!-- <hbox align="center">
+				<label value="Search:" style="margin-right:0px; margin-left:2px" />
+			</hbox> -->
+			<menulist id="ZimTB-SearchTerms" editable="true" flex="1" width="150" sizetopopup="none" style="">
+				<menupopup id="ZimTB-SearchTermsMenu" sizetopopup="none">
+					<!-- <menu id="ZimTB-SavedSearch" label="&zmtb.searchlist.savedsearches;" class="menuitem-iconic" /> -->
+					<menu id="ZimTB-Tags" label="&zmtb.searchlist.tags;" class="menuitem-iconic" />
+					<menuseparator/>
+					<menuitem id="ZimTB-RecentSearchLabel" label="&zmtb.searchlist.recent;" value="0" disabled="true" class="menuitem-iconic" />
+				</menupopup>
+			</menulist>
+			<toolbarbutton id="ZMTB-SearchButton" label="Search" />
+		</toolbaritem>
+		
+			<toolbarseparator/>
+			<!-- <splitter id="ZimTB-ResizeSplitter" state="open" collapse="none" resizebefore="closest" resizeafter="none" tooltiptext="Resize the Search Box"/> -->
+	</toolbar>
+</overlay>

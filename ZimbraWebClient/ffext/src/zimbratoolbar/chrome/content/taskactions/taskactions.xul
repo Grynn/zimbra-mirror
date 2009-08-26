@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "chrome://zimbratb/locale/zimbratb.dtd">
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<script type="application/x-javascript" src="ZMTB_TaskActions.js"/>
+	<script>
+		window.addEventListener("load", function(){
+			new ZMTB_TaskActions(com_zimbra_tb);
+		}, false);
+	</script>
+	<toolbar id="ZimTB-Toolbar">
+		<toolbarbutton  flex="0" id="ZimTB-Tasks-Button" label="&zmtb.taskactions.tasks;" type="menu" tooltiptext="Check Mail" menu="ZimTB-Tasks-Menu">
+			<menupopup id="ZimTB-Tasks-Menu">
+				<menuitem id="ZimTB-NewTask" label="&zmtb.taskactions.newtask;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuseparator/>
+				<menuitem id="ZimTB-NewTaskList" label="&zmtb.taskactions.newlist;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuitem id="ZimTB-NewRemTaskList" label="&zmtb.taskactions.newremlist;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuitem id="ZimTB-SharedTaskList" label="&zmtb.taskactions.linktolist;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuseparator/>
+					<menuitem id="ZimTB-ViewTasks" label="&zmtb.taskactions.viewtasks;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+			</menupopup>
+		</toolbarbutton>
+	</toolbar>
+	<vbox id="ZimTB-ActionsBar">
+		<vbox id="ZimTB-NewTaskList-Bar">
+			<vbox class="ZMTB-ActionBar-Title" align="start">
+				<label value="&zmtb.taskactions.newlist.title;" style="font-size:14px"/>
+			</vbox>
+			<hbox align="center">
+				<label value="&zmtb.taskactions.name;"/>
+				<textbox id="ZimTB-NewTaskList-Name" width="150" />
+				<button id="ZimTB-NewTaskList-Create" label="&zmtb.taskactions.newlist.create;"/>
+				<button id="ZimTB-NewTaskList-Close" label="&zmtb.taskactions.cancel;"/>
+			</hbox>
+		</vbox>
+		<vbox id="ZimTB-NewRemTaskList-Bar">
+			<vbox class="ZMTB-ActionBar-Title" align="start">
+				<label value="&zmtb.taskactions.newremlist.title;" style="font-size:14px"/>
+			</vbox>
+			<hbox align="center">
+				<label value="&zmtb.taskactions.name;"/>
+				<textbox id="ZimTB-NewRemTaskList-Name" width="150"/>
+				<label value="&zmtb.taskactions.newremlist.url;"/>
+				<textbox id="ZimTB-NewRemTaskList-URL" width="150"/>
+				<button id="ZimTB-NewRemTaskList-Create" label="&zmtb.taskactions.newremlist.create;"/>
+				<button id="ZimTB-NewRemTaskList-Close" label="&zmtb.taskactions.cancel;"/>
+			</hbox>
+		</vbox>
+		<vbox id="ZimTB-LinkToTaskList-Bar">
+			<vbox class="ZMTB-ActionBar-Title" align="start">
+				<label value="&zmtb.taskactions.linktolist.title;" style="font-size:14px"/>
+			</vbox>
+			<hbox align="center">
+				<label value="&zmtb.taskactions.name;"/>
+				<textbox id="ZimTB-LinkToTaskList-Name"/>
+				<label value="&zmtb.taskactions.linktolist.owner;"/>
+				<textbox id="ZimTB-LinkToTaskList-Owner"/>
+				<label value="&zmtb.taskactions.linktolist.path;"/>
+				<textbox id="ZimTB-LinkToTaskList-Path"/>
+				<button id="ZimTB-LinkToTaskList-Create" label="&zmtb.taskactions.linktolist.create;"/>
+				<button id="ZimTB-LinkToTaskList-Close" label="&zmtb.taskactions.cancel;"/>
+			</hbox>
+		</vbox>
+		<vbox id="ZimTB-NewTask-Bar">
+			<vbox class="ZMTB-ActionBar-Title" align="start">
+				<label value="&zmtb.taskactions.newtask.title;" style="font-size:14px"/>
+			</vbox>
+			<hbox>
+				<vbox align="start">
+					<hbox align="center" class="ZMTB-ActionBar-Row">
+						<label value="&zmtb.taskactions.newtask.subject;"/>
+					</hbox>
+					<hbox align="center" class="ZMTB-ActionBar-Row">
+						<label value="&zmtb.taskactions.newtask.location;"/>
+					</hbox>
+				</vbox>
+				<vbox align="end">
+					<hbox align="center" class="ZMTB-ActionBar-Row">
+						<textbox id="ZimTB-NewTask-Subject"/>
+					</hbox>
+					<hbox align="center" class="ZMTB-ActionBar-Row">
+						<textbox id="ZimTB-NewTask-Location"/>
+					</hbox>
+				</vbox>
+				<vbox align="start">
+					<hbox align="center" class="ZMTB-ActionBar-Row">
+						<label value="&zmtb.taskactions.newtask.start;"/>
+					</hbox>
+					<hbox align="center" class="ZMTB-ActionBar-Row">
+						<label value="&zmtb.taskactions.newtask.end;"/>
+					</hbox>
+				</vbox>
+				<vbox align="end">
+					<hbox align="center" class="ZMTB-ActionBar-Row">
+						<datepicker id="ZimTB-NewTask-StartDate" type="popup"/>
+					</hbox>
+					<hbox align="center" class="ZMTB-ActionBar-Row">
+						<datepicker id="ZimTB-NewTask-EndDate" type="popup"/>
+					</hbox>
+				</vbox>
+				<hbox align="center">
+					<vbox align="start">
+<!-- <checkbox label="All Day Event" id="ZimTB-NewTask-AllDay"/> -->
+						<label value="&zmtb.taskactions.newtask.tasklist;"/>
+						<menulist id="ZimTB-NewTask-TaskList"/>
+					</vbox>
+				</hbox>
+				<vbox width="200" align="end">
+					<button width="150" id="ZimTB-NewTask-Create" label="&zmtb.taskactions.newtask.create;"/>
+					<button width="150" id="ZimTB-NewTask-Close" label="&zmtb.taskactions.cancel;"/>
+				</vbox>
+			</hbox>
+		</vbox>
+	</vbox>
+</overlay>

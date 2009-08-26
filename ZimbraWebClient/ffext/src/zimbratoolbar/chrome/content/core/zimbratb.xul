@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://zimbratb/skin/zimbratb.css" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://zimbratb/locale/zimbratb.dtd">
+<!-- Load Components -->
+<?xul-overlay href="chrome://zimbratb/content/appointments/appointments.xul"?>
+<?xul-overlay href="chrome://zimbratb/content/zimbraactions/zimbraactions.xul"?>
+<?xul-overlay href="chrome://zimbratb/content/searchlist/searchlist.xul"?>
+<?xul-overlay href="chrome://zimbratb/content/folderlist/folderlist.xul"?>
+<?xul-overlay href="chrome://zimbratb/content/mailactions/mailactions.xul"?>
+<?xul-overlay href="chrome://zimbratb/content/contactactions/contactactions.xul"?>
+<?xul-overlay href="chrome://zimbratb/content/calendaractions/calendaractions.xul"?>
+<?xul-overlay href="chrome://zimbratb/content/taskactions/taskactions.xul"?>
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="ZimTB-Overlay">
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxCallback.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxCookie.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxEnv.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxException.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxRpc.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxRpcRequest.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxSoapDoc.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxSoapException.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxSoapFault.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxStringUtil.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxTimedAction.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxXmlDoc.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZmCsfeCommand.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZmCsfeException.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZmCsfeResult.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_RequestManager.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_FolderManager.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_TBItem.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_Actions.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_Toolbar.js"/>
+	<script>
+		window.addEventListener("load", function(){window.com_zimbra_tb = new ZMTB_Toolbar()}, false);
+	</script>
+<!-- Strings for Localization -->
+	<stringbundleset>
+		<stringbundle id="ZMTB-LocalStrings" src="chrome://zimbratb/locale/zimbratb.properties"/>
+	</stringbundleset>
+<!-- Merge with Toolbox -->
+	<toolbox id="navigator-toolbox">
+		<toolbar id="ZimTB-Toolbar" toolbarname="Zimbra Toolbar" accesskey="Z" class="chromeclass-toolbar" context="toolbar-context-menu" hidden="false" persist="hidden">
+		<!-- <spacer ordinal="10" flex="100" />	 -->
+		<!-- <image ordinal="10" src="chrome://zimbratb/skin/throbber.gif" /> -->
+		</toolbar>
+		<vbox id="ZimTB-ActionsBar" hidden="true" />
+		<notificationbox id="ZMTB-Notifications"/>
+	</toolbox>
+</overlay>

@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "chrome://zimbratb/locale/zimbratb.dtd">
+<overlay id="mailActions" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<script src="chrome://global/content/nsDragAndDrop.js"/>
+	<script src="chrome://global/content/nsTransferable.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/messagecomposer/ZMTB_MessageComposer.js"/>
+	<script type="application/x-javascript" src="ZMTB_MailActions.js"/>
+	<script>
+		window.addEventListener("load", function(){
+			new ZMTB_MailActions(com_zimbra_tb);
+		}, false);
+	</script>
+	<vbox>
+		<browser id="ZMTB_AttachBrowser" height="0" width="0" />
+	</vbox>
+	<toolbar id="ZimTB-Toolbar">
+		<toolbarbutton flex="0" id="ZimTB-Mail-Button" label="&zmtb.mailactions.mail;" type="menu" menu="ZimTB-Mail-Menu">
+			<menupopup id="ZimTB-Mail-Menu">
+				<menuitem id="ZimTB-NewEmail" label="&zmtb.mailactions.quickcompose;" class="menuitem-iconic zmtb-menucommand" />
+				<menuseparator/>
+				<menuitem id="ZimTB-NewFolder" label="&zmtb.mailactions.newfolder;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-NewSavedSearch" label="&zmtb.mailactions.newsaved;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-NewRSS" label="&zmtb.mailactions.newrss;" class="menuitem-iconic zmtb-menucommand" />
+				<menuseparator/>
+				<menuitem id="ZimTB-ViewMail" label="&zmtb.mailactions.viewmail;" class="menuitem-iconic zmtb-menucommand ZimTB-Mail-CloseEnv" />
+			</menupopup>
+		</toolbarbutton>
+	</toolbar>
+	<vbox id="ZimTB-ActionsBar" style="border-bottom:solid 1px #666666">
+		<vbox id="ZimTB-NewFolder-Bar">
+			<vbox class="ZMTB-ActionBar-Title" align="start">
+				<label value="&zmtb.mailactions.newfolder.title;" style="font-size:14px"/>
+			</vbox>
+			<hbox align="center">
+				<label value="&zmtb.mailactions.name;"/>
+				<textbox id="ZimTB-NewFolder-Name" width="150"/>
+				<label value="&zmtb.mailactions.parent;"/>
+				<menulist id="ZimTB-NewFolder-Parent" width="150" class="ZimTB-FolderList" sizetopopup="none"/>
+				<button id="ZimTB-NewFolder-Create" width="100" label="&zmtb.mailactions.newfolder.create;"/>
+				<button id="ZimTB-NewFolder-Close" width="100" label="&zmtb.mailactions.cancel;"/>
+			</hbox>
+		</vbox>
+		<vbox id="ZimTB-NewSearchFolder-Bar">
+			<vbox class="ZMTB-ActionBar-Title" align="start">
+				<label value="&zmtb.mailactions.newsearch.title;" style="font-size:14px"/>
+			</vbox>
+			<hbox align="center">
+				<label value="&zmtb.mailactions.name;"/>
+				<textbox id="ZimTB-NewSearchFolder-Name" width="150" />
+				<label value="&zmtb.mailactions.newsearch.query;"/>
+				<textbox id="ZimTB-NewSearchFolder-Query" width="150" />
+				<label value="&zmtb.mailactions.parent;"/>
+				<menulist id="ZimTB-NewSearchFolder-Parent" class="ZimTB-FolderList" sizetopopup="none"/>
+				<button id="ZimTB-NewSearchFolder-Create" label="&zmtb.mailactions.newsearch.create;"/>
+				<button id="ZimTB-NewSearchFolder-Close" label="&zmtb.mailactions.cancel;"/>
+			</hbox>
+		</vbox>
+		<vbox id="ZimTB-NewRSS-Bar">
+			<vbox class="ZMTB-ActionBar-Title" align="start">
+				<label value="&zmtb.mailactions.newfeed.title;" style="font-size:14px"/>
+			</vbox>
+			<hbox align="center">
+				<label value="&zmtb.mailactions.name;"/>
+				<textbox id="ZimTB-NewRSS-Name" width="150" />
+				<label value="&zmtb.mailactions.newfeed.url;"/>
+				<textbox id="ZimTB-NewRSS-URL" width="150" />
+				<label value="&zmtb.mailactions.parent;"/>
+				<menulist id="ZimTB-NewRSS-Parent" class="ZimTB-FolderList" sizetopopup="none"/>
+				<button id="ZimTB-NewRSS-Create" label="&zmtb.mailactions.newfeed.create;"/>
+				<button id="ZimTB-NewRSS-Close" label="&zmtb.mailactions.cancel;"/>
+			</hbox>
+		</vbox>
+	</vbox>
+	
+	<!-- Context Menu -->
+	<popup id="contentAreaContextMenu" >
+		<menuitem id="ZMTB-ContextAction-ComposeTo" insertbefore="context-copyemail" label="&zmtb.mailactions.context.quickcompose;" class="menuitem-iconic ZMTB-ContextAction" />
+		<menuitem id="ZMTB-ContextAction-AddRSS" insertafter="context-sep-open" label="&zmtb.mailactions.context.addrss;" class="menuitem-iconic ZMTB-ContextAction" />
+		<menuseparator id="ZMTB-ContextSeparator" />
+	</popup>
+</overlay>

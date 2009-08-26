@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "chrome://zimbratb/locale/zimbratb.dtd">
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<script type="application/x-javascript" src="ZMTB_ContactActions.js"/>
+	<script>
+		window.addEventListener("load", function(){
+			new ZMTB_ContactActions(com_zimbra_tb);
+		}, false);
+	</script>
+	<toolbar id="ZimTB-Toolbar">
+		<toolbarbutton flex="0" id="ZimTB-Contacts-Button" label="&zmtb.contactactions.contacts;" type="menu" tooltiptext="" menu="ZimTB-Contact-Menu">
+			<menupopup id="ZimTB-Contact-Menu">
+				<menuitem id="ZimTB-NewContact" label="&zmtb.contactactions.newcontact;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuseparator/>
+				<menuitem id="ZimTB-NewAddressBook" label="&zmtb.contactactions.newaddrbook;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuitem id="ZimTB-LinkToAddressBook" label="&zmtb.contactactions.linktoaddrbook;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuseparator/>
+				<menuitem id="ZimTB-ViewContacts" label="&zmtb.contactactions.viewcontacts;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+			</menupopup>
+		</toolbarbutton>
+	</toolbar>
+	<vbox id="ZimTB-ActionsBar">
+		<vbox id="ZimTB-NewAddrBook-Bar">
+			<vbox class="ZMTB-ActionBar-Title" align="start">
+				<label value="New Address Book" style="font-size:14px"/>
+			</vbox>
+			<hbox align="center">
+				<label value="Name:"/>
+				<textbox id="ZimTB-NewAddrBook-Name" width="150" />
+				<label value="Parent folder:"/>
+				<menulist id="ZimTB-NewAddrBook-Parent" class="ZimTB-FolderList" sizetopopup="none"/>
+				<button id="ZimTB-NewAddrBook-Create" label="Create Address Book"/>
+				<button id="ZimTB-NewAddrBook-Close" label="Cancel"/>
+			</hbox>
+		</vbox>
+		<vbox id="ZimTB-LinkToAddrBook-Bar">
+			<vbox class="ZMTB-ActionBar-Title" align="start">
+				<label value="Link to Address Book" style="font-size:14px"/>
+			</vbox>
+			<hbox align="center">
+				<label value="Name:"/>
+				<textbox id="ZimTB-LinkToAddrBook-Name" />
+				<label value="Owner:"/>
+				<textbox id="ZimTB-LinkToAddrBook-Owner" />
+				<label value="Path:"/>
+				<textbox id="ZimTB-LinkToAddrBook-Path" />
+				<label value="Parent folder:"/>
+				<menulist id="ZimTB-LinkToAddrBook-Parent" class="ZimTB-FolderList" sizetopopup="none"/>
+				<button id="ZimTB-LinkToAddrBook-Create" label="Link to Address Book"/>
+				<button id="ZimTB-LinkToAddrBook-Close" label="Cancel"/>
+			</hbox>
+		</vbox>
+		<vbox id="ZimTB-NewContact-Bar">
+			<vbox class="ZMTB-ActionBar-Title" align="start">
+				<label value="New Contact" style="font-size:14px"/>
+			</vbox>
+			<hbox align="center">
+				<groupbox>
+					<grid>
+						<columns>
+							<column>
+						</column>
+							<column>
+						</column>
+							<column>
+						</column>
+							<column>
+						</column>
+						</columns>
+						<rows>
+							<row align="center">
+								<label value="&zmtb.contactactions.newcontact.last;"/>
+								<textbox tabindex="1" id="ZimTB-NewContact-Last"/>
+								<label value="&zmtb.contactactions.newcontact.company;"/>
+								<textbox tabindex="4" id="ZimTB-NewContact-Company"/>
+							</row>
+							<row align="center">
+								<label value="&zmtb.contactactions.newcontact.first;"/>
+								<textbox tabindex="2" id="ZimTB-NewContact-First"/>
+								<label value="&zmtb.contactactions.newcontact.jobtitle;"/>
+								<textbox tabindex="5" id="ZimTB-NewContact-JobTitle"/>
+							</row>
+							<row align="center">
+								<label value="&zmtb.contactactions.newcontact.middle;"/>
+								<textbox tabindex="3" id="ZimTB-NewContact-Middle"/>
+								<label value="&zmtb.contactactions.newcontact.email;"/>
+								<textbox tabindex="6" id="ZimTB-NewContact-Email"/>
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+				<groupbox>
+					<grid>
+						<columns>
+							<column>
+						</column>
+							<column>
+						</column>
+							<column>
+						</column>
+							<column>
+						</column>
+						</columns>
+						<rows>
+							<row align="center">
+								<label value="&zmtb.contactactions.newcontact.street;"/>
+								<textbox tabindex="7" id="ZimTB-NewContact-Street"/>
+								<label value="&zmtb.contactactions.newcontact.zip;"/>
+								<textbox tabindex="10" width="50" id="ZimTB-NewContact-Zip"/>
+								<label value="&zmtb.contactactions.newcontact.fax;"/>
+								<textbox tabindex="13" id="ZimTB-NewContact-Fax"/>
+							</row>
+							<row align="center">
+								<label value="&zmtb.contactactions.newcontact.city;"/>
+								<textbox tabindex="8" id="ZimTB-NewContact-City"/>
+								<label value="&zmtb.contactactions.newcontact.country;"/>
+								<textbox tabindex="11" id="ZimTB-NewContact-Country"/>
+								<spacer/>
+								<label value="&zmtb.contactactions.newcontact.location;"/>
+							</row>
+							<row align="center">
+								<label value="&zmtb.contactactions.newcontact.state;"/>
+								<textbox tabindex="9" width="50" id="ZimTB-NewContact-State"/>
+								<label value="&zmtb.contactactions.newcontact.phone;"/>
+								<textbox tabindex="12" id="ZimTB-NewContact-Phone"/>
+								<spacer/>
+								<menulist id="ZimTB-NewContact-Location"  sizetopopup="none">
+									<menupopup>
+										<menuitem label="&zmtb.contactactions.newcontact.work;" value="work"/>
+										<menuitem label="&zmtb.contactactions.newcontact.home;" value="home"/>
+									</menupopup>
+								</menulist>
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+				<vbox>
+					<hbox align="center">
+						<label value="&zmtb.contactactions.newcontact.addto;"/>
+						<menulist align="end" width="100" id="ZimTB-NewContact-AddressBooks" sizetopopup="none"/>
+					</hbox>
+					<button id="ZimTB-NewContact-Create" label="&zmtb.contactactions.newcontact.create;"/>
+					<button id="ZimTB-NewContact-Close" label="&zmtb.contactactions.cancel;"/>
+				</vbox>
+			</hbox>
+		</vbox>
+	</vbox>
+	<!-- Context Menu -->
+	<popup id="contentAreaContextMenu" >
+		<menuitem id="ZMTB-ContextAction-CreateContact" insertbefore="context-copyemail" label="&zmtb.contactactions.context.createcontact;" class="menuitem-iconic ZMTB-ContextAction" />
+	</popup>
+</overlay>

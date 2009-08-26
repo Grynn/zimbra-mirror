@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "chrome://zimbratb/locale/zimbratb.dtd">
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://zimbratb/skin/zimbratb.css" type="text/css"?>
+<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&zmtb.preferences.prefwintitle;">
+	<script type="application/x-javascript" src="ZMTB_Prefs.js"/>
+	<prefpane label="&zmtb.preferences.prefpanetitle;">
+		<preferences>
+			<preference id="zmtb-hostname" name="extensions.zmtb.hostname" type="string"/>
+			<preference id="zmtb-usehtml" name="extensions.zmtb.useHtmlUrl" type="bool"/>
+			<preference id="zmtb-username" name="extensions.zmtb.username" type="string"/>
+			<preference id="zmtb-updatefreq" name="extensions.zmtb.updatefreq" type="string"/>
+			<preference id="zmtb-openlinksin" name="extensions.zmtb.openLinksIn" type="string"/>
+			<preference id="zmtb-remindappts" name="extensions.zmtb.remindAppts" type="bool"/>
+			<preference id="zmtb-recentsearch" name="extensions.zmtb.recentSearch" type="string"/>
+			<preference id="zmtb-showfolders" name="extensions.zmtb.showFolders" type="string"/>
+			<preference id="zmtb-defaultwatch" name="extensions.zmtb.defaultWatch" type="int"/>
+		</preferences>
+		<groupbox>
+			<caption label="&zmtb.preferences.connectionsettings;"/>
+			<hbox>
+				<label value="&zmtb.preferences.serverurl;" width="150"/>
+				<vbox>
+					<textbox preference="zmtb-hostname" id="zmtb-hostnameField" width="300"/>
+					<label value="&zmtb.preferences.serverex;" style="font-size:10px; font-style:italic"/>
+				</vbox>
+			</hbox>
+			<hbox>
+				<label value="&zmtb.preferences.username;" width="150"/>
+				<vbox>
+					<textbox preference="zmtb-username" id="zmtb-usernameField" width="200"/>
+					<label value="&zmtb.preferences.emailex;" style="font-size:10px; font-style:italic"/>
+				</vbox>
+			</hbox>
+			<hbox>
+				<label value="&zmtb.preferences.password;" width="150"/>
+				<textbox id="zmtb-passwordField" type="password" width="200"/>
+			</hbox>
+			<hbox align="center">
+				<button label="&zmtb.preferences.connect;" id="zmtb-prefconnect" width="150"/>
+				<label id="zmtb-connectionStatus" width="300" style="margin-top:8px"/>
+			</hbox>
+		</groupbox>
+		<groupbox>
+			<caption label="&zmtb.preferences.advancedsettings;"/>
+			<hbox>
+				<vbox>
+					<label value="&zmtb.preferences.openlinksin;"/>
+					<hbox>
+						<spacer width="25"/>
+						<radiogroup preference="zmtb-openlinksin">
+							<radio label="&zmtb.preferences.currenttab;" value="Current Tab"/>
+							<radio label="&zmtb.preferences.newtab;" value="New Tab"/>
+							<radio label="&zmtb.preferences.newwindow;" value="New Window"/>
+						</radiogroup>
+					</hbox>
+				</vbox>
+				<spacer width="100"/>
+				<vbox align="end">
+					<hbox align="center">
+						<label value="Default watch folder: " /><menulist id="ZMTB-Default-Folder" preference="zmtb-defaultwatch" />
+					</hbox>
+					<hbox align="center">
+						<label value="&zmtb.preferences.updatefreq;"/>
+						<textbox preference="zmtb-updatefreq" id="zmtb-updatefreqField" maxlength="4" width="50"/>
+					</hbox>
+					<hbox>
+						<button label="&zmtb.preferences.clearrecent;" id="zmtb-clearrecent" width="200"/>
+					</hbox>
+				</vbox>
+			</hbox>
+		</groupbox>
+	</prefpane>
+</prefwindow>

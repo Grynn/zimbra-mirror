@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:em="http://www.mozilla.org/2004/em-rdf#"
+         xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="urn:mozilla:install-manifest"
+                   em:id="zimbratb@zimbra.com"
+                   em:version="0.14"
+                   em:type="2"
+                   em:name="Zimbra Toolbar"
+                   em:description="A toolbar that interacts with your Zimbra Mail account."
+                   em:creator="Andrew Inscore"
+                   em:homepageURL="http://zimbra.com"
+                   em:updateURL="http://zimbra.com"
+                   em:optionsURL="chrome://zimbratb/content/preferences/preferences.xul"
+				   em:iconURL="chrome://zimbratb/skin/zimbra_z.png"
+                   em:updateKey="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCx2mx3m931ZU5Jl1sck1me2/yzdZngZIb3NNWr9YVi+DJEjgkppsHkygml0kA+hShF3QqXF2rI74Z8JLt36K7LWRtVKzOqpesAoZjLLOZhmaHG4NjADEpkuc6/hUiHfQjsvJAjuO2j13ns3+Ww92OmCJ8ntQcP8LH5rm+lOuSAvQIDAQAB">
+    <em:targetApplication RDF:resource="rdf:#$mCg2i2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$mCg2i2"
+                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   em:minVersion="3.0"
+                   em:maxVersion="3.*" />
+</RDF:RDF>

@@ -1,0 +1,30 @@
+#ZimTB-MainMenu {
+    list-style-image: url("chrome://zimbratb/skin/main.png");
+}
+
+#ZimTB-Combined-Button {
+    list-style-image: url("chrome://zimbratb/skin/combined.png");
+}
+
+#ZimTB-Inbox-Button > .toolbarbutton-menubutton-button {
+    -moz-box-orient: horizontal;
+}
+
+#ZimTB-Inbox-Button {
+    list-style-image: url("chrome://zimbratb/skin/inbox.gif");
+}
+
+#ZimTB-Combined-Image {
+    list-style-image: url("chrome://zimbratb/skin/images.png");
+}
+
+#ZimTB-ResizeBar {
+    background-repeat: no-repeat;
+    min-height: 22px;
+    min-width: 3px;
+}
+
+#ZimTB-ResizeSplitter {
+    background: transparent;
+    border: none !important;
+}

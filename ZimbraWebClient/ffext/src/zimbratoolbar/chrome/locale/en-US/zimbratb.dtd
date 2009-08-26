@@ -1,0 +1,194 @@
+<!ENTITY zmtb.snoozemenu.1 "1 Minute">
+<!ENTITY zmtb.snoozemenu.5 "5 Minutes">
+<!ENTITY zmtb.snoozemenu.10 "10 Minutes">
+<!ENTITY zmtb.snoozemenu.15 "15 Minutes">
+<!ENTITY zmtb.snoozemenu.30 "30 Minutes">
+<!ENTITY zmtb.snoozemenu.45 "45 Minutes">
+<!ENTITY zmtb.snoozemenu.60 "60 Minutes">
+
+<!ENTITY zmtb.zimbraactions.openadvanced "Open Zimbra Mail(Advanced)">
+<!ENTITY zmtb.zimbraactions.openadvanced.accesskey "A">
+<!ENTITY zmtb.zimbraactions.openlite "Open Zimbra Mail(Lite)">
+<!ENTITY zmtb.zimbraactions.openlite.accesskey "S">
+<!ENTITY zmtb.zimbraactions.preferences "Preferences...">
+<!ENTITY zmtb.zimbraactions.preferences.accesskey "P">
+<!ENTITY zmtb.zimbraactions.refresh "Refresh">
+
+<!ENTITY zmtb.searchlist.savedsearches "Saved Searches">
+<!ENTITY zmtb.searchlist.tags "Tags">
+<!ENTITY zmtb.searchlist.recent "Recent Searches">
+
+<!-- Mail actions -->
+<!ENTITY zmtb.mailactions.cancel "Cancel">
+
+<!ENTITY zmtb.mailactions.mail "Mail">
+<!ENTITY zmtb.mailactions.quickcompose "Quick Compose">
+<!ENTITY zmtb.mailactions.newfolder "New Folder">
+<!ENTITY zmtb.mailactions.newsaved "New Saved Search">
+<!ENTITY zmtb.mailactions.newrss "New RSS/ATOM Feed">
+<!ENTITY zmtb.mailactions.viewmail "View Email">
+
+
+<!ENTITY zmtb.mailactions.name "Name:">
+<!ENTITY zmtb.mailactions.parent "Parent Folder:">
+
+<!ENTITY zmtb.mailactions.newfolder.title "New Folder">
+<!ENTITY zmtb.mailactions.newfolder.create "Create Folder">
+
+<!ENTITY zmtb.mailactions.newsearch.title "New Search Folder">
+<!ENTITY zmtb.mailactions.newsearch.create "Create Saved Search">
+<!ENTITY zmtb.mailactions.newsearch.query "Search Query:">
+
+<!ENTITY zmtb.mailactions.newfeed.title "New RSS/ATOM Feed">
+<!ENTITY zmtb.mailactions.newfeed.url "URL:">
+<!ENTITY zmtb.mailactions.newfeed.create "Create Feed">
+
+<!ENTITY zmtb.mailactions.context.quickcompose "Quick Compose To">
+<!ENTITY zmtb.mailactions.context.addrss "Add RSS Folder">
+
+<!-- Contact actions -->
+<!ENTITY zmtb.contactactions.contacts "Contacts">
+<!ENTITY zmtb.contactactions.newcontact "New Contact">
+<!ENTITY zmtb.contactactions.newaddrbook "New Address Book">
+<!ENTITY zmtb.contactactions.linktoaddrbook "Link to Address Book">
+<!ENTITY zmtb.contactactions.viewcontacts "View Contacts">
+
+
+<!ENTITY zmtb.contactactions.cancel "Cancel">
+<!ENTITY zmtb.contactactions.name "Name:">
+<!ENTITY zmtb.contactactions.parent "Parent Folder:">
+
+<!ENTITY zmtb.contactactions.newcontact.last "Last:">
+<!ENTITY zmtb.contactactions.newcontact.first "First:">
+<!ENTITY zmtb.contactactions.newcontact.middle "Middle:">
+<!ENTITY zmtb.contactactions.newcontact.company "Company:">
+<!ENTITY zmtb.contactactions.newcontact.jobtitle "Job Title:">
+<!ENTITY zmtb.contactactions.newcontact.email "Email:">
+<!ENTITY zmtb.contactactions.newcontact.street "Street:">
+<!ENTITY zmtb.contactactions.newcontact.city "City:">
+<!ENTITY zmtb.contactactions.newcontact.state "State:">
+<!ENTITY zmtb.contactactions.newcontact.zip "Zip:">
+<!ENTITY zmtb.contactactions.newcontact.country "Country:">
+<!ENTITY zmtb.contactactions.newcontact.phone "Phone:">
+<!ENTITY zmtb.contactactions.newcontact.fax "Fax:">
+<!ENTITY zmtb.contactactions.newcontact.location "Location:">
+<!ENTITY zmtb.contactactions.newcontact.work "Work">
+<!ENTITY zmtb.contactactions.newcontact.home "Home">
+<!ENTITY zmtb.contactactions.newcontact.addto "Add to:">
+<!ENTITY zmtb.contactactions.newcontact.create "Save Contact">
+
+<!ENTITY zmtb.contactactions.newaddrbook.create "Create Address Book">
+
+<!ENTITY zmtb.contactactions.linkaddrbook.owner "Owner:">
+<!ENTITY zmtb.contactactions.linkaddrbook.path "Path:">
+<!ENTITY zmtb.contactactions.linkaddrbook.create "Link to Address Book">
+<!ENTITY zmtb.contactactions.context.createcontact "Create Contact">
+
+<!-- Calendar actions -->
+<!ENTITY zmtb.calendaractions.calendar "Calendar">
+<!ENTITY zmtb.calendaractions.newappt "New Appointment">
+<!ENTITY zmtb.calendaractions.newcal "New Calendar">
+<!ENTITY zmtb.calendaractions.newremcal "Subscribe to Remote Calendar">
+<!ENTITY zmtb.calendaractions.linktocal "Link to Shared Calendar">
+<!ENTITY zmtb.calendaractions.viewcal "View Calendars">
+
+<!ENTITY zmtb.calendaractions.cancel "Cancel">
+<!ENTITY zmtb.calendaractions.name "Name:">
+<!ENTITY zmtb.calendaractions.parent "Parent Folder:">
+
+<!ENTITY zmtb.calendaractions.newappt.title "New Appointment">
+<!ENTITY zmtb.calendaractions.newappt.subject "Subject:">
+<!ENTITY zmtb.calendaractions.newappt.location "Location:">
+<!ENTITY zmtb.calendaractions.newappt.create "Create Appointment:">
+<!ENTITY zmtb.calendaractions.newappt.start "Start:">
+<!ENTITY zmtb.calendaractions.newappt.end "End:">
+<!ENTITY zmtb.calendaractions.newappt.allday "All Day:">
+<!ENTITY zmtb.calendaractions.newappt.repeat "Repeat:">
+<!ENTITY zmtb.calendaractions.newappt.repeat.none "None">
+<!ENTITY zmtb.calendaractions.newappt.repeat.day "Every Day">
+<!ENTITY zmtb.calendaractions.newappt.repeat.week "Every Week">
+<!ENTITY zmtb.calendaractions.newappt.repeat.month "Every Month">
+<!ENTITY zmtb.calendaractions.newappt.repeat.year "Every Year">
+<!ENTITY zmtb.calendaractions.newappt.alarm "Alarm:">
+<!ENTITY zmtb.calendaractions.newappt.alarm.never "Never">
+<!ENTITY zmtb.calendaractions.newappt.alarm.1m "1 Minute Before">
+<!ENTITY zmtb.calendaractions.newappt.alarm.5m "5 Minutes Before">
+<!ENTITY zmtb.calendaractions.newappt.alarm.10m "10 Minutes Before">
+<!ENTITY zmtb.calendaractions.newappt.alarm.15m "15 Minutes Before">
+<!ENTITY zmtb.calendaractions.newappt.alarm.30m "30 Minutes Before">
+<!ENTITY zmtb.calendaractions.newappt.alarm.45m "45 Minutes Before">
+<!ENTITY zmtb.calendaractions.newappt.alarm.60m "60 Minutes Before">
+<!ENTITY zmtb.calendaractions.newappt.alarm.2h "2 Hours Before">
+<!ENTITY zmtb.calendaractions.newappt.alarm.3h "3 Hours Before">
+<!ENTITY zmtb.calendaractions.newappt.alarm.4h "4 Hours Before">
+<!ENTITY zmtb.calendaractions.newappt.alarm.5h "5 Hours Before">
+<!ENTITY zmtb.calendaractions.newappt.alarm.18h "18 Hours Before">
+
+<!ENTITY zmtb.calendaractions.newcalendar.title "New Calendar">
+<!ENTITY zmtb.calendaractions.newcalendar.create "Create Calendar">
+
+<!ENTITY zmtb.calendaractions.newremcalendar.title "Subscribe to Remote Calendar">
+<!ENTITY zmtb.calendaractions.newremcalendar.url "URL:">
+<!ENTITY zmtb.calendaractions.newremcalendar.create "Subscribe to Calendar">
+
+<!ENTITY zmtb.calendaractions.linktocalendar.title "Link to Shared Calendar">
+<!ENTITY zmtb.calendaractions.linktocalendar.owner "Owner:">
+<!ENTITY zmtb.calendaractions.linktocalendar.path "Path:">
+<!ENTITY zmtb.calendaractions.linktocalendar.create "Link to Calendar">
+
+<!ENTITY zmtb.calendaractions.context.addcal "Add to Calendars">
+
+<!-- Task actions -->
+<!ENTITY zmtb.taskactions.tasks "Tasks">
+<!ENTITY zmtb.taskactions.newtask "New Task">
+<!ENTITY zmtb.taskactions.newlist "New Task List">
+<!ENTITY zmtb.taskactions.newremlist "Subscribe to Remote Task List">
+<!ENTITY zmtb.taskactions.linktolist "Link to Shared Task List">
+<!ENTITY zmtb.taskactions.viewtasks "View Tasks">
+
+<!ENTITY zmtb.taskactions.cancel "Cancel">
+<!ENTITY zmtb.taskactions.name "Name:">
+<!ENTITY zmtb.taskactions.parent "Task List:">
+
+<!ENTITY zmtb.taskactions.newtask.title "New Task">
+<!ENTITY zmtb.taskactions.newtask.subject "Subject:">
+<!ENTITY zmtb.taskactions.newtask.location "Location:">
+<!ENTITY zmtb.taskactions.newtask.start "Start:">
+<!ENTITY zmtb.taskactions.newtask.end "End:">
+<!ENTITY zmtb.taskactions.newtask.tasklist "Task List:">
+<!ENTITY zmtb.taskactions.newtask.create "Create Task">
+
+<!ENTITY zmtb.taskactions.newlist.title "New Task List">
+<!ENTITY zmtb.taskactions.newlist.create "Create Task List">
+
+<!ENTITY zmtb.taskactions.newremlist.title "Subscribe to Remote Task List">
+<!ENTITY zmtb.taskactions.newremlist.url "URL:">
+<!ENTITY zmtb.taskactions.newremlist.create "Subscribe to Task List">
+
+<!ENTITY zmtb.taskactions.linktolist.title "Link to Shared Task List">
+<!ENTITY zmtb.taskactions.linktolist.owner "Owner:">
+<!ENTITY zmtb.taskactions.linktolist.path "Path:">
+<!ENTITY zmtb.taskactions.linktolist.create "Link to Calendar">
+
+<!-- Preferences -->
+<!ENTITY zmtb.preferences.prefwintitle "Zimbra Toolbar Preferences">
+<!ENTITY zmtb.preferences.prefpanetitle "">
+<!ENTITY zmtb.preferences.connectionsettings "Connection Settings:">
+<!ENTITY zmtb.preferences.serverurl "URL of Zimbra Server:">
+<!ENTITY zmtb.preferences.serverex "Ex: https://mail.example.com">
+<!ENTITY zmtb.preferences.username "Username:">
+<!ENTITY zmtb.preferences.emailex "Ex: user@example.com">
+<!ENTITY zmtb.preferences.password "Password:">
+<!ENTITY zmtb.preferences.connect "Test Connection">
+<!ENTITY zmtb.preferences.advancedsettings "Advanced Settings">
+<!ENTITY zmtb.preferences.openlinksin "Open New Links In:">
+<!ENTITY zmtb.preferences.currenttab "Current Tab">
+<!ENTITY zmtb.preferences.newtab "New Tab">
+<!ENTITY zmtb.preferences.newwindow "New Window">
+<!ENTITY zmtb.preferences.clearrecent "Clear Recent Searches">
+<!ENTITY zmtb.preferences.updatefreq "Update Frequency (min):">
+
+
+
+
+
