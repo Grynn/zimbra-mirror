@@ -28,12 +28,10 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.datasource.SyncState;
-import com.zimbra.cs.mailbox.DataSourceMailbox;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.LocalJMSession;
-import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.Message;
 import com.zimbra.cs.mailbox.OperationContext;
@@ -334,16 +332,9 @@ public class OfflineDataSource extends DataSource {
     }
 
     @Override
-    public boolean checkPendingMessages() throws ServiceException {
-    	DataSourceMailbox mbox = (DataSourceMailbox) getMailbox();
-        return mbox.getFolderById(null, LocalMailbox.ID_FOLDER_OUTBOX).getSize() > 0 &&
-               mbox.sendPendingMessages(true) > 0;
-    }
-
-    @Override
     public long getSyncFrequency() {
         return getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncFreq,
-                               OfflineConstants.DEFAULT_SYNC_FREQ);
+            OfflineConstants.DEFAULT_SYNC_FREQ);
     }
 
     @Override
@@ -361,7 +352,7 @@ public class OfflineDataSource extends DataSource {
     }
     
     public boolean isEmail() {
-    	return getType() == Type.imap || getType() == Type.pop3;
+    	return getType() == Type.imap || getType() == Type.pop3 || getType() == Type.live;
     }
     
     public boolean isSmtpEnabled() {

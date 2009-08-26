@@ -25,6 +25,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mime.ParsedAddress;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedMessage;
@@ -41,10 +42,9 @@ public class OfflineMailSender extends MailSender {
     
     @Override
     public ItemId sendMimeMessage(OperationContext octxt, Mailbox mbox, Boolean saveToSent, MimeMessage mm,
-                                  Collection<InternetAddress> newContacts, Collection<Upload> uploads,
-                                  ItemId origMsgId, String replyType, Identity identity,
-                                  boolean ignoreFailedAddresses, boolean replyToSender)
-    throws ServiceException {
+        Collection<InternetAddress> newContacts, Collection<Upload> uploads,
+        ItemId origMsgId, String replyType, Identity identity, boolean ignoreFailedAddresses,
+        boolean replyToSender) throws ServiceException {
         try {
             // for messages that aren't actually *sent*, just go down the standard save-to-sent path
             if (mm.getAllRecipients() == null)
@@ -55,20 +55,27 @@ public class OfflineMailSender extends MailSender {
 
         Account acct = mbox.getAccount();
         Account authuser = octxt == null ? null : octxt.getAuthenticatedUser();
+        Mailbox draftMbox = mbox;
+        
         if (authuser == null)
             authuser = acct;
-
         try {
             // set the From, Sender, Date, Reply-To, etc. headers
             updateHeaders(mm, acct, authuser, octxt, null /* don't set originating IP in offline client */, replyToSender, false);
 
-            // save as a draft for now...
+            // save as a draft to be sent during sync interval
+            if (OfflineProvisioning.isDataSourceAccount(acct)) {
+                Account local = OfflineProvisioning.getOfflineInstance().getLocalAccount();
+                
+                draftMbox = MailboxManager.getInstance().getMailboxByAccount(local);
+            }
             ParsedMessage pm = new ParsedMessage(mm, mm.getSentDate().getTime(), mbox.attachmentsIndexingEnabled());
             if (identity == null)
                 identity = Provisioning.getInstance().getDefaultIdentity(authuser);
             String identityId = identity == null ? null : identity.getAttr(Provisioning.A_zimbraPrefIdentityId);
-            int draftId = mbox.saveDraft(octxt, pm, Mailbox.ID_AUTO_INCREMENT, (origMsgId != null ? origMsgId.toString(acct) : null), replyType, identityId).getId();
-            mbox.move(octxt, draftId, MailItem.TYPE_MESSAGE, ZcsMailbox.ID_FOLDER_OUTBOX);
+            int draftId = draftMbox.saveDraft(octxt, pm, Mailbox.ID_AUTO_INCREMENT,
+                (origMsgId != null ? origMsgId.toString(acct) : null), replyType, identityId, acct.getId()).getId();
+            draftMbox.move(octxt, draftId, MailItem.TYPE_MESSAGE, DesktopMailbox.ID_FOLDER_OUTBOX);
 
             // we can now purge the uploaded attachments
             if (uploads != null)
@@ -86,8 +93,7 @@ public class OfflineMailSender extends MailSender {
                     }
                 }
             }
-
-            return new ItemId(mbox, draftId);
+            return new ItemId(draftMbox, draftId);
         } catch (MessagingException me) {
             OfflineLog.offline.warn("exception occurred during SendMsg", me);
             throw ServiceException.FAILURE("MessagingException", me);
