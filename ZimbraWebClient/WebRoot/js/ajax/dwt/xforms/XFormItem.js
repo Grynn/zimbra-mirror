@@ -3155,8 +3155,8 @@ Case_XFormItem.prototype._outputHTML = function () {
 
 	
 //	DBG.dumpObj(html.toString());
-	element.innerHTML = html.toString();
-	this.deferred = false;	
+    element.innerHTML = html.toString();
+    this.deferred = false;
 }
 
 Case_XFormItem.prototype.hide = function(isBlock) {
@@ -4781,6 +4781,8 @@ Dwt_TabBar_XFormItem = function() {}
 XFormItemFactory.createItemType("_TAB_BAR_", "tab_bar", Dwt_TabBar_XFormItem, Dwt_Adaptor_XFormItem);
 Dwt_TabBar_XFormItem.prototype.colSpan = "*";
 Dwt_TabBar_XFormItem.prototype.labelLocation = _NONE_;
+Dwt_TabBar_XFormItem.prototype.cssStyle = "margin-right: 5px";
+
 // NOTE: Overriding the _TAB_BAR_
 //XFormItemFactory.registerItemType(_TAB_BAR_, "tab_bar", Dwt_TabBar_XFormItem);
 
@@ -4812,7 +4814,7 @@ Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
 	var btnCssClass = this.getInheritedProperty("buttonCssClass");	
 	
 	var widget = new DwtTabBarFloat(form, cssClass, btnCssClass);
-	this._value2tabkey = {};
+    this._value2tabkey = {};
 	this._tabkey2value = {};
 	
 	var choices = this.getChoices();
@@ -4829,6 +4831,7 @@ Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
 			this._value2tabkey[values[i]] = i + 1;
 			this._tabkey2value[i + 1] = values[i];
 			widget.addButton(i+1, labels[i]);
+            widget.getButton(i+1).getHtmlElement().style ["paddingRight"] = "2px" ;
 		}			
 	} else {
 		var cnt = choices.length;
@@ -4838,6 +4841,7 @@ Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
 			this._value2tabkey[choice.value] = i + 1;
 			this._tabkey2value[i + 1] = choice.value;
 			widget.addButton(i+1, choice.label);
+            widget.getButton(i+1).getHtmlElement().style ["paddingRight"] = "2px" ;
 		}
 	}
 	
