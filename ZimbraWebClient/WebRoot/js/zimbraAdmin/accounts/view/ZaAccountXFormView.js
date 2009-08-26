@@ -373,11 +373,24 @@ ZaAccountXFormView.updateAlias = function () {
 		var obj = this.parent.editAliasDlg.getObject();
 		var instance = this.getInstance();
 		var arr = instance.attrs[ZaAccount.A_zimbraMailAlias];
-		if(obj[ZaAlias.A_index] >=0 && arr[obj[ZaAlias.A_index]] != obj[ZaAccount.A_name] ) {			
-			arr[obj[ZaAlias.A_index]] = obj[ZaAccount.A_name];
-			this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A_zimbraMailAlias, arr); 
-			this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A2_alias_selection_cache, new Array());
-			this.parent.setDirty(true);	
+		if(obj[ZaAlias.A_index] >=0 && arr[obj[ZaAlias.A_index]] != obj[ZaAccount.A_name] ) {	
+			//get domain name
+			var domain;
+			var domainName = ZaAccount.getDomain(obj[ZaAccount.A_name]);
+			try {
+				domain = ZaDomain.getDomainByName(domainName);
+			} catch (ex) {
+				
+			}
+			//check if have access to create aliases in this domain
+			if(!domain || !ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ALIAS, domain)) {		
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_PERMISSION_CREATE_ALIAS, [domainName])) ;
+			} else {
+				arr[obj[ZaAlias.A_index]] = obj[ZaAccount.A_name];
+				this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A_zimbraMailAlias, arr); 
+				this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A2_alias_selection_cache, new Array());
+				this.parent.setDirty(true);
+			}
 		}
 	}
 }
@@ -403,12 +416,25 @@ ZaAccountXFormView.addAlias  = function () {
 		this.parent.addAliasDlg.popdown();
 		var obj = this.parent.addAliasDlg.getObject();
 		if(obj[ZaAccount.A_name] && obj[ZaAccount.A_name].length>1) {
-			var instance = this.getInstance();
-			var arr = instance.attrs[ZaAccount.A_zimbraMailAlias]; 
-			arr.push(obj[ZaAccount.A_name]);
-			this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A_zimbraMailAlias, arr);
-			this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A2_alias_selection_cache, new Array());
-			this.parent.setDirty(true);
+			//get domain name
+			var domain;
+			var domainName = ZaAccount.getDomain(obj[ZaAccount.A_name]);
+			try {
+				domain = ZaDomain.getDomainByName(domainName);
+			} catch (ex) {
+				
+			}
+			//check if have access to create aliases in this domain
+			if(!domain || !ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ALIAS, domain)) {
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_PERMISSION_CREATE_ALIAS, [domainName])) ;
+			} else {
+				var instance = this.getInstance();
+				var arr = instance.attrs[ZaAccount.A_zimbraMailAlias]; 
+				arr.push(obj[ZaAccount.A_name]);
+				this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A_zimbraMailAlias, arr);
+				this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A2_alias_selection_cache, new Array());
+				this.parent.setDirty(true);
+			}
 		}
 	}
 }
