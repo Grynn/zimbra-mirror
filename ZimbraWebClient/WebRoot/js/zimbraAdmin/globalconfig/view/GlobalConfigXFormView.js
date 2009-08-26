@@ -177,8 +177,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 				items:[
 					{type:_ZAGROUP_,
 						items:[
-							{ref: ZaGlobalConfig.A_zimbraGalMaxResults, type:_INPUT_,
-							  label: ZaMsg.NAD_GalMaxResults, width: "5em"
+							{ref: ZaGlobalConfig.A_zimbraGalMaxResults, type:_TEXTFIELD_,
+							  label: ZaMsg.LBL_zimbraGalMaxResults, msgName:ZaMsg.MSG_zimbraGalMaxResults, 
+							  labelLocation:_LEFT_, cssClass:"admin_xform_number_input"
 							},
 							{ref:ZaGlobalConfig.A_zimbraDefaultDomainName, type:_DYNSELECT_,
 								label: ZaMsg.NAD_DefaultDomainName,
@@ -186,14 +187,14 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 								dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
 								dataFetcherClass:ZaSearch,editable:true
 							},
-							{ref: ZaGlobalConfig.A_zimbraScheduledTaskNumThreads, type:_INPUT_,
-							  label: ZaMsg.NAD_zimbraScheduledTaskNumThreads, width: "5em"
+							{ref: ZaGlobalConfig.A_zimbraScheduledTaskNumThreads, type:_TEXTFIELD_,
+							  label: ZaMsg.NAD_zimbraScheduledTaskNumThreads, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"
 							},
 							{ref: ZaGlobalConfig.A_zimbraMailPurgeSleepInterval, type:_LIFETIME_,
 							  label: ZaMsg.LBL_zimbraMailPurgeSleepInterval, width: "5em"
 							} ,
                           { ref: ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _TEXTFIELD_,
-								  label: ZaMsg.NAD_DOC_MaxUploadSize, width: "6em"
+								  label: ZaMsg.NAD_DOC_MaxUploadSize, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"
 	  						}
                         ]
 					}

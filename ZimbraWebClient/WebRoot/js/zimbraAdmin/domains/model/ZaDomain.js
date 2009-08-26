@@ -29,7 +29,7 @@ ZaDomain = function() {
 	this.type=ZaItem.DOMAIN;
 
 	//default attributes
-	this.attrs[ZaDomain.A_GalMode] = ZaDomain.GAL_Mode_internal;
+	this.attrs[ZaDomain.A_zimbraGalMode] = ZaDomain.GAL_Mode_internal;
     this.attrs[ZaDomain.A_AuthMech] = ZaDomain.AuthMech_zimbra;
 	this.attrs[ZaDomain.A_GALSyncUseGALSearch]='TRUE';
 	this.notebookAcls = {};
@@ -105,8 +105,8 @@ ZaDomain.A_zimbraPublicServiceProtocol = "zimbraPublicServiceProtocol";
 ZaDomain.A_zimbraDNSCheckHostname = "zimbraDNSCheckHostname";
 
 //GAL search
-ZaDomain.A_GalMaxResults = "zimbraGalMaxResults";
-ZaDomain.A_GalMode = "zimbraGalMode";
+ZaDomain.A_zimbraGalMaxResults = "zimbraGalMaxResults";
+ZaDomain.A_zimbraGalMode = "zimbraGalMode";
 ZaDomain.A_GalLdapURL = "zimbraGalLdapURL";
 ZaDomain.A_GalLdapSearchBase = "zimbraGalLdapSearchBase";
 ZaDomain.A_GalLdapBindDn = "zimbraGalLdapBindDn";
@@ -361,7 +361,7 @@ function(tmpObj, newDomain) {
 	}
 	tmpObj.name = tmpObj.attrs[ZaDomain.A_domainName];
 	//check values
-	if(!AjxUtil.isEmpty(tmpObj.attrs[ZaDomain.A_GalMaxResults]) && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaDomain.A_GalMaxResults])) {
+	if(!AjxUtil.isEmpty(tmpObj.attrs[ZaDomain.A_zimbraGalMaxResults]) && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaDomain.A_zimbraGalMaxResults])) {
 		//show error msg
 		ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR , [ZaMsg.NAD_GalMaxResults]));
 		return null;
@@ -373,7 +373,7 @@ function(tmpObj, newDomain) {
 		return null;
 	}
 	
-	if(tmpObj.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal) {	
+	if(tmpObj.attrs[ZaDomain.A_zimbraGalMode]!=ZaDomain.GAL_Mode_internal) {	
 		//check that Filter is provided and at least one server
 		if(!tmpObj.attrs[ZaDomain.A_GalLdapFilter]) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);			
@@ -405,11 +405,11 @@ function(tmpObj, newDomain) {
 
 	var soapDoc = AjxSoapDoc.create("CreateDomainRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("name", tmpObj.attrs[ZaDomain.A_domainName]);
-	var attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalMode]);
-	attr.setAttribute("n", ZaDomain.A_GalMode);	
+	var attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraGalMode]);
+	attr.setAttribute("n", ZaDomain.A_zimbraGalMode);	
 
-	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalMaxResults]);
-	attr.setAttribute("n", ZaDomain.A_GalMaxResults);
+	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraGalMaxResults]);
+	attr.setAttribute("n", ZaDomain.A_zimbraGalMaxResults);
 
 	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_notes]);
 	attr.setAttribute("n", ZaDomain.A_notes);	
@@ -435,7 +435,7 @@ function(tmpObj, newDomain) {
 	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_description]);
 	attr.setAttribute("n", ZaDomain.A_description);		
 
-	if(tmpObj.attrs[ZaDomain.A_GalMode] != ZaDomain.GAL_Mode_internal) {
+	if(tmpObj.attrs[ZaDomain.A_zimbraGalMode] != ZaDomain.GAL_Mode_internal) {
 		temp = tmpObj.attrs[ZaDomain.A_GalLdapURL].join(" ");
 		attr = soapDoc.set("a", temp);
 		attr.setAttribute("n", ZaDomain.A_GalLdapURL);	
@@ -560,7 +560,7 @@ ZaDomain.createGalAccounts = function (tmpObj,newDomain) {
 		if(tmpObj[ZaDomain.A2_new_gal_sync_account_name].indexOf("@") < 0) {
 			tmpObj[ZaDomain.A2_new_gal_sync_account_name] = [tmpObj[ZaDomain.A2_new_gal_sync_account_name],"@",tmpObj.attrs[ZaDomain.A_domainName]].join("");
 		}
-		if((tmpObj.attrs[ZaDomain.A_GalMode] == ZaDomain.GAL_Mode_internal || tmpObj.attrs[ZaDomain.A_GalMode] == ZaDomain.GAL_Mode_both)
+		if((tmpObj.attrs[ZaDomain.A_zimbraGalMode] == ZaDomain.GAL_Mode_internal || tmpObj.attrs[ZaDomain.A_zimbraGalMode] == ZaDomain.GAL_Mode_both)
 			&& tmpObj[ZaDomain.A2_new_gal_sync_account_name] && tmpObj[ZaDomain.A2_new_internal_gal_ds_name]) {
 			var createInternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN); 
 			createInternalDSDoc.setAttribute("name", tmpObj[ZaDomain.A2_new_internal_gal_ds_name]);
@@ -572,7 +572,7 @@ ZaDomain.createGalAccounts = function (tmpObj,newDomain) {
 			soapDoc.set("a", tmpObj[ZaDomain.A2_new_internal_gal_polling_interval],createInternalDSDoc).setAttribute("n",ZaDataSource.A_zimbraDataSourcePollingInterval);
 		}
 		
-		if(tmpObj.attrs[ZaDomain.A_GalMode] != ZaDomain.GAL_Mode_internal
+		if(tmpObj.attrs[ZaDomain.A_zimbraGalMode] != ZaDomain.GAL_Mode_internal
 			&& tmpObj[ZaDomain.A2_new_gal_sync_account_name] && tmpObj[ZaDomain.A2_new_external_gal_ds_name]) {
 			var createExternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN); 
 			createExternalDSDoc.setAttribute("name", tmpObj[ZaDomain.A2_new_external_gal_ds_name]);
@@ -638,7 +638,7 @@ ZaDomain.canConfigureAuth = function (obj) {
 		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapSearchBindPassword,obj));
 }
 ZaDomain.canConfigureGal = function (obj) {
-	return (ZaItem.hasWritePermission(ZaDomain.A_GalMode,obj) 
+	return (ZaItem.hasWritePermission(ZaDomain.A_zimbraGalMode,obj) 
 		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapURL,obj)
 		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapSearchBase,obj)
 		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapBindDn,obj)
@@ -843,7 +843,7 @@ function (obj, callback, sampleQuery) {
 	//search
 	var searchTestReq = soapDoc.set("CheckGalConfigRequest", null, null, ZaZimbraAdmin.URN);
 	var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external,searchTestReq);
-	attr.setAttribute("n", ZaDomain.A_GalMode);
+	attr.setAttribute("n", ZaDomain.A_zimbraGalMode);
 
 	var temp = obj.attrs[ZaDomain.A_GalLdapURL].join(" ");
 	attr = soapDoc.set("a", temp,searchTestReq);
@@ -871,7 +871,7 @@ function (obj, callback, sampleQuery) {
 	
 	var synchTestReq = soapDoc.set("CheckGalConfigRequest", null, null, ZaZimbraAdmin.URN);
 	var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external,synchTestReq);
-	attr.setAttribute("n", ZaDomain.A_GalMode);
+	attr.setAttribute("n", ZaDomain.A_zimbraGalMode);
 
 	var temp = obj.attrs[ZaDomain.A_GalLdapURL].join(" ");
 	attr = soapDoc.set("a", temp,synchTestReq);
@@ -944,7 +944,7 @@ function(tmpObj) {
 			}
 		} 
 		 
-		if((tmpObj.attrs[ZaDomain.A_GalMode] == ZaDomain.GAL_Mode_internal || tmpObj.attrs[ZaDomain.A_GalMode] == ZaDomain.GAL_Mode_both)
+		if((tmpObj.attrs[ZaDomain.A_zimbraGalMode] == ZaDomain.GAL_Mode_internal || tmpObj.attrs[ZaDomain.A_zimbraGalMode] == ZaDomain.GAL_Mode_both)
 			&& tmpObj[ZaDomain.A2_new_internal_gal_ds_name]) {
 			var createInternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN); 
 			createInternalDSDoc.setAttribute("name", tmpObj[ZaDomain.A2_new_internal_gal_ds_name]);
@@ -965,7 +965,7 @@ function(tmpObj) {
 			}*/
 		}
 		
-		if(tmpObj.attrs[ZaDomain.A_GalMode] != ZaDomain.GAL_Mode_internal
+		if(tmpObj.attrs[ZaDomain.A_zimbraGalMode] != ZaDomain.GAL_Mode_internal
 			&& tmpObj[ZaDomain.A2_new_external_gal_ds_name]) {
 			var createExternalDSDoc = soapDoc.set("CreateGalSyncAccountRequest", null, null, ZaZimbraAdmin.URN); 
 			createExternalDSDoc.setAttribute("name", tmpObj[ZaDomain.A2_new_external_gal_ds_name]);
@@ -1022,10 +1022,10 @@ function(tmpObj) {
 	var modifyDomainDoc = soapDoc.set("ModifyDomainRequest", null, null, ZaZimbraAdmin.URN);
 	soapDoc.set("id", this.id,modifyDomainDoc);
 	
-	var attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalMode],modifyDomainDoc);
-	attr.setAttribute("n", ZaDomain.A_GalMode);	
+	var attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraGalMode],modifyDomainDoc);
+	attr.setAttribute("n", ZaDomain.A_zimbraGalMode);	
 
-	if(tmpObj.attrs[ZaDomain.A_GalMode] != ZaDomain.GAL_Mode_internal) {
+	if(tmpObj.attrs[ZaDomain.A_zimbraGalMode] != ZaDomain.GAL_Mode_internal) {
 		var temp = tmpObj.attrs[ZaDomain.A_GalLdapURL].join(" ");
 		attr = soapDoc.set("a", temp,modifyDomainDoc);
 		attr.setAttribute("n", ZaDomain.A_GalLdapURL);	
@@ -1045,9 +1045,9 @@ function(tmpObj) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraGalAutoCompleteLdapFilter],modifyDomainDoc);
 		attr.setAttribute("n", ZaDomain.A_zimbraGalAutoCompleteLdapFilter);		
 	}
-	if(this[ZaDomain.A_GalMaxResults] != tmpObj.attrs[ZaDomain.A_GalMaxResults],modifyDomainDoc) {
-		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalMaxResults],modifyDomainDoc);
-		attr.setAttribute("n", ZaDomain.A_GalMaxResults);	
+	if(this[ZaDomain.A_zimbraGalMaxResults] != tmpObj.attrs[ZaDomain.A_zimbraGalMaxResults],modifyDomainDoc) {
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraGalMaxResults],modifyDomainDoc);
+		attr.setAttribute("n", ZaDomain.A_zimbraGalMaxResults);	
 	}
 		
 	try {
@@ -1305,8 +1305,8 @@ function (obj) {
 	if(!this.attrs[ZaDomain.A_AuthMech]) {
 		this.attrs[ZaDomain.A_AuthMech] = ZaDomain.AuthMech_zimbra; //default value
 	}
-	if(!this.attrs[ZaDomain.A_GalMode]) {
-		this.attrs[ZaDomain.A_GalMode] = ZaDomain.GAL_Mode_internal; //default value
+	if(!this.attrs[ZaDomain.A_zimbraGalMode]) {
+		this.attrs[ZaDomain.A_zimbraGalMode] = ZaDomain.GAL_Mode_internal; //default value
 	}
 
 	if(this.attrs[ZaDomain.A_AuthLdapURL]) {
@@ -1320,8 +1320,8 @@ function (obj) {
 		this.attrs[ZaDomain.A_GalLdapURL] = temp.split(" ");		
 	} else this.attrs[ZaDomain.A_GalLdapURL] = new Array();
 	
-	if(this.attrs[ZaDomain.A_GalMode]) {
-		if(this.attrs[ZaDomain.A_GalMode] == "ldap" || this.attrs[ZaDomain.A_GalMode] == "both") {
+	if(this.attrs[ZaDomain.A_zimbraGalMode]) {
+		if(this.attrs[ZaDomain.A_zimbraGalMode] == "ldap" || this.attrs[ZaDomain.A_zimbraGalMode] == "both") {
 			if(this.attrs[ZaDomain.A_GalLdapFilter] == "ad") {
 				this.attrs[ZaDomain.A_GALServerType] = "ad";
 			} else {
@@ -1346,7 +1346,7 @@ function (obj) {
 			this.attrs[ZaDomain.A_GALSyncUseGALSearch]="TRUE";
 		}
 	} else {
-		this.attrs[ZaDomain.A_GalMode] = "zimbra";
+		this.attrs[ZaDomain.A_zimbraGalMode] = "zimbra";
 		this.attrs[ZaDomain.A_GALSyncUseGALSearch]="TRUE";
 	}
 	
@@ -1688,8 +1688,8 @@ ZaDomain.myXModel = {
          ZaItem.descriptionModelItem,   
         {id:ZaDomain.A_notes, type:_STRING_, ref:"attrs/" + ZaDomain.A_notes},
 		{id:ZaDomain.A_domainDefaultCOSId, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainDefaultCOSId},		
-		{id:ZaDomain.A_GalMode, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalMode},
-		{id:ZaDomain.A_GalMaxResults, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_GalMaxResults, maxInclusive:2147483647, minInclusive:1},					
+		{id:ZaDomain.A_zimbraGalMode, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalMode},
+		{id:ZaDomain.A_zimbraGalMaxResults, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_zimbraGalMaxResults, maxInclusive:2147483647, minInclusive:1},					
 		{id:ZaDomain.A_GALServerType, type:_STRING_, ref:"attrs/" + ZaDomain.A_GALServerType},
 		{id:ZaDomain.A_GALSyncServerType, type:_STRING_, ref:"attrs/" + ZaDomain.A_GALSyncServerType},
 		{id:ZaDomain.A_GALSyncUseGALSearch, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_GALSyncUseGALSearch},

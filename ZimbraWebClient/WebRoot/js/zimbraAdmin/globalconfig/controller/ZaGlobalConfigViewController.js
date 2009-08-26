@@ -150,7 +150,7 @@ function () {
 	
 	if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaGlobalConfig.A_zimbraGalMaxResults])) {
 		//show error msg
-		this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR,[ZaMsg.NAD_GalMaxResults]), null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR,[ZaMsg.MSG_zimbraGalMaxResults]), null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._errorDialog.popup();		
 		return false;
 	}	

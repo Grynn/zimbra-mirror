@@ -333,7 +333,7 @@ function () {
 	} else if (this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP && this._containedObject.attrs[ZaDomain.A_GALSyncUseGALSearch]=="TRUE") {
 		 this.goPage(ZaGALConfigXWizard.GAL_SYNC_CONFIG_STEP_1); 
 	} else if (this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.CONFIG_COMPLETE_STEP) {
-		if(this._containedObject.attrs[ZaDomain.A_GalMode]==ZaDomain.GAL_Mode_internal) {
+		if(this._containedObject.attrs[ZaDomain.A_zimbraGalMode]==ZaDomain.GAL_Mode_internal) {
 			this.goPage(ZaGALConfigXWizard.GALMODE_STEP);
 		} else {
 			this.goPage(ZaGALConfigXWizard.GAL_TEST_RESULT_STEP);
@@ -347,11 +347,11 @@ function () {
 
 ZaGALConfigXWizard.prototype.goNext = 
 function() {
-	if(this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GALMODE_STEP && this._containedObject.attrs[ZaDomain.A_GalMode]==ZaDomain.GAL_Mode_internal) {
+	if(this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GALMODE_STEP && this._containedObject.attrs[ZaDomain.A_zimbraGalMode]==ZaDomain.GAL_Mode_internal) {
 		this.goPage(ZaGALConfigXWizard.CONFIG_COMPLETE_STEP);
 	} else if (this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GAL_TEST_RESULT_STEP) {
 		this.goPage(ZaGALConfigXWizard.CONFIG_COMPLETE_STEP);
-	} else if(this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GALMODE_STEP && this._containedObject.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal) {	
+	} else if(this._containedObject[ZaModel.currentStep] == ZaGALConfigXWizard.GALMODE_STEP && this._containedObject.attrs[ZaDomain.A_zimbraGalMode]!=ZaDomain.GAL_Mode_internal) {	
 		//check that Filter is provided and at least one server
 		if(!this._containedObject.attrs[ZaDomain.A_GalLdapFilter]) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);			
@@ -417,8 +417,8 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 			items: [
 				{type:_CASE_, caseKey:ZaGALConfigXWizard.GALMODE_STEP,numCols:2,colSizes:["220px","430px"],
 					items: [
-						{ref:ZaDomain.A_GalMode, type:_OSELECT1_, label:ZaMsg.Domain_GalMode, labelLocation:_LEFT_, choices:this.GALModes, onChange:ZaGALConfigXWizard.onGalModeChange},
-						{ref:ZaDomain.A_GalMaxResults, type:_TEXTFIELD_, label:ZaMsg.NAD_GalMaxResults, labelLocation:_LEFT_},
+						{ref:ZaDomain.A_zimbraGalMode, type:_OSELECT1_, label:ZaMsg.Domain_GalMode, labelLocation:_LEFT_, choices:this.GALModes, onChange:ZaGALConfigXWizard.onGalModeChange},
+						{ref:ZaDomain.A_zimbraGalMaxResults, type:_TEXTFIELD_, label:ZaMsg.LBL_zimbraGalMaxResults, msgName:ZaMsg.MSG_zimbraGalMaxResults, labelLocation:_LEFT_},
 						{type:_DWT_ALERT_,style: DwtAlert.WARNING,
 							content:ZaMsg.WARNING_DOMAIN_DS_NOT_CONFIGRED,
 							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A_zimbraGalAccountId]]
@@ -438,14 +438,14 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts]]
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds + ".name"), label:ZaMsg.Domain_InternalGALDSName, type:_OUTPUT_,
-							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotExternal,
 								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
 							]
 						},
 						{ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_,
-							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotExternal,
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
@@ -454,7 +454,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval),
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
 							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
-							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotExternal,
 								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
@@ -463,21 +463,21 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ref:ZaDomain.A2_new_internal_gal_polling_interval, 
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
 							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
-							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotExternal,
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
 							]						
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds + ".name"), label:ZaMsg.Domain_ExternalGALDSName, type:_OUTPUT_,
-							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotInternal,
 								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
 							]
 						},
 						{ref:ZaDomain.A2_new_external_gal_ds_name, label:ZaMsg.Domain_ExternalGALDSName, type:_TEXTFIELD_,
-							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotInternal,
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
@@ -486,7 +486,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval), 
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
 							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
-							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotInternal,
 								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
@@ -495,14 +495,14 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ref:ZaDomain.A2_new_external_gal_polling_interval, 
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
 							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
-							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotInternal,
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
 							]						
 						},						
 						{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","430px"],
-							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal],
 							cssStyle:"overflow:auto",
 							items: [
@@ -639,12 +639,12 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 				},				
 				{type:_CASE_, caseKey:ZaGALConfigXWizard.GAL_CONFIG_SUM_STEP,numCols:2,colSizes:["220px","430px"],
 					items: [
-						{ref:ZaDomain.A_GalMode, type:_OUTPUT_, label:ZaMsg.Domain_GalMode, choices:this.GALModes},
-						{ref:ZaDomain.A_GalMaxResults, type:_OUTPUT_, label:ZaMsg.NAD_GalMaxResults},
+						{ref:ZaDomain.A_zimbraGalMode, type:_OUTPUT_, label:ZaMsg.Domain_GalMode, choices:this.GALModes},
+						{ref:ZaDomain.A_zimbraGalMaxResults, type:_OUTPUT_, label:ZaMsg.LBL_zimbraGalMaxResults},
 						//search
 						{type:_ZAWIZ_TOP_GROUPER_,
 							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal],
-							visibilityChangeEventSources:[ZaDomain.A_GalMode],
+							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							useParentTable:false,
 							numCols:2,colSpan:2,
 							label:ZaMsg.Domain_GALSearchConfigSummary,
@@ -677,30 +677,30 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaDomain.A_GALSyncUseGALSearch, type:_OUTPUT_, label:ZaMsg.Domain_GALSyncUseGALSearch, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE", bmolsnr:true},
 								{ref:ZaDomain.A_GALSyncServerType, type:_OUTPUT_, label:ZaMsg.Domain_GALServerType, choices:this.GALServerTypes, labelLocation:_LEFT_,
 									visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal,[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]],
-									visibilityChangeEventSources:[ZaDomain.A_GalMode,ZaDomain.A_GALSyncUseGALSearch], bmolsnr:true									
+									visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode,ZaDomain.A_GALSyncUseGALSearch], bmolsnr:true									
 								},
 								{ref:ZaDomain.A_zimbraGalSyncLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false, bmolsnr:true,
 									visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal,[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]],
-									visibilityChangeEventSources:[ZaDomain.A_GalMode,ZaDomain.A_GALSyncUseGALSearch],									
+									visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode,ZaDomain.A_GALSyncUseGALSearch],									
 									items:[
 										{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_,bmolsnr:true}
 									]
 								},	
 								{ref:ZaDomain.A_zimbraGalSyncLdapFilter, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_,required:true, 
 									visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal,[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"],[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
-									visibilityChangeEventSources:[ZaDomain.A_GalMode,ZaDomain.A_GALSyncUseGALSearch,ZaDomain.A_GALServerType], bmolsnr:true									
+									visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode,ZaDomain.A_GALSyncUseGALSearch,ZaDomain.A_GALServerType], bmolsnr:true									
 								},
 								{ref:ZaDomain.A_zimbraGalSyncLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_,
 									visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal,[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]],
-									visibilityChangeEventSources:[ZaDomain.A_GalMode,ZaDomain.A_GALSyncUseGALSearch], bmolsnr:true								
+									visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode,ZaDomain.A_GALSyncUseGALSearch], bmolsnr:true								
 								},
 								{ref:ZaDomain.A_SyncUseBindPassword, type:_OUTPUT_, label:ZaMsg.Domain_UseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",
 									visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal,[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]],
-									visibilityChangeEventSources:[ZaDomain.A_GalMode,ZaDomain.A_GALSyncUseGALSearch], bmolsnr:true									
+									visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode,ZaDomain.A_GALSyncUseGALSearch], bmolsnr:true									
 								},
 								{ref:ZaDomain.A_zimbraGalSyncLdapBindDn, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, 
 									visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal,[XForm.checkInstanceValue,ZaDomain.A_UseBindPassword,"TRUE"],[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]],
-									visibilityChangeEventSources:[ZaDomain.A_GalMode,ZaDomain.A_GALSyncUseGALSearch,ZaDomain.A_UseBindPassword], bmolsnr:true									
+									visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode,ZaDomain.A_GALSyncUseGALSearch,ZaDomain.A_UseBindPassword], bmolsnr:true									
 								}
 							]
 						},
