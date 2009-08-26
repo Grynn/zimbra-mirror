@@ -1619,7 +1619,7 @@ public class SkinResources
 		//
 		// replace occurances of @opacity(percentage)@ with CSS opacity value (correct for each platform)
 		//
-		//	TODO: does IE7 support regular opacity?
+		//	TODO: does IE7 support regular opacity?   No!
 		//
         private String outputOpacity(Stack<String> stack, String[] params) throws IOException {
 			float opacity;

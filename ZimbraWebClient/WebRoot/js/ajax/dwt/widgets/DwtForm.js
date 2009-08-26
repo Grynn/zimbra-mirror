@@ -285,7 +285,7 @@ DwtForm.prototype.isIgnore = function(id) {
 // convenience control methods
 
 DwtForm.prototype.set = function(id, value) {
-	this.setValue(value);
+	this.setValue(id, value, true);
 	this.update();
 };
 DwtForm.prototype.get = DwtForm.prototype.getValue;
