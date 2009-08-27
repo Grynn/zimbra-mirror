@@ -164,6 +164,9 @@ function(html, idx, obj, spanId, contact) {
 
 Com_Zimbra_Email.prototype._getBuddy =
 function(contact, address) {
+
+    if(appCtxt.isChildWindow) return;
+
 	var buddy;
 	if (appCtxt.get(ZmSetting.IM_ENABLED) && !(!appCtxt.get(ZmSetting.IM_PREF_AUTO_LOGIN) &&
 		!appCtxt.getApp(ZmApp.IM).hasRoster())) {	// If not AUTO_LOGIN enabled, don't LOGIN
