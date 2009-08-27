@@ -348,8 +348,8 @@ function() {
 	}else if (cStep == ZaCertWizard.STEP_GEN_CSR) {
 		//validate the CN and SubjectAltNames
 		var cn = this._containedObject.attrs[ZaCert.A_commonName];
-		var cn_regEx = /^[A-Za-z0-9\-\_\*]{1,}(\.[A-Za-z0-9\-\_]{2,}){1,}$/;
-		var san_regEx = /^[A-Za-z0-9\-\_]{1,}(\.[A-Za-z0-9\-\_]{2,}){1,}$/;
+		var cn_regEx = /^[A-Za-z0-9\-\_\*]{1,}(\.[A-Za-z0-9\-\_]{1,}){0,}(\.[A-Za-z0-9\-\_]{2,}){1,}$/;
+		var san_regEx = cn_regEx;
 		if (cn ==null || cn.match(cn_regEx) == null){
 			//show error msg
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(

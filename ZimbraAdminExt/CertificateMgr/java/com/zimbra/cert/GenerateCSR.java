@@ -74,11 +74,11 @@ public class GenerateCSR extends AdminDocumentHandler {
                 throw ServiceException.INVALID_REQUEST("Invalid CSR type: " + type +". Must be (self|comm).", null);    
             }
             
-            cmd +=  " -new " ;
+            cmd +=  " -new -keysize 2048 " ;
             String subject = getSubject (request);
             
             if (subject != null && subject.length() > 0) {
-                cmd += " \"" + subject +"\"";
+                cmd += "-subject \"" + subject +"\"";
             }
             
             String subjectAltNames = getSubjectAltNames(request) ;
