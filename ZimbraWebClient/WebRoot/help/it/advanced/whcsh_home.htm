@@ -1,5 +1,5 @@
-﻿<!-- saved from url=(0014)about:internet -->
-<html>
+﻿<html>
+<!-- saved from url=(0014)about:internet -->
 <script language="javascript1.2" src="whver.js"></script>
 <script language="javascript1.2" src="whmozemu.js"></script>
 <script language="javascript1.2" src="whutils.js"></script>
@@ -288,7 +288,7 @@ function parsePart(sPart)
 	else if(sPart.toLowerCase().indexOf("url=")==0)
 	{
 		if(IsInternal(sPart.substring(4)))
-			gsTopicURL=sPart.substring(4);
+			gsTopicURL=_textToHtml(sPart.substring(4));
 		gbURLReady=true;
 	}
 	else if(sPart.toLowerCase().indexOf("cmd=")==0)

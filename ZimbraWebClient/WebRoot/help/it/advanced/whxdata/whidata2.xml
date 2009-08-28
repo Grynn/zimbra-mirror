@@ -1,7 +1,16 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="scadenza sessione" >
+<key name="Rubrica, rimozione dell'accesso" >
+  <topic name="Condivisione della Rubrica" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Rubriche, importazione" >
+  <topic name="Importazione di contatti" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="ruoli" >
+  <topic name="Identità di posta" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="scadenza di una sessione" >
   <topic name="Se la sessione scade" url="Userspecific/if_your_session_expires.htm" />
 </key>
 <key name="segnare un appuntamento come privato" >
@@ -12,7 +21,7 @@
 </key>
 <key name="Spostamento" >
   <topic name="Spostamento di messaggi email da una cartella all'altra" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
-  <key name="di messaggi email da una cartella all'altra" >
+  <key name="Messaggi email da una cartella all'altra, spostamento" >
     <topic name="Spostamento di messaggi email da una cartella all'altra" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   </key>
 </key>
@@ -60,7 +69,7 @@
   <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="tasto destro del mouse, menu del" >
-  <topic name=" Menu del tasto destro del mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="Menu del tasto destro del mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="Tipi di file allegati supportati" >
   <topic name="Tipi di file allegati supportati" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
@@ -86,7 +95,7 @@
 <key name="vista messaggio" >
   <topic name="Gestione della vista del messaggio email" url="conversations/conversation_list_view.htm" />
 </key>
-<key name="vista orario" >
+<key name="vista pianificazione" >
   <topic name="Visualizzazione di più Agende" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
 </key>
 <key name="Vista tradizionale" >

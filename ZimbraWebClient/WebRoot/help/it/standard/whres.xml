@@ -13,7 +13,7 @@
 <item name="JS_alert_cantLoadProject" value="Impossibile caricare il progetto:" />
 <item name="Next" value="&gt;&gt;" />
 <item name="SyncToc" value="SyncToc" />
-<item name="MergeError2" value="и in una lingua diversa rispetto alla Guida in linea principale; l'indice e le ricerche globali nella Guida in linea secondaria verranno disabilitati." />
+<item name="MergeError2" value="è in una lingua diversa rispetto alla Guida in linea principale; l'indice e le ricerche globali nella Guida in linea secondaria verranno disabilitati." />
 <item name="nls_body_instruction" value="Immettete la domanda nella casella di testo di cui sopra e fate clic su GO." />
 <item name="ToolBarSearchBtnText" value="Vai" />
 <item name="SuggestViewNoFrameMessage" value="Per visualizzare la Guida senza fotogrammi, fare clic su questo" />
@@ -47,7 +47,7 @@
 <item name="About" value="Riguardo" />
 <item name="Author" value="Autore" />
 <item name="IndexSelectTopicTitle" value="Selezionate un argomento" />
-<item name="Blank_topic_text" value="Questo argomento и stato creato dal programma guidato di conversione dei progetti WinHelp e corrisponde al punto di destinazione di un argomento mancante o di un hyperlink interrotto." />
+<item name="Blank_topic_text" value="Questo argomento è stato creato dal programma guidato di conversione dei progetti WinHelp e corrisponde al punto di destinazione di un argomento mancante o di un hyperlink interrotto." />
 <item name="BrowserLimitedMessage" value="Il browser non supporta i fotogrammi. Consigliamo di aggiornare il browser ad una versione che li supporta." />
 <item name="LoadingTOCItem" value="Caricamento indice in corso:" />
 <item name="Display" value="Visualizza" />
@@ -58,7 +58,7 @@
 <item name="RelateTopicListPrompt" value="Fare clic su un argomento e quindi su Visualizza." />
 <item name="Seperate " value=" |" />
 <item name="NextTooltip" value="Argomento successivo" />
-<item name="JS_alert_colorlimitation" value="WebHelp ha rilevato che il display и impostato su 16 colori. Per assistenza completa su WebHelp, impostare il display per l'utilizzo di 256 colori o piщ." />
+<item name="JS_alert_colorlimitation" value="WebHelp ha rilevato che il display è impostato su 16 colori. Per assistenza completa su WebHelp, impostare il display per l'utilizzo di 256 colori o più." />
 <item name="TopicsNotFound" value="Non è stato trovato nessun argomento." />
 <item name="Show" value="Mostra" />
 <item name="PreTooltip" value="Argomento precedente" />

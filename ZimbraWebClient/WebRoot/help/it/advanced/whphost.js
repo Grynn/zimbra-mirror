@@ -125,6 +125,8 @@ function whCom(sName,sComFile)
 			sHTML+="<DIV ID="+this.msDivId+" ALIGN=left STYLE=\"position:absolute;z-index:1;left:0;top:0;width:100%;height:100%;visibility:hidden\">";
 		else if(gbMac&&gbNav6)
 			sHTML+="<DIV ID="+this.msDivId+" ALIGN=left STYLE=\"position:absolute;z-index:1;left:0;top:0;width:100%;height:100%;visibility:hidden\">";
+		else if(gbUnixOS)
+			sHTML+="<DIV ID="+this.msDivId+" ALIGN=left STYLE=\"position:absolute;z-index:1;left:0;top:0;width:100%;height:100%;visibility:hidden\">";
 		else
 			sHTML+="<DIV ID="+this.msDivId+" ALIGN=left STYLE=\"position:absolute;z-index:1;left:0;top:0;width:100%;height:"+parent.height+";visibility:hidden\">";
 		sHTML+="</DIV>";
@@ -412,7 +414,7 @@ function putProjectInfo(aRProj)
 		if(gnChecked!=0)
 		{
 			if(aRProj[0].sLangId!=gaProj[0].sLangId)
-				alert("La Guida in linea secondaria "+aRProj[0].sPPath+" и in una lingua diversa rispetto alla Guida in linea principale; l'indice e le ricerche globali nella Guida in linea secondaria verranno disabilitati.");
+				alert("La Guida in linea secondaria "+aRProj[0].sPPath+" è in una lingua diversa rispetto alla Guida in linea principale; l'indice e le ricerche globali nella Guida in linea secondaria verranno disabilitati.");
 		}
 		gaProj[gnChecked]=aRProj[0];
 		for(var i=1;i<aRProj.length;i++)

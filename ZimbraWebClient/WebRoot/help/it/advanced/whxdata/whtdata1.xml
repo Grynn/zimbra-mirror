@@ -1,15 +1,23 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Uso di Documenti" url="Documents/Working_in_Notebooks.htm" />
-<item name="Creazione di nuovi Blocchi Note" url="Documents/Create_multiple_notebooks.htm" />
-<item name="Creazione di una nuova pagina" url="Documents/Create_a_new_page.htm" />
-<item name="Uso dell'editor Rich Text" url="Documents/Using_the_rich_text_editor.htm" />
-<item name="Uso del linguaggio HTML per la formattazione delle pagine di Documenti" url="Documents/Using_HTML_for_format_pages.htm" />
-<item name="Aggiunta di una tabella a una pagina del Blocco Note" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-<item name="Condivisione di Blocchi Note in Documenti" url="Documents/Sharing_Notebooks.htm" />
-<item name="Accettazione dell'accesso a un Blocco Note in Documenti" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
-<item name="Collegamento a un Blocco Note condiviso" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
-<item name="Modifica o annullamento dell'accesso alla cartella Documenti" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+<item name="Appuntamenti, riunioni ed eventi" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+<item name="Organizzazione di una riunione" url="Calendar/About_the_Appointment_Page.htm" />
+<item name="Creazione di un appuntamento" url="Calendar/Scheduling_meetings.htm" />
+<item name="Visualizzazione degli orari liberi/occupati" url="Calendar/Seeing_free_busy_times.htm" />
+<item name="Impostazione delle autorizzazioni per la visualizzazione dei tuoi orari liberi/occupati" url="6_0new_topics/Setting_permissions_to_see_your_free_busy_information.htm" />
+<item name="Segnare un appuntamento come privato" url="6_0new_topics/Marking_an_appointment_as_private.htm" />
+<item name="Pianificazione delle risorse" url="Calendar/Scheduling_Resources.htm" />
+<item name="Trasformazione di un messaggio in una richiesta di riunione" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+<item name="Uso di Aggiunta rapida per creare un appuntamento" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<item name="Pianificazione di Giornate intere" url="Calendar/Scheduling_All_Day_events.htm" />
+<item name="Creazione di appuntamenti ricorrenti" url="Calendar/Creating_recurring_appointments.htm" />
+<item name="Modifica dei dettagli delle riunioni in agenda" url="6_0new_topics/editing_meetings_on_your_calendar.htm" />
+<item name="Identificazione di chi può invitarti alle riunioni" url="6_0new_topics/Identifying_who_can_invite_you_to_meetings.htm" />
+<item name="Ricezione di un messaggio di autorizzazione negata" url="6_0new_topics/Receiving_a_permission_denied_message.htm" />
+<item name="Risposta a un invito a una riunione" url="Calendar/Responding_to_an_invitation.htm" />
+<item name="Modifica di una riunione organizzata da te" url="6_0new_topics/Changing_a_meeting_.htm" />
+<item name="Eliminazione di un appuntamento" url="Calendar/Deleting_an_appointment.htm" />
+<item name="Eliminazione di appuntamenti ricorrenti" url="Calendar/Deleting_recurring_appointments.htm" />
 
 </tocdata>

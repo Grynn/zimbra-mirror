@@ -1,22 +1,26 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <fts>
-<chunkinfo url="whfwdata0.xml" first="!" last="apre"/>
-<chunkinfo url="whfwdata1.xml" first="apri" last="cioè"/>
-<chunkinfo url="whfwdata2.xml" first="cisco" last="convertito"/>
-<chunkinfo url="whfwdata3.xml" first="coopera" last="destra"/>
-<chunkinfo url="whfwdata4.xml" first="destro" last="estensioni"/>
-<chunkinfo url="whfwdata5.xml" first="esterni" last="in:in"/>
-<chunkinfo url="whfwdata6.xml" first="in:inbox" last="l'operazione"/>
-<chunkinfo url="whfwdata7.xml" first="l'opzione" last="necessarie"/>
-<chunkinfo url="whfwdata8.xml" first="necessario" last="pianificato"/>
-<chunkinfo url="whfwdata9.xml" first="pianificazione" last="recuperare"/>
-<chunkinfo url="whfwdata10.xml" first="recuperarli" last="scrive"/>
-<chunkinfo url="whfwdata11.xml" first="scrivendo" last="strumenti"/>
-<chunkinfo url="whfwdata12.xml" first="strumento" last="usufruire"/>
-<chunkinfo url="whfwdata13.xml" first="utente" last="™"/>
+<chunkinfo url="whfwdata0.xml" first="!" last="appaiono"/>
+<chunkinfo url="whfwdata1.xml" first="appare" last="cambia"/>
+<chunkinfo url="whfwdata2.xml" first="cambiamenti" last="concetti"/>
+<chunkinfo url="whfwdata3.xml" first="concludersi" last="d'origine"/>
+<chunkinfo url="whfwdata4.xml" first="d'ufficio" last="dicembre"/>
+<chunkinfo url="whfwdata5.xml" first="dichiararsi" last="esiste"/>
+<chunkinfo url="whfwdata6.xml" first="esistente" last="hai"/>
+<chunkinfo url="whfwdata7.xml" first="hanno" last="invece"/>
+<chunkinfo url="whfwdata8.xml" first="invia" last="listed"/>
+<chunkinfo url="whfwdata9.xml" first="livelli" last="nell'area"/>
+<chunkinfo url="whfwdata10.xml" first="nell'elenco" last="permetti"/>
+<chunkinfo url="whfwdata11.xml" first="permission" last="punto"/>
+<chunkinfo url="whfwdata12.xml" first="puoi" last="risolvere"/>
+<chunkinfo url="whfwdata13.xml" first="risorsa" last="sezione"/>
+<chunkinfo url="whfwdata14.xml" first="sezioni" last="supportato"/>
+<chunkinfo url="whfwdata15.xml" first="svariati" last="valida"/>
+<chunkinfo url="whfwdata16.xml" first="validi" last="™"/>
 
-<tchunkinfo first="0" last="92" url="whftdata0.xml" />
-<tchunkinfo first="93" last="149" url="whftdata1.xml" />
+<tchunkinfo first="0" last="91" url="whftdata0.xml" />
+<tchunkinfo first="92" last="188" url="whftdata1.xml" />
+<tchunkinfo first="189" last="191" url="whftdata2.xml" />
 
 </fts>

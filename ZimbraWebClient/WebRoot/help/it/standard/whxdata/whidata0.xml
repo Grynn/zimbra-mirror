@@ -16,26 +16,23 @@
 <key name="allegati" >
   <topic name="Apertura dei file allegati" url="reading_mail/opening_file_attachments.htm" />
 </key>
-<key name="allegati, blocco degli" >
-  <topic name="Allegati, blocco degli" url="reading_mail/attachment_blocking.htm" />
-  <topic name="Blocco dei messaggi" url="reading_mail/Message_blocking_feature.htm" />
-</key>
 <key name="appuntamenti privati" >
   <topic name="Pagina Appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="assenza, messaggio di" >
   <topic name="Messaggio di assenza" url="Userspecific/vacation_message.htm" />
 </key>
-<key name="blocco degli allegati" >
+<key name="Blocco degli allegati" >
   <topic name="Blocco degli allegati" url="reading_mail/attachment_blocking.htm" />
+  <topic name="Blocco dei messaggi" url="reading_mail/Message_blocking_feature.htm" />
 </key>
 <key name="bozza del messaggio" >
   <topic name="Salvataggio di una bozza del messaggio" url="Creating_Messages/saving_a_draft_message.htm" />
 </key>
-<key name="cartella Cestino" >
+<key name="Cartella Cestino" >
   <topic name="Cartella Cestino" url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
-<key name="cartella Inviati" >
+<key name="Cartella Inviati" >
   <topic name="Cartella Inviati" url="Navigation_folders_and_tips/sent_folder.htm" />
 </key>
 <key name="cartella, feed RSS" >
@@ -67,6 +64,9 @@
 </key>
 <key name="Descrizione del linguaggio di query" >
   <topic name="Descrizione del linguaggio di query" url="Search/query_language_description.htm" />
+</key>
+<key name="esportazione di Agende iCal" >
+  <topic name="Importazione dell'Agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="feed RSS" >
   <topic name="Iscrizione ai feed RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
@@ -110,9 +110,6 @@
 <key name="Messaggio email" >
   <topic name="Parti di un messaggio email" url="Creating_Messages/parts_of_an_email_message.htm" />
 </key>
-<key name="notifica email" >
-  <topic name="Nuove notifiche email" url="Userspecific/New_mail_notifications.htm" />
-</key>
 <key name="nuova finestra, visualizzazione dei messaggi" >
   <topic name="Gestione della visualizzazione dei messaggi" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
@@ -121,9 +118,6 @@
 </key>
 <key name="opzioni" >
   <topic name="Impostazione delle opzioni" url="Userspecific/b_Setting_your_Options.htm" />
-</key>
-<key name="opzioni, nuova notifica email" >
-  <topic name="Nuove notifiche email" url="Userspecific/New_mail_notifications.htm" />
 </key>
 <key name="ordinamento degli impegni" >
   <topic name="Ordinamento degli impegni " url="Tasks/Sorting_tasks_.htm" />
@@ -165,7 +159,7 @@
     <topic name="Risposta ai messaggi email" url="reading_mail/replying_to_mail_messages.htm" />
   </key>
 </key>
-<key name="riunioni." >
+<key name="riunioni" >
   <topic name="Pagina dell'appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="Rubrica, aggiunta di nuovi contatti" >
@@ -174,7 +168,7 @@
 <key name="Rubriche, creazione" >
   <topic name="Rubriche" url="Contacts/b_Your_Address_Books.htm" />
 </key>
-<key name="scadenza sessione" >
+<key name="scadenza di una sessione" >
   <topic name="Se la sessione scade" url="Userspecific/if_your_session_expires.htm" />
 </key>
 <key name="segnare un appuntamento come privato" >

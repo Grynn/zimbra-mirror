@@ -19,14 +19,13 @@
   <item name="Gestione della visualizzazione dei messaggi" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
   <item name="Controllo della posta e ricezione di nuovi messaggi" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
   <item name="Suddivisione in categorie dei messaggi email" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
-  <item name="Ordinamento dei messaggi nel riquadro del contenuto" url="Navigation_folders_and_tips/sorting_conversations.htm" />
   <item name="Stampa dei messaggi email" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="Impostazione di un indirizzo di inoltro" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Recupero dei messaggi email eliminati" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Eliminazione di messaggi email" url="reading_mail/b_Purging_email_messages.htm" />
   <book name="Lettura dei messaggi" >
     <item name="Lettura dei messaggi" url="reading_mail/reading_mail.htm" />
-    <item name=" Segnare un messaggio come non letto" url="reading_mail/b_Marking_mail_as_unread.htm" />
+    <item name="Segnare un messaggio come non letto" url="reading_mail/b_Marking_mail_as_unread.htm" />
     <item name="Apertura dei file allegati" url="reading_mail/opening_file_attachments.htm" />
     <item name="Blocco degli allegati" url="reading_mail/attachment_blocking.htm" />
     <item name="Blocco dei messaggi" url="reading_mail/Message_blocking_feature.htm" />
@@ -52,16 +51,16 @@
 <book name="Gestione dell'Agenda" >
   <item name="Agenda" url="Calendar/b_About_Calendar.htm" />
   <item name="Creazione di una nuova Agenda" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="Eliminazione di un appuntamento" url="Calendar/b_Canceling_a_meeting.htm" />
-  <item name="Aggiunta di colori alle Agende" url="Calendar/Adding_background_color_to_calendars.htm" />
-  <item name="Importazione dell'Agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
-  <item name="Esportazione dell'Agenda iCal" url="Calendar/Exporting_your_iCal_calendar.htm" />
+  <item name="Aggiunta di colori di sfondo alle Agende" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Opzioni di visualizzazione dell'Agenda" url="Calendar/Calendar_Views.htm" />
+  <item name="Importazione di iCalendars" url="6_0new_topics/Importing_iCalendars.htm" />
+  <item name="Svuotamento dell'Agenda" url="6_0new_topics/Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="Pianificazione di appuntamenti, riunioni ed eventi" >
   <item name="Organizzazione di una riunione" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Pianificazione di una riunione" url="Calendar/b_Scheduling_a_meeting.htm" />
   <item name="Creazione di appuntamenti ricorrenti" url="Calendar/b_creating_recurring_appointments.htm" />
+  <item name="Eliminazione di un appuntamento" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>
 <book name="Uso dell'Elenco impegni" >
   <item name="Impegni" url="Tasks/About_Tasks.htm" />
@@ -69,8 +68,17 @@
   <item name="Modifica di un impegno" url="Tasks/Change_a_task.htm" />
   <item name="Ordinamento degli impegni" url="Tasks/Sorting_tasks_.htm" />
 </book>
+<book name="Condivisione di cartelle" >
+  <book name="Condivisione di Rubriche" >
+    <item name="Collegamento a una Rubrica condivisa" url="6_0new_topics/Linking_to_a_Shared_Address_Book.htm" />
+  </book>
+  <book name="Condivisione di Agende" >
+    <item name="Collegamento a un'agenda condivisa" url="6_0new_topics/Link_to_Shared_Calendar.htm" />
+  </book>
+</book>
 <book name="Ricerca di elementi" >
   <item name="Uso della funzione di ricerca" url="Search/b_Using_Search.htm" />
+  <item name="Creazione e salvataggio di una query di ricerca" url="6_0new_topics/b_Create_and_Save_a_Search_Query.htm" />
   <item name="Descrizione del linguaggio di query" url="Search/query_language_description.htm" />
 </book>
 <book name="Uso di tag e cartelle per l'organizzazione dei messaggi email" >
@@ -78,7 +86,7 @@
   <item name="Applicazione di un contrassegno a un messaggio email" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
   <item name="Uso delle cartelle" url="Navigation_folders_and_tips/about_folders.htm" />
   <item name="Ridenominazione delle cartelle" url="Navigation_folders_and_tips/renaming_folders.htm" />
-  <item name="Eliminazione delle cartelle" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
+  <item name="Eliminazione di cartelle" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
 </book>
 <book name="Creazione di filtri " >
   <item name="Filtro dei messaggi" url="filters/bc_Filtering_your_messages.htm" />
@@ -86,7 +94,6 @@
 </book>
 <book name="Impostazione delle preferenze" >
   <item name="Impostazione delle preferenze" url="Userspecific/b_Setting_your_Options.htm" />
-  <item name="Nuove notifiche email" url="Userspecific/New_mail_notifications.htm" />
   <item name="Creazione di messaggi di assenza" url="Userspecific/vacation_message.htm" />
   <item name="Salvataggio dei messaggi inviati" url="Navigation_folders_and_tips/sent_folder.htm" />
   <item name="Spazio disponibile della casella di posta" url="Navigation_folders_and_tips/quotas.htm" />

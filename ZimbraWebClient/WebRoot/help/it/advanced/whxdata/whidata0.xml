@@ -25,7 +25,7 @@
 <key name="account POP" >
   <topic name="Gestione degli account POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
 </key>
-<key name="account POP, aggiunta " >
+<key name="account POP, aggiunta" >
   <topic name="Aggiunta di account POP" url="Userspecific/Adding_POP_accounts.htm" />
 </key>
 <key name="Agenda" >
@@ -58,7 +58,7 @@
 <key name="aggiunta di contatti" >
   <topic name="Creazione di un nuovo contatto" url="Contacts/creating_a_new_contact.htm" />
 </key>
-<key name="Aggiunta rapida" >
+<key name="aggiunta rapida" >
   <topic name="Uso di Aggiunta rapida per creare un appuntamento" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="allegare" >
@@ -69,10 +69,6 @@
 </key>
 <key name="allegati" >
   <topic name="Apertura dei file allegati" url="reading_mail/opening_file_attachments.htm" />
-</key>
-<key name="allegati, blocco degli" >
-  <topic name="Allegati, blocco degli" url="reading_mail/attachment_blocking.htm" />
-  <topic name="Blocco dei messaggi" url="reading_mail/Message_blocking_feature.htm" />
 </key>
 <key name="anteprima, attivazione e disattivazione del riquadro" >
   <topic name="Lettura dei messaggi dal riquadro di lettura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
@@ -102,7 +98,7 @@
   <topic name="eliminazione di messaggi" url="reading_mail/archiving_old_messages.htm" />
 </key>
 <key name="arrivo di nuovi messaggi" >
-  <topic name="Ricezione dei messaggi" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="Come ricevere nuovi messaggi" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="assenza, messaggio di" >
   <topic name="Messaggio di assenza" url="Userspecific/vacation_message.htm" />
@@ -121,6 +117,7 @@
 </key>
 <key name="blocco degli allegati" >
   <topic name="Blocco degli allegati" url="reading_mail/attachment_blocking.htm" />
+  <topic name="Blocco dei messaggi" url="reading_mail/Message_blocking_feature.htm" />
 </key>
 <key name="Blocco Note" >
   <topic name="Uso di Blocchi Note" url="Documents/Working_in_Notebooks.htm" />
@@ -140,10 +137,10 @@
 <key name="caratteri jolly, uso nelle ricerche" >
   <topic name="Uso della funzione di ricerca" url="Search/using_the_search_feature.htm" />
 </key>
-<key name="cartella Cestino" >
+<key name="Cartella Cestino" >
   <topic name="Cartella Cestino" url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
-<key name="cartella Inviati" >
+<key name="Cartella Inviati" >
   <topic name="Cartella Inviati" url="Navigation_folders_and_tips/sent_folder.htm" />
 </key>
 <key name="cartelle" >
@@ -194,7 +191,7 @@
   <topic name="Eliminazione di un contatto" url="Contacts/deleting_a_contact.htm" />
 </key>
 <key name="contatti, importazione" >
-  <topic name="Importazione di Contatti" url="Contacts/Importing_Contacts.htm" />
+  <topic name="Importazione di contatti" url="Contacts/Importing_Contacts.htm" />
 </key>
 <key name="contatto" >
   <topic name="Modifica di un contatto" url="Contacts/editing_a_contact.htm" />
@@ -269,9 +266,9 @@
   <topic name="Contatti" url="Contacts/contacts.htm" />
 </key>
 <key name="Eliminazione" >
-  <topic name="Eliminazione delle cartelle" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <topic name="Eliminazione di cartelle" url="Navigation_folders_and_tips/deleting_folders.htm" />
   <key name="cartelle" >
-    <topic name="Eliminazione delle cartelle" url="Navigation_folders_and_tips/deleting_folders.htm" />
+    <topic name="Eliminazione di cartelle" url="Navigation_folders_and_tips/deleting_folders.htm" />
   </key>
 </key>
 <key name="eliminazione di appuntamenti ricorrenti" >
@@ -283,11 +280,14 @@
 <key name="Esempi di ricerca" >
   <topic name="Esempi di ricerca" url="Search/search_examples.htm" />
 </key>
+<key name="esportazione di Agende iCal" >
+  <topic name="Importazione dell'Agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
 <key name="eventi" >
   <topic name="Pianificazione di Giornate intere" url="Calendar/Scheduling_All_Day_events.htm" />
   <topic name="Appuntamenti, riunioni ed eventi" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
-<key name="feed Atom " >
+<key name="feed Atom" >
   <topic name="Iscrizione ai feed RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
 <key name="filtro dei messaggi" >
@@ -304,12 +304,6 @@
 </key>
 <key name="formattazione con HTML" >
   <topic name="Uso dell'editor HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
-</key>
-<key name="funzione di ricerca" >
-  <topic name="Uso della funzione di ricerca" url="Search/using_the_search_feature.htm" />
-  <key name="Uso" >
-    <topic name="Uso della funzione di ricerca" url="Search/using_the_search_feature.htm" />
-  </key>
 </key>
 
 </indexdata>

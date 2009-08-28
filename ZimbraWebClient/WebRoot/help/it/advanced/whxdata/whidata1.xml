@@ -1,6 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="funzione di ricerca" >
+  <topic name="Uso della funzione di ricerca" url="Search/using_the_search_feature.htm" />
+  <key name="Uso" >
+    <topic name="Uso della funzione di ricerca" url="Search/using_the_search_feature.htm" />
+  </key>
+</key>
 <key name="Funzioni dell'interfaccia utente" >
   <topic name="Funzioni dell'interfaccia utente e tasti di scelta rapida" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
 </key>
@@ -11,7 +17,7 @@
   <topic name="GAL e Contatti, differenze" url="Contacts/gal_vs_contacts.htm" />
 </key>
 <key name="Generatore delle ricerche" >
-  <topic name="Creazione delle query di ricerca" url="Search/building_search_queries.htm" />
+  <topic name="Uso della funzione di ricerca avanzata" url="Search/building_search_queries.htm" />
 </key>
 <key name="HTML" >
   <topic name="Visualizzazione HTML dei messaggi email" url="reading_mail/displaying_html_in_email_messages.htm" />
@@ -24,8 +30,8 @@
   <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="identità di posta" >
-  <topic name="Creazione di personalità" url="Userspecific/Creating_Personas.htm" />
   <topic name="Identità di posta" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Creazione di personalità" url="Userspecific/Creating_Personas.htm" />
   <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="identità di posta usata nella composizione del messaggio" >
@@ -35,10 +41,10 @@
   <topic name="Importazione dell'Agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="importazione di contatti" >
-  <topic name="Importazione di Contatti" url="Contacts/Importing_Contacts.htm" />
+  <topic name="Importazione di contatti" url="Contacts/Importing_Contacts.htm" />
 </key>
 <key name="importazione di Rubriche" >
-  <topic name="Importazione di Contatti" url="Contacts/Importing_Contacts.htm" />
+  <topic name="Importazione di contatti" url="Contacts/Importing_Contacts.htm" />
 </key>
 <key name="impostazione di un indirizzo di inoltro" >
   <topic name="Impostazione di un indirizzo di inoltro" url="Userspecific/Setting_a_Forwarding_Address.htm" />
@@ -130,7 +136,7 @@
 <key name="modifica di un appuntamento" >
   <topic name="Modifica di appuntamenti ricorrenti" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
-<key name="Navigazione" >
+<key name="navigazione" >
   <topic name="Area Cartelle" url="Navigation_folders_and_tips/Folders_area.htm" />
   <topic name="Navigazione nell'interfaccia utente" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
@@ -192,7 +198,7 @@
   <topic name="Creazione di personalità" url="Userspecific/Creating_Personas.htm" />
 </key>
 <key name="posta, ricezione" >
-  <topic name="Ricezione dei messaggi" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="Come ricevere nuovi messaggi" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="preferenze utente" >
   <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
@@ -248,10 +254,10 @@
   <topic name="Ricerca rapida" url="Search/Quick_search.htm" />
 </key>
 <key name="ricerca, and/or" >
-  <topic name="Differenza tra tipi di ricerche &quot;And&quot; e &quot;Or&quot;" url="Search/and_vs_or_searches.htm" />
+  <topic name="Differenza tra i tipi di ricerca “And” e “Or”" url="Search/and_vs_or_searches.htm" />
 </key>
 <key name="ricezione dei messaggi" >
-  <topic name="Ricezione dei messaggi" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="Come ricevere nuovi messaggi" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="ricorda nome utente e password su questo computer" >
   <topic name="Accesso e uscita" url="Userspecific/logging_on_and_off.htm" />
@@ -280,7 +286,7 @@
     <topic name="Risposta ai messaggi email" url="reading_mail/replying_to_mail_messages.htm" />
   </key>
 </key>
-<key name="riunioni." >
+<key name="riunioni" >
   <topic name="Appuntamenti, riunioni ed eventi" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
   <topic name="Pagina dell'appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
@@ -295,15 +301,6 @@
 </key>
 <key name="Rubrica, modifica dell'accesso condiviso" >
   <topic name="Condivisione della Rubrica" url="Contacts/Sharing_your_Address_Book.htm" />
-</key>
-<key name="Rubrica, rimozione dell'accesso" >
-  <topic name="Condivisione della Rubrica" url="Contacts/Sharing_your_Address_Book.htm" />
-</key>
-<key name="Rubriche, importazione" >
-  <topic name="Importazione di Contatti" url="Contacts/Importing_Contacts.htm" />
-</key>
-<key name="ruoli" >
-  <topic name="Identità di posta" url="Userspecific/Mail_Identities.htm" />
 </key>
 
 </indexdata>
