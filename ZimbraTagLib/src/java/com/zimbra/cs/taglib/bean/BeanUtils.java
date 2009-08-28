@@ -438,15 +438,18 @@ public class BeanUtils {
 		ZMailbox mbox = ZJspSession.getZMailbox(pc);
 		TimeZone tz = mbox.getPrefs().getTimeZone();
 		Calendar cal = Calendar.getInstance(tz);
+		Calendar msgCal = Calendar.getInstance(tz);
 
 		long nowTime = cal.getTimeInMillis();
-		long msgTime = msg.getTime();
+        msgCal.setTime(msg);
+		long msgTime = msgCal.getTimeInMillis();
+
 
 		final int ONE_DAY = 24 * 3600000;
 		String resource;
-		if (nowTime - msgTime < ONE_DAY && cal.getTime().getDay() == msg.getDay()) {
+		if (nowTime - msgTime < ONE_DAY && cal.getTime().getDay() == msgCal.get(Calendar.DAY_OF_WEEK)) {
 			resource = "ZM_formatVoiceDateToday";
-		} else if ((nowTime - msgTime) < (2 * ONE_DAY) && (new Date(nowTime - ONE_DAY).getDay()) == msg.getDay()) {
+		} else if ((nowTime - msgTime) < (2 * ONE_DAY) && (new Date(nowTime - ONE_DAY).getDay()) == msgCal.get(Calendar.DAY_OF_WEEK)) {
 			resource = "ZM_formatVoiceDateYesterday";
 		} else {
 			resource = "ZM_formatVoiceDate";
@@ -458,7 +461,7 @@ public class BeanUtils {
 			pc.setAttribute(resource, df, PageContext.REQUEST_SCOPE);
 		}
 		df.setTimeZone(tz);
-		return df.format(msg);
+		return df.format(msgCal.getTime());
 	}
 
     public static String getAttr(PageContext pc, String attr) throws JspException, ServiceException {
