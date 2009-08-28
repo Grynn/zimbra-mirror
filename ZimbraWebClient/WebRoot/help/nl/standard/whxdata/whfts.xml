@@ -1,0 +1,14 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<fts>
+<chunkinfo url="whfwdata0.xml" first="!" last="bewaard"/>
+<chunkinfo url="whfwdata1.xml" first="bewaren" last="gearchiveerd"/>
+<chunkinfo url="whfwdata2.xml" first="geavanceerd" last="keuzerondje"/>
+<chunkinfo url="whfwdata3.xml" first="keuzevakjes" last="onjuiste"/>
+<chunkinfo url="whfwdata4.xml" first="onmiddellijk" last="stellen"/>
+<chunkinfo url="whfwdata5.xml" first="stelt" last="verzendt"/>
+<chunkinfo url="whfwdata6.xml" first="verzonden" last="één"/>
+
+<tchunkinfo first="0" last="69" url="whftdata0.xml" />
+
+</fts>

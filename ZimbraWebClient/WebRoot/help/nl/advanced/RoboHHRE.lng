@@ -1,0 +1,104 @@
+[GlossaryTab]
+TabCaption=&Verklarende woordenlijst
+TermCaption=&Term
+DefinitionCaption=&Definitie voor:
+
+[BrowseSequence]
+PreCaption=Vorig
+PreTooltip=Vorig onderwerp
+NextCaption=Volgend
+NextTooltip=Volgend onderwerp
+BlockTooltip=Bladervolgorde selecteren
+
+[Common]
+Contents=Inhoud
+Index=Index
+Search=Zoeken
+Glossary=Verklarende woordenlijst
+Logo/Author=Gevoed door
+Show=Weergeven
+Hide=Verbergen
+SyncToc=SyncToc
+Prev=<<
+Next=>>
+Disabled Prev=<<
+Disabled Next=>>
+Seperate = |
+
+[WebHelp]
+Cancel=Annuleren
+CantOpenURLorFile=Kan URL of bestand niet openen
+CompletingContents=Inhoud wordt afgemaakt...
+Display=Weergeven
+Term=Term:
+Definition=Definitie:
+Done=Klaar
+Find=Zoeken
+IndexInputPrompt=Typ het keyword in om dit te vinden:
+RelateTopicListPrompt=Klik op een onderwerp en klik op Weergeven.
+LoadingData=Gegevens worden geladen, een ogenblik alstublieft...
+LoadingContents=Inhoud wordt geladen, even wachten...
+LoadingContentsData=Wordt geladen, klik hier om te annuleren...
+LoadingFTS=Zoekgegevens worden geladen...
+LoadingIndex=Index wordt geladen...
+LoadingTOCItem=Inhoudsopgave wordt geladen:
+Searching=Bezig met zoeken...
+FtsInputPrompt=Typ het (de) woord(en) om te zoeken naar:
+FtsHilitePrompt=Zoekresultaten markeren
+TopicsFound=Gevonden onderwerpen
+BrowserLimitedMessage=Uw browser ondersteunt geen frames. Wij bevelen aan dat u uw browser bijwerkt naar een versie die frames ondersteunt.
+SuggestViewNoFrameMessage=Klik om Help te bekijken zonder frames
+SuggestViewNoFrameMsg2=hyperkoppeling.
+TopicsNotFound=Geen onderwerpen gevonden.
+CantSearch=Kan deze zin niet zoeken.
+JS_alert_appletNotLoad = Kan applet niet laden. Als u een oude versie van Netscape gebruikt, moet het bestand prefs.js worden bijgewerkt.
+JS_alert_colorlimitation=WebHelp heeft waargenomen dat uw beeldscherm is ingesteld op 16 kleuren. Stel voor volledige WebHelp-ondersteuning uw beeldscherm in op het gebruik van 256 of meer kleuren.
+Blank_topic_text=Dit onderwerp werd aangemaakt door de wizard WinHelp Project Conversion en is de bestemming van een ontbrekend onderwerp of een verbroken hyperlink.
+JS_alert_ProjectLoadingFail=Kan niet correct worden geladen. Gelieve de 'vernieuwen' knop te selecteren.
+JS_alert_cantLoadProject=Project kan niet geladen worden:
+JS_alert_ErrorInLoading=Fout in het laden van het navigatie gedeelte. Gelieve Webhelp opnieuw genereren.
+IndexBtnText=Start
+FtsBtnText=Start
+ToolBarSearchBtnText=Start
+InTopicSearchBtnText=Start
+SearchLabel=Zoeken
+SearchPrompt=- Zoeken -
+PreTooltip=Vorig onderwerp
+NextTooltip=Volgend onderwerp
+WebSearch=WebSearch
+SyncTocTooltip=Synchroniseren van de inhoudsopgave
+Book=Boek
+Page=Pagina
+Remote_Page=Remote pagina
+Show_Navigation_Component=Navigatie gedeelte tonen
+Hide_Navigation_Component=Navigatie gedeelte niet tonen
+nls_edit_label=Gelieve uw vraag intikken:
+nls_button_go_hint=Opzoek beginnen
+nls_button_go_text=Start
+nls_body_instruction=Gelieve uw vraag in het bovenstaande tekstveld intikken en GO klikken.
+nls_body_empty=Sorry, wij konden geen goed antwoord op uw vraag vinden.
+IndexSelectTopicTitle=Kies een onderwerp
+IndexSelectTopicLabel=Kies een onderwerp en klik op Tonen
+IndexSelectTopicError=Gelieve een onderwerp kiezen.
+IndexAlphabetBookmarks=ABCDEFGHIJKLMNOPQRSTUVWXYZ
+MergeError1=Het samengevoegde Help-systeem
+MergeError2=gebruikt een andere taal dan het hoofdhelpsysteem. Het zoeken in de index en in de volledige tekst is daarom niet ingeschakeld in de samengevoegde Help.
+MergeError3=gebruikt een andere markering van de webinstelling dan die in Master Help. Hierdoor wordt de functie Samenvoegen in Help uitgeschakeld.
+PoweredBy=Gevoed door
+GeneratedBy=Gegenereerd door
+Author=Auteur
+About=Info…
+Print=Afdrukken
+
+[PrintedDoc]
+ChapterFileNamePrefix=Chapter_
+TitlePage=Titelpagina
+TitlePageFileName=Chapter__Title_Page.doc
+TableOfContents=Inhoud
+
+CrossReferencePrefix=Raadpleeg
+GlossaryHeadingStyleName=Woordenlijstkop
+GlossaryTermStyleName=Woordenlijsterm
+GlossaryDefinitionStyleName=Woordenlijstdefinitie
+TitlePageTitleStyleName=Titel van titelpagina
+TocPageTitleStyleName=Paginatitel inhoud

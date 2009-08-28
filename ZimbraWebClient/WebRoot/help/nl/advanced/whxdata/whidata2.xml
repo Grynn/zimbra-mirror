@@ -1,0 +1,113 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="Vergaderingen" >
+  <topic name="Afspraken, vergaderingen en evenementen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="Info over de Afspraakpagina" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Verplaatsen" >
+  <topic name="E-mailberichten verplaatsen tussen mappen" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <key name="E-mailberichten tussen mappen" >
+    <topic name="E-mailberichten verplaatsen tussen mappen" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  </key>
+</key>
+<key name="Verwijderen" >
+  <topic name="Mappen verwijderen" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <key name="Mappen" >
+    <topic name="Mappen verwijderen" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
+<key name="Verwijderen, contacten" >
+  <topic name="Een contact verwijderen" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="Verwijderen, terugkerende afspraken" >
+  <topic name="Terugkerende afspraken wijzigen" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="Verzonden, map" >
+  <topic name="Verzonden, map" url="Navigation_folders_and_tips/sent_folder.htm" />
+</key>
+<key name="Vlaggen" >
+  <topic name="Een e-mailbericht van een vlag voorzien" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  <key name="E-mailbericht" >
+    <topic name="Een e-mailbericht van een vlag voorzien" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  </key>
+</key>
+<key name="Vol, mailbox" >
+  <topic name="Quota" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="Voorbeelddeelvenster, in- en uitschakelen" >
+  <topic name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="Voorkeuren" >
+  <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Voorkeuren wijzigen" >
+  <topic name="Je gebruikersopties wijzigen" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="Voorkeuren, leesdeelvenster bekijken" >
+  <topic name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="Voorzien, een vergadering" >
+  <topic name="Info over de Afspraakpagina" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Vrij/bezet" >
+  <topic name="Tijdstippen vrij/bezet bekijken" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="Wachtwoord" >
+  <topic name="Als je je wachtwoord vergeet" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="Je wachtwoord wijzigen" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="Weergave, agenda-" >
+  <topic name="Info over Zimbra-agenda" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="Wijzigen, een afspraak" >
+  <topic name="Terugkerende afspraken wijzigen" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="Wijzigen, gedeelde takenlijst" >
+  <topic name="Je takenlijst delen" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="Wijzigen, opties" >
+  <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Wildcard, gebruiken tijdens zoeken" >
+  <topic name="De zoekfunctie gebruiken" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="Wildcards" >
+  <topic name="Wildcards" url="filters/wildcards.htm" />
+</key>
+<key name="Zimbra Assistent" >
+  <topic name="Zimbra Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="Zimbra-webclient, functies" >
+  <topic name="Zimbra Collaration Suite" url="Getting_Started/about_liquid_mail.htm" />
+</key>
+<key name="Zimlets" >
+  <topic name="Info over Zimlets" url="Zimlets/About_Zimlets.htm" />
+</key>
+<key name="Zoeken met wildcards" >
+  <topic name="De zoekfunctie gebruiken" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="Zoeken naar een bericht" >
+  <topic name="Zoeken naar berichten" url="Search/_search__vs.__search_for_.htm" />
+</key>
+<key name="Zoeken, en/of" >
+  <topic name="“En”- vs. “Of”-zoekopdrachten" url="Search/and_vs_or_searches.htm" />
+</key>
+<key name="Zoekfunctie" >
+  <topic name="De zoekfunctie gebruiken" url="Search/using_the_search_feature.htm" />
+  <key name="Gebruiken" >
+    <topic name="De zoekfunctie gebruiken" url="Search/using_the_search_feature.htm" />
+  </key>
+</key>
+<key name="Zoekopdrachten" >
+  <topic name="Zoekopdrachten samenstellen" url="Search/building_search_queries.htm" />
+  <topic name="Zoekopdrachten opslaan" url="Search/saving_search_queries.htm" />
+  <key name="Opslaan" >
+    <topic name="Zoekopdrachten opslaan" url="Search/saving_search_queries.htm" />
+  </key>
+</key>
+<key name="Zoekvoorbeelden" >
+  <topic name="Zoekvoorbeelden" url="Search/search_examples.htm" />
+</key>
+
+</indexdata>

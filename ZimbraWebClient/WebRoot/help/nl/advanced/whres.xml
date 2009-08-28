@@ -1,0 +1,342 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<resource>
+<item name="Prev" value="&lt;&lt;" />
+<item name="Hide" value="Verbergen" />
+<item name="SyncTocTooltip" value="Synchroniseren van de inhoudsopgave" />
+<item name="InTopicSearchBtnText" value="Start" />
+<item name="JS_alert_appletNotLoad " value=" Kan applet niet laden. Als u een oude versie van Netscape gebruikt, moet het bestand prefs.js worden bijgewerkt." />
+<item name="FtsInputPrompt" value="Typ het (de) woord(en) om te zoeken naar:" />
+<item name="Done" value="Klaar" />
+<item name="Logo/Author" value="Gevoed door" />
+<item name="MergeError1" value="Het samengevoegde Help-systeem" />
+<item name="JS_alert_cantLoadProject" value="Project kan niet geladen worden:" />
+<item name="Next" value="&gt;&gt;" />
+<item name="SyncToc" value="SyncToc" />
+<item name="MergeError2" value="gebruikt een andere taal dan het hoofdhelpsysteem. Het zoeken in de index en in de volledige tekst is daarom niet ingeschakeld in de samengevoegde Help." />
+<item name="nls_body_instruction" value="Gelieve uw vraag in het bovenstaande tekstveld intikken en GO klikken." />
+<item name="ToolBarSearchBtnText" value="Start" />
+<item name="SuggestViewNoFrameMessage" value="Klik om Help te bekijken zonder frames" />
+<item name="MergeError3" value="gebruikt een andere markering van de webinstelling dan die in Master Help. Hierdoor wordt de functie Samenvoegen in Help uitgeschakeld." />
+<item name="Hide_Navigation_Component" value="Navigatie gedeelte niet tonen" />
+<item name="FtsBtnText" value="Start" />
+<item name="TopicsFound" value="Gevonden onderwerpen" />
+<item name="LoadingContentsData" value="Wordt geladen, klik hier om te annuleren..." />
+<item name="Definition" value="Definitie:" />
+<item name="CompletingContents" value="Inhoud wordt afgemaakt..." />
+<item name="GeneratedBy" value="Gegenereerd door" />
+<item name="PoweredBy" value="Gevoed door" />
+<item name="IndexAlphabetBookmarks" value="ABCDEFGHIJKLMNOPQRSTUVWXYZ" />
+<item name="Contents" value="Inhoud" />
+<item name="IndexSelectTopicLabel" value="Kies een onderwerp en klik op Tonen" />
+<item name="Disabled Prev" value="&lt;&lt;" />
+<item name="Glossary" value="Verklarende woordenlijst" />
+<item name="Search" value="Zoeken" />
+<item name="CantSearch" value="Kan deze zin niet zoeken." />
+<item name="LoadingIndex" value="Index wordt geladen..." />
+<item name="LoadingData" value="Gegevens worden geladen, een ogenblik alstublieft..." />
+<item name="Show_Navigation_Component" value="Navigatie gedeelte tonen" />
+<item name="Book" value="Boek" />
+<item name="Disabled Next" value="&gt;&gt;" />
+<item name="nls_body_empty" value="Sorry, wij konden geen goed antwoord op uw vraag vinden." />
+<item name="nls_button_go_hint" value="Opzoek beginnen" />
+<item name="FtsHilitePrompt" value="Zoekresultaten markeren" />
+<item name="Find" value="Zoeken" />
+<item name="CantOpenURLorFile" value="Kan URL of bestand niet openen" />
+<item name="Print" value="Afdrukken" />
+<item name="About" value="Info…" />
+<item name="Author" value="Auteur" />
+<item name="IndexSelectTopicTitle" value="Kies een onderwerp" />
+<item name="Blank_topic_text" value="Dit onderwerp werd aangemaakt door de wizard WinHelp Project Conversion en is de bestemming van een ontbrekend onderwerp of een verbroken hyperlink." />
+<item name="BrowserLimitedMessage" value="Uw browser ondersteunt geen frames. Wij bevelen aan dat u uw browser bijwerkt naar een versie die frames ondersteunt." />
+<item name="LoadingTOCItem" value="Inhoudsopgave wordt geladen:" />
+<item name="Display" value="Weergeven" />
+<item name="Cancel" value="Annuleren" />
+<item name="IndexSelectTopicError" value="Gelieve een onderwerp kiezen." />
+<item name="nls_edit_label" value="Gelieve uw vraag intikken:" />
+<item name="SearchLabel" value="Zoeken" />
+<item name="RelateTopicListPrompt" value="Klik op een onderwerp en klik op Weergeven." />
+<item name="Seperate " value=" |" />
+<item name="NextTooltip" value="Volgend onderwerp" />
+<item name="JS_alert_colorlimitation" value="WebHelp heeft waargenomen dat uw beeldscherm is ingesteld op 16 kleuren. Stel voor volledige WebHelp-ondersteuning uw beeldscherm in op het gebruik van 256 of meer kleuren." />
+<item name="TopicsNotFound" value="Geen onderwerpen gevonden." />
+<item name="Show" value="Weergeven" />
+<item name="PreTooltip" value="Vorig onderwerp" />
+<item name="SearchPrompt" value="- Zoeken -" />
+<item name="IndexBtnText" value="Start" />
+<item name="JS_alert_ProjectLoadingFail" value="Kan niet correct worden geladen. Gelieve de 'vernieuwen' knop te selecteren." />
+<item name="LoadingContents" value="Inhoud wordt geladen, even wachten..." />
+<item name="Term" value="Term:" />
+<item name="WebSearchButton" value="WebSearch" />
+<item name="Remote_Page" value="Remote pagina" />
+<item name="WebSearch" value="WebSearch" />
+<item name="LoadingFTS" value="Zoekgegevens worden geladen..." />
+<item name="Index" value="Index" />
+<item name="JS_alert_ErrorInLoading" value="Fout in het laden van het navigatie gedeelte. Gelieve Webhelp opnieuw genereren." />
+<item name="IndexInputPrompt" value="Typ het keyword in om dit te vinden:" />
+<item name="Page" value="Pagina" />
+<item name="SuggestViewNoFrameMsg2" value="hyperkoppeling." />
+<item name="nls_button_go_text" value="Start" />
+<item name="Searching" value="Bezig met zoeken..." />
+
+  <item name="English"   value="" />
+  <item name="langorder" value="0,1,2,3,4,5,6,7,8,40,41,42,43,44,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,38,45,46,47,48,49,50,33,51,52,53,88,54,34,55,56,115,119,121,123,125,126,127,128,129,130,57,58,89,90,91,59,60,131,148,150,154,158,168,171,173,175,185,187,189,191,193,197,214,216,218,220,225,230,240,242,244,246,252,61,62,63,64,66,67,131,148,150,154,158,168,171,173,175,185,187,189,191,193,197,214,216,218,220,225,230,240,242,244,251,252,68,69,70,71,27,114,28,82,170,85,112,109,110,65,113,223,86,213,29,255,30,31,80,81,83,84,111,36,37,79,229,222,87,212,32,254,251,39,72,97,98,99,100,73,101,74,102,133,93,103,35,104,75,105,92,122,124,76,106,107,108,77,120,199,94,116,117,118,78,131,131,131,131,131,131,131,150,158,158,158,158,175,175,175,175,154,193,197,197,197,197,197,95,197,230,230,230,230,246,227,224,131,131,131,131,131,131,131,150,158,158,158,158,175,175,175,175,154,193,197,197,197,197,197,96,197,230,230,230,230,246,227,250," />
+
+  <panes show="0">
+    <toc />
+    <index />
+    <fts />
+  </panes>
+
+  <stopwords>
+    <word name="0" />
+    <word name="1" />
+    <word name="2" />
+    <word name="3" />
+    <word name="4" />
+    <word name="5" />
+    <word name="6" />
+    <word name="7" />
+    <word name="8" />
+    <word name="9" />
+    <word name="aan" />
+    <word name="achter" />
+    <word name="al" />
+    <word name="alle" />
+    <word name="alleen" />
+    <word name="alles" />
+    <word name="als" />
+    <word name="andere" />
+    <word name="anders" />
+    <word name="behoefte" />
+    <word name="ben" />
+    <word name="bereiken" />
+    <word name="bij" />
+    <word name="binnen" />
+    <word name="daar" />
+    <word name="daarom" />
+    <word name="dan" />
+    <word name="dat" />
+    <word name="de" />
+    <word name="deze" />
+    <word name="die" />
+    <word name="dit" />
+    <word name="doe" />
+    <word name="doen" />
+    <word name="door" />
+    <word name="dus" />
+    <word name="een" />
+    <word name="elk" />
+    <word name="elke" />
+    <word name="en" />
+    <word name="enig" />
+    <word name="enige" />
+    <word name="enkele" />
+    <word name="er" />
+    <word name="gebruik" />
+    <word name="gebruiken" />
+    <word name="gebruikt" />
+    <word name="gedaan" />
+    <word name="gedurende" />
+    <word name="geen" />
+    <word name="gemaakt" />
+    <word name="getroffen" />
+    <word name="gevonden" />
+    <word name="geweest" />
+    <word name="geworden" />
+    <word name="ginds" />
+    <word name="haar" />
+    <word name="had" />
+    <word name="halen" />
+    <word name="heb" />
+    <word name="hebben" />
+    <word name="hebt" />
+    <word name="heeft" />
+    <word name="hen" />
+    <word name="het" />
+    <word name="hetzelfde" />
+    <word name="hetzij" />
+    <word name="hier" />
+    <word name="hij" />
+    <word name="hoe" />
+    <word name="hun" />
+    <word name="ieder" />
+    <word name="iedere" />
+    <word name="ik" />
+    <word name="in" />
+    <word name="indien" />
+    <word name="is" />
+    <word name="je" />
+    <word name="jij" />
+    <word name="jouw" />
+    <word name="jullie" />
+    <word name="kan" />
+    <word name="kom" />
+    <word name="komt" />
+    <word name="kunnen" />
+    <word name="kunt" />
+    <word name="langs" />
+    <word name="liever" />
+    <word name="maar" />
+    <word name="mag" />
+    <word name="maken" />
+    <word name="manier" />
+    <word name="meer" />
+    <word name="meest" />
+    <word name="meestal" />
+    <word name="meeste" />
+    <word name="met" />
+    <word name="mij" />
+    <word name="mijn" />
+    <word name="misschien" />
+    <word name="moeten" />
+    <word name="mogen" />
+    <word name="na" />
+    <word name="naar" />
+    <word name="nee" />
+    <word name="neen" />
+    <word name="niet" />
+    <word name="nog" />
+    <word name="of" />
+    <word name="ofwel" />
+    <word name="ok" />
+    <word name="okay" />
+    <word name="om" />
+    <word name="omdat" />
+    <word name="onder" />
+    <word name="ons" />
+    <word name="onze" />
+    <word name="ook" />
+    <word name="op" />
+    <word name="over" />
+    <word name="overige" />
+    <word name="re" />
+    <word name="reeds" />
+    <word name="sommige" />
+    <word name="sommigen" />
+    <word name="soortgelijk" />
+    <word name="te" />
+    <word name="telkens" />
+    <word name="tenzij" />
+    <word name="tijdens" />
+    <word name="toch" />
+    <word name="toen" />
+    <word name="tot" />
+    <word name="treffen" />
+    <word name="treft" />
+    <word name="tussen" />
+    <word name="u" />
+    <word name="uw" />
+    <word name="van" />
+    <word name="vanuit" />
+    <word name="veel" />
+    <word name="vele" />
+    <word name="verder" />
+    <word name="vervolgens" />
+    <word name="via" />
+    <word name="vinden" />
+    <word name="vindt" />
+    <word name="voor" />
+    <word name="voorkeur" />
+    <word name="voort" />
+    <word name="vorm" />
+    <word name="vroeg" />
+    <word name="vóór" />
+    <word name="waar" />
+    <word name="waarom" />
+    <word name="wanneer" />
+    <word name="waren" />
+    <word name="was" />
+    <word name="wat" />
+    <word name="we" />
+    <word name="weg" />
+    <word name="welke" />
+    <word name="wie" />
+    <word name="wij" />
+    <word name="wil" />
+    <word name="willekeurig" />
+    <word name="willen" />
+    <word name="wilt" />
+    <word name="zal" />
+    <word name="zie" />
+    <word name="zien" />
+    <word name="ziet" />
+    <word name="zij" />
+    <word name="zijn" />
+    <word name="zijn" />
+    <word name="zo" />
+    <word name="zodanig" />
+    <word name="zonder" />
+    <word name="zulk" />
+    <word name="zullen" />
+    <word name="zult" />
+  </stopwords>
+
+
+	<paneskin>
+		<background color="#e8dcc1" img="" />
+		<font name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+		<toc>
+			<background color="#f9f9f9" img="" />
+			<icons>
+				<book open="chr_book_op.gif" close="chr_book_clo.gif" />
+				<item  local="chr_page.gif" remote="chr_webpage.gif" />
+				<newbook open="" close="" />
+				<newitem  local="" remote="" />
+			</icons>
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</toc>
+		<index>
+			<form>
+				<fonts>
+					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+				</fonts>
+				<button normal="" hover="" />
+				<editwith value="20" />
+			</form>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<empty name="" size="8pt" color="" style="" weight="" decoration="" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</index>
+		<fts>
+			<form>
+				<fonts>
+					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+				</fonts>
+				<button normal="" hover="" />
+				<editwith value="20" />
+			</form>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<error name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</fts>
+		<glossary>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</glossary>
+	</paneskin>
+</resource>

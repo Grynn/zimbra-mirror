@@ -1,0 +1,274 @@
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Beschrijving van de querytaal</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { font-weight:bold; }
+p.whs2 { margin-left:40px; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Naar items zoeken\nBeschrijving van de querytaal");
+addButton("show",BTN_TEXT,"Weergeven","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Beschrijving van de querytaal</h1>
+<p>In dit geavanceerde onderwerp wordt de zoekgrammatica die wordt gebruikt 
+ voor de zoekfunctie van Zimbra gedetailleerd beschreven. Er wordt altijd 
+ een bepaald soort query toegepast om de weergave te produceren die je 
+ ziet in de Zimbra-interface. </p>
+<p><b style="font-weight: bold;">TIP</b>: In Voorkeuren in het tabblad 
+ Algemeen instellen kun je naar '<i><b>Altijd zoekopdrachten weergeven'</b></i> 
+ gaan om de huidige zoekopdracht te zien in de werkbalk Zoeken. Als deze 
+ optie bijvoorbeeld is ingeschakeld, dan wordt de queryreeks '<i><b>in:Postvak 
+ IN'</b></i> getoond als je op de map Postvak IN klikt.</p>
+<h2>Structuur van de zoektaal</h2>
+<p>Eenvoudige zoekopdrachten kunnen worden uitgevoerd door een woord in 
+ te voeren in het zoekveld. Bij kale woorden (woorden zonder zoekoperator) 
+ wordt gezocht in de 'inhoud':'-operator - dit komt overeen met alle tekst 
+ in het bericht. </p>
+<p>Meer geavanceerde zoekopdrachten kunnen worden verricht door een <b>zoekoperator</b> 
+ op te geven. Een zoekoperator is een speciaal trefwoord gevolgd door een 
+ dubbele punt, gevolgd door een andere parameter die specifiek is voor 
+ die operator. Bijvoorbeeld: </p>
+<ul><li class=p><p><b style="font-weight: bold;">in:Postvak IN</b> 
+ bestaat uit de operator &quot;in&quot; en de parameter &quot;Postvak 
+ IN&quot; à&nbsp;- hiermee worden berichten geretourneerd in 
+ de map genaamd &quot;Postvak IN&quot; </p></li>
+</ul>
+<ul><li class=p><p><b style="font-weight: bold;">van:iemand</b> - de operator 
+ is &quot;van&quot;, de parameter is &quot;iemand&quot; - hiermee worden 
+ berichten geretourneerd met het woord &quot;iemand&quot; in het e-mailadres 
+ </p></li>
+</ul>
+<p>Een trefwoord kan altijd vooraf worden gegaan door het woord &quot;niet&quot; 
+ om items op te geven die dat criterium niet hebben, bijvoorbeeld <b>niet 
+ in:Postvak IN</b>. Zoeken is niet hoofdlettergevoelig, 
+ d.w.z. dat &quot;in:postvak in&quot; hetzelfde is als &quot;in:Postvak 
+ IN&quot;. Het minteken (<b>-</b>) is een synoniem voor <b>NIET</b> Dus: 
+ <b>niet in:postvak in</b> is hetzelfde als <b>-in:postvak in</b> </p>
+<p>In de meeste gevallen is het niet nodig om interpunctie toe te voegen 
+ bij zoekopdrachten, aangezien deze meestal worden genegeerd door de zoekcode. 
+ Dit geldt niet altijd (bijv. als je naar een uurvermelding '9:30' zoekt 
+ in een bericht). Als dat het geval is, moet de je de zoekparameter insluiten 
+ tussen aanhalingstekens. Bijvoorbeeld: <b>onderwerp:&quot;9:30&quot;</b> 
+ retourneert berichten met de reeks 9:30 in het onderwerp. </p>
+<p>Toegestane tekens in de zoekparameter </p>
+<ul><li class=p><p>De volgende tekens mogen nergens in een zoekparameter 
+ voorkomen, behalve als ze tussen aanhalingstekens staan: ~ '&nbsp;! # 
+ $ % ^ &amp; * ( ) _&nbsp;? / { }[ ]&nbsp;;&nbsp;: </p></li>
+	<li class=p><p>De volgende tekens zijn toegestaan in een zoekparameter 
+ zolang ze maar niet het eerste teken zijn: - + &lt; &gt; </p></li>
+</ul>
+<h2>Meerdere zoektermen </h2>
+<p>Als er meerdere zoektermen zijn ingevoerd (gescheiden door spaties), 
+ dan wordt er standaard een &quot;AND-vergelijking&quot; 
+ op alle termen gedaan. <b>in:postvak in tim</b> betekent 
+ &quot;retourneer me berichten met postvak in EN met het woord tim&quot;. 
+ Voor zoekopdrachten met meerdere criteria kun je naar items zoeken die 
+ overeenkomen met één van de opgegeven criteria of met alle criteria. Je 
+ kunt beide soorten zoekopdrachten uitvoeren met het geavanceerde zoekprogramma. 
+ </p>
+<p>Voor alle zoekdeelvensters met uitzondering van Basiszoekopdrachten 
+ gelden de volgende regels: </p>
+<ul><li class=p><p>Als je naar berichten zoekt die overeenkomen met een 
+ van de opgegeven criteria heet dit een '<b>OR'</b>-opdracht, omdat als 
+ het bericht X of Y bevat, het als een overeenkomst wordt beschouwd. Bij 
+ geavanceerde zoekdeelvensters met meerdere keuzevakjes wordt er een '<b>OR'</b>-opdracht 
+ gemaakt als er meerdere selecties worden verricht in een enkel deelvenster. 
+ </p></li>
+	<li class=p><p>Als je naar berichten zoekt die zowel X als Y bevatten, 
+ dan wordt dit een '<b>AND'</b>-zoekopdracht genoemd, omdat het bericht 
+ overeen dient te komen met alle opgegeven criteria om als overeenkomst 
+ te worden beschouwd. Als je in geavanceerde zoekdeelvensters met zoekvakjes 
+ meerdere instanties van hetzelfde deelvenster opent en verschillende vakjes 
+ aanvinkt in elk deelvenster, dan worden de criteria opgegeven als een 
+ '<b>AND'</b>-zoekopdracht. </p></li>
+</ul>
+<p>Alleen &quot;OR&quot; verschijnt in een query. Als je als optie hebt 
+ geselecteerd om de zoekquery in de balk Zoeken weer te geven terwijl je 
+ selecties maakt in Geavanceerd zoeken, dan wordt het tekstvak Zoeken telkens 
+ bijgewerkt om de resulterende query weer te geven. Bij de zoekopdracht 
+ '<b>AND'</b> verschijnt het woord '<b>AND'</b> niet. </p>
+<p><b style="font-weight: bold;">Tip</b>: Haakjes gebruiken met AND en 
+ OR. Woorden binnen haakjes worden als eenheid beschouwd. Bijvoorbeeld 
+ <b>van:(john thomas)</b> is gelijk aan <b>van:john 
+ AND van:thomas</b>. Als je OR tussen haakjes zet, <b>van:(john 
+ or smith)</b>, is de zoekopdracht voor resultaten <b>van:john OF van:thomas</b>. 
+ </p>
+<h3>Het sterretje b&gt;* als wildcard gebruiken bij het zoeken </h3>
+<p>Het sterretje (<b>*</b>) kan worden gebruikt als een wildcard bij het 
+ zoeken naar inhoud met woorden die een gelijksoortige spelling hebben. 
+ </p>
+<p>Gebruik het sterretje <b>*</b> als een wildcard na een voorvoegsel. 
+ De zoekreeks <b>do*</b> retourneert bijvoorbeeld items 
+ zoals <i>dom</i>, <i>dok</i>, <i>door</i>, enz. </p>
+<h2>Trefwoordbeschrijvingen en voorbeelden</h2>
+<p class="whs1">inhoud:</p>
+<p class="whs2">Geeft tekst op die het bericht moet bevatten. 
+ Bijvoorbeeld, <span class=code>inhoud:bananen</span> vindt alle items 
+ met het woord &quot;bananen&quot;.</p>
+<p class="whs1">van:</p>
+<p class="whs2">Geeft de naam of het e-mailadres van een 
+ afzender op die zich in de kop Van bevindt. Dit kan tekst zijn zoals in 
+ &quot;John Smith III&quot;, een e-mailadres zoals &quot;joe@acme.com&quot;, 
+ of een domein zoals &quot;zimbra.com&quot;.</p>
+<p class="whs1">aan:</p>
+<p class="whs2">Zelfde als Van:, behalve dat dit één van 
+ de mensen opgeeft aan wie de e-mail is geadresseerd in de kop Aan:.</p>
+<p class="whs1">cc:</p>
+<p class="whs2">Zelfde als Van:, behalve dat dit een ontvanger 
+ opgeeft in de kop Cc: van het bericht.</p>
+<p class="whs1">onderwerp:</p>
+<p class="whs2">Geeft tekst op die moet verschijnen in de 
+ onderwerpkop van het bericht. Een voorbeeld kan zijn <span class=code>onderwerp:&quot;nieuw 
+ vakantiebeleid&quot;</span>. Gebruik aanhalingstekens om naar een exacte 
+ overeenkomst te zoeken.</p>
+<p class="whs1">in:</p>
+<p class="whs2">Geeft een map op. Bijvoorbeeld, <span class=code>in:verzonden</span> 
+ toont alle items in je map <span style="font-weight: bold;"><B>Verzonden</B></span>.</p>
+<p class="whs1">heeft:</p>
+<p class="whs2">Geeft een attribuut op dat een bericht moet 
+ hebben. De soorten objecten die je kunt opgeven zijn &quot;bijlage&quot;, 
+ &quot;telefoon&quot; of &quot;url&quot;. <span class=code>heeft:bijlage</span> 
+ zou bijvoorbeeld alle berichten vinden met één of meer bijlagen van elk 
+ willekeurig type.</p>
+<p class="whs1">bestandsnaam:</p>
+<p class="whs2">Geeft de bestandsnaam van een bijlage op. 
+ <span class=code>Bestandsnaam:query.tx</span>t zou 
+ bijvoorbeeld berichten vinden met een bestandsbijlage genaamd &quot;query.txt&quot;.</p>
+<p class="whs1">type:</p>
+<p class="whs2">Geeft een zoekopdracht op binnen bijlagen 
+ van een opgegeven type. De soorten bijlagen die je kunt opgeven zijn &quot;tekst&quot;, 
+ &quot;word&quot;, &quot;excel&quot; en &quot;pdf&quot;. 
+ <span class=code>Type:word &quot;hallo&quot;</span> zoekt bijvoorbeeld 
+ naar berichten met bijlagen die Microsoft Word-documenten zijn en zoekt 
+ binnen die bijlagen naar het woord &quot;hallo&quot;.</p>
+<p class="whs1">bijlage:</p>
+<p class="whs2">Geeft alle items met een bepaald soort bijlage 
+ op. <span class=code>Bijlage:word</span> vindt bijvoorbeeld alle berichten 
+ met Word-bijlagen.</p>
+<p class="whs1">is:</p>
+<p class="whs2">Zoekt naar berichten met een bepaalde status. 
+ Toegestane waarden zijn &quot;niet-gelezen&quot;, &quot;gelezen&quot;, 
+ &quot;gevlagd&quot;, &quot;niet-gevlagd&quot;, &quot;verzonden&quot;, 
+ &quot;concept&quot;, &quot;ontvangen&quot;, &quot;beantwoord&quot;, &quot;niet-beantwoord&quot;, 
+ &quot;doorgestuurd&quot;, niet-doorgestuurd&quot;, 
+ &quot;overal&quot;, &quot;extern&quot; (in een gedeelde map), &quot;plaatselijk&quot;, 
+ &quot;verzonden&quot;. Bijvoorbeeld <span class=code>is:niet-gelezen</span> 
+ vindt alle niet-gelezen berichten.</p>
+<p class="whs1">datum:</p>
+<p class="whs2">Gebruik dit trefwoord om een datum aan te 
+ geven in de standaardindeling voor de landinstelling van je browser. Voor 
+ Engels (Verenigde Staten) is deze indeling bijvoorbeeld mm/dd/yyyy). 
+ <span class=code>datum:2/1/2007</span> vindt dan bijvoorbeeld berichten 
+ van 1 februari 2007. De symbolen groter dan (&gt;) of kleiner dan (&lt;) 
+ kunnen worden gebruikt in plaats van <i>na</i> of <i>voor</i>. &gt;= en 
+ &lt;= zijn tevens toegestaan. </p>
+<p class="whs1">na:</p>
+<p class="whs2">Geeft e-mail op die na een bepaalde datum 
+ is verzonden. <span class=code>na:2/1/2007</span><span class=code style="font-weight: normal; font-family: Arial, sans-serif; font-size: 10pt;"><font size=2 style="font-size:10pt;"> 
+ geeft bijvoorbeeld e-mail op die na 1 februari, 2007 is verzonden</font></span><span 
+ class=code style="font-weight: normal;">.</span></p>
+<p class="whs1">voor:</p>
+<p class="whs2">Zelfde als <span class=code>na:</span>, behalve 
+ dat dit e-mail opgeeft die vr de opgegeven datum is verzonden.</p>
+<p class="whs1">grootte:</p>
+<p class="whs2">Geeft berichten op waarvan de totale grootte, 
+ inclusief bijlagen, een opgegeven aantal bytes, kilobytes of megabytes 
+ is. <span class=code>grootte:12 kb</span> vindt bijvoorbeeld 
+ berichten die precies 12 kb groot zijn . De symbolen groter dan (&gt;) 
+ of kleiner dan (&lt;) kunnen worden gebruikt in plaats van de trefwoorden 
+ groter of kleiner.</p>
+<p class="whs1">groter:</p>
+<p class="whs2">Lijkt op grootte:, behalve dat het groter 
+ dan de opgegeven grootte opgeeft.</p>
+<p class="whs1">kleiner:</p>
+<p class="whs2">Lijkt op grootte:, behalve dat het kleiner 
+ dan de opgegeven grootte opgeeft.</p>
+<p class="whs1"><span><B>solo:</B></span></p>
+<p class="whs2">Zoekt naar e-mailberichten die nog niet zijn 
+ beantwoord.</p>
+<p class="whs1">labels:</p>
+<p class="whs2">Zoekt naar berichten die met een specifiek 
+ label zijn gelabeld. <span class=code>label:geel</span> zoekt bijvoorbeeld 
+ naar berichten waarop een label met de naam &quot;geel&quot; is toegepast.</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<tocdata>
+<item name="Items beheren die jij deelt" url="6_0new_topics/Managing_items_you_share.htm" />
+<book name="E-mailmappen delen" >
+  <item name="E-mailmappen delen" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
+  <item name="Je Postvak delen" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+  <item name="Toegang tot de gedeelde postvakmap accepteren" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+  <item name="Toegang tot een gedeelde map intrekken" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="Werken binnen een gedeelde e-mailmap" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+</book>
+<book name="Adresboeken delen" >
+  <item name="Je adresboek delen" url="Contacts/Sharing_your_Address_Book.htm" />
+</book>
+<book name="Agenda’s delen" >
+  <item name="Je agenda delen" url="Calendar/Delegating_Calendar_Access.htm" />
+  <item name="Beheerdersrechten toekennen voor gedeelde Agenda’s" url="6_0new_topics/Admin_rights_for_shared_Calendars.htm" />
+  <item name="Managersrechten toekennen voor gedeelde Agenda’s" url="6_0new_topics/Manager_rights_for_shared_Calendars.htm" />
+  <item name="Toegang accepteren tot een gedeelde agenda" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+  <item name="Een aanvraag om een agenda te delen afwijzen" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+</book>
+<book name="Taaklijsten delen" >
+  <item name="Je takenlijst delen" url="Tasks/Share_your_Task_folder.htm" />
+  <item name="Toegang tot gedeelde takenlijsten accepteren" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
+</book>
+<book name="Document-notitieboeken delen" >
+  <item name="Document-notitieboeken delen" url="Documents/Sharing_Notebooks.htm" />
+  <item name="Toegang tot een Document-notitieboek accepteren" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
+  <item name="Een link maken naar een gedeeld notitieboek" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
+  <item name="Toegang tot je Documentenmap wijzigen of annuleren" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+</book>
+<book name="Aktetas-mappen delen" >
+  <item name="Je Aktetas delen" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+</book>
+
+</tocdata>
