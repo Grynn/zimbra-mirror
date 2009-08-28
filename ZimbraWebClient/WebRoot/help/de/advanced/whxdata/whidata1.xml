@@ -1,8 +1,27 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="Löschen" >
+  <topic name="Ordner löschen" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <key name="Ordner" >
+    <topic name="Ordner löschen" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
+<key name="Mail" >
+  <topic name="Mails lesen" url="reading_mail/reading_mail.htm" />
+  <topic name="Teile einer Mail" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <key name="Lesen" >
+    <topic name="Mails lesen" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="Mail empfangen" >
+  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
 <key name="Mail weiterleiten" >
   <topic name="Adresse für Weiterleitung einrichten" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="Mail, neue" >
+  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="Mail-Accounts" >
   <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
@@ -15,12 +34,12 @@
   <topic name="Persönlichkeiten anlegen" url="Userspecific/Creating_Personas.htm" />
 </key>
 <key name="Mailansicht" >
-  <topic name="Ihre Mailansicht verwalten" url="conversations/conversation_list_view.htm" />
+  <topic name="Mailansicht verwalten" url="conversations/conversation_list_view.htm" />
 </key>
 <key name="Mailbenachrichtigung" >
   <topic name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
 </key>
-<key name="Mailbox voll" >
+<key name="Mailbox, volle" >
   <topic name="Kapazitäten" url="Navigation_folders_and_tips/quotas.htm" />
 </key>
 <key name="Mailentwurf" >
@@ -32,14 +51,8 @@
 <key name="Mails archivieren" >
   <topic name="Mails löschen" url="reading_mail/archiving_old_messages.htm" />
 </key>
-<key name="Mails empfangen" >
-  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-</key>
 <key name="Mails filtern" >
   <topic name="Mails filtern" url="filters/filtering_your_messages.htm" />
-</key>
-<key name="Mails, neu" >
-  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="Markieren" >
   <topic name="Mails markieren" url="Tags_and_flags/Flagging_an_email_message.htm" />
@@ -50,11 +63,8 @@
 <key name="Meldung, Abwesenheit" >
   <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
 </key>
-<key name="Menüs, Rechtsklick" >
+<key name="Menüs, Kontextmenüs" >
   <topic name="Kontextmenüs" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="Mit der Maus ziehen" >
-  <topic name="Arbeitsbereich im Zimbra-Web-Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="Mit Platzhalter suchen" >
   <topic name="Mit der Suchfunktion arbeiten" url="Search/using_the_search_feature.htm" />
@@ -63,11 +73,11 @@
   <topic name="Nach Mails suchen" url="Search/_search__vs.__search_for_.htm" />
 </key>
 <key name="Navigation" >
-  <topic name="Ordnerbereich" url="Navigation_folders_and_tips/Folders_area.htm" />
+  <topic name="Ordner (Bereich)" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
 <key name="Navigation mit Tastatur" >
   <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
-  <topic name="Tastenkürzel im ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+  <topic name="ZWC, Tastenkürzel" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="Navigieren" >
   <topic name="In der Benutzeroberfläche navigieren" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
@@ -119,11 +129,8 @@
   <topic name="Ordner umbenennen" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <topic name="Wissenswertes zu Ordnern" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
-<key name="Ordner „Gesendet“" >
-  <topic name="Ordner „Gesendet“" url="Navigation_folders_and_tips/sent_folder.htm" />
-</key>
 <key name="Ordneransicht" >
-  <topic name="Ordnerbereich" url="Navigation_folders_and_tips/Folders_area.htm" />
+  <topic name="Ordner (Bereich)" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
 <key name="Papierkorb" >
   <topic name="Papierkorb" url="Navigation_folders_and_tips/trash_folder.htm" />
@@ -132,7 +139,7 @@
   <topic name="Kapazitäten" url="Navigation_folders_and_tips/quotas.htm" />
 </key>
 <key name="Passwort" >
-  <topic name="Passwort vergessen?" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="Vergessenes Passwort" url="Userspecific/if_you_forget_your_password.htm" />
   <topic name="Passwort ändern" url="Userspecific/chaning_your_password.htm" />
 </key>
 <key name="Persönliche Kontakte" >
@@ -176,7 +183,7 @@
   <topic name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
 </key>
 <key name="Rechte für Mail-Ordner bearbeiten" >
-  <topic name="Zugriff auf einen freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <topic name="Zugriff auf freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </key>
 <key name="Rechte, Freigabe für Notizbücher ändern" >
   <topic name="Zugriff für Ihr Notizbuch beenden" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
@@ -187,7 +194,7 @@
 <key name="Rechtsklick" >
   <topic name="Arbeitsbereich im Zimbra-Web-Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
-<key name="Regeln, Filter" >
+<key name="Regeln für Filter" >
   <topic name="Mails filtern" url="filters/filtering_your_messages.htm" />
   <topic name="Funktionsweise von Filtern" url="filters/how_filtering_works.htm" />
 </key>
@@ -204,10 +211,10 @@
   <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
 </key>
 <key name="RSS" >
-  <topic name="RSS/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+  <topic name="RSS-/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
 <key name="RSS-Feed abonnieren" >
-  <topic name="RSS/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+  <topic name="RSS-/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
 <key name="Schnelleingabe" >
   <topic name="Termin über Schnelleingabe anlegen" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
@@ -227,11 +234,11 @@
 <key name="Signatur automatisch einfügen" >
   <topic name="Signaturen verwenden" url="Userspecific/using_a_signature.htm" />
 </key>
-<key name="Signaturen je nach Persönlichkeit" >
-  <topic name="Persönlichkeiten anlegen" url="Userspecific/Creating_Personas.htm" />
+<key name="Signatur einfügen" >
+  <topic name="Signaturen verwenden" url="Userspecific/using_a_signature.htm" />
 </key>
 <key name="Sitzung abgelaufen" >
-  <topic name="Sitzung abgelaufen" url="Userspecific/if_your_session_expires.htm" />
+  <topic name="Ablauf der Sitzung" url="Userspecific/if_your_session_expires.htm" />
 </key>
 <key name="Spalten im Inhaltsfenster sortieren" >
   <topic name="Unterhaltungen sortieren" url="Navigation_folders_and_tips/sorting_conversations.htm" />
@@ -250,11 +257,11 @@
   <topic name="Suchbeispiele" url="Search/search_examples.htm" />
 </key>
 <key name="Suchen, UND/ODER" >
-  <topic name="Suchen des Typs &quot;AND&quot; und &quot;OR&quot;" url="Search/and_vs_or_searches.htm" />
+  <topic name="Suchabfragen mit “AND” und “OR”" url="Search/and_vs_or_searches.htm" />
 </key>
 <key name="Suchfunktion" >
   <topic name="Mit der Suchfunktion arbeiten" url="Search/using_the_search_feature.htm" />
-  <key name="Nutzen" >
+  <key name="Arbeiten" >
     <topic name="Mit der Suchfunktion arbeiten" url="Search/using_the_search_feature.htm" />
   </key>
 </key>
@@ -283,7 +290,7 @@
 <key name="Tastenkürzel" >
   <topic name="Arbeitsbereich im Zimbra-Web-Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
-  <topic name="Tastenkürzel im ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+  <topic name="ZWC, Tastenkürzel" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="Termin als privat markieren" >
   <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />

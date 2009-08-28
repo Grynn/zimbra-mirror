@@ -11,7 +11,7 @@
   <topic name="Neue Kontakte hinzufügen" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
 <key name="Adressbücher hinzufügen" >
-  <topic name="Ihre Adressbücher" url="Contacts/b_Your_Address_Books.htm" />
+  <topic name="Adressbücher" url="Contacts/b_Your_Address_Books.htm" />
 </key>
 <key name="Adresse für Weiterleitung einrichten" >
   <topic name="Adresse für Weiterleitung einrichten" url="Userspecific/Setting_a_Forwarding_Address.htm" />
@@ -26,11 +26,10 @@
   <topic name="Dateianhänge öffnen" url="reading_mail/opening_file_attachments.htm" />
 </key>
 <key name="Anhänge blockieren" >
-  <topic name="Anhänge blockieren" url="reading_mail/attachment_blocking.htm" />
-  <topic name="Mailblockierung" url="reading_mail/Message_blocking_feature.htm" />
+  <topic name="Blockierfunktion für Anhänge" url="reading_mail/attachment_blocking.htm" />
 </key>
 <key name="Anlegen von Adressbüchern" >
-  <topic name="Ihre Adressbücher" url="Contacts/b_Your_Address_Books.htm" />
+  <topic name="Adressbücher" url="Contacts/b_Your_Address_Books.htm" />
 </key>
 <key name="Antworten" >
   <topic name="Auf Mails antworten" url="reading_mail/replying_to_mail_messages.htm" />
@@ -47,11 +46,18 @@
 <key name="Beschreibung der Sprache für Suchabfragen" >
   <topic name="Beschreibung der Sprache für Suchabfragen" url="Search/query_language_description.htm" />
 </key>
+<key name="Besprechung anlegen" >
+  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
 <key name="Besprechung planen" >
   <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="Besprechungen" >
   <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Blockierfunktion für Anhänge" >
+  <topic name="Blockierfunktion für Anhänge" url="reading_mail/attachment_blocking.htm" />
+  <topic name="Mailblockierung" url="reading_mail/Message_blocking_feature.htm" />
 </key>
 <key name="Einstellungen" >
   <topic name="Optionen einrichten" url="Userspecific/b_Setting_your_Options.htm" />
@@ -59,11 +65,14 @@
 <key name="Filterbedingungen" >
   <topic name="Von Filtern unterstützte Bedingungen und Aktionen" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
+<key name="iCal-Kalender exportieren" >
+  <topic name="iCal-Kalender importieren" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
 <key name="iCal-Kalender importieren" >
-  <topic name="Ihren iCal-Kalender importieren" url="Calendar/Importing_your_iCal_calendar.htm" />
+  <topic name="iCal-Kalender importieren" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="Importieren oder Exportieren des iCal-Kalenders" >
-  <topic name="Ihren iCal-Kalender importieren" url="Calendar/Importing_your_iCal_calendar.htm" />
+  <topic name="iCal-Kalender importieren" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="Kapazitäten" >
   <topic name="Kapazitäten" url="Navigation_folders_and_tips/quotas.htm" />
@@ -84,10 +93,7 @@
 <key name="Mail weiterleiten" >
   <topic name="Adresse für Weiterleitung einrichten" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
-<key name="Mailbenachrichtigung" >
-  <topic name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
-</key>
-<key name="Mailbox voll" >
+<key name="Mailbox, volle" >
   <topic name="Kapazitäten" url="Navigation_folders_and_tips/quotas.htm" />
 </key>
 <key name="Mailentwurf" >
@@ -114,18 +120,12 @@
 <key name="Optionen" >
   <topic name="Optionen einrichten" url="Userspecific/b_Setting_your_Options.htm" />
 </key>
-<key name="Optionen, Benachrichtigung bei neuen Mails" >
-  <topic name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
-</key>
 <key name="Ordner" >
   <topic name="Ordner umbenennen" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <topic name="Wissenswertes zu Ordnern" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
-<key name="Ordner „Gesendet“" >
-  <topic name="Ordner „Gesendet“" url="Navigation_folders_and_tips/sent_folder.htm" />
-</key>
 <key name="Ordner, RSS-Feed" >
-  <topic name="RSS/ATOM-Feeds abonnieren " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+  <topic name="RSS-/Atom-Feeds abonnieren " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
 <key name="Papierkorb" >
   <topic name="Papierkorb" url="Navigation_folders_and_tips/trash_folder.htm" />
@@ -134,20 +134,20 @@
   <topic name="Kapazitäten" url="Navigation_folders_and_tips/quotas.htm" />
 </key>
 <key name="Passwort" >
-  <topic name="Passwort vergessen?" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="Vergessenes Passwort" url="Userspecific/if_you_forget_your_password.htm" />
   <topic name="Passwort ändern" url="Userspecific/chaning_your_password.htm" />
 </key>
 <key name="Private Termine" >
   <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="RSS-Feed" >
-  <topic name="RSS/ATOM-Feeds abonnieren " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+  <topic name="RSS-/Atom-Feeds abonnieren " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
 <key name="Signaturen einfügen" >
   <topic name="Signatur automatisch einfügen" url="Userspecific/b_Automatically_adding_your_signature.htm" />
 </key>
 <key name="Sitzung abgelaufen" >
-  <topic name="Sitzung abgelaufen" url="Userspecific/if_your_session_expires.htm" />
+  <topic name="Ablauf der Sitzung" url="Userspecific/if_your_session_expires.htm" />
 </key>
 <key name="Spalten im Inhaltsfenster sortieren" >
   <topic name="Unterhaltungen sortieren" url="Navigation_folders_and_tips/sorting_conversations.htm" />

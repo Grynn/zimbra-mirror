@@ -1,6 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <ftstdata>
+<topic name="Suchabfrage erstellen und speichern" url="6_0new_topics/b_Create_and_Save_a_Search_Query.htm" />
+<topic name="Ihren Kalender bereinigen" url="6_0new_topics/Cleaning_up_your_Calendar.htm" />
+<topic name="Kontaktliste exportieren" url="6_0new_topics/exporting_a_contact_list.htm" />
+<topic name="iCalendars importieren" url="6_0new_topics/Importing_iCalendars.htm" />
+<topic name="Link zu freigegebenem Kalender einrichten" url="6_0new_topics/Link_to_Shared_Calendar.htm" />
+<topic name="Link zu freigegebenem Adressbuch einrichten" url="6_0new_topics/Linking_to_a_Shared_Address_Book.htm" />
 <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
 <topic name="Hintergrundfarbe für Kalender einrichten" url="Calendar/Adding_background_color_to_calendars.htm" />
 <topic name="Wissenswertes zum Kalender" url="Calendar/b_About_Calendar.htm" />
@@ -62,7 +68,6 @@
 <topic name="Passwort vergessen?" url="Userspecific/if_you_forget_your_password.htm" />
 <topic name="Sitzung abgelaufen" url="Userspecific/if_your_session_expires.htm" />
 <topic name="An- und Abmelden" url="Userspecific/logging_on_and_off.htm" />
-<topic name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
 <topic name="Adresse für Weiterleitung einrichten" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
 <topic name="Version" url="version.htm" />

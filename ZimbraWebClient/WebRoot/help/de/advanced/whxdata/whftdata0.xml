@@ -1,6 +1,48 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <ftstdata>
+<topic name="Admin-Rechte für freigegebene Kalender" url="6_0new_topics/Admin_rights_for_shared_Calendars.htm" />
+<topic name="Inhalt Ihres Accounts sichern" url="6_0new_topics/Backing_up_the_Content_of_Your_Account.htm" />
+<topic name="Listenansicht im Kalender" url="6_0new_topics/Calendar_List_View.htm" />
+<topic name="Besprechung ändern" url="6_0new_topics/Changing_a_meeting_.htm" />
+<topic name="Status und Verfügbarkeit ändern" url="6_0new_topics/Changing_status_and_availability.htm" />
+<topic name="Im Ordner &quot;Dateien&quot; Präsentationen erstellen" url="6_0new_topics/creating_slide_presentations_in_briefcase.htm" />
+<topic name="Ansicht benutzerspezifisch einrichten" url="6_0new_topics/Customize_your_view.htm" />
+<topic name="Besprechungen in Ihrem Kalender bearbeiten" url="6_0new_topics/editing_meetings_on_your_calendar.htm" />
+<topic name="Objekte aus Ihrem Account exportieren" url="6_0new_topics/Exporting_Items_from_your_account.htm" />
+<topic name="Spam-Mails filtern" url="6_0new_topics/Filtering_Junk_Mail.htm" />
+<topic name="Mails filtern" url="6_0new_topics/filtering_your_messages.htm" />
+<topic name="Wipe-Funktion für Ihr Mobilgerät ausführen" url="6_0new_topics/How_to_wipe_your_mobile_device.htm" />
+<topic name="Festlegen, wer Sie zu Besprechungen einladen darf" url="6_0new_topics/Identifying_who_can_invite_you_to_meetings.htm" />
+<topic name="Objekte importieren und exportieren" url="6_0new_topics/Importing_and_Exporting_Items_.htm" />
+<topic name="Tastenkürzel" url="6_0new_topics/Keyboard_Shortcut_Keys.htm" />
+<topic name="Manager-Rechte für freigegebene Kalender" url="6_0new_topics/Manager_rights_for_shared_Calendars.htm" />
+<topic name="Freigegebene Objekte verwalten" url="6_0new_topics/Managing_items_you_share.htm" />
+<topic name="Spam-Ordner verwalten" url="6_0new_topics/Managing_your_Junk_Folder.htm" />
+<topic name="Mobilgeräte verwalten" url="6_0new_topics/Managing_your_mobile_devices.htm" />
+<topic name="Ihre Zimlets verwalten" url="6_0new_topics/Managing_your_Zimlets.htm" />
+<topic name="Termin als privat markieren" url="6_0new_topics/Marking_an_appointment_as_private.htm" />
+<topic name="Kontakte drucken" url="6_0new_topics/Printing_Contacts.htm" />
+<topic name="Mail &quot;Berechtigung verweigert&quot;" url="6_0new_topics/Receiving_a_permission_denied_message.htm" />
+<topic name="Lesebestätigung anfordern" url="6_0new_topics/Requesting_a_Return_Receipt.htm" />
+<topic name="Dateien aus Ihrem Ordner &quot;Dateien&quot; senden" url="6_0new_topics/Send_Files_from_your_Briefcase.htm" />
+<topic name="Anderen Nutzern Ihren Frei-/Belegt-Status senden" url="6_0new_topics/Sending_your_free_busy_status_to_others.htm" />
+<topic name="Berechtigungen zum Anzeigen Ihrer Frei-/Belegt-Informationen einstellen" url="6_0new_topics/Setting_permissions_to_see_your_free_busy_information.htm" />
+<topic name="Dreiteilige Mailansicht einstellen" url="6_0new_topics/Setting_the_three-pane_view_for_email.htm" />
+<topic name="Desktop-Benachrichtigungen einrichten" url="6_0new_topics/Setting_up_desktop_alerts.htm" />
+<topic name="Einstellungen für das Adressbuch einrichten" url="6_0new_topics/setting_your_address_book_preferences.htm" />
+<topic name="Kalendereinstellungen einrichten" url="6_0new_topics/Setting_your_Calendar_preferences.htm" />
+<topic name="Allgemeine Einstellungen einrichten" url="6_0new_topics/Setting_your_general_preferences.htm" />
+<topic name="Maileinstellungen einrichten" url="6_0new_topics/Setting_your_mail_preferences.htm" />
+<topic name="Einstellungen für das Fenster zum Verfassen von Mails einrichten" url="6_0new_topics/Setting_your_preferences_for_the_email_compose_window.htm" />
+<topic name="Ordner freigeben" url="6_0new_topics/Sharing_a_folder.htm" />
+<topic name="Mit Tastenkürzeln navigieren" url="6_0new_topics/Using_Shortcuts_to_navigate.htm" />
+<topic name="Rechtschreibprüfung nutzen" url="6_0new_topics/Using_Spell_Check.htm" />
+<topic name="Creating Spreadsheets in Briefcase" url="Briefcase_newfor6_0/Creating_Spreadsheets_in_Briefcase.htm" />
+<topic name="Send Files from your Briefcase" url="Briefcase_newfor6_0/Send_Files_from_your_Briefcase.htm" />
+<topic name="Sharing your Briefcase" url="Briefcase_newfor6_0/Sharing_your_Briefcase.htm" />
+<topic name="Working in Briefcase" url="Briefcase_newfor6_0/Working_in_Briefcase.htm" />
+<topic name="Working with files in Briefcase" url="Briefcase_newfor6_0/Working_with_files_in_Briefcase.htm" />
 <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 <topic name="Wissenswertes zum Kalender" url="Calendar/About_Calendar.htm" />
 <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
@@ -56,48 +98,5 @@
 <topic name="Zugriff auf einen freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 <topic name="Ihre Mailbox freigeben" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
 <topic name="In einem freigegebenen Mail-Ordner arbeiten" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
-<topic name="Zugriff auf ein Notizbuch annehmen" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
-<topic name="Tabelle in Notizbuchseite einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-<topic name="Zugriff für Ihr Notizbuch beenden" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-<topic name="Neue Seite anlegen" url="Documents/Create_a_new_page.htm" />
-<topic name="Neue Notizbücher anlegen" url="Documents/Create_multiple_notebooks.htm" />
-<topic name="Link zu einem freigegebenen Notizbuch einrichten" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
-<topic name="Notizbücher freigeben" url="Documents/Sharing_Notebooks.htm" />
-<topic name="Seiten in HTML formatieren" url="Documents/Using_HTML_for_format_pages.htm" />
-<topic name="Im Rich-Text-Editor arbeiten" url="Documents/Using_the_rich_text_editor.htm" />
-<topic name="Mit Zimbra-Notizen arbeiten" url="Documents/Working_in_Notebooks.htm" />
-<topic name="Von Filtern unterstützte Bedingungen und Aktionen" url="filters/filter_conditions_and_actions_supported.htm" />
-<topic name="Mails filtern" url="filters/filtering_your_messages.htm" />
-<topic name="Funktionsweise von Filtern" url="filters/how_filtering_works.htm" />
-<topic name="Platzhalter" url="filters/wildcards.htm" />
-<topic name="Wissenswertes zur Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
-<topic name="Funktionen und Tastenkürzel der Benutzeroberfläche" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-<topic name="Grundlagen des Instant Messaging" url="instant_messaging/Instant_Messaging_Basics.htm" />
-<topic name="Dateien freigeben" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
-<topic name="Im Ordner „Dateien“ arbeiten" url="Miscellaneous_one_off_topics/Working_in_Briefcase.htm" />
-<topic name="Zimbra-Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
-<topic name="Wissenswertes zu Ordnern" url="Navigation_folders_and_tips/about_folders.htm" />
-<topic name="Für mehrere ausgewählte Objekte Aktionen durchführen" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
-<topic name="RSS/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-<topic name="In Zimbra mit Browsern arbeiten" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-<topic name="Mails nach Kategorien sortieren" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
-<topic name="Voreingestellten Client-Typ für die Anmeldung ändern" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
-<topic name="Benutzerdefinierte Ordner anlegen" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
-<topic name="Startseite Ihrer Mail benutzerspezifisch einrichten" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
-<topic name="Ordner löschen" url="Navigation_folders_and_tips/deleting_folders.htm" />
-<topic name="Ordnerbereich" url="Navigation_folders_and_tips/Folders_area.htm" />
-<topic name="Systemordner" url="Navigation_folders_and_tips/inbox_folder.htm" />
-<topic name="Mails in Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
-<topic name="Arbeitsbereich im Zimbra-Web-Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-<topic name="Kapazitäten" url="Navigation_folders_and_tips/quotas.htm" />
-<topic name="Ordner umbenennen" url="Navigation_folders_and_tips/renaming_folders.htm" />
-<topic name="Kontextmenüs" url="Navigation_folders_and_tips/right-click_menus.htm" />
-<topic name="Ordner „Gesendet“" url="Navigation_folders_and_tips/sent_folder.htm" />
-<topic name="Inhaltsfenster nach Spalten sortieren" url="Navigation_folders_and_tips/sorting_conversations.htm" />
-<topic name="Herkömmliche Ansicht" url="Navigation_folders_and_tips/Traditional_View.htm" />
-<topic name="Papierkorb" url="Navigation_folders_and_tips/trash_folder.htm" />
-<topic name="Tastenkürzel im ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
-<topic name="Mails löschen" url="reading_mail/archiving_old_messages.htm" />
-<topic name="Anhänge blockieren" url="reading_mail/attachment_blocking.htm" />
 
 </ftstdata>  

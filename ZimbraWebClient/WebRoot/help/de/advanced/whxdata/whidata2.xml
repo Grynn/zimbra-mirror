@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
 <key name="Unterhaltungen" >
-  <topic name="Unterhaltungen können mehrere Ordner betreffen" url="conversations/conversations_can_span_folders.htm" />
+  <topic name="Ordnerübergreifende Unterhaltungen" url="conversations/conversations_can_span_folders.htm" />
   <topic name="Unterhaltung drucken" url="conversations/printing_a_conversation.htm" />
   <key name="Drucken" >
     <topic name="Unterhaltung drucken" url="conversations/printing_a_conversation.htm" />
@@ -12,15 +12,15 @@
   </key>
 </key>
 <key name="Unterhaltungsansicht" >
-  <topic name="Ihre Mailansicht verwalten" url="conversations/conversation_list_view.htm" />
+  <topic name="Mailansicht verwalten" url="conversations/conversation_list_view.htm" />
 </key>
 <key name="Unzustellbare Mail" >
   <topic name="Unzustellbare Mail" url="Creating_Messages/undeliverable_mail.htm" />
 </key>
 <key name="Verschieben" >
-  <topic name="Mails in Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <topic name="Mails zwischen Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <key name="Mails in Ordnern" >
-    <topic name="Mails in Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+    <topic name="Mails zwischen Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   </key>
 </key>
 <key name="Vervollständigung der Adresse in Mails" >
@@ -29,7 +29,7 @@
 <key name="Vorhandene Accounts hinzufügen" >
   <topic name="POP-Accounts hinzufügen" url="Userspecific/Adding_POP_accounts.htm" />
 </key>
-<key name="Vorschaufenster, Ein- und Ausschalten" >
+<key name="Vorschaufenster, ein- und ausschalten" >
   <topic name="Mails im Lesefenster lesen" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="Weiterleiten" >
@@ -50,6 +50,9 @@
 <key name="Wiki-Ordner freigeben" >
   <topic name="Wiki-Ordner freigeben" url="Documents/Sharing_Notebooks.htm" />
 </key>
+<key name="Ziehen mit der Maus" >
+  <topic name="Arbeitsbereich im Zimbra-Web-Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
 <key name="Zimbra-Assistent" >
   <topic name="Zimbra-Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
@@ -69,7 +72,7 @@
   <topic name="Wiederkehrende Termine ändern" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
 <key name="Übersichtsfenster" >
-  <topic name="Ordnerbereich" url="Navigation_folders_and_tips/Folders_area.htm" />
+  <topic name="Ordner (Bereich)" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
 
 </indexdata>
