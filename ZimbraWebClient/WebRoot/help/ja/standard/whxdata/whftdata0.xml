@@ -1,6 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <ftstdata>
+<topic name="検索クエリを作成して保存する" url="6_0new_topics/b_Create_and_Save_a_Search_Query.htm" />
+<topic name="カレンダーを削除する" url="6_0new_topics/Cleaning_up_your_Calendar.htm" />
+<topic name="連絡先リストをエクスポートする" url="6_0new_topics/exporting_a_contact_list.htm" />
+<topic name="iCalendarをインポートする" url="6_0new_topics/Importing_iCalendars.htm" />
+<topic name="共有カレンダーにリンクする" url="6_0new_topics/Link_to_Shared_Calendar.htm" />
+<topic name="共有アドレスブックにリンクする" url="6_0new_topics/Linking_to_a_Shared_Address_Book.htm" />
 <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
 <topic name="カレンダーに背景色をつける" url="Calendar/Adding_background_color_to_calendars.htm" />
 <topic name="カレンダーについて" url="Calendar/b_About_Calendar.htm" />
@@ -62,7 +68,6 @@
 <topic name="パスワードを忘れた場合" url="Userspecific/if_you_forget_your_password.htm" />
 <topic name="セッションの有効期限が切れた場合" url="Userspecific/if_your_session_expires.htm" />
 <topic name="ログインとログアウト" url="Userspecific/logging_on_and_off.htm" />
-<topic name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
 <topic name="転送アドレスを設定する" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 <topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
 <topic name="バージョン" url="version.htm" />

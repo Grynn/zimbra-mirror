@@ -19,7 +19,6 @@
   <item name="メールの表示方法を管理する" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
   <item name="新着メールを確認する" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
   <item name="メールメッセージを分類する" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
-  <item name="内容ペインのメッセージを並べ替える" url="Navigation_folders_and_tips/sorting_conversations.htm" />
   <item name="メールメッセージを印刷する" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="転送アドレスを設定する" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
@@ -52,16 +51,16 @@
 <book name="カレンダーを管理する" >
   <item name="カレンダーについて" url="Calendar/b_About_Calendar.htm" />
   <item name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="予約を削除する" url="Calendar/b_Canceling_a_meeting.htm" />
   <item name="カレンダーに色をつける" url="Calendar/Adding_background_color_to_calendars.htm" />
-  <item name="iCalカレンダーをインポートする" url="Calendar/Importing_your_iCal_calendar.htm" />
-  <item name="iCalカレンダーをエクスポートする" url="Calendar/Exporting_your_iCal_calendar.htm" />
   <item name="カレンダービューのオプション" url="Calendar/Calendar_Views.htm" />
+  <item name="iCalendarをインポートする" url="6_0new_topics/Importing_iCalendars.htm" />
+  <item name="カレンダーを削除する" url="6_0new_topics/Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="予約、会議、イベントを予定する" >
   <item name="会議を計画する" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="会議を予約する" url="Calendar/b_Scheduling_a_meeting.htm" />
   <item name="繰り返し予約を作成する" url="Calendar/b_creating_recurring_appointments.htm" />
+  <item name="予約を削除する" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>
 <book name="タスクリストを使用する" >
   <item name="タスクについて" url="Tasks/About_Tasks.htm" />
@@ -69,8 +68,17 @@
   <item name="タスクを変更する" url="Tasks/Change_a_task.htm" />
   <item name="タスクを並べ替える" url="Tasks/Sorting_tasks_.htm" />
 </book>
+<book name="フォルダを共有する" >
+  <book name="アドレスブックを共有する" >
+    <item name="共有アドレスブックにリンクする" url="6_0new_topics/Linking_to_a_Shared_Address_Book.htm" />
+  </book>
+  <book name="カレンダーを共有する" >
+    <item name="共有カレンダーにリンクする" url="6_0new_topics/Link_to_Shared_Calendar.htm" />
+  </book>
+</book>
 <book name="項目を検索する" >
   <item name="検索を使用する" url="Search/b_Using_Search.htm" />
+  <item name="検索クエリを作成して保存する" url="6_0new_topics/b_Create_and_Save_a_Search_Query.htm" />
   <item name="クエリ言語の記述" url="Search/query_language_description.htm" />
 </book>
 <book name="タグとフォルダを使用してメールを整理する" >
@@ -86,7 +94,6 @@
 </book>
 <book name="ユーザー設定を指定する" >
   <item name="ユーザー設定を指定する" url="Userspecific/b_Setting_your_Options.htm" />
-  <item name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
   <item name="不在メッセージを作成する" url="Userspecific/vacation_message.htm" />
   <item name="送信したメッセージを保存する" url="Navigation_folders_and_tips/sent_folder.htm" />
   <item name="メールボックスの割り当て容量" url="Navigation_folders_and_tips/quotas.htm" />

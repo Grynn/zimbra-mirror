@@ -37,9 +37,6 @@
 <key name="オプション" >
   <topic name="オプションを設定する" url="Userspecific/b_Setting_your_Options.htm" />
 </key>
-<key name="オプション、メール着信通知" >
-  <topic name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
-</key>
 <key name="オプション、不在メッセージ" >
   <topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
 </key>
@@ -125,9 +122,6 @@
 <key name="メールメッセージ" >
   <topic name="メールメッセージの各部分について" url="Creating_Messages/parts_of_an_email_message.htm" />
 </key>
-<key name="メール通知" >
-  <topic name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
-</key>
 <key name="ログオフする" >
   <topic name="ログインとログアウト" url="Userspecific/logging_on_and_off.htm" />
 </key>
@@ -141,7 +135,7 @@
   <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="会議" >
-  <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="会議を予定する" >
   <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />

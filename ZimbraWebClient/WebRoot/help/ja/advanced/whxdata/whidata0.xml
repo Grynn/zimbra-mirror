@@ -70,8 +70,8 @@
 <key name="wikiフォルダを共有する" >
   <topic name="wikiフォルダを共有する" url="Documents/Sharing_Notebooks.htm" />
 </key>
-<key name="Zimbraアシスタント" >
-  <topic name="Zimbraアシスタント" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+<key name="Zimbra Assistant" >
+  <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
 <key name="Zimbraウェブクライアントの機能" >
   <topic name="Zimbra Collaboration Suiteの概要" url="Getting_Started/about_liquid_mail.htm" />
@@ -86,7 +86,7 @@
   <topic name="文書wikiフォルダへのアクセスを取り消す" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
 </key>
 <key name="アシスタント" >
-  <topic name="Zimbraアシスタント" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
 <key name="アドレスをオートコンプリートする" >
   <topic name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
@@ -322,7 +322,7 @@
   <topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
 </key>
 <key name="メッセージから予約を作成" >
-  <topic name="Zimbraアシスタント" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
 <key name="メッセージをアーカイブする" >
   <topic name="メッセージを完全に削除する" url="reading_mail/archiving_old_messages.htm" />
@@ -357,10 +357,10 @@
   <topic name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
 <key name="メールを受信する" >
-  <topic name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="新着メール" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="メールを確認" >
-  <topic name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="新着メール" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 
 </indexdata>

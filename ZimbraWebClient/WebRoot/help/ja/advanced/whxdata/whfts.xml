@@ -1,22 +1,25 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <fts>
-<chunkinfo url="whfwdata0.xml" first="!" last="「"/>
-<chunkinfo url="whfwdata1.xml" first="」" last="ことがあります"/>
-<chunkinfo url="whfwdata2.xml" first="この" last="しの"/>
-<chunkinfo url="whfwdata3.xml" first="します" last="ています"/>
-<chunkinfo url="whfwdata4.xml" first="ていますが" last="によって"/>
-<chunkinfo url="whfwdata5.xml" first="によっては" last="わせてくさい"/>
-<chunkinfo url="whfwdata6.xml" first="わせてください" last="スタイル"/>
-<chunkinfo url="whfwdata7.xml" first="ステップ" last="マウスボタン"/>
-<chunkinfo url="whfwdata8.xml" first="マウスポインタ" last="何回自分宛"/>
-<chunkinfo url="whfwdata9.xml" first="作成" last="基"/>
-<chunkinfo url="whfwdata10.xml" first="基本" last="書体"/>
-<chunkinfo url="whfwdata11.xml" first="書式" last="翌月"/>
-<chunkinfo url="whfwdata12.xml" first="考" last="関数"/>
-<chunkinfo url="whfwdata13.xml" first="関連" last="｣"/>
+<chunkinfo url="whfwdata0.xml" first="!" last="messages"/>
+<chunkinfo url="whfwdata1.xml" first="microsoft" last="「"/>
+<chunkinfo url="whfwdata2.xml" first="」" last="けする"/>
+<chunkinfo url="whfwdata3.xml" first="けすることができます" last="したときにはすぐに"/>
+<chunkinfo url="whfwdata4.xml" first="したときの" last="するにつれ"/>
+<chunkinfo url="whfwdata5.xml" first="するには" last="でも"/>
+<chunkinfo url="whfwdata6.xml" first="と" last="のを"/>
+<chunkinfo url="whfwdata7.xml" first="は" last="をかけている"/>
+<chunkinfo url="whfwdata8.xml" first="をかけることができます" last="ショートカットキー"/>
+<chunkinfo url="whfwdata9.xml" first="ショートカットタブ" last="プレゼンテーション"/>
+<chunkinfo url="whfwdata10.xml" first="プレゼンテーションページ" last="中"/>
+<chunkinfo url="whfwdata11.xml" first="中央" last="判断"/>
+<chunkinfo url="whfwdata12.xml" first="別" last="帳"/>
+<chunkinfo url="whfwdata13.xml" first="常" last="標準的"/>
+<chunkinfo url="whfwdata14.xml" first="権" last="表"/>
+<chunkinfo url="whfwdata15.xml" first="表示" last="防"/>
+<chunkinfo url="whfwdata16.xml" first="降順" last="｣"/>
 
-<tchunkinfo first="0" last="114" url="whftdata0.xml" />
-<tchunkinfo first="115" last="149" url="whftdata1.xml" />
+<tchunkinfo first="0" last="111" url="whftdata0.xml" />
+<tchunkinfo first="112" last="191" url="whftdata1.xml" />
 
 </fts>

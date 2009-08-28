@@ -78,7 +78,7 @@
 </key>
 <key name="会議" >
   <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="会議を予定する" >
   <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
@@ -190,13 +190,13 @@
   <topic name="リッチテキストエディタを使用する" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="新着メッセージ" >
-  <topic name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="新着メール" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="新着メールをポーリングする" >
   <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="新着メールを確認する" >
-  <topic name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="新着メール" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="既存のアカウントを追加する" >
   <topic name="POPアカウントを追加する" url="Userspecific/Adding_POP_accounts.htm" />
@@ -205,7 +205,7 @@
   <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="検索、and/or" >
-  <topic name="「And」型と「Or」型の検索" url="Search/and_vs_or_searches.htm" />
+  <topic name="“AND”型と“OR”型の検索" url="Search/and_vs_or_searches.htm" />
 </key>
 <key name="検索の例" >
   <topic name="検索の例" url="Search/search_examples.htm" />
