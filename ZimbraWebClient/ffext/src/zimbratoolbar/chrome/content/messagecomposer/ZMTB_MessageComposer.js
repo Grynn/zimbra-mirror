@@ -6,10 +6,10 @@ var ZMTB_MessageComposer = function(requestManager, browser)
 	this._ccBox = null;
 	this._subBox = null;
 	this._messBox = null;
-	this._browser = browser;
+	// this._browser = browser;
 	this._pgListener = new ZMTB_AttachProgressListener(this);
 	this._dragObserver = new ZMTB_AttachDragObserver(this);
-	this._browser.addProgressListener(this._pgListener);
+	// this._browser.addProgressListener(this._pgListener);
 	this._attachments = [];
 	this._files = [];
 }
@@ -35,6 +35,8 @@ ZMTB_MessageComposer.prototype._addEvents = function(email)
 	this._ccBox = this._panel.document.getElementById("zmc_cc");
 	this._subBox = this._panel.document.getElementById("zmc_sub");
 	this._messBox = this._panel.document.getElementById("zmc_mess");
+	this._browser = this._panel.document.getElementById("ZMTB_AttachBrowser");
+	this._browser.addProgressListener(this._pgListener);
 	if(email)
 	{
 		this._toBox.value = email;
@@ -256,11 +258,12 @@ ZMTB_MessageComposer.prototype.receiveFile = function(file)
 ZMTB_MessageComposer.prototype.receiveFiles = function(files)
 {
 	this._files = files;
-	this._browser.loadURI("chrome://zimbratb/content/messagecomposer//upload.html");
+	this._browser.loadURI("chrome://zimbratb/content/messagecomposer/upload.html");
 };
 
 ZMTB_MessageComposer.prototype.processStatus = function(status)
 {
+	Components.utils.reportError("Status is: "+status);
 	if(status == 0)
 		this._panel.document.getElementById("zmc_error").value="";
 	else
@@ -269,6 +272,11 @@ ZMTB_MessageComposer.prototype.processStatus = function(status)
 
 ZMTB_MessageComposer.prototype.processPage = function(URI, doc)
 {
+	//Moved upload browser to compose window, needed hack
+	URI = this._browser.currentURI;
+	doc = this._browser.contentDocument;
+	//End hack
+	
 	if(URI.host == "zimbratb" && doc.getElementsByName("fileUpload").length==0)
 	{
 		var filediv = doc.getElementById("zmfiles");

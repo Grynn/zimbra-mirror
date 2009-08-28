@@ -14,14 +14,14 @@
 			<preference id="zmtb-remindappts" name="extensions.zmtb.remindAppts" type="bool"/>
 			<preference id="zmtb-recentsearch" name="extensions.zmtb.recentSearch" type="string"/>
 			<preference id="zmtb-showfolders" name="extensions.zmtb.showFolders" type="string"/>
-			<preference id="zmtb-defaultwatch" name="extensions.zmtb.defaultWatch" type="int"/>
+			<preference id="zmtb-defaultwatch" name="extensions.zmtb.defaultWatch" type="string"/>
 		</preferences>
 		<groupbox>
 			<caption label="&zmtb.preferences.connectionsettings;"/>
 			<hbox>
 				<label value="&zmtb.preferences.serverurl;" width="150"/>
 				<vbox>
-					<textbox preference="zmtb-hostname" id="zmtb-hostnameField" width="300"/>
+					<textbox preference="zmtb-hostname" id="zmtb-hostnameField" type="autocomplete" autocompletesearch="history" width="300"/>
 					<label value="&zmtb.preferences.serverex;" style="font-size:10px; font-style:italic"/>
 				</vbox>
 			</hbox>
@@ -55,10 +55,10 @@
 						</radiogroup>
 					</hbox>
 				</vbox>
-				<spacer width="100"/>
+				<spacer flex="100"/>
 				<vbox align="end">
 					<hbox align="center">
-						<label value="Default watch folder: " /><menulist id="ZMTB-Default-Folder" preference="zmtb-defaultwatch" />
+						<label value="Default watch folder: " /><menulist id="ZMTB-Default-Folder" preference="zmtb-defaultwatch" width="150" />
 					</hbox>
 					<hbox align="center">
 						<label value="&zmtb.preferences.updatefreq;"/>

@@ -226,7 +226,8 @@ ZMTB_ApptManager.prototype._setTimers = function()
 	var This = this;
 	for (var i=0; i < this._appts.length; i++) 
 	{
-		if((this._appts[i].alarm - (new Date).getTime()) > 0 && !this._appts[i].timer)
+		//Alarm must be in the future but not more than ZMTB_ApptManager.HOURSPAST hours away
+		if((this._appts[i].alarm - (new Date).getTime()) > 0 && (this._appts[i].alarm - (new Date).getTime()) < (ZMTB_ApptManager.HOURSPAST * 60 * 60 * 1000)  && !this._appts[i].timer)
 		{
 			Components.utils.reportError("Timer set for: "+ this._appts[i].name + " With timeout: "+(this._appts[i].alarm - (new Date).getTime()).toString());
 			this._appts[i].timer = window.setTimeout(function(id){This.notify(id)}, this._appts[i].alarm - (new Date).getTime(), this._appts[i].id);

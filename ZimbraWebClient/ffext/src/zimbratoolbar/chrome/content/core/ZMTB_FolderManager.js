@@ -191,6 +191,16 @@ ZMTB_FolderManager.prototype.registerListener = function(listener)
 	this._listeners.push(listener);
 }
 
+ZMTB_FolderManager.prototype.removeListener = function(listener)
+{
+	for (var i = this._listeners.length - 1; i >= 0; i--)
+		if(this._listeners[i] == listener)
+		{
+			this._listeners.splice(i, 1);
+			return;
+		}
+}
+
 ZMTB_FolderManager.prototype._updateListeners = function()
 {
 	// Components.utils.reportError("Updating listeners.");

@@ -173,6 +173,7 @@ ZMTB_CalendarActions.prototype.newApptCommand = function()
 	document.getElementById("ZimTB-NewAppt-StartDate").dateValue = start;
 	document.getElementById("ZimTB-NewAppt-EndTime").dateValue = end;
 	document.getElementById("ZimTB-NewAppt-EndDate").dateValue = end;
+	document.getElementById("ZimTB-NewAppt-AllDay").checked = false;
 	document.getElementById("ZimTB-NewAppt-Subject").value = "";
 	document.getElementById("ZimTB-NewAppt-Location").value = "";
 }
@@ -180,17 +181,18 @@ ZMTB_CalendarActions.prototype.newApptCommand = function()
 ZMTB_CalendarActions.prototype.newAppt = function(cal, subj, loc, startdate, starttime, enddate, endtime, repeat, alarm, allday)
 {
 	var sd = ZMTB_AjxSoapDoc.create("CreateAppointmentRequest", ZMTB_RequestManager.NS_MAIL);
-	// var sd = AjxSoapDoc.create("CreateAppointmentRequest", ZMTB_RequestManager.NS_MAIL);
+	
+	// <s d="YYYYMMDD['T'HHMMSS[Z]]" [tz="timezone_identifier"]>
 	var st = startdate.getUTCFullYear().toString()+((startdate.getUTCMonth()+1).toString().length==2?(startdate.getUTCMonth()+1):"0"+(startdate.getUTCMonth()+1)).toString()+(startdate.getUTCDate().toString().length==2?startdate.getUTCDate():"0"+startdate.getUTCDate()).toString()+"T"+(starttime.getUTCHours().toString().length==2?starttime.getUTCHours():"0"+starttime.getUTCHours()).toString()+(starttime.getUTCMinutes().toString().length==2?starttime.getUTCMinutes():"0"+starttime.getUTCMinutes()).toString()+(starttime.getUTCSeconds().toString().length==2?starttime.getUTCSeconds():"0"+starttime.getUTCSeconds()).toString()+"Z";
 	var et = enddate.getUTCFullYear().toString()+((enddate.getUTCMonth()+1).toString().length==2?(enddate.getUTCMonth()+1):"0"+(enddate.getUTCMonth()+1)).toString()+(enddate.getUTCDate().toString().length==2?enddate.getUTCDate():"0"+enddate.getUTCDate()).toString()+"T"+(endtime.getUTCHours().toString().length==2?endtime.getUTCHours():"0"+endtime.getUTCHours()).toString()+(endtime.getUTCMinutes().toString().length==2?endtime.getUTCMinutes():"0"+endtime.getUTCMinutes()).toString()+(endtime.getUTCSeconds().toString().length==2?endtime.getUTCSeconds():"0"+endtime.getUTCSeconds()).toString()+"Z";
-	// <s d="YYYYMMDD['T'HHMMSS[Z]]" [tz="timezone_identifier"]>
 	var m =  {"l":cal, 
 				"su":subj,
 				"inv":{ 
 					"comp":{"name":subj, 
 							"loc":loc, 
 							"s":{"d":st}, 
-							"e":{"d":et}
+							"e":{"d":et}, 
+							"allDay":allday
 							}
 						}
 			};

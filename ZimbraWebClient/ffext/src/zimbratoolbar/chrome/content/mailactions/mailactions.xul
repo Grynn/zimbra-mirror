@@ -10,9 +10,9 @@
 			new ZMTB_MailActions(com_zimbra_tb);
 		}, false);
 	</script>
-	<vbox>
-		<browser id="ZMTB_AttachBrowser" height="0" width="0" />
-	</vbox>
+	<!-- 			<vbox>
+					<browser id="ZMTB_AttachBrowser" height="0" width="0" />
+				</vbox> -->
 	<toolbar id="ZimTB-Toolbar">
 		<toolbarbutton flex="0" id="ZimTB-Mail-Button" label="&zmtb.mailactions.mail;" type="menu" menu="ZimTB-Mail-Menu">
 			<menupopup id="ZimTB-Mail-Menu">

@@ -102,7 +102,7 @@
 <!ENTITY zmtb.calendaractions.newappt.create "Create Appointment:">
 <!ENTITY zmtb.calendaractions.newappt.start "Start:">
 <!ENTITY zmtb.calendaractions.newappt.end "End:">
-<!ENTITY zmtb.calendaractions.newappt.allday "All Day:">
+<!ENTITY zmtb.calendaractions.newappt.allday "All Day">
 <!ENTITY zmtb.calendaractions.newappt.repeat "Repeat:">
 <!ENTITY zmtb.calendaractions.newappt.repeat.none "None">
 <!ENTITY zmtb.calendaractions.newappt.repeat.day "Every Day">

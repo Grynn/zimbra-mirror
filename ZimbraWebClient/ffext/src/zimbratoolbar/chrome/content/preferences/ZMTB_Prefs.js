@@ -28,7 +28,10 @@ var ZMTB_Prefs = function()
 		{
 			this._zmtb = win.com_zimbra_tb;
 			this._zmtb.getRequestManager().addUpdateListener(this);
+			this._zmtb.getFolderManager().registerListener(this);
+			window.addEventListener("unload", function(){This._zmtb.getFolderManager().removeListener(This)}, false);
 			this._folderMan = this._zmtb.getFolderManager();
+			this._localStrings = this._zmtb.getLocalStrings();
 			this.updateFolders();
 		}
 	}
@@ -51,29 +54,34 @@ var ZMTB_Prefs = function()
 		this._passField.value = password;
 }
 
-ZMTB_Prefs.prototype.updateFolders = function(responseObj)
+ZMTB_Prefs.prototype.updateFolders = function()
 {
 	var folders = this._folderMan.getFolders("default");
+	this.resetFolderList();
 	this._populateList(folders);
+}
+
+ZMTB_Prefs.prototype.resetFolderList = function()
+{
+	this._menuList.removeAllItems();
 }
 
 ZMTB_Prefs.prototype._populateList = function(folders)
 {
-	// var list = document.getElementById("ZMTB-Default-Folder");
-	// this.resetFolderList();
 	///Using new folder manager
 	var list = this._menuList;
 	for (var i=0; i < folders.length; i++)
 		this._addToMenu(folders[i], "ZimTB-"+folders[i].name+"-Folder");
 	list.selectedIndex = 0;
 	var pm = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-	var df = pm.getIntPref("extensions.zmtb.defaultWatch");
+	var df = pm.getCharPref("extensions.zmtb.defaultWatch");
 	for (var i=0; i < this._menuList.itemCount; i++)
 		if(this._menuList.getItemAtIndex(i).value == df)
 			this._menuList.selectedIndex = i;
 	if(!this._menuList.selectedIndex)
 		this._menuList.selectedIndex = 0;
-	this._menuList.className = this._menuList.selectedItem.className;
+	if(this._menuList.selectedItem)
+		this._menuList.className = this._menuList.selectedItem.className;
 	var This = this;
 	this._menuList.addEventListener("command", function(){This._menuList.className = This._menuList.selectedItem.className}, false)
 }
@@ -84,11 +92,11 @@ ZMTB_Prefs.prototype._addToMenu = function(folder, class)
 	var m = this._menuList.appendItem(folder.name, folder.id);
 	m.style.marginLeft = mL;
 	if(class)
-		m.className = class + " menu-iconic ZimTB-Mail-Folder";
+		m.className = class + " menuitem-iconic ZimTB-Mail-Folder";
 	if(folder.rss)
-		m.className = "ZimTB-RSS-Folder menu-iconic";
+		m.className = "ZimTB-RSS-Folder menuitem-iconic";
 	else if(folder.query)
-		m.className = "ZMTB-Search-Folder menu-iconic";
+		m.className = "ZMTB-Search-Folder menuitem-iconic";
 }
 
 ZMTB_Prefs.prototype.receiveUpdate = function(responseObj)
@@ -113,18 +121,18 @@ ZMTB_Prefs.prototype.receiveUpdate = function(responseObj)
 	clearTimeout(this._timeout);
 	if(responseObj.Body.Fault && responseObj.Body.Fault.Detail.Error.Code)
 	{
-		if(this._statusLabel.value == "Connected to server!")
+		if(this._statusLabel.value == this._localStrings.getString("preferences_status_connected"))
 			return;
 		switch(responseObj.Body.Fault.Detail.Error.Code)
 		{
 			case "NETWORK_ERROR":
-				this._statusLabel.value = "Could not connect to server."
+				this.setStatus(this._localStrings.getString("preferences_status_noconnect"));
 				break;
 			case "account.CHANGE_PASSWORD":
-				this._statusLabel.value = "Password has expired."
+				this.setStatus(this._localStrings.getString("preferences_status_passexp"));
 				break;
 			case "account.AUTH_FAILED":
-				this._statusLabel.value = "Incorrect username or password."
+				this.setStatus(this._localStrings.getString("preferences_status_noauth"));
 				break;
 		}
 	}
@@ -132,7 +140,7 @@ ZMTB_Prefs.prototype.receiveUpdate = function(responseObj)
 	{
 		clearTimeout(this._timeout);
 		if(this._startConnect)
-			this._statusLabel.value = "Connected to server!";
+			this.setStatus(this._localStrings.getString("preferences_status_connected"))
 	}
 }
 
@@ -165,17 +173,17 @@ ZMTB_Prefs.prototype.connect = function()
 	
 	if(pm.getCharPref("extensions.zmtb.hostname")=="")
 	{
-		this._statusLabel.value = "You have entered an invalid Server URL.";
+		this.setStatus(this._localStrings.getString("preferences_status_invalidurl"));
 		return;
 	}
 	else if(pm.getCharPref("extensions.zmtb.username")=="")
 	{
-		this._statusLabel.value = "User name required.";
+		this.setStatus(this._localStrings.getString("preferences_status_needusername"));
 		return;
 	}
 	else if(this._passField.value=="")
 	{
-		this._statusLabel.value = "Password required.";
+		this.setStatus(this._localStrings.getString("preferences_status_needpassword"));
 		return;
 	}
 
@@ -190,12 +198,11 @@ ZMTB_Prefs.prototype.connect = function()
 		}
 	}
 	passwordManager.addLogin(loginInfo);
-	Components.utils.reportError("connect")
 	if(ZMTB_Prefs._checkURL(pm.getCharPref("extensions.zmtb.hostname")))
 		pm.setCharPref("extensions.zmtb.hostname", ZMTB_Prefs._checkURL(pm.getCharPref("extensions.zmtb.hostname")))
 	else
 	{
-		this._statusLabel.value = "You have entered an invalid Server URL.";
+		this.setStatus(this._localStrings.getString("preferences_status_invalidurl"));
 		return;
 	}
 	var enumerator = wm.getEnumerator("navigator:browser");
@@ -206,11 +213,14 @@ ZMTB_Prefs.prototype.connect = function()
 				win.com_zimbra_tb.getRequestManager().newServer(pm.getCharPref("extensions.zmtb.hostname"), pm.getCharPref("extensions.zmtb.username"), this._passField);
 	}
 	this._statusLabel.value = "";
-	this._timeout = setTimeout("window._zmtbPrefs.setStatus('Could not connect to server.')", 5000);
+	this._timeout = setTimeout(this.setStatus, 5000, this, this._localStrings.getString("preferences_status_noconnect"));
 }
-ZMTB_Prefs.prototype.setStatus = function(message)
+ZMTB_Prefs.prototype.setStatus = function(message, This)
 {
-	this._statusLabel.value = message;
+	if(This)
+		This._statusLabel.value = message;
+	else
+		this._statusLabel.value = message;		
 }
 ZMTB_Prefs.prototype.resetRecent = function()
 {

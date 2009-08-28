@@ -71,6 +71,7 @@ ZMTB_RequestManager.prototype.sendRequest = function(soapDoc)
 		req.invoke({soapDoc:soapDoc, asyncMode:true, callback:new ZMTB_AjxCallback(this, this.parseResponse), changeToken:this._changeToken});
 		clearTimeout(this._timeout);
 		this._timeout = setTimeout(function(){
+			This._zmtb.notify(This._zmtb.getLocalStrings().getString("requestfail"), null, "failure");
 			This._zmtb.disable();
 		}, 5000);
 	}catch(ex){

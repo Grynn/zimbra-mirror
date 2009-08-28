@@ -6,8 +6,8 @@ var ZMTB_Toolbar = function()
 	this._tbItems = [];
 	this._rqManager.addUpdateListener(this._folderManager);
 	this._localStrings = document.getElementById("ZMTB-LocalStrings");
-	var prefManager = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-    var updateTimer = window.setInterval(function(){This.update()}, prefManager.getCharPref("extensions.zmtb.updatefreq") * 60 * 1000);
+	var prefManager = this._prefManager = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+    this._updateTimer = window.setInterval(function(){This.update()}, prefManager.getCharPref("extensions.zmtb.updatefreq") * 60 * 1000);
     var prefListener = new ZMTB_PrefListener("extensions.zmtb.", function(branch, name)
     {
         switch (name)
@@ -16,8 +16,8 @@ var ZMTB_Toolbar = function()
 	            This._rqManager.setTabPreference(prefManager.getCharPref("extensions.zmtb.openLinksIn"))
 	            break;
 	        case "updatefreq":
-	            window.clearInterval(updateTimer);
-	            updateTimer = window.setInterval(function(){This.update()}, prefManager.getCharPref("extensions.zmtb.updatefreq") * 60 * 1000);
+	            window.clearInterval(this._updateTimer);
+	            this._updateTimer = window.setInterval(function(){This.update()}, prefManager.getCharPref("extensions.zmtb.updatefreq") * 60 * 1000);
 	            break;
         }
 	});
@@ -32,14 +32,18 @@ ZMTB_Toolbar.prototype.reset = function()
 
 ZMTB_Toolbar.prototype.enable = function()
 {
-	document.getElementById("ZMTB-Notifications").hidden = false;
+	// document.getElementById("ZMTB-Notifications").hidden = false;
+	clearInterval(this._updateTimer);
+	var This = this;
+	this._updateTimer = window.setInterval(function(){This.update()}, This._prefManager.getCharPref("extensions.zmtb.updatefreq") * 60 * 1000);
 	for (var i=0; i < this._tbItems.length; i++)
 		this._tbItems[i].enable();
 }
 
 ZMTB_Toolbar.prototype.disable = function()
 {
-	document.getElementById("ZMTB-Notifications").hidden = true;
+	// document.getElementById("ZMTB-Notifications").hidden = true;
+	clearInterval(this._updateTimer);
 	for (var i=0; i < this._tbItems.length; i++)
 		this._tbItems[i].disable();
 }

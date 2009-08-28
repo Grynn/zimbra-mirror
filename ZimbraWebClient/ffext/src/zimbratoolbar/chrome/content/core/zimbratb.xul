@@ -5,6 +5,7 @@
 <?xul-overlay href="chrome://zimbratb/content/appointments/appointments.xul"?>
 <?xul-overlay href="chrome://zimbratb/content/zimbraactions/zimbraactions.xul"?>
 <?xul-overlay href="chrome://zimbratb/content/searchlist/searchlist.xul"?>
+<!-- <?xul-overlay href="chrome://zimbratb/content/folderlist2.xul"?> -->
 <?xul-overlay href="chrome://zimbratb/content/folderlist/folderlist.xul"?>
 <?xul-overlay href="chrome://zimbratb/content/mailactions/mailactions.xul"?>
 <?xul-overlay href="chrome://zimbratb/content/contactactions/contactactions.xul"?>

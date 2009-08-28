@@ -176,7 +176,7 @@ ZMTB_FolderList.prototype._populateList = function(folders)
 		this._addToMenu(folders[i], "ZimTB-"+folders[i].name+"-Folder");
 	this._menuList.selectedIndex = 0;
 	var pm = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-	var df = pm.getIntPref("extensions.zmtb.defaultWatch");
+	var df = pm.getCharPref("extensions.zmtb.defaultWatch");
 	for (var i=0; i < this._menuList.itemCount; i++)
 		if(this._menuList.getItemAtIndex(i).value == df)
 			this._menuList.selectedIndex = i;

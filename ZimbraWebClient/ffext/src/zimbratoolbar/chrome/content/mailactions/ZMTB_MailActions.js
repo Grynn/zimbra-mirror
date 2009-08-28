@@ -2,7 +2,7 @@ var ZMTB_MailActions = function(zmtb)
 {
 	ZMTB_Actions.call(this, zmtb);
 	zmtb.getRequestManager().addUpdateListener(this);
-	this._messageComp = new ZMTB_MessageComposer(this._rqManager, document.getElementById("ZMTB_AttachBrowser"));
+	this._messageComp = new ZMTB_MessageComposer(this._rqManager/*, document.getElementById("ZMTB_AttachBrowser")*/);
 	var This = this;
 	this._folderMan.setFilter("mail", {first:[2, 5, 6, 4], exclude:[3, 14], type:"message", root:true});
 	this._folderMan.setFilter("search", {first:[2, 5, 6, 4], exclude:[3, 14], type:"message", root:true, search:true});

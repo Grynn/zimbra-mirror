@@ -12,6 +12,7 @@ var ZMTB_ContactActions = function(zmtb)
 	},false);
 	
 	this._folderMan.setFilter("contacts", {type:"contact", exclude:[3], root:true});
+	this._folderMan.setFilter("newcontact", {type:"contact", exclude:[3]});
 	document.getElementById("ZimTB-NewAddressBook").addEventListener("click",function(event){
 		This.openActions("ZimTB-NewAddrBook-Bar");
 		This._populateList(document.getElementById("ZimTB-NewAddrBook-Parent"), This._folderMan.getFolders("contacts"), This._localstrings.getString("contactaction_rootname"));
@@ -78,7 +79,7 @@ var ZMTB_ContactActions = function(zmtb)
 			firstName:document.getElementById("ZimTB-NewContact-First").value,
 			company:document.getElementById("ZimTB-NewContact-Company").value,
 			jobTitle:document.getElementById("ZimTB-NewContact-JobTitle").value,
-			email:document.getElementById("ZimTB-NewContact-Email").value,
+			Email:document.getElementById("ZimTB-NewContact-Email").value,
 			Street:document.getElementById("ZimTB-NewContact-Street").value,
 			City:document.getElementById("ZimTB-NewContact-City").value,
 			State:document.getElementById("ZimTB-NewContact-State").value,
@@ -167,7 +168,7 @@ ZMTB_ContactActions.prototype.newContactCommand = function()
 	if(phone)
 		document.getElementById("ZimTB-NewContact-Phone").value = phone[0];
 	this.openActions("ZimTB-NewContact-Bar");
-	this._populateList(document.getElementById("ZimTB-NewContact-AddressBooks"), this._folderMan.getFolders("contacts"), this._localstrings.getString("contactaction_rootname"));
+	this._populateList(document.getElementById("ZimTB-NewContact-AddressBooks"), this._folderMan.getFolders("newcontact"));
 	//Set default folder
 	for (var i=0; i < document.getElementById("ZimTB-NewContact-AddressBooks").itemCount; i++)
 		if(document.getElementById("ZimTB-NewContact-AddressBooks").getItemAtIndex(i).getAttribute("value") == 7) //Default contacts folder ID
@@ -190,7 +191,6 @@ ZMTB_ContactActions.prototype.newContactCommand = function()
 ZMTB_ContactActions.prototype.newContact = function(cObj, folderId, location)
 {
 	var sd = ZMTB_AjxSoapDoc.create("CreateContactRequest", ZMTB_RequestManager.NS_MAIL);
-	// var sd = AjxSoapDoc.create("CreateContactRequest", ZMTB_RequestManager.NS_MAIL);
 	var as = [];
 	var i=0;
 	var cn = sd.set("cn", {"l":folderId})
@@ -199,7 +199,7 @@ ZMTB_ContactActions.prototype.newContact = function(cObj, folderId, location)
 		var n=a;
 		if(cObj[a] == "")
 			continue;
-		//If the object name begins with an uppercase letter, it needs a location prefix [work|home]
+		//If the property name begins with an uppercase letter, it needs a location prefix [work|home]
 		if(a.match(/^[A-Z]+\S*/g))
 			n=location+a;
 		var el = sd.set("a", cObj[a], cn)

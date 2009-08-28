@@ -11,7 +11,7 @@ var ZMTB_SearchList = function(zmtb)
 	this.customSearch = false;
 	var This = this;
 	this._menuList.addEventListener("keypress", function(event){if(event.keyCode==event.DOM_VK_RETURN || event.keyCode==event.DOM_VK_ENTER)This.execSearch(event.target.label)}, false);
-	document.getElementById("ZMTB-SearchButton").addEventListener("command", function(){This.execSearch(This._menuList.label)}, false)
+	document.getElementById("ZMTB-SearchButton").addEventListener("command", function(){This.execSearch(This._menuList.label)}, false);
 	this._menuList.addEventListener("command", function(event){event.stopPropagation(); This.execRecent(event.target.label)}, false);
 	this._tagMenu.addEventListener("command", function(event){event.stopPropagation(); This.execTag(event.target.label);}, false);
 	this.loadRecent();
@@ -33,11 +33,13 @@ ZMTB_SearchList.EMPTYTAGLIST =  "No Tags";
 ZMTB_SearchList.prototype.enable = function()
 {
 	document.getElementById("ZimTB-SearchTerms").disabled = false;
+	document.getElementById("ZMTB-SearchButton").disabled = false;
 }
 
 ZMTB_SearchList.prototype.disable = function()
 {
 	document.getElementById("ZimTB-SearchTerms").disabled = true;
+	document.getElementById("ZMTB-SearchButton").disabled = true;
 }
 
 ZMTB_SearchList.prototype.reset = function()
