@@ -1,0 +1,103 @@
+﻿[GlossaryTab]
+TabCaption=&Глоссарий
+TermCaption=&Термин
+DefinitionCaption=&Определение:
+
+[BrowseSequence]
+PreCaption=Предыдущий
+PreTooltip=Предыдущий раздел
+NextCaption=Следующий
+NextTooltip=Следующий раздел
+BlockTooltip=Выбрать блок
+
+[Common]
+Contents=Содержание
+Index=Указатель
+Search=Поиск
+Glossary=Глоссарий
+Logo/Author=Предоставляется
+Show=Показать
+Hide=Скрыть
+SyncToc=SyncToc
+Prev=<<
+Next=>>
+Disabled Prev=<<
+Disabled Next=>>
+Seperate = |
+
+[WebHelp]
+Cancel=Отмена
+CantOpenURLorFile=Невозможно открыть URL или файл
+CompletingContents=Заполнение содержания...
+Display=Показать
+Term=Термин:
+Definition=Определение:
+Done=Готово
+Find=Найти
+IndexInputPrompt=Введите ключевое слово для поиска:
+RelateTopicListPrompt=Выберите раздел, затем нажмите 'Показать'.
+LoadingData=Загрузка данных, подождите...
+LoadingContents=Загрузка содержания, подождите...
+LoadingContentsData=Загрузка, нажмите здесь для отмены...
+LoadingFTS=Чтение данных поиска...
+LoadingIndex=Загрузка указателя...
+LoadingTOCItem=Загрузка содержания:
+Searching=Поиск…
+FtsInputPrompt=Введите слова для поиска:
+FtsHilitePrompt=Выделить результаты поиска
+TopicsFound=разделов найдено
+BrowserLimitedMessage=Ваш обозреватель не поддерживает рамки. Рекомендуется обновить обозреватель на версию, поддерживающую рамки.
+SuggestViewNoFrameMessage=Для просмотр справочной системы без рамок нажмите эту
+SuggestViewNoFrameMsg2=гиперссылку.
+TopicsNotFound=Разделов не найдено.
+CantSearch=Невозможно выполнить поиск для этой фразы.
+JS_alert_appletNotLoad = Не удалось загрузить приложение. Если используется старая версия Netscape, необходимо изменить файл prefs.js.
+JS_alert_colorlimitation=Система WebHelp обнаружила, что дисплей настроен на 16 цветов. Для полной поддержки WebHelp задайте для дисплея использование 256 или более цветов.
+Blank_topic_text=Этот раздел создан мастером WinHelp Project Conversion и используется для отсутствующего раздела или неработающей гиперссылки.
+JS_alert_ProjectLoadingFail=Неуспешная загрузка, нажмите 'Обновить'.
+JS_alert_cantLoadProject=Невозможно загрузить проект:
+JS_alert_ErrorInLoading=Ошибка при загрузке компонента навигации. Выполните регенерацию WebHelp.
+IndexBtnText=Вперед
+FtsBtnText=Вперед
+ToolBarSearchBtnText=Вперед
+InTopicSearchBtnText=Вперед
+SearchLabel=Поиск
+SearchPrompt=- Поиск -
+PreTooltip=Предыдущий раздел
+NextTooltip=Следующий раздел
+WebSearch=WebSearch
+SyncTocTooltip=Синхр. содержания
+Book=Книга
+Page=Страница
+Remote_Page=Удаленная страница
+Show_Navigation_Component=Показать компонент навигации
+Hide_Navigation_Component=Скрыть компонент навигации
+nls_edit_label=Введите вопрос:
+nls_button_go_hint=Начать поиск
+nls_button_go_text=Вперед
+nls_body_instruction=Введите свой вопрос в текстовом поле выше, затем нажмите 'Вперед'.
+nls_body_empty=Извините, нам не удалось найти достойный ответ на вопрос.
+IndexSelectTopicTitle=Выбор раздела
+IndexSelectTopicLabel=Выберите раздел, затем нажмите 'Показать'
+IndexSelectTopicError=Выберите раздел.
+IndexAlphabetBookmarks=АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ
+MergeError1=В объединенной справочной системе
+MergeError2=используется другой язык по сравнению с основной справочной системой, поэтому функции указателя и полнотекстового поиска в объединенной системе будут отключены.
+MergeError3=использование пометки веб-настройки, отличной от основной справочной системы, которая приведет к тому, что объединенная функциональность в справочной системе будет отключена.
+PoweredBy=Предоставляется
+GeneratedBy=Создано
+Author=Автор
+About=О программе
+Print=Печать
+
+[PrintedDoc]
+TableOfContents=Содержание
+TitlePage=Титульный лист
+ChapterFileNamePrefix=Глава_
+TitlePageFileName=Глава__Название_Страница.doc
+CrossReferencePrefix=См.
+GlossaryHeadingStyleName=Заголовок глоссария
+GlossaryTermStyleName=Термин глоссария
+GlossaryDefinitionStyleName=Определение глоссария
+TitlePageTitleStyleName=Заголовок титульного листа
+TocPageTitleStyleName=Заголовок страницы содержания

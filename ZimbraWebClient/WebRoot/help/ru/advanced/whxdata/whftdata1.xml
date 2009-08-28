@@ -1,6 +1,49 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <ftstdata>
+<topic name="Совместный доступ к почтовому ящику" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+<topic name="Работа в общей папке почты" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+<topic name="Согласие на общий доступ к документам (блокнот)" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
+<topic name="Добавление таблицы на страницу блокнота" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<topic name="Отмена доступа к папке вики-документов" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+<topic name="Создание новой страницы" url="Documents/Create_a_new_page.htm" />
+<topic name="Создание новых блокнотов" url="Documents/Create_multiple_notebooks.htm" />
+<topic name="Подключение к общему блокноту" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
+<topic name="Общий доступ к «Документам» (блокнотам)" url="Documents/Sharing_Notebooks.htm" />
+<topic name="Использование кода HTML для форматирования страниц" url="Documents/Using_HTML_for_format_pages.htm" />
+<topic name="Использование форматированного текста" url="Documents/Using_the_rich_text_editor.htm" />
+<topic name="Работа в документах Zimbra" url="Documents/Working_in_Notebooks.htm" />
+<topic name="Поддерживаемые условия и действия фильтров" url="filters/filter_conditions_and_actions_supported.htm" />
+<topic name="Фильтрация сообщений" url="filters/filtering_your_messages.htm" />
+<topic name="Как работают фильтры" url="filters/how_filtering_works.htm" />
+<topic name="Подстановочные знаки" url="filters/wildcards.htm" />
+<topic name="О Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+<topic name="Ссылки и функции пользовательского интерфейса" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+<topic name="Мгновенные сообщения. Основные сведения" url="instant_messaging/Instant_Messaging_Basics.htm" />
+<topic name="Общий доступ к портфелю" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+<topic name="Работа в портфеле" url="Miscellaneous_one_off_topics/Working_in_Briefcase.htm" />
+<topic name="Помощник Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+<topic name="О папках" url="Navigation_folders_and_tips/about_folders.htm" />
+<topic name="Применение действий к нескольким выбранным элементам" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
+<topic name="Подписка на RSS/Atom-ленты" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+<topic name="Использование браузера с клиентом Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+<topic name="Систематизация почтовых сообщений" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+<topic name="Изменение типа клиента по умолчанию для входа" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+<topic name="Создание специальных папок" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+<topic name="Настройка исходной страницы почты" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
+<topic name="Удаление папок" url="Navigation_folders_and_tips/deleting_folders.htm" />
+<topic name="Область «Папки»" url="Navigation_folders_and_tips/Folders_area.htm" />
+<topic name="Системные папки" url="Navigation_folders_and_tips/inbox_folder.htm" />
+<topic name="Перемещение почтовых сообщений по папкам" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+<topic name="Рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+<topic name="Лимиты" url="Navigation_folders_and_tips/quotas.htm" />
+<topic name="Переименование папок" url="Navigation_folders_and_tips/renaming_folders.htm" />
+<topic name="Меню, открываемые правой кнопкой мыши" url="Navigation_folders_and_tips/right-click_menus.htm" />
+<topic name="Папка «Отправленные»" url="Navigation_folders_and_tips/sent_folder.htm" />
+<topic name="Сортировка столбцов в области содержимого" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+<topic name="Вид «Обычный»" url="Navigation_folders_and_tips/Traditional_View.htm" />
+<topic name="Корзина" url="Navigation_folders_and_tips/trash_folder.htm" />
+<topic name="Горячие клавиши ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
 <topic name="Удаление сообщений" url="reading_mail/archiving_old_messages.htm" />
 <topic name="Блокирование вложений" url="reading_mail/attachment_blocking.htm" />
 <topic name="Отображение HTML-кода в почтовых сообщениях" url="reading_mail/displaying_html_in_email_messages.htm" />

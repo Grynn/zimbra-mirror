@@ -1,10 +1,36 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Общий доступ к папкам почты" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
-<item name="Совместный доступ к почтовому ящику" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-<item name="Отказ в доступе к общей папке" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
-<item name="Принятие доступа к общей папке почты" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-<item name="Работа в общей папке почты" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+<item name="Управление элементами общего доступа" url="6_0new_topics/Managing_items_you_share.htm" />
+<book name="Общий доступ к папкам почты" >
+  <item name="Общий доступ к папкам почты" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
+  <item name="Общий доступ к почтовому ящику" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+  <item name="Принятие доступа к общей папке почты" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+  <item name="Отказ в доступе к общей папке" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="Работа в общей папке почты" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+</book>
+<book name="Общий доступ к адресным книгам" >
+  <item name="Предоставление доступа к адресной книге" url="Contacts/Sharing_your_Address_Book.htm" />
+</book>
+<book name="Общий доступ к ежедневникам" >
+  <item name="Предоставление общего доступа к ежедневнику" url="Calendar/Delegating_Calendar_Access.htm" />
+  <item name="Предоставление прав администратора для ежедневников общего доступа" url="6_0new_topics/Admin_rights_for_shared_Calendars.htm" />
+  <item name="Предоставление прав менеджера для ежедневников общего доступа" url="6_0new_topics/Manager_rights_for_shared_Calendars.htm" />
+  <item name="Принятие доступа к общему ежедневнику" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+  <item name="Отклонение запроса на общий доступ к ежедневнику" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+</book>
+<book name="Общий доступ к спискам задач" >
+  <item name="Общедоступный список задач" url="Tasks/Share_your_Task_folder.htm" />
+  <item name="Принятие доступа к списку задач" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
+</book>
+<book name="Общий доступ к «Документам» (блокнотам)" >
+  <item name="Общий доступ к «Документам» (блокнотам)" url="Documents/Sharing_Notebooks.htm" />
+  <item name="Согласие на общий доступ к документам (блокнот)" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
+  <item name="Подключение к общему блокноту" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
+  <item name="Изменение или отмена доступа к документам (блокнот)" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+</book>
+<book name="Общий доступ к папкам портфеля" >
+  <item name="Общий доступ к портфелю" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+</book>
 
 </tocdata>
