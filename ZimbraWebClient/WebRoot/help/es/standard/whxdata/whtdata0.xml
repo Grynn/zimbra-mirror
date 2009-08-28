@@ -18,14 +18,13 @@
 <book name="Gestionar tus mensajes " >
   <item name="Gestionar cómo se visualizan los mensajes" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
   <item name="Cómo saber que has recibido un mensaje nuevo" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
-  <item name="Organizar tus mensajes de correo" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
-  <item name="Organizar los mensajes en el panel de contenido" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  <item name="Clasificar tus mensajes de correo" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="Imprimir los mensajes de correo" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="Configurar una dirección de reenvío" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Recuperar los mensajes eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Eliminar los mensajes" url="reading_mail/b_Purging_email_messages.htm" />
   <book name="Leer tus mensajes" >
-    <item name="Leer tus mensajes" url="reading_mail/reading_mail.htm" />
+    <item name="Leer tu correo" url="reading_mail/reading_mail.htm" />
     <item name="Marcar los mensajes como no leídos" url="reading_mail/b_Marking_mail_as_unread.htm" />
     <item name="Abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
     <item name="Bloqueo de archivos adjuntos" url="reading_mail/attachment_blocking.htm" />
@@ -52,16 +51,16 @@
 <book name="Gestionar tu agenda" >
   <item name="Acerca de la Agenda" url="Calendar/b_About_Calendar.htm" />
   <item name="Crear nueva agenda" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="Eliminar una cita" url="Calendar/b_Canceling_a_meeting.htm" />
   <item name="Añadir un color de fondo a las agendas" url="Calendar/Adding_background_color_to_calendars.htm" />
-  <item name="Importar tu agenda iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
-  <item name="Exportar tu agenda iCal" url="Calendar/Exporting_your_iCal_calendar.htm" />
   <item name="Opciones de la vista de agendas" url="Calendar/Calendar_Views.htm" />
+  <item name="Importar agendas iCalendar" url="6_0new_topics/Importing_iCalendars.htm" />
+  <item name="Ordenar tu agenda" url="6_0new_topics/Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="Programar citas, reuniones y eventos" >
   <item name="Organizar una reunión" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Programar una reunión" url="Calendar/b_Scheduling_a_meeting.htm" />
   <item name="Crear una cita recurrente" url="Calendar/b_creating_recurring_appointments.htm" />
+  <item name="Eliminar una cita" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>
 <book name="Usar las listas de tareas" >
   <item name="Acerca de las tareas" url="Tasks/About_Tasks.htm" />
@@ -69,8 +68,17 @@
   <item name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />
   <item name="Ordenar las tareas" url="Tasks/Sorting_tasks_.htm" />
 </book>
+<book name="Compartir carpetas" >
+  <book name="Compartir tus libretas de direcciones" >
+    <item name="Enlazar a una libreta de direcciones compartida" url="6_0new_topics/Linking_to_a_Shared_Address_Book.htm" />
+  </book>
+  <book name="Compartir tus agendas" >
+    <item name="Enlazar a agenda compartida" url="6_0new_topics/Link_to_Shared_Calendar.htm" />
+  </book>
+</book>
 <book name="Buscar elementos" >
   <item name="Utilizar la búsqueda" url="Search/b_Using_Search.htm" />
+  <item name="Crear y guardar búsquedas" url="6_0new_topics/b_Create_and_Save_a_Search_Query.htm" />
   <item name="Descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
 </book>
 <book name="Utilizar etiquetas y carpetas para organizar los mensajes" >
@@ -86,7 +94,6 @@
 </book>
 <book name="Configurar tus preferencias" >
   <item name="Configurar tus preferencias" url="Userspecific/b_Setting_your_Options.htm" />
-  <item name="Notificaciones de nuevos mensajes" url="Userspecific/New_mail_notifications.htm" />
   <item name="Crear mensajes por ausencia" url="Userspecific/vacation_message.htm" />
   <item name="Guardar los mensajes que envías" url="Navigation_folders_and_tips/sent_folder.htm" />
   <item name="Espacio de almacenamiento del buzón" url="Navigation_folders_and_tips/quotas.htm" />

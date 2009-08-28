@@ -1,0 +1,104 @@
+﻿[GlossaryTab]
+TabCaption=&Glosario
+TermCaption=&Término
+DefinitionCaption=&Definición de:
+
+[BrowseSequence]
+PreCaption=Anterior
+PreTooltip=Tema Previo
+NextCaption=Siguiente
+NextTooltip=Tema Siguiente
+BlockTooltip=Seleccionar examinar secuencias
+
+[Common]
+Contents=Contenido
+Index=Índice
+Search=Búsqueda
+Glossary=Glosario
+Logo/Author=Desarrollado por
+Show=Mostrar
+Hide=Ocultar
+SyncToc=SyncToc
+Prev=<<
+Next=>>
+Disabled Prev=<<
+Disabled Next=>>
+Seperate = |
+
+[WebHelp]
+Cancel=Cancelar
+CantOpenURLorFile=No se puede abrir el URL o archivo
+CompletingContents=Completando el contenido...
+Display=Mostrar
+Term=Término:
+Definition=Definición:
+Done=Hecho
+Find=Encontrar
+IndexInputPrompt=Escriba la palabra clave que quiere encontrar:
+RelateTopicListPrompt=Haga clic en un tema, y luego haga clic en Visualizar.
+LoadingData=Cargando datos, por favor espere...
+LoadingContents=Cargando el contenido, por favor, espere...
+LoadingContentsData=Cargando, haga click para cancelar...
+LoadingFTS=Leyendo los datos de búsqueda...
+LoadingIndex=Cargando el índice...
+LoadingTOCItem=Cargando el índice de materias:
+Searching=Buscando...
+FtsInputPrompt=Escriba la(s) palabra(s) que quiere buscar:
+FtsHilitePrompt=Resaltar resultados de la búsqueda 
+TopicsFound=Temas encontrados
+BrowserLimitedMessage=Su examinador no es compatible con cuadros. Le recomendamos que actualice su examinador a una versión que sea compatible con cuadros.
+SuggestViewNoFrameMessage=Para el sistema de Ayuda sin cuadros, haga clic en este
+SuggestViewNoFrameMsg2=hiperenlace.
+TopicsNotFound=No se han encontrado temas.
+CantSearch=No se puede buscar esta frase.
+JS_alert_appletNotLoad = No se pudo cargar applet. Si utiliza una versión antigua de Netscape, el archivo prefs.js tendrá que actualizarse.
+JS_alert_colorlimitation=WebHelp ha detectado que su pantalla es de 16 colores. Para una compatibilidad completa con WebHelp, configure su pantalla para usar 256 o más colores.
+Blank_topic_text=Este tema fue creado por el Asistente WinHelp Project Conversion, y es el destino de un tema que falta o un hiperenlace roto.
+JS_alert_ProjectLoadingFail=No se pudo cargar correctamente, por favor haga click en Refrescar.
+JS_alert_cantLoadProject=No se puede cargar el proyecto:
+JS_alert_ErrorInLoading=Error al cargar el componente de navegación. Por favor regenere WebHelp.
+IndexBtnText=Ir
+FtsBtnText=Ir
+ToolBarSearchBtnText=Ir
+InTopicSearchBtnText=Ir
+SearchLabel=Buscar
+SearchPrompt=- Buscar -
+PreTooltip=Tema Previo
+NextTooltip=Tema Siguiente
+WebSearch=WebSearch
+SyncTocTooltip=Sincronización de Indice de materias
+Book=Libro
+Page=Paginación
+Remote_Page=Paginación alejada
+Show_Navigation_Component=Mostrar componente de navegación
+Hide_Navigation_Component=Ocultar componente de navegación
+nls_edit_label=Escriba su pregunta:
+nls_button_go_hint=Inicie la búsqueda
+nls_button_go_text=Ir
+nls_body_instruction=Introduzca su pregunta en el cuadro de texto anterior, luego haga clic en GO.
+nls_body_empty=Disculpe, no pudimos encontrar una buena respuesta a su pregunta.
+IndexSelectTopicTitle=Seleccione un tema
+IndexSelectTopicLabel=Seleccione un tema, y luego haga clic en Mostrar
+IndexSelectTopicError=Por favor seleccione un tema.
+IndexAlphabetBookmarks=ABCDEFGHIJKLMNOPQRSTUVWXYZ
+MergeError1=El sistema de ayuda combinado
+MergeError2=no utiliza el mismo idioma que el sistema de ayuda principal. La funcionalidad de índice y de búsqueda de texto completo se desactivará en el sistema de ayuda combinado.
+MergeError3=está usando una marca diferente de la configuración Web del sistema de la Ayuda maestra, lo que hará que se deshabilite la funcionalidad de combinación en el sistema de la Ayuda.
+PoweredBy=Desarrollado por
+GeneratedBy=Generado Por
+Author=Autor
+About=Acerca de
+Print=Imprimir
+
+[PrintedDoc]
+ChapterFileNamePrefix=Capítulo_
+TitlePage=Página de título
+TitlePageFileName=Capítulo__Página_Título.doc
+TableOfContents=Contenido
+
+CrossReferencePrefix=Consulte
+GlossaryHeadingStyleName=Encabezado de glosario
+GlossaryTermStyleName=Término de glosario
+GlossaryDefinitionStyleName=Definición de glosario
+TitlePageTitleStyleName=Título de la página de título
+TocPageTitleStyleName=Título de la página Contenido

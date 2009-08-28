@@ -1,15 +1,23 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Trabajar con el Bloc de notas" url="Documents/Working_in_Notebooks.htm" />
-<item name="Crear nuevos blocs de notas" url="Documents/Create_multiple_notebooks.htm" />
-<item name="Crear una nueva página" url="Documents/Create_a_new_page.htm" />
-<item name="Utilizar el editor de texto enriquecido" url="Documents/Using_the_rich_text_editor.htm" />
-<item name="Utilizar HTML para dar formato a las páginas del bloc de notas" url="Documents/Using_HTML_for_format_pages.htm" />
-<item name="Añadir una tabla a la página del bloc de notas" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-<item name="Compartir tus blocs de notas" url="Documents/Sharing_Notebooks.htm" />
-<item name="Aceptar acceder a un bloc de notas" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
-<item name="Enlazar a un bloc de notas compartido" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
-<item name="Cambiar o cancelar el acceso a tu Bloc de notas" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+<item name="Acerca de las citas, las reuniones y los eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+<item name="Organizar una reunión" url="Calendar/About_the_Appointment_Page.htm" />
+<item name="Crear una cita" url="Calendar/Scheduling_meetings.htm" />
+<item name="Consultar la disponibilidad" url="Calendar/Seeing_free_busy_times.htm" />
+<item name="Configurar los permisos para que los demás vean si estás disponible u ocupado" url="6_0new_topics/Setting_permissions_to_see_your_free_busy_information.htm" />
+<item name="Marcar una cita como privada" url="6_0new_topics/Marking_an_appointment_as_private.htm" />
+<item name="Programar recursos" url="Calendar/Scheduling_Resources.htm" />
+<item name="Convertir un mensaje en una petición de reunión" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+<item name="Usar el Añadido rápido para crear una cita" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<item name="Programar eventos para todo el día" url="Calendar/Scheduling_All_Day_events.htm" />
+<item name="Crear una cita recurrente" url="Calendar/Creating_recurring_appointments.htm" />
+<item name="Modificar los detalles de las reuniones incluidas en tu agenda" url="6_0new_topics/editing_meetings_on_your_calendar.htm" />
+<item name="Especificar quién te puede invitar a una reunión" url="6_0new_topics/Identifying_who_can_invite_you_to_meetings.htm" />
+<item name="Recibir un mensaje de permiso denegado" url="6_0new_topics/Receiving_a_permission_denied_message.htm" />
+<item name="Responder a una invitación para reunirte" url="Calendar/Responding_to_an_invitation.htm" />
+<item name="Cambiar una reunión que has organizado" url="6_0new_topics/Changing_a_meeting_.htm" />
+<item name="Eliminar una cita" url="Calendar/Deleting_an_appointment.htm" />
+<item name="Eliminar las citas recurrentes" url="Calendar/Deleting_recurring_appointments.htm" />
 
 </tocdata>

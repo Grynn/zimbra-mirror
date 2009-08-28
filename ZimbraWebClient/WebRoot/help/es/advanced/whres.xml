@@ -17,6 +17,7 @@
 <item name="nls_body_instruction" value="Introduzca su pregunta en el cuadro de texto anterior, luego haga clic en GO." />
 <item name="ToolBarSearchBtnText" value="Ir" />
 <item name="SuggestViewNoFrameMessage" value="Para el sistema de Ayuda sin cuadros, haga clic en este" />
+<item name="MergeError3" value="está usando una marca diferente de la configuración Web del sistema de la Ayuda maestra, lo que hará que se deshabilite la funcionalidad de combinación en el sistema de la Ayuda." />
 <item name="Hide_Navigation_Component" value="Ocultar componente de navegación" />
 <item name="FtsBtnText" value="Ir" />
 <item name="TopicsFound" value="Temas encontrados" />
