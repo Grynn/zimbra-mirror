@@ -1,6 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="Récupération" >
+  <topic name="Récupération de mails supprimés" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="mails supprimés" >
+    <topic name="Récupération de mails supprimés" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
 <key name="Répondre" >
   <topic name="Répondre à des mails" url="reading_mail/replying_to_mail_messages.htm" />
   <key name="mails" >
@@ -22,9 +28,6 @@
 </key>
 <key name="se rappeler de moi sur cet ordinateur" >
   <topic name="Connexion et déconnexion" url="Userspecific/logging_on_and_off.htm" />
-</key>
-<key name="Search Builder" >
-  <topic name="Établir des demandes de recherche" url="Search/building_search_queries.htm" />
 </key>
 <key name="signature" >
   <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
@@ -68,10 +71,10 @@
 </key>
 <key name="touches de raccourcis" >
   <topic name="Touches de raccourcis du clavier ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="transfert d’adresse mail" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="trier des tâches" >
   <topic name="Trier des tâches " url="Tasks/Sorting_tasks_.htm" />

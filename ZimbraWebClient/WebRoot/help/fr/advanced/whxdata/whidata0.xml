@@ -97,7 +97,7 @@
   <topic name="Programmation de journées entières" url="Calendar/Scheduling_All_Day_events.htm" />
 </key>
 <key name="calendriers iCal, importer ou exporter" >
-  <topic name="Importation de votre calendrier iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
+  <topic name="Importer votre calendrier iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="caractère de substitution, utiliser dans la recherche" >
   <topic name="Utilisation de la fonction de recherche" url="Search/using_the_search_feature.htm" />
@@ -121,19 +121,19 @@
   <topic name="Partage de votre carnet d’adresses" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
 <key name="carnets d'adresses, importation" >
-  <topic name="Importation de contacts" url="Contacts/Importing_Contacts.htm" />
+  <topic name="Importer des contacts" url="Contacts/Importing_Contacts.htm" />
 </key>
 <key name="clic droit" >
   <topic name="Espace de travail de Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="comment configurer l’affichage initial du panneau de contenu" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="comment créer des rendez-vous" >
   <topic name="À propos des rendez-vous, réunions et événements" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
 <key name="Compte de messagerie POP, réception" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="Compte IMAP" >
   <topic name="Gérer vos comptes POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
@@ -161,7 +161,7 @@
   <topic name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
 <key name="consultation de nouveau mail" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="contact" >
   <topic name="Modification d’un contact" url="Contacts/editing_a_contact.htm" />
@@ -178,7 +178,7 @@
   <topic name="Modification d’un contact" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="contacts, importer" >
-  <topic name="Importation de contacts" url="Contacts/Importing_Contacts.htm" />
+  <topic name="Importer des contacts" url="Contacts/Importing_Contacts.htm" />
 </key>
 <key name="contacts, rajouter à la liste un contact supprimé" >
   <topic name="Suppression d’un contact" url="Contacts/deleting_a_contact.htm" />
@@ -210,7 +210,7 @@
 </key>
 <key name="demandes de recherche" >
   <topic name="Établir des demandes de recherche" url="Search/building_search_queries.htm" />
-  <topic name="Sauvegarde des recherches" url="Search/saving_search_queries.htm" />
+  <topic name="Enregistrement des recherches" url="Search/saving_search_queries.htm" />
   <key name="Enregistrement" >
     <topic name="Enregistrement des recherches" url="Search/saving_search_queries.htm" />
   </key>
@@ -256,9 +256,9 @@
   <topic name="Déléguer l’accès à votre calendrier" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
 <key name="Déplacer" >
-  <topic name="Déplacer des mails dans des dossiers" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <topic name="Déplacer des mails d’un dossier à l’autre" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <key name="mails dans des dossiers" >
-    <topic name="Déplacer des mails dans des dossiers" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+    <topic name="Déplacer des mails d’un dossier à l’autre" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   </key>
 </key>
 <key name="emplacement, réserver" >
@@ -270,6 +270,9 @@
 <key name="expiration de la session" >
   <topic name="Si votre session a expiré" url="Userspecific/if_your_session_expires.htm" />
 </key>
+<key name="exporter des calendriers iCal" >
+  <topic name="Importer votre calendrier iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
 <key name="faire suivre votre mail" >
   <topic name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
@@ -280,7 +283,7 @@
   <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
 </key>
 <key name="filtrer des mails" >
-  <topic name="Filtrer vos messages" url="filters/filtering_your_messages.htm" />
+  <topic name="Filtrer vos mails" url="filters/filtering_your_messages.htm" />
 </key>
 <key name="fonction de recherche" >
   <topic name="Utilisation de la fonction de recherche" url="Search/using_the_search_feature.htm" />
@@ -305,9 +308,6 @@
 </key>
 <key name="glisser-déposer" >
   <topic name="Espace de travail de Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="groupes de contacts" >
-  <topic name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
 
 </indexdata>

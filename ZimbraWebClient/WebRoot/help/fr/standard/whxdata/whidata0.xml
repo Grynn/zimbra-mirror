@@ -19,7 +19,7 @@
 <key name="ajouter une liste de groupes de contacts" >
   <topic name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
-<key name="blocage des pièces jointes" >
+<key name="Blocage des pièces jointes" >
   <topic name="Blocage des pièces jointes" url="reading_mail/attachment_blocking.htm" />
   <topic name="Fonction de blocage des mails" url="reading_mail/Message_blocking_feature.htm" />
 </key>
@@ -30,7 +30,7 @@
   <topic name="Enregistrement d’un brouillon" url="Creating_Messages/saving_a_draft_message.htm" />
 </key>
 <key name="calendriers iCal, importer ou exporter" >
-  <topic name="Importation de votre calendrier iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
+  <topic name="Importer votre calendrier iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="carnet d’adresses, ajouter de nouveaux contacts" >
   <topic name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
@@ -77,6 +77,9 @@
 <key name="expiration de la session" >
   <topic name="Si votre session a expiré" url="Userspecific/if_your_session_expires.htm" />
 </key>
+<key name="exporter des calendriers iCal" >
+  <topic name="Importer votre calendrier iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
 <key name="faire suivre votre mail" >
   <topic name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
@@ -84,18 +87,18 @@
   <topic name="S’abonner au fil RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
 <key name="filtrer des mails" >
-  <topic name="Filtrer vos messages" url="filters/bc_Filtering_your_messages.htm" />
+  <topic name="Filtrer vos mails" url="filters/bc_Filtering_your_messages.htm" />
 </key>
 <key name="groupes de contacts, ajouter" >
   <topic name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
 <key name="importer des calendriers iCal" >
-  <topic name="Importation de votre calendrier iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
+  <topic name="Importer votre calendrier iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
-<key name="Livraison de mail impossible :" >
-  <topic name="Livraison de mail impossible :" url="Creating_Messages/undeliverable_mail.htm" />
+<key name="Livraison de mail impossible " >
+  <topic name="Livraison de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
 </key>
-<key name="mail" >
+<key name="Mail" >
   <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
   <topic name="Parties d’un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <key name="Lecture" >
@@ -112,14 +115,11 @@
   <topic name="Message d'absence" url="Userspecific/vacation_message.htm" />
 </key>
 <key name="messages, configuration de règles de filtre" >
-  <topic name="Filtrer vos messages" url="filters/bc_Filtering_your_messages.htm" />
+  <topic name="Filtrer vos mails" url="filters/bc_Filtering_your_messages.htm" />
 </key>
 <key name="mot de passe" >
   <topic name="Si vous oubliez votre mot de passe" url="Userspecific/if_you_forget_your_password.htm" />
   <topic name="Modifier votre mot de passe" url="Userspecific/chaning_your_password.htm" />
-</key>
-<key name="notification de mail" >
-  <topic name="Notification de nouveaux mails" url="Userspecific/New_mail_notifications.htm" />
 </key>
 <key name="nouvelle fenêtre, affichage des mails" >
   <topic name="Choisir comment les mails sont affichés" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
@@ -129,9 +129,6 @@
 </key>
 <key name="options" >
   <topic name="Configuration de vos options" url="Userspecific/b_Setting_your_Options.htm" />
-</key>
-<key name="options, notification de nouveau mail" >
-  <topic name="Notification de nouveaux mails" url="Userspecific/New_mail_notifications.htm" />
 </key>
 <key name="pièces jointes" >
   <topic name="Ouvrir des pièces jointes" url="reading_mail/opening_file_attachments.htm" />

@@ -1,18 +1,21 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="groupes de contacts" >
+  <topic name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
 <key name="HTML" >
   <topic name="Affichage HTML dans les mails" url="reading_mail/displaying_html_in_email_messages.htm" />
   <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="html, afficher le mail au format" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="HTML, définir les paramètres par défaut" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="identité mail" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="identité mail pour la création d’un mail" >
   <topic name="Création d’un mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
@@ -26,13 +29,13 @@
   <topic name="Créer des avatars" url="Userspecific/Creating_Personas.htm" />
 </key>
 <key name="importation de carnets d'adresses" >
-  <topic name="Importation de contacts" url="Contacts/Importing_Contacts.htm" />
+  <topic name="Importer des contacts" url="Contacts/Importing_Contacts.htm" />
 </key>
 <key name="importer des calendriers iCal" >
-  <topic name="Importation de votre calendrier iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
+  <topic name="Importer votre calendrier iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="importer des contacts" >
-  <topic name="Importation de contacts" url="Contacts/Importing_Contacts.htm" />
+  <topic name="Importer des contacts" url="Contacts/Importing_Contacts.htm" />
 </key>
 <key name="Impression" >
   <topic name="Impression d’une conversation" url="conversations/printing_a_conversation.htm" />
@@ -74,8 +77,8 @@
 <key name="listes de distribution personnelles" >
   <topic name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
-<key name="Livraison de mail impossible :" >
-  <topic name="Livraison de mail impossible :" url="Creating_Messages/undeliverable_mail.htm" />
+<key name="Livraison de mail impossible " >
+  <topic name="Livraison de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
 </key>
 <key name="Mail" >
   <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
@@ -109,7 +112,7 @@
   <topic name="Retrait d’accès à un dossier partagé" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </key>
 <key name="modifier les options" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="modifier un rendez-vous" >
   <topic name="Modification de rendez-vous récurrents" url="Calendar/Deleting_recurring_appointments.htm" />
@@ -121,18 +124,18 @@
 <key name="navigateurs" >
   <topic name="Utilisation du navigateur avec Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
 </key>
-<key name="Navigation" >
+<key name="navigation" >
   <topic name="Navigation sur l’interface utilisateur" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <topic name="Zone de dossiers" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
 <key name="navigation clavier" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="navigation, clavier" >
   <topic name="Touches de raccourcis du clavier ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="notification de mail" >
-  <topic name="Notification de nouveaux mails" url="Userspecific/New_mail_notifications.htm" />
+  <topic name="Notifications de nouveau mail" url="Userspecific/New_mail_notifications.htm" />
 </key>
 <key name="nouveaux mails" >
   <topic name="Comment vous avertir lorsque vous recevez un mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
@@ -141,7 +144,7 @@
   <topic name="Message d'absence" url="Userspecific/vacation_message.htm" />
 </key>
 <key name="options" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="options, afficher le panneau de lecture" >
   <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
@@ -150,7 +153,7 @@
   <topic name="Modifier vos options d’utilisateur" url="Userspecific/Changing_Your_User_Options.htm" />
 </key>
 <key name="options, notification de nouveau mail" >
-  <topic name="Notification de nouveaux mails" url="Userspecific/New_mail_notifications.htm" />
+  <topic name="Notifications de nouveau mail" url="Userspecific/New_mail_notifications.htm" />
 </key>
 <key name="options, restaurer par défaut" >
   <topic name="Restaurer les options par défaut" url="Userspecific/the__restore_defaults__button.htm" />
@@ -201,10 +204,10 @@
   <topic name="Travailler dans des carnets" url="Documents/Working_in_Notebooks.htm" />
 </key>
 <key name="préférences" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="préférences d’utilisateur" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="préférences, afficher le panneau de lecture" >
   <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
@@ -228,7 +231,10 @@
   <topic name="Touches de raccourcis du clavier ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="rappel de rendez-vous" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Configuration de vos préférences d’utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Recherche avancée" >
+  <topic name="Établir des demandes de recherche" url="Search/building_search_queries.htm" />
 </key>
 <key name="recherche avec un caractère de substitution" >
   <topic name="Utilisation de la fonction de recherche" url="Search/using_the_search_feature.htm" />
@@ -240,7 +246,7 @@
   <topic name="Rechercher des mails" url="Search/_search__vs.__search_for_.htm" />
 </key>
 <key name="rechercher, et/ou" >
-  <topic name="Recherches de type &quot;Et&quot; / &quot;Ou&quot;" url="Search/and_vs_or_searches.htm" />
+  <topic name="Recherches de type “Et” / “Ou” " url="Search/and_vs_or_searches.htm" />
 </key>
 <key name="Redirection" >
   <topic name="Faire suivre un mail" url="Creating_Messages/forwarding_a_mail_message.htm" />
@@ -285,17 +291,11 @@
   <topic name="S’abonner à un fil RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
 <key name="règles, filtre" >
-  <topic name="Filtrer vos messages" url="filters/filtering_your_messages.htm" />
+  <topic name="Filtrer vos mails" url="filters/filtering_your_messages.htm" />
   <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
 </key>
 <key name="réception des mails" >
   <topic name="Comment vous avertir lorsque vous recevez un mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-</key>
-<key name="Récupération" >
-  <topic name="Récupération de mails supprimés" url="reading_mail/recovering_deleted_mail_messages.htm" />
-  <key name="mails supprimés" >
-    <topic name="Récupération de mails supprimés" url="reading_mail/recovering_deleted_mail_messages.htm" />
-  </key>
 </key>
 
 </indexdata>

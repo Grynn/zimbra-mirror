@@ -1,6 +1,49 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <ftstdata>
+<topic name="Accepter l’accès à un dossier de boîte de réception partagée" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+<topic name="Partage de dossiers de messagerie" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
+<topic name="Retrait d’accès à un dossier partagé" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+<topic name="Partage de votre boîte aux lettres" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+<topic name="Travailler dans un dossier de mails partagé" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+<topic name="Accepter l’accès à un carnet" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
+<topic name="Ajouter un tableau à une page de carnet" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<topic name="Annuler l'accès à votre dossier Carnets (« wiki »)" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+<topic name="Créer une page" url="Documents/Create_a_new_page.htm" />
+<topic name="Créer un carnet" url="Documents/Create_multiple_notebooks.htm" />
+<topic name="Lien vers un carnet partagé" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
+<topic name="Partage de carnets" url="Documents/Sharing_Notebooks.htm" />
+<topic name="Utilisation de HTML pour formater des pages" url="Documents/Using_HTML_for_format_pages.htm" />
+<topic name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
+<topic name="Travailler sur des documents Zimbra" url="Documents/Working_in_Notebooks.htm" />
+<topic name="Conditions et actions de filtre supportées" url="filters/filter_conditions_and_actions_supported.htm" />
+<topic name="Filtrer vos messages" url="filters/filtering_your_messages.htm" />
+<topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
+<topic name="Caractères de substitution" url="filters/wildcards.htm" />
+<topic name="À propos de Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+<topic name="Fonctions d’interface utilisateur et raccourcis" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+<topic name="Fonctions élémentaires de messagerie instantanée" url="instant_messaging/Instant_Messaging_Basics.htm" />
+<topic name="Partager votre Porte-documents" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+<topic name="Travailler dans un Porte-documents" url="Miscellaneous_one_off_topics/Working_in_Briefcase.htm" />
+<topic name="Assistant Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+<topic name="À propos des dossiers" url="Navigation_folders_and_tips/about_folders.htm" />
+<topic name="Appliquer des actions à plusieurs sélections" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
+<topic name="S’abonner à un fil RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+<topic name="Utilisation du navigateur avec Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+<topic name="Classification de vos mails" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+<topic name="Modification du type de connexion par défaut de mon client" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+<topic name="Créer des dossiers personnalisés" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+<topic name="Personnalisation de votre page de messagerie initiale" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
+<topic name="Supprimer des dossiers" url="Navigation_folders_and_tips/deleting_folders.htm" />
+<topic name="Zone de dossiers" url="Navigation_folders_and_tips/Folders_area.htm" />
+<topic name="Dossiers du système" url="Navigation_folders_and_tips/inbox_folder.htm" />
+<topic name="Déplacer des mails dans des dossiers" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+<topic name="Espace de travail de Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+<topic name="quotas" url="Navigation_folders_and_tips/quotas.htm" />
+<topic name="Renommer des dossiers" url="Navigation_folders_and_tips/renaming_folders.htm" />
+<topic name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
+<topic name="Dossier Envoyés" url="Navigation_folders_and_tips/sent_folder.htm" />
+<topic name="Trier les colonnes de la liste du panneau de contenus" url="Navigation_folders_and_tips/sorting_conversations.htm" />
 <topic name="Affichage traditionnel" url="Navigation_folders_and_tips/Traditional_View.htm" />
 <topic name="Dossier Corbeille" url="Navigation_folders_and_tips/trash_folder.htm" />
 <topic name="Touches de raccourcis du clavier ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
@@ -32,6 +75,7 @@
 <topic name="Utiliser les tags pour classer les mails" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 <topic name="À propos des tâches" url="Tasks/About_Tasks.htm" />
 <topic name="Ajouter une tâche" url="Tasks/Add_a_task.htm" />
+<topic name="Créer des listes de tâches" url="Tasks/bc_Create_task_lists.htm" />
 <topic name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
 <topic name="Créer des dossiers de tâches" url="Tasks/Create_tasks_folders.htm" />
 <topic name="Supprimer une tâche" url="Tasks/Delete_a_task.htm" />
@@ -56,7 +100,6 @@
 <topic name="Restaurer les options par défaut" url="Userspecific/the__restore_defaults__button.htm" />
 <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
 <topic name="Message d'absence" url="Userspecific/vacation_message.htm" />
-<topic name="version" url="version.htm" />
-<topic name="À propos des Zimlets" url="Zimlets/About_Zimlets.htm" />
+<topic name="Version" url="version.htm" />
 
 </ftstdata>  

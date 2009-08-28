@@ -1,14 +1,23 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="À propos des tâches" url="Tasks/About_Tasks.htm" />
-<item name="Créer des listes de tâches" url="Tasks/Create_tasks_folders.htm" />
-<item name="Ajouter une tâche" url="Tasks/Add_a_task.htm" />
-<item name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
-<item name="Déplacer des tâches" url="Tasks/Moving_tasks.htm" />
-<item name="Supprimer une tâche" url="Tasks/Delete_a_task.htm" />
-<item name="Partager votre liste de tâches" url="Tasks/Share_your_Task_folder.htm" />
-<item name="Accepter l’accès à des listes de tâches partagées" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
-<item name="Trier des tâches" url="Tasks/Sorting_tasks_.htm" />
+<item name="À propos des rendez-vous, réunions et événements" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+<item name="Programmation d’un rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
+<item name="Création d’un rendez-vous" url="Calendar/Scheduling_meetings.htm" />
+<item name="Consultation des disponibilités (libre/occupé)" url="Calendar/Seeing_free_busy_times.htm" />
+<item name="Configurer les autorisations pour consulter vos informations de disponibilité (libre/occupé) " url="6_0new_topics/Setting_permissions_to_see_your_free_busy_information.htm" />
+<item name="Marquer un rendez-vous comme étant d’ordre privé" url="6_0new_topics/Marking_an_appointment_as_private.htm" />
+<item name="Programmation des ressources" url="Calendar/Scheduling_Resources.htm" />
+<item name="Conversion d’un mail en une demande de réunion" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+<item name="Utilisation de QuickAdd/Ajout rapide pour créer un rendez-vous" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<item name="Programmation de journées entières" url="Calendar/Scheduling_All_Day_events.htm" />
+<item name="Création de rendez-vous récurrents" url="Calendar/Creating_recurring_appointments.htm" />
+<item name="Modification des détails d'une réunion dans votre calendrier" url="6_0new_topics/editing_meetings_on_your_calendar.htm" />
+<item name="Désigner les personnes qui peuvent vous inviter à des réunions" url="6_0new_topics/Identifying_who_can_invite_you_to_meetings.htm" />
+<item name="Recevoir un message d’autorisation refusée " url="6_0new_topics/Receiving_a_permission_denied_message.htm" />
+<item name="Répondre à une invitation de réunion" url="Calendar/Responding_to_an_invitation.htm" />
+<item name="Modifier une réunion que vous organisez" url="6_0new_topics/Changing_a_meeting_.htm" />
+<item name="Supprimer un rendez-vous" url="Calendar/Deleting_an_appointment.htm" />
+<item name="Supprimer des rendez-vous récurrents" url="Calendar/Deleting_recurring_appointments.htm" />
 
 </tocdata>

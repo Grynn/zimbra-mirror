@@ -13,9 +13,12 @@
 </book>
 <book name="Navigation dans votre boîte aux lettres" >
   <item name="Navigation sur le client Web de Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <item name="Configurer vos préférences générales " url="6_0new_topics/Setting_your_general_preferences.htm" />
+  <item name="Personnaliser la vue de votre compte" url="6_0new_topics/Customize_your_view.htm" />
   <item name="Fonctions d’interface utilisateur et raccourcis" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
   <item name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="Appliquer des actions à plusieurs sélections" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
+  <item name="Utiliser des raccourcis pour la navigation" url="6_0new_topics/Using_Shortcuts_to_navigate.htm" />
   <item name="Utilisation des navigateurs" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
   <item name="Sauvegarde de mon travail" url="Userspecific/browser_session_handling.htm" />
   <item name="Affichage dans le panneau d’aperçu" url="Navigation_folders_and_tips/Folders_area.htm" />
@@ -23,8 +26,8 @@
 </book>
 <book name="Gestion de vos mails " >
   <item name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
+  <item name="Configurer vos préférences mails" url="6_0new_topics/Setting_your_mail_preferences.htm" />
   <item name="Classification de vos mails" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
-  <item name="Trier les mails dans le panneau de contenu" url="Navigation_folders_and_tips/sorting_conversations.htm" />
   <item name="Personnalisation de votre page de messagerie initiale" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
   <item name="Quel est le principe de fonctionnement des conversations ?" url="conversations/conversations_can_span_folders.htm" />
   <item name="Impression d’une conversation" url="conversations/printing_a_conversation.htm" />
@@ -33,11 +36,14 @@
   <item name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="S’abonner à un fil RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
   <item name="Gestion de plusieurs identités dans votre compte" url="Userspecific/Mail_Identities.htm" />
+  <item name="Gérer le dossier Spam" url="6_0new_topics/Managing_your_Junk_Folder.htm" />
   <item name="Récupération de mails supprimés" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Purger des mails" url="reading_mail/archiving_old_messages.htm" />
+  <item name="Partager un dossier" url="6_0new_topics/Sharing_a_folder.htm" />
   <book name="Lecture des mails" >
     <item name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
     <item name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+    <item name="Configurer des alertes dans Zimbra Desktop" url="6_0new_topics/Setting_up_desktop_alerts.htm" />
     <item name="Marquer des mails comme non lus" url="reading_mail/marking_mail_as_unread.htm" />
     <item name="Nouveaux mails" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
     <item name="Affichage HTML dans les mails" url="reading_mail/displaying_html_in_email_messages.htm" />
@@ -54,9 +60,11 @@
 </book>
 <book name="Écrire un mail" >
   <item name="Création d’un mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="Configurer vos préférences pour la fenêtre Écrire un mail " url="6_0new_topics/Setting_your_preferences_for_the_email_compose_window.htm" />
   <item name="Parties d’un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
-  <item name="Ajouter automatiquement votre signature" url="Userspecific/using_a_signature.htm" />
   <item name="Saisie automatique d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Ajouter automatiquement votre signature" url="Userspecific/using_a_signature.htm" />
+  <item name="Demander un accusé de réception" url="6_0new_topics/Requesting_a_Return_Receipt.htm" />
   <item name="Joindre des fichiers à votre mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Types de pièces jointes" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Ajout d’adresses Cc : et Cci : ." url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
@@ -71,13 +79,12 @@
 <book name="Gestion de vos carnets d’adresses" >
   <item name="Votre carnet d’adresses" url="Contacts/contacts.htm" />
   <item name="Types de carnets d’adresses disponibles" url="Contacts/gal_vs_contacts.htm" />
+  <item name="Configurer vos préférences de carnet d’adresses" url="6_0new_topics/setting_your_address_book_preferences.htm" />
   <item name="Ajout de nouveaux contacts" url="Contacts/creating_a_new_contact.htm" />
   <item name="Utilisation d'un carnet d’adresses de la société" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="Ajout automatique de contacts" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
   <item name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
-  <item name="Partage de votre carnet d’adresses" url="Contacts/Sharing_your_Address_Book.htm" />
-  <item name="Importation de carnets d'adresses" url="Contacts/Importing_Contacts.htm" />
-  <item name="Exportation de carnets d’adresses" url="Contacts/Exporting_Address_Books.htm" />
+  <item name="Importer et exporter des objets" url="6_0new_topics/Importing_and_Exporting_Items_.htm" />
   <item name="Impression des noms de contacts ou des carnets d’adresses" url="Contacts/Printing_Contacts.htm" />
   <item name="Modification des informations d’un contact" url="Contacts/editing_a_contact.htm" />
   <item name="Suppression de contacts" url="Contacts/deleting_a_contact.htm" />
@@ -86,42 +93,40 @@
   <item name="À propos du calendrier Zimbra" url="Calendar/About_Calendar.htm" />
   <item name="Créer des calendriers" url="Calendar/Create_Calendars.htm" />
   <item name="Ajouter une couleur de fond aux calendriers" url="Calendar/Adding_background_color_to_calendars.htm" />
-  <item name="Affichage de plusieurs calendriers" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
-  <item name="Partage de votre calendrier" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="Accepter l’accès à un calendrier partagé" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
-  <item name="Refuser une demande de partage de calendrier" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
-  <item name="Suppression de calendriers" url="Calendar/Deleting_Calendars.htm" />
-  <item name="Importation de votre calendrier iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
-  <item name="Exportation de votre calendrier iCal" url="Calendar/Exporting_your_iCal_calendar.htm" />
+  <item name="Configurer vos préférences de calendrier" url="6_0new_topics/Setting_your_Calendar_preferences.htm" />
   <item name="Options d’affichage du Calendrier" url="Calendar/Calendar_Views.htm" />
+  <item name="Calendrier – Affichage Liste" url="6_0new_topics/Calendar_List_View.htm" />
+  <item name="Affichage de plusieurs calendriers" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+  <item name="Suppression de calendriers" url="Calendar/Deleting_Calendars.htm" />
+  <item name="Importer et exporter des objets" url="6_0new_topics/Importing_and_Exporting_Items_.htm" />
   <item name="Impression d’un calendrier" url="Calendar/Printing_a_calendar.htm" />
 </book>
 <book name="Planification de rendez-vous, réunions et événements" >
-  <item name="À propos des rendez-vous, réunions et événements" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="Planification d’une réunion" url="Calendar/About_the_Appointment_Page.htm" />
-  <item name="Création d’un rendez-vous" url="Calendar/Scheduling_meetings.htm" />
-  <item name="Consultation des disponibilités (libre/occupé)" url="Calendar/Seeing_free_busy_times.htm" />
-  <item name="Programmation des ressources" url="Calendar/Scheduling_Resources.htm" />
-  <item name="Conversion d’un mail en une demande de réunion" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
-  <item name="Utilisation de QuickAdd/Ajout rapide pour créer un rendez-vous" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
-  <item name="Programmation de journées entières" url="Calendar/Scheduling_All_Day_events.htm" />
-  <item name="Création de rendez-vous récurrents" url="Calendar/Creating_recurring_appointments.htm" />
-  <item name="Répondre à une invitation de réunion" url="Calendar/Responding_to_an_invitation.htm" />
-  <item name="Supprimer un rendez-vous" url="Calendar/Deleting_an_appointment.htm" />
-  <item name="Supprimer des rendez-vous récurrents" url="Calendar/Deleting_recurring_appointments.htm" />
+<chunk name="Planification de rendez-vous, réunions et événements" ref="whtdata1.xml" />
 </book>
 <book name="Utilisation des listes de tâches" >
-<chunk name="Utilisation des listes de tâches" ref="whtdata1.xml" />
+  <item name="À propos des tâches" url="Tasks/About_Tasks.htm" />
+  <item name="Créer des listes de tâches" url="Tasks/Create_tasks_folders.htm" />
+  <item name="Créer des listes de tâches" url="Tasks/bc_Create_task_lists.htm" />
+  <item name="Ajouter une tâche" url="Tasks/Add_a_task.htm" />
+  <item name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
+  <item name="Déplacer des tâches" url="Tasks/Moving_tasks.htm" />
+  <item name="Supprimer une tâche" url="Tasks/Delete_a_task.htm" />
+  <item name="Trier des tâches" url="Tasks/Sorting_tasks_.htm" />
 </book>
 <book name="Travailler dans des documents " >
-<chunk name="Travailler dans des documents " ref="whtdata2.xml" />
+  <item name="Travailler dans des documents" url="Documents/Working_in_Notebooks.htm" />
+  <item name="Créer un carnet" url="Documents/Create_multiple_notebooks.htm" />
+  <item name="Créer une page" url="Documents/Create_a_new_page.htm" />
+  <item name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
+  <item name="Utilisation de HTML pour formater des pages de documents" url="Documents/Using_HTML_for_format_pages.htm" />
+  <item name="Ajouter un tableau à une page de carnet" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </book>
 <book name="Utilisation du Porte-documents" >
-  <item name="Travailler dans un Porte-documents" url="Miscellaneous_one_off_topics/Working_in_Briefcase.htm" />
-  <item name="Partager votre Porte-documents" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+<chunk name="Utilisation du Porte-documents" ref="whtdata2.xml" />
 </book>
-<book name="Partage de dossiers de messagerie" >
-<chunk name="Partage de dossiers de messagerie" ref="whtdata3.xml" />
+<book name="Partager des dossiers" >
+<chunk name="Partager des dossiers" ref="whtdata3.xml" />
 </book>
 <book name="Recherche d’objets" >
 <chunk name="Recherche d’objets" ref="whtdata4.xml" />
@@ -135,8 +140,11 @@
 <book name="Configuration de vos préférences" >
 <chunk name="Configuration de vos préférences" ref="whtdata7.xml" />
 </book>
+<book name="Gestion de votre compte" >
+<chunk name="Gestion de votre compte" ref="whtdata8.xml" />
+</book>
 <book name="Utilisation des Zimlets" >
-  <item name="À propos des Zimlets" url="Zimlets/About_Zimlets.htm" />
+<chunk name="Utilisation des Zimlets" ref="whtdata9.xml" />
 </book>
 
 </tocdata>
