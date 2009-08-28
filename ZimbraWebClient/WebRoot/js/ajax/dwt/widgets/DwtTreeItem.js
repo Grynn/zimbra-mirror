@@ -26,14 +26,19 @@
  *        parent				[DwtComposite] 		parent widget
  *        index 				[int]*				index at which to add this control among parent's children
  *        text 					[string]*			label text for the tree item
- *        imageInfo				[string]*			icon for the tree item
- *        deferred				[boolean]*			If true, postpone initialization until needed.
+ *        imageInfo				[string]*			icon for the left end of the tree item
+ *        extraInfo				[string]*			icon for the right end of the tree item
+ *        expandNodeImage		[string]*			icon to use for expanding tree item (instead of default)
+ *        collapseNodeImage     [string]*			icon to use for collapsing tree item (instead of default)
  *        className				[string]*			CSS class
  *        posStyle				[constant]*			positioning style
+ *        deferred				[boolean]*			If true, postpone initialization until needed.
  *        selectable			[boolean]*			if true, this item is selectable
  *        forceNotifySelection	[boolean]*			force notify selection even if checked style
  *        forceNotifyAction		[boolean]*			force notify action even if checked style
  *        singleClickAction		[boolean]*			true if an action is performed in single click
+ *        dndScrollCallback		[AjxCallback]*		callback triggered when scrolling of a drop area for an object being dragged
+ *        dndScrollId			[string]*			
  */
 DwtTreeItem = function(params) {
     if (arguments.length == 0) { return; }    
