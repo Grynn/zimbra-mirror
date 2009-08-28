@@ -1,9 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<book name="Informações iniciais" >
+<book name="Começando a usar" >
   <item name="Informações básicas sobre o Cliente Web Padrão PCZ" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
-  <item name="Fazendo login e saindo" url="Userspecific/logging_on_and_off.htm" />
+  <item name="Efetuando login e saindo" url="Userspecific/logging_on_and_off.htm" />
   <item name="Alterando meu tipo de cliente padrão para login" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Teclas de atalho do teclado" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
   <item name="Alterando sua senha" url="Userspecific/chaning_your_password.htm" />
@@ -19,13 +19,12 @@
   <item name="Gerenciando a forma como os e-mails são exibidos" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
   <item name="Como saber quando recebi novas mensagens" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
   <item name="Categorizando suas mensagens de e-mail" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
-  <item name="Classificando mensagens no Painel de conteúdo" url="Navigation_folders_and_tips/sorting_conversations.htm" />
   <item name="Imprimindo mensagens de e-mail" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="Definindo um endereço de encaminhamento" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Recuperando mensagens de e-mail apagadas" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Eliminando mensagens de e-mail" url="reading_mail/b_Purging_email_messages.htm" />
   <book name="Lendo mensagens" >
-    <item name="Lendo e-mail" url="reading_mail/reading_mail.htm" />
+    <item name="Lendo e-mails" url="reading_mail/reading_mail.htm" />
     <item name="Marcando e-mail como não lido" url="reading_mail/b_Marking_mail_as_unread.htm" />
     <item name="Abrindo arquivos anexos" url="reading_mail/opening_file_attachments.htm" />
     <item name="Bloqueio de anexo" url="reading_mail/attachment_blocking.htm" />
@@ -37,11 +36,11 @@
   <item name="Escrevendo novas mensagens de e-mail" url="Creating_Messages/b_Composing_email_message.htm" />
   <item name="Partes da mensagem de e-mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Adicionando sua assinatura automaticamente" url="Userspecific/b_Automatically_adding_your_signature.htm" />
-  <item name="Anexando arquivos à sua mensagem" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
+  <item name="Anexando arquivos a sua mensagem" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Tipos de arquivo anexo" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Salvando mensagens como rascunhos" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
-<book name="Respondendo e encaminhando mensagens" >
+<book name="Responder e encaminhar mensagens" >
   <item name="Respondendo a mensagens de e-mail" url="reading_mail/replying_to_mail_messages.htm" />
   <item name="Encaminhando uma mensagem de e-mail" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </book>
@@ -52,25 +51,34 @@
 <book name="Gerenciando sua agenda" >
   <item name="Sobre a agenda" url="Calendar/b_About_Calendar.htm" />
   <item name="Criar nova agenda" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="Apagando um compromisso" url="Calendar/b_Canceling_a_meeting.htm" />
   <item name="Adicionando cor às agendas" url="Calendar/Adding_background_color_to_calendars.htm" />
-  <item name="Importando sua agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
-  <item name="Exportando sua agenda iCal" url="Calendar/Exporting_your_iCal_calendar.htm" />
   <item name="Opções de visualização de agenda" url="Calendar/Calendar_Views.htm" />
+  <item name="Importando iCalendars" url="6_0new_topics/Importing_iCalendars.htm" />
+  <item name="Limpando sua agenda" url="6_0new_topics/Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="Agendando compromissos, reuniões e eventos" >
   <item name="Planejando uma reunião" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Programando uma reunião" url="Calendar/b_Scheduling_a_meeting.htm" />
   <item name="Criando compromissos recorrentes" url="Calendar/b_creating_recurring_appointments.htm" />
+  <item name="Apagando um compromisso" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>
 <book name="Usando listas de tarefas" >
   <item name="Sobre Tarefas" url="Tasks/About_Tasks.htm" />
-  <item name="Criando listas de tarefas" url="Tasks/bc_Create_task_lists.htm" />
-  <item name="Alterando uma tarefa" url="Tasks/Change_a_task.htm" />
+  <item name="Criar listas de tarefas" url="Tasks/bc_Create_task_lists.htm" />
+  <item name="Alterar uma tarefa" url="Tasks/Change_a_task.htm" />
   <item name="Classificando tarefas" url="Tasks/Sorting_tasks_.htm" />
 </book>
+<book name="Compartilhando pastas" >
+  <book name="Compartilhando as listas de endereços" >
+    <item name="Criando link para uma lista de endereços compartilhada" url="6_0new_topics/Linking_to_a_Shared_Address_Book.htm" />
+  </book>
+  <book name="Compartilhando agendas" >
+    <item name="Criar link para a agenda compartilhada" url="6_0new_topics/Link_to_Shared_Calendar.htm" />
+  </book>
+</book>
 <book name="Buscando itens" >
-  <item name="Usando a Busca" url="Search/b_Using_Search.htm" />
+  <item name="Usando a busca" url="Search/b_Using_Search.htm" />
+  <item name="Criar e salvar um critério de busca" url="6_0new_topics/b_Create_and_Save_a_Search_Query.htm" />
   <item name="Descrição da linguagem de critérios" url="Search/query_language_description.htm" />
 </book>
 <book name="Usando marcadores e pastas para organizar e-mail" >

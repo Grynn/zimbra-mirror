@@ -1,0 +1,104 @@
+﻿[GlossaryTab]
+TabCaption=&Glossário
+TermCaption=&Termo
+DefinitionCaption=&Definição para:
+
+[BrowseSequence]
+PreCaption=Anterior
+PreTooltip=Tópico anterior
+NextCaption=Próximo
+NextTooltip=Tópico seguinte
+BlockTooltip=Selecionar seqüências de busca
+
+[Common]
+Contents=Conteúdo
+Index=Índice
+Search=Buscar
+Glossary=Glossário
+Logo/Author=Oferecido por
+Show=Mostrar
+Hide=Esconder
+SyncToc=SyncToc
+Prev=<<
+Next=>>
+Disabled Prev=<<
+Disabled Next=>>
+Seperate = |
+
+[WebHelp]
+Cancel=Cancelar
+CantOpenURLorFile=URL ou arquivo não podem ser abertos
+CompletingContents=Completando conteúdo...
+Display=Exibir
+Term=Termo:
+Definition=Definição:
+Done=Finalizado
+Find=Encontrar
+IndexInputPrompt=Digitar a palavra-chave para encontrar:
+RelateTopicListPrompt=Clicar em um tópico e a seguir clicar Exibir.
+LoadingData=Carregando dados, favor aguardar...
+LoadingContents=Carregando conteúdo, favor aguardar...
+LoadingContentsData=Carregando, clicar aqui para cancelar...
+LoadingFTS=Lendo dados de busca...
+LoadingIndex=Carregando índice...
+LoadingTOCItem=Carregando conteúdo:
+Searching=Buscando...
+FtsInputPrompt=Digitar a(s) palavra(s) para buscar:
+FtsHilitePrompt=Realçar resultados da procura
+TopicsFound=Tópicos encontrados
+BrowserLimitedMessage=Seu navegador não suporta estruturas.  Recomendamos a atualização de seu navegador para uma versão que suporta estruturas.
+SuggestViewNoFrameMessage=Para visualizar o sistema Help sem estruturas clique neste
+SuggestViewNoFrameMsg2=hiperlink.
+TopicsNotFound=Nenhum tópicos encontrado.
+CantSearch=Não é possível procurar esta frase.
+JS_alert_appletNotLoad = Impossível carregar o applet. Se você está utilizando uma versão antiga do Netscape, o arquivo prefs.js deve ser editado.
+JS_alert_colorlimitation=WebHelp detectou que o seu monitor está configurado para 16 cores.  Para obter apoio completo de WebHelp, configure seu monitor para utilizar 256 cores ou mais.
+Blank_topic_text=Este tópico foi criado pelo WinHelp Project Conversion Wizard, e é o destino de um tópico inexistente ou de um hyperlink interrompido.
+JS_alert_ProjectLoadingFail=Não foi possível carregar corretamente, favor clicar em Renovar.
+JS_alert_cantLoadProject=Não é possível carregar o projeto:
+JS_alert_ErrorInLoading=Erro ao carregar o componente de navegação. Favor regenerar o WebHelp.
+IndexBtnText=Ir
+FtsBtnText=Ir
+ToolBarSearchBtnText=Ir
+InTopicSearchBtnText=Ir
+SearchLabel=Buscar
+SearchPrompt=- Buscar -
+PreTooltip=Tópico anterior
+NextTooltip=Tópico seguinte
+WebSearch=WebSearch
+SyncTocTooltip=Sincronizar Índice
+Book=Livro
+Page=Página
+Remote_Page=Página remota
+Show_Navigation_Component=Mostrar componente de navegação
+Hide_Navigation_Component=Esconder componente de navegação
+nls_edit_label=Digite a sua pergunta:
+nls_button_go_hint=Ir a Busca
+nls_button_go_text=Ir
+nls_body_instruction=Digite sua pergunta na caixa de texto e a seguir clique GO.
+nls_body_empty=Sinto muito, não foi possível encontrar uma boa resposta a sua pergunta.
+IndexSelectTopicTitle=Selecione um tópico
+IndexSelectTopicLabel=Selecione um tópico e a seguir clique Exibir
+IndexSelectTopicError=Favor selecionar um tópico.
+IndexAlphabetBookmarks=ABCDEFGHIJKLMNOPQRSTUVWXYZ
+MergeError1=O sistema de Ajuda mesclado
+MergeError2=está usando um idioma diferente do sistema de Ajuda principal, o que desativará o índice e a funcionalidade de pesquisa de texto completo no sistema de Ajuda mesclado.
+MergeError3=está a usar uma marca diferente da configuração Web do sistema de Ajuda principal que fará com que a função de união seja desactivada no sistema de Ajuda.
+PoweredBy=Oferecido por
+GeneratedBy=Gerado por
+Author=Autor
+About=Sobre
+Print=Imprimir
+
+[PrintedDoc]
+ChapterFileNamePrefix=Capítulo_
+TitlePage=Página de título
+TitlePageFileName=Capítulo__Página_título.doc
+TableOfContents=Conteúdo
+
+CrossReferencePrefix=Consulte
+GlossaryHeadingStyleName=Título do glossário
+GlossaryTermStyleName=Termo do glossário
+GlossaryDefinitionStyleName=Definição do glossário
+TitlePageTitleStyleName=Título da página de título
+TocPageTitleStyleName=Título da página de conteúdo

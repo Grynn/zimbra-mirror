@@ -1,15 +1,15 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <fts>
-<chunkinfo url="whfwdata0.xml" first="!" last="c"/>
-<chunkinfo url="whfwdata1.xml" first="cabeçalho" last="deixadas"/>
-<chunkinfo url="whfwdata2.xml" first="deixar" last="exibidas"/>
-<chunkinfo url="whfwdata3.xml" first="exibido" last="links"/>
-<chunkinfo url="whfwdata4.xml" first="lista" last="pergunta"/>
-<chunkinfo url="whfwdata5.xml" first="pergunte" last="salvar"/>
-<chunkinfo url="whfwdata6.xml" first="salvas" last="ícone"/>
-<chunkinfo url="whfwdata7.xml" first="ícones" last="–"/>
+<chunkinfo url="whfwdata0.xml" first="!" last="brasil"/>
+<chunkinfo url="whfwdata1.xml" first="busca" last="date"/>
+<chunkinfo url="whfwdata2.xml" first="dd" last="exclui"/>
+<chunkinfo url="whfwdata3.xml" first="excluir" last="lado"/>
+<chunkinfo url="whfwdata4.xml" first="larger" last="padrão"/>
+<chunkinfo url="whfwdata5.xml" first="padrões" last="reservando"/>
+<chunkinfo url="whfwdata6.xml" first="resida" last="vincular"/>
+<chunkinfo url="whfwdata7.xml" first="vindas" last="–"/>
 
-<tchunkinfo first="0" last="64" url="whftdata0.xml" />
+<tchunkinfo first="0" last="70" url="whftdata0.xml" />
 
 </fts>

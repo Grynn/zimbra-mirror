@@ -1,6 +1,48 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <ftstdata>
+<topic name="Direitos de administrador para agendas compartilhadas" url="6_0new_topics/Admin_rights_for_shared_Calendars.htm" />
+<topic name="Fazendo backup do conteúdo de sua conta" url="6_0new_topics/Backing_up_the_Content_of_Your_Account.htm" />
+<topic name="Exibição em lista da Agenda" url="6_0new_topics/Calendar_List_View.htm" />
+<topic name="Alterando uma reunião" url="6_0new_topics/Changing_a_meeting_.htm" />
+<topic name="Alterando o status e a disponibilidade" url="6_0new_topics/Changing_status_and_availability.htm" />
+<topic name="Criando apresentações de slides no porta-arquivos" url="6_0new_topics/creating_slide_presentations_in_briefcase.htm" />
+<topic name="Personalize sua exibição" url="6_0new_topics/Customize_your_view.htm" />
+<topic name="Editando reuniões na agenda" url="6_0new_topics/editing_meetings_on_your_calendar.htm" />
+<topic name="Exportando itens de sua conta" url="6_0new_topics/Exporting_Items_from_your_account.htm" />
+<topic name="Filtrando spam" url="6_0new_topics/Filtering_Junk_Mail.htm" />
+<topic name="Filtrando suas mensagens" url="6_0new_topics/filtering_your_messages.htm" />
+<topic name="Como limpar seu dispositivo móvel" url="6_0new_topics/How_to_wipe_your_mobile_device.htm" />
+<topic name="Identificando quem pode convidar você para reuniões" url="6_0new_topics/Identifying_who_can_invite_you_to_meetings.htm" />
+<topic name="Importando e exportando itens" url="6_0new_topics/Importing_and_Exporting_Items_.htm" />
+<topic name="Teclas de atalho do teclado" url="6_0new_topics/Keyboard_Shortcut_Keys.htm" />
+<topic name="Direitos de gerenciador para agendas compartilhadas" url="6_0new_topics/Manager_rights_for_shared_Calendars.htm" />
+<topic name="Gerenciando os itens que você compartilha" url="6_0new_topics/Managing_items_you_share.htm" />
+<topic name="Gerenciando sua pasta Spam" url="6_0new_topics/Managing_your_Junk_Folder.htm" />
+<topic name="Gerenciando seus dispositivos móveis" url="6_0new_topics/Managing_your_mobile_devices.htm" />
+<topic name="Gerenciando seus Zimlets" url="6_0new_topics/Managing_your_Zimlets.htm" />
+<topic name="Marcando um compromisso como particular" url="6_0new_topics/Marking_an_appointment_as_private.htm" />
+<topic name="Imprimindo contatos" url="6_0new_topics/Printing_Contacts.htm" />
+<topic name="Recebendo uma mensagem de permissão negada" url="6_0new_topics/Receiving_a_permission_denied_message.htm" />
+<topic name="Solicitando uma confirmação de leitura" url="6_0new_topics/Requesting_a_Return_Receipt.htm" />
+<topic name="Enviar arquivos de seu porta-arquivos" url="6_0new_topics/Send_Files_from_your_Briefcase.htm" />
+<topic name="Enviando seus status livre/ocupado para outros" url="6_0new_topics/Sending_your_free_busy_status_to_others.htm" />
+<topic name="Definindo permissões para ver suas informações de livre/ocupado" url="6_0new_topics/Setting_permissions_to_see_your_free_busy_information.htm" />
+<topic name="Definindo a exibição em três painéis para e-mail" url="6_0new_topics/Setting_the_three-pane_view_for_email.htm" />
+<topic name="Configurando alertas de desktop" url="6_0new_topics/Setting_up_desktop_alerts.htm" />
+<topic name="Definindo as preferências de lista de endereços" url="6_0new_topics/setting_your_address_book_preferences.htm" />
+<topic name="Definindo suas preferências de agenda" url="6_0new_topics/Setting_your_Calendar_preferences.htm" />
+<topic name="Configurando suas preferências gerais" url="6_0new_topics/Setting_your_general_preferences.htm" />
+<topic name="Configurando as preferências de e-mail" url="6_0new_topics/Setting_your_mail_preferences.htm" />
+<topic name="Definindo suas preferências para a janela de composição de e-mails" url="6_0new_topics/Setting_your_preferences_for_the_email_compose_window.htm" />
+<topic name="Compartilhando uma pasta" url="6_0new_topics/Sharing_a_folder.htm" />
+<topic name="Usando atalhos para a navegação" url="6_0new_topics/Using_Shortcuts_to_navigate.htm" />
+<topic name="Usando o verificador ortográfico" url="6_0new_topics/Using_Spell_Check.htm" />
+<topic name="Creating Spreadsheets in Briefcase" url="Briefcase_newfor6_0/Creating_Spreadsheets_in_Briefcase.htm" />
+<topic name="Send Files from your Briefcase" url="Briefcase_newfor6_0/Send_Files_from_your_Briefcase.htm" />
+<topic name="Sharing your Briefcase" url="Briefcase_newfor6_0/Sharing_your_Briefcase.htm" />
+<topic name="Working in Briefcase" url="Briefcase_newfor6_0/Working_in_Briefcase.htm" />
+<topic name="Working with files in Briefcase" url="Briefcase_newfor6_0/Working_with_files_in_Briefcase.htm" />
 <topic name="Sobre compromissos, reuniões e eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 <topic name="Sobre a agenda" url="Calendar/About_Calendar.htm" />
 <topic name="Sobre a página Compromissos" url="Calendar/About_the_Appointment_Page.htm" />
@@ -52,47 +94,5 @@
 <topic name="Usando o editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 <topic name="Usando o verificador ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
 <topic name="Aceitando acesso à pasta de caixa de e-mail compartilhada" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-<topic name="Compartilhando pastas de e-mail" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
-<topic name="Revogando um acesso a uma pasta compartilhada" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
-<topic name="Compartilhando sua caixa de e-mails" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-<topic name="Trabalhando em uma pasta de e-mail compartilhada" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
-<topic name="Aceitando acesso a um notebook de Documentos" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
-<topic name="Adicionando uma tabela a uma página de notebook" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-<topic name="Cancelando acesso à sua pasta wiki de Documentos" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-<topic name="Criar uma nova página" url="Documents/Create_a_new_page.htm" />
-<topic name="Criar novos notebooks" url="Documents/Create_multiple_notebooks.htm" />
-<topic name="Criando link para um notebook compartilhado" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
-<topic name="Compartilhando Notebooks de documentos" url="Documents/Sharing_Notebooks.htm" />
-<topic name="Usando HTML para páginas formatadas" url="Documents/Using_HTML_for_format_pages.htm" />
-<topic name="Usando o editor de texto com formatação" url="Documents/Using_the_rich_text_editor.htm" />
-<topic name="Trabalhando em documentos Zimbra" url="Documents/Working_in_Notebooks.htm" />
-<topic name="Condições de filtro e ações suportadas" url="filters/filter_conditions_and_actions_supported.htm" />
-<topic name="Filtrando suas mensagens" url="filters/filtering_your_messages.htm" />
-<topic name="Como funciona a filtragem" url="filters/how_filtering_works.htm" />
-<topic name="curingas" url="filters/wildcards.htm" />
-<topic name="Sobre o Pacote de colaboração Zimbra" url="Getting_Started/about_liquid_mail.htm" />
-<topic name="Recursos e atalhos da interface de usuário" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-<topic name="Informações básicas sobre o sistema de troca de mensagens instantâneas" url="instant_messaging/Instant_Messaging_Basics.htm" />
-<topic name="Compartilhando seu Porta-arquivos" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
-<topic name="Trabalhando no Porta-arquivos" url="Miscellaneous_one_off_topics/Working_in_Briefcase.htm" />
-<topic name="Assistente Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
-<topic name="Sobre pastas" url="Navigation_folders_and_tips/about_folders.htm" />
-<topic name="Aplicando ações a várias seleções" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
-<topic name="Assinar conteúdos RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-<topic name="Uso do navegador com o Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-<topic name="Categorizando suas mensagens de e-mail" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
-<topic name="Alterando meu tipo de cliente padrão para login" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
-<topic name="Criando pastas personalizadas" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
-<topic name="Personalizando sua página inicial de e-mails" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
-<topic name="Apagando pastas" url="Navigation_folders_and_tips/deleting_folders.htm" />
-<topic name="Área de pastas" url="Navigation_folders_and_tips/Folders_area.htm" />
-<topic name="Pastas de sistema" url="Navigation_folders_and_tips/inbox_folder.htm" />
-<topic name="Movendo mensagens de e-mail entre pastas" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
-<topic name="Espaço de trabalho do Cliente Zimbra para Web" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-<topic name="cotas" url="Navigation_folders_and_tips/quotas.htm" />
-<topic name="Renomeando pastas" url="Navigation_folders_and_tips/renaming_folders.htm" />
-<topic name="Menus de botão direito do mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
-<topic name="Pasta Enviadas" url="Navigation_folders_and_tips/sent_folder.htm" />
-<topic name="Classificando as colunas da lista do Painel de conteúdo" url="Navigation_folders_and_tips/sorting_conversations.htm" />
 
 </ftstdata>  
