@@ -50,13 +50,13 @@
   <topic name="用戶介面功能和快速鍵" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
 </key>
 <key name="用戶偏好設定" >
-  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="設定偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="用通配字元搜尋" >
   <topic name="使用搜尋功能" url="Search/using_the_search_feature.htm" />
 </key>
 <key name="用鍵盤瀏覽" >
-  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="設定偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="登出" >
   <topic name="登入和登出" url="Userspecific/logging_on_and_off.htm" />
@@ -90,7 +90,7 @@
 </key>
 <key name="聯絡人" >
   <topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
-  <topic name="聯絡人" url="Contacts/contacts.htm" />
+  <topic name="通訊錄" url="Contacts/contacts.htm" />
   <topic name="建立新聯絡人" url="Contacts/creating_a_new_contact.htm" />
   <key name="編輯" >
     <topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
@@ -197,7 +197,7 @@
   <topic name="轉寄郵件" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
 <key name="轉寄電郵地址" >
-  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="設定偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="通訊錄，修改分享權限" >
   <topic name="分享你的通訊錄" url="Contacts/Sharing_your_Address_Book.htm" />
@@ -231,7 +231,7 @@
   <topic name="右鍵選單" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="選項" >
-  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="設定偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="選項，休假訊息" >
   <topic name="休假訊息" url="Userspecific/vacation_message.htm" />
@@ -283,7 +283,7 @@
   <topic name="限額" url="Navigation_folders_and_tips/quotas.htm" />
 </key>
 <key name="郵箱身份" >
-  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="設定偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
   <topic name="郵箱身份" url="Userspecific/Mail_Identities.htm" />
   <topic name="建立身份" url="Userspecific/Creating_Personas.htm" />
 </key>
@@ -310,7 +310,7 @@
   <topic name="關於預約、會議和活動" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
 <key name="預約提醒" >
-  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="設定偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="預約，quickadd" >
   <topic name="使用 QuickAdd 建立預約" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />

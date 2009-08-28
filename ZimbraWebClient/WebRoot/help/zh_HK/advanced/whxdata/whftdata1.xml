@@ -1,6 +1,52 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <ftstdata>
+<topic name="訂閱 RSS/Atom feed" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+<topic name="在 Zimbra 中使用瀏覽器" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+<topic name="郵件分類" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+<topic name="改變登入的預設用戶端類型" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+<topic name="建立自訂資料夾" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+<topic name="自訂初始電子郵件頁面" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
+<topic name="刪除資料夾" url="Navigation_folders_and_tips/deleting_folders.htm" />
+<topic name="資料夾區" url="Navigation_folders_and_tips/Folders_area.htm" />
+<topic name="系統資料夾" url="Navigation_folders_and_tips/inbox_folder.htm" />
+<topic name="在資料夾間移動郵件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+<topic name="Zimbra Web Client 工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+<topic name="限額" url="Navigation_folders_and_tips/quotas.htm" />
+<topic name="重新命名資料夾" url="Navigation_folders_and_tips/renaming_folders.htm" />
+<topic name="右鍵選單" url="Navigation_folders_and_tips/right-click_menus.htm" />
+<topic name="寄件箱" url="Navigation_folders_and_tips/sent_folder.htm" />
+<topic name="「內容窗格清單」排序" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+<topic name="傳統視窗" url="Navigation_folders_and_tips/Traditional_View.htm" />
+<topic name="垃圾桶" url="Navigation_folders_and_tips/trash_folder.htm" />
+<topic name="ZWC 快速鍵" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+<topic name="清除郵件" url="reading_mail/archiving_old_messages.htm" />
+<topic name="附件阻止" url="reading_mail/attachment_blocking.htm" />
+<topic name="顯示 HTML 格式郵件" url="reading_mail/displaying_html_in_email_messages.htm" />
+<topic name="如何知道有新郵件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+<topic name="將郵件標記為未讀" url="reading_mail/marking_mail_as_unread.htm" />
+<topic name="郵件阻止功能" url="reading_mail/Message_blocking_feature.htm" />
+<topic name="開啟附件" url="reading_mail/opening_file_attachments.htm" />
+<topic name="列印郵件" url="reading_mail/printing_a_mail_message.htm" />
+<topic name="讀取郵件" url="reading_mail/reading_mail.htm" />
+<topic name="在「讀取」窗格中讀取郵件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+<topic name="還原刪除的郵件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+<topic name="回覆郵件" url="reading_mail/replying_to_mail_messages.htm" />
+<topic name="搜尋郵件" url="Search/_search__vs.__search_for_.htm" />
+<topic name="AND 及 OR 搜尋" url="Search/and_vs_or_searches.htm" />
+<topic name="建立搜尋條件" url="Search/building_search_queries.htm" />
+<topic name="「包含」與「相符」" url="Search/contains_vs_matches.htm" />
+<topic name="查詢語言說明" url="Search/query_language_description.htm" />
+<topic name="快速搜尋" url="Search/Quick_search.htm" />
+<topic name="儲存搜尋條件" url="Search/saving_search_queries.htm" />
+<topic name="搜尋例項" url="Search/search_examples.htm" />
+<topic name="使用搜尋功能" url="Search/using_the_search_feature.htm" />
+<topic name="在「搜尋」中使用 * 作為通配字元" url="Search/Using_Wildcard_in_Search.htm" />
+<topic name="為郵件加標記" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+<topic name="刪除標記" url="Tags_and_flags/deleting_tags.htm" />
+<topic name="為郵件加上旗標" url="Tags_and_flags/Flagging_an_email_message.htm" />
+<topic name="用標記分類郵件" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+<topic name="關於事項" url="Tasks/About_Tasks.htm" />
 <topic name="加入事項" url="Tasks/Add_a_task.htm" />
 <topic name="改變事項" url="Tasks/Change_a_task.htm" />
 <topic name="建立事項資料夾" url="Tasks/Create_tasks_folders.htm" />

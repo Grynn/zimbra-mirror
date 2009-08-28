@@ -1,0 +1,103 @@
+﻿[GlossaryTab]
+TabCaption=語彙(&G)
+TermCaption=詞彙(&T)
+DefinitionCaption=定義(&D):
+
+[BrowseSequence]
+PreCaption=上一頁
+PreTooltip=上一個主題
+NextCaption=下一頁
+NextTooltip=下一個主題
+BlockTooltip=選取區塊
+
+[Common]
+Contents=內容
+Index=索引
+Search=搜尋
+Glossary=語彙
+Logo/Author=提供者:
+Show=顯示
+Hide=隱藏
+SyncToc=SyncToc
+Prev=<<
+Next=>>
+Disabled Prev=<<
+Disabled Next=>>
+Seperate = |
+
+[WebHelp]
+Cancel=取消
+CantOpenURLorFile=無法開啟 URL 或檔案
+CompletingContents=正在載入內容...
+Display=顯示
+Term=詞彙:
+Definition=定義:
+Done=完成
+Find=搜尋
+IndexInputPrompt=輸入要尋找的關鍵字:
+RelateTopicListPrompt=按一下主題，再按一下「顯示」。
+LoadingData=正在載入資料，請稍候...
+LoadingContents=正在載入內容，請稍候...
+LoadingContentsData=正在載入，按此可取消...
+LoadingFTS=正在載入搜尋資料...
+LoadingIndex=正在載入索引...
+LoadingTOCItem=正在載入目錄:
+Searching=正在搜尋...
+FtsInputPrompt=輸入要搜尋的字詞:
+FtsHilitePrompt=突出顯示搜索結果
+TopicsFound=找到主題
+BrowserLimitedMessage=您的瀏覽器不支援框架。 建議您將瀏覽器更新為可支援框架的版本。
+SuggestViewNoFrameMessage=若要檢視不含框架的「說明」系統，請按一下這個
+SuggestViewNoFrameMsg2=超連結。
+TopicsNotFound=未找到任何主題。
+CantSearch=無法搜尋該字詞。
+JS_alert_appletNotLoad = 無法載入小程式。 若您使用舊版 Netscape，則須編輯 prefs.js 檔。
+JS_alert_colorlimitation=WebHelp 已偵測到您的顯示器被設定為 16 色。 若要取得完整的 WebHelp 支援，請設定您的顯示器使用 256 或更多色彩。
+Blank_topic_text=此主題係由「WinHelp Project Conversion Wizard」建立，且為遺失主題或中斷超連結之目標。
+JS_alert_ProjectLoadingFail=無法正確載入，請按一下「重新整理」。
+JS_alert_cantLoadProject=無法載入專案:
+JS_alert_ErrorInLoading=載入導覽元件時發生錯誤。 請重新產生 WebHelp。
+IndexBtnText=移至
+FtsBtnText=移至
+ToolBarSearchBtnText=移至
+InTopicSearchBtnText=移至
+SearchLabel=搜尋
+SearchPrompt=- 搜尋 -
+PreTooltip=上一個主題
+NextTooltip=下一個主題
+WebSearch=WebSearch
+SyncTocTooltip=同步主題
+Book=書籍
+Page=頁面
+Remote_Page=遠端頁面
+Show_Navigation_Component=顯示導覽元件
+Hide_Navigation_Component=隱藏導覽元件
+nls_edit_label=輸入您的問題:
+nls_button_go_hint=進行搜尋
+nls_button_go_text=移至
+nls_body_instruction=在上方的文字方塊中輸入您的問題，再按一下「移至」。
+nls_body_empty=抱歉，我們無法為您的問題尋找到適當的解答。
+IndexSelectTopicTitle=選取主題
+IndexSelectTopicLabel=選取主題，再按一下「顯示」
+IndexSelectTopicError=請選取一個主題。
+IndexAlphabetBookmarks=一畫二畫三畫四畫五畫六畫七畫八畫九畫十畫十一畫十二畫十三畫十四畫十五畫十六畫十七畫十八畫十九畫二十畫二十一畫二十二畫二十三畫二十四畫二十五畫二十六畫二十七畫以上
+MergeError1=合併的說明系統
+MergeError2=所使用的語言與主要說明系統不同，這將會停用合併的說明系統中之索引與全文搜尋功能。
+MergeError3=正在使用與專家幫助系統不同的網路設置標誌，這將導致幫助系統中的合併功能被禁用。
+PoweredBy=提供者為
+GeneratedBy=產生程式為
+Author=作者
+About=關於
+Print=列印
+
+[PrintedDoc]
+TableOfContents=目錄
+TitlePage=標題頁面
+ChapterFileNamePrefix=章節_
+TitlePageFileName=章節__標題_頁.doc
+CrossReferencePrefix=請參閱
+GlossaryHeadingStyleName=語彙標題
+GlossaryTermStyleName=詞彙
+GlossaryDefinitionStyleName=語彙定義
+TitlePageTitleStyleName=標題頁面標題
+TocPageTitleStyleName=目錄頁面標題

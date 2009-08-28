@@ -162,9 +162,6 @@
 <key name="選項，休假訊息" >
   <topic name="休假訊息" url="Userspecific/vacation_message.htm" />
 </key>
-<key name="選項，新郵件通知" >
-  <topic name="新郵件通知" url="Userspecific/New_mail_notifications.htm" />
-</key>
 <key name="還原" >
   <topic name="還原刪除的郵件" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <key name="刪除的郵件" >
@@ -180,9 +177,6 @@
 </key>
 <key name="郵件草稿" >
   <topic name="儲存郵件草稿" url="Creating_Messages/saving_a_draft_message.htm" />
-</key>
-<key name="郵件通知" >
-  <topic name="新郵件通知" url="Userspecific/New_mail_notifications.htm" />
 </key>
 <key name="郵件，休假" >
   <topic name="休假訊息" url="Userspecific/vacation_message.htm" />
