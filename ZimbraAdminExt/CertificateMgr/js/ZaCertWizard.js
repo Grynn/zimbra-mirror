@@ -756,7 +756,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					},
 					trueValue:"TRUE", falseValue:"FALSE", msgName:com_zimbra_cert_manager.FORCE_NEW_CSR },
 				{ ref: ZaCert.A_commonName, type:_TEXTFIELD_, width: 150,
-					visibilityChecks:[],
+					visibilityChecks:[],  bmolsnr:true,
                     enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
 				    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
                     label: com_zimbra_cert_manager.CERT_INFO_CN},
@@ -770,9 +770,8 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 							this.setInstanceValue (value) ;
 							if (value) {
 								if (AjxEnv.hasFirebug) console.log("Set the wildcard server name") ;
-								this.setInstanceValue(
-									ZaCert.getWildCardServerName(this.getInstanceValue("/attrs/" + ZaCert.A_commonName)),
-									"/attrs/" + ZaCert.A_commonName ) ;
+                                var wildCardSN = ZaCert.getWildCardServerName(this.getInstanceValue(ZaCert.A_commonName)) ;
+								this.setInstanceValue( wildCardSN,	ZaCert.A_commonName ) ;
 							}
  						}
 				},	
