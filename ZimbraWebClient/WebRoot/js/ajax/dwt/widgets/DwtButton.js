@@ -652,21 +652,6 @@ function(ev) {
 	    if (this._depImg){
 			AjxImg.setImage(this, this._depImg);
 	    }
-
-		DwtEventManager.notifyListeners(DwtEvent.ONMOUSEDOWN, mouseEv);
-
-		if (obj._menu instanceof AjxCallback) {
-			obj.popup();
-		}
-
-		if (obj._dropDownEvtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
-	    	var selEv = DwtShell.selectionEvent;
-	    	DwtUiEvent.copy(selEv, mouseEv);
-	    	selEv.item = obj;
-	    	obj._dropDownEvtMgr.notifyListeners(DwtEvent.SELECTION, selEv);
-	    } else { 
-			obj._toggleMenu();
-		}
 	}
 
 	mouseEv._stopPropagation = true;
@@ -685,6 +670,22 @@ function(ev) {
 	    if (this._hovImg && !this.noMenuBar) {
 			AjxImg.setImage(this, this._hovImg);
 	    }
+
+		DwtEventManager.notifyListeners(DwtEvent.ONMOUSEDOWN, mouseEv);
+
+		var obj = DwtControl.getTargetControl(ev);
+		if (obj._menu instanceof AjxCallback) {
+			obj.popup();
+		}
+
+		if (obj._dropDownEvtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
+	    	var selEv = DwtShell.selectionEvent;
+	    	DwtUiEvent.copy(selEv, mouseEv);
+	    	selEv.item = obj;
+	    	obj._dropDownEvtMgr.notifyListeners(DwtEvent.SELECTION, selEv);
+	    } else {
+			obj._toggleMenu();
+		}
 	}
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
