@@ -636,14 +636,6 @@ DwtButton.prototype._createHtmlFromTemplate = function(templateId, data) {
 DwtButton._dropDownCellMouseDownHdlr =
 function(ev) {
 	var obj = DwtControl.getTargetControl(ev);
-    /**
-     * Below condition added for the bug 17089
-     * If menu is there and already popped up, do pop it down first and then proceed.
-     */
-
-    if (obj && obj.getMenu() && obj.getMenu().isPoppedUp()){
-        obj.getMenu().popdown();
-    }
 
     var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev, obj);
@@ -674,19 +666,27 @@ function(ev) {
 		DwtEventManager.notifyListeners(DwtEvent.ONMOUSEDOWN, mouseEv);
 
 		var obj = DwtControl.getTargetControl(ev);
-		if (obj._menu instanceof AjxCallback) {
-			obj.popup();
-		}
+		if (obj) {
+			if (obj.getMenu() && obj.getMenu().isPoppedUp()) {
+				obj.getMenu().popdown();
+			}
+			else {
+				if (obj._menu instanceof AjxCallback) {
+					obj.popup();
+				}
 
-		if (obj._dropDownEvtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
-	    	var selEv = DwtShell.selectionEvent;
-	    	DwtUiEvent.copy(selEv, mouseEv);
-	    	selEv.item = obj;
-	    	obj._dropDownEvtMgr.notifyListeners(DwtEvent.SELECTION, selEv);
-	    } else {
-			obj._toggleMenu();
+				if (obj._dropDownEvtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
+					var selEv = DwtShell.selectionEvent;
+					DwtUiEvent.copy(selEv, mouseEv);
+					selEv.item = obj;
+					obj._dropDownEvtMgr.notifyListeners(DwtEvent.SELECTION, selEv);
+				} else {
+					obj._toggleMenu();
+				}
+			}
 		}
 	}
+	
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
