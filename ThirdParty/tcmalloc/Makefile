@@ -25,10 +25,10 @@ build:
 	cd google-perftools-$(TCMALLOC_VERSION); \
 	CFLAGS="-g -O2" \
 	CPPFLAGS="-I/usr/include" \
-	CXXFLAGS="-I/usr/include" \
-	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION) --enable-minimal $(CONF_OPS); \
+	CXXFLAGS="-g -O2 -I/usr/include" \
+	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION) --enable-minimal; \
 	make; \
-	make install)
+	make install STRIP="")
 	(cd $(ZIMBRA_HOME); ln -s tcmalloc-$(TCMALLOC_VERSION) tcmalloc; \
 	rmdir $(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION)/bin)
 
