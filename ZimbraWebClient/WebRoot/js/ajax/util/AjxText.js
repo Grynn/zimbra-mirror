@@ -52,6 +52,13 @@ AjxFormat.prototype.toString = function() {
 AjxFormat.prototype._pattern;
 AjxFormat.prototype._segments;
 
+// Static functions
+
+AjxFormat.initialize = function() {
+	AjxDateFormat.initialize();
+	AjxNumberFormat.initialize();
+};
+
 // Public methods
 
 /** 
@@ -458,19 +465,6 @@ AjxDateFormat.DEFAULT = AjxDateFormat.MEDIUM;
 
 AjxDateFormat._META_CHARS = "GyMwWDdFEaHkKhmsSzZ";
 
-AjxDateFormat._dateFormats = [
-	I18nMsg.formatDateShort, I18nMsg.formatDateMedium,
-	I18nMsg.formatDateLong, I18nMsg.formatDateFull
-];
-AjxDateFormat._timeFormats = [
-	I18nMsg.formatTimeShort, I18nMsg.formatTimeMedium, 
-	I18nMsg.formatTimeLong, I18nMsg.formatTimeFull
-];
-
-AjxDateFormat._DATE_FORMATTERS = {};
-AjxDateFormat._TIME_FORMATTERS = {};
-AjxDateFormat._DATETIME_FORMATTERS = {};
-
 // Static methods
 
 AjxDateFormat.getDateInstance = function(style) {
@@ -511,6 +505,26 @@ AjxDateFormat.format = function(pattern, date) {
 };
 AjxDateFormat.parse = function(pattern, dateStr) {
 	return new AjxDateFormat(pattern).parse(dateStr);
+};
+
+AjxDateFormat.initialize = function() {
+	// format
+	AjxDateFormat._dateFormats = [
+		I18nMsg.formatDateShort, I18nMsg.formatDateMedium,
+		I18nMsg.formatDateLong, I18nMsg.formatDateFull
+	];
+	AjxDateFormat._timeFormats = [
+		I18nMsg.formatTimeShort, I18nMsg.formatTimeMedium,
+		I18nMsg.formatTimeLong, I18nMsg.formatTimeFull
+	];
+
+	AjxDateFormat._DATE_FORMATTERS = {};
+	AjxDateFormat._TIME_FORMATTERS = {};
+	AjxDateFormat._DATETIME_FORMATTERS = {};
+
+	// segments
+	AjxDateFormat.MonthSegment.initialize();
+	AjxDateFormat.WeekdaySegment.initialize();
 };
 
 // Public methods
@@ -673,27 +687,29 @@ AjxDateFormat.MonthSegment.prototype.toString = function() {
 	return "dateMonth: \""+this._s+'"'; 
 };
 
-// Constants
+// Static functions
 
-AjxDateFormat.MonthSegment.MONTHS = {};
-AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.SHORT] = [
-	AjxMsg.monthJanShort, AjxMsg.monthFebShort, AjxMsg.monthMarShort, 
-	AjxMsg.monthAprShort, AjxMsg.monthMayShort, AjxMsg.monthJunShort, 
-	AjxMsg.monthJulShort, AjxMsg.monthAugShort, AjxMsg.monthSepShort, 
-	AjxMsg.monthOctShort, AjxMsg.monthNovShort, AjxMsg.monthDecShort
-];
-AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.MEDIUM] = [ 
-	I18nMsg.monthJanMedium, I18nMsg.monthFebMedium, I18nMsg.monthMarMedium,
-	I18nMsg.monthAprMedium, I18nMsg.monthMayMedium, I18nMsg.monthJunMedium,
-	I18nMsg.monthJulMedium, I18nMsg.monthAugMedium, I18nMsg.monthSepMedium,
-	I18nMsg.monthOctMedium, I18nMsg.monthNovMedium, I18nMsg.monthDecMedium
-];
-AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.LONG] = [ 
-	I18nMsg.monthJanLong, I18nMsg.monthFebLong, I18nMsg.monthMarLong,
-	I18nMsg.monthAprLong, I18nMsg.monthMayLong, I18nMsg.monthJunLong,
-	I18nMsg.monthJulLong, I18nMsg.monthAugLong, I18nMsg.monthSepLong,
-	I18nMsg.monthOctLong, I18nMsg.monthNovLong, I18nMsg.monthDecLong
-];
+AjxDateFormat.MonthSegment.initialize = function() {
+	AjxDateFormat.MonthSegment.MONTHS = {};
+	AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.SHORT] = [
+		AjxMsg.monthJanShort, AjxMsg.monthFebShort, AjxMsg.monthMarShort,
+		AjxMsg.monthAprShort, AjxMsg.monthMayShort, AjxMsg.monthJunShort,
+		AjxMsg.monthJulShort, AjxMsg.monthAugShort, AjxMsg.monthSepShort,
+		AjxMsg.monthOctShort, AjxMsg.monthNovShort, AjxMsg.monthDecShort
+	];
+	AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.MEDIUM] = [
+		I18nMsg.monthJanMedium, I18nMsg.monthFebMedium, I18nMsg.monthMarMedium,
+		I18nMsg.monthAprMedium, I18nMsg.monthMayMedium, I18nMsg.monthJunMedium,
+		I18nMsg.monthJulMedium, I18nMsg.monthAugMedium, I18nMsg.monthSepMedium,
+		I18nMsg.monthOctMedium, I18nMsg.monthNovMedium, I18nMsg.monthDecMedium
+	];
+	AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.LONG] = [
+		I18nMsg.monthJanLong, I18nMsg.monthFebLong, I18nMsg.monthMarLong,
+		I18nMsg.monthAprLong, I18nMsg.monthMayLong, I18nMsg.monthJunLong,
+		I18nMsg.monthJulLong, I18nMsg.monthAugLong, I18nMsg.monthSepLong,
+		I18nMsg.monthOctLong, I18nMsg.monthNovLong, I18nMsg.monthDecLong
+	];
+};
 
 // Public methods
 
@@ -822,25 +838,27 @@ AjxDateFormat.DaySegment.prototype.toString = function() {
 	return "dateDay: \""+this._s+'"'; 
 };
 
-// Constants
+// Static functions
 
-AjxDateFormat.WeekdaySegment.WEEKDAYS = {};
-// NOTE: The short names aren't available in Java so we have to define them.
-AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.SHORT] = [ 
-	AjxMsg.weekdaySunShort, AjxMsg.weekdayMonShort, AjxMsg.weekdayTueShort,
-	AjxMsg.weekdayWedShort, AjxMsg.weekdayThuShort, AjxMsg.weekdayFriShort,
-	AjxMsg.weekdaySatShort
-];
-AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.MEDIUM] = [ 
-	I18nMsg.weekdaySunMedium, I18nMsg.weekdayMonMedium, I18nMsg.weekdayTueMedium,
-	I18nMsg.weekdayWedMedium, I18nMsg.weekdayThuMedium, I18nMsg.weekdayFriMedium,
-	I18nMsg.weekdaySatMedium
-];
-AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.LONG] = [ 
-	I18nMsg.weekdaySunLong, I18nMsg.weekdayMonLong, I18nMsg.weekdayTueLong,
-	I18nMsg.weekdayWedLong, I18nMsg.weekdayThuLong, I18nMsg.weekdayFriLong,
-	I18nMsg.weekdaySatLong
-];
+AjxDateFormat.WeekdaySegment.initialize = function() {
+	AjxDateFormat.WeekdaySegment.WEEKDAYS = {};
+	// NOTE: The short names aren't available in Java so we have to define them.
+	AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.SHORT] = [
+		AjxMsg.weekdaySunShort, AjxMsg.weekdayMonShort, AjxMsg.weekdayTueShort,
+		AjxMsg.weekdayWedShort, AjxMsg.weekdayThuShort, AjxMsg.weekdayFriShort,
+		AjxMsg.weekdaySatShort
+	];
+	AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.MEDIUM] = [
+		I18nMsg.weekdaySunMedium, I18nMsg.weekdayMonMedium, I18nMsg.weekdayTueMedium,
+		I18nMsg.weekdayWedMedium, I18nMsg.weekdayThuMedium, I18nMsg.weekdayFriMedium,
+		I18nMsg.weekdaySatMedium
+	];
+	AjxDateFormat.WeekdaySegment.WEEKDAYS[AjxDateFormat.LONG] = [
+		I18nMsg.weekdaySunLong, I18nMsg.weekdayMonLong, I18nMsg.weekdayTueLong,
+		I18nMsg.weekdayWedLong, I18nMsg.weekdayThuLong, I18nMsg.weekdayFriLong,
+		I18nMsg.weekdaySatLong
+	];
+};
 
 // Public methods
 
@@ -1416,8 +1434,6 @@ AjxNumberFormat._PERCENT = "percent";
 
 AjxNumberFormat._META_CHARS = "0#.,E";
 
-AjxNumberFormat._FORMATTERS = {};
-
 // Data
 
 AjxNumberFormat.prototype._groupingOffset = Number.MAX_VALUE;
@@ -1462,6 +1478,10 @@ AjxNumberFormat.getPercentInstance = function() {
 
 AjxNumberFormat.format = function(pattern, number) {
 	return new AjxNumberFormat(pattern).format(number);
+};
+
+AjxNumberFormat.initialize = function() {
+	AjxNumberFormat._FORMATTERS = {};
 };
 
 // Public methods
@@ -1777,3 +1797,9 @@ AjxListFormat.prototype.format = function(array) {
 	}
 	return list.join("");
 };
+
+//
+// INITIALIZE
+//
+
+AjxFormat.initialize();
