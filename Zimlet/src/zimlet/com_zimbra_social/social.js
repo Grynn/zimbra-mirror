@@ -195,7 +195,11 @@ com_zimbra_social.prototype._postToUrlShortner =
 function() {
 	var longUrl = document.getElementById("com_zimbra_twitter_longUrl_field").value;
 	
-	var url = "http://api.bit.ly/shorten?version=2.0.1&longUrl="+longUrl+"&login=zimbra&apiKey=R_20927271403ca63a07c25d17edc32a1d";
+	var url = "http://api.bit.ly/shorten?"
+            +"version="+AjxStringUtil.urlComponentEncode("2.0.1")
+            +"&longUrl="+AjxStringUtil.urlComponentEncode(longUrl)
+            +"&login="+AjxStringUtil.urlComponentEncode("zimbra")
+            +"&apiKey="+AjxStringUtil.urlComponentEncode("R_20927271403ca63a07c25d17edc32a1d");
 	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
 	AjxRpc.invoke(null, entireurl, null, new AjxCallback(this, this._postToUrlShortnerCallback, longUrl), false);
 };
