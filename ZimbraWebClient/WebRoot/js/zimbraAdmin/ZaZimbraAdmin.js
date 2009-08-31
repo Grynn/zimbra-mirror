@@ -371,7 +371,11 @@ ZaZimbraAdmin.reload_msg = function () {
 
     //the dynamic script load is asynchronous, may need a callback to make sure all the messages are actually loaded
     if (AjxEnv.hasFirebug) console.log("Reload the message file: " + includes.toString()) ;
-    AjxInclude(includes);
+
+    //reinitialize the AjxFormat after the message files are loaded
+    var callback = new AjxCallback (AjxFormat.initialize); 
+
+    AjxInclude(includes, null, callback);
     ZaZimbraAdmin._LOCALE_MSG_RELOADED = true ;
 }
 

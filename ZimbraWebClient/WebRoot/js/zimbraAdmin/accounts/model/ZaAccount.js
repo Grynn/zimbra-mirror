@@ -1923,8 +1923,9 @@ function (serverStr) {
 	if (serverStr) {
 		var ajxTKServerStr = serverStr.substring(0,8) + "T" + serverStr.substring(8) ;
 		var curDate = AjxDateUtil.parseServerDateTime(ajxTKServerStr);	
-		var formatter = new AjxDateFormat("MM/dd/yyyy HH:mm:ss");
-		return formatter.format(curDate) ;	
+//		var formatter = new AjxDateFormat("MM/dd/yyyy HH:mm:ss");
+        var formatter = AjxDateFormat.getDateTimeInstance() ;
+        return formatter.format(curDate) ;
 	}else{
 		return ZaMsg.Last_Login_Never;
 	}
