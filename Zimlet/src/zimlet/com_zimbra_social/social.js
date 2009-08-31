@@ -135,11 +135,7 @@ function() {
 	var callback = AjxCallback.simpleClosure(this._shortenUrlButtonListener, this);
 	document.getElementById("social_insertShortenedurl").onclick = callback;
 
-	//link thats displayed when no accounts are available
-	if(document.getElementById("social_addAccountLink")) {
-		var callback = AjxCallback.simpleClosure(this.preferences._showManageAccntsDlg, this.preferences);
-		document.getElementById("social_addAccountLink").onclick = callback;
-	}
+
 
 
 	var searchButton = new DwtButton({parent:this.getShell()});
@@ -436,7 +432,7 @@ function() {
 	if (hasAccounts)
 		return html.join("");
 	else {
-		return "<label style=\"font-size:12px;color:#555555;font-style:italic\">No accounts have been added yet! </label><a id='social_addAccountLink'><label style=\"font-size:12px;color:#3300FF;font-style:italic\">Click here to add one</label></a>";
+		return "<label style=\"font-size:12px;color:#555555;font-style:italic\">No accounts have been added yet! Click on 'Add/Remove Accounts' to add one </label>";
 	}
 };
 
@@ -1108,6 +1104,7 @@ function() {
 
 	this._addTweetButtons();
 	this._loadInformation();
+    this._setMainCardHeight();
 	this._dontAutoScroll = false;
 };
 
@@ -1120,18 +1117,18 @@ function() {
 	html[idx++] = "<TD width=16px valign='middle'>";
 	html[idx++] =  AjxImg.getImageHtml("Blank_16");
 	html[idx++] = "</TD>";
-	html[idx++] ="<TD  valign='middle'>";
-	html[idx++] = "<label  valign='middle' width=30% style=\"font-size:14px;color:black;font-weight:bold\" id='social_whatareyoudoingLabel'>What are you doing?";
+	html[idx++] ="<TD  nowrap='' width=180px  valign='left'>";
+	html[idx++] = "<label  valign='middle'  style=\"font-size:14px;color:black;font-weight:bold\" id='social_whatareyoudoingLabel' >What are you doing?";
 	html[idx++] = "</label>";
 	html[idx++] = "</TD>";
 	html[idx++] = "<TD width=16px valign='middle'>";
 	html[idx++] =  AjxImg.getImageHtml("Blank_16");
 	html[idx++] = "</TD>";
-	html[idx++] =	"<td width=61% id='social_updateToCell'>";
+	html[idx++] =	"<td  width=70% nowrap='' id='social_updateToCell'>";
 	html[idx++] = this._addUpdateToCheckboxes();
 	html[idx++] = "</TD>";
 	html[idx++] =	"<TD valign='middle' align='right'>";
-	html[idx++] = "<input   style=\"width:200px;\" type=\"text\" autocomplete=\"off\" id=\"social_searchField\"></input>";
+	html[idx++] = "<input   style=\"width:150px;\" type=\"text\" autocomplete=\"off\" id=\"social_searchField\"></input>";
 	html[idx++] = "</TD><TD valign='middle'>";
 	html[idx++] = "<div  valign='middle' id='social_searchButton' />";
 	html[idx++] = "</TD>";
@@ -1249,7 +1246,7 @@ function(tableId, jsonObj, type) {
 			created_at = obj.created_at;
 			text = " " + obj.title + " " + obj.alias;
 			source = "tweetmeme";
-			tweetcount = obj.tweetcount;
+			tweetcount = obj.url_count;
 			imageAnchor = "<TD > ";
 			imageAnchor = imageAnchor + "<a  href=\"" + obj.url + "\" target=\"_blank\" style=\"color:gray\">";
 			imageAnchor = imageAnchor + "<table><tr>";
@@ -1921,5 +1918,26 @@ function(params) {
 				this.tableIdAndTimerMap[tableId] = timer;
 			}
 		}
+	}
+};
+
+com_zimbra_social.prototype._showWarningMsg = function(message) {
+	var style = DwtMessageDialog.WARNING_STYLE;
+	var dialog = appCtxt.getMsgDialog();
+	this.warningDialog = dialog;
+	dialog.setMessage(message, style);
+	dialog.popup();
+};
+
+com_zimbra_social.prototype.openCenteredWindow =
+function (url) {
+    var width = 800;
+    var height = 600;
+    var left = parseInt((screen.availWidth/2) - (width/2));
+    var top = parseInt((screen.availHeight/2) - (height/2));
+    var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + "screenX=" + left + ",screenY=" + top;
+    var win = window.open(url, "subWind", windowFeatures);
+   	if (!win) {
+		 this._showWarningMsg(ZmMsg.popupBlocker);
 	}
 };

@@ -135,7 +135,7 @@ com_zimbra_socialFacebook.prototype.getExtendedPermForRead =
 function () {
 	var url = "https://www.facebook.com/authorize.php?";
 	var params = "version=1.0&ext_perm=read_stream&api_key="+this.apiKey;
-	this.openCenteredWindow(url + params);
+	this.zimlet.openCenteredWindow(url + params);
 	//var newWin = window.Open = window.open(url + params, "tfbOpen", "width=750,height=500");
 	//if (!newWin) {
 //		appCtxt.getAppController().setStatusMsg(ZmMsg.popupBlocker, ZmStatusView.LEVEL_CRITICAL);
@@ -188,18 +188,7 @@ function (args) {
 	return obj.signature;
 };
 
-com_zimbra_socialFacebook.prototype.openCenteredWindow =
-function (url) {
-    var width = 590;
-    var height = 550;
-    var left = parseInt((screen.availWidth/2) - (width/2));
-    var top = parseInt((screen.availHeight/2) - (height/2));
-    var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + "screenX=" + left + ",screenY=" + top;
-    var win = window.open(url, "subWind", windowFeatures);
-   	if (!win) {
-		appCtxt.getAppController().setStatusMsg(ZmMsg.popupBlocker, ZmStatusView.LEVEL_CRITICAL);
-	}
-};
+
 
 
 com_zimbra_socialFacebook.prototype.fbCreateToken =
@@ -244,7 +233,7 @@ function (authToken) {
 	}
 	var p = tmp.join("&");
 	url = url + p ;
-	this.openCenteredWindow(url);
+	this.zimlet.openCenteredWindow(url);
 };
 
 com_zimbra_socialFacebook.prototype._getSessionId =
@@ -302,7 +291,7 @@ function (fromAuthorizeBtn) {
 	}
 	var p = tmp.join("&");
 	url = url + p;
-	this.openCenteredWindow(url);
+	this.zimlet.openCenteredWindow(url);
 };
 
 com_zimbra_socialFacebook.prototype._convertFB_JsonStrToUrlEncodedStr = function(text) {

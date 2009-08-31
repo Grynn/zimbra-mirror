@@ -52,13 +52,14 @@ function() {
 com_zimbra_socialTwitter.prototype._trendsCallback =
 function(response) {
 	var text = response.text;
-	var jsonObj = eval("(" + text + ")");
-	var trends = jsonObj.trends;
 	if (!response.success) {
 		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
 		appCtxt.getAppController().setStatusMsg("Twitter Error: " + response.text, ZmStatusView.LEVEL_WARNING, null, transitions);
 		return;
 	}
+	var jsonObj = eval("(" + text + ")");
+	var trends = jsonObj.trends;
+
 
 	this.allTrends = new Array();
 	for (var i = 0; i < trends.length; i++) {
@@ -497,7 +498,7 @@ function(normalizedStr, ignoreEncodingArray) {
 
 com_zimbra_socialTwitter.prototype._postToTweetCallback =
 function(account, response) {
-	var jsonObj = eval("("+response.text + ")");
+
 	if (!response.success) {
 		var msgDialog = appCtxt.getMsgDialog();
 		var msg =  jsonObj.error;
@@ -505,6 +506,7 @@ function(account, response) {
 		msgDialog.popup();
 		return;
 	}
+  	var jsonObj = eval("("+response.text + ")");  
 	document.getElementById("social_statusTextArea").value = "";
 	this.zimlet.showNumberOfLetters();
 	appCtxt.getAppController().setStatusMsg("Updates Sent", ZmStatusView.LEVEL_INFO);
@@ -706,11 +708,9 @@ function(response) {
 			this._oauth_token_secret = name.replace("oauth_token_secret=", "");
 		}
 	}
-	var newWin = window.open("https://twitter.com/oauth/authorize?oauth_token=" + AjxStringUtil.urlComponentEncode(this._oauth_token), "", "toolbar=no,menubar=no");
-	if (!newWin) {
-		appCtxt.getAppController().setStatusMsg(ZmMsg.popupBlocker, ZmStatusView.LEVEL_CRITICAL);
-	}
+    this.zimlet.openCenteredWindow("https://twitter.com/oauth/authorize?oauth_token=" + AjxStringUtil.urlComponentEncode(this._oauth_token));
 };
+
 
 com_zimbra_socialTwitter.prototype._showGetPinDlg = function() {
 	//if zimlet dialog already exists...
@@ -753,7 +753,8 @@ com_zimbra_socialTwitter.prototype._okgetPinBtnListener =
 function() {
 
 	var pin = document.getElementById("com_zimbra_twitter_pin_field").value;
-	if(pin == "") {
+    pin = AjxStringUtil.trim(pin);
+	if(pin == "" || pin.length != 7) {
 		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
 		appCtxt.getAppController().setStatusMsg("Please enter 7 digit twitter PIN (Step 5)", ZmStatusView.LEVEL_WARNING, null, transitions);
 		return;
@@ -792,7 +793,13 @@ com_zimbra_socialTwitter.prototype.manageTwitterAccounts = function(text) {
 	tObj.raw = text;
 	tObj.name = tObj.screen_name;
 	tObj.type = tObj["__type"];
-	this.zimlet.allAccounts[tObj.user_id + tObj.screen_name] = tObj;
+    if(tObj.name == undefined) {//pin is invalid or something else is wrong
+        var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE,ZmToast.PAUSE,  ZmToast.FADE_OUT ];
+		appCtxt.getAppController().setStatusMsg("Twitter PIN is INVALID, please try again", ZmStatusView.LEVEL_WARNING, null, transitions);
+		return;
+    } else {
+	    this.zimlet.allAccounts[tObj.user_id + tObj.screen_name] = tObj;
+    }
 };
 
 

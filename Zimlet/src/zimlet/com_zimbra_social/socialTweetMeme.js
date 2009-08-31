@@ -23,7 +23,7 @@ function com_zimbra_socialTweetMeme(zimlet) {
 
 com_zimbra_socialTweetMeme.prototype.getTweetmemeCategories =
 function() {
-	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode("http://api.tweetmeme.com/categories.json");
+	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode("http://api.tweetmeme.com/stories/categories.json");
 	AjxRpc.invoke(null, entireurl, null, new AjxCallback(this, this._tweetMemeCallback), true);
 };
 
@@ -60,11 +60,11 @@ function(params) {
 	var query = params.query;
 	var url = "";
 	if (query == "__MOST_POPULAR__")
-		url = "http://api.tweetmeme.com/popular.json?";
+		url = "http://api.tweetmeme.com/stories/popular.json?";
 	else if (query == "__MOST_RECENT__")
-		url = "http://api.tweetmeme.com/recent.json";
+		url = "http://api.tweetmeme.com/stories/recent.json";
 	else
-		url = "http://api.tweetmeme.com/popular.json?category=" + AjxStringUtil.urlComponentEncode(params.query);
+		url = "http://api.tweetmeme.com/stories/popular.json?category=" + AjxStringUtil.urlComponentEncode(params.query);
 
 	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
 	AjxRpc.invoke(null, entireurl, null, new AjxCallback(this, this._tweetMemeSearchCallback, params), true);

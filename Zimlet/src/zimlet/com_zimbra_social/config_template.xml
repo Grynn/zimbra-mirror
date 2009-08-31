@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_social" version="1.9">
+<zimletConfig name="com_zimbra_social" version="2.0">
     <global>
         <property name="allowedDomains">twitter.com,*.twitter.com,*.facebook.com,*.tweetmeme.com,api.tr.im,*.digg.com,api.bit.ly</property>
 		<!-- note: 
