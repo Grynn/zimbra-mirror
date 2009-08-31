@@ -14,8 +14,6 @@
 # ***** END LICENSE BLOCK *****
 #
 
-require_once("Zimbra/ServerResponse.php");
-
 $filename = "";
 $text = "";
 $dictionary = "en_EN";
@@ -35,6 +33,9 @@ if (get_magic_quotes_gpc()) {
 }
 
 if ($text != NULL) {
+    header("Content-Type: text/plain");
+    set_error_handler("returnError");
+
     setlocale(LC_ALL, $dictionary);
 
     // Get rid of double-dashes, since we ignore dashes
@@ -42,7 +43,7 @@ if ($text != NULL) {
     $text = preg_replace('/--+/', ' ', $text);
 
 	// Convert to ISO-8859-1
-	$text = iconv("UTF-8", "iso-8859-1", $text);
+	$text = iconv("UTF-8", "iso-8859-1//IGNORE", $text);
 
     // Split on anything that's not a word character, quote or dash
     $words = preg_split('/[^\w\xc0-\xfd-\']+/', $text);
@@ -50,12 +51,7 @@ if ($text != NULL) {
     // Load dictionary
     $dictionary = pspell_new($dictionary);
     if ($dictionary == 0) {
-        $msg = "Unable to open dictionary " . $dictionary;
-        error_log($msg);
-        $response = new ServerResponse();
-        $response->addParameter("error", $msg);
-        $response->writeContent();
-        return;
+        returnError("Unable to open dictionary " . $dictionary);
     }
 
     $skip = FALSE;
@@ -96,9 +92,7 @@ if ($text != NULL) {
         }
     }
 
-    $response = new ServerResponse();
-    $response->addParameter("misspelled", $misspelled);
-    $response->writeContent();
+    echo $misspelled;
 } else {
 ?>
 
@@ -120,4 +114,11 @@ if ($text != NULL) {
 
 <?php
     }
+
+function returnError($errno, $message) {
+    header("HTTP/1.1 500 Internal Server Error");
+    error_log("Error $errno: " . $message);
+    exit($message);
+}
+
 ?>
