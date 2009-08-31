@@ -70,7 +70,7 @@ public class HttpSession
         return Statuscode;
     }
     
-    public InputStream Send(String uri)
+    public InputStream Send(String uri) throws HttpException
     {
         InputStream is=null;
         try
@@ -84,6 +84,10 @@ public class HttpSession
                                         HttpStatus.getStatusText(Statuscode));
             }
             is = method.getResponseBodyAsStream();            
+        }
+        catch(HttpException he)
+        {
+            throw he;
         }
         catch(Exception ex)
         {

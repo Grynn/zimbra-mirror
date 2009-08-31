@@ -34,6 +34,7 @@ import java.net.MalformedURLException;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.HttpException;
 
 public class ZMSoapSession 
 {
@@ -736,6 +737,7 @@ public class ZMSoapSession
     public boolean UploadFileUsingHttpSession(String url, String stfile, String ContentType)
     {
         boolean retval=true;
+        InputStream is=null;
         HttpSession httpsession = new HttpSession();
         httpsession.SetPostMethod(true);
         try
@@ -754,7 +756,16 @@ public class ZMSoapSession
         NameValuePair param2 = new NameValuePair("Content-type",ContentType);
         rparams.add(param2);
         httpsession.SetRequestHeader(rparams);
-        InputStream is= httpsession.Send(url);
+        try
+        {
+            is= httpsession.Send(url);
+        }
+        catch(HttpException he)
+        {
+            session_logger.log(Level.SEVERE,he.getMessage());
+            retval=false;
+        }
+        
         if(is!=null)
         {
             //do nothing   
@@ -770,10 +781,26 @@ public class ZMSoapSession
                                          double[] exc_array,Logger gtmbLog,boolean debug)
     {
         boolean retval=false;
+        InputStream istr=null;
         HttpSession httpsession = new HttpSession();
-        httpsession.SetPostMethod(false);
-        String uri=zcsurl;
-        InputStream istr= httpsession.Send(uri);
+        try
+        {
+            httpsession.SetPostMethod(false);
+            String uri=zcsurl;
+            istr= httpsession.Send(uri);
+        }
+        catch(HttpException he)
+        {
+            if (httpsession.GetStatusCode()==204) //NO content; Most probably mailbox is empty
+            {
+                gtmbLog.log(Level.WARNING,he.getMessage()+" (MailBox may be empty.)");
+            }
+            else
+            {
+                gtmbLog.log(Level.SEVERE,he.getMessage());
+            }
+            return retval;
+        }
         if (istr!=null)
         {
             try
