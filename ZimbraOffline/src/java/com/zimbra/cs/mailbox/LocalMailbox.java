@@ -73,7 +73,8 @@ public class LocalMailbox extends DesktopMailbox {
             ID_FOLDER_ROOT).getSubfolderHierarchy() : accessable) {
             if (folder.getId() != ID_FOLDER_INBOX &&
                 folder.getId() != ID_FOLDER_SPAM &&
-                folder.getId() != ID_FOLDER_SENT)
+                folder.getId() != ID_FOLDER_SENT &&
+                !(folder instanceof Mountpoint))
                 visible.add(folder);
         }
         return visible;
