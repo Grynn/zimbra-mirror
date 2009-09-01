@@ -2,21 +2,51 @@ package com.zimbra.cs.mailbox;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Message.RecipientType;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
+import com.zimbra.common.util.StringUtil;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.Identity;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Provisioning.DataSourceBy;
+import com.zimbra.cs.account.Provisioning.IdentityBy;
+import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbMailItem;
+import com.zimbra.cs.mailbox.MailSender.SafeSendFailedException;
+import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
+import com.zimbra.cs.mime.Mime;
+import com.zimbra.cs.mime.ParsedMessage;
+import com.zimbra.cs.mime.Mime.FixedMimeMessage;
+import com.zimbra.cs.offline.LMailSender;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.offline.YMailSender;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.offline.util.ymail.YMailException;
+import com.zimbra.cs.service.util.ItemId;
+import com.zimbra.cs.util.JMSession;
 
 public class DataSourceMailbox extends SyncMailbox {
     private boolean hasFolders;
@@ -170,6 +200,168 @@ public class DataSourceMailbox extends SyncMailbox {
         return new OfflineMailSender();
     }
 
+    /*
+     * Tracks messages that we've called SendMsg on but never got back a
+     *  response.  This should help avoid duplicate sends when the connection
+     *  goes away in the process of a SendMsg.<p>
+     *
+     *  key: a String of the form <tt>account-id:message-id</tt><p>
+     *  value: a Pair containing the content change ID and the "send UID"
+     *         used when the message was previously sent.
+     */
+    private static final Map<Integer, Pair<Integer, String>> sSendUIDs = new HashMap<Integer, Pair<Integer, String>>();
+
+    public int sendPendingMessages(boolean isOnRequest) throws ServiceException {
+        OperationContext context = new OperationContext(this);
+
+        int sentCount = 0;
+        for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE); iterator.hasNext(); ) {
+            int id = iterator.next();
+
+            Message msg;
+            try {
+                msg = getMessageById(context, id);
+            } catch (NoSuchItemException x) { //message deleted
+                OutboxTracker.remove(this, id);
+                continue;
+            }
+            if (msg == null || msg.getFolderId() != ID_FOLDER_OUTBOX) {
+                OutboxTracker.remove(this, id);
+                continue;
+            }
+
+            OfflineAccount acct = (OfflineAccount)OfflineProvisioning.
+            getOfflineInstance().getAccount(msg.getDraftAccountId());
+            OfflineDataSource ds = (OfflineDataSource)OfflineProvisioning.getInstance().get(
+                acct, DataSourceBy.id, msg.getDraftIdentityId());
+            Session session = null;
+
+            if (ds == null)
+                ds = (OfflineDataSource)OfflineProvisioning.getOfflineInstance().getDataSource(acct);
+
+            if (!isOnRequest && isAutoSyncDisabled(ds))
+                continue;
+
+            // For Yahoo bizmail use SMTP rather than Cascade
+            boolean isYBizmail = ds.isYahoo() && ds.isYBizmail();
+
+            if (isYBizmail) {
+                session = ds.getYBizmailSession();
+            } else if (!ds.isLive() && !ds.isYahoo()) {
+                session = LocalJMSession.getSession(ds);
+                if (session == null) {
+                    OfflineLog.offline.info("SMTP configuration not valid: " + msg.getSubject());
+                    bounceToInbox(context, acct, id, msg, "SMTP configuration not valid");
+                    OutboxTracker.remove(this, id);
+                    continue;
+                }
+            }
+            Identity identity = Provisioning.getInstance().get(getAccount(), IdentityBy.id, msg.getDraftIdentityId());
+            // try to avoid repeated sends of the same message by tracking "send UIDs" on SendMsg requests
+            Pair<Integer, String> sendRecord = sSendUIDs.get(id);
+            String sendUID = sendRecord == null || sendRecord.getFirst() != msg.getSavedSequence() ?
+                UUID.randomUUID().toString() : sendRecord.getSecond();
+            sSendUIDs.put(id, new Pair<Integer, String>(msg.getSavedSequence(), sendUID));
+
+            MimeMessage mm = ((FixedMimeMessage) msg.getMimeMessage()).setSession(session);
+            String origId = msg.getDraftOrigId();
+            ItemId origMsgId = StringUtil.isNullOrEmpty(origId) ? null : new
+                ItemId(origId, acct.getId());
+
+            // Do we need to save a copy of the message ourselves to the Sent folder?
+            boolean saveToSent = (isYBizmail || ds.isSaveToSent()) && getAccount().isPrefSaveToSent();
+
+            if (ds.isYahoo() && !isYBizmail) {
+                YMailSender ms = YMailSender.newInstance(ds);
+                try {
+                    ms.sendMimeMessage(context, this, saveToSent, mm, null, null,
+                        origMsgId, msg.getDraftReplyType(), identity, false, false);
+                } catch (ServiceException e) {
+                    Throwable cause = e.getCause();
+                    if (cause != null && cause instanceof YMailException) {
+                        OfflineLog.offline.info("YMail request failed: " + msg.getSubject(), cause);
+                        YMailException yme = (YMailException) cause;
+                        if (yme.isRetriable()) {
+                            OutboxTracker.recordFailure(this, id);
+                        } else {
+                            bounceToInbox(context, acct, id, msg, cause.getMessage());
+                            OutboxTracker.remove(this, id);
+                        }
+                        continue;
+                    }
+                    throw e;
+                }
+            } else {
+                MailSender ms = ds.isLive() ? LMailSender.newInstance(ds) : new MailSender();
+                try {
+                    ms.sendMimeMessage(context, this, saveToSent, mm, null, null,
+                        origMsgId, msg.getDraftReplyType(), identity, false, false);
+                } catch (ServiceException e) {
+                    Throwable cause = e.getCause();
+                    if (cause instanceof MessagingException) {
+                        OfflineLog.offline.info("Mail send failure: " + msg.getSubject(), cause);
+                        if (cause instanceof SafeSendFailedException) {
+                            bounceToInbox(context, acct, id, msg, cause.getMessage());
+                            OutboxTracker.remove(this, id);
+                        } else {
+                            OutboxTracker.recordFailure(this, id);
+                        }
+                        continue;
+                    }
+                    throw e;
+                }
+            }
+
+            OfflineLog.offline.debug("sent pending mail (" + id + "): " + msg.getSubject());
+
+            // remove the draft from the outbox
+            delete(context, id, MailItem.TYPE_MESSAGE);
+            OutboxTracker.remove(this, id);
+            OfflineLog.offline.debug("deleted pending draft (" + id + ')');
+
+            // the draft is now gone, so remove it from the "send UID" hash and the list of items to push
+            sSendUIDs.remove(id);
+            sentCount++;
+        }
+
+        return sentCount;
+    }
+
+    private void bounceToInbox(OperationContext context, Account acct, int id,
+        Message msg, String error) {
+        try {
+            MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
+            
+            mm.setFrom(new InternetAddress(acct.getName()));
+            mm.setRecipient(RecipientType.TO, new InternetAddress(acct.getName()));
+            mm.setSubject("Delivery failed: " + error);
+    
+            mm.saveChanges(); //must call this to update the headers
+    
+            MimeMultipart mmp = new MimeMultipart();
+            MimeBodyPart mbp = new MimeBodyPart();
+            
+            mbp.setText(error == null ?
+                "SEND FAILED. PLEASE CHECK RECIPIENT ADDRESSES AND SMTP SETTINGS" : error);
+                    mmp.addBodyPart(mbp);
+            mbp = new MimeBodyPart();
+            mbp.setContent(msg.getMimeMessage(), "message/rfc822");
+            mbp.setHeader("Content-Disposition", "attachment");
+            mmp.addBodyPart(mbp, mmp.getCount());
+            mm.setContent(mmp);
+            mm.saveChanges();
+            ParsedMessage pm = new ParsedMessage(mm, true);
+            addMessage(context, pm, Mailbox.ID_FOLDER_INBOX, true,
+                Flag.BITMASK_UNREAD | Flag.BITMASK_FROM_ME, null);
+            delete(context, id, MailItem.TYPE_MESSAGE);
+            OfflineLog.offline.warn("SMTP: bounced failed send " + id + ": " +
+                error + ": " + msg.getSubject());
+        } catch (Exception e) {
+            OfflineLog.offline.warn("SMTP: bounced failed send " + id + ": " +
+                error + ": " + msg.getSubject(), e);
+        }
+}
+
     private boolean isAutoSyncDisabled(DataSource ds) {
         return ds.getSyncFrequency() <= 0;
     }
@@ -271,7 +463,8 @@ public class DataSourceMailbox extends SyncMailbox {
                     getOfflineAccount().setRequestScopeDebugTraceOn(true);
                 }
                 try {
-                    syncAllLocalDataSources(false, isOnRequest);
+                    int count = sendPendingMessages(isOnRequest);
+                    syncAllLocalDataSources(count > 0, isOnRequest);
                 } catch (Exception x) {
                     if (isDeleting())
                         OfflineLog.offline.info("Mailbox \"%s\" is being deleted",
@@ -306,7 +499,6 @@ public class DataSourceMailbox extends SyncMailbox {
             ID_FOLDER_ROOT).getSubfolderHierarchy() : accessable) {
             if (folder.getId() > Mailbox.FIRST_USER_ID ||
                 folder.getId() == ID_FOLDER_FAILURE ||
-                folder.getId() == ID_FOLDER_OUTBOX ||
                 folder.getDefaultView() != MailItem.TYPE_MESSAGE ||
                 ds.isSyncCapable(folder))
                 visible.add(folder);

@@ -727,6 +727,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_offlineFeatureSmtpEnabled, syncEnabled == null ? TRUE : syncEnabled);
 
         attrs.put(A_zimbraFeatureBriefcasesEnabled, FALSE);
+        attrs.put(A_zimbraFeatureGalEnabled, FALSE);
         attrs.put(A_zimbraFeatureIMEnabled, FALSE);
         attrs.put(A_zimbraFeatureNotebookEnabled, FALSE);
         attrs.put(A_zimbraFeatureTasksEnabled, FALSE);

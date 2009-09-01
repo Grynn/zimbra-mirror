@@ -48,14 +48,14 @@ public class OfflineMailSender extends MailSender {
         try {
             // for messages that aren't actually *sent*, just go down the standard save-to-sent path
             if (mm.getAllRecipients() == null)
-                return super.sendMimeMessage(octxt, mbox, saveToSent, mm, newContacts, uploads, origMsgId, replyType, identity, ignoreFailedAddresses, replyToSender);
+                return super.sendMimeMessage(octxt, mbox, saveToSent, mm,
+                    newContacts, uploads, origMsgId, replyType, identity, ignoreFailedAddresses, replyToSender);
         } catch (MessagingException me) {
             throw ServiceException.FAILURE("could not determine message recipients; aborting mail send", me);
         }
 
         Account acct = mbox.getAccount();
         Account authuser = octxt == null ? null : octxt.getAuthenticatedUser();
-        Mailbox draftMbox = mbox;
         
         if (authuser == null)
             authuser = acct;
@@ -64,18 +64,16 @@ public class OfflineMailSender extends MailSender {
             updateHeaders(mm, acct, authuser, octxt, null /* don't set originating IP in offline client */, replyToSender, false);
 
             // save as a draft to be sent during sync interval
-            if (OfflineProvisioning.isDataSourceAccount(acct)) {
-                Account local = OfflineProvisioning.getOfflineInstance().getLocalAccount();
-                
-                draftMbox = MailboxManager.getInstance().getMailboxByAccount(local);
-            }
-            ParsedMessage pm = new ParsedMessage(mm, mm.getSentDate().getTime(), mbox.attachmentsIndexingEnabled());
+            ParsedMessage pm = new ParsedMessage(mm, mm.getSentDate().getTime(),
+                mbox.attachmentsIndexingEnabled());
             if (identity == null)
                 identity = Provisioning.getInstance().getDefaultIdentity(authuser);
-            String identityId = identity == null ? null : identity.getAttr(Provisioning.A_zimbraPrefIdentityId);
-            int draftId = draftMbox.saveDraft(octxt, pm, Mailbox.ID_AUTO_INCREMENT,
-                (origMsgId != null ? origMsgId.toString(acct) : null), replyType, identityId, acct.getId()).getId();
-            draftMbox.move(octxt, draftId, MailItem.TYPE_MESSAGE, DesktopMailbox.ID_FOLDER_OUTBOX);
+            String identityId = identity == null ? null :
+                identity.getAttr(Provisioning.A_zimbraPrefIdentityId);
+            int draftId = mbox.saveDraft(octxt, pm, Mailbox.ID_AUTO_INCREMENT,
+                (origMsgId != null ? origMsgId.toString(acct) : null), replyType,
+                identityId, acct.getId()).getId();
+            mbox.move(octxt, draftId, MailItem.TYPE_MESSAGE, DesktopMailbox.ID_FOLDER_OUTBOX);
 
             // we can now purge the uploaded attachments
             if (uploads != null)
@@ -83,17 +81,24 @@ public class OfflineMailSender extends MailSender {
 
             // add any new contacts to the personal address book
             if (newContacts != null) {
+                Mailbox contactMbox = mbox;
+                
+                if (!acct.isFeatureContactsEnabled()) {
+                    Account localAcct = OfflineProvisioning.getOfflineInstance().getLocalAccount();
+                    
+                    contactMbox = MailboxManager.getInstance().getMailboxByAccount(localAcct);
+                }
                 for (InternetAddress iaddr : newContacts) {
                     ParsedAddress addr = new ParsedAddress(iaddr);
                     try {
                         ParsedContact pc = new ParsedContact(addr.getAttributes());
-                        mbox.createContact(octxt, pc, Mailbox.ID_FOLDER_AUTO_CONTACTS, null);
+                        contactMbox.createContact(octxt, pc, Mailbox.ID_FOLDER_AUTO_CONTACTS, null);
                     } catch (ServiceException e) {
                         OfflineLog.offline.warn("ignoring error while auto-adding contact", e);
                     }
                 }
             }
-            return new ItemId(draftMbox, draftId);
+            return new ItemId(mbox, draftId);
         } catch (MessagingException me) {
             OfflineLog.offline.warn("exception occurred during SendMsg", me);
             throw ServiceException.FAILURE("MessagingException", me);
