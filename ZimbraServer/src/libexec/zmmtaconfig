@@ -1089,12 +1089,26 @@ sub rewriteConfig {
         my ($cmd, $key, $total) = 
           ($sr =~ m/freq ([^:]+):(\S+)\s+(\S+)/);
         $val = lookUpConfig($cmd, $key);
+        my $per=$val;
+        my $i;
+        $per =~ s/\d+//g;
         $val =~ s/\D//g;
+        if ($per eq "m") {
+          $i=60;
+          $val=($val/$i);
+        } elsif ($per eq "s") {
+          $i=3600;
+          $val=($val/$i);
+        } elsif ($per eq "d") {
+          $i=24;
+          $val=($i*$val);
+        }
         if ($val) {
           $rep = ( $total/$val );
         } else {
           $rep = $total;
         }
+        $rep=1 if ($rep < 1 && $total > 1);
       } elsif ($sr =~ m/^explode/) {
         my ($cmd, $key) = ($sr =~ m/explode .* ([^:]+):(\w+)/);
         logMsg(5, "Explode $sr");
