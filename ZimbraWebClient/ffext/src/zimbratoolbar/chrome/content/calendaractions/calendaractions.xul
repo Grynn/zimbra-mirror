@@ -91,7 +91,7 @@
 				</vbox>
 				<vbox align="end">
 					<hbox align="center" class="ZMTB-ActionBar-Row">
-						<timepicker id="ZimTB-NewAppt-StartTime" hideseconds="true" increment="1"/>
+						<timepicker id="ZimTB-NewAppt-StartTime" hideseconds="true" increment="5"/>
 						<datepicker id="ZimTB-NewAppt-StartDate" type="popup"/>
 					</hbox>
 					<hbox align="center" class="ZMTB-ActionBar-Row">

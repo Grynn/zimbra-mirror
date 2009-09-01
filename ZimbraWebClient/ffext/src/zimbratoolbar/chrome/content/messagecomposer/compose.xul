@@ -1,13 +1,15 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://zimbratb/skin/zimbratb.css" type="text/css"?>
-<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" id="zmtb-compose-window" title="Compose Message" style="padding:0px; margin:0px; border:none">
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" id="zmtb-compose-window" title="Compose Message" style="padding:0px; margin:0px; border:none; background-color:#333333;">
 	<script type="application/x-javascript" src="ZMTB_MessageComposer.js"/>
 	<vbox style="background-color:#333333; padding:10px; padding-top:0px; margin:0px; border:0px">
 		<browser id="ZMTB_AttachBrowser" height="0"/>
-		<hbox id="ZMTB-Compose-Header" align="center">
-			<image src="chrome://zimbratb/skin/zimbra2.gif"/>
+		<hbox style="margin:10px; margin-bottom:5px" align="center" id="ZMTB-Compose-Header" >
+			<image  src="chrome://zimbratb/skin/zimbra_c.png" style="margin-bottom:8px" />
 			<label id="ZMTB-Compose-Title" value="| Compose New Mail"/>
+			<spacer flex="100" />
+			<image id="zmc_loading" hidden="true" src="chrome://zimbratb/skin/loading.gif" />
 		</hbox>
 <!-- <separator class="groove" /> -->
 		<vbox style="padding:5px; -moz-border-radius:5px; background-color:#CCCCCC">
@@ -26,7 +28,7 @@
 				<spacer flex="100"/>
 				<textbox id="zmc_sub" width="350"/>
 			</hbox>
-			<vbox id="zmc_attach" style="margin:4px; height:70px; overflow-y:scroll; background-color:white;">
+			<vbox id="zmc_attach" >
 				<vbox align="center">
 					<label value="Drag attachments here." style="font-size:20px; padding:10px; color:#CCCCCC;" align="center"/>
 				</vbox>
@@ -41,9 +43,9 @@
 				<button label="Send" id="zmc_send"/>
 				<button label="Save Draft" id="zmc_save"/>
 <!-- <spacer width="300" /> -->
-				<vbox align="center" width="150">
-					<label id="zmc_error" value="" style="margin-top:10px; font-size:12px; color:red"/>
-				</vbox>
+				<hbox align="center" flex="100" >
+					<label id="zmc_error" value="" width="130" />
+				</hbox>
 				<button label="Cancel" id="zmc_close"/>
 			</hbox>
 		</vbox>

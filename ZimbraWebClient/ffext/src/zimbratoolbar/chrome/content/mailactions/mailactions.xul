@@ -76,6 +76,5 @@
 	<popup id="contentAreaContextMenu" >
 		<menuitem id="ZMTB-ContextAction-ComposeTo" insertbefore="context-copyemail" label="&zmtb.mailactions.context.quickcompose;" class="menuitem-iconic ZMTB-ContextAction" />
 		<menuitem id="ZMTB-ContextAction-AddRSS" insertafter="context-sep-open" label="&zmtb.mailactions.context.addrss;" class="menuitem-iconic ZMTB-ContextAction" />
-		<menuseparator id="ZMTB-ContextSeparator" />
 	</popup>
 </overlay>

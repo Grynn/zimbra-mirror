@@ -58,7 +58,7 @@
 				<spacer flex="100"/>
 				<vbox align="end">
 					<hbox align="center">
-						<label value="Default watch folder: " /><menulist id="ZMTB-Default-Folder" preference="zmtb-defaultwatch" width="150" />
+						<label value="Default watch folder: " /><menulist id="ZMTB-Default-Folder" sizetopopup="false" preference="zmtb-defaultwatch" width="150" />
 					</hbox>
 					<hbox align="center">
 						<label value="&zmtb.preferences.updatefreq;"/>

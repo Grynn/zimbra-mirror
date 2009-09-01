@@ -126,20 +126,29 @@ menulist#ZimTB-Folders > menupopup > menu > .menu-iconic-left
 
 #zmc_attach
 {
-  -moz-appearance: textfield;
-  cursor: text;
-  margin: 4px 4px;
-  border: 3px solid;
-  -moz-border-top-colors: transparent #888888 #000000;
-  -moz-border-right-colors: transparent #FFFFFF #000000;
-  -moz-border-bottom-colors: transparent #FFFFFF #000000;
-  -moz-border-left-colors: transparent #888888 #000000;
-  -moz-border-radius-topright: 2px;
-  -moz-border-radius-bottomleft: 2px;
-  /*padding: 1px 0px 1px 2px ;*/
-  padding: 0px;
-  background-color: -moz-Field;
-  color: -moz-FieldText;
+ 	-moz-appearance: textfield;
+ 	margin: 4px 4px;
+	height:70px;
+	overflow-y:scroll;
+	width:100px;
+}
+
+#zmc_attach_inner
+{
+	float:left;
+}
+
+#zmc_attach.zmtbhover
+{
+	border:solid 3px #333333;
+	-moz-appearance:none;
+	background-color:-moz-field;
+}
+
+#zmc_error{
+	margin-top:10px;
+	font-size:12px;
+	color:red;
 }
 
 .ZMTB-ActionBar-Title

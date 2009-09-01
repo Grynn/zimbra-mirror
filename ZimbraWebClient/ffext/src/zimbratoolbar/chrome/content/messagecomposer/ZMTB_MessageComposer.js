@@ -21,7 +21,7 @@ ZMTB_MessageComposer.prototype.open = function(email)
 	else
 	{
 		this._attachments = [];
-		this._panel = window.open("chrome://zimbratb/content/messagecomposer/compose.xul", "zimbracompose", "chrome,centerscreen");
+		this._panel = window.open("chrome://zimbratb/content/messagecomposer/compose.xul", "zimbracompose", "chrome,centerscreen,width=450,height=450");
 		var This=this;
 		this._panel.addEventListener("load", function(){This._addEvents(email)}, false);
 	}
@@ -65,18 +65,18 @@ ZMTB_MessageComposer.prototype._addEvents = function(email)
 ZMTB_MessageComposer.prototype._dragover = function(e)
 {
 	nsDragAndDrop.dragOver(e, this._dragObserver);
-	this._panel.document.getElementById("zmc_attach").style.borderColor="#000000";
+	this._panel.document.getElementById("zmc_attach").className="zmtbhover";
 };
 
 ZMTB_MessageComposer.prototype._dragdrop = function(e)
 {
-	this._panel.document.getElementById("zmc_attach").style.borderColor="#CCCCCC";
+	this._panel.document.getElementById("zmc_attach").className="";
 	nsDragAndDrop.drop(e, this._dragObserver);
 };
 
 ZMTB_MessageComposer.prototype._dragexit = function(e)
 {
-	this._panel.document.getElementById("zmc_attach").style.borderColor="#CCCCCC";
+	this._panel.document.getElementById("zmc_attach").className="";
 };
 
 ZMTB_MessageComposer.prototype.sendMessage = function()
@@ -159,96 +159,6 @@ ZMTB_MessageComposer.prototype.saveMessage = function()
 	this._attachments = [];
 };
 
-ZMTB_MessageComposer.prototype.newPanel = function()
-{
-	var panel = document.createElement("panel");
-	panel.setAttribute("allowEvents", true);
-	var drag = false;
-	// var cmx;
-	// var cmy;
-	// panel.addEventListener("mousemove", function(e)
-	// {
-	// 	e.stopPropagation();
-	// 	if(drag)
-	// 	{
-	// 		panel.moveTo(panel.boxObject.x+(e.layerX-cmx), panel.boxObject.y+(e.layerY-cmy));
-	// 		Components.utils.reportError("cmx: "+cmx+" cmy: "+cmy+" screenX: "+e.layerX+" screenY: "+e.layerY+" pX: "+panel.boxObject.x+ " pY: "+panel.boxObject.y);
-	// 		
-	// 	}
-	// }, false);
-	// panel.addEventListener("mousedown", function(e){e.stopPropagation();drag=true; cmx=e.layerX; cmy=e.layerY}, false);
-	// panel.addEventListener("mouseup", function(e){drag=false}, false);
-	// panel.addEventListener("mouseout", function(e){}, false);
-	
-	var This=this;
-	
-	panel.id = "ZimTB-Compose-Panel";
-	panel.setAttribute("noautohide", "true");
-	panel.setAttribute("noautofocus", "true");
-	panel.addEventListener("mousedown", function(e){Components.utils.reportError("mousee"); gBrowser.selectedBrowser.focus()}, false);
-	var vbox = document.createElement("vbox");
-	vbox.id = "ZimTB-Compose-Box";
-	vbox.style.padding="5px";
-	vbox.style.backgroundColor = "#333333";
-	vbox.width = "600";
-	panel.appendChild(vbox);
-	var ibox = document.createElement("vbox");
-	ibox.style.padding="15px";
-	ibox.style.MozBorderRadius = "10px";
-	ibox.style.backgroundColor = "white";
-	vbox.appendChild(ibox);
-	var header = document.createElement("label");
-	header.setAttribute("value", "Zimbra | Compose New Mail");
-	header.style.fontSize = "20px";
-	header.style.color = "#999999";
-	ibox.appendChild(header);
-	
-	var groove = document.createElement("separator");
-	groove.className = "groove";
-	ibox.appendChild(groove);
-	
-	var toLabel = document.createElement("label");
-	toLabel.setAttribute("value", "To:");
-	ibox.appendChild(toLabel);
-	var toBox = document.createElement("textbox");
-	this._toBox = ibox.appendChild(toBox);
-	var ccLabel = document.createElement("label");
-	ccLabel.setAttribute("value", "CC:");
-	ibox.appendChild(ccLabel);
-	var ccBox = document.createElement("textbox");
-	this._ccBox = ibox.appendChild(ccBox);
-	var subLabel = document.createElement("label");
-	subLabel.setAttribute("value", "Subject:");
-	ibox.appendChild(subLabel);
-	var subBox = document.createElement("textbox");
-	this._subBox = ibox.appendChild(subBox);
-	var messLabel = document.createElement("label");
-	messLabel.setAttribute("value", "Message:");
-	ibox.appendChild(messLabel);
-	var messBox = document.createElement("textbox");
-	messBox.setAttribute("multiline", "true");
-	messBox.setAttribute("spellcheck", "true");
-	messBox.setAttribute("height", "200");
-	this._messBox = ibox.appendChild(messBox);
-	
-	var buttonBox = document.createElement("hbox");
-	var sendButton = document.createElement("button");
-	sendButton.setAttribute("label", "Send");
-	sendButton.addEventListener("command", function(){This.send()}, false);
-	buttonBox.appendChild(sendButton);
-	var saveButton = document.createElement("button");
-	saveButton.setAttribute("label", "Save Draft");
-	buttonBox.appendChild(saveButton);
-	var cancelButton = document.createElement("button");
-	cancelButton.setAttribute("label", "Cancel");
-	cancelButton.addEventListener("command", function(){This.close()}, false)
-	
-	buttonBox.appendChild(cancelButton);
-	ibox.appendChild(buttonBox);
-	
-	return panel;
-}
-
 ZMTB_MessageComposer.prototype.receiveFile = function(file)
 {
 	this._files = [file];
@@ -293,10 +203,13 @@ ZMTB_MessageComposer.prototype.processPage = function(URI, doc)
 		doc.getElementById("zmupload").action = this._rqManager.getServerURL()+"service/upload?fmt=raw,extended";
 		doc.getElementById("zmupload").submit();
 		this._panel.document.getElementById("zmc_error").value="Uploading...";
+		this._panel.document.getElementById("zmc_loading").hidden=false;
+		
 	}
 	else if(this._rqManager.getServerURL().indexOf(URI.host) >= 0)
 	{
 		this._panel.document.getElementById("zmc_error").value="";
+		this._panel.document.getElementById("zmc_loading").hidden=true;
 		var resp = doc.body.firstChild.data;
 		if(resp.indexOf('"aid":"') >=0 && resp.indexOf('"filename":"') >=0)
 		{
@@ -320,10 +233,12 @@ ZMTB_MessageComposer.prototype._updateAttachments = function()
 	for (var i=fileDiv.childNodes.length-1; i>=0; i--) {
 		fileDiv.removeChild(fileDiv.childNodes[i]);
 	}
-	var hbox = fileDiv.appendChild(this._panel.document.createElement("hbox"));
+	var hbox = fileDiv.appendChild(this._panel.document.createElement("html:div"));
+	hbox.id="zmc_attach_inner";
 	for (var i=0; i < this._attachments.length; i++)
 	{
 		var chkbox = hbox.appendChild(this._panel.document.createElement("checkbox"));
+		chkbox.style.styleFloat = "left";
 		chkbox.label = this._attachments[i].name;
 		chkbox.checked = true;
 		chkbox.id = this._attachments[i].aid;
