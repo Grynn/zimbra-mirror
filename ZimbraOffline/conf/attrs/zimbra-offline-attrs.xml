@@ -74,6 +74,10 @@
   <desc>A user given name for a Zimbra account</desc>
 </attr>
 
+<attr name="offlineFeatureSmtpEnabled" type="boolean" cardinality="single" optionalIn="account" flags="accountInfo">
+  <desc>whether sending messages from an account is enabled</desc>
+</attr>
+
 <attr name="offlineSyncFreq" type="integer" cardinality="single" optionalIn="account">
   <desc>Zimbra account sync frequency in seconds, where -1 means manually and 0 means push</desc>
 </attr>
@@ -98,14 +102,6 @@
   <desc>name of the sole data source in a data source account</desc>
 </attr>
 
-<attr name="zimbraDataSourceContactSyncEnabled" type="boolean" cardinality="single" optionalIn="dataSource">
-  <desc>whether contact synchronization is enabled</desc>
-</attr>
-
-<attr name="zimbraDataSourceCalendarSyncEnabled" type="boolean" cardinality="single" optionalIn="dataSource">
-  <desc>whether calendar synchronization is enabled</desc>
-</attr>
-
 <attr name="offlineGalAccountId" type="string" cardinality="single" optionalIn="account">
   <desc>account id of the GAL account associated with a sync account</desc>
 </attr>
@@ -120,6 +116,14 @@
 
 <attr name="offlineMountpointProxyAccountId" type="string" cardinality="single" optionalIn="account">
   <desc>id of the offline acount through which access to mountpoints is proxied</desc>
+</attr>
+
+<attr name="zimbraDataSourceContactSyncEnabled" type="boolean" cardinality="single" optionalIn="dataSource">
+  <desc>whether contact synchronization is enabled</desc>
+</attr>
+
+<attr name="zimbraDataSourceCalendarSyncEnabled" type="boolean" cardinality="single" optionalIn="dataSource">
+  <desc>whether calendar synchronization is enabled</desc>
 </attr>
 
 <attr name="zimbraDataSourceSmtpEnabled" type="boolean" cardinality="single" optionalIn="dataSource">

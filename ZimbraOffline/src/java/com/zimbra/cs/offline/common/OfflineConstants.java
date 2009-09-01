@@ -21,7 +21,6 @@ import org.dom4j.QName;
 
 import com.zimbra.common.util.Constants;
 
-
 public interface OfflineConstants {
 
     public static final String NAMESPACE_STR = "urn:zimbraOffline";
@@ -33,14 +32,14 @@ public interface OfflineConstants {
     public static final QName CLIENT_EVENT_NOTIFY_REQUEST = QName.get("ClientEventNotifyRequest", NAMESPACE);
     public static final QName CLIENT_EVENT_NOTIFY_RESPONSE = QName.get("ClientEventNotifyResponse", NAMESPACE);
 	
-	public static final String A_Event = "e";
-	public static final String EVENT_UI_LOAD_BEGIN = "ui_load_begin";
-	public static final String EVENT_UI_LOAD_END = "ui_load_end";
-    
+    public static final String A_Event = "e";
+    public static final String EVENT_UI_LOAD_BEGIN = "ui_load_begin";
+    public static final String EVENT_UI_LOAD_END = "ui_load_end";
+
     public static enum SyncStatus {
-		unknown, offline, online, running, authfail, error
-	}	
-	
+        unknown, offline, online, running, authfail, error
+    }
+
     public static final String A_offlineAccountsOrder = "offlineAccountsOrder";
     
     public static final String A_offlineRemoteServerVersion = "offlineRemoteServerVersion";
@@ -53,10 +52,14 @@ public interface OfflineConstants {
     public static final String A_offlineProxyUser = "offlineProxyUser";
     public static final String A_offlineProxyPass = "offlineProxyPass";
 
-    public static final String A_offlineDataSourceType = "offlineDataSourceType";
-    public static final String A_offlineDataSourceName = "offlineDataSourceName";
     public static final String A_offlineAccountName = "offlineAccountName";
     public static final String A_offlineAccountFlavor = "offlineAccountFlavor";
+
+    public static final String A_offlineDataSourceType = "offlineDataSourceType";
+    public static final String A_offlineDataSourceName = "offlineDataSourceName";
+    
+    public static final String A_offlineFeatureSmtpEnabled = "offlineFeatureSmtpEnabled";
+
     public static final String A_offlineGalAccountId = "offlineGalAccountId";
     public static final String A_offlineGalAccountSyncToken = "offlineGalAccountSyncToken";
     public static final String A_offlineGalAccountLastFullSync = "offlineGalAccountLastFullSync";

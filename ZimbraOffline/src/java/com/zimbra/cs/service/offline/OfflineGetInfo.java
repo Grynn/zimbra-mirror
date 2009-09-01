@@ -27,18 +27,14 @@ public class OfflineGetInfo extends GetInfo {
     @Override
     protected Element encodeChildAccount(Element parent, Account child,
         boolean isVisible) {
-        String accountFlavor = child.getAttr(OfflineConstants.A_offlineAccountFlavor);
         String accountName = child.getAttr(Provisioning.A_zimbraPrefLabel);
         Element elem = super.encodeChildAccount(parent, child, isVisible);
         
         accountName = accountName != null ? accountName : child.getAttr(
             OfflineConstants.A_offlineAccountName);
-        if (elem != null && (accountFlavor != null || accountName != null)) {
+        if (elem != null && accountName != null) {
             Element attrsElem = elem.addUniqueElement(AccountConstants.E_ATTRS);
             
-            if (accountFlavor != null)
-                attrsElem.addKeyValuePair(OfflineConstants.A_offlineAccountFlavor,
-                    accountFlavor, AccountConstants.E_ATTR, AccountConstants.A_NAME);
             if (accountName != null)
                 attrsElem.addKeyValuePair(Provisioning.A_zimbraPrefLabel,
                     accountName, AccountConstants.E_ATTR, AccountConstants.A_NAME);

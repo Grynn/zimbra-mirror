@@ -535,6 +535,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (!(attrs.get(A_zimbraAccountStatus) instanceof String))
             attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
 
+        attrs.put(A_offlineFeatureSmtpEnabled, TRUE);
         attrs.remove(A_zimbraIsAdminAccount);
         attrs.remove(A_zimbraIsDomainAdminAccount);
         
@@ -722,6 +723,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraFeatureCalendarEnabled, syncEnabled == null ? FALSE : syncEnabled);
         syncEnabled = dsAttrs.get(A_zimbraDataSourceContactSyncEnabled);
         attrs.put(A_zimbraFeatureContactsEnabled, syncEnabled == null ? FALSE : syncEnabled);
+        syncEnabled = dsAttrs.get(A_zimbraDataSourceSmtpEnabled);
+        attrs.put(A_offlineFeatureSmtpEnabled, syncEnabled == null ? TRUE : syncEnabled);
 
         attrs.put(A_zimbraFeatureBriefcasesEnabled, FALSE);
         attrs.put(A_zimbraFeatureIMEnabled, FALSE);
@@ -1249,6 +1252,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 sync = ds.getBooleanAttr(A_zimbraDataSourceContactSyncEnabled, false) ?
                     TRUE : FALSE;
                 attrs.put(A_zimbraFeatureContactsEnabled, sync);
+                sync = ds.getBooleanAttr(A_zimbraDataSourceSmtpEnabled, true) ?
+                    TRUE : FALSE;
+                attrs.put(A_offlineFeatureSmtpEnabled, sync);
                 setAccountAttribute(acct, A_zimbraFeatureContactsEnabled, sync);
                 attrs.put(A_zimbraFeatureBriefcasesEnabled, FALSE);
                 setAccountAttribute(acct, A_zimbraFeatureBriefcasesEnabled, FALSE);
@@ -2187,71 +2193,60 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	attrs.put(A_zimbraDataSourceSmtpAuthPassword, DataSource.encryptData(dataSourceId, (String) attrs.get(A_zimbraDataSourceSmtpAuthPassword)));
 
         if (isDataSourceAccount(account) && attrs.get(A_zimbraDataSourceHost) != null) {
-        	boolean isTestNeeded = false;
-        	if (!ds.getHost().equals(attrs.get(A_zimbraDataSourceHost)) ||
-        			!ds.getPort().toString().equals(attrs.get(A_zimbraDataSourcePort)) ||
-        			!ds.getAttr(A_zimbraDataSourceConnectionType).equals(attrs.get(A_zimbraDataSourceConnectionType)))
-        		isTestNeeded = true;
-        	
-        	String encrypted = (String)attrs.get(A_zimbraDataSourcePassword);
-        	String decrypted = null;
-        	if (encrypted == null) {
-        		encrypted = ds.getAttr(A_zimbraDataSourcePassword);
-        		attrs.put(A_zimbraDataSourcePassword, encrypted);
-        		decrypted = ds.getDecryptedPassword();
-        	} else {
-        		decrypted = DataSource.decryptData(dataSourceId, encrypted);
-        		if (!isTestNeeded && !decrypted.equals(ds.getDecryptedPassword()))
-        			isTestNeeded = true;
-        	}
-        	String domain = ds.getAttr(Provisioning.A_zimbraDataSourceDomain);
-        	if (ds.getType() != DataSource.Type.live && !"yahoo.com".equals(domain)) {
-	        	if (!isTestNeeded && (!ds.getAttr(A_zimbraDataSourceSmtpHost).equals(attrs.get(A_zimbraDataSourceSmtpHost)) ||
-	        		!ds.getAttr(A_zimbraDataSourceSmtpPort).equals(attrs.get(A_zimbraDataSourceSmtpPort)) ||
-	        		!ds.getAttr(A_zimbraDataSourceSmtpConnectionType).equals(attrs.get(A_zimbraDataSourceSmtpConnectionType)) ||
-	        		!ds.getAttr(A_zimbraDataSourceSmtpAuthRequired).equals(attrs.get(A_zimbraDataSourceSmtpAuthRequired))))
-	        		isTestNeeded = true;
-	        	
-	        	if (!isTestNeeded && ds.getBooleanAttr(A_zimbraDataSourceSmtpAuthRequired, false) &&
-	        		!ds.getAttr(A_zimbraDataSourceSmtpAuthUsername).equals(attrs.get(A_zimbraDataSourceSmtpAuthUsername)))
-	        		isTestNeeded = true;
-	        	
-	        	String smtpPassword = (String)attrs.get(A_zimbraDataSourceSmtpAuthPassword);
-	        	if (smtpPassword == null) {
-	        		smtpPassword = ds.getAttr(A_zimbraDataSourceSmtpAuthPassword, null);
-	        		if (smtpPassword != null)
-	        			attrs.put(A_zimbraDataSourceSmtpAuthPassword, smtpPassword);
-	        	} else if (!isTestNeeded && !smtpPassword.equals(ds.getAttr(A_zimbraDataSourceSmtpAuthPassword, null)))
-	        		isTestNeeded = true;
-        	}
-        	
-        	if (attrs.remove(A_zimbraDataSourceAccountSetup) != null) {
-            	String sslCertAlias = (String)attrs.remove(OfflineConstants.A_zimbraDataSourceSslCertAlias);
-            	if (sslCertAlias != null)
-            		acceptSSLCertAlias(sslCertAlias);
-            	
+            String decrypted = null;
+            String encrypted = (String)attrs.get(A_zimbraDataSourcePassword);
+            
+            if (encrypted == null) {
+                encrypted = ds.getAttr(A_zimbraDataSourcePassword);
+                attrs.put(A_zimbraDataSourcePassword, encrypted);
+                decrypted = ds.getDecryptedPassword();
+            } else {
+                decrypted = DataSource.decryptData(dataSourceId, encrypted);
+            }
+            
+            String domain = ds.getAttr(Provisioning.A_zimbraDataSourceDomain);
+            if (ds.getType() != DataSource.Type.live && !"yahoo.com".equals(domain)) {
+                String smtpPassword = (String)attrs.get(A_zimbraDataSourceSmtpAuthPassword);
+                
+                if (smtpPassword == null) {
+                    smtpPassword = ds.getAttr(A_zimbraDataSourceSmtpAuthPassword, null);
+                    if (smtpPassword != null)
+                        attrs.put(A_zimbraDataSourceSmtpAuthPassword, smtpPassword);
+                }
+            }
+
+            if (attrs.remove(A_zimbraDataSourceAccountSetup) != null) {
+                String sslCertAlias = (String)attrs.remove(
+                    OfflineConstants.A_zimbraDataSourceSslCertAlias);
+                if (sslCertAlias != null)
+                    acceptSSLCertAlias(sslCertAlias);
+
                 if ("yahoo.com".equals(domain)) {
                     // Clear auth token so that it will be regenerated during test...
                     OfflineYAuth.removeToken(ds);
                 }
-                testDataSource(new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs, this));
-	            
-	            String syncCal = (String) attrs.get(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled);
-	            if (syncCal != null && syncCal.equals(Provisioning.TRUE)) {
-		            String parts[] = ds.getEmailAddress().split("@");
-		            if (parts.length != 2)
-		                throw ServiceException.INVALID_REQUEST("must be valid email address: "+ ds.getEmailAddress(), null);
-		            String localPart = parts[0];
-		            String domainFromEmail = parts[1];
-		            domainFromEmail = IDNUtil.toAsciiDomainName(domainFromEmail);
-	                testCalDav(localPart, domainFromEmail, decrypted);
-	            }
-	            
-	            OfflineSyncManager.getInstance().clearErrorCode(ds.getName());
-	            
-	            adjustAccountDisplayName(account, ds, attrs);
+                testDataSource(new OfflineDataSource(account, ds.getType(),
+                    ds.getName(), ds.getId(), attrs, this));
+
+                String syncCal = (String)attrs.get(
+                    OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled);
+                if (syncCal != null && syncCal.equals(Provisioning.TRUE)) {
+                    String parts[] = ds.getEmailAddress().split("@");
+                    if (parts.length != 2)
+                        throw ServiceException.INVALID_REQUEST(
+                            "must be valid caldav email address: " + ds.getEmailAddress(), null);
+                    
+                    String localPart = parts[0];
+                    String domainFromEmail = parts[1];
+                    domainFromEmail = IDNUtil.toAsciiDomainName(domainFromEmail);
+                    testCalDav(localPart, domainFromEmail, decrypted);
+                }
+
+                OfflineSyncManager.getInstance().clearErrorCode(ds.getName());
+
+                adjustAccountDisplayName(account, ds, attrs);
             }
-    	
+
             attrs.put(A_zimbraDataSourceEnabled, TRUE);
         }
 

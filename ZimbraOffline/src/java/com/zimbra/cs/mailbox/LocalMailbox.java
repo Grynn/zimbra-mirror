@@ -43,6 +43,7 @@ import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
+import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.MailSender.SafeSendFailedException;
@@ -90,7 +91,7 @@ public class LocalMailbox extends SyncMailbox {
             redo.start(System.currentTimeMillis());
             createFolder(new OfflineContext(redo), GLOBAL_SEARCHES_PATH,
                 ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
-                MailItem.TYPE_SEARCHFOLDER, 0, MailItem.DEFAULT_COLOR_RGB, null);
+                MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
         }
         for (Account account : OfflineProvisioning.getOfflineInstance().getAllAccounts()) {
             try {
@@ -115,7 +116,7 @@ public class LocalMailbox extends SyncMailbox {
             MailItem.DEFAULT_COLOR_RGB, null, null);
         Folder.create(ID_FOLDER_GLOBAL_SEARCHES, this,
             getFolderById(ID_FOLDER_USER_ROOT), GLOBAL_SEARCHES_PATH,
-            Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_SEARCHFOLDER, 0,
+            Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_UNKNOWN, 0,
             MailItem.DEFAULT_COLOR_RGB, null, null);
     }
     
@@ -186,8 +187,8 @@ public class LocalMailbox extends SyncMailbox {
                 continue;
             }
             
-            Account acct = OfflineProvisioning.getOfflineInstance().getAccount(
-                msg.getDraftAccountId());
+            OfflineAccount acct = (OfflineAccount)OfflineProvisioning.
+                getOfflineInstance().getAccount(msg.getDraftAccountId());
             OfflineDataSource ds = (OfflineDataSource)OfflineProvisioning.getInstance().get(
                 acct, DataSourceBy.id, msg.getDraftIdentityId());
             Session session = null;
@@ -209,6 +210,7 @@ public class LocalMailbox extends SyncMailbox {
                     continue;
                 }
             }
+            
             Identity identity = Provisioning.getInstance().get(acct, IdentityBy.id, msg.getDraftIdentityId());
             MimeMessage mm = ((FixedMimeMessage) msg.getMimeMessage()).setSession(session);
             MailSender ms;
