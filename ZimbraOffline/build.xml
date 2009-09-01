@@ -269,6 +269,11 @@
 		</copy>
 	</target>
 
+	<target name="offline-zimlet-war">
+        	<mkdir dir="${dist.dir}/zimlets-deployed"/>
+        	<mkdir dir="${dist.dir}/jetty/webapps/zimlet"/>
+	</target>
+
 	<target name="offline-db-init" depends="offline-sqlite-init,offline-derby-init" />
 
 	<target name="offline-sqlite-init" if="db-sqlite">
@@ -360,6 +365,7 @@
 	<target name="offline-dev-dist">
 		<antcall target="offline-war" />
 		<antcall target="offline-zimbra-war" />
+		<antcall target="offline-zimlet-war" />
 
 		<copy tofile="${dist.dir}/conf/localconfig.xml" file="${config.dir}/localconfig.xml" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/log4j.properties" file="${config.dir}/log4j.properties" overwrite="true" />
@@ -661,7 +667,7 @@
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e zimlet_directory='${param.install.dir}/jetty/webapps/service/zimlet'" />
+			<arg line="-e zimlet_directory='${param.install.dir}/zimlets-deployed'" />
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />

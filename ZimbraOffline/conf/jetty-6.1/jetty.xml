@@ -61,6 +61,7 @@
 
         <Call name="addRewriteRule"><Arg>/service/*</Arg><Arg></Arg></Call>
         <Call name="addRewriteRule"><Arg>/zimbra/*</Arg><Arg></Arg></Call>
+        <Call name="addRewriteRule"><Arg>/zimlet/*</Arg><Arg></Arg></Call>
         <Call name="addRewriteRule"><Arg>/*</Arg><Arg>/zimbra</Arg></Call>
         <Set name="handler">
           <New id="Handlers" class="org.mortbay.jetty.handler.HandlerCollection">
@@ -71,9 +72,6 @@
                </Item>
                <Item>
                  <New id="DefaultHandler" class="org.mortbay.jetty.handler.DefaultHandler"/>
-               </Item>
-               <Item>
-                 <New id="RequestLog" class="org.mortbay.jetty.handler.RequestLogHandler"/>
                </Item>
              </Array>
             </Set>
@@ -107,52 +105,25 @@
       <Set name="defaultsDescriptor"><SystemProperty name="jetty.home" default="."/>/etc/webdefault.xml</Set>
       <Set name="tempDirectory"><SystemProperty name="jetty.home" default="."/>/work/zimbra</Set>
     </New>
-
-    <!-- =========================================================== -->
-    <!-- Configure the webapp deployer.                              -->
-    <!-- A webapp  deployer will deploy standard webapps discovered  -->
-    <!-- in a directory at startup, without the need for additional  -->
-    <!-- configuration files.    It does not support hot deploy or   -->
-    <!-- non standard contexts (see ContextDeployer above).          -->
-    <!--                                                             -->
-    <!-- This deployer is configured to deploy webapps from the      -->
-    <!-- $JETTY_HOME/webapps directory                               -->
-    <!--                                                             -->
-    <!-- Normally only one type of deployer need be used.            -->
-    <!--                                                             -->
-    <!-- =========================================================== -->
-    <Call name="addLifeCycle">
-      <Arg>
-        <New class="org.mortbay.jetty.deployer.WebAppDeployer">
-          <Set name="contexts"><Ref id="Contexts"/></Set>
-          <Set name="webAppDir"><SystemProperty name="jetty.home" default="."/>/webapps</Set>
-	  <Set name="parentLoaderPriority">false</Set>
-	  <Set name="extract">true</Set>
-	  <Set name="allowDuplicates">false</Set>
-          <Set name="defaultsDescriptor"><SystemProperty name="jetty.home" default="."/>/etc/webdefault.xml</Set>
-        </New>
-      </Arg>
-    </Call>
-
-    <!-- =========================================================== -->
-    <!-- Configure Request Log                                       -->
-    <!-- Request logs  may be configured for the entire server here, -->
-    <!-- or they can be configured for a specific web app in a       -->
-    <!-- contexts configuration (see $(jetty.home)/contexts/test.xml -->
-    <!-- for an example).                                            -->
-    <!-- =========================================================== -->
-    <Ref id="RequestLog">
-      <Set name="requestLog">
-        <New id="RequestLogImpl" class="org.mortbay.jetty.NCSARequestLog">
-          <Arg><SystemProperty name="jetty.home" default="."/>/logs/access_log.yyyy_mm_dd</Arg>
-          <Set name="logDateFormat">dd/MMM/yyyy:HH:mm:ss Z</Set>
-          <Set name="retainDays">30</Set>
-          <Set name="append">true</Set>
-          <Set name="extended">true</Set>
-          <Set name="filenameDateFormat">yyyy-MM-dd</Set>
+    
+    <New id="zimlet" class="org.mortbay.jetty.webapp.WebAppContext">
+      <Arg><Ref id="Contexts"/></Arg>
+      <Arg><SystemProperty name="jetty.home" default="."/>/webapps/zimlet</Arg>
+      <Arg>/zimlet</Arg>
+      <Set name="configurationClasses"><Ref id="plusConfig"/></Set>
+      <Set name="defaultsDescriptor"><SystemProperty name="jetty.home" default="."/>/etc/webdefault.xml</Set>
+      <Set name="tempDirectory"><SystemProperty name="jetty.home" default="."/>/work/zimlet</Set>
+      <Set name="baseResource">
+        <New class="org.mortbay.resource.ResourceCollection">
+          <Set name="resources">
+            <Array type="String">
+              <Item><SystemProperty name="jetty.home" default="."/>/webapps/zimlet</Item>
+              <Item><SystemProperty name="jetty.home" default="."/>/../zimlets-deployed</Item>
+            </Array>
+          </Set>
         </New>
       </Set>
-    </Ref>
+    </New>
 
     <!-- =========================================================== -->
     <!-- extra options                                               -->
