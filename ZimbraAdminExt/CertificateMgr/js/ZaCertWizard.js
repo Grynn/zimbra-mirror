@@ -877,7 +877,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				};
 	cases.push(case_upload_cert);
 	
-	var case_install_cert = {type:_CASE_, numCols:2, colSizes:["200px", "350px"],
+	var case_install_cert = {type:_CASE_, numCols:2, colSizes:["150px", "300px"],
                     tabGroupKey:ZaCertWizard.STEP_INSTALL_CERT, caseKey:ZaCertWizard.STEP_INSTALL_CERT,
 					align:_LEFT_, valign:_TOP_};
 	var case_install_certItems = [
