@@ -4,6 +4,7 @@ var ZMTB_Toolbar = function()
 	this._rqManager = new ZMTB_RequestManager(this);
 	this._folderManager = new ZMTB_FolderManager(this._rqManager);
 	this._tbItems = [];
+	this._disabled = false;
 	this._rqManager.addUpdateListener(this._folderManager);
 	this._localStrings = document.getElementById("ZMTB-LocalStrings");
 	var prefManager = this._prefManager = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
@@ -33,6 +34,7 @@ ZMTB_Toolbar.prototype.reset = function()
 ZMTB_Toolbar.prototype.enable = function()
 {
 	// document.getElementById("ZMTB-Notifications").hidden = false;
+	this._disabled = false;
 	clearInterval(this._updateTimer);
 	var This = this;
 	this._updateTimer = window.setInterval(function(){This.update()}, This._prefManager.getCharPref("extensions.zmtb.updatefreq") * 60 * 1000);
@@ -43,7 +45,10 @@ ZMTB_Toolbar.prototype.enable = function()
 ZMTB_Toolbar.prototype.disable = function()
 {
 	// document.getElementById("ZMTB-Notifications").hidden = true;
+	this._disabled = true;
 	clearInterval(this._updateTimer);
+	var This = this;
+	this._updateTimer = window.setInterval(function(){This._rqManager.newServer(This._prefManager.getCharPref("extensions.zmtb.hostname"), This._prefManager.getCharPref("extensions.zmtb.username"))}, This._prefManager.getCharPref("extensions.zmtb.updatefreq") * 60 * 1000);
 	for (var i=0; i < this._tbItems.length; i++)
 		this._tbItems[i].disable();
 }

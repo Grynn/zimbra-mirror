@@ -17,14 +17,19 @@ ZMTB_RequestManager._VERSION = "1.0";
 ZMTB_RequestManager.NS_ACCOUNT = "urn:zimbraAccount";
 ZMTB_RequestManager.NS_MAIL = "urn:zimbraMail";
 ZMTB_RequestManager.NS_ZIMBRA = "urn:zimbra";
-ZMTB_RequestManager.ALLFOLDERS = "GetFolderRequest";
-ZMTB_RequestManager.SEARCH = "SearchRequest";
-ZMTB_RequestManager.MODIFYAPPT = "ModifyAppointmentRequest";
-ZMTB_RequestManager.DISMISS = "ModifyAppointmentRequest";
+// ZMTB_RequestManager.ALLFOLDERS = "GetFolderRequest";
+// ZMTB_RequestManager.SEARCH = "SearchRequest";
+// ZMTB_RequestManager.MODIFYAPPT = "ModifyAppointmentRequest";
+// ZMTB_RequestManager.DISMISS = "ModifyAppointmentRequest";
 
 ZMTB_RequestManager.prototype.getNewRqId = function()
 {
 	return this._rqCount++;
+}
+
+ZMTB_RequestManager.prototype.getServerVersion = function()
+{
+	return this._serverVersion;
 }
 
 ZMTB_RequestManager.prototype.updateAll = function()
@@ -35,7 +40,17 @@ ZMTB_RequestManager.prototype.updateAll = function()
 	sd.set("GetFolderRequest", null, sd.getMethod(), ZMTB_RequestManager.NS_MAIL);
 	sd.set("SearchRequest", {"types":"appointment", "calExpandInstStart":((new Date()).getTime()-1000*60*60*6), "calExpandInstEnd":((new Date()).getTime()+18*60*60*1000), "query":"in:calendar"}, sd.getMethod(), ZMTB_RequestManager.NS_MAIL);
 	sd.set("GetTagRequest", null, sd.getMethod(), ZMTB_RequestManager.NS_MAIL);
-	(new ZMTBCsfeCommand()).invoke({soapDoc:sd, asyncMode:true, callback:new ZMTB_AjxCallback(this, this.parseResponse), changeToken:this._changeToken});
+	if(this._serverVersion == "")
+		sd.set("GetInfoRequest", {"sections":"mbox"}, sd.getMethod(), ZMTB_RequestManager.NS_ACCOUNT);
+	try{
+		(new ZMTBCsfeCommand()).invoke({soapDoc:sd, asyncMode:true, callback:new ZMTB_AjxCallback(this, this.parseResponse), changeToken:this._changeToken});
+		clearTimeout(this._timeout);
+		var This=this;
+		this._timeout = setTimeout(function(){
+			This._zmtb.disable();
+		}, 5000);
+	}catch(ex)
+	{}
 }
 
 ZMTB_RequestManager.prototype.newServer = function(host, user, pass)
@@ -92,6 +107,7 @@ ZMTB_RequestManager.prototype.reset = function()
 	});
 	ZMTBCsfeCommand.clearAuthToken();
 	this._changeToken = 0;
+	this._serverVersion = "";
 	// this._authenticate();
 }
 
@@ -183,15 +199,27 @@ ZMTB_RequestManager.prototype._authenticate = function()
 
 ZMTB_RequestManager.prototype.parseResponse = function(result)
 {
-	clearTimeout(this._timeout);
 	try{
 		var rd = result.getResponse();
 	}catch(ex)
 	{
+		// Components.utils.reportError("Exception in result.");
+		// Components.utils.reportError(ex.msg);
+		if(ex.code == ZMTBCsfeException.NETWORK_ERROR)
+			this._zmtb.disable();
 		return;
 	}
+	// Components.utils.reportError("No exception. START");
+	// for(var a in rd)
+	// 	Components.utils.reportError("Key "+a+" in obj "+rd[a]);
+	// Components.utils.reportError("No exception. END");
+	clearTimeout(this._timeout);
 	if(!rd.Body)
+	{
+		if(rd.code == ZMTBCsfeException.NETWORK_ERROR)
+			this._zmtb.disable();
 		return;
+	}
 	if(rd.Body.Fault)
 	{
 		this._zmtb.notify(this._zmtb.getLocalStrings().getString("requestfail"), null, "failure");
@@ -213,6 +241,11 @@ ZMTB_RequestManager.prototype.parseResponse = function(result)
 		return;
 	}
 	this._zmtb.enable();
+	if(rd.Body.BatchResponse && rd.Body.BatchResponse.GetInfoResponse)
+	{
+		this._serverVersion = rd.Body.BatchResponse.GetInfoResponse[0].version;
+		Components.utils.reportError("Server version is: "+this._serverVersion);
+	}
 	if(rd.Header.context.change)
 	{
 		var ct = rd.Header.context.change.token;

@@ -25,8 +25,13 @@ ZMTB_ApptManager.ALMINUTESPAST = "5";
 
 ZMTB_ApptManager.prototype.reset = function()
 {
-	this._clearTimers();
-	this._appts = [];
+	if(!this._appts)
+		this._appts = [];
+	else
+	{
+		this._clearTimers();
+		this._appts = [];
+	}
 	this._snoozes = [];
 }
 

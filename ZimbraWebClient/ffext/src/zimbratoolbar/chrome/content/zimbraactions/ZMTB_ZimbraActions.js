@@ -37,7 +37,6 @@ ZMTB_ZimbraActions.prototype.openPrefsCommand = function(name, parentId, query)
 	while(enumerator.hasMoreElements())
 	{
 		var win = enumerator.getNext();
-		Components.utils.reportError(win.location);
 		if(win.location == "chrome://zimbratb/content/preferences/preferences.xul")
 		{
 			win.focus();

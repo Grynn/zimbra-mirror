@@ -79,7 +79,7 @@ var ZMTB_ContactActions = function(zmtb)
 			firstName:document.getElementById("ZimTB-NewContact-First").value,
 			company:document.getElementById("ZimTB-NewContact-Company").value,
 			jobTitle:document.getElementById("ZimTB-NewContact-JobTitle").value,
-			Email:document.getElementById("ZimTB-NewContact-Email").value,
+			// Email:document.getElementById("ZimTB-NewContact-Email").value,
 			Street:document.getElementById("ZimTB-NewContact-Street").value,
 			City:document.getElementById("ZimTB-NewContact-City").value,
 			State:document.getElementById("ZimTB-NewContact-State").value,
@@ -88,6 +88,10 @@ var ZMTB_ContactActions = function(zmtb)
 			Phone:document.getElementById("ZimTB-NewContact-Phone").value,
 			Fax:document.getElementById("ZimTB-NewContact-Fax").value
 		};
+		if(This._zmtb.getRequestManager().getServerVersion().charAt(0) == "6")
+			contactObj.Email = document.getElementById("ZimTB-NewContact-Email").value;
+		else
+			contactObj.email = document.getElementById("ZimTB-NewContact-Email").value;
 		var send = false;
 		for(var val in contactObj)
 			if(contactObj[val] != "")

@@ -1,5 +1,5 @@
 content zimbratb chrome/content/
 overlay chrome://browser/content/browser.xul chrome://zimbratb/content/core/zimbratb.xul
 # overlay chrome://browser/content/preferences/preferences.xul chrome://zimbratb/content/preferences/preferences.xul
-skin zimbratb classic/1.0 chrome/skin/
+skin zimbratb classic/1.0 chrome/skin/classic/
 locale	zimbratb	en-US	chrome/locale/en-US/
