@@ -45,6 +45,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.ZimbraNamespace;
+import com.zimbra.common.mime.MimeConstants;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
@@ -55,7 +56,6 @@ import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import com.zimbra.cs.mailbox.calendar.ZAttendee;
-import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedDocument;
 import com.zimbra.cs.mime.ParsedMessage;
@@ -759,7 +759,7 @@ public class InitialSync {
                         descHtml = descHtmlElem.getText();
                     if ((desc != null && desc.length() > 0) || (descHtml != null && descHtml.length() > 0)) {
                         Element multiAltMp = msg.addElement(MailConstants.E_MIMEPART);
-                        multiAltMp.addAttribute(MailConstants.A_CONTENT_TYPE, Mime.CT_MULTIPART_ALTERNATIVE);
+                        multiAltMp.addAttribute(MailConstants.A_CONTENT_TYPE, MimeConstants.CT_MULTIPART_ALTERNATIVE);
                         multiAltMp.addAttribute(MailConstants.A_BODY, "TEXT");
                         int estimatedMultiAltSize =
                             (desc != null ? desc.length() : 0) + (descHtml != null ? descHtml.length() : 0);
@@ -767,7 +767,7 @@ public class InitialSync {
                         int part = 1;
                         if (desc != null && desc.length() > 0) {
                             Element plainMp = multiAltMp.addElement(MailConstants.E_MIMEPART);
-                            plainMp.addAttribute(MailConstants.A_CONTENT_TYPE, Mime.CT_TEXT_PLAIN);
+                            plainMp.addAttribute(MailConstants.A_CONTENT_TYPE, MimeConstants.CT_TEXT_PLAIN);
                             plainMp.addAttribute(MailConstants.A_SIZE, desc.length());
                             plainMp.addAttribute(MailConstants.A_BODY, true);
                             plainMp.addAttribute(MailConstants.A_PART, part);
@@ -777,7 +777,7 @@ public class InitialSync {
                         }
                         if (descHtml != null && descHtml.length() > 0) {
                             Element htmlMp = multiAltMp.addElement(MailConstants.E_MIMEPART);
-                            htmlMp.addAttribute(MailConstants.A_CONTENT_TYPE, Mime.CT_TEXT_HTML);
+                            htmlMp.addAttribute(MailConstants.A_CONTENT_TYPE, MimeConstants.CT_TEXT_HTML);
                             htmlMp.addAttribute(MailConstants.A_SIZE, descHtml.length());
                             htmlMp.addAttribute(MailConstants.A_BODY, true);
                             htmlMp.addAttribute(MailConstants.A_PART, part);

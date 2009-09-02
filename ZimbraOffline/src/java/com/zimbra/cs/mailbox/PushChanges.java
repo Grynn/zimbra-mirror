@@ -41,6 +41,7 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapProtocol;
+import com.zimbra.common.mime.MimeConstants;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.mailbox.Contact.Attachment;
 import com.zimbra.cs.mailbox.InitialSync.InviteMimeLocator;
@@ -527,9 +528,9 @@ public class PushChanges {
     private String uploadMessage(Message msg) throws ServiceException {
         int timeout = (int) (OfflineLC.http_connection_timeout.intValue() + msg.getSize() / 25000 * Constants.MILLIS_PER_SECOND);
     	if (ombx.getRemoteServerVersion().isAtLeast(minServerVersionForUploadStreaming))
-    		return getZMailbox().uploadContentAsStream("msg-" + msg.getId(), msg.getContentStream(), Mime.CT_MESSAGE_RFC822, msg.getSize(), timeout);
+    		return getZMailbox().uploadContentAsStream("msg-" + msg.getId(), msg.getContentStream(), MimeConstants.CT_MESSAGE_RFC822, msg.getSize(), timeout);
     	else
-    		return getZMailbox().uploadAttachment("message", msg.getContent(), Mime.CT_MESSAGE_RFC822, timeout);
+    		return getZMailbox().uploadAttachment("message", msg.getContent(), MimeConstants.CT_MESSAGE_RFC822, timeout);
     }
 
     /** Turns a List of Integers into a String of the form <tt>1,2,3,4</tt>. */
