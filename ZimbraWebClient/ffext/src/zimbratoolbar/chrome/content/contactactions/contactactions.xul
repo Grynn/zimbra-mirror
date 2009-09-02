@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE window SYSTEM "chrome://zimbratb/locale/zimbratb.dtd">
+<?xml-stylesheet href="chrome://zimbratb/skin/contactactions/contactactions.css" type="text/css"?>
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<script type="application/x-javascript" src="ZMTB_ContactActions.js"/>
 	<script>
@@ -8,21 +9,21 @@
 		}, false);
 	</script>
 	<toolbar id="ZimTB-Toolbar">
-		<toolbarbutton flex="0" id="ZimTB-Contacts-Button" label="&zmtb.contactactions.contacts;" type="menu" tooltiptext="" menu="ZimTB-Contact-Menu">
+		<toolbarbutton flex="0" id="ZimTB-Contacts-Button" label="&zmtb.contactactions.contacts;" type="menu" menu="ZimTB-Contact-Menu">
 			<menupopup id="ZimTB-Contact-Menu">
-				<menuitem id="ZimTB-NewContact" label="&zmtb.contactactions.newcontact;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuitem id="ZimTB-NewContact" label="&zmtb.contactactions.newcontact;" class="menuitem-iconic zmtb-menucommand" />
 				<menuseparator/>
-				<menuitem id="ZimTB-NewAddressBook" label="&zmtb.contactactions.newaddrbook;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
-				<menuitem id="ZimTB-LinkToAddressBook" label="&zmtb.contactactions.linktoaddrbook;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuitem id="ZimTB-NewAddressBook" label="&zmtb.contactactions.newaddrbook;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-LinkToAddressBook" label="&zmtb.contactactions.linktoaddrbook;" class="menuitem-iconic zmtb-menucommand" />
 				<menuseparator/>
-				<menuitem id="ZimTB-ViewContacts" label="&zmtb.contactactions.viewcontacts;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuitem id="ZimTB-ViewContacts" label="&zmtb.contactactions.viewcontacts;" class="menuitem-iconic zmtb-menucommand" />
 			</menupopup>
 		</toolbarbutton>
 	</toolbar>
 	<vbox id="ZimTB-ActionsBar">
 		<vbox id="ZimTB-NewAddrBook-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="New Address Book" style="font-size:14px"/>
+				<label value="New Address Book" />
 			</vbox>
 			<hbox align="center">
 				<label value="Name:"/>
@@ -35,7 +36,7 @@
 		</vbox>
 		<vbox id="ZimTB-LinkToAddrBook-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="Link to Address Book" style="font-size:14px"/>
+				<label value="Link to Address Book" />
 			</vbox>
 			<hbox align="center">
 				<label value="Name:"/>
@@ -52,7 +53,7 @@
 		</vbox>
 		<vbox id="ZimTB-NewContact-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="New Contact" style="font-size:14px"/>
+				<label value="New Contact" />
 			</vbox>
 			<hbox align="center">
 				<groupbox>

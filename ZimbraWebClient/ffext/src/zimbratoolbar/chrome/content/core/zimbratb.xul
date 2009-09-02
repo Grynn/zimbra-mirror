@@ -27,11 +27,11 @@
 	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZmCsfeCommand.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZmCsfeException.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZmCsfeResult.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_Toolbar.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_RequestManager.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_FolderManager.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_TBItem.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_Actions.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_Toolbar.js"/>
 	<script>
 		window.addEventListener("load", function(){window.com_zimbra_tb = new ZMTB_Toolbar()}, false);
 	</script>

@@ -1,0 +1,50 @@
+#ZMTB-Appointments
+{
+	max-height:96px;
+	overflow:hidden;
+}
+
+.ZMTB-Appt-Box
+{
+	height:30px;
+	overflow:hidden;
+	position:relative;
+	bottom:0px;
+	background-image:url(chrome://zimbratb/skin/apptbar.png);
+	background-repeat:repeat-x;
+	background-position:center;
+	border-top: 1px solid #ffe970;
+	border-bottom: 1px solid #bf8a01;
+	vertical-align:bottom;
+}
+
+.ZMTB-Appt-Button
+{
+	-moz-appearance:none; 
+	-moz-border-radius:10px;
+	border:1px solid #666666;
+	background-image:url(chrome://zimbratb/skin/buttonback.png);
+	background-repeat:repeat-x;
+	background-position:center;
+	height:18px;
+	margin:6px;
+	min-height: 18px;
+}
+
+.ZMTB-Appt-Message
+{
+	font-weight:bold;
+	font-size:10px;
+	margin-left:10px;
+	padding-top:5px;
+}
+
+.ZMTB-Appt-Image
+{
+	margin-left:10px;	
+	background-image:url(chrome://zimbratb/skin/calendar.gif);
+	background-position:center;
+	background-repeat:no-repeat;
+	width:16px;
+	height:16px;
+}

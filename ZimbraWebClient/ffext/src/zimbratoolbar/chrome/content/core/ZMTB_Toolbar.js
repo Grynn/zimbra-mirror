@@ -86,12 +86,10 @@ ZMTB_Toolbar.prototype.notify = function(message, image, type)
 	else if(type == "failure")
 		type=document.getElementById("ZMTB-Notifications").PRIORITY_CRITICAL_MEDIUM;
 	if(!image)
-		image = "chrome://zimbratb/skin/zimbra_z_small.png";
+		image = "chrome://zimbratb/skin/default_images/zimbra_z_small.png";
 	clearTimeout(window.zmtb_noteTimeout);
-	// document.getElementById("ZMTB-Notifications").removeAllNotifications();
 	this.clearNotifications();
 	var note = document.getElementById("ZMTB-Notifications").appendNotification(message, 1, image, type);
-	// window.zmtb_noteTimeout = setTimeout('document.getElementById("ZMTB-Notifications").removeAllNotifications()', 3000);
 	var This=this;
 	window.zmtb_noteTimeout = setTimeout(function(){This.clearNotification(note)}, 3000);
 }
@@ -148,19 +146,3 @@ function ZimTB_GetByClass(class)
             matches.push(allTags[i]);
     return matches;
 }
-
-// ZMTB_Toolbar.prototype.includeComponent = function(URL)
-// {
-// 	this._loadQueue.push(URL);
-// 	if(!this._loading)
-// 	{
-// 		document.loadOverlay(this._loadQueue.shift(), this);
-// 		this._loading=true;
-// 	}
-// }
-
-// ZMTB_Toolbar.prototype.observe = function(subject, topic, data)
-// {
-// 	if(topic == "xul-overlay-merged" && this._loadQueue.length > 0)
-// 		document.loadOverlay(this._loadQueue.shift(), this);
-// };

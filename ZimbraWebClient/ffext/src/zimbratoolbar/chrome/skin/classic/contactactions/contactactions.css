@@ -1,0 +1,30 @@
+#ZimTB-Contacts-Button
+{
+	-moz-box-orient: horizontal;
+	list-style-image: url("contacts.gif");
+}
+
+#ZimTB-NewContact
+{
+	list-style-image: url("newcontact.gif");
+}
+
+#ZimTB-NewContactGroup
+{
+	list-style-image: url("newcontactgroup.gif");
+}
+
+#ZimTB-NewAddressBook
+{
+	list-style-image: url("addressbook.gif");
+}
+
+#ZimTB-LinkToAddressBook
+{
+	list-style-image: url("addressbooklink.gif");
+}
+
+#ZimTB-ViewContacts
+{
+	list-style-image: url("contacts.gif");
+}

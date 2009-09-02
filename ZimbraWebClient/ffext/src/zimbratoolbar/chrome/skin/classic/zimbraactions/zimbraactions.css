@@ -1,0 +1,29 @@
+#ZimTB-MainMenu {
+    list-style-image: url("zimbra.png");
+}
+
+#ZimTB-MainMenu .toolbarbutton-text
+{
+	width:0px;
+	margin:0px;
+	padding:0px;
+}
+
+#ZimTB-Refresh-Button
+{
+	list-style-image: url("refresh.gif");
+	-moz-margin-end:0px;
+}
+
+#ZimTB-Refresh-Button .toolbarbutton-text
+{
+	width:0px;
+	margin:0px;
+	padding:0px;
+}
+
+#ZimTB-Refresh-Button .toolbarbutton-icon
+{
+	margin:0px;
+	padding:0px;
+}

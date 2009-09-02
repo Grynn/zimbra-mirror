@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE window SYSTEM "chrome://zimbratb/locale/zimbratb.dtd">
+<?xml-stylesheet href="chrome://zimbratb/skin/calendaractions/calendaractions.css" type="text/css"?>
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<script type="application/x-javascript" src="ZMTB_CalendarActions.js"/>
 	<script>
@@ -8,22 +9,22 @@
 		}, false);
 	</script>
 	<toolbar id="ZimTB-Toolbar">
-		<toolbarbutton  flex="0" id="ZimTB-Calendar-Button" label="&zmtb.calendaractions.calendar;" type="menu" tooltiptext="" menu="ZimTB-Calendar-Menu">
+		<toolbarbutton  flex="0" id="ZimTB-Calendar-Button" label="&zmtb.calendaractions.calendar;" type="menu" menu="ZimTB-Calendar-Menu">
 			<menupopup id="ZimTB-Calendar-Menu">
-				<menuitem id="ZimTB-NewAppointment" label="&zmtb.calendaractions.newappt;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuitem id="ZimTB-NewAppointment" label="&zmtb.calendaractions.newappt;" class="menuitem-iconic zmtb-menucommand" />
 				<menuseparator/>
-				<menuitem id="ZimTB-NewCalendar" label="&zmtb.calendaractions.newcal;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
-				<menuitem id="ZimTB-RemoteCalendar" label="&zmtb.calendaractions.newremcal;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
-				<menuitem id="ZimTB-SharedCalendar" label="&zmtb.calendaractions.linktocal;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuitem id="ZimTB-NewCalendar" label="&zmtb.calendaractions.newcal;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-RemoteCalendar" label="&zmtb.calendaractions.newremcal;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-SharedCalendar" label="&zmtb.calendaractions.linktocal;" class="menuitem-iconic zmtb-menucommand" />
 				<menuseparator/>
-				<menuitem id="ZimTB-ViewCalendars" label="&zmtb.calendaractions.viewcal;" class="menuitem-iconic zmtb-menucommand" tooltiptext="" />
+				<menuitem id="ZimTB-ViewCalendars" label="&zmtb.calendaractions.viewcal;" class="menuitem-iconic zmtb-menucommand" />
 			</menupopup>
 		</toolbarbutton>
 	</toolbar>
 	<vbox id="ZimTB-ActionsBar">
 		<vbox id="ZimTB-NewCal-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="&zmtb.calendaractions.newcalendar.title;" style="font-size:14px"/>
+				<label value="&zmtb.calendaractions.newcalendar.title;" />
 			</vbox>
 			<hbox align="center">
 				<label value="&zmtb.calendaractions.name;"/>
@@ -34,7 +35,7 @@
 		</vbox>
 		<vbox id="ZimTB-NewRemCal-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="&zmtb.calendaractions.newremcalendar.title;" style="font-size:14px"/>
+				<label value="&zmtb.calendaractions.newremcalendar.title;" />
 			</vbox>
 			<hbox align="center">
 				<label value="&zmtb.calendaractions.name;"/>
@@ -47,7 +48,7 @@
 		</vbox>
 		<vbox id="ZimTB-LinkToCal-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="&zmtb.calendaractions.linktocalendar.title;" style="font-size:14px"/>
+				<label value="&zmtb.calendaractions.linktocalendar.title;" />
 			</vbox>
 			<hbox align="center">
 				<label value="&zmtb.calendaractions.name;"/>
@@ -62,7 +63,7 @@
 		</vbox>
 		<vbox id="ZimTB-NewAppt-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="&zmtb.calendaractions.newappt.title;" style="font-size:14px"/>
+				<label value="&zmtb.calendaractions.newappt.title;" />
 			</vbox>
 			<hbox>
 				<vbox align="start">

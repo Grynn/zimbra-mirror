@@ -47,29 +47,9 @@ ZMTB_Actions.prototype.hideActions = function(elementId)
 	this._zmtb.clearNotifications();
 }
 
-// ZMTB_Actions.prototype.notifySuccess = function(message, image)
-// {
-// 	if(!image)
-// 		image = "chrome://zimbratb/skin/zimbra_z_small.png";
-// 	var note = document.getElementById("ZMTB-Notifications").appendNotification(message, 1, image, document.getElementById("ZMTB-Notifications").PRIORITY_INFO_MEDIUM);
-// 	note.style.background = "none";
-// 	note.style.backgroundColor = "green";
-// 	note.style.color = "white";
-// 	setTimeout('document.getElementById("ZMTB-Notifications").currentNotification.close()', 3000);
-// }
-// 
-// ZMTB_Actions.prototype.notifyFail = function(message, image)
-// {
-// 	if(!image)
-// 		image = "chrome://zimbratb/skin/zimbra_z_small.png";
-// 	document.getElementById("ZMTB-Notifications").appendNotification(message, 1, image, document.getElementById("ZMTB-Notifications").PRIORITY_CRITICAL_MEDIUM);
-// 	setTimeout('document.getElementById("ZMTB-Notifications").currentNotification.close()', 3000);
-// }
-
 ZMTB_Actions.prototype.newLinked = function(name, view, parentId, owner, path)
 {
 	var sd = ZMTB_AjxSoapDoc.create("CreateMountpointRequest", ZMTB_RequestManager.NS_MAIL);
-	// var sd = AjxSoapDoc.create("CreateMountpointRequest", ZMTB_RequestManager.NS_MAIL);
 	sd.set("link", {"name":name, "view":view, "l":parentId, "owner":owner, "path":path});
 	this._rqManager.sendRequest(sd);
 }
@@ -77,7 +57,6 @@ ZMTB_Actions.prototype.newLinked = function(name, view, parentId, owner, path)
 ZMTB_Actions.prototype.newFolder = function(name, view, parentId, url)
 {
 	var sd = ZMTB_AjxSoapDoc.create("CreateFolderRequest", ZMTB_RequestManager.NS_MAIL);
-	// var sd = AjxSoapDoc.create("CreateFolderRequest", ZMTB_RequestManager.NS_MAIL);
 	var folder =  {"name":name, "view":view, "l":parentId};
 	if(url)
 		folder.url = url;

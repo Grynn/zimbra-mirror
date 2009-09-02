@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE window SYSTEM "chrome://zimbratb/locale/zimbratb.dtd">
+<?xml-stylesheet href="chrome://zimbratb/skin/taskactions/taskactions.css" type="text/css"?>
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<script type="application/x-javascript" src="ZMTB_TaskActions.js"/>
 	<script>
@@ -8,22 +9,22 @@
 		}, false);
 	</script>
 	<toolbar id="ZimTB-Toolbar">
-		<toolbarbutton  flex="0" id="ZimTB-Tasks-Button" label="&zmtb.taskactions.tasks;" type="menu" tooltiptext="Check Mail" menu="ZimTB-Tasks-Menu">
+		<toolbarbutton  flex="0" id="ZimTB-Tasks-Button" label="&zmtb.taskactions.tasks;" type="menu" menu="ZimTB-Tasks-Menu">
 			<menupopup id="ZimTB-Tasks-Menu">
-				<menuitem id="ZimTB-NewTask" label="&zmtb.taskactions.newtask;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuitem id="ZimTB-NewTask" label="&zmtb.taskactions.newtask;" class="menuitem-iconic" />
 				<menuseparator/>
-				<menuitem id="ZimTB-NewTaskList" label="&zmtb.taskactions.newlist;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
-				<menuitem id="ZimTB-NewRemTaskList" label="&zmtb.taskactions.newremlist;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
-				<menuitem id="ZimTB-SharedTaskList" label="&zmtb.taskactions.linktolist;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+				<menuitem id="ZimTB-NewTaskList" label="&zmtb.taskactions.newlist;" class="menuitem-iconic " />
+				<menuitem id="ZimTB-NewRemTaskList" label="&zmtb.taskactions.newremlist;" class="menuitem-iconic" />
+				<menuitem id="ZimTB-SharedTaskList" label="&zmtb.taskactions.linktolist;" class="menuitem-iconic" />
 				<menuseparator/>
-					<menuitem id="ZimTB-ViewTasks" label="&zmtb.taskactions.viewtasks;" class="menuitem-iconic zmtb-menucommand" tooltiptext=""/>
+					<menuitem id="ZimTB-ViewTasks" label="&zmtb.taskactions.viewtasks;" class="menuitem-iconic" />
 			</menupopup>
 		</toolbarbutton>
 	</toolbar>
 	<vbox id="ZimTB-ActionsBar">
 		<vbox id="ZimTB-NewTaskList-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="&zmtb.taskactions.newlist.title;" style="font-size:14px"/>
+				<label value="&zmtb.taskactions.newlist.title;" />
 			</vbox>
 			<hbox align="center">
 				<label value="&zmtb.taskactions.name;"/>
@@ -34,7 +35,7 @@
 		</vbox>
 		<vbox id="ZimTB-NewRemTaskList-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="&zmtb.taskactions.newremlist.title;" style="font-size:14px"/>
+				<label value="&zmtb.taskactions.newremlist.title;" />
 			</vbox>
 			<hbox align="center">
 				<label value="&zmtb.taskactions.name;"/>
@@ -47,7 +48,7 @@
 		</vbox>
 		<vbox id="ZimTB-LinkToTaskList-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="&zmtb.taskactions.linktolist.title;" style="font-size:14px"/>
+				<label value="&zmtb.taskactions.linktolist.title;" />
 			</vbox>
 			<hbox align="center">
 				<label value="&zmtb.taskactions.name;"/>
@@ -62,7 +63,7 @@
 		</vbox>
 		<vbox id="ZimTB-NewTask-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="&zmtb.taskactions.newtask.title;" style="font-size:14px"/>
+				<label value="&zmtb.taskactions.newtask.title;" />
 			</vbox>
 			<hbox>
 				<vbox align="start">
@@ -99,7 +100,6 @@
 				</vbox>
 				<hbox align="center">
 					<vbox align="start">
-<!-- <checkbox label="All Day Event" id="ZimTB-NewTask-AllDay"/> -->
 						<label value="&zmtb.taskactions.newtask.tasklist;"/>
 						<menulist id="ZimTB-NewTask-TaskList"/>
 					</vbox>

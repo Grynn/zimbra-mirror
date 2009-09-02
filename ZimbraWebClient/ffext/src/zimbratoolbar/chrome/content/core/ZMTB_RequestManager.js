@@ -17,10 +17,6 @@ ZMTB_RequestManager._VERSION = "1.0";
 ZMTB_RequestManager.NS_ACCOUNT = "urn:zimbraAccount";
 ZMTB_RequestManager.NS_MAIL = "urn:zimbraMail";
 ZMTB_RequestManager.NS_ZIMBRA = "urn:zimbra";
-// ZMTB_RequestManager.ALLFOLDERS = "GetFolderRequest";
-// ZMTB_RequestManager.SEARCH = "SearchRequest";
-// ZMTB_RequestManager.MODIFYAPPT = "ModifyAppointmentRequest";
-// ZMTB_RequestManager.DISMISS = "ModifyAppointmentRequest";
 
 ZMTB_RequestManager.prototype.getNewRqId = function()
 {
@@ -49,8 +45,7 @@ ZMTB_RequestManager.prototype.updateAll = function()
 		this._timeout = setTimeout(function(){
 			This._zmtb.disable();
 		}, 5000);
-	}catch(ex)
-	{}
+	}catch(ex){}
 }
 
 ZMTB_RequestManager.prototype.newServer = function(host, user, pass)
@@ -81,7 +76,6 @@ ZMTB_RequestManager.prototype.sendRequest = function(soapDoc)
 	if(!ZMTBCsfeCommand.getAuthToken())
 		this._authenticate();
 	var req = new ZMTBCsfeCommand();
-	// soapDoc.set("requestId", this._rqCount);
 	try{
 		req.invoke({soapDoc:soapDoc, asyncMode:true, callback:new ZMTB_AjxCallback(this, this.parseResponse), changeToken:this._changeToken});
 		clearTimeout(this._timeout);
@@ -92,7 +86,6 @@ ZMTB_RequestManager.prototype.sendRequest = function(soapDoc)
 	}catch(ex){
 		this._zmtb.notify(this._zmtb.getLocalStrings().getString("requestfail"), null, "failure");
 	}
-	// return this._rqCount++;
 }
 
 ZMTB_RequestManager.prototype.addUpdateListener = function(updatable)
@@ -153,8 +146,7 @@ ZMTB_RequestManager.prototype.goToPath = function(path, callback, callObj)
                     .getService(Components.interfaces.nsIIOService);
 	var url = this.getServerURL()+path;
 	this._curLoc = url;
-	
-	Components.utils.reportError(url);
+
 	if(this.getTabPreference() == "New Window")
 	{
 		var newWin = window.open(url);
@@ -203,16 +195,10 @@ ZMTB_RequestManager.prototype.parseResponse = function(result)
 		var rd = result.getResponse();
 	}catch(ex)
 	{
-		// Components.utils.reportError("Exception in result.");
-		// Components.utils.reportError(ex.msg);
 		if(ex.code == ZMTBCsfeException.NETWORK_ERROR)
 			this._zmtb.disable();
 		return;
 	}
-	// Components.utils.reportError("No exception. START");
-	// for(var a in rd)
-	// 	Components.utils.reportError("Key "+a+" in obj "+rd[a]);
-	// Components.utils.reportError("No exception. END");
 	clearTimeout(this._timeout);
 	if(!rd.Body)
 	{
@@ -316,9 +302,7 @@ ZMTB_BrowserListener.prototype.onStateChange = function(aWebProgress, aRequest, 
 	}
 };
 
-ZMTB_BrowserListener.prototype.onLocationChange = function(aProgress, aRequest, aURI)
-{
-};
+ZMTB_BrowserListener.prototype.onLocationChange = function(aProgress, aRequest, aURI){};
 ZMTB_BrowserListener.prototype.onProgressChange = function(aWebProgress, aRequest, curSelf, maxSelf, curTot, maxTot){};
 ZMTB_BrowserListener.prototype.onStatusChange = function(aWebProgress, aRequest, aStatus, aMessage){};
 ZMTB_BrowserListener.prototype.onSecurityChange = function(aWebProgress, aRequest, aState){};

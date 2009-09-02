@@ -1,154 +1,76 @@
+/************************************************
+  Default image classes
+************************************************/
 
-#ZMTB-Compose-Title
+.ZimTB-Mail-Folder
 {
-	font-size:20px;
-	font-color:#CCCCCC;
+	list-style-image: url("default_images/folder.gif");
 }
 
-#ZMTB-Appointments
+.ZimTB-Mail-OpenEnv
 {
-	max-height:96px;
-	overflow:hidden;
+	list-style-image: url("default_images/mail.gif");
 }
 
-.ZMTB-Appt-Box
+.ZimTB-Mail-CloseEnv
 {
-	height:30px;
-	overflow:hidden;
-	position:relative;
-	bottom:0px;
-	background-image:url(chrome://zimbratb/skin/apptbar.png);
-	background-repeat:repeat-x;
-	background-position:center;
-	border-top: 1px solid #ffe970;
-	border-bottom: 1px solid #bf8a01;
-	vertical-align:bottom;
+	list-style-image: url("default_images/closemail.gif");
 }
 
-/*.menu-iconic-left, .menu-iconic-icon 
+.ZimTB-Inbox-Folder
 {
-  -moz-appearance: none ! important;
-	width:100px ! important;
-	min-width:40px ! important;
-	max-width:none;
-}*/
+	list-style-image: url("default_images/inbox.gif");
+	
+}
 
-/* Windows menu icon hack */
-/*.menulist-menupopup > menuitem > .menu-iconic-left,
-menulist > menupopup > menuitem > .menu-iconic-left,
-.menulist-menupopup > menu > .menu-iconic-left,
-menulist > menupopup > menu > .menu-iconic-left {
- 	display: -moz-box;
-	margin-right:2px;
-}*/
-
-#ZMTB-Default-Folder .menulist-menupopup > menuitem > .menu-iconic-left,
-menulist#ZMTB-Default-Folder > menupopup > menuitem > .menu-iconic-left,
-#ZimTB-Folders .menulist-menupopup > menu > .menu-iconic-left,
-menulist#ZimTB-Folders > menupopup > menu > .menu-iconic-left
+.ZimTB-Drafts-Folder
 {
- 	display: -moz-box;
-	margin-right:2px;	
+	list-style-image: url("default_images/drafts.gif");
 }
 
-.ZMTB-Appt-Button
+.ZimTB-Sent-Folder
 {
-	-moz-appearance:none; 
-	-moz-border-radius:10px;
-	border:1px solid #666666;
-	background-image:url(chrome://zimbratb/skin/buttonback.png);
-	background-repeat:repeat-x;
-	background-position:center;
-	height:18px;
-	margin:6px;
-	min-height: 18px;
+	list-style-image: url("default_images/sent.gif");
 }
 
-.ZMTB-Appt-Message
+.ZimTB-Trash-Folder
 {
-	font-weight:bold;
-	font-size:10px;
-	margin-left:10px;
-	padding-top:5px;
+	list-style-image: url("default_images/trash.gif");
 }
 
-.ZMTB-Appt-Image
+.ZimTB-Junk-Folder
 {
-	margin-left:10px;	
-	background-image:url(chrome://zimbratb/skin/calendar.gif);
-	background-position:center;
-	background-repeat:no-repeat;
-	width:16px;
-	height:16px;
+	list-style-image: url("default_images/junk.gif");
 }
 
-#ZimTB-MainMenu {
-    list-style-image: url("chrome://zimbratb/skin/main.png");
-}
-
-#ZimTB-MainMenu .toolbarbutton-text
+.ZimTB-RSS-Folder
 {
-	width:0px;
-	margin:0px;
-	padding:0px;
+	list-style-image: url("default_images/rss.gif") ! important;
+
 }
 
-#ZimTB-Combined-Button {
-    list-style-image: url("chrome://zimbratb/skin/combined.png");
-}
-
-#ZimTB-Mail-Button
+.ZimTB-Saved-Search
 {
-    -moz-box-orient: horizontal;
-	list-style-image: url("chrome://zimbratb/skin/mail.gif");
+	list-style-image: url("default_images/newsaved.gif");
 }
 
-#ZimTB-Combined-Image {
-    list-style-image: url("chrome://zimbratb/skin/images.png");
-}
-
-#ZMTB-Notifications
+.ZMTB-Search-Folder
 {
-/*	background-color:green;*/
+	list-style-image: url("default_images/newsaved.gif");
 }
+
+/************************************************
+ Classes for use in instances of ZMTB_Actions
+************************************************/
 
 .ZMTB-ContextAction
 {
-	list-style-image: url("chrome://zimbratb/skin/zimbra_z_small.png");
+	list-style-image: url("default_images/zimbra_z_small.png");
 }
 
-#ZMTB-Compose-Header
+#ZimTB-ActionsBar
 {
-	background-color:#333333;
-	color:#CCCCCC;
-	font-weight:bold;
-}
-
-#zmc_attach
-{
- 	-moz-appearance: textfield;
- 	margin: 4px 4px;
-	height:70px;
-	overflow-y:scroll;
-	width:100px;
-}
-
-#zmc_attach_inner
-{
-	float:left;
-}
-
-#zmc_attach.zmtbhover
-{
-	border:solid 3px #333333;
-	-moz-appearance:none;
-	background-color:-moz-field;
-}
-
-#zmc_error{
-	margin-top:10px;
-	font-size:12px;
-	color:red;
+	border-bottom:1px solid #333333;
 }
 
 .ZMTB-ActionBar-Title
@@ -159,224 +81,9 @@ menulist#ZimTB-Folders > menupopup > menu > .menu-iconic-left
 	padding-left:10px;
 }
 
-.ZimTB-Mail-Folder
+.ZMTB-ActionBar-Title label
 {
-	list-style-image: url("chrome://zimbratb/skin/folder.gif");
-}
-
-.ZimTB-Mail-CloseEnv
-{
-	list-style-image: url("chrome://zimbratb/skin/closemail.gif");
-}
-
-.ZimTB-Inbox-Folder, .ZimTB-Inbox-Folder:hover
-{
-	list-style-image: url("chrome://zimbratb/skin/inbox.gif");
-	
-}
-
-.ZimTB-Drafts-Folder
-{
-	list-style-image: url("chrome://zimbratb/skin/drafts.gif");
-}
-
-.ZimTB-Sent-Folder
-{
-	list-style-image: url("chrome://zimbratb/skin/sent.gif");
-}
-
-.ZimTB-Trash-Folder
-{
-	list-style-image: url("chrome://zimbratb/skin/trash.gif");
-}
-
-.ZimTB-Junk-Folder
-{
-	list-style-image: url("chrome://zimbratb/skin/junk.gif");
-}
-
-.ZimTB-RSS-Folder
-{
-	list-style-image: url("chrome://zimbratb/skin/rss.gif") ! important;
-
-}
-
-#ZimTB-NewEmail
-{
-	list-style-image: url("chrome://zimbratb/skin/newmail.gif");
-}
-
-#ZimTB-NewFolder
-{
-	-moz-box-orient: horizontal;
-	list-style-image: url("chrome://zimbratb/skin/newfolder.gif");
-}
-#ZimTB-EditFolders
-{
-	list-style-image: url("chrome://zimbratb/skin/folder.gif");
-}
-
-.ZimTB-Saved-Search
-{
-	list-style-image: url("chrome://zimbratb/skin/newsaved.gif");
-}
-
-#ZimTB-Refresh-Button
-{
-	list-style-image: url("chrome://zimbratb/skin/refresh.gif");
-	-moz-margin-end:0px;
-/*	background-image: url("chrome://zimbratb/skin/refresh.gif");
-	background-repeat:no-repeat;
-	background-position:center; */
-}
-
-#ZimTB-Refresh-Button .toolbarbutton-text
-{
-	width:0px;
-	margin:0px;
-	padding:0px;
-}
-
-#ZimTB-Refresh-Button .toolbarbutton-icon
-{
-	margin:0px;
-	padding:0px;
-}
-
-#ZimTB-NewSavedSearch
-{
-	list-style-image: url("chrome://zimbratb/skin/newsaved.gif");
-}
-
-#ZimTB-NewContact
-{
-	list-style-image: url("chrome://zimbratb/skin/newcontact.gif");
-}
-
-#ZimTB-NewContactGroup
-{
-	list-style-image: url("chrome://zimbratb/skin/newcontactgroup.gif");
-}
-
-#ZimTB-NewAddressBook
-{
-	list-style-image: url("chrome://zimbratb/skin/addressbook.gif");
-}
-
-#ZimTB-LinkToAddressBook
-{
-	list-style-image: url("chrome://zimbratb/skin/addressbooklink.gif");
-}
-
-#ZimTB-ViewContacts
-{
-	list-style-image: url("chrome://zimbratb/skin/contacts.gif");
-}
-
-#ZimTB-NewAppointment
-{
-	list-style-image: url("chrome://zimbratb/skin/newappointment.gif");
-}
-
-#ZimTB-NewCalendar
-{
-	list-style-image: url("chrome://zimbratb/skin/newappointment.gif");
-}
-
-#ZimTB-RemoteCalendar
-{
-	list-style-image: url("chrome://zimbratb/skin/newappointment.gif");
-}
-
-#ZimTB-SharedCalendar
-{
-	list-style-image: url("chrome://zimbratb/skin/newappointment.gif");
-}
-
-#ZimTB-ViewCalendars
-{
-	list-style-image: url("chrome://zimbratb/skin/calendar.gif");
-}
-
-#ZimTB-ViewTasks
-{
-	list-style-image: url("chrome://zimbratb/skin/tasks.gif");
-}
-
-#ZimTB-EditTasks
-{
-	list-style-image: url("chrome://zimbratb/skin/tasks.gif");
-}
-
-#ZimTB-NewTask
-{
-	list-style-image: url("chrome://zimbratb/skin/newtask.gif");
-}
-
-#ZimTB-NewTaskList
-{
-	list-style-image: url("chrome://zimbratb/skin/newtasklist.gif");
-}
-
-#ZimTB-NewRemTaskList
-{
-	list-style-image: url("chrome://zimbratb/skin/newtasklist.gif");
-}
-
-#ZimTB-SharedTaskList
-{
-	list-style-image: url("chrome://zimbratb/skin/newtasklist.gif");
-}
-
-#ZimTB-NewContact
-{
-	list-style-image: url("chrome://zimbratb/skin/newcontact.gif");
-}
-
-#ZimTB-NewRSS
-{
-	list-style-image: url("chrome://zimbratb/skin/rss.gif");
-}
-
-#ZimTB-Calendar-Button
-{
-	-moz-box-orient: horizontal;
-	list-style-image: url("chrome://zimbratb/skin/calendar.gif");
-}
-#ZimTB-Contacts-Button
-{
-	-moz-box-orient: horizontal;
-	list-style-image: url("chrome://zimbratb/skin/contacts.gif");
-}
-#ZimTB-Tasks-Button
-{
-	-moz-box-orient: horizontal;
-	list-style-image: url("chrome://zimbratb/skin/tasks.gif");
-}
-
-.ZimTB-FolderList
-{
-	width:150px;
-}
-
-.ZimTB-NewMessages
-{
-	width:22px;
-	height:22px;
-	-moz-border-radius:10px;
-	border:solid 1px white;
-	background-color:red;
-	color:white;
-	font-weight:bold;
-	text-align:center;
-	padding-top:2px;
-	line-height:20px;
-	font-size:12px;
-}
-
-.ZMTB-Search-Folder
-{
-	list-style-image: url("chrome://zimbratb/skin/newsaved.gif");
+	font-size:14px;
 }
 
 .ZMTB-ActionBar-Row
@@ -389,37 +96,12 @@ menulist#ZimTB-Folders > menupopup > menu > .menu-iconic-left
 	width:100px;
 }
 
-.ZimTB-Tag-Color-0
+#ZMTB-Default-Folder .menulist-menupopup > menuitem > .menu-iconic-left,
+menulist#ZMTB-Default-Folder > menupopup > menuitem > .menu-iconic-left,
+#ZimTB-Folders .menulist-menupopup > menu > .menu-iconic-left,
+menulist#ZimTB-Folders > menupopup > menu > .menu-iconic-left
 {
-	list-style-image: url("chrome://zimbratb/skin/tagorange.gif");
+ 	display: -moz-box;
+	margin-right:2px;	
 }
 
-.ZimTB-Tag-Color-1
-{
-	list-style-image: url("chrome://zimbratb/skin/tagblue.gif");
-}
-
-.ZimTB-Tag-Color-2
-{
-	list-style-image: url("chrome://zimbratb/skin/tagcyan.gif");
-}
-
-.ZimTB-Tag-Color-3
-{
-	list-style-image: url("chrome://zimbratb/skin/taggreen.gif");
-}
-
-.ZimTB-Tag-Color-4
-{
-	list-style-image: url("chrome://zimbratb/skin/tagpurple.gif");
-}
-
-.ZimTB-Tag-Color-5
-{
-	list-style-image: url("chrome://zimbratb/skin/tagred.gif");
-}
-
-.ZimTB-Tag-Color-6
-{
-	list-style-image: url("chrome://zimbratb/skin/tagyellow.gif");
-}

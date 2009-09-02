@@ -6,7 +6,6 @@ var ZMTB_FolderManager = function(requestManager)
 	this._rqManager = requestManager;
 }
 /*
-
 Filter paramaters: 	first //Initial folders to add to list
 					exclude //Folders to exclude from list
 					type //Type of folders to include in list
@@ -15,7 +14,6 @@ Filter paramaters: 	first //Initial folders to add to list
 
 */
 ZMTB_FolderManager._DEFAULTFILTER = {first:[2, 5, 6, 4], exclude:[3, 14], type:"message", search:true};
-// ZMTB_FolderManager._DEFAULTFILTER = {first:["Inbox", "Sent", "Drafts", "Junk"], exclude:["Trash", "Chats"], type:"message", search:true};
 
 ZMTB_FolderManager.prototype.setFilter = function(name, filter)
 {
@@ -35,8 +33,6 @@ ZMTB_FolderManager.prototype.getFolders = function(filterName)
 			for (var i=0; i < filter.first.length; i++)
 				if(this._folders[filter.first[i]])
 					folders.push(this._folders[filter.first[i]]);
-				// if(this._getFolderByName(filter.first[i]))
-					// folders.push(this._getFolderByName(filter.first[i]));
 		}
 		for (var i in this._folders)
 		{
@@ -88,8 +84,6 @@ ZMTB_FolderManager.prototype.getFolders = function(filterName)
 		for(var i in this._folders)
 			folders.push(this._folders[i]);
 			
-	// for (var i=0; i < folders.length; i++)
-	// 		Components.utils.reportError(folders[i].name);
 	return folders;
 }
 
@@ -203,7 +197,6 @@ ZMTB_FolderManager.prototype.removeListener = function(listener)
 
 ZMTB_FolderManager.prototype._updateListeners = function()
 {
-	// Components.utils.reportError("Updating listeners.");
 	for (var i=0; i < this._listeners.length; i++)
 		this._listeners[i].updateFolders();
 }
@@ -218,8 +211,6 @@ ZMTB_FolderManager.prototype._addFolders = function(fs)
 			this._folders[fs[i].id].rss = true;
 		if(fs[i].query)
 			this._folders[fs[i].id].query = fs[i].query;
-		//this._folders[fs[i].id] = {id:fs[i].id, name:fs[i].name, parent:fs[i].l, unread:(fs[i].u?fs[i].u:0), rss:(fs[i].url?1:0), view:(fs[i].view?fs[i].view:"message")};
-		//this._folders.push({id:fs[i].id, name:fs[i].name, parent:fs[i].l, unread:(fs[i].u?fs[i].u:0), rss:(fs[i].url?1:0)});
 		if(fs[i].search)
 			this._addFolders(fs[i].search);
 		if(fs[i].folder)

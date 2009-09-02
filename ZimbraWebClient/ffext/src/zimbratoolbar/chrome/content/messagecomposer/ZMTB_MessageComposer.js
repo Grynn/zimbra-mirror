@@ -14,6 +14,18 @@ var ZMTB_MessageComposer = function(requestManager, browser)
 	this._files = [];
 }
 
+ZMTB_MessageComposer.TOFIELD = "ZMTB-MessageComposer-ToField";
+ZMTB_MessageComposer.CCFIELD = "ZMTB-MessageComposer-CCField";
+ZMTB_MessageComposer.SUBFIELD = "ZMTB-MessageComposer-SubField";
+ZMTB_MessageComposer.MESSFIELD = "ZMTB-MessageComposer-MessField";
+ZMTB_MessageComposer.SENDBUTTON = "ZMTB-MessageComposer-Send";
+ZMTB_MessageComposer.SAVEBUTTON = "ZMTB-MessageComposer-Save";
+ZMTB_MessageComposer.CANCELBUTTON = "ZMTB-MessageComposer-Cancel";
+ZMTB_MessageComposer.ATTACHBROWSER = "ZMTB-MessageComposer-AttachBrowser";
+ZMTB_MessageComposer.ERRORLABEL = "ZMTB-MessageComposer-ErrorLabel";
+ZMTB_MessageComposer.FILEINPUT = "ZMTB-MessageComposer-FileInput";
+ZMTB_MessageComposer.ATTACHBOX = "ZMTB-MessageComposer-AttachBox";
+
 ZMTB_MessageComposer.prototype.open = function(email)
 {
 	if(this._panel && !this._panel.closed)
@@ -31,11 +43,11 @@ ZMTB_MessageComposer.prototype._addEvents = function(email)
 {
 	var win = this._panel;
 	var This = this;
-	this._toBox = this._panel.document.getElementById("zmc_to");
-	this._ccBox = this._panel.document.getElementById("zmc_cc");
-	this._subBox = this._panel.document.getElementById("zmc_sub");
-	this._messBox = this._panel.document.getElementById("zmc_mess");
-	this._browser = this._panel.document.getElementById("ZMTB_AttachBrowser");
+	this._toBox = this._panel.document.getElementById(ZMTB_MessageComposer.TOFIELD);
+	this._ccBox = this._panel.document.getElementById(ZMTB_MessageComposer.CCFIELD);
+	this._subBox = this._panel.document.getElementById(ZMTB_MessageComposer.SUBFIELD);
+	this._messBox = this._panel.document.getElementById(ZMTB_MessageComposer.MESSFIELD);
+	this._browser = this._panel.document.getElementById(ZMTB_MessageComposer.ATTACHBROWSER);
 	this._browser.addProgressListener(this._pgListener);
 	if(email)
 	{
@@ -44,45 +56,43 @@ ZMTB_MessageComposer.prototype._addEvents = function(email)
 	}
 	else
 		this._toBox.focus();
-	this._panel.document.getElementById("zmc_fileInput").addEventListener("change", function(e){This.receiveFile(e.target.value); e.target.value=""}, false);
-	this._panel.document.getElementById("zmc_close").addEventListener("command", function(){win.close()}, false);
-	this._panel.document.getElementById("zmc_send").addEventListener("command", function(){
+	this._panel.document.getElementById(ZMTB_MessageComposer.FILEINPUT).addEventListener("change", function(e){This.receiveFile(e.target.value); e.target.value=""}, false);
+	this._panel.document.getElementById(ZMTB_MessageComposer.CANCELBUTTON).addEventListener("command", function(){win.close()}, false);
+	this._panel.document.getElementById(ZMTB_MessageComposer.SENDBUTTON).addEventListener("command", function(){
 		if(This._toBox.value != "")
 		{
 			This.sendMessage();
 			win.close()
 		}
 		else
-			This._panel.document.getElementById("zmc_error").value="No recipient."
+			This._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value="No recipient."
 	}, false);	
-	this._panel.document.getElementById("zmc_save").addEventListener("command", function(){This.saveMessage(); win.close()}, false);
-	this._panel.document.getElementById("zmc_attach").addEventListener("dragover", function(e){This._dragover(e)}, false);
-	this._panel.document.getElementById("zmc_attach").addEventListener("dragexit", function(e){This._dragexit(e)}, false);
-	this._panel.document.getElementById("zmc_attach").addEventListener("dragdrop", function(e){This._dragdrop(e)}, false);
-	//this._panel.document.getElementById("zmc_attach").ondragdrop = function(e){This._panel.document.getElementById("zmc_attach").style.backgroundColor="red"; Components.utils.reportError("dropped");nsDragAndDrop.drop(e, attachObserver)};
+	this._panel.document.getElementById(ZMTB_MessageComposer.SAVEBUTTON).addEventListener("command", function(){This.saveMessage(); win.close()}, false);
+	this._panel.document.getElementById(ZMTB_MessageComposer.ATTACHBOX).addEventListener("dragover", function(e){This._dragover(e)}, false);
+	this._panel.document.getElementById(ZMTB_MessageComposer.ATTACHBOX).addEventListener("dragexit", function(e){This._dragexit(e)}, false);
+	this._panel.document.getElementById(ZMTB_MessageComposer.ATTACHBOX).addEventListener("dragdrop", function(e){This._dragdrop(e)}, false);
 }
 
 ZMTB_MessageComposer.prototype._dragover = function(e)
 {
 	nsDragAndDrop.dragOver(e, this._dragObserver);
-	this._panel.document.getElementById("zmc_attach").className="zmtbhover";
+	this._panel.document.getElementById(ZMTB_MessageComposer.ATTACHBOX).className="ZMTB-DragOver";
 };
 
 ZMTB_MessageComposer.prototype._dragdrop = function(e)
 {
-	this._panel.document.getElementById("zmc_attach").className="";
+	this._panel.document.getElementById(ZMTB_MessageComposer.ATTACHBOX).className="";
 	nsDragAndDrop.drop(e, this._dragObserver);
 };
 
 ZMTB_MessageComposer.prototype._dragexit = function(e)
 {
-	this._panel.document.getElementById("zmc_attach").className="";
+	this._panel.document.getElementById(ZMTB_MessageComposer.ATTACHBOX).className="";
 };
 
 ZMTB_MessageComposer.prototype.sendMessage = function()
 {
 	var sd = ZMTB_AjxSoapDoc.create("SendMsgRequest", ZMTB_RequestManager.NS_MAIL);
-	// var sd = AjxSoapDoc.create("SendMsgRequest", ZMTB_RequestManager.NS_MAIL);
 	var attach = "";
 	var soapEmails = [];
 	var tos = this._toBox.value.split(",");
@@ -109,28 +119,11 @@ ZMTB_MessageComposer.prototype.sendMessage = function()
 	var m = sd.set("m", mess);
 	this._rqManager.sendRequest(sd);
 	this._attachments = [];
-	
-	// <SendMsgRequest [suid="{send-uid}"] [needCalendarSentByFixup="0|1"] [noSave="0|1"]>
-	//   <m [f="!|?"] [origid="..." rt="r|w"] [idnt="{identity-id}"]>
-	//     <e t="{type}" a="{email-address}" p="{personal-name}" [add="1"]/>+
-	//     <su>{subject}</su>*
-	//     [<irt>{Message-ID header for message being replied to}</irt>]
-	//     <mp ct="{content-type}" [ci="{content-id}"]>
-	//       <content>...</content>
-	//     </mp>
-	//     <attach [aid="{attach-upload-id}"]>
-	//       [<m id="{message-id}"/>]*
-	//       [<mp mid="{message-id}" part="{part-id}"/>]*
-	//       [<cn id="{contact-id}"/>]*
-	//     </attach>
-	//   </m>
-	// </SendMsgRequest>
 };
 
 ZMTB_MessageComposer.prototype.saveMessage = function()
 {
 	var sd = ZMTB_AjxSoapDoc.create("SaveDraftRequest", ZMTB_RequestManager.NS_MAIL);
-	// var sd = AjxSoapDoc.create("SaveDraftRequest", ZMTB_RequestManager.NS_MAIL);
 	var attach = "";
 	var soapEmails = [];
 	var tos = this._toBox.value.split(",");
@@ -173,16 +166,15 @@ ZMTB_MessageComposer.prototype.receiveFiles = function(files)
 
 ZMTB_MessageComposer.prototype.processStatus = function(status)
 {
-	Components.utils.reportError("Status is: "+status);
 	if(status == 0)
-		this._panel.document.getElementById("zmc_error").value="";
+		this._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value="";
 	else
-		this._panel.document.getElementById("zmc_error").value="Cannot connect to server.";
+		this._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value="Cannot connect to server.";
 }
 
 ZMTB_MessageComposer.prototype.processPage = function(URI, doc)
 {
-	//Moved upload browser to compose window, needed hack
+	//Moved upload browser to compose window, hacking
 	URI = this._browser.currentURI;
 	doc = this._browser.contentDocument;
 	//End hack
@@ -202,13 +194,13 @@ ZMTB_MessageComposer.prototype.processPage = function(URI, doc)
 			}
 		doc.getElementById("zmupload").action = this._rqManager.getServerURL()+"service/upload?fmt=raw,extended";
 		doc.getElementById("zmupload").submit();
-		this._panel.document.getElementById("zmc_error").value="Uploading...";
+		this._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value="Uploading...";
 		this._panel.document.getElementById("zmc_loading").hidden=false;
 		
 	}
 	else if(this._rqManager.getServerURL().indexOf(URI.host) >= 0)
 	{
-		this._panel.document.getElementById("zmc_error").value="";
+		this._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value="";
 		this._panel.document.getElementById("zmc_loading").hidden=true;
 		var resp = doc.body.firstChild.data;
 		if(resp.indexOf('"aid":"') >=0 && resp.indexOf('"filename":"') >=0)
@@ -228,13 +220,12 @@ ZMTB_MessageComposer.prototype.processPage = function(URI, doc)
 
 ZMTB_MessageComposer.prototype._updateAttachments = function()
 {
-	// Components.utils.reportError(doc.getElementsByName("fileUpload").length);
-	var fileDiv = this._panel.document.getElementById("zmc_attach");
+	var fileDiv = this._panel.document.getElementById(ZMTB_MessageComposer.ATTACHBOX);
 	for (var i=fileDiv.childNodes.length-1; i>=0; i--) {
 		fileDiv.removeChild(fileDiv.childNodes[i]);
 	}
 	var hbox = fileDiv.appendChild(this._panel.document.createElement("html:div"));
-	hbox.id="zmc_attach_inner";
+	hbox.id=ZMTB_MessageComposer.ATTACHBOX+"-inner";
 	for (var i=0; i < this._attachments.length; i++)
 	{
 		var chkbox = hbox.appendChild(this._panel.document.createElement("checkbox"));
@@ -244,8 +235,6 @@ ZMTB_MessageComposer.prototype._updateAttachments = function()
 		chkbox.id = this._attachments[i].aid;
 		var This=this;
 		chkbox.addEventListener("command", function(e){if(e.target.checked)This.getAttachment(e.target.id).send = true; else This.getAttachment(e.target.id).send = false}, false);
-		// var label = fileDiv.appendChild(this._panel.document.createElement("label"));
-		// label.value = this._attachments[i].name;
 	}
 	if(this._attachments.length == 0)
 	{

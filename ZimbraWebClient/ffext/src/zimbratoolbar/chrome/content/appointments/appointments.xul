@@ -1,4 +1,5 @@
 <!DOCTYPE window SYSTEM "chrome://zimbratb/locale/zimbratb.dtd">
+<?xml-stylesheet href="chrome://zimbratb/skin/appointments/appointments.css" type="text/css"?>
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="ZimTB-Overlay">
 	<script type="application/x-javascript" src="ZMTB_ApptManager.js"/>
 	<script>

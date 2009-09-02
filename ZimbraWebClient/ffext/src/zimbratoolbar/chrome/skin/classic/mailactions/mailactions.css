@@ -1,0 +1,19 @@
+#ZimTB-Mail-Button
+{
+    -moz-box-orient: horizontal;
+}
+
+#ZimTB-NewEmail
+{
+	list-style-image: url("newmail.gif");
+}
+
+#ZimTB-NewFolder
+{
+	-moz-box-orient: horizontal;
+	list-style-image: url("newfolder.gif");
+}
+#ZimTB-EditFolders
+{
+	list-style-image: url("folder.gif");
+}

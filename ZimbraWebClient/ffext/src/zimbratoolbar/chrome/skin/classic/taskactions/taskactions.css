@@ -1,0 +1,30 @@
+#ZimTB-Tasks-Button
+{
+	-moz-box-orient: horizontal;
+	list-style-image: url("tasks.gif");
+}
+
+#ZimTB-ViewTasks
+{
+	list-style-image: url("tasks.gif");
+}
+
+#ZimTB-NewTask
+{
+	list-style-image: url("newtask.gif");
+}
+
+#ZimTB-NewTaskList
+{
+	list-style-image: url("newtasklist.gif");
+}
+
+#ZimTB-NewRemTaskList
+{
+	list-style-image: url("newtasklist.gif");
+}
+
+#ZimTB-SharedTaskList
+{
+	list-style-image: url("newtasklist.gif");
+}

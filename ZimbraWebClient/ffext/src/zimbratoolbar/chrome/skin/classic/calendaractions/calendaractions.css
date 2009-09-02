@@ -1,0 +1,30 @@
+#ZimTB-Calendar-Button
+{
+	-moz-box-orient: horizontal;
+	list-style-image: url("calendar.gif");
+}
+
+#ZimTB-NewAppointment
+{
+	list-style-image: url("newappointment.gif");
+}
+
+#ZimTB-NewCalendar
+{
+	list-style-image: url("newappointment.gif");
+}
+
+#ZimTB-RemoteCalendar
+{
+	list-style-image: url("newappointment.gif");
+}
+
+#ZimTB-SharedCalendar
+{
+	list-style-image: url("newappointment.gif");
+}
+
+#ZimTB-ViewCalendars
+{
+	list-style-image: url("calendar.gif");
+}

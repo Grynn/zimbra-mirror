@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE window SYSTEM "chrome://zimbratb/locale/zimbratb.dtd">
+<?xml-stylesheet href="chrome://zimbratb/skin/mailactions/mailactions.css" type="text/css"?>
 <overlay id="mailActions" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<script src="chrome://global/content/nsDragAndDrop.js"/>
 	<script src="chrome://global/content/nsTransferable.js"/>
@@ -10,26 +11,23 @@
 			new ZMTB_MailActions(com_zimbra_tb);
 		}, false);
 	</script>
-	<!-- 			<vbox>
-					<browser id="ZMTB_AttachBrowser" height="0" width="0" />
-				</vbox> -->
 	<toolbar id="ZimTB-Toolbar">
-		<toolbarbutton flex="0" id="ZimTB-Mail-Button" label="&zmtb.mailactions.mail;" type="menu" menu="ZimTB-Mail-Menu">
+		<toolbarbutton flex="0" id="ZimTB-Mail-Button" class="ZimTB-Mail-OpenEnv" label="&zmtb.mailactions.mail;" type="menu" menu="ZimTB-Mail-Menu">
 			<menupopup id="ZimTB-Mail-Menu">
 				<menuitem id="ZimTB-NewEmail" label="&zmtb.mailactions.quickcompose;" class="menuitem-iconic zmtb-menucommand" />
 				<menuseparator/>
 				<menuitem id="ZimTB-NewFolder" label="&zmtb.mailactions.newfolder;" class="menuitem-iconic zmtb-menucommand" />
-				<menuitem id="ZimTB-NewSavedSearch" label="&zmtb.mailactions.newsaved;" class="menuitem-iconic zmtb-menucommand" />
-				<menuitem id="ZimTB-NewRSS" label="&zmtb.mailactions.newrss;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-NewSavedSearch" label="&zmtb.mailactions.newsaved;" class="menuitem-iconic zmtb-menucommand ZimTB-Saved-Search" />
+				<menuitem id="ZimTB-NewRSS" label="&zmtb.mailactions.newrss;" class="menuitem-iconic zmtb-menucommand ZimTB-RSS-Folder" />
 				<menuseparator/>
 				<menuitem id="ZimTB-ViewMail" label="&zmtb.mailactions.viewmail;" class="menuitem-iconic zmtb-menucommand ZimTB-Mail-CloseEnv" />
 			</menupopup>
 		</toolbarbutton>
 	</toolbar>
-	<vbox id="ZimTB-ActionsBar" style="border-bottom:solid 1px #666666">
+	<vbox id="ZimTB-ActionsBar" >
 		<vbox id="ZimTB-NewFolder-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="&zmtb.mailactions.newfolder.title;" style="font-size:14px"/>
+				<label value="&zmtb.mailactions.newfolder.title;" />
 			</vbox>
 			<hbox align="center">
 				<label value="&zmtb.mailactions.name;"/>
@@ -42,7 +40,7 @@
 		</vbox>
 		<vbox id="ZimTB-NewSearchFolder-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="&zmtb.mailactions.newsearch.title;" style="font-size:14px"/>
+				<label value="&zmtb.mailactions.newsearch.title;" />
 			</vbox>
 			<hbox align="center">
 				<label value="&zmtb.mailactions.name;"/>
@@ -57,7 +55,7 @@
 		</vbox>
 		<vbox id="ZimTB-NewRSS-Bar">
 			<vbox class="ZMTB-ActionBar-Title" align="start">
-				<label value="&zmtb.mailactions.newfeed.title;" style="font-size:14px"/>
+				<label value="&zmtb.mailactions.newfeed.title;" />
 			</vbox>
 			<hbox align="center">
 				<label value="&zmtb.mailactions.name;"/>
