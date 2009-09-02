@@ -498,8 +498,10 @@ public class DataSourceMailbox extends SyncMailbox {
         for (Folder folder : accessable == null ? getFolderById(
             ID_FOLDER_ROOT).getSubfolderHierarchy() : accessable) {
             if (folder.getId() > Mailbox.FIRST_USER_ID ||
-                folder.getId() == ID_FOLDER_FAILURE ||
                 folder.getDefaultView() != MailItem.TYPE_MESSAGE ||
+                folder.getId() == ID_FOLDER_DRAFTS ||
+                folder.getId() == ID_FOLDER_FAILURE ||
+                folder.getId() == ID_FOLDER_OUTBOX ||
                 ds.isSyncCapable(folder))
                 visible.add(folder);
             else
