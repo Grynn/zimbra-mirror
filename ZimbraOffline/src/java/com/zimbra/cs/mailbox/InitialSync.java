@@ -454,16 +454,14 @@ public class InitialSync {
 
         boolean relocated = elt.getAttributeBool(A_RELOCATED, false) || !name.equals(elt.getAttribute(MailConstants.A_NAME));
 
-        CreateSavedSearch redo = new CreateSavedSearch(ombx.getId(), parentId, name, query, searchTypes, sort, new MailItem.Color(color));
+        CreateSavedSearch redo = new CreateSavedSearch(ombx.getId(), parentId, name, query, searchTypes, sort, flags, new MailItem.Color(color));
         redo.setSearchId(id);
         redo.start(System.currentTimeMillis());
 
         try {
-            // XXX: FLAGS should be settable in the SearchFolder create...
-            ombx.createSearchFolder(new OfflineContext(redo), parentId, name, query, searchTypes, sort, color);
+            ombx.createSearchFolder(new OfflineContext(redo), parentId, name, query, searchTypes, sort, flags, color);
             if (relocated)
                 ombx.setChangeMask(sContext, id, MailItem.TYPE_SEARCHFOLDER, Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
-            ombx.setTags(sContext, id, MailItem.TYPE_SEARCHFOLDER, flags, MailItem.TAG_UNCHANGED);
             ombx.syncDate(sContext, id, MailItem.TYPE_SEARCHFOLDER, date);
             OfflineLog.offline.debug("initial: created search folder (" + id + "): " + name);
         } catch (ServiceException e) {
