@@ -236,19 +236,19 @@ function submit(id, name, type, flavor, verb) {
                     <div class="ZAccountInfo">
     <c:choose>
        <c:when test="${account.statusUnknown}">
-                      <i><img src="/zimbra/img/im/ImgOffline.gif" align="absmiddle">&nbsp;<fmt:message key='StatusUnknown'/></i>
+                      <i><img src="/zimbra/img/startup/ImgOffline.gif" align="absmiddle">&nbsp;<fmt:message key='StatusUnknown'/></i>
        </c:when>
        <c:when test="${account.statusOffline}">
-                      <i><img src="/zimbra/img/im/ImgImAway.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOffline'/></i>
+                      <i><img src="/zimbra/img/startup/ImgImAway.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOffline'/></i>
        </c:when>
        <c:when test="${account.statusOnline}">
-                      <i><img src="/zimbra/img/im/ImgImAvailable.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOnline'/></i>
+                      <i><img src="/zimbra/img/startup/ImgImAvailable.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOnline'/></i>
        </c:when>
        <c:when test="${account.statusRunning}">
                       <i><img src="/zimbra/img/animated/Imgwait_16.gif" align="absmiddle">&nbsp;<fmt:message key='StatusInProg'/></i>
        </c:when>
        <c:when test="${account.statusAuthFailed}">
-                      <i><img src="/zimbra/img/im/ImgImDnd.gif" align="absmiddle">&nbsp;<fmt:message key='StatusCantLogin'/></i>
+                      <i><img src="/zimbra/img/startup/ImgImDnd.gif" align="absmiddle">&nbsp;<fmt:message key='StatusCantLogin'/></i>
        </c:when>
        <c:when test="${account.statusError}">
                       <i><img height="14" width="14" src="/zimbra/img/dwt/ImgCritical.gif" align="absmiddle">&nbsp;<fmt:message key='StatusErr'/></i>
@@ -265,7 +265,7 @@ function submit(id, name, type, flavor, verb) {
                       <a href="javascript:OnReset('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="ResetData"/></a>&nbsp;
                       <a href="javascript:OnReindex('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Reindex"/></a>
 	<c:if test="${not default}">
-                     &nbsp;<a href="javascript:OnDefault('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><img src="/zimbra/img/arrows/ImgAccordionClosed.gif" width="12" heigh="12" align="absbottom" border="0"></a>
+                     &nbsp;<a href="javascript:OnDefault('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><img src="/zimbra/img/startup/ImgAccordionClosed.gif" width="12" heigh="12" align="absbottom" border="0"></a>
        </c:if>
                       </div>
                     </td>
