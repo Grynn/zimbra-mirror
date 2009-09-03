@@ -6,6 +6,7 @@ var ZMTB_MailActions = function(zmtb)
 	var This = this;
 	this._folderMan.setFilter("mail", {first:[2, 5, 6, 4], exclude:[3, 14], type:"message", root:true});
 	this._folderMan.setFilter("search", {first:[2, 5, 6, 4], exclude:[3, 14], type:"message", root:true, search:true});
+	
 	//Context Menu Options
 	document.getElementById("ZMTB-ContextAction-AddRSS").addEventListener("command",function(){
 		 This.newRSSFolderCommand();
@@ -18,7 +19,7 @@ var ZMTB_MailActions = function(zmtb)
 			document.getElementById("ZMTB-ContextAction-ComposeTo").hidden = false;
 		else
 			document.getElementById("ZMTB-ContextAction-ComposeTo").hidden = true;
-		if(gContextMenu.onLink && (gContextMenu.linkURL.indexOf(".xml") >=0 || gContextMenu.linkURL.indexOf("format=xml") >=0))
+		if(gContextMenu.onLink && (gContextMenu.linkURL.indexOf(".xml") >=0 || gContextMenu.linkURL.indexOf("format=xml") >=0) || gContextMenu.linkURL.indexOf(".rss") >=0)
 			document.getElementById("ZMTB-ContextAction-AddRSS").hidden = false;
 		else
 			document.getElementById("ZMTB-ContextAction-AddRSS").hidden = true;
