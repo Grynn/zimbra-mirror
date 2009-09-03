@@ -101,23 +101,6 @@ ZMTB_Prefs.prototype._addToMenu = function(folder, class)
 
 ZMTB_Prefs.prototype.receiveUpdate = function(responseObj)
 {
-	// if(responseObj.code)
-	// {
-	// 	if(this._statusLabel.value == "Connected to server!")
-	// 		return;
-	// 	switch(responseObj.code)
-	// 	{
-	// 		case "NETWORK_ERROR":
-	// 			this._statusLabel.value = "Could not connect to server."
-	// 			break;
-	// 		case "account.CHANGE_PASSWORD":
-	// 			this._statusLabel.value = "Your password has expired. You must change it."
-	// 			break;
-	// 		case "account.AUTH_FAILED":
-	// 			this._statusLabel.value = "You have entered an incorrect username or password."
-	// 			break;
-	// 	}
-	// }
 	clearTimeout(this._timeout);
 	if(responseObj.Body.Fault && responseObj.Body.Fault.Detail.Error.Code)
 	{
@@ -213,14 +196,12 @@ ZMTB_Prefs.prototype.connect = function()
 				win.com_zimbra_tb.getRequestManager().newServer(pm.getCharPref("extensions.zmtb.hostname"), pm.getCharPref("extensions.zmtb.username"), this._passField);
 	}
 	this._statusLabel.value = "";
-	this._timeout = setTimeout(this.setStatus, 5000, this, this._localStrings.getString("preferences_status_noconnect"));
+	var This=this;
+	this._timeout = setTimeout(function(){This.setStatus(This._localStrings.getString("preferences_status_noconnect"))}, 5000);
 }
-ZMTB_Prefs.prototype.setStatus = function(message, This)
+ZMTB_Prefs.prototype.setStatus = function(message)
 {
-	if(This)
-		This._statusLabel.value = message;
-	else
-		this._statusLabel.value = message;		
+	this._statusLabel.value = message;		
 }
 ZMTB_Prefs.prototype.resetRecent = function()
 {

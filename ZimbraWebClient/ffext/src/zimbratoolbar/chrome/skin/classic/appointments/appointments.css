@@ -10,7 +10,7 @@
 	overflow:hidden;
 	position:relative;
 	bottom:0px;
-	background-image:url(chrome://zimbratb/skin/apptbar.png);
+	background-image:url(apptbar.png);
 	background-repeat:repeat-x;
 	background-position:center;
 	border-top: 1px solid #ffe970;
@@ -23,7 +23,7 @@
 	-moz-appearance:none; 
 	-moz-border-radius:10px;
 	border:1px solid #666666;
-	background-image:url(chrome://zimbratb/skin/buttonback.png);
+	background-image:url(buttonback.png);
 	background-repeat:repeat-x;
 	background-position:center;
 	height:18px;
@@ -42,7 +42,7 @@
 .ZMTB-Appt-Image
 {
 	margin-left:10px;	
-	background-image:url(chrome://zimbratb/skin/calendar.gif);
+	background-image:url(calendar.gif);
 	background-position:center;
 	background-repeat:no-repeat;
 	width:16px;

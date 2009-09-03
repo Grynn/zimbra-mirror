@@ -17,6 +17,19 @@
 <!ENTITY zmtb.searchlist.savedsearches "Saved Searches">
 <!ENTITY zmtb.searchlist.tags "Tags">
 <!ENTITY zmtb.searchlist.recent "Recent Searches">
+<!ENTITY zmtb.searchlist.search "Search">
+
+<!-- Message Composer -->
+<!ENTITY zmtb.messagecomposer.windowtitle "Quick Compose">
+<!ENTITY zmtb.messagecomposer.title "Compose New Mail">
+<!ENTITY zmtb.messagecomposer.to "To:">
+<!ENTITY zmtb.messagecomposer.cc "CC:">
+<!ENTITY zmtb.messagecomposer.subject "Subject:">
+<!ENTITY zmtb.messagecomposer.attachhere "Drag attachments here.">
+<!ENTITY zmtb.messagecomposer.messagehere "Your message here.">
+<!ENTITY zmtb.messagecomposer.send "Send">
+<!ENTITY zmtb.messagecomposer.save "Save Draft">
+<!ENTITY zmtb.messagecomposer.cancel "Cancel">
 
 <!-- Mail actions -->
 <!ENTITY zmtb.mailactions.cancel "Cancel">

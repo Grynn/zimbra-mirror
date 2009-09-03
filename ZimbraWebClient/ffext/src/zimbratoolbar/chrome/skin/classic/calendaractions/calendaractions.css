@@ -28,3 +28,13 @@
 {
 	list-style-image: url("calendar.gif");
 }
+
+#ZimTB-NewCal-Name, #ZimTB-NewRemCal-Name, #ZimTB-NewRemCal-URL, #ZimTB-NewAppt-Create, #ZimTB-NewAppt-Close
+{
+	width:150px  ! important;
+}
+
+#ZimTB-NewAppt-Create, #ZimTB-NewAppt-Close
+{
+	margin-left:20px;
+}

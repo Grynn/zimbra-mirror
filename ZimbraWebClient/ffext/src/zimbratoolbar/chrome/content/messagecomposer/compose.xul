@@ -1,35 +1,36 @@
 <?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "chrome://zimbratb/locale/zimbratb.dtd">
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://zimbratb/skin/messagecomposer/messagecomposer.css" type="text/css"?>
-<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" id="zmtb-compose-window" title="Compose Message" style="padding:0px; margin:0px; border:none; background-color:#333333;">
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" id="zmtb-compose-window" title="&zmtb.messagecomposer.windowtitle;" style="padding:0px; margin:0px; border:none; background-color:#333333;">
 	<script type="application/x-javascript" src="ZMTB_MessageComposer.js"/>
 	<vbox id="ZMTB-MessageComposer-Container" >
 		<browser id="ZMTB-MessageComposer-AttachBrowser" height="0"/>
 		<hbox style="margin:10px; margin-bottom:5px" align="center" id="ZMTB-MessageComposer-Header" >
-			<image  src="chrome://zimbratb/skin/messagecomposer/zimbra_c.png" style="margin-bottom:8px" />
-			<label id="ZMTB-MessageComposer-Title" value="| Compose New Mail"/>
+			<image  src="chrome://zimbratb/skin/messagecomposer/zimbra_c.png" style="margin-bottom:10px; margin-right:20px" />
+			<label id="ZMTB-MessageComposer-Title" value="&zmtb.messagecomposer.title;"/>
 			<spacer flex="100" />
 			<image id="zmc_loading" hidden="true" src="chrome://zimbratb/skin/messagecomposer/loading.gif" />
 		</hbox>
 		<vbox id="ZMTB-MessageComposer-FormBox" >
 			<hbox align="center">
-				<label value="To:"/>
+				<label value="&zmtb.messagecomposer.to;"/>
 				<spacer flex="100"/>
 				<textbox id="ZMTB-MessageComposer-ToField" width="350"/>
 			</hbox>
 			<hbox align="center">
-				<label value="CC:"/>
+				<label value="&zmtb.messagecomposer.cc;"/>
 				<spacer flex="100"/>
 				<textbox id="ZMTB-MessageComposer-CCField" width="350"/>
 			</hbox>
 			<hbox align="center">
-				<label value="Subject:"/>
+				<label value="&zmtb.messagecomposer.subject;"/>
 				<spacer flex="100"/>
 				<textbox id="ZMTB-MessageComposer-SubField" width="350"/>
 			</hbox>
 			<vbox id="ZMTB-MessageComposer-AttachBox" >
 				<vbox align="center">
-					<label id="ZMTB-MessageComposer-AttachmentsLabel" value="Drag attachments here." align="center"/>
+					<label id="ZMTB-MessageComposer-AttachmentsLabel" value="&zmtb.messagecomposer.attachhere;" align="center"/>
 				</vbox>
 			</vbox>
 			<vbox align="end">
@@ -37,12 +38,12 @@
 			</vbox>
 			<textbox emptytext="Your message here." height="150" spellcheck="true" multiline="true" id="ZMTB-MessageComposer-MessField"/>
 			<hbox>
-				<button label="Send" id="ZMTB-MessageComposer-Send"/>
-				<button label="Save Draft" id="ZMTB-MessageComposer-Save"/>
+				<button label="&zmtb.messagecomposer.send;" id="ZMTB-MessageComposer-Send"/>
+				<button label="&zmtb.messagecomposer.save;" id="ZMTB-MessageComposer-Save"/>
 				<hbox align="center" flex="100" >
 					<label id="ZMTB-MessageComposer-ErrorLabel" value="" width="130" />
 				</hbox>
-				<button label="Cancel" id="ZMTB-MessageComposer-Cancel"/>
+				<button label="&zmtb.messagecomposer.cancel;" id="ZMTB-MessageComposer-Cancel"/>
 			</hbox>
 		</vbox>
 	</vbox>

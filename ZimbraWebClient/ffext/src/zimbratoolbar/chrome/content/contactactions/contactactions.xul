@@ -22,12 +22,12 @@
 	</toolbar>
 	<vbox id="ZimTB-ActionsBar">
 		<vbox id="ZimTB-NewAddrBook-Bar">
-			<vbox class="ZMTB-ActionBar-Title" align="start">
+			<vbox class="ZMTB-ActionBar-Title" >
 				<label value="New Address Book" />
 			</vbox>
-			<hbox align="center">
+			<hbox class="ZMTB-ActionBar-Row">
 				<label value="Name:"/>
-				<textbox id="ZimTB-NewAddrBook-Name" width="150" />
+				<textbox id="ZimTB-NewAddrBook-Name" />
 				<label value="Parent folder:"/>
 				<menulist id="ZimTB-NewAddrBook-Parent" class="ZimTB-FolderList" sizetopopup="none"/>
 				<button id="ZimTB-NewAddrBook-Create" label="Create Address Book"/>
@@ -35,10 +35,10 @@
 			</hbox>
 		</vbox>
 		<vbox id="ZimTB-LinkToAddrBook-Bar">
-			<vbox class="ZMTB-ActionBar-Title" align="start">
+			<vbox class="ZMTB-ActionBar-Title" >
 				<label value="Link to Address Book" />
 			</vbox>
-			<hbox align="center">
+			<hbox class="ZMTB-ActionBar-Row">
 				<label value="Name:"/>
 				<textbox id="ZimTB-LinkToAddrBook-Name" />
 				<label value="Owner:"/>
@@ -52,7 +52,7 @@
 			</hbox>
 		</vbox>
 		<vbox id="ZimTB-NewContact-Bar">
-			<vbox class="ZMTB-ActionBar-Title" align="start">
+			<vbox class="ZMTB-ActionBar-Title" >
 				<label value="New Contact" />
 			</vbox>
 			<hbox align="center">
@@ -125,7 +125,7 @@
 								<label value="&zmtb.contactactions.newcontact.phone;"/>
 								<textbox tabindex="12" id="ZimTB-NewContact-Phone"/>
 								<spacer/>
-								<menulist id="ZimTB-NewContact-Location"  sizetopopup="none">
+								<menulist id="ZimTB-NewContact-Location" sizetopopup="none">
 									<menupopup>
 										<menuitem label="&zmtb.contactactions.newcontact.work;" value="work"/>
 										<menuitem label="&zmtb.contactactions.newcontact.home;" value="home"/>
@@ -138,7 +138,7 @@
 				<vbox>
 					<hbox align="center">
 						<label value="&zmtb.contactactions.newcontact.addto;"/>
-						<menulist align="end" width="100" id="ZimTB-NewContact-AddressBooks" sizetopopup="none"/>
+						<menulist id="ZimTB-NewContact-AddressBooks" sizetopopup="none"/>
 					</hbox>
 					<button id="ZimTB-NewContact-Create" label="&zmtb.contactactions.newcontact.create;"/>
 					<button id="ZimTB-NewContact-Close" label="&zmtb.contactactions.cancel;"/>

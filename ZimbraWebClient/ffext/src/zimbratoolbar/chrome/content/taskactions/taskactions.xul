@@ -23,34 +23,34 @@
 	</toolbar>
 	<vbox id="ZimTB-ActionsBar">
 		<vbox id="ZimTB-NewTaskList-Bar">
-			<vbox class="ZMTB-ActionBar-Title" align="start">
+			<vbox class="ZMTB-ActionBar-Title" >
 				<label value="&zmtb.taskactions.newlist.title;" />
 			</vbox>
-			<hbox align="center">
+			<hbox class="ZMTB-ActionBar-Row">
 				<label value="&zmtb.taskactions.name;"/>
-				<textbox id="ZimTB-NewTaskList-Name" width="150" />
+				<textbox id="ZimTB-NewTaskList-Name" />
 				<button id="ZimTB-NewTaskList-Create" label="&zmtb.taskactions.newlist.create;"/>
 				<button id="ZimTB-NewTaskList-Close" label="&zmtb.taskactions.cancel;"/>
 			</hbox>
 		</vbox>
 		<vbox id="ZimTB-NewRemTaskList-Bar">
-			<vbox class="ZMTB-ActionBar-Title" align="start">
+			<vbox class="ZMTB-ActionBar-Title" >
 				<label value="&zmtb.taskactions.newremlist.title;" />
 			</vbox>
-			<hbox align="center">
+			<hbox class="ZMTB-ActionBar-Row">
 				<label value="&zmtb.taskactions.name;"/>
-				<textbox id="ZimTB-NewRemTaskList-Name" width="150"/>
+				<textbox id="ZimTB-NewRemTaskList-Name" />
 				<label value="&zmtb.taskactions.newremlist.url;"/>
-				<textbox id="ZimTB-NewRemTaskList-URL" width="150"/>
+				<textbox id="ZimTB-NewRemTaskList-URL" />
 				<button id="ZimTB-NewRemTaskList-Create" label="&zmtb.taskactions.newremlist.create;"/>
 				<button id="ZimTB-NewRemTaskList-Close" label="&zmtb.taskactions.cancel;"/>
 			</hbox>
 		</vbox>
 		<vbox id="ZimTB-LinkToTaskList-Bar">
-			<vbox class="ZMTB-ActionBar-Title" align="start">
+			<vbox class="ZMTB-ActionBar-Title" >
 				<label value="&zmtb.taskactions.linktolist.title;" />
 			</vbox>
-			<hbox align="center">
+			<hbox class="ZMTB-ActionBar-Row">
 				<label value="&zmtb.taskactions.name;"/>
 				<textbox id="ZimTB-LinkToTaskList-Name"/>
 				<label value="&zmtb.taskactions.linktolist.owner;"/>
@@ -62,39 +62,39 @@
 			</hbox>
 		</vbox>
 		<vbox id="ZimTB-NewTask-Bar">
-			<vbox class="ZMTB-ActionBar-Title" align="start">
+			<vbox class="ZMTB-ActionBar-Title" >
 				<label value="&zmtb.taskactions.newtask.title;" />
 			</vbox>
 			<hbox>
 				<vbox align="start">
-					<hbox align="center" class="ZMTB-ActionBar-Row">
+					<hbox class="ZMTB-ActionBar-Row">
 						<label value="&zmtb.taskactions.newtask.subject;"/>
 					</hbox>
-					<hbox align="center" class="ZMTB-ActionBar-Row">
+					<hbox class="ZMTB-ActionBar-Row">
 						<label value="&zmtb.taskactions.newtask.location;"/>
 					</hbox>
 				</vbox>
 				<vbox align="end">
-					<hbox align="center" class="ZMTB-ActionBar-Row">
+					<hbox class="ZMTB-ActionBar-Row">
 						<textbox id="ZimTB-NewTask-Subject"/>
 					</hbox>
-					<hbox align="center" class="ZMTB-ActionBar-Row">
+					<hbox class="ZMTB-ActionBar-Row">
 						<textbox id="ZimTB-NewTask-Location"/>
 					</hbox>
 				</vbox>
 				<vbox align="start">
-					<hbox align="center" class="ZMTB-ActionBar-Row">
+					<hbox class="ZMTB-ActionBar-Row">
 						<label value="&zmtb.taskactions.newtask.start;"/>
 					</hbox>
-					<hbox align="center" class="ZMTB-ActionBar-Row">
+					<hbox class="ZMTB-ActionBar-Row">
 						<label value="&zmtb.taskactions.newtask.end;"/>
 					</hbox>
 				</vbox>
 				<vbox align="end">
-					<hbox align="center" class="ZMTB-ActionBar-Row">
+					<hbox class="ZMTB-ActionBar-Row">
 						<datepicker id="ZimTB-NewTask-StartDate" type="popup"/>
 					</hbox>
-					<hbox align="center" class="ZMTB-ActionBar-Row">
+					<hbox class="ZMTB-ActionBar-Row">
 						<datepicker id="ZimTB-NewTask-EndDate" type="popup"/>
 					</hbox>
 				</vbox>
@@ -104,9 +104,9 @@
 						<menulist id="ZimTB-NewTask-TaskList"/>
 					</vbox>
 				</hbox>
-				<vbox width="200" align="end">
-					<button width="150" id="ZimTB-NewTask-Create" label="&zmtb.taskactions.newtask.create;"/>
-					<button width="150" id="ZimTB-NewTask-Close" label="&zmtb.taskactions.cancel;"/>
+				<vbox>
+					<button id="ZimTB-NewTask-Create" label="&zmtb.taskactions.newtask.create;"/>
+					<button id="ZimTB-NewTask-Close" label="&zmtb.taskactions.cancel;"/>
 				</vbox>
 			</hbox>
 		</vbox>

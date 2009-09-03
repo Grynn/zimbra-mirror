@@ -28,3 +28,14 @@
 {
 	list-style-image: url("contacts.gif");
 }
+
+#ZimTB-NewAddrBook-Name, #ZimTB-NewAddrBook-Parent, #ZimTB-LinkToAddrBook-Parent
+{
+	width:150px  ! important;
+}
+
+#ZimTB-NewContact-AddressBooks
+{
+	width:100px;
+	-moz-box-align:end;
+}

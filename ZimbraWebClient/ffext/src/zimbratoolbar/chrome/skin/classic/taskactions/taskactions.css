@@ -28,3 +28,18 @@
 {
 	list-style-image: url("newtasklist.gif");
 }
+
+#ZimTB-NewTask-TaskList
+{
+	width:100px;
+}
+
+#ZimTB-NewTask-Create, #ZimTB-NewTask-Close, #ZimTB-NewTaskList-Name, #ZimTB-NewRemTaskList-Name, #ZimTB-NewRemTaskList-URL
+{
+	width:150px  ! important;
+}
+
+#ZimTB-NewTask-Create, #ZimTB-NewTask-Close
+{
+	margin-left:20px;
+}

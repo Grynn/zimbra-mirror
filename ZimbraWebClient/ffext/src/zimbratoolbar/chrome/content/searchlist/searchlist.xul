@@ -18,7 +18,7 @@
 						<menuitem id="ZimTB-RecentSearchLabel" label="&zmtb.searchlist.recent;" value="0" disabled="true" class="menuitem-iconic" />
 					</menupopup>
 				</menulist>
-				<toolbarbutton id="ZMTB-SearchButton" label="Search" />
+				<toolbarbutton id="ZMTB-SearchButton" label="&zmtb.searchlist.search;" />
 			</toolbaritem>
 		<toolbarseparator/>
 	</toolbar>

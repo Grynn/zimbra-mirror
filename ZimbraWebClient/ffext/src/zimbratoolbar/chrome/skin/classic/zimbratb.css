@@ -79,6 +79,7 @@
 	color:#CCCCCC;
 	font-weight:bold;
 	padding-left:10px;
+	-moz-box-align:start;
 }
 
 .ZMTB-ActionBar-Title label
@@ -88,7 +89,8 @@
 
 .ZMTB-ActionBar-Row
 {
-	height:32px
+	height:32px;
+	-moz-box-align:center;
 }
 
 #ZimTB-ActionsBar textbox

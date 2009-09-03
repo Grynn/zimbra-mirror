@@ -26,27 +26,27 @@
 	</toolbar>
 	<vbox id="ZimTB-ActionsBar" >
 		<vbox id="ZimTB-NewFolder-Bar">
-			<vbox class="ZMTB-ActionBar-Title" align="start">
+			<vbox class="ZMTB-ActionBar-Title" >
 				<label value="&zmtb.mailactions.newfolder.title;" />
 			</vbox>
-			<hbox align="center">
+			<hbox class="ZMTB-ActionBar-Row">
 				<label value="&zmtb.mailactions.name;"/>
-				<textbox id="ZimTB-NewFolder-Name" width="150"/>
+				<textbox id="ZimTB-NewFolder-Name" />
 				<label value="&zmtb.mailactions.parent;"/>
-				<menulist id="ZimTB-NewFolder-Parent" width="150" class="ZimTB-FolderList" sizetopopup="none"/>
-				<button id="ZimTB-NewFolder-Create" width="100" label="&zmtb.mailactions.newfolder.create;"/>
-				<button id="ZimTB-NewFolder-Close" width="100" label="&zmtb.mailactions.cancel;"/>
+				<menulist id="ZimTB-NewFolder-Parent" class="ZimTB-FolderList" sizetopopup="none"/>
+				<button id="ZimTB-NewFolder-Create" label="&zmtb.mailactions.newfolder.create;"/>
+				<button id="ZimTB-NewFolder-Close" label="&zmtb.mailactions.cancel;"/>
 			</hbox>
 		</vbox>
 		<vbox id="ZimTB-NewSearchFolder-Bar">
-			<vbox class="ZMTB-ActionBar-Title" align="start">
+			<vbox class="ZMTB-ActionBar-Title" >
 				<label value="&zmtb.mailactions.newsearch.title;" />
 			</vbox>
-			<hbox align="center">
+			<hbox class="ZMTB-ActionBar-Row">
 				<label value="&zmtb.mailactions.name;"/>
-				<textbox id="ZimTB-NewSearchFolder-Name" width="150" />
+				<textbox id="ZimTB-NewSearchFolder-Name" />
 				<label value="&zmtb.mailactions.newsearch.query;"/>
-				<textbox id="ZimTB-NewSearchFolder-Query" width="150" />
+				<textbox id="ZimTB-NewSearchFolder-Query" />
 				<label value="&zmtb.mailactions.parent;"/>
 				<menulist id="ZimTB-NewSearchFolder-Parent" class="ZimTB-FolderList" sizetopopup="none"/>
 				<button id="ZimTB-NewSearchFolder-Create" label="&zmtb.mailactions.newsearch.create;"/>
@@ -54,14 +54,14 @@
 			</hbox>
 		</vbox>
 		<vbox id="ZimTB-NewRSS-Bar">
-			<vbox class="ZMTB-ActionBar-Title" align="start">
+			<vbox class="ZMTB-ActionBar-Title" >
 				<label value="&zmtb.mailactions.newfeed.title;" />
 			</vbox>
-			<hbox align="center">
+			<hbox class="ZMTB-ActionBar-Row">
 				<label value="&zmtb.mailactions.name;"/>
-				<textbox id="ZimTB-NewRSS-Name" width="150" />
+				<textbox id="ZimTB-NewRSS-Name" />
 				<label value="&zmtb.mailactions.newfeed.url;"/>
-				<textbox id="ZimTB-NewRSS-URL" width="150" />
+				<textbox id="ZimTB-NewRSS-URL" />
 				<label value="&zmtb.mailactions.parent;"/>
 				<menulist id="ZimTB-NewRSS-Parent" class="ZimTB-FolderList" sizetopopup="none"/>
 				<button id="ZimTB-NewRSS-Create" label="&zmtb.mailactions.newfeed.create;"/>

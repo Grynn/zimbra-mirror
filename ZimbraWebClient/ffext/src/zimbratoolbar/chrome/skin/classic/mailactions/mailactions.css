@@ -17,3 +17,13 @@
 {
 	list-style-image: url("folder.gif");
 }
+
+#ZimTB-NewFolder-Name, #ZimTB-NewFolder-Parent, #ZimTB-NewSearchFolder-Name, #ZimTB-NewSearchFolder-Query, #ZimTB-NewSearchFolder-Parent, #ZimTB-NewRSS-Name, #ZimTB-NewRSS-URL, #ZimTB-NewRSS-Parent
+{
+	width:150px ! important;
+}
+
+#ZimTB-NewFolder-Create, #ZimTB-NewFolder-Close
+{
+	width:100px;
+}
