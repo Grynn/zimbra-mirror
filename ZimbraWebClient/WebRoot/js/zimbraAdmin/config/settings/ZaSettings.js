@@ -438,10 +438,12 @@ ZaSettings.INIT[ZaSettings.SKIN_USER_INFO_ID]				= [null, ZaSettings.T_CONFIG, Z
 //in order to add the "Not Set" label to the timezone choices, we need to normalize it to label value pair
 ZaSettings.getTimeZoneChoices = function () {
     if (!ZaSettings._timeZoneChoices) {
-    ZaSettings._timeZoneChoices = [{ label: ZaMsg.VALUE_NOT_SET, value: "" }]  ;
-        for (var i=0; i < AjxTimezoneData.TIMEZONE_RULES.length ; i ++) {
-            var currentTimezone = AjxTimezoneData.TIMEZONE_RULES[i] ;
-            ZaSettings._timeZoneChoices.push({label: currentTimezone.serverId,  value:currentTimezone.serverId});
+        ZaSettings._timeZoneChoices = [{ label: ZaMsg.VALUE_NOT_SET, value: "" }]  ;
+        var tz_options_values =  AjxTimezone.getZonePreferencesOptions () ;
+        var tz_options_labels = AjxTimezone.getZonePreferences () ;
+
+        for (var i=0; i < tz_options_values.length ; i ++) {
+            ZaSettings._timeZoneChoices.push({label: tz_options_labels[i],  value: tz_options_values[i]});
         }
     }
     return ZaSettings._timeZoneChoices;
