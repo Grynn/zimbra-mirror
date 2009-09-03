@@ -191,6 +191,7 @@ ZMTB_RequestManager.prototype._authenticate = function()
 
 ZMTB_RequestManager.prototype.parseResponse = function(result)
 {
+	clearTimeout(this._timeout);
 	try{
 		var rd = result.getResponse();
 	}catch(ex)
@@ -199,7 +200,6 @@ ZMTB_RequestManager.prototype.parseResponse = function(result)
 			this._zmtb.disable();
 		return;
 	}
-	clearTimeout(this._timeout);
 	if(!rd.Body)
 	{
 		if(rd.code == ZMTBCsfeException.NETWORK_ERROR)
@@ -227,11 +227,8 @@ ZMTB_RequestManager.prototype.parseResponse = function(result)
 		return;
 	}
 	this._zmtb.enable();
-	if(rd.Body.BatchResponse && rd.Body.BatchResponse.GetInfoResponse)
-	{
-		this._serverVersion = rd.Body.BatchResponse.GetInfoResponse[0].version;
-		Components.utils.reportError("Server version is: "+this._serverVersion);
-	}
+	if(rd.Header.context.refresh && rd.Header.context.refresh.version)
+		this._serverVersion = rd.Header.context.refresh.version;
 	if(rd.Header.context.change)
 	{
 		var ct = rd.Header.context.change.token;

@@ -38,3 +38,8 @@
 {
 	margin-left:20px;
 }
+
+#ZimTB-NewAppt-Repeat, #ZimTB-NewAppt-Alarm
+{
+	width:100px ! important;
+}

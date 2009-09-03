@@ -88,8 +88,12 @@ ZMTB_SearchList.prototype.receiveUpdate = function(responseObj)
 	if(responseObj.Header.context.refresh)
 	{
 		this._tags =[];
-		for (var i=0; i < responseObj.Header.context.refresh.tags.length; i++)
-			this._tags.push({name:responseObj.Header.context.refresh.tags[i].name, value:responseObj.Header.context.refresh.tags[i].id});
+		if(responseObj.Header.context.refresh.tags)
+			for (var i=0; i < responseObj.Header.context.refresh.tags.tag.length; i++)
+			{
+				var t = responseObj.Header.context.refresh.tags.tag[i];
+				this._tags.push({name:t.name, value:t.id, color:t.color});
+			}
 		this.loadTags();
 	}
 	if(responseObj.Body.GetTagResponse || (responseObj.Body.BatchResponse && responseObj.Body.BatchResponse.GetTagResponse))

@@ -136,9 +136,14 @@ function(params) {
 		soapDoc.set("nosession", null, context);
 	}
 	var sessionId = ZMTBCsfeCommand.getSessionId();
-	if (sessionId) {
+	
+	//Zimbra 6 requires that an empty session element be included in order to receive a refresh block
+	var si2 = soapDoc.set("session", null, context);
+	if (sessionId)
+	{
 		var si = soapDoc.set("sessionId", null, context);
 		si.setAttribute("id", sessionId);
+		si2.setAttribute("id", sessionId);
 	}
 
 	if (params.targetServer) {
@@ -331,6 +336,8 @@ function(response, asyncMode) {
 
 	if (data.Header && data.Header.context && data.Header.context.sessionId)
 		ZMTBCsfeCommand.setSessionId(data.Header.context.sessionId);
+	else if(data.Header && data.Header.context && data.Header.context.session)
+		ZMTBCsfeCommand.setSessionId(data.Header.context.session.id);
 
 	return asyncMode ? result : data;
 };

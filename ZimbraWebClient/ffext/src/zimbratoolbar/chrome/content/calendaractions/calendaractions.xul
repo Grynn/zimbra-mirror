@@ -101,10 +101,10 @@
 					</hbox>
 				</vbox>
 				<vbox align="start">
-					<hbox class="ZMTB-ActionBar-Row" align="center">
+					<hbox class="ZMTB-ActionBar-Row">
 						<checkbox label="&zmtb.calendaractions.newappt.allday;" id="ZimTB-NewAppt-AllDay"/>
 					</hbox>
-					<hbox class="ZMTB-ActionBar-Row" align="center">
+					<hbox class="ZMTB-ActionBar-Row">
 						<menulist width="100" id="ZimTB-NewAppt-Calendar"/>
 					</hbox>
 				</vbox>
@@ -118,7 +118,7 @@
 				</vbox>
 				<vbox align="end">
 					<hbox align="center" class="ZMTB-ActionBar-Row">
-						<menulist id="ZimTB-NewAppt-Repeat" width="100" sizetopopup="none">
+						<menulist id="ZimTB-NewAppt-Repeat" sizetopopup="none">
 							<menupopup>
 								<menuitem label="&zmtb.calendaractions.newappt.repeat.none;"/>
 								<menuitem label="&zmtb.calendaractions.newappt.repeat.day;" value="DAI"/>
@@ -129,7 +129,7 @@
 						</menulist>
 					</hbox>
 					<hbox align="center" class="ZMTB-ActionBar-Row">
-						<menulist width="100" id="ZimTB-NewAppt-Alarm" sizetopopup="none">
+						<menulist id="ZimTB-NewAppt-Alarm" sizetopopup="none">
 							<menupopup>
 								<menuitem label="&zmtb.calendaractions.newappt.alarm.never;"/>
 								<menuitem label="&zmtb.calendaractions.newappt.alarm.1m;" value="1"/>
