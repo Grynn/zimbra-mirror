@@ -112,6 +112,9 @@ DwtEvent.ONMOUSEWHEEL = "onmousewheel";
  * @type String */
 DwtEvent.ONSELECTSTART = "onselectstart";
 
+/** Browser onscroll event
+ * @type String */
+DwtEvent.ONSCROLL = "onscroll";
 
 // semantic events
 /** Action event. An example is right-clicking on a list item or tree item

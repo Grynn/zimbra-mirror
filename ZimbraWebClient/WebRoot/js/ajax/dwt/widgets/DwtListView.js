@@ -397,20 +397,20 @@ function(defaultColumnSort, noResultsOk) {
 };
 
 DwtListView.prototype._renderList =
-function(list, noResultsOk) {
+function(list, noResultsOk, doAdd) {
 	if (list instanceof AjxVector && list.size()) {
 		var now = new Date();
 		var size = list.size();
 		var htmlArr = [];
 		for (var i = 0; i < size; i++) {
 			var item = list.get(i);
-			var div = this._createItemHtml(item, {now:now}, true, i);
+			var div = this._createItemHtml(item, {now:now}, !doAdd, i);
 			if (div) {
 				if (div instanceof Array) {
 					for (var j = 0; j < div.length; j++){
 						this._addRow(div[j]);
 					}
-				} else if (div.tagName) {
+				} else if (div.tagName || doAdd) {
 					this._addRow(div);
 				} else {
 					htmlArr.push(div);
@@ -436,7 +436,7 @@ function(itemArray) {
 		if (this._list.size() == 0) {
 			this._resetList();
 		}
-		this._renderList(AjxVector.fromArray(itemArray));
+		this._renderList(AjxVector.fromArray(itemArray), null, true);
 		this._list.addList(itemArray);
 	}
 };
