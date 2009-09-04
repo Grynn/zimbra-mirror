@@ -146,7 +146,7 @@ ZaCert.certOvTreeModifier = function (tree) {
 	if (!overviewPanelController) throw new Exception("ZaCert.certOvTreeModifier: Overview Panel Controller is not set.");
 	
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CERTS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		overviewPanelController._certTi = new DwtTreeItem(overviewPanelController._toolsTi);
+		overviewPanelController._certTi = new DwtTreeItem({parent:overviewPanelController._toolsTi,className:"AdminTreeItem"});
 		overviewPanelController._certTi.setText(com_zimbra_cert_manager.OVP_certs);
 		overviewPanelController._certTi.setImage("OverviewCertificate"); //TODO: Use Cert icons
 		overviewPanelController._certTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW);	
@@ -157,7 +157,7 @@ ZaCert.certOvTreeModifier = function (tree) {
 			if(serverList && serverList.length) {
 				var cnt = serverList.length;
 				for(var ix=0; ix< cnt; ix++) {
-					var ti1 = new DwtTreeItem(overviewPanelController._certTi );			
+					var ti1 = new DwtTreeItem({parent:overviewPanelController._certTi,className:"AdminTreeItem"});			
 					ti1.setText(serverList[ix].name);	
 					ti1.setImage("Server");
 					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS);

@@ -56,7 +56,7 @@ function (ev) {
 		//add the new ZaDomain to the controlled list
 		if(ev.getDetails()) {
 			var newCos = ev.getDetails();
-			var ti1 = new DwtTreeItem(this._cosTi);			
+			var ti1 = new DwtTreeItem({parent:this._cosTi,className:"AdminTreeItem"});			
 			ti1.setText(newCos.name);	
 			ti1.setImage("COS");
 			ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_VIEW);
@@ -182,7 +182,7 @@ function () {
 		if(savedSearchList && savedSearchList.length) {
 			var cnt = savedSearchList.length;
 			for(var ix=0; ix< cnt; ix++) {
-				var ti1 = new DwtTreeItem(this._savedSearchTi);			
+				var ti1 = new DwtTreeItem({parent:this._savedSearchTi,className:"AdminTreeItem"});			
 				ti1.setText(savedSearchList[ix].name);	
 				ti1.setImage("SearchFolder");
 				ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SEARCH_LIST_VIEW);
@@ -209,7 +209,7 @@ function (list) {
 	if(domainList && domainList.length) {
 		var cnt = domainList.length;
 		for(var ix=0; ix< cnt; ix++) {
-			var ti1 = new DwtTreeItem(this._domainsTi);			
+			var ti1 = new DwtTreeItem({parent:this._domainsTi,className:"AdminTreeItem"});			
 			ti1.setText(domainList[ix].name);	
 			ti1.setImage("Domain");
 			ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
@@ -340,28 +340,28 @@ function() {
 		this._addressesTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ADDRESSES);
 	    this._addressesTi.setSty
 		if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {	
-			this.accountTi = ti = new DwtTreeItem(this._addressesTi);
+			this.accountTi = ti = new DwtTreeItem({parent:this._addressesTi,className:"AdminTreeItem"});
 			ti.setText(ZaMsg.OVP_accounts);
 			ti.setImage("Account");
 			ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
 		}
 		
 		if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			this.aliasTi = ti = new DwtTreeItem(this._addressesTi);
+			this.aliasTi = ti = new DwtTreeItem({parent:this._addressesTi,className:"AdminTreeItem"});
 			ti.setText(ZaMsg.OVP_aliases);
 			ti.setImage("AccountAlias");
 			ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ALIASES_LIST_VIEW);
 		}
 			
 		if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			this.dlTi = ti = new DwtTreeItem(this._addressesTi);
+			this.dlTi = ti = new DwtTreeItem({parent:this._addressesTi,className:"AdminTreeItem"});
 			ti.setText(ZaMsg.OVP_distributionLists);
 			ti.setImage("DistributionList");
 			ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW);
 		}
 		
         if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-            this.resourceTi = ti = new DwtTreeItem(this._addressesTi);
+            this.resourceTi = ti = new DwtTreeItem({parent:this._addressesTi,className:"AdminTreeItem"});
             ti.setText(ZaMsg.OVP_resources);
             ti.setImage("Resource");
             ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._RESOURCE_VIEW);
@@ -383,7 +383,7 @@ function() {
 		this._configTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SYS_CONFIG);	
 		
 		if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			this._cosTi = new DwtTreeItem(this._configTi);
+			this._cosTi = new DwtTreeItem({parent:this._configTi,className:"AdminTreeItem"});
 			this._cosTi.setText(ZaMsg.OVP_cos);
 			this._cosTi.setImage("COS");
 			this._cosTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_LIST_VIEW);
@@ -394,7 +394,7 @@ function() {
 				if(cosList && cosList.size()) {
 					var idHash = cosList.getIdHash();
 					for(var ix in idHash) {
-						var ti1 = new DwtTreeItem(this._cosTi);			
+						var ti1 = new DwtTreeItem({parent:this._cosTi,className:"AdminTreeItem"});			
 						ti1.setText(idHash[ix].name);	
 						ti1.setImage("COS");
 						ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_VIEW);
@@ -411,7 +411,7 @@ function() {
 		}
 		//TODO:  ZaSettings.DOMAIN_AUTH_WIZ_ENABLED - LDAPAuthWizard enabled for the domain admin
 		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			this._domainsTi = new DwtTreeItem(this._configTi);
+			this._domainsTi = new DwtTreeItem({parent:this._configTi,className:"AdminTreeItem"});
 			this._domainsTi.setText(ZaMsg.OVP_domains);
 			this._domainsTi.setImage("Domain");
 			this._domainsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAINS_LIST_VIEW);
@@ -428,7 +428,7 @@ function() {
 		}
 	
         if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-            this._serversTi = new DwtTreeItem(this._configTi);
+            this._serversTi = new DwtTreeItem({parent:this._configTi,className:"AdminTreeItem"});
             this._serversTi.setText(ZaMsg.OVP_servers);
             this._serversTi.setImage("Server");
             this._serversTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SERVERS_LIST_VIEW);
@@ -440,7 +440,7 @@ function() {
                 if(serverList && serverList.length) {
                     var cnt = serverList.length;
                     for(var ix=0; ix< cnt; ix++) {
-                        var ti1 = new DwtTreeItem(this._serversTi);
+                        var ti1 = new DwtTreeItem({parent:this._serversTi,className:"AdminTreeItem"});
                         ti1.setText(serverList[ix].name);
                         ti1.setImage("Server");
                         ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SERVER_VIEW);
@@ -457,7 +457,7 @@ function() {
         }
         
         if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ZIMLET_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			this._zimletsTi = new DwtTreeItem(this._configTi);
+			this._zimletsTi = new DwtTreeItem({parent:this._configTi,className:"AdminTreeItem"});
 			this._zimletsTi.setText(ZaMsg.OVP_zimlets);
 			this._zimletsTi.setImage("Zimlet");
 			this._zimletsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ZIMLET_LIST_VIEW);
@@ -465,14 +465,14 @@ function() {
 		}
 
 		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ADMIN_ZIMLET_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			this._adminZimletsTi = new DwtTreeItem(this._configTi);
+			this._adminZimletsTi = new DwtTreeItem({parent:this._configTi,className:"AdminTreeItem"});
 			this._adminZimletsTi.setText(ZaMsg.OVP_adminZimlets);
 			this._adminZimletsTi.setImage("AdminExtension");
 			this._adminZimletsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW);
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW] = ZaOverviewPanelController.adminExtListTreeListener;					
 		}
 		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_CONFIG_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {		
-			ti = new DwtTreeItem(this._configTi);
+			ti = new DwtTreeItem({parent:this._configTi,className:"AdminTreeItem"});
 			ti.setText(ZaMsg.OVP_global);
 			ti.setImage("GlobalSettings");
 			ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._GLOBAL_SETTINGS);	
@@ -487,14 +487,14 @@ function() {
 		this._monitoringTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._MONITORING);
 		
 		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATUS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {	
-			this.statusTi = new DwtTreeItem(this._monitoringTi);
+			this.statusTi = new DwtTreeItem({parent:this._monitoringTi,className:"AdminTreeItem"});
 			this.statusTi.setText(ZaMsg.OVP_status);
 			this.statusTi.setImage("Status");
 			this.statusTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._STATUS);
 		}
 		
 		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {	
-			this._statisticsTi = new DwtTreeItem(this._monitoringTi);
+			this._statisticsTi = new DwtTreeItem({parent:this._monitoringTi,className:"AdminTreeItem"});
 			this._statisticsTi.setText(ZaMsg.OVP_statistics);
 			this._statisticsTi.setImage("Statistics");
 			this._statisticsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._STATISTICS);
@@ -509,9 +509,9 @@ function() {
 					for(var ix=0; ix< cnt; ix++) {
 						var ti1;
 						if(this._statisticsTi) 
-							ti1 = new DwtTreeItem(this._statisticsTi);
+							ti1 = new DwtTreeItem({parent:this._statisticsTi,className:"AdminTreeItem"});
 						else
-							ti1 = new DwtTreeItem(this._monitoringTi);
+							ti1 = new DwtTreeItem({parent:this._monitoringTi,className:"AdminTreeItem"});
 						ti1.setText(serverList[ix].name);	
 						ti1.setImage("StatisticsByServer");
 						ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._STATISTICS_BY_SERVER);
@@ -541,7 +541,7 @@ function() {
 		this._toolsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._TOOLS);
 		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.MAILQ_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {		
 			try {
-				this._postqTi = new DwtTreeItem(this._toolsTi);
+				this._postqTi = new DwtTreeItem({parent:this._toolsTi,className:"AdminTreeItem"});
 				this._postqTi.setText(ZaMsg.OVP_postq);
 				this._postqTi.setImage("Queue");
 				this._postqTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSTQ_VIEW);
@@ -549,7 +549,7 @@ function() {
 				if(mtaList && mtaList.length) {
 					var cnt = mtaList.length;
 					for(var ix=0; ix< cnt; ix++) {
-						var ti1 = new DwtTreeItem(this._postqTi);			
+						var ti1 = new DwtTreeItem({parent:this._postqTi,className:"AdminTreeItem"});			
 						ti1.setText(mtaList[ix].name);	
 						ti1.setImage("Queue");
 						ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW);
@@ -578,7 +578,7 @@ function() {
 			if(savedSearchList && savedSearchList.length) {
 				var cnt = savedSearchList.length;
 				for(var ix=0; ix< cnt; ix++) {
-					var ti1 = new DwtTreeItem(this._savedSearchTi);			
+					var ti1 = new DwtTreeItem({parent:this._savedSearchTi,className:"AdminTreeItem"});			
 					ti1.setText(savedSearchList[ix].name);	
 					ti1.setImage("SearchFolder");
 					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SEARCH_LIST_VIEW);

@@ -181,7 +181,7 @@ Zambra.ovTreeModifier = function (tree) {
 			this._configTi.setText(ZaMsg.OVP_configuration);
 			this._configTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SYS_CONFIG);		
 		}
-		this._sambaTi = new DwtTreeItem(this._configTi);
+		this._sambaTi = new DwtTreeItem({parent:this._configTi,className:"AdminTreeItem"});
 		this._sambaTi.setText(zimbra_samba.SambaDomainsListViewTitle);
 		this._sambaTi.setImage("ZimbraIcon");
 		this._sambaTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SAMBA_DOMAIN_LIST);	
@@ -192,7 +192,7 @@ Zambra.ovTreeModifier = function (tree) {
 			if(sambaDomainList && sambaDomainList.length) {
 				var cnt = sambaDomainList.length;
 				for(var ix=0; ix< cnt; ix++) {
-					var ti1 = new DwtTreeItem(this._sambaTi);			
+					var ti1 = new DwtTreeItem({parent:this._sambaTi,className:"AdminTreeItem"});			
 					ti1.setText(sambaDomainList[ix].name);	
 					ti1.setImage("Domain");
 					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SAMBA_DOMAIN_VIEW);

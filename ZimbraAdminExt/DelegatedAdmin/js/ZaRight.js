@@ -101,7 +101,7 @@ ZaRight.rightsOvTreeModifier = function (tree) {
 
     if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RIGHT_LIST_VIEW]
             || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-        overviewPanelController._rightsTi = new DwtTreeItem(overviewPanelController._configTi);
+        overviewPanelController._rightsTi = new DwtTreeItem({parent:overviewPanelController._configTi,className:"AdminTreeItem"});
         overviewPanelController._rightsTi.setText(com_zimbra_delegatedadmin.OVP_rights);
         overviewPanelController._rightsTi.setImage("RightObject"); //TODO: Use Rights icons
 		overviewPanelController._rightsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._RIGHTS_LIST_VIEW);

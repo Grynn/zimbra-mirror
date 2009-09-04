@@ -743,7 +743,7 @@ function(selected, noFocus) {
 			this._initialize();
 		}
 		if (!this._itemDiv) { return; }
-		if (selected && (this._selectionEnabled || this._forceNotifySelection) && this._origClassName == "DwtTreeItem") {
+		if (selected && (this._selectionEnabled || this._forceNotifySelection) /*&& this._origClassName == "DwtTreeItem"*/) {
 			this._itemDiv.className = this._selectedClassName;
 			if (!noFocus) {
 				this.focus();
@@ -766,7 +766,7 @@ function(actioned) {
 
 		if (!this._itemDiv) { return; }
 
-		if (actioned && (this._actionEnabled || this._forceNotifyAction) && !this._selected && !this && this._origClassName == "DwtTreeItem") {
+		if (actioned && (this._actionEnabled || this._forceNotifyAction) && !this._selected && !this /*&& this._origClassName == "DwtTreeItem"*/) {
 			this._itemDiv.className = this._actionedClassName;
 			return true;
 		}

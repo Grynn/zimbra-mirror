@@ -327,7 +327,7 @@ zimbra_posixaccount_ext.ovTreeModifier = function (tree) {
 			this._configTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SYS_CONFIG);		
 		}
 		
-		this._posixGroupTi = new DwtTreeItem(this._configTi);
+		this._posixGroupTi = new DwtTreeItem({parent:this._configTi,className:"AdminTreeItem"});
 		this._posixGroupTi.setText(zimbra_posixaccount.PosixGroups);
 		this._posixGroupTi.setImage("ZimbraIcon");
 		this._posixGroupTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSIX_GROUP_LIST);	
@@ -338,7 +338,7 @@ zimbra_posixaccount_ext.ovTreeModifier = function (tree) {
 			if(posixGroupList && posixGroupList.length) {
 				var cnt = posixGroupList.length;
 				for(var ix=0; ix< cnt; ix++) {
-					var ti1 = new DwtTreeItem(this._posixGroupTi);			
+					var ti1 = new DwtTreeItem({parent:this._posixGroupTi,className:"AdminTreeItem"});			
 					ti1.setText(posixGroupList[ix].name);	
 					ti1.setImage("Domain");
 					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSIX_GROUP_VIEW);
