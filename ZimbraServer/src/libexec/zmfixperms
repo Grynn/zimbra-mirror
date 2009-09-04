@@ -509,6 +509,7 @@ if [ -d ${zimbra_home}/data/postfix ]; then
   if [ ! -d ${zimbra_home}/data/postfix/spool/pid ]; then
     mkdir -p ${zimbra_home}/data/postfix/spool/pid
   fi
+  chmod 755 ${zimbra_home}/data/postfix
   chown -fR ${postfix_owner}:${postfix_owner} ${zimbra_home}/data/postfix/spool
   chown -f ${root_user} ${zimbra_home}/data/postfix/spool
   chgrp -f ${postfix_owner} ${zimbra_home}/data/postfix/spool
