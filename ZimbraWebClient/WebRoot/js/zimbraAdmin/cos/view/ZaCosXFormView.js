@@ -558,6 +558,24 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 }
             ]},
             {type:_ZA_TOP_GROUPER_, id:"cos_prefs_mail_receiving",label:ZaMsg.NAD_MailOptionsReceiving,items :[
+                {ref:ZaCos.A_zimbraPrefMailSoundsEnabled,
+                    type:_CHECKBOX_,
+                    msgName:ZaMsg.LBL_playSound,
+                    label:ZaMsg.LBL_playSound,
+                    trueValue:"TRUE", falseValue:"FALSE"
+                },
+                {ref:ZaCos.A_zimbraPrefMailFlashIcon,
+                    type:_CHECKBOX_,
+                    msgName:ZaMsg.LBL_flashIcon,
+                    label:ZaMsg.LBL_flashIcon,
+                    trueValue:"TRUE", falseValue:"FALSE"
+                },
+                {ref:ZaCos.A_zimbraPrefMailFlashTitle,
+                    type:_CHECKBOX_,
+                    msgName:ZaMsg.LBL_flashTitle,
+                    label:ZaMsg.LBL_flashTitle,
+                    trueValue:"TRUE", falseValue:"FALSE"
+                },
                 {ref:ZaCos.A_zimbraPrefMailPollingInterval, type:_LIFETIME_,
                     msgName:ZaMsg.MSG_zimbraPrefMailPollingInterval,
                     label:ZaMsg.LBL_zimbraPrefMailPollingInterval, labelLocation:_LEFT_,

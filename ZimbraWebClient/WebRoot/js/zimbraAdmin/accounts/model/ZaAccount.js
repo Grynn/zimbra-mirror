@@ -128,6 +128,9 @@ ZaAccount.A_zimbraPrefIncludeTrashInSearch = "zimbraPrefIncludeTrashInSearch";
 ZaAccount.A_zimbraPrefMailInitialSearch = "zimbraPrefMailInitialSearch";
 ZaAccount.A_zimbraPrefMailItemsPerPage = "zimbraPrefMailItemsPerPage";
 ZaAccount.A_zimbraPrefMailPollingInterval = "zimbraPrefMailPollingInterval";
+ZaAccount.A_zimbraPrefMailFlashTitle = "zimbraPrefMailFlashTitle";
+ZaAccount.A_zimbraPrefMailFlashIcon = "zimbraPrefMailFlashIcon" ;
+ZaAccount.A_zimbraPrefMailSoundsEnabled = "zimbraPrefMailSoundsEnabled" ;
 ZaAccount.A_zimbraMailMinPollingInterval = "zimbraMailMinPollingInterval";
 ZaAccount.A_zimbraPrefOutOfOfficeFromDate = "zimbraPrefOutOfOfficeFromDate";
 ZaAccount.A_zimbraPrefOutOfOfficeUntilDate = "zimbraPrefOutOfOfficeUntilDate";
@@ -1527,6 +1530,9 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefMailItemsPerPage, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailItemsPerPage, choices:[10,25,50,100]},
         {id:ZaAccount.A_zimbraPrefMailPollingInterval, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailPollingInterval},
         {id:ZaAccount.A_zimbraMailMinPollingInterval, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraMailMinPollingInterval},
+        {id:ZaAccount.A_zimbraPrefMailFlashIcon, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefMailFlashIcon, type:_COS_ENUM_},
+        {id:ZaAccount.A_zimbraPrefMailFlashTitle, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefMailFlashTitle, type:_COS_ENUM_},
+        {id:ZaAccount.A_zimbraPrefMailSoundsEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefMailSoundsEnabled, type:_COS_ENUM_},
         {id:ZaAccount.A_zimbraPrefOutOfOfficeReply, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefOutOfOfficeReply},
         {id:ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled},
         {id:ZaAccount.A_zimbraPrefReplyToAddress, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefReplyToAddress},

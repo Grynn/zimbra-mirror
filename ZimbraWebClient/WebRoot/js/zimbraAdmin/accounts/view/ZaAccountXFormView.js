@@ -891,6 +891,9 @@ ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaAccount.A_zimbraPrefNewMailNotificationEnabled,
 	ZaAccount.A_zimbraMailMinPollingInterval,
 	ZaAccount.A_zimbraPrefMailPollingInterval,
+    ZaAccount.A_zimbraPrefMailSoundsEnabled,
+    ZaAccount.A_zimbraPrefMailFlashIcon,
+    ZaAccount.A_zimbraPrefMailFlashTitle,
 	ZaAccount.A_zimbraPrefMailDefaultCharset,
 	ZaAccount.A_zimbraPrefMailItemsPerPage,
 	ZaAccount.A_zimbraPrefGroupMailBy,
@@ -1750,7 +1753,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									 labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS}
 							]
 						},
-						{type:_ZA_TOP_GROUPER_,colSizes:["175px","auto"], id:"account_prefs_mail_receiving",
+						{type:_ZA_TOP_GROUPER_,colSizes:["175px","auto"], id:"account_prefs_mail_receiving", numCols: 2,
 							label:ZaMsg.NAD_MailOptionsReceiving,
 							items :[
 								{ref:ZaAccount.A_zimbraPrefMailPollingInterval, type:_SUPER_LIFETIME_, 
@@ -1768,6 +1771,30 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
 									colSpan:2
 								},
+                                {ref:ZaAccount.A_zimbraPrefMailSoundsEnabled,
+									type:_SUPER_CHECKBOX_, colSpan:2,
+									colSizes:["175px","375px","190px"],
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+									msgName:ZaMsg.LBL_playSound,
+									checkBoxLabel:ZaMsg.LBL_playSound,
+									trueValue:"TRUE", falseValue:"FALSE"
+								},
+                                {ref:ZaAccount.A_zimbraPrefMailFlashIcon,
+									type:_SUPER_CHECKBOX_,  colSpan:2,
+									colSizes:["175px","375px","190px"],
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+									msgName:ZaMsg.LBL_flashIcon,
+									checkBoxLabel:ZaMsg.LBL_flashIcon,
+									trueValue:"TRUE", falseValue:"FALSE"
+								},
+                                {ref:ZaAccount.A_zimbraPrefMailFlashTitle,
+									type:_SUPER_CHECKBOX_, colSpan:2,
+									colSizes:["175px","375px","190px"],
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+									msgName:ZaMsg.LBL_flashTitle,
+									checkBoxLabel:ZaMsg.LBL_flashTitle,
+									trueValue:"TRUE", falseValue:"FALSE"
+								},         
 								{ref:ZaAccount.A_zimbraPrefNewMailNotificationEnabled, 
 									type:_ZA_CHECKBOX_, 
 									msgName:ZaMsg.LBL_zimbraPrefNewMailNotificationEnabled,
