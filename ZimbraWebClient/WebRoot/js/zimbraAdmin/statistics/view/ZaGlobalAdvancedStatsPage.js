@@ -579,14 +579,16 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
     var cb = function(response) {
         var soapResponse = response.getResponse().Body.GetLoggerStatsResponse;
         ZaGlobalAdvancedStatsPage.clearSelect(serversSelect);
-        for (var i = 0, j = soapResponse.hostname.length; i < j; i++) {
-            var option = document.createElement("option");
-            if (i == 0) option.selected = "selected";
-            option.value = soapResponse.hostname[i].hn;
-            ZaGlobalAdvancedStatsPage.setText(option, soapResponse.hostname[i].hn);
-            serversSelect.appendChild(option);
+        if (soapResponse.hostname) {
+            for (var i = 0, j = soapResponse.hostname.length; i < j; i++) {
+                var option = document.createElement("option");
+                if (i == 0) option.selected = "selected";
+                option.value = soapResponse.hostname[i].hn;
+                ZaGlobalAdvancedStatsPage.setText(option, soapResponse.hostname[i].hn);
+                serversSelect.appendChild(option);
+            }
+            ZaGlobalAdvancedStatsPage.serverSelected({ target: serversSelect }, id);
         }
-        ZaGlobalAdvancedStatsPage.serverSelected({ target: serversSelect }, id);
     };
     
     var csfeParams = { soapDoc: soapRequest, asyncMode: true, callback: new AjxCallback(cb) };
