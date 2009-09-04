@@ -105,8 +105,12 @@
 					</vbox>
 				</hbox>
 				<vbox>
-					<button id="ZimTB-NewTask-Create" label="&zmtb.taskactions.newtask.create;"/>
-					<button id="ZimTB-NewTask-Close" label="&zmtb.taskactions.cancel;"/>
+					<hbox class="ZMTB-ActionBar-Row">
+						<button id="ZimTB-NewTask-Create" label="&zmtb.taskactions.newtask.create;"/>
+					</hbox>
+					<hbox class="ZMTB-ActionBar-Row">
+						<button id="ZimTB-NewTask-Close" label="&zmtb.taskactions.cancel;"/>
+					</hbox>
 				</vbox>
 			</hbox>
 		</vbox>

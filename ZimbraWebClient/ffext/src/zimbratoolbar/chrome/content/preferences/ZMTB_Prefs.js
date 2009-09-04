@@ -3,18 +3,17 @@ function ZMTB_PrefInit()
 {
 	var pref = window._zmtbPrefs = new ZMTB_Prefs();
 }
+
 var ZMTB_Prefs = function()
 {
 	var This=this;
-	document.getElementById("zmtb-prefconnect").addEventListener("command", function(){This.connect()}, false);
+	document.getElementById("ZMTB-Prefs-Connect").addEventListener("command", function(){This.connect()}, false);
 	window.addEventListener("unload", function(){This.connect()}, false);
-	document.getElementById("zmtb-clearrecent").addEventListener("command", function(){This.resetRecent()}, false);
-	//If updates are received before the user changes account settings, we don't want to display a connected message
+	document.getElementById("ZMTB-Prefs-ClearRecent").addEventListener("command", function(){This.resetRecent()}, false);
+	//If updates are received for the previous connection before the user changes connection settings, we don't want to display a connected message
 	this._startConnect = false;
-	this._statusLabel = document.getElementById("zmtb-connectionStatus");
+	this._statusLabel = document.getElementById("ZMTB-Prefs-Status");
 	this._prefManager = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-	//Passwords are stored separately in the loginManager
-	this._passField = document.getElementById("zmtb-passwordField");
 	//Connection timeout
 	this._timeout = null;
 	this._menuList = document.getElementById("ZMTB-Default-Folder");
@@ -49,10 +48,14 @@ var ZMTB_Prefs = function()
 		}
 	}
 	if(!password)
-		this._passField.value = "";
+		document.getElementById(ZMTB_Prefs.PASSFIELD).value = "";
 	else	
-		this._passField.value = password;
+		document.getElementById(ZMTB_Prefs.PASSFIELD).value = password;
 }
+
+ZMTB_Prefs.HOSTFIELD = "ZMTB-Prefs-Hostname";
+ZMTB_Prefs.USERNAMEFIELD = "ZMTB-Prefs-Username";
+ZMTB_Prefs.PASSFIELD = "ZMTB-Prefs-Password";
 
 ZMTB_Prefs.prototype.updateFolders = function()
 {
@@ -68,7 +71,6 @@ ZMTB_Prefs.prototype.resetFolderList = function()
 
 ZMTB_Prefs.prototype._populateList = function(folders)
 {
-	///Using new folder manager
 	var list = this._menuList;
 	for (var i=0; i < folders.length; i++)
 		this._addToMenu(folders[i], "ZimTB-"+folders[i].name+"-Folder");
@@ -148,41 +150,44 @@ ZMTB_Prefs.prototype.connect = function()
 	this._startConnect = true;
 	this._zmtb.reset();
 	this._zmtb.disable();
+	this.setStatus("");
 	var passwordManager = Components.classes["@mozilla.org/login-manager;1"]
 	                                .getService(Components.interfaces.nsILoginManager);
 	var nsLoginInfo = new Components.Constructor("@mozilla.org/login-manager/loginInfo;1", Components.interfaces.nsILoginInfo, "init");
 	var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator);
 	var pm = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
 	
-	if(pm.getCharPref("extensions.zmtb.hostname")=="")
+	if(document.getElementById(ZMTB_Prefs.HOSTFIELD).value=="")
+	// if(pm.getCharPref("extensions.zmtb.hostname")=="")
 	{
 		this.setStatus(this._localStrings.getString("preferences_status_invalidurl"));
 		return;
 	}
-	else if(pm.getCharPref("extensions.zmtb.username")=="")
+	else if(document.getElementById(ZMTB_Prefs.USERNAMEFIELD).value=="")
+	// else if(pm.getCharPref("extensions.zmtb.username")=="")
 	{
 		this.setStatus(this._localStrings.getString("preferences_status_needusername"));
 		return;
 	}
-	else if(this._passField.value=="")
+	else if(document.getElementById(ZMTB_Prefs.PASSFIELD).value=="")
 	{
 		this.setStatus(this._localStrings.getString("preferences_status_needpassword"));
 		return;
 	}
 
-	var loginInfo = new nsLoginInfo('chrome://zimbratb', null, 'Zimbra Login', pm.getCharPref("extensions.zmtb.username"), this._passField.value, "", "");
+	var loginInfo = new nsLoginInfo('chrome://zimbratb', null, 'Zimbra Login', document.getElementById(ZMTB_Prefs.USERNAMEFIELD).value, document.getElementById(ZMTB_Prefs.PASSFIELD).value, "", "");
 	var logins = passwordManager.findLogins({}, 'chrome://zimbratb', null, 'Zimbra Login');
 	for (var i = 0; i < logins.length; i++)
 	{
-		if (logins[i].username == pm.getCharPref("extensions.zmtb.username"))
+		if (logins[i].username == document.getElementById(ZMTB_Prefs.USERNAMEFIELD).value)
 		{
 			passwordManager.removeLogin(logins[i]);
 		    break;
 		}
 	}
 	passwordManager.addLogin(loginInfo);
-	if(ZMTB_Prefs._checkURL(pm.getCharPref("extensions.zmtb.hostname")))
-		pm.setCharPref("extensions.zmtb.hostname", ZMTB_Prefs._checkURL(pm.getCharPref("extensions.zmtb.hostname")))
+	if(ZMTB_Prefs._checkURL(document.getElementById(ZMTB_Prefs.HOSTFIELD).value))
+		pm.setCharPref("extensions.zmtb.hostname", ZMTB_Prefs._checkURL(document.getElementById(ZMTB_Prefs.HOSTFIELD).value))
 	else
 	{
 		this.setStatus(this._localStrings.getString("preferences_status_invalidurl"));
@@ -193,7 +198,7 @@ ZMTB_Prefs.prototype.connect = function()
 	{
 	  var win = enumerator.getNext();
 		if(win.com_zimbra_tb && win.com_zimbra_tb.getRequestManager())
-				win.com_zimbra_tb.getRequestManager().newServer(pm.getCharPref("extensions.zmtb.hostname"), pm.getCharPref("extensions.zmtb.username"), this._passField);
+			win.com_zimbra_tb.getRequestManager().newServer(document.getElementById(ZMTB_Prefs.HOSTFIELD).value, document.getElementById(ZMTB_Prefs.USERNAMEFIELD).value, document.getElementById(ZMTB_Prefs.PASSFIELD).value);
 	}
 	this._statusLabel.value = "";
 	var This=this;

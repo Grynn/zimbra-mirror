@@ -149,8 +149,12 @@
 					</hbox>
 				</vbox>
 				<vbox align="end">
-					<button id="ZimTB-NewAppt-Create" label="&zmtb.calendaractions.newappt.create;"/>
-					<button id="ZimTB-NewAppt-Close" label="&zmtb.calendaractions.cancel;"/>
+					<hbox align="center" class="ZMTB-ActionBar-Row">
+						<button id="ZimTB-NewAppt-Create" label="&zmtb.calendaractions.newappt.create;"/>
+					</hbox>
+					<hbox align="center" class="ZMTB-ActionBar-Row">
+						<button id="ZimTB-NewAppt-Close" label="&zmtb.calendaractions.cancel;"/>
+					</hbox>
 				</vbox>
 			</hbox>
 		</vbox>

@@ -61,3 +61,9 @@
 	margin:0px;
 	border:0px;
 }
+
+#ZMTB-MessageComposer-Container textbox
+{
+	margin-top:4px;
+	margin-bottom:4px;
+}

@@ -23,6 +23,10 @@
 	-moz-appearance:none; 
 	-moz-border-radius:10px;
 	border:1px solid #666666;
+	-moz-border-top-colors:#666666;
+	-moz-border-bottom-colors:#666666;
+	-moz-border-left-colors:#666666;
+	-moz-border-right-colors:#666666;
 	background-image:url(buttonback.png);
 	background-repeat:repeat-x;
 	background-position:center;

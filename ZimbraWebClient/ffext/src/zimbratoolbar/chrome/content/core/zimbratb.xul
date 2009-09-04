@@ -5,28 +5,27 @@
 <?xul-overlay href="chrome://zimbratb/content/appointments/appointments.xul"?>
 <?xul-overlay href="chrome://zimbratb/content/zimbraactions/zimbraactions.xul"?>
 <?xul-overlay href="chrome://zimbratb/content/searchlist/searchlist.xul"?>
-<!-- <?xul-overlay href="chrome://zimbratb/content/folderlist2.xul"?> -->
 <?xul-overlay href="chrome://zimbratb/content/folderlist/folderlist.xul"?>
 <?xul-overlay href="chrome://zimbratb/content/mailactions/mailactions.xul"?>
 <?xul-overlay href="chrome://zimbratb/content/contactactions/contactactions.xul"?>
 <?xul-overlay href="chrome://zimbratb/content/calendaractions/calendaractions.xul"?>
 <?xul-overlay href="chrome://zimbratb/content/taskactions/taskactions.xul"?>
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="ZimTB-Overlay">
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxCallback.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxCookie.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxEnv.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxException.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxRpc.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxRpcRequest.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxSoapDoc.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxSoapException.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxSoapFault.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxStringUtil.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxTimedAction.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/AjxXmlDoc.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZmCsfeCommand.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZmCsfeException.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZmCsfeResult.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxCallback.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxCookie.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxEnv.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxException.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxRpc.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxRpcRequest.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxSoapDoc.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxSoapException.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxSoapFault.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxStringUtil.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxTimedAction.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxXmlDoc.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_ZmCsfeCommand.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_ZmCsfeException.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_ZmCsfeResult.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_Toolbar.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_RequestManager.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_FolderManager.js"/>

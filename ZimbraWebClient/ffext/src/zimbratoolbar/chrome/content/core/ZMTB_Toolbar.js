@@ -23,7 +23,20 @@ var ZMTB_Toolbar = function()
         }
 	});
     prefListener.register();
-    this._rqManager.newServer(prefManager.getCharPref("extensions.zmtb.hostname"), prefManager.getCharPref("extensions.zmtb.username"));
+
+	var password;
+  	var passwordManager = Components.classes["@mozilla.org/login-manager;1"].getService(Components.interfaces.nsILoginManager);
+	var pm = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+	var logins = passwordManager.findLogins({}, 'chrome://zimbratb', null, 'Zimbra Login');
+	for (var i = 0; i < logins.length; i++)
+	{
+		if (logins[i].username == pm.getCharPref("extensions.zmtb.username"))
+		{
+		   password = logins[i].password;
+		   break;
+		}
+	}
+    this._rqManager.newServer(prefManager.getCharPref("extensions.zmtb.hostname"), prefManager.getCharPref("extensions.zmtb.username"), password);
 }
 
 ZMTB_Toolbar.prototype.reset = function()

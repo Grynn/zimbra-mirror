@@ -21,24 +21,24 @@
 			<hbox>
 				<label value="&zmtb.preferences.serverurl;" width="150"/>
 				<vbox>
-					<textbox preference="zmtb-hostname" id="zmtb-hostnameField" type="autocomplete" autocompletesearch="history" width="300"/>
+					<textbox preference="zmtb-hostname" id="ZMTB-Prefs-Hostname" type="autocomplete" autocompletesearch="history" width="300"/>
 					<label value="&zmtb.preferences.serverex;" style="font-size:10px; font-style:italic"/>
 				</vbox>
 			</hbox>
 			<hbox>
 				<label value="&zmtb.preferences.username;" width="150"/>
 				<vbox>
-					<textbox preference="zmtb-username" id="zmtb-usernameField" width="200"/>
+					<textbox preference="zmtb-username" id="ZMTB-Prefs-Username" width="200"/>
 					<label value="&zmtb.preferences.emailex;" style="font-size:10px; font-style:italic"/>
 				</vbox>
 			</hbox>
 			<hbox>
 				<label value="&zmtb.preferences.password;" width="150"/>
-				<textbox id="zmtb-passwordField" type="password" width="200"/>
+				<textbox id="ZMTB-Prefs-Password" type="password" width="200"/>
 			</hbox>
 			<hbox align="center">
-				<button label="&zmtb.preferences.connect;" id="zmtb-prefconnect" width="150"/>
-				<label id="zmtb-connectionStatus" width="300" style="margin-top:8px"/>
+				<button label="&zmtb.preferences.connect;" id="ZMTB-Prefs-Connect" width="150"/>
+				<label id="ZMTB-Prefs-Status" width="300" style="margin-top:8px"/>
 			</hbox>
 		</groupbox>
 		<groupbox>
@@ -62,10 +62,10 @@
 					</hbox>
 					<hbox align="center">
 						<label value="&zmtb.preferences.updatefreq;"/>
-						<textbox preference="zmtb-updatefreq" id="zmtb-updatefreqField" maxlength="4" width="50"/>
+						<textbox preference="zmtb-updatefreq" id="ZMTB-Prefs-UpdateFreq" maxlength="4" width="50"/>
 					</hbox>
 					<hbox>
-						<button label="&zmtb.preferences.clearrecent;" id="zmtb-clearrecent" width="200"/>
+						<button label="&zmtb.preferences.clearrecent;" id="ZMTB-Prefs-ClearRecent" width="200"/>
 					</hbox>
 				</vbox>
 			</hbox>

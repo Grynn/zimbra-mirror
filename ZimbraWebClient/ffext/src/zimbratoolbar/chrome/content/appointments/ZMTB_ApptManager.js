@@ -172,15 +172,10 @@ ZMTB_ApptManager.prototype.dismiss = function(notification)
 	this.clearSnooze(notification.value);
 	this._dismissAppt(notification.value);
 	this._closeNotification(notification);
-	// this._notificationBox.removeChild(notification);
-	// this._notificationBox.removeNotification(notification);
 }
 
 ZMTB_ApptManager.prototype.snooze = function(notification, minutes)
 {
-	
-	Components.utils.reportError("minutes is " + minutes);
-	Components.utils.reportError("notification is " + notification.value);
 	var curS = this._getSnoozeById(notification.value);
 	if(curS)
 		curS.alarm = (new Date).getTime() + (minutes*60*1000);
@@ -192,8 +187,6 @@ ZMTB_ApptManager.prototype.snooze = function(notification, minutes)
 	this.clearAppt(notification.value);
 	this._setTimers();
 	this._closeNotification(notification);
-	// this._notificationBox.removeChild(notification);
-	// this._notificationBox.removeNotification(notification);
 	//this._dismissAppt(notification.value);
 }
 
@@ -235,7 +228,7 @@ ZMTB_ApptManager.prototype._setTimers = function()
 		//Alarm must be in the future but not more than ZMTB_ApptManager.HOURSPAST hours away
 		if((this._appts[i].alarm - (new Date).getTime()) > 0 && (this._appts[i].alarm - (new Date).getTime()) < (ZMTB_ApptManager.HOURSPAST * 60 * 60 * 1000)  && !this._appts[i].timer)
 		{
-			Components.utils.reportError("Timer set for: "+ this._appts[i].name + " With timeout: "+(this._appts[i].alarm - (new Date).getTime()).toString());
+			//Components.utils.reportError("Timer set for: "+ this._appts[i].name + " With timeout: "+(this._appts[i].alarm - (new Date).getTime()).toString());
 			this._appts[i].timer = window.setTimeout(function(id){This.notify(id)}, this._appts[i].alarm - (new Date).getTime(), this._appts[i].id);
 			// this._appts[i].timer = window.setTimeout("ZMTB_ApptNotify("+this._appts[i].id+")", this._appts[i].alarm - (new Date).getTime());
 		}
@@ -249,7 +242,7 @@ ZMTB_ApptManager.prototype._setTimers = function()
 				window.clearTimeout(this._snoozes[i].timer);
 			this._snoozes[i].timer = window.setTimeout(function(id){This.notify(id)}, this._snoozes[i].alarm - (new Date).getTime(), this._snoozes[i].id);
 			// this._snoozes[i].timer = window.setTimeout("ZMTB_ApptNotify("+this._snoozes[i].id+")", this._snoozes[i].alarm - (new Date).getTime());
-			Components.utils.reportError("Snooze set for: "+ this._snoozes[i].name + " With timeout: "+(this._snoozes[i].alarm - (new Date).getTime()).toString());
+			//Components.utils.reportError("Snooze set for: "+ this._snoozes[i].name + " With timeout: "+(this._snoozes[i].alarm - (new Date).getTime()).toString());
 		}
 	}
 }

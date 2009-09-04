@@ -52,19 +52,7 @@ ZMTB_RequestManager.prototype.newServer = function(host, user, pass)
 {
 	this.setServerURL(host);
 	this.setUsername(user);
-	var password;
-  	var passwordManager = Components.classes["@mozilla.org/login-manager;1"].getService(Components.interfaces.nsILoginManager);
-	var pm = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-	var logins = passwordManager.findLogins({}, 'chrome://zimbratb', null, 'Zimbra Login');
-	for (var i = 0; i < logins.length; i++)
-	{
-		if (logins[i].username == pm.getCharPref("extensions.zmtb.username"))
-		{
-		   password = logins[i].password;
-		   break;
-		}
-	}
-	this.setPassword(password);
+	this.setPassword(pass);
 	this._zmtb.disable();
 	this.reset();
 	this._authenticate();
@@ -212,11 +200,7 @@ ZMTB_RequestManager.prototype.parseResponse = function(result)
 		switch(rd.Body.Fault.Detail.Error.Code)
 		{
 			case "NETWORK_ERROR":
-				this._zmtb.disable();
-				break;
 			case "account.CHANGE_PASSWORD":
-				this._zmtb.disable();
-				break;
 			case "account.AUTH_FAILED":
 				this._zmtb.disable();
 				break;
