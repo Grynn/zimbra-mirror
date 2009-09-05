@@ -249,7 +249,6 @@ DwtComboBox.prototype._createHtmlFromTemplate = function(templateId, data) {
 	var inputParams = this._inputParams || {};
 	inputParams.parent = this;
 	inputParams.size = inputParams.size || 40;
-	inputParams.skipCaretHack = true;
 	delete this._inputParams;
     
     this.input = new DwtInputField(inputParams);

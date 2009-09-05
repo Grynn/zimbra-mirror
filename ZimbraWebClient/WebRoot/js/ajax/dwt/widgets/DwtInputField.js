@@ -41,9 +41,6 @@
  *        validatorCtxtObj	[object]*			object context for validation function
  *        className			[string]*			CSS class
  *        posStyle			[constant]*			positioning style
- *        skipCaretHack		[boolean]*			true to NOT do hack to make the caret show up in Firefox.
- * 												The hack uses a block display div, so for an input that needs
- * 												to be displayed inline, set this parameter to true.
  *        required          [boolean]*          True to mark as required.
  *        hint				[string]*			A hint to display in the input field when the value is empty.
  *        id				[string]*			an explicit ID to use for the control's DIV element
@@ -78,12 +75,9 @@ DwtInputField = function(params) {
 	var inputFieldId = params.inputID || Dwt.getNextId();
 	var errorIconId = Dwt.getNextId();
 	var htmlEl = this.getHtmlElement();
-	var doCursorHack = params.skipCaretHack;
-	var hackBegin = doCursorHack ? "" : Dwt.CARET_HACK_BEGIN;
-	var hackEnd = doCursorHack ? "" : Dwt.CARET_HACK_END;
 	if (this._errorIconStyle == DwtInputField.ERROR_ICON_NONE) {
 		if (params.forceMultiRow || (params.rows && params.rows > 1)) {
-			var htmlArr = [hackBegin, "<textarea id='", inputFieldId, "' rows=", params.rows];
+			var htmlArr = ["<textarea id='", inputFieldId, "' rows=", params.rows];
 			var i = htmlArr.length;
 			if (params.forceMultiRow || params.size) {
 				htmlArr[i++] = " cols=";
@@ -94,10 +88,9 @@ DwtInputField = function(params) {
 				htmlArr[i++] = params.wrap;
 			}
 			htmlArr[i++] = "></textarea>"
-			htmlArr[i++] = hackEnd;
 			htmlEl.innerHTML = htmlArr.join("");
 		} else {
-			htmlEl.innerHTML = [hackBegin, "<input id='",inputFieldId,"'>", hackEnd].join("");
+			htmlEl.innerHTML = ["<input id='",inputFieldId,"'>"].join("");
 		}
 
 	} else {
@@ -106,7 +99,7 @@ DwtInputField = function(params) {
 		if (this._errorIconStyle == DwtInputField.ERROR_ICON_LEFT)
 			htmlArr[i++] = ["<td style='padding-right:2px;'id='", errorIconId, "'></td>"].join("");
 
-		htmlArr[i++] = ["<td>", hackBegin, "<input id='", inputFieldId, "'>", hackEnd, "</td>"].join("");
+		htmlArr[i++] = ["<td>", "<input id='", inputFieldId, "'>", "</td>"].join("");
 
 		if (this._errorIconStyle == DwtInputField.ERROR_ICON_RIGHT)
 			htmlArr[i++] = ["<td style='padding-left:2px;' id='", errorIconId, "'></td>"].join("");

@@ -213,21 +213,7 @@ Dwt.SCROLLBAR_WIDTH = 22;
 Dwt.KEY_OBJECT = "_object_";
 Dwt.KEY_ID = "_id_";
 
-
-/** Constants related to the hack to make the blinking cursor show up in Firefox.
- * There is an explanation of this hack in Firefox's bug database:
- * https://bugzilla.mozilla.org/show_bug.cgi?id=167801#c6
- */
-Dwt.CARET_HACK_ENABLED = AjxEnv.isFirefox && !AjxEnv.isFirefox3up;
-if (Dwt.CARET_HACK_ENABLED) {
-	Dwt.CARET_HACK_BEGIN = "<div style='overflow:auto;'>";
-	Dwt.CARET_HACK_END = "</div>";
-} else {
-	Dwt.CARET_HACK_BEGIN = "";
-	Dwt.CARET_HACK_END = "";
-}
-
-/** z-index increment unit. Used by compenets if they need to bump their z-index
+/** z-index increment unit. Used by components if they need to bump their z-index
  * @type Int
  */
 Dwt._Z_INC = 1;

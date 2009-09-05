@@ -161,7 +161,6 @@ DwtBaseDialog.prototype.popup =
 function(loc) {
 	if (this._poppedUp) { return; }
 
-	this.applyCaretHack();
 	this.cleanup(true);
 	var thisZ = this._zIndex;
 

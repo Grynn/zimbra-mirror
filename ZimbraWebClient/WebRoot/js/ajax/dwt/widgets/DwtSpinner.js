@@ -45,9 +45,6 @@
  *                 integers (default).  Pass 'null' to allow float numbers but
  *                 not enforce decimals.
  * @param {String} align The align of the input field text; defaults to "right" in dwt.css
- * @param {boolean} skipCaretHack true to NOT do hack to make the cursor show up in Firefox.
- * 								  The hack uses a block display div, so for an input that needs
- * 								  to be displayed inline, set this parameter to true.
  *
  * @author Mihai Bazon
  */
@@ -68,7 +65,6 @@ DwtSpinner = function(params) {
 	this._step          = params.step      || 1;
 	this._decimals      = 'decimals' in params ? params.decimals : 0;
 	this._align         = params.align     || null;
-	this._skipCaretHack = params.skipCaretHack;
 
 	// timerFunc is a closure that gets called upon timeout when the user
 	// presses and holds the mouse button
@@ -97,10 +93,8 @@ DwtSpinner.prototype._createElements = function() {
 	this._idField = id;
 	this._idUpButton = id + "-up";
 	this._idDownButton = id + "-down";
-	var hackBegin = this._skipCaretHack ? "" : Dwt.CARET_HACK_BEGIN;
-	var hackEnd = this._skipCaretHack ? "" : Dwt.CARET_HACK_END;
 	var html = [ "<table class='DwtSpinner' cellspacing='0' cellpadding='0'>",
-		     "<tr><td rowspan='2' class='DwtSpinner-inputCell'>", hackBegin, "<input id='", id, "' autocomplete='off' />", hackEnd, "</td>",
+		     "<tr><td rowspan='2' class='DwtSpinner-inputCell'>", "<input id='", id, "' autocomplete='off' />", "</td>",
 		     "<td unselectable id='", this._idUpButton, "' class='DwtSpinner-upBtn'><div class='ImgUpArrowSmall'>&nbsp;</div></td>",
 		     "</tr><tr>",
 		     "<td unselectable id='", this._idDownButton, "' class='DwtSpinner-downBtn'><div class='ImgDownArrowSmall'>&nbsp;</div></td>",

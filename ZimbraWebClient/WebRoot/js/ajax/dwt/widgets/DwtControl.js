@@ -1686,31 +1686,6 @@ function(oel, nel, inheritClass, inheritStyle) {
 };
 
 /**
- * Applies part of the hack to make the blinking curosor show up in
- * Firefox text input fields. This should be called when some DOM
- * region -- such as a dialog or a tab page -- is being displayed.
- */
-DwtControl.prototype.applyCaretHack =
-function() {
-	if (Dwt.CARET_HACK_ENABLED) {
-		var shellElement = this.shell.getHtmlElement();
-		var myElement = this.getHtmlElement();
-
-		// Go up the hierarchy and find the element that is a child of the shell.
-		var childElement = myElement;
-		while (childElement.parentNode && (childElement.parentNode != shellElement)) {
-			childElement = childElement.parentNode;
-		}
-		// Remove the child from the shell, and then put it back exactly where it was.
-		if (childElement) {
-			var sibling = childElement.nextSibling;
-			shellElement.removeChild(childElement);
-			shellElement.insertBefore(childElement, sibling);
-		}
-	}
-};
-
-/**
  * This protected method is called by the keyboard navigate infrastructure when a control
  * gains focus. This method should be overridden by derived classes to provide
  * the visual behaviour for the component losing focus

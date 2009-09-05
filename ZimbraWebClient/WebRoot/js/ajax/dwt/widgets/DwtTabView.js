@@ -350,7 +350,6 @@ function(tabKey) {
 		this._hideAllTabs();						// hide all the tabs
 		var tabView = this.getTabView(tabKey);		// make this tab visible
         if (tabView) {
-            this.applyCaretHack();
 			tabView.setVisible(true);
             tabView.showMe();
         }
