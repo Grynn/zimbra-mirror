@@ -23,9 +23,9 @@
 	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxStringUtil.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxTimedAction.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_AjxXmlDoc.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_ZmCsfeCommand.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_ZmCsfeException.js"/>
-	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTB_ZmCsfeResult.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTBCsfeCommand.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTBCsfeException.js"/>
+	<script type="application/x-javascript" src="chrome://zimbratb/content/zmtb_ajax/ZMTBCsfeResult.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_Toolbar.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_RequestManager.js"/>
 	<script type="application/x-javascript" src="chrome://zimbratb/content/core/ZMTB_FolderManager.js"/>
