@@ -16,8 +16,8 @@ ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-LDAP_RELEASE ?= 2.4.17
-LDAP_PATCH_LEVEL ?= 8z
+LDAP_RELEASE ?= 2.4.18
+LDAP_PATCH_LEVEL ?= 2z
 LDAP_VERSION ?= $(LDAP_RELEASE).$(LDAP_PATCH_LEVEL)
 LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-$(LDAP_VERSION).tgz
 LDAP_LIB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-clibs-$(LDAP_VERSION).tgz
@@ -41,12 +41,6 @@ build:
 	cd openldap-$(LDAP_VERSION); \
 	patch -g0 -N -p1 < ../patches/ITS5037.patch; \
 	patch -g0 -N -p1 < ../patches/leopard.fix; \
-	patch -g0 -N -p1 < ../patches/ITS6077.patch; \
-	patch -g0 -N -p1 < ../patches/ITS6215.patch; \
-	patch -g0 -N -p1 < ../patches/ITS6220.patch; \
-	patch -g0 -N -p1 < ../patches/ITS6222.patch; \
-	patch -g0 -N -p1 < ../patches/ITS6239.patch; \
-	patch -g0 -N -p1 < ../patches/perf2.patch; \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(OPENLDAP_CLIB_DIR) -L$(LIBTOOL_LIB_DIR) \
 		 -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(OPENLDAP_CLIB_DIR) -R$(LIBTOOL_LIB_DIR)" \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) \
