@@ -5,12 +5,12 @@
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" id="zmtb-compose-window" title="&zmtb.messagecomposer.windowtitle;" style="padding:0px; margin:0px; border:none; background-color:#333333;">
 	<script type="application/x-javascript" src="ZMTB_MessageComposer.js"/>
 	<vbox id="ZMTB-MessageComposer-Container" >
-		<browser id="ZMTB-MessageComposer-AttachBrowser" height="0"/>
+		<browser id="ZMTB-MessageComposer-AttachBrowser" height="0" />
 		<hbox style="margin:10px; margin-bottom:5px" align="center" id="ZMTB-MessageComposer-Header" >
 			<image  src="chrome://zimbratb/skin/messagecomposer/zimbra_c.png" style="margin-bottom:10px; margin-right:20px" />
 			<label id="ZMTB-MessageComposer-Title" value="&zmtb.messagecomposer.title;"/>
 			<spacer flex="100" />
-			<image id="zmc_loading" hidden="true" src="chrome://zimbratb/skin/messagecomposer/loading.gif" />
+			<image id="ZMTB-MessageComposer-LoadingIcon" hidden="true" src="chrome://zimbratb/skin/messagecomposer/loading.gif" />
 		</hbox>
 		<vbox id="ZMTB-MessageComposer-FormBox" >
 			<hbox align="center">
@@ -37,11 +37,11 @@
 				<html:input type="file" id="ZMTB-MessageComposer-FileInput"/>
 			</vbox>
 			<textbox emptytext="Your message here." height="150" spellcheck="true" multiline="true" id="ZMTB-MessageComposer-MessField"/>
-			<hbox>
+			<hbox align="center">
 				<button label="&zmtb.messagecomposer.send;" id="ZMTB-MessageComposer-Send"/>
 				<button label="&zmtb.messagecomposer.save;" id="ZMTB-MessageComposer-Save"/>
-				<hbox align="center" flex="100" >
-					<label id="ZMTB-MessageComposer-ErrorLabel" value="" width="130" />
+				<hbox id="ZMTB-MessageComposer-ErrorBox" align="center" flex="100" >
+					<label id="ZMTB-MessageComposer-ErrorLabel" value="" />
 				</hbox>
 				<button label="&zmtb.messagecomposer.cancel;" id="ZMTB-MessageComposer-Cancel"/>
 			</hbox>

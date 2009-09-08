@@ -1,15 +1,14 @@
-var ZMTB_MessageComposer = function(requestManager, browser)
+var ZMTB_MessageComposer = function(zmtb)
 {
-	this._rqManager = requestManager;
+	this._rqManager = zmtb.getRequestManager();
+	this._localStrings = zmtb.getLocalStrings();
 	this._panel = null;
 	this._toBox = null;
 	this._ccBox = null;
 	this._subBox = null;
 	this._messBox = null;
-	// this._browser = browser;
 	this._pgListener = new ZMTB_AttachProgressListener(this);
 	this._dragObserver = new ZMTB_AttachDragObserver(this);
-	// this._browser.addProgressListener(this._pgListener);
 	this._attachments = [];
 	this._files = [];
 }
@@ -25,6 +24,7 @@ ZMTB_MessageComposer.ATTACHBROWSER = "ZMTB-MessageComposer-AttachBrowser";
 ZMTB_MessageComposer.ERRORLABEL = "ZMTB-MessageComposer-ErrorLabel";
 ZMTB_MessageComposer.FILEINPUT = "ZMTB-MessageComposer-FileInput";
 ZMTB_MessageComposer.ATTACHBOX = "ZMTB-MessageComposer-AttachBox";
+ZMTB_MessageComposer.LOADING = "ZMTB-MessageComposer-LoadingIcon";
 
 ZMTB_MessageComposer.prototype.open = function(email)
 {
@@ -35,7 +35,6 @@ ZMTB_MessageComposer.prototype.open = function(email)
 		this._attachments = [];
 		var x = window.screenX + 200;
 		var y = window.screenY + 150;
-		Components.utils.reportError("left is "+x+" & top is "+y);
 		this._panel = window.open("chrome://zimbratb/content/messagecomposer/compose.xul", "zimbracompose", "chrome,top="+y+",left="+x+",width=450,height=450");
 		var This=this;
 		this._panel.addEventListener("load", function(){This._addEvents(email)}, false);
@@ -69,7 +68,7 @@ ZMTB_MessageComposer.prototype._addEvents = function(email)
 			win.close()
 		}
 		else
-			This._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value="No recipient."
+			This._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value=this._localStrings..getString("messagecomposer_error_norecpt");
 	}, false);	
 	this._panel.document.getElementById(ZMTB_MessageComposer.SAVEBUTTON).addEventListener("command", function(){This.saveMessage(); win.close()}, false);
 	this._panel.document.getElementById(ZMTB_MessageComposer.ATTACHBOX).addEventListener("dragover", function(e){This._dragover(e)}, false);
@@ -170,10 +169,19 @@ ZMTB_MessageComposer.prototype.receiveFiles = function(files)
 
 ZMTB_MessageComposer.prototype.processStatus = function(status)
 {
+	Components.utils.reportError(status);
 	if(status == 0)
 		this._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value="";
+	else if(status == 2152857613)
+	{
+		this._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value=this._localStrings.getString("messagecomposer_error_noattach");
+		this._panel.document.getElementById(ZMTB_MessageComposer.LOADING).hidden=true;
+	}
 	else
-		this._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value="Cannot connect to server.";
+	{
+		this._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value=this._localStrings.getString("messagecomposer_error_noconnect");
+		this._panel.document.getElementById(ZMTB_MessageComposer.LOADING).hidden=true;
+	}
 }
 
 ZMTB_MessageComposer.prototype.processPage = function(URI, doc)
@@ -198,14 +206,13 @@ ZMTB_MessageComposer.prototype.processPage = function(URI, doc)
 			}
 		doc.getElementById("zmupload").action = this._rqManager.getServerURL()+"service/upload?fmt=raw,extended";
 		doc.getElementById("zmupload").submit();
-		this._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value="Uploading...";
-		this._panel.document.getElementById("zmc_loading").hidden=false;
-		
+		this._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value=this._localStrings.getString("messagecomposer_error_uploading");
+		this._panel.document.getElementById(ZMTB_MessageComposer.LOADING).hidden=false;
 	}
 	else if(this._rqManager.getServerURL().indexOf(URI.host) >= 0)
 	{
 		this._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value="";
-		this._panel.document.getElementById("zmc_loading").hidden=true;
+		this._panel.document.getElementById(ZMTB_MessageComposer.LOADING).hidden=true;
 		var resp = doc.body.firstChild.data;
 		if(resp.indexOf('"aid":"') >=0 && resp.indexOf('"filename":"') >=0)
 		{
@@ -219,6 +226,8 @@ ZMTB_MessageComposer.prototype.processPage = function(URI, doc)
 			this._attachments.push({aid:aid, name:filename, send:true});
 			this._updateAttachments();
 		}
+		else
+			this._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value=this._localStrings.getString("messagecomposer_error_noattach");
 	}
 }
 

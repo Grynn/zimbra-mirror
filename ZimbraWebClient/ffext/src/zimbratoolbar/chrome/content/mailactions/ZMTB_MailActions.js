@@ -2,7 +2,7 @@ var ZMTB_MailActions = function(zmtb)
 {
 	ZMTB_Actions.call(this, zmtb);
 	zmtb.getRequestManager().addUpdateListener(this);
-	this._messageComp = new ZMTB_MessageComposer(this._rqManager);
+	this._messageComp = new ZMTB_MessageComposer(zmtb);
 	this._folderMan.setFilter("mail", {first:[2, 5, 6, 4], exclude:[3, 14], type:"message", root:true});
 	this._folderMan.setFilter("search", {first:[2, 5, 6, 4], exclude:[3, 14], type:"message", root:true, search:true});
 	this._initContext();
@@ -50,7 +50,7 @@ ZMTB_MailActions.prototype._initMenu = function()
 	document.getElementById("ZimTB-NewFolder").addEventListener("command",function(event){
 		This.openActions("ZimTB-NewFolder-Bar");
 		document.getElementById("ZimTB-NewFolder-Name").focus();
-		This._populateList(document.getElementById("ZimTB-NewFolder-Parent"), This._folderMan.getFolders("mail"), This._localstrings.getString("mailaction_rootname"));
+		This._populateList(document.getElementById("ZimTB-NewFolder-Parent"), This._folderMan.getFolders("mail")/*, This._localstrings.getString("mailaction_rootname")*/);
 		for (var i=0; i < document.getElementById("ZimTB-NewFolder-Parent").itemCount; i++)
 			if(document.getElementById("ZimTB-NewFolder-Parent").getItemAtIndex(i).getAttribute("value") == 1)
 				document.getElementById("ZimTB-NewFolder-Parent").selectedIndex=i;
@@ -61,16 +61,13 @@ ZMTB_MailActions.prototype._initMenu = function()
 		document.getElementById("ZimTB-NewSearchFolder-Name").value="";
 		document.getElementById("ZimTB-NewSearchFolder-Query").value="";
 		document.getElementById("ZimTB-NewSearchFolder-Name").focus();
-		This._populateList(document.getElementById("ZimTB-NewSearchFolder-Parent"), This._folderMan.getFolders("search"), This._localstrings.getString("mailaction_rootname"));
+		This._populateList(document.getElementById("ZimTB-NewSearchFolder-Parent"), This._folderMan.getFolders("search")/*, This._localstrings.getString("mailaction_rootname")*/);
 		for (var i=0; i < document.getElementById("ZimTB-NewSearchFolder-Parent").itemCount; i++)
 			if(document.getElementById("ZimTB-NewSearchFolder-Parent").getItemAtIndex(i).getAttribute("value") == 1)
 				document.getElementById("ZimTB-NewSearchFolder-Parent").selectedIndex=i;
 	},false);
 	document.getElementById("ZimTB-NewRSS").addEventListener("command",function(event){
 		This.newRSSFolderCommand();
-		document.getElementById("ZimTB-NewRSS-Name").value="";
-		document.getElementById("ZimTB-NewRSS-URL").value="";
-		document.getElementById("ZimTB-NewRSS-Name").focus();
 	},false);
 	document.getElementById("ZimTB-ViewMail").addEventListener("command",function(event){
 		This._rqManager.goToPath("?app=mail");
@@ -188,10 +185,13 @@ ZMTB_MailActions.prototype.newRSSFolderCommand = function()
 {
 	
 	this.openActions("ZimTB-NewRSS-Bar");
-	this._populateList(document.getElementById("ZimTB-NewRSS-Parent"), this._folderMan.getFolders("mail"), this._localstrings.getString("mailaction_rootname"));
+	this._populateList(document.getElementById("ZimTB-NewRSS-Parent"), this._folderMan.getFolders("mail")/*, this._localstrings.getString("mailaction_rootname")*/);
 	for (var i=0; i < document.getElementById("ZimTB-NewRSS-Parent").itemCount; i++)
 		if(document.getElementById("ZimTB-NewRSS-Parent").getItemAtIndex(i).getAttribute("value") == 1) //Root folder ID
-			document.getElementById("ZimTB-NewRSS-Parent").selectedIndex=i;
+			document.getElementById("ZimTB-NewRSS-Parent").selectedIndex=i;	
+	document.getElementById("ZimTB-NewRSS-Name").value="";
+	document.getElementById("ZimTB-NewRSS-URL").value="";
+	document.getElementById("ZimTB-NewRSS-Name").focus();
 }
 
 ZMTB_MailActions.prototype.newSearchFolder = function(name, parentId, query)

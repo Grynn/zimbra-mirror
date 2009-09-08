@@ -30,7 +30,7 @@ ZMTB_ContactActions.prototype._initMenu = function()
 	//New Address Book
 	document.getElementById("ZimTB-NewAddressBook").addEventListener("command",function(event){
 		This.openActions("ZimTB-NewAddrBook-Bar");
-		This._populateList(document.getElementById("ZimTB-NewAddrBook-Parent"), This._folderMan.getFolders("contacts"), This._localstrings.getString("contactaction_rootname"));
+		This._populateList(document.getElementById("ZimTB-NewAddrBook-Parent"), This._folderMan.getFolders("contacts")/*, This._localstrings.getString("contactaction_rootname")*/);
 		for (var i=0; i < document.getElementById("ZimTB-NewAddrBook-Parent").itemCount; i++)
 			if(document.getElementById("ZimTB-NewAddrBook-Parent").getItemAtIndex(i).getAttribute("value") == 7) //Default contacts folder ID
 				document.getElementById("ZimTB-NewAddrBook-Parent").selectedIndex=i;
@@ -40,7 +40,7 @@ ZMTB_ContactActions.prototype._initMenu = function()
 	//Link to Address Book
 	document.getElementById("ZimTB-LinkToAddressBook").addEventListener("command",function(event){
 		This.openActions("ZimTB-LinkToAddrBook-Bar");
-		This._populateList(document.getElementById("ZimTB-LinkToAddrBook-Parent"), This._folderMan.getFolders("contacts"), This._localstrings.getString("contactaction_rootname"));
+		This._populateList(document.getElementById("ZimTB-LinkToAddrBook-Parent"), This._folderMan.getFolders("contacts")/*, This._localstrings.getString("contactaction_rootname")*/);
 		for (var i=0; i < document.getElementById("ZimTB-LinkToAddrBook-Parent").itemCount; i++)
 			if(document.getElementById("ZimTB-LinkToAddrBook-Parent").getItemAtIndex(i).getAttribute("value") == 7) //Default contacts folder ID
 				document.getElementById("ZimTB-LinkToAddrBook-Parent").selectedIndex=i;

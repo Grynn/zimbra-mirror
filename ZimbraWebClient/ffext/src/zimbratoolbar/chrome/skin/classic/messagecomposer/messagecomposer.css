@@ -67,3 +67,14 @@
 	margin-top:4px;
 	margin-bottom:4px;
 }
+
+#ZMTB-MessageComposer-ErrorLabel
+{
+	margin-bottom:10px;
+	text-align:center;
+}
+
+#ZMTB-MessageComposer-ErrorBox
+{
+	overflow:hidden;
+}

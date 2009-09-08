@@ -70,7 +70,12 @@ ZMTB_FolderManager.prototype.getFolders = function(filterName)
 		if(filter.type)
 		{
 			for (var i = folders.length - 1; i >= 0; i--)
-				if(folders[i].view && folders[i].view != filter.type && !(filter.root && folders[i].id == 1))
+				if(!folders[i].view && folders[i].id != 1)
+				{
+					if(!(filter.search && folders[i].query))
+						folders.splice(i, 1);
+				}
+				else if(folders[i].view != filter.type && !(filter.root && folders[i].id == 1))
 					folders.splice(i, 1);
 		}
 		if(!filter.search)
@@ -224,6 +229,8 @@ ZMTB_FolderManager.prototype.getFullPath = function(folderId, root)
 	if(!this._folders[folderId])
 		return "";
 	if(this._folders[folderId].parent == 1 && !root)
+		return this._folders[folderId].name;
+	else if(folderId == 1 && !root)
 		return this._folders[folderId].name;
 	else if(folderId == 1)
 		return root;
