@@ -37,6 +37,7 @@ var ZMTB_Toolbar = function()
 		}
 	}
     this._rqManager.newServer(prefManager.getCharPref("extensions.zmtb.hostname"), prefManager.getCharPref("extensions.zmtb.username"), password);
+
 }
 
 ZMTB_Toolbar.prototype.reset = function()

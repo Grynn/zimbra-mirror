@@ -11,13 +11,13 @@
 	<toolbar id="ZimTB-Toolbar">
 		<toolbarbutton  flex="0" id="ZimTB-Calendar-Button" label="&zmtb.calendaractions.calendar;" type="menu" menu="ZimTB-Calendar-Menu">
 			<menupopup id="ZimTB-Calendar-Menu">
-				<menuitem id="ZimTB-NewAppointment" label="&zmtb.calendaractions.newappt;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-NewAppointment" label="&zmtb.calendaractions.newappt;" accesskey="&zmtb.calendaractions.newappt.ak;" class="menuitem-iconic zmtb-menucommand" />
 				<menuseparator/>
-				<menuitem id="ZimTB-NewCalendar" label="&zmtb.calendaractions.newcal;" class="menuitem-iconic zmtb-menucommand" />
-				<menuitem id="ZimTB-RemoteCalendar" label="&zmtb.calendaractions.newremcal;" class="menuitem-iconic zmtb-menucommand" />
-				<menuitem id="ZimTB-SharedCalendar" label="&zmtb.calendaractions.linktocal;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-NewCalendar" label="&zmtb.calendaractions.newcal;" accesskey="&zmtb.calendaractions.newcal.ak;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-RemoteCalendar" label="&zmtb.calendaractions.newremcal;" accesskey="&zmtb.calendaractions.newremcal.ak;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-SharedCalendar" label="&zmtb.calendaractions.linktocal;" accesskey="&zmtb.calendaractions.linktocal.ak;" class="menuitem-iconic zmtb-menucommand" />
 				<menuseparator/>
-				<menuitem id="ZimTB-ViewCalendars" label="&zmtb.calendaractions.viewcal;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-ViewCalendars" label="&zmtb.calendaractions.viewcal;" accesskey="&zmtb.calendaractions.viewcal.ak;" class="menuitem-iconic zmtb-menucommand" />
 			</menupopup>
 		</toolbarbutton>
 	</toolbar>

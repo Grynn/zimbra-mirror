@@ -39,7 +39,7 @@
 		<stringbundle id="ZMTB-LocalStrings" src="chrome://zimbratb/locale/zimbratb.properties"/>
 	</stringbundleset>
 <!-- Merge with Toolbox -->
-	<toolbox id="navigator-toolbox">
+	<toolbox id="navigator-toolbox" >
 		<toolbar id="ZimTB-Toolbar" toolbarname="Zimbra Toolbar" accesskey="Z" class="chromeclass-toolbar" context="toolbar-context-menu" hidden="false" persist="hidden">
 		<!-- <spacer ordinal="10" flex="100" />	 -->
 		<!-- <image ordinal="10" src="chrome://zimbratb/skin/throbber.gif" /> -->

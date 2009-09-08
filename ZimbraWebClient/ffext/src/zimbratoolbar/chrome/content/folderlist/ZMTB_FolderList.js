@@ -6,11 +6,24 @@ var ZMTB_FolderList = function(zmtb)
 	this._messages = [];
 	this._rqManager = zmtb.getRequestManager();
 	this._menuList = document.getElementById("ZimTB-Folders");
+	this._watchIndex = 0;
 	this._folderMan = zmtb.getFolderManager();
 	var This=this;
 	this._rqIds = {};
-	this._menuList.addEventListener("keypress", function(e){e.preventDefault(); e.stopPropagation(); This._menuList.selectedIndex=0}, false);
-	this._menuList.addEventListener("change", function(e){e.preventDefault(); e.stopPropagation(); This._menuList.selectedIndex=0}, false);
+	this._menuList.addEventListener("keypress", function(e)
+	{
+		//If we receive a modifier, leave the list box so that an action can be performed eg New Tab
+		if(e.metaKey || e.ctrlKey || e.altKey)
+			e.target.blur();
+		//If key is alnum, open popup
+		else if(e.charCode >= 48 && e.charCode <= 122)
+			e.target.menupopup.openPopup(e.target);
+		This._menuList.selectedIndex = This._watchIndex;
+	}, true);
+	this._menuList.addEventListener("change", function(e)
+	{
+		This._menuList.selectedIndex = This._watchIndex;
+	}, false);
 }
 
 ZMTB_FolderList.prototype = new ZMTB_TBItem();
@@ -28,8 +41,6 @@ ZMTB_FolderList.prototype.disable = function()
 
 ZMTB_FolderList.prototype.updateFolders = function()
 {
-	// this._folders = [];
-	//this._addMailFolders(folders, "");
 	var folders = this._folderMan.getFolders("default");
 	this._populateList(folders);
 	for (var i=0; i < this._menuList.menupopup.childNodes.length; i++)
@@ -179,7 +190,7 @@ ZMTB_FolderList.prototype._populateList = function(folders)
 	var df = pm.getCharPref("extensions.zmtb.defaultWatch");
 	for (var i=0; i < this._menuList.itemCount; i++)
 		if(this._menuList.getItemAtIndex(i).value == df)
-			this._menuList.selectedIndex = i;
+			this._menuList.selectedIndex = this._watchIndex = i;
 	if(!this._menuList.selectedIndex)
 		this._menuList.selectedIndex = 0;
 	this._menuList.className = this._menuList.selectedItem.className;

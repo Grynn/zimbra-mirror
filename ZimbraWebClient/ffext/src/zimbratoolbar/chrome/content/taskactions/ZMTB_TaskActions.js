@@ -2,30 +2,49 @@ var ZMTB_TaskActions = function(zmtb)
 {
 	ZMTB_Actions.call(this, zmtb);
 	zmtb.getRequestManager().addUpdateListener(this);
-	
-	var This = this;
 	this._folderMan.setFilter("tasklists", {type:"task", exclude:[3]});
+	this._initMenu();
+	this._initActions();
+}
+
+ZMTB_TaskActions.prototype = new ZMTB_Actions();
+ZMTB_TaskActions.prototype.constructor = ZMTB_TaskActions;
+
+ZMTB_TaskActions.prototype._initMenu = function()
+{
+	var This=this;
 	//Menu items
-	document.getElementById("ZimTB-NewTask").addEventListener("click",function(event){
+	document.getElementById("ZimTB-NewTask").addEventListener("command",function(event){
 		This.newTaskCommand();
+		document.getElementById("ZimTB-NewTask-Subject").value = "";
+		document.getElementById("ZimTB-NewTask-Location").value = "";
 		document.getElementById("ZimTB-NewTask-Subject").focus();
 	},false);
-	document.getElementById("ZimTB-ViewTasks").addEventListener("click",function(event){
+	document.getElementById("ZimTB-ViewTasks").addEventListener("command",function(event){
 		This._rqManager.goToPath("?app=tasks")
 	},false);
-	document.getElementById("ZimTB-NewTaskList").addEventListener("click",function(event){
+	document.getElementById("ZimTB-NewTaskList").addEventListener("command",function(event){
 		This.openActions("ZimTB-NewTaskList-Bar");
+		document.getElementById("ZimTB-NewTaskList-Name").value="";
 		document.getElementById("ZimTB-NewTaskList-Name").focus();
 	},false);
-	document.getElementById("ZimTB-NewRemTaskList").addEventListener("click",function(event){
+	document.getElementById("ZimTB-NewRemTaskList").addEventListener("command",function(event){
 		This.openActions("ZimTB-NewRemTaskList-Bar");
 		document.getElementById("ZimTB-NewRemTaskList-Name").focus();
+		document.getElementById("ZimTB-NewRemTaskList-Name").value="";
+		document.getElementById("ZimTB-NewRemTaskList-Name").URL="";
 	},false);
-	document.getElementById("ZimTB-SharedTaskList").addEventListener("click",function(event){
+	document.getElementById("ZimTB-SharedTaskList").addEventListener("command",function(event){
 		This.openActions("ZimTB-LinkToTaskList-Bar");
+		document.getElementById("ZimTB-LinkToTaskList-Name").value="";
 		document.getElementById("ZimTB-LinkToTaskList-Name").focus();
 	},false);
-		
+
+}
+
+ZMTB_TaskActions.prototype._initActions = function()
+{
+	var This=this;
 	//Tasks
 	document.getElementById("ZimTB-NewTask-Create").addEventListener("command", function(){
 		This.newTask(document.getElementById("ZimTB-NewTask-TaskList").selectedItem.value, document.getElementById("ZimTB-NewTask-Subject").value, document.getElementById("ZimTB-NewTask-Location").value, document.getElementById("ZimTB-NewTask-StartDate").dateValue, document.getElementById("ZimTB-NewTask-EndDate").dateValue);
@@ -33,8 +52,6 @@ var ZMTB_TaskActions = function(zmtb)
 	}, false);
 	document.getElementById("ZimTB-NewTask-Close").addEventListener("command", function(){
 			This.hideActions();
-			document.getElementById("ZimTB-NewTask-Subject").value = "";
-			document.getElementById("ZimTB-NewTask-Location").value = "";
 	}, false);
 	
 	//Link to Task List
@@ -56,7 +73,6 @@ var ZMTB_TaskActions = function(zmtb)
 		}
 		This.newLinked(document.getElementById("ZimTB-LinkToTaskList-Name").value, "task", 1, document.getElementById("ZimTB-LinkToTaskList-Owner").value, document.getElementById("ZimTB-LinkToTaskList-Path").value)
 		This.hideActions();
-		document.getElementById("ZimTB-LinkToTaskList-Name").value="";
 	}, false);
 	document.getElementById("ZimTB-LinkToTaskList-Close").addEventListener("command", function(){This.hideActions()}, false);
 	
@@ -69,7 +85,6 @@ var ZMTB_TaskActions = function(zmtb)
 		}
 		This.newFolder(document.getElementById("ZimTB-NewTaskList-Name").value, "task", 1);
 		This.hideActions();
-		document.getElementById("ZimTB-NewTaskList-Name").value="";
 	}, false);
 	document.getElementById("ZimTB-NewTaskList-Close").addEventListener("command", function(){This.hideActions()}, false);
 	
@@ -86,15 +101,10 @@ var ZMTB_TaskActions = function(zmtb)
 			return;
 		}
 		This.newFolder(document.getElementById("ZimTB-NewRemTaskList-Name").value, "task", 1, document.getElementById("ZimTB-NewRemTaskList-URL").value);
-		This.hideActions();
-		document.getElementById("ZimTB-NewRemTaskList-Name").value="";
-		document.getElementById("ZimTB-NewRemTaskList-Name").URL="";
+		This.hideActions();s
 	}, false);
 	document.getElementById("ZimTB-NewRemTaskList-Close").addEventListener("command", function(){This.hideActions()}, false);
 }
-
-ZMTB_TaskActions.prototype = new ZMTB_Actions();
-ZMTB_TaskActions.prototype.constructor = ZMTB_TaskActions;
 
 ZMTB_TaskActions.prototype.enable = function()
 {

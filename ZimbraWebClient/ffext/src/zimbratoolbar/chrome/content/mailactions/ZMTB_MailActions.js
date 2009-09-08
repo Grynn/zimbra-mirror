@@ -2,11 +2,20 @@ var ZMTB_MailActions = function(zmtb)
 {
 	ZMTB_Actions.call(this, zmtb);
 	zmtb.getRequestManager().addUpdateListener(this);
-	this._messageComp = new ZMTB_MessageComposer(this._rqManager/*, document.getElementById("ZMTB_AttachBrowser")*/);
-	var This = this;
+	this._messageComp = new ZMTB_MessageComposer(this._rqManager);
 	this._folderMan.setFilter("mail", {first:[2, 5, 6, 4], exclude:[3, 14], type:"message", root:true});
 	this._folderMan.setFilter("search", {first:[2, 5, 6, 4], exclude:[3, 14], type:"message", root:true, search:true});
-	
+	this._initContext();
+	this._initMenu();
+	this._initActions();
+}
+
+ZMTB_MailActions.prototype = new ZMTB_Actions();
+ZMTB_MailActions.prototype.constructor = ZMTB_MailActions;
+
+ZMTB_MailActions.prototype._initContext = function()
+{
+	var This=this;
 	//Context Menu Options
 	document.getElementById("ZMTB-ContextAction-AddRSS").addEventListener("command",function(){
 		 This.newRSSFolderCommand();
@@ -24,9 +33,13 @@ var ZMTB_MailActions = function(zmtb)
 		else
 			document.getElementById("ZMTB-ContextAction-AddRSS").hidden = true;
 	}, false);
-	
+}
+
+ZMTB_MailActions.prototype._initMenu = function()
+{
+	var This=this;
 	//Menu items
-	document.getElementById("ZimTB-NewEmail").addEventListener("click",function(event){
+	document.getElementById("ZimTB-NewEmail").addEventListener("command",function(event){
 		var selectedText = window.content.document.getSelection().toString();
 		var email = selectedText.match(/((([!#$%&'*+\-\/=?^_`{|}~\w])|([!#$%&'*+\-\/=?^_`{|}~\w][!#$%&'*+\-\/=?^_`{|}~\.\w]{0,}[!#$%&'*+\-\/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)/);
 		if(email)
@@ -34,30 +47,39 @@ var ZMTB_MailActions = function(zmtb)
 		else
 			This._messageComp.open();
 	},false);
-	document.getElementById("ZimTB-NewFolder").addEventListener("click",function(event){
+	document.getElementById("ZimTB-NewFolder").addEventListener("command",function(event){
 		This.openActions("ZimTB-NewFolder-Bar");
 		document.getElementById("ZimTB-NewFolder-Name").focus();
 		This._populateList(document.getElementById("ZimTB-NewFolder-Parent"), This._folderMan.getFolders("mail"), This._localstrings.getString("mailaction_rootname"));
 		for (var i=0; i < document.getElementById("ZimTB-NewFolder-Parent").itemCount; i++)
 			if(document.getElementById("ZimTB-NewFolder-Parent").getItemAtIndex(i).getAttribute("value") == 1)
 				document.getElementById("ZimTB-NewFolder-Parent").selectedIndex=i;
+		document.getElementById("ZimTB-NewFolder-Name").value="";
 	},false);
-	document.getElementById("ZimTB-NewSavedSearch").addEventListener("click",function(event){
+	document.getElementById("ZimTB-NewSavedSearch").addEventListener("command",function(event){
 		This.openActions("ZimTB-NewSearchFolder-Bar");
+		document.getElementById("ZimTB-NewSearchFolder-Name").value="";
+		document.getElementById("ZimTB-NewSearchFolder-Query").value="";
 		document.getElementById("ZimTB-NewSearchFolder-Name").focus();
 		This._populateList(document.getElementById("ZimTB-NewSearchFolder-Parent"), This._folderMan.getFolders("search"), This._localstrings.getString("mailaction_rootname"));
 		for (var i=0; i < document.getElementById("ZimTB-NewSearchFolder-Parent").itemCount; i++)
 			if(document.getElementById("ZimTB-NewSearchFolder-Parent").getItemAtIndex(i).getAttribute("value") == 1)
 				document.getElementById("ZimTB-NewSearchFolder-Parent").selectedIndex=i;
 	},false);
-	document.getElementById("ZimTB-NewRSS").addEventListener("click",function(event){
+	document.getElementById("ZimTB-NewRSS").addEventListener("command",function(event){
 		This.newRSSFolderCommand();
+		document.getElementById("ZimTB-NewRSS-Name").value="";
+		document.getElementById("ZimTB-NewRSS-URL").value="";
 		document.getElementById("ZimTB-NewRSS-Name").focus();
 	},false);
-	document.getElementById("ZimTB-ViewMail").addEventListener("click",function(event){
+	document.getElementById("ZimTB-ViewMail").addEventListener("command",function(event){
 		This._rqManager.goToPath("?app=mail");
 	},false);
-	
+}
+
+ZMTB_MailActions.prototype._initActions = function()
+{
+	var This=this;
 	//New Folder
 	document.getElementById("ZimTB-NewFolder-Create").addEventListener("command", function(){
 		if(document.getElementById("ZimTB-NewFolder-Name").value=="")
@@ -67,7 +89,6 @@ var ZMTB_MailActions = function(zmtb)
 		}
 		This.newFolder(document.getElementById("ZimTB-NewFolder-Name").value, "message", document.getElementById("ZimTB-NewFolder-Parent").selectedItem.value);
 		This.hideActions();
-		document.getElementById("ZimTB-NewFolder-Name").value="";
 	}, false);
 	document.getElementById("ZimTB-NewFolder-Close").addEventListener("command", function(){This.hideActions()}, false);
 	
@@ -85,8 +106,6 @@ var ZMTB_MailActions = function(zmtb)
 		}
 		This.newSearchFolder(document.getElementById("ZimTB-NewSearchFolder-Name").value, document.getElementById("ZimTB-NewSearchFolder-Parent").selectedItem.value, document.getElementById("ZimTB-NewSearchFolder-Query").value);
 		This.hideActions();
-		document.getElementById("ZimTB-NewSearchFolder-Name").value="";
-		document.getElementById("ZimTB-NewSearchFolder-Query").value="";
 	}, false);
 	document.getElementById("ZimTB-NewSearchFolder-Close").addEventListener("command", function(){This.hideActions()}, false);
 	
@@ -104,14 +123,9 @@ var ZMTB_MailActions = function(zmtb)
 		}
 		This.newFolder(document.getElementById("ZimTB-NewRSS-Name").value, "message", document.getElementById("ZimTB-NewRSS-Parent").selectedItem.value, document.getElementById("ZimTB-NewRSS-URL").value);
 		This.hideActions();
-		document.getElementById("ZimTB-NewRSS-Name").value="";
-		document.getElementById("ZimTB-NewRSS-URL").value="";
 	}, false);
 	document.getElementById("ZimTB-NewRSS-Close").addEventListener("command", function(){This.hideActions()}, false);
 }
-
-ZMTB_MailActions.prototype = new ZMTB_Actions();
-ZMTB_MailActions.prototype.constructor = ZMTB_MailActions;
 
 ZMTB_MailActions.prototype.enable = function()
 {

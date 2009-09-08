@@ -12,15 +12,15 @@
 		}, false);
 	</script>
 	<toolbar id="ZimTB-Toolbar">
-		<toolbarbutton flex="0" id="ZimTB-Mail-Button" class="ZimTB-Mail-OpenEnv" label="&zmtb.mailactions.mail;" type="menu" menu="ZimTB-Mail-Menu">
+		<toolbarbutton accesskey="M" flex="0" id="ZimTB-Mail-Button" class="ZimTB-Mail-OpenEnv" label="&zmtb.mailactions.mail;" type="menu" menu="ZimTB-Mail-Menu">
 			<menupopup id="ZimTB-Mail-Menu">
-				<menuitem id="ZimTB-NewEmail" label="&zmtb.mailactions.quickcompose;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-NewEmail" label="&zmtb.mailactions.quickcompose;" accesskey="&zmtb.mailactions.quickcompose.ak;" class="menuitem-iconic zmtb-menucommand" />
 				<menuseparator/>
-				<menuitem id="ZimTB-NewFolder" label="&zmtb.mailactions.newfolder;" class="menuitem-iconic zmtb-menucommand" />
-				<menuitem id="ZimTB-NewSavedSearch" label="&zmtb.mailactions.newsaved;" class="menuitem-iconic zmtb-menucommand ZimTB-Saved-Search" />
-				<menuitem id="ZimTB-NewRSS" label="&zmtb.mailactions.newrss;" class="menuitem-iconic zmtb-menucommand ZimTB-RSS-Folder" />
+				<menuitem id="ZimTB-NewFolder" label="&zmtb.mailactions.newfolder;" accesskey="&zmtb.mailactions.newfolder.ak;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-NewSavedSearch" label="&zmtb.mailactions.newsaved;" accesskey="&zmtb.mailactions.newsaved.ak;" class="menuitem-iconic zmtb-menucommand ZimTB-Saved-Search" />
+				<menuitem id="ZimTB-NewRSS" label="&zmtb.mailactions.newrss;" accesskey="&zmtb.mailactions.newrss.ak;" class="menuitem-iconic zmtb-menucommand ZimTB-RSS-Folder" />
 				<menuseparator/>
-				<menuitem id="ZimTB-ViewMail" label="&zmtb.mailactions.viewmail;" class="menuitem-iconic zmtb-menucommand ZimTB-Mail-CloseEnv" />
+				<menuitem id="ZimTB-ViewMail" label="&zmtb.mailactions.viewmail;" accesskey="&zmtb.mailactions.viewmail.ak;" class="menuitem-iconic zmtb-menucommand ZimTB-Mail-CloseEnv" />
 			</menupopup>
 		</toolbarbutton>
 	</toolbar>

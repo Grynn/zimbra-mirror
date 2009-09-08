@@ -2,30 +2,18 @@ var ZMTB_CalendarActions = function(zmtb)
 {
 	ZMTB_Actions.call(this, zmtb);
 	zmtb.getRequestManager().addUpdateListener(this);
-	var This = this;
-	this._folderMan.setFilter("calendars", {type:"appointment", exclude:[3]})
-	
-	//Menu items
-	document.getElementById("ZimTB-NewAppointment").addEventListener("click",function(event){
-		This.newApptCommand();
-	},false);
-	document.getElementById("ZimTB-NewCalendar").addEventListener("click",function(event){
-		This.openActions("ZimTB-NewCal-Bar");
-		document.getElementById("ZimTB-NewCal-Name").focus();
-	},false);
-	document.getElementById("ZimTB-RemoteCalendar").addEventListener("click",function(event){
-		This.openActions("ZimTB-NewRemCal-Bar");
-		document.getElementById("ZimTB-NewRemCal-Name").focus();
-	},false);
-	document.getElementById("ZimTB-SharedCalendar").addEventListener("click",function(event){
-		This.openActions("ZimTB-LinkToCal-Bar");
-		document.getElementById("ZimTB-LinkToCal-Name").focus();
-	},false);
-	document.getElementById("ZimTB-ViewCalendars").addEventListener("click",function(event){
-		This._rqManager.goToPath("?app=calendar")
-	},false);
-	
-	//Context Menu
+	this._folderMan.setFilter("calendars", {type:"appointment", exclude:[3]});
+	this._initContext();
+	this._initMenu();
+	this._initActions();
+}
+
+ZMTB_CalendarActions.prototype = new ZMTB_Actions();
+ZMTB_CalendarActions.prototype.constructor = ZMTB_CalendarActions;
+
+ZMTB_CalendarActions.prototype._initContext = function()
+{
+	var This=this;
 	document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", function(e){
 		if(gContextMenu.onLink && (gContextMenu.linkURL.indexOf(".ics") >=0))
 			document.getElementById("ZMTB-ContextAction-AddCal").hidden = false;
@@ -37,8 +25,41 @@ var ZMTB_CalendarActions = function(zmtb)
 		document.getElementById("ZimTB-NewRemCal-URL").value=gContextMenu.linkURL;
 		document.getElementById("ZimTB-NewRemCal-Name").focus();
 	}, false);
-	
-	//Appts
+}
+
+ZMTB_CalendarActions.prototype._initMenu = function()
+{
+	var This=this;
+	document.getElementById("ZimTB-NewAppointment").addEventListener("command",function(event){
+		This.newApptCommand();
+	},false);
+	document.getElementById("ZimTB-NewCalendar").addEventListener("command",function(event){
+		This.openActions("ZimTB-NewCal-Bar");
+		document.getElementById("ZimTB-NewCal-Name").value="";
+		document.getElementById("ZimTB-NewCal-Name").focus();
+	},false);
+	document.getElementById("ZimTB-RemoteCalendar").addEventListener("command",function(event){
+		This.openActions("ZimTB-NewRemCal-Bar");
+		document.getElementById("ZimTB-NewRemCal-Name").value="";
+		document.getElementById("ZimTB-NewRemCal-URL").value="";
+		document.getElementById("ZimTB-NewRemCal-Name").focus();
+	},false);
+	document.getElementById("ZimTB-SharedCalendar").addEventListener("command",function(event){
+		This.openActions("ZimTB-LinkToCal-Bar");
+		document.getElementById("ZimTB-LinkToCal-Name").value="";
+		document.getElementById("ZimTB-LinkToCal-Owner").value="";
+		document.getElementById("ZimTB-LinkToCal-Path").value="";
+		document.getElementById("ZimTB-LinkToCal-Name").focus();
+	},false);
+	document.getElementById("ZimTB-ViewCalendars").addEventListener("command",function(event){
+		This._rqManager.goToPath("?app=calendar")
+	},false);
+}
+
+ZMTB_CalendarActions.prototype._initActions = function()
+{
+	var This=this;
+	//New Appt
 	document.getElementById("ZimTB-NewAppt-Create").addEventListener("command", function(){
 		This.newAppt(document.getElementById("ZimTB-NewAppt-Calendar").selectedItem.value, document.getElementById("ZimTB-NewAppt-Subject").value, document.getElementById("ZimTB-NewAppt-Location").value, document.getElementById("ZimTB-NewAppt-StartDate").dateValue, document.getElementById("ZimTB-NewAppt-StartTime").dateValue, document.getElementById("ZimTB-NewAppt-EndDate").dateValue, document.getElementById("ZimTB-NewAppt-EndTime").dateValue, document.getElementById("ZimTB-NewAppt-Repeat").selectedItem.value, document.getElementById("ZimTB-NewAppt-Alarm").selectedItem.value, document.getElementById("ZimTB-NewAppt-AllDay").checked);
 		This.hideActions();
@@ -56,7 +77,6 @@ var ZMTB_CalendarActions = function(zmtb)
 		}
 		This.newFolder(document.getElementById("ZimTB-NewCal-Name").value, "appointment", 1);
 		This.hideActions();
-		document.getElementById("ZimTB-NewCal-Name").value="";
 	}, false);
 	document.getElementById("ZimTB-NewCal-Close").addEventListener("command", function(){This.hideActions()}, false);
 	
@@ -74,8 +94,6 @@ var ZMTB_CalendarActions = function(zmtb)
 		}
 		This.newFolder(document.getElementById("ZimTB-NewRemCal-Name").value, "appointment", 1, document.getElementById("ZimTB-NewRemCal-URL").value);
 		This.hideActions();
-		document.getElementById("ZimTB-NewRemCal-Name").value="";
-		document.getElementById("ZimTB-NewRemCal-URL").value="";
 	}, false);
 	document.getElementById("ZimTB-NewRemCal-Close").addEventListener("command", function(){This.hideActions()}, false);
 	
@@ -98,17 +116,9 @@ var ZMTB_CalendarActions = function(zmtb)
 		}
 		This.newLinked(document.getElementById("ZimTB-LinkToCal-Name").value, "appointment", 1, document.getElementById("ZimTB-LinkToCal-Owner").value,  document.getElementById("ZimTB-LinkToCal-Path").value);
 		This.hideActions();
-		document.getElementById("ZimTB-LinkToCal-Name").value="";
-		document.getElementById("ZimTB-LinkToCal-Owner").value="";
-		document.getElementById("ZimTB-LinkToCal-Path").value="";
 	}, false);
 	document.getElementById("ZimTB-LinkToCal-Close").addEventListener("command", function(){This.hideActions()}, false);
-	
-	
 }
-
-ZMTB_CalendarActions.prototype = new ZMTB_Actions();
-ZMTB_CalendarActions.prototype.constructor = ZMTB_CalendarActions;
 
 ZMTB_CalendarActions.prototype.enable = function()
 {

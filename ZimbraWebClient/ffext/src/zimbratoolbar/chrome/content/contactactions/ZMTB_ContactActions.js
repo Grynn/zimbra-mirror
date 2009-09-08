@@ -2,39 +2,60 @@ var ZMTB_ContactActions = function(zmtb)
 {
 	ZMTB_Actions.call(this, zmtb);
 	zmtb.getRequestManager().addUpdateListener(this);
-
-	var This = this;
-	document.getElementById("ZimTB-NewContact").addEventListener("click",function(event){
-		This.newContactCommand();
-	},false);
-	document.getElementById("ZimTB-ViewContacts").addEventListener("click",function(event){
-		This._rqManager.goToPath("?app=contacts");
-	},false);
-	
 	this._folderMan.setFilter("contacts", {type:"contact", exclude:[3], root:true});
 	this._folderMan.setFilter("newcontact", {type:"contact", exclude:[3]});
-	document.getElementById("ZimTB-NewAddressBook").addEventListener("click",function(event){
+	this._initContext();
+	this._initMenu();
+	this._initActions();
+}
+
+ZMTB_ContactActions.prototype = new ZMTB_Actions();
+ZMTB_ContactActions.prototype.constructor = ZMTB_ContactActions;
+
+ZMTB_ContactActions.prototype._initContext = function()
+{
+	var This=this;
+	//Context actions
+	document.getElementById("ZMTB-ContextAction-CreateContact").addEventListener("command", function(){This.newContactCommand(); document.getElementById("ZimTB-NewContact-Email").value = document.popupNode.toString().substr(7);}, false);
+	document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", function(e){if(gContextMenu.onMailtoLink)document.getElementById("ZMTB-ContextAction-CreateContact").hidden = false;else document.getElementById("ZMTB-ContextAction-CreateContact").hidden = true}, false);
+}
+
+ZMTB_ContactActions.prototype._initMenu = function()
+{
+	var This=this;
+	//New Contact
+	document.getElementById("ZimTB-NewContact").addEventListener("command",function(event){
+		This.newContactCommand();
+	},false);
+	//New Address Book
+	document.getElementById("ZimTB-NewAddressBook").addEventListener("command",function(event){
 		This.openActions("ZimTB-NewAddrBook-Bar");
 		This._populateList(document.getElementById("ZimTB-NewAddrBook-Parent"), This._folderMan.getFolders("contacts"), This._localstrings.getString("contactaction_rootname"));
 		for (var i=0; i < document.getElementById("ZimTB-NewAddrBook-Parent").itemCount; i++)
 			if(document.getElementById("ZimTB-NewAddrBook-Parent").getItemAtIndex(i).getAttribute("value") == 7) //Default contacts folder ID
 				document.getElementById("ZimTB-NewAddrBook-Parent").selectedIndex=i;
+		document.getElementById("ZimTB-NewAddrBook-Name").value="";
 		document.getElementById("ZimTB-NewAddrBook-Name").focus();
 	},false);
-	document.getElementById("ZimTB-LinkToAddressBook").addEventListener("click",function(event){
+	//Link to Address Book
+	document.getElementById("ZimTB-LinkToAddressBook").addEventListener("command",function(event){
 		This.openActions("ZimTB-LinkToAddrBook-Bar");
 		This._populateList(document.getElementById("ZimTB-LinkToAddrBook-Parent"), This._folderMan.getFolders("contacts"), This._localstrings.getString("contactaction_rootname"));
 		for (var i=0; i < document.getElementById("ZimTB-LinkToAddrBook-Parent").itemCount; i++)
 			if(document.getElementById("ZimTB-LinkToAddrBook-Parent").getItemAtIndex(i).getAttribute("value") == 7) //Default contacts folder ID
 				document.getElementById("ZimTB-LinkToAddrBook-Parent").selectedIndex=i;
+		document.getElementById("ZimTB-LinkToAddrBook-Name").value="";
 		document.getElementById("ZimTB-LinkToAddrBook-Name").focus();
 	},false);
-	
-	//Context actions
-	document.getElementById("ZMTB-ContextAction-CreateContact").addEventListener("command", function(){This.newContactCommand(); document.getElementById("ZimTB-NewContact-Email").value = document.popupNode.toString().substr(7);}, false);
-	document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", function(e){if(gContextMenu.onMailtoLink)document.getElementById("ZMTB-ContextAction-CreateContact").hidden = false;else document.getElementById("ZMTB-ContextAction-CreateContact").hidden = true}, false);
-	
-	
+	//View Contacts
+	document.getElementById("ZimTB-ViewContacts").addEventListener("command",function(event){
+		This._rqManager.goToPath("?app=contacts");
+	},false);
+}
+
+ZMTB_ContactActions.prototype._initActions = function()
+{
+	var This=this;
 	//New Address Book
 	document.getElementById("ZimTB-NewAddrBook-Create").addEventListener("command", function(){
 		if(document.getElementById("ZimTB-NewAddrBook-Name").value=="")
@@ -44,7 +65,6 @@ var ZMTB_ContactActions = function(zmtb)
 		}
 		This.newFolder(document.getElementById("ZimTB-NewAddrBook-Name").value, "contact", document.getElementById("ZimTB-NewAddrBook-Parent").selectedItem.value);
 		This.hideActions();
-		document.getElementById("ZimTB-NewAddrBook-Name").value="";
 	}, false);
 	document.getElementById("ZimTB-NewAddrBook-Close").addEventListener("command", function(){This.hideActions()}, false);
 	
@@ -67,7 +87,6 @@ var ZMTB_ContactActions = function(zmtb)
 		}
 		This.newLinked(document.getElementById("ZimTB-LinkToAddrBook-Name").value, "contact", document.getElementById("ZimTB-LinkToAddrBook-Parent").selectedItem.value, document.getElementById("ZimTB-LinkToAddrBook-Owner").value, document.getElementById("ZimTB-LinkToAddrBook-Path").value)
 		This.hideActions();
-		document.getElementById("ZimTB-LinkToAddrBook-Name").value="";
 	}, false);
 	document.getElementById("ZimTB-LinkToAddrBook-Close").addEventListener("command", function(){This.hideActions()}, false);
 	
@@ -88,6 +107,7 @@ var ZMTB_ContactActions = function(zmtb)
 			Phone:document.getElementById("ZimTB-NewContact-Phone").value,
 			Fax:document.getElementById("ZimTB-NewContact-Fax").value
 		};
+		//Zimbra 6 accepts homeEmail or workEmail, zimbra 5 accepts only email
 		if(This._zmtb.getRequestManager().getServerVersion().charAt(0) == "6")
 			contactObj.Email = document.getElementById("ZimTB-NewContact-Email").value;
 		else
@@ -107,9 +127,6 @@ var ZMTB_ContactActions = function(zmtb)
 	}, false);
 	document.getElementById("ZimTB-NewContact-Close").addEventListener("command", function(){This.hideActions()}, false);
 }
-
-ZMTB_ContactActions.prototype = new ZMTB_Actions();
-ZMTB_ContactActions.prototype.constructor = ZMTB_ContactActions;
 
 ZMTB_ContactActions.prototype.enable = function()
 {

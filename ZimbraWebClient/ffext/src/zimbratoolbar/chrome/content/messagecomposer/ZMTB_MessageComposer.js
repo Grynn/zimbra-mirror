@@ -33,7 +33,10 @@ ZMTB_MessageComposer.prototype.open = function(email)
 	else
 	{
 		this._attachments = [];
-		this._panel = window.open("chrome://zimbratb/content/messagecomposer/compose.xul", "zimbracompose", "chrome,centerscreen,width=450,height=450");
+		var x = window.screenX + 200;
+		var y = window.screenY + 150;
+		Components.utils.reportError("left is "+x+" & top is "+y);
+		this._panel = window.open("chrome://zimbratb/content/messagecomposer/compose.xul", "zimbracompose", "chrome,top="+y+",left="+x+",width=450,height=450");
 		var This=this;
 		this._panel.addEventListener("load", function(){This._addEvents(email)}, false);
 	}
@@ -48,6 +51,7 @@ ZMTB_MessageComposer.prototype._addEvents = function(email)
 	this._subBox = this._panel.document.getElementById(ZMTB_MessageComposer.SUBFIELD);
 	this._messBox = this._panel.document.getElementById(ZMTB_MessageComposer.MESSFIELD);
 	this._browser = this._panel.document.getElementById(ZMTB_MessageComposer.ATTACHBROWSER);
+	this._panel.document.addEventListener("keypress", function(e){if(e.keyCode == e.DOM_VK_ESCAPE)win.close()}, false);
 	this._browser.addProgressListener(this._pgListener);
 	if(email)
 	{

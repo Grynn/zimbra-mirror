@@ -11,12 +11,12 @@
 	<toolbar id="ZimTB-Toolbar">
 		<toolbarbutton flex="0" id="ZimTB-Contacts-Button" label="&zmtb.contactactions.contacts;" type="menu" menu="ZimTB-Contact-Menu">
 			<menupopup id="ZimTB-Contact-Menu">
-				<menuitem id="ZimTB-NewContact" label="&zmtb.contactactions.newcontact;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-NewContact" label="&zmtb.contactactions.newcontact;" accesskey="&zmtb.contactactions.newcontact.ak;" class="menuitem-iconic zmtb-menucommand" />
 				<menuseparator/>
-				<menuitem id="ZimTB-NewAddressBook" label="&zmtb.contactactions.newaddrbook;" class="menuitem-iconic zmtb-menucommand" />
-				<menuitem id="ZimTB-LinkToAddressBook" label="&zmtb.contactactions.linktoaddrbook;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-NewAddressBook" label="&zmtb.contactactions.newaddrbook;" accesskey="&zmtb.contactactions.newaddrbook.ak;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-LinkToAddressBook" label="&zmtb.contactactions.linktoaddrbook;" accesskey="&zmtb.contactactions.linktoaddrbook.ak;" class="menuitem-iconic zmtb-menucommand" />
 				<menuseparator/>
-				<menuitem id="ZimTB-ViewContacts" label="&zmtb.contactactions.viewcontacts;" class="menuitem-iconic zmtb-menucommand" />
+				<menuitem id="ZimTB-ViewContacts" label="&zmtb.contactactions.viewcontacts;" accesskey="&zmtb.contactactions.viewcontacts.ak;" class="menuitem-iconic zmtb-menucommand" />
 			</menupopup>
 		</toolbarbutton>
 	</toolbar>

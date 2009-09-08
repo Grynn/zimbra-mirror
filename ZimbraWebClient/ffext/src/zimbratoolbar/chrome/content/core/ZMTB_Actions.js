@@ -6,6 +6,8 @@ var ZMTB_Actions = function(zmtb)
 	this._rqManager = zmtb.getRequestManager();
 	this._folderMan = zmtb.getFolderManager();
 	this._rqIds = [];
+	var This=this;
+	document.getElementById("ZimTB-ActionsBar").addEventListener("keypress", function(e){if(e.keyCode == e.DOM_VK_ESCAPE)This.hideActions()}, false);
 }
 
 ZMTB_Actions.prototype = new ZMTB_TBItem();
@@ -39,7 +41,7 @@ ZMTB_Actions.prototype.openActions = function(elementId)
 	document.getElementById("ZimTB-ActionsBar").hidden=false;
 }
 
-ZMTB_Actions.prototype.hideActions = function(elementId)
+ZMTB_Actions.prototype.hideActions = function()
 {
 	for (var i=0; i < document.getElementById("ZimTB-ActionsBar").childNodes.length; i++)
 		document.getElementById("ZimTB-ActionsBar").childNodes[i].hidden = true;

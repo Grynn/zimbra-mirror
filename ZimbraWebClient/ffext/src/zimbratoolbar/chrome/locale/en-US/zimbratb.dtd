@@ -36,10 +36,15 @@
 
 <!ENTITY zmtb.mailactions.mail "Mail">
 <!ENTITY zmtb.mailactions.quickcompose "Quick Compose">
+<!ENTITY zmtb.mailactions.quickcompose.ak "Q">
 <!ENTITY zmtb.mailactions.newfolder "New Folder">
+<!ENTITY zmtb.mailactions.newfolder.ak "F">
 <!ENTITY zmtb.mailactions.newsaved "New Saved Search">
+<!ENTITY zmtb.mailactions.newsaved.ak "S">
 <!ENTITY zmtb.mailactions.newrss "New RSS/ATOM Feed">
+<!ENTITY zmtb.mailactions.newrss.ak "R">
 <!ENTITY zmtb.mailactions.viewmail "View Email">
+<!ENTITY zmtb.mailactions.viewmail.ak "V">
 
 
 <!ENTITY zmtb.mailactions.name "Name:">
@@ -62,9 +67,13 @@
 <!-- Contact actions -->
 <!ENTITY zmtb.contactactions.contacts "Contacts">
 <!ENTITY zmtb.contactactions.newcontact "New Contact">
+<!ENTITY zmtb.contactactions.newcontact.ak "C">
 <!ENTITY zmtb.contactactions.newaddrbook "New Address Book">
+<!ENTITY zmtb.contactactions.newaddrbook.ak "B">
 <!ENTITY zmtb.contactactions.linktoaddrbook "Link to Address Book">
+<!ENTITY zmtb.contactactions.linktoaddrbook.ak "L">
 <!ENTITY zmtb.contactactions.viewcontacts "View Contacts">
+<!ENTITY zmtb.contactactions.viewcontacts.ak "V">
 
 
 <!ENTITY zmtb.contactactions.cancel "Cancel">
@@ -100,10 +109,15 @@
 <!-- Calendar actions -->
 <!ENTITY zmtb.calendaractions.calendar "Calendar">
 <!ENTITY zmtb.calendaractions.newappt "New Appointment">
+<!ENTITY zmtb.calendaractions.newappt.ak "A">
 <!ENTITY zmtb.calendaractions.newcal "New Calendar">
+<!ENTITY zmtb.calendaractions.newcal.ak "C">
 <!ENTITY zmtb.calendaractions.newremcal "Subscribe to Remote Calendar">
+<!ENTITY zmtb.calendaractions.newremcal.ak "S">
 <!ENTITY zmtb.calendaractions.linktocal "Link to Shared Calendar">
+<!ENTITY zmtb.calendaractions.linktocal.ak "L">
 <!ENTITY zmtb.calendaractions.viewcal "View Calendars">
+<!ENTITY zmtb.calendaractions.viewcal.ak "V">
 
 <!ENTITY zmtb.calendaractions.cancel "Cancel">
 <!ENTITY zmtb.calendaractions.name "Name:">
@@ -154,10 +168,15 @@
 <!-- Task actions -->
 <!ENTITY zmtb.taskactions.tasks "Tasks">
 <!ENTITY zmtb.taskactions.newtask "New Task">
+<!ENTITY zmtb.taskactions.newtask.ak "T">
 <!ENTITY zmtb.taskactions.newlist "New Task List">
+<!ENTITY zmtb.taskactions.newlist.ak "N">
 <!ENTITY zmtb.taskactions.newremlist "Subscribe to Remote Task List">
+<!ENTITY zmtb.taskactions.newremlist.ak "S">
 <!ENTITY zmtb.taskactions.linktolist "Link to Shared Task List">
+<!ENTITY zmtb.taskactions.linktolist.ak "L">
 <!ENTITY zmtb.taskactions.viewtasks "View Tasks">
+<!ENTITY zmtb.taskactions.viewtasks.ak "V">
 
 <!ENTITY zmtb.taskactions.cancel "Cancel">
 <!ENTITY zmtb.taskactions.name "Name:">

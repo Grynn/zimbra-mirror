@@ -133,6 +133,12 @@ ZMTB_RequestManager.prototype.goToPath = function(path, callback, callObj)
 	var ios = Components.classes["@mozilla.org/network/io-service;1"]
                     .getService(Components.interfaces.nsIIOService);
 	var url = this.getServerURL()+path;
+	//Force advanced client
+	var args = url.indexOf("?");
+	if(args > 0)
+		url = url.substr(0, args+1) + "client=advanced&" + url.substr(args+1);
+	else
+		url += "?client=advanced";
 	this._curLoc = url;
 
 	if(this.getTabPreference() == "New Window")

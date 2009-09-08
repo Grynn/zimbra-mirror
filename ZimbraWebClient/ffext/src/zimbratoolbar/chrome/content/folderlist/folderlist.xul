@@ -8,7 +8,7 @@
 	</script>
 	<toolbar id="ZimTB-Toolbar">
 		<toolbaritem id="ZimTB-Folders-TBItem" >
-			<menulist id="ZimTB-Folders" editable="false" flex="1" width="150" sizetopopup="none">
+			<menulist id="ZimTB-Folders" editable="false" flex="1" width="150" height="15" style="min-height:15px ! important;" sizetopopup="none">
 				<menupopup class="menulist-menupopup" />
 			</menulist>
 		</toolbaritem>
