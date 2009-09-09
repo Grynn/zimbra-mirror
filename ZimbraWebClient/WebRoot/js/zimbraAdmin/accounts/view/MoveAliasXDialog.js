@@ -138,7 +138,8 @@ function() {
 								dataFetcherTypes:[ZaSearch.ACCOUNTS, ZaSearch.RESOURCES, ZaSearch.DLS],
 								dataFetcherAttrs:[ZaItem.A_zimbraId, ZaItem.A_cn, ZaAccount.A_name, ZaAccount.A_displayname, ZaAccount.A_mail],
 								toolTipContent:ZaMsg.tt_StartTypingAccountName,
-								width:"200px", inputSize:30, editable:true, forceUpdate:true,
+								label:ZaMsg.NAD_AccountName,labelLocation:_LEFT_,
+								width:"100%", inputSize:30, editable:true, forceUpdate:true,
 								choices:new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, "name", "name"),
 								visibilityChecks:[],enableDisableChecks:[],
 								onChange: function(value, event, form){
