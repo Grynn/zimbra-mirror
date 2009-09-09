@@ -64,6 +64,7 @@ DIRS := openssl \
 	libtool \
 	openldap \
 	aspell \
+	sendmail \
 	clamav \
 	apache-httpd \
 	php \
