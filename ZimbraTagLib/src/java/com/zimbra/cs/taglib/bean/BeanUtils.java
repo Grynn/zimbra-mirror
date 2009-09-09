@@ -1248,6 +1248,14 @@ public class BeanUtils {
 						});
 			}
 		}
+		String callerId = phone.getCallerId();
+		if (!StringUtil.isNullOrEmpty(callerId)) {
+			return I18nUtil.getLocalizedMessage(pc, "callingPartyCallerIdFormat",
+					new Object[] {
+							BeanUtils.cook(callerId),
+							phoneDisplay
+					});
+		}
 		return phoneDisplay;
 	}
 
