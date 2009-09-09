@@ -6609,6 +6609,12 @@
     </function>
 
     <function>
+        <name>getDisplayCaller</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getDisplayCaller(javax.servlet.jsp.PageContext, com.zimbra.cs.zclient.ZPhone)</function-signature>
+    </function>
+
+    <function>
         <name>isValidPhoneNumber</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isValidPhoneNumber(java.lang.String)</function-signature>

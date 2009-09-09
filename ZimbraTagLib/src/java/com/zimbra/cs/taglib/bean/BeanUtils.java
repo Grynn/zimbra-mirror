@@ -19,10 +19,8 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.HttpUtil;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.soap.VoiceConstants;
+import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.cs.taglib.ZJspSession;
-import com.zimbra.cs.zclient.ZAppointmentHit;
-import com.zimbra.cs.zclient.ZEmailAddress;
-import com.zimbra.cs.zclient.ZFilterAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZDiscardAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZFileIntoAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZKeepAction;
@@ -30,7 +28,6 @@ import com.zimbra.cs.zclient.ZFilterAction.ZMarkAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZRedirectAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZStopAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZTagAction;
-import com.zimbra.cs.zclient.ZFilterCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZAddressBookCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZAttachmentExistsCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZBodyCondition;
@@ -38,21 +35,13 @@ import com.zimbra.cs.zclient.ZFilterCondition.ZDateCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZHeaderCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZHeaderExistsCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition;
-import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZFolder.Color;
 import com.zimbra.cs.zclient.ZFolder.View;
-import com.zimbra.cs.zclient.ZInvite;
 import com.zimbra.cs.zclient.ZInvite.ZAttendee;
 import com.zimbra.cs.zclient.ZInvite.ZComponent;
 import com.zimbra.cs.zclient.ZInvite.ZWeekDay;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZShare;
-import com.zimbra.cs.zclient.ZSimpleRecurrence;
 import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
-import com.zimbra.cs.zclient.ZTag;
-import com.zimbra.cs.zclient.ZSearchParams;
-import com.zimbra.cs.zclient.ZPhone;
-import com.zimbra.cs.zclient.ZPhoneAccount;
+import com.zimbra.cs.zclient.*;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -61,7 +50,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
-import com.zimbra.cs.mailbox.MailServiceException;
+import com.zimbra.cs.mailbox.Contact;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 import com.yahoo.platform.yui.compressor.CssCompressor;
 
@@ -1229,7 +1218,38 @@ public class BeanUtils {
 		return account == null ? null : new ZPhoneAccountBean(account);
 	}
 
-
+	public static Map<String, String> sPHONE_FIELDS = new HashMap<String, String>();
+	static {
+		sPHONE_FIELDS.put(ContactConstants.A_callbackPhone, "phoneLabelCallback");
+		sPHONE_FIELDS.put(ContactConstants.A_carPhone, "phoneLabelCar");
+		sPHONE_FIELDS.put(ContactConstants.A_assistantPhone, "phoneLabelAssistant");
+		sPHONE_FIELDS.put(ContactConstants.A_companyPhone, "phoneLabelCompany");
+		sPHONE_FIELDS.put(ContactConstants.A_homeFax, "phoneLabelHomeFax");
+		sPHONE_FIELDS.put(ContactConstants.A_homePhone, "phoneLabelHome");
+		sPHONE_FIELDS.put(ContactConstants.A_homePhone2, "phoneLabelHome2");
+		sPHONE_FIELDS.put(ContactConstants.A_mobilePhone, "phoneLabelMobile");
+		sPHONE_FIELDS.put(ContactConstants.A_otherPhone, "phoneLabelOther");
+		sPHONE_FIELDS.put(ContactConstants.A_workPhone, "phoneLabelWork");
+		sPHONE_FIELDS.put(ContactConstants.A_workPhone2, "phoneLabelWork2");
+	}
+	public static String getDisplayCaller(PageContext pc, ZPhone phone) throws ServiceException, JspException {
+		ZMailbox mbox = ZJspSession.getZMailbox(pc);
+		ZContactByPhoneCache.ContactPhone data = mbox.getContactByPhone(phone.getName());
+		String phoneDisplay = phone.getDisplay();
+		if (data != null) {
+			String fileAsString = Contact.getFileAsString(data.getContact().getAttrs());
+			if (fileAsString != null && fileAsString.length() > 0) {
+				String field = I18nUtil.getLocalizedMessage(pc, sPHONE_FIELDS.get(data.getField()));
+				return I18nUtil.getLocalizedMessage(pc, "callingPartyFormat",
+						new Object[] {
+								BeanUtils.cook(fileAsString),
+								field,
+								phoneDisplay
+						});
+			}
+		}
+		return phoneDisplay;
+	}
 
 	private static Pattern sPHONE_NAME = Pattern.compile("[^\\d]");
 	private static String getPhoneName(String display) {

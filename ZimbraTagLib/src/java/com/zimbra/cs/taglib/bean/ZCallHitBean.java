@@ -33,6 +33,8 @@ public class ZCallHitBean extends ZSearchHitBean {
 
     public ZPhone getCaller() { return mHit.getCaller(); }
 
+    public ZPhone getRecipient() { return mHit.getRecipient(); }
+
     public String getDisplayCaller() { return mHit.getDisplayCaller(); }
 
 	public String getDisplayRecipient() { return mHit.getDisplayRecipient(); }
