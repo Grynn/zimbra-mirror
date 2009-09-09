@@ -198,7 +198,9 @@ CLEAN_TARGETS	=	\
 		$(PERL_TGZ_DEST) \
 		$(PERL_BIN_TGZ_DEST)
 
-all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
+all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR) build check tarball
+
+build:
 	mkdir -p $(TMPDIR)
 	@echo "Logging to $(LOGFILE)"
 
@@ -297,7 +299,7 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 			cp -R $(DEST_DIR)/opt/zimbra/zimbramon/* $(DEST_DIR); \
 			rm -rf $(DEST_DIR)/opt;) >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
-	done	
+	done
 
 	@for lib in $(SWATCH); do \
 		echo -n "Compiling perl lib $$lib ..."; \
@@ -309,7 +311,14 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 			$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
-	done	
+	done
+
+check:
+	@echo -n "Verifying build..."; \
+	(./zmcheckbuiltmodules.pl); \
+	if [ $$? -ne 0 ]; then "echo "FAILED."; else echo "done."; fi
+
+tarball:
 	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
 	(cd $(DEST_LIB_DIR); rm -f i386-linux-thread-multi/goferperf.pl; \
 	tar czf $(PERL_TGZ_DEST) .); \
@@ -320,17 +329,6 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)/*
 
-
-tarball:
-	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
-	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .; \
-	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi)
-	@echo -n "Creating $(PERL_BIN_TGZ_DEST)..."; \
-	(cd $(DEST_BIN_DIR); \
-	tar cfz $(PERL_BIN_TGZ_DEST) sa-compile sa-learn sa-update spamassassin spamc spamd; \
-	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi)
-	chmod -R a+w $(PERL_TGZ_DEST_DIR)/*
-
 $(PERL_TGZ_DEST_DIR):
 	mkdir -p $@
 
@@ -339,11 +337,6 @@ $(DEST_LIB_DIR):
 
 $(DEST_BIN_DIR):
 	mkdir -p $@
-
-DBD:
-	echo "Compiling perl lib DBD::mysql"; \
-	$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' ; \
-
 
 setup:
 	mkdir -p ${HOME}/.cpan/CPAN
