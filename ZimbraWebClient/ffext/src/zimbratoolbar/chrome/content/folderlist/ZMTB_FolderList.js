@@ -46,8 +46,10 @@ ZMTB_FolderList.prototype.updateFolders = function()
 	for (var i=0; i < this._menuList.menupopup.childNodes.length; i++)
 	{
 		var open = this._menuList.menupopup.childNodes[i].appendItem("Open this Folder in Zimbra", this._menuList.menupopup.childNodes[i].value);
+		if(this._menuList.menupopup.childNodes[i].getAttribute("query"))
+			open.setAttribute("query", this._menuList.menupopup.childNodes[i].getAttribute("query"))
 		var This=this;
-		open.addEventListener("command", function(e){This.execFolder(e.target.value)}, false);
+		open.addEventListener("command", function(e){This.execFolder(e.target)}, false);
 		this._menuList.menupopup.childNodes[i].menupopup.appendChild(document.createElement("menuseparator"));
 	}
 	this.getMessages(folders);
@@ -72,9 +74,27 @@ ZMTB_FolderList.prototype.resetFolderList = function()
 		this._menuList.menupopup.removeChild(this._menuList.menupopup.childNodes[i]);
 }
 
-ZMTB_FolderList.prototype.execFolder = function(id)
+ZMTB_FolderList.prototype.execFolder = function(menu)
 {
-	this._rqManager.goToPath("?app=mail&f="+id, this._scriptFolder);
+	if(menu.getAttribute("query"))
+	{
+		this._menuList.query = menu.getAttribute("query");
+		this._rqManager.goToPath("?app=mail", this._scriptSearch, this);
+	}
+	else
+		this._rqManager.goToPath("?app=mail&f="+menu.value, this._scriptFolder);
+}
+
+ZMTB_FolderList.prototype._scriptSearch = function(loc, doc)
+{
+	if(doc.getElementById("zmtb_customScript"))
+		return;
+	var s = doc.createElement("script");
+	s.id = "zmtb_customScript";
+	var q = this._menuList.query;
+	var t = doc.createTextNode('window.appCtxt.getSearchController().search({"query":"'+unescape(q)+'"})');
+	s.appendChild(t);
+	doc.body.appendChild(s);
 }
 
 ZMTB_FolderList.prototype._scriptFolder = function(loc, doc)

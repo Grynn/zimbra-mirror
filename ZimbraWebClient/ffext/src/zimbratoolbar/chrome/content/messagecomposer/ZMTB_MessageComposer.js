@@ -169,7 +169,6 @@ ZMTB_MessageComposer.prototype.receiveFiles = function(files)
 
 ZMTB_MessageComposer.prototype.processStatus = function(status)
 {
-	Components.utils.reportError(status);
 	if(status == 0)
 		this._panel.document.getElementById(ZMTB_MessageComposer.ERRORLABEL).value="";
 	else if(status == 2152857613)
