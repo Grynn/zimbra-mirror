@@ -140,19 +140,6 @@ ZMTB_ContactActions.prototype.disable = function()
 
 ZMTB_ContactActions.prototype.receiveUpdate = function(responseObj)
 {
-	if(responseObj.Body.Fault && this.getRqObj(responseObj.Body.Fault.requestId))
-	// if(responseObj.Body.Fault && this.hasRequestId(responseObj.Body.Fault.requestId))
-	{
-		// switch(responseObj.Body.Fault.Detail.Error.Code)
-		// {
-		// 	case "mail.INVALID_NAME":
-		// 		this.notifyFail("Invalid folder name.");
-		// 		break;
-		// 	case "mail.INVALID_NAME":
-		// 		this.notifyFail("Invalid folder name.");
-		// 		break;
-		// }
-	}
 	if(responseObj.Body.CreateContactResponse && responseObj.Body.CreateContactResponse.cn)
 	{
 		this._zmtb.notify("Contact created successfully.", null, "success");
@@ -170,6 +157,22 @@ ZMTB_ContactActions.prototype.receiveUpdate = function(responseObj)
 		for (var i=0; i < responseObj.Body.CreateMountpointResponse.link.length; i++)
 			if(responseObj.Body.CreateMountpointResponse.link[i].view == "contact")
 				this._zmtb.notify(this._localstrings.getString("contactaction_linkedaddrbook_success"), null, "success");
+	}
+}
+
+ZMTB_ContactActions.prototype.receiveError = function(error)
+{
+	switch(error.code)
+	{
+		// switch(responseObj.Body.Fault.Detail.Error.Code)
+		// {
+		// 	case "mail.INVALID_NAME":
+		// 		this.notifyFail("Invalid folder name.");
+		// 		break;
+		// 	case "mail.INVALID_NAME":
+		// 		this.notifyFail("Invalid folder name.");
+		// 		break;
+		// }
 	}
 }
 

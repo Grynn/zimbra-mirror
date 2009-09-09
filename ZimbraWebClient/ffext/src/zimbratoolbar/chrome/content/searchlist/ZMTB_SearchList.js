@@ -83,8 +83,6 @@ ZMTB_SearchList.prototype.execSearch = function(query)
 
 ZMTB_SearchList.prototype.receiveUpdate = function(responseObj)
 {
-	if(responseObj.code)
-		return;
 	if(responseObj.Header.context.refresh)
 	{
 		this._tags =[];
@@ -105,6 +103,10 @@ ZMTB_SearchList.prototype.receiveUpdate = function(responseObj)
 				this._tags.push({name:resp.tag[i].name, value:resp.tag[i].id, color:resp.tag[i].color});
 		this.loadTags();
 	}
+}
+
+ZMTB_SearchList.prototype.receiveError = function(error)
+{
 }
 
 ZMTB_SearchList.prototype.addToList = function(array, list)

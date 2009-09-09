@@ -136,27 +136,7 @@ ZMTB_MailActions.prototype.disable = function()
 
 ZMTB_MailActions.prototype.receiveUpdate = function(responseObj)
 {
-	if(responseObj.Body.Fault && this.getRqObj(responseObj.Body.Fault.requestId))
-	{
-		// switch(responseObj.Body.Fault.Detail.Error.Code)
-		// {
-		// 	case "mail.INVALID_NAME":
-		// 		this.notifyFail("Invalid folder name.");
-		// 		break;
-		// 	case "service.INVALID_REQUEST":
-		// 		this.notifyFail(responseObj.Body.Fault.Reason.Text);
-		// 		break;
-		// 	case "mail.ALREADYEXISTS":
-		// 		this.notifyFail("Folder name already exists.");
-		// 		break;
-		// 	case "mail.SEND_FAILURE":
-		// 		this.notifyFail("Message could not be sent.");
-		// 		break;
-		// 	case "mail.SEND_FAILURE":
-		// 		this.notifyFail("Folder name already exists.");
-		// 		break;
-		// }
-	}
+
 	if(responseObj.Body.CreateFolderResponse && responseObj.Body.CreateFolderResponse.folder)
 	{
 		for (var i=0; i < responseObj.Body.CreateFolderResponse.folder.length; i++)
@@ -177,6 +157,31 @@ ZMTB_MailActions.prototype.receiveUpdate = function(responseObj)
 		this._zmtb.notify(this._localstrings.getString("mailaction_newmessage_sent"), null, "success");
 	if(responseObj.Body.SaveDraftResponse && responseObj.Body.SaveDraftResponse.m)
 		this._zmtb.notify(this._localstrings.getString("mailaction_newmessage_saved"), null, "success");
+}
+
+ZMTB_MailActions.prototype.receiveError = function(error)
+{
+	switch(error.code)
+	{
+		// switch(responseObj.Body.Fault.Detail.Error.Code)
+		// {
+		// 	case "mail.INVALID_NAME":
+		// 		this.notifyFail("Invalid folder name.");
+		// 		break;
+		// 	case "service.INVALID_REQUEST":
+		// 		this.notifyFail(responseObj.Body.Fault.Reason.Text);
+		// 		break;
+		// 	case "mail.ALREADYEXISTS":
+		// 		this.notifyFail("Folder name already exists.");
+		// 		break;
+		// 	case "mail.SEND_FAILURE":
+		// 		this.notifyFail("Message could not be sent.");
+		// 		break;
+		// 	case "mail.SEND_FAILURE":
+		// 		this.notifyFail("Folder name already exists.");
+		// 		break;
+		// }
+	}
 }
 
 ZMTB_MailActions.prototype.reset = function(){}

@@ -37,8 +37,6 @@ ZMTB_ApptManager.prototype.reset = function()
 
 ZMTB_ApptManager.prototype.receiveUpdate = function(responseObj)
 {
-	if(responseObj.code)
-		return;
 	if(responseObj.Body.BatchResponse && responseObj.Body.BatchResponse.SearchResponse)
 	{
 		for (var i=0; i < responseObj.Body.BatchResponse.SearchResponse.length; i++)
@@ -92,6 +90,10 @@ ZMTB_ApptManager.prototype.receiveUpdate = function(responseObj)
 		//this._checkSnoozes();
 		this._setTimers();
 	}
+}
+
+ZMTB_ApptManager.prototype.receiveError = function(error)
+{
 }
 
 ZMTB_ApptManager.prototype.notify = function(id)

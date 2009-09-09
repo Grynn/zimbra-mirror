@@ -97,7 +97,8 @@ function(fault, method) {
 	var faultCode = ZMTB_AjxStringUtil.getAsString(fault.Code.Value);
 	var errorCode = ZMTB_AjxStringUtil.getAsString(fault.Detail.Error.Code);
 	var reasonText = fault.Reason.Text + (trace ? "\n" + trace : "");
-	return new ZMTBCsfeException(reasonText, errorCode, method, faultCode, fault.Detail.Error.a);
+	var requestId = fault.requestId;
+	return new ZMTBCsfeException(reasonText, errorCode, method, faultCode, fault.Detail.Error.a, requestId);
 };
 
 /**
@@ -308,16 +309,16 @@ function(response, asyncMode) {
 
 	var fault = data.Body.Fault;
 	if (fault) {
-		if (asyncMode)
-			result.set(data);
+		// if (asyncMode)
+		// 	result.set(data);
 		// JS response with fault
-		// var ex = ZMTBCsfeCommand.faultToEx(fault, "ZMTBCsfeCommand.prototype.invoke");
-		// if (asyncMode) {
-		// 	result.set(ex, true, data.Header);
-		// 	return result;
-		// } else {
-		// 	throw ex;
-		// }
+		var ex = ZMTBCsfeCommand.faultToEx(fault, "ZMTBCsfeCommand.prototype.invoke");
+		if (asyncMode) {
+			result.set(ex, true, data.Header);
+			return result;
+		} else {
+			throw ex;
+		}
 	} else if (!response.success) {
 		// bad XML or JS response that had no fault
 		var ex = new ZMTBCsfeException("Csfe service error", ZMTBCsfeException.CSFE_SVC_ERROR,

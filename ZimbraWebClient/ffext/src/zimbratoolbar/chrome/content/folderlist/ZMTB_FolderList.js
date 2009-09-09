@@ -96,8 +96,6 @@ ZMTB_FolderList.prototype.execMessage = function(message)
 
 ZMTB_FolderList.prototype.receiveUpdate = function(responseObj)
 {
-	if(responseObj.code)
-		return;
 	if(responseObj.Body.SearchResponse && responseObj.Body.SearchResponse.m)
 	{
 		this._messages = [];
@@ -126,8 +124,11 @@ ZMTB_FolderList.prototype.receiveUpdate = function(responseObj)
 			}
 			this._populateFolders();
 		}
-	}
-		
+	}	
+}
+
+ZMTB_FolderList.prototype.receiveError = function(error)
+{
 }
 
 ZMTB_FolderList.prototype.getMessages = function(folders)

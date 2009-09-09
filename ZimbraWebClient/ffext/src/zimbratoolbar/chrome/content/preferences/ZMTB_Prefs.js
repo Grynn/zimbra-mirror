@@ -104,28 +104,25 @@ ZMTB_Prefs.prototype._addToMenu = function(folder, class)
 ZMTB_Prefs.prototype.receiveUpdate = function(responseObj)
 {
 	clearTimeout(this._timeout);
-	if(responseObj.Body.Fault && responseObj.Body.Fault.Detail.Error.Code)
-	{
-		if(this._statusLabel.value == this._localStrings.getString("preferences_status_connected"))
-			return;
-		switch(responseObj.Body.Fault.Detail.Error.Code)
-		{
-			case "NETWORK_ERROR":
-				this.setStatus(this._localStrings.getString("preferences_status_noconnect"));
-				break;
-			case "account.CHANGE_PASSWORD":
-				this.setStatus(this._localStrings.getString("preferences_status_passexp"));
-				break;
-			case "account.AUTH_FAILED":
-				this.setStatus(this._localStrings.getString("preferences_status_noauth"));
-				break;
-		}
-	}
-	else
-	{
-		clearTimeout(this._timeout);
+
 		if(this._startConnect)
 			this.setStatus(this._localStrings.getString("preferences_status_connected"))
+}
+
+ZMTB_Prefs.prototype.receiveError = function(error)
+{
+	clearTimeout(this._timeout);
+	switch(error.code)
+	{
+		case "NETWORK_ERROR":
+			this.setStatus(this._localStrings.getString("preferences_status_noconnect"));
+			break;
+		case "account.CHANGE_PASSWORD":
+			this.setStatus(this._localStrings.getString("preferences_status_passexp"));
+			break;
+		case "account.AUTH_FAILED":
+			this.setStatus(this._localStrings.getString("preferences_status_noauth"));
+			break;
 	}
 }
 

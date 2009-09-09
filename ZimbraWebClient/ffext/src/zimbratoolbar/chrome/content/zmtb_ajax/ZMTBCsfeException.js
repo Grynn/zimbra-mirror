@@ -23,9 +23,9 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZMTBCsfeException(msg, code, method, detail, data) {
+function ZMTBCsfeException(msg, code, method, detail, data, requestId) {
 	ZMTB_AjxException.call(this, msg, code, method, detail);
-	
+	this.requestId = requestId;
 	if (data) {
 		this.data = {};
 		for (var i = 0; i < data.length; i++) {

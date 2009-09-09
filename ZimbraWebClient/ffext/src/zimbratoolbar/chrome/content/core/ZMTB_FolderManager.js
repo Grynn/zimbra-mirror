@@ -180,6 +180,10 @@ ZMTB_FolderManager.prototype.receiveUpdate = function(responseObj)
 	}
 }
 
+ZMTB_FolderManager.prototype.receiveError = function(error)
+{
+}
+
 ZMTB_FolderManager.prototype.reset = function()
 {
 	this._folders = {};

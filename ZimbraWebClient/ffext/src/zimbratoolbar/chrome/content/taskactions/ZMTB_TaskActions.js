@@ -118,8 +118,6 @@ ZMTB_TaskActions.prototype.disable = function()
 
 ZMTB_TaskActions.prototype.receiveUpdate = function(responseObj)
 {
-	if(responseObj.code)
-		return;
 	if(responseObj.Body.CreateTaskResponse)
 		this._zmtb.notify(this._localstrings.getString("taskaction_newtask_success"), null, "success");
 	if(responseObj.Body.CreateFolderResponse && responseObj.Body.CreateFolderResponse.folder)
@@ -141,6 +139,10 @@ ZMTB_TaskActions.prototype.receiveUpdate = function(responseObj)
 			if(responseObj.Body.CreateMountpointResponse.link[i].view == "task")
 				this._zmtb.notify(this._localstrings.getString("taskaction_linkedtasklist_success"), null, "success");
 	}
+}
+
+ZMTB_TaskActions.prototype.receiveError = function(error)
+{
 }
 
 ZMTB_TaskActions.prototype.reset = function() {}

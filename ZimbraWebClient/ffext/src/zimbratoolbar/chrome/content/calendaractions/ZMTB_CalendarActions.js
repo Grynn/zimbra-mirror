@@ -22,6 +22,7 @@ ZMTB_CalendarActions.prototype._initContext = function()
 	}, false);
 	document.getElementById("ZMTB-ContextAction-AddCal").addEventListener("command",function(){
 		This.openActions("ZimTB-NewRemCal-Bar");
+		document.getElementById("ZimTB-NewRemCal-Name").value="";
 		document.getElementById("ZimTB-NewRemCal-URL").value=gContextMenu.linkURL;
 		document.getElementById("ZimTB-NewRemCal-Name").focus();
 	}, false);
@@ -132,8 +133,6 @@ ZMTB_CalendarActions.prototype.disable = function()
 
 ZMTB_CalendarActions.prototype.receiveUpdate = function(responseObj)
 {
-	if(responseObj.code)
-		return;
 	if(responseObj.Body.CreateAppointmentResponse)
 	{
 		this._zmtb.notify(this._localstrings.getString("calendaraction_newappt_success"), null, "success");
@@ -158,6 +157,10 @@ ZMTB_CalendarActions.prototype.receiveUpdate = function(responseObj)
 			if(responseObj.Body.CreateMountpointResponse.link[i].view == "appointment")
 				this._zmtb.notify(this._localstrings.getString("calendaraction_linkedcal_success"), null, "success");
 	}
+}
+
+ZMTB_CalendarActions.prototype.receiveError = function(error)
+{
 }
 
 ZMTB_CalendarActions.prototype.reset = function(){}

@@ -67,10 +67,10 @@ ZMTB_RequestManager.prototype.sendRequest = function(soapDoc)
 	try{
 		req.invoke({soapDoc:soapDoc, asyncMode:true, callback:new ZMTB_AjxCallback(this, this.parseResponse), changeToken:this._changeToken});
 		clearTimeout(this._timeout);
-		this._timeout = setTimeout(function(){
-			This._zmtb.notify(This._zmtb.getLocalStrings().getString("requestfail"), null, "failure");
-			This._zmtb.disable();
-		}, 5000);
+		// this._timeout = setTimeout(function(){
+		// 	This._zmtb.notify(This._zmtb.getLocalStrings().getString("requestfail"), null, "failure");
+		// 	This._zmtb.disable();
+		// }, 5000);
 	}catch(ex){
 		this._zmtb.notify(this._zmtb.getLocalStrings().getString("requestfail"), null, "failure");
 	}
@@ -194,42 +194,39 @@ ZMTB_RequestManager.prototype.parseResponse = function(result)
 			this._zmtb.disable();
 		return;
 	}
-	if(!rd.Body)
+	if(rd.code)
 	{
-		if(rd.code == ZMTBCsfeException.NETWORK_ERROR)
-			this._zmtb.disable();
-		return;
-	}
-	if(rd.Body.Fault)
-	{
-		this._zmtb.notify(this._zmtb.getLocalStrings().getString("requestfail"), null, "failure");
-		switch(rd.Body.Fault.Detail.Error.Code)
+		var notify = true;
+		switch(rd.code)
 		{
 			case "NETWORK_ERROR":
 			case "account.CHANGE_PASSWORD":
 			case "account.AUTH_FAILED":
 				this._zmtb.disable();
+				notify = false;
 				break;
 		}
+		if(notify)
+			this._zmtb.notify(this._zmtb.getLocalStrings().getString("requestfail"), null, "failure");
 		this._listeners.forEach(function(element){
-			element.receiveUpdate(rd);
+			element.receiveError(rd);
 		});
 		return;
 	}
 	this._zmtb.enable();
 	if(rd.Header.context.refresh && rd.Header.context.refresh.version)
 		this._serverVersion = rd.Header.context.refresh.version;
-	if(rd.Header.context.change)
-	{
-		var ct = rd.Header.context.change.token;
-		if(ct>this._changeToken)
-			this._changeToken = ct;
-	}
 	if(rd.Header.context.notify)
 	{
 		for (var i=0; i < rd.Header.context.notify.length; i++)
 			if(this._notifySeq < rd.Header.context.notify[i].seq)
 				this._notifySeq = rd.Header.context.notify[i].seq;
+	}
+	if(rd.Header.context.change)
+	{
+		var ct = rd.Header.context.change.token;
+		if(ct>this._changeToken)
+			this._changeToken = ct;
 	}
 	if(rd.Body.AuthResponse && rd.Body.AuthResponse.authToken)
 	{
@@ -248,13 +245,6 @@ ZMTB_RequestManager.prototype.parseResponse = function(result)
 	    cookieSvc.setCookieString(cookieUri, null, cookieString, null);
 		this.updateAll();
 	}
-	if(rd.Header.context.change)
-	{
-		var ct = rd.Header.context.change.token;
-		if(ct>this._changeToken)
-			this._changeToken = ct;
-	}
-	
 	this._listeners.forEach(function(element){
 		element.receiveUpdate(rd);
 	});
