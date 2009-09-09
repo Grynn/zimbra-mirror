@@ -18,8 +18,10 @@ build:
 	cd sendmail-$(SENDMAIL_VERSION)/libmilter; \
 	./Build; \
 	cd ../obj.*/libmilter; \
-	mkdir -p $(ZIMBRA_HOME)/sendmail-$(SENDMAIL_VERSION)/lib; \
-	cp -p libmilter.a $(ZIMBRA_HOME)/sendmail-$(SENDMAIL_VERSION)/lib;) 
+	mkdir -p $(ZIMBRA_HOME)/sendmail-$(SENDMAIL_VERSION)/include/libmilter; \
+	cp -p libmilter.a $(ZIMBRA_HOME)/sendmail-$(SENDMAIL_VERSION)/lib;)
+	(mkdir -p $(ZIMBRA_HOME)/sendmail-$(SENDMAIL_VERSION)/lib; \
+	cp -p sendmail-$(SENDMAIL_VERSION)/include/libmilter/* $(ZIMBRA_HOME)/sendmail-$(SENDMAIL_VERSION)/include/libmilter)
 	(cd $(ZIMBRA_HOME); ln -s sendmail-$(SENDMAIL_VERSION) sendmail)
 
 tar:
