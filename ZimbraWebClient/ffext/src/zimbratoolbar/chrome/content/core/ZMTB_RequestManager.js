@@ -143,12 +143,36 @@ ZMTB_RequestManager.prototype.goToPath = function(path, callback, callObj)
 
 	if(this.getTabPreference() == "New Window")
 	{
+		var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator);
+		var enumerator = wm.getEnumerator("navigator:browser");
+		while(enumerator.hasMoreElements())
+		{
+			var win = enumerator.getNext();
+			tabBrowser = win.getBrowser()
+			for (var i=0; i < tabBrowser.browsers.length; i++) {
+				if(tabBrowser.browsers[i].contentWindow.wrappedJSObject.ZmZimbraMail)
+				{
+					tabBrowser.selectedTab = tabBrowser.mTabs[i]
+					tabBrowser.browsers[i].loadURI(url);
+					win.focus();
+					return;
+				}
+			};
+		}
 		var newWin = window.open(url);
 		if(callback)
 			newWin.gBrowser.selectedBrowser.addProgressListener(new ZMTB_BrowserListener(callback, callObj));
 	}
 	else if(this.getTabPreference() == "New Tab")
 	{
+		for (var i=0; i < gBrowser.browsers.length; i++) {
+			if(gBrowser.browsers[i].contentWindow.wrappedJSObject.ZmZimbraMail)
+			{
+				gBrowser.selectedTab = gBrowser.mTabs[i]
+				gBrowser.browsers[i].loadURI(url);
+				return;
+			}
+		};
 		gBrowser.selectedTab = gBrowser.addTab(url);
 		if(callback)
 			gBrowser.selectedBrowser.addProgressListener(new ZMTB_BrowserListener(callback, callObj));

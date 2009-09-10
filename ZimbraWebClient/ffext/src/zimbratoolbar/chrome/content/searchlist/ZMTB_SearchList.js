@@ -83,17 +83,17 @@ ZMTB_SearchList.prototype.execSearch = function(query)
 
 ZMTB_SearchList.prototype.receiveUpdate = function(responseObj)
 {
-	if(responseObj.Header.context.refresh)
-	{
-		this._tags =[];
-		if(responseObj.Header.context.refresh.tags)
-			for (var i=0; i < responseObj.Header.context.refresh.tags.tag.length; i++)
-			{
-				var t = responseObj.Header.context.refresh.tags.tag[i];
-				this._tags.push({name:t.name, value:t.id, color:t.color});
-			}
-		this.loadTags();
-	}
+	// if(responseObj.Header.context.refresh)
+	// {
+	// 	this._tags =[];
+	// 	if(responseObj.Header.context.refresh.tags)
+	// 		for (var i=0; i < responseObj.Header.context.refresh.tags.tag.length; i++)
+	// 		{
+	// 			var t = responseObj.Header.context.refresh.tags.tag[i];
+	// 			this._tags.push({name:t.name, value:t.id, color:t.color});
+	// 		}
+	// 	this.loadTags();
+	// }
 	if(responseObj.Body.GetTagResponse || (responseObj.Body.BatchResponse && responseObj.Body.BatchResponse.GetTagResponse))
 	{
 		var resp = (responseObj.Body.GetTagResponse?responseObj.Body.GetTagResponse:responseObj.Body.BatchResponse.GetTagResponse[0]);
@@ -111,11 +111,10 @@ ZMTB_SearchList.prototype.receiveError = function(error)
 
 ZMTB_SearchList.prototype.addToList = function(array, list)
 {
-	array.forEach(function(element)
-	{
-		var el = list.appendItem(element.name, element.value);
-		el.className = (element.class?element.class:"");
-	});
+	for (var i=0; i < array.length; i++) {
+		var el = list.appendItem(array[i].name, array[i].value);
+		el.className = (array[i].class?array[i].class:"");
+	};
 }
 
 ZMTB_SearchList.prototype.resetList = function()
@@ -131,7 +130,14 @@ ZMTB_SearchList.prototype.addToRecent = function(query)
 	if(recent == "")
 		recent = escape(query);
 	else
+	{
+		var rArray = recent.split(", ");
+		for (var i = rArray.length - 1; i >= 0; i--)
+			if(rArray[i] == escape(query))
+				rArray.splice(i, 1);
+		recent = rArray.join(", ");
 		recent = escape(query)+", "+recent;
+	}
 	//Maintain length
 	if(recent.split(", ").length > 10)
 	{
@@ -161,6 +167,15 @@ ZMTB_SearchList.prototype.loadTags = function()
 		this._tagMenu.removeItemAt(i);
 	for (var i=0; i < this._tags.length; i++)
 		this._tags[i].class = "menuitem-iconic ZimTB-Tag-Color-"+this._tags[i].color;
+	this._tags = this._tags.sort(function(a, b)
+		{
+			a=a.name;
+			b=b.name;
+			for (var i=0; i < a.length && i < b.length; i++)
+				if(a.charCodeAt(i) - b.charCodeAt(i) != 0)
+					return a.charCodeAt(i) - b.charCodeAt(i);
+			return 0;
+		});
 	this.addToList(this._tags, this._tagMenu);
 	if(this._tagMenu.itemCount==0)
 	{
