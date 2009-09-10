@@ -117,7 +117,7 @@ build:
 install:
 	(cd postfix-$(POSTFIX_VERSION); \
 	 $(MAKE) non-interactive-package $(INSTALL_PARMS); \
-	sed -e 's|postconf|/opt/zimbra/bin/postconf|' auxiliary/qshape/qshape.pl > $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/sbin;\
+	sed -e 's|postconf|/opt/zimbra/bin/postconf|' auxiliary/qshape/qshape.pl > $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/sbin/qshape.pl;\
 	chmod a+rx $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/sbin/qshape.pl;)
 	(cd $(ZIMBRA_HOME); ln -s postfix-$(POSTFIX_VERSION) postfix)
 
