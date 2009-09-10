@@ -18,6 +18,7 @@ use strict;
 use DBI;
 use FileHandle;
 use POSIX qw(:signal_h :errno_h :sys_wait_h);
+use File::Temp qw(tempfile);
 
 #############
 
@@ -189,7 +190,7 @@ sub runSql(@) {
       if ($logScript);
 
     # Run the mysql command and redirect output to a temp file
-    my $tempFile = "/tmp/mysql.out.$$";
+    my (undef, $tempFile) = tempfile("mysql.out.XXXX", DIR=>"/tmp",  OPEN=>1);
     my $command = "$MYSQL --user=$DB_USER --password=$DB_PASSWORD " .
         "--database=$DATABASE --batch --skip-column-names";
     unless (open(MYSQL, "| $command > $tempFile")) {
@@ -227,7 +228,7 @@ sub runLoggerSql(@) {
       if ($logScript);
 
     # Run the mysql command and redirect output to a temp file
-    my $tempFile = "/tmp/mysql.out.$$";
+    my (undef, $tempFile) = tempfile("mysql.out.XXXX", DIR=>"/tmp",  OPEN=>1);
     my $command = "$LOGMYSQL --user=$DB_USER --password=$LOGGER_DB_PASSWORD " .
         "--database=$LOGGER_DATABASE --batch --skip-column-names";
     unless (open(MYSQL, "| $command > $tempFile")) {
