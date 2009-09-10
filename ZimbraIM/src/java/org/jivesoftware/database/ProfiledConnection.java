@@ -14,6 +14,11 @@
  */
 package org.jivesoftware.database;
 
+import org.apache.commons.dbcp.DelegatingConnection;
+import org.apache.commons.dbcp.DelegatingStatement;
+import org.apache.commons.dbcp.DelegatingCallableStatement;
+import org.apache.commons.dbcp.DelegatingPreparedStatement;
+
 import java.sql.*;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -28,7 +33,8 @@ import java.util.Hashtable;
  *
  * @author Jive Software
  */
-public class ProfiledConnection extends AbstractConnection {
+public class ProfiledConnection extends DelegatingConnection {
+    private final Connection connection;
 
     /**
      * Constant for SELECT database queries.
@@ -588,13 +594,7 @@ public class ProfiledConnection extends AbstractConnection {
      */
     public ProfiledConnection(Connection connection) {
         super(connection);
-    }
-
-    public void close() throws SQLException {
-        // Close underlying connection.
-        if (connection != null) {
-            connection.close();
-        }
+        this.connection = connection;
     }
 
     public Statement createStatement() throws SQLException {
@@ -631,7 +631,7 @@ public class ProfiledConnection extends AbstractConnection {
      * Statement object and performs timings of the database queries. The class
      * does not handle batch queries but should generally work otherwise.
      */
-    class TimedStatement extends StatementWrapper {
+    class TimedStatement extends DelegatingStatement {
 
         private Statement stmt;
 
@@ -639,7 +639,7 @@ public class ProfiledConnection extends AbstractConnection {
          * Creates a new TimedStatement that wraps <tt>stmt</tt>.
          */
         public TimedStatement(Statement stmt) {
-            super(stmt);
+            super(ProfiledConnection.this, stmt);
             this.stmt = stmt;
         }
 
@@ -719,13 +719,18 @@ public class ProfiledConnection extends AbstractConnection {
      * underlying PreparedStatement object and performs timings of the database
      * queries.
      */
-    class TimedPreparedStatement extends PreparedStatementWrapper {
-
+    class TimedPreparedStatement extends DelegatingPreparedStatement {
+        private final PreparedStatement pstmt;
         private String sql;
         private int type = SELECT;
 
+        public boolean isClosed() {
+            return super.isClosed();
+        }
+        
         public TimedPreparedStatement(PreparedStatement pstmt, String sql) {
-            super(pstmt);
+            super(ProfiledConnection.this, pstmt);
+            this.pstmt = pstmt;
             this.sql = sql;
 
             // determine the type of query
@@ -924,13 +929,14 @@ public class ProfiledConnection extends AbstractConnection {
      * underlying CallableStatement object and performs timings of the database
      * queries.
      */
-    class TimedCallableStatement extends CallableStatementWrapper {
-
+    class TimedCallableStatement extends DelegatingCallableStatement {
+        private final CallableStatement cstmt;
         private String sql;
         private int type = SELECT;
 
         public TimedCallableStatement(CallableStatement cstmt, String sql) {
-            super(cstmt);
+            super(ProfiledConnection.this, cstmt);
+            this.cstmt = cstmt;
             this.sql = sql;
 
             // determine the type of query
