@@ -54,6 +54,7 @@ case "$1" in
   start)
     if [ ! -f ${configfile} ]; then
       echo "${configfile} is missing."
+      exit 0
     fi
 
     checkrunning

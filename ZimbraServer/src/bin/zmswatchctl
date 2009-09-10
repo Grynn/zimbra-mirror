@@ -56,7 +56,13 @@ checkrunning()
 case "$1" in 
   start)
     if [ ! -f ${configfile} ]; then
-      ${zimbra_home}/libexec/zmsnmpinit
+      if [ -x ${zimbra_home}/libexec/zmsnmpit ]; then
+        ${zimbra_home}/libexec/zmsnmpinit
+      else 
+        # zimbra-snmp is likely not installed if the init script doesn't exist
+        # this prevents errors on logrotate
+        exit 0
+      fi
     fi
 
     checkrunning

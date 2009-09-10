@@ -64,8 +64,7 @@
     notifempty
     create 0740 zimbra zimbra
     postrotate
-      su - zimbra -c "/opt/zimbra/bin/zmlogswatchctl stop"
-      su - zimbra -c "/opt/zimbra/bin/zmlogswatchctl start"
+      su - zimbra -c "/opt/zimbra/bin/zmlogswatchctl restart" > /dev/null 2>&1 || true
     endscript
     rotate 5
     compress
@@ -78,8 +77,7 @@
     notifempty
     create 0740 zimbra zimbra
     postrotate
-      su - zimbra -c "/opt/zimbra/bin/zmswatchctl stop"
-      su - zimbra -c "/opt/zimbra/bin/zmswatchctl start"
+      su - zimbra -c "/opt/zimbra/bin/zmswatchctl restart" > /dev/null 2>&1 || true
     endscript
     rotate 5
     compress
@@ -92,7 +90,7 @@
     notifempty
     create 0740 zimbra zimbra
     postrotate
-      su - zimbra -c "/opt/zimbra/bin/zmmtaconfigctl restart"
+      su - zimbra -c "/opt/zimbra/bin/zmmtaconfigctl restart" > /dev/null 2>&1 || true
     endscript
     rotate 5
     compress
