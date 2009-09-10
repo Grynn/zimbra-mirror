@@ -188,7 +188,7 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 endif
 
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
-	DEST_BIN_DIR  :=	$(DEST_DIR)/usr/bin
+	DEST_BIN_DIR  :=	$(DEST_DIR)/bin
 endif
 
 # TARGETS
