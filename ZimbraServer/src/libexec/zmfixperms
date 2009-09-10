@@ -57,6 +57,7 @@ components="\
   memcached \
   mysql \
   net-snmp \
+  nginx \
   openldap \
   openldap-clibs \
   openssl \
