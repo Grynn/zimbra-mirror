@@ -159,7 +159,7 @@
 			<property name="zimbra.buildinfo.type" value="${offline.appid}"/>
 			<property name="zimbra.buildinfo.release" value="${offline.name}"/>
 		</ant>
-		<javac destdir="${build.classes.dir}" debug="true" classpathref="offline.class.path">
+		<javac destdir="${build.classes.dir}" debug="true" classpathref="offline.class.path" target="1.5">
 			<src refid="all.java.path" />
 		</javac>
 	</target>
