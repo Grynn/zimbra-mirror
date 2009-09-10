@@ -316,7 +316,7 @@ build:
 
 check:
 	@echo "Verifying perl module build...";
-	$(PERL_ROOT)/zmcheckbuiltmodules.pl;
+	$(PERL_ROOT)/zmcheckbuiltmodules.pl >> $(LOGFILE) 2>&1;
 
 tarball:
 	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
