@@ -200,11 +200,9 @@ function(defaultColumnSort) {
 	htmlArr[idx++] = this._noMaximize ? ">" : " width=100%>";
 	htmlArr[idx++] = "<tr>";
 
-	var numResizeable = 0, resizeableCol;
 	var numCols = this._headerList.length;
 	for (var i = 0; i < numCols; i++) {
 		var headerCol = this._headerList[i];
-
 		var field = headerCol._field;
 		headerCol._index = i;
 		var id = headerCol._id = DwtId.getListViewHdrId(DwtId.WIDGET_HDR, this._view, field);
@@ -216,97 +214,16 @@ function(defaultColumnSort) {
 			this._variableHeaderCol = headerCol;
 		}
 
-		if (!headerCol._visible) { continue; }
-		
-		htmlArr[idx++] = "<td id='";
-		htmlArr[idx++] = id;
-		htmlArr[idx++] = "' class='";
-		htmlArr[idx++] = (id == this._currentColId)
-			? "DwtListView-Column DwtListView-ColumnActive'"
-			: "DwtListView-Column'";
-		if (headerCol._width) {
-			htmlArr[idx++] = " width=";
-			htmlArr[idx++] = headerCol._width;
-			if (headerCol._widthUnits) {
-				htmlArr[idx++] = headerCol._widthUnits;
-			}
+		if (headerCol._visible) {
+			idx = this._createHeader(htmlArr, idx, headerCol, i, numCols, id, defaultColumnSort);
 		}
-		htmlArr[idx++] = ">";
-		// must add a div to force clipping :(
-		htmlArr[idx++] = "<div";
-		var headerColWidth = null;
-		if (headerCol._width && headerCol._width != "auto") {
-            //why we need to + 2 here ? It causes the misalign of the list items in IE
-            if (AjxEnv.isIE) {
-                headerColWidth = headerCol._width;		    
-            }else{
-                headerColWidth = headerCol._width + 2;
-            }
-			if (headerCol._widthUnits) {
-				headerColWidth += headerCol._widthUnits;
-			}
-		}
-		if (!!headerColWidth) {
-			htmlArr[idx++] = " style='overflow: hidden; width: ";
-			htmlArr[idx++] = headerColWidth;
-			htmlArr[idx++] = "'>";
-		} else {
-			htmlArr[idx++] = ">";
-		}
-
-		// add new table for icon/label/sorting arrow
-		htmlArr[idx++] = "<table border=0 cellpadding=0 cellspacing=0 width=100%><tr>";
-		if (headerCol._iconInfo) {
-			var idText = ["id='", DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ICON, this._view, field), "'"].join("");
-			htmlArr[idx++] = "<td><center>";
-			htmlArr[idx++] = AjxImg.getImageHtml(headerCol._iconInfo, null, idText);
-			htmlArr[idx++] = "</center></td>";
-		}
-
-		if (headerCol._label) {
-			htmlArr[idx++] = "<td id='";
-			htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_LABEL, this._view, field);
-			htmlArr[idx++] = "' class='DwtListHeaderItem-label'>";
-			htmlArr[idx++] = headerCol._label;
-			htmlArr[idx++] = "</td>";
-		}
-
-		if (headerCol._sortable && !headerCol._noSortArrow) {
-			var arrowIcon = this._bSortAsc ? "ColumnUpArrow" : "ColumnDownArrow";
-			
-			htmlArr[idx++] = "<td align=right style='padding-right:2px' width=100% id='";
-			htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
-			htmlArr[idx++] = "'>";
-			var isDefault = (field == defaultColumnSort);
-			htmlArr[idx++] = AjxImg.getImageHtml(arrowIcon, isDefault ? null : "visibility:hidden");
-			htmlArr[idx++] = "</td>";
-			if (isDefault) {
-				this._currentColId = id;
-			}
-		}
-
-		// ALWAYS add "sash" separators
-		if (i < (numCols - 1)) {
-			htmlArr[idx++] = "<td width=4>";
-			htmlArr[idx++] = "<table align=right border=0 cellpadding=0 cellspacing=0 width=2 height=100%><tr>";
-			htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: ";
-			htmlArr[idx++] = (DwtListView.HEADERITEM_HEIGHT - 2);
-			htmlArr[idx++] = "px; background-color: #8A8A8A'></div></td><td id='";
-			htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_SASH, this._view, field);
-			htmlArr[idx++] = "' class='DwtListView-Sash'><div style='width: 1px; height: ";
-			htmlArr[idx++] = (DwtListView.HEADERITEM_HEIGHT - 2);
-			htmlArr[idx++] = "px; background-color: #FFFFFF'></div></td></tr></table>";
-			htmlArr[idx++] = "</td>";
-		}
-
-		htmlArr[idx++] = "</tr></table>";
-		htmlArr[idx++] = "</div></td>";
 	}
 	htmlArr[idx++] = "</tr></table>";
 
 	this._listColDiv.innerHTML = htmlArr.join("");
 
 	// for each sortable column, sets its identifier
+	var numResizeable = 0, resizeableCol;
 	for (var j = 0; j < this._headerList.length; j++) {
 		var headerCol = this._headerList[j];
 		var cell = document.getElementById(headerCol._id);
@@ -334,6 +251,98 @@ function(defaultColumnSort) {
 	}
 
 	this.headerColCreated = true;
+};
+
+DwtListView.prototype._createHeader =
+function(htmlArr, idx, headerCol, i, numCols, id, defaultColumnSort) {
+
+	var field = headerCol._field;
+
+	htmlArr[idx++] = "<td id='";
+	htmlArr[idx++] = id;
+	htmlArr[idx++] = "' class='";
+	htmlArr[idx++] = (id == this._currentColId)
+		? "DwtListView-Column DwtListView-ColumnActive'"
+		: "DwtListView-Column'";
+	if (headerCol._width) {
+		htmlArr[idx++] = " width=";
+		htmlArr[idx++] = headerCol._width;
+		if (headerCol._widthUnits) {
+			htmlArr[idx++] = headerCol._widthUnits;
+		}
+	}
+	htmlArr[idx++] = ">";
+	// must add a div to force clipping :(
+	htmlArr[idx++] = "<div";
+	var headerColWidth = null;
+	if (headerCol._width && headerCol._width != "auto") {
+		//why we need to + 2 here ? It causes the misalign of the list items in IE
+		if (AjxEnv.isIE) {
+			headerColWidth = headerCol._width;
+		} else {
+			headerColWidth = headerCol._width + 2;
+		}
+		if (headerCol._widthUnits) {
+			headerColWidth += headerCol._widthUnits;
+		}
+	}
+	if (!!headerColWidth) {
+		htmlArr[idx++] = " style='overflow: hidden; width: ";
+		htmlArr[idx++] = headerColWidth;
+		htmlArr[idx++] = "'>";
+	} else {
+		htmlArr[idx++] = ">";
+	}
+
+	// add new table for icon/label/sorting arrow
+	htmlArr[idx++] = "<table border=0 cellpadding=0 cellspacing=0 width=100%><tr>";
+	if (headerCol._iconInfo) {
+		var idText = ["id='", DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ICON, this._view, field), "'"].join("");
+		htmlArr[idx++] = "<td><center>";
+		htmlArr[idx++] = AjxImg.getImageHtml(headerCol._iconInfo, null, idText);
+		htmlArr[idx++] = "</center></td>";
+	}
+
+	if (headerCol._label) {
+		htmlArr[idx++] = "<td id='";
+		htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_LABEL, this._view, field);
+		htmlArr[idx++] = "' class='DwtListHeaderItem-label'>";
+		htmlArr[idx++] = headerCol._label;
+		htmlArr[idx++] = "</td>";
+	}
+
+	if (headerCol._sortable && !headerCol._noSortArrow) {
+		var arrowIcon = this._bSortAsc ? "ColumnUpArrow" : "ColumnDownArrow";
+
+		htmlArr[idx++] = "<td align=right style='padding-right:2px' width=100% id='";
+		htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
+		htmlArr[idx++] = "'>";
+		var isDefault = (field == defaultColumnSort);
+		htmlArr[idx++] = AjxImg.getImageHtml(arrowIcon, isDefault ? null : "visibility:hidden");
+		htmlArr[idx++] = "</td>";
+		if (isDefault) {
+			this._currentColId = id;
+		}
+	}
+
+	// ALWAYS add "sash" separators
+	if (i < (numCols - 1)) {
+		htmlArr[idx++] = "<td width=4>";
+		htmlArr[idx++] = "<table align=right border=0 cellpadding=0 cellspacing=0 width=2 height=100%><tr>";
+		htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: ";
+		htmlArr[idx++] = (DwtListView.HEADERITEM_HEIGHT - 2);
+		htmlArr[idx++] = "px; background-color: #8A8A8A'></div></td><td id='";
+		htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_SASH, this._view, field);
+		htmlArr[idx++] = "' class='DwtListView-Sash'><div style='width: 1px; height: ";
+		htmlArr[idx++] = (DwtListView.HEADERITEM_HEIGHT - 2);
+		htmlArr[idx++] = "px; background-color: #FFFFFF'></div></td></tr></table>";
+		htmlArr[idx++] = "</td>";
+	}
+
+	htmlArr[idx++] = "</tr></table>";
+	htmlArr[idx++] = "</div></td>";
+
+	return idx;
 };
 
 // returns the index of the given item based on its position in the list
