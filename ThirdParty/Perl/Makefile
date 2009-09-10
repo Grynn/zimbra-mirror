@@ -314,9 +314,8 @@ build:
 	done
 
 check:
-	@echo -n "Verifying build..."; \
-	(./zmcheckbuiltmodules.pl); \
-	if [ $$? -ne 0 ]; then "echo "FAILED."; else echo "done."; fi
+	@echo "Verifying perl module build...";
+	$(PERL_ROOT)/zmcheckbuiltmodules.pl;
 
 tarball:
 	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
