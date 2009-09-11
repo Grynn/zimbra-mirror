@@ -21,5 +21,10 @@
 	<string>zimbra</string>
 	<key>GroupName</key>
 	<string>zimbra</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PERL5LIB</key>
+    <string>/opt/zimbra/zimbramon/lib/darwin-thread-multi-2level:/opt/zimbra/zimbramon/lib</string>
+  </dict>
 </dict>
 </plist>
