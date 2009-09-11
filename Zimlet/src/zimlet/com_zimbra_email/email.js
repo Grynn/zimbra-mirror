@@ -37,8 +37,7 @@ function() {
 		this._newTooltipHint = ZmMsg.leftClickComposeHint + "<br>" + ZmMsg.rightClickHint;
 	}
 
-    this._yahooSocialEnabled = this.getBoolConfig("yahooSocialEnabled");
-    
+	this._yahooSocialEnabled = this.getBoolConfig("yahooSocialEnabled");
 };
 
 Com_Zimbra_Email.prototype._getRoster =
@@ -139,6 +138,9 @@ function(html, idx, obj, contact, buddy, spanId) {
 		this._getRoster();
 	} else if (contact) {
 		content = AjxStringUtil.htmlEncode(contact.getFullName());
+		if (!content) {
+			content = AjxStringUtil.htmlEncode(obj.toString());
+		}
 	} else {
 		content = AjxStringUtil.htmlEncode(obj.toString());
 	}
@@ -165,7 +167,7 @@ function(html, idx, obj, spanId, contact) {
 Com_Zimbra_Email.prototype._getBuddy =
 function(contact, address) {
 
-    if(appCtxt.isChildWindow) return;
+	if (appCtxt.isChildWindow) { return; }
 
 	var buddy;
 	if (appCtxt.get(ZmSetting.IM_ENABLED) && !(!appCtxt.get(ZmSetting.IM_PREF_AUTO_LOGIN) &&
@@ -192,12 +194,12 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	var toolTip;
 
 	// @yahoo.com love
-    var isYahoo = false;
-    if(this._yahooSocialEnabled){
-        var parts = addr.split("@");
-        var domain = (parts.length > 0) ? parts[1] : null;
-        isYahoo = (domain && domain == "yahoo.com");
-    }
+	var isYahoo = false;
+	if (this._yahooSocialEnabled) {
+		var parts = addr.split("@");
+		var domain = (parts.length > 0) ? parts[1] : null;
+		isYahoo = (domain && domain == "yahoo.com");
+	}
 
 	var contactList = AjxDispatcher.run("GetContacts");
 	var contact = contactList ? contactList.getContactByEmail(addr) : null;
@@ -395,15 +397,15 @@ function(spanElement, contentObjText, matchContext, ev) {
 	var addr = (contentObjText instanceof AjxEmailAddress)
 		? contentObjText.address : contentObjText;
 
-    if(this._yahooSocialEnabled){
-        var parts = addr.split("@");
-        var domain = (parts.length > 0) ? parts[1] : null;
-        if (domain && domain == "yahoo.com") {
-            var yProfileUrl = "http://profiles.yahoo.com/" + parts[0];
-            window.open(yProfileUrl, "_blank");
-            return;
-        }
-    }
+	if (this._yahooSocialEnabled){
+		var parts = addr.split("@");
+		var domain = (parts.length > 0) ? parts[1] : null;
+		if (domain && domain == "yahoo.com") {
+			var yProfileUrl = "http://profiles.yahoo.com/" + parts[0];
+			window.open(yProfileUrl, "_blank");
+			return;
+		}
+	}
 
 	var contactList = AjxDispatcher.run("GetContacts");
 	var contact = contactList ? contactList.getContactByEmail(addr) : null;
