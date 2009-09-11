@@ -223,7 +223,7 @@ else
 fi
 
 echo "Checking for prerequisite binaries"
-for req in autoconf autoheader automake libtool bison flex gcc g++ perl make patch wget bzip2
+for req in autoconf autoheader automake libtool bison flex gcc g++ perl make patch wget bzip2 unzip
 do
 	echo "	Checking $req"
 	command=`which $req 2>/dev/null`
