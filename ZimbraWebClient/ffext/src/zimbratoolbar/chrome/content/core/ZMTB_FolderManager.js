@@ -101,6 +101,15 @@ ZMTB_FolderManager.prototype._addChildren = function(folderArray)
 	{
 		if(folderArray[i].id == 1) continue;
 		var children = this._getChildren(folderArray[i].id);
+		children.sort(function(a, b)
+			{
+				a=a.name;
+				b=b.name;
+				for (var i=0; i < a.length && i < b.length; i++)
+					if(a.charCodeAt(i) - b.charCodeAt(i) != 0)
+						return a.charCodeAt(i) - b.charCodeAt(i);
+				return 0;
+			});
 		this._addChildren(children);
 		for (var j=0; j < children.length; j++)
 		{
@@ -125,54 +134,54 @@ ZMTB_FolderManager.prototype.receiveUpdate = function(responseObj)
 		return;
 	else
 	{
-		if(responseObj.Header.context.notify)
-		{
-			for (var i=0; i < responseObj.Header.context.notify.length; i++)
-			{
-				var notify = responseObj.Header.context.notify[i];
-				if(notify.modified && notify.modified.folder)
-				{
-					var fs = notify.modified.folder;
-					for (var i=0; i < fs.length; i++)
-					{
-						if(this._folders[fs[i].id])
-						{
-							if(fs[i].l)
-								this._folders[fs[i].id].parent = fs[i].l;
-							if(fs[i].name)
-								this._folders[fs[i].id].name = fs[i].name;
-							if(fs[i].u)
-								this._folders[fs[i].id].unread = fs[i].u;
-						}
-					};
-					this._updateListeners();
-				}
-				if(notify.created && notify.created.folder)
-				{
-					this._addFolders(notify.created.folder);
-					this._updateListeners();
-				}
-				if(notify.deleted && notify.deleted.id)
-				{
-					var ids = notify.deleted.id.split(",");
-					for (var i=0; i < ids.length; i++)
-						if(this._folders[ids[i]])
-							delete this._folders[ids[i]];
-					this._updateListeners();
-				}
-			}
-		}
+		// if(responseObj.Header.context.notify)
+		// {
+		// 	for (var i=0; i < responseObj.Header.context.notify.length; i++)
+		// 	{
+		// 		var notify = responseObj.Header.context.notify[i];
+		// 		if(notify.modified && notify.modified.folder)
+		// 		{
+		// 			var fs = notify.modified.folder;
+		// 			for (var i=0; i < fs.length; i++)
+		// 			{
+		// 				if(this._folders[fs[i].id])
+		// 				{
+		// 					if(fs[i].l)
+		// 						this._folders[fs[i].id].parent = fs[i].l;
+		// 					if(fs[i].name)
+		// 						this._folders[fs[i].id].name = fs[i].name;
+		// 					if(fs[i].u)
+		// 						this._folders[fs[i].id].unread = fs[i].u;
+		// 				}
+		// 			};
+		// 			this._updateListeners();
+		// 		}
+		// 		if(notify.created && notify.created.folder)
+		// 		{
+		// 			this._addFolders(notify.created.folder);
+		// 			this._updateListeners();
+		// 		}
+		// 		if(notify.deleted && notify.deleted.id)
+		// 		{
+		// 			var ids = notify.deleted.id.split(",");
+		// 			for (var i=0; i < ids.length; i++)
+		// 				if(this._folders[ids[i]])
+		// 					delete this._folders[ids[i]];
+		// 			this._updateListeners();
+		// 		}
+		// 	}
+		// }
 		if(responseObj.Body.GetFolderResponse)
 		{
 			this.reset();
 			this._addFolders(responseObj.Body.GetFolderResponse.folder);
 			this._updateListeners();
 		}
-		else if(responseObj.Header.context.refresh)
-		{
-			this._addFolders(responseObj.Header.context.refresh.folder);
-			this._updateListeners();
-		}
+		// else if(responseObj.Header.context.refresh)
+		// {
+		// 	this._addFolders(responseObj.Header.context.refresh.folder);
+		// 	this._updateListeners();
+		// }
 		else if(responseObj.Body.BatchResponse && responseObj.Body.BatchResponse.GetFolderResponse)
 		{
 			this.reset();
@@ -218,15 +227,15 @@ ZMTB_FolderManager.prototype._addFolders = function(fs)
 {
 	for (var i=0; i < fs.length; i++)
 	{
-		this._folders[fs[i].id] = {id:fs[i].id, name:fs[i].name, parent:fs[i].l, unread:(fs[i].u?fs[i].u:0), view:fs[i].view};
+		this._folders[fs[i].id] = {id:fs[i].id, name:fs[i].name, parent:fs[i].l, unread:(fs[i].u?fs[i].u:0), view:(fs[i].view?fs[i].view:"message")};
 		if(fs[i].url)
 			this._folders[fs[i].id].rss = true;
 		if(fs[i].query)
 			this._folders[fs[i].id].query = fs[i].query;
-		if(fs[i].search)
-			this._addFolders(fs[i].search);
 		if(fs[i].folder)
 			this._addFolders(fs[i].folder);
+		if(fs[i].search)
+			this._addFolders(fs[i].search);
 	}
 }
 
