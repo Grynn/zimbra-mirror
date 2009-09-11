@@ -10,18 +10,21 @@ var ZMTB_FolderList = function(zmtb)
 	this._folderMan = zmtb.getFolderManager();
 	var This=this;
 	this._rqIds = {};
+	//When we a key is pressed inside the folder list, we don't want the watch folder to be changed
 	this._menuList.addEventListener("keypress", function(e)
 	{
+		e.preventDefault();
+		This._menuList.selectedIndex = This._watchIndex;
 		//If we receive a modifier, leave the list box so that an action can be performed eg New Tab
 		if(e.metaKey || e.ctrlKey || e.altKey)
 			e.target.blur();
 		//If key is alnum, open popup
 		else if(e.charCode >= 48 && e.charCode <= 122)
 			e.target.menupopup.openPopup(e.target);
-		This._menuList.selectedIndex = This._watchIndex;
 	}, true);
 	this._menuList.addEventListener("change", function(e)
 	{
+		e.preventDefault();
 		This._menuList.selectedIndex = This._watchIndex;
 	}, false);
 }

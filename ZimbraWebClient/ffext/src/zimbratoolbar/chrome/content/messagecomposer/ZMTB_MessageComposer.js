@@ -1,6 +1,7 @@
 var ZMTB_MessageComposer = function(zmtb)
 {
 	this._rqManager = zmtb.getRequestManager();
+	this._rqManager.addUpdateListener(this);
 	this._localStrings = zmtb.getLocalStrings();
 	this._panel = null;
 	this._toBox = null;
@@ -11,6 +12,7 @@ var ZMTB_MessageComposer = function(zmtb)
 	this._dragObserver = new ZMTB_AttachDragObserver(this);
 	this._attachments = [];
 	this._files = [];
+	this._signature = "";
 }
 
 ZMTB_MessageComposer.TOFIELD = "ZMTB-MessageComposer-ToField";
@@ -25,6 +27,25 @@ ZMTB_MessageComposer.ERRORLABEL = "ZMTB-MessageComposer-ErrorLabel";
 ZMTB_MessageComposer.FILEINPUT = "ZMTB-MessageComposer-FileInput";
 ZMTB_MessageComposer.ATTACHBOX = "ZMTB-MessageComposer-AttachBox";
 ZMTB_MessageComposer.LOADING = "ZMTB-MessageComposer-LoadingIcon";
+
+
+ZMTB_MessageComposer.prototype.reset = function(email)
+{
+	
+}
+
+ZMTB_MessageComposer.prototype.receiveUpdate = function(responseObj)
+{
+	// if(responseObj.Body.BatchResponse && responseObj.Body.BatchResponse.GetInfoResponse)
+	// 	this._signature = responseObj.Body.BatchResponse.GetInfoResponse[0].identities.identity[0]._attrs.zimbraPrefMailSignature;
+	// if(!this._signature)
+	// 	this._signature = "";
+}
+
+ZMTB_MessageComposer.prototype.receiveError = function(error)
+{
+	
+}
 
 ZMTB_MessageComposer.prototype.open = function(email)
 {
@@ -49,6 +70,7 @@ ZMTB_MessageComposer.prototype._addEvents = function(email)
 	this._ccBox = this._panel.document.getElementById(ZMTB_MessageComposer.CCFIELD);
 	this._subBox = this._panel.document.getElementById(ZMTB_MessageComposer.SUBFIELD);
 	this._messBox = this._panel.document.getElementById(ZMTB_MessageComposer.MESSFIELD);
+	this._messBox.value = "\n\n"+this._signature;
 	this._browser = this._panel.document.getElementById(ZMTB_MessageComposer.ATTACHBROWSER);
 	this._panel.document.addEventListener("keypress", function(e){if(e.keyCode == e.DOM_VK_ESCAPE)win.close()}, false);
 	this._browser.addProgressListener(this._pgListener);

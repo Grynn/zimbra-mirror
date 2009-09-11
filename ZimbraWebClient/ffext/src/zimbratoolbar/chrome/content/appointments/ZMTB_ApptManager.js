@@ -1,22 +1,12 @@
-var ZMTB_ApptManager = function(requestManager)
+var ZMTB_ApptManager = function(zmtb)
 {
-	this.reset();
-	this._rqManager = requestManager;
-	var This = this;
 	this._notificationBox = document.getElementById("ZMTB-Appointments");
+	ZMTB_TBItem.call(this, zmtb);
+	this.reset();
+	this._rqManager = zmtb.getRequestManager();
+	this._rqManager.addUpdateListener(this);
+	var This = this;
 	this._animateInterval = {};
-	//ZimTB_GetByClass("ZimTB-Snooze-Choice").forEach(function(element){element.addEventListener("command", function(event){This.snooze(event.target.value, This._notificationBox.currentNotification)}, false)});
-	
-	
-	// var note = document.getElementById("ZMTB-Appt-Box").cloneNode(true);
-	// note.setAttribute("id", "");
-	// note.value = 0;
-	// document.getElementById("ZMTB-Appointments").appendChild(note);
-	// note.getElementsByClassName("ZMTB-Appt-Dismiss")[0].addEventListener("command", function(event){This.dismiss(note)}, false);
-	// var snoozes = note.getElementsByClassName("ZimTB-Snooze-Choice");
-	// for (var i=0; i < snoozes.length; i++)
-	// 	snoozes[i].addEventListener("command", function(event){This.snooze(note, event.target.value)}, false);
-	// this._openNotification(note);
 }
 
 ZMTB_ApptManager.HOURSPREV = "6";
@@ -33,6 +23,16 @@ ZMTB_ApptManager.prototype.reset = function()
 		this._appts = [];
 	}
 	this._snoozes = [];
+}
+
+ZMTB_ApptManager.prototype.enable = function()
+{
+	this._notificationBox.hidden = false;
+}
+
+ZMTB_ApptManager.prototype.disable = function()
+{
+	this._notificationBox.hidden = true;
 }
 
 ZMTB_ApptManager.prototype.receiveUpdate = function(responseObj)
@@ -136,12 +136,12 @@ ZMTB_ApptManager.prototype._openNotification = function(note)
 {
 	note.style.height = "0px";
 	note.hidden = false;
-	this._animateInterval[note.value] = setInterval(this._animateNote, 30, this, note, "open");
+	this._animateInterval[note.value] = setInterval(this._animateNote, 10, this, note, "open");
 }
 
 ZMTB_ApptManager.prototype._closeNotification = function(note)
 {
-	this._animateInterval[note.value] = setInterval(this._animateNote, 30, this, note, "close");
+	this._animateInterval[note.value] = setInterval(this._animateNote, 10, this, note, "close");
 }
 
 ZMTB_ApptManager.prototype._animateNote = function(This, note, openClose)

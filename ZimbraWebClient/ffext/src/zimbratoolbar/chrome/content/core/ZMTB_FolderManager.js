@@ -27,7 +27,10 @@ ZMTB_FolderManager.prototype.getFolders = function(filterName)
 	if(filter)
 	{
 		if(filter.root && this._folders[1])
+		{
 			folders.push(this._folders[1]);
+			folders[0].name = filter.root;
+		}
 		if(filter.first)
 		{
 			for (var i=0; i < filter.first.length; i++)

@@ -2,7 +2,7 @@ var ZMTB_ContactActions = function(zmtb)
 {
 	ZMTB_Actions.call(this, zmtb);
 	zmtb.getRequestManager().addUpdateListener(this);
-	this._folderMan.setFilter("contacts", {type:"contact", exclude:[3], root:true});
+	this._folderMan.setFilter("contacts", {type:"contact", exclude:[3], root:"Address Books(Root)"});
 	this._folderMan.setFilter("newcontact", {type:"contact", exclude:[3]});
 	this._initContext();
 	this._initMenu();

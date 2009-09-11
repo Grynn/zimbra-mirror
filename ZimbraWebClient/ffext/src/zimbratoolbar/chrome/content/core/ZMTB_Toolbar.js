@@ -1,6 +1,16 @@
 var ZMTB_Toolbar = function()
 {
 	var This=this;
+	document.getElementById("ZimTB-Toolbar").addEventListener("DOMAttrModified", function(e)
+	{
+		if(e.attrName == "collapsed")
+		{
+			if(e.newValue == "true")
+				This.disable();
+			else
+				This.update();
+		}
+	}, false);
 	this._rqManager = new ZMTB_RequestManager(this);
 	this._folderManager = new ZMTB_FolderManager(this._rqManager);
 	this._tbItems = [];

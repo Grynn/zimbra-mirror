@@ -10,10 +10,9 @@ var ZMTB_RequestManager = function(zmtb)
 	this._tabPref = "";
 	this._rqCount = 0;
 	this._timeout = null;
+	this._serverVersion = "";
 }
 
-ZMTB_RequestManager._USER_AGENT = "Zimbra Toolbar";
-ZMTB_RequestManager._VERSION = "1.0";
 ZMTB_RequestManager.NS_ACCOUNT = "urn:zimbraAccount";
 ZMTB_RequestManager.NS_MAIL = "urn:zimbraMail";
 ZMTB_RequestManager.NS_ZIMBRA = "urn:zimbra";
@@ -37,7 +36,7 @@ ZMTB_RequestManager.prototype.updateAll = function()
 	sd.set("SearchRequest", {"types":"appointment", "calExpandInstStart":((new Date()).getTime()-1000*60*60*6), "calExpandInstEnd":((new Date()).getTime()+18*60*60*1000), "query":"in:calendar"}, sd.getMethod(), ZMTB_RequestManager.NS_MAIL);
 	sd.set("GetTagRequest", null, sd.getMethod(), ZMTB_RequestManager.NS_MAIL);
 	if(this._serverVersion == "")
-		sd.set("GetInfoRequest", {"sections":"mbox"}, sd.getMethod(), ZMTB_RequestManager.NS_ACCOUNT);
+		sd.set("GetInfoRequest", {"sections":"mbox,idents"}, sd.getMethod(), ZMTB_RequestManager.NS_ACCOUNT);
 	try{
 		(new ZMTBCsfeCommand()).invoke({soapDoc:sd, asyncMode:true, callback:new ZMTB_AjxCallback(this, this.parseResponse), changeToken:this._changeToken});
 		clearTimeout(this._timeout);
@@ -238,8 +237,8 @@ ZMTB_RequestManager.prototype.parseResponse = function(result)
 		return;
 	}
 	this._zmtb.enable();
-	if(rd.Header.context.refresh && rd.Header.context.refresh.version)
-		this._serverVersion = rd.Header.context.refresh.version;
+	// if(rd.Header.context.refresh && rd.Header.context.refresh.version)
+	// 	this._serverVersion = rd.Header.context.refresh.version;
 	if(rd.Header.context.notify)
 	{
 		for (var i=0; i < rd.Header.context.notify.length; i++)

@@ -101,7 +101,7 @@
 				<hbox align="center">
 					<vbox align="start">
 						<label value="&zmtb.taskactions.newtask.tasklist;"/>
-						<menulist id="ZimTB-NewTask-TaskList"/>
+						<menulist id="ZimTB-NewTask-TaskList" sizetopopup="none" />
 					</vbox>
 				</hbox>
 				<vbox>

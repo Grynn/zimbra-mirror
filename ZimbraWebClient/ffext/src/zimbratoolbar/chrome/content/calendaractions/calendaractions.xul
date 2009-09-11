@@ -105,7 +105,7 @@
 						<checkbox label="&zmtb.calendaractions.newappt.allday;" id="ZimTB-NewAppt-AllDay"/>
 					</hbox>
 					<hbox class="ZMTB-ActionBar-Row">
-						<menulist width="100" id="ZimTB-NewAppt-Calendar"/>
+						<menulist width="100" id="ZimTB-NewAppt-Calendar" sizetopopup="none" />
 					</hbox>
 				</vbox>
 				<vbox align="start">
