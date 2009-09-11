@@ -36,10 +36,30 @@ ZMTB_MessageComposer.prototype.reset = function(email)
 
 ZMTB_MessageComposer.prototype.receiveUpdate = function(responseObj)
 {
-	// if(responseObj.Body.BatchResponse && responseObj.Body.BatchResponse.GetInfoResponse)
-	// 	this._signature = responseObj.Body.BatchResponse.GetInfoResponse[0].identities.identity[0]._attrs.zimbraPrefMailSignature;
-	// if(!this._signature)
-	// 	this._signature = "";
+	if(responseObj.Body.BatchResponse && responseObj.Body.BatchResponse.GetInfoResponse)
+	{
+		if(responseObj.Body.BatchResponse.GetInfoResponse[0].identities && responseObj.Body.BatchResponse.GetInfoResponse[0].identities.identity[0]._attrs.zimbraPrefDefaultSignatureId)
+		{
+			var sigId = responseObj.Body.BatchResponse.GetInfoResponse[0].identities.identity[0]._attrs.zimbraPrefDefaultSignatureId;
+			this._signature = "";
+			if(responseObj.Body.BatchResponse.GetInfoResponse[0].signatures)
+			{
+				var sigs = responseObj.Body.BatchResponse.GetInfoResponse[0].signatures.signature;
+				for (var i=0; i < sigs.length; i++)
+				{
+					if(sigs[i].id == sigId)
+					{
+						for (var j=0; j < sigs[i].content.length; j++) {
+							if(sigs[i].content[j].type == "text/plain")
+								this._signature = sigs[i].content[j]._content;
+						};
+					}
+				}
+			}
+		}
+		else
+			this._signature = "";
+	}
 }
 
 ZMTB_MessageComposer.prototype.receiveError = function(error)

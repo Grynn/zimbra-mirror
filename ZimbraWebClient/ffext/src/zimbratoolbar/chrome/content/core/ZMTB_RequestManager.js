@@ -35,8 +35,7 @@ ZMTB_RequestManager.prototype.updateAll = function()
 	sd.set("GetFolderRequest", null, sd.getMethod(), ZMTB_RequestManager.NS_MAIL);
 	sd.set("SearchRequest", {"types":"appointment", "calExpandInstStart":((new Date()).getTime()-1000*60*60*6), "calExpandInstEnd":((new Date()).getTime()+18*60*60*1000), "query":"in:calendar"}, sd.getMethod(), ZMTB_RequestManager.NS_MAIL);
 	sd.set("GetTagRequest", null, sd.getMethod(), ZMTB_RequestManager.NS_MAIL);
-	if(this._serverVersion == "")
-		sd.set("GetInfoRequest", {"sections":"mbox,idents"}, sd.getMethod(), ZMTB_RequestManager.NS_ACCOUNT);
+	sd.set("GetInfoRequest", {"sections":"mbox,idents,sigs"}, sd.getMethod(), ZMTB_RequestManager.NS_ACCOUNT);
 	try{
 		(new ZMTBCsfeCommand()).invoke({soapDoc:sd, asyncMode:true, callback:new ZMTB_AjxCallback(this, this.parseResponse), changeToken:this._changeToken});
 		clearTimeout(this._timeout);
@@ -237,6 +236,8 @@ ZMTB_RequestManager.prototype.parseResponse = function(result)
 		return;
 	}
 	this._zmtb.enable();
+	if(rd.Body.BatchResponse && rd.Body.BatchResponse.GetInfoResponse && rd.Body.BatchResponse.GetInfoResponse[0].version)
+		this._serverVersion = rd.Body.BatchResponse.GetInfoResponse[0].version;
 	// if(rd.Header.context.refresh && rd.Header.context.refresh.version)
 	// 	this._serverVersion = rd.Header.context.refresh.version;
 	if(rd.Header.context.notify)
