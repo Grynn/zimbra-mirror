@@ -1,0 +1,5 @@
+content zimbratb jar:chrome/zimbratb.jar!/content/
+overlay chrome://browser/content/browser.xul chrome://zimbratb/content/core/zimbratb.xul
+# overlay chrome://browser/content/preferences/preferences.xul chrome://zimbratb/content/preferences/preferences.xul
+skin zimbratb classic/1.0 jar:chrome/zimbratb.jar!/skin/classic/
+locale	zimbratb	en-US	jar:chrome/zimbratb.jar!/locale/en-US/

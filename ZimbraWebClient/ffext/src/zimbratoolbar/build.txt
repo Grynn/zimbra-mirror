@@ -1,0 +1,3 @@
+1. Rename chrome.manifest.build to chrome.manifest (Current chrome.manifest is for testing.)
+2. Zip all directories inside chrome/ and rename to zimbratb.jar (so path will be chrome/zimbratb.jar)
+3. Zip chrome/, defaults/, the new chrome.manifest and install.rdf together and change file name to zimbratb.xpi 
