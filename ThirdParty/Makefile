@@ -92,8 +92,8 @@ build:
 		$(MAKE) -C $$dir >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  $(ECHO) "FAILED.";  else  $(ECHO) "SUCCEEDED.";  fi ; \
 	done)
-	@($(ECHO) -n "*** Building in Perl "; $(MAKE) -C Perl ) 
 	@($(MAKE) -C apache-httpd tar >> $(LOGFILE) 2>&1)
+	@($(ECHO) -n "*** Building in Perl "; $(MAKE) -C Perl ) 
 
 clean:
 	for dir in $(DIRS); do \
