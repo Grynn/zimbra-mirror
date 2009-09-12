@@ -113,14 +113,6 @@ function(entry) {
 	this.updateTab();
 }
 
-ZaResourceXFormView.onRepeatRemove = 
-function (index, form) {
-	var list = this.getInstanceValue();
-	if (list == null || typeof(list) == "string" || index >= list.length || index<0) return;
-	list.splice(index, 1);
-	form.parent.setDirty(true);
-}
-
 ZaResourceXFormView.deleteCalFwdAddrButtonListener = function () {
 	var instance = this.getInstance();	
 	if(instance[ZaResource.A2_calFwdAddr_selection_cache] != null) {

@@ -1334,43 +1334,6 @@ XFormItem.prototype.getItems = function () {
 	return this.__attributes.items;
 }
 
-
-XFormItem.prototype.getRelevant = function () {
-	return this.cacheInheritedProperty("relevant","_relevant");
-}
-
-XFormItem.prototype.getRelevantIfEmpty = function () {
-	return this.getInheritedProperty("relevantIfEmpty");
-}
-
-XFormItem.prototype.evalRelevant = function () {
-	var relevant = this.getRelevant();
-	if (relevant == null) return true;
-
-	var item = this;
-	var form = this.getForm();
-	var model = this.getModel();
-	var instance = this.getForm().getInstance();
-	with (form) {
-		return eval(relevant);
-	}
-}
-
-XFormItem.getInheritedRelevancy = function (item) {
-	if(item.getRelevant() != null) 
-		return item.evalRelevant();
-	var tmpItem = item.getParentItem();	
-	while(tmpItem) {
-		if(tmpItem.getRelevant() != null) {
-			return tmpItem.evalRelevant();
-		} else {
-			tmpItem = tmpItem.getParentItem();
-		}
-	}
-	if(!tmpItem)
-		return true;
-}
-
 XFormItem.prototype.getChoices = function () {
 	return this.getInheritedProperty("choices");
 }
@@ -1738,22 +1701,6 @@ XFormItem.prototype.getContainerCssString = function () {
 			
 		style += "vertical-align:middle";
 	}
-
-/*		var relevant = this.getRelevant();
-	if (relevant) {
-	var relevantBehavior = this.getRelevantBehavior();
-		if (relevantBehavior == _HIDE_) {
-			if(style.length)
-				style += ";";
-						
-			style += "display:none";
-		} else if(relevantBehavior == _BLOCK_HIDE_) {
-			if(style.length)
-				style += ";";			
-		
-			style += "display:block";
-		} 
-	}*/
 
 	if (style != "") css += " style=\"" + style + ";\"";
 	return css;
@@ -3367,7 +3314,7 @@ Repeat_XFormItem.prototype.getAddButton = function () {
 				repeatItem.addRowButtonClicked(this.getParentItem().instanceNum);
 			},
 			visibilityChecks:[Repeat_XFormItem.isAddButtonVisible],
-			visibilityChangeEventSources:[this.getRef()],
+			visibilityChangeEventSources:[this.getRefPath()],
 			forceUpdate:true
 		};
 		var label = this.getInheritedProperty("addButtonLabel");
@@ -3405,8 +3352,6 @@ Repeat_XFormItem.prototype.moveDownButton = {
 		var repeatItem = this.getParentItem().getParentItem();
 		repeatItem.moveDownButtonClicked(this.getParentItem().instanceNum);
 	},
-	relevantBehavior:_HIDE_,
-	relevant:"(item.getInstanceCount()-1) == item.__parentItem.instanceNum",
 	forceUpdate:true
 }
 
@@ -3426,31 +3371,21 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 //				useParentTable:true,
 				type:_GROUP_, 
 				numCols: items.length,
-				items:[].concat(items)
+				items:[].concat(items),
+				visibilityChangeEventSources:[this.getRefPath()],
+				visibilityChecks:[function() {
+					return (this.instanceNum==0 || (this.instanceNum < this.getNumberToShow()) || (this.instanceNum < this.getInstanceCount()));
+				}]
 			};
 	}
 	
-//	group.useParentTable = true;
 	group.colSpan = 1;
 
-	var relevant = "(item.instanceNum < " + this.getNumberToShow() + ") || "+
-				   "(item.instanceNum < item.getInstanceCount())";
-	group.visibilityChecks = [Repeat_XFormItem.groupVisibilityCheck];
-	group.visibilityChangeEventSources = [this.getRef()];
-	/*group.relevant = relevant;
-	group.relevantBehavior = this.getRelevantBehavior();*/
-	
 	//Check if we have an explicit condition defined for Remove button
 	
 	// add the add and remove buttons to the original items array, if appropriate
 	if (this.getShowRemoveButton()) {
 		var button = this.getRemoveButton();
-			
-		//var removeButtonRelevant = this.cacheInheritedProperty("remove_relevant","_remove_relevant");
-		/*if(removeButtonRelevant) {
-			button.relevant = removeButtonRelevant;
-		} */
-		
 		group.items[group.items.length] = button;
 		group.numCols++;			
 	}
@@ -3458,12 +3393,13 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 		var button = this.getAddButton();
 	
 		var showAddOnNextRow = this.getInheritedProperty("showAddOnNextRow");
-/*		if (!this.getAlwaysShowAddButton()) {
-			button.relevant = "(item.getInstanceCount()-1) == item.__parentItem.instanceNum";
-		}*/
 		group.items[group.items.length] = button;
 		if(showAddOnNextRow) {
-			group.items[group.items.length] = {type:_SPACER_, colSpan:(group.numCols-1), visibilityChecks:[Repeat_XFormItem.isLastRow], visibilityChangeEventSources:[this.getRef()]};
+			group.items[group.items.length] = 
+			{type:_SPACER_, colSpan:(group.numCols-1), 
+				visibilityChecks:[Repeat_XFormItem.isLastRow], 
+				visibilityChangeEventSources:[this.getRefPath()]
+			};
 		} else {
 			group.numCols++;
 		}

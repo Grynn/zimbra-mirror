@@ -73,7 +73,7 @@ ZaServer.A_zimbraMtaRelayHost = "zimbraMtaRelayHost";
 ZaServer.A_zimbraMtaTlsAuthOnly = "zimbraMtaTlsAuthOnly";
 ZaServer.A_zimbraMtaMyNetworks = "zimbraMtaMyNetworks";
 //smtp
-ZaServer.A_SmtpHostname  = "zimbraSmtpHostname";
+ZaServer.A_zimbraSmtpHostname  = "zimbraSmtpHostname";
 ZaServer.A_SmtpPort = "zimbraSmtpPort";
 ZaServer.A_SmtpTimeout = "zimbraSmtpTimeout";
 //Lmtp
@@ -369,7 +369,7 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_zimbraMtaMyNetworks, ref:"attrs/" +  ZaServer.A_zimbraMtaMyNetworks, type:_STRING_, maxLength: 256 },
 		{id:ZaServer.A_zimbraMtaDnsLookupsEnabled, ref:"attrs/" +  ZaServer.A_zimbraMtaDnsLookupsEnabled, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 		// ...other...
-		{id:ZaServer.A_SmtpHostname, ref:"attrs/" +  ZaServer.A_SmtpHostname, type:_COS_HOSTNAME_OR_IP_, maxLength: 256 },
+		{id:ZaServer.A_zimbraSmtpHostname, ref:"attrs/" +  ZaServer.A_zimbraSmtpHostname, type:_COS_LIST_, listItem:{type:_COS_HOSTNAME_OR_IP_, maxLength: 256} },
 		{id:ZaServer.A_SmtpPort, ref:"attrs/" +  ZaServer.A_SmtpPort, type:_COS_PORT_},
 		{id:ZaServer.A_SmtpTimeout, ref:"attrs/" + ZaServer.A_SmtpTimeout, type:_COS_NUMBER_, minInclusive: 0 },
 		{id:ZaServer.A_LmtpAdvertisedName, ref:"attrs/" +  ZaServer.A_LmtpAdvertisedName, type:_STRING_, maxLength: 128 },
@@ -830,6 +830,13 @@ ZaServer.prototype.initFromJS = function(server) {
 	}
 	this[ZaServer.A_ServiceHostname] = this.attrs[ZaServer.A_ServiceHostname]; // a hack for New Account Wizard	
 	this[ZaServer.A_showVolumes] = this.attrs[ZaServer.A_zimbraMailboxServiceEnabled];
+	if(this.attrs[ZaServer.A_zimbraSmtpHostname] && !(this.attrs[ZaServer.A_zimbraSmtpHostname] instanceof Array)) {
+		this.attrs[ZaServer.A_zimbraSmtpHostname] = [this.attrs[ZaServer.A_zimbraSmtpHostname]];
+	}
+	
+	if(this._defaultValues && this._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname] && !(this._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname]  instanceof Array)) {
+		this._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname]  = [this.attrs[ZaServer.A_zimbraSmtpHostname]];
+	}	
 }
 
 ZaServer.prototype.parseCurrentVolumesResponse =

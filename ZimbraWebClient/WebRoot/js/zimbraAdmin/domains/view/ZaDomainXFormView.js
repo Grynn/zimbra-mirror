@@ -48,7 +48,7 @@ ZaDomainXFormView.prototype.constructor = ZaDomainXFormView;
 ZaTabView.XFormModifiers["ZaDomainXFormView"] = new Array();
 
 ZaDomainXFormView.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
-
+/*
 ZaDomainXFormView.onRepeatRemove = 
 function (index, form) {
 	var list = this.getInstanceValue();
@@ -56,7 +56,7 @@ function (index, form) {
 	list.splice(index, 1);
 	this.setInstanceValue(list);
 	form.parent.setDirty(true);
-}
+}*/
 /**
 * @method setObject sets the object contained in the view
 * @param entry - ZaDomain object to display
@@ -905,8 +905,8 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 						removeButtonLabel:ZaMsg.NAD_RemoveVirtualHost,
 						items: [
 							{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaDomainXFormView.onFormFieldChanged}
-						],
-						onRemove:ZaDomainXFormView.onRepeatRemove
+						]/*,
+						onRemove:ZaDomainXFormView.onRepeatRemove*/
 				}
 			]
 		};

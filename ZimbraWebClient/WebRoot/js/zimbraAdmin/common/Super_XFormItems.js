@@ -1703,3 +1703,51 @@ function() {
 		alert(ex);
 	}
 };
+
+/**
+*	_SUPER_REPEAT_ form item type
+**/
+SuperRepeat_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPER_REPEAT_", "super_repeat", SuperRepeat_XFormItem, Super_XFormItem);
+SuperRepeat_XFormItem.prototype.numCols=2;
+SuperRepeat_XFormItem.prototype.colSizes=["275px","275px"];
+SuperRepeat_XFormItem.prototype.nowrap = false;
+SuperRepeat_XFormItem.prototype.labelWrap = true;
+SuperRepeat_XFormItem.prototype.items = [];
+SuperRepeat_XFormItem.prototype.labelWidth = "275px";
+
+SuperRepeat_XFormItem.prototype.initializeItems = function() {
+
+	var items = this.getInheritedProperty("repeatItems");
+		
+	var repeatItem = {
+		type:_REPEAT_,
+		items:items,
+		ref:".",
+		label:null, labelLocation:_NONE_,
+		repeatInstance:this.getRepeatInstance(),
+		showAddButton:this.getShowAddButton(),
+		showRemoveButton:this.getShowRemoveButton(),
+		addButtonLabel:this.getInheritedProperty("addButtonLabel"),
+		removeButtonLabel:this.getInheritedProperty("removeButtonLabel"),
+		removeButtonCSSStyle:this.getInheritedProperty("removeButtonCSSStyle"),
+		addButtonWidth:this.getInheritedProperty("addButtonWidth"),
+		removeButtonWidth:this.getInheritedProperty("removeButtonWidth"),
+		showAddOnNextRow:AjxUtil.isEmpty(this.getInheritedProperty("showAddOnNextRow")) ? true : this.getInheritedProperty("showAddOnNextRow"),
+		alwaysShowAddButton:false
+	}
+	
+	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");	
+	var anchorHlpr = {	
+		type:_SUPER_ANCHOR_HELPER_, ref:".",
+		visibilityChecks:[Super_XFormItem.checkIfOverWriten],
+		visibilityChangeEventSources:[this.getRefPath()],
+		onChange:Composite_XFormItem.onFieldChange,
+		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:150px")
+	};
+		
+	this.items = [repeatItem,anchorHlpr];
+	
+	
+	Composite_XFormItem.prototype.initializeItems.call(this);
+}

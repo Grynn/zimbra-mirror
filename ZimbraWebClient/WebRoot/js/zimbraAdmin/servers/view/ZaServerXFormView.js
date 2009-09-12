@@ -452,7 +452,7 @@ ZaServerXFormView.SERVICE_TAB_ATTRS = [ZaServer.A_zimbraLdapServiceEnabled, ZaSe
 	ZaServer.A_zimbraAntiVirusServiceEnabled, ZaServer.A_zimbraSpellServiceEnabled, ZaServer.A_zimbraLoggerServiceEnabled];
 ZaServerXFormView.SERVICE_TAB_RIGHTS = [];
 
-ZaServerXFormView.MTA_TAB_ATTRS = [ZaServer.A_zimbraMtaAuthEnabled, ZaServer.A_zimbraMtaTlsAuthOnly, ZaServer.A_SmtpHostname,
+ZaServerXFormView.MTA_TAB_ATTRS = [ZaServer.A_zimbraMtaAuthEnabled, ZaServer.A_zimbraMtaTlsAuthOnly, ZaServer.A_zimbraSmtpHostname,
 	ZaServer.A_SmtpPort, ZaServer.A_zimbraMtaRelayHost, ZaServer.A_SmtpTimeout, ZaServer.A_zimbraMtaMyNetworks, ZaServer.A_zimbraMtaDnsLookupsEnabled];
 ZaServerXFormView.MTA_TAB_RIGHTS = [];
 
@@ -665,15 +665,26 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					      	    }
 				      	    ]
 						},
-				      {type:_ZA_TOP_GROUPER_, colSizes:["auto"],numCols:1,label:ZaMsg.Global_MTA_NetworkGrp,
+				      {type:_ZA_TOP_GROUPER_, colSizes:["275px","425px"], numCols:2,label:ZaMsg.Global_MTA_NetworkGrp,
 					      items: [
-							{ref:ZaServer.A_SmtpHostname, type:_SUPER_TEXTFIELD_,
-							  txtBoxLabel:ZaMsg.NAD_MTA_WebMailHostname,
-							  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-							  onChange: ZaServerXFormView.onFormFieldChanged,
-							  toolTipContent: ZaMsg.tt_MTA_WebMailHostname,
-							  textFieldCssClass:"admin_xform_name_input"
-							},
+					      	{type:_SUPER_REPEAT_, ref:ZaServer.A_zimbraSmtpHostname, 
+					      		label:ZaMsg.LBL_zimbraSmtpHostname,
+								resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+								repeatInstance:"", showAddButton:true, 
+								showRemoveButton:true, 
+								addButtonLabel:ZaMsg.Add_zimbraSmtpHostname, 
+								showAddOnNextRow:true,
+								removeButtonLabel:ZaMsg.Remove_zimbraSmtpHostname,
+								removeButtonCSSStyle: "margin-left: 50px",
+					      		repeatItems:[
+								{ 
+								  type:_TEXTFIELD_,ref:".",
+								  toolTipContent: ZaMsg.tt_zimbraSmtpHostname,
+								  cssClass:"admin_xform_name_input",
+								  enableDisableChecks:[],
+								  visibilityChecks:[]
+								}]
+					      	},
 							{type:_GROUP_,numCols:3,colSpan:3,colSizes:["275px","275px","150px"],
 						  		items:[
 									{ref:ZaServer.A_SmtpPort, type:_OUTPUT_, label:ZaMsg.NAD_MTA_WebMailPort, width:"4em"},
