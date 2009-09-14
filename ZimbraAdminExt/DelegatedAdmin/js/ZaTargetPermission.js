@@ -25,8 +25,7 @@ ZaGrantsListView = function(parent, className, posStyle, headerList) {
 
 	ZaListView.call(this, parent, className, posStyle, headerList);
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-    //disable the multiselect for Grants List view
-    this.setMultiSelect(false) ;
+    this.setMultiSelect(true) ;
 }
 
 ZaGrantsListView.prototype = new ZaListView;
@@ -181,7 +180,7 @@ ZaGrantsListView.revokeGlobalGrant = function () {
         targetInfo [ZaGrant.A_target_type] = "global" ;
 
         for (var i = 0; i < selectedGrants.length; i ++) {
-// TODO: when multiselection enabled, we need a progress dialog to show the progress
+// TODO: when multiselection enabled, we may need a progress dialog to show the progress
             if (ZaGrant.revokeMethod (selectedGrants[i])) {
                 // fire the removal event.               
                 this.fireRemovalEvent (selectedGrants[i]) ;
@@ -234,7 +233,7 @@ ZaTargetPermission.getGrantsListXFormItem = function (params) {
         headerList: ZaGrantsListView._getHeaderList (w, by),
         hideHeader: false ,
         onSelection:ZaGrantsListView.grantSelectionListener,
-        multiselect: false  //TODO: enable multiselect in the future
+        multiselect: true 
     } ;
 
     var marginLeft = ( w - 340 ) / 2 ;
@@ -617,7 +616,8 @@ function (grantsList) {
     var keys = [ZaGrant.A_target, ZaGrant.A_grantee, ZaGrant.A_right, ZaGrant.A_deny, ZaGrant.A_canDelegate] ;
     for (var i=0; i < grantsList.length; i ++) {
         var grant = grantsList [i] ;
-
+        dlgMsg += "<tr><td colspan=2>-----<strong>"+ AjxMessageFormat.format(com_zimbra_delegatedadmin.Label_ACE, [i+1])
+                 +"</strong>-----</td></tr>"  ;
         for (var j =0; j < keys.length; j ++) {
             var key = keys [j] ;
             dlgMsg += "<tr>";

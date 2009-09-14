@@ -54,12 +54,13 @@ function () {
             com_zimbra_delegatedadmin.Bt_revoke, com_zimbra_delegatedadmin.Grant_Delete_tt,
     "Delete", "DeleteDis",
             new AjxListener(this, this.deleteGrantsListener));
-
+   
     this._toolbarOperations[ZaOperation.CLOSE] = new ZaOperation(ZaOperation.CLOSE,
             ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis",
             new AjxListener(this, this.closeButtonListener));
 
     this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
+
 }
 ZaController.initToolbarMethods["ZaAllGrantsViewController"].push(ZaAllGrantsViewController.initToolbarMethod);
 
@@ -147,7 +148,7 @@ ZaAllGrantsViewController.prototype.deleteGrantsListener = function () {
     var directGrantsListViewItem = form.getItemsById (ZaGrant.A3_directGrantsList) [0] ;
 
     var selectedGrant = directGrantsListViewItem.getSelection();
-    if (selectedGrant && selectedGrant.length > 0) {
+    if (selectedGrant && selectedGrant.length >= 1) {
         if(!this.revokeRightDlg) {
             this.revokeRightDlg = new ZaMsgDialog (
                     ZaApp.getInstance().getAppCtxt().getShell(),
@@ -178,7 +179,9 @@ function(entry) {
             this._toolbarOrder.push(ZaOperation.HELP);
 
             this._toolbar = new ZaToolBar(this._container, this._toolbarOperations, this._toolbarOrder);
-
+            this._editBt = this._toolbar.getButton (ZaOperation.EDIT);
+            this._deleteBt = this._toolbar.getButton (ZaOperation.DELETE );
+           
             this._contentView = this._view = new this.tabConstructor(this._container, entry);
             var elements = new Object();
             elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
@@ -200,6 +203,8 @@ function(entry) {
         entry[ZaModel.currentTab] = "1";
         this._currentObject = entry;
         this._view.setObject(entry);
+
+
     } catch (ex) {
         this._handleException(ex, "ZaAllGrantsViewController.prototype._setView", null, false);
     }

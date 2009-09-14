@@ -827,7 +827,7 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
                     headerList: ZaGrantsListView._getHeaderList (530, ZaGrant.A_grantee),
                     hideHeader: false ,
 //                    onSelection:ZaGrantsListView.grantSelectionListener,
-                    multiselect: false  //TODO: enable multiselect in the future
+                    multiselect: true
                 } 
         ]
     }

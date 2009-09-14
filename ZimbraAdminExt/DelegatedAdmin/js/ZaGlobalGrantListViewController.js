@@ -329,6 +329,9 @@ function(ev) {
         this.revokeRightDlg.registerCallback(DwtDialog.YES_BUTTON, ZaGrantsListView.revokeGlobalGrant, this, null);
         var confirmMsg =  com_zimbra_delegatedadmin.confirm_delete_grants + ZaTargetPermission.getDlMsgFromGrant(selectedGrant) ;
         this.revokeRightDlg.setMessage (confirmMsg,  DwtMessageDialog.INFO_STYLE) ;
+        var noOfSG = selectedGrant.length ;
+        var height = (noOfSG >= 3 ? 3 * 80 : noOfSG * 80);
+        this.revokeRightDlg.setSize (400, height + 30);
         this.revokeRightDlg.popup ();
     } else {
         ZaApp.getInstance().getCurrentController().popupMsgDialog (com_zimbra_delegatedadmin.no_grant_selected_msg) ;
@@ -362,19 +365,27 @@ ZaGlobalGrantListViewController.changeActionsStateMethod =
 function () {
 	if(this._contentView) {
 		var cnt = this._contentView.getSelectionCount();
-		 if (cnt == 1){
+		 if (cnt >= 1){
+
             if(this._toolbarOperations[ZaOperation.DELETE])
-				this._toolbarOperations[ZaOperation.DELETE].enabled = true;
+                 this._toolbarOperations[ZaOperation.DELETE].enabled = true;
 
-			if(this._popupOperations[ZaOperation.DELETE])
-				this._popupOperations[ZaOperation.DELETE].enabled = true;
+            if(this._popupOperations[ZaOperation.DELETE])
+                this._popupOperations[ZaOperation.DELETE].enabled = true;
 
-             if(this._toolbarOperations[ZaOperation.EDIT])
-                 this._toolbarOperations[ZaOperation.EDIT].enabled = true;
+            if (cnt == 1) {
+                if(this._toolbarOperations[ZaOperation.EDIT])
+                    this._toolbarOperations[ZaOperation.EDIT].enabled = true;
 
-             if(this._popupOperations[ZaOperation.EDIT])
-                 this._popupOperations[ZaOperation.EDIT].enabled = true;
+                if(this._popupOperations[ZaOperation.EDIT])
+                    this._popupOperations[ZaOperation.EDIT].enabled = true;
+            }else {
+                if(this._toolbarOperations[ZaOperation.EDIT])
+                     this._toolbarOperations[ZaOperation.EDIT].enabled = false;
 
+                if(this._popupOperations[ZaOperation.EDIT])
+                    this._popupOperations[ZaOperation.EDIT].enabled = false;
+            }
 		} else {
 			if(this._toolbarOperations[ZaOperation.DELETE])
 				this._toolbarOperations[ZaOperation.DELETE].enabled = false;

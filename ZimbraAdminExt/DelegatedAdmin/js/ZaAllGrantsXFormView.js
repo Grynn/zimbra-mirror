@@ -24,6 +24,18 @@ ZaAllGrantsXFormView.grantSelectionListener = function () {
     var selectedGrants = this.widget.getSelection () ;
     this.getModel().setInstanceValue (instance,
             ZaGrant.A2_grantsListSelectedItems, selectedGrants) ;
+
+    if (selectedGrants.length >= 1) {
+        var controller = ZaApp.getInstance ().getCurrentController () ;
+        var deleteBt = controller._toolbar.getButton (ZaOperation.DELETE );
+        var editBt = controller._toolbar.getButton (ZaOperation.EDIT);
+        deleteBt.setEnabled (true) ;
+        if (selectedGrants.length == 1) {
+            editBt.setEnabled (true) ;
+        } else {
+            editBt.setEnabled (false) ;            
+        }
+    }
 }
 
 ZaAllGrantsXFormView.getXModel = function () {
@@ -91,7 +103,7 @@ ZaAllGrantsXFormView.prototype.getMyXForm = function() {
                         headerList: ZaGrantsListView._getHeaderList (null, "all"),
                         hideHeader: false ,
                         onSelection:ZaAllGrantsXFormView.grantSelectionListener,
-                        multiselect: false  //TODO: enable multiselect in the future
+                        multiselect: true
                     }
                 ]
             },
@@ -104,7 +116,7 @@ ZaAllGrantsXFormView.prototype.getMyXForm = function() {
 //                        cssClass: "MBXList",
                         headerList: ZaGrantsListView._getHeaderList (null, "all"),
                         hideHeader: false ,
-                        multiselect: false  //TODO: enable multiselect in the future
+                        multiselect: false
                     }
                 ]
             }
