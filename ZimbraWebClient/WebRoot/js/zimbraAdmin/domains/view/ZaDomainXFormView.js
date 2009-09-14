@@ -303,7 +303,7 @@ function (params,resp) {
 			ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);	
 		
 		if(!resp && !ZaApp.getInstance().getCurrentController()._currentRequest.cancelled) {
-			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaDomainController.prototype.saveChangesCallback"));
+			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaDomainController.prototype.modifyAclCallback"));
 		} else if(resp.isException && resp.isException()) {
 			throw(resp.getException());
 		} else if(resp.getResponse().Body && resp.getResponse().Body.BatchResponse && resp.getResponse().Body.BatchResponse.Fault) {

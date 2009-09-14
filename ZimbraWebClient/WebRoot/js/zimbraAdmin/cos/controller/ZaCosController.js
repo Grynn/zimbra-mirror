@@ -561,7 +561,7 @@ function () {
 			//if modification took place - fire a ChangeEvent
 			//changeDetails["obj"] = this._currentObject;
 			//changeDetails["mods"] = mods;
-			this.fireChangeEvent(this._currentObject);
+			//this.fireChangeEvent(this._currentObject);
 		}
 	} catch (ex) {
 		var detailStr = "";
