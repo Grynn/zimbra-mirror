@@ -22,8 +22,8 @@ import java.util.Set;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
-import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
 import com.zimbra.cs.redolog.op.CreateFolder;
 
 public class LocalMailbox extends DesktopMailbox {
@@ -42,7 +42,7 @@ public class LocalMailbox extends DesktopMailbox {
             
             redo.setFolderId(ID_FOLDER_NOTIFICATIONS);
             redo.start(System.currentTimeMillis());
-            createFolder(new OfflineContext(redo), NOTIFICATIONS_PATH,
+            createFolder(new TracelessContext(redo), NOTIFICATIONS_PATH,
                 ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
                 MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
         }

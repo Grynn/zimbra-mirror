@@ -7,17 +7,23 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Pair;
 import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
-import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.util.TypedIdList;
+import com.zimbra.cs.redolog.op.RedoableOp;
+import com.zimbra.cs.session.PendingModifications.Change;
 
 public abstract class ChangeTrackingMailbox extends SyncMailbox {
+
+    public static class TracelessContext extends OperationContext {
+        public TracelessContext()                 { super((RedoableOp) null); }
+        public TracelessContext(RedoableOp redo)  { super(redo); }
+    }
 
     public ChangeTrackingMailbox(MailboxData data) throws ServiceException {
         super(data);
     }	
 	
     @Override boolean isTrackingSync() {
-        return !(getOperationContext() instanceof OfflineContext);
+        return !(getOperationContext() instanceof TracelessContext);
     }
 
     @Override public boolean isTrackingImap() {
@@ -28,7 +34,28 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         return true;
     }
     
-    @Override void itemCreated(MailItem item, boolean inArchive) throws ServiceException {};
+    
+    @Override
+    void trackChangeNew(MailItem item) throws ServiceException {
+        if (!isTrackingSync() || !isPushType(item.getType()))
+            return;
+
+        DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_CONFLICT);
+    }
+    
+    @Override
+    void trackChangeModified(MailItem item, int changeMask) throws ServiceException {
+        if (!isTrackingSync() || !isPushType(item.getType()))
+            return;
+
+        int filter = getChangeMaskFilter(item.getType());
+        if ((changeMask & filter) != 0)
+            DbOfflineMailbox.updateChangeRecord(item, changeMask & filter);
+    }
+    
+    abstract boolean isPushType(byte type);
+    
+    abstract int getChangeMaskFilter(byte type);
     
     synchronized boolean isPendingDelete(OperationContext octxt, int itemId, byte type) throws ServiceException {
         boolean success = false;

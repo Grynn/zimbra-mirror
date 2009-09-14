@@ -51,9 +51,9 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineAccount.Version;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.mailbox.MailItem.UnderlyingData;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
-import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import com.zimbra.cs.mailbox.calendar.ZAttendee;
 import com.zimbra.cs.mime.ParsedContact;
@@ -115,7 +115,7 @@ public class InitialSync {
     
     static final String A_RELOCATED = "relocated";
 
-    private static final OfflineContext sContext = new OfflineContext();
+    private static final TracelessContext sContext = new TracelessContext();
 
     private final ZcsMailbox ombx;
     private final MailboxSync mMailboxSync;
@@ -459,7 +459,7 @@ public class InitialSync {
         redo.start(System.currentTimeMillis());
 
         try {
-            ombx.createSearchFolder(new OfflineContext(redo), parentId, name, query, searchTypes, sort, flags, color);
+            ombx.createSearchFolder(new TracelessContext(redo), parentId, name, query, searchTypes, sort, flags, color);
             if (relocated)
                 ombx.setChangeMask(sContext, id, MailItem.TYPE_SEARCHFOLDER, Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
             ombx.syncDate(sContext, id, MailItem.TYPE_SEARCHFOLDER, date);
@@ -522,9 +522,9 @@ public class InitialSync {
         try {
             if (itemType == MailItem.TYPE_FOLDER) {
                 // don't care about current feed syncpoint; sync can't be done offline
-                ombx.createFolder(new OfflineContext(redo), name, parentId, system, view, flags, color, url);
+                ombx.createFolder(new TracelessContext(redo), name, parentId, system, view, flags, color, url);
             } else {
-                ombx.createMountpoint(new OfflineContext(redo), parentId, name, ownerId, remoteId, view, flags, color);               
+                ombx.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, view, flags, color);               
             }
             if (relocated)
                 ombx.setChangeMask(sContext, id, itemType, Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
@@ -576,7 +576,7 @@ public class InitialSync {
 
         try {
             // don't care about current feed syncpoint; sync can't be done offline
-            ombx.createTag(new OfflineContext(redo), name, color);
+            ombx.createTag(new TracelessContext(redo), name, color);
             if (renamed)
                 ombx.setChangeMask(sContext, id, MailItem.TYPE_TAG, Change.MODIFIED_NAME);
             ombx.syncDate(sContext, id, MailItem.TYPE_TAG, date);
@@ -816,7 +816,7 @@ public class InitialSync {
         player.start(System.currentTimeMillis());
         
         try {
-             OfflineContext ctxt = new OfflineContext(player);
+             TracelessContext ctxt = new TracelessContext(player);
              ombx.setCalendarItem(ctxt, folderId, flags, tags, parsed.defaultInv, parsed.exceptions, parsed.replies, parsed.nextAlarm);
              ombx.syncDate(ctxt, itemId, isAppointment ? MailItem.TYPE_APPOINTMENT : MailItem.TYPE_TASK, date);
              if (OfflineLog.offline.isDebugEnabled()) {
@@ -879,7 +879,7 @@ public class InitialSync {
         redo.start(System.currentTimeMillis());
 
         try {
-            Contact cn = ombx.createContact(new OfflineContext(redo), pc, folderId, tags);
+            Contact cn = ombx.createContact(new TracelessContext(redo), pc, folderId, tags);
             if (flags != 0)
                 ombx.setTags(sContext, id, MailItem.TYPE_CONTACT, flags, MailItem.TAG_UNCHANGED);
             if (color != MailItem.DEFAULT_COLOR)
@@ -1152,12 +1152,12 @@ public class InitialSync {
             // XXX: need to call with noICal = false
             Message msg;
             if (type == MailItem.TYPE_CHAT) {
-                msg = ombx.createChat(new OfflineContext(redo), pm, folderId, flags, tags);
+                msg = ombx.createChat(new TracelessContext(redo), pm, folderId, flags, tags);
             } else {
                 DeliveryContext deliveryCtxt = new DeliveryContext();
 
                 deliveryCtxt.setIncomingBlob(blob);
-                msg = ombx.addMessage(new OfflineContext(redo), pm, folderId, true, flags, tags, convId, ":API:", null, deliveryCtxt);
+                msg = ombx.addMessage(new TracelessContext(redo), pm, folderId, true, flags, tags, convId, ":API:", null, deliveryCtxt);
             }
             ombx.syncDate(sContext, id, type, received);
             OfflineLog.offline.debug("initial: created " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
@@ -1200,9 +1200,9 @@ public class InitialSync {
                     int change_mask = ombx.getChangeMask(sContext, id, type);
                     if ((change_mask & Change.MODIFIED_CONTENT) == 0) {
                         if (type == MailItem.TYPE_CHAT)
-                            ombx.updateChat(new OfflineContext(redo2), pm, id);
+                            ombx.updateChat(new TracelessContext(redo2), pm, id);
                         else
-                            ombx.saveDraft(new OfflineContext(redo2), pm, id);
+                            ombx.saveDraft(new TracelessContext(redo2), pm, id);
                         ombx.syncDate(sContext, id, type, received);
                         OfflineLog.offline.debug("initial: updated " + MailItem.getNameForType(type) + " content (" + id + "): " + msg.getSubject());
                     } else {
@@ -1298,9 +1298,9 @@ public class InitialSync {
             
             try {
                 ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
-                ombx.addDocumentRevision(new OfflineContext(player), id, pd);
+                ombx.addDocumentRevision(new TracelessContext(player), id, pd);
             } catch (MailServiceException.NoSuchItemException nsie) {
-                ombx.createDocument(new OfflineContext(player), folderId, pd, type);
+                ombx.createDocument(new TracelessContext(player), folderId, pd, type);
             }
             if (flags != 0)
                 ombx.setTags(sContext, id, type, flags, MailItem.TAG_UNCHANGED);
@@ -1384,10 +1384,10 @@ public class InitialSync {
 
                 try {
                     ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
-                    ombx.addDocumentRevision(new OfflineContext(player), id, pd);
+                    ombx.addDocumentRevision(new TracelessContext(player), id, pd);
                 } catch (MailServiceException.NoSuchItemException nsie) {
                     try {
-                        ombx.createDocument(new OfflineContext(player), doc.getFolderId(), pd, doc.getType());
+                        ombx.createDocument(new TracelessContext(player), doc.getFolderId(), pd, doc.getType());
                     } catch (MailServiceException me) {
                         if (me.getCode().equals(MailServiceException.ALREADY_EXISTS)) {
                             // this is an edge case where a different object of
@@ -1403,7 +1403,7 @@ public class InitialSync {
                             MailItem oldItem = ombx.getItemByPath(sContext, path);
                             String newName = path + "-old";
                             ombx.rename(sContext, oldItem.mId, MailItem.TYPE_UNKNOWN, newName);
-                            ombx.createDocument(new OfflineContext(player), doc.getFolderId(), pd, doc.getType());
+                            ombx.createDocument(new TracelessContext(player), doc.getFolderId(), pd, doc.getType());
                         } else
                             throw me;
                     }

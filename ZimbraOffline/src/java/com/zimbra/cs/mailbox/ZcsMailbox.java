@@ -49,7 +49,6 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.redolog.op.RedoableOp;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.UserServlet.HttpInputStream;
 import com.zimbra.cs.servlet.ZimbraServlet;
@@ -58,11 +57,6 @@ import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StoreManager;
 
 public class ZcsMailbox extends ChangeTrackingMailbox {
-
-    public static class OfflineContext extends OperationContext {
-        public OfflineContext()                 { super((RedoableOp) null); }
-        public OfflineContext(RedoableOp redo)  { super(redo); }
-    }
 
     public static final int FIRST_OFFLINE_ITEM_ID = 2 << 29;
 
@@ -421,81 +415,27 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             updateFilterRules(itemId, oldFolderPath);
         }
     }
-    
-    /* NOTE: additional archiving handling specific to zimbra mailbox
-     * 
-     * items newly moved into archive before hard-deletes are pushed to server will have the archived dirty bit set.
-     * 
-     * when an item is moved into archive, we'll set the archived dirty bit.
-     * 
-     * when an item is moved out of archive and if archived dirty bit is not set,
-     * we'll also set the conflict dirty bit to mark it as new item to be uploaded.  in the case when an item is first
-     * moved into archive and then moved out before sync with server, we'll keep the archived dirty bit and address that on the next push.
-     * 
-     * when setting the archived dirty bit, we should preserve other change bits in case the item is moved out of archive before the next sync.
-     * 
-     * if an item is in archive and the archived dirty bit is not set, we don't need to keep track of changes on it; if the archived dirty bit
-     * is set, which means there's no sync since it was archived, we'll still need to keep track of changes.
-     * 
-     * when an item with conflict dirty bit is moved into
-     * archive we'll still set the archived dirty bit since pushing up unnecessary delete is always A-OK.
-     * 
-     * Bug 32184: if item moved into trash from archive has archived dirty bit, it's an item newly archived so we'll just remove its \Archived flag
-     * and treat it as a regular item.  if item moved into trash from archive has no archived dirty bit, we'll keep the \Archived flag and won't
-     * track any changes on it.  when an item with \Archived flag is moved into other non-archive folders, we'll clear the \Archived flag and set the
-     * conflict dirty bit to mark it as new item to be uploaded.
-     */
-    
-    @Override
-    void trackChangeNew(MailItem item) throws ServiceException {
-        if (!isTrackingSync() || !PushChanges.PUSH_TYPES_SET.contains(item.getType()))
-            return;
 
-        DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_CONFLICT);
+    @Override
+    boolean isPushType(byte type) {
+        return PushChanges.PUSH_TYPES_SET.contains(type);
     }
-	
+    
     @Override
-    void trackChangeModified(MailItem item, int changeMask) throws ServiceException {
-        if (!isTrackingSync() || !PushChanges.PUSH_TYPES_SET.contains(item.getType()))
-            return;
-
-        int filter = 0;
-        switch (item.getType()) {
-            case MailItem.TYPE_MESSAGE:       filter = PushChanges.MESSAGE_CHANGES;     break;
-            case MailItem.TYPE_CHAT:          filter = PushChanges.CHAT_CHANGES;        break;
-            case MailItem.TYPE_CONTACT:       filter = PushChanges.CONTACT_CHANGES;     break;
-            case MailItem.TYPE_FOLDER:        filter = PushChanges.FOLDER_CHANGES;      break;
-            case MailItem.TYPE_SEARCHFOLDER:  filter = PushChanges.SEARCH_CHANGES;      break;
-            case MailItem.TYPE_TAG:           filter = PushChanges.TAG_CHANGES;         break;
-            case MailItem.TYPE_APPOINTMENT:
-            case MailItem.TYPE_TASK:          filter = PushChanges.APPOINTMENT_CHANGES; break;
-            case MailItem.TYPE_WIKI:
-            case MailItem.TYPE_DOCUMENT:      filter = PushChanges.DOCUMENT_CHANGES;    break;
+    int getChangeMaskFilter(byte type) {
+        switch (type) {
+        case MailItem.TYPE_MESSAGE:       return PushChanges.MESSAGE_CHANGES;     
+        case MailItem.TYPE_CHAT:          return PushChanges.CHAT_CHANGES;        
+        case MailItem.TYPE_CONTACT:       return PushChanges.CONTACT_CHANGES;     
+        case MailItem.TYPE_FOLDER:        return PushChanges.FOLDER_CHANGES;      
+        case MailItem.TYPE_SEARCHFOLDER:  return PushChanges.SEARCH_CHANGES;      
+        case MailItem.TYPE_TAG:           return PushChanges.TAG_CHANGES;         
+        case MailItem.TYPE_APPOINTMENT:
+        case MailItem.TYPE_TASK:          return PushChanges.APPOINTMENT_CHANGES; 
+        case MailItem.TYPE_WIKI:
+        case MailItem.TYPE_DOCUMENT:      return PushChanges.DOCUMENT_CHANGES;
+        default:                          return 0;
         }
-
-        if ((changeMask & filter) != 0)
-            DbOfflineMailbox.updateChangeRecord(item, changeMask & filter);
-    }
-    
-    @Override
-    boolean trackChangeArchived(MailItem item, boolean toArchive, boolean isTrashing) throws ServiceException {
-    	if (!isTrackingSync() || !PushChanges.PUSH_TYPES_SET.contains(item.getType()))
-            return true;
-    	
-    	if (toArchive) {
-    		assert !isTrashing;
-    		DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_ARCHIVED);
-    	} else {
-    		//if archived dirty bit is not set, we will set the conflict dirty bit;
-    		//if archived dirty bit is set, meaning there was no sync since the item was first moved into archive,
-    		//we should should keep the archived dirty bit so that the next push can straighten it out.
-    		int mask = DbOfflineMailbox.getChangeMask(item);
-    		if (isTrashing)
-    			return (mask & Change.MODIFIED_ARCHIVED) != 0; //remove \Archived flag if archived bit is set
-    		else if ((mask & Change.MODIFIED_ARCHIVED) == 0 && (mask & Change.MODIFIED_CONFLICT) == 0)
-    			DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_CONFLICT);
-    	}
-    	return true;
     }
     
     public Element proxyRequest(Element request, SoapProtocol resProto, boolean quietWhenOffline, String op) throws ServiceException {

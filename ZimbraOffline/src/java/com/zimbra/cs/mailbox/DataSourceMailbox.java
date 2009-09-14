@@ -177,16 +177,8 @@ public class DataSourceMailbox extends SyncMailbox {
     }
 
     @Override
-    void archiveSingleItem(MailItem item, boolean toArchive, boolean isTrashing)
-        throws ServiceException {
-        super.archiveSingleItem(item, toArchive, isTrashing);
-        if (hasFolders && item instanceof Folder)
-            alterSyncFolderFlag((Folder)item, !toArchive);
-    }
-
-    @Override
-    void itemCreated(MailItem item, boolean inArchive) throws ServiceException {
-        if (hasFolders && !inArchive && item instanceof Folder &&
+    void itemCreated(MailItem item) throws ServiceException {
+        if (hasFolders && item instanceof Folder &&
             ((Folder)item).getDefaultView() == MailItem.TYPE_MESSAGE &&
             (((Folder)item).getUrl() == null || ((Folder)item).getUrl().equals(""))) {
             alterSyncFolderFlag((Folder)item, true);

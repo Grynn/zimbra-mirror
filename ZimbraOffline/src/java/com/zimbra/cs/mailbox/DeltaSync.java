@@ -28,8 +28,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.StringUtil;
-import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
-import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
+import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
@@ -41,7 +40,7 @@ import com.zimbra.cs.session.PendingModifications.Change;
 
 public class DeltaSync {
 
-    private static final OfflineContext sContext = new OfflineContext();
+    private static final TracelessContext sContext = new TracelessContext();
 
     private final ZcsMailbox ombx;
     private final MailboxSync mMailboxSync;
@@ -317,52 +316,46 @@ public class DeltaSync {
         List<Integer> leafIds = new ArrayList<Integer>(), tagIds = new ArrayList<Integer>();
         Set<Integer> foldersToDelete = new HashSet<Integer>();
 
-        synchronized (ombx) { //lock so that an item doesn't get moved into archive after we gather the list to delete
-	        // sort the deleted items into two sets: leaves and folders
-	        for (Element deltype : delement.listElements()) {
-	            byte type = Sync.typeForElementName(deltype.getName());
-	            if (type == MailItem.TYPE_UNKNOWN || type == MailItem.TYPE_CONVERSATION)
-	                continue;
-	            boolean isTag = type == MailItem.TYPE_TAG;
-	            boolean isFolder = InitialSync.KNOWN_FOLDER_TYPES.contains(deltype.getName());
-	            for (String idStr : deltype.getAttribute(MailConstants.A_IDS).split(",")) {
-	                Integer id = Integer.valueOf(idStr);
-	                Integer mask = ombx.getChangeMask(sContext, id, type);
-	                try {
-		                if (ombx.isItemInArchive(ombx.getItemById(sContext, id, type))) //don't delete something that was newly archived
-		                	continue;
-	                } catch (NoSuchItemException x) { continue; }
-	                // tag numbering conflict issues: don't delete tags we've created locally
-	                if (isTag && (mask & Change.MODIFIED_CONFLICT) != 0)
-	                    continue;
-	                (isFolder ? foldersToDelete : leafIds).add(id);
-	                if (isTag)
-	                    tagIds.add(id);
-	            }
-	        }
-	
-	        // temporary workaround because tags are left off the "typed delete" list up to 4.5.2
-	        for (String idStr : delement.getAttribute(MailConstants.A_IDS).split(",")) {
-	            Integer id = Integer.valueOf(idStr);
-	            if (id < MailItem.TAG_ID_OFFSET || id >= MailItem.TAG_ID_OFFSET + MailItem.MAX_TAG_COUNT || tagIds.contains(id))
-	                continue;
-	            // tag numbering conflict issues: don't delete tags we've created locally
-	            if ((ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG) & Change.MODIFIED_CONFLICT) != 0)
-	                continue;
-	            leafIds.add(id);  tagIds.add(id);
-	        }
-	
-	        // delete all the leaves now
-	        int idx = 0, ids[] = new int[leafIds.size()];
-	        for (int id : leafIds)
-	            ids[idx++] = id;
-	        ombx.delete(sContext, ids, MailItem.TYPE_UNKNOWN, null);
-	        OfflineLog.offline.debug("delta: deleted leaves: " + Arrays.toString(ids));
-	
-	        // avoid some nasty corner cases caused by tag id reuse
-	        for (int tagId : tagIds)
-	            ombx.removePendingDelete(sContext, tagId, MailItem.TYPE_TAG);
+        // sort the deleted items into two sets: leaves and folders
+        for (Element deltype : delement.listElements()) {
+            byte type = Sync.typeForElementName(deltype.getName());
+            if (type == MailItem.TYPE_UNKNOWN || type == MailItem.TYPE_CONVERSATION)
+                continue;
+            boolean isTag = type == MailItem.TYPE_TAG;
+            boolean isFolder = InitialSync.KNOWN_FOLDER_TYPES.contains(deltype.getName());
+            for (String idStr : deltype.getAttribute(MailConstants.A_IDS).split(",")) {
+                Integer id = Integer.valueOf(idStr);
+                Integer mask = ombx.getChangeMask(sContext, id, type);
+                // tag numbering conflict issues: don't delete tags we've created locally
+                if (isTag && (mask & Change.MODIFIED_CONFLICT) != 0)
+                    continue;
+                (isFolder ? foldersToDelete : leafIds).add(id);
+                if (isTag)
+                    tagIds.add(id);
+            }
         }
+
+        // temporary workaround because tags are left off the "typed delete" list up to 4.5.2
+        for (String idStr : delement.getAttribute(MailConstants.A_IDS).split(",")) {
+            Integer id = Integer.valueOf(idStr);
+            if (id < MailItem.TAG_ID_OFFSET || id >= MailItem.TAG_ID_OFFSET + MailItem.MAX_TAG_COUNT || tagIds.contains(id))
+                continue;
+            // tag numbering conflict issues: don't delete tags we've created locally
+            if ((ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG) & Change.MODIFIED_CONFLICT) != 0)
+                continue;
+            leafIds.add(id);  tagIds.add(id);
+        }
+
+        // delete all the leaves now
+        int idx = 0, ids[] = new int[leafIds.size()];
+        for (int id : leafIds)
+            ids[idx++] = id;
+        ombx.delete(sContext, ids, MailItem.TYPE_UNKNOWN, null);
+        OfflineLog.offline.debug("delta: deleted leaves: " + Arrays.toString(ids));
+
+        // avoid some nasty corner cases caused by tag id reuse
+        for (int tagId : tagIds)
+            ombx.removePendingDelete(sContext, tagId, MailItem.TYPE_TAG);
         
         // save the folder deletes for later
         return (foldersToDelete.isEmpty() ? null : foldersToDelete);
@@ -374,13 +367,11 @@ public class DeltaSync {
             return;
         }
 
-        synchronized (ombx) {
-	        if (folder.getItemCount() == 0 && !folder.hasSubfolders() && !ombx.isItemInArchive(folder)) {
-	            // normal case: contents have already been deleted via processLeafDeletes()
-	            ombx.delete(sContext, folder.getId(), folder.getType());
-	            OfflineLog.offline.debug("delta: deleted folder: " + folder.getId());
-	            return;
-	        }
+        if (folder.getItemCount() == 0 && !folder.hasSubfolders()) {
+            // normal case: contents have already been deleted via processLeafDeletes()
+            ombx.delete(sContext, folder.getId(), folder.getType());
+            OfflineLog.offline.debug("delta: deleted folder: " + folder.getId());
+            return;
         }
 
         // mark the remote folder for re-creation in order to hold its local contents

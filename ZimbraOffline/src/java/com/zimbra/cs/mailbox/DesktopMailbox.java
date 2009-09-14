@@ -22,7 +22,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.db.DbMailbox;
-import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
+import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.redolog.op.CreateFolder;
 
 public abstract class DesktopMailbox extends Mailbox {
@@ -49,13 +49,11 @@ public abstract class DesktopMailbox extends Mailbox {
     }
 
     public static final String OUTBOX_PATH = "Outbox";
-    public static final String ARCHIVE_PATH = "Local Folders";
     public static final String NOTIFICATIONS_PATH = "Notification Mountpoints";
     public static final String FAILURE_PATH = "Error Reports";
     
     public static final int ID_FOLDER_NOTIFICATIONS = 250;
     public static final int ID_FOLDER_FAILURE = 252;
-    public static final int ID_FOLDER_ARCHIVE = 253;
     public static final int ID_FOLDER_OUTBOX = 254;
 
     private static final String CONFIG_OFFLINE_VERSION = "offline_ver";
@@ -135,7 +133,7 @@ public abstract class DesktopMailbox extends Mailbox {
             
             redo.setFolderId(ID_FOLDER_FAILURE);
             redo.start(System.currentTimeMillis());
-            createFolder(new OfflineContext(redo), FAILURE_PATH,
+            createFolder(new TracelessContext(redo), FAILURE_PATH,
                 ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
                 MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR_RGB, null);
         }

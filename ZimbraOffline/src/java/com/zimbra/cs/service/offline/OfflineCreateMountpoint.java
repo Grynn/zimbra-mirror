@@ -22,15 +22,13 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.account.offline.OfflineAccount;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
-import com.zimbra.cs.mailbox.ZcsMailbox.OfflineContext;
+import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.redolog.op.CreateMountpoint;
 import com.zimbra.soap.ZimbraSoapContext;
 
@@ -65,7 +63,7 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
         redo.setId(id);
         redo.setChangeId(mod_content);
         try {
-            mbox.createMountpoint(new OfflineContext(redo), parentId, name, ownerId, remoteId, view, flags, color);
+            mbox.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, view, flags, color);
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;

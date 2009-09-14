@@ -1,7 +1,5 @@
 package com.zimbra.cs.mailbox;
 
-import java.util.List;
-
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
@@ -14,24 +12,19 @@ import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class ExchangeMailbox extends ChangeTrackingMailbox {
 
-
-
-
     public ExchangeMailbox(MailboxData data) throws ServiceException {
         super(data);
     }
-
+    
     @Override
-    void trackChangeNew(MailItem item) throws ServiceException {
-        // TODO Auto-generated method stub
-
+    boolean isPushType(byte type) {
+        return true; //TODO
     }
-
+    
     @Override
-    void trackChangeModified(MailItem item, int changeMask)
-    throws ServiceException {
+    int getChangeMaskFilter(byte type) {
         // TODO Auto-generated method stub
-
+        return 0;
     }
 
     OfflineDataSource getDataSource() throws ServiceException {

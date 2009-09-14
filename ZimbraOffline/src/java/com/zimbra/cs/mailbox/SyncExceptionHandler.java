@@ -230,7 +230,7 @@ public class SyncExceptionHandler {
 		
     		//save failure alert to "Sync Failures" folder
     		ParsedMessage pm = new ParsedMessage(mm, true);
-    		dmbx.addMessage(new ZcsMailbox.OfflineContext(), pm, DesktopMailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
+    		dmbx.addMessage(new ChangeTrackingMailbox.TracelessContext(), pm, DesktopMailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
 		} catch (Exception e) {
 			OfflineLog.offline.warn("can't save failure report", e);
     	}
@@ -250,7 +250,7 @@ public class SyncExceptionHandler {
 		
     		//save failure alert to "Sync Failures" folder
     		ParsedMessage pm = new ParsedMessage(mm, true);
-    		dmbx.addMessage(new ZcsMailbox.OfflineContext(), pm, DesktopMailbox.ID_FOLDER_FAILURE, true, Flag.BITMASK_UNREAD, null);
+    		dmbx.addMessage(new ChangeTrackingMailbox.TracelessContext(), pm, DesktopMailbox.ID_FOLDER_FAILURE, true, Flag.BITMASK_UNREAD, null);
 		} catch (Exception e) {
 			OfflineLog.offline.warn("can't save failure report for id=" + id, e);
     	}
