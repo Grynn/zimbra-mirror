@@ -676,13 +676,19 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 								showAddOnNextRow:true,
 								removeButtonLabel:ZaMsg.Remove_zimbraSmtpHostname,
 								removeButtonCSSStyle: "margin-left: 50px",
+								bnolsnr:true,
 					      		repeatItems:[
 								{ 
 								  type:_TEXTFIELD_,ref:".",
 								  toolTipContent: ZaMsg.tt_zimbraSmtpHostname,
 								  cssClass:"admin_xform_name_input",
 								  enableDisableChecks:[],
-								  visibilityChecks:[]
+								  visibilityChecks:[],
+								  bnolsnr:true,
+								  elementChanged: function(elementValue,instanceValue, event) {
+									this.getForm().itemChanged(this, elementValue, event);
+									this.getForm().itemChanged(this.getParentItem(), elementValue, event);
+								  }
 								}]
 					      	},
 							{type:_GROUP_,numCols:3,colSpan:3,colSizes:["275px","275px","150px"],

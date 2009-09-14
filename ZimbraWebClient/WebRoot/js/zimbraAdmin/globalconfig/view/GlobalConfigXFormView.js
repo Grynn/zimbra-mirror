@@ -325,10 +325,20 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 						},
 						{type:_ZA_TOP_GROUPER_,label:ZaMsg.Global_MTA_NetworkGrp,id:"mta_network_group",
 							items:[
-								{ ref: ZaGlobalConfig.A_zimbraSmtpHostname, type: _TEXTFIELD_,
-								  label:ZaMsg.LBL_zimbraSmtpHostname,
-								  toolTipContent: ZaMsg.tt_zimbraSmtpHostname
-								},
+								{ ref: ZaGlobalConfig.A_zimbraSmtpHostname, type: _REPEAT_,
+						  	  		label: ZaMsg.LBL_zimbraSmtpHostname,
+							  		labelLocation:_LEFT_,
+							  		align:_LEFT_,
+							  		repeatInstance:"",
+							  		showAddButton:true,
+							  		showRemoveButton:true,
+							  		showAddOnNextRow:true,
+							  		items: [
+										{ ref:".", type: _TEXTFIELD_, label:null,labelLocation:_NONE_,
+								  			toolTipContent: ZaMsg.tt_zimbraSmtpHostname
+										}
+							  		]
+						  		},
 								{ ref: ZaGlobalConfig.A_zimbraSmtpPort, type: _OUTPUT_,
 								  label: ZaMsg.NAD_MTA_WebMailPort
 							    },

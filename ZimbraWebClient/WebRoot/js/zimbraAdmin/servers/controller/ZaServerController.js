@@ -180,7 +180,6 @@ function () {
 	var obj = this._view.getObject();
 	this._currentObject.modify(obj);
 	this._view.setDirty(false);	
-	this.fireChangeEvent(this._currentObject);
 	return true;
 }
 
@@ -325,16 +324,16 @@ ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServ
 
 ZaServerController.prototype.validateMTA =
 function (params) {
-	if(!ZaItem.hasWritePermission(ZaServer.A_SmtpHostname,this._currentObject))
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraSmtpHostname,this._currentObject))
 		this.runValidationStack(params);
 	
 	var obj = this._view.getObject();
-	if((!obj.attrs[ZaServer.A_SmtpHostname] || obj.attrs[ZaServer.A_SmtpHostname] == "") && (this._currentObject.attrs[ZaServer.A_SmtpHostname] != null && this._currentObject.attrs[ZaServer.A_SmtpHostname] != "")) {
+	if((AjxUtil.isEmpty(obj.attrs[ZaServer.A_zimbraSmtpHostname])) && !AjxUtil.isEmpty(this._currentObject.attrs[ZaServer.A_zimbraSmtpHostname])) {
 		if(ZaApp.getInstance().dialogs["confirmMessageDialog"])
 			ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
 			
 		ZaApp.getInstance().dialogs["confirmMessageDialog"] = ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.CANCEL_BUTTON]);	
-		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(AjxMessageFormat.format(ZaMsg.WARNING_RESETING_SMTP_HOST,[obj._defaultValues.attrs[ZaServer.A_SmtpHostname],obj._defaultValues.attrs[ZaServer.A_SmtpHostname]]),  DwtMessageDialog.WARNING_STYLE);
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(AjxMessageFormat.format(ZaMsg.WARNING_RESETING_SMTP_HOST,[obj._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname].join(", "),obj._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname].join(", ")]),  DwtMessageDialog.WARNING_STYLE);
 		var args;
 		var callBack = ZaServerController.prototype.runValidationStack;
 		if(!params || !params["func"]) {
