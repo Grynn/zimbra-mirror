@@ -141,7 +141,7 @@ Cos_List_XModelItem.prototype.getSuperValue = function(ins) {
 }
 //	methods
 
-List_XModelItem.prototype.initializeItems = function () {
+Cos_List_XModelItem.prototype.initializeItems = function () {
 	var listItem = this.listItem;
 	listItem.ref = listItem.id = "#";	
 	this.listItem = XModelItemFactory.createItem(listItem, this, this.getModel());
@@ -149,10 +149,11 @@ List_XModelItem.prototype.initializeItems = function () {
 }
 
 
-List_XModelItem.prototype.validateType = function (value) {
+Cos_List_XModelItem.prototype.validateType = function (value) {
 	return value;
-//XXX REWORK THIS TO USE THE listItem MODEL ITEM FOR EACH SUB-ITEM
 }
+
+
 /**
 * _COS_MAILQUOTA_ XModel item type
 **/
@@ -1734,7 +1735,12 @@ SuperRepeat_XFormItem.prototype.initializeItems = function() {
 		addButtonWidth:this.getInheritedProperty("addButtonWidth"),
 		removeButtonWidth:this.getInheritedProperty("removeButtonWidth"),
 		showAddOnNextRow:AjxUtil.isEmpty(this.getInheritedProperty("showAddOnNextRow")) ? true : this.getInheritedProperty("showAddOnNextRow"),
-		alwaysShowAddButton:false
+		alwaysShowAddButton:false,
+		updateElement:function(value) {
+			Super_XFormItem.updateCss.call(this,5);
+			Repeat_XFormItem.prototype.updateElement.call(this, value);
+		},		
+		bmolsnr:true
 	}
 	
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");	

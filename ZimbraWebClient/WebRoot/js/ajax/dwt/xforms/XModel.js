@@ -200,16 +200,13 @@ XModel.prototype.getLeafPath = function (path) {
 
 XModel.prototype.getInstanceValue = function (instance, path) {
 	var getter = this._getPathGetter(path);
-//DBG.println("getInstanceValue(",path,"):" + (typeof path) + ":" + (typeof getter));
 	return getter.call(this, instance);
 }
 
 XModel.prototype.getParentInstanceValue = function (instance, path) {
 	var getter = this._getParentPathGetter(path);
-//DBG.println("getParentInstanceValue(",path,"):" + (typeof path) + ":" + (typeof getter));
 	return getter.call(this, instance);
 }
-
 
 XModel.prototype.setInstanceValue = function (instance, path, value) {
 //DBG.println("setInstanceValue(",path,"): ", value, " (",typeof value,")");
@@ -245,6 +242,11 @@ XModel.prototype.setInstanceValue = function (instance, path, value) {
 			ref = ref.pop();
 		}
 		parentValue[ref] = value;
+		var parentItem = modelItem.getParentItem();
+		if(parentItem && parentItem.setter) {
+			var parentPath = this.getParentPath(path).join(this.pathDelimiter);
+			XModel.prototype.setInstanceValue.call(this,instance, parentPath, parentValue);
+		} 
 	}
 	
 	//notify listeners that my value has changed
@@ -391,7 +393,6 @@ XModel.prototype._getPathGetter = function (path) {
 }
 
 XModel.prototype._getParentPathGetter = function (path) {
-//DBG.println("_getParentPathGetter(",path,")");
 	var getter = this._parentGetters[path];
 	if (getter != null) return getter;
 	
@@ -401,7 +402,6 @@ XModel.prototype._getParentPathGetter = function (path) {
 	this._pathGetters[parentPath] = getter;
 	return getter;
 }
-
 
 XModel.prototype._makePathGetter = function (path) {
 	if (path == null) return new Function("return null");
