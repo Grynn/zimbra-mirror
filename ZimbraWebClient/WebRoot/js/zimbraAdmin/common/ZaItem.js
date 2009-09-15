@@ -51,6 +51,7 @@ ZaItem.A_objectClass = "objectClass";
 ZaItem.A_zimbraId = "zimbraId";
 ZaItem.A_cn = "cn" ;
 ZaItem.A_zimbraACE = "zimbraACE";
+ZaItem.A_zimbraCreateTimestamp = "zimbraCreateTimestamp";
 
 /* Translation of  the attribute names to the screen names */
 ZaItem._ATTR = new Object();
