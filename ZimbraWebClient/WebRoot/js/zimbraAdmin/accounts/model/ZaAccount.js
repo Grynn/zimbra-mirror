@@ -1928,11 +1928,7 @@ function (){
 ZaAccount.getLastLoginTime =
 function (serverStr) {
 	if (serverStr) {
-		var ajxTKServerStr = serverStr.substring(0,8) + "T" + serverStr.substring(8) ;
-		var curDate = AjxDateUtil.parseServerDateTime(ajxTKServerStr);	
-//		var formatter = new AjxDateFormat("MM/dd/yyyy HH:mm:ss");
-        var formatter = AjxDateFormat.getDateTimeInstance() ;
-        return formatter.format(curDate) ;
+		return ZaItem.formatServerTime(serverStr);
 	}else{
 		return ZaMsg.Last_Login_Never;
 	}

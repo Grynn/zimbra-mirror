@@ -75,7 +75,18 @@ ZaZimletXFormView.myXFormModifier = function(xFormObject) {
                         items:[
                             {type:_OUTPUT_, ref:"name", label:ZaMsg.NAD_zimletName},
                             {type:_OUTPUT_, ref:ZaZimlet.A_zimbraZimletEnabled, label:ZaMsg.NAD_zimletStatus,choices:ZaModel.BOOLEAN_CHOICES },
-                            {type:_OUTPUT_, ref:ZaZimlet.A_zimbraZimletDescription, label:ZaMsg.NAD_Description, colSpan: "*"}
+                            {type:_OUTPUT_, ref:ZaZimlet.A_zimbraZimletDescription, label:ZaMsg.NAD_Description, colSpan: "*"},
+							{type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp, 
+								label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
+								getDisplayValue:function() {
+										var val = ZaItem.formatServerTime(this.getInstanceValue());
+									if(!val)
+										return ZaMsg.Server_Time_NA;
+									else
+										return val;
+								},
+								visibilityChecks:[ZaItem.hasReadPermission]	
+							}                            
                         ]
                     }
 				],

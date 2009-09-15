@@ -330,9 +330,20 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 	var _tab1 = ++this.TAB_INDEX;
 	var _tab2, _tab3, _tab4, _tab5, _tab6, _tab7;
 	
-	var headerItems = [	{type:_AJX_IMAGE_, src:"COS_32", label:null},
+	var headerItems = [	{type:_AJX_IMAGE_, src:"COS_32", label:null,rowSpan:2},
 							{type:_OUTPUT_, ref:ZaCos.A_name, label:null,cssClass:"AdminTitle", rowSpan:2},				
-							{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID}];
+							{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID},
+							{type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp, 
+								label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
+								getDisplayValue:function() {
+									var val = ZaItem.formatServerTime(this.getInstanceValue());
+									if(!val)
+										return ZaMsg.Server_Time_NA;
+									else
+										return val;
+								},
+								visibilityChecks:[ZaItem.hasReadPermission]	
+					 		}];
 							
 	this.tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
 

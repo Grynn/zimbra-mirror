@@ -538,7 +538,8 @@ ZaResource.myXModel = {
 			   }
 			}
 		},
-		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId}, 	
+		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
+		{id:ZaItem.A_zimbraCreateTimestamp, ref:"attrs/" + ZaItem.A_zimbraCreateTimestamp}, 	
 		{id:ZaResource.A_mail, type:_STRING_, ref:"attrs/"+ZaResource.A_mail,
 			constraints: {type:"method", value:
 			   function (value, form, formItem, instance) {				   

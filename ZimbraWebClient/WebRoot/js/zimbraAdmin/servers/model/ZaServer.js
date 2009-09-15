@@ -336,6 +336,7 @@ ZaServer.volumeObjModel = {
 ZaServer.myXModel = {
 	items: [
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
+		{id:ZaItem.A_zimbraCreateTimestamp, ref:"attrs/" + ZaItem.A_zimbraCreateTimestamp},
 		{id:ZaServer.A_name, ref:"attrs/" + ZaServer.A_name, type:_STRING_},
 //		{id:ZaServer.A_description, ref:"attrs/" +  ZaServer.A_description, type:_STRING_},
          ZaItem.descriptionModelItem,   

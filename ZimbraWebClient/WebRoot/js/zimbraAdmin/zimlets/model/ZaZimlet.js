@@ -256,6 +256,8 @@ ZaItem.loadMethods["ZaZimlet"].push(ZaZimlet.loadMethod);
 ZaZimlet.myXModel = { 
 	items:[
         { id:ZaZimlet.A_name, ref:ZaZimlet.A_name, type: _STRING_ },
+        {id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
+        {id:ZaItem.A_zimbraCreateTimestamp, ref:"attrs/" + ZaItem.A_zimbraCreateTimestamp},
         { id:ZaZimlet.A_flushCache,ref:ZaZimlet.A_flushCache,type: _ENUM_, choices:ZaModel.BOOLEAN_CHOICES2},
         { id:ZaZimlet.A_zimbraZimletDescription, ref:"attrs/" + ZaZimlet.A_zimbraZimletDescription, type: _STRING_ },
         { id:ZaZimlet.A_zimbraZimletEnabled, ref:"attrs/" + ZaZimlet.A_zimbraZimletEnabled, type: _ENUM_,  choices:ZaModel.BOOLEAN_CHOICES} 

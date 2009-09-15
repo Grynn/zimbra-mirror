@@ -259,10 +259,10 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 	var imgChoices = [ 	{value:ZaResource.RESOURCE_TYPE_LOCATION, label: "Location_32"},
 						{value:ZaResource.RESOURCE_TYPE_EQUIPMENT, label: "Resource_32"}   ];
 						
-	var headerItems = [	{type:_AJX_IMAGE_, ref:ZaResource.A_zimbraCalResType, src:"Resource_32", label:null, rowSpan:2, choices: imgChoices},
-						{type:_OUTPUT_, ref:ZaResource.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:2,visibilityChecks:[ZaItem.hasReadPermission]}];
+	var headerItems = [	{type:_AJX_IMAGE_, ref:ZaResource.A_zimbraCalResType, src:"Resource_32", label:null, rowSpan:3, choices: imgChoices},
+						{type:_OUTPUT_, ref:ZaResource.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:3,visibilityChecks:[ZaItem.hasReadPermission]}];
 						
-	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_COSId, labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, 
+	/*headerItems.push({type:_OUTPUT_, ref:ZaResource.A_COSId, labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, 
 		choices:this.cosChoices,getDisplayValue:function(newValue) {
 			if(ZaItem.ID_PATTERN.test(newValue)) {
 				var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
@@ -276,7 +276,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 				}
 				return newValue;
 			},
-			visibilityChecks:[ZaItem.hasReadPermission]});
+			visibilityChecks:[ZaItem.hasReadPermission]});*/
 
 	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer,visibilityChecks:[ZaItem.hasReadPermission]});
 
@@ -285,7 +285,17 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 	headerItems.push({type:_OUTPUT_,  ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID,visibilityChecks:[ZaItem.hasReadPermission]});
 	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_zimbraCalResType, label:ZaMsg.NAD_ResType, labelLocation:_LEFT_, required:false,
 						getDisplayValue: ZaResource.getResTypeLabel,visibilityChecks:[ZaItem.hasReadPermission] });	
-
+	headerItems.push({type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp, 
+							label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
+							getDisplayValue:function() {
+								var val = ZaItem.formatServerTime(this.getInstanceValue());
+								if(!val)
+									return ZaMsg.Server_Time_NA;
+								else
+									return val;
+							},
+							visibilityChecks:[ZaItem.hasReadPermission]	
+						});
 	this.tabChoices = new Array();
 	var _tab2;
 	var _tab1 = ++this.TAB_INDEX;

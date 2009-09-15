@@ -992,8 +992,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	}
 		
 	var emptyAlias = " @" + domainName;
-	var headerItems = [{type:_AJX_IMAGE_, src:"Person_32", label:null, rowSpan:2},{type:_OUTPUT_, ref:ZaAccount.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:2}];
-	headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_COSId,valueChangeEventSources:[ZaAccount.A_COSId], labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, choices:this.cosChoices,getDisplayValue:function(newValue) {
+	var headerItems = [{type:_AJX_IMAGE_, src:"Person_32", label:null, rowSpan:3},{type:_OUTPUT_, ref:ZaAccount.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:3}];
+	/*headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_COSId,valueChangeEventSources:[ZaAccount.A_COSId], labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, choices:this.cosChoices,getDisplayValue:function(newValue) {
 			if(ZaItem.ID_PATTERN.test(newValue)) {
 				var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
 				if(cos)
@@ -1007,7 +1007,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 				return newValue;
 			},
 			visibilityChecks:[ZaItem.hasReadPermission]	
-	});
+	});*/
 
 	headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer,visibilityChecks:[ZaItem.hasReadPermission]});
 	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_accountStatus, label:ZaMsg.NAD_AccountStatus, labelLocation:_LEFT_, choices:this.accountStatusChoices,visibilityChecks:[ZaItem.hasReadPermission]});
@@ -1082,8 +1082,11 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	headerItems.push({type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp, 
 						label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
 						getDisplayValue:function() {
-							var val = this.getInstanceValue();
-							return ZaAccount.getLastLoginTime(val) ;
+							var val = ZaItem.formatServerTime(this.getInstanceValue());
+							if(!val)
+								return ZaMsg.Server_Time_NA;
+							else
+								return val;
 						},
 						visibilityChecks:[ZaItem.hasReadPermission]	
 					 });

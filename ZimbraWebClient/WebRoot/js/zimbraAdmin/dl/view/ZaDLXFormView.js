@@ -1207,12 +1207,23 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 			items: [
 				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
 					items: [
-						{type:_AJX_IMAGE_, src:"Group_32", label:null, rowSpan:2},
-						{type:_OUTPUT_, ref:"name", label:null,cssClass:"AdminTitle", rowSpan:2},
+						{type:_AJX_IMAGE_, src:"Group_32", label:null, rowSpan:3},
+						{type:_OUTPUT_, ref:"name", label:null,cssClass:"AdminTitle", rowSpan:3},
 						{type:_OUTPUT_, ref:"id", label:ZaMsg.NAD_ZimbraID},
 						{type:_OUTPUT_, ref:"zimbraMailStatus", label:ZaMsg.NAD_AccountStatus,
 								choices: this.dlStatusChoices
-						}
+						},
+						{type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp, 
+							label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
+							getDisplayValue:function() {
+								var val = ZaItem.formatServerTime(this.getInstanceValue());
+								if(!val)
+									return ZaMsg.Server_Time_NA;
+								else
+									return val;
+							},
+							visibilityChecks:[ZaItem.hasReadPermission]	
+						}						
 					]
 				}
 			],
