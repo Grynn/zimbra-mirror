@@ -10,6 +10,9 @@
   <key name="data_source_xsync_class">
     <value>com.zimbra.zimbrasync.client.ExchangeSync</value>
   </key>
+  <key name="data_source_xsync_factory_class">
+    <value>com.zimbra.zimbrasync.client.OfflineExchangeSyncFactory</value>
+  </key>
   <key name="http_connection_timeout">
     <value>30000</value>
   </key>
