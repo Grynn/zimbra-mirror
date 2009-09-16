@@ -92,7 +92,7 @@ else
 fi
 
 if [ "x$DEBUG" = "x" ]; then
-	DEBUG=`${zimbra_home}/bin/zmprov -l gcf zimbraHttpDebugHandlerEnabled | sed -e 's/zimbraHttpDebugHandlerEnabled: //' | tr A-Z a-z`
+	DEBUG=`${zimbra_home}/bin/zmprov -l gs ${zimbra_server_hostname} zimbraHttpDebugHandlerEnabled | grep zimbraHttpDebugHandlerEnabled | sed -e 's/zimbraHttpDebugHandlerEnabled: //' | tr A-Z a-z`
 
 	if [ "x$DEBUG" = "x" ]; then
 		DEBUG="false"
@@ -465,7 +465,7 @@ updateJettyConfig() {
     origfile=${mailboxd_conf_directory}/jetty.xml.in
     tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
     if [ $? = 0 -a -s "${tempfile}" ]; then
-      echo -n "Updating ${origfile}..."
+      echo -n "Enabling debug handler ${origfile}..."
 	    sed -e 's/\(.*DEBUGBEGIN\).*/\1 -->/' -e 's/.*\(DEBUGEND.*\)/<!-- \1/' \
 		    ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
       if [ $? = 0 ]; then
@@ -482,7 +482,7 @@ updateJettyConfig() {
     origfile=${mailboxd_conf_directory}/jetty.xml.in
     tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
     if [ $? = 0 -a -s "${tempfile}" ]; then
-      echo -n "Updating ${origfile}..."
+      echo -n "Disabling debug handler ${origfile}..."
 	    sed -e 's/\(.*DEBUGBEGIN\).*/\1/' -e 's/.*\(DEBUGEND.*\)/\1/' \
 		    ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
       if [ $? = 0 ]; then
