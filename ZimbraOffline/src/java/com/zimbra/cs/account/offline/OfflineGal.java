@@ -15,6 +15,8 @@
 package com.zimbra.cs.account.offline;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
@@ -35,7 +37,10 @@ import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.OperationContext;
+import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
+import com.zimbra.cs.mailbox.ContactAutoComplete;
 import com.zimbra.common.util.Pair;
+import com.zimbra.cs.service.util.ItemId;
 
 public class OfflineGal {
 
@@ -50,11 +55,13 @@ public class OfflineGal {
     public static final String A_zimbraCalResLocationDisplayName = "zimbraCalResLocationDisplayName";
     
     public static final String SECOND_GAL_FOLDER = "Contacts2";
+ 
+    public static final List<String> EMAIL_KEYS = Arrays.asList(ContactConstants.A_email, ContactConstants.A_email2, ContactConstants.A_email3);
     
     private OfflineAccount mAccount;
     private Mailbox mGalMbox = null;
     private OperationContext mOpContext = null;
-    
+   
     public OfflineGal(OfflineAccount account) {
         mAccount = account;
     }
@@ -125,11 +132,11 @@ public class OfflineGal {
         }
     }   
     
-    public void searchAccounts(Element response, String name) throws ServiceException {
-        searchAccounts(response, name, 0);
+    public void search(Element response, String name) throws ServiceException {
+        search(response, name, 0);
     }
     
-    public void searchAccounts(Element response, String name, int limit) throws ServiceException {
+    public void search(Element response, String name, int limit) throws ServiceException {
         limit = limit == 0 ? mAccount.getIntAttr(Provisioning.A_zimbraGalMaxResults, 100) : limit;        
         ZimbraQueryResults zqr = search(name, limit + 1); // use limit + 1 so that we know when to set "had more"
         if (zqr == null) {
@@ -165,6 +172,23 @@ public class OfflineGal {
         } finally {
             zqr.doneWithSearchResults();
         }
+    }
+    
+    public void search(AutoCompleteResult result, String name, int limit) throws ServiceException {
+        ZimbraQueryResults zqr = search(name, limit);
+        if (zqr == null)
+            return;
+        
+        try {
+            while (zqr.hasNext()) {
+                int id = zqr.getNext().getItemId();            
+                Contact contact = (Contact) mGalMbox.getItemById(mOpContext, id, MailItem.TYPE_CONTACT);
+                ItemId iid = new ItemId(mGalMbox, id);
+                ContactAutoComplete.addMatchedContacts(name, contact.getFields(), EMAIL_KEYS, ContactAutoComplete.FOLDER_ID_GAL, iid, result);
+            }                    
+        } finally {
+            zqr.doneWithSearchResults();
+        }        
     }
     
     // Return: first  - id of current GAL folder, second - id of previous GAL folder
