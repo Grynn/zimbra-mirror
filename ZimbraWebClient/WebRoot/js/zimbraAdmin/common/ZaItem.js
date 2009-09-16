@@ -571,6 +571,12 @@ function (obj) {
 			}
 		}
 	}
+	if(!this.attrs[ZaAccount.A_description])
+		this.attrs[ZaAccount.A_description] = [];
+		
+	if(!(this.attrs[ZaAccount.A_description] instanceof Array)) {
+		this.attrs[ZaAccount.A_description] = [this.attrs[ZaAccount.A_description]];
+	}	
 }
 
 ZaItem.initAttrsFromJS =

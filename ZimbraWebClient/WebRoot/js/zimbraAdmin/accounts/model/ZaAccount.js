@@ -1125,6 +1125,9 @@ function (account) {
 			this.attrs[[account.a[ix].n]].push(account.a[ix]._content);
 		}
 	}
+	if(!(this.attrs[ZaAccount.A_description] instanceof Array)) {
+		this.attrs[ZaAccount.A_description] = [this.attrs[ZaAccount.A_description]];
+	}
 	
 }
 

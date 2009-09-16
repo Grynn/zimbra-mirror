@@ -332,6 +332,13 @@ function (resource) {
 	}
 		
 	this.setSchedulePolicyFromLdapAttrs();	
+	if(!this.attrs[ZaAccount.A_description])
+		this.attrs[ZaAccount.A_description] = [];
+		
+	if(!(this.attrs[ZaAccount.A_description] instanceof Array)) {
+		this.attrs[ZaAccount.A_description] = [this.attrs[ZaAccount.A_description]];
+	}	
+	
 }
 
 //set the ldap attributes according to the schedule policy values
