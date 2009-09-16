@@ -27,6 +27,7 @@ CREATE TABLE directory (
    UNIQUE(entry_type, entry_name)
 );
 
+CREATE UNIQUE INDEX ui_directory_zimbra_id ON directory(zimbra_id);
 
 CREATE TABLE directory_attrs (
    entry_id    INTEGER NOT NULL,
@@ -46,12 +47,12 @@ FOR EACH ROW BEGIN
   WHERE (SELECT entry_id FROM directory WHERE entry_id = NEW.entry_id) IS NULL;
 END;
 
-CREATE TRIGGER fku_dattr_entry_id
-BEFORE UPDATE OF mailbox_id ON [directory_attrs] 
-FOR EACH ROW BEGIN
-    SELECT RAISE(ROLLBACK, 'update on table "directory_attrs" violates foreign key constraint "fku_dattr_entry_id"')
-      WHERE (SELECT entry_id FROM directory WHERE entry_id = NEW.entry_id) IS NULL;
-END;
+-- CREATE TRIGGER fku_dattr_entry_id
+-- BEFORE UPDATE OF entry_id ON [directory_attrs] 
+-- FOR EACH ROW BEGIN
+--     SELECT RAISE(ROLLBACK, 'update on table "directory_attrs" violates foreign key constraint "fku_dattr_entry_id"')
+--       WHERE (SELECT entry_id FROM directory WHERE entry_id = NEW.entry_id) IS NULL;
+-- END;
 
 CREATE TRIGGER fkdc_dattr_entry_id
 BEFORE DELETE ON directory
@@ -75,15 +76,15 @@ CREATE TRIGGER fki_dleaf_entry_id
 BEFORE INSERT ON [directory_leaf]
 FOR EACH ROW BEGIN
   SELECT RAISE(ROLLBACK, 'insert on table "directory_leaf" violates foreign key constraint "fki_dleaf_entry_id"')
-  WHERE (SELECT entry_id FROM directory WHERE entry_id = NEW.entry_id) IS NULL;
+  WHERE (SELECT entry_id FROM directory WHERE entry_id = NEW.parent_id) IS NULL;
 END;
 
-CREATE TRIGGER fku_dleaf_entry_id
-BEFORE UPDATE OF mailbox_id ON [directory_leaf] 
-FOR EACH ROW BEGIN
-    SELECT RAISE(ROLLBACK, 'update on table "directory_leaf" violates foreign key constraint "fku_dleaf_entry_id"')
-      WHERE (SELECT entry_id FROM directory WHERE entry_id = NEW.entry_id) IS NULL;
-END;
+-- CREATE TRIGGER fku_dleaf_entry_id
+-- BEFORE UPDATE OF entry_id ON [directory_leaf] 
+-- FOR EACH ROW BEGIN
+--     SELECT RAISE(ROLLBACK, 'update on table "directory_leaf" violates foreign key constraint "fku_dleaf_entry_id"')
+--       WHERE (SELECT entry_id FROM directory WHERE entry_id = NEW.entry_id) IS NULL;
+-- END;
 
 CREATE TRIGGER fkdc_dleaf_entry_id
 BEFORE DELETE ON directory
@@ -110,15 +111,28 @@ FOR EACH ROW BEGIN
   WHERE (SELECT entry_id FROM directory_leaf WHERE entry_id = NEW.entry_id) IS NULL;
 END;
 
-CREATE TRIGGER fku_dleafattr_entry_id
-BEFORE UPDATE OF mailbox_id ON [directory_leaf_attrs] 
-FOR EACH ROW BEGIN
-    SELECT RAISE(ROLLBACK, 'update on table "directory_leaf_attrs" violates foreign key constraint "fku_dleafattr_entry_id"')
-      WHERE (SELECT entry_id FROM directory_leaf WHERE entry_id = NEW.entry_id) IS NULL;
-END;
+-- CREATE TRIGGER fku_dleafattr_entry_id
+-- BEFORE UPDATE OF entry_id ON [directory_leaf_attrs] 
+-- FOR EACH ROW BEGIN
+--     SELECT RAISE(ROLLBACK, 'update on table "directory_leaf_attrs" violates foreign key constraint "fku_dleafattr_entry_id"')
+--       WHERE (SELECT entry_id FROM directory_leaf WHERE entry_id = NEW.entry_id) IS NULL;
+-- END;
 
 CREATE TRIGGER fkdc_dleafattr_entry_id
 BEFORE DELETE ON directory_leaf
 FOR EACH ROW BEGIN 
     DELETE FROM directory_leaf_attrs WHERE directory_leaf_attrs.entry_id = OLD.entry_id;
 END;
+
+CREATE TABLE directory_granter (
+   granter_name  VARCHAR(128) NOT NULL,
+   granter_id    CHAR(36) NOT NULL,
+   grantee_id    CHAR(36) NOT NULL,
+
+   PRIMARY KEY (granter_name, grantee_id)
+);
+
+CREATE INDEX i_dgranter_gter_name ON directory_granter(granter_name);
+CREATE INDEX i_dgranter_gter_id ON directory_granter(granter_id);
+CREATE INDEX i_dgranter_gtee_id ON directory_granter(grantee_id);
+

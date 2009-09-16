@@ -26,6 +26,7 @@
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="build.src.java.dir" location="${build.dir}/src/java" />
 	<property name="dist.dir" location="${build.dir}/dist" />
+	<property name="dist.db.dir" location="${build.dir}/dist/db" />
 	<property name="jetty.dir" location="${dist.dir}/jetty" />
 	<property name="zimlet.dir" location="../Zimlet/build/dist" />
 
@@ -59,14 +60,15 @@
 		<isset property="is-windows"/>
 	</condition>
 
-	<property name="zimbra.derby.dir" location="${zimbra.home.dir}/derby" />
+	<property name="zimbra.derby.dir" location="${zimbra.home.dir}/derby"/>
+	<property name="zimbra.index.dir" location="${zimbra.home.dir}/index"/>
+	<property name="zimbra.store.dir" location="${zimbra.home.dir}/store"/>
+	<property name="zimbra.sqlite.dir" location="${zimbra.home.dir}/sqlite"/>
 
 	<property name="build.zmprov" location="${build.dir}/data/zmprov.txt" />
 
-	<property name="build.derbyij" location="${dist.dir}/db/derbyij.sql" />
-	<property name="zimbra.derbyij" location="${zimbra.home.dir}/db/derbyij.sql" />
-	<property name="build.up_ver_ij" location="${dist.dir}/db/up_ver_ij.sql" />
-	<property name="build.reindex_ij" location="${dist.dir}/db/reindex_ij.sql" />
+	<property name="build.up_ver_ij" location="${dist.db.dir}/up_ver_ij.sql" />
+	<property name="build.reindex_ij" location="${dist.db.dir}/reindex_ij.sql" />
 
 	<property name="server.warfile" location="${server.build.dir}/service.war" />
 	<property name="server.jarfile" location="${server.build.dir}/zimbrastore.jar" />
@@ -75,20 +77,6 @@
 	<property name="server.wiki.dir" location="${server.build.dir}/dist/wiki" />
 
 	<property name="ical4j.jar" value="ical4j-0.9.16-patched.jar" />
-
-    <condition property="db-sqlite">
-		<isset property="env.ZIMBRA_OFFLINE_USE_SQLITE" />
-	</condition>
-	<condition property="db-derby">
-		<not><isset property="db-sqlite"/></not>
-	</condition>
-
-	<condition property="src.db.dir" value="${src.dir}/db/derby" else="${src.dir}/db/sqlite">
-		<isset property="db-derby" />
-	</condition>
-	<condition property="server.db.dir" value="${server.src.dir}/db/derby" else="${server.src.dir}/db/sqlite">
-		<isset property="db-derby" />
-	</condition>
 
 	<property name="jetty.home.dir" location="${zimbra.home.dir}/jetty" />
 
@@ -99,6 +87,27 @@
 	<property name="prism.src.dir" location="../ThirdParty/prism" />
 	<property name="xulrunner.src.dir" location="../ThirdParty/xulrunner" />
 	<property name="jetty.version" value="6.1.15" />
+
+    <condition property="db-derby">
+		<isset property="env.ZIMBRA_OFFLINE_USE_DERBY" />
+	</condition>
+	<condition property="db-sqlite">
+		<not><isset property="db-derby"/></not>
+	</condition>
+
+	<condition property="db.driver.jar" value="derby*.jar">
+		<isset property="db-derby"/>
+	</condition>
+	<condition property="db.driver.jar" value="sqlitejdbc*.jar">
+		<isset property="db-sqlite"/>
+	</condition>
+
+	<condition property="src.db.dir" value="${src.dir}/db/derby" else="${src.dir}/db/sqlite">
+		<isset property="db-derby" />
+	</condition>
+	<condition property="server.db.dir" value="${server.src.dir}/db/derby" else="${server.src.dir}/db/sqlite">
+		<isset property="db-derby" />
+	</condition>
 
 	<fileset id="gdata.jars" dir="${jars.dir}">
 		<include name="gdata-core-*.jar"/>
@@ -140,9 +149,6 @@
 			<pathelement location="${common.jars.dir}/ant-contrib-1.0b1.jar" />
 		</classpath>
 	</taskdef>
-
-	<property name="zimbra.index.dir" location="${zimbra.home.dir}/index" />
-	<property name="zimbra.store.dir" location="${zimbra.home.dir}/store" />
 
 	<!-- Targets -->
 	<target name="offline-build-init">
@@ -270,82 +276,83 @@
 	</target>
 
 	<target name="offline-zimlet-war">
-        	<mkdir dir="${dist.dir}/zimlets-deployed"/>
-        	<mkdir dir="${dist.dir}/jetty/webapps/zimlet"/>
+		<mkdir dir="${dist.dir}/zimlets-deployed"/>
+		<mkdir dir="${dist.dir}/jetty/webapps/zimlet"/>
 	</target>
 
-	<target name="offline-db-init" depends="offline-sqlite-init,offline-derby-init" />
+    <target name="choose-db-schema">
+        <condition property="db.schema.dir" value="src/db/sqlite">
+            <isset property="db-sqlite"/>
+        </condition>
+        <condition property="db.schema.dir" value="src/db/derby">
+            <isset property="db-derby"/>
+        </condition>
+        <echo>Using database schema in ${db.schema.dir}</echo>
+    </target>
 
-	<target name="offline-sqlite-init" if="db-sqlite">
-		<echo>Setting store and index directories to '${zimbra.store.dir}' and '${zimbra.index.dir}'</echo>
-		<sql driver="com.sqlite.jdbc.Driver" url="jdbc:sqlite://localhost:7306/" userid="root" password="zimbra" classpathref="offline.class.path" onerror="continue" keepformat="true" src="${server.db.dir}/dropdb.sql" />
-		<sql driver="com.sqlite.jdbc.Driver" url="jdbc:sqlite://localhost:7306/" userid="root" password="zimbra" classpathref="offline.class.path" onerror="abort" keepformat="true">
-			<transaction src="${server.db.dir}/db.sql" />
-			<transaction src="${src.db.dir}/directory.sql" />
-			<transaction src="${server.build.dir}/versions-init.sql" />
-			<transaction>
-				INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
-				    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
-				  VALUES (1, 1, 'message1', '${zimbra.store.dir}', 12, 8, 12, 8, 0, 4096);
-				INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
-				    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
-				  VALUES (2, 10, 'index1', '${zimbra.index.dir}', 12, 8, 12, 8, 0, 4096);
-
-				INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id) VALUES (1, 2, 1);
-			</transaction>
-		</sql>
-	</target>
+	<target name="offline-db-init" depends="choose-db-schema,offline-derby-init,offline-sqlite-init" />
 
 	<target name="offline-derby-init" if="db-derby">
-		<echo>Setting store and index directories to '${zimbra.store.dir}' and '${zimbra.index.dir}'</echo>
-		<delete dir="${zimbra.derby.dir}" />
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<arg line="-e zimbra_class_database=com.zimbra.cs.db.Derby -f" />
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${zimbra.home.dir}/conf/localconfig.xml" />
+			<arg line="-e zimbra_class_database=com.zimbra.cs.db.Derby -f" />
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<arg line="-e debug_disable_mailbox_group=false -f" />
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${zimbra.home.dir}/conf/localconfig.xml" />
+			<arg line="-e debug_disable_mailbox_group=false -f" />
+		</java>
+
+		<delete dir="${zimbra.derby.dir}"/>
 
 		<java classname="org.apache.derby.tools.ij" fork="true" classpathref="offline.class.path" failonerror="true">
-			<arg file="${zimbra.derbyij}" />
+			<arg file="${dist.db.dir}/init.sql" />
 		</java>
 	</target>
 
-	<target name="offline-gen-versions-init">
-		<java classname="com.zimbra.cs.db.Derby" fork="true" classpathref="offline.class.path" failonerror="true">
-			<arg line="-o ${dist.dir}/db" />
+	<target name="offline-sqlite-init" if="db-sqlite">
+	    <!-- SQLite JDBC driver doesn't support Statement.setEscapeProcessing, which breaks the <sql/> task. -->
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${zimbra.home.dir}/conf/localconfig.xml" />
+			<arg line="-e zimbra_class_database=com.zimbra.cs.db.SQLite -f" />
 		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${zimbra.home.dir}/conf/localconfig.xml" />
+			<arg line="-e debug_disable_mailbox_group=true -f" />
+		</java>
+
+	    <delete dir="${zimbra.sqlite.dir}"/>
+	    <mkdir dir="${zimbra.sqlite.dir}"/>
+
+		<exec executable="sqlite3" dir="${zimbra.sqlite.dir}" failonerror="true" input="${dist.db.dir}/init.sql">
+			<arg line="zimbra.db"/>
+		</exec>
 	</target>
 
-	<target name="offline-gen-derbyij">
-		<echo file="${build.derbyij}">
-			CONNECT 'jdbc:derby:${param.derby.dir};create=true';
+    <target name="derby-versions-init" if="db-derby">
+        <java classname="com.zimbra.cs.db.Derby" fork="true" classpathref="offline.class.path" failonerror="true">
+            <arg line="-o ${build.dir}"/>
+        </java>
+    </target>
 
-			RUN '${param.db.dir}/db.sql';
-			RUN '${param.db.dir}/directory.sql';
-			RUN '${param.db.dir}/versions-init.sql';
+    <target name="sqlite-versions-init" if="db-sqlite">
+        <java classname="com.zimbra.cs.db.SQLite" fork="true" classpathref="offline.class.path" failonerror="true">
+            <arg line="-o ${build.dir}"/>
+        </java>
+    </target>
 
-			INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
-			    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
-			  VALUES (1, 1, 'message1', '${param.store.dir}', 12, 8, 12, 8, 0, 4096);
-			INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
-			    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
-			  VALUES (2, 10, 'index1', '${param.index.dir}', 12, 8, 12, 8, 0, 4096);
-
-			INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id) VALUES (1, 2, 1);
-
-			EXIT;
-		</echo>
-	</target>
-
-	<target name="offline-gen-upverij">
-		<echo file="${build.up_ver_ij}">
-            CONNECT 'jdbc:derby:${param.derby.dir}';
-
-        	UPDATE zimbra.config set value='52' where name='db.version';
-			COMMIT;
-
-        	EXIT;
-        </echo>
-	</target>
+    <target name="db-versions-init" depends="derby-versions-init,sqlite-versions-init"/>
 
 	<target name="offline-gen-reindexij">
 		<echo file="${build.reindex_ij}">
-            CONNECT 'jdbc:derby:${param.derby.dir}';
+            CONNECT 'jdbc:derby:${zimbra.derby.dir}';
 
 			DROP INDEX mboxgroup1.i_mail_item_folder_id_date;
 			CREATE INDEX mboxgroup1.i_mail_item_folder_id_date ON mail_item(mailbox_id, folder_id, date DESC);
@@ -357,7 +364,6 @@
 			CREATE INDEX mboxgroup1.i_mail_item_flags_date ON mail_item(mailbox_id, flags, date DESC);
 
 			COMMIT;
-
             EXIT;
         </echo>
 	</target>
@@ -367,10 +373,10 @@
 		<antcall target="offline-zimbra-war" />
 		<antcall target="offline-zimlet-war" />
 
+		<copy tofile="${dist.dir}/conf/datasource.properties" file="${config.dir}/datasource.properties" overwrite="true" />
+		<copy todir="${dist.dir}/conf" file="${config.dir}/derby.properties" overwrite="true"/>
 		<copy tofile="${dist.dir}/conf/localconfig.xml" file="${config.dir}/localconfig.xml" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/log4j.properties" file="${config.dir}/log4j.properties" overwrite="true" />
-		<copy tofile="${dist.dir}/conf/datasource.properties" file="${config.dir}/datasource.properties" overwrite="true" />
-		<copy tofile="${dist.dir}/conf/derby.properties" file="${config.dir}/derby.properties" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/timezones.ics" file="${server.config.dir}/timezones.ics" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/zimbra-contact-fields.xml" file="${server.config.dir}/contacts/zimbra-contact-fields.xml" overwrite="true" />
 		<copy todir="${dist.dir}/conf/msgs" overwrite="true">
@@ -396,21 +402,46 @@
 		<copy tofile="${dist.dir}/jetty/etc/start.config" file="${config.dir}/jetty-6.1/start.config" overwrite="true" />
 		<copy tofile="${dist.dir}/jetty/etc/webdefault.xml" file="${server.config.dir}/jetty-6.1/webdefault.xml" overwrite="true" />
 
-		<copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.config.dir}/jetty-6.1/log4j.properties.production" overwrite="true" />
 		<copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
-			<fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="sqlite*.jar,mysql*.jar" />
-			<fileset file="${common.jars.dir}/derby.jar"/>
+			<fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="derby.jar,sqlite*.jar,mysql*.jar,jfreechart*,memcached*,testng*" />
 			<fileset refid="gdata.jars"/>
-                </copy>
-		<copy tofile="${dist.dir}/jetty/lib/log4j-1.2.8.jar" file="${common.jars.dir}/log4j-1.2.8.jar" overwrite="true" />
+		</copy>
+		<copy todir="${dist.dir}/jetty/lib" overwrite="true">
+			<fileset file="${common.jars.dir}/log4j*.jar"/>
+		</copy>
+		<copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.config.dir}/jetty-6.1/log4j.properties.production" overwrite="true" />
 
-		<copy todir="${dist.dir}/db" overwrite="true">
-			<fileset dir="${server.db.dir}" includes="*.sql" />
-			<fileset dir="${src.db.dir}" includes="*.sql" />
+		<!-- db schema, config and jars -->
+		<antcall target="db-versions-init" />
+		<copy todir="${dist.db.dir}" overwrite="true">
+			<fileset dir="${server.src.dir}/db" includes="*.sql"/>
+			<fileset dir="${server.db.dir}" includes="*.sql" excludes="init.sql"/>
+			<fileset dir="${src.dir}/db" includes="*.sql"/>
+			<fileset dir="${src.db.dir}" includes="*.sql"/>
+			<fileset dir="${build.dir}" includes="*.sql"/>
+			<filterset>
+				<filter token="ZIMBRA_HOME" value="${zimbra.home.dir}"/>
+			</filterset>
 		</copy>
 
-		<copy tofile="${dist.dir}/lib/derbytools.jar" file="../ZimbraServer/tools/lib/derbytools.jar" overwrite="true" />
-		<copy tofile="${dist.dir}/lib/zdesktop.jar" file="${build.dir}/zdesktop.jar" overwrite="true" />
+		<if>
+			<isset property="db-derby"/>
+			<then>
+				<copy todir="${dist.dir}/conf" file="${config.dir}/derby.properties" overwrite="true"/>
+				<copy todir="${dist.dir}/lib" file="../ZimbraServer/tools/lib/derbytools.jar" overwrite="true" />
+				<copy todir="${dist.dir}/jetty/common/lib" file="${common.jars.dir}/derby.jar" overwrite="true"/>
+			</then>
+		</if>
+		<if>
+			<isset property="db-sqlite"/>
+			<then>
+				<copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
+					<fileset file="${common.jars.dir}/sqlite*.jar"/>
+				</copy>
+			</then>
+		</if>
+
+		<copy todir="${dist.dir}/lib" file="${build.dir}/zdesktop.jar" overwrite="true" />
 
 		<mkdir dir="${dist.dir}/wiki/Templates" />
 		<copy todir="${dist.dir}/wiki/Templates" overwrite="true">
@@ -644,14 +675,7 @@
 
 		<antcall target="offline-build-zimlets" />
 			
-		<antcall target="offline-gen-versions-init" />
-		<antcall target="offline-gen-derbyij">
-			<param name="param.derby.dir" value="${param.install.dir}/derby" />
-			<param name="param.db.dir" value="${param.install.dir}/db" />
-			<param name="param.build.dir" value="${param.install.dir}/db" />
-			<param name="param.store.dir" value="${param.install.dir}/store" />
-			<param name="param.index.dir" value="${param.install.dir}/index" />
-		</antcall>
+		<antcall target="db-versions-init" />
 
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />

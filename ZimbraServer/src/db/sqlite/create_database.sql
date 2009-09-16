@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    mod_metadata  INTEGER UNSIGNED NOT NULL,  -- change number for last row modification
    change_date   INTEGER UNSIGNED,           -- UNIX-style timestamp for last row modification
    mod_content   INTEGER UNSIGNED NOT NULL,  -- change number for last change to "content" (e.g. blob)
+   change_mask   INTEGER UNSIGNED,           -- bitmask of changes since the last server push
 
    -- UNIQUE (folder_id, name),  -- for namespace uniqueness
 
@@ -100,6 +101,7 @@ CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_date ON mail_item(date)%
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_mod_metadata ON mail_item(mod_metadata)%      -- used by the sync code
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_tags_date ON mail_item(tags, date)%           -- for tag searches
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_flags_date ON mail_item(flags, date)%         -- for flag searches
+CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_change_mask ON mail_item(change_mask, date)%  -- for figuring out which items to push during sync
 
 -- -- CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (parent_id) REFERENCES mail_item(id)
 -- CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fki_mail_item_parent_id
@@ -327,11 +329,13 @@ END%
 
 -- Tracks local MailItem created from remote objects via DataSource
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.data_source_item (
+   data_source_id  CHAR(36) NOT NULL,
    item_id         INTEGER UNSIGNED NOT NULL PRIMARY KEY,
    folder_id       INTEGER UNSIGNED NOT NULL DEFAULT 0,
-   data_source_id  CHAR(36) NOT NULL,
    remote_id       VARCHAR(255) NOT NULL,
    metadata        MEDIUMTEXT,
 
-   UNIQUE (data_source_id, remote_id)
+   UNIQUE (data_source_id, folder_id, remote_id)
 )%
+
+CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_remote_id ON data_source_item(data_source_id, remote_id)%  -- for reverse lookup
