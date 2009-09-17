@@ -112,8 +112,8 @@ enableSyncProv() {
 
         # Install accesslog DB_CONFIG
 	if [ ! -f ${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG -o ! -s ${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG ]; then
-		if [ -f ${zimbra_home}/openldap/var/openldap-data/DB_CONFIG.accesslog.custom ]; then
-			cp -f ${zimbra_home}/openldap/var/openldap-data/DB_CONFIG.accesslog.custom ${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG
+		if [ -f ${zimbra_home}/conf/custom/ldap/DB_CONFIG.accesslog ]; then
+			cp -f ${zimbra_home}/conf/custom/ldap/DB_CONFIG.accesslog ${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG
 		else
 			cp -f ${zimbra_home}/openldap/var/openldap-data/DB_CONFIG.accesslog ${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG
 		fi
