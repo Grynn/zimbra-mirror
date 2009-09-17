@@ -54,6 +54,8 @@ public interface OfflineConstants {
 
     public static final String A_offlineAccountName = "offlineAccountName";
     public static final String A_offlineAccountFlavor = "offlineAccountFlavor";
+    
+    public static final String A_offlineShareContactsInAutoComplete = "offlineShareContactsInAutoComplete"; 
 
     public static final String A_offlineDataSourceType = "offlineDataSourceType";
     public static final String A_offlineDataSourceName = "offlineDataSourceName";

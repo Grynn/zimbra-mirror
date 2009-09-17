@@ -26,31 +26,27 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineGal;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
 import com.zimbra.cs.mailbox.ContactAutoComplete;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.ZcsMailbox;
-import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.service.mail.AutoComplete;
+import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.soap.ZimbraSoapContext;
 
 public class OfflineAutoComplete extends AutoComplete {
 
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext ctxt = getZimbraSoapContext(context);
-        Account account = getRequestedAccount(getZimbraSoapContext(context));
-        if (!(account instanceof OfflineAccount))
-            throw OfflineServiceException.MISCONFIGURED("incorrect account class: " + account.getClass().getSimpleName());
-        
-        if (!account.getBooleanAttr(Provisioning.A_zimbraFeatureGalEnabled , false) ||
-            !account.getBooleanAttr(Provisioning.A_zimbraFeatureGalAutoCompleteEnabled , false))
-            throw ServiceException.PERM_DENIED("auto complete GAL disabled");
-        
+        Account account = getRequestedAccount(getZimbraSoapContext(context));        
         Mailbox mbox = getRequestedMailbox(ctxt);
-        if (!(mbox instanceof ZcsMailbox))
-            throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
-                        
+            
+        boolean galAC = (account instanceof OfflineAccount) && (mbox instanceof ZcsMailbox) &&
+            account.getBooleanAttr(Provisioning.A_zimbraFeatureGalEnabled , false) &&
+            account.getBooleanAttr(Provisioning.A_zimbraFeatureGalAutoCompleteEnabled , false);
+        
         String name = request.getAttribute(MailConstants.A_NAME);
         while (name.endsWith("*"))
             name = name.substring(0, name.length() - 1);
@@ -58,7 +54,7 @@ public class OfflineAutoComplete extends AutoComplete {
         int limit = account.getContactAutoCompleteMaxResults();        
         AutoCompleteResult result = query(request, ctxt, account, true, name, limit);
         
-        if (result.entries.size() < limit) {
+        if (galAC && result.entries.size() < limit) {
             int galLimit = limit - result.entries.size();
             
             if (account.getBooleanAttr(Provisioning.A_zimbraFeatureGalSyncEnabled , false)) {            
@@ -85,8 +81,33 @@ public class OfflineAutoComplete extends AutoComplete {
             }
         }
 
+        if (result.entries.size() < limit)
+            autoCompleteFromOtherAccounts(request, ctxt, account, name, limit, result);
+            
         Element response = ctxt.createElement(MailConstants.AUTO_COMPLETE_RESPONSE);
         toXML(response, result, ctxt.getAuthtokenAccountId());
         return response;        
-    }   
+    }
+    
+    public void autoCompleteFromOtherAccounts(Element request, ZimbraSoapContext ctxt, Account reqAcct,
+        String name, int limit, AutoCompleteResult result) throws ServiceException {
+        OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+        List<Account> accounts = prov.getAllAccounts();
+        accounts.add(0, prov.getLocalAccount());
+        String reqAcctId = reqAcct.getId();
+        
+        int lmt = limit - result.entries.size();
+        for(Account account : accounts) {
+            if (account.getId().equals(reqAcctId) || !account.getBooleanAttr(OfflineConstants.A_offlineShareContactsInAutoComplete , false))
+                continue;
+            
+            AutoCompleteResult res = query(request, ctxt, account, true, name, lmt);
+            if (res != null)
+                result.appendEntries(res);
+            
+            lmt = limit - result.entries.size();
+            if (lmt <= 0)
+                break;
+        }
+    }
 }
