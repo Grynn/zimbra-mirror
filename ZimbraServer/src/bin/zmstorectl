@@ -62,10 +62,10 @@ flushDirtyPages() {
 case "$1" in 
   start)
     if [ x$2 = "x" ]; then
-      ${zimbra_home}/libexec/zmmtaconfig mailbox
+      ${zimbra_home}/libexec/zmmtaconfig mailbox >/dev/null 2>&1
     fi
     for i in $START_ORDER; do
-      ${zimbra_home}/bin/$i start norewrite
+      ${zimbra_home}/bin/$i start norewrite >/dev/null 2>&1
       R=$?
       if [ $R -ne "0" ]; then
         STATUS=$R
