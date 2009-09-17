@@ -403,7 +403,7 @@
 		<copy tofile="${dist.dir}/jetty/etc/webdefault.xml" file="${server.config.dir}/jetty-6.1/webdefault.xml" overwrite="true" />
 
 		<copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
-			<fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="derby.jar,sqlite*.jar,mysql*.jar,jfreechart*,memcached*,testng*" />
+			<fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="derby.jar,sqlite*.jar,mysql*.jar,jfreechart*,testng*" />
 			<fileset refid="gdata.jars"/>
 		</copy>
 		<copy todir="${dist.dir}/jetty/lib" overwrite="true">
