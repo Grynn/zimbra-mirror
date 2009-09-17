@@ -967,7 +967,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 						});
 		}
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefMessageViewHtmlPreferred,ZaAccount.A_zimbraPrefDisplayExternalImages,
-			ZaAccount.A_zimbraPrefGroupMailBy,ZaAccount.A_zimbraPrefMailItemsPerPage,ZaAccount.A_zimbraPrefMailDefaultCharset],[])) {				
+			ZaAccount.A_zimbraPrefGroupMailBy,ZaAccount.A_zimbraPrefMailItemsPerPage,ZaAccount.A_zimbraMaxMailItemsPerPage,ZaAccount.A_zimbraPrefMailDefaultCharset],[])) {				
 			prefItems.push({type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_mail_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_MailOptions}
@@ -993,8 +993,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefGroupMailBy,
 									label:ZaMsg.LBL_zimbraPrefGroupMailBy, labelLocation:_LEFT_
 								},
+								{ref:ZaAccount.A_zimbraMaxMailItemsPerPage, type:_SUPERWIZ_SELECT1_,
+									editable:true,inputSize:4,choices:[10,25,50,100,250,500,1000],
+									msgName:ZaMsg.MSG_zimbraMaxMailItemsPerPage,label:ZaMsg.LBL_zimbraMaxMailItemsPerPage,
+									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, valueLabel:null
+								},								
 								{ref:ZaAccount.A_zimbraPrefMailItemsPerPage, type:_SUPERWIZ_SELECT1_,
-									msgName:ZaMsg.LBL_zimbraPrefMailItemsPerPage,label:ZaMsg.LBL_zimbraPrefMailItemsPerPage,
+									msgName:ZaMsg.MSG_zimbraPrefMailItemsPerPage,label:ZaMsg.LBL_zimbraPrefMailItemsPerPage,
 									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, valueLabel:null
 								},
 								{ref:ZaAccount.A_zimbraPrefMailDefaultCharset, type:_SUPERWIZ_SELECT1_, msgName:ZaMsg.LBL_zimbraPrefMailDefaultCharset,
