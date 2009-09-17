@@ -261,6 +261,7 @@ ZaCosXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaCos.A_zimbraMailMinPollingInterval,
 	ZaCos.A_zimbraPrefMailPollingInterval,
 	ZaCos.A_zimbraPrefMailDefaultCharset,
+	ZaCos.A_zimbraMaxMailItemsPerPage,
 	ZaCos.A_zimbraPrefMailItemsPerPage,
 	ZaCos.A_zimbraPrefGroupMailBy,
 	ZaCos.A_zimbraPrefDisplayExternalImages,
@@ -559,7 +560,11 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 {ref:ZaCos.A_zimbraPrefGroupMailBy, type:_OSELECT1_, msgName:ZaMsg.LBL_zimbraPrefGroupMailBy,
                     label:ZaMsg.LBL_zimbraPrefGroupMailBy, labelLocation:_LEFT_
                 },
-                {ref:ZaCos.A_zimbraPrefMailItemsPerPage, type:_OSELECT1_, msgName:ZaMsg.LBL_zimbraPrefMailItemsPerPage,
+				{ref:ZaCos.A_zimbraMaxMailItemsPerPage, type:_OSELECT1_, msgName:ZaMsg.MSG_zimbraMaxMailItemsPerPage,
+                    label:ZaMsg.LBL_zimbraMaxMailItemsPerPage, labelLocation:_LEFT_, choices:[10,25,50,100,250,500,1000], editable:true,
+                    inputSize:4
+                },                
+                {ref:ZaCos.A_zimbraPrefMailItemsPerPage, type:_OSELECT1_, msgName:ZaMsg.MSG_zimbraPrefMailItemsPerPage,
                     label:ZaMsg.LBL_zimbraPrefMailItemsPerPage, labelLocation:_LEFT_
                 },
                 {ref:ZaCos.A_zimbraPrefMailDefaultCharset, type:_OSELECT1_,

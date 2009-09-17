@@ -91,6 +91,7 @@ ZaCos.A_zimbraPrefGroupMailBy = "zimbraPrefGroupMailBy";
 ZaCos.A_zimbraPrefIncludeSpamInSearch = "zimbraPrefIncludeSpamInSearch";
 ZaCos.A_zimbraPrefIncludeTrashInSearch = "zimbraPrefIncludeTrashInSearch";
 ZaCos.A_zimbraPrefMailInitialSearch = "zimbraPrefMailInitialSearch";
+ZaCos.A_zimbraMaxMailItemsPerPage = "zimbraMaxMailItemsPerPage";
 ZaCos.A_zimbraPrefMailItemsPerPage = "zimbraPrefMailItemsPerPage";
 ZaCos.A_zimbraPrefMailPollingInterval = "zimbraPrefMailPollingInterval";
 ZaCos.A_zimbraPrefMailFlashTitle = "zimbraPrefMailFlashTitle";
@@ -605,6 +606,7 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraAllowAnyFromAddress, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraAllowAnyFromAddress, type:_ENUM_},
         {id:ZaCos.A_zimbraPrefSaveToSent, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefSaveToSent, type:_ENUM_},
         {id:ZaCos.A_zimbraPrefContactsPerPage, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPrefContactsPerPage, choices:[10,25,50,100]},
+        {id:ZaCos.A_zimbraMaxMailItemsPerPage, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraMaxMailItemsPerPage,maxInclusive:2147483647, minInclusive:0},
         {id:ZaCos.A_zimbraPrefMailItemsPerPage, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPrefMailItemsPerPage, choices:[10,25,50,100]},
         {id:ZaCos.A_zimbraPrefHtmlEditorDefaultFontFamily, choices:ZaModel.FONT_FAMILY_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefHtmlEditorDefaultFontFamily, type:_ENUM_},
         {id:ZaCos.A_zimbraPrefHtmlEditorDefaultFontSize, choices:ZaModel.FONT_SIZE_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefHtmlEditorDefaultFontSize, type:_ENUM_},

@@ -1082,16 +1082,19 @@ Super_Select1_XFormItem.prototype.initializeItems = function() {
 		anchorHlpr.cssStyle = "width:150px";
 	}	
 
-	var trueValue = this.getInheritedProperty("trueValue");
-	var falseValue = this.getInheritedProperty("falseValue");	
 	var choices = this.getInheritedProperty("choices");	
-	
-	slct.trueValue = trueValue;
-	slct.falseValue = falseValue;	
 	
 	if(choices)
 		slct.choices = choices;	
 	
+	var editable = this.getInheritedProperty("editable");
+	if(editable)
+		slct.editable = editable;
+		
+	var inputSize = this.getInheritedProperty("inputSize");
+	if(inputSize)
+		slct.inputSize = inputSize;
+
 	this.items = [slct,anchorHlpr];
 	Composite_XFormItem.prototype.initializeItems.call(this);
 	
@@ -1757,3 +1760,83 @@ SuperRepeat_XFormItem.prototype.initializeItems = function() {
 	
 	Composite_XFormItem.prototype.initializeItems.call(this);
 }
+
+/**
+*	SUPER_DYNSELECT form item type
+**/
+Super_DynSelect_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPER_DYNSELECT_", "super_dynselect", Super_DynSelect_XFormItem, Super_XFormItem);
+Super_DynSelect_XFormItem.prototype.labelCssClass = "xform_label_left";
+Super_DynSelect_XFormItem.prototype.labelCssStyle = "width:275px" ;
+Super_DynSelect_XFormItem.prototype.colSizes=["275px","150px"];
+Super_DynSelect_XFormItem.prototype.nowrap = false;
+Super_DynSelect_XFormItem.prototype.labelWrap = true;
+Super_DynSelect_XFormItem.prototype.trueValue = "TRUE";
+Super_DynSelect_XFormItem.prototype.falseValue = "FALSE";
+Super_DynSelect_XFormItem.prototype.initializeItems = function() {
+	
+	
+	var slct = {	type:_DYNSELECT_, ref:".",
+		onChange:Composite_XFormItem.onFieldChange,
+		forceUpdate:true,
+	 	errorLocation:_PARENT_,
+		updateElement:function(value) {
+			Super_XFormItem.updateCss.call(this,5);
+			DynSelect_XFormItem.prototype.updateElement.call(this, value);
+		}
+	};
+	var anchorHlpr = {	
+		type:_SUPER_ANCHOR_HELPER_, ref:".",
+		visibilityChecks:[Super_XFormItem.checkIfOverWriten],
+		visibilityChangeEventSources:[this.getRefPath()],
+		onChange:Composite_XFormItem.onFieldChange
+	};
+	
+	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
+	if(anchorCssStyle) {
+		anchorHlpr.cssStyle = anchorCssStyle;
+	} else {
+		anchorHlpr.cssStyle = "width:150px";
+	}	
+
+	var choices = this.getInheritedProperty("choices");	
+	
+	if(choices)
+		slct.choices = choices;
+		
+	var toolTipContent = this.getInheritedProperty("slctToolTipContent");
+	if(toolTipContent) {
+	 slct.toolTipContent = toolTipContent;
+	}
+	var dataFetcherClass = this.getInheritedProperty("dataFetcherClass");
+	if(dataFetcherClass) {
+	 slct.dataFetcherClass = dataFetcherClass;
+	}
+
+	var dataFetcherMethod = this.getInheritedProperty("dataFetcherMethod");
+	if(dataFetcherMethod) {
+	 slct.dataFetcherMethod = dataFetcherMethod;
+	}
+	
+	this.items = [slct,anchorHlpr];
+	Composite_XFormItem.prototype.initializeItems.call(this);
+}	
+
+
+Super_DynSelect_XFormItem.prototype.useParentTable = false;
+Super_DynSelect_XFormItem.prototype.numCols = 2;
+
+Super_DynSelect_XFormItem.prototype.items = [];
+
+/**
+*	_SUPERWIZ_DYNSELECT_ form item type
+**/
+SuperWiz_DynSelect_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPERWIZ_DYNSELECT_", "superwiz_dynselect", SuperWiz_DynSelect_XFormItem, Super_DynSelect_XFormItem);
+SuperWiz_DynSelect_XFormItem.prototype.labelCssClass = "xform_label_left ZaWizLabel";
+SuperWiz_DynSelect_XFormItem.prototype.labelCssStyle = "width:200px" ;
+SuperWiz_DynSelect_XFormItem.prototype.colSizes=["250px","150px"];
+SuperWiz_DynSelect_XFormItem.prototype.nowrap = false;
+SuperWiz_DynSelect_XFormItem.prototype.labelWrap = true;
+SuperWiz_DynSelect_XFormItem.prototype.visibilityChecks = [ZaItem.hasWritePermission];
+SuperWiz_DynSelect_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];

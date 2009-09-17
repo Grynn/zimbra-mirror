@@ -34,8 +34,14 @@ DynSelect_XFormItem.prototype.edited = false;
 DynSelect_XFormItem.LOAD_PAUSE = AjxEnv.isIE ? 500 : 250;	// delay between chunks
 DynSelect_XFormItem.prototype.initFormItem = function () {
 	// if we're dealing with an XFormChoices object...
-	var choices  = this.getInheritedProperty("choices");
-	this.choices = choices ? choices : new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");
+	var choices  = this.getChoices();
+	if(choices instanceof Array) {
+		choices =  new XFormChoices(choices,XFormChoices.SIMPLE_LIST);
+	}
+	if(!choices)
+		choices = new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");
+		
+	this.setChoices(choices); 
 //	this.choices = new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");
 	//	...set up to receive notification when its choices change
 	var listener = new AjxListener(this, this.choicesChangeLsnr);
@@ -46,10 +52,16 @@ DynSelect_XFormItem.prototype.initFormItem = function () {
 	this.dataFetcherAttrs = this.getInheritedProperty("dataFetcherAttrs");
 	this.dataFetcherDomain = this.getInheritedProperty("dataFetcherDomain");
 	this.dataFetcherObject = null;
+	if(!this.dataFetcherMethod) {
+		this.dataFetcherMethod = DynSelect_XFormItem.fetchDataDefault;
+		this.dataFetcherObject = this;
+	}
 }
 DynSelect_XFormItem.prototype.changeChoicesCallback = 
 function (data, more, total) {
-	var choices = this.getChoices();
+	var choices;
+	choices = this.choices ? this.choices : this.getChoices();
+	
 	if(!choices)
 		return;
 	choices.setChoices(data);
@@ -63,6 +75,11 @@ function (data, more, total) {
 		if(!this.menuUp)
 			this.showMenu();	
 	}
+}
+
+DynSelect_XFormItem.fetchDataDefault = function (callArgs) {
+	var callback = callArgs["callback"];
+	callback.run(this.choices.getChoiceObject(), false, null);
 }
 
 DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {

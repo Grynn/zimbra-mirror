@@ -402,6 +402,28 @@ function () {
 		this._errorDialog.popup();		
 		return false;
 	}	
+	
+	var maxItemsPerPage;
+	if(tmpObj.attrs[ZaAccount.A_zimbraMaxMailItemsPerPage] != null) {
+		maxItemsPerPage = parseInt (tmpObj.attrs[ZaAccount.A_zimbraMaxMailItemsPerPage]);
+	} else {
+		maxItemsPerPage = parseInt ( tmpObj._defaultValues.attrs[ZaAccount.A_zimbraMaxMailItemsPerPage]);
+	}
+	
+	var prefItemsPerPage;
+	if(tmpObj.attrs[ZaAccount.A_zimbraPrefMailItemsPerPage] != null) {
+		prefItemsPerPage = parseInt (tmpObj.attrs[ZaAccount.A_zimbraPrefMailItemsPerPage]);
+	} else {
+		prefItemsPerPage = parseInt ( tmpObj._defaultValues.attrs[ZaAccount.A_zimbraPrefMailItemsPerPage]);
+	}
+		
+	if(maxItemsPerPage < prefItemsPerPage) {
+		//show error msg
+		this._errorDialog.setMessage(ZaMsg.ERROR_ITEMS_PER_PAGE_OVER_MAX, null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);		
+		this._errorDialog.popup();		
+		return false;		
+	}	
+	
 		
 	//check that current theme is part of selected themes
 	if(tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] !=null && tmpObj.attrs[ZaCos.A_zimbraAvailableSkin].length > 0 && tmpObj.attrs[ZaCos.A_zimbraPrefSkin] ) {

@@ -90,7 +90,9 @@ OSelect1_XFormItem.prototype.updateElement = function (newValue) {
 			}
 			el.value = newValue;
 			//DBG.println(AjxDebug.DBG1, AjxBuffer.concat(this.getId(),".value = ",newValue));
-
+			if(this.getElement() && el.offsetWidth && this.getElement().style)
+				this.getElement().style.width = el.offsetWidth + 20;
+				
 		} else {
 			el.innerHTML = newValue;
 		}
@@ -643,7 +645,8 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 	var id = this.getId();
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ id + "')";	
 	var inputHtml;
-	if(this.getInheritedProperty("editable")) {
+	var editable = this.getInheritedProperty("editable");
+	if(editable) {
 		var inputSize = this.getInheritedProperty("inputSize");		
 		inputHtml = ["<input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
 					" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"",
@@ -652,35 +655,20 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 					">"].join("");
 	}
 	
-	if (this.getWidth() == "auto") {
-		if(this.getInheritedProperty("editable") && !AjxEnv.isIE) {
-			var element = this.getElement("tempInput");
-			if(!element) 
-				element = this.createElement("tempInput", null, "input");
-			element.style.left = -1000;
-			element.style.top = -1000;
-			element.type="text";
-			element.size = inputSize;
-			element.className = this.getDisplayCssClass();
-			this._width = element.offsetWidth+20;
-			element.readonly = true;
-			this.hideElement("tempInput",false);			
-		} else {
-			var element = this.getElement("tempDiv");
-			if(!element) 
-				element = this.createElement("tempDiv", null, "div", "MENU CONTENTS");
-			element.style.left = -1000;
-			element.style.top = -1000;
-			element.className = this.getMenuCssClass();
-			element.innerHTML = this.getChoicesHTML();
-			this._width = element.offsetWidth+20;
-			element.innerHTML = "";
-		}
-
+	if (this.getWidth() == "auto" && !editable) {
+		var element = this.getElement("tempDiv");
+		if(!element) 
+			element = this.createElement("tempDiv", null, "div", "MENU CONTENTS");
+		element.style.left = -1000;
+		element.style.top = -1000;
+		element.className = this.getMenuCssClass();
+		element.innerHTML = this.getChoicesHTML();
+		this._width = element.offsetWidth+20;
+		element.innerHTML = "";
 	}
 
 	
-	if(this.getInheritedProperty("editable")) {
+	if(editable) {
 		HTMLoutput.append(
 			"<div id=", id, this.getCssString(),
 				" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this)\"",

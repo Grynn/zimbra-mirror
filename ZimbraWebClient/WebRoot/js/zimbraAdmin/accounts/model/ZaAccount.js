@@ -126,6 +126,7 @@ ZaAccount.A_zimbraPrefGroupMailBy = "zimbraPrefGroupMailBy";
 ZaAccount.A_zimbraPrefIncludeSpamInSearch = "zimbraPrefIncludeSpamInSearch";
 ZaAccount.A_zimbraPrefIncludeTrashInSearch = "zimbraPrefIncludeTrashInSearch";
 ZaAccount.A_zimbraPrefMailInitialSearch = "zimbraPrefMailInitialSearch";
+ZaAccount.A_zimbraMaxMailItemsPerPage = "zimbraMaxMailItemsPerPage";
 ZaAccount.A_zimbraPrefMailItemsPerPage = "zimbraPrefMailItemsPerPage";
 ZaAccount.A_zimbraPrefMailPollingInterval = "zimbraPrefMailPollingInterval";
 ZaAccount.A_zimbraPrefMailFlashTitle = "zimbraPrefMailFlashTitle";
@@ -615,7 +616,27 @@ function(tmpObj) {
 	}	
 	if(tmpObj.attrs[ZaAccount.A_zimbraEnforcePwdHistory])
 		tmpObj.attrs[ZaAccount.A_zimbraEnforcePwdHistory] = parseInt(tmpObj.attrs[ZaAccount.A_zimbraEnforcePwdHistory]);
+	
+	var maxItemsPerPage;
+	if(tmpObj.attrs[ZaAccount.A_zimbraMaxMailItemsPerPage] != null) {
+		maxItemsPerPage = parseInt (tmpObj.attrs[ZaAccount.A_zimbraMaxMailItemsPerPage]);
+	} else {
+		maxItemsPerPage = parseInt ( tmpObj._defaultValues.attrs[ZaAccount.A_zimbraMaxMailItemsPerPage]);
+	}
+	
+	var prefItemsPerPage;
+	if(tmpObj.attrs[ZaAccount.A_zimbraPrefMailItemsPerPage] != null) {
+		prefItemsPerPage = parseInt (tmpObj.attrs[ZaAccount.A_zimbraPrefMailItemsPerPage]);
+	} else {
+		prefItemsPerPage = parseInt ( tmpObj._defaultValues.attrs[ZaAccount.A_zimbraPrefMailItemsPerPage]);
+	}
 		
+	if(maxItemsPerPage < prefItemsPerPage) {
+		//show error msg
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ITEMS_PER_PAGE_OVER_MAX);
+		return false;		
+	}	
+			
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		//check that current theme is part of selected themes
 		var currentTheme = tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] ? tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] : tmpObj._defaultValues.attrs[ZaCos.A_zimbraPrefSkin];
@@ -1531,6 +1552,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefIncludeSpamInSearch, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefIncludeSpamInSearch, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefIncludeTrashInSearch, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefIncludeTrashInSearch, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefMailInitialSearch, type:_COS_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailInitialSearch},
+        {id:ZaAccount.A_zimbraMaxMailItemsPerPage, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMaxMailItemsPerPage,maxInclusive:2147483647, minInclusive:0},
         {id:ZaAccount.A_zimbraPrefMailItemsPerPage, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailItemsPerPage, choices:[10,25,50,100]},
         {id:ZaAccount.A_zimbraPrefMailPollingInterval, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailPollingInterval},
         {id:ZaAccount.A_zimbraMailMinPollingInterval, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraMailMinPollingInterval},
