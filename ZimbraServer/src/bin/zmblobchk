@@ -14,4 +14,4 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-exec `dirname $0`/zmjava com.zimbra.cs.store.consistency.BlobConsistencyCheck "$@"
+exec `dirname $0`/zmjava com.zimbra.cs.store.file.BlobConsistencyUtil "$@"
