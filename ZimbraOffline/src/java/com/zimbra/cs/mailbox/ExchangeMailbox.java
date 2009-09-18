@@ -9,6 +9,7 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.session.PendingModifications.Change;
 
 public class ExchangeMailbox extends ChangeTrackingMailbox {
 
@@ -18,13 +19,50 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
     
     @Override
     boolean isPushType(byte type) {
-        return true; //TODO
+        switch (type) {
+        case MailItem.TYPE_MESSAGE:
+//        case MailItem.TYPE_APPOINTMENT:
+//        case MailItem.TYPE_CONTACT:
+//        case MailItem.TYPE_TASK:
+//        case MailItem.TYPE_WIKI:
+            return true;
+        }
+        return false;
     }
+    
+    /** The bitmask of all message changes that we propagate to the server. */
+    static final int MESSAGE_CHANGES = Change.MODIFIED_UNREAD | Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER;
+
+    /** The bitmask of all chat changes that we propagate to the server. */
+    //static final int CHAT_CHANGES = Change.MODIFIED_UNREAD | Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER;
+
+    /** The bitmask of all contact changes that we propagate to the server. */
+    static final int CONTACT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER | Change.MODIFIED_CONTENT;
+
+    /** The bitmask of all folder changes that we propagate to the server. */
+    static final int FOLDER_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME;
+    
+    /** The bitmask of all appointment changes that we propagate to the server. */
+    static final int APPOINTMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
+                                           Change.MODIFIED_CONTENT | Change.MODIFIED_INVITE;
+    
+    /** The bitmask of all document changes that we propagate to the server. */
+    static final int DOCUMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
+                                        Change.MODIFIED_CONTENT | Change.MODIFIED_NAME;
     
     @Override
     int getChangeMaskFilter(byte type) {
-        // TODO Auto-generated method stub
-        return 0;
+        switch (type) {
+        case MailItem.TYPE_MESSAGE:       return MESSAGE_CHANGES;     
+        //case MailItem.TYPE_CHAT:          return PushChanges.CHAT_CHANGES;     
+        case MailItem.TYPE_CONTACT:       return PushChanges.CONTACT_CHANGES;     
+        case MailItem.TYPE_FOLDER:        return PushChanges.FOLDER_CHANGES;      
+        case MailItem.TYPE_APPOINTMENT:
+        case MailItem.TYPE_TASK:          return PushChanges.APPOINTMENT_CHANGES; 
+        case MailItem.TYPE_WIKI:
+        case MailItem.TYPE_DOCUMENT:      return PushChanges.DOCUMENT_CHANGES;
+        default:                          return 0;
+        }
     }
 
     OfflineDataSource getDataSource() throws ServiceException {
