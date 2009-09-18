@@ -1126,7 +1126,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			ZaAccount.A_zimbraPrefHtmlEditorDefaultFontFamily,ZaAccount.A_zimbraPrefHtmlEditorDefaultFontSize,
 			ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor,ZaAccount.A_zimbraPrefForwardReplyInOriginalFormat,
 			ZaAccount.A_zimbraPrefMailSignatureEnabled,/*ZaAccount.A_zimbraPrefMailSignatureStyle,*/
-			ZaAccount.A_zimbraMailSignatureMaxLength,ZaAccount.A_zimbraPrefMailSignature],[])) {				
+			ZaAccount.A_zimbraMailSignatureMaxLength,ZaAccount.A_zimbraPrefMailSignature,ZaAccount.A_zimbraPrefMandatorySpellCheckEnabled],[])) {				
 			prefItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_composing",borderCssClass:"LowPadedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsComposing,
 							items :[																										
@@ -1161,6 +1161,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.LBL_zimbraPrefForwardReplyInOriginalFormat,
 									checkBoxLabel:ZaMsg.LBL_zimbraPrefForwardReplyInOriginalFormat, 
 									trueValue:"TRUE", falseValue:"FALSE"},
+								{ref:ZaAccount.A_zimbraPrefMandatorySpellCheckEnabled, 
+									//colSpan:2,
+									type:_SUPER_WIZ_CHECKBOX_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.LBL_zimbraPrefMandatorySpellCheckEnabled,
+									checkBoxLabel:ZaMsg.LBL_zimbraPrefMandatorySpellCheckEnabled,
+									trueValue:"TRUE", falseValue:"FALSE"},									
 								{ref:ZaAccount.A_zimbraPrefMailSignatureEnabled, 
 									type:_ZA_CHECKBOX_, msgName:ZaMsg.LBL_zimbraPrefMailSignatureEnabled,
 									label:ZaMsg.LBL_zimbraPrefMailSignatureEnabled,  

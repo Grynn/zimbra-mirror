@@ -285,7 +285,8 @@ ZaCosXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaCos.A_zimbraPrefCalendarAllowPublishMethodInvite,
 	ZaCos.A_zimbraPrefCalendarToasterEnabled,
 	ZaCos.A_zimbraPrefCalendarShowPastDueReminders,
-	ZaCos.A_zimbraPrefAppleIcalDelegationEnabled
+	ZaCos.A_zimbraPrefAppleIcalDelegationEnabled,
+	ZaCos.A_zimbraPrefMandatorySpellCheckEnabled
 ];
 ZaCosXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -639,6 +640,11 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 {ref:ZaCos.A_zimbraPrefForwardReplyInOriginalFormat, type:_CHECKBOX_,
                     msgName:ZaMsg.LBL_zimbraPrefForwardReplyInOriginalFormat,
                     label:ZaMsg.LBL_zimbraPrefForwardReplyInOriginalFormat, trueValue:"TRUE", falseValue:"FALSE"
+                },
+                {ref:ZaCos.A_zimbraPrefMandatorySpellCheckEnabled, type:_CHECKBOX_, 
+                	msgName:ZaMsg.LBL_zimbraPrefMandatorySpellCheckEnabled,
+                	label:ZaMsg.LBL_zimbraPrefMandatorySpellCheckEnabled,
+                    trueValue:"TRUE", falseValue:"FALSE"
                 },
                /* {ref:ZaCos.A_zimbraPrefMailSignatureStyle, type:_CHECKBOX_,
                     msgName:ZaMsg.LBL_zimbraPrefMailSignatureStyle,

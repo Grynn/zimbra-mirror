@@ -172,6 +172,7 @@ ZaAccount.A_zimbraJunkMessagesIndexingEnabled = "zimbraJunkMessagesIndexingEnabl
 ZaAccount.A_zimbraPrefMailSendReadReceipts = "zimbraPrefMailSendReadReceipts";
 ZaAccount.A_zimbraPrefReadReceiptsToAddress = "zimbraPrefReadReceiptsToAddress";
 ZaAccount.A_zimbraPrefAdminConsoleWarnOnExit = "zimbraPrefAdminConsoleWarnOnExit" ;
+ZaAccount.A_zimbraPrefMandatorySpellCheckEnabled = "zimbraPrefMandatorySpellCheckEnabled";
 
 //features
 ZaAccount.A_zimbraFeatureImportExportFolderEnabled = "zimbraFeatureImportExportFolderEnabled";
@@ -1533,7 +1534,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefMailSignature, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailSignature},
         {id:ZaAccount.A_zimbraPrefMailSignatureEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefMailSignatureEnabled},
         //preferences
-        {id:ZaAccount.A_zimbraFeatureImportExportFolderEnabled, type:_COS_ENUM_, ref:"attrs/" + ZaAccount.A_zimbraFeatureImportExportFolderEnabled, choices:ZaModel.BOOLEAN_CHOICES},
+        {id:ZaAccount.A_zimbraPrefMandatorySpellCheckEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefMandatorySpellCheckEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefAppleIcalDelegationEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefAppleIcalDelegationEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefCalendarShowPastDueReminders, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarShowPastDueReminders, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefCalendarToasterEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarToasterEnabled, choices:ZaModel.BOOLEAN_CHOICES},
@@ -1604,6 +1605,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefCalendarAutoAddInvites, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarAutoAddInvites, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefCalendarApptVisibility, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarApptVisibility, choices:ZaSettings.apptVisibilityChoices},
         //features
+        {id:ZaAccount.A_zimbraFeatureImportExportFolderEnabled, type:_COS_ENUM_, ref:"attrs/" + ZaAccount.A_zimbraFeatureImportExportFolderEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureMailPriorityEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureMailPriorityEnabled, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_zimbraFeatureReadReceiptsEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureReadReceiptsEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureImapDataSourceEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureImapDataSourceEnabled, choices:ZaModel.BOOLEAN_CHOICES},

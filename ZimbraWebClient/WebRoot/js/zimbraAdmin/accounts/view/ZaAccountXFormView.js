@@ -859,7 +859,9 @@ ZaAccountXFormView.FEATURE_TAB_ATTRS = [ZaAccount.A_zimbraFeatureReadReceiptsEna
 	ZaAccount.A_zimbraFeatureInstantNotify,
 	ZaAccount.A_zimbraFeatureAdvancedSearchEnabled,
 	ZaAccount.A_zimbraFeatureSavedSearchesEnabled,
-	ZaAccount.A_zimbraFeatureInitialSearchPreferenceEnabled];
+	ZaAccount.A_zimbraFeatureInitialSearchPreferenceEnabled,
+	ZaAccount.A_zimbraFeatureImportExportFolderEnabled
+];
 
 ZaAccountXFormView.FEATURE_TAB_RIGHTS = [];
 ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
@@ -923,7 +925,7 @@ ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaAccount.A_zimbraPrefCalendarToasterEnabled,
 	ZaAccount.A_zimbraPrefCalendarShowPastDueReminders,
 	ZaAccount.A_zimbraPrefAppleIcalDelegationEnabled,
-	ZaAccount.A_zimbraFeatureImportExportFolderEnabled
+	ZaAccount.A_zimbraPrefMandatorySpellCheckEnabled
 ];
 ZaAccountXFormView.PREFERENCES_TAB_RIGHTS = [];	
 
@@ -2008,6 +2010,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.LBL_zimbraPrefForwardReplyInOriginalFormat,
 									checkBoxLabel:ZaMsg.LBL_zimbraPrefForwardReplyInOriginalFormat, 
 									trueValue:"TRUE", falseValue:"FALSE"},
+								{ref:ZaAccount.A_zimbraPrefMandatorySpellCheckEnabled, 
+									//colSpan:2,
+									type:_SUPER_CHECKBOX_, 
+									colSizes:["175px","375px","190px"],
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.LBL_zimbraPrefMandatorySpellCheckEnabled,
+									checkBoxLabel:ZaMsg.LBL_zimbraPrefMandatorySpellCheckEnabled,
+									trueValue:"TRUE", falseValue:"FALSE"},									
 								{ref:ZaAccount.A_zimbraPrefMailSignatureEnabled, 
 									type:_ZA_CHECKBOX_, msgName:ZaMsg.LBL_zimbraPrefMailSignatureEnabled,
 									label:ZaMsg.LBL_zimbraPrefMailSignatureEnabled,  
