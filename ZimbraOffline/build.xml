@@ -88,11 +88,11 @@
 	<property name="xulrunner.src.dir" location="../ThirdParty/xulrunner" />
 	<property name="jetty.version" value="6.1.15" />
 
-    <condition property="db-derby">
-		<isset property="env.ZIMBRA_OFFLINE_USE_DERBY" />
-	</condition>
 	<condition property="db-sqlite">
-		<not><isset property="db-derby"/></not>
+		<isset property="env.ZIMBRA_OFFLINE_USE_SQLITE" />
+	</condition>
+	<condition property="db-derby">
+		<not><isset property="db-sqlite"/></not>
 	</condition>
 
 	<condition property="db.driver.jar" value="derby*.jar">
