@@ -26,6 +26,7 @@ import java.util.Map;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Pair;
 import com.zimbra.cs.db.DbPool.Connection; 
+import com.zimbra.cs.localconfig.DebugConfig;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.MailItem;
@@ -53,12 +54,13 @@ public class DbOfflineMailbox {
         try {
             // first, duplicate the original row with the new ID
             String table = DbMailItem.getMailItemTableName(mbox);
+            String mailbox_id = DebugConfig.disableMailboxGroups ? "" : "mailbox_id, ";
             stmt = conn.prepareStatement("INSERT INTO " + table +
-                    "(mailbox_id, id, type, parent_id, folder_id, index_id, imap_id, date, size, volume_id, blob_digest," +
-                    " unread, flags, tags, sender, subject, name, metadata, mod_metadata, change_date, mod_content, change_mask) " +
-                    "(SELECT mailbox_id, ?, type, parent_id, folder_id, index_id, imap_id, date, size, volume_id, blob_digest," +
+                    " (" + mailbox_id + "id, type, parent_id, folder_id, index_id, imap_id, date, size, volume_id, blob_digest," +
+                    " unread, flags, tags, sender, subject, name, metadata, mod_metadata, change_date, mod_content, change_mask)" +
+                    " SELECT " + mailbox_id + "?, type, parent_id, folder_id, index_id, imap_id, date, size, volume_id, blob_digest," +
                     " unread, flags, tags, sender, subject, name, metadata, mod_metadata, change_date, mod_content, change_mask" +
-                    " FROM " + table + " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?)");
+                    " FROM " + table + " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
             int pos = 1;
             stmt.setInt(pos++, newId);
             pos = DbMailItem.setMailboxId(stmt, mbox, pos);
