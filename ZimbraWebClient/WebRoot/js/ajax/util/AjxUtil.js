@@ -338,11 +338,13 @@ function(list) {
 };
 
 AjxUtil.arrayAsHash =
-function(array) {
+function(array, valueOrFunc) {
 	var hash = {};
+	var func = typeof valueOrFunc == "function" && valueOrFunc;
+	var value = valueOrFunc || true; 
 	for (var i = 0; i < array.length; i++) {
 		var key = array[i];
-		hash[key] = true;
+		hash[key] = func ? func(key, hash, i, array) : value;
 	}
 	return hash;
 };
@@ -399,12 +401,55 @@ AjxUtil.values = function(object, acceptFunc) {
     }
     return values;
 };
+
 AjxUtil.map = function(array, func) {
 	var narray = new Array(array.length);
 	for (var i = 0; i < array.length; i++) {
 		narray[i] = func ? func(array[i]) : array[i];
 	}
 	return narray;
+};
+AjxUtil.uniq = function(array) {
+	var object = {};
+	for (var i = 0; i < array.length; i++) {
+		object[array[i]] = true;
+	}
+	return AjxUtil.keys(object);
+};
+AjxUtil.concat = function(array1 /* ..., arrayN */) {
+	var array = [];
+	for (var i = 0; i < arguments.length; i++) {
+		array.push.apply(array, arguments[i]);
+	}
+	return array;
+};
+
+AjxUtil.union = function(array1 /* ..., arrayN */) {
+	var array = [];
+	return AjxUtil.uniq(array.concat.apply(array, arguments));
+};
+AjxUtil.intersection = function(array1 /* ..., arrayN */) {
+	var array = AjxUtil.concat.apply(this, arguments);
+	var object = AjxUtil.arrayAsHash(array, AjxUtil.__intersection_count);
+	for (var p in object) {
+		if (object[p] == 1) {
+			delete object[p];
+		}
+	}
+	return AjxUtil.keys(object);
+};
+AjxUtil.__intersection_count = function(key, hash, index, array) {
+	return hash[key] != null ? hash[key] + 1 : 1;
+};
+AjxUtil.complement = function(array1, array2) {
+	var object1 = AjxUtil.arrayAsHash(array1);
+	var object2 = AjxUtil.arrayAsHash(array2);
+	for (var p in object2) {
+		if (p in object1) {
+			delete object2[p];
+		}
+	}
+	return AjxUtil.keys(object2);
 };
 
 AjxUtil.getFirstElement = function(parent, ename, aname, avalue) {
