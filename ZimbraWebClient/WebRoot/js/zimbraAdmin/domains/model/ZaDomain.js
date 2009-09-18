@@ -232,6 +232,7 @@ ZaDomain.A2_new_internal_gal_ds_name = "new_internal_gal_ds_name";
 ZaDomain.A2_new_external_gal_ds_name = "new_external_gal_ds_name";
 ZaDomain.A2_new_internal_gal_polling_interval = "new_internal_gal_polling_interval";
 ZaDomain.A2_new_external_gal_polling_interval = "new_external_gal_polling_interval";
+ZaDomain.A2_create_gal_acc = "create_gal_acc";
 //result codes returned from Check* requests
 ZaDomain.Check_OK = "check.OK";
 ZaDomain.Check_UNKNOWN_HOST="check.UNKNOWN_HOST";
@@ -553,7 +554,7 @@ function(tmpObj, newDomain) {
 ZaItem.createMethods["ZaDomain"].push(ZaDomain.createMethod);
 
 ZaDomain.createGalAccounts = function (tmpObj,newDomain) {
-	if(tmpObj[ZaDomain.A2_new_gal_sync_account_name] && 
+	if(tmpObj[ZaDomain.A2_create_gal_acc] && tmpObj[ZaDomain.A2_create_gal_acc]=="TRUE" && tmpObj[ZaDomain.A2_new_gal_sync_account_name] && 
 		(tmpObj[ZaDomain.A2_new_internal_gal_ds_name] || tmpObj[ZaDomain.A2_new_external_gal_ds_name])) {
 		var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 		soapDoc.setMethodAttribute("onerror", "stop");
@@ -937,7 +938,7 @@ function(tmpObj) {
 	var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 	soapDoc.setMethodAttribute("onerror", "stop");
 	
-	if(tmpObj[ZaDomain.A2_new_internal_gal_ds_name] || tmpObj[ZaDomain.A2_new_external_gal_ds_name]) {
+	if(tmpObj[ZaDomain.A2_create_gal_acc] && tmpObj[ZaDomain.A2_create_gal_acc]=="TRUE" && tmpObj[ZaDomain.A2_new_internal_gal_ds_name] || tmpObj[ZaDomain.A2_new_external_gal_ds_name]) {
 		if(tmpObj[ZaDomain.A2_new_gal_sync_account_name]) {
 			if(tmpObj[ZaDomain.A2_new_gal_sync_account_name].indexOf("@") < 0) {
 				tmpObj[ZaDomain.A2_new_gal_sync_account_name] = [tmpObj[ZaDomain.A2_new_gal_sync_account_name],"@",tmpObj.attrs[ZaDomain.A_domainName]].join("");
@@ -1692,6 +1693,7 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_GalLdapBindPassword, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindPassword},
 		{id:ZaDomain.A_GalLdapBindPasswordConfirm, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindPasswordConfirm},
 		{id:ZaDomain.A_zimbraGalAccountId, type:_LIST_, listItem:{type:_STRING_}, ref:"attrs/" + ZaDomain.A_zimbraGalAccountId},
+		{id:ZaDomain.A2_create_gal_acc, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaDomain.A2_create_gal_acc},
 		{id:ZaDomain.A2_new_gal_sync_account_name, type:_STRING_, ref:ZaDomain.A2_new_gal_sync_account_name},
 		{id:ZaDomain.A2_new_internal_gal_ds_name, type:_STRING_, ref:ZaDomain.A2_new_internal_gal_ds_name},
 		{id:ZaDomain.A2_new_external_gal_ds_name, type:_STRING_, ref:ZaDomain.A2_new_external_gal_ds_name},

@@ -142,7 +142,7 @@ function(entry) {
 	this._containedObject.type = entry.type ;
 	this._containedObject.id = entry.id;
 	this._containedObject[ZaDomain.A2_gal_sync_accounts] = entry[ZaDomain.A2_gal_sync_accounts];
-			
+	this._containedObject[ZaDomain.A2_create_gal_acc] = "TRUE";
 	if(entry.rights)
 		this._containedObject.rights = entry.rights;
 
@@ -423,6 +423,11 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							content:ZaMsg.WARNING_DOMAIN_DS_NOT_CONFIGRED,
 							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A_zimbraGalAccountId]]
 						},
+						{ref:ZaDomain.A2_create_gal_acc, type:_CHECKBOX_, label:ZaMsg.Domain_UseGALSyncAccts, 
+							labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",
+							labelCssClass:"xform_label", align:_LEFT_,labelWrap:true,
+							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A2_gal_sync_accounts]]							
+						},						
 						{type:_DYNSELECT_, label:ZaMsg.Domain_GalSyncAccount,
 							width:250,
 						 	ref:ZaDomain.A2_new_gal_sync_account_name,
@@ -432,7 +437,8 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,
 							dataFetcherDomain:entry.name,
 							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A2_gal_sync_accounts]],
-							enableDisableChecks:[]
+							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0].name"), type:_OUTPUT_,label:ZaMsg.Domain_GalSyncAccount,
 							visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts]]
@@ -442,14 +448,16 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotExternal,
 								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
-							]
+							]							
 						},
 						{ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_,
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotExternal,
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
-							]
+							],
+							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]							
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval),
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
@@ -458,7 +466,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotExternal,
 								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
-							]						
+							]
 						},
 						{ref:ZaDomain.A2_new_internal_gal_polling_interval, 
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
@@ -467,21 +475,25 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotExternal,
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
-							]						
+							],
+							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]													
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds + ".name"), label:ZaMsg.Domain_ExternalGALDSName, type:_OUTPUT_,
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotInternal,
 								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
-							]
+							]							
 						},
 						{ref:ZaDomain.A2_new_external_gal_ds_name, label:ZaMsg.Domain_ExternalGALDSName, type:_TEXTFIELD_,
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotInternal,
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
-							]
+							],
+							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]							
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval), 
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
@@ -490,7 +502,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotInternal,
 								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
-							]						
+							]													
 						},
 						{ref:ZaDomain.A2_new_external_gal_polling_interval, 
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
@@ -499,7 +511,9 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							visibilityChecks:[
 								ZaNewDomainXWizard.isDomainModeNotInternal,
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
-							]						
+							],
+							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
 						},						
 						{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","430px"],
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],

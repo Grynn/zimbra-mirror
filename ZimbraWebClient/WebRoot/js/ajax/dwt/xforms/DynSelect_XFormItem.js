@@ -321,8 +321,6 @@ DynSelect_XFormItem.prototype.setElementEnabled = function(enabled) {
 			
 		this.getForm().getElement(this.getId()).className = this.cssClass + "_disabled";
 		table.className = this.getTableCssClass()+"_disabled";
-		if(this.getInheritedProperty("editable")) {
-			this.getDisplayElement().disabled=true;
-		}
+		this.getDisplayElement().disabled=true;
 	}
 }
