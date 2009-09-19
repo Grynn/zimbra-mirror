@@ -14,7 +14,7 @@
     <value>com.zimbra.zimbrasync.client.OfflineExchangeSyncFactory</value>
   </key>
   <key name="debug_disable_mailbox_group">
-    <value>true</value>
+    <value>false</value>
   </key>
   <key name="http_connection_timeout">
     <value>30000</value>
@@ -89,7 +89,7 @@
     <value>com.zimbra.cs.mailbox.OfflineMailboxManager</value>
   </key>
   <key name="zimbra_class_database">
-    <value>com.zimbra.cs.db.SQLite</value>
+    <value>com.zimbra.cs.db.Derby</value>
   </key>
   <key name="zimbra_class_application">
     <value>com.zimbra.cs.offline.OfflineApplication</value>
