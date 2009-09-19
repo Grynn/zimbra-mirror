@@ -61,8 +61,8 @@ sub get_pid_tree() {
                 }
             }
             close(STATUS);
-            die "ppid not found for $pid" if (!defined($ppid));
-            die "name not found for $pid" if (!defined($cmd));
+            next if (!defined($ppid));
+            next if (!defined($cmd));
             $pid_names{$pid} = $cmd;
             $pid_ppid{$pid} = $ppid;
         }
@@ -190,9 +190,16 @@ sub main() {
                         }
                     } else { # new process, take full count
                         for (@statlist) {
+                        	$pid_stats{$pid}->{$_} = 0 if !defined $pid_stats{$pid}->{$_};
+                        	$stats{$name}->{$_}    = 0 if !defined $stats{$name}->{$_};
                             $stats{$name}->{$_} += $pid_stats{$pid}->{$_};
                         }
                     }
+                    $stats{$name}->{'rss'}        = 0 if !defined $stats{$name}->{'rss'};
+                    $pid_stats{$pid}->{'rss'}     = 0 if !defined $pid_stats{$pid}->{'rss'};
+                    $stats{$name}->{'threads'}    = 0 if !defined $stats{$name}->{'threads'};
+                    $pid_stats{$pid}->{'threads'} = 0 if !defined $pid_stats{$pid}->{'threads'};
+                    
                     # memory usage is always a total
                     $stats{$name}->{'rss'}     += $pid_stats{$pid}->{'rss'};
                     $stats{$name}->{'threads'} += $pid_stats{$pid}->{'threads'};
