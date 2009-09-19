@@ -210,7 +210,8 @@ sub main() {
                 }
                 my $values = join(', ', @printstats);
                 $LOGFH->print("$values\n");
-                Zimbra::Mon::Logger::LogStats( "info", "zmstat allprocs.csv: ${HEADING}:: $values"); 
+                # allprocs causes way too much traffic to send to logger at the moment
+                # Zimbra::Mon::Logger::LogStats( "info", "zmstat allprocs.csv: ${HEADING}:: $values"); 
                 $LOGFH->flush();
                 $ROTATE_DEFER = 0;
                 if ($ROTATE_NOW) {
