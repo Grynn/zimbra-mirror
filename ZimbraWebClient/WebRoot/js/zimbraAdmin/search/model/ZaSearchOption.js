@@ -47,6 +47,7 @@ ZaSearchOption.A_includeNeverLoginedAccounts = "include_never_login_accounts" ;
 ZaSearchOption.A_accountLastLoginTime_From = ZaAccount.A_zimbraLastLogonTimestamp + "_From" ;
 ZaSearchOption.A_accountLastLoginTime_To = ZaAccount.A_zimbraLastLogonTimestamp + "_To" ;
 ZaSearchOption.A_accountLastLoginTime = ZaAccount.A_zimbraLastLogonTimestamp ;
+ZaSearchOption.A_zimbraMailForwardingAddress = ZaAccount.A_zimbraMailForwardingAddress ;
 //ZaSearchOption.A_objTypeAccountRegular = "option_" + ZaSearch.ACCOUNTS + "_regular" ;
 ZaSearchOption.A_objTypeDl = "option_" + ZaSearch.DLS ;
 ZaSearchOption.A_objTypeAlias = "option_" + ZaSearch.ALIASES;
@@ -124,7 +125,8 @@ function (optionId){
 			
 			//last login time
 			{id: ZaSearchOption.A_accountLastLoginTime_From, ref: "options/" + ZaSearchOption.A_accountLastLoginTime_From, type:_DATETIME_},	
-			{id: ZaSearchOption.A_accountLastLoginTime_To, ref: "options/" + ZaSearchOption.A_accountLastLoginTime_To, type:_DATETIME_}
+			{id: ZaSearchOption.A_accountLastLoginTime_To, ref: "options/" + ZaSearchOption.A_accountLastLoginTime_To, type:_DATETIME_},
+            {id: ZaSearchOption.A_zimbraMailForwardingAddress, ref: "options/" + ZaSearchOption.A_zimbraMailForwardingAddress, type:_STRING_}
 	];
 	
 	if (optionId == ZaSearchOption.OBJECT_TYPE_ID) { 
@@ -363,7 +365,14 @@ function (optionId, height){
                         label:ZaMsg.search_option_label_to, labelLocation:_LEFT_
 					}]
 		 		},
-				{type:_SPACER_} //used to avoid the missing border of the calendar
+				{type:_SPACER_}, //used to avoid the missing border of the calendar
+                {
+                    type: _TEXTFIELD_, ref:  ZaSearchOption.A_zimbraMailForwardingAddress,
+                    label: ZaMsg.LB_External_mail, align: _LEFT_, width: 150, 
+                    onChange: ZaSearchBuilderController.handleOptions,
+                    toolTipContent: ZaMsg.LB_External_mail_tt,
+                    enableDisableChecks:[],visibilityChecks:[]
+                }
 			]
 		 }
 	]
