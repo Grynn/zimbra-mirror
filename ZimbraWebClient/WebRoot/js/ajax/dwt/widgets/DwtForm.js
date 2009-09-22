@@ -587,7 +587,9 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 		if (Dwt.instanceOf(type, "DwtFormRows")) {
 		    item.equals = DwtFormRows.__equals;
 		}
-		control = item.control = this._createControl(itemDef, parentDef, tabIndexes, params, parent, defaultType);
+		if (element) {
+			control = item.control = this._createControl(itemDef, parentDef, tabIndexes, params, parent, defaultType);
+		}
 	}
 	else if (element) {
 		this._attachElementHandlers(itemDef, parentDef, tabIndexes, parent, element);
