@@ -553,9 +553,6 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 	parent = parent || this;
 	var type = itemDef.type = itemDef.type || defaultType;
 	var element = document.getElementById([parent._htmlElId,id].join("_"));
-	if (!element) {
-		return null;
-	}
 	if (Dwt.instanceOf(type, "DwtRadioButtonGroup")) {
 		// create control
 		control = new window[type]({});
