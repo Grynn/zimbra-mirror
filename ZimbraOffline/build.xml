@@ -280,17 +280,7 @@
 		<mkdir dir="${dist.dir}/jetty/webapps/zimlet"/>
 	</target>
 
-    <target name="choose-db-schema">
-        <condition property="db.schema.dir" value="src/db/sqlite">
-            <isset property="db-sqlite"/>
-        </condition>
-        <condition property="db.schema.dir" value="src/db/derby">
-            <isset property="db-derby"/>
-        </condition>
-        <echo>Using database schema in ${db.schema.dir}</echo>
-    </target>
-
-	<target name="offline-db-init" depends="choose-db-schema,offline-derby-init,offline-sqlite-init" />
+	<target name="offline-db-init" depends="offline-derby-init,offline-sqlite-init" />
 
 	<target name="offline-derby-init" if="db-derby">
 		<delete dir="${zimbra.derby.dir}"/>
@@ -600,6 +590,7 @@
 		<mkdir dir="${zimbra.home.dir}/redolog" />
 		<mkdir dir="${zimbra.home.dir}/redolog/archive" />
 		<mkdir dir="${zimbra.home.dir}/bin" />
+		<mkdir dir="${zimbra.sqlite.dir}" />
 
 		<if>
 			<isset property="is-unix" />
@@ -613,8 +604,6 @@
 				<copy tofile="${zimbra.home.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
 			</then>
 		</if>
-		<antcall target="offline-db-init" />
-
 	</target>
 
 	<target name="offline-reset-the-world-part-2">
