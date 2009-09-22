@@ -28,9 +28,6 @@ import com.zimbra.cs.redolog.op.CreateFolder;
 public abstract class DesktopMailbox extends Mailbox {
 
     static DesktopMailbox newMailbox(MailboxData data) throws ServiceException {
-        if (data.accountId.endsWith(SyncMailbox.DELETING_MID_SUFFIX))
-            return new SyncMailbox.DeletingMailbox(data);
-
         OfflineAccount account = (OfflineAccount)Provisioning.getInstance()
             .get(AccountBy.id, data.accountId);
         if (account == null)

@@ -88,11 +88,11 @@
 	<property name="xulrunner.src.dir" location="../ThirdParty/xulrunner" />
 	<property name="jetty.version" value="6.1.15" />
 
-	<condition property="db-sqlite">
-		<isset property="env.ZIMBRA_OFFLINE_USE_SQLITE" />
-	</condition>
 	<condition property="db-derby">
-		<not><isset property="db-sqlite"/></not>
+		<isset property="env.ZIMBRA_OFFLINE_USE_DERBY" />
+	</condition>
+	<condition property="db-sqlite">
+		<not><isset property="db-derby"/></not>
 	</condition>
 
 	<condition property="db.driver.jar" value="derby*.jar">
@@ -293,25 +293,7 @@
 	<target name="offline-db-init" depends="choose-db-schema,offline-derby-init,offline-sqlite-init" />
 
 	<target name="offline-derby-init" if="db-derby">
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e zimbra_class_database=com.zimbra.cs.db.Derby -f" />
-		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${zimbra.home.dir}/conf/localconfig.xml" />
-			<arg line="-e zimbra_class_database=com.zimbra.cs.db.Derby -f" />
-		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e debug_disable_mailbox_group=false -f" />
-		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${zimbra.home.dir}/conf/localconfig.xml" />
-			<arg line="-e debug_disable_mailbox_group=false -f" />
-		</java>
-
 		<delete dir="${zimbra.derby.dir}"/>
-
 		<java classname="org.apache.derby.tools.ij" fork="true" classpathref="offline.class.path" failonerror="true">
 			<arg file="${dist.db.dir}/init.sql" />
 		</java>
@@ -319,17 +301,8 @@
 
 	<target name="offline-sqlite-init" if="db-sqlite">
 	    <!-- SQLite JDBC driver doesn't support Statement.setEscapeProcessing, which breaks the <sql/> task. -->
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${zimbra.home.dir}/conf/localconfig.xml" />
-			<arg line="-e zimbra_class_database=com.zimbra.cs.db.SQLite -f" />
-		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${zimbra.home.dir}/conf/localconfig.xml" />
-			<arg line="-e debug_disable_mailbox_group=true -f" />
-		</java>
-
-	    <delete dir="${zimbra.sqlite.dir}"/>
-	    <mkdir dir="${zimbra.sqlite.dir}"/>
+		<delete dir="${zimbra.sqlite.dir}"/>
+		<mkdir dir="${zimbra.sqlite.dir}"/>
 
 		<exec executable="sqlite3" dir="${zimbra.sqlite.dir}" failonerror="true" input="${dist.db.dir}/init.sql">
 			<arg line="zimbra.db"/>
@@ -420,7 +393,8 @@
 			<fileset dir="${src.db.dir}" includes="*.sql"/>
 			<fileset dir="${build.dir}" includes="*.sql"/>
 			<filterset>
-				<filter token="ZIMBRA_HOME" value="${zimbra.home.dir}"/>
+				<filter token="ZIMBRA_HOME" value="${zimbra.home.dir}/"/>
+				<filter token="ZIMBRA_INSTALL" value="${zimbra.home.dir}/"/>
 			</filterset>
 		</copy>
 
@@ -428,8 +402,16 @@
 			<isset property="db-derby"/>
 			<then>
 				<copy todir="${dist.dir}/conf" file="${config.dir}/derby.properties" overwrite="true"/>
-				<copy todir="${dist.dir}/lib" file="../ZimbraServer/tools/lib/derbytools.jar" overwrite="true" />
+				<copy todir="${dist.dir}/lib" file="../ZimbraServer/tools/lib/derbytools.jar" overwrite="true"/>
 				<copy todir="${dist.dir}/jetty/common/lib" file="${common.jars.dir}/derby.jar" overwrite="true"/>
+				<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+					<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
+					<arg line="-e zimbra_class_database=com.zimbra.cs.db.Derby -f"/>
+				</java>
+				<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+					<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
+					<arg line="-e debug_disable_mailbox_group=false -f"/>
+				</java>
 			</then>
 		</if>
 		<if>
@@ -443,6 +425,7 @@
 
 		<copy todir="${dist.dir}/lib" file="${build.dir}/zdesktop.jar" overwrite="true" />
 
+		<!-- wikis -->
 		<mkdir dir="${dist.dir}/wiki/Templates" />
 		<copy todir="${dist.dir}/wiki/Templates" overwrite="true">
 			<fileset dir="${server.wiki.dir}/Template" />
@@ -630,7 +613,6 @@
 				<copy tofile="${zimbra.home.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
 			</then>
 		</if>
-
 		<antcall target="offline-db-init" />
 
 	</target>

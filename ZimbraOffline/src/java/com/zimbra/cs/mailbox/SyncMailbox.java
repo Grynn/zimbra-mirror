@@ -19,41 +19,6 @@ import com.zimbra.cs.util.ZimbraApplication;
 
 public abstract class SyncMailbox extends DesktopMailbox {
 
-    static class DeletingMailbox extends SyncMailbox {
-        DeletingMailbox(MailboxData data) throws ServiceException {
-            super(data);
-        }
-
-        @Override
-        synchronized boolean finishInitialization() {
-            final String accountId = getAccountId();
-            new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        Thread.sleep(15000);
-                        deleteThisMailbox();
-                    } catch (Exception x) {
-                        OfflineLog.offline.error("Deleting mailbox %s mailbox",
-                            accountId, x);
-                    }
-                }
-            }, "mailbox-reaper:" + accountId).start();
-            return false;
-        }
-
-        @Override
-        public boolean isAutoSyncDisabled() {
-            return false;
-        }
-
-        @Override
-        public void sync(boolean isOnRequest, boolean isDebugTraceOn)
-            throws ServiceException {}
-
-        @Override
-        protected void syncOnTimer() {}
-    }
-
     static final String DELETING_MID_SUFFIX = ":delete";
 
     private String accountName;
@@ -68,16 +33,11 @@ public abstract class SyncMailbox extends DesktopMailbox {
     public SyncMailbox(MailboxData data) throws ServiceException {
         super(data);
 
-        if (this instanceof DeletingMailbox) {
-            accountName = getAccountId();
-        } else {
-            OfflineAccount account = (OfflineAccount)getAccount();
-            if (account.isDataSourceAccount())
-                accountName = account
-                    .getAttr(OfflineProvisioning.A_offlineDataSourceName);
-            else
-                accountName = account.getName();
-        }
+        OfflineAccount account = (OfflineAccount)getAccount();
+        if (account.isDataSourceAccount())
+            accountName = account.getAttr(OfflineProvisioning.A_offlineDataSourceName);
+        else
+            accountName = account.getName();
     }
 
     @Override
@@ -147,13 +107,39 @@ public abstract class SyncMailbox extends DesktopMailbox {
         }
 
         if (asynch) {
+            class DeleteThread extends Thread {
+                private long id;
+                
+                DeleteThread(long id, String accountId) {
+                    super("mailbox-reaper:" + accountId);
+                    this.id = id;
+                }
+                public void run() {
+                    try {
+                        Thread.sleep(5000);
+                        
+                        MailboxManager mgr = MailboxManager.getInstance();
+                        SyncMailbox mbox = (SyncMailbox)mgr.getMailboxById(id,
+                            true);
+                        
+                        synchronized (mgr) {
+                            if (mbox != null)
+                                mbox.deleteThisMailbox();
+                        }
+                    } catch (Exception e) {
+                        OfflineLog.offline.warn("unable to delete mailbox id " +
+                            id, e);
+                    }
+                }
+            }
+            
             MailboxManager mm = MailboxManager.getInstance();
+            
             synchronized (mm) {
                 unhookMailboxForDeletion();
                 mm.markMailboxDeleted(this); // to remove from cache
             }
-            mm.getMailboxById(getId(), true); // the mailbox will now be loaded
-                                              // as a DeletingMailbox
+            new DeleteThread(getId(), getAccountId()).start();
         } else {
             deleteThisMailbox();
         }

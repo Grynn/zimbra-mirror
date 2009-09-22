@@ -16,13 +16,32 @@
  */
 package com.zimbra.cs.offline;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ByteUtil;
+import com.zimbra.common.util.StringUtil;
+import com.zimbra.cs.db.Db;
 import com.zimbra.cs.db.DbPool;
+import com.zimbra.cs.db.DbUtil;
 import com.zimbra.cs.store.file.Volume;
+import com.zimbra.cs.util.Config;
 import com.zimbra.cs.util.ZimbraApplication;
 
 public class OfflineApplication extends ZimbraApplication {
-
+    private static String[] sqlScripts = {
+        "db", "directory", "wildfire", "versions-init", "default-volumes"
+    };
+    private static String OFFLINE_DB_VERSION = "3";
+    private static String ZIMBRA_DB_NAME = "zimbra";
+        
     @Override
     public String getId() {
         return OfflineLC.zdesktop_app_id.value();
@@ -40,10 +59,13 @@ public class OfflineApplication extends ZimbraApplication {
 
     @Override
     public void initialize(boolean forMailboxd) {
-        long threshold = OfflineLC.zdesktop_volume_compression_threshold.longValue();
-        Volume vol = Volume.getCurrentMessageVolume();
-        
         try {
+            if (!forMailboxd)
+                return;
+
+            long threshold = OfflineLC.zdesktop_volume_compression_threshold.longValue();
+            Volume vol = Volume.getCurrentMessageVolume();
+            
             Volume.update(vol.getId(), vol.getType(), vol.getName(),
                 vol.getRootPath(), vol.getMboxGroupBits(), vol.getMboxBits(),
                 vol.getFileGroupBits(), vol.getFileBits(), threshold != 0,
@@ -54,6 +76,53 @@ public class OfflineApplication extends ZimbraApplication {
         }
     }
 
+    public void initializeZimbraDb(boolean forMailboxd) throws ServiceException {
+        if (!forMailboxd)
+            return;
+
+        DbPool.Connection conn = DbPool.getConnection();
+        File file = null;
+        PreparedStatement stmt = null;
+        
+        if (!Db.getInstance().databaseExists(conn, ZIMBRA_DB_NAME)) {
+            OfflineLog.offline.info("Creating database " + ZIMBRA_DB_NAME);
+            try {
+                for (String name : sqlScripts) {
+                    try {
+                        file = Config.getPathRelativeToZimbraHome("db/" + name + ".sql");
+                        
+                        String script;
+                        String template = new String(ByteUtil.getContent(file));
+                        Map<String, String> vars = new HashMap<String, String>();
+                        vars.put("ZIMBRA_HOME", LC.zimbra_home.value() + '/');
+                        vars.put("ZIMBRA_INSTALL", LC.zimbra_home.value() + '/');
+                        script = StringUtil.fillTemplate(template, vars, StringUtil.atPattern);
+                        DbUtil.executeScript(conn, new StringReader(script));
+                    } catch (IOException e) {
+                        throw ServiceException.FAILURE("unable to read SQL statements from " +
+                            file.getPath(), e);
+                    } catch (SQLException e) {
+                        throw ServiceException.FAILURE("unable to run " +
+                            ZIMBRA_DB_NAME + " db script" + file.getPath(), e);
+                    } finally {
+                        DbPool.closeStatement(stmt);
+                    }
+                }
+                try {
+                    stmt = conn.prepareStatement("INSERT INTO config(name, value, description) VALUES ('offline.db.version', '" +
+                        OFFLINE_DB_VERSION + "', 'offline db schema version')");
+                    stmt.executeUpdate();
+                } catch (SQLException e) {
+                    throw ServiceException.FAILURE("unable to set offline db version", e);
+                } finally {
+                    DbPool.closeStatement(stmt);
+                }
+            } finally {
+                conn.close();
+            }
+        }
+    }
+    
     @Override
     public void shutdown() {
         super.shutdown();

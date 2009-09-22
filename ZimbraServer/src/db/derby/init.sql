@@ -1,9 +1,9 @@
-CONNECT 'jdbc:derby:@ZIMBRA_HOME@/derby;create=true';
+CONNECT 'jdbc:derby:@ZIMBRA_INSTALL@derby;create=true';
 
-RUN '@ZIMBRA_HOME@/db/db.sql';
-RUN '@ZIMBRA_HOME@/db/wildfire.sql';
-RUN '@ZIMBRA_HOME@/db/versions-init.sql';
-RUN '@ZIMBRA_HOME@/db/default-volumes.sql';
+RUN '@ZIMBRA_INSTALL@db/db.sql';
+RUN '@ZIMBRA_INSTALL@db/wildfire.sql';
+RUN '@ZIMBRA_INSTALL@db/versions-init.sql';
+RUN '@ZIMBRA_INSTALL@db/default-volumes.sql';
 
 EXIT;
 

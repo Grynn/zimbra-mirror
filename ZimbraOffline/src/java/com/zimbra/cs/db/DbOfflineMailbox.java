@@ -701,10 +701,10 @@ public class DbOfflineMailbox {
 
         PreparedStatement stmt = null;
         try {
-        	stmt = conn.prepareStatement("UPDATE mailbox SET account_id = ? WHERE id = ?");
+            stmt = conn.prepareStatement("UPDATE mailbox SET account_id = ? WHERE id = ?");
             int pos = 1;
             stmt.setString(pos++, newAccountId);
-            pos = DbMailItem.setMailboxId(stmt, mbox, pos);
+            stmt.setLong(pos++, mbox.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw ServiceException.FAILURE("failed to replace account ID on mailbox " + mbox.getId() , e);
