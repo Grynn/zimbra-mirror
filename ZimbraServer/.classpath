@@ -79,7 +79,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ganymed-ssh2-build209.jar" sourcepath="/ThirdParty/ganymed-ssh2/ganymed-ssh2-build209/src"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ical4j-0.9.16-patched.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/java_memcached-release_1.6.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jdavmail-0.9.007.jar" sourcepath="/ThirdParty/jdavmail/src"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jdom.jar" sourcepath="/ThirdParty/jdom-1.1/src"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/json.jar" sourcepath="/ThirdParty/json/src/java/org/json">
 		<attributes>

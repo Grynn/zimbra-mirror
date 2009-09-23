@@ -93,36 +93,6 @@
             </fmt:message>
         </c:set>
     </c:when>
-    <c:when test="${accountFlavor eq 'Live'}">
-        <jsp:useBean id="lbean" class="com.zimbra.cs.offline.jsp.LiveBean" scope="request"/>
-        <jsp:setProperty name="lbean" property="*"/>
-        <jsp:setProperty name="lbean" property="locale" value="${pageContext.request.locale}"/>
-        ${zdf:doRequest(lbean)}
-        <c:set var="bean" value="${lbean}" scope="request"/>
-        <c:set var="help">
-	    <fmt:message key='LiveNote'/>
-        </c:set>
-        <c:set var="beta">
-            <fmt:message key='BetaNoteLive'>
-                <fmt:param>${betaLink}</fmt:param>
-            </fmt:message>
-        </c:set>
-    </c:when>
-        <c:when test="${accountFlavor eq 'Xsync'}">
-        <jsp:useBean id="xbean" class="com.zimbra.cs.offline.jsp.XsyncBean" scope="request"/>
-        <jsp:setProperty name="xbean" property="*"/>
-        <jsp:setProperty name="xbean" property="locale" value="${pageContext.request.locale}"/>
-        ${zdf:doRequest(xbean)}
-        <c:set var="bean" value="${xbean}" scope="request"/>
-        <c:set var="help">
-        <fmt:message key='XsyncNote'/>
-        </c:set>
-        <c:set var="beta">
-            <fmt:message key='BetaNoteXsync'>
-                <fmt:param>${betaLink}</fmt:param>
-            </fmt:message>
-        </c:set>
-    </c:when>
     <c:when test="${accountFlavor eq 'MSE'}">
         <jsp:useBean id="mbean" class="com.zimbra.cs.offline.jsp.MmailBean" scope="request"/>
         <jsp:setProperty name="mbean" property="*"/>
@@ -146,6 +116,21 @@
         <c:set var="bean" value="${pbean}" scope="request"/>
         <c:set var="beta">
             <fmt:message key='BetaNotePOP'>
+                <fmt:param>${betaLink}</fmt:param>
+            </fmt:message>
+        </c:set>
+    </c:when>
+    <c:when test="${accountFlavor eq 'Xsync'}">
+        <jsp:useBean id="xbean" class="com.zimbra.cs.offline.jsp.XsyncBean" scope="request"/>
+        <jsp:setProperty name="xbean" property="*"/>
+        <jsp:setProperty name="xbean" property="locale" value="${pageContext.request.locale}"/>
+        ${zdf:doRequest(xbean)}
+        <c:set var="bean" value="${xbean}" scope="request"/>
+        <c:set var="help">
+        <fmt:message key='XsyncNote'/>
+        </c:set>
+        <c:set var="beta">
+            <fmt:message key='BetaNoteXsync'>
                 <fmt:param>${betaLink}</fmt:param>
             </fmt:message>
         </c:set>
@@ -318,7 +303,6 @@ function onEditLink(id, keep) {
                   <option value="Zimbra" <c:if test="${accountFlavor eq 'Zimbra'}">selected</c:if> ><fmt:message key='Zimbra'/></option>
                   <option value="YMP" <c:if test="${accountFlavor eq 'YMP'}">selected</c:if> ><fmt:message key='YMP'/></option>
                   <option value="Gmail" <c:if test="${accountFlavor eq 'Gmail'}">selected</c:if> ><fmt:message key='Gmail'/></option>
-                  <option value="Live" <c:if test="${accountFlavor eq 'Live'}">selected</c:if> ><fmt:message key='Live'/></option>
                   <option value="AOL" <c:if test="${accountFlavor eq 'AOL'}">selected</c:if> ><fmt:message key='AOL'/></option>
                   <option value="MobileMe" <c:if test="${accountFlavor eq 'MobileMe'}">selected</c:if> ><fmt:message key='MobileMe'/></option>
                   <option value="Xsync" <c:if test="${accountFlavor eq 'Xsync'}">selected</c:if> ><fmt:message key='Xsync'/></option>
