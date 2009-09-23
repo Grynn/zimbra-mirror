@@ -335,7 +335,6 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.data_source_item (
    remote_id       VARCHAR(255) NOT NULL,
    metadata        MEDIUMTEXT,
 
-   UNIQUE (data_source_id, folder_id, remote_id)
+   UNIQUE (data_source_id, remote_id)
 );
 
-CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_remote_id ON data_source_item(data_source_id, remote_id);  -- for reverse lookup
