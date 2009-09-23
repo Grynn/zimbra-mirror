@@ -118,6 +118,14 @@ Dwt.SCROLL = 3;
  * @type Int*/
 Dwt.FIXED_SCROLL = 4;
 
+/** Only show scrollbars on Y when content overflows
+ * @type Int*/
+Dwt.SCROLL_Y = 5;
+
+/** Only show scrollbars on X when content overflows
+ * @type Int*/
+Dwt.SCROLL_X = 6;
+
 
 // z-index order
 /** hidden layer. Elements at this layer will be hidden from view
@@ -495,8 +503,18 @@ function(htmlElement) {
 		return Dwt.SCROLL;
 	else if (overflow =="scroll")
 		return Dwt.FIXED_SCROLL;
-	else
+	else {
+        var overflowX =  DwtCssStyle.getProperty(htmlElement, "overflowX");
+        var overflowY =  DwtCssStyle.getProperty(htmlElement, "overflowY");
+        if(overflow == ''){
+            if(overflowX == 'scroll'){
+                return Dwt.SCROLL_X;
+            } else if(overflowY == 'scroll'){
+                return Dwt.SCROLL_Y;
+            }
+        }
 		return Dwt.VISIBLE;
+    }
 };
 
 /**
@@ -521,7 +539,13 @@ function(htmlElement, scrollStyle) {
 		htmlElement.style.overflow = "auto";
 	else if (scrollStyle == Dwt.FIXED_SCROLL)
 		htmlElement.style.overflow = "scroll";
-	else
+    else if (scrollStyle == Dwt.SCROLL_Y) {
+		htmlElement.style.overflowX = "hidden";
+        htmlElement.style.overflowY = "auto";
+    } else if (scrollStyle == Dwt.SCROLL_X) {
+		htmlElement.style.overflowY = "hidden";
+        htmlElement.style.overflowX = "auto";
+    } else
 		htmlElement.style.overflow = "visible";
 };
 
