@@ -1642,9 +1642,19 @@ ZATabCase_XFormItem.prototype.caseVarRef = ZaModel.currentTab;
 ZATabCase_XFormItem.prototype.visibilityChangeEventSources = [ZaModel.currentTab];
 ZATabCase_XFormItem.prototype.align = _LEFT_;
 ZATabCase_XFormItem.prototype.valign = _TOP_;
+ZATabCase_XFormItem.prototype.getTabLevel = function () {
+	return this.getInheritedProperty("tabLevel") || 1;
+}
+
+ZATabCase_XFormItem.prototype.getHeaderLevel = function () {
+    return this.getInheritedProperty("headerLevel") || 1;
+}
+
 ZATabCase_XFormItem.prototype.getCustomHeight = function () {
 	try {
 		var form = this.getForm();
+        var tabLevel = this.getTabLevel () ;
+        var headerLevel = this.getHeaderLevel () ;
 		var formParentElement = this.getForm().parent.getHtmlElement();
 		var totalHeight = parseInt(formParentElement.style.height);
 		if(isNaN(totalHeight)) {
@@ -1666,10 +1676,12 @@ ZATabCase_XFormItem.prototype.getCustomHeight = function () {
 				tabBarHeight = formTabBar.getElement().clientHeight ? formTabBar.getElement().clientHeight : formTabBar.getElement().offsetHeight;				
 			}
 		}
-		if(totalHeight<=0 || totalHeight < (headerHeight + tabBarHeight + 2))
+        var totalHeaderHeight = headerHeight * headerLevel ;
+        var totalTabBarHeight = tabBarHeight * tabLevel ;
+		if(totalHeight<=0 || totalHeight < (totalHeaderHeight + totalTabBarHeight + 2))
 			return "100%";
 		else
-			return totalHeight - headerHeight - tabBarHeight - 2;
+			return totalHeight - totalHeaderHeight - totalTabBarHeight - 2;
 	} catch (ex) {
         
 	}

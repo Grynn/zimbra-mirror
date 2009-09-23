@@ -37,10 +37,9 @@ function(entry) {
 
 ZaEffectiveRightsXFormView.getEffectiveRightsHTML =
 function (itemValue, grantee, targets, type, isByDomain) {
-    
     var targetsLabel = ZaEffectiveRights.getTargetLabel(type) ;
+    
     if (targets == "all") {
-
         if ( type != ZaItem.GLOBAL_CONFIG || type != ZaItem.GLOBAL_GRANT ) {
             targetsLabel = AjxMessageFormat.format (com_zimbra_delegatedadmin.lb_all, [targetsLabel]) ;    
         }
@@ -130,6 +129,7 @@ ZaEffectiveRightsXFormView.prototype.getMyXForm = function(targets, grantee) {
 
         topTabCases[i] = {
             type:_ZATABCASE_,caseKey: topTabIndex, numCols:1,
+            overflow: "hidden", tabLevel : 1, headerLevel: 1,
             items:[
                 {
                     type:_GROUP_,
@@ -181,6 +181,7 @@ ZaEffectiveRightsXFormView.prototype.getMyXForm = function(targets, grantee) {
 
             var tempSecondCase = {
                 type:_ZATABCASE_,caseVarRef: secondTabCaseRef  ,
+                overflow: "hidden", tabLevel:2,headerLevel: 2,
                 caseKey: secondTabIndex, numCols:1,
                 items:[]
             } ;
@@ -261,7 +262,9 @@ ZaEffectiveRightsXFormView.prototype.getMyXForm = function(targets, grantee) {
                     thirdTabIndex ++;
                     thirdTabChoices.push({value: thirdTabIndex, label: titleLabel});
                     thirdTabCases.push(
-                    {    type:_ZATABCASE_,caseVarRef: thirdTabCaseRef,
+                    {
+                        type:_ZATABCASE_,caseVarRef: thirdTabCaseRef,
+                        tabLevel: 3, headerLevel: 2,
                         caseKey: thirdTabIndex, numCols:1,
                         items:[
                             {
