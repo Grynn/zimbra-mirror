@@ -1,0 +1,9 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite, Network Edition.
+# Copyright (C) 2005, 2006, 2007 Zimbra, Inc.  All Rights Reserved.
+# ***** END LICENSE BLOCK *****
+# 
+
+exec `dirname $0`/zmjavaext -classpath /opt/zimbra/lib/ext/zimbraversioncheck/zimbraversioncheck.jar com.zimbra.cs.versioncheck.VersionCheckUtil "$@"
