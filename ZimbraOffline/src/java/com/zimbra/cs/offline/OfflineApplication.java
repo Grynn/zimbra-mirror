@@ -31,6 +31,7 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.db.Db;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.db.DbUtil;
+import com.zimbra.cs.db.OfflineVersions;
 import com.zimbra.cs.store.file.Volume;
 import com.zimbra.cs.util.Config;
 import com.zimbra.cs.util.ZimbraApplication;
@@ -39,7 +40,6 @@ public class OfflineApplication extends ZimbraApplication {
     private static String[] sqlScripts = {
         "db", "directory", "wildfire", "versions-init", "default-volumes"
     };
-    private static String OFFLINE_DB_VERSION = "3";
     private static String ZIMBRA_DB_NAME = "zimbra";
         
     @Override
@@ -110,7 +110,7 @@ public class OfflineApplication extends ZimbraApplication {
                 }
                 try {
                     stmt = conn.prepareStatement("INSERT INTO config(name, value, description) VALUES ('offline.db.version', '" +
-                        OFFLINE_DB_VERSION + "', 'offline db schema version')");
+                        OfflineVersions.OFFLINE_DB_VERSION + "', 'offline db schema version')");
                     stmt.executeUpdate();
                 } catch (SQLException e) {
                     throw ServiceException.FAILURE("unable to set offline db version", e);
