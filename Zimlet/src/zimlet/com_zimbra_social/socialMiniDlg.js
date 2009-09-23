@@ -190,6 +190,6 @@ function() {
 	if (hasAccounts)
 		return html.join("");
 	else {
-		return "<label style=\"font-size:12px;color:#555555;font-style:italic\">No accounts have been added yet! Click on 'Add/Remove Accounts' to add one </label>";
+		return "<label style=\"font-size:12px;color:#555555;font-style:italic\">No accounts have been added. Go to 'Social' Zimlet Tab > Click on 'Add/Remove Accounts' to add one </label>";
 	}
 };

@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_social" version="2.1.2" description="Social Zimlet: Allows users to access to twitter,facebook,digg,tweetmeme etc social services">
+<zimlet name="com_zimbra_social" version="2.1.4" description="Social Zimlet: Allows users to access to twitter,facebook,digg,tweetmeme etc social services">
     <include>socialTwitter.js</include>
     <include>socialFacebook.js</include>
     <include>socialTweetMeme.js</include>

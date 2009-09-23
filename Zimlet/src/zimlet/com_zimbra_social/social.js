@@ -42,7 +42,7 @@ function(app, toolbar, controller, view) {
 	{
 		var buttonIndex = -1;
 		for (var i = 0, count = toolbar.opList.length; i < count; i++) {
-			if (toolbar.opList[i] == ZmOperation.PRINT) {
+			if (toolbar.opList[i] == ZmOperation.VIEW_MENU) {
 				buttonIndex = i + 1;
 				break;
 			}
@@ -50,7 +50,7 @@ function(app, toolbar, controller, view) {
 		ZmMsg.socialBtnLabel = "Socialize";
 		var buttonArgs = {
 			text    : ZmMsg.socialBtnLabel,
-			tooltip: "Allows you to share email contents via twitter or facebook",
+			tooltip: "Allows you to share email or RSS contents via twitter or facebook",
 			index: buttonIndex,
 			image: "ZimbraIcon"
 		};
@@ -607,6 +607,15 @@ function() {
 		return "<label style=\"font-size:12px;color:#555555;font-style:italic\">No accounts have been added yet! Click on 'Add/Remove Accounts' to add one </label>";
 	}
 };
+com_zimbra_social.prototype._getMaxHeaderTextLength =
+function() {
+	if(!this.maxHeaderTextLength) {
+		var cardWidth = parseInt(this.preferences.social_pref_cardWidthList.replace("px", ""));
+		this.maxHeaderTextLength = (cardWidth/50)*2;
+	}
+	return this.maxHeaderTextLength;
+};
+
 
 com_zimbra_social.prototype._showCard =
 function(params) {
@@ -628,12 +637,18 @@ function(params) {
 		this.cardIndex = this.cardIndex + 1;
 	}
 	var hdrClass = "social_axnClass social_generalColor";
-	var prettyName = type.toLowerCase() + ": " + headerName;
+	var trimName = headerName;
+	
+	if(headerName.length > this._getMaxHeaderTextLength()) {
+		trimName = headerName.substring(0, this._getMaxHeaderTextLength()) + "..";		
+	}
+
+	var prettyName = type.toLowerCase() + ": " + trimName;
 	var iconName = "social_twitterIcon";
 	var hdrCellColor = "black";
 	if (type == "ACCOUNT") {
 		hdrClass = "social_axnClass social_twitterColor";
-		prettyName = "twitter: " + headerName;
+		prettyName = "twitter: " + trimName;
 	} else if (type == "FACEBOOK") {
 		hdrClass = "social_axnClass social_facebookColor";
 		hdrCellColor = "white";
@@ -1497,6 +1512,9 @@ function(ev) {
 	var noAccountSelected = true;
 
 	var message = this.updateField.value;
+	if (message.length == 0) {
+		return;
+	}
 	if (message.length > 140) {
 		appCtxt.getAppController().setStatusMsg("More than 140 Characters is not allowed", ZmStatusView.LEVEL_WARNING);
 		return;
