@@ -261,7 +261,7 @@ function(enabled) {
 			this._addMouseListeners();
 			// set event handler for pull down menu if applicable
 			if (this._menu) {
-				this._setupDropDownCellMouseHandlers();
+				this._setDropDownCellMouseHandlers(true);
                 if (this._dropDownEl) {
                     AjxImg.setImage(this._dropDownEl, this._dropDownImg);
                 }
@@ -271,7 +271,7 @@ function(enabled) {
 			this._removeMouseListeners();
 			// remove event handlers for pull down menu if applicable
 			if (this._menu) {
-				this._removeDropDownCellMouseHandlers();
+				this._setDropDownCellMouseHandlers(false);
                 if (this._dropDownEl) {
                     AjxImg.setDisabledImage(this._dropDownEl, this._dropDownImg);
                 }
@@ -335,7 +335,7 @@ function(menuOrCallback, shouldToggle, followIconStyle, popupAbove) {
 
 			// set event handler if applicable
 			if (this._enabled) {
-				this._setupDropDownCellMouseHandlers();
+				this._setDropDownCellMouseHandlers(true);
 			}
 
             if (!(this._menu instanceof AjxCallback)) {
@@ -351,14 +351,9 @@ function(menuOrCallback, shouldToggle, followIconStyle, popupAbove) {
     }
 };
 
-DwtButton.prototype._setupDropDownCellMouseHandlers =
-function() {
-	this._dropDownEventsEnabled = true;
-};
-
-DwtButton.prototype._removeDropDownCellMouseHandlers =
-function() {
-	this._dropDownEventsEnabled = false;
+DwtButton.prototype._setDropDownCellMouseHandlers =
+function(set) {
+	this._dropDownEventsEnabled = set;
 };
 
 /**
@@ -440,8 +435,7 @@ DwtButton.prototype.popup =
 function(menu) {
 	menu = menu || this.getMenu();
 
-    if (!menu)
-		return;
+    if (!menu) { return; }
 
     var parent = menu.parent;
 	var parentBounds = parent.getBounds();
