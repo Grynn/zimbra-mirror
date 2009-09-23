@@ -1,0 +1,3 @@
+<template id='Bugz_link'>
+	<a id='${id}' href='${href}' class='${className}'>${text}</a>
+</template>

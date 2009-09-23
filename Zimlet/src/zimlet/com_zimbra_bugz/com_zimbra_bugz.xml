@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_bugz" version="1.1" target="main view-window" description="Bugz - Highlights, previews and links zimbra bugs">
+<zimlet name="com_zimbra_bugz" version="1.2" target="main view-window" description="Bugz - Highlights, previews and links zimbra bugs">
 	<resource>bugz.xsl</resource>
 	<contentObject>
 		<matchOn>
@@ -17,4 +17,7 @@
 			</actionUrl>
 		</toolTip>
     </contentObject>
+	<include>bugz.js</include>
+	<include>templates/Bugz.template.js</include>	
+	<handlerObject>com_zimbra_bugz</handlerObject>
 </zimlet>
