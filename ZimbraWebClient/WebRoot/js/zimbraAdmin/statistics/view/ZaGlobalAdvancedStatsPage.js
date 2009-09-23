@@ -99,7 +99,19 @@ ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, c
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
     soapRequest.set("startTime", { "!time": start });
     soapRequest.set("endTime", { "!time": end });
-    var child = soapRequest.set("stats", { "!name" : group, "!limit" : "true" });
+    
+    var counters = [];
+    for (var i = 0; i < columns.length; i++) {
+        counters.push({ "!name" : columns[i] });
+    }
+    var statsdata = { "!name" : group, "!limit" : "true" };
+    if (counters.length > 0) {
+        statsdata.values = { "stat" : [] };
+        for (var i = 0; i < counters.length; i++) {
+            statsdata.values.stat.push(counters[i]);
+        }
+    }
+    soapRequest.set("stats", statsdata);
     
     var cb = function(response) {
     	if(response.isException && response.isException()) {
@@ -183,7 +195,20 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
     soapRequest.set("hostname", { "!hn": hostname });
     soapRequest.set("startTime", { "!time": start });
     soapRequest.set("endTime", { "!time": end });
-    var child = soapRequest.set("stats", { "!name" : group, "!limit" : "true" });
+    
+    var counters = [];
+    for (var i = 0; i < columns.length; i++) {
+        counters.push({ "!name" : columns[i] });
+    }
+    var statsdata = { "!name" : group, "!limit" : "true" };
+    if (counters.length > 0) {
+        statsdata.values = { "stat" : [] };
+        for (var i = 0; i < counters.length; i++) {
+            statsdata.values.stat.push(counters[i]);
+        }
+    }
+    soapRequest.set("stats", statsdata);
+    
     var cb = function(response) {
     	if(response.isException && response.isException()) {
     		ZaApp.getInstance().getCurrentController()._handleException(response.getException(),"ZaGlobalAdvancedStatsPage.plotGlobalQuickChart", null, false);
@@ -389,8 +414,6 @@ ZaGlobalAdvancedStatsPage.getCounters = function(hostname, group) {
     soapRequest.set("hostname", { "!hn": hostname });
     var child = soapRequest.set("stats", { "!name" : group });
     soapRequest.set(null, "get-counters", child);
-    var cb = function(response) {
-    };
     
     var csfeParams = { soapDoc: soapRequest };
     var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
