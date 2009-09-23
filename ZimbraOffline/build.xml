@@ -45,6 +45,13 @@
 	<property name="im.jars.dir" location="${im.dir}/jars" />
 	<property name="im.classes.dir" location="${im.dir}/build/classes" />
 
+	<property name="zsync.common.dir" location="../ZimbraSyncCommon" />
+	<property name="zsync.common.build.dir" location="${zsync.common.dir}/build" />
+	<property name="zsync.client.dir" location="../ZimbraSyncClient" />
+	<property name="zsync.client.build.dir" location="${zsync.client.dir}/build" />
+	<property name="offline.ext.dir" location="../ZimbraOfflineExt" />
+	<property name="offline.ext.build.dir" location="${offline.ext.dir}/build" />
+
 	<condition property="is-windows">
 		<os family="windows" />
 	</condition>
@@ -168,6 +175,9 @@
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="offline.class.path" target="1.5">
 			<src refid="all.java.path" />
 		</javac>
+		<ant dir="${zsync.common.dir}" target="jar" inheritAll="false" />
+		<ant dir="${zsync.client.dir}" target="jar" inheritAll="false" />
+		<ant dir="${offline.ext.dir}" target="jar" inheritAll="false" />
 	</target>
 
 	<target name="offline-jar" depends="offline-compile" description="Creates the jar file">
@@ -188,6 +198,11 @@
 		<copy file="${config.dir}/web.xml" todir="${dist.dir}/jetty/webapps/service/WEB-INF" overwrite="true"/>
 		<copy todir="${dist.dir}/jetty/webapps/service/WEB-INF/lib" overwrite="true">
 			<fileset dir="${build.dir}" includes="${jarfile}"/>
+		</copy>
+		<copy todir="${dist.dir}/jetty/webapps/service/WEB-INF/lib" overwrite="true">
+			<fileset dir="${zsync.common.build.dir}" includes="zsynccommon.jar"/>
+			<fileset dir="${zsync.client.build.dir}" includes="zsyncclient.jar"/>
+			<fileset dir="${offline.ext.build.dir}" includes="zdext.jar"/>
 		</copy>
 	</target>
 
