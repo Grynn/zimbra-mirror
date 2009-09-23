@@ -21,7 +21,6 @@ function com_zimbra_socialDigg(zimlet) {
 	this.zimlet = zimlet;
 }
 
-
 com_zimbra_socialDigg.prototype.getDiggCategories =
 function() {
 
@@ -33,9 +32,9 @@ function() {
 	this.allDiggCats.push({query:"world_business", name:"world_business"});
 	this.allDiggCats.push({query:"entertainment", name:"entertainment"});
 	this.allDiggCats.push({query:"videos", name:"videos"});
-	this.allDiggCats.push({query:"gaming", name:"gaming"});
+	this.allDiggCats.push({query:"Offbeat", name:"Offbeat"});
 
-	if(this.zimlet.preferences.social_pref_diggPopularIsOn) {
+	if (this.zimlet.preferences.social_pref_diggPopularIsOn) {
 		for (var i = 0; i < 1; i++) {
 			var folder = this.allDiggCats[i];
 			var tableId = this.zimlet._showCard({headerName:folder.name, type:"DIGG", autoScroll:false});
@@ -50,12 +49,12 @@ function(params) {
 	var query = params.query;
 	var url = "";
 	var tmp = new Date();
-	var time = ((new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate())).getTime() - 3600*24*1000)/1000;
-	var args = "min_promote_date="+time+"&sort=digg_count-desc&appkey=http%3A%2F%2Fwww.zimbra.com&count=20&type=json";
+	var time = ((new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate())).getTime() - 3600 * 24 * 1000) / 1000;
+	var args = "min_promote_date=" + time + "&sort=digg_count-desc&appkey=http%3A%2F%2Fwww.zimbra.com&count=20&type=json";
 	if (query == "Popular in 24hours")
-		url = 	"http://services.digg.com/stories/popular?" + args;
+		url = "http://services.digg.com/stories/popular?" + args;
 	else
-		url ="http://services.digg.com/stories/container/"+query+"/popular?" + args;
+		url = "http://services.digg.com/stories/container/" + query + "/popular?" + args;
 
 	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
 	AjxRpc.invoke(null, entireurl, null, new AjxCallback(this, this._DiggSearchCallback, params), true);

@@ -1,26 +1,31 @@
-<zimlet name="com_zimbra_social" version="2.0" description="Social Zimlet: Allows users to access to twitter,facebook,digg,tweetmeme etc social services">
-	<include>socialTwitter.js</include>
-	<include>socialFacebook.js</include>
-	<include>socialTweetMeme.js</include>
-	<include>socialPreferences.js</include>
-	<include>socialDigg.js</include>
-	<include>sha1.js</include>
-	<include>oauth.js</include>
-	<include>md5.js</include>
-	<include>social.js</include>
-	<includeCSS>social.css</includeCSS>
-	<resource>social-icon.gif</resource>
-	<handlerObject>com_zimbra_social</handlerObject>
+<zimlet name="com_zimbra_social" version="2.1.2" description="Social Zimlet: Allows users to access to twitter,facebook,digg,tweetmeme etc social services">
+    <include>socialTwitter.js</include>
+    <include>socialFacebook.js</include>
+    <include>socialTweetMeme.js</include>
+    <include>socialPreferences.js</include>
+    <include>socialDigg.js</include>
+    <include>socialMiniDlg.js</include>
+    <include>sha1.js</include>
+    <include>oauth.js</include>
+    <include>md5.js</include>
+    <include>social.js</include>
+    <includeCSS>social.css</includeCSS>
+    <resource>social-icon.gif</resource>
+    <handlerObject>com_zimbra_social</handlerObject>
 
-	<userProperties>
-		<property type="string" name="social_pref_tweetmemePopularIsOn" value="true"/>
-		<property type="string" name="social_pref_trendsPopularIsOn" value="true"/>
-		<property type="string" name="social_pref_diggPopularIsOn" value="true"/>
-		<property type="string" name="social_pref_SocialMailUpdateOn" value="true"/>
-		<property type="string" name="social_pref_dontShowWelcomeScreenOn" value="false"/>
-
-
-	</userProperties>
+    <userProperties>
+        <property type="string" name="social_pref_tweetmemePopularIsOn" value="true"/>
+        <property type="string" name="social_pref_trendsPopularIsOn" value="true"/>
+        <property type="string" name="social_pref_diggPopularIsOn" value="true"/>
+        <property type="string" name="social_pref_SocialMailUpdateOn" value="true"/>
+        <property type="string" name="social_pref_dontShowWelcomeScreenOn" value="false"/>
+        <property type="string" name="social_pref_showTweetAlertsOn" value="true"/>
+        <property type="string" name="social_pref_cardWidthList" value="400px"/>
+        <property type="string" name="social_pref_autoShortenURLOn" value="true"/>
+        <property type="string" name="social_pref_toolbarButtonOn" value="true"/>
+        <property type="string" name="social_pref_numberofTweetsToReturn" value="50"/>
+        <property type="string" name="social_pref_numberofTweetsSearchesToReturn" value="50"/>
+    </userProperties>
 </zimlet>
 
 

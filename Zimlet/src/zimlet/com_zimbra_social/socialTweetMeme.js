@@ -45,7 +45,7 @@ function(response) {
 	for (var i = 0; i < cats.length; i++) {
 		this.allTweetMemeCats.push({query:cats[i].name, name:cats[i].display});
 	}
-	if(this.zimlet.preferences.social_pref_tweetmemePopularIsOn) {
+	if (this.zimlet.preferences.social_pref_tweetmemePopularIsOn) {
 		for (var i = 0; i < 1; i++) {
 			var folder = this.allTweetMemeCats[i];
 			var tableId = this.zimlet._showCard({headerName:folder.name, type:"TWEETMEME", autoScroll:false});
