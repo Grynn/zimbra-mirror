@@ -6,6 +6,9 @@ import org.dom4j.QName;
 import com.zimbra.soap.DocumentDispatcher;
 import com.zimbra.soap.DocumentService;
 
+/**
+ * @author Greg Solovyev
+ */
 public class VersionCheckService implements DocumentService {
 	public static final String NAMESPACE_STR = "urn:zimbraAdmin";
 	
@@ -19,7 +22,7 @@ public class VersionCheckService implements DocumentService {
 	
 	
 	public void registerHandlers(DocumentDispatcher dispatcher) {
-		// TODO Auto-generated method stub
+		dispatcher.registerHandler(VC_REQUEST, new VersionCheck());
 
 	}
 

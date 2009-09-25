@@ -18,6 +18,9 @@ import com.zimbra.cs.service.versioncheck.VersionCheckService;
 import com.zimbra.cs.util.BuildInfo;
 import com.zimbra.cs.util.SoapCLI;
 
+/**
+ * @author Greg Solovyev
+ */
 public class VersionCheckUtil extends SoapCLI {
     private static final String OPT_CHECK_VERSION = "c";
     private static final String SHOW_LAST_RESULT = "r";

@@ -7,6 +7,8 @@
 package com.zimbra.cs.versioncheck;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.qa.unittest.TestVersionCheck;
+import com.zimbra.qa.unittest.ZimbraSuite;
 import com.zimbra.soap.SoapServlet;
 import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.service.versioncheck.VersionCheckService;
@@ -19,6 +21,7 @@ public class VersionCheckExtension implements ZimbraExtension {
     
     public void init() throws ServiceException {
         SoapServlet.addService("AdminServlet", new VersionCheckService());
+        ZimbraSuite.addTest(TestVersionCheck.class);        
     }
 
     public void destroy() {
