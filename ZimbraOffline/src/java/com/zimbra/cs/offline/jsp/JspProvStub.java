@@ -30,6 +30,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.soap.SoapProvisioning;
+import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class JspProvStub {
@@ -129,7 +130,7 @@ public class JspProvStub {
     	dsAttrs.put(Provisioning.A_zimbraDataSourceName, name);
     	dsAttrs.put(OfflineConstants.A_offlineDataSourceName, name);
     	dsAttrs.put(OfflineConstants.A_offlineDataSourceType, dsType.toString());
-    	dsAttrs.put(Provisioning.A_zimbraDataSourceImportClassName, DataSource.getDefaultImportClass(dsType));
+    	dsAttrs.put(Provisioning.A_zimbraDataSourceImportClassName, DataSourceManager.getDefaultImportClass(dsType));
     	prov.createDataSource(account, dsType, name, dsAttrs);
 	}
     

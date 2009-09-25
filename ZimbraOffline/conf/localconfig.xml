@@ -142,4 +142,7 @@
   <key name="zdesktop_mail_uncompressed_cache_max_files">
     <value>20</value>
   </key>
+  <key name="zimbra_class_datasourcemanager">
+    <value>com.zimbra.cs.datasource.offline.OfflineDataSourceManager</value>
+  </key>
 </localconfig>

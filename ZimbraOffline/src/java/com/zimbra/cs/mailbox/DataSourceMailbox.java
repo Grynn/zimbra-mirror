@@ -435,8 +435,9 @@ public class DataSourceMailbox extends SyncMailbox {
         throws ServiceException {
         // Force a full sync if INBOX sync enabled and has not yet been
         // successfully sync'd
-        Folder inbox = ds.getMailbox().getFolderById(Mailbox.ID_FOLDER_INBOX);
-        boolean forceSync = ds.isSyncEnabled(inbox) && !ds.hasSyncState(inbox.getId());
+        DataSourceManager dsm = DataSourceManager.getInstance();
+        Folder inbox = dsm.getMailbox(ds).getFolderById(Mailbox.ID_FOLDER_INBOX);
+        boolean forceSync = dsm.isSyncEnabled(ds, inbox) && !ds.hasSyncState(inbox.getId());
         boolean fullSync = isOnRequest || forceSync;
         List<Integer> folderIds = null;
         OfflineDataSource ods = (OfflineDataSource)ds;
@@ -500,7 +501,7 @@ public class DataSourceMailbox extends SyncMailbox {
                 folder.getId() == ID_FOLDER_DRAFTS ||
                 folder.getId() == ID_FOLDER_FAILURE ||
                 folder.getId() == ID_FOLDER_OUTBOX ||
-                ds.isSyncCapable(folder))
+                DataSourceManager.getInstance().isSyncCapable(ds, folder))
                 visible.add(folder);
             else
                 all = false;

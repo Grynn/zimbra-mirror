@@ -755,8 +755,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         // Bug 31998: If Yahoo then copy auth tokens from test data source to
         // new data source and clear original tokens
         if (testDs.isYahoo()) {
-            Mailbox mbox = testDs.getMailbox();
-            MetadataTokenStore.copyTokens(mbox, ds.getMailbox());
+            DataSourceManager dsm = DataSourceManager.getInstance();
+            Mailbox mbox = dsm.getMailbox(testDs);
+            MetadataTokenStore.copyTokens(mbox, dsm.getMailbox(ds));
             MetadataTokenStore.clearTokens(mbox);
             OfflineYAuth.deleteRawAuthManager(mbox);
         }

@@ -20,6 +20,7 @@ import com.zimbra.cs.util.yauth.Authenticator;
 import com.zimbra.cs.util.yauth.TokenStore;
 import com.zimbra.cs.util.yauth.RawAuth;
 import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.common.service.ServiceException;
@@ -36,7 +37,7 @@ public final class OfflineYAuth {
 
     public static Authenticator newAuthenticator(DataSource ds)
         throws ServiceException {
-        RawAuthManager ram = getRawAuthManager(ds.getMailbox());
+        RawAuthManager ram = getRawAuthManager(DataSourceManager.getInstance().getMailbox(ds));
         return ram.newAuthenticator(
             APPID, ds.getUsername(), ds.getDecryptedPassword());
     }
@@ -51,13 +52,13 @@ public final class OfflineYAuth {
     }
 
     public static void removeToken(DataSource ds) throws ServiceException {
-        TokenStore store = getRawAuthManager(ds.getMailbox()).getTokenStore();
+        TokenStore store = getRawAuthManager(DataSourceManager.getInstance().getMailbox(ds)).getTokenStore();
         store.removeToken(APPID, ds.getUsername());
     }
     
     public static void newToken(DataSource ds, String password)
         throws ServiceException {
-        TokenStore store = getRawAuthManager(ds.getMailbox()).getTokenStore();
+        TokenStore store = getRawAuthManager(DataSourceManager.getInstance().getMailbox(ds)).getTokenStore();
         try {
             store.newToken(APPID, ds.getUsername(), password);
         } catch (IOException e) {

@@ -27,10 +27,10 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.SyncState;
 import com.zimbra.cs.mailbox.DataSourceMailbox;
 import com.zimbra.cs.mailbox.DesktopMailbox;
-import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -195,30 +195,15 @@ public class OfflineDataSource extends DataSource {
 	}
 
 	@Override
-	public boolean isSyncCapable(Folder folder) {
-		if (isSyncInboxOnly())
-			return folder.getId() == Mailbox.ID_FOLDER_INBOX;
-		return (folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0;
-	}
-
-	@Override
-	public boolean isSyncEnabled(Folder folder) {
-        if (isSyncInboxOnly() && folder.getId() != Mailbox.ID_FOLDER_INBOX) {
-            return false;
-        }
-        int bits = folder.getFlagBitmask();
-        return (bits & Flag.BITMASK_SYNCFOLDER) != 0 && (bits & Flag.BITMASK_SYNC) != 0;
-	}
-
-	@Override
 	public boolean isSyncEnabled(String localPath) {
 		if (isSyncInboxOnly())
 			return localPath.equalsIgnoreCase("/Inbox");
 		try {
-			Mailbox mbox = getMailbox();
+		    DataSourceManager dsm = DataSourceManager.getInstance();
+			Mailbox mbox = dsm.getMailbox(this);
 			Folder folder = mbox.getFolderByPath(new OperationContext(mbox), localPath);
 			if (folder != null)
-				return isSyncEnabled(folder);
+				return dsm.isSyncEnabled(this, folder);
             else
                 OfflineLog.offline.warn("local path " + localPath + " not found");
 		} catch (ServiceException x) {
@@ -346,20 +331,6 @@ public class OfflineDataSource extends DataSource {
                mbox.sendPendingMessages(true) > 0;
     }
     
-    @Override
-    public DataImport getDataImport() throws ServiceException {
-        if (getType() == Type.imap) {
-            if (isYahoo()) {
-                return new YMailImport(this);
-            } else if (isGmail()) {
-                return new GMailImport(this);
-            } else {
-                return OfflineImport.imapImport(this);
-            }
-        }
-        return super.getDataImport();
-    }
-    
     public boolean isEmail() {
     	return getType() == Type.imap || getType() == Type.pop3 || getType() == Type.live;
     }
@@ -437,6 +408,10 @@ public class OfflineDataSource extends DataSource {
             0,    // proxyPort
             isDebugTraceEnabled());
     }
-    
+
+    public Mailbox getMailbox()
+    throws ServiceException {
+        return DataSourceManager.getInstance().getMailbox(this);
+    }
 }
 

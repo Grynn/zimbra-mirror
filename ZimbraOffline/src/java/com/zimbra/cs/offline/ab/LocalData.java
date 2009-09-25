@@ -28,6 +28,7 @@ import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Log;
 import com.zimbra.cs.account.offline.OfflineDataSource;
+import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbDataSource;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 
@@ -53,7 +54,7 @@ public final class LocalData {
 
     public LocalData(OfflineDataSource ds) throws ServiceException {
         this.ds = ds;
-        this.mbox = (DesktopMailbox) ds.getMailbox();
+        this.mbox = (DesktopMailbox) DataSourceManager.getInstance().getMailbox(ds);
         key = getKey(ds);
         log = getLog(ds);
     }

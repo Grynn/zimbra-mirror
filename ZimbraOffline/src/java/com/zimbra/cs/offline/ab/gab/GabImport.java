@@ -16,6 +16,7 @@ package com.zimbra.cs.offline.ab.gab;
 
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
+import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.offline.OfflineLog;
@@ -48,7 +49,7 @@ public class GabImport implements DataSource.DataImport {
             return;
         }
         LOG.info("Importing contacts for account '%s'", ds.getName());
-        ds.getMailbox().beginTrackingSync();
+        DataSourceManager.getInstance().getMailbox(ds).beginTrackingSync();
         if (session == null) {
             session = new SyncSession(ds);
         }
