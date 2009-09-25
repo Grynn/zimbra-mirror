@@ -83,6 +83,7 @@ public class LocalMailbox extends DesktopMailbox {
             "conversation");
         Folder root = getFolderById(ID_FOLDER_USER_ROOT);
         
+        getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color((byte)8));
         SearchFolder.create(ID_FOLDER_GLOBAL_INBOX, root, GLOBAL_INBOX_PATH,
             GLOBAL_INBOX_SEARCH, groupBy, null, Flag.BITMASK_GLOBAL,
             MailItem.DEFAULT_COLOR_RGB, null);

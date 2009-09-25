@@ -1,5 +1,6 @@
 package com.zimbra.cs.mailbox;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -106,6 +107,11 @@ public class DataSourceMailbox extends SyncMailbox {
                 if (mi != null)
                     mi.mData.flags |= mNoInferiorsFlag.getBitmask();
             }
+            OfflineDataSource ds = (OfflineDataSource)(OfflineProvisioning.
+                getOfflineInstance().getDataSource(getAccount()));
+            if (ds.isYahoo() || ds.isGmail())
+                getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color(
+                    (byte)(ds.isYahoo() ? 4 : 5)));
         }
     }
 

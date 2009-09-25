@@ -98,6 +98,11 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
 
     }
 
+    @Override protected synchronized void initialize() throws ServiceException {
+        super.initialize();
+        getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color((byte)1));
+    }
+
     @Override
     public void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
         if (lockMailboxToSync()) {
