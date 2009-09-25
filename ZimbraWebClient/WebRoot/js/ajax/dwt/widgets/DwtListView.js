@@ -2359,6 +2359,9 @@ DwtListView.prototype._sizeChildren =
 function(height) {
 	if (this.headerColCreated && this._listDiv && (height != Dwt.DEFAULT)) {
 		Dwt.setSize(this._listDiv, Dwt.DEFAULT, height - DwtListView.HEADERITEM_HEIGHT);
+		return true;
+	} else {
+		return false;
 	}
 };
 
