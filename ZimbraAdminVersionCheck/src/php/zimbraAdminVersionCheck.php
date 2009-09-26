@@ -19,8 +19,10 @@ if(isset($_REQUEST["majorversion"]) &&
 							"critical"=>1,
 							"updateURL"=>"http://www.zimbra.com/community/downloads.html",
 							"release"=>"20090921024654",
-							"version"=>"6.0.2_GA_1841.RHEL4.NETWORK",
-							"description"=>" "
+							"version"=>"6.0.2_GA",
+							"description"=>" ",
+							"platform"="RHEL4",
+							"buildtype"="NETWORK"							
 						)					
 					)					
 				)
@@ -109,6 +111,10 @@ if(!empty($majorUpdate) || !empty($minorUpdate) || !empty($microUpdates)) {
 		echo $majorUpdate["updateURL"]; 
 	?>" description="<?php
 		echo $majorUpdate["description"]; 
+	?>" platform="<?php 
+		echo $minorUpdate["platform"]; 
+	?>" buildtype="<?php 
+		echo $minorUpdate["buildtype"]; 
 	?>"/>
 <?php	
 	}
@@ -125,6 +131,10 @@ if(!empty($majorUpdate) || !empty($minorUpdate) || !empty($microUpdates)) {
 		echo $minorUpdate["updateURL"]; 
 	?>" description="<?php 
 		echo $minorUpdate["description"]; 
+	?>" platform="<?php 
+		echo $minorUpdate["platform"]; 
+	?>" buildtype="<?php 
+		echo $minorUpdate["buildtype"]; 
 	?>"/>	
 <?php	
 	}
@@ -142,7 +152,11 @@ if(!empty($majorUpdate) || !empty($minorUpdate) || !empty($microUpdates)) {
 				echo $val["updateURL"];
 			?>" description="<?php
 				echo $val["description"];
-			?>"/>
+			?>"  platform="<?php 
+				echo $minorUpdate["platform"]; 
+			?>" buildtype="<?php 
+				echo $minorUpdate["buildtype"]; 
+			?>/>
 <?php			
 		}
 	}

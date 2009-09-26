@@ -4,6 +4,8 @@ package com.zimbra.cs.versioncheck;
  */
 public class VersionUpdate {
 	private String type;
+	private String buildtype;
+	private String platform;
 	private String shortversion;
 	private String version;
 	private String release;
@@ -56,5 +58,21 @@ public class VersionUpdate {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getBuildtype() {
+		return buildtype;
+	}
+
+	public void setBuildtype(String buildtype) {
+		this.buildtype = buildtype;
+	}
+
+	public String getPlatform() {
+		return platform;
+	}
+
+	public void setPlatform(String platform) {
+		this.platform = platform;
 	}
 }

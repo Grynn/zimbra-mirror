@@ -42,6 +42,8 @@ public class VersionCheck extends AdminDocumentHandler {
 	public static String A_SHORT_VERSION = "shortversion";
 	public static String A_VERSION = "version";
 	public static String A_RELEASE = "release";
+	public static String A_PLATFORM = "platform";
+	public static String A_BUILDTYPE = "buildtype";
 	
 	@Override
 	public Element handle(Element request, Map<String, Object> context)	throws ServiceException {
@@ -50,11 +52,11 @@ public class VersionCheck extends AdminDocumentHandler {
         checkRight(zc, context, null, AdminRight.PR_SYSTEM_ADMIN_ONLY);      
         String action = request.getAttribute(MailConstants.E_ACTION);
     	Element response = zc.createElement(VersionCheckService.VC_RESPONSE);
-        if(action == VersionCheckService.VERSION_CHECK_CHECK) {
+        if(action.equalsIgnoreCase(VersionCheckService.VERSION_CHECK_CHECK)) {
         	//check if we are the correct host
         	checkVersion();
 
-        } else if(action == VersionCheckService.VERSION_CHECK_STATUS) {
+        } else if(action.equalsIgnoreCase(VersionCheckService.VERSION_CHECK_STATUS)) {
 			try {
 	        	Provisioning prov = Provisioning.getInstance();
 	            Config config = prov.getConfig();
@@ -76,17 +78,20 @@ public class VersionCheck extends AdminDocumentHandler {
 		                String description = eUpdate.getAttribute(A_DESCRIPTION);
 		                String version = eUpdate.getAttribute(A_VERSION);
 		                String release = eUpdate.getAttribute(A_RELEASE);
+		                String platform = eUpdate.getAttribute(A_PLATFORM);
+		                String buildtype = eUpdate.getAttribute(A_BUILDTYPE);
 		                String shortVersion = eUpdate.getAttribute(A_SHORT_VERSION);
 		                
 		                Element elRespUpdate = elRespUpdates.addElement(E_UPDATE);
 		                elRespUpdate.addAttribute(A_UPDATE_TYPE,updateType);
 		                elRespUpdate.addAttribute(A_CRITICAL,isCritical);
 		                elRespUpdate.addAttribute(A_UPDATE_URL,detailsUrl);
-		                elRespUpdate.addAttribute(A_UPDATE_URL,detailsUrl);
 		                elRespUpdate.addAttribute(A_DESCRIPTION,description);
 		                elRespUpdate.addAttribute(A_SHORT_VERSION,shortVersion);
 		                elRespUpdate.addAttribute(A_RELEASE,release);
 		                elRespUpdate.addAttribute(A_VERSION,version);
+		                elRespUpdate.addAttribute(A_BUILDTYPE,buildtype);
+		                elRespUpdate.addAttribute(A_PLATFORM,platform);		                
 		            }					
 				}
 

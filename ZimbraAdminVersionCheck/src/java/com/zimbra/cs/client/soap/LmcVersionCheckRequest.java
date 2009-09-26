@@ -28,7 +28,8 @@ public class LmcVersionCheckRequest extends LmcSoapRequest {
 	    	try {
 	        	Element evc = DomUtil.get(responseXML, VersionCheck.E_VERSION_CHECK);
 		        response.setStatus(DomUtil.getAttrBoolean(evc, VersionCheck.A_VERSION_CHECK_STATUS));
-		        for(Iterator<Element> iter = evc.elementIterator();iter.hasNext();) {
+		        Element eUpdates = DomUtil.get(evc, VersionCheck.E_UPDATES);
+		        for(Iterator<Element> iter = eUpdates.elementIterator();iter.hasNext();) {
 		        	Element eUpdate = iter.next();
 		        	VersionUpdate upd = new VersionUpdate();
 		        	upd.setCritical(DomUtil.getAttrBoolean(eUpdate, VersionCheck.A_CRITICAL));
@@ -37,6 +38,9 @@ public class LmcVersionCheckRequest extends LmcSoapRequest {
 		        	upd.setRelease(DomUtil.getAttr(eUpdate, VersionCheck.A_RELEASE));
 		        	upd.setVersion(DomUtil.getAttr(eUpdate, VersionCheck.A_VERSION));
 		        	upd.setDescription(DomUtil.getAttr(eUpdate, VersionCheck.A_DESCRIPTION));
+		        	upd.setPlatform(DomUtil.getAttr(eUpdate, VersionCheck.A_PLATFORM));
+		        	upd.setBuildtype(DomUtil.getAttr(eUpdate, VersionCheck.A_BUILDTYPE));
+		        	upd.setUpdateURL(DomUtil.getAttr(eUpdate, VersionCheck.A_UPDATE_URL));
 		        	response.addUpdate(upd);
 		        }
 	    	} catch (ServiceException ex) {
