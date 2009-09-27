@@ -413,13 +413,44 @@ AjxTimezone.getAbbreviatedZoneChoices = function() {
 				value: serverId,
 				// these props used by sort comparator
 				standard: rule.standard,
-				serverid: serverId
+				serverid: serverId,
+                clientId: clientId
 			};
 			AjxTimezone._ABBR_ZONE_OPTIONS.push(option);
 		}
 		AjxTimezone._ABBR_ZONE_OPTIONS.sort(AjxTimezone._BY_OFFSET);
 	}
 	return AjxTimezone._ABBR_ZONE_OPTIONS;
+};
+
+AjxTimezone.getMatchingTimezoneChoices = function() {
+	if (AjxTimezone._MATCHING_ZONE_OPTIONS) {
+		var count = AjxTimezone._MATCHING_ZONE_OPTIONS.length;
+		var total = AjxTimezone.STANDARD_RULES.length + AjxTimezone.DAYLIGHT_RULES.length;
+		if (count != total) {
+			AjxTimezone._MATCHING_ZONE_OPTIONS = null;
+		}
+	}
+	if (!AjxTimezone._MATCHING_ZONE_OPTIONS) {
+		AjxTimezone._MATCHING_ZONE_OPTIONS = [];
+		for (var i in AjxTimezone.MATCHING_RULES) {
+			var rule = AjxTimezone.MATCHING_RULES[i];
+			var clientId = rule.clientId;
+			var serverId = rule.serverId;
+            if(clientId == AjxTimezone.AUTO_DETECTED) continue;
+			var option = {
+				displayValue: AjxTimezone.getMediumName(clientId),
+				value: serverId,
+				// these props used by sort comparator
+				standard: rule.standard,
+				serverid: serverId,
+                clientId: clientId
+			};
+			AjxTimezone._MATCHING_ZONE_OPTIONS.push(option);
+		}
+		AjxTimezone._MATCHING_ZONE_OPTIONS.sort(AjxTimezone._BY_OFFSET);
+	}
+	return AjxTimezone._MATCHING_ZONE_OPTIONS;
 };
 
 AjxTimezone._BY_OFFSET = function(arule, brule) {
@@ -508,7 +539,12 @@ function(timezonePreference) {
 	var dec1offset = -dec1.getTimezoneOffset();
 	var jun1offset = -jun1.getTimezoneOffset();
 
+    AjxTimezone.MATCHING_RULES = [];
+    AjxTimezone.TIMEZONE_CONFLICT = false;
     var matchingRules = [];
+    var matchingRulesMap = {};
+    var offsetMatchingRules = [];
+    var daylightMatchingFound = false;
 
     // if the offset for jun is the same as the offset in december,
 	// then we have a timezone that doesn't deal with daylight savings.
@@ -517,7 +553,11 @@ function(timezonePreference) {
  		for (var i = 0; i < rules.length ; ++i ) {
             var rule = rules[i];
             if (rule.standard.offset == jun1offset) {
-				 matchingRules.push(rule);
+				 if(!matchingRulesMap[rule.serverId]) {
+                     matchingRules.push(rule);
+                     matchingRulesMap[rule.serverId] = true;
+                 }
+                 AjxTimezone.MATCHING_RULES.push(rule);
 			}
 		}
 	}
@@ -527,6 +567,8 @@ function(timezonePreference) {
 		var rules = AjxTimezone.DAYLIGHT_RULES;
 		var dst = Math.max(dec1offset, jun1offset);
 		var std = Math.min(dec1offset, jun1offset);
+        var now = new Date();
+        var currentOffset = -now.getTimezoneOffset();
         for (var i = 0; i < rules.length ; ++i ) {
 			var rule = rules[i];
 			if (rule.standard.offset == std && rule.daylight.offset == dst) {
@@ -539,23 +581,42 @@ function(timezonePreference) {
                 var d1 = new Date(dtrans[0], dtrans[1]-1, dtrans[2]+2);
                 if (-s1.getTimezoneOffset() == std && -d1.getTimezoneOffset() == dst &&
                     -s0.getTimezoneOffset() == dst && -d0.getTimezoneOffset() == std) {
-                    matchingRules.push(rule);
+                    if(!matchingRulesMap[rule.serverId]) {
+                        matchingRules.push(rule);
+                        matchingRulesMap[rule.serverId] = true;
+                    }                    
+                    daylightMatchingFound = true;
                 }
+            }
+            //used for conflict resolution when server rules are wrong 
+            if (rule.standard.offset == currentOffset || rule.daylight.offset == currentOffset) {
+                    AjxTimezone.MATCHING_RULES.push(rule);
             }
 		}
 	}
 
     //when there is a timezone conflict use the preference to find better match
-    if(timezonePreference != null) {
-        for(var i in matchingRules) {
-            if(matchingRules[i].serverId == timezonePreference) {
-                return matchingRules[i];
+    if((matchingRules.length > 0) && timezonePreference != null) {
+        var rules = matchingRules; 
+        for(var i in rules) {
+            if(rules[i].serverId == timezonePreference) {
+                return rules[i];
             }
         }
     }
 
     if(matchingRules.length > 0) {
+        AjxTimezone.TIMEZONE_CONFLICT = (matchingRules.length > 1);  
         return matchingRules[0];        
+    }
+
+    if((AjxTimezone.MATCHING_RULES.length > 0) && timezonePreference != null) {
+        var rules = AjxTimezone.MATCHING_RULES; 
+        for(var i in rules) {
+            if(rules[i].serverId == timezonePreference) {
+                return rules[i];
+            }
+        }
     }
 
     // generate default rule
@@ -684,9 +745,9 @@ AjxTimezone._generateDefaultRule = function() {
 	}
 
 	// add generated rule to proper list
-	AjxTimezoneData.TIMEZONE_RULES.unshift(rule);
-	var rules = rule.daylight ? AjxTimezone.DAYLIGHT_RULES : AjxTimezone.STANDARD_RULES;
-	rules.unshift(rule);
+	//AjxTimezoneData.TIMEZONE_RULES.unshift(rule);
+	//var rules = rule.daylight ? AjxTimezone.DAYLIGHT_RULES : AjxTimezone.STANDARD_RULES;
+	//rules.unshift(rule);
 
 	return rule;
 };
@@ -705,6 +766,7 @@ AjxTimezone._generateShortName = function(offset, period) {
 // Static initialization
 
 AjxTimezone.DEFAULT_RULE = AjxTimezone._guessMachineTimezone();
+
 
 /*** DEBUG ***
 // This forces the client to create an auto-detected timezone rule,
