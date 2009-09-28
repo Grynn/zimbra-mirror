@@ -634,6 +634,9 @@ function() {
 
 DwtListView.prototype.setSelection =
 function(item, skipNotify) {
+
+	if (!item) { return; }
+
 	var el = this._getElFromItem(item);
 	if (el) {
 		this.deselectAll();
