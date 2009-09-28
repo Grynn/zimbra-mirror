@@ -17,7 +17,7 @@
  * Created on Jun 1, 2004
  *
  */
-package com.zimbra.cs.zclient;
+package com.zimbra.common.zclient;
 
 import com.zimbra.common.service.ServiceException;
 

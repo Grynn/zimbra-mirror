@@ -22,8 +22,8 @@ import javax.servlet.jsp.SkipPageException;
 
 import com.zimbra.cs.taglib.bean.ZExceptionBean;
 import com.zimbra.cs.taglib.bean.ZTagLibException;
-import com.zimbra.cs.zclient.ZClientException;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.common.zclient.ZClientException;
 import com.zimbra.common.service.ServiceException;
 
 public class GetExceptionTag extends ZimbraSimpleTag {
