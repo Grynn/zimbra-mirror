@@ -1,22 +1,40 @@
 package com.zimbra.cs.service.versioncheck;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.AuthToken;
+import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Server;
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.util.DateUtil;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.Provisioning.AccountBy;
+import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.account.accesscontrol.AdminRight;
+import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
+import com.zimbra.cs.servlet.ZimbraServlet;
+import com.zimbra.cs.util.AccountUtil;
 import com.zimbra.cs.util.BuildInfo;
+import com.zimbra.cs.zclient.ZEmailAddress;
+import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZMailbox.Options;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
 import com.zimbra.soap.ZimbraSoapContext;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -24,7 +42,7 @@ import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.util.URIUtil;
 import org.dom4j.DocumentException;
-
+import com.zimbra.cs.httpclient.URLUtil;
 /**
  * @author Greg Solovyev
  */
@@ -48,18 +66,113 @@ public class VersionCheck extends AdminDocumentHandler {
 	@Override
 	public Element handle(Element request, Map<String, Object> context)	throws ServiceException {
         ZimbraSoapContext zc = getZimbraSoapContext(context);
-        
-        checkRight(zc, context, null, AdminRight.PR_SYSTEM_ADMIN_ONLY);      
+    	Provisioning prov = Provisioning.getInstance();        
+        Config config = prov.getConfig();
+    	checkRight(zc, context, null, AdminRight.PR_SYSTEM_ADMIN_ONLY);      
         String action = request.getAttribute(MailConstants.E_ACTION);
     	Element response = zc.createElement(VersionCheckService.VC_RESPONSE);
         if(action.equalsIgnoreCase(VersionCheckService.VERSION_CHECK_CHECK)) {
-        	//check if we are the correct host
-        	checkVersion();
+        	//check if we need to proxy to the updater server
+        	String updaterServerId = config.getAttr(Provisioning.A_zimbraVersionCheckServer);
 
+            if (updaterServerId != null) {
+                Server server = prov.get(ServerBy.id, updaterServerId);
+                if (server != null && !getLocalHostId().equalsIgnoreCase(server.getId()))
+                    return proxyRequest(request, context, server);
+            }
+            
+        	//perform the version check
+        	checkVersion();
+        	
+        	
+        	// check if there are any emails to notify of a new version
+			boolean sendNotification = false;
+			String emails = config.getAttr(Provisioning.A_zimbraVersionCheckNotificationEmail);
+			if (emails != null && emails.length() > 0) {
+				sendNotification = true;
+			}
+			if (sendNotification) {
+				String resp = config.getAttr(Provisioning.A_zimbraVersionCheckLastResponse);
+				try {
+					Element respDoc = Element.parseXML(resp);
+					boolean hasUpdates = respDoc.getAttributeBool(A_VERSION_CHECK_STATUS, false);
+					boolean hasCritical = false;
+					if (hasUpdates) {
+						String msg = "Found the following zimbra updates:\n";
+						Element eUpdates = respDoc.getElement(E_UPDATES);
+						for (Iterator<Element> iter = eUpdates.elementIterator(E_UPDATE); iter.hasNext();) {
+							Element eUpdate = iter.next();
+//							String updateType = eUpdate.getAttribute(A_UPDATE_TYPE);
+							boolean isCritical = eUpdate.getAttributeBool(A_CRITICAL, false);
+							if (isCritical)
+								hasCritical = true;
+
+							String detailsUrl = eUpdate.getAttribute(A_UPDATE_URL);
+//							String description = eUpdate.getAttribute(A_DESCRIPTION);
+							String version = eUpdate.getAttribute(A_VERSION);
+//							String release = eUpdate.getAttribute(A_RELEASE);
+							String platform = eUpdate.getAttribute(A_PLATFORM);
+//							String buildtype = eUpdate.getAttribute(A_BUILDTYPE);
+//							String shortVersion = eUpdate.getAttribute(A_SHORT_VERSION);
+							if (sendNotification) {
+								if (isCritical) {
+									msg += String.format(
+													"Version: %s; platform: %s, detailsUrl %s. This update is critical!\n",
+													version, platform,
+													detailsUrl);
+								} else {
+									msg += String.format(
+													"Version: %s; platform: %s, detailsUrl %s. \n",
+													version, platform,
+													detailsUrl);
+								}
+							}
+						}
+						try {
+							AuthToken at = zc.getAuthToken();
+							String acctId = at.getAccountId();
+							// use ZMailbox to add messages to target mailbox
+							Account targetAccount = Provisioning.getInstance().get(AccountBy.id, acctId);
+							String accountSOAPURI = AccountUtil.getSoapUri(targetAccount);
+							AuthToken targetAuth = AuthProvider.getAuthToken(targetAccount,	System.currentTimeMillis() + 3600 * 1000);
+							Options options = new Options();
+							options.setAuthToken(targetAuth.getEncoded());
+							options.setTargetAccount(acctId);
+							options.setTargetAccountBy(AccountBy.id);
+							if(accountSOAPURI == null) {
+								accountSOAPURI =  URLUtil.getSoapURL(prov.getLocalServer(),true);
+							}
+							options.setUri(accountSOAPURI);
+							options.setNoSession(true);
+							ZMailbox zmbox = ZMailbox.getMailbox(options);
+							ZOutgoingMessage m = new ZOutgoingMessage();
+							List<ZEmailAddress> addrs = new ArrayList<ZEmailAddress>();
+							addrs.addAll(ZEmailAddress.parseAddresses(emails,ZEmailAddress.EMAIL_TYPE_TO));
+							if (hasCritical)
+								m.setSubject("Critical Zimbra update is available.");
+							else
+								m.setSubject("Zimbra update is available.");
+
+							m.setAddresses(addrs);
+							m.setMessagePart(new MessagePart(
+											"text/plain", msg));
+							zmbox.sendMessage(m, null, false);
+						} catch (Exception e) {
+							ZimbraLog.extensions.error(
+											"Version check extension failed to send notifications.",
+											this, e);
+						}
+					}
+				} catch (DocumentException e) {
+					throw ServiceException.FAILURE(
+									"error parsing  zimbraVersionCheckLastResponse config attribute",
+									e);
+				}
+			}
+        	
         } else if(action.equalsIgnoreCase(VersionCheckService.VERSION_CHECK_STATUS)) {
 			try {
-	        	Provisioning prov = Provisioning.getInstance();
-	            Config config = prov.getConfig();
+
 	        	String resp = config.getAttr(Provisioning.A_zimbraVersionCheckLastResponse);
 
 	        	Element respDoc = Element.parseXML(resp);
