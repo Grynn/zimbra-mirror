@@ -41,8 +41,7 @@ public class DbOfflineMigration {
         try {
             DbPool.startup();
             conn = DbPool.getConnection();
-            stmt = conn
-                .prepareStatement("SELECT value FROM zimbra.config WHERE name = 'db.version'");
+            stmt = conn.prepareStatement("SELECT value FROM config WHERE name = 'db.version'");
             rs = stmt.executeQuery();
             rs.next();
             int oldDbVersion = Integer.parseInt(rs.getString(1));
@@ -50,8 +49,7 @@ public class DbOfflineMigration {
             stmt.close();
 
             int newDbVersion = Integer.parseInt(Versions.DB_VERSION);
-            System.out.println("oldDbVersion=" + oldDbVersion
-                + " newDbVersion=" + newDbVersion);
+            System.out.println("oldDbVersion=" + oldDbVersion + " newDbVersion=" + newDbVersion);
 
             if (oldDbVersion != newDbVersion) {
                 switch (oldDbVersion) {

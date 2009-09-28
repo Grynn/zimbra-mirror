@@ -33,6 +33,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/derby.jar"/>
+	<classpathentry kind="lib" path="/ZimbraServer/tools/lib/derbytools.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/junit-4.4.jar" sourcepath="/ThirdParty/junit-4.4">
 		<attributes>
 			<attribute name="javadoc_location" value="http://junit.sourceforge.net/javadoc/"/>

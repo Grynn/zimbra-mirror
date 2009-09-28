@@ -1,108 +1,169 @@
-<project name="Offline-Installer" default="installer-make">
+<project name="Offline-Installer" default="default">
 
 	<property file="build.properties"/>
-
-        <property name="media_win32" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_win32}"/>
-        <property name="media_macos" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_macos}"/>
-        <property name="media_linux" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_linux}"/>
-
-		<property name="install4j.dir" value="/home/build/zdesktop/install4j"/>
-        <property name="build.dir" location="../ZimbraBuild/i386" />
-
-        <taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="${install4j.dir}/bin/ant.jar"/>
-
-        <taskdef resource="net/sf/antcontrib/antlib.xml">
-                <classpath>
-                        <pathelement location="../ZimbraCommon/jars/ant-contrib-1.0b1.jar" />
-                </classpath>
-        </taskdef>
-
-	<target name="installer-patch">
-		<copy todir="${install4j.dir}/resource/messages" overwrite="true">
-			<fileset dir="src/installer/install4j.patch" includes="*.utf8 languages"/>
-		</copy>
-		<copy todir="${install4j.dir}/resource" overwrite="true">
-			<fileset dir="src/installer/install4j.patch" includes="i4jdel.exe"/>
-		</copy>
-	</target>
+	<property name="media_win32" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_win32}"/>
+	<property name="media_macos" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_macos}"/>
+	<property name="media_linux" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_linux}"/>
+	<property name="build.dir" location="../ZimbraBuild/i386" />
+    <property name="pmdoc.dir" location="./build/macos_installer.pmdoc" />
+    <property name="prism.app" value="build/dist/app/macos/prism/Prism.app" />
+    <property name="updater.app" value="build/dist/app/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app" />
+    <property name="zd.app" value="build/dist/app/macos/Zimbra Desktop.app" />
+  
+  	<condition property="is-mac">
+		<os family="mac"/>
+	</condition>
+	<condition property="is-windows">
+		<os family="windows"/>
+	</condition>
+	<condition property="is-linux">
+        <and>
+            <os family="unix"/>
+            <not>
+                <os family="mac"/>
+            </not>
+        </and>
+	</condition>
+  
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="../ZimbraCommon/jars/ant-contrib-1.0b1.jar" />
+		</classpath>
+	</taskdef>
 
 	<target name="installer-clean">
 		<delete> <fileset dir="${build.dir}" includes="zdesktop*"/> </delete>
 	</target>
 
-	<target name="installer-pack-media">
-		<install4j projectfile="ZimbraOffline.install4j" verbose="true" release="${offline.version}"
-		           destination="${build.dir}" buildids="44,198394,59040">
-       		<variable name="offline_channel" value="${offline.channel}"/>
-       		<variable name="offline_relabel" value="${offline.relabel}"/>
-       		<variable name="offline_version" value="${offline.version}"/>
-       		<variable name="offline_buildid" value="${offline.buildid}"/>
-			<variable name="offline_ausurl" value="${offline.aus.host}${offline.aus.path}"/>
-			<variable name="offline_ausurl_dev" value="${offline.ausdev.host}${offline.ausdev.path}"/>
-		</install4j>
-
-		<gen-update-php builddir="${build.dir}" ausurl="${offline.aus.host}${offline.aus.path}"/>
+	<target name="default">
+        <ant dir="." target="offline-make-install-files" inheritAll="false"/>
+        
+		<antcall target="installer-pack-media-mac"/>
+        <antcall target="installer-pack-media-windows"/>
+        <antcall target="installer-pack-media-linux"/>
+        
+        <antcall target="gen-update-php"/>
+        <antcall target="symlink-media"/>
+	</target>
+	
+	<target name="installer-pack-media-mac" if="is-mac">
+        <mkdir dir="${pmdoc.dir}" />
+        <copy todir="${pmdoc.dir}" overwrite="true">
+            <fileset dir="src/installer/macos_installer.pmdoc" />
+        </copy>
+        <replace file="${pmdoc.dir}/01app.xml" token="@build.root@" value="${basedir}" />
+        <replace file="${pmdoc.dir}/02data.xml" token="@build.root@" value="${basedir}" />
+        
+        <delete dir="build/dist/app/win32" />
+        <delete dir="build/dist/app/linux" />
+        <if><available file="${updater.app}" type="dir" /><then>
+            <move file="${updater.app}" tofile="${updater.app}_noreloc" preservelastmodified="true" />
+        </then></if>
+        <if><available file="${prism.app}" type="dir" /><then>
+            <move file="${prism.app}" tofile="${prism.app}_noreloc" preservelastmodified="true" />
+        </then></if>
+        <if><available file="${zd.app}" type="dir" /><then>
+            <move file="${zd.app}" tofile="${zd.app}_noreloc" preservelastmodified="true" />
+        </then></if>        
+        
+        <exec executable="src/installer/pmdoc-get-contents.pl">
+            <arg value="${basedir}/build/dist/app" />
+            <arg value="${pmdoc.dir}/01app-contents.xml" />
+            <arg value="root" />
+            <arg value="admin" />
+        </exec>
+        <exec executable="src/installer/pmdoc-get-contents.pl">
+            <arg value="${basedir}/build/dist/data" />
+            <arg value="${pmdoc.dir}/02data-contents.xml" />
+        </exec>
+        
+        <exec executable="/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker">
+            <arg value="--doc" />
+            <arg value="build/macos_installer.pmdoc" />
+            <arg value="--title" />
+            <arg value="${media_macos}" />
+            <arg value="--verbose" />
+        </exec>
+        
+        <move file="${media_macos}.mpkg" tofile="${build.dir}/${media_macos}.mpkg" preservelastmodified="true" />
+        <exec executable="/usr/bin/hdiutil">
+            <arg value="create" />
+            <arg value="-srcfolder" />
+            <arg value="${build.dir}/${media_macos}.mpkg" />
+            <arg value="-volname" />
+            <arg value="Zimbra_Desktop_Installer" />
+            <arg value="-ov" />
+            <arg value="${build.dir}/${media_macos}.dmg" />
+            <arg value="-format" />
+            <arg value="UDZO" />
+            <arg value="-imagekey" />
+            <arg value="zlib-level=6" />
+        </exec>
+        <delete dir="${build.dir}/${media_macos}.mpkg" />
 	</target>
 
-	<target name="installer-pack-media-dev">
-		<install4j projectfile="ZimbraOffline.install4j" verbose="true" release="${offline.version}"
-		           destination="${build.dir}/dev" buildids="44,198394,59040">
-       		<variable name="offline_channel" value="${offline.channel}"/>
-       		<variable name="offline_relabel" value="${offline.relabel}"/>
-       		<variable name="offline_version" value="${offline.version}"/>
-       		<variable name="offline_buildid" value="${offline.buildid}"/>
-			<variable name="offline_ausurl" value="${offline.ausdev.host}${offline.ausdev.path}"/>
-		</install4j>
+	<target name="installer-pack-media-windows" if="is-windows">
 
-		<gen-update-php builddir="${build.dir}/dev" ausurl="${offline.ausdev.host}${offline.ausdev.path}"/>
 	</target>
+	
+	<target name="installer-pack-media-linux" if="is-linux">
+		<delete dir="build/dist/app/win32" />
+		<delete dir="build/dist/app/macos" />
+		<copy todir="build/dist" file="src/installer/install-linux.pl" preservelastmodified="true" overwrite="true" />
+		<chmod file="build/dist/install-linux.pl" perm="ugo+rx" />
 
-	<target name="installer-make">
-			<antcall target="installer-patch"/>
-        	<ant dir="." target="offline-make-install-files" inheritAll="false"/>
-        	<antcall target="installer-pack-media"/>
-        	<antcall target="symlink-media"/>
+		<!-- ant's tar task can't preserve permissions. we call gnu tar directly -->
+		<exec executable="/bin/tar">
+			<arg value="pcvzf" />
+			<arg value="${build.dir}/${media_linux}" />
+			<arg value="-C" />
+			<arg value="build/dist" />
+			<arg value="app" />
+			<arg value="data" />
+			<arg value="install-linux.pl" />
+		</exec>
 	</target>
-
-        <macrodef name="gen-update-php">
-			<attribute name="builddir"/>
-			<attribute name="ausurl"/>
-			<sequential>
-                <copy file="src/installer/update.php" todir="@{builddir}" overwrite="true"/>
-                <replace file="@{builddir}/update.php" token="@ausurl@" value="@{ausurl}"/>
-                <replace file="@{builddir}/update.php" token="@version@" value="${offline.version}"/>
-                <replace file="@{builddir}/update.php" token="@buildid@" value="${offline.buildid}"/>
-                <replace file="@{builddir}/update.php" token="@suffix_win32@" value="${offline.suffix_win32}"/>
-                <replace file="@{builddir}/update.php" token="@suffix_macos@" value="${offline.suffix_macos}"/>
-                <replace file="@{builddir}/update.php" token="@suffix_linux@" value="${offline.suffix_linux}"/>
-
-                <if><available file="@{builddir}/${media_win32}" type="file"/><then>
-                        <checksum file="@{builddir}/${media_win32}" property="hash_win32"/>
-                        <length file="@{builddir}/${media_win32}" property="size_win32"/>
-                        <replace file="@{builddir}/update.php" token="@hash_win32@" value="${hash_win32}"/>
-                        <replace file="@{builddir}/update.php" token="@size_win32@" value="${size_win32}"/>
-                </then></if>
-
-                <if><available file="@{builddir}/${media_macos}" type="file"/><then>
-                        <checksum file="@{builddir}/${media_macos}" property="hash_macos"/>
-                        <length file="@{builddir}/${media_macos}" property="size_macos"/>
-                        <replace file="@{builddir}/update.php" token="@hash_macos@" value="${hash_macos}"/>
-                        <replace file="@{builddir}/update.php" token="@size_macos@" value="${size_macos}"/>
-                </then></if>
-
-                <if><available file="@{builddir}/${media_linux}" type="file"/><then>
-                        <checksum file="@{builddir}/${media_linux}" property="hash_linux"/>
-                        <length file="@{builddir}/${media_linux}" property="size_linux"/>
-                        <replace file="@{builddir}/update.php" token="@hash_linux@" value="${hash_linux}"/>
-                        <replace file="@{builddir}/update.php" token="@size_linux@" value="${size_linux}"/>
-                </then></if>
-			</sequential>
-        </macrodef>
+	
+	<target name="gen-update-php">
+		<copy file="src/installer/update.php" todir="${build.dir}" overwrite="true"/>
+		<replace file="${build.dir}/update.php" token="@version@" value="${offline.version}"/>
+		<replace file="${build.dir}/update.php" token="@buildid@" value="${offline.buildid}"/>
+		<replace file="${build.dir}/update.php" token="@suffix_win32@" value="${offline.suffix_win32}"/>
+		<replace file="${build.dir}/update.php" token="@suffix_macos@" value="${offline.suffix_macos}"/>
+		<replace file="${build.dir}/update.php" token="@suffix_linux@" value="${offline.suffix_linux}"/>
+	
+		<if><available file="${build.dir}/${media_win32}" type="file"/><then>
+			<checksum file="${build.dir}/${media_win32}" property="hash_win32"/>
+			<length file="${build.dir}/${media_win32}" property="size_win32"/>
+			<replace file="${build.dir}/update.php" token="@hash_win32@" value="${hash_win32}"/>
+			<replace file="${build.dir}/update.php" token="@size_win32@" value="${size_win32}"/>
+		</then></if>
+	
+		<if><available file="${build.dir}/${media_macos}.dmg" type="file"/><then>
+			<checksum file="${build.dir}/${media_macos}.dmg" property="hash_macos"/>
+			<length file="${build.dir}/${media_macos}.dmg" property="size_macos"/>
+			<replace file="${build.dir}/update.php" token="@hash_macos@" value="${hash_macos}"/>
+			<replace file="${build.dir}/update.php" token="@size_macos@" value="${size_macos}"/>
+		</then></if>
+	
+		<if><available file="${build.dir}/${media_linux}" type="file"/><then>
+			<checksum file="${build.dir}/${media_linux}" property="hash_linux"/>
+			<length file="${build.dir}/${media_linux}" property="size_linux"/>
+			<replace file="${build.dir}/update.php" token="@hash_linux@" value="${hash_linux}"/>
+			<replace file="${build.dir}/update.php" token="@size_linux@" value="${size_linux}"/>
+		</then></if>
+	</target>
 
 	<target name="symlink-media">
-		<symlink link="${build.dir}/zdesktop_linux_i686.sh" resource="${media_linux}" overwrite="true"/>
-		<symlink link="${build.dir}/zdesktop_macos_intel.dmg" resource="${media_macos}" overwrite="true"/>
-		<symlink link="${build.dir}/zdesktop_win32.exe" resource="${media_win32}" overwrite="true"/>
+        <if><available file="${build.dir}/${media_linux}" type="file"/><then>
+            <symlink link="${build.dir}/zdesktop_linux_i686.tgz" resource="${media_linux}" overwrite="true"/>
+        </then></if>
+        <if><available file="${build.dir}/${media_macos}.dmg" type="file"/><then>
+            <symlink link="${build.dir}/zdesktop_macos_intel.dmg" resource="${media_macos}.dmg" overwrite="true"/>
+        </then></if>
+        <if><available file="${build.dir}/${media_win32}" type="file"/><then>
+            <symlink link="${build.dir}/zdesktop_win32.exe" resource="${media_win32}" overwrite="true"/>
+        </then></if>
 	</target>
 </project>
 

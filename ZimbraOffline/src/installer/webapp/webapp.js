@@ -42,28 +42,21 @@ function startStopServer(verb) {
       var systemDir = dirSvc.get("SysD", Ci.nsIFile);
       var zdesktopServer = systemDir.clone();
       zdesktopServer.append("net.exe");
-      args = [verb, "Yahoo! Zimbra Desktop Service"];
+      args = [verb, "Zimbra Desktop Service"];
     }
     else if (os == "linux") {
       var appRoot = WebAppProperties.getAppRoot();
       var zdesktopRoot = appRoot.parent;
       zdesktopServer = zdesktopRoot.clone();
+      zdesktopServer.append("bin");
       zdesktopServer.append("zdesktop");
       args = [verb];
     }
     else if (os == "darwin") {
-      if (verb == "start") {
-        zdesktopServer = Cc["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
-        zdesktopServer.initWithPath("/bin");
-        zdesktopServer.append("launchctl");
-        args = [verb, "com.zimbra.zdesktop"];
-      } else if (verb == "stop") {
-        var appRoot = WebAppProperties.getAppRoot();
-        var zdesktopRoot = appRoot.parent;
-        zdesktopServer = zdesktopRoot.clone();
-        zdesktopServer.append("zdesktop");
-        args = [verb];
-      }
+      zdesktopServer = Cc["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
+      zdesktopServer.initWithPath("/bin");
+      zdesktopServer.append("launchctl");
+      args = [verb, "com.zimbra.zdesktop"];
     }
 
     var process = Cc["@mozilla.org/process/util;1"].createInstance(Ci.nsIProcess);
@@ -78,10 +71,20 @@ function startStopServer(verb) {
   return true;
 }
 
+function reloadWebAppIni() {
+  var appRoot = WebAppProperties.getAppRoot();
+  var iniFile = appRoot.clone();
+  iniFile.append("webapp.ini");
+  WebAppProperties.readINI(iniFile);  
+}
+
 function serverCheck() {
   var startTime = null;
   var threadManager = Cc["@mozilla.org/thread-manager;1"].getService(Ci.nsIThreadManager);
   do {
+    // update Uri
+    reloadWebAppIni();
+    
     // Check whether the server is running
     var req = new XMLHttpRequest();
     req.open('GET', WebAppProperties.uri, false);

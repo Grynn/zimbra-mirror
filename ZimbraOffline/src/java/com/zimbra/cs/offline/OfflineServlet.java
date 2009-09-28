@@ -85,13 +85,11 @@ public class OfflineServlet extends HttpServlet {
 	public void init() {
 		try {
 			ZimbraLog.addContextFilters(OfflineLC.zdesktop_log_context_filter.value());
-			
-			int port = Integer.parseInt(getServletConfig().getInitParameter("port"));
-			int adminPort = Integer.parseInt(getServletConfig().getInitParameter("adminPort"));
-			
+			String port = LC.zimbra_admin_service_port.value();
+						
 			//setting static variables
 			LOCALHOST_SOAP_URL = LOCALHOST_URL_PREFIX + port + AccountConstants.USER_SERVICE_URI;
-			LOCALHOST_ADMIN_URL = LOCALHOST_URL_PREFIX + adminPort + AdminConstants.ADMIN_SERVICE_URI;
+			LOCALHOST_ADMIN_URL = LOCALHOST_URL_PREFIX + port + AdminConstants.ADMIN_SERVICE_URI;
 			LOCALHOST_MAIL_URL = LOCALHOST_URL_PREFIX + port + "/zimbra/mail";
 			
 			OfflineDataSource.init();

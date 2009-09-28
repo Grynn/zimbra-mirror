@@ -22,6 +22,7 @@ import com.zimbra.cs.taglib.bean.BeanUtils;
 import com.zimbra.cs.zclient.ZAuthResult;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.common.localconfig.LC;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -73,6 +74,7 @@ public class ZJspSession {
 
 	private static final String DEFAULT_HTTPS_PORT = "443";
 	private static final String DEFAULT_HTTP_PORT = "80";
+	private static final String RANDOM_HTTP_PORT = "0";
 	private static final String PROTO_MIXED = "mixed";
 	private static final String PROTO_HTTP = "http";
 	private static final String PROTO_HTTPS = "https";
@@ -84,6 +86,7 @@ public class ZJspSession {
 
     private static final String sHttpsPort = BeanUtils.getEnvString("httpsPort", DEFAULT_HTTPS_PORT);
     private static final String sHttpPort = BeanUtils.getEnvString("httpPort", DEFAULT_HTTP_PORT);
+    private static final String sLocalHost = BeanUtils.getEnvString("localHost", "localhost");
 
     private static final String sAdminUrl = BeanUtils.getEnvString("adminUrl", null);
 
@@ -177,7 +180,10 @@ public class ZJspSession {
         if (proto.equals(PROTO_HTTPS)) {
             port = (sHttpsPort != null && sHttpsPort.equals(DEFAULT_HTTPS_PORT)) ? "" : ":" + sHttpsPort;
         } else if (proto.equals(PROTO_HTTP)) {
-            port = (sHttpPort != null && sHttpPort.equals(DEFAULT_HTTP_PORT)) ? "" : ":" + sHttpPort;
+            if (sHttpPort.equals(RANDOM_HTTP_PORT))
+            	port = ":" + LC.zimbra_admin_service_port.value();
+            else
+            	port = sHttpPort.equals(DEFAULT_HTTP_PORT) ? "" : ":" + sHttpPort;            
         } else {
             return null;
         }
@@ -352,10 +358,14 @@ public class ZJspSession {
             if (sSoapUrl == null) {
                 if (sProtocolMode.equalsIgnoreCase(PROTO_HTTPS)) {
                     String httpsPort = (sHttpsPort != null && sHttpsPort.equals(DEFAULT_HTTPS_PORT)) ? "" : ":" + sHttpsPort;
-                    sSoapUrl = "https://localhost" + httpsPort +"/service/soap";
+                    sSoapUrl = "https://" + sLocalHost + httpsPort +"/service/soap";
                 } else {
-                    String httpPort = (sHttpPort != null && sHttpPort.equals(DEFAULT_HTTP_PORT)) ? "" : ":" + sHttpPort;
-                    sSoapUrl = "http://localhost" + httpPort +"/service/soap";
+                    String httpPort;
+                    if (sHttpPort.equals(RANDOM_HTTP_PORT)) // offline uses random http port
+                    	httpPort = ":" + LC.zimbra_admin_service_port.value();
+                    else
+                    	httpPort = sHttpPort.equals(DEFAULT_HTTP_PORT) ? "" : ":" + sHttpPort;
+                    sSoapUrl = "http://" + sLocalHost + httpPort +"/service/soap";
                 }
             }
         }

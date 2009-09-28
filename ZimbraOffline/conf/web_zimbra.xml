@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE web-app [ <!ENTITY servicePort "@port@"> ]>
 
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -14,11 +13,6 @@
 	<context-param>
 		<param-name>admin.allowed.ports</param-name>
 		<param-value>0</param-value>
-	</context-param>
-
-	<context-param>
-	   <param-name>zimbra.soap.url</param-name>
-	   <param-value>http://127.0.0.1:&servicePort;/service/soap</param-value>
 	</context-param>
 
 	<context-param>
@@ -186,19 +180,11 @@
 	  <load-on-startup>0</load-on-startup>
 	</servlet>
 
-        <servlet>
-          <servlet-name>ConfigServlet</servlet-name>
-          <servlet-class>com.zimbra.cs.offline.jsp.ConfigServlet</servlet-class>
-          <init-param>
-            <param-name>port</param-name>
-            <param-value>&servicePort;</param-value>
-          </init-param>
-          <init-param>
-            <param-name>adminPort</param-name>
-            <param-value>&servicePort;</param-value>
-          </init-param>
-          <load-on-startup>1</load-on-startup>
-        </servlet>
+    <servlet>
+      <servlet-name>ConfigServlet</servlet-name>
+      <servlet-class>com.zimbra.cs.offline.jsp.ConfigServlet</servlet-class>
+      <load-on-startup>1</load-on-startup>
+    </servlet>
 
 	<servlet-mapping>
 	  <servlet-name>jsp</servlet-name>
@@ -287,7 +273,13 @@
 	<env-entry>
 		<env-entry-name>httpPort</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>&servicePort;</env-entry-value>
+        <env-entry-value>0</env-entry-value>
+	</env-entry>
+
+	<env-entry>
+		<env-entry-name>localHost</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>127.0.0.1</env-entry-value>
 	</env-entry>
 
 	<env-entry>

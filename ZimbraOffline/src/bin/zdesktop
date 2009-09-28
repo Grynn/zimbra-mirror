@@ -94,7 +94,15 @@ TMPJ=/tmp/j$$
 ACTION=$1
 shift
 ARGS="$*"
-CONFIGS=""
+
+##################################################
+# Set offline env. vars
+##################################################
+
+ZIMBRA_HOME="@install.data.root@"
+JETTY_HOME="@install.app.root@/jetty"
+CONFIGS="${ZIMBRA_HOME}/jetty/etc/jetty.xml"
+#JAVA="@install.java.path@"
 
 ##################################################
 # Find directory function
@@ -160,7 +168,7 @@ fi
 #########################################################################
 # Zimbra tweak, because we want to keep jetty.conf under $JETTY_HOME/etc
 #########################################################################
-JAVA_OPTIONS="-DSTART='${JETTY_HOME}/etc/start.config' -DSTOP.PORT=7644 -DSTOP.KEY=stop -Dzimbra.config='${ZIMBRA_HOME}/conf/localconfig.xml' -Djava.library.path='${ZIMBRA_HOME}/lib' -Djava.awt.headless=true"
+JAVA_OPTIONS="-DSTART='${JETTY_HOME}/etc/start.config' -DSTOP.PORT=7644 -DSTOP.KEY=stop -Dzimbra.config='${ZIMBRA_HOME}/conf/localconfig.xml' -Djava.library.path='${JETTY_HOME}/../lib' -Djava.awt.headless=true"
 JETTY_CONSOLE="${ZIMBRA_HOME}/log/zdesktop.out"
 JETTY_RUN="${ZIMBRA_HOME}/log"
 
@@ -291,7 +299,7 @@ JAVA_OPTIONS="$MAILBOXD_JAVA_OPTIONS $JAVA_OPTIONS -Djetty.home='$JETTY_HOME'"
 #####################################################
 # This is how the Jetty server will be started
 #####################################################
-RUN_CMD="$JAVA -ea $JAVA_OPTIONS -jar '$JETTY_HOME/start.jar' $JETTY_ARGS '$CONFIGS'"
+RUN_CMD="'$JAVA' -ea $JAVA_OPTIONS -jar '$JETTY_HOME/start.jar' $JETTY_ARGS '$CONFIGS'"
 
 #####################################################
 # Comment these out after you're happy with what 
@@ -310,6 +318,8 @@ echo "JAVA           =  $JAVA"
 ##################################################
 # Do the action
 ##################################################
+cd "${ZIMBRA_HOME}/log"
+
 case "$ACTION" in
   start)
         echo "Starting Jetty: "

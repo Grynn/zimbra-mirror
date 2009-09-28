@@ -65,7 +65,7 @@ class OfflineConfig extends Config {
             return new OfflineConfig(attrs, provisioning);
         } catch (ServiceException e) {
             // throw RuntimeException because we're being called at startup...
-            throw new RuntimeException("failure instantiating global Config", e);
+            throw new RuntimeException("failure instantiating global Config: " + e.getMessage(), e);
         }
     }
 }

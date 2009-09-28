@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+
+<!-- =============================================================== -->
+<!-- Configure the Jetty Server                                      -->
+<!--                                                                 -->
+<!-- Documentation of this file format can be found at:              -->
+<!-- http://docs.codehaus.org/display/JETTY/jetty.xml                -->
+<!--                                                                 -->
+<!-- =============================================================== -->
+
+
+<Configure id="Server" class="org.mortbay.jetty.Server">
+
+    <!-- =========================================================== -->
+    <!-- Server Thread Pool                                          -->
+    <!-- =========================================================== -->
+    <Set name="ThreadPool">
+      <!-- Default bounded blocking threadpool -->
+      <New id="pool" class="org.mortbay.thread.BoundedThreadPool">
+        <Set name="minThreads">5</Set>
+        <Set name="lowThreads">10</Set>
+        <Set name="maxThreads">25</Set>
+      </New>
+    </Set>
+
+    <!-- =========================================================== -->
+    <!-- Set connectors                                              -->
+    <!-- =========================================================== -->
+    <!-- One of each type!                                           -->
+    <!-- =========================================================== -->
+
+    <!-- Use this connector for many frequently idle connections
+         and for threadless continuations.
+    -->    
+    <Call name="addConnector">
+      <Arg>
+          <New id="http" class="org.mortbay.jetty.nio.SelectChannelConnector">
+            <!-- by default, listen on localhost only; comment it out to open up remote access -->
+            <Set name="host">127.0.0.1</Set>
+
+            <!-- let jetty bind to a random port -->
+            <Set name="port"><SystemProperty name="jetty.port" default="@install.jetty.port@"/></Set>
+
+            <Set name="maxIdleTime">30000</Set>
+            <Set name="Acceptors">2</Set>
+          </New>
+      </Arg>
+    </Call>
+    
+    <!-- =========================================================== -->
+    <!-- start connectors                                            -->
+    <!-- =========================================================== -->
+    <Ref id="http">
+      <Call name="open"/>
+    </Ref>
+
+    <!-- =========================================================== -->
+    <!-- update port in zimbra's localconfig.xml and prism's web.ini --> 
+    <!-- =========================================================== -->
+    <Ref id="http">
+        <Get id="jettyPort" name="localPort"/>
+    </Ref>
+    <Call class="com.zimbra.cs.offline.OfflineConfigTool" name="setPort">
+        <Arg>@install.data.root@</Arg>
+        <Arg><Ref id="jettyPort"/></Arg>
+    </Call>
+
+    <!-- =========================================================== -->
+    <!-- Set handler Collection Structure                            --> 
+    <!-- =========================================================== -->
+    <Set name="handler">
+      <New id="Handlers" class="org.mortbay.jetty.handler.RewriteHandler">
+        <Set name="rewriteRequestURI">true</Set>
+        <Set name="rewritePathInfo">false</Set>
+        <Set name="originalPathAttribute">requestedPath</Set>
+
+        <Call name="addRewriteRule"><Arg>/home/*</Arg><Arg>/service/home/</Arg></Call>
+        <Call name="addRewriteRule"><Arg>/user/*</Arg><Arg>/service/user/</Arg></Call>
+        <Call name="addRewriteRule"><Arg>/zimbra/home/*</Arg><Arg>/service/home</Arg></Call>
+        <Call name="addRewriteRule"><Arg>/zimbra/user/*</Arg><Arg>/service/user</Arg></Call>
+
+        <Call name="addRewriteRule"><Arg>/service/*</Arg><Arg></Arg></Call>
+        <Call name="addRewriteRule"><Arg>/zimbra/*</Arg><Arg></Arg></Call>
+        <Call name="addRewriteRule"><Arg>/*</Arg><Arg>/zimbra</Arg></Call>
+        <Set name="handler">
+          <New id="Handlers" class="org.mortbay.jetty.handler.HandlerCollection">
+            <Set name="handlers">
+             <Array type="org.mortbay.jetty.Handler">
+               <Item>
+                 <New id="Contexts" class="org.mortbay.jetty.handler.ContextHandlerCollection"/>
+               </Item>
+               <Item>
+                 <New id="DefaultHandler" class="org.mortbay.jetty.handler.DefaultHandler"/>
+               </Item>
+               <Item>
+                 <New id="RequestLog" class="org.mortbay.jetty.handler.RequestLogHandler"/>
+               </Item>
+             </Array>
+            </Set>
+          </New>
+        </Set>
+      </New>
+    </Set>
+
+    <Array id="plusConfig" type="java.lang.String">
+      <Item>org.mortbay.jetty.webapp.WebInfConfiguration</Item>
+      <Item>org.mortbay.jetty.plus.webapp.EnvConfiguration</Item>
+      <Item>org.mortbay.jetty.plus.webapp.Configuration</Item>
+      <Item>org.mortbay.jetty.webapp.JettyWebXmlConfiguration</Item>
+      <Item>org.mortbay.jetty.webapp.TagLibConfiguration</Item>
+    </Array>
+
+    <New id="service" class="org.mortbay.jetty.webapp.WebAppContext">
+      <Arg><Ref id="Contexts"/></Arg>
+      <Arg><SystemProperty name="jetty.home" default="."/>/webapps/service</Arg>
+      <Arg>/service</Arg>
+      <Set name="configurationClasses"><Ref id="plusConfig"/></Set>
+      <Set name="defaultsDescriptor"><SystemProperty name="jetty.home" default="."/>/etc/webdefault.xml</Set>
+      <Set name="tempDirectory"><SystemProperty name="jetty.home" default="."/>/work/service</Set>
+    </New>
+
+    <New id="zimbra" class="org.mortbay.jetty.webapp.WebAppContext">
+      <Arg><Ref id="Contexts"/></Arg>
+      <Arg><SystemProperty name="jetty.home" default="."/>/webapps/zimbra</Arg>
+      <Arg>/zimbra</Arg>
+      <Set name="configurationClasses"><Ref id="plusConfig"/></Set>
+      <Set name="defaultsDescriptor"><SystemProperty name="jetty.home" default="."/>/etc/webdefault.xml</Set>
+      <Set name="tempDirectory"><SystemProperty name="jetty.home" default="."/>/work/zimbra</Set>
+    </New>
+
+    <!-- =========================================================== -->
+    <!-- Configure the webapp deployer.                              -->
+    <!-- A webapp  deployer will deploy standard webapps discovered  -->
+    <!-- in a directory at startup, without the need for additional  -->
+    <!-- configuration files.    It does not support hot deploy or   -->
+    <!-- non standard contexts (see ContextDeployer above).          -->
+    <!--                                                             -->
+    <!-- This deployer is configured to deploy webapps from the      -->
+    <!-- $JETTY_HOME/webapps directory                               -->
+    <!--                                                             -->
+    <!-- Normally only one type of deployer need be used.            -->
+    <!--                                                             -->
+    <!-- =========================================================== -->
+    <Call name="addLifeCycle">
+      <Arg>
+        <New class="org.mortbay.jetty.deployer.WebAppDeployer">
+          <Set name="contexts"><Ref id="Contexts"/></Set>
+          <Set name="webAppDir"><SystemProperty name="jetty.home" default="."/>/webapps</Set>
+	  <Set name="parentLoaderPriority">false</Set>
+	  <Set name="extract">true</Set>
+	  <Set name="allowDuplicates">false</Set>
+          <Set name="defaultsDescriptor"><SystemProperty name="jetty.home" default="."/>/etc/webdefault.xml</Set>
+        </New>
+      </Arg>
+    </Call>
+
+    <!-- =========================================================== -->
+    <!-- Configure Request Log                                       -->
+    <!-- Request logs  may be configured for the entire server here, -->
+    <!-- or they can be configured for a specific web app in a       -->
+    <!-- contexts configuration (see $(jetty.home)/contexts/test.xml -->
+    <!-- for an example).                                            -->
+    <!-- =========================================================== -->
+    <Ref id="RequestLog">
+      <Set name="requestLog">
+        <New id="RequestLogImpl" class="org.mortbay.jetty.NCSARequestLog">
+          <Arg><SystemProperty name="jetty.home" default="."/>/logs/access_log.yyyy_mm_dd</Arg>
+          <Set name="logDateFormat">dd/MMM/yyyy:HH:mm:ss Z</Set>
+          <Set name="retainDays">30</Set>
+          <Set name="append">true</Set>
+          <Set name="extended">true</Set>
+          <Set name="filenameDateFormat">yyyy-MM-dd</Set>
+        </New>
+      </Set>
+    </Ref>
+
+    <!-- =========================================================== -->
+    <!-- extra options                                               -->
+    <!-- =========================================================== -->
+    <Set name="stopAtShutdown">true</Set>
+    <Set name="sendServerVersion">false</Set>
+    <Set name="sendDateHeader">true</Set>
+
+
+</Configure>

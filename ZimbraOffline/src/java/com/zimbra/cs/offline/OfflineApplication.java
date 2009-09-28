@@ -35,6 +35,8 @@ import com.zimbra.cs.db.OfflineVersions;
 import com.zimbra.cs.store.file.Volume;
 import com.zimbra.cs.util.Config;
 import com.zimbra.cs.util.ZimbraApplication;
+import com.zimbra.cs.zimlet.ZimletFile;
+import com.zimbra.cs.zimlet.ZimletUtil;
 
 public class OfflineApplication extends ZimbraApplication {
     private static String[] sqlScripts = {
@@ -59,6 +61,9 @@ public class OfflineApplication extends ZimbraApplication {
 
     @Override
     public void initialize(boolean forMailboxd) {
+        migrateDb();
+        deployZimlets();
+        
         try {
             if (!forMailboxd)
                 return;
@@ -66,8 +71,9 @@ public class OfflineApplication extends ZimbraApplication {
             long threshold = OfflineLC.zdesktop_volume_compression_threshold.longValue();
             Volume vol = Volume.getCurrentMessageVolume();
             
+            // in offline, we always use the relative path "store" for message volume
             Volume.update(vol.getId(), vol.getType(), vol.getName(),
-                vol.getRootPath(), vol.getMboxGroupBits(), vol.getMboxBits(),
+                "store", vol.getMboxGroupBits(), vol.getMboxBits(),
                 vol.getFileGroupBits(), vol.getFileBits(), threshold != 0,
                 threshold == 0 ? vol.getCompressionThreshold() : threshold, true);
             Volume.reloadVolumes();
@@ -131,5 +137,45 @@ public class OfflineApplication extends ZimbraApplication {
         } catch (Exception x) {
             OfflineLog.offline.warn("Exception during shutdown", x);
         }
+    }
+      
+    private void migrateDb() {
+        try {
+        	OfflineLog.offline.debug("DB migration check started...");
+            new com.zimbra.cs.db.DbOfflineMigration().run();
+            OfflineLog.offline.debug("DB migration done");
+        } catch (SQLException e) {
+        	OfflineLog.offline.error("DB migration sql error: " + e.getMessage());
+        } catch (Exception e) {
+        	OfflineLog.offline.error("DB migration error: " + e.getMessage());
+        }
+    }
+    
+    private void deployZimlets() {
+    	OfflineLog.offline.debug("Deploying new zimlets...");
+    	
+    	File zimletDir = new File(LC.zimbra_home.value() + "/zimlets");
+		if (zimletDir == null || !zimletDir.exists() || !zimletDir.isDirectory()) {
+			OfflineLog.offline.debug("Invalid zimlets directory: " + zimletDir.getPath());
+			return;
+		}
+		
+    	String[] zimlets = zimletDir.list();
+    	if (zimlets == null) {
+    		OfflineLog.offline.debug("No zimlets found at " + zimletDir.getPath());
+    		return;
+    	}
+    	
+    	for (int i = 0; i < zimlets.length; i++) {
+    		try {
+    			ZimletUtil.deployZimlet(new ZimletFile(zimletDir, zimlets[i]));
+    			OfflineLog.offline.debug("Zimlet deployed:  " + zimlets[i]);
+    			new File(zimletDir.getPath() + "/" + zimlets[i]).delete();    			
+    		} catch (Exception e) {
+    			OfflineLog.offline.warn("Fail to deploy zimlet " + zimlets[i] + ": " + e.getMessage());
+    		}
+    	}
+    	
+    	OfflineLog.offline.debug("Zimlets deployment done.");
     }
 }

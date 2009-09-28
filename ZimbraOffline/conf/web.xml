@@ -2,7 +2,6 @@
 <!--
   Copyright 2004 Zimbra Systems, Inc
 -->
-<!DOCTYPE web-app [ <!ENTITY servicePort "@port@"> ]>
 
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,10 +14,6 @@
   <filter>
     <filter-name>ZimletFilter</filter-name>
     <filter-class>com.zimbra.cs.zimlet.ZimletFilter</filter-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
   </filter>
 
   <filter-mapping>
@@ -35,20 +30,12 @@
   <servlet>
     <servlet-name>ExtensionDispatcherServlet</servlet-name>
     <servlet-class>com.zimbra.cs.extension.ExtensionDispatcherServlet</servlet-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
     <load-on-startup>2</load-on-startup>
   </servlet>
   
   <servlet>
     <servlet-name>SoapServlet</servlet-name>
     <servlet-class>com.zimbra.soap.SoapServlet</servlet-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
     <!-- User command handlers only -->
     <init-param>
       <param-name>engine.handler.0</param-name>
@@ -72,10 +59,6 @@
   <servlet>
     <servlet-name>AdminServlet</servlet-name>
     <servlet-class>com.zimbra.soap.SoapServlet</servlet-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
     <!-- Admin servlet allows both admin and user commands -->
     <init-param>
       <param-name>engine.handler.0</param-name>
@@ -100,10 +83,6 @@
     <servlet-name>ContentServlet</servlet-name>
     <servlet-class>com.zimbra.cs.service.ContentServlet</servlet-class>
     <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
-    <init-param>
       <param-name>errorpage.attachment.blocked</param-name>
       <param-value>/error/attachment_blocked.jsp</param-value>
     </init-param>
@@ -114,10 +93,6 @@
     <servlet-name>UserServlet</servlet-name>
     <servlet-class>com.zimbra.cs.service.UserServlet</servlet-class>
     <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
-    <init-param>
       <param-name>errorpage.attachment.blocked</param-name>
       <param-value>/error/attachment_blocked.jsp</param-value>
     </init-param>
@@ -127,106 +102,58 @@
   <servlet>
     <servlet-name>PreAuthServlet</servlet-name>
     <servlet-class>com.zimbra.cs.service.PreAuthServlet</servlet-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
     <load-on-startup>5</load-on-startup>
   </servlet>
 
   <servlet>
     <servlet-name>PublicICalServlet</servlet-name>
     <servlet-class>com.zimbra.cs.service.PublicICalServlet</servlet-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
     <load-on-startup>5</load-on-startup>
   </servlet>
 
   <servlet>
     <servlet-name>FileUploadServlet</servlet-name>
     <servlet-class>com.zimbra.cs.service.FileUploadServlet</servlet-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
     <load-on-startup>6</load-on-startup>
   </servlet>
 
   <servlet>
     <servlet-name>StatsImageServlet</servlet-name>
     <servlet-class>com.zimbra.cs.service.admin.StatsImageServlet</servlet-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
     <load-on-startup>7</load-on-startup>
   </servlet>
 
   <servlet>
     <servlet-name>CollectConfigFiles</servlet-name>
     <servlet-class>com.zimbra.cs.service.admin.CollectConfigFiles</servlet-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
   </servlet>
   
   <servlet>
     <servlet-name>CollectLDAPConfigZimbra</servlet-name>
     <servlet-class>com.zimbra.cs.service.admin.CollectLDAPConfigZimbra</servlet-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
   </servlet>
     
   <servlet>
     <servlet-name>ProxyServlet</servlet-name>
     <servlet-class>com.zimbra.cs.zimlet.ProxyServlet</servlet-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
     <load-on-startup>8</load-on-startup>
   </servlet>
 
   <servlet>
     <servlet-name>DavServlet</servlet-name>
     <servlet-class>com.zimbra.cs.dav.service.DavServlet</servlet-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
     <load-on-startup>9</load-on-startup>
   </servlet>
   
   <servlet>
     <servlet-name>OfflineServlet</servlet-name>
     <servlet-class>com.zimbra.cs.offline.OfflineServlet</servlet-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
-    <init-param>
-      <param-name>port</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
-    <init-param>
-      <param-name>adminPort</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
     <load-on-startup>10</load-on-startup>
   </servlet>
 
   <servlet>
     <servlet-name>ZimletResources</servlet-name>
     <servlet-class>com.zimbra.cs.zimlet.ZimletResources</servlet-class>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>&servicePort;</param-value>
-    </init-param>
   </servlet>
 
   <servlet-mapping>

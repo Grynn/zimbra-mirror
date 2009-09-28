@@ -4,7 +4,7 @@
 	<property file="build.properties"/>
 	<property environment="env" />
 	<property name="offline.appid" value="4062-5711-9195-4050"/>
-	<property name="offline.name" value="Yahoo! Zimbra Desktop"/>
+	<property name="offline.name" value="Zimbra Desktop"/>
 	<condition property="offline.relabel" value="ALPHA">
 		<not><isset property="offline.relabel"/></not>
 	</condition>
@@ -26,7 +26,9 @@
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="build.src.java.dir" location="${build.dir}/src/java" />
 	<property name="dist.dir" location="${build.dir}/dist" />
-	<property name="dist.db.dir" location="${build.dir}/dist/db" />
+	<property name="dist.app.dir" location="${dist.dir}/app"/>
+	<property name="dist.data.dir" location="${dist.dir}/data"/>
+	<property name="dist.db.dir" location="${dist.dir}/db" />
 	<property name="jetty.dir" location="${dist.dir}/jetty" />
 	<property name="zimlet.dir" location="../Zimlet/build/dist" />
 
@@ -61,16 +63,25 @@
 		</not>
 	</condition>
 
+	<condition property="bundle-jre">
+		<not>
+			<os family="mac" />
+		</not>
+	</condition>
+
 	<!-- offline must be able to run from a path with spaces. here we have default dev installation -->
 	<!-- path contain space characters so that if this is broken, we can catch it right away.       -->
 	<condition property="zimbra.home.dir" value="/opt/zimbra/zdesktop" else="/opt/zimbra/zdesktop dev">
 		<isset property="is-windows"/>
 	</condition>
 
-	<property name="zimbra.derby.dir" location="${zimbra.home.dir}/derby"/>
-	<property name="zimbra.index.dir" location="${zimbra.home.dir}/index"/>
-	<property name="zimbra.store.dir" location="${zimbra.home.dir}/store"/>
-	<property name="zimbra.sqlite.dir" location="${zimbra.home.dir}/sqlite"/>
+	<property name="zimbra.offline.app.dir" location="${zimbra.home.dir}/app" />
+	<property name="zimbra.offline.data.dir" location="${zimbra.home.dir}/data" />
+	
+	<property name="zimbra.derby.dir" location="${zimbra.offline.data.dir}/derby" />
+	<property name="zimbra.index.dir" location="${zimbra.offline.data.dir}/index"/>
+	<property name="zimbra.store.dir" location="${zimbra.offline.data.dir}/store"/>
+	<property name="zimbra.sqlite.dir" location="${zimbra.offline.data.dir}/sqlite"/>
 
 	<property name="build.zmprov" location="${build.dir}/data/zmprov.txt" />
 
@@ -85,7 +96,8 @@
 
 	<property name="ical4j.jar" value="ical4j-0.9.16-patched.jar" />
 
-	<property name="jetty.home.dir" location="${zimbra.home.dir}/jetty" />
+	<property name="jetty.home.dir" location="${zimbra.offline.app.dir}/jetty" />
+	<property name="jetty.data.dir" location="${zimbra.offline.data.dir}/jetty"/>
 
 	<property name="webclient.dir" value="../ZimbraWebClient" />
 	<property name="zimbra.warfile" location="${webclient.dir}/build/dist/jetty/webapps/zimbra.war" />
@@ -184,6 +196,7 @@
 		<jar destfile="${build.dir}/${jarfile}" basedir="${build.classes.dir}" excludes="com/zimbra/cs/offline/jsp/**"/>
 		<jar destfile="${build.dir}/offlinejsp.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/common/*.class,com/zimbra/cs/offline/jsp/*.class"/>
 		<jar destfile="${build.dir}/zdesktop.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/start/Main.class" />
+		<jar destfile="${build.dir}/offlinecfgtool.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/OfflineConfigTool.class" />
 	</target>
 
 	<target name="offline-clean" description="Removes build files and undeploys extension">
@@ -284,15 +297,15 @@
 		<copy file="${build.dir}/offlinejsp.jar" todir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib" overwrite="true"/>
 
 		<ant dir="../ZimbraWebClient" target="jspc.offline_build" inheritAll="false" />
-		<mkdir dir="${dist.dir}/jetty/work/zimbra/jsp"/>
-		<copy todir="${dist.dir}/jetty/work/zimbra/jsp" overwrite="true">
+		<mkdir dir="${dist.app.dir}/jetty/work/zimbra/jsp"/>
+		<copy todir="${dist.app.dir}/jetty/work/zimbra/jsp" overwrite="true">
 			<fileset dir="../ZimbraWebClient/build/dist/jetty/work/zimbra/jsp"/>
 		</copy>
 	</target>
 
 	<target name="offline-zimlet-war">
-		<mkdir dir="${dist.dir}/zimlets-deployed"/>
-		<mkdir dir="${dist.dir}/jetty/webapps/zimlet"/>
+		<mkdir dir="${dist.app.dir}/zimlets-deployed"/>
+		<mkdir dir="${dist.app.dir}/jetty/webapps/zimlet"/>
 	</target>
 
 	<target name="offline-db-init" depends="offline-derby-init,offline-sqlite-init" />
@@ -376,7 +389,6 @@
 		<copy tofile="${dist.dir}/conf/cacerts" file="${config.dir}/cacerts" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/keystore.base" file="${config.dir}/keystore.base" overwrite="true" />
 
-		<copy tofile="${dist.dir}/jetty/etc/jetty.xml" file="${config.dir}/jetty-6.1/jetty.xml" overwrite="true" />
 		<copy tofile="${dist.dir}/jetty/etc/start.config" file="${config.dir}/jetty-6.1/start.config" overwrite="true" />
 		<copy tofile="${dist.dir}/jetty/etc/webdefault.xml" file="${server.config.dir}/jetty-6.1/webdefault.xml" overwrite="true" />
 
@@ -398,8 +410,8 @@
 			<fileset dir="${src.db.dir}" includes="*.sql"/>
 			<fileset dir="${build.dir}" includes="*.sql"/>
 			<filterset>
-				<filter token="ZIMBRA_HOME" value="${zimbra.home.dir}/"/>
-				<filter token="ZIMBRA_INSTALL" value="${zimbra.home.dir}/"/>
+				<filter token="ZIMBRA_HOME" value=""/>
+				<filter token="ZIMBRA_INSTALL" value="${zimbra.offline.data.dir}/"/>
 			</filterset>
 		</copy>
 
@@ -407,7 +419,7 @@
 			<isset property="db-derby"/>
 			<then>
 				<copy todir="${dist.dir}/conf" file="${config.dir}/derby.properties" overwrite="true"/>
-				<copy todir="${dist.dir}/lib" file="../ZimbraServer/tools/lib/derbytools.jar" overwrite="true"/>
+				<copy todir="${dist.dir}/jetty/common/lib" file="../ZimbraServer/tools/lib/derbytools.jar" overwrite="true"/>
 				<copy todir="${dist.dir}/jetty/common/lib" file="${common.jars.dir}/derby.jar" overwrite="true"/>
 				<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 					<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
@@ -429,6 +441,7 @@
 		</if>
 
 		<copy todir="${dist.dir}/lib" file="${build.dir}/zdesktop.jar" overwrite="true" />
+		<copy todir="${jetty.dir}/lib" file="${build.dir}/offlinecfgtool.jar" overwrite="true" />
 
 		<!-- wikis -->
 		<mkdir dir="${dist.dir}/wiki/Templates" />
@@ -440,7 +453,7 @@
 	<target name="offline-redeploy-zimlets">
 		<antcall target="offline-build-zimlets"/>
 			<copy todir="${zimbra.home.dir}/zimlets" overwrite="true">
-				<fileset dir="${dist.dir}/zimlets" includes="*.zip" />
+				<fileset dir="${dist.data.dir}/zimlets" includes="*.zip" />
 			</copy>
 		<antcall target="offline-deploy-zimlets"/>
 	</target>
@@ -448,7 +461,7 @@
 	<target name="offline-deploy-zimlets">
 		<foreach target="offline-install-zimlet" param="zimlet">
 			<path>
-				<fileset dir="${zimbra.home.dir}/zimlets" includes="*.zip" />
+				<fileset dir="${zimbra.offline.data.dir}/zimlets" includes="*.zip" />
 			</path>
 			<param name="action" value="deploy" />
 		</foreach>
@@ -457,7 +470,7 @@
 	<target name="offline-install-zimlet">
 		<echo>${action} ${zimlet}</echo>
 		<java classname="com.zimbra.cs.zimlet.ZimletUtil" fork="true" classpathref="deploy.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${zimbra.home.dir}/conf/localconfig.xml" />
+			<sysproperty key="zimbra.config" value="${zimbra.offline.data.dir}/conf/localconfig.xml" />
 			<arg line="-a http://localhost:7733/service/admin/soap/" />
 			<arg line="-u http://localhost:7733/service/upload?fmt=raw" />
 			<arg line="${action}" />
@@ -510,12 +523,12 @@
 		<antcall target="start-jetty-java"/>
 	</target>
 
-	<target name="start-jetty-unix" if="is-unix">
-		<exec executable="${zimbra.home.dir}/bin/offline">
-			<arg value="start"/>
-			<env key="ZIMBRA_HOME" value="${zimbra.home.dir}"/>
-		</exec>
-	</target>
+    <target name="start-jetty-unix" if="is-unix">
+        <exec executable="${zimbra.offline.data.dir}/bin/zdesktop">
+            <arg value="start"/>
+            <env key="ZIMBRA_HOME" value="${zimbra.offline.data.dir}"/>
+        </exec>
+    </target>
 
 	<target name="start-jetty" depends="start-jetty-windows,start-jetty-unix"/>
 
@@ -523,31 +536,31 @@
 		<antcall target="stop-jetty-java"/>
 	</target>
 
-	<target name="stop-jetty-unix" if="is-unix">
-		<if>
-			<available file="${zimbra.home.dir}/bin/offline" type="file"/>
-			<then>
-				<exec executable="${zimbra.home.dir}/bin/offline">
-					<arg value="stop"/>
-					<env key="ZIMBRA_HOME" value="${zimbra.home.dir}"/>
-				</exec>
-			</then>
-			<else>
-				<echo>Jetty not installed; skipping jetty stop</echo>
-			</else>
-		</if>
-	</target>
+    <target name="stop-jetty-unix" if="is-unix">
+        <if>
+            <available file="${zimbra.offline.data.dir}/bin/zdesktop" type="file"/>
+            <then>
+                <exec executable="${zimbra.offline.data.dir}/bin/zdesktop">
+                    <arg value="stop"/>
+                    <env key="ZIMBRA_HOME" value="${zimbra.offline.data.dir}"/>
+                </exec>
+            </then>
+            <else>
+                <echo>Jetty not installed; skipping jetty stop</echo>
+            </else>
+        </if>
+    </target>
 
 	<target name="stop-jetty" depends="stop-jetty-windows,stop-jetty-unix"/>
 
 	<target name="start-jetty-java">
 		<java dir="${jetty.home.dir}" jar="${jetty.home.dir}/start.jar" fork="true" spawn="true">
-			<sysproperty key="java.library.path" value="${zimbra.home.dir}/lib" />
+			<sysproperty key="java.library.path" value="${zimbra.offline.app.dir}/lib" />
 			<sysproperty key="java.awt.headless" value="true" />
 			<sysproperty key="START" value="${jetty.home.dir}/etc/start.config" />
 			<sysproperty key="STOP.PORT" value="7678" />
 			<sysproperty key="STOP.KEY" value="stop" />
-			<sysproperty key="zimbra.config" value="${zimbra.home.dir}/conf/localconfig.xml" />
+			<sysproperty key="zimbra.config" value="${zimbra.offline.data.dir}/conf/localconfig.xml" />
 		</java>
 	</target>
 
@@ -570,64 +583,36 @@
 		<delete dir="${zimbra.home.dir}" />
 
 		<antcall target="offline-make-dist">
-			<param name="param.install.dir" value="${zimbra.home.dir}" />
+			<param name="param.app.dir" value="${zimbra.home.dir}/app" />
+            <param name="param.data.dir" value="${zimbra.home.dir}/data" />			
 			<param name="param.port" value="7733" />
 		</antcall>
-
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e javamail_imap_debug=false" />
-		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e javamail_pop3_debug=false" />
-		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e javamail_smtp_debug=false" />
-		</java>
-
-		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.request=INFO" value="log4j.logger.zimbra.offline.request=DEBUG"/>
-		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.response=INFO" value="log4j.logger.zimbra.offline.response=DEBUG"/>
-		<replace file="${dist.dir}/conf/log4j.properties" token="@install@/log" value="${zimbra.home.dir}/log"/>
 
 		<copy todir="${zimbra.home.dir}" overwrite="true">
 			<fileset dir="${dist.dir}"/>
 		</copy>
 
-		<!--touch>
-    			<fileset dir="${zimbra.home.dir}/jetty/work/zimbra/jsp"/>
-		</touch-->
-
-		<mkdir dir="${zimbra.home.dir}/log" />
-		<mkdir dir="${zimbra.home.dir}/store" />
-		<mkdir dir="${zimbra.home.dir}/index" />
-		<mkdir dir="${zimbra.home.dir}/redolog" />
-		<mkdir dir="${zimbra.home.dir}/redolog/archive" />
-		<mkdir dir="${zimbra.home.dir}/bin" />
 		<mkdir dir="${zimbra.sqlite.dir}" />
 
 		<if>
 			<isset property="is-unix" />
 			<then>
-				<copy tofile="${zimbra.home.dir}/bin/offline" file="src/bin/offline" overwrite="true"/>
-				<copy tofile="${zimbra.home.dir}/bin/zmjava" file="src/bin/zmjava" overwrite="true"/>
-					<chmod perm="a+rx">
-						<fileset dir="${zimbra.home.dir}/bin"/>
-					</chmod>
-				<copy tofile="${zimbra.home.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX" overwrite="true"/>
-				<copy tofile="${zimbra.home.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
+				<copy tofile="${zimbra.offline.data.dir}/bin/zmjava" file="src/bin/zmjava" overwrite="true"/>
+				<chmod perm="a+rx">
+					<fileset dir="${zimbra.offline.data.dir}/bin"/>
+		        </chmod>
+				<copy tofile="${zimbra.offline.app.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX" overwrite="true"/>
+				<copy tofile="${zimbra.offline.app.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
 			</then>
 		</if>
 	</target>
 
 	<target name="offline-reset-the-world-part-2">
-		<antcall target="offline-deploy-zimlets" />
+		<antcall target="offline-server-start" />
 	</target>
 
 	<target name="offline-reset-the-world" description="Offline R-T-W">
 		<antcall target="offline-reset-the-world-part-1" />
-		<antcall target="offline-server-start" />
 		<antcall target="offline-reset-the-world-part-2" />
 	</target>
 
@@ -635,7 +620,7 @@
 		<ant dir="../Zimlet" target="clean" inheritAll="false" />
 		<ant dir="../Zimlet" target="package-zimlets" inheritAll="false" />
 		<ant dir="../Zimlet" target="package-zimlets-offline" inheritAll="false" />
-		<copy todir="${dist.dir}/zimlets" overwrite="true">
+		<copy todir="${dist.data.dir}/zimlets" overwrite="true">
 			<fileset dir="../Zimlet/build/dist/zimlets" includes="*.zip" />
 			<fileset dir="../Zimlet/build/dist/zimlets-offline" includes="*.zip" />
 		</copy>
@@ -647,17 +632,13 @@
 		<mkdir dir="${dist.dir}" />
 		<gunzip src="${jetty.src.dir}/jetty-${jetty.version}.tar.gz" dest="${dist.dir}/jetty-${jetty.version}.tar" />
 		<untar src="${dist.dir}/jetty-${jetty.version}.tar" dest="${dist.dir}" overwrite="true" />
-		<move file="${dist.dir}/jetty-${jetty.version}" tofile="${dist.dir}/jetty" />
+		<move file="${dist.dir}/jetty-${jetty.version}" tofile="${dist.app.dir}/jetty" />
 		<delete file="${dist.dir}/jetty-${jetty.version}.tar" />
-		<mkdir dir="${dist.dir}/jetty/logs" />
-		<mkdir dir="${dist.dir}/jetty/webapps" />
-		<mkdir dir="${dist.dir}/jetty/work" />
+		<mkdir dir="${dist.app.dir}/jetty/logs" />
+		<mkdir dir="${dist.app.dir}/jetty/webapps" />
+		<mkdir dir="${dist.app.dir}/jetty/work" />
 
 		<antcall target="offline-dev-dist"/>
-
-		<replace file="${dist.dir}/jetty/etc/jetty.xml" token="@port@" value="${param.port}"/>
-		<replace file="${dist.dir}/jetty/webapps/service/WEB-INF/web.xml" token="@port@" value="${param.port}"/>
-		<replace file="${dist.dir}/jetty/webapps/zimbra/WEB-INF/web.xml" token="@port@" value="${param.port}"/>
 
 		<antcall target="offline-build-zimlets" />
 			
@@ -665,27 +646,23 @@
 
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e zimbra_home='${param.install.dir}' -f" />
+			<arg line="-e zimbra_home='${param.data.dir}' -f" />
+		</java>           	
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<arg line="-e mailboxd_directory='${param.app.dir}/jetty'" />
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e mailboxd_directory='${param.install.dir}/jetty'" />
+			<arg line="-e zimlet_directory='${param.app.dir}/zimlets-deployed'" />
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e mailboxd_pidfile='${param.install.dir}/log/jetty.pid'" />
+			<arg line="-e mailboxd_keystore='$${zimbra_home}/conf/keystore'" />
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e zimlet_directory='${param.install.dir}/zimlets-deployed'" />
-		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e mailboxd_keystore='${param.install.dir}/conf/keystore'" />
-		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e mailboxd_truststore='${param.install.dir}/conf/cacerts'" />
+			<arg line="-e mailboxd_truststore='$${zimbra_home}/conf/cacerts'" />
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
@@ -699,67 +676,107 @@
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
 			<arg line="-e zdesktop_buildid=${offline.buildid}" />
 		</java>
+        <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+            <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+            <arg line="-e javamail_imap_debug=false" />
+        </java>
+        <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+            <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+            <arg line="-e javamail_pop3_debug=false" />
+        </java>
+        <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+            <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+            <arg line="-e javamail_smtp_debug=false" />
+        </java>
+            	
+		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.request=INFO" value="log4j.logger.zimbra.offline.request=DEBUG"/>
+		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.response=INFO" value="log4j.logger.zimbra.offline.response=DEBUG"/>		
 		
-		<replace file="${dist.dir}/conf/localconfig.xml" token="&lt;localconfig&gt;" value="&lt;!DOCTYPE localconfig [ &lt;!ENTITY servicePort &quot;${param.port}&quot;&gt; ]&gt;&#10;&lt;localconfig&gt;"/>
-		<replace file="${dist.dir}/conf/localconfig.xml" token="@port@" value="&amp;servicePort;"/>
-
-		<mkdir dir="${dist.dir}/log"/>
-		<mkdir dir="${dist.dir}/store"/>
-		<mkdir dir="${dist.dir}/index"/>
-		<mkdir dir="${dist.dir}/redolog"/>
+		<!-- separate app dir and data dir  -->
+		
+		<move file="${dist.dir}/lib" tofile="${dist.app.dir}/lib"/>
+		<move file="${dist.dir}/jetty" tofile="${dist.app.dir}/jetty"/>
+			
+		<move file="${dist.dir}/db" tofile="${dist.data.dir}/db"/>
+		<move file="${dist.dir}/conf" tofile="${dist.data.dir}/conf" />					
+		<move file="${dist.dir}/wiki" tofile="${dist.data.dir}/wiki"/>
+					
+		<!-- create user folders -->
+		<mkdir dir="${dist.data.dir}/log"/>
+		<mkdir dir="${dist.data.dir}/bin"/>	
+		<mkdir dir="${dist.data.dir}/store"/>
+		<mkdir dir="${dist.data.dir}/index"/>
+		<mkdir dir="${dist.data.dir}/redolog"/>
+		<mkdir dir="${dist.data.dir}/redolog/archive"/>
+		<if><isset property="db-sqlite"/><then>
+			<mkdir dir="${dist.data.dir}/sqlite" />
+		</then></if>
+			
+		<mkdir dir="${dist.data.dir}/jetty/etc"/>
+		<copy todir="${dist.data.dir}/jetty/etc" file="${config.dir}/jetty.xml" overwrite="true"/>
+		<copy tofile="${dist.data.dir}/bin/zdesktop" file="src/bin/zdesktop" overwrite="true"/>
+	
+		<!-- update configs -->
+		<replace file="${dist.data.dir}/conf/log4j.properties" token="@install.data.root@" value="${param.data.dir}"/>
+		<replace file="${dist.data.dir}/jetty/etc/jetty.xml" token="@install.jetty.port@" value="${param.port}"/>
+		<replace file="${dist.data.dir}/jetty/etc/jetty.xml" token="@install.data.root@" value="${param.data.dir}"/>
+		<replace file="${dist.data.dir}/bin/zdesktop" token="@install.data.root@" value="${param.data.dir}"/>
+		<replace file="${dist.data.dir}/bin/zdesktop" token="@install.app.root@" value="${param.app.dir}"/>
+	
+		<chmod file="${dist.data.dir}/bin/zdesktop" perm="ugo+x" />
 	</target>
 
 	<target name="offline-prep-launcher">
-		<copy tofile="${dist.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX" overwrite="true"/>
-		<copy tofile="${dist.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
+		<copy tofile="${dist.app.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX" overwrite="true"/>
+		<copy tofile="${dist.app.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
 
-		<copy todir="${dist.dir}" overwrite="true">
+		<copy todir="${dist.app.dir}" overwrite="true">
 			<fileset dir="src/installer" includes="README.txt" />
 		</copy>
-		<replace file="${dist.dir}/README.txt" token="@version@" value="${offline.version} (build ${offline.buildid})"/>
+		<replace file="${dist.app.dir}/README.txt" token="@version@" value="${offline.version} (build ${offline.buildid})"/>
 
-		<copy todir="${dist.dir}/zdesktop.webapp" overwrite="true">
+		<copy todir="${dist.data.dir}/zdesktop.webapp" overwrite="true">
 			<fileset dir="src/installer/webapp" />
 		</copy>
-		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/launcher.icns" file="src/installer/resources/launcher_128x128.icns" overwrite="true"/>
-		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/launcher.png" file="src/installer/resources/launcher_32x32.png" overwrite="true"/>
-		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/launcher.ico" file="src/installer/resources/launcher_32x32.ico" overwrite="true"/>
-		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/newmail.png" file="src/installer/resources/newmail_16x16.png" overwrite="true"/>
+		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/launcher.icns" file="src/installer/resources/launcher_128x128.icns" overwrite="true"/>
+		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/launcher.png" file="src/installer/resources/launcher_32x32.png" overwrite="true"/>
+		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/launcher.ico" file="src/installer/resources/launcher_32x32.ico" overwrite="true"/>
+		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/newmail.png" file="src/installer/resources/newmail_16x16.png" overwrite="true"/>
 
-		<mkdir dir="${dist.dir}/macos"/>
-		<mkdir dir="${dist.dir}/linux"/>
-		<mkdir dir="${dist.dir}/win32"/>
+		<mkdir dir="${dist.app.dir}/macos"/>
+		<mkdir dir="${dist.app.dir}/linux"/>
+		<mkdir dir="${dist.app.dir}/win32"/>
 
-		<copy todir="${dist.dir}/macos" overwrite="true">
+		<copy todir="${dist.app.dir}/macos" overwrite="true">
 			<fileset dir="src/installer" includes="launchd.plist quit_zdesktop.applescript svckill.msh" />
 			<fileset dir="src/installer/resources" includes="launcher_128x128.icns" />
 		</copy>
-		<chmod file="${dist.dir}/macos/svckill.msh" perm="ugo+x"/>
-		<copy todir="${dist.dir}/macos/Yahoo! Zimbra Desktop.app" overwrite="true">
+		<chmod file="${dist.app.dir}/macos/svckill.msh" perm="ugo+x"/>
+		<copy todir="${dist.app.dir}/macos/Zimbra Desktop.app" overwrite="true">
 			<fileset dir="src/installer/macos.app" includes="*/**" />
 		</copy>
-		<copy todir="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/" file="${dist.dir}/macos/prism/Prism.app/Contents/MacOS/prism"/>
-		<chmod file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism" perm="ugo+x"/>
-		<replace file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/Info.plist" token="@version@" value="${offline.version}"/>
+		<copy todir="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/MacOS/" file="${dist.app.dir}/macos/prism/Prism.app/Contents/MacOS/prism"/>
+		<chmod file="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/MacOS/prism" perm="ugo+x"/>
+		<replace file="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/Info.plist" token="@version@" value="${offline.version}"/>
 
-		<copy todir="${dist.dir}/linux" overwrite="true">
+		<copy todir="${dist.app.dir}/linux" overwrite="true">
 			<fileset dir="src/installer" includes="linux.desktop svckill.sh" />
 		</copy>
-		<chmod file="${dist.dir}/linux/svckill.sh" perm="ugo+x"/>
+		<chmod file="${dist.app.dir}/linux/svckill.sh" perm="ugo+x"/>
 
-		<copy todir="${dist.dir}/win32" overwrite="true">
+		<copy todir="${dist.app.dir}/win32" overwrite="true">
 			<fileset dir="src/installer" includes="svckill.vbs" />
 			<fileset dir="src/installer/resources" includes="launcher_32x32.ico launcher_48x48.ico" />
 		</copy>
-		<copy file="src/installer/win32/prism/application.ini" todir="${dist.dir}/win32/prism" overwrite="true"/>
+		<copy todir="${dist.app.dir}/win32/prism" file="src/installer/win32/prism/application.ini" overwrite="true"/>
 	</target>
 
 	<property name="prism.version.macos" value="090709"/>
 	<property name="prism.version.win32" value="090709"/>
 	<property name="prism.version.linux" value="090113"/>
-	<property name="prism.extroot.macos" value="${dist.dir}/macos/prism/Prism.app/Contents/Resources"/>
-	<property name="prism.extroot.win32" value="${dist.dir}/win32/prism"/>
-	<property name="prism.extroot.linux" value="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org"/>
+	<property name="prism.extroot.macos" value="${dist.app.dir}/macos/prism/Prism.app/Contents/Resources"/>
+	<property name="prism.extroot.win32" value="${dist.app.dir}/win32/prism"/>
+	<property name="prism.extroot.linux" value="${dist.app.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org"/>
 
 	<macrodef name="translate-prism-files">
 		<attribute name="language"/> 
@@ -790,7 +807,7 @@
 		<attribute name="extroot"/>
 
 		<sequential>
-			<copy todir="${dist.dir}/@{os}/prism/" overwrite="true">
+			<copy todir="${dist.app.dir}/@{os}/prism/" overwrite="true">
 				<fileset dir="${prism.src.dir}/@{os}/@{version}/patches/" includes="*/**"/>	
 			</copy>
 
@@ -823,16 +840,12 @@
 
 	<target name="offline-prep-prism">
 	    <!-- unzip original prism drops to dist dirs -->			
-		<unzip src="${prism.src.dir}/macos/${prism.version.macos}/drop/prism-${prism.version.macos}.macos.zip" dest="${dist.dir}/macos/prism" overwrite="true"/>
-		<unzip src="${prism.src.dir}/win32/${prism.version.win32}/drop/prism-${prism.version.win32}.win32.zip" dest="${dist.dir}/win32/prism" overwrite="true"/>
-		<unzip src="${prism.src.dir}/linux/${prism.version.linux}/drop/prism-${prism.version.linux}.linux.zip" dest="${dist.dir}/linux/prism" overwrite="true"/>
+		<unzip src="${prism.src.dir}/macos/${prism.version.macos}/drop/prism-${prism.version.macos}.macos.zip" dest="${dist.app.dir}/macos/prism" overwrite="true"/>
+		<unzip src="${prism.src.dir}/win32/${prism.version.win32}/drop/prism-${prism.version.win32}.win32.zip" dest="${dist.app.dir}/win32/prism" overwrite="true"/>
+		<unzip src="${prism.src.dir}/linux/${prism.version.linux}/drop/prism-${prism.version.linux}.linux.zip" dest="${dist.app.dir}/linux/prism" overwrite="true"/>
 
 		<!-- delete unused refractor extensions from win32 and linux -->
-		<delete dir="${dist.dir}/linux/prism/extensions/refractor@developer.mozilla.org"/>
-
-		<!-- rename prism executables on win32 and linux to zdclient -->
-		<move file="${dist.dir}/win32/prism/prism.exe" tofile="${dist.dir}/win32/prism/zdclient.exe" overwrite="true"/>
-		<move file="${dist.dir}/linux/prism/prism" tofile="${dist.dir}/linux/prism/zdclient" overwrite="true"/>
+		<delete dir="${dist.app.dir}/linux/prism/extensions/refractor@developer.mozilla.org"/>
 
 		<!-- apply patches and i18n works -->
 		<native2ascii reverse="true" encoding="UTF8" src="src/installer/messages" dest="src/installer/messages_utf8" includes="*.properties" />
@@ -840,80 +853,99 @@
 		<patch-prism-files os="win32" version="${prism.version.win32}" extroot="${prism.extroot.win32}"/>
 		<patch-prism-files os="linux" version="${prism.version.linux}" extroot="${prism.extroot.linux}"/>
 
+		<!-- rename prism executables on win32 and linux to zdclient -->
+		<move file="${dist.app.dir}/win32/prism/prism.exe" tofile="${dist.app.dir}/win32/prism/zdclient.exe" overwrite="true"/>
+		<move file="${dist.app.dir}/linux/prism/prism" tofile="${dist.app.dir}/linux/prism/zdclient" overwrite="true"/>
+		<chmod file="${dist.app.dir}/linux/prism/zdclient" perm="ugo+x"/>
+
 		<!-- use firefox xulrunner to replace the one comes with prism -->
 <!--
 		<delete>
-			<fileset dir="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework"/>
-			<fileset dir="${dist.dir}/win32/prism/xulrunner"/>
-			<fileset dir="${dist.dir}/linux/prism/xulrunner"/>
+			<fileset dir="${dist.app.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework"/>
+			<fileset dir="${dist.app.dir}/win32/prism/xulrunner"/>
+			<fileset dir="${dist.app.dir}/linux/prism/xulrunner"/>
 		</delete>
-       	<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.macos.zip" dest="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks"/>
-       	<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.win32.zip" dest="${dist.dir}/win32/prism"/>
-       	<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.linux.zip" dest="${dist.dir}/linux/prism"/>
+       	<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.macos.zip" dest="${dist.app.dir}/macos/prism/Prism.app/Contents/Frameworks"/>
+       	<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.win32.zip" dest="${dist.app.dir}/win32/prism"/>
+       	<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.linux.zip" dest="${dist.app.dir}/linux/prism"/>
 -->
-		<copy todir="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/chrome" overwrite="true">
+		<copy todir="${dist.app.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/chrome" overwrite="true">
 			<fileset dir="${xulrunner.src.dir}/locales" includes="*.manifest *.jar"/>
 		</copy>
-		<copy todir="${dist.dir}/win32/prism/xulrunner/chrome" overwrite="true">
+		<copy todir="${dist.app.dir}/win32/prism/xulrunner/chrome" overwrite="true">
 			<fileset dir="${xulrunner.src.dir}/locales" includes="*.manifest *.jar"/>
 		</copy>
-		<copy todir="${dist.dir}/linux/prism/xulrunner/chrome" overwrite="true">
+		<copy todir="${dist.app.dir}/linux/prism/xulrunner/chrome" overwrite="true">
 			<fileset dir="${xulrunner.src.dir}/locales" includes="*.manifest *.jar"/>
 		</copy>
 
 		<!-- patch xulrunner with our update service mod -->
-		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/components/nsUpdateService.js" file="src/installer/updater/macos/nsUpdateService.js" overwrite="true"/>
-		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app/Contents/MacOS/updater" file="src/installer/updater/macos/updater" overwrite="true"/>
-		<chmod file="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app/Contents/MacOS/updater" perm="ugo+x"/>
-		<copy tofile="${dist.dir}/win32/prism/xulrunner/components/nsUpdateService.js" file="src/installer/updater/win32/nsUpdateService.js" overwrite="true"/>
-		<copy tofile="${dist.dir}/win32/prism/xulrunner/updater.exe" file="src/installer/updater/win32/updater.exe" overwrite="true"/>
-		<copy tofile="${dist.dir}/linux/prism/xulrunner/components/nsUpdateService.js" file="src/installer/updater/linux/nsUpdateService.js" overwrite="true"/>
-		<copy tofile="${dist.dir}/linux/prism/xulrunner/updater" file="src/installer/updater/linux/updater" overwrite="true"/>
-		<chmod file="${dist.dir}/linux/prism/xulrunner/updater" perm="ugo+x"/>
+		<copy tofile="${dist.app.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/components/nsUpdateService.js" file="src/installer/updater/macos/nsUpdateService.js" overwrite="true"/>
+		<copy tofile="${dist.app.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app/Contents/MacOS/updater" file="src/installer/updater/macos/updater" overwrite="true"/>
+		<chmod file="${dist.app.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app/Contents/MacOS/updater" perm="ugo+x"/>
+		<copy tofile="${dist.app.dir}/win32/prism/xulrunner/components/nsUpdateService.js" file="src/installer/updater/win32/nsUpdateService.js" overwrite="true"/>
+		<copy tofile="${dist.app.dir}/win32/prism/xulrunner/updater.exe" file="src/installer/updater/win32/updater.exe" overwrite="true"/>
+		<copy tofile="${dist.app.dir}/linux/prism/xulrunner/components/nsUpdateService.js" file="src/installer/updater/linux/nsUpdateService.js" overwrite="true"/>
+		<copy tofile="${dist.app.dir}/linux/prism/xulrunner/updater" file="src/installer/updater/linux/updater" overwrite="true"/>
+		<chmod file="${dist.app.dir}/linux/prism/xulrunner/updater" perm="ugo+x"/>
 
 		<!-- set permissions executibles -->
-		<chmod dir="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/" perm="ugo+x" includes="*/**"/> 
-		<chmod file="${dist.dir}/macos/prism/Prism.app/Contents/MacOS/prism" perm="ugo+x"/> 
-		<chmod file="${dist.dir}/linux/prism/prism" perm="ugo+x"/>
+		<chmod dir="${dist.app.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/" perm="ugo+x" includes="*/**"/> 
+		<chmod file="${dist.app.dir}/macos/prism/Prism.app/Contents/MacOS/prism" perm="ugo+x"/> 
+		<chmod file="${dist.app.dir}/linux/prism/prism" perm="ugo+x"/>
 
 		<!-- fix things that are specific to each platform -->
-		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
-		<copy tofile="${dist.dir}/win32/prism/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
-		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
+		<copy tofile="${dist.app.dir}/macos/prism/Prism.app/Contents/Resources/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
+		<copy tofile="${dist.app.dir}/win32/prism/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
+		<copy tofile="${dist.app.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 	
 		<!-- unzip zimbra drag and drop extension -->
 		<ant dir="../ZimbraWebClient" target="ffext-reset-the-world" inheritAll="false"/>
-		<mkdir dir="${dist.dir}/profile/extensions/zimbradnd@zimbra.com"/>
-		<unzip src="../ZimbraWebClient/ffext/build/ZimbraDnD.xpi" dest="${dist.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>
+		<mkdir dir="${dist.data.dir}/profile/extensions/zimbradnd@zimbra.com"/>
+		<unzip src="../ZimbraWebClient/ffext/build/ZimbraDnD.xpi" dest="${dist.data.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>
 		
 		<!-- unzip inquisitor extension -->
-		<mkdir dir="${dist.dir}/profile/extensions/Inquisitor@yahoo"/>
-		<unzip src="src/installer/extensions/inquisitor4prism.xpi" dest="${dist.dir}/profile/extensions/Inquisitor@yahoo" overwrite="true"/>
+		<mkdir dir="${dist.data.dir}/profile/extensions/Inquisitor@yahoo"/>
+		<unzip src="src/installer/extensions/inquisitor4prism.xpi" dest="${dist.data.dir}/profile/extensions/Inquisitor@yahoo" overwrite="true"/>
 
 		<!-- any non-branding patches that are between prism drops should go here -->
 
 	</target>
 
 	<target name="test-launcher-mac">
-		<replace file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini" token="@install@" value="${dist.dir}"/>
-		<replace file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" token="@install@" value="${dist.dir}"/>
+		<replace file="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/Resources/application.ini" token="@install@" value="${dist.dir}"/>
+		<replace file="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" token="@install@" value="${dist.dir}"/>
 	</target>
 	
 	<target name="offline-install-misc">
-		<replace file="${dist.dir}/conf/log4j.properties" token="@install@/log/" value=""/>
-		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.rootLogger=INFO,CONSOLE,LOGFILE" value="log4j.rootLogger=INFO,LOGFILE"/>
-		<replace file="${dist.dir}/jetty/resources/log4j.properties" token="/opt/zimbra/log/" value=""/>
+		<replace file="${dist.data.dir}/conf/log4j.properties" token="@install.data.root@/log/" value=""/>
+		<replace file="${dist.data.dir}/conf/log4j.properties" token="log4j.rootLogger=INFO,CONSOLE,LOGFILE" value="log4j.rootLogger=INFO,LOGFILE"/>
+		<replace file="${dist.app.dir}/jetty/resources/log4j.properties" token="/opt/zimbra/log/" value=""/>
 	</target>
 
+	<target name="offline-jre" if="bundle-jre">
+		<mkdir dir="${dist.app.dir}/win32/jre"/>
+		<gunzip src="../ThirdParty/java/jre/windows-x86-1.5.0_15.tar.gz" dest="${dist.app.dir}/win32/jre"/>
+		<untar src="${dist.app.dir}/win32/jre/windows-x86-1.5.0_15.tar" dest="${dist.app.dir}/win32/jre" overwrite="true"/>
+		<delete file="${dist.app.dir}/win32/jre/windows-x86-1.5.0_15.tar"/>
+		
+		<mkdir dir="${dist.app.dir}/linux/jre"/>
+		<gunzip src="../ThirdParty/java/jre/linux-x86-1.5.0_15.tar.gz" dest="${dist.app.dir}/linux/jre"/>
+		<untar src="${dist.app.dir}/linux/jre/linux-x86-1.5.0_15.tar" dest="${dist.app.dir}/linux/jre" overwrite="true"/>
+		<delete file="${dist.app.dir}/linux/jre/linux-x86-1.5.0_15.tar"/> 
+	</target>
+		
 	<target name="offline-make-install-files">
 		<antcall target="offline-make-dist">
-			<param name="param.install.dir" value="@install@" />
-			<param name="param.port" value="7633" />
+			<param name="param.app.dir" value="@install.app.root@" />
+	        <param name="param.data.dir" value="@install.data.root@" />
+			<param name="param.port" value="0" />
 		</antcall>
 		<antcall target="offline-install-misc" />
 		<antcall target="offline-prep-prism" />
 		<antcall target="offline-prep-launcher" />
 		<antcall target="offline-jspc" />
+		<antcall target="offline-jre" />
 	</target>
 
 	<target name="offline-sync-jsp-opt">
@@ -932,18 +964,18 @@
 	</target>
 
 	<target name="offline-sync-jsp-dist">
-		<copy todir="${dist.dir}/jetty/webapps/zimbra/desktop" overwrite="true">
-			<fileset dir="WebRoot/desktop" includes="**/*"/>
-		</copy>
-		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
-			<fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag"/>
-		</copy>
-		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/classes/desktop" overwrite="true">
-			<fileset dir="WebRoot/WEB-INF/classes/desktop" includes="*.properties"/>
-		</copy>
-		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tlds" overwrite="true">
-			<fileset dir="WebRoot/WEB-INF/tlds" includes="*.tld"/>
-		</copy>
+        <copy todir="${dist.app.dir}/jetty/webapps/zimbra/desktop" overwrite="true">
+            <fileset dir="WebRoot/desktop" includes="**/*"/>
+        </copy>
+        <copy todir="${dist.app.dir}/jetty/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
+            <fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag"/>
+        </copy>
+        <copy todir="${dist.app.dir}/jetty/webapps/zimbra/WEB-INF/classes/desktop" overwrite="true">
+            <fileset dir="WebRoot/WEB-INF/classes/desktop" includes="*.properties"/>
+        </copy>
+        <copy todir="${dist.app.dir}/jetty/webapps/zimbra/WEB-INF/tlds" overwrite="true">
+            <fileset dir="WebRoot/WEB-INF/tlds" includes="*.tld"/>
+        </copy>
 	</target>
 
 	<target name="offline-dev-sync">

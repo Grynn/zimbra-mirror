@@ -12,16 +12,16 @@
 		<delete dir="${jetty_webapps}" />
 		<mkdir dir="${jetty_webapps}" />
 		<war warfile="${jetty_webapps}/service.war" webxml="${config.dir}/web.xml">
-                        <fileset dir="../ZimbraServer/WebRoot"/>
+			<fileset dir="../ZimbraServer/WebRoot"/>
 			<lib dir="${common.jars.dir}" includes="*.jar" excludes="${war.exclude}" />
 			<lib dir="${im.jars.dir}" includes="*.jar" excludes="${war.exclude}" />
-                        <lib dir="${jars.dir}" includes="*.jar" excludes="${war.exclude}" />
-                        <classes dir="${server.config.dir}" includes="sieveConfig.xml" />
+			<lib dir="${jars.dir}" includes="*.jar" excludes="${war.exclude}" />
+			<classes dir="${server.config.dir}" includes="sieveConfig.xml" />
 		</war>
 		<mkdir dir="${jetty_webapps}/service" />
 		<unzip dest="${jetty_webapps}/service" src="${jetty_webapps}/service.war" />
 		<delete file="${jetty_webapps}/service.war" />
-                <replace file="${jetty_webapps}/service/WEB-INF/web.xml" token="@port@" value="7733"/>
+        <replace file="${jetty_webapps}/service/WEB-INF/web.xml" token="@port@" value="7733"/>
 	</target>
 
 	<property name="project.outputDirectory" value="build" />
@@ -30,7 +30,7 @@
 	<property name="jetty_run_base" location="/opt/zimbra/zdesktop dev" />
 
 	<path id="jetty.plugin.classpath">
-		<fileset dir="${jetty_run_base}/jetty/lib">
+		<fileset dir="${jetty_run_base}/app/jetty/lib">
 			<include name="*.jar" />
 			<include name="plus/*.jar" />
 			<include name="naming/*.jar" />
@@ -51,14 +51,14 @@
 			</connectors>
 
 			<systemProperties>
-				<systemproperty name="zimbra.config" value="${jetty_run_base}/conf/localconfig.xml" />
-				<systemproperty name="java.library.path" value="${jetty_run_base}/lib" />
+				<systemproperty name="zimbra.config" value="${jetty_run_base}/data/conf/localconfig.xml" />
+				<systemproperty name="java.library.path" value="${jetty_run_base}/app/lib" />
 				<systemproperty name="java.awt.headless" value="true" />
 			</systemProperties>
 
-			<webApp name="ZimbraServer" warfile="${jetty_webapps}/service" contextpath="/service">
-				<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar" />
-				<lib dir="${jetty_run_base}/lib" includes="*.jar" excludes="not-needed.jar" />
+			<webApp name="ZimbraServer" warfile="build/dist/app/jetty/webapps/service" contextpath="/service">
+				<lib dir="${jetty_run_base}/app/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar" />
+				<lib dir="${jetty_run_base}/app/lib" includes="*.jar" excludes="not-needed.jar" />
                 		<classes dir="build/classes"/>
 				<classes dir="../ZimbraCommon/build/classes" />
 				<classes dir="../ZimbraIM/build/classes" />
@@ -69,9 +69,9 @@
 				<!--classes dir="../ThirdParty/javamail/javamail-1.4.1ea/mail/build/classes" /-->
 			</webApp>
 
-              	<webApp name="ZimbraWebClient" warfile="build/dist/jetty/webapps/zimbra" contextpath="/zimbra">
-			<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar" />
-                	<classes dir="${jetty_run_base}/jetty/webapps/zimbra/WEB-INF/classes"/>
+           	<webApp name="ZimbraWebClient" warfile="build/dist/app/jetty/webapps/zimbra" contextpath="/zimbra">
+			<lib dir="${jetty_run_base}/app/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar" />
+                	<classes dir="${jetty_run_base}/app/jetty/webapps/zimbra/WEB-INF/classes"/>
                 	<classes dir="build/classes"/>
 			<classes dir="../ZimbraCommon/build/classes" />
 			<classes dir="../ZimbraIM/build/classes" />
