@@ -112,6 +112,14 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
         return CALDAV_APPNAME;
     }
     
+    @Override protected byte getDefaultColor() {
+        if (serviceName.equals("yahoo.com"))
+            return 4;
+        else if (serviceName.equals("gmail.com"))
+            return 5;
+        return 0;
+    }
+    
     @Override
     protected int getRootFolderId(DataSource ds) throws ServiceException {
     	//return ds.getIntAttr(OfflineConstants.A_zimbraDataSourceCalendarFolderId, ds.getFolderId());
