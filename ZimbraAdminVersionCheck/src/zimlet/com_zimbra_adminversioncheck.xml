@@ -1,0 +1,6 @@
+<zimlet name="com_zimbra_adminversioncheck" version="1.0.0" description="Version check Extension for Admin UI" extension="true">
+<include>com_zimbra_adminversioncheck.js</include>
+<include>ZaVersionCheckViewController.js</include>
+<include>ZaVersionCheckXFormView.js</include>
+<disableUIUndeploy>FALSE</disableUIUndeploy>
+</zimlet>
