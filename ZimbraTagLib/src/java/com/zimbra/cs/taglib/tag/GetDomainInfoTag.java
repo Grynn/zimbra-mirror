@@ -16,12 +16,12 @@ package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.util.DateUtil;
 import com.zimbra.common.util.EasySSLProtocolSocketFactory;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.account.soap.SoapProvisioning;
-import com.zimbra.cs.servlet.ZimbraServlet;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -83,7 +83,7 @@ public class GetDomainInfoTag extends ZimbraSimpleTag {
         SoapProvisioning sp = new SoapProvisioning();
         String mServer = LC.zimbra_zmprov_default_soap_server.value();
         int mPort = LC.zimbra_admin_service_port.intValue();
-        sp.soapSetURI(LC.zimbra_admin_service_scheme.value()+mServer+":"+mPort+ ZimbraServlet.ADMIN_SERVICE_URI);
+        sp.soapSetURI(LC.zimbra_admin_service_scheme.value()+mServer+":"+mPort+ AdminConstants.ADMIN_SERVICE_URI);
         try {
             return sp.getDomainInfo(mBy, mValue);
         } catch (ServiceException e) {

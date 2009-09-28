@@ -62,7 +62,6 @@ import com.zimbra.cs.offline.ab.gab.GDataServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 import com.zimbra.cs.service.UserServlet;
-import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.yauth.AuthenticationException;
 
@@ -588,7 +587,7 @@ public class OfflineSyncManager {
 
     private synchronized void confirmServiceOpen() {
         String uri = LC.zimbra_admin_service_scheme.value() + "127.0.0.1"+ ":" + LC.zimbra_admin_service_port.value() +
-        ZimbraServlet.ADMIN_SERVICE_URI;
+        AdminConstants.ADMIN_SERVICE_URI;
         for (int i = 0; i < 24; ++i) {
             try {
                 SoapHttpTransport transport = new SoapHttpTransport(uri);

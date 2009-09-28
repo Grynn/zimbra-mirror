@@ -24,6 +24,7 @@ import java.util.TimerTask;
 import java.util.UUID;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element.XMLElement;
@@ -41,7 +42,6 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.service.account.ModifyPrefs;
-import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.ZimbraApplication;
 import com.zimbra.cs.zclient.ZFilterRules;
@@ -169,7 +169,7 @@ public class DirectorySync {
 
         try {
             // fetch the account data from the remote host
-            ZMailbox zmbx = prov.newZMailbox((OfflineAccount)acct, ZimbraServlet.USER_SERVICE_URI);
+            ZMailbox zmbx = prov.newZMailbox((OfflineAccount)acct, AccountConstants.USER_SERVICE_URI);
             syncAccount(prov, acct, zmbx);
             pushAccount(prov, acct, zmbx);
             syncFilterRules(prov, acct, zmbx);

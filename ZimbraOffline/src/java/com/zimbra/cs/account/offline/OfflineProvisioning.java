@@ -19,6 +19,7 @@ import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.RemoteServiceException;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.CustomTrustManager;
@@ -51,7 +52,6 @@ import com.zimbra.cs.offline.ab.gab.GDataServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.util.OfflineUtil;
 import com.zimbra.cs.offline.util.OfflineYAuth;
-import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.util.yauth.AuthenticationException;
 import com.zimbra.cs.util.yauth.MetadataTokenStore;
 import com.zimbra.cs.zclient.ZGetInfoResult;
@@ -353,7 +353,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     		acceptSSLCertAlias(sslCertAlias);
 
         // fetch the mailbox; this will throw an exception if the username/password/URI are incorrect
-        ZMailbox.Options options = new ZMailbox.Options(acct.getAttr(Provisioning.A_mail), AccountBy.name, password, Offline.getServerURI(baseUri, ZimbraServlet.USER_SERVICE_URI));
+        ZMailbox.Options options = new ZMailbox.Options(acct.getAttr(Provisioning.A_mail), AccountBy.name, password, Offline.getServerURI(baseUri, AccountConstants.USER_SERVICE_URI));
         newZMailbox(options, proxyHost, proxyPort, proxyUser, proxyPass);
         OfflineSyncManager.getInstance().clearErrorCode(acct.getName());
     }
@@ -510,7 +510,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	if (sslCertAlias != null)
     		acceptSSLCertAlias(sslCertAlias);
         
-        ZGetInfoResult zgi = newZMailbox(emailAddress, (String)attrs.get(A_offlineRemotePassword), attrs, ZimbraServlet.USER_SERVICE_URI).getAccountInfo(false);
+        ZGetInfoResult zgi = newZMailbox(emailAddress, (String)attrs.get(A_offlineRemotePassword), attrs, AccountConstants.USER_SERVICE_URI).getAccountInfo(false);
         OfflineLog.offline.info("Remote Zimbra Server Version: " + zgi.getVersion());
         OfflineAccount.Version remoteVersion = new OfflineAccount.Version(zgi.getVersion());
         if (!remoteVersion.isAtLeast(MIN_ZCS_VER))

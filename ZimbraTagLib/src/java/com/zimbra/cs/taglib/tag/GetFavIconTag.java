@@ -17,8 +17,8 @@ package com.zimbra.cs.taglib.tag;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.account.Entry;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.common.localconfig.LC;
+import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.common.util.HttpUtil;
 
@@ -61,7 +61,7 @@ public class GetFavIconTag extends ZimbraSimpleTag {
 				LC.zimbra_zmprov_default_soap_server.value() +
 				':' +
 				LC.zimbra_admin_service_port.intValue() +
-				ZimbraServlet.ADMIN_SERVICE_URI
+				AdminConstants.ADMIN_SERVICE_URI
 			;
 
 			SoapProvisioning provisioning = new SoapProvisioning();

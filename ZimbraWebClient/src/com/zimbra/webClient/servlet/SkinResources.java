@@ -17,6 +17,7 @@ package com.zimbra.webClient.servlet;
 
 import com.yahoo.platform.yui.compressor.CssCompressor;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
+import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.servlet.DiskCacheServlet;
@@ -47,7 +48,6 @@ import com.zimbra.cs.account.Entry;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.account.soap.SoapProvisioning;
-import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.kabuki.util.Colors;
 
@@ -407,7 +407,7 @@ public class SkinResources
 				LC.zimbra_zmprov_default_soap_server.value() +
 				':' +
 				LC.zimbra_admin_service_port.intValue() +
-				ZimbraServlet.ADMIN_SERVICE_URI
+				AdminConstants.ADMIN_SERVICE_URI
 			;
 			provisioning.soapSetURI(soapUri);
 			String serverName = getServerName(req);
