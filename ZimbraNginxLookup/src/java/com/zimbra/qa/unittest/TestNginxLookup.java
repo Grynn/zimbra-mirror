@@ -29,6 +29,7 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 
+import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.util.CliUtil;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Config;
@@ -163,7 +164,7 @@ public class TestNginxLookup extends TestCase {
         
         CliUtil.toolSetup();
         mSoapProv = new SoapProvisioning();
-        mSoapProv.soapSetURI("https://localhost:7071" + ZimbraServlet.ADMIN_SERVICE_URI);
+        mSoapProv.soapSetURI("https://localhost:7071" + AdminConstants.ADMIN_SERVICE_URI);
         mSoapProv.soapZimbraAdminAuthenticate();
         
         String TEST_ID = TestProvisioningUtil.genTestId();
