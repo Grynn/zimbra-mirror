@@ -54,6 +54,9 @@ if(ZaAccount) {
 	ZaAccount.myXModel.items.push(domainAdminMailQuotaAllowedItem);
 }
 
+if (ZaSearchOption) {
+	ZaSearchOption.A_objTypeAccountDomainAdmin = ZaAccount.A_zimbraIsDelegatedAdminAccount;
+}
 
 if (ZaCos) {
 	ZaCos.A_zimbraDomainAdminMaxMailQuota = "zimbraDomainAdminMaxMailQuota" ;

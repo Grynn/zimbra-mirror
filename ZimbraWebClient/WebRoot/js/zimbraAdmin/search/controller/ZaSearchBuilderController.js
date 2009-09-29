@@ -79,7 +79,7 @@ function (query) {
 
 ZaSearchBuilderController.handleOptions =
 function (value, event, form){
-	DBG.println(AjxDebug.DBG3, "Handling the options on the search builder toolbar ...");
+//	DBG.println(AjxDebug.DBG3, "Handling the options on the search builder toolbar ...");
 	
 	var controller = form.parent._controller ;
 	var searchField = ZaApp.getInstance().getSearchListController()._searchField ;
