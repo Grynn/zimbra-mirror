@@ -1096,30 +1096,26 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                             label:ZaMsg.NAD_zimbraSkinForegroundColor,
                             labelLocation:_LEFT_,
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-                            buttonImage: "Color", width: "50px" ,
-                            onChange:ZaTabView.onFormFieldChanged
+                            buttonImage: "Color", width: "50px"
                         }  ,
                         {ref:ZaDomain.A_zimbraSkinBackgroundColor,
                             type: _SUPER_DWT_COLORPICKER_,
                             label:ZaMsg.NAD_zimbraSkinBackgroundColor,
                             labelLocation:_LEFT_,  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-                            buttonImage: "Color", width: "50px" ,
-                            onChange:ZaTabView.onFormFieldChanged
+                            buttonImage: "Color", width: "50px"
                         }  ,
                         {ref:ZaDomain.A_zimbraSkinSecondaryColor, 
                             type: _SUPER_DWT_COLORPICKER_,
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             label:ZaMsg.NAD_zimbraSkinSecondaryColor,
                             labelLocation:_LEFT_,
-                            buttonImage: "Color", width: "50px" ,
-                            onChange:ZaTabView.onFormFieldChanged
+                            buttonImage: "Color", width: "50px"
                         },
                         {ref:ZaDomain.A_zimbraSkinSelectionColor,
                             type: _SUPER_DWT_COLORPICKER_,
                             label:ZaMsg.NAD_zimbraSkinSelectionColor,
                             labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-                            buttonImage: "Color", width: "50px" ,
-                            onChange:ZaTabView.onFormFieldChanged
+                            buttonImage: "Color", width: "50px"
                         },
                         {type:_GROUP_,  colSpan: 2, cssStyle: "margin-top: 10px; margin-left: 200px", items: [
                                 {type: _DWT_BUTTON_,  label: ZaMsg.bt_ResetAllSkinColor,

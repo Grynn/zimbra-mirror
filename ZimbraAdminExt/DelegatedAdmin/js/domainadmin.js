@@ -103,7 +103,6 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 			{ ref:ZaAccount.A_zimbraDomainAdminMaxMailQuota, type:_SUPER_TEXTFIELD_,
 				type:_SUPER_TEXTFIELD_, resetToSuperLabel: ZaMsg.NAD_ResetToCOS,
 				msgName:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
-				onChange:ZaTabView.onFormFieldChanged,
 				txtBoxLabel:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
 				toolTipContent: com_zimbra_delegatedadmin.tt_DomainAdminMaxMailQuota,
                 visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount]==\'TRUE\' "],
@@ -302,8 +301,7 @@ if(ZaTabView.XFormModifiers["ZaCosXFormView"]) {
 					ref:ZaCos.A_zimbraDomainAdminMaxMailQuota, type:_TEXTFIELD_,
 					msgName:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,label:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
 					labelLocation:_LEFT_,
-					cssClass:"admin_xform_number_input",
-					onChange:ZaTabView.onFormFieldChanged
+					cssClass:"admin_xform_number_input"
 				};
 
 		
@@ -769,8 +767,7 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
     ZaDomainXFormView.LogoAppBannerPreviewId = Dwt.getNextId() ;
 
     ZaDomainXFormView.onAppLogoURLChange = function (value, event, form) {
-        ZaTabView.onFormFieldChanged.call (this, value, event, form) ;
-
+        this.setInstanceValue (value) ;
         var appBannerPreviewItem = form.getItemsById (ZaDomainXFormView.LogoAppBannerPreviewId) [0];
         appBannerPreviewItem.updateElement(ZaDomainXFormView.getAppLogoPreview.call(this)) ;
     }
@@ -797,8 +794,7 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
     ZaDomainXFormView.LogoLoginBannerPreviewId = Dwt.getNextId() ;
 
     ZaDomainXFormView.onLoginLogoURLChange = function (value, event, form) {
-        ZaTabView.onFormFieldChanged.call (this, value, event, form) ;
-
+        this.setInstanceValue (value) ;
         var loginBannerPreviewItem = form.getItemsById (ZaDomainXFormView.LogoLoginBannerPreviewId) [0];
         loginBannerPreviewItem.updateElement(ZaDomainXFormView.getLoginLogoPreview.call(this)) ;
     }
@@ -1044,8 +1040,7 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
                            {ref:ZaDomain.A_zimbraSkinLogoURL,
                                 type:ZaSettings.isDomainAdmin ? _TEXTFIELD_ : _SUPER_TEXTFIELD_,  textFieldWidth: "200px",
                                 label:com_zimbra_delegatedadmin.NAD_zimbraSkinLogoURL,
-                                labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-                                onChange:ZaTabView.onFormFieldChanged
+                                labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
                             },
                             {ref:ZaDomain.A_zimbraSkinLogoAppBanner,
                                 type: ZaSettings.isDomainAdmin ? _TEXTFIELD_ : _SUPER_TEXTFIELD_,  textFieldWidth: "200px",
@@ -1152,8 +1147,7 @@ if (GlobalConfigXFormView)  {
     GlobalConfigXFormView.LogoAppBannerPreviewId = Dwt.getNextId() ;
 
     GlobalConfigXFormView.onAppLogoURLChange = function (value, event, form) {
-        ZaTabView.onFormFieldChanged.call (this, value, event, form) ;
-
+        this.setInstanceValue (value) ;
         var appBannerPreviewItem = form.getItemsById (GlobalConfigXFormView.LogoAppBannerPreviewId) [0];
         appBannerPreviewItem.updateElement(ZaDomainXFormView.getAppLogoPreview.call(this)) ;
     }
@@ -1161,8 +1155,7 @@ if (GlobalConfigXFormView)  {
     GlobalConfigXFormView.LogoLoginBannerPreviewId = Dwt.getNextId() ;
 
     GlobalConfigXFormView.onLoginLogoURLChange = function (value, event, form) {
-        ZaTabView.onFormFieldChanged.call (this, value, event, form) ;
-
+        this.setInstanceValue (value) ;
         var loginBannerPreviewItem = form.getItemsById (GlobalConfigXFormView.LogoLoginBannerPreviewId) [0];
         loginBannerPreviewItem.updateElement(ZaDomainXFormView.getLoginLogoPreview.call(this)) ;
     }
@@ -1172,8 +1165,7 @@ if (GlobalConfigXFormView)  {
 ZaDomainAdmin.GlobalConfigXFormModifier = function (xFormObject) {
     var enableMXCheckCheckbox = { ref: ZaGlobalConfig.A_zimbraAdminConsoleDNSCheckEnabled, type: _CHECKBOX_,
 							  	  label: com_zimbra_delegatedadmin.ENABLE_GLOB_CONSOLE_DNS_CHECK,
-							  	  trueValue: "TRUE", falseValue: "FALSE",
-								  onChange:ZaTabView.onFormFieldChanged
+							  	  trueValue: "TRUE", falseValue: "FALSE"
 							  	};
 
     var tabCases = xFormObject.items[2].items;
@@ -1207,8 +1199,7 @@ ZaDomainAdmin.GlobalConfigXFormModifier = function (xFormObject) {
                     {ref:ZaGlobalConfig.A_zimbraSkinLogoURL,
                         type:_TEXTFIELD_,
                         label:com_zimbra_delegatedadmin.NAD_zimbraSkinLogoURL,
-                        labelLocation:_LEFT_, width: 200,
-                        onChange:ZaTabView.onFormFieldChanged
+                        labelLocation:_LEFT_, width: 200
                     } ,
                     {ref:ZaGlobalConfig.A_zimbraSkinLogoAppBanner,
                         type:_TEXTFIELD_,
