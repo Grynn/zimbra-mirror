@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
         <key>Label</key>
-        <string>com.zimbra.zdesktop</string>
+        <string>com.zimbra.desktop</string>
         <key>ProgramArguments</key>
         <array>
                 <string>@install.data.root@/bin/zdesktop</string>

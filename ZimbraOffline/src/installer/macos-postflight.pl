@@ -84,7 +84,7 @@ find_and_replace("$data_root/jetty/etc/jetty.xml", $tokens);
 find_and_replace("$data_root/bin/zdesktop", $tokens);
 
 # install zdesktop service
-my $plist = "$home_dir/Library/LaunchAgents/com.zimbra.zdesktop.plist";
+my $plist = "$home_dir/Library/LaunchAgents/com.zimbra.desktop.plist";
 system("cp -f \"$app_root/macos/launchd.plist\" \"$plist\"");
 find_and_replace($plist, $tokens);
 find_and_replace("$data_root/bin/zdesktop", {'/dev/null &' => '/dev/null'});

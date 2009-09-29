@@ -11,7 +11,7 @@
   <key>CFBundleIconFile</key>
   <string>launcher_128x128</string>
   <key>CFBundleIdentifier</key>
-  <string>com.zimbra.zdesktop</string>
+  <string>com.zimbra.desktop</string>
   <key>CFBundleInfoDictionaryVersion</key>
   <string>6.0</string>
   <key>CFBundleName</key>
