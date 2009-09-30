@@ -921,6 +921,7 @@
 		<replace file="${dist.data.dir}/conf/log4j.properties" token="@install.data.root@/log/" value=""/>
 		<replace file="${dist.data.dir}/conf/log4j.properties" token="log4j.rootLogger=INFO,CONSOLE,LOGFILE" value="log4j.rootLogger=INFO,LOGFILE"/>
 		<replace file="${dist.app.dir}/jetty/resources/log4j.properties" token="/opt/zimbra/log/" value=""/>
+		<copy todir="${dist.app.dir}" file="src/installer/License.rtf" overwrite="true" />
 	</target>
 
 	<target name="offline-jre" if="bundle-jre">

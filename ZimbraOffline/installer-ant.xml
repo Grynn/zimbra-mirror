@@ -6,9 +6,12 @@
 	<property name="media_linux" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_linux}"/>
 	<property name="build.dir" location="../ZimbraBuild/i386" />
     <property name="pmdoc.dir" location="./build/macos_installer.pmdoc" />
+    <property name="wxs.dir" location="${basedir}\build" />
     <property name="prism.app" value="build/dist/app/macos/prism/Prism.app" />
     <property name="updater.app" value="build/dist/app/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app" />
     <property name="zd.app" value="build/dist/app/macos/Zimbra Desktop.app" />
+    <property name="winperl" value="C:\strawberry\perl\bin\perl.exe" />
+    <property name="wix.home" value="C:\Program Files\Windows Installer XML v3" />
   
   	<condition property="is-mac">
 		<os family="mac"/>
@@ -66,18 +69,18 @@
             <move file="${zd.app}" tofile="${zd.app}_noreloc" preservelastmodified="true" />
         </then></if>        
         
-        <exec executable="src/installer/pmdoc-get-contents.pl">
+        <exec executable="src/installer/pmdoc-get-contents.pl" failonerror="true">
             <arg value="${basedir}/build/dist/app" />
             <arg value="${pmdoc.dir}/01app-contents.xml" />
             <arg value="root" />
             <arg value="admin" />
         </exec>
-        <exec executable="src/installer/pmdoc-get-contents.pl">
+        <exec executable="src/installer/pmdoc-get-contents.pl" failonerror="true">
             <arg value="${basedir}/build/dist/data" />
             <arg value="${pmdoc.dir}/02data-contents.xml" />
         </exec>
         
-        <exec executable="/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker">
+        <exec executable="/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker" failonerror="true">
             <arg value="--doc" />
             <arg value="build/macos_installer.pmdoc" />
             <arg value="--title" />
@@ -86,7 +89,7 @@
         </exec>
         
         <move file="${media_macos}.mpkg" tofile="${build.dir}/${media_macos}.mpkg" preservelastmodified="true" />
-        <exec executable="/usr/bin/hdiutil">
+        <exec executable="/usr/bin/hdiutil" failonerror="true">
             <arg value="create" />
             <arg value="-srcfolder" />
             <arg value="${build.dir}/${media_macos}.mpkg" />
@@ -102,8 +105,39 @@
         <delete dir="${build.dir}/${media_macos}.mpkg" />
 	</target>
 
+	<!-- These open source programs are required for building Windows installer  -->
+	<!--   1) WiX v3.0 (http://wix.sourceforge.net/downloadv3.html) "            -->
+	<!--   2) Strawberry Perl (http://strawberryperl.com/) "                     -->
 	<target name="installer-pack-media-windows" if="is-windows">
+		<copy todir="${wxs.dir}" file="src/installer/win_installer.wxs" overwrite="true" />
+		<replace file="${wxs.dir}/win_installer.wxs" token="@build.root@" value="${basedir}" />
+		
+		<delete dir="build/dist/app/macos" />
+		<delete dir="build/dist/app/linux" />
+		<exec executable="${winperl}" failonerror="true">
+			<arg value="${basedir}\src\installer\wxs-get-contents.pl" />
+			<arg value="${basedir}" />
+		</exec>
+        
+		<exec executable="${wix.home}\bin\candle.exe" failonerror="true">
+			<arg value="-out" />
+			<arg value="${wxs.dir}\win_installer.wixobj" />
+			<arg value="-arch" />
+			<arg value="x86" />
+			<arg value="-ext" />
+			<arg value="${wix.home}\bin\WixUIExtension.dll" />
+			<arg value="${wxs.dir}\win_installer.wxs" />			
+		</exec>
 
+		<exec executable="${wix.home}\bin\light.exe" failonerror="true">
+			<arg value="-sval" />
+			<arg value="-cultures:null" />
+			<arg value="-ext" />
+			<arg value="${wix.home}\bin\WixUIExtension.dll" />
+			<arg value="-out" />
+			<arg value="${build.dir}\${media_win32}" />
+			<arg value="${wxs.dir}\win_installer.wixobj" />       
+		</exec>
 	</target>
 	
 	<target name="installer-pack-media-linux" if="is-linux">
@@ -113,7 +147,7 @@
 		<chmod file="build/dist/install-linux.pl" perm="ugo+rx" />
 
 		<!-- ant's tar task can't preserve permissions. we call gnu tar directly -->
-		<exec executable="/bin/tar">
+		<exec executable="/bin/tar" failonerror="true">
 			<arg value="pcvzf" />
 			<arg value="${build.dir}/${media_linux}" />
 			<arg value="-C" />
@@ -162,7 +196,7 @@
             <symlink link="${build.dir}/zdesktop_macos_intel.dmg" resource="${media_macos}.dmg" overwrite="true"/>
         </then></if>
         <if><available file="${build.dir}/${media_win32}" type="file"/><then>
-            <symlink link="${build.dir}/zdesktop_win32.exe" resource="${media_win32}" overwrite="true"/>
+            <symlink link="${build.dir}/zdesktop_win32.msi" resource="${media_win32}" overwrite="true"/>
         </then></if>
 	</target>
 </project>

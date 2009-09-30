@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="ae979f72-e7b5-4491-ad44-5a7dddc7b4bf" Name="Zimbra Desktop" Manufacturer="Zimbra" UpgradeCode="f8836321-20a3-43c8-96e3-5df9ce908691" Language="1033" Codepage="1252" Version="2.0.0">
+    
+    <Package Description="Zimbra Desktop" Manufacturer="Zimbra" SummaryCodepage="1252" Languages="1033" InstallerVersion="300" Keywords="Installer" Compressed="yes" />
+    <Media Id="1" Cabinet="Setup_1.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1" CompressionLevel="high" />
+    <Property Id="DiskPrompt" Value="Zimbra Desktop Installation [1]" />
+    <Upgrade Id="f8836321-20a3-43c8-96e3-5df9ce908691">
+      <UpgradeVersion OnlyDetect="no" Property="SETUP_PREVIOUSVERSIONFOUND" IncludeMinimum="yes" Minimum="0.0.0" Maximum="2.0.0" IncludeMaximum="yes" />
+    </Upgrade>
+    
+    <InstallExecuteSequence>
+      <Custom Action="ID10617" After="CostFinalize" />
+      <LaunchConditions Sequence="100">NOT Installed</LaunchConditions>
+      <FindRelatedProducts Sequence="200" />
+      <AppSearch Sequence="300" />
+      <CCPSearch Sequence="400">NOT Installed</CCPSearch>
+      <RMCCPSearch Sequence="600">NOT Installed AND CPP_TEST</RMCCPSearch>
+      <ValidateProductID Sequence="700" />
+      <CostInitialize Sequence="800" />
+      <FileCost Sequence="900" />
+      <IsolateComponents Sequence="990">RedirectedDllSupport</IsolateComponents>
+      <CostFinalize Sequence="1000" />
+      <SetODBCFolders Sequence="1100">NOT Installed</SetODBCFolders>
+      <MigrateFeatureStates Sequence="1200" />
+      <InstallValidate Sequence="1400" />
+      <RemoveExistingProducts Sequence="1480">SETUP_PREVIOUSVERSIONFOUND</RemoveExistingProducts>
+      <InstallInitialize Sequence="1500" />
+      <ProcessComponents Sequence="1600" />
+      <UnpublishComponents Sequence="1680" />
+      <UnpublishFeatures Sequence="1800" />
+      <StopServices Sequence="1900">VersionNT</StopServices>
+      <DeleteServices Sequence="1980">VersionNT</DeleteServices>
+      <UnregisterComPlus Sequence="2000" />
+      <SelfUnregModules Sequence="2100" />
+      <UnregisterTypeLibraries Sequence="2200" />
+      <RemoveODBC Sequence="2300" />
+      <UnregisterFonts Sequence="2400" />
+      <RemoveRegistryValues Sequence="2600" />
+      <UnregisterClassInfo Sequence="2700" />
+      <UnregisterExtensionInfo Sequence="2800" />
+      <UnregisterProgIdInfo Sequence="2900" />
+      <UnregisterMIMEInfo Sequence="3000" />
+      <RemoveIniValues Sequence="3100" />
+      <RemoveShortcuts Sequence="3200" />
+      <RemoveEnvironmentStrings Sequence="3300" />
+      <RemoveDuplicateFiles Sequence="3400" />
+      <RemoveFiles Sequence="3500" />
+      <RemoveFolders Sequence="3600" />
+      <CreateFolders Sequence="3700" />
+      <MoveFiles Sequence="3800" />
+      <InstallFiles Sequence="4000" />
+      <DuplicateFiles Sequence="4100" />
+      <PatchFiles Sequence="4200" />
+      <BindImage Sequence="4300" />
+      <CreateShortcuts Sequence="4500" />
+      <RegisterClassInfo Sequence="4600" />
+      <RegisterExtensionInfo Sequence="4700" />
+      <RegisterProgIdInfo Sequence="4800" />
+      <RegisterMIMEInfo Sequence="4900" />
+      <WriteRegistryValues Sequence="5000" />
+      <WriteIniValues Sequence="5100" />
+      <WriteEnvironmentStrings Sequence="5200" />
+      <RegisterFonts Sequence="5300" />
+      <InstallODBC Sequence="5400" />
+      <RegisterTypeLibraries Sequence="5500" />
+      <SelfRegModules Sequence="5600" />
+      <RegisterComPlus Sequence="5700" />
+      <InstallServices Sequence="5800">VersionNT</InstallServices>
+      <StartServices Sequence="5900">VersionNT</StartServices>
+      <RegisterUser Sequence="6000" />
+      <RegisterProduct Sequence="6100" />
+      <PublishComponents Sequence="6200" />
+      <PublishFeatures Sequence="6300" />
+      <PublishProduct Sequence="6400" />
+      <MsiPublishAssemblies Sequence="6500" />
+      <MsiUnpublishAssemblies Sequence="6550" />
+      <InstallFinalize Sequence="6600" />
+      <Custom Action="ID10618" After="FileCost" />
+
+      <!-- ZWixUtils Custom Actions -->
+      <Custom Action="ID10701" Sequence="7001">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10702" Sequence="7002">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10703" Sequence="7003">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10704" Sequence="7004">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10705" Sequence="7005">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10706" Sequence="7006">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10707" Sequence="7007">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10708" Sequence="7008">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10709" Sequence="7009">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10710" Sequence="7010">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10711" Sequence="7011">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10712" Sequence="7012">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10713" Sequence="7013">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10714" Sequence="7014">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="ID10715" Sequence="7015">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>      
+    </InstallExecuteSequence>
+    
+    <CustomAction Id="ID10617" Property="Setup_PRODUCT" Value="ae979f72-e7b5-4491-ad44-5a7dddc7b4bf" HideTarget="no" />
+    
+    <InstallUISequence>
+      <Custom Action="ID10617" After="CostFinalize" />
+      <Custom Action="ID10618" After="FileCost" />
+    </InstallUISequence>
+    
+    <AdvertiseExecuteSequence>
+      <CostInitialize Sequence="800" />
+      <CostFinalize Sequence="1000" />
+      <InstallValidate Sequence="1400" />
+      <InstallInitialize Sequence="1500" />
+      <CreateShortcuts Sequence="4500" />
+      <RegisterClassInfo Sequence="4600" />
+      <RegisterExtensionInfo Sequence="4700" />
+      <RegisterProgIdInfo Sequence="4800" />
+      <RegisterMIMEInfo Sequence="4900" />
+      <PublishComponents Sequence="6200" />
+      <PublishFeatures Sequence="6300" />
+      <PublishProduct Sequence="6400" />
+      <MsiPublishAssemblies Sequence="6500" />
+      <InstallFinalize Sequence="6600" />
+    </AdvertiseExecuteSequence>
+    
+    <CustomAction Id="ID10618" Property="TARGETDIR" Value="[APPLICATIONFOLDER]" HideTarget="no" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+    
+      <Directory Id="ProgramMenuFolder" Name="Programs">
+        <Directory Id="DesktopFolder" Name="Desktop">
+          <Component Id="ID10619" Guid="5a6c426a-6f4a-42c5-82fe-1e4fc19d82aa">
+            <RegistryValue Root="HKCU" Key="SOFTWARE\Zimbra\Zimbra Desktop\Components\ID10619" Type="string" KeyPath="yes" Value="" />
+            <RemoveFolder Id="ID10620" On="uninstall" />
+          </Component>
+        </Directory>
+        <Component Id="ID10621" Guid="6f5dc277-6ebc-4891-9fb6-78e30e79935d">
+          <RegistryValue Root="HKCU" Key="SOFTWARE\Zimbra\Zimbra Desktop\Components\ID10621" Type="string" KeyPath="yes" Value="" />
+          <RemoveFolder Id="ID10622" On="uninstall" />
+        </Component>
+        <Directory Id="ProgramMenuDir" Name="Zimbra Desktop">
+          <Component Id="ID10623" Guid="c04e89cb-01bd-4935-a380-099f825636df">
+            <RegistryValue Root="HKCU" Key="SOFTWARE\Zimbra\Zimbra Desktop\Components\ID10623" Type="string" KeyPath="yes" Value="" />
+            <RemoveFolder Id="ID10624" On="uninstall" />
+          </Component>
+        </Directory>
+        <Directory Id="StartupFolder" Name="StartupFolder Directory">
+          <Component Id="ID10625" Guid="40453fff-4de1-4e25-96c2-bd425c3aca5c">
+            <RegistryValue Root="HKCU" Key="SOFTWARE\Zimbra\Zimbra Desktop\Components\ID10625" Type="string" KeyPath="yes" Value="" />
+            <RemoveFolder Id="ID10626" On="uninstall" />
+          </Component>
+        </Directory>
+      </Directory>
+
+
+      <Directory Id="ProgramFilesFolder" Name="Program Files Folder">
+        <Directory Id="InstallOrganizationFolder" Name="Zimbra">
+        
+          <!-- Root Application Directory: Id="APPLICATIONFOLDER", Name="Zimbra Desktop" -->
+@build.application.folder.contents@          
+                    
+        </Directory>  <!-- PromgramFilesFolder -->
+      </Directory>  <!--  InstallOrganizationFolder -->
+      
+      <Directory Id="LocalAppDataFolder" Name="LocalAppDataFolder Directory">
+        <Directory Id="Id_cf9da429b80d92be7ba7749919a63589" Name="Zimbra">
+        
+          <!-- Root Data Directory: Id="ZDDATAFOLDER", Name="Zimbra Desktop" -->
+@build.data.folder.contents@
+                
+        </Directory>  <!-- Id_cf9da429b80d92be7ba7749919a63589 -->
+      </Directory>  <!-- LocalAppDataFolder -->
+      
+    </Directory>  <!-- TARGETDIR -->
+    
+    
+    <Property Id="ApplicationFolderName" Value="Zimbra Desktop" />
+    <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
+    <Property Id="WixAppFolder" Value="WixPerUserFolder" />
+    
+    <WixVariable Id="WixUILicenseRtf" Value="@build.root@\build\dist\app\License.rtf" />
+    
+    <Feature Id="ID1C787BADDF55E290CC71CB4BDE88B613" Title="Complete" Level="1" Description="The complete package" InstallDefault="local" ConfigurableDirectory="APPLICATIONFOLDER">
+
+@build.component.references@
+            
+      <!-- Menu Folder Items -->
+      <ComponentRef Id="ID10619" />
+      <ComponentRef Id="ID10621" />
+      <ComponentRef Id="ID10623" />
+      <ComponentRef Id="ID10625" />
+    </Feature>
+    
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+    </UI>
+    <Condition Message="You must not be an administrator to install this product.">Privileged</Condition>
+    <Property Id="ALLUSERS" Value="0" />
+    <Condition Message="This product require Windows XP or newer">VersionNT &gt;= 501</Condition>
+
+    <!-- ZWixUtils -->
+    <Binary Id="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" SourceFile="@build.root@\src\installer\zwixutils.dll" />
+    <CustomAction Id="ID10701" Property="NumberOfTokens" Value="2" />
+    <CustomAction Id="ID10702" Property="Token1" Value="@install.app.root@" />
+    <CustomAction Id="ID10703" Property="Value1" Value="[APPLICATIONFOLDER]" />
+    <CustomAction Id="ID10704" Property="Token2" Value="@install.data.root@" />
+    <CustomAction Id="ID10705" Property="Value2" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop" />
+
+    <CustomAction Id="ID10706" Property="File" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop\db\derbyij.sql" />
+    <CustomAction Id="ID10707" BinaryKey="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" DllEntry="ZTokenReplace" />
+
+    <CustomAction Id="ID10708" Property="File" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop\conf\localconfig.xml" />
+    <CustomAction Id="ID10709" BinaryKey="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" DllEntry="ZTokenReplace" />
+
+    <CustomAction Id="ID10710" Property="File" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop\conf\wrapper.conf" />
+    <CustomAction Id="ID10711" BinaryKey="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" DllEntry="ZTokenReplace" />
+
+    <CustomAction Id="ID10712" Property="File" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop\jetty\etc\jetty.xml" />
+    <CustomAction Id="ID10713" BinaryKey="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" DllEntry="ZTokenReplace" />
+
+    <CustomAction Id="ID10714" Property="File" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop\zdesktop.webapp\override.ini" />
+    <CustomAction Id="ID10715" BinaryKey="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" DllEntry="ZTokenReplace" />
+    
+  </Product>
+</Wix>
