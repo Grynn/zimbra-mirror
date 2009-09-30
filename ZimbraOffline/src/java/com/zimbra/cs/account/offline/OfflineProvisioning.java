@@ -659,7 +659,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     private synchronized Account createDataSourceAccount(String dsName, String emailAddress, String _password, Map<String, Object> dsAttrs) throws ServiceException {
-        validEmailAddress(emailAddress);
+        
         emailAddress = emailAddress.toLowerCase().trim();
         String parts[] = emailAddress.split("@");
         if (parts.length != 2)
@@ -669,6 +669,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         String domain = parts[1];
         domain = IDNUtil.toAsciiDomainName(domain);
         emailAddress = localPart + "@" + domain;
+        validEmailAddress(emailAddress);
 
         //first we need to verify datasource
     	String accountLabel = (String)dsAttrs.remove(A_zimbraPrefLabel);
