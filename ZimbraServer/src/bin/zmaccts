@@ -33,10 +33,14 @@ chop($ldapurl);
 if ($ldapurl eq '') {
   $ldapurl = "ldap://localhost";
 }
+my $use_tls ="";
+if ( $ldapurl !~ /^ldaps:/ ) {
+  $use_tls="-Z":
+}
 
 my $ldapsearch = "/opt/zimbra/bin/ldapsearch";
 my $ldapquery = "(&(objectclass=zimbraAccount)(!(objectclass=zimbraCalendarResource)))";
-my $ldapargs = "-x -H '$ldapurl' -w $ldappass -D $ldapdn -b ''";
+my $ldapargs = "-x $use_tls -H '$ldapurl' -w $ldappass -D $ldapdn -b ''";
 my $ldapattrs =  "zimbraMailDeliveryAddress zimbraAccountStatus createTimestamp zimbraLastLogonTimestamp";
 
 my $search = "$ldapsearch $ldapargs '$ldapquery' $ldapattrs";
