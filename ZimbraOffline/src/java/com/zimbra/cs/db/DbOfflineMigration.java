@@ -65,7 +65,7 @@ public class DbOfflineMigration {
             }
 
             // now do offline specific db migration
-            stmt = conn.prepareStatement("SELECT value FROM zimbra.config WHERE name = 'offline.db.version'");
+            stmt = conn.prepareStatement("SELECT value FROM config WHERE name = 'offline.db.version'");
             rs = stmt.executeQuery();
             int oldOfflineDbVersion = 1; // default to 1 if missing
             if (rs.next())

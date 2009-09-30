@@ -1,19 +1,25 @@
 package com.zimbra.cs.mailbox;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.db.DbOfflineMailbox;
+import com.zimbra.cs.db.DbPool.Connection;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.util.OfflineYAuth;
+import com.zimbra.cs.redolog.op.DeleteMailbox;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
+import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.ZimbraApplication;
 
@@ -83,52 +89,38 @@ public abstract class SyncMailbox extends DesktopMailbox {
         deleteMailbox(true);
     }
 
-    public void deleteMailbox(boolean asynch) throws ServiceException {
+    public void deleteMailbox(boolean async) throws ServiceException {
         synchronized (this) {
             if (isDeleting)
                 return;
             isDeleting = true;
-
             cancelCurrentTask();
-
-            beginMaintenance(); // putting mailbox in maintenance will cause
-                                // sync to stop when writing
+            beginMaintenance(); // mailbox maintenance will cause sync to stop when writing
         }
-
         synchronized (syncLock) { // wait for any hot sync thread to unwind
             endMaintenance(true);
         }
-
         try {
             resetSyncStatus();
         } catch (ServiceException x) {
             if (!x.getCode().equals(AccountServiceException.NO_SUCH_ACCOUNT))
                 OfflineLog.offline.warn(x);
         }
-
-        if (asynch) {
+        if (async) {
             class DeleteThread extends Thread {
-                private long id;
+                SyncMailbox mbox;
                 
-                DeleteThread(long id, String accountId) {
-                    super("mailbox-reaper:" + accountId);
-                    this.id = id;
+                DeleteThread(SyncMailbox mbox) {
+                    super("mailbox-reaper:" + mbox.getAccountId());
+                    this.mbox = mbox;
                 }
                 public void run() {
                     try {
-                        Thread.sleep(5000);
-                        
-                        MailboxManager mgr = MailboxManager.getInstance();
-                        SyncMailbox mbox = (SyncMailbox)mgr.getMailboxById(id,
-                            true);
-                        
-                        synchronized (mgr) {
-                            if (mbox != null)
-                                mbox.deleteThisMailbox();
-                        }
+                        Thread.sleep(10000);
+                        mbox.deleteThisMailbox(true);
                     } catch (Exception e) {
                         OfflineLog.offline.warn("unable to delete mailbox id " +
-                            id, e);
+                            getId(), e);
                     }
                 }
             }
@@ -139,20 +131,20 @@ public abstract class SyncMailbox extends DesktopMailbox {
                 unhookMailboxForDeletion();
                 mm.markMailboxDeleted(this); // to remove from cache
             }
-            new DeleteThread(getId(), getAccountId()).start();
+            new DeleteThread(this).start();
         } else {
-            deleteThisMailbox();
+            deleteThisMailbox(false);
         }
     }
 	
     private synchronized String unhookMailboxForDeletion()
         throws ServiceException {
         String accountId = getAccountId();
+        boolean success = false;
+        
         if (accountId.endsWith(DELETING_MID_SUFFIX))
             return accountId;
-
         accountId = accountId + ":" + getId() + DELETING_MID_SUFFIX;
-        boolean success = false;
         try {
             beginTransaction("replaceAccountId", null);
             DbOfflineMailbox.replaceAccountId(this, accountId);
@@ -163,9 +155,46 @@ public abstract class SyncMailbox extends DesktopMailbox {
         }
     }
 
-    void deleteThisMailbox() throws ServiceException {
+    void deleteThisMailbox(boolean async) throws ServiceException {
         OfflineLog.offline.info("deleting mailbox %s", getAccountId());
-        super.deleteMailbox();
+        if (async) {
+            DeleteMailbox redoRecorder = new DeleteMailbox(getId());
+            boolean success = false;
+            
+            synchronized(this) {
+                try {
+                    beginTransaction("deleteMailbox", null, redoRecorder);
+                    redoRecorder.log();
+    
+                    Connection conn = getOperationConnection();
+                    
+                    DbMailbox.clearMailboxContent(this);
+                    synchronized(MailboxManager.getInstance()) {
+                        DbMailbox.deleteMailbox(conn, this);
+                    }
+                    success = true;
+                } catch (Exception e) {
+                    ZimbraLog.store.warn("Unable to delete mailbox data", e);
+                } finally {
+                    endTransaction(success);
+                }
+                try {
+                    IndexHelper ih = new IndexHelper(this);
+                    
+                    ih.instantiateMailboxIndex();
+                    ih.deleteIndex();
+                } catch (IOException e) {
+                    ZimbraLog.store.warn("Unable to delete index data", e);
+                }
+                try {
+                    StoreManager.getInstance().deleteStore(this);
+                } catch (IOException e) {
+                    ZimbraLog.store.warn("Unable to delete message data", e);
+                }
+            }
+        } else {
+            super.deleteMailbox();
+        }
         OfflineLog.offline.info("mailbox %s deleted", getAccountId());
     }
 
