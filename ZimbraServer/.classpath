@@ -88,7 +88,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jzlib.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/libidn-1.0.jar" sourcepath="/ThirdParty/libidn/libidn-1.0/src"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/log4j-1.2.8.jar" sourcepath="/ThirdParty/jakarta-log4j-1.2.8/src/java"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.4.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-1.1.6-zimbra.jar" sourcepath="/ThirdParty/mina/mina-1.1.6-zimbra/src-zimbra"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-filter-ssl-1.1.6.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mysql-connector-java-5.0.8-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.0.8/src"/>
@@ -113,5 +112,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ThirdParty/apache-james-jsieve-0.3/apache-jsieve-0.3-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.4.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
