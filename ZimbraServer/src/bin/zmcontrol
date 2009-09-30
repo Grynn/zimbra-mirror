@@ -386,7 +386,7 @@ sub getEnabledServices {
 }
 
 sub isLdapLocal {
-  return((index(getLocalConfig("ldap_url"), getLocalConfig("zimbra_server_hostname")) != -1) ? 1 : 0);
+  return((index(getLocalConfig("ldap_url"), "/".getLocalConfig("zimbra_server_hostname")) != -1) ? 1 : 0);
 }
 
 sub getHostName {
