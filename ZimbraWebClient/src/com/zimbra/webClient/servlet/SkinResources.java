@@ -398,8 +398,16 @@ public class SkinResources
         File skinDir = new File(skinDirname);
         File manifestFile = new File(skinDir, SKIN_MANIFEST);
 
+		String skinsDirname = LC.skins_directory.value();
+		if (skinsDirname == null) skinsDirname = "/zimbra";
+		int slashIndex = skinsDirname.lastIndexOf('/');
+		skinsDirname = skinsDirname.substring(0, slashIndex);
+		slashIndex = skinsDirname.lastIndexOf('/');
+		String appContextPath = skinsDirname.substring(slashIndex);
+
 		// domain overrides
-		Map<String,String> substOverrides = null;
+		Map<String,String> substOverrides = new HashMap<String,String>();
+	    substOverrides.put(Manifest.S_APP_CONTEXT_PATH, appContextPath);
 		try {
 			SoapProvisioning provisioning = new SoapProvisioning();
 			String soapUri =
@@ -416,7 +424,6 @@ public class SkinResources
 				info = provisioning.getConfig();
 			}
 			if (info != null) {
-				substOverrides = new HashMap<String,String>();
 				// colors
 				substOverrides.put(Manifest.S_SKIN_FOREGROUND_COLOR, info.getAttr(A_SKIN_FOREGROUND_COLOR));
 				substOverrides.put(Manifest.S_SKIN_BACKGROUND_COLOR, info.getAttr(A_SKIN_BACKGROUND_COLOR));
@@ -1047,6 +1054,8 @@ public class SkinResources
 		private static final String S_HELP_ADVANCED_URL = "HelpAdvancedURL";
 		private static final String S_HELP_DELEGATED_URL = "HelpDelegatedURL";
 		private static final String S_HELP_STANDARD_URL = "HelpStandardURL";
+
+		private static final String S_APP_CONTEXT_PATH = "AppContextPath"; 
 
         private static final String E_SKIN = "skin";
         private static final String E_SUBSTITUTIONS = "substitutions";
