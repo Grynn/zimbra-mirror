@@ -37,7 +37,7 @@ sub getdatastructure($$$) {
         $sth->bind_param(1, $file);
         my $i;
         for ($i = 0; $i < @$hostid; $i++) {
-            $sth->bind_param($i + 2, int($hostid->[$i]));
+            $sth->bind_param($i + 2, $hostid->[$i]);
         }
         $sth->execute;
         die $sth->err if $sth->err;
