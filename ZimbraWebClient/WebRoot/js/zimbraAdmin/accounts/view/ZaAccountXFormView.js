@@ -1187,6 +1187,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	
 	        {type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_form_name_group",
 				colSizes:["275px","*"],numCols:2,
+				visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        			[ZaAccount.A_name,
+                        			ZaAccount.A_firstName,
+                        			ZaAccount.A_initials,
+                        			ZaAccount.A_lastName,
+                        			ZaAccount.A_displayname,
+                        			ZaAccount.A_zimbraMailCanonicalAddress,
+                        			ZaAccount.A_zimbraHideInGal]]],				
 				items:[
 				{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
 					labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true,
@@ -1256,7 +1264,11 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 					label:ZaMsg.NAD_AccountStatus, 
 					labelLocation:_LEFT_, choices:this.accountStatusChoices
 				}
-			]
+			],
+			visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        			[ZaAccount.A_accountStatus,
+                        			ZaAccount.A_COSId,
+                        			ZaAccount.A_zimbraIsAdminAccount]]]			
 		}
 			
 

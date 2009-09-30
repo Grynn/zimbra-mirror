@@ -88,6 +88,8 @@ function() {
 
 ZaSearch.standardAttributes = [ZaAccount.A_displayname, 
 							ZaItem.A_zimbraId,
+							ZaAccount.A_accountName,
+							ZaAccount.A_lastName,
 							ZaAccount.A_mailHost, 
 							ZaAccount.A_uid,
 							ZaAccount.A_COSId,
