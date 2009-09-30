@@ -73,7 +73,13 @@ verifyLdapInstalled() {
 
 verifyLdap() {
 	echo -n "Verifying ldap on ${ldap_master_url}..."
-	ARGS="-x -s base -b cn=zimbra -H ${ldap_master_url} -D ${zimbra_ldap_userdn} -w ${zimbra_ldap_password}"
+        num=`expr match "$ldap_master_url" 'ldaps*'`
+        if [ "$num" -eq 5 ]; then
+		TLS=
+	else
+		TLS=-Z
+	fi
+	ARGS="-x ${TLS} -s base -b cn=zimbra -H ${ldap_master_url} -D ${zimbra_ldap_userdn} -w ${zimbra_ldap_password}"
 	OUTPUT=`$LDS $ARGS 2>&1`
 	if [ $? -ne 0 ]; then
 		echo "FAILED"
@@ -134,7 +140,7 @@ createLdapConfig() {
 	# Verify syncprov isn't already enabled on the db
 	echo -n "Enabling sync replication on replica..."
         num=`expr match "$ldap_master_url" 'ldaps*'`
-        if [ "$num" == 5 ]; then
+        if [ "$num" -eq 5 ]; then
 	cat >> ${zimbra_tmp_directory}/syncprov-replica.mod.$$<<EOF
 dn: olcDatabase={2}hdb,cn=config
 changetype: modify
