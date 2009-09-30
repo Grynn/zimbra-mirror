@@ -246,10 +246,6 @@ function () {
 	//var changeDetails = new Object();
 	this._currentObject.modify(mods);
 	
-	//if modification took place - fire a Settings Change Event
-	//changeDetails["obj"] = this._currentObject;
-	//changeDetails["modFields"] = mods;
-	this.fireChangeEvent(this._currentObject);
 	return true;
 }
 
