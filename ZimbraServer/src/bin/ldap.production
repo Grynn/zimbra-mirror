@@ -26,7 +26,8 @@ zmsetvars \
   ldap_bind_url \
   ldap_master_url \
   ldap_replica_rid  \
-  ldap_replication_password
+  ldap_replication_password \
+  ldap_common_require_tls
 
 if [ x"$ldap_replica_rid" = "x" ]; then
   ldap_replica_rid=100
@@ -65,7 +66,11 @@ checkrunning()
 checkListening()
 {
   SEARCHTIMEOUT=30 #timelimit for ldapsearch
-  /opt/zimbra/openldap/bin/ldapsearch -x -l $SEARCHTIMEOUT -b "" -s base -H ${bind_url} >/dev/null 2>&1
+  if [ "$ldap_common_require_tls" -eq 0 ]; then
+    /opt/zimbra/openldap/bin/ldapsearch -x -l $SEARCHTIMEOUT -b "" -s base -H ${bind_url} >/dev/null 2>&1
+  else
+    /opt/zimbra/openldap/bin/ldapsearch -ZZ -x -l $SEARCHTIMEOUT -b "" -s base -H ${bind_url} >/dev/null 2>&1
+  fi
   if [ $? -ne 0 ]; then
     LISTENING=0
   else
