@@ -21,6 +21,7 @@ sub gethostid($$) {
     my $rows = $sth->fetchall_arrayref([0]);
     die $sth->err if $sth->err;
     $sth->finish;
+    die "$hostname not found\n" if @$rows == 0;
     return [ map $_->[0], @$rows ];
 }
 
@@ -28,18 +29,14 @@ sub getdatastructure($$$) {
     my ($dbh, $file, $hostid) = @_;
     my $ref = undef;
     if (@$hostid > 0) {
-    	my @placeholders = map('?', @$hostid);
-    	my $ps = join(',', @placeholders);
-        my $sth = $dbh->prepare(q{
+    	my $ps = join(',', ('?') x @$hostid);
+        my $sth = $dbh->prepare(qq{
             SELECT col_name, col_name_19, col_num, rrd_file, host_id FROM rrds
             WHERE csv_file = ? AND host_id IN ($ps)
         });
-        $sth->bind_param(1, $file);
-        my $i;
-        for ($i = 0; $i < @$hostid; $i++) {
-            $sth->bind_param($i + 2, $hostid->[$i]);
-        }
-        $sth->execute;
+        my @params = ($file, @$hostid);
+
+        $sth->execute(@params);
         die $sth->err if $sth->err;
         $ref = $sth->fetchall_hashref('col_name');
     } else {
