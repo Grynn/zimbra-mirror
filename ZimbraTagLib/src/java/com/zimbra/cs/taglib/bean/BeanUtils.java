@@ -60,6 +60,7 @@ import javax.mail.internet.AddressException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.DateFormatSymbols;
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -298,7 +299,7 @@ public class BeanUtils {
         if (size >= 1073741824) {
             dsize = size/1073741824.0;
             if(pc == null){
-                units = " GB";
+                units = "GB";
             }else{
                 units = I18nUtil.getLocalizedMessage(pc, "gb");// " GB";
             }
@@ -306,38 +307,36 @@ public class BeanUtils {
         } else if (size >= 1048576) {
             dsize = size/1048576.0;
             if(pc == null){
-                units = " MB";
+                units = "MB";
             }else{
                 units = I18nUtil.getLocalizedMessage(pc, "mb");//" MB";
             }
         } else if (size >= 1024) {
             dsize = size/1024.0;
             if(pc == null){
-                units = " KB";
+                units = "KB";
             }else{
-                units = I18nUtil.getLocalizedMessage(pc, "kb");;//" KB";
+                units = I18nUtil.getLocalizedMessage(pc, "kb");//" KB";
             }
         } else {
             dsize = size;
             if(pc == null){
-                units = " b";
+                units = "b";
             }else{
                 units = I18nUtil.getLocalizedMessage(pc, "b");//" B";
             }
         }
 
+        Locale locale = I18nUtil.findLocale(pc);
+        NumberFormat formatter = NumberFormat.getNumberInstance(locale);        
+        String str = dsize+"";
         if (fractions == 0) {
-            return Math.round(dsize) + units;
+            str = formatter.format(Math.round(dsize));
         } else {
-            String str = String.format("%."+fractions+"f", dsize);
-            int p = str.length()-1;
-            if (fractions > 0 && str.charAt(p) == '0') {
-                while (str.charAt(p) == '0' && p > 0) p--;
-                if (str.charAt(p) == '.') p--;
-                str = str.substring(0, p+1);
-            }
-            return str + units;
+            formatter.setMaximumFractionDigits(fractions);
+            str = formatter.format(dsize);
         }
+        return str + " " + units;
     }
 
     public static String displaySizePercent(long size, long max) {
