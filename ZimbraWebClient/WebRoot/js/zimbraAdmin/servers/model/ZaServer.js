@@ -975,15 +975,15 @@ ZaServer.flushCache = function (params) {
 	var soapDoc = AjxSoapDoc.create("FlushCacheRequest", ZaZimbraAdmin.URN, null);
 	var elCache = soapDoc.set("cache", null);
 	
-	var type = "";
+	var type = [];
 	if(params.flushSkin)
-		type +="skin";
+		type.push("skin")
 	if(params.flushLocale)	
-		type +="locale";
+		type.push("locale");
 	if(params.flushZimlet)	
-		type +="zimlet";
+		type.push("zimlet");
 		
-	elCache.setAttribute("type", type);		
+	elCache.setAttribute("type", type.join(","));		
 	
 	var reqMgrParams = {
 		controller : ZaApp.getInstance().getCurrentController(),
