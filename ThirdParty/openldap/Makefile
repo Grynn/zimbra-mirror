@@ -49,7 +49,7 @@ build:
 	CFLAGS="-g -O0" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) --libexecdir=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin \
 	--with-cyrus-sasl \
-	--with-tls \
+	--with-tls=openssl \
 	--enable-dynamic \
 	--enable-slapd \
 		--enable-modules \
