@@ -105,7 +105,7 @@
 	<property name="jetty.src.dir" location="../ThirdParty/jetty" />
 	<property name="prism.src.dir" location="../ThirdParty/prism" />
 	<property name="xulrunner.src.dir" location="../ThirdParty/xulrunner" />
-	<property name="jetty.version" value="6.1.15" />
+	<property name="jetty.version" value="6.1.15.z6" />
 
 	<condition property="db-derby">
 		<isset property="env.ZIMBRA_OFFLINE_USE_DERBY" />
