@@ -66,6 +66,7 @@ ZaVersionCheck.myXModel = {	items:[
 ZaVersionCheck.loadMethod = 
 function(by, val) {
 	var params, soapDoc;
+	var hasError = false
 	soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
     soapDoc.setMethodAttribute("onerror", "continue");
     var getConfigDoc = soapDoc.set("GetAllConfigRequest", null, null, ZaZimbraAdmin.URN);	
@@ -107,13 +108,14 @@ function(by, val) {
 			}
 				
 			if(batchResp.VersionCheckResponse) {
-				resp = batchResp.VersionCheckResponse[0];
+				var resp = batchResp.VersionCheckResponse[0];
 				if(resp && resp.versionCheck && resp.versionCheck[0] && resp.versionCheck[0].updates) {
-					if(resp.versionCheck[0].updates instanceof Array && resp.versionCheck[0].updates.length>0) {
+					if(resp.versionCheck[0].updates instanceof Array && resp.versionCheck[0].updates.length>0 && 
+					resp.versionCheck[0].updates[0].update && resp.versionCheck[0].updates[0].update.length>0) {
 						this[ZaVersionCheck.A_zimbraVersionCheckUpdates] = [];
-						var cnt = resp.versionCheck[0].updates.length;
+						var cnt = resp.versionCheck[0].updates[0].update.length;
 						for(var i = 0; i< cnt; i++) {
-							this[ZaVersionCheck.A_zimbraVersionCheckUpdates].push(resp.versionCheck[0].updates[i]);
+							this[ZaVersionCheck.A_zimbraVersionCheckUpdates].push(resp.versionCheck[0].updates[0].update[i]);
 						}
 					}
 				}
@@ -124,7 +126,7 @@ function(by, val) {
 		//show the error and go on
 		//we should not stop the Account from loading if some of the information cannot be acces
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaVersionCheck.loadMethod", null, false);
-	    hasError = true ;
+	    hasError = true;
         lastException = ex ;
     }		
 	

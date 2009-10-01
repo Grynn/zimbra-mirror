@@ -3,7 +3,7 @@ ZaVersionCheckXFormView = function(parent, entry) {
 	this.TAB_INDEX = 0;	
 	this.criticalChoices = new XFormChoices([{value:"1",label:com_zimbra_adminversioncheck.Critical},
 		{value:"0",label:com_zimbra_adminversioncheck.NotCritical}], XFormChoices.OBJECT_LIST, "value", "label");
-	this.initForm(ZaVersionCheckXFormView.myXModel,this.getMyXForm(entry), null);
+	this.initForm(ZaVersionCheck.myXModel,this.getMyXForm(entry), null);
 }
 
 ZaVersionCheckXFormView.prototype = new ZaTabView();
@@ -40,8 +40,58 @@ ZaVersionCheckXFormView.checkLastAttemptFailed = function() {
 	return (this.getInstanceValue(ZaVersionCheck.A_zimbraVersionCheckLastAttempt) != this.getInstanceValue(ZaVersionCheck.A_zimbraVersionCheckLastSuccess));	
 }
 
+ZaVersionCheckXFormView.prototype.setObject =
+function(entry) {
+    this._containedObject = new Object();
+	this._containedObject.attrs = new Object();
+    for (var a in entry.attrs) {
+		var modelItem = this._localXForm.getModel().getItem(a) ;
+        if ((modelItem != null && modelItem.type == _LIST_) || (entry.attrs[a] != null && entry.attrs[a] instanceof Array)) {  
+        	//need deep clone
+            this._containedObject.attrs [a] =
+                    ZaItem.deepCloneListItem (entry.attrs[a]);
+        } else {
+            this._containedObject.attrs[a] = entry.attrs[a];
+        }
+	}
+	this._containedObject.name = entry.name;
+	this._containedObject.type = entry.type;
+
+	if(entry.rights)
+		this._containedObject.rights = entry.rights;
+
+	if(entry.setAttrs)
+		this._containedObject.setAttrs = entry.setAttrs;
+	
+	if(entry.getAttrs)
+		this._containedObject.getAttrs = entry.getAttrs;
+		
+	if(entry._defaultValues)
+		this._containedObject._defaultValues = entry._defaultValues;
+	
+	if(entry.id)
+		this._containedObject.id = entry.id;
+	
+	if(!entry[ZaModel.currentTab])
+		this._containedObject[ZaModel.currentTab] = "1";
+	else
+		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
+			
+	this._containedObject[ZaVersionCheck.A_zimbraVersionCheckUpdates] = [];
+	if(entry[ZaVersionCheck.A_zimbraVersionCheckUpdates]) {
+		this._containedObject[ZaVersionCheck.A_zimbraVersionCheckUpdates] = entry[ZaVersionCheck.A_zimbraVersionCheckUpdates]; 
+	}
+	
+	this._localXForm.setInstance(this._containedObject);
+	//update the tab
+	this.updateTab();
+}
+
 ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
+	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
 	var _tab1, _tab2;
+	_tab1 = ++this.TAB_INDEX;
+	_tab2 = ++this.TAB_INDEX;
     var tabBarChoices = [
     	{value:_tab1, label:com_zimbra_adminversioncheck.TABT_ConfigPage},
     	{value:_tab2, label:com_zimbra_adminversioncheck.TABT_UpdatesPage}
@@ -100,81 +150,73 @@ ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
     var case2 = {type:_ZATABCASE_, caseKey:_tab2,
     	colSizes:["auto"],numCols:1,
     	items:[
-			{ type: _DWT_ALERT_,
-				visibilityChecks:[ZaVersionCheckXFormView.checkLastAttemptFailed],
-				visibilityChangeEventSources:[ZaVersionCheck.A_zimbraVersionCheckLastAttempt,ZaVersionCheck.A_zimbraVersionCheckLastSuccess],
-				containerCssStyle: "padding-bottom:0px",
-				style: DwtAlert.CRITICAL,
-				iconVisible: true, 
-				content: com_zimbra_adminversioncheck.WARNING_LAST_ATTEMPT_FAILED,
-				colSpan:"*"
-			},
-			{ type: _DWT_ALERT_,
-				visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaVersionCheck.A_zimbraVersionCheckUpdates]],
-				visibilityChangeEventSources:[ZaVersionCheck.A_zimbraVersionCheckUpdates],
-				containerCssStyle: "padding-bottom:0px",
-				style: DwtAlert.WARNING,
-				iconVisible: true, 
-				content: com_zimbra_adminversioncheck.UpdatesAreAvailable,
-				colSpan:"*"
-			},
-			{ type: _DWT_ALERT_,
-				visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaVersionCheck.A_zimbraVersionCheckUpdates]],
-				visibilityChangeEventSources:[ZaVersionCheck.A_zimbraVersionCheckUpdates],
-				containerCssStyle: "padding-bottom:0px",
-				style: DwtAlert.WARNING,
-				iconVisible: true, 
-				content: com_zimbra_adminversioncheck.UpdatesAreAvailable,
-				colSpan:"*"
-			},	
-			{type:_REPEAT_,
-				ref:ZaVersionCheck.A_zimbraVersionCheckUpdates
-			},
-			{ type: _DWT_ALERT_,
-				visibilityChecks:[[XForm.checkInstanceValueEmty,ZaVersionCheck.A_zimbraVersionCheckUpdates]],
-				visibilityChangeEventSources:[ZaVersionCheck.A_zimbraVersionCheckUpdates],
-				containerCssStyle: "padding-bottom:0px",
-				style: DwtAlert.INFORMATION,
-				iconVisible: true, 
-				content: com_zimbra_adminversioncheck.ServerIsUpToDate,
-				colSpan:"*"
-			},					
-    		{ref:ZaVersionCheck.A_zimbraVersionCheckLastAttempt,type:_OUTPUT_,
-    			label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckLastAttempt
-    		},
-    		{ref:ZaVersionCheck.A_zimbraVersionCheckLastSuccess,type:_OUTPUT_,
-    			label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckLastSuccess
-    		},
-    		{
-    			ref:ZaVersionCheck.A_zimbraVersionCheckUpdates,
-    			type:_REPEAT_,
-    			labelLocation:_LEFT_,
-				align:_LEFT_,
-				repeatInstance:"",
-				showAddButton:false,
-				showRemoveButton:false,
-				showAddOnNextRow:false,
-				items: [
-					{ 
-						ref:ZaVersionCheck.A_zimbraVersionCheckUpdateShortversion, 
-						type: _OUTPUT_, label:null,labelLocation:_NONE_
-					},
-					{ 
-						ref:ZaVersionCheck.A_zimbraVersionCheckUpdateCritical, 
-						type: _OUTPUT_, label:null,labelLocation:_NONE_,
-						choices:this.criticalChoices
-					},
-					{ 
-						ref:ZaVersionCheck.A_zimbraVersionCheckUpdateUpdateURL, 
-						type: _URL_, label:null,labelLocation:_NONE_
-					}
-				]
-    				
-    		}
+			{type:_ZAGROUP_,items:[
+	    		{ref:ZaVersionCheck.A_zimbraVersionCheckLastAttempt,type:_OUTPUT_,
+	    			label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckLastAttempt
+	    		},
+	    		{ref:ZaVersionCheck.A_zimbraVersionCheckLastSuccess,type:_OUTPUT_,
+	    			label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckLastSuccess
+	    		},
+	    		{
+	    			ref:ZaVersionCheck.A_zimbraVersionCheckUpdates,
+	    			type:_REPEAT_,
+	    			labelLocation:_LEFT_,
+					align:_LEFT_,
+					repeatInstance:"",
+					showAddButton:false,
+					showRemoveButton:false,
+					showAddOnNextRow:false,
+					visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaVersionCheck.A_zimbraVersionCheckUpdates]],
+					visibilityChangeEventSources:[ZaVersionCheck.A_zimbraVersionCheckUpdates],				
+					items: [
+						{ 
+							ref:ZaVersionCheck.A_zimbraVersionCheckUpdateShortversion, 
+							type: _OUTPUT_, label:null,labelLocation:_NONE_
+						},
+						{ 
+							ref:ZaVersionCheck.A_zimbraVersionCheckUpdateCritical, 
+							type: _OUTPUT_, label:null,labelLocation:_NONE_,
+							choices:this.criticalChoices
+						},
+						{ 
+							ref:ZaVersionCheck.A_zimbraVersionCheckUpdateUpdateURL, 
+							type: _URL_, label:null,labelLocation:_NONE_
+						}
+					]
+	    				
+	    		}]
+			}
     	]
     }
     var switchItems = [case1,case2];
     xFormObject.items = [
+		{ type: _DWT_ALERT_,cssClass: "DwtTabTable",
+			visibilityChecks:[ZaVersionCheckXFormView.checkLastAttemptFailed],
+			visibilityChangeEventSources:[ZaVersionCheck.A_zimbraVersionCheckLastAttempt,ZaVersionCheck.A_zimbraVersionCheckLastSuccess],
+			containerCssStyle: "padding-bottom:0px",
+			style: DwtAlert.CRITICAL,
+			iconVisible: true, 
+			content: com_zimbra_adminversioncheck.WARNING_LAST_ATTEMPT_FAILED,
+			colSpan:"*"
+		},
+		{ type: _DWT_ALERT_,cssClass: "DwtTabTable",
+			visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaVersionCheck.A_zimbraVersionCheckUpdates]],
+			visibilityChangeEventSources:[ZaVersionCheck.A_zimbraVersionCheckUpdates],
+			containerCssStyle: "padding-bottom:0px",
+			style: DwtAlert.WARNING,
+			iconVisible: true, 
+			content: com_zimbra_adminversioncheck.UpdatesAreAvailable,
+			colSpan:"*"
+		},
+		{ type: _DWT_ALERT_,cssClass: "DwtTabTable",
+			visibilityChecks:[[XForm.checkInstanceValueEmty,ZaVersionCheck.A_zimbraVersionCheckUpdates]],
+			visibilityChangeEventSources:[ZaVersionCheck.A_zimbraVersionCheckUpdates],
+			containerCssStyle: "padding-bottom:0px",
+			style: DwtAlert.INFORMATION,
+			iconVisible: true, 
+			content: com_zimbra_adminversioncheck.ServerIsUpToDate,
+			colSpan:"*"
+		},	
 		{type:_TAB_BAR_,  ref:ZaModel.currentTab,id:"xform_tabbar",
 		 	containerCssStyle: "padding-top:0px",
 			choices: tabBarChoices 
