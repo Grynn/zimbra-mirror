@@ -107,6 +107,18 @@ $mailfrom_to_quarantine = ''; # null return path; uses original sender if undef
 $path = '/opt/zimbra/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/sbin:/usr/bin:/bin';
 %%uncomment LOCAL:amavis_dspam_enabled%%$dspam = '/opt/zimbra/dspam/bin/dspam';
 
+@spam_scanners = (
+    ['SpamAssassin', 'Amavis::SpamControl::SpamAssassin' ],
+
+%%uncomment LOCAL:amavis_dspam_enabled%%  ['DSPAM',
+'Amavis::SpamControl::ExtProg', $dspam,
+%%uncomment LOCAL:amavis_dspam_enabled%%    [ qw(--stdout --classify --deliver=innocent,spam --mode=tum
+%%uncomment LOCAL:amavis_dspam_enabled%%         --tokenizer=chained,noise --user), $daemon_user ],
+%%uncomment LOCAL:amavis_dspam_enabled%%         mail_body_size_limit => 64000, score_factor => 1,
+%%uncomment LOCAL:amavis_dspam_enabled%%    ],
+);
+
+
 $MAXLEVELS = 14;
 $MAXFILES = 1500;
 $MIN_EXPANSION_QUOTA =      100*1024;  # bytes  (default undef, not enforced)
