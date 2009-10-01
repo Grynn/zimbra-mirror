@@ -1,7 +1,5 @@
 ZaZimbraAdmin._SAMBA_DOMAIN_LIST = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SAMBA_DOMAIN_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._SAMBA_DOMAIN_LIST] = "SMBDomains_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._SAMBA_DOMAIN_VIEW] = "SMBDomains_view_title";
 if(ZaMsg) {
 	ZaMsg.SMBDomains_view_title = zimbra_samba.SambaDomainsListViewTitle;
 }

@@ -4,8 +4,6 @@ function zimbra_posixaccount_ext () {
 
 ZaZimbraAdmin._POSIX_GROUP_LIST = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._POSIX_GROUP_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._POSIX_GROUP_LIST] = "PSXGroups_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._POSIX_GROUP_VIEW] = "PSXGroups_view_title";
 if(ZaMsg) {
 	ZaMsg.PSXGroups_view_title = zimbra_posixaccount.PosixGroupsListViewTitle;
 }

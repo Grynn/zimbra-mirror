@@ -455,17 +455,6 @@ function(viewId) {
 		}
 		Dwt.setTitle(title ? ZaMsg.zimbraTitle + ": " + title : ZaMsg.zimbraTitle);
 	}
-	
-	/*
-	if(this._components[ZaAppViewMgr.C_CURRENT_APP] && this._components[ZaAppViewMgr.C_CURRENT_APP].setCurrentView) {
-		this._components[ZaAppViewMgr.C_CURRENT_APP].setCurrentView(viewId);		
-	}
-
-	if(ZaZimbraAdmin.MSG_KEY[viewId] && ZaMsg[ZaZimbraAdmin.MSG_KEY[viewId]]) {
-		Dwt.setTitle(ZaMsg[ZaZimbraAdmin.MSG_KEY[viewId]]);
-	} else {
-		Dwt.setTitle(ZaMsg.zimbraTitle);	
-	}*/
 }
 
 // Handles app/tree movement. If you move the sash beyond the max or min width,

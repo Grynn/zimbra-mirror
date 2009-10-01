@@ -82,33 +82,6 @@ ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._RESOURCE_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._ZIMLET_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 
-ZaZimbraAdmin.MSG_KEY = new Object();
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = "Accounts_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._SEARCH_LIST_VIEW] = "Search_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ACCOUNT_VIEW] = "Accounts_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ALIASES_LIST_VIEW] = "Aliases_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ALIAS_VIEW] = "Aliases_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW] = "DL_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._DL_VIEW] = "DL_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._GLOBAL_SETTINGS] = "GlobalConfig_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._SERVERS_LIST_VIEW] = "Servers_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._DOMAINS_LIST_VIEW] = "Domain_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._COS_LIST_VIEW] = "COS_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._STATISTICS] = "GlobalStats_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._STATISTICS_BY_SERVER] = "ServerStats_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._SERVER_VIEW] = "Servers_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._HELP_VIEW] = "Help_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._DOMAIN_VIEW] = "Domain_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._COS_VIEW] = "COS_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._STATUS] = "Status_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._MIGRATION_WIZ_VIEW] = "Migration_wiz_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._POSTQ_VIEW] = "PostQ_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW] = "PostQ_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._RESOURCE_VIEW] = "Resources_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._RESOURCE_LIST_VIEW] = "Resources_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW] = "AdminZimlets_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ZIMLET_LIST_VIEW] = "Zimlets_view_title";
-ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ZIMLET_VIEW] = "Zimlets_view_title";
 // do not change the name of the cookie! SoapServlet looks for it
 ZaZimbraAdmin._COOKIE_NAME = "ZM_ADMIN_AUTH_TOKEN";
 	
