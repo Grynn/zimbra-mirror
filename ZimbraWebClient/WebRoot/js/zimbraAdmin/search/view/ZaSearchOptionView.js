@@ -94,7 +94,7 @@ function () {
 ZaSearchOptionView.prototype.initForm = 
 function (xModelMetaData, xFormMetaData, xFormInstance) {
 	if(xModelMetaData == null || xFormMetaData == null)
-		throw new AjxException("Metadata for XForm and/or XModel are not defined", AjxException.INVALID_PARAM, "DwtXWizardDialog.prototype._initForm");
+		throw new AjxException("Metadata for XForm and/or XModel are not defined", AjxException.INVALID_PARAM, "ZaSearchOptionView.prototype.initForm");
 
 	this._localXModel = new XModel(xModelMetaData);
 	//

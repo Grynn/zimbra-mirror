@@ -54,7 +54,7 @@ function () {
 ZaMigrationWizView.prototype.initForm = 
 function (xModelMetaData, xFormMetaData) {
 	if(xModelMetaData == null || xFormMetaData == null)
-		throw new AjxException("Metadata for XForm and/or XModel are not defined", AjxException.INVALID_PARAM, "DwtXWizardDialog.prototype._initForm");
+		throw new AjxException("Metadata for XForm and/or XModel are not defined", AjxException.INVALID_PARAM, "ZaMigrationWizView.prototype.initForm");
 
 	this._localXModel = new XModel(xModelMetaData);
 	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this);
