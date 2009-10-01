@@ -266,7 +266,7 @@ function () {
 	if(!ZaAccount.checkValues(tmpObj))
 		return false;
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CHPWD] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT,tmpObj)) {
 		//change password if new password is provided
 		if(tmpObj.attrs[ZaAccount.A_password]!=null && tmpObj[ZaAccount.A2_confirmPassword]!=null && tmpObj.attrs[ZaAccount.A_password].length > 0) {
 			try {
