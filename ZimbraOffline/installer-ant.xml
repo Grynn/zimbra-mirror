@@ -196,7 +196,7 @@
             <symlink link="${build.dir}/zdesktop_macos_intel.dmg" resource="${media_macos}.dmg" overwrite="true"/>
         </then></if>
         <if><available file="${build.dir}/${media_win32}" type="file"/><then>
-            <symlink link="${build.dir}/zdesktop_win32.msi" resource="${media_win32}" overwrite="true"/>
+            <copy tofile="${build.dir}/zdesktop_win32.msi" file="${build.dir}/${media_win32}" overwrite="true"/>
         </then></if>
 	</target>
 </project>

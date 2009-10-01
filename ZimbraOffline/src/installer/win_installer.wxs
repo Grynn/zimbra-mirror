@@ -84,8 +84,6 @@
       <Custom Action="ID10703" Sequence="7003">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
       <Custom Action="ID10704" Sequence="7004">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
       <Custom Action="ID10705" Sequence="7005">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10706" Sequence="7006">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10707" Sequence="7007">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
       <Custom Action="ID10708" Sequence="7008">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
       <Custom Action="ID10709" Sequence="7009">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
       <Custom Action="ID10710" Sequence="7010">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
@@ -203,9 +201,6 @@
     <CustomAction Id="ID10703" Property="Value1" Value="[APPLICATIONFOLDER]" />
     <CustomAction Id="ID10704" Property="Token2" Value="@install.data.root@" />
     <CustomAction Id="ID10705" Property="Value2" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop" />
-
-    <CustomAction Id="ID10706" Property="File" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop\db\derbyij.sql" />
-    <CustomAction Id="ID10707" BinaryKey="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" DllEntry="ZTokenReplace" />
 
     <CustomAction Id="ID10708" Property="File" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop\conf\localconfig.xml" />
     <CustomAction Id="ID10709" BinaryKey="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" DllEntry="ZTokenReplace" />
