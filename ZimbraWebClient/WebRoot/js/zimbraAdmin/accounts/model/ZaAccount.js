@@ -843,11 +843,12 @@ ZaItem.createMethods["ZaAccount"].push(ZaAccount.createMethod);
 */
 ZaAccount.modifyMethod =
 function(mods) {
-	
+	var gotSomething = false;
 	//update the object
 	var soapDoc = AjxSoapDoc.create("ModifyAccountRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	for (var aname in mods) {
+		gotSomething = true;
 		//multy value attribute
 		if(mods[aname] instanceof Array) {
 			var cnt = mods[aname].length;
@@ -873,6 +874,10 @@ function(mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
+	
+	if(!gotSomething)
+		return;
+		
 	//var modifyAccCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	

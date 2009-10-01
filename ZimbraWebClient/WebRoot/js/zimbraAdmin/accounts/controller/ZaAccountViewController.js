@@ -291,6 +291,9 @@ function () {
                 || a == ZaItem.A_zimbraACE) {
 			continue;
 		}	
+		if(!ZaItem.hasWritePermission(a,tmpObj)) {
+			continue;
+		}		
 		//check if the value has been modified
 		if ((this._currentObject.attrs[a] != tmpObj.attrs[a]) && !(this._currentObject.attrs[a] == undefined && tmpObj.attrs[a] === "")) {
 			if(a==ZaAccount.A_uid) {
