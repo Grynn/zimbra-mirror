@@ -232,7 +232,7 @@ ZaItem.loadMethods["ZaCos"].push(ZaCos.loadMethod);
 
 ZaCos.prototype.refresh = 
 function () {
-	this.load("name", this.attrs[ZaCos.A_name]);
+	this.load("name", this.name);
 }
 
 ZaCos.prototype.initFromJS =
@@ -362,9 +362,12 @@ function() {
 **/
 ZaCos.modifyMethod = 
 function (mods) {
+	var gotSomething = false;
+	
 	var soapDoc = AjxSoapDoc.create("ModifyCosRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	for (var aname in mods) {
+		gotSomething = true;
 		//multy value attribute
 		if(mods[aname] instanceof Array) {
 			var cnt = mods[aname].length;
@@ -391,6 +394,9 @@ function (mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
+	if(!gotSomething)
+		return;
+		
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
