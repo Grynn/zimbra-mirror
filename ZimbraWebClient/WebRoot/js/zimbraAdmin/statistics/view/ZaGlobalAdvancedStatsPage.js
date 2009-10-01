@@ -238,18 +238,12 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
                     record[values[i].stat[j].name] = values[i].stat[j].value;
                 }
             }
-            // skip missing values, we can't assume it's a zero or last value
-            var skipRec = false;
             for (var j = 0; j < columns.length; j++) {
                 if (!record[columns[j]]) {
-                    //record[columns[j]] = 0;
-                    skipRec = true;
-                    break;
+                    record[columns[j]] = 0;
                 }
             }
-            if (!skipRec) {
-                newData.push(record);
-            }
+            newData.push(record);
         }
         if (newData.length < 1) {
             var e = document.getElementById("loggerchart" + id);
