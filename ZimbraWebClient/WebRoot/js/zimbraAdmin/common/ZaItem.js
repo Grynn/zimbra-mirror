@@ -257,6 +257,9 @@ ZaItem.prototype.parseTargetsRightsFromJS = function(targetObj) {
 						}
 					}
 				}
+				if(!getAttrs[ZaItem.A_zimbraId] ) {
+					this.attrsToGet.push(ZaItem.A_zimbraId);
+				}				
 			} 
 			if (targetObj.getAttrs[0].all){
 				this.getAttrs.all = true;
@@ -576,6 +579,10 @@ function (obj) {
 		
 	if(!(this.attrs[ZaAccount.A_description] instanceof Array)) {
 		this.attrs[ZaAccount.A_description] = [this.attrs[ZaAccount.A_description]];
+	}	
+	
+	if(!this.attrs[ZaItem.A_zimbraId] && this.id) {
+		this.attrs[ZaItem.A_zimbraId] = this.id;
 	}	
 }
 

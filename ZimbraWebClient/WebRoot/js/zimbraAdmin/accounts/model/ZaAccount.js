@@ -1200,6 +1200,9 @@ function (account) {
 		this.attrs[ZaAccount.A_description] = [this.attrs[ZaAccount.A_description]];
 	}
 	
+	if(!this.attrs[ZaItem.A_zimbraId] && this.id) {
+		this.attrs[ZaItem.A_zimbraId] = this.id;
+	}
 }
 
 /**
