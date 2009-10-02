@@ -150,7 +150,7 @@ ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
     var case2 = {type:_ZATABCASE_, caseKey:_tab2,
     	colSizes:["auto"],numCols:1,
     	items:[
-			{type:_ZAGROUP_,items:[
+			{type:_ZAGROUP_,colSizes:["275","400"],items:[
 	    		{ref:ZaVersionCheck.A_zimbraVersionCheckLastAttempt,type:_OUTPUT_,
 	    			label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckLastAttempt
 	    		},
