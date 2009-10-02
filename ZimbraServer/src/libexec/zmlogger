@@ -41,12 +41,15 @@ my @CREATE_DDL = (
     )},
 );
 
+my %hostid_cache;
+my %structure_cache;
+
 my %hostname_mapped;
 sub map_host($$$) {
-	my ($dbh, $syslog_hostname, $zm_hostname) = @_;
+    my ($dbh, $syslog_hostname, $zm_hostname) = @_;
 	
-	return if $syslog_hostname eq $zm_hostname;
-	return if exists $hostname_mapped{$syslog_hostname};
+    return if $syslog_hostname eq $zm_hostname;
+    return if exists $hostname_mapped{$syslog_hostname};
 	
     my $sth = $dbh->prepare(q{
         UPDATE hosts SET zm_hostname = ? WHERE dns_hostname = ?
@@ -60,12 +63,16 @@ sub map_host($$$) {
 sub get_host_id($$) {
     my $dbh      = shift @_;
     my $hostname = shift@_;
+
+    return $hostid_cache{$hostname} if defined $hostid_cache{$hostname};
+
     my $sth = $dbh->prepare("SELECT id FROM hosts WHERE dns_hostname = ?");
     $sth->bind_param(1, $hostname);
     $sth->execute();
     die $sth->err if ($sth->err);
     my $ref = $sth->fetchall_arrayref({});
-    @$ref > 0 ? $ref->[0]->{'id'} : undef;
+    $hostid_cache{$hostname} = @$ref > 0 ? $ref->[0]->{'id'} : undef;
+    return $hostid_cache{$hostname};
 }
 
 sub create_host($$) {
@@ -83,6 +90,11 @@ sub create_host($$) {
 
 sub get_structure($$$) {
     my ($dbh, $hostid, $csv) = @_;
+
+    $structure_cache{$hostid} = {} if !exists $structure_cache{$hostid};
+    return $structure_cache{$hostid}->{$csv}
+            if defined $structure_cache{$hostid}->{$csv};
+
     my $sth = $dbh->prepare(q{
             SELECT col_name, col_name_19, col_num, rrd_file FROM rrds
             WHERE host_id = ? AND csv_file = ?
@@ -92,7 +104,8 @@ sub get_structure($$$) {
     $sth->execute();
     die $sth->err if ($sth->err);
     my $ref = $sth->fetchall_hashref('col_name');
-    keys %$ref > 0 ? $ref : undef;
+    $structure_cache{$hostid}->{$csv} = keys %$ref > 0 ? $ref : undef;
+    return $structure_cache{$hostid}->{$csv};
 }
 
 sub prune_data($$) {
@@ -190,6 +203,7 @@ sub get_col_types($$$$) {
 
 sub insert_rrd_column_map($$$$$) {
     my ($dbh, $hostid, $csv, $headersref, $dataref) = @_;
+    delete $structure_cache{$hostid}->{$csv} if exists $structure_cache{$hostid};
     my $rrd_file_no = get_next_rrd_fileno($dbh, $hostid);
     my $sth = $dbh->prepare(q{
             INSERT INTO rrds
@@ -223,8 +237,7 @@ sub insert_rrd_column_map($$$$$) {
     create_rrd($hostid, $rrd_file_no, \@columns, $dbh, $csv, \@real_columns);
     @columns;
 }
-# TODO figure out how to determine GAUGE vs COUNTER types (fortunately, almost
-# everything is GAUGE)
+
 sub create_structure($$$$$) {
     my ($dbh, $hostid, $csv, $headersref, $dataref) = @_;
 
@@ -282,7 +295,7 @@ sub add_columns($$$$$$) {
     my ($dbh, $hostid, $csv_file, $structure, $headersref, $dataref) = @_;
     my @columns;
     my @data;
-    for (my $i = 0; $i < @$headersref; $i++) {
+    foreach my $i (0 .. $#$headersref) {
         my $column = $headersref->[$i];
         if (! exists $structure->{$column}) {
             push(@columns, $column);
@@ -471,6 +484,7 @@ sub run() {
         } else {
             next;
         }
+
         my $hostid = get_host_id($dbh,$host);
         $hostid    = create_host($dbh, $host) if (!defined($hostid));
 
