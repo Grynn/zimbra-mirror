@@ -58,26 +58,27 @@ if ( $options{d} + $options{e} <= 0) {
   exit (1);
 }
 
-my $source_config_dir = "/opt/zimbra/openldap/etc/openldap";
-
-my $infile;
-if ( -f "$source_config_dir/convertd_mimehandlers.ldif") {
-  $infile="$source_config_dir/convertd_mimehandlers.ldif";
-} elsif ( -f "/opt/zimbra/convertd/conf/ldap/convertd_mimehandlers.ldif") {
-  $infile="/opt/zimbra/convertd/conf/ldap/convertd_mimehandlers.ldif";
-} else {
-  print "Error! convertd_mimehandlers.ldif file not found";
-  exit (1);
-}
 
 # Get the LDAP Master
 my $ldap_master = getLocalConfig("ldap_master_url");
 
-print "Updating LDAP\n";
+print "Updating LDAP.\n";
 my $ldap = Net::LDAP->new("$ldap_master")  or  die "$@";
 my $mesg = $ldap->bind("$admin_user", password=>"$admin_password");
 
 if ( $options{e} ) {
+  my $source_config_dir = "/opt/zimbra/openldap/etc/openldap";
+
+  my $infile;
+  if ( -f "$source_config_dir/convertd_mimehandlers.ldif") {
+    $infile="$source_config_dir/convertd_mimehandlers.ldif";
+  } elsif ( -f "/opt/zimbra/convertd/conf/ldap/convertd_mimehandlers.ldif") {
+    $infile="/opt/zimbra/convertd/conf/ldap/convertd_mimehandlers.ldif";
+  } else {
+    print "Error! convertd_mimehandlers.ldif file not found.\n";
+    exit (1);
+  }
+
   $mesg = $ldap->modify('cn=text/enriched,cn=mime,cn=config,cn=zimbra',
     replace => [ 'zimbraMimeHandlerClass' => 'com.zimbra.cs.mime.handler.TextEnrichedHandler' ] );
 
@@ -134,10 +135,12 @@ if ( $options{d} ) {
   $mesg = $ldap->delete('cn=application/zip,cn=mime,cn=config,cn=zimbra');
   $mesg = $ldap->delete('cn=text/rtf,cn=mime,cn=config,cn=zimbra');
   $mesg = $ldap->delete('cn=unsupported,cn=mime,cn=config,cn=zimbra');
+
 }
 
 $ldap->unbind();
 $ldap->disconnect();
+
 
 exit 0;
 
