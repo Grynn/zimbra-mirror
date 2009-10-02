@@ -241,6 +241,7 @@ ZaItem.createMethods["ZaDistributionList"].push(ZaDistributionList.createMethod)
 * @param mods set of modified attributes and their new values
 */
 ZaDistributionList.modifyMethod = function(mods, obj) {
+	var gotSomething = false;
 	var soapDoc = AjxSoapDoc.create("ModifyDistributionListRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	//transfer the fields from the tmpObj to the _currentObject
@@ -254,6 +255,10 @@ ZaDistributionList.modifyMethod = function(mods, obj) {
 			if(a==ZaAccount.A_uid) {
 				continue; //skip uid, it is changed throw a separate request
 			}
+			if(!ZaItem.hasWritePermission(a,obj)) {
+				continue;
+			}			
+			gotSomething = true;
 			if(obj.attrs[a] instanceof Array) {
 	   			if (!this.attrs[a]) {
 	   				this.attrs[a] = [] ;
@@ -288,6 +293,9 @@ ZaDistributionList.modifyMethod = function(mods, obj) {
 			}				
 		}
 	}	
+	if(!gotSomething)
+		return;
+		
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var reqMgrParams = {
@@ -555,18 +563,19 @@ function(tmpObj, callback) {
 
 
 ZaDistributionList.checkValues = function(tmpObj) {
-	if(tmpObj.name == null || tmpObj.name.length < 1) {
-		//show error msg
-		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_DL_NAME_REQUIRED);
-		return false;
+	if(ZaItem.hasWritePermission(ZaAccount.A_name,tmpObj)) {
+		if(tmpObj.name == null || tmpObj.name.length < 1) {
+			//show error msg
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_DL_NAME_REQUIRED);
+			return false;
+		}
+		if(!AjxUtil.isValidEmailNonReg(tmpObj.name)) {
+			//show error msg
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_DL_NAME_INVALID);
+			return false;
+		}	
 	}
-
 	
-	if(!AjxUtil.isValidEmailNonReg(tmpObj.name)) {
-		//show error msg
-		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_DL_NAME_INVALID);
-		return false;
-	}	
 
 	return true;
 }

@@ -421,12 +421,13 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ref:ZaDomain.A_zimbraGalMaxResults, type:_TEXTFIELD_, label:ZaMsg.LBL_zimbraGalMaxResults, msgName:ZaMsg.MSG_zimbraGalMaxResults, labelLocation:_LEFT_},
 						{type:_DWT_ALERT_,style: DwtAlert.WARNING,
 							content:ZaMsg.WARNING_DOMAIN_DS_NOT_CONFIGRED,
-							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A_zimbraGalAccountId]]
+							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A_zimbraGalAccountId]],colSpan:"*"
 						},
 						{ref:ZaDomain.A2_create_gal_acc, type:_CHECKBOX_, label:ZaMsg.Domain_UseGALSyncAccts, 
 							labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",
 							labelCssClass:"xform_label", align:_LEFT_,labelWrap:true,
-							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A2_gal_sync_accounts]]							
+							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A2_gal_sync_accounts],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]],
+							enableDisableChecks:[[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT],[ZaItem.hasRight,ZaDomain.RIGHT_ADMIN_LOGIN_AS]]							
 						},						
 						{type:_DYNSELECT_, label:ZaMsg.Domain_GalSyncAccount,
 							width:250,
@@ -436,16 +437,17 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							dataFetcherAttrs:[ZaItem.A_zimbraId, ZaItem.A_cn, ZaAccount.A_name, ZaAccount.A_displayname, ZaAccount.A_mail,ZaItem.A_objectClass],
 							dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,
 							dataFetcherDomain:entry.name,
-							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A2_gal_sync_accounts]],
+							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A2_gal_sync_accounts],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]],
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT],[ZaItem.hasRight,ZaDomain.RIGHT_ADMIN_LOGIN_AS]]
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0].name"), type:_OUTPUT_,label:ZaMsg.Domain_GalSyncAccount,
-							visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts]]
+							visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]]
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds + ".name"), label:ZaMsg.Domain_InternalGALDSName, type:_OUTPUT_,
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
+								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
 								ZaNewDomainXWizard.isDomainModeNotExternal,
 								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
 							]							
@@ -453,17 +455,19 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ref:ZaDomain.A2_new_internal_gal_ds_name, label:ZaMsg.Domain_InternalGALDSName, type:_TEXTFIELD_,
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
+								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
 								ZaNewDomainXWizard.isDomainModeNotExternal,
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
 							],
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]							
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT],[ZaItem.hasRight,ZaDomain.RIGHT_ADMIN_LOGIN_AS]]							
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval),
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
 							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
+								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
 								ZaNewDomainXWizard.isDomainModeNotExternal,
 								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
 							]
@@ -473,15 +477,17 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_internal,
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
+								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
 								ZaNewDomainXWizard.isDomainModeNotExternal,
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
 							],
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]													
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_ADMIN_LOGIN_AS]]													
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds + ".name"), label:ZaMsg.Domain_ExternalGALDSName, type:_OUTPUT_,
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
+								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
 								ZaNewDomainXWizard.isDomainModeNotInternal,
 								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
 							]							
@@ -489,17 +495,19 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ref:ZaDomain.A2_new_external_gal_ds_name, label:ZaMsg.Domain_ExternalGALDSName, type:_TEXTFIELD_,
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
+								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
 								ZaNewDomainXWizard.isDomainModeNotInternal,
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
 							],
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]							
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_ADMIN_LOGIN_AS]]							
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval), 
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
 							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
+								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
 								ZaNewDomainXWizard.isDomainModeNotInternal,
 								[XForm.checkInstanceValueNotEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
 							]													
@@ -509,19 +517,23 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
+								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
 								ZaNewDomainXWizard.isDomainModeNotInternal,
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
 							],
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_ADMIN_LOGIN_AS]]
 						},						
 						{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","430px"],
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[ZaNewDomainXWizard.isDomainModeNotInternal],
 							cssStyle:"overflow:auto",
 							items: [
-								{ref:ZaDomain.A_GALServerType, type:_OSELECT1_, label:ZaMsg.Domain_GALServerType, labelLocation:_LEFT_, choices:this.GALServerTypes, onChange:ZaGALConfigXWizard.onGALServerTypeChange},
+								{ref:ZaDomain.A_GALServerType, type:_OSELECT1_, label:ZaMsg.Domain_GALServerType, labelLocation:_LEFT_, 
+									choices:this.GALServerTypes, onChange:ZaGALConfigXWizard.onGALServerTypeChange
+								},
 								{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
+									visibilityChecks:[[ZaItem.hasWritePermission,ZaDomain.A_GalLdapURL]],
 									items: [
 										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
 										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerName, width:"200px"},
@@ -531,11 +543,13 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 									]
 								},
 								{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,  
+									visibilityChecks:[[ZaItem.hasWritePermission,ZaDomain.A_GalLdapURL]],
 									addButtonLabel:ZaMsg.Domain_AddURL, 
 									removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,
 									showAddOnNextRow:true,
 									items: [
-										{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"3269",ldapPort:"3268",  labelLocation:_NONE_}
+										{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"3269",ldapPort:"3268",  labelLocation:_NONE_,
+										visibilityChecks:[],enableDisableChecks:[]}
 									]
 								},
 								{ref:ZaDomain.A_GalLdapFilter, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, 
@@ -606,7 +620,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
 							showAddOnNextRow:true,							
 							items: [
-								{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"3269",ldapPort:"3268",  labelLocation:_NONE_}
+								{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"3269",ldapPort:"3268",  labelLocation:_NONE_,visibilityChecks:[],enableDisableChecks:[]}
 							]
 						},
 						{ref:ZaDomain.A_zimbraGalSyncLdapURL, type:_REPEAT_, label:ZaMsg.LBL_Domain_GalLdapURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,
@@ -618,7 +632,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
 							showAddOnNextRow:true,							
 							items: [
-								{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"636",ldapPort:"389",  labelLocation:_NONE_}
+								{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"636",ldapPort:"389",  labelLocation:_NONE_,visibilityChecks:[],enableDisableChecks:[]}
 							]
 						},
 						{ref:ZaDomain.A_zimbraGalSyncLdapFilter, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, textWrapping:"soft", 

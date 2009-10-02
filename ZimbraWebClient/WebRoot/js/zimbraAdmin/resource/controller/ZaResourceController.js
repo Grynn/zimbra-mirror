@@ -262,7 +262,7 @@ function () {
 	if(!ZaResource.checkValues(tmpObj))
 		return false;
 		
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CHPWD] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(ZaItem.hasRight(ZaResource.SET_CALRES_PASSWORD_RIGHT,tmpObj)) {
 		//change password if new password is provided
 		if(tmpObj.attrs[ZaResource.A_password]!=null && tmpObj[ZaResource.A2_confirmPassword]!=null && tmpObj.attrs[ZaResource.A_password].length > 0) {
 			try {
@@ -303,6 +303,9 @@ function () {
                 || a == ZaItem.A_zimbraId || a == ZaItem.A_zimbraACE) {
 			continue;
 		}	
+		if(!ZaItem.hasWritePermission(a,tmpObj)) {
+			continue;
+		}
 		//check if the value has been modified
 		if ((this._currentObject.attrs[a] != tmpObj.attrs[a]) && !(this._currentObject.attrs[a] == undefined && tmpObj.attrs[a] === "")) {
 			if(a==ZaResource.A_uid) {

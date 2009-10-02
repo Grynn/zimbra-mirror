@@ -260,6 +260,8 @@ ZaDomain.RIGHT_CREATE_ACCOUNT = "createAccount";
 ZaDomain.RIGHT_CREATE_CALRES = "createCalendarResource";
 ZaDomain.RIGHT_CREATE_DL = "createDistributionList";
 ZaDomain.RIGHT_CREATE_ALIAS = "createAlias";
+ZaDomain.RIGHT_ADMIN_LOGIN_AS = "adminLoginAs";
+ZaDomain.RIGHT_CHECK_MX_RECORD = "checkDomainMXRecord";
 ZaDomain.cacheCounter = 0;
 ZaDomain.staticDomainByNameCacheTable = {};
 ZaDomain.staticDomainByIdCacheTable = {};
@@ -631,32 +633,35 @@ ZaDomain.prototype.loadNewObjectDefaults = function (domainBy, domain, cosBy, co
 }
 ZaDomain.canConfigureAuth = function (obj) {
 	return (ZaItem.hasWritePermission(ZaDomain.A_AuthMech,obj) 
-		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapURL,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapUserDn,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapSearchBase,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapSearchFilter,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapSearchBindDn,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_AuthLdapSearchBindPassword,obj));
+		&& ZaItem.hasWritePermission(ZaDomain.A_AuthLdapURL,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_AuthLdapUserDn,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_AuthLdapSearchBase,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_AuthLdapSearchFilter,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_AuthLdapSearchBindDn,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_AuthLdapSearchBindPassword,obj));
 }
 ZaDomain.canConfigureGal = function (obj) {
-	return (ZaItem.hasWritePermission(ZaDomain.A_zimbraGalMode,obj) 
-		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapURL,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapSearchBase,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapBindDn,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapBindDn,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapBindPassword,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_GalLdapFilter,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalAutoCompleteLdapFilter,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapURL,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapSearchBase,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapFilter,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapAuthMech,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapBindDn,obj)
-		|| ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapBindPassword,obj));
+	return (ZaItem.hasRight(ZaDomain.RIGHT_ADMIN_LOGIN_AS,obj)
+		&& ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ACCOUNT,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraGalAccountId,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraGalMode,obj) 
+		&& ZaItem.hasWritePermission(ZaDomain.A_GalLdapURL,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_GalLdapSearchBase,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_GalLdapBindDn,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_GalLdapBindDn,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_GalLdapBindPassword,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_GalLdapFilter,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraGalAutoCompleteLdapFilter,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapURL,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapSearchBase,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapFilter,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapAuthMech,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapBindDn,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapBindPassword,obj));
 }
 
 ZaDomain.canConfigureWiki = function (obj) {
-	if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ACCOUNT,obj) && ZaItem.hasWritePermission(ZaDomain.A_zimbraNotebookAccount,obj))
+	if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ACCOUNT,obj) && ZaItem.hasWritePermission(ZaDomain.A_zimbraNotebookAccount,obj) && ZaItem.hasRight(ZaDomain.RIGHT_ADMIN_LOGIN_AS,obj))
 		return true;
 }
 

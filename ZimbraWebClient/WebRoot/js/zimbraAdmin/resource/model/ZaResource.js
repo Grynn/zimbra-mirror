@@ -125,56 +125,58 @@ function(tmpObj) {
 	/**
 	* check values
 	**/
-
-	if(tmpObj.name == null || tmpObj.name.length < 1) {
-		//show error msg
-		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_REQUIRED);
-		return false;
+	if(ZaItem.hasWritePermission(ZaAccount.A_name,tmpObj)) {
+		if(tmpObj.name == null || tmpObj.name.length < 1) {
+			//show error msg
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_REQUIRED);
+			return false;
+		}
+		
+		/*if(!AjxUtil.EMAIL_SHORT_RE.test(tmpObj.name) ) {*/
+		if(!AjxUtil.isValidEmailNonReg(tmpObj.name)) {
+			//show error msg
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_RESOURCE_EMAIL_INVALID);
+			return false;
+		}
 	}
-	
-	/*if(!AjxUtil.EMAIL_SHORT_RE.test(tmpObj.name) ) {*/
-	if(!AjxUtil.isValidEmailNonReg(tmpObj.name)) {
-		//show error msg
-		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_RESOURCE_EMAIL_INVALID);
-		return false;
-	}
-	
 
 	var maxPwdLen = Number.POSITIVE_INFINITY;
 	var minPwdLen = 1;	
-	
-	//validate password length against this account's COS setting
-	if(tmpObj.attrs[ZaResource.A_zimbraMinPwdLength] != null) {
-		minPwdLen = tmpObj.attrs[ZaResource.A_zimbraMinPwdLength];
-	} else  {
-		minPwdLen = tmpObj._defaultValues.attrs[ZaResource.A_zimbraMinPwdLength];
-	}
-	
-	if(tmpObj.attrs[ZaResource.A_zimbraMaxPwdLength] != null) {
-		maxPwdLen = tmpObj.attrs[ZaResource.A_zimbraMaxPwdLength];
-	} else  {
-		maxPwdLen = tmpObj._defaultValues.attrs[ZaResource.A_zimbraMaxPwdLength];
-	}
-	//if there is a password - validate it
-	if(tmpObj.attrs[ZaResource.A_password]!=null || tmpObj[ZaResource.A2_confirmPassword]!=null) {
-		if(tmpObj.attrs[ZaResource.A_password] != tmpObj[ZaResource.A2_confirmPassword]) {
-			//show error msg
-			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
-			return false;
-		} 			
-		if(tmpObj.attrs[ZaResource.A_password].length < minPwdLen || AjxStringUtil.trim(tmpObj.attrs[ZaResource.A_password]).length < minPwdLen) { 
-			//show error msg
-			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + String(ZaMsg.NAD_passMinLengthMsg).replace("{0}",minPwdLen));
-			return false;		
+	if(ZaItem.hasWritePermission(ZaAccount.A_zimbraMinPwdLength,tmpObj) && ZaItem.hasWritePermission(ZaAccount.A_zimbraMaxPwdLength,tmpObj)) {
+		//validate password length against this account's COS setting
+		if(tmpObj.attrs[ZaResource.A_zimbraMinPwdLength] != null) {
+			minPwdLen = tmpObj.attrs[ZaResource.A_zimbraMinPwdLength];
+		} else  {
+			minPwdLen = tmpObj._defaultValues.attrs[ZaResource.A_zimbraMinPwdLength];
 		}
 		
-		if(AjxStringUtil.trim(tmpObj.attrs[ZaResource.A_password]).length > maxPwdLen) { 
-			//show error msg
-			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + String(ZaMsg.NAD_passMaxLengthMsg).replace("{0}",maxPwdLen));
-			return false;		
+		if(tmpObj.attrs[ZaResource.A_zimbraMaxPwdLength] != null) {
+			maxPwdLen = tmpObj.attrs[ZaResource.A_zimbraMaxPwdLength];
+		} else  {
+			maxPwdLen = tmpObj._defaultValues.attrs[ZaResource.A_zimbraMaxPwdLength];
 		}
-	} 	
-		
+	}
+	if(ZaItem.hasRight(ZaResource.SET_CALRES_PASSWORD_RIGHT,tmpObj)) {
+		//if there is a password - validate it
+		if(tmpObj.attrs[ZaResource.A_password]!=null || tmpObj[ZaResource.A2_confirmPassword]!=null) {
+			if(tmpObj.attrs[ZaResource.A_password] != tmpObj[ZaResource.A2_confirmPassword]) {
+				//show error msg
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+				return false;
+			} 			
+			if(tmpObj.attrs[ZaResource.A_password].length < minPwdLen || AjxStringUtil.trim(tmpObj.attrs[ZaResource.A_password]).length < minPwdLen) { 
+				//show error msg
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + String(ZaMsg.NAD_passMinLengthMsg).replace("{0}",minPwdLen));
+				return false;		
+			}
+			
+			if(AjxStringUtil.trim(tmpObj.attrs[ZaResource.A_password]).length > maxPwdLen) { 
+				//show error msg
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + String(ZaMsg.NAD_passMaxLengthMsg).replace("{0}",maxPwdLen));
+				return false;		
+			}
+		} 	
+	}		
 	return true;
 }
 
@@ -256,6 +258,7 @@ ZaItem.createMethods["ZaResource"].push(ZaResource.createMethod);
 */
 ZaResource.modifyMethod =
 function(mods) {
+	var hasSomething = false;
 	//update the object
 	var soapDoc = AjxSoapDoc.create("ModifyCalendarResourceRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
@@ -268,16 +271,22 @@ function(mods) {
 					if(mods[aname][ix]) { //if there is an empty element in the array - don't send it
 						var attr = soapDoc.set("a", mods[aname][ix]);
 						attr.setAttribute("n", aname);
+						hasSomething = true;
 					}
 				}
 			} else {
 				var attr = soapDoc.set("a", "");
 				attr.setAttribute("n", aname);
+				hasSomething = true;
 			}
 		} else {
 			var attr = soapDoc.set("a", mods[aname]);
 			attr.setAttribute("n", aname);
+			hasSomething = true;
 		}
+	}
+	if(!hasSomething) {
+		return;
 	}
 	//var modifyAccCommand = new ZmCsfeCommand();
 	var params = new Object();

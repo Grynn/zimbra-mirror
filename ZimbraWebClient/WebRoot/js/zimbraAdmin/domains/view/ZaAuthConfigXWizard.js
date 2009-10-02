@@ -340,7 +340,8 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 										removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,												
 										showAddOnNextRow:true,											
 										items: [
-											{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_,ldapSSLPort:"3269",ldapPort:"3268"}
+											{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_,ldapSSLPort:"3269",ldapPort:"3268",
+											visibilityChecks:[],enableDisableChecks:[]}
 										]
 									}											
 								]
@@ -363,7 +364,8 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 										removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,												
 										showAddOnNextRow:true,											
 										items: [
-											{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"636",ldapPort:"389",  labelLocation:_NONE_}
+											{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"636",ldapPort:"389",  labelLocation:_NONE_,
+											visibilityChecks:[],enableDisableChecks:[]}
 										]
 									},	
 									{ref:ZaDomain.A_zimbraAuthLdapStartTlsEnabled, type:_CHECKBOX_, label:ZaMsg.Domain_AuthLdapStartTlsEnabled, onChange: ZaAuthConfigXWizard.startTlsEnabledChanged,

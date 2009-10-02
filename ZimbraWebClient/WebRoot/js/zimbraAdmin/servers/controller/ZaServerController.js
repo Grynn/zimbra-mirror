@@ -185,9 +185,10 @@ function () {
 
 ZaServerController.prototype.validateMyNetworks = 
 function (params) {
-	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraMtaMyNetworks,this._currentObject))
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraMtaMyNetworks,this._currentObject)) {
 		this.runValidationStack(params);
-		
+		return;
+	}	
 	var obj = this._view.getObject();
 	//find local networks
 	var locals = [];
@@ -324,8 +325,10 @@ ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServ
 
 ZaServerController.prototype.validateMTA =
 function (params) {
-	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraSmtpHostname,this._currentObject))
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraSmtpHostname,this._currentObject)) {
 		this.runValidationStack(params);
+		return;
+	}
 	
 	var obj = this._view.getObject();
 	if((AjxUtil.isEmpty(obj.attrs[ZaServer.A_zimbraSmtpHostname])) && !AjxUtil.isEmpty(this._currentObject.attrs[ZaServer.A_zimbraSmtpHostname])) {
@@ -345,14 +348,17 @@ function (params) {
 		ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();		
 	} else {
 		this.runValidationStack(params);
+		return;
 	}
 }
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateMTA);
 
 ZaServerController.prototype.validateVolumeChanges = 
 function (params) {
-	if(!ZaItem.hasRight(ZaServer.MANAGE_VOLUME_RIGHT,this._currentObject))
+	if(!ZaItem.hasRight(ZaServer.MANAGE_VOLUME_RIGHT,this._currentObject)) {
 		this.runValidationStack(params);
+		return;
+	}
 		
 	var obj = this._view.getObject();
 	if(obj[ZaServer.A_RemovedVolumes] && obj[ZaServer.A_RemovedVolumes].length > 0 ) {
@@ -372,6 +378,7 @@ function (params) {
 		ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();		
 	} else {
 		this.runValidationStack(params);
+		return;
 	}
 }
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateVolumeChanges);
@@ -393,9 +400,10 @@ ZaServerController.changeProxyPorts = function () {
 }
 ZaServerController.prototype.validateImapBindPort =
 function (params) {
-	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraImapBindPort,this._currentObject))
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraImapBindPort,this._currentObject)) {
 		this.runValidationStack(params);
-			
+		return;
+	}		
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
 
@@ -413,9 +421,11 @@ function (params) {
 			ZaServerController.showPortWarning.call(this, params,tmpObj);
 		} else {
 			this.runValidationStack(params);
+			return;
 		}
 	} else {
 		this.runValidationStack(params);
+		return;
 	}
 }
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateImapBindPort);
@@ -437,18 +447,21 @@ function (params) {
 			ZaServerController.showPortWarning.call(this, params,tmpObj);
 		} else {
 			this.runValidationStack(params);
+			return;
 		}
 	} else {
 		this.runValidationStack(params);
+		return;
 	}
 }
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateImapSSLBindPort);
 
 ZaServerController.prototype.validatePop3BindPort =
 function (params) {
-	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraPop3BindPort,this._currentObject))
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraPop3BindPort,this._currentObject)) {
 		this.runValidationStack(params);
-	
+		return;
+	}
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
 
@@ -464,18 +477,21 @@ function (params) {
 			ZaServerController.showPortWarning.call(this, params,tmpObj);
 		} else {
 			this.runValidationStack(params);
+			return;
 		}
 	} else {
 		this.runValidationStack(params);
+		return;
 	}
 }
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validatePop3BindPort);
 
 ZaServerController.prototype.validatePop3SSLBindPort =
 function (params) {
-	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraPop3SSLBindPort,this._currentObject))
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraPop3SSLBindPort,this._currentObject)) {
 		this.runValidationStack(params);
-			
+		return;
+	}		
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
 
@@ -491,17 +507,21 @@ function (params) {
 			ZaServerController.showPortWarning.call(this, params,tmpObj);
 		} else {
 			this.runValidationStack(params);
+			return;
 		}
 	} else {
 		this.runValidationStack(params);
+		return;
 	}
 }
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validatePop3SSLBindPort);
 
 ZaServerController.prototype.validateImapProxyBindPort =
 function (params) {
-	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraImapProxyBindPort,this._currentObject))
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraImapProxyBindPort,this._currentObject)) {
 		this.runValidationStack(params);
+		return;
+	}
 	
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
@@ -518,9 +538,11 @@ function (params) {
 			ZaServerController.showPortWarning.call(this, params,tmpObj);
 		} else {
 			this.runValidationStack(params);
+			return;
 		}
 	} else {
 		this.runValidationStack(params);
+		return;
 	}
 }
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateImapProxyBindPort);
@@ -528,9 +550,10 @@ ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServ
 
 ZaServerController.prototype.validateImapSSLProxyBindPort =
 function (params) {
-	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraImapSSLProxyBindPort,this._currentObject))
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraImapSSLProxyBindPort,this._currentObject)) {
 		this.runValidationStack(params);
-	
+		return;
+	}
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
 
@@ -546,9 +569,11 @@ function (params) {
 			ZaServerController.showPortWarning.call(this, params,tmpObj);	
 		} else {
 			this.runValidationStack(params);
+			return;
 		}
 	} else {
 		this.runValidationStack(params);
+		return;
 	}
 }
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateImapSSLProxyBindPort);
@@ -556,8 +581,10 @@ ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServ
 
 ZaServerController.prototype.validatePop3ProxyBindPort =
 function (params) {
-	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraPop3ProxyBindPort,this._currentObject))
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraPop3ProxyBindPort,this._currentObject)) {
 		this.runValidationStack(params);
+		return;
+	}
 	
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
@@ -574,17 +601,21 @@ function (params) {
 			ZaServerController.showPortWarning.call(this, params,tmpObj);
 		} else {
 			this.runValidationStack(params);
+			return;
 		}
 	} else {
 		this.runValidationStack(params);
+		return;
 	}
 }
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validatePop3ProxyBindPort);
 
 ZaServerController.prototype.validatePop3SSLProxyBindPort =
 function (params) {
-	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraPop3SSLProxyBindPort,this._currentObject))
+	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraPop3SSLProxyBindPort,this._currentObject)) {
 		this.runValidationStack(params);
+		return;
+	}
 	
 	var obj = this._view.getObject();
  	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
@@ -601,9 +632,11 @@ function (params) {
 			ZaServerController.showPortWarning.call(this, params,tmpObj);
 		} else {
 			this.runValidationStack(params);
+			return;
 		}
 	} else {
 		this.runValidationStack(params);
+		return;
 	}
 }
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validatePop3SSLProxyBindPort);

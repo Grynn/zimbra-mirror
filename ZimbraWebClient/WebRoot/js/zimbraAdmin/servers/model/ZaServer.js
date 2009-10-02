@@ -504,55 +504,56 @@ function(attrs) {
 ZaServer.modifyMethod = function (tmpObj) {
 	if(tmpObj.attrs == null) {
 		//show error msg
-		ZaApp.getInstance().getCurrentController()._errorDialog.setMessage(ZaMsg.ERROR_UNKNOWN, null, DwtMessageDialog.CRITICAL_STYLE, null);
-		ZaApp.getInstance().getCurrentController()._errorDialog.popup();		
-		return false;	
+		//ZaApp.getInstance().getCurrentController()._errorDialog.setMessage(ZaMsg.ERROR_UNKNOWN, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		//ZaApp.getInstance().getCurrentController()._errorDialog.popup();		
+		return;	
 	}
 	
-	// update zimbraServiceEnabled
-	var svcInstalled = AjxUtil.isString(tmpObj.attrs[ZaServer.A_zimbraServiceInstalled])
-							? [ tmpObj.attrs[ZaServer.A_zimbraServiceInstalled] ]
-							: tmpObj.attrs[ZaServer.A_zimbraServiceInstalled];
-	if (svcInstalled) {
-		// get list of actually enabled fields
-		var enabled = [];
-		for (var i = 0; i < svcInstalled.length; i++) {
-			var service = svcInstalled[i];
-			if (tmpObj.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service]) {
-				enabled.push(service);
-			}			
-		}
-		
-		// see if list of actually enabled fields is same as before
-		
-		var dirty = false; 
-		
-		if (this.attrs[ZaServer.A_zimbraServiceEnabled]) {
-			var prevEnabled = AjxUtil.isString(this.attrs[ZaServer.A_zimbraServiceEnabled])
-							? [ this.attrs[ZaServer.A_zimbraServiceEnabled] ]
-							: this.attrs[ZaServer.A_zimbraServiceEnabled];
-							
-			dirty = (enabled.length != prevEnabled.length);		
+	if(ZaItem.hasWritePermission(ZaServer.A_zimbraServiceEnabled,tmpObj)) {
+		// update zimbraServiceEnabled
+		var svcInstalled = AjxUtil.isString(tmpObj.attrs[ZaServer.A_zimbraServiceInstalled])
+								? [ tmpObj.attrs[ZaServer.A_zimbraServiceInstalled] ]
+								: tmpObj.attrs[ZaServer.A_zimbraServiceInstalled];
+		if (svcInstalled) {
+			// get list of actually enabled fields
+			var enabled = [];
+			for (var i = 0; i < svcInstalled.length; i++) {
+				var service = svcInstalled[i];
+				if (tmpObj.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service]) {
+					enabled.push(service);
+				}			
+			}
 			
-			if (!dirty) {
-				for (var i = 0; i < prevEnabled.length; i++) {
-					var service = prevEnabled[i];
-					if (!tmpObj.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service]) {
-						dirty = true;
-						break;
+			// see if list of actually enabled fields is same as before
+			
+			var dirty = false; 
+			
+			if (this.attrs[ZaServer.A_zimbraServiceEnabled]) {
+				var prevEnabled = AjxUtil.isString(this.attrs[ZaServer.A_zimbraServiceEnabled])
+								? [ this.attrs[ZaServer.A_zimbraServiceEnabled] ]
+								: this.attrs[ZaServer.A_zimbraServiceEnabled];
+								
+				dirty = (enabled.length != prevEnabled.length);		
+				
+				if (!dirty) {
+					for (var i = 0; i < prevEnabled.length; i++) {
+						var service = prevEnabled[i];
+						if (!tmpObj.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service]) {
+							dirty = true;
+							break;
+						}
 					}
 				}
 			}
-		}
-		
-		// save new list of enabled fields
-		if (dirty) {
-			tmpObj.attrs[ZaServer.A_zimbraServiceEnabled] = enabled;
-		}
-	}	
-
+			
+			// save new list of enabled fields
+			if (dirty) {
+				tmpObj.attrs[ZaServer.A_zimbraServiceEnabled] = enabled;
+			}
+		}	
+	}
 	//modify volumes
-	if(this.attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
+	if(this.attrs[ZaServer.A_zimbraMailboxServiceEnabled] && ZaItem.hasRight(ZaServer.MANAGE_VOLUME_RIGHT,this)) {
 		//remove Volumes
 		if(tmpObj[ZaServer.A_RemovedVolumes]) {
 			var cnt = tmpObj[ZaServer.A_RemovedVolumes].length;
@@ -623,7 +624,8 @@ ZaServer.modifyMethod = function (tmpObj) {
 			
 		}
 	}	
-		
+	
+	var hasSomething = false;	
 	//create a ModifyServerRequest SOAP request
 	var soapDoc = AjxSoapDoc.create("ModifyServerRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
@@ -634,6 +636,11 @@ ZaServer.modifyMethod = function (tmpObj) {
                 || a == ZaItem.A_zimbraACE)
 			continue;
 		
+		if(!ZaItem.hasWritePermission(a,this)) {
+			continue;
+		}
+		
+		hasSomething = true;
 		if (this.attrs[a] != tmpObj.attrs[a] ) {
 			if(tmpObj.attrs[a] instanceof Array) {
 				var array = tmpObj.attrs[a];
@@ -652,17 +659,17 @@ ZaServer.modifyMethod = function (tmpObj) {
 			}
 		}
 	}
-	//modify the server
-//	var command = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	var reqMgrParams = {
-		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : ZaMsg.BUSY_MODIFY_SERVER
+	if(hasSomething) {
+		//modify the server
+		var params = new Object();
+		params.soapDoc = soapDoc;	
+		var reqMgrParams = {
+			controller : ZaApp.getInstance().getCurrentController(),
+			busyMsg : ZaMsg.BUSY_MODIFY_SERVER
+		}
+		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyServerResponse;		
+		this.initFromJS(resp.server[0]);		
 	}
-	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyServerResponse;		
-	this.initFromJS(resp.server[0]);		
-
 }
 ZaItem.modifyMethods["ZaServer"].push(ZaServer.modifyMethod);
 
