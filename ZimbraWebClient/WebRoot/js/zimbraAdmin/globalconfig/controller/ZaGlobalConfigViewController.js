@@ -123,86 +123,91 @@ function () {
 	}
 
 	//check values
-	if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaGlobalConfig.A_zimbraSmtpPort])) {
-		//show error msg
-		this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [ZaMsg.NAD_SmtpPort]), null, DwtMessageDialog.CRITICAL_STYLE, null);
-		this._errorDialog.popup();		
-		return false;
-	}
-	
-	//check if domain is real
-	if(tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]) {
-		if(tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName] != this._currentObject.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]) {
-			var testD = new ZaDomain();
-			try {
-				testD.load("name",tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]);
-			} catch (ex) {
-				if (ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
-					this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_WRONG_DOMAIN_IN_GS, [tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]]), null, DwtMessageDialog.CRITICAL_STYLE, null);
-					this._errorDialog.popup();	
-					return false;	
-				} else {
-					throw (ex);
-				}
-			}
-		}
-	}
-	
-	if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaGlobalConfig.A_zimbraGalMaxResults])) {
-		//show error msg
-		this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR,[ZaMsg.MSG_zimbraGalMaxResults]), null, DwtMessageDialog.CRITICAL_STYLE, null);
-		this._errorDialog.popup();		
-		return false;
-	}	
-	
-	if (tmpObj.attrs[ZaGlobalConfig.A_zimbraScheduledTaskNumThreads] &&
-	 	 !AjxUtil.isPositiveInt(tmpObj.attrs[ZaGlobalConfig.A_zimbraScheduledTaskNumThreads])) {
+	if(ZaItem.hasWritePermission(ZaGlobalConfig.A_zimbraSmtpPort,tmpObj)) {
+		if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaGlobalConfig.A_zimbraSmtpPort])) {
 			//show error msg
-		this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR,[ZaMsg.NAD_zimbraScheduledTaskNumThreads]), null, DwtMessageDialog.CRITICAL_STYLE, null);
-		this._errorDialog.popup();		
-		return false;
+			this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [ZaMsg.NAD_SmtpPort]), null, DwtMessageDialog.CRITICAL_STYLE, null);
+			this._errorDialog.popup();		
+			return false;
+		}
 	}	
-	
-	// update zimbraMtaRestriction (except RBLs)
-	var restrictions = [];
-	for (var i = 0; i < ZaGlobalConfig.MTA_RESTRICTIONS.length; i++) {
-		var restriction = ZaGlobalConfig.MTA_RESTRICTIONS[i];
-		if (tmpObj.attrs["_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_"+restriction]) {
-			restrictions.push(restriction);
-		}			
-	}
-	var dirty = restrictions.length > 0;
-	if (tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction]) {
-		var prevRestrictions = AjxUtil.isString(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction])
-		                     ? [ tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction] ]
-		                     : tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction];
-		dirty = restrictions.length != prevRestrictions.length;
-		if (!dirty) {
-			for (var i = 0; i < prevRestrictions.length; i++) {
-				var restriction = prevRestrictions[i];
-				if (!tmpObj.attrs["_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_"+restriction]) {
-					dirty = true;
-					break;
+	//check if domain is real
+	if(ZaItem.hasWritePermission(ZaGlobalConfig.A_zimbraDefaultDomainName,tmpObj)) {
+		if(tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]) {
+			if(tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName] != this._currentObject.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]) {
+				var testD = new ZaDomain();
+				try {
+					testD.load("name",tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]);
+				} catch (ex) {
+					if (ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
+						this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_WRONG_DOMAIN_IN_GS, [tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]]), null, DwtMessageDialog.CRITICAL_STYLE, null);
+						this._errorDialog.popup();	
+						return false;	
+					} else {
+						throw (ex);
+					}
 				}
 			}
 		}
+	}	
+	if(ZaItem.hasWritePermission(ZaGlobalConfig.A_zimbraGalMaxResults,tmpObj)) {
+		if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaGlobalConfig.A_zimbraGalMaxResults])) {
+			//show error msg
+			this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR,[ZaMsg.MSG_zimbraGalMaxResults]), null, DwtMessageDialog.CRITICAL_STYLE, null);
+			this._errorDialog.popup();		
+			return false;
+		}	
+	}	
+	if(ZaItem.hasWritePermission(ZaGlobalConfig.A_zimbraScheduledTaskNumThreads,tmpObj)) {
+		if (tmpObj.attrs[ZaGlobalConfig.A_zimbraScheduledTaskNumThreads] &&
+		 	 !AjxUtil.isPositiveInt(tmpObj.attrs[ZaGlobalConfig.A_zimbraScheduledTaskNumThreads])) {
+				//show error msg
+			this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR,[ZaMsg.NAD_zimbraScheduledTaskNumThreads]), null, DwtMessageDialog.CRITICAL_STYLE, null);
+			this._errorDialog.popup();		
+			return false;
+		}	
+	}	
+	// update zimbraMtaRestriction (except RBLs)
+	if(ZaItem.hasWritePermission(ZaGlobalConfig.A_zimbraMtaRestriction,tmpObj)) {
+		var restrictions = [];
+		for (var i = 0; i < ZaGlobalConfig.MTA_RESTRICTIONS.length; i++) {
+			var restriction = ZaGlobalConfig.MTA_RESTRICTIONS[i];
+			if (tmpObj.attrs["_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_"+restriction]) {
+				restrictions.push(restriction);
+			}			
+		}
+		var dirty = restrictions.length > 0;
+		if (tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction]) {
+			var prevRestrictions = AjxUtil.isString(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction])
+			                     ? [ tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction] ]
+			                     : tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction];
+			dirty = restrictions.length != prevRestrictions.length;
+			if (!dirty) {
+				for (var i = 0; i < prevRestrictions.length; i++) {
+					var restriction = prevRestrictions[i];
+					if (!tmpObj.attrs["_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_"+restriction]) {
+						dirty = true;
+						break;
+					}
+				}
+			}
+		}
+		//check RBLs
+		var numRBLs = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].length;
+		if( (numRBLs !=  this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].length) ||
+			(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].join(""))) {
+			dirty = true;
+		}
+		for(var ix=0;ix<numRBLs;ix++) {
+			restrictions.push("reject_rbl_client "+tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient][ix]);
+		}
+	
+		if (dirty) {
+			tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction] = restrictions;
+		}
 	}
-
 
 	
-	//check RBLs
-	var numRBLs = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].length;
-	if( (numRBLs !=  this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].length) ||
-		(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].join(""))) {
-		dirty = true;
-	}
-	for(var ix=0;ix<numRBLs;ix++) {
-		restrictions.push("reject_rbl_client "+tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient][ix]);
-	}
-
-	if (dirty) {
-		tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction] = restrictions;
-	}
 	//transfer the fields from the tmpObj to the _currentObject, since _currentObject is an instance of ZaDomain
 	var mods = new Object();
 	for (var a in tmpObj.attrs) {
@@ -213,7 +218,10 @@ function () {
                 || a == ZaItem.A_zimbraACE)
 			continue;
 
-
+		if(!ZaItem.hasWritePermission(a,tmpObj)) {
+			continue;
+		}		
+		
 		if ((this._currentObject.attrs[a] != tmpObj.attrs[a]) && !(this._currentObject.attrs[a] == undefined && tmpObj.attrs[a] === "")) {
 			if(tmpObj.attrs[a] instanceof Array) {
                 if (!this._currentObject.attrs[a]) 
@@ -228,20 +236,19 @@ function () {
 		}
 	}
 	//check if blocked extensions are changed
-	if(!AjxUtil.isEmpty(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])) {
-		if(
-			(
-				(!this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] || !this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].length))
-				|| (tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].join(""))
-			) {
-			mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension];
-		} 
-		if(cnt==0)
-			mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = "";	
-	} else if (AjxUtil.isEmpty(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])  && !AjxUtil.isEmpty(this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])) {
-		mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = "";
-	}		
-	
+	if(ZaItem.hasWritePermission(ZaGlobalConfig.A_zimbraMtaBlockedExtension,tmpObj)) {
+		if(!AjxUtil.isEmpty(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])) {
+			if(
+				(
+					(!this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] || !this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].length))
+					|| (tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].join(""))
+				) {
+				mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension];
+			} 
+		} else if (AjxUtil.isEmpty(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])  && !AjxUtil.isEmpty(this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])) {
+			mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = "";
+		}		
+	}	
 	//save the model
 	//var changeDetails = new Object();
 	this._currentObject.modify(mods);
