@@ -79,7 +79,7 @@ function () {
 	}
 
 	//check values
-	if(!AjxUtil.isEmpty(tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckSendNotifications])) {
+	if(!AjxUtil.isEmpty(tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckSendNotifications]) && tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckSendNotifications]=="TRUE") {
 		if(AjxUtil.isEmpty(tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmail])) {
 			//show error msg
 			this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [com_zimbra_adminversioncheck.MSG_zimbraVersionCheckNotificationEmail]), null, DwtMessageDialog.CRITICAL_STYLE, null);

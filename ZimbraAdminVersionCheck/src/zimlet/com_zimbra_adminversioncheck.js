@@ -15,7 +15,7 @@ ZaItem.loadMethods["ZaVersionCheck"] = new Array();
 ZaItem.modifyMethods["ZaVersionCheck"] = new Array();
 
 ZaOperation.VERSION_CHECK = ++ZA_OP_INDEX;
-
+ZaVersionCheck.INVALID_VC_RESPONSE = "versioncheck.INVALID_VC_RESPONSE";
 //constants
 ZaVersionCheck.A_zimbraVersionCheckLastAttempt = "zimbraVersionCheckLastAttempt";
 ZaVersionCheck.A_zimbraVersionCheckLastSuccess = "zimbraVersionCheckLastSuccess";
@@ -62,11 +62,18 @@ ZaVersionCheck.myXModel = {	items:[
 	}
 ]};
 
+ZaVersionCheck.getAttemptTime =
+function (serverStr) {
+	if (serverStr) {
+		return ZaItem.formatServerTime(serverStr);
+	}else{
+		return com_zimbra_adminversioncheck.Never;
+	}
+}
 
 ZaVersionCheck.loadMethod = 
 function(by, val) {
 	var params, soapDoc;
-	var hasError = false
 	soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
     soapDoc.setMethodAttribute("onerror", "continue");
     var getConfigDoc = soapDoc.set("GetAllConfigRequest", null, null, ZaZimbraAdmin.URN);	
@@ -86,7 +93,6 @@ function(by, val) {
 		if(respObj.isException && respObj.isException()) {
 			ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaVersionCheck.loadMethod", null, false);
 		    hasError  = true ;
-            lastException = ex ;
         } else if(respObj.Body.BatchResponse.Fault) {
 			var fault = respObj.Body.BatchResponse.Fault;
 			if(fault instanceof Array)
@@ -97,45 +103,71 @@ function(by, val) {
 				var ex = ZmCsfeCommand.faultToEx(fault);
 				ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaVersionCheck.loadMethod", null, false);
                 hasError = true ;
-				lastException = ex ;
             }
-		} else {
-			var batchResp = respObj.Body.BatchResponse;
-				
-			if(batchResp.GetAllConfigResponse) {
-				resp = batchResp.GetAllConfigResponse[0];
-				this.initFromJS(resp);
-			}
-				
-			if(batchResp.VersionCheckResponse) {
-				var resp = batchResp.VersionCheckResponse[0];
-				if(resp && resp.versionCheck && resp.versionCheck[0] && resp.versionCheck[0].updates) {
-					if(resp.versionCheck[0].updates instanceof Array && resp.versionCheck[0].updates.length>0 && 
-					resp.versionCheck[0].updates[0].update && resp.versionCheck[0].updates[0].update.length>0) {
-						this[ZaVersionCheck.A_zimbraVersionCheckUpdates] = [];
-						var cnt = resp.versionCheck[0].updates[0].update.length;
-						for(var i = 0; i< cnt; i++) {
-							this[ZaVersionCheck.A_zimbraVersionCheckUpdates].push(resp.versionCheck[0].updates[0].update[i]);
-						}
+		} 
+		var batchResp = respObj.Body.BatchResponse;
+			
+		if(batchResp.GetAllConfigResponse) {
+			resp = batchResp.GetAllConfigResponse[0];
+			this.initFromJS(resp);
+		}
+			
+		if(batchResp.VersionCheckResponse) {
+			var resp = batchResp.VersionCheckResponse[0];
+			if(resp && resp.versionCheck && resp.versionCheck[0] && resp.versionCheck[0].updates) {
+				if(resp.versionCheck[0].updates instanceof Array && resp.versionCheck[0].updates.length>0 && 
+				resp.versionCheck[0].updates[0].update && resp.versionCheck[0].updates[0].update.length>0) {
+					this[ZaVersionCheck.A_zimbraVersionCheckUpdates] = [];
+					var cnt = resp.versionCheck[0].updates[0].update.length;
+					for(var i = 0; i< cnt; i++) {
+						this[ZaVersionCheck.A_zimbraVersionCheckUpdates].push(resp.versionCheck[0].updates[0].update[i]);
 					}
 				}
 			}
+		}
 				
-			}
+			
 	} catch (ex) {
 		//show the error and go on
 		//we should not stop the Account from loading if some of the information cannot be acces
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaVersionCheck.loadMethod", null, false);
-	    hasError = true;
-        lastException = ex ;
     }		
-	
-	if (hasError) {
-        throw lastException ;
-    }
-
 }
 ZaItem.loadMethods["ZaVersionCheck"].push(ZaVersionCheck.loadMethod);
+
+ZaVersionCheck.modifyMethod = function (mods) {
+	var soapDoc = AjxSoapDoc.create("ModifyConfigRequest", ZaZimbraAdmin.URN, null);
+	for (var aname in mods) {
+		//multy value attribute
+		if(mods[aname] instanceof Array) {
+			var cnt = mods[aname].length;
+			if(cnt > 0) {
+				for(var ix=0; ix <cnt; ix++) {
+					if(mods[aname][ix] instanceof String)
+						var attr = soapDoc.set("a", mods[aname][ix].toString());
+					else if(mods[aname][ix] instanceof Object)
+						var attr = soapDoc.set("a", mods[aname][ix].toString());
+					else 
+						var attr = soapDoc.set("a", mods[aname][ix]);
+						
+					attr.setAttribute("n", aname);
+				}
+			} 
+			else {
+				var attr = soapDoc.set("a");
+				attr.setAttribute("n", aname);
+			}
+		} else {
+			var attr = soapDoc.set("a", mods[aname]);
+			attr.setAttribute("n", aname);
+		}
+	}
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	command.invoke(params);
+}
+ZaItem.modifyMethods["ZaVersionCheck"].push(ZaVersionCheck.modifyMethod);
 
 ZaZimbraAdmin._VERSION_CHECK_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 

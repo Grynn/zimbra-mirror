@@ -103,7 +103,7 @@ ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
 				items:[
 					{ref:ZaVersionCheck.A_zimbraVersionCheckServer, type: _OSELECT1_, 
 						label:com_zimbra_adminversioncheck.VersionCheckServer,
-						editable:false, choices: ZaApp.getInstance().getServerListChoices(), 
+						editable:false, choices: ZaApp.getInstance().getServerIdListChoices(), 
 						enableDisableChecks:[],
 						visibilityChecks:[],
 						tableCssStyle: "height: 15px"
@@ -152,10 +152,16 @@ ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
     	items:[
 			{type:_ZAGROUP_,colSizes:["275","400"],items:[
 	    		{ref:ZaVersionCheck.A_zimbraVersionCheckLastAttempt,type:_OUTPUT_,
-	    			label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckLastAttempt
+	    			label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckLastAttempt,
+	    			getDisplayValue:function(val) {
+	    				return ZaVersionCheck.getAttemptTime(val);
+	    			}
 	    		},
 	    		{ref:ZaVersionCheck.A_zimbraVersionCheckLastSuccess,type:_OUTPUT_,
-	    			label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckLastSuccess
+	    			label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckLastSuccess,
+	    			getDisplayValue:function(val) {
+	    				return ZaVersionCheck.getAttemptTime(val);
+	    			}	    			
 	    		},
 	    		{
 	    			ref:ZaVersionCheck.A_zimbraVersionCheckUpdates,
