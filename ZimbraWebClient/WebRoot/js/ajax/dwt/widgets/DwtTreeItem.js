@@ -420,7 +420,7 @@ function() {
 };
 
 DwtTreeItem.prototype._initialize =
-function(index, realizeDeferred) {
+function(index, realizeDeferred, forceNode) {
 	this._checkState();
 	if (AjxEnv.isIE) {
 		this._setEventHdlrs([DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE]);
@@ -453,7 +453,7 @@ function(index, realizeDeferred) {
 	// If we have deferred children, then make sure we set up accordingly
 	if (this._nodeCell) {
 		this._nodeCell.style.width = this._nodeCell.style.height = DwtTreeItem._NODECELL_DIM;
-		if (this._children.size() > 0) {
+		if (this._children.size() > 0 || forceNode) {
 			AjxImg.setImage(this._nodeCell, this._collapseNodeImage);
 			this.addNodeIconListeners();
 		}
