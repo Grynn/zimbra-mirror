@@ -116,7 +116,7 @@
         <condition property="zimbra.buildinfo.platform" value="${native.os}">
             <not><isset property="${zimbra.buildinfo.platform}"/></not>
         </condition>             
-        <condition property="zimbra.buildinfo.version" value="6.0.2">
+        <condition property="zimbra.buildinfo.version" value="6.0.2_BETA1_1111.${native.os}">
             <not><isset property="${zimbra.buildinfo.version}"/></not>
         </condition>
     	  <propertyregex property="zimbra.buildinfo.majorversion"
@@ -136,6 +136,23 @@
     	              regexp="([0-9]+)\.([0-9]+)\.([0-9]+)"
     	              select="\3"
     	              casesensitive="false" />
+  	  <propertyregex property="zimbra.buildinfo.relclass"
+  	              input="${zimbra.buildinfo.version}"
+  	              regexp="([0-9]+)\.([0-9]+)\.([0-9]+)_([A-Z]+)"
+  	              select="\4"
+  	              casesensitive="false" />
+    	  <propertyregex property="zimbra.buildinfo.relnum"
+    	              input="${zimbra.buildinfo.version}"
+    	              regexp="([0-9]+)\.([0-9]+)\.([0-9]+)_([A-Z]+)([0-9]+)(\.|_)?"
+    	              select="\5"
+    	              casesensitive="false" />
+    	
+  	  <propertyregex property="zimbra.buildinfo.buildnum"
+  	              input="${zimbra.buildinfo.version}"
+  	              regexp="([0-9]+)\.([0-9]+)\.([0-9]+)_([A-Z0-9]+)(\.|_)?([0-9]+)?"
+  	              select="\6"
+  	              casesensitive="false" />
+    	
         <condition property="zimbra.buildinfo.type" value="FOSS">
             <not><isset property="${zimbra.buildinfo.type}"/></not>
         </condition>
@@ -164,6 +181,18 @@
 	 	<math result="futureminorversion" operand1="${zimbra.buildinfo.minorversion}" operation="+" operand2="1" datatype="int"/>
 		<math result="futuremicroversion" operand1="${zimbra.buildinfo.microversion}" operation="+" operand2="1" datatype="int"/>
 	 	<math result="futuremicroversion2" operand1="${zimbra.buildinfo.microversion}" operation="+" operand2="2" datatype="int"/>
+	 	
+        <if>
+            <isset property="zimbra.buildinfo.relnum"/>
+            <then>
+            	<math result="futurerelnum" operand1="${zimbra.buildinfo.relnum}" operation="+" operand2="1" datatype="int"/>
+            </then>
+            <else>
+            	 <property name="futurerelnum" value=""/>
+            </else>
+        </if>
+ 	
+	 	<math result="futurebuildnum" operand1="${zimbra.buildinfo.buildnum}" operation="+" operand2="1" datatype="int"/>
 	 	<replace file="${build.dir}/buildinfo/testversion.xml">
 	 		<replacefilter token="%MAJOR_VERSION%" value="${zimbra.buildinfo.majorversion}"/>
 	 		<replacefilter token="%FUTURE_MAJOR_VERSION%" value="${futuremajorversion}"/>
@@ -174,6 +203,10 @@
 	 		<replacefilter token="%FUTURE_MICRO_VERSION2%" value="${futuremicroversion2}"/>	 		
 	 		<replacefilter token="%PLATFORM%" value="${zimbra.buildinfo.platform}"/>
 	 		<replacefilter token="%TYPE%" value="${zimbra.buildinfo.type}"/>
+	 		<replacefilter token="%FUTURE_BUILD_NUM%" value="${futurebuildnum}"/>
+	 		<replacefilter token="%FUTURE_RELNUM%" value="${futurerelnum}"/>
+	 		<replacefilter token="%RELNUM%" value="${zimbra.buildinfo.relnum}"/>
+	 		<replacefilter token="%RELCLASS%" value="${zimbra.buildinfo.relclass}"/>
 	 	</replace>
     </target>
 
