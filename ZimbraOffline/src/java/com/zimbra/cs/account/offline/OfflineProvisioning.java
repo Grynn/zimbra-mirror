@@ -2210,7 +2210,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             }
             
             String domain = ds.getAttr(Provisioning.A_zimbraDataSourceDomain);
-            if (ds.getType() != DataSource.Type.live && !"yahoo.com".equals(domain)) {
+            if (!"yahoo.com".equals(domain)) {
                 String smtpPassword = (String)attrs.get(A_zimbraDataSourceSmtpAuthPassword);
                 
                 if (smtpPassword == null) {

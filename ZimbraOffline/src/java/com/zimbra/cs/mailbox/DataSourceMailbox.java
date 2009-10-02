@@ -63,8 +63,7 @@ public class DataSourceMailbox extends SyncMailbox {
         OfflineDataSource ds = (OfflineDataSource)OfflineProvisioning.
             getOfflineInstance().getDataSource(getAccount());
         if (ds != null) {
-            hasFolders = ds.getType() == DataSource.Type.imap ||
-                ds.getType() == DataSource.Type.live;
+            hasFolders = ds.getType() == DataSource.Type.imap;
             isFlat = ds.isLive() || ds.isYahoo();
         }
         mSyncFlag = getFlagById(Flag.ID_FLAG_SYNC);

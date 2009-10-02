@@ -224,8 +224,7 @@ public class XmailBean extends MailBean {
                         dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId,
                             ZFolder.ID_INBOX);
                     } else {
-                        assert dsType == DataSource.Type.imap ||
-                            dsType == DataSource.Type.live;
+                        assert dsType == DataSource.Type.imap;
                         dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId,
                             ZFolder.ID_USER_ROOT);
                     }
@@ -263,7 +262,7 @@ public class XmailBean extends MailBean {
                     }
                 } else if (email.endsWith('@' + hdomain) ||
                     email.endsWith('@' + ldomain) || email.endsWith('@' + mdomain)) {
-                    if (dsType == DataSource.Type.live || dsType == DataSource.Type.pop3) {
+                    if (dsType == DataSource.Type.pop3) {
                         dsAttrs.put(Provisioning.A_zimbraDataSourceDomain,
                             hdomain);
                     } else {

@@ -38,11 +38,8 @@ import com.zimbra.cs.mailbox.Message;
 import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailclient.CommandFailedException;
-import com.zimbra.cs.offline.GMailImport;
-import com.zimbra.cs.offline.OfflineImport;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.offline.YMailImport;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.util.ymail.YMailClient;
@@ -230,6 +227,7 @@ public class OfflineDataSource extends DataSource {
     
     private static final int MAX_ENTRIES = 64 * 1024;
 
+    @SuppressWarnings("serial")
     private static final Map<Object, SyncState> sSyncStateMap =
         Collections.synchronizedMap(new LinkedHashMap<Object, SyncState>() {
             @SuppressWarnings("unchecked")
@@ -332,7 +330,7 @@ public class OfflineDataSource extends DataSource {
     }
     
     public boolean isEmail() {
-    	return getType() == Type.imap || getType() == Type.pop3 || getType() == Type.live;
+    	return getType() == Type.imap || getType() == Type.pop3;
     }
     
     public boolean isSmtpEnabled() {
