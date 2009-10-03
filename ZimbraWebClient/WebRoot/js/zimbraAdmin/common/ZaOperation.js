@@ -44,6 +44,23 @@ function() {
 		return "ZaOperation";
 }
 
+ZaOperation.duplicate = function (oldInstance) {
+    var id = oldInstance.id;
+	var caption = oldInstance.caption;
+	var tooltip = oldInstance.tt ;
+	var lsnr = oldInstance.listener ;
+	var imgId = oldInstance.imageId ;
+	var disImgId = oldInstance.disImageId ;
+	var type = oldInstance.type;
+	var menuOpList = oldInstance.menuOpList;
+	var className = oldInstance.className;
+	var labelId = oldInstance.labelId;
+    
+    var newOp = new ZaOperation (id, caption, tooltip, imgId, disImgId, lsnr, type, menuOpList, className, labelId);
+
+    return newOp ;
+}
+
 // types
 ZaOperation.TYPE_BUTTON = 1;
 ZaOperation.TYPE_MENU = 2;
@@ -103,3 +120,4 @@ ZaOperation.DOWNLOAD_SERVER_CONFIG = ++ZA_OP_INDEX;
 ZaOperation.DOWNLOAD_GLOBAL_CONFIG = ++ZA_OP_INDEX;
 ZaOperation.VIEW_DOMAIN_ACCOUNTS = ++ZA_OP_INDEX;
 ZaOperation.FLUSH_CACHE = ++ZA_OP_INDEX;
+ZaOperation.MORE_ACTIONS = ++ZA_OP_INDEX;  

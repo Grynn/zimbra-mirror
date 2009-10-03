@@ -904,7 +904,10 @@ function () {
 		if(this._popupOperations[i] instanceof ZaOperation && !AjxUtil.isEmpty(this._actionMenu.getMenuItem(this._popupOperations[i].id))) {
 			this._actionMenu.getMenuItem(this._popupOperations[i].id).setEnabled(this._popupOperations[i].enabled);
 		}
-	}
+	}                                      
+
+    //enable More Actions Buttons
+    this._toolbar.enableMoreActionsMenuItems () ;
 }
 
 ZaController.prototype.closeTabsInRemoveList =
