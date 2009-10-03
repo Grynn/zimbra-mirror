@@ -10,7 +10,7 @@
 	<property name="prism.app" value="build/dist/app/macos/prism/Prism.app" />
 	<property name="updater.app" value="build/dist/app/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app" />
 	<property name="zd.app" value="build/dist/app/macos/Zimbra Desktop.app" />
-	<property name="winperl" value="C:\strawberry\perl\bin\perl.exe" />
+	<property name="winperl" value="C:\perl\bin\perl.exe" />
 	<property name="wix.home" value="C:\Program Files\Windows Installer XML v3" />
   
   	<condition property="is-mac">
