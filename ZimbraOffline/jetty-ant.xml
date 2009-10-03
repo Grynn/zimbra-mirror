@@ -56,7 +56,7 @@
 				<systemproperty name="java.awt.headless" value="true" />
 			</systemProperties>
 
-			<webApp name="ZimbraServer" warfile="build/dist/app/jetty/webapps/service" contextpath="/service">
+			<webApp name="ZimbraServer" warfile="${jetty_webapps}/service" contextpath="/service">
 				<lib dir="${jetty_run_base}/app/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar" />
 				<lib dir="${jetty_run_base}/app/lib" includes="*.jar" excludes="not-needed.jar" />
                 		<classes dir="build/classes"/>

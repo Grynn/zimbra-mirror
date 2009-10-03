@@ -2388,16 +2388,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             OfflineLog.offline.warn("offline account missing RemoteServerUri attr: " + grantee.getName());
             throw AccountServiceException.INVALID_ATTR_VALUE(OfflineConstants.A_offlineRemoteServerUri + " is null", null);            
         }        
-        String mailHost = OfflineConstants.SYNC_SERVER_PREFIX + uri;
+        String mailHost = (OfflineConstants.SYNC_SERVER_PREFIX + uri).toLowerCase();
         granter.setCachedAttr(A_zimbraMailHost, mailHost);
    
         Server server;
-        String key = mailHost.toLowerCase();
         synchronized (mSyncServerCache) {
-            server = mSyncServerCache.get(key);
+            server = mSyncServerCache.get(mailHost);
         }
         if (server != null)
             return;
+        String id = (OfflineConstants.SYNC_SERVER_PREFIX + granteeId).toLowerCase();
 
         boolean ssl = uri.startsWith("https://");            
         String port = ssl ? "443" : "80";
@@ -2416,7 +2416,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(Provisioning.A_cn, host);
         attrs.put(Provisioning.A_zimbraServiceHostname, host);
         attrs.put(Provisioning.A_zimbraSmtpHostname, host);
-        attrs.put(Provisioning.A_zimbraId, grantee.getId());
+        attrs.put(Provisioning.A_zimbraId, id);
         attrs.put("zimbraServiceEnabled", "mailbox");
         attrs.put("zimbraServiceInstalled", "mailbox");
         if (ssl)
@@ -2426,9 +2426,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(Provisioning.A_zimbraAdminPort, port);
         attrs.put(Provisioning.A_zimbraMailMode, ssl ? "https" : "http");
 
-        server = new Server(key, key, attrs, null, this);
+        server = new Server(mailHost, id, attrs, null, this);
         synchronized(mSyncServerCache) {
-            mSyncServerCache.put(key, server);
+            mSyncServerCache.put(mailHost, server);
+            mSyncServerCache.put(id, server);
         }
     }
         
