@@ -79,6 +79,10 @@ public class OfflineServiceProxy extends DocumentHandler {
     public static OfflineServiceProxy CheckPermission() {
         return new OfflineServiceProxy("check permission", false, false);
     }
+    
+    public static OfflineServiceProxy GetShareInfoRequest() {
+        return new OfflineServiceProxy("get share info", false, false);
+    }
 }
 
 
