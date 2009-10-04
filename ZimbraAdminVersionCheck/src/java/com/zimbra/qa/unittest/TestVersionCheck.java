@@ -78,7 +78,7 @@ public class TestVersionCheck extends TestCase {
 		int majorCounter=0;
 		int minorCounter=0;
 		int microCounter=0;
-		int relCounter=0;
+		int buildCounter=0;
     	for(Iterator <VersionUpdate> iter = updates.iterator();iter.hasNext();){
     		counter++;
     		VersionUpdate update = iter.next();
@@ -96,15 +96,15 @@ public class TestVersionCheck extends TestCase {
             	minorCounter++;
             } else if(updateType.equalsIgnoreCase("micro")) {
             	microCounter++;
-            } else if(updateType.equalsIgnoreCase("release")) {
-            	relCounter++;
+            } else if(updateType.equalsIgnoreCase("build")) {
+            	buildCounter++;
             }      		
     	}
-    	assertEquals("Wrong number of updates in SOAP response",5,counter);
+    	assertEquals("Wrong number of updates in SOAP response",4,counter);
 		assertEquals("Wring number of major updates parsed",majorCounter,1);
 		assertEquals("Wring number of minor updates parsed",minorCounter,1);
-		assertEquals("Wring number of micro updates parsed",microCounter,2);
-		assertEquals("Wring number of micro updates parsed",relCounter,1);
+		assertEquals("Wring number of micro updates parsed",microCounter,1);
+		assertEquals("Wring number of build updates parsed",buildCounter,1);
 	}
 	
 	public void testCheckVersion() throws Exception {
@@ -126,7 +126,7 @@ public class TestVersionCheck extends TestCase {
 		int majorCounter=0;
 		int minorCounter=0;
 		int microCounter=0;
-		int relCounter=0;
+		int buildCounter=0;
 		for (Element e : eUpdates.listElements()) {
 			counter++;
             String updateType = e.getAttribute(VersionCheck.A_UPDATE_TYPE);
@@ -136,14 +136,14 @@ public class TestVersionCheck extends TestCase {
             	minorCounter++;
             } else if(updateType.equalsIgnoreCase("micro")) {
             	microCounter++;
-            } else if(updateType.equalsIgnoreCase("release")) {
-            	relCounter++;
+            } else if(updateType.equalsIgnoreCase("build")) {
+            	buildCounter++;
             } 
         }					
-		assertEquals("Wring number of updates parsed",counter,5);
+		assertEquals("Wring number of updates parsed",counter,4);
 		assertEquals("Wring number of major updates parsed",majorCounter,1);
 		assertEquals("Wring number of minor updates parsed",minorCounter,1);
-		assertEquals("Wring number of micro updates parsed",microCounter,2);
-		assertEquals("Wring number of micro updates parsed",relCounter,1);
+		assertEquals("Wring number of micro updates parsed",microCounter,1);
+		assertEquals("Wring number of build updates parsed",buildCounter,1);
 	}
 }

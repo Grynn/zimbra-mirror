@@ -71,6 +71,43 @@ function (serverStr) {
 	}
 }
 
+ZaVersionCheck.checkNow = function() {
+	var params, soapDoc;
+	soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+    soapDoc.setMethodAttribute("onerror", "continue");
+	
+	var versionCheck = soapDoc.set("VersionCheckRequest", null, null, ZaZimbraAdmin.URN);
+	versionCheck.setAttribute("action","check");
+
+	try {
+		params = new Object();
+		params.soapDoc = soapDoc;	
+		var reqMgrParams ={
+			controller:ZaApp.getInstance().getCurrentController()
+		}
+		var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
+		if(respObj.isException && respObj.isException()) {
+			ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaVersionCheck.checkNow", null, false);
+		    hasError  = true ;
+        } else if(respObj.Body.BatchResponse.Fault) {
+			var fault = respObj.Body.BatchResponse.Fault;
+			if(fault instanceof Array)
+				fault = fault[0];
+			
+			if (fault) {
+				// JS response with fault
+				var ex = ZmCsfeCommand.faultToEx(fault);
+				ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaVersionCheck.checkNow", null, false);
+                hasError = true ;
+            }
+		} 
+	} catch (ex) {
+		//show the error and go on
+		//we should not stop the Account from loading if some of the information cannot be acces
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaVersionCheck.loadMethod", null, false);
+    }		
+}
+
 ZaVersionCheck.loadMethod = 
 function(by, val) {
 	var params, soapDoc;
@@ -114,10 +151,10 @@ function(by, val) {
 			
 		if(batchResp.VersionCheckResponse) {
 			var resp = batchResp.VersionCheckResponse[0];
+			this[ZaVersionCheck.A_zimbraVersionCheckUpdates] = [];
 			if(resp && resp.versionCheck && resp.versionCheck[0] && resp.versionCheck[0].updates) {
 				if(resp.versionCheck[0].updates instanceof Array && resp.versionCheck[0].updates.length>0 && 
 				resp.versionCheck[0].updates[0].update && resp.versionCheck[0].updates[0].update.length>0) {
-					this[ZaVersionCheck.A_zimbraVersionCheckUpdates] = [];
 					var cnt = resp.versionCheck[0].updates[0].update.length;
 					for(var i = 0; i< cnt; i++) {
 						this[ZaVersionCheck.A_zimbraVersionCheckUpdates].push(resp.versionCheck[0].updates[0].update[i]);

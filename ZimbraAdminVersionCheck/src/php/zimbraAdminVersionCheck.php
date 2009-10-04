@@ -1,46 +1,24 @@
 <?php
+require_once("versions.php");
 echo "<?xml version=\"1.0\"?>\n";
 $majorUpdate; //only latest
 $minorUpdate; //only latest
-$microUpdates = array(); //all available
+$microUpdate = array(); //only latest
+$buildUpdates = array(); //all available
 
 if(isset($_REQUEST["majorversion"]) && 
 	isset($_REQUEST["minorversion"]) && 
 	isset($_REQUEST["microversion"]) && 
 	isset($_REQUEST["platform"]) && 
-	isset($_REQUEST["type"])) {
-	$versions = array (
-		"NETWORK" => array (
-			"RHEL4"=>array (
-				6=>array (
-					0=>array (
-						2=>array(
-							"shortversion"=>"6.0.2",
-							"critical"=>1,
-							"updateURL"=>"http://www.zimbra.com/community/downloads.html",
-							"release"=>"20090921024654",
-							"version"=>"6.0.2_GA",
-							"description"=>" ",
-							"platform"="RHEL4",
-							"buildtype"="NETWORK"							
-						)					
-					)					
-				)
-			),
-			"RHEL5"=>array(),
-			"RHEL5_64"=>array(),
-			"MACOSXx86"=>array(),
-			"UBUNTU8"=>array(),
-			"UBUNTU6"=>array()
-		),
-		"FOSS" => array()
-	);
+	isset($_REQUEST["type"]) && 
+	isset($_REQUEST["buildnum"])) {
 	
 	$type = $_REQUEST["type"];
 	$platform = $_REQUEST["platform"];
 	$majorversion = intval($_REQUEST["majorversion"]);
 	$minorversion = intval($_REQUEST["minorversion"]);
 	$microversion = intval($_REQUEST["microversion"]);
+	$buildnum = intval($_REQUEST["buildnum"]);
 	
 	if(!empty($versions[$type])) {
 		$my_type = $versions[$type]; 
@@ -50,28 +28,61 @@ if(isset($_REQUEST["majorversion"]) &&
 				if(intval($major_key)==$majorversion) {
 					//look for minor updates
 					foreach($my_major as $minor_key=>$my_minor) {
-						if($minor_key == $minorversion) {
+						if(intval($minor_key) == $minorversion) {
 							//look for micro updates
 							foreach($my_minor as $micro_key=>$my_micro) {
-								if($micro_key>$microversion) {
-									array_push($microUpdates,$my_micro);
+								if($micro_key==$microversion) {
+									//look for new builds
+									foreach($my_micro as $build_key=>$my_build) {
+										if($build_key>$buildnum) {
+											array_push($buildUpdates,$my_build);
+										}
+									}
+									
+								} else if($micro_key>$microversion) {
+									//micro updates available
+									$latestBuildKey = 0;
+									foreach($my_micro as $build_key=>$my_build) {
+										if($latestBuildKey <= $build_key) {
+											//find the latest micro update
+											$latestBuildKey = $build_key;
+										}
+									}
+									if(!empty($my_micro[$latestBuildKey])) {								
+										$microUpdate = $my_micro[$latestBuildKey];
+									}
 								}
 							}
 						} else if($minor_key > $minorversion) {
 							//minor update available
 							$latestMicroKey = 0;
+							$latestBuildKey = 0;
 							foreach($my_minor as $micro_key=>$my_micro) {
 								if($latestMicroKey <= $micro_key) {
-									//find the latest minor update
+									//find the latest micro version in the minor update
 									$latestMicroKey = $micro_key;
 								}
 							}
-							$minorUpdate = $my_minor[$latestMicroKey]; 							
+							if(!empty($my_minor[$latestMicroKey])) {
+								$my_micro = $my_minor[$latestMicroKey];
+								foreach($my_micro as $build_key=>$my_build) {
+									if($latestBuildKey <= $build_key) {
+										//find the latest build in the micro update
+										$latestBuildKey = $build_key;
+									}
+								}
+							}
+							if(!empty($my_minor[$latestMicroKey][$latestBuildKey])) {
+							 	$minorUpdate = $my_minor[$latestMicroKey][$latestBuildKey]; 						
+							}
 						}
 					}
 				} else if(intval($major_key)>$majorversion) {
 					//major update available
 					$latestMinorKey = 0;
+					$latestMicroKey = 0;
+					$latestBuildKey = 0;
+					
 					foreach($my_major as $minor_key=>$my_minor) {
 						if($minor_key >= $latestMinorKey) {
 							$latestMinorKey = $minor_key; 
@@ -79,7 +90,7 @@ if(isset($_REQUEST["majorversion"]) &&
 					}
 					if(!empty($my_major[$latestMinorKey])) {
 						$my_minor = $my_major[$latestMinorKey];
-						$latestMicroKey = 0;
+						
 						foreach($my_minor as $micro_key=>$my_micro) {
 							if($latestMicroKey <= $micro_key) {
 								//find the latest minor update
@@ -87,15 +98,24 @@ if(isset($_REQUEST["majorversion"]) &&
 							}
 						}
 						if(!empty($my_minor[$latestMicroKey])) {
-							$majorUpdate = 	$my_minor[$latestMicroKey];								
+							$my_micro = $my_minor[$latestMicroKey];
+							foreach($my_micro as $build_key=>$my_build) {
+								if($latestBuildKey <= $build_key) {
+									$latestBuildKey = $build_key;
+								}
+							}
 						}
 					}
+					if(!empty($my_major[$latestMinorKey][$latestMicroKey][$latestBuildKey])) {
+						$majorUpdate = 	$my_minor[$latestMicroKey];								
+					}
+					
 				}
 			}
 		}
 	}
 }
-if(!empty($majorUpdate) || !empty($minorUpdate) || !empty($microUpdates)) {
+if(!empty($majorUpdate) || !empty($minorUpdate) || !empty($microUpdates) || !empty($buildUpdates)) {
 ?>
 <versionCheck status="1">
 <updates>
@@ -138,9 +158,29 @@ if(!empty($majorUpdate) || !empty($minorUpdate) || !empty($microUpdates)) {
 	?>"/>	
 <?php	
 	}
-	if(!empty($microUpdates)) {
-		foreach($microUpdates as $key=>$val) {
-			?><update type="micro" shortversion="<?php
+	if(!empty($microUpdate)) {
+?><update type="micro" shortversion="<?php 
+		echo $microUpdate["shortversion"]; 
+	?>" version="<?php 
+		echo $microUpdate["version"]; 
+	?>" release="<?php
+		echo $microUpdate["release"]; 
+	?>" critical="<?php
+		echo $microUpdate["critical"]; 
+	?>" updateURL="<?php 
+		echo $microUpdate["updateURL"]; 
+	?>" description="<?php 
+		echo $microUpdate["description"]; 
+	?>" platform="<?php 
+		echo $microUpdate["platform"]; 
+	?>" buildtype="<?php 
+		echo $microUpdate["buildtype"]; 
+	?>"/>	
+<?php	
+	}
+	if(!empty($buildUpdates)) {
+		foreach($buildUpdates as $key=>$val) {
+			?><update type="build" shortversion="<?php
 				echo $val["shortversion"];
 			?>" version="<?php
 				echo $val["version"];
@@ -153,10 +193,10 @@ if(!empty($majorUpdate) || !empty($minorUpdate) || !empty($microUpdates)) {
 			?>" description="<?php
 				echo $val["description"];
 			?>"  platform="<?php 
-				echo $minorUpdate["platform"]; 
+				echo $val["platform"]; 
 			?>" buildtype="<?php 
-				echo $minorUpdate["buildtype"]; 
-			?>/>
+				echo $val["buildtype"]; 
+			?>"/>
 <?php			
 		}
 	}

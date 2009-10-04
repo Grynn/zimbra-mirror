@@ -166,27 +166,34 @@ ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
 	    		{
 	    			ref:ZaVersionCheck.A_zimbraVersionCheckUpdates,
 	    			type:_REPEAT_,
-	    			labelLocation:_LEFT_,
+	    			colSpan:"*",
+	    			bmolsnr:true,
 					align:_LEFT_,
 					repeatInstance:"",
 					showAddButton:false,
 					showRemoveButton:false,
 					showAddOnNextRow:false,
 					visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaVersionCheck.A_zimbraVersionCheckUpdates]],
-					visibilityChangeEventSources:[ZaVersionCheck.A_zimbraVersionCheckUpdates],				
+					visibilityChangeEventSources:[ZaVersionCheck.A_zimbraVersionCheckUpdates],
 					items: [
-						{ 
-							ref:ZaVersionCheck.A_zimbraVersionCheckUpdateShortversion, 
-							type: _OUTPUT_, label:null,labelLocation:_NONE_
-						},
-						{ 
-							ref:ZaVersionCheck.A_zimbraVersionCheckUpdateCritical, 
-							type: _OUTPUT_, label:null,labelLocation:_NONE_,
-							choices:this.criticalChoices
-						},
-						{ 
-							ref:ZaVersionCheck.A_zimbraVersionCheckUpdateUpdateURL, 
-							type: _URL_, label:null,labelLocation:_NONE_
+						{type:_GROUP_,
+							numCols:3,
+							colSizes:["50","100","525"],				
+							items:[
+								{ 
+									ref:ZaVersionCheck.A_zimbraVersionCheckUpdateShortversion, 
+									type: _OUTPUT_, label:null,labelLocation:_NONE_
+								},
+								{ 
+									ref:ZaVersionCheck.A_zimbraVersionCheckUpdateCritical, 
+									type: _OUTPUT_, label:null,labelLocation:_NONE_,
+									choices:this.criticalChoices
+								},
+								{ 
+									ref:ZaVersionCheck.A_zimbraVersionCheckUpdateUpdateURL, 
+									type: _URL_, label:null,labelLocation:_NONE_
+								}
+							]
 						}
 					]
 	    				

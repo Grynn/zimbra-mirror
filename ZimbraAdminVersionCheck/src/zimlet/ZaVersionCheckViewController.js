@@ -29,17 +29,56 @@ ZaVersionCheckViewController = function(appCtxt, container) {
 
 ZaVersionCheckViewController.prototype = new ZaXFormViewController();
 ZaVersionCheckViewController.prototype.constructor = ZaVersionCheckViewController;
-
+ZaController.initToolbarMethods["ZaVersionCheckViewController"] = new Array();
 ZaController.setViewMethods["ZaVersionCheckViewController"] = [];
+ZaController.changeActionsStateMethods["ZaVersionCheckViewController"] = new Array();
+
+ZaVersionCheckViewController.initToolbarMethod =
+function () {
+	this._toolbarOperations[ZaOperation.SAVE] = new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));    			
+	this._toolbarOperations[ZaOperation.VERSION_CHECK] = new ZaOperation(ZaOperation.VERSION_CHECK, com_zimbra_adminversioncheck.CheckNow, com_zimbra_adminversioncheck.CheckNow_tt, "Refresh", "Refresh", new AjxListener(this, this.checkNowListener));
+	
+	this._toolbarOrder.push(ZaOperation.SAVE);
+	this._toolbarOrder.push(ZaOperation.VERSION_CHECK);
+}
+ZaController.initToolbarMethods["ZaVersionCheckViewController"].push(ZaVersionCheckViewController.initToolbarMethod);
+
+ZaVersionCheckViewController.prototype.checkNowListener =
+function(ev) {
+	if(this._view.isDirty()) {
+		this.popupMsgDialog(com_zimbra_adminversioncheck.saveChangesFirst, true);		
+	} else if (AjxUtil.isEmpty(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckServer]) || 
+				AjxUtil.isEmpty(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckURL]) ||
+				(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmail] == "TRUE" &&
+					(AjxUtil.isEmpty(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom]) ||
+			 		 AjxUtil.isEmpty(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationSubject]) ||
+			 		 AjxUtil.isEmpty(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationBody]) ||
+			 		 AjxUtil.isEmpty(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmail])
+			 		)
+			    )
+			) {
+		this.popupMsgDialog(com_zimbra_adminversioncheck.ERROR_UPDATES_NOT_CONFIGURED, true);
+	} else {
+		if(this._view._localXForm && this._view._localXForm.getInstance()) {
+			ZaVersionCheck.checkNow();
+		}
+		this._currentObject.refresh(false,true);
+		this._view.setObject(this._currentObject);
+	}	
+}
+
 
 ZaVersionCheckViewController.setViewMethod = function (item) {
     if(!this._UICreated) {
-  		this._ops = new Array();
-		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
-		this._ops.push(new ZaOperation(ZaOperation.NONE));
-		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));
-		this._toolbar = new ZaToolBar(this._container, this._ops);
-
+    	this._initToolbar();
+    	
+			//always add Help button at the end of the toolbar		
+		this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
+		this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));							
+		this._toolbarOrder.push(ZaOperation.NONE);
+		this._toolbarOrder.push(ZaOperation.HELP);
+		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations, this._toolbarOrder);
+	
 		this._contentView = this._view = new this.tabConstructor(this._container,item);
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
@@ -155,3 +194,13 @@ function () {
 	this._currentObject.modify(mods);
 	return true;
 }
+
+ZaVersionCheckViewController.changeActionsStateMethod = function () {
+	if(!this._currentObject)
+		return;
+		
+	if(this._toolbarOperations[ZaOperation.SAVE])	
+		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+}
+ZaController.changeActionsStateMethods["ZaVersionCheckViewController"].push(ZaVersionCheckViewController.changeActionsStateMethod);
+
