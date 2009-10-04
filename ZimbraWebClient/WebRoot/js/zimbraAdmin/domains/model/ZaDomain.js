@@ -1362,8 +1362,11 @@ function (obj) {
 		this.attrs[ZaDomain.A_UseBindPassword] = "FALSE";
 	}
 	
-	
-	
+	//
+	//if(this.attrs[ZaDomain.A_AuthADDomainName]);
+	if(!AjxUtil.isEmpty(this.attrs[ZaDomain.A_AuthLdapUserDn])) {
+		this.attrs[ZaDomain.A_AuthADDomainName] = ZaAccount.getDomain(this.attrs[ZaDomain.A_AuthLdapUserDn]);	
+	}
 		
 	if(this.attrs[ZaDomain.A_AuthLdapSearchBindDn] || this.attrs[ZaDomain.A_AuthLdapSearchBindPassword]) {
 		this[ZaDomain.A_AuthUseBindPassword] = "TRUE";
