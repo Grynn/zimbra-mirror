@@ -33,7 +33,7 @@ ZaGlobalConfigViewController.prototype = new ZaXFormViewController();
 ZaGlobalConfigViewController.prototype.constructor = ZaGlobalConfigViewController;
 
 //ZaGlobalConfigViewController.STATUS_VIEW = "ZaGlobalConfigViewController.STATUS_VIEW";
-
+ZaController.initToolbarMethods["ZaGlobalConfigViewController"] = new Array();
 ZaController.setViewMethods["ZaGlobalConfigViewController"] = [];
 
 /**
@@ -50,19 +50,31 @@ function(item, openInNewTab) {
 	this._setView(item, false);
 }
 
-ZaGlobalConfigViewController.setViewMethod = function (item) {
-    if(!this._UICreated) {
-  		this._ops = new Array();
-		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
-		this._ops.push(new ZaOperation(ZaOperation.DOWNLOAD_GLOBAL_CONFIG, ZaMsg.TBB_DownloadConfig, ZaMsg.GLOBTBB_DownloadConfig_tt, "DownloadGlobalConfig", "DownloadGlobalConfig", new AjxListener(this, this.downloadConfigButtonListener)));
-		if (ZaOperation.UPDATELICENSE) {
-			this._ops.push(new ZaOperation(ZaOperation.UPDATELICENSE, ZaMsg.TBB_UpdateLicense, ZaMsg.ALTBB_UpdateLicense_tt, "UpdateLicense", "UpdateLicense",
-						new AjxListener(this, this.updateLicenseButtonListener)));
-		}
-		this._ops.push(new ZaOperation(ZaOperation.NONE));
-		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));
-		this._toolbar = new ZaToolBar(this._container, this._ops);
+ZaGlobalConfigViewController.initToolbarMethod =
+function () {
+	this._toolbarOperations[ZaOperation.SAVE] = new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));    			
+	this._toolbarOperations[ZaOperation.DOWNLOAD_GLOBAL_CONFIG] = new ZaOperation(ZaOperation.DOWNLOAD_GLOBAL_CONFIG, ZaMsg.TBB_DownloadConfig, ZaMsg.GLOBTBB_DownloadConfig_tt, "DownloadGlobalConfig", "DownloadGlobalConfig", new AjxListener(this, this.downloadConfigButtonListener));
+	this._toolbarOrder.push(ZaOperation.SAVE);
+	this._toolbarOrder.push(ZaOperation.DOWNLOAD_GLOBAL_CONFIG);
 
+	if (ZaOperation.UPDATELICENSE) {
+		this._toolbarOperations[ZaOperation.UPDATELICENSE] = new ZaOperation(ZaOperation.UPDATELICENSE, ZaMsg.TBB_UpdateLicense, ZaMsg.ALTBB_UpdateLicense_tt, "UpdateLicense", "UpdateLicense",
+			new AjxListener(this, this.updateLicenseButtonListener));
+		this._toolbarOrder.push(ZaOperation.UPDATELICENSE);			
+	}
+	
+}
+ZaController.initToolbarMethods["ZaGlobalConfigViewController"].push(ZaGlobalConfigViewController.initToolbarMethod);
+
+
+ZaGlobalConfigViewController.setViewMethod = function (item) {
+    try {
+	    this._initToolbar();
+		this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
+		this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));		
+		this._toolbarOrder.push(ZaOperation.NONE);
+		this._toolbarOrder.push(ZaOperation.HELP);
+		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations, this._toolbarOrder);
 		this._contentView = this._view = new this.tabConstructor(this._container);
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
@@ -76,18 +88,18 @@ ZaGlobalConfigViewController.setViewMethod = function (item) {
 		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 		this._UICreated = true;
 		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
-	}
-	//ZaApp.getInstance().pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
-	ZaApp.getInstance().pushView(this.getContentViewId());
-	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-	if (ZaOperation.UPDATELICENSE){
-		var updateLicenseButton = this._toolbar.getButton(ZaOperation.UPDATELICENSE) ;
-		updateLicenseButton.setEnabled(false);
-		 var divEl = updateLicenseButton.getHtmlElement();
-		 divEl.style.visibility = "hidden";
-	}
-	item.load();
-	try {
+	
+		//ZaApp.getInstance().pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
+		ZaApp.getInstance().pushView(this.getContentViewId());
+		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+		if (ZaOperation.UPDATELICENSE){
+			var updateLicenseButton = this._toolbar.getButton(ZaOperation.UPDATELICENSE) ;
+			updateLicenseButton.setEnabled(false);
+			 var divEl = updateLicenseButton.getHtmlElement();
+			 divEl.style.visibility = "hidden";
+		}
+		item.load();
+	
 		item[ZaModel.currentTab] = "1"
 		this._view.setDirty(false);
 		this._view.setObject(item);
