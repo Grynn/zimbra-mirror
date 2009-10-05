@@ -153,7 +153,7 @@ function () {
 		if(tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom] != this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom]) {
 			var testA = new ZaAccount();
 			try {
-				testD.load("name",tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom]);
+				testA.load("name",tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom]);
 			} catch (ex) {
 				if (ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT) {
 					this._errorDialog.setMessage(AjxMessageFormat.format(com_zimbra_adminversioncheck.ERROR_WRONG_ACCOUNT, [tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom]]), null, DwtMessageDialog.CRITICAL_STYLE, null);

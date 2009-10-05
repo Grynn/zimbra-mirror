@@ -19,7 +19,6 @@ import com.zimbra.cs.client.soap.LmcVersionCheckResponse;
 import com.zimbra.cs.service.versioncheck.VersionCheckService;
 import com.zimbra.cs.util.BuildInfo;
 import com.zimbra.cs.util.SoapCLI;
-import com.zimbra.cs.util.BuildInfo.Version;
 
 /**
  * @author Greg Solovyev
