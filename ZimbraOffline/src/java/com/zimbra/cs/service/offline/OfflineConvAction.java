@@ -21,6 +21,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.OperationContext;
@@ -30,7 +31,6 @@ import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.soap.ZimbraSoapContext;
 
 public class OfflineConvAction extends ConvAction {
     
@@ -65,14 +65,13 @@ public class OfflineConvAction extends ConvAction {
             return;
         context.put(OFFLINECONV_TOACCT, toAcct);
                       
-        ZimbraSoapContext ctxt = getZimbraSoapContext(context);
-        Mailbox mbox = getRequestedMailbox(ctxt);
+        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(toAcct);
         if (!(mbox instanceof ZcsMailbox))
             throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
         ZcsMailbox ombx = (ZcsMailbox)mbox;
         context.put(OFFLINECONV_MBOX, ombx);
         
-        OperationContext octxt = getOperationContext(ctxt, context);
+        OperationContext octxt = getOperationContext(getZimbraSoapContext(context), context);
         Folder folder = ombx.getFolderById(octxt, folderId);
         if (ombx.pushNewFolder(octxt, folderId)) {
             String newId = Integer.toString(ombx.getFolderByName(octxt, folder.getParentId(), folder.getName()).getId());
