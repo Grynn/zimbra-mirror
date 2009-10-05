@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<datasource syncAllFolders="true">
+    <service name="yahoo.com" saveToSent="false"
+             calDavTargetUrl="https://caldav.calendar.yahoo.com"
+             calDavPrincipalPath="/principals/users/@USERNAME@">
+        <folder remotePath="Inbox" localPath="/Inbox" sync="true"/>
+        <folder remotePath="Bulk Mail" localPath="Junk" sync="false"/>
+        <folder remotePath="Draft" ignore="true"/>
+        <folder remotePath="Sent" localPath="/Sent" sync="true"/>
+        <folder remotePath="Trash" localPath="/Trash" sync="false"/>
+        <folder remotePath="Junk" ignore="true"/>
+    </service>
+
+    <service name="gmail.com" saveToSent="false"
+             calDavTargetUrl="https://www.google.com"
+             calDavPrincipalPath="/calendar/dav/@USERNAME@/user">
+        <folder remotePath="INBOX" localPath="/Inbox" sync="true"/>
+        <folder remotePath="[Gmail]" ignore="true"/>
+        <folder remotePath="[Gmail]/Trash" localPath="/Trash" sync="false"/>
+        <folder remotePath="[Gmail]/All Mail" ignore="true"/>
+        <folder remotePath="[Gmail]/Drafts" ignore="true"/>
+        <folder remotePath="[Gmail]/Sent Mail" localPath="/Sent" sync="true"/>
+        <folder remotePath="[Gmail]/Spam" localPath="/Junk" sync="false"/>
+        <folder remotePath="[Gmail]/Starred" ignore="true"/>
+        <folder remotePath="[Google Mail]" ignore="true"/>
+        <folder remotePath="[Google Mail]/Trash" localPath="/Trash" sync="false"/>
+        <folder remotePath="[Google Mail]/All Mail" ignore="true"/>
+        <folder remotePath="[Google Mail]/Drafts" ignore="true"/>
+        <folder remotePath="[Google Mail]/Sent Mail" localPath="/Sent" sync="true"/>
+        <folder remotePath="[Google Mail]/Spam" localPath="/Junk" sync="false"/>
+        <folder remotePath="[Google Mail]/Starred" ignore="true"/>
+        <folder remotePath="[Google Mail]/Trash" localPath="/Trash" sync="false"/>
+    </service>
+
+    <service name="aol.com" saveToSent="false">
+        <folder remotePath="INBOX" localPath="/Inbox" sync="true"/>
+        <folder remotePath="Spam" localPath="/Junk" sync="true"/>
+        <folder remotePath="Sent Items" localPath="/Sent" sync="true"/>
+    </service>
+
+    <service name=".msexchange" saveToSent="true">
+        <folder remotePath="INBOX" localPath="/Inbox" sync="true"/>
+        <folder remotePath="Junk E-mail" localPath="/Junk" sync="true"/>
+        <folder remotePath="Draft" ignore="true"/>
+        <folder remotePath="Deleted Items" localPath="/Trash" sync="false"/>
+        <folder remotePath="Sent Items" localPath="/Sent" sync="true"/>
+    </service>
+
+    <service name="hotmail.com" saveToSent="true">
+        <folder remotePath="inbox" localPath="/Inbox" sync="true"/>
+        <folder remotePath="bulkmail" localPath="/Junk" sync="false"/>
+        <folder remotePath="drafts" localPath="/Drafts" sync="false"/>
+        <folder remotePath="sentitems" localPath="/Sent" sync="true"/>
+        <folder remotePath="deleteditems" localPath="/Trash" sync="true"/>
+    </service>
+
+    <service name="me.com" saveToSent="true">
+        <folder remotePath="Inbox" localPath="/Inbox" sync="true"/>
+        <folder remotePath="Sent Messages" localPath="/Sent" sync="true"/>
+        <folder remotePath="Deleted Messages" localPath="/Trash" sync="false"/>
+        <folder remotePath="Junk" localPath="/Junk" sync="false"/>
+        <folder remotePath="Drafts" localPath="/Drafts" sync="false"/>
+    </service>
+
+</datasource>

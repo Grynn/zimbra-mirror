@@ -24,6 +24,7 @@ import com.zimbra.common.util.SystemUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
+import com.zimbra.cs.account.offline.DataSourceConfig;
 import com.zimbra.cs.datasource.CalDavDataImport;
 import com.zimbra.cs.dav.DavException;
 import com.zimbra.cs.dav.client.CalDavClient;
@@ -32,8 +33,6 @@ import com.zimbra.cs.mailbox.OfflineServiceException;
 public class OfflineCalDavDataImport extends CalDavDataImport {
     private final String serviceName;
     
-    private static final String CALDAV_TARGET_URL = "calDavTargetUrl";
-    private static final String CALDAV_PRINCIPAL_PATH = "calDavPrincipalPath";
     private static final String CALDAV_APPNAME = "Desktop";
     
     public OfflineCalDavDataImport(DataSource ds, String serviceName) throws ServiceException {
@@ -43,10 +42,11 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
     
     public static void loginTest(String username, String password, String serviceName) throws IOException, ServiceException {
         try {
-            OfflineDataSource.KnownService ks = OfflineDataSource.getKnownServiceByName(serviceName);
-            String url, path;                        
-            if (ks != null && ks.attrs != null && (url = ks.attrs.get(CALDAV_TARGET_URL)) != null &&
-                (path = ks.attrs.get(CALDAV_PRINCIPAL_PATH)) != null) {
+            DataSourceConfig.Service ks =
+                OfflineDataSource.getDataSourceConfig().getService(serviceName);
+            String url, path;
+            if (ks != null && ((url = ks.getCalDavTargetUrl()) != null &&
+                              ((path = ks.getCalDavPrincipalPath()) != null))) {
                 OfflineLog.offline.debug("offline caldav login test: url=" + url + " path=" + path);
                 CalDavClient client = new CalDavClient(url);
                 client.setAppName(CALDAV_APPNAME);
@@ -90,21 +90,20 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
     
     @Override
     protected String getTargetUrl() {
-        OfflineDataSource.KnownService ks = ((OfflineDataSource)dataSource).getKnownService();
-        return (ks != null && ks.attrs != null) ? ks.attrs.get(CALDAV_TARGET_URL) : null;
+        DataSourceConfig.Service ks = ((OfflineDataSource)dataSource).getKnownService();
+        return ks != null ? ks.getCalDavTargetUrl() : null;
     }
     
     @Override
     protected String getPrincipalUrl() {
-        OfflineDataSource.KnownService ks = ((OfflineDataSource)dataSource).getKnownService();        
-        if (ks == null || ks.attrs == null)
-            return null;               
-        
-        String path = ks.attrs.get(CALDAV_PRINCIPAL_PATH);
-        if (path == null)
-            return null;
-        
-        return path.replaceAll("@USERNAME@", dataSource.getUsername());
+        DataSourceConfig.Service ks = ((OfflineDataSource)dataSource).getKnownService();
+        if (ks != null) {
+            String path = ks.getCalDavPrincipalPath();
+            if (path != null) {
+                return path.replaceAll("@USERNAME@", dataSource.getUsername());
+            }
+        }
+        return null;
     }
     
     @Override

@@ -1907,13 +1907,13 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
-              <action name="conf/datasource.properties" id="288000" beanClass="com.install4j.runtime.beans.actions.text.FixCrLfAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="conf/datasource.xml" id="288000" beanClass="com.install4j.runtime.beans.actions.text.FixCrLfAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.text.FixCrLfAction">
                       <void property="file">
                         <object class="java.io.File">
-                          <string>conf/datasource.properties</string>
+                          <string>conf/datasource.xml</string>
                         </object>
                       </void>
                     </object>
