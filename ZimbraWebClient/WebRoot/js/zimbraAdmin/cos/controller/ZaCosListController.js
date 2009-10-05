@@ -167,7 +167,7 @@ function(ev) {
 
             if ( item.attrs ) {
                 for(var aname in item.attrs) {
-                    if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) )
+                    if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) || (aname == ZaItem.A_zimbraCreateTimestamp) )
                         continue;
 
                     if ( (typeof item.attrs[aname] == "object") || (item.attrs[aname] instanceof Array)) {
@@ -211,7 +211,7 @@ function(ev) {
 	newCos.loadNewObjectDefaults();
 	//copy values from default cos to the new cos
 	for(var aname in defCos.attrs) {
-		if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) )
+		if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) || (aname == ZaItem.A_zimbraCreateTimestamp))
 			continue;			
 		newCos.attrs[aname] = defCos.attrs[aname];
 	}

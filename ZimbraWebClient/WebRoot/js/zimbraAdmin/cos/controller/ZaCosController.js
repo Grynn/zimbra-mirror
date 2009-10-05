@@ -501,7 +501,7 @@ function () {
 	for (var a in tmpObj.attrs) {
 		if(a == ZaItem.A_objectClass || a == ZaItem.A_zimbraId || a == ZaCos.A_zimbraAvailableSkin
                 || a == ZaCos.A_zimbraZimletAvailableZimlets || a == ZaCos.A_zimbraMailHostPool
-                || a == ZaItem.A_zimbraACE) {
+                || a == ZaItem.A_zimbraACE || a== ZaItem.A_zimbraCreateTimestamp) {
 			continue;
 		}
 		if(!ZaItem.hasWritePermission(a,tmpObj)) {
@@ -663,7 +663,7 @@ function () {
 	var defCos = ZaCos.getCosByName("default");
 	//copy values from default cos to the new cos
 	for(var aname in defCos.attrs) {
-		if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) )
+		if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) || (aname = ZaItem.A_zimbraCreateTimestamp))
 			continue;			
 		newCos.attrs[aname] = defCos.attrs[aname];
 	}	
