@@ -10,11 +10,9 @@ import java.util.Map;
 
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
-import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
-import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
@@ -27,7 +25,6 @@ import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.account.accesscontrol.AdminRight;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
-import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.util.AccountUtil;
 import com.zimbra.cs.util.BuildInfo;
 import com.zimbra.cs.zclient.ZEmailAddress;
@@ -82,63 +79,107 @@ public class VersionCheck extends AdminDocumentHandler {
             }
             
         	//perform the version check
-        	checkVersion();
-        	
-        	
-        	// check if there are any emails to notify of a new version
+        	String lastAttempt = checkVersion();
+        	String resp = config.getAttr(Provisioning.A_zimbraVersionCheckLastResponse);
+        	Element respDoc;
+			try {	
+				respDoc = Element.parseXML(resp);
+			} catch (DocumentException dex) {
+				throw VersionCheckException.INVALID_VC_RESPONSE(resp, dex);
+			}
+			if(respDoc == null) {
+				throw ServiceException.FAILURE("error parsing  zimbraVersionCheckLastResponse config attribute. Attribute value is empty",null);
+			}
+			Map<String, String> attrs = new HashMap<String, String>();
+			if(resp !=null && resp.length()>0) {
+				attrs.put(Provisioning.A_zimbraVersionCheckLastSuccess, lastAttempt);
+			}
+			prov.modifyAttrs(config, attrs, true);
+			
+			// check if there are any emails to notify of a new version
 			boolean sendNotification = false;
+
 			String emails = config.getAttr(Provisioning.A_zimbraVersionCheckNotificationEmail);
-			if (emails != null && emails.length() > 0) {
+			if (emails != null && emails.length() > 0 && config.getBooleanAttr(Provisioning.A_zimbraVersionCheckSendNotifications, false)) {
 				sendNotification = true;
 			}
 			if (sendNotification) {
-				String resp = config.getAttr(Provisioning.A_zimbraVersionCheckLastResponse);
-				try {
-					Element respDoc = Element.parseXML(resp);
-					boolean hasUpdates = respDoc.getAttributeBool(A_VERSION_CHECK_STATUS, false);
+				String fromEmail = config.getAttr(Provisioning.A_zimbraVersionCheckNotificationEmailFrom);
+				boolean hasUpdates = respDoc.getAttributeBool(A_VERSION_CHECK_STATUS, false);
+				if (hasUpdates) {
 					boolean hasCritical = false;
-					if (hasUpdates) {
-						String msg = "Found the following zimbra updates:\n";
+					String msgTemplate = config.getAttr(Provisioning.A_zimbraVersionCheckNotificationBody);
+					String subjTemplate = config.getAttr(Provisioning.A_zimbraVersionCheckNotificationSubject);
+					if(msgTemplate!=null && subjTemplate!=null) {
+						String msg = "";
+						String criticalStr = "";
+						String updateTemplate = null;
+						String prefix = null;
 						Element eUpdates = respDoc.getElement(E_UPDATES);
-						for (Iterator<Element> iter = eUpdates.elementIterator(E_UPDATE); iter.hasNext();) {
-							Element eUpdate = iter.next();
-//							String updateType = eUpdate.getAttribute(A_UPDATE_TYPE);
-							boolean isCritical = eUpdate.getAttributeBool(A_CRITICAL, false);
-							if (isCritical)
-								hasCritical = true;
-
-							String detailsUrl = eUpdate.getAttribute(A_UPDATE_URL);
-//							String description = eUpdate.getAttribute(A_DESCRIPTION);
-							String version = eUpdate.getAttribute(A_VERSION);
-//							String release = eUpdate.getAttribute(A_RELEASE);
-							String platform = eUpdate.getAttribute(A_PLATFORM);
-//							String buildtype = eUpdate.getAttribute(A_BUILDTYPE);
-//							String shortVersion = eUpdate.getAttribute(A_SHORT_VERSION);
-							if (sendNotification) {
-								if (isCritical) {
-									msg += String.format(
-													"Version: %s; platform: %s, detailsUrl %s. This update is critical!\n",
-													version, platform,
-													detailsUrl);
-								} else {
-									msg += String.format(
-													"Version: %s; platform: %s, detailsUrl %s. \n",
-													version, platform,
-													detailsUrl);
-								}
+						int beginUpdateIndex,endUpdateIndex;
+						beginUpdateIndex = msgTemplate.indexOf("${BEGIN_UPDATE}");
+						endUpdateIndex = msgTemplate.indexOf("${END_UPDATE}",beginUpdateIndex);
+						int beginPrefixIndex = msgTemplate.indexOf("${BEGIN_PREFIX}");
+						int endPrefixIndex = msgTemplate.indexOf("${END_PREFIX}");
+						if(beginPrefixIndex > -1 && endPrefixIndex > 14) {
+							prefix = updateTemplate = msgTemplate.substring(beginPrefixIndex+15, endPrefixIndex);
+							if(prefix != null && prefix.length()>0) {
+								msg = msg.concat(prefix);
 							}
 						}
+						if(beginUpdateIndex > -1 && endUpdateIndex > -1) {
+							updateTemplate = msgTemplate.substring(beginUpdateIndex, endUpdateIndex);
+							
+							int i=1;
+							for (Iterator<Element> iter = eUpdates.elementIterator(E_UPDATE); iter.hasNext();) {
+								Element eUpdate = iter.next();
+								boolean isCritical = eUpdate.getAttributeBool(A_CRITICAL, false);
+								if (isCritical)
+									hasCritical = true;
+
+								if (isCritical) {
+									criticalStr = "critical";
+								} else {
+									criticalStr = "not critical";
+								}
+								msg = msg.concat(updateTemplate.replaceAll("\\$\\{UPDATE_URL\\}", eUpdate.getAttribute(A_UPDATE_URL))
+								.replaceAll("\\$\\{UPDATE_DESCRIPTION\\}", eUpdate.getAttribute(A_DESCRIPTION))
+								.replaceAll("\\$\\{UPDATE_VERSION\\}", eUpdate.getAttribute(A_VERSION))
+								.replaceAll("\\$\\{UPDATE_SHORT_VERSION\\}", eUpdate.getAttribute(A_SHORT_VERSION))
+								.replaceAll("\\$\\{UPDATE_RELEASE\\}", eUpdate.getAttribute(A_RELEASE))
+								.replaceAll("\\$\\{UPDATE_PLATFORM\\}", eUpdate.getAttribute(A_PLATFORM))
+								.replaceAll("\\$\\{UPDATE_BUILD_TYPE\\}", eUpdate.getAttribute(A_BUILDTYPE))
+								.replaceAll("\\$\\{IS_CRITICAL\\}", criticalStr)
+								.replaceAll("\\$\\{UPDATE_COUNTER\\}", Integer.toString(i))
+								.replaceAll("\\$\\{BEGIN_UPDATE\\}", "")
+								.replaceAll("\\$\\{END_UPDATE\\}", "\n")
+								);
+								i++;
+							}
+						}
+						int beginSigIndex = msgTemplate.indexOf("${BEGIN_SIGNATURE}");
+						int endSigIndex = msgTemplate.indexOf("${END_SIGNATURE}");
+						if(beginSigIndex > -1 && endSigIndex > 17) {
+							prefix = updateTemplate = msgTemplate.substring(beginSigIndex+18, endSigIndex);
+							if(prefix != null && prefix.length()>0) {
+								msg = msg.concat(prefix);
+							}
+						}						
+						if (hasCritical) {
+							criticalStr = "critical";
+						} else {
+							criticalStr = "not critical";
+						}
+						msg = msg.replaceAll("\\$\\{NEWLINE\\}", "\n");
+						String subj = subjTemplate.replaceAll("\\$\\{IS_CRITICAL\\}", criticalStr).replaceAll("\\$\\{NEW_LINE\\}", "\n");
 						try {
-							AuthToken at = zc.getAuthToken();
-							String acctId = at.getAccountId();
-							// use ZMailbox to add messages to target mailbox
-							Account targetAccount = Provisioning.getInstance().get(AccountBy.id, acctId);
+							Account targetAccount = Provisioning.getInstance().get(AccountBy.name, fromEmail);
 							String accountSOAPURI = AccountUtil.getSoapUri(targetAccount);
 							AuthToken targetAuth = AuthProvider.getAuthToken(targetAccount,	System.currentTimeMillis() + 3600 * 1000);
 							Options options = new Options();
 							options.setAuthToken(targetAuth.getEncoded());
-							options.setTargetAccount(acctId);
-							options.setTargetAccountBy(AccountBy.id);
+							options.setTargetAccount(fromEmail);
+							options.setTargetAccountBy(AccountBy.name);
 							if(accountSOAPURI == null) {
 								accountSOAPURI =  URLUtil.getSoapURL(prov.getLocalServer(),true);
 							}
@@ -148,25 +189,14 @@ public class VersionCheck extends AdminDocumentHandler {
 							ZOutgoingMessage m = new ZOutgoingMessage();
 							List<ZEmailAddress> addrs = new ArrayList<ZEmailAddress>();
 							addrs.addAll(ZEmailAddress.parseAddresses(emails,ZEmailAddress.EMAIL_TYPE_TO));
-							if (hasCritical)
-								m.setSubject("Critical Zimbra update is available.");
-							else
-								m.setSubject("Zimbra update is available.");
-
+							m.setSubject(subj);
 							m.setAddresses(addrs);
-							m.setMessagePart(new MessagePart(
-											"text/plain", msg));
+							m.setMessagePart(new MessagePart("text/plain", msg));
 							zmbox.sendMessage(m, null, false);
 						} catch (Exception e) {
-							ZimbraLog.extensions.error(
-											"Version check extension failed to send notifications.",
-											this, e);
+							ZimbraLog.extensions.error("Version check extension failed to send notifications.",	this, e);
 						}
 					}
-				} catch (DocumentException e) {
-					throw ServiceException.FAILURE(
-									"error parsing  zimbraVersionCheckLastResponse config attribute",
-									e);
 				}
 			}
         	
@@ -174,40 +204,41 @@ public class VersionCheck extends AdminDocumentHandler {
 			try {
 
 	        	String resp = config.getAttr(Provisioning.A_zimbraVersionCheckLastResponse);
+	        	boolean hasUpdates = false;
+	        	if(resp != null) {
+		        	Element respDoc = Element.parseXML(resp);
 
-	        	Element respDoc = Element.parseXML(resp);
-
-				boolean hasUpdates = respDoc.getAttributeBool(A_VERSION_CHECK_STATUS, false);
-				Element elRespVersionCheck = response.addElement(E_VERSION_CHECK);
-				elRespVersionCheck.addAttribute(A_VERSION_CHECK_STATUS, hasUpdates);
-				if(hasUpdates) {
-					Element eUpdates = respDoc.getElement(E_UPDATES);
-					Element elRespUpdates = elRespVersionCheck.addElement(E_UPDATES);
-		            for (Iterator<Element> iter = eUpdates.elementIterator(E_UPDATE); iter.hasNext(); ) {
-		                Element eUpdate = iter.next();
-		                String updateType = eUpdate.getAttribute(A_UPDATE_TYPE);
-		                boolean isCritical = eUpdate.getAttributeBool(A_CRITICAL,false);
-		                String detailsUrl = eUpdate.getAttribute(A_UPDATE_URL);
-		                String description = eUpdate.getAttribute(A_DESCRIPTION);
-		                String version = eUpdate.getAttribute(A_VERSION);
-		                String release = eUpdate.getAttribute(A_RELEASE);
-		                String platform = eUpdate.getAttribute(A_PLATFORM);
-		                String buildtype = eUpdate.getAttribute(A_BUILDTYPE);
-		                String shortVersion = eUpdate.getAttribute(A_SHORT_VERSION);
-		                
-		                Element elRespUpdate = elRespUpdates.addElement(E_UPDATE);
-		                elRespUpdate.addAttribute(A_UPDATE_TYPE,updateType);
-		                elRespUpdate.addAttribute(A_CRITICAL,isCritical);
-		                elRespUpdate.addAttribute(A_UPDATE_URL,detailsUrl);
-		                elRespUpdate.addAttribute(A_DESCRIPTION,description);
-		                elRespUpdate.addAttribute(A_SHORT_VERSION,shortVersion);
-		                elRespUpdate.addAttribute(A_RELEASE,release);
-		                elRespUpdate.addAttribute(A_VERSION,version);
-		                elRespUpdate.addAttribute(A_BUILDTYPE,buildtype);
-		                elRespUpdate.addAttribute(A_PLATFORM,platform);		                
-		            }					
-				}
-
+					hasUpdates = respDoc.getAttributeBool(A_VERSION_CHECK_STATUS, false);
+					Element elRespVersionCheck = response.addElement(E_VERSION_CHECK);
+					elRespVersionCheck.addAttribute(A_VERSION_CHECK_STATUS, hasUpdates);
+					if(hasUpdates) {
+						Element eUpdates = respDoc.getElement(E_UPDATES);
+						Element elRespUpdates = elRespVersionCheck.addElement(E_UPDATES);
+			            for (Iterator<Element> iter = eUpdates.elementIterator(E_UPDATE); iter.hasNext(); ) {
+			                Element eUpdate = iter.next();
+			                String updateType = eUpdate.getAttribute(A_UPDATE_TYPE);
+			                boolean isCritical = eUpdate.getAttributeBool(A_CRITICAL,false);
+			                String detailsUrl = eUpdate.getAttribute(A_UPDATE_URL);
+			                String description = eUpdate.getAttribute(A_DESCRIPTION);
+			                String version = eUpdate.getAttribute(A_VERSION);
+			                String release = eUpdate.getAttribute(A_RELEASE);
+			                String platform = eUpdate.getAttribute(A_PLATFORM);
+			                String buildtype = eUpdate.getAttribute(A_BUILDTYPE);
+			                String shortVersion = eUpdate.getAttribute(A_SHORT_VERSION);
+			                
+			                Element elRespUpdate = elRespUpdates.addElement(E_UPDATE);
+			                elRespUpdate.addAttribute(A_UPDATE_TYPE,updateType);
+			                elRespUpdate.addAttribute(A_CRITICAL,isCritical);
+			                elRespUpdate.addAttribute(A_UPDATE_URL,detailsUrl);
+			                elRespUpdate.addAttribute(A_DESCRIPTION,description);
+			                elRespUpdate.addAttribute(A_SHORT_VERSION,shortVersion);
+			                elRespUpdate.addAttribute(A_RELEASE,release);
+			                elRespUpdate.addAttribute(A_VERSION,version);
+			                elRespUpdate.addAttribute(A_BUILDTYPE,buildtype);
+			                elRespUpdate.addAttribute(A_PLATFORM,platform);		                
+			            }					
+					}
+	        	}
 			} catch (DocumentException e) {
 				throw ServiceException.FAILURE("error parsing  zimbraVersionCheckLastResponse config attribute", e);
 			}
@@ -217,7 +248,8 @@ public class VersionCheck extends AdminDocumentHandler {
 	}
 
 	
-	public static void checkVersion () throws ServiceException {
+	public static String checkVersion () throws ServiceException {
+		String lastAttempt = DateUtil.toGeneralizedTime(new Date());
 		Provisioning prov = Provisioning.getInstance();
 		Config config = prov.getConfig();
 		String url = config.getAttr(Provisioning.A_zimbraVersionCheckURL);
@@ -225,13 +257,15 @@ public class VersionCheck extends AdminDocumentHandler {
 		HttpClient client = new HttpClient( );
 		boolean checkSuccess=false;
 		String resp = null;
-		String query = String.format("%s=%s&%s=%s&%s=%s&%s=%s&%s=%s",
+		String query = String.format("%s=%s&%s=%s&%s=%s&%s=%s&%s=%s&%s=%s",
 				AdminConstants.A_VERSION_INFO_MAJOR,BuildInfo.MAJORVERSION,
 				AdminConstants.A_VERSION_INFO_MINOR,BuildInfo.MINORVERSION,
 				AdminConstants.A_VERSION_INFO_MICRO,BuildInfo.MICROVERSION,
 				AdminConstants.A_VERSION_INFO_PLATFORM,BuildInfo.PLATFORM,
 				AdminConstants.A_VERSION_INFO_TYPE,
-				(StringUtil.isNullOrEmpty(BuildInfo.TYPE) ? "unknown" : BuildInfo.TYPE));
+				(StringUtil.isNullOrEmpty(BuildInfo.TYPE) ? "unknown" : BuildInfo.TYPE),
+				AdminConstants.A_VERSION_INFO_BUILDNUM, BuildInfo.BUILDNUM
+				);
 		
 		try {
 			method.setQueryString(URIUtil.encodeQuery(query));
@@ -257,18 +291,15 @@ public class VersionCheck extends AdminDocumentHandler {
 		} catch (IOException e) {
 			throw ServiceException.FAILURE("Failed to send HTTP request to version check script.",e);
 		}  finally {
-			String lastAttempt = DateUtil.toGeneralizedTime(new Date());
 			Map<String, String> attrs = new HashMap<String, String>();
 			attrs.put(Provisioning.A_zimbraVersionCheckLastAttempt, lastAttempt);
 			if(checkSuccess) {
-				attrs.put(Provisioning.A_zimbraVersionCheckLastSuccess, lastAttempt);
 				attrs.put(Provisioning.A_zimbraVersionCheckLastResponse, resp);
 			}
 			prov.modifyAttrs(config, attrs, true);
 			
 			//send a notification
 		}
-
-		
+		return lastAttempt;
 	}
 }
