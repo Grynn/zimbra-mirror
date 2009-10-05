@@ -64,6 +64,12 @@ case "$1" in
       exit 0
     fi
 
+    zmprov gs `zmhostname` zimbraServiceEnabled | grep -qw logger
+    if [ $? = 1 ]; then
+        echo "zimbra logger service is not enabled!  failed."
+        exit 1
+    fi
+
     if [ ! -d ${zimbra_tmp_directory} ]; then
       mkdir -p ${zimbra_tmp_directory} > /dev/null 2>&1
     fi
