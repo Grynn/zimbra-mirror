@@ -146,7 +146,7 @@ sub init_counters($) {
     my $data = shift @_;
     my @mtas = listMTA();
 
-    my @counters = qw(clam_events sendmail_events filter_event filter_virus filter_spam filter_misc mta_count mta_volume mta_delay);
+    my @counters = qw(clam_events sendmail_events filter_count filter_virus filter_spam filter_misc mta_count mta_volume mta_delay);
     foreach my $mta (@mtas) {
         foreach my $counter (@counters) {
             counter_increment($data, $mta, $counter);

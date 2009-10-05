@@ -46,10 +46,10 @@ ZaGlobalMessageCountPage.prototype.showMe =  function(refresh) {
 ZaGlobalMessageCountPage.prototype.setObject =
 function () {
     // noop
-    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-48hours', 'zmmtastats', [ 'mta_count' ], [ 'msgs/s' ], 'now-48h', 'now');
-    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-30days',  'zmmtastats', [ 'mta_count' ], [ 'msgs/s' ], 'now-30d', 'now');
-    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-60days',  'zmmtastats', [ 'mta_count' ], [ 'msgs/s' ], 'now-60d', 'now');
-    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-year',    'zmmtastats', [ 'mta_count' ], [ 'msgs/s' ], 'now-1y',  'now');
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-48hours', 'zmmtastats', [ 'mta_count' ], [ 'msgs' ], 'now-48h', 'now', { convertToCount: 1 });
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-30days',  'zmmtastats', [ 'mta_count' ], [ 'msgs' ], 'now-30d', 'now', { convertToCount: 1 });
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-60days',  'zmmtastats', [ 'mta_count' ], [ 'msgs' ], 'now-60d', 'now', { convertToCount: 1 });
+    ZaGlobalAdvancedStatsPage.plotGlobalQuickChart('global-message-count-year',    'zmmtastats', [ 'mta_count' ], [ 'msgs' ], 'now-1y',  'now', { convertToCount: 1 });
 }
 
 ZaGlobalMessageCountPage.prototype._createHtml = 

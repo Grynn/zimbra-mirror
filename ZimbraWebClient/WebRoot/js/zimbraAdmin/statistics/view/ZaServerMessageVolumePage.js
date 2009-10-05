@@ -44,10 +44,10 @@ ZaServerMessageVolumePage.prototype.showMe =  function(refresh) {
 	}
 	if (this._currentObject) {
 	    var item = this._currentObject;
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-48hours', item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes/s' ], 'now-48h', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-30days',  item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes/s' ], 'now-30d', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-60days',  item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes/s' ], 'now-60d', 'now');
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-year',    item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes/s' ], 'now-1y',  'now');
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-48hours', item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes' ], 'now-48h', 'now', { convertToCount: 1 });
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-30days',  item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes' ], 'now-30d', 'now', { convertToCount: 1 });
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-60days',  item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes' ], 'now-60d', 'now', { convertToCount: 1 });
+        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-year',    item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes' ], 'now-1y',  'now', { convertToCount: 1 });
 	}
 }
 

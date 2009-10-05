@@ -57,7 +57,7 @@ ZaGlobalAdvancedStatsPage.getDataTipText = function (item, index, series) {
 }
 /* must be global for getDataTipText */
 ZaGlobalAdvancedStatsPage.formatLabel = function (value) {
-    return YAHOO.util.Number.format(value, { thousandsSeparator: ",", decimalPlaces: 3});
+    return YAHOO.util.Number.format(value, { thousandsSeparator: ",", decimalPlaces: 0});
 }
 ZaGlobalAdvancedStatsPage.formatTimeLabel = function (value) {
     return YAHOO.util.Date.format(value, { format: ZaMsg.NAD_AdvStatsLabelDateFormat });
@@ -92,7 +92,7 @@ ZaGlobalAdvancedStatsPage.setText = function (e, text) {
         e.textContent = text;
     }
 }
-ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, column_units, start, end) {
+ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, column_units, start, end, options) {
     var chartdiv = document.getElementById("loggerchart" + id);
     ZaGlobalAdvancedStatsPage.setText(chartdiv, ZaMsg.NAD_AdvStatsLoadingDataLabel);
     
@@ -147,7 +147,13 @@ ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, c
         }
         
         var newData = [];
+        var period = 0;
+        var lastTS = 0;
         for (var i in data) {
+            if (lastTS != 0)
+                period = i - lastTS;
+            lastTS = i;
+                
             record = { timestamp: new Date(i * 1000) };
             for (var j in data[i]) {
                 record[j] = data[i][j];
@@ -157,6 +163,8 @@ ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, c
                 if (!record[columns[j]]) {
                     record[columns[j]] = 0;
                 }
+                if (options && options.convertToCount)
+                    record[columns[j]] = record[columns[j]] * period;
             }
             newData.push(record);
         }
@@ -187,7 +195,7 @@ ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, c
     ZaRequestMgr.invoke(csfeParams, reqMgrParams);
 }
 
-ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, columns, column_units, start, end) {
+ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, columns, column_units, start, end, options) {
     var chartdiv = document.getElementById("loggerchart" + id);
     ZaGlobalAdvancedStatsPage.setText(chartdiv, ZaMsg.NAD_AdvStatsLoadingDataLabel);
     
@@ -229,8 +237,12 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
         }
         
         var newData = [];
-        
+        var period = 0;
         for (var i = 0; i < values.length; i++) {
+           if (i + 1 < values.length)
+                period = values[i + 1].t - values[i].t;
+            
+                
             var ts = new Date(values[i].t * 1000);
             var record = { timestamp: ts };
             for (var j = 0; j < values[i].stat.length; j++) {
@@ -242,6 +254,8 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
                 if (!record[columns[j]]) {
                     record[columns[j]] = 0;
                 }
+                if (options && options.convertToCount)
+                    record[columns[j]] = record[columns[j]] * period;
             }
             newData.push(record);
         }
