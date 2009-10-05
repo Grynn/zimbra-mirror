@@ -35,7 +35,7 @@ if ($ldapurl eq '') {
 }
 my $use_tls ="";
 if ( $ldapurl !~ /^ldaps:/ ) {
-  $use_tls="-Z":
+  $use_tls="-Z";
 }
 
 my $ldapsearch = "/opt/zimbra/bin/ldapsearch";
