@@ -3,6 +3,7 @@ package com.zimbra.cs.versioncheck;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Date;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -12,6 +13,10 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapTransport;
 import com.zimbra.common.util.CliUtil;
+import com.zimbra.cs.account.Config;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Server;
+import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.client.LmcSession;
 import com.zimbra.cs.client.soap.LmcSoapClientException;
 import com.zimbra.cs.client.soap.LmcVersionCheckRequest;
@@ -19,12 +24,13 @@ import com.zimbra.cs.client.soap.LmcVersionCheckResponse;
 import com.zimbra.cs.service.versioncheck.VersionCheckService;
 import com.zimbra.cs.util.BuildInfo;
 import com.zimbra.cs.util.SoapCLI;
-
+import com.zimbra.common.util.DateUtil;
 /**
  * @author Greg Solovyev
  */
 public class VersionCheckUtil extends SoapCLI {
     private static final String OPT_CHECK_VERSION = "c";
+    private static final String OPT_MANUAL_CHECK_VERSION = "m";
     private static final String SHOW_LAST_STATUS = "r";
     
     protected VersionCheckUtil() throws ServiceException {
@@ -58,9 +64,44 @@ public class VersionCheckUtil extends SoapCLI {
             }
             
             if (cl.hasOption(OPT_CHECK_VERSION)) {
+            	//check schedule
+        		Provisioning prov = Provisioning.getInstance();
+        		Config config;
+        		config = prov.getConfig();
+            	String updaterServerId = config.getAttr(Provisioning.A_zimbraVersionCheckServer);
+            	
+                if (updaterServerId != null) {
+                    Server server = prov.get(ServerBy.id, updaterServerId);
+                    if (server != null) {
+                    	Server localServer = prov.getLocalServer();
+                    	if (localServer!=null) { 
+                    		if(!localServer.getId().equalsIgnoreCase(server.getId())) {
+                    			System.out.println("Wrong server");
+                    			System.exit(0);
+                    		}
+                    	}
+                    }
+                }        		
+        		String versionInterval = config.getAttr(Provisioning.A_zimbraVersionCheckInterval);
+        		if(versionInterval == null || versionInterval.length()==0 || versionInterval.equalsIgnoreCase("0")) {
+        			System.out.println("Automatic updates are disabled");
+        			System.exit(0);
+        		} else {
+        			long checkInterval = DateUtil.getTimeIntervalSecs(versionInterval,0);
+        			Date lastChecked = DateUtil.parseGeneralizedTime(config.getAttr(Provisioning.A_zimbraVersionCheckLastAttempt));
+        			Date now = new Date();
+        			if( now.getTime()/1000- lastChecked.getTime()/1000 >= checkInterval) {
+        				util.doVersionCheck();
+        			} else {
+        				System.out.println("Too early");
+        				System.exit(0);
+        			}
+        		}
+            } else if (cl.hasOption(OPT_MANUAL_CHECK_VERSION)) {
                 util.doVersionCheck();
             } else if (cl.hasOption(SHOW_LAST_STATUS)) {
                 util.doResult();
+                System.exit(0);
             } else {
                 util.usage();
                 System.exit(1);
@@ -125,8 +166,10 @@ public class VersionCheckUtil extends SoapCLI {
     protected void setupCommandLineOptions() {
        // super.setupCommandLineOptions();
         Options options = getOptions();
-        options.addOption(OPT_CHECK_VERSION, "check", false, "Initiate version check request.");
+        Options hiddenOptions = getHiddenOptions();
+        hiddenOptions.addOption(OPT_CHECK_VERSION, "autocheck", false, "Initiate version check request (exits if zimbraVersionCheckInterval==0)");        
         options.addOption(SHOW_LAST_STATUS, "result", false, "Show results of last version check.");
+        options.addOption(OPT_MANUAL_CHECK_VERSION, "check", false, "Initiate version check request.");
     }
     
     protected String getCommandUsage() {
