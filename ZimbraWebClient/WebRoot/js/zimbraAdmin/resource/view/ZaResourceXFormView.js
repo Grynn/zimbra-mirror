@@ -283,8 +283,6 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 	headerItems.push({type:_OUTPUT_,  ref:ZaResource.A_accountStatus, label:ZaMsg.NAD_ResourceStatus, labelLocation:_LEFT_, choices:ZaResource.accountStatusChoices,visibilityChecks:[ZaItem.hasReadPermission]});
 	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_name, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false});
 	headerItems.push({type:_OUTPUT_,  ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID,visibilityChecks:[ZaItem.hasReadPermission]});
-	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_zimbraCalResType, label:ZaMsg.NAD_ResType, labelLocation:_LEFT_, required:false,
-						getDisplayValue: ZaResource.getResTypeLabel,visibilityChecks:[ZaItem.hasReadPermission] });	
 	headerItems.push({type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp, 
 							label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
 							getDisplayValue:function() {
@@ -296,6 +294,9 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 							},
 							visibilityChecks:[ZaItem.hasReadPermission]	
 						});
+	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_zimbraCalResType, label:ZaMsg.NAD_ResType, labelLocation:_LEFT_, required:false,
+						getDisplayValue: ZaResource.getResTypeLabel,visibilityChecks:[ZaItem.hasReadPermission] });	
+
 	this.tabChoices = new Array();
 	var _tab2;
 	var _tab1 = ++this.TAB_INDEX;
