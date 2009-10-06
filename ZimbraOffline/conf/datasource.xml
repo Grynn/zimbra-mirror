@@ -47,14 +47,6 @@
         <folder remotePath="Sent Items" localPath="/Sent" sync="true"/>
     </service>
 
-    <service name="hotmail.com" saveToSent="true">
-        <folder remotePath="inbox" localPath="/Inbox" sync="true"/>
-        <folder remotePath="bulkmail" localPath="/Junk" sync="false"/>
-        <folder remotePath="drafts" localPath="/Drafts" sync="false"/>
-        <folder remotePath="sentitems" localPath="/Sent" sync="true"/>
-        <folder remotePath="deleteditems" localPath="/Trash" sync="true"/>
-    </service>
-
     <service name="me.com" saveToSent="true">
         <folder remotePath="Inbox" localPath="/Inbox" sync="true"/>
         <folder remotePath="Sent Messages" localPath="/Sent" sync="true"/>
