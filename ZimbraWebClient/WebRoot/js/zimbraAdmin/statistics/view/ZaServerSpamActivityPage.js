@@ -39,6 +39,7 @@ function() {
 
 ZaServerSpamActivityPage.prototype.showMe =  function(refresh) {
 	DwtTabViewPage.prototype.showMe.call(this);	
+	ZaGlobalAdvancedStatsPage.detectFlash(document.getElementById("loggerchart-flashdetect"));
 	if(refresh && this._currentObject) {
 		this.setObject(this._currentObject);
 	}
@@ -65,6 +66,7 @@ function () {
 	this._dayImgID = Dwt.getNextId();
 	this._monthImgID = Dwt.getNextId();		
 	this._yearImgID = Dwt.getNextId();	
+	html[idx++] = "<h1 style='display: none' id='loggerchart-flashdetect'></h1>";	
 	html[idx++] = "<h3 style='padding-left: 10px'>" + ZaMsg.Stats_AV_Header + "</h3>" ;	
 	html[idx++] = "<div>";	
 	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left' style='width: 90%'>";	

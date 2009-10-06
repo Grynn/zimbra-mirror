@@ -83,6 +83,26 @@ ZaGlobalAdvancedStatsPage.indexOf = function (ary, item) {
     }
 }
 
+ZaGlobalAdvancedStatsPage.detectFlash = function(e) {
+    var hasFlash = false;
+    var version = YAHOO.deconcept.SWFObjectUtil.getPlayerVersion();
+    
+    if (version.major == 9 && version.minor == 0 && version.rev >= 45)
+        hasFlash = true;
+    else if (version.major == 9 && version.minor > 0)
+        hasFlash = true;
+    else if (version.major > 9)
+        hasFlash = true;
+    if (!hasFlash) {
+        e.style.display = "block";
+        var msg = ZaMsg.NAD_AdvStatsFlashRequired;
+        if (version.major > 0)
+            msg = AjxMessageFormat(ZaMsg.NAD_AdvStatsFlashOld, [ version.major, version.minor, version.rev ]);
+            
+        ZaGlobalAdvancedStatsPage.setText(e, msg);
+    }
+}
+
 ZaGlobalAdvancedStatsPage.setText = function (e, text) {
     var hasInnerText = (document.getElementsByTagName("body")[0].innerText != undefined);
 

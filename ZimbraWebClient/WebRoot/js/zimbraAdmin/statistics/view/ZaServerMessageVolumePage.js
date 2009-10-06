@@ -39,6 +39,7 @@ function() {
 
 ZaServerMessageVolumePage.prototype.showMe =  function(refresh) {
 	DwtTabViewPage.prototype.showMe.call(this);	
+	ZaGlobalAdvancedStatsPage.detectFlash(document.getElementById("loggerchart-flashdetect"));
 	if(refresh && this._currentObject) {
 		this.setObject(this._currentObject);
 	}
@@ -61,6 +62,7 @@ function () {
 	DwtTabViewPage.prototype._createHtml.call(this);
 	var idx = 0;
 	var html = new Array(50);
+	html[idx++] = "<h1 style='display: none' id='loggerchart-flashdetect'></h1>";	
 	html[idx++] = "<h3 style='padding-left: 10px'>" + ZaMsg.Stats_MV_Header + "</h3>" ;
 	html[idx++] = "<div>";	
 	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left' style='width: 90%'>";	
