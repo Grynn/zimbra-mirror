@@ -64,7 +64,7 @@ case "$1" in
       exit 0
     fi
 
-    zmprov gs `zmhostname` zimbraServiceEnabled | grep -qw logger
+    zmprov -l gs `zmhostname` zimbraServiceEnabled | grep -qw logger
     if [ $? = 1 ]; then
         echo "zimbra logger service is not enabled!  failed."
         exit 1
