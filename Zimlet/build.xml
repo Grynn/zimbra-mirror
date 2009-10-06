@@ -103,7 +103,7 @@
 		<delete dir="${build.dir}" />
 	</target>
 
-	<target name="build-init">
+	<target name="build-init" depends="set-buildinfo-vars">
 		<mkdir dir="${build.classes.dir}" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${jars.dir}" />
@@ -147,57 +147,54 @@
     <target name="reload-zimlets-experimental" depends="deploy-zimlets-experimental,restart-webserver" description="Reload Zimlets Experimental"/>
 
 	<target name="package-zimlets" depends="build-init,compile,templates">
-		<foreach list="${zimlets}" target="package-zimlet" param="zimlet"/>
+		<foreach list="${zimlets}" target="package-zimlet" param="zimlet">
+	        <param name="tempdir" value="${generated.dir}/zimlets" />
+	        <param name="destdir" value="${dist.zimlet.dir}" />
+            <param name="zimlet.version" value="${zimlet.version}" />
+            <param name="TS" value="${TS}" />
+		</foreach>
 		<zip destfile="${dist.zimlet.dir}/com_zimbra_phone.zip" update="true">
 			<fileset dir="${build.classes.dir}" includes="**/NANPHandler.class"/>
 		</zip>
 		<echo message="dist.zimlet.dir=${dist.zimlet.dir}" file="${dist.dir}/build.properties"/>
 	</target>
 	<target name="package-zimlets-extra" depends="build-init,compile,templates">
-		<foreach list="${zimlets-extra}" target="package-zimlet-extra" param="zimlet"/>
+        <foreach list="${zimlets-extra}" target="package-zimlet" param="zimlet">
+            <param name="tempdir" value="${generated.dir}/zimlets" />
+            <param name="destdir" value="${dist.zimlet-extra.dir}" />
+            <param name="zimlet.version" value="${zimlet.version}" />
+            <param name="TS" value="${TS}" />
+        </foreach>
 		<zip destfile="${dist.zimlet-extra.dir}/com_zimbra_tracking.zip" update="true">
 			<fileset dir="${build.classes.dir}" includes="**/TrackingHandler.class"/>
 		</zip>
 	</target>
     <target name="package-zimlets-experimental" depends="build-init,compile,templates">
-		<foreach list="${zimlets-experimental}" target="package-zimlet-experimental" param="zimlet"/>
-		<!--zip destfile="${dist.zimlet-experimental.dir}/com_zimbra_tracking.zip" update="true">
-			<fileset dir="${build.classes.dir}" includes="**/TrackingHandler.class"/>
-		</zip-->
+        <foreach list="${zimlets-experimental}" target="package-zimlet" param="zimlet">
+            <param name="tempdir" value="${generated.dir}/zimlets" />
+            <param name="destdir" value="${dist.zimlet-experimental.dir}" />
+            <param name="zimlet.version" value="${zimlet.version}" />
+            <param name="TS" value="${TS}" />
+        </foreach>
 	</target>
     <target name="package-zimlets-offline" depends="build-init,compile,templates">
-		<foreach list="${zimlets-offline}" target="package-zimlet-offline" param="zimlet"/>
+        <foreach list="${zimlets-offline}" target="package-zimlet" param="zimlet">
+            <param name="tempdir" value="${generated.dir}/zimlets" />
+            <param name="destdir" value="${dist.zimlet-offline.dir}" />
+            <param name="zimlet.version" value="${zimlet.version}" />
+            <param name="TS" value="${TS}" />
+        </foreach>
 	</target>
 
 	<target name="package-zimlet">
 		<echo>${zimlet}</echo>
-		<zip destfile="${dist.zimlet.dir}/${zimlet}.zip" update="true" >
-			<fileset dir="${src.zimlet.dir}/${zimlet}" />
-			<fileset dir="${build.dir}/templates/${zimlet}" includes="templates/**/*.js" />
-		</zip>
-	</target>
-
-	<target name="package-zimlet-extra">
-		<echo>${zimlet}</echo>
-		<zip destfile="${dist.zimlet-extra.dir}/${zimlet}.zip" update="true" >
-			<fileset dir="${src.zimlet.dir}/${zimlet}" />
-			<fileset dir="${build.dir}/templates/${zimlet}" includes="templates/**/*.js" />
-		</zip>
-	</target>
-
-    <target name="package-zimlet-experimental">
-		<echo>${zimlet}</echo>
-		<zip destfile="${dist.zimlet-experimental.dir}/${zimlet}.zip" update="true" >
-			<fileset dir="${src.zimlet.dir}/${zimlet}" />
-			<fileset dir="${build.dir}/templates/${zimlet}" includes="templates/**/*.js" />
-		</zip>
-	</target>
-
-    <target name="package-zimlet-offline">
-		<echo>${zimlet}</echo>
-		<zip destfile="${dist.zimlet-offline.dir}/${zimlet}.zip" update="true" >
-			<fileset dir="${src.zimlet.dir}/${zimlet}" />
-			<fileset dir="${build.dir}/templates/${zimlet}" includes="templates/**/*.js" />
+        <copy todir="${tempdir}/${zimlet}" overwrite="true">
+            <fileset dir="${src.zimlet.dir}/${zimlet}"/>
+            <fileset dir="${build.dir}/templates/${zimlet}" includes="templates/**/*.js" />
+        </copy>
+        <replaceregexp file="${tempdir}/${zimlet}/${zimlet}.xml" match='version="\d+(\.\d+)*"' replace='version="${zimlet.version}.${TS}"' byline="true"/>
+		<zip destfile="${destdir}/${zimlet}.zip" update="true" >
+			<fileset dir="${tempdir}/${zimlet}" />
 		</zip>
 	</target>
 
@@ -286,4 +283,18 @@
 	<target name="restart-webserver">
 		<ant dir="${server.dir}" target="restart-webserver"/>
 	</target>
+	
+    <target name="set-buildinfo-vars">
+        <tstamp>
+        	<format property="TS" pattern="yyyyMMdd.hhmmss" />
+        </tstamp>
+        <condition property="zimbra.buildinfo.version" value="6.0.0_test">
+            <not><isset property="${zimbra.buildinfo.version}"/></not>
+        </condition>
+    	<propertyregex property="zimlet.version" 
+    	   input="${zimbra.buildinfo.version}"
+    	   regexp="([0-9]+\.[0-9]+\.[0-9]+)" select="\1" casesensitive="false" />
+    	<echo>Version: ${zimlet.version}.${TS}</echo>
+    </target>
+	
 </project>
