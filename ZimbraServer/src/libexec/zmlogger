@@ -440,7 +440,7 @@ sub runserver() {
 	use Socket;
 	use Carp;
 	
-	my $port = 10663; # TODO magic number, move to localconfig
+	my $port = $Zimbra::Mon::Zmstat::LC{'logger_zmrrdfetch_port'};
 	my $proto = getprotobyname('tcp');
 	
 	$SIG{CHLD} = \&REAPER;
