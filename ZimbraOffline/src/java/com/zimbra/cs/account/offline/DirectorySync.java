@@ -186,7 +186,7 @@ public class DirectorySync {
     private void syncFilterRules(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
         Set<String> modified = acct.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
         if (modified.contains(Provisioning.A_zimbraMailSieveScript)) {
-        	Element xmlRules = RuleManager.getRulesAsXML(XMLElement.mFactory, acct);
+        	Element xmlRules = RuleManager.getRulesAsXML(XMLElement.mFactory, acct, true);
         	ZFilterRules rules = new ZFilterRules(xmlRules);
         	zmbx.saveFilterRules(rules);
         	OfflineLog.offline.debug("dsync: pushed %d filter rules: %s", rules.getRules().size(), acct.getName());
@@ -195,7 +195,7 @@ public class DirectorySync {
             Element e = new XMLElement(MailConstants.SAVE_RULES_REQUEST); //dummy element
             rules.toElement(e);
             try {
-            	RuleManager.setXMLRules(acct, e.getElement(MailConstants.E_FILTER_RULES));
+            	RuleManager.setXMLRules(acct, e.getElement(MailConstants.E_FILTER_RULES), true);
             	OfflineLog.offline.debug("dsync: pulled %d filter rules: %s", rules.getRules().size(), acct.getName());
             } catch (ServiceException x) {
             	//bug 37422
