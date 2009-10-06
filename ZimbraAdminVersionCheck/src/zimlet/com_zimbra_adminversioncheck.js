@@ -47,6 +47,7 @@ ZaVersionCheck.myXModel = {	items:[
     {id:ZaVersionCheck.A_zimbraVersionCheckSendNotifications, ref:"attrs/" +  ZaVersionCheck.A_zimbraVersionCheckSendNotifications,  type:_ENUM_, choices: ZaModel.BOOLEAN_CHOICES},        
     {id:ZaVersionCheck.A_zimbraVersionCheckServer, ref:"attrs/" + ZaVersionCheck.A_zimbraVersionCheckServer, type: _STRING_},
 	{id:ZaVersionCheck.A_zimbraVersionCheckURL, ref:"attrs/" + ZaVersionCheck.A_zimbraVersionCheckURL, type: _STRING_},
+	{id:ZaVersionCheck.A_zimbraVersionCheckInterval, type:_MLIFETIME_, ref:"attrs/"+ZaVersionCheck.A_zimbraVersionCheckInterval},
 	{id:ZaVersionCheck.A_zimbraVersionCheckUpdates, type:_LIST_, listItem:
 		{type:_OBJECT_, 
 			items: [

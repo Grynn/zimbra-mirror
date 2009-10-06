@@ -108,6 +108,10 @@ ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
 						visibilityChecks:[],
 						tableCssStyle: "height: 15px"
 				  	},
+				  	{ref:ZaVersionCheck.A_zimbraVersionCheckInterval,
+				  		type:_LIFETIME_, 
+				  		label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckInterval,labelLocation:_LEFT_
+				  	},
 					{ref:ZaVersionCheck.A_zimbraVersionCheckURL, type:_TEXTFIELD_, 
 						label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckURL, width:250
   					},
