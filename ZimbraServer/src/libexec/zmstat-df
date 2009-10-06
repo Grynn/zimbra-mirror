@@ -69,6 +69,7 @@ sub get_df_stat() {
             disk_space => $space
         });
     }
+    close DF;
     @stats;
 }
 sub sighup {
