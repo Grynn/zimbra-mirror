@@ -75,7 +75,7 @@ function(object, now, isDndIcon) {
 			} else if(id.indexOf(ZaPosixGroup.A_description)==0) {	
 				// description
 				html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-				html[idx++] = AjxStringUtil.htmlEncode(object.attrs[ZaPosixGroup.A_description]);
+				html[idx++] = AjxStringUtil.htmlEncode(ZaItem.getDescriptionValue(object.attrs[ZaAccount.A_description] ));
 				html[idx++] = "</nobr></td>";
 			} else if(id.indexOf(ZaPosixGroup.A_cn)==0) {	
 				// description
