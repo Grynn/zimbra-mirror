@@ -22,7 +22,11 @@ use Zimbra::Mon::LoggerSchema;
 use RRDs;
 use DBI;
 use FileHandle;
-use vars qw ($logger_directory $logger_rrd_directory);
+use POSIX ":sys_wait_h";
+use vars qw ($logger_directory $logger_rrd_directory $zmrrdfetch);
+
+Zimbra::Mon::Zmstat::getLocalConfig();
+$zmrrdfetch = $Zimbra::Mon::Zmstat::LC{zimbra_home} . "/libexec/zmrrdfetch";
 
 my @CREATE_DDL = (
     q{CREATE TABLE IF NOT EXISTS hosts (
@@ -396,7 +400,6 @@ sub upgrade_schema($) {
 }
 
 sub init() {
-    Zimbra::Mon::Zmstat::getLocalConfig();
     $logger_directory = $Zimbra::Mon::Zmstat::LC{logger_data_directory};
     $logger_rrd_directory   = "$logger_directory/rrds";
 
@@ -409,6 +412,71 @@ sub init() {
     create_schema($dbh);
     upgrade_schema($dbh);
     $dbh;
+}
+
+sub runzmrrdfetch($$) {
+	my ($cmd, $len) = @_;
+	chomp($cmd);
+	chomp($cmd);
+	$cmd =~ s/\r|\n//g;
+	
+	my @cmd = split(/ /, $cmd);
+	
+	close STDOUT;
+	open(STDOUT, ">&Client") || die "dup: $!";
+	close STDIN;
+	exec($zmrrdfetch, @cmd);
+	
+}
+
+sub REAPER {
+	my $child;
+	while (($child = waitpid(-1,WNOHANG)) > 0) {
+		# do nothing
+	}
+	$SIG{CHLD} = \&REAPER;
+}
+sub runserver() {
+	use Socket;
+	use Carp;
+	
+	my $port = 10663; # TODO magic number, move to localconfig
+	my $proto = getprotobyname('tcp');
+	
+	$SIG{CHLD} = \&REAPER;
+	
+	socket(Server, PF_INET, SOCK_STREAM, $proto)               || die "socket: $!";
+	setsockopt(Server, SOL_SOCKET, SO_REUSEADDR, pack("l", 1)) || die "setsockopt: $!";
+	bind(Server, sockaddr_in($port, INADDR_LOOPBACK))          || die "bind: $!";
+	listen(Server, SOMAXCONN)                                  || die "listen: $!";
+	
+	for (; ; close Client) {
+		my $paddr = accept(Client,Server);
+		next if !$paddr;
+		my $pid;
+		if (($pid = fork()) == 0) {
+            $0 = "zmlogger: zmrrdfetch: client";
+			my $buf;
+            my $read = sysread(Client, $buf, 128);
+            if ($read > 0) {
+			    runzmrrdfetch($buf, $read);
+			    die "Failed to exec";
+            }
+            close Client;
+            exit;
+		} else {
+			my ($rport, $iaddr) = sockaddr_in($paddr);
+			print "Spawned: $pid -- Connected from " . inet_ntoa($iaddr) . ":$rport\n";
+			close Client;
+		}
+	}
+}
+sub forkserver() {
+	if (!fork()) {
+		$0 = "zmlogger: zmrrdfetch: server";
+		runserver();
+		die "Unexpected exit";
+	}
 }
 
 sub run() {
@@ -505,4 +573,5 @@ sub run() {
     $dbh->disconnect;
 }
 
+forkserver();
 run();
