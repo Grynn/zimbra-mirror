@@ -36,7 +36,7 @@ ZaPosixGroupXFormView.prototype.setObject =
 function (entry) {
 	this._containedObject = new ZaPosixGroup();
 	this._containedObject.attrs = new Object();
-
+	
 	for(var a in entry) {
 		if(typeof(entry[a])=="object") 
 			continue;
@@ -46,7 +46,7 @@ function (entry) {
 
 	for (var a in entry.attrs) {
 		if(entry.attrs[a] instanceof Array) {
-			this._containedObject.attrs[a] = new Array();
+			this._containedObject.attrs[a] = [];
 			var cnt = entry.attrs[a].length;
 			for(var ix = 0; ix < cnt; ix++) {
 				this._containedObject.attrs[a][ix]=entry.attrs[a][ix];
@@ -120,17 +120,16 @@ ZaPosixGroupXFormView.myXFormModifier = function(xFormObject,entry) {
 							type:_REPEAT_,
 							label:ZaPosixGroup.A_memberUid,
 							labelLocation:_LEFT_, 
-							align:_LEFT_,
-							repeatInstance:"  ", 
+							align:_LEFT_, 
 							showAddButton:true, 
 							showRemoveButton:true, 
 							showAddOnNextRow:true,
+							repeatInstance:"",
+							//bmoslnr:true,
 							//onChange:ZaTabView.onFormFieldChanged, 
 							items: [
 								{ref:".", type:_TEXTFIELD_, label:null,width:"200px"}
-							],
-							//onRemove:ZaAccountXFormView.onRepeatRemove,
-						 	relevantBehavior: _HIDE_									
+							]								
 						}						
 					]
 				}

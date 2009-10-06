@@ -8,6 +8,7 @@ function ZaPosixGroup() {
 	this.type = ZaItem.POSIX_GROUP;
 	this.attrs = [];
 	this.attrs[ZaItem.A_objectClass] = [];
+	this.attrs[ZaPosixGroup.A_memberUid] = [];
 	this._init();
 }
 
@@ -98,6 +99,10 @@ ZaPosixGroup.prototype.initFromJS = function(posixGroup) {
 	
 	if(this.attrs && this.attrs[ZaPosixGroup.A_memberUid] && !(this.attrs[ZaPosixGroup.A_memberUid] instanceof Array))
 		this.attrs[ZaPosixGroup.A_memberUid] = [this.attrs[ZaPosixGroup.A_memberUid]];
+	
+	if(!this.attrs[ZaPosixGroup.A_memberUid]) {
+		this.attrs[ZaPosixGroup.A_memberUid] = [];
+	}
 	
 	if(this.attrs && this.attrs[ZaPosixGroup.A_gidNumber])
 		this.id = this.attrs[ZaPosixGroup.A_gidNumber];
