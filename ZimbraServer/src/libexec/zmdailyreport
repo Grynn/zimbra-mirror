@@ -37,7 +37,7 @@ use Zimbra::Util::Common;
 use Zimbra::Mon::Logger;
 use Getopt::Long qw(GetOptions);
 use Mail::Mailer ();
-use POSIX qw(strftime);
+use POSIX qw(strftime setlocale LC_TIME);
 use Time::Local qw(timelocal);
 
 my ( %Opt, $Debug );
@@ -49,6 +49,7 @@ pod2usage( -exitval => 1, -verbose => 0 ) if ( $Opt{help} );
 
 $Debug = $Opt{debug};
 
+setlocale(LC_TIME, "en_US");
 my $stdout;
 open($stdout, ">&STDOUT") || die $!;
 pipe(PFIN, PFOUT);
@@ -61,6 +62,7 @@ open(STDIN, "<&=$fhin") || die $!;
 if (fork()) {
 	close(MOUT);
 	my $today = strftime("%b %e ", localtime);
+	my $datestring = strftime("%F", localtime);
 	
 	my $found = 0;
 	if (open(LOG, "gzip -dc /var/log/zimbra.log.1.gz |")) {
@@ -96,7 +98,7 @@ if (fork()) {
 	close (MIN);
 	
 	if ($Opt{mailreport}) {
-		sendEmailReport(day => $today, data => \@Report);
+		sendEmailReport(day => $datestring, data => \@Report);
 	} else {
 		print @Report;
 	}
