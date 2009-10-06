@@ -82,7 +82,7 @@ function() {
 	
 	//set the currentController's _currentQuery
 	
-	ZaApp.getInstance().getCurrentController()._currentQuery = params.query ;
+	ZaApp.getInstance().getSearchListController()._currentQuery = params.query ;
 	searchListController._currentQuery = params.query ;
 	
 	this._isSearchButtonClicked = false ;
