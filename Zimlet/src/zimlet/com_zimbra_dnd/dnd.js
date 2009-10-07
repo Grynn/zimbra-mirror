@@ -36,15 +36,46 @@ function () {
 		var zDnDUploadFrm = document.getElementById("zdnd_form");
 		zDnDUploadFrm.setAttribute("action", uploadUri);
 	}
+
+    var cmd = window.newWindowCommand;
+    if(cmd == 'compose') {
+            var self = this;
+            setTimeout(function() {
+                var curView = appCtxt.getAppViewMgr().getCurrentView();
+                var el = curView.getHtmlElement();
+                var doc = el.ownerDocument;
+                var filesEl = doc.getElementById("zdnd_files");
+                if (!filesEl) {
+                    var fileSpan = doc.createElement("span");
+                    fileSpan.id = "zdnd_files";
+                    fileSpan.style.display = "none";
+                    fileSpan.innerHTML = window.opener.document.getElementById("zdnd_files").innerHTML;
+                    el.appendChild(fileSpan);
+                }
+
+                if (doc.getElementById("zdnd_files")) {
+                    var uploadUri = appCtxt.get(ZmSetting.CSFE_UPLOAD_URI);
+                    var zDnDUploadFrm = doc.getElementById("zdnd_form");
+                    zDnDUploadFrm.setAttribute("action", uploadUri);
+                }
+                
+                var ev = document.createEvent("Events");
+			    ev.initEvent("ZimbraDnD", true, false);
+                curView._resetBodySize();
+                el.dispatchEvent(ev);
+
+            }, 1000);
+    }
+
 };
 
 Com_Zimbra_DnD.prototype.onShowView =
 function(viewId, isNewView) {
-	if ("createEvent" in document && document.getElementById("zdnd_files")) {
+    if ("createEvent" in document && document.getElementById("zdnd_files")) {
 		if (viewId == ZmId.VIEW_COMPOSE ||
 			viewId == ZmId.VIEW_BRIEFCASE_COLUMN ||
 			viewId == ZmId.VIEW_BRIEFCASE ||
-			viewId == ZmId.VIEW_BRIEFCASE_DETAIL)
+			viewId == ZmId.VIEW_BRIEFCASE_DETAIL || viewId.indexOf('COMPOSE') != -1)
 		{
 			var ev = document.createEvent("Events");
 			ev.initEvent("ZimbraDnD", true, false);
@@ -66,9 +97,12 @@ function() {
 	if (viewId == ZmId.VIEW_COMPOSE ||
 		viewId == ZmId.VIEW_BRIEFCASE_COLUMN ||
 		viewId == ZmId.VIEW_BRIEFCASE ||
-		viewId == ZmId.VIEW_.BRIEFCASE_DETAIL)
+		viewId == ZmId.VIEW_BRIEFCASE_DETAIL || viewId.indexOf('COMPOSE') != -1)
 	{
 		var curView = appCtxt.getAppViewMgr().getCurrentView();
+        /*if(window.newWindowCommand == 'compose'){
+           window.opener.document.getElementById("zdnd_files").innerHTML = document.getElementById("zdnd_files").innerHTML;
+        }*/
 		if (curView) {
 			curView.uploadFiles();
 		}
