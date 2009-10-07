@@ -643,6 +643,10 @@ public class ProfiledConnection extends DelegatingConnection {
             this.stmt = stmt;
         }
 
+        public boolean isClosed() {
+            return super.isClosed();
+        }
+        
         public boolean execute(String sql) throws SQLException {
 
             long t1 = System.currentTimeMillis();
@@ -724,10 +728,6 @@ public class ProfiledConnection extends DelegatingConnection {
         private String sql;
         private int type = SELECT;
 
-        public boolean isClosed() {
-            return super.isClosed();
-        }
-        
         public TimedPreparedStatement(PreparedStatement pstmt, String sql) {
             super(ProfiledConnection.this, pstmt);
             this.pstmt = pstmt;
@@ -750,6 +750,10 @@ public class ProfiledConnection extends DelegatingConnection {
             }
         }
 
+        public boolean isClosed() {
+            return super.isClosed();
+        }
+        
         public boolean execute() throws SQLException {
             // Perform timing of this method.
             long t1 = System.currentTimeMillis();
@@ -956,6 +960,10 @@ public class ProfiledConnection extends DelegatingConnection {
             }
         }
 
+        public boolean isClosed() {
+            return super.isClosed();
+        }
+        
         public boolean execute() throws SQLException {
             // Perform timing of this method.
             long t1 = System.currentTimeMillis();
