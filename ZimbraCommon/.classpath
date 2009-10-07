@@ -7,7 +7,7 @@
 			<attribute name="javadoc_location" value="http://java.sun.com/products/javabeans/glasgow/javadocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/ant-contrib-1.0b1.jar"/>
+	<classpathentry kind="lib" path="jars/ant-contrib-1.0b3.jar"/>
 	<classpathentry kind="lib" path="jars/bouncycastle.jar"/>
 	<classpathentry kind="lib" path="jars/catalina-ant.jar"/>
 	<classpathentry kind="lib" path="jars/commons-beanutils-1.8.0.jar"/>
@@ -86,7 +86,7 @@
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/tomcat/tomcat-5.5-doc/servletapi/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/tnef-1.4.0.jar" sourcepath="/ThirdParty/jtnef-1.4.0/src"/>
+	<classpathentry kind="lib" path="jars/tnef-1.5.0.jar" sourcepath="/ThirdParty/jtnef/src"/>
 	<classpathentry kind="lib" path="jars/xercesImpl-2.9.1.jar" sourcepath="/ThirdParty/xerces-2_9_1-src/src"/>
 	<classpathentry kind="lib" path="jars/zimbra-charset.jar"/>
 	<classpathentry kind="lib" path="jars/zimbra-native.jar" sourcepath="/ZimbraNative/src/java"/>
