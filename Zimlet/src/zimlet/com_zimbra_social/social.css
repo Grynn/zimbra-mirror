@@ -11,6 +11,13 @@
     height: 16px;
     overflow: hidden;
 }
+.Imgsocial_greenAppIcon {
+    background: transparent url("social_greenApp.png") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
 
 .Imgsocial_trendIcon {
     background: transparent url("chart_bar.png") no-repeat 0 0;

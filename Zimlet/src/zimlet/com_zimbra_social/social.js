@@ -52,7 +52,7 @@ function(app, toolbar, controller, view) {
 			text    : ZmMsg.socialBtnLabel,
 			tooltip: "Allows you to share email or RSS contents via twitter or facebook",
 			index: buttonIndex,
-			image: "ZimbraIcon"
+			image: "social_greenAppIcon"
 		};
 		var button = toolbar.createOp("SOCIAL_ZIMLET_TOOLBAR_BUTTON", buttonArgs);
 		button.addSelectionListener(new AjxListener(this.miniDlg, this.miniDlg._buttonListener, [controller]));
@@ -139,7 +139,7 @@ function() {
 	this.loadAllAccountsFromDB();
 	this._objectManager = new ZmObjectManager(new DwtComposite(this.getShell()));
 
-	this.shortnersRegex = /bit.ly|tinyurl.com|is.gd|tr.im|ow.ly|cli.gs|u.mavrev.com|twurl.nl|tiny.cc|digg.com|su.pr|snipr.com|short.to|budurl.com|snipurl.com|just.as|alturl.com|om.ly|snurl.com|adjix.com|redirx.com|doiop.com|easyurl.net|u.nu|myurl.in|rubyurl.com|kl.am|sn.im/ig;
+	this.shortnersRegex = /bit.ly|tinyurl.com|is.gd|tr.im|ow.ly|cli.gs|u.mavrev.com|twurl.nl|tiny.cc|digg.com|su.pr|snipr.com|short.to|budurl.com|snipurl.com|just.as|alturl.com|om.ly|snurl.com|adjix.com|redirx.com|doiop.com|easyurl.net|u.nu|myurl.in|rubyurl.com|kl.am|sn.im/i;
 	this.urlRegEx = /((telnet:)|((https?|ftp|gopher|news|file):\/\/)|(www.[\w\.\_\-]+))[^\s\<\>\[\]\{\}\'\"]*/gi;
 
 	//scan for tweets..
@@ -325,7 +325,6 @@ function(selectedTxt, newTxt) {
 
 com_zimbra_social.prototype._postToUrlShortnerCallback =
 function(longUrl, response) {
-
 	if (!response.success) {
 		appCtxt.getAppController().setStatusMsg("Could Not Shorten", ZmStatusView.LEVEL_WARNING);
 		return;
@@ -473,9 +472,8 @@ function(text) {
 	var sText = text.toLowerCase();
 	var urlsToShorten = new Array();
 	for (var i = 0; i < potentialUrlsToShorten.length; i++) {
-		var url = potentialUrlsToShorten[i];
-		var m = this.shortnersRegex.exec(sText);
-		if (m == null) {
+		var url = potentialUrlsToShorten[i].toLowerCase();
+		if (!this.shortnersRegex.test(url)) {
 			urlsToShorten.push(url);
 		}
 	}
@@ -1051,7 +1049,7 @@ function() {
 
 com_zimbra_social.prototype._createsocialApp =
 function() {
-	this._socialAppName = this.createApp("Social", "ZimbraIcon", "Socialize with your friends and family via Facebook & Twitter");
+	this._socialAppName = this.createApp("Social", "social_greenAppIcon", "Socialize with your friends and family via Facebook & Twitter");
 };
 
 com_zimbra_social.prototype.appActive = function(appName, active) {
