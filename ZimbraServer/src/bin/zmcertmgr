@@ -344,7 +344,7 @@ createKeystore () {
     echo "${ERROR_PREFIX} failed to create ${mailboxd_server}.pkcs12"
     exit 1
   else 
-    chmod 644 ${zimbra_ssl_directory}/${mailboxd_server}.pkcs12
+    chmod 640 ${zimbra_ssl_directory}/${mailboxd_server}.pkcs12
   fi
   
   echo -n "** Creating keystore file ${mailboxd_keystore}..."
@@ -521,7 +521,7 @@ deployCA() {
     perl -e 'my $i=1; while (<>) { open(N, ">commercial_ca_$i.pem") if (/BEGIN CERTIFICATE/); print N; if (/END CERTIFICATE/) { close(N); $i++; } }' ${commercial_ca_crt}
   fi
 
-  chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
+  chmod 640 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
   echo "done."
 
   # add hash to ca
@@ -533,7 +533,7 @@ deployCA() {
       chmod 644 ${zimbra_conf_directory}/ca/$pem
     done
   fi
-  chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
+  chmod 640 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
 }
 
 
@@ -640,7 +640,7 @@ deployCert() {
     echo -n "** Installing mta certificate and key..."
     cp -f ${current_crt} ${postfix_smtpd_tls_cert_file}
     cp -f ${current_key} ${postfix_smtpd_tls_key_file}
-    chmod 644 ${postfix_smtpd_tls_cert_file} ${postfix_smtpd_tls_key_file}
+    chmod 640 ${postfix_smtpd_tls_cert_file} ${postfix_smtpd_tls_key_file}
 
     echo "done."
   fi
@@ -649,7 +649,7 @@ deployCert() {
     echo -n "** Installing slapd certificate and key..."
     cp -f ${current_crt} ${zimbra_conf_directory}/slapd.crt
     cp -f ${current_key} ${zimbra_conf_directory}/slapd.key
-    chmod 644 ${zimbra_conf_directory}/slapd.key ${zimbra_conf_directory}/slapd.crt
+    chmod 640 ${zimbra_conf_directory}/slapd.key ${zimbra_conf_directory}/slapd.crt
     echo "done."
   fi
       
@@ -657,7 +657,7 @@ deployCert() {
     echo -n "** Installing proxy certificate and key..."
     cp -f ${current_crt} ${zimbra_conf_directory}/nginx.crt
     cp -f ${current_key} ${zimbra_conf_directory}/nginx.key
-    chmod 644 ${zimbra_conf_directory}/nginx.key ${zimbra_conf_directory}/nginx.crt
+    chmod 640 ${zimbra_conf_directory}/nginx.key ${zimbra_conf_directory}/nginx.crt
     echo "done."
   fi
 
@@ -677,7 +677,7 @@ deployCert() {
   cp -f ${zimbra_ca_key} ${zimbra_conf_directory}/ca/ca.key
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
   ln -f -s ca.pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/ca.pem`.0
-  chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
+  chmod 640 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
   if [ -f "${commercial_ca_crt}" ]; then
     cp -f ${commercial_ca_crt} ${zimbra_conf_directory}/ca/commercial_ca.pem
     cd ${zimbra_conf_directory}/ca
@@ -686,7 +686,7 @@ deployCert() {
       cd ${zimbra_conf_directory}/ca
       for pem in commercial_ca*.pem; do
         ln -f -s $pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`.0
-        chmod 644 ${zimbra_conf_directory}/ca/$pem
+        chmod 640 ${zimbra_conf_directory}/ca/$pem
       done
     fi
   fi
@@ -847,7 +847,7 @@ createServerCertReq() {
     chmod 644 ${current_csr}
   fi
   if [ -f "${current_key}" ]; then
-    chmod 644 ${current_key}
+    chmod 640 ${current_key}
   fi
   saveConfigKey "zimbraSSLPrivateKey" ${current_key} "server"
 }

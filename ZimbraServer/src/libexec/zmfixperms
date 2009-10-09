@@ -233,6 +233,11 @@ if [ -d ${zimbra_home} ]; then
     chown -R ${zimbra_user}:${zimbra_group} ${i}
   done
 
+  for i in ${zimbra_home}/conf/*.key; do
+    printMsg "Fixing permissions on ${i}"
+    chmod 640 $i
+  done
+
 
 fi
 
