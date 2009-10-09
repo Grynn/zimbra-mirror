@@ -207,7 +207,9 @@ public class I18nUtil {
 	// locale functions
 
 	public static Locale getLocale(String id) {
-		StringTokenizer tokenizer = new StringTokenizer(id, "_-");
+        if ("nb-NO".equals(id)) // ybug - 2966850
+            return new Locale("no", "NO", "NY");
+        StringTokenizer tokenizer = new StringTokenizer(id, "_-");
 		String language = tokenizer.nextToken();
 		String country = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : null;
 		if (country != null) {
