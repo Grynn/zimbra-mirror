@@ -40,7 +40,8 @@
 
 	<target name="default">
         <ant dir="." target="offline-make-install-files" inheritAll="false"/>
-        
+       	<mkdir dir="${build.dir}" />
+ 
 		<antcall target="installer-pack-media-mac"/>
         <antcall target="installer-pack-media-windows"/>
         <antcall target="installer-pack-media-linux"/>
