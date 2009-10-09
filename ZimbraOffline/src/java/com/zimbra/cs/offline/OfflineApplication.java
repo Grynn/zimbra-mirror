@@ -87,12 +87,12 @@ public class OfflineApplication extends ZimbraApplication {
             return;
 
         DbPool.Connection conn = DbPool.getConnection();
-        File file = null;
-        PreparedStatement stmt = null;
-        
-        if (!Db.getInstance().databaseExists(conn, ZIMBRA_DB_NAME)) {
-            OfflineLog.offline.info("Creating database " + ZIMBRA_DB_NAME);
-            try {
+        try {
+            if (!Db.getInstance().databaseExists(conn, ZIMBRA_DB_NAME)) {
+                File file = null;
+                PreparedStatement stmt = null;
+                
+                OfflineLog.offline.info("Creating database " + ZIMBRA_DB_NAME);
                 for (String name : sqlScripts) {
                     try {
                         file = Config.getPathRelativeToZimbraHome("db/" + name + ".sql");
@@ -100,6 +100,7 @@ public class OfflineApplication extends ZimbraApplication {
                         String script;
                         String template = new String(ByteUtil.getContent(file));
                         Map<String, String> vars = new HashMap<String, String>();
+                        
                         vars.put("ZIMBRA_HOME", LC.zimbra_home.value() + '/');
                         vars.put("ZIMBRA_INSTALL", LC.zimbra_home.value() + '/');
                         script = StringUtil.fillTemplate(template, vars, StringUtil.atPattern);
@@ -118,14 +119,15 @@ public class OfflineApplication extends ZimbraApplication {
                     stmt = conn.prepareStatement("INSERT INTO config(name, value, description) VALUES ('offline.db.version', '" +
                         OfflineVersions.OFFLINE_DB_VERSION + "', 'offline db schema version')");
                     stmt.executeUpdate();
+                    conn.commit();
                 } catch (SQLException e) {
                     throw ServiceException.FAILURE("unable to set offline db version", e);
                 } finally {
                     DbPool.closeStatement(stmt);
                 }
-            } finally {
-                conn.close();
             }
+        } finally {
+            conn.close();
         }
     }
     
@@ -141,13 +143,13 @@ public class OfflineApplication extends ZimbraApplication {
       
     private void migrateDb() {
         try {
-        	OfflineLog.offline.debug("DB migration check started...");
+            OfflineLog.offline.debug("DB migration check started...");
             new com.zimbra.cs.db.DbOfflineMigration().run();
             OfflineLog.offline.debug("DB migration done");
         } catch (SQLException e) {
-        	OfflineLog.offline.error("DB migration sql error: " + e.getMessage());
+            OfflineLog.offline.error("DB migration sql error: " + e.getMessage());
         } catch (Exception e) {
-        	OfflineLog.offline.error("DB migration error: " + e.getMessage());
+            OfflineLog.offline.error("DB migration error: " + e.getMessage());
         }
     }
     
@@ -155,38 +157,35 @@ public class OfflineApplication extends ZimbraApplication {
     	OfflineLog.offline.debug("Deploying new zimlets...");
     	
     	File zimletDir = new File(LC.zimbra_home.value() + "/zimlets");
-		if (zimletDir == null || !zimletDir.exists() || !zimletDir.isDirectory()) {
-			OfflineLog.offline.debug("Invalid zimlets directory: " + zimletDir.getPath());
-			return;
-		}
-		
-		boolean hasBackup = true;
-		File zimletBackupDir = new File(zimletDir.getPath() + "/backup");
-		if (!zimletBackupDir.exists())
-		    hasBackup = zimletBackupDir.mkdir();
-		
+	if (zimletDir == null || !zimletDir.exists() || !zimletDir.isDirectory()) {
+	    OfflineLog.offline.debug("Invalid zimlets directory: " + zimletDir.getPath());
+	    return;
+	}
+	
+	boolean hasBackup = true;
+	File zimletBackupDir = new File(zimletDir.getPath() + "/backup");
+	if (!zimletBackupDir.exists())
+	    hasBackup = zimletBackupDir.mkdir();
+	
     	String[] zimlets = zimletDir.list();
     	if (zimlets == null) {
-    		OfflineLog.offline.debug("No zimlets found at " + zimletDir.getPath());
-    		return;
+	    OfflineLog.offline.debug("No zimlets found at " + zimletDir.getPath());
+	    return;
     	}
-    	    	
     	for (int i = 0; i < zimlets.length; i++) {
-    		try {
-    		    File zimletFile = new File(zimletDir.getPath() + "/" + zimlets[i]);
-    		    if (zimletFile.isDirectory())
-    		        continue;
-    		    
-    			ZimletUtil.deployZimlet(new ZimletFile(zimletDir, zimlets[i]));
-    			OfflineLog.offline.debug("Zimlet deployed:  " + zimlets[i]);
-    			
-    			if (hasBackup)
-    			    zimletFile.renameTo(new File(zimletBackupDir, zimlets[i]));
-    		} catch (Exception e) {
-    			OfflineLog.offline.warn("Fail to deploy zimlet " + zimlets[i] + ": " + e.getMessage());
-    		}
+	    try {
+		File zimletFile = new File(zimletDir.getPath() + "/" + zimlets[i]);
+		if (zimletFile.isDirectory())
+		    continue;
+		ZimletUtil.deployZimlet(new ZimletFile(zimletDir, zimlets[i]));
+		OfflineLog.offline.debug("Zimlet deployed:  " + zimlets[i]);
+		if (hasBackup)
+		    zimletFile.renameTo(new File(zimletBackupDir, zimlets[i]));
+	    } catch (Exception e) {
+		OfflineLog.offline.warn("Fail to deploy zimlet " + zimlets[i] +
+		    ": " + e.getMessage());
+	    }
     	}
-    	
     	OfflineLog.offline.debug("Zimlets deployment done.");
     }
 }
