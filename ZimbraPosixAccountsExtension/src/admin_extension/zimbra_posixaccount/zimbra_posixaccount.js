@@ -161,43 +161,45 @@ if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 
 
 zimbra_posixaccount_ext.initSettings= function () {
-	try {
-		var soapDoc = AjxSoapDoc.create("GetAdminExtensionZimletsRequest", "urn:zimbraAdmin", null);	
-		var command = new ZmCsfeCommand();
-		var params = new Object();
-		params.soapDoc = soapDoc;	
-		var resp = command.invoke(params);
-		var zimlets = null;
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.POSIX_GROUPS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {	
 		try {
-			if(resp && resp.Body && resp.Body.GetAdminExtensionZimletsResponse && resp.Body.GetAdminExtensionZimletsResponse.zimlets && resp.Body.GetAdminExtensionZimletsResponse.zimlets.zimlet) {
-				zimlets = resp.Body.GetAdminExtensionZimletsResponse.zimlets.zimlet;
-			}
-		} catch (ex) {
-			//go on
-		}
-		if(zimlets && zimlets.length > 0) {
-			var cnt = zimlets.length;
-			for(var ix = 0; ix < cnt; ix++) {
-				if(zimlets[ix] && zimlets[ix].zimlet && zimlets[ix].zimlet[0] && zimlets[ix].zimletConfig && zimlets[ix].zimletConfig[0]) { 
-					var zimletConfig = zimlets[ix].zimletConfig[0];					
-					if(zimletConfig.name=="zimbra_posixaccount") {
-						var global = zimletConfig.global[0];
-						if(global) {
-							var properties = global.property;
-							var cnt2 = properties.length;							
-							for (var j=0;j<cnt2;j++) {
-								zimbra_posixaccount_ext[properties[j].name] = properties[j]._content;
-							}
-						}
-						break;
-					}
-				} else {
-					continue;
+			var soapDoc = AjxSoapDoc.create("GetAdminExtensionZimletsRequest", "urn:zimbraAdmin", null);	
+			var command = new ZmCsfeCommand();
+			var params = new Object();
+			params.soapDoc = soapDoc;	
+			var resp = command.invoke(params);
+			var zimlets = null;
+			try {
+				if(resp && resp.Body && resp.Body.GetAdminExtensionZimletsResponse && resp.Body.GetAdminExtensionZimletsResponse.zimlets && resp.Body.GetAdminExtensionZimletsResponse.zimlets.zimlet) {
+					zimlets = resp.Body.GetAdminExtensionZimletsResponse.zimlets.zimlet;
 				}
+			} catch (ex) {
+				//go on
 			}
-		}	
-	} catch (ex) {
-		//do nothing, do not block the app from loading
+			if(zimlets && zimlets.length > 0) {
+				var cnt = zimlets.length;
+				for(var ix = 0; ix < cnt; ix++) {
+					if(zimlets[ix] && zimlets[ix].zimlet && zimlets[ix].zimlet[0] && zimlets[ix].zimletConfig && zimlets[ix].zimletConfig[0]) { 
+						var zimletConfig = zimlets[ix].zimletConfig[0];					
+						if(zimletConfig.name=="zimbra_posixaccount") {
+							var global = zimletConfig.global[0];
+							if(global) {
+								var properties = global.property;
+								var cnt2 = properties.length;							
+								for (var j=0;j<cnt2;j++) {
+									zimbra_posixaccount_ext[properties[j].name] = properties[j]._content;
+								}
+							}
+							break;
+						}
+					} else {
+						continue;
+					}
+				}
+			}	
+		} catch (ex) {
+			//do nothing, do not block the app from loading
+		}
 	}
 }
 
@@ -205,51 +207,56 @@ if(ZaSettings.initMethods)
 	ZaSettings.initMethods.push(zimbra_posixaccount_ext.initSettings);
 
 zimbra_posixaccount_ext.initOUs = function () {
-	
-	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
-	soapDoc.set("ldapSearchBase", zimbra_posixaccount_ext.ldapSuffix);
-	soapDoc.set("query", zimbra_posixaccount_ext.ldapGroupSuffix);	
-	var getSambaDomainsCommand = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse;
-	if(resp && resp.LDAPEntry && resp.LDAPEntry[0]) {
-		//ou exists
-	} else {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.POSIX_GROUPS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		try {
-			//ou does not exist - create it
-			var soapDoc = AjxSoapDoc.create("CreateLDAPEntryRequest", "urn:zimbraAdmin", null);		
-			var dn = [zimbra_posixaccount_ext.ldapGroupSuffix,zimbra_posixaccount_ext.ldapSuffix];
-			soapDoc.set("dn", dn.join(","));	
-			var testCommand = new ZmCsfeCommand();
+			var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
+			soapDoc.set("ldapSearchBase", zimbra_posixaccount_ext.ldapSuffix);
+			soapDoc.set("query", zimbra_posixaccount_ext.ldapGroupSuffix);	
+			var getSambaDomainsCommand = new ZmCsfeCommand();
 			var params = new Object();
-			var attr = soapDoc.set("a", "organizationalRole");
-			attr.setAttribute("n", "objectClass");		
-			var attr = soapDoc.set("a", "groups");
-			attr.setAttribute("n", "cn");		
-			
 			params.soapDoc = soapDoc;	
-			var resp = testCommand.invoke(params).Body.CreateLDAPEntryResponse;
-			
+			var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse;
+			if(resp && resp.LDAPEntry && resp.LDAPEntry[0]) {
+				//ou exists
+			} else {
+				try {
+					//ou does not exist - create it
+					var soapDoc = AjxSoapDoc.create("CreateLDAPEntryRequest", "urn:zimbraAdmin", null);		
+					var dn = [zimbra_posixaccount_ext.ldapGroupSuffix,zimbra_posixaccount_ext.ldapSuffix];
+					soapDoc.set("dn", dn.join(","));	
+					var testCommand = new ZmCsfeCommand();
+					var params = new Object();
+					var attr = soapDoc.set("a", "organizationalRole");
+					attr.setAttribute("n", "objectClass");		
+					var attr = soapDoc.set("a", "groups");
+					attr.setAttribute("n", "cn");		
+					
+					params.soapDoc = soapDoc;	
+					var resp = testCommand.invoke(params).Body.CreateLDAPEntryResponse;
+					
+				} catch (e) {
+					alert("Warning! Failed to create "+dn.join(",")+" for Posix groups!");
+				}
+			}
 		} catch (e) {
-			alert("Warning! Failed to create "+dn.join(",")+" for Samba groups!");
+			alert("Warning! Failed to initialize zimbra_posixaccount extension!");
 		}
-			
 	}
-
 }
 
 if(ZaSettings.initMethods)
 	ZaSettings.initMethods.push(zimbra_posixaccount_ext.initOUs);
 
 zimbra_posixaccount_ext.initDefaults = function () {
-	zimbra_posixaccount_ext.shells = ["/bin/bash"];
-	if(zimbra_posixaccount_ext.loginShells) {
-		var chunks = zimbra_posixaccount_ext.loginShells.split(",");
-		if(chunks && chunks.length) {
-			zimbra_posixaccount_ext.shells = chunks;
-		} else {
-			zimbra_posixaccount_ext.shells = [zimbra_posixaccount_ext.loginShells];
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.POSIX_GROUPS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {	
+		zimbra_posixaccount_ext.shells = ["/bin/bash"];
+		if(zimbra_posixaccount_ext.loginShells) {
+			var chunks = zimbra_posixaccount_ext.loginShells.split(",");
+			if(chunks && chunks.length) {
+				zimbra_posixaccount_ext.shells = chunks;
+			} else {
+				zimbra_posixaccount_ext.shells = [zimbra_posixaccount_ext.loginShells];
+			}
 		}
 	}
 }
