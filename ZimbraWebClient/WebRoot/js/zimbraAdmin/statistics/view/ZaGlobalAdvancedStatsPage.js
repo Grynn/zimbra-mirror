@@ -49,7 +49,7 @@ ZaGlobalAdvancedStatsPage.prototype.showMe =  function(refresh) {
 }
 
 ZaGlobalAdvancedStatsPage.getDataTipText = function (item, index, series) {
-    var text = AjxMessageFormat(ZaMsg.NAD_AdvStatsDataTip,
+    var text = AjxMessageFormat.format(ZaMsg.NAD_AdvStatsDataTip,
              [ series.displayName, YAHOO.util.Date.format(item.timestamp, { format: ZaMsg.NAD_AdvStatsTipDateFormat }) ]) +
              "\n" +
              ZaGlobalAdvancedStatsPage.formatLabel(item[series.yField]);
@@ -97,9 +97,16 @@ ZaGlobalAdvancedStatsPage.detectFlash = function(e) {
         e.style.display = "block";
         var msg = ZaMsg.NAD_AdvStatsFlashRequired;
         if (version.major > 0)
-            msg = AjxMessageFormat(ZaMsg.NAD_AdvStatsFlashOld, [ version.major, version.minor, version.rev ]);
+            msg = AjxMessageFormat.format(ZaMsg.NAD_AdvStatsFlashOld, [ version.major, version.minor, version.rev ]);
             
-        ZaGlobalAdvancedStatsPage.setText(e, msg);
+        for (var i = e.childNodes.length; i > 0; i--)
+            e.removeChild(e.childNodes.item(i - 1));
+        
+        var a = document.createElement("a");
+        ZaGlobalAdvancedStatsPage.setText(a, msg);
+        a.href = "http://get.adobe.com/flashplayer";
+        
+        e.appendChild(a);
     }
 }
 
