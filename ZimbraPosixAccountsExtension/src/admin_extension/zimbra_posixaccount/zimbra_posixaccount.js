@@ -65,21 +65,26 @@ ZaPosixAccount.getNextUid = function () {
 	return 	nextId;
 }
 
+ZaAccountXFormView.POSIXACCOUNT_TAB_ATTRS = [ZaPosixAccount.A_gidNumber,
+		ZaPosixAccount.A_uidNumber, 
+		ZaPosixAccount.A_homeDirectory, 
+		ZaPosixAccount.A_loginShell];
 
+ZaAccountXFormView.POSIXACCOUNT_TAB_RIGHTS = [];
 
 if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 	zimbra_posixaccount_ext.AccountXFormModifier= function (xFormObject,entry) {
-		var cnt = xFormObject.items.length;
-		var i = 0;
-		for(i = 0; i <cnt; i++) {
-			if(xFormObject.items[i].type=="switch") 
-				break;
-		}
-
-		var posixTabIx = ++this.TAB_INDEX;			
-		var tabBar = xFormObject.items[1] ;
-		tabBar.choices.push({value:posixTabIx, label:zimbra_posixaccount.PosixAccount});		
-		var posixAccountTab={type:_ZATABCASE_, numCols:1, caseKey:posixTabIx,
+		if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.POSIXACCOUNT_TAB_ATTRS, ZaAccountXFormView.POSIXACCOUNT_TAB_RIGHTS)) {
+			var cnt = xFormObject.items.length;
+			var i = 0;
+			for(i = 0; i <cnt; i++) {
+				if(xFormObject.items[i].type=="switch") 
+					break;
+			}
+			var tabBar = xFormObject.items[1] ;
+			var posixTabIx = ++this.TAB_INDEX;
+			tabBar.choices.push({value:posixTabIx, label:zimbra_posixaccount.PosixAccount});
+			var posixAccountTab={type:_ZATABCASE_, numCols:1, caseKey:posixTabIx,
 					items: [
 						{type:_ZAGROUP_, 
 							items:[
@@ -91,7 +96,8 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 							]
 				}	]
 			};
-		xFormObject.items[i].items.push(posixAccountTab);
+			xFormObject.items[i].items.push(posixAccountTab);
+		}
 	}
 	ZaTabView.XFormModifiers["ZaAccountXFormView"].push(zimbra_posixaccount_ext.AccountXFormModifier);	
 }
@@ -99,62 +105,63 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 	
 	zimbra_posixaccount_ext.AccountXWizModifier= function (xFormObject, entry) {
-//		var stepCounter = this.stepChoices.length;
-		ZaNewAccountXWizard.POSIX_ACC_STEP = ++this.TAB_INDEX;		
-		this.stepChoices.push({value:ZaNewAccountXWizard.POSIX_ACC_STEP, label:"Posix Account"});
-		this._lastStep = this.stepChoices.length;
-
-
-		var cnt = xFormObject.items.length;
-		var i = 0;
-		for(i = 0; i <cnt; i++) {
-			if(xFormObject.items[i].type=="switch") 
-				break;
-		}
-		cnt = xFormObject.items[i].items.length;
-		var j = 0;
-		var gotAdvanced = false;
-		var gotFeatures = false;		
-
-		var posixAccountStep={type:_CASE_, numCols:1, caseKey:ZaNewAccountXWizard.POSIX_ACC_STEP, tabGroupKey:ZaNewAccountXWizard.POSIX_ACC_STEP,		
-					items: [
-						{type:_ZAWIZGROUP_, 
-							items:[
-								{ref:ZaPosixAccount.A_gidNumber, type:_OSELECT1_, editable:false,choices:ZaApp.getInstance().getPosixGroupIdListChoices(true), msgName:zimbra_posixaccount.PosixGroup,label:zimbra_posixaccount.PosixGroup, labelLocation:_LEFT_},							
-								{ref:ZaPosixAccount.A_gidNumber, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_gidNumber,label:ZaPosixAccount.A_gidNumber, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
-								{ref:ZaPosixAccount.A_uidNumber, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_uidNumber,label:ZaPosixAccount.A_uidNumber, labelLocation:_LEFT_, width:250,
-									getDisplayValue:function () {
-										var val = this.getInstanceValue();
-									
-										if(!val) {
-											val = ZaPosixAccount.getNextUid();
-											this.setInstanceValue(val);
-										}	
-										return val;
-									}
-								},
-								{ref:ZaPosixAccount.A_homeDirectory, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_homeDirectory,label:ZaPosixAccount.A_homeDirectory, labelLocation:_LEFT_,
-									getDisplayValue:function() {
-										var val = this.getInstanceValue();
-										var instance = this.getInstance();
-										if((val === null || val === undefined) && zimbra_posixaccount_ext.homePath && instance && instance.name) {
-											var chunks = instance.name.split("@");
-											if(chunks) {
-												var uname = chunks[0];
-												if(uname) {
-													val = String(zimbra_posixaccount_ext.homePath).replace("%u",uname);
-													this.setInstanceValue(val);
+		if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.POSIXACCOUNT_TAB_ATTRS, ZaAccountXFormView.POSIXACCOUNT_TAB_RIGHTS)) {
+			ZaNewAccountXWizard.POSIX_ACC_STEP = ++this.TAB_INDEX;		
+			this.stepChoices.push({value:ZaNewAccountXWizard.POSIX_ACC_STEP, label:"Posix Account"});
+			this._lastStep = this.stepChoices.length;
+	
+	
+			var cnt = xFormObject.items.length;
+			var i = 0;
+			for(i = 0; i <cnt; i++) {
+				if(xFormObject.items[i].type=="switch") 
+					break;
+			}
+			cnt = xFormObject.items[i].items.length;
+			var j = 0;
+			var gotAdvanced = false;
+			var gotFeatures = false;		
+	
+			var posixAccountStep={type:_CASE_, numCols:1, caseKey:ZaNewAccountXWizard.POSIX_ACC_STEP, tabGroupKey:ZaNewAccountXWizard.POSIX_ACC_STEP,		
+						items: [
+							{type:_ZAWIZGROUP_, 
+								items:[
+									{ref:ZaPosixAccount.A_gidNumber, type:_OSELECT1_, editable:false,choices:ZaApp.getInstance().getPosixGroupIdListChoices(true), msgName:zimbra_posixaccount.PosixGroup,label:zimbra_posixaccount.PosixGroup, labelLocation:_LEFT_},							
+									{ref:ZaPosixAccount.A_gidNumber, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_gidNumber,label:ZaPosixAccount.A_gidNumber, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
+									{ref:ZaPosixAccount.A_uidNumber, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_uidNumber,label:ZaPosixAccount.A_uidNumber, labelLocation:_LEFT_, width:250,
+										getDisplayValue:function () {
+											var val = this.getInstanceValue();
+										
+											if(!val) {
+												val = ZaPosixAccount.getNextUid();
+												this.setInstanceValue(val);
+											}	
+											return val;
+										}
+									},
+									{ref:ZaPosixAccount.A_homeDirectory, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_homeDirectory,label:ZaPosixAccount.A_homeDirectory, labelLocation:_LEFT_,
+										getDisplayValue:function() {
+											var val = this.getInstanceValue();
+											var instance = this.getInstance();
+											if((val === null || val === undefined) && zimbra_posixaccount_ext.homePath && instance && instance.name) {
+												var chunks = instance.name.split("@");
+												if(chunks) {
+													var uname = chunks[0];
+													if(uname) {
+														val = String(zimbra_posixaccount_ext.homePath).replace("%u",uname);
+														this.setInstanceValue(val);
+													}
 												}
 											}
+											return val;
 										}
-										return val;
-									}
-								},								
-								{ref:ZaPosixAccount.A_loginShell, type:_OSELECT1_, editable:true, msgName:ZaPosixAccount.A_loginShell,label:ZaPosixAccount.A_loginShell, labelLocation:_LEFT_, choices:zimbra_posixaccount_ext.shells}
-							]
-				}	]
-			};
-		xFormObject.items[i].items.push(posixAccountStep);
+									},								
+									{ref:ZaPosixAccount.A_loginShell, type:_OSELECT1_, editable:true, msgName:ZaPosixAccount.A_loginShell,label:ZaPosixAccount.A_loginShell, labelLocation:_LEFT_, choices:zimbra_posixaccount_ext.shells}
+								]
+					}	]
+				};
+			xFormObject.items[i].items.push(posixAccountStep);
+		}
 	}
 	ZaXDialog.XFormModifiers["ZaNewAccountXWizard"].push(zimbra_posixaccount_ext.AccountXWizModifier);	
 }
