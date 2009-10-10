@@ -827,8 +827,8 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 							this.setInstanceValue(value);
 						},
 						width:"150px"}
-					],
-					onRemove:ZaCertWizard.onRepeatRemove
+					]//,
+					//onRemove:ZaCertWizard.onRepeatRemove
 				}			
 			]
 		},
