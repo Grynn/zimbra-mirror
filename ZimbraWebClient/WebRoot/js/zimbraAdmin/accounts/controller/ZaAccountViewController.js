@@ -510,8 +510,7 @@ ZaAccountViewController.prototype._newButtonListener =
 function(ev) {
 	try {
 		var newAccount = new ZaAccount();
-		newAccount.loadNewObjectDefaults("name", ZaSettings.myDomainName);
-		newAccount.getAttrs = {all:true};		
+		newAccount.loadNewObjectDefaults("name", ZaSettings.myDomainName);		
 		if(!ZaApp.getInstance()._newAccountWizard)
 			ZaApp.getInstance()._newAccountWizard = new ZaNewAccountXWizard(this._container,newAccount);
         else { //update the account type if needed

@@ -398,10 +398,7 @@ function(ev) {
 		EmailAddr_XFormItem.resetDomainLists.call(this) ;
 		var newAccount = new ZaAccount();
 		newAccount.loadNewObjectDefaults("name", ZaSettings.myDomainName);
-		newAccount.getAttrs = {all:true};
-		/*newAccount.rights = {};
-		newAccount._defaultValues = {attrs:{}};*/
-		//newAccount.rights[ZaAccount.RENAME_ACCOUNT_RIGHT] = true;				
+		
 		if(!ZaApp.getInstance().dialogs["newAccountWizard"])
 			ZaApp.getInstance().dialogs["newAccountWizard"] = new ZaNewAccountXWizard(this._container,newAccount);	
         else { //update the account type if needed
