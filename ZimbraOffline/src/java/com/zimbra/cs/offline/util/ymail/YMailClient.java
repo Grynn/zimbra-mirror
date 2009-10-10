@@ -22,6 +22,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapTransport;
+import com.zimbra.common.soap.Element.ContainerException;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.util.DateUtil;
 import com.zimbra.common.service.ServiceException;
@@ -114,7 +115,7 @@ public class YMailClient {
         }
     }
 
-    public void test() throws SoapFaultException, IOException {
+    public void test() throws IOException, ContainerException, ServiceException {
         Element req = new Element.XMLElement(AdminConstants.PING_REQUEST);
         transport.invokeWithoutSession(req.detach());
     }
