@@ -2660,6 +2660,50 @@
 
     </tag>
 
+     <tag>
+        <description>
+            Do GetInfoRequest get back JSON in variable.
+        </description>
+
+        <name>getItemInfoJSON</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.GetItemInfoJSONTag</tag-class>
+
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the JSON result int.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+         <attribute>
+             <description>ZMailboxBean object to use</description>
+             <name>box</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>com.zimbra.cs.taglib.bean.ZMailboxBean</type>
+         </attribute>
+
+         <attribute>
+             <description>
+                 conversation id to fetch
+             </description>
+             <name>id</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+
+    </tag>
+
     <tag>
         <description>
             Retreive the ZUserAgentBean
