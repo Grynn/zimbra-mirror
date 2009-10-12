@@ -10,7 +10,7 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-DSPAM_VERSION ?= 3.8.0
+DSPAM_VERSION ?= 3.9.0-BETA1
 
 DSPAM_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/dspam/dspam-$(DSPAM_VERSION).tgz
