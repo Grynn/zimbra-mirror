@@ -99,7 +99,6 @@ lang pl describe EXCUSE_REMOVE		Pisze, jak mo¿na zostaæ usuniêtym z listy
 lang pl describe EXTRA_MPART_TYPE	Nag³ówek zawiera nadmiarowy wpis Content-type:...type=
 lang pl describe FAKE_HELO_EMAIL_COM	odpowied¼ HELO hosta nie zgadza siê z rDNS: email.com
 lang pl describe FAKE_HELO_EXCITE	odpowied¼ HELO hosta nie zgadza siê z rDNS: excite.com
-lang pl describe FAKE_HELO_LYCOS	odpowied¼ HELO hosta nie zgadza siê z rDNS: lycos.com
 lang pl describe FAKE_HELO_MAIL_COM	odpowied¼ HELO hosta nie zgadza siê z rDNS: mail.com
 lang pl describe FAKE_HELO_MSN		odpowied¼ HELO hosta nie zgadza siê z rDNS: msn.com
 lang pl describe FAKE_HELO_YAHOO_CA	odpowied¼ HELO hosta nie zgadza siê z rDNS: yahoo.ca
@@ -132,6 +131,7 @@ lang pl describe GTUBE			Ogólny test na Niepo¿±dane Przesy³ki Email
 lang pl describe GUARANTEED_100_PERCENT	100% gwarancji
 lang pl describe HEADER_COUNT_CTYPE	Znaleziono wielokrotne nag³ówki Content-Type
 lang pl describe HEAD_ILLEGAL_CHARS	Nag³ówek zawiera zbyt wiele niedozwolonych znaków
+lang pl describe HG_HORMONE		O ludzkich hormonach wzrostu.
 lang pl describe HIDE_WIN_STATUS	U¿ywa Javascriptu by ukryæ URLe w przegl±darce
 lang pl describe HTML_CHARSET_FARAWAY	Obcy jêzyk u¿ywany w znacznikach HTML
 lang pl describe HTML_COMMENT_SAVED_URL	Wiadomo¶æ HTML jest stron± WWW
@@ -202,7 +202,6 @@ lang pl describe RCVD_FAKE_HELO_DOTCOM	Nag³ówek Received zawiera sfa³szowan± naz
 lang pl describe RCVD_IN_BL_SPAMCOP_NET	Odebrane od systemu klasy RELAY w/g: bl.spamcop.net
 lang pl describe RCVD_IN_BSP_OTHER	Nadawca bierze udzia³ w 'Bonded Sender Program' (inny relay)
 lang pl describe RCVD_IN_BSP_TRUSTED	Nadawca bierze udzia³ w 'Bonded Sender Program' (zaufany relay)
-lang pl describe RCVD_IN_DSBL		Otrzymano przez relay listowany w list.dsbl.org
 lang pl describe RCVD_IN_MAPS_DUL	"open relay" wed³ug DUL, http://www.mail-abuse.org/dul/
 lang pl describe RCVD_IN_MAPS_NML	"open relay" wed³ug NML, http://www.mail-abuse.org/nml/
 lang pl describe RCVD_IN_MAPS_RBL	"open relay" wed³ug RBL, http://www.mail-abuse.org/rbl/

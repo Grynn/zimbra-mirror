@@ -96,7 +96,6 @@ lang de describe RCVD_IN_SBL Transportiert via Rechner in SBL-Liste (http://www.
 lang de describe RCVD_IN_XBL Transportiert via Rechner in XBL-Liste (http://www.spamhaus.org/xbl/)
 lang de describe DNS_FROM_RFC_DSN Absender in dsn-Liste von www.rfc-ignorant.org
 lang de describe DNS_FROM_RFC_BOGUSMX Absender in bogusmx-Liste von www.rfc-ignorant.org
-lang de describe RCVD_IN_DSBL Transportiert via Rechner in Liste von list.dsbl.org
 lang de describe DNS_FROM_AHBL_RHSBL Absenderadresse in Liste von dnsbl.ahbl.org
 lang de describe RCVD_IN_BSP_TRUSTED Senderechner in Liste von http://www.bondedsender.org/
 lang de describe RCVD_IN_BSP_OTHER Senderechner in Liste von http://www.bondedsender.org/
@@ -132,7 +131,6 @@ lang de describe FAKE_HELO_MSN HELO-Rechnername gehört nicht zu msn.com
 lang de describe FAKE_HELO_MAIL_COM HELO-Rechnername gehört nicht zu mail.com
 lang de describe FAKE_HELO_EMAIL_COM HELO-Rechnername gehört nicht zu email.com
 lang de describe FAKE_HELO_EXCITE HELO-Rechnername gehört nicht zu excite.com
-lang de describe FAKE_HELO_LYCOS HELO-Rechnername gehört nicht zu lycos.com
 lang de describe FAKE_HELO_YAHOO_CA HELO-Rechnername gehört nicht zu yahoo.ca
 lang de describe FAKE_HELO_MAIL_COM_DOM HELO-Rechnername verdächtig (mail.com)
 lang de describe HELO_DYNAMIC_IPADDR HELO-Rechnername verdächtig (IP-Adresse 1)
@@ -293,6 +291,7 @@ lang de describe NO_MEDICAL Keine medizinischen Examen nötig
 lang de describe DIET_1 Reduzieren Sie Ihr Gewicht
 lang de describe FIN_FREE Finanzielle Unabhängigkeit
 lang de describe FORWARD_LOOKING Enthält Formulierungen aus Aktienprospekten
+lang de describe HG_HORMONE Erwähnt menschliche Wachstumshormone
 lang de describe ONE_TIME Einmaliges Angebot/Gelegenheit
 lang de describe JOIN_MILLIONS Machen Sie es Millionen von Amerikanern nach
 lang de describe MARKETING_PARTNERS Angeblich haben Sie sich bei einem Partnerunternehmen registriert

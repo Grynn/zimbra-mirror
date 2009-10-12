@@ -81,7 +81,6 @@ lang nl describe RCVD_IN_SORBS_ZOMBIE            SORBS: verzender is een gekaapt
 lang nl describe RCVD_IN_SORBS_DUL               SORBS: bericht is direct verstuurd vanaf een dynamisch IP adres
 lang nl describe RCVD_IN_SBL                     Ontvangen via een relay die gevonden is in Spamhaus SBL
 lang nl describe RCVD_IN_XBL                     Ontvangen via een relay die gevonden is in Spamhaus XBL
-lang nl describe RCVD_IN_DSBL                    Ontvangen via een relay die gevonden is in list.dsbl.org
 lang nl describe RCVD_IN_BSP_TRUSTED             Verzender is opgenomen in het Bonded Sender Program (trusted relay)
 lang nl describe RCVD_IN_BSP_OTHER               Verzender is opgenomen in het Bonded Sender Program (other relay)
 lang nl describe RCVD_IN_BL_SPAMCOP_NET          Ontvangen via een relay die gevonden is in bl.spamcop.net
@@ -93,7 +92,6 @@ lang nl describe FAKE_HELO_MSN                   Host HELO komt niet overeen met
 lang nl describe FAKE_HELO_MAIL_COM              Host HELO komt niet overeen met rDNS: mail.com
 lang nl describe FAKE_HELO_EMAIL_COM             Host HELO komt niet overeen met rDNS: email.com
 lang nl describe FAKE_HELO_EXCITE                Host HELO komt niet overeen met rDNS: excite.com
-lang nl describe FAKE_HELO_LYCOS                 Host HELO komt niet overeen met rDNS: lycos.com
 lang nl describe FAKE_HELO_YAHOO_CA              Host HELO komt niet overeen met rDNS: yahoo.ca
 lang nl describe FROM_STARTS_WITH_NUMS           Van: begint met nummers
 lang nl describe FROM_OFFERS                     Van: adres is van "at iets-aangeboden"
@@ -217,6 +215,7 @@ lang nl describe REFINANCE_YOUR_HOME             Hyphoteek oversluiten
 lang nl describe REFINANCE_NOW                   Hyphoteek oversluiten
 lang nl describe NO_MEDICAL                      Geen medische keuring
 lang nl describe FORWARD_LOOKING                 Aandelen waarschuwing
+lang nl describe HG_HORMONE                      Heeft het over groeihormomen
 lang nl describe ONE_TIME                        Eenmalige afzettingspraktijk
 lang nl describe JOIN_MILLIONS                   Voeg je bij miljoenen Amerikanen
 lang nl describe ONLINE_PHARMACY                 Online apotheek

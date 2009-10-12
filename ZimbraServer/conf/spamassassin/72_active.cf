@@ -109,15 +109,6 @@ body CURR_PRICE         /\bCurrent Price:/
 body DEAR_WINNER /\bdear.{1,20}winner/i
 ##} DEAR_WINNER
 
-##{ DNS_FROM_OPENWHOIS
-
-ifplugin Mail::SpamAssassin::Plugin::DNSEval
-header          DNS_FROM_OPENWHOIS  eval:check_rbl_envfrom('openwhois', 'bl.open-whois.org.')
-describe        DNS_FROM_OPENWHOIS  Envelope sender listed in bl.open-whois.org.
-tflags          DNS_FROM_OPENWHOIS  net publish
-endif
-##} DNS_FROM_OPENWHOIS
-
 ##{ DOS_FIX_MY_URI
 meta DOS_FIX_MY_URI             __MIMEOLE_1106 && __DOS_HAS_ANY_URI && __DOS_SINGLE_EXT_RELAY && __DOS_HI && __DOS_LINK
 describe DOS_FIX_MY_URI         Looks like a "fix my obfu'd URI please" spam
@@ -294,11 +285,6 @@ body     FB_HEY_BRO_COMMA	/Hey bro, /
 describe FB_HEY_BRO_COMMA	Phrase hey bro,
 ##} FB_HEY_BRO_COMMA
 
-##{ FB_HG_H_CAP
-body     FB_HG_H_CAP		/\bHGH\b/
-describe FB_HG_H_CAP		Phrase: HGH
-##} FB_HG_H_CAP
-
 ##{ FB_HOMELOAN
 body     FB_HOMELOAN		/\$\d{3},\d{3} home loan/i
 describe FB_HOMELOAN		Phrase $x home loan
@@ -337,6 +323,7 @@ describe FB_LOWER_PAYM		Phrase: lower your monthly payments
 ##{ FB_MED1CAT
 body     FB_MED1CAT		/\bmed1cat/i
 describe FB_MED1CAT		Phrase: Med1cat
+score FB_MED1CAT                     1.000 0.000 0.000 0.000
 ##} FB_MED1CAT
 
 ##{ FB_MEDS_PERCENT
@@ -815,7 +802,7 @@ endif
 ##{ FRT_BIGGERMEM1
 
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-body     FRT_BIGGERMEM1		/<inter SP2><post P2>(?:<B><I><G><G><E><R>|<L><A><R><G><E><R>).{1,8}(?:<P><E><N><I><S>|<B><R><E><A><S><T>|<M><E><M><B><E><R>)/i
+body     FRT_BIGGERMEM1         /<inter SP2><post P2>(?:<B><IX><GX><GX><E><R>|<L><A><R><GX><E><R>).{1,8}(?:<P><E><N><IX><SX>|<B><R><E><A><SX><TX>|<M><E><M><B><E><R>)/i
 describe FRT_BIGGERMEM1		ReplaceTags: Bigger / Larger, Penis / Member
 endif
 ##} FRT_BIGGERMEM1
@@ -863,7 +850,7 @@ endif
 ##{ FRT_GUARANTEE1
 
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-body     FRT_GUARANTEE1		/<inter SP2><post P2>(?!guarantee)<G><U><A><R><A><N><T><E><E>/i
+body     FRT_GUARANTEE1         /<inter SP2><post P2>(?!guarantee)<GX><U><A><R><A><N><TX><E><E>/i
 describe FRT_GUARANTEE1		ReplaceTags: Guarantee (1)
 endif
 ##} FRT_GUARANTEE1
@@ -887,7 +874,7 @@ endif
 ##{ FRT_MEETING
 
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-body     FRT_MEETING		/<inter SP2><post P2>\b(?!meeting)<M><E><E><T><I><N><G>\b/i
+body     FRT_MEETING            /<inter SP2><post P2>\b(?!meeting)<M><E><E><TX><IX><N><GX>\b/i
 describe FRT_MEETING		ReplaceTags: Meeting
 endif
 ##} FRT_MEETING
@@ -975,7 +962,7 @@ endif
 ##{ FRT_STRONG1
 
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-body     FRT_STRONG1		/<inter SP2><post P2>\b(?!stro\s?ng)<S><T><R><O><N><G>\b/i
+body     FRT_STRONG1            /<inter SP2><post P2>\b(?!stro\s?ng)<SX><TX><R><O><N><GX>\b/i
 describe FRT_STRONG1		ReplaceTags: Strong (1)
 endif
 ##} FRT_STRONG1
@@ -983,7 +970,7 @@ endif
 ##{ FRT_STRONG2
 
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-body     FRT_STRONG2		/<inter W0><post P2>\b(?!strong)<S><T><R><O><N><G>\b/i
+body     FRT_STRONG2            /<inter W0><post P2>\b(?!strong)<SX><TX><R><O><N><GX>\b/i
 describe FRT_STRONG2		ReplaceTags: Strong (2)
 endif
 ##} FRT_STRONG2
@@ -1023,7 +1010,7 @@ endif
 ##{ FRT_WEIGHT2
 
 ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-body     FRT_WEIGHT2		/<inter W0><post P2>\b(?!weight)<W><E><I><G><H><T>/i
+body     FRT_WEIGHT2            /<inter W0><post P2>\b(?!weight)<WX><E><IX><GX><H><TX>/i
 describe FRT_WEIGHT2		ReplaceTags: Weight (2)
 endif
 ##} FRT_WEIGHT2
@@ -1102,6 +1089,7 @@ describe FS_LARGE_PERCENT2	Larger than 100% in subj.
 ##{ FS_LOWER_YOUR
 header   FS_LOWER_YOUR		Subject =~ /lower your/i
 describe FS_LOWER_YOUR		Phrase: lower your
+score FS_LOWER_YOUR                  1.000 0.000 0.000 0.000
 ##} FS_LOWER_YOUR
 
 ##{ FS_LOW_RATES
@@ -1182,7 +1170,6 @@ describe FS_TIP_DDD		Phrase: subject = tip ddd
 ##{ FS_WEIGHT_LOSS
 header   FS_WEIGHT_LOSS		Subject =~ /weight loss/i
 describe FS_WEIGHT_LOSS		Subject says Weight Loss
-score FS_WEIGHT_LOSS                 0.942 0.458 0.000 0.000
 ##} FS_WEIGHT_LOSS
 
 ##{ FS_WILL_HELP
@@ -1358,12 +1345,14 @@ meta JM_TORA_XM     (__MAILER_OL_6626 && __MOLE_2962 && __NAKED_TO)
 meta            KAM_LOTTO1      (__KAM_LOTTO1 + __KAM_LOTTO2 + __KAM_LOTTO3 + __KAM_LOTTO4 + __KAM_LOTTO5 + __KAM_LOTTO6 + __KAM_LOTTO7 >= 3)
 describe        KAM_LOTTO1      Likely to be a e-Lotto Scam Email
 #score           KAM_LOTTO1      0.5
+score KAM_LOTTO1                     2.207 2.192 0.000 0.000
 ##} KAM_LOTTO1
 
 ##{ KAM_LOTTO2
 meta            KAM_LOTTO2      (__KAM_LOTTO1 + __KAM_LOTTO2 + __KAM_LOTTO3 + __KAM_LOTTO4 + __KAM_LOTTO5 + __KAM_LOTTO6 + __KAM_LOTTO7 >= 4)
 describe        KAM_LOTTO2      Highly Likely to be a e-Lotto Scam Email
 #score           KAM_LOTTO2      1.0
+score KAM_LOTTO2                     1.000 1.759 0.000 0.000
 ##} KAM_LOTTO2
 
 ##{ KAM_LOTTO3
@@ -2030,7 +2019,10 @@ endif
 ##{ URIBL_RHS_AHBL
 
 ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-#reuse          URIBL_RHS_AHBL T_URIBL_RHS_AHBL
+body            URIBL_RHS_AHBL  eval:check_uridnsbl('URIBL_RHS_AHBL')
+describe        URIBL_RHS_AHBL  Contains an URI listed in rhsbl.ahbl.org.
+tflags          URIBL_RHS_AHBL  net
+#score URIBL_RHS_AHBL                 0.000 0.001 0.000 0.000
 endif
 ##} URIBL_RHS_AHBL
 
@@ -2043,396 +2035,6 @@ describe URIBL_RHS_DOB          Contains an URI of a new domain (Day Old Bread)
 tflags URIBL_RHS_DOB            net
 endif
 ##} URIBL_RHS_DOB
-
-##{ WHOIS_1AND1PR
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_1AND1PR       bl.open-whois.org.  A   127.0.0.2
-body            WHOIS_1AND1PR       eval:check_uridnsbl('WHOIS_1AND1PR')
-describe        WHOIS_1AND1PR       URL registered to 1&1 Private Registration
-tflags          WHOIS_1AND1PR       net
-endif
-##} WHOIS_1AND1PR
-
-##{ WHOIS_AITPRIV
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_AITPRIV       bl.open-whois.org.  A   127.0.0.19
-body            WHOIS_AITPRIV       eval:check_uridnsbl('WHOIS_AITPRIV')
-describe        WHOIS_AITPRIV       URL registered as an AIT Private Registration
-tflags          WHOIS_AITPRIV       net publish
-endif
-##} WHOIS_AITPRIV
-
-##{ WHOIS_CONTACTPRIV
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_CONTACTPRIV   bl.open-whois.org.  A   127.0.0.37
-body            WHOIS_CONTACTPRIV   eval:check_uridnsbl('WHOIS_CONTACTPRIV')
-describe        WHOIS_CONTACTPRIV   URL registered to contactprivacy.com
-tflags          WHOIS_CONTACTPRIV   net
-endif
-##} WHOIS_CONTACTPRIV
-
-##{ WHOIS_DMNBYPROXY
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_DMNBYPROXY        bl.open-whois.org.  A   127.0.0.15
-body            WHOIS_DMNBYPROXY        eval:check_uridnsbl('WHOIS_DMNBYPROXY')
-describe        WHOIS_DMNBYPROXY        Contains URL registered to Domains by Proxy
-tflags          WHOIS_DMNBYPROXY        net
-endif
-##} WHOIS_DMNBYPROXY
-
-##{ WHOIS_DOMESCROW
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_DOMESCROW     bl.open-whois.org.  A   127.0.0.10
-body            WHOIS_DOMESCROW     eval:check_uridnsbl('WHOIS_DOMESCROW')
-describe        WHOIS_DOMESCROW     URL registered to Domain Escrow Services
-tflags          WHOIS_DOMESCROW     net
-endif
-##} WHOIS_DOMESCROW
-
-##{ WHOIS_DOMPRIVCORP
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub               WHOIS_DOMPRIVCORP   bl.open-whois.org.      A       127.0.0.24
-body                    WHOIS_DOMPRIVCORP   eval:check_uridnsbl('WHOIS_DOMPRIVCORP')
-describe                WHOIS_DOMPRIVCORP   URL registered to DomainPrivacyCorp.com
-tflags                  WHOIS_DOMPRIVCORP   net
-endif
-##} WHOIS_DOMPRIVCORP
-
-##{ WHOIS_DREAMPRIV
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_DREAMPRIV     bl.open-whois.org.  A   127.0.0.8
-body            WHOIS_DREAMPRIV     eval:check_uridnsbl('WHOIS_DREAMPRIV')
-describe        WHOIS_DREAMPRIV     URL registered as a DreamHost Private Registration
-tflags          WHOIS_DREAMPRIV     net
-endif
-##} WHOIS_DREAMPRIV
-
-##{ WHOIS_DROA
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub               WHOIS_DROA          bl.open-whois.org.      A       127.0.0.26
-body                    WHOIS_DROA      eval:check_uridnsbl('WHOIS_DROA')
-describe                WHOIS_DROA      URL registered as an DROA Private Registration
-tflags                  WHOIS_DROA      net
-endif
-##} WHOIS_DROA
-
-##{ WHOIS_DYNADOT
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub               WHOIS_DYNADOT       bl.open-whois.org.      A       127.0.0.27
-body                    WHOIS_DYNADOT       eval:check_uridnsbl('WHOIS_DYNADOT')
-describe                WHOIS_DYNADOT       URL registered to Dynadot Privacy
-tflags                  WHOIS_DYNADOT       net
-endif
-##} WHOIS_DYNADOT
-
-##{ WHOIS_FINEXE
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub               WHOIS_FINEXE        bl.open-whois.org.      A       127.0.0.25
-body                    WHOIS_FINEXE        eval:check_uridnsbl('WHOIS_FINEXE')
-describe                WHOIS_FINEXE        URL registered to Finexe Domain Proxy Service
-tflags                  WHOIS_FINEXE        net
-endif
-##} WHOIS_FINEXE
-
-##{ WHOIS_GKGPROXY
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub               WHOIS_GKGPROXY      bl.open-whois.org.      A       127.0.0.29
-body                    WHOIS_GKGPROXY      eval:check_uridnsbl('WHOIS_GKGPROXY')
-describe                WHOIS_GKGPROXY      URL registered to GKG.NET Domain Proxy Service
-tflags                  WHOIS_GKGPROXY      net
-endif
-##} WHOIS_GKGPROXY
-
-##{ WHOIS_IDSHIELD
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_IDSHIELD      bl.open-whois.org.  A   127.0.0.16
-body            WHOIS_IDSHIELD      eval:check_uridnsbl('WHOIS_IDSHIELD')
-describe        WHOIS_IDSHIELD      Contains URL registered to WHOIS ID Shield
-tflags          WHOIS_IDSHIELD      net
-endif
-##} WHOIS_IDSHIELD
-
-##{ WHOIS_IDTHEFTPROT
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_IDTHEFTPROT   bl.open-whois.org.  A   127.0.0.39
-body            WHOIS_IDTHEFTPROT   eval:check_uridnsbl('WHOIS_IDTHEFTPROT')
-describe        WHOIS_IDTHEFTPROT   URL registered to Whois ID Theft Protection
-tflags          WHOIS_IDTHEFTPROT   net
-endif
-##} WHOIS_IDTHEFTPROT
-
-##{ WHOIS_KATZ
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub               WHOIS_KATZ      bl.open-whois.org.      A       127.0.0.31
-body                    WHOIS_KATZ      eval:check_uridnsbl('WHOIS_KATZ')
-describe                WHOIS_KATZ      URL registered to Katz Global Domain Name Trust
-tflags                  WHOIS_KATZ      net
-endif
-##} WHOIS_KATZ
-
-##{ WHOIS_LISTINGAG
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_LISTINGAG     bl.open-whois.org.  A   127.0.0.33
-body            WHOIS_LISTINGAG     eval:check_uridnsbl('WHOIS_LISTINGAG')
-describe        WHOIS_LISTINGAG     URL registered to Domain Listing Agent
-tflags          WHOIS_LISTINGAG     net
-endif
-##} WHOIS_LISTINGAG
-
-##{ WHOIS_LNOA
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub               WHOIS_LNOA      bl.open-whois.org.      A       127.0.0.28
-body                    WHOIS_LNOA      eval:check_uridnsbl('WHOIS_LNOA')
-describe                WHOIS_LNOA      URL registered to LNOA WHOIS Privacy
-tflags                  WHOIS_LNOA      net
-endif
-##} WHOIS_LNOA
-
-##{ WHOIS_MAPNAME
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_MAPNAME       bl.open-whois.org.  A   127.0.0.34
-body            WHOIS_MAPNAME       eval:check_uridnsbl('WHOIS_MAPNAME')
-describe        WHOIS_MAPNAME       URL registered to MapName
-tflags          WHOIS_MAPNAME       net
-endif
-##} WHOIS_MAPNAME
-
-##{ WHOIS_MONIKER_PRIV
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_MONIKER_PRIV  bl.open-whois.org.  A   127.0.0.11
-body            WHOIS_MONIKER_PRIV  eval:check_uridnsbl('WHOIS_MONIKER_PRIV')
-describe        WHOIS_MONIKER_PRIV  URL registered to Moniker Privacy Protection
-tflags          WHOIS_MONIKER_PRIV  net
-endif
-##} WHOIS_MONIKER_PRIV
-
-##{ WHOIS_MYPRIVREG
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_MYPRIVREG     bl.open-whois.org.  A   127.0.0.17
-body            WHOIS_MYPRIVREG     eval:check_uridnsbl('WHOIS_MYPRIVREG')
-describe        WHOIS_MYPRIVREG     URL registered to myprivateregistration.com
-tflags          WHOIS_MYPRIVREG     net
-endif
-##} WHOIS_MYPRIVREG
-
-##{ WHOIS_NAMEKING
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_NAMEKING      bl.open-whois.org.  A   127.0.0.35
-body            WHOIS_NAMEKING      eval:check_uridnsbl('WHOIS_NAMEKING')
-describe        WHOIS_NAMEKING      URL registered to NameKing
-tflags          WHOIS_NAMEKING      net publish
-endif
-##} WHOIS_NAMEKING
-
-##{ WHOIS_NAMESECURE
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_NAMESECURE    bl.open-whois.org.  A   127.0.0.9
-body            WHOIS_NAMESECURE    eval:check_uridnsbl('WHOIS_NAMESECURE')
-describe        WHOIS_NAMESECURE    Contains URL registered to NameSecure
-tflags          WHOIS_NAMESECURE    net
-endif
-##} WHOIS_NAMESECURE
-
-##{ WHOIS_NETID
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_NETID     bl.open-whois.org.  A   127.0.0.42
-body            WHOIS_NETID     eval:check_uridnsbl('WHOIS_NETID')
-describe        WHOIS_NETID     URL registered to NetIdentity
-tflags          WHOIS_NETID     net
-endif
-##} WHOIS_NETID
-
-##{ WHOIS_NETSOLPR
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_NETSOLPR      bl.open-whois.org.  A   127.0.0.4
-body            WHOIS_NETSOLPR      eval:check_uridnsbl('WHOIS_NETSOLPR')
-describe        WHOIS_NETSOLPR      URL registered as a NetSol Private Registration
-tflags          WHOIS_NETSOLPR      net
-endif
-##} WHOIS_NETSOLPR
-
-##{ WHOIS_NOLDC
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_NOLDC     bl.open-whois.org.  A   127.0.0.41
-body            WHOIS_NOLDC     eval:check_uridnsbl('WHOIS_NOLDC')
-describe        WHOIS_NOLDC     URL registered to NOLDC, Inc.
-tflags          WHOIS_NOLDC     net
-endif
-##} WHOIS_NOLDC
-
-##{ WHOIS_NOMINET
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_NOMINET       bl.open-whois.org.  A   127.0.0.36
-body            WHOIS_NOMINET       eval:check_uridnsbl('WHOIS_NOMINET')
-describe        WHOIS_NOMINET       URL registered to Nominet Private Registrant
-tflags          WHOIS_NOMINET       net
-endif
-##} WHOIS_NOMINET
-
-##{ WHOIS_PRIVACYPOST
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_PRIVACYPOST   bl.open-whois.org.  A   127.0.0.7
-body            WHOIS_PRIVACYPOST   eval:check_uridnsbl('WHOIS_PRIVACYPOST')
-describe        WHOIS_PRIVACYPOST   Contains URL registered to PrivacyPost
-tflags          WHOIS_PRIVACYPOST   net
-endif
-##} WHOIS_PRIVACYPOST
-
-##{ WHOIS_PRIVDOMAIN
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_PRIVDOMAIN    bl.open-whois.org.  A   127.0.0.38
-body            WHOIS_PRIVDOMAIN    eval:check_uridnsbl('WHOIS_PRIVDOMAIN')
-describe        WHOIS_PRIVDOMAIN    URL registered to privacy-domain.com
-tflags          WHOIS_PRIVDOMAIN    net
-endif
-##} WHOIS_PRIVDOMAIN
-
-##{ WHOIS_PRIVPROT
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_PRIVPROT      bl.open-whois.org.  A   127.0.0.3
-body            WHOIS_PRIVPROT      eval:check_uridnsbl('WHOIS_PRIVPROT')
-describe        WHOIS_PRIVPROT      URL registered to WHOIS Privacy Protection
-tflags          WHOIS_PRIVPROT      net publish
-endif
-##} WHOIS_PRIVPROT
-
-##{ WHOIS_REGISTER4LESS
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_REGISTER4LESS bl.open-whois.org.  A   127.0.0.30
-body            WHOIS_REGISTER4LESS eval:check_uridnsbl('WHOIS_REGISTER4LESS')
-describe        WHOIS_REGISTER4LESS URL registered to R4L Privacy
-tflags          WHOIS_REGISTER4LESS      net
-endif
-##} WHOIS_REGISTER4LESS
-
-##{ WHOIS_REGISTERFLY
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_REGISTERFLY       bl.open-whois.org.  A   127.0.0.14
-body            WHOIS_REGISTERFLY       eval:check_uridnsbl('WHOIS_REGISTERFLY')
-describe        WHOIS_REGISTERFLY       Contains URL registered to RegisterFly
-tflags          WHOIS_REGISTERFLY       net publish
-endif
-##} WHOIS_REGISTERFLY
-
-##{ WHOIS_REGTEK
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_REGTEK        bl.open-whois.org.  A   127.0.0.40
-body            WHOIS_REGTEK        eval:check_uridnsbl('WHOIS_REGTEK')
-describe        WHOIS_REGTEK        URL registered to RegTek Whois Envoy
-tflags          WHOIS_REGTEK        net
-endif
-##} WHOIS_REGTEK
-
-##{ WHOIS_SAFENAMES
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_SAFENAMES     bl.open-whois.org.  A   127.0.0.12
-body            WHOIS_SAFENAMES     eval:check_uridnsbl('WHOIS_SAFENAMES')
-describe        WHOIS_SAFENAMES     Contains URL registered to SafeNames
-tflags          WHOIS_SAFENAMES     net
-endif
-##} WHOIS_SAFENAMES
-
-##{ WHOIS_SECINFOSERV
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_SECINFOSERV   bl.open-whois.org.  A   127.0.0.21
-body            WHOIS_SECINFOSERV   eval:check_uridnsbl('WHOIS_SECINFOSERV')
-describe        WHOIS_SECINFOSERV   URL registered to Secure WHOIS Information Services
-tflags          WHOIS_SECINFOSERV   net
-endif
-##} WHOIS_SECINFOSERV
-
-##{ WHOIS_SECUREWHOIS
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_SECUREWHOIS   bl.open-whois.org.  A   127.0.0.5
-body            WHOIS_SECUREWHOIS   eval:check_uridnsbl('WHOIS_SECUREWHOIS')
-describe        WHOIS_SECUREWHOIS   Contains URL registered to SecureWhois
-tflags          WHOIS_SECUREWHOIS   net publish
-endif
-##} WHOIS_SECUREWHOIS
-
-##{ WHOIS_SPAMFREE
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_SPAMFREE      bl.open-whois.org.  A   127.0.0.32
-body            WHOIS_SPAMFREE      eval:check_uridnsbl('WHOIS_SPAMFREE')
-describe        WHOIS_SPAMFREE      URL registered to SpamFreeReg.com
-tflags          WHOIS_SPAMFREE      net
-endif
-##} WHOIS_SPAMFREE
-
-##{ WHOIS_SRSPLUS
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_SRSPLUS       bl.open-whois.org.  A   127.0.0.23
-body            WHOIS_SRSPLUS       eval:check_uridnsbl('WHOIS_SRSPLUS')
-describe        WHOIS_SRSPLUS       URL registered as an SRSPlus Private Registration
-tflags          WHOIS_SRSPLUS       net
-endif
-##} WHOIS_SRSPLUS
-
-##{ WHOIS_UNLISTED
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_UNLISTED      bl.open-whois.org.  A   127.0.0.13
-body            WHOIS_UNLISTED      eval:check_uridnsbl('WHOIS_UNLISTED')
-describe        WHOIS_UNLISTED      Contains URL registered to Unlisted-Whois.com
-tflags          WHOIS_UNLISTED      net
-endif
-##} WHOIS_UNLISTED
-
-##{ WHOIS_WHOISGUARD
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_WHOISGUARD        bl.open-whois.org.  A   127.0.0.18
-body            WHOIS_WHOISGUARD        eval:check_uridnsbl('WHOIS_WHOISGUARD')
-describe        WHOIS_WHOISGUARD        URL registered to WhoisGuard
-tflags          WHOIS_WHOISGUARD        net publish
-endif
-##} WHOIS_WHOISGUARD
-
-##{ WHOIS_WHOISPROT
-
-ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhssub       WHOIS_WHOISPROT     bl.open-whois.org.  A   127.0.0.20
-body            WHOIS_WHOISPROT     eval:check_uridnsbl('WHOIS_WHOISPROT')
-describe        WHOIS_WHOISPROT     URL registered to WhoisProtector
-tflags          WHOIS_WHOISPROT     net
-endif
-##} WHOIS_WHOISPROT
 
 ##{ XMAILER_MIMEOLE_OL_015D5
 meta XMAILER_MIMEOLE_OL_015D5  (__XM_OL_015D5 && __MO_OL_015D5)
@@ -2574,6 +2176,10 @@ meta XMAILER_MIMEOLE_OL_BC7E6  (__XM_OL_BC7E6 && __MO_OL_BC7E6)
 meta XMAILER_MIMEOLE_OL_C65FA  (__XM_OL_C65FA && __MO_OL_C65FA)
 ##} XMAILER_MIMEOLE_OL_C65FA
 
+##{ XMAILER_MIMEOLE_OL_C9068
+meta XMAILER_MIMEOLE_OL_C9068  (__XM_OL_C9068 && __MO_OL_C9068)
+##} XMAILER_MIMEOLE_OL_C9068
+
 ##{ XMAILER_MIMEOLE_OL_CAC8F
 meta XMAILER_MIMEOLE_OL_CAC8F  (__XM_OL_CAC8F && __MO_OL_CAC8F)
 ##} XMAILER_MIMEOLE_OL_CAC8F
@@ -2605,37 +2211,6 @@ meta XMAILER_MIMEOLE_OL_F6D01  (__XM_OL_F6D01 && __MO_OL_F6D01)
 ##{ XMAILER_MIMEOLE_OL_FF5C8
 meta XMAILER_MIMEOLE_OL_FF5C8  (__XM_OL_FF5C8 && __MO_OL_FF5C8)
 ##} XMAILER_MIMEOLE_OL_FF5C8
-
-##{ if version >= 3.002004 ifplugin Mail::SpamAssassin::Plugin::DKIM _sandbox
-
-if version >= 3.002004
-ifplugin Mail::SpamAssassin::Plugin::DKIM
-priority T_NOTVALID_YAHOO	500
-priority T_NOTVALID_GMAIL	500
-priority T_NOTVALID_PAY	500
-def_whitelist_from_dkim  *@ebay.com
-def_whitelist_from_dkim  *@*.ebay.com
-def_whitelist_from_dkim  *@ebay.co.uk
-def_whitelist_from_dkim  *@*.ebay.co.uk
-def_whitelist_from_dkim  *@ebay.at
-def_whitelist_from_dkim  *@ebay.ca
-def_whitelist_from_dkim  *@ebay.de
-def_whitelist_from_dkim  *@ebay.fr
-def_whitelist_from_dkim  *@*.paypal.com
-def_whitelist_from_dkim  *@*.paypal.com	paypal.com
-def_whitelist_from_dkim  *@paypal.com
-def_whitelist_from_dkim  *@amazon.com
-def_whitelist_from_dkim  *@cisco.com
-def_whitelist_from_dkim  *@alert.bankofamerica.com
-def_whitelist_from_dkim  *@cnn.com
-def_whitelist_from_dkim  *@*.cnn.com
-def_whitelist_from_dkim  *@skype.net
-def_whitelist_from_dkim  *@welcome.skype.com
-def_whitelist_from_dkim  *@cc.yahoo-inc.com  yahoo-inc.com
-def_whitelist_from_dkim  *@cc.yahoo-inc.com
-endif
-endif
-##} if version >= 3.002004 ifplugin Mail::SpamAssassin::Plugin::DKIM _sandbox
 
 ##{ ifplugin Mail::SpamAssassin::Plugin::DNSEval _sandbox
 
@@ -2688,12 +2263,12 @@ replace_post	P2	{1,2}
 replace_post	P3	{1,3}
 replace_inter W0 \w?
 replace_inter SP2 [\s\d_*\$\%(),.:;?!}{\[\]|\/?^\#~\xa1`'+-]?
-replace_tag   G  [gk6]
-replace_tag   Q  [qg]
-replace_tag   S  [sz5\xa6\xa7]
-replace_tag   T  [t|]
-replace_tag   U2 [u\xb5\xd9\xda\xdb\xdc\xfc\xfb\xfa\xf9\xfd]
-replace_tag   W  (?:[wv]|vv)
+replace_tag   GX  [gk6]
+replace_tag   IX  [ilt|!1y?\xcc\xcd\xce\xcf\xec\xed\xee\xef]
+replace_tag   SX  [sz5\xa6\xa7]
+replace_tag   TX  [t|]
+replace_tag   UX [u\xb5\xd9\xda\xdb\xdc\xfc\xfb\xfa\xf9\xfd]
+replace_tag   WX  (?:[wv]|vv)
 replace_rules T_FRT_ABSOLUT
 replace_rules FRT_ADOBE2
 replace_rules T_FRT_ADULT2
@@ -2777,18 +2352,9 @@ endif
 ##{ ifplugin Mail::SpamAssassin::Plugin::URIDNSBL _sandbox
 
 ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-#reuse URIBL_RHS_DOB
-urirhsbl        T_URIBL_RHS_AHBL  rhsbl.ahbl.org. A
+urirhsbl        URIBL_RHS_AHBL  rhsbl.ahbl.org. A
 endif
 ##} ifplugin Mail::SpamAssassin::Plugin::URIDNSBL _sandbox
-
-##{ ifplugin Mail::SpamAssassin::Plugin::WLBLEval _sandbox
-
-ifplugin Mail::SpamAssassin::Plugin::WLBLEval
-def_whitelist_from_rcvd abuse@yahoo.com		 yahoo.com
-def_whitelist_from_rcvd MAILER-DAEMON@yahoo.com  yahoo.com
-endif
-##} ifplugin Mail::SpamAssassin::Plugin::WLBLEval _sandbox
 
 ##{ redirector_pattern_sandbox
 redirector_pattern m'/(?:index.php)?\?.*(?<=[?&])URL=(.*?)(?:$|[&\#])'i
@@ -2796,8 +2362,8 @@ redirector_pattern m'^http:/*(?:\w+\.)?google(?:\.\w{2,3}){1,2}/url\?.*?(?<=[?&]
 redirector_pattern m'^http:/*(?:\w+\.)?google(?:\.\w{2,3}){1,2}/search\?.*?(?<=[?&])q=[^&]*?(?<=%20|..[=+\s])(?:site|inurl):(.*?)(?:$|%20|[\s+&\#])'i
 redirector_pattern m'^http:/*(?:\w+\.)?google(?:\.\w{2,3}){1,2}/search\?.*?(?<=[?&])q=[^&]*?(?<=%20|..[=+\s])(?:"|%22)(.*?)(?:$|%22|["\s+&\#])'i
 redirector_pattern m'^http:/*(?:\w+\.)?google(?:\.\w{2,3}){1,2}/translate\?.*?(?<=[?&])u=(.*?)(?:$|[&\#])'i
-redirector_pattern m'^http:/*(?:\w+\.)?google(?:\.\w{2,3}){1,2}/pagead/iclk\?.*?(?<=[?&])adurl=(.*?)(?:$|[&\#])'i
 redirector_pattern m'^http:/*(?:\w+\.)?aol\.com/redir\.adp\?.*(?<=[?&])_url=(.*?)(?:$|[&\#])'i
+redirector_pattern m'^http:/*rd\.yahoo\.co\.jp/\*(.*)'i
 ##} redirector_pattern_sandbox
 
 
@@ -2975,6 +2541,7 @@ header __MO_OL_B4B40  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.41
 header __MO_OL_B9B11  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2462\.0000/
 header __MO_OL_BC7E6  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4927\.1200/
 header __MO_OL_C65FA  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4807\.1700/
+header __MO_OL_C9068  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1807/
 header __MO_OL_CAC8F  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V4\.71\.1712\.3/
 header __MO_OL_CF0C0  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4807\.2300/
 header __MO_OL_EF20B  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2180/
@@ -3010,6 +2577,7 @@ ifplugin Mail::SpamAssassin::Plugin::DNSEval
 header	__RCVD_IN_DNSWL		eval:check_rbl('dnswl-firsttrusted', 'list.dnswl.org.')
 tflags	__RCVD_IN_DNSWL		nice net
 endif
+
 meta     __SEX_WRDS		(__WORD_SEX || __WORD_CUM || __WORD_SPERM || __WORD_SLUTS || __WORD_RAPED)
 header   __SUBJ_3DIGIT		Subject =~ /\b\d{3}[^0-9]/
 header   __SUBJ_APPROVE		Subject =~ /Approve/i
@@ -3099,6 +2667,7 @@ header __XM_OL_B4B40  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5
 header __XM_OL_B9B11  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2462\.0000/
 header __XM_OL_BC7E6  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
 header __XM_OL_C65FA  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
+header __XM_OL_C9068  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1478/
 header __XM_OL_CAC8F  X-Mailer =~ /Microsoft\ Outlook\ Express\ 4\.71\.1712\.3/
 header __XM_OL_CF0C0  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
 header __XM_OL_EF20B  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1478/
