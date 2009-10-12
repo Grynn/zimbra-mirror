@@ -31,6 +31,7 @@ build:
 	cd dspam-$(DSPAM_VERSION); \
 	patch -g0 -N -p1 < ../patches/mac.patch; \
 	CFLAGS="-g -O2" \
+	./autogen.sh; \
 	./configure --prefix=$(ZIMBRA_HOME)/dspam-$(DSPAM_VERSION) \
 	--sysconfdir=$(ZIMBRA_HOME)/conf --with-logdir=$(ZIMBRA_HOME)/log \
 	--enable-daemon \
