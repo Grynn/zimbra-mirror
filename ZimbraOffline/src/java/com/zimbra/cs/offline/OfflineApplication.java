@@ -95,7 +95,7 @@ public class OfflineApplication extends ZimbraApplication {
                 OfflineLog.offline.info("Creating database " + ZIMBRA_DB_NAME);
                 for (String name : sqlScripts) {
                     try {
-                        file = Config.getPathRelativeToZimbraHome("db/" + name + ".sql");
+                        file = new File(LC.mailboxd_directory.value() + "/../db/" + name + ".sql");
                         
                         String script;
                         String template = new String(ByteUtil.getContent(file));

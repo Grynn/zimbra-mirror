@@ -680,8 +680,8 @@
 		
 		<move file="${dist.dir}/lib" tofile="${dist.app.dir}/lib"/>
 		<move file="${dist.dir}/jetty" tofile="${dist.app.dir}/jetty"/>
-			
-		<move file="${dist.dir}/db" tofile="${dist.data.dir}/db"/>
+		<move file="${dist.dir}/db" tofile="${dist.app.dir}/db"/>
+
 		<move file="${dist.dir}/conf" tofile="${dist.data.dir}/conf" />					
 		<move file="${dist.dir}/wiki" tofile="${dist.data.dir}/wiki"/>
 					
@@ -732,7 +732,7 @@
 		<mkdir dir="${dist.app.dir}/win32"/>
 
 		<copy todir="${dist.app.dir}/macos" overwrite="true">
-			<fileset dir="src/installer" includes="launchd.plist quit_zdesktop.applescript svckill.msh" />
+			<fileset dir="src/installer/macos" includes="launchd.plist quit_zdesktop.applescript svckill.sh" />
 			<fileset dir="src/installer/resources" includes="launcher_128x128.icns" />
 		</copy>
 		<chmod file="${dist.app.dir}/macos/svckill.msh" perm="ugo+x"/>

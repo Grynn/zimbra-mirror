@@ -53,7 +53,7 @@
 	<target name="installer-pack-media-mac" if="is-mac">
 		<mkdir dir="${pmdoc.dir}" />
 		<copy todir="${pmdoc.dir}" overwrite="true">
-			<fileset dir="src/installer/macos_installer.pmdoc" />
+			<fileset dir="src/installer/macos/macos_installer.pmdoc" />
 		</copy>
 		<replace file="${pmdoc.dir}/01app.xml" token="@build.root@" value="${basedir}" />
 		<replace file="${pmdoc.dir}/02data.xml" token="@build.root@" value="${basedir}" />
@@ -70,13 +70,13 @@
 			<move file="${zd.app}" tofile="${zd.app}_noreloc" preservelastmodified="true" />
 		</then></if>        
 		
-		<exec executable="src/installer/pmdoc-get-contents.pl" failonerror="true">
+		<exec executable="src/installer/macos/pmdoc-get-contents.pl" failonerror="true">
 			<arg value="${basedir}/build/dist/app" />
 			<arg value="${pmdoc.dir}/01app-contents.xml" />
 			<arg value="root" />
 			<arg value="admin" />
 		</exec>
-		<exec executable="src/installer/pmdoc-get-contents.pl" failonerror="true">
+		<exec executable="src/installer/macos/pmdoc-get-contents.pl" failonerror="true">
 			<arg value="${basedir}/build/dist/data" />
 			<arg value="${pmdoc.dir}/02data-contents.xml" />
 		</exec>
