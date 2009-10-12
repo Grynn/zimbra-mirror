@@ -618,7 +618,7 @@
 		<mkdir dir="${dist.dir}" />
 		<gunzip src="${jetty.src.dir}/jetty-${jetty.version}.tar.gz" dest="${dist.dir}/jetty-${jetty.version}.tar" />
 		<untar src="${dist.dir}/jetty-${jetty.version}.tar" dest="${dist.dir}" overwrite="true" />
-		<move file="${dist.dir}/jetty-${jetty.version}" tofile="${dist.app.dir}/jetty" />
+		<move file="${dist.dir}/jetty-${jetty.version}" tofile="${dist.dir}/jetty" />
 		<delete file="${dist.dir}/jetty-${jetty.version}.tar" />
 		<mkdir dir="${dist.app.dir}/jetty/logs" />
 		<mkdir dir="${dist.app.dir}/jetty/webapps" />
