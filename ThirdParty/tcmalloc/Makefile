@@ -15,7 +15,7 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-TCMALLOC_VERSION ?= 1.3
+TCMALLOC_VERSION ?= 1.4
 TCMALLOC_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/tcmalloc/tcmalloc-$(TCMALLOC_VERSION).tgz
 
 all: allclean build tar
