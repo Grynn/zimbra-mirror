@@ -12,7 +12,7 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-LDAP_VERSION ?= 2.4.18.2z
+LDAP_VERSION ?= 2.4.19.2z
 
 BDB_VERSION ?= 4.7.25.4
 BDB_LIB_DIR ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib

@@ -16,7 +16,7 @@ ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-LDAP_RELEASE ?= 2.4.18
+LDAP_RELEASE ?= 2.4.19
 LDAP_PATCH_LEVEL ?= 2z
 LDAP_VERSION ?= $(LDAP_RELEASE).$(LDAP_PATCH_LEVEL)
 LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-$(LDAP_VERSION).tgz
