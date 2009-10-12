@@ -567,8 +567,12 @@ deployCert() {
     shift
 
     # dos2unix conversion
-    perl -i -pe 's/\r//g' ${cli_comm_crt}
-    perl -i -pe 's/\r//g' ${cli_ca_chain}
+    if [ -f "${cli_comm_crt}" ]; then
+      perl -i -pe 's/\r//g' ${cli_comm_crt}
+    fi
+    if [ -f "${cli_ca_chain}" ]; then
+      perl -i -pe 's/\r//g' ${cli_ca_chain}
+    fi
   
     if [ x"${cli_comm_crt}" = "x" ]; then
       getCertFromLdap $type
