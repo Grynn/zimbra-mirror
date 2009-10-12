@@ -327,37 +327,19 @@
 		</exec>
 	</target>
 
-    <target name="derby-versions-init" if="db-derby">
-        <java classname="com.zimbra.cs.db.Derby" fork="true" classpathref="offline.class.path" failonerror="true">
-            <arg line="-o ${build.dir}"/>
-        </java>
-    </target>
-
-    <target name="sqlite-versions-init" if="db-sqlite">
-        <java classname="com.zimbra.cs.db.SQLite" fork="true" classpathref="offline.class.path" failonerror="true">
-            <arg line="-o ${build.dir}"/>
-        </java>
-    </target>
-
-    <target name="db-versions-init" depends="derby-versions-init,sqlite-versions-init"/>
-
-	<target name="offline-gen-reindexij">
-		<echo file="${build.reindex_ij}">
-            CONNECT 'jdbc:derby:${zimbra.derby.dir}';
-
-			DROP INDEX mboxgroup1.i_mail_item_folder_id_date;
-			CREATE INDEX mboxgroup1.i_mail_item_folder_id_date ON mail_item(mailbox_id, folder_id, date DESC);
-
-			DROP INDEX mboxgroup1.i_mail_item_tags_date;
-			CREATE INDEX mboxgroup1.i_mail_item_tags_date ON mail_item(mailbox_id, tags, date DESC);
-
-			DROP INDEX mboxgroup1.i_mail_item_flags_date;
-			CREATE INDEX mboxgroup1.i_mail_item_flags_date ON mail_item(mailbox_id, flags, date DESC);
-
-			COMMIT;
-            EXIT;
-        </echo>
+	<target name="derby-versions-init" if="db-derby">
+		<java classname="com.zimbra.cs.db.Derby" fork="true" classpathref="offline.class.path" failonerror="true">
+			<arg line="-o ${build.dir}"/>
+		</java>
 	</target>
+
+	<target name="sqlite-versions-init" if="db-sqlite">
+		<java classname="com.zimbra.cs.db.SQLite" fork="true" classpathref="offline.class.path" failonerror="true">
+			<arg line="-o ${build.dir}"/>
+		</java>
+	</target>
+
+	<target name="db-versions-init" depends="derby-versions-init,sqlite-versions-init"/>
 
 	<target name="offline-dev-dist">
 		<antcall target="offline-war" />
@@ -397,8 +379,12 @@
 			<fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="derby.jar,sqlite*.jar,mysql*.jar,jfreechart*,testng*" />
 			<fileset refid="gdata.jars"/>
 		</copy>
+		<delete>
+			<fileset dir="${dist.dir}/jetty/lib" includes="slf4j*.jar"/>
+		</delete>
 		<copy todir="${dist.dir}/jetty/lib" overwrite="true">
 			<fileset file="${common.jars.dir}/log4j*.jar"/>
+			<fileset file="${common.jars.dir}/slf4j*.jar"/>
 		</copy>
 		<copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.config.dir}/jetty-6.1/log4j.properties.production" overwrite="true" />
 
@@ -585,23 +571,20 @@
 
 		<antcall target="offline-make-dist">
 			<param name="param.app.dir" value="${zimbra.home.dir}/app" />
-            <param name="param.data.dir" value="${zimbra.home.dir}/data" />			
+			<param name="param.data.dir" value="${zimbra.home.dir}/data" />			
 			<param name="param.port" value="7733" />
 		</antcall>
-
 		<copy todir="${zimbra.home.dir}" overwrite="true">
 			<fileset dir="${dist.dir}"/>
 		</copy>
-
 		<mkdir dir="${zimbra.sqlite.dir}" />
-
 		<if>
 			<isset property="is-unix" />
 			<then>
 				<copy tofile="${zimbra.offline.data.dir}/bin/zmjava" file="src/bin/zmjava" overwrite="true"/>
 				<chmod perm="a+rx">
 					<fileset dir="${zimbra.offline.data.dir}/bin"/>
-		        </chmod>
+				</chmod>
 				<copy tofile="${zimbra.offline.app.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX" overwrite="true"/>
 				<copy tofile="${zimbra.offline.app.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
 			</then>
@@ -677,18 +660,18 @@
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
 			<arg line="-e zdesktop_buildid=${offline.buildid}" />
 		</java>
-        <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-            <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-            <arg line="-e javamail_imap_debug=false" />
-        </java>
-        <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-            <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-            <arg line="-e javamail_pop3_debug=false" />
-        </java>
-        <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-            <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-            <arg line="-e javamail_smtp_debug=false" />
-        </java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<arg line="-e javamail_imap_debug=false" />
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<arg line="-e javamail_pop3_debug=false" />
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<arg line="-e javamail_smtp_debug=false" />
+		</java>
             	
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.request=INFO" value="log4j.logger.zimbra.offline.request=DEBUG"/>
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.response=INFO" value="log4j.logger.zimbra.offline.response=DEBUG"/>		
@@ -844,7 +827,7 @@
 	</macrodef>
 
 	<target name="offline-prep-prism">
-	    <!-- unzip original prism drops to dist dirs -->			
+		<!-- unzip original prism drops to dist dirs -->
 		<unzip src="${prism.src.dir}/macos/${prism.version.macos}/drop/prism-${prism.version.macos}.macos.zip" dest="${dist.app.dir}/macos/prism" overwrite="true"/>
 		<unzip src="${prism.src.dir}/win32/${prism.version.win32}/drop/prism-${prism.version.win32}.win32.zip" dest="${dist.app.dir}/win32/prism" overwrite="true"/>
 		<unzip src="${prism.src.dir}/linux/${prism.version.linux}/drop/prism-${prism.version.linux}.linux.zip" dest="${dist.app.dir}/linux/prism" overwrite="true"/>
@@ -870,9 +853,9 @@
 			<fileset dir="${dist.app.dir}/win32/prism/xulrunner"/>
 			<fileset dir="${dist.app.dir}/linux/prism/xulrunner"/>
 		</delete>
-       	<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.macos.zip" dest="${dist.app.dir}/macos/prism/Prism.app/Contents/Frameworks"/>
-       	<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.win32.zip" dest="${dist.app.dir}/win32/prism"/>
-       	<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.linux.zip" dest="${dist.app.dir}/linux/prism"/>
+		<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.macos.zip" dest="${dist.app.dir}/macos/prism/Prism.app/Contents/Frameworks"/>
+		<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.win32.zip" dest="${dist.app.dir}/win32/prism"/>
+		<unzip src="${xulrunner.src.dir}/1.9.0.1/xulrunner-1.9.0.1.en-US.linux.zip" dest="${dist.app.dir}/linux/prism"/>
 -->
 		<copy todir="${dist.app.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/chrome" overwrite="true">
 			<fileset dir="${xulrunner.src.dir}/locales" includes="*.manifest *.jar"/>
