@@ -29,6 +29,7 @@ all: allclean build tar
 build:
 	(tar xzf src/dspam-$(DSPAM_VERSION).tar.gz; \
 	cd dspam-$(DSPAM_VERSION); \
+	patch -g0 -N -p1 < ../patches/mac.patch; \
 	CFLAGS="-g -O2" \
 	./configure --prefix=$(ZIMBRA_HOME)/dspam-$(DSPAM_VERSION) \
 	--sysconfdir=$(ZIMBRA_HOME)/conf --with-logdir=$(ZIMBRA_HOME)/log \

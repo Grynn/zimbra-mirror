@@ -1,0 +1,10 @@
+--- dspam-3.9.0-BETA1/src/read_config.h.orig	2009-10-12 14:06:11.000000000 -0700
++++ dspam-3.9.0-BETA1/src/read_config.h	2009-10-12 14:06:37.000000000 -0700
+@@ -35,6 +35,6 @@
+ int configure_algorithms (DSPAM_CTX * CTX);
+ 
+ agent_pref_t pref_config(void);
+-config_t agent_config;
++static config_t agent_config;
+ 
+ #endif /* _READ_CONFIG_H */
