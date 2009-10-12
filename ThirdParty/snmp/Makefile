@@ -6,7 +6,7 @@ MAKEARGS ?= -j2
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 ZIMBRA_HOME ?= /opt/zimbra
 APP_NAME=net-snmp
-APP_VERSION ?= 5.4.2.1
+APP_VERSION ?= 5.5
 APP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/snmp/$(APP_NAME)-$(APP_VERSION).tgz
 INSTALL_PREFIX := $(ZIMBRA_HOME)/$(APP_NAME)-$(APP_VERSION)
 
@@ -46,7 +46,6 @@ all: allclean build tar
 build: $(APP_NAME)-$(APP_VERSION)
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	(cd $(APP_NAME)-$(APP_VERSION); \
-	patch -g0 -N -p1 < ../patches/patch-leopard-inpcb.patch; \
 	$(ENVMOD) CFLAGS="-g -O2" ./configure --prefix=$(INSTALL_PREFIX) \
 	--with-default-snmp-version=3 --with-sys-contact="admin" \
 	--with-sys-location="unknown" --with-logfile="$(ZIMBRA_HOME)/log/snmpd.log" \
