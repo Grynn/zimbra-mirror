@@ -186,11 +186,11 @@
 			<property name="zimbra.buildinfo.type" value="${offline.appid}"/>
 			<property name="zimbra.buildinfo.release" value="${offline.name}"/>
 		</ant>
+		<ant dir="${zsync.common.dir}" target="jar" inheritAll="false" />
+		<ant dir="${zsync.client.dir}" target="jar" inheritAll="false" />
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="offline.class.path" target="1.5">
 			<src refid="all.java.path" />
 		</javac>
-		<ant dir="${zsync.common.dir}" target="jar" inheritAll="false" />
-		<ant dir="${zsync.client.dir}" target="jar" inheritAll="false" />
 	</target>
 
 	<target name="offline-jar" depends="offline-compile" description="Creates the jar file">
@@ -202,6 +202,8 @@
 
 	<target name="offline-clean" description="Removes build files and undeploys extension">
 		<delete dir="${build.dir}" />
+		<ant dir="../ZimbraSyncCommon" target="clean" inheritAll="false" />
+		<ant dir="../ZimbraSyncClient" target="clean" inheritAll="false" />
 		<ant dir="../ZimbraCommon" target="clean" inheritAll="false" />
 		<ant dir="../ZimbraServer" target="clean" inheritAll="false" />
 		<ant dir="../ZimbraWebClient" target="clean" inheritAll="false" />
