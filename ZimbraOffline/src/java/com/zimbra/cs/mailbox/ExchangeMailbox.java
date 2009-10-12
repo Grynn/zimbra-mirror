@@ -1,15 +1,32 @@
 package com.zimbra.cs.mailbox;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
+
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.Pair;
+import com.zimbra.common.util.StringUtil;
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.Identity;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
+import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications.Change;
+import com.zimbra.zimbrasync.client.ExchangeSyncFactory;
+import com.zimbra.zimbrasync.client.cmd.Request;
 
 public class ExchangeMailbox extends ChangeTrackingMailbox {
 
@@ -68,9 +85,73 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
     OfflineDataSource getDataSource() throws ServiceException {
         return (OfflineDataSource)OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
     }
-
+    
+    @Override
+    public MailSender getMailSender() throws ServiceException {
+        return new OfflineMailSender();
+    }
+    
+    private static final OperationContext sContext = new TracelessContext();
+    private static final Map<Integer, Pair<Integer, String>> sSendUIDs = new HashMap<Integer, Pair<Integer, String>>();
+    
     private int sendPendingMessages(boolean isOnRequest) throws ServiceException {
-        return 0;
+        int sentCount = 0;
+        for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE); iterator.hasNext(); ) {
+            int id = iterator.next();
+
+            Message msg;
+            try {
+                msg = getMessageById(sContext, id);
+            } catch (NoSuchItemException x) { //message deleted
+                OutboxTracker.remove(this, id);
+                continue;
+            }
+            if (msg == null || msg.getFolderId() != ID_FOLDER_OUTBOX) {
+                OutboxTracker.remove(this, id);
+                continue;
+            }
+
+            OfflineDataSource ds = getDataSource();
+            if (!isOnRequest && isAutoSyncDisabled(ds))
+                continue;
+
+            ZimbraLog.xsync.debug("sending pending mail (id=%d): %s", msg.getId(), msg.getSubject());
+            
+            
+            Identity identity = Provisioning.getInstance().get(getAccount(), IdentityBy.id, msg.getDraftIdentityId());
+            // try to avoid repeated sends of the same message by tracking "send UIDs" on SendMsg requests
+            Pair<Integer, String> sendRecord = sSendUIDs.get(id);
+            String sendUID = sendRecord == null || sendRecord.getFirst() != msg.getSavedSequence() ? UUID.randomUUID().toString() : sendRecord.getSecond();
+            sSendUIDs.put(id, new Pair<Integer, String>(msg.getSavedSequence(), sendUID));
+
+            String origId = msg.getDraftOrigId();
+            ItemId origMsgId = StringUtil.isNullOrEmpty(origId) ? null : new ItemId(origId, ds.getAccountId());
+
+            // Do we need to save a copy of the message ourselves to the Sent folder?
+            boolean saveToSent = (ds.isSaveToSent()) && getAccount().isPrefSaveToSent();
+            
+            try {
+                new Request(ExchangeSyncFactory.getInstance().getSyncSettings(ds, 0)).doSendMail(msg.getContentStream(), msg.getSize(), saveToSent); //TODO: PolicyKey
+            } catch (ServiceException x) {
+                //TODO:
+                ZimbraLog.xsync.warn("send mail failure (id=%d)", msg.getId(), x);
+            } catch (IOException x) {
+                //TODO:
+                ZimbraLog.xsync.warn("send mail failure (id=%d)", msg.getId(), x);
+            }
+
+            ZimbraLog.xsync.debug("sent pending mail (id=%d)", msg.getId());
+
+            // remove the draft from the outbox
+            delete(sContext, id, MailItem.TYPE_MESSAGE);
+            OutboxTracker.remove(this, id);
+
+            // the draft is now gone, so remove it from the "send UID" hash and the list of items to push
+            sSendUIDs.remove(id);
+            sentCount++;
+        }
+
+        return sentCount;
     }
 
     private boolean isAutoSyncDisabled(DataSource ds) {
