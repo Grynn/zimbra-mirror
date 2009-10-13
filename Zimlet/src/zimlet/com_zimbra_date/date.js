@@ -214,8 +214,9 @@ function() {
 	// get all the defined patterns
 	var i, pattern;
 	for (i = 1; pattern = this.getMessage("format"+i+".pattern"); i++) {
-		if (pattern.match(/^###+/)) break; //Minimum three hashes to terminate
-		if (pattern.match(/^#/)) continue; //one hash to skip/disable the pattern
+		if (pattern.match(/^\?\?\?+/)) break;	// this means couldn't find the resources file!
+		if (pattern.match(/^###+/)) break;		// Minimum three hashes to terminate
+		if (pattern.match(/^#/)) continue;		// one hash to skip/disable the pattern
 		Com_Zimbra_Date.PATTERNS.push(pattern);
 		Com_Zimbra_Date.RULES.push(this.getMessage("format"+i+".rule"));
 	}
