@@ -51,33 +51,37 @@ public class TestXsync extends TestCase {
         msg.setMessagePart(new MessagePart("text/plain", "This is the outer message"));
         localMailbox.sendMessage(msg, null, false);
         sync();
-        ZMessage sm1 = TestUtil.search(remoteMailbox, "in:inbox is:unread").get(0);
-        assertNotNull(sm1);
-        ZMessage cm1 = TestUtil.search(localMailbox, "in:inbox is:unread").get(0);
-        assertNotNull(cm1);
+        ZMessage recv = TestUtil.search(remoteMailbox, "in:inbox is:unread").get(0);
+        assertNotNull(recv);
+        checkMsgCount(localMailbox, "in:inbox is:unread", 1);
         ZMessage sent = TestUtil.search(localMailbox, "in:sent").get(0);
         assertNotNull(sent);
         
-        //create remote F1 and add MSG1 to F1, and delete local sent message
-        ZFolder sf1 = TestUtil.createFolder(remoteMailbox, "" + Mailbox.ID_FOLDER_USER_ROOT,  "F1");
-        remoteMailbox.moveMessage(sm1.getId(), sf1.getId());
+        //delete both sent and recv
+        remoteMailbox.deleteMessage(recv.getId());
         localMailbox.deleteMessage(sent.getId());
+        sync();
+        checkMsgCount(localMailbox, "in:inbox", 0);
+        checkMsgCount(remoteMailbox, "in:sent", 0);
+        
+        //create remote F1 and add MSG1 to F1
+        ZFolder sf1 = TestUtil.createFolder(remoteMailbox, "" + Mailbox.ID_FOLDER_USER_ROOT,  "F1");
+        String sm1Id = TestUtil.addMessage(remoteMailbox, "MSG1", sf1.getId(), "u");
         sync();
         ZFolder cf1 = localMailbox.getFolderByPath("/F1");
         assertNotNull("local /F1", cf1);
         checkMsgCount(localMailbox, "in:F1 is:unread", 1);
-        checkMsgCount(remoteMailbox, "in:sent", 0);
         
         //create remote F2, move MSG1 to F2, and mark MSG1 read
         ZFolder sf2 = TestUtil.createFolder(remoteMailbox, sf1.getId(),  "F2");
-        remoteMailbox.moveMessage(sm1.getId(), sf2.getId());
-        remoteMailbox.markMessageRead(sm1.getId(), true);
+        remoteMailbox.moveMessage(sm1Id, sf2.getId());
+        remoteMailbox.markMessageRead(sm1Id, true);
         sync();
         ZFolder cf2 = localMailbox.getFolderByPath("/F1/F2");
         assertNotNull("local /F1/F2", cf2);
         checkMsgCount(localMailbox, "in:F1", 0);
         checkMsgCount(localMailbox, "in:F1/F2", 1);
-        cm1 = TestUtil.search(localMailbox, "in:F1/F2").get(0);
+        ZMessage cm1 = TestUtil.search(localMailbox, "in:F1/F2").get(0);
         assertFalse("MSG1 unread", cm1.isUnread());
 
         //create local F3 and move MSG1 into it, and mark MSG1 unread
@@ -89,7 +93,7 @@ public class TestXsync extends TestCase {
         assertNotNull("remote /F1/F2/F3", sf3);
         checkMsgCount(remoteMailbox, "in:F1/F2", 0);
         checkMsgCount(remoteMailbox, "in:F1/F2/F3", 1);
-        sm1 = TestUtil.search(remoteMailbox, "in:F1/F2/F3").get(0);
+        ZMessage sm1 = TestUtil.search(remoteMailbox, "in:F1/F2/F3").get(0);
         assertTrue("MSG1 read", sm1.isUnread()); //need to preserv local changes when moving a message
         
         //create local F4 and move F3 into it
