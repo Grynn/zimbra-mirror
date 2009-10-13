@@ -163,6 +163,7 @@ ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, c
                         data[stats[0].values[j].t] = {};
                         setOrIncrement = true;
                     }
+                    if (!stats[0].values[j].stat) continue;
                     for (var m = 0; m < stats[0].values[j].stat.length; m++) {
                         if (setOrIncrement)
                             data[stats[0].values[j].t][stats[0].values[j].stat[m].name] = stats[0].values[j].stat[m].value;
