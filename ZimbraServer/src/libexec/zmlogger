@@ -25,6 +25,24 @@ use FileHandle;
 use POSIX ":sys_wait_h";
 use vars qw ($logger_directory $logger_rrd_directory $zmrrdfetch);
 
+if ($^O eq "darwin") {
+	$SIG{CHLD} = \&catchSignal;
+} else {
+	$SIG{CHLD} = sub { while(waitpid(-1,WNOHANG)>0) { } };
+}
+
+$SIG{QUIT}  = \&catchSignal;
+$SIG{INT}   = \&catchSignal;
+$SIG{KILL}  = \&catchSignal;
+$SIG{TERM}  = \&catchSignal;
+
+sub catchSignal {
+  my $sig = shift;
+  return if ($sig eq "CHLD");
+  print "Shutting down. Received signal $sig";
+  exit 0;
+}
+
 Zimbra::Mon::Zmstat::getLocalConfig();
 $zmrrdfetch = $Zimbra::Mon::Zmstat::LC{zimbra_home} . "/libexec/zmrrdfetch";
 
@@ -429,21 +447,12 @@ sub runzmrrdfetch($$) {
 	
 }
 
-sub REAPER {
-	my $child;
-	while (($child = waitpid(-1,WNOHANG)) > 0) {
-		# do nothing
-	}
-	$SIG{CHLD} = \&REAPER;
-}
 sub runserver() {
 	use Socket;
 	use Carp;
 	
 	my $port = $Zimbra::Mon::Zmstat::LC{'logger_zmrrdfetch_port'};
 	my $proto = getprotobyname('tcp');
-	
-	$SIG{CHLD} = \&REAPER;
 	
 	socket(Server, PF_INET, SOCK_STREAM, $proto)               || die "socket: $!";
 	setsockopt(Server, SOL_SOCKET, SO_REUSEADDR, pack("l", 1)) || die "setsockopt: $!";
