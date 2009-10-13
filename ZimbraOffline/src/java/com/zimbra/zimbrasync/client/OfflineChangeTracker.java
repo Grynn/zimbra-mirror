@@ -1,8 +1,10 @@
 package com.zimbra.zimbrasync.client;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import com.zimbra.common.service.ServiceException;
@@ -16,6 +18,8 @@ import com.zimbra.zimbrasync.client.ChangeTracker;
 import com.zimbra.zimbrasync.client.ExchangeItemMapping;
 
 public class OfflineChangeTracker extends ChangeTracker {
+    
+    private Set<Integer> allDeletes; //don't init here as super constructor will call into findClientChanges()
 
     public OfflineChangeTracker(DataSource ds, Map<Integer, ExchangeFolderMapping> folderMappingsByClientId) throws ServiceException {
         super(ds, folderMappingsByClientId);
@@ -33,7 +37,7 @@ public class OfflineChangeTracker extends ChangeTracker {
             int folderId = entry.getValue().getSecond();
             
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
-                getClientAdds(folderId).add(id);
+                addClientAdd(folderId, id);
             } else {
                 if ((mask & Change.MODIFIED_FOLDER) != 0) {
                     int oldFldId = mappingByClientId.get(id).getFolderId();
@@ -55,7 +59,7 @@ public class OfflineChangeTracker extends ChangeTracker {
                     }
                 }
                 if (((mask & Change.MODIFIED_CONTENT) | (mask & Change.MODIFIED_METADATA) | (mask & Change.MODIFIED_UNREAD)) != 0)
-                    getClientChanges(folderId).add(id);
+                    addClientChange(folderId, id);
             }
         }
         
@@ -63,8 +67,12 @@ public class OfflineChangeTracker extends ChangeTracker {
         addItemMappings(ExchangeItemMapping.getMappings(ds, tombstones));
         for (int id : tombstones) {
             ExchangeItemMapping eim = mappingByClientId.get(id);
-            if (eim != null)
-                getClientDeletes(eim.getFolderId()).add(id);
+            if (eim != null) {
+                addClientDelete(eim.getFolderId(), id);
+                if (allDeletes == null)
+                    allDeletes = new HashSet<Integer>();
+                allDeletes.add(id);
+            }
         }
     }
     
@@ -108,11 +116,31 @@ public class OfflineChangeTracker extends ChangeTracker {
     
     @Override
     protected void clearItemDeleted(int id) throws ServiceException {
-        //if we get one positive delete response, clear all tombstones as a shortcut as we don't plan to send deletes in multiple batches
-        if (!tombstonesCleared) {
-            ChangeTrackingMailbox ctmbox = (ChangeTrackingMailbox)mbox;
-            ctmbox.clearTombstones(getContext(false), cutoffChangeId); //TODO: maybe need to skip temporary failures?
-            tombstonesCleared = true;
+        allDeletes.remove(id);
+    }
+    
+    @Override
+    public void folderSyncComplete() throws ServiceException {
+        //by now we may have deleted some folders, so clean up the deletes
+        for (Iterator<Entry<Integer, List<Integer>>> i = deletesByFoderId.entrySet().iterator(); i.hasNext();) {
+            Entry<Integer, List<Integer>> entry = i.next();
+            if (!folderMappingsByClientId.containsKey(entry.getKey())) { //folder got deleted, either from client or from server
+                for (int id : entry.getValue())
+                    allDeletes.remove(id);
+                i.remove();
+            }
+        }
+    }
+    
+    @Override
+    public void syncComplete() throws ServiceException {
+        if (deletesByFoderId.size() > 0) {
+            if (allDeletes.size() == 0) {
+                ChangeTrackingMailbox ctmbox = (ChangeTrackingMailbox)mbox;
+                ctmbox.clearTombstones(getContext(false), cutoffChangeId);
+            } else {
+                ZimbraLog.xsync.warn("%d client deletes not acknowledged: %s", allDeletes.size(), allDeletes.toString());
+            }
         }
     }
 }
