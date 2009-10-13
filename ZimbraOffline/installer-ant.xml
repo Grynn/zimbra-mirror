@@ -4,6 +4,7 @@
 	<property name="media_win32" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_win32}"/>
 	<property name="media_macos" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_macos}"/>
 	<property name="media_linux" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_linux}"/>
+	<property name="media_linux_dir" value="zdesktop_${offline.filever}_build_${offline.buildid}_linux_i686"/>
 	<property name="build.dir" location="../ZimbraBuild/i386" />
 	<property name="pmdoc.dir" location="./build/macos_installer.pmdoc" />
 	<property name="wxs.dir" location="${basedir}\build" />
@@ -147,15 +148,17 @@
 		<copy todir="build/dist" file="src/installer/install-linux.pl" preservelastmodified="true" overwrite="true" />
 		<chmod file="build/dist/install-linux.pl" perm="ugo+rx" />
 
+		<mkdir dir="build/dist/${media_linux_dir}" />
+		<move todir="build/dist/${media_linux_dir}">
+			<fileset dir="build/dist" excludes="${media_linux_dir}" />
+		</move>
 		<!-- ant's tar task can't preserve permissions. we call gnu tar directly -->
 		<exec executable="/bin/tar" failonerror="true">
 			<arg value="pcvzf" />
 			<arg value="${build.dir}/${media_linux}" />
 			<arg value="-C" />
 			<arg value="build/dist" />
-			<arg value="app" />
-			<arg value="data" />
-			<arg value="install-linux.pl" />
+			<arg value="${media_linux_dir}" />
 		</exec>
 	</target>
 	
