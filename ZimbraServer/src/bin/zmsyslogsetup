@@ -87,9 +87,9 @@ updateSyslogNG() {
   # create a safe temp file and make sure we have enough space to fill it
   tmpfile=$(mktemp ${zimbra_tmp_directory}/syslog-ng.conf.XXXXXX) && cp -f ${syslogconf} ${tmpfile}
   if [ $? = 0 -a -s "${tmpfile}" ]; then
-    echo -n "Updating $syslogconf..."
+    echo -n "updateSyslogNG: Updating $syslogconf..."
   else 
-    echo "Unable to create a temp file."
+    echo "updateSyslogNG: Unable to create temp file: ${tmpfile}"
     exit 1
   fi
 
@@ -135,9 +135,9 @@ updateSyslog() {
   # create a safe temp file and make sure we have enough space to fill it
   tmpfile=$(mktemp ${zimbra_tmp_directory}/syslog.conf.XXXXXX) && cp -f ${syslogconf} ${tmpfile}
   if [ $? = 0 -a -s "${tmpfile}" ]; then
-    echo -n "Updating $syslogconf..."
+    echo -n "updateSyslog: Updating $syslogconf..."
   else 
-    echo "Unable to create a temp file."
+    echo "updateSyslog: Unable to create temp file: ${tmpfile}"
     exit 1
   fi
 
@@ -176,7 +176,7 @@ updateSyslog() {
   if [ $? = 0 -a -s "${tmpfile2}" ]; then
     echo -n "."
   else 
-    echo "Unable to create a temp file."
+    echo "updateSyslog: Unable to create temp file2: ${tmpfile2}"
     exit 1
   fi
   egrep -v "^mail.*($LOGHOST|zimbra)" ${tmpfile} > ${tmpfile2}
