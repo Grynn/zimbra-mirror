@@ -1353,25 +1353,6 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 		colSizes:["275px","*"],numCols:2,
 	 	items:[
         ZaItem.descriptionXFormItem,
-       /*{ref:ZaAccount.A_description,  msgName:ZaMsg.NAD_Description,
-			   label:ZaMsg.NAD_Description, labelLocation:_LEFT_, //cssClass:"admin_xform_name_input" ,
-               labelCssStyle:"vertical-align:top",
-               type:_REPEAT_,
-                align:_LEFT_,
-                repeatInstance:"",
-                showAddButton:false,
-                showRemoveButton:false,
-                showAddOnNextRow:false,
-//                removeButtonLabel:ZaMsg.NAD_RemoveAddress,
-                items: [
-                    {ref:".", type:_TEXTFIELD_, width:"30em"}
-                ]
-            },
-            {ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,
-				label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"
-			},         */
-
-
 		{ref:ZaAccount.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,
 			label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em"
 		}
