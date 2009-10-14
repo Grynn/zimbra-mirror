@@ -145,8 +145,8 @@
 	<target name="installer-pack-media-linux" if="is-linux">
 		<delete dir="build/dist/app/win32" />
 		<delete dir="build/dist/app/macos" />
-		<copy todir="build/dist" file="src/installer/install-linux.pl" preservelastmodified="true" overwrite="true" />
-		<chmod file="build/dist/install-linux.pl" perm="ugo+rx" />
+		<copy todir="build/dist" file="src/installer/linux/install.pl" preservelastmodified="true" overwrite="true" />
+		<chmod file="build/dist/install.pl" perm="ugo+rx" />
 
 		<mkdir dir="build/dist/${media_linux_dir}" />
 		<move todir="build/dist/${media_linux_dir}">

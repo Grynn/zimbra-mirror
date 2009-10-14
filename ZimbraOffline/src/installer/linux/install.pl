@@ -11,18 +11,18 @@ my ($app_root, $data_root, $icon_dir);
 
 my $messages = {
     en_US => {
-	AcceptDecline => "(A)ccept or (D)ecline",
-	ChooseAppRoot => "Choose the folder where you would like to install Zimbra Desktop's application files",
-	ChooseDataRoot => "Choose the folder where you would like to install Zimbra Desktop's user data files",
-	ChooseIconDir => "Choose the folder where you would like to create desktop icon",
-	Configuring => "Configuring...",
-	Continue => "Press enter to continue",
-	CreateIcon => "Creating desktop icon...",
-	Done => "done",
-	Installing => "Installing files...",
-	Success => 'Zimbra Desktop is installed successfully',
-	Welcome => "Welcome to Zimbra Desktop setup wizard. This will install Zimbra Desktop on you computer.",
-	YesNo => "(Y)es or (N)o"
+        AcceptDecline => "(A)ccept or (D)ecline",
+        ChooseAppRoot => "Choose the folder where you would like to install Zimbra Desktop's application files",
+        ChooseDataRoot => "Choose the folder where you would like to install Zimbra Desktop's user data files",
+        ChooseIconDir => "Choose the folder where you would like to create desktop icon",
+        Configuring => "Configuring...",
+        Continue => "Press enter to continue",
+        CreateIcon => "Creating desktop icon...",
+        Done => "done",
+        Installing => "Installing files...",
+        Success => 'Zimbra Desktop is installed successfully',
+        Welcome => "Welcome to Zimbra Desktop setup wizard. This will install Zimbra Desktop on you computer.",
+        YesNo => "(Y)es or (N)o"
     }
 };
 
@@ -139,8 +139,8 @@ print get_message('Done'), "\n";
 
 # create desktop icon
 print get_message('CreateIcon');
-find_and_replace("$app_root/linux/linux.desktop", $tokens);
-exit 1 if system("cp -p $app_root/linux/linux.desktop $icon_dir");
+find_and_replace("$app_root/linux/zd.desktop", $tokens);
+exit 1 if system("cp -p $app_root/linux/zd.desktop $icon_dir");
 print get_message('Done'), "\n";
 
 print get_message('Success'), "\n\n";
