@@ -30,9 +30,9 @@ my %BINARIES = (
                 "cyrus-sasl" => "2.1.23.3z",
                 "heimdal" => "1.2.1",
                 "libtool" => "2.2.6a",
-                "openldap" => "2.4.18.2z",
+                "openldap" => "2.4.19.2z",
                 "openssl" => "0.9.8k",
-                "tcmalloc" => "1.3"
+                "tcmalloc" => "1.4"
                );
 my $P4_CMD = "p4";
 
