@@ -33,17 +33,20 @@ if (get_magic_quotes_gpc()) {
 }
 
 if ($text != NULL) {
-    header("Content-Type: text/plain");
-    set_error_handler("returnError");
+    header("Content-Type: text/plain; charset=UTF-8");
 
     setlocale(LC_ALL, $dictionary);
+
+    // Convert to ISO-8859-1
+    $text = iconv("UTF-8", "iso-8859-1//IGNORE", $text);
+
+	// Set error handler after the call to iconv, in case iconv
+	// complains about unexpected characters (bug 41760). 
+    set_error_handler("returnError");
 
     // Get rid of double-dashes, since we ignore dashes
     // when splitting words
     $text = preg_replace('/--+/', ' ', $text);
-
-	// Convert to ISO-8859-1
-	$text = iconv("UTF-8", "iso-8859-1//IGNORE", $text);
 
     // Split on anything that's not a word character, quote or dash
     $words = preg_split('/[^\w\xc0-\xfd-\']+/', $text);
