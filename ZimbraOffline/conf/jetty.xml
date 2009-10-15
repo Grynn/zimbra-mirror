@@ -93,9 +93,6 @@
                <Item>
                  <New id="DefaultHandler" class="org.mortbay.jetty.handler.DefaultHandler"/>
                </Item>
-               <Item>
-                 <New id="RequestLog" class="org.mortbay.jetty.handler.RequestLogHandler"/>
-               </Item>
              </Array>
             </Set>
           </New>
@@ -117,7 +114,7 @@
       <Arg>/service</Arg>
       <Set name="configurationClasses"><Ref id="plusConfig"/></Set>
       <Set name="defaultsDescriptor"><SystemProperty name="jetty.home" default="."/>/etc/webdefault.xml</Set>
-      <Set name="tempDirectory"><SystemProperty name="jetty.home" default="."/>/work/service</Set>
+      <Set name="tempDirectory">@install.data.root@/jetty/work/service</Set>
     </New>
 
     <New id="zimbra" class="org.mortbay.jetty.webapp.WebAppContext">
@@ -126,7 +123,7 @@
       <Arg>/zimbra</Arg>
       <Set name="configurationClasses"><Ref id="plusConfig"/></Set>
       <Set name="defaultsDescriptor"><SystemProperty name="jetty.home" default="."/>/etc/webdefault.xml</Set>
-      <Set name="tempDirectory"><SystemProperty name="jetty.home" default="."/>/work/zimbra</Set>
+      <Set name="tempDirectory">@install.data.root@/jetty/work/zimbra</Set>
     </New>
 
     <!-- =========================================================== -->
@@ -154,26 +151,6 @@
         </New>
       </Arg>
     </Call>
-
-    <!-- =========================================================== -->
-    <!-- Configure Request Log                                       -->
-    <!-- Request logs  may be configured for the entire server here, -->
-    <!-- or they can be configured for a specific web app in a       -->
-    <!-- contexts configuration (see $(jetty.home)/contexts/test.xml -->
-    <!-- for an example).                                            -->
-    <!-- =========================================================== -->
-    <Ref id="RequestLog">
-      <Set name="requestLog">
-        <New id="RequestLogImpl" class="org.mortbay.jetty.NCSARequestLog">
-          <Arg><SystemProperty name="jetty.home" default="."/>/logs/access_log.yyyy_mm_dd</Arg>
-          <Set name="logDateFormat">dd/MMM/yyyy:HH:mm:ss Z</Set>
-          <Set name="retainDays">30</Set>
-          <Set name="append">true</Set>
-          <Set name="extended">true</Set>
-          <Set name="filenameDateFormat">yyyy-MM-dd</Set>
-        </New>
-      </Set>
-    </Ref>
 
     <!-- =========================================================== -->
     <!-- extra options                                               -->

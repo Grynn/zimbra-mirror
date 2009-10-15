@@ -305,11 +305,6 @@
 		</copy>
 	</target>
 
-	<target name="offline-zimlet-war">
-		<mkdir dir="${dist.app.dir}/zimlets-deployed"/>
-		<mkdir dir="${dist.app.dir}/jetty/webapps/zimlet"/>
-	</target>
-
 	<target name="offline-db-init" depends="offline-derby-init,offline-sqlite-init" />
 
 	<target name="offline-derby-init" if="db-derby">
@@ -346,7 +341,6 @@
 	<target name="offline-dev-dist">
 		<antcall target="offline-war" />
 		<antcall target="offline-zimbra-war" />
-		<antcall target="offline-zimlet-war" />
 
 		<copy tofile="${dist.dir}/conf/datasource.xml" file="${config.dir}/datasource.xml" overwrite="true" />
 		<copy todir="${dist.dir}/conf" file="${config.dir}/derby.properties" overwrite="true"/>
@@ -640,7 +634,7 @@
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e zimlet_directory='${param.app.dir}/zimlets-deployed'" />
+			<arg line="-e zimlet_directory='$${zimbra_home}/zimlets-deployed'" />
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
@@ -692,6 +686,7 @@
 		<mkdir dir="${dist.data.dir}/bin"/>	
 		<mkdir dir="${dist.data.dir}/store"/>
 		<mkdir dir="${dist.data.dir}/index"/>
+		<mkdir dir="${dist.data.dir}/zimlets-deployed"/>
 		<mkdir dir="${dist.data.dir}/redolog"/>
 		<mkdir dir="${dist.data.dir}/redolog/archive"/>
 		<if><isset property="db-sqlite"/><then>
@@ -699,6 +694,8 @@
 		</then></if>
 			
 		<mkdir dir="${dist.data.dir}/jetty/etc"/>
+		<mkdir dir="${dist.data.dir}/jetty/work/service"/>
+		<mkdir dir="${dist.data.dir}/jetty/work/zimbra"/>
 		<copy todir="${dist.data.dir}/jetty/etc" file="${config.dir}/jetty.xml" overwrite="true"/>
 		<copy tofile="${dist.data.dir}/bin/zdesktop" file="src/bin/zdesktop" overwrite="true"/>
 	
@@ -743,6 +740,7 @@
 		</copy>
 		<copy todir="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/MacOS/" file="${dist.app.dir}/macos/prism/Prism.app/Contents/MacOS/prism"/>
 		<chmod file="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/MacOS/prism" perm="ugo+x"/>
+		<chmod file="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/MacOS/zdrun" perm="ugo+x"/>
 		<replace file="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/Info.plist" token="@version@" value="${offline.version}"/>
 
 		<copy todir="${dist.app.dir}/linux" overwrite="true">
@@ -941,6 +939,8 @@
 		<antcall target="offline-prep-launcher" />
 		<antcall target="offline-jspc" />
 		<antcall target="offline-jre" />
+
+		<move file="${dist.data.dir}" todir="${dist.app.dir}" overwrite="true" />
 	</target>
 
 	<target name="offline-sync-jsp-opt">

@@ -10,7 +10,7 @@
 	<property name="wxs.dir" location="${basedir}\build" />
 	<property name="prism.app" value="build/dist/app/macos/prism/Prism.app" />
 	<property name="updater.app" value="build/dist/app/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app" />
-	<property name="zd.app" value="build/dist/app/macos/Zimbra Desktop.app" />
+	<property name="zd.app" value="${basedir}/build/dist/app/macos/Zimbra Desktop.app" />
 	<property name="winperl" value="C:\perl\bin\perl.exe" />
 	<property name="wix.home" value="C:\Program Files\Windows Installer XML v3" />
   
@@ -56,8 +56,9 @@
 		<copy todir="${pmdoc.dir}" overwrite="true">
 			<fileset dir="src/installer/macos/macos_installer.pmdoc" />
 		</copy>
+		<replace file="${pmdoc.dir}/index.xml" token="@build.root@" value="${basedir}" />
 		<replace file="${pmdoc.dir}/01app.xml" token="@build.root@" value="${basedir}" />
-		<replace file="${pmdoc.dir}/02data.xml" token="@build.root@" value="${basedir}" />
+		<replace file="${pmdoc.dir}/02zimbra.xml" token="@build.root@" value="${basedir}" />
 		
 		<delete dir="build/dist/app/win32" />
 		<delete dir="build/dist/app/linux" />
@@ -77,9 +78,10 @@
 			<arg value="root" />
 			<arg value="admin" />
 		</exec>
+
 		<exec executable="src/installer/macos/pmdoc-get-contents.pl" failonerror="true">
-			<arg value="${basedir}/build/dist/data" />
-			<arg value="${pmdoc.dir}/02data-contents.xml" />
+			<arg value="${zd.app}_noreloc" />
+			<arg value="${pmdoc.dir}/02zimbra-contents.xml" />
 		</exec>
         
 		<exec executable="/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker" failonerror="true">
@@ -88,8 +90,9 @@
 			<arg value="--title" />
 			<arg value="${media_macos}" />
 			<arg value="--verbose" />
+			<arg value="--no-recommend" />
 		</exec>
-        
+
 		<move file="${media_macos}.mpkg" tofile="${build.dir}/${media_macos}.mpkg" preservelastmodified="true" />
 		<exec executable="/usr/bin/hdiutil" failonerror="true">
 			<arg value="create" />
@@ -194,9 +197,11 @@
 
 	<target name="symlink-media">
 		<if><available file="${build.dir}/${media_linux}" type="file"/><then>
+			<delete file="${build.dir}/zdesktop_linux_i686.tgz" quiet="true" />
 			<symlink link="${build.dir}/zdesktop_linux_i686.tgz" resource="${media_linux}" overwrite="true"/>
 		</then></if>
 		<if><available file="${build.dir}/${media_macos}.dmg" type="file"/><then>
+			<delete file="${build.dir}/zdesktop_macos_intel.dmg" quiet="true" />
 			<symlink link="${build.dir}/zdesktop_macos_intel.dmg" resource="${media_macos}.dmg" overwrite="true"/>
 		</then></if>
 		<if><available file="${build.dir}/${media_win32}" type="file"/><then>
