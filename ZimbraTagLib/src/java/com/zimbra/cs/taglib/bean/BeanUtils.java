@@ -327,7 +327,10 @@ public class BeanUtils {
             }
         }
 
-        Locale locale = I18nUtil.findLocale(pc);
+        Locale locale = I18nUtil.getLocale("en_US"); // Default US, in case pc is null
+        if(pc != null){
+                locale = I18nUtil.findLocale(pc);
+        }
         NumberFormat formatter = NumberFormat.getNumberInstance(locale);        
         String str = dsize+"";
         if (fractions == 0) {
