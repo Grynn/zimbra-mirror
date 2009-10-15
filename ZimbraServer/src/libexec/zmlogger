@@ -581,7 +581,7 @@ sub run() {
 
         $utime = times() - $utime;
         if ($utime > 0.015) {
-        	print STDERR "utime > 15ms: line: [$line]\n";
+        	print STDERR "utime > 15ms ($utime): line: [$line]\n";
         }
     }
     
