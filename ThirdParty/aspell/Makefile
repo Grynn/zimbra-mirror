@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 ASPELL_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(ASPELL_ROOT)/../..; pwd)
 MAKE ?= make
