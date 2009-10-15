@@ -1,7 +1,7 @@
 # Makefile for entire install tree, for RPM packages.
 
 # EXECUTABLES
-
+SHELL	:= /bin/bash
 PERL_ROOT ?= $(shell pwd)
 P4_ROOT ?= $(shell cd $(PERL_ROOT)/../..; pwd)
 ZIMBRA_HOME ?= /opt/zimbra
