@@ -1,3 +1,4 @@
+SHELL	:= /bin/bash
 THIRDPARTY_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(THIRDPARTY_ROOT)/..; pwd)
 
