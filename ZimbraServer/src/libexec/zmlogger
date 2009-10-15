@@ -39,7 +39,7 @@ $SIG{TERM}  = \&catchSignal;
 sub catchSignal {
   my $sig = shift;
   return if ($sig eq "CHLD");
-  print "Shutting down. Received signal $sig";
+  print STDERR "Shutting down. Received signal $sig\n";
   exit 0;
 }
 
@@ -475,7 +475,7 @@ sub runserver() {
             exit;
 		} else {
 			my ($rport, $iaddr) = sockaddr_in($paddr);
-			print "Spawned: $pid -- Connected from " . inet_ntoa($iaddr) . ":$rport\n";
+			print STDERR (scalar(localtime()) . ": Spawned: $pid -- Connected from " . inet_ntoa($iaddr) . ":$rport\n");
 			close Client;
 		}
 	}
@@ -505,6 +505,7 @@ sub run() {
     
     while (<>) {
         my $line = $_;
+        my $utime = times;
         chomp $line;
         die "No parent process. logswatch stopped?" if (getppid() == 1);
         next if (/last message repeated/);
@@ -577,6 +578,11 @@ sub run() {
 
         insert_data($dbh, $hostid, $csv_file, $structure,
                     \@headerAry, \@dataAry);
+
+        $utime = times() - $utime;
+        if ($utime > 0.015) {
+        	print STDERR "utime > 15ms: line: [$line]\n";
+        }
     }
     
     $dbh->disconnect;
