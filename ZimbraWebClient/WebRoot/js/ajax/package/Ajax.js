@@ -30,6 +30,7 @@ AjxPackage.require("ajax.debug.AjxDebugXmlDocument");
 AjxPackage.require("ajax.xml.AjxXmlDoc");
 AjxPackage.require("ajax.xml.AjxSerializer");
 AjxPackage.require("ajax.core.AjxImg");
+AjxPackage.require("ajax.core.AjxColor");
 AjxPackage.require("ajax.events.AjxEvent");
 AjxPackage.require("ajax.events.AjxEventMgr");
 AjxPackage.require("ajax.util.AjxTimedAction");
