@@ -45,7 +45,6 @@
 		<mkdir dir="${jetty.dir}/work"/>
 		<mkdir dir="${jetty.dir}/webapps"/>
 
-		<copy todir="${jetty.dir}/lib" file="${slf4j.dir}/jcl104-over-slf4j-${slf4j.version}.jar"/>
 		<copy todir="${jetty.dir}/lib" file="${slf4j.dir}/slf4j-api-${slf4j.version}.jar"/>
 		<copy todir="${jetty.dir}/lib" file="${slf4j.dir}/slf4j-log4j12-${slf4j.version}.jar"/>
 	</target>
