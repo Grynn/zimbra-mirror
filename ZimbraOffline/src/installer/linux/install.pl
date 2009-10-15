@@ -123,7 +123,7 @@ unless (-e $data_root) {
     exit 1 if system("mkdir -p $data_root");
 }
 exit 1 if system("cp -r -p ./app/* $app_root");
-exit 1 if system("cp -r -p ./data/* $data_root");
+exit 1 if system("cp -r -p ./app/data/* $data_root");
 print get_message('Done'), "\n";
 
 my $tokens = {'@install.app.root@' => $app_root, '@install.data.root@' => $data_root};
