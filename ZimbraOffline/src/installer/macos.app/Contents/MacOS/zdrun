@@ -60,7 +60,7 @@ unless (-e $data_root) {
 	# copy data files
 	system("cp -R -f \"$app_root/data\" \"$data_root\"");
 	# copy app bundle
-	system("cp -R -f \"$app_root/macos/Zimbra Desktop.app\" \"$data_root\"");
+	system("cp -R -f \"$app_root/Zimbra Desktop.app\" \"$data_root\"");
 
 	my $tokens = {'@install.app.root@' => $app_root, '@install.data.root@' => $data_root};
 

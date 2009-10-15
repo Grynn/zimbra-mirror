@@ -25,10 +25,9 @@ use warnings;
 my $app_root = $ARGV[1];
 my $updater_app = "$app_root/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app";
 my $prism_app = "$app_root/macos/prism/Prism.app";
-my $zd_app = "$app_root/macos/Zimbra Desktop.app";
 
 system("mv \"${prism_app}_noreloc\" \"$prism_app\"");
 system("mv \"${updater_app}_noreloc\" \"$updater_app\"");
-system("mv \"${zd_app}_noreloc\" \"$zd_app\"");
+system("mv \"$app_root/macos/Zimbra Desktop.app_noreloc\" \"$app_root/Zimbra Desktop.app\"");
 system("chown -R root:admin \"$app_root\"");
 
