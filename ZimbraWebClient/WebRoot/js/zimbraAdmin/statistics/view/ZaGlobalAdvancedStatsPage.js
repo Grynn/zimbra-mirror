@@ -328,6 +328,7 @@ ZaGlobalAdvancedStatsPage.plotChart = function (id, fields, colDef, newData) {
     // doesn't work right in 2.7.0
     //yAxis.scale = "logarithmic";
     yAxis.maximum = max + 10;
+    yAxis.minimum = 0;
     yAxis.labelFunction = ZaGlobalAdvancedStatsPage.formatLabel;
     var timeAxis = new YAHOO.widget.TimeAxis();
     
