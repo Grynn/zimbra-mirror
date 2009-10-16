@@ -50,7 +50,7 @@ public class MailboxSync {
     private static final String CKEY_TOKEN = "token"; //last sync token, only for incremental sync
     
     private enum SyncStage {
-        BLANK, INITIAL, SYNC, RESET
+        BLANK, INITIAL, SYNC
     }
 	
     private Element mSyncTree;
@@ -73,141 +73,126 @@ public class MailboxSync {
             try {
             	setStage(SyncStage.valueOf(syncState.get(CKEY_STAGE)));
                 switch (mStage) {
-                    case INITIAL: {
-                    	MetadataList mdl = syncState.getList(CKEY_DONE_FOLDERS, true);
-                    	if (mdl != null)
-                    		mDoneFolders.addAll(mdl.asList());
-                        mLastSyncedItem = (int)syncState.getLong(CKEY_LASTID, 0);
+                case INITIAL: {
+                    MetadataList mdl = syncState.getList(CKEY_DONE_FOLDERS, true);
+                    if (mdl != null)
+                        mDoneFolders.addAll(mdl.asList());
+                    mLastSyncedItem = (int)syncState.getLong(CKEY_LASTID, 0);
                     	
-                        Metadata syncTree =ombx.getConfig(null, CONF_SYNCTREE);
-                    	mSyncTree = Element.parseXML(syncTree.get(CKEY_SYNCRESP));
-                    	//fall-thru
-                    }
-                    case SYNC: {
-                    	mSyncToken = syncState.get(CKEY_TOKEN, null);
-                    	break;
-                    }
+                    Metadata syncTree = ombx.getConfig(null, CONF_SYNCTREE);
+                    mSyncTree = Element.parseXML(syncTree.get(CKEY_SYNCRESP));
+                    //fall-thru
+                }
+                case SYNC: {
+                    mSyncToken = syncState.get(CKEY_TOKEN, null);
+                    break;
+                }
                 }
             } catch (Exception e) {
-                ZimbraLog.mailbox.warn("invalid persisted sync data; will force reset", e);
-                setStage(SyncStage.RESET);
+                ZimbraLog.mailbox.warn("invalid persisted sync data - must reset mailbox", e);
             }
     	} else { //legacy metadata support
-	        Metadata config = ombx.getConfig(null, SN_OFFLINE);
-	        if (config != null && config.containsKey(FN_PROGRESS)) {
-	            try {
-	            	setStage(SyncStage.valueOf(config.get(FN_PROGRESS)));
-	                switch (mStage) {
-	                    case INITIAL: {
-	                    	Element syncTree = Element.parseXML(config.get(FN_INITIAL));
-                            int lastId = (int) config.getLong(FN_LAST_ID, 0);
-	                    	saveSyncTree(syncTree, syncTree.getAttribute(MailConstants.A_TOKEN));
-	                    	checkpointItem(lastId);
-	                    	break;
-	                    }
-	                    case SYNC: {
-	                    	String token = config.get(FN_TOKEN, null);
-	                    	recordInitialSyncComplete(token);
-	                    	break;
-	                    }
-	                }
-	                ombx.setConfig(null, SN_OFFLINE, null);
-	            } catch (Exception e) {
-	                ZimbraLog.mailbox.warn("invalid persisted sync data; will force reset");
-	                setStage(SyncStage.RESET);
-	            }
+    	    Metadata config = ombx.getConfig(null, SN_OFFLINE);
+    	    if (config != null && config.containsKey(FN_PROGRESS)) {
+    	        try {
+    	            setStage(SyncStage.valueOf(config.get(FN_PROGRESS)));
+    	            switch (mStage) {
+    	            case INITIAL: {
+    	                Element syncTree = Element.parseXML(config.get(FN_INITIAL));
+    	                int lastId = (int) config.getLong(FN_LAST_ID, 0);
+    	                saveSyncTree(syncTree, syncTree.getAttribute(MailConstants.A_TOKEN));
+    	                checkpointItem(lastId);
+    	                break;
+    	            }
+    	            case SYNC: {
+    	                String token = config.get(FN_TOKEN, null);
+    	                recordInitialSyncComplete(token);
+    	                break;
+    	            }
+    	            }
+    	            ombx.setConfig(null, SN_OFFLINE, null);
+    	        } catch (Exception e) {
+    	            ZimbraLog.mailbox.warn("invalid persisted sync data; will force reset");
 	        }
+    	    }
     	}
     }
     
     void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
        	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         if (ombx.lockMailboxToSync()) { //don't want to start another sync when one is already in progress
-        	synchronized (ombx.syncLock) {
-        	
-        	if (isOnRequest && isDebugTraceOn) {
-        		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE START ==============================");
-        		ombx.getOfflineAccount().setRequestScopeDebugTraceOn(true);
+            synchronized (ombx.syncLock) {
+                if (isOnRequest && isDebugTraceOn) {
+                    OfflineLog.offline.debug("============================== SYNC DEBUG TRACE START ==============================");
+                    ombx.getOfflineAccount().setRequestScopeDebugTraceOn(true);
         	}
-        	
-            try {
-            	String user = ombx.getRemoteUser();
-                if (mStage == SyncStage.RESET) {
-                    String acctId = ombx.getAccountId();
-                    ombx.deleteMailbox();
-                    MailboxManager.getInstance().getMailboxByAccountId(acctId);
-                    return; //new instance will kick off sync on its own schedule
-                }
-                
-            	if (!isOnRequest) {
-        	    	if (ombx.isAutoSyncDisabled() || !syncMan.reauthOK(ombx.getAccount()) || !syncMan.retryOK(ombx.getAccount()))
-        	    		return;
-            	}
-            	                                
-            	boolean forceSync = false;
-                if (mStage == SyncStage.SYNC) {
-                	int totalSent = PushChanges.sendPendingMessages(ombx, isOnRequest);
-                	if (totalSent > 0)
-                		forceSync = true;
-                	else
-                		syncMan.syncComplete(user); //sendPendingMessages may have called syncStart but then send fails
-                }
-        	    	
-        	    if (!forceSync && !isOnRequest) {        	        
-        	    	if (mStage == SyncStage.SYNC) {
-        	    		long freqLimit = syncMan.getSyncFrequencyLimit();
-        	    		long frequency = ombx.getSyncFrequency() < freqLimit ? freqLimit : ombx.getSyncFrequency();
-        	    		
-        	    		if (freqLimit == 0 && syncMan.isOnLine(user) && ombx.isPushEnabled()) {
-        	    			if (!poller.hasChanges(mSyncToken))
-        	    				return;
-        	    		} else if (System.currentTimeMillis() - syncMan.getLastSyncTime(user) < frequency) {
-        	    			return;
-        	    		}
-        	    	}
-        	    }
-                
-        	    OfflineLog.offline.info(">>>>>>>> name=%s;version=%s;build=%s;release=%s;os=%s;server=%s",
-        	    		ombx.getAccount().getName(), OfflineLC.zdesktop_version.value(), OfflineLC.zdesktop_buildid.value(), OfflineLC.zdesktop_relabel.value(),
-        	    		System.getProperty("os.name") + " " + System.getProperty("os.arch") + " " + System.getProperty("os.version"),
-        	    		ombx.getOfflineAccount().getRemoteServerVersion());
-        	    
-                syncMan.syncStart(user);
+                try {
+                    String user = ombx.getRemoteUser();
+                    if (!isOnRequest) {
+                        if (ombx.isAutoSyncDisabled() || !syncMan.reauthOK(ombx.getAccount()) || !syncMan.retryOK(ombx.getAccount()))
+                            return;
+                    }
 
-                if (mStage == SyncStage.BLANK)
-                    InitialSync.sync(ombx);
-                else if (mStage == SyncStage.INITIAL)
-                    InitialSync.resume(ombx);
-                
-                DeltaSync.sync(ombx);
-                if (PushChanges.sync(ombx, isOnRequest))
+                    boolean forceSync = false;
+                    if (mStage == SyncStage.SYNC) {
+                        int totalSent = PushChanges.sendPendingMessages(ombx, isOnRequest);
+                        if (totalSent > 0)
+                            forceSync = true;
+                        else
+                            syncMan.syncComplete(user); //sendPendingMessages may have called syncStart but then send fails
+                    }
+                    if (!forceSync && !isOnRequest) {
+                        if (mStage == SyncStage.SYNC) {
+                            long freqLimit = syncMan.getSyncFrequencyLimit();
+                            long frequency = ombx.getSyncFrequency() < freqLimit ? freqLimit : ombx.getSyncFrequency();
+
+                            if (freqLimit == 0 && syncMan.isOnLine(user) && ombx.isPushEnabled()) {
+                                if (!poller.hasChanges(mSyncToken))
+                                    return;
+                            } else if (System.currentTimeMillis() - syncMan.getLastSyncTime(user) < frequency) {
+                                return;
+                            }
+                        }
+                    }
+                    OfflineLog.offline.info(">>>>>>>> name=%s;version=%s;build=%s;release=%s;os=%s;server=%s",
+                        ombx.getAccount().getName(), OfflineLC.zdesktop_version.value(),
+                        OfflineLC.zdesktop_buildid.value(), OfflineLC.zdesktop_relabel.value(),
+                        System.getProperty("os.name") + " " + System.getProperty("os.arch") +
+                        " " + System.getProperty("os.version"),
+                        ombx.getOfflineAccount().getRemoteServerVersion());
+                    syncMan.syncStart(user);
+                    if (mStage == SyncStage.BLANK)
+                        InitialSync.sync(ombx);
+                    else if (mStage == SyncStage.INITIAL)
+                        InitialSync.resume(ombx);
                     DeltaSync.sync(ombx);
-
-                syncMan.syncComplete(user);
-                OfflineProvisioning.getOfflineInstance().setAccountAttribute(ombx.getAccount(), OfflineConstants.A_offlineLastSync,
-                		Long.toString(System.currentTimeMillis()));
-                
-                GalSync.sync(ombx, isOnRequest);
-                
-                System.gc();
-            } catch (Exception e) {
-            	if (ombx.isDeleting())
-            		OfflineLog.offline.info("Mailbox \"%s\" is being deleted", ombx.getAccountName());
-            	else if (e instanceof ServiceException && ((ServiceException)e).getCode().equals(ServiceException.AUTH_EXPIRED)) {
-            		syncMan.clearAuthToken(ombx.getAccount());
-            		throw (ServiceException)e;
-            	} else
-            		syncMan.processSyncException(ombx.getAccount(), e);
-            } finally {
-            	if (isOnRequest && isDebugTraceOn) {
-            		ombx.getOfflineAccount().setRequestScopeDebugTraceOn(false);
-            		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE END ================================");
-            	}
-            	ombx.unlockMailbox();
+                    if (PushChanges.sync(ombx, isOnRequest))
+                        DeltaSync.sync(ombx);
+                    syncMan.syncComplete(user);
+                    OfflineProvisioning.getOfflineInstance().setAccountAttribute(
+                        ombx.getAccount(), OfflineConstants.A_offlineLastSync,
+                        Long.toString(System.currentTimeMillis()));
+                    GalSync.sync(ombx, isOnRequest);
+                    System.gc();
+                } catch (Exception e) {
+                    if (ombx.isDeleting()) {
+                        OfflineLog.offline.info("Mailbox \"%s\" is being deleted", ombx.getAccountName());
+                    } else if (e instanceof ServiceException && ((ServiceException)e).getCode().equals(ServiceException.AUTH_EXPIRED)) {
+                        syncMan.clearAuthToken(ombx.getAccount());
+                        throw (ServiceException)e;
+                    } else {
+                        syncMan.processSyncException(ombx.getAccount(), e);
+                    }
+                } finally {
+                    if (isOnRequest && isDebugTraceOn) {
+                        ombx.getOfflineAccount().setRequestScopeDebugTraceOn(false);
+                        OfflineLog.offline.debug("============================== SYNC DEBUG TRACE END ================================");
+                    }
+                    ombx.unlockMailbox();
+                }
             }
-        	} //synchronized (ombx.syncLock)
         } else if (isOnRequest) {
-        	OfflineLog.offline.debug("sync already in progress");
+            OfflineLog.offline.info("sync already in progress");
         }
     }
     
@@ -284,14 +269,16 @@ public class MailboxSync {
     }
     
     private void checkpoint() throws ServiceException {
-    	Metadata syncState = new Metadata().put(CKEY_STAGE, SyncStage.INITIAL);
-    	if (mSyncToken != null)
-    		syncState.put(CKEY_TOKEN, mSyncToken);
-    	if (mDoneFolders.size() > 0)
-	    	syncState.put(CKEY_DONE_FOLDERS, new MetadataList(new ArrayList<Long>(mDoneFolders)));
-    	if (mLastSyncedItem > 0)
-    		syncState.put(CKEY_LASTID, mLastSyncedItem);
-    	ombx.setConfig(null, CONF_SYNCSTATE, syncState);
+        Metadata syncState = new Metadata().put(CKEY_STAGE, SyncStage.INITIAL);
+        
+        if (mSyncToken != null)
+            syncState.put(CKEY_TOKEN, mSyncToken);
+        if (mDoneFolders.size() > 0)
+            syncState.put(CKEY_DONE_FOLDERS, new MetadataList(
+                new ArrayList<Long>(mDoneFolders)));
+        if (mLastSyncedItem > 0)
+            syncState.put(CKEY_LASTID, mLastSyncedItem);
+        ombx.setConfig(null, CONF_SYNCSTATE, syncState);
     }
     
     
@@ -306,10 +293,8 @@ public class MailboxSync {
             mSyncTree = null;
             ombx.setConfig(null, CONF_SYNCTREE, null);
         }
-        
         mDoneFolders.clear();
         mLastSyncedItem = 0;
-    	
         recordSyncComplete(token);
     }
 
@@ -321,13 +306,12 @@ public class MailboxSync {
     void recordSyncComplete(String token) throws ServiceException {
         if (token == null)
             throw ServiceException.FAILURE("null sync token passed to recordSyncComplete", null);
-
         mSyncToken = token;
-        
         if (mStage == SyncStage.SYNC)
-        	ombx.setConfig(null, CONF_SYNCSTATE, new Metadata().put(CKEY_STAGE, SyncStage.SYNC).put(CKEY_TOKEN, token));
+            ombx.setConfig(null, CONF_SYNCSTATE, new Metadata().put(CKEY_STAGE,
+                SyncStage.SYNC).put(CKEY_TOKEN, token));
         else
-        	checkpoint(); //called by completion of peek-forward delta
+            checkpoint(); //called by completion of peek-forward delta
     }
     
     private void setStage(SyncStage stage) throws ServiceException {

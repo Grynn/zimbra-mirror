@@ -24,7 +24,6 @@ import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.ZimbraApplication;
 
 public abstract class SyncMailbox extends DesktopMailbox {
-
     static final String DELETING_MID_SUFFIX = ":delete";
 
     private String accountName;
@@ -32,18 +31,23 @@ public abstract class SyncMailbox extends DesktopMailbox {
 
     private Timer timer;
     private TimerTask currentTask;
-	
+
     Object syncLock = new Object();
+    private boolean deleteAsync;
     private boolean mSyncRunning;
 
     public SyncMailbox(MailboxData data) throws ServiceException {
         super(data);
 
         OfflineAccount account = (OfflineAccount)getAccount();
+        OfflineProvisioning provisioning = OfflineProvisioning.getOfflineInstance();
+        
         if (account.isDataSourceAccount())
             accountName = account.getAttr(OfflineProvisioning.A_offlineDataSourceName);
         else
             accountName = account.getName();
+        deleteAsync = !provisioning.isGalAccount(account) &&
+            !provisioning.isMountpointAccount(account);
     }
 
     @Override
@@ -56,8 +60,8 @@ public abstract class SyncMailbox extends DesktopMailbox {
     }
 
     boolean lockMailboxToSync() {
-        if (isDeleting() || !OfflineSyncManager.getInstance().isServiceOpen()
-            || OfflineSyncManager.getInstance().isUiLoadingInProgress())
+        if (isDeleting() || !OfflineSyncManager.getInstance().isServiceOpen() ||
+            OfflineSyncManager.getInstance().isUiLoadingInProgress())
             return false;
 
         if (!mSyncRunning) {
@@ -86,7 +90,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
 
     @Override
     public void deleteMailbox() throws ServiceException {
-        deleteMailbox(true);
+        deleteMailbox(deleteAsync);
     }
 
     public void deleteMailbox(boolean async) throws ServiceException {
@@ -116,7 +120,6 @@ public abstract class SyncMailbox extends DesktopMailbox {
                 }
                 public void run() {
                     try {
-                        Thread.sleep(10000);
                         mbox.deleteThisMailbox(true);
                     } catch (Exception e) {
                         OfflineLog.offline.warn("unable to delete mailbox id " +
@@ -179,11 +182,9 @@ public abstract class SyncMailbox extends DesktopMailbox {
                     endTransaction(success);
                 }
                 try {
-                    IndexHelper ih = new IndexHelper(this);
-                    
-                    ih.instantiateMailboxIndex();
-                    ih.deleteIndex();
-                } catch (IOException e) {
+                    if (mIndexHelper != null)
+                        mIndexHelper.deleteIndex();
+                } catch (Exception e) {
                     ZimbraLog.store.warn("Unable to delete index data", e);
                 }
                 try {
@@ -211,11 +212,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
     }
 
     protected synchronized void initSyncTimer() throws ServiceException {
-        if (((OfflineAccount)getAccount()).isLocalAccount())
-            return;
-
         cancelCurrentTask();
-
         currentTask = new TimerTask() {
             public void run() {
                 if (ZimbraApplication.getInstance().isShutdown())
