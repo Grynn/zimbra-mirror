@@ -28,6 +28,8 @@ zmsetvars -f \
   zimbra_server_hostname \
   zimbra_tmp_directory \
   zimbra_java_home \
+  zimbra_uid \
+  zimbra_gid \
   zimbra_zmcertmgr_expiration_threshold \
   ldap_is_master \
   mailboxd_directory \
@@ -152,7 +154,7 @@ initSSLDirs() {
       echo "** Creating directory ${csr_download_directory}"
       mkdir -p ${csr_download_directory}
     fi
-    chown zimbra:zimbra ${csr_download_directory}
+    chown ${zimbra_uid}:${zimbra_gid} ${csr_download_directory}
     chmod -R 740 ${csr_download_directory}
   fi
     
@@ -226,7 +228,7 @@ loadConfigKey() {
     return
   fi
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
-  chown zimbra ${tmpfile}
+  chown ${zimbra_uid} ${tmpfile}
   if [ ! -s ${file} ]; then
     echo -n "** Retrieving $location config key $key..."
     su - zimbra -c "${zimbra_home}/bin/zmprov -m -l -- ${zmprov_opts} ${key} | sed  -e 's/^${key}: //' > ${tmpfile} 2> /dev/null" 2>/dev/null && mv -f ${tmpfile} ${file} 2> /dev/null
@@ -447,7 +449,7 @@ createCA() {
 
 
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
-  chown zimbra ${tmpfile}
+  chown ${zimbra_uid} ${tmpfile}
   if [ ! -f ${zimbra_ca_key} -a x"$IS_NEW_CA" = "x" ]; then
     echo -n "** Retrieving CA private key from ldap..."
     su - zimbra -c "${zimbra_home}/bin/zmprov -m -l -- gacf zimbraCertAuthorityKeySelfSigned | sed  -e 's/^zimbraCertAuthorityKeySelfSigned: //' > ${tmpfile} 2> /dev/null" 2>/dev/null && mv -f ${tmpfile} ${zimbra_ca_key} 2> /dev/null
@@ -460,7 +462,7 @@ createCA() {
   rm -f ${tmpfile} 2> /dev/null
 
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
-  chown zimbra ${tmpfile}
+  chown ${zimbra_uid} ${tmpfile}
   if [ ! -f ${zimbra_ca_crt} -a x"$IS_NEW_CA" = "x" ]; then
     echo -n "** Retrieving CA cert from ldap..."
     su - zimbra -c "${zimbra_home}/bin/zmprov -m -l -- gacf zimbraCertAuthorityCertSelfSigned | sed  -e 's/^zimbraCertAuthorityCertSelfSigned: //' > ${tmpfile} 2> /dev/null" 2> /dev/null && mv -f ${tmpfile} ${zimbra_ca_crt} 2> /dev/null
@@ -520,7 +522,8 @@ deployCA() {
     cd ${zimbra_conf_directory}/ca
     perl -e 'my $i=1; while (<>) { open(N, ">commercial_ca_$i.pem") if (/BEGIN CERTIFICATE/); print N; if (/END CERTIFICATE/) { close(N); $i++; } }' ${commercial_ca_crt}
   fi
-
+  chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/ca/ca.pem 
+  chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/ca/ca.key
   chmod 640 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
   echo "done."
 
@@ -533,6 +536,8 @@ deployCA() {
       chmod 644 ${zimbra_conf_directory}/ca/$pem
     done
   fi
+  chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/ca/ca.pem 
+  chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/ca/ca.key
   chmod 640 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
 }
 
@@ -644,6 +649,8 @@ deployCert() {
     echo -n "** Installing mta certificate and key..."
     cp -f ${current_crt} ${postfix_smtpd_tls_cert_file}
     cp -f ${current_key} ${postfix_smtpd_tls_key_file}
+    chown ${zimbra_uid}:${zimbra_gid} ${postfix_smtpd_tls_cert_file}
+    chown ${zimbra_uid}:${zimbra_gid} ${postfix_smtpd_tls_key_file}
     chmod 640 ${postfix_smtpd_tls_cert_file} ${postfix_smtpd_tls_key_file}
 
     echo "done."
@@ -653,6 +660,8 @@ deployCert() {
     echo -n "** Installing slapd certificate and key..."
     cp -f ${current_crt} ${zimbra_conf_directory}/slapd.crt
     cp -f ${current_key} ${zimbra_conf_directory}/slapd.key
+    chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/slapd.key 
+    chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/slapd.crt
     chmod 640 ${zimbra_conf_directory}/slapd.key ${zimbra_conf_directory}/slapd.crt
     echo "done."
   fi
@@ -661,6 +670,8 @@ deployCert() {
     echo -n "** Installing proxy certificate and key..."
     cp -f ${current_crt} ${zimbra_conf_directory}/nginx.crt
     cp -f ${current_key} ${zimbra_conf_directory}/nginx.key
+    chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/nginx.key 
+    chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/nginx.crt
     chmod 640 ${zimbra_conf_directory}/nginx.key ${zimbra_conf_directory}/nginx.crt
     echo "done."
   fi
@@ -681,6 +692,8 @@ deployCert() {
   cp -f ${zimbra_ca_key} ${zimbra_conf_directory}/ca/ca.key
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
   ln -f -s ca.pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/ca.pem`.0
+  chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/ca/ca.pem 
+  chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/ca/ca.key
   chmod 640 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
   if [ -f "${commercial_ca_crt}" ]; then
     cp -f ${commercial_ca_crt} ${zimbra_conf_directory}/ca/commercial_ca.pem
@@ -690,6 +703,8 @@ deployCert() {
       cd ${zimbra_conf_directory}/ca
       for pem in commercial_ca*.pem; do
         ln -f -s $pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`.0
+        chown ${zimbra_uid}:${zimbra_gid} 
+        ${zimbra_conf_directory}/ca/$pem
         chmod 640 ${zimbra_conf_directory}/ca/$pem
       done
     fi
@@ -798,7 +813,7 @@ createConf() {
     sed -e "s/@@HOSTNAME@@/$zimbra_server_hostname/" \
     -e "s/@@SUBJECT_ALT_NAMES@@/$ALTNAMES/"  > ${ssl_conf}
   chmod 640 ${ssl_conf}
-  chown zimbra:zimbra ${ssl_conf}
+  chown ${zimbra_uid}:${zimbra_gid} ${ssl_conf}
   echo "done"
 }
 
