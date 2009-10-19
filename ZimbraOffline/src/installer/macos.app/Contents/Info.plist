@@ -7,15 +7,15 @@
   <key>CFBundleExecutable</key>
   <string>zdrun</string>
   <key>CFBundleGetInfoString</key>
-  <string>Yahoo! Zimbra Desktop @version@, (C) 2008 Yahoo!</string>
+  <string>Zimbra Desktop @version@, (C) 2008-2009 Zimbra</string>
   <key>CFBundleIconFile</key>
   <string>launcher_128x128</string>
   <key>CFBundleIdentifier</key>
-  <string>com.zimbra.desktop</string>
+  <string>com.zimbra.zdclient</string>
   <key>CFBundleInfoDictionaryVersion</key>
   <string>6.0</string>
   <key>CFBundleName</key>
-  <string>Yahoo! Zimbra Desktop</string>
+  <string>Zimbra Desktop</string>
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleShortVersionString</key>

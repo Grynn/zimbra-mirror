@@ -59,7 +59,7 @@
     <value>60000</value>
   </key>
   <key name="zdesktop_installation_key">
-    <value>@install_key@</value>
+    <value>@install.key@</value>
   </key>
   <key name="zdesktop_mail_file_descriptor_cache_size">
     <value>10</value>
@@ -101,7 +101,7 @@
     <value>com.zimbra.common.util.CustomSSLProtocolSocketFactory</value>
   </key>
   <key name="zimbra_ldap_password">
-    <value>@install_key@</value>
+    <value>@install.key@</value>
   </key>
   <key name="zimbra_log4j_properties_watch">
     <value>0</value>

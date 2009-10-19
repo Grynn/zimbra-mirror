@@ -50,6 +50,13 @@ sub find_and_replace($$) {
     chmod $mode, $file;
 }
 
+sub get_random_id() {
+	my @n;
+	srand(time ^ ($$ + ($$ << 15)) ^ int(rand(0xFFFF)));
+	push(@n, sprintf("%04x", int(rand(0xFFFF)))) for (0..7);
+	return "$n[0]$n[1]-$n[2]-$n[3]-$n[4]-$n[5]$n[6]$n[7]";
+}
+
 my $home_dir = $ENV{HOME};
 die("Error: unable to get user home directory") unless ($home_dir);
 
@@ -62,13 +69,19 @@ unless (-e $data_root) {
 	# copy app bundle
 	system("cp -R -f \"$app_root/Zimbra Desktop.app\" \"$data_root\"");
 
-	my $tokens = {'@install.app.root@' => $app_root, '@install.data.root@' => $data_root};
+	my $inst_id = get_random_id();
+	my $tokens = {
+		'@install.app.root@' => $app_root, 
+		'@install.data.root@' => $data_root,
+		'@install.key@' => $inst_id
+	};
 
 	# fix data files
 	find_and_replace("$data_root/conf/localconfig.xml", $tokens);
 	find_and_replace("$data_root/jetty/etc/jetty.xml", $tokens);
 	find_and_replace("$data_root/bin/zdesktop", $tokens);
 	find_and_replace("$data_root/Zimbra Desktop.app/Contents/Resources/application.ini", $tokens);
+	find_and_replace("$data_root/zdesktop.webapp/webapp.ini", $tokens);
 
 	# install zdesktop service
 	my $plist = "$home_dir/Library/LaunchAgents/com.zimbra.desktop.plist";
