@@ -151,9 +151,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	String uri = Offline.getServerURI(account, serviceUri);
     	ZAuthToken authToken = OfflineSyncManager.getInstance().lookupAuthToken(account);
     	if (authToken != null) {
-    		options = new ZMailbox.Options(authToken, uri);
+    	    options = new ZMailbox.Options(authToken, uri);
     	} else {
-    		options = new ZMailbox.Options(account.getAttr(Provisioning.A_mail), AccountBy.name, account.getAttr(A_offlineRemotePassword), uri);
+    	    options = new ZMailbox.Options(account.getAttr(Provisioning.A_mail), AccountBy.name, account.getAttr(A_offlineRemotePassword), uri);
     	}
         options.setDebugListener(new Offline.OfflineDebugListener(account));
     	return newZMailbox(options, account.getProxyHost(), account.getProxyPort(), account.getProxyUser(), account.getProxyPass());
@@ -164,9 +164,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	int proxyPort = 0;
     	String portStr = (String)attrs.get(A_offlineProxyPort);
     	if (portStr != null) {
-	    	try {
-	    		proxyPort = Integer.parseInt(portStr);
-	    	} catch (NumberFormatException x) {}
+            try {
+                proxyPort = Integer.parseInt(portStr);
+            } catch (NumberFormatException x) {}
     	}
     	String proxyUser = (String)attrs.get(A_offlineProxyUser);
     	String proxyPass = (String)attrs.get(A_offlineProxyPass);
@@ -193,16 +193,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable) throws ServiceException {
+    public void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable) throws ServiceException {
         modifyAttrs(e, attrs, checkImmutable, true);
     }
 
     @Override
-    public synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback) throws ServiceException {
+    public void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback) throws ServiceException {
         modifyAttrs(e, attrs, checkImmutable, allowCallback, e instanceof Account && isZcsAccount((Account)e));
     }
 
-    synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback, boolean markChanged) throws ServiceException {
+    void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback, boolean markChanged) throws ServiceException {
         modifyAttrs(e, attrs, checkImmutable, allowCallback, markChanged, false);
     }
     
@@ -216,7 +216,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         else if (etype == EntryType.DATASOURCE)
             throw ServiceException.INVALID_REQUEST("must use Provisioning.modifyDataSource() instead", null);
         else if (etype == EntryType.SIGNATURE)
-        	throw ServiceException.INVALID_REQUEST("must use Provisioning.modifySignature() instead", null);
+            throw ServiceException.INVALID_REQUEST("must use Provisioning.modifySignature() instead", null);
 
         if (allowCallback && e instanceof Account && isLocalAccount((Account)e) && attrs.containsKey(A_offlineAccountsOrder))
         	((Map<String, Object>)attrs).put(A_offlineAccountsOrder, promoteAccount((String)attrs.get(A_offlineAccountsOrder)));
@@ -420,7 +420,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized Config getConfig() {
+    public Config getConfig() {
         return mLocalConfig;
     }
     
@@ -447,7 +447,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized List<Zimlet> getObjectTypes() {
+    public List<Zimlet> getObjectTypes() {
         return listAllZimlets();
     }
 
@@ -1123,7 +1123,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized void deleteAccount(String zimbraId) throws ServiceException {
+    public void deleteAccount(String zimbraId) throws ServiceException {
         Folder fldr;
         Mailbox mbox;
         
@@ -1142,7 +1142,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         deleteGalAccount(zimbraId);
         DbOfflineDirectory.deleteGranterByGrantee(zimbraId);
         deleteOfflineAccount(zimbraId);
-        cachedaccountIds = null;
+        synchronized (this) {
+            cachedaccountIds = null;
+        }
     }
     
     private synchronized void deleteOfflineAccount(String zimbraId) throws ServiceException {
@@ -1154,31 +1156,29 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         fixAccountsOrder(true);        
     }
 
-    public synchronized void deleteGalAccount(String mainAcctId) throws ServiceException {
+    public void deleteGalAccount(String mainAcctId) throws ServiceException {
         OfflineAccount mainAcct = (OfflineAccount)get(AccountBy.id, mainAcctId);
         if (mainAcct != null)
             deleteGalAccount(mainAcct);
     }
         
-    public synchronized void deleteGalAccount(OfflineAccount mainAcct) throws ServiceException {
+    public void deleteGalAccount(OfflineAccount mainAcct) throws ServiceException {
         OfflineAccount galAcct = null;
         String galAcctId = mainAcct.getAttr(OfflineConstants.A_offlineGalAccountId, false);        
 
-        if (galAcctId != null && galAcctId.length() > 0) {
-            setAccountAttribute(mainAcct, OfflineConstants.A_offlineGalAccountId, "");
+        if (galAcctId != null && galAcctId.length() > 0)
             galAcct = (OfflineAccount)get(AccountBy.id, galAcctId);
+        if (galAcct == null)
+            galAcct = (OfflineAccount)get(AccountBy.name, mainAcct.getName() + OfflineConstants.GAL_ACCOUNT_SUFFIX);
+        if (galAcct != null) {
+            Mailbox mbox = OfflineMailboxManager.getInstance().getMailboxByAccount(galAcct, false);
+            
+            if (mbox != null)
+                mbox.deleteMailbox();
+            deleteOfflineAccount(galAcct.getId());
         }
-        if (galAcct == null) {
-            galAcct = (OfflineAccount)get(AccountBy.name, mainAcct.getName() + OfflineConstants.GAL_ACCOUNT_SUFFIX);  
-            if (galAcct == null)
-                return;
-        }
-
-        Mailbox mbox = OfflineMailboxManager.getInstance().getMailboxByAccount(galAcct, false);      
-        if (mbox != null)
-        	((SyncMailbox)mbox).deleteMailbox(false);
-        
-        deleteOfflineAccount(galAcct.getId());
+        if (galAcctId != null && galAcctId.length() > 0)
+            setAccountAttribute(mainAcct, OfflineConstants.A_offlineGalAccountId, "");
     }       
     
     @Override
@@ -1187,7 +1187,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized Account get(AccountBy keyType, String key) throws ServiceException {
+    public Account get(AccountBy keyType, String key) throws ServiceException {
     	return get(false, keyType, key);
     }
     
@@ -1318,23 +1318,22 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	return getAllAccounts(false);
     }
     
-    private List<Account> getAllAccounts(boolean includeSyncStatus) throws ServiceException {
+    private synchronized List<Account> getAllAccounts(boolean includeSyncStatus) throws ServiceException {
         List<Account> accts = new ArrayList<Account>();
-        synchronized (this) {
-        	cachedaccountIds = cachedaccountIds != null ? cachedaccountIds : DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT);
-            for (String zimbraId : cachedaccountIds) {
-                Account acct = get(includeSyncStatus, AccountBy.id, zimbraId);
-                if (acct != null && !isLocalAccount(acct) && !isGalAccount(acct) && !isMountpointAccount(acct)) {
-                	MailboxManager.getInstance().getMailboxByAccount(acct);
-                    accts.add(acct);
-                }
+
+        cachedaccountIds = cachedaccountIds != null ? cachedaccountIds : DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT);
+        for (String zimbraId : cachedaccountIds) {
+            Account acct = get(includeSyncStatus, AccountBy.id, zimbraId);
+            if (acct != null && !isLocalAccount(acct) && !isGalAccount(acct) && !isMountpointAccount(acct)) {
+            	MailboxManager.getInstance().getMailboxByAccount(acct);
+                accts.add(acct);
             }
         }
         return accts;
     }
 
     @Override
-    public synchronized List<Account> getAllAdminAccounts() throws ServiceException {
+    public List<Account> getAllAdminAccounts() throws ServiceException {
         List<Account> admins = new ArrayList<Account>(1);
         Account acct = get(AccountBy.adminName, LC.zimbra_ldap_user.value());
         if (acct != null)
@@ -1376,7 +1375,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized void authAccount(Account acct, String password, AuthContext.Protocol proto) throws ServiceException {
+    public void authAccount(Account acct, String password, AuthContext.Protocol proto) throws ServiceException {
         String instkey = OfflineLC.zdesktop_installation_key.value();
         if (instkey == null || instkey.startsWith("@") || instkey.equals(password)) {
             ZimbraLog.security.info(ZimbraLog.encodeAttrs(
@@ -1389,7 +1388,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     @Override
-    public synchronized void authAccount(Account acct, String password, AuthContext.Protocol proto, Map<String, Object> context) throws ServiceException {
+    public void authAccount(Account acct, String password, AuthContext.Protocol proto, Map<String, Object> context) throws ServiceException {
 	authAccount(acct, password, proto);
     }
 
@@ -1481,7 +1480,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized Server getLocalServer() {
+    public Server getLocalServer() {
         return mLocalServer;
     }
 

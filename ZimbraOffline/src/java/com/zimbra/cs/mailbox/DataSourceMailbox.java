@@ -1,6 +1,5 @@
 package com.zimbra.cs.mailbox;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -209,13 +208,16 @@ public class DataSourceMailbox extends SyncMailbox {
     private static final Map<Integer, Pair<Integer, String>> sSendUIDs = new HashMap<Integer, Pair<Integer, String>>();
 
     public int sendPendingMessages(boolean isOnRequest) throws ServiceException {
-        OperationContext context = new OperationContext(this);
+        OperationContext context = null;
 
         int sentCount = 0;
         for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE); iterator.hasNext(); ) {
             int id = iterator.next();
-
             Message msg;
+            
+            if (context == null)
+                context = new OperationContext(this);
+
             try {
                 msg = getMessageById(context, id);
             } catch (NoSuchItemException x) { //message deleted
