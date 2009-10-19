@@ -102,7 +102,7 @@ ARGS="$*"
 ZIMBRA_HOME="@install.data.root@"
 JETTY_HOME="@install.app.root@/jetty"
 CONFIGS="${ZIMBRA_HOME}/jetty/etc/jetty.xml"
-#JAVA="@install.java.path@"
+#@install.linux.java.home@
 
 ##################################################
 # Find directory function

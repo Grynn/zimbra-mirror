@@ -20,7 +20,8 @@ my $messages = {
         CreateIcon => "Creating desktop icon...",
         Done => "done",
         Installing => "Installing files...",
-        Success => 'Zimbra Desktop is installed successfully',
+        RunCommand => "You can start Zimbra Desktop by double-clicking the desktop icon or by running the following from command line:",
+        Success => 'Zimbra Desktop is installed successfully.',
         Welcome => "Welcome to Zimbra Desktop setup wizard. This will install Zimbra Desktop on you computer.",
         YesNo => "(Y)es or (N)o"
     }
@@ -107,6 +108,8 @@ sub dialog_desktop_icon() {
 }
 
 # main
+my $script_dir = substr($0, 0, length($0) - 11);
+chdir($script_dir);
 
 dialog_welcome();
 dialog_license();
@@ -126,7 +129,11 @@ exit 1 if system("cp -r -p ./app/* $app_root");
 exit 1 if system("cp -r -p ./app/data/* $data_root");
 print get_message('Done'), "\n";
 
-my $tokens = {'@install.app.root@' => $app_root, '@install.data.root@' => $data_root};
+my $tokens = {
+	'@install.app.root@' => $app_root, 
+	'@install.data.root@' => $data_root,
+	'#@install.linux.java.home@' => "JAVA_HOME=\"$app_root/linux/jre\""
+};
 
 # fix data files
 print get_message('Configuring');
@@ -144,5 +151,6 @@ exit 1 if system("cp -p $app_root/linux/zd.desktop $icon_dir");
 print get_message('Done'), "\n";
 
 print get_message('Success'), "\n\n";
+print get_message('RunCommand'), "\n";
+print "\"$app_root/linux/prism/zdclient\" -webapp \"$data_root/zdesktop.webapp\" -override \"$data_root/zdesktop.webapp/override.ini\" -profile \"$data_root/profile\"\n\n";
 
-0;
