@@ -856,7 +856,7 @@ function(rule, date) {
 		// try to parse as a date
 		date = AjxDateFormat.parse("yyyyy-MM-dd", s);
 		if (!date && (date = AjxDateFormat.parse("yyyy-MM-dd'T'hh:mm:ss'Z'", s))) {
-			date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+			date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
 		}
 		if (!date) date = AjxDateFormat.parse("yyyy-MM-dd'T'HH:mm:ss", s);
 		if (!date) throw "invalid date pattern: \""+s+"\"";
