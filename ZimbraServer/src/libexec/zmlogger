@@ -25,6 +25,8 @@ use FileHandle;
 use POSIX ":sys_wait_h";
 use vars qw ($logger_directory $logger_rrd_directory $zmrrdfetch);
 
+my $server_pid = -1;
+
 if ($^O eq "darwin") {
 	$SIG{CHLD} = \&catchSignal;
 } else {
@@ -39,6 +41,10 @@ $SIG{TERM}  = \&catchSignal;
 sub catchSignal {
   my $sig = shift;
   return if ($sig eq "CHLD");
+  if ($server_pid != -1) {
+      print STDERR "Killing child server from sighandler: $server_pid\n";
+      killserver();
+  }
   print STDERR "Shutting down. Received signal $sig\n";
   exit 0;
 }
@@ -481,11 +487,27 @@ sub runserver() {
 	}
 }
 sub forkserver() {
-	if (!fork()) {
+	
+	my $pid;
+	if (($pid = fork()) == 0) {
 		$0 = "zmlogger: zmrrdfetch: server";
 		runserver();
 		die "Unexpected exit";
+	} else {
+		print STDERR "zmrrdfetch server pid: $pid\n";
+		$server_pid = $pid;
 	}
+}
+sub killserver() {
+    print STDERR "Killing child server: $server_pid\n";
+    my $count = 0;
+    while (kill(0, $server_pid)) {
+        print STDERR "Sending SIGTERM to $server_pid\n";
+        kill('TERM', $server_pid);
+        $count++;
+        sleep(1);
+        kill('KILL', $server_pid) if ($count > 10);
+    }
 }
 
 sub run() {
@@ -586,7 +608,9 @@ sub run() {
     }
     
     $dbh->disconnect;
+
 }
 
 forkserver();
 run();
+killserver();
