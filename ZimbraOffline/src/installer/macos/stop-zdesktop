@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Run this script to stop zimbra desktop service
+
+launchctl stop com.zimbra.desktop

@@ -58,8 +58,10 @@
 		</copy>
 		<replace file="${pmdoc.dir}/index.xml" token="@build.root@" value="${basedir}" />
 		<replace file="${pmdoc.dir}/01app.xml" token="@build.root@" value="${basedir}" />
-		<replace file="${pmdoc.dir}/02zimbra.xml" token="@build.root@" value="${basedir}" />
-		
+		<copy todir="build/dist/app/data/bin" file="src/installer/macos/start-zdesktop" overwrite="true" />
+		<copy todir="build/dist/app/data/bin" file="src/installer/macos/stop-zdesktop" overwrite="true" />
+		<chmod dir="build/dist/app/data/bin" includes="*" perm="ugo+rx" />
+	
 		<delete dir="build/dist/app/win32" />
 		<delete dir="build/dist/app/linux" />
 		<if><available file="${updater.app}" type="dir" /><then>
@@ -79,11 +81,6 @@
 			<arg value="admin" />
 		</exec>
 
-		<exec executable="src/installer/macos/pmdoc-get-contents.pl" failonerror="true">
-			<arg value="${zd.app}_noreloc" />
-			<arg value="${pmdoc.dir}/02zimbra-contents.xml" />
-		</exec>
-        
 		<exec executable="/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker" failonerror="true">
 			<arg value="--doc" />
 			<arg value="build/macos_installer.pmdoc" />

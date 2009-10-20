@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Run this script to start zimbra desktop service
+
+launchctl start com.zimbra.desktop

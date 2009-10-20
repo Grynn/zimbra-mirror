@@ -60,7 +60,7 @@ sub get_random_id() {
 my $home_dir = $ENV{HOME};
 die("Error: unable to get user home directory") unless ($home_dir);
 
-my $app_root = "/Applications/Zimbra Desktop"; ### todo: set it at install time 
+my $app_root = "@INSTALL.APP.ROOT@";
 my $data_root = "$home_dir/Library/Zimbra Desktop";
 
 unless (-e $data_root) {
@@ -75,13 +75,15 @@ unless (-e $data_root) {
 		'@install.data.root@' => $data_root,
 		'@install.key@' => $inst_id
 	};
-
+	my $infotok = {'<string>zdrun</string>' => '<string>prism</string>'};
+	
 	# fix data files
 	find_and_replace("$data_root/conf/localconfig.xml", $tokens);
 	find_and_replace("$data_root/jetty/etc/jetty.xml", $tokens);
 	find_and_replace("$data_root/bin/zdesktop", $tokens);
-	find_and_replace("$data_root/Zimbra Desktop.app/Contents/Resources/application.ini", $tokens);
 	find_and_replace("$data_root/zdesktop.webapp/webapp.ini", $tokens);
+	find_and_replace("$data_root/Zimbra Desktop.app/Contents/Resources/application.ini", $tokens);
+	find_and_replace("$data_root/Zimbra Desktop.app/Contents/Info.plist", $infotok);
 
 	# install zdesktop service
 	my $plist = "$home_dir/Library/LaunchAgents/com.zimbra.desktop.plist";
