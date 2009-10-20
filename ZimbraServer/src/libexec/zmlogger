@@ -23,7 +23,7 @@ use RRDs;
 use DBI;
 use FileHandle;
 use POSIX ":sys_wait_h";
-use vars qw ($logger_directory $logger_rrd_directory $zmrrdfetch);
+use vars qw ($logger_directory $logger_rrd_directory $zmrrdfetch $zmrrdfetch_pid);
 
 my $server_pid = -1;
 
@@ -51,6 +51,7 @@ sub catchSignal {
 
 Zimbra::Mon::Zmstat::getLocalConfig();
 $zmrrdfetch = $Zimbra::Mon::Zmstat::LC{zimbra_home} . "/libexec/zmrrdfetch";
+$zmrrdfetch_pid = $Zimbra::Mon::Zmstat::LC{zimbra_log_directory} . "/zmrrdfetch-server.pid";
 
 my @CREATE_DDL = (
     q{CREATE TABLE IF NOT EXISTS hosts (
@@ -496,6 +497,9 @@ sub forkserver() {
 	} else {
 		print STDERR "zmrrdfetch server pid: $pid\n";
 		$server_pid = $pid;
+		open(PIDFILE, ">$zmrrdfetch_pid") || die $!;
+		print PIDFILE "$server_pid\n";
+		close(PIDFILE);
 	}
 }
 sub killserver() {

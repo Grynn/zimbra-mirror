@@ -23,6 +23,8 @@ zmsetvars \
 
 configfile=${zimbra_home}/conf/logswatchrc
 pidfile=${zimbra_log_directory}/logswatch.pid
+zmrrdfetchpidfile=${zimbra_log_directory}/zmrrdfetch-server.pid
+zmrrdfetchpid=""
 logfile=${zimbra_log_directory}/zmlogswatch.out
 pid=""
 os=$(uname -s)
@@ -31,6 +33,9 @@ getpid()
 {
   if [ -f ${pidfile} ]; then
     pid=$(cat ${pidfile})
+  fi
+  if [ -f ${zmrrdfetchpidfile} ]; then
+    zmrrdfetchpid=$(cat ${zmrrdfetchpidfile})
   fi
 }
 
@@ -101,6 +106,24 @@ case "$1" in
       exit 0
     else
       for ((i = 0; i < 30; i++)); do
+          if [ -z "$zmrrdfetchpid" ]; then
+              break;
+          fi
+          kill -0 $zmrrdfetchpid 2> /dev/null
+          if [ $? != 0 ]; then
+              rm -f ${zmrrdfetchpidfile}
+              break;
+          fi
+          kill $zmrrdfetchpid 2> /dev/null
+          sleep 1
+      done
+      if [ -n "$zmrrdfetchpid" ]; then
+          kill -0 $zmrrdfetchpid 2> /dev/null
+          if [ $? = 0 ]; then
+              kill -9 $zmrrdfetchpid
+          fi
+      fi
+      for ((i = 0; i < 30; i++)); do
         kill -0 $pid 2> /dev/null
         if [ $? != 0 ]; then
           rm -rf ${pidfile}
@@ -118,7 +141,7 @@ case "$1" in
           done
           for i in $(seq 0 ${#ids[@]}); do
             if [ "${ids[$i]}" ]; then
-              kill -15 ${ids[$i]}
+              kill -15 ${ids[$i]} 2> /dev/null
             fi
           done
         else
