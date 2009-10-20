@@ -327,13 +327,19 @@ case "$ACTION" in
         if [ -f "$JETTY_PID" ]
         then
             PID=`cat "$JETTY_PID" 2>/dev/null`
-            if ps -o args -p $PID | grep $JAVA > /dev/null 2>&1 
+            if [ -z $PID ]
             then
-                echo "Already Running!!"
-                exit 1
-            else
-                echo "Stale pid file removed: $JETTY_PID"
+                echo "Empty pid file removed: $JETTY_PID"
                 rm -f "$JETTY_PID"
+            else
+                if ps -f -p $PID | grep $JAVA > /dev/null 2>&1 
+                then
+                    echo "Already Running!!"
+                    exit 1
+                else
+                    echo "Stale pid file removed: $JETTY_PID"
+                    rm -f "$JETTY_PID"
+                fi
             fi 
         fi
 
