@@ -941,7 +941,9 @@
 		<antcall target="offline-jspc" />
 		<antcall target="offline-jre" />
 
-		<move file="${dist.data.dir}" todir="${dist.app.dir}" overwrite="true" />
+		<if><isset property="is-unix" /><then>
+			<move file="${dist.data.dir}" todir="${dist.app.dir}" overwrite="true" />
+		</then></if>
 	</target>
 
 	<target name="offline-sync-jsp-opt">
