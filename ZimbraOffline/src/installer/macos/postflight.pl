@@ -61,6 +61,7 @@ system("chown -R root:admin \"$app_root\"");
 
 my $tokens = {
     '@INSTALL.APP.ROOT@' => $app_root,
+    '@INSTALL.APP.TIMESTAMP@' => time()
 };
 find_and_replace("$app_root/Zimbra Desktop.app/Contents/MacOS/zdrun", $tokens);
 
