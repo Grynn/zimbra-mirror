@@ -13,8 +13,14 @@
 -- ***** END LICENSE BLOCK *****
 -- 
 
-PRAGMA legacy_file_format = OFF;
-PRAGMA encoding = "UTF-8";
+PRAGMA default_page_size=4096;
+PRAGMA page_size=4096;
+PRAGMA default_cache_size=2000;
+PRAGMA cache_size=2000;
+PRAGMA encoding="UTF-8";
+PRAGMA fullsync=OFF;
+PRAGMA journal_mode=PERSIST;
+PRAGMA legacy_file_format=OFF;
 
 -- -----------------------------------------------------------------------
 -- volumes
