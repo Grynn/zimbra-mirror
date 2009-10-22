@@ -85,7 +85,7 @@ function(ev) {
 				itemType = zmfolder.type.toLowerCase();
 			}
 		} else {
-			var opDesc = ZmOperation._operationDesc[id] || ZmOperation.defineOperation({id:id});
+			var opDesc = ZmOperation._operationDesc[id] || ZmOperation.defineOperation(id);
 			if (opDesc.shortcut == undefined) {//lot of ops dont have sc set on them
 				text = this.getShortcutFromOp(opDesc);
 			} else {
