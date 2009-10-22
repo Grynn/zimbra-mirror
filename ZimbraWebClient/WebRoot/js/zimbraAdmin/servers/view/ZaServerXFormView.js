@@ -670,10 +670,11 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					      	{type:_SUPER_REPEAT_, ref:ZaServer.A_zimbraSmtpHostname, 
 					      		label:ZaMsg.LBL_zimbraSmtpHostname,
 								resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-								repeatInstance:"", showAddButton:true, 
+								repeatInstance:"", 
+								showAddButton:true, 
 								showRemoveButton:true, 
-								addButtonLabel:ZaMsg.Add_zimbraSmtpHostname, 
 								showAddOnNextRow:true,
+								addButtonLabel:ZaMsg.Add_zimbraSmtpHostname, 
 								removeButtonLabel:ZaMsg.Remove_zimbraSmtpHostname,
 								removeButtonCSSStyle: "margin-left: 50px",
 								bnolsnr:true,
@@ -697,13 +698,31 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 								  	{type:_SPACER_}
 								]
 						  	},
-							{ ref:ZaServer.A_zimbraMtaRelayHost, type:_SUPER_HOSTPORT_,
-							    textBoxLabel: ZaMsg.NAD_MTA_RelayMTA,
-							    onChange: ZaServerXFormView.onFormFieldChanged,
-							    onClick: "ZaController.showTooltip",
-								toolTipContent: ZaMsg.tt_MTA_RelayMTA,
-								onMouseout: "ZaController.hideTooltip",
-							    resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
+					      	{type:_SUPER_REPEAT_, ref:ZaServer.A_zimbraMtaRelayHost, 
+					      		label:ZaMsg.NAD_MTA_RelayMTA,
+								resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+								repeatInstance:"", 
+								showAddButton:true, 
+								showRemoveButton:true, 
+								showAddOnNextRow:true,
+								addButtonLabel:ZaMsg.Add_zimbraSmtpHostname, 
+								removeButtonLabel:ZaMsg.Remove_zimbraSmtpHostname,
+								removeButtonCSSStyle: "margin-left: 50px",
+								bnolsnr:true,
+					      		repeatItems:[
+									{ 								
+										ref:".", type:_HOSTPORT_,
+									    onClick: "ZaController.showTooltip",
+										toolTipContent: ZaMsg.tt_MTA_RelayMTA,
+								  		enableDisableChecks:[],
+								  		visibilityChecks:[],										
+									    bmolsnr:true,
+									    elementChanged: function(elementValue,instanceValue, event) {
+											this.getForm().itemChanged(this, elementValue, event);
+											this.getForm().itemChanged(this.getParentItem(), elementValue, event);
+								  		}
+						      		}
+					      		]
 							},
 							{type:_GROUP_,numCols:3,colSpan:3,colSizes:["275px","275px","150px"],
 						  		items:[

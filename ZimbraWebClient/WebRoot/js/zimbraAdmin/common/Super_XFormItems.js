@@ -58,7 +58,7 @@ Cos_String_XModelItem.prototype.getSuperValue = function(ins) {
 	var _ref = this.ref.replace("/", ".");
 	return eval("ins._defaultValues." + _ref);
 }
-Cos_String_XModelItem.prototype.getLocalValue = function(ins) {
+Cos_String_XModelItem.prototype.getLocalValue = function(ins, refPath) {
 	if(!ins)
 		return null;
 	var _ref = this.ref.replace("/", ".");
@@ -190,7 +190,7 @@ Cos_MailQuota_XModelItem.prototype.getSuperValue = function(ins) {
 //	var value = (eval("ins._defaultValues." + _ref) != null) ? Number(eval("ins._defaultValues." + _ref) / 1048576).toFixed(0) : 0;
 	return value;
 }
-Cos_MailQuota_XModelItem.prototype.getLocalValue = function(ins) {
+Cos_MailQuota_XModelItem.prototype.getLocalValue = function(ins, refPath) {
 	if(!ins)
 		return null;	
 	var _ref = this.ref.replace("/", ".");
@@ -273,10 +273,10 @@ Super_XFormItem.checkIfOverWriten = function() {
 	if(!ZaItem.hasWritePermission.call(this))
 		return false;
 		
-	if(this.getModelItem() && this.getModelItem().getLocalValue(this.getInstance())==null)
+	if(this.getModelItem() && this.getModelItem().getLocalValue(this.getInstance(), this.refPath)==null)
 		return false;
-	else if (this.getModelItem() &&  (this.getModelItem().getLocalValue(this.getInstance()) instanceof AjxVector) && 
-	(this.getModelItem().getLocalValue(this.getInstance()).size==0) )	
+	else if (this.getModelItem() &&  (this.getModelItem().getLocalValue(this.getInstance(), this.refPath) instanceof AjxVector) && 
+	(this.getModelItem().getLocalValue(this.getInstance(), this.refPath).size==0) )	
 		return false;
 	else 
 		return true;
@@ -952,7 +952,7 @@ SuperZimlet_Select_XFormItem.prototype.initializeItems = function() {
 			}
 		},
 		updateElement:function() {
-			this.getElement().checked = !this.getModelItem().getLocalValue(this.getInstance());
+			this.getElement().checked = !this.getModelItem().getLocalValue(this.getInstance(), this.refPath);
 		}
 		
 	};
@@ -960,7 +960,7 @@ SuperZimlet_Select_XFormItem.prototype.initializeItems = function() {
 	var radioBox2 = {type:_RADIO_, groupname:"zimlet_select_check_grp"+selectRef,ref:".",
 		label:limitLabel, labelLocation:_RIGHT_ ,
 		updateElement:function() {
-			this.getElement().checked = this.getModelItem().getLocalValue(this.getInstance());
+			this.getElement().checked = this.getModelItem().getLocalValue(this.getInstance(), this.refPath);
 		},		
 		elementChanged:function(elementValue,instanceValue, event) {
 			var arr = this.getModelItem().getSuperValue(this.getInstance());

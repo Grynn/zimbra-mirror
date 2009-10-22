@@ -330,9 +330,12 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							  		labelLocation:_LEFT_,
 							  		align:_LEFT_,
 							  		repeatInstance:"",
-							  		showAddButton:true,
-							  		showRemoveButton:true,
-							  		showAddOnNextRow:true,
+									showAddButton:true, 
+									showRemoveButton:true, 
+									showAddOnNextRow:true,
+									addButtonLabel:ZaMsg.Add_zimbraSmtpHostname, 
+									removeButtonLabel:ZaMsg.Remove_zimbraSmtpHostname,
+									removeButtonCSSStyle: "margin-left: 50px",							  		
 							  		items: [
 										{ ref:".", type: _TEXTFIELD_, label:null,labelLocation:_NONE_,
 								  			toolTipContent: ZaMsg.tt_zimbraSmtpHostname
@@ -342,12 +345,26 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 								{ ref: ZaGlobalConfig.A_zimbraSmtpPort, type: _OUTPUT_,
 								  label: ZaMsg.NAD_MTA_WebMailPort
 							    },
-								{ref:ZaGlobalConfig.A_zimbraMtaRelayHost,label:ZaMsg.NAD_MTA_RelayMTA,
-									type:_HOSTPORT_,
-									 onClick: "ZaController.showTooltip",
-							 		 toolTipContent: ZaMsg.tt_MTA_RelayMTA,
-							 		 onMouseout: "ZaController.hideTooltip"
-								},
+							    { ref: ZaGlobalConfig.A_zimbraMtaRelayHost, type: _REPEAT_,
+						  	  		label: ZaMsg.NAD_MTA_RelayMTA,
+							  		labelLocation:_LEFT_,
+							  		align:_LEFT_,
+							  		repeatInstance:"",
+									showAddButton:true, 
+									showRemoveButton:true, 
+									showAddOnNextRow:true,
+									addButtonLabel:ZaMsg.Add_zimbraSmtpHostname, 
+									removeButtonLabel:ZaMsg.Remove_zimbraSmtpHostname,
+									removeButtonCSSStyle: "margin-left: 50px",
+							  		items: [
+										{ref:".",label:null,labelLocation:_NONE_,
+											type:_HOSTPORT_,
+											onClick: "ZaController.showTooltip",
+									 		toolTipContent: ZaMsg.tt_MTA_RelayMTA,
+									 		onMouseout: "ZaController.hideTooltip"
+										}
+									]
+						  		},
 								{ type: _DWT_ALERT_,
 									containerCssStyle: "padding-bottom:0px",
 									style: DwtAlert.INFO,
