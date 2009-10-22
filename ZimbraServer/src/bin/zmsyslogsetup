@@ -94,17 +94,19 @@ updateSyslogNG() {
   fi
 
   grep -v zimbra ${syslogconf} > ${tmpfile}
-  echo 'filter f_local0       { facility(local0); }; # zimbra' >> ${tmpfile}
-  echo 'filter f_local1       { facility(local1); }; # zimbra' >> ${tmpfile}
-  echo 'destination zmail { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra ' >> ${tmpfile}
-  echo 'destination zmstats { file("/var/log/zimbra-stats.log" owner("zimbra") ); }; # zimbra ' >> ${tmpfile}
-  echo 'log { source(src); filter(f_mail); destination(zmail); }; # zimbra' >> ${tmpfile}
-  echo 'destination local0 { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra' >> ${tmpfile}
-  echo 'log { source(src); filter(f_local0); destination(local0); }; # zimbra' >> ${tmpfile}
-  echo 'log { source(src); filter(f_local1); destination(zmstats); }; # zimbra' >> ${tmpfile}
-  echo 'filter f_auth       { facility(auth); }; # zimbra' >> ${tmpfile}
-  echo 'destination zmauth { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra' >> ${tmpfile}
-  echo 'log { source(src); filter(f_auth); destination(zmauth); }; # zimbra' >> ${tmpfile}
+  echo 'source zimbra_src {  unix-stream("/dev/log"; keep-alive(yes); max-connections(20);); }; # zimbra' >> ${tmpfile}
+  echo 'filter zimbra_local0 { facility(local0); }; # zimbra' >> ${tmpfile}
+  echo 'filter zimbra_local1 { facility(local1); }; # zimbra' >> ${tmpfile}
+  echo 'filter zimbra_auth { facility(auth); }; # zimbra' >> ${tmpfile}
+  echo 'filter zimbra_mail { facility(mail); }; # zimbra' >> ${tmpfile}
+  echo 'destination zimbra_mail { file("/var/log/zimbra.log" owner("zimbra")); }; # zimbra' >> ${tmpfile}
+  echo 'destination zimbra_local1 { file("/var/log/zimbra-stats.log" owner("zimbra")); }; # zimbra' >> ${tmpfile}
+  echo 'destination zimbra_local0 { file("/var/log/zimbra.log" owner("zimbra")); }; # zimbra' >> ${tmpfile}
+  echo 'destination zimbra_auth { file("/var/log/zimbra.log" owner("zimbra")); }; # zimbra' >> ${tmpfile}
+  echo 'log { source(zimbra_src); filter(zimbra_mail); destination(zimbra_mail); }; # zimbra' >> ${tmpfile}
+  echo 'log { source(zimbra_src); filter(zimbra_local0); destination(zimbra_local0); }; # zimbra' >> ${tmpfile}
+  echo 'log { source(zimbra_src); filter(zimbra_local1); destination(zimbra_local1); }; # zimbra' >> ${tmpfile}
+  echo 'log { source(zimbra_src); filter(zimbra_auth); destination(zimbra_auth); }; # zimbra' >> ${tmpfile}
 
   # remove duplicate logging
   sed -i -e 's:\(^destination mailinfo.*\):#\1:' ${tmpfile}
