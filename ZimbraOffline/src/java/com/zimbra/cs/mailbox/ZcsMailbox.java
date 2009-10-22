@@ -345,11 +345,6 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             MailItem item = getItemById(itemId, type);
             markItemModified(item, Change.INTERNAL_ONLY);
 
-            if (date == item.getDate()) {
-                success = true;
-                return;
-            }
-
             // update the database
             DbOfflineMailbox.setDate(item, date);
 
