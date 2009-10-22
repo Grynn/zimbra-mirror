@@ -115,7 +115,7 @@ if(isset($_REQUEST["majorversion"]) &&
 		}
 	}
 }
-if(!empty($majorUpdate) || !empty($minorUpdate) || !empty($microUpdates) || !empty($buildUpdates)) {
+if(!empty($majorUpdate) || !empty($minorUpdate) || !empty($microUpdate) || !empty($buildUpdates)) {
 ?>
 <versionCheck status="1">
 <updates>
