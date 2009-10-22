@@ -122,13 +122,6 @@ function() {
 ZmBatchCommand.prototype.run =
 function(callback, errorCallback) {
 
-	if (!this._cmds.length) {
-		if (callback) {
-			callback.run();
-		}
-		return;
-	}
-
 	// Invoke each command so that it hands us its SOAP doc, response callback,
 	// and error callback
 	for (var i = 0; i < this._cmds.length; i++) {
