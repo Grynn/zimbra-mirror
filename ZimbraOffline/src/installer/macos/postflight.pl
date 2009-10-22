@@ -68,3 +68,6 @@ find_and_replace("$app_root/Zimbra Desktop.app/Contents/MacOS/zdrun", $tokens);
 # open zd app in finder
 system("open \"$app_root\"");
 
+# launch zd
+system("open \"$app_root/Zimbra Desktop.app\"");
+
