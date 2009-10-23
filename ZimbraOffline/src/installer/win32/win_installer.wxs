@@ -195,7 +195,7 @@
     <Condition Message="This product require Windows XP or newer">VersionNT &gt;= 501</Condition>
 
     <!-- ZWixUtils -->
-    <Binary Id="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" SourceFile="@build.root@\src\installer\zwixutils.dll" />
+    <Binary Id="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" SourceFile="@build.root@\src\installer\win32\zwixutils.dll" />
     <CustomAction Id="ID10701" Property="NumberOfTokens" Value="2" />
     <CustomAction Id="ID10702" Property="Token1" Value="@install.app.root@" />
     <CustomAction Id="ID10703" Property="Value1" Value="[APPLICATIONFOLDER]" />

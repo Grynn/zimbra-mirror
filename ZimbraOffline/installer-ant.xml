@@ -111,13 +111,13 @@
 	<!--   1) WiX v3.0 (http://wix.sourceforge.net/downloadv3.html) "            -->
 	<!--   2) Strawberry Perl (http://strawberryperl.com/) "                     -->
 	<target name="installer-pack-media-windows" if="is-windows">
-		<copy todir="${wxs.dir}" file="src/installer/win_installer.wxs" overwrite="true" />
+		<copy todir="${wxs.dir}" file="src/installer/win32/win_installer.wxs" overwrite="true" />
 		<replace file="${wxs.dir}/win_installer.wxs" token="@build.root@" value="${basedir}" />
 		
 		<delete dir="build/dist/app/macos" />
 		<delete dir="build/dist/app/linux" />
 		<exec executable="${winperl}" failonerror="true">
-			<arg value="${basedir}\src\installer\wxs-get-contents.pl" />
+			<arg value="${basedir}\src\installer\win32\wxs-get-contents.pl" />
 			<arg value="${basedir}" />
 		</exec>
         
