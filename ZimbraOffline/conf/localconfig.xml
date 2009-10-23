@@ -37,9 +37,6 @@
   <key name="mailboxd_output_rotate_interval">
     <value>0</value>
   </key>
-  <key name="sqlite_pool_size">
-    <value>5</value>
-  </key>
   <key name="ssl_allow_mismatched_certs">
     <value>false</value>
   </key>
