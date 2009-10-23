@@ -428,7 +428,7 @@ public class DbOfflineMailbox {
         try {
             stmt = conn.prepareStatement("SELECT id, mod_metadata" +
                     " FROM " + DbMailItem.getMailItemTableName(ombx) +
-                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id IN" + DbUtil.suitableNumberOfVariables(ids.length));
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + DbUtil.whereIn("id", ids.length));
             int pos = 1;
             pos = DbMailItem.setMailboxId(stmt, ombx, pos);
             for (int id : ids)
@@ -458,7 +458,7 @@ public class DbOfflineMailbox {
         try {
             stmt = conn.prepareStatement("SELECT id, folder_id" +
                     " FROM " + DbMailItem.getMailItemTableName(ombx) +
-                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id IN" + DbUtil.suitableNumberOfVariables(ids.length));
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + DbUtil.whereIn("id", ids.length));
             int pos = 1;
             pos = DbMailItem.setMailboxId(stmt, ombx, pos);
             for (int id : ids)

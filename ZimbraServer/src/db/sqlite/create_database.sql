@@ -99,15 +99,15 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
 
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_type ON mail_item(type);                      -- for looking up folders and tags
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_parent_id ON mail_item(parent_id);            -- for looking up a parent\'s children
-CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_folder_id_date ON mail_item(folder_id, date); -- for looking up by folder and sorting by date
+CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_folder_id_date ON mail_item(folder_id, date DESC); -- for looking up by folder and sorting by date
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_index_id ON mail_item(index_id);              -- for looking up based on search results
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_unread ON mail_item(unread);                  -- there should be a small number of items with unread=TRUE
                                                                          --   no compound index on (unread, date), so we save space at
                                                                          --   the expense of sorting a small number of rows
-CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_date ON mail_item(date);                      -- fallback index in case other constraints are not specified
+CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_date ON mail_item(date DESC);                 -- fallback index in case other constraints are not specified
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_mod_metadata ON mail_item(mod_metadata);      -- used by the sync code
-CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_tags_date ON mail_item(tags, date);           -- for tag searches
-CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_flags_date ON mail_item(flags, date);         -- for flag searches
+CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_tags_date ON mail_item(tags, date DESC);      -- for tag searches
+CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_flags_date ON mail_item(flags, date DESC);    -- for flag searches
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_change_mask ON mail_item(change_mask, date);  -- for figuring out which items to push during sync
 
 -- -- CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (parent_id) REFERENCES mail_item(id)
