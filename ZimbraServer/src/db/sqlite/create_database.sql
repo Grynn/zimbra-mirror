@@ -13,8 +13,8 @@
 -- ***** END LICENSE BLOCK *****
 -- 
 
-PRAGMA ${DATABASE_NAME}.default_page_size=4096;
-PRAGMA ${DATABASE_NAME}.page_size=4096;
+PRAGMA ${DATABASE_NAME}.default_page_size=2048;
+PRAGMA ${DATABASE_NAME}.page_size=2048;
 PRAGMA ${DATABASE_NAME}.default_cache_size=2000;
 PRAGMA ${DATABASE_NAME}.cache_size=2000;
 PRAGMA ${DATABASE_NAME}.encoding="UTF-8";

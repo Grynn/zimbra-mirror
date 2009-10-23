@@ -13,8 +13,8 @@
 -- ***** END LICENSE BLOCK *****
 -- 
 
-PRAGMA default_page_size=4096;
-PRAGMA page_size=4096;
+PRAGMA default_page_size=2048;
+PRAGMA page_size=2048;
 PRAGMA default_cache_size=2000;
 PRAGMA cache_size=2000;
 PRAGMA encoding="UTF-8";
