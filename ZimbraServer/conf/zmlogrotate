@@ -61,7 +61,8 @@
     daily
     missingok
     copytruncate
-    notifempty    create 0660 zimbra zimbra
+    notifempty
+    create 0660 zimbra zimbra
     postrotate
      kill -HUP `cat /opt/zimbra/log/freshclam.pid 2> /dev/null` 2> /dev/null || true
     endscript
