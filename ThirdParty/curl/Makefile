@@ -5,6 +5,10 @@ MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
+	HEIMDAL_VERSION ?= 1.3.0rc1
+endif
+
 ZIMBRA_HOME ?= /opt/zimbra
 CURL_VERSION ?= 7.19.6
 HEIMDAL_VERSION ?= 1.2.1
@@ -48,10 +52,12 @@ endif
 all: allclean build tar
 
 build:
-	(tar xzf src/curl-$(CURL_VERSION).tar.gz; \
-	cd curl-$(CURL_VERSION); \
-	patch -N -g0 -p1 < ../patches/krb5.patch; \
-	patch -N -g0 -p1 < ../patches/custom-openssl.patch; \
+	tar xzf src/curl-$(CURL_VERSION).tar.gz
+	(cd curl-$(CURL_VERSION); \
+	patch -N -g0 -p1 < ../patches/krb5.patch)
+	#patch -N -g0 -p1 < ../patches/custom-openssl.patch)
+	(cd curl-$(CURL_VERSION); \
+	DYLD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(HEIMDAL_LIB_DIR) -L$(CURL_LIB_DIR) \
 		-R$(OPENSSL_LIB_DIR) -R$(HEIMDAL_LIB_DIR) -R$(CURL_LIB_DIR)" \
@@ -60,13 +66,13 @@ build:
 		--with-gssapi=/opt/zimbra/heimdal-$(HEIMDAL_VERSION) \
 		--with-ssl=/opt/zimbra/openssl-$(OPENSSL_VERSION) \
 		--with-ca-bundle=/opt/zimbra/curl-$(CURL_VERSION)/share/curl/ca-bundle.crt \
-		--with-zlib=/usr/lib64 \
-		--with-libidn=/usr/lib64;\
-	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) $(MAKE) $(MAKEARGS); \
-	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) $(MAKE) $(MAKEARGS) install; \
-	$(MAKE) ca-bundle; \
-	mkdir -p $(ZIMBRA_HOME)/curl-$(CURL_VERSION)/share/curl; \
-	cp -f lib/ca-bundle.crt $(ZIMBRA_HOME)/curl-$(CURL_VERSION)/share/curl/ca-bundle.crt)
+		--with-zlib=$(LIB_DIR) \
+		--with-libidn=$(LIB_DIR))
+	(cd curl-$(CURL_VERSION);  LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) $(MAKE) $(MAKEARGS))
+	(cd curl-$(CURL_VERSION); LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) $(MAKE) $(MAKEARGS) install)
+	(cd curl-$(CURL_VERSION); $(MAKE) ca-bundle)
+	mkdir -p $(ZIMBRA_HOME)/curl-$(CURL_VERSION)/share/curl
+	(cd curl-$(CURL_VERSION); cp -f lib/ca-bundle.crt $(ZIMBRA_HOME)/curl-$(CURL_VERSION)/share/curl/ca-bundle.crt)
 	(cd $(ZIMBRA_HOME); ln -s curl-$(CURL_VERSION) curl)
 
 tar:

@@ -7,6 +7,7 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
+
 ZIMBRA_HOME ?= /opt/zimbra
 SENDMAIL_VERSION ?= 8.14.3
 SENDMAIL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/sendmail/sendmail-$(SENDMAIL_VERSION).tgz
@@ -15,6 +16,7 @@ all: allclean build tar
 
 build:
 	(tar xzf src/sendmail.$(SENDMAIL_VERSION).tar.gz; \
+	cp sendmail-$(SENDMAIL_VERSION)/devtools/OS/Darwin.9.x sendmail-$(SENDMAIL_VERSION)/devtools/OS/Darwin.10.x; \
 	cd sendmail-$(SENDMAIL_VERSION)/libmilter; \
 	./Build; \
 	cd ../obj.*/libmilter; \

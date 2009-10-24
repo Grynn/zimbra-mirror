@@ -1,7 +1,7 @@
 OPENSSL_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(OPENSSL_ROOT)/../..; pwd)
 MAKE ?= make
-MAKEARGS := -j1
+MAKEARGS := -j3
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
@@ -11,6 +11,10 @@ endif
 
 ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	PLAT := darwin-i386-cc
+endif
+
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
+	PLAT := darwin64-x86_64-cc
 endif
 
 ifeq ($(BUILD_PLATFORM), MACOSX)

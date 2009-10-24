@@ -5,6 +5,10 @@ MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
+	HEIMDAL_VERSION ?=  1.3.0rc1
+endif
+
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
@@ -67,6 +71,7 @@ build:
 	cd $(HEIMDAL_SOURCE)/lib/hx509; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/krb5; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/ntlm; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/sqlite; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/gssapi; $(MAKE) install STRIP="")
 	(cd $(ZIMBRA_HOME); ln -s heimdal-$(HEIMDAL_VERSION) heimdal)
 

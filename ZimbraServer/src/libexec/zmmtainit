@@ -50,7 +50,7 @@ else
 fi
 
 PLAT=`/bin/bash ${zimbra_home}/libexec/get_plat_tag.sh`
-if [ "X$PLAT" = "XMACOSXx86_10.5" ]; then
+if [ "X$PLAT" = "XMACOSXx86_10.5" -o "X$PLAT" = "XMACOSXx86_10.6" ]; then
   postfix_owner=_postfix
 else
   postfix_owner=postfix

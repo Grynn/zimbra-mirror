@@ -19,8 +19,8 @@ endif
 ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	ENVMOD := env LIBS="-lresolv" 
 endif
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
-	ENVMOD := env LIBS="-lresolv" CPPFLAGS="-DHAVE_SSIZE_T"
+ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))
+	ENVMOD := env LIBS="-lresolv" CPPFLAGS="-DHAVE_SSIZE_T" MACOSX_DEPLOYMENT_TARGET=10.5
 endif
 ifeq ($(BUILD_PLATFORM), MACOSX)
 	ENVMOD := env LIBS="-lresolv" 
@@ -44,13 +44,15 @@ endif
 all: allclean build tar
 
 build: $(APP_NAME)-$(APP_VERSION)
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
+ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))
+	@echo MAC $(BUILD_PLATFORM)
 	(cd $(APP_NAME)-$(APP_VERSION); \
+	cp ../patches/darwin10.h include/net-snmp/system; \
 	$(ENVMOD) CFLAGS="-g -O2" ./configure --prefix=$(INSTALL_PREFIX) \
 	--with-default-snmp-version=3 --with-sys-contact="admin" \
 	--with-sys-location="unknown" --with-logfile="$(ZIMBRA_HOME)/log/snmpd.log" \
 	--disable-embedded-perl \
-	--with-perl-modules="PREFIX=$(PERL_DEST_DIR) LIB=$(PERL_DEST_LIB_DIR)" \
+	--without-perl-modules \
 	--with-persistent-directory="$(INSTALL_PREFIX)/var"; \
 	sed -i .bak -e 's/-arch ppc//g' config.status; \
 	./config.status; \
@@ -59,6 +61,7 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	(mkdir -p $(INSTALL_PREFIX)/var)
 	(cd $(ZIMBRA_HOME); ln -s $(APP_NAME)-$(APP_VERSION) $(APP_NAME))
 else
+	echo NON_MAC $(BUILD_PLATFORM)
 	(cd $(APP_NAME)-$(APP_VERSION); \
 	$(ENVMOD) CFLAGS="-g -O2" ./configure --prefix=$(INSTALL_PREFIX) \
 	--with-default-snmp-version=3 --with-sys-contact="admin" \

@@ -26,8 +26,8 @@ zimbra_zmjava_java_ext_dirs="`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmja
 if [ -d ${zimbra_java_home}/jre ]; then
     JRE_EXT_DIR=${zimbra_java_home}/jre/lib/ext
 else
-    JRE_EXT_DIR=/System/Library/Frameworks/JavaVM.framework/Versions/1.5/Home/lib/ext
-    #JRE_EXT_DIR=${zimbra_java_home}/lib/ext
+    #JRE_EXT_DIR=/System/Library/Frameworks/JavaVM.framework/Versions/1.5/Home/lib/ext
+    JRE_EXT_DIR=${zimbra_java_home}/lib/ext
 fi
 
 if [ -f ".hotspot_compiler" ]; then

@@ -7,6 +7,7 @@ POSTFIX_VERSION ?= $(POSTFIX_RELEASE).$(POSTFIX_PATCH_LEVEL)
 
 P4_ROOT ?= $(shell cd $(POSTFIX_ROOT)/../..; pwd)
 MAKE ?= make
+SED ?= sed
 MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
@@ -18,8 +19,10 @@ SASL_VERSION ?= 2.1.23.3z
 LDAP_VERSION ?= 2.4.19.2z
 OPENSSL_VERSION ?= 0.9.8k
 MYSQL_VERSION_STRING ?= 5.0.85
+
 MYSQL_VERSION ?= standard-$(MYSQL_VERSION_STRING)-pc-linux-gnu-i686-glibc23
 MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
+
 ifeq ($(BUILD_PLATFORM), MACOSX)
 	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
 	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
@@ -29,6 +32,13 @@ ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-i686
 	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-i686
 endif     
+
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
+	OS_REL := 10
+	OS_PLAT := $(shell uname -p)
+	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin$(OS_REL)-$(OS_PLAT)
+	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin$(OS_REL)-$(OS_PLAT)
+endif 
 
 SYSTEM_LIB := /usr/lib
 BDB_VERSION ?= 4.7.25.4
@@ -59,8 +69,7 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 endif
 
 ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-i686
-	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-i686
+	EXTRALIBS := -lresolv
 	PCRE_DEF := -DHAS_PCRE
 	PCRE_INCLUDE := -I/opt/zimbra/include
 	PCRE_LIB := -L/opt/zimbra/lib -lpcre
@@ -69,15 +78,18 @@ ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 endif
 
 INSTALL_PARMS := install_root=/../
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
+ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))
 	INSTALL_PARMS := install_root=/../ setgid_group=_postdrop mail_owner=_postfix
 endif
 
 all: allclean build install tar
 
 build:
-	(tar xzf src/postfix-$(POSTFIX_RELEASE).tar.gz; \
-	mv postfix-$(POSTFIX_RELEASE) postfix-$(POSTFIX_VERSION); \
+	tar xzf src/postfix-$(POSTFIX_RELEASE).tar.gz
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
+	$(SED) -i -e 's/#define RESOLVE_H_NEEDS_NAMESER8_COMPAT_H//' postfix-$(POSTFIX_RELEASE)/src/util/sys_defs.h
+endif
+	(mv postfix-$(POSTFIX_RELEASE) postfix-$(POSTFIX_VERSION); \
 	cd postfix-$(POSTFIX_VERSION); \
 	patch -g0 -p1 < ../patches/postfix-zimbra-bdb.patch; \
 	patch -g0 -p1 < ../patches/postfix-main-cf-zimbra.patch; \
@@ -106,7 +118,7 @@ build:
 	-I/opt/zimbra/mysql-$(MYSQL_VERSION)/include/mysql \
 	-I/opt/zimbra/openssl-$(OPENSSL_VERSION)/include \
 	-I/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/include/sasl -I/usr/include' \
-	AUXLIBS='-L/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/lib \
+	AUXLIBS='$(EXTRALIBS) -L/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/lib \
 	$(DBLIB) -ldb -L/opt/zimbra/openldap-clibs-$(LDAP_VERSION)/lib $(PCRE_LIB) \
 	-lldap -llber -L/opt/zimbra/mysql-$(MYSQL_VERSION)/lib \
 	-L/opt/zimbra/mysql-$(MYSQL_VERSION)/lib/mysql \

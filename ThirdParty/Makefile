@@ -3,6 +3,7 @@ THIRDPARTY_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(THIRDPARTY_ROOT)/..; pwd)
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
+OS_PLATFORM ?= $(shell uname -p)
 
 MAKE := make
 ECHO := /bin/echo
@@ -33,8 +34,14 @@ MYSQL_VERSION ?= standard-$(MYSQL_VERSION_STRING)-pc-linux-gnu-i686
 MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
 
 ifeq ($(BUILD_PLATFORM), MACOSX)
-    MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
+	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
 	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
+endif
+
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
+	OS_RELEASE ?= 10
+	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin$(OS_RELEASE)-$(OS_PLATFORM)
+	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin$(OS_RELEASE)-$(OS_PLATFORM)
 endif
 
 ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
@@ -48,7 +55,11 @@ MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
 OPENSSL_VERSION ?= 0.9.8k
 OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
 
-HEIMDAL_VERSION ?= 1.2.1
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
+	HEIMDAL_VERSION ?= 1.3.0rc1
+else
+	HEIMDAL_VERSION ?= 1.2.1
+endif
 HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
 
 HTTPD_VERSION ?= 2.2.14
