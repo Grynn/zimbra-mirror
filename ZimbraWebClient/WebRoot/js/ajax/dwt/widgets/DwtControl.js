@@ -1109,6 +1109,10 @@ function(id) {
 			delete DwtComposite._pendingElements[this._htmlElId];
 			DwtComposite._pendingElements[id] = htmlEl;
 		}
+		else {
+			delete DwtControl.ALL_BY_ID[this._htmlElId];
+			DwtControl.ALL_BY_ID[id] = this;
+		}
 		htmlEl.id = id;
 	}
 	this._htmlElId = id;
@@ -2795,9 +2799,10 @@ DwtControl.__HANDLER[DwtEvent.ONKEYPRESS] = DwtControl.__keyPressHdlr;
 DwtControl.prototype.__initCtrl =
 function() {
 	this.shell = this.parent.shell || this.parent;
-	var htmlElement = this._elRef = this._createElement();
 	// __internalId is for back-compatibility (was side effect of Dwt.associateElementWithObject)
-	this._htmlElId = htmlElement.id = this.__internalId = this._htmlElId || Dwt.getNextId();
+	this._htmlElId = this.__internalId = this._htmlElId || Dwt.getNextId();
+	var htmlElement = this._elRef = this._createElement(this._htmlElId);
+	htmlElement.id = this._htmlElId; 
 	if (DwtControl.ALL_BY_ID) {
 		if (DwtControl.ALL_BY_ID[this._htmlElId]) {
 			DBG.println(AjxDebug.DBG1, "Duplicate ID for " + this.toString() + ": " + this._htmlElId);
@@ -2822,7 +2827,16 @@ function() {
 	this.parent.addChild(this, this.__index);
 };
 
-DwtControl.prototype._createElement = function() {
+/**
+ * Returns the container element to be used for this control.
+ * <p>
+ * <strong>Note:</strong>
+ * The caller will overwrite the id of the returned element with the
+ * specified id.
+ *
+ * @param id [string] The id of the container element.
+ */
+DwtControl.prototype._createElement = function(id) {
 	return document.createElement("DIV")
 };
 

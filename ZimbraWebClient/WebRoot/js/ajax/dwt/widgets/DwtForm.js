@@ -601,6 +601,9 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 	if (element && control instanceof DwtControl) {
 		control.replaceElement(element);
 	}
+	if (element && control instanceof DwtInputField) {
+		control.getInputElement().id += "_input";
+	}
 
 	// add to list of tab indexes
 	if (itemDef.notab == null) {
@@ -670,6 +673,7 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 	var id = itemDef.id || [this._htmlElId, Dwt.getNextId()].join("_");
 	var type = itemDef.type = itemDef.type || defaultType;
 	params = params ? AjxUtil.createProxy(params) : {};
+	params.id = params.id || [this._htmlElId, id].join("_");
 	params.parent = parent || this;
 	params.template = itemDef.template || params.template;
 	params.className = itemDef.className || params.className;
@@ -1032,7 +1036,6 @@ DwtForm.__makeFunc = function(value) {
 };
 
 DwtForm.__equals = function(a, b) {
-//	console.log("DwtForm.__equals[a=",a,"][b=",b,"]");
 	return a == b;
 };
 
@@ -1077,8 +1080,7 @@ DwtFormRows = function(params) {
 
 	// save state
 	this._rowDef = this._itemDef.rowitem || {};
-//	console.log("DwtFormRows#",params.id,".rowitem.equals = ",this._rowDef.equals);
-	this._equals = DwtForm.__makeFunc(this._rowDef.equals) || DwtForm.__equals; 
+	this._equals = DwtForm.__makeFunc(this._rowDef.equals) || DwtForm.__equals;
 	this._rowCount = 0;
 	this._minRows = this._itemDef.minrows || 1;
 	this._maxRows = this._itemDef.maxrows || Number.MAX_VALUE;
@@ -1164,17 +1166,31 @@ DwtFormRows.prototype.addRow = function(itemDef, index) {
 	itemDef = itemDef || (this._rowDef && AjxUtil.createProxy(this._rowDef));
 	if (!itemDef) return;
 
+	if (index == null) index = this._rowCount;
+
+	// move other rows "up"
+	for (var i = this._rowCount - 1; i >= index; i--) {
+		var oindex = i, nindex = i+1;
+		var item = this._items[oindex];
+		item.aka = String(nindex);
+		delete this._items[oindex];
+		this._items[item.aka] = item;
+		this._setControlIds(item.id, item.aka);
+	}
+
+	// initialize definition
 	itemDef.id = itemDef.id || Dwt.getNextId();
-	itemDef.aka = String(this._rowCount++);
+	itemDef.aka = String(index);
+	this._rowCount++;
 
 	// create row html
-	var data = { id: [this._htmlElId, itemDef.id].join("_") };
+	var data = { id: [this.getHTMLElId(), itemDef.id].join("_") };
 	var rowHtml = AjxTemplate.expand(this.ROW_TEMPLATE, data);
 
 	var rowsEl = this._rowsEl;
 	rowsEl.appendChild(Dwt.toDocumentFragment(rowHtml, data.id+"_row"));
 	var rowEl = rowsEl.lastChild;
-	if (index != null) {
+	if (index != this._rowCount - 1) {
 		rowsEl.insertBefore(rowEl, rowsEl.childNodes[index]);
 	}
 
@@ -1183,7 +1199,7 @@ DwtFormRows.prototype.addRow = function(itemDef, index) {
 	var control = this._registerControl(itemDef, null, tabIndexes);
 
 	var addDef = this._itemDef.additem ? AjxUtil.createProxy(this._itemDef.additem) : { image: "Add" };
-	addDef[addDef.id?"aka":"id"] = itemDef.id+"_add";
+	addDef.id = addDef.id || itemDef.id+"_add";
 	addDef.visible = "this.getRowCount() < this.getMaxRows()";
 	addDef.ignore = true;
 	var addButton = this._registerControl(addDef,null,tabIndexes,null,null,"DwtButton");
@@ -1192,7 +1208,7 @@ DwtFormRows.prototype.addRow = function(itemDef, index) {
 	}
 
 	var removeDef = this._itemDef.removeitem ? AjxUtil.createProxy(this._itemDef.removeitem) : { image: "Remove" };
-	removeDef[removeDef.id?"aka":"id"] = itemDef.id+"_remove";
+	removeDef.id = removeDef.id || itemDef.id+"_remove";
 	removeDef.visible = "this.getRowCount() > this.getMinRows()";
 	removeDef.ignore = true;
 	var removeButton = this._registerControl(removeDef,null,tabIndexes,null,null,"DwtButton");
@@ -1206,6 +1222,9 @@ DwtFormRows.prototype.addRow = function(itemDef, index) {
 	item._addId= addDef.id;
 	item._removeId = removeDef.id;
 
+	// set control identifiers
+	this._setControlIds(item.id, index);
+
 	// create tab group for row
 	var tabGroup = new DwtTabGroup(itemDef.id);
 	tabIndexes.sort(DwtForm.__byTabIndex);
@@ -1215,11 +1234,11 @@ DwtFormRows.prototype.addRow = function(itemDef, index) {
 	}
 
 	// add to tab group
-	if (index == null || index >= this._rowCount) {
+	if (index == this._rowCount - 1) {
 		this._rowsTabGroup.addMember(tabGroup);
 	}
 	else {
-		var indexItemDef = this._items[String(index)];
+		var indexItemDef = this._items[String(index+1)];
 		var indexTabGroup = this._rowsTabGroup.getTabGroupMemberByName(indexItemDef.id);
 		this._rowsTabGroup.addMemberBefore(tabGroup, indexTabGroup);
 	}
@@ -1227,7 +1246,7 @@ DwtFormRows.prototype.addRow = function(itemDef, index) {
 	// update display and notify handler
 	this.update();
 	if (this._onaddrow) {
-		this._call(this._onaddrow, [index||this._rowCount-1]);
+		this._call(this._onaddrow, [index]);
 	}
 
 	return control;
@@ -1261,9 +1280,12 @@ DwtFormRows.prototype.removeRow = function(indexOrId) {
 	}
 
 	// shift everything down one, removing old last row
-	for (var i = Number(item.aka) + 1; i < this._rowCount; i++) {
-		this._items[i-1] = this._items[i];
-		this._items[i-1].aka = String(i-1);
+	var fromIndex = Number(item.aka);
+	for (var i = fromIndex + 1; i < this._rowCount; i++) {
+		var oindex = i, nindex = i-1;
+		this._items[nindex] = this._items[oindex];
+		this._items[nindex].aka = String(nindex);
+		this._setControlIds(this._items[nindex].id, this._items[nindex].aka);
 	}
 	this._deleteItem(String(--this._rowCount));
 
@@ -1306,11 +1328,9 @@ DwtFormRows.prototype.getIndexForRowId = function(rowId) {
 };
 
 DwtFormRows.__equals = function(a,b) {
-//	console.log("DwtFormRows.__equals[a=",a,"][b=",b,"]");
 	if (a === b) return true;
 	if (!a || !b || a.length != b.length) return false;
 	for (var i = 0; i < a.length; i++) {
-//		console.log("i: ",i,", a[i]: ",a[i],", b[i]: ",b[i]);
 		if (!this._call(this._equals, [a[i],b[i]])) {
 			return false;
 		}
@@ -1319,6 +1339,28 @@ DwtFormRows.__equals = function(a,b) {
 };
 
 // Protected methods
+
+/** Override to set child controls' identifiers. */
+DwtFormRows.prototype._setControlIds = function(rowId, index) {
+	var id = [this.getHTMLElId(), index].join("_");
+	var item = this._items[rowId];
+	this._setControlId(item && item.control, id);
+	var addButton = this._items[item._addId];
+	this._setControlId(addButton && addButton.control, id+"_add");
+	var removeButton = this._items[item._removeId];
+	this._setControlId(removeButton && removeButton.control, id+"_remove");
+	// TODO: update parentid attribute of children
+};
+
+DwtFormRows.prototype._setControlId = function(control, id) {
+	if (!control) return;
+	if (control instanceof DwtControl) {
+		control.setHtmlElementId(id);
+	}
+	else {
+		control.id = id;
+	}
+};
 
 DwtFormRows.prototype._handleAddRow = function(rowId) {
 	var index = this.getIndexForRowId(rowId) + 1;
