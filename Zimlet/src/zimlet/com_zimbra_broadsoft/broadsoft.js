@@ -788,7 +788,7 @@ function() {
 	html[i++] = "<TABLE>";
 	html[i++] = "<TR>";
 	html[i++] = "<TD>";
-	html[i++] = "Broadsoft SIP Email: ";
+	html[i++] = "Broadsoft User Name: ";
 	html[i++] = "</TD><TD>";
 	html[i++] = "<input id='broadsoft_email'  size='30' type='text'/>";
 	html[i++] = "</TD>";
