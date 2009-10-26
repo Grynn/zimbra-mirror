@@ -39,7 +39,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
         switch (type) {
         case MailItem.TYPE_MESSAGE:
 //        case MailItem.TYPE_APPOINTMENT:
-//        case MailItem.TYPE_CONTACT:
+        case MailItem.TYPE_CONTACT:
 //        case MailItem.TYPE_TASK:
 //        case MailItem.TYPE_WIKI:
             return true;
@@ -71,13 +71,13 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
     int getChangeMaskFilter(byte type) {
         switch (type) {
         case MailItem.TYPE_MESSAGE:       return MESSAGE_CHANGES;     
-        //case MailItem.TYPE_CHAT:          return PushChanges.CHAT_CHANGES;     
-        case MailItem.TYPE_CONTACT:       return PushChanges.CONTACT_CHANGES;     
-        case MailItem.TYPE_FOLDER:        return PushChanges.FOLDER_CHANGES;      
+        //case MailItem.TYPE_CHAT:          return CHAT_CHANGES;     
+        case MailItem.TYPE_CONTACT:       return CONTACT_CHANGES;     
+        case MailItem.TYPE_FOLDER:        return FOLDER_CHANGES;      
         case MailItem.TYPE_APPOINTMENT:
-        case MailItem.TYPE_TASK:          return PushChanges.APPOINTMENT_CHANGES; 
+        case MailItem.TYPE_TASK:          return APPOINTMENT_CHANGES; 
         case MailItem.TYPE_WIKI:
-        case MailItem.TYPE_DOCUMENT:      return PushChanges.DOCUMENT_CHANGES;
+        case MailItem.TYPE_DOCUMENT:      return DOCUMENT_CHANGES;
         default:                          return 0;
         }
     }

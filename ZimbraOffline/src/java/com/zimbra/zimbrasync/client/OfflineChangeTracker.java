@@ -58,7 +58,7 @@ public class OfflineChangeTracker extends ChangeTracker {
                         clearItemMoved(id, folderId); //just clear the bit if item is still in there
                     }
                 }
-                if (((mask & Change.MODIFIED_CONTENT) | (mask & Change.MODIFIED_METADATA) | (mask & Change.MODIFIED_UNREAD)) != 0)
+                if ((mask & ~Change.MODIFIED_FOLDER) != 0)
                     addClientChange(folderId, id);
             }
         }

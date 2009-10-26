@@ -43,11 +43,12 @@ public class TestXsync extends TestCase {
         checkMsgCount("in:inbox is:unread");
         
         //send message to self
+        ZimbraLog.test.info("TEST 1");
         ZOutgoingMessage msg = new ZOutgoingMessage();
         List<ZEmailAddress> addresses = new ArrayList<ZEmailAddress>();
         addresses.add(new ZEmailAddress(EMAIL, null, null, ZEmailAddress.EMAIL_TYPE_TO));
         msg.setAddresses(addresses);
-        msg.setSubject("MSG1");
+        msg.setSubject("SEND");
         msg.setMessagePart(new MessagePart("text/plain", "This is the outer message"));
         localMailbox.sendMessage(msg, null, false);
         sync();
@@ -58,6 +59,7 @@ public class TestXsync extends TestCase {
         assertNotNull(sent);
         
         //delete both sent and recv
+        ZimbraLog.test.info("TEST 2");
         remoteMailbox.deleteMessage(recv.getId());
         localMailbox.deleteMessage(sent.getId());
         sync();
@@ -65,6 +67,7 @@ public class TestXsync extends TestCase {
         checkMsgCount(remoteMailbox, "in:sent", 0);
         
         //create remote F1 and add MSG1 to F1
+        ZimbraLog.test.info("TEST 3");
         ZFolder sf1 = TestUtil.createFolder(remoteMailbox, "" + Mailbox.ID_FOLDER_USER_ROOT,  "F1");
         String sm1Id = TestUtil.addMessage(remoteMailbox, "MSG1", sf1.getId(), "u");
         sync();
@@ -73,6 +76,7 @@ public class TestXsync extends TestCase {
         checkMsgCount(localMailbox, "in:F1 is:unread", 1);
         
         //create remote F2, move MSG1 to F2, and mark MSG1 read
+        ZimbraLog.test.info("TEST 4");
         ZFolder sf2 = TestUtil.createFolder(remoteMailbox, sf1.getId(),  "F2");
         remoteMailbox.moveMessage(sm1Id, sf2.getId());
         remoteMailbox.markMessageRead(sm1Id, true);
@@ -85,6 +89,7 @@ public class TestXsync extends TestCase {
         assertFalse("MSG1 unread", cm1.isUnread());
 
         //create local F3 and move MSG1 into it, and mark MSG1 unread
+        ZimbraLog.test.info("TEST 5");
         ZFolder cf3 = TestUtil.createFolder(localMailbox, cf2.getId(), "F3");
         localMailbox.moveMessage(cm1.getId(), cf3.getId());
         localMailbox.markMessageRead(cm1.getId(), false);
@@ -97,6 +102,7 @@ public class TestXsync extends TestCase {
         assertTrue("MSG1 read", sm1.isUnread()); //need to preserv local changes when moving a message
         
         //create local F4 and move F3 into it
+        ZimbraLog.test.info("TEST 6");
         ZFolder cf4 = TestUtil.createFolder(localMailbox, "" + Mailbox.ID_FOLDER_USER_ROOT, "F4");
         localMailbox.moveFolder(cf3.getId(), cf4.getId());
         sync();
@@ -108,6 +114,7 @@ public class TestXsync extends TestCase {
         assertNotNull("remote /F4/F3", sf3);
         
         //add remote F5 into F2, but delete local F2. F5 should be /F5 on both local and remote
+        ZimbraLog.test.info("TEST 7");
         ZFolder sf5 = TestUtil.createFolder(remoteMailbox, sf2.getId(),  "F5");
         localMailbox.deleteFolder(cf2.getId());
         sync();
@@ -117,6 +124,7 @@ public class TestXsync extends TestCase {
         assertNotNull("remote /F5", sf5);
         
         //add /F5/F6 on both local and remote, remote F6 should be merged with local F6.
+        ZimbraLog.test.info("TEST 8");
         ZFolder cf6 = TestUtil.createFolder(localMailbox, cf5.getId(), "F6");
         ZFolder sf6 = TestUtil.createFolder(remoteMailbox, sf5.getId(), "F6");
         sync();
@@ -126,6 +134,7 @@ public class TestXsync extends TestCase {
         assertNotNull("remote /F5/F6", sf6);
         
         //add /F5/F6/F5 on remote, but delete /F5/F6 local, new F5 should be relocated to /F5 and renamed
+        ZimbraLog.test.info("TEST 9");
         ZFolder sf5_ = TestUtil.createFolder(remoteMailbox, sf6.getId(), "F5");
         localMailbox.deleteFolder(cf6.getId());
         sync();
@@ -134,6 +143,7 @@ public class TestXsync extends TestCase {
         ZFolder cf5_ = localMailbox.getFolderByPath("/" + sf5_.getName());
         assertNotNull("local /F5...", cf5_);
         
+        ZimbraLog.test.info("TEST 10");
         //move remote /F5 to /F4/F3/F5 and rename that to /F4/F3/F1, but delete /F4 locally, expect renamed F1 get moved to /F1 and renamed again
         remoteMailbox.renameFolder(sf5.getId(), "F1", sf3.getId());
         localMailbox.deleteFolder(cf4.getId());
@@ -145,6 +155,7 @@ public class TestXsync extends TestCase {
         assertNotNull("local /F1...", cf1_);
         
         //delete remote F1, but move local F1... into F1. remote F1 should get recreated. 
+        ZimbraLog.test.info("TEST 11");
         remoteMailbox.deleteFolder(sf1.getId());
         localMailbox.moveFolder(cf1_.getId(), cf1.getId());
         sync();
@@ -156,6 +167,7 @@ public class TestXsync extends TestCase {
         assertNotNull("remote /F1/F1...", sf1_);
         
         //move /F5_ under /F1 and create /F1/F1_/F7. now we have /F1/F1_/F7 and /F1/F5_
+        ZimbraLog.test.info("TEST 12");
         localMailbox.moveFolder(cf5_.getId(), cf1.getId());
         ZFolder cf7 = TestUtil.createFolder(localMailbox, cf1_.getId(), "F7");
         sync();
@@ -168,6 +180,7 @@ public class TestXsync extends TestCase {
         //the expected result is: 1) /F1 and /F1/F1... gets recreated on remote
         //                        2) /F1/F1.../F8 gets created on remote
         //                        3) local /F1/F7 is deleted, and local /F5_ is deleted
+        ZimbraLog.test.info("TEST 13");
         remoteMailbox.deleteFolder(sf1.getId());
         localMailbox.moveFolder(cf5_.getId(), "" + Mailbox.ID_FOLDER_USER_ROOT);
         localMailbox.moveFolder(cf7.getId(), cf1.getId());
@@ -182,6 +195,7 @@ public class TestXsync extends TestCase {
         cf7 = localMailbox.getFolderById(cf7.getId());
         assertNull("local /F1/F7", cf7);
         
+        ZimbraLog.test.info("TEST 14");
         String sm2Id = TestUtil.addMessage(remoteMailbox, "MSG2", sf1.getId(), "u");
         String sm3Id = TestUtil.addMessage(remoteMailbox, "MSG3", sf8.getId(), "u");
         String sm4Id = TestUtil.addMessage(remoteMailbox, "MSG4", "" + Mailbox.ID_FOLDER_INBOX, "u");
@@ -190,6 +204,7 @@ public class TestXsync extends TestCase {
         ZMessage cm3 = TestUtil.search(localMailbox, "subject:MSG3").get(0);
         ZMessage cm4 = TestUtil.search(localMailbox, "in:inbox").get(0);
         
+        ZimbraLog.test.info("TEST 15");
         remoteMailbox.deleteFolder(sf1.getId());
         localMailbox.moveMessage(cm4.getId(), cf1_.getId()); //remote /F1 and /F1/F1... should be recreated
         localMailbox.moveMessage(cm3.getId(), "" + Mailbox.ID_FOLDER_INBOX); //cm3 should be deleted
@@ -203,6 +218,7 @@ public class TestXsync extends TestCase {
         assertEquals("remote MSG4", sm4.getFolderId(), sf1_.getId());
         
         //move MSG4 to Inbox and delete local /F1/F1...
+        ZimbraLog.test.info("TEST 16");
         localMailbox.moveMessage(cm4.getId(), "" + Mailbox.ID_FOLDER_INBOX);
         localMailbox.deleteFolder(cf1_.getId());
         sync();
@@ -210,6 +226,7 @@ public class TestXsync extends TestCase {
         sm4 = remoteMailbox.getMessageById(sm4Id);
         assertEquals("remote MSG4", sm4.getFolderId(), "" + Mailbox.ID_FOLDER_INBOX);
         
+        ZimbraLog.test.info("TEST 17");
         localMailbox.moveMessage(cm4.getId(), cf1.getId());
         localMailbox.deleteFolder(cf1.getId());
         sync();
