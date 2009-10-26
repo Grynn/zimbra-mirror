@@ -33,7 +33,6 @@ import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.db.DbUtil;
 import com.zimbra.cs.db.OfflineVersions;
 import com.zimbra.cs.store.file.Volume;
-import com.zimbra.cs.util.Config;
 import com.zimbra.cs.util.ZimbraApplication;
 import com.zimbra.cs.zimlet.ZimletFile;
 import com.zimbra.cs.zimlet.ZimletUtil;
@@ -154,38 +153,37 @@ public class OfflineApplication extends ZimbraApplication {
     }
     
     private void deployZimlets() {
-    	OfflineLog.offline.debug("Deploying new zimlets...");
-    	
-    	File zimletDir = new File(LC.zimbra_home.value() + "/zimlets");
-	if (zimletDir == null || !zimletDir.exists() || !zimletDir.isDirectory()) {
-	    OfflineLog.offline.debug("Invalid zimlets directory: " + zimletDir.getPath());
-	    return;
-	}
-	
-	boolean hasBackup = true;
-	File zimletBackupDir = new File(zimletDir.getPath() + "/backup");
-	if (!zimletBackupDir.exists())
-	    hasBackup = zimletBackupDir.mkdir();
-	
-    	String[] zimlets = zimletDir.list();
-    	if (zimlets == null) {
-	    OfflineLog.offline.debug("No zimlets found at " + zimletDir.getPath());
-	    return;
-    	}
-    	for (int i = 0; i < zimlets.length; i++) {
-	    try {
-		File zimletFile = new File(zimletDir.getPath() + "/" + zimlets[i]);
-		if (zimletFile.isDirectory())
-		    continue;
-		ZimletUtil.deployZimlet(new ZimletFile(zimletDir, zimlets[i]));
-		OfflineLog.offline.debug("Zimlet deployed:  " + zimlets[i]);
-		if (hasBackup)
-		    zimletFile.renameTo(new File(zimletBackupDir, zimlets[i]));
-	    } catch (Exception e) {
-		OfflineLog.offline.warn("Fail to deploy zimlet " + zimlets[i] +
-		    ": " + e.getMessage());
-	    }
-    	}
-    	OfflineLog.offline.debug("Zimlets deployment done.");
+        OfflineLog.offline.debug("Deploying new zimlets...");
+        
+        File zimletDir = new File(LC.zimbra_home.value() + File.separator + "zimlets");
+        if (zimletDir == null || !zimletDir.exists() || !zimletDir.isDirectory()) {
+            OfflineLog.offline.debug("Invalid zimlets directory: " + zimletDir.getPath());
+            return;
+        }
+        
+        boolean hasBackup = true;
+        File zimletBackupDir = new File(zimletDir.getPath() + File.separator + "backup");
+        if (!zimletBackupDir.exists())
+            hasBackup = zimletBackupDir.mkdir();
+        
+        String[] zimlets = zimletDir.list();
+        if (zimlets == null) {
+            OfflineLog.offline.debug("No zimlets found at " + zimletDir.getPath());
+            return;
+        }
+        for (int i = 0; i < zimlets.length; i++) {
+            try {
+                File zimletFile = new File(zimletDir.getPath() + File.separator + zimlets[i]);
+                if (zimletFile.isDirectory())
+                    continue;
+                ZimletUtil.deployZimlet(new ZimletFile(zimletDir, zimlets[i]));
+                OfflineLog.offline.debug("Zimlet deployed:  " + zimlets[i]);
+                if (hasBackup)
+                    zimletFile.renameTo(new File(zimletBackupDir, zimlets[i]));
+            } catch (Exception e) {
+                OfflineLog.offline.warn("Fail to deploy zimlet " + zimlets[i] + ": " + e.getMessage());
+            }
+        }
+        OfflineLog.offline.debug("Zimlets deployment done.");
     }
 }
