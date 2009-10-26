@@ -31,7 +31,6 @@ import com.zimbra.cs.mailbox.ChangeTrackingMailbox;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.Tag;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.session.PendingModifications.Change;
@@ -425,29 +424,32 @@ public class DbOfflineMailbox {
         Map<Integer, Integer> changes = new HashMap<Integer, Integer>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        try {
-            stmt = conn.prepareStatement("SELECT id, mod_metadata" +
-                    " FROM " + DbMailItem.getMailItemTableName(ombx) +
-                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + DbUtil.whereIn("id", ids.length));
-            int pos = 1;
-            pos = DbMailItem.setMailboxId(stmt, ombx, pos);
-            for (int id : ids)
-                stmt.setInt(pos++, id);
-            
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-            	int id = rs.getInt(1);
-            	int modSequence = rs.getInt(2);
-            	changes.put(id, modSequence);
+
+        for (int i = 0; i < ids.length; i += Db.getINClauseBatchSize()) {
+            try {
+                int count = Math.min(Db.getINClauseBatchSize(), ids.length - i);
+                stmt = conn.prepareStatement("SELECT id, mod_metadata" +
+                        " FROM " + DbMailItem.getMailItemTableName(ombx) +
+                        " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + DbUtil.whereIn("id", count));
+                int pos = 1;
+                pos = DbMailItem.setMailboxId(stmt, ombx, pos);
+                for (int index = i; index < i + count; index++)
+                    stmt.setInt(pos++, ids[i]);
+                
+                rs = stmt.executeQuery();
+                while (rs.next()) {
+                	int id = rs.getInt(1);
+                	int modSequence = rs.getInt(2);
+                	changes.put(id, modSequence);
+                }
+            } catch (SQLException e) {
+                throw ServiceException.FAILURE("getting mod sequence of given items " + ombx.getId(), e);
+            } finally {
+                DbPool.closeResults(rs);
+                DbPool.closeStatement(stmt);
             }
-            
-            return changes;
-        } catch (SQLException e) {
-            throw ServiceException.FAILURE("getting mod sequence of given items " + ombx.getId(), e);
-        } finally {
-            DbPool.closeResults(rs);
-            DbPool.closeStatement(stmt);
         }
+        return changes;
     }
     
     public static Map<Integer, Integer> getItemFolderIds(ChangeTrackingMailbox ombx, int[] ids) throws ServiceException {
@@ -455,29 +457,32 @@ public class DbOfflineMailbox {
         Map<Integer, Integer> result = new HashMap<Integer, Integer>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        try {
-            stmt = conn.prepareStatement("SELECT id, folder_id" +
-                    " FROM " + DbMailItem.getMailItemTableName(ombx) +
-                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + DbUtil.whereIn("id", ids.length));
-            int pos = 1;
-            pos = DbMailItem.setMailboxId(stmt, ombx, pos);
-            for (int id : ids)
-                stmt.setInt(pos++, id);
-            
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-            	int id = rs.getInt(1);
-            	int folderId = rs.getInt(2);
-            	result.put(id, folderId);
+        
+        for (int i = 0; i < ids.length; i += Db.getINClauseBatchSize()) {
+            try {
+                int count = Math.min(Db.getINClauseBatchSize(), ids.length - i);
+                stmt = conn.prepareStatement("SELECT id, folder_id" +
+                        " FROM " + DbMailItem.getMailItemTableName(ombx) +
+                        " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + DbUtil.whereIn("id", count));
+                int pos = 1;
+                pos = DbMailItem.setMailboxId(stmt, ombx, pos);
+                for (int index = i; index < i + count; index++)
+                    stmt.setInt(pos++, ids[i]);
+                
+                rs = stmt.executeQuery();
+                while (rs.next()) {
+                	int id = rs.getInt(1);
+                	int folderId = rs.getInt(2);
+                	result.put(id, folderId);
+                }
+            } catch (SQLException e) {
+                throw ServiceException.FAILURE("getting folder ids of given items " + ombx.getId(), e);
+            } finally {
+                DbPool.closeResults(rs);
+                DbPool.closeStatement(stmt);
             }
-            
-            return result;
-        } catch (SQLException e) {
-            throw ServiceException.FAILURE("getting folder ids of given items " + ombx.getId(), e);
-        } finally {
-            DbPool.closeResults(rs);
-            DbPool.closeStatement(stmt);
         }
+        return result;
     }
 
     public static int getChangeMask(MailItem item) throws ServiceException {
@@ -563,24 +568,6 @@ public class DbOfflineMailbox {
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw ServiceException.FAILURE("setting change record for item " + item.getId(), e);
-        } finally {
-            DbPool.closeStatement(stmt);
-        }
-    }
-
-    public static void clearChangeRecords(ZcsMailbox ombx, List<Integer> ids) throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
-
-        PreparedStatement stmt = null;
-        try {
-            stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(ombx) +
-                    " SET change_mask = NULL" +
-                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change IS NOT NULL");
-            int pos = 1;
-            pos = DbMailItem.setMailboxId(stmt, ombx, pos);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw ServiceException.FAILURE("clearing change records for items " + ids, e);
         } finally {
             DbPool.closeStatement(stmt);
         }
