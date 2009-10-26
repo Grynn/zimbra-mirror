@@ -544,6 +544,8 @@
 			<sysproperty key="STOP.PORT" value="7678" />
 			<sysproperty key="STOP.KEY" value="stop" />
 			<sysproperty key="zimbra.config" value="${zimbra.offline.data.dir}/conf/localconfig.xml" />
+			<sysproperty key="jetty.home" value="${zimbra.offline.app.dir}/jetty" />
+			<arg value="${zimbra.offline.data.dir}/jetty/etc/jetty.xml" />
 		</java>
 	</target>
 
