@@ -30,6 +30,7 @@
  */
 DwtKeyMapMgr = function(keyMap) {
 	var map = this._map = keyMap.getMap();
+	this._repeat = keyMap._repeat;
 	this._args = keyMap._args;
 	
 	// build FSA for each mapping
@@ -228,6 +229,12 @@ function(element) {
 
 	var tag = element.tagName.toUpperCase();
 	return (tag == "INPUT" || tag == "TEXTAREA");
+};
+
+
+DwtKeyMapMgr.prototype.repeats =
+function(map, action) {
+	return this._repeat[map] && this._repeat[map][action];
 };
 
 DwtKeyMapMgr.__buildFSA =

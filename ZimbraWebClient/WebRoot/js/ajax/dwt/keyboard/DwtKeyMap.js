@@ -31,6 +31,8 @@ DwtKeyMap = function(subclassInit) {
 	this._map			= {};
 	this._args			= {};
 	this._checkedMap	= {};	// cache results of _checkMap()
+	this._repeat		= {};	// actions that support keyboard auto-repeat
+
 	this._load(this._map, AjxKeys);
 
 	DwtKeyMap.MOD_ORDER[DwtKeyMap.ALT]		= 1;
@@ -191,7 +193,7 @@ function(map, keys, mapNames) {
 		if ((this._checkedMap[mapName] === false) ||
 			(!this._checkedMap[mapName] && !this._checkMap(mapName))) { continue; }
 		if (!map[mapName]) {
-			map[mapName]= {};
+			map[mapName] = {};
 		}
 		if (!this._checkAction(mapName, action)) { continue; }
 		var keySequences = propValue.split(/\s*;\s*/);
@@ -207,6 +209,14 @@ function(map, keys, mapNames) {
 			} else if (field == "keycode") {
 				map[mapName][ks] = action;
 			}
+		}
+		var repeatKey = [parts[0], action, "repeat"].join(".");
+		var repeatValue = keys[repeatKey];
+		if (repeatValue && repeatValue.toLowerCase() != "false") {
+			if (!this._repeat[mapName]) {
+				this._repeat[mapName] = {};
+			}
+			this._repeat[mapName][action] = true;
 		}
 	}
 };
