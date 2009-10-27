@@ -13,9 +13,9 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
-	include $(HTTPD_ROOT)/../beta_versions.def
+	include $(ASPELL_ROOT)/../beta_versions.def
 else
-	include $(HTTPD_ROOT)/../versions.def
+	include $(ASPELL_ROOT)/../versions.def
 endif
 
 ASPELL_TGZ_TARGET := \
