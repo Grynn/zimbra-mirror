@@ -10,7 +10,13 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-LIBTOOL_VERSION ?= 2.2.6a
+
+ifdef BETA
+	include $(LIBTOOL_ROOT)/../beta_versions.def
+else
+	include $(LIBTOOL_ROOT)/../versions.def
+endif
+
 LIBTOOL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/libtool/libtool-$(LIBTOOL_VERSION).tgz
 LIBTOOL_LIB_DIR	?= $(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION)/lib
 

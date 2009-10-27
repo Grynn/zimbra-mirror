@@ -1,25 +1,24 @@
-APP_ROOT := $(shell pwd)
-P4_ROOT ?= $(shell cd $(APP_ROOT)/../..; pwd)
+RRDTOOL_ROOT := $(shell pwd)
+P4_ROOT ?= $(shell cd $(RRDTOOL_ROOT)/../..; pwd)
 MAKE ?= make
 MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 ZIMBRA_HOME ?= /opt/zimbra
 
-PNG_NAME ?= libpng
-PNG_VERSION ?= 1.2.34
+ifdef BETA
+	include $(RRDTOOL_ROOT)/../beta_versions.def
+else
+	include $(RRDTOOL_ROOT)/../versions.def
+endif
 
-FREETYPE_NAME ?= freetype
-FREETYPE_VERSION ?= 2.3.7
+PNG_NAME	:= libpng
+FREETYPE_NAME	:= freetype
+LIBART_NAME	:= libart_lgpl
+RRDTOOL_NAME	:= rrdtool
 
-LIBART_NAME ?= libart_lgpl
-LIBART_VERSION ?= 2.3.20
-
-APP_NAME=rrdtool
-APP_RELEASE ?= 1.2.30
-APP_VERSION ?= $(APP_RELEASE)
-APP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/rrdtool/$(APP_NAME)-$(APP_VERSION).tar.gz
-INSTALL_PREFIX := $(ZIMBRA_HOME)/zimbramon/$(APP_NAME)-$(APP_VERSION)
+RRDTOOL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/rrdtool/$(RRDTOOL_NAME)-$(RRDTOOL_VERSION).tar.gz
+INSTALL_PREFIX := $(ZIMBRA_HOME)/zimbramon/$(RRDTOOL_NAME)-$(RRDTOOL_VERSION)
 
 PERL_DIR	:= $(ZIMBRA_HOME)/zimbramon
 PERL_LIB_DIR	:= $(ZIMBRA_HOME)/zimbramon/lib
@@ -75,14 +74,14 @@ build:
 		--mandir=$(INSTALL_PREFIX)/man \
 		--enable-shared=no; \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
-	cd $(APP_ROOT); \
+	cd $(RRDTOOL_ROOT); \
 	tar xfz src/$(FREETYPE_NAME)-$(FREETYPE_VERSION).tar.gz; \
 	cd $(FREETYPE_NAME)-$(FREETYPE_VERSION); \
 	env CFLAGS="-g -O2 -fPIC" ./configure \
 		--enable-shared=no \
 		--prefix=$(INSTALL_PREFIX); \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
-	cd $(APP_ROOT); \
+	cd $(RRDTOOL_ROOT); \
 	tar xfz src/$(LIBART_NAME)-$(LIBART_VERSION).tar.gz; \
 	cd $(LIBART_NAME)-$(LIBART_VERSION); \
 	./configure --enable-shared=no --prefix=$(INSTALL_PREFIX); \
@@ -90,10 +89,10 @@ build:
 	rm -rf $(INSTALL_PREFIX)/lib/pkgconfig; \
 	rm -rf $(INSTALL_PREFIX)/share; \
 	rm -rf $(INSTALL_PREFIX)/bin; \
-	cd $(APP_ROOT); \
-	tar xzf src/$(APP_NAME)-$(APP_RELEASE).tar.gz; \
+	cd $(RRDTOOL_ROOT); \
+	tar xzf src/$(RRDTOOL_NAME)-$(RRDTOOL_VERSION).tar.gz; \
 	rm -rf $(PERL_DIR)/lib; \
-	cd $(APP_NAME)-$(APP_VERSION); \
+	cd $(RRDTOOL_NAME)-$(RRDTOOL_VERSION); \
 	$(ENVMOD) ./configure --prefix=$(INSTALL_PREFIX) \
 		--enable-static --enable-shared=no \
 		--with-perl-options="PREFIX=$(PERL_DIR) LIB=$(PERL_LIB_DIR) LIBS='-L$(INSTALL_PREFIX)/lib -lm -lpng -lz -lfreetype'" \
@@ -101,27 +100,27 @@ build:
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	rm -rf $(INSTALL_PREFIX)/share/rrdtool/examples)
 	rm -rf $(PERL_DIR)/share
-	(cp -f $(APP_NAME)-$(APP_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
+	(cp -f $(RRDTOOL_NAME)-$(RRDTOOL_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
 	(mkdir -p $(INSTALL_PREFIX)/var)
-	(cd $(INSTALL_PREFIX)/..; ln -s $(APP_NAME)-$(APP_VERSION) $(APP_NAME))
+	(cd $(INSTALL_PREFIX)/..; ln -s $(RRDTOOL_NAME)-$(RRDTOOL_VERSION) $(RRDTOOL_NAME))
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/rrdtool
-	(cd $(PERL_DIR); tar czf $(APP_TGZ_TARGET) $(APP_NAME)-$(APP_VERSION) lib)
+	(cd $(PERL_DIR); tar czf $(RRDTOOL_TGZ_TARGET) $(RRDTOOL_NAME)-$(RRDTOOL_VERSION) lib)
 
-p4edit: $(APP_TGZ_TARGET)
-	p4 add $(APP_TGZ_TARGET)
-	p4 edit $(APP_TGZ_TARGET)
+p4edit: $(RRDTOOL_TGZ_TARGET)
+	p4 add $(RRDTOOL_TGZ_TARGET)
+	p4 edit $(RRDTOOL_TGZ_TARGET)
 	
 
 clean:
-	/bin/rm -rf $(APP_NAME)-$(APP_VERSION)
+	/bin/rm -rf $(RRDTOOL_NAME)-$(RRDTOOL_VERSION)
 	/bin/rm -rf $(PNG_NAME)-$(PNG_VERSION)
 	/bin/rm -rf $(FREETYPE_NAME)-$(FREETYPE_VERSION)
 	/bin/rm -rf $(LIBART_NAME)-$(LIBART_VERSION)
 
 allclean: clean
-	/bin/rm -rf $(ZIMBRA_HOME)/zimbramon/$(APP_NAME)-$(APP_VERSION)
-	/bin/rm -rf $(ZIMBRA_HOME)/zimbramon/$(APP_NAME)
+	/bin/rm -rf $(ZIMBRA_HOME)/zimbramon/$(RRDTOOL_NAME)-$(RRDTOOL_VERSION)
+	/bin/rm -rf $(ZIMBRA_HOME)/zimbramon/$(RRDTOOL_NAME)
 	/bin/rm -rf $(PERL_DIR)/lib
-	rm -rf $(APP_TGZ_TARGET)
+	rm -rf $(RRDTOOL_TGZ_TARGET)

@@ -7,6 +7,14 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
+ZIMBRA_HOME ?= /opt/zimbra
+
+ifdef BETA
+	include $(TCMALLOC_ROOT)/../beta_versions.def
+else
+	include $(TCMALLOC_ROOT)/../versions.def
+endif
+
 ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	ENVMOD := env LIBS="-lresolv" 
 endif
@@ -14,8 +22,6 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 	ENVMOD := env LIBS="-lresolv" 
 endif
 
-ZIMBRA_HOME ?= /opt/zimbra
-TCMALLOC_VERSION ?= 1.4
 TCMALLOC_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/tcmalloc/tcmalloc-$(TCMALLOC_VERSION).tgz
 
 all: allclean build tar

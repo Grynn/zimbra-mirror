@@ -10,8 +10,12 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-CLAMAV_VERSION ?= 0.95.2
-SENDMAIL_VERSION ?= 8.14.3
+
+ifdef BETA
+	include $(CLAMAV_ROOT)/../beta_versions.def
+else
+	include $(CLAMAV_ROOT)/../versions.def
+endif
 
 CLAMAV_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/clamav/clamav-$(CLAMAV_VERSION).tgz

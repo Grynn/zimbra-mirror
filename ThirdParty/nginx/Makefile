@@ -7,14 +7,14 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-CYRUS_VERSION ?= 2.1.23.3z
-CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
-
-SSL_VERSION	?= 0.9.8k
-
 ZIMBRA_HOME ?= /opt/zimbra
 
-NGINX_VERSION ?= 0.5.37
+ifdef BETA
+	include $(NGINX_ROOT)/../beta_versions.def
+else
+	include $(NGINX_ROOT)/../versions.def
+endif
+
 NGINX_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx/nginx-$(NGINX_VERSION)-zimbra.tgz
 NGINX_INSTALL := $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
 

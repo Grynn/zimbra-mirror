@@ -5,23 +5,20 @@ MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
-	HEIMDAL_VERSION ?=  1.3.0rc1
-endif
-
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-HEIMDAL_VERSION ?=  1.2.1
+
+ifdef BETA
+	include $(HEIMDAL_ROOT)/../beta_versions.def
+else
+	include $(HEIMDAL_ROOT)/../versions.def
+endif
+
 HEIMDAL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/heimdal/heimdal-$(HEIMDAL_VERSION).tgz
 HEIMDAL_SOURCE := $(HEIMDAL_ROOT)/heimdal-$(HEIMDAL_VERSION)
-
-OPENSSL_VERSION ?= 0.9.8k
-
-OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
-HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
 
 all: allclean build tar
 

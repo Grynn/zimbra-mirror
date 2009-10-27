@@ -9,6 +9,14 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
+ZIMBRA_HOME ?= /opt/zimbra
+
+ifdef BETA
+	include $(OPENSSL_ROOT)/../beta_versions.def
+else
+	include $(OPENSSL_ROOT)/../versions.def
+endif
+
 ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	PLAT := darwin-i386-cc
 endif
@@ -69,14 +77,10 @@ ifeq ($(PLAT), )
 	PLAT := linux-elf
 endif
 
-ZIMBRA_HOME ?= /opt/zimbra
-OPENSSL_VERSION ?=  0.9.8k
 OPENSSL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openssl/openssl-$(OPENSSL_VERSION).tgz
 OPENSSL_SOURCE := $(OPENSSL_ROOT)/openssl-$(OPENSSL_VERSION)
 
 all: allclean build tar
-
-#patch -N -g0 -p1 < ../patches/leopard.sharedlib.fix; \
 
 build:
 	(tar xzf src/openssl-$(OPENSSL_VERSION).tar.gz; \

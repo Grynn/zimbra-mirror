@@ -10,14 +10,14 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-CURL_VERSION ?= 7.19.6
-HEIMDAL_VERSION ?= 1.2.1
-OPENSSL_VERSION ?= 0.9.8k
-CURL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/curl/curl-$(CURL_VERSION).tgz
 
-OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
-HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
-CURL_LIB_DIR ?= $(ZIMBRA_HOME)/curl-$(CURL_VERSION)/lib
+ifdef BETA
+	include $(CURL_ROOT)/../beta_versions.def
+else
+	include $(CURL_ROOT)/../versions.def
+endif
+
+CURL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/curl/curl-$(CURL_VERSION).tgz
 
 LIB_DIR := /usr/lib
 
@@ -55,7 +55,6 @@ build:
 	tar xzf src/curl-$(CURL_VERSION).tar.gz
 	(cd curl-$(CURL_VERSION); \
 	patch -N -g0 -p1 < ../patches/krb5.patch)
-	#patch -N -g0 -p1 < ../patches/custom-openssl.patch)
 	(cd curl-$(CURL_VERSION); \
 	DYLD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) \

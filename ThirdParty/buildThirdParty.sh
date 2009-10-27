@@ -19,6 +19,7 @@
 PROGDIR=`dirname $0`
 cd $PROGDIR
 PATHDIR=`pwd`
+BETA=
 CLEAN=no
 SYNC=no
 PUBLIC=yes
@@ -28,7 +29,8 @@ MIRROR="http://cpan.yahoo.com/"
 
 usage() {
 	echo ""
-	echo "Usage: "`basename $0`" -c [-p] [-s]" >&2
+	echo "Usage: "`basename $0`" [-b] -c [-p] [-s]" >&2
+	echo "-b: Use beta software versions"
 	echo "-c: Remove contents of /opt/zimbra (clean)"
 	echo "-p: Use private CPAN mirror"
 	echo "-s: Re-sync source before building"
@@ -109,6 +111,10 @@ fi
 
 while [ $# -gt 0 ]; do
 	case $1 in
+		-b|--beta)
+			BETA=1
+			shift;
+			;;
 		-c|--clean)
 			CLEAN=yes
 			shift;
@@ -333,7 +339,7 @@ rm -f make.out 2> /dev/null
 make allclean > /dev/null 2>&1
 
 if [ x$PUBLIC = x"yes" ]; then
-	make all CMIRROR=$MIRROR 2>&1 | tee -a make.out
+	make all CMIRROR=$MIRROR BETA=$BETA 2>&1 | tee -a make.out
 else
 	make all 2>&1 | tee -a make.out
 fi

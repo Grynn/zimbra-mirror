@@ -1,10 +1,5 @@
 POSTFIX_ROOT := $(shell pwd)
 
-ZIMBRA_HOME ?= /opt/zimbra
-POSTFIX_RELEASE ?= 2.6.5
-POSTFIX_PATCH_LEVEL ?= 2z
-POSTFIX_VERSION ?= $(POSTFIX_RELEASE).$(POSTFIX_PATCH_LEVEL)
-
 P4_ROOT ?= $(shell cd $(POSTFIX_ROOT)/../..; pwd)
 MAKE ?= make
 SED ?= sed
@@ -12,13 +7,17 @@ MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
+ZIMBRA_HOME ?= /opt/zimbra
+
+ifdef BETA
+	include $(POSTFIX_ROOT)/../beta_versions.def
+else
+	include $(POSTFIX_ROOT)/../versions.def
+endif
+
 PCRE_DEF := -DHAS_PCRE
 PCRE_INCLUDE := -I/usr/include/pcre
 PCRE_LIB := -lpcre
-SASL_VERSION ?= 2.1.23.3z
-LDAP_VERSION ?= 2.4.19.2z
-OPENSSL_VERSION ?= 0.9.8k
-MYSQL_VERSION_STRING ?= 5.0.85
 
 MYSQL_VERSION ?= standard-$(MYSQL_VERSION_STRING)-pc-linux-gnu-i686-glibc23
 MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
@@ -41,7 +40,6 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
 endif 
 
 SYSTEM_LIB := /usr/lib
-BDB_VERSION ?= 4.7.25.4
 
 POSTFIX_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix/postfix-$(POSTFIX_VERSION).tgz
@@ -54,7 +52,7 @@ ifeq ($(BUILD_PLATFORM), CentOS4_64)
 	SYSTEM_LIB := /usr/lib64
 endif
 
-LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib/mysql:/opt/zimbra/openldap-clibs-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/lib:/opt/zimbra/bdb-$(BDB_VERSION)/lib
+LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib/mysql:/opt/zimbra/openldap-clibs-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib:/opt/zimbra/bdb-$(BDB_VERSION)/lib
 
 DBINC := -I/opt/zimbra/bdb-$(BDB_VERSION)/include
 DBLIB := -L/opt/zimbra/bdb-$(BDB_VERSION)/lib
@@ -117,8 +115,8 @@ endif
 	-I/opt/zimbra/mysql-$(MYSQL_VERSION)/include \
 	-I/opt/zimbra/mysql-$(MYSQL_VERSION)/include/mysql \
 	-I/opt/zimbra/openssl-$(OPENSSL_VERSION)/include \
-	-I/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/include/sasl -I/usr/include' \
-	AUXLIBS='$(EXTRALIBS) -L/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/lib \
+	-I/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include/sasl -I/usr/include' \
+	AUXLIBS='$(EXTRALIBS) -L/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib \
 	$(DBLIB) -ldb -L/opt/zimbra/openldap-clibs-$(LDAP_VERSION)/lib $(PCRE_LIB) \
 	-lldap -llber -L/opt/zimbra/mysql-$(MYSQL_VERSION)/lib \
 	-L/opt/zimbra/mysql-$(MYSQL_VERSION)/lib/mysql \

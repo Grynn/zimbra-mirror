@@ -7,9 +7,14 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-
 ZIMBRA_HOME ?= /opt/zimbra
-SENDMAIL_VERSION ?= 8.14.3
+
+ifdef BETA
+	include $(SENDMAIL_ROOT)/../beta_versions.def
+else
+	include $(SENDMAIL_ROOT)/../versions.def
+endif
+
 SENDMAIL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/sendmail/sendmail-$(SENDMAIL_VERSION).tgz
 
 all: allclean build tar

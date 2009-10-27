@@ -5,9 +5,16 @@ MAKEARGS ?= -j2 DEFINES=-DCHECK_CSN
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
-
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
+endif
+
+ZIMBRA_HOME ?= /opt/zimbra
+
+ifdef BETA
+	include $(OPENLDAP_ROOT)/../beta_versions.def
+else
+	include $(OPENLDAP_ROOT)/../versions.def
 endif
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
@@ -15,23 +22,8 @@ ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	CPPFLAG := "-DOPENLDAP_FD_SETSIZE=32768"
 endif
 
-ZIMBRA_HOME ?= /opt/zimbra
-LDAP_RELEASE ?= 2.4.19
-LDAP_PATCH_LEVEL ?= 2z
-LDAP_VERSION ?= $(LDAP_RELEASE).$(LDAP_PATCH_LEVEL)
 LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-$(LDAP_VERSION).tgz
 LDAP_LIB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-clibs-$(LDAP_VERSION).tgz
-
-CYRUS_VERSION ?= 2.1.23.3z
-BDB_VERSION ?= 4.7.25.4
-OPENSSL_VERSION ?= 0.9.8k
-LIBTOOL_VERSION ?= 2.2.6a
-
-CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
-BDB_LIB_DIR ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib
-OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
-OPENLDAP_CLIB_DIR ?= $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib
-LIBTOOL_LIB_DIR ?= $(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION)/lib
 
 all: allclean build tar
 
@@ -41,8 +33,8 @@ build:
 	cd openldap-$(LDAP_VERSION); \
 	patch -g0 -N -p1 < ../patches/ITS5037.patch; \
 	patch -g0 -N -p1 < ../patches/leopard.fix; \
-	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(OPENLDAP_CLIB_DIR) -L$(LIBTOOL_LIB_DIR) \
-		 -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(OPENLDAP_CLIB_DIR) -R$(LIBTOOL_LIB_DIR)" \
+	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_CLIB_DIR) -L$(LIBTOOL_LIB_DIR) \
+		 -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(LDAP_CLIB_DIR) -R$(LIBTOOL_LIB_DIR)" \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) \
 	CPPFLAGS="-I$(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include -I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include \
 		  -I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include -I$(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION)/include $(CPPFLAG)" \

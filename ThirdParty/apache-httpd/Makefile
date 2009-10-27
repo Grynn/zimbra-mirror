@@ -5,12 +5,15 @@ MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
-HTTPD_VERSION ?= 2.2.14
+ZIMBRA_HOME ?= /opt/zimbra
+ifdef BETA
+	include $(HTTPD_ROOT)/../beta_versions.def
+else
+	include $(HTTPD_ROOT)/../versions.def
+endif
 
 HTTPD_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/apache-httpd/httpd-$(HTTPD_VERSION).tgz
-
-ZIMBRA_HOME ?= /opt/zimbra
 
 ifeq ($(BUILD_PLATFORM), RHEL5_64)
 	ENVMOD := env LIBS="-L/usr/lib64"

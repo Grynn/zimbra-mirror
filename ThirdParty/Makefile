@@ -3,68 +3,23 @@ THIRDPARTY_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(THIRDPARTY_ROOT)/..; pwd)
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
+ifeq ($(BUILD_PLATFORM), )
+	BUILD_PLATFORM := "UNKNOWN"
+endif
+
 OS_PLATFORM ?= $(shell uname -p)
+
+ifdef BETA
+	include $(THIRDPARTY_ROOT)/beta_versions.def
+else
+	include $(THIRDPARTY_ROOT)/versions.def
+endif
 
 MAKE := make
 ECHO := /bin/echo
 MAKEARGS ?= -j5
 
-ifeq ($(BUILD_PLATFORM), )
-	BUILD_PLATFORM := "UNKNOWN"
-endif
-
 ZIMBRA_HOME ?= /opt/zimbra
-LDAP_VERSION ?= 2.4.19.2z
-
-BDB_VERSION ?= 4.7.25.4
-BDB_LIB_DIR ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib
-
-BDB_ROOT ?= $(P4_ROOT)/ThirdParty/bdb
-
-CYRUS_VERSION ?= 2.1.23.3z
-CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
-
-ASPELL_VERSION ?= aspell-0.60.6
-CLAMAV_VERSION ?= 0.95.2
-
-LIBTOOL_VERSION ?= 2.2.6a
-
-MYSQL_VERSION_STRING ?= 5.0.85
-MYSQL_VERSION ?= standard-$(MYSQL_VERSION_STRING)-pc-linux-gnu-i686
-MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
-
-ifeq ($(BUILD_PLATFORM), MACOSX)
-	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
-	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
-endif
-
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
-	OS_RELEASE ?= 10
-	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin$(OS_RELEASE)-$(OS_PLATFORM)
-	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin$(OS_RELEASE)-$(OS_PLATFORM)
-endif
-
-ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-i686
-	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-i686
-endif
-
-MYSQL_VERSION ?= standard-$(MYSQL_VERSION_STRING)-pc-linux-gnu-i686
-MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
-
-OPENSSL_VERSION ?= 0.9.8k
-OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
-
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
-	HEIMDAL_VERSION ?= 1.3.0rc1
-else
-	HEIMDAL_VERSION ?= 1.2.1
-endif
-HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
-
-HTTPD_VERSION ?= 2.2.14
-
-POSTFIX_VERSION ?= 2.6.5.2z
 
 DIRS := openssl \
 	mysql \

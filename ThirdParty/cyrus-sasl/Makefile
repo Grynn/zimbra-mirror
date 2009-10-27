@@ -11,17 +11,13 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
-CYRUS_RELEASE ?= 2.1.23
-CYRUS_PATCHLEVEL ?= 3z
-CYRUS_VERSION ?= $(CYRUS_RELEASE).$(CYRUS_PATCHLEVEL)
+ifdef BETA
+	include $(CYRUS_ROOT)/../beta_versions.def
+else
+	include $(CYRUS_ROOT)/../versions.def
+endif
+
 CYRUS_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl/cyrus-sasl-$(CYRUS_VERSION).tgz
-CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
-
-HEIMDAL_VERSION ?= 1.2.1
-OPENSSL_VERSION ?= 0.9.8k
-
-HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
-OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
 
 all: allclean build 
 

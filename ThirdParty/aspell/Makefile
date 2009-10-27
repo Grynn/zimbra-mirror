@@ -12,7 +12,11 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
-ASPELL_VERSION := 0.60.6
+ifdef BETA
+	include $(HTTPD_ROOT)/../beta_versions.def
+else
+	include $(HTTPD_ROOT)/../versions.def
+endif
 
 ASPELL_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/aspell/aspell-$(ASPELL_VERSION).tgz

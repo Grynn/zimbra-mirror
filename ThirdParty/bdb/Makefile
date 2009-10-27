@@ -10,11 +10,14 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-BDB_RELEASE ?= 4.7.25
-BDB_PATCH_LEVEL ?= 4
-BDB_VERSION ?= $(BDB_RELEASE).$(BDB_PATCH_LEVEL)
-BDB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/bdb/bdb-$(BDB_VERSION).tgz
-BDB_LIB_DIR ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib
+
+ifdef BETA
+	include $(BDB_ROOT)/../beta_versions.def
+else
+	include $(BDB_ROOT)/../versions.def
+endif
+
+BDB_TGZ_TARGET	:= $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/bdb/bdb-$(BDB_VERSION).tgz
 
 CONFIG_FLAG := --enable-posixmutexes --with-mutex=POSIX/pthreads
 

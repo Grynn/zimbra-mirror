@@ -1,8 +1,3 @@
-PHP_VERSION ?= 5.2.11
-HTTPD_VERSION ?= 2.2.14
-ASPELL_VERSION ?= 0.60.6
-LIBXML2_VERSION ?= 2.6.32.1
-
 PHP_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(PHP_ROOT)/../..; pwd)
 MAKE ?= make
@@ -14,10 +9,18 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
+ZIMBRA_HOME ?= /opt/zimbra
+
+ifdef BETA
+	include $(PHP_ROOT)/../beta_versions.def
+else
+	include $(PHP_ROOT)/../versions.def
+endif
+
 SED	:= echo
 
 ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(LIBXML2_VERSION)\/lib\/libxml2.a/g' Makefile
+	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(XML_VERSION)\/lib\/libxml2.a/g' Makefile
 endif
 
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
@@ -25,10 +28,8 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 endif
 
 ifeq ($(BUILD_PLATFORM), MACOSX)
-	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(LIBXML2_VERSION)\/lib\/libxml2.a/g' Makefile
+	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(XML_VERSION)\/lib\/libxml2.a/g' Makefile
 endif
-
-ZIMBRA_HOME ?= /opt/zimbra
 
 PHP_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php/php-$(PHP_VERSION).tgz
@@ -37,7 +38,7 @@ all: allclean build tar
 
 build:
 	tar xzf src/php-$(PHP_VERSION).tar.gz
-	(cd php-$(PHP_VERSION); $(ACEXE) CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file-path=/opt/zimbra/conf --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) --with-libxml-dir=/opt/zimbra/libxml2-$(LIBXML2_VERSION); $(SED); $(MAKE) $(MAKEARGS); $(MAKE) install)
+	(cd php-$(PHP_VERSION); $(ACEXE) CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file-path=/opt/zimbra/conf --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) --with-libxml-dir=/opt/zimbra/libxml2-$(XML_VERSION); $(SED); $(MAKE) $(MAKEARGS); $(MAKE) install)
 
 clean:
 	rm -rf php-$(PHP_VERSION)

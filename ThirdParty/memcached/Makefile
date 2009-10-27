@@ -9,10 +9,14 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
-LIBEVENT_VERSION ?=1.4.12-stable
+ifdef BETA
+	include $(MEMCACHED_ROOT)/../beta_versions.def
+else
+	include $(MEMCACHED_ROOT)/../versions.def
+endif
+
 LIBEVENT_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/memcached/libevent-$(LIBEVENT_VERSION).tgz
 
-MEMCACHED_VERSION ?= 1.4.2
 MEMCACHED_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/memcached/memcached-$(MEMCACHED_VERSION).tgz
 MEMCACHED_INSTALL := $(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION)
 

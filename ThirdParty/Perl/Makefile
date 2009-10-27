@@ -10,6 +10,12 @@ LOGFILE ?= ThirdParty-Perllibs.log
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
+ifdef BETA
+	include $(PERL_ROOT)/../beta_versions.def
+else
+	include $(PERL_ROOT)/../versions.def
+endif
+
 PERL 	:= $(shell which perl)
 GZIP    := $(shell which gzip)
 BZIP2   := $(shell which bzip2)
@@ -25,17 +31,10 @@ SED     := $(shell which sed)
 UNZIP	:= $(shell which unzip)
 CMIRROR	?= http://buildmaster.lab.zimbra.com:8080/cpan/
 
-BDB_VERSION ?= 4.7.25.4
-SSL_VERSION ?= 0.9.8k
-LDAP_VERSION ?= 2.4.19.2z
-BDB_INC ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
-BDB_LIB ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib
-
-MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include
-
-LDAP_INCLUDE := $(ZIMBRA_HOME)/openldap/include
-LDAP_LIB := $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib
-SASL_INCLUDE := $(ZIMBRA_HOME)/cyrus-sasl/include
+BDB_INCLUDELUDE	:= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
+MYSQL_INCLUDE	:= $(ZIMBRA_HOME)/mysql/include
+LDAP_INCLUDE 	:= $(ZIMBRA_HOME)/openldap/include
+SASL_INCLUDE	:= $(ZIMBRA_HOME)/cyrus-sasl/include
 
 ifeq ($(BUILD_PLATFORM), MACOSX)
 	MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include/mysql
@@ -209,8 +208,8 @@ build:
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) --lib=$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib LDFLAGS="-L$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib"; \
-			LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) --lib=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib LDFLAGS="-L$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib"; \
+			LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
@@ -218,8 +217,8 @@ build:
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) LIBS="-L$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib -lssl -lcrypto" INC="-I$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/include"; \
-			LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) LIBS="-L$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -lssl -lcrypto" INC="-I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include"; \
+			LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
@@ -227,14 +226,14 @@ build:
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) LIBS="-L$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib -lssl -lcrypto" INC="-I$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/include"; \
-			LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) LIBS="-L$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -lssl -lcrypto" INC="-I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include"; \
+			LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
 	@for lib in $(PRE_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INCLUDE) BERKELEYDB_LIB=$(BDB_LIB_DIR) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
@@ -242,8 +241,8 @@ build:
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-		OPENSSL_PREFIX=$(ZIMBRA_HOME)/openssl-$(SSL_VERSION) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
-		LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+		OPENSSL_PREFIX=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+		LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 	
@@ -258,7 +257,7 @@ build:
 	
 	@for lib in $(PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INCLUDE) BERKELEYDB_LIB=$(BDB_LIB_DIR) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
@@ -267,8 +266,8 @@ build:
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) \
-				-sdk openldap -lib_path $(LDAP_LIB) -include_path $(LDAP_INCLUDE) -sasl_include_path $(SASL_INCLUDE); \
-			LD_RUN_PATH="$(LDAP_LIB)" $(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
+				-sdk openldap -lib_path $(LDAP_CLIB_DIR) -include_path $(LDAP_INCLUDE) -sasl_include_path $(SASL_INCLUDE); \
+			LD_RUN_PATH="$(LDAP_CLIB_DIR)" $(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then echo "FAILED."; else echo "done."; fi \
 	done
 
@@ -276,14 +275,14 @@ build:
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-		BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(BDB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
-		LD_RUN_PATH=$(BDB_LIB) $(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
+		BERKELEYDB_INCLUDE=$(BDB_INCLUDE) BERKELEYDB_LIB=$(BDB_LIB_DIR) $(BDB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+		LD_RUN_PATH=$(BDB_LIB_DIR) $(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
 	@for lib in $(DBFILE_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		LD_RUN_PATH=$(ZIMBRA_HOME)/$(BDB_LIB) DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) $(DB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		LD_RUN_PATH=$(ZIMBRA_HOME)/$(BDB_LIB_DIR) DB_FILE_INCLUDE=$(BDB_INCLUDE) DB_FILE_LIB=$(BDB_LIB_DIR) $(DB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
@@ -308,7 +307,7 @@ build:
 		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
 			$(SED) -i .bak -e 's#/usr/lib/sendmail /usr/sbin/sendmail#/opt/zimbra/postfix/sbin/sendmail#' lib/Swatch/Actions.pm; \
 			rm -f lib/Swatch/Actions.pm.bak; \
-			BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) \
+			BERKELEYDB_INCLUDE=$(BDB_INCLUDE) BERKELEYDB_LIB=$(BDB_LIB_DIR) \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 			$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
