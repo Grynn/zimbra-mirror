@@ -1136,8 +1136,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         } catch (Exception e) {
         }
         mbox = OfflineMailboxManager.getInstance().getMailboxByAccount(
-            mAccountCache.getById(zimbraId));
-        if (mbox instanceof SyncMailbox)
+            mAccountCache.getById(zimbraId), false);
+        if (mbox != null && mbox instanceof SyncMailbox)
             ((SyncMailbox)mbox).cancelCurrentTask();
         deleteGalAccount(zimbraId);
         DbOfflineDirectory.deleteGranterByGrantee(zimbraId);
