@@ -54,7 +54,7 @@ sub get_pid_tree() {
                 }
             }
             close(STATUS);
-            die "ppid not found for $pid" if (!defined($ppid));
+            next if (!defined($ppid));
             $pid_ppid{$pid} = $ppid;
         }
     }
