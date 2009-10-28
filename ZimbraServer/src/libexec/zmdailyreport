@@ -49,7 +49,7 @@ pod2usage( -exitval => 1, -verbose => 0 ) if ( $Opt{help} );
 
 $Debug = $Opt{debug};
 
-setlocale(LC_TIME, "en_US");
+setlocale(LC_TIME, "C");
 my $stdout;
 open($stdout, ">&STDOUT") || die $!;
 pipe(PFIN, PFOUT);
