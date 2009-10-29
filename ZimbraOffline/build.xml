@@ -557,6 +557,11 @@
 		</java>
 	</target>
 
+	<target name="restart-jetty">
+		<antcall target="stop-jetty" />
+		<antcall target="start-jetty" />
+	</target>
+
 	<target name="offline-reset-the-world-part-1">
 		<available file="${jetty.home.dir}/start.jar" property="jetty.exists" />
 		<if>

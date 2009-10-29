@@ -28,6 +28,7 @@ import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.common.util.FileUtil;
 import com.zimbra.cs.db.Db;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.db.DbUtil;
@@ -178,8 +179,10 @@ public class OfflineApplication extends ZimbraApplication {
                     continue;
                 ZimletUtil.deployZimlet(new ZimletFile(zimletDir, zimlets[i]));
                 OfflineLog.offline.debug("Zimlet deployed:  " + zimlets[i]);
-                if (hasBackup)
-                    zimletFile.renameTo(new File(zimletBackupDir, zimlets[i]));
+                if (hasBackup) {
+                    FileUtil.copy(zimletFile, new File(zimletBackupDir, zimlets[i]), true);
+                    zimletFile.delete();
+                }
             } catch (Exception e) {
                 OfflineLog.offline.warn("Fail to deploy zimlet " + zimlets[i] + ": " + e.getMessage());
             }
