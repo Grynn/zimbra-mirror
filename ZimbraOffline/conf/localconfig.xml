@@ -76,20 +76,32 @@
   <key name="zdesktop_volume_compression_threshold">
     <value>131072</value>
   </key>
-  <key name="zimbra_java_path">
-    <value>jre</value>
+  <key name="zimbra_admin_service_port">
+    <value>@port@</value>
+  </key>
+  <key name="zimbra_admin_service_scheme">
+    <value>http://</value>
+  </key>
+  <key name="zimbra_authtoken_cache_size">
+    <value>16</value>
   </key>
   <key name="zimbra_class_accessmanager">
     <value>com.zimbra.cs.account.offline.OfflineAccessManager</value>
   </key>
-  <key name="zimbra_class_mboxmanager">
-    <value>com.zimbra.cs.mailbox.OfflineMailboxManager</value>
+  <key name="zimbra_class_application">
+    <value>com.zimbra.cs.offline.OfflineApplication</value>
   </key>
   <key name="zimbra_class_database">
     <value>com.zimbra.cs.db.SQLite</value>
   </key>
-  <key name="zimbra_class_application">
-    <value>com.zimbra.cs.offline.OfflineApplication</value>
+  <key name="zimbra_class_datasourcemanager">
+    <value>com.zimbra.cs.datasource.offline.OfflineDataSourceManager</value>
+  </key>
+  <key name="zimbra_class_mboxmanager">
+    <value>com.zimbra.cs.mailbox.OfflineMailboxManager</value>
+  </key>
+  <key name="zimbra_class_provisioning">
+    <value>com.zimbra.cs.account.offline.OfflineProvisioning</value>
   </key>
   <key name="zimbra_class_rulerewriterfactory">
     <value>com.zimbra.cs.filter.OfflineRuleRewriterFactory</value>
@@ -97,26 +109,8 @@
   <key name="zimbra_class_sslprotocolsocketfactory">
     <value>com.zimbra.common.util.CustomSSLProtocolSocketFactory</value>
   </key>
-  <key name="zimbra_ldap_password">
-    <value>@install.key@</value>
-  </key>
-  <key name="zimbra_log4j_properties_watch">
-    <value>0</value>
-  </key>
-  <key name="zimbra_mailbox_groups">
-    <value>100</value>
-  </key>
-  <key name="zimbra_mailbox_purgeable">
-    <value>false</value>
-  </key>
-  <key name="zimbra_admin_service_port">
-    <value>@port@</value>
-  </key>
-  <key name="zimbra_admin_service_scheme">
-    <value>http://</value>
-  </key>
-  <key name="zimbra_class_provisioning">
-    <value>com.zimbra.cs.account.offline.OfflineProvisioning</value>
+  <key name="zimbra_java_path">
+    <value>jre</value>
   </key>
   <key name="zimbra_index_completed_pool_size">
     <value>2</value>
@@ -127,6 +121,21 @@
   <key name="zimbra_index_reindex_pool_size">
     <value>2</value>
   </key>
+  <key name="zimbra_ldap_password">
+    <value>@install.key@</value>
+  </key>
+  <key name="zimbra_log4j_properties_watch">
+    <value>0</value>
+  </key>
+  <key name="zdesktop_mail_uncompressed_cache_max_files">
+    <value>20</value>
+  </key>
+  <key name="zimbra_mailbox_groups">
+    <value>100</value>
+  </key>
+  <key name="zimbra_mailbox_purgeable">
+    <value>false</value>
+  </key>
   <key name="zimbra_mailbox_active_cache">
     <value>50</value>
   </key>
@@ -135,12 +144,6 @@
   </key>
   <key name="zimbra_mailbox_manager_hardref_cache">
     <value>250</value>
-  </key>
-  <key name="zdesktop_mail_uncompressed_cache_max_files">
-    <value>20</value>
-  </key>
-  <key name="zimbra_class_datasourcemanager">
-    <value>com.zimbra.cs.datasource.offline.OfflineDataSourceManager</value>
   </key>
   <key name="zimbra_relative_volume_path">
     <value>true</value>

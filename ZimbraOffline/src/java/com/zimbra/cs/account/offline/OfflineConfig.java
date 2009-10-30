@@ -61,6 +61,7 @@ class OfflineConfig extends Config {
             attrs.put(Provisioning.A_zimbraMailUncompressedCacheMaxFiles, OfflineLC.zdesktop_mail_uncompressed_cache_max_files.value());
             attrs.put(Provisioning.A_zimbraMessageCacheSize, OfflineLC.zdesktop_message_cache_size.value());
             attrs.put(Provisioning.A_zimbraMessageIdDedupeCacheSize, "0");
+            attrs.put(Provisioning.A_zimbraNotebookPageCacheSize, "96");
 
             return new OfflineConfig(attrs, provisioning);
         } catch (ServiceException e) {
