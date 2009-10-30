@@ -363,13 +363,13 @@
 		</copy>
 		<fixcrlf srcdir="${dist.dir}/conf" eol="unix" includes="**" />
 
-		<copy tofile="${dist.dir}/conf/globs2" file="${server.config.dir}/globs2" overwrite="true" />
-		<copy tofile="${dist.dir}/conf/magic" file="${server.config.dir}/magic" overwrite="true" />
-		<copy tofile="${dist.dir}/conf/cacerts" file="${config.dir}/cacerts" overwrite="true" />
-		<copy tofile="${dist.dir}/conf/keystore.base" file="${config.dir}/keystore.base" overwrite="true" />
+		<copy todir="${dist.dir}/conf" file="${server.config.dir}/globs2" overwrite="true" />
+		<copy todir="${dist.dir}/conf" file="${server.config.dir}/magic" overwrite="true" />
+		<copy todir="${dist.dir}/conf" file="${config.dir}/cacerts" overwrite="true" />
+		<copy todir="${dist.dir}/conf" file="${config.dir}/keystore.base" overwrite="true" />
 
-		<copy tofile="${dist.dir}/jetty/etc/start.config" file="${config.dir}/jetty-6.1/start.config" overwrite="true" />
-		<copy tofile="${dist.dir}/jetty/etc/webdefault.xml" file="${server.config.dir}/jetty-6.1/webdefault.xml" overwrite="true" />
+		<copy todir="${dist.dir}/jetty/etc" file="${config.dir}/jetty-6.1/start.config" overwrite="true" />
+		<copy todir="${dist.dir}/jetty/etc" file="${config.dir}/webdefault.xml" overwrite="true"/>
 
 		<copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
 			<fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="derby.jar,sqlite*.jar,mysql*.jar,jfreechart*,testng*" />
@@ -574,7 +574,8 @@
 
 		<antcall target="offline-make-dist">
 			<param name="param.app.dir" value="${zimbra.home.dir}/app" />
-			<param name="param.data.dir" value="${zimbra.home.dir}/data" />			
+			<param name="param.data.dir" value="${zimbra.home.dir}/data" />
+			<param name="param.development" value="true" />
 			<param name="param.port" value="7733" />
 		</antcall>
 		<copy todir="${zimbra.home.dir}" overwrite="true">
@@ -617,13 +618,9 @@
 		<antcall target="offline-clean" />
 
 		<mkdir dir="${dist.dir}" />
-		<gunzip src="${jetty.src.dir}/jetty-${jetty.version}.tar.gz" dest="${dist.dir}/jetty-${jetty.version}.tar" />
-		<untar src="${dist.dir}/jetty-${jetty.version}.tar" dest="${dist.dir}" overwrite="true" />
+		<untar src="${jetty.src.dir}/jetty-${jetty.version}.tar.gz" dest="${dist.dir}" overwrite="true" compression="gzip"/>
 		<move file="${dist.dir}/jetty-${jetty.version}" tofile="${dist.dir}/jetty" />
-		<delete file="${dist.dir}/jetty-${jetty.version}.tar" />
-		<mkdir dir="${dist.app.dir}/jetty/logs" />
 		<mkdir dir="${dist.app.dir}/jetty/webapps" />
-		<mkdir dir="${dist.app.dir}/jetty/work" />
 
 		<antcall target="offline-dev-dist"/>
 
@@ -680,38 +677,38 @@
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.response=INFO" value="log4j.logger.zimbra.offline.response=DEBUG"/>		
 		
 		<!-- separate app dir and data dir  -->
-		
+		<move file="${dist.dir}/db" tofile="${dist.app.dir}/db"/>
+		<move file="${dist.dir}/conf" tofile="${dist.data.dir}/conf" />
 		<move file="${dist.dir}/lib" tofile="${dist.app.dir}/lib"/>
 		<move file="${dist.dir}/jetty" tofile="${dist.app.dir}/jetty"/>
-		<move file="${dist.dir}/db" tofile="${dist.app.dir}/db"/>
-
-		<move file="${dist.dir}/conf" tofile="${dist.data.dir}/conf" />					
 		<move file="${dist.dir}/wiki" tofile="${dist.data.dir}/wiki"/>
 					
 		<!-- create user folders -->
-		<mkdir dir="${dist.data.dir}/log"/>
 		<mkdir dir="${dist.data.dir}/bin"/>	
-		<mkdir dir="${dist.data.dir}/store"/>
 		<mkdir dir="${dist.data.dir}/index"/>
-		<mkdir dir="${dist.data.dir}/zimlets-deployed"/>
+		<mkdir dir="${dist.data.dir}/log"/>
+		<mkdir dir="${dist.data.dir}/store"/>
 		<mkdir dir="${dist.data.dir}/redolog"/>
 		<mkdir dir="${dist.data.dir}/redolog/archive"/>
 		<if><isset property="db-sqlite"/><then>
 			<mkdir dir="${dist.data.dir}/sqlite" />
 		</then></if>
+		<mkdir dir="${dist.data.dir}/zimlets-deployed"/>
 			
 		<mkdir dir="${dist.data.dir}/jetty/etc"/>
 		<mkdir dir="${dist.data.dir}/jetty/work/service"/>
 		<mkdir dir="${dist.data.dir}/jetty/work/zimbra"/>
-		<copy todir="${dist.data.dir}/jetty/etc" file="${config.dir}/jetty.xml" overwrite="true"/>
+
+		<copy file="${config.dir}/jetty.xml" todir="${dist.data.dir}/jetty/etc" overwrite="true"/>
 		<copy tofile="${dist.data.dir}/bin/zdesktop" file="src/bin/zdesktop" overwrite="true"/>
 	
 		<!-- update configs -->
 		<replace file="${dist.data.dir}/conf/log4j.properties" token="@install.data.root@" value="${param.data.dir}"/>
-		<replace file="${dist.data.dir}/jetty/etc/jetty.xml" token="@install.jetty.port@" value="${param.port}"/>
 		<replace file="${dist.data.dir}/jetty/etc/jetty.xml" token="@install.data.root@" value="${param.data.dir}"/>
-		<replace file="${dist.data.dir}/bin/zdesktop" token="@install.data.root@" value="${param.data.dir}"/>
+		<replace file="${dist.data.dir}/jetty/etc/jetty.xml" token="@install.jetty.port@" value="${param.port}"/>
+		<replace file="${dist.app.dir}/jetty/etc/webdefault.xml" token="@development@" value="${param.development}"/>
 		<replace file="${dist.data.dir}/bin/zdesktop" token="@install.app.root@" value="${param.app.dir}"/>
+		<replace file="${dist.data.dir}/bin/zdesktop" token="@install.data.root@" value="${param.data.dir}"/>
 	
 		<chmod file="${dist.data.dir}/bin/zdesktop" perm="ugo+x" />
 	</target>
@@ -940,6 +937,7 @@
 		<antcall target="offline-make-dist">
 			<param name="param.app.dir" value="@install.app.root@" />
 	        <param name="param.data.dir" value="@install.data.root@" />
+			<param name="param.development" value="false" />
 			<param name="param.port" value="0" />
 		</antcall>
 		<antcall target="offline-install-misc" />
