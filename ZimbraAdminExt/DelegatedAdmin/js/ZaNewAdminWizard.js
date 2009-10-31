@@ -45,39 +45,43 @@ ZaNewAdmin.getMyXModel = function () {
            ZaUIComponent.UIComponentsItem,
            ZaUIComponent.InheritedUIComponentsItem
 	];
-	if(ZaPosixAccount) {
-		modelItems.push({id:ZaPosixAccount.A_gidNumber,type:_NUMBER_,ref:"attrs/"+ZaPosixAccount.A_gidNumber, required:true});
-		modelItems.push({id:ZaPosixAccount.A_homeDirectory,type:_STRING_,ref:"attrs/"+ZaPosixAccount.A_homeDirectory, required:true});
-		modelItems.push({id:ZaPosixAccount.A_uidNumber,type:_NUMBER_, defaultValue:1000,ref:"attrs/"+ZaPosixAccount.A_uidNumber, required:true});
-		modelItems.push({id:ZaPosixAccount.A_loginShell,type:_STRING_,ref:"attrs/"+ZaPosixAccount.A_loginShell, required:true});
-		modelItems.push({id:ZaPosixAccount.A_gecos,type:_STRING_,ref:"attrs/"+ZaPosixAccount.A_gecos});		
-	}
-	if(ZaSamAccount) {
-		modelItems.push({id:ZaSamAccount.A_isSpecialNTAccount,type:_NUMBER_, defaultValue:0,ref:ZaSamAccount.A_isSpecialNTAccount});
-		modelItems.push({id:ZaSamAccount.A_sambaDomainSID,type:_STRING_,ref:ZaSamAccount.A_sambaDomainSID});				
-				
-		modelItems.push({id:ZaSamAccount.A_sambaSID,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaSID, required:true});			
-		modelItems.push({id:ZaSamAccount.A_sambaAcctFlags,type:_STRING_, defaultValue:0,ref:"attrs/"+ZaSamAccount.A_sambaAcctFlags});	
-		modelItems.push({id:ZaSamAccount.A_sambaBadPasswordCount,type:_NUMBER_, defaultValue:0,ref:"attrs/"+ZaSamAccount.A_sambaBadPasswordCount});
-		modelItems.push({id:ZaSamAccount.A_sambaBadPasswordTime,type:_NUMBER_, defaultValue:0,ref:"attrs/"+ZaSamAccount.A_sambaBadPasswordTime});		
-		modelItems.push({id:ZaSamAccount.A_sambaDomainName,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaDomainName});		
-		modelItems.push({id:ZaSamAccount.A_sambaHomeDrive,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaHomeDrive});		
-		modelItems.push({id:ZaSamAccount.A_sambaHomePath,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaHomePath});			
-		modelItems.push({id:ZaSamAccount.A_sambaKickoffTime,type:_NUMBER_,ref:"attrs/"+ZaSamAccount.A_sambaKickoffTime});		
-		modelItems.push({id:ZaSamAccount.A_sambaLMPassword,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaLMPassword});				
-		modelItems.push({id:ZaSamAccount.A_sambaLogoffTime,type:_NUMBER_,ref:"attrs/"+ZaSamAccount.A_sambaLogoffTime});						
-		modelItems.push({id:ZaSamAccount.A_sambaLogonHours,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaLogonHours});								
-		modelItems.push({id:ZaSamAccount.A_sambaLogonScript,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaLogonScript});			
-		modelItems.push({id:ZaSamAccount.A_sambaLogonTime,type:_NUMBER_,ref:"attrs/"+ZaSamAccount.A_sambaLogonTime});		
-		modelItems.push({id:ZaSamAccount.A_sambaMungedDial,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaMungedDial});
-		modelItems.push({id:ZaSamAccount.A_sambaNTPassword,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaNTPassword});				
-		modelItems.push({id:ZaSamAccount.A_sambaPasswordHistory,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaPasswordHistory});		
-		modelItems.push({id:ZaSamAccount.A_sambaPrimaryGroupSID,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaPrimaryGroupSID});		
-		modelItems.push({id:ZaSamAccount.A_sambaProfilePath,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaProfilePath});		
-		modelItems.push({id:ZaSamAccount.A_sambaPwdCanChange,type:_NUMBER_,ref:"attrs/"+ZaSamAccount.A_sambaPwdCanChange});		
-		modelItems.push({id:ZaSamAccount.A_sambaPwdLastSet,type:_NUMBER_,ref:"attrs/"+ZaSamAccount.A_sambaPwdLastSet});		
-		modelItems.push({id:ZaSamAccount.A_sambaPwdMustChange,type:_NUMBER_,ref:"attrs/"+ZaSamAccount.A_sambaPwdMustChange});			
-		modelItems.push({id:ZaSamAccount.A_sambaUserWorkstations,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaUserWorkstations});
+	try {
+		if(ZaPosixAccount) {
+			modelItems.push({id:ZaPosixAccount.A_gidNumber,type:_NUMBER_,ref:"attrs/"+ZaPosixAccount.A_gidNumber, required:true});
+			modelItems.push({id:ZaPosixAccount.A_homeDirectory,type:_STRING_,ref:"attrs/"+ZaPosixAccount.A_homeDirectory, required:true});
+			modelItems.push({id:ZaPosixAccount.A_uidNumber,type:_NUMBER_, defaultValue:1000,ref:"attrs/"+ZaPosixAccount.A_uidNumber, required:true});
+			modelItems.push({id:ZaPosixAccount.A_loginShell,type:_STRING_,ref:"attrs/"+ZaPosixAccount.A_loginShell, required:true});
+			modelItems.push({id:ZaPosixAccount.A_gecos,type:_STRING_,ref:"attrs/"+ZaPosixAccount.A_gecos});		
+		}
+		if(ZaSamAccount) {
+			modelItems.push({id:ZaSamAccount.A_isSpecialNTAccount,type:_NUMBER_, defaultValue:0,ref:ZaSamAccount.A_isSpecialNTAccount});
+			modelItems.push({id:ZaSamAccount.A_sambaDomainSID,type:_STRING_,ref:ZaSamAccount.A_sambaDomainSID});				
+					
+			modelItems.push({id:ZaSamAccount.A_sambaSID,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaSID, required:true});			
+			modelItems.push({id:ZaSamAccount.A_sambaAcctFlags,type:_STRING_, defaultValue:0,ref:"attrs/"+ZaSamAccount.A_sambaAcctFlags});	
+			modelItems.push({id:ZaSamAccount.A_sambaBadPasswordCount,type:_NUMBER_, defaultValue:0,ref:"attrs/"+ZaSamAccount.A_sambaBadPasswordCount});
+			modelItems.push({id:ZaSamAccount.A_sambaBadPasswordTime,type:_NUMBER_, defaultValue:0,ref:"attrs/"+ZaSamAccount.A_sambaBadPasswordTime});		
+			modelItems.push({id:ZaSamAccount.A_sambaDomainName,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaDomainName});		
+			modelItems.push({id:ZaSamAccount.A_sambaHomeDrive,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaHomeDrive});		
+			modelItems.push({id:ZaSamAccount.A_sambaHomePath,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaHomePath});			
+			modelItems.push({id:ZaSamAccount.A_sambaKickoffTime,type:_NUMBER_,ref:"attrs/"+ZaSamAccount.A_sambaKickoffTime});		
+			modelItems.push({id:ZaSamAccount.A_sambaLMPassword,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaLMPassword});				
+			modelItems.push({id:ZaSamAccount.A_sambaLogoffTime,type:_NUMBER_,ref:"attrs/"+ZaSamAccount.A_sambaLogoffTime});						
+			modelItems.push({id:ZaSamAccount.A_sambaLogonHours,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaLogonHours});								
+			modelItems.push({id:ZaSamAccount.A_sambaLogonScript,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaLogonScript});			
+			modelItems.push({id:ZaSamAccount.A_sambaLogonTime,type:_NUMBER_,ref:"attrs/"+ZaSamAccount.A_sambaLogonTime});		
+			modelItems.push({id:ZaSamAccount.A_sambaMungedDial,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaMungedDial});
+			modelItems.push({id:ZaSamAccount.A_sambaNTPassword,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaNTPassword});				
+			modelItems.push({id:ZaSamAccount.A_sambaPasswordHistory,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaPasswordHistory});		
+			modelItems.push({id:ZaSamAccount.A_sambaPrimaryGroupSID,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaPrimaryGroupSID});		
+			modelItems.push({id:ZaSamAccount.A_sambaProfilePath,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaProfilePath});		
+			modelItems.push({id:ZaSamAccount.A_sambaPwdCanChange,type:_NUMBER_,ref:"attrs/"+ZaSamAccount.A_sambaPwdCanChange});		
+			modelItems.push({id:ZaSamAccount.A_sambaPwdLastSet,type:_NUMBER_,ref:"attrs/"+ZaSamAccount.A_sambaPwdLastSet});		
+			modelItems.push({id:ZaSamAccount.A_sambaPwdMustChange,type:_NUMBER_,ref:"attrs/"+ZaSamAccount.A_sambaPwdMustChange});			
+			modelItems.push({id:ZaSamAccount.A_sambaUserWorkstations,type:_STRING_,ref:"attrs/"+ZaSamAccount.A_sambaUserWorkstations});
+		}
+	} catch (ex) {
+		//
 	}
    return {items:modelItems};
 }
@@ -793,13 +797,17 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
         ]
     }]};
     
-    if(ZaPosixAccount && zimbra_posixaccount_ext && zimbra_posixaccount_ext) {
-    	zimbra_posixaccount_ext.ACC_WIZ_GROUP.items[0].choices = ZaApp.getInstance().getPosixGroupIdListChoices(true);
-		case_account.items.push(zimbra_posixaccount_ext.ACC_WIZ_GROUP);
-    }     
-    if(ZaSamAccount && Zambra && ZaSamAccount.ACC_WIZ_GROUP) {
-    	ZaSamAccount.ACC_WIZ_GROUP.items[0].choices = ZaApp.getInstance().getSambaDomainSIDListChoices();
-    	case_account.items.push(ZaSamAccount.ACC_WIZ_GROUP);
+    try {
+	    if(ZaPosixAccount && zimbra_posixaccount_ext && zimbra_posixaccount_ext) {
+	    	zimbra_posixaccount_ext.ACC_WIZ_GROUP.items[0].choices = ZaApp.getInstance().getPosixGroupIdListChoices(true);
+			case_account.items.push(zimbra_posixaccount_ext.ACC_WIZ_GROUP);
+	    }     
+	    if(ZaSamAccount && Zambra && ZaSamAccount.ACC_WIZ_GROUP) {
+	    	ZaSamAccount.ACC_WIZ_GROUP.items[0].choices = ZaApp.getInstance().getSambaDomainSIDListChoices();
+	    	case_account.items.push(ZaSamAccount.ACC_WIZ_GROUP);
+	    }
+    } catch (ex) {
+    	//
     }
     cases.push (case_account) ;
     
