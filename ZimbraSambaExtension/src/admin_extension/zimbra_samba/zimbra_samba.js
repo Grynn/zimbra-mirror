@@ -209,7 +209,7 @@ Zambra.ovTreeModifier = function (tree) {
 	}
 }
 
-if(ZaOverviewPanelController.treeModifiers)
+if(ZaOverviewPanelController.treeModifiers) {
 	ZaOverviewPanelController.treeModifiers.push(Zambra.ovTreeModifier);
-
+}
 	

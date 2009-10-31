@@ -1,12 +1,12 @@
-<zimlet name="zimbra_samba" version="6" description="Admin Extension for managing Samba User Accounts" extension="true">
+<zimlet name="zimbra_samba" version="6.0.3" description="Admin Extension for managing Samba User Accounts" extension="true">
 <include>zimbra_samba_md4.js</include>
 <include>zimbra_samba.js</include>
+<include>ZaSambaAcFlagsXFormItem.js</include>
 <include>ZaSamAccount.js</include>
 <include>ZaSambaDomain.js</include>
 <include>ZaSambaDomainController.js</include>
 <include>ZaSambaDomainListController.js</include>
 <include>ZaSambaDomainListView.js</include>
 <include>ZaSambaDomainXFormView.js</include>
-<include>ZaSambaAcFlagsXFormItem.js</include>
 <include>ZaSambaGroupMapping.js</include>
 </zimlet>

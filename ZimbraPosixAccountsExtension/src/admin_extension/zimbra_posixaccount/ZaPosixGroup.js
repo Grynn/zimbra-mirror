@@ -318,11 +318,11 @@ ZaItem.modifyMethods["ZaPosixGroup"].push(ZaPosixGroup.modifyMethod);
 
 ZaApp.prototype.getPosixGroupIdListChoices =
 function(refresh) {
-	if (refresh || this._posixGroupList == null) {
-		this._posixGroupList = ZaPosixGroup.getAll(this);
+	if (refresh || ZaApp.PosixGroupList == null) {
+		ZaApp.PosixGroupList = ZaPosixGroup.getAll(this);
 	}
-	if(refresh || this._posixGroupIdChoices == null) {
-		var arr = this._posixGroupList.getArray();
+	if(refresh || ZaApp.PosixGroupIdChoices == null) {
+		var arr = ZaApp.PosixGroupList.getArray();
 		var posixGroupArr = [];
 		for (var i = 0 ; i < arr.length; ++i) {
 			var obj = new Object();
@@ -330,14 +330,14 @@ function(refresh) {
 			obj.id = arr[i].id;
 			posixGroupArr.push(obj);
 		}
-		if(this._posixGroupIdChoices == null) {
-			this._posixGroupIdChoices = new XFormChoices(posixGroupArr, XFormChoices.OBJECT_LIST, "id", "name");
+		if(ZaApp.PosixGroupIdChoices == null) {
+			ZaApp.PosixGroupIdChoices = new XFormChoices(posixGroupArr, XFormChoices.OBJECT_LIST, "id", "name");
 		} else {	
-			this._posixGroupIdChoices.setChoices(posixGroupArr);
-			this._posixGroupIdChoices.dirtyChoices();
+			ZaApp.PosixGroupIdChoices.setChoices(posixGroupArr);
+			ZaApp.PosixGroupIdChoices.dirtyChoices();
 		}
 	}
-	return this._posixGroupIdChoices;	
+	return ZaApp.PosixGroupIdChoices;	
 }
 
 ZaPosixGroup.myXModel = {
