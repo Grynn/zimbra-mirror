@@ -861,20 +861,25 @@ function (itemId, tabConstructor) {
 
 ZaController.prototype.changeActionsState =
 function () {
+
 	if(this.changeAcStateAcId)
 		this.changeAcStateAcId = null;
 		
-	for(var i in  this._toolbarOperations) {
-		if(this._toolbarOperations[i] instanceof ZaOperation) {
-			this._toolbarOperations[i].enabled = true;
+	if(this._toolbarOperations) {
+		for(var i in this._toolbarOperations) {
+			if(this._toolbarOperations[i] instanceof ZaOperation) {
+				this._toolbarOperations[i].enabled = true;
+			}
+		}
+	}	
+	if(this._popupOperations) {
+		for(var i in  this._popupOperations) {
+			if(this._popupOperations[i] instanceof ZaOperation) {
+				this._popupOperations[i].enabled = true;
+			}
 		}
 	}
 	
-	for(var i in  this._popupOperations) {
-		if(this._popupOperations[i] instanceof ZaOperation) {
-			this._popupOperations[i].enabled = true;
-		}
-	}
 	if(ZaController.changeActionsStateMethods[this._iKeyName]) {
 		var methods = ZaController.changeActionsStateMethods[this._iKeyName];
 		var cnt = methods.length;
@@ -888,26 +893,31 @@ function () {
 			}
 		}
 	}	
-
-	for(var i in  this._toolbarOperations) {
-		if(this._toolbarOperations[i] instanceof ZaOperation &&  !AjxUtil.isEmpty(this._toolbar.getButton(this._toolbarOperations[i].id))) {
-			//paging button should be excluded
-            if (this._toolbarOperations[i].id == ZaOperation.PAGE_BACK || this._toolbarOperations[i].id == ZaOperation.PAGE_FORWARD) {
-                //do nothing
-            }else{
-                this._toolbar.getButton(this._toolbarOperations[i].id).setEnabled(this._toolbarOperations[i].enabled);
-            }
-        }
+	
+	if(this._toolbar && this._toolbarOperations) {
+		for(var i in  this._toolbarOperations) {
+			if(this._toolbarOperations[i] instanceof ZaOperation &&  !AjxUtil.isEmpty(this._toolbar.getButton(this._toolbarOperations[i].id))) {
+				//paging button should be excluded
+	            if (this._toolbarOperations[i].id == ZaOperation.PAGE_BACK || this._toolbarOperations[i].id == ZaOperation.PAGE_FORWARD) {
+	                //do nothing
+	            }else{
+	                this._toolbar.getButton(this._toolbarOperations[i].id).setEnabled(this._toolbarOperations[i].enabled);
+	            }
+	        }
+		}
 	}
 	
-	for(var i in  this._popupOperations) {
-		if(this._popupOperations[i] instanceof ZaOperation && !AjxUtil.isEmpty(this._actionMenu.getMenuItem(this._popupOperations[i].id))) {
-			this._actionMenu.getMenuItem(this._popupOperations[i].id).setEnabled(this._popupOperations[i].enabled);
-		}
-	}                                      
-
+	if(this._actionMenu && this._popupOperations) {
+		for(var i in this._popupOperations) {
+			if(this._popupOperations[i] instanceof ZaOperation && !AjxUtil.isEmpty(this._actionMenu.getMenuItem(this._popupOperations[i].id))) {
+				this._actionMenu.getMenuItem(this._popupOperations[i].id).setEnabled(this._popupOperations[i].enabled);
+			}
+		}                                      
+	}
     //enable More Actions Buttons
-    this._toolbar.enableMoreActionsMenuItems () ;
+    if(this._toolbar) {
+    	this._toolbar.enableMoreActionsMenuItems () ;
+    }
 }
 
 ZaController.prototype.closeTabsInRemoveList =
