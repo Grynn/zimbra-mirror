@@ -84,6 +84,10 @@ public class JspProvStub {
     	return prov.get(AccountBy.id, accountId);
     }
     
+    public Account getOfflineAccountByName(String name) throws ServiceException {
+        return prov.get(AccountBy.name, name);
+    }
+    
     public Account createOfflineAccount(String accountName, String email, Map<String, Object> attrs)
     		throws ServiceException {
         attrs.put(Provisioning.A_zimbraPrefLabel, accountName);

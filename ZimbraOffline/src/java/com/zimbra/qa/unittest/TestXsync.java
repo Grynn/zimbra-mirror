@@ -1,20 +1,31 @@
 package com.zimbra.qa.unittest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapProtocol;
+import com.zimbra.common.util.ByteUtil;
+import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.jsp.ConfigServlet;
+import com.zimbra.cs.offline.jsp.JspProvStub;
 import com.zimbra.cs.offline.jsp.XsyncBean;
+import com.zimbra.cs.zclient.ZContact;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMessage;
+import com.zimbra.cs.zclient.ZSearchParams;
+import com.zimbra.cs.zclient.ZTag;
+import com.zimbra.cs.zclient.ZMailbox.ZAttachmentInfo;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
 
@@ -23,25 +34,29 @@ import junit.framework.TestCase;
 public class TestXsync extends TestCase {
 
     private static final String ACCOUNT = "XSYNC";
-    private static final String USERNAME = "user2";
+    private static final String USERNAME = "xsync";
     private static final String PASSWORD = "test123";
-    private static final String EMAIL = "user2@jjmac.local";
+    private static final String EMAIL = "xsync@jjmac.local";
     private static final String HOST = "localhost";
     private static final int PORT = 7070;
     private static final boolean isSSL = false;
     private static final String LOCAL_ADMIN_URL = "http://localhost:7733/service/admin/soap";
     private static final String LOCAL_SOAP_URL = "http://localhost:7733/service/soap";
-    private static final String REMOTE_SOAP_URL = "http://localhost:7070/service/soap";
+    //private static final String REMOTE_SOAP_URL = "http://localhost:7070/service/soap";
     
-    private String localAccountId;
     private ZMailbox localMailbox;
     private ZMailbox remoteMailbox;
     
     public void testXsync() throws Exception {
-        sync();
-        checkMsgCount("in:inbox");
-        checkMsgCount("in:inbox is:unread");
-        
+        try {
+            syncEmail();
+            syncContacts();
+        } catch (Exception x) {
+            ZimbraLog.test.warn("test xsync", x);
+        }
+    }
+    
+    private void syncEmail() throws Exception {
         //send message to self
         ZimbraLog.test.info("TEST 1");
         ZOutgoingMessage msg = new ZOutgoingMessage();
@@ -196,8 +211,8 @@ public class TestXsync extends TestCase {
         assertNull("local /F1/F7", cf7);
         
         ZimbraLog.test.info("TEST 14");
-        String sm2Id = TestUtil.addMessage(remoteMailbox, "MSG2", sf1.getId(), "u");
-        String sm3Id = TestUtil.addMessage(remoteMailbox, "MSG3", sf8.getId(), "u");
+        TestUtil.addMessage(remoteMailbox, "MSG2", sf1.getId(), "u");
+        TestUtil.addMessage(remoteMailbox, "MSG3", sf8.getId(), "u");
         String sm4Id = TestUtil.addMessage(remoteMailbox, "MSG4", "" + Mailbox.ID_FOLDER_INBOX, "u");
         sync();
         ZMessage cm2 = TestUtil.search(localMailbox, "in:F1").get(0);
@@ -234,6 +249,65 @@ public class TestXsync extends TestCase {
         assertEquals(0, TestUtil.search(remoteMailbox, "subject:MSG4").size());
     }
     
+    public void syncContacts() throws Exception {
+        ZTag bizTag = remoteMailbox.createTag("biz", null);
+        Map<String, String> attrs = new HashMap<String, String>();
+        attrs.put(ContactConstants.A_email, "user1@jjmac.local");
+        String fakejpeg = "fakejpeg";
+        String attachId = remoteMailbox.uploadAttachment("fakejpeg.jpg", fakejpeg.getBytes(), "image/jpeg", (int)Constants.MILLIS_PER_MINUTE);
+        Map<String, ZAttachmentInfo> attachments = new HashMap<String, ZAttachmentInfo>();
+        ZAttachmentInfo info = new ZAttachmentInfo().setAttachmentId(attachId);
+        info.setPartName(null);
+        attachments.put(ContactConstants.A_image, info);
+        ZContact sc1 = remoteMailbox.createContact("" + Mailbox.ID_FOLDER_CONTACTS, bizTag.getId(), attrs, attachments);
+        sync();
+        String cId1 = TestUtil.search(localMailbox, "in:contacts", ZSearchParams.TYPE_CONTACT).get(0);
+        ZContact cc1 = localMailbox.getContact(cId1);
+        assertEquals("cc1 email", "user1@jjmac.local", cc1.getAttrs().get(ContactConstants.A_email));
+        assertEquals("cc1 attach", "fakejpeg", new String(ByteUtil.readInput(cc1.getAttachmentData(ContactConstants.A_image), 0, Integer.MAX_VALUE)));
+        assertEquals("cc1 tag", "biz", localMailbox.getTags(cc1.getTagIds()).get(0).getName());
+        
+        attrs.put(ContactConstants.A_firstName, "jj");
+        cc1.modify(attrs, false);        
+        sync();
+        sc1 = remoteMailbox.getContact(sc1.getId());
+        assertEquals("sc1 email", "user1@jjmac.local", sc1.getAttrs().get(ContactConstants.A_email));
+        assertEquals("sc1 firstname", "jj", sc1.getAttrs().get(ContactConstants.A_firstName));
+        assertEquals("sc1 attach", "fakejpeg", new String(ByteUtil.readInput(sc1.getAttachmentData(ContactConstants.A_image), 0, Integer.MAX_VALUE)));
+        assertEquals("sc1 tag", "biz", remoteMailbox.getTags(sc1.getTagIds()).get(0).getName());
+        
+        attrs.put(ContactConstants.A_lastName, "O'Matic");
+        sc1.modify(attrs, false);        
+        sync();
+        cc1 = localMailbox.getContact(cc1.getId());
+        assertEquals("cc1 email", "user1@jjmac.local", cc1.getAttrs().get(ContactConstants.A_email));
+        assertEquals("cc1 firstname", "jj", cc1.getAttrs().get(ContactConstants.A_firstName));
+        assertEquals("cc1 lastname", "O'Matic", cc1.getAttrs().get(ContactConstants.A_lastName));
+        assertEquals("cc1 attach", "fakejpeg", new String(ByteUtil.readInput(cc1.getAttachmentData(ContactConstants.A_image), 0, Integer.MAX_VALUE)));
+        assertEquals("cc1 tag", "biz", localMailbox.getTags(cc1.getTagIds()).get(0).getName());
+        
+        ZFolder cfx = localMailbox.createFolder("" + Mailbox.ID_FOLDER_USER_ROOT,  "ConX", ZFolder.View.contact, null, null, null);
+        localMailbox.moveContact(cc1.getId(), cfx.getId());
+        
+        bizTag = localMailbox.getTagByName("biz");
+        cc1.tag(bizTag.getId(), false);
+        ZTag funTag = localMailbox.createTag("fun", null);
+        cc1.tag(funTag.getId(), true);
+        sync();
+        String sId1 = TestUtil.search(remoteMailbox, "in:ConX", ZSearchParams.TYPE_CONTACT).get(0);
+        sc1 = remoteMailbox.getContact(sId1);
+        assertEquals("sc1 email", "user1@jjmac.local", sc1.getAttrs().get(ContactConstants.A_email));
+        assertEquals("sc1 firstname", "jj", sc1.getAttrs().get(ContactConstants.A_firstName));
+        assertEquals("sc1 lastname", "O'Matic", sc1.getAttrs().get(ContactConstants.A_lastName));
+        assertEquals("sc1 attach", "fakejpeg", new String(ByteUtil.readInput(sc1.getAttachmentData(ContactConstants.A_image), 0, Integer.MAX_VALUE)));
+        assertEquals("sc1 tag", "fun", remoteMailbox.getTags(sc1.getTagIds()).get(0).getName());
+        
+        ZFolder sfx = remoteMailbox.getFolderByPath("/ConX");
+        remoteMailbox.deleteFolder(sfx.getId());
+        sync();
+        assertEquals("no local contacts", 0, TestUtil.search(localMailbox, "*", ZSearchParams.TYPE_CONTACT).size());
+    }
+    
     private void sync() throws Exception {
         Element req = remoteMailbox.newRequestElement(OfflineConstants.SYNC_REQUEST);
         localMailbox.invoke(req);
@@ -253,16 +327,35 @@ public class TestXsync extends TestCase {
     
     @Override
     protected void setUp() throws Exception {
+        TestUtil.cliSetup();
         ZimbraLog.toolSetupLog4j("INFO", null, false);
-        
         ConfigServlet.LOCALHOST_ADMIN_URL = LOCAL_ADMIN_URL;
         
+        cleanUp();
+        createRemoteAccount();
         createLocalAccount();
         
-//        localAccount = (OfflineAccount)OfflineProvisioning.getOfflineInstance().get(AccountBy.id, localAccountId);
-//        ds = OfflineProvisioning.getOfflineInstance().getDataSource(localAccount);
-//        xmbox = (ExchangeMailbox)(MailboxManager.getInstance().getMailboxByAccount(localAccount));
-        
+        sync();
+        checkMsgCount("in:inbox");
+        checkMsgCount("in:inbox is:unread");
+    }
+    
+    @Override
+    protected void tearDown() throws Exception {
+        cleanUp();
+    }
+    
+    private void cleanUp() throws Exception {
+        try {
+            deleteLocalAccount();
+            deleteRemoteAccount();
+        } catch (Exception x) {
+            ZimbraLog.test.warn("deleting accounts", x);
+        }
+    }
+    
+    private void createLocalAccount() throws Exception {
+        XsyncBean.createAccount(ACCOUNT, USERNAME, PASSWORD, EMAIL, HOST, PORT, isSSL);
         ZMailbox.Options options = new ZMailbox.Options();
         options.setAccount(EMAIL);
         options.setAccountBy(AccountBy.name);
@@ -271,27 +364,29 @@ public class TestXsync extends TestCase {
         options.setRequestProtocol(SoapProtocol.Soap12);
         options.setResponseProtocol(SoapProtocol.Soap12);
         localMailbox = ZMailbox.getMailbox(options);
-        
-        options = new ZMailbox.Options();
-        options.setAccount(EMAIL);
-        options.setAccountBy(AccountBy.name);
-        options.setPassword(PASSWORD);
-        options.setUri(REMOTE_SOAP_URL);
-        options.setRequestProtocol(SoapProtocol.Soap12);
-        options.setResponseProtocol(SoapProtocol.Soap12);
-        remoteMailbox = ZMailbox.getMailbox(options);
-    }  
-    
-    @Override
-    protected void tearDown() throws Exception {
-        deleteLocalAccount();
-    }
-    
-    private void createLocalAccount() throws Exception {
-        localAccountId = XsyncBean.createAccount(ACCOUNT, USERNAME, PASSWORD, EMAIL, HOST, PORT, isSSL);
     }
     
     private void deleteLocalAccount() throws Exception {
-        XsyncBean.deleteAccount(localAccountId);
+        Account local = JspProvStub.getInstance().getOfflineAccountByName(EMAIL);
+        if (local != null)
+            XsyncBean.deleteAccount(local.getId());
+    }
+    
+    private void createRemoteAccount() throws Exception {
+        TestUtil.createAccount(USERNAME);
+        remoteMailbox = TestUtil.getZMailbox(USERNAME);
+//      options = new ZMailbox.Options();
+//      options.setAccount(EMAIL);
+//      options.setAccountBy(AccountBy.name);
+//      options.setPassword(PASSWORD);
+//      options.setUri(REMOTE_SOAP_URL);
+//      options.setRequestProtocol(SoapProtocol.Soap12);
+//      options.setResponseProtocol(SoapProtocol.Soap12);
+//      remoteMailbox = ZMailbox.getMailbox(options);
+    }
+    
+    private void deleteRemoteAccount() throws Exception {
+        if (TestUtil.accountExists(USERNAME))
+            TestUtil.deleteAccount(USERNAME);
     }
 }
