@@ -50,8 +50,12 @@ function(controller) {
 		start = end;
 	}
 	subject = message ? message.subject : "";
-	var callback = new AjxCallback(this, this._processContent, {longUrl : lastUrl, subject : message.subject});
-	this.zimlet._postToUrlShortner({longUrl:lastUrl, callback:callback});
+	if(lastUrl == "") {
+		this._processContent({longUrl : lastUrl, subject : message.subject});
+	} else {
+		var callback = new AjxCallback(this, this._processContent, {longUrl : lastUrl, subject : message.subject});
+		this.zimlet._postToUrlShortner({longUrl:lastUrl, callback:callback});
+	}
 };
 
 com_zimbra_socialMiniDlg.prototype._processContent =
@@ -59,9 +63,13 @@ function(params, response) {
 	var content = "";
 	var subject = params.subject;
 	var longUrl = params.longUrl;
-	if (!response.success) {
-		appCtxt.getAppController().setStatusMsg("Could Not automatically Shorten URL", ZmStatusView.LEVEL_WARNING);
-	} else {
+	if(longUrl == "") {
+		if(subject.length >140) {
+			content = subject.substring(0, 137) + "...";
+		}else {
+			content = subject;
+		}
+	}else if(response.success) {
 		var text = eval("(" + response.text + ")");
 		var shortUrl = text.results[longUrl].shortUrl;
 		var leftOverLen = 140 - shortUrl.length;
@@ -69,7 +77,9 @@ function(params, response) {
 			subject = subject.substring(0, (leftOverLen - 4)) + "...";
 		}
 		content = subject + " " + shortUrl;
-	}
+	} else if(!response.success) {
+		appCtxt.getAppController().setStatusMsg("Could Not automatically Shorten URL", ZmStatusView.LEVEL_WARNING);
+	} 
 	this.zimlet.updateField.value = content;
 	this.zimlet.showNumberOfLetters();
 };

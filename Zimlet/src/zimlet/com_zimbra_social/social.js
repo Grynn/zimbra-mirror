@@ -296,8 +296,17 @@ com_zimbra_social.prototype._postToUrlShortner =
 function(params) {
 	var longUrl = params.longUrl;
 	var callback = params.callback;
-	if (!longUrl)
-		longUrl = document.getElementById("com_zimbra_twitter_longUrl_field").value;
+	if (!longUrl) {
+		var longUrlField = document.getElementById("com_zimbra_twitter_longUrl_field");
+		if(longUrlField) {
+			longUrl = document.getElementById("com_zimbra_twitter_longUrl_field").value;
+		} else {
+			return;
+		}
+	}
+
+	if(longUrl == "")
+		return;
 
 	var url = "http://api.bit.ly/shorten?"
 			+ "version=" + AjxStringUtil.urlComponentEncode("2.0.1")

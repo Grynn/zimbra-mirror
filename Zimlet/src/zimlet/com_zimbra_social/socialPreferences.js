@@ -28,9 +28,8 @@ function com_zimbra_socialPreferences(zimlet) {
 	this.social_pref_cardWidthList = this.zimlet.getUserProperty("social_pref_cardWidthList");
 	this.social_pref_numberofTweetsToReturn = parseInt(this.zimlet.getUserProperty("social_pref_numberofTweetsToReturn"));
 	this.social_pref_numberofTweetsSearchesToReturn = parseInt(this.zimlet.getUserProperty("social_pref_numberofTweetsSearchesToReturn"));
-
 	this.social_pref_autoShortenURLOn = this.zimlet.getUserProperty("social_pref_autoShortenURLOn") == "true";
-	this.social_pref_toolbarButtonOn = this.zimlet.getUserProperty("social_pref_autoShortenURLOn") == "true";
+	this.social_pref_toolbarButtonOn = this.zimlet.getUserProperty("social_pref_toolbarButtonOn") == "true";
 }
 
 com_zimbra_socialPreferences.prototype._showManageAccntsDlg = function() {
@@ -504,24 +503,24 @@ function() {
 };
 
 com_zimbra_socialPreferences.prototype._setPrefCheckboxes = function() {
-	if (this.social_pref_tweetmemePopularIsOn)
+	if (this.social_pref_tweetmemePopularIsOn) {
 		document.getElementById("social_pref_tweetmemePopularIsOn").checked = true;
-
-	if (this.social_pref_trendsPopularIsOn)
+	}
+	if (this.social_pref_trendsPopularIsOn) {
 		document.getElementById("social_pref_trendsPopularIsOn").checked = true;
-
-	if (this.social_pref_diggPopularIsOn)
+	}
+	if (this.social_pref_diggPopularIsOn) {
 		document.getElementById("social_pref_diggPopularIsOn").checked = true;
-
-	if (this.social_pref_toolbarButtonOn)
+	}
+	if (this.social_pref_toolbarButtonOn) {
 		document.getElementById("social_pref_toolbarButtonOn").checked = true;
-
-	if (this.social_pref_SocialMailUpdateOn)
+	}
+	if (this.social_pref_SocialMailUpdateOn) {
 		document.getElementById("social_pref_SocialMailUpdateOn").checked = true;
-
-	if (this.social_pref_showTweetAlertsOn)
+	}
+	if (this.social_pref_showTweetAlertsOn) {
 		document.getElementById("social_pref_showTweetAlertsOn").checked = true;
-
+	}
 	var list = document.getElementById("social_pref_cardWidthList");
 	for (var i = 0; i < list.options.length; i++) {
 		if (list.options[i].value == this.social_pref_cardWidthList) {
