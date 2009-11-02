@@ -52,7 +52,7 @@ public class OfflineAutoComplete extends AutoComplete {
             name = name.substring(0, name.length() - 1);
         
         int limit = account.getContactAutoCompleteMaxResults();        
-        AutoCompleteResult result = query(request, ctxt, account, true, name, limit);
+        AutoCompleteResult result = query(request, ctxt, account, true, name, limit, Provisioning.GAL_SEARCH_TYPE.ALL);
         
         if (galAC && result.entries.size() < limit) {
             int galLimit = limit - result.entries.size();
@@ -101,7 +101,7 @@ public class OfflineAutoComplete extends AutoComplete {
             if (account.getId().equals(reqAcctId) || !account.getBooleanAttr(OfflineProvisioning.A_zimbraPrefShareContactsInAutoComplete , false))
                 continue;
             
-            AutoCompleteResult res = query(request, ctxt, account, true, name, lmt);
+            AutoCompleteResult res = query(request, ctxt, account, true, name, lmt, Provisioning.GAL_SEARCH_TYPE.ALL);
             if (res != null)
                 result.appendEntries(res);
             
