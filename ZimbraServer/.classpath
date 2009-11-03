@@ -97,7 +97,7 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/slf4j-api-1.5.8.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/tnef-1.5.0.jar" sourcepath="/ThirdParty/jtnef/src"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/xercesImpl-2.9.1.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.3.4.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.4.2-zimbra.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-charset.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-native.jar" sourcepath="/ZimbraNative/src/java"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.15.jar"/>

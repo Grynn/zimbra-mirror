@@ -47,6 +47,8 @@
 	<property name="im.jars.dir" location="${im.dir}/jars" />
 	<property name="im.classes.dir" location="${im.dir}/build/classes" />
 
+	<property name="webclient.dir" location="../ZimbraWebClient" />
+
 	<property name="zsync.common.dir" location="../ZimbraSyncCommon" />
 	<property name="zsync.common.build.dir" location="${zsync.common.dir}/build" />
 	<property name="zsync.common.classes.dir" location="${zsync.common.build.dir}/classes" />
@@ -277,6 +279,59 @@
 		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/_base/logos/ZimbraInside/LoginBanner.png" overwrite="true"/>
 		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/yahoo/logos/LoginBanner.png" overwrite="true"/>
 
+	</target>
+
+	<target name='offline-compress'>
+		<fileset id="js-includes" dir="${dist.dir}/app/jetty/webapps/zimbra">
+			<include name="**/*.js" />
+			<include name="**/*.css" />
+		</fileset>
+
+		<taskdef name="try"
+			 classname="com.zimbra.webClient.build.TryTask"
+			 classpath="${webclient.dir}/build/classes"
+		/>
+
+		<!-- strip debug, minimize js, prepend copyright -->
+		<for param="var">
+			<path>
+				<fileset refid="js-includes"/>
+			</path>
+			<sequential>
+				<echo>Stripping debug in @{var}</echo>
+				<replaceregexp byline="true">
+					<regexp pattern="^\s*DBG\.\w+\(.*\);\s*$"/>
+					<substitution expression=" "/>
+					<fileset file="@{var}"/>
+				</replaceregexp>
+				<echo>Minimizing to @{var}.tmp</echo>
+				<try>
+					<block>
+						<java jar="${common.jars.dir}/yuicompressor-2.4.2-zimbra.jar"
+							fork="true" failonerror="true" output="${build.dir}/yui-compress.out">
+							<arg value="--line-break"/>
+							<arg value="400"/>
+							<arg value="-o"/>
+							<arg value="@{var}.tmp"/>
+							<arg value="@{var}"/>
+						</java>
+					</block>
+					<catch>
+						<echo>Error minimizing to @{var}.tmp</echo>
+					</catch>
+					<finally>
+					</finally>
+				</try>
+				<echo>Prepending Copyright to @{var}</echo>
+				<concat destfile="@{var}" fixlastline="true">
+					<header filtering="no" trimleading="yes">
+// Copyright (C) 2005-2009 Zimbra Inc. http://www.zimbra.com/
+					</header>
+					<fileset file='@{var}.tmp'/>
+				</concat>
+				<delete file="@{var}.tmp"/>
+			</sequential>
+		</for>
 	</target>
 
 	<target name="offline-jspc">
