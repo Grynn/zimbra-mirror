@@ -1233,6 +1233,13 @@ public class BeanUtils {
 		sPHONE_FIELDS.put(ContactConstants.A_otherPhone, "phoneLabelOther");
 		sPHONE_FIELDS.put(ContactConstants.A_workPhone, "phoneLabelWork");
 		sPHONE_FIELDS.put(ContactConstants.A_workPhone2, "phoneLabelWork2");
+		sPHONE_FIELDS.put(ContactConstants.A_homeFax, "phoneLabelHomeFax");
+		sPHONE_FIELDS.put(ContactConstants.A_workFax, "AB_FIELD_workFax");
+		sPHONE_FIELDS.put(ContactConstants.A_workMobile, "AB_FIELD_workMobile");
+		sPHONE_FIELDS.put(ContactConstants.A_workAltPhone, "AB_FIELD_workAlternatePhone");
+		sPHONE_FIELDS.put(ContactConstants.A_otherFax, "AB_FIELD_otherFax");
+		sPHONE_FIELDS.put(ContactConstants.A_assistantPhone, "AB_FIELD_assistantPhone");
+		sPHONE_FIELDS.put(ContactConstants.A_companyPhone, "AB_FIELD_companyPhone");
 	}
 	public static String getDisplayCaller(PageContext pc, ZPhone phone) throws ServiceException, JspException {
 		ZMailbox mbox = ZJspSession.getZMailbox(pc);
