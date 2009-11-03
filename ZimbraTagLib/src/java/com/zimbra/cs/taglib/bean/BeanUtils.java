@@ -1230,7 +1230,7 @@ public class BeanUtils {
 		sPHONE_FIELDS.put(ContactConstants.A_homePhone, "phoneLabelHome");
 		sPHONE_FIELDS.put(ContactConstants.A_homePhone2, "phoneLabelHome2");
 		sPHONE_FIELDS.put(ContactConstants.A_mobilePhone, "phoneLabelMobile");
-		sPHONE_FIELDS.put(ContactConstants.A_otherPhone, "phoneLabelOther");
+		sPHONE_FIELDS.put(ContactConstants.A_otherPhone, "phoneLabelHomeAlternate");
 		sPHONE_FIELDS.put(ContactConstants.A_workPhone, "phoneLabelWork");
 		sPHONE_FIELDS.put(ContactConstants.A_workPhone2, "phoneLabelWork2");
 		sPHONE_FIELDS.put(ContactConstants.A_homeFax, "phoneLabelHomeFax");
