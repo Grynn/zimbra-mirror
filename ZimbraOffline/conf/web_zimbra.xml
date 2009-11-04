@@ -85,7 +85,7 @@
 		</init-param>
 		<init-param>
 			<param-name>ProdMode</param-name>
-			<param-value>false</param-value>
+			<param-value>@production@</param-value>
 			<!--
 				This paramater value is filled in by the build depending
 				on whether the build is a dev or prod build. This

@@ -271,7 +271,7 @@
     </init-param>
     <init-param>
         <param-name>suppressSmap</param-name>
-        <param-value>true</param-value>
+        <param-value>@production@</param-value>
     </init-param>
     <init-param>
         <param-name>tagpoolMaxSize</param-name>

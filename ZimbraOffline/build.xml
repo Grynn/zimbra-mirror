@@ -227,10 +227,13 @@
 		<ant dir="../ZimbraWebClient" target="war" inheritAll="false" />
 		<unzip src="${zimbra.warfile}" dest="${dist.dir}/jetty/webapps/zimbra" overwrite="true"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/help"/>
-		<copy file="${config.dir}/web_zimbra.xml" tofile="${dist.dir}/jetty/webapps/zimbra/WEB-INF/web.xml" overwrite="true"/>
-
 		<tstamp><format property="build.simpleDate" pattern="yyMMddHHmmss" /></tstamp>
-		<replace file="${dist.dir}/jetty/webapps/zimbra/WEB-INF/web.xml" token="@jsVersion@" value="${build.simpleDate}"/>
+		<copy file="${config.dir}/web_zimbra.xml" tofile="${dist.dir}/jetty/webapps/zimbra/WEB-INF/web.xml" overwrite="true">
+			<filterset>
+				<filter token="jsVersion" value="${build.simpleDate}"/>
+				<filter token="production" value="${param.production}/"/>
+			</filterset>
+		</copy>
 
 		<copy todir="${dist.dir}/jetty/webapps/zimbra/desktop" overwrite="true">
 			<fileset dir="WebRoot/desktop" />
@@ -284,7 +287,6 @@
 	<target name='offline-compress'>
 		<fileset id="js-includes" dir="${dist.dir}/app/jetty/webapps/zimbra">
 			<include name="**/*.js" />
-			<include name="**/*.css" />
 		</fileset>
 
 		<taskdef name="try"
@@ -298,34 +300,34 @@
 				<fileset refid="js-includes"/>
 			</path>
 			<sequential>
-				<echo>Stripping debug in @{var}</echo>
+				<echo>Shrinking @{var}</echo>
 				<replaceregexp byline="true">
 					<regexp pattern="^\s*DBG\.\w+\(.*\);\s*$"/>
 					<substitution expression=" "/>
 					<fileset file="@{var}"/>
 				</replaceregexp>
-				<echo>Minimizing to @{var}.tmp</echo>
 				<try>
 					<block>
 						<java jar="${common.jars.dir}/yuicompressor-2.4.2-zimbra.jar"
 							fork="true" failonerror="true" output="${build.dir}/yui-compress.out">
+							<arg value="--charset"/>
+							<arg value="utf-8"/>
 							<arg value="--line-break"/>
-							<arg value="400"/>
+							<arg value="0"/>
 							<arg value="-o"/>
 							<arg value="@{var}.tmp"/>
 							<arg value="@{var}"/>
 						</java>
 					</block>
 					<catch>
-						<echo>Error minimizing to @{var}.tmp</echo>
+						<echo>Error minimizing @{var}</echo>
 					</catch>
 					<finally>
 					</finally>
 				</try>
-				<echo>Prepending Copyright to @{var}</echo>
 				<concat destfile="@{var}" fixlastline="true">
 					<header filtering="no" trimleading="yes">
-// Copyright (C) 2005-2009 Zimbra Inc. http://www.zimbra.com/
+/* Copyright (C) 2005-2009 Zimbra Inc. http://www.zimbra.com/ */
 					</header>
 					<fileset file='@{var}.tmp'/>
 				</concat>
@@ -356,7 +358,9 @@
 		<ant dir="../ZimbraWebClient" target="jspc.offline_build" inheritAll="false" />
 		<mkdir dir="${dist.app.dir}/jetty/work/zimbra/jsp"/>
 		<copy todir="${dist.app.dir}/jetty/work/zimbra/jsp" overwrite="true">
-			<fileset dir="../ZimbraWebClient/build/dist/jetty/work/zimbra/jsp"/>
+			<fileset dir="../ZimbraWebClient/build/dist/jetty/work/zimbra/jsp">
+				<include name="**/*.class"/>
+			</fileset>
 		</copy>
 	</target>
 
@@ -395,8 +399,10 @@
 
 	<target name="offline-dev-dist">
 		<antcall target="offline-war" />
-		<antcall target="offline-zimbra-war" />
-
+		<antcall target="offline-zimbra-war">
+			<param name="param.development" value="${param.development}" />
+			<param name="param.production" value="${param.production}" />
+		</antcall>
 		<copy tofile="${dist.dir}/conf/datasource.xml" file="${config.dir}/datasource.xml" overwrite="true" />
 		<copy todir="${dist.dir}/conf" file="${config.dir}/derby.properties" overwrite="true"/>
 		<copy tofile="${dist.dir}/conf/localconfig.xml" file="${config.dir}/localconfig.xml" overwrite="true" />
@@ -632,6 +638,7 @@
 			<param name="param.data.dir" value="${zimbra.home.dir}/data" />
 			<param name="param.development" value="true" />
 			<param name="param.port" value="7733" />
+			<param name="param.production" value="false" />
 		</antcall>
 		<copy todir="${zimbra.home.dir}" overwrite="true">
 			<fileset dir="${dist.dir}"/>
@@ -762,6 +769,7 @@
 		<replace file="${dist.data.dir}/jetty/etc/jetty.xml" token="@install.data.root@" value="${param.data.dir}"/>
 		<replace file="${dist.data.dir}/jetty/etc/jetty.xml" token="@install.jetty.port@" value="${param.port}"/>
 		<replace file="${dist.app.dir}/jetty/etc/webdefault.xml" token="@development@" value="${param.development}"/>
+		<replace file="${dist.app.dir}/jetty/etc/webdefault.xml" token="@production@" value="${param.production}"/>
 		<replace file="${dist.data.dir}/bin/zdesktop" token="@install.app.root@" value="${param.app.dir}"/>
 		<replace file="${dist.data.dir}/bin/zdesktop" token="@install.data.root@" value="${param.data.dir}"/>
 	
@@ -994,11 +1002,13 @@
 	        <param name="param.data.dir" value="@install.data.root@" />
 			<param name="param.development" value="false" />
 			<param name="param.port" value="0" />
+			<param name="param.production" value="true" />
 		</antcall>
 		<antcall target="offline-install-misc" />
 		<antcall target="offline-prep-prism" />
 		<antcall target="offline-prep-launcher" />
 		<antcall target="offline-jspc" />
+		<antcall target="offline-compress" />
 		<antcall target="offline-jre" />
 
 		<if><isset property="is-unix" /><then>
