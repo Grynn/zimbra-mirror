@@ -5030,6 +5030,44 @@
     </tag>
 
     <tag>
+        <description>get document content</description>
+        <name>getDocumentContent</name>
+        <tag-class>com.zimbra.cs.taglib.tag.briefcase.GetDocumentContentTag</tag-class>
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+        <attribute>
+            <description>ZMailboxBean object to use</description>
+            <name>box</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZMailboxBean</type>
+        </attribute>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the result String.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>document id</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+         <attribute>
+            <description>charset eg. UTF-8 (default), ISO-8859-1 etc.</description>
+            <name>charset</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    
+    <tag>
         <description>Save attachments as documents to a briefcase folder</description>
         <name>saveAttachmentsToBriefcase</name>
         <tag-class>com.zimbra.cs.taglib.tag.msg.SaveAttachmentsToBriefcaseTag</tag-class>
