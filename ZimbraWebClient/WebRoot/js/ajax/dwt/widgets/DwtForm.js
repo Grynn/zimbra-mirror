@@ -55,6 +55,7 @@ DwtForm.PARAMS = DwtControl.PARAMS.concat("form", "model");
 //
 
 DwtForm.prototype.setValue = function(id, value, force) {
+	if (typeof id != "string") id = String(id);
 	if (id.match(/\./) || id.match(/\[/)) {
 		var parts = id.replace(/\[(\d+)\](\.)?/,".$1$2").split(".");
 		var control = this.getControl(parts[0]);
@@ -70,6 +71,7 @@ DwtForm.prototype.setValue = function(id, value, force) {
 	this._setControlValue(id, value);
 };
 DwtForm.prototype.getValue = function(id, defaultValue) {
+	if (typeof id != "string") id = String(id);
 	if (id.match(/\./) || id.match(/\[/)) {
 		var parts = id.replace(/\[(\d+)\](\.)?/,".$1$2").split(".");
 		var control = this.getControl(parts[0]);
@@ -88,6 +90,7 @@ DwtForm.prototype.getValue = function(id, defaultValue) {
 };
 
 DwtForm.prototype.getControl = function(id) {
+	if (typeof id != "string") id = String(id);
 	var item = this._items[id];
 	return item && item.control;
 };
