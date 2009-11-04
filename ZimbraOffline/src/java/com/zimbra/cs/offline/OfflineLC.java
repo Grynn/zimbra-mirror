@@ -59,6 +59,8 @@ public class OfflineLC {
     public static final KnownKey zdesktop_sync_skip_idlist;
     
     public static final KnownKey zdesktop_request_timeout;
+    public static final KnownKey zdesktop_authreq_timeout;
+    public static final KnownKey zdesktop_authreq_retry_interval;
     public static final KnownKey http_so_timeout;
     public static final KnownKey http_connection_timeout;
     public static final KnownKey dns_cache_ttl;
@@ -263,6 +265,14 @@ public class OfflineLC {
         zdesktop_request_timeout = new KnownKey("zdesktop_request_timeout");
         zdesktop_request_timeout.setDefault("30000");
         zdesktop_request_timeout.setDoc("HTTP request timeout in milliseconds while waiting for response. A value of zero means no timeout. Default 30000 (30 seconds).");
+
+        zdesktop_authreq_timeout = new KnownKey("zdesktop_authreq_timeout");
+        zdesktop_authreq_timeout.setDefault("6000");
+        zdesktop_authreq_timeout.setDoc("HTTP request timeout in milliseconds while waiting for auth response. A value of zero means no timeout. Default 6000 (6 seconds).");
+
+        zdesktop_authreq_retry_interval = new KnownKey("zdesktop_authreq_retry_interval");
+        zdesktop_authreq_retry_interval.setDefault("60000");
+        zdesktop_authreq_retry_interval.setDoc("Number of milliseconds to wait before resending auth request. Default 60000 (1 minute).");
 
         http_so_timeout = new KnownKey("http_so_timeout");
         http_so_timeout.setDefault("30000");

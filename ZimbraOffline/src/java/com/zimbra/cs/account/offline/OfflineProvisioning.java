@@ -2438,7 +2438,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (isZcsAccount(account) || isMountpointAccount(account)) {
             String id = isMountpointAccount(account) ? account.getAttr(A_offlineMountpointProxyAccountId) : acctId;
             ZcsMailbox ombx = (ZcsMailbox)MailboxManager.getInstance().getMailboxByAccountId(id, false);
-            return ombx.getAuthToken().getValue();
+            ZAuthToken at = ombx.getAuthToken(false);
+            return at == null ? null : at.getValue();
         } else {
             return null;
         }
