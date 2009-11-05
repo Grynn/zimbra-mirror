@@ -13,8 +13,10 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
 	include $(CURL_ROOT)/../beta_versions.def
+	PATCH := echo
 else
 	include $(CURL_ROOT)/../versions.def
+	PATCH	:= patch -N -g0 -p1 < ../patches/krb5.patch
 endif
 
 CURL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/curl/curl-$(CURL_VERSION).tgz
@@ -54,6 +56,7 @@ all: allclean build tar
 build:
 	tar xzf src/curl-$(CURL_VERSION).tar.gz
 	(cd curl-$(CURL_VERSION); \
+	$(PATCH); \
 	DYLD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(HEIMDAL_LIB_DIR) -L$(CURL_LIB_DIR) \
