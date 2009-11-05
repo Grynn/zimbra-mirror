@@ -32,6 +32,7 @@ build:
 	mv openldap-$(LDAP_RELEASE) openldap-$(LDAP_VERSION); \
 	cd openldap-$(LDAP_VERSION); \
 	patch -g0 -N -p1 < ../patches/ITS5037.patch; \
+	patch -g0 -N -p1 < ../patches/ITS6360.patch; \
 	patch -g0 -N -p1 < ../patches/leopard.fix; \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_CLIB_DIR) -L$(LIBTOOL_LIB_DIR) \
 		 -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(LDAP_CLIB_DIR) -R$(LIBTOOL_LIB_DIR)" \
