@@ -13,6 +13,7 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
 	include $(CYRUS_ROOT)/../beta_versions.def
+	BSTR	:= beta
 else
 	include $(CYRUS_ROOT)/../versions.def
 endif
@@ -25,7 +26,7 @@ build:
 ifneq	(,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	@echo "Building cyrus-sasl for $(BUILD_PLATFORM)"
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl
-	_S_='~' ./zimbra-cyrus-sasl-build.sh
+	_S_='~' ./zimbra-cyrus-sasl-build.sh ${BSTR}
 	(cd build/cyrus-sasl-$(CYRUS_VERSION); $(MAKE) install)
 	(./fix-sasl.pl)
 	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
@@ -33,7 +34,7 @@ ifneq	(,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	cyrus-sasl-$(CYRUS_VERSION))
 else
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl
-	_S_='~' ./zimbra-cyrus-sasl-build.sh
+	_S_='~' ./zimbra-cyrus-sasl-build.sh ${BSTR}
 	(cd build/cyrus-sasl-$(CYRUS_VERSION); $(MAKE) install)
 	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
 	tar czf $(CYRUS_TGZ_TARGET) \

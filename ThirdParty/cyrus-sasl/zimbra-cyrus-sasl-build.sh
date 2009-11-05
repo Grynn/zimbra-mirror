@@ -6,35 +6,26 @@
 # the steps to run autoconf from the rpm spec.  The cyrus CVS tree's
 # SMakefile is probably the source for the rpm spec.
 #
-package=cyrus-sasl
-release=2.1.23
-patchlevel=3z
-cyrus_version=${release}.${patchlevel}
-src=${package}-${cyrus_version}
-platform=`uname -s`
+BETA=$1
+if [ x$BETA = "xbeta" ]; then
+  source ../beta_versions.sh
+else
+  source ../versions.sh
+fi
 
+platform=`uname -s`
 cyrus_root=`pwd`
 p4_root=`cd ${cyrus_root}/../..; pwd`
 build_platform=`sh ${p4_root}/ZimbraBuild/rpmconf/Build/get_plat_tag.sh`
 
-heimdal_version=1.2.1
-openssl_version=0.9.8k
-curl_version=7.19.7
-xml2_version=2.6.32.1
-
-openssl_lib_dir=/opt/zimbra/openssl-${openssl_version}/lib
-heimdal_lib_dir=/opt/zimbra/heimdal-${heimdal_version}/lib
-cyrus_lib_dir=/opt/zimbra/cyrus-sasl-${cyrus_version}/lib
-curl_lib_dir=/opt/zimbra/curl-${curl_version}/lib
-
 rm -fr build
 mkdir build
 cd build
-tar xfz ../src/cyrus-sasl-${release}.tar.gz  -C .
-chmod -R +w ${package}-${release}
-mv ${package}-${release} ${src}
+tar xfz ../src/cyrus-sasl-${cyrus_release}.tar.gz  -C .
+chmod -R +w cyrus-sasl-${cyrus_release}
+mv cyrus-sasl-${cyrus_release} ${cyrus_src}
 
-cd ${src}
+cd ${cyrus_src}
 patch -g0 -p1 < ../../sasl-link-order.patch
 patch -g0 -p1 < ../../sasl-darwin.patch
 patch -g0 -p1 < ../../sasl-auth-zimbra.patch
@@ -75,9 +66,9 @@ sed -i.obak -e 's|${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' -e 's|${
 
 sed -i.bak 's/-lRSAglue //' configure
 if [ $platform = "Darwin" ]; then
-LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
-            --with-saslauthd=/opt/zimbra/${src}/state \
-            --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
+LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${cyrus_src} \
+            --with-saslauthd=/opt/zimbra/${cyrus_src}/state \
+            --with-plugindir=/opt/zimbra/${cyrus_src}/lib/sasl2 \
             --enable-static=no \
             --enable-shared \
             --with-dblib=no \
@@ -88,9 +79,9 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \
             --enable-login
 else 
-LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
-            --with-saslauthd=/opt/zimbra/${src}/state \
-            --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
+LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${cyrus_src} \
+            --with-saslauthd=/opt/zimbra/${cyrus_src}/state \
+            --with-plugindir=/opt/zimbra/${cyrus_src}/lib/sasl2 \
             --with-dblib=no \
             --with-openssl=/opt/zimbra/openssl-${openssl_version} \
             --with-libcurl=/opt/zimbra/curl-${curl_version}/bin/curl-config \
