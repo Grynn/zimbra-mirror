@@ -224,6 +224,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
                         Zimbra.halt("Caught out of memory error", e);
                     OfflineLog.offline.warn("Caught exception in timer ", e);
                 }
+                System.gc();
             }
         };
 
