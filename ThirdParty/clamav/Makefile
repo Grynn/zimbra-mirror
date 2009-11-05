@@ -13,8 +13,10 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
 	include $(CLAMAV_ROOT)/../beta_versions.def
+	PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-953.patch
 else
 	include $(CLAMAV_ROOT)/../versions.def
+	PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-95.patch
 endif
 
 CLAMAV_TGZ_TARGET := \
@@ -25,7 +27,7 @@ all: allclean build tar
 build:
 	(tar xzf src/clamav-$(CLAMAV_VERSION).tar.gz; \
 	cd clamav-$(CLAMAV_VERSION); \
-	patch -N -g0 -p1 < ../patches/fix-configure-95.patch; \
+	$(PATCH); \
 	CFLAGS="-g -O2" \
 	CPPFLAGS="-I/opt/zimbra/sendmail-$(SENDMAIL_VERSION)/include" \
 	LDFLAGS="-L/opt/zimbra/sendmail-$(SENDMAIL_VERSION)/lib" \
