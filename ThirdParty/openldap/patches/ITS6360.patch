@@ -1,11 +1,5 @@
-Index: cache.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/cache.c,v
-retrieving revision 1.211
-retrieving revision 1.214
-diff -u -p -r1.211 -r1.214
---- cache.c	21 Oct 2009 18:15:15 -0000	1.211
-+++ cache.c	4 Nov 2009 05:09:51 -0000	1.214
+--- openldap-2.4.19/servers/slapd/back-bdb/cache.c	21 Oct 2009 18:15:15 -0000	1.211
++++ openldap-2.4.19/servers/slapd/back-bdb/cache.c	4 Nov 2009 05:09:51 -0000	1.214
 @@ -972,6 +972,9 @@ load1:
  				 */
  				if ( (*eip)->bei_state & CACHE_ENTRY_NOT_CACHED ) {
