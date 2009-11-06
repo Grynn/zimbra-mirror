@@ -56,7 +56,6 @@ DBD_PERL_LIBS 	:= \
 	DBD::mysql \
 
 PRE_PERL_LIBS	:= \
-	D/DA/DAVECROSS/Array-Compare-1.18.tar.gz \
 	Tree::DAG_Node \
 	Sub::Uplevel \
 	Test::Exception \
@@ -125,6 +124,9 @@ PERL_LIBS 	:= \
 	XML::Simple \
 	IO::Socket::INET6 \
 	DBD::SQLite
+
+Array_Compare := \
+	Array-Compare-1.17
 
 NET_SSLeay := \
 	Net-SSLeay-1.35
@@ -228,6 +230,15 @@ build:
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) LIBS="-L$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -lssl -lcrypto" INC="-I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include"; \
 			LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
+
+	@for lib in $(ARRAY_COMPARE); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+			$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
