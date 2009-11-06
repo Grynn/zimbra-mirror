@@ -14,8 +14,10 @@ PERL_VERSION :=	$(shell /usr/bin/perl -e 'print "$$]"')
 
 BUILD_TYPE	:= PREFIX
 
+LBIT		:=
 ifeq (5.01,$(findstring 5.01,$(PERL_VERSION)))
 	BUILD_TYPE	:= INSTALL_BASE
+	LBIT		:= ln -s ../lib perl5
 endif
 
 ifdef BETA
@@ -352,6 +354,7 @@ $(PERL_TGZ_DEST_DIR):
 
 $(DEST_LIB_DIR):
 	mkdir -p $@
+	$(LBIT)
 
 $(DEST_BIN_DIR):
 	mkdir -p $@
