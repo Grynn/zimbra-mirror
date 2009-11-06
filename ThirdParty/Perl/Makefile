@@ -10,7 +10,7 @@ LOGFILE ?= ThirdParty-Perllibs.log
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
-PERL_VERSION :=	$(shell /usr/bin/perl -e "print $]")
+PERL_VERSION :=	$(shell /usr/bin/perl -e 'print "$$]"')
 
 BUILD_TYPE	:= PREFIX
 
