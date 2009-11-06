@@ -56,6 +56,7 @@ DBD_PERL_LIBS 	:= \
 	DBD::mysql \
 
 PRE_PERL_LIBS	:= \
+	Moose \
 	Array::Compare \
 	Tree::DAG_Node \
 	Sub::Uplevel \
