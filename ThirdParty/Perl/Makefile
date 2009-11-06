@@ -5,19 +5,39 @@ SHELL	:= /bin/bash
 PERL_ROOT ?= $(shell pwd)
 P4_ROOT ?= $(shell cd $(PERL_ROOT)/../..; pwd)
 ZIMBRA_HOME ?= /opt/zimbra
+JAVA_HOME		:= /usr/local/java
+export JAVA_HOME
+TMPDIR	:= tmp
+BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
+PERL_TGZ_DEST_DIR := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/perl
+PERL_TGZ_DEST	:= $(PERL_TGZ_DEST_DIR)/perllib.tgz
+PERL_BIN_TGZ_DEST := $(PERL_TGZ_DEST_DIR)/perlbin.tgz
+
+ifeq ($(BUILD_PLATFORM), )
+        BUILD_PLATFORM := "UNKNOWN"
+endif
+
+DEST_DIR		:= $(PERL_ROOT)/zimbramon
+DEST_LIB_DIR	:= $(DEST_DIR)/lib
+DEST_BIN_DIR	:= $(DEST_DIR)/bin
+
+ifeq ($(BUILD_PLATFORM), MACOSX)
+	DEST_BIN_DIR  :=	$(DEST_DIR)/usr/bin
+endif
+
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
+	DEST_BIN_DIR  :=	$(DEST_DIR)/bin
+endif
 
 LOGFILE ?= ThirdParty-Perllibs.log
 
-BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
-
 PERL_VERSION :=	$(shell /usr/bin/perl -e 'print "$$]"')
-
 BUILD_TYPE	:= PREFIX
-
 LBIT		:=
+
 ifeq (5.01,$(findstring 5.01,$(PERL_VERSION)))
 	BUILD_TYPE	:= INSTALL_BASE
-	LBIT		:= ln -s ../lib perl5
+	LBIT		:= (cd $(DEST_LIB_DIR); ln -s ../lib perl5)
 endif
 
 ifdef BETA
@@ -171,37 +191,6 @@ XML_PARSER = \
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
 
-JAVA_HOME		:= /usr/local/java
-export JAVA_HOME
-
-TMPDIR	:= tmp
-
-PERL_LIB_SOURCE  := $(shell pwd)
-
-P4_ROOT ?= $(shell cd $(PERL_LIB_SOURCE)/../..; pwd)
-
-BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
-
-PERL_TGZ_DEST_DIR := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/perl
-PERL_TGZ_DEST	:= $(PERL_TGZ_DEST_DIR)/perllib.tgz
-PERL_BIN_TGZ_DEST := $(PERL_TGZ_DEST_DIR)/perlbin.tgz
-
-ifeq ($(BUILD_PLATFORM), )
-        BUILD_PLATFORM := "UNKNOWN"
-endif
-
-DEST_DIR		:= $(PERL_LIB_SOURCE)/zimbramon
-DEST_LIB_DIR	:= $(DEST_DIR)/lib
-DEST_BIN_DIR	:= $(DEST_DIR)/bin
-
-ifeq ($(BUILD_PLATFORM), MACOSX)
-	DEST_BIN_DIR  :=	$(DEST_DIR)/usr/bin
-endif
-
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
-	DEST_BIN_DIR  :=	$(DEST_DIR)/bin
-endif
-
 # TARGETS
 
 CLEAN_TARGETS	=	\
@@ -218,7 +207,7 @@ build:
 
 	@for lib in $(CRYPT_SSLeay); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) --lib=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib LDFLAGS="-L$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib"; \
 			LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
@@ -227,7 +216,7 @@ build:
 
 	@for lib in $(CRYPT_RANDOM); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) LIBS="-L$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -lssl -lcrypto" INC="-I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include"; \
 			LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
@@ -236,7 +225,7 @@ build:
 
 	@for lib in $(CRYPT_RSA); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) LIBS="-L$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -lssl -lcrypto" INC="-I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include"; \
 			LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
@@ -245,7 +234,7 @@ build:
 
 	@for lib in $(ARRAY_COMPARE); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 			$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
@@ -260,7 +249,7 @@ build:
 
 	@for lib in $(NET_SSLeay); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 		OPENSSL_PREFIX=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 		LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
@@ -269,7 +258,7 @@ build:
 	
 	@for lib in $(XML_PARSER); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) $(EXPAT_LIB) $(EXPAT_INCLUDE); \
 		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
@@ -284,7 +273,7 @@ build:
 
 	@for lib in $(LDAPAPI); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) \
 				-sdk openldap -lib_path $(LDAP_CLIB_DIR) -include_path $(LDAP_INCLUDE) -sasl_include_path $(SASL_INCLUDE); \
@@ -294,7 +283,7 @@ build:
 
 	@for lib in $(BDB_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 		BERKELEYDB_INCLUDE=$(BDB_INCLUDE) BERKELEYDB_LIB=$(BDB_LIB_DIR) $(BDB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 		LD_RUN_PATH=$(BDB_LIB_DIR) $(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
@@ -313,7 +302,7 @@ build:
 
 	@for lib in $(SA_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib" ...; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(ZIMBRA_HOME)/zimbramon LIB=$(ZIMBRA_HOME)/zimbramon/lib DATADIR=$(ZIMBRA_HOME)/conf/spamassassin CONFDIR=/etc/mail/spamassassin LOCALSTATEDIR=/var/spamassassin; \
 			$(MAKE); $(MAKE) install DESTDIR=$(DEST_DIR); \
@@ -324,7 +313,7 @@ build:
 
 	@for lib in $(SWATCH); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
 			$(SED) -i .bak -e 's#/usr/lib/sendmail /usr/sbin/sendmail#/opt/zimbra/postfix/sbin/sendmail#' lib/Swatch/Actions.pm; \
 			rm -f lib/Swatch/Actions.pm.bak; \
