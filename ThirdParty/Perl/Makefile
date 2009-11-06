@@ -14,8 +14,8 @@ PERL_VERSION :=	$(shell /usr/bin/perl -e "print $]")
 
 BUILD_TYPE	:= PREFIX
 
-ifeq (5.01,$(findstring 5.01,$(PERL_VERSION))
-BUILD_TYPE	:= INSTALL_BASE
+ifeq (5.01,$(findstring 5.01,$(PERL_VERSION)))
+	BUILD_TYPE	:= INSTALL_BASE
 endif
 
 ifdef BETA
