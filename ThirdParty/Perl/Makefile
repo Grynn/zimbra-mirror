@@ -10,6 +10,14 @@ LOGFILE ?= ThirdParty-Perllibs.log
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
+PERL_VERSION :=	$(shell /usr/bin/perl -e "print $]")
+
+BUILD_TYPE	:= PREFIX
+
+ifeq (5.01,$(findstring 5.01,$(PERL_VERSION))
+BUILD_TYPE	:= INSTALL_BASE
+endif
+
 ifdef BETA
 	include $(PERL_ROOT)/../beta_versions.def
 else
@@ -350,7 +358,7 @@ $(DEST_BIN_DIR):
 
 setup:
 	mkdir -p ${HOME}/.cpan/CPAN
-	sed -e "s|@@LYNX@@|$(LYNX)|g" -e "s|@@WGET@@|$(WGET)|g" -e "s|@@LESS@@|$(LESS)|g" -e "s|@@GPG@@|$(GPG)|g" -e "s|@@UNZIP@@|$(UNZIP)|g" -e "s|@@CURL@@|$(CURL)|g" -e "s|@@BZIP2@@|$(BZIP2)|g" -e "s|@@MAKE@@|$(MAKE)|g" -e "s|@@FTP@@|$(FTP)|g" -e "s|@@TAR@@|$(TAR)|g" -e "s|@@GZIP@@|$(GZIP)|g" -e "s|@@BUILD_ROOT@@|$(PERL_ROOT)|g" -e "s|@@CMIRROR@@|$(CMIRROR)|g" MyConfig.pm.template > ${HOME}/.cpan/CPAN/MyConfig.pm 
+	sed -e "s|@@LYNX@@|$(LYNX)|g" -e "s|@@WGET@@|$(WGET)|g" -e "s|@@LESS@@|$(LESS)|g" -e "s|@@GPG@@|$(GPG)|g" -e "s|@@UNZIP@@|$(UNZIP)|g" -e "s|@@CURL@@|$(CURL)|g" -e "s|@@BZIP2@@|$(BZIP2)|g" -e "s|@@MAKE@@|$(MAKE)|g" -e "s|@@FTP@@|$(FTP)|g" -e "s|@@TAR@@|$(TAR)|g" -e "s|@@GZIP@@|$(GZIP)|g" -e "s|@@BUILD_TYPE@@|$(BUILD_TYPE)|g" -e "s|@@BUILD_ROOT@@|$(PERL_ROOT)|g" -e "s|@@CMIRROR@@|$(CMIRROR)|g" MyConfig.pm.template > ${HOME}/.cpan/CPAN/MyConfig.pm 
 
 p4edit: $(PERL_TGZ_DEST) 
 	p4 add $(PERL_TGZ_DEST)
