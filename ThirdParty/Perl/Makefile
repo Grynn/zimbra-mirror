@@ -125,7 +125,7 @@ PERL_LIBS 	:= \
 	IO::Socket::INET6 \
 	DBD::SQLite
 
-Array_Compare := \
+ARRAY_COMPARE	:= \
 	Array-Compare-1.17
 
 NET_SSLeay := \
