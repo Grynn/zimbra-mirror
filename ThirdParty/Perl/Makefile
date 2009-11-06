@@ -56,8 +56,7 @@ DBD_PERL_LIBS 	:= \
 	DBD::mysql \
 
 PRE_PERL_LIBS	:= \
-	Moose \
-	Array::Compare \
+	Array-Compare-1.18.tar.gz \
 	Tree::DAG_Node \
 	Sub::Uplevel \
 	Test::Exception \
