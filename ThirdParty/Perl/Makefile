@@ -31,7 +31,7 @@ SED     := $(shell which sed)
 UNZIP	:= $(shell which unzip)
 CMIRROR	?= http://buildmaster.lab.zimbra.com:8080/cpan/
 
-BDB_INCLUDELUDE	:= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
+BDB_INCLUDE	:= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
 MYSQL_INCLUDE	:= $(ZIMBRA_HOME)/mysql/include
 LDAP_INCLUDE 	:= $(ZIMBRA_HOME)/openldap/include
 SASL_INCLUDE	:= $(ZIMBRA_HOME)/cyrus-sasl/include
