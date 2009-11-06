@@ -214,7 +214,11 @@ public abstract class SyncMailbox extends DesktopMailbox {
     protected synchronized void initSyncTimer() throws ServiceException {
         cancelCurrentTask();
         currentTask = new TimerTask() {
+            private Long lastGC = new Long(0);
+            
             public void run() {
+                boolean doGC;
+                
                 if (ZimbraApplication.getInstance().isShutdown())
                     return;
                 try {
@@ -224,11 +228,18 @@ public abstract class SyncMailbox extends DesktopMailbox {
                         Zimbra.halt("Caught out of memory error", e);
                     OfflineLog.offline.warn("Caught exception in timer ", e);
                 }
-                System.gc();
+                synchronized (lastGC) {
+                    long now = System.currentTimeMillis();
+                    
+                    doGC = now - lastGC > 5 * 60 * Constants.MILLIS_PER_SECOND;
+                    lastGC = now;
+                }
+                if (doGC)
+                    System.gc();
             }
         };
 
-        timer = new Timer("mid=" + getId());
+        timer = new Timer("sync-" + getId() + '-' + getAccount().getName());
         timer.schedule(currentTask, 10 * Constants.MILLIS_PER_SECOND,
             5 * Constants.MILLIS_PER_SECOND);
     }
