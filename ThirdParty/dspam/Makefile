@@ -43,6 +43,8 @@ build:
 	--enable-large-scale --with-storage-driver=hash_drv,mysql_drv \
 	--with-mysql-includes=$(MYSQL_INCLUDE_DIR) \
 	--with-mysql-libraries=$(ZIMBRA_HOME)/mysql/lib \
+	--with-dspam-home-group=root \
+	--with-dspam-mode=0755 \
 	--enable-debug --enable-clamav; \
 	$(MAKE) $(MAKEARGS); $(MAKE) install)
 	(cd $(ZIMBRA_HOME); ln -s dspam-$(DSPAM_VERSION) dspam)
