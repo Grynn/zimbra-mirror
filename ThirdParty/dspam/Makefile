@@ -44,6 +44,7 @@ build:
 	--with-mysql-includes=$(MYSQL_INCLUDE_DIR) \
 	--with-mysql-libraries=$(ZIMBRA_HOME)/mysql/lib \
 	--with-dspam-home-group=root \
+	--with-dspam-group=root \
 	--with-dspam-mode=0755 \
 	--enable-debug --enable-clamav; \
 	$(MAKE) $(MAKEARGS); $(MAKE) install)
