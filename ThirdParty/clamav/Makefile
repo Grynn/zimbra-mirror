@@ -13,7 +13,7 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
 	include $(CLAMAV_ROOT)/../beta_versions.def
-	PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-953.patch
+	PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-953.patch; patch -N -g0 -p1 < ../patches/patch-0.95.3-bug1737.patch
 else
 	include $(CLAMAV_ROOT)/../versions.def
 	PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-95.patch
