@@ -64,16 +64,8 @@
 			<param-value>@jsVersion@</param-value>
 		</init-param>
 		<init-param>
-			<param-name>extensions</param-name>
-			<param-value>.zgz</param-value>
-		</init-param>
-		<init-param>
-			<param-name>GzipExtension</param-name>
-			<param-value>.zgz</param-value>
-		</init-param>
-		<init-param>
 			<param-name>shouldSupportGzip</param-name>
-			<param-value>true</param-value>
+			<param-value>false</param-value>
 		</init-param>
 		<init-param>
 			<param-name>Expires</param-name>
