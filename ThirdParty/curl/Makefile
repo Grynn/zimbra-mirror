@@ -13,11 +13,11 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
 	include $(CURL_ROOT)/../beta_versions.def
-	PATCH := echo
 else
 	include $(CURL_ROOT)/../versions.def
-	PATCH	:= patch -N -g0 -p1 < ../patches/krb5.patch
 endif
+
+PATCH	:= patch -N -g0 -p1 < ../patches/krb5.patch
 
 CURL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/curl/curl-$(CURL_VERSION).tgz
 

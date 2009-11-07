@@ -4,8 +4,8 @@ cyrus_version=${cyrus_release}.${cyrus_patchlevel}
 cyrus_src=cyrus-sasl-${cyrus_version}
 
 heimdal_version=1.2.1
-openssl_version=0.9.8k
-curl_version=7.19.6
+openssl_version=0.9.8l
+curl_version=7.19.7
 xml2_version=2.6.32.1
 
 openssl_lib_dir=/opt/zimbra/openssl-${openssl_version}/lib
