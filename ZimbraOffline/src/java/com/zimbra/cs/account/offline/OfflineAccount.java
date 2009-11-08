@@ -30,7 +30,9 @@ public class OfflineAccount extends Account {
 	Account localAccount; //the local account that acts as everyone's parent. this will be null if this account itself is the local account
 	
 	public static class Version {
-		private int major;
+	    private static Version v6 = new Version("6.0.0");
+	    
+	    private int major;
 		private int minor;
 		private int maintenance;
 
@@ -64,6 +66,10 @@ public class OfflineAccount extends Account {
 		public boolean isAtLeast(Version required) {
 			return major > required.major || major == required.major && minor > required.minor ||
 			       major == required.major && minor == required.minor && maintenance >= required.maintenance;
+		}
+		
+		public boolean isAtLeast6xx() {
+		    return isAtLeast(v6);
 		}
 		
 		public String toString() { return "" + major + "." + minor + "." + maintenance; }

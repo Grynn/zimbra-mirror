@@ -16,6 +16,7 @@ package com.zimbra.cs.account.offline;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,6 +40,7 @@ import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.Provisioning.SignatureBy;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.filter.RuleManager;
+import com.zimbra.cs.filter.RuleRewriter;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.offline.OfflineLC;
@@ -175,13 +177,16 @@ public class DirectorySync {
             ZMailbox zmbx = prov.newZMailbox((OfflineAccount)acct, AccountConstants.USER_SERVICE_URI);
             syncAccount(prov, acct, zmbx);
             pushAccount(prov, acct, zmbx);
-            syncFilterRules(prov, acct, zmbx);
+            if (((OfflineAccount)acct).getRemoteServerVersion().isAtLeast6xx())
+                syncFilterRules(prov, acct, zmbx);
+            else
+                syncRules5xx(prov, acct, zmbx);
 
             // FIXME: there's a race condition here, as <tt>acct</tt> may have been modified during the push
             prov.markAccountClean(acct);
             return true;
         } catch (Exception e) {
-            OfflineSyncManager.getInstance().processSyncException(acct, e);
+            OfflineSyncManager.getInstance().processSyncException(acct, e, false);
             return false;
         }
     }
@@ -206,7 +211,39 @@ public class DirectorySync {
             }
         }
     }
-
+    
+    private void syncRules5xx(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
+        Set<String> modified = acct.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
+        if (modified.contains(Provisioning.A_zimbraMailSieveScript)) {
+            Element xmlRules = RuleManager.getRulesAsXML(XMLElement.mFactory, acct, false);
+            RuleRewriter.sanitizeRules(xmlRules);
+            saveRulesTo5xxServer(zmbx, xmlRules);
+            OfflineLog.offline.debug("dsync: pushed %d filter rules: %s", xmlRules.listElements().size(), acct.getName());
+        } else {
+            Element xmlRules = getRulesFrom5xxServer(zmbx);
+            RuleRewriter.sanitizeRules(xmlRules);
+            try {
+                RuleManager.setXMLRules(acct, xmlRules, false);
+                OfflineLog.offline.debug("dsync: pulled %d filter rules: %s", xmlRules.listElements().size(), acct.getName());
+            } catch (ServiceException x) {
+                //bug 37422
+                OfflineLog.offline.warn("dsync: pulled %d filter rules:\n%s", xmlRules.listElements().size(), xmlRules.prettyPrint(), x);
+            }
+        }
+    }
+    
+    private void saveRulesTo5xxServer(ZMailbox zmbx, Element xmlRules) throws ServiceException {
+        Element req = zmbx.newRequestElement(MailConstants.SAVE_RULES_REQUEST);
+        req.addElement(xmlRules);
+        zmbx.invoke(req);
+    }
+    
+    private Element getRulesFrom5xxServer(ZMailbox zmbx) throws ServiceException {
+        Element req = zmbx.newRequestElement(MailConstants.GET_RULES_REQUEST);
+        Element resp = zmbx.invoke(req);
+        return resp.getElement(MailConstants.E_RULES);
+    }
+    
     private void syncAccount(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
         ZGetInfoResult zgi = zmbx.getAccountInfo(false);
         Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(acct);
@@ -286,6 +323,15 @@ public class DirectorySync {
     private static boolean isLocallyCreated(Entry e) {
         return e.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs).contains(OfflineProvisioning.A_offlineDn);
     }
+    
+    private static Map<String, Object> scrubAttributes(Map<String, Object> attrs) {
+        for (Iterator<java.util.Map.Entry<String, Object>> i = attrs.entrySet().iterator(); i.hasNext();) {
+            String name = i.next().getKey();
+            if (OfflineProvisioning.sOfflineAttributes.contains(name))
+                i.remove();
+        }
+        return attrs;
+    }
 
     @SuppressWarnings("unchecked")
     private static Map<String, Object> diffAttributes(Entry e, Map<String, Object> attrs) {
@@ -355,7 +401,7 @@ public class DirectorySync {
         if (ident == null) {
             // if we're here and haven't locally deleted the identity, it's a new one and needs to be created
             if (!acct.getMultiAttrSet(OfflineProvisioning.A_offlineDeletedIdentity).contains(identityId)) {
-                ident = prov.createIdentity(acct, name, attrs, false);
+                ident = prov.createIdentity(acct, name, scrubAttributes(attrs), false);
                 OfflineLog.offline.debug("dsync: created identity: " + acct.getName() + '/' + ident.getName());
             }
         } else {
@@ -393,7 +439,7 @@ public class DirectorySync {
         if (signature == null) {
             if (!acct.getMultiAttrSet(OfflineProvisioning.A_offlineDeletedSignature).contains(signatureId)) {
                 // if we're here and haven't locally deleted the signature, it's a new one and needs to be created
-                signature = prov.createSignature(acct, name, attrs, false);
+                signature = prov.createSignature(acct, name, scrubAttributes(attrs), false);
                 OfflineLog.offline.debug("dsync: created signature: " + acct.getName() + '/' + signature.getName());
             }
         } else {
@@ -498,6 +544,7 @@ public class DirectorySync {
 
         Map<String, Object> attrs = ident.getAttrs();
         attrs.remove(OfflineProvisioning.A_offlineModifiedAttrs);
+        scrubAttributes(attrs);
         ZIdentity zident = new ZIdentity(ident.getName(), attrs);
 
         // create or modify the identity, as requested
@@ -550,6 +597,7 @@ public class DirectorySync {
 
         Map<String, Object> attrs = signature.getAttrs();
         attrs.remove(OfflineProvisioning.A_offlineModifiedAttrs);
+        scrubAttributes(attrs);
         String sigType = signature.getAttr(Provisioning.A_zimbraPrefMailSignatureHTML, null) == null ? "text/plain" : "text/html";
         ZSignature zsig = new ZSignature(signature.getId(), signature.getName(), signature.getAttr(Signature.mimeTypeToAttrName(sigType)), sigType);
 

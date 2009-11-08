@@ -473,12 +473,20 @@ public class OfflineSyncManager {
     public void processSyncException(Account account, Exception exception) {
         processSyncException(account.getName(), ((OfflineAccount)account).getRemotePassword(), exception, ((OfflineAccount)account).isDebugTraceEnabled());
     }
+    
+    public void processSyncException(Account account, Exception exception, boolean markSyncFail) {
+        processSyncException(account.getName(), ((OfflineAccount)account).getRemotePassword(), exception, ((OfflineAccount)account).isDebugTraceEnabled(), markSyncFail);
+    }
 
     public void processSyncException(DataSource dataSource, Exception exception) throws ServiceException {
         processSyncException(dataSource.getName(), dataSource.getDecryptedPassword(), exception, dataSource.isDebugTraceEnabled());
     }
 
     public void processSyncException(String targetName, String password, Exception exception, boolean isDebugTraceOn) {
+        processSyncException(targetName, password, exception, isDebugTraceOn, true);
+    }
+    
+    public void processSyncException(String targetName, String password, Exception exception, boolean isDebugTraceOn, boolean markSyncFail) {
         Throwable cause = SystemUtil.getInnermostException(exception);
         String code = null;
         if (cause instanceof ServiceException)
@@ -502,7 +510,8 @@ public class OfflineSyncManager {
                 OfflineLog.offline.debug("sync remote auth failure: " + targetName, exception);
         } else {
             code = code == null ? OfflineServiceException.UNEXPECTED : code;
-            syncFailed(targetName, code, cause.getMessage(), exception);
+            if (markSyncFail)
+                syncFailed(targetName, code, cause.getMessage(), exception);
             OfflineLog.offline.error("sync failure: " + targetName, exception);
             if (exception instanceof SoapFaultException) {
                 SoapFaultException x = (SoapFaultException)exception;
