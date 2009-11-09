@@ -37,7 +37,7 @@ ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
              --http-proxy-temp-path=$(ZIMBRA_HOME)/data/tmp \
              --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp \
              --with-mail_ssl_module; \
-	LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib:$(CYRUS_LIB_DIR)" make; make install)
+	LD_RUN_PATH="/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:$(CYRUS_LIB_DIR)" make; make install)
 else
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
 	./configure \
@@ -53,7 +53,7 @@ else
              --http-proxy-temp-path=$(ZIMBRA_HOME)/data/tmp \
              --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp \
              --with-mail_ssl_module; \
-	LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib:$(CYRUS_LIB_DIR)" make; make install)
+	LD_RUN_PATH="/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:$(CYRUS_LIB_DIR)" make; make install)
 endif
 	(cd $(ZIMBRA_HOME); ln -s $(NGINX_INSTALL) nginx)
 
