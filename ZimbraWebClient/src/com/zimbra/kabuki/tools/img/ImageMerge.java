@@ -704,7 +704,7 @@ public class ImageMerge {
 				combinedHeight + " image...");
 
 		// create the combined image and write other images into it
-		BufferedImage buffImg = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_3BYTE_BGR);
+		BufferedImage buffImg = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_4BYTE_ABGR);
 		for (int i = 0; i < fileCount; i++)
 			// add this image's bits to the combined image
 			addFullColorImageBits(buffImg, originals[i]);
