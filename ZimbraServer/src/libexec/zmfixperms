@@ -246,8 +246,18 @@ fi
 if [ ! -d ${zimbra_home}/data/tmp ]; then
   mkdir -p ${zimbra_home}/data/tmp
 fi
-chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/tmp
+# Handle nginx path problems bug#42156
+if [ ! -d ${zimbra_home}/data/tmp/nginx ]; then
+  mkdir -p ${zimbra_home}/data/tmp/nginx/client
+  mkdir -p ${zimbra_home}/data/tmp/nginx/proxy
+  mkdir -p ${zimbra_home}/data/tmp/nginx/fastcgi
+fi
+chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/tmp
 chmod 755 ${zimbra_home}/data/tmp
+chmod 755 ${zimbra_home}/data/tmp/nginx
+chmod 755 ${zimbra_home}/data/tmp/nginx/client
+chmod 755 ${zimbra_home}/data/tmp/nginx/proxy
+chmod 755 ${zimbra_home}/data/tmp/nginx/fastcgi
 
 if [ -f ${zimbra_home}/.install_history ]; then
   chmod 644 ${zimbra_home}/.install_history
