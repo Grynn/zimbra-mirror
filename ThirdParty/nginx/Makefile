@@ -51,7 +51,7 @@ else
              --error-log-path=/opt/zimbra/log/nginx.log \
              --http-client-body-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/client \
              --http-proxy-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/proxy \
-             --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp/fastcgi \
+             --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/fastcgi \
              --with-mail_ssl_module; \
 	LD_RUN_PATH="$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR)" make; make install)
 endif
