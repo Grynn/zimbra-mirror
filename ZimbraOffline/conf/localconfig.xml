@@ -62,7 +62,10 @@
     <value>10</value>
   </key>
   <key name="zdesktop_mail_uncompressed_cache_max_bytes">
-    <value>20971520</value>
+    <value>2097152</value>
+  </key>
+  <key name="zdesktop_mail_uncompressed_cache_max_files">
+    <value>10</value>
   </key>
   <key name="zdesktop_message_cache_size">
     <value>25</value>
@@ -109,9 +112,6 @@
   <key name="zimbra_class_sslprotocolsocketfactory">
     <value>com.zimbra.common.util.CustomSSLProtocolSocketFactory</value>
   </key>
-  <key name="zimbra_java_path">
-    <value>jre</value>
-  </key>
   <key name="zimbra_index_completed_pool_size">
     <value>2</value>
   </key>
@@ -121,14 +121,14 @@
   <key name="zimbra_index_reindex_pool_size">
     <value>2</value>
   </key>
+  <key name="zimbra_java_path">
+    <value>jre</value>
+  </key>
   <key name="zimbra_ldap_password">
     <value>@install.key@</value>
   </key>
   <key name="zimbra_log4j_properties_watch">
     <value>0</value>
-  </key>
-  <key name="zdesktop_mail_uncompressed_cache_max_files">
-    <value>20</value>
   </key>
   <key name="zimbra_mailbox_groups">
     <value>100</value>
@@ -147,5 +147,8 @@
   </key>
   <key name="zimbra_relative_volume_path">
     <value>true</value>
+  </key>
+  <key name="zimbra_web_generate_gzip">
+    <value>false</value>
   </key>
 </localconfig>

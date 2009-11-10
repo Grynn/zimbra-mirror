@@ -38,14 +38,9 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.*;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.util.HttpUtil;
-import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.account.Config;
-import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Entry;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.util.Zimbra;
@@ -268,7 +263,8 @@ public class SkinResources
 					file = File.createTempFile("res-", "."+type, getCacheDir());
 					if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: buffer file: "+file);
 					copy(buffer, file);
-					compress(file);
+					if (LC.zimbra_web_generate_gzip.booleanValue())
+						compress(file);
 					putCacheFile(cacheId, file);
 				}
             }

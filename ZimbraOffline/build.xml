@@ -287,6 +287,10 @@
 	<!-- to skip compress, run: ant -Dnocompress=true {target} -->
 	<target name='offline-compress' unless="nocompress">
 		<fileset id="js-includes" dir="${dist.dir}/app/jetty/webapps/zimbra">
+			<include name="js/ajax/**/*.js" />
+			<include name="templates/**/*.js" />
+			<include name="tiny_mce/**/*.css" />
+			<include name="tiny_mce/**/*.js" />
 			<include name="**/*_all.js" />
 		</fileset>
 
