@@ -357,7 +357,9 @@ public class Props2JsServlet
 
     public static class PropsLoader extends ClassLoader {
         // Constants
-        private Pattern RE_LOCALE = Pattern.compile(".*(_[a-z]{2}(_[A-Z]{2})?)\\.properties");
+		private static Pattern RE_LOCALE = Pattern.compile(".*(_[a-z]{2}(_[A-Z]{2})?)\\.properties");
+		private static Pattern RE_SYSPROP = Pattern.compile("\\$\\{(.*?)\\}");
+
         // Data
         private List<String> patterns;
         private String dir;
@@ -381,6 +383,7 @@ public class Props2JsServlet
             for (String basename : this.patterns) {
                 basename = basename.replaceAll("\\$\\{dir\\}", this.dir);
                 basename = basename.replaceAll("\\$\\{name\\}", this.name);
+				basename = replaceSystemProps(basename);
                 basename += locale + ext;
                 File file = new File(basename);
                 if (file.exists()) {
@@ -394,6 +397,23 @@ public class Props2JsServlet
             }
             return super.getResourceAsStream(name);
         }
+
+		// Private
+		private static String replaceSystemProps(String s) {
+			Matcher matcher = RE_SYSPROP.matcher(s);
+			if (!matcher.find()) return s;
+			StringBuilder str = new StringBuilder();
+			int index = 0;
+			do {
+				str.append(s.substring(index, matcher.start()));
+				String pname = matcher.group(1);
+				String pvalue = System.getProperty(pname);
+				str.append(pvalue != null ? pvalue : matcher.group(0));
+				index = matcher.end();
+		    } while (matcher.find());
+			str.append(s.substring(index));
+			return str.toString();
+		}
     }
 
 } // class Props2JsServlet
