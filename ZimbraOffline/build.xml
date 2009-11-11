@@ -676,7 +676,7 @@
 		<ant dir="../Zimlet" target="package-zimlets" inheritAll="false" />
 		<ant dir="../Zimlet" target="package-zimlets-offline" inheritAll="false" />
 		<copy todir="${dist.data.dir}/zimlets" overwrite="true">
-			<fileset dir="../Zimlet/build/dist/zimlets" includes="*.zip" />
+			<fileset dir="../Zimlet/build/dist/zimlets" includes="*.zip" excludes="com_zimbra_local.zip,com_zimbra_ymemoticons.zip"/>
 			<fileset dir="../Zimlet/build/dist/zimlets-offline" includes="*.zip" />
 		</copy>
 	</target>
