@@ -57,8 +57,6 @@ sub smtpd_access_policy {
       $mesg = $ldap->start_tls_s();
 	  if ($mesg != 0) {
 	    next;
-	  } else {
-	    last;
 	  }
     }
     $mesg = $ldap->bind_s("uid=zmpostfix,cn=appaccts,cn=zimbra",$postfix_pw);
