@@ -84,8 +84,12 @@ ZaUIComponent.getUIComponentsXFormItem  = function (choiceWidth) {
     var w = choiceWidth || 400 ;
     var list =
         { type: _GROUP_, colSpan:"*", numCols: 2, colSize: [w, w], items: [
-               {type: _OUTPUT_, value: com_zimbra_delegatedadmin.tLabel_direct_ui_comp, align: _LEFT_ },
-               {type: _OUTPUT_, value: com_zimbra_delegatedadmin.tLabel_indirect_ui_comp, align: _LEFT_ },
+               {type: _OUTPUT_, value: com_zimbra_delegatedadmin.tLabel_direct_ui_comp,
+                   cssStyle: "font-size:12px;",
+                   align: _LEFT_ },
+               {type: _OUTPUT_, value: com_zimbra_delegatedadmin.tLabel_indirect_ui_comp,
+                   cssStyle: "font-size:12px;",
+                   align: _LEFT_ },
                {type:_ZIMLET_SELECT_, numCols: 1, colSizes: [ w], choicesWidth: w,
                     selectRef:ZaAccount.A_zimbraAdminConsoleUIComponents,
                     ref:ZaAccount.A_zimbraAdminConsoleUIComponents,
