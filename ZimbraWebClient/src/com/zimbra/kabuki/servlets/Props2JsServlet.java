@@ -279,7 +279,7 @@ public class Props2JsServlet
 			List<String> basenamesList = new LinkedList<String>();
 			basenamePatterns.add(basenamesList);
 			while (tokenizer.hasMoreTokens()) {
-				String pattern = this.getDirPath(tokenizer.nextToken().trim());
+				String pattern = tokenizer.nextToken().trim();
 				basenamesList.add(pattern);
 			}
 		}
@@ -301,6 +301,7 @@ public class Props2JsServlet
         int lastSlash = uri.lastIndexOf('/');
         int prevSlash = uri.substring(0, lastSlash).lastIndexOf('/');
         String basedir = uri.substring(prevSlash, lastSlash + 1);
+	    String dirname = this.getDirPath("");
 
         String filenames = uri.substring(uri.lastIndexOf('/') + 1);
         String classnames = filenames.substring(0, filenames.indexOf('.'));
@@ -316,7 +317,7 @@ public class Props2JsServlet
 			if (isDebugEnabled()) {
 				debug("!!! classname: "+classname);
 			}
-            load(req, out, locale, basenamePatterns, basedir, classname);
+            load(req, out, locale, basenamePatterns, basedir, dirname, classname);
         }
 
         // save buffer
@@ -328,7 +329,7 @@ public class Props2JsServlet
     protected void load(HttpServletRequest req,
                       PrintStream out, Locale locale,
                       List<List<String>> basenamePatterns,
-                      String basedir, String classname) {
+                      String basedir, String dirname, String classname) {
         String basename = basedir + classname;
 
         out.println();
@@ -337,7 +338,7 @@ public class Props2JsServlet
 		for (List<String> basenames : basenamePatterns) {
 			try {
 				ClassLoader parentLoader = this.getClass().getClassLoader();
-				ClassLoader loader = new PropsLoader(parentLoader, basenames, basedir, classname);
+				ClassLoader loader = new PropsLoader(parentLoader, basenames, basedir, dirname, classname);
 				ResourceBundle bundle = ResourceBundle.getBundle(basename, locale, loader);
 				Props2Js.convert(out, bundle, classname);
 			}
@@ -363,14 +364,16 @@ public class Props2JsServlet
         // Data
         private List<String> patterns;
         private String dir;
+	    private String dirname;
         private String name;
 
         // Constructors
         public PropsLoader(ClassLoader parent, List<String> patterns,
-                           String basedir, String classname) {
+                           String basedir, String dirname, String classname) {
             super(parent);
             this.patterns = patterns;
             this.dir = basedir.replaceAll("/[^/]+$", "").replaceAll("^.*/", "");
+	        this.dirname = dirname;
             this.name = classname;
         }
 
@@ -385,7 +388,10 @@ public class Props2JsServlet
                 basename = basename.replaceAll("\\$\\{name\\}", this.name);
 				basename = replaceSystemProps(basename);
                 basename += locale + ext;
-                File file = new File(basename);
+                File file = new File(this.dirname+basename);
+	            if (!file.exists()) {
+		            file = new File(basename);
+	            }
                 if (file.exists()) {
                     try {
                         return new FileInputStream(file);
