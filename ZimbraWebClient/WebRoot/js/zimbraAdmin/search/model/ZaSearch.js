@@ -508,7 +508,7 @@ function(n, types) {
             if (types[i] == "domains") {
                 query.push ("(zimbraDomainName=*"+n+"*)") ;
             } else {
-                query.push("(mail=*"+n+"*)") ;
+                query.push("(mail=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)") ;
                 if (types[i] == "accounts" || types[i] == "resources") {
                     query.push ("(zimbraMailDeliveryAddress=*"+n+"*)");
                 } else if (types[i] == "distributionlists" || types[i] == "aliases") {
