@@ -172,7 +172,6 @@ ZaGlobalGrantListViewController.prototype._createUI = function () {
 			tab: this.getMainTab()
 		}
 		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-//      Disable double click for the global grant list
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));
 		this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
@@ -344,12 +343,11 @@ function(ev) {
 **/
 ZaGlobalGrantListViewController.prototype._listSelectionListener =
 function(ev) {
-	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) { //TODO: edit the item
-		/*
-        if(ev.item) {
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		if(ev.item) {
 			this._selectedItem = ev.item;
-			ZaApp.getInstance().getGrantViewController().show(ev.item);
-		} */
+            this._editButtonListener(ev) ;
+		}
 	} else {
 		this.changeActionsState();
 	}
