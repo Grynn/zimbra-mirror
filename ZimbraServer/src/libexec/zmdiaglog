@@ -37,7 +37,8 @@ if (!-d $zimbra_tmp_directory) {
   File::Path::mkpath("$zimbra_tmp_directory");
 }
 
-$DEFAULT_DEST = "$zimbra_tmp_directory/zmdiaglog-$ZMHOSTNAME." . $$;
+$DEFAULT_DEST = "$zimbra_tmp_directory/zmdiaglog-$ZMHOSTNAME." .
+        strftime("%Y%m%d-%H%M%S", localtime()) . "." . $$;
 $DEFAULT_TIMEOUT = 120;
 $PID_FILE = '/opt/zimbra/log/zmmailboxd_java.pid';
 $JMAP = '/opt/zimbra/java/bin/jmap';
@@ -264,6 +265,7 @@ sub run() {
         my $TS = strftime("%H-%M-%S", localtime());
     
         invoke_thread_dump($i, $TS);
+        system("top -bc -n1 > top.$i.$TS 2>&1");
     
         my $stats = collect_thread_stats($mailboxd_pid);
         open(STATS, ">proc-stats.$i.$TS") || warn $i;
@@ -335,7 +337,6 @@ sub run() {
         logmsg "Zipping up contents into $destination/$dirname.zip\n";
         chdir('..');
         system("nice -n 19 zip -9r $dirname.zip $dirname/");
-        rename("$dirname.zip", "$dirname/$dirname.zip");
     } else {
     	logmsg "Skipping zip creation";
     }
