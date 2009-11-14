@@ -67,6 +67,9 @@ public class XsyncBean extends MailBean {
                     addInvalid("port");
                 if (!isValidEmail(email))
                     addInvalid("email");
+                
+                if (username == null || username.length() == 0)
+                    username = email.substring(0, email.indexOf('@'));
 
                 if (isAllOK()) {
                 	dsAttrs.put(OfflineConstants.A_zimbraDataSourceAccountSetup, Provisioning.TRUE);

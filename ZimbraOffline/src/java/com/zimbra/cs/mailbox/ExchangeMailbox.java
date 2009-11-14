@@ -26,12 +26,16 @@ import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.zimbrasync.client.ExchangeSyncFactory;
+import com.zimbra.zimbrasync.client.cmd.HttpStatusException;
 import com.zimbra.zimbrasync.client.cmd.Request;
+import com.zimbra.zimbrasync.client.cmd.HttpStatusException.NeedProvisioningException;
 
 public class ExchangeMailbox extends ChangeTrackingMailbox {
-
+    private ExchangeSyncFactory syncFactory;
+    
     public ExchangeMailbox(MailboxData data) throws ServiceException {
         super(data);
+        syncFactory = ExchangeSyncFactory.getInstance();
     }
     
     @Override
@@ -94,7 +98,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
     private static final OperationContext sContext = new TracelessContext();
     private static final Map<Integer, Pair<Integer, String>> sSendUIDs = new HashMap<Integer, Pair<Integer, String>>();
     
-    private int sendPendingMessages(boolean isOnRequest) throws ServiceException {
+    private int sendPendingMessages(boolean isOnRequest) throws HttpStatusException, ServiceException {
         int sentCount = 0;
         for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE); iterator.hasNext(); ) {
             int id = iterator.next();
@@ -131,7 +135,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
             boolean saveToSent = (ds.isSaveToSent()) && getAccount().isPrefSaveToSent();
             
             try {
-                new Request(ExchangeSyncFactory.getInstance().getSyncSettings(ds, 0)).doSendMail(msg.getContentStream(), msg.getSize(), saveToSent); //TODO: PolicyKey
+                new Request(syncFactory.getSyncSettings(ds), syncFactory.getPolicyKey(this)).doSendMail(msg.getContentStream(), msg.getSize(), saveToSent);
             } catch (ServiceException x) {
                 //TODO:
                 ZimbraLog.xsync.warn("send mail failure (id=%d)", msg.getId(), x);
@@ -194,7 +198,16 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
                 }
 
                 try {
-                    int count = sendPendingMessages(isOnRequest);
+                    int count = 0;
+                    try {
+                        count = sendPendingMessages(isOnRequest);
+                    } catch (NeedProvisioningException x) {
+                        ZimbraLog.xsync.info("Server requiring Policy Provision. Force sync to trigger Provision.");
+                        isOnRequest = true;
+                    } catch (HttpStatusException x) {
+                        //TODO
+                        ZimbraLog.xsync.warn("send mail failure", x);
+                    }
                     syncDataSource(count > 0, isOnRequest);
                 } catch (Exception x) {
                     if (isDeleting())
