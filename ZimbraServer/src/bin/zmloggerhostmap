@@ -37,7 +37,7 @@ $host,                   $zmhost
 
 sub usage() {
     print STDERR <<'EOF';
-Usage: zmloggerhostmap [-hcd] <dns_hostname> <zm_hostname>
+Usage: zmloggerhostmap [-adh] <dns_hostname> <zm_hostname>
   -a        - create a new host mapping
   -d        - delete a host mapping (specify both names to prevent accidents)
   -h        - show this help
