@@ -708,7 +708,7 @@ AjxUtil.hashCompare =
 function(hash1, hash2) {
 
 	var keys1 = AjxUtil.getHashKeys(hash1);
-	var keys2 = AjxUtil.getHashKeys(hash12);
+	var keys2 = AjxUtil.getHashKeys(hash2);
 	if (!AjxUtil.arrayCompare(keys1, keys2)) {
 		return false;
 	}
