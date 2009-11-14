@@ -208,6 +208,7 @@ Usage: zmdiaglog [-dth]
     -a    - Do everything: also gather JVM heapdump/coredump
     -d    - Log destination (Default $zimbra_tmp_directory/zmdiaglog.PID)
     -t    - Timeout in seconds for hanging commands (Default $DEFAULT_TIMEOUT)
+    -z    - Zip output
     -h    - This help message
 EOF
 }
@@ -218,7 +219,7 @@ sub run() {
     my %options;
     $options{'d'} = $DEFAULT_DEST;
     $options{'t'} = $DEFAULT_TIMEOUT;
-    getopts('d:t:ha', \%options);
+    getopts('d:t:haz', \%options);
     
     if ($options{'h'}) {
         HELP_MESSAGE(\*STDERR);
@@ -330,10 +331,14 @@ sub run() {
     my $dirname = `pwd`;
     chomp($dirname);
     chomp($dirname = `basename $dirname`);
-    logmsg "Zipping up contents into $destination/$dirname.zip\n";
-    chdir('..');
-    system("nice -n 19 zip -9r $dirname.zip $dirname/");
-    rename("$dirname.zip", "$dirname/$dirname.zip");
+    if ($options{'z'}) {
+        logmsg "Zipping up contents into $destination/$dirname.zip\n";
+        chdir('..');
+        system("nice -n 19 zip -9r $dirname.zip $dirname/");
+        rename("$dirname.zip", "$dirname/$dirname.zip");
+    } else {
+    	logmsg "Skipping zip creation";
+    }
     chdir($destination);
     logmsg "\n *** Diagnostics collection done, stored in $destination/$dirname.zip\n";
 }
