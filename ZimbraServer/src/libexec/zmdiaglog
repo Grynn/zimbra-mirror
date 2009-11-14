@@ -50,7 +50,7 @@ $HAVE_LSOF = has_cmd('lsof');
 $LOG_FILE = 'zmdiag.log';
 $ZMSTAT_CONF = '/opt/zimbra/conf/zmstat-chart.xml';
 $ZMDUMPENV = '/opt/zimbra/bin/zmdumpenv';
-$ZMPROV = '/opt/zimbra/bin/zmprov';
+$ZMPROV = '/opt/zimbra/bin/zmprov -l';
 
 
 sub logmsg($) {
