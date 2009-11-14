@@ -588,6 +588,13 @@ function(skipNotify) {
 	}
 };
 
+DwtListView.prototype.selectAll =
+function() {
+	if (this._list && this._list.size()) {
+		this.setSelectedItems(this._list.getArray());
+	}
+};
+
 DwtListView.prototype.deselectAll =
 function() {
 	var a = this._selectedItems.getArray();
@@ -944,9 +951,7 @@ function(actionCode, ev) {
 		}
 
 		case DwtKeyMap.SELECT_ALL:
-			if (this._list && this._list.size()) {
-				this.setSelectedItems(this._list.getArray());
-			}
+			this.selectAll();
 			break;
 
 		case DwtKeyMap.SELECT_FIRST:
@@ -1404,8 +1409,9 @@ function(dragOp) {
 
 		div = document.createElement("div");
 		Dwt.setPosition(div, Dwt.ABSOLUTE_STYLE);
+		var text = this.allSelected ? ZmMsg.all : dndSelection.length;
 		div.innerHTML = "<table><tr><td class='DragProxyTextLabel'>"
-						+ dndSelection.length + "</td></tr></table>";
+						+ text + "</td></tr></table>";
 		icon.appendChild(div);
 
 		roundPlusStyle = "position:absolute;top:30;left:0;visibility:hidden";

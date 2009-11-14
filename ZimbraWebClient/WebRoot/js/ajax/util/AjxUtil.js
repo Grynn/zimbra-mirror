@@ -719,3 +719,22 @@ function(hash1, hash2) {
 	}
 	return true;
 };
+
+/**
+ * Returns a shallow copy of the given hash.
+ *
+ * @param hash	[hash]
+ */
+AjxUtil.hashCopy =
+function(hash) {
+	var copy = {};
+	for (var key in hash) {
+		copy[key] = hash[key];
+	}
+	return copy;
+};
+
+AjxUtil.toArray =
+function(arg) {
+	return (arg instanceof Array) ? arg : (arg === undefined) ? [] : [arg];
+};
