@@ -6,7 +6,7 @@ use Getopt::Long;
 sub readProcTaskStats($) {
     my $pid = shift;
     my %usage = ();
-    open(TASKS, "find /proc/$pid/task -type d -maxdepth 1 -mindepth 1|") 
+    open(TASKS, "find /proc/$pid/task -maxdepth 1 -mindepth 1 -type d|") 
 	|| die "find on /proc/$pid/task failed: $!";
     while (<TASKS>) {
 	chomp;
