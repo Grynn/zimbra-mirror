@@ -434,8 +434,7 @@ ZaItem.createMethods["ZaAccount"].push (ZaAccountMemberOfListView.addMemberList)
 ZaAccountMemberOfListView.modifyMemberList =
 function (mods, tmpObj) {
      try {
-        if (this[ZaAccount.A2_memberOf] == null)
-        {
+        if (!tmpObj || (this[ZaAccount.A2_memberOf] == null) || !tmpObj[ZaAccount.A2_memberOf]) {
             //no need to modify the member list
             return ;
         }
