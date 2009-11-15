@@ -84,7 +84,8 @@ Q_MSGS_QUESTION_RADIO_XFormItem.prototype.items = [
 		},
 		elementChanged: function(elementValue,instanceValue, event) {
 			this.getForm().itemChanged(this, ZaMTAActionDialog.SELECTED_MSGS, event);
-		}
+		},
+		bmolsnr:true
 	},
 	{type:_OUTPUT_, ref:ZaMTAActionDialog.MSG_IDS,
 		getDisplayValue:function (itemVal) {
@@ -113,7 +114,8 @@ Q_FLTRD_QUESTION_RADIO_XFormItem.prototype.items = [
 		},
 		elementChanged: function(elementValue,instanceValue, event) {
 			this.getForm().itemChanged(this, ZaMTAActionDialog.FLTRED_SET, event);
-		}		
+		},
+		bmolsnr:true		
 	},
 	{type:_OUTPUT_, ref:ZaMTAActionDialog.FLTR_ITEMS,
 		getDisplayValue:function (itemVal) {
