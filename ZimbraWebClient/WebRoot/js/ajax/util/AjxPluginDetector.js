@@ -63,7 +63,7 @@ AjxPluginDetector.getQuickTimeVersion =
 function() {
 	if(AjxEnv.isIE) {
 		var object = new ActiveXObject("QuickTimeCheckObject.QuickTimeCheck.1");
-		DBG.println("AjxPluginDetector: Quicktime is " + object.IsQuickTimeAvailable(0) ? "available" : "not available");
+		DBG.println(AjxDebug.DBG1, "AjxPluginDetector: Quicktime is " + object.IsQuickTimeAvailable(0) ? "available" : "not available");
 		if (object.IsQuickTimeAvailable(0)) {
 			try {
 				var version = Number(object.QuickTimeVersion).toString(16);
@@ -73,7 +73,7 @@ function() {
 				}
 				return result;
 			} catch(e) {
-				DBG.println("AjxPluginDetector: Error while checking QuickTimeVersion: " + e);
+				DBG.println(AjxDebug.DBG1, "AjxPluginDetector: Error while checking QuickTimeVersion: " + e);
 			}
 		}
 		return null;
@@ -115,7 +115,7 @@ function() {
 
 AjxPluginDetector.detectPlugin =
 function() {
-	DBG.println("-----------------------<br>AjxPluginDetector: Looking for plugin: [" + AjxPluginDetector._argumentsToString(AjxPluginDetector.detectPlugin.arguments) + "]");
+	DBG.println(AjxDebug.DBG1, "-----------------------<br>AjxPluginDetector: Looking for plugin: [" + AjxPluginDetector._argumentsToString(AjxPluginDetector.detectPlugin.arguments) + "]");
 	var names = AjxPluginDetector.detectPlugin.arguments;
 	var allPlugins = navigator.plugins;
 	var pluginsArrayLength = allPlugins.length;
@@ -127,11 +127,11 @@ function() {
 			if (allPlugins[pluginsArrayCounter]) {
 				if( (allPlugins[pluginsArrayCounter].name.indexOf(names[namesCounter]) >= 0)) {
 					// this name was found
-					DBG.println("AjxPluginDetector: found name match '" + allPlugins[pluginsArrayCounter].name + "'");
+					DBG.println(AjxDebug.DBG1, "AjxPluginDetector: found name match '" + allPlugins[pluginsArrayCounter].name + "'");
 					numFound++;
 				} else if (allPlugins[pluginsArrayCounter].description.indexOf(names[namesCounter]) >= 0) {
 					// this name was found
-					DBG.println("AjxPluginDetector: found description match '" + allPlugins[pluginsArrayCounter].description + "'");
+					DBG.println(AjxDebug.DBG1, "AjxPluginDetector: found description match '" + allPlugins[pluginsArrayCounter].description + "'");
 					numFound++;
 				}
 			}
@@ -139,13 +139,13 @@ function() {
 	    // now that we have checked all the required names against this one plugin,
 	    // if the number we found matches the total number provided then we were successful
 	    if(numFound == names.length) {
-			DBG.println("AjxPluginDetector: Found plugin!<br>-----------------------");
+			DBG.println(AjxDebug.DBG1, "AjxPluginDetector: Found plugin!<br>-----------------------");
 			return true;
 	    } else if (numFound) {
-			DBG.println("AjxPluginDetector: Found partial plugin match, numFound=" + numFound);
+			DBG.println(AjxDebug.DBG1, "AjxPluginDetector: Found partial plugin match, numFound=" + numFound);
 		}
 	}
-	DBG.println("AjxPluginDetector: Failed to find plugin.<br>-----------------------");
+	DBG.println(AjxDebug.DBG1, "AjxPluginDetector: Failed to find plugin.<br>-----------------------");
 	return false;
 };
 
@@ -166,10 +166,10 @@ AjxPluginDetector.detectActiveXControl =
 function(progId) {
 	try {
 		new ActiveXObject(progId);
-		DBG.println("AjxPluginDetector: found ActiveXObject '" + progId + "'");
+		DBG.println(AjxDebug.DBG1, "AjxPluginDetector: found ActiveXObject '" + progId + "'");
 		return true;
 	} catch (e) {
-		DBG.println("AjxPluginDetector: unable to find ActiveXObject '" + progId + "'");
+		DBG.println(AjxDebug.DBG1, "AjxPluginDetector: unable to find ActiveXObject '" + progId + "'");
 		return false;
 	}
 };
