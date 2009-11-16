@@ -39,10 +39,12 @@ function startStopServer(verb) {
     var zdesktopServer = null;
     var args = null;
     if (os == "winnt") {
-      var systemDir = dirSvc.get("SysD", Ci.nsIFile);
-      var zdesktopServer = systemDir.clone();
-      zdesktopServer.append("net.exe");
-      args = [verb, "Zimbra Desktop Service"];
+      var appRoot = WebAppProperties.getAppRoot();
+      var zdesktopRoot = appRoot.parent;
+      zdesktopServer = zdesktopRoot.clone();
+      zdesktopServer.append("bin");
+      zdesktopServer.append("zdctl.vbs");
+      args = [verb];
     }
     else if (os == "linux") {
       var appRoot = WebAppProperties.getAppRoot();

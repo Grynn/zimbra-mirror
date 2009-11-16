@@ -17,7 +17,7 @@
 ' ZD service control
 '
 
-Dim sScriptPath, sScriptDir, sZdOutFile, sZdPidFile, sZdStopPortFile, sZdCtlErrFile, sAppRoot, oWMI, oFso
+Dim sScriptPath, sScriptDir, sZdOutFile, sZdPidFile, sZdStopPortFile, sZdCtlErrFile, sAppRoot, oWMI, oFso, sCurrUser
 
 Sub Usage()
     WScript.StdOut.WriteLine("Usage: zdctl.vbs <start|stop>")
@@ -93,110 +93,92 @@ Function RunCmd(sCmd, sDir, iSW, sPidFile, sErrFile)
 End Function
 
 Sub StartServer()
-    Dim bRet, sCmd, oFile, sLastMod, sStopPort, iWaitTime, iSize
+    Dim bRet, sCmd, oFile, iWaitTime, iSize
     
     If IsRunning() Then
         WScript.StdOut.WriteLine("ZD service already running")
         WScript.Quit
     End If
 
-    sLastMod = ""
     If oFso.FileExists(sZdOutFile) Then
-        Set oFile = oFso.GetFile(sZdOutFile)
-        sLastMod = oFile.DateLastModified
+        oFso.DeleteFile sZdOutFile
     End If
     
-    sCmd = sScriptDir & "\zdesktop.exe"
+    sCmd = "cmd.exe /k " & Chr(34) & sScriptDir & "\zdesktop.exe" & Chr(34)
     bRet = RunCmd(sCmd, sScriptDir, 0, sZdPidFile, sZdCtlErrFile)
-    WScript.Sleep 1500
+
+	If bRet = true Then 
+    	iWaitTime = 20000 
+    	Do Until iWaitTime <= 0
+        	If oFso.FileExists(sZdOutFile) Then
+            	Exit Do
+        	End If
+        	WSCript.Sleep(1000)
+        	iWaitTime = iWaitTime - 1000
+    	Loop
+	End If
     
     If (bRet = false) Or (Not oFso.FileExists(sZdOutFile)) Then
         WriteLineToFile sZdCtlErrFile, "Failed to start ZD service", true
-        Exit Sub
-    End If
-     
-    iWaitTime = 10000 ' 10 seconds
-    Do Until iWaitTime <= 0
-        Set oFile = oFso.GetFile(sZdOutFile)
-        iSize = oFile.Size
-        If iSize > 100 Then
-            Exit Do
-        End If        
-        WSCript.Sleep(1000)
-        iWaitTime = iWaitTime - 1000    
-    Loop
-    
-    If StrComp(sLastMod, oFile.DateLastModified) = 0 Then
-        Exit Sub  ' second instance of zdesktop.exe quits
-    End If
-    
-    sStopPort = Null
-    Set oFile = oFso.OpenTextFile(sZdOutFile, 1, false)
-    Do Until oFile.AtEndOfStream
-        Dim sLine
-        sLine = oFile.ReadLine
-        If IsNumeric(sLine) Then
-            sStopPort = sLine
-            Exit Do
-        End If   
-    Loop
-    oFile.Close
-    
-    If IsNull(sStopPort) Then
-        WriteLineToFile sZdCtlErrFile, "Unable to get stop port", true
-    Else
-        WriteLineToFile sZdStopPortFile, sStopPort, false
     End If
 End Sub
 
 Sub StopServer()
-    Dim sPid, sStopPort, sWaitTime, sCmd
+    Dim sPid, sZdPid, iWaitTime, sCmd, sTaskKill, oProcs, oProc
     
     If Not IsRunning() Then
         WScript.StdOut.WriteLine("ZD service not running")
         WScript.Quit
     End If
 
-    sWaitTime = 10000 ' 10 seconds
-    sStopPort = ReadLineFromFile(sZdStopPortFile)
-    If IsNull(sStopPort) Then
-        WriteLineToFile sZdCtlErrFile, "Unable to read log\zdesktop.sp", true
-        sWaitTime = 0
-    Else
-        sCmd = sAppRoot & "\win32\jre\bin\java.exe -DSTOP.PORT=" & sStopPort & _
-            " -DSTOP.KEY=stop -jar " & Chr(34) & sAppRoot & _
-            "\jetty\start.jar" & Chr(34) & " --stop"
-        If RunCmd(sCmd, Null, 0, Null, sZdCtlErrFile) = false Then
-            sWaitTime = 0
-        End If   
-    End If        
+	sTaskKill = Chr(34) & oFso.GetSpecialFolder(1).Path & "\taskkill.exe" & Chr(34)
+    iWaitTime = 10000 ' 10 seconds
 
     sPid = ReadLineFromFile(sZdPidFile)
     If IsNull(sPid) Then
         WriteLineToFile sZdCtlErrFile, "Unable to read log\zdesktop.pid", true
-        Exit Sub
+        iWaitTime = 0 
+	Else
+		sCmd = sTaskKill & " /PID " & sPid
+		RunCmd sCmd, Null, 0, Null, Null
     End If    
 
-    Do Until sWaitTime <= 0
-        Dim oProcs
-        Set oProcs = oWMI.ExecQuery("SELECT Name FROM Win32_Process WHERE ProcessId = " & sPid)
-        
-        If oProcs.Count = 0 Then ' process quit
-            oFso.DeleteFile sZdStopPortFile
+	sZdPid = Null
+    Set oProcs = oWMI.ExecQuery("SELECT ProcessId FROM Win32_Process WHERE Name = 'zdesktop.exe' ")
+	For Each oProc In oProcs
+		Dim sUser, sDomain
+		If oProc.GetOwner(sUser, sDomain) = 0 Then
+			If StrComp(sUser, sCurrUser) = 0 Then
+				sZdPid = oProc.ProcessId	
+				Exit For
+			End If
+		End If		
+	Next
+
+	If IsNull(sZdPid) Then
+    	oFso.DeleteFile sZdPidFile
+		Exit Sub			
+	End If
+
+    Do Until iWaitTime <= 0
+		Set oProcs = oWMI.ExecQuery("SELECT Name FROM Win32_Process WHERE ProcessId = " & sZdPid) 
+        If oProcs.Count = 0 Then
             oFso.DeleteFile sZdPidFile
             Exit Sub 
         End If        
         WScript.Sleep 1000
-        sWaitTime = sWaitTime - 1000
+        iWaitTime = iWaitTime - 1000
     Loop
     
     ' hard kill
-    sCmd = "taskkill /F /PID " & sPid
-    RunCmd sCmd, Null, 0, Null, Null
+	sCmd = sTaskKill & " /F /PID " & sZdPid
+   	RunCmd sCmd, Null, 0, Null, Null
+	On Error Resume Next
+    oFso.DeleteFile sZdPidFile
 End Sub
 
 '--------------------------------- main ---------------------------------
-Dim oArgs
+Dim oArgs, oWN
 Set oArgs = WScript.Arguments
 If oArgs.Count < 1 Then ' have to break them up here - vbs always evals ALL expressions
     Usage()
@@ -213,6 +195,8 @@ sZdStopPortFile = sScriptDir & "\..\log\zdesktop.sp"
 sZdCtlErrFile = sScriptDir & "\..\log\zdctl.err"
 Set oWMI = GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\cimv2")
 Set oFso = CreateObject("Scripting.FileSystemObject")
+Set oWN = WScript.CreateObject("WScript.Network")
+sCurrUser = oWN.UserName
         
 If oArgs.Item(0) = "start" Then
     StartServer()

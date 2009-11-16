@@ -77,21 +77,6 @@
       <MsiUnpublishAssemblies Sequence="6550" />
       <InstallFinalize Sequence="6600" />
       <Custom Action="ID10618" After="FileCost" />
-
-      <!-- ZWixUtils Custom Actions -->
-      <Custom Action="ID10701" Sequence="7001">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10702" Sequence="7002">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10703" Sequence="7003">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10704" Sequence="7004">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10705" Sequence="7005">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10708" Sequence="7008">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10709" Sequence="7009">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10710" Sequence="7010">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10711" Sequence="7011">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10712" Sequence="7012">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10713" Sequence="7013">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10714" Sequence="7014">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>
-      <Custom Action="ID10715" Sequence="7015">NOT(REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)</Custom>      
     </InstallExecuteSequence>
     
     <CustomAction Id="ID10617" Property="Setup_PRODUCT" Value="ae979f72-e7b5-4491-ad44-5a7dddc7b4bf" HideTarget="no" />
@@ -157,15 +142,6 @@
         </Directory>  <!-- PromgramFilesFolder -->
       </Directory>  <!--  InstallOrganizationFolder -->
       
-      <Directory Id="LocalAppDataFolder" Name="LocalAppDataFolder Directory">
-        <Directory Id="Id_cf9da429b80d92be7ba7749919a63589" Name="Zimbra">
-        
-          <!-- Root Data Directory: Id="ZDDATAFOLDER", Name="Zimbra Desktop" -->
-@build.data.folder.contents@
-                
-        </Directory>  <!-- Id_cf9da429b80d92be7ba7749919a63589 -->
-      </Directory>  <!-- LocalAppDataFolder -->
-      
     </Directory>  <!-- TARGETDIR -->
     
     
@@ -194,25 +170,5 @@
     <Property Id="ALLUSERS" Value="0" />
     <Condition Message="This product require Windows XP or newer">VersionNT &gt;= 501</Condition>
 
-    <!-- ZWixUtils -->
-    <Binary Id="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" SourceFile="@build.root@\src\installer\win32\zwixutils.dll" />
-    <CustomAction Id="ID10701" Property="NumberOfTokens" Value="2" />
-    <CustomAction Id="ID10702" Property="Token1" Value="@install.app.root@" />
-    <CustomAction Id="ID10703" Property="Value1" Value="[APPLICATIONFOLDER]" />
-    <CustomAction Id="ID10704" Property="Token2" Value="@install.data.root@" />
-    <CustomAction Id="ID10705" Property="Value2" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop" />
-
-    <CustomAction Id="ID10708" Property="File" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop\conf\localconfig.xml" />
-    <CustomAction Id="ID10709" BinaryKey="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" DllEntry="ZTokenReplace" />
-
-    <CustomAction Id="ID10710" Property="File" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop\conf\wrapper.conf" />
-    <CustomAction Id="ID10711" BinaryKey="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" DllEntry="ZTokenReplace" />
-
-    <CustomAction Id="ID10712" Property="File" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop\jetty\etc\jetty.xml" />
-    <CustomAction Id="ID10713" BinaryKey="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" DllEntry="ZTokenReplace" />
-
-    <CustomAction Id="ID10714" Property="File" Value="[LocalAppDataFolder]Zimbra\Zimbra Desktop\zdesktop.webapp\override.ini" />
-    <CustomAction Id="ID10715" BinaryKey="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" DllEntry="ZTokenReplace" />
-    
   </Product>
 </Wix>

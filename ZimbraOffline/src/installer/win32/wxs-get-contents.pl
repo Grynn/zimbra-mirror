@@ -67,30 +67,22 @@ my $build_root = lc($ARGV[0]);
 my $build_root_len = length($build_root);
 my $wxs_file = "$build_root\\build\\win_installer.wxs";
 my $dist_dir = "$build_root\\build\\dist";
-my ($xml_app, $xml_data, $xml_refs) = ("", "", "");
+my ($xml_app, $xml_refs) = ("", "");
 my $seed_prefix = "zimbra_desktop_";
 my $cid_counter = 20000;
 
-sub handler_zdclient_exe {
+sub handler_zdrun_vbs {
 	my ($ind, $xml) = @_;
 	
 	$$xml .= ">\r\n";
-	$$xml .= "$ind  <Shortcut Id=\"ID_42446FE2_8C85_4ca0_8AEB_4143383960E8\" Directory=\"ProgramMenuDir\" Advertise=\"no\" Name=\"Zimbra Desktop\" Icon=\"ID_BB30ED2D_2B17_4c39_B242_BE52A559A470\" Arguments=\"-override &quot;[LocalAppDataFolder]Zimbra\\Zimbra Desktop\\zdesktop.webapp\\override.ini&quot;\">\r\n";
-    $$xml .= "$ind    <Icon Id=\"ID_BB30ED2D_2B17_4c39_B242_BE52A559A470\" SourceFile=\"$dist_dir\\data\\zdesktop.webapp\\icons\\default\\launcher.ico\" />\r\n";
+	$$xml .= "$ind  <Shortcut Id=\"ID_42446FE2_8C85_4ca0_8AEB_4143383960E8\" Directory=\"ProgramMenuDir\" Advertise=\"no\" Name=\"Zimbra Desktop\" Icon=\"ID_BB30ED2D_2B17_4c39_B242_BE52A559A470\">\r\n";
+    $$xml .= "$ind    <Icon Id=\"ID_BB30ED2D_2B17_4c39_B242_BE52A559A470\" SourceFile=\"$dist_dir\\app\\data\\zdesktop.webapp\\icons\\default\\launcher.ico\" />\r\n";
     $$xml .= "$ind  </Shortcut>\r\n";
     $$xml .= "$ind</File>\r\n";
 }
 
-sub handler_wrapper_exe {
-	my ($ind, $xml) = @_;
-	
-	$$xml .= " KeyPath=\"yes\" />\r\n";
-	$$xml .= "$ind<ServiceInstall Id=\"ID_AF9A7A0D_FF98_4674_A789_71040A7F2AC7\" DisplayName=\"Zimbra Desktop Service\" Name=\"Zimbra Desktop Service\" ErrorControl=\"critical\" Start=\"auto\" Type=\"ownProcess\" Vital=\"yes\" Arguments=\"-s &quot;[LocalAppDataFolder]Zimbra\\Zimbra Desktop\\conf\\wrapper.conf&quot;\" />\r\n";
-}
-
 my $handlers = {
-	"$dist_dir\\app\\win32\\prism\\zdclient.exe" => \&handler_zdclient_exe,
-	"$dist_dir\\app\\win32\\wrapper.exe" => \&handler_wrapper_exe	
+	"$dist_dir\\app\\win32\\zdrun.vbs" => \&handler_zdrun_vbs,
 };
 
 sub next_cid {
@@ -154,11 +146,9 @@ sub traverse {
 }
 
 traverse("$dist_dir\\app", "          ", "APPLICATIONFOLDER", "Zimbra Desktop", \$xml_app);
-traverse("$dist_dir\\data", "          ", "ZDDATAFOLDER", "Zimbra Desktop", \$xml_data);
 
 my $tokens = {
 	'@build.application.folder.contents@' => $xml_app, 
-	'@build.data.folder.contents@' => $xml_data, 
 	'@build.component.references@' => $xml_refs
 };
 find_and_replace($wxs_file, $tokens);

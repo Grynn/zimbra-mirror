@@ -18,6 +18,9 @@
 ' ZD runner
 '
 
+Dim oFso, oShellApp, sScriptPath, sScriptDir, oTokens, sAppRoot, sDataRoot
+Dim sLocalAppDir, bIsUpgrade, sTmpDir, aUserDirs, aUserFiles
+
 Sub FindAndReplace(sFile, oTokens)
     Dim oFso, oInFile, oOutFile, sTmpFile
     
@@ -39,7 +42,7 @@ Sub FindAndReplace(sFile, oTokens)
     Do Until oInFile.AtEndOfStream
         Dim sLine, sKey
         sLine = oInFile.ReadLine
-        For Each sKey in oTokens.Keys
+        For Each sKey In oTokens.Keys
             sLine = Replace(sLine, sKey, oTokens.Item(sKey))
         Next
         oOutFile.WriteLine(sLine)       
@@ -56,6 +59,12 @@ Function GetRandomId
     GetRandomId = LCase(Mid(oTypeLib.GUID, 2, 36))
 End Function
 
+Sub CopyIfExists(sSrc, sDest, bOW)
+	If oFso.FileExists(sSrc) Then
+		oFso.CopyFile sSrc, sDest, bOW
+	End If
+End Sub
+
 Sub LaunchPrism()
     Dim oWMI, oStartup, oCfg, oProc, iPid
     
@@ -64,30 +73,95 @@ Sub LaunchPrism()
     Set oCfg = oStartup.SpawnInstance_
     oCfg.ShowWindow = 1 ' SW_NORMAL
 
-    sCmd = ""
+    sCmd = Chr(34) & sAppRoot & "\win32\prism\zdclient.exe" & Chr(34) & " -override " & _
+        Chr(34) & sDataRoot & "\zdesktop.webapp\override.ini" & Chr(34)  
     
     Set oProc = oWMI.Get("Win32_Process")
     oProc.Create sCmd, Null, oCfg, iPid             
     WScript.Quit
 End Sub
 
+Sub BackupData()
+	If oFso.FolderExists(sTmpDir) Then
+		oFso.DeleteFolder sTmpDir, true
+	End If
+	oFso.CreateFolder sTmpDir
+	
+	Dim sDir
+	For Each sDir In aUserDirs
+		oFso.MoveFolder sDataRoot & "\" & sDir, sTmpDir & "\" & sDir
+	Next
+	
+	oFso.CreateFolder sTmpDir & "\profile"
+	Dim sFile
+	For Each sFile In aUserFiles
+		CopyIfExists sDataRoot & "\" & sFile, sTmpDir & "\" & sFile, true 
+	Next
+	
+	oFso.MoveFolder sDataRoot & "\zimlets\backup", sTmpDir & "\zimlets"	
+	
+	oFso.DeleteFolder sDataRoot, true
+End Sub
+
+Sub RestoreData()
+	Dim sDir
+	For Each sDir In aUserDirs
+		If oFso.FolderExists(sDataRoot & "\" & sDir) Then 
+			oFso.DeleteFolder sDataRoot & "\" & sDir, true
+		End If
+		oFso.MoveFolder sTmpDir & "\" & sDir, sDataRoot & "\" & sDir 
+	Next
+	
+	Dim sFile
+	For Each sFile In aUserFiles
+		CopyIfExists sTmpDir & "\" & sFile, sDataRoot & "\" & sFile, true
+	Next
+	
+	' restore zimlets, but don't overwrite at dest
+	Dim oZLFolder, oFiles, oFile
+	Set oZLFolder = oFso.GetFolder(sTmpDir & "\zimlets")
+	Set oFiles = oZLFolder.Files
+	For Each oFile In oFiles
+		If Not oFso.FileExists(sDataRoot & "\zimlets\" & oFile.Name) Then 
+			oFso.CopyFile sTmpDir & "\zimlets\" & oFile.Name, _
+				sDataRoot & "\zimlets\" & oFile.Name, true
+		End If
+	Next
+	
+	oFso.DeleteFolder sTmpDir, true
+End Sub
+
 '------------------------------- main ---------------------------------
 
-Dim oFso, oShell, oShellApp, sScriptPath, sScriptDir, oTokens, sAppRoot, sDataRoot
-Dim sLocalAppDir, bIsUpgrade, sTmpDir, sAppTimeStamp
-
-'Set oShell = WScript.CreateObject("WScript.Shell")
 Set oFso = CreateObject("Scripting.FileSystemObject")
 Set oShellApp = CreateObject("Shell.Application")
 
-sAppTimeStamp = "@INSTALL.APP.TIMESTAMP@"
-bIsUpgrade = false
+aUserDirs = Array("index", "store", "sqlite", "log", "zimlets-properties")
+aUserFiles = Array("profile\prefs.js", "profile\persdict.dat", "profile\localstore.json")
 sTmpDir = oFso.GetSpecialFolder(2).Path & "\zdtmp"
 sScriptPath = WScript.ScriptFullName
 sScriptDir = Left(sScriptPath, InStrRev(sScriptPath, WScript.ScriptName) - 2)
 sAppRoot = oFso.GetParentFolderName(sScriptDir)
 sLocalAppDir = oShellApp.Namespace(&H1c&).Self.Path
 sDataRoot = sLocalAppDir & "\Zimbra\Zimbra Desktop"
+bIsUpgrade = false
+
+If oFso.FolderExists(sDataRoot) Then
+	Dim sAppDataRoot, oDataDir, oAppDataDir
+	sAppDataRoot = sAppRoot & "\data"
+	Set oDataDir = oFso.GetFolder(sDataRoot)
+	Set oAppDataDir = oFso.GetFolder(sAppDataRoot)
+	
+	If DateDiff("s", oDataDir.DateLastModified, oAppDataDir.DateLastModified) > 0 Then
+		bIsUpgrade = true
+	Else
+		LaunchPrism
+	End If
+End If
+
+If bIsUpgrade Then
+	BackupData
+End If
 
 ' copy data files
 If Not oFso.FolderExists(sLocalAppDir & "\Zimbra") Then
@@ -107,7 +181,12 @@ oTokens.Add "@install.key@", GetRandomId()
 FindAndReplace sDataRoot & "\conf\localconfig.xml", oTokens
 FindAndReplace sDataRoot & "\jetty\etc\jetty.xml", oTokens
 FindAndReplace sDataRoot & "\zdesktop.webapp\webapp.ini", oTokens
+FindAndReplace sDataRoot & "\zdesktop.webapp\override.ini", oTokens
 FindAndReplace sDataRoot & "\bin\zdesktop.ini", oTokens
 FindAndReplace sDataRoot & "\bin\zdctl.vbs", oTokens
 
-LaunchPrism()
+If bIsUpgrade Then
+	RestoreData
+End If
+
+LaunchPrism
