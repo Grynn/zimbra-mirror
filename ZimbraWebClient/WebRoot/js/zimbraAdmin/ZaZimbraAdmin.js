@@ -352,8 +352,6 @@ ZaZimbraAdmin.reload_msg = function () {
     ZaZimbraAdmin._LOCALE_MSG_RELOADED = true ;
 }
 
-//process the GetInfoRequest response to set the domainAdminMaxMailQuota value in MB
-
 ZaZimbraAdmin.initInfo =
 function (resp) {
 	if(resp && resp.Body && resp.Body.GetInfoResponse) {

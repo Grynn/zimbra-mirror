@@ -74,43 +74,8 @@ function(entry) {
             this._containedObject.attrs[a] = entry.attrs[a];
         }
     }
-	
-	if (typeof ZaDomainAdmin == "function") {
-		this._containedObject[ZaCos.A2_zimbraDomainAdminMailQuotaAllowed] = entry [ZaCos.A2_zimbraDomainAdminMailQuotaAllowed];
-	}
-    
-    /** Not needed anymore, it should be automatically handled by deepCloneListItem.
-	var servers = entry.attrs[ZaCos.A_zimbraMailHostPool];
-	if(servers != null && servers != "") {
-		if (AjxUtil.isString(servers))	 {
-			this._containedObject.attrs[ZaCos.A_zimbraMailHostPool] = [servers];
-		} else {
-			var cnt = servers.length;
-			this._containedObject.attrs[ZaCos.A_zimbraMailHostPool] = [];
-			for(var i = 0; i < cnt; i ++) {
-				this._containedObject.attrs[ZaCos.A_zimbraMailHostPool].push(servers[i]);					
-			}
-		}
-	} else {
-		this._containedObject.attrs[ZaCos.A_zimbraMailHostPool] = null;		
-	}  */
 
 	
-/*	if(entry.attrs[ZaCos.A_zimbraMailHostPool] instanceof Array)
-		servers = entry.attrs[ZaCos.A_zimbraMailHostPool];
-	else
-		servers = [entry.attrs[ZaCos.A_zimbraMailHostPool]];
-		
-	if(servers != null) {
-		var cnt = servers.length;
-		this._containedObject.attrs[ZaCos.A_zimbraMailHostPool] = [];
-		for(var i = 0; i < cnt; i ++) {
-			this._containedObject.attrs[ZaCos.A_zimbraMailHostPool].push(servers[i]);					
-		}
-	} else {
-		this._containedObject.attrs[ZaCos.A_zimbraMailHostPool] = null;		
-	}
-*/
 	if (entry.getAttrs) {
         if(entry.getAttrs[ZaCos.A_zimbraAvailableSkin] || entry.getAttrs.all) {
             var skins = entry.attrs[ZaCos.A_zimbraAvailableSkin];

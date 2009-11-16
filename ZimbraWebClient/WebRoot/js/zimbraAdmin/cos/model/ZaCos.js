@@ -244,41 +244,6 @@ function (obj) {
 	if(typeof(this.attrs[ZaCos.A_zimbraMailHostPool]) == 'string'){
 		this.attrs[ZaCos.A_zimbraMailHostPool] = [this.attrs[ZaCos.A_zimbraMailHostPool]];
 	}
-	
-	/*this[ZaCos.A_zimbraMailAllServersInternal] = new AjxVector();
-	this[ZaCos.A_zimbraMailHostPoolInternal] = new AjxVector();
-	
-	var hostVector = new ZaItemVector();
-	if(this.attrs[ZaCos.A_zimbraMailHostPool] instanceof Array) {	
-		for(sname in this.attrs[ZaCos.A_zimbraMailHostPool]) {
-			if(ZaApp.getInstance().getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool][sname]]) {
-				hostVector.add(ZaApp.getInstance().getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool][sname]]);
-			} else {
-				var newServer = new ZaServer();
-				newServer.load("id", this.attrs[ZaCos.A_zimbraMailHostPool][sname]);
-				hostVector.add(newServer);
-			}
-		}
-	} else if(typeof(this.attrs[ZaCos.A_zimbraMailHostPool]) == 'string'){
-		if(ZaApp.getInstance().getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool]]) {
-			hostVector.add(ZaApp.getInstance().getServerMap()[this.attrs[ZaCos.A_zimbraMailHostPool]]);
-		} else {
-			var newServer = new ZaServer();
-			newServer.load("id", this.attrs[ZaCos.A_zimbraMailHostPool]);
-			hostVector.add(newServer);
-		}
-	}
-	this[ZaCos.A_zimbraMailHostPoolInternal] = hostVector;
-	*/
-	
-	if (typeof ZaDomainAdmin == "function") {
-		if (this.attrs[ZaCos.A_zimbraDomainAdminMaxMailQuota] >= 0) {
-			this[ZaCos.A2_zimbraDomainAdminMailQuotaAllowed] = 'TRUE';
-		}else{
-			this[ZaCos.A2_zimbraDomainAdminMailQuotaAllowed] = 'FALSE' ;
-		}
-	}
-
 }
 
 /**

@@ -43,15 +43,10 @@ if(adminName) {
 
 if(ZaAccount) {
 	ZaAccount.A_zimbraDomainAdminMaxMailQuota = "zimbraDomainAdminMaxMailQuota" ;
-	ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed = "zimbraDomainAdminMailQuotaAllowed" ;
-	var domainAdminMaxMailQuotaItem = {id:ZaAccount.A_zimbraDomainAdminMaxMailQuota, type:_COS_MAILQUOTA_, ref:"attrs."+ZaAccount.A_zimbraDomainAdminMaxMailQuota} ;
-	var domainAdminMailQuotaAllowedItem = {id:ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed} ;
-//	if (ZaSettings.isDomainAdmin) {
+	var domainAdminMaxMailQuotaItem = {id:ZaAccount.A_zimbraDomainAdminMaxMailQuota, type:_COS_MAILQUOTA_, minInclusive:-1, ref:"attrs."+ZaAccount.A_zimbraDomainAdminMaxMailQuota} ;
 		domainAdminMaxMailQuotaItem.type = _COS_MAILQUOTA_ ;
-		domainAdminMailQuotaAllowedItem.type = _ENUM_;
-//	}
+
 	ZaAccount.myXModel.items.push(domainAdminMaxMailQuotaItem);
-	ZaAccount.myXModel.items.push(domainAdminMailQuotaAllowedItem);
 }
 
 if (ZaSearchOption) {
@@ -60,41 +55,13 @@ if (ZaSearchOption) {
 
 if (ZaCos) {
 	ZaCos.A_zimbraDomainAdminMaxMailQuota = "zimbraDomainAdminMaxMailQuota" ;
-	ZaCos.A2_zimbraDomainAdminMailQuotaAllowed = "zimbraDomainAdminMailQuotaAllowed" ;
-	ZaCos.myXModel.items.push({id:ZaCos.A2_zimbraDomainAdminMailQuotaAllowed, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaCos.A2_zimbraDomainAdminMailQuotaAllowed});
-	ZaCos.myXModel.items.push({id:ZaCos.A_zimbraDomainAdminMaxMailQuota, type:_MAILQUOTA_, ref:"attrs."+ZaCos.A_zimbraDomainAdminMaxMailQuota});
+	ZaCos.myXModel.items.push({id:ZaCos.A_zimbraDomainAdminMaxMailQuota, type:_MAILQUOTA_, ref:"attrs."+ZaCos.A_zimbraDomainAdminMaxMailQuota,minInclusive:-1});
 }
 
 if(ZaSettings) {
 
-//    ZaSettings.DOMAIN_ACCT_LIMIT_TAB = "domainAccountLimitsTab";
-//    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_ACCT_LIMIT_TAB, label: com_zimbra_delegatedadmin.UI_Comp_domainAcctLimitsTab});
-
     ZaDomainAdmin.initSettings = function() {
 	    if (AjxEnv.hasFirebug) console.log("domainadmin.js is modifying ZaSettings");
-                               
-        /*
-	    if(domainAdmin) {                                        
-	    	ZaUtil.HELP_URL = "help/delegated/";
-			if(ZaHelpView)
-				ZaHelpView.mainHelpPage = "da_about_zimbra_collaboration_suite.htm";
-
-			if(ZaXDialog) {
-				ZaXDialog.helpURL = location.pathname + "help/delegated/delegated_admin/da_about_zimbra_collaboration_suite.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
-			}
-			if(ZaController) {
-				ZaController.helpURL = location.pathname + "help/delegated/delegated_admin/da_about_zimbra_collaboration_suite.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
-			}
-			if(ZaAccountListController) {
-				ZaAccountListController.helpURL = location.pathname + "help/delegated/delegated_admin/da_domain_administrator_responsibilities.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
-			}
-			if(ZaAccountViewController) {
-				ZaAccountViewController.helpURL = location.pathname + "help/delegated/delegated_admin/da_editing_an_account.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
-			}
-			if(ZaNewAccountXWizard) {
-				ZaNewAccountXWizard.helpURL = location.pathname + "help/delegated/delegated_admin/da_creating_an_account.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
-			}
-	    }*/
 	}
 	if(ZaSettings.initMethods)
 		ZaSettings.initMethods.push(ZaDomainAdmin.initSettings);
@@ -102,16 +69,45 @@ if(ZaSettings) {
 
 if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 	ZaDomainAdmin.AccountXFormModifier = function(xFormObject) {
-		var accountDomainAdminMaxQuotaField =
-			{ ref:ZaAccount.A_zimbraDomainAdminMaxMailQuota, type:_SUPER_TEXTFIELD_,
-				type:_SUPER_TEXTFIELD_, resetToSuperLabel: ZaMsg.NAD_ResetToCOS,
-				msgName:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
-				txtBoxLabel:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
-				toolTipContent: com_zimbra_delegatedadmin.tt_DomainAdminMaxMailQuota,
-                visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount]==\'TRUE\' "],
-                visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount]
-			};
-
+		var accountDomainAdminMaxQuotaField = { 
+			ref:ZaAccount.A_zimbraDomainAdminMaxMailQuota, type:_SUPER_TEXTFIELD_,
+			type:_SUPER_TEXTFIELD_, resetToSuperLabel: ZaMsg.NAD_ResetToCOS,
+			msgName:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
+			txtBoxLabel:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
+			toolTipContent: com_zimbra_delegatedadmin.tt_DomainAdminMaxMailQuota,
+            visibilityChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraIsDelegatedAdminAccount,"TRUE"]],
+            visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount],
+            enableDisableChecks:[ZaDomainAdmin.canModifyQuota],
+            enableDisableChangeEventSources:[ZaAccount.A_zimbraDomainAdminMaxMailQuota],
+			getDisplayValue:function(newValue) {
+				if(newValue<0) {
+					return "";
+				} else {
+					return newValue;
+				}
+			},			
+			bmolsnr:true
+		};
+        
+        var accountDomainAdminMailQuotaBx = {
+        	ref:ZaAccount.A_zimbraDomainAdminMaxMailQuota,type:_SUPER_CHECKBOX_,
+			resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+			customOvewriteChecks:[ZaDomainAdmin.isAdminQuotaCheckboxVisible],
+			checkBoxLabel:com_zimbra_delegatedadmin.NAD_DomainAdminMailQuotaAllowed,
+            visibilityChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraIsDelegatedAdminAccount,"TRUE"]],
+            visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount],			
+			updateElement:function (newValue) {
+				this.items[0].getElement().checked = ((parseInt(newValue) >= 0) || AjxUtil.isEmpty(newValue));
+			},
+			checkBoxElementChanged: function(elementValue,instanceValue, event) {
+				if(elementValue) {
+					this.getForm().itemChanged(this, 0, event);
+				} else {
+					this.getForm().itemChanged(this, -1, event);
+				}
+			},
+			bmolsnr:true
+		};
         var tabs = xFormObject.items[2].items;
 
 		//change General tab
@@ -124,7 +120,7 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 				for(var j=0;j<cnt2;j++) {
 					if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A2_adminRoles ) {
 						//add domain admin quota field
-					    xFormObject.items[2].items[0].items[i].items.splice(j+1,0, accountDomainAdminMaxQuotaField);
+					    xFormObject.items[2].items[0].items[i].items.splice(j+1,0, accountDomainAdminMailQuotaBx, accountDomainAdminMaxQuotaField);
                     	break;
 					}
 				}
@@ -160,14 +156,45 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 
 if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 	ZaDomainAdmin.NewAccountWizXFormModifier = function(xFormObject) {
-		var accountDomainAdminMaxQuotaField =
-				{ ref:ZaAccount.A_zimbraDomainAdminMaxMailQuota, type:_SUPERWIZ_TEXTFIELD_,
-					msgName:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
-					label:null, txtBoxLabel: com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
-					labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
-					toolTipContent: com_zimbra_delegatedadmin.tt_DomainAdminMaxMailQuota,
-					visibilityChecks: []
-				};
+		var accountDomainAdminMaxQuotaField = { 
+			ref:ZaAccount.A_zimbraDomainAdminMaxMailQuota, type:_SUPERWIZ_TEXTFIELD_,
+			type:_SUPER_TEXTFIELD_, resetToSuperLabel: ZaMsg.NAD_ResetToCOS,
+			msgName:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
+			customOvewriteChecks:[ZaDomainAdmin.isAdminQuotaCheckboxVisible],
+			txtBoxLabel:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
+			toolTipContent: com_zimbra_delegatedadmin.tt_DomainAdminMaxMailQuota,
+            visibilityChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraIsDelegatedAdminAccount,"TRUE"]],
+            visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount],
+            enableDisableChecks:[ZaDomainAdmin.canModifyQuota],
+            enableDisableChangeEventSources:[ZaAccount.A_zimbraDomainAdminMaxMailQuota],
+			getDisplayValue:function(newValue) {
+				if(newValue<0) {
+					return "";
+				} else {
+					return newValue;
+				}
+			},			
+			bmolsnr:true
+		};
+        
+        var accountDomainAdminMailQuotaBx = {
+            visibilityChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraIsDelegatedAdminAccount,"TRUE"]],
+            visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount],        	
+        	ref:ZaAccount.A_zimbraDomainAdminMaxMailQuota,type:_SUPER_WIZ_CHECKBOX_,
+			resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+			checkBoxLabel:com_zimbra_delegatedadmin.NAD_DomainAdminMailQuotaAllowed,
+			updateElement:function (newValue) {
+				this.items[0].getElement().checked = ((parseInt(newValue) >= 0) || AjxUtil.isEmpty(newValue));
+			},
+			checkBoxElementChanged: function(elementValue,instanceValue, event) {
+				if(elementValue) {
+					this.getForm().itemChanged(this, 0, event);
+				} else {
+					this.getForm().itemChanged(this, -1, event);
+				}
+			},
+			bmolsnr:true
+		};
 
         var steps = xFormObject.items[3].items;
         var tmpItems = steps[0].items;
@@ -178,7 +205,7 @@ if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 				var cnt2 = tmpGrouperItems.length;
 				for(var j=0;j<cnt2;j++) {
 					if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A2_adminRoles) {
-						xFormObject.items[3].items[0].items[i].items.splice(j+1,0, accountDomainAdminMaxQuotaField);
+						xFormObject.items[3].items[0].items[i].items.splice(j+1,0, accountDomainAdminMailQuotaBx, accountDomainAdminMaxQuotaField);
 						break;
 					}
 				}
@@ -295,24 +322,72 @@ if(ZaTabView.XFormModifiers["ZaMigrationWizView"]) {
 	ZaTabView.XFormModifiers["ZaMigrationWizView"].push(ZaDomainAdmin.MigViewXFormModifier);
 }
 
+ZaDomainAdmin.canModifyQuota = function() {
+	var val = this.getInstanceValue(ZaCos.A_zimbraDomainAdminMaxMailQuota);
+	return (! (AjxUtil.isEmpty(val) || val<0));	
+}
+
+ZaDomainAdmin.isAdminQuotaCheckboxVisible = function() {
+	if(!ZaItem.hasWritePermission.call(this))
+		return false;
+		
+	if(this.getModelItem() && this.getModelItem().getLocalValue(this.getInstance(), this.refPath)==null) {
+		return false;
+	} else if (this.getModelItem() &&  (this.getModelItem().getLocalValue(this.getInstance(), this.refPath) instanceof AjxVector) && 
+		(this.getModelItem().getLocalValue(this.getInstance(), this.refPath).size==0) ) {	
+		return false;
+	} else {
+		if(this.getModelItem().getLocalValue(this.getInstance(), this.refPath)<0 && this.getModelItem().getSuperValue(this.getInstance()) <0) {
+			return false;
+		} else if(this.getModelItem().getLocalValue(this.getInstance(), this.refPath)>=0 && this.getModelItem().getSuperValue(this.getInstance()) >=0) {
+			return false;	
+		} else {
+			return true;
+		}
+	}	
+}
+
 //modify the cos UI
 if(ZaTabView.XFormModifiers["ZaCosXFormView"]) {
 	ZaDomainAdmin.CosXFormModifier = function(xFormObject) {
 		//add the zimbraDomainAdminMaxMailQuota
 		var seperator  = {type:_SEPARATOR_, colSpan:"*"};
 		var cosDomainAdminMaxQuotaField = {
-					ref:ZaCos.A_zimbraDomainAdminMaxMailQuota, type:_TEXTFIELD_,
-					msgName:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,label:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
-					labelLocation:_LEFT_,
-					cssClass:"admin_xform_number_input"
-				};
+			ref:ZaCos.A_zimbraDomainAdminMaxMailQuota, type:_TEXTFIELD_,
+			msgName:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
+			label:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
+			labelLocation:_LEFT_,
+			cssClass:"admin_xform_number_input",
+			enableDisableChecks:[ZaDomainAdmin.canModifyQuota],
+			enableDisableChangeEventSources:[ZaCos.A_zimbraDomainAdminMaxMailQuota],
+			bmolsnr:true,
+			getDisplayValue:function (newValue) {
+				if(newValue==-1) {
+					return "";
+				} else {
+					return newValue;
+				}
+			}
+		};
 
 		
-        var cosDomainAdminMailQuotaBx = {ref:ZaCos.A2_zimbraDomainAdminMailQuotaAllowed,type:_CHECKBOX_,
-							msgName:com_zimbra_delegatedadmin.NAD_DomainAdminMailQuotaAllowed ,label:com_zimbra_delegatedadmin.NAD_DomainAdminMailQuotaAllowed ,
-							trueValue:"TRUE", falseValue:"FALSE",
-							onChange:ZaDomainAdmin.onDomainAdminMailQuotaAllowed4cos
-						};
+        var cosDomainAdminMailQuotaBx = {
+        	ref:ZaCos.A_zimbraDomainAdminMaxMailQuota,type:_CHECKBOX_,
+			msgName:com_zimbra_delegatedadmin.NAD_DomainAdminMailQuotaAllowed,
+			label:com_zimbra_delegatedadmin.NAD_DomainAdminMailQuotaAllowed ,
+			updateElement:function (newValue) {
+				this.getElement().checked = (parseInt(newValue) >= 0);
+			},
+			elementChanged: function(elementValue,instanceValue, event) {
+				if(elementValue) {
+					this.getForm().itemChanged(this, 0, event);
+				} else {
+					this.getForm().itemChanged(this, -1, event);
+				}
+					
+			},
+			bmolsnr:true
+		};
 
 
 		var tabCases = xFormObject.items[2].items;

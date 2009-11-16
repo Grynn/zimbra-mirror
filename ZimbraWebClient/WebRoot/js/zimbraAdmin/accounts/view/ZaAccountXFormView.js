@@ -104,11 +104,6 @@ function(entry) {
 	this._containedObject[ZaAccount.A2_nonMemberList + "_offset"] = entry[ZaAccount.A2_nonMemberList + "_offset"];
 	this._containedObject[ZaAccount.A2_nonMemberList + "_more"] = entry[ZaAccount.A2_nonMemberList + "_more"];
 	
-	if ((typeof ZaDomainAdmin == "function")) {
-		this._containedObject[ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed] = entry [ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed];
-	}	
-	
-	
 	if(ZaTabView.isTAB_ENABLED(entry,ZaAccountXFormView.ALIASES_TAB_ATTRS, ZaAccountXFormView.ALIASES_TAB_RIGHTS)) {
 		if(this._containedObject.attrs[ZaAccount.A_zimbraMailAlias]) {
 			if(!this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] instanceof Array) {

@@ -181,7 +181,7 @@ Cos_MailQuota_XModelItem.prototype.getSuperValue = function(ins) {
 	var _ref = this.ref.replace("/", ".");
 	//var value = 0;
 	var value = null;
-	if((eval("ins._defaultValues." + _ref) != null) && (eval("ins._defaultValues." + _ref) != 0) && (eval("ins._defaultValues." + _ref) != "")) {
+	if((eval("ins._defaultValues." + _ref) != null) && (eval("ins._defaultValues." + _ref) != "")) {
 		value = (eval("ins._defaultValues." + _ref) / 1048576);
 		if(value != Math.round(value)) {
 			value = Number(value).toFixed(2);
@@ -372,6 +372,8 @@ Super_Textfield_XFormItem.prototype.initializeItems = function() {
 	var textFieldWidth = this.getInheritedProperty("textFieldWidth");
 	var toolTip = this.getInheritedProperty("toolTipContent");
 
+	var getDisplayValue = this.getInheritedProperty("getDisplayValue");
+	
 	var txtField =	{	
 		type:_TEXTFIELD_, ref:".",align:_LEFT_,
 		elementChanged: function(elementValue,instanceValue, event) {
@@ -393,7 +395,9 @@ Super_Textfield_XFormItem.prototype.initializeItems = function() {
 		labelWrap:this.getInheritedProperty("labelWrap")		
 	};
 	
-	
+	if(getDisplayValue) {
+		txtField.getDisplayValue = getDisplayValue;
+	}
 	
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
 	
@@ -509,7 +513,10 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 		falseValue:this.getInheritedProperty("falseValue"),
 		forceUpdate:true
 	};
-	
+	var chkBoxElementChanged = this.getInheritedProperty("checkBoxElementChanged");
+	if(chkBoxElementChanged) {
+		chkBox.elementChanged = chkBoxElementChanged;
+	}
 	var anchorHlpr = {	
 		type:_SUPER_ANCHOR_HELPER_, ref:".",
 		visibilityChecks:[Super_XFormItem.checkIfOverWriten],
@@ -517,6 +524,11 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 		onChange:Composite_XFormItem.onFieldChange,
 		cssStyle:"width:150px"
 	};
+	
+	var customOvewriteChecks = this.getInheritedProperty("customOvewriteChecks");
+	if(customOvewriteChecks) {
+		anchorHlpr.visibilityChecks = customOvewriteChecks; 
+	}
 	
 	if(anchorCssStyle) {
 		anchorHlpr.cssStyle = anchorCssStyle;
