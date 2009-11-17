@@ -35,6 +35,7 @@ ZaGlobalConfigViewController.prototype.constructor = ZaGlobalConfigViewControlle
 //ZaGlobalConfigViewController.STATUS_VIEW = "ZaGlobalConfigViewController.STATUS_VIEW";
 ZaController.initToolbarMethods["ZaGlobalConfigViewController"] = new Array();
 ZaController.setViewMethods["ZaGlobalConfigViewController"] = [];
+ZaController.changeActionsStateMethods["ZaGlobalConfigViewController"] = [];
 
 /**
 * Adds listener to removal of an ZaDomain 
@@ -69,35 +70,29 @@ ZaController.initToolbarMethods["ZaGlobalConfigViewController"].push(ZaGlobalCon
 
 ZaGlobalConfigViewController.setViewMethod = function (item) {
     try {
-	    this._initToolbar();
-		this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-		this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));		
-		this._toolbarOrder.push(ZaOperation.NONE);
-		this._toolbarOrder.push(ZaOperation.HELP);
-		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations, this._toolbarOrder);
-		this._contentView = this._view = new this.tabConstructor(this._container);
-		var elements = new Object();
-		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-		var tabParams = {
-			openInNewTab: false,
-			tabId: this.getContentViewId(),
-			tab: this.getMainTab()
-		}
-		//ZaApp.getInstance().createView(ZaZimbraAdmin._GLOBAL_SETTINGS,elements);
-		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-		this._UICreated = true;
-		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
-	
+	    if ( !this._UICreated || (this._view == null) || (this._toolbar == null)) {
+            this._initToolbar();
+            this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
+            this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
+            this._toolbarOrder.push(ZaOperation.NONE);
+            this._toolbarOrder.push(ZaOperation.HELP);
+            this._toolbar = new ZaToolBar(this._container, this._toolbarOperations, this._toolbarOrder);
+            this._contentView = this._view = new this.tabConstructor(this._container);
+            var elements = new Object();
+            elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+            elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+            var tabParams = {
+                openInNewTab: false,
+                tabId: this.getContentViewId(),
+                tab: this.getMainTab()
+            }
+            //ZaApp.getInstance().createView(ZaZimbraAdmin._GLOBAL_SETTINGS,elements);
+            ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
+            this._UICreated = true;
+            ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
+        }
 		//ZaApp.getInstance().pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
 		ZaApp.getInstance().pushView(this.getContentViewId());
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-		if (ZaOperation.UPDATELICENSE){
-			var updateLicenseButton = this._toolbar.getButton(ZaOperation.UPDATELICENSE) ;
-			updateLicenseButton.setEnabled(false);
-			 var divEl = updateLicenseButton.getHtmlElement();
-			 divEl.style.visibility = "hidden";
-		}
 		item.load();
 	
 		item[ZaModel.currentTab] = "1"
@@ -114,6 +109,15 @@ ZaGlobalConfigViewController.prototype.setEnabled =
 function(enable) {
 	this._view.setEnabled(enable);
 }
+
+ZaGlobalConfigViewController.changeActionsStateMethod =
+function () {
+    if(this._toolbarOperations[ZaOperation.SAVE]) {
+        this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+    }
+}
+ZaController.changeActionsStateMethods["ZaGlobalConfigViewController"].push(ZaGlobalConfigViewController.changeActionsStateMethod);
+
 
 /**
 * handles "download" button click. Launches file download in a new window

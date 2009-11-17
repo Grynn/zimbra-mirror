@@ -44,6 +44,14 @@ function() {
 		return "ZaOperation";
 }
 
+ZaOperation.prototype.setEnabled = function (enabled) {
+    this.enabled = enabled ;
+}
+
+ZaOperation.prototype.setVisible = function (visible) {
+    this.visible = visible ;
+}
+
 ZaOperation.duplicate = function (oldInstance) {
     var id = oldInstance.id;
 	var caption = oldInstance.caption;
