@@ -809,6 +809,20 @@ ZaItem.checkFBSettings = function (oldSettingObj, currentSettingObj, controller)
     }
 }
 
+ZaItem.clearInteropSettings = function () {
+     var currentSettingObj = this.getForm().getInstance() ;
+     var attrNames = [ZaDomain.A_zimbraFreebusyExchangeURL, ZaDomain.A_zimbraFreebusyExchangeAuthScheme,
+                     ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ZaDomain.A_zimbraFreebusyExchangeAuthPassword,
+                     ZaDomain.A_zimbraFreebusyExchangeUserOrg ] ;
+
+    for (var i=0; i < attrNames.length; i ++ ) {
+        var n = attrNames [i] ;
+        this.setInstanceValue("", n) ;
+    }
+    var form = this.getForm();
+    form.parent.setDirty(true);
+    form.refresh () ;
+}
 
 //Sometimes, the admin extensions needs to modify the object value before it is set
 //We can add the modifer function in the extension and it will be called by the main program

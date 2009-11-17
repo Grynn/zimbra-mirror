@@ -631,13 +631,19 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                             { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg, type: _TEXTFIELD_,
 						  	  label: ZaMsg.LBL_zimbraFreebusyExchangeUserOrg, width: "20em"
 						  	},
-
-                              {type: _GROUP_, colSpan:2, numCols:3, colSizes: ["150px", "*", "auto" ], items :[
+                              {type: _SPACER_, height: 10 },
+                              {type: _GROUP_, colSpan:2, numCols:5, colSizes: ["120px", "*", "50px", "*", "auto" ], items :[
                                   {   type:_CELLSPACER_ },
                                   {
                                       type: _DWT_BUTTON_ , colSpan: 2, label: ZaMsg.Check_Settings, width: "15em",
                                       onActivate: ZaItem.checkInteropSettings, enableDisableChecks:[[ZaItem.hasRight,ZaGlobalConfig.CHECK_EXCHANGE_AUTH_CONFIG_RIGHT,ZaZimbraAdmin.currentAdminAccount]]
                                   } ,
+                                  {   type:_CELLSPACER_ } ,
+                                  {
+                                      type: _DWT_BUTTON_ , colSpan: 2, label: ZaMsg.Clear_Settings, width: "15em",
+                                      onActivate: ZaItem.clearInteropSettings,
+                                      enableDisableChecks:[[ZaItem.hasRight,ZaGlobalConfig.CHECK_EXCHANGE_AUTH_CONFIG_RIGHT,ZaZimbraAdmin.currentAdminAccount]]
+                                  },
                                   {   type:_CELLSPACER_ }
                                  ]
                               }

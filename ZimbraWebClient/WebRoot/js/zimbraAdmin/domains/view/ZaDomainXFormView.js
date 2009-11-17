@@ -1038,14 +1038,19 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 					  	  label: ZaMsg.LBL_zimbraFreebusyExchangeUserOrg, width: "30em",
 						  onChange: ZaDomainXFormView.onFormFieldChanged
 					  	},
-                        {type: _GROUP_, colSpan:2, numCols:3, colSizes: ["150px", "*", "auto" ], 
+                        {type: _SPACER_, height: 10 },
+                        {type: _GROUP_, colSpan:2, numCols:5, colSizes: ["120px", "*", "50px", "*", "auto" ], 
                         	items :[
                             	{type:_CELLSPACER_ },
                               	{
                                   type: _DWT_BUTTON_ , colSpan: 2, label: ZaMsg.Check_Settings, width: "15em",
                                   onActivate: ZaItem.checkInteropSettings
                               	},
-                              	{type:_CELLSPACER_}
+                              	{type:_CELLSPACER_},
+                                {type: _DWT_BUTTON_ , colSpan: 2, label: ZaMsg.Clear_Settings, width: "15em",
+                                    onActivate: ZaItem.clearInteropSettings
+                              	},
+                              	{type:_CELLSPACER_}    
                              ]
                         }
 					]
