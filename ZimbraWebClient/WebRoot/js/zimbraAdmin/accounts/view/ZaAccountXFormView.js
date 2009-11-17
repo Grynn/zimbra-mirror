@@ -1481,7 +1481,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 						//non member group
 						{type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.Account_NonGroupLabel,
 							items:[
-								{type:_GROUP_, numCols:5, colSizes:[30, "auto",10,80, 120,20], width:"100%", 
+								{type:_GROUP_, numCols:5, colSizes:[50, "auto",10,80, 120,20], width:"100%", 
 								   items:[
 								   		{type:_OUTPUT_, value:ZaMsg.DLXV_LabelFind, nowrap:true},
 										{ref:"query", type:_TEXTFIELD_, width:"100%", label:null,
