@@ -134,6 +134,7 @@ DwtKeyMap.SWITCH_MODE		= "SwitchMode";
 DwtKeyMap.TEXT_BOLD			= "Bold";
 DwtKeyMap.TEXT_ITALIC		= "Italic";
 DwtKeyMap.TEXT_UNDERLINE	= "Underline";
+DwtKeyMap.TEXT_STRIKETHRU	= "Strikethru";
 DwtKeyMap.YES				= "Yes";
 
 DwtKeyMap.GOTO_TAB_RE = new RegExp(DwtKeyMap.GOTO_TAB + "(\\d+)");
