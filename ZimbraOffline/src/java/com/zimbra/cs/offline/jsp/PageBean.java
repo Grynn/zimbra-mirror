@@ -86,6 +86,15 @@ public class PageBean {
 		updateServerLocale(locale);
 	}
 	
+        public String getSkin() {
+            try {
+                return JspProvStub.getInstance().getOfflineAccount(
+                    OfflineConstants.LOCAL_ACCOUNT_ID).getAttr(Provisioning.A_zimbraPrefSkin);
+            } catch (ServiceException x) {
+                return "default";
+            }
+        }
+    
 	public static synchronized void updateServerLocale(Locale locale) throws ServiceException {
 	    if (serverLocale == null || !serverLocale.equals(locale)) {	        
 	        Map<String, Object> attrs = new HashMap<String, Object>();

@@ -238,6 +238,9 @@
 		<copy todir="${dist.dir}/jetty/webapps/zimbra/desktop" overwrite="true">
 			<fileset dir="WebRoot/desktop" />
 		</copy>
+		<copy todir="${dist.dir}/jetty/webapps/zimbra" overwrite="true">
+			<fileset dir="WebRoot/zimbra" />
+		</copy>
 		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
 			<fileset dir="WebRoot/WEB-INF/tags/desktop" />
 		</copy>

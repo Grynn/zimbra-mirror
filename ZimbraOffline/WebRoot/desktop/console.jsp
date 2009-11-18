@@ -16,8 +16,8 @@
 -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="zd" tagdir="/WEB-INF/tags/desktop" %>
 <%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
 
@@ -42,7 +42,7 @@
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <link rel="shortcut icon" href="/zimbra/favicon.ico" type="image/vnd.microsoft.icon">
 <link rel="stylesheet" href="/zimbra/css/common.css" type="text/css">
-<link rel="stylesheet" href="/zimbra/desktop/css/offline.css" type="text/css">
+<link rel="stylesheet" href="/zimbra/css/desktop.css?skin=${bean.skin}" type="text/css">
 <title><fmt:message key="ZimbraDesktop"/></title>
 
 <script type="text/javascript" src="/zimbra/desktop/js/desktop.js"></script>
@@ -99,7 +99,7 @@ function submit(id, name, type, flavor, verb) {
   <table class="ZPanel" cellpadding="0" cellspacing="0">
     <tr>
       <td class="ZPanelLogo">
-        <img src="/zimbra/desktop/img/YahooZimbraLogo.gif" border="0">
+        <img src="/zimbra/desktop/img/ZimbraDesktop.png" border="0">
       </td>
     </tr>
     <tr>
@@ -308,7 +308,9 @@ function submit(id, name, type, flavor, verb) {
 
   </table>
 </div>
-<zd:tips userAgent="${header['User-Agent']}"/>
+<div>
+  <zd:tips userAgent="${header['User-Agent']}"/>
+</div>
 
 <form name="accountForm" action="${zdf:addAuthToken('/zimbra/desktop/accsetup.jsp')}" method="POST">
     <input type="hidden" name="accountId">

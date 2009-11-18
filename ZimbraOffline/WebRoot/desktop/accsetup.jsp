@@ -177,6 +177,9 @@
         </c:set>
     </c:when>
     <c:otherwise>
+      <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.MailBean"/>
+      <jsp:setProperty name="bean" property="*"/>
+      <jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
     </c:otherwise>
 </c:choose>
 
@@ -185,7 +188,7 @@
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <link rel="shortcut icon" href="/zimbra/favicon.ico" type="image/vnd.microsoft.icon">
 <link rel="stylesheet" href="/zimbra/css/common.css" type="text/css">
-<link rel="stylesheet" href="/zimbra/desktop/css/offline.css" type="text/css">
+<link rel="stylesheet" href="/zimbra/css/desktop.css?skin=${bean.skin}&debug=1" type="text/css">
 <title><fmt:message key="ZimbraDesktop"/></title>
 
 <script type="text/javascript" src="/zimbra/desktop/js/desktop.js"></script>
@@ -240,7 +243,7 @@ function onEditLink(id, keep) {
   <table class="ZPanel" cellpadding="0" cellspacing="0">
     <tr>
       <td class="ZPanelLogo">
-        <img src="/zimbra/desktop/img/YahooZimbraLogo.gif" border="0">
+        <img src="/zimbra/desktop/img/ZimbraDesktop.png" border="0">
       </td>
     </tr>
     <tr>
