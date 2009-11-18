@@ -1,0 +1,299 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ * 
+ * Zimbra Collaboration Suite Server
+ * Copyright (C) 2007, 2008, 2009 Zimbra, Inc.
+ * 
+ * The contents of this file are subject to the Yahoo! Public License
+ * Version 1.0 ("License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ * http://www.zimbra.com/license.
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+ * 
+ * ***** END LICENSE BLOCK *****
+ */
+/* Offline-specific styles */
+BODY {
+	@ChromeBg@
+	@FullSize@
+	margin: 0px;
+}
+
+P, TH, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON, A {
+        @FontFamily-default@
+        @FontSize-normal@
+}
+
+FORM {
+	 margin: 0px;
+	 padding: 0px;
+}
+
+HTML {
+	@FullSize@
+}
+
+INPUT[type=text],
+INPUT[type=password] {
+	@InputField@
+}
+
+A:link, A:active, A:visited {
+	@Text-anchor@
+	text-decoration: none;
+}
+
+A:hover {
+	@MiniCalHeaderBg@
+	@MiniCalHeaderText@
+	border: none;
+	text-decoration: none;
+}
+
+.ZAccountName {
+	@FontSize-bigger@
+	font-weight: bold;
+	padding-bottom: 3px;
+}
+
+.ZCheckbox {
+	text-align: right;
+}
+
+.ZCheckboxLabel {
+	padding-top: 4px;
+}
+
+.ZField {
+	padding-left: 3px;
+	width: 350px;
+}
+
+.ZAccount {
+	width: 80%;
+}
+
+.ZAccountHelp {
+	width: 350px;
+}
+
+.ZAccountInfo {
+	padding-bottom: 2px;
+	white-space: nowrap;
+}
+
+.ZAccountInfo A:hover {
+	@MiniCalHeaderBg@
+	@MiniCalHeaderText@
+	text-decoration: none;
+}
+
+.ZAccountName {
+	@FontSize-bigger@
+	font-weight: bold;
+	padding-bottom: 3px;
+}
+
+.ZCheckbox {
+	text-align: right;
+}
+
+.ZCheckboxLabel {
+	padding-top: 4px;
+}
+
+.ZField {
+	padding-left: 3px;
+	width: 350px;
+}
+
+.ZFieldError,
+.ZFieldInfo,
+.ZFieldLabel,
+.ZFieldLabelLeft,
+.ZFieldSubLabel {
+	padding: 0px 4px;
+	text-align: right;
+	@Label@
+}
+
+.ZFieldError {
+	@Text-error@
+}
+
+.ZFieldLabel,
+.ZFieldLabelLeft {
+	@Label@
+	font-weight: bold;
+}
+
+.ZFieldLabelLeft {
+	text-align: left;
+}
+
+.ZFieldMedium {
+	width: 200px;
+}
+
+.ZFieldSubLabel {
+	padding-right: 10px;
+}
+
+.ZFieldSubLabelLeft {
+	text-align: left;
+}
+
+.ZHint {
+	@Text-hint@
+	white-space: nowrap;
+}
+
+.ZMessageInfo {
+	border: 1px solid @SeperatorColor@;
+	margin-bottom: 5px;
+	padding: 10px;
+	text-align: left;
+	@ListBg@
+}
+
+.ZOfflineError {
+	@Text-error@
+}
+
+.ZOfflineNotice {
+	@Text-important@
+	font-weight: bold;
+}
+
+.ZPanel {
+	overflow: visible;
+	position: relative;
+	width: 720px;
+	@roundCorners(8)@
+}
+
+.ZPanelBottom {
+	padding: 4px;
+	@Text-light@
+}
+
+.ZPanelBottom A {
+	@MiniCalHeaderText@
+}
+
+.ZPanelInfo {
+	@AppBg@
+	border: none;
+	padding: 16px 40px 18px 40px;
+	@roundCorners(0px 0px 8px 8px)@
+	text-align: center;
+}
+
+.ZPanelLogo {
+	@MiniCalHeaderBg@
+	border: none;
+	padding: 16px 0px 12px 0px;
+	@roundCorners(8px 8px 0px 0px)@
+	text-align: center;
+}
+
+.ZPanelPadding {
+	padding-top: 35px;
+}
+
+.ZPanelTitle {
+	@FontSize-biggest@
+	font-weight: normal;
+	padding: 0px;
+	text-align: center;
+}
+
+.ZRadio {
+	padding-top: 2px;
+}
+
+.ZSection {
+	font-weight: bold;
+	padding: 10px 5px 6px 5px;
+	@Label-light@
+}
+
+.ZSeparator {
+	border-width: 0px;
+	@BottomSeparator@
+}
+
+.ZSelect,
+.ZSelectSmall {
+	@Select@
+	background-color: @InputBgColor@;
+	width: 350px;
+}
+
+.ZSelectSmall {
+	width: 200px;
+}
+
+.ZSyncErrorNotice {
+	@Text-error@
+}
+
+.ZWelcome {
+	@FontSize-big@
+	font-weight: bold;
+}
+
+.ZWelcomeInfo {
+	@FontSize-normal@
+	font-weight: normal;
+	padding-bottom: 4px;
+	padding-top: 4px;
+}
+
+.ZButton {
+}
+
+.ZButton A,
+.ZButton A:active,
+.ZButton A:hover,
+.ZButton A:link,
+.ZButton A:visited {
+	@MiniCalHeaderText@
+	text-decoration: none;
+}
+
+.ZButton TABLE {
+	@MiniCalHeaderBg@
+	@MiniCalHeaderText@
+	border-color: #949494 #616161 #616161 #949494;
+	border-style: solid;
+	border-width: 2px 2px 2px 2px;
+	cursor: pointer;
+	overflow: visible;
+	text-align: center;
+	width: 80px;
+	@roundCorners(8)@
+}
+
+.ZButton .Warn TABLE {
+	background-color: #DB414C;
+}
+
+.ZButton .Down {
+	border-color: #616161 #949494 #949494 #616161;
+}
+
+.ZButton .Down,
+.ZButton .Over A {
+	@Text-disabled@
+}
+
+.ZButton .Title {
+	border: none;
+	padding: 2px 4px 3px 5px;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
