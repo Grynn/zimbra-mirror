@@ -527,6 +527,7 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	ZaGlobalAdvancedStatsPage.setText(label, ZaMsg.NAD_AdvStatsServerLabel);
 	select = document.createElement("select");
 	select.id = "select-servers" + id;
+	select.style.width = "18em";
 	select.name = "servers";
 	select.onchange = function(evt) { ZaGlobalAdvancedStatsPage.serverSelected(evt, id); }
 	td.vAlign = "top";
@@ -539,6 +540,7 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	ZaGlobalAdvancedStatsPage.setText(label, ZaMsg.NAD_AdvStatsGroupLabel);
 	select = document.createElement("select");
 	select.id = "select-group" + id;
+	select.style.width = "18em";
 	select.name = "groups";
 	select.onchange = function(evt) { ZaGlobalAdvancedStatsPage.groupSelected(evt, id); }
 	td.vAlign = "top";
@@ -551,6 +553,7 @@ ZaGlobalAdvancedStatsPage.insertChartHTML = function(element) {
 	ZaGlobalAdvancedStatsPage.setText(label, ZaMsg.NAD_AdvStatsCountersLabel);
 	select = document.createElement("select");
 	select.id = "select-counter" + id;
+	select.style.width = "18em";
 	select.name = "counters";
 	select.multiple = true;
 	select.size = 5;
