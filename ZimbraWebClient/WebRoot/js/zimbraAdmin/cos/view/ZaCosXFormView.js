@@ -966,6 +966,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
         var case5Items = [
             {type:_ZAGROUP_, numCols:1,colSizes:["auto"],
                 items: [
+                    {type: _OUTPUT_, value: ZaMsg.COS_LimitZimletsTo,     
+                                        cssStyle:"margin-left: 275px;" },
                     {type:_ZIMLET_SELECT_,
                         selectRef:ZaCos.A_zimbraZimletAvailableZimlets,
                         ref:ZaCos.A_zimbraZimletAvailableZimlets,
