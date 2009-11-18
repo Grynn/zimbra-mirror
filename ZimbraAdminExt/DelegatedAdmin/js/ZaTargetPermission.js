@@ -673,13 +673,19 @@ function (resp) {
 		return;
 
     for (i = 0; i < resp.right.length; i ++) {
-        var item;
-        if(this._constructor) {
-            item = new this._constructor() ;
+        var right = resp.right [i] ;
+        if (right != null) {
+            if (right.name == ZaRight.CROSS_DOMAIN_ADMIN)   {
+                continue ;
+            }
+            var item;
+            if(this._constructor) {
+                item = new this._constructor() ;
+            }
+            item.type = ZaItem.RIGHT ;
+            item.initFromJS(resp.right[i]) ;
+            this.add (item) ;
         }
-        item.type = ZaItem.RIGHT ;
-        item.initFromJS(resp.right[i]) ;
-        this.add (item) ;
     }
 }
 

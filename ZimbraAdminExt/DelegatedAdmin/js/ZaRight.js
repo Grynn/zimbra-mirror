@@ -50,7 +50,9 @@ ZaRight.RIGHT_TYPES = ["preset", "setAttrs", "getAttrs", "combo"];
 
 ZaRight.CONFIG_GRANTS_RIGHT = "viewGrants" ;
 ZaRight.VIEW_RIGHTS_USR_RIGHT = "checkRightUsr" ;
-ZaRight.VIEW_RIGHTS_GRP_RIGHT = "checkRightGrp" ;       
+ZaRight.VIEW_RIGHTS_GRP_RIGHT = "checkRightGrp" ;
+
+ZaRight.CROSS_DOMAIN_ADMIN = "crossDomainAdmin" ;
 
 //@return the lists of rights for the type specified
 ZaRight.getCustomRightsList = function () {
