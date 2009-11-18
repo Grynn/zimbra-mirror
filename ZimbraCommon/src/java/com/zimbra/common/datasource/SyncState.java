@@ -12,9 +12,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.datasource;
-
-import com.zimbra.cs.mailclient.imap.Mailbox;
+package com.zimbra.common.datasource;
 
 public class SyncState {
     private long lastUid = -1;

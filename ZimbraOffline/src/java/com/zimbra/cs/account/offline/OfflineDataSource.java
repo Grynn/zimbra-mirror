@@ -22,12 +22,12 @@ import java.util.Map;
 
 import javax.mail.Session;
 
+import com.zimbra.common.datasource.SyncState;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
-import com.zimbra.cs.datasource.SyncState;
 import com.zimbra.cs.mailbox.DataSourceMailbox;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Folder;
