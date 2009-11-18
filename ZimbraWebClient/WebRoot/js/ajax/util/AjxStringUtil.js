@@ -1089,9 +1089,9 @@ function(sourceUri) {
  *	Parse the query string (part after the "?") and return it as a hash of key/value pairs.
  */
 AjxStringUtil.parseQueryString =
-function() {
+function(sourceUri) {
 
-	var location = "" + window.location;
+	var location = sourceUri || ("" + window.location);
 	var idx = location.indexOf("?");
 	if (idx == -1) { return null; }
 	var qs = location.substring(idx + 1).replace(/#.*$/, '');

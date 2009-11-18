@@ -31,21 +31,21 @@ function() {
 		this._alexaKey = AjxStringUtil.trim(this.getConfig("alexaThumbnailKey"));
 		// console.log("Found Alexa Key: %s", this._alexaKey);
 	}
-    Com_Zimbra_Url.REGEXES = [];
-    //populate regular expressions
-    var s = this.getConfig("ZIMLET_CONFIG_REGEX_VALUE");
-    if(s){
-        var r = new RegExp(s,"gi");
-        if(r)
-        Com_Zimbra_Url.REGEXES.push(r);
-    }
+	Com_Zimbra_Url.REGEXES = [];
+	//populate regular expressions
+	var s = this.getConfig("ZIMLET_CONFIG_REGEX_VALUE");
+	if(s){
+		var r = new RegExp(s,"gi");
+		if(r)
+		Com_Zimbra_Url.REGEXES.push(r);
+	}
 
-    if (/^\s*true\s*$/i.test(this.getConfig("supportUNC"))) {
-        s = this.getConfig("ZIMLET_UNC_REGEX_VALUE");
-        var r = new RegExp(s,"gi");
-        if(r)
-        Com_Zimbra_Url.REGEXES.push(r);
-    }
+	if (/^\s*true\s*$/i.test(this.getConfig("supportUNC"))) {
+		s = this.getConfig("ZIMLET_UNC_REGEX_VALUE");
+		var r = new RegExp(s,"gi");
+		if(r)
+		Com_Zimbra_Url.REGEXES.push(r);
+	}
 
 };
 
@@ -56,23 +56,23 @@ Com_Zimbra_Url.THUMB_SIZE = 'width="200" height="150"';
 
 Com_Zimbra_Url.prototype.match =
 function(line, startIndex) {
-    for (var i = 0; i < Com_Zimbra_Url.REGEXES.length; i++) {
-        
-        var re = Com_Zimbra_Url.REGEXES[i];
+	for (var i = 0; i < Com_Zimbra_Url.REGEXES.length; i++) {
+		
+		var re = Com_Zimbra_Url.REGEXES[i];
 		re.lastIndex = startIndex;
 		var m = re.exec(line);
-        if (!m) {
-            continue;
-        }
-        var last = m[0].charAt(m[0].length - 1);
-        if (last == '.' || last == "," || last == '!') {
-            var m2 = {index: m.index };
-            m2[0] = m[0].substring(0, m[0].length - 1);
-            return m2;
-        } else {
-            return m;
-        }
-    }
+		if (!m) {
+			continue;
+		}
+		var last = m[0].charAt(m[0].length - 1);
+		if (last == '.' || last == "," || last == '!') {
+			var m2 = {index: m.index };
+			m2[0] = m[0].substring(0, m[0].length - 1);
+			return m2;
+		} else {
+			return m;
+		}
+	}
 };
 
 Com_Zimbra_Url.prototype._getHtmlContent =
@@ -81,17 +81,32 @@ function(html, idx, obj, context) {
 	if (escapedUrl.substr(0, 4) == 'www.') {
 		escapedUrl = "http://" + escapedUrl;
 	}
-    /*if(navigator.appVersion.match(/windows/ig)){
-        escapedUrl = obj.replace(/\//g,'\\');
-    }else{*/
-        escapedUrl = escapedUrl.replace(/\\/g,'/');
-    /*}*/
-    if(escapedUrl.indexOf("\\\\") == 0 || escapedUrl.indexOf("//") == 0){
-       obj.isUNC = true;
-       escapedUrl = "file://"+escapedUrl;
-    }
-    html[idx++] = "<a target='_blank' href='";
-	html[idx++] = escapedUrl;
+	/*if(navigator.appVersion.match(/windows/ig)){
+		escapedUrl = obj.replace(/\//g,'\\');
+	}else{*/
+		escapedUrl = escapedUrl.replace(/\\/g,'/');
+	/*}*/
+	if (escapedUrl.indexOf("\\\\") == 0 || escapedUrl.indexOf("//") == 0){
+		obj.isUNC = true;
+		escapedUrl = "file://"+escapedUrl;
+	}
+
+	var link = "<a target='_blank' href='" + escapedUrl; // Default link to use when ?app= fails
+
+	var paramStr = escapedUrl.substr(escapedUrl.indexOf("?"));
+	if (paramStr) {
+		var params = AjxStringUtil.parseQueryString(escapedUrl);
+		if (params) {
+			var app = params.app;
+			if (app && app.length > 0) {
+				app = app.toUpperCase();
+				if (appCtxt.getApp(ZmApp[app])) {
+					link = "<a href='javascript:top.appCtxt.getAppController().activateApp(top.ZmApp."+app+", null, null);";
+				}
+			}
+		}
+	}
+	html[idx++] = link;
 	html[idx++] = "'>";
 	html[idx++] = AjxStringUtil.htmlEncode(obj);
 	html[idx++] = "</a>";
@@ -104,16 +119,16 @@ function(spanElement, obj, context, canvas) {
 	if (/^\s*true\s*$/i.test(this.getConfig("stripUrls"))) {
 		url = url.replace(/[?#].*$/, "");
 	}
-    /*if(navigator.appVersion.match(/windows/ig)){
-        url = url.replace(/\//g,'\\');
-    }else{*/
-        url = url.replace(/\\/g,'/');
-   /* }*/
-    if(url.indexOf("\\\\") == 0 || url.indexOf("//") == 0){
-       url = "file://"+url;
-    }
+	/*if(navigator.appVersion.match(/windows/ig)){
+		url = url.replace(/\//g,'\\');
+	}else{*/
+		url = url.replace(/\\/g,'/');
+	/* }*/
+	if(url.indexOf("\\\\") == 0 || url.indexOf("//") == 0){
+		url = "file://"+url;
+	}
 
-    if(this._disablePreview || url.indexOf("file://")==0){  //local files
+	if(this._disablePreview || url.indexOf("file://")==0){  //local files
 		this._showUrlThumbnail(url,canvas);
 	} else if (this._alexaId) {
 		this._showAlexaThumbnail(url, canvas);
@@ -125,11 +140,11 @@ function(spanElement, obj, context, canvas) {
 };
 
 Com_Zimbra_Url.prototype.clicked = function(){
-  var tooltip = DwtShell.getShell(window).getToolTip();
-  if(tooltip) {
-      tooltip.popdown();
-  }
-  return true;
+	var tooltip = DwtShell.getShell(window).getToolTip();
+	if (tooltip) {
+		tooltip.popdown();
+	}
+	return true;
 };
 
 Com_Zimbra_Url.prototype._showUrlThumbnail = function(url, canvas){
@@ -159,8 +174,8 @@ Com_Zimbra_Url.ALEXA_CACHE_EXPIRES = 10 * 60 * 1000; // 10 minutes
 
 Com_Zimbra_Url.prototype._showAlexaThumbnail = function(url, canvas) {
 	canvas.innerHTML = [ "<table style='width: 200px; height: 150px; border-collapse: collapse' cellspacing='0' cellpadding='0'><tr><td align='center'>",
-			     ZmMsg.fetchingAlexaThumbnail,
-			     "</td></tr></table>" ].join("");
+				 ZmMsg.fetchingAlexaThumbnail,
+				 "</td></tr></table>" ].join("");
 
 	// check cache first
 	var cached = Com_Zimbra_Url.ALEXA_THUMBNAIL_CACHE[url];
@@ -203,7 +218,7 @@ Com_Zimbra_Url.prototype._showAlexaThumbnail = function(url, canvas) {
 	query = "http://ast.amazonaws.com/xino/?" + query.join("&");
 	// console.log("Query URL: %s", query);
 	this.sendRequest(null, query, null, new AjxCallback(this, this._alexaDataIn,
-							    [ canvas, url, query ]),
+								[ canvas, url, query ]),
 			 true);
 };
 
