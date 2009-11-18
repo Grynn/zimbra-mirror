@@ -61,6 +61,9 @@ function OnEdit(id, name, type, flavor) {
 }
 
 function OnLogin() {
+    zd.hide("addButton");
+    zd.hide("loginButton");
+    zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Loading'/></span>");
     window.location = "${zdf:addAuthToken('/zimbra/desktop/login.jsp')}";
 }
 

@@ -49,11 +49,6 @@
         <jsp:setProperty name="abean" property="locale" value="${pageContext.request.locale}"/>
         ${zdf:doRequest(abean)}
         <c:set var="bean" value="${abean}" scope="request"/>
-        <c:set var="beta">
-            <fmt:message key='BetaNoteAOL'>
-                <fmt:param>${betaLink}</fmt:param>
-            </fmt:message>
-        </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'Gmail'}">
         <jsp:useBean id="gbean" class="com.zimbra.cs.offline.jsp.GmailBean" scope="request"/>
@@ -75,11 +70,6 @@
                 <li><fmt:message key='GmailClick'><fmt:param><b><fmt:message key='GmailSaveChgs'/></b></fmt:param></fmt:message>
             </ol>
         </c:set>
-        <c:set var="beta">
-            <fmt:message key='BetaNoteGmail'>
-                <fmt:param>${betaLink}</fmt:param>
-            </fmt:message>
-        </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'Imap'}">
         <jsp:useBean id="ibean" class="com.zimbra.cs.offline.jsp.ImapBean" scope="request"/>
@@ -87,10 +77,8 @@
         <jsp:setProperty name="ibean" property="locale" value="${pageContext.request.locale}"/>
         ${zdf:doRequest(ibean)}
         <c:set var="bean" value="${ibean}" scope="request"/>
-        <c:set var="beta">
-            <fmt:message key='BetaNoteIMAP'>
-                <fmt:param>${betaLink}</fmt:param>
-            </fmt:message>
+        <c:set var="help">
+            <fmt:message key='IMAPNote'/>
         </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'MSE'}">
@@ -100,7 +88,7 @@
         ${zdf:doRequest(mbean)}
         <c:set var="bean" value="${mbean}" scope="request"/>
         <c:set var="help">
-        <fmt:message key='MSENote'/>
+            <fmt:message key='MSENote'/>
         </c:set>
         <c:set var="beta">
             <fmt:message key='BetaNoteExchange'>
@@ -114,10 +102,8 @@
         <jsp:setProperty name="pbean" property="locale" value="${pageContext.request.locale}"/>
         ${zdf:doRequest(pbean)}
         <c:set var="bean" value="${pbean}" scope="request"/>
-        <c:set var="beta">
-            <fmt:message key='BetaNotePOP'>
-                <fmt:param>${betaLink}</fmt:param>
-            </fmt:message>
+        <c:set var="help">
+            <fmt:message key='POPNote'/>
         </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'Xsync'}">
@@ -127,7 +113,7 @@
         ${zdf:doRequest(xbean)}
         <c:set var="bean" value="${xbean}" scope="request"/>
         <c:set var="help">
-        <fmt:message key='XsyncNote'/>
+            <fmt:message key='XsyncNote'/>
         </c:set>
         <c:set var="beta">
             <fmt:message key='BetaNoteXsync'>
@@ -144,11 +130,6 @@
         <c:set var="help">
 	    <fmt:message key='YMPNote'>
                 <fmt:param><a href=http://mail.yahoo.com target=_blank><fmt:message key='YMPLink'/></a></fmt:param>
-            </fmt:message>
-        </c:set>
-        <c:set var="beta">
-            <fmt:message key='BetaNoteYahoo'>
-                <fmt:param>${betaLink}</fmt:param>
             </fmt:message>
         </c:set>
     </c:when>
@@ -188,7 +169,7 @@
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <link rel="shortcut icon" href="/zimbra/favicon.ico" type="image/vnd.microsoft.icon">
 <link rel="stylesheet" href="/zimbra/css/common.css" type="text/css">
-<link rel="stylesheet" href="/zimbra/css/desktop.css?skin=${bean.skin}&debug=1" type="text/css">
+<link rel="stylesheet" href="/zimbra/css/desktop.css?skin=${bean.skin}" type="text/css">
 <title><fmt:message key="ZimbraDesktop"/></title>
 
 <script type="text/javascript" src="/zimbra/desktop/js/desktop.js"></script>
@@ -311,7 +292,7 @@ function onEditLink(id, keep) {
                   <option value="Xsync" <c:if test="${accountFlavor eq 'Xsync'}">selected</c:if> ><fmt:message key='Xsync'/></option>
                   <option value="MSE" <c:if test="${accountFlavor eq 'MSE'}">selected</c:if> ><fmt:message key='MSE'/></option>
                   <option value="Imap" <c:if test="${accountFlavor eq 'Imap'}">selected</c:if> ><fmt:message key='Imap'/></option>
-                  <option value="Pop" <c:if test="${accountFlavor eq 'Pop'}">selected</c:if> ><fmt:message key='Pop'/></option>
+                  <option value="Pop" <c:if test="${accountFlavor eq 'Pop'}">selected</c:if> ><fmt:message key='POP'/></option>
                   </select>
                 </form>
               </td>
