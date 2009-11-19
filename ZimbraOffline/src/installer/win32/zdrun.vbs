@@ -30,12 +30,12 @@ Sub FindAndReplace(sFile, oTokens)
     On Error Resume Next
     Set oInFile = oFso.OpenTextFile(sFile, 1, false)
     If Err.number <> 0 Then
-        WScript.StdOut.WriteLine("failed to open file: " & sFile)
+        WScript.StdOut.WriteLine "failed to open file: " & sFile
         Exit Sub
     End If
     Set oOutFile = oFso.OpenTextFile(sTmpFile, 2, true)
     If Err.number <> 0 Then
-        WScript.StdOut.WriteLine("failed to open file: " & sTmpFile)
+        WScript.StdOut.WriteLine "failed to open file: " & sTmpFile
         Exit Sub   
     End If
     
@@ -159,6 +159,8 @@ If oFso.FolderExists(sDataRoot) Then
 	End If
 End If
 
+WScript.StdOut.WriteLine "Initializing. Please wait..."
+
 If bIsUpgrade Then
 	BackupData
 End If
@@ -183,7 +185,6 @@ FindAndReplace sDataRoot & "\jetty\etc\jetty.xml", oTokens
 FindAndReplace sDataRoot & "\zdesktop.webapp\webapp.ini", oTokens
 FindAndReplace sDataRoot & "\zdesktop.webapp\override.ini", oTokens
 FindAndReplace sDataRoot & "\bin\zdesktop.ini", oTokens
-FindAndReplace sDataRoot & "\bin\zdctl.vbs", oTokens
 
 If bIsUpgrade Then
 	RestoreData

@@ -17,7 +17,7 @@
 ' ZD service control
 '
 
-Dim sScriptPath, sScriptDir, sZdOutFile, sZdPidFile, sZdStopPortFile, sZdCtlErrFile, sAppRoot, oWMI, oFso, sCurrUser
+Dim sScriptPath, sScriptDir, sZdOutFile, sZdPidFile, sZdCtlErrFile, oWMI, oShell, oFso, sCurrUser
 
 Sub Usage()
     WScript.StdOut.WriteLine("Usage: zdctl.vbs <start|stop>")
@@ -65,71 +65,66 @@ Function ReadLineFromFile(sFile)
     oFin.Close
 End Function
 
-' sDir: if Null, it's calling process's current dir
-' iSW: 0 - hide, 1 - normal
-Function RunCmd(sCmd, sDir, iSW, sPidFile, sErrFile) 
-    Dim oStartup, oCfg, oProc, iRet, iPid, sErr, oFout
-    
-    Set oStartup = oWMI.Get("Win32_ProcessStartup")
-    Set oCfg = oStartup.SpawnInstance_
-    oCfg.ShowWindow = iSW
+Sub RunCmd(sCmd, sArgs, sImgName, sPidFile, sErrFile) 
+    oShell.Run sCmd & " " & sArgs, 0, false
+    WScript.Sleep 2000 
 
-    Set oProc = oWMI.Get("Win32_Process")
-    iRet = oProc.Create(sCmd, sDir, oCfg, iPid)         
-    If iRet <> 0 Then
-        sErr = "Process could not be created(" & iRet & "): " & sCmd        
-        If IsNull(sErrFile) Then
-            WScript.StdOut.WriteLine(sErr)
-        Else
-            WriteLineToFile sErrFile, sErr, false
-        End If
-        RunCmd = false
-    Else
-        If Not IsNull(sPidFile) Then
-            WriteLineTofile sPidFile, iPid, false
-        End If
-        RunCmd = true
+    If (Not IsNull(sImgName)) And (Not IsNull(sPidFile)) Then
+    	Dim oProcs, oProc
+		Set oProcs = oWMI.ExecQuery("SELECT ProcessId, CommandLine FROM Win32_Process WHERE Name = '" & sImgName & "' ")
+    	For Each oProc In oProcs
+    		If InStr(1, oProc.CommandLine, sArgs, 1) > 0 Then
+				WriteLineToFile sPidFile, oProc.ProcessId, false
+				Exit Sub
+			End If
+		Next
     End If
-End Function
+
+	If (Not IsNull(sErrFile)) Then
+		WriteLineToFile sErrFile, "Unable to get process id"
+	End If
+End Sub
 
 Sub StartServer()
-    Dim bRet, sCmd, oFile, iWaitTime, iSize
+    Dim sArgs, oFile, iWaitTime 
     
     If IsRunning() Then
         WScript.StdOut.WriteLine("ZD service already running")
         WScript.Quit
     End If
 
+    WScript.StdOut.WriteLine("Starting background process. Please wait...")
+
     If oFso.FileExists(sZdOutFile) Then
         oFso.DeleteFile sZdOutFile
     End If
     
-    sCmd = "cmd.exe /k " & Chr(34) & sScriptDir & "\zdesktop.exe" & Chr(34)
-    bRet = RunCmd(sCmd, sScriptDir, 0, sZdPidFile, sZdCtlErrFile)
+    sArgs = "/k " & Chr(34) & sScriptDir & "\zdesktop.exe" & Chr(34)
+    RunCmd "%comspec%", sArgs, "cmd.exe", sZdPidFile, Null 
 
-	If bRet = true Then 
-    	iWaitTime = 20000 
-    	Do Until iWaitTime <= 0
-        	If oFso.FileExists(sZdOutFile) Then
-            	Exit Do
-        	End If
-        	WSCript.Sleep(1000)
-        	iWaitTime = iWaitTime - 1000
-    	Loop
-	End If
+   	iWaitTime = 20000 
+   	Do Until iWaitTime <= 0
+       	If oFso.FileExists(sZdOutFile) Then
+           	Exit Do
+       	End If
+       	WSCript.Sleep(1000)
+       	iWaitTime = iWaitTime - 1000
+   	Loop
     
-    If (bRet = false) Or (Not oFso.FileExists(sZdOutFile)) Then
+    If Not oFso.FileExists(sZdOutFile) Then
         WriteLineToFile sZdCtlErrFile, "Failed to start ZD service", true
     End If
 End Sub
 
 Sub StopServer()
-    Dim sPid, sZdPid, iWaitTime, sCmd, sTaskKill, oProcs, oProc
+    Dim sPid, sZdPid, iWaitTime, sTaskKill, oProcs, oProc
     
     If Not IsRunning() Then
         WScript.StdOut.WriteLine("ZD service not running")
         WScript.Quit
     End If
+
+    WScript.StdOut.WriteLine("Stopping background process. Please wait...")
 
 	sTaskKill = Chr(34) & oFso.GetSpecialFolder(1).Path & "\taskkill.exe" & Chr(34)
     iWaitTime = 10000 ' 10 seconds
@@ -139,8 +134,7 @@ Sub StopServer()
         WriteLineToFile sZdCtlErrFile, "Unable to read log\zdesktop.pid", true
         iWaitTime = 0 
 	Else
-		sCmd = sTaskKill & " /PID " & sPid
-		RunCmd sCmd, Null, 0, Null, Null
+		RunCmd sTaskKill, "/PID " & sPid, Null, Null, Null
     End If    
 
 	sZdPid = Null
@@ -171,8 +165,7 @@ Sub StopServer()
     Loop
     
     ' hard kill
-	sCmd = sTaskKill & " /F /PID " & sZdPid
-   	RunCmd sCmd, Null, 0, Null, Null
+   	RunCmd sTaskKill, "/F /PID " & sZdPid, Null, Null, Null
 	On Error Resume Next
     oFso.DeleteFile sZdPidFile
 End Sub
@@ -186,14 +179,13 @@ ElseIf oArgs.Item(0) <> "start" And oArgs.Item(0) <> "stop" Then
     Usage()
 End If
 
-sAppRoot = "@install.app.root@"
 sScriptPath = WScript.ScriptFullName
 sScriptDir = Left(sScriptPath, InStrRev(sScriptPath, WScript.ScriptName) - 2)
 sZdOutFile = sScriptDir & "\..\log\zdesktop.out"
 sZdPidFile = sScriptDir & "\..\log\zdesktop.pid"
-sZdStopPortFile = sScriptDir & "\..\log\zdesktop.sp"
 sZdCtlErrFile = sScriptDir & "\..\log\zdctl.err"
 Set oWMI = GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\cimv2")
+Set oShell = CreateObject("WScript.Shell")
 Set oFso = CreateObject("Scripting.FileSystemObject")
 Set oWN = WScript.CreateObject("WScript.Network")
 sCurrUser = oWN.UserName
