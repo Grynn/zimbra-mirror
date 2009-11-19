@@ -19,6 +19,8 @@ import java.util.*;
 import org.apache.tools.ant.*;
 import org.apache.tools.ant.types.*;
 
+import com.zimbra.common.util.TemplateCompiler;
+
 
 public class TemplateTask
 extends Task {
@@ -81,7 +83,7 @@ extends Task {
             DirectoryScanner scanner = fileSet.getDirectoryScanner(project);
             String[] filenames = scanner.getIncludedFiles();
 	        try {
-		        Template.convertFiles(idir, odir, prefix, filenames, format,
+		        TemplateCompiler.compile(idir, odir, prefix, filenames, format,
 				                      authoritative, define);
 	        } catch (IOException e) {
 		        System.err.println("error: "+e.getMessage());

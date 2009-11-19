@@ -12,7 +12,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.kabuki.tools.templates;
+package com.zimbra.common.util;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -25,7 +25,7 @@ import org.apache.commons.cli.*;
 
 /**
  */
-public class Template {
+public class TemplateCompiler {
 
 	//
 	// Constants
@@ -101,8 +101,8 @@ public class Template {
 	public static void main(String[] args)
 	throws Exception {
         try {
-            Template template = new Template();
-            template.templatize(args);
+            TemplateCompiler compiler = new TemplateCompiler();
+            compiler.compile(args);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -114,14 +114,14 @@ public class Template {
 	//  Public API
 	//
 
-	public static void convertFiles(File idir, File odir, String prefix,
+	public static void compile(File idir, File odir, String prefix,
 	                                String[] filenames,
 	                                boolean authoritative, boolean define)
 	throws IOException {
-		convertFiles(idir, odir, prefix, filenames, "js", authoritative, define);
+		compile(idir, odir, prefix, filenames, "js", authoritative, define);
 	}
 
-	public static void convertFiles(File idir, File odir, String prefix,
+	public static void compile(File idir, File odir, String prefix,
 	                                String[] filenames, String format,
 	                                boolean authoritative, boolean define)
 	throws IOException {
@@ -140,7 +140,7 @@ public class Template {
 				pdir.mkdirs();
 			}
 			try {
-				convert(ifile, ofile, format, pkg, authoritative, define);
+				compile(ifile, ofile, format, pkg, authoritative, define);
 			}
 			catch (IOException e) {
 				System.err.println("error: "+e.getMessage());
@@ -148,13 +148,13 @@ public class Template {
 		}
 	}
 
-	public static void convert(File ifile, File ofile, String pkg,
+	public static void compile(File ifile, File ofile, String pkg,
 	                           boolean authoritative, boolean define)
 	throws IOException {
-		convert(ifile, ofile, "js", pkg, authoritative, define);
+		compile(ifile, ofile, "js", pkg, authoritative, define);
 	}
 
-	public static void convert(File ifile, File ofile, String format, String pkg,
+	public static void compile(File ifile, File ofile, String format, String pkg,
 	                           boolean authoritative, boolean define)
 	throws IOException {
 	    BufferedReader in = null;
@@ -254,25 +254,12 @@ public class Template {
 	//  Private helpers
 	//
 
-	private void templatize(String[] args) throws IOException {
+	private void compile(String[] args) throws IOException {
 		parseArgs(args);
-
-		/*
-		System.out.println("Authoritative: " + _authoritative);
-		System.out.println("Prefix: " + _prefix);
-		System.out.println("Input dir base: "+ _idir);
-		System.out.println("Output dir base: " + _odir);
-		System.out.println("Files...");
-		for (String f : _filenames) {
-			System.out.println("\t" + f);
-		}
-        */
 
 		File idir = new File(_idir);
 		File odir = new File(_odir);
-
-        convertFiles(idir, odir, _prefix, _filenames, _format, _authoritative, _define);
-
+        compile(idir, odir, _prefix, _filenames, _format, _authoritative, _define);
 	}
 
 	private void parseArgs(String[] args) {
