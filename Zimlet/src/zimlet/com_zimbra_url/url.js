@@ -93,15 +93,17 @@ function(html, idx, obj, context) {
 
 	var link = "<a target='_blank' href='" + escapedUrl; // Default link to use when ?app= fails
 
-	var paramStr = escapedUrl.substr(escapedUrl.indexOf("?"));
-	if (paramStr) {
-		var params = AjxStringUtil.parseQueryString(escapedUrl);
-		if (params) {
-			var app = params.app;
-			if (app && app.length > 0) {
-				app = app.toUpperCase();
-				if (appCtxt.getApp(ZmApp[app])) {
-					link = "<a href='javascript:top.appCtxt.getAppController().activateApp(top.ZmApp."+app+", null, null);";
+	if (escapedUrl.split(/[\?#]/)[0] == (""+window.location).split(/[\?#]/)[0]) {
+		var paramStr = escapedUrl.substr(escapedUrl.indexOf("?"));
+		if (paramStr) {
+			var params = AjxStringUtil.parseQueryString(escapedUrl);
+			if (params) {
+				var app = params.app;
+				if (app && app.length > 0) {
+					app = app.toUpperCase();
+					if (appCtxt.getApp(ZmApp[app])) {
+						link = "<a href='javascript:top.appCtxt.getAppController().activateApp(top.ZmApp."+app+", null, null);";
+					}
 				}
 			}
 		}
