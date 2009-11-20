@@ -35,17 +35,32 @@ com_zimbra_socialTwitter.prototype._getTodayStr = function() {
 
 com_zimbra_socialTwitter.prototype._normalizeDate =
 function(month, day, year) {
-	var tmpArry = (I18nMsg.formatDateShort.toLowerCase()).split("/");
-	if (tmpArry[0].indexOf("d") >= 0 && tmpArry[1].indexOf("m") >= 0) {
-		return day + "/" + month + "/" + year;
-	} else if (tmpArry[1].indexOf("d") >= 0 && tmpArry[0].indexOf("m") >= 0) {
-		return month + "/" + day + "/" + year;
-	} else if (tmpArry[1].indexOf("m") >= 0 && tmpArry[2].indexOf("d") >= 0) {
-		return year + "/" + month + "/" + day;
-	} else if (tmpArry[1].indexOf("d") >= 0 && tmpArry[2].indexOf("m") >= 0) {
-		return year + "/" + day + "/" + month;
+	var fString = [];
+	var ds = I18nMsg.formatDateShort.toLowerCase();
+	var arry = [];
+	arry.push({name:"m", indx:ds.indexOf("m")});
+	arry.push({name:"yyyy", indx:ds.indexOf("yyyy")});
+	arry.push({name:"d", indx:ds.indexOf("d")});
+	var sArry = arry.sort(social_sortTimeObjs);
+	for(var i = 0; i < sArry.length; i++) {
+		var name = sArry[i].name;
+		if(name == "m") {
+			fString.push(month);
+		} else if(name == "yyyy") {
+			fString.push(year);
+		}  else if(name == "d") {
+			fString.push(day);
+		} 
 	}
+	return fString.join("/");
 };
+
+function social_sortTimeObjs(a, b) {
+	var x = parseInt(a.indx);
+	var y = parseInt(b.indx);
+	return ((x > y) ? 1 : ((x < y) ? -1 : 0));
+}
+
 com_zimbra_socialTwitter.prototype.getTwitterTrends =
 function() {
 	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode("http://search.twitter.com/trends.json");
