@@ -28,6 +28,7 @@
         <Call name="addRewriteRule"><Arg>/zimbraAdmin/*</Arg><Arg></Arg></Call>
         <Call name="addRewriteRule"><Arg>/service/*</Arg><Arg></Arg></Call>
         <Call name="addRewriteRule"><Arg>/zimbra/*</Arg><Arg></Arg></Call>
+        <Call name="addRewriteRule"><Arg>/zimlet/*</Arg><Arg></Arg></Call>
         <Call name="addRewriteRule"><Arg>/*</Arg><Arg>/zimbra</Arg></Call>
         <Set name="handler">
           <New id="Handlers" class="org.mortbay.jetty.handler.HandlerCollection">

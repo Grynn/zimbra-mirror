@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+  <display-name>Zimlet Service</display-name>
+  <description>Zimlet repository</description>
+
+<!--
+  <filter>
+    <filter-name>ZimletFilter</filter-name>
+    <filter-class>com.zimbra.cs.zimlet.ZimletFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>ZimletFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <servlet>
+    <servlet-name>ProxyServlet</servlet-name>
+    <servlet-class>com.zimbra.cs.zimlet.ProxyServlet</servlet-class>
+    <load-on-startup>8</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>ZimletResources</servlet-name>
+    <servlet-class>com.zimbra.cs.zimlet.ZimletResources</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ProxyServlet</servlet-name>
+    <url-pattern>/proxy/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>ZimletResources</servlet-name>
+    <url-pattern>/zimlet/*</url-pattern>
+  </servlet-mapping>
+-->
+</web-app>
