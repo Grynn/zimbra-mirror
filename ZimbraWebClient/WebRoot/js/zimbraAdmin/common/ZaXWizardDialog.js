@@ -96,6 +96,7 @@ function(pageKey) {
 		this._localXForm.focusFirst(this._localXForm.tabGroupIDs[pageKey]);
 	else
 		this._localXForm.focusFirst();
+    this._localXForm.refresh () ; //some wizard value is not refreshed. See bug28704 comment #11
 }
 
 /**
