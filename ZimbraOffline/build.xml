@@ -419,6 +419,7 @@
 		<copy todir="${dist.dir}/conf" file="${config.dir}/derby.properties" overwrite="true"/>
 		<copy tofile="${dist.dir}/conf/localconfig.xml" file="${config.dir}/localconfig.xml" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/log4j.properties" file="${config.dir}/log4j.properties" overwrite="true" />
+		<copy tofile="${dist.dir}/conf/zdwrapper.conf" file="${config.dir}/wrapper.conf" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/timezones.ics" file="${server.config.dir}/timezones.ics" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/zimbra-contact-fields.xml" file="${server.config.dir}/contacts/zimbra-contact-fields.xml" overwrite="true" />
 		<copy todir="${dist.dir}/conf/msgs" overwrite="true">
@@ -829,8 +830,11 @@
 		</copy>
 		<chmod file="${dist.app.dir}/linux/svckill.sh" perm="ugo+x"/>
 
+		<unzip src="../ThirdParty/wrapper/wrapper-windows-x86-32-3.3.6.zip" dest="${build.dir}/wrapper" overwrite="true" />
+		<copy tofile="${dist.app.dir}/win32/zdwrapper.exe" file="${build.dir}/wrapper/wrapper-windows-x86-32-3.3.6/bin/wrapper.exe" overwrite="true" />
+		<copy todir="${dist.app.dir}/lib" file="${build.dir}/wrapper/wrapper-windows-x86-32-3.3.6/lib/wrapper.dll" overwrite="true" />
+		<copy todir="${dist.app.dir}/lib" file="${build.dir}/wrapper/wrapper-windows-x86-32-3.3.6/lib/wrapper.jar" overwrite="true" />
 		<copy todir="${dist.app.dir}/win32" overwrite="true">
-			<fileset dir="src/installer" includes="svckill.vbs" />
 			<fileset dir="src/installer/resources" includes="launcher_32x32.ico launcher_48x48.ico" />
 		</copy>
 		<copy todir="${dist.app.dir}/win32/prism" file="src/installer/win32/prism/application.ini" overwrite="true"/>
@@ -995,6 +999,7 @@
 			<gunzip src="../ThirdPartyBuilds/windows/java/jre/windows-x86-1.6.0_16.tar.gz" dest="${dist.app.dir}/win32/jre"/>
 			<untar src="${dist.app.dir}/win32/jre/windows-x86-1.6.0_16.tar" dest="${dist.app.dir}/win32/jre" overwrite="true"/>
 			<delete file="${dist.app.dir}/win32/jre/windows-x86-1.6.0_16.tar"/>
+			<copy tofile="${dist.app.dir}/win32/jre/bin/zdesktop.exe" file="${dist.app.dir}/win32/jre/bin/java.exe" overwrite="true" />
 		</then></if>
 
 		<if><isset property="is-unix" /><then>

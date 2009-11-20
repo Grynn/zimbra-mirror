@@ -13,7 +13,6 @@
 	<property name="zd.app" value="${basedir}/build/dist/app/macos/Zimbra Desktop.app" />
 	<property name="winperl" value="C:\strawberry\perl\bin\perl.exe" />
 	<property name="wix.home" value="C:\Program Files\Windows Installer XML v3" />
-	<property name="winrun4j.zip" location="../ThirdPartyBuilds/windows/winrun4j/winrun4J-0.3.3.zip" />
  
   	<condition property="is-mac">
 		<os family="mac"/>
@@ -114,9 +113,6 @@
 	<target name="installer-pack-media-windows" if="is-windows">
 		<delete dir="build/dist/app/macos" />
 		<delete dir="build/dist/app/linux" />
-		<unzip src="${winrun4j.zip}" dest="build" overwrite="true" />
-		<copy tofile="build/dist/app/data/bin/zdesktop.exe" file="build/winrun4j/bin/WinRun4J.exe" overwrite="true" />	
-		<copy todir="build/dist/app/data/bin" file="conf/zdesktop.ini" overwrite="true" />
 		<copy todir="build/dist/app/data/bin" file="src/installer/win32/zdctl.vbs" overwrite="true" />
 		<copy todir="build/dist/app/win32" file="src/installer/win32/zdrun.vbs" overwrite="true" />
 		<delete file="build/dist/app/data/bin/zdesktop" />
