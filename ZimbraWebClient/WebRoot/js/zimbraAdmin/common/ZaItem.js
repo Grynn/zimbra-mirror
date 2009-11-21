@@ -736,16 +736,51 @@ function () {
     var controller =  ZaApp.getInstance().getCurrentController() ;
 
     try {
-
         //bug 29424 - save the settings before the check
-        var oldSettingObj = controller._currentObject  ;
+//        var oldSettingObj = controller._currentObject  ;
+//        ZaItem.checkFBSettings (oldSettingObj, currentSettingObj, controller) ;
         var currentSettingObj = this.getForm().getInstance() ;
-        ZaItem.checkFBSettings (oldSettingObj, currentSettingObj, controller) ;
+        var defaultValues = currentSettingObj._defaultValues ; //it could be the global settings for domain
 
-        if (AjxEnv.hasFirebug) console.log("Checking the interop settings ...") ;
-        var soapCmd  = "CheckExchangeAuthRequest";
+       if (AjxEnv.hasFirebug) console.log("Checking the interop settings ...") ;
+       var soapCmd  = "CheckExchangeAuthRequest";
+       var soapDoc = AjxSoapDoc.create(soapCmd, ZaZimbraAdmin.URN, null);
+       var authEl = soapDoc.set("auth", "") ;
 
-        var soapDoc = AjxSoapDoc.create(soapCmd, ZaZimbraAdmin.URN, null);
+        var attrNames = [ZaDomain.A_zimbraFreebusyExchangeURL, ZaDomain.A_zimbraFreebusyExchangeAuthScheme,
+                             ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ZaDomain.A_zimbraFreebusyExchangeAuthPassword ];
+
+        for (var i=0; i < attrNames.length; i ++ ) {
+           var n = attrNames [i] ;
+           var value =  currentSettingObj.attrs[n] || defaultValues.attrs[n];
+           if (value == null) {
+               var errorMsg ;
+               if (n == ZaDomain.A_zimbraFreebusyExchangeURL) {
+                   errorMsg = ZaMsg.Error_missing_exchange_url ;
+               } else if (n == ZaDomain.A_zimbraFreebusyExchangeAuthScheme) {
+                   errorMsg = ZaMsg.Error_missing_scheme ;
+               } else if (n == ZaDomain.A_zimbraFreebusyExchangeAuthUsername) {
+                   errorMsg = ZaMsg.Error_missing_exchange_username ;
+               } else if (n == ZaDomain.A_zimbraFreebusyExchangeAuthPassword) {
+                   errorMsg = ZaMsg.Error_missing_exchange_password ;
+               }
+               controller.popupErrorDialog(errorMsg);
+               return ;
+           } else {
+               var attrName ;
+               if (n == ZaDomain.A_zimbraFreebusyExchangeURL) {
+                   attrName = "url" ;
+               } else if (n == ZaDomain.A_zimbraFreebusyExchangeAuthScheme) {
+                    attrName = "scheme" ;
+               } else if (n == ZaDomain.A_zimbraFreebusyExchangeAuthUsername) {
+                   attrName = "user" ;
+               } else if (n == ZaDomain.A_zimbraFreebusyExchangeAuthPassword) {
+                   attrName = "pass" ;
+               }
+               authEl.setAttribute(attrName, value ) ;
+           }
+        }
+  
         var params = new Object();
         params.soapDoc = soapDoc;
         var reqMgrParams = {
@@ -760,6 +795,7 @@ function () {
     }
 }
 
+/*
 ZaItem.checkFBSettings = function (oldSettingObj, currentSettingObj, controller) {
     var attrNames = [ZaDomain.A_zimbraFreebusyExchangeURL, ZaDomain.A_zimbraFreebusyExchangeAuthScheme,
                      ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ZaDomain.A_zimbraFreebusyExchangeAuthPassword,
@@ -807,7 +843,7 @@ ZaItem.checkFBSettings = function (oldSettingObj, currentSettingObj, controller)
         }
         ZaRequestMgr.invoke(params, reqMgrParams) ;
     }
-}
+}  */
 
 ZaItem.clearInteropSettings = function () {
      var currentSettingObj = this.getForm().getInstance() ;

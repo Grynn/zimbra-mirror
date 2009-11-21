@@ -1017,25 +1017,28 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 				{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_Exchange_Settings,
 					items: [
 						{ ref: ZaDomain.A_zimbraFreebusyExchangeURL,
-                             type: _TEXTFIELD_, width: "30em" ,
+                             type: _SUPER_TEXTFIELD_, width: "30em" ,
+                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                              onChange: ZaDomainXFormView.onFormFieldChanged ,
-                             label: ZaMsg.NAD_Exchange_URL
+                             txtBoxLabel: ZaMsg.NAD_Exchange_URL
 						},
 						{ ref: ZaDomain.A_zimbraFreebusyExchangeAuthScheme, label: ZaMsg.NAD_Exchange_Auth_Schema,
-							type: _OSELECT1_,
+							type: _SUPER_SELECT1_,   resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 					    	onChange: ZaDomainXFormView.onFormFieldChanged
         	           	},
 						{ ref: ZaDomain.A_zimbraFreebusyExchangeAuthUsername,
-				  	  		type: _TEXTFIELD_, width: "20em",
-                         	label: ZaMsg.NAD_Exchange_Auth_User,
+                            resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+				  	  		type: _SUPER_TEXTFIELD_, width: "20em",
+                         	txtBoxLabel: ZaMsg.NAD_Exchange_Auth_User,
 					  		onChange: ZaDomainXFormView.onFormFieldChanged
 				  		},
 					  	{ ref: ZaDomain.A_zimbraFreebusyExchangeAuthPassword, type: _PASSWORD_,
 					  	  label: ZaMsg.NAD_Exchange_Auth_Password, width: "20em",
 						  onChange: ZaDomainXFormView.onFormFieldChanged
 					  	},
-                        { ref: ZaDomain.A_zimbraFreebusyExchangeUserOrg, type: _TEXTFIELD_ ,
-					  	  label: ZaMsg.LBL_zimbraFreebusyExchangeUserOrg, width: "30em",
+                        { ref: ZaDomain.A_zimbraFreebusyExchangeUserOrg, type: _SUPER_TEXTFIELD_ ,
+                          resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+					  	  txtBoxLabel: ZaMsg.LBL_zimbraFreebusyExchangeUserOrg, width: "30em",
 						  onChange: ZaDomainXFormView.onFormFieldChanged
 					  	},
                         {type: _SPACER_, height: 10 },
