@@ -192,6 +192,7 @@ function(oel, nel, inheritClass, inheritStyle) {
 	nel = this.getInputElement();
 	DwtControl.prototype._replaceElementHook.call(this, oel, nel, inheritClass, inheritStyle);
 	if (oel.id) {
+		this.setHtmlElementId(oel.id+"_control");
 		nel.id = oel.id;
 		if (this._textEl) {
 			this._textEl.setAttribute("for", oel.id);
