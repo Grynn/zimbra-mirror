@@ -267,7 +267,7 @@
 		<!--replace file="${dist.dir}/jetty/webapps/zimbra/skins/_base/base/skin.html" token="ZmMsg.splashScreenAppName" value="ZmMsg.splashScreenOfflineName"/-->
 
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/mobile"/>
-		<delete dir="${dist.dir}/jetty/webapps/zimbra/h"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/h" excludes="print*"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/m"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/img/admin"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/img/htmlEdit"/>
