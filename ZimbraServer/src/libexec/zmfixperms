@@ -49,6 +49,7 @@ components="\
   clamav \
   curl \
   cyrus-sasl \
+  altermime \
   dspam \
   heimdal \
   httpd \
@@ -348,6 +349,13 @@ if [ -L ${zimbra_home}/dspam ]; then
     mkdir -p ${zimbra_home}/data/dspam
   fi
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/dspam
+fi
+
+if [ -L ${zimbra_home}/altermime ]; then
+  if [ ! -d "${zimbra_home}/data/altermime" ]; then
+    mkdir -p ${zimbra_home}/data/altermime
+  fi
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/altermime
 fi
 
 if [ -L ${zimbra_home}/amavisd ]; then

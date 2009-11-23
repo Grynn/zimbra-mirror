@@ -15,6 +15,17 @@ use strict;
 
 # Enable DKIM verification
 $enable_dkim_verification = 1;
+#$enable_dkim_verification = %%binary VAR:zimbraDKIMVerificationEnabled%%;
+#$enable_dkim_signing = %%binary VAR:zimbraDKIMSigningEnabled%%;
+
+# Mandatory Signatures
+%%uncomment VAR:zimbraDomainMandatoryMailSignatureEnabled%%$altermime='/opt/zimbra/altermime/bin/altermime';
+%%uncomment VAR:zimbraDomainMandatoryMailSignatureEnabled%%@altermime_args_disclaimer = qw(--verbose --disclaimer=/opt/zimbra/data/altermime/_OPTION_.txt --disclaimer-html=/opt/zimbra/data/altermime/_OPTION_.html );
+%%uncomment VAR:zimbraDomainMandatoryMailSignatureEnabled%%$defang_maps_by_ccat{+CC_CATCHALL} = ['disclaimer'];
+
+@disclaimer_options_bysender_maps = (
+  { '.' => 'global-default' },
+);
 
 $enable_ldap = 1;
 $default_ldap = {
@@ -69,6 +80,12 @@ $interface_policy{'SOCK'}='AM.PDP-SOCK';  # only relevant with $unix_socketname
 # (with amavis-milter.c from this package or old amavis.c client use 'AM.CL'):
 #$policy_bank{'AM.PDP-SOCK'} = { protocol=>'AM.PDP' };
 $policy_bank{'AM.PDP-SOCK'} = { protocol=>'AM.PDP',log_level=>5 };
+
+$policy_bank{'MYNETS'} = {
+  originating                 => 1,
+  allow_disclaimers           => %%binary VAR:zimbraDomainMandatoryMailSignatureEnabled%%,
+  log_level                   => 1,
+};
 
 # $sa_debug = 1;
 $sa_configpath = '/opt/zimbra/conf/spamassassin';
