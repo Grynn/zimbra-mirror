@@ -131,7 +131,7 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
                                 value:["(<A target='_blank' onclick='ZaZimbraAdmin.unloadHackCallback();' HREF='",location.pathname,"adminhelp/pdf/User Instructions for ZCS Import Wizard.pdf'>",ZaMsg.IMPORT_WIZ_DOWNLOAD_HELP,"</a>)"].join("")}
 						]
 					},
-					{type:_OUTPUT_, cssClass:"ZaDownloadText", label: null, value:ZaMsg.IMPORT_WIZ_DOWNLOAD_TEXT},
+					{type:_OUTPUT_, cssClass:"ZaDownloadText", label: null, value:ZaMsg.IMPORT_WIZ_DOWNLOAD_TEXT}/*,
 					
 					//TOASTER
 					{type:_GROUP_,numCols:2,
@@ -142,7 +142,7 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
                             }
 						]
 					},
-					{type:_OUTPUT_, cssClass:"ZaDownloadText", label: null, value:ZaMsg.ZIMBRA_TOASTER_DOWNLOAD_TEXT}
+					{type:_OUTPUT_, cssClass:"ZaDownloadText", label: null, value:ZaMsg.ZIMBRA_TOASTER_DOWNLOAD_TEXT} */
 				]
 			}
 		];
