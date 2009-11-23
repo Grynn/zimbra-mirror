@@ -1,0 +1,114 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+# 
+use strict;
+use lib qw(/opt/zimbra/zimbramon/lib /opt/zimbra/libexec/scripts);
+use Net::DNS;
+use Socket;
+use Net::LDAP;
+use Net::LDAP::LDIF;
+use Getopt::Long;
+
+my (%c,%loaded,%saved,$rc);
+my ($help, $verbose, $force);
+
+my (undef, undef,$uid,$gid) = getpwnam('zimbra');
+if ($> ne $uid) {
+  print "Must be run as user zimbra.\n";
+  &usage
+}
+
+GetOptions("help" => \$help, 
+    "force" => \$force,
+    "verbose+" => \$verbose);
+
+&usage if ($help);
+
+$c{zmlocalconfig}="/opt/zimbra/bin/zmlocalconfig";
+$c{zimbra_home} = getLocalConfig("zimbra_home");
+$c{zmprov}="$c{zimbra_home}/bin/zmprov -l --";
+
+# ***** Main *****
+my $enabled = getLdapGlobalConfig("zimbraDomainMandatoryMailSignatureEnabled");
+
+if (lc($enabled) eq "true") {
+  my $text = getLdapGlobalConfig("zimbraDomainMandatoryMailSignatureText");
+  my $html = getLdapGlobalConfig("zimbraDomainMandatoryMailSignatureHTML");
+  writeFile("$c{zimbra_home}/data/altermime/global-default.txt", "$text");
+  writeFile("$c{zimbra_home}/data/altermime/global-default.html", "$html");
+}
+
+exit 0;
+# ***** End Main *****
+
+
+# ***** Subroutines *****
+sub usage {
+  print "\n";
+  print "Usage: $0 [-h] [-d] [-f] [-v+]\n";
+  print " --help: print this usage statement.\n";
+  print " --force: Force the rename, bypassing safety checks.\n";
+  print " --verbose: Set the verbosity level.\n";
+  print "\n";
+  exit 0; 
+}
+
+sub writeFile($$) {
+  my ($file, $content) = @_;
+  open(DATA, ">$file");
+  print DATA "$content";
+  close(DATA);
+}
+
+sub getLocalConfig {
+  my ($key,$force) = @_;
+
+  return $loaded{lc}{$key}
+    if (exists $loaded{lc}{$key} && !$force);
+  print "Getting local config $key=";
+  my $val = `$c{zmlocalconfig} -x -s -m nokey ${key} 2> /dev/null`;
+  chomp $val;
+  $loaded{lc}{$key} = $val;
+  print "$val\n"; 
+  return $val;
+}
+
+sub getLdapGlobalConfig($) {
+  my ($key) = @_;
+  my ($val); 
+  return $loaded{gcf}{$key}
+    if (exists $loaded{gcf}{$key});
+
+  print "Getting global config $key=";
+  open(ZMPROV, "$c{zmprov} gcf $key|");
+  my @CONFIG = <ZMPROV>;
+  close(ZMPROV);
+
+  while (scalar(@CONFIG) > 0)  {
+    chomp(my $line = shift(@CONFIG));
+    my ($k, $v) = $line =~ m/^(\w+):\s(.*)/;
+    while ($CONFIG[0] !~ m/^\w+:\s.*/ && scalar(@CONFIG) > 0) {
+      chomp($v .= shift(@CONFIG));
+    }
+
+    next if ($k =~ m/cn|objectClass/);
+    $val .= (($val eq "") ? "$v" : " $v") if ($k eq $key);
+    $loaded{gcf}{$k} .= 
+      (($loaded{gcf}{$k} eq "") ? "$v" : " $v");;
+  }
+  print "$loaded{gcf}{$key}\n";
+  return $loaded{gcf}{$key};
+}
+
