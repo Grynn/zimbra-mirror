@@ -41,7 +41,7 @@ else
   statsfile="-/var/log/zimbra-stats.log"
   LOCALHOST=$(hostname --fqdn)
 fi
-LOGHOST=`su - zimbra -c '/opt/zimbra/bin/zmprov -l gacf | egrep "^zimbraLogHostname"'`
+LOGHOST=`su - zimbra -c '/opt/zimbra/bin/zmprov -m -l gacf | egrep "^zimbraLogHostname"'`
 
 if [ "x$LOGHOST" = "x" ]; then
   TYPE="local"
