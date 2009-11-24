@@ -21,37 +21,18 @@ import java.util.Set;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.redolog.op.CreateFolder;
-import com.zimbra.cs.redolog.op.CreateSavedSearch;
 
 public class LocalMailbox extends DesktopMailbox {
-    private static String GLOBAL_INBOX_SEARCH = "in:inbox";
-    
     public LocalMailbox(MailboxData data) throws ServiceException {
         super(data);
     }
     
     @Override synchronized void ensureSystemFolderExists() throws ServiceException {
         super.ensureSystemFolderExists();
-        try {
-            getFolderById(ID_FOLDER_GLOBAL_INBOX);
-        } catch (NoSuchItemException e) {
-            String groupBy = getAccount().getAttr(Provisioning.A_zimbraPrefGroupMailBy,
-                "conversation");
-            CreateSavedSearch redo = new CreateSavedSearch(getId(),
-                ID_FOLDER_USER_ROOT, NOTIFICATIONS_PATH, GLOBAL_INBOX_SEARCH,
-                groupBy, null, Flag.BITMASK_GLOBAL, MailItem.DEFAULT_COLOR_RGB);
-            
-            redo.setSearchId(ID_FOLDER_GLOBAL_INBOX);
-            redo.start(System.currentTimeMillis());
-            createSearchFolder(new TracelessContext(redo), ID_FOLDER_USER_ROOT,
-                GLOBAL_INBOX_PATH, GLOBAL_INBOX_SEARCH, groupBy, null,
-                Flag.BITMASK_GLOBAL, MailItem.DEFAULT_COLOR_RGB);
-        }
         try {
             getFolderById(ID_FOLDER_NOTIFICATIONS);
         } catch (NoSuchItemException e) {
@@ -78,16 +59,9 @@ public class LocalMailbox extends DesktopMailbox {
 
     @Override protected synchronized void initialize() throws ServiceException {
         super.initialize();
-        
-        String groupBy = getAccount().getAttr(Provisioning.A_zimbraPrefGroupMailBy,
-            "conversation");
-        Folder root = getFolderById(ID_FOLDER_USER_ROOT);
-        
         getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color((byte)8));
-        SearchFolder.create(ID_FOLDER_GLOBAL_INBOX, root, GLOBAL_INBOX_PATH,
-            GLOBAL_INBOX_SEARCH, groupBy, null, Flag.BITMASK_GLOBAL,
-            MailItem.DEFAULT_COLOR_RGB, null);
-        Folder.create(ID_FOLDER_NOTIFICATIONS, this, root, NOTIFICATIONS_PATH,
+        Folder.create(ID_FOLDER_NOTIFICATIONS, this,
+            getFolderById(ID_FOLDER_USER_ROOT), NOTIFICATIONS_PATH,
             Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_UNKNOWN, 0,
             MailItem.DEFAULT_COLOR_RGB, null, null);
     }

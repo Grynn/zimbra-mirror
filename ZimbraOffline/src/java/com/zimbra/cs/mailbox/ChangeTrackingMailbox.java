@@ -16,6 +16,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
     public static class TracelessContext extends OperationContext {
         public TracelessContext()                 { super((RedoableOp) null); }
         public TracelessContext(RedoableOp redo)  { super(redo); }
+        public boolean isRedo()                   { return false; }
     }
 
     public ChangeTrackingMailbox(MailboxData data) throws ServiceException {

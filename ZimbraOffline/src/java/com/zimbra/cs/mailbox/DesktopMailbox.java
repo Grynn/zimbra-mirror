@@ -46,11 +46,9 @@ public abstract class DesktopMailbox extends Mailbox {
     }
 
     public static final String FAILURE_PATH = "Error Reports";
-    public static final String GLOBAL_INBOX_PATH = "Global Inbox";
     public static final String NOTIFICATIONS_PATH = "Notification Mountpoints";
     public static final String OUTBOX_PATH = "Outbox";
     
-    public static final int ID_FOLDER_GLOBAL_INBOX = 249;
     public static final int ID_FOLDER_NOTIFICATIONS = 250;
     public static final int ID_FOLDER_FAILURE = 252;
     public static final int ID_FOLDER_OUTBOX = 254;

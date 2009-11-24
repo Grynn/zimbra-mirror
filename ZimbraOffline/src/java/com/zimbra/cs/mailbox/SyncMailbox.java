@@ -35,6 +35,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
     Object syncLock = new Object();
     private boolean deleteAsync;
     private boolean mSyncRunning;
+    private static Long lastGC = new Long(0);
 
     public SyncMailbox(MailboxData data) throws ServiceException {
         super(data);
@@ -214,8 +215,6 @@ public abstract class SyncMailbox extends DesktopMailbox {
     protected synchronized void initSyncTimer() throws ServiceException {
         cancelCurrentTask();
         currentTask = new TimerTask() {
-            private Long lastGC = new Long(0);
-            
             public void run() {
                 boolean doGC;
                 
