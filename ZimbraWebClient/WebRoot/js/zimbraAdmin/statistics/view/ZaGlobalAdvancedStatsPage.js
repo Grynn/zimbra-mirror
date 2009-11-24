@@ -253,7 +253,7 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
         var soapResponse = response.getResponse().Body.GetLoggerStatsResponse;
         
         if (!soapResponse.hostname || !soapResponse.hostname[0].stats) {
-            var e = document    .getElementById("loggerchart" + id);
+            var e = document.getElementById("loggerchart" + id);
             ZaGlobalAdvancedStatsPage.setText(e, ZaMsg.NAD_AdvStatsNoDataLabel);
             return;
         }
@@ -266,6 +266,10 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
         
         var newData = [];
         var period = 0;
+        var fixedColumns = new Array();
+        for (var i = 0; i < columns.length; i++) {
+            fixedColumns.push(columns[i].replace(/[/%:]/g, "_"));
+        }
         for (var i = 0; i < values.length; i++) {
            if (i + 1 < values.length)
                 period = values[i + 1].t - values[i].t;
@@ -275,15 +279,16 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
             var record = { timestamp: ts };
             for (var j = 0; j < values[i].stat.length; j++) {
                 if (ZaGlobalAdvancedStatsPage.indexOf(columns, values[i].stat[j].name) != -1) {
-                    record[values[i].stat[j].name] = values[i].stat[j].value;
+                    //record[values[i].stat[j].name] = values[i].stat[j].value;
+                    record[values[i].stat[j].name.replace(/[/%:]/g, "_")] = values[i].stat[j].value;
                 }
             }
-            for (var j = 0; j < columns.length; j++) {
-                if (!record[columns[j]]) {
-                    record[columns[j]] = 0;
+            for (var j = 0; j < fixedColumns.length; j++) {
+                if (!record[fixedColumns[j]]) {
+                    record[fixedColumns[j]] = 0;
                 }
                 if (options && options.convertToCount)
-                    record[columns[j]] = record[columns[j]] * period;
+                    record[fixedColumns[j]] = record[fixedColumns[j]] * period;
             }
             newData.push(record);
         }
@@ -299,11 +304,12 @@ ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, column
                 if ((column_units.length == 1 && column_units[0] != null) || (column_units.length > 1 && column_units[i] != null))
                     legend = legend + " (" + column_units[column_units.length == 1 ? 0 : i] + ")";
             }
-            colDef.push({ displayName: legend, yField: columns[i] });
+            //colDef.push({ displayName: legend, yField: columns[i] });
+            colDef.push({ displayName: legend, yField: fixedColumns[i] });
         }
         var fields = [ "timestamp" ];
-        for (var i = 0; i < columns.length; i++) {
-            fields.push(columns[i]);
+        for (var i = 0; i < fixedColumns.length; i++) {
+            fields.push(fixedColumns[i]);
         }
     
         ZaGlobalAdvancedStatsPage.plotChart(id, fields, colDef, newData);
