@@ -91,7 +91,7 @@ public class PageBean {
                 return JspProvStub.getInstance().getOfflineAccount(
                     OfflineConstants.LOCAL_ACCOUNT_ID).getAttr(Provisioning.A_zimbraPrefSkin);
             } catch (ServiceException x) {
-                return "default";
+                return "twilight";
             }
         }
     
