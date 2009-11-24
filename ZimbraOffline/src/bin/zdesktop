@@ -354,8 +354,24 @@ case "$ACTION" in
         PID=`cat "$JETTY_PID" 2>/dev/null`
         echo "Shutting down Jetty: $PID"
         kill $PID 2>/dev/null
-        sleep 2
-        kill -9 $PID 2>/dev/null
+
+        timeout=12
+        while [ $timeout -gt 0 ]; do
+            if ps -f -p $PID | grep $JAVA > /dev/null 2>&1
+            then
+                sleep 1
+                timeout=$[timeout-1]
+            else
+                PID=''
+                break
+            fi
+        done
+
+        if [ ! -z $PID ]
+        then
+            kill -9 $PID 2>/dev/null
+        fi
+
         rm -f "$JETTY_PID"
         echo "STOPPED `date`" >> "$JETTY_CONSOLE"
         ;;
