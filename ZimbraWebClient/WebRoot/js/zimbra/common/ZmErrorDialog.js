@@ -50,7 +50,7 @@ function() {
 
 ZmErrorDialog.REPORT_BUTTON = ++DwtDialog.LAST_BUTTON;
 ZmErrorDialog.DETAIL_BUTTON = ++DwtDialog.LAST_BUTTON;
-ZmErrorDialog.REPORT_URL = "//www.zimbra.com/e/";
+ZmErrorDialog.DEFAULT_REPORT_URL = "//www.zimbra.com/e/";
 
 //
 // Data
@@ -196,15 +196,12 @@ function() {
 
 ZmErrorDialog.prototype._reportCallback =
 function() {
-	// iframe initialization - recreate iframe if IE and reuse if FF
-	if (!this._iframe || AjxEnv.isIE) {
-		this._iframe = document.createElement("iframe");
-		this._iframe.style.width = this._iframe.style.height = 0;
-		this._iframe.style.visibility = "hidden";
+	this._iframe = document.createElement("iframe");
+	this._iframe.style.width = this._iframe.style.height = 0;
+	this._iframe.style.visibility = "hidden";
 
-		var contentDiv = this._getContentDiv();
-		contentDiv.appendChild(this._iframe);
-	}
+	var contentDiv = this._getContentDiv();
+	contentDiv.appendChild(this._iframe);
 
 	var strPrefs = this._getUserPrefs();
 	var formId = Dwt.getNextId();
@@ -218,7 +215,7 @@ function() {
 	html[idx++] = formId;
 	html[idx++] = "' method='POST' action='";
 	html[idx++] = scheme;
-	html[idx++] = ZmErrorDialog.REPORT_URL;
+	html[idx++] = appCtxt.get(ZmSetting.ERROR_REPORT_URL) || ZmErrorDialog.DEFAULT_REPORT_URL;
 	html[idx++] = "'>";
 	html[idx++] = "<textarea name='details'>";
 	html[idx++] = this._detailStr;
@@ -247,6 +244,7 @@ function() {
 	var form = idoc.getElementById(formId);
 	if (form) {
 		form.submit();
+		appCtxt.setStatusMsg(ZmMsg.errorReportSent);
 	}
 
 	this.popdown();
