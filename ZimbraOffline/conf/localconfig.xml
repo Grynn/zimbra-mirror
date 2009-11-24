@@ -151,4 +151,10 @@
   <key name="zimbra_web_generate_gzip">
     <value>false</value>
   </key>
+  <key name="zimbra_index_max_uncommitted_operations">
+    <value>20</value>
+  </key>
+  <key name="zimbra_index_idle_flush_time">
+    <value>20</value>
+  </key>
 </localconfig>
