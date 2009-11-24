@@ -571,15 +571,17 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 				var radioItemDef = itemDef.items[i];
 				var checked = radioItemDef.checked || radioItemDef.value == itemDef.value;
 				var radio = this._registerControl(radioItemDef, itemDef, tabIndexes, nparams, parent, "DwtRadioButton");
-				radio.setValue(radioItemDef.value);
+				this.setValue(radioItemDef.id, radioItemDef.value);
 				this._items[radioItemDef.id].value = checked;
-				control.addRadio(radio.getInputElement().id, radio, checked);
-				// handlers
-				var handler = DwtForm.__makeFunc(radioItemDef.onclick || itemDef.onclick);
-				radio.addSelectionListener(new AjxListener(this, this._radio2group2model, [radioItemDef.id, id, handler]));
-				// HACK: Work around fact that the DwtRadioButtonGroup overwrites
-				//       the radio button input element's onclick handler.
-				DwtForm.__hack_fixRadioButtonHandler(radio);
+				if (radio) {
+					control.addRadio(radio.getInputElement().id, radio, checked);
+					// handlers
+					var handler = DwtForm.__makeFunc(radioItemDef.onclick || itemDef.onclick);
+					radio.addSelectionListener(new AjxListener(this, this._radio2group2model, [radioItemDef.id, id, handler]));
+					// HACK: Work around fact that the DwtRadioButtonGroup overwrites
+					//       the radio button input element's onclick handler.
+					DwtForm.__hack_fixRadioButtonHandler(radio);
+				}
 			}
 		}
 	}
@@ -854,7 +856,7 @@ DwtForm.prototype._initControl = function(itemDef, useCurrentValues) {
 	}
 	else if (itemDef.value) {
 		if (Dwt.instanceOf(itemDef.type, "DwtRadioButton")) {
-			item.ovalue = item.value = item.control.isSelected();
+			item.ovalue = item.value = item.control && item.control.isSelected();
 		}
 		else {
 			this.setValue(id, itemDef.value, true);
