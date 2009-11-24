@@ -99,7 +99,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.4.2-zimbra.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-charset.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-native.jar" sourcepath="/ZimbraNative/src/java"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.15.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/sqlite-jdbc-3.6.17.3.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/memcached-2.3.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/apache-jsieve-0.3-zimbra.jar" sourcepath="/ThirdParty/apache-james-jsieve-0.3/apache-jsieve-0.3-sources.jar">
@@ -113,5 +112,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraIM"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-1.1.7-zimbra.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-filter-ssl-1.1.7.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.22.z6.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
