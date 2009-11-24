@@ -108,6 +108,7 @@
 	<property name="prism.src.dir" location="../ThirdParty/prism" />
 	<property name="xulrunner.src.dir" location="../ThirdParty/xulrunner" />
 	<property name="jetty.version" value="6.1.22.z6" />
+	<property name="wrapper.version" value="wrapper-windows-x86-32-3.3.9" />
 
 	<condition property="db-derby">
 		<isset property="env.ZIMBRA_OFFLINE_USE_DERBY" />
@@ -830,10 +831,10 @@
 		</copy>
 		<chmod file="${dist.app.dir}/linux/svckill.sh" perm="ugo+x"/>
 
-		<unzip src="../ThirdParty/wrapper/wrapper-windows-x86-32-3.3.6.zip" dest="${build.dir}/wrapper" overwrite="true" />
-		<copy tofile="${dist.app.dir}/win32/zdwrapper.exe" file="${build.dir}/wrapper/wrapper-windows-x86-32-3.3.6/bin/wrapper.exe" overwrite="true" />
-		<copy todir="${dist.app.dir}/lib" file="${build.dir}/wrapper/wrapper-windows-x86-32-3.3.6/lib/wrapper.dll" overwrite="true" />
-		<copy todir="${dist.app.dir}/lib" file="${build.dir}/wrapper/wrapper-windows-x86-32-3.3.6/lib/wrapper.jar" overwrite="true" />
+		<unzip src="../ThirdParty/wrapper/${wrapper.version}.zip" dest="${build.dir}/wrapper" overwrite="true" />
+		<copy tofile="${dist.app.dir}/win32/zdwrapper.exe" file="${build.dir}/wrapper/${wrapper.version}/bin/wrapper.exe" overwrite="true" />
+		<copy todir="${dist.app.dir}/lib" file="${build.dir}/wrapper/${wrapper.version}/lib/wrapper.dll" overwrite="true" />
+		<copy todir="${dist.app.dir}/lib" file="${build.dir}/wrapper/${wrapper.version}/lib/wrapper.jar" overwrite="true" />
 		<copy todir="${dist.app.dir}/win32" overwrite="true">
 			<fileset dir="src/installer/resources" includes="launcher_32x32.ico launcher_48x48.ico" />
 		</copy>

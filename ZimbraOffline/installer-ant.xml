@@ -114,6 +114,7 @@
 		<delete dir="build/dist/app/macos" />
 		<delete dir="build/dist/app/linux" />
 		<copy todir="build/dist/app/data/bin" file="src/installer/win32/zdctl.vbs" overwrite="true" />
+		<copy todir="build/dist/app/data/bin" file="src/installer/win32/zdctl-wrapper.vbs" overwrite="true" />
 		<copy todir="build/dist/app/win32" file="src/installer/win32/zdrun.vbs" overwrite="true" />
 		<delete file="build/dist/app/data/bin/zdesktop" />
 

@@ -21,6 +21,14 @@ function preload() {
   return serverCheck();
 }
 
+function shutdown() {
+  var xulRuntime = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime);
+  var os = xulRuntime.OS.toLowerCase();
+  if (os == "winnt") {
+    startStopServer("stop");
+  }
+}
+
 function startServer() {
   return startStopServer("start");
 }
@@ -39,12 +47,16 @@ function startStopServer(verb) {
     var zdesktopServer = null;
     var args = null;
     if (os == "winnt") {
+      var systemDir = dirSvc.get("SysD", Ci.nsIFile);
+      var zdesktopServer = systemDir.clone();
+      zdesktopServer.append("cscript.exe");
+
       var appRoot = WebAppProperties.getAppRoot();
       var zdesktopRoot = appRoot.parent;
-      zdesktopServer = zdesktopRoot.clone();
-      zdesktopServer.append("bin");
-      zdesktopServer.append("zdctl.vbs");
-      args = [verb];
+      var zdctl = zdesktopRoot.clone();
+      zdctl.append("bin");
+      zdctl.append("zdctl-wrapper.vbs");
+      args = [zdctl.path, verb];
     }
     else if (os == "linux") {
       var appRoot = WebAppProperties.getAppRoot();
@@ -120,7 +132,7 @@ function serverCheck() {
 
 function load() {
   if ("platform" in window) {
-    window.platform.icon().behavior = Ci.nsIApplicationIcon.HIDE_ON_MINIMIZE | Ci.nsIApplicationIcon.HIDE_ON_CLOSE;
+    window.platform.icon().behavior = Ci.nsIApplicationIcon.HIDE_ON_CLOSE;
 
     window.platform.icon().menu.addMenuItem("about", bundle.GetStringFromName("AboutDesktop"), function(){window.platform.showAbout();});
     window.platform.icon().menu.addMenuItem("checkForUpdates", bundle.GetStringFromName("CheckUpdates"), function(){checkForUpdates();});

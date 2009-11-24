@@ -72,13 +72,12 @@ my $seed_prefix = "zimbra_desktop_";
 my $cid_counter = 20000;
 
 sub handler_zdrun_vbs {
-	my ($ind, $xml) = @_;
+	my ($ind, $xml, $fileid) = @_;
 	
-	$$xml .= ">\r\n";
-	$$xml .= "$ind  <Shortcut Id=\"ID_42446FE2_8C85_4ca0_8AEB_4143383960E8\" Directory=\"ProgramMenuDir\" Advertise=\"no\" Name=\"Zimbra Desktop\" Show=\"minimized\" Icon=\"ID_BB30ED2D_2B17_4c39_B242_BE52A559A470\">\r\n";
-    $$xml .= "$ind    <Icon Id=\"ID_BB30ED2D_2B17_4c39_B242_BE52A559A470\" SourceFile=\"$dist_dir\\app\\data\\zdesktop.webapp\\icons\\default\\launcher.ico\" />\r\n";
-    $$xml .= "$ind  </Shortcut>\r\n";
-    $$xml .= "$ind</File>\r\n";
+	$$xml .= " />\r\n";
+	$$xml .= "$ind<Shortcut Id=\"ID_42446FE2_8C85_4ca0_8AEB_4143383960E8\" Directory=\"ProgramMenuDir\" Advertise=\"no\" Name=\"Zimbra Desktop\" Show=\"minimized\" Icon=\"ID_BB30ED2D_2B17_4c39_B242_BE52A559A470\" Target=\"[SystemFolder]cscript.exe\" Arguments=\'\"[!$fileid]\"\'>\r\n";
+    $$xml .= "$ind  <Icon Id=\"ID_BB30ED2D_2B17_4c39_B242_BE52A559A470\" SourceFile=\"$dist_dir\\app\\data\\zdesktop.webapp\\icons\\default\\launcher.ico\" />\r\n";
+    $$xml .= "$ind</Shortcut>\r\n";
 }
 
 my $handlers = {
@@ -129,7 +128,7 @@ sub traverse {
             
             my $handler = $handlers->{lc($path)};
             if ($handler) {
-            	$handler->("$indent    ", $xml);
+            	$handler->("$indent    ", $xml, $fileid);
             } else {
             	$$xml .= " />\r\n";
             }
