@@ -69,16 +69,6 @@ public abstract class DesktopMailbox extends Mailbox {
     @Override
     protected synchronized void initialize() throws ServiceException {
         super.initialize();
-        // create system folders
-        Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
-        
-        Folder.create(ID_FOLDER_OUTBOX, this, userRoot, OUTBOX_PATH,
-            Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0,
-            MailItem.DEFAULT_COLOR_RGB, null, null);
-        Folder.create(ID_FOLDER_FAILURE, this, userRoot, FAILURE_PATH,
-            Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0,
-            MailItem.DEFAULT_COLOR_RGB, null, null);
-
         // set the version to CURRENT
         Metadata md = new Metadata();
         offlineVersion = OfflineMailboxVersion.CURRENT();
