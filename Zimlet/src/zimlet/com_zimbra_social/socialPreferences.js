@@ -480,7 +480,7 @@ function() {
 	var dlg = appCtxt.getYesNoMsgDialog();
 	dlg.registerCallback(DwtDialog.YES_BUTTON, this._yesButtonClicked, this, dlg);
 	dlg.registerCallback(DwtDialog.NO_BUTTON, this._NoButtonClicked, this, dlg);
-	dlg.setMessage("We need to Refresh Browser for preferences to take affect. Do you want to continue?", DwtMessageDialog.WARNING_STYLE);
+	dlg.setMessage("The browser must be refreshed for the changes to take effect.  Continue?", DwtMessageDialog.WARNING_STYLE);
 	dlg.popup();
 };
 
