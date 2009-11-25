@@ -21,6 +21,7 @@ import java.util.Map;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.OfflineServiceException;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.soap.DocumentHandler;
@@ -36,6 +37,10 @@ public class OfflineClientEventNotify extends DocumentHandler {
 			OfflineSyncManager.getInstance().setUiLoadingInProgress(true);
 		else if (event.equals(OfflineConstants.EVENT_UI_LOAD_END))
 			OfflineSyncManager.getInstance().setUiLoadingInProgress(false);
+		else if (event.equals(OfflineConstants.EVENT_NETWORK_UP))
+		    OfflineLog.offline.info("NETWORK UP"); //TODO
+		else if (event.equals(OfflineConstants.EVENT_NETWORK_DOWN))
+		    OfflineLog.offline.info("NETWORK DOWN"); //TODO
 		else
 			throw OfflineServiceException.UNKNOWN_CLIENT_EVENT(event); 
 		

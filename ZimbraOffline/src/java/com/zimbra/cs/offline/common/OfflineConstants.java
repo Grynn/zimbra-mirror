@@ -35,6 +35,8 @@ public interface OfflineConstants {
     public static final String A_Event = "e";
     public static final String EVENT_UI_LOAD_BEGIN = "ui_load_begin";
     public static final String EVENT_UI_LOAD_END = "ui_load_end";
+    public static final String EVENT_NETWORK_UP = "network_up";
+    public static final String EVENT_NETWORK_DOWN = "network_down";
 
     public static enum SyncStatus {
         unknown, offline, online, running, authfail, error
