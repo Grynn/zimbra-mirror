@@ -1308,13 +1308,13 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
 
-        <attribute>
+		<attribute>
             <description>list of comma-separated headernames to get</description>
             <name>requestHeaders</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
-        </attribute>
+       </attribute>
 
     </tag>
 
@@ -2660,7 +2660,7 @@
 
     </tag>
 
-     <tag>
+    <tag>
         <description>
             Do GetInfoRequest get back JSON in variable.
         </description>
@@ -2738,7 +2738,7 @@
 
     </tag>
 
-	<tag>
+        <tag>
 		<description>Retrieve the favicon set on the domain or local config.</description>
 		<name>getFavIcon</name>
 		<tag-class>com.zimbra.cs.taglib.tag.GetFavIconTag</tag-class>
@@ -5015,7 +5015,7 @@
             <type>com.zimbra.cs.taglib.bean.ZMailboxBean</type>
         </attribute>
         <attribute>
-            <description>
+        <description>
                 Name of the exported scoped variable for the result.
             </description>
             <name>var</name>
@@ -5805,6 +5805,62 @@
 
     </tag>
 
+  <tag>
+        <description>
+    	    Interface for ZPhone    
+        </description>
+
+        <name>phone</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.voice.PhoneTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.Boolean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+		Name of the variable that says whether the phone number is valid
+            </description>
+            <name>var</name>
+            <required>false</required>
+        </attribute>
+
+	<attribute>
+            <description>
+                Name of phone account
+            </description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+	<attribute>
+            <description>
+                Name of the var that will hold the formatted phone number
+            </description>
+            <name>displayVar</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+	<attribute>
+            <description>
+                Name of the var that will hold any error strings
+            </description>
+            <name>errorVar</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
     <tag>
         <description>
             Changes the voice prefs.
@@ -5845,7 +5901,7 @@
                 Is email notification active.
             </description>
             <name>emailnotificationactive</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
@@ -5855,7 +5911,7 @@
                 Email notification address.
             </description>
             <name>emailnotificationaddress</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
@@ -5865,7 +5921,7 @@
                 Is call forwarding active.
             </description>
             <name>callforwardingactive</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
@@ -5875,9 +5931,69 @@
                 Call forwarding number
             </description>
             <name>callforwardingforwardto</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Is selective call forwarding active.
+            </description>
+            <name>selectivecallforwardingactive</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Selective call forwarding "forward to" number
+            </description>
+            <name>selectivecallforwardingforwardto</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Selective call forwarding "forward from" numbers
+            </description>
+            <name>selectivecallforwardingforwardfrom</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Object</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Anonymous Call rejection
+            </description>
+            <name>anonymouscallrejectionactive</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Is selective call rejection active.
+            </description>
+            <name>selectivecallrejectionactive</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Selective call rejection "reject from" numbers
+            </description>
+            <name>selectivecallrejectionrejectfrom</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Object</type>
         </attribute>
 
         <attribute>
@@ -5885,9 +6001,355 @@
                 Number of voice items per page
             </description>
             <name>numberPerPage</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+	<attribute>
+            <description>
+                Call forwarding retention
+            </description>
+            <name>numberOfRings</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+	<attribute>
+	    <description>
+		Automatically play messages when entering UI
+	    </description>
+	    <name>autoPlayNewMsgs</name>
+	    <required>false</required>
+	    <rtexprvalue>true</rtexprvalue>
+	    <type>java.lang.String</type>
+	</attribute>
+
+	<attribute>
+	    <description>
+		Play date and time as part of messages
+	    </description>
+	    <name>playDateAndTimeInMsgEnv</name>
+	    <required>false</required>
+	    <rtexprvalue>true</rtexprvalue>
+	    <type>java.lang.String</type>
+	</attribute>
+
+	<attribute>
+	    <description>
+		Skip pin entry
+	    </description>
+	    <name>skipPinEntry</name>
+	    <required>false</required>
+	    <rtexprvalue>true</rtexprvalue>
+	    <type>java.lang.String</type>
+	</attribute>
+
+	<attribute>
+	    <description>
+		Require pin entry (opposite of the above)
+	    </description>
+	    <name>requirePinEntry</name>
+	    <required>false</required>
+	    <rtexprvalue>true</rtexprvalue>
+	    <type>java.lang.String</type>
+	</attribute>
+
+	<attribute>
+	    <description>
+		Play caller name when playing messages
+	    </description>
+	    <name>playCallerNameInMsgEnv</name>
+	    <required>false</required>
+	    <rtexprvalue>true</rtexprvalue>
+	    <type>java.lang.String</type>
+	</attribute>
+
+	<attribute>
+	    <description>
+		Automatically play new messages in UI?
+	    </description>
+	    <name>autoPlayNewMsgs</name>
+	    <required>false</required>
+	    <rtexprvalue>true</rtexprvalue>
+	    <type>java.lang.String</type>
+	</attribute>
+
+	<attribute>
+	    <description>
+		Prompt length
+	    </description>
+	    <name>promptLevel</name>
+	    <required>false</required>
+	    <rtexprvalue>true</rtexprvalue>
+	    <type>java.lang.String</type>
+	</attribute>
+
+	<attribute>
+	    <description>
+		Outgoing message language
+	    </description>
+	    <name>answeringLocale</name>
+	    <required>false</required>
+	    <rtexprvalue>true</rtexprvalue>
+	    <type>java.lang.String</type>
+	</attribute>
+
+	<attribute>
+	    <description>
+		Checking message language
+	    </description>
+	    <name>userLocale</name>
+	    <required>false</required>
+	    <rtexprvalue>true</rtexprvalue>
+	    <type>java.lang.String</type>
+	</attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Adds the phone numbers of voice mail/call log entries to selective call rejection.
+        </description>
+
+        <name>addToRejectFeature</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.voice.AddToRejectFeatureTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.Integer</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the variable that says how many numbers were successfully added
+            </description>
+            <name>var</name>
+            <required>false</required>
+        </attribute>
+
+        <attribute>
+            <description>
+                Name of phone account
+            </description>
+            <name>phone</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Id array of voice mail entries
+            </description>
+            <name>voiceId</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String[]</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Output variable for error constants (constants of ZPhone and ZCallFeatures)
+            </description>
+            <name>error</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+	<attribute>
+            <description>
+                Max entries in list (defaults to 12 if unset)
+            </description>
+            <name>max</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+
+
+    <tag>
+        <description>
+            Adds the phone numbers of voice mail/call log entries to selective call forwarding.
+        </description>
+
+        <name>addToForwardFeature</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.voice.AddToForwardFeatureTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.Integer</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the variable that says how many numbers were successfully added
+            </description>
+            <name>var</name>
+            <required>false</required>
+        </attribute>
+
+        <attribute>
+            <description>
+                Name of phone account
+            </description>
+            <name>phone</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Id array of voice mail entries
+            </description>
+            <name>voiceId</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String[]</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Output variable for error constants (constants of ZPhone and ZCallFeatures)
+            </description>
+            <name>error</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+	<attribute>
+            <description>
+                Max entries in list (defaults to 12 if unset)
+            </description>
+            <name>max</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Handles lists associated with phone numbers. Implements a Hashmap of ArrayLists:
+            HashMap(String, ArrayList(String, String))
+            entries in the hashmap are referred to by the [phone] attribute, and the map may be inspected in jsp as mapvar[phonenumber] (this would yield an iteratable list whose length may be found with fn:length())
+            If the input map is null, a new map will be created.
+            After every call, the map is outputted in the var variable (to be stored and used again as input to the tag)
+        </description>
+
+        <name>listObject</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.voice.ListObjectTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.util.HashMap</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Output variable name to save resulting map into
+            </description>
+            <name>var</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Scope to save output variables into
+            </description>
+            <name>scope</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Name of phone account
+            </description>
+            <name>phone</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Output variable name to save a comma-separated String into
+            </description>
+            <name>csep</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Output variable name to save a String array into
+            </description>
+            <name>strArr</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+	
+	<attribute>
+            <description>
+                Map to edit
+            </description>
+            <name>map</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.util.HashMap</type>
+        </attribute>
+
+	<attribute>
+            <description>
+                Value to add
+            </description>
+            <name>add</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+	<attribute>
+            <description>
+                Value to remove, if found
+            </description>
+            <name>remove</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+	<attribute>
+            <description>
+                Set to true to clear all elements from the list
+            </description>
+            <name>clear</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
         </attribute>
     </tag>
 
@@ -6530,9 +6992,9 @@
         <function-signature>long MSECS_PER_HOUR()</function-signature>
     </function>
 
-	<function>
+    <function>
 		<name>getCanonicalId</name>
-		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
 		<function-signature>java.lang.String getCanonicalId(java.util.TimeZone)</function-signature>
 	</function>
 
@@ -6726,7 +7188,7 @@
 		<function-signature>boolean getIsMyCard(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
 	</function>
 
-	<function>
+    <function>
         <name>getYFirstDayOfMonthView</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.util.Calendar getYFirstDayOfMonthView(java.util.Calendar,long)</function-signature>

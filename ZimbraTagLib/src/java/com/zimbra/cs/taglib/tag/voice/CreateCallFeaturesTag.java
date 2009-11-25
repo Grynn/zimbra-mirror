@@ -38,14 +38,27 @@ public class CreateCallFeaturesTag extends CallFeaturesTagBase {
             String address = mEmailNotificationActive ? mEmailNotificationAddress : "";
             newFeatures.getVoiceMailPrefs().setEmailNotificationAddress(address);
 
-			ZCallForwardingBean newCallForwarding = newFeatures.getCallForwardingAll();
-			newCallForwarding.setIsActive(mCallForwardingActive);
-			newCallForwarding.setForwardTo(mCallForwardingForwardTo);
+	    ZCallForwardingBean newCallForwarding = newFeatures.getCallForwardingAll();
+	    newCallForwarding.setIsActive(mCallForwardingActive);
+	    newCallForwarding.setForwardTo(mCallForwardingForwardTo);
 
             ZSelectiveCallForwardingBean newSelectiveCallForwarding = newFeatures.getSelectiveCallForwarding();
             newSelectiveCallForwarding.setIsActive(mSelectiveCallForwardingActive);
             newSelectiveCallForwarding.setForwardTo(mSelectiveCallForwardingForwardTo);
             newSelectiveCallForwarding.setForwardFrom(mSelectiveCallForwardingForwardFrom);
+
+	    // Uncomment when selective call rejection has been implemented in the soap interface
+	    //ZSelectiveCallRejectionBean newSelectiveCallRejection = newFeatures.getSelectiveCallRejection();
+
+	    newFeatures.getCallForwardingAll().setNumberOfRings(mNumberOfRings);
+
+	    newFeatures.getVoiceMailPrefs().setAutoPlayNewMsgs(mAutoPlayNewMsgs);
+	    newFeatures.getVoiceMailPrefs().setPlayDateAndTimeInMsgEnv(mPlayDateAndTimeInMsgEnv);
+	    newFeatures.getVoiceMailPrefs().setSkipPinEntry(mSkipPinEntry);
+	    newFeatures.getVoiceMailPrefs().setPlayCallerNameInMsgEnv(mPlayCallerNameInMsgEnv);
+	    newFeatures.getVoiceMailPrefs().setPromptLevel(mPromptLevel);
+	    newFeatures.getVoiceMailPrefs().setAnsweringLocale(mAnsweringLocale);
+	    newFeatures.getVoiceMailPrefs().setUserLocale(mUserLocale);
 
             getJspContext().setAttribute(mVar, newFeatures, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
