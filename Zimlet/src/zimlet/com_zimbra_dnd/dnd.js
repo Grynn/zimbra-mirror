@@ -72,7 +72,7 @@ function () {
 Com_Zimbra_DnD.prototype.onShowView =
 function(viewId, isNewView) {
     if ("createEvent" in document && document.getElementById("zdnd_files")) {
-		if (viewId == ZmId.VIEW_COMPOSE ||
+        if (viewId == ZmId.VIEW_COMPOSE ||
 			viewId == ZmId.VIEW_BRIEFCASE_COLUMN ||
 			viewId == ZmId.VIEW_BRIEFCASE ||
 			viewId == ZmId.VIEW_BRIEFCASE_DETAIL || viewId.indexOf('COMPOSE') != -1)
@@ -82,10 +82,10 @@ function(viewId, isNewView) {
 
 			var curView = appCtxt.getAppViewMgr().getCurrentView();
 
-			if (viewId == ZmId.VIEW_COMPOSE) {
+			if (viewId == ZmId.VIEW_COMPOSE || viewId == viewId.indexOf('COMPOSE') != -1) {
 				curView._resetBodySize();
 			}
-			var el = curView.getHtmlElement();
+            var el = curView.getHtmlElement();
 			el.dispatchEvent(ev);
 		}
 	}

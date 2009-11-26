@@ -117,8 +117,9 @@ var ZimbraDnD = {
 	butEle: null,
     evtAdded: false,
 	init: function(e) {
+        ZimbraDnD.evtAdded = false;
         var oZmCv = e.target;
-		var el = e.target.ownerDocument.getElementById('zdnd_tooltip');
+		var el = e.target.ownerDocument.getElementById(oZmCv.id + '_zdnd_tooltip');
 		if (el) {
 			el.style.display = "block";
 		}
