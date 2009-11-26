@@ -122,6 +122,7 @@ DwtHtmlEditor._FORMAT_BLOCK = "formatblock";
 
 DwtHtmlEditor._INITDELAY = 50;
 
+DwtHtmlEditor.FONT_SIZE_VALUES = ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"];
 
 DwtHtmlEditor._BLOCK_ELEMENTS = {
 	address:1, body:1, div:1, dl:1, fieldset:1, form:1, h1:1, h2:1, h3:1, h4:1, h5:1, h6:1,
@@ -1225,7 +1226,7 @@ function(ev) {
 
 	// If we have a mousedown event, then let DwtMenu know. This is a nasty hack that we have to do since
 	// the iFrame is in a different document etc
-	if (ev.type == "mousedown") {
+    if (ev.type == "mousedown") {
 		DwtMenu._outsideMouseDownListener(ev);
 	}
 
@@ -1488,9 +1489,11 @@ function() {
 		} else {
 			ev._ignoreCommandState=null;
 		}
-
 		ev.fontFamily = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_NAME);
-		ev.fontSize = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_SIZE);
+		//bug:25251
+        var fontSize = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_SIZE);
+        if(fontSize == "") { fontSize = (DwtHtmlEditor.FONT_SIZE_VALUES.indexOf(appCtxt.get(ZmSetting.COMPOSE_INIT_FONT_SIZE)) + 1); }
+        ev.fontSize = fontSize;
 		ev.backgroundColor = iFrameDoc.queryCommandValue((AjxEnv.isIE) ? "backcolor" : "hilitecolor");
 		ev.color = iFrameDoc.queryCommandValue("forecolor");
 		if (AjxEnv.isIE) {
