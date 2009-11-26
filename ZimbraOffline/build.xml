@@ -814,7 +814,7 @@
 		<mkdir dir="${dist.app.dir}/win32"/>
 
 		<copy todir="${dist.app.dir}/macos" overwrite="true">
-			<fileset dir="src/installer/macos" includes="launchd.plist quit_zdesktop.applescript svckill.sh" />
+			<fileset dir="src/installer/macos" includes="launchd.plist quit_zdesktop.applescript" />
 			<fileset dir="src/installer/resources" includes="launcher_128x128.icns" />
 		</copy>
 		<chmod file="${dist.app.dir}/macos/svckill.msh" perm="ugo+x"/>
@@ -827,9 +827,9 @@
 		<replace file="${dist.app.dir}/macos/Zimbra Desktop.app/Contents/Info.plist" token="@version@" value="${offline.version}"/>
 
 		<copy todir="${dist.app.dir}/linux" overwrite="true">
-			<fileset dir="src/installer/linux" includes="zd.desktop svckill.sh" />
+			<fileset dir="src/installer/linux" includes="zd.desktop user-install.pl" />
 		</copy>
-		<chmod file="${dist.app.dir}/linux/svckill.sh" perm="ugo+x"/>
+		<chmod file="${dist.app.dir}/linux/user-install.pl" perm="ugo+x"/>
 
 		<unzip src="../ThirdParty/wrapper/${wrapper.version}.zip" dest="${build.dir}/wrapper" overwrite="true" />
 		<copy tofile="${dist.app.dir}/win32/zdwrapper.exe" file="${build.dir}/wrapper/${wrapper.version}/bin/wrapper.exe" overwrite="true" />
