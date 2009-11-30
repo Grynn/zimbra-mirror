@@ -50,7 +50,6 @@
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/tomcat/tomcat-5.5-doc/servletapi/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/sqlite-jdbc-3.6.17.3.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/xercesImpl-2.9.1.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-client-1.0.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-client-meta-1.0.jar"/>
@@ -59,5 +58,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSyncCommon"/>
 	<classpathentry kind="lib" path="jars/gdata-contacts-3.0.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-contacts-meta-3.0.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/sqlite-jdbc-3.6.19.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
