@@ -152,6 +152,7 @@
 		<delete dir="build/dist/app/macos" />
 		<delete file="build/dist/app/data/zdesktop.webapp/override.ini" />
 		<move file="build/dist/app/data/zdesktop.webapp/override.ini.linux" tofile="build/dist/app/data/zdesktop.webapp/override.ini" />
+		<replace file="build/dist/app/data/zdesktop.webapp/webapp.ini" token="status=false" value="status=true" />
 		<copy todir="build/dist" file="src/installer/linux/install.pl" preservelastmodified="true" overwrite="true" />
 		<chmod file="build/dist/install.pl" perm="ugo+rx" />
 
