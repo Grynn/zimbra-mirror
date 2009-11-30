@@ -21,9 +21,6 @@ BDB_TGZ_TARGET	:= $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/bdb/bdb-$(BDB_VE
 
 CONFIG_FLAG := --enable-posixmutexes --with-mutex=POSIX/pthreads
 
-ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	CONFIG_FLAG :=
-endif
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	CONFIG_FLAG := 
 endif
