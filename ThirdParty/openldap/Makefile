@@ -11,10 +11,13 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
+PATCH	:=
+
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
 else
 	include $(OPENLDAP_ROOT)/../versions.def
+	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6360.patch;
 endif
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
@@ -32,7 +35,7 @@ build:
 	mv openldap-$(LDAP_RELEASE) openldap-$(LDAP_VERSION); \
 	cd openldap-$(LDAP_VERSION); \
 	patch -g0 -N -p1 < ../patches/ITS5037.patch; \
-	patch -g0 -N -p1 < ../patches/ITS6360.patch; \
+	$(PATCH); \
 	patch -g0 -N -p1 < ../patches/leopard.fix; \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_CLIB_DIR) -L$(LIBTOOL_LIB_DIR) \
 		 -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(LDAP_CLIB_DIR) -R$(LIBTOOL_LIB_DIR)" \

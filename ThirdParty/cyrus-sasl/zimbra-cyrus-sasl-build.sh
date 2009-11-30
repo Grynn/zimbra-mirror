@@ -7,16 +7,17 @@
 # SMakefile is probably the source for the rpm spec.
 #
 BETA=$1
-if [ x$BETA = "xbeta" ]; then
-  source ../beta_versions.sh
-else
-  source ../versions.sh
-fi
 
 platform=`uname -s`
 cyrus_root=`pwd`
 p4_root=`cd ${cyrus_root}/../..; pwd`
 build_platform=`sh ${p4_root}/ZimbraBuild/rpmconf/Build/get_plat_tag.sh`
+
+if [ x$BETA = "xbeta" ]; then
+  source ../beta_versions.sh
+else
+  source ../versions.sh
+fi
 
 rm -fr build
 mkdir build
