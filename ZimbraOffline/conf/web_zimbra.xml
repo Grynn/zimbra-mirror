@@ -296,6 +296,7 @@
 			<url-pattern>/h/printconversations</url-pattern>
 			<url-pattern>/h/printmessage</url-pattern>
 			<url-pattern>/h/printtasks</url-pattern>
+			<url-pattern>/h/viewimages</url-pattern>
 		</jsp-property-group>
     </jsp-config>
 
