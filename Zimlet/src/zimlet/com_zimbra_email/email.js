@@ -136,13 +136,13 @@ function(html, idx, obj, contact, buddy, spanId) {
 		}
 
 		this._getRoster();
-	} else if (contact) {
-		content = AjxStringUtil.htmlEncode(contact.getFullName());
+	} else {
+		if (contact && contact instanceof ZmContact) {
+			content = AjxStringUtil.htmlEncode(contact.getFullName());
+		}
 		if (!content) {
 			content = AjxStringUtil.htmlEncode(obj.toString());
 		}
-	} else {
-		content = AjxStringUtil.htmlEncode(obj.toString());
 	}
 
 	if (spanId) {
