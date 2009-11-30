@@ -901,6 +901,11 @@ createCert() {
     #echo "subj=$SUBJECT"
   fi
 
+  if [ x"$1" = "x-subjectAltNames" ]; then
+    shift
+    subject_alt_names=$1
+  fi
+
   if [ x"${1}" = "x-allserver" ]; then
     ALLSERVERS="$1"
     shift
@@ -938,6 +943,7 @@ createCert() {
   fi
 
   if [ x"${ALLSERVERS}" = "x-allserver" ]; then
+    # merge these with cli specified. -bp
     subject_alt_names=`su - zimbra -c "${zimbra_home}/bin/zmprov -m -l gas | xargs "`
     createCSR self -new -keysize ${KEYSIZE}
     shift
