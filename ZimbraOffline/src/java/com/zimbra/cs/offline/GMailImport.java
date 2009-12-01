@@ -40,6 +40,9 @@ public class GMailImport implements DataSource.DataImport {
         if (gabImport != null) {
             gabImport.test();
         }
+        if (calDavImport != null) {
+            calDavImport.test();
+        }
         imapImport.test();
     }
     

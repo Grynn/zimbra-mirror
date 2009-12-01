@@ -82,6 +82,9 @@ public class XsyncBean extends MailBean {
                     dsAttrs.put(Provisioning.A_zimbraDataSourcePort, port);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, connectionType.toString());
                     dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? Provisioning.TRUE : Provisioning.FALSE);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceContactSyncEnabled, Provisioning.TRUE);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled, Provisioning.TRUE);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceTaskSyncEnabled, Provisioning.TRUE);
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq, Long.toString(syncFreqSecs));
                     dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_USER_ROOT);
                     if (sslCertAlias != null && sslCertAlias.length() > 0)

@@ -42,7 +42,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
     boolean isPushType(byte type) {
         switch (type) {
         case MailItem.TYPE_MESSAGE:
-//        case MailItem.TYPE_APPOINTMENT:
+        case MailItem.TYPE_APPOINTMENT:
         case MailItem.TYPE_CONTACT:
 //        case MailItem.TYPE_TASK:
 //        case MailItem.TYPE_WIKI:

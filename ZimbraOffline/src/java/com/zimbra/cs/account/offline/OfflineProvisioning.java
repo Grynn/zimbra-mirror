@@ -47,7 +47,6 @@ import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
-import com.zimbra.cs.offline.OfflineCalDavDataImport;
 import com.zimbra.cs.offline.ab.gab.GDataServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.util.OfflineUtil;
@@ -58,7 +57,6 @@ import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
 
-import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
@@ -635,30 +633,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             }
         }
     }
-
-    private void testCalDav(String localPart, String domain, String password) throws ServiceException {
-        String username = null;
-        String service;
-      
-        if (domain.equals("yahoo.com") || domain.equals("ymail.com") ||
-            domain.equals("rocketmail.com") || domain.equals("yahoo.co.jp")) {
-            if (domain.equals("yahoo.com"))
-                username = localPart;
-            service = "yahoo.com";
-        } else {
-            service = "gmail.com";
-        }
-        if (username == null)
-            username = localPart + "@" + domain;
-        
-        try {
-            OfflineLog.offline.debug("testing offline caldav access: username=" + username + " service=" + service);
-            OfflineCalDavDataImport.loginTest(username, password, service);
-            OfflineLog.offline.debug("caldav access test passed for " + username);
-        } catch (IOException e) {
-            throw ServiceException.FAILURE("IO error in CalDav login test", e);
-        }
-    }
     
     private synchronized Account createDataSourceAccount(String dsName, String emailAddress, String _password, Map<String, Object> dsAttrs) throws ServiceException {
         
@@ -692,10 +666,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         OfflineDataSource testDs = new OfflineDataSource(getLocalAccount(), type, dsName, dsid, dsAttrs, this);
         testDataSource(testDs);
-
-        String syncCal = (String) dsAttrs.get(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled);
-        if (syncCal != null && syncCal.equals(Provisioning.TRUE))
-            testCalDav(localPart, domain, password);
         
     	String accountId = UUID.randomUUID().toString();
 
@@ -723,19 +693,19 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         setDefaultAccountAttributes(attrs);
         
-        Object syncEnabled = dsAttrs.get(A_zimbraDataSourceCalendarSyncEnabled);
-
-        attrs.put(A_zimbraFeatureCalendarEnabled, syncEnabled == null ? FALSE : syncEnabled);
-        syncEnabled = dsAttrs.get(A_zimbraDataSourceContactSyncEnabled);
+        Object syncEnabled = dsAttrs.get(A_zimbraDataSourceContactSyncEnabled);
         attrs.put(A_zimbraFeatureContactsEnabled, syncEnabled == null ? FALSE : syncEnabled);
+        syncEnabled = dsAttrs.get(A_zimbraDataSourceCalendarSyncEnabled);
+        attrs.put(A_zimbraFeatureCalendarEnabled, syncEnabled == null ? FALSE : syncEnabled);
+        syncEnabled = dsAttrs.get(A_zimbraDataSourceTaskSyncEnabled);
+        attrs.put(A_zimbraFeatureTasksEnabled, syncEnabled == null ? FALSE : syncEnabled);
         syncEnabled = dsAttrs.get(A_zimbraDataSourceSmtpEnabled);
         attrs.put(A_offlineFeatureSmtpEnabled, syncEnabled == null ? TRUE : syncEnabled);
-
+        
         attrs.put(A_zimbraFeatureBriefcasesEnabled, FALSE);
         attrs.put(A_zimbraFeatureGalEnabled, FALSE);
         attrs.put(A_zimbraFeatureIMEnabled, FALSE);
         attrs.put(A_zimbraFeatureNotebookEnabled, FALSE);
-        attrs.put(A_zimbraFeatureTasksEnabled, FALSE);
         attrs.put(A_zimbraPrefAccountTreeOpen , getAllAccounts().size() == 0 ? TRUE : FALSE);
         attrs.put(A_zimbraZimletAvailableZimlets, new String[0]);
 
@@ -2233,20 +2203,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 }
                 testDataSource(new OfflineDataSource(account, ds.getType(),
                     ds.getName(), ds.getId(), attrs, this));
-
-                String syncCal = (String)attrs.get(
-                    OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled);
-                if (syncCal != null && syncCal.equals(Provisioning.TRUE)) {
-                    String parts[] = ds.getEmailAddress().split("@");
-                    if (parts.length != 2)
-                        throw ServiceException.INVALID_REQUEST(
-                            "must be valid caldav email address: " + ds.getEmailAddress(), null);
-                    
-                    String localPart = parts[0];
-                    String domainFromEmail = parts[1];
-                    domainFromEmail = IDNUtil.toAsciiDomainName(domainFromEmail);
-                    testCalDav(localPart, domainFromEmail, decrypted);
-                }
 
                 OfflineSyncManager.getInstance().clearErrorCode(ds.getName());
 

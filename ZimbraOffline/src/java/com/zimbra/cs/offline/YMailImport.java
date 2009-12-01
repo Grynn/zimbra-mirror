@@ -40,9 +40,11 @@ public class YMailImport implements DataSource.DataImport {
         if (yabImport != null) {
             yabImport.test();
         }
+        if (calDavImport != null) {
+            calDavImport.test();
+        }
         imapImport.test();
     }
-
 
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {

@@ -40,7 +40,7 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
         this.serviceName = serviceName;
     }
     
-    public static void loginTest(String username, String password, String serviceName) throws IOException, ServiceException {
+    public void test() throws ServiceException {
         try {
             DataSourceConfig.Service ks =
                 OfflineDataSource.getDataSourceConfig().getService(serviceName);
@@ -50,8 +50,12 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
                 OfflineLog.offline.debug("offline caldav login test: url=" + url + " path=" + path);
                 CalDavClient client = new CalDavClient(url);
                 client.setAppName(CALDAV_APPNAME);
-                client.setCredential(username, password);
-                client.login(path.replaceAll("@USERNAME@", username));
+                client.setCredential(getUsername(), getDecryptedPassword());
+                try {
+                    client.login(path.replaceAll("@USERNAME@", getUsername()));
+                } catch (IOException x) {
+                    throw ServiceException.FAILURE("caldav login test failed", x);
+                }
             } else {
                 throw new DavException("offline caldav login test: missing caldav parameters for " + serviceName, 599);
             }
