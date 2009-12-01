@@ -608,7 +608,9 @@ function(ev) {
 
 DwtInputField.prototype._hideHint = 
 function(value) {
-	this.getInputElement().value = value;
+	var element = this.getInputElement();
+	element.value = value;
+	element.title = this._hint || "";
 	this._hintIsVisible = false;
 	this._updateClassName();
 };
@@ -618,6 +620,7 @@ function() {
 	if (this._hint) {
 		var element = this.getInputElement();
 		if (!element.value) {
+			element.title = "";
 			element.value = this._hint;
 			this._hintIsVisible = true;
 			this._updateClassName();
