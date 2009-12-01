@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -172,6 +173,8 @@ public class OfflineApplication extends ZimbraApplication {
             OfflineLog.offline.debug("No zimlets found at " + zimletDir.getPath());
             return;
         }
+
+        ArrayList<File> filesToDel = new ArrayList<File>();
         for (int i = 0; i < zimlets.length; i++) {
             try {
                 File zimletFile = new File(zimletDir.getPath() + File.separator + zimlets[i]);
@@ -181,12 +184,20 @@ public class OfflineApplication extends ZimbraApplication {
                 OfflineLog.offline.debug("Zimlet deployed:  " + zimlets[i]);
                 if (hasBackup) {
                     FileUtil.copy(zimletFile, new File(zimletBackupDir, zimlets[i]), true);
-                    zimletFile.delete();
+                    filesToDel.add(zimletFile);
                 }
             } catch (Exception e) {
                 OfflineLog.offline.warn("Fail to deploy zimlet " + zimlets[i] + ": " + e.getMessage());
             }
         }
+
+        // On Windows, even associated FileInputStream is closed, File.delete() still may
+        // not work without calling GC first. This seems to be a known issue for Windows JVM
+        System.gc(); 
+        for (File zimletFile : filesToDel) {
+            zimletFile.delete();
+        }
+
         OfflineLog.offline.debug("Zimlets deployment done.");
     }
 }
