@@ -585,8 +585,9 @@ function(ev) {
 		obj._hasFocus = false;
 		if (obj._validationStyle == DwtInputField.ONEXIT_VALIDATION) {
 			var val = obj._validateInput(obj.getValue());
-			if (val != null)
+			if (val != null) {
 				obj.setValue(val);
+			}
 		}
 		if (!obj._hintIsVisible && obj._hint) {
 			obj._showHint();
@@ -598,7 +599,7 @@ DwtInputField._focusHdlr =
 function(ev) {
 	var obj = DwtControl.getTargetControl(ev);
 	if (obj) {
-		DwtShell.getShell(window).getKeyboardMgr().grabFocus(obj.getTabGroupMember());
+		var kbMgr = DwtShell.getShell(window).getKeyboardMgr().inputGotFocus(obj);
 		if (obj._hintIsVisible) {
 			obj._hideHint('');
 		}

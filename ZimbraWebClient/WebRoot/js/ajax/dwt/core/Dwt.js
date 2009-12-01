@@ -1237,3 +1237,7 @@ Dwt.setFavIcon = function(iconURL) {
 	}
 };
 
+Dwt.enableDesignMode =
+function(doc, on) {
+	doc.designMode = on ? "on" : "off";
+};

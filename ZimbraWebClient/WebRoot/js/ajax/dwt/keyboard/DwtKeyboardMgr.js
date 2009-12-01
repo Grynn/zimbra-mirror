@@ -63,6 +63,9 @@ DwtKeyboardMgr = function(shell) {
 	this.__keyTimeout = 750;
 	this.__currTabGroup = null;
 	this.__currDefaultHandler = null;
+
+	this._clearRepeatAction = new AjxTimedAction(null, function() { DwtKeyboardMgr.__keyCode = null; });
+	this._clearRepeatActionId = -1;
 };
 
 /**@private*/
@@ -142,9 +145,9 @@ function(tabGroup) {
  */
 DwtKeyboardMgr.prototype.popTabGroup =
 function(tabGroup) {
-//	DBG.println("kbnav", "POP tab group " + tgName);
 	if (!this.__keyboardHandlingInited) { return; }
 	if (!tabGroup) return;
+//	DBG.println("kbnav", "POP tab group " + tabGroup.__name);
 	
 	// we never want an empty stack
 	if (this.__tabGrpStack.length <= 1) {
@@ -254,6 +257,17 @@ function(focusObj) {
 	}
 		
 	this.__doGrabFocus(focusObj);
+};
+
+DwtKeyboardMgr.prototype.inputGotFocus =
+function(inputCtrl) {
+
+	this.__focusObj = inputCtrl;
+	this.__dwtInputCtrl = true;
+	this.__dwtCtrlHasFocus = false;
+	if (this.__currTabGroup) {
+		this.__currTabGroup.setFocusMember(inputCtrl.getTabGroupMember(), false, true);
+	}
 };
 
 /**
@@ -416,7 +430,8 @@ function() {
  */
 DwtKeyboardMgr.prototype.__doGrabFocus =
 function(focusObj) {
-	if (!focusObj) return;
+
+	if (!focusObj) { return; }
 	
 	var dwtInputCtrl = (Dwt.instanceOf(focusObj, "DwtInputField") ||
 						Dwt.instanceOf(focusObj, "DwtHtmlEditor") ||
@@ -472,14 +487,14 @@ function(focusObj) {
  */
 DwtKeyboardMgr.__onFocusHdlr =
 function(ev) {
-//	DBG.println("kbnav", "DwtKeyboardMgr: ONFOCUS");
+
 	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 	kbMgr.__dwtCtrlHasFocus = true;
 	var focusObj = kbMgr.__focusObj;
+//	DBG.println("kbnav", "DwtKeyboardMgr: ONFOCUS - " + focusObj);
 	if (focusObj && focusObj.__doFocus) {
 		focusObj.__doFocus();
 	}
-//	DBG.println("kbnav", "focus object: " + kbMgr.__focusObj);
 };
 
 /**
@@ -488,13 +503,13 @@ function(ev) {
  */
 DwtKeyboardMgr.__onBlurHdlr =
 function(ev) {
-//	DBG.println("kbnav", "DwtKeyboardMgr: ONBLUR");
+
 	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 
 	// Got to play the trick with HTML elements which get focus before blur is
 	// called on the old focus object. (see _grabFocus)
 	var focusObj = kbMgr.__oldFocusObj || kbMgr.__focusObj;
-	
+//	DBG.println("kbnav", "DwtKeyboardMgr: ONBLUR - " + focusObj);
 	if (focusObj && focusObj.__doBlur) {
 		focusObj.__doBlur();
 	}
@@ -508,7 +523,6 @@ function(ev) {
 //	kbMgr.__oldFocusObj = kbMgr.__focusObj = null;
 	kbMgr.__oldFocusObj = null;
 	kbMgr.__dwtCtrlHasFocus = false;	
-//	DBG.println("kbnav", "focus object (blur): " + kbMgr.__focusObj);
 };
 
 
@@ -519,7 +533,14 @@ DwtKeyboardMgr.__keyUpHdlr =
 function(ev) {
 	ev = DwtUiEvent.getEvent(ev);
 //	DBG.println("kbnav", "keyup: " + ev.keyCode);
+
+	// clear saved repeating key
 	DwtKeyboardMgr.__keyCode = null;
+	if (this._clearRepeatActionId != -1) {
+		AjxTimedAction.cancelAction(this._clearRepeatActionId);
+		this._clearRepeatActionId = -1;
+	}
+	
 	if (AjxEnv.isMac && AjxEnv.isGeckoBased && ev.keyCode == 0) {
 		return DwtKeyboardMgr.__keyDownHdlr(ev);
 	} else {
@@ -610,21 +631,23 @@ function(ev) {
  */
 DwtKeyboardMgr.__syncFocus =
 function(kbMgr, obj) {
-	
+//	DBG.println("kbnav", "sync focus ----- obj: " + obj + ", __focusObj: " + kbMgr.__focusObj + ", __dwtCtrlHasFocus: "
+//			+ kbMgr.__dwtCtrlHasFocus + ", __dwtInputCtrl: " + kbMgr.__dwtInputCtrl + ", __oldFocusObj: " + kbMgr.__oldFocusObj);
 	/* (BUG 8588) If obj is not the hidden input field (it's some other input field), and if
 	 * a control has focus, then we have a focus mismatch and we need to blur the
 	 * control that thinks it has focus. That can happen due to the way focus
 	 * can be set in input fields. */ 
 	if ((obj != kbMgr._kbFocusField) && kbMgr.__dwtCtrlHasFocus) {
-		DBG.println(AjxDebug.DBG3, "FOCUS MISMATCH! focus obj: " + kbMgr.__focusObj);
-		DwtKeyboardMgr.__onBlurHdlr();
+//		DBG.println("kbnav", "FOCUS MISMATCH! focus obj: " + kbMgr.__focusObj + ", obj: " + obj);
+//		DwtKeyboardMgr.__onBlurHdlr();
+		kbMgr._kbFocusField.focus();
 	}
 	
 //	DBG.println("kbnav", "DwtKeyboardMgr.__syncFocus: focus obj: " + kbMgr.__focusObj + " - obj: " + obj);
 	if (!kbMgr.__dwtCtrlHasFocus) {
 		// DwtInputField DwtHtmlEditor
 		if ((obj != kbMgr.__focusObj) && !kbMgr.__dwtInputCtrl) {
-//			DBG.println(AjxDebug.DBG1, "Focus out of sync, resetting");
+//			DBG.println("kbnav", "Focus out of sync, resetting");
 			if (kbMgr.__currTabGroup && kbMgr.__currTabGroup.setFocusMember(obj)) {
 				kbMgr.__focusObj = obj;
 				kbMgr.__oldFocusObj = null;
@@ -650,7 +673,7 @@ function(ev) {
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = DwtKeyboardMgr.__keyCode || DwtKeyEvent.getCharCode(ev);
 	var isRepeat = (DwtKeyboardMgr.__keyCode != null);
-//	DBG.println("kbnav", "keydown: " + keyCode);
+//	DBG.println("kbnav", "keydown: " + keyCode + " -------- " + ev.target);
 //	DBG.println("kbnav", "saved key code: " + DwtKeyboardMgr.__keyCode + " (" + isRepeat + ")");
 
 	// Popdown any tooltip
@@ -660,7 +683,7 @@ function(ev) {
 	var focusInTGMember = DwtKeyboardMgr.__syncFocus(kbMgr, kev.target);
 	
 	if (!focusInTGMember) {
-		DBG.println(AjxDebug.DBG3, "Object is not in tab hierarchy");
+//		DBG.println("kbnav", "Object is not in tab hierarchy");
 	}
 			
 	/* The first thing we care about is the tab key since we want to manage
@@ -681,7 +704,7 @@ function(ev) {
 	 	if (kbMgr.__currTabGroup && !DwtKeyMapMgr.hasModifier(kev)) {
 		 	// If a menu is popped up then don't act on the Tab
 		 	if (!DwtMenu.menuShowing()) {
-			 	DBG.println(AjxDebug.DBG3, "Tab");
+//			 	DBG.println("kbnav", "Tab");
 			 	// If the tab hit is in an element or if the current tab group has
 			 	// a focus member
 				if (focusInTGMember || kbMgr.__currTabGroup.getFocusMember()) {
@@ -771,6 +794,7 @@ function(ev) {
 	if (handled == DwtKeyboardMgr.__KEYSEQ_REPEAT) {
 //		DBG.println("kbnav", "saving repeatable keyCode " + keyCode);
 		DwtKeyboardMgr.__keyCode = keyCode;
+		kbMgr._clearRepeatActionId = AjxTimedAction.scheduleAction(kbMgr._clearRepeatAction, 150);
 	}
 
 	return kbMgr.__processKeyEvent(ev, kev, propagate);
@@ -817,7 +841,7 @@ function(hdlr, ev, forceActionCode, isRepeat) {
 		// that event. Also, keys like the up/down arrows are considered "special" and don't send
 		// keypress.
 		if (!isRepeat && this.__keyMapMgr.repeats(mapName, actionCode)) {
-			DBG.println("kbnav", mapName + "." + actionCode + " repeats");
+//			DBG.println("kbnav", mapName + "." + actionCode + " repeats");
 			if (AjxEnv.isGeckoBased) {
 				return DwtKeyboardMgr.__KEYSEQ_REPEAT;
 			} else {

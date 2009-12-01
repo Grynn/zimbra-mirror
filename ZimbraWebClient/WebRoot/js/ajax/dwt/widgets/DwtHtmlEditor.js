@@ -1524,8 +1524,9 @@ function() {
 		else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_FULL))		ev.justification = DwtHtmlEditor.JUSTIFY_FULL;
 
 		// Notify any listeners
-		if (this.isListenerRegistered(DwtEvent.STATE_CHANGE))
+		if (this.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
 			this.notifyListeners(DwtEvent.STATE_CHANGE, ev);
+		}
 	} catch (ex) {
 		if (AjxEnv.isGeckoBased) {
 			this._enableDesignMode(iFrameDoc);
@@ -1538,7 +1539,7 @@ function(iFrameDoc) {
 	if (!iFrameDoc) { return; }
 
 	try {
-		iFrameDoc.designMode = "on";
+		Dwt.enableDesignMode(iFrameDoc, true);
 		// Probably a regression of FF 1.5.0.1/Linux requires us to
 		// reset event handlers here (Zimbra bug: 6545).
  		if (AjxEnv.isGeckoBased && (AjxEnv.isLinux || AjxEnv.isMac))
