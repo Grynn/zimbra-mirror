@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.zimbra.common.util.ZimbraLog;
 
-public class SetHeaderFilter implements Filter {
+public class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter {
     
     // --------------------------------------------------------------
     // Class constants
@@ -76,7 +76,15 @@ public class SetHeaderFilter implements Filter {
     private String mailUrl;
     private String mailUrlHome;
     private String mailUrlUser;
-    
+
+	//
+	// Constructors
+	//
+
+	public SetHeaderFilter() {
+		super(ZimbraLog.webclient);
+	}
+
     // --------------------------------------------------------------
     // init helper methods
     // --------------------------------------------------------------
@@ -147,7 +155,8 @@ public class SetHeaderFilter implements Filter {
      *
      * @param filterConfig The filter configuration object
      */
-    public void init(FilterConfig filterConfig) {
+	public void init(FilterConfig filterConfig) throws ServletException {
+		super.init(filterConfig);
         this.config = filterConfig;
         if (filterConfig != null) {
             debug = getInitParameterInt("debug", 0);
@@ -196,8 +205,8 @@ public class SetHeaderFilter implements Filter {
     * Take this filter out of service.
     */
     public void destroy() {
+		super.destroy();
         this.config = null;
-
     }
     
     private boolean isHttpRequest(ServletRequest request, 
@@ -229,10 +238,19 @@ public class SetHeaderFilter implements Filter {
     public void doFilter ( ServletRequest request, ServletResponse response,
                            FilterChain chain ) throws IOException,
                                                       ServletException {
-        
+		super.doFilter(request, response, chain);
+		// Clear logging context before each servlet request.
+		ZimbraLog.clearContext();
+    }
+
+	public boolean doFilter(ServletRequest request, ServletResponse response)
+	throws IOException, ServletException {
         if (debug > 0) {
             System.out.println("@doFilter");
         }
+		if (!super.doFilter(request, response)) {
+			return false;
+		}
 
 	    /***/
         // TODO: We could pass all the init-params through but we only need one for now.
@@ -258,8 +276,7 @@ public class SetHeaderFilter implements Filter {
             if (debug > 0){
                 System.out.println("not proceeding with filter");
             }
-            chain.doFilter(request, response);
-            return;
+			return true;
         }
         
         // CalDAV service discovery (bug 35008). 
@@ -268,7 +285,7 @@ public class SetHeaderFilter implements Filter {
             ServletContext targetContext = config.getServletContext().getContext("/service");
             RequestDispatcher dispatcher = targetContext.getRequestDispatcher("/dav");
             dispatcher.forward(req, resp);
-        	return;
+			return false;
         }
         
         String uri = req.getRequestURI();
@@ -286,7 +303,6 @@ public class SetHeaderFilter implements Filter {
             if (debug > 0) {
                 System.out.println("doFilter gets called wo compression");
             }
-            chain.doFilter(req, resp);
         } else {
             Matcher m = extensionPattern.matcher(uri);
             if (debug > 0) {
@@ -299,17 +315,18 @@ public class SetHeaderFilter implements Filter {
                 // not sure why I can't set the headers after 
                 // the chain.doFilter call, but ...
                 // I can't.
+	            // [A] Because you can't write the headers after
+	            // [A] content has already been written to the
+	            // [A] response!
                 if (debug > 0) {
                     System.out.println("setting headers");                    
                 }
                 resp.setHeader(HEADER_CONTENT_ENCODING, HEADER_VAL_GZIP);
                 resp.setHeader(HEADER_VARY, HEADER_ACCEPT_ENCODING);
             }
-            chain.doFilter(req, resp);
         }
-        
-        // Clear logging context before each servlet request.
-        ZimbraLog.clearContext();
+
+		return true;
     }
 
     private void setRequestAttributes( HttpServletRequest req, HttpServletResponse resp,
