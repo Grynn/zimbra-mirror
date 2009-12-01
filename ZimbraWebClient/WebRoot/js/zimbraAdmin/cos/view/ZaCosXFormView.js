@@ -606,14 +606,30 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                      choices: ZaSettings.getLocaleChoices()
                 }
             ]},
+            {type:_ZA_TOP_GROUPER_, id:"cos_prefs_standard_client",label:ZaMsg.NAD_MailOptionsStandardClient,
+            	visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
+					[
+						ZaCos.A_zimbraMaxMailItemsPerPage,
+						ZaCos.A_zimbraPrefMailItemsPerPage
+					]]
+				],
+            	items :[
+					{ref:ZaCos.A_zimbraMaxMailItemsPerPage, type:_OSELECT1_, msgName:ZaMsg.MSG_zimbraMaxMailItemsPerPage,
+	                    label:ZaMsg.LBL_zimbraMaxMailItemsPerPage, labelLocation:_LEFT_, choices:[10,25,50,100,250,500,1000], editable:true,
+	                    inputSize:4
+	                },                
+	                {ref:ZaCos.A_zimbraPrefMailItemsPerPage, type:_OSELECT1_, msgName:ZaMsg.MSG_zimbraPrefMailItemsPerPage,
+	                    label:ZaMsg.LBL_zimbraPrefMailItemsPerPage, labelLocation:_LEFT_
+	                }            		
+            	]
+            },       
+            {type: _SPACER_ , height: "10px" },   
             {type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"cos_form_prefs_mail_header",
                 visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 					[
 						ZaCos.A_zimbraPrefMessageViewHtmlPreferred,
 						ZaCos.A_zimbraPrefDisplayExternalImages,
 						ZaCos.A_zimbraPrefGroupMailBy,
-						ZaCos.A_zimbraMaxMailItemsPerPage,
-						ZaCos.A_zimbraPrefMailItemsPerPage,
 						ZaCos.A_zimbraPrefMailDefaultCharset
 					]]
 				], 
@@ -635,13 +651,6 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 },
                 {ref:ZaCos.A_zimbraPrefGroupMailBy, type:_OSELECT1_, msgName:ZaMsg.LBL_zimbraPrefGroupMailBy,
                     label:ZaMsg.LBL_zimbraPrefGroupMailBy, labelLocation:_LEFT_
-                },
-				{ref:ZaCos.A_zimbraMaxMailItemsPerPage, type:_OSELECT1_, msgName:ZaMsg.MSG_zimbraMaxMailItemsPerPage,
-                    label:ZaMsg.LBL_zimbraMaxMailItemsPerPage, labelLocation:_LEFT_, choices:[10,25,50,100,250,500,1000], editable:true,
-                    inputSize:4
-                },                
-                {ref:ZaCos.A_zimbraPrefMailItemsPerPage, type:_OSELECT1_, msgName:ZaMsg.MSG_zimbraPrefMailItemsPerPage,
-                    label:ZaMsg.LBL_zimbraPrefMailItemsPerPage, labelLocation:_LEFT_
                 },
                 {ref:ZaCos.A_zimbraPrefMailDefaultCharset, type:_OSELECT1_,
                      msgName:ZaMsg.LBL_zimbraPrefMailDefaultCharset,label:ZaMsg.LBL_zimbraPrefMailDefaultCharset,
