@@ -1289,7 +1289,7 @@ function(colIdx, params) {
 	var headerList = params.headerList || this._headerList;
 	var width = headerList[colIdx]._width;
 	if (width) {
-		if (AjxEnv.isIE)		return (width + 4);
+		if (AjxEnv.isIE)		return (width + 2);
 		if (AjxEnv.isSafari)	return (width + 5);
 		return width;
 	}
