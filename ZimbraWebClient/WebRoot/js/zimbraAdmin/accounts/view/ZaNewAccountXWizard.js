@@ -786,7 +786,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 					});
 		};
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureTaggingEnabled,ZaAccount.A_zimbraFeatureSharingEnabled,
-			ZaAccount.A_zimbraFeatureChangePasswordEnabled,ZaAccount.A_zimbraFeatureSkinChangeEnabled,
+			ZaAccount.A_zimbraFeatureChangePasswordEnabled,ZaAccount.A_zimbraFeatureSkinChangeEnabled,ZaAccount.A_zimbraFeatureManageZimlets,
 			//ZaAccount.A_zimbraFeatureHtmlComposeEnabled,ZaAccount.A_zimbraFeatureShortcutAliasesEnabled,
 			ZaAccount.A_zimbraFeatureGalEnabled,ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled,
 			ZaAccount.A_zimbraFeatureImportExportFolderEnabled],[])) {
@@ -797,6 +797,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							{ref:ZaAccount.A_zimbraFeatureSharingEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureSharingEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureSharingEnabled,trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureChangePasswordEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureChangePasswordEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureChangePasswordEnabled,trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureSkinChangeEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureSkinChangeEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureSkinChangeEnabled, trueValue:"TRUE", falseValue:"FALSE"},
+							{ref:ZaAccount.A_zimbraFeatureManageZimlets, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureManageZimlets,checkBoxLabel:ZaMsg.LBL_zimbraFeatureManageZimlets, trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureHtmlComposeEnabled, type:_SUPER_WIZ_CHECKBOX_, 
 								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 								msgName:ZaMsg.LBL_zimbraFeatureHtmlComposeEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureHtmlComposeEnabled, 
