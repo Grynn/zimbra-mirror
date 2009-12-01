@@ -193,7 +193,9 @@ public class OfflineApplication extends ZimbraApplication {
 
         // On Windows, even associated FileInputStream is closed, File.delete() still may
         // not work without calling GC first. This seems to be a known issue for Windows JVM
-        System.gc(); 
+        if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
+            System.gc();
+        }
         for (File zimletFile : filesToDel) {
             zimletFile.delete();
         }
