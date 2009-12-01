@@ -221,7 +221,7 @@ sub run() {
     my %options;
     $options{'d'} = $DEFAULT_DEST;
     $options{'t'} = $DEFAULT_TIMEOUT;
-    getopts('d:t:haz', \%options);
+    getopts('d:t:jhaz', \%options);
     
     if ($options{'h'}) {
         HELP_MESSAGE(\*STDERR);
