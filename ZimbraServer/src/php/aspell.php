@@ -17,6 +17,7 @@
 $filename = "";
 $text = "";
 $dictionary = "en_EN";
+$ignoreWords = array();
 
 if (isset($_FILES["text"])) {
     $text = file_get_contents($_FILES["text"]);
@@ -26,6 +27,13 @@ if (isset($_FILES["text"])) {
 
 if (isset($_REQUEST["dictionary"])) {
     $dictionary = $_REQUEST["dictionary"];
+}
+
+if (isset($_REQUEST["ignore"])) {
+    $wordArray = preg_split('/[\s,]+/', $_REQUEST["ignore"]);
+    foreach ($wordArray as $word) {
+        $ignoreWords[$word] = TRUE;
+    }
 }
    
 if (get_magic_quotes_gpc()) {
@@ -64,6 +72,11 @@ if ($text != NULL) {
     foreach ($words as $word) {
         if ($skip) {
             $skip = FALSE;
+            continue;
+        }
+	
+	// Skip ignored words.
+	if (array_key_exists($word, $ignoreWords)) {
             continue;
         }
 
@@ -108,7 +121,8 @@ if ($text != NULL) {
 <form action="aspell.php" method="post" enctype="multipart/form-data">
     <p>Type in some words to spell check:</p>
     <textarea NAME="text" ROWS="10" COLS="80"></textarea>
-    <p>Dictionary:<input type="text" name="dictionary" value="<?php print $dictionary; ?>" size="8"/></p>
+    <p>Dictionary: <input type="text" name="dictionary" value="<?php print $dictionary; ?>" size="8"/></p>
+    <p>Ignore: <input type="text" name="ignore" size="40"/></p>
     <p><input type="submit" /></p>
 </form>
 
