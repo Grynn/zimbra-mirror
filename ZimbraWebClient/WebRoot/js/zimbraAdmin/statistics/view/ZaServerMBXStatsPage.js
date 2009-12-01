@@ -140,7 +140,7 @@ ZaServerMBXStatsPage.prototype.getMbxes = function ( targetServer, offset, sortB
 			diskUsed = ( accounts[i].used / _1MB ).toFixed(2) ;
 			
 			if (accounts[i].limit == 0 ){
-				quotaLimit = "unlimited" ;
+				quotaLimit = ZaMsg.Unlimited;
 				percentage = 0 ;	
 			}else{			
 				if (accounts[i].limit >= _1MB) {
