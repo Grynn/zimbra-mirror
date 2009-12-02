@@ -29,6 +29,7 @@ import com.zimbra.cs.datasource.CalDavDataImport;
 import com.zimbra.cs.dav.DavException;
 import com.zimbra.cs.dav.client.CalDavClient;
 import com.zimbra.cs.mailbox.OfflineServiceException;
+import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class OfflineCalDavDataImport extends CalDavDataImport {
     private final String serviceName;
@@ -125,7 +126,6 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
     
     @Override
     protected int getRootFolderId(DataSource ds) throws ServiceException {
-    	//return ds.getIntAttr(OfflineConstants.A_zimbraDataSourceCalendarFolderId, ds.getFolderId());
-    	return ds.getFolderId();
+    	return ds.getIntAttr(OfflineConstants.A_zimbraDataSourceCalendarFolderId, ds.getFolderId());
     }
 }
