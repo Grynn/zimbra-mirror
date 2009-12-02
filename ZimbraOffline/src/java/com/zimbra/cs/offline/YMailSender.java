@@ -50,6 +50,7 @@ public class YMailSender extends MailSender {
     private YMailSender(YMailClient ymc, boolean saveCopy) {
         this.ymc = ymc;
         this.saveCopy = saveCopy;
+        setTrackBadHosts(false);
     }
 
     @Override
