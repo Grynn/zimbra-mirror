@@ -181,20 +181,14 @@ public class ConsoleBean extends PageBean {
             sum.flavor = ds.getAttr(OfflineConstants.A_offlineAccountFlavor);
 	    if (sum.flavor == null) {
 		String domain = ds.getAttr(Provisioning.A_zimbraDataSourceDomain, null);
-		if (sum.type.equals("live"))
-		    sum.flavor = "Live";
-		else if (sum.type.equals("pop3"))
+		if (sum.type.equals("pop3"))
 		    sum.flavor = "Pop";
-		else if (AmailBean.Domain.equals(domain))
-		    sum.flavor = "AOL";
 		else if (GmailBean.Domain.equals(domain))
 		    sum.flavor = "Gmail";
 		else if (MmailBean.Domain.equals(domain))
 		    sum.flavor = "MSE";
 		else if (YmailBean.Domain.equals(domain))
 		    sum.flavor = "YMP";
-                else if (MobileMeBean.Domain.equals(domain))
-                    sum.flavor = "MobileMe";
 		else
 		    sum.flavor = "Imap";
 	    }

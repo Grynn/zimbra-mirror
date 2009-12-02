@@ -79,7 +79,7 @@ function SetSmtpPort() {
             <td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='AccountName'/></td>
             <td><input class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}" ${empty bean.accountId ? '' : 'disabled'}><td>
         </tr>
-<c:if test="${bean.type ne 'zimbra' and bean.type ne 'xsync'}">
+<c:if test="${bean.type ne 'zimbra'}">
         <tr>
             <td class="ZFieldLabel"><fmt:message key='FullName'/></td>
             <td><input class="ZField" type="text" id="fromDisplay" name="fromDisplay" value="${bean.fromDisplay}"></td>
@@ -89,11 +89,18 @@ function SetSmtpPort() {
             <td class="${zdf:isValid(bean, 'email') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='EmailAddress'/></td>
             <td><input class="ZField" type="text" id="email" name="email" value="${bean.email}" ${empty bean.accountId ? '' : 'disabled'}></td>
         </tr>
+        
 <c:if test="${bean.serverConfigSupported}">    
     <c:if test="${bean.usernameRequired}">    
         <tr id="receivingMailRow">
             <td class="ZSection" colspan="2"><fmt:message key='ReceivingMail'/><hr class="ZSeparator"></td>
         </tr>
+	<c:if test="${bean.type eq 'xsync'}">
+	        <tr>
+	            <td class="ZFieldLabel"><fmt:message key='Domain'/></td>
+	            <td><input class="ZField" type="text" id="domain" name="domain" value="${bean.domain}"></td>
+	        </tr>
+	</c:if>
         <tr id="usernameRow">
             <td class="${zdf:isValid(bean, 'username') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='UserName'/></td>
             <td><input class="ZField" type="text" id="username" name="username" value="${bean.username}"></td>

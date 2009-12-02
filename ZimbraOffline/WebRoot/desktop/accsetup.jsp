@@ -43,13 +43,6 @@
 </c:set>
 
 <c:choose>
-    <c:when test="${accountFlavor eq 'AOL'}">
-        <jsp:useBean id="abean" class="com.zimbra.cs.offline.jsp.AmailBean" scope="request"/>
-        <jsp:setProperty name="abean" property="*"/>
-        <jsp:setProperty name="abean" property="locale" value="${pageContext.request.locale}"/>
-        ${zdf:doRequest(abean)}
-        <c:set var="bean" value="${abean}" scope="request"/>
-    </c:when>
     <c:when test="${accountFlavor eq 'Gmail'}">
         <jsp:useBean id="gbean" class="com.zimbra.cs.offline.jsp.GmailBean" scope="request"/>
         <jsp:setProperty name="gbean" property="*"/>
@@ -142,18 +135,6 @@
         <c:set var="help">
 	    <fmt:message key='ToLearnZCS'>
 	        <fmt:param><a href="http://www.zimbra.com" target="_blank">www.zimbra.com</a></fmt:param>
-            </fmt:message>
-        </c:set>
-    </c:when>
-    <c:when test="${accountFlavor eq 'MobileMe'}">
-        <jsp:useBean id="mmbean" class="com.zimbra.cs.offline.jsp.MobileMeBean" scope="request"/>
-        <jsp:setProperty name="mmbean" property="*"/>
-        <jsp:setProperty name="mmbean" property="locale" value="${pageContext.request.locale}"/>
-        ${zdf:doRequest(mmbean)}
-        <c:set var="bean" value="${mmbean}" scope="request"/>
-        <c:set var="beta">
-            <fmt:message key='BetaNoteMobileMe'>
-                <fmt:param>${betaLink}</fmt:param>
             </fmt:message>
         </c:set>
     </c:when>
@@ -287,8 +268,6 @@ function onEditLink(id, keep) {
                   <option value="Zimbra" <c:if test="${accountFlavor eq 'Zimbra'}">selected</c:if> ><fmt:message key='Zimbra'/></option>
                   <option value="YMP" <c:if test="${accountFlavor eq 'YMP'}">selected</c:if> ><fmt:message key='YMP'/></option>
                   <option value="Gmail" <c:if test="${accountFlavor eq 'Gmail'}">selected</c:if> ><fmt:message key='Gmail'/></option>
-                  <option value="AOL" <c:if test="${accountFlavor eq 'AOL'}">selected</c:if> ><fmt:message key='AOL'/></option>
-                  <option value="MobileMe" <c:if test="${accountFlavor eq 'MobileMe'}">selected</c:if> ><fmt:message key='MobileMe'/></option>
                   <option value="Xsync" <c:if test="${accountFlavor eq 'Xsync'}">selected</c:if> ><fmt:message key='Xsync'/></option>
                   <option value="MSE" <c:if test="${accountFlavor eq 'MSE'}">selected</c:if> ><fmt:message key='MSE'/></option>
                   <option value="Imap" <c:if test="${accountFlavor eq 'Imap'}">selected</c:if> ><fmt:message key='Imap'/></option>

@@ -13,7 +13,9 @@ import com.zimbra.cs.offline.jsp.JspConstants.JspVerb;
 import com.zimbra.cs.zclient.ZFolder;
 
 public class XsyncBean extends MailBean {
-
+    protected String fromDisplay = "";
+    protected String domain = "";
+    
 	public XsyncBean() {
 		type = "xsync";
 		connectionType = ConnectionType.ssl;
@@ -33,6 +35,9 @@ public class XsyncBean extends MailBean {
         accountName = ds.getName();
         password = JspConstants.MASKED_PASSWORD;
         email = ds.getEmailAddress();
+        fromDisplay = ds.getFromDisplay();
+        username = ds.getUsername();
+        domain = ds.getDomain() == null ? "" : ds.getDomain();
 
         type = ds.getType().toString();
         host = ds.getHost();
@@ -67,6 +72,8 @@ public class XsyncBean extends MailBean {
                     addInvalid("port");
                 if (!isValidEmail(email))
                     addInvalid("email");
+                if (isEmpty(username))
+                    addInvalid("username");
                 
                 if (username == null || username.length() == 0)
                     username = email.substring(0, email.indexOf('@'));
@@ -75,9 +82,11 @@ public class XsyncBean extends MailBean {
                 	dsAttrs.put(OfflineConstants.A_zimbraDataSourceAccountSetup, Provisioning.TRUE);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, Provisioning.TRUE);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceUsername, username);
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceDomain, domain);
                     if (!password.equals(JspConstants.MASKED_PASSWORD))
                     	dsAttrs.put(Provisioning.A_zimbraDataSourcePassword, password);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceEmailAddress, email);
+                    dsAttrs.put(Provisioning.A_zimbraPrefFromDisplay, fromDisplay);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceHost, host);
                     dsAttrs.put(Provisioning.A_zimbraDataSourcePort, port);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, connectionType.toString());
@@ -123,12 +132,36 @@ public class XsyncBean extends MailBean {
         }
 	}
 	
+    public String getFromDisplay() {
+        return fromDisplay;
+    }
+
+    public void setFromDisplay(String fromDisplay) {
+        this.fromDisplay = optional(fromDisplay);
+    }
+	
+	public String getDomain() {
+	    return domain;
+	}
+	
+	public void setDomain(String domain) {
+	    this.domain = optional(domain);
+	}
+	
+    public String getUsername() {
+        return username;
+    }
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
+	
     public boolean isSmtpConfigSupported() {
         return false;
     }
 
     public boolean isUsernameRequired() {
-        return false;
+        return true;
     }
     
     public static String createAccount(String accountName, String username, String password, String email, String host, int port, boolean isSSL) throws Exception {
