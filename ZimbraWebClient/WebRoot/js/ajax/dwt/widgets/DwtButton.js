@@ -594,8 +594,10 @@ function(show) {
 	// blinking.
 	if (this._hoverImageInfo){
 		var iconEl = this._getIconEl();
-		var info = show ? this._hoverImageInfo : this.__imageInfo;
-		iconEl.firstChild.className = AjxImg.getClassForImage(info);
+		if (iconEl) {  //add a null check so buttons with no icon elements don't break the app.
+			var info = show ? this._hoverImageInfo : this.__imageInfo;
+			iconEl.firstChild.className = AjxImg.getClassForImage(info);
+		}
 	}
 };
 
