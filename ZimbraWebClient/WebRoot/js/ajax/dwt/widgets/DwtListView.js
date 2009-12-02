@@ -646,6 +646,9 @@ function(item, skipNotify) {
 
 	var el = this._getElFromItem(item);
 	if (el) {
+		if ((this._selectedItems.size() == 1) && (this._selectedItems.get(0) == el)) {
+			return;
+		}
 		this.deselectAll();
 		this._unmarkKbAnchorElement(true);
 		this._selectedItems.add(el);
