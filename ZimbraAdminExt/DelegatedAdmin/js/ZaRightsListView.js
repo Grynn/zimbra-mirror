@@ -122,6 +122,8 @@ function() {
 //	var sortable=1;
 	headerList[0] = new ZaListHeaderItem(ZaRight.A_name, com_zimbra_delegatedadmin.Col_right_name,
             null, 200, null, null, true, true);
+    headerList[1] = new ZaListHeaderItem(ZaRight.A_type, com_zimbra_delegatedadmin.Col_right_type,
+            null, 100, null, null, true, true);
 
     return headerList;
 }

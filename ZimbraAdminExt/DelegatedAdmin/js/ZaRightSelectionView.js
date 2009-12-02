@@ -66,7 +66,7 @@ function() {
                  items: [
                    {type:_OUTPUT_, value: com_zimbra_delegatedadmin.Label_rights_to_add,  width: 100, 
                        valign: _CENTER_, align: _RIGHT_ },
-                   {ref:ZaRight.A_rights, type:_DWT_LIST_, height:200, width:"250px",
+                   {ref:ZaRight.A_rights, type:_DWT_LIST_, height:200, width:"300px",
                          forceUpdate: true, cssClass: "DLSource",
                          widgetClass: ZaRightsMiniListView,
                 //                        headerList:acctLimitsHeaderList,
