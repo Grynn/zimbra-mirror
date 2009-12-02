@@ -703,8 +703,7 @@ deployCert() {
       cd ${zimbra_conf_directory}/ca
       for pem in commercial_ca*.pem; do
         ln -f -s $pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`.0
-        chown ${zimbra_uid}:${zimbra_gid} 
-        ${zimbra_conf_directory}/ca/$pem
+        chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/ca/$pem
         chmod 640 ${zimbra_conf_directory}/ca/$pem
       done
     fi
