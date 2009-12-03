@@ -62,16 +62,9 @@ UNZIP	:= $(shell which unzip)
 CMIRROR	?= http://buildmaster.lab.zimbra.com:8080/cpan/
 
 BDB_INCLUDE	:= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
-MYSQL_INCLUDE	:= $(ZIMBRA_HOME)/mysql/include
+MYSQL_INCLUDE	:= $(ZIMBRA_HOME)/mysql/include/mysql
 LDAP_INCLUDE 	:= $(ZIMBRA_HOME)/openldap/include
 SASL_INCLUDE	:= $(ZIMBRA_HOME)/cyrus-sasl/include
-
-ifeq ($(BUILD_PLATFORM), MACOSX)
-	MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include/mysql
-endif
-ifeq ($(BUILD_PLATFORM), MACOSXx86)
-	MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include/mysql
-endif
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	EXPAT_INCLUDE := EXPATINCPATH=$(ZIMBRA_HOME)/include
@@ -297,7 +290,7 @@ build:
 	done
 
 	@echo -n "Compiling perl lib DBD::mysql ..."; \
-	$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"$(ZIMBRA_HOME)/mysql/bin/mysql_config\" --libs=\"-L$(ZIMBRA_HOME)/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/lib:/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' >> $(LOGFILE) 2>&1; \
+	$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"$(ZIMBRA_HOME)/mysql/bin/mysql_config\" --libs=\"-L$(ZIMBRA_HOME)/mysql/lib/mysql -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/lib:/opt/zimbra/mysql/lib/mysql"; force ("install", "DBD::mysql")' >> $(LOGFILE) 2>&1; \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 
 	@for lib in $(SA_PERL_LIBS); do \

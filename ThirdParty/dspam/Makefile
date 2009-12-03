@@ -20,14 +20,7 @@ endif
 DSPAM_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/dspam/dspam-$(DSPAM_VERSION).tgz
 
-MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include 
-
-ifeq ($(BUILD_PLATFORM), MACOSX)
-	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
-endif
-ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
-endif
+MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
 
 all: allclean build tar
 
@@ -42,7 +35,7 @@ build:
 	--enable-daemon \
 	--enable-large-scale --with-storage-driver=hash_drv,mysql_drv \
 	--with-mysql-includes=$(MYSQL_INCLUDE_DIR) \
-	--with-mysql-libraries=$(ZIMBRA_HOME)/mysql/lib \
+	--with-mysql-libraries=$(ZIMBRA_HOME)/mysql/lib/mysql \
 	--with-dspam-home-group=root \
 	--with-dspam-group=root \
 	--with-dspam-mode=0755 \
