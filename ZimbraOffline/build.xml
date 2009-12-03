@@ -978,6 +978,9 @@
 		<mkdir dir="${dist.data.dir}/profile/extensions/Inquisitor@yahoo"/>
 		<unzip src="src/installer/extensions/inquisitor4prism.xpi" dest="${dist.data.dir}/profile/extensions/Inquisitor@yahoo" overwrite="true"/>
 
+        <!-- override default settings in profile -->
+        <copy todir="${dist.data.dir}/profile" file="prism/profile/user.js" overwrite="true" />
+
 		<!-- any non-branding patches that are between prism drops should go here -->
 
 	</target>

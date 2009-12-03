@@ -179,6 +179,7 @@ Set oTokens = CreateObject("Scripting.Dictionary")
 oTokens.Add "@install.app.root@", sAppRoot
 oTokens.Add "@install.data.root@", sDataRoot
 oTokens.Add "@install.key@", GetRandomId()
+oTokens.Add "@install.locale@", "en-US"
 
 FindAndReplace sDataRoot & "\bin\zdctl.vbs", oTokens
 FindAndReplace sDataRoot & "\conf\localconfig.xml", oTokens
@@ -186,6 +187,7 @@ FindAndReplace sDataRoot & "\conf\zdwrapper.conf", oTokens
 FindAndReplace sDataRoot & "\jetty\etc\jetty.xml", oTokens
 FindAndReplace sDataRoot & "\zdesktop.webapp\webapp.ini", oTokens
 FindAndReplace sDataRoot & "\zdesktop.webapp\override.ini", oTokens
+FindAndReplace sDataRoot & "\profile\user.js", oTokens
 
 If bIsUpgrade Then
 	RestoreData

@@ -105,7 +105,8 @@ my $inst_id = get_random_id();
 my $tokens = {
 	'@install.app.root@' => $app_root, 
 	'@install.data.root@' => $data_root,
-	'@install.key@' => $inst_id
+	'@install.key@' => $inst_id,
+	'@install.locale@' => 'en-US'
 };
 my $infotok = {'<string>zdrun</string>' => '<string>prism</string>'};
 
@@ -114,6 +115,7 @@ find_and_replace("$data_root/conf/localconfig.xml", $tokens);
 find_and_replace("$data_root/jetty/etc/jetty.xml", $tokens);
 find_and_replace("$data_root/bin/zdesktop", $tokens);
 find_and_replace("$data_root/zdesktop.webapp/webapp.ini", $tokens);
+find_and_replace("$data_root/profile/user.js", $tokens);
 find_and_replace("$data_root/Zimbra Desktop.app/Contents/Resources/application.ini", $tokens);
 find_and_replace("$data_root/Zimbra Desktop.app/Contents/Info.plist", $infotok);
 

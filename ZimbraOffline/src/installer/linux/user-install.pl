@@ -197,6 +197,7 @@ my $tokens = {
 	'@install.app.root@' => $app_root, 
 	'@install.data.root@' => $data_root,
 	'@install.key@' => get_random_id(),
+	'@install.locale@' => 'en-US',
 	'#@install.linux.java.home@' => "JAVA_HOME=\"$app_root/linux/jre\""
 };
 
@@ -206,6 +207,7 @@ find_and_replace("$data_root/conf/localconfig.xml", $tokens);
 find_and_replace("$data_root/jetty/etc/jetty.xml", $tokens);
 find_and_replace("$data_root/bin/zdesktop", $tokens);
 find_and_replace("$data_root/zdesktop.webapp/webapp.ini", $tokens);
+find_and_replace("$data_root/profile/user.js", $tokens);
 print get_message('Done'), "\n";
 
 # create desktop icon
