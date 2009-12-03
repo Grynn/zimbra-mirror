@@ -108,6 +108,17 @@ ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
 						visibilityChecks:[],
 						tableCssStyle: "height: 15px"
 				  	},
+					{ type: _DWT_ALERT_,
+					  containerCssStyle: "padding-bottom:0px",
+					  style: DwtAlert.WARNING,
+					  iconVisible: false,
+					  ref:ZaVersionCheck.A_zimbraVersionCheckServer,
+					  getDisplayValue:function(val) {
+					  	return AjxMessageFormat.format(com_zimbra_adminversioncheck.Alert_Crontab, [ZaApp.getInstance().getServerMap()[val]]);
+					  },
+					  bmolsnr:true
+					  //content: com_zimbra_adminversioncheck.Alert_Crontab
+					},				  	
 				  	{ref:ZaVersionCheck.A_zimbraVersionCheckInterval,
 				  		type:_LIFETIME_, 
 				  		label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckInterval,labelLocation:_LEFT_
