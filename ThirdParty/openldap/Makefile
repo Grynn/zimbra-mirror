@@ -27,7 +27,7 @@ ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 endif
 
 LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-$(LDAP_VERSION).tgz
-LDAP_LIB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-clibs-$(LDAP_VERSION).tgz
+LDAP_LIB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-libs-$(LDAP_VERSION).tgz
 
 all: allclean build tar
 
@@ -38,8 +38,8 @@ build:
 	patch -g0 -N -p1 < ../patches/ITS5037.patch; \
 	$(PATCH) \
 	patch -g0 -N -p1 < ../patches/leopard.fix; \
-	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_CLIB_DIR) -L$(LIBTOOL_LIB_DIR) \
-		 -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(LDAP_CLIB_DIR) -R$(LIBTOOL_LIB_DIR)" \
+	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L$(LIBTOOL_LIB_DIR) \
+		 -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(LDAP_LIB_DIR) -R$(LIBTOOL_LIB_DIR)" \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) \
 	CPPFLAGS="-I$(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include -I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include \
 		  -I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include -I$(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION)/include $(CPPFLAG)" \
@@ -67,11 +67,8 @@ build:
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap
-	(cd $(ZIMBRA_HOME); tar czf $(LDAP_TGZ_TARGET) openldap-$(LDAP_VERSION))
-	mkdir -p $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib
-	(cd $(ZIMBRA_HOME); cp -pfr $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/lib/* $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib; \
-	ln -s openldap-clibs-$(LDAP_VERSION) openldap-clibs; \
-	tar cfz $(LDAP_LIB_TGZ_TARGET) openldap-clibs-$(LDAP_VERSION))
+	(cd $(ZIMBRA_HOME); tar czf $(LDAP_LIB_TGZ_TARGET) openldap-$(LDAP_VERSION)/lib)
+	(cd $(ZIMBRA_HOME); tar czf $(LDAP_TGZ_TARGET) openldap-$(LDAP_VERSION)/bin openldap-$(LDAP_VERSION)/etc openldap-$(LDAP_VERSION)/include openldap-$(LDAP_VERSION)/sbin openldap-$(LDAP_VERSION)/share openldap-$(LDAP_VERSION)/var)
 
 p4edit: $(LDAP_TGZ_TARGET)
 	p4 add $(LDAP_TGZ_TARGET)
@@ -85,7 +82,5 @@ clean:
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)
 	/bin/rm -rf $(ZIMBRA_HOME)/openldap
-	/bin/rm -rf $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)
-	/bin/rm -rf $(ZIMBRA_HOME)/openldap-clibs
 	rm -f $(LDAP_TGZ_TARGET)
 	rm -f $(LDAP_LIB_TGZ_TARGET)
