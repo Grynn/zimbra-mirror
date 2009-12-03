@@ -28,6 +28,7 @@ public class ZUserAgentBean {
     boolean isOsMac = false;
     boolean isOsWindows = false;
     boolean isOsLinux = false;
+    boolean isOsAndroid = false;
     boolean isNav  = false;
     boolean isIE = false;
     boolean trueNs = false;
@@ -127,6 +128,8 @@ public class ZUserAgentBean {
                     isOsMac = true;
                 } else if (token.indexOf("linux") != -1){
                     isOsLinux = true;
+                }else if (token.indexOf("android") != -1){
+                    isOsAndroid = true;
                 }
 
                 token = agtArr.hasMoreTokens() ? agtArr.nextToken() : null;
@@ -153,6 +156,8 @@ public class ZUserAgentBean {
     public boolean getIsOsMac() { return isOsMac; }
 
     public boolean getIsOsLinux() { return isOsLinux; }
+
+    public boolean getIsOsAndroid() { return isOsAndroid; }
     
     public boolean getIsOpera() { return isOpera; }
     
