@@ -195,6 +195,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
                 if (isOnRequest && isDebugTraceOn) {
                     OfflineLog.offline.debug("============================== SYNC DEBUG TRACE START ==============================");
                     getOfflineAccount().setRequestScopeDebugTraceOn(true);
+                    getDataSource().setRequestScopeDebugTraceOn(true);
                 }
 
                 try {
@@ -217,6 +218,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
                 } finally {
                     if (isOnRequest && isDebugTraceOn) {
                         getOfflineAccount().setRequestScopeDebugTraceOn(false);
+                        getDataSource().setRequestScopeDebugTraceOn(false);
                         OfflineLog.offline.debug("============================== SYNC DEBUG TRACE END ================================");
                     }
                     unlockMailbox();
