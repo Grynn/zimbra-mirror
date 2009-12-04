@@ -105,7 +105,6 @@ public class OfflineSyncManager {
     private static class OfflineSyncStatus {
         String mStage;
         SyncStatus mStatus = SyncStatus.unknown;
-        boolean mSyncRunning = false;
 
         long mLastSyncTime = 0;
         long mLastFailTime = 0;
@@ -597,7 +596,7 @@ public class OfflineSyncManager {
     private synchronized void confirmServiceOpen() {
         String uri = LC.zimbra_admin_service_scheme.value() + "127.0.0.1"+ ":" + LC.zimbra_admin_service_port.value() +
         AdminConstants.ADMIN_SERVICE_URI;
-        for (int i = 0; i < 24; ++i) {
+        for (int i = 0; i < 24 * 10; ++i) {
             try {
                 SoapHttpTransport transport = new SoapHttpTransport(uri);
                 transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
@@ -620,7 +619,7 @@ public class OfflineSyncManager {
                     OfflineLog.offline.warn("service port check failed; will retry in 5 seconds", x);
             }
             try {
-                Thread.sleep(5000); //avoid potential tight loop
+                Thread.sleep(500); //avoid potential tight loop
             } catch (InterruptedException e) {}
         }
         Zimbra.halt("Zimbra Desktop Service failed to initialize.  Shutting down...");
@@ -654,7 +653,7 @@ public class OfflineSyncManager {
                 return;
             OfflineLog.offline.info("ui loading in progress; sync on hold.");
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000);
             } catch (InterruptedException x) {}
         }
     }
