@@ -149,7 +149,7 @@ initSSLDirs() {
   chmod -R 740 ${zimbra_comm_cert_directory}
 
   # This should only happen on store nodes
-  if [ -d ${zimbra_home}/mysql ]; then
+  if [ -d ${zimbra_home}/mysql/bin ]; then
     if [ ! -d "${csr_download_directory}" ]; then
       echo "** Creating directory ${csr_download_directory}"
       mkdir -p ${csr_download_directory}
