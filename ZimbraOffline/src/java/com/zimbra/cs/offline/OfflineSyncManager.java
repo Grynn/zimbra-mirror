@@ -611,15 +611,17 @@ public class OfflineSyncManager {
                 isServiceOpen = true;
                 return;
             } catch (Exception x) {
-                if (x instanceof ConnectException || x instanceof SocketTimeoutException || x instanceof ConnectTimeoutException)
-                    OfflineLog.offline.info("awaiting service port.");
-                else if (x instanceof NoRouteToHostException || x instanceof PortUnreachableException)
+                if (x instanceof ConnectException || x instanceof SocketTimeoutException || x instanceof ConnectTimeoutException) {
+                    if (i == 0 || i >= 5)
+                        OfflineLog.offline.info("awaiting service port.");
+                } else if (x instanceof NoRouteToHostException || x instanceof PortUnreachableException) {
                     OfflineLog.offline.warn("service host or port unreachable; will retry in 5 seconds.", x);
-                else
+                } else {
                     OfflineLog.offline.warn("service port check failed; will retry in 5 seconds", x);
+                }
             }
             try {
-                Thread.sleep(500); //avoid potential tight loop
+                Thread.sleep(250); //avoid potential tight loop
             } catch (InterruptedException e) {}
         }
         Zimbra.halt("Zimbra Desktop Service failed to initialize.  Shutting down...");

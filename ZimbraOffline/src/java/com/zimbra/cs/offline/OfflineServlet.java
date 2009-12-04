@@ -15,7 +15,6 @@
 
 package com.zimbra.cs.offline;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -40,11 +39,11 @@ import com.zimbra.cs.zclient.ZMailbox;
 public class OfflineServlet extends HttpServlet {
 
     private static final String LOCALHOST_URL_PREFIX = "http://127.0.0.1:";
-    
+
     private static String LOCALHOST_SOAP_URL;
     private static String LOCALHOST_ADMIN_URL;
     private static String LOCALHOST_MAIL_URL;
-	
+
     private ZMailbox.Options getMailboxOptions(String username, String password) {
         ZMailbox.Options options = new ZMailbox.Options(username, Provisioning.AccountBy.name, password, LOCALHOST_SOAP_URL);
         options.setNoSession(false);
@@ -63,45 +62,42 @@ public class OfflineServlet extends HttpServlet {
         zmapps.setMaxAge(31536000);
         response.addCookie(zmapps);
     }
-    
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		try {
-		    SoapProvisioning prov = new SoapProvisioning();
-		    prov.soapSetURI(LOCALHOST_ADMIN_URL);
-		    prov.soapZimbraAdminAuthenticate();
-	
-		    setAuthCookie("local_account@host.local", "test123", resp);
-		    resp.sendRedirect(LOCALHOST_MAIL_URL);
-		} catch (ServiceException x) {
-			throw new ServletException(x);
-		}
-	}
 
-	private static final long serialVersionUID = 901093939836074611L;
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+    throws ServletException, IOException {
+        try {
+            SoapProvisioning prov = new SoapProvisioning();
+            prov.soapSetURI(LOCALHOST_ADMIN_URL);
+            prov.soapZimbraAdminAuthenticate();
 
-	@Override
-	public void init() {
-		try {
-			ZimbraLog.addContextFilters(OfflineLC.zdesktop_log_context_filter.value());
-			String port = LC.zimbra_admin_service_port.value();
-						
-			//setting static variables
-			LOCALHOST_SOAP_URL = LOCALHOST_URL_PREFIX + port + AccountConstants.USER_SERVICE_URI;
-			LOCALHOST_ADMIN_URL = LOCALHOST_URL_PREFIX + port + AdminConstants.ADMIN_SERVICE_URI;
-			LOCALHOST_MAIL_URL = LOCALHOST_URL_PREFIX + port + "/zimbra/mail";
-			
-			OfflineDataSource.init();
-			OfflineProvisioning.getOfflineInstance().getLocalAccount();
-			WikiUtil wu = WikiUtil.getInstance();
-			wu.initDefaultWiki("local@host.local");
-			String templatePath = LC.zimbra_home.value() + File.separator + "wiki" + File.separator + "Templates";
-			wu.startImport("local@host.local", "Template", new File(templatePath));
-			
-			OfflineSyncManager.getInstance().init();
-		} catch (Exception x) {
-			throw new RuntimeException(x);
-		}
+            setAuthCookie("local_account@host.local", "test123", resp);
+            resp.sendRedirect(LOCALHOST_MAIL_URL);
+        } catch (ServiceException x) {
+            throw new ServletException(x);
+        }
+    }
+
+    private static final long serialVersionUID = 901093939836074611L;
+
+    @Override
+    public void init() {
+        try {
+            ZimbraLog.addContextFilters(OfflineLC.zdesktop_log_context_filter.value());
+            String port = LC.zimbra_admin_service_port.value();
+
+            //setting static variables
+            LOCALHOST_SOAP_URL = LOCALHOST_URL_PREFIX + port + AccountConstants.USER_SERVICE_URI;
+            LOCALHOST_ADMIN_URL = LOCALHOST_URL_PREFIX + port + AdminConstants.ADMIN_SERVICE_URI;
+            LOCALHOST_MAIL_URL = LOCALHOST_URL_PREFIX + port + "/zimbra/mail";
+
+            OfflineDataSource.init();
+            OfflineProvisioning.getOfflineInstance().getLocalAccount();
+            WikiUtil wu = WikiUtil.getInstance();
+            wu.initDefaultWiki("local@host.local");
+            OfflineSyncManager.getInstance().init();
+        } catch (Exception x) {
+            throw new RuntimeException(x);
+        }
     }
 }

@@ -56,8 +56,7 @@ public class OfflineDataSource extends DataSource {
     }
 
     void setServiceName(String serviceName) {
-    	knownService = serviceName == null ?
-                null : config.getService(serviceName);
+    	knownService = serviceName == null ? null : config.getService(serviceName);
     }
 
     public DataSourceConfig.Service getKnownService() {
@@ -76,13 +75,14 @@ public class OfflineDataSource extends DataSource {
 
     public static void init() throws IOException {
         File file = new File(OfflineLC.zdesktop_datasource_config.value());
+        
         config = DataSourceConfig.read(file);
-        OfflineLog.offline.info("Loaded datasource configuration from '%s'", file);
         for (DataSourceConfig.Service service : config.getServices()) {
-            OfflineLog.offline.info(
+            OfflineLog.offline.debug(
                 "Loaded %d folder mappings for service '%s'",
                 service.getFolders().size(), service.getName());
         }
+        OfflineLog.offline.info("Loaded datasource configuration from '%s'", file);
     }
 
     private DataSourceConfig.Folder getKnownFolderByRemotePath(String remotePath) {

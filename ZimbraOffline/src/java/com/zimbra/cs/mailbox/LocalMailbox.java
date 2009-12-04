@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
@@ -46,12 +45,12 @@ public class LocalMailbox extends DesktopMailbox {
                 ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
                 MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
         }
-        for (Account account : OfflineProvisioning.getOfflineInstance().getAllAccounts()) {
+        for (String accountId : OfflineProvisioning.getOfflineInstance().getAllAccountIds()) {
             try {
-                getFolderByName(null, ID_FOLDER_NOTIFICATIONS, account.getId());
+                getFolderByName(null, ID_FOLDER_NOTIFICATIONS, accountId);
             } catch (NoSuchItemException e) {
-                createMountpoint(null, ID_FOLDER_NOTIFICATIONS, account.getId(),
-                    account.getId(), ID_FOLDER_USER_ROOT,
+                createMountpoint(null, ID_FOLDER_NOTIFICATIONS, accountId,
+                    accountId, ID_FOLDER_USER_ROOT,
                     MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB);
             }
         }

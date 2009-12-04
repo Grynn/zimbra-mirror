@@ -53,10 +53,12 @@ import com.zimbra.cs.offline.util.OfflineUtil;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.util.yauth.AuthenticationException;
 import com.zimbra.cs.util.yauth.MetadataTokenStore;
+import com.zimbra.cs.wiki.WikiUtil;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
 
+import java.io.File;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
@@ -843,6 +845,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private static final String LOCAL_ACCOUNT_DISPLAYNAME = "Loading...";
 
     private synchronized Account createLocalAccount() throws ServiceException {
+        Account account;
         Map<String, Object> attrs = new HashMap<String, Object>();
 
         attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );
@@ -859,7 +862,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraPrefFromDisplay, LOCAL_ACCOUNT_DISPLAYNAME);
         setDefaultAccountAttributes(attrs);
 
-        return createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true, false);
+        account = createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true, false);
+        WikiUtil wu = WikiUtil.getInstance();
+        wu.initDefaultWiki("local@host.local");
+        String templatePath = LC.zimbra_home.value() + File.separator + "wiki" + File.separator + "Templates";
+        try {
+            wu.startImport("local@host.local", "Template", new File(templatePath));
+        } catch (Exception e) {
+            OfflineLog.offline.warn("can't import local account wiki templates");
+        }
+        return account;
     }
 
     public synchronized Account getLocalAccount() throws ServiceException {
@@ -1286,6 +1298,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     private List<String> cachedaccountIds;
 
+    public synchronized List<String> getAllAccountIds() throws ServiceException {
+        if (cachedaccountIds == null)
+            cachedaccountIds = DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT);
+        return cachedaccountIds;
+    }
+    
     public List<Account> getAllAccounts() throws ServiceException {
     	return getAllAccounts(false);
     }
@@ -1293,8 +1311,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private synchronized List<Account> getAllAccounts(boolean includeSyncStatus) throws ServiceException {
         List<Account> accts = new ArrayList<Account>();
 
-        cachedaccountIds = cachedaccountIds != null ? cachedaccountIds : DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT);
-        for (String zimbraId : cachedaccountIds) {
+        for (String zimbraId : getAllAccountIds()) {
             Account acct = get(includeSyncStatus, AccountBy.id, zimbraId);
             if (acct != null && !isLocalAccount(acct) && !isGalAccount(acct) && !isMountpointAccount(acct)) {
             	MailboxManager.getInstance().getMailboxByAccount(acct);
