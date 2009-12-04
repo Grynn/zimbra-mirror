@@ -21,7 +21,7 @@ if [ ! -d ${mailboxd_directory} ]; then
   exit 0
 fi
 
-if [ ! -d ${zimbra_home}/mysql ]; then
+if [ ! -d ${zimbra_home}/mysql/bin ]; then
   exit 0
 fi
 

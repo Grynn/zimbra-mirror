@@ -22,7 +22,7 @@ zmsetvars \
   mysql_errlogfile \
   zimbra_tmp_directory 
 
-if [ ! -d ${mysql_directory} ]; then
+if [ ! -d ${mysql_directory}/bin ]; then
   exit 0
 fi
 
