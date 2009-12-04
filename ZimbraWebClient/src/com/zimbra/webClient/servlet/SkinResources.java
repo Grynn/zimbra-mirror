@@ -260,7 +260,7 @@ public class SkinResources
 
 				// write buffer to cache file
 				if (!debug) {
-					file = File.createTempFile("res-", "."+type, getCacheDir());
+			                file = createCacheFile(cacheId, type);
 					if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: buffer file: "+file);
 					copy(buffer, file);
 					if (LC.zimbra_web_generate_gzip.booleanValue())

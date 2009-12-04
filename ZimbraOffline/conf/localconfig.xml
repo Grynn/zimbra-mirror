@@ -112,11 +112,20 @@
   <key name="zimbra_class_sslprotocolsocketfactory">
     <value>com.zimbra.common.util.CustomSSLProtocolSocketFactory</value>
   </key>
+  <key name="zimbra_disk_cache_servlet_flush">
+    <value>false</value>
+  </key>
   <key name="zimbra_index_completed_pool_size">
     <value>2</value>
   </key>
   <key name="zimbra_index_flush_pool_size">
     <value>1</value>
+  </key>
+  <key name="zimbra_index_idle_flush_time">
+    <value>20</value>
+  </key>
+  <key name="zimbra_index_max_uncommitted_operations">
+    <value>20</value>
   </key>
   <key name="zimbra_index_reindex_pool_size">
     <value>2</value>
@@ -150,11 +159,5 @@
   </key>
   <key name="zimbra_web_generate_gzip">
     <value>false</value>
-  </key>
-  <key name="zimbra_index_max_uncommitted_operations">
-    <value>20</value>
-  </key>
-  <key name="zimbra_index_idle_flush_time">
-    <value>20</value>
   </key>
 </localconfig>
