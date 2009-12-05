@@ -1,13 +1,11 @@
-<zimlet name="com_zimbra_social" version="2.1.7.1" description="Social Zimlet: Allows users to access to twitter,facebook,digg,tweetmeme etc social services">
+<zimlet name="com_zimbra_social" version="2.1.7.2" description="Social Zimlet: Allows users to access to twitter,facebook,digg,tweetmeme etc social services">
     <include>socialTwitter.js</include>
     <include>socialFacebook.js</include>
     <include>socialTweetMeme.js</include>
     <include>socialPreferences.js</include>
     <include>socialDigg.js</include>
     <include>socialMiniDlg.js</include>
-    <include>sha1.js</include>
     <include>oauth.js</include>
-    <include>md5.js</include>
     <include>social.js</include>
     <includeCSS>social.css</includeCSS>
     <resource>social-icon.gif</resource>

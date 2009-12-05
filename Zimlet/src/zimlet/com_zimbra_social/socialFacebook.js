@@ -428,7 +428,8 @@ function(otherParamsArray, secret, signatureFromJSP) {
 			for (var i = 0; i < paramsArray.length; i++) {
 				sig = sig + paramsArray[i][0] + "=" + paramsArray[i][1];
 			}
-			sig = hex_md5(sig + secret);
+			AjxPackage.require("Crypt");
+			sig =  AjxMD5.hex_md5(sig + secret);
 		}
 	} else {
 		sig = signatureFromJSP;
