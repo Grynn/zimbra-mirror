@@ -47,7 +47,7 @@ SKIN_WORK_BASE=`dirname "${skins_directory}"`
 
 BASE_URL=/`basename "${SKIN_WORK_BASE}"`
 
-CP="${SKIN_WORK_BASE}/WEB-INF/classes/"
+CP="${zimbra_home}/lib/jars/zimbracommon.jar"
 
 # Make sure source exists, and copy it to working dir
 if [ -d "$SKIN_SRC" ]; then
@@ -102,7 +102,7 @@ pushd $SKIN_WORK_DIR > /dev/null
 TEMPLATES=`find . -type f -name \*.template`
 if [ -n "${TEMPLATES}" ]; then
     echo "Processing templates..."
-    sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.templates.Template \
+    sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.common.util.TemplateCompiler \
         --prefix "${SKIN_NAME}" \
         --authoritative \
         --inputdir "${SKIN_WORK_DIR}" \
