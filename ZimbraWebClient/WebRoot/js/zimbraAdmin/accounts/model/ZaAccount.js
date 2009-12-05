@@ -2062,7 +2062,13 @@ function () {
 		ZaApp.getInstance().getCurrentController().popupMsgDialog (warning, true);
 	}	
 }
-
+ZaAccount.isAdminAccount = function () {
+	try {
+		return (this.getInstanceValue(ZaAccount.A_zimbraIsAdminAccount)=="TRUE" || this.getInstanceValue(ZaAccount.A_zimbraIsDelegatedAdminAccount)=="TRUE");
+	} catch (ex)	 {
+		return false;
+	}
+}
 /**
  * Test if the email retention policy should be enabled based on
  * if (serversetting is not set) { //check global setting

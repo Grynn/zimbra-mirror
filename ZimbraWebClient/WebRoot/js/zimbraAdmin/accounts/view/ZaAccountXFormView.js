@@ -2798,8 +2798,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraAdminAuthTokenLifetime,
 									txtBoxLabel:ZaMsg.LBL_zimbraAdminAuthTokenLifetime,
 									//enableDisableChecks:[ZaAccountXFormView.isAdminAccount],
-									enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A_zimbraIsAdminAccount,"TRUE"] ],
-									enableDisableChangeEventSources:[ZaAccount.A_zimbraIsAdminAccount]
+									enableDisableChecks:[ZaAccount.isAdminAccount],
+									enableDisableChangeEventSources:[ZaAccount.A_zimbraIsAdminAccount, ZaAccount.A_zimbraIsDelegatedAdminAccount]
 								},								
 								{ref:ZaAccount.A_zimbraAuthTokenLifetime,
 									type:_SUPER_LIFETIME_, 
