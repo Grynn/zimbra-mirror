@@ -358,7 +358,7 @@ function(ex, method, params, restartOnError, obj) {
 	{
 		try {
 			var bReloginMode = true;
-			if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED) 
+			if (ZaApp.getInstance() != null && ex.code == ZmCsfeException.SVC_AUTH_EXPIRED) 
 			{
 				ZmCsfeCommand._curAuthToken = null;
 
