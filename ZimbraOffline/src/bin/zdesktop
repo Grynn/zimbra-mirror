@@ -171,6 +171,7 @@ fi
 JAVA_OPTIONS="-DSTART='${JETTY_HOME}/etc/start.config' -Dzimbra.home='${ZIMBRA_HOME}' -Dzimbra.config='${ZIMBRA_HOME}/conf/localconfig.xml' -Djava.library.path='${JETTY_HOME}/../lib' -Djava.awt.headless=true"
 JETTY_CONSOLE="${ZIMBRA_HOME}/log/zdesktop.out"
 JETTY_RUN="${ZIMBRA_HOME}/log"
+JETTY_PID="$JETTY_RUN/zdesktop.pid"
 
 ###########################################################
 # Get the list of config.xml files from the command line.
@@ -429,9 +430,9 @@ case "$ACTION" in
         echo "RUN_CMD        =  $RUN_CMD"
         echo
         
-        if [ -f "$JETTY_RUN/offline.pid" ]
+        if [ -f "$JETTY_PID" ]
         then
-            echo "Jetty running pid="`cat "$JETTY_RUN/offline.pid"`
+            echo "Jetty running pid="`cat "$JETTY_PID"`
             exit 0
         fi
         exit 1
