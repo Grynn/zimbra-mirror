@@ -1,7 +1,6 @@
 <zimlet name="com_zimbra_yflickr" version="0.1" description="Flickr">
 	<include>com_zimbra_yflickr.js</include>
     <include>photoset.js</include>
-    <include>md5.js</include>
     <include>flickr.js</include>
 	<includeCSS>com_zimbra_yflickr.css</includeCSS>
 	<handlerObject>Com_Zimbra_Yflickr</handlerObject>

@@ -88,6 +88,9 @@ function Com_Zimbra_Yflickr()
     /* (attachment state) variables */
     this.attach_current = -1;           // current img being attached
     this.attach_photos = [];            // list of <img>s to be attached
+
+    //Load AjxMD5.js
+    this._loadObject("/js/ajax/util/AjxMD5.js");
 }
 
 Com_Zimbra_Yflickr.prototype = new ZmZimletBase();
@@ -1381,3 +1384,19 @@ Com_Zimbra_Yflickr.prototype.singleClicked = function() {
 Com_Zimbra_Yflickr.prototype.doubleClicked = function() {
     this.authorize();
 }
+
+Com_Zimbra_Yflickr.prototype._loadObject = function(file){
+	var fileref;
+	if (file.indexOf(".js")!=-1){ //If object is a js file
+		fileref=document.createElement('script');
+		fileref.setAttribute("type","text/javascript");
+		fileref.setAttribute("src", file);
+	}
+	else if (file.indexOf(".css")!=-1){ //If object is a css file
+		fileref=document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", file);
+	}
+	document.getElementsByTagName("head").item(0).appendChild(fileref)
+};
