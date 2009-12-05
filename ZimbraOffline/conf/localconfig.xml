@@ -157,6 +157,9 @@
   <key name="zimbra_relative_volume_path">
     <value>true</value>
   </key>
+  <key name="zimbra_rights_delegated_admin_supported">
+    <value>false</value>
+  </key>
   <key name="zimbra_web_generate_gzip">
     <value>false</value>
   </key>

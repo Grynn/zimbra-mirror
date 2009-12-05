@@ -32,7 +32,6 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning;
-import com.zimbra.cs.wiki.WikiUtil;
 import com.zimbra.cs.zclient.ZMailbox;
 
 
@@ -93,8 +92,6 @@ public class OfflineServlet extends HttpServlet {
 
             OfflineDataSource.init();
             OfflineProvisioning.getOfflineInstance().getLocalAccount();
-            WikiUtil wu = WikiUtil.getInstance();
-            wu.initDefaultWiki("local@host.local");
             OfflineSyncManager.getInstance().init();
         } catch (Exception x) {
             throw new RuntimeException(x);

@@ -433,7 +433,7 @@
 			<fileset dir="${config.dir}/attrs" />
 		</copy>
 		<copy todir="${dist.dir}/conf/rights" overwrite="true">
-			<fileset dir="${server.config.dir}/rights"/>
+			<fileset dir="${server.config.dir}/rights" excludes="*admin*" />
 		</copy>
 		<fixcrlf srcdir="${dist.dir}/conf" eol="unix" includes="**" />
 

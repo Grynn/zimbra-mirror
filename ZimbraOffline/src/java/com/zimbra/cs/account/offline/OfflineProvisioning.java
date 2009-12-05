@@ -859,6 +859,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_offlineAccountFlavor, LOCAL_ACCOUNT_FLAVOR);
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
         attrs.put(A_zimbraPrefAccountTreeOpen , TRUE);
+        attrs.put(A_zimbraPrefCalendarAlwaysShowMiniCal , TRUE);
         attrs.put(A_zimbraPrefFromDisplay, LOCAL_ACCOUNT_DISPLAYNAME);
         setDefaultAccountAttributes(attrs);
 
