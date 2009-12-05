@@ -268,6 +268,7 @@ public class VersionCheck extends AdminDocumentHandler {
 				);
 		
 		try {
+			ZimbraLog.extensions.debug("Sending version check query %s", query);
 			method.setQueryString(URIUtil.encodeQuery(query));
 			client.executeMethod( method );
 			resp = method.getResponseBodyAsString();
