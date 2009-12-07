@@ -42,6 +42,8 @@ function() {
 			Dwt.setVisible(localSearchBtnEl, true);
 		}
 	}
+
+    YahooMaps.loadExternalResources();
 };
 
 
