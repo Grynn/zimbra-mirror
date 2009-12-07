@@ -144,7 +144,7 @@ case "$1" in
       killall -TERM clamd
     else
       killall -TERM ${zimbra_home}/clamav/bin/freshclam
-        killall -TERM ${zimbra_home}/clamav/sbin/clamd
+      killall -TERM ${zimbra_home}/clamav/sbin/clamd
     fi
     exit 0
    ;;
