@@ -3,6 +3,7 @@ package com.zimbra.cs.mailbox;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -173,14 +174,20 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
     
     @Override
     public boolean isAutoSyncDisabled() {
-        // TODO Auto-generated method stub
-        return false;
+        try {
+            return isAutoSyncDisabled(getDataSource());
+        } catch (ServiceException x) {
+            return true;
+        }
     }
 
     @Override
     protected void syncOnTimer() {
-        // TODO Auto-generated method stub
-
+        try {
+            sync(false, false);
+        } catch (ServiceException x) {
+            ZimbraLog.xsync.warn(x);
+        }
     }
 
     @Override protected synchronized void initialize() throws ServiceException {
