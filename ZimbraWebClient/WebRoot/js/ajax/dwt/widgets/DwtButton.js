@@ -141,9 +141,6 @@ function() {
 DwtButton.prototype.addSelectionListener =
 function(listener, index) {
 	this.addListener(DwtEvent.SELECTION, listener, index);
-	if (DwtControl.globalSelectionListener) {
-		this.addListener(DwtEvent.SELECTION, DwtControl.globalSelectionListener);
-	}
 };
 
 /**
@@ -612,6 +609,7 @@ function(ev) {
 			selEv.detail = (typeof this.__detail == "undefined") ? 0 : this.__detail;
 			this.notifyListeners(DwtEvent.SELECTION, selEv);
 			this._lastNotify = now;
+			this.shell.notifyGlobalSelection(selEv);
 		}
 	} else if (this._menu) {
 		this._toggleMenu();

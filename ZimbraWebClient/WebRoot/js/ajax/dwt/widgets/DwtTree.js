@@ -89,9 +89,6 @@ function() {
 DwtTree.prototype.addSelectionListener = 
 function(listener) {
 	this.addListener(DwtEvent.SELECTION, listener);
-	if (DwtControl.globalSelectionListener) {
-		this.addListener(DwtEvent.SELECTION, DwtControl.globalSelectionListener);
-	}
 };
 
 DwtTree.prototype.removeSelectionListener = 
@@ -418,5 +415,8 @@ function(listener, items, detail, srcEv, destEv, kbNavEvent) {
 		destEv.detail = detail;
 		destEv.kbNavEvent = kbNavEvent;
 		this.notifyListeners(listener, destEv);
+		if (listener == DwtEvent.SELECTION) {
+			this.shell.notifyGlobalSelection(destEv);
+		}
 	}
 };

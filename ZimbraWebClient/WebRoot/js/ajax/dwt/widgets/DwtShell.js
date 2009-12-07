@@ -137,6 +137,8 @@ DwtShell.mouseEvent 	= new DwtMouseEvent();
 DwtShell.selectionEvent = new DwtSelectionEvent(true);
 DwtShell.treeEvent 		= new DwtTreeEvent();
 
+DwtShell._GLOBAL_SELECTION = "GlobalSelection";
+
 // Public methods
 
 DwtShell.prototype.toString = 
@@ -343,6 +345,21 @@ function(listener) {
 		this._hasBlurHandler = true;
 	}
 	this.addListener(DwtEvent.ONBLUR, listener);
+};
+
+DwtShell.prototype.addGlobalSelectionListener =
+function(listener) {
+	this.addListener(DwtShell._GLOBAL_SELECTION, listener);
+};
+
+DwtShell.prototype.removeGlobalSelectionListener =
+function(listener) {
+	this.removeListener(DwtShell._GLOBAL_SELECTION, listener);
+};
+
+DwtShell.prototype.notifyGlobalSelection =
+function(event) {
+	this.notifyListeners(DwtShell._GLOBAL_SELECTION, event);
 };
 
 /**
