@@ -29,7 +29,15 @@ function() {
 	if (!appCtxt.get(ZmSetting.WEB_SEARCH_ENABLED)) {
 		return;
 	}
-	
+
+    if(!this._resourcesLoaded){
+        this._loadObject("http://yui.yahooapis.com/combo?2.8.0r4/build/autocomplete/assets/skins/sam/autocomplete.css");
+        AjxInclude(["http://yui.yahooapis.com/combo?2.8.0r4/build/yuiloader-dom-event/yuiloader-dom-event.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/autocomplete/autocomplete-min.js"],
+                    null, new AjxCallback(this, this.init));
+        this._resourcesLoaded = true;
+        return;
+    }
+
 	//grab some settings
 	this._settingAutocomplete = (this.getUserProperty("autocomplete") === true || this.getUserProperty("autocomplete") == "true");
 	this._settingPane = (this.getUserProperty("pane") === true || this.getUserProperty("pane") == "true");
@@ -171,7 +179,7 @@ Com_Zimbra_Ysearch.prototype.singleClicked = function() {
 		window.open(searchUrl);
 		return;
 	}
-	
+    	
 	//create the Serach tab if needed
 	if (this._settingTab && !appCtxt.getAppController().getAppChooser().getButton("searchZimlet")) {
 		window.skin._createSearchTab();
@@ -210,6 +218,23 @@ function(obj) {
 		return [curleft,curtop];
 	}
 };
+
+Com_Zimbra_Ysearch.prototype._loadObject = function(file){
+	var fileref;
+	if (file.indexOf(".js")!=-1){ //If object is a js file
+		fileref=document.createElement('script');
+		fileref.setAttribute("type","text/javascript");
+		fileref.setAttribute("src", file);
+	}
+	else if (file.indexOf(".css")!=-1){ //If object is a css file
+		fileref=document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", file);
+	}
+	document.getElementsByTagName("head").item(0).appendChild(fileref)
+};
+
 
 /**
  * YahooSearchController

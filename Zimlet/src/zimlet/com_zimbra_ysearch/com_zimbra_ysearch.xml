@@ -1,10 +1,6 @@
 <zimlet name="com_zimbra_ysearch" version="1.0" description="Yahoo! Search">
-	<include>yahoo-dom-event.js</include>
-	<include>get-min.js</include>
-	<include>autocomplete-min.js</include>
 	<include>ysearch.js</include>
 	<include>yahoosearch.js</include>
-    <includeCSS>autocomplete.css</includeCSS>
     <includeCSS>ysearch.css</includeCSS>
     <includeCSS>yahoosearch.css</includeCSS>
 	<resource>ylogo.gif</resource>
