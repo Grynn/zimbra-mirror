@@ -14,7 +14,7 @@
 		</matchOn>
 
 		<toolTip>
-			<html:span style="font: 120% Georgia;">Call <b>${src.objectContent}</b> through Asterisk</html:span>
+			&lt;html:span style="font: 120% Georgia;"&gt;Call &lt;b&gt;${src.objectContent}&lt;/b&gt; through Asterisk&lt;/html:span&gt;
 		</toolTip>
 		<contextMenu>
 			<menuItem label="Call" id="ICALL"/>
