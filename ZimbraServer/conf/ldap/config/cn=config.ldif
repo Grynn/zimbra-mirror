@@ -29,6 +29,7 @@ olcTLSCertificateKeyFile: /opt/zimbra/conf/slapd.key
 olcTLSCRLCheck: none
 olcTLSVerifyClient: never
 olcToolThreads: 1
+olcWriteTimeout: 0
 structuralObjectClass: olcGlobal
 entryUUID: 1525b684-333e-102d-86f5-d562901af228
 creatorsName: cn=config
