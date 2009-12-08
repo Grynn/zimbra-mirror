@@ -94,6 +94,10 @@
 				List of patterns for which no-cache headers will be returned.
 			-->
 		</init-param>
+	    <init-param>
+		    <param-name>zimbraResponseHeader.enabled</param-name>
+		    <param-value>false</param-value>
+	    </init-param>
 	</filter>
 
 	<filter-mapping>
