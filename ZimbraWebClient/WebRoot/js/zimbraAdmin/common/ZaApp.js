@@ -493,12 +493,10 @@ function (params, resp) {
 		} else {
 			ZaSearch.TOO_MANY_RESULTS_FLAG = false ;
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
-			this._domainList = new ZaItemList(ZaDomain);	
-			this._domainList.loadFromJS(response);
-			this._appCtxt.getAppController().getOverviewPanelController().updateDomainList(this._domainList);				
-			/*EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
-			EmailAddr_XFormItem.domainChoices.dirtyChoices();
-			*/
+			var domainList = new ZaItemList(ZaDomain);	
+			domainList.loadFromJS(response);
+			domainList.loadEffectiveRights();
+			this._appCtxt.getAppController().getOverviewPanelController().updateDomainList(domainList);				
 			if (domainItem != null && domainItem instanceof XFormItem && this._domainList.size() <= 0) {
 				domainItem.setError(ZaMsg.ERROR_NO_SUCH_DOMAIN) ;
 				var event = new DwtXFormsEvent(this, domainItem, domainItem.getInstanceValue());
@@ -518,8 +516,6 @@ function(refresh) {
 	if (refresh || this._domainList == null) {
 		this._domainList = ZaDomain.getAll();
 		this._domainList.loadEffectiveRights();
-		/*EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
-		EmailAddr_XFormItem.domainChoices.dirtyChoices();*/
 	}
 	return this._domainList;	
 }
@@ -533,22 +529,6 @@ function (refresh) {
 	}
 	
 	return ZaSearch.SAVED_SEARCHES ;
-}
-
-ZaApp.prototype.getDomainListChoices =
-function(refresh) {
-	if (refresh || this._domainList == null) {
-		this._domainList = ZaDomain.getAll();
-	}
-	if(refresh || this._domainListChoices == null) {
-		if(this._domainListChoices == null)
-			this._domainListChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");	
-
-		this._domainListChoices.setChoices(this._domainList.getArray());
-		this._domainListChoices.dirtyChoices();
-
-	}
-	return this._domainListChoices;	
 }
 
 ZaApp.prototype.getServerByName =
