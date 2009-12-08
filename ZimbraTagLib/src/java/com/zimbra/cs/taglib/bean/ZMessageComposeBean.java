@@ -1066,7 +1066,8 @@ public class ZMessageComposeBean {
             setTaskPercentComplete(appt.getPercentCompleted());
             setTaskPriority(appt.getPriority());
             setTaskStatus(appt.getStatus().name());
-            setOrigOrganizer(appt.getOrganizer().getAddress());
+            if(appt.getOrganizer() != null)
+                setOrigOrganizer(appt.getOrganizer().getAddress());
 
             String tz = appt.getStart() != null ? appt.getStart().getTimeZoneId() : null;
             setTimeZone(tz == null ? mailbox.getPrefs().getTimeZoneId() : TZIDMapper.canonicalize(tz));
