@@ -243,10 +243,15 @@ XModel.prototype.setInstanceValue = function (instance, path, value) {
 		}
 		parentValue[ref] = value;
 		var parentItem = modelItem.getParentItem();
-		if(parentItem && parentItem.setter) {
+		if(parentItem) {
 			var parentPath = this.getParentPath(path).join(this.pathDelimiter);
-			XModel.prototype.setInstanceValue.call(this,instance, parentPath, parentValue);
-		} 
+			 if(parentItem.setter) {
+				XModel.prototype.setInstanceValue.call(this,instance, parentPath, parentValue);
+			 } else {
+				var event = new DwtXModelEvent(instance, parentItem, parentPath, parentValue);
+				parentItem.notifyListeners(DwtEvent.XFORMS_VALUE_CHANGED, event);
+			 }
+		}
 	}
 	
 	//notify listeners that my value has changed

@@ -1329,7 +1329,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	case1Items.push(setupGroup);
 	
 	var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_form_password_group", 
-		visibilityChecks:[[XFormItem.prototype.hasRight,ZaAccount.SET_PASSWORD_RIGHT]],
+		visibilityChecks:[[ZaItem.hasRight,ZaAccount.SET_PASSWORD_RIGHT]],
 		colSizes:["275px","*"],numCols:2,
 		items:[
 		{ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,
@@ -2069,7 +2069,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									showAddOnNextRow:true,
 									removeButtonLabel:ZaMsg.NAD_RemoveAddress,
 									items: [
-										{ref:".", type:_TEXTFIELD_, label:null,width:"200px", enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraAllowFromAddress]]}
+										{
+											ref:".", type:_TEXTFIELD_, label:null,width:"200px", enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraAllowFromAddress]],
+											visibilityChecks:[[ZaItem.hasReadPermission,ZaAccount.A_zimbraAllowFromAddress]]
+										}
 									],
 									//onRemove:ZaAccountXFormView.onRepeatRemove,
 									visibilityChecks:[ZaAccountXFormView.isSendingFromAnyAddressDisAllowed,[ZaItem.hasReadPermission,ZaAccount.A_zimbraAllowFromAddress]],
@@ -2371,18 +2374,18 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									items: [
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
 											onActivate:"ZaAccountXFormView.deleteAliasButtonListener.call(this);",id:"deleteAliasButton",
-											enableDisableChecks:[ZaAccountXFormView.isDeleteAliasEnabled,[XFormItem.prototype.hasRight,ZaAccount.REMOVE_ACCOUNT_ALIAS_RIGHT]],
+											enableDisableChecks:[ZaAccountXFormView.isDeleteAliasEnabled,[ZaItem.hasRight,ZaAccount.REMOVE_ACCOUNT_ALIAS_RIGHT]],
 											enableDisableChangeEventSources:[ZaAccount.A2_alias_selection_cache]
 										},
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
 											onActivate:"ZaAccountXFormView.editAliasButtonListener.call(this);",id:"editAliasButton",
 											enableDisableChangeEventSources:[ZaAccount.A2_alias_selection_cache],
-											enableDisableChecks:[ZaAccountXFormView.isEditAliasEnabled,[XFormItem.prototype.hasRight,ZaAccount.ADD_ACCOUNT_ALIAS_RIGHT],[XFormItem.prototype.hasRight,ZaAccount.REMOVE_ACCOUNT_ALIAS_RIGHT]]
+											enableDisableChecks:[ZaAccountXFormView.isEditAliasEnabled,[ZaItem.hasRight,ZaAccount.ADD_ACCOUNT_ALIAS_RIGHT],[ZaItem.hasRight,ZaAccount.REMOVE_ACCOUNT_ALIAS_RIGHT]]
 										},
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
-											enableDisableChecks:[[XFormItem.prototype.hasRight,ZaAccount.ADD_ACCOUNT_ALIAS_RIGHT]],
+											enableDisableChecks:[[ZaItem.hasRight,ZaAccount.ADD_ACCOUNT_ALIAS_RIGHT]],
 											enableDisableChangeEventSources:[ZaAccount.A2_alias_selection_cache],
 											onActivate:"ZaAccountXFormView.addAliasButtonListener.call(this);"
 										}

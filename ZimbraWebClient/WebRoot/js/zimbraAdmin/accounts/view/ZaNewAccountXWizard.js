@@ -649,8 +649,15 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							showAddOnNextRow:true,
 							removeButtonLabel:ZaMsg.NAD_RemoveAlias,
 							removeButtonCSSStyle: "margin-left: 50px",
+							visibilityChecks:[
+								[ZaItem.hasWritePermission, ZaAccount.A_zimbraMailAlias]
+							],
 							items: [
-								{ref:".", type:_EMAILADDR_, label:null, enableDisableChecks:[]}
+								{ref:".", type:_EMAILADDR_, label:null, enableDisableChecks:[], 
+									visibilityChecks:[
+										[ZaItem.hasWritePermission, ZaAccount.A_zimbraMailAlias]
+									],
+								}
 							]
 						}
 					]
@@ -710,7 +717,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							removeButtonLabel:ZaMsg.NAD_RemoveAddress,
 							nowrap:false,labelWrap:true,
 							items: [
-								{ref:".", type:_TEXTFIELD_, label:null, width:250, enableDisableChecks:[]}
+								{ref:".", type:_TEXTFIELD_, label:null, width:250, enableDisableChecks:[],
+								visibilityChecks:[[ZaItem.hasWritePermission, ZaAccount.A_zimbraMailForwardingAddress]]}
 							]
 						},
 						{ref:ZaAccount.A_zimbraPrefCalendarForwardInvitesTo, type:_REPEAT_,
@@ -722,7 +730,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							removeButtonLabel:ZaMsg.NAD_RemoveAddress,
 							nowrap:false,labelWrap:true,
 							items: [
-								{ref:".", type:_TEXTFIELD_, label:null, width:250, enableDisableChecks:[]}
+								{ref:".", type:_TEXTFIELD_, label:null, width:250, enableDisableChecks:[],
+								visibilityChecks:[[ZaItem.hasWritePermission, ZaAccount.A_zimbraPrefCalendarForwardInvitesTo]]}
 							]
 						}						
 					]
