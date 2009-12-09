@@ -138,12 +138,12 @@ Set oShellApp = CreateObject("Shell.Application")
 
 aUserDirs = Array("index", "store", "sqlite", "log", "zimlets-properties")
 aUserFiles = Array("profile\prefs.js", "profile\persdict.dat", "profile\localstore.json")
-sTmpDir = oFso.GetSpecialFolder(2).Path & "\zdtmp"
 sScriptPath = WScript.ScriptFullName
 sScriptDir = Left(sScriptPath, InStrRev(sScriptPath, WScript.ScriptName) - 2)
 sAppRoot = oFso.GetParentFolderName(sScriptDir)
 sLocalAppDir = oShellApp.Namespace(&H1c&).Self.Path
 sDataRoot = sLocalAppDir & "\Zimbra\Zimbra Desktop"
+sTmpDir = sDataRoot & ".tmp"
 bIsUpgrade = false
 
 If oFso.FolderExists(sDataRoot) Then
