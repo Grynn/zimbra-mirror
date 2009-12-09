@@ -27,6 +27,9 @@ if [ "x$1" != "x" ]; then
 	exit 1
 fi
 
+PID=""
+PIDFILE="/opt/zimbra/openldap/var/run/slapd.pid"
+
 zmsetvars -f\
 	zimbra_home \
 	zimbra_server_hostname \
@@ -59,6 +62,29 @@ fi
 toLower() { 
   
         echo $1 | tr "[:upper:]" "[:lower:]"
+}
+
+getpid()
+{
+        if [ -f $PIDFILE ]; then
+                PID=`cat $PIDFILE`
+        fi
+}
+
+checkrunning()
+{
+        getpid
+        if [ "x$PID" = "x" ]; then
+                RUNNING=0
+        else
+                kill -0 $PID
+                if [ $? != 0 ]; then
+                        PID=""
+                        RUNNING=0
+                else
+                        RUNNING=1
+                fi
+        fi
 }
 
 verifyLdapInstalled() {
@@ -228,12 +254,15 @@ resetLdapUrl() {
 
 startLdap() {
 	echo -n "Starting LDAP on ${zimbra_server_hostname}..."
-	${zimbra_home}/bin/ldap start > /dev/null 2>&1
-	if [ $? == 1 ]; then
-  		echo "Error: Unable to start ldap, exiting."
-		resetLdapUrl
-		zmsetvars -f ldap_url
-		exit 1;
+	checkrunning
+	if [ $RUNNING = 0 ]; then
+		${zimbra_home}/bin/ldap start > /dev/null 2>&1
+		if [ $? = 1 ]; then
+			echo "Error: Unable to start ldap, exiting."
+			resetLdapUrl
+			zmsetvars -f ldap_url
+			exit 1;
+		fi
 	fi
 	echo "done"
 }
