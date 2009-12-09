@@ -154,6 +154,9 @@
   <key name="zimbra_mailbox_manager_hardref_cache">
     <value>250</value>
   </key>
+  <key name="zimbra_minimize_resources">
+    <value>true</value>
+  </key>
   <key name="zimbra_relative_volume_path">
     <value>true</value>
   </key>
