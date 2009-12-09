@@ -33,7 +33,6 @@ import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbMailItem;
-import com.zimbra.cs.mailbox.MailSender.SafeSendFailedException;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedMessage;
@@ -296,18 +295,20 @@ public class DataSourceMailbox extends SyncMailbox {
                     ms.sendMimeMessage(context, this, saveToSent, mm, null, null,
                         origMsgId, msg.getDraftReplyType(), identity, false, false);
                 } catch (ServiceException e) {
-                    Throwable cause = e.getCause();
-                    if (cause instanceof MessagingException) {
-                        OfflineLog.offline.info("Mail send failure: " + msg.getSubject(), cause);
-                        if (cause instanceof SafeSendFailedException) {
+                    if (ms.wasConnectionFailure()) {
+                        // Temporary failure.  Retry later.
+                        OutboxTracker.recordFailure(this, id);
+                        continue;
+                    } else {
+                        Throwable cause = e.getCause();
+                        if (cause instanceof MessagingException) {
+                            OfflineLog.offline.info("Mail send failure: " + msg.getSubject(), cause);
                             bounceToInbox(context, acct, id, msg, cause.getMessage());
                             OutboxTracker.remove(this, id);
-                        } else {
-                            OutboxTracker.recordFailure(this, id);
+                            continue;
                         }
-                        continue;
+                        throw e;
                     }
-                    throw e;
                 }
             }
 
