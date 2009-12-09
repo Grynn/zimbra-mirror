@@ -488,14 +488,30 @@
 				</java>
 			</then>
 		</if>
-		<if>
-			<isset property="db-sqlite"/>
-			<then>
-				<copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
-					<fileset file="${common.jars.dir}/sqlite*.jar"/>
-				</copy>
+        <if>
+            <isset property="db-sqlite"/>
+            <then>
+                <copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
+                    <fileset file="${common.jars.dir}/sqlite*.jar"/>
+                </copy>
+                <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+                    <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
+                    <arg line="-e zimbra_class_database=com.zimbra.cs.db.SQLite -f"/>
+                </java>
+                <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+                    <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+                    <arg line="-e debug_disable_mailbox_group=true -f"/>
+                </java>
+                <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+                    <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
+                    <arg line="-e sqlite_cache_size=2000 -f"/>
+                </java>
+                <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+                    <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
+                    <arg line="-e sqlite_page_size=2048 -f"/>
+                </java>
 			</then>
-		</if>
+        </if>
 
 		<copy todir="${dist.dir}/lib" file="${build.dir}/zdesktop.jar" overwrite="true" />
 		<copy todir="${jetty.dir}/lib" file="${build.dir}/offlinecfgtool.jar" overwrite="true" />

@@ -13,14 +13,9 @@
 -- ***** END LICENSE BLOCK *****
 -- 
 
-PRAGMA ${DATABASE_NAME}.default_page_size=2048;
-PRAGMA ${DATABASE_NAME}.page_size=2048;
-PRAGMA ${DATABASE_NAME}.default_cache_size=2000;
-PRAGMA ${DATABASE_NAME}.cache_size=2000;
-PRAGMA ${DATABASE_NAME}.encoding="UTF-8";
-PRAGMA ${DATABASE_NAME}.fullsync=OFF;
-PRAGMA ${DATABASE_NAME}.journal_mode=PERSIST;
-PRAGMA ${DATABASE_NAME}.legacy_file_format=OFF;
+PRAGMA ${DATABASE_NAME}.legacy_file_format = OFF;
+PRAGMA ${DATABASE_NAME}.encoding = "UTF-8";
+PRAGMA ${DATABASE_NAME}.foreign_keys = ON;
 
 -- -----------------------------------------------------------------------
 -- mailbox statistics
@@ -39,7 +34,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mailbox (
    last_soap_access    INTEGER UNSIGNED NOT NULL DEFAULT 0,
    new_messages        INTEGER UNSIGNED NOT NULL DEFAULT 0,
    idx_deferred_count  INTEGER UNSIGNED NOT NULL DEFAULT 0,
-   highest_indexed     VARCHAR(21) -- mod_content of highest item in the index
+   highest_indexed     VARCHAR(21)                    -- mod_content of highest item in the index
 );
 
 -- -----------------------------------------------------------------------
@@ -93,8 +88,8 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    -- UNIQUE (folder_id, name),  -- for namespace uniqueness
 
    -- CONSTRAINT fk_mail_item_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id),
-   CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (parent_id) REFERENCES mail_item(id),
-   CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (folder_id) REFERENCES mail_item(id)
+   CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (parent_id) REFERENCES mail_item(id) ON UPDATE CASCADE,
+   CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (folder_id) REFERENCES mail_item(id) ON UPDATE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_type ON mail_item(type);                      -- for looking up folders and tags
@@ -109,50 +104,6 @@ CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_mod_metadata ON mail_ite
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_tags_date ON mail_item(tags, date DESC);      -- for tag searches
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_flags_date ON mail_item(flags, date DESC);    -- for flag searches
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_change_mask ON mail_item(change_mask, date);  -- for figuring out which items to push during sync
-
--- -- CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (parent_id) REFERENCES mail_item(id)
--- CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fki_mail_item_parent_id
--- AFTER INSERT ON [mail_item]
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'insert on table "mail_item" violates foreign key constraint "fki_mail_item_parent_id"')
---   WHERE NEW.parent_id IS NOT NULL AND (SELECT COUNT(*) FROM mail_item WHERE id = NEW.parent_id) IS NULL;
--- END;
-
--- CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fku_mail_item_parent_id
--- BEFORE UPDATE OF parent_id ON [mail_item]
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "mail_item" violates foreign key constraint "fku_mail_item_parent_id"')
---       WHERE NEW.parent_id IS NOT NULL AND (SELECT id FROM mail_item WHERE id = NEW.parent_id) IS NULL;
--- END;
-
--- CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fkd_mail_item_parent_id
--- BEFORE DELETE ON [mail_item]
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'delete on table "mail_item" violates foreign key constraint "fkd_mail_item_parent_id"')
---   WHERE (SELECT parent_id FROM mail_item WHERE parent_id = OLD.id) IS NOT NULL;
--- END;
-
--- -- CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (folder_id) REFERENCES mail_item(id)
--- CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fki_mail_item_folder_id
--- AFTER INSERT ON [mail_item]
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'insert on table "mail_item" violates foreign key constraint "fki_mail_item_folder_id"')
---   WHERE (SELECT id FROM mail_item WHERE id = NEW.folder_id) IS NULL;
--- END;
-
--- CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fku_mail_item_folder_id
--- BEFORE UPDATE OF folder_id ON [mail_item]
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "mail_item" violates foreign key constraint "fku_mail_item_folder_id"')
---       WHERE (SELECT id FROM mail_item WHERE id = NEW.folder_id) IS NULL;
--- END;
-
--- CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fkd_mail_item_folder_id
--- BEFORE DELETE ON [mail_item]
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'delete on table "mail_item" violates foreign key constraint "fkd_mail_item_folder_id"')
---   WHERE (SELECT folder_id FROM mail_item WHERE folder_id = OLD.id) IS NOT NULL;
--- END;
 
 -- -----------------------------------------------------------------------
 -- old versions of existing items
@@ -172,29 +123,8 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.revision (
    mod_content   INTEGER UNSIGNED NOT NULL,  -- change number for last change to "content" (e.g. blob)
 
    PRIMARY KEY (item_id, version),
-   CONSTRAINT fk_revision_item_id FOREIGN KEY (item_id) REFERENCES mail_item(id) ON DELETE CASCADE
+   CONSTRAINT fk_revision_item_id FOREIGN KEY (item_id) REFERENCES mail_item(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- -- CONSTRAINT fk_revision_item_id FOREIGN KEY (item_id) REFERENCES mail_item(id) ON DELETE CASCADE
--- CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fki_revision_item_id
--- BEFORE INSERT ON [revision]
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'insert on table "revision" violates foreign key constraint "fki_revision_item_id"')
---   WHERE (SELECT id FROM mail_item WHERE id = NEW.item_id) IS NULL;
--- END;
-
--- CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fku_revision_item_id
--- BEFORE UPDATE OF item_id ON [revision]
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "revision" violates foreign key constraint "fku_revision_item_id"')
---       WHERE (SELECT id FROM mail_item WHERE id = NEW.item_id) IS NULL;
--- END;
-
-CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fkdc_revision_item_id
-BEFORE DELETE ON mail_item
-FOR EACH ROW BEGIN 
-    DELETE FROM revision WHERE item_id = OLD.id;
-END;
 
 -- -----------------------------------------------------------------------
 -- conversations receiving new mail
@@ -204,31 +134,10 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.open_conversation (
    hash        CHAR(28) NOT NULL PRIMARY KEY,
    conv_id     INTEGER UNSIGNED NOT NULL,
 
-   CONSTRAINT fk_open_conversation_conv_id FOREIGN KEY (conv_id) REFERENCES mail_item(id) ON DELETE CASCADE
+   CONSTRAINT fk_open_conversation_conv_id FOREIGN KEY (conv_id) REFERENCES mail_item(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_open_conversation_conv_id ON open_conversation(conv_id);
-
--- -- CONSTRAINT fk_open_conversation_conv_id FOREIGN KEY (conv_id) REFERENCES mail_item(id) ON DELETE CASCADE
--- CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fki_open_conversation_conv_id
--- BEFORE INSERT ON [open_conversation]
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'insert on table "open_conversation" violates foreign key constraint "fki_open_conversation_conv_id"')
---   WHERE (SELECT id FROM mail_item WHERE id = NEW.conv_id) IS NULL;
--- END;
-
--- CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fku_open_conversation_conv_id
--- BEFORE UPDATE OF conv_id ON [open_conversation]
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "open_conversation" violates foreign key constraint "fku_open_conversation_conv_id"')
---       WHERE (SELECT id FROM mail_item WHERE id = NEW.conv_id) IS NULL;
--- END;
-
-CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fkdc_open_conversation_conv_id
-BEFORE DELETE ON mail_item
-FOR EACH ROW BEGIN 
-    DELETE FROM open_conversation WHERE conv_id = OLD.id;
-END;
 
 -- -----------------------------------------------------------------------
 -- calendar items (appointments, todos)
@@ -240,29 +149,8 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.appointment (
    start_time  DATETIME NOT NULL,
    end_time    DATETIME,
 
-   CONSTRAINT fk_appointment_item_id FOREIGN KEY (item_id) REFERENCES mail_item(id) ON DELETE CASCADE
+   CONSTRAINT fk_appointment_item_id FOREIGN KEY (item_id) REFERENCES mail_item(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- -- CONSTRAINT fk_appointment_item_id FOREIGN KEY (item_id) REFERENCES mail_item(id) ON DELETE CASCADE
--- CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fki_appointment_item_id
--- BEFORE INSERT ON [appointment]
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'insert on table "appointment" violates foreign key constraint "fki_appointment_item_id"')
---   WHERE (SELECT id FROM mail_item WHERE id = NEW.item_id) IS NULL;
--- END;
-
--- CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fku_appointment_item_id
--- BEFORE UPDATE OF item_id ON [appointment]
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "appointment" violates foreign key constraint "fku_appointment_item_id"')
---       WHERE (SELECT id FROM mail_item WHERE id = NEW.item_id) IS NULL;
--- END;
-
-CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fkdc_appointment_item_id
-BEFORE DELETE ON mail_item
-FOR EACH ROW BEGIN 
-    DELETE FROM appointment WHERE item_id = OLD.id;
-END;
 
 -- -----------------------------------------------------------------------
 -- deletion records for sync
@@ -310,29 +198,8 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.imap_message (
    flags           INTEGER NOT NULL DEFAULT 0,
 
    UNIQUE (imap_folder_id, uid),
-   CONSTRAINT fk_imap_message_imap_folder_id FOREIGN KEY (imap_folder_id) REFERENCES imap_folder(item_id) ON DELETE CASCADE
+   CONSTRAINT fk_imap_message_imap_folder_id FOREIGN KEY (imap_folder_id) REFERENCES imap_folder(item_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- CONSTRAINT fk_imap_message_imap_folder_id FOREIGN KEY (imap_folder_id) REFERENCES imap_folder(item_id) ON DELETE CASCADE
-CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fki_imap_message_imap_folder_id
-BEFORE INSERT ON [imap_message]
-FOR EACH ROW BEGIN
-  SELECT RAISE(ROLLBACK, 'insert on table "imap_message" violates foreign key constraint "fki_imap_message_imap_folder_id"')
-  WHERE (SELECT id FROM imap_folder WHERE item_id = NEW.imap_folder_id) IS NULL;
-END;
-
-CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fku_imap_message_imap_folder_id
-BEFORE UPDATE OF imap_folder_id ON [imap_message]
-FOR EACH ROW BEGIN
-    SELECT RAISE(ROLLBACK, 'update on table "imap_message" violates foreign key constraint "fku_imap_message_imap_folder_id"')
-      WHERE (SELECT id FROM imap_folder WHERE item_id = NEW.imap_folder_id) IS NULL;
-END;
-
-CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fkdc_imap_message_imap_folder_id
-BEFORE DELETE ON imap_folder
-FOR EACH ROW BEGIN 
-    DELETE FROM imap_message WHERE imap_folder_id = OLD.item_id;
-END;
 
 -- Tracks local MailItem created from remote objects via DataSource
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.data_source_item (
@@ -344,4 +211,3 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.data_source_item (
 
    UNIQUE (data_source_id, remote_id)
 );
-

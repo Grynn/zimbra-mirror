@@ -13,14 +13,15 @@
 -- ***** END LICENSE BLOCK *****
 -- 
 
-PRAGMA default_page_size=2048;
-PRAGMA page_size=2048;
-PRAGMA default_cache_size=2000;
-PRAGMA cache_size=2000;
-PRAGMA encoding="UTF-8";
-PRAGMA fullsync=OFF;
-PRAGMA journal_mode=PERSIST;
-PRAGMA legacy_file_format=OFF;
+PRAGMA default_page_size = 2048;
+PRAGMA page_size = 2048;
+PRAGMA default_cache_size = 2000;
+PRAGMA cache_size = 2000;
+PRAGMA encoding = "UTF-8";
+PRAGMA fullsync = OFF;
+PRAGMA journal_mode = PERSIST;
+PRAGMA legacy_file_format = OFF;
+PRAGMA foreign_keys = ON;
 
 -- -----------------------------------------------------------------------
 -- volumes
@@ -52,34 +53,6 @@ CREATE TABLE current_volumes (
    CONSTRAINT fk_current_volumes_secondary_message_volume_id FOREIGN KEY (secondary_message_volume_id) REFERENCES volume(id),
    CONSTRAINT fk_current_volumes_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)
 );
-
--- CREATE TRIGGER fki_current_volumes_volume_id
--- BEFORE INSERT ON [current_volumes]
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'insert on table "current_volumes" violates foreign key constraint "fki_current_volumes_volume_id"')
---   WHERE (SELECT id FROM volume WHERE id = NEW.message_volume_id) IS NULL OR
---         (SELECT id FROM volume WHERE id = NEW.secondary_message_volume_id OR NEW.secondary_message_volume_id IS NULL) IS NULL OR
---         (SELECT id FROM volume WHERE id = NEW.index_volume_id) IS NULL;
--- END;
-
--- CREATE TRIGGER fku_current_volumes_volume_id
--- BEFORE UPDATE ON [current_volumes] 
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "current_volumes" violates foreign key constraint "fku_current_volumes_volume_id"')
---       WHERE (SELECT id FROM volume WHERE id = NEW.message_volume_id) IS NULL OR
---             (SELECT id FROM volume WHERE id = NEW.secondary_message_volume_id OR NEW.secondary_message_volume_id IS NULL) IS NULL OR
---             (SELECT id FROM volume WHERE id = NEW.index_volume_id) IS NULL;
--- END;
-
--- CREATE TRIGGER fkd_current_volumes_volume_id
--- BEFORE DELETE ON volume
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'delete on table "volume" violates foreign key constraint "fkd_current_volumes_volume_id"')
---   WHERE (SELECT message_volume_id FROM current_volumes WHERE message_volume_id = OLD.id) IS NOT NULL OR
---         (SELECT secondary_message_volume_id FROM current_volumes WHERE secondary_message_volume_id = OLD.id) IS NOT NULL OR
---         (SELECT index_volume_id FROM current_volumes WHERE index_volume_id = OLD.id) IS NOT NULL;
--- END;
-
 
 -- -----------------------------------------------------------------------
 -- mailbox info
@@ -152,26 +125,6 @@ CREATE TABLE scheduled_task (
 
 CREATE INDEX i_scheduled_task_mailbox_id ON scheduled_task(mailbox_id);
 
--- CREATE TRIGGER fki_scheduled_task_mailbox_id
--- BEFORE INSERT ON [scheduled_task]
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'insert on table "scheduled_task" violates foreign key constraint "fki_scheduled_task_mailbox_id"')
---   WHERE (SELECT id FROM mailbox WHERE id = NEW.mailbox_id) IS NULL;
--- END;
-
--- CREATE TRIGGER fku_scheduled_task_mailbox_id
--- BEFORE UPDATE OF mailbox_id ON [scheduled_task] 
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "scheduled_task" violates foreign key constraint "fku_scheduled_task_mailbox_id"')
---       WHERE (SELECT id FROM mailbox WHERE id = NEW.mailbox_id) IS NULL;
--- END;
-
-CREATE TRIGGER fkdc_scheduled_task_mailbox_id
-BEFORE DELETE ON mailbox
-FOR EACH ROW BEGIN 
-    DELETE FROM scheduled_task WHERE scheduled_task.mailbox_id = OLD.id;
-END;
-
 -- Mobile Devices
 CREATE TABLE mobile_devices (
    mailbox_id          BIGINT UNSIGNED NOT NULL,
@@ -191,23 +144,3 @@ CREATE TABLE mobile_devices (
    PRIMARY KEY (mailbox_id, device_id),
    CONSTRAINT fk_mobile_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
 );
-
--- CREATE TRIGGER fki_mobile_devices_mailbox_id
--- BEFORE INSERT ON [mobile_devices]
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'insert on table "mobile_devices" violates foreign key constraint "fki_mobile_devices_mailbox_id"')
---   WHERE (SELECT id FROM mailbox WHERE id = NEW.mailbox_id) IS NULL;
--- END;
-
--- CREATE TRIGGER fku_mobile_devices_mailbox_id
--- BEFORE UPDATE OF mailbox_id ON [mobile_devices] 
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "mobile_devices" violates foreign key constraint "fku_mobile_devices_mailbox_id"')
---       WHERE (SELECT id FROM mailbox WHERE id = NEW.mailbox_id) IS NULL;
--- END;
-
-CREATE TRIGGER fkdc_mobile_devices_mailbox_id
-BEFORE DELETE ON mailbox
-FOR EACH ROW BEGIN 
-    DELETE FROM mobile_devices WHERE mobile_devices.mailbox_id = OLD.id;
-END;
