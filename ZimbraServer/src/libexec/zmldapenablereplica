@@ -229,6 +229,12 @@ resetLdapUrl() {
 startLdap() {
 	echo -n "Starting LDAP on ${zimbra_server_hostname}..."
 	${zimbra_home}/bin/ldap start > /dev/null 2>&1
+	if [ $? == 1 ]; then
+  		echo "Error: Unable to start ldap, exiting."
+		resetLdapUrl
+		zmsetvars -f ldap_url
+		exit 1;
+	fi
 	echo "done"
 }
 stopLdap() {
