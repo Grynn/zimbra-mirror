@@ -651,13 +651,8 @@ function(item, skipNotify) {
 		}
 		this.deselectAll();
 		this._unmarkKbAnchorElement(true);
-		this._selectedItems.add(el);
 		this._selAnchor = this._kbAnchor = el;
-        Dwt.delClass(el, this._styleRe, this.getEnabled() ? this._selectedClass : this._disabledSelectedClass);
-
-		if (this.hasFocus()) {
-			Dwt.addClass(el, this._kbFocusClass);
-		}
+		this.selectItem(item, this.getEnabled());
 
 		// reset the selected index
 		this.firstSelIndex = (this._list && this._list.size() > 0) ? this._list.indexOf(item) : -1;
@@ -713,16 +708,23 @@ function(clickedEl, bContained, ev) {
 DwtListView.prototype.setSelectedItems =
 function(selectedArray) {
 	this.deselectAll();
-	var sz = selectedArray.length;
+	var sz = selectedArray.length, doSelect = this.getEnabled();
 	for (var i = 0; i < sz; ++i) {
-		var el = this._getElFromItem(selectedArray[i]);
-		if (el) {
-            Dwt.delClass(el, this._styleRe, this.getEnabled() ? this._selectedClass : this._disabledSelectedClass);
-			if (this._kbAnchor == el && this.hasFocus()) {
-				Dwt.addClass(el, this._kbFocusClass);
-			}
-			this._selectedItems.add(el);
+		this.selectItem(selectedArray[i], doSelect);
+	}
+};
+
+// Selects or deselects a single item
+DwtListView.prototype.selectItem =
+function(item, selected) {
+
+	var el = this._getElFromItem(item);
+	if (el) {
+		Dwt.delClass(el, this._styleRe, selected ? this._selectedClass : this._disabledSelectedClass);
+		if (this._kbAnchor == el && this.hasFocus()) {
+			Dwt.addClass(el, this._kbFocusClass);
 		}
+		this._selectedItems.add(el);
 	}
 };
 
