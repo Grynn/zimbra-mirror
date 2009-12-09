@@ -1273,11 +1273,12 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 
 		setupGroup.items.push(
 			{type:_GROUP_, numCols:3,colSizes:["156px","22px","100px"], nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
-				visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_COSId]],
+				visibilityChecks:[[ZaItem.hasReadPermission,ZaAccount.A_COSId]],
 				items: [
 					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, choices:this.cosChoices,
 						inputPreProcessor:ZaAccountXFormView.preProcessCOS,
-						enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autoCos,"FALSE"]],
+						enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autoCos,"FALSE"],
+                            [ZaItem.hasWritePermission,ZaAccount.A_COSId]],
 						enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
 						visibilityChecks:[],
 						bmolsnr:true,
@@ -1301,7 +1302,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							}
 					},
 					{ref:ZaAccount.A2_autoCos, type:_CHECKBOX_,
-						visibilityChecks:[], 
+						visibilityChecks:[],
+                        enableDisableChecks:[ [ZaItem.hasWritePermission,ZaAccount.A_COSId]],
 						msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,
 						trueValue:"TRUE", falseValue:"FALSE" ,
 						elementChanged: function(elementValue,instanceValue, event) {
