@@ -574,10 +574,10 @@
 	<target name="offline-server-start">
 		<antcall target="start-jetty" />
 		<echo>Waiting for jetty to start</echo>
-		<waitfor checkevery="5" checkeveryunit="second" maxwait="60" maxwaitunit="second">
+		<waitfor checkevery="200" maxwait="20" maxwaitunit="second">
 			<http url="http://${deploy.host}:${deploy.port}/service/soap" errorsBeginAt="500" />
 		</waitfor>
-		<waitfor checkevery="5" checkeveryunit="second" maxwait="60" maxwaitunit="second">
+		<waitfor checkevery="200" maxwait="20" maxwaitunit="second">
 			<http url="http://${deploy.host}:${deploy.port}/service/admin/soap" errorsBeginAt="500" />
 		</waitfor>
 	</target>
@@ -585,7 +585,7 @@
 	<target name="offline-server-stop">
 		<antcall target="stop-jetty" />
 		<echo>Waiting for jetty to stop</echo>
-		<waitfor checkevery="1" checkeveryunit="second" maxwait="10" maxwaitunit="second">
+		<waitfor checkevery="200" maxwait="10" maxwaitunit="second">
 			<not>
 				<http url="http://${deploy.host}:${deploy.port}/" />
 			</not>
