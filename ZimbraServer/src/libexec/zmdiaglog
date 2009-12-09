@@ -18,12 +18,15 @@ use Getopt::Std;
 use POSIX qw(strftime);
 use File::Spec;
 use File::Path;
+use Zimbra::Mon::Zmstat;
 
 use vars qw(
     $VERSION $PID_FILE $DEFAULT_DEST $JMAP $JAVA $DEFAULT_TIMEOUT
     $HAVE_GCORE $HAVE_PSTACK $HAVE_LSOF $LOG_FILE $ZMSTAT_CONF
     $ZMDUMPENV $ZMPROV $ZMHOSTNAME
 );
+
+my $isMac = isMac();
 
 chomp($ZMHOSTNAME = `/opt/zimbra/bin/zmhostname`);
 
@@ -267,6 +270,9 @@ sub run() {
     
         invoke_thread_dump($i, $TS);
         system("top -bc -n1 > top.$i.$TS 2>&1");
+        my $netstat = "netstat -anp > netstat.$i.$TS 2>&1";
+        $netstat = "netstat -an > netstat.$i.$TS 2>&1" if ($isMac);
+        system($netstat);
     
         my $stats = collect_thread_stats($mailboxd_pid);
         open(STATS, ">proc-stats.$i.$TS") || warn $i;
