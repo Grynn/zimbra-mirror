@@ -781,7 +781,7 @@ Zimlet_SelectRadio_XFormItem.prototype.initializeItems = function() {
 	var radioBoxLabel2 = this.getInheritedProperty("radioBoxLabel2");
 	var choices = this.getInheritedProperty("choices");	
 
-	var radioBox1 = {type:_RADIO_, groupname:"zimlet_select_check_grp"+selectRef,ref:".",
+	var radioBox1 = {type:_RADIO_, groupname:this.id+"zimlet_select_check_grp"+selectRef,ref:".",
 		label:radioBoxLabel1, labelLocation:_RIGHT_,
 		elementChanged:function(elementValue,instanceValue, event) {
 			if(elementValue==true) {
@@ -794,7 +794,7 @@ Zimlet_SelectRadio_XFormItem.prototype.initializeItems = function() {
 		
 	};
 	
-	var radioBox2 = {type:_RADIO_, groupname:"zimlet_select_check_grp"+selectRef,ref:".",
+	var radioBox2 = {type:_RADIO_, groupname:this.id+"zimlet_select_check_grp"+selectRef,ref:".",
 		label:radioBoxLabel2, labelLocation:_RIGHT_ ,
 		updateElement:function(value) {
 			this.getElement().checked = value;
@@ -956,7 +956,7 @@ SuperZimlet_Select_XFormItem.prototype.initializeItems = function() {
 	var selectRef = this.getInheritedProperty("selectRef");
 	var limitLabel = this.getInheritedProperty("limitLabel");
 	var choices = this.getInheritedProperty("choices");	
-	var radioBox1 = {type:_RADIO_, groupname:"zimlet_select_check_grp"+selectRef,ref:".",
+	var radioBox1 = {type:_RADIO_, groupname:this.id+"zimlet_select_check_grp"+selectRef,ref:".",
 		label:ZaMsg.NAD_UseCosSettings, labelLocation:_RIGHT_,
 		elementChanged:function(elementValue,instanceValue, event) {
 			if(elementValue==true) {
@@ -969,7 +969,7 @@ SuperZimlet_Select_XFormItem.prototype.initializeItems = function() {
 		
 	};
 	
-	var radioBox2 = {type:_RADIO_, groupname:"zimlet_select_check_grp"+selectRef,ref:".",
+	var radioBox2 = {type:_RADIO_, groupname:this.id+"zimlet_select_check_grp"+selectRef,ref:".",
 		label:limitLabel, labelLocation:_RIGHT_ ,
 		updateElement:function() {
 			this.getElement().checked = this.getModelItem().getLocalValue(this.getInstance(), this.refPath);
