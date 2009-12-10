@@ -23,7 +23,7 @@ function (share) {
 	this[ZaShare.A_folderId] = share[ZaShare.A_folderId];
 	this[ZaShare.A_ownerId] = share[ZaShare.A_ownerId];
 	this[ZaShare.A_ownerEmail] = share[ZaShare.A_ownerEmail];
-	this[ZaShare.A_ownerName] = share[ZaShare.A_ownerName];
+	this[ZaShare.A_ownerName] = share[ZaShare.A_ownerName] ? share[ZaShare.A_ownerName] : share[ZaShare.A_ownerEmail];
 	this[ZaShare.A_folderPath] = share[ZaShare.A_folderPath];
 	this[ZaShare.A_granteeType] = share[ZaShare.A_granteeType];
 	this[ZaShare.A_granteeId] = share[ZaShare.A_granteeId];
