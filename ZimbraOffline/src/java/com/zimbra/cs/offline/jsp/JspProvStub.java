@@ -25,6 +25,7 @@ import java.util.Map;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.AttributeManager;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
@@ -44,6 +45,7 @@ public class JspProvStub {
     }
     
     public static JspProvStub getInstance() throws ServiceException {
+        AttributeManager.setMinimize(true);
     	return new JspProvStub();
     }
 
