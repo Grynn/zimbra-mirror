@@ -286,9 +286,7 @@ public class SkinResources
 	        }
             resp.setHeader("Cache-control", "public, max-age="+maxAge);
             resp.setContentType(contentType);
-            if (LC.zimbra_web_generate_gzip.booleanValue()) {
-                resp.setHeader("Content-Encoding", "gzip");
-            }
+
 			// NOTE: I cast the file length to an int which I think is
 			//       fine. If the aggregated contents are larger than
 			//       Integer.MAX_VALUE, then we've got other problems. ;)
