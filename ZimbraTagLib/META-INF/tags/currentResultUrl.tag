@@ -31,36 +31,40 @@
     <c:when test="${empty context}">
         <c:url value="${value}" var="urlVar">
             <c:if test="${not refresh}">
-                <c:if test="${usecache}"><c:param name='su' value='1'/></c:if>
-                <c:param name='si' value='${empty index ? param.si : index}'/>
-                <c:if test="${!empty param.so}"><c:param name='so' value='${param.so}'/></c:if>
-                <c:if test="${!empty param.sc}"><c:param name='sc' value='${param.sc}'/></c:if>
+                <c:if test="${usecache && (empty dynattrs.su && dynattrs.su!='')}"><c:param name='su' value='1'/></c:if>
+                <c:if test="${empty dynattrs.si && dynattrs.si!=''}"><c:param name='si' value='${empty index ? param.si : index}'/></c:if>
+                <c:if test="${!empty param.so && (empty dynattrs.so && dynattrs.so!='')}"><c:param name='so' value='${param.so}'/></c:if>
+                <c:if test="${!empty param.sc && (empty dynattrs.sc && dynattrs.sc!='')}"><c:param name='sc' value='${param.sc}'/></c:if>
             </c:if>
-            <c:if test="${!empty param.sq}"><c:param name='sq' value='${param.sq}'/></c:if>
-            <c:if test="${!empty param.sfi}"><c:param name='sfi' value='${param.sfi}'/></c:if>
-            <c:if test="${!empty param.sti}"><c:param name='sti' value='${param.sti}'/></c:if>
-            <c:if test="${!empty param.st}"><c:param name='st' value='${param.st}'/></c:if>
-            <c:if test="${!empty param.ss}"><c:param name='ss' value='${param.ss}'/></c:if>
+            <c:if test="${!empty param.sq && (empty dynattrs.sq && dynattrs.sq!='')}"><c:param name='sq' value='${param.sq}'/></c:if>
+            <c:if test="${!empty param.sfi && (empty dynattrs.sfi && dynattrs.sfi!='')}"><c:param name='sfi' value='${param.sfi}'/></c:if>
+            <c:if test="${!empty param.sti && (empty dynattrs.sti && dynattrs.sti!='')}"><c:param name='sti' value='${param.sti}'/></c:if>
+            <c:if test="${!empty param.st && (empty dynattrs.st && dynattrs.st!='')}"><c:param name='st' value='${param.st}'/></c:if>
+            <c:if test="${!empty param.ss && (empty dynattrs.ss && dynattrs.ss!='')}"><c:param name='ss' value='${param.ss}'/></c:if>
             <c:forEach items="${dynattrs}" var="a">
-                <c:param name='${a.key}' value='${a.value}'/>
+                <c:if test="${!empty a.key && !empty a.value}">
+                    <c:param name='${a.key}' value='${a.value}'/>
+                </c:if>
             </c:forEach>
         </c:url>
     </c:when>
     <c:otherwise>
         <c:url value="${value}" var="urlVar">
             <c:if test="${not refresh}">
-                <c:if test="${usecache}"><c:param name='su' value='1'/></c:if>
-                <c:param name='si' value='${empty index ? context.currentItemIndex : index}'/>
-                <c:param name='so' value='${context.searchResult.offset}'/>
-                <c:if test="${!empty context}"><c:param name='sc' value='${context.id}'/></c:if>
+                <c:if test="${usecache && (empty dynattrs.su && dynattrs.su!='')}"><c:param name='su' value='1'/></c:if>
+                <c:if test="${empty dynattrs.si && dynattrs.si!=''}"><c:param name='si' value='${empty index ? context.currentItemIndex : index}'/></c:if>
+                <c:if test="${empty dynattrs.so && dynattrs.so!=''}"><c:param name='so' value='${context.searchResult.offset}'/></c:if>
+                <c:if test="${!empty context && (empty dynattrs.sc && dynattrs.sc!='')}"><c:param name='sc' value='${context.id}'/></c:if>
             </c:if>
-            <c:if test="${!empty context.sq}"><c:param name='sq' value='${context.sq}'/></c:if>
-            <c:if test="${!empty context.sfi}"><c:param name='sfi' value='${context.sfi}'/></c:if>
-            <c:if test="${!empty context.sti}"><c:param name='sti' value='${context.sti}'/></c:if>
-            <c:if test="${!empty context.st}"><c:param name='st' value='${context.st}'/></c:if>
-            <c:if test="${!empty context.ss}"><c:param name='ss' value='${context.ss}'/></c:if>
+            <c:if test="${!empty context.sq && (empty dynattrs.sq && dynattrs.sq!='')}"><c:param name='sq' value='${context.sq}'/></c:if>
+            <c:if test="${!empty context.sfi && (empty dynattrs.sfi && dynattrs.sfi!='')}"><c:param name='sfi' value='${context.sfi}'/></c:if>
+            <c:if test="${!empty context.sti && (empty dynattrs.sti && dynattrs.sti!='')}"><c:param name='sti' value='${context.sti}'/></c:if>
+            <c:if test="${!empty context.st && (empty dynattrs.st && dynattrs.st!='')}"><c:param name='st' value='${context.st}'/></c:if>
+            <c:if test="${!empty context.ss && (empty dynattrs.ss && dynattrs.ss!='')}"><c:param name='ss' value='${context.ss}'/></c:if>
             <c:forEach items="${dynattrs}" var="a">
-                <c:param name='${a.key}' value='${a.value}'/>
+                <c:if test="${!empty a.key && !empty a.value}">
+                    <c:param name='${a.key}' value='${a.value}'/>
+                </c:if>
             </c:forEach>
         </c:url>
     </c:otherwise>
