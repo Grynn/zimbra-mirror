@@ -118,9 +118,6 @@ if ($ldap_is_master ne "true" ) {
 
 # Start ldap
 my $rc=`${zimbra_home}/bin/ldap start`;
-if ( $rc eq 0 ) {
-        exit 1;
-}
 
 my $ldap = Net::LDAP->new("${ldap_master_url}")  or  die "$@";
 
