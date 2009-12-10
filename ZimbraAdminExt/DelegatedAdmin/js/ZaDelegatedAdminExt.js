@@ -91,12 +91,18 @@ if (ZaController.initToolbarMethods["ZaAccountListController"]) {
                 );
 
         if (this._defaultType == ZaItem.ACCOUNT || this._defaultType == ZaItem.DL) {
+            if (!this._toolbarOrder) {
+                this._toolbarOrder == [] ;
+            }
+            this._toolbarOrder.push (ZaOperation.VIEW_EFFECTIVE_RIGHTS)  ;
+            this._toolbarOrder.push (ZaOperation.CONFIG_GRANTS)  ;
+            /*
             for (var i = 0; i < this._toolbarOrder.length; i ++) {
                 if (this._toolbarOrder[i] == ZaOperation.NONE) {
                     this._toolbarOrder.splice(i, 0, ZaOperation.VIEW_EFFECTIVE_RIGHTS, ZaOperation.CONFIG_GRANTS);
                     break;
                 }
-            }
+            }  */
         }
 
     }
