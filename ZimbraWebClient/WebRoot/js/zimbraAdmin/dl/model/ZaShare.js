@@ -19,7 +19,7 @@ function (share) {
 		return;
 		
 	this.name = share[ZaShare.A_folderPath];
-	this.id = share[ZaShare.A_folderId];
+	this.id = [share[ZaShare.A_ownerId], "_folder_", share[ZaShare.A_folderId]].join("");
 	this[ZaShare.A_folderId] = share[ZaShare.A_folderId];
 	this[ZaShare.A_ownerId] = share[ZaShare.A_ownerId];
 	this[ZaShare.A_ownerEmail] = share[ZaShare.A_ownerEmail];
