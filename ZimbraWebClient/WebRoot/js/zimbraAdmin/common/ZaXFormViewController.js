@@ -245,6 +245,11 @@ function (params) {
 				this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);		
 		
 			this.closeCnfrmDlg();
+
+            if (typeof (this.changeActionsState) == "function") { //update the toolbar buttons
+                this.changeActionsState ();
+            }
+
 			this._currentObject.refresh(false,true);	
 			this.fireChangeEvent(this._currentObject);		
 			if(params) {
