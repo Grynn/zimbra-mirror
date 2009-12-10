@@ -220,7 +220,7 @@ function(params) {
 	if (items) {
 		this._list = items;
 	} else {
-		this._list = new ZmList(ZmItem.BRIEFCASE);
+		this._list = new ZmList(ZmItem.BRIEFCASE_ITEM);
 	}
 	var bcView = this._tabAttachMailView;
 	bcView.set(this._list);
