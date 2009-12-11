@@ -20,8 +20,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -32,7 +30,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -226,7 +223,7 @@ public class Props2JsServlet extends HttpServlet {
         return req.getLocale();
     }
 
-    protected synchronized byte[] getBuffer(HttpServletRequest req,
+    protected byte[] getBuffer(HttpServletRequest req,
         Locale locale, String uri) throws IOException {
         BufferStream bos = new BufferStream(24 * 1024);
         DataOutputStream out = new DataOutputStream(bos);

@@ -62,11 +62,10 @@ public class Props2Js {
     public static void convert(OutputStream ostream, ResourceBundle bundle,
         String classname) throws IOException {
         DataOutputStream out = getOutputStream(ostream);
-        Enumeration<String> keys = bundle.getKeys();
         Matcher matcher = VARNAME.matcher("");
         
         printHead(out, classname);
-        while (keys.hasMoreElements()) {
+        for (Enumeration<String> keys = bundle.getKeys(); keys.hasMoreElements();) {
             String key = keys.nextElement();
             
             printEntry(out, matcher, key, bundle.getString(key));
@@ -76,11 +75,10 @@ public class Props2Js {
     public static void convert(OutputStream ostream, Properties props,
         String classname) throws IOException {
         DataOutputStream out = getOutputStream(ostream);
-        Enumeration<Object> keys = props.keys();
         Matcher matcher = VARNAME.matcher("");
         
         printHead(out, classname);
-        while (keys.hasMoreElements()) {
+        for (Enumeration<Object> keys = props.keys(); keys.hasMoreElements();) {
             String key = (String)keys.nextElement();
             
             printEntry(out, matcher, key, props.getProperty(key));
@@ -96,12 +94,12 @@ public class Props2Js {
             
             PropertyPrinter(DataOutputStream out) { this.out = out; }
 
-            public synchronized Object put(Object key, Object val) {
+            public Object put(Object key, Object val) {
                 try {
                     printEntry(out, matcher, (String)key, (String)val);
                 } catch (IOException e) {
                 }
-                return val;
+                return null;
             }
         }
         
