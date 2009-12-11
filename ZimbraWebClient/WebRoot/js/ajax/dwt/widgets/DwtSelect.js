@@ -299,8 +299,9 @@ function(optionValue) {
 
 DwtSelect.prototype.setSelectedOption =
 function(optionObj) {
-	if (optionObj)
+	if (optionObj) {
 		this._setSelectedOption(optionObj);
+}
 };
 
 DwtSelect.prototype.getValue =
@@ -490,7 +491,7 @@ function() {
         function(){
             var divEl = document.getElementById(divElId.id);
             if (divEl) {
-                divEl.style.width = divEl.childNodes[0].offsetWidth;
+                divEl.style.width = divEl.childNodes[0].offsetWidth || "auto"; // offsetWidth doesn't work in IE if the element or one of its parents has display:none
             }
     }, 200));
 };
