@@ -56,6 +56,7 @@ public class YMailSender extends MailSender {
     @Override
     protected Collection<Address> sendMessage(Mailbox mbox,
                                MimeMessage mm,
+                               boolean ignoreFailedAddresses,
                                RollbackData[] rollback) throws IOException {
         try {
         	Address[] rcpts = mm.getAllRecipients();
