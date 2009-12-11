@@ -15,6 +15,7 @@
  * ***** END LICENSE BLOCK *****
 -->
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
+<%@ page session="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="zm" uri="com.zimbra.zm" %>
 <%@ taglib prefix="zd" tagdir="/WEB-INF/tags/desktop" %>
@@ -56,7 +57,7 @@ ${zdf:onLogin(eventBean)}
 
 <c:choose>
 <c:when test="${not empty authResult}">
-    <jsp:forward page="/public/login.jsp"/>
+    <jsp:forward page="/public/launchZCS.jsp"/>
 </c:when>
 <c:otherwise>
     <c:redirect url="${zdf:addAuthToken('/desktop/console.jsp')}"/>
