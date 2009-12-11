@@ -16,11 +16,12 @@
 
 package com.zimbra.kabuki.servlets;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -109,10 +111,6 @@ public class Props2JsServlet extends HttpServlet {
     private static Map<Locale, Map<String, byte[]>> buffers =
         new HashMap<Locale, Map<String, byte[]>>();
 
-    //
-    // HttpServlet methods
-    //
-
     private String getDirPath(String dirname) {
         if (new File(dirname).isAbsolute()) {
             return dirname;
@@ -123,8 +121,8 @@ public class Props2JsServlet extends HttpServlet {
         return basedir + dirname;
     }
 
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
-        throws IOException, ServletException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws
+        IOException, ServletException {
         // get request info
         boolean debug = req.getParameter(P_DEBUG) != null;
         Locale locale = getLocale(req);
@@ -141,7 +139,7 @@ public class Props2JsServlet extends HttpServlet {
         }
         
         // get byte buffer
-        byte[] buffer = localeBuffers.get(uri);
+        byte[] buffer = debug ? null : localeBuffers.get(uri);
 
         if (buffer == null) {
             buffer = getBuffer(req, locale, uri);
@@ -155,29 +153,23 @@ public class Props2JsServlet extends HttpServlet {
                 gzos.close();
                 buffer = bos.toByteArray();
             }
-            if (!debug && !LC.zimbra_minimize_resources.booleanValue())
+            if (!LC.zimbra_minimize_resources.booleanValue())
                 localeBuffers.put(uri, buffer);
         }
 
         // generate output
         OutputStream out = resp.getOutputStream();
         try {
-            if (uri.endsWith(COMPRESSED_EXT)) {
+            if (uri.endsWith(COMPRESSED_EXT))
                 resp.setHeader("Content-Encoding", "gzip");
-            }
             resp.setContentType("application/x-javascript");
         } catch (Exception e) {
-            if (isErrorEnabled()) {
+            if (isErrorEnabled())
                 error(e.getMessage());
-            }
         }
         out.write(buffer);
         out.flush();
     }
-
-    //
-    // Protected methods
-    //
 
     protected boolean isWarnEnabled() {
         return true;
@@ -201,21 +193,19 @@ public class Props2JsServlet extends HttpServlet {
 
     protected String getRequestURI(HttpServletRequest req) {
         String uri = (String) req.getAttribute(A_REQUEST_URI);
-        if (uri == null) {
+        if (uri == null)
             uri = req.getRequestURI();
-        }
         return uri;
     }
 
     protected List<String> getBasenamePatternsList(HttpServletRequest req) {
         List<String> list = new LinkedList<String>();
         String patterns = (String) req.getAttribute(A_BASENAME_PATTERNS);
-        if (patterns == null) {
+        
+        if (patterns == null)
             patterns = this.getInitParameter(P_BASENAME_PATTERNS);
-        }
-        if (patterns == null) {
+        if (patterns == null)
             patterns = "WEB-INF/classes/${dir}/${name}";
-        }
         list.add(patterns);
         return list;
     }
@@ -234,7 +224,7 @@ public class Props2JsServlet extends HttpServlet {
             return new Locale(language);
         }
         return req.getLocale();
-    } // getLocale(HttpServletRequest):Locale
+    }
 
     protected synchronized byte[] getBuffer(HttpServletRequest req,
         Locale locale, String uri) throws IOException {
@@ -273,10 +263,10 @@ public class Props2JsServlet extends HttpServlet {
         int prevSlash = uri.substring(0, lastSlash).lastIndexOf('/');
         String basedir = uri.substring(prevSlash, lastSlash + 1);
         String dirname = this.getDirPath("");
-
         String filenames = uri.substring(uri.lastIndexOf('/') + 1);
         String classnames = filenames.substring(0, filenames.indexOf('.'));
         StringTokenizer tokenizer = new StringTokenizer(classnames, ",");
+        
         if (isDebugEnabled()) {
             for (List<String> basenames : basenamePatterns) {
                 debug("!!! basenames: "+basenames);
@@ -291,8 +281,8 @@ public class Props2JsServlet extends HttpServlet {
             load(req, out, locale, basenamePatterns, basedir, dirname, classname);
         }
         return bos.toByteArray();
-    } // getBuffer(Locale,String):byte[]
-
+    } 
+    
     protected void load(HttpServletRequest req, DataOutputStream out,
         Locale locale, List<List<String>> basenamePatterns,
         String basedir, String dirname, String classname) throws IOException {
@@ -302,38 +292,34 @@ public class Props2JsServlet extends HttpServlet {
         for (List<String> basenames : basenamePatterns) {
             try {
                 ClassLoader parentLoader = this.getClass().getClassLoader();
-                ClassLoader loader = new PropsLoader(parentLoader, basenames, basedir, dirname, classname);
-                ResourceBundle bundle = ResourceBundle.getBundle(basename, locale, loader);
-                Props2Js.convert(out, bundle, classname);
-            }
-            catch (MissingResourceException e) {
-                out.writeBytes("// resource bundle for " + classname +
-                    " not found\n");
-            }
-            catch (IOException e) {
-                out.writeBytes("// resource bundle error for " + classname +
+                PropsLoader loader = new PropsLoader(parentLoader, basenames,
+                    basedir, dirname, classname);
+                
+                // load path list, but not actual properties to prevent caching
+                ResourceBundle.getBundle(basename, locale, loader);
+                for (File file : loader.getFiles()) {
+                    Props2Js.convert(out, file, classname);
+                }
+            } catch (MissingResourceException e) {
+                out.writeBytes("// properties for " + classname + " not found\n");
+            } catch (IOException e) {
+                out.writeBytes("// properties error for " + classname +
                     " - see server log\n");
                 error(e.getMessage());
             }
         }
-    } // load(PrintStream,String)
-
-    //
-    // Classes
-    //
+    }
 
     public static class PropsLoader extends ClassLoader {
-        // Constants
-        private static Pattern RE_LOCALE = Pattern.compile(".*(_[a-z]{2}(_[A-Z]{2})?)\\.properties");
-        private static Pattern RE_SYSPROP = Pattern.compile("\\$\\{(.*?)\\}");
-
-        // Data
+        private List<File> files;
         private List<String> patterns;
         private String dir;
         private String dirname;
         private String name;
 
-        // Constructors
+        private static Pattern RE_LOCALE = Pattern.compile(".*(_[a-z]{2}(_[A-Z]{2})?)\\.properties");
+        private static Pattern RE_SYSPROP = Pattern.compile("\\$\\{(.*?)\\}");
+
         public PropsLoader(ClassLoader parent, List<String> patterns,
             String basedir, String dirname, String classname) {
             super(parent);
@@ -341,9 +327,11 @@ public class Props2JsServlet extends HttpServlet {
             this.dir = basedir.replaceAll("/[^/]+$", "").replaceAll("^.*/", "");
             this.dirname = dirname;
             this.name = classname;
+            this.files = new LinkedList<File>();
         }
 
-        // ClassLoader methods
+        public List<File> getFiles() { return files; }
+        
         public InputStream getResourceAsStream(String rname) {
             String filename = rname.replaceAll("^.*/", "");
             Matcher matcher = RE_LOCALE.matcher(filename);
@@ -359,18 +347,13 @@ public class Props2JsServlet extends HttpServlet {
                     file = new File(basename);
                 }
                 if (file.exists()) {
-                    try {
-                        return new FileInputStream(file);
-                    }
-                    catch (FileNotFoundException e) {
-                        // ignore
-                    }
+                    files.add(file);
+                    return new ByteArrayInputStream(new byte[0]);
                 }
             }
             return super.getResourceAsStream(rname);
         }
 
-        // Private
         private static String replaceSystemProps(String s) {
             Matcher matcher = RE_SYSPROP.matcher(s);
             if (!matcher.find()) return s;
@@ -387,5 +370,4 @@ public class Props2JsServlet extends HttpServlet {
             return str.toString();
         }
     }
-
-} // class Props2JsServlet
+}

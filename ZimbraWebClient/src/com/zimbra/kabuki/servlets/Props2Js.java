@@ -61,8 +61,7 @@ public class Props2Js {
 
     public static void convert(OutputStream ostream, ResourceBundle bundle,
         String classname) throws IOException {
-        DataOutputStream out = ostream instanceof DataOutputStream ?
-            (DataOutputStream)ostream : new DataOutputStream(ostream);
+        DataOutputStream out = getOutputStream(ostream);
         Enumeration<String> keys = bundle.getKeys();
         Matcher matcher = VARNAME.matcher("");
         
@@ -76,8 +75,7 @@ public class Props2Js {
 
     public static void convert(OutputStream ostream, Properties props,
         String classname) throws IOException {
-        DataOutputStream out = ostream instanceof DataOutputStream ?
-            (DataOutputStream)ostream : new DataOutputStream(ostream);
+        DataOutputStream out = getOutputStream(ostream);
         Enumeration<Object> keys = props.keys();
         Matcher matcher = VARNAME.matcher("");
         
@@ -87,6 +85,33 @@ public class Props2Js {
             
             printEntry(out, matcher, key, props.getProperty(key));
         }
+    }
+
+    public static void convert(OutputStream ostream, File file,
+        String classname) throws IOException {
+        // print values immediately rather than store them in a hash
+        class PropertyPrinter extends Properties {
+            DataOutputStream out;
+            Matcher matcher = VARNAME.matcher("");
+            
+            PropertyPrinter(DataOutputStream out) { this.out = out; }
+
+            public synchronized Object put(Object key, Object val) {
+                try {
+                    printEntry(out, matcher, (String)key, (String)val);
+                } catch (IOException e) {
+                }
+                return val;
+            }
+        }
+        
+        DataOutputStream out = getOutputStream(ostream);
+        FileInputStream in = new FileInputStream(file);
+        PropertyPrinter pp = new PropertyPrinter(out);
+        
+        printHead(out, classname);
+        pp.load(in);
+        in.close();
     }
 
     private static void printHead(DataOutputStream out, String classname) throws
@@ -226,6 +251,11 @@ public class Props2Js {
             if (ofile != null) {
                 out.close();
             }
+    }
+
+    private static DataOutputStream getOutputStream(OutputStream ostream) {
+        return ostream instanceof DataOutputStream ?
+            (DataOutputStream)ostream : new DataOutputStream(ostream);
     }
 
     private static Locale getLocale(String arg) {
