@@ -301,15 +301,9 @@ public class Props2JsServlet extends HttpServlet {
         out.writeBytes("// Basename: " + basename + '\n');
         for (List<String> basenames : basenamePatterns) {
             try {
-                class PropControl extends ResourceBundle.Control {
-                    public long getTimeToLive(String baseName, Locale l) {
-                        return ResourceBundle.Control.TTL_DONT_CACHE;
-                    }
-                }
-
                 ClassLoader parentLoader = this.getClass().getClassLoader();
                 ClassLoader loader = new PropsLoader(parentLoader, basenames, basedir, dirname, classname);
-                ResourceBundle bundle = ResourceBundle.getBundle(basename, locale, loader, new PropControl());
+                ResourceBundle bundle = ResourceBundle.getBundle(basename, locale, loader);
                 Props2Js.convert(out, bundle, classname);
             }
             catch (MissingResourceException e) {
