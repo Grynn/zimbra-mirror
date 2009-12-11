@@ -658,7 +658,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								{ref:".", type:_EMAILADDR_, label:null, enableDisableChecks:[], 
 									visibilityChecks:[
 										[ZaItem.hasWritePermission, ZaAccount.A_zimbraMailAlias]
-									],
+									]
 								}
 							]
 						}
