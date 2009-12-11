@@ -20,7 +20,7 @@
       <New id="pool" class="org.mortbay.thread.BoundedThreadPool">
         <Set name="minThreads">1</Set>
         <Set name="lowThreads">1</Set>
-        <Set name="maxThreads">15</Set>
+        <Set name="maxThreads">5</Set>
       </New>
     </Set>
 
@@ -42,7 +42,7 @@
             <!-- let jetty bind to a random port -->
             <Set name="port"><SystemProperty name="jetty.port" default="@install.jetty.port@"/></Set>
 
-            <Set name="maxIdleTime">300000</Set>
+            <Set name="maxIdleTime">100000</Set>
             <Set name="Acceptors">1</Set>
           </New>
       </Arg>
