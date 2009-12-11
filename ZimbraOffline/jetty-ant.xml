@@ -71,17 +71,17 @@
 				<classes dir="../ZimbraSyncClient/build/classes" />
 			</webApp>
 
-           	<webApp name="ZimbraWebClient" warfile="build/dist/app/jetty/webapps/zimbra" contextpath="/zimbra">
-			<lib dir="${jetty_run_base}/app/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar" />
-                	<classes dir="${jetty_run_base}/app/jetty/webapps/zimbra/WEB-INF/classes"/>
-                	<classes dir="build/classes"/>
-			<classes dir="../ZimbraCommon/build/classes" />
-			<classes dir="../ZimbraIM/build/classes" />
-			<classes dir="../ZimbraServer/build/classes" />
-		</webApp>
+			<webApp name="ZimbraWebClient" warfile="build/dist/app/jetty/webapps/zimbra" contextpath="/zimbra">
+				<lib dir="${jetty_run_base}/app/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar" />
+				<classes dir="build/classes"/>
+				<classes dir="../ZimbraCommon/build/classes" />
+				<classes dir="../ZimbraServer/build/classes" />
+				<classes dir="../ZimbraWebClient/build/classes" />
+				<classes dir="${jetty_run_base}/app/jetty/webapps/zimbra/WEB-INF/classes"/>
+			</webApp>
 
-           	<webApp name="Zimlet" warfile="build/dist/app/jetty/webapps/zimlet" contextpath="/zimlet">
-		</webApp>
+			<webApp name="Zimlet" warfile="build/dist/app/jetty/webapps/zimlet" contextpath="/zimlet">
+			</webApp>
 
 		</jetty>
 	</target>
