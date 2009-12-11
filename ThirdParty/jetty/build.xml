@@ -17,6 +17,7 @@
 	<target name="shop" depends="clean">
 		<!--unzip src="src/jetty-${jetty.version}.zip" dest="${build.dir}/src"/-->
 		
+		<copy todir="${jetty.dir}" file="${src.dir}/NOTICE.txt" />
 		<copy todir="${jetty.dir}" file="${src.dir}/README.txt" />
 		<copy todir="${jetty.dir}" file="${src.dir}/VERSION.txt" />
 		<copy todir="${jetty.dir}" file="${src.dir}/start.jar" />
@@ -24,7 +25,6 @@
 		<copy todir="${jetty.dir}/LICENSES">
 			<fileset dir="${src.dir}/LICENSES" includes="LICENSE*.txt" />
 		</copy>
-		<copy todir="${jetty.dir}/LICENSES" file="${src.dir}/LICENSES/NOTICE.txt" />
 		
 		<copy todir="${jetty.dir}/lib" file="${src.dir}/lib/jetty-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib" file="${src.dir}/lib/jetty-util-${jetty.version}.jar" />
