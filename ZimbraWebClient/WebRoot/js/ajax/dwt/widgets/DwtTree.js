@@ -121,7 +121,9 @@ function() {
 	var a = this._selectedItems.getArray();
 	var sz = this._selectedItems.size();
 	for (var i = 0; i < sz; i++) {
-		a[i]._setSelected(false);
+		if (a[i]) {
+			a[i]._setSelected(false);
+		}
 	}
 	if (sz > 0) {
 		this._notifyListeners(DwtEvent.SELECTION, this._selectedItems.getArray(), DwtTree.ITEM_DESELECTED, null, this._selEv);
