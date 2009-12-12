@@ -1055,6 +1055,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         addToMap(attrs, A_zimbraPrefMailSignatureStyle, "outlook");
         addToMap(attrs, A_zimbraPrefMessageViewHtmlPreferred, TRUE);
         addToMap(attrs, A_zimbraPrefReadingPaneEnabled, TRUE);
+        addToMap(attrs, A_zimbraPrefReadingPaneLocation, "right");
         addToMap(attrs, A_zimbraPrefReplyIncludeOriginalText, "includeBody");
         addToMap(attrs, A_zimbraPrefSaveToSent, TRUE);
         addToMap(attrs, A_zimbraPrefSentLifetime, "0");
