@@ -355,7 +355,8 @@ public class GalSync {
 
         while (handler.getIdCount() > 0) {
             fetchContacts(handler, mbox);
-            
+            System.gc();
+ 
             if (handler.getIdCount() > 0) {
                 try {
                     Thread.sleep(OfflineLC.zdesktop_gal_sync_group_interval.longValue());

@@ -66,18 +66,12 @@ Sub CopyIfExists(sSrc, sDest, bOW)
 End Sub
 
 Sub LaunchPrism()
-    Dim oWMI, oStartup, oCfg, oProc, iPid
-    
-    Set oWMI = GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\cimv2")
-    Set oStartup = oWMI.Get("Win32_ProcessStartup")
-    Set oCfg = oStartup.SpawnInstance_
-    oCfg.ShowWindow = 1 ' SW_NORMAL
+    Dim oShell, sCmd
 
+    Set oShell = CreateObject("WScript.Shell")
     sCmd = Chr(34) & sAppRoot & "\win32\prism\zdclient.exe" & Chr(34) & " -override " & _
         Chr(34) & sDataRoot & "\zdesktop.webapp\override.ini" & Chr(34)  
-    
-    Set oProc = oWMI.Get("Win32_Process")
-    oProc.Create sCmd, Null, oCfg, iPid             
+    oShell.Run sCmd, 1, false 
     WScript.Quit
 End Sub
 
