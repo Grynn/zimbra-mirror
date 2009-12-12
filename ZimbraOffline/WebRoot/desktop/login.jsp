@@ -48,16 +48,14 @@ ${zdf:onLogin(eventBean)}
     <c:if test="${not empty authtoken}">
         <zm:login authtoken="${authtoken}" authtokenInUrl="${not empty param.zauthtoken}"
             varRedirectUrl="postLoginUrl" varAuthResult="authResult"
-            rememberme="true"
-            prefs="${prefsToFetch}" attrs="${attrsToFetch}"
+            rememberme="true" prefs="${prefsToFetch}" attrs="${attrsToFetch}"
             requestedSkin="${param.skin}"/>
-        <%-- continue on at not empty authResult test --%>
     </c:if>
 </c:if>
 
 <c:choose>
 <c:when test="${not empty authResult}">
-    <jsp:forward page="/public/launchZCS.jsp"/>
+    <jsp:forward page="/desktop/launchZD.jsp"/>
 </c:when>
 <c:otherwise>
     <c:redirect url="${zdf:addAuthToken('/desktop/console.jsp')}"/>
