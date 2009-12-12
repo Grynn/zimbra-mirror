@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_meebo" version="0.1" description="Displays meebo bar at the bottom">
+<zimlet name="com_zimbra_meebo" version="0.2" description="Displays meebo bar at the bottom">
   <include>meebo.js</include>
   <handlerObject>com_zimbra_meebo</handlerObject>
 </zimlet>

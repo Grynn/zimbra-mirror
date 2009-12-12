@@ -27,10 +27,11 @@ com_zimbra_meebo.prototype.constructor = com_zimbra_meebo;
 
 com_zimbra_meebo.prototype.init =
 function() {
+	this._addResizeHandler();
 	this.callCount = 0;
 	this._createMeeboFrame();
-	//meebo object takes some time to load, we check every 3 seconds for 30 secs before giving up
-	 this.timer = setInterval(AjxCallback.simpleClosure(this._showMeebo, this), 3000);	
+	//meebo object takes some time to load, we check every 5 seconds for 60 secs before giving up
+	 this.timer = setInterval(AjxCallback.simpleClosure(this._showMeebo, this), 5000);	
  };
 
 
@@ -50,15 +51,29 @@ function() {
 com_zimbra_meebo.prototype._showMeebo =
 function() {
 	this.callCount++;
-	if(this.callCount == 10) {//after 3*10 seconds, stop checking
+	if(this.callCount == 10) {//after 60 seconds, stop checking
 		clearInterval(this.timer);
-		appCtxt.getAppController().setStatusMsg("Could not load Meebo bar even after 30 secs", ZmStatusView.LEVEL_WARNING);
+		appCtxt.getAppController().setStatusMsg("Could not load Meebo bar even after 60 secs", ZmStatusView.LEVEL_WARNING);
 	}
 	if(Meebo) {
 		Meebo.unhide(1);
 		clearInterval(this.timer);
 	}
+
+
 };
 
 
+com_zimbra_meebo.prototype._addResizeHandler =
+function() {
+	this._view = appCtxt.getCurrentView();
+	this._view.addControlListener(new AjxListener(this, this._resizeHandler));//add resize handler
 
+};
+
+com_zimbra_meebo.prototype._resizeHandler =
+function(ev) {
+	var el = appCtxt.getShell().getHtmlElement();
+	var bodyHeight = el.offsetParent.offsetHeight;
+	el.style.height = (bodyHeight - 26) + "px";//always set shell's height 26px less than body's height
+};
