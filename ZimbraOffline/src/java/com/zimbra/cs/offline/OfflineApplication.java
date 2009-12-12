@@ -30,6 +30,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.FileUtil;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.Db;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.db.DbUtil;
@@ -51,8 +52,13 @@ public class OfflineApplication extends ZimbraApplication {
     }
 
     @Override
-    public String getInstallId() {
-        return OfflineLC.zdesktop_installation_key.value();
+    public String getClientId() {
+        try {
+            return OfflineProvisioning.getOfflineInstance().getClientId();
+        } catch (ServiceException x) {
+            OfflineLog.offline.warn("Unable to get client ID", x);
+        }
+        return null;
     }
 
     @Override

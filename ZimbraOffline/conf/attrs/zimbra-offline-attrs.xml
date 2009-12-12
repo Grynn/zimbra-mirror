@@ -186,4 +186,8 @@
   <desc>the account ID of the account for mailto handling</desc>
 </attr>
 
+<attr name="offlineClientId" type="string" cardinality="single" optionalIn="account">
+  <desc>a unique ID of this client</desc>
+</attr>
+
 </attrs>

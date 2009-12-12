@@ -69,6 +69,7 @@ import javax.security.auth.login.LoginException;
 
 public class OfflineProvisioning extends Provisioning implements OfflineConstants {
 
+    public static final String A_offlineClientId = "offlineClientId";
     public static final String A_offlineDn = "offlineDn";
     public static final String A_offlineModifiedAttrs = "offlineModifiedAttrs";
     public static final String A_offlineDeletedIdentity = "offlineDeletedIdentity";
@@ -77,10 +78,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_offlineMountpointProxyAccountId = "offlineMountpointProxyAccountId";
     public static final String A_zimbraPrefMailtoHandlerEnabled = "zimbraPrefMailtoHandlerEnabled";
     public static final String A_zimbraPrefMailtoAccountId = "zimbraPrefMailtoAccountId";
-    public static final String A_zimbraPrefMailToasterEnabled = "zimbraPrefMailToasterEnabled";
-    public static final String A_zimbraPrefCalendarToasterEnabled = "zimbraPrefCalendarToasterEnabled";
     public static final String A_zimbraPrefShareContactsInAutoComplete = "zimbraPrefShareContactsInAutoComplete";
-    public static final String A_zimbraCreateTimestamp = "zimbraCreateTimestamp";
 
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
@@ -842,12 +840,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private static final String LOCAL_ACCOUNT_UID = "local";
     private static final String LOCAL_ACCOUNT_FLAVOR = "Local";
     private static final String LOCAL_ACCOUNT_NAME = LOCAL_ACCOUNT_UID + "@host.local";
-    private static final String LOCAL_ACCOUNT_DISPLAYNAME = "Loading...";
 
     private synchronized Account createLocalAccount() throws ServiceException {
-        Account account;
+        String clientId = UUID.randomUUID().toString();
+        OfflineLog.offline.info("Client ID: %s", clientId);
+        
         Map<String, Object> attrs = new HashMap<String, Object>();
-
         attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );
         attrs.put(A_zimbraMailHost, "localhost");
         attrs.put(A_uid, LOCAL_ACCOUNT_UID);
@@ -855,15 +853,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraId, LOCAL_ACCOUNT_ID);
         attrs.put(A_cn, LOCAL_ACCOUNT_UID);
         attrs.put(A_sn, LOCAL_ACCOUNT_UID);
-        attrs.put(A_displayName, LOCAL_ACCOUNT_DISPLAYNAME);
+        attrs.put(A_offlineClientId, clientId);
         attrs.put(A_offlineAccountFlavor, LOCAL_ACCOUNT_FLAVOR);
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
         attrs.put(A_zimbraPrefAccountTreeOpen , TRUE);
         attrs.put(A_zimbraPrefCalendarAlwaysShowMiniCal , TRUE);
-        attrs.put(A_zimbraPrefFromDisplay, LOCAL_ACCOUNT_DISPLAYNAME);
         setDefaultAccountAttributes(attrs);
 
-        account = createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true, false);
+        Account account = createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true, false);
         WikiUtil wu = WikiUtil.getInstance();
         wu.initDefaultWiki("local@host.local");
         String templatePath = LC.zimbra_home.value() + File.separator + "wiki" + File.separator + "Templates";
@@ -885,6 +882,17 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	if (webappUri == null || !webappUri.equals(uri))
     	    setAccountAttribute(account, A_offlineWebappUri, uri);
     	return account;
+    }
+    
+    public synchronized String getClientId() throws ServiceException {
+        Account account = getLocalAccount();
+        String clientId = account.getAttr(A_offlineClientId, null);
+        if (clientId == null) {
+            clientId = UUID.randomUUID().toString();
+            OfflineLog.offline.info("Client ID: %s", clientId);
+            setAccountAttribute(account, A_offlineClientId, clientId);
+        }
+        return clientId;
     }
 
     public boolean isGalAccount(Account account) {
@@ -956,16 +964,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB);
         }
     }
-
-    private static final String A_zimbraMailIdleSessionTimeout = "zimbraMailIdleSessionTimeout";
-    private static final String A_zimbraPrefCalendarAlwaysShowMiniCal = "zimbraPrefCalendarAlwaysShowMiniCal";
-    private static final String A_zimbraPrefCalendarApptReminderWarningTime = "zimbraPrefCalendarApptReminderWarningTime";
-    private static final String A_zimbraPrefComposeInNewWindow = "zimbraPrefComposeInNewWindow";
-    private static final String A_zimbraPrefContactsInitialView = "zimbraPrefContactsInitialView";
-    private static final String A_zimbraPrefGalAutoCompleteEnabled = "zimbraPrefGalAutoCompleteEnabled";
-    private static final String A_zimbraPrefHtmlEditorDefaultFontColor = "zimbraPrefHtmlEditorDefaultFontColor";
-    private static final String A_zimbraPrefHtmlEditorDefaultFontFamily = "zimbraPrefHtmlEditorDefaultFontFamily";
-    private static final String A_zimbraPrefHtmlEditorDefaultFontSize = "zimbraPrefHtmlEditorDefaultFontSize";
     
     private void setDefaultAccountAttributes(Map<String, Object> attrs) {
         addToMap(attrs, A_zimbraAllowAnyFromAddress, TRUE);
