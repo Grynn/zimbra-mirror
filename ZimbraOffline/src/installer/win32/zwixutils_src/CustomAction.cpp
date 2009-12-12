@@ -119,6 +119,41 @@ LExit:
 	return WcaFinalize(er);
 }
 
+UINT __stdcall ZTouchFolder(MSIHANDLE hInstall) {
+	HRESULT hr = S_OK;
+	UINT er = ERROR_SUCCESS;
+
+	hr = WcaInitialize(hInstall, "ZTouchFolder");
+	ExitOnFailure(hr, "Failed to initialize");
+	WcaLog(LOGMSG_STANDARD, "Initialized.");
+
+    UINT rc;
+	char folder[4096];
+	DWORD foldersize = sizeof(folder);
+
+    rc = MsiGetProperty(hInstall, "Folder", &folder[0], &foldersize);
+    if (rc != ERROR_SUCCESS) {
+		WcaLog(LOGMSG_STANDARD, "Unable to get property: Folder");
+        return WcaFinalize(ERROR_INSTALL_FAILURE);
+    }
+
+	char path[4096];
+	sprintf(path, "%s\\REMOVEME.TXT", folder);
+	FILE *fo = fopen(path, "w");
+	if (fo != NULL) {
+		fprintf(fo, "REMOVE ME");
+		fclose(fo);
+	} else {
+		WcaLog(LOGMSG_STANDARD, "Unable to create file under folder: %s", folder);
+        return WcaFinalize(ERROR_INSTALL_FAILURE);
+	}
+	unlink(path);
+
+LExit:
+	er = SUCCEEDED(hr) ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE;
+	return WcaFinalize(er);
+}
+
 // DllMain - Initialize and cleanup WiX custom action utils.
 extern "C" BOOL WINAPI DllMain(__in HINSTANCE hInst, __in ULONG ulReason, __in LPVOID) {
 	switch(ulReason)

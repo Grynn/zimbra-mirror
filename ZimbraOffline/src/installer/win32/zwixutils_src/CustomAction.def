@@ -3,3 +3,4 @@ LIBRARY "ZWixUtils"
 EXPORTS
 
 ZTokenReplace
+ZTouchFolder
