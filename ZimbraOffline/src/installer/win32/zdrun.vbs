@@ -19,7 +19,7 @@
 '
 
 Dim oFso, oShellApp, sScriptPath, sScriptDir, oTokens, sAppRoot, sDataRoot
-Dim sLocalAppDir, bIsUpgrade, sTmpDir, aUserDirs, aUserFiles
+Dim sLocalAppDir, bIsUpgrade, sTmpDir, aUserDirs, aUserFiles, sVersion, sVerFile
 
 Sub FindAndReplace(sFile, oTokens)
     Dim oFso, oInFile, oOutFile, sTmpFile
@@ -125,11 +125,35 @@ Sub RestoreData()
 	oFso.DeleteFolder sTmpDir, true
 End Sub
 
+Sub WriteVersion()
+    Dim oFout
+
+    On Error Resume Next
+    Set oFout = oFso.OpenTextFile(sVerFile, 2, true)
+    If Err.number = 0 Then
+        oFout.WriteLine(sVersion)
+    End If
+    oFout.Close
+End Sub
+
+Function ReadVersion()
+    Dim oFin
+
+    ReadVersion = ""
+    On Error Resume Next
+    Set oFin = oFso.OpenTextFile(sVerFile, 1, false)
+    If Err.number = 0 Then
+        ReadVersion= oFin.ReadLine()
+    End If
+    oFin.Close
+End Function
+
 '------------------------------- main ---------------------------------
 
 Set oFso = CreateObject("Scripting.FileSystemObject")
 Set oShellApp = CreateObject("Shell.Application")
 
+sVersion="@version@"
 aUserDirs = Array("index", "store", "sqlite", "log", "zimlets-properties")
 aUserFiles = Array("profile\prefs.js", "profile\persdict.dat", "profile\localstore.json")
 sScriptPath = WScript.ScriptFullName
@@ -137,20 +161,19 @@ sScriptDir = Left(sScriptPath, InStrRev(sScriptPath, WScript.ScriptName) - 2)
 sAppRoot = oFso.GetParentFolderName(sScriptDir)
 sLocalAppDir = oShellApp.Namespace(&H1c&).Self.Path
 sDataRoot = sLocalAppDir & "\Zimbra\Zimbra Desktop"
+sVerFile = sDataRoot & "\conf\version"
 sTmpDir = sDataRoot & ".tmp"
 bIsUpgrade = false
 
 If oFso.FolderExists(sDataRoot) Then
-	Dim sAppDataRoot, oDataDir, oAppDataDir
-	sAppDataRoot = sAppRoot & "\data"
-	Set oDataDir = oFso.GetFolder(sDataRoot)
-	Set oAppDataDir = oFso.GetFolder(sAppDataRoot)
-	
-	If DateDiff("s", oDataDir.DateLastModified, oAppDataDir.DateLastModified) > 0 Then
-		bIsUpgrade = true
-	Else
-		LaunchPrism
-	End If
+    Dim sCurVer
+
+    sCurVer = ReadVersion
+    If StrComp(sCurVer, sVersion) = 0 Then
+        LaunchPrism
+    Else
+        bIsUpgrade = true
+    End If
 End If
 
 WScript.StdOut.WriteLine "Initializing. Please wait..."
@@ -167,6 +190,7 @@ If Not oFso.FolderExists(sLocalAppDir & "\Zimbra\Zimbra Desktop") Then
     oFso.CreateFolder sLocalAppDir & "\Zimbra\Zimbra Desktop"
 End If
 oFso.CopyFolder sAppRoot & "\data\*", sDataRoot & "\", true
+WriteVersion
 
 ' fix data files
 Set oTokens = CreateObject("Scripting.Dictionary")

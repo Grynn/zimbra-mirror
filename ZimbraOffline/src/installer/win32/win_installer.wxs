@@ -11,7 +11,7 @@
     <Package Id="*" Description="Zimbra Desktop" Manufacturer="Zimbra" SummaryCodepage="1252" Languages="1033" InstallerVersion="300" Keywords="Installer" Compressed="yes" />
     <Media Id="1" Cabinet="Setup_1.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1" CompressionLevel="high" />
     <Property Id="DiskPrompt" Value="Zimbra Desktop Installation [1]" />
-    <Upgrade Id="f8836321-20a3-43c8-96e3-5df9ce908691">
+    <Upgrade Id="$(var.UpgradeCode)">
       <!-- Detect any newer version of this product -->
       <UpgradeVersion Minimum="$(var.version)" IncludeMinimum="no" OnlyDetect="yes" Property="NEWER_VERSION_FOUND"/>
 
@@ -36,7 +36,7 @@
       <SetODBCFolders Sequence="1100">NOT Installed</SetODBCFolders>
       <MigrateFeatureStates Sequence="1200" />
       <InstallValidate Sequence="1400" />
-      <RemoveExistingProducts After="InstallFinalize" />
+      <RemoveExistingProducts After="InstallFinalize">OLDER_VERSION_FOUND</RemoveExistingProducts>
       <InstallInitialize Sequence="1500" />
       <ProcessComponents Sequence="1600" />
       <UnpublishComponents Sequence="1680" />

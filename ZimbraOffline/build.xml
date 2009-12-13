@@ -815,7 +815,9 @@
 		<copy todir="${dist.app.dir}" overwrite="true">
 			<fileset dir="src/installer" includes="README.txt" />
 		</copy>
+        <copy todir="${dist.app.dir}/win32" file="src/installer/win32/zdrun.vbs" overwrite="true" />
 		<replace file="${dist.app.dir}/README.txt" token="@version@" value="${offline.version} (build ${offline.buildid})"/>
+		<replace file="${dist.app.dir}/win32/zdrun.vbs" token="@version@" value="${offline.version} build ${offline.buildid}" />
 
 		<copy todir="${dist.data.dir}/zdesktop.webapp" overwrite="true">
 			<fileset dir="src/installer/webapp" />

@@ -1,5 +1,6 @@
 
 #include "stdafx.h"
+#include "direct.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
@@ -138,16 +139,13 @@ UINT __stdcall ZTouchFolder(MSIHANDLE hInstall) {
     }
 
 	char path[4096];
-	sprintf(path, "%s\\REMOVEME.TXT", folder);
-	FILE *fo = fopen(path, "w");
-	if (fo != NULL) {
-		fprintf(fo, "REMOVE ME");
-		fclose(fo);
+	sprintf(path, "%s\\removeme", folder);
+	if (CreateDirectory(path, NULL) == TRUE) {
+		WcaLog(LOGMSG_STANDARD, "temp directory created %s", path);
+		RemoveDirectory(path);
 	} else {
-		WcaLog(LOGMSG_STANDARD, "Unable to create file under folder: %s", folder);
-        return WcaFinalize(ERROR_INSTALL_FAILURE);
+		WcaLog(LOGMSG_STANDARD, "unable to create temp directory %s", path);
 	}
-	unlink(path);
 
 LExit:
 	er = SUCCEEDED(hr) ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE;
