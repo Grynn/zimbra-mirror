@@ -734,7 +734,11 @@ function(hash) {
 	return copy;
 };
 
+// converts the arg to an array if it isn't one
 AjxUtil.toArray =
 function(arg) {
-	return (arg instanceof Array) ? arg : (arg === undefined) ? [] : [arg];
+	// array check that doesn't rely on instanceof, since type info
+	// can get lost in new window
+	var isArray = Boolean(arg && (arg.length != null) && arg.splice && arg.slice);
+	return isArray ? arg : (arg === undefined) ? [] : [arg];
 };
