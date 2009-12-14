@@ -138,6 +138,8 @@ function() {
 
 DwtTree.prototype.setSelection =
 function(treeItem, skipNotify, kbNavEvent, noFocus) {
+	if (!treeItem) { return; }
+
 	// Remove currently selected items from the selection list. if <treeItem> is in that list, then note it and return
 	// after we are done processing the selected list
 	var a = this._selectedItems.getArray();
@@ -183,7 +185,6 @@ function(child) {};
 DwtTree.prototype.addSeparator =
 function() {
 	var sep = document.createElement("div");
-//	sep.className = "horizSep";
 	sep.className = "vSpace";
 	this.getHtmlElement().appendChild(sep);
 };
