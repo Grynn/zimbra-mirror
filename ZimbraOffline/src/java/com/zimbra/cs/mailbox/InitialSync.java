@@ -950,16 +950,19 @@ public class InitialSync {
     }
 
     private void syncMessagesAsTgz(List<Integer> ids, byte type) throws ServiceException {
-        UserServlet.HttpInputStream in = null;
-        
         OfflineAccount acct = ombx.getOfflineAccount();
+        UserServlet.HttpInputStream in = null;
+        Pair<Header[], UserServlet.HttpInputStream> response;
+        
         try {
             String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=tgz&list=" + StringUtil.join(",", ids));
+            
             if (acct.isDebugTraceEnabled())
                 OfflineLog.request.debug("GET " + url);
             try {
-                Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url,
-                        acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
+                response = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(),
+                    url, acct.getProxyHost(), acct.getProxyPort(),
+                    acct.getProxyUser(), acct.getProxyPass());
                 in = response.getSecond();
             } catch (MailServiceException.NoSuchItemException nsie) {
                 OfflineLog.offline.info("initial: messages have been deleted; skipping");
@@ -1004,12 +1007,20 @@ public class InitialSync {
                         throw new RuntimeException("missing meta entry reading tgz stream");
                     }
                 }
-                if (!idSet.isEmpty()) {
-                    for (int id : idSet)
-                        SyncExceptionHandler.saveFailureReport(ombx, id, "message missing from server response", null);
-                }
             } catch (IOException x) {
-                throw ServiceException.FAILURE("TarInputStream", x);
+                boolean empty = false;          // workaround bug in tar formatter
+                
+                for (Header hdr : response.getFirst()) {
+                    if (hdr.getName().equalsIgnoreCase("Content-Length"))
+                        if (hdr.getValue().equals("0"))
+                            empty = true;
+                }
+                if (!empty)
+                    throw ServiceException.FAILURE("TarInputStream", x);
+            }
+            if (!idSet.isEmpty()) {
+                SyncExceptionHandler.saveFailureReport(ombx, idSet.iterator().next(),
+                    "missing msg ids " + idSet.toString() + " from server response", null);
             }
         } finally {
             if (in != null)
