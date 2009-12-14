@@ -132,16 +132,17 @@ function serverCheck() {
 
 function load() {
   if ("platform" in window) {
+    var xulRuntime = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime);
+    var os = xulRuntime.OS.toLowerCase();
+
     window.platform.icon().behavior = Ci.nsIApplicationIcon.HIDE_ON_CLOSE;
 
     window.platform.icon().menu.addMenuItem("about", bundle.GetStringFromName("AboutDesktop"), function(){window.platform.showAbout();});
     window.platform.icon().menu.addMenuItem("checkForUpdates", bundle.GetStringFromName("CheckUpdates"), function(){checkForUpdates();});
-    window.platform.icon().menu.addMenuItem("shutdownService", bundle.GetStringFromName("ShutdownService"), function(){shutdownService();});
-
-    var xulRuntime = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime);
-    var os = xulRuntime.OS.toLowerCase();
     if (os == "winnt") {
       window.platform.icon().menu.addMenuItem("quitApp", bundle.GetStringFromName("Quit"), function(){quitApp();});
+    } else {
+      window.platform.icon().menu.addMenuItem("shutdownService", bundle.GetStringFromName("ShutdownService"), function(){shutdownService();});
     }
   }
 }
