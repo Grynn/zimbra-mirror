@@ -67,7 +67,7 @@ my $is_upgrade = 0;
 my $tmpdir = "$home_dir/Library/.zdtmp";
 
 my @user_files = ("index", "store", "sqlite", "log", "zimlets-properties", 
-	"profile/prefs.js", "profile/persdict.dat", "profile/localstore.json");
+	"conf/keystore", "profile/prefs.js", "profile/persdict.dat", "profile/localstore.json");
 
 sub launch_prism() {
 	exec("\"$data_root/Zimbra Desktop.app/Contents/MacOS/prism\"");
@@ -84,6 +84,7 @@ if (-e $data_root) {
 	mkdir($tmpdir);
 	system("rm -rf \"$tmpdir/*\"");
 	mkdir("$tmpdir/profile");
+	mkdir("$tmpdir/conf");
 	mkdir("$tmpdir/zimlets");
 
 	for (@user_files) {

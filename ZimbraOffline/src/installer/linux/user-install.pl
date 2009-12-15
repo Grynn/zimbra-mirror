@@ -165,7 +165,7 @@ $icon_dir = dialog_desktop_icon();
 
 my $tmpdir = "$data_root" . ".tmp";
 my @user_files = ("index", "store", "sqlite", "log", "zimlets-properties",
-    "profile/prefs.js", "profile/persdict.dat", "profile/localstore.json");
+    "conf/keystore", "profile/prefs.js", "profile/persdict.dat", "profile/localstore.json");
 
 my $is_upgrade = 0;
 if (-e $data_root) {
@@ -175,6 +175,7 @@ if (-e $data_root) {
     mkdir($tmpdir);
     system("rm -rf \"$tmpdir/*\"");
     mkdir("$tmpdir/profile");
+    mkdir("$tmpdir/conf");
     mkdir("$tmpdir/zimlets");
 
     for (@user_files) {

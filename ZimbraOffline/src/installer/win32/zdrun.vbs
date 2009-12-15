@@ -87,6 +87,7 @@ Sub BackupData()
 	Next
 	
 	oFso.CreateFolder sTmpDir & "\profile"
+	oFso.CreateFolder sTmpDir & "\conf"
 	Dim sFile
 	For Each sFile In aUserFiles
 		CopyIfExists sDataRoot & "\" & sFile, sTmpDir & "\" & sFile, true 
@@ -155,7 +156,7 @@ Set oShellApp = CreateObject("Shell.Application")
 
 sVersion="@version@"
 aUserDirs = Array("index", "store", "sqlite", "log", "zimlets-properties")
-aUserFiles = Array("profile\prefs.js", "profile\persdict.dat", "profile\localstore.json")
+aUserFiles = Array("conf\keystore", "profile\prefs.js", "profile\persdict.dat", "profile\localstore.json")
 sScriptPath = WScript.ScriptFullName
 sScriptDir = Left(sScriptPath, InStrRev(sScriptPath, WScript.ScriptName) - 2)
 sAppRoot = oFso.GetParentFolderName(sScriptDir)
