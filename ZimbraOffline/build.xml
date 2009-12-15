@@ -275,7 +275,6 @@
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/img/im"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/img/mobile"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/portals"/>
-		<delete dir="${dist.dir}/jetty/webapps/zimbra/public/slides"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/public/sounds"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/_sample"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/yahoo2"/>
