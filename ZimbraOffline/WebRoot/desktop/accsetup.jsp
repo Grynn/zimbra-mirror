@@ -14,14 +14,13 @@
  * 
  * ***** END LICENSE BLOCK *****
 -->
-<%@ page import="com.zimbra.cs.offline.jsp.ZmailBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
 <%@ taglib prefix="zd" tagdir="/WEB-INF/tags/desktop" %>
 <%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
 
-<fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
+<fmt:setBundle basename="/messages/ZdMsg" scope="request"/>
 
 <zd:auth/>
 
@@ -152,6 +151,7 @@
 <link rel="stylesheet" href="/zimbra/css/common.css" type="text/css">
 <link rel="stylesheet" href="/zimbra/css/desktop.css?skin=${bean.skin}" type="text/css">
 <title><fmt:message key="ZimbraDesktop"/></title>
+<link rel="SHORTCUT ICON" href="<c:url value='/img/logo/favicon.ico'/>">
 
 <script type="text/javascript" src="/zimbra/desktop/js/desktop.js"></script>
 <script type="text/javascript">

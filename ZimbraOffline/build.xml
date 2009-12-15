@@ -245,7 +245,7 @@
 		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
 			<fileset dir="WebRoot/WEB-INF/tags/desktop" />
 		</copy>
-		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/classes/desktop" overwrite="true">
+		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/classes/messages" overwrite="true">
 			<fileset dir="WebRoot/WEB-INF/classes/desktop" />
 		</copy>
 		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tlds" overwrite="true">
@@ -357,8 +357,7 @@
 		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tags/desktop" overwrite="true">
 			<fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag"/>
 		</copy>
-		<mkdir dir="../ZimbraWebClient/build/WebRoot/WEB-INF/classes/desktop"/>
-		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/classes/desktop" overwrite="true">
+		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/classes/messages" overwrite="true">
 			<fileset dir="WebRoot/WEB-INF/classes/desktop" includes="*.properties"/>
 		</copy>
 		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tlds" overwrite="true">

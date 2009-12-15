@@ -21,7 +21,7 @@
 <%@ taglib prefix="zd" tagdir="/WEB-INF/tags/desktop" %>
 <%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
 
-<fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
+<fmt:setBundle basename="/messages/ZdMsg" scope="request"/>
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.ConsoleBean"/>
 <jsp:setProperty name="bean" property="*"/>
@@ -44,6 +44,7 @@
 <link rel="stylesheet" href="/zimbra/css/common.css" type="text/css">
 <link rel="stylesheet" href="/zimbra/css/desktop.css?skin=${bean.skin}" type="text/css">
 <title><fmt:message key="ZimbraDesktop"/></title>
+<link rel="SHORTCUT ICON" href="<c:url value='/img/logo/favicon.ico'/>">
 
 <script type="text/javascript" src="/zimbra/desktop/js/desktop.js"></script>
 <script type="text/javascript">

@@ -23,7 +23,7 @@
 <%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
 <%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
 
-<fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
+<fmt:setBundle basename="/messages/ZdMsg" scope="request"/>
 
 <script type="text/javascript">
 function InitScreen() {

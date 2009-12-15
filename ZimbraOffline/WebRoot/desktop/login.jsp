@@ -17,9 +17,8 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ page session="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="zm" uri="com.zimbra.zm" %>
-<%@ taglib prefix="zd" tagdir="/WEB-INF/tags/desktop" %>
 <%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
+<%@ taglib prefix="zm" uri="com.zimbra.zm" %>
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.PageBean"/>
 <jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
@@ -27,13 +26,11 @@
 
 ${zdf:onLogin(eventBean)}
 
-<zd:auth/>
-
 <c:if test="${empty bean.loginUsername}">
     <c:redirect url="${zdf:addAuthToken('/desktop/console.jsp')}"/>
 </c:if>
 
-<c:set var="attrsToFetch" value="zimbraFeatureMailEnabled,zimbraFeatureCalendarEnabled,zimbraFeatureContactsEnabled,zimbraFeatureIMEnabled,zimbraFeatureNotebookEnabled,zimbraFeatureOptionsEnabled,zimbraFeaturePortalEnabled,zimbraFeatureTasksEnabled,zimbraFeatureVoiceEnabled,zimbraFeatureBriefcasesEnabled,zimbraFeatureMailUpsellEnabled,zimbraFeatureContactsUpsellEnabled,zimbraFeatureCalendarUpsellEnabled,zimbraFeatureVoiceUpsellEnabled"/>
+<c:set var="attrsToFetch" value="zimbraFeatureMailEnabled,zimbraFeatureCalendarEnabled,zimbraFeatureContactsEnabled,zimbraFeatureIMEnabled,zimbraFeatureNotebookEnabled,zimbraFeatureOptionsEnabled,zimbraFeatureTasksEnabled,zimbraFeatureBriefcasesEnabled"/>
 <c:set var="prefsToFetch" value="zimbraPrefSkin,zimbraPrefClientType,zimbraPrefLocale"/>
 
 <c:catch var="loginException">
@@ -61,3 +58,4 @@ ${zdf:onLogin(eventBean)}
     <c:redirect url="${zdf:addAuthToken('/desktop/console.jsp')}"/>
 </c:otherwise>
 </c:choose>
+

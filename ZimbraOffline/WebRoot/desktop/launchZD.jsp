@@ -2,9 +2,9 @@
 <%@ page session="false" %>
 <%@ page import="java.util.*,javax.naming.*,com.zimbra.cs.zclient.ZAuthResult" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="app" uri="com.zimbra.htmlclient" %>
 <%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
 <%@ taglib prefix="zm" uri="com.zimbra.zm" %>
+
 <%!
     private static String httpPort = null;
     static {
@@ -35,12 +35,7 @@
     }
 
     ZAuthResult authResult = (ZAuthResult) request.getAttribute("authResult");
-    String skin = authResult.getSkin();
-%>
 
-<app:skinAndRedirect defaultSkin="${skin}" />
-
-<%
     response.setHeader("Expires", "Tue, 24 Jan 2000 17:46:50 GMT");
     response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
     response.setHeader("Pragma", "no-cache");
@@ -91,6 +86,7 @@
     String prodMode = getAttribute(request, "prodMode", "");
     String editor = getParameter(request, "editor", "");
     String ext = getAttribute(request, "fileExtension", null);
+    String skin = authResult.getSkin();
 
     if (ext == null || isDevMode)
 	ext = "";
@@ -122,9 +118,10 @@
     pageContext.setAttribute("vers", vers);
 %>
 
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 <fmt:setLocale value='${locale}' scope='request' />
-<fmt:setBundle basename="/desktop/ZdMsg" scope="request" />
+<fmt:setBundle basename="/messages/ZdMsg" scope="request" />
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 <title><fmt:message key="ZimbraDesktop"/></title>
 <link href="<c:url value="/css/images,common,dwt,msgview,login,zm,wiki,skin.css">
     <c:param name="v" value="${vers}" />
