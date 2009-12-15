@@ -1,22 +1,11 @@
 <%@ page buffer="8kb" session="false" autoFlush="true" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ page session="false" %>
-<%@ page import="java.util.*,javax.naming.*,com.zimbra.cs.zclient.ZAuthResult" %>
+<%@ page import="java.util.Locale,com.zimbra.cs.zclient.ZAuthResult" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
 <%@ taglib prefix="zm" uri="com.zimbra.zm" %>
 
 <%!
-    private static String httpPort = null;
-    static {
-	try {
-	    Context initCtx = new InitialContext();
-	    Context envCtx = (Context) initCtx.lookup("java:comp/env");
-
-	    httpPort = (String)envCtx.lookup("httpPort");
-	} catch (NamingException ne) {
-	}
-    }
-
     static String getParameter(HttpServletRequest request, String pname, String defValue) {
 	String value = request.getParameter(pname);
 	return value != null ? value : defValue;
@@ -45,7 +34,7 @@
 <html>
 <head>
 <!--
- launchDesktop.jsp
+ launchZD.jsp
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
  * Copyright (C) 2007, 2008, 2009 Zimbra, Inc.
@@ -61,18 +50,16 @@
 -->
 <%
     java.util.List<String> localePref = authResult.getPrefs().get("zimbraPrefLocale");
-    if (localePref != null && localePref.size() > 0) {
+    if (localePref != null && localePref.size() > 0)
 	request.setAttribute("localeId", localePref.get(0));
-    }
 
     boolean isDev = getParameter(request, "dev", "0").equals("1");
     if (isDev) {
-	request.setAttribute("mode", "mjsf");
-	request.setAttribute("gzip", "false");
-	request.setAttribute("fileExtension", "");
-	if (request.getAttribute("debug") == null) {
+	if (request.getAttribute("debug") == null)
 	    request.setAttribute("debug", "1");
-	}
+	request.setAttribute("fileExtension", "");
+	request.setAttribute("gzip", "false");
+	request.setAttribute("mode", "mjsf");
 	request.setAttribute("packages", "dev");
     }
 
@@ -80,13 +67,14 @@
     String extraPackages = getParameter(request, "packages", getAttribute(request, "packages", null));
     String mode = getAttribute(request, "mode", null);
     boolean isDevMode = mode != null && mode.equalsIgnoreCase("mjsf");
+    boolean isOfflineMode = true;
     boolean isSkinDebugMode = mode != null && mode.equalsIgnoreCase("skindebug");
 
-    String vers = getAttribute(request, "version", "");
-    String prodMode = getAttribute(request, "prodMode", "");
     String editor = getParameter(request, "editor", "");
     String ext = getAttribute(request, "fileExtension", null);
+    String prodMode = getAttribute(request, "prodMode", "");
     String skin = authResult.getSkin();
+    String vers = getAttribute(request, "version", "");
 
     if (ext == null || isDevMode)
 	ext = "";
@@ -109,10 +97,10 @@
     pageContext.setAttribute("contextPath", contextPath);
     pageContext.setAttribute("editor", editor);
     pageContext.setAttribute("ext", ext);
-    pageContext.setAttribute("isDevMode", isDev);
-    pageContext.setAttribute("isOfflineMode", true);
-    pageContext.setAttribute("isProdMode", !prodMode.equals(""));
     pageContext.setAttribute("isDebug", isSkinDebugMode || isDevMode);
+    pageContext.setAttribute("isDevMode", isDev);
+    pageContext.setAttribute("isOfflineMode", "true");
+    pageContext.setAttribute("isProdMode", !prodMode.equals(""));
     pageContext.setAttribute("locale", locale);
     pageContext.setAttribute("skin", skin);
     pageContext.setAttribute("vers", vers);
@@ -265,32 +253,20 @@
 <c:if test="${editor eq 'tinymce'}">
         window.isTinyMCE = true; 
 </c:if>
-	// NOTE: Domain info settings moved into launch function to
-	//       prevent sloppy code from accessing extraneous window
-	//       scoped variable.
-    <zm:getDomainInfo var="domainInfo" by="virtualHostname" value="${zm:getServerName(pageContext)}"/>
 	var settings = {
 	    "dummy":1<c:forEach var="pref" items="${requestScope.authResult.prefs}">,
 	    "${pref.key}":"${zm:jsEncode(pref.value[0])}"</c:forEach>
 <c:forEach var="attr" items="${requestScope.authResult.attrs}">,
 	    "${attr.key}":"${zm:jsEncode(attr.value[0])}"
 </c:forEach>
-<c:if test="${not empty domainInfo}">
-	    <c:forEach var="info" items="${domainInfo.attrs}">,
-	    "${info.key}":"${zm:jsEncode(info.value)}"</c:forEach>
-</c:if>
 	};
-
 	var params = {
-	    app:"${zm:cook(app)}",
 	    settings:settings, batchInfoResponse:batchInfoResponse,
-	    offlineMode:true, devMode:${isDevMode},
-	    httpPort:"<%=httpPort%>"
+	    devMode:${isDevMode}, offlineMode:${isOfflineMode}
 	};
 	ZmZimbraMail.run(params);
     }
 
-    //	START DOMContentLoaded
     // Mozilla and Opera 9 expose the event we could use
     if (document.addEventListener) {
         document.addEventListener("DOMContentLoaded", launch, null);
@@ -302,21 +278,17 @@
     // 	for Internet Explorer. readyState will not be achieved on init call
     if (AjxEnv.isIE && AjxEnv.isWindows) {
         document.attachEvent("onreadystatechange", function(e) {
-            if (document.readyState == "complete") {
+            if (document.readyState == "complete")
                 launch();
-            }
         });
     }
 
-    if (/(WebKit|khtml)/i.test(navigator.userAgent)) { // sniff
+    if (/(WebKit|khtml)/i.test(navigator.userAgent)) {
         var _timer = setInterval(function() {
-            if (/loaded|complete/.test(document.readyState)) {
+            if (/loaded|complete/.test(document.readyState))
                 launch();
-                // call the onload handler
-            }
         }, 10);
     }
-    //	END DOMContentLoaded
 
     AjxCore.addOnloadListener(launch);
     AjxCore.addOnunloadListener(ZmZimbraMail.unload);
