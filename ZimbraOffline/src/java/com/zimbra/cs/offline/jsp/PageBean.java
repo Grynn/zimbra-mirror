@@ -117,7 +117,7 @@ public class PageBean {
         
         if (at != null && !at.startsWith("@"))
             url += (url.indexOf('?') < 0 ? "?" : "&") + "at=" + at;
-        if (devMode != null && !devMode.isEmpty())
+        if (devMode != null && devMode.length() > 0)
             url += (url.indexOf('?') < 0 ? "?" : "&") + "dev=" + devMode;
         return url;
     }
