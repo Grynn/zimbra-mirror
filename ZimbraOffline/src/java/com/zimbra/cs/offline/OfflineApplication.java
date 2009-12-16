@@ -30,6 +30,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.FileUtil;
+import com.zimbra.common.util.SystemUtil;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.Db;
 import com.zimbra.cs.db.DbPool;
@@ -199,7 +200,7 @@ public class OfflineApplication extends ZimbraApplication {
 
         // On Windows, even associated FileInputStream is closed, File.delete() still may
         // not work without calling GC first. This seems to be a known issue for Windows JVM
-        if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
+        if (SystemUtil.ON_WINDOWS) {
             System.gc();
         }
         for (File zimletFile : filesToDel) {
