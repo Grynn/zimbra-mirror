@@ -47,7 +47,7 @@ SKIN_WORK_BASE=`dirname "${skins_directory}"`
 
 BASE_URL=/`basename "${SKIN_WORK_BASE}"`
 
-CP="${zimbra_home}/lib/jars/zimbracommon.jar"
+CP="${zimbra_home}/lib/jars/zimbracommon.jar:${SKIN_WORK_BASE}/WEB-INF/classes"
 
 # Make sure source exists, and copy it to working dir
 if [ -d "$SKIN_SRC" ]; then
