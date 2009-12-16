@@ -14,7 +14,7 @@
  * 
  * ***** END LICENSE BLOCK *****
 -->
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" session="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
 <%@ taglib prefix="zd" tagdir="/WEB-INF/tags/desktop" %>
@@ -22,13 +22,15 @@
 
 <fmt:setBundle basename="/messages/ZdMsg" scope="request"/>
 
+<% pageContext.setAttribute("devMode", request.getParameter("dev")); %>
+
 <zd:auth/>
 
 <c:set var="accountFlavor" value="${param.accountFlavor eq null ? '' : param.accountFlavor}"/>
 <c:set var='cancel'><fmt:message key='Cancel'/></c:set>
 <c:set var='save'><fmt:message key='Save'/></c:set>
 <c:set var='buttonType' value="default"/>
-<c:set var="uri" value="${zdf:addAuthToken('/zimbra/desktop/accsetup.jsp')}"/>
+<c:set var="uri" value="${zdf:addAuthToken('/desktop/accsetup.jsp', devMode)}"/>
 <c:set var='betaLink'>
     <fmt:message key='BetaNoteSupport'>
         <fmt:param>
@@ -147,10 +149,11 @@
 <html>
 <head>
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-<link rel="shortcut icon" href="/zimbra/favicon.ico" type="image/vnd.microsoft.icon">
-<link rel="stylesheet" href="/zimbra/css/common.css" type="text/css">
-<link rel="stylesheet" href="/zimbra/css/desktop.css?skin=${bean.skin}" type="text/css">
 <title><fmt:message key="ZimbraDesktop"/></title>
+<link rel="stylesheet" href="<c:url value="/css/common,desktop.css">
+    <c:param name="debug" value="${devMode}" />
+    <c:param name="skin" value="${bean.skin}" />
+</c:url>" type="text/css">
 <link rel="SHORTCUT ICON" href="<c:url value='/img/logo/favicon.ico'/>">
 
 <script type="text/javascript" src="/zimbra/desktop/js/desktop.js"></script>
@@ -162,7 +165,7 @@ function accntChange(accnt) {
 }
 
 function OnCancel() {
-    window.location = "${zdf:addAuthToken('/zimbra/desktop/console.jsp')}";
+    window.location = "${zdf:addAuthToken('/desktop/console.jsp', devMode)}";
 }
 
 function OnDelete() {
@@ -281,7 +284,7 @@ function onEditLink(id, keep) {
 <c:when test="${accountFlavor eq ''}">
 </c:when>
 <c:when test="${not bean.noVerb && (bean.allOK || not (bean.add || bean.modify))}">
-    <jsp:forward page="${zdf:addAuthToken('console.jsp')}">
+    <jsp:forward page="${zdf:addAuthToken('/desktop/console.jsp', devMode)}">
 	<jsp:param name="accountName" value="${bean.accountName}"></jsp:param>
 	<jsp:param name="error" value="${bean.error}"></jsp:param>
 	<jsp:param name="verb" value="${bean.verb}"></jsp:param>

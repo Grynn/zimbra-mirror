@@ -76,7 +76,7 @@
             com.zimbra.cs.offline.jsp.PageBean
         </function-class>
         <function-signature>
-            String addAuthToken(java.lang.String)
+            String addAuthToken(java.lang.String, java.lang.String)
         </function-signature>
     </function>
     <function>

@@ -33,7 +33,7 @@
       <td><a href="http://www.zimbra.com/forums/zimbra-desktop/" target="_blank"><fmt:message key='TipsForums'/></a></td>
       <c:if test="${zdf:isPrism(userAgent)}">
         <td>&#8226;</td>
-        <td><a href="javascript:window.platform.openURI('${zdf:addAuthToken(zdf:getBaseUri())}');"><fmt:message key='TipsOpenInBrowser'/></a></td>
+        <td><a href="javascript:window.platform.openURI('${zdf:addAuthToken(zdf:getBaseUri(), devMode)}');"><fmt:message key='TipsOpenInBrowser'/></a></td>
       </c:if>
     </tr>
   </table>

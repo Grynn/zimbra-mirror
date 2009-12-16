@@ -14,7 +14,7 @@
  * 
  * ***** END LICENSE BLOCK *****
 -->
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" session="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -27,6 +27,8 @@
 <jsp:setProperty name="bean" property="*"/>
 <jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
 
+<% pageContext.setAttribute("devMode", request.getParameter("dev")); %>
+
 <zd:auth/>
 
 <c:set var="accounts" value="${bean.accounts}"/>
@@ -34,22 +36,23 @@
 <c:set var='login'><fmt:message key='GotoDesktop'/></c:set>
 
 <c:if test="${param.loginOp != 'logout' && (param.client == 'advanced' || (param.client == 'standard' && fn:length(accounts) == 1))}">
-    <jsp:forward page="${zdf:addAuthToken('/desktop/login.jsp')}"/>
+    <jsp:forward page="${zdf:addAuthToken('/desktop/login.jsp', devMode)}"/>
 </c:if>
 
 <html>
 <head>
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-<link rel="shortcut icon" href="/zimbra/favicon.ico" type="image/vnd.microsoft.icon">
-<link rel="stylesheet" href="/zimbra/css/common.css" type="text/css">
-<link rel="stylesheet" href="/zimbra/css/desktop.css?skin=${bean.skin}" type="text/css">
 <title><fmt:message key="ZimbraDesktop"/></title>
+<link rel="stylesheet" href="<c:url value="/css/common,desktop.css">
+    <c:param name="debug" value="${devMode}" />
+    <c:param name="skin" value="${bean.skin}" />
+</c:url>" type="text/css">
 <link rel="SHORTCUT ICON" href="<c:url value='/img/logo/favicon.ico'/>">
 
 <script type="text/javascript" src="/zimbra/desktop/js/desktop.js"></script>
 <script type="text/javascript">
 function OnAdd() {
-    window.location = "${zdf:addAuthToken('/zimbra/desktop/accsetup.jsp')}";
+    window.location = "${zdf:addAuthToken('/desktop/accsetup.jsp', devMode)}";
 }
 
 function OnDelete(id, name, type, flavor) {
@@ -65,11 +68,11 @@ function OnLogin() {
     zd.hide("addButton");
     zd.hide("loginButton");
     zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Loading'/></span>");
-    window.location = "${zdf:addAuthToken('/zimbra/desktop/login.jsp')}";
+    window.location = "${zdf:addAuthToken('/desktop/login.jsp', devMode)}";
 }
 
 function OnDefault(id, name, type, flavor) {
-    document.accountForm.action = "${zdf:addAuthToken('/zimbra/desktop/console.jsp')}";
+    document.accountForm.action = "${zdf:addAuthToken('/desktop/console.jsp', devMode)}";
     submit(id, name, type, flavor, "");
 }
 
@@ -316,7 +319,7 @@ function submit(id, name, type, flavor, verb) {
   <zd:tips userAgent="${header['User-Agent']}"/>
 </div>
 
-<form name="accountForm" action="${zdf:addAuthToken('/zimbra/desktop/accsetup.jsp')}" method="POST">
+<form name="accountForm" action="${zdf:addAuthToken('/desktop/accsetup.jsp', devMode)}" method="POST">
     <input type="hidden" name="accountId">
     <input type="hidden" name="accountName">
     <input type="hidden" name="accountType">

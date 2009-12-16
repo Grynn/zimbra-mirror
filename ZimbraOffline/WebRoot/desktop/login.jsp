@@ -24,10 +24,12 @@
 <jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
 <jsp:useBean id="eventBean" class="com.zimbra.cs.offline.jsp.ClientEventBean"/>
 
+<% pageContext.setAttribute("devMode", request.getParameter("dev")); %>
+
 ${zdf:onLogin(eventBean)}
 
 <c:if test="${empty bean.loginUsername}">
-    <c:redirect url="${zdf:addAuthToken('/desktop/console.jsp')}"/>
+    <c:redirect url="${zdf:addAuthToken('/desktop/console.jsp', devMode)}"/>
 </c:if>
 
 <c:set var="attrsToFetch" value="zimbraFeatureMailEnabled,zimbraFeatureCalendarEnabled,zimbraFeatureContactsEnabled,zimbraFeatureIMEnabled,zimbraFeatureNotebookEnabled,zimbraFeatureOptionsEnabled,zimbraFeatureTasksEnabled,zimbraFeatureBriefcasesEnabled"/>
@@ -55,7 +57,7 @@ ${zdf:onLogin(eventBean)}
     <jsp:forward page="/desktop/launchZD.jsp"/>
 </c:when>
 <c:otherwise>
-    <c:redirect url="${zdf:addAuthToken('/desktop/console.jsp')}"/>
+    <c:redirect url="${zdf:addAuthToken('/desktop/console.jsp', devMode)}"/>
 </c:otherwise>
 </c:choose>
 
