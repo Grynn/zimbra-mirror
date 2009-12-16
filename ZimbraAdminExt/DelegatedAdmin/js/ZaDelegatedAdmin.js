@@ -80,7 +80,7 @@ if (ZaAccount) {
     ZaAccount.getAdminChkBoxItem = function () {
         var adminChkBox = {
             ref:ZaAccount.A_zimbraIsDelegatedAdminAccount,type:_CHECKBOX_,
-            label:ZaMsg.NAD_IsAdmin,
+            label: com_zimbra_delegatedadmin.NAD_IsAdmin,
             bmolsnr:true,
             elementChanged :
             function(elementValue,instanceValue, event) {
@@ -119,9 +119,9 @@ if (ZaAccount) {
            addButtonLabel:com_zimbra_delegatedadmin.NAD_Add,
            showRemoveButton:true, removeButtonLabel:com_zimbra_delegatedadmin.NAD_Remove,
            enableDisableChecks: [],
-           visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount]==\'TRUE\' " +
-                             "|| instance.attrs[ZaDistributionList.A_isAdminGroup]==\'TRUE\' "],
+           visibilityChecks:[],
            visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount, ZaDistributionList.A_isAdminGroup] ,
+
            onRemove:ZaAccount.onAdminRoleRemove,
            items:[adminRoleField]
        }
@@ -153,6 +153,12 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
    ZaDelegatedAdmin.AccountXFormModifier = function (xFormObject) {
        var adminChkBox = ZaAccount.getAdminChkBoxItem ();
        var adminRolesItem = ZaAccount.getAdminRolesItem () ;
+       adminChkBox.visibilityChecks = [[ZaItem.hasReadPermission,ZaAccount.A_zimbraIsDelegatedAdminAccount]] ;
+       adminChkBox.enableDisableChecks = [[ZaItem.hasWritePermission,ZaAccount.A_zimbraIsDelegatedAdminAccount]] ;
+       adminRolesItem.visibilityChecks = [[XForm.checkInstanceValue, ZaAccount.A_zimbraIsDelegatedAdminAccount, "TRUE"],
+       [ZaItem.hasRight, ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT]] ;
+       adminRolesItem.enableDisableChecks = [[ZaItem.hasWritePermission,ZaAccount.A_zimbraIsDelegatedAdminAccount]] ;
+
 
         var tabs = xFormObject.items[2].items;
         var tmpItems = tabs[0].items;
@@ -198,6 +204,10 @@ if (ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
    ZaDelegatedAdmin.newAccountModifier = function (xFormObject) {
        var adminChkBox = ZaAccount.getAdminChkBoxItem ();
        var adminRolesItem = ZaAccount.getAdminRolesItem () ;
+       adminChkBox.visibilityChecks = [[ZaItem.hasWritePermission,ZaAccount.A_zimbraIsDelegatedAdminAccount]] ;
+       adminRolesItem.visibilityChecks = [[XForm.checkInstanceValue, ZaAccount.A_zimbraIsDelegatedAdminAccount, "TRUE"]] ;
+       adminRolesItem.enableDisableChecks = [[ZaItem.hasWritePermission,ZaAccount.A_zimbraIsDelegatedAdminAccount]] ;
+
 
         var tabs = xFormObject.items[3].items;
         var tmpItems = tabs[0].items;
@@ -235,14 +245,17 @@ if (ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 ZaDelegatedAdmin.accountViewMethod =
 function (entry) {
     if (entry.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount]
-            && entry.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] == "TRUE" ) {
+            && entry.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] == "TRUE"
+            && ZaItem.hasRight (ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT, entry) ) {
         this._view._containedObject[ZaAccount.A2_adminRoles] = [] ;
         //Get the isAdminAccount DLs from the directMemberList
         var allDirectMemberOfs = this._view._containedObject [ZaAccount.A2_memberOf] [ZaAccount.A2_directMemberList] ;
-        for (var i = 0; i < allDirectMemberOfs.length; i ++) {
-// TODO: enable it when GetAccountMembershipRequest returns isAdminGroup
-        if (allDirectMemberOfs[i][ZaDistributionList.A_isAdminGroup] == "TRUE")
-                this._view._containedObject[ZaAccount.A2_adminRoles].push (allDirectMemberOfs[i].name) ;
+        if (allDirectMemberOfs != null) {
+            for (var i = 0; i < allDirectMemberOfs.length; i ++) {
+            //enable it when GetAccountMembershipRequest returns isAdminGroup
+            if (allDirectMemberOfs[i][ZaDistributionList.A_isAdminGroup] == "TRUE")
+                    this._view._containedObject[ZaAccount.A2_adminRoles].push (allDirectMemberOfs[i].name) ;
+            }
         }
 
         var xform = this._view._localXForm ;
