@@ -34,7 +34,12 @@ endif
 PHP_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php/php-$(PHP_VERSION).tgz
 
-all: allclean build tar
+files	:= $(wildcard src/php-$(PHP_VERSION).tar.gz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	tar xzf src/php-$(PHP_VERSION).tar.gz

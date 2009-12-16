@@ -20,7 +20,12 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-all: build tar
+files	:= $(wildcard src/$(ALTMIME_NAME)-$(ALTMIME_VERSION).tar.gz)
+
+all: checksrc build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build: $(ALTMIME_NAME)-$(ALTMIME_VERSION)
 	(cd $(ALTMIME_NAME)-$(ALTMIME_VERSION); $(MAKE))

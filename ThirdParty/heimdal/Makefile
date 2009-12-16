@@ -20,7 +20,12 @@ endif
 HEIMDAL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/heimdal/heimdal-$(HEIMDAL_VERSION).tgz
 HEIMDAL_SOURCE := $(HEIMDAL_ROOT)/heimdal-$(HEIMDAL_VERSION)
 
-all: allclean build tar
+files   := $(wildcard src/heimdal-$(HEIMDAL_VERSION).tar.gz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	(tar xzf src/heimdal-$(HEIMDAL_VERSION).tar.gz; \

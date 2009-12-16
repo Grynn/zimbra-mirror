@@ -24,7 +24,12 @@ endif
 
 TCMALLOC_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/tcmalloc/tcmalloc-$(TCMALLOC_VERSION).tgz
 
-all: allclean build tar
+files	:= $(wildcard src/google-perftools-$(TCMALLOC_VERSION).tar.gz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	(tar xzf src/google-perftools-$(TCMALLOC_VERSION).tar.gz; \

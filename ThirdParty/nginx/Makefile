@@ -18,7 +18,12 @@ endif
 NGINX_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx/nginx-$(NGINX_VERSION)-zimbra.tgz
 NGINX_INSTALL := $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
 
-all: allclean build tar
+files	:= $(wildcard src/nginx-$(NGINX_VERSION).tar.gz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))

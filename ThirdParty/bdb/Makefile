@@ -25,7 +25,12 @@ ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	CONFIG_FLAG := 
 endif
 
-all: allclean build tar
+files	:= $(wildcard src/db-$(BDB_RELEASE).tar.gz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	@echo "Building for Platform $(BUILD_PLATFORM)"

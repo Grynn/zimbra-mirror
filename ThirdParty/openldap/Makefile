@@ -29,7 +29,12 @@ endif
 LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-$(LDAP_VERSION).tgz
 LDAP_LIB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-libs-$(LDAP_VERSION).tgz
 
-all: allclean build tar
+files	:= $(wildcard src/openldap-$(LDAP_RELEASE).tgz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	(tar xzf src/openldap-$(LDAP_RELEASE).tgz; \

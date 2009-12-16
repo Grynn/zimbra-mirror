@@ -51,7 +51,12 @@ ifeq ($(BUILD_PLATFORM), F11_64)
 	LIB_DIR := /usr/lib64
 endif
 
-all: allclean build tar
+files	:= $(wildcard src/curl-$(CURL_VERSION).tar.gz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	tar xzf src/curl-$(CURL_VERSION).tar.gz

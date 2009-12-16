@@ -20,7 +20,12 @@ endif
 
 CYRUS_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl/cyrus-sasl-$(CYRUS_VERSION).tgz
 
-all: allclean build 
+files	:= $(wildcard src/cyrus-sasl-$(CYRUS_RELEASE).tar.gz)
+
+all: checksrc allclean build 
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build: 
 ifneq	(,$(findstring MACOSX,$(BUILD_PLATFORM)))

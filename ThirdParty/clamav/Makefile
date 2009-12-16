@@ -19,10 +19,15 @@ endif
 
 PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-953.patch; patch -N -g0 -p1 < ../patches/patch-0.95.3-bug1737.patch
 
+files	:= $(wildcard src/clamav-$(CLAMAV_VERSION).tar.gz)
+
 CLAMAV_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/clamav/clamav-$(CLAMAV_VERSION).tgz
 
-all: allclean build tar
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	(tar xzf src/clamav-$(CLAMAV_VERSION).tar.gz; \

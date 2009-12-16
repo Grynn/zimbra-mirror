@@ -80,7 +80,12 @@ endif
 OPENSSL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openssl/openssl-$(OPENSSL_VERSION).tgz
 OPENSSL_SOURCE := $(OPENSSL_ROOT)/openssl-$(OPENSSL_VERSION)
 
-all: allclean build tar
+files	:= $(wildcard src/openssl-$(OPENSSL_VERSION).tar.gz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	(tar xzf src/openssl-$(OPENSSL_VERSION).tar.gz; \

@@ -20,7 +20,14 @@ LIBEVENT_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/memcached/l
 MEMCACHED_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/memcached/memcached-$(MEMCACHED_VERSION).tgz
 MEMCACHED_INSTALL := $(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION)
 
-all: allclean build tar
+filesa	:= $(wildcard src/libevent-$(LIBEVENT_VERSION).tar.gz)
+filesb	:= $(wildcard src/memcached-$(MEMCACHED_VERSION).tar.gz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(filesa), @echo "", exit 1)
+	$(if $(filesb), @echo "", exit 1)
 
 build:
 	(tar xfz src/libevent-$(LIBEVENT_VERSION).tar.gz; \

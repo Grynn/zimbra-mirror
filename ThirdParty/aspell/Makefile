@@ -21,6 +21,8 @@ endif
 ASPELL_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/aspell/aspell-$(ASPELL_VERSION).tgz
 
+files	:= $(wildcard src/aspell-$(ASPELL_VERSION).tar.gz)
+
 ASPELL_DICTS := \
 	aspell6-en-6.0-0 \
 	aspell-fr-0.50-3 \
@@ -37,7 +39,10 @@ ASPELL_DICTS := \
 	aspell6-pt_BR-20090702-0 \
 	aspell6-ru-0.99f7-1
 
-all: allclean build install dict-install tar
+all: checksrc allclean build install dict-install tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	tar xzf src/aspell-$(ASPELL_VERSION).tar.gz

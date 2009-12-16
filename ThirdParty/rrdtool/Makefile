@@ -62,7 +62,18 @@ ifeq ($(ENVMOD), )
 		CPPFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0 -I$(INSTALL_PREFIX)/include/freetype2"
 endif
 
-all: allclean build tar
+filesa   := $(wildcard src/$(PNG_NAME)-$(PNG_VERSION).tar.gz)
+filesb   := $(wildcard src/$(FREETYPE_NAME)-$(FREETYPE_VERSION).tar.gz)
+filesc   := $(wildcard src/$(LIBART_NAME)-$(LIBART_VERSION).tar.gz)
+filesd   := $(wildcard src/$(RRDTOOL_NAME)-$(RRDTOOL_VERSION).tar.gz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(filesa), @echo "", exit 1)
+	$(if $(filesb), @echo "", exit 1)
+	$(if $(filesc), @echo "", exit 1)
+	$(if $(filesd), @echo "", exit 1)
 
 build:
 	(tar xzf src/$(PNG_NAME)-$(PNG_VERSION).tar.gz; \

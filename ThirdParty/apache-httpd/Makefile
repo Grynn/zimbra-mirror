@@ -19,7 +19,12 @@ ifeq ($(BUILD_PLATFORM), RHEL5_64)
 	ENVMOD := env LIBS="-L/usr/lib64"
 endif
 
-all: allclean build
+files	:= $(wildcard src/httpd-$(HTTPD_VERSION).tar.gz)
+
+all: checksrc allclean build
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	tar xzf src/httpd-$(HTTPD_VERSION).tar.gz

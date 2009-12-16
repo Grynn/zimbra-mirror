@@ -48,7 +48,12 @@ ifeq ($(BUILD_PLATFORM), F11_64)
 	ENVMOD := env LIBS="-L/usr/lib64"
 endif
 
-all: allclean build tar
+files   := $(wildcard src/$(SNMP_NAME)-$(SNMP_VERSION).tar.gz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build: $(SNMP_NAME)-$(SNMP_VERSION)
 ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))

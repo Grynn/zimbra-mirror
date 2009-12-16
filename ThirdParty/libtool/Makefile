@@ -20,7 +20,12 @@ endif
 LIBTOOL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/libtool/libtool-$(LIBTOOL_VERSION).tgz
 LIBTOOL_LIB_DIR	?= $(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION)/lib
 
-all: allclean build tar
+files	:= $(wildcard src/libtool-$(LIBTOOL_VERSION).tar.gz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	(tar xzf src/libtool-$(LIBTOOL_VERSION).tar.gz; \

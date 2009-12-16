@@ -21,7 +21,12 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-all: allclean build tar
+files	:= $(wildcard src/$(XML_NAME)-$(XML_RELEASE).tar.gz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	(tar xzf src/$(XML_NAME)-$(XML_RELEASE).tar.gz; \

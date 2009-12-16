@@ -22,7 +22,12 @@ DSPAM_TGZ_TARGET := \
 
 MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
 
-all: allclean build tar
+files	:= $(wildcard src/dspam-$(DSPAM_VERSION).tar.gz)
+
+all: checksrc allclean build tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	(tar xzf src/dspam-$(DSPAM_VERSION).tar.gz; \

@@ -80,7 +80,12 @@ ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))
 	INSTALL_PARMS := install_root=/../ setgid_group=_postdrop mail_owner=_postfix
 endif
 
-all: allclean build install tar
+files   := $(wildcard src/postfix-$(POSTFIX_RELEASE).tar.gz)
+
+all: checksrc allclean build install tar
+
+checksrc:
+	$(if $(files), @echo "", exit 1)
 
 build:
 	tar xzf src/postfix-$(POSTFIX_RELEASE).tar.gz
