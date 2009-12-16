@@ -776,6 +776,7 @@
 		<mkdir dir="${dist.data.dir}/bin"/>
 		<mkdir dir="${dist.data.dir}/data"/>
 		<mkdir dir="${dist.data.dir}/data/tmp"/>
+		<mkdir dir="${dist.data.dir}/data/tmp/java"/>
 		<mkdir dir="${dist.data.dir}/index"/>
 		<mkdir dir="${dist.data.dir}/log"/>
 		<mkdir dir="${dist.data.dir}/store"/>
