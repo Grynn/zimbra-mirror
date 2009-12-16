@@ -97,7 +97,7 @@ public class ImageMerge {
 		_mOptions.addOption(option);
 
 		option = new Option("s", "css-file", true, "css file name");
-		option.setRequired(true);
+		option.setRequired(false);
 		_mOptions.addOption(option);
 
 		option = new Option("j", "js-file", true, "JavaScript file name");
