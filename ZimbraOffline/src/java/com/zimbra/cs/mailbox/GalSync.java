@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
@@ -35,11 +36,15 @@ import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.DataSource.Type;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.offline.OfflineGal;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
+import com.zimbra.cs.db.DbDataSource;
+import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.index.queryparser.ParseException;
@@ -66,6 +71,7 @@ public class GalSync {
         private int syncFolder;
         private int dropFolder;
         private ArrayList<String> idList = null;
+        private DataSource ds = null;
         
         public SyncHandler(OfflineAccount galAccount, boolean fullSync, boolean trace) {
             this.galAccount = galAccount;
@@ -107,13 +113,28 @@ public class GalSync {
                 galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
                 context = new OperationContext(galMbox);
                 Pair<Integer, Integer> pair = OfflineGal.getSyncFolders(galMbox, context);
+                String dsId = galAccount.getAttr(OfflineConstants.A_offlineGalAccountDataSourceId, false);
+
                 if (fullSync) {
                     OfflineLog.offline.debug("Offline GAL full sync requested: " + galAccount.getName());
                     syncFolder = pair.getSecond().intValue();
                     dropFolder = pair.getFirst().intValue();
                     galMbox.emptyFolder(context, syncFolder, false);
+                    
+                    if (dsId == null) {
+                        dsId = UUID.randomUUID().toString();
+                        OfflineProvisioning.getOfflineInstance().setAccountAttribute(galAccount, 
+                            OfflineConstants.A_offlineGalAccountDataSourceId, dsId);
+                    }
                 } else {
                     syncFolder = pair.getFirst().intValue();
+                }
+                
+                if (dsId != null) {
+                    ds = new DataSource(galAccount, Type.gal, galAccount.getName(), dsId, 
+                        new HashMap<String, Object>(), OfflineProvisioning.getOfflineInstance());
+                    if (fullSync)
+                        DbDataSource.deleteAllMappings(ds);
                 }
             } catch (ServiceException e) {
                 exception = e;
@@ -171,6 +192,33 @@ public class GalSync {
             row.detach(); // done with this node - prune it off to save memory
         }
         
+        private void createContact(ParsedContact contact, String id, String logstr) throws ServiceException {            
+            Contact c = galMbox.createContact(context, contact, syncFolder, null);
+            if (ds != null)
+                DbDataSource.addMapping(ds, new DataSourceItem(0, c.getId(), id, null));
+            OfflineLog.offline.debug("Offline GAL contact created: " + logstr);
+        }
+        
+        private int findContact(String id) throws ServiceException, ParseException, IOException {
+            if (ds == null) {
+                byte[] types = new byte[1];
+                types[0] = MailItem.TYPE_CONTACT;
+            
+                ZimbraQueryResults zqr = galMbox.search(context, "#" + OfflineConstants.GAL_LDAP_DN + ":\"" + id + "\"", types, SortBy.NONE, 1);
+                try {                         
+                    if (zqr.hasNext())
+                        return zqr.getNext().getItemId();
+                } finally {
+                    zqr.doneWithSearchResults();
+                }
+            } else {
+                DataSourceItem dsItem = DbDataSource.getReverseMapping(ds, id);
+                if (dsItem.itemId > 0)
+                    return dsItem.itemId;
+            }
+            return -1;
+        }
+        
         public void saveContact(String id, Map<String, String> map, Mailbox galMbox) throws ServiceException, ParseException, IOException {
             String fullName = map.get(ContactConstants.A_fullName);
             if (fullName == null) {
@@ -183,35 +231,20 @@ public class GalSync {
                     map.put(ContactConstants.A_fullName, fullName);
             }           
             map.put(ContactConstants.A_type, map.get(OfflineGal.A_zimbraCalResType) == null ? OfflineGal.CTYPE_ACCOUNT : OfflineGal.CTYPE_RESOURCE);
-            String entry = "id=" + id + " name=\"" + fullName + "\"";
+            String logstr = "id=" + id + " name=\"" + fullName + "\"";
             
             ParsedContact contact = new ParsedContact(map);           
             String ctime, mtime;
             if (fullSync || ((ctime = map.get("createTimeStamp")) != null && (mtime = map.get("modifyTimeStamp")) != null && mtime.equals(ctime))) {
-                galMbox.createContact(context, contact, syncFolder, null);
-                OfflineLog.offline.debug("Offline GAL contact created: " + entry);
+                createContact(contact, id, logstr);
             } else {
-                byte[] types = new byte[1];
-                types[0] = MailItem.TYPE_CONTACT;
-                
-                ZimbraQueryResults zqr = galMbox.search(context, "#" + OfflineConstants.GAL_LDAP_DN + ":\"" + id + "\"", types, SortBy.NONE, 1);
-                try {                         
-                    if (zqr.hasNext()) {
-                        galMbox.modifyContact(context, zqr.getNext().getItemId(), contact);
-                        OfflineLog.offline.debug("Offline GAL contact modified: " + entry);
-                        
-                        /* Mailbox search is a CPU intensive task. Sleep 100 milliseconds here to reduce 
-                         * CPU utilization in GAL sync background thread */
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException ie) {}
-                    } else {
-                        galMbox.createContact(context, contact, syncFolder, null);
-                        OfflineLog.offline.debug("Offline GAL contact created: " + entry);
-                    }
-                } finally {
-                    zqr.doneWithSearchResults();
-                }
+                int itemId = findContact(id);
+                if (itemId > 0) {
+                    galMbox.modifyContact(context, itemId, contact);
+                    OfflineLog.offline.debug("Offline GAL contact modified: " + logstr);
+                } else {                    
+                    createContact(contact, id, logstr);               
+                }                
             }
         }
     }
@@ -321,10 +354,10 @@ public class GalSync {
     
     private static void syncGal(ZcsMailbox mbox, OfflineAccount galAccount, long lastFullSync, boolean traceEnabled)
         throws ServiceException, IOException, ParseException {                
-        String syncToken = galAccount.getAttr(OfflineConstants.A_offlineGalAccountSyncToken);
+        String syncToken = galAccount.getAttr(OfflineConstants.A_offlineGalAccountSyncToken, false);
         long interval = OfflineLC.zdesktop_gal_refresh_interval_days.longValue();        
         if (lastFullSync > 0 && (System.currentTimeMillis() - lastFullSync) / Constants.MILLIS_PER_DAY >= interval)
-            syncToken = "";
+            syncToken = "";     
         boolean fullSync = (syncToken == null || syncToken.length() == 0);
         
         XMLElement req = new XMLElement(AccountConstants.SYNC_GAL_REQUEST);

@@ -110,6 +110,10 @@
   <desc>sync token from last SyncGal response</desc>
 </attr>
 
+<attr name="offlineGalAccountDataSourceId" type="string" cardinality="single" optionalIn="account">
+  <desc>data source id for gal sync account</desc>
+</attr>
+
 <attr name="zimbraPrefShareContactsInAutoComplete" type="string" cardinality="single" optionalIn="account">
   <desc>if true, include all contacts of this account in address auto-completion, in other accounts compose window</desc>
 </attr>
