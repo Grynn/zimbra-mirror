@@ -127,7 +127,7 @@ public class OfflineLC {
     	zdesktop_app_id = new KnownKey("zdesktop_app_id");
 
         zdesktop_name = new KnownKey("zdesktop_name");
-        zdesktop_name.setDefault("Yahoo! Zimbra Desktop");
+        zdesktop_name.setDefault("Zimbra Desktop");
         zdesktop_name.setDoc("UserAgent name of the Zimbra Desktop software.");
     	
         zdesktop_relabel = new KnownKey("zdesktop_relabel");
@@ -135,7 +135,7 @@ public class OfflineLC {
         zdesktop_relabel.setDoc("Release label such as R or BETA");
         
         zdesktop_version = new KnownKey("zdesktop_version");
-        zdesktop_version.setDefault("0.1");
+        zdesktop_version.setDefault("2.0");
         zdesktop_version.setDoc("Version number of the Zimbra Desktop software.");
         
         zdesktop_buildid = new KnownKey("zdesktop_buildid");
@@ -143,7 +143,7 @@ public class OfflineLC {
         zdesktop_buildid.setDoc("Build number of the Zimbra Desktop software.");
 
         zdesktop_skins = new KnownKey("zdesktop_skins");
-        zdesktop_skins.setDefault("beach");
+        zdesktop_skins.setDefault("twilight");
         zdesktop_skins.setDoc("Comma delimited list of installed skins.");
 	    
         zdesktop_redolog_enabled = new KnownKey("zdesktop_redolog_enabled");
@@ -349,10 +349,10 @@ public class OfflineLC {
 
         zdesktop_batched_indexing_size = new KnownKey("zdesktop_batched_indexing_size", "0", "batch size to use when indexing data");
         zdesktop_mail_disk_streaming_threshold = new KnownKey("zdesktop_mail_disk_streaming_threshold", "1048576", "number of bytes to hold in memory before streaming to disk");
-        zdesktop_mail_file_descriptor_cache_size = new KnownKey("zdesktop_mail_file_descriptor_cache_size", "10", "maximum number of file descriptors that are opened for accessing message content");
-        zdesktop_mail_uncompressed_cache_max_bytes = new KnownKey("zdesktop_mail_uncompressed_cache_max_bytes", "20971520", "max number of bytes in the uncompressed blob cache on disk");
-        zdesktop_mail_uncompressed_cache_max_files = new KnownKey("zdesktop_mail_uncompressed_cache_max_files", "20", "max number of files in the uncompressed blob cache on disk");
-        zdesktop_message_cache_size = new KnownKey("zdesktop_message_cache_size", "25", "maximum number of JavaMail MimeMessage objects in the message cache");
+        zdesktop_mail_file_descriptor_cache_size = new KnownKey("zdesktop_mail_file_descriptor_cache_size", "5", "maximum number of file descriptors that are opened for accessing message content");
+        zdesktop_mail_uncompressed_cache_max_bytes = new KnownKey("zdesktop_mail_uncompressed_cache_max_bytes", "5242880", "max number of bytes in the uncompressed blob cache on disk");
+        zdesktop_mail_uncompressed_cache_max_files = new KnownKey("zdesktop_mail_uncompressed_cache_max_files", "10", "max number of files in the uncompressed blob cache on disk");
+        zdesktop_message_cache_size = new KnownKey("zdesktop_message_cache_size", "12", "maximum number of JavaMail MimeMessage objects in the message cache");
         zdesktop_volume_compression_threshold = new KnownKey("zdesktop_volume_compression_threshold", "131072", "size threshold for blob store compression");
     }
     

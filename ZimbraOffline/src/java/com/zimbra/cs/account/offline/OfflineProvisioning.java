@@ -250,8 +250,13 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         boolean isAccountSetup = attrs.remove(A_offlineAccountSetup) != null;
         
         if (isAccountSetup && etype == EntryType.ACCOUNT)
-        	revalidateRemoteLogin((OfflineAccount)e, attrs);
+            revalidateRemoteLogin((OfflineAccount)e, attrs);
 
+        String enableWiki = (String)attrs.remove(A_zimbraFeatureNotebookEnabled);
+        
+        if (enableWiki != null && enableWiki.equals(TRUE))
+            initWikiTemplates();
+        
         if (etype == EntryType.CONFIG) {
             DbOfflineDirectory.modifyDirectoryEntry(etype, A_offlineDn, "config", attrs, false);
         } else {
@@ -459,6 +464,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_displayName,
             A_sn,
             A_zimbraAccountStatus,
+            A_zimbraFeatureNotebookEnabled,
             A_zimbraPrefSkin,
             A_zimbraZimletAvailableZimlets,
             A_zimbraPrefClientType,
@@ -839,7 +845,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     
     private static final String LOCAL_ACCOUNT_UID = "local";
     private static final String LOCAL_ACCOUNT_FLAVOR = "Local";
-    private static final String LOCAL_ACCOUNT_NAME = LOCAL_ACCOUNT_UID + "@host.local";
+    public static final String LOCAL_ACCOUNT_NAME = LOCAL_ACCOUNT_UID + "@host.local";
 
     private synchronized Account createLocalAccount() throws ServiceException {
         String clientId = UUID.randomUUID().toString();
@@ -861,17 +867,23 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         setDefaultAccountAttributes(attrs);
 
         Account account = createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true, false);
-        WikiUtil wu = WikiUtil.getInstance();
-        wu.initDefaultWiki("local@host.local");
-        String templatePath = LC.zimbra_home.value() + File.separator + "wiki" + File.separator + "Templates";
-        try {
-            wu.startImport("local@host.local", "Template", new File(templatePath));
-        } catch (Exception e) {
-            OfflineLog.offline.warn("can't import local account wiki templates");
-        }
+        /* do not initialize wiki templates until they are needed
+         * initWikiTemplates();
+         */
         return account;
     }
 
+    public synchronized void initWikiTemplates() throws ServiceException {
+        WikiUtil wu = WikiUtil.getInstance();
+        wu.initDefaultWiki(LOCAL_ACCOUNT_NAME);
+        String templatePath = LC.zimbra_home.value() + File.separator + "wiki" + File.separator + "Templates";
+        try {
+            wu.startImport(LOCAL_ACCOUNT_NAME, "Template", new File(templatePath));
+        } catch (Exception e) {
+            OfflineLog.offline.warn("can't import local account wiki templates");
+        }
+    }
+    
     public synchronized Account getLocalAccount() throws ServiceException {
     	Account account = get(AccountBy.id, LOCAL_ACCOUNT_ID);
     	if (account == null)
@@ -991,7 +1003,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         addToMap(attrs, A_zimbraFeatureMailForwardingEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureMailPriorityEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureNewMailNotificationEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureNotebookEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureNotebookEnabled, FALSE);
         addToMap(attrs, A_zimbraFeatureOutOfOfficeReplyEnabled, TRUE);
         addToMap(attrs, A_zimbraFeaturePop3DataSourceEnabled, TRUE);
         addToMap(attrs, A_zimbraFeaturePortalEnabled, FALSE);

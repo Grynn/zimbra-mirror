@@ -80,11 +80,13 @@ public class OfflineApplication extends ZimbraApplication {
             Volume vol = Volume.getCurrentMessageVolume();
             
             // in offline, we always use the relative path "store" for message volume
-            Volume.update(vol.getId(), vol.getType(), vol.getName(),
-                "store", vol.getMboxGroupBits(), vol.getMboxBits(),
-                vol.getFileGroupBits(), vol.getFileBits(), threshold != 0,
-                threshold == 0 ? vol.getCompressionThreshold() : threshold, true);
-            Volume.reloadVolumes();
+            if (vol.getCompressionThreshold() != threshold) {
+                Volume.update(vol.getId(), vol.getType(), vol.getName(),
+                    "store", vol.getMboxGroupBits(), vol.getMboxBits(),
+                    vol.getFileGroupBits(), vol.getFileBits(), threshold != 0,
+                    threshold == 0 ? vol.getCompressionThreshold() : threshold, true);
+                Volume.reloadVolumes();
+            }
         } catch (ServiceException e) {
             OfflineLog.offline.warn("Unable to update volume compression", e);
         }
