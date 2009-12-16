@@ -29,47 +29,7 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 	PLAT := darwin-ppc-cc
 endif
 
-ifeq ($(BUILD_PLATFORM), RHEL4_64)
-	PLAT := linux-x86_64
-endif
-
-ifeq ($(BUILD_PLATFORM), CentOS4_64)
-	PLAT := linux-x86_64
-endif
-
-ifeq ($(BUILD_PLATFORM), RHEL5_64)
-	PLAT := linux-x86_64
-endif
-
-ifeq ($(BUILD_PLATFORM), CentOS5_64)
-	PLAT := linux-x86_64
-endif
-
-ifeq ($(BUILD_PLATFORM), SLES11_64)
-	PLAT := linux-x86_64
-endif
-
-ifeq ($(BUILD_PLATFORM), SLES10_64)
-	PLAT := linux-x86_64
-endif
-
-ifeq ($(BUILD_PLATFORM), UBUNTU6_64)
-	PLAT := linux-x86_64
-endif
-
-ifeq ($(BUILD_PLATFORM), UBUNTU8_64)
-	PLAT := linux-x86_64
-endif
-
-ifeq ($(BUILD_PLATFORM), DEBIAN5_64)
-	PLAT := linux-x86_64
-endif
-
-ifeq ($(BUILD_PLATFORM), F10_64)
-	PLAT := linux-x86_64
-endif
-
-ifeq ($(BUILD_PLATFORM), F11_64)
+ifeq (_64,$(findstring _64, $(PLATFORM)))
 	PLAT := linux-x86_64
 endif
 
