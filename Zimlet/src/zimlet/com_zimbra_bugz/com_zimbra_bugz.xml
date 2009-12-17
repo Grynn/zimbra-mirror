@@ -1,5 +1,8 @@
-<zimlet name="com_zimbra_bugz" version="1.2" target="main view-window" description="Bugz - Highlights, previews and links zimbra bugs">
+<zimlet name="com_zimbra_bugz" version="1.2" target="main view-window" description="Highlights, previews and links Zimbra bugzilla entries to http://bugzilla.zimbra.com">
+	<include>bugz.js</include>
+	<include>templates/Bugz.template.js</include>	
 	<resource>bugz.xsl</resource>
+	<handlerObject>com_zimbra_bugz</handlerObject>
 	<contentObject>
 		<matchOn>
 			<regex attrs="ig">(?:(?:\bbug(?:zilla)?:?\s*#?)|(?:show_bug.cgi\?id=))(\d+)\b</regex>
@@ -17,7 +20,4 @@
 			</actionUrl>
 		</toolTip>
     </contentObject>
-	<include>bugz.js</include>
-	<include>templates/Bugz.template.js</include>	
-	<handlerObject>com_zimbra_bugz</handlerObject>
 </zimlet>

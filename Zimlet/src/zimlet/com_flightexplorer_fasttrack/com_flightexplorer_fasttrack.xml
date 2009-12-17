@@ -1,4 +1,4 @@
-<zimlet name="com_flightexplorer_fasttrack" version="5.0" description="Finds updated flight status using FlightExplorer FastTrack service">
+<zimlet name="com_flightexplorer_fasttrack" version="5.0" description="Finds flight status using Flight Explorer FastTrack service">
 	<include>com_flightexplorer_fasttrack.js</include>
 	<include>FlightStatusDlg.js</include>	
 	<resource>permission.txt</resource>

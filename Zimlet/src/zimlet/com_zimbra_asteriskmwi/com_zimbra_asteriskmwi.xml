@@ -1,7 +1,6 @@
-<zimlet name="com_zimbra_asteriskmwi" version="3.0" description="Asterisk MWI (an interface to an Asterisk PBX voicemail)"
-	xmlns:html="http://www.w3.org/1999/xhtml">
+<zimlet name="com_zimbra_asteriskmwi" version="3.0" description="Access Asterisk voicemail (MWI)">
 	<summary>
-		This zimlet provides an interface to an Asterisk PBX voicemail
+		This zimlet provides an interface to an Asterisk PBX voicemail.
 	</summary>
 	<include>asteriskmwi.js</include>
 	<includeCSS>asteriskmwi.css</includeCSS>
@@ -9,8 +8,7 @@
 	<handlerObject>Com_Zimbra_AsteriskMWI</handlerObject>
 
 	<zimletPanelItem label="Voicemail" icon="AMWI-panelIcon">
-		<toolTipText>Click to access your voicemail</toolTipText>
-
+		<toolTipText>Click to access your Asterisk voicemail</toolTipText>
 		<contextMenu>
 			<menuItem label="Preferences..." id="PREFERENCES" />
 		</contextMenu>
@@ -20,6 +18,4 @@
 		<property type="string" name="pbxUname" minLength="0" maxLength="32" label="PBX Username" />
 		<property type="password" name="pbxPass" minLength="0" maxLength="32" label="PBX Password" />
 	</userProperties>
-
-
 </zimlet>

@@ -1,14 +1,14 @@
-<zimlet name="com_zimbra_attachmentalert" version="1.1" description="Alerts when we forget to attach an attachment during mail compose">
+<zimlet name="com_zimbra_attachmentalert" version="1.1" description="Alerts you when forgetting to attach an attachment when composing a message.">
 	<include>attachmentalert.js</include>
 	<includeCSS>attachmentalert.css</includeCSS>
 	<resource>attachmentalert-icon.gif</resource>
 	<handlerObject>com_zimbra_attachmentalert</handlerObject>
 
 	<zimletPanelItem label="Attachment Alert" icon="attachmentAlert-panelIcon">
-		<toolTipText>Alerts when we forget to attach an attachment during mail compose</toolTipText>
+		<toolTipText>If the word "attach" is in your composed message, alerts you when forgetting to attach an attachment.</toolTipText>
 	</zimletPanelItem>
+
 	<userProperties>
 		<property type="string" name="turnONAttachmentAlertZimletNew" value="false"/>
 	</userProperties>
-	
 </zimlet>

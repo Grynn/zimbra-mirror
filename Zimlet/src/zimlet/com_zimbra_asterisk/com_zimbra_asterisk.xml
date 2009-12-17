@@ -1,25 +1,21 @@
-<zimlet name="com_zimbra_asterisk" version="1.0" description="Call through Asterisk"
-        xmlns:html="http://www.w3.org/1999/xhtml">
+<zimlet name="com_zimbra_asterisk" version="1.0" description="Place a telephone call using Asterisk">
 	<summary>
-		This zimlet provides an interface to an Asterisk PBX
+		This zimlet provides an interface to an Asterisk PBX.
 	</summary>
 	<include>asterisk.js</include>
 	<includeCSS>asterisk.css</includeCSS>
 	<resource>asterisk.gif</resource>
 	<handlerObject>Com_Zimbra_Asterisk</handlerObject>
-
 	<contentObject type="Asterisk">
 		<matchOn>
 			<regex attrs="ig">(^|\W)(?:(?:\(\d{3}\)[-_.\s]?|\d-?\d{3}[-_.\s]?))?\d{3}[-_.\s]\d{4}(\W|$)</regex>
 		</matchOn>
-
 		<toolTip>
 			&lt;html:span style="font: 120% Georgia;"&gt;Call &lt;b&gt;${src.objectContent}&lt;/b&gt; through Asterisk&lt;/html:span&gt;
 		</toolTip>
 		<contextMenu>
 			<menuItem label="Call" id="ICALL"/>
 		</contextMenu>
-
 	</contentObject>
 
 	<contextMenu>
@@ -27,7 +23,7 @@
 	</contextMenu>
 
 	<zimletPanelItem label="Asterisk" icon="ASTK-panelIcon">
-		<toolTipText>Click to access the phone server, or drop a contact or appointment</toolTipText>
+		<toolTipText>Click to access the Asterisk phone server or drop a Contact or an Appointment to place a call.</toolTipText>
 		<dragSource type="ZmContact"/>
 		<dragSource type="ZmAppt"/>
 		<contextMenu>
@@ -36,7 +32,6 @@
 			</menuItem>
 		</contextMenu>
 	</zimletPanelItem>
-
 	<userProperties>
 		<property type="string" name="targetipaddress" label="Target IPAddress"/>
         <property type="string" name="pbxUname" minLength="0" maxLength="32" label="PBX Username"/>
