@@ -169,7 +169,7 @@ public class VersionCheckUtil extends SoapCLI {
         Options hiddenOptions = getHiddenOptions();
         hiddenOptions.addOption(OPT_CHECK_VERSION, "autocheck", false, "Initiate version check request (exits if zimbraVersionCheckInterval==0)");        
         options.addOption(SHOW_LAST_STATUS, "result", false, "Show results of last version check.");
-        options.addOption(OPT_MANUAL_CHECK_VERSION, "check", false, "Initiate version check request.");
+        options.addOption(OPT_MANUAL_CHECK_VERSION, "manual", false, "Initiate version check request.");
     }
     
     protected String getCommandUsage() {
