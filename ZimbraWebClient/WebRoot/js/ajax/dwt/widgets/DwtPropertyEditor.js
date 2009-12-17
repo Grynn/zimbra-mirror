@@ -251,7 +251,7 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 	// indent if needed
 	tr.className = "level-" + level;
 
-	if (prop.visible === false)
+	if (prop.visible == "false")
 		tr.className += " invisible";
 
 	if (prop.readonly)
