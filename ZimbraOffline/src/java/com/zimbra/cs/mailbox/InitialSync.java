@@ -863,9 +863,9 @@ public class InitialSync {
         ParsedContact pc;
         try {
             pc = new ParsedContact(fields, blob);
-        } catch (ServiceException e) {
-            OfflineLog.offline.debug("contact parse error: "  + elt.toString());
-            OfflineLog.offline.warn("unable to parse contact entry. item skipped: " + e.getMessage());
+        } catch (ServiceException x) {
+            OfflineLog.offline.debug("contact parse error: id=%d", id);
+            OfflineLog.offline.warn("unable to parse contact entry; item skipped.", x);
             return;
         }
 
