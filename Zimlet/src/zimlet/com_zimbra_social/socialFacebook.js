@@ -152,7 +152,8 @@ function (tableId, account) {
 	var url = "https://api.facebook.com/restserver.php";
 	var paramsArray = [
 		["method", "Stream.get"],
-		["session_key", account.session_key]
+		["session_key", account.session_key],
+		["filter_key", "nf"]	
 	];
 	var params = this._getFBParams(paramsArray, account.secret);
 	if (!tableId) {
@@ -160,6 +161,7 @@ function (tableId, account) {
 	}
 	this._doPOST(url, params, new AjxCallback(this, this._getStreamCallback, tableId));
 };
+
 
 com_zimbra_socialFacebook.prototype.postLike =
 function (obj) {
@@ -428,7 +430,8 @@ function(otherParamsArray, secret, signatureFromJSP) {
 			for (var i = 0; i < paramsArray.length; i++) {
 				sig = sig + paramsArray[i][0] + "=" + paramsArray[i][1];
 			}
-			AjxPackage.require("Crypt");
+			//AjxPackage.require("Crypt");
+			AjxPackage.require("ajax.util.AjxMD5");
 			sig =  AjxMD5.hex_md5(sig + secret);
 		}
 	} else {
