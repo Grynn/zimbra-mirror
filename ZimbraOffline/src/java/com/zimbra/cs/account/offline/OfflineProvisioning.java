@@ -39,6 +39,7 @@ import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
+import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.mailbox.SyncMailbox;
 import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
@@ -252,10 +253,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (isAccountSetup && etype == EntryType.ACCOUNT)
             revalidateRemoteLogin((OfflineAccount)e, attrs);
 
-        String enableWiki = (String)attrs.remove(A_zimbraFeatureNotebookEnabled);
-        
-        if (enableWiki != null && enableWiki.equals(TRUE))
-            initWikiTemplates();
+        if (e instanceof Account && !isLocalAccount((Account)e))
+            enableWiki(attrs);
         
         if (etype == EntryType.CONFIG) {
             DbOfflineDirectory.modifyDirectoryEntry(etype, A_offlineDn, "config", attrs, false);
@@ -867,20 +866,42 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         setDefaultAccountAttributes(attrs);
 
         Account account = createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true, false);
-        /* do not initialize wiki templates until they are needed
-         * initWikiTemplates();
-         */
         return account;
     }
 
-    public synchronized void initWikiTemplates() throws ServiceException {
-        WikiUtil wu = WikiUtil.getInstance();
-        wu.initDefaultWiki(LOCAL_ACCOUNT_NAME);
-        String templatePath = LC.zimbra_home.value() + File.separator + "wiki" + File.separator + "Templates";
-        try {
-            wu.startImport(LOCAL_ACCOUNT_NAME, "Template", new File(templatePath));
-        } catch (Exception e) {
-            OfflineLog.offline.warn("can't import local account wiki templates");
+    private synchronized void enableWiki(Map<String, ? extends Object> attrs) throws ServiceException {
+        if (attrs.get(A_zimbraFeatureNotebookEnabled) == null)
+            return;
+        
+        boolean b = false;
+        Account localAccount = getLocalAccount();
+        
+        for (Account account : getAllZcsAccounts()) {
+            if (account.isFeatureNotebookEnabled()) {
+                b = true;
+                break;
+            }
+        }
+        if (localAccount.isFeatureNotebookEnabled() != b)
+            localAccount.setFeatureNotebookEnabled(b);
+        if (b) {
+            try {
+                Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(localAccount);
+                mbox.getFolderByPath(new OperationContext(localAccount), "Template");
+                return;
+            } catch (ServiceException e) {
+                System.out.println(e);
+            }
+            WikiUtil wu = WikiUtil.getInstance();
+            wu.initDefaultWiki(LOCAL_ACCOUNT_NAME);
+            String templatePath = LC.zimbra_home.value() + File.separator +
+                "wiki" + File.separator + "Templates";
+            
+            try {
+                wu.startImport(LOCAL_ACCOUNT_NAME, "Template", new File(templatePath));
+            } catch (Exception e) {
+                OfflineLog.offline.warn("can't import local account wiki templates");
+            }
         }
     }
     
@@ -1193,17 +1214,17 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         DbOfflineDirectory.GranterEntry granter = null;
         if (keyType == AccountBy.id) {
             if ((acct = mAccountCache.getById(key)) == null) {
-            	attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_zimbraId, key);
-            
-            	if (attrs == null && (acct = mGranterCache.getById(key)) == null)
-            	    granter = lookupGranter("id", key);
+                attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_zimbraId, key);
+
+                if (attrs == null && (acct = mGranterCache.getById(key)) == null)
+                    granter = lookupGranter("id", key);
             }
         } else if (keyType == AccountBy.name) {
-        	if (key.equals(LOCAL_ACCOUNT_NAME))
-        		return getLocalAccount();
+            if (key.equals(LOCAL_ACCOUNT_NAME))
+                return getLocalAccount();
             if ((acct = mAccountCache.getByName(key)) == null) {
-            	attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_offlineDn, key);
-            
+                attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_offlineDn, key);
+
                 if (attrs == null && (acct = mGranterCache.getByName(key)) == null)
                     granter = lookupGranter("name", key);
             }
@@ -1219,74 +1240,38 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 attrs.put(A_zimbraIsAdminAccount, TRUE);
             }
         }
-        
+
         if (granter != null)
             acct = makeGranter(granter.name, granter.id, granter.granteeId);
-        
+
         if (acct != null)
-        	attrs = acct.getAttrs();
-        
+            attrs = acct.getAttrs();
+
         String name = null;
         if (attrs != null)
             name = (String)attrs.get(A_mail);
-        
+
         if (name == null) { // either attrs == null or A_mail attr is missing...
             if (acct != null && keyType != AccountBy.adminName) // in case account entry is somehow corrupted in DB, delete it
                 DbOfflineDirectory.deleteDirectoryEntry(EntryType.ACCOUNT, acct.getId());
-        	return null;
-        }
-
-        String flavor = attrs == null ? null : (String)attrs.get(A_offlineAccountFlavor);
-
-        // upgrade from 1.0
-        if (acct != null && flavor == null) {
-            if (isLocalAccount(acct)) {
-                flavor = LOCAL_ACCOUNT_FLAVOR;
-            } else if (isDataSourceAccount(acct)) {
-                DataSource ds = getDataSource(acct);
-                String sync = ds.getBooleanAttr(A_zimbraDataSourceCalendarSyncEnabled, false) ?
-                    TRUE : FALSE;
-
-                flavor = ds.getAttr(A_offlineAccountFlavor);
-                attrs.put(A_zimbraFeatureCalendarEnabled, sync);
-                setAccountAttribute(acct, A_zimbraFeatureCalendarEnabled, sync);
-                sync = ds.getBooleanAttr(A_zimbraDataSourceContactSyncEnabled, false) ?
-                    TRUE : FALSE;
-                attrs.put(A_zimbraFeatureContactsEnabled, sync);
-                sync = ds.getBooleanAttr(A_zimbraDataSourceSmtpEnabled, true) ?
-                    TRUE : FALSE;
-                attrs.put(A_offlineFeatureSmtpEnabled, sync);
-                setAccountAttribute(acct, A_zimbraFeatureContactsEnabled, sync);
-                attrs.put(A_zimbraFeatureBriefcasesEnabled, FALSE);
-                setAccountAttribute(acct, A_zimbraFeatureBriefcasesEnabled, FALSE);
-                attrs.put(A_zimbraFeatureNotebookEnabled, FALSE);
-                setAccountAttribute(acct, A_zimbraFeatureNotebookEnabled, FALSE);
-                attrs.put(A_zimbraFeatureTasksEnabled, FALSE);
-                setAccountAttribute(acct, A_zimbraFeatureTasksEnabled, FALSE);
-            } else if (isZcsAccount(acct)) {
-                flavor = "Zimbra";
-            }
-            if (flavor != null) {
-                attrs.put(A_offlineAccountFlavor, flavor);
-                setAccountAttribute(acct, A_offlineAccountFlavor, flavor);
-            }
+            return null;
         }
 
         if (includeSyncStatus) {
-	        //There are attributes we don't persist into DB.  This is where we add them:
-	    	attrs.put(OfflineConstants.A_offlineSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(name).toString());
-	    	String statusErrorCode = OfflineSyncManager.getInstance().getErrorCode(name);
-	    	if (statusErrorCode != null)
-	    		attrs.put(OfflineConstants.A_offlineSyncStatusErrorCode, statusErrorCode);
-	    	String statusErrorMsg = OfflineSyncManager.getInstance().getErrorMsg(name);
-	    	if (statusErrorMsg != null)
-	    		attrs.put(OfflineConstants.A_offlineSyncStatusErrorMsg, statusErrorMsg);
-	    	String statusException = OfflineSyncManager.getInstance().getException(name);
-	    	if (statusException != null)
-	    		attrs.put(OfflineConstants.A_offlineSyncStatusException, statusException);
+            //There are attributes we don't persist into DB.  This is where we add them:
+            attrs.put(OfflineConstants.A_offlineSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(name).toString());
+            String statusErrorCode = OfflineSyncManager.getInstance().getErrorCode(name);
+            if (statusErrorCode != null)
+                attrs.put(OfflineConstants.A_offlineSyncStatusErrorCode, statusErrorCode);
+            String statusErrorMsg = OfflineSyncManager.getInstance().getErrorMsg(name);
+            if (statusErrorMsg != null)
+                attrs.put(OfflineConstants.A_offlineSyncStatusErrorMsg, statusErrorMsg);
+            String statusException = OfflineSyncManager.getInstance().getException(name);
+            if (statusException != null)
+                attrs.put(OfflineConstants.A_offlineSyncStatusException, statusException);
         }
-    	
-    	if (acct != null) {
+
+        if (acct != null) {
             acct.setAttrs(attrs);
         } else {
             acct = new OfflineAccount(name, (String) attrs.get(A_zimbraId),
@@ -1296,10 +1281,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             mAccountCache.put(acct);
         }
 
-    	String granteeId = (String)attrs.get(A_offlineMountpointProxyAccountId);
-    	if (granteeId != null) // is offline mountpoint account..
-    	    loadRemoteSyncServer((OfflineAccount)acct, granteeId);
-    	        	
+        String granteeId = (String)attrs.get(A_offlineMountpointProxyAccountId);
+        if (granteeId != null) // is offline mountpoint account..
+            loadRemoteSyncServer((OfflineAccount)acct, granteeId);
+
         return acct;
     }
     
