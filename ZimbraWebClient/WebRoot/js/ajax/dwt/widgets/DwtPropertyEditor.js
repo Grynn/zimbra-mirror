@@ -496,7 +496,7 @@ DwtPropertyEditor.prototype._createInputField = function(prop, target) {
 	this._currentFieldCell = target;
 	var type = DwtPropertyEditor.DWT_INPUT_FIELD_TYPES[prop.type]
 		|| DwtInputField.STRING;
-	var field = new DwtInputField({parent: this, type: type, initialValue: prop.value, maxLen: prop.maxLength});
+	var field = new DwtInputField({parent: this, type: type, initialValue: prop.value, maxLen: prop.maxLength, rows: prop.rows});
 	if (type == DwtInputField.INTEGER || type == DwtInputField.FLOAT) {
 		field.setValidNumberRange(prop.minValue || null,
 					  prop.maxValue || null);
