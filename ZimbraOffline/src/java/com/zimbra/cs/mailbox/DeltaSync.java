@@ -738,7 +738,7 @@ public class DeltaSync {
             else
                 fields.put(eField.getAttribute(Element.XMLElement.A_ATTR_NAME), eField.getText());
         }
-        assert(hasBlob == ((flags & Flag.BITMASK_ATTACHED) != 0));
+        assert(fields.isEmpty() || hasBlob == ((flags & Flag.BITMASK_ATTACHED) != 0));
 
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
 
