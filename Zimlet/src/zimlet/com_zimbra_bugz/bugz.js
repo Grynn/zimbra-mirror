@@ -40,10 +40,8 @@ function(html, idx, obj, spanId, context) {
 	return idx;
 };
 
-
-ZmZimletBase.prototype.clicked =
+com_zimbra_bugz.prototype.clicked =
 function(spanElement, contentObjText, matchContext, event) {
 	// Just let the browser handle the click.
 	event._stopPropagation = false;
 };
-
