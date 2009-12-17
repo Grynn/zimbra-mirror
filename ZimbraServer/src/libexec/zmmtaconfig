@@ -1035,9 +1035,9 @@ sub rewriteConfig {
         my ($cmd, $key) = ($sr =~ m/uncomment ([^:]+):(\S+)/);
         logMsg(5, "uncomment before lookup key=$key cmd=$cmd sr=$sr");
         $val = lookUpConfig($cmd, $key);
-        if ($val eq  "no" || $val eq "" || $val eq "0" || $val eq "false") {
+        if (lc($val) eq  "no" || $val eq "" || $val eq "0" || lc($val) eq "false") {
           $rep = "#";
-        } elsif ($val eq "1" || $val eq "yes" || $val eq "true" ) {
+        } elsif ($val eq "1" || lc($val) eq "yes" || lc($val) eq "true" ) {
           $rep = "";
         }
         logMsg(5, "uncomment after rep key=$key val=$val rep=$rep cmd=$cmd");
