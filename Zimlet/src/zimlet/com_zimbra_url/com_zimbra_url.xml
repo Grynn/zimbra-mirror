@@ -1,8 +1,7 @@
-<zimlet name="com_zimbra_url" version="2.0" target="main view-window" description="URL - Highlights and links the URLs">
+<zimlet name="com_zimbra_url" version="2.0" target="main view-window" description="Highlights and links URLs.">
 	<include>url.js</include>
 	<resource>blank_pixel.gif</resource>
 	<handlerObject>Com_Zimbra_Url</handlerObject>
-
 	<serverExtension hasKeyword="url" extensionClass="com.zimbra.cs.zimlet.handler.RegexHandler"/>
 	<contentObject type="url">
 		<matchOn>

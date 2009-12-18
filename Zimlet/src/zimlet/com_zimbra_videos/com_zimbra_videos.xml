@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_videos" version="1.2" description="Play Video Live!">
+<zimlet name="com_zimbra_videos" version="1.2" description="Watch video.">
     <include>videos.js</include>
     <includeCSS>videos.css</includeCSS>
     <handlerObject>Com_Zimbra_Video</handlerObject>
@@ -13,11 +13,10 @@
 		</contextMenu>
 	</contentObject> 
     
-    <zimletPanelItem label="Video live!" icon="VideoIcon">
+    <zimletPanelItem label="Video Viewer" icon="VideoIcon">
+        <toolTipText>Right click, add your favorite (Google or YouTube) video URL and watch it come alive!</toolTipText>
     	<dragSource type="ZmMailMsg"/>
     	<dragSource type="ZmConv" />
-    	
-        <toolTipText>Right click and add your fav (Google or YouTube) Video URL to watch it come alive!</toolTipText>
         <contextMenu>
  			<menuItem label="Play Video URL" id="VIDEO"/>
  			<menuItem label="Recently Played" id="RECENTLY_PLAYED"/>

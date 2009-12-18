@@ -1,5 +1,5 @@
-<zimlet name="com_zimbra_webex" version="0.3" description="WebEx for Zimbra">
-  <summary>Extend the Zimbra Advanced Web Client with WebEx integration</summary>
+<zimlet name="com_zimbra_webex" version="0.3" description="Host, join and schedule WebEx Meetings.">
+  <summary>Extend the Zimbra Web Client with WebEx integration</summary>
   <include>webex.js</include>
   <include>createMtgDlg.js</include>
   <includeCSS>webex.css</includeCSS>
@@ -7,7 +7,7 @@
   
   
   <zimletPanelItem label="WebEx" icon="WEBEX-panelIcon">
-    <toolTipText>Host, Join, Schedule or List WebEx Meetings</toolTipText>
+    <toolTipText>Host, join and schedule WebEx Meetings.</toolTipText>
     
     <dragSource type="ZmContact" />
     <dragSource type="ZmAppt" />

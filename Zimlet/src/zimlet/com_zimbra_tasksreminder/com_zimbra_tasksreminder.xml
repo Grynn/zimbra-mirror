@@ -1,10 +1,10 @@
-<zimlet name="com_zimbra_tasksreminder" version="2.1" description="Reminds about upcoming and overdue Tasks, once a day" >
+<zimlet name="com_zimbra_tasksreminder" version="2.1" description="Once a day will remind users about up-coming and overdue tasks." >
 	<include>tasksreminder.js</include>
 	<includeCSS>tasksreminder.css</includeCSS>
 	<handlerObject>com_zimbra_tasksreminder</handlerObject>
 
   <zimletPanelItem label="Tasks Reminder" icon="tasksreminder-panelIcon">
-    <toolTipText>Reminds about upcoming and overdue Tasks, once a day</toolTipText>
+    <toolTipText>Once a day will remind you about up-coming and overdue tasks.</toolTipText>
 
   </zimletPanelItem>
 

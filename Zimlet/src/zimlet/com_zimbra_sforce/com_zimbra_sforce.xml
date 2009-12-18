@@ -1,11 +1,11 @@
-<zimlet name="com_zimbra_sforce" version="2.2" description="Salesforce">
+<zimlet name="com_zimbra_sforce" version="2.2" description="Enables you to interact with your Salesforce account.">
   <include>sforce.js</include>
   <includeCSS>sforce.css</includeCSS>
   <handlerObject>Com_Zimbra_SForce</handlerObject>
 
   <zimletPanelItem label="Salesforce" icon="SFORCE-panelIcon">
 
-    <toolTipText>Use drag'n'drop to interact with your Salesforce account</toolTipText>
+    <toolTipText>Use drag-and-drop to interact with your Salesforce account.</toolTipText>
 
     <dragSource type="ZmContact" />
     <dragSource type="ZmMailMsg" />

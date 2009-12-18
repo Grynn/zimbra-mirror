@@ -1,17 +1,16 @@
-<zimlet name="com_zimbra_emailquotes" version="0.3" description="Adds preferred quotes below neear email signature area">
+<zimlet name="com_zimbra_emailquotes" version="0.3" description="Adds quotes and sayings to your email signature.">
   <include>emailquotes.js</include>
   <includeCSS>emailquotes.css</includeCSS>
   <handlerObject>com_zimbra_emailquotes</handlerObject>
 
   <zimletPanelItem label="Email Quotes" icon="emailquotes-panelIcon">
-    <toolTipText>Adds preferred quotes below neear email signature area</toolTipText>
+    <toolTipText>Adds quotes and sayings to your email signature.</toolTipText>
   </zimletPanelItem>
 
 	<userProperties>
-		<!-- default: hope,humor,leadership,virtue,wisdom-->
+		<!-- default: hope,humor,leadership,virtue,wisdom -->
 		<property type="string" name="equotes_defaultSelections" value="115,74,27,9,64,81"/>
 		<property type="string" name="equotes_userSelections" value=""/>		
-		
 		<property type="string" name="turnEmailQuotesZimletON" value="false"/>
 	</userProperties>
 </zimlet>

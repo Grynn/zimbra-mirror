@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_speak" version="0.1" description="Email to speech">
+<zimlet name="com_zimbra_speak" version="0.1" description="Converts an email-to-speech.">
   <include>speak.js</include>
   <handlerObject>com_zimbra_speak</handlerObject>
 

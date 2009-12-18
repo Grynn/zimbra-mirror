@@ -1,8 +1,8 @@
 <zimlet name="com_zimbra_po" version="1.1" description="Purchase Order">
-	<serverExtension hasKeyword="po" regex="GR\w{6}\-\w{5}"/>
 	<include>po.js</include>
 	<includeCSS>po.css</includeCSS>
 	<handlerObject>Com_Zimbra_Po</handlerObject>
+	<serverExtension hasKeyword="po" regex="GR\w{6}\-\w{5}"/>
 
 	<contentObject type="po">
 		<matchOn>

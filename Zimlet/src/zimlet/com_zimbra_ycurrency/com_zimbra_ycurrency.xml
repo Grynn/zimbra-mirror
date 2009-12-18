@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_ycurrency" version="1.0" description="Highlights and converts currencies">
+<zimlet name="com_zimbra_ycurrency" version="1.0" description="Highlights and converts currencies.">
     <include>ycurrency.js</include>
     <includeCSS>ycurrency.css</includeCSS>
     <handlerObject>Com_Zimbra_YCurrency</handlerObject>
@@ -10,8 +10,8 @@
             <menuItem label="Visit yahoo finance" id="GOTOYF"/>
         </contextMenu>
     </contentObject>
-    <zimletPanelItem label="Currency" icon="YCURRENCY-panelIcon">
-		<toolTipText>Currency Converter.</toolTipText>
+    <zimletPanelItem label="Currency Converter" icon="YCURRENCY-panelIcon">
+		<toolTipText>Highlights and converts currencies.</toolTipText>
         <singleClicked>
             <canvas type="window"/>
             <actionUrl method="get" target="http://finance.yahoo.com/currency"/>
@@ -24,11 +24,11 @@
         </contextMenu>
     </zimletPanelItem>
     <userProperties>
-    <property type="string"   name="home_currency" minLength="3" maxLength="3" label="Home Currency"/>
-    <property type="string"   name="tooltip_currs" minLength="3" maxLength="40" label="Tooltip currencies"/>
-    <property type="enum" name="chart_type" label="Ex-rate chart" value="H_2_O">
-		<item label="Home currency to other" value="H_2_O"/>
-		<item label="Other to home currency" value="O_2_H"/>
-	</property>
+	    <property type="string"   name="home_currency" minLength="3" maxLength="3" label="Home Currency"/>
+    	<property type="string"   name="tooltip_currs" minLength="3" maxLength="40" label="Tooltip currencies"/>
+    	<property type="enum" name="chart_type" label="Ex-rate chart" value="H_2_O">
+			<item label="Home currency to other" value="H_2_O"/>
+			<item label="Other to home currency" value="O_2_H"/>
+		</property>
   </userProperties>
 </zimlet>

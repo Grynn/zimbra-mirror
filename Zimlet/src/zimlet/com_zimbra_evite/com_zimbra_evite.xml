@@ -1,10 +1,10 @@
-<zimlet name="com_zimbra_evite" version="0.9" description="Manages evite events">
+<zimlet name="com_zimbra_evite" version="0.9" description="Helps view and manage your Evite events.">
   <include>evite.js</include>
   <includeCSS>evite.css</includeCSS>
   <handlerObject>Com_zimbra_evite</handlerObject>
 
   <zimletPanelItem label="Evite" icon="Evite-panelIcon">
-    <toolTipText>Manage my evite events</toolTipText>
+    <toolTipText>View and manage your Evite events.</toolTipText>
     <dragSource type="ZmMailMsg" />
     <dragSource type="ZmAppt" />    
     <contextMenu>

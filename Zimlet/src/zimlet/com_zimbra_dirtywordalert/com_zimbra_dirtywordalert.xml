@@ -1,11 +1,11 @@
-<zimlet name="com_zimbra_dirtywordalert" version="1.2" description="Checks for dirty words in mail thats being composed and alerts user" target="main compose-window">
+<zimlet name="com_zimbra_dirtywordalert" version="1.2" target="main compose-window" description="Checks for dirty words and alerts user when composing an email message.">
 	<include>dirtywordalert.js</include>
 	<includeCSS>dirtywordalert.css</includeCSS>
 	<resource>dirtywordalert-icon.gif</resource>
 	<handlerObject>com_zimbra_dirtywordalert</handlerObject>
 
 	<zimletPanelItem label="Dirty Word Alert" icon="dirtywordalert-panelIcon">
-		<toolTipText>Checks for dirty words in mail thats being composed and alerts user</toolTipText>
+		<toolTipText>Checks for dirty words and alerts user when composing an email message.</toolTipText>
 	</zimletPanelItem>
 	<userProperties>
 		<property type="string" name="turnONdirtywordalertZimletNew" value="false"/>

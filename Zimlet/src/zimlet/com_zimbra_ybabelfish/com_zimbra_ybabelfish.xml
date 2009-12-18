@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_ybabelfish" version="1.0" description="Yahoo! Translator: Babel Fish">
+<zimlet name="com_zimbra_ybabelfish" version="1.0" description="Translate a conversation or message with Yahoo! Translator.">
 	<include>ybabelfish.js</include>
 	<include>YBabelfishPrefsDialog.js</include>
 	<includeCSS>ybabelfish.css</includeCSS>
@@ -6,7 +6,7 @@
 	<handlerObject>Com_Zimbra_Ybabelfish</handlerObject>
 
 	<zimletPanelItem label="Yahoo! Translator" icon="Babelfish-panelIcon">
-		<toolTipText>Drag a conversation or message here to translate it</toolTipText>
+		<toolTipText>Drag-and-drop a conversation or message to translate using Yahoo! Translator.</toolTipText>
 		<dragSource type="ZmConv" />
 		<dragSource type="ZmMailMsg" />
 	    <contextMenu>

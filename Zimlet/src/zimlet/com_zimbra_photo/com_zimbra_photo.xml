@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_photo" version="1.0" description="PHOTO">
+<zimlet name="com_zimbra_photo" version="1.0" description="Display a photo over names in email messages.">
 	<include>photo.js</include>
 	<resource>blank_pixel.gif</resource>
 	<resource>bill_evans.jpg</resource>

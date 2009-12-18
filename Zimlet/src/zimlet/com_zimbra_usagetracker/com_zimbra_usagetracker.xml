@@ -1,11 +1,11 @@
-<zimlet name="com_zimbra_usagetracker" version="1.0" description="Tracks ZWC usage">
+<zimlet name="com_zimbra_usagetracker" version="1.0" description="Tracks Zimbra Web Client usage.">
 	<include>usagetracker.js</include>
 	<include>ga.js</include>
 	<includeCSS>usagetracker.css</includeCSS>
 	<resource>chart.gif</resource>
 	<handlerObject>Com_Zimbra_Usagetracker</handlerObject>
 
-	<zimletPanelItem label="Usage Tracker" icon="Usagetracker-panelIcon">
-		<toolTipText>I collect data about you!</toolTipText>
+	<zimletPanelItem label="Zimbra Usage Tracker" icon="Usagetracker-panelIcon">
+		<toolTipText>Collects data about Zimbra Web Client usage.</toolTipText>
 	</zimletPanelItem>
 </zimlet>

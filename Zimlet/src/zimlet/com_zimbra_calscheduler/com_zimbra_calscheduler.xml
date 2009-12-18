@@ -1,11 +1,10 @@
-<zimlet name="com_zimbra_calscheduler" version="1.0" description="Schedule an appt from drag-drop message, auto add attendies, free/busy status for a week">
+<zimlet name="com_zimbra_calscheduler" version="1.0" description="Schedules an appointment based on a drag-and-dropped message and will auto-add attendees and display their free/busy status for a week.">
 	<include>calscheduler.js</include>
 	<includeCSS>calscheduler.css</includeCSS>
 	<include>templates/CalScheduler.template.js</include>	
 	<handlerObject>Com_Zimbra_CalScheduler</handlerObject>
-
 	<zimletPanelItem label="Calendar Scheduler">
-		<toolTipText>Calendar Scheduler</toolTipText>
+		<toolTipText>Drag-and-drop a message to schedule an appointment.</toolTipText>
         <dragSource type="ZmMailMsg" />
         <dragSource type="ZmConv" />
 	</zimletPanelItem>

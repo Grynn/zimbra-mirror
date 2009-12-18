@@ -6,15 +6,15 @@
 	<handlerObject>Com_Zimbra_Yflickr</handlerObject>
 
 <zimletPanelItem label="Flickr" icon="FLICKR-panelIcon">
-    <toolTipText>Flickr Zimlet</toolTipText>
+    <toolTipText>Quick link to Flickr.</toolTipText>
     <contextMenu>
     <menuItem label="Authorize" id="YflickrAuthorize" icon="AUTHORIZE-panelIcon" />
     <menuItem label="Credits" id="YflickrCredits" icon="CREDITS-panelIcon"/>
     <menuItem label="About" id="YflickrAbout" icon="ABOUT-panelIcon" />
     <menuItem />
     <menuItem label="Visit Flickr" id="WWW.FLICKR.COM" icon="FLICKR-panelIcon">
-    <canvas type="window" title="Flickr Website" width="800" height="600" />
-    <actionUrl target="http://www.flickr.com" />
+	    <canvas type="window" title="Flickr Website" width="800" height="600" />
+    	<actionUrl target="http://www.flickr.com" />
     </menuItem>
     </contextMenu>
 </zimletPanelItem>

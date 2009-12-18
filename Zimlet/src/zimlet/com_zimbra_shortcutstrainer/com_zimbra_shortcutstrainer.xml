@@ -1,11 +1,11 @@
-<zimlet name="com_zimbra_shortcutstrainer" version="1.2" description="Allows you to train and remember most common keyboard shortcuts">
+<zimlet name="com_zimbra_shortcutstrainer" version="1.2" description="Allows you to train and remember most common keyboard shortcuts.">
 	<include>shortcutstrainer.js</include>
 	<includeCSS>shortcutstrainer.css</includeCSS>
 	<resource>shortcutstrainer.gif</resource>
 	<handlerObject>com_zimbra_shortcutstrainer</handlerObject>
 
 	<zimletPanelItem label="Shortcuts Trainer" icon="shortcutstrainer-panelIcon">
-		<toolTipText>Allows you to train and remember most common keyboard shortcuts</toolTipText>
+		<toolTipText>Allows you to train and remember most common keyboard shortcuts.</toolTipText>
 	</zimletPanelItem>
 
 	<userProperties>

@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_travelagent" version="2.04" description="Search travel reservations across multiple engines">
+<zimlet name="com_zimbra_travelagent" version="2.04" description="Search travel reservations.">
 <include>com_zimbra_travelagent.js</include>
 <include>TravelAgentFlightFindView.js</include>
 <include>TravelAgentCarFindView.js</include>
@@ -14,7 +14,8 @@
 <resource>travel_agent.gif</resource>
 <includeCSS>com_zimbra_travelagent.css</includeCSS>	
 <handlerObject>Com_Zimbra_TravelAgent</handlerObject>
-	<zimletPanelItem label="Travel agent" icon="TravelAgent-panelIcon">
+	<zimletPanelItem label="Travel Agent" icon="TravelAgent-panelIcon">
+		<toolTipText>Search travel reservations.</toolTipText>
 		<dragSource type="ZmContact" />
 		<dragSource type="ZmAppt" />
 		<contextMenu>
@@ -22,8 +23,7 @@
 			<menuItem label="Book a flight" id="BOOKAFLIGHT" />
 			<menuItem label="Book a car" id="BOOKACAR" />			
 			<menuItem label="Book a hotel" id="BOOKAHOTEL" />				
-		</contextMenu>		
-		<toolTipText>Search travel reservations across multiple engines</toolTipText>
+		</contextMenu>
 	</zimletPanelItem>
 	<userProperties>
 		<property type="string" minLength="3" maxLength="4"  name="myairport" label="My airport" visible="true" value="SFO"/>

@@ -1,10 +1,10 @@
-<zimlet name="com_zimbra_sms" version="2.2" description="Send SMS during compose; Drag'n'drop a message, contact, appointment to send them as sms">
+<zimlet name="com_zimbra_sms" version="2.2" description="Send SMS when composing a message; drag-and-drop a message, contact or appointment to send as SMS.">
 	<include>sms.js</include>
 	<includeCSS>sms.css</includeCSS>
 	<resource>sms-icon.gif</resource>
 	<handlerObject>Com_Zimbra_sms</handlerObject>
 	<zimletPanelItem label="SMS" icon="SMS-panelIcon">
-		<toolTipText>Send SMS during compose; Drag'n'drop a message, contact, appointment to send them as sms</toolTipText>
+		<toolTipText>Send SMS when composing a message; drag-and-drop a message, contact or appointment to send as SMS.</toolTipText>
 		<dragSource type="ZmContact" />
 		<dragSource type="ZmMailMsg" />
 		<dragSource type="ZmConv" />

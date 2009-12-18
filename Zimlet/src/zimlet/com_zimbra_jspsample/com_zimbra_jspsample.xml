@@ -1,44 +1,37 @@
-<zimlet name="com_zimbra_jspsample" version="1.0" description="Sends props to the JSP">
+<zimlet name="com_zimbra_jspsample" version="1.0" description="Sends properties to a JSP file">
 
-<userProperties>
-  <property type="string" name="uname" label="Username"/>
-  <property type="string" name="pass" label="Password"/>
-  <property type="string" name="url" label="Page URL"/>
-  <property type="enum" name="dlstyle" label="Download Style">
-     <item label="Attachments Only" visualType="radio"/>
-	 <item label="Body Only" visualType="radio"/>
-  </property>
-</userProperties>
-
-<zimletPanelItem label="JSPSample"> 
-  <toolTipText>
-  Drag'n'Drop a message or folder here to send props to the JSP
-  </toolTipText>
-
-  <dragSource type="ZmMailMsg">
-      <canvas type="dialog" width="600" height="350"/>
-      <actionUrl target="/service/zimlet/com_zimbra_jspsample/sample.jsp">
-          <param name="subject">${obj.subject}</param>
-          <param name="id">${obj.id}</param>
-      </actionUrl>
-  </dragSource>
-
-  <dragSource type="ZmConv">
-      <canvas type="dialog" width="600" height="350"/>
-	  <actionUrl target="/service/zimlet/com_zimbra_jspsample/sample.jsp">
-	      <param name="subject">${obj.subject}</param>
-		  <param name="id">${obj.id}</param>
-	  </actionUrl>
-  </dragSource>
-
-  <dragSource type="ZmFolder">
-      <canvas type="dialog" width="600" height="350"/>
-		<actionUrl target="/service/zimlet/com_zimbra_jspsample/sample.jsp">
-	      <param name="name">${obj.name}</param>
-		  <param name="path">${obj.path}</param>
-	  </actionUrl>
-  </dragSource>
-
-</zimletPanelItem>
+	<zimletPanelItem label="JSPSample">
+		<toolTipText>Drag-and-drop a message or folder to send properties to a JSP file.</toolTipText>
+		<dragSource type="ZmMailMsg">
+			<canvas type="dialog" width="600" height="350"/>
+			<actionUrl target="/service/zimlet/com_zimbra_jspsample/sample.jsp">
+				<param name="subject">${obj.subject}</param>
+				<param name="id">${obj.id}</param>
+			</actionUrl>
+		</dragSource>
+		<dragSource type="ZmConv">
+			<canvas type="dialog" width="600" height="350"/>
+			<actionUrl target="/service/zimlet/com_zimbra_jspsample/sample.jsp">
+				<param name="subject">${obj.subject}</param>
+				<param name="id">${obj.id}</param>
+			</actionUrl>
+		</dragSource>
+		<dragSource type="ZmFolder">
+			<canvas type="dialog" width="600" height="350"/>
+			<actionUrl target="/service/zimlet/com_zimbra_jspsample/sample.jsp">
+				<param name="name">${obj.name}</param>
+				<param name="path">${obj.path}</param>
+			</actionUrl>
+		</dragSource>
+	</zimletPanelItem>
+	<userProperties>
+		<property type="string" name="uname" label="Username"/>
+  		<property type="string" name="pass" label="Password"/>
+  		<property type="string" name="url" label="Page URL"/>
+  		<property type="enum" name="dlstyle" label="Download Style">
+  			<item label="Attachments Only" visualType="radio"/>
+     		<item label="Body Only" visualType="radio"/>
+  		</property>
+	</userProperties>
 
 </zimlet>

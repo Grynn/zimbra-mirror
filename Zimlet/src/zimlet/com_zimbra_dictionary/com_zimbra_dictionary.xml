@@ -1,9 +1,9 @@
-<zimlet name="com_zimbra_dictionary" version="1.0" description="Look up selected word by pressing Ctrl-Y">
+<zimlet name="com_zimbra_dictionary" version="1.0" description="Allows you to quickly look-up a word in the dictionary.">
 	<include>dictionary.js</include>
 	<include>DictionaryPrefsDialog.js</include>
 	<handlerObject>Com_Zimbra_Dictionary</handlerObject>
 	<zimletPanelItem label="Dictionary">
-		<toolTipText>Select a word and press Ctrl-Y to look it up.</toolTipText>
+		<toolTipText>Click to look-up a word in the dictionary.</toolTipText>
 		<contextMenu>
 	      <menuItem label="Look Up Word" id="lookup"/>
 	      <menuItem label="Preferences..." id="prefs"/>

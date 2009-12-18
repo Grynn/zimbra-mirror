@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_yfinance" version="1.0" description="Stock quote polling, previewing and Financial calculations">
+<zimlet name="com_zimbra_yfinance" version="1.0" description="Stock quotes and financial information using Yahoo! Finance.">
 	<include>calcengine.js</include>
 	<include>YSymbolLookupDialog.js</include>	
 	<include>YSymbolsDialog.js</include>
@@ -14,8 +14,8 @@
 		</matchOn-->		
 	</contentObject>
 
-	<zimletPanelItem label="Finance" icon="YFINANCE-panelIcon">
-		<toolTipText>Yahoo Finance Zimlet</toolTipText>
+	<zimletPanelItem label="Yahoo! Finance" icon="YFINANCE-panelIcon">
+		<toolTipText>Stock quotes and financial information using Yahoo! Finance.</toolTipText>
 		<contextMenu>
 			<menuItem label="Calculators" id="CALCULATOR"/>
 			<menuItem label="Check Stock Status" id="CHECK_STOCK_STATUS"/>

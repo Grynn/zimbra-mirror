@@ -1,11 +1,11 @@
-<zimlet name="com_zimbra_emaildownloader" version="0.1" description="Allows downloading a single email message">
+<zimlet name="com_zimbra_emaildownloader" version="0.1" description="Allows downloading a single email message.">
 	<include>emaildownloader.js</include>
 	<includeCSS>emaildownloader.css</includeCSS>
 	<resource>emaildownloader-icon.gif</resource>
 	<handlerObject>com_zimbra_emaildownloader</handlerObject>
 
 	<zimletPanelItem label="Email Downloader" icon="emaildownloader-panelIcon">
-		<toolTipText>Allows downloading a single email message</toolTipText>
+		<toolTipText>Drag-and-drop an email to download message and all attachments in a file.</toolTipText>
 		<dragSource type="ZmConv" />
 	    <dragSource type="ZmMailMsg"/>
 	</zimletPanelItem>

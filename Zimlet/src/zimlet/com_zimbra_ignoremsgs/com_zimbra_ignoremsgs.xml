@@ -1,10 +1,10 @@
-<zimlet name="com_zimbra_ignoremsgs" version="0.1" description="Allows to Ignore unnecessary message-threads from cluttering your Inbox">
+<zimlet name="com_zimbra_ignoremsgs" version="0.1" description="Allows you to ignore message threads.">
   <include>ignoremsgs.js</include>
   <includeCSS>ignoremsgs.css</includeCSS>
   <handlerObject>com_zimbra_ignoremsgs</handlerObject>
 
   <zimletPanelItem label="Ignore Messages" icon="ignoremsgs-panelIcon">
-    <toolTipText>Allows to Ignore unnecessary message-threads from cluttering your Inbox</toolTipText>
+    <toolTipText>Select a message thread to ignore.</toolTipText>
   </zimletPanelItem>
   <userProperties>
      <property type="string" name="turnOnIgnoreMsgsZimlet" value="false"/>

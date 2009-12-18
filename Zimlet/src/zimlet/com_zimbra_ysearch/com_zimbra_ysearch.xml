@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_ysearch" version="1.0" description="Yahoo! Search">
+<zimlet name="com_zimbra_ysearch" version="1.0" description="Perform a search using Yahoo!">
 	<include>ysearch.js</include>
 	<include>yahoosearch.js</include>
     <includeCSS>ysearch.css</includeCSS>
@@ -7,7 +7,7 @@
 	<handlerObject>Com_Zimbra_Ysearch</handlerObject>
 
 	<zimletPanelItem label="Yahoo! Search" icon="YLogo">
-		<toolTipText>Click to see search pane</toolTipText>
+		<toolTipText>Perform a search using Yahoo!</toolTipText>
 		<contextMenu>
 			<menuItem label="Preferences..." id="prefs"/>
 		</contextMenu>

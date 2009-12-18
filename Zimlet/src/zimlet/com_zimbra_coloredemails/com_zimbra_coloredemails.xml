@@ -1,21 +1,18 @@
-<zimlet name="com_zimbra_coloredemails" version="0.5" description="Changes color of the emails in the list based on sender's email or tag name">
+<zimlet name="com_zimbra_coloredemails" version="0.5" description="Changes color of email messages (in list view) based on sender email or message tag.">
   <include>coloredemails.js</include>
   <includeCSS>coloredemails.css</includeCSS>
   <handlerObject>com_zimbra_coloredemails</handlerObject>
 
   <zimletPanelItem label="Colored Emails" icon="coloredemails-panelIcon">
-    <toolTipText>Changes color of the emails in the list based on sender's email or tag name</toolTipText>
+    <toolTipText>Color code email messages based on sender’s email or message tag.</toolTipText>
 		<dragSource type="ZmConv" />
 		<dragSource type="ZmMailMsg" />
   </zimletPanelItem>
-
-	<userProperties>
+  <userProperties>
 		<property type="string" name="cEmail_manualAddedEmails" value=""/>	
 		<property type="string" name="cEmail_autoAddedEmails" value=""/>	
-		
 		<property type="string" name="cEmail_autoAssociateChkbx" value="true"/>	
 		<property type="string" name="cEmail_useAutoAssociatedEmailsChkbx" value="false"/>			
-		
 		<property type="string" name="turnColoredEmailsZimletON" value="true"/>
-	</userProperties>
+  </userProperties>
 </zimlet>

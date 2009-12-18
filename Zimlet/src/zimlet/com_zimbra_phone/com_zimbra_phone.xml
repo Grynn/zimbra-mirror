@@ -1,8 +1,8 @@
-<zimlet name="com_zimbra_phone" version="2.0" target="main view-window" description="Highlights phone numbers, Skype call numbers or add to contacts">
-	<serverExtension hasKeyword="phone" extensionClass="com.zimbra.cs.zimlet.handler.NANPHandler"/>
+<zimlet name="com_zimbra_phone" version="2.0" target="main view-window" description="Highlights phone numbers to enable Skype call numbers and add to Address Book.">
 	<include>phone.js</include>
 	<include>templates/Phone.template.js</include>
 	<handlerObject>Com_Zimbra_Phone</handlerObject>
+	<serverExtension hasKeyword="phone" extensionClass="com.zimbra.cs.zimlet.handler.NANPHandler"/>
 	<contentObject type="phone">
 		<matchOn>
             <regex attrs="g">(((\+\d{2}[-\. ]\d{5}[-\. ]?\d{5})|(\b(\d{1}[-. ])?(\(?\d{3}\)?[-. ])?\d{3}[-.]\d{4}\b)|(\(\d{3}\)[-\. ]?\d{7}))(( x| ext)[-#: ]?\d{1,5}){0,1})</regex>

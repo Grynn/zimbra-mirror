@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_local" version="3.0" description="Integrates Yahoo! Local">
+<zimlet name="com_zimbra_local" version="3.0" description="Use Yahoo! Local to find businesses and services near you.">
 	<include>local.js</include>
     <include>yahoomaps.js</include>
     <include>upcoming.js</include>
@@ -9,7 +9,7 @@
 
 	<handlerObject>Com_Zimbra_Local</handlerObject>
 
-	<zimletPanelItem label="Local" icon="YLogo">
+	<zimletPanelItem label="Yahoo! Local" icon="YLogo">
 		<toolTipText>${msg.panelTooltip}</toolTipText>
 		<contextMenu>
 			<menuItem label="${msg.menuItemSearch}" id="SEARCH" />
