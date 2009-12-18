@@ -76,6 +76,24 @@ function(menuItemId) {
 		case "DROP":
 			this._rejectListener()
 			break;
+		case "COURSES":
+			// do something
+			break;
+		case "TRANSCRIPT":
+			// do something
+			break;
+		case "ADD_TO_CALENDAR":
+			// do something
+			break;
+		case "CLASSMATES":
+			// do something
+			break;
+		case "STUDENT_MANAGER":
+			// do something
+			break;
+		case "COURSE_MANAGER":
+			// do something
+			break;
 	}
 };
 

@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_edu" version="1.1" description="Helps view and manage courses.">
+<zimlet name="com_zimbra_edu" version="1.5" description="Helps view and manage courses.">
 	<include>com_zimbra_edu.js</include>
 	<includeCSS>edu.css</includeCSS>
 	<handlerObject>Com_Zimbra_Edu</handlerObject>
@@ -25,14 +25,13 @@
 	<zimletPanelItem label="Z-EDU Manager" icon="Pencil-Icon">
 		<toolTipText>Help view and manage courses. Right-click for options.</toolTipText>
 		<contextMenu>
-			<menuItem label="My Courses" id="COURSES" >
- 		   	  	<menuItem label="Transcript" id="a" />
-   		   		<menuItem label="Add to Calendar" id="b" />
-   		  	 	<menuItem label="Classmates" id="d" />
-			</menuItem>
+			<menuItem label="My Courses" id="COURSES" />
+ 		   	<menuItem label="Transcript" id="TRANSCRIPT" />
+   		   	<menuItem label="Add to Calendar" id="ADD_TO_CALENDAR" />
+   		  	<menuItem label="Classmates" id="CLASSMATES" />
 			<menuItem />
-			<menuItem label="Course Manager" id="COURSE_ADMIN" />
-			<menuItem label="Student Manager" id="COURSE_ADMIN" />
+			<menuItem label="Course Manager" id="COURSE_MANAGER" />
+			<menuItem label="Student Manager" id="STUDENT_MANAGER" />
 		</contextMenu>
   </zimletPanelItem>
 </zimlet>
