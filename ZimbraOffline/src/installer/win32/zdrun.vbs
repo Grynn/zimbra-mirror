@@ -18,8 +18,8 @@
 ' ZD runner
 '
 
-Dim oFso, oShellApp, sScriptPath, sScriptDir, oTokens, sAppRoot, sDataRoot
-Dim sLocalAppDir, bIsUpgrade, sTmpDir, aUserDirs, aUserFiles, sVersion, sVerFile
+Dim oFso, oShellApp, oShell, sScriptPath, sScriptDir, oTokens, sAppRoot, sDataRoot
+Dim sLocalAppDir, bIsUpgrade, sTmpDir, sRestoreDir, aUserDirs, aUserFiles, sVersion, sVerFile
 
 Sub FindAndReplace(sFile, oTokens)
     Dim oFso, oInFile, oOutFile, sTmpFile
@@ -66,24 +66,55 @@ Sub CopyIfExists(sSrc, sDest, bOW)
 End Sub
 
 Sub LaunchPrism()
-    Dim oShell, sCmd
+    Dim sCmd
 
-    Set oShell = CreateObject("WScript.Shell")
     sCmd = Chr(34) & sAppRoot & "\win32\prism\zdclient.exe" & Chr(34) & " -override " & _
         Chr(34) & sDataRoot & "\zdesktop.webapp\override.ini" & Chr(34)  
     oShell.Run sCmd, 1, false 
     WScript.Quit
 End Sub
 
+Sub StopProcesses()
+    Dim sCmd, sPrism, sCScript, sZdCtl
+
+    sPrism = Chr(34) & sAppRoot & "\win32\prism\zdclient.exe" & Chr(34)
+    sCScript = Chr(34) & oFso.GetSpecialFolder(1).Path & "\cscript.exe" & Chr(34)
+    sZdCtl = Chr(34) & sDataRoot & "\bin\zdctl.vbs" & Chr(34)
+
+    'Stop backend service
+    oShell.Run sCScript & " " & sZdCtl & " stop", 0, true
+    'Stop prism
+    oShell.Run sPrism & " -close", 0, true
+End Sub
+
+Sub BackupFailed(sMsg)
+    If Not IsNull(sMsg) Then
+        oShell.Popup sMsg, 0, "Zimbra Desktop", 48
+    End If
+    oFso.MoveFolder sTmpDir, sRestoreDir
+    WScript.Quit
+End Sub
+
 Sub BackupData()
 	If oFso.FolderExists(sTmpDir) Then
-		oFso.DeleteFolder sTmpDir, true
+        ' Save leftover temp dir, in case it's needed in manual recovery 
+        Dim iEpoch
+        iEpoch = DateDiff("s", "01/01/1970 00:00:00", Now())
+		oFso.MoveFolder sTmpDir, sTmpDir & "." & iEpoch 
 	End If
 	oFso.CreateFolder sTmpDir
 	
+    On Error Resume Next
+
 	Dim sDir
 	For Each sDir In aUserDirs
-		oFso.MoveFolder sDataRoot & "\" & sDir, sTmpDir & "\" & sDir
+        If oFso.FolderExists(sDataRoot & "\" & sDir) Then
+		    oFso.MoveFolder sDataRoot & "\" & sDir, sTmpDir & "\" & sDir
+            If Err.number <> 0 Then
+                BackupFailed "File operation failed. Please close any open files under " & _
+                    sDataRoot & "\" & sDir 
+            End If
+        End If
 	Next
 	
 	oFso.CreateFolder sTmpDir & "\profile"
@@ -92,38 +123,62 @@ Sub BackupData()
 	For Each sFile In aUserFiles
 		CopyIfExists sDataRoot & "\" & sFile, sTmpDir & "\" & sFile, true 
 	Next
-	
-	oFso.MoveFolder sDataRoot & "\zimlets\backup", sTmpDir & "\zimlets"	
-	
-	oFso.DeleteFolder sDataRoot, true
+
+    If oFso.FolderExists(sDataRoot & "\zimlets\backup") Then    	
+	    oFso.MoveFolder sDataRoot & "\zimlets\backup", sTmpDir & "\zimlets"
+        If Err.number <> 0 Then
+            BackupFailed "File operation failed. Please close any open files under " & _
+                sDataRoot & "\zimlets\backup"
+        End If
+    End If	
+
+    Dim iButton, sMsg
+    Do	
+	    oFso.DeleteFolder sDataRoot, true
+        If Err.number = 0 Then
+            Exit Sub
+        Else
+            sMsg = "Unable to delete folder: " & sDataRoot & ". " & _
+                "Please close any open files in this folder and its sub-folders."
+            iButton = oShell.Popup(sMsg, 0, "Zimbra Desktop", 5 + 48)
+        End If
+        Err.Clear
+    Loop While iButton = 4 ' Retry
+
+    ' Cancled
+    BackupFailed Null
 End Sub
 
-Sub RestoreData()
+Sub RestoreData(sSrcRoot)
 	Dim sDir
 	For Each sDir In aUserDirs
-		If oFso.FolderExists(sDataRoot & "\" & sDir) Then 
-			oFso.DeleteFolder sDataRoot & "\" & sDir, true
-		End If
-		oFso.MoveFolder sTmpDir & "\" & sDir, sDataRoot & "\" & sDir 
+        If oFso.FolderExists(sSrcRoot & "\" & sDir) Then
+		    If oFso.FolderExists(sDataRoot & "\" & sDir) Then 
+			    oFso.DeleteFolder sDataRoot & "\" & sDir, true
+		    End If
+		    oFso.MoveFolder sSrcRoot & "\" & sDir, sDataRoot & "\" & sDir
+        End If
 	Next
 	
 	Dim sFile
 	For Each sFile In aUserFiles
-		CopyIfExists sTmpDir & "\" & sFile, sDataRoot & "\" & sFile, true
+		CopyIfExists sSrcRoot & "\" & sFile, sDataRoot & "\" & sFile, true
 	Next
 	
-	' restore zimlets, but don't overwrite at dest
+	' Restore zimlets, but don't overwrite at destination
 	Dim oZLFolder, oFiles, oFile
-	Set oZLFolder = oFso.GetFolder(sTmpDir & "\zimlets")
-	Set oFiles = oZLFolder.Files
-	For Each oFile In oFiles
-		If Not oFso.FileExists(sDataRoot & "\zimlets\" & oFile.Name) Then 
-			oFso.CopyFile sTmpDir & "\zimlets\" & oFile.Name, _
-				sDataRoot & "\zimlets\" & oFile.Name, true
-		End If
-	Next
+    If oFso.FolderExists(sSrcRoot & "\zimlets") Then
+	    Set oZLFolder = oFso.GetFolder(sSrcRoot & "\zimlets")
+	    Set oFiles = oZLFolder.Files
+	    For Each oFile In oFiles
+		    If Not oFso.FileExists(sDataRoot & "\zimlets\" & oFile.Name) Then 
+			    oFso.CopyFile sSrcRoot & "\zimlets\" & oFile.Name, _
+				    sDataRoot & "\zimlets\" & oFile.Name, true
+		    End If
+	    Next
+    End If
 	
-	oFso.DeleteFolder sTmpDir, true
+	oFso.DeleteFolder sSrcRoot, true
 End Sub
 
 Sub WriteVersion()
@@ -153,6 +208,7 @@ End Function
 
 Set oFso = CreateObject("Scripting.FileSystemObject")
 Set oShellApp = CreateObject("Shell.Application")
+Set oShell = CreateObject("WScript.Shell")
 
 sVersion="@version@"
 aUserDirs = Array("index", "store", "sqlite", "log", "zimlets-properties")
@@ -164,11 +220,15 @@ sLocalAppDir = oShellApp.Namespace(&H1c&).Self.Path
 sDataRoot = sLocalAppDir & "\Zimbra\Zimbra Desktop"
 sVerFile = sDataRoot & "\conf\version"
 sTmpDir = sDataRoot & ".tmp"
+sRestoreDir = sDataRoot & ".rst"
 bIsUpgrade = false
 
 If oFso.FolderExists(sDataRoot) Then
-    Dim sCurVer
+    If oFso.FolderExists(sRestoreDir) Then
+        RestoreData sRestoreDir
+    End If 
 
+    Dim sCurVer
     sCurVer = ReadVersion
     If StrComp(sCurVer, sVersion) = 0 Then
         LaunchPrism
@@ -177,7 +237,12 @@ If oFso.FolderExists(sDataRoot) Then
     End If
 End If
 
-WScript.StdOut.WriteLine "Initializing. Please wait..."
+Dim sMsg
+sMsg = "Initializing, please wait..."
+WScript.Echo sMsg
+oShell.Popup sMsg, 5, "Zimbra Desktop", 64
+
+StopProcesses
 
 If bIsUpgrade Then
 	BackupData
@@ -209,7 +274,7 @@ FindAndReplace sDataRoot & "\zdesktop.webapp\override.ini", oTokens
 FindAndReplace sDataRoot & "\profile\user.js", oTokens
 
 If bIsUpgrade Then
-	RestoreData
+	RestoreData sTmpDir
 End If
 
 LaunchPrism
