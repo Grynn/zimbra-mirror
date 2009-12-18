@@ -119,7 +119,7 @@ ForceOnline.prototype = {
 
   canSetProperty: function canSetProperty(iid, propertyName) {
     Components.utils.reportError(propertyName);
-    return "NoAccess";
+    return "AllAccess";
   },
 
   observe : function(aSubject, aTopic, aData) {
@@ -159,6 +159,10 @@ ForceOnline.prototype = {
       this._listenerMap[type] = [];
     }
     this._listenerMap[type].push(listener);
+    
+    if ((type == ONLINE_STATUS && !this._ios.offline) || (type == OFFLINE_STATUS && this._ios.offline)) {
+      this._dispatchNetworkStatusEvent(type);
+    }
   },
   
   removeEventListener : function(type, listener, capture) {
