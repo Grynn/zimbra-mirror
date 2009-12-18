@@ -270,13 +270,18 @@ public class GalSync {
             OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
             String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;                      
             try {
-                OfflineLog.offline.info("Offline GAL sync started: " + user);            
+                OfflineLog.offline.info("Offline GAL sync started for " + user);
                 syncGal(ombx, galAccount, lastFullSync, traceOn); 
                 syncMan.syncComplete(target);
-                OfflineLog.offline.info("Offline GAL sync completed successfully: " + user);
+                OfflineLog.offline.info("Offline GAL sync completed successfully for " + user);
             } catch (Exception e) {
-                syncMan.processSyncException(target, "", e, traceOn);
-                OfflineLog.offline.info("Offline GAL sync failed: user=" + user + " err=\"" + e.getMessage() + "\"");
+                if (OfflineSyncManager.getInstance().isServiceActive()) {
+                    syncMan.processSyncException(target, "", e, traceOn);
+                    OfflineLog.offline.info("Offline GAL sync failed for " + user +
+                        ": " + e.getMessage());
+                } else {
+                    OfflineLog.offline.info("Offline GAL sync terminated: " + user);
+                }
             }
         }
     };

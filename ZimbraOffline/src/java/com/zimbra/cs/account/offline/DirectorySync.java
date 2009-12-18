@@ -76,8 +76,9 @@ public class DirectorySync {
                     syncAllAccounts(false);
                 } catch (Throwable e) { //don't let exceptions kill the timer
                     if (e instanceof OutOfMemoryError)
-                        Zimbra.halt("Caught out of memory error", e);
-                    OfflineLog.offline.warn("Caught exception in timer ", e);
+                        Zimbra.halt("caught out of memory error", e);
+                    else if (OfflineSyncManager.getInstance().isServiceActive())
+                        OfflineLog.offline.warn("caught exception in timer ", e);
                 }
             }
         },

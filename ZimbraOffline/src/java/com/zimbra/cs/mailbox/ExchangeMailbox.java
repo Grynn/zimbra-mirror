@@ -185,7 +185,8 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
         try {
             sync(false, false);
         } catch (ServiceException x) {
-            if (!x.getCode().equals(ServiceException.INTERRUPTED))
+            if (OfflineSyncManager.getInstance().isServiceActive() &&
+                !x.getCode().equals(ServiceException.INTERRUPTED))
                 ZimbraLog.xsync.warn(x);
         }
     }

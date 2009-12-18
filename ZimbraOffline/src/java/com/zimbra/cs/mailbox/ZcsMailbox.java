@@ -114,7 +114,8 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 } catch (ServiceException e) {
                     OfflineLog.offline.error(e);
                 }
-            } else if (!x.getCode().equals(ServiceException.INTERRUPTED)) {
+            } else if (!OfflineSyncManager.getInstance().isServiceActive() &&
+                !x.getCode().equals(ServiceException.INTERRUPTED)) {
                 OfflineLog.offline.error(x);
             }
         }

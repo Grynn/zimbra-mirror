@@ -564,7 +564,7 @@ public class OfflineSyncManager {
 
     public synchronized boolean isServiceActive() {
         return isServiceUp && isNetworkUp &&
-        !ZimbraApplication.getInstance().isShutdown() && !isUiLoading;
+            !ZimbraApplication.getInstance().isShutdown() && !isUiLoading;
     }
 
     public synchronized void setNetworkUp(boolean b) {
@@ -587,6 +587,10 @@ public class OfflineSyncManager {
         lock.lock();
         waiting.signalAll();
         lock.unlock();
+        try {
+            Thread.sleep(250);
+        } catch (Exception e) {
+        }
     }
 
     public void init() throws ServiceException {

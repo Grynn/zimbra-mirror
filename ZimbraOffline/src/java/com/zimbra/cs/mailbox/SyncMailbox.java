@@ -238,8 +238,9 @@ public abstract class SyncMailbox extends DesktopMailbox {
                     syncOnTimer();
                 } catch (Throwable e) { // don't let exceptions kill the timer
                     if (e instanceof OutOfMemoryError)
-                        Zimbra.halt("Caught out of memory error", e);
-                    OfflineLog.offline.warn("Caught exception in timer ", e);
+                        Zimbra.halt("caught out of memory error", e);
+                    else if (OfflineSyncManager.getInstance().isServiceActive())
+                        OfflineLog.offline.warn("caught exception in timer ", e);
                 }
                 synchronized (lastGC) {
                     long now = System.currentTimeMillis();
