@@ -64,6 +64,7 @@ public class MailboxSync {
     
     private OfflinePoller poller;
 
+    @SuppressWarnings("unchecked")
     MailboxSync(ZcsMailbox ombx) throws ServiceException {
     	this.ombx = ombx;
     	poller = new OfflinePoller(ombx);
@@ -174,7 +175,9 @@ public class MailboxSync {
                         Long.toString(System.currentTimeMillis()));
                     GalSync.sync(ombx, isOnRequest);
                 } catch (Exception e) {
-                    if (ombx.isDeleting()) {
+                    if (!OfflineSyncManager.getInstance().isServiceActive()) {
+                        return;
+                    } else if (ombx.isDeleting()) {
                         OfflineLog.offline.info("Mailbox \"%s\" is being deleted", ombx.getAccountName());
                     } else if (e instanceof ServiceException && ((ServiceException)e).getCode().equals(ServiceException.AUTH_EXPIRED)) {
                         syncMan.clearAuthToken(ombx.getAccount());

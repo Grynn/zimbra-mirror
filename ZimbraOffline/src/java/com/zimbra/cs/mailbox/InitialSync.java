@@ -995,8 +995,12 @@ public class InitialSync {
                                         Flag.flagsToBitmask(itemData.flags), itemData.tags, ud.parentId);
                                 idSet.remove(ud.id);
                             } catch (Exception x) {
-                                SyncExceptionHandler.checkRecoverableException("InitialSync.syncMessagesAsTgz", x);
-                                SyncExceptionHandler.syncMessageFailed(ombx, ud.id, x);
+                                if (OfflineSyncManager.getInstance().isServiceActive()) {
+                                    SyncExceptionHandler.checkRecoverableException("InitialSync.syncMessagesAsTgz", x);
+                                    SyncExceptionHandler.syncMessageFailed(ombx, ud.id, x);
+                                } else {
+                                    return;
+                                }
                             }
                         } else {
                             throw new RuntimeException("missing blob entry reading tgz stream");

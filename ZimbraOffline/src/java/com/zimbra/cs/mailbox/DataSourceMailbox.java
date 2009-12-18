@@ -468,7 +468,9 @@ public class DataSourceMailbox extends SyncMailbox {
                     int count = sendPendingMessages(isOnRequest);
                     syncAllLocalDataSources(count > 0, isOnRequest);
                 } catch (Exception x) {
-                    if (isDeleting())
+                    if (!OfflineSyncManager.getInstance().isServiceActive())
+                        return;
+                    else if (isDeleting())
                         OfflineLog.offline.info("Mailbox \"%s\" is being deleted",
                             getAccountName());
                     else

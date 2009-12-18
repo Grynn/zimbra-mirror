@@ -502,11 +502,13 @@ public class OfflineSyncManager {
         else
             code = RemoteServiceException.getErrorCode(cause);
 
-        if (isConnectionDown(exception)) {
+        if (!isServiceActive()) {
+            OfflineLog.offline.info("sync aborted by shutdown: " + targetName);
+        } else if (isConnectionDown(exception)) {
             connectionDown(targetName, null); //offline don't need code
             OfflineLog.offline.info("sync connection down: " + targetName);
             if (isDebugTraceOn)
-                OfflineLog.offline.debug("sync conneciton down: " + targetName, exception);
+                OfflineLog.offline.debug("sync connection down: " + targetName, exception);
         } else if (isAuthError(exception)) {
             authFailed(targetName, code, password);
             OfflineLog.offline.warn("sync remote auth failure: " + targetName);
