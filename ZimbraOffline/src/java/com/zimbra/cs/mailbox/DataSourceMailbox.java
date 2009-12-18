@@ -385,7 +385,8 @@ public class DataSourceMailbox extends SyncMailbox {
         try {
             sync(false, false);
         } catch (ServiceException x) {
-            OfflineLog.offline.error(x);
+            if (!x.getCode().equals(ServiceException.INTERRUPTED))
+                OfflineLog.offline.error(x);
         }
     }
 

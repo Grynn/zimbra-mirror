@@ -58,6 +58,7 @@ import com.zimbra.cs.zclient.ZSignature;
 public class DirectorySync {
 
     private static DirectorySync instance = new DirectorySync();
+    private TimerTask currentTask;
 
     public static DirectorySync getInstance() {
         return instance;
@@ -65,10 +66,12 @@ public class DirectorySync {
 
     private Timer timer = new Timer("sync-timer-dir");
     private DirectorySync() {
-        timer.schedule(new TimerTask() {
+        timer.schedule(currentTask = new TimerTask() {
             @Override public void run() {
-                if (ZimbraApplication.getInstance().isShutdown())
+                if (ZimbraApplication.getInstance().isShutdown()) {
+                    currentTask.cancel();
                     return;
+                }
                 try {
                     syncAllAccounts(false);
                 } catch (Throwable e) { //don't let exceptions kill the timer
@@ -147,7 +150,8 @@ public class DirectorySync {
 
                 lastExecutionTime = now;
             } catch (ServiceException e) {
-                OfflineLog.offline.warn("error listing accounts to sync", e);
+                if (!e.getCode().equals(ServiceException.INTERRUPTED))
+                    OfflineLog.offline.warn("error listing accounts to sync", e);
             } catch (Exception t) {
                 OfflineLog.offline.error("Unexpected exception syncing directory", t);
             } finally {
@@ -156,7 +160,8 @@ public class DirectorySync {
         }
     }
 
-    private boolean sync(Account acct, boolean isOnRequest) {
+    private boolean sync(Account acct, boolean isOnRequest) throws ServiceException {
+        OfflineSyncManager.getInstance().continueOK();
         if (!isOnRequest && !OfflineSyncManager.getInstance().reauthOK(acct)) //don't reauth if just failed not too long ago
             return false;
 

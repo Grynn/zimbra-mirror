@@ -75,10 +75,8 @@ public abstract class SyncMailbox extends DesktopMailbox {
     }
 
     boolean lockMailboxToSync() {
-        if (isDeleting() || !OfflineSyncManager.getInstance().isServiceOpen() ||
-            OfflineSyncManager.getInstance().isUiLoadingInProgress())
+        if (isDeleting() || !OfflineSyncManager.getInstance().isServiceActive())
             return false;
-
         if (!mSyncRunning) {
             synchronized (this) {
                 if (!mSyncRunning) {
@@ -232,8 +230,10 @@ public abstract class SyncMailbox extends DesktopMailbox {
             public void run() {
                 boolean doGC;
                 
-                if (ZimbraApplication.getInstance().isShutdown())
+                if (ZimbraApplication.getInstance().isShutdown()) {
+                    cancelCurrentTask();
                     return;
+                }
                 try {
                     syncOnTimer();
                 } catch (Throwable e) { // don't let exceptions kill the timer

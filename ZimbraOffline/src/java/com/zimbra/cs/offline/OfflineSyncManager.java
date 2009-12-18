@@ -27,6 +27,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.*;
 
 import javax.mail.AuthenticationFailedException;
 import javax.security.auth.login.LoginException;
@@ -63,6 +65,7 @@ import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.util.Zimbra;
+import com.zimbra.cs.util.ZimbraApplication;
 import com.zimbra.cs.util.yauth.AuthenticationException;
 
 public class OfflineSyncManager {
@@ -79,7 +82,6 @@ public class OfflineSyncManager {
     private static final String A_ZDSYNC_ERRORCODE = "code";
     private static final String A_ZDSYNC_MESSAGE = "message";
     private static final String A_ZDSYNC_UNREAD = "unread";
-
 
     private static class SyncError {
         String message;
@@ -100,7 +102,6 @@ public class OfflineSyncManager {
             }
         }
     }
-
 
     private static class OfflineSyncStatus {
         String mStage;
@@ -423,9 +424,9 @@ public class OfflineSyncManager {
         }
         Throwable cause = SystemUtil.getInnermostException(exception);
         return cause instanceof AuthenticationFailedException ||
-        cause instanceof AuthenticationException ||
-        cause instanceof com.google.gdata.util.AuthenticationException ||
-        cause instanceof LoginException;
+            cause instanceof AuthenticationException ||
+            cause instanceof com.google.gdata.util.AuthenticationException ||
+            cause instanceof LoginException;
     }
 
     public static boolean isConnectionDown(Exception exception) {
@@ -442,15 +443,17 @@ public class OfflineSyncManager {
                 return true;
             }
         }
+        if (!getInstance().isNetworkUp())
+            return true;
 
         Throwable cause = SystemUtil.getInnermostException(exception);
         return cause instanceof java.net.UnknownHostException ||
-        cause instanceof java.net.NoRouteToHostException ||
-        cause instanceof java.net.SocketException ||
-        cause instanceof java.net.SocketTimeoutException ||
-        cause instanceof java.net.ConnectException ||
-        cause instanceof org.apache.commons.httpclient.ConnectTimeoutException ||
-        cause instanceof org.apache.commons.httpclient.NoHttpResponseException;
+            cause instanceof java.net.NoRouteToHostException ||
+            cause instanceof java.net.SocketException ||
+            cause instanceof java.net.SocketTimeoutException ||
+            cause instanceof java.net.ConnectException ||
+            cause instanceof org.apache.commons.httpclient.ConnectTimeoutException ||
+            cause instanceof org.apache.commons.httpclient.NoHttpResponseException;
     }
 
     public static boolean isIOException(Exception exception) {
@@ -540,19 +543,50 @@ public class OfflineSyncManager {
     }
 
     private static OfflineSyncManager instance = new OfflineSyncManager();
+
     public static OfflineSyncManager getInstance() {
         return instance;
     }
 
     private Set<Integer> toSkipList = new HashSet<Integer>();
+
     public boolean isInSkipList(int itemId) {
         return toSkipList.contains(itemId);
     }
 
-    private boolean isServiceOpen;
+    private boolean isNetworkUp = true, isServiceUp = false, isUiLoading = false;
+    private Lock lock = new ReentrantLock();
+    private Condition waiting  = lock.newCondition(); 
 
-    public synchronized boolean isServiceOpen() {
-        return isServiceOpen;
+    public synchronized boolean isNetworkUp() {
+        return isNetworkUp;
+    }
+
+    public synchronized boolean isServiceActive() {
+        return isServiceUp && isNetworkUp &&
+        !ZimbraApplication.getInstance().isShutdown() && !isUiLoading;
+    }
+
+    public synchronized void setNetworkUp(boolean b) {
+        lock.lock();
+        isNetworkUp = b;
+        if (isNetworkUp)
+            waiting.signalAll();
+        lock.unlock();
+    }
+
+    public synchronized void setUILoading(boolean b) {
+        lock.lock();
+        isUiLoading = b;
+        if (!isUiLoading)
+            waiting.signalAll();
+        lock.unlock();
+    }
+
+    public synchronized void shutdown() {
+        lock.lock();
+        waiting.signalAll();
+        lock.unlock();
     }
 
     public void init() throws ServiceException {
@@ -562,13 +596,36 @@ public class OfflineSyncManager {
             }
         }, "sync-manager-init").start();
     }
-    
+
+    public void continueOK() throws ServiceException {
+        try {
+            lock.lock();
+            if (isUiLoading) {
+                OfflineLog.offline.info("ui loading in progress; pausing sync");
+                if (!waiting.await(45, TimeUnit.SECONDS)) {
+                    OfflineLog.offline.warn("ui loading in progress for 45 seconds; resuming sync");
+                    isUiLoading = false;
+                    waiting.signalAll();
+                }
+            }
+            if (!isNetworkUp) {
+                OfflineLog.offline.info("network down; pausing sync");
+                waiting.await();
+            }
+        } catch (Exception e) {
+        } finally {
+            lock.unlock();
+        }
+        if (ZimbraApplication.getInstance().isShutdown())
+            throw ServiceException.INTERRUPTED("system shutting down");
+    }
+
     private synchronized void backgroundInit() {
         String uri = LC.zimbra_admin_service_scheme.value() + "127.0.0.1"+ ":" + LC.zimbra_admin_service_port.value() +
         AdminConstants.ADMIN_SERVICE_URI;
         final int LOOP_COUNT = 24 * 10;
         int loop = 0;
-        
+
         while (loop++ < LOOP_COUNT) {
             try {
                 SoapHttpTransport transport = new SoapHttpTransport(uri);
@@ -581,7 +638,7 @@ public class OfflineSyncManager {
                 Element request = new Element.XMLElement(AdminConstants.PING_REQUEST);
                 transport.invokeWithoutSession(request.detach());
                 OfflineLog.offline.info("service port is ready.");
-                isServiceOpen = true;
+                isServiceUp = true;
                 break;
             } catch (Exception x) {
                 if (x instanceof ConnectException || x instanceof SocketTimeoutException || x instanceof ConnectTimeoutException) {
@@ -599,7 +656,7 @@ public class OfflineSyncManager {
         }
         if (loop == LOOP_COUNT)
             Zimbra.halt("Zimbra Desktop Service failed to initialize. Shutting down...");
-        
+
         //load all mailboxes so that timers are kicked off
         String[] toSkip = OfflineLC.zdesktop_sync_skip_idlist.value().split("\\s*,\\s*");
         for (String s : toSkip) {
@@ -622,7 +679,7 @@ public class OfflineSyncManager {
                 MailboxManager.getInstance().getMailboxByAccount(syncAccount);
             }
             DirectorySync.getInstance();
-    
+
             //deal with left over mailboxes from interrupted delete/reset
             long[] mids = MailboxManager.getInstance().getMailboxIds();
             for (long mid : mids) {
@@ -636,40 +693,6 @@ public class OfflineSyncManager {
             Zimbra.halt("Zimbra Desktop failed to initialize accounts. Shutting down...");
         }
     }
-
-    private boolean isUiLoadingInProgress;
-    private long uiLoadingStartTime;
-
-    public synchronized boolean isUiLoadingInProgress() {
-        if (!isUiLoadingInProgress)
-            return false;
-        if (System.currentTimeMillis() - uiLoadingStartTime >= 60000) { //hard limit of halting sync to 60 seconds
-            OfflineLog.offline.warn("ui loading has been in progress for more than 60 seconds; force resuming any blocked sync.");
-            setUiLoadingInProgress(false);
-            return false;
-        }
-        return isUiLoadingInProgress;
-    }
-
-    public synchronized void setUiLoadingInProgress(boolean b) {
-        isUiLoadingInProgress = b;
-        if (b)
-            uiLoadingStartTime = System.currentTimeMillis();
-        else
-            uiLoadingStartTime = 0;
-    }
-
-    public void continueOK() {
-        while (true) {
-            if (!isUiLoadingInProgress())
-                return;
-            OfflineLog.offline.info("ui loading in progress; sync on hold.");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException x) {}
-        }
-    }
-
 
     /*
 		<zdsync xmlns="urn:zimbraOffline">
@@ -713,13 +736,12 @@ public class OfflineSyncManager {
 
     public synchronized long getSyncFrequencyLimit() {
         long quietTime = System.currentTimeMillis() - lastClientPing;
-
         long freqLimit = 0;
+
         if (quietTime > Constants.MILLIS_PER_HOUR)
             freqLimit = Constants.MILLIS_PER_HOUR;
         else if (quietTime > 5 * Constants.MILLIS_PER_MINUTE)
             freqLimit = 15 * Constants.MILLIS_PER_MINUTE;
-
         return freqLimit;
     }
 }

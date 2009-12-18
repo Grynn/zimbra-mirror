@@ -144,11 +144,7 @@ public class OfflineApplication extends ZimbraApplication {
     @Override
     public void shutdown() {
         super.shutdown();
-        try {
-            DbPool.shutdown();
-        } catch (Exception x) {
-            OfflineLog.offline.warn("Exception during shutdown", x);
-        }
+        OfflineSyncManager.getInstance().shutdown();
     }
       
     private void migrateDb() {

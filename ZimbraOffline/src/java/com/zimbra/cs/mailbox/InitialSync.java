@@ -1128,6 +1128,7 @@ public class InitialSync {
         CreateMessage redo;
         int size = 0;
 
+        OfflineSyncManager.getInstance().continueOK();
         if (convId < 0)
             convId = Mailbox.ID_AUTO_INCREMENT;
         try {

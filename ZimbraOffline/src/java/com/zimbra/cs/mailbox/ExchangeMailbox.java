@@ -3,7 +3,6 @@ package com.zimbra.cs.mailbox;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -186,7 +185,8 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
         try {
             sync(false, false);
         } catch (ServiceException x) {
-            ZimbraLog.xsync.warn(x);
+            if (!x.getCode().equals(ServiceException.INTERRUPTED))
+                ZimbraLog.xsync.warn(x);
         }
     }
 

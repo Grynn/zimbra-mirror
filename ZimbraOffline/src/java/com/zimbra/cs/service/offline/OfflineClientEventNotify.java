@@ -21,38 +21,39 @@ import java.util.Map;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.OfflineServiceException;
-import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.soap.DocumentHandler;
 
 public class OfflineClientEventNotify extends DocumentHandler {
 
-	@Override
-	public Element handle(Element request, Map<String, Object> context)
-			throws ServiceException {
-		
-		String event = request.getAttribute(OfflineConstants.A_Event);
-		if (event.equals(OfflineConstants.EVENT_UI_LOAD_BEGIN))
-			OfflineSyncManager.getInstance().setUiLoadingInProgress(true);
-		else if (event.equals(OfflineConstants.EVENT_UI_LOAD_END))
-			OfflineSyncManager.getInstance().setUiLoadingInProgress(false);
-		else if (event.equals(OfflineConstants.EVENT_NETWORK_UP))
-		    OfflineLog.offline.info("NETWORK UP"); //TODO
-		else if (event.equals(OfflineConstants.EVENT_NETWORK_DOWN))
-		    OfflineLog.offline.info("NETWORK DOWN"); //TODO
-		else
-			throw OfflineServiceException.UNKNOWN_CLIENT_EVENT(event); 
-		
-		return getZimbraSoapContext(context).createElement(OfflineConstants.CLIENT_EVENT_NOTIFY_RESPONSE);
-	}
-	
-	@Override
+    @Override
+    public Element handle(Element request, Map<String, Object> context)
+    throws ServiceException {
+
+        String event = request.getAttribute(OfflineConstants.A_Event);
+        if (event.equals(OfflineConstants.EVENT_UI_LOAD_BEGIN))
+            OfflineSyncManager.getInstance().setUILoading(true);
+        else if (event.equals(OfflineConstants.EVENT_UI_LOAD_END))
+            OfflineSyncManager.getInstance().setUILoading(false);
+        else if (event.equals(OfflineConstants.EVENT_NETWORK_DOWN))
+            OfflineSyncManager.getInstance().setNetworkUp(false);
+        else if (event.equals(OfflineConstants.EVENT_NETWORK_UP))
+            OfflineSyncManager.getInstance().setNetworkUp(true);
+        else if (event.equals(OfflineConstants.EVENT_SHUTTING_DOWN))
+            OfflineSyncManager.getInstance().shutdown();
+        else
+            throw OfflineServiceException.UNKNOWN_CLIENT_EVENT(event); 
+
+        return getZimbraSoapContext(context).createElement(OfflineConstants.CLIENT_EVENT_NOTIFY_RESPONSE);
+    }
+
+    @Override
     public boolean needsAuth(Map<String, Object> context) {
         return false;
     }
-	
-	@Override
+
+    @Override
     public boolean needsAdminAuth(Map<String, Object> context) {
         return false;
     }
