@@ -103,7 +103,7 @@ function() {
         /*if(window.newWindowCommand == 'compose'){
            window.opener.document.getElementById("zdnd_files").innerHTML = document.getElementById("zdnd_files").innerHTML;
         }*/
-		if (curView) {
+		if (curView && curView.uploadFiles) {
 			curView.uploadFiles();
 		}
 	}
