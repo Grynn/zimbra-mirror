@@ -169,9 +169,9 @@ $config{loglevel} = $state->{localconfig}->{zmmtaconfig_log_level} || 3;
 $config{interval} = $state->{localconfig}->{zmmtaconfig_interval} || 60;
 $config{debug} = $state->{localconfig}->{zmmtaconfig_debug} || 0;
 $config{restartconfig} =
-  ($state->{localconfig}->{zmmtaconfig_enable_config_restarts} eq "FALSE") ? 0 : 1;
+  (uc($state->{localconfig}->{zmmtaconfig_enable_config_restarts}) eq "FALSE") ? 0 : 1;
 $config{watchdog} = 
-  ($state->{localconfig}->{zmmtaconfig_watchdog} eq "FALSE") ? 0 : 1;
+  (uc($state->{localconfig}->{zmmtaconfig_watchdog}) eq "FALSE") ? 0 : 1;
 $config{configFile} = "$config{baseDir}/conf/zmmta.cf";
 $config{logFile}    = "$config{baseDir}/log/$config{progname}.log";
 $config{pidFile}    = "$config{baseDir}/log/$config{progname}.pid";
@@ -299,8 +299,8 @@ sub getLocalConfig {
     while (${$ref->{output}}[0] !~ m/^\w+\s=\s.*/ && scalar(@{$ref->{output}}) > 0) {;
       chomp($v .= shift(@{$ref->{output}}));
     }
-    $v = "yes" if ($v eq "TRUE");
-    $v = "no" if ($v eq "FALSE");
+    $v = "yes" if (uc($v) eq "TRUE");
+    $v = "no" if (uc($v) eq "FALSE");
     logMsg(5, "$k=$v");
     if (exists $state->{localconfig}->{$k}) {
       $state->{localconfig}->{$k} = "$state->{localconfig}->{$k} $v";
@@ -402,8 +402,8 @@ sub getGlobalConfig {
     }
     
     next if ($k =~ m/cn|objectClass/);
-    $v = "yes" if ($v eq "TRUE");
-    $v = "no" if ($v eq "FALSE");
+    $v = "yes" if (uc($v) eq "TRUE");
+    $v = "no" if (uc($v) eq "FALSE");
     logMsg(5, "$k=$v");
     if (exists $state->{globalconfig}->{$k}) {
       $state->{globalconfig}->{$k} = "$state->{globalconfig}->{$k} $v";
@@ -502,8 +502,8 @@ sub getServerConfig {
       chomp($v .= shift(@{$ref->{output}}));
     }
     next if $k =~ m/objectClass|cn|#|^$/;
-    $v = "yes" if ($v eq "TRUE");
-    $v = "no" if ($v eq "FALSE");
+    $v = "yes" if (uc($v) eq "TRUE");
+    $v = "no" if (uc($v) eq "FALSE");
 
     logMsg(5, "$k=$v");
     logMsg(4, "$k=$v") if ($k eq "zimbraMailPort" && $config{debug});
@@ -687,6 +687,8 @@ sub readConfig {
         if ($line =~ m/^REWRITE/) {
           logMsg(5, "Adding file rewrite $fields[1] to section $section->{name}"); 
           $section->{config}->{rewrites}->{$fields[2]} = "$fields[1]";
+          $section->{config}->{rewrites}->{$fields[2]}->{mode} = $fields[4]
+            if ($fields[3] eq "MODE");
         } elsif ($line =~ m/^RESTART/) {
           foreach my $service (@fields) {
             next if ($service eq "RESTART");
@@ -922,8 +924,9 @@ sub doActions() {
   return unless $config{restartconfig};
   # do the actions
   foreach my $rewrite (keys %{$state->{current}->{rewrites}}) {
+    my $mode = $state->{current}->{rewrites}->{$rewrite}->{mode} || "0440";
     delete($state->{current}->{rewrites}->{$rewrite})
-     unless rewriteConfig($state->{current}->{rewrites}->{$rewrite},$rewrite);
+     unless rewriteConfig($state->{current}->{rewrites}->{$rewrite},$rewrite,$mode);
   }
   foreach my $postconf (keys %{$state->{current}->{postconf}}) {
     delete($state->{current}->{postconf}->{$postconf}) 
@@ -943,9 +946,11 @@ sub doActions() {
 }
 
 sub rewriteConfig {
-  my ($from, $to) = @_;
+  my ($from, $to, $mode) = @_;
   logMsg(4, "Entering Function");
   my $rc=0;
+  $mode="0440" if ($mode eq "");
+  $mode=oct($mode);
 
   $from = "$config{baseDir}/$from"
     if ($from !~ m|^/|);
@@ -1143,8 +1148,8 @@ sub rewriteConfig {
   }
   close DEST;
 
-  chmod(0440, $to);
-  logMsg(3, "Rewrote: $to") unless ($to =~ m|^/tmp|);
+  chmod($mode, $to);
+  logMsg(3, "Rewrote: $to with mode $mode") unless ($to =~ m|^/tmp|);
   logMsg(4, "Leaving Function");
 
   return $rc;

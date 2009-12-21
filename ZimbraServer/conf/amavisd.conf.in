@@ -127,8 +127,7 @@ $path = '/opt/zimbra/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/sbin:/usr/bin
 @spam_scanners = (
     ['SpamAssassin', 'Amavis::SpamControl::SpamAssassin' ],
 
-%%uncomment LOCAL:amavis_dspam_enabled%%  ['DSPAM',
-'Amavis::SpamControl::ExtProg', $dspam,
+%%uncomment LOCAL:amavis_dspam_enabled%%  ['DSPAM', 'Amavis::SpamControl::ExtProg', $dspam,
 %%uncomment LOCAL:amavis_dspam_enabled%%    [ qw(--stdout --classify --deliver=innocent,spam --mode=tum
 %%uncomment LOCAL:amavis_dspam_enabled%%         --tokenizer=chained,noise --user), $daemon_user ],
 %%uncomment LOCAL:amavis_dspam_enabled%%         mail_body_size_limit => 64000, score_factor => 1,
