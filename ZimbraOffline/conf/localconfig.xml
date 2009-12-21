@@ -172,4 +172,10 @@
   <key name="zimbra_web_generate_gzip">
     <value>false</value>
   </key>
+  <key name="zimbra_slow_logging_enabled">
+    <value>true</value>
+  </key>
+  <key name="zimbra_slow_logging_threshold">
+    <value>5000</value>
+  </key>
 </localconfig>
