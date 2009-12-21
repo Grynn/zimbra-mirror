@@ -36,7 +36,6 @@ com_zimbra_tasksreminder.prototype.init = function() {
 		this.runSearch();
 		this.setUserProperty("taskreminder_lastShownDate", todayStr, true);
 		this._searchField.value = this.prevSearchFieldVal; //reset search-field's value
-
 	}else {
 		return;
 	}		
@@ -192,20 +191,35 @@ function sortTasksByOverDue(a, b) {
 	return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 }
 
+
 com_zimbra_tasksreminder.prototype._normalizeDate =
 function(month, day, year) {
-	var tmpArry = (I18nMsg.formatDateShort.toLowerCase()).split("/");
-	if(tmpArry[0].indexOf("d") >=0 && tmpArry[1].indexOf("m") >=0) {
-		return day + "/" + month + "/" + year;
-	} else if(tmpArry[1].indexOf("d") >=0 && tmpArry[0].indexOf("m") >=0) {
-		return month + "/" + day + "/" + year;
-	} else if(tmpArry[1].indexOf("m") >=0 && tmpArry[2].indexOf("d") >=0) {
-		return year + "/"+ month + "/" + day ;
-	} else if(tmpArry[1].indexOf("d") >=0 && tmpArry[2].indexOf("m") >=0) {
-			return year + "/"+ day + "/" + month ;
+	var fString = [];
+	var ds = I18nMsg.formatDateShort.toLowerCase();
+	var arry = [];
+	var separator = ds.replace("d", "").replace("y","").replace("m","").substring(0,1);
+	arry.push({name:"m", indx:ds.indexOf("m")});
+	arry.push({name:"yy", indx:ds.indexOf("yy")});
+	arry.push({name:"d", indx:ds.indexOf("d")});
+	var sArry = arry.sort(taskReminder_sortTimeObjs);
+	for(var i = 0; i < sArry.length; i++) {
+		var name = sArry[i].name;
+		if(name == "m") {
+			fString.push(month);
+		} else if(name == "yy") {
+			fString.push(year);
+		}  else if(name == "d") {
+			fString.push(day);
+		} 
 	}
+	return fString.join(separator);
 };
 
+function taskReminder_sortTimeObjs(a, b) {
+	var x = parseInt(a.indx);
+	var y = parseInt(b.indx);
+	return ((x > y) ? 1 : ((x < y) ? -1 : 0));
+}
 
 com_zimbra_tasksreminder.prototype._sendEmailWithPrefInfo = function() {
 	var action = ZmOperation.NEW_MESSAGE;
