@@ -82,6 +82,36 @@ sub get_input($;$$) {
     return $ret;
 }
 
+sub stop_process($) {
+    my $exec = shift();
+    my @lines = ();
+    my @procs;
+    my $pid;
+
+    if (open(PSINFO, "ps -fe 2>&1 |")) {
+        @lines = <PSINFO>;
+        close(PSINFO);
+    }
+    @procs = grep(/$exec/, @lines);
+    if (@procs) {
+        my @cols = split(/\s+/, $procs[0]);
+        $pid = $cols[1];
+    }
+
+    return unless ($pid);
+    system("kill $pid");
+
+    my $c = 12;
+    while ($c--) {
+        open(PSINFO, "ps -p $pid 2>&1 |");
+        @lines = <PSINFO>;
+        close(PSINFO);
+        return unless (grep(/^$pid/, @lines));
+        sleep(1);
+    }
+    system("kill -9 $pid");
+}
+
 sub dialog_welcome() {
     print "\n\n";
     print get_message('Welcome'), "\n";
@@ -110,6 +140,9 @@ chdir($script_dir);
 dialog_welcome();
 dialog_license();
 $app_root = dialog_app_root();
+
+stop_process("$app_root/linux/prism/zdclient");
+stop_process("$app_root/linux/jre/bin/java");
 
 # copy app files;
 print get_message('Installing');
