@@ -1055,6 +1055,9 @@
 		<copy todir="${jetty.home.dir}/webapps/zimbra/desktop" overwrite="true">
 			<fileset dir="WebRoot/desktop" includes="**/*"/>
 		</copy>
+		<copy todir="${jetty.home.dir}/webapps/zimbra/css" overwrite="true">
+			<fileset dir="WebRoot/zimbra/css" includes="**/*"/>
+		</copy>
 		<copy todir="${jetty.home.dir}/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
 			<fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag" />
 		</copy>
@@ -1070,6 +1073,9 @@
         <copy todir="${dist.app.dir}/jetty/webapps/zimbra/desktop" overwrite="true">
             <fileset dir="WebRoot/desktop" includes="**/*"/>
         </copy>
+		<copy todir="${dist.app.dir}/jetty/webapps/zimbra/css" overwrite="true">
+			<fileset dir="WebRoot/zimbra/css" includes="**/*"/>
+		</copy>
         <copy todir="${dist.app.dir}/jetty/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
             <fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag"/>
         </copy>
