@@ -385,9 +385,7 @@ public class DataSourceMailbox extends SyncMailbox {
         try {
             sync(false, false);
         } catch (ServiceException x) {
-            if (OfflineSyncManager.getInstance().isServiceActive() &&
-                !x.getCode().equals(ServiceException.INTERRUPTED))
-                OfflineLog.offline.error(x);
+            OfflineLog.offline.error(x);
         }
     }
 
@@ -457,7 +455,10 @@ public class DataSourceMailbox extends SyncMailbox {
     }
 
     public void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
-        if (lockMailboxToSync()) {
+        if (!OfflineSyncManager.getInstance().isServiceActive()) {
+            if (isOnRequest)
+                OfflineLog.offline.debug("offline sync request ignored");
+        } else if (lockMailboxToSync()) {
             synchronized (syncLock) {
                 if (isOnRequest && isDebugTraceOn) {
                     OfflineLog.offline.debug(

@@ -37,9 +37,9 @@ public class OfflineClientEventNotify extends DocumentHandler {
         else if (event.equals(OfflineConstants.EVENT_UI_LOAD_END))
             OfflineSyncManager.getInstance().setUILoading(false);
         else if (event.equals(OfflineConstants.EVENT_NETWORK_DOWN))
-            OfflineSyncManager.getInstance().setNetworkUp(false);
+            OfflineSyncManager.getInstance().setConnectionDown(true);
         else if (event.equals(OfflineConstants.EVENT_NETWORK_UP))
-            OfflineSyncManager.getInstance().setNetworkUp(true);
+            OfflineSyncManager.getInstance().setConnectionDown(false);
         else if (event.equals(OfflineConstants.EVENT_SHUTTING_DOWN))
             OfflineSyncManager.getInstance().shutdown();
         else

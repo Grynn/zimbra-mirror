@@ -137,6 +137,10 @@ public class OfflineSyncManager {
             mRetryCount = 0;
             return true;
         }
+        
+        void reset() {
+            mStatus = SyncStatus.unknown;
+        }
 
         void resetLastSyncTime() {
             mLastSyncTime = System.currentTimeMillis();
@@ -443,7 +447,7 @@ public class OfflineSyncManager {
                 return true;
             }
         }
-        if (!getInstance().isNetworkUp())
+        if (!getInstance().isConnectionDown())
             return true;
 
         Throwable cause = SystemUtil.getInnermostException(exception);
@@ -493,6 +497,7 @@ public class OfflineSyncManager {
     public void processSyncException(String targetName, String password, Exception exception, boolean isDebugTraceOn, boolean markSyncFail) {
         Throwable cause = SystemUtil.getInnermostException(exception);
         String code = null;
+        
         if (cause instanceof ServiceException)
             code = ((ServiceException)cause).getCode();
         else if (cause instanceof com.google.gdata.util.ServiceException)
@@ -502,8 +507,10 @@ public class OfflineSyncManager {
         else
             code = RemoteServiceException.getErrorCode(cause);
 
-        if (!isServiceActive()) {
+        if (ZimbraApplication.getInstance().isShutdown()) {
             OfflineLog.offline.info("sync aborted by shutdown: " + targetName);
+        } else if (!isServiceActive()) {
+            OfflineLog.offline.info("sync aborted by network: " + targetName);
         } else if (isConnectionDown(exception)) {
             connectionDown(targetName, null); //offline don't need code
             OfflineLog.offline.info("sync connection down: " + targetName);
@@ -556,23 +563,34 @@ public class OfflineSyncManager {
         return toSkipList.contains(itemId);
     }
 
-    private boolean isNetworkUp = true, isServiceUp = false, isUiLoading = false;
+    private boolean isConnectionDown = false, isServiceUp = false, isUiLoading = false;
     private Lock lock = new ReentrantLock();
     private Condition waiting  = lock.newCondition(); 
 
-    public synchronized boolean isNetworkUp() {
-        return isNetworkUp;
+    public synchronized boolean isConnectionDown() {
+        return isConnectionDown;
     }
 
     public synchronized boolean isServiceActive() {
-        return isServiceUp && isNetworkUp &&
+        return isServiceUp && !isConnectionDown &&
             !ZimbraApplication.getInstance().isShutdown() && !isUiLoading;
     }
 
-    public synchronized void setNetworkUp(boolean b) {
+    public synchronized void setConnectionDown(boolean b) {
+        OfflineLog.offline.info("setting connection status to " + (b ? "down" : "up"));
+        for (OfflineSyncStatus ss : syncStatusTable.values()) {
+            if (ss.getSyncStatus() != SyncStatus.authfail &&
+                ss.getSyncStatus() != SyncStatus.error) {
+                if (b)
+                    ss.connectionDown(null);
+                else
+                    ss.reset();
+            }
+        }
+        notifyStateChange();
         lock.lock();
-        isNetworkUp = b;
-        if (isNetworkUp)
+        isConnectionDown = b;
+        if (!isConnectionDown)
             waiting.signalAll();
         lock.unlock();
     }
@@ -607,22 +625,20 @@ public class OfflineSyncManager {
         try {
             lock.lock();
             if (isUiLoading) {
-                OfflineLog.offline.info("ui loading in progress; pausing sync");
-                if (!waiting.await(45, TimeUnit.SECONDS)) {
-                    OfflineLog.offline.warn("ui loading in progress for 45 seconds; resuming sync");
+                OfflineLog.offline.info("ui loading - sync paused");
+                if (!waiting.await(30, TimeUnit.SECONDS)) {
+                    OfflineLog.offline.warn("ui loading in progress for 30 seconds - sync resuming");
                     isUiLoading = false;
                     waiting.signalAll();
                 }
-            }
-            if (!isNetworkUp) {
-                OfflineLog.offline.info("network down; pausing sync");
-                waiting.await();
             }
         } catch (Exception e) {
         } finally {
             lock.unlock();
         }
-        if (ZimbraApplication.getInstance().isShutdown())
+        if (isConnectionDown)
+            throw ServiceException.INTERRUPTED("network down - sync cancelled");
+        else if (ZimbraApplication.getInstance().isShutdown())
             throw ServiceException.INTERRUPTED("system shutting down");
     }
 

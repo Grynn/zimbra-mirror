@@ -9,12 +9,8 @@ import java.util.UUID;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
-import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.Identity;
-import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
@@ -23,7 +19,6 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.zimbrasync.client.ExchangeSyncFactory;
 import com.zimbra.zimbrasync.client.cmd.HttpStatusException;
@@ -122,14 +117,10 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
             ZimbraLog.xsync.debug("sending pending mail (id=%d): %s", msg.getId(), msg.getSubject());
             
             
-            Identity identity = Provisioning.getInstance().get(getAccount(), IdentityBy.id, msg.getDraftIdentityId());
             // try to avoid repeated sends of the same message by tracking "send UIDs" on SendMsg requests
             Pair<Integer, String> sendRecord = sSendUIDs.get(id);
             String sendUID = sendRecord == null || sendRecord.getFirst() != msg.getSavedSequence() ? UUID.randomUUID().toString() : sendRecord.getSecond();
             sSendUIDs.put(id, new Pair<Integer, String>(msg.getSavedSequence(), sendUID));
-
-            String origId = msg.getDraftOrigId();
-            ItemId origMsgId = StringUtil.isNullOrEmpty(origId) ? null : new ItemId(origId, ds.getAccountId());
 
             // Do we need to save a copy of the message ourselves to the Sent folder?
             boolean saveToSent = (ds.isSaveToSent()) && getAccount().isPrefSaveToSent();
@@ -185,9 +176,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
         try {
             sync(false, false);
         } catch (ServiceException x) {
-            if (OfflineSyncManager.getInstance().isServiceActive() &&
-                !x.getCode().equals(ServiceException.INTERRUPTED))
-                ZimbraLog.xsync.warn(x);
+            ZimbraLog.xsync.warn(x);
         }
     }
 
@@ -198,7 +187,10 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
 
     @Override
     public void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
-        if (lockMailboxToSync()) {
+        if (!OfflineSyncManager.getInstance().isServiceActive()) {
+            if (isOnRequest)
+                OfflineLog.offline.debug("offline sync request ignored");
+        } else if (lockMailboxToSync()) {
             synchronized (syncLock) {
                 if (isOnRequest && isDebugTraceOn) {
                     OfflineLog.offline.debug("============================== SYNC DEBUG TRACE START ==============================");
@@ -219,7 +211,9 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
                     }
                     syncDataSource(count > 0, isOnRequest);
                 } catch (Exception x) {
-                    if (isDeleting())
+                    if (!OfflineSyncManager.getInstance().isServiceActive())
+                        return;
+                    else if (isDeleting())
                         OfflineLog.offline.info("Mailbox \"%s\" is being deleted", getAccountName());
                     else
                         OfflineLog.offline.error("exception encountered during sync", x);
@@ -231,7 +225,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
                     }
                     unlockMailbox();
                 }
-            } //synchronized (syncLock)
+            }
         } else if (isOnRequest) {
             OfflineLog.offline.debug("sync already in progress");
         }
