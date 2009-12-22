@@ -27,11 +27,16 @@ use vars qw ($logger_directory $logger_rrd_directory $zmrrdfetch $zmrrdfetch_pid
 
 my $server_pid = -1;
 
-if ($^O eq "darwin") {
-	$SIG{CHLD} = \&catchSignal;
-} else {
-	$SIG{CHLD} = sub { while(waitpid(-1,WNOHANG)>0) { } };
-}
+#if ($^O eq "darwin") {
+#	$SIG{CHLD} = \&catchSignal;
+#} else {
+$SIG{CHLD} = sub {
+	my $reaped;
+	# always waitpid, even if processes are being autoreaped, it doesn't cost much...
+    while (($reaped = waitpid(-1,WNOHANG)) > 0) {
+    }
+};
+#}
 
 $SIG{QUIT}  = \&catchSignal;
 $SIG{INT}   = \&catchSignal;
