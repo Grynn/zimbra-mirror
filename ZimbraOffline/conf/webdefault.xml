@@ -266,6 +266,10 @@
         <param-value>@development@</param-value>
     </init-param>
     <init-param>
+        <param-name>mappedFile</param-name>
+        <param-value>@development@</param-value>
+    </init-param>
+    <init-param>
         <param-name>reloading</param-name>
         <param-value>@development@</param-value>
     </init-param>
