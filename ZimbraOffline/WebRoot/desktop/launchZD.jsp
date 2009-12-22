@@ -123,6 +123,7 @@
     appCurrentSkin = "${zm:jsEncode(skin)}";
     appExtension   = "${zm:jsEncode(ext)}";
     appDevMode     = ${isDevMode};
+    isTinyMCE      = true;
 </script>
 </head>
 <body>
