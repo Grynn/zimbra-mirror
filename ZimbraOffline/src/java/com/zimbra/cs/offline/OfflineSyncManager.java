@@ -139,6 +139,11 @@ public class OfflineSyncManager {
         }
         
         void reset() {
+            mCode = null;
+            mError = null;
+            mStage = null;
+            mLastFailTime = mLastSyncTime = 0;
+            mRetryCount = 0;
             mStatus = SyncStatus.unknown;
         }
 
