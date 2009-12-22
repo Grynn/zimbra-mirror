@@ -25,6 +25,7 @@ use warnings;
 
 my $locale = "en_US";
 my $home_dir = $ENV{HOME} || die("Error: unable to get user home directory");
+my $app_root;
 
 my $messages = {
     en_US => {
@@ -33,9 +34,11 @@ my $messages = {
         Configuring => "Initializing user data...",
         CreateIcon => "Creating desktop icon...",
 		Installing => "Installing user data files...",
+        InvalidDataRoot1 => "*** Error: User data directory can not be the same as, or a subdirectory of, the application directory.",
+        InvalidDataRoot2 => "*** Error: User data directory can not be a parent directory of the application directory.",
         Done => "done",
         RunCommand => "You can start Zimbra Desktop by double-clicking the desktop icon or by running the following command:",
-		RunWithAbsPath => 'You must run user-install.pl with absolute path.',
+		RunWithAbsPath => '*** Error: You must run user-install.pl with absolute path.',
         Success => 'Zimbra Desktop has been installed successfully for user {0}.'
     }
 };
@@ -135,7 +138,18 @@ sub move_no_overwrite($$) {
 }
 
 sub dialog_data_root() { 
-    return get_input(get_message("ChooseDataRoot"), "$home_dir/zdesktop");
+    my $dr;
+
+    while (1) {   
+        $dr = get_input(get_message("ChooseDataRoot"), "$home_dir/zdesktop");
+        if (index($dr, $app_root) >= 0) {
+            print get_message("InvalidDataRoot1"), "\n";
+        } elsif (index($app_root, $dr) >= 0) {
+            print get_message("InvalidDataRoot2"), "\n";
+        } else {
+            return $dr;
+        }
+    }
 }
 
 sub dialog_desktop_icon() { 
@@ -143,7 +157,7 @@ sub dialog_desktop_icon() {
 }
 
 # main
-my ($app_root, $data_root, $icon_dir);
+my ($data_root, $icon_dir);
 
 my $script_path = $0;
 if ($script_path eq 'user-install.pl' || $script_path eq './user-install.pl') {
