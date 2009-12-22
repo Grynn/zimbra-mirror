@@ -103,6 +103,7 @@ ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,"
 													   ZaAccount.A_mailHost , "," , 
 													   ZaAccount.A_uid ,"," , 
 													   ZaAccount.A_description, ",",
+                                                       ZaDistributionList.A_isAdminGroup,",", 
 													   ZaDistributionList.A_mailStatus);
 
 
