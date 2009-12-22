@@ -14,20 +14,28 @@
  */
 
 /**
- * @constructor
+ * @overview
+ * 
+ * This file contains a Dwt composite control.
+ * 
+ */
+
+/**
  * @class
  * A composite may contain other controls. All controls that need to contain child controls
  * (such as menus, trees) should inherit from this class.
  * 
- * @author Ross Dargahi
+ * @param {Hash}	params		a hash of parameters
+ * <ul>
+ * <li>parent	[DwtComposite]	the parent widget</li>
+ * <li>className		[String]*			CSS class</li>
+ * <li>posStyle		[constant]*			positioning style</li>
+ * <li>deferred		[Boolean]*			if true, postpone initialization until needed</li>
+ * <li>id			[String]*			an explicit ID to use for the control's HTML element</li>
+ * <li>index 		[int]*				index at which to add this control among parent's children</li>
+ * </ul>
  * 
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
- *        deferred		[boolean]*			if true, postpone initialization until needed
- *        id			[string]*			an explicit ID to use for the control's HTML element
- *        index 		[int]*				index at which to add this control among parent's children 
+ * @extends	DwtControl
  */
 DwtComposite = function(params) {
 	if (arguments.length == 0) { return; }
@@ -46,16 +54,18 @@ DwtComposite.PARAMS = DwtControl.PARAMS.concat();
 DwtComposite.prototype = new DwtControl;
 DwtComposite.prototype.constructor = DwtComposite;
 
-/** Pending elements hash (i.e. elements that have not yet been realized)
- * @type object */
+/**
+ * Pending elements hash (i.e. elements that have not yet been realized).
+ * 
+ * @type object
+ * @private
+ */
 DwtComposite._pendingElements = new Object();
 
-
 /**
- * This method returns this objects real class name
+ * Returns a string representation of the class.
  * 
- * @return class name
- * @type String
+ * @return {String}		a string representation of the class
  */
 DwtComposite.prototype.toString = 
 function() {
@@ -64,14 +74,16 @@ function() {
 
 /**
  * Disposes of the control. This method will remove the control from under the
- * control of it's parent and release any resources associate with the compontent
- * it will also notify any event listeners on registered  <i>DwtEvent.DISPOSE</i> event type
+ * control of it's parent and release any resources associate with the component.
+ * The method will also notify any event listeners on registered {@link DwtEvent.DISPOSE} event type.
  * 
- * In the case of <i>DwtComposite</i> this method will also dispose of all of the composite's
- * children
+ * <p>
+ * In the case of {@link DwtComposite} this method will also dispose of all of the composite's
+ * children.
  * 
+ * <p> 
  * Subclasses may override this method to perform their own dispose functionality but
- * should generallly call up to the parent method
+ * should generally call the parent <code>dispose()</code> method.
  * 
  * @see DwtControl#isDisposed
  * @see DwtControl#addDisposeListener
@@ -89,7 +101,9 @@ function() {
 }
 
 /**
- * @type array
+ * Gets the children of this composite.
+ * 
+ * @return	{Array}		an array of composites
  */
 DwtComposite.prototype.getChildren =
 function() {
@@ -97,8 +111,9 @@ function() {
 }
 
 /**
- * @return the composite's number of children
- * @type number
+ * Gets the number of children of this composite.
+ * 
+ * @return {Number} 		the number of composite children
  */
 DwtComposite.prototype.getNumChildren =
 function() {
@@ -106,7 +121,8 @@ function() {
 }
 
 /**
- * Disposes of all of the composite's children
+ * Removes all of the composite children.
+ * 
  */
 DwtComposite.prototype.removeChildren =
 function() {
@@ -116,8 +132,8 @@ function() {
 }
 
 /**
- * Removes all of the composite's child by calling <code>removeChildren</code> and
- * also clears out the composite's HTML element of any content
+ * Clears the composite HTML element of content and removes
+ * all composite children by calling <code>removeChildren</code>.
  * 
  * @see #removeChildren
  */
@@ -128,10 +144,10 @@ function() {
 }
 
 /**
-* Adds the given child control to this composite.
+* Adds the given child control to this composite at the index (if specified).
 *
-* @param {DwtControl} child	The child control to add
-* @param {number} index index at which to add the child (optional)
+* @param {DwtControl} child		the child control to add
+* @param {Number}	index		the index at which to add the child (may be <code>null</code>)
 */
 DwtComposite.prototype.addChild =
 function(child, index) {
@@ -151,12 +167,11 @@ function(child, index) {
 };
 
 /**
-* Removes the given child control from this control. A removed child is no longer retrievable via
+* Removes the specified child control from this control. A removed child is no longer retrievable via
 * <code>getHtmlElement()</code>, so there is an option to save a reference to the removed child. 
 * That way it can be added later using <code>addChild()</code>.
 *
-* @param {DwtConrol} child the child control to remove
-* 
+* @param {DwtConrol} child		the child control to remove
 * @see #addChild
 */
 DwtComposite.prototype.removeChild =
@@ -181,6 +196,8 @@ function(child) {
 
 /**
  * Allows the user to use the mouse to select text on the control.
+ * 
+ * @private
  */
 DwtComposite.prototype._setAllowSelection =
 function() {
@@ -192,9 +209,10 @@ function() {
 };
 
 /**
- * Determines whether to prevent the browser from allowing text selection.
+ * Sets whether to prevent the browser from allowing text selection.
  * 
  * @see DwtControl#preventSelection
+ * @private
  */
 DwtComposite.prototype.preventSelection = 
 function(targetEl) {
@@ -205,6 +223,7 @@ function(targetEl) {
  * Determines whether to prevent the browser from displaying its context menu.
  * 
  * @see DwtControl#preventContextMenu
+ * @private
  */
 DwtComposite.prototype.preventContextMenu =
 function(target) {
@@ -230,6 +249,7 @@ function(target) {
  * Handles focus control when the mouse button is released
  * 
  * @see DwtControl#_focusByMouseUpEvent
+ * @private
  */
 DwtComposite.prototype._focusByMouseUpEvent =
 function()  {
@@ -245,6 +265,7 @@ function()  {
  * Event listener that is only registered when this control allows selection
  * 
  * @see _allowSelection
+ * @private
  */
 DwtComposite.prototype._mouseDownListener =
 function(ev) {
@@ -259,6 +280,7 @@ function(ev) {
  * Event listener that is only registered when this control allows selection
  * 
  * @see _allowSelection
+ * @private
  */
 DwtComposite.prototype._contextMenuListener =
 function(ev) {
