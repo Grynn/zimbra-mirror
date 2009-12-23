@@ -80,6 +80,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_zimbraPrefMailtoHandlerEnabled = "zimbraPrefMailtoHandlerEnabled";
     public static final String A_zimbraPrefMailtoAccountId = "zimbraPrefMailtoAccountId";
     public static final String A_zimbraPrefShareContactsInAutoComplete = "zimbraPrefShareContactsInAutoComplete";
+    public static final String A_zimbraPrefNotebookSyncEnabled = "zimbraPrefNotebookSyncEnabled";
 
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
@@ -253,9 +254,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (isAccountSetup && etype == EntryType.ACCOUNT)
             revalidateRemoteLogin((OfflineAccount)e, attrs);
 
-        if (e instanceof Account && !isLocalAccount((Account)e))
-            enableWiki(attrs);
-        
         if (etype == EntryType.CONFIG) {
             DbOfflineDirectory.modifyDirectoryEntry(etype, A_offlineDn, "config", attrs, false);
         } else {
@@ -264,15 +262,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
         reload(e);
 
+        if (e instanceof Account && !isLocalAccount((Account)e))
+            enableWiki(attrs);
         if (!skipAttrMgr)
             AttributeManager.getInstance().postModify(attrs, e, context, false, allowCallback);
-        
-//        if (isAccountSetup && etype == EntryType.ACCOUNT) {
-//        	if (e.getBooleanAttr(A_offlineEnableTrace, false))
-//        		ZimbraLog.soap.addAccountLogger(((Account)e).getName(), Log.Level.debug);
-//        	else
-//        		ZimbraLog.soap.removeAccountLogger(((Account)e).getName());
-//        }
     }
     
     public void setAccountAttribute(Account account, String key, Object value) throws ServiceException {
@@ -464,6 +457,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_sn,
             A_zimbraAccountStatus,
             A_zimbraFeatureNotebookEnabled,
+            A_zimbraPrefNotebookSyncEnabled,
             A_zimbraPrefSkin,
             A_zimbraZimletAvailableZimlets,
             A_zimbraPrefClientType,
@@ -561,6 +555,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraJunkMessagesIndexingEnabled, TRUE);
         
         attrs.put(A_zimbraMailQuota, "0");
+
+        Object syncEnabled = attrs.get(A_zimbraPrefNotebookSyncEnabled);
+        attrs.put(A_zimbraFeatureNotebookEnabled, syncEnabled == null ? FALSE : syncEnabled);
 
         Account account = createAccountInternal(emailAddress, zgi.getId(), attrs, true, false);
         
@@ -713,9 +710,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraFeatureNotebookEnabled, FALSE);
         attrs.put(A_zimbraPrefAccountTreeOpen , getAllAccounts().size() == 0 ? TRUE : FALSE);
         attrs.put(A_zimbraZimletAvailableZimlets, new String[0]);
-
-        if (testDs.isYahoo())
-            attrs.put(A_zimbraPrefSkin, "yahoo");
 
         Account account = createAccountInternal(emailAddress, accountId, attrs, false, false);
         OfflineDataSource ds = null;
