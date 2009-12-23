@@ -346,7 +346,7 @@ ZaNewAdminWizard.prototype.goPage = function (pageKey) {
 ZaNewAdminWizard.prototype.configProposedGrants = function (params) {
     var grant = this._containedObject[ZaNewAdmin.A_proposedGrantsList][params.index] ;
     params.msgs.push (AjxMessageFormat.format(com_zimbra_delegatedadmin.msg_proposed_grants_start,
-            [this.getProposedGrantMsg(grant, params)])) ;
+            [ZaNewAdminWizard.getProposedGrantMsg(grant, params)])) ;
     if (this.isGrantGranted (grant)) {
         params.msgs.push (com_zimbra_delegatedadmin.msg_proposed_grants_skipped) ;
         params.index ++ ;
@@ -356,7 +356,7 @@ ZaNewAdminWizard.prototype.configProposedGrants = function (params) {
             this.configProposedGrants(params) ;
         }
     } else {
-        var callback = new AjxCallback (this, this.configProposedGrantsCallback, [params])
+        var callback = new AjxCallback (this, this.configProposedGrantsCallback, [params]) ;
         ZaGrant.grantMethod (grant, callback) ;
     }
 
@@ -388,7 +388,7 @@ function (params, resp) {
     }
 }
 
-ZaNewAdminWizard.prototype.getProposedGrantMsg = function (grant, params) {
+ZaNewAdminWizard.getProposedGrantMsg = function (grant, params) {
     if (!params.index) params.index = 0 ;
     var number = params.index + 1; 
     var msg = number + ") " + grant[ZaGrant.A_target] + "/" + grant[ZaGrant.A_target_type] + "/";
@@ -527,12 +527,40 @@ ZaNewAdminWizard.LEGACY_DA_VIEW =  [
 //                    ZaSettings.DOMAIN_LIST_VIEW
                 ];
 
+ZaNewAdminWizard.getDefaultDARights = function (object) {
+    var tmpGrantsList = [] ;
+    if (object != null) {
+        var domainAdminRight = {} ;
+        domainAdminRight [ZaGrant.A_grantee] = object [ZaAccount.A_name] ;
+        domainAdminRight [ZaGrant.A_grantee_id] = object.id ;
+        domainAdminRight [ZaGrant.A_grantee_type] =  ZaGrant.getGranteeTypeByItemType (object.type) ;
+        domainAdminRight [ZaGrant.A_right] = "domainAdminConsoleRights" ;
+        domainAdminRight [ZaGrant.A_right_type] = "combo" ;
+        domainAdminRight [ZaGrant.A_target] = ZaAccount.getDomain (object.name) ;
+        domainAdminRight [ZaGrant.A_target_type] = ZaItem.DOMAIN ;
+        tmpGrantsList.push (domainAdminRight)  ;
+
+        var domainAdminZimletRight = {} ;
+        domainAdminZimletRight [ZaGrant.A_grantee] = object [ZaAccount.A_name] ;
+        domainAdminZimletRight [ZaGrant.A_grantee_id] = object.id ;
+        domainAdminZimletRight [ZaGrant.A_grantee_type] = ZaGrant.getGranteeTypeByItemType (object.type) ;
+        domainAdminZimletRight [ZaGrant.A_right] = "domainAdminZimletRights" ;
+        domainAdminZimletRight [ZaGrant.A_right_type] = "combo" ;
+        domainAdminZimletRight [ZaGrant.A_target] = ZaGrant.GLOBAL_TARGET_NAME;
+        domainAdminZimletRight [ZaGrant.A_target_type] = ZaItem.GLOBAL_GRANT ;
+        tmpGrantsList.push(domainAdminZimletRight)  ;
+    }
+    return tmpGrantsList ;
+
+}
 ZaNewAdminWizard.prototype.setProposedGrants = function () {
     var proposedGrantsList = this._containedObject [ZaNewAdmin.A_proposedGrantsList] = [] ;
     var tmpGrantsList = [] ;
     if ((this._containedObject [ZaNewAdmin.A_default_domain_admin_grp] == "TRUE")   
         && this.isLegacyDAView())
     {
+        tmpGrantsList =  ZaNewAdminWizard.getDefaultDARights (this._containedObject)  ;
+        /*
         var domainAdminRight = {} ;
         domainAdminRight [ZaGrant.A_grantee] = this._containedObject [ZaAccount.A_name] ;
         domainAdminRight [ZaGrant.A_grantee_id] = this._containedObject.id ;
@@ -551,7 +579,7 @@ ZaNewAdminWizard.prototype.setProposedGrants = function () {
         domainAdminZimletRight [ZaGrant.A_right_type] = "combo" ;
         domainAdminZimletRight [ZaGrant.A_target] = ZaGrant.GLOBAL_TARGET_NAME;
         domainAdminZimletRight [ZaGrant.A_target_type] = ZaItem.GLOBAL_GRANT ;
-        tmpGrantsList.push(domainAdminZimletRight)  ;
+        tmpGrantsList.push(domainAdminZimletRight)  ;   */
 
    }else{
         //not the legacy da view, so we will assign the rights based on the view

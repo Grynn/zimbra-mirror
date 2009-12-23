@@ -8,12 +8,20 @@ if (ZaAccount) {
     ZaAccount.A2_adminRoles = "adminRoles" ;
     ZaAccount.adminRolesModelItem = {ref: ZaAccount.A2_adminRoles ,id: ZaAccount.A2_adminRoles,
                                     type: _LIST_, listItem:{type:_EMAIL_ADDRESS_}} ;
-    ZaAccount.adminAccountModelItem = {id:ZaAccount.A_zimbraIsDelegatedAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
+    ZaAccount.adminAccountModelItem = {id:ZaAccount.A_zimbraIsDelegatedAdminAccount, type:_ENUM_,
+            choices:ZaModel.BOOLEAN_CHOICES,
             ref:"attrs/"+ZaAccount.A_zimbraIsDelegatedAdminAccount} ;
     ZaAccount.myXModel.items.push (ZaAccount.adminAccountModelItem) ;
 
     //admin roles model item
     ZaAccount.myXModel.items.push (ZaAccount.adminRolesModelItem) ;
+
+    ZaAccount.A2_isAssignDefaultDARights = "isAssignDefaultDARights" ;
+    ZaAccount.myXModel.items.push ({
+        id: ZaAccount.A2_isAssignDefaultDARights, type: _ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
+        ref: ZaAccount.A2_isAssignDefaultDARights
+    }) ;
+
 
     ZaAccount.changeAdminRoles = function (value, event, form) {
         var oldVal = this.getInstanceValue();
@@ -75,6 +83,83 @@ if (ZaAccount) {
             form.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_directMemberList, directMemberOfList) ;
             if (form.parent.setDirty) form.parent.setDirty (true) ;
         }
+    }
+
+    ZaController.prototype.assignDefaultDARights = function (item, value, ev) {
+        var isAssignDefaultDARights = (value && value == "TRUE");
+        var isDelegatedAdminValue = item.getInstanceValue(ZaAccount.A_zimbraIsDelegatedAdminAccount) ;
+        var isDelegatedAdmin = (isDelegatedAdminValue && isDelegatedAdminValue == "TRUE") ;
+        var isDelegatedGroupValue = item.getInstanceValue(ZaDistributionList.A_isAdminGroup) ;
+        var isDelegatedGroup = (isDelegatedGroupValue && isDelegatedGroupValue == "TRUE") ;
+
+        if ((isDelegatedAdmin || isDelegatedGroup) && isAssignDefaultDARights)  {
+            console.log("Adding the DA Rights and views ...") ;
+            var tmpObject = item.getInstance() ;
+
+            //1. Modify the admin view
+            var defaultAdminView = ZaUtil.cloneArray (ZaNewAdminWizard.LEGACY_DA_VIEW) ;
+            if (isDelegatedAdmin) {
+                tmpObject [ZaNewAdmin.A_admin_type] = ZaItem.ACCOUNT ;
+            }else if (isDelegatedGroup) {
+                tmpObject [ZaNewAdmin.A_admin_type] = ZaItem.DL ;                
+            }
+
+            var uiComponents = tmpObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] || [] ;
+            tmpObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = uiComponents.concat(defaultAdminView);
+            if (ZaNewAdmin.modifyAdmin (tmpObject)) {
+                this._currentObject [ZaAccount.A2_isAssignDefaultDARights] = "TRUE" ;
+                this._currentObject.attrs [ZaAccount.A_zimbraAdminConsoleUIComponents]
+                            = tmpObject.attrs [ZaAccount.A_zimbraAdminConsoleUIComponents] ;                
+            }
+
+            //2. Modify the account right
+            var defaultRights = ZaNewAdminWizard.getDefaultDARights (tmpObject) ;
+
+            ZaGrant.assignMultiGrants.call(this, {
+                    currentIndex: 0,
+                    rightsArr: defaultRights,
+                    showStatus: -1
+            }) ;
+
+
+            //we should remove the event change handler if everything runs fine.
+            this.removeChangeListener (this._assignDefaultDARightslistener) ;
+        }else {
+            console.log("No need to add the DA Rights ...") ;
+        }
+    }
+
+    ZaAccount.getAssignDefaultDARightsChkBoxItem = function (w) {
+        if (w == null) w = "300px" ;
+        var ckb = { type: _GROUP_, colSpan: "*", numCols:2, colSizes: [w, "*"], items: [
+                {
+                    ref: ZaAccount.A2_isAssignDefaultDARights ,
+                    type: _CHECKBOX_ ,
+                    label: com_zimbra_delegatedadmin.NAD_IsAssignDefaultDARights,
+                    bmolsnr: true ,
+                    visibilityChecks: [[XForm.checkInstanceValue, ZaAccount.A_zimbraIsDelegatedAdminAccount, "TRUE"]],
+                    visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount, ZaDistributionList.A_isAdminGroup] ,
+                    onChange :
+                        function(value, event, form) {
+                            var controller = ZaApp.getInstance ().getCurrentController () ;
+
+                            var isDelegatedAdmin = this.getInstanceValue(ZaAccount.A_zimbraIsDelegatedAdminAccount) ;
+                            if (!controller._assignDefaultDARightslistener) {
+                                controller._assignDefaultDARightslistener =  new AjxListener (controller, ZaController.prototype.assignDefaultDARights, [this, value]) ;
+                            }
+                            if(value == "TRUE" && (isDelegatedAdmin && isDelegatedAdmin == "TRUE")) {
+                                controller.addChangeListener (controller._assignDefaultDARightslistener)
+                            }else {
+                                controller.removeChangeListener (controller._assignDefaultDARightslistener) ;
+                            }
+
+                            this.setInstanceValue(value);
+                    },
+                    trueValue:"TRUE", falseValue:"FALSE"
+                }
+            ]
+        };
+        return ckb ;
     }
 
     ZaAccount.getAdminChkBoxItem = function () {
@@ -159,6 +244,7 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
        [ZaItem.hasRight, ZaAccount.GET_ACCOUNT_MEMBERSHIP_RIGHT]] ;
        adminRolesItem.enableDisableChecks = [[ZaItem.hasWritePermission,ZaAccount.A_zimbraIsDelegatedAdminAccount]] ;
 
+       var assignDefaultDARightsItem = ZaAccount.getAssignDefaultDARightsChkBoxItem() ;
 
         var tabs = xFormObject.items[2].items;
         var tmpItems = tabs[0].items;
@@ -170,7 +256,8 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
                for(var j=0;j<cnt2;j++) {
                    if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_zimbraIsAdminAccount) {
                        //add  Admin checkbox
-                       xFormObject.items[2].items[0].items[i].items.splice(j+1,0, adminChkBox, adminRolesItem);
+                       xFormObject.items[2].items[0].items[i].items.splice(j+1,0,
+                               adminChkBox, assignDefaultDARightsItem, adminRolesItem);
                        
                        //add the mutual exclusive action to global admin 
                        tmpGrouperItems[j].elementChanged =

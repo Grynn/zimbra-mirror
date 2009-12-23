@@ -182,6 +182,104 @@ ZaGrant.load = function (params) {
     }
 }
 
+/**
+ *
+ * @param rightsArr
+ * @param params
+ *          {
+               rightsArr:
+               currentIndex :
+               showStatus : 1 (show all status, no matter succeed or failed)
+                            -1 (only show status in the end when there are errors)
+                            0 (don't show status at all)
+               resultObj: {
+                    msg: [],
+                    status: -1 (error), 0 (OK)
+               }
+            }
+ * @param callback
+ */
+ZaGrant.assignMultiGrants = function (params) {
+
+    if (params.resultObj == null){
+        params.resultObj = {
+            msg: [],
+            status: 0 
+        } ;
+    }
+    
+    if (params.rightsArr == null || params.rightsArr.length <= 0) {
+        params.resultObj.msg.push (com_zimbra_delegatedadmin.no_rights_to_assign) ;
+    } else {
+        if (params.currentIndex == null || params.currentIndex < 0) {
+            params.currentIndex = 0; 
+        }
+        if (params.currentIndex < params.rightsArr.length) {
+            var grant = params.rightsArr [params.currentIndex] ;
+            var callback = new AjxCallback (this, ZaGrant.assignMultiGrantsCallback, [params]) ;
+
+            params.resultObj.msg.push(AjxMessageFormat.format(com_zimbra_delegatedadmin.msg_proposed_grants_start,
+                            [ZaNewAdminWizard.getProposedGrantMsg(grant, params)]));
+            ZaGrant.grantMethod (grant, callback) ;
+        } else {
+            params.resultObj.msg.push (com_zimbra_delegatedadmin.msg_proposed_grants_done) ;
+        }
+    }
+
+    //show status
+
+    if (!ZaApp.getInstance().dialogs["createProposedGrantsListStatusDialog"]){
+        ZaApp.getInstance().dialogs["createProposedGrantsListStatusDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell());
+    }
+    var statusDialog = ZaApp.getInstance().dialogs["createProposedGrantsListStatusDialog"];
+    statusDialog.setSize (400, 100);
+
+    if (params.showStatus == 1) {
+        if (!statusDialog.isPoppedUp ()) statusDialog.popup () ;
+        statusDialog.setMessage (params.resultObj.msg.join(""));
+    } else if ((params.showStatus == -1) && (params.currentIndex >= params.rightsArr.length)){
+        if (params.resultObj.status < 0) { //there is error
+            if (!statusDialog.isPoppedUp ()) statusDialog.popup () ;
+            statusDialog.setMessage (params.resultObj.msg.join(""));
+        }
+    }
+
+}
+
+ZaGrant.assignMultiGrantsCallback = function (params, resp) {
+    if (!resp || resp.isException()) {
+        params.resultObj.status = -1; 
+        params.resultObj.msg.push ("<font color='red'>" + com_zimbra_delegatedadmin.msg_proposed_grants_failed + "</font>") ;
+    } else {
+        params.resultObj.msg.push (com_zimbra_delegatedadmin.msg_proposed_grants_granted) ;
+    }
+
+    params.currentIndex ++ ;
+    ZaGrant.assignMultiGrants.call (this, params) ;
+    /*
+    if (params.currentIndex >= this._containedObject[ZaNewAdmin.A_proposedGrantsList].length) {
+        params.resultObj.msg.push (com_zimbra_delegatedadmin.msg_proposed_grants_done) ;
+        ZaApp.getInstance().dialogs["createProposedGrantsListStatusDialog"].setMessage (params.resultObj.msg.join(""));
+    } else {
+        ZaApp.getInstance().dialogs["createProposedGrantsListStatusDialog"].setMessage (params.resultObj.msg.join(""));
+        this.configProposedGrants(params) ;
+    } */
+
+}
+
+ZaGrant.getGranteeTypeByItemType = function (objType) {
+    var type = null ;
+    if (objType != null) {
+        if (objType == ZaItem.ACCOUNT) {
+            type = ZaGrant.GRANTEE_TYPE.usr;
+        } else if (objType == ZaItem.DL) {
+            type = ZaGrant.GRANTEE_TYPE.grp;
+        }
+    }
+
+    return type ;
+}
+
 //GrantRightRequest, triggered by the GrantDialog actions
 ZaGrant.grantMethod = function (obj, callback) {
     if (AjxEnv.hasFirebug)

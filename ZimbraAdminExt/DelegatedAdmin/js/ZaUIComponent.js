@@ -122,6 +122,12 @@ function () {
     }
 
     this._containedObject [ZaUIComponent.A_inheritedUIComponents] = inheritedUIComps ;
+
+    //keep the assign default da views and rights checkbox checked if assign the rights succeed
+    var controller = ZaApp.getInstance ().getCurrentController () ;
+    if ( controller._currentObject [ZaAccount.A2_isAssignDefaultDARights] == "TRUE" ) {
+        this._containedObject [ZaAccount.A2_isAssignDefaultDARights] = "TRUE" ;    
+    }
 }
 
 ZaUIComponent.uiCompObjectModifer = function () {
