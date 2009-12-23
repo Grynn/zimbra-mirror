@@ -32,13 +32,18 @@ XFormItemFactory = function() {}
 XFormItemFactory.createItem = function (attributes, parentItem, xform) {
 	// assign a modelItem to the item
 	var refPath = this.getRefPath(attributes, parentItem);
+	var subRefPath = this.getSubRefPath(attributes, parentItem);
 
-	var modelItem;
+	var modelItem, subModelItem;
 	if (refPath != null) {
 		// assign a modelItem to the item
 		modelItem = this.getModelItem(xform.xmodel, attributes, refPath);
 	}
-			
+	
+	if (subRefPath != null) {
+		// assign a modelItem to the item
+		subModelItem = this.getModelItem(xform.xmodel, attributes, subRefPath);
+	}
 	// get the class for that type and create one
 	var type = this.getItemType(attributes, modelItem);
 	var constructor = this.getItemTypeConstructor(type, xform);
@@ -57,7 +62,10 @@ XFormItemFactory.createItem = function (attributes, parentItem, xform) {
 	item.id = xform.getUniqueId(idPrefix);
 
 	item.refPath = refPath;
+	item.subRefPath = subRefPath;
 	item.__modelItem = modelItem;
+	item.__subModelItem = subModelItem;
+	
 	item.__xform = xform;
 	item.__parentItem = parentItem;
 	
@@ -98,6 +106,36 @@ XFormItemFactory.getRefPath = function (attributes, parentItem) {
 
 	} else {
 		path = parentPath + "/" + ref;
+	}
+	return path;
+}
+
+XFormItemFactory.getSubRefPath = function (attributes, parentItem) {
+	if (attributes.subRefPath) return attributes.subRefPath;
+	
+	var subRref = attributes.subRef;
+	if (subRref == null) return null;
+	
+	if (parentItem) {
+		var parentPath = parentItem.getSubRefPath();
+		if (parentPath == null) parentPath = "";
+	} else {
+		var parentPath = "";
+	}
+	
+	var path = subRref;
+	if (subRref == ".") {
+		path = parentPath;
+
+	} else if (subRref == "..") {
+		parentPath = parentPath.split("/");
+		path = parentPath.slice(0, parentPath.length - 1).join("/");
+
+	} else if (parentPath == "") {
+		path = subRref;
+
+	} else {
+		path = parentPath + "/" + subRref;
 	}
 	return path;
 }
@@ -739,15 +777,22 @@ XFormItem.prototype.getModelItem = function() {
 	return this.__modelItem;
 }
 
+XFormItem.prototype.getSubModelItem = function() {
+	return this.__subModelItem;
+}
+
 //XXX NON-STANDARD
 XFormItem.prototype.getRef = function () {
 	if (this.ref !== _UNDEFINED_) return this.ref;
 	return this.__attributes.ref;
 }
 
-
 XFormItem.prototype.getRefPath = function () {
 	return this.refPath;
+}
+
+XFormItem.prototype.getSubRefPath = function () {
+	return this.subRefPath;
 }
 
 XFormItem.prototype.getId = function () {
@@ -1564,7 +1609,6 @@ XFormItem.prototype.getChoiceNum = function (value) {
 	}
 	return -1
 }
-
 
 XFormItem.prototype.getCssString = function () {
 	var css = (this.getCssClass() || '');

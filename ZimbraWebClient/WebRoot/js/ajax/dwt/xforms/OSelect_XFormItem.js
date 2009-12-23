@@ -877,20 +877,20 @@ OSelect_XFormItem.prototype.choiceSelected = function (itemNum, clearOldValues, 
 }
 
 OSelect_XFormItem.prototype.setValue = function (newValue, clearOldValues, includeIntermediates, event) {
-	var oldValues
+
+	var newValues;
 	if (clearOldValues) {
 		if(this.getMultiple()) {
 			if(newValue instanceof Array)
-				oldValues = newValue;
+				newValues = newValue;
 			else
-				oldValues = [newValue];
+				newValues = [newValue];
 		} else {
-			oldValues = newValue;
+			newValues = newValue;
 		}
 	} else {
-		oldValues;
 		if (includeIntermediates) {
-			oldValues = [];
+			newValues = [];
 			var vals = this.getNormalizedValues();
 			var start = this._selectionCursor;
 			var dist = this._selectionAnchor - this._selectionCursor;
@@ -899,52 +899,59 @@ OSelect_XFormItem.prototype.setValue = function (newValue, clearOldValues, inclu
 				start = this._selectionAnchor;
 			}
 			for (var i = start; i <= start + dist; ++i) {
-				oldValues.push(vals[i]);
+				newValues.push(vals[i]);
 			}
 		} else {
-			oldValues = this.getInstanceValue();
-
-			if(oldValues) {
-				if (typeof oldValues == "string") {
-					if (oldValues == "") 	
-						oldValues = [];
+			var oldValues = this.getInstanceValue();
+			if(typeof oldValues == "string") {
+				newValues = new String(oldValues);
+			} else if(typeof oldValues =="object" || oldValues instanceof Array) {
+				newValues = [];
+				for(var a in oldValues) {
+					newValues[a] = oldValues[a];
+				}
+			}
+			if(newValues) {
+				if (typeof newValues == "string") {
+					if (newValues == "") 	
+						newValues = [];
 					else
-						oldValues = oldValues.split(",");
+						newValues = newValues.split(",");
 				}
 			} else {
-				oldValues = new Array();			
+				newValues = new Array();			
 			}			
 			
 			var found = false;
-			for (var i = 0; i < oldValues.length; i++) {
-				if (oldValues[i] == newValue) {
+			for (var i = 0; i < newValues.length; i++) {
+				if (newValues[i] == newValue) {
 					found = true;
 					break;
 				}
 			}
 			
 			if (found) {
-				oldValues.splice(i, 1);
+				newValues.splice(i, 1);
 			} else {
-				oldValues.push(newValue);
+				newValues.push(newValue);
 			}
 		}
-		if(!oldValues || (oldValues.length == 1 && oldValues[0] == "")) {
-			oldValues = []
+		if(!newValues || (newValues.length == 1 && newValues[0] == "")) {
+			newValues = []
 		} 
 		// if we have a modelItem which is a LIST type
 		//	convert the output to the propert outputType
 		var modelItem = this.getModelItem();
 		if (modelItem && modelItem.getOutputType) {
 			if (modelItem.getOutputType() == _STRING_) {
-				oldValues = oldValues.join(modelItem.getItemDelimiter());
+				newValues = newValues.join(modelItem.getItemDelimiter());
 			}
 		} else {
 			// otherwise assume we should convert it to a comma-separated string
-			oldValues = oldValues.join(",");
+			newValues = newValues.join(",");
 		}
 	}
-	this.getForm().itemChanged(this, oldValues, event);
+	this.getForm().itemChanged(this, newValues, event);
 }
 
 OSelect_XFormItem.prototype.setElementEnabled = function (enabled) {
@@ -989,7 +996,7 @@ OSelect_Check_XFormItem.prototype.getChoiceHTML = function (itemNum, value, labe
 		">",
 		"<table cellspacing=0 cellpadding=0><tr><td><input type=checkbox id='",id,"_choiceitem_",itemNum,"'></td><td>",
 				label,
-		"</td></tr></table></tr>"
+		"</td></tr></table></td></tr>"
 	);
 }
 
@@ -1047,7 +1054,7 @@ OSelect_Check_XFormItem.prototype.deselectAll = function (ev) {
 OSelect_Check_XFormItem.prototype.updateElement = function (values) {
 	var element = this.getElement();
 	element.innerHTML = this.getChoicesHTML();
-
+	this.clearAllHilites();
 	if (values) {	
 		if(this.getMultiple()) {
 			if (typeof values == "string") values = values.split(",");
@@ -1061,4 +1068,312 @@ OSelect_Check_XFormItem.prototype.updateElement = function (values) {
 		}
 	}
     this.updateEnabledDisabled();
+}
+
+OSelect_Check_XFormItem.prototype.clearAllHilites = function () {
+	var choices = this.getNormalizedChoices();
+	var cnt;
+	if(choices.values) {
+		cnt = choices.values.length;
+		for(var i=0; i< cnt; i++) {
+			this.dehiliteChoice(i);		
+		}
+	}
+}
+
+OSelect_DblCheck_XFormItem = function() {}
+XFormItemFactory.createItemType("_OSELECT_DBL_CHECK_", "oselect_dbl_check", OSelect_DblCheck_XFormItem, OSelect_Check_XFormItem)
+
+OSelect_DblCheck_XFormItem.prototype.onSubChoiceOver = function (itemNum) {}
+OSelect_DblCheck_XFormItem.prototype.onSubChoiceOut = function (itemNum) {}
+
+OSelect_DblCheck_XFormItem.prototype.onSubChoiceClick = function (itemNum, event) {
+	event = event || window.event;
+	var clearOthers = true;
+	var includeIntermediates = false;
+	
+	if(this.getMultiple()) {
+		clearOthers = false;
+		if (event.shiftKey) {
+			includeIntermediates = true;
+		}
+	}
+	
+	this.subChoiceSelected(itemNum, clearOthers, includeIntermediates, event);
+};
+
+OSelect_DblCheck_XFormItem.prototype.subChoiceSelected = function (itemNum, clearOldValues, includeIntermediates, event) {
+	if (includeIntermediates){
+		this._subSelectionCursor = itemNum;
+		if (this._subSelectionAnchor == null) {
+			this._subSselectionAnchor = itemNum;
+		}
+	} else {
+		this._subSelectionAnchor = itemNum;
+		this._subSelectionCursor = itemNum;
+	}
+
+	var value = this.getNormalizedValues()[itemNum];
+	this.setSubValue(value, clearOldValues, includeIntermediates, event);
+}
+
+OSelect_DblCheck_XFormItem.prototype.setSubValue = function (newValue, clearOldValues, includeIntermediates, event) {
+	var newValues;
+
+	if (clearOldValues) {
+		if(this.getMultiple()) {
+			if(newValue instanceof Array)
+				newValues = newValue;
+			else
+				newValues = [newValue];
+		} else {
+			newValues = newValue;
+		}
+	} else {
+		if (includeIntermediates) {
+			newValues = [];
+			var vals = this.getNormalizedValues();
+			var start = this._subSelectionCursor;
+			var dist = this._subSelectionAnchor - this._subSelectionCursor;
+			if (dist < 0 ) {
+				dist = this._subSelectionCursor - this._subSelectionAnchor;
+				start = this._subSelectionAnchor;
+			}
+			for (var i = start; i <= start + dist; ++i) {
+				newValues.push(vals[i]);
+			}
+		} else {
+			var oldValues = this.getInstanceValue(this.getInheritedProperty("subRef"));
+			if(typeof oldValues == "string") {
+				newValues = new String(oldValues);
+			} else if(typeof oldValues =="object" || oldValues instanceof Array) {
+				newValues = [];
+				for(var a in oldValues) {
+					newValues[a] = oldValues[a];
+				}
+			}
+			if(newValues) {
+				if (typeof newValues == "string") {
+					if (newValues == "") 	
+						newValues = [];
+					else
+						newValues = newValues.split(",");
+				}
+			} else {
+				newValues = new Array();			
+			}			
+			
+			var found = false;
+			for (var i = 0; i < newValues.length; i++) {
+				if (newValues[i] == newValue) {
+					found = true;
+					break;
+				}
+			}
+			
+			if (found) {
+				newValues.splice(i, 1);
+			} else {
+				newValues.push(newValue);
+			}
+		}
+		if(!newValues || (newValues.length == 1 && newValues[0] == "")) {
+			newValues = []
+		} 
+		// if we have a modelItem which is a LIST type
+		//	convert the output to the propert outputType
+		var modelItem = this.getSubModelItem();
+		if (modelItem && modelItem.getOutputType) {
+			if (modelItem.getOutputType() == _STRING_) {
+				newValues = newValues.join(modelItem.getItemDelimiter());
+			}
+		} else {
+			// otherwise assume we should convert it to a comma-separated string
+			newValues = newValues.join(",");
+		}
+	}
+	this.getForm().subItemChanged(this, newValues, event);
+}
+
+OSelect_DblCheck_XFormItem.prototype.getSubLabel = function () {
+	return this.getInheritedProperty("subLabel");	
+}
+
+OSelect_DblCheck_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass) {
+	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
+	var id = this.getId();
+	var subLabel = this.getSubLabel();
+	return AjxBuffer.concat(
+		"<tr><td class=", cssClass, 
+			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
+			" onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",
+			" onclick=\"",ref, ".onChoiceClick(", itemNum,", event||window.event)\"",
+			" ondblclick=\"",ref, ".onChoiceDoubleClick(", itemNum,", event||window.event)\">",
+				"<table cellspacing=0 cellpadding=0><tr><td><input type=checkbox id='",id,"_choiceitem_",itemNum,"'></td><td>",
+				label,
+				"</td></tr></table>",
+			"</td><td class=",cssClass,
+				" onmouseover=\"",ref,".onSubChoiceOver(", itemNum, ", event||window.event)\"",
+				" onmouseout=\"",ref, ".onSubChoiceOut(", itemNum, ", event||window.event)\"",
+				" onclick=\"",ref, ".onSubChoiceClick(", itemNum, ", event||window.event)\"",
+				" ondblclick=\"",ref, ".onSubChoiceDoubleClick(", itemNum, ".event||window.event)\">",
+					"<table cellspacing=0 cellpadding=0><tr><td><input type=checkbox id='",id,"_subchoiceitem_",itemNum,"'></td><td>",
+				subLabel,
+				"</td></tr></table>",
+		"</td></tr>"
+	);
+}
+
+OSelect_DblCheck_XFormItem.prototype.hiliteChoice = function (itemNum) {
+	var chEl = this.getChoiceElements(itemNum);
+	if(chEl) {
+		var el = chEl[0];
+		el.className = this.getChoiceSelectedCssClass();
+	
+		var checks = el.getElementsByTagName("input");
+		if (checks) {
+			checks[0].checked = true;
+			this.enableSubChoice(itemNum);
+		}
+	}
+}
+
+OSelect_DblCheck_XFormItem.prototype.dehiliteChoice = function(itemNum) {
+	var chEl = this.getChoiceElements(itemNum);
+	if(chEl) {
+		var el = chEl[0];
+		el.className = this.getChoiceCssClass();
+
+		var checks = el.getElementsByTagName("input");
+		if (checks) {
+			checks[0].checked = false;
+			this.dehiliteSubChoice(itemNum);
+			this.disableSubChoice(itemNum);
+		}
+	}
+}
+
+OSelect_DblCheck_XFormItem.prototype.hiliteSubChoice = function (itemNum) {
+	var chEl = this.getChoiceElements(itemNum);
+	if(chEl) {
+		var el = chEl[3];
+		el.className = this.getChoiceSelectedCssClass();
+
+		var checks = el.getElementsByTagName("input");
+		if (checks) {
+			checks[0].checked = true;
+		}
+	}
+}
+
+OSelect_DblCheck_XFormItem.prototype.dehiliteSubChoice = function(itemNum) {
+	var chEl = this.getChoiceElements(itemNum);
+	if(chEl) {
+		var el = chEl[3];
+		el.className = this.getChoiceCssClass();
+
+		var checks = el.getElementsByTagName("input");
+		if (checks) {
+			checks[0].checked = false;
+		}
+	}
+}
+
+OSelect_DblCheck_XFormItem.prototype.disableSubChoice = function (itemNum) {
+	var chEl = this.getChoiceElements(itemNum);
+	if(chEl) {
+		var el = chEl[3];
+		el.className = this.getChoiceCssClass() + "_disabled";
+
+		var checks = el.getElementsByTagName("input");
+		if (checks) {
+			checks[0].disabled = true;
+		}
+	}
+}
+
+OSelect_DblCheck_XFormItem.prototype.enableSubChoice = function (itemNum) {
+	var chEl = this.getChoiceElements(itemNum);
+	if(chEl) {
+		var el = chEl[3];
+		el.className = this.getChoiceCssClass();
+
+		var checks = el.getElementsByTagName("input");
+		if (checks) {
+			checks[0].disabled = false;
+		}
+	}
+}
+
+
+OSelect_DblCheck_XFormItem.prototype.updateElement = function () {
+	var element = this.getElement();
+	element.innerHTML = this.getChoicesHTML();
+	var values = this.getInstanceValue();
+	this.clearAllHilites();
+	if (values) {	
+		if(this.getMultiple()) {
+			if (typeof values == "string") values = values.split(",");
+			for (var i = 0; i < values.length; i++) {
+				var itemNum = this.getChoiceNum(values[i]);
+				if (itemNum != -1) this.hiliteChoice(itemNum);
+			}
+		} else {
+			var itemNum = this.getChoiceNum(values);
+			if (itemNum != -1) this.hiliteChoice(itemNum);
+		}
+	}
+	
+	var subValues = this.getInstanceValue(this.getInheritedProperty("subRef"));
+	if (subValues) {	
+		if(this.getMultiple()) {
+			if (typeof subValues == "string") subValues = subValues.split(",");
+			for (var i = 0; i < subValues.length; i++) {
+				var itemNum = this.getChoiceNum(subValues[i]);
+				if (itemNum != -1) this.hiliteSubChoice(itemNum);
+			}
+		} else {
+			var itemNum = this.getChoiceNum(values);
+			if (itemNum != -1) this.hiliteSubChoice(itemNum);
+		}
+	}	
+    this.updateEnabledDisabled();
+}
+
+OSelect_DblCheck_XFormItem.prototype.onSubChoiceDoubleClick = function (itemNum, event) {
+	this.subChoiceSelected(itemNum, true, event);
+}
+
+OSelect_DblCheck_XFormItem.prototype.setElementEnabled = function (enabled) {
+	var choices = this.getNormalizedChoices();
+	if(!choices)
+		return;
+	
+	var values = choices.values;
+	if(!values)
+		return;
+		
+	var cnt = values.length;
+	for(var i=0; i < cnt; i ++) {
+		var chkbx = this.getElement(this.getId() + "_choiceitem_" + i);
+		var chkbxSub = this.getElement(this.getId() + "_subchoiceitem_" + i);	
+		if(chkbx && chkbxSub) {
+			if(enabled) {
+				chkbx.className = this.getChoiceCssClass();
+				chkbx.disabled = false;
+//				chkbxSub.className = this.getChoiceCssClass();
+//				chkbxSub.disabled = false;					
+			} else {
+				chkbx.className = this.getChoiceCssClass() + "_disabled";
+				chkbx.disabled = true;
+				chkbxSub.className = this.getChoiceCssClass() + "_disabled";
+				chkbxSub.disabled = true;				
+			}
+		} 
+	}
+};
+
+OSelect_DblCheck_XFormItem.prototype.deselectAll = function (ev) {
+	this.getForm().subItemChanged(this, [], ev);
+	this.getForm().itemChanged(this, [], ev);
 }

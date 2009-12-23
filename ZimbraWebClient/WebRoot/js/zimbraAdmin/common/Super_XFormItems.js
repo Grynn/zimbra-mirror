@@ -702,31 +702,23 @@ Zimlet_Select_XFormItem.prototype.choicesWidth = "275px";
 
 Zimlet_Select_XFormItem.prototype.initializeItems = function() {
 	var selectRef = this.getInheritedProperty("selectRef");
+	var selectSubRef = this.getInheritedProperty("selectSubRef");
+	var selectSubLabel = this.getInheritedProperty("selectSubLabel");
 	var choices = this.getInheritedProperty("choices");	
 	var selectLabel = this.getInheritedProperty("selectLabel");
     var choicesWidth = this.getInheritedProperty ("choicesWidth") || "275px" ;
     
     var selectChck = {
-		type:_OSELECT_CHECK_,
+		type:_OSELECT_DBL_CHECK_,
 		choices:choices,
 		colSpan:3,
 		ref:selectRef,
+		subRef:selectSubRef,
 		label:selectLabel,
+		subLabel:selectSubLabel,
 		labelLocation:_TOP_,
 		width:choicesWidth,
-		onChange:function (value, event, form) {
-            if (this.getIsEnabled ()) { //the changes are only effective when it is enabled
-                if (this.getParentItem() && this.getParentItem().getParentItem() && this.getParentItem().getParentItem().getOnChangeMethod()) {
-                    return this.getParentItem().getParentItem().getOnChangeMethod().call(this, value, event, form);
-                } else {
-                    return this.setInstanceValue(value);
-                }
-            }
-        },
-		forceUpdate:true,
-		updateElement:function(value) {
-			OSelect_Check_XFormItem.prototype.updateElement.call(this, value);
-		},
+		//bmolsnr:true,
 		cssStyle:"margin-bottom:5px;margin-top:5px;border:2px inset gray;"				
 	};
 	

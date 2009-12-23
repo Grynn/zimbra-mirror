@@ -767,6 +767,58 @@ XForm.prototype.onBlur = function(id) {
 	this.__focusObject = null;
 }
 
+XForm.prototype.subItemChanged = function (id, value, event, quite) {
+	//console.log("XForm.prototype.itemChanged start (" + id +","+value+","+event+")");
+	var item = this.getItemById(id);
+	if (item == null) return alert("Couldn't get item for " + id);	// EXCEPTION
+	
+	// tell the item that it's display is dirty so it might have to update
+	item.dirtyDisplay();
+
+	// validate value
+	var modelItem = item.getSubModelItem();
+	var errorCorrected = false;
+	if (modelItem != null) {
+		try {
+			value = modelItem.validate(value, this, item, this.getInstance());
+			if(item.hasError()) {
+				errorCorrected = true;
+			}
+			item.clearError();
+		}
+		catch (message) {
+			item.setError(message);
+			var event = new DwtXFormsEvent(this, item, value);
+			this.notifyListeners(DwtEvent.XFORMS_VALUE_ERROR, event);
+			return;
+		}
+	}
+
+	// if there is an onChange handler, call that
+	var onChangeMethod = item.cacheInheritedMethod("onSubChange","$onSubChange","value,event,form");
+
+	if (typeof onChangeMethod == "function") {
+//		DBG.println("itemChanged(", item.ref, ").onChange = ", onChangeMethod);
+		value = onChangeMethod.call(item, value, event, this);
+	} else {
+		var oldVal = item.getInstanceValue(item.getInheritedProperty("subRef"));
+		if(oldVal == value) {
+			if(errorCorrected && !quite) 
+				this.notifyListeners(DwtEvent.XFORMS_VALUE_CHANGED, event);
+				
+			return;
+		}	
+		item.setInstanceValue(value, item.getSubRefPath());
+	}
+	
+	var event = new DwtXFormsEvent(this, item, value);
+	if(!quite)
+		this.notifyListeners(DwtEvent.XFORMS_VALUE_CHANGED, event);
+
+	this.setIsDirty(true, item);
+	//console.log("XForm.prototype.itemChanged end (" + id +","+value+","+event+")");
+}
+
 XForm.prototype.itemChanged = function (id, value, event, quite) {
 	//console.log("XForm.prototype.itemChanged start (" + id +","+value+","+event+")");
 	var item = this.getItemById(id);
