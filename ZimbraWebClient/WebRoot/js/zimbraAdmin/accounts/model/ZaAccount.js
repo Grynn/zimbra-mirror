@@ -100,6 +100,7 @@ ZaAccount.A_zimbraMailTrashLifetime = "zimbraMailTrashLifetime";
 ZaAccount.A_zimbraMailIdleSessionTimeout = "zimbraMailIdleSessionTimeout";
 ZaAccount.A_zimbraAvailableSkin = "zimbraAvailableSkin";
 ZaAccount.A_zimbraZimletAvailableZimlets = "zimbraZimletAvailableZimlets";
+ZaAccount.A_zimbraZimletMandatoryZimlets = "zimbraZimletMandatoryZimlets";
 //prefs
 ZaAccount.A_zimbraPrefAppleIcalDelegationEnabled = "zimbraPrefAppleIcalDelegationEnabled";
 ZaAccount.A_zimbraPrefCalendarShowPastDueReminders = "zimbraPrefCalendarShowPastDueReminders";
@@ -1648,7 +1649,8 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefSkin, type:_COS_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefSkin},
         {id:ZaAccount.A_zimbraAvailableSkin, type:_COS_LIST_, ref:"attrs/" + ZaAccount.A_zimbraAvailableSkin, dataType: _STRING_},
-        {id:ZaAccount.A_zimbraZimletAvailableZimlets, type:_COS_LIST_, ref:"attrs/" + ZaAccount.A_zimbraZimletAvailableZimlets, dataType: _STRING_},
+        {id:ZaAccount.A_zimbraZimletMandatoryZimlets,  type:_COS_LIST_, ref:"attrs/" + ZaAccount.A_zimbraZimletMandatoryZimlets, dataType:_STRING_,outputType:_LIST_},
+        {id:ZaAccount.A_zimbraZimletAvailableZimlets, type:_COS_LIST_, ref:"attrs/" + ZaAccount.A_zimbraZimletAvailableZimlets, dataType: _STRING_,outputType:_LIST_},
         {id:ZaAccount.A_zimbraPrefGalAutoCompleteEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefGalAutoCompleteEnabled},
         {id:ZaAccount.A_zimbraPrefAdminConsoleWarnOnExit, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefAdminConsoleWarnOnExit},
         {id:ZaAccount.A_zimbraPrefWarnOnExit, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefWarnOnExit},

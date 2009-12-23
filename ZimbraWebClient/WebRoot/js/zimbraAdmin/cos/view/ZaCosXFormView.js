@@ -983,6 +983,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     {type:_ZIMLET_SELECT_,
                         selectRef:ZaCos.A_zimbraZimletAvailableZimlets,
                         ref:ZaCos.A_zimbraZimletAvailableZimlets,
+                        selectSubRef:ZaCos.A_zimbraZimletMandatoryZimlets,
+                        selectSubLabel:ZaMsg.zimbraZimletMandatoryZimlets,
                         choices:ZaCosXFormView.zimletChoices,
                         visibilityChecks:[Case_XFormItem.prototype.isCurrentTab],
                         visibilityChangeEventSources:[ZaModel.currentTab],
