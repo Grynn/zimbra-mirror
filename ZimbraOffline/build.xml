@@ -992,9 +992,10 @@
 		<mkdir dir="${dist.data.dir}/profile/extensions/zimbradnd@zimbra.com"/>
 		<unzip src="../ZimbraWebClient/ffext/build/ZimbraDnD.xpi" dest="${dist.data.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>
 		
-		<!-- unzip inquisitor extension -->
+		<!-- unzip inquisitor extension
 		<mkdir dir="${dist.data.dir}/profile/extensions/Inquisitor@yahoo"/>
 		<unzip src="src/installer/extensions/inquisitor4prism.xpi" dest="${dist.data.dir}/profile/extensions/Inquisitor@yahoo" overwrite="true"/>
+		-->
 
         <!-- override default settings in profile -->
         <copy todir="${dist.data.dir}/profile" file="prism/profile/user.js" overwrite="true" />

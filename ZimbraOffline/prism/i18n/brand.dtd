@@ -1,5 +1,5 @@
-<!ENTITY  brandShortName  "Y! Zimbra Desktop">
-<!ENTITY  brandFullName   "Yahoo! Zimbra Desktop">
+<!ENTITY  brandShortName  "Zimbra Desktop">
+<!ENTITY  brandFullName   "Zimbra Desktop">
 
 <!-- required for download dialog (unknownContentType.xul) -->
 
