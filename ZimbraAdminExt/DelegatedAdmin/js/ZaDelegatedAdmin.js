@@ -86,46 +86,53 @@ if (ZaAccount) {
     }
 
     ZaController.prototype.assignDefaultDARights = function (item, value, ev) {
-        var isAssignDefaultDARights = (value && value == "TRUE");
-        var isDelegatedAdminValue = item.getInstanceValue(ZaAccount.A_zimbraIsDelegatedAdminAccount) ;
-        var isDelegatedAdmin = (isDelegatedAdminValue && isDelegatedAdminValue == "TRUE") ;
-        var isDelegatedGroupValue = item.getInstanceValue(ZaDistributionList.A_isAdminGroup) ;
-        var isDelegatedGroup = (isDelegatedGroupValue && isDelegatedGroupValue == "TRUE") ;
+        try {
+            var isAssignDefaultDARights = (value && value == "TRUE");
+            var isDelegatedAdminValue = item.getInstanceValue(ZaAccount.A_zimbraIsDelegatedAdminAccount) ;
+            var isDelegatedAdmin = (isDelegatedAdminValue && isDelegatedAdminValue == "TRUE") ;
+            var isDelegatedGroupValue = item.getInstanceValue(ZaDistributionList.A_isAdminGroup) ;
+            var isDelegatedGroup = (isDelegatedGroupValue && isDelegatedGroupValue == "TRUE") ;
 
-        if ((isDelegatedAdmin || isDelegatedGroup) && isAssignDefaultDARights)  {
-            console.log("Adding the DA Rights and views ...") ;
-            var tmpObject = item.getInstance() ;
+            if ((isDelegatedAdmin || isDelegatedGroup) && isAssignDefaultDARights)  {
+    //            console.log("Adding the DA Rights and views ...") ;
+//                var tmpObject = item.getInstance() ;
+                  var tmpObject = ev.getDetails (); //it should be the object after the event occured, especially useful to get the newly created account id
+                //1. Modify the admin view
+                var defaultAdminView = ZaUtil.cloneArray (ZaNewAdminWizard.LEGACY_DA_VIEW) ;
+                if (isDelegatedAdmin) {
+                    tmpObject [ZaNewAdmin.A_admin_type] = ZaItem.ACCOUNT ;
+                }else if (isDelegatedGroup) {
+                    tmpObject [ZaNewAdmin.A_admin_type] = ZaItem.DL ;
+                }
 
-            //1. Modify the admin view
-            var defaultAdminView = ZaUtil.cloneArray (ZaNewAdminWizard.LEGACY_DA_VIEW) ;
-            if (isDelegatedAdmin) {
-                tmpObject [ZaNewAdmin.A_admin_type] = ZaItem.ACCOUNT ;
-            }else if (isDelegatedGroup) {
-                tmpObject [ZaNewAdmin.A_admin_type] = ZaItem.DL ;                
+                var uiComponents = tmpObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] || [] ;
+                tmpObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = uiComponents.concat(defaultAdminView);
+                if (ZaNewAdmin.modifyAdmin (tmpObject)) {
+                    if (this._currentObject && this._currentObject.attrs) { //it is not applicable to the new account creation
+                        this._currentObject [ZaAccount.A2_isAssignDefaultDARights] = "TRUE" ;
+                        this._currentObject.attrs [ZaAccount.A_zimbraAdminConsoleUIComponents]
+                                    = tmpObject.attrs [ZaAccount.A_zimbraAdminConsoleUIComponents] ;
+                    }
+                }
+
+                //2. Modify the account right
+                var defaultRights = ZaNewAdminWizard.getDefaultDARights (tmpObject) ;
+
+                ZaGrant.assignMultiGrants.call(this, {
+                        currentIndex: 0,
+                        rightsArr: defaultRights,
+                        showStatus: -1
+                }) ;
+            }else {
+    //            console.log("No need to add the DA Rights ...") ;
             }
-
-            var uiComponents = tmpObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] || [] ;
-            tmpObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = uiComponents.concat(defaultAdminView);
-            if (ZaNewAdmin.modifyAdmin (tmpObject)) {
-                this._currentObject [ZaAccount.A2_isAssignDefaultDARights] = "TRUE" ;
-                this._currentObject.attrs [ZaAccount.A_zimbraAdminConsoleUIComponents]
-                            = tmpObject.attrs [ZaAccount.A_zimbraAdminConsoleUIComponents] ;                
-            }
-
-            //2. Modify the account right
-            var defaultRights = ZaNewAdminWizard.getDefaultDARights (tmpObject) ;
-
-            ZaGrant.assignMultiGrants.call(this, {
-                    currentIndex: 0,
-                    rightsArr: defaultRights,
-                    showStatus: -1
-            }) ;
-
-
+        }catch (ex) {
+            this.popupErrorDialog(com_zimbra_delegatedadmin.ERROR_ASSIGN_DEFAULT_DA_RIGHTS,
+                    ex, true);	
+        } finally {
             //we should remove the event change handler if everything runs fine.
             this.removeChangeListener (this._assignDefaultDARightslistener) ;
-        }else {
-            console.log("No need to add the DA Rights ...") ;
+            this.removeCreationListener (this._assignDefaultDARightslistener) ;
         }
     }
 
@@ -137,8 +144,8 @@ if (ZaAccount) {
                     type: _CHECKBOX_ ,
                     label: com_zimbra_delegatedadmin.NAD_IsAssignDefaultDARights,
                     bmolsnr: true ,
-                    visibilityChecks: [[XForm.checkInstanceValue, ZaAccount.A_zimbraIsDelegatedAdminAccount, "TRUE"]],
                     visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount, ZaDistributionList.A_isAdminGroup] ,
+                    enableDisableChecks: [],
                     onChange :
                         function(value, event, form) {
                             var controller = ZaApp.getInstance ().getCurrentController () ;
@@ -148,9 +155,11 @@ if (ZaAccount) {
                                 controller._assignDefaultDARightslistener =  new AjxListener (controller, ZaController.prototype.assignDefaultDARights, [this, value]) ;
                             }
                             if(value == "TRUE" && (isDelegatedAdmin && isDelegatedAdmin == "TRUE")) {
-                                controller.addChangeListener (controller._assignDefaultDARightslistener)
+                                controller.addChangeListener (controller._assignDefaultDARightslistener) ;
+                                controller.addCreationListener (controller._assignDefaultDARightslistener)  ;
                             }else {
                                 controller.removeChangeListener (controller._assignDefaultDARightslistener) ;
+                                controller.removeCreationListener (controller._assignDefaultDARightslistener) ;
                             }
 
                             this.setInstanceValue(value);
@@ -245,7 +254,11 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
        adminRolesItem.enableDisableChecks = [[ZaItem.hasWritePermission,ZaAccount.A_zimbraIsDelegatedAdminAccount]] ;
 
        var assignDefaultDARightsItem = ZaAccount.getAssignDefaultDARightsChkBoxItem() ;
-
+       assignDefaultDARightsItem.items[0].visibilityChecks = [
+           [XForm.checkInstanceValue, ZaAccount.A_zimbraIsDelegatedAdminAccount, "TRUE"],
+           [ZaItem.hasWritePermission,ZaAccount.A_zimbraAdminConsoleUIComponents]
+       ];
+       
         var tabs = xFormObject.items[2].items;
         var tmpItems = tabs[0].items;
         var cnt = tmpItems.length;
@@ -295,6 +308,11 @@ if (ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
        adminRolesItem.visibilityChecks = [[XForm.checkInstanceValue, ZaAccount.A_zimbraIsDelegatedAdminAccount, "TRUE"]] ;
        adminRolesItem.enableDisableChecks = [[ZaItem.hasWritePermission,ZaAccount.A_zimbraIsDelegatedAdminAccount]] ;
 
+       var assignDefaultDARightsItem = ZaAccount.getAssignDefaultDARightsChkBoxItem("220px") ;
+       assignDefaultDARightsItem.items[0].visibilityChecks = [
+           [XForm.checkInstanceValue, ZaAccount.A_zimbraIsDelegatedAdminAccount, "TRUE"],
+           [ZaItem.hasWritePermission,ZaAccount.A_zimbraAdminConsoleUIComponents]
+       ];
 
         var tabs = xFormObject.items[3].items;
         var tmpItems = tabs[0].items;
@@ -306,7 +324,7 @@ if (ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
                for(var j=0;j<cnt2;j++) {
                    if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_zimbraIsAdminAccount) {
                        //add  Admin checkbox
-                      tmpItems[i].items.splice(j+1,0, adminChkBox, adminRolesItem);
+                      tmpItems[i].items.splice(j+1,0, adminChkBox, assignDefaultDARightsItem, adminRolesItem);
 
                        //add the mutual exclusive action to global admin
                        tmpGrouperItems[j].elementChanged =

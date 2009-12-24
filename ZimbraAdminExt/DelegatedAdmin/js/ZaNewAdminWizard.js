@@ -176,6 +176,7 @@ ZaNewAdmin.createAdmin = function (tmpObj) {
 }
 
 ZaNewAdmin.modifyAdmin = function (tmpObj) {
+    if (!tmpObj || !tmpObj.id) return false ;
     var soapDoc ;
     var controller =  ZaApp.getInstance().getCurrentController() ;
 
@@ -538,6 +539,7 @@ ZaNewAdminWizard.getDefaultDARights = function (object) {
         domainAdminRight [ZaGrant.A_right_type] = "combo" ;
         domainAdminRight [ZaGrant.A_target] = ZaAccount.getDomain (object.name) ;
         domainAdminRight [ZaGrant.A_target_type] = ZaItem.DOMAIN ;
+        domainAdminRight [ZaGrant.A_canDelegate] = "1" ;
         tmpGrantsList.push (domainAdminRight)  ;
 
         var domainAdminZimletRight = {} ;
@@ -548,6 +550,7 @@ ZaNewAdminWizard.getDefaultDARights = function (object) {
         domainAdminZimletRight [ZaGrant.A_right_type] = "combo" ;
         domainAdminZimletRight [ZaGrant.A_target] = ZaGrant.GLOBAL_TARGET_NAME;
         domainAdminZimletRight [ZaGrant.A_target_type] = ZaItem.GLOBAL_GRANT ;
+        domainAdminZimletRight [ZaGrant.A_canDelegate] = "1" ;
         tmpGrantsList.push(domainAdminZimletRight)  ;
     }
     return tmpGrantsList ;
