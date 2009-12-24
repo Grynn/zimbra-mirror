@@ -753,13 +753,13 @@ public class SkinResources
     }
 
     private String getSkin(HttpServletRequest req) {
-        String zimbraAdminURL = "/zimbraAdmin";
+        String zimbraAdminURL = null;
+        
         try {
             Context initCtx = new InitialContext();
             Context envCtx = (Context) initCtx.lookup("java:comp/env");
             zimbraAdminURL = (String) envCtx.lookup("adminUrl");
         } catch (NamingException ne) {
-            ne.printStackTrace();
         }
         if (zimbraAdminURL == null) {
             zimbraAdminURL = "/zimbraAdmin";
