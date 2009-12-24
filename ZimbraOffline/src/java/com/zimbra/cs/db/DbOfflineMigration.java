@@ -38,8 +38,10 @@ public class DbOfflineMigration {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        int newOfflineDbVersion = OfflineVersions.OFFLINE_DB_VERSION;
+        int oldOfflineDbVersion = 1; // default to 1 if missing
+
         try {
-            DbPool.startup();
             conn = DbPool.getConnection();
             stmt = conn.prepareStatement("SELECT value FROM config WHERE name = 'db.version'");
             rs = stmt.executeQuery();
@@ -67,13 +69,11 @@ public class DbOfflineMigration {
             // now do offline specific db migration
             stmt = conn.prepareStatement("SELECT value FROM config WHERE name = 'offline.db.version'");
             rs = stmt.executeQuery();
-            int oldOfflineDbVersion = 1; // default to 1 if missing
             if (rs.next())
                 oldOfflineDbVersion = Integer.parseInt(rs.getString(1));
             rs.close();
             stmt.close();
 
-            int newOfflineDbVersion = OfflineVersions.OFFLINE_DB_VERSION;
             System.out.println("oldOfflineDbVersion=" + oldOfflineDbVersion +
                 " newOfflineDbVersion=" + newOfflineDbVersion);
 
@@ -106,7 +106,10 @@ public class DbOfflineMigration {
             DbPool.closeResults(rs);
             DbPool.closeStatement(stmt);
             DbPool.quietClose(conn);
-            DbPool.close();
+            if (oldOfflineDbVersion != newOfflineDbVersion) {
+                DbPool.close();
+                DbPool.startup();
+            }
         }
     }
 

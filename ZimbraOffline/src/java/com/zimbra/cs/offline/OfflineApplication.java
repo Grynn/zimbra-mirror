@@ -98,7 +98,9 @@ public class OfflineApplication extends ZimbraApplication {
 
         DbPool.Connection conn = DbPool.getConnection();
         try {
-            if (!Db.getInstance().databaseExists(conn, ZIMBRA_DB_NAME)) {
+            if (Db.getInstance().databaseExists(conn, ZIMBRA_DB_NAME)) {
+                Db.getInstance().optimize(conn, ZIMBRA_DB_NAME, 0);
+            } else {
                 File file = null;
                 PreparedStatement stmt = null;
                 

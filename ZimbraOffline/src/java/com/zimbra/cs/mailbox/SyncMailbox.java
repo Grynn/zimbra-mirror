@@ -35,6 +35,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
     Object syncLock = new Object();
     private boolean deleteAsync;
     private boolean mSyncRunning;
+    private long lastOptimizeTime = 0;
     private static Long lastGC = new Long(0);
 
     public SyncMailbox(MailboxData data) throws ServiceException {
@@ -229,6 +230,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
         currentTask = new TimerTask() {
             public void run() {
                 boolean doGC;
+                long now;
                 
                 if (ZimbraApplication.getInstance().isShutdown()) {
                     cancelCurrentTask();
@@ -236,6 +238,11 @@ public abstract class SyncMailbox extends DesktopMailbox {
                 }
                 try {
                     syncOnTimer();
+                    now = System.currentTimeMillis();
+                    if (now - lastOptimizeTime > 12 * Constants.MILLIS_PER_HOUR) {
+                        optimize(null, 0);
+                        lastOptimizeTime = now;
+                    }
                 } catch (Throwable e) { // don't let exceptions kill the timer
                     if (e instanceof OutOfMemoryError)
                         Zimbra.halt("caught out of memory error", e);
@@ -243,17 +250,17 @@ public abstract class SyncMailbox extends DesktopMailbox {
                         OfflineLog.offline.warn("caught exception in timer ", e);
                 }
                 synchronized (lastGC) {
-                    long now = System.currentTimeMillis();
-                    
+                    now = System.currentTimeMillis();
                     doGC = now - lastGC > 5 * 60 * Constants.MILLIS_PER_SECOND;
-                    lastGC = now;
+                    if (doGC) {
+                        System.gc();
+                        lastGC = now;
+                    }
                 }
-                if (doGC)
-                    System.gc();
             }
         };
 
-        timer = new Timer("sync-" + getId() + '-' + getAccount().getName());
+        timer = new Timer("sync-mbox-" + getAccount().getName());
         timer.schedule(currentTask, 10 * Constants.MILLIS_PER_SECOND,
             5 * Constants.MILLIS_PER_SECOND);
     }

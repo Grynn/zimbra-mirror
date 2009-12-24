@@ -63,7 +63,6 @@ public class GalSync {
         
         private OfflineAccount galAccount;
         private boolean fullSync;
-        private boolean trace;        
         private Mailbox galMbox;
         private OperationContext context;
         private Exception exception = null;       
@@ -76,7 +75,6 @@ public class GalSync {
         public SyncHandler(OfflineAccount galAccount, boolean fullSync, boolean trace) {
             this.galAccount = galAccount;
             this.fullSync = fullSync;
-            this.trace = trace && OfflineLC.zdesktop_gal_sync_trace_enabled.booleanValue();
         }
              
         public String getToken() { return token; }        
@@ -257,6 +255,7 @@ public class GalSync {
         private boolean traceOn;
         
         public SyncThread(ZcsMailbox ombx, String user, OfflineAccount galAccount, long lastFullSync, boolean traceOn) {
+            super("sync-gal-" + user);
             this.ombx = ombx;
             this.user = user;            
             this.galAccount = galAccount;
@@ -393,6 +392,7 @@ public class GalSync {
 
         while (handler.getIdCount() > 0) {
             fetchContacts(handler, mbox);
+            mbox.optimize(null, 0);
             System.gc();
  
             if (handler.getIdCount() > 0) {
@@ -408,7 +408,7 @@ public class GalSync {
             Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
             OperationContext octxt = new OperationContext(galMbox);
             galMbox.emptyFolder(octxt, handler.getDropFolder(), false);
-                
+            galMbox.optimize(null, 1);
             prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastFullSync, Long.toString(System.currentTimeMillis()));
         }
     }
