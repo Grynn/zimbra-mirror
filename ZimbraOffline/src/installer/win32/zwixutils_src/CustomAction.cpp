@@ -141,13 +141,60 @@ UINT __stdcall ZTouchFolder(MSIHANDLE hInstall) {
 	char path[4096];
 	sprintf(path, "%s\\removeme", folder);
 	if (CreateDirectory(path, NULL) == TRUE) {
-		WcaLog(LOGMSG_STANDARD, "temp directory created %s", path);
+		WcaLog(LOGMSG_STANDARD, "Temp directory created %s", path);
 		RemoveDirectory(path);
 	} else {
-		WcaLog(LOGMSG_STANDARD, "unable to create temp directory %s", path);
+		WcaLog(LOGMSG_STANDARD, "Unable to create temp directory %s", path);
 	}
 
 LExit:
+	er = SUCCEEDED(hr) ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE;
+	return WcaFinalize(er);
+}
+
+UINT __stdcall ZShutdown(MSIHANDLE hInstall) {
+	HRESULT hr = S_OK;
+	UINT er = ERROR_SUCCESS;
+
+	hr = WcaInitialize(hInstall, "ZShutdown");
+	ExitOnFailure(hr, "Failed to initialize");
+	WcaLog(LOGMSG_STANDARD, "Initialized.");
+
+	const char *subkey = "Software\\Zimbra\\Zimbra Desktop";
+	HKEY hKey;
+	char data_root[512];
+	char *zdctl_path = NULL;
+	DWORD sz = sizeof(data_root);
+	if (RegOpenKeyEx(HKEY_CURRENT_USER, subkey, 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS) {
+		if (RegQueryValueEx(hKey, "DataRoot", NULL, NULL, (LPBYTE)data_root, &sz) == ERROR_SUCCESS) {
+			zdctl_path = new char[sz + 20];
+			sprintf(zdctl_path, "%s\\bin\\zdctl.vbs", data_root);
+		}
+		RegCloseKey(hKey);
+	}
+
+	if (zdctl_path) {
+		char sysdir[256];
+		GetSystemDirectory(sysdir, sizeof(sysdir));
+		
+		char cmdline[2048];
+		sprintf(cmdline, "\"%s\\cscript.exe\" \"%s\" shutdown", sysdir, zdctl_path);
+
+		PROCESS_INFORMATION pi;
+		STARTUPINFO si;
+		memset(&si, 0, sizeof(si));
+		si.cb= sizeof(si);
+		if(CreateProcess(NULL, cmdline, NULL, NULL, false, 0, NULL, NULL, &si, &pi)) {
+			WcaLog(LOGMSG_STANDARD, "Command run successfully: %s", cmdline);
+		} else {
+			WcaLog(LOGMSG_STANDARD, "Failed to run command: %s", cmdline);
+		}
+	}
+
+LExit:
+	if (zdctl_path)
+		delete [] zdctl_path;
+
 	er = SUCCEEDED(hr) ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE;
 	return WcaFinalize(er);
 }

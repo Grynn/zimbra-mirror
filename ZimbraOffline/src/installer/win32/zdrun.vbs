@@ -18,7 +18,7 @@
 ' ZD runner
 '
 
-Dim oFso, oShellApp, oShell, sScriptPath, sScriptDir, oTokens, sAppRoot, sDataRoot
+Dim oFso, oReg, oShellApp, oShell, sScriptPath, sScriptDir, oTokens, sAppRoot, sDataRoot
 Dim sLocalAppDir, bIsUpgrade, sTmpDir, sRestoreDir, aUserDirs, aUserFiles, sVersion, sVerFile
 
 Sub FindAndReplace(sFile, oTokens)
@@ -209,6 +209,7 @@ End Function
 Set oFso = CreateObject("Scripting.FileSystemObject")
 Set oShellApp = CreateObject("Shell.Application")
 Set oShell = CreateObject("WScript.Shell")
+Set oReg=GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\default:StdRegProv")
 
 sVersion="@version@"
 aUserDirs = Array("index", "store", "sqlite", "log", "zimlets-properties")
@@ -276,5 +277,9 @@ FindAndReplace sDataRoot & "\profile\user.js", oTokens
 If bIsUpgrade Then
 	RestoreData sTmpDir
 End If
+
+const HKEY_CURRENT_USER = &H80000001
+oReg.CreateKey HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop"
+oReg.SetStringValue HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop", "DataRoot", sDataRoot
 
 LaunchPrism

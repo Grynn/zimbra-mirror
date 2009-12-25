@@ -20,7 +20,7 @@
 Dim sAppRoot, sScriptPath, sScriptDir, sZdLogFile, sZdOutFile, sZdAnchorFile, sZdCtlErrFile, oWMI, oShell, oFso, sCurrUser
 
 Sub Usage()
-    WScript.StdOut.WriteLine("Usage: zdctl.vbs <start|stop>")
+    WScript.StdOut.WriteLine("Usage: zdctl.vbs <start|stop|shutdown>")
     WScript.Quit
 End Sub
 
@@ -91,6 +91,39 @@ Sub RunCmd2(sCmd, sArgs, sImgName, sPidFile, sErrFile)
 	End If
 End Sub
 
+Function FindProcess(sImageName)
+	Dim oProcs, oProc
+	
+	FindProcess = Null
+    Set oProcs = oWMI.ExecQuery("SELECT ProcessId FROM Win32_Process WHERE Name = '" & sImageName & "' ")
+	For Each oProc In oProcs
+		Dim sUser, sDomain
+		If oProc.GetOwner(sUser, sDomain) = 0 Then
+			If StrComp(sUser, sCurrUser) = 0 Then
+				FindProcess = oProc.ProcessId	
+				Exit Function
+			End If
+		End If		
+	Next
+End Function
+
+Sub WaitAndTerm(iPid, iWaitTime)
+    Dim sTaskKill, oProcs
+
+    Do Until iWaitTime <= 0
+        Set oProcs = oWMI.ExecQuery("SELECT Name FROM Win32_Process WHERE ProcessId = " & iPid) 
+        If oProcs.Count = 0 Then ' done
+            Exit Sub 
+        End If        
+        WScript.Sleep 1000
+        iWaitTime = iWaitTime - 1000
+    Loop
+    
+    ' hard kill
+    sTaskKill = Chr(34) & oFso.GetSpecialFolder(1).Path & "\taskkill.exe" & Chr(34)
+    RunCmd sTaskKill & " /F /PID " & iPid, 0
+End Sub
+
 Sub StartServer()
     Dim sCmd, oFile, iWaitTime 
     
@@ -124,7 +157,7 @@ Sub StartServer()
 End Sub
 
 Sub StopServer()
-    Dim sZdPid, iWaitTime, sTaskKill, oProcs, oProc
+    Dim iZdPid, iWaitTime
     
     If Not IsRunning() Then
         WScript.StdOut.WriteLine("ZD service not running")
@@ -133,18 +166,8 @@ Sub StopServer()
 
     WScript.StdOut.WriteLine("Stopping background process. Please wait...")
 
-	sZdPid = Null
-    Set oProcs = oWMI.ExecQuery("SELECT ProcessId FROM Win32_Process WHERE Name = 'zdesktop.exe' ")
-	For Each oProc In oProcs
-		Dim sUser, sDomain
-		If oProc.GetOwner(sUser, sDomain) = 0 Then
-			If StrComp(sUser, sCurrUser) = 0 Then
-				sZdPid = oProc.ProcessId	
-				Exit For
-			End If
-		End If		
-	Next
-	If IsNull(sZdPid) Then ' no running zdesktop instance found
+	iZdPid = FindProcess("zdesktop.exe")
+	If IsNull(iZdPid) Then ' no running zdesktop instance found
 		Exit Sub			
 	End If
 
@@ -156,18 +179,22 @@ Sub StopServer()
 		iWaitTime = 0
 	End If
 
-    Do Until iWaitTime <= 0
-		Set oProcs = oWMI.ExecQuery("SELECT Name FROM Win32_Process WHERE ProcessId = " & sZdPid) 
-        If oProcs.Count = 0 Then ' done
-            Exit Sub 
-        End If        
-        WScript.Sleep 1000
-        iWaitTime = iWaitTime - 1000
-    Loop
-    
-    ' hard kill
-	sTaskKill = Chr(34) & oFso.GetSpecialFolder(1).Path & "\taskkill.exe" & Chr(34)
-   	RunCmd sTaskKill & " /F /PID " & sZdPid, 0
+	WaitAndTerm iZdPid, iWaitTime
+End Sub
+
+Sub Shutdown()
+    Dim iPrismPid, sCmd
+	
+    StopServer()
+	
+    iPrismPid = FindProcess("zdclient.exe")
+    If IsNull(iPrismPid) Then
+	    Exit Sub
+    End If
+
+    sCmd = Chr(34) & sAppRoot & "\win32\prism\zdclient.exe" & Chr(34) & " -close"
+    RunCmd sCmd, 0
+    WaitAndTerm iPrismPid, 5000
 End Sub
 
 '--------------------------------- main ---------------------------------
@@ -175,7 +202,7 @@ Dim oArgs, oWN
 Set oArgs = WScript.Arguments
 If oArgs.Count < 1 Then ' have to break them up here - vbs always evals ALL expressions
     Usage()
-ElseIf oArgs.Item(0) <> "start" And oArgs.Item(0) <> "stop" Then
+ElseIf oArgs.Item(0) <> "start" And oArgs.Item(0) <> "stop" And oArgs.Item(0) <> "shutdown" Then
     Usage()
 End If
 
@@ -194,6 +221,8 @@ sCurrUser = oWN.UserName
         
 If oArgs.Item(0) = "start" Then
     StartServer()
-Else
+ElseIf oArgs.Item(0) = "stop" Then
     StopServer()
+Else
+    Shutdown()
 End If

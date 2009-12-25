@@ -89,6 +89,9 @@
       <MsiUnpublishAssemblies Sequence="6550" />
       <InstallFinalize Sequence="6600" />
       <Custom Action="ID10618" After="FileCost" />
+
+      <!-- ZWixUtils Custom Actions -->
+      <Custom Action="ID10701" After="FindRelatedProducts">(NOT (REMOVE ~= "ALL" OR UPGRADINGPRODUCTCODE)) AND OLDER_VERSION_FOUND</Custom>
     </InstallExecuteSequence>
     
     <InstallUISequence>
@@ -179,6 +182,10 @@
     <Condition Message="You must not be an administrator to install this product.">Privileged</Condition>
     <Property Id="ALLUSERS" Value="0" />
     <Condition Message="This product require Windows XP or newer">VersionNT &gt;= 501</Condition>
+
+    <!-- ZWixUtils -->
+    <Binary Id="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" SourceFile="@build.root@\src\installer\win32\zwixutils.dll" />
+    <CustomAction Id="ID10701" BinaryKey="ID_CD5EDF1B_5835_426b_A76B_BAEE811A1D6A" DllEntry="ZShutdown" />
 
   </Product>
 </Wix>
