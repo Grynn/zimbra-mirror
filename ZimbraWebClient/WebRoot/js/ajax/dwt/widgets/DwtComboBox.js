@@ -226,6 +226,8 @@ DwtComboBox.prototype._handleKeyDown = function(ev) {
 };
 
 DwtComboBox.prototype._handleKeyUp = function(ev) {
+	// propagate event to DwtInputField
+	DwtInputField._keyUpHdlr(ev);
 	// notify our listeners
 	var event = DwtUiEvent.getEvent(ev);
 	event._args = { selectObj: this, newValue: this.input.getValue(), oldValue: this.__ovalue };
