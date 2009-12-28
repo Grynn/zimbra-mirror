@@ -1130,7 +1130,7 @@ function(item, params) {
 		div.style.overflow = "visible";		// bug fix #3654 - yuck
 	}
 
-	div.className = this._getDivClass(this._normalClass, item, params);
+	div.className = this._getDivClass(params.divClass || this._normalClass, item, params);
 
 	if (params.isDragProxy) {
 		Dwt.setPosition(div, Dwt.ABSOLUTE_STYLE);
