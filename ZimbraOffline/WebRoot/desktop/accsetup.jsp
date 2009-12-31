@@ -28,9 +28,7 @@
 
 <c:set var='accountFlavor' value="${param.accountFlavor eq null ? '' : param.accountFlavor}"/>
 <c:set var='verb' value="${param.verb eq null ? '' : param.verb}"/>
-<c:set var='cancel'><fmt:message key='Cancel'/></c:set>
-<c:set var='save'><fmt:message key='Save'/></c:set>
-<c:set var='buttonType' value="default"/>
+<c:set var='save' value='Save'/>
 <c:set var="uri" value="${zdf:addAuthToken('/desktop/accsetup.jsp', devMode)}"/>
 <c:set var='betaLink'>
 	<fmt:message key='BetaNoteSupport'>
@@ -307,8 +305,7 @@ function onEditLink(id, keep, makeInvisible) {
 											<zd:sslCertError/><br>
 											<c:choose>
 												<c:when test="${bean.sslCertInfo.acceptable}">
-													<c:set var='save'><fmt:message key='CertAcceptButton'/></c:set>
-													<c:set var='buttonType' value="Warn"/>
+													<c:set var='save' value='CertAcceptButton'/>
 													<div><fmt:message key='CertAcceptWarning'/></div>
 												</c:when>
 												<c:otherwise>
@@ -679,7 +676,7 @@ function onEditLink(id, keep, makeInvisible) {
 										<td align=right>
 											<table border=0>
 												<tr>
-													<td><div id="saveButton" class="ZPanelButton" onclick='OnSubmit()'><fmt:message key='Save'/></div></td>
+													<td><div id="saveButton" class="ZPanelButton" onclick='OnSubmit()'><fmt:message key='${save}'/></div></td>
 												</tr>
 											</table>
 										</td>
