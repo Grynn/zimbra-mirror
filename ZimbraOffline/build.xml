@@ -1088,6 +1088,13 @@
         </copy>
 	</target>
 
+	<target name="offline-setup-pages">
+		<antcall target="offline-sync-jsp-opt" />
+		<copy todir="${jetty.home.dir}/webapps/zimbra/skins" overwrite="true" verbose="true">
+			<fileset dir="WebRoot/zimbra/skins" includes="**/*" />
+		</copy>
+	</target>
+
 	<target name="offline-dev-sync">
 		<ant dir="../ZimbraWebClient" target="dev-sync" inheritAll="false">
 			<property name="webapp.dir" value="${jetty.home.dir}/webapps/zimbra/"/>
