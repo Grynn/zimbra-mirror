@@ -30,14 +30,14 @@
  *
  * @param {Hash}		params			a hash of parameters
  * <ul>
- * <li>parent			[DwtComposite] 		the parent widget (the shell)</li>
- * <li>className			[String]*			the CSS class</li>
- * <li>title				[String]*			the title of dialog</li>
- * <li>standardButtons	[Array|constant]	an array of standard buttons to include. Defaults to {@link DwtDialog.OK_BUTTON} and {@link DwtDialog.CANCEL_BUTTON}.</li>
- * <li>extraButtons		[Array]  			a list of {@link DwtDialog_ButtonDescriptor} objects describing custom buttons to add to the dialog</li>
- * <li>zIndex			[int]*				the z-index to set for this dialog when it is visible. Defaults to <i>Dwt.Z_DIALOG</i>.</li>
- * <li>mode 			[{@link DwtDialog.MODELESS}|{@link DwtDialog.MODAL}]*			the modality of the dialog. Defaults to {@link DwtDialog.MODAL}.</li> 
- * <li>loc				[DwtPoint]*			the location at which to popup the dialog. Defaults to centered within its parent.</li>
+ * <li>parent			{DwtComposite} 		the parent widget (the shell)</li>
+ * <li>className		{String}			the CSS class</li>
+ * <li>title			{String}			the title of dialog</li>
+ * <li>standardButtons	{Array|constant}	an array of standard buttons to include. Defaults to {@link DwtDialog.OK_BUTTON} and {@link DwtDialog.CANCEL_BUTTON}.</li>
+ * <li>extraButtons		{Array}  			a list of {@link DwtDialog_ButtonDescriptor} objects describing custom buttons to add to the dialog</li>
+ * <li>zIndex			{int}				the z-index to set for this dialog when it is visible. Defaults to <i>Dwt.Z_DIALOG</i>.</li>
+ * <li>mode 			{@link DwtDialog.MODELESS}|{@link DwtDialog.MODAL}			the modality of the dialog. Defaults to {@link DwtDialog.MODAL}.</li> 
+ * <li>loc				{DwtPoint}			the location at which to popup the dialog. Defaults to centered within its parent.</li>
  * </ul>
  * 
  * @see		#.CANCEL_BUTTON
@@ -140,6 +140,11 @@ DwtDialog.PARAMS = ["parent", "className", "title", "standardButtons", "extraBut
 DwtDialog.prototype = new DwtBaseDialog;
 DwtDialog.prototype.constructor = DwtDialog;
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @return		{String}		a string representation of the object
+ */
 DwtDialog.prototype.toString = function() {
 	return "DwtDialog";
 };
@@ -663,8 +668,8 @@ function() {
  * 
  * @param	{String}	id		the button Id
  * @param	{String}	label		the button label
- * @param	{String}	align		the alignment
- * @param	{String}	callback		the callback
+ * @param	{constant}	align		the alignment
+ * @param	{AjxCallback}	callback		the callback
  * @param	{String}	cellTemplate		the template
  */
 DwtDialog_ButtonDescriptor = function(id, label, align, callback, cellTemplate) {
