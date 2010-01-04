@@ -151,10 +151,14 @@ if (ZaAccount) {
                             var controller = ZaApp.getInstance ().getCurrentController () ;
 
                             var isDelegatedAdmin = this.getInstanceValue(ZaAccount.A_zimbraIsDelegatedAdminAccount) ;
+                            var isAdminGroup = this.getInstanceValue (ZaDistributionList.A_isAdminGroup);
+
                             if (!controller._assignDefaultDARightslistener) {
                                 controller._assignDefaultDARightslistener =  new AjxListener (controller, ZaController.prototype.assignDefaultDARights, [this, value]) ;
                             }
-                            if(value == "TRUE" && (isDelegatedAdmin && isDelegatedAdmin == "TRUE")) {
+                            if(value == "TRUE" &&
+                                ((isDelegatedAdmin && isDelegatedAdmin == "TRUE")
+                                        || (isAdminGroup && isAdminGroup == "TRUE"))) {
                                 controller.addChangeListener (controller._assignDefaultDARightslistener) ;
                                 controller.addCreationListener (controller._assignDefaultDARightslistener)  ;
                             }else {
@@ -254,7 +258,9 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
        adminRolesItem.enableDisableChecks = [[ZaItem.hasWritePermission,ZaAccount.A_zimbraIsDelegatedAdminAccount]] ;
 
        var assignDefaultDARightsItem = ZaAccount.getAssignDefaultDARightsChkBoxItem() ;
+       //we should only allow it to show up for global admin now
        assignDefaultDARightsItem.items[0].visibilityChecks = [
+           [ZaZimbraAdmin.isGlobalAdmin],
            [XForm.checkInstanceValue, ZaAccount.A_zimbraIsDelegatedAdminAccount, "TRUE"],
            [ZaItem.hasWritePermission,ZaAccount.A_zimbraAdminConsoleUIComponents]
        ];
@@ -310,6 +316,7 @@ if (ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 
        var assignDefaultDARightsItem = ZaAccount.getAssignDefaultDARightsChkBoxItem("220px") ;
        assignDefaultDARightsItem.items[0].visibilityChecks = [
+           [ZaZimbraAdmin.isGlobalAdmin],    
            [XForm.checkInstanceValue, ZaAccount.A_zimbraIsDelegatedAdminAccount, "TRUE"],
            [ZaItem.hasWritePermission,ZaAccount.A_zimbraAdminConsoleUIComponents]
        ];
@@ -378,6 +385,11 @@ if (ZaDistributionList) {
     ZaDistributionList.myXModel.items.push (
         {id:ZaDistributionList.A_isAdminGroup, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
             ref:"attrs/"+ZaDistributionList.A_isAdminGroup}) ;
+
+    ZaDistributionList.myXModel.items.push ({
+        id: ZaAccount.A2_isAssignDefaultDARights, type: _ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
+        ref: ZaAccount.A2_isAssignDefaultDARights
+    }) ;
 }
      
 
@@ -393,6 +405,13 @@ if (ZaTabView.XFormModifiers["ZaDLXFormView"]) {
                 visibilityChecks:[],
                 trueValue:"TRUE", falseValue:"FALSE"
             }  ;
+
+       var assignDefaultDARightsItem = ZaAccount.getAssignDefaultDARightsChkBoxItem("120px") ;
+       assignDefaultDARightsItem.items[0].visibilityChecks = [
+           [ZaZimbraAdmin.isGlobalAdmin],
+           [XForm.checkInstanceValue, ZaDistributionList.A_isAdminGroup, "TRUE"],
+           [ZaItem.hasWritePermission,ZaAccount.A_zimbraAdminConsoleUIComponents]
+       ];
        
        var switchGroupItems ;
         for (var i=0; i < xFormObject.items.length; i ++) {
@@ -411,7 +430,7 @@ if (ZaTabView.XFormModifiers["ZaDLXFormView"]) {
                     if (membersView[m].id == "dl_form_members_general_group") {
                         for (var n=0; n < membersView[m].items.length; n ++ ) {
                             if (membersView[m].items[n].ref == "zimbraMailStatus") {
-                                membersView[m].items.splice (n,0, adminGroupChkBx) ;
+                                membersView[m].items.splice (n,0, adminGroupChkBx, assignDefaultDARightsItem) ;
                                 break;
                             }
                         }
