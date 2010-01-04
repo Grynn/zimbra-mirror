@@ -36,6 +36,7 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbMailItem;
@@ -114,6 +115,8 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 } catch (ServiceException e) {
                     OfflineLog.offline.error(e);
                 }
+            } else if (x.getCode().equals(AccountServiceException.NO_SUCH_ACCOUNT)) {
+                cancelCurrentTask();
             } else if (!OfflineSyncManager.getInstance().isServiceActive() &&
                 !x.getCode().equals(ServiceException.INTERRUPTED)) {
                 OfflineLog.offline.error(x);
