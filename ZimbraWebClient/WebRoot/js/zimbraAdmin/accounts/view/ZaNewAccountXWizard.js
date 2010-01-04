@@ -487,7 +487,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 						toolTipContent:ZaMsg.tt_StartTypingCOSName,
 						onChange:ZaAccount.setCosChanged,
 						emptyText:ZaMsg.enterSearchTerm,						
-						enableDisableChecks:[ZaNewAccountXWizard.isAutoCos],
+						enableDisableChecks:[[ZaNewAccountXWizard.isAutoCos], [ZaItem.hasWritePermission,ZaAccount.A_COSId]],
 						enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
 						visibilityChecks:[],
 						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
@@ -519,6 +519,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							}
 							this.getForm().itemChanged(this, elementValue, event);
 						},
+                        enableDisableChecks:[ [ZaItem.hasWritePermission,ZaAccount.A_COSId]],
 						visibilityChecks:[]
 					}
 				]
