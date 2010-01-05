@@ -141,7 +141,7 @@ Sub StartServer()
         oFso.DeleteFile sZdAnchorFile
     End If
     
-    sCmd = Chr(34) & sAppRoot & "\win32\zdwrapper.exe" & Chr(34) & " -c " & Chr(34) & sScriptDir & "\..\conf\zdwrapper.conf" & Chr(34)
+    sCmd = Chr(34) & sAppRoot & "\win32\zdesktop.exe" & Chr(34) & " " & Chr(34) & sScriptDir & "\..\conf\zdesktop.conf" & Chr(34)
     RunCmd sCmd, 2000
 
    	iWaitTime = 20000 

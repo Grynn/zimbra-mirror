@@ -108,7 +108,6 @@
 	<property name="prism.src.dir" location="../ThirdParty/prism" />
 	<property name="xulrunner.src.dir" location="../ThirdParty/xulrunner" />
 	<property name="jetty.version" value="6.1.22.z6" />
-	<property name="wrapper.version" value="wrapper-windows-x86-32-3.3.9" />
 
 	<condition property="db-derby">
 		<isset property="env.ZIMBRA_OFFLINE_USE_DERBY" />
@@ -199,7 +198,7 @@
 	<target name="offline-jar" depends="offline-compile" description="Creates the jar file">
 		<jar destfile="${build.dir}/${jarfile}" basedir="${build.classes.dir}" excludes="com/zimbra/cs/offline/jsp/**"/>
 		<jar destfile="${build.dir}/offlinejsp.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/common/*.class,com/zimbra/cs/offline/jsp/*.class"/>
-		<jar destfile="${build.dir}/zdesktop.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/start/Main.class" />
+		<jar destfile="${build.dir}/zdesktop.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/start/Main.class,com/zimbra/cs/offline/wrapper/WrapperUtil.class" />
 		<jar destfile="${build.dir}/offlinecfgtool.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/OfflineConfigTool.class" />
 	</target>
 
@@ -430,7 +429,7 @@
 		<copy todir="${dist.dir}/conf" file="${config.dir}/derby.properties" overwrite="true"/>
 		<copy tofile="${dist.dir}/conf/localconfig.xml" file="${config.dir}/localconfig.xml" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/log4j.properties" file="${config.dir}/log4j.properties" overwrite="true" />
-		<copy tofile="${dist.dir}/conf/zdwrapper.conf" file="${config.dir}/wrapper.conf" overwrite="true" />
+        <copy tofile="${dist.dir}/conf/zdesktop.conf" file="${config.dir}/zdesktop.conf" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/timezones.ics" file="${server.config.dir}/timezones.ics" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/zimbra-contact-fields.xml" file="${server.config.dir}/contacts/zimbra-contact-fields.xml" overwrite="true" />
 		<copy todir="${dist.dir}/conf/msgs" overwrite="true">
@@ -827,6 +826,7 @@
 			<fileset dir="src/installer" includes="README.txt" />
 		</copy>
         <copy todir="${dist.app.dir}/win32" file="src/installer/win32/zdrun.vbs" overwrite="true" />
+        <copy todir="${dist.app.dir}/win32" file="src/installer/win32/zdesktop.exe" overwrite="true" />
 		<replace file="${dist.app.dir}/README.txt" token="@version@" value="${offline.version} (build ${offline.buildid})"/>
 		<replace file="${dist.app.dir}/win32/zdrun.vbs" token="@version@" value="${offline.version} build ${offline.buildid}" />
 
@@ -860,10 +860,6 @@
 		</copy>
 		<chmod file="${dist.app.dir}/linux/user-install.pl" perm="ugo+x"/>
 
-		<unzip src="../ThirdParty/wrapper/${wrapper.version}.zip" dest="${build.dir}/wrapper" overwrite="true" />
-		<copy tofile="${dist.app.dir}/win32/zdwrapper.exe" file="${build.dir}/wrapper/${wrapper.version}/bin/wrapper.exe" overwrite="true" />
-		<copy todir="${dist.app.dir}/lib" file="${build.dir}/wrapper/${wrapper.version}/lib/wrapper.dll" overwrite="true" />
-		<copy todir="${dist.app.dir}/lib" file="${build.dir}/wrapper/${wrapper.version}/lib/wrapper.jar" overwrite="true" />
 		<copy todir="${dist.app.dir}/win32" overwrite="true">
 			<fileset dir="src/installer/resources" includes="launcher_32x32.ico launcher_48x48.ico" />
 		</copy>
@@ -1033,7 +1029,6 @@
 			<gunzip src="../ThirdPartyBuilds/windows/java/jre/windows-x86-1.6.0_16.tar.gz" dest="${dist.app.dir}/win32/jre"/>
 			<untar src="${dist.app.dir}/win32/jre/windows-x86-1.6.0_16.tar" dest="${dist.app.dir}/win32/jre" overwrite="true"/>
 			<delete file="${dist.app.dir}/win32/jre/windows-x86-1.6.0_16.tar"/>
-			<copy tofile="${dist.app.dir}/win32/jre/bin/zdesktop.exe" file="${dist.app.dir}/win32/jre/bin/java.exe" overwrite="true" />
 		</then></if>
 
 		<if><isset property="is-unix" /><then>
