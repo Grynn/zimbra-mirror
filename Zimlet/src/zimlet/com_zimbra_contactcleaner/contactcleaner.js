@@ -26,7 +26,7 @@ com_zimbra_contactcleaner.prototype = new ZmZimletBase();
 com_zimbra_contactcleaner.prototype.constructor = com_zimbra_contactcleaner;
 
 // Consts
-com_zimbra_contactcleaner.AddressBookOnlyMsg = "You can use this Zimlet from 'within Address Book' only";
+com_zimbra_contactcleaner.AddressBookOnlyMsg = "You can use this Zimlet from <b>within Address Book application</b> only";
 com_zimbra_contactcleaner.prototype.BEGIN_AT = 0;
 com_zimbra_contactcleaner.prototype.END_AT = 59;
 com_zimbra_contactcleaner.prototype.PROCESS_AT_ONCE = 60;
@@ -35,13 +35,20 @@ com_zimbra_contactcleaner.prototype.PROCESS_AT_ONCE = 60;
 com_zimbra_contactcleaner.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
+
+
+
 com_zimbra_contactcleaner.prototype.singleClicked =
 function() {
-	if (appCtxt.getAppController().getActiveApp() != "Contacts") {
-		appCtxt.getAppController().setStatusMsg(com_zimbra_contactcleaner.AddressBookOnlyMsg, ZmStatusView.LEVEL_CRITICAL);
-		return;
 
+	if (appCtxt.getAppController().getActiveApp() != "Contacts") {
+		var dlg = appCtxt.getMsgDialog();
+		dlg.reset();//reset dialog since we could be using it
+		dlg.setMessage(com_zimbra_contactcleaner.AddressBookOnlyMsg, DwtMessageDialog.WARNING_STYLE);
+		dlg.popup();
+		return;
 	}
+
 	//if previous process is still running in background, show that dlg
 	if (this.pbDialog) {
 		if (this.pbDialog.runInBackground) {
@@ -94,6 +101,7 @@ function() {
 	document.getElementById("cc_expandCollapseAllDiv_id").className = "cc_hidden";
 	this._setAllValues("BUSY");
 	document.getElementById("dupeResultsDiv").innerHTML = "";
+	AjxDispatcher.run("GetContactController");
 	this._contactList = AjxDispatcher.run("GetContacts");
 	document.getElementById("cc_dupesWithConflictsChkbox_id").onclick = cc_createClosure(this, this.handleMergeChkbox);
 	document.getElementById("cc_dupesWithPartialMatchChkbox_id").onclick = cc_createClosure(this, this.handleMergePartialChkbox);
@@ -135,6 +143,7 @@ function() {
 	var processButton = new DwtDialog_ButtonDescriptor(this._ProcessButtonId, (blk + "Merge and Move duplicates to Trash" + blk), DwtDialog.ALIGN_RIGHT);
 	this.conOrgDialog = this._createDialog({title:"Contact Cleaner", view:this._parentView, standardButtons : [ DwtDialog.CANCEL_BUTTON],extraButtons:[processButton]});
 	this.conOrgDialog.setButtonListener(this._ProcessButtonId, new AjxListener(this, this.cleanerProcessBtnListner));
+	AjxDispatcher.run("GetContactController");
 	this._contactList = AjxDispatcher.run("GetContacts");
 };
 //-------------------------------- INITIALIZE UI (END) --------------------------------------------------------
@@ -182,9 +191,11 @@ com_zimbra_contactcleaner.prototype.findDupes =
 function(array) {
 	var _arry;
 	this.resetIsOriginal = true;
-	this.vec_master = this.getDupesVector(array.sort(sortContactsBy_E11), "_email", "_email");
+	this.vec_master = this.getDupesVector(array.sort(sortContactsBy_FN), "_firstName", "_lastName");
+	//this.vec_master = this.getDupesVector(array.sort(sortContactsBy_E11), "_email", "_email");
 	this.resetIsOriginal = false;
 
+	this.vec_E11 = this.getDupesVector(this.leftOverArry.sort(sortContactsBy_E11), "_email", "_email");
 	this.vec_E12 = this.getDupesVector(this.leftOverArry.sort(sortContactsBy_E12), "_email", "_email2");
 	this.vec_E13 = this.getDupesVector(this.leftOverArry.sort(sortContactsBy_E13), "_email", "_email3");
 	this.vec_E21 = this.getDupesVector(this.leftOverArry.sort(sortContactsBy_E21), "_email2", "_email");
@@ -193,8 +204,8 @@ function(array) {
 	this.vec_E31 = this.getDupesVector(this.leftOverArry.sort(sortContactsBy_E31), "_email3", "_email");
 	this.vec_E32 = this.getDupesVector(this.leftOverArry.sort(sortContactsBy_E32), "_email3", "_email2");
 	this.vec_E33 = this.getDupesVector(this.leftOverArry.sort(sortContactsBy_E33), "_email3", "_email3");
-	this.vec_FN = this.getDupesVector(this.leftOverArry.sort(sortContactsBy_FN), "_firstName", "_lastName");
 
+	this.mergeVectorsWithMaster(this.vec_E11, "_email", "_email");
 	this.mergeVectorsWithMaster(this.vec_E12, "_email", "_email2");
 	this.mergeVectorsWithMaster(this.vec_E13, "_email", "_email3");
 	this.mergeVectorsWithMaster(this.vec_E21, "_email2", "_email");
@@ -203,8 +214,6 @@ function(array) {
 	this.mergeVectorsWithMaster(this.vec_E31, "_email3", "_email");
 	this.mergeVectorsWithMaster(this.vec_E32, "_email3", "_email2");
 	this.mergeVectorsWithMaster(this.vec_E33, "_email3", "_email3");
-	this.mergeVectorsWithMaster(this.vec_FN, "_firstName", "_lastName");
-
 }
 
 com_zimbra_contactcleaner.prototype.mergeVectorsWithMaster =
@@ -293,17 +302,26 @@ function(_arry, fld1, fld2) {
 		matchfound = false;
 		nxt_fld1 = eval("_arry[" + k + "]." + fld1);
 		nxt_fld2 = eval("_arry[" + k + "]." + fld2);
-		if (fld1 != "_firstName" && (((nxt_fld1 == x_fld1) && (nxt_fld1 != "-" && x_fld1 != "-")) || ((nxt_fld2 == x_fld2) && (nxt_fld2 != "-" && x_fld2 != "-"))
-				|| ((nxt_fld1 == x_fld2) && (nxt_fld1 != "-" && x_fld2 != "-")) || ((nxt_fld2 == x_fld1) && (nxt_fld2 != "-" && x_fld1 != "-")))
-				|| ((fld1 == "_firstName") && ((nxt_fld1 == x_fld1) && (nxt_fld1 != "-" && x_fld1 != "-"))
-				&& ((nxt_fld2 == x_fld2) && (nxt_fld2 != "-" && x_fld2 != "-"))))
-
-		{
-			if (_arry[k]._isOriginal) {
-				this._dupesetAlreadyHasOrig = true;
-			}
-			dupeArry.push(_arry[k]);
-			matchfound = true;
+		/*
+		if (fld1 != "_firstName" 
+			&& (((nxt_fld1 == x_fld1) && (nxt_fld1 != "-" && x_fld1 != "-")) || 
+				((nxt_fld2 == x_fld2) && (nxt_fld2 != "-" && x_fld2 != "-"))|| 
+				((nxt_fld1 == x_fld2) && (nxt_fld1 != "-" && x_fld2 != "-")) || 
+				((nxt_fld2 == x_fld1) && (nxt_fld2 != "-" && x_fld1 != "-")))
+				||
+			((fld1 == "_firstName") 
+			&& ((nxt_fld1 == x_fld1) && (nxt_fld1 != "-" && x_fld1 != "-"))
+				&& ((nxt_fld2 == x_fld2) && (nxt_fld2 != "-" && x_fld2 != "-")))){
+		*/
+		if(	((nxt_fld1 == x_fld1) && (nxt_fld1 != "-" && x_fld1 != "-")) || 
+			((nxt_fld2 == x_fld2) && (nxt_fld2 != "-" && x_fld2 != "-")) || 
+			((nxt_fld1 == x_fld2) && (nxt_fld1 != "-" && x_fld2 != "-")) || 
+			((nxt_fld2 == x_fld1) && (nxt_fld2 != "-" && x_fld1 != "-"))){
+				if (_arry[k]._isOriginal) {
+					this._dupesetAlreadyHasOrig = true;
+				}
+				dupeArry.push(_arry[k]);
+				matchfound = true;
 		}
 
 		//if there is no match or last element...
@@ -356,7 +374,7 @@ function() {
 				currentContact._company = (attr.company) ? (attr.company).toLowerCase() : "-";
 				currentContact._firstName = (attr.firstName) ? (attr.firstName).toLowerCase() : "-";
 				currentContact._lastName = (attr.lastName) ? (attr.lastName).toLowerCase() : "-";
-				currentContact._notes = (attr.notes) ? attr.notes : "-";
+				currentContact._notes = (attr.notes) ? attr.notes  : "-";
 				currentContact._workPhone = (attr.workPhone) ? attr.workPhone : "-";
 				this.filteredContactsArry.push(currentContact);
 			}
@@ -536,9 +554,12 @@ function(dupeArry, dupeId) {
 	for (var i = 0; i < dupeArry.length; i++) {
 		var tc = dupeArry[i];
 		var tcAttr = tc.attr ? tc.attr : tc._attrs;
-		for (var el in tcAttr)
-
-			allElemArry.push(el);
+		for (var el in tcAttr){
+			//lot of times contacts will have notes with a blank line, ignore those
+			if(el != "notes" || (el == "notes" && tcAttr[el].replace("\n","") != "")) {
+				allElemArry.push(el);
+			}
+		}
 	}
 	allElemArry = cc_unique(allElemArry);
 	allElemArry = allElemArry.sort();
@@ -976,7 +997,7 @@ function(ev) {
 		var respCallback = new AjxCallback(this, this._handleResponseDeleteDuplicates);
 		appCtxt.getAppController().sendRequest({soapDoc:soapDoc, asyncMode:true, callback:respCallback});
 
-		var msg = "Processing contacts " + (this.startAt + 1) + " to " + (this.endAt + 1) + " out of " + this.dupesVectorSize;
+		var msg = "Processing contacts " + (this.startAt + 1) + " to " + (this.endAt + 1);
 		this.setProgressbarMsg(msg);
 		this.conOrgDialog.popdown();
 		if (!this.pbDialog.runInBackground)
@@ -989,10 +1010,11 @@ function(ev) {
 
 // Callbacks.....
 com_zimbra_contactcleaner.prototype._handleResponseDeleteDuplicates =
-function(result) {
+function(result) {	
 	if (this.abortProcess) {
-		var msg = "Process was aborted! " + (this.endAt + 1) + " out of " + this.dupesVectorSize + " contacts were processed! Please log out and log back in.";
+		var msg = "Process was aborted! " + (this.endAt + 1)  + " contacts were processed! ";
 		this.setProgressbarAbortMsg(msg);
+		this._showNotesDlg(msg);
 	} else if (this.endAt != this.dupesVectorSize - 1) {
 		document.getElementById("cc_processbarForeground").style.width = parseInt(this.getProgressbarLen() * (this.endAt / this.dupesVectorSize)) + "px";
 		this.startAt = this.endAt + 1;
@@ -1000,11 +1022,24 @@ function(result) {
 		this.dupeContactCurrentCnt = this.dupeContactNextCnt;
 		this.concleanerDlgDeleteListner();
 	} else {
-		var msg = "Successfully completed processing " + this.dupesVectorSize + " contacts! Please log out and log back in.";
+		var msg = "Successfully completed processing " + this.dupesVectorSize + " contacts!";
 		this.setProgressbarComplete(msg);
+		this._showNotesDlg(msg);
 	}
 };
 
+com_zimbra_contactcleaner.prototype._showNotesDlg =
+function(mainMsg) {
+	var notes =["<b>",mainMsg,"</b><br/><br/><b>Notes:</b>",
+		" <br/>1. Please log out and log back in.",
+		" <br/>2. Verify if contacts are merged properly and duplicates are moved to Trash",
+		"<br/>3. If things are fine, you may have to then empty Trash to permanently remove duplicate contacts from Trash",
+		" to not see them in auto-complete fields like in To or Cc compose fields"].join("");
+	var dlg = appCtxt.getMsgDialog();
+	dlg.reset();//reset dialog since we could be using it
+	dlg.setMessage(notes, DwtMessageDialog.INFO_STYLE);
+	dlg.popup();
+};
 //-------------------------------- PROCESS DUPLICATE CONTACTS (END) -------------------------------------------
 
 //-------------------------------------- HELPER FUNCTIONS(START) ----------------------------------------------
@@ -1182,7 +1217,7 @@ function(msg) {
 
 
 com_zimbra_contactcleaner.prototype.setProgressbarComplete =
-function(msg) {
+function(msg, notes) {
 	this.pbDialog.getButton("pbAbortBtn").setEnabled(false);
 	//disable Abort btn
 	this.pbDialog.getButton("pbrunBackgroundBtn").setEnabled(false);
@@ -1190,6 +1225,8 @@ function(msg) {
 	document.getElementById("cc_processbarForeground").style.width = this.getProgressbarLen() + "px";
 	document.getElementById("cc_processBusy").className = "cc_hidden";
 	document.getElementById("cc_pbMsgDiv").innerHTML = this.formatMsg(msg);
+
+
 	this.pbDialog.popup();
 	this.pbDialog.runInBackground = false;
 };
