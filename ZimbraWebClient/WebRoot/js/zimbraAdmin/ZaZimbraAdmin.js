@@ -754,6 +754,12 @@ function() {
     }
 };
 
+ZaZimbraAdmin.isGlobalAdmin = function () {
+    return (ZaZimbraAdmin.currentAdminAccount 
+            && ZaZimbraAdmin.currentAdminAccount.attrs
+            && (ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE'));
+}
+
 
 ZaAboutDialog = function(parent, className, title, w, h) {
 	if (arguments.length == 0) return;

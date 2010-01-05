@@ -18,6 +18,7 @@ ZaNewAdmin.prototype.constructor = ZaNewAdmin ;
 
 ZaNewAdmin.A_admin_type = "new_admin_type" ;
 ZaNewAdmin.A_default_domain_admin_grp = "default_da_grp" ;
+ZaNewAdmin.A_default_domain_admin = "default_da" ;
 ZaNewAdmin.A_proposedGrantsList = "proposedGrantsList" ;
 //ZaNewAdminWizard.A_proposedGrantsListCheckbox = "proposedGrantsListCheckbox" ;
 
@@ -40,6 +41,8 @@ ZaNewAdmin.getMyXModel = function () {
                 ref:"attrs/" + ZaDistributionList.A_isAdminGroup},
            {id: ZaNewAdmin.A_default_domain_admin_grp, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, 
                ref: ZaNewAdmin.A_default_domain_admin_grp},
+            {id: ZaNewAdmin.A_default_domain_admin, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
+               ref: ZaNewAdmin.A_default_domain_admin},
             ZaNewAdmin.getProposedGrantsListItem () ,
            ZaTargetPermission.grantListItem ,
            ZaUIComponent.UIComponentsItem,
@@ -241,8 +244,9 @@ ZaNewAdminWizard = function (parent) {
             "ZaNewAdminWizard", extraButtons);
 
     this.newAdminTypesChoices = [
-        {value: ZaItem.ACCOUNT, label: com_zimbra_delegatedadmin.type_account },
-        {value: ZaItem.DL, label: com_zimbra_delegatedadmin.IsAdminGroup}
+        {value: ZaItem.DL, label: com_zimbra_delegatedadmin.IsAdminGroup},
+        {value: ZaItem.ACCOUNT, label: com_zimbra_delegatedadmin.type_account }
+
     ];
 
     this.stepChoices = [
@@ -281,9 +285,12 @@ ZaNewAdminWizard.initToolbarMethod = function () {
         this._newAdminListener = new AjxListener(this, ZaAccountListController.prototype._newAdminListener);
 
         var menuOpList = newMenu.menuOpList ;
-        menuOpList.push(new ZaOperation(
+        //only show the new administrator for global administrator
+        if(ZaZimbraAdmin.isGlobalAdmin()) {
+		    menuOpList.push(new ZaOperation(
                 ZaOperation.NEW_WIZARD, com_zimbra_delegatedadmin.ADMINBB_New_menuItem,
                 com_zimbra_delegatedadmin.ADMINBB_New_tt, "DomainAdminUser", "DomainAdminUserDis", this._newAdminListener));
+        }
     }
 }
 ZaController.initToolbarMethods["ZaAccountListController"].push(ZaNewAdminWizard.initToolbarMethod);
@@ -437,9 +444,11 @@ function() {
         if (this._containedObject[ZaNewAdmin.A_admin_type] == ZaItem.ACCOUNT) {
             nextStep = ZaNewAdminWizard.STEP_NEW_ACCOUNT ;
             this._containedObject[ZaNewAdmin.A_default_domain_admin_grp] = "FALSE" ;
+            this._containedObject[ZaNewAdmin.A_default_domain_admin] = "TRUE" ;
         } else if  (this._containedObject[ZaNewAdmin.A_admin_type] == ZaItem.DL) {
             nextStep = ZaNewAdminWizard.STEP_NEW_GROUP ;
             this._containedObject[ZaNewAdmin.A_default_domain_admin_grp] = "TRUE" ;
+            this._containedObject[ZaNewAdmin.A_default_domain_admin] = "FALSE" ;
         }
     } else if (cStep == ZaNewAdminWizard.STEP_NEW_ACCOUNT
             || cStep == ZaNewAdminWizard.STEP_NEW_GROUP) {
@@ -449,7 +458,9 @@ function() {
             ZaUIComponent.accountObjectModifer.call(this) ;
 
             //init the zimbraAdminConsoleUIComponents
-            if (this._containedObject[ZaNewAdmin.A_default_domain_admin_grp] == "TRUE") {
+            if ((this._containedObject[ZaNewAdmin.A_default_domain_admin_grp] == "TRUE")
+                || (this._containedObject[ZaNewAdmin.A_default_domain_admin] == "TRUE"))
+            {
                 this._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] =
                         ZaUtil.cloneArray (ZaNewAdminWizard.LEGACY_DA_VIEW) ;
             } else {
@@ -559,7 +570,8 @@ ZaNewAdminWizard.getDefaultDARights = function (object) {
 ZaNewAdminWizard.prototype.setProposedGrants = function () {
     var proposedGrantsList = this._containedObject [ZaNewAdmin.A_proposedGrantsList] = [] ;
     var tmpGrantsList = [] ;
-    if ((this._containedObject [ZaNewAdmin.A_default_domain_admin_grp] == "TRUE")   
+    if (((this._containedObject [ZaNewAdmin.A_default_domain_admin_grp] == "TRUE")
+         || (this._containedObject [ZaNewAdmin.A_default_domain_admin] == "TRUE"))   
         && this.isLegacyDAView())
     {
         tmpGrantsList =  ZaNewAdminWizard.getDefaultDARights (this._containedObject)  ;
@@ -753,7 +765,7 @@ ZaNewAdminWizard.prototype.setObject = function (entry)  {
     }
 
     if (!this._containedObject[ZaNewAdmin.A_admin_type]) {
-        this._containedObject[ZaNewAdmin.A_admin_type] = ZaItem.ACCOUNT ;        
+        this._containedObject[ZaNewAdmin.A_admin_type] = ZaItem.DL ;        
     }
 
     this._containedObject[ZaModel.currentStep] = ZaNewAdminWizard.STEP_START ;
@@ -823,11 +835,20 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
                     this.getForm().parent._button[DwtWizardDialog.NEXT_BUTTON].setEnabled((!(elementValue && elementValue == "TRUE")));
                 },
                 bmolsnr:true, trueValue:"TRUE", falseValue:"FALSE"
-            },
-            ZaAccount.getAdminRolesItem ()               
+            } ,
+            {ref: ZaNewAdmin.A_default_domain_admin ,  type:_CHECKBOX_,
+                visibilityChecks:[[XForm.checkInstanceValue, ZaAccount.A_zimbraIsDelegatedAdminAccount, "TRUE"]],
+                visibilityChangeEventSources: [ZaAccount.A_zimbraIsDelegatedAdminAccount] ,
+                enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraIsDelegatedAdminAccount]],
+                label:com_zimbra_delegatedadmin.NAD_IsAssignDefaultDARights,trueValue:"TRUE", falseValue:"FALSE" }
         ]
     }]};
-    
+
+      var adminRolesItem = ZaAccount.getAdminRolesItem () ;
+      adminRolesItem.visibilityChecks = [[XForm.checkInstanceValue, ZaAccount.A_zimbraIsDelegatedAdminAccount, "TRUE"]] ;
+      adminRolesItem.enableDisableChecks = [[ZaItem.hasWritePermission,ZaAccount.A_zimbraIsDelegatedAdminAccount]] ;
+     case_account.items [0].items.push (adminRolesItem) ;
+
     try {
 	    if(ZaPosixAccount && zimbra_posixaccount_ext && zimbra_posixaccount_ext) {
 	    	zimbra_posixaccount_ext.ACC_WIZ_GROUP.items[0].choices = ZaApp.getInstance().getPosixGroupIdListChoices(true);
