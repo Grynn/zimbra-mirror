@@ -294,7 +294,7 @@ fi
 # Add jetty properties to Java VM options.
 #####################################################
 #MAILBOXD_JAVA_OPTIONS=`/opt/zimbra/bin/zmlocalconfig -m nokey mailboxd_java_options`
-MAILBOXD_JAVA_OPTIONS="-client -d32 -Djava.awt.headless=true -Xms32m -Xmx95m -Xss170k -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=30 -XX:NewRatio=4 -XX:TargetSurvivorRatio=70 -XX:+UseConcMarkSweepGC"
+MAILBOXD_JAVA_OPTIONS="-client -d32 -Djava.awt.headless=true -Xms32m -Xmx95m -Xss150k -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -XX:NewRatio=3 -XX:TargetSurvivorRatio=70 -XX:+UseConcMarkSweepGC"
 JAVA_OPTIONS="$MAILBOXD_JAVA_OPTIONS $JAVA_OPTIONS -Djetty.home='$JETTY_HOME'"
 
 #####################################################

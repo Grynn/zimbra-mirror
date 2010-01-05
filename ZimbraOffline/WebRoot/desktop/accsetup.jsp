@@ -155,7 +155,7 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/skins/${bean.skin}/desktop.css"></c:url>">
 <link rel="SHORTCUT ICON" href="<c:url value='/img/logo/favicon.ico'/>">
 
-<script type="text/javascript" src="/zimbra/desktop/js/desktop.js"></script>
+<script type="text/javascript" src="/js/desktop.js"></script>
 
 <script type="text/javascript">
 
