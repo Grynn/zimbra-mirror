@@ -21,14 +21,6 @@ function preload() {
   return serverCheck();
 }
 
-function shutdown() {
-  var xulRuntime = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime);
-  var os = xulRuntime.OS.toLowerCase();
-  if (os == "winnt") {
-    startStopServer("stop");
-  }
-}
-
 function startServer() {
   return startStopServer("start");
 }
@@ -139,10 +131,9 @@ function load() {
 
     window.platform.icon().menu.addMenuItem("about", bundle.GetStringFromName("AboutDesktop"), function(){window.platform.showAbout();});
     window.platform.icon().menu.addMenuItem("checkForUpdates", bundle.GetStringFromName("CheckUpdates"), function(){checkForUpdates();});
+    window.platform.icon().menu.addMenuItem("shutdownService", bundle.GetStringFromName("ShutdownService"), function(){shutdownService();});
     if (os == "winnt") {
       window.platform.icon().menu.addMenuItem("quitApp", bundle.GetStringFromName("Quit"), function(){quitApp();});
-    } else {
-      window.platform.icon().menu.addMenuItem("shutdownService", bundle.GetStringFromName("ShutdownService"), function(){shutdownService();});
     }
   }
 }
