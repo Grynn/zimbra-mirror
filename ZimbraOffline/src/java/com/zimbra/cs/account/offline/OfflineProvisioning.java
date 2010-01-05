@@ -254,6 +254,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (isAccountSetup && etype == EntryType.ACCOUNT)
             revalidateRemoteLogin((OfflineAccount)e, attrs);
 
+        if (e instanceof Account)
+            enableWiki((Account)e, attrs);
+
         if (etype == EntryType.CONFIG) {
             DbOfflineDirectory.modifyDirectoryEntry(etype, A_offlineDn, "config", attrs, false);
         } else {
@@ -261,9 +264,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             mHasDirtyAccounts |= markChanged;
         }
         reload(e);
-
-        if (e instanceof Account && !isLocalAccount((Account)e))
-            enableWiki(attrs);
         if (!skipAttrMgr)
             AttributeManager.getInstance().postModify(attrs, e, context, false, allowCallback);
     }
@@ -556,18 +556,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         
         attrs.put(A_zimbraMailQuota, "0");
 
-        Object syncEnabled = attrs.get(A_zimbraPrefNotebookSyncEnabled);
-        attrs.put(A_zimbraFeatureNotebookEnabled, syncEnabled == null ? FALSE : syncEnabled);
-
         Account account = createAccountInternal(emailAddress, zgi.getId(), attrs, true, false);
         
         try {
             // create identity entries in database
             for (ZIdentity zident : zgi.getIdentities())
                 DirectorySync.getInstance().syncIdentity(this, account, zident);
-            // create data source entries in database
-//            for (ZDataSource zdsrc : zgi.getDataSources())
-//                DirectorySync.getInstance().syncDataSource(this, account, zdsrc);
         } catch (ServiceException e) {
             OfflineLog.offline.error("error initializing account " + emailAddress, e);
             deleteAccount(zgi.getId());
@@ -863,38 +857,34 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return account;
     }
 
-    private synchronized void enableWiki(Map<String, ? extends Object> attrs) throws ServiceException {
-        if (attrs.get(A_zimbraFeatureNotebookEnabled) == null)
+    @SuppressWarnings("unchecked")
+    private synchronized void enableWiki(Account account, Map<String, ? extends
+        Object> attrs) throws ServiceException {
+        boolean b;
+        String enabled = (String)attrs.get(A_zimbraPrefNotebookSyncEnabled);
+        
+        if (!isLocalAccount(account) || enabled == null)
             return;
-        
-        boolean b = false;
-        Account localAccount = getLocalAccount();
-        
-        for (Account account : getAllZcsAccounts()) {
-            if (account.isFeatureNotebookEnabled()) {
-                b = true;
-                break;
-            }
-        }
-        if (localAccount.isFeatureNotebookEnabled() != b)
-            localAccount.setFeatureNotebookEnabled(b);
+        b = enabled.equals(TRUE);
+        if (account.isFeatureNotebookEnabled() != b)
+            ((Map<String, Object>)attrs).put(Provisioning.A_zimbraFeatureNotebookEnabled, b ? Provisioning.TRUE : Provisioning.FALSE);
         if (b) {
             try {
-                Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(localAccount);
-                mbox.getFolderByPath(new OperationContext(localAccount), "Template");
+                Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account);
+                
+                mbox.getFolderByPath(new OperationContext(account), "Template");
                 return;
             } catch (ServiceException e) {
-                System.out.println(e);
             }
-            WikiUtil wu = WikiUtil.getInstance();
-            wu.initDefaultWiki(LOCAL_ACCOUNT_NAME);
-            String templatePath = LC.zimbra_home.value() + File.separator +
-                "wiki" + File.separator + "Templates";
-            
             try {
+                WikiUtil wu = WikiUtil.getInstance();
+                String templatePath = LC.zimbra_home.value() + File.separator +
+                    "wiki" + File.separator + "Templates";
+                
+                wu.initDefaultWiki(LOCAL_ACCOUNT_NAME);
                 wu.startImport(LOCAL_ACCOUNT_NAME, "Template", new File(templatePath));
             } catch (Exception e) {
-                OfflineLog.offline.warn("can't import local account wiki templates");
+                OfflineLog.offline.warn("cannot import local wiki templates");
             }
         }
     }
