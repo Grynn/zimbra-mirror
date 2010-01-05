@@ -69,7 +69,7 @@ A:hover {
 
 .ZPanelInfoInner {
 	background-color: #ffffff;
-	padding: 10px;
+	padding: 10px 10px 20px 10px;
 }
 
 .ZWelcome {
@@ -196,7 +196,7 @@ A:hover {
 .ZAccountStatus {
 	font-size: 11px;
 	font-weight: bold;
-	color: #444444;
+	color: #999999;
 }
 
 .ZAccountLastSync {
@@ -229,24 +229,39 @@ A:hover {
 	color: #444444;
 }
 
+.ZTable {
+	width: 585px;
+}
+
+.ZTable td {
+	padding: 3px 0px 3px 3px;
+}
+
+.ZTableInner td {
+	padding: 0px;
+}
+
 .ZField {
 	width: 100%;
-	font-size: 16px;
-	color: #444444;
+	font-size: 12px;
+	color: #222222;
 	white-space: nowrap;
 }
 
 .ZFieldLabel, .ZFieldError {
-	color: #444444;
+	color: #222222;
 	text-align: right;
 	white-space: nowrap;
-	width: 200px;
+	/*width: 100px;*/
+	font-size: 12px;
 }
 
 .ZFieldSubLabel, .ZFieldErrorSubLabel {
-	color: #444444;
+	color: #222222;
 	text-align: right;
 	white-space: nowrap;
+	font-size: 12px;
+	width: 100px;
 }
 
 .ZFieldCertLabel {
@@ -254,13 +269,15 @@ A:hover {
 	font-size: 11px;
 }
 
-.ZSyncLabel {
+.ZSectionLabel {
 	color: #7a7a7a;
+	text-align: left;
+	padding-left: 2px;
 }
 
 .ZRadioLabel, .ZCheckboxLabel, .ZInputLabel {
 	color: #444444;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 .ZFieldError, .ZFieldErrorSubLabel {
@@ -268,31 +285,23 @@ A:hover {
 }
 
 .ZSelect {
-	color: #444444;
-	font-size: 14px;
+	color: #222222;
+	font-size: 12px;
 }
 
 .ZAccountHelp {
 	font-size: 12px;
-	color: #444444;
-	padding-bottom: 10px;
+	color: #666666;
+	padding-bottom: 12px;
 }
 
 .ZAccountWarning {
 	padding-top: 5px;
 }
 
-.ZSection {
-	color: #666666;
-	border-bottom: 1px solid #999999;
-	padding-top: 20px;
-	margin-bottom: 10px;
-	font-size: 14px;
-}
-
 .ZSubLink a {
 	color: #999999;
-	font-size: 14px;
+	font-size: 12px;
 	text-decoration: underline;
 }
 
@@ -319,4 +328,15 @@ A:hover {
 .ZDot {
 	color: #444444;
 	font-size: 10px;
+}
+
+.ZHorizontalLine {
+	margin: 0px;
+	padding: 0px;
+	height: 2px;
+	border-color: #dddddd;
+}
+
+.ZRowPadding {
+	padding-top: 10px;
 }

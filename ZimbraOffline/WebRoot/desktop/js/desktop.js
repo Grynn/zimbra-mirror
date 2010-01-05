@@ -86,10 +86,18 @@ var zd = {
 		return (it.style.display == 'none');
 	},
 	
-	toggle : function(id, show) {
-		if (typeof show == "undefined")	show = zd.isShown(id);
-		if (show) 	this.show(id);
-		else 		this.hide(id);
+	toggle : function(id, show, focusElId) {
+		if (typeof show == "undefined")	{
+			show = zd.isShown(id);
+		}
+		if (show) {
+			this.show(id);
+			if (focusElId) {
+				document.getElementById(focusElId).focus();
+			}
+		} else {
+			this.hide(id);
+		}
 	},
 
 	togglePlatformNotice : function(id) {

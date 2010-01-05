@@ -41,6 +41,7 @@
 
 <html>
 <head>
+<meta http-equiv="refresh" content="10" >
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <title><fmt:message key="ZimbraDesktop"/></title>
 
