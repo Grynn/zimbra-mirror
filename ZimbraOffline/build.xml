@@ -277,8 +277,19 @@
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/portals"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/public/tmp"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/_sample"/>
-		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/yahoo/img/_)sourceImages"/>
-		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/zmail/img/_)sourceImages"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/bare"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/beach"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/bones"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/goldrush"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/hotrod"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/lavender"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/lemongrass"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/sand"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/sky"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/steel"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/waves"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/yahoo"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/zmail"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/test"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/yui"/>
 

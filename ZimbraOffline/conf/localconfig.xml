@@ -74,7 +74,7 @@
     <value>30000</value>
   </key>
   <key name="zdesktop_skins">
-    <value>twilight,bare,beach,bones,goldrush,hotrod,lake,lavender,lemongrass,oasis,pebble,sand,sky,smoke,steel,tree,waves,zmail</value>
+    <value>twilight,lake,oasis,pebble,smoke,tree</value>
   </key>
   <key name="zdesktop_volume_compression_threshold">
     <value>131072</value>
