@@ -372,8 +372,7 @@
 		<copy file="${build.dir}/offlinejsp.jar" todir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib"/>
 
 		<ant dir="../ZimbraWebClient" target="jspc.offline_build" inheritAll="false" />
-		<mkdir dir="${dist.app.dir}/jetty/work/zimbra/jsp"/>
-		<copy todir="${dist.app.dir}/jetty/work/zimbra/jsp" overwrite="true">
+		<copy todir="${dist.data.dir}/data/tmp/jetty/zimbra/jsp" overwrite="true">
 			<fileset dir="../ZimbraWebClient/build/dist/jetty/work/zimbra/jsp">
 				<include name="**/*.class"/>
 			</fileset>
