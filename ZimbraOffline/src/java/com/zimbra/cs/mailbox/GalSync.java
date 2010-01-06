@@ -69,7 +69,9 @@ public class GalSync {
         private String token = null;
         private int syncFolder;
         private int dropFolder;
-        private ArrayList<String> idList = null;
+        private ArrayList<String> idGroups = null;
+        private int grpSize = OfflineLC.zdesktop_gal_sync_group_size.intValue();
+        private int idCount;
         private DataSource ds = null;
         
         public SyncHandler(OfflineAccount galAccount, boolean fullSync, boolean trace) {
@@ -81,18 +83,8 @@ public class GalSync {
         public OfflineAccount getGalAccount() { return galAccount; }             
         public int getDropFolder() { return dropFolder; }  
         public Exception getException() { return exception; }              
-        public int getIdCount() { return idList == null ? 0 : idList.size(); }
-        
-        public String[] removeIds(int count) {
-            if (idList.size() == 0)
-                return null;            
-            int size = Math.min(idList.size(), (count > 0 ? count : 500));
-            String[] ret = new String[size];
-            for (int i = 0; i < size; ++i) {
-                ret[i] = idList.remove(0);
-            }
-            return ret;       
-        }
+        public int getGroupCount() { return idGroups == null ? 0 : idGroups.size(); }
+        public String removeGroup() { return idGroups.remove(0); }
         
         public void onStart(ElementPath elPath) { //TODO: add trace logging; 
             String path = elPath.getPath();
@@ -181,9 +173,16 @@ public class GalSync {
                     if (exception != null)
                         elPath.removeHandler(PATH_CN);
                 } else { // Ids Only
-                    if (idList == null)
-                        idList = new ArrayList<String>();
-                    idList.add(id);
+                    if (idGroups == null)
+                        idGroups = new ArrayList<String>();
+                    if (idGroups.size() == 0 || idCount >= grpSize) {                        
+                        idGroups.add(id);
+                        idCount = 1;
+                    } else {                        
+                        int i = idGroups.size() - 1;
+                        idGroups.set(i, idGroups.get(i) + "," + id);
+                        idCount++;
+                    }
                 }
             }
             
@@ -390,12 +389,12 @@ public class GalSync {
         }
         
 
-        while (handler.getIdCount() > 0) {
+        while (handler.getGroupCount() > 0) {
             fetchContacts(handler, mbox);
             mbox.optimize(null, 0);
             System.gc();
  
-            if (handler.getIdCount() > 0) {
+            if (handler.getGroupCount() > 0) {
                 try {
                     Thread.sleep(OfflineLC.zdesktop_gal_sync_group_interval.longValue());
                 } catch (InterruptedException ie) {}
@@ -414,20 +413,8 @@ public class GalSync {
     }
     
     private static void fetchContacts(SyncHandler handler, ZcsMailbox mbox) throws ServiceException, ParseException, IOException {
-        String[] ids = handler.removeIds(OfflineLC.zdesktop_gal_sync_group_size.intValue());
-        int length = ids.length;        
-        if (length == 0)
-            return;
-        
-        String idstr = "";
-        for (int i = 0; i < length; ++i) {
-            if (idstr.length() > 0)
-                idstr += ",";
-            idstr += ids[i];
-        }
-            
         XMLElement req = new XMLElement(MailConstants.GET_CONTACTS_REQUEST);
-        req.addElement(AdminConstants.E_CN).addAttribute(AccountConstants.A_ID, idstr);
+        req.addElement(AdminConstants.E_CN).addAttribute(AccountConstants.A_ID, handler.removeGroup());
         Element response = mbox.sendRequest(req, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12);
         
         Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(handler.getGalAccount().getId(), false);
