@@ -222,7 +222,7 @@
 
 	<target name="offline-war" depends="offline-jar">
 		<unzip src="${server.warfile}" dest="${dist.dir}/jetty/webapps/service" overwrite="true"/>
-		<copy file="${config.dir}/web.xml" todir="${dist.dir}/jetty/webapps/service/WEB-INF"/>
+		<copy file="${config.dir}/web.xml" todir="${dist.dir}/jetty/webapps/service/WEB-INF" overwrite="true"/>
 		<copy todir="${dist.dir}/jetty/webapps/service/WEB-INF/lib">
 			<fileset dir="${build.dir}" includes="${jarfile}"/>
 			<fileset dir="${zsync.common.build.dir}" includes="zsynccommon.jar"/>
@@ -290,11 +290,10 @@
 
 		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/_base/logos/LoginBanner.png"/>
 		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/_base/logos/ZimbraInside/LoginBanner.png"/>
-		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/yahoo/logos/LoginBanner.png"/>
 	</target>
 
 	<target name="offline-zimlet-war">
-		<copy file="${config.dir}/web_zimlet.xml" tofile="${dist.dir}/jetty/webapps/zimlet/WEB-INF/web.xml"/>
+		<copy file="${config.dir}/web_zimlet.xml" tofile="${dist.dir}/jetty/webapps/zimlet/WEB-INF/web.xml" overwrite="true"/>
 	</target>
 
 	<!-- to skip compress, run: ant -Dnocompress=true {target} -->
