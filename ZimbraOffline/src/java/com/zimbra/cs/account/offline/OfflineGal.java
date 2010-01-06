@@ -88,8 +88,10 @@ public class OfflineGal {
         
         if (galAcctId != null && galAcctId.length() > 0)
             mGalMbox = MailboxManager.getInstance().getMailboxByAccountId(galAcctId, false);
-        if (mGalMbox == null)
-            throw OfflineServiceException.MISSING_GAL_MAILBOX(mAccount.getName());
+        if (mGalMbox == null) {
+            OfflineLog.offline.debug("unable to access GAL mailbox for " + mAccount.getName());
+            return null;
+        }
        
         byte[] types = new byte[1];
         types[0] = MailItem.TYPE_CONTACT;
