@@ -46,7 +46,7 @@ A:hover {
 	text-align: center;
 	width: 720px;
 	background: #3e100f url("img/setup-bkgd-full.gif") no-repeat top left;
-	padding: 20px 40px;
+	padding: 20px 40px 25px;
 }
 
 .ZPanelLogo {
@@ -63,18 +63,22 @@ A:hover {
 }
 
 .ZPanelInfoOuter {
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
 	background-color: #dddddd;
 	padding: 10px;
 }
 
 .ZPanelInfoInner {
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
 	background-color: #ffffff;
-	padding: 10px 10px 20px 10px;
+	padding: 10px;
 }
 
 .ZWelcome {
 	font-size: 14px;
-	color: #4a4a4a;
+	color: #222222;
 }
 
 .ZWelcome li {
@@ -91,10 +95,11 @@ A:hover {
 	-webkit-border-radius: 6px;
 	background: #5ca334 url("img/button-bkgd.gif") repeat-x top left;
 	color: #eeeeee;
-	height: 28px;
-	font-size: 13px;
-	padding: 7px 20px 0px 20px;
 	cursor: pointer;
+	height: 24px;
+	font-size: 12px;
+	padding: 7px 16px 0px 16px;
+	text-align: center;
 }
 
 .ZCancel {

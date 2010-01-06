@@ -41,7 +41,9 @@
 
 <html>
 <head>
+<c:if test="${empty accounts}">
 <meta http-equiv="refresh" content="10" >
+</c:if>
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <title><fmt:message key="ZimbraDesktop"/></title>
 
@@ -118,7 +120,7 @@ function submit(id, name, type, flavor, verb) {
 					</td>
 				</tr>
 			</table><br>
-			<table cellpadding="0" cellspacing="0" border=0 width=100%>
+			<table border=0 cellpadding=0 cellspacing=0 width=100%>
 				<c:choose>
 					<c:when test="${not empty accounts}">
 						<tr>
@@ -138,7 +140,9 @@ function submit(id, name, type, flavor, verb) {
 						<div class="ZPanelInfoInner">
 							<c:choose>
 								<c:when test="${empty accounts}">
-									<table cellpadding=4 cellspacing=0>
+									<center>
+									<br>
+									<table border=0 cellpadding=0 cellspacing=0 class="ZTable">
 										<tr>
 											<td>
 												<p class="ZWelcome"><fmt:message key='WelcomeDesc1'/></p>
@@ -165,16 +169,19 @@ function submit(id, name, type, flavor, verb) {
 												</ol>
 											</td>
 										</tr>
-									</table>
-									<br>
-									<table border=0 cellpadding=0 cellspacing=0 align=right>
 										<tr>
 											<td>
-												<div class="ZPanelButton" onclick='OnAdd()'><fmt:message key='AccountAdd'/></div>
+												<table border=0 cellpadding=0 cellspacing=0 align=right>
+													<tr>
+														<td>
+															<div class="ZPanelButton" onclick='OnAdd()'><fmt:message key='AccountAdd'/></div>
+														</td>
+													</tr>
+												</table>
 											</td>
 										</tr>
 									</table>
-									<br><br>
+									</center>
 								</c:when>
 								<c:otherwise>
 									<c:if test="${not empty param.verb && not empty param.accountName}">
@@ -207,7 +214,7 @@ function submit(id, name, type, flavor, verb) {
 											</c:choose>
 										</div>
 									</c:if>
-									<table cellpadding="4" cellspacing="0" border=0 width=100%>
+									<table border=0 cellpadding=4 cellspacing=0 width=100%>
 										<tr>
 											<td>
 												<c:set var='default' value='true'/>
@@ -301,15 +308,17 @@ function submit(id, name, type, flavor, verb) {
 												</c:forEach>
 											</td>
 										</tr>
-									</table><br>
-									<table border=0 cellpadding=0 cellspacing=0 align=right>
-										<tr>
 											<td>
-												<div id="loginButton" class="ZPanelButton" onclick='OnLogin()'><fmt:message key='GotoDesktop'/> &#187;</div>
+												<table border=0 cellpadding=0 cellspacing=0 align=right>
+													<tr>
+														<td>
+															<div id="loginButton" class="ZPanelButton" onclick='OnLogin()'><fmt:message key='GotoDesktop'/> &#187;</div>
+														</td>
+													</tr>
+												</table>
 											</td>
 										</tr>
 									</table>
-									<br><br>
 								</c:otherwise>
 							</c:choose>
 						</div>

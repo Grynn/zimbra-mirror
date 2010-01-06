@@ -270,7 +270,7 @@ function onEditLink(id, keep, makeInvisible) {
 					</td>
 				</tr>
 			</table><br>
-			<table cellpadding="0" cellspacing="0" border=0 width=100%>
+			<table border=0 cellpadding=0 cellspacing=0 width=100%>
 				<tr>
 					<td class="ZPanelTabs">
 						<table border=0 cellpadding=0 cellspacing=0>
@@ -444,7 +444,7 @@ function onEditLink(id, keep, makeInvisible) {
 											<tr id="mailServerRow">
 												<td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='InMailServer'/>:</td>
 												<td>
-													<table cellpadding="0" cellspacing="0" width="100%" border=0 class="ZTableInner">
+													<table border=0 cellpadding=0 cellspacing=0 width=100% border=0 class="ZTableInner">
 														<tr>
 															<td><input class="ZField" type="text" id="host" name="host" value="${bean.host}"></td>
 															<td align=right>
@@ -603,7 +603,7 @@ function onEditLink(id, keep, makeInvisible) {
 											<tr id="popSettingsRow">
 												<td class="ZFieldLabel"><fmt:message key='SyncMsgs'/>:</td>
 												<td>
-													<table cellpadding="0" cellspacing="0" width=85% class="ZTableInner">
+													<table cellpadding=0 cellspacing=0 width=85% class="ZTableInner">
 														<tr>
 															<td>
 																<input type="radio" id="leaveOnServer" name="leaveOnServer" ${bean.leaveOnServer ? '' : 'checked'} value="false">
@@ -646,8 +646,8 @@ function onEditLink(id, keep, makeInvisible) {
 											</tr>
 										</c:if>
 										<tr>
+										<tr><td></td></tr>
 											<td colspan=2>
-												<br><br>
 												<table border=0 cellpadding=0 cellspacing=0 width=100%>
 													<tr>
 														<td>
