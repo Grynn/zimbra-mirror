@@ -901,6 +901,9 @@
 			</copy>
 
 			<replace file="@{extroot}/defaults/preferences/preferences.js" token="@version@" value="${offline.version}"/>
+			<replace file="@{extroot}/defaults/preferences/preferences.js" token="@channel@" value="${offline.channel}"/>
+			<replace file="@{extroot}/defaults/preferences/preferences.js" token="@buildid@" value="${offline.buildid}"/>
+			<replace file="@{extroot}/defaults/preferences/preferences.js" token="@buildos@" value="@{os}"/>
 			<replace file="@{extroot}/chrome/webrunner/content/about.js" token="@version@" value="${offline.version}"/>
 			<replace file="@{extroot}/chrome/webrunner/content/about.js" token="@buildid@" value="${offline.buildid}"/>
 
