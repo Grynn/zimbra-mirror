@@ -1,0 +1,11 @@
+--- heimdal-1.3.1/lib/hcrypto/Makefile.in.orig	2010-01-07 12:06:00.000000000 -0800
++++ heimdal-1.3.1/lib/hcrypto/Makefile.in	2010-01-07 12:06:11.000000000 -0800
+@@ -118,7 +118,7 @@
+ 	libhcrypto_la-dh.lo libhcrypto_la-dh-imath.lo \
+ 	libhcrypto_la-dsa.lo libhcrypto_la-doxygen.lo \
+ 	libhcrypto_la-evp.lo libhcrypto_la-evp-hcrypto.lo \
+-	libhcrypto_la-evp-cc.lo libhcrypto_la-engine.lo \
++	libhcrypto_la-engine.lo \
+ 	libhcrypto_la-hmac.lo libhcrypto_la-md2.lo \
+ 	libhcrypto_la-md4.lo libhcrypto_la-md5.lo \
+ 	libhcrypto_la-pkcs5.lo libhcrypto_la-pkcs12.lo \

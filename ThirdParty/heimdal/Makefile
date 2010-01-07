@@ -17,6 +17,11 @@ else
 	include $(HEIMDAL_ROOT)/../versions.def
 endif
 
+PATCH	:=
+ifeq ($(BUILD_PLATFORM), MACOSXx86)
+	PATCH   := patch -g0 -N -p1 < ../patches/mac.patch;
+endif
+
 HEIMDAL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/heimdal/heimdal-$(HEIMDAL_VERSION).tgz
 HEIMDAL_SOURCE := $(HEIMDAL_ROOT)/heimdal-$(HEIMDAL_VERSION)
 
@@ -30,6 +35,7 @@ checksrc:
 build:
 	(tar xzf src/heimdal-$(HEIMDAL_VERSION).tar.gz; \
 	cd heimdal-$(HEIMDAL_VERSION); \
+	$(PATCH) \
 	CFLAGS="-g -O2 -D_REENTRANT" \
 	CCFLAGS="-g -O2 -D_REENTRANT" \
 	COMPILE_ET="NO" \
