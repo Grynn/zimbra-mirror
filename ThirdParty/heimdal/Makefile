@@ -71,9 +71,9 @@ build:
 	cd $(HEIMDAL_SOURCE)/lib/hcrypto; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/wind; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/hx509; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/sqlite; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/krb5; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/ntlm; $(MAKE) install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/sqlite; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/gssapi; $(MAKE) install STRIP="")
 	(cd $(ZIMBRA_HOME); ln -s heimdal-$(HEIMDAL_VERSION) heimdal)
 
