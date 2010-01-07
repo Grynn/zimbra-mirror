@@ -94,7 +94,7 @@ updateSyslogNG() {
   fi
 
   grep -v zimbra ${syslogconf} > ${tmpfile}
-  echo 'source zimbra_src {  unix-stream("/dev/log" keep-alive(yes) max-connections(20);); }; # zimbra' >> ${tmpfile}
+  echo 'source zimbra_src {  unix-stream("/dev/log" keep-alive(yes) max-connections(20)); }; # zimbra' >> ${tmpfile}
   echo 'filter zimbra_local0 { facility(local0); }; # zimbra' >> ${tmpfile}
   echo 'filter zimbra_local1 { facility(local1); }; # zimbra' >> ${tmpfile}
   echo 'filter zimbra_auth { facility(auth); }; # zimbra' >> ${tmpfile}
