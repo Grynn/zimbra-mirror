@@ -1126,11 +1126,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public void deleteAccount(String zimbraId) throws ServiceException {
         Folder fldr;
+        Account localAccount = getLocalAccount();
         Mailbox mbox;
         
         try {
             mbox = OfflineMailboxManager.getInstance().getMailboxByAccount(
-                getLocalAccount());
+                localAccount);
             fldr = mbox.getFolderByName(null, DesktopMailbox.ID_FOLDER_NOTIFICATIONS,
                 zimbraId);
             mbox.delete(null, fldr.getId(), MailItem.TYPE_MOUNTPOINT);
@@ -1146,6 +1147,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         synchronized (this) {
             cachedaccountIds = null;
         }
+        if (localAccount.isFeatureNotebookEnabled() && getAllZcsAccounts().size() == 0)
+            localAccount.setFeatureNotebookEnabled(false);
     }
     
     private synchronized void deleteOfflineAccount(String zimbraId) throws ServiceException {
