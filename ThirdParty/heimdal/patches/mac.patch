@@ -9,3 +9,13 @@
  	libhcrypto_la-hmac.lo libhcrypto_la-md2.lo \
  	libhcrypto_la-md4.lo libhcrypto_la-md5.lo \
  	libhcrypto_la-pkcs5.lo libhcrypto_la-pkcs12.lo \
+--- heimdal-1.3.1/lib/hx509/ks_keychain.c.orig	2009-11-21 07:41:51.000000000 -0800
++++ heimdal-1.3.1/lib/hx509/ks_keychain.c	2010-01-07 12:34:59.000000000 -0800
+@@ -45,6 +45,7 @@
+ #define kSecCredentialTypeDefault 0
+ #endif
+ 
++#define CSSM_SIZE uint32_t
+ 
+ static int
+ getAttribute(SecKeychainItemRef itemRef, SecItemAttr item,
