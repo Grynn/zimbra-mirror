@@ -65,17 +65,27 @@ if (fork()) {
 	my $datestring = strftime("%F", localtime);
 	
 	my $found = 0;
-	if (open(LOG, "gzip -dc /var/log/zimbra.log.1.gz |")) {
-	    while (<LOG>) {
-		    my $line = $_;
-		    if ($line =~ /$today/o) {
-   		         print PFOUT $line;
-   		         $found = 1;
-	        } elsif ($found) {
-	    	    last; # don't scan any further, we've exhausted today's logs
+	my $old_log;
+	if (-f "/var/log/zimbra.log.1.gz") {
+		$old_log = "gzip -dc /var/log/zimbra.log.1.gz |";
+	} elsif (-f "/var/log/zimbra.log.1.bz2") {
+		$old_log = "bzip2 -dc /var/log/zimbra.log.1.bz2 |";
+	}
+	if (defined($old_log)) {
+	    if (open(LOG, $old_log)) {
+	    	
+            while (<LOG>) {
+		        my $line = $_;
+		        if ($line =~ /$today/o) {
+   		             print PFOUT $line;
+   		             $found = 1;
+	            } elsif ($found) {
+	    	        last; # don't scan any further, we've exhausted today's logs
+	            }
 	        }
+		    close(LOG);
 	    }
-		close(LOG);
+		
 	}
 	open(LOG, "</var/log/zimbra.log") || die $!;
 	$found = 0;
