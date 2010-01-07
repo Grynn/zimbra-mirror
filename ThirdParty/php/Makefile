@@ -11,8 +11,10 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
+PATCH	:=
 ifdef BETA
 	include $(PHP_ROOT)/../beta_versions.def
+	PATCH	:= patch -g0 -N -p1 < ../patches/dns.patch;
 else
 	include $(PHP_ROOT)/../versions.def
 endif
@@ -43,7 +45,7 @@ checksrc:
 
 build:
 	tar xzf src/php-$(PHP_VERSION).tar.gz
-	(cd php-$(PHP_VERSION); $(ACEXE) CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file-path=/opt/zimbra/conf --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) --with-libxml-dir=/opt/zimbra/libxml2-$(XML_VERSION); $(SED); $(MAKE) $(MAKEARGS); $(MAKE) install)
+	(cd php-$(PHP_VERSION); $(PATCH) $(ACEXE) CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file-path=/opt/zimbra/conf --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) --with-libxml-dir=/opt/zimbra/libxml2-$(XML_VERSION); $(SED); $(MAKE) $(MAKEARGS); $(MAKE) install)
 
 clean:
 	rm -rf php-$(PHP_VERSION)
