@@ -167,6 +167,13 @@ ZaGrantsListView.revokeRight = function () {
             }
         }
         this.getModel().setInstanceValue(instance, ZaGrant.A2_grantsList, currentGrantList);
+        this.getModel().setInstanceValue(instance,
+                ZaGrant.A2_grantStatus, com_zimbra_delegatedadmin.GrantStatus_Revoke);
+        this.setInstanceValue ("TRUE", ZaGrant.A2_showGrantStatus) ;
+
+        //need to refresh the form to show the status change ? why the change event is not triggerred ?
+        this.refresh ();
+        this.setInstanceValue ("FALSE", ZaGrant.A2_showGrantStatus) ;  //the status will be hidden on next refresh
     }
 
     this.parent.revokeRightDlg.popdown () ;
@@ -226,6 +233,17 @@ ZaTargetPermission.getGrantsListXFormItem = function (params) {
     var w = params.width ? params.width : 700 ;
     var h = params.height ? params.height : 200 ;
     var by = params.by ? params.by : ZaGrant.A_target ;
+
+    var grantStatusItem = {
+       ref: ZaGrant.A2_grantStatus, id: ZaGrant.A2_grantStatus,
+       type: _DWT_ALERT_, width: "100px",
+	   style: DwtAlert.INFORMATION, iconVisible: false ,
+       bmolsnr: true, 
+       visibilityChangeEventSources: [ZaGrant.A2_grantsList, ZaGrant.A2_grantStatus,ZaGrant.A2_showGrantStatus ] ,
+       visibilityChecks:[[XForm.checkInstanceValue, ZaGrant.A2_showGrantStatus, "TRUE"]]
+//       content: com_zimbra_delegatedadmin.HELP_NOTES_ACL
+    } ;
+
     var grantsListXFormItem  =  {
         ref: ZaGrant.A2_grantsList, id: ZaGrant.A2_grantsList, type: _DWT_LIST_,
         width:w, height: h,
@@ -255,7 +273,7 @@ ZaTargetPermission.getGrantsListXFormItem = function (params) {
         ]
     }
 
-    return [ grantsListXFormItem, grantsListButtonsItem] ;
+    return [ grantStatusItem, grantsListXFormItem, grantsListButtonsItem] ;
 }
 
 

@@ -332,6 +332,14 @@ ZaGrantDialog.prototype.grantRightMethod = function (parent, isMore, isGlobalGra
             } else {
                 currentGrantList.push(ZaUtil.deepCloneObject (obj)) ;
                 parent.getModel().setInstanceValue(instance, this.grantListPropertyName, currentGrantList);
+
+                parent.getModel().setInstanceValue(instance,
+                    ZaGrant.A2_grantStatus, com_zimbra_delegatedadmin.GrantStatus_Grant);
+                parent.setInstanceValue ("TRUE", ZaGrant.A2_showGrantStatus) ;
+
+                //need to refresh the form to show the status change ? why the change event is not triggerred ?
+                parent.refresh ();
+                parent.setInstanceValue ("FALSE", ZaGrant.A2_showGrantStatus) ;  //the status will be hidden on next refresh
             }
             return true ;
         }
@@ -403,6 +411,7 @@ ZaGrantDialog.prototype.editRightAndFinishCallback = function  (parent, selected
             }
 //            currentGrantList.splice(currentGrantIndex, 1) ;
             parent.getModel().setInstanceValue(parent.getInstance(), this.grantListPropertyName, currentGrantList);
+
         }
 
         //2. popdown the informational dialog
@@ -420,7 +429,14 @@ ZaGrantDialog.prototype.editRightAndFinishCallback = function  (parent, selected
             }
         }
 
-        //4. popdown teh edit dialog
+        //4. update status message and popdown the edit dialog
+        if (!isGlobalGrant) {
+            parent.setInstanceValue( com_zimbra_delegatedadmin.GrantStatus_Update, ZaGrant.A2_grantStatus);
+            parent.setInstanceValue ("TRUE", ZaGrant.A2_showGrantStatus) ;
+            //need to refresh the form to show the status change ? why the change event is not triggerred ?
+            parent.refresh ();
+            parent.setInstanceValue ("FALSE", ZaGrant.A2_showGrantStatus) ;  //the status will be hidden on next refresh
+        }
         this.popdown ();
     }
 }
