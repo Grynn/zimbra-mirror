@@ -29,7 +29,7 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 	PLAT := darwin-ppc-cc
 endif
 
-ifeq (_64,$(findstring _64, $(PLATFORM)))
+ifeq (_64,$(findstring _64, $(BUILD_PLATFORM)))
 	PLAT := linux-x86_64
 endif
 
