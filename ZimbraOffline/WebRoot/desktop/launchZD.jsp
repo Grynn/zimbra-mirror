@@ -69,39 +69,44 @@
     boolean isDevMode = mode != null && mode.equalsIgnoreCase("mjsf");
     boolean isOfflineMode = true;
     boolean isSkinDebugMode = mode != null && mode.equalsIgnoreCase("skindebug");
+    boolean isDebug = isSkinDebugMode || isDevMode;
 
     String editor = getParameter(request, "editor", "");
     String ext = getAttribute(request, "fileExtension", null);
+    String lang = "";
+    Locale locale = request.getLocale();
+    String localeId = getAttribute(request, "localeId", null);
     String prodMode = getAttribute(request, "prodMode", "");
+    String res;
     String skin = authResult.getSkin();
     String vers = getAttribute(request, "version", "");
 
     if (ext == null || isDevMode)
 	ext = "";
-
-    Locale locale = request.getLocale();
-    String localeId = getAttribute(request, "localeId", null);
-
     if (localeId != null) {
 	int index = localeId.indexOf("_");
 	if (index == -1) {
+	    lang = "&language=" + localeId;
 	    locale = new Locale(localeId);
 	} else {
 	    String language = localeId.substring(0, index);
 	    String country = localeId.substring(localeId.length() - 2);
+	    lang = "&language=" + language + "&country=" + country;;
 	    locale = new Locale(language, country);
 	}
     }
+    res = "?v=" + vers + (isDebug ? "&debug=1" : "") + lang + "&skin=" + skin + "&mode="+mode;
 
     pageContext.setAttribute("app", "");
     pageContext.setAttribute("contextPath", contextPath);
     pageContext.setAttribute("editor", editor);
     pageContext.setAttribute("ext", ext);
-    pageContext.setAttribute("isDebug", isSkinDebugMode || isDevMode);
+    pageContext.setAttribute("isDebug", isDebug);
     pageContext.setAttribute("isDevMode", isDev);
     pageContext.setAttribute("isOfflineMode", "true");
     pageContext.setAttribute("isProdMode", !prodMode.equals(""));
     pageContext.setAttribute("locale", locale);
+    pageContext.setAttribute("res", res);
     pageContext.setAttribute("skin", skin);
     pageContext.setAttribute("vers", vers);
 %>
@@ -111,12 +116,12 @@
 
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 <title><fmt:message key="ZimbraDesktop"/></title>
-<link href="<c:url value="/css/images,common,dwt,msgview,login,zm,wiki,skin.css">
+<link rel="stylesheet" href="<c:url value="/css/images,common,dwt,msgview,login,zm,wiki,skin.css">
     <c:param name="v" value="${vers}" />
     <c:param name="debug" value='${isDebug?"1":""}' />
     <c:param name="skin" value="${skin}" />
     <c:param name="locale" value="${locale}" />
-</c:url>" rel="stylesheet" type="text/css" />
+</c:url>" type="text/css" />
 <link rel="SHORTCUT ICON" href="<c:url value='/img/logo/favicon.ico'/>">
 <script>
     appContextPath = "${zm:jsEncode(contextPath)}";
@@ -127,10 +132,8 @@
 </script>
 </head>
 <body>
-<jsp:include page="/public/Resources.jsp">
-    <jsp:param name="res" value="I18nMsg,AjxMsg,ZMsg,ZmMsg,AjxKeys,ZmKeys,ZdMsg,AjxTemplateMsg" />
-    <jsp:param name="skin" value="${skin}" />
-</jsp:include>
+
+<script type="text/javascript" src="/res/I18nMsg,AjxMsg,ZMsg,ZmMsg,AjxKeys,ZmKeys,ZdMsg,AjxTemplateMsg.js<%=res%>"></script>
 
 <!-- image overlays and masks -->
 <script>
@@ -155,8 +158,23 @@
     <jsp:param name="customerDomain" value="${param.customerDomain}" />
 </jsp:include>
 
-<jsp:include page="/public/Boot.jsp"/>
+<!-- bootstrap classes -->
+<% if (isDevMode) { %>
+    <jsp:include page="/public/Boot.jsp" />
+<% } else { %>
+<script type="text/javascript">
+    <jsp:include>
+	<jsp:attribute name='page'>/js/Boot_all.js</jsp:attribute>
+    </jsp:include>
+</script>
+<% } %>
+
 <script>
+    AjxPackage.setBasePath("<%=contextPath%>/js");
+    AjxPackage.setExtension("<%= isDevMode ? "" : "_all" %>.js");
+    AjxPackage.setQueryString("v=<%=vers%>");
+    AjxTemplate.setBasePath("<%=contextPath%>/templates");
+    AjxTemplate.setExtension(".template.js");
     AjxEnv.DEFAULT_LOCALE = "${zm:javaLocaleId(locale)}";
 </script>
 <script>
