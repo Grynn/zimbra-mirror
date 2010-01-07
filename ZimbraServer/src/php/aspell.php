@@ -19,16 +19,19 @@ $text = "";
 $dictionary = "en_EN";
 $ignoreWords = array();
 
+// Split on anything that's not a letter, dash or quote.
+// Special-case Hindi/Devanagari because some characters
+// are not matched by \p{L}.
+$splitRegexp = "/[^\p{L}\p{Devanagari}-\p{N}\']+/u";
+
 if (isset($_FILES["text"])) {
     $text = file_get_contents($_FILES["text"]);
 } else if (isset($_REQUEST["text"])){
     $text = $_REQUEST["text"];
 }
-
 if (isset($_REQUEST["dictionary"])) {
     $dictionary = $_REQUEST["dictionary"];
 }
-
 if (isset($_REQUEST["ignore"])) {
     $wordArray = preg_split('/[\s,]+/', $_REQUEST["ignore"]);
     foreach ($wordArray as $word) {
@@ -41,26 +44,21 @@ if (get_magic_quotes_gpc()) {
 }
 
 if ($text != NULL) {
-    header("Content-Type: text/plain; charset=UTF-8");
-
     setlocale(LC_ALL, $dictionary);
 
-    // Convert to ISO-8859-1
-    $text = iconv("UTF-8", "iso-8859-1//IGNORE", $text);
-
-	// Set error handler after the call to iconv, in case iconv
-	// complains about unexpected characters (bug 41760). 
+    // Set a custom error handler so we return the error message
+    // to the client.
     set_error_handler("returnError");
 
     // Get rid of double-dashes, since we ignore dashes
-    // when splitting words
-    $text = preg_replace('/--+/', ' ', $text);
+    // when splitting words.
+    $text = preg_replace('/--+/u', ' ', $text);
 
     // Split on anything that's not a word character, quote or dash
-    $words = preg_split('/[^\w\xc0-\xfd-\']+/', $text);
+    $words = preg_split($splitRegexp, $text);
 	
     // Load dictionary
-    $dictionary = pspell_new($dictionary);
+    $dictionary = pspell_new($dictionary, "", "", "UTF-8");
     if ($dictionary == 0) {
         returnError("Unable to open dictionary " . $dictionary);
     }
@@ -81,14 +79,14 @@ if ($text != NULL) {
         }
 
         // Ignore hyphenations
-        if (preg_match('/-$/', $word)) {
+        if (preg_match('/-$/u', $word)) {
             // Skip the next word too
             $skip = TRUE;
             continue;
         }
 
         // Skip numbers
-        if (preg_match('/[0-9\-]+/', $word)) {
+        if (preg_match('/[\p{N}\-]+/u', $word)) {
             continue;
         }
         
@@ -102,18 +100,18 @@ if ($text != NULL) {
         // Check spelling
         if (!pspell_check($dictionary, $word)) {
             $suggestions = implode(",", pspell_suggest($dictionary, $word));
-            $suggestions = utf8_encode($suggestions);
-            $utfw = utf8_encode($word);
-            $misspelled .= "$utfw:$suggestions\n";
+            $misspelled .= "$word:$suggestions\n";
         }
     }
 
+    header("Content-Type: text/plain; charset=UTF-8");
     echo $misspelled;
 } else {
 ?>
 
 <html>
  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Spell Checker</title>
  </head>
  <body>
@@ -132,7 +130,10 @@ if ($text != NULL) {
 <?php
     }
 
+// Custom error handler that returns the error without HTML formatting.
+// This is necessary because the client is expecting text.
 function returnError($errno, $message) {
+    header("Content-Type: text/plain; charset=UTF-8");
     header("HTTP/1.1 500 Internal Server Error");
     error_log("Error $errno: " . $message);
     exit($message);
