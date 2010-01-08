@@ -14,7 +14,11 @@ ZIMBRA_HOME ?= /opt/zimbra
 PATCH	:=
 ifdef BETA
 	include $(PHP_ROOT)/../beta_versions.def
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
+	PATCH	:= patch -g0 -N -p1 < ../patches/dns.patch; patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
+else
 	PATCH	:= patch -g0 -N -p1 < ../patches/dns.patch;
+endif
 else
 	include $(PHP_ROOT)/../versions.def
 endif
