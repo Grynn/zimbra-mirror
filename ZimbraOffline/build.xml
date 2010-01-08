@@ -287,9 +287,6 @@
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/zmail"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/test"/>
 		<delete dir="${dist.dir}/jetty/webapps/zimbra/yui"/>
-
-		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/_base/logos/LoginBanner.png"/>
-		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/_base/logos/ZimbraInside/LoginBanner.png"/>
 	</target>
 
 	<target name="offline-zimlet-war">
@@ -828,8 +825,8 @@
 			<fileset dir="src/installer/webapp" />
 		</copy>
 		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/launcher.icns" file="src/installer/resources/launcher_128x128.icns" overwrite="true"/>
-		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/launcher.png" file="src/installer/resources/launcher_32x32.png" overwrite="true"/>
-		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/launcher.ico" file="src/installer/resources/launcher_32x32.ico" overwrite="true"/>
+		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/launcher.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
+		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/launcher.ico" file="src/installer/resources/launcher_128x128.ico" overwrite="true"/>
 		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/newmail.png" file="src/installer/resources/newmail_16x16.png" overwrite="true"/>
 
 		<mkdir dir="${dist.app.dir}/macos"/>
@@ -854,9 +851,6 @@
 		</copy>
 		<chmod file="${dist.app.dir}/linux/user-install.pl" perm="ugo+x"/>
 
-		<copy todir="${dist.app.dir}/win32" overwrite="true">
-			<fileset dir="src/installer/resources" includes="launcher_32x32.ico launcher_48x48.ico" />
-		</copy>
 		<copy todir="${dist.app.dir}/win32/prism" file="src/installer/win32/prism/application.ini" overwrite="true"/>
 	</target>
 
