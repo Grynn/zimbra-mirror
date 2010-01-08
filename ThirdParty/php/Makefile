@@ -28,19 +28,11 @@ else
 endif
 endif
 
-#SED	:= echo
-
-#ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(XML_VERSION)\/lib\/libxml2.a/g' Makefile
-#endif
+SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(XML_VERSION)\/lib\/libxml2.a/g' Makefile
 
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	ACEXE := ac_cv_exeext=
 endif
-
-#ifeq ($(BUILD_PLATFORM), MACOSX)
-#	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(XML_VERSION)\/lib\/libxml2.a/g' Makefile
-#endif
 
 PHP_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php/php-$(PHP_VERSION).tgz
@@ -58,7 +50,6 @@ build:
 	$(PATCH) $(ACEXE) CFLAGS="-g -O2" \
 	./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file-path=/opt/zimbra/conf --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) --with-libxml-dir=/opt/zimbra/libxml2-$(XML_VERSION); \
 	$(SED); \
-	sed -i .bak -e 's/-L\/usr\/lib//g' config.status; \
 	$(MAKE) $(MAKEARGS); \
 	$(MAKE) install)
 
