@@ -183,7 +183,6 @@
 				WEB-INF/classes/messages/${name},
 				WEB-INF/classes/keys/${name},
 				WEB-INF/classes/${dir}/${name},
-				${zimbra.home}/zimlets-properties/${name}/${name},
                 ${zimbra.home}/zimlets-deployed/${name}/${name},
 				${zimbra.home}/zimlets-deployed/_dev/${name}/${name}
 			</param-value>
