@@ -395,12 +395,18 @@ public class SkinResources
         File skinDir = new File(skinDirname);
         File manifestFile = new File(skinDir, SKIN_MANIFEST);
 
-		String skinsDirname = LC.skins_directory.value();
-		if (skinsDirname == null) skinsDirname = "/zimbra";
-		int slashIndex = skinsDirname.lastIndexOf('/');
-		skinsDirname = skinsDirname.substring(0, slashIndex);
-		slashIndex = skinsDirname.lastIndexOf('/');
-		String appContextPath = skinsDirname.substring(slashIndex);
+        String appContextPath = null;
+        try {
+            Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+            appContextPath = (String) envCtx.lookup("mailUrl");
+        }
+        catch (NamingException ne) {
+            // ignore
+        }
+        if (appContextPath == null) {
+            appContextPath = "/zimbra";
+        }
 
 		// domain overrides
 		Map<String,String> substOverrides = new HashMap<String,String>();
@@ -498,7 +504,7 @@ public class SkinResources
 							for (File file : templates) {
 								// TODO: optimize
 								files.add(new File(file.getParentFile(), file.getName() + ".js"));
-								String templateFilename = file.getName().replaceAll("\\.template$", ""); 
+								String templateFilename = file.getName().replaceAll("\\.template$", "");
 								String templateExt = ".template.js";
 								addLocaleFiles(files, requestedLocale, file.getParentFile(), templateFilename, templateExt);
 							}
