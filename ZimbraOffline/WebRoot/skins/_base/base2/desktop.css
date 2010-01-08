@@ -19,6 +19,7 @@
 
 BODY {
 	background: #808080 url("img/bg.png") repeat-x top left;
+	margin: 0px;
 	padding-top: 40px;
 }
 
@@ -38,6 +39,11 @@ A:link, A:active, A:visited {
 
 A:hover {
 	text-decoration: underline;
+}
+
+INPUT[disabled='disabled'] {
+	background-color: #ebebeb;
+	color: #444444;
 }
 
 .ZPanel {
@@ -98,6 +104,7 @@ A:hover {
 	cursor: pointer;
 	height: 24px;
 	font-size: 12px;
+	min-width: 85px;
 	padding: 7px 16px 0px 16px;
 	text-align: center;
 }
@@ -118,12 +125,12 @@ A:hover {
 	-webkit-border-top-right-radius: 6px;
 	background: #6a6a6a url("img/tab_inactive.png") repeat-x top left;
 	color: #6b6b6b;
+	cursor: pointer;
 	height: 25px;
 	font-size: 13px;
-	padding: 7px 20px 0px 20px;
-	cursor: pointer;
-	text-transform: uppercase;
 	font-weight: bold;
+	padding: 7px 20px 0px 20px;
+	text-transform: uppercase;
 }
 
 .ZPanelTabActive {
@@ -133,12 +140,12 @@ A:hover {
 	-webkit-border-top-right-radius: 6px;
 	background-color: #dddddd;
 	color: #444444;
+	cursor: default;
 	height: 25px;
 	font-size: 13px;
-	padding: 7px 20px 0px 20px;
-	cursor: default;
-	text-transform: uppercase;
 	font-weight: bold;
+	padding: 7px 20px 0px 20px;
+	text-transform: uppercase;
 }
 
 .ZPanelFirstTab {
@@ -152,10 +159,10 @@ A:hover {
 .ZInfo {
 	background-color: #ffffbe;
 	border: 1px solid #fff13f;
+	color: #444444;
+	font-size: 12px;
 	padding: 8px;
 	margin: 5px 5px 15px 5px;
-	font-size: 12px;
-	color: #444444;
 }
 
 .ZInfoError {
@@ -199,15 +206,15 @@ A:hover {
 }
 
 .ZAccountStatus {
+	color: #999999;
 	font-size: 11px;
 	font-weight: bold;
-	color: #999999;
 }
 
 .ZAccountLastSync {
+	color: #999999;
 	font-size: 12px;
 	font-style: italic;
-	color: #999999;
 	padding-right: 10px;
 	white-space: nowrap;
 }
@@ -218,9 +225,9 @@ A:hover {
 }
 
 .ZAccountErrorMessage {
-	font-weight: bold;
-	font-size: 11px;
 	color: #444444;
+	font-size: 11px;
+	font-weight: bold;
 }
 
 .ZAccountErrorDetails {
@@ -228,18 +235,18 @@ A:hover {
 }
 
 #errorDetails {
-	display: none;
-	overflow: hidden;
-	font-size: 10px;
 	color: #444444;
+	display: none;
+	font-size: 10px;
+	overflow: hidden;
 }
 
 .ZTable {
-	width: 585px;
+	width: 565px;
 }
 
 .ZTable td {
-	padding: 3px 0px 3px 3px;
+	padding: 3px 6px 3px 0px;
 }
 
 .ZTableInner td {
@@ -247,26 +254,10 @@ A:hover {
 }
 
 .ZField {
+	color: #222222;
+	font-size: 12px;
+	white-space: nowrap;
 	width: 100%;
-	font-size: 12px;
-	color: #222222;
-	white-space: nowrap;
-}
-
-.ZFieldLabel, .ZFieldError {
-	color: #222222;
-	text-align: right;
-	white-space: nowrap;
-	/*width: 100px;*/
-	font-size: 12px;
-}
-
-.ZFieldSubLabel, .ZFieldErrorSubLabel {
-	color: #222222;
-	text-align: right;
-	white-space: nowrap;
-	font-size: 12px;
-	width: 100px;
 }
 
 .ZFieldCertLabel {
@@ -274,10 +265,31 @@ A:hover {
 	font-size: 11px;
 }
 
+.ZFieldLabel, .ZFieldError, .ZFieldSubLabel, .ZFieldErrorSubLabel {
+	color: #222222;
+	font-size: 12px;
+	/* font-weight: bold; */
+	text-align: right;
+	white-space: nowrap;
+}
+
+.ZFieldSubLabel, .ZFieldErrorSubLabel {
+	color: #222222;
+	font-weight: normal;
+}
+
+.ZFieldError, .ZFieldErrorSubLabel {
+	color: #911510;
+}
+
+.ZFieldMedium {
+        width: 60%;
+}
+
 .ZSectionLabel {
 	color: #7a7a7a;
-	text-align: left;
 	padding-left: 2px;
+	text-align: left;
 }
 
 .ZRadioLabel, .ZCheckboxLabel, .ZInputLabel {
@@ -285,18 +297,15 @@ A:hover {
 	font-size: 12px;
 }
 
-.ZFieldError, .ZFieldErrorSubLabel {
-	color: #911510;
-}
-
 .ZSelect {
 	color: #222222;
 	font-size: 12px;
+        width: 60%;
 }
 
 .ZAccountHelp {
-	font-size: 12px;
 	color: #666666;
+	font-size: 12px;
 	padding-bottom: 12px;
 }
 
@@ -311,8 +320,11 @@ A:hover {
 }
 
 .ZError, .ZWarning {
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	color: #911510;
+	font-size: 12px;
 	padding: 10px;
-	font-size: 14px;
 	margin-bottom: 10px;
 }
 
@@ -327,19 +339,19 @@ A:hover {
 }
 
 .ZTip a {
-	color: #444444;
+	color: #383838;
 }
 
 .ZDot {
-	color: #444444;
+	color: #383838;
 	font-size: 10px;
 }
 
 .ZHorizontalLine {
-	margin: 0px;
-	padding: 0px;
-	height: 2px;
 	border-color: #dddddd;
+	height: 2px;
+	margin: 4px 0px 6px 0px;
+	padding: 0px;
 }
 
 .ZRowPadding {

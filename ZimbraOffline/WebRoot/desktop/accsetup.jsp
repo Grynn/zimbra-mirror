@@ -151,8 +151,15 @@
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <title><fmt:message key="ZimbraDesktop"/></title>
 
+<!--
+<link rel="stylesheet" href="<c:url value="/css/common,desktop.css">
+    <c:param name="debug" value="${devMode}" />
+    <c:param name="skin" value="${bean.skin}" />
+</c:url>" type="text/css">
+-->
 <link rel="stylesheet" type="text/css" href="<c:url value="/skins/_base/base2/desktop.css"></c:url>">
 <link rel="stylesheet" type="text/css" href="<c:url value="/skins/${bean.skin}/desktop.css"></c:url>">
+
 <link rel="SHORTCUT ICON" href="<c:url value='/img/logo/favicon.ico'/>">
 
 <script type="text/javascript" src="/js/desktop.js"></script>
@@ -295,41 +302,43 @@ function onEditLink(id, keep, makeInvisible) {
 				<tr>
 					<td class="ZPanelInfoOuter">
 						<div class="ZPanelInfoInner">
-							<c:choose>
-								<c:when test="${accountFlavor eq ''}">
-								</c:when>
-								<c:when test="${not empty bean.error}">
-									<div id="message" class="ZError">
-										${bean.error}
-										<c:if test="${not empty bean.sslCertInfo}">
-											<zd:sslCertError/><br>
-											<c:choose>
-												<c:when test="${bean.sslCertInfo.acceptable}">
-													<c:set var='save' value='CertAcceptButton'/>
-													<div><fmt:message key='CertAcceptWarning'/></div>
-												</c:when>
-												<c:otherwise>
-													<div><fmt:message key='CertCantAccept'/></div>
-												</c:otherwise>
-											</c:choose>
-										</c:if>
-									</div>
-								</c:when>
-								<c:when test="${not bean.allValid}" >
-									<div id="message" class="ZError">
-										<fmt:message key='PlsCorrectInput'/>
-									</div>
-								</c:when>
-							</c:choose>
-
 							<center>
 							<table border=0 cellpadding=0 cellspacing=0 class="ZTable">
+								<tr>
+									<td colspan=2>
+										<c:choose>
+											<c:when test="${accountFlavor eq ''}">
+											</c:when>
+											<c:when test="${not empty bean.error}">
+												<div id="message" class="ZError">
+													${bean.error}
+													<c:if test="${not empty bean.sslCertInfo}">
+														<zd:sslCertError/><br>
+														<c:choose>
+															<c:when test="${bean.sslCertInfo.acceptable}">
+																<c:set var='save' value='CertAcceptButton'/>
+																<div><fmt:message key='CertAcceptWarning'/></div>
+															</c:when>
+															<c:otherwise>
+																<div><fmt:message key='CertCantAccept'/></div>
+															</c:otherwise>
+														</c:choose>
+													</c:if>
+												</div>
+											</c:when>
+											<c:when test="${not bean.allValid}" >
+												<div id="message" class="ZError">
+													<fmt:message key='PlsCorrectInput'/>
+												</div>
+											</c:when>
+										</c:choose>
+									</td>
+								</tr>
 								<c:if test="${empty bean.accountId}">
 									<tr>
 										<td valign=top class="ZFieldLabel"><fmt:message key='AccountType'/>:</td>
 										<td valign=bottom>
 											<form name="newAccnt" action="" method="POST">
-												<input type="hidden" name="verb" id="verb" value=""></input>
 												<select name="accountFlavor" id="accountFlavor" onchange="accntChange(this)" class="ZSelect">
 													<option value=""><fmt:message key='AccountSelect'/></option>
 													<option value="Zimbra" <c:if test="${accountFlavor eq 'Zimbra'}">selected</c:if> ><fmt:message key='Zimbra'/></option>
@@ -340,6 +349,7 @@ function onEditLink(id, keep, makeInvisible) {
 													<option value="Imap" <c:if test="${accountFlavor eq 'Imap'}">selected</c:if> ><fmt:message key='Imap'/></option>
 													<option value="Pop" <c:if test="${accountFlavor eq 'Pop'}">selected</c:if> ><fmt:message key='POP'/></option>
 												</select>
+												<input type="hidden" name="verb" id="verb" value=""></input>
 											</form>
 										</td>
 									</tr>
@@ -394,7 +404,7 @@ function onEditLink(id, keep, makeInvisible) {
 										</c:choose>
 										<tr>
 											<td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='AccountName'/>:</td>
-											<td><input class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}" ${empty bean.accountId ? '' : 'disabled'}><td>
+											<td><input class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}" ${empty bean.accountId ? '' : 'disabled="disabled"'}><td>
 										</tr>
 										<c:if test="${bean.type ne 'zimbra'}">
 											<tr>
@@ -404,7 +414,7 @@ function onEditLink(id, keep, makeInvisible) {
 										</c:if>
 										<tr id="emailRow">
 											<td class="${zdf:isValid(bean, 'email') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='EmailAddress'/>:</td>
-											<td><input class="ZField" type="text" id="email" name="email" value="${bean.email}" ${empty bean.accountId ? '' : 'disabled'}></td>
+											<td><input class="ZField" type="text" id="email" name="email" value="${bean.email}" ${empty bean.accountId ? '' : 'disabled="disabled"'}></td>
 										</tr>
 										<c:if test="${bean.serverConfigSupported}">
 											<c:if test="${bean.usernameRequired}">
@@ -412,10 +422,10 @@ function onEditLink(id, keep, makeInvisible) {
 													<td colspan=2 class="ZRowPadding"></td>
 												</tr>
 												<tr>
-													<td class="ZFieldLabel ZSectionLabel"><fmt:message key='ReceivingMail'/></td>
-												</tr>
-												<tr>
-													<td colspan=2><center><hr size=2 class="ZHorizontalLine"/></center></td>
+													<td class="ZFieldLabel ZSectionLabel" colspan=2>
+														<fmt:message key='ReceivingMail'/>
+														<hr class="ZHorizontalLine"/>
+													</td>
 												</tr>
 												<c:if test="${bean.type eq 'xsync'}">
 													<tr>
@@ -432,9 +442,9 @@ function onEditLink(id, keep, makeInvisible) {
 										<tr id="passwordRow">
 											<td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Password'/>:</td>
 											<td>
-												<table cellpadding=0 cellspacing=0 width=100% border=0 class="ZTableInner">
+												<table border=0 cellpadding=0 cellspacing=0 width=100% class="ZTableInner">
 													<tr>
-														<td><input class="ZField" type="password" id="password" name="password" value="${bean.password}" disabled></td>
+														<td><input class="ZField" type="password" id="password" name="password" value="${bean.password}" disabled="disabled"></td>
 														<td class="ZSubLink" id="passwordLink"><a href="javascript:;" onclick="onEditLink('password'); return false;"><fmt:message key='Edit'/></a></td>
 													</tr>
 												</table>
@@ -444,14 +454,14 @@ function onEditLink(id, keep, makeInvisible) {
 											<tr id="mailServerRow">
 												<td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='InMailServer'/>:</td>
 												<td>
-													<table border=0 cellpadding=0 cellspacing=0 width=100% border=0 class="ZTableInner">
+													<table border=0 cellpadding=0 cellspacing=0 width=100% class="ZTableInner">
 														<tr>
 															<td><input class="ZField" type="text" id="host" name="host" value="${bean.host}"></td>
 															<td align=right>
 																<table border=0>
 																	<tr>
-																		<td class="${zdf:isValid(bean, 'port') ? 'ZFieldSubLabel' : 'ZFieldErrorSubLabel'}"><fmt:message key='Port'/>:&nbsp;</td>
-																		<td><input type="text" class="ZField" id="port" name="port" value="${bean.port}" size=6 disabled></td>
+																		<td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldErrorLabel'}"><fmt:message key='Port'/>:&nbsp;</td>
+																		<td><input type="text" class="ZField" id="port" name="port" value="${bean.port}" size=5 disabled="disabled"></td>
 																		<td class="ZSubLink" id="portLink"><a href="javascript:;" onclick="onEditLink('port', false, true); return false;"><fmt:message key='Edit'/></a></td>
 																	</tr>
 																</table>
@@ -495,10 +505,10 @@ function onEditLink(id, keep, makeInvisible) {
 													<td colspan=2 class="ZRowPadding"></td>
 												</tr>
 												<tr>
-													<td class="ZFieldLabel ZSectionLabel"><fmt:message key='SendingMail'/></td>
-												</tr>
-												<tr>
-													<td colspan=2><center><hr size=2 class="ZHorizontalLine"/></center></td>
+													<td class="ZFieldLabel ZSectionLabel" colspan=2>
+														<fmt:message key='SendingMail'/>
+														<hr class="ZHorizontalLine"/>
+													</td>
 												</tr>
 												<tr id="smtpServerRow">
 													<td class="${zdf:isValid(bean, 'smtpHost') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='OutMailServer'/>:</td>
@@ -509,8 +519,8 @@ function onEditLink(id, keep, makeInvisible) {
 																<td align=right>
 																	<table border=0>
 																		<tr>
-																			<td class="${zdf:isValid(bean, 'smtpPort') ? 'ZFieldSubLabel' : 'ZFieldErrorSubLabel'}"><fmt:message key='Port'/>:&nbsp;</td>
-																			<td><input style="width:40px" class="ZField" type="text" id="smtpPort" name="smtpPort" value="${bean.smtpPort}" disabled></td>
+																			<td class="${zdf:isValid(bean, 'smtpPort') ? 'ZFieldLabel' : 'ZFieldErrorLabel'}"><fmt:message key='Port'/>:&nbsp;</td>
+																			<td><input class="ZField" type="text" id="smtpPort" name="smtpPort" value="${bean.smtpPort}" size=5 disabled="disabled"></td>
 																			<td class="ZSubLink" id="smtpPortLink"><a href="javascript:;" onclick="onEditLink('smtpPort', false, true); return false;"><fmt:message key='Edit'/></a></td>
 																		</tr>
 																	</table>
@@ -536,18 +546,18 @@ function onEditLink(id, keep, makeInvisible) {
 												<tr id="smtpAuthSettingsRow" ${bean.smtpAuth ? '' : 'style="display:none"'}>
 													<td class="ZFieldLabel"></td>
 													<td>
-														<table cellpadding=0 cellspacing=0 border=0>
+														<table border=0 cellpadding=0 cellspacing=0 width=100%>
 															<tr>
-																<td class="${zdf:isValid(bean, 'smtpUsername') ? 'ZFieldSubLabel ZInputLabel' : 'ZFieldErrorSubLabel ZInputLabel'}"><fmt:message key='UserName'/>:</td>
-																<td><input class="ZFieldMedium" type="text" id="smtpUsername" name="smtpUsername" value="${bean.smtpUsername}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
+																<td class="${zdf:isValid(bean, 'smtpUsername') ? 'ZFieldSubLabel' : 'ZFieldErrorSubLabel'}" width=35%><fmt:message key='UserName'/>:</td>
+																<td><input class="ZField" type="text" id="smtpUsername" name="smtpUsername" value="${bean.smtpUsername}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
 															</tr>
 															<tr>
-																<td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZFieldSubLabel ZInputLabel' : 'ZFieldErrorSubLabel ZInputLabel'}"><fmt:message key='Password'/>:</td>
+																<td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZFieldSubLabel' : 'ZFieldErrorSubLabel'}"><fmt:message key='Password'/>:</td>
 																<td>
-																	<table cellpadding=0 cellspacing=0 border=0 class="ZTableInner">
+																	<table border=0 cellpadding=0 cellspacing=0 width=100% class="ZTableInner">
 																		<tr>
-																			<td><input type="password" id="smtpPassword" name="smtpPassword" value="${bean.smtpPassword}" style="width:100%" disabled></td>
-																			<td id="smtpPasswordLink"><a href="javascript:;" onclick="onEditLink('smtpPassword'); return false;"><fmt:message key='Edit'/></a></td>
+																			<td><input class="ZField" type="password" id="smtpPassword" name="smtpPassword" value="${bean.smtpPassword}" disabled="disabled"></td>
+																			<td id="smtpPasswordLink" width="1%"><a href="javascript:;" onclick="onEditLink('smtpPassword'); return false;"><fmt:message key='Edit'/></a></td>
 																		</tr>
 																	</table>
 																</td>
@@ -558,14 +568,14 @@ function onEditLink(id, keep, makeInvisible) {
 												<tr id="replyToRow">
 													<td valign=top class="ZFieldLabel"><fmt:message key='ReplyTo'/>:</td>
 													<td>
-														<table cellpadding=2 cellspacing=2 class="ZTableInner">
+														<table border=0 cellpadding=0 cellspacing=0 width=100%>
 															<tr>
-																<td class="ZFieldSubLabel ZInputLabel"><fmt:message key='Name'/>:</td>
-																<td><input class="ZField ZInputLabel" type="text" id="replyToDisplay" name="replyToDisplay" value="${bean.replyToDisplay}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
+																<td class="ZFieldSubLabel" width=35%><fmt:message key='Name'/>:</td>
+																<td><input class="ZField" type="text" id="replyToDisplay" name="replyToDisplay" value="${bean.replyToDisplay}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
 															</tr>
 															<tr>
-																<td class="ZFieldSubLabel ZInputLabel"><fmt:message key='EmailAddress'/>:</td>
-																<td><input class="ZField ZInputLabel" type="text" id="replyTo" name="replyTo" value="${bean.replyTo}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
+																<td class="ZFieldSubLabel"><fmt:message key='EmailAddress'/>:</td>
+																<td><input class="ZField" type="text" id="replyTo" name="replyTo" value="${bean.replyTo}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
 															</tr>
 														</table>
 													</td>
@@ -576,10 +586,10 @@ function onEditLink(id, keep, makeInvisible) {
 											<td colspan=2 class="ZRowPadding"></td>
 										</tr>
 										<tr>
-											<td class="ZFieldLabel ZSectionLabel"><fmt:message key='SyncOptions'/></td>
-										</tr>
-										<tr>
-											<td colspan=2><center><hr size=2 class="ZHorizontalLine"/></center></td>
+											<td class="ZFieldLabel ZSectionLabel" colspan=2>
+												<fmt:message key='SyncOptions'/>
+												<hr class="ZHorizontalLine"/>
+											</td>
 										</tr>
 										<tr>
 											<td class="ZFieldLabel"><fmt:message key='SyncFrequency'/>:</td>
@@ -645,10 +655,11 @@ function onEditLink(id, keep, makeInvisible) {
 												</td>
 											</tr>
 										</c:if>
-										<tr>
 										<tr><td></td></tr>
+										<tr><td></td></tr>
+										<tr>
 											<td colspan=2>
-												<table border=0 cellpadding=0 cellspacing=0 width=100%>
+												<table border=0 cellpadding=0 cellspacing=0 width=100% class="ZTableInner">
 													<tr>
 														<td>
 															<table border=0>
