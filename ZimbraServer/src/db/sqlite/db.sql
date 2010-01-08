@@ -140,6 +140,7 @@ CREATE TABLE mobile_devices (
    last_policy_update  INTEGER UNSIGNED,
    remote_wipe_req     INTEGER UNSIGNED,
    remote_wipe_ack     INTEGER UNSIGNED,
+   policy_values       VARCHAR(512),
 
    PRIMARY KEY (mailbox_id, device_id),
    CONSTRAINT fk_mobile_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
