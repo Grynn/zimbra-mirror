@@ -188,7 +188,7 @@
         <copy todir="${tempdir}/${zimlet}" overwrite="true">
             <fileset dir="${src.zimlet.dir}/${zimlet}"/>
         </copy>
-        <replaceregexp file="${tempdir}/${zimlet}/${zimlet}.xml" match='version="\d+(\.\d+)*"' replace='version="${zimlet.version}.${TS}"' byline="true"/>
+        <replaceregexp file="${tempdir}/${zimlet}/${zimlet}.xml" match='version="(\d+(\.\d+)*)"' replace='version="\1_${zimlet.version}.${TS}"' byline="true"/>
 		<zip destfile="${destdir}/${zimlet}.zip" update="true" >
 			<fileset dir="${tempdir}/${zimlet}" />
 		</zip>
