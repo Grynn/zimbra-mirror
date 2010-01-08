@@ -272,11 +272,8 @@ function onEditLink(id, keep, makeInvisible) {
 					<td>
 						<div class="ZPanelLogo"></div>
 					</td>
-					<td valign=top>
-						<div class="ZPanelTitle"><fmt:message key='Desktop'/></div>
-					</td>
 				</tr>
-			</table><br>
+			</table>
 			<table border=0 cellpadding=0 cellspacing=0 width=100%>
 				<tr>
 					<td class="ZPanelTabs">

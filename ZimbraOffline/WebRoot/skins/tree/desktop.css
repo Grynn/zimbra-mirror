@@ -25,6 +25,10 @@ BODY {
 	background: #6c901d url("img/setup-bkgd-full.gif") no-repeat top left;
 }
 
+.ZPanelLogo {
+	background: url("img/LoginBanner.png") no-repeat top left;
+}
+
 .ZTip a {
 	color: #7f9c3c;
 }

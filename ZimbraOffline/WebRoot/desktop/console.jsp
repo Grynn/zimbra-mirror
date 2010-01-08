@@ -115,11 +115,8 @@ function submit(id, name, type, flavor, verb) {
 					<td>
 						<div class="ZPanelLogo"></div>
 					</td>
-					<td valign=top>
-						<div class="ZPanelTitle"><fmt:message key='Desktop'/></div>
-					</td>
 				</tr>
-			</table><br>
+			</table>
 			<table border=0 cellpadding=0 cellspacing=0 width=100%>
 				<c:choose>
 					<c:when test="${not empty accounts}">
@@ -141,7 +138,6 @@ function submit(id, name, type, flavor, verb) {
 							<c:choose>
 								<c:when test="${empty accounts}">
 									<center>
-									<br>
 									<table border=0 cellpadding=0 cellspacing=0 class="ZTable">
 										<tr>
 											<td>

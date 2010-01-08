@@ -25,6 +25,10 @@ BODY {
 	background: #0088c2 url("img/setup-bkgd-full.gif") no-repeat top left;
 }
 
+.ZPanelLogo {
+	background: url("img/LoginBanner.png") no-repeat top left;
+}
+
 .ZPanelTitle {
 	color: #999999;
 }
