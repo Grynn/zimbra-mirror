@@ -28,19 +28,19 @@ else
 endif
 endif
 
-SED	:= echo
+#SED	:= echo
 
-ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
+#ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(XML_VERSION)\/lib\/libxml2.a/g' Makefile
-endif
+#endif
 
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	ACEXE := ac_cv_exeext=
 endif
 
-ifeq ($(BUILD_PLATFORM), MACOSX)
-	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(XML_VERSION)\/lib\/libxml2.a/g' Makefile
-endif
+#ifeq ($(BUILD_PLATFORM), MACOSX)
+#	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(XML_VERSION)\/lib\/libxml2.a/g' Makefile
+#endif
 
 PHP_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php/php-$(PHP_VERSION).tgz
