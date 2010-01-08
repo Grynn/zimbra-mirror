@@ -102,6 +102,8 @@ ZaRightsMiniListView = function(parent, className, posStyle, headerList) {
 	var posStyle = null;
 	var headerList = ZaRightsMiniListView._getHeaderList();
     ZaListView.call(this, parent, className, posStyle, headerList);
+    var rightListController = ZaApp.getInstance ().getRightsListController () ;
+    this.addSelectionListener(new AjxListener(rightListController, rightListController._listSelectionListener));
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 }
@@ -146,7 +148,13 @@ function(right) {
 		var field = this._headerList[i]._field;
         if (field == "name" || field == ZaRight.A_type) {
             html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-            html[idx++] = AjxStringUtil.htmlEncode(right [field]) ;
+            var val = "" ;
+            if (field == "name") {
+                val = right [field] ;
+            } else if (field == ZaRight.A_type) {
+                val = right.attrs [field] ;
+            }
+            html[idx++] = AjxStringUtil.htmlEncode(val) ;
             html[idx++] = "</nobr></td>" ;
         }
 	}
