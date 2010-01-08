@@ -55,12 +55,10 @@ public class DbOfflineMigration {
 
             if (oldDbVersion != newDbVersion) {
                 switch (oldDbVersion) {
-                case 0:
-                    // migrateFromVersionXX(conn, isTestRun);
-                    // fall-through
-                case 1:
-                    // migrateFromVersionYY(conn, isTestRun);
-                    // fall-through
+                case 63:
+                    migrateFromVersion63(conn, isTestRun);
+                    //if there are more versions, let it fall through
+                    break;
                 default:
                     throw new DbUnsupportedVersionException();
                 }
@@ -112,7 +110,29 @@ public class DbOfflineMigration {
             }
         }
     }
-
+    
+    private void migrateFromVersion63(Connection conn, boolean isTestRun) throws Exception {
+        PreparedStatement stmt = null;
+        boolean isSuccess = false;
+        try {
+            stmt = conn.prepareStatement("ALTER TABLE zimbra.mobile_devices ADD COLUMN policy_values VARCHAR(512);");
+            stmt.executeUpdate();
+            stmt.close();
+            
+            stmt = conn.prepareStatement("UPDATE zimbra.config set value='64' where name='db.version'");
+            stmt.executeUpdate();
+            stmt.close();
+            
+            isSuccess = true;
+        } finally {
+            DbPool.closeStatement(stmt);
+            if (isTestRun || !isSuccess)
+                conn.rollback();
+            else
+                conn.commit();
+        }
+    }
+    
     // derby does not support "drop table if exists...", so have to do this
     // programmatically
     public void dropTableIfExists(Connection conn, String table)
@@ -139,7 +159,7 @@ public class DbOfflineMigration {
 
     public static void main(String[] args) throws Exception {
         System.setProperty("zimbra.config",
-            "/Users/jjzhuang/zimbra/zdesktop/conf/localconfig.xml");
+            "/Users/jjzhuang/Library/Zimbra\\ Desktop/conf/localconfig.xml");
 
         new DbOfflineMigration().testRun();
         new DbOfflineMigration().testRun();
