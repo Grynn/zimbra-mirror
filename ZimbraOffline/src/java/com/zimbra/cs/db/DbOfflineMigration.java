@@ -42,6 +42,7 @@ public class DbOfflineMigration {
         int oldOfflineDbVersion = 1; // default to 1 if missing
 
         try {
+            DbPool.startup();
             conn = DbPool.getConnection();
             stmt = conn.prepareStatement("SELECT value FROM config WHERE name = 'db.version'");
             rs = stmt.executeQuery();
@@ -115,11 +116,11 @@ public class DbOfflineMigration {
         PreparedStatement stmt = null;
         boolean isSuccess = false;
         try {
-            stmt = conn.prepareStatement("ALTER TABLE zimbra.mobile_devices ADD COLUMN policy_values VARCHAR(512);");
+            stmt = conn.prepareStatement("ALTER TABLE mobile_devices ADD COLUMN policy_values VARCHAR(512);");
             stmt.executeUpdate();
             stmt.close();
             
-            stmt = conn.prepareStatement("UPDATE zimbra.config set value='64' where name='db.version'");
+            stmt = conn.prepareStatement("UPDATE config set value='64' where name='db.version'");
             stmt.executeUpdate();
             stmt.close();
             
@@ -159,7 +160,7 @@ public class DbOfflineMigration {
 
     public static void main(String[] args) throws Exception {
         System.setProperty("zimbra.config",
-            "/Users/jjzhuang/Library/Zimbra\\ Desktop/conf/localconfig.xml");
+            "/Users/jjzhuang/Library/Zimbra Desktop/conf/localconfig.xml");
 
         new DbOfflineMigration().testRun();
         new DbOfflineMigration().testRun();
