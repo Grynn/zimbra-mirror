@@ -3,12 +3,7 @@ cyrus_patchlevel=3z
 cyrus_version=${cyrus_release}.${cyrus_patchlevel}
 cyrus_src=cyrus-sasl-${cyrus_version}
 
-if [ $build_platform = "MACOSXx86_10.6" ]; then
-  heimdal_version=1.3.1
-else
-  heimdal_version=1.2.1
-fi
-
+heimdal_version=1.3.1
 openssl_version=0.9.8l
 curl_version=7.19.7
 xml2_version=2.6.32.1
