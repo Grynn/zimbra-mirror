@@ -85,11 +85,11 @@ public class OfflineSyncManager {
 
     private static class SyncError {
         String message;
-        Exception exception;
+        Throwable t;
 
-        SyncError(String message, Exception exception) {
+        SyncError(String message, Throwable t) {
             this.message = message;
-            this.exception = exception;
+            this.t = t;
         }
 
         void encode(Element e) {
@@ -97,8 +97,8 @@ public class OfflineSyncManager {
             if (message != null && message.length() > 0) {
                 error.addAttribute(A_ZDSYNC_MESSAGE, message);
             }
-            if (exception != null) {
-                error.addElement(ZDSYNC_EXCEPTION).setText(ExceptionToString.ToString(exception));
+            if (t != null) {
+                error.addElement(ZDSYNC_EXCEPTION).setText(ExceptionToString.ToString(t));
             }
         }
     }
@@ -159,10 +159,10 @@ public class OfflineSyncManager {
             mStatus = SyncStatus.offline;
         }
 
-        void syncFailed(String code, String message, Exception exception) {
+        void syncFailed(String code, String message, Throwable t) {
             mLastFailTime = System.currentTimeMillis();
             mCode = code;
-            mError = new SyncError(message, exception);
+            mError = new SyncError(message, t);
             mStatus = SyncStatus.error;
             ++mRetryCount;
         }
@@ -235,7 +235,7 @@ public class OfflineSyncManager {
         }
 
         String getException() {
-            return mError == null || mError.exception == null ? null : ExceptionToString.ToString(mError.exception); 
+            return mError == null || mError.t == null ? null : ExceptionToString.ToString(mError.t); 
         }
     }
 
@@ -336,9 +336,9 @@ public class OfflineSyncManager {
         notifyStateChange();
     }
 
-    private void syncFailed(String targetName, String code, String message, Exception exception) {
+    private void syncFailed(String targetName, String code, String message, Throwable t) {
         synchronized (syncStatusTable) {
-            getStatus(targetName).syncFailed(code, message, exception);
+            getStatus(targetName).syncFailed(code, message, t);
         }
         notifyStateChange();
     }
@@ -499,7 +499,7 @@ public class OfflineSyncManager {
         processSyncException(targetName, password, exception, isDebugTraceOn, true);
     }
 
-    public void processSyncException(String targetName, String password, Exception exception, boolean isDebugTraceOn, boolean markSyncFail) {
+    private void processSyncException(String targetName, String password, Exception exception, boolean isDebugTraceOn, boolean markSyncFail) {
         Throwable cause = SystemUtil.getInnermostException(exception);
         String code = null;
         
@@ -536,6 +536,11 @@ public class OfflineSyncManager {
                 OfflineLog.offline.warn("SoapFaultException: " + x.getReason() + "\nFaultRequest:\n" + x.getFaultRequest() + "\nFaultResponse:\n" + x.getFaultResponse());
             }
         }
+    }
+    
+    public void processSyncError(String targetName, Error error) {
+        syncFailed(targetName, OfflineServiceException.UNEXPECTED, error.getMessage(), error);
+        OfflineLog.offline.error("sync failure: " + targetName, error);
     }
 
     public SyncStatus getSyncStatus(String targetName) {

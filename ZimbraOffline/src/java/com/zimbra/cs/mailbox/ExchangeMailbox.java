@@ -251,6 +251,8 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
                 OfflineLog.offline.info("Mailbox \"%s\" is being deleted", getAccountName());
             else
                 syncMan.processSyncException(ds, x);
+        } catch (Error e) {
+            syncMan.processSyncError(ds.getName(), e);
         }
     }
 }

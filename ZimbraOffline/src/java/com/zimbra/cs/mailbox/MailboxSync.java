@@ -189,6 +189,8 @@ public class MailboxSync {
                     } else {
                         syncMan.processSyncException(ombx.getAccount(), e);
                     }
+                } catch (Error e) {
+                    syncMan.processSyncError(ombx.getAccountName(), e);
                 } finally {
                     if (isOnRequest && isDebugTraceOn) {
                         ombx.getOfflineAccount().setRequestScopeDebugTraceOn(false);

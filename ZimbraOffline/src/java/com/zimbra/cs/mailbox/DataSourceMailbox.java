@@ -428,6 +428,8 @@ public class DataSourceMailbox extends SyncMailbox {
                         getAccountName());
                 else
                     syncMan.processSyncException(ds, x);
+            } catch (Error e) {
+                syncMan.processSyncError(ds.getName(), e);
             }
         }
     }
