@@ -341,7 +341,13 @@ ZaRight.prototype.initFromJS = function(right) {
                 if (ix == "rights") {
                     elVals = right[ix][0].r ;
                     for (var j = 0; j < elVals.length; j ++) {
-                        this.attrs[ix].push (elVals[j].n) ;
+                        var nestedRight =  {};
+
+                        nestedRight.name = elVals[j].n ;
+                        nestedRight[ZaRight.A_type] = elVals[j][ZaRight.A_type] ;
+                        nestedRight[ZaRight.A_targetType] = elVals[j][ZaRight.A_targetType] ;
+                        
+                        this.attrs[ix].push (nestedRight) ;
                     }
                 }else if (ix == "attrs")  {
                     elVals = right[ix][0];

@@ -123,7 +123,7 @@ function() {
 	headerList[0] = new ZaListHeaderItem(ZaRight.A_name, com_zimbra_delegatedadmin.Col_right_name,
             null, 200, null, null, true, true);
     headerList[1] = new ZaListHeaderItem(ZaRight.A_type, com_zimbra_delegatedadmin.Col_right_type,
-            null, 100, null, null, true, true);
+            null, null, null, null, true, true);
 
     return headerList;
 }
@@ -137,15 +137,19 @@ function(right) {
 	div.className = div[DwtListView._STYLE_CLASS];
 	this.associateItemWithElement(right, div, DwtListView.TYPE_LIST_ITEM);
 
-	var idx = 0;
+    var idx = 0;
 	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
 	html[idx++] = "<tr>";
 
-    html[idx++] = "<td align='left'><nobr>";
-//        html[idx++] = AjxStringUtil.htmlEncode(right.attrs [field]) ;
-    html[idx++] = AjxStringUtil.htmlEncode(right) ;
-    html[idx++] = "</nobr></td>" ;
-
+    var cnt = this._headerList.length;
+	for(var i = 0; i < cnt; i++) {
+		var field = this._headerList[i]._field;
+        if (field == "name" || field == ZaRight.A_type) {
+            html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
+            html[idx++] = AjxStringUtil.htmlEncode(right [field]) ;
+            html[idx++] = "</nobr></td>" ;
+        }
+	}
 	html[idx++] = "</tr></table>";
 	div.innerHTML = html.join("");
 	return div;
