@@ -16,7 +16,7 @@ else
 endif
 
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
-	PATCH   := patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.fix;
+	PATCH   := patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.patch;
 endif
 
 NGINX_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx/nginx-$(NGINX_VERSION)-zimbra.tgz
