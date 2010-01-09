@@ -923,7 +923,8 @@ OSelect_XFormItem.prototype.setValue = function (newValue, clearOldValues, inclu
 			}			
 			
 			var found = false;
-			for (var i = 0; i < newValues.length; i++) {
+			var i;
+			for (i = 0; i < newValues.length; i++) {
 				if (newValues[i] == newValue) {
 					found = true;
 					break;

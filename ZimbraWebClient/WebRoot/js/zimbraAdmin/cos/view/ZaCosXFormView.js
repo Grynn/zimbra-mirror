@@ -955,7 +955,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
             }]},
             {type:_ZAGROUP_, numCols:1,colSizes:["auto"],
                 items: [
-                    {type:_ZIMLET_SELECT_RADIO_,
+                    {type:_ZASELECT_RADIO_,
                         selectRef:ZaCos.A_zimbraAvailableSkin,
                         ref:ZaCos.A_zimbraAvailableSkin,
                         choices:ZaCosXFormView.themeChoices,
@@ -978,18 +978,15 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
         var case5Items = [
             {type:_ZAGROUP_, numCols:1,colSizes:["auto"],
                 items: [
-                    {type: _OUTPUT_, value: ZaMsg.COS_LimitZimletsTo,     
-                                        cssStyle:"margin-left: 275px;" },
-                    {type:_ZIMLET_SELECT_,
+                    {type: _OUTPUT_, value: ZaMsg.COS_LimitZimletsTo,cssStyle:"margin-left: 275px;" },
+                    {type:_ZA_ZIMLET_SELECT_COMBO_,
                         selectRef:ZaCos.A_zimbraZimletAvailableZimlets,
                         ref:ZaCos.A_zimbraZimletAvailableZimlets,
-                        selectSubRef:ZaCos.A_zimbraZimletMandatoryZimlets,
-                        selectSubLabel:ZaMsg.zimbraZimletMandatoryZimlets,
                         choices:ZaCosXFormView.zimletChoices,
                         visibilityChecks:[Case_XFormItem.prototype.isCurrentTab],
                         visibilityChangeEventSources:[ZaModel.currentTab],
                         caseKey:_tab5, caseVarRef:ZaModel.currentTab,
-                        selectLabel:ZaMsg.COS_COSLimitZimletsTo
+                        selectLabel:"",selectLabelLocation:_NONE_
                     }
                 ]
             }
@@ -1004,7 +1001,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
         var case6Items = [
             {type:_ZAGROUP_, numCols:1,colSizes:["auto"],
                 items: [
-                    {type:_ZIMLET_SELECT_RADIO_,
+                    {type:_ZASELECT_RADIO_,
                         selectRef:ZaCos.A_zimbraMailHostPool,
                         ref:ZaCos.A_zimbraMailHostPool,
                         choices:ZaApp.getInstance().getServerIdListChoices(),

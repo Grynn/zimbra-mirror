@@ -1072,7 +1072,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
             	{type:_ZAGROUP_, numCols:1,colSizes:["auto"],
 					items: [
                     	{type: _OUTPUT_, value: ZaMsg.NAD_LimitZimletsToDomain, cssStyle:"margin-left: 275px;" },
-                    	{type:_ZIMLET_SELECT_,
+                    	{type:_ZA_ZIMLET_SELECT_COMBO_,
                             selectRef:ZaDomain.A_zimbraZimletDomainAvailableZimlets,
 							ref:ZaDomain.A_zimbraZimletDomainAvailableZimlets,
 							choices:ZaDomainXFormView.zimletChoices
