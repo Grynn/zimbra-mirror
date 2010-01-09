@@ -27,23 +27,24 @@ import com.zimbra.cs.db.DbPool.Connection;
 public class DbOfflineMigration {
 
     public void testRun() throws Exception {
-        runInternal(true);
+        runInternal(true, null);
     }
 
-    public void run() throws Exception {
-        runInternal(false);
+    public void run(Connection conn) throws Exception {
+        runInternal(false, conn);
     }
 
-    public void runInternal(boolean isTestRun) throws Exception {
-        Connection conn = null;
+    public void runInternal(boolean isTestRun, Connection dbConn) throws Exception {
+        Connection conn = dbConn;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         int newOfflineDbVersion = OfflineVersions.OFFLINE_DB_VERSION;
         int oldOfflineDbVersion = 1; // default to 1 if missing
 
         try {
-            DbPool.startup();
-            conn = DbPool.getConnection();
+            if (conn == null)
+                conn = DbPool.getConnection();
+            
             stmt = conn.prepareStatement("SELECT value FROM config WHERE name = 'db.version'");
             rs = stmt.executeQuery();
             rs.next();
@@ -104,11 +105,8 @@ public class DbOfflineMigration {
         } finally {
             DbPool.closeResults(rs);
             DbPool.closeStatement(stmt);
-            DbPool.quietClose(conn);
-            if (oldOfflineDbVersion != newOfflineDbVersion) {
-                DbPool.close();
-                DbPool.startup();
-            }
+            if (dbConn == null)
+                DbPool.quietClose(conn);
         }
     }
     

@@ -69,7 +69,6 @@ public class OfflineApplication extends ZimbraApplication {
 
     @Override
     public void initialize(boolean forMailboxd) {
-        migrateDb();
         deployZimlets();
         
         try {
@@ -95,10 +94,11 @@ public class OfflineApplication extends ZimbraApplication {
     public void initializeZimbraDb(boolean forMailboxd) throws ServiceException {
         if (!forMailboxd)
             return;
-
+                
         DbPool.Connection conn = DbPool.getConnection();
         try {
             if (Db.getInstance().databaseExists(conn, ZIMBRA_DB_NAME)) {
+                migrateDb(conn);
                 Db.getInstance().optimize(conn, ZIMBRA_DB_NAME, 0);
             } else {
                 File file = null;
@@ -149,10 +149,10 @@ public class OfflineApplication extends ZimbraApplication {
         OfflineSyncManager.getInstance().shutdown();
     }
       
-    private void migrateDb() {
+    private void migrateDb(DbPool.Connection conn) {
         try {
             OfflineLog.offline.debug("DB migration check started...");
-            new com.zimbra.cs.db.DbOfflineMigration().run();
+            new com.zimbra.cs.db.DbOfflineMigration().run(conn);
             OfflineLog.offline.debug("DB migration done");
         } catch (SQLException e) {
             OfflineLog.offline.error("DB migration sql error: " + e.getMessage());
