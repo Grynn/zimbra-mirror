@@ -1397,7 +1397,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 						items: [	
 							{type:_ZAWIZGROUP_, numCols:1,colSizes:["auto"], 
 								items: [
-									{type:_SUPER_ZIMLETWIZ_SELECT_CHECK_,
+									{type:_SUPER_WIZ_ZIMLET_SELECT_,
 										selectRef:ZaAccount.A_zimbraZimletAvailableZimlets, 
 										ref:ZaAccount.A_zimbraZimletAvailableZimlets, 
 										choices:ZaNewAccountXWizard.zimletChoices,

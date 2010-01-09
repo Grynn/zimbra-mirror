@@ -897,7 +897,7 @@ SuperWiz_Select_XFormItem.prototype.labelWidth = "200px";
 SuperZimlet_Select_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_ZIMLET_SELECT_", "super_zimlet_select", SuperZimlet_Select_XFormItem, Super_XFormItem);
 SuperZimlet_Select_XFormItem.prototype.numCols=2;
-SuperZimlet_Select_XFormItem.prototype.colSizes=["275px","275px"];
+SuperZimlet_Select_XFormItem.prototype.colSizes=["275px","*"];
 SuperZimlet_Select_XFormItem.prototype.nowrap = false;
 SuperZimlet_Select_XFormItem.prototype.labelWrap = true;
 SuperZimlet_Select_XFormItem.prototype.items = [];
@@ -982,6 +982,15 @@ SuperZimlet_Select_XFormItem.prototype.initializeItems = function() {
 	
 	Composite_XFormItem.prototype.initializeItems.call(this);
 }
+
+/**
+*	_SUPER_WIZ_ZIMLET_SELECT_ form item type
+**/
+SuperWiz_Zimlet_Select_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPER_WIZ_ZIMLET_SELECT_", "super_wiz_zimlet_select", SuperWiz_Zimlet_Select_XFormItem, SuperZimlet_Select_XFormItem);
+SuperWiz_Zimlet_Select_XFormItem.prototype.numCols=2;
+SuperWiz_Zimlet_Select_XFormItem.prototype.colSizes=["50px","*"];
+SuperWiz_Zimlet_Select_XFormItem.prototype.labelWidth = "50px";
 
 /**
 *	SUPER_SELECT1 form item type
