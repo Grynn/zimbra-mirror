@@ -591,21 +591,26 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
     case1Items.push (new_acct_timezone_group) ;
     
 
-
-    var notesGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_wiz_notes_group",
-		numCols:2,
-	 	items:[
-
-		{ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,
-			label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"
-		},
-		{ref:ZaAccount.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,
-			label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em"
-		}
-		]
-	};
-
-	case1Items.push(notesGroup);
+	if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_description,ZaAccount.A_notes],[])) {
+	    var notesGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_wiz_notes_group",
+			
+			numCols:2,
+		 	items:[
+				{ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,
+					label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input",
+					 visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_description]],
+					 enableDisableChecks:[]
+				},
+				{ref:ZaAccount.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,
+					label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em",
+					visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_notes]],
+					enableDisableChecks:[]
+				}
+			]
+		};
+	
+		case1Items.push(notesGroup);
+	}
 	case1.items = case1Items;
 	cases.push(case1);
 
