@@ -151,6 +151,8 @@ INPUT[disabled='disabled'] {
 }
 
 .ZInfo {
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
 	background-color: #ffffbe;
 	border: 1px solid #fff13f;
 	color: #444444;
@@ -164,6 +166,8 @@ INPUT[disabled='disabled'] {
 }
 
 .ZAccountGood {
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
 	background-color: #f1fee8;
 	border: 1px solid #d3fdba;
 	padding: 5px;
@@ -174,6 +178,8 @@ INPUT[disabled='disabled'] {
 }
 
 .ZAccountBad {
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
 	background-color: #ffefef;
 	border: 1px solid #ffd5d4;
 	padding: 5px;

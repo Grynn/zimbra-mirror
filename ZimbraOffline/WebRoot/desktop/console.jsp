@@ -124,8 +124,8 @@ function submit(id, name, type, flavor, verb) {
 							<td class="ZPanelTabs">
 								<table border=0 cellpadding=0 cellspacing=0>
 									<tr>
-										<td><div class="ZPanelTabInactive ZPanelFirstTab" onclick='OnAdd()'><fmt:message key='AccountAdd'/></div></td>
-										<td><div class="ZPanelTabActive ZPanelTab"><fmt:message key='HeadTitle'/></div></td>
+										<td><div class="ZPanelTabActive ZPanelFirstTab"><fmt:message key='HeadTitle'/></div></td>
+										<td><div class="ZPanelTabInactive ZPanelTab" onclick='OnAdd()'><fmt:message key='AccountAdd'/></div></td>
 									</tr>
 								</table>
 							</td>

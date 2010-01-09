@@ -279,8 +279,9 @@ function onEditLink(id, keep, makeInvisible) {
 					<td class="ZPanelTabs">
 						<table border=0 cellpadding=0 cellspacing=0>
 							<tr>
+								<td><div class="ZPanelTabInactive ZPanelFirstTab" onclick='OnCancel()'><fmt:message key='HeadTitle'/></div></td>
 								<td>
-									<div class="ZPanelTabActive ZPanelFirstTab">
+									<div class="ZPanelTabActive ZPanelTab">
 										<c:choose>
 											<c:when test="${empty bean.accountId}">
 												<fmt:message key='AccountAdd'></fmt:message>
@@ -291,7 +292,6 @@ function onEditLink(id, keep, makeInvisible) {
 										</c:choose>
 									</div>
 								</td>
-								<td><div class="ZPanelTabInactive ZPanelTab" onclick='OnCancel()'><fmt:message key='HeadTitle'/></div></td>
 							</tr>
 						</table>
 					</td>
