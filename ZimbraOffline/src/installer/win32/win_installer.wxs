@@ -19,6 +19,11 @@
       <UpgradeVersion Maximum="$(var.version)" IncludeMaximum="yes" OnlyDetect="no" Property="OLDER_VERSION_FOUND"/>
     </Upgrade>
 
+    <!-- working around a wix bug: icon id must ends with '.exe' -->
+    <Icon Id="ZD_Installer_Icon.exe" SourceFile="@build.root@\src\installer\resources\launcher_128x128.ico" />
+    <Property Id="ARPPRODUCTICON" Value="ZD_Installer_Icon.exe" />
+    <Property Id="ARPHELPLINK" Value="http://www.zimbra.com/zdesktop" />
+
     <CustomAction Id="ID10617" Error="Can't downgrade to an older version of Zimbra Desktop." />
 
     <InstallExecuteSequence>
