@@ -773,18 +773,18 @@ Zimlet_SelectCheck_XFormItem.prototype.initializeItems = function() {
 }
 
 /**
-*	_SUPER_ZIMLET_SELECT_CHECK_ form item type
+*	_SUPER_SELECT_CHECK_ form item type
 **/
-SuperZimlet_Select_XFormItem = function () {}
-XFormItemFactory.createItemType("_SUPER_ZIMLET_SELECT_CHECK_", "super_zimlet_select_check", SuperZimlet_Select_XFormItem, Super_XFormItem);
-SuperZimlet_Select_XFormItem.prototype.numCols=2;
-SuperZimlet_Select_XFormItem.prototype.colSizes=["275px","275px"];
-SuperZimlet_Select_XFormItem.prototype.nowrap = false;
-SuperZimlet_Select_XFormItem.prototype.labelWrap = true;
-SuperZimlet_Select_XFormItem.prototype.items = [];
-SuperZimlet_Select_XFormItem.prototype.labelWidth = "275px";
+SuperSelect_Check_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPER_SELECT_CHECK_", "super_select_check", SuperSelect_Check_XFormItem, Super_XFormItem);
+SuperSelect_Check_XFormItem.prototype.numCols=2;
+SuperSelect_Check_XFormItem.prototype.colSizes=["275px","275px"];
+SuperSelect_Check_XFormItem.prototype.nowrap = false;
+SuperSelect_Check_XFormItem.prototype.labelWrap = true;
+SuperSelect_Check_XFormItem.prototype.items = [];
+SuperSelect_Check_XFormItem.prototype.labelWidth = "275px";
 
-SuperZimlet_Select_XFormItem.prototype.initializeItems = function() {
+SuperSelect_Check_XFormItem.prototype.initializeItems = function() {
 	var selectRef = this.getInheritedProperty("selectRef");
 	var limitLabel = this.getInheritedProperty("limitLabel");
 	var choices = this.getInheritedProperty("choices");	
@@ -883,13 +883,105 @@ SuperZimlet_Select_XFormItem.prototype.initializeItems = function() {
 }
 
 /**
-*	_SUPER_ZIMLETWIZ_SELECT_CHECK_ form item type
+*	_SUPER_WIZ_SELECT_CHECK_ form item type
 **/
-SuperZimletWiz_Select_XFormItem = function () {}
-XFormItemFactory.createItemType("_SUPER_ZIMLETWIZ_SELECT_CHECK_", "super_zimletwiz_select_check", SuperZimletWiz_Select_XFormItem, SuperZimlet_Select_XFormItem);
-SuperZimletWiz_Select_XFormItem.prototype.numCols=2;
-SuperZimletWiz_Select_XFormItem.prototype.colSizes=["200px","275px"];
-SuperZimletWiz_Select_XFormItem.prototype.labelWidth = "200px";
+SuperWiz_Select_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPER_WIZ_SELECT_CHECK_", "super_wiz_select_check", SuperWiz_Select_XFormItem, SuperSelect_Check_XFormItem);
+SuperWiz_Select_XFormItem.prototype.numCols=2;
+SuperWiz_Select_XFormItem.prototype.colSizes=["200px","275px"];
+SuperWiz_Select_XFormItem.prototype.labelWidth = "200px";
+
+/**
+*	_SUPER_ZIMLET_SELECT_ form item type
+**/
+SuperZimlet_Select_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPER_ZIMLET_SELECT_", "super_zimlet_select", SuperZimlet_Select_XFormItem, Super_XFormItem);
+SuperZimlet_Select_XFormItem.prototype.numCols=2;
+SuperZimlet_Select_XFormItem.prototype.colSizes=["275px","275px"];
+SuperZimlet_Select_XFormItem.prototype.nowrap = false;
+SuperZimlet_Select_XFormItem.prototype.labelWrap = true;
+SuperZimlet_Select_XFormItem.prototype.items = [];
+SuperZimlet_Select_XFormItem.prototype.labelWidth = "275px";
+
+SuperZimlet_Select_XFormItem.prototype.initializeItems = function() {
+	var selectRef = this.getInheritedProperty("selectRef");
+	var limitLabel = this.getInheritedProperty("limitLabel");
+	var choices = this.getInheritedProperty("choices");	
+	var radioBox1 = {type:_RADIO_, groupname:this.id+"zimlet_select_check_grp"+selectRef,ref:".",
+		label:ZaMsg.NAD_UseCosSettings, labelLocation:_RIGHT_,
+		elementChanged:function(elementValue,instanceValue, event) {
+			if(elementValue==true) {
+				this.getForm().itemChanged(this.getParentItem(), null, event);	
+			}
+		},
+		updateElement:function() {
+			this.getElement().checked = !this.getModelItem().getLocalValue(this.getInstance(), this.refPath);
+		}
+		
+	};
+	
+	var radioBox2 = {type:_RADIO_, groupname:this.id+"zimlet_select_check_grp"+selectRef,ref:".",
+		label:limitLabel, labelLocation:_RIGHT_ ,
+		updateElement:function() {
+			this.getElement().checked = this.getModelItem().getLocalValue(this.getInstance(), this.refPath);
+		},		
+		elementChanged:function(elementValue,instanceValue, event) {
+			var arr = this.getModelItem().getSuperValue(this.getInstance());
+			var arr2 = [];
+			if(arr) {
+				var cnt = arr.length;
+				for(var i=0;i<cnt;i++) {
+					arr2.push(arr[i]);
+				}
+			}
+			this.getForm().itemChanged(this.getParentItem(), arr2, event);	
+		}
+	};	
+	
+	var selectChck = {
+		type:_ZA_ZIMLET_SELECT_,
+		choices:choices,
+		colSpan:4,
+		ref:selectRef,
+		label:"",
+		labelLocation:_NONE_,
+		width:"500px",
+		cssStyle:"margin-bottom:5px;margin-top:5px;border:2px inset gray;"				
+	};
+	
+	var selectChckGrp = {
+		type:_GROUP_,
+		numCols:4,
+		colSizes:["130px","15px","130px"],
+		items:[
+			selectChck,
+			{type:_DWT_BUTTON_,label:ZaMsg.SelectAll,width:"120px",
+				onActivate:function (ev) {
+					var lstElement = this.getParentItem().items[0];
+					if(lstElement) {
+						lstElement.selectAll(ev);
+					}
+				}
+			},
+			{type:_CELLSPACER_,width:"5px"},
+			{type:_DWT_BUTTON_,label:ZaMsg.DeselectAll,width:"120px",
+				onActivate:function (ev) {
+					var lstElement = this.getParentItem().items[0];
+					if(lstElement) {
+						lstElement.deselectAll(ev);
+					}
+				}
+			},
+			{type:_CELLSPACER_,width:"235px"},
+		]
+		
+	}
+		
+	this.items = [radioBox1,radioBox2,{type:_CELLSPACER_,width:this.labelWidth},selectChckGrp];
+	
+	
+	Composite_XFormItem.prototype.initializeItems.call(this);
+}
 
 /**
 *	SUPER_SELECT1 form item type

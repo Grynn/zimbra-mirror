@@ -1376,7 +1376,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								] 
 							},
 							{type:_SPACER_},
-							{type:_SUPER_ZIMLETWIZ_SELECT_CHECK_,
+							{type:_SUPER_WIZ_SELECT_CHECK_,
 								selectRef:ZaAccount.A_zimbraAvailableSkin, 
 								ref:ZaAccount.A_zimbraAvailableSkin, 
 								choices:ZaNewAccountXWizard.themeChoices,
