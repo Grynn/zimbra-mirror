@@ -235,7 +235,7 @@
 	<env-entry>
 		<env-entry-name>mailUrl</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>zimbra</env-entry-value>
+        <env-entry-value>/zimbra</env-entry-value>
 	</env-entry>
 
     <jsp-config>
