@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
- * Copyright (C) 2005, 2006, 2007, 2008 Zimbra, Inc.
+ * Copyright (C) 2005-2010 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
@@ -14,22 +14,29 @@
  */
 
 /**
- * Creates a toolbar. Components must be added via the add*() functions.
- * @constructor
- * @class
- * A toolbar is a horizontal or vertical strip of widgets (usually buttons).
+ * @overview
+ * 
+ * This file defines a toolbar.
  *
- * DwtToolBar.HORIZ_STYLE		horizontal toolbar
- * DwtToolBar.VERT_STYLE		vertical toolbar
+ */
+
+/**
+ * @class
+ * Creates a toolbar. Components must be added via the <code>add*()</code> functions.
+ * A toolbar is a horizontal or vertical strip of widgets (usually buttons).
  *
  * @author Ross Dargahi
  * 
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
- *        style			[constant]*			menu style
- *        index 		[int]*				index at which to add this control among parent's children 
+ * @param {Hash}	params		a hash of parameters
+ * <ul>
+ * <li>parent		{@link DwtComposite}	the parent widget
+ * <li>className	{String}			the CSS class
+ * <li>posStyle		{@link DwtToolBar.HORIZ_STYLE} or {@link DwtToolBar.VERT_STYLE}	the positioning style
+ * <li>style		{constant}			the menu style
+ * <li>index 		{int}				the index at which to add this control among parent's children
+ * </ul>
+ * 
+ * @extends	DwtComposite
  */
 DwtToolBar = function(params) {
 	if (arguments.length == 0) { return; }
@@ -66,6 +73,11 @@ DwtToolBar.PARAMS = ["parent", "className", "posStyle", "style", "index"];
 DwtToolBar.prototype = new DwtComposite;
 DwtToolBar.prototype.constructor = DwtToolBar;
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @return		{String}		a string representation of the object
+ */
 DwtToolBar.prototype.toString =
 function() {
 	return "DwtToolBar";
@@ -75,7 +87,13 @@ function() {
 // Constants
 //
 
+/**
+ * Defines the "horizontal" style.
+ */
 DwtToolBar.HORIZ_STYLE	= 1;
+/**
+ * Defines the "vertical" style.
+ */
 DwtToolBar.VERT_STYLE	= 2;
 
 DwtToolBar.ELEMENT		= 1;
@@ -116,6 +134,10 @@ DwtToolBar.__itemCount = 0;
 // Public methods
 //
 
+/**
+ * Disposes of the toolbar.
+ * 
+ */
 DwtToolBar.prototype.dispose =
 function() {
 	this._itemsEl = null;
@@ -124,23 +146,45 @@ function() {
 	DwtComposite.prototype.dispose.call(this);
 };
 
+/**
+ * Gets the item.
+ * 
+ * @param	{int}		index	the index
+ * @return	{Object}	the item
+ */
 DwtToolBar.prototype.getItem =
 function(index) {
 	return this._children.get(index);
 };
 
+/**
+ * Gets the item count.
+ * 
+ * @return	{int}	the size of the children items
+ */
 DwtToolBar.prototype.getItemCount =
 function() {
 	return this._children.size();
 };
 
+/**
+ * Gets the items.
+ * 
+ * @return	{Array}	an array of children items
+ */
 DwtToolBar.prototype.getItems =
 function() {
 	return this._children.getArray();
 };
 
 // item creation
-
+/**
+ * Adds a spacer.
+ * 
+ * @param	{int}	size		the space size
+ * @param	{int}	index		the index for the spacer
+ * @return	{Object}	the newly added element
+ */
 DwtToolBar.prototype.addSpacer =
 function(size, index) {
     var el = this._createSpacerElement();
@@ -148,6 +192,13 @@ function(size, index) {
 	return el;
 };
 
+/**
+ * Adds a separator.
+ * 
+ * @param	{String}	className	the separator CSS class name
+ * @param	{int}	index		the index for the separator
+ * @return	{Object}	the newly added element
+ */
 DwtToolBar.prototype.addSeparator =
 function(className, index) {
 	var el = this._createSeparatorElement();
@@ -155,11 +206,23 @@ function(className, index) {
 	return el;
 };
 
+/**
+ * Removes a separator.
+ * 
+ * @param	{Object}	el		the element
+ */
 DwtToolBar.prototype.removeSeparator =
 function(el) {
 	this._removeItem(el);
 };
 
+/**
+ * Adds a filler.
+ * 
+ * @param	{String}	className	the CSS class name
+ * @param	{int}	index		the index for the filler
+ * @return	{Object}	the newly added element
+ */
 DwtToolBar.prototype.addFiller =
 function(className, index) {
 	var el = this._createFillerElement();
@@ -169,6 +232,12 @@ function(className, index) {
 
 // DwtComposite methods
 
+/**
+ * Adds a child item.
+ * 
+ * @param	{Object}	child	the child item
+ * @param	{int}	index		the index for the child
+ */
 DwtToolBar.prototype.addChild =
 function(child, index) {
     DwtComposite.prototype.addChild.apply(this, arguments);
@@ -181,11 +250,23 @@ function(child, index) {
 
 // keyboard nav
 
+/**
+ * Gets the key map name.
+ * 
+ * @return	{String}	the key map name
+ */
 DwtToolBar.prototype.getKeyMapName =
 function() {
     return this._keyMapName;
 };
 
+/**
+ * Handles the key action event.
+ * 
+ * @param	{constant}	actionCode	the action code
+ * @param	{Object}	ev		the event
+ * @return	{Boolean}	<code>true</code> if the event is handled
+ */
 DwtToolBar.prototype.handleKeyAction =
 function(actionCode, ev) {
 
@@ -224,6 +305,9 @@ function(actionCode, ev) {
 
 // utility
 
+/**
+ * @private
+ */
 DwtToolBar.prototype._createItemId =
 function(id) {
     id = id || this._htmlElId;
@@ -233,6 +317,9 @@ function(id) {
 
 // html creation
 
+/**
+ * @private
+ */
 DwtToolBar.prototype._createHtml =
 function() {
     var data = { id: this._htmlElId };
@@ -242,6 +329,9 @@ function() {
     this._suffixEl = document.getElementById(data.id+"_suffix");
 };
 
+/**
+ * @private
+ */
 DwtToolBar.prototype._createItemElement =
 function(templateId) {
         templateId = templateId || this.ITEM_TEMPLATE;
@@ -257,16 +347,25 @@ function(templateId) {
         return cont.firstChild.rows[0].cells[0]; // DIV->TABLE->TR->TD
 };
 
+/**
+ * @private
+ */
 DwtToolBar.prototype._createSpacerElement =
 function(templateId) {
     return this._createItemElement(templateId || this.SPACER_TEMPLATE);
 };
 
+/**
+ * @private
+ */
 DwtToolBar.prototype._createSeparatorElement =
 function(templateId) {
     return this._createItemElement(templateId || this.SEPARATOR_TEMPLATE);
 };
 
+/**
+ * @private
+ */
 DwtToolBar.prototype._createFillerElement =
 function(templateId) {
     return this._createItemElement(templateId || this.FILLER_TEMPLATE);
@@ -274,6 +373,9 @@ function(templateId) {
 
 // item management
 
+/**
+ * @private
+ */
 DwtToolBar.prototype._addItem =
 function(type, element, index) {
 
@@ -289,6 +391,9 @@ function(type, element, index) {
     // TODO!
 };
 
+/**
+ * @private
+ */
 DwtToolBar.prototype._removeItem =
 function(item) {
 	for (var i = 0; i < this._items.length; i++) {
@@ -300,7 +405,10 @@ function(item) {
 	}
 };
 
-// transfer focus to the current item
+/**
+ * transfer focus to the current item
+ * @private
+ */
 DwtToolBar.prototype._focus =
 function(item) {
 	DBG.println(AjxDebug.DBG3, "DwtToolBar: FOCUS");
@@ -333,7 +441,11 @@ function(item) {
 	}
 };
 
-// blur the current item
+/**
+ * blur the current item.
+ * 
+ * @private
+ */
 DwtToolBar.prototype._blur =
 function(item) {
 	DBG.println(AjxDebug.DBG3, "DwtToolBar: BLUR");
@@ -349,7 +461,10 @@ function(item) {
  * For now, we only move focus to simple components like buttons. Also,
  * the item must be enabled and visible.
  *
- * @param index		[int]		index of item within toolbar
+ * @param {int}	index		the index of item within toolbar
+ * @return	{Object}	the item
+ * 
+ * @private
  */
 DwtToolBar.prototype._getFocusItem =
 function(index) {
@@ -364,7 +479,9 @@ function(index) {
 /**
  * Moves focus to next or previous item that can take focus.
  *
- * @param back		[boolean]*		if true, move focus to previous item
+ * @param {Boolean}	back		if <code>true</code>, move focus to previous item
+ * 
+ * @private
  */
 DwtToolBar.prototype._moveFocus =
 function(back) {
@@ -382,6 +499,9 @@ function(back) {
 	}
 };
 
+/**
+ * @private
+ */
 DwtToolBar.prototype.__markPrevNext =
 function(id, opened) {
     var index = this.__getButtonIndex(id);
@@ -406,6 +526,9 @@ function(id, opened) {
     if (last) Dwt.addClass(last.getHtmlElement(), DwtToolBar.LAST_ITEM);
 };
 
+/**
+ * @private
+ */
 DwtToolBar.prototype.__getButtonIndex =
 function(id) {
     var i = 0;
@@ -418,6 +541,9 @@ function(id) {
     return -1;
 };
 
+/**
+ * @private
+ */
 DwtToolBar.prototype.__getButtonAt =
 function(index) {
     var i = 0;
@@ -434,6 +560,23 @@ function(index) {
 // Classes
 //
 
+/**
+ * @class
+ * This class represents a toolbar button.
+ * 
+ * @param	{Hash}		params		a hash of parameters
+ * <ul>
+ * <li>parent		{@link DwtComposite}	the parent widget
+ * <li>style		{constant}			the menu style
+ * <li>className	{String}			the CSS class
+ * <li>posStyle		{@link DwtToolBar.HORIZ_STYLE} or {@link DwtToolBar.VERT_STYLE}	the positioning style
+ * <li>actionTiming {Object}	the action timing</li>
+ * <li>id {String}	the id</li>
+ * <li>index 		{int}				the index at which to add this control among parent's children
+ * </ul>
+
+ * @extends	DwtButton
+ */
 DwtToolBarButton = function(params) {
 	if (arguments.length == 0) { return; }
 	var params = Dwt.getParams(arguments, DwtToolBarButton.PARAMS);
