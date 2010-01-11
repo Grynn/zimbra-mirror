@@ -474,23 +474,23 @@ function onEditLink(id, keep, makeInvisible) {
 														<tr>
 															<td>
 																<input type="radio" id="cleartext" name="security" value="cleartext" ${bean.security == 'cleartext' ? 'checked' : ''} onclick="SetPort()">
-																<span class="ZRadioLabel"><fmt:message key='SecurityNone'/></span>
+																<label class="ZRadioLabel" for="cleartext"><fmt:message key='SecurityNone'/></label>
 															</td>
 															<td>&nbsp;&nbsp;</td>
 															<td>
 																<input type="radio" id="ssl" name="security" value="ssl" ${bean.security == 'ssl' ? 'checked' : ''} onclick="SetPort()">
-																<span class="ZRadioLabel"><fmt:message key='SecuritySsl'/></span>
+																<label class="ZRadioLabel" for="ssl"><fmt:message key='SecuritySsl'/></label>
 															</td>
 															<td>&nbsp;&nbsp;</td>
 															<c:if test="${bean.type ne 'zimbra' and bean.type ne 'xsync'}">
 																<td>
 																	<input type="radio" id="tls" name="security" value="tls" ${bean.security == 'tls' ? 'checked' : ''} onclick="SetPort()">
-																	<span class="ZRadioLabel"><fmt:message key='SecurityTls'/></span>
+																	<label class="ZRadioLabel" for="tls"><fmt:message key='SecurityTls'/></label>
 																</td>
 																<td>&nbsp;&nbsp;</td>
 																<td>
 																	<input type="radio" id="tls_if_available" name="security" value="tls_if_available" ${bean.security == 'tls_if_available' ? 'checked' : ''} onclick="SetPort()">
-																	<span class="ZRadioLabel"><fmt:message key='SecurityTlsIfAvailable'/></span>
+																	<label class="ZRadioLabel" for="tls_if_available"><fmt:message key='SecurityTlsIfAvailable'/></label>
 																</td>
 															</c:if>
 														</tr>
@@ -530,14 +530,14 @@ function onEditLink(id, keep, makeInvisible) {
 													<td class="ZFieldLabel"><fmt:message key='Security'/>:</td>
 													<td>
 														<input type="checkbox" id="smtpSsl" name="smtpSsl" ${bean.smtpSsl ? 'checked' : ''} onclick="SetSmtpPort()">
-														<span class="ZCheckboxLabel"><fmt:message key='SecureSmtp'/></span>
+														<label class="ZCheckboxLabel" for="smtpSsl"><fmt:message key='SecureSmtp'/></label>
 													</td>
 												</tr>
 												<tr id="smtpAuthRow">
 													<td class="ZFieldLabel"><fmt:message key='SmtpAuth'/>:</td>
 													<td>
 														<input type="checkbox" id="smtpAuth" name="smtpAuth" ${bean.smtpAuth ? 'checked' : ''} onclick='zd.toggle("smtpAuthSettingsRow", this.checked, "smtpUsername");'>
-														<span class="ZCheckboxLabel"><fmt:message key='SmtpAuthInfo'/></span>
+														<label class="ZCheckboxLabel" for="smtpAuth"><fmt:message key='SmtpAuthInfo'/></label>
 													</td>
 												</tr>
 												<tr id="smtpAuthSettingsRow" ${bean.smtpAuth ? '' : 'style="display:none"'}>
@@ -614,11 +614,11 @@ function onEditLink(id, keep, makeInvisible) {
 														<tr>
 															<td>
 																<input type="radio" id="leaveOnServer" name="leaveOnServer" ${bean.leaveOnServer ? '' : 'checked'} value="false">
-																<span class="ZRadioLabel"><fmt:message key='SyncMsgsDelete'/></span>
+																<label class="ZRadioLabel" for="leaveOnServer"><fmt:message key='SyncMsgsDelete'/></label>
 															</td>
 															<td>
 																<input type="radio" id="leaveOnServer" name="leaveOnServer" ${bean.leaveOnServer ? 'checked' : ''} value="true">
-																<span class="ZRadioLabel"><fmt:message key='SyncMsgsLeave'/></span>
+																<label class="ZRadioLabel" for="leaveOnServer"><fmt:message key='SyncMsgsLeave'/></label>
 															</td>
 														</tr>
 													</table>
@@ -630,7 +630,7 @@ function onEditLink(id, keep, makeInvisible) {
 												<td class="ZFieldLabel"></td>
 												<td>
 													<input type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" ${bean.calendarSyncEnabled ? 'checked' : ''}>
-													<span class="ZCheckboxLabel"><fmt:message key='SyncCalendarInfo'/></span>
+													<label class="ZCheckboxLabel" for="calendarSyncEnabled"><fmt:message key='SyncCalendarInfo'/></label>
 												</td>
 											</tr>
 										</c:if>
@@ -639,7 +639,7 @@ function onEditLink(id, keep, makeInvisible) {
 												<td class="ZFieldLabel"></td>
 												<td>
 													<input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''}>
-													<span class="ZCheckboxLabel"><fmt:message key='SyncContactsInfo'/></span>
+													<label class="ZCheckboxLabel" for="contactSyncEnabled"><fmt:message key='SyncContactsInfo'/></label>
 												</td>
 											</tr>
 										</c:if>
@@ -648,7 +648,7 @@ function onEditLink(id, keep, makeInvisible) {
 												<td></td>
 												<td>
 													<input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}>
-													<span class="ZCheckboxLabel"><fmt:message key='EnableTrace'/></span>
+													<label class="ZCheckboxLabel" for="debugTraceEnabled"><fmt:message key='EnableTrace'/></label>
 												</td>
 											</tr>
 										</c:if>
