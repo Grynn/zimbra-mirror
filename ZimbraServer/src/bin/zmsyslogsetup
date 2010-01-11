@@ -129,9 +129,11 @@ updateSyslogNG() {
 }
 
 updateSyslog() {
+  rsyslog=0
   syslogconf=/etc/syslog.conf
   if [ -f "/etc/rsyslog.conf" ]; then
     syslogconf=/etc/rsyslog.conf
+    rsyslog=1 
   fi
 
   # create a safe temp file and make sure we have enough space to fill it
@@ -152,13 +154,24 @@ updateSyslog() {
 
   # Remove existing entries that we may have added.
   grep -v "^local0\.\*" ${syslogconf} | grep -v "^local1\.\*" > ${tmpfile}
+  if [ $rsyslog = 1 ]; then
+    sed -i -e '/^\tlocal0,local1.none;\\/d' ${tmpfile}
+  fi
   sed -i -e '/^auth\.\* /d' ${tmpfile}
   sed -i -e 's/;local0.none//g' ${tmpfile}
   sed -i -e 's/;local1.none//g' ${tmpfile}
   sed -i -e 's/;auth.none//g' ${tmpfile}
 
   # Don't log local0 and auth twice 
-  sed -i -e 's/^*.info/*.info;local0.none;local1.none;auth.none/' ${tmpfile}
+  if [ $rsyslog = 0 ]; then
+    sed -i -e 's/^*.info/*.info;local0.none;local1.none;auth.none/' ${tmpfile}
+  fi
+
+  if [ $rsyslog = 1 ]; then
+    sed -i -e 's/^\*\.\*;auth,authpriv.none/\*\.\*;auth,authpriv.none;local0.none;local1.none/' ${tmpfile}
+    sed -i -e 's/^\*\.=debug;\\/\*.=debug;\\\n\tlocal0,local1.none;\\/' ${tmpfile}
+    sed -i -e 's/^\*\.=info;\*\.=notice;\*\.=warn;\\/\*.=info;\*.=notice;\*.=warn;\\\n\tlocal0,local1.none;\\/' ${tmpfile}
+  fi
 
   if [ $TYPE = "remote" ]; then
     echo "local0.*                @$LOGHOST" >> ${tmpfile}
