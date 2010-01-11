@@ -1,10 +1,10 @@
 <project name="Offline-Installer" default="default">
 
 	<property file="build.properties"/>
-	<property name="media_win32" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_win32}"/>
-	<property name="media_macos" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_macos}"/>
-	<property name="media_linux" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_linux}"/>
-	<property name="media_linux_dir" value="zdesktop_${offline.filever}_build_${offline.buildid}_linux_i686"/>
+	<property name="media_win32" value="zdesktop_${offline.filever}_${offline.branch}_b${offline.buildid}_${offline.suffix_win32}"/>
+	<property name="media_macos" value="zdesktop_${offline.filever}_${offline.branch}_b${offline.buildid}_${offline.suffix_macos}"/>
+	<property name="media_linux" value="zdesktop_${offline.filever}_${offline.branch}_b${offline.buildid}_${offline.suffix_linux}"/>
+	<property name="media_linux_dir" value="zdesktop_${offline.filever}_${offline.branch}_b${offline.buildid}_linux_i686"/>
 	<property name="build.dir" location="../ZimbraBuild/i386" />
 	<property name="pmdoc.dir" location="./build/macos_installer.pmdoc" />
 	<property name="wxs.dir" location="${basedir}\build" />
