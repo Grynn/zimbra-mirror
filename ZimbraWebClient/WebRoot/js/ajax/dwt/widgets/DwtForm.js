@@ -571,7 +571,6 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 				var radioItemDef = itemDef.items[i];
 				var checked = radioItemDef.checked || radioItemDef.value == itemDef.value;
 				var radio = this._registerControl(radioItemDef, itemDef, tabIndexes, nparams, parent, "DwtRadioButton");
-				this.setValue(radioItemDef.id, radioItemDef.value);
 				this._items[radioItemDef.id].value = checked;
 				if (radio) {
 					control.addRadio(radio.getInputElement().id, radio, checked);
@@ -688,6 +687,7 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 	var isCheckBox = Dwt.instanceOf(type, "DwtCheckbox");
 	if (isRadioButton || isCheckBox) {
 		params.name = itemDef.name || params.name;
+        params.value = itemDef.value || params.value;
 		params.checked = itemDef.checked != null ? itemDef.checked : params.checked;
 	}
 

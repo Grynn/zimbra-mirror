@@ -29,6 +29,7 @@
  * 									aligned. The default value for this parameter is: 
  * 									<code>DwtCheckbox.TEXT_LEFT | DwtCheckbox.ALIGN_CENTER</code>.
  *        name		[string]		The input control name. Required for IE.
+ *        value     [string]        The input control value.
  *        checked	[boolean]		The input control checked status. Required for IE.
  *        className	[string]*		CSS class
  *        posStyle	[constant]*		positioning style
@@ -42,7 +43,7 @@ DwtRadioButton = function(params) {
 	DwtCheckbox.call(this, params);
 }
 
-DwtRadioButton.PARAMS = ["parent", "style", "name", "checked", "className", "posStyle", "id", "index"];
+DwtRadioButton.PARAMS = DwtCheckbox.PARAMS;
 
 DwtRadioButton.prototype = new DwtCheckbox;
 DwtRadioButton.prototype.constructor = DwtRadioButton;

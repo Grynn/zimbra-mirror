@@ -23,6 +23,7 @@
  *        style 	[constant]*		The text style. One of: <i>DwtCheckbox.TEXT_LEFT</i> or
  * 									<i>DwtCheckbox.TEXT_RIGHT</i> (default). 
  *        name		[string]		The input control name. Required for IE.
+ *        value     [string]        The input control value.
  *        checked	[boolean]		The input control checked status. Required for IE.
  *        className	[string]*		CSS class
  *        posStyle	[constant]*		positioning style
@@ -39,6 +40,7 @@ DwtCheckbox = function(params) {
 
 	this._textPosition = DwtCheckbox.DEFAULT_POSITION;
 	this._initName = params.name;
+    this._initValue = params.value;
 	this._initChecked = params.checked;
 	this._createHtml();
 };
@@ -62,7 +64,8 @@ DwtCheckbox.PARAMS = [
 	"className",
 	"posStyle",
 	"id",
-	"index"
+	"index",
+    "value"
 ];
 DwtCheckbox.TEXT_LEFT			= "left";
 DwtCheckbox.TEXT_RIGHT			= "right";
@@ -164,17 +167,16 @@ function() {
 
 DwtCheckbox.prototype.setValue =
 function(value) {
-	if (this._value != value) {
-		this._value = value;
-		if (this._inputEl) {
-			this._inputEl.value = value;
-		}
-	}
+    var object = this._inputEl || this;
+	if (object.value != value) {
+        object.value = value;
+    }
 };
 
 DwtCheckbox.prototype.getValue =
 function() {
-	return this._value != null ? this._value : this._text;
+    var object = this._inputEl || this;
+	return object.value || this.getText();
 };
 
 DwtCheckbox.prototype.getInputElement =
@@ -217,6 +219,7 @@ function(templateId, data) {
 	//       not take the first programmatic value. So we pass in
 	//       the init values from the constructor.
 	data.name = this._initName || this._htmlElId;
+    data.value = this._initValue;
 	data.checked = Boolean(this._initChecked) ? "checked" : "";
 	DwtControl.prototype._createHtmlFromTemplate.call(this, templateId, data);
 	this._inputEl = document.getElementById(data.id+"_input");
