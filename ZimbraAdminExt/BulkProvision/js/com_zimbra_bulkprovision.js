@@ -71,7 +71,7 @@ ZaSearchListController.prototype._downloadAccountsListener =
  function (ev) {
      //TODO: need to filter out non account items, such as domain, etc.
      if (AjxEnv.hasFirebug) console.log("Download all the search result accounts ...") ;
-     var queryString = "?action=getS ";
+     var queryString = "?action=getSR";
      if (this._currentQuery) {
         queryString += "&q=" + AjxStringUtil.htmlEncode(this._currentQuery) ;
      }
