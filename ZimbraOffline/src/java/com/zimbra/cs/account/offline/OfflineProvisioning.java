@@ -851,6 +851,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
         attrs.put(A_zimbraPrefAccountTreeOpen , TRUE);
         attrs.put(A_zimbraPrefCalendarAlwaysShowMiniCal , TRUE);
+        attrs.put(A_zimbraPrefGetMailAction, "update");
         setDefaultAccountAttributes(attrs);
 
         Account account = createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true, false);
