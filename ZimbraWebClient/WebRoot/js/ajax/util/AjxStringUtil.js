@@ -190,7 +190,9 @@ function(str, dels) {
  *        eol		[string]*		the eol sequence for each wrapped line, defaults to '\n'
  *        breakOkay	[boolean]*		whether long words (longer than <code>len</code>) can be broken, default is false
  *        compress	[boolean]*		remove single returns within a paragraph before wrapping
- * 
+ *        before	[string]*		text to prepend to final result
+ *        after		[string]*		text to append to final result
+ *
  * @returns			the wrapped/quoted text
  */
 AjxStringUtil.wordWrap =
@@ -203,20 +205,23 @@ function(params) {
 	var pre = params.pre || '';
 	len -= pre.length;
 	var eol = params.eol || (params.htmlMode ? '<br>' : '\n');
+	var before = params.before || "", after = params.after || "";
 
 	// For HTML, just insert the prefix. The browser should handle wrapping.
 	if (params.htmlMode) {
-		var lines = text.split(AjxStringUtil.HTML_BR_RE);
-		var lines1 = [];
-		if (lines.length > 0) {
-			for (var i = 0; i < lines.length; i++) {
-				// bug 29491 - prefix block-level elements; should probably look for others,
-				// but <div> is by far the most common one
-				lines1.push(lines[i].replace(/(<div\s+[^>]*>)/gi, "$1" + pre));
+		if (pre) {
+			var lines = text.split(AjxStringUtil.HTML_BR_RE);
+			var lines1 = [];
+			if (lines.length > 0) {
+				for (var i = 0; i < lines.length; i++) {
+					// bug 29491 - prefix block-level elements; should probably look for others,
+					// but <div> is by far the most common one
+					lines1.push(lines[i].replace(/(<div\s+[^>]*>)/gi, "$1" + pre));
+				}
+				text = pre + lines1.join(eol + pre)
 			}
-			text = pre + lines1.join(eol + pre)
 		}
-		return text;
+		return [before, text, after].join("");
 	}
 
 	var chunks = [];
@@ -260,7 +265,8 @@ function(params) {
 	if (i > bk) {
 		chunks[c++] = pre + text.substring(bk, i);
 	}
-	return chunks.join(eol) + eol;
+	var result = chunks.join(eol) + eol;
+	return [before, result, after].join("");
 };
 
 /**
@@ -603,19 +609,21 @@ function(origString, pixelWidth, className) {
 };
 
 // Regexes for finding non-quoted content
-AjxStringUtil.MSG_SEP_RE = new RegExp("^\\s*--+\\s*(" + "Original Message" + "|" + "Forwarded Message" + ")\\s*--+", "i");
+AjxStringUtil.MSG_SEP_RE = new RegExp("^\\s*--+\\s*(" + AjxMsg.origMsg + "|" + AjxMsg.forwardedMessage + ")\\s*--+", "i");
 AjxStringUtil.SIG_RE = /^(- ?-+)|(__+)\r?$/;
 AjxStringUtil.COLON_RE = /\S+:$/;
-AjxStringUtil.PREFIX_RE = /^\s*(>|\|)/;
+AjxStringUtil.PREFIX_RE = /^\s*(&gt;|>|\|)/;
 AjxStringUtil.BRACKET_RE = /^\s*\[.+\]\s*$/;
 AjxStringUtil.LINE_RE = /^\s*_{30,}\s*$/;
 AjxStringUtil.BLANK_RE = /^\s*$/;
 AjxStringUtil.SPLIT_RE = /\r|\n|\r\n/;
-AjxStringUtil.HTML_BLANK_RE = /^\s*<br>\s*$/i;
 AjxStringUtil.HDR_RE = /^\s*\w+:/;
+AjxStringUtil.HTML_BLANK_RE = /^\s*(<br\s*\/?>)*\s*$/i;
 AjxStringUtil.HTML_BR_RE = /<br\s*\/?>/gi;
 AjxStringUtil.HTML_BODY_RE = /<body(\s|>)/i;
-
+AjxStringUtil.HTML_QUOTE_PRE_RE = /^\s*<blockquote/i;
+AjxStringUtil.HTML_QUOTE_POST_RE = /^\s*<\/blockquote>/i;
+AjxStringUtil.HTML_QUOTE_COLOR = "rgb(16, 16, 255)";
 
 /**
  * Returns a list of chunks of top-level content in a message body. Top-level
@@ -701,6 +709,15 @@ function(lines, i, htmlMode) {
 		while (i < lines.length && (AjxStringUtil.PREFIX_RE.test(line) || AjxStringUtil.BLANK_RE.test(line))) {
 			i++;
 			line = htmlMode ? AjxStringUtil.stripTags(lines[i]) : lines[i];
+		}
+		skip = i - start;
+	} else if (AjxStringUtil.HTML_QUOTE_PRE_RE.test(line) && line.indexOf(AjxStringUtil.HTML_QUOTE_COLOR) != -1) {
+		while (i < lines.length && (!AjxStringUtil.HTML_QUOTE_POST_RE.test(line))) {
+			i++;
+			line = lines[i];
+		}
+		if (i < lines.length) {
+			lines[i] = lines[i].replace(AjxStringUtil.HTML_QUOTE_POST_RE, "");
 		}
 		skip = i - start;
 	} else if (AjxStringUtil.COLON_RE.test(line)) {
