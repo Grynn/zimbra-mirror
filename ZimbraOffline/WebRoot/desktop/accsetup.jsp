@@ -185,31 +185,27 @@ function OnDelete() {
 }
 
 function OnSubmit() {
+	zd.hide("cancelButton");
+	zd.disableButton("saveButton", "<fmt:message key='Processing'/>");
 	zd.enable("accountName");
 	zd.enable("email");
 	zd.enable("password");
-	if (document.getElementById("port")) {
+	if (document.getElementById("port"))
 		zd.enable("port");
-	}
-	if (document.getElementById("smtpPort")) {
+	if (document.getElementById("smtpPort"))
 		zd.enable("smtpPort");
-	}
-	if (document.getElementById("smtpPassword")) {
+	if (document.getElementById("smtpPassword"))
 		zd.enable("smtpPassword");
-	}
-	zd.hide("cancelButton");
-	zd.set("saveButton", "<fmt:message key='Processing'/>");
 	document.accountForm.submit();
 }
 
 function onEditLink(id, keep, makeInvisible) {
 	var elem = document.getElementById(id + "Link");
 
-	if (makeInvisible) {
+	if (makeInvisible)
 		elem.style.visibility = "hidden";
-	} else {
+	else
 		elem.style.display = "none";
-	}
 	elem = document.getElementById(id);
 	if (elem.type == "password" && !keep) {
 		elem.value = "";
@@ -220,12 +216,10 @@ function onEditLink(id, keep, makeInvisible) {
 
 <c:if test="${not empty accountFlavor}">
 	function InitScreen() {
-		if (document.getElementById("password")) {
+		if (document.getElementById("password"))
 			zd.disable('password');
-		}
-		if (document.getElementById("smtpPassword")) {
+		if (document.getElementById("smtpPassword"))
 			zd.disable('smtpPassword');
-		}
 		<c:if test="${bean.password eq '' or not zdf:isValid(bean, 'password') || verb eq 'add'}">
 			onEditLink("password", true);
 		</c:if>
@@ -239,22 +233,18 @@ function onEditLink(id, keep, makeInvisible) {
 
 	function SetPort() {
 		if (zd.isDisabled("port")) {
-			if (${bean.type eq 'pop3'}) {
+			if (${bean.type eq 'pop3'})
 				zd.set("port", zd.isChecked("ssl") ? "995" : "110");
-			}
-			else if (${bean.type eq 'imap'}) {
+			else if (${bean.type eq 'imap'})
 				zd.set("port", zd.isChecked("ssl") ? "993" : "143");
-			}
-			else if (${bean.type eq 'zimbra' or bean.type eq 'xsync'}) {
+			else if (${bean.type eq 'zimbra' or bean.type eq 'xsync'})
 				zd.set("port", zd.isChecked("ssl") ? "443" : "80");
-			}
 		}
 	}
 
 	function SetSmtpPort() {
-		if (zd.isDisabled("smtpPort")) {
+		if (zd.isDisabled("smtpPort"))
 			zd.set("smtpPort", zd.isChecked("smtpSsl") ? "465" : "25");
-		}
 	}
 </c:if>
 
@@ -333,11 +323,11 @@ function onEditLink(id, keep, makeInvisible) {
 								</tr>
 								<c:if test="${empty bean.accountId}">
 									<tr>
-										<form name="newAccnt" action="" method="POST">
-											<td>
-												<div class="ZFieldLabel"><fmt:message key='AccountType'/>:</div>
-											</td>
-											<td>
+										<td>
+											<div class="ZFieldLabel"><fmt:message key='AccountType'/>:</div>
+										</td>
+										<td>
+											<form name="newAccnt" action="" method="POST">
 												<select name="accountFlavor" id="accountFlavor" onchange="accntChange(this)" class="ZSelect">
 													<option value=""><fmt:message key='AccountSelect'/></option>
 													<option value="Zimbra" <c:if test="${accountFlavor eq 'Zimbra'}">selected</c:if> ><fmt:message key='Zimbra'/></option>
@@ -349,8 +339,8 @@ function onEditLink(id, keep, makeInvisible) {
 													<option value="Pop" <c:if test="${accountFlavor eq 'Pop'}">selected</c:if> ><fmt:message key='POP'/></option>
 												</select>
 												<input type="hidden" name="verb" id="verb" value=""></input>
-											</td>
-										</form>
+											</form>
+										</td>
 									</tr>
 								</c:if>
 								<c:if test="${not empty accountFlavor}">
@@ -652,8 +642,9 @@ function onEditLink(id, keep, makeInvisible) {
 										<tr>
 											<td colspan=2>
 												<div class="ZFieldLabel ZSectionLabel">
-												<fmt:message key='SyncOptions'/>
-												<hr class="ZHorizontalLine"/>
+													<fmt:message key='SyncOptions'/>
+													<hr class="ZHorizontalLine"/>
+												</div>
 											</td>
 										</tr>
 										<tr>
@@ -724,8 +715,6 @@ function onEditLink(id, keep, makeInvisible) {
 												</td>
 											</tr>
 										</c:if>
-										<tr><td></td></tr>
-										<tr><td></td></tr>
 										<tr>
 											<td colspan=2>
 												<table border=0 cellpadding=0 cellspacing=0 width=100% class="ZTableInner">
@@ -734,7 +723,7 @@ function onEditLink(id, keep, makeInvisible) {
 															<td>
 																<table border=0>
 																	<tr>
-																		<td><div id="saveButton" class="ZPanelButton" onclick='OnSubmit()' onmouseover='OnHover(this, true)' onmouseout='OnHover(this)'><fmt:message key='${save}'/></div></td>
+																		<td><div id="saveButton" class="ZPanelButton" onclick='OnSubmit()' onmouseover='zd.OnHover(this, true)' onmouseout='zd.OnHover(this)'><fmt:message key='${save}'/></div></td>
 																	</tr>
 																</table>
 															</td>
@@ -742,7 +731,7 @@ function onEditLink(id, keep, makeInvisible) {
 														<td align="right">
 															<table border=0>
 																<tr>
-																	<td><div id="cancelButton" class="ZPanelButton ZCancel" onclick='OnCancel()' onmouseover='OnHover(this, true)' onmouseout='OnHover(this)'><fmt:message key='Cancel'/></div></td>
+																	<td><div id="cancelButton" class="ZPanelButton ZCancel" onclick='OnCancel()' onmouseover='zd.OnHover(this, true)' onmouseout='zd.OnHover(this)'><fmt:message key='Cancel'/></div></td>
 																</tr>
 															</table>
 														</td>

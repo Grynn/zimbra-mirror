@@ -41,8 +41,8 @@
 
 <html>
 <head>
-<c:if test="${empty accounts}">
-<meta http-equiv="refresh" content="10" >
+<c:if test="${not empty bean.accounts}">
+<meta http-equiv="refresh" content="12;url=/desktop/console.jsp" >
 </c:if>
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <title><fmt:message key="ZimbraDesktop"/></title>
@@ -69,7 +69,7 @@ function OnEdit(id, name, type, flavor) {
 }
 
 function OnLogin() {
-	zd.set("loginButton", "<fmt:message key='Loading'/>");
+	zd.disableButton("loginButton", "<fmt:message key='Loading'/>");
 	window.location = "${zdf:addAuthToken('/desktop/login.jsp', devMode)}";
 }
 
@@ -79,21 +79,18 @@ function OnDefault(id, name, type, flavor) {
 }
 
 function OnReset(id, name, type, flavor) {
-	if (confirm("<fmt:message key='OnResetWarn'/>")) {
+	if (confirm("<fmt:message key='OnResetWarn'/>"))
 		submit(id, name, type, flavor, "rst");
-	}
 }
 
 function OnReindex(id, name, type, flavor) {
-	if (confirm("<fmt:message key='OnReindexWarn'/>")) {
+	if (confirm("<fmt:message key='OnReindexWarn'/>"))
 		submit(id, name, type, flavor, "idx");
-	}
 }
 
 function submit(id, name, type, flavor, verb) {
-	if (verb != "") {
-		zd.set("loginButton", "<fmt:message key='Processing'/>");
-	}
+	if (verb != "")
+		zd.disableButton("loginButton", "<fmt:message key='Processing'/>");
 	document.accountForm.accountId.value = id;
 	document.accountForm.accountName.value = name;
 	document.accountForm.accountType.value = type;
@@ -171,7 +168,7 @@ function submit(id, name, type, flavor, verb) {
 													<table border=0 cellpadding=0 cellspacing=0 align=right>
 														<tr>
 															<td>
-																<div class="ZPanelButton" onclick='OnAdd()' onmouseover='OnHover(this, true)' onmouseout='OnHover(this)'><fmt:message key='AccountAdd'/></div>
+																<div class="ZPanelButton" onclick='OnAdd()' onmouseover='zd.OnHover(this, true)' onmouseout='zd.OnHover(this)'><fmt:message key='AccountAdd'/></div>
 															</td>
 														</tr>
 													</table>
@@ -313,7 +310,7 @@ function submit(id, name, type, flavor, verb) {
 													<table border=0 cellpadding=0 cellspacing=0>
 														<tr>
 															<td>
-																<div id="loginButton" class="ZPanelButton" onclick='OnLogin()' onmouseover='OnHover(this, true)' onmouseout='OnHover(this)'><fmt:message key='GotoDesktop'/> &#187;</div>
+																<div id="loginButton" class="ZPanelButton" onclick='OnLogin()' onmouseover='zd.OnHover(this, true)' onmouseout='zd.OnHover(this)'><fmt:message key='GotoDesktop'/> &#187;</div>
 															</td>
 														</tr>
 													</table>

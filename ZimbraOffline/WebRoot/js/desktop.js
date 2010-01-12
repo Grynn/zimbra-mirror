@@ -101,8 +101,8 @@ var zd = {
 	},
 
 	togglePlatformNotice : function(id) {
-	    id = id + (zd.isMac() ? "-Mac" : "-isWin");
-	    zd.toggle(id);
+		id = id + (zd.isMac() ? "-Mac" : "-isWin");
+		zd.toggle(id);
 	},
 	
 	enable : function(id) {
@@ -115,9 +115,15 @@ var zd = {
 		it.disabled = true;
 	},
 	
+	disableButton : function(id, text) {
+		var it = this.byId(id);
+		it.className = "ZPanelButton ZCancel";
+		it.innerHTML = text;
+	},
+	
 	isDisabled : function(id) {
-	    var it = zd.byId(id);
-        return it.disabled;
+		var it = zd.byId(id);
+		return it.disabled;
 	},
 	
 	isChecked : function(id) {
@@ -261,14 +267,12 @@ var zd = {
 	
 	clearCookie : function(name) {
 		this.setCookie(name,"");
-	}
+	},
 	
-}
-
-function OnHover(elem, over) {
-	var names = elem.className.split("Hover");
-	var name = names[0];
-
-	elem.className = name + (over ? " " + names + "Hover" : "");
+	OnHover : function(elem, over) {
+		var names = elem.className.split("Hover");
+		var name = names[0];
+		elem.className = name + (over ? " " + names + "Hover" : "");
+	}
 }
 
