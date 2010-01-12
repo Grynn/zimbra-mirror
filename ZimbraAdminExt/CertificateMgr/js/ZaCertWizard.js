@@ -373,7 +373,7 @@ function() {
 		}
 		try {
 			if ((!this._containedObject[ZaCert.A_csr_exists]) || (this._containedObject[ZaCert.A_force_new_csr] == 'TRUE')){
-				if (this._containedObject[ZaCert.A_type_comm]) {
+				if (!this._containedObject[ZaCert.A_type_self]) {
                     ZaCert.genCSR (ZaApp.getInstance(), this._containedObject.attrs, type, true,  this._containedObject[ZaCert.A_target_server]) ;
                 } else {
                     if (AjxEnv.hasFirebug) console.log("Self-Signed certificate, skip the CSR generation.") ;                    
