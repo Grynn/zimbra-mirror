@@ -93,6 +93,7 @@ ZaAccount.A_zimbraIsSystemResource = "zimbraIsSystemResource";
 ZaAccount.A_zimbraExcludeFromCMBSearch = "zimbraExcludeFromCMBSearch";
 
 ZaAccount.A_zimbraAdminAuthTokenLifetime  = "zimbraAdminAuthTokenLifetime";
+ZaAccount.A_zimbraAuthTokenValidityValue = "zimbraAuthTokenValidityValue";
 ZaAccount.A_zimbraAuthTokenLifetime = "zimbraAuthTokenLifetime";
 ZaAccount.A_zimbraMailMessageLifetime = "zimbraMailMessageLifetime";
 ZaAccount.A_zimbraMailSpamLifetime = "zimbraMailSpamLifetime";

@@ -113,6 +113,10 @@ function () {
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.ACTBB_Delete_tt);
 			if(this._toolbar.getButton(ZaOperation.CHNG_PWD))			
 				this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.ACTBB_ChngPwd_tt);
+			
+			if(this._toolbar.getButton(ZaOperation.EXPIRE_SESSION))	
+				this._toolbar.getButton(ZaOperation.EXPIRE_SESSION).setToolTipContent(ZaMsg.ACTBB_ExpireSessions_tt);
+				
 		} else if (type == ZaItem.ALIAS) {
 			newButton.setToolTipContent(ZaMsg.ALTBB_New_tt);
 			newButton.setImage("AccountAlias");
@@ -224,6 +228,7 @@ function () {
 	
 	if(this._defaultType == ZaItem.ACCOUNT) {
 		this._popupOperations[ZaOperation.CHNG_PWD] = new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener));
+		this._popupOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, ZaAccountListController.prototype._expireSessionListener));
 	}
 
 	this._popupOperations[ZaOperation.VIEW_MAIL] = new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, ZaAccountListController.prototype._viewMailListener));		
@@ -304,6 +309,7 @@ function () {
 	
 	if(this._defaultType == ZaItem.ACCOUNT) {
 		this._toolbarOperations[ZaOperation.CHNG_PWD] = new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener));
+		this._toolbarOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, ZaAccountListController.prototype._expireSessionListener));
 	}
 	this._toolbarOperations[ZaOperation.VIEW_MAIL] = new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, ZaAccountListController.prototype._viewMailListener));		
 
@@ -318,6 +324,7 @@ function () {
 	this._toolbarOrder.push(ZaOperation.DELETE);
 	if(this._defaultType == ZaItem.ACCOUNT) {
 		this._toolbarOrder.push(ZaOperation.CHNG_PWD);
+		this._toolbarOrder.push(ZaOperation.EXPIRE_SESSION);
 	}
 	this._toolbarOrder.push(ZaOperation.VIEW_MAIL);
 	if(this._defaultType == ZaItem.ALIAS) {
@@ -583,6 +590,30 @@ function(ev) {
 		this._chngPwdDlg.popup();
 	}
 }
+
+ZaAccountListController.prototype._expireSessionListener = 
+function(ev) {
+	if(this._contentView.getSelectionCount()==1) {
+		var item = this._contentView.getSelection()[0];
+		item.loadEffectiveRights("id", item.id, false);
+		if(ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,item)) {
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.WARN_EXPIRE_SESSIONS, DwtMessageDialog.WARNING_STYLE);
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype.expireSessions, this, [item]);		
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDlg, this, null);				
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
+		} else {
+			this.popupMsgDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_PERMISSION_FOR_OPERATION_ON, [item.name ? item.name : item.attrs[ZaAccount.A_accountName]]), true);
+		}
+	}
+}
+
+ZaAccountListController.prototype.expireSessions = 
+function(acct) {
+	ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
+	mods = {};
+	mods[ZaAccount.A_zimbraAuthTokenValidityValue] = (!acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue] ? 1 : (parseInt(acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue])+1)); 
+	acct.modify(mods,acct);
+}  
 
 ZaAccountListController._viewMailListenerLauncher = 
 function(account) {
@@ -898,7 +929,11 @@ function () {
 
                 if(this._popupOperations[ZaOperation.CHNG_PWD]) {
                     this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
-                }	
+                }
+                
+            	if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+					this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+				}	
             }
 
             if (((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.DL))
@@ -953,7 +988,15 @@ function () {
 						 
 						 if(this._toolbarOperations[ZaOperation.CHNG_PWD])
 						 	this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;   
-					}										
+					}	
+					if(!ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,item)) {    
+					   	if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+							this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+						}
+					   	if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {	
+							this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+						}						
+					}									
 				}
 			} else if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT))  {
 				if(!item.targetObj)
@@ -986,10 +1029,21 @@ function () {
 						 
 						 if(this._toolbarOperations[ZaOperation.CHNG_PWD])
 						 	this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;   
-					}					
+					}		
+					if(!ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,item.targetObj)) {    
+					   	if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+							this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+						}
+					   	if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {	
+							this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+						}						
+					}
 				}
 			}
         } else {
+			if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+				this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+			}        	
 			if(this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
 				this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
 			}
@@ -1006,6 +1060,9 @@ function () {
 				this._toolbarOperations[ZaOperation.DELETE].enabled = false;
 			}
 			
+			if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {	
+				this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+			}    			
 			if(this._popupOperations[ZaOperation.VIEW_MAIL]) {
 				this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
 			}
@@ -1023,7 +1080,9 @@ function () {
 			}				
 		}		
 	} else if (cnt > 1){
-		
+		if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+			this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+		}	
 		if(this._toolbarOperations[ZaOperation.EDIT]) {	
 			this._toolbarOperations[ZaOperation.EDIT].enabled = false;
 		}		
@@ -1036,7 +1095,10 @@ function () {
 		if(this._toolbarOperations[ZaOperation.MOVE_ALIAS]) {
 			this._toolbarOperations[ZaOperation.MOVE_ALIAS].enabled = false;		
 		}
-				
+		
+		if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {	
+			this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+		}					
 		if(this._popupOperations[ZaOperation.EDIT]) {	
 			this._popupOperations[ZaOperation.EDIT].enabled = false;
 		}		
@@ -1050,7 +1112,9 @@ function () {
 			this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;		
 		}
 	} else {
-		
+		if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+			this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+		}		
 		if(this._toolbarOperations[ZaOperation.EDIT]) {	
 			this._toolbarOperations[ZaOperation.EDIT].enabled = false;
 		}	
@@ -1067,6 +1131,9 @@ function () {
 			this._toolbarOperations[ZaOperation.MOVE_ALIAS].enabled = false;
 		}	
 				
+		if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {	
+			this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+		}				
 		if(this._popupOperations[ZaOperation.EDIT]) {	
 			this._popupOperations[ZaOperation.EDIT].enabled = false;
 		}	
