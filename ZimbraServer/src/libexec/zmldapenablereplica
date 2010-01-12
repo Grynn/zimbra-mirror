@@ -122,7 +122,7 @@ verifyAccesslog() {
 	ARGS="-x -H ldapi:/// -LLL -D cn=config -w ${ldap_root_password} -s base -b cn=accesslog"
 	OUTPUT=`$LDS $ARGS 2>&1`
 	if [ $? -eq 0 ]; then
-		echo 'Error: Accesslog enabled. Exiting...'
+		echo 'Accesslog is already enabled. Exiting...'
 		exit 1
 	fi
 }
