@@ -264,3 +264,11 @@ var zd = {
 	}
 	
 }
+
+function OnHover(elem, over) {
+	var names = elem.className.split("Hover");
+	var name = names[0];
+
+	elem.className = name + (over ? " " + names + "Hover" : "");
+}
+

@@ -73,7 +73,7 @@ INPUT[disabled='disabled'] {
 	-moz-border-radius: 7px;
 	-webkit-border-radius: 7px;
 	background-color: #ffffff;
-	padding: 10px;
+	padding: 20px;
 }
 
 .ZWelcome {
@@ -101,10 +101,21 @@ INPUT[disabled='disabled'] {
 	min-width: 85px;
 	padding: 7px 16px 0px 16px;
 	text-align: center;
+	white-space: nowrap;
+}
+
+.ZPanelButtonHover {
+	color: #FFFFFF;
+	background: #79c74d;
 }
 
 .ZCancel {
 	background: #7c7c7c url("img/button-bkgd-cancel.png") repeat-x top left;
+}
+
+.ZCancelHover {
+	color: #FFFFFF;
+	background: #c9c9c9;
 }
 
 .ZPanelBottom a {
@@ -157,12 +168,8 @@ INPUT[disabled='disabled'] {
 	border: 1px solid #fff13f;
 	color: #444444;
 	font-size: 12px;
+	margin-bottom: 20px;
 	padding: 8px;
-	margin: 5px 5px 15px 5px;
-}
-
-.ZInfoError {
-	font-weight: bold;
 }
 
 .ZAccountGood {
@@ -170,6 +177,7 @@ INPUT[disabled='disabled'] {
 	-webkit-border-radius: 6px;
 	background-color: #f1fee8;
 	border: 1px solid #d3fdba;
+	margin-bottom: 20px;
 	padding: 5px;
 }
 
@@ -182,6 +190,7 @@ INPUT[disabled='disabled'] {
 	-webkit-border-radius: 6px;
 	background-color: #ffefef;
 	border: 1px solid #ffd5d4;
+	margin-bottom: 20px;
 	padding: 5px;
 }
 
@@ -242,11 +251,11 @@ INPUT[disabled='disabled'] {
 }
 
 .ZTable {
-	width: 565px;
+	width: 575px;
 }
 
 .ZTable td {
-	padding: 3px 6px 3px 0px;
+	padding: 3px 0px 3px 0px;
 }
 
 .ZTableInner td {
@@ -269,6 +278,7 @@ INPUT[disabled='disabled'] {
 	color: #222222;
 	font-size: 12px;
 	/* font-weight: bold; */
+	padding: 0px 6px 0px 10px;
 	text-align: right;
 	white-space: nowrap;
 }
@@ -325,7 +335,7 @@ INPUT[disabled='disabled'] {
 	color: #911510;
 	font-size: 12px;
 	padding: 10px;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
 
 .ZError {
