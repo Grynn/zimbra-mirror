@@ -330,17 +330,22 @@ ZaCert.installCert = function (app, params, serverId) {
 			//set the comm_cert element
 			soapDoc.set("comm_cert", comm_cert);	
 		}
-        //add the subject element for the allserver install
+        //add the subject element and subjectAltNames element
         if (subject != null) {
             var subject_attrs = {} ;
             for (var n in subject) {
                 if (n == ZaCert.A_subject_alt) {
-                   //ignore subject_alt_names
+                   var subjectAlts = subject[n] ;
+                    if (( subjectAlts instanceof Array) && (subjectAlts.length > 0)){
+                        for (var i=0; i < subjectAlts.length; i ++) {
+                            soapDoc.set(n, subjectAlts[i]);
+                        }
+                    }
                 }else{
                     subject_attrs [n] = subject[n] ;
                 }
             }
-            soapDoc.set("subject", subject);
+            soapDoc.set("subject", subject_attrs);
         }
     }else {
 		throw new AjxException (com_zimbra_cert_manager.UNKNOW_INSTALL_TYPE_ERROR, "ZaCert.installCert") ;		
@@ -385,9 +390,9 @@ ZaCert.myXModel = {
 		{id: ZaCert.A_countryName, type: _STRING_, ref: "attrs/" + ZaCert.A_countryName, length: 2, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\'\*]*$/ },
 		{id: ZaCert.A_commonName, type: _STRING_, ref: "attrs/" + ZaCert.A_commonName },
 		{id: ZaCert.A_state, type: _STRING_, ref: "attrs/" + ZaCert.A_state, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\'\*]*$/ },
-		{id: ZaCert.A_city, type: _STRING_, ref: "attrs/" + ZaCert.A_city, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\'\*]*$/ },
-		{id: ZaCert.A_organization, type: _STRING_, ref: "attrs/" + ZaCert.A_organization, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\,\'\*]*$/ },
-		{id: ZaCert.A_organizationUnit, type: _STRING_, ref: "attrs/" + ZaCert.A_organizationUnit, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\,\'\*]*$/ },
+		{id: ZaCert.A_city, type: _STRING_, ref: "attrs/" + ZaCert.A_city, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\'\*\s]*$/ },
+		{id: ZaCert.A_organization, type: _STRING_, ref: "attrs/" + ZaCert.A_organization, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\,\'\*\s]*$/ },
+		{id: ZaCert.A_organizationUnit, type: _STRING_, ref: "attrs/" + ZaCert.A_organizationUnit, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\,\'\*\s]*$/ },
 		{id: ZaCert.A_validation_days, type: _NUMBER_, ref: ZaCert.A_validation_days, required: true },
 		{id: ZaCert.A_type_comm, type: _ENUM_, ref: ZaCert.A_type_comm, choices:ZaModel.BOOLEAN_CHOICES1 },
 		{id: ZaCert.A_type_self, type: _ENUM_, ref: ZaCert.A_type_self, choices:ZaModel.BOOLEAN_CHOICES1 },

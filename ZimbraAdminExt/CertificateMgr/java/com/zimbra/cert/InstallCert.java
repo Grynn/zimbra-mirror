@@ -104,14 +104,30 @@ public class InstallCert extends AdminDocumentHandler {
                 cmd += " -days " + validation_days ;
             }
         }
+
+        Element subjectEl = request.getElement(SUBJECT)  ;
+        String subject = GenerateCSR.getSubject(subjectEl) ;
+
+        String subjectAltNames = GenerateCSR.getSubjectAltNames(request) ;
+
+        if (certType.equals("self")) {
+            cmd += " -keysize 2048 " ;
+
+            if (subject != null && subject.length() > 0) {
+                cmd += "-subject \"" + subject +"\"";
+            }
+
+            if (subjectAltNames != null && subjectAltNames.length() >0) {
+                cmd += " -subjectAltNames \"" + subjectAltNames + "\"" ;
+            }
+        }
         
-       
         if (isTargetAllServer) {
            if (certType.equals("self")) { //self -allserver install - need to pass the subject to the createcrt cmd
-                Element el = request.getElement(SUBJECT)  ;
-                String subject = GenerateCSR.getSubject(el) ;
-                ZimbraLog.security.debug("Subject for allserver: " + subject);
-                cmd += " -subject " + " \"" + subject +"\"";
+                if (subject != null && subject.length() > 0) {
+                    ZimbraLog.security.debug("Subject for allserver: " + subject);
+                    cmd += " -subject " + " \"" + subject +"\"";
+                }
             }else{
                deploycrt_cmd += " " + ZimbraCertMgrExt.UPLOADED_CRT_FILE +  " "  + ZimbraCertMgrExt.UPLOADED_CRT_CHAIN_FILE ;
            }

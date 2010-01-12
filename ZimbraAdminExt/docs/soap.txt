@@ -62,6 +62,7 @@ SubjectAltName: 0|*, it is used to add the Subject Alt Name extension in the cer
   	<subject>
   	    <{name}>{value}</{name}>*
   	</subject>
+  	<SubjectAltName>{value}</SubjectAltName>*
   	<validation_days>{value}</validation_days>
   	<comm_cert>
   		<cert>

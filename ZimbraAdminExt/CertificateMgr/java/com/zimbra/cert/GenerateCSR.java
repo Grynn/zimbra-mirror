@@ -119,7 +119,7 @@ public class GenerateCSR extends AdminDocumentHandler {
         return subject ;
     }
     
-    String getSubjectAltNames (Element request) {
+    public static String  getSubjectAltNames (Element request) {
         Element e = null ;
         String subjectAltNames = "" ;
       

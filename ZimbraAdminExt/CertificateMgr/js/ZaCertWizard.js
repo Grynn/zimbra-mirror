@@ -125,7 +125,7 @@ function() {
 		var validationDays = instance[ZaCert.A_validation_days] ;
 		
 		var selfType = instance[ZaCert.A_type_self] ;
-		var commType = instance[ZaCert.A_type_comm] ;
+		var commType = instance[ZaCert.A_type_comm] ;    
 		var csrType = instance[ZaCert.A_type_csr] ;
 		
 		var contentElement =  null ;
@@ -373,7 +373,11 @@ function() {
 		}
 		try {
 			if ((!this._containedObject[ZaCert.A_csr_exists]) || (this._containedObject[ZaCert.A_force_new_csr] == 'TRUE')){
-				ZaCert.genCSR (ZaApp.getInstance(), this._containedObject.attrs, type, true,  this._containedObject[ZaCert.A_target_server]) ;
+				if (this._containedObject[ZaCert.A_type_comm]) {
+                    ZaCert.genCSR (ZaApp.getInstance(), this._containedObject.attrs, type, true,  this._containedObject[ZaCert.A_target_server]) ;
+                } else {
+                    if (AjxEnv.hasFirebug) console.log("Self-Signed certificate, skip the CSR generation.") ;                    
+                }
 			}else{
 				if (AjxEnv.hasFirebug) console.log("Previous CSR exists, skip the CSR generation.") ;
 			}
