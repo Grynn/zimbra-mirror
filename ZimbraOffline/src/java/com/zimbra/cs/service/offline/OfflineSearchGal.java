@@ -52,7 +52,7 @@ public class OfflineSearchGal extends DocumentHandler {
             while (name.endsWith("*"))
                 name = name.substring(0, name.length() - 1);            
 
-            (new OfflineGal((OfflineAccount)account)).search(response, name);                  
+            (new OfflineGal((OfflineAccount)account)).search(response, name, request.getAttribute(AccountConstants.A_TYPE, "all"));                  
         } else { // proxy mode
             response = ((ZcsMailbox)mbox).proxyRequest(request, ctxt.getResponseProtocol(), true, "search GAL");
             if (response == null) {

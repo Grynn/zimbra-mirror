@@ -77,11 +77,7 @@ public class OfflineGal {
     public OperationContext getOpContext() {
         return mOpContext;
     }
-    
-    public ZimbraQueryResults search(String name, int limit) throws ServiceException {
-        return search(name, limit, CTYPE_ACCOUNT);
-    }
-    
+        
     public ZimbraQueryResults search(String name, int limit, String type) throws ServiceException {        
         String galAcctId = mAccount.getAttr(OfflineConstants.A_offlineGalAccountId, false);
         mGalMbox = null;
@@ -134,13 +130,13 @@ public class OfflineGal {
         }
     }   
     
-    public void search(Element response, String name) throws ServiceException {
-        search(response, name, 0);
+    public void search(Element response, String name, String type) throws ServiceException {
+        search(response, name, 0, type);
     }
     
-    public void search(Element response, String name, int limit) throws ServiceException {
+    public void search(Element response, String name, int limit, String type) throws ServiceException {
         limit = limit == 0 ? mAccount.getIntAttr(Provisioning.A_zimbraGalMaxResults, 100) : limit;        
-        ZimbraQueryResults zqr = search(name, limit + 1); // use limit + 1 so that we know when to set "had more"
+        ZimbraQueryResults zqr = search(name, limit + 1, type); // use limit + 1 so that we know when to set "had more"
         if (zqr == null) {
             response.addAttribute(AccountConstants.A_MORE, false);
             return;
@@ -176,8 +172,8 @@ public class OfflineGal {
         }
     }
     
-    public void search(AutoCompleteResult result, String name, int limit) throws ServiceException {
-        ZimbraQueryResults zqr = search(name, limit);
+    public void search(AutoCompleteResult result, String name, int limit, String type) throws ServiceException {
+        ZimbraQueryResults zqr = search(name, limit, type);
         if (zqr == null)
             return;
         

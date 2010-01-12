@@ -33,7 +33,6 @@ import com.zimbra.cs.mailbox.ContactAutoComplete;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.service.mail.AutoComplete;
-import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.soap.ZimbraSoapContext;
 
 public class OfflineAutoComplete extends AutoComplete {
@@ -51,19 +50,21 @@ public class OfflineAutoComplete extends AutoComplete {
         while (name.endsWith("*"))
             name = name.substring(0, name.length() - 1);
         
+        String typeStr = request.getAttribute(MailConstants.A_TYPE, "account");
+        Provisioning.GAL_SEARCH_TYPE stype = getSearchType(typeStr);
         int limit = account.getContactAutoCompleteMaxResults();        
-        AutoCompleteResult result = query(request, ctxt, account, true, name, limit, Provisioning.GAL_SEARCH_TYPE.ALL);
+        AutoCompleteResult result = query(request, ctxt, account, true, name, limit, stype);
         
         if (galAC && result.entries.size() < limit) {
             int galLimit = limit - result.entries.size();
             
             if (account.getBooleanAttr(Provisioning.A_zimbraFeatureGalSyncEnabled , false)) {            
-                (new OfflineGal((OfflineAccount)account)).search(result, name, galLimit);                        
+                (new OfflineGal((OfflineAccount)account)).search(result, name, galLimit, typeStr);                        
             } else { // proxy mode
                 XMLElement req = new XMLElement(AccountConstants.AUTO_COMPLETE_GAL_REQUEST);
                 req.addAttribute(AccountConstants.A_NAME, name);
                 req.addAttribute(AccountConstants.A_LIMIT, galLimit);
-                req.addAttribute(AccountConstants.A_TYPE, "account");
+                req.addAttribute(AccountConstants.A_TYPE, typeStr);
                 
                 Element resp = ((ZcsMailbox)mbox).proxyRequest(req, ctxt.getResponseProtocol(), true, "auto-complete GAL");
                 if (resp != null) {
@@ -82,7 +83,7 @@ public class OfflineAutoComplete extends AutoComplete {
         }
 
         if (result.entries.size() < limit)
-            autoCompleteFromOtherAccounts(request, ctxt, account, name, limit, result);
+            autoCompleteFromOtherAccounts(request, ctxt, account, name, limit, stype, result);
             
         Element response = ctxt.createElement(MailConstants.AUTO_COMPLETE_RESPONSE);
         toXML(response, result, ctxt.getAuthtokenAccountId());
@@ -90,7 +91,7 @@ public class OfflineAutoComplete extends AutoComplete {
     }
     
     public void autoCompleteFromOtherAccounts(Element request, ZimbraSoapContext ctxt, Account reqAcct,
-        String name, int limit, AutoCompleteResult result) throws ServiceException {
+        String name, int limit, Provisioning.GAL_SEARCH_TYPE stype, AutoCompleteResult result) throws ServiceException {
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
         List<Account> accounts = prov.getAllAccounts();
         accounts.add(0, prov.getLocalAccount());
@@ -101,7 +102,7 @@ public class OfflineAutoComplete extends AutoComplete {
             if (account.getId().equals(reqAcctId) || !account.getBooleanAttr(OfflineProvisioning.A_zimbraPrefShareContactsInAutoComplete , false))
                 continue;
             
-            AutoCompleteResult res = query(request, ctxt, account, true, name, lmt, Provisioning.GAL_SEARCH_TYPE.ALL);
+            AutoCompleteResult res = query(request, ctxt, account, true, name, lmt, stype);
             if (res != null)
                 result.appendEntries(res);
             
