@@ -77,7 +77,7 @@ ZaGlobalConfigViewController.setViewMethod = function (item) {
             this._toolbarOrder.push(ZaOperation.NONE);
             this._toolbarOrder.push(ZaOperation.HELP);
             this._toolbar = new ZaToolBar(this._container, this._toolbarOperations, this._toolbarOrder);
-            this._contentView = this._view = new this.tabConstructor(this._container);
+            this._contentView = this._view = new this.tabConstructor(this._container,item);
             var elements = new Object();
             elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
             elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
