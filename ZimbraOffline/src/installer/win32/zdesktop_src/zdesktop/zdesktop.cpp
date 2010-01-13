@@ -103,8 +103,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // TODO: enforce single instance...
-
     Config cfg;
     string cmdline(lpCmdLine);
     size_t len = cmdline.length();
@@ -114,6 +112,15 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
         string err = "Unable to load config file: " + cmdline;
         MessageBox(NULL, err.c_str(), "Zimbra Desktop Service", MB_ICONERROR | MB_OK);
         return FALSE;
+    }
+
+    string mutexname = cfg.Get("mutex.name");
+    if (!mutexname.empty()) {
+        HANDLE mutex = CreateMutex(NULL, TRUE, mutexname.c_str());
+        if (mutex != NULL && WaitForSingleObject(mutex, 0) != WAIT_OBJECT_0) {
+            MessageBox(NULL, "Service is already running.", "Zimbra Desktop Service", MB_ICONERROR | MB_OK);         
+            return FALSE;
+        }
     }
 
     string workdir = cfg.Get("working.directory");

@@ -264,6 +264,7 @@ Set oTokens = CreateObject("Scripting.Dictionary")
 oTokens.Add "@install.app.root@", sAppRoot
 oTokens.Add "@install.data.root@", sDataRoot
 oTokens.Add "@install.key@", GetRandomId()
+oTokens.Add "@install.mutex.name@", GetRandomId()
 oTokens.Add "@install.locale@", "en-US"
 
 FindAndReplace sDataRoot & "\bin\zdctl.vbs", oTokens
