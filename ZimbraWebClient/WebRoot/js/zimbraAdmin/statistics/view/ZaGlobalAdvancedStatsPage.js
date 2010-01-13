@@ -225,6 +225,7 @@ ZaGlobalAdvancedStatsPage.plotGlobalQuickChart = function (id, group, columns, c
 
 ZaGlobalAdvancedStatsPage.plotQuickChart = function (id, hostname, group, columns, column_units, start, end, options) {
     var chartdiv = document.getElementById("loggerchart" + id);
+    chartdiv.style.display = "block";
     ZaGlobalAdvancedStatsPage.setText(chartdiv, ZaMsg.NAD_AdvStatsLoadingDataLabel);
     
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
@@ -452,6 +453,42 @@ ZaGlobalAdvancedStatsPage._getCounters = function(hostname, group, counterSelect
     ZaRequestMgr.invoke(csfeParams, reqMgrParams);
     
 }
+
+ZaGlobalAdvancedStatsPage.getMTAHosts = function() {
+    if (ZaGlobalAdvancedStatsPage.MTA_HOSTS) {
+        return ZaGlobalAdvancedStatsPage.MTA_HOSTS;
+    }
+    var soapRequest = AjxSoapDoc.create("GetServiceStatusRequest", ZaZimbraAdmin.URN, null);
+    var csfeParams = { soapDoc: soapRequest };
+    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
+    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetServiceStatusResponse;
+    
+    var hosts = new Array();
+    if (soapResponse.status && soapResponse.status instanceof Array) {
+        var ary = soapResponse.status;
+        var cnt = ary.length;
+        for (var i = 0; i < cnt; i++) {
+            if (ary[i].service == "mta") {
+                hosts.push(ary[i].server);
+            }
+        }
+    }
+    ZaGlobalAdvancedStatsPage.MTA_HOSTS = hosts;
+    return ZaGlobalAdvancedStatsPage.MTA_HOSTS;
+}
+
+ZaGlobalAdvancedStatsPage.hideDIVs = function(divs) {
+    if (divs && divs instanceof Array) {
+        var cnt = divs.length;
+        for (var i = 0; i < cnt; i++) {
+            var chartdiv = document.getElementById("loggerchart" + divs[i]);
+            if (chartdiv != null) {
+                chartdiv.style.display = "none";
+            }
+        }
+    }
+}
+
 ZaGlobalAdvancedStatsPage.getCounters = function(hostname, group) {
     var soapRequest = AjxSoapDoc.create("GetLoggerStatsRequest", ZaZimbraAdmin.URN, null);
     soapRequest.set("hostname", { "!hn": hostname });

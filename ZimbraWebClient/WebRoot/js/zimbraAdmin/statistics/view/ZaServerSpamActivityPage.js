@@ -39,16 +39,31 @@ function() {
 
 ZaServerSpamActivityPage.prototype.showMe =  function(refresh) {
 	DwtTabViewPage.prototype.showMe.call(this);	
-	ZaGlobalAdvancedStatsPage.detectFlash(document.getElementById("loggerchartserverasav-flashdetect"));
 	if(refresh && this._currentObject) {
 		this.setObject(this._currentObject);
 	}
 	if (this._currentObject) {
 	    var item = this._currentObject;
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-48hours', item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filtered' ], 'now-48h', 'now', { convertToCount: 1 });
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-30days',  item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filtered' ], 'now-30d', 'now', { convertToCount: 1 });
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-60days',  item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filtered' ], 'now-60d', 'now', { convertToCount: 1 });
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-year',    item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filtered' ], 'now-1y',  'now', { convertToCount: 1 });
+	    
+        var charts = document.getElementById('loggerchartserverasav');
+        charts.style.display = "block";
+	    ZaGlobalAdvancedStatsPage.hideDIVs([ 'serverasav-no-mta',
+	     'server-message-asav-48hours', 'server-message-asav-30days',
+         'server-message-asav-60days', 'server-message-asav-year' ]);
+	    
+	    var hosts = ZaGlobalAdvancedStatsPage.getMTAHosts();
+	    if (ZaGlobalAdvancedStatsPage.indexOf(hosts, item.name) != -1) {
+	        ZaGlobalAdvancedStatsPage.detectFlash(document.getElementById("loggerchartserverasav-flashdetect"));
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-48hours', item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filtered' ], 'now-48h', 'now', { convertToCount: 1 });
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-30days',  item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filtered' ], 'now-30d', 'now', { convertToCount: 1 });
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-60days',  item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filtered' ], 'now-60d', 'now', { convertToCount: 1 });
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-asav-year',    item.name, 'zmmtastats', [ 'filter_virus', 'filter_spam' ], [ 'filtered' ], 'now-1y',  'now', { convertToCount: 1 });
+        } else {
+            var nomta = document.getElementById('loggerchartserverasav-no-mta');
+            nomta.style.display = "block";
+            charts.style.display = "none";
+            ZaGlobalAdvancedStatsPage.setText(nomta, ZaMsg.Stats_NO_MTA);
+        }
     }
 }
 
@@ -67,8 +82,9 @@ function () {
 	this._monthImgID = Dwt.getNextId();		
 	this._yearImgID = Dwt.getNextId();	
 	html[idx++] = "<h1 style='display: none' id='loggerchartserverasav-flashdetect'></h1>";	
+	html[idx++] = "<h1 style='display: none' id='loggerchartserverasav-no-mta'></h1>";	
 	html[idx++] = "<h3 style='padding-left: 10px'>" + ZaMsg.Stats_AV_Header + "</h3>" ;	
-	html[idx++] = "<div>";	
+	html[idx++] = "<div id='loggerchartserverasav'>";	
 	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left' style='width: 90%'>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";

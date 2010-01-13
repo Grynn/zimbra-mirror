@@ -39,16 +39,31 @@ function() {
 
 ZaServerMessageVolumePage.prototype.showMe =  function(refresh) {
 	DwtTabViewPage.prototype.showMe.call(this);	
-	ZaGlobalAdvancedStatsPage.detectFlash(document.getElementById("loggerchartservermv-flashdetect"));
 	if(refresh && this._currentObject) {
 		this.setObject(this._currentObject);
 	}
 	if (this._currentObject) {
 	    var item = this._currentObject;
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-48hours', item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes' ], 'now-48h', 'now', { convertToCount: 1 });
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-30days',  item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes' ], 'now-30d', 'now', { convertToCount: 1 });
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-60days',  item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes' ], 'now-60d', 'now', { convertToCount: 1 });
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-year',    item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes' ], 'now-1y',  'now', { convertToCount: 1 });
+	    
+        var charts = document.getElementById('loggerchartservermv');
+        charts.style.display = "block";
+	    ZaGlobalAdvancedStatsPage.hideDIVs([ 'servermv-no-mta',
+	     'server-message-volume-48hours', 'server-message-volume-30days',
+         'server-message-volume-60days', 'server-message-volume-year' ]);
+	    
+	    var hosts = ZaGlobalAdvancedStatsPage.getMTAHosts();
+	    if (ZaGlobalAdvancedStatsPage.indexOf(hosts, item.name) != -1) {
+	        ZaGlobalAdvancedStatsPage.detectFlash(document.getElementById("loggerchartservermv-flashdetect"));
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-48hours', item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes' ], 'now-48h', 'now', { convertToCount: 1 });
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-30days',  item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes' ], 'now-30d', 'now', { convertToCount: 1 });
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-60days',  item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes' ], 'now-60d', 'now', { convertToCount: 1 });
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-volume-year',    item.name, 'zmmtastats', [ 'mta_volume' ], [ 'bytes' ], 'now-1y',  'now', { convertToCount: 1 });
+        } else {
+            var nomta = document.getElementById('loggerchartservermv-no-mta');
+            nomta.style.display = "block";
+            charts.style.display = "none";
+            ZaGlobalAdvancedStatsPage.setText(nomta, ZaMsg.Stats_NO_MTA);
+        }
 	}
 }
 
@@ -63,8 +78,9 @@ function () {
 	var idx = 0;
 	var html = new Array(50);
 	html[idx++] = "<h1 style='display: none' id='loggerchartservermv-flashdetect'></h1>";	
+	html[idx++] = "<h1 style='display: none' id='loggerchartservermv-no-mta'></h1>";	
 	html[idx++] = "<h3 style='padding-left: 10px'>" + ZaMsg.Stats_MV_Header + "</h3>" ;
-	html[idx++] = "<div>";	
+	html[idx++] = "<div id='loggerchartservermv'>";	
 	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left' style='width: 90%'>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";

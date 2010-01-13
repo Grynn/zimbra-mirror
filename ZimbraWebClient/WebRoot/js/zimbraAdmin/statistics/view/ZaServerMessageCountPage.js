@@ -39,16 +39,30 @@ function() {
 
 ZaServerMessageCountPage.prototype.showMe =  function(refresh) {
 	DwtTabViewPage.prototype.showMe.call(this);	
-	ZaGlobalAdvancedStatsPage.detectFlash(document.getElementById("loggerchartservermc-flashdetect"));
 	if(refresh && this._currentObject) {
 		this.setObject(this._currentObject);
 	}
 	if (this._currentObject) {
 	    var item = this._currentObject;
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-48hours', item.name, 'zmmtastats', [ 'mta_count' ], [ 'msgs' ], 'now-48h', 'now', { convertToCount: 1 });
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-30days',  item.name, 'zmmtastats', [ 'mta_count' ], [ 'msgs' ], 'now-30d', 'now', { convertToCount: 1 });
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-60days',  item.name, 'zmmtastats', [ 'mta_count' ], [ 'msgs' ], 'now-60d', 'now', { convertToCount: 1 });
-        ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-year',    item.name, 'zmmtastats', [ 'mta_count' ], [ 'msgs' ], 'now-1y',  'now', { convertToCount: 1 });
+        var charts = document.getElementById('loggerchartservermc');
+        charts.style.display = "block";
+	    ZaGlobalAdvancedStatsPage.hideDIVs([ 'servermc-no-mta',
+	     'server-message-count-48hours', 'server-message-count-30days',
+         'server-message-count-60days', 'server-message-count-year' ]);
+	    
+	    var hosts = ZaGlobalAdvancedStatsPage.getMTAHosts();
+	    if (ZaGlobalAdvancedStatsPage.indexOf(hosts, item.name) != -1) {
+	        ZaGlobalAdvancedStatsPage.detectFlash(document.getElementById("loggerchartservermc-flashdetect"));
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-48hours', item.name, 'zmmtastats', [ 'mta_count' ], [ 'msgs' ], 'now-48h', 'now', { convertToCount: 1 });
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-30days',  item.name, 'zmmtastats', [ 'mta_count' ], [ 'msgs' ], 'now-30d', 'now', { convertToCount: 1 });
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-60days',  item.name, 'zmmtastats', [ 'mta_count' ], [ 'msgs' ], 'now-60d', 'now', { convertToCount: 1 });
+            ZaGlobalAdvancedStatsPage.plotQuickChart('server-message-count-year',    item.name, 'zmmtastats', [ 'mta_count' ], [ 'msgs' ], 'now-1y',  'now', { convertToCount: 1 });
+        } else {
+            var nomta = document.getElementById('loggerchartservermc-no-mta');
+            nomta.style.display = "block";
+            charts.style.display = "none";
+            ZaGlobalAdvancedStatsPage.setText(nomta, ZaMsg.Stats_NO_MTA);
+        }
 	}
 }
 
@@ -63,8 +77,9 @@ function () {
     var html = new Array(50);
 	DwtTabViewPage.prototype._createHtml.call(this);
 	html[idx++] = "<h1 style='display: none' id='loggerchartservermc-flashdetect'></h1>";	
+	html[idx++] = "<h1 style='display: none' id='loggerchartservermc-no-mta'></h1>";	
 	html[idx++] = "<h3 style='padding-left: 10px'>" + ZaMsg.Stats_MC_Header + "</h3>" ;
-	html[idx++] = "<div>";	
+	html[idx++] = "<div id='loggerchartservermc'>";	
 	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left' style='width: 90%'>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
 	html[idx++] = "<tr valign='top'><td align='left'>";
