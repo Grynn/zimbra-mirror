@@ -2,7 +2,7 @@
  * ***** BEGIN LICENSE BLOCK *****
  *
  * Zimbra Collaboration Suite Zimlets
- * Copyright (C) 2006, 2007 Zimbra, Inc.
+ * Copyright (C) 2006-2010 Zimbra, Inc.
  *
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
@@ -13,14 +13,25 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  *
  * ***** END LICENSE BLOCK *****
- *@Author Raja Rao DV
+ * @Author Raja Rao DV
+ * 
  */
 
+/**
+ * @class
+ * This class represents the BroadSoft zimlet.
+ * 
+ * @extends	ZmZimletBase
+ */
 function com_zimbra_broadsoft() {
 }
 com_zimbra_broadsoft.prototype = new ZmZimletBase();
 com_zimbra_broadsoft.prototype.constructor = com_zimbra_broadsoft;
 
+/**
+ * Initializes the zimlet.
+ * 
+ */
 com_zimbra_broadsoft.prototype.init =
 function() {
 	ZmZimletBase.prototype.init.apply(this, arguments);
@@ -30,9 +41,17 @@ function() {
 };
 
 //---------------------------------------------------------------------------------
+//
 // CREATE A UNIQUE LIST VIEW
+//
 //---------------------------------------------------------------------------------
 
+/**
+ * @class
+ * This class represents the BroadSoft list view.
+ * 
+ * @extends	ZmListView
+ */
 BroadSoftListView = function(params) {
 	ZmListView.call(this, params);
 };
@@ -40,6 +59,10 @@ BroadSoftListView = function(params) {
 BroadSoftListView.prototype = new ZmListView;
 BroadSoftListView.prototype.constructor = BroadSoftListView;
 
+/**
+ * Gets the cell contents.
+ * 
+ */
 BroadSoftListView.prototype._getCellContents =
 function(htmlArr, idx, item, field, colIdx, params) {
 	if (field == "ph")
@@ -50,22 +73,34 @@ function(htmlArr, idx, item, field, colIdx, params) {
 	return idx;
 };
 
+//---------------------------------------------------------------------------------
+//
+// OVERRIDE ZIMLET FRAMEWORK FUNCTIONS AND CREATE TAB APPLICATION
+//
+//---------------------------------------------------------------------------------
 
-//---------------------------------------------------------------------------------
-// OVERRIDE ZIMLET FRAMEWORK FUNCTIONS AND CREATE APP
-//---------------------------------------------------------------------------------
+/**
+ * This method is called by the zimlet framework when the zimlet is double-clicked.
+ * 
+ */
 com_zimbra_broadsoft.prototype.doubleClicked =
 function() {
 	this.singleClicked();
 };
 
-
+/**
+ * This method is called by the zimlet framework when the zimlet is single-clicked.
+ * 
+ */
 com_zimbra_broadsoft.prototype.singleClicked =
 function() {
-	//DO NOTHING
+	// do nothing
 };
 
-//TOOLTIP..
+/**
+ * This method is called when the zimlet tool-tip is popped-up.
+ * 
+ */
 com_zimbra_broadsoft.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
 	var html = new Array();
@@ -78,12 +113,23 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	canvas.innerHTML = html.join("");
 };
 
+/**
+ * Creates the BroadSoft tab application.
+ * 
+ */
 com_zimbra_broadsoft.prototype._createBroadSoftApp =
 function() {
-	this._broadsoftPhoneApp = this.createApp("Phone", "Telephone", "BroadSoft Phone App");
+	this._broadsoftPhoneApp = this.createApp("Phone", "Telephone", "BroadSoft Phone Application");
 };
 
-com_zimbra_broadsoft.prototype.appActive = function(appName, active) {
+/**
+ * This method is called by the zimlet framework when the tab application is active.
+ * 
+ * @param	{String}	appName		the application
+ * @param	{Boolean}	active		<code>true</code> if the tab application is active
+ */
+com_zimbra_broadsoft.prototype.appActive =
+function(appName, active) {
 	if (active) {
 		this._appName = appName;
 		this._BroadSoftlistViews = [];
@@ -93,11 +139,23 @@ com_zimbra_broadsoft.prototype.appActive = function(appName, active) {
 	}
 };
 
-
-com_zimbra_broadsoft.prototype._hideApp = function(appName) {
-	//dont do anything
+/**
+ * Hides the tab application.
+ * 
+ */
+com_zimbra_broadsoft.prototype._hideApp =
+function(appName) {
+	// do nothing
 };
-com_zimbra_broadsoft.prototype.appLaunch = function(appName, params) {
+
+/**
+ * This method is called by the zimlet framework when the tab application is launched.
+ * 
+ * @param	{String}	appName		the tab application name
+ * @param	{Hash}		params		a hash of parameters
+ */
+com_zimbra_broadsoft.prototype.appLaunch =
+function(appName, params) {
 	if (this._broadsoftPhoneApp != appName)
 		return;
 
@@ -108,9 +166,10 @@ com_zimbra_broadsoft.prototype.appLaunch = function(appName, params) {
 	//this._selectDefaultFolder();
 };
 
-//---------------------------------------------------------------------------------
-// CREATE TREE VIEW AND CALL-LOGS LISTVIEW
-//---------------------------------------------------------------------------------
+/**
+ * Creates a tree view and call-logs list view.
+ * 
+ */
 com_zimbra_broadsoft.prototype._createTreeView =
 function() {
 	var html = new Array();
@@ -122,7 +181,6 @@ function() {
 
 	var overview = activeApp ? activeApp.getOverview() : null;
 	var element = overview.getHtmlElement();
-
 
 	var expandIconId = "broadsoft_expandIcon_" + Dwt.getNextId();
 	this.expandIconAndFolderTreeMap[expandIconId] = new Array();
@@ -142,6 +200,12 @@ function() {
 	element.onclick = AjxCallback.simpleClosure(this._handleTreeClick, this);
 };
 
+/**
+ * Handles a tree click event.
+ * 
+ * @param	{Object}		ev		the event
+ * @see		#_createTreeView
+ */
 com_zimbra_broadsoft.prototype._handleTreeClick =
 function(ev) {
 	if (AjxEnv.isIE) {
@@ -193,6 +257,11 @@ function(ev) {
 	this._treeClickAction(this.treeIdAndFolderItemMap[el.id]);
 };
 
+/**
+ * Handles a tree click action.
+ * 
+ * @param	{Object}	folder		the folder
+ */
 com_zimbra_broadsoft.prototype._treeClickAction =
 function(folder) {
 	switch (folder.name) {
@@ -211,6 +280,13 @@ function(folder) {
 	}
 };
 
+/**
+ * Gets the tree header HTML.
+ * 
+ * @param	{String}	treeName		the tree name
+ * @param	{String}	expandIconId	the expand icon id
+ * @return	{String}	the HTML
+ */
 com_zimbra_broadsoft.prototype._getTreeHeaderHTML =
 function(treeName, expandIconId) {
 	var html = new Array();
@@ -238,6 +314,11 @@ function(treeName, expandIconId) {
 	return html.join("");
 };
 
+/**
+ * Gets the folder HTML.
+ * 
+ * @return	{String}	the HTML
+ */
 com_zimbra_broadsoft.prototype._getFolderHTML =
 function(folder, expandIconId, childExpandIconId, isSubFolder, hasChild) {
 	var html = new Array();
@@ -285,6 +366,11 @@ function(folder, expandIconId, childExpandIconId, isSubFolder, hasChild) {
 	return html.join("");
 };
 
+/**
+ * Listens for tree events.
+ * 
+ * @param	{Object}	ev		the event
+ */
 com_zimbra_broadsoft.prototype._treeListener =
 function(ev) {
 	var txt = ev.item._text;
@@ -308,9 +394,11 @@ function(ev) {
 	}
 };
 
-
-
-
+/**
+ * Gets the header list.
+ * 
+ * @return	{Array}	an array of {@link DwtListHeaderItem} objects
+ */
 com_zimbra_broadsoft.prototype._getHeaderList =
 function() {
 	var hList = [];
@@ -319,9 +407,11 @@ function() {
 	return hList;
 };
 
-
-
-
+/**
+ * Adds toolbar buttons.
+ * 
+ * @param	{Hash}	param	a hash of parameters
+ */
 com_zimbra_broadsoft.prototype._addToolbarBtns =
 function(param) {
 		var app = appCtxt.getApp(this._appName);
@@ -339,22 +429,26 @@ function(param) {
 		this._saveBtn.setEnabled(param.enableSaveBtn);
 };
 
-
-
-//---------------------------------------------------------------------------------
-// PHONE NUMBER IS CLICKED...
-//---------------------------------------------------------------------------------
-//called by zimbraCore when link is clicked
+/**
+ * This method is called when a phone number is clicked.
+ * 
+ * @param	{Object}	myElement	the element
+ * @param	{String}	toPhoneNumber	the phone number
+ * 
+ */
 com_zimbra_broadsoft.prototype.clicked =
 function(myElement, toPhoneNumber) {
 	this._setZimletCurrentPreferences();
 	this._clickToCall(toPhoneNumber);
 };
 
-//---------------------------------------------------------------------------------
-// WHEN ITEMS ARE DROPPED ONTO ZIMLET...
-//---------------------------------------------------------------------------------
-com_zimbra_broadsoft.prototype.doDrop = function(obj) {
+/**
+ * This method is called when items are dropped onto the zimlet.
+ * 
+ * @param	{Object}	obj		the dropped object
+ */
+com_zimbra_broadsoft.prototype.doDrop =
+function(obj) {
 	this._setZimletCurrentPreferences();
 	switch (obj.TYPE) {
 		case "ZmMailMsg":
@@ -371,12 +465,18 @@ com_zimbra_broadsoft.prototype.doDrop = function(obj) {
 			break;
 
 		default:
-			this.displayErrorMessage("You somehow managed to drop a \"" + obj.TYPE
-					+ "\" but however this Zimlet does't support it for drag'n'drop.");
+			this.displayErrorMessage("BroadSoft Zimlet: Object type \"" + obj.TYPE
+					+ "\" is not supported for drag-and-drop.");
 	}
 };
 
-com_zimbra_broadsoft.prototype.msgDropped = function(zmObject) {
+/**
+ * Handles a dropped message.
+ * 
+ * @param	{ZmMailMsg|ZmConv}	zmObject		the dropped message
+ */
+com_zimbra_broadsoft.prototype.msgDropped =
+function(zmObject) {
 	var msgObj = zmObject.srcObj;//get access to source-object
 	if (zmObject.type == "CONV") {
 		msgObj = zmObject.getFirstHotMsg();
@@ -392,11 +492,27 @@ com_zimbra_broadsoft.prototype.msgDropped = function(zmObject) {
 	var respCallback = new AjxCallback(this, this._callContact, fromEmails[0]);
 	appCtxt.getApp(ZmApp.CONTACTS).getContactByEmail(fromEmails[0], respCallback);
 };
-com_zimbra_broadsoft.prototype.contactDropped = function(zmObject) {
+
+/**
+ * Handles a dropped contact.
+ * 
+ * @param	{ZmContact}	zmObject		the dropped contact
+ */
+com_zimbra_broadsoft.prototype.contactDropped =
+function(zmObject) {
 	this._callContact(null, zmObject, false);
 }
 
-com_zimbra_broadsoft.prototype._callContact = function(email, contact, isContactSrcObj) {
+/**
+ * Calls the contact.
+ * 
+ * @param	{Object}	email		an email
+ * @param	{ZmContact}	contact		the contact
+ * @param	{Boolean}	isContactSrcObj	<code>true</code> if the contact source object
+ * 
+ */
+com_zimbra_broadsoft.prototype._callContact =
+function(email, contact, isContactSrcObj) {
 
 	if (contact == undefined) {
 		appCtxt.getAppController().setStatusMsg("No Contact found for this email: " + email, ZmStatusView.LEVEL_WARNING);
@@ -414,7 +530,15 @@ com_zimbra_broadsoft.prototype._callContact = function(email, contact, isContact
 	this._clickToCall(phoneNumber);
 };
 
-com_zimbra_broadsoft.prototype._getPhoneNumber = function(contact, isContactSrcObj) {
+/**
+ * Gets the phone number.
+ * 
+ * @param	{ZmContact}	contact		the contact
+ * @param	{Boolean}	isContactSrcObj	<code>true</code> if the contact source object
+ * @return	{String}	the phone number or an empty string for none
+ */
+com_zimbra_broadsoft.prototype._getPhoneNumber =
+function(contact, isContactSrcObj) {
 	var phoneNumber = "";
 	try {
 		if (isContactSrcObj) {
@@ -441,41 +565,79 @@ com_zimbra_broadsoft.prototype._getPhoneNumber = function(contact, isContactSrcO
 
 };
 
-
 //---------------------------------------------------------------------------------
+//
 // BROADSOFT API URLS
+//
 //---------------------------------------------------------------------------------
+
+/**
+ * Gets the "Click2Call" url.
+ * 
+ * @param	{String}	phoneNumberToCall		the phone number
+ * @return	{String}	the url
+ */
 com_zimbra_broadsoft.prototype.getClick2CallURL =
 function(phoneNumberToCall) {
 	return "https://" + this.broadsoft_server + "/com.broadsoft.xsi-actions/v1.0/user/" + this.broadsoft_email + "/calls/new/" + phoneNumberToCall;
 };
 
+/**
+ * Gets the "CallAnyWhere" url.
+ * 
+ * @return	{String}	the url
+ */
 com_zimbra_broadsoft.prototype.getCallAnyWhereURL =
 function() {
 	return "https://" + this.broadsoft_server + "/com.broadsoft.xsi-actions/v1.0/user/" + this.broadsoft_email + "/services/BroadWorksAnywhere";
 };
 
+/**
+ * Gets the "CallLogs" url.
+ * 
+ * @return	{String}	the url
+ */
 com_zimbra_broadsoft.prototype.getCallLogsURL =
 function() {
 	return "https://" + this.broadsoft_server + "/com.broadsoft.xsi-actions/v1.0/user/" + this.broadsoft_email + "/directories/CallLogs";
 };
 
+/**
+ * Gets the "Calls" url.
+ * 
+ * @return	{String}	the url
+ */
 com_zimbra_broadsoft.prototype.getCallsURL =
 function() {
 	return "https://" + this.broadsoft_server + "/com.broadsoft.xsi-actions/v1.0/user/" + this.broadsoft_email + "/calls";
 };
 
+/**
+ * Gets the "CancelCalls" url.
+ * 
+ * @return	{String}	the url
+ */
 com_zimbra_broadsoft.prototype.getCancelCallsURL =
 function() {
 	return "https://" + this.broadsoft_server + "/com.broadsoft.xsi-actions/v1.0/user/" + this.broadsoft_email + "/calls/" + this.callId;
 };
 
+/**
+ * Gets the "DoNotDisturb" url.
+ * 
+ * @return	{String}	the url
+ */
 com_zimbra_broadsoft.prototype.getDoNotDisturbURL =
 function() {
 	return" https://" + this.broadsoft_server + "/com.broadsoft.xsi-actions/v1.0/user/" + this.broadsoft_email + "/services/DoNotDisturb";
 };
 
-
+/**
+ * Calls the zimlet JSP.
+ * 
+ * @param	{String}	turnOn	"true" or "false"
+ * @param	{String}	actionName	the action name ("doNotDisturb" or "callAnyWhere")
+ */
 com_zimbra_broadsoft.prototype._callJSP =
 function(turnON, actionName) {
 	var pArray =  new Array();
@@ -490,22 +652,37 @@ function(turnON, actionName) {
 
 };
 
+/**
+ * Calls the zimlet JSP for "DoNotDisturb" action
+ * 
+ * @param	{String}	turnOn	"true" or "false"
+ */
 com_zimbra_broadsoft.prototype._callJspForDoNotDisturb =
 function(turnON) {
 	this._callJSP(turnON, "doNotDisturb");
 };
 
+/**
+ * Calls the zimlet JSP for "CallAnyWhere" action
+ * 
+ * @param	{String}	turnOn	"true" or "false"
+ */
 com_zimbra_broadsoft.prototype._callJspForCallAnyWhere =
 function(turnON) {
 	//this._callJSP(turnON, "callAnyWhere");
 };
 
-
-
 //---------------------------------------------------------------------------------
-// BROADSOFT OPERATIONS...
+//
+// BROADSOFT OPERATIONS
+//
 //---------------------------------------------------------------------------------
-//===========
+
+/**
+ * Click to call operation.
+ * 
+ * @param	{String}	toPhoneNumber	the phone number
+ */
 com_zimbra_broadsoft.prototype._clickToCall =
 function(toPhoneNumber) {
 
@@ -515,19 +692,25 @@ function(toPhoneNumber) {
 	var hdrs = new Array();
 	hdrs["Authorization"] = this.make_basic_auth(this.broadsoft_email, this.broadsoft_password);
 	var feedUrl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(this.getClick2CallURL(toPhoneNumber));
-	AjxRpc.invoke(null, feedUrl, hdrs, new AjxCallback(this, this._reponseHandler), false);
+	AjxRpc.invoke(null, feedUrl, hdrs, new AjxCallback(this, this._responseHandler), false);
 
 };
-com_zimbra_broadsoft.prototype._reponseHandler =
+
+/**
+ * Handles the click to call response.
+ * 
+ * @param	{Object}	response	the response
+ * @see		#_clickToCall
+ */
+com_zimbra_broadsoft.prototype._responseHandler =
 function(response) {
 //	this._getCurrentCalls();
 };
-//===========
 
-
-
-
-//===========
+/**
+ * Anywhere operation.
+ * 
+ */
 com_zimbra_broadsoft.prototype._getBroadsoftAnywhere =
 function() {
 	var hdrs = new Array();
@@ -536,13 +719,20 @@ function() {
 	AjxRpc.invoke(null, feedUrl, hdrs, new AjxCallback(this, this._getBroadsoftAnywhereHdlr), true);
 };
 
+/**
+ * Handles the anywhere response.
+ * 
+ * @param	{Object}	response	the response
+ * @see		#_getBroadsoftAnywhere
+ */
 com_zimbra_broadsoft.prototype._getBroadsoftAnywhereHdlr =
 function(response) {
 };
-//===========
 
-
-//===========
+/**
+ * Check do not disturb operation.
+ * 
+ */
 com_zimbra_broadsoft.prototype._checkDoNotDisturb =
 function() {
 	var hdrs = new Array();
@@ -551,6 +741,12 @@ function() {
 	AjxRpc.invoke(null, feedUrl, hdrs, new AjxCallback(this, this._checkDoNotDisturbHdlr), true);
 };
 
+/**
+ * Handles the do not disturb response.
+ * 
+ * @param	{Object}	response	the response
+ * @see		#_checkDoNotDisturb
+ */
 com_zimbra_broadsoft.prototype._checkDoNotDisturbHdlr =
 function(response) {
 	try {
@@ -566,14 +762,14 @@ function(response) {
 	}
 	if (this.isDoNotDisturbON_server == "true") {
 		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE,  ZmToast.PAUSE,  ZmToast.PAUSE, ZmToast.FADE_OUT ];
-		appCtxt.getAppController().setStatusMsg("Please Note: Do Not Disturb Is ON", ZmStatusView.LEVEL_WARNING, null, transitions);
+		appCtxt.getAppController().setStatusMsg("Note: Do Not Disturb Is ON", ZmStatusView.LEVEL_WARNING, null, transitions);
 	}
 };
-//===========
 
-
-
-//===========
+/**
+ * Current calls operation.
+ * 
+ */
 com_zimbra_broadsoft.prototype._getCurrentCalls =
 function() {
 	var hdrs = new Array();
@@ -582,6 +778,12 @@ function() {
 	AjxRpc.invoke(null, feedUrl, hdrs, new AjxCallback(this, this._getCurrentCallsHdlr), true);
 };
 
+/**
+ * Handles the current calls response.
+ * 
+ * @param	{Object}	response	the response
+ * @see		#_getCurrentCalls
+ */
 com_zimbra_broadsoft.prototype._getCurrentCallsHdlr =
 function(response) {
 	try {
@@ -600,14 +802,12 @@ function(response) {
 	} catch(e) {
 	}
 };
-//===========
 
-
-
-//---------------------------------------------------------------------------------
-// SHOW CALL-LOGS ...
-//---------------------------------------------------------------------------------
-//===========
+/**
+ * Get call logs operation.
+ * 
+ * @param	{Object}	callType		the call type
+ */
 com_zimbra_broadsoft.prototype._getCallLogs =
 function(callType) {
 	if (callType && this._hasCashedCallLogs) {
@@ -622,6 +822,12 @@ function(callType) {
 	AjxRpc.invoke(null, feedUrl, hdrs, new AjxCallback(this, this._getCallLogsHdlr, callType), true);
 };
 
+/**
+ * Handles the call logs response.
+ * 
+ * @param	{Object}	response	the response
+ * @see		#_getCallLogs
+ */
 com_zimbra_broadsoft.prototype._getCallLogsHdlr =
 function(callType, response) {
 	var xml = response.xml;
@@ -644,7 +850,11 @@ function(callType, response) {
 
 };
 
-
+/**
+ * Show call logs.
+ * 
+ * @param	{Object}	callType		the call type
+ */
 com_zimbra_broadsoft.prototype._showCallLogs =
 function(callType) {
 	if (callType == undefined)
@@ -658,14 +868,25 @@ function(callType) {
 	this._listView.set(this._callLogs[callType], 1, true);
 };
 
-
+/**
+ * Handles call toolbar button
+ * 
+ * @see	#_addToolbarBtns
+ */
 com_zimbra_broadsoft.prototype._handleCallToolbarButton =
 function() {
 	var selection = this._listView.getSelection();
 	if(selection.length > 0) {
 		this._clickToCall(selection[0].ph);
 	}
-}
+};
+
+/**
+ * Stores the call logs.
+ * 
+ * @param	{Array}		callLogsList		the call logs list
+ * @param	{String}	category		the category
+ */
 com_zimbra_broadsoft.prototype._storeCallLogs =
 function(callLogsList, category) {
 	this._callLogs[category] = new AjxVector();
@@ -684,6 +905,12 @@ function(callLogsList, category) {
 	}
 };
 
+/**
+ * Formats date time.
+ * 
+ * @param	{Date}	date		the date
+ * @return	{String}	the formatted date string
+ */
 com_zimbra_broadsoft.prototype._formatDateTime =
 function(dateTime) {			
 	//get time and date
@@ -693,6 +920,12 @@ function(dateTime) {
 	return date + " " + time;
 };
 
+/**
+ * Formats the date.
+ * 
+ * @param	{Date}	d	the date
+ * @return	{String}	the formatted date string
+ */
 com_zimbra_broadsoft.prototype._formatDate =
 function(d) {
 	var tmp1 = d.split("-");
@@ -712,7 +945,13 @@ function(d) {
 
 };
 
-
+/**
+ * Makes basic auth.
+ * 
+ * @param	{String}	user		the username
+ * @param	{String}	password	the password
+ * @return	{String}	the basic auth string
+ */
 com_zimbra_broadsoft.prototype.make_basic_auth =
 function (user, password) {
 	var tok = user + ':' + password;
@@ -721,12 +960,10 @@ function (user, password) {
 };
 
 
-
-
-
-//---------------------------------------------------------------------------------
-// PREFERENCE VIEW
-//---------------------------------------------------------------------------------
+/**
+ * Sets the current preferences.
+ * 
+ */
 com_zimbra_broadsoft.prototype._setZimletCurrentPreferences =
 function() {
 	this.broadsoft_email = this.getUserProperty("broadsoft_email");
@@ -768,17 +1005,23 @@ function() {
 	} else if (document.getElementById("broadsoft_enableDoNotDisturb") != null && this.broadsoft_incomingCallsRadio == "CALL_DONOTDISTURB") {
 		document.getElementById("broadsoft_enableDoNotDisturb").checked = true;
 	}
-
-
 };
 
+/**
+ * Shows the preferences view.
+ * 
+ */
 com_zimbra_broadsoft.prototype._showPreferencesView =
 function() {
 	var app = appCtxt.getApp(this._appName);
 	app.setContent(this._createPreferenceHTML());
 };
 
-
+/**
+ * Creates the preferences HTML.
+ * 
+ * @return	{String}	the HTML
+ */
 com_zimbra_broadsoft.prototype._createPreferenceHTML =
 function() {
 	var html = new Array();
@@ -850,6 +1093,11 @@ function() {
 	return html.join("");
 };
 
+/**
+ * Listens for the OK preferences button.
+ * 
+ * @see		#_addToolbarBtns
+ */
 com_zimbra_broadsoft.prototype._okPreferenceBtnListener =
 function() {
 	var _saveRequired = false;
@@ -905,15 +1153,19 @@ function() {
 
 	//this._mainDlg.popdown();
 	if (_saveRequired) {
-		this.saveUserProperties(new AjxCallback(this, this._showpreferenceSavedMsg));
+		this.saveUserProperties(new AjxCallback(this, this._showPreferenceSavedMsg));
 	}
 };
 
-com_zimbra_broadsoft.prototype._showpreferenceSavedMsg =
+/**
+ * Shows the preference saved message.
+ * 
+ */
+com_zimbra_broadsoft.prototype._showPreferenceSavedMsg =
 function() {
 	var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
 	appCtxt.getAppController().setStatusMsg("Preferences Saved", ZmStatusView.LEVEL_INFO, null, transitions);
-}
+};
 
 
 
