@@ -17,6 +17,7 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ page session="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="zd" tagdir="/WEB-INF/tags/desktop" %>
 <%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
 <%@ taglib prefix="zm" uri="com.zimbra.zm" %>
 
@@ -25,6 +26,8 @@
 <jsp:useBean id="eventBean" class="com.zimbra.cs.offline.jsp.ClientEventBean"/>
 
 <% pageContext.setAttribute("devMode", request.getParameter("dev")); %>
+
+<zd:auth/>
 
 ${zdf:onLogin(eventBean)}
 

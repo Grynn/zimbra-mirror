@@ -249,6 +249,8 @@ if ($is_upgrade) {
     system("rm -rf \"$tmpdir\"");
 }
 
+system("chmod 700 \"$data_root\"");
+
 print get_message('Success', [$ENV{USER}]), "\n\n";
 print get_message('RunCommand'), "\n";
 print "\"$app_root/linux/prism/zdclient\" -webapp \"$data_root/zdesktop.webapp\" -override \"$data_root/zdesktop.webapp/override.ini\" -profile \"$data_root/profile\"\n\n";

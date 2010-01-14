@@ -3,7 +3,10 @@
 <%@ page import="java.util.Locale,com.zimbra.cs.zclient.ZAuthResult" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
+<%@ taglib prefix="zd" tagdir="/WEB-INF/tags/desktop" %>
 <%@ taglib prefix="zm" uri="com.zimbra.zm" %>
+
+<zd:auth/>
 
 <%!
     static String getParameter(HttpServletRequest request, String pname, String defValue) {

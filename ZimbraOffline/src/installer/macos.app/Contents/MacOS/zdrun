@@ -151,4 +151,5 @@ if ($is_upgrade) {
     system("rm -rf \"$tmpdir\"");
 }
 
+system("/bin/chmod 700 \"$data_root\"");
 launch_prism();
