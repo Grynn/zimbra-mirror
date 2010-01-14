@@ -339,6 +339,11 @@ ZaGlobalAdvancedStatsPage.plotChart = function (id, fields, colDef, newData) {
     yAxis.labelFunction = ZaGlobalAdvancedStatsPage.formatLabel;
     var timeAxis = new YAHOO.widget.TimeAxis();
     
+    if (newData.length > 1) {
+        var dx = newData[1].timestamp.getTime() - newData[0].timestamp.getTime();
+        dx = dx / 1000 / 60;
+        timeAxis.title = AjxMessageFormat.format(ZaMsg.NAD_AdvStatsIntervalFormatMinutes, [ dx ]);
+    }
     timeAxis.labelFunction = function (value) {
         var ts0 = newData[0].timestamp.getTime();
         var ts1 = newData[newData.length - 1].timestamp.getTime();
@@ -713,5 +718,4 @@ function () {
 	a.onclick = function () { ZaGlobalAdvancedStatsPage.insertChartHTML(element); };
 	div.appendChild(a);
 	element.appendChild(div);
-	//ZaGlobalAdvancedStatsPage.insertChartHTML(element);
 }
