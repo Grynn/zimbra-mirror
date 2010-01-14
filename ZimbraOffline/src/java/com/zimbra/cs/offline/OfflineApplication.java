@@ -23,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.zimbra.common.localconfig.LC;
@@ -46,6 +47,8 @@ public class OfflineApplication extends ZimbraApplication {
         "db", "directory", "wildfire", "versions-init", "default-volumes"
     };
     private static String ZIMBRA_DB_NAME = "zimbra";
+    
+    private List<String> extensionNames;
         
     @Override
     public String getId() {
@@ -65,6 +68,17 @@ public class OfflineApplication extends ZimbraApplication {
     @Override
     public boolean supports(String className) {
         return false;
+    }
+    
+    @Override
+    public void addExtensionName(String name) {
+        (extensionNames == null ? extensionNames = new ArrayList<String>() : extensionNames).add(name);
+        OfflineLog.offline.info("added extension: %s", name);
+    }
+    
+    @Override
+    public List<String> getExtensionNames() {
+        return extensionNames;
     }
 
     @Override

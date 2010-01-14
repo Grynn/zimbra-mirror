@@ -1,8 +1,10 @@
 package com.zimbra.cs.mailbox;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -14,23 +16,57 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
+import com.zimbra.cs.extension.ExtensionUtil;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.session.PendingModifications.Change;
-import com.zimbra.zimbrasync.client.ExchangeSyncFactory;
-import com.zimbra.zimbrasync.client.cmd.HttpStatusException;
-import com.zimbra.zimbrasync.client.cmd.Request;
-import com.zimbra.zimbrasync.client.cmd.HttpStatusException.NeedProvisioningException;
+import com.zimbra.cs.util.ZimbraApplication;
 
 public class ExchangeMailbox extends ChangeTrackingMailbox {
-    private ExchangeSyncFactory syncFactory;
+
+    private static final String EXCHANGE_HELPER_CLASS = "com.zimbra.cs.offline.OfflineExchangeHelper";
+    private static final Class[] EXCHANGE_HELPER_CONSTRUCTOR_SIGNATURE = {
+        Mailbox.class, DataSource.class
+    };
+    
+    private static boolean isXsyncEnabled;
+    private static boolean isXsyncExtChecked;
+    
+    static boolean isXsyncEnabled() {
+        if (!isXsyncExtChecked) {
+            List<String> extNames = ZimbraApplication.getInstance().getExtensionNames();
+            if (extNames != null) {
+                for (String ext : extNames)
+                    if (OfflineConstants.EXTENSION_XSYNC.equals(ext))
+                        isXsyncEnabled = true;
+            }
+            isXsyncExtChecked = true;
+        }
+        return isXsyncEnabled;
+    }
+    
+    private ExchangeHelper helper;
     
     public ExchangeMailbox(MailboxData data) throws ServiceException {
         super(data);
-        syncFactory = ExchangeSyncFactory.getInstance();
+        
+        if (isXsyncEnabled()) {
+            try {
+                Class cmdClass = null;
+                try {
+                    cmdClass = Class.forName(EXCHANGE_HELPER_CLASS);
+                } catch (ClassNotFoundException x) {
+                    cmdClass = ExtensionUtil.findClass(EXCHANGE_HELPER_CLASS);
+                }
+                Constructor constructor = cmdClass.getConstructor(EXCHANGE_HELPER_CONSTRUCTOR_SIGNATURE);
+                helper = (ExchangeHelper)constructor.newInstance(new Object[] {this, getDataSource()});
+            } catch (Exception x) {
+                throw ServiceException.FAILURE("failed init exchange mailbox", x);
+            }
+        }
     }
     
     @Override
@@ -93,7 +129,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
     private static final OperationContext sContext = new TracelessContext();
     private static final Map<Integer, Pair<Integer, String>> sSendUIDs = new HashMap<Integer, Pair<Integer, String>>();
     
-    private int sendPendingMessages(boolean isOnRequest) throws HttpStatusException, ServiceException {
+    private int sendPendingMessages(boolean isOnRequest) throws ServiceException {
         int sentCount = 0;
         for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE); iterator.hasNext(); ) {
             int id = iterator.next();
@@ -126,7 +162,8 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
             boolean saveToSent = (ds.isSaveToSent()) && getAccount().isPrefSaveToSent();
             
             try {
-                new Request(syncFactory.getSyncSettings(ds), syncFactory.getPolicyKey(this)).doSendMail(msg.getContentStream(), msg.getSize(), saveToSent);
+                //new Request(syncFactory.getSyncSettings(ds), syncFactory.getPolicyKey(this))
+                helper.doSendMail(msg.getContentStream(), msg.getSize(), saveToSent);
             } catch (ServiceException x) {
                 //TODO:
                 ZimbraLog.xsync.warn("send mail failure (id=%d)", msg.getId(), x);
@@ -187,6 +224,9 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
 
     @Override
     public void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
+        if (!isXsyncEnabled())
+            return;
+        
         if (!OfflineSyncManager.getInstance().isServiceActive()) {
             if (isOnRequest)
                 OfflineLog.offline.debug("offline sync request ignored");
@@ -202,10 +242,11 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
                     int count = 0;
                     try {
                         count = sendPendingMessages(isOnRequest);
-                    } catch (NeedProvisioningException x) {
-                        ZimbraLog.xsync.info("Server requiring Policy Provision. Force sync to trigger Provision.");
-                        isOnRequest = true;
-                    } catch (HttpStatusException x) {
+//                    } catch (NeedProvisioningException x) {
+//                        ZimbraLog.xsync.info("Server requiring Policy Provision. Force sync to trigger Provision.");
+//                        isOnRequest = true;
+//                    } catch (HttpStatusException x) {
+                    } catch (Exception x) {
                         //TODO
                         ZimbraLog.xsync.warn("send mail failure", x);
                     }

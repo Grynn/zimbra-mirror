@@ -57,11 +57,8 @@
 	<classpathentry kind="lib" path="jars/gdata-core-1.0.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-contacts-3.0.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-contacts-meta-3.0.jar"/>
-
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSyncClient"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSyncCommon"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraTagLib"/>
 	<classpathentry kind="output" path="build/classes"/>

@@ -56,6 +56,9 @@
 	<property name="zsync.client.build.dir" location="${zsync.client.dir}/build" />
 	<property name="zsync.client.classes.dir" location="${zsync.client.build.dir}/classes" />
 
+        <property name="zdext.dir" location="../ZimbraOfflineExt"/>
+        <property name="zdext.build.dir" location="${zdext.dir}/build"/>
+
 	<condition property="is-windows">
 		<os family="windows" />
 	</condition>
@@ -146,8 +149,6 @@
 		<pathelement location="${common.classes.dir}" />
 		<pathelement location="${build.classes.dir}" />
 		<pathelement location="${server.classes.dir}" />
-		<pathelement location="${zsync.common.classes.dir}" />
-		<pathelement location="${zsync.client.classes.dir}" />
 		<fileset dir="${common.jars.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -188,11 +189,15 @@
 			<property name="zimbra.buildinfo.type" value="${offline.appid}"/>
 			<property name="zimbra.buildinfo.release" value="${offline.name}"/>
 		</ant>
-		<ant dir="${zsync.common.dir}" target="jar" inheritAll="false" />
-		<ant dir="${zsync.client.dir}" target="jar" inheritAll="false" />
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="offline.class.path" target="1.5">
 			<src refid="all.java.path" />
 		</javac>
+	</target>
+
+	<target name="offline-ext-jars">
+		<ant dir="${zsync.common.dir}" target="jar" inheritAll="false" />
+		<ant dir="${zsync.client.dir}" target="jar" inheritAll="false" />
+		<ant dir="${zdext.dir}" target="jar" inheritAll="false" />
 	</target>
 
 	<target name="offline-jar" depends="offline-compile" description="Creates the jar file">
@@ -225,8 +230,6 @@
 		<copy file="${config.dir}/web.xml" todir="${dist.dir}/jetty/webapps/service/WEB-INF" overwrite="true"/>
 		<copy todir="${dist.dir}/jetty/webapps/service/WEB-INF/lib">
 			<fileset dir="${build.dir}" includes="${jarfile}"/>
-			<fileset dir="${zsync.common.build.dir}" includes="zsynccommon.jar"/>
-			<fileset dir="${zsync.client.build.dir}" includes="zsyncclient.jar"/>
 		</copy>
 	</target>
 
@@ -670,8 +673,10 @@
 			<param name="param.production" value="false" />
 		</antcall>
 		<copy todir="${zimbra.home.dir}" overwrite="true">
-			<fileset dir="${dist.dir}"/>
+			<fileset dir="${dist.dir}" includes="app/**,data/**"/>
 		</copy>
+		<unzip src="${dist.dir}/ext/exchange.zip" dest="${zimbra.home.dir}/app/lib/ext/exchange" overwrite="true"/>
+
 		<mkdir dir="${zimbra.sqlite.dir}" />
 		<if>
 			<isset property="is-unix" />
@@ -722,6 +727,10 @@
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
 			<arg line="-e zimbra_home='${param.data.dir}' -f" />
+		</java>           	
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<arg line="-e zimbra_extension_directory='${param.app.dir}/lib/ext'" />
 		</java>           	
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
@@ -807,6 +816,18 @@
 		<replace file="${dist.data.dir}/bin/zdesktop" token="@install.data.root@" value="${param.data.dir}"/>
 	
 		<chmod file="${dist.data.dir}/bin/zdesktop" perm="ugo+x" />
+
+		<antcall target="offline-make-dist-ext"/>
+	</target>
+
+	<target name="offline-make-dist-ext">
+		<antcall target="offline-ext-jars"/>
+		<mkdir dir="${dist.dir}/ext"/>
+		<zip destfile="${dist.dir}/ext/exchange.zip">
+			<fileset dir="${zsync.common.build.dir}" includes="zsynccommon.jar"/>
+			<fileset dir="${zsync.client.build.dir}" includes="zsyncclient.jar"/>
+			<fileset dir="${zdext.build.dir}" includes="zdext.jar"/>
+		</zip>
 	</target>
 
 	<target name="offline-prep-launcher">

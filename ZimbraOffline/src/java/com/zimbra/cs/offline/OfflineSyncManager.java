@@ -722,7 +722,7 @@ public class OfflineSyncManager {
                 }
             }
         } catch (Exception e) {
-            Zimbra.halt("Zimbra Desktop failed to initialize accounts. Shutting down...");
+            Zimbra.halt("Zimbra Desktop failed to initialize accounts. Shutting down...", e);
         }
     }
 

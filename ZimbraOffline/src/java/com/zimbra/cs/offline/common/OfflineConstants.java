@@ -31,13 +31,20 @@ public interface OfflineConstants {
     
     public static final QName CLIENT_EVENT_NOTIFY_REQUEST = QName.get("ClientEventNotifyRequest", NAMESPACE);
     public static final QName CLIENT_EVENT_NOTIFY_RESPONSE = QName.get("ClientEventNotifyResponse", NAMESPACE);
-	
+    
+    public static final QName GET_EXTENSIONS_REQUEST = QName.get("GetExtensionsRequest", NAMESPACE);
+    public static final QName GET_EXTENSIONS_RESPONSE = QName.get("GetExtensionsResponse", NAMESPACE);
+    
     public static final String A_Event = "e";
     public static final String EVENT_UI_LOAD_BEGIN = "ui_load_begin";
     public static final String EVENT_UI_LOAD_END = "ui_load_end";
     public static final String EVENT_NETWORK_UP = "network_up";
     public static final String EVENT_NETWORK_DOWN = "network_down";
     public static final String EVENT_SHUTTING_DOWN = "shutting_down";
+
+    public static final String EXTENSION = "ext";
+    public static final String EXTENSION_NAME = "name";
+    public static final String EXTENSION_XSYNC = "xsync";
 
     public static enum SyncStatus {
         unknown, offline, online, running, authfail, error
