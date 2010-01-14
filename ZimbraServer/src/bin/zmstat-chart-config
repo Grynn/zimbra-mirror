@@ -209,14 +209,15 @@ _HERE_
 
 sub getFDstatConfig() {
     print <<_HERE_;
-  <chart title="Host $ZIMBRA_HOSTNAME: Total file descriptors open"
+  <chart title="Host $ZIMBRA_HOSTNAME: Open file descriptor count"
       category="IO"
       infile="$fdstatCsv"
       outfile="${ZIMBRA_HOSTNAME}_fd_stat.png"
       yAxis="fd"
       showRaw="false"
       showMovingAvg="true">
-    <plot data="fd_count" legend="file descriptors open"/>
+    <plot data="fd_count" legend="total system file descriptors open"/>
+    <plot data="mailboxd_fd_count" legend="mailboxd file descriptors open"/>
   </chart>
 _HERE_
 }

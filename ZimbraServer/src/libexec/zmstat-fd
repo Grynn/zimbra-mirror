@@ -26,10 +26,55 @@ use Zimbra::Mon::Zmstat;
 use Zimbra::Mon::Logger;
 use vars qw($LOGFH $CONSOLE $LOGFILE $ROTATE_NOW $ROTATE_DEFER);
 
-zmstatInit();
+Zimbra::Mon::Zmstat::osCheck();
+Zimbra::Mon::Zmstat::getLocalConfig('zimbra_home', 'zimbra_user', 'zimbra_server_hostname',
+               'zmstat_log_directory', 'zmstat_interval',
+               'zmstat_disk_interval');
+my $zuser = $Zimbra::Mon::Zmstat::LC{zimbra_user};
+my ($zuid,$zgid) = (getpwnam($zuser))[2,3];
+
+if (@ARGV > 0 && $ARGV[0] eq 'stop') {
+	my $dir = getPidFileDir();
+	my $pidFile = "$dir/zmstat-fd-real.pid";
+	my $pid = readPidFile($pidFile);
+    if (!kill(0, $pid)) {
+        unlink($pidFile);
+    } elsif (kill(15, $pid) == 1) {  # SIGTERM
+        unlink($pidFile);
+    } elsif (kill(9, $pid) == 1) {
+    	unlink($pidFile);
+    }
+	exit;
+}
+if (@ARGV > 0 && $ARGV[0] eq 'rotate') {
+	my $dir = getPidFileDir();
+	my $pidFile = "$dir/zmstat-fd-real.pid";
+	my $pid = readPidFile($pidFile);
+    kill(1, $pid);
+}
+
+if ($< != 0) {
+    Zimbra::Mon::Zmstat::userCheck();
+    createPidFile('zmstat-fd.pid');
+    $SIG{TERM} = sub {
+    	system("sudo /opt/zimbra/libexec/zmstat-fd stop");
+    };
+    $SIG{INT} = sub {
+    	system("sudo /opt/zimbra/libexec/zmstat-fd stop");
+    };
+    $SIG{HUP} = sub {
+    	system("sudo /opt/zimbra/libexec/zmstat-fd rotate");
+    };
+    my $args = "";
+    if (@ARGV > 0) {
+    	$args = " " . join(' ', @ARGV);
+    }
+    system("sudo /opt/zimbra/libexec/zmstat-fd$args");
+    exit;
+}
 
 my $STAT = '/proc/sys/fs/file-nr';
-my $HEADING = 'timestamp, fd_count';
+my $HEADING = 'timestamp, fd_count, mailboxd_fd_count';
 
 sub get_fd_stat() {
     open(STAT, "<$STAT") || die "Can't open $STAT: $!";
@@ -39,6 +84,47 @@ sub get_fd_stat() {
     close(STAT);
     $stat;
 }
+sub get_mbox_stat() {
+    my $mbox_pid = get_mboxd_pid();
+    return 0 if ($mbox_pid == 0);
+    
+    opendir(PROC, "/proc/$mbox_pid/fd") || warn $!;
+    my @ents = grep { /^[0-9]+/ } readdir(PROC);
+    closedir(PROC);
+    return scalar @ents;
+}
+
+my $MBOX_PID_FILE = '/opt/zimbra/log/zmmailboxd_java.pid';
+sub get_mboxd_pid() {
+    my $pid = 0;
+    if (-f $MBOX_PID_FILE) {
+        eval {
+            open(PID_FILE, "<$MBOX_PID_FILE") || die $!;
+            $pid = <PID_FILE>;
+            chomp($pid); chomp($pid);
+            close PID_FILE;
+        };
+        if ($@) {
+            print STDERR "Unable to find pid file, falling back: $@\n";
+        }
+    }
+    if (!$pid) {
+        eval {
+            open(PS, "ps -ef | grep [j]etty.xml | awk '{ print \$2 }' |")
+                    || die $!;
+            $pid = <PS>;
+            chomp($pid); chomp($pid);
+            close(PS);
+        };
+        if ($@) {
+            print STDERR "Unable to manually obtain mailboxd pid: $@\n";
+        } elsif (!$pid) {
+            print STDERR "Unable to determine mailboxd pid\n";
+        }
+    }
+    return $pid;
+}
+
 sub sighup {
     if (!$CONSOLE) {
         $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
@@ -76,7 +162,7 @@ if (!$opts_good) {
     print STDERR "\n";
     usage();
 }
-createPidFile('zmstat-fd.pid');
+createPidFile('zmstat-fd-real.pid');
 
 my $date = getDate();
 if ($CONSOLE) {
@@ -85,20 +171,23 @@ if ($CONSOLE) {
     
 } else {
     $LOGFH = openLogFile($LOGFILE, $HEADING);
+    chown $zuid, $zgid, $LOGFILE;
 }
 waitUntilNiceRoundSecond($interval);
 
 while (1) {
     my $stat = get_fd_stat();
+    my $mbox_stat = get_mbox_stat();
     my $tstamp = getTstamp();
     my $currDate = getDate();
     if ($currDate ne $date && !$CONSOLE) {
         $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING, $date);
+        chown $zuid, $zgid, $LOGFILE;
         $date = $currDate;
     }
     $ROTATE_DEFER = 1;
-    $LOGFH->print("$tstamp, $stat\n");
-    Zimbra::Mon::Logger::LogStats( "info", "zmstat fd.csv: ${HEADING}:: $tstamp, $stat"); 
+    $LOGFH->print("$tstamp, $stat, $mbox_stat\n");
+    Zimbra::Mon::Logger::LogStats( "info", "zmstat fd.csv: ${HEADING}:: $tstamp, $stat, $mbox_stat"); 
     $LOGFH->flush();
     $ROTATE_DEFER = 0;
     if ($ROTATE_NOW) {
