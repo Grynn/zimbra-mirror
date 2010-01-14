@@ -42,7 +42,7 @@
 <html>
 <head>
 <c:if test="${not empty bean.accounts}">
-<meta http-equiv="refresh" content="12;url=/desktop/console.jsp" >
+<meta http-equiv="refresh" content="12;url=${zdf:addAuthToken('/desktop/console.jsp', devMode)}" >
 </c:if>
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <title><fmt:message key="ZimbraDesktop"/></title>
