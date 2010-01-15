@@ -14,7 +14,13 @@
  */
 
 /**
- * @constructor
+ * @overview
+ * 
+ * This file defines a button.
+ *
+ */
+
+/**
  * @class
  * This class represents a button, which is basically a smart label that can handle
  * various UI events. It knows when it has been hovered (the mouse is over it),
@@ -23,42 +29,46 @@
  *
  * There are several different types of button:
  * <ul>
- * <li> Push - this is the standard push button </li>
- * <li> Toggle - This is a button that exhibits selectable behaviour when clicked
- * 		e.g. on/off. To make a button selectable style "or" <i>DwtButton.SELECT_STYLE<i>
+ * <li>Push - this is the standard push button</li>
+ * <li>Toggle - This is a button that exhibits selectable behaviour when clicked
+ * 		e.g. on/off. To make a button selectable style "or" {@link DwtButton.SELECT_STYLE}
  * 		to the consturctor's style parameter</li>
- * <li> Menu - By setting a mene via the <i>setMenu</i> method a button will become
+ * <li>Menu - By setting a mene via the {@link #setMenu} method a button will become
  * 		a drop down or menu button.</li>
  * </ul>
  *
  * <h4>CSS</h4>
  * <ul>
- * <li><i>className</i>-hover - hovered style
- * <li><i>className</i>-active - mouse down style
- * <li><i>className</i>-selected - permanently down style
- * <li><i>className</i>-disabled - disabled style
+ * <li><i>className</i>-hover - hovered style</li>
+ * <li><i>className</i>-active - mouse down style</li>
+ * <li><i>className</i>-selected - permanently down style</li>
+ * <li><i>className</i>-disabled - disabled style</li>
  * </ul>
  *
  * <h4>Keyboard Actions</h4>
  * <ul>
  * <li>DwtKeyMap.SELECT - triggers the button</li>
- * <li>DwtKeyMap.SUBMENU - display's the button's submenu if one is set
+ * <li>DwtKeyMap.SUBMENU - display's the button's submenu if one is set</li>
  * </ul>
  *
  * @author Ross Dargahi
  * @author Conrad Damon
  * 
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        style			[constant]*			button style
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
- *        actionTiming	[constant]*			if DwtButton.ACTION_MOUSEUP, then the button is triggered
- *											on mouseup events, else if DwtButton.ACTION_MOUSEDOWN,
+ * @param {Hash}	params		a hash of parameter:
+ * <ul>
+ * <li>parent		{@link DwtComposite}		the parent widget
+ * <li>style			{constant}			the button style
+ * <li>className		{String}			the CSS class
+ * <li>posStyle		{constant}			the positioning style
+ * <li>actionTiming	{constant}			if {@link DwtButton.ACTION_MOUSEUP}, then the button is triggered
+ *											on mouseup events, else if {@link DwtButton.ACTION_MOUSEDOWN},
  * 											then the button is triggered on mousedown events
- *        id			[string]*			ID to use for the control's HTML element
- *        index 		[int]*				index at which to add this control among parent's children
- *        listeners		[hash]*				event listeners
+ * <li>id			{String}			the id to use for the control HTML element
+ * <li>index 		{int}				the index at which to add this control among parent's children
+ * <li>listeners		{Hash}				a hash of event listeners
+ * </ul>
+ *        
+ * @extends		DwtLabel
  */
 DwtButton = function(params) {
 	if (arguments.length == 0) { return; }
@@ -99,6 +109,11 @@ DwtButton = function(params) {
 DwtButton.prototype = new DwtLabel;
 DwtButton.prototype.constructor = DwtButton;
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @return		{String}		a string representation of the object
+ */
 DwtButton.prototype.toString =
 function() {
 	return "DwtButton";
@@ -111,7 +126,13 @@ DwtButton.PARAMS = ["parent", "style", "className", "posStyle", "actionTiming", 
 DwtButton.TOGGLE_STYLE = DwtLabel._LAST_STYLE * 2; // NOTE: These must be powers of 2 because we do bit-arithmetic to check the style.
 DwtButton.ALWAYS_FLAT = DwtLabel._LAST_STYLE * 4;
 DwtButton._LAST_STYLE = DwtButton.ALWAYS_FLAT;
+/**
+ * Defines the "mouse-up" action timing.
+ */
 DwtButton.ACTION_MOUSEUP = 1;
+/**
+ * Defines the "mouse-down" action timing.
+ */
 DwtButton.ACTION_MOUSEDOWN = 2; // No special appearance when hovered or active
 DwtButton.NOTIFY_WINDOW = 500;  // Time (in ms) during which to block additional clicks from being processed
 
@@ -123,6 +144,11 @@ DwtButton.prototype.TEMPLATE = "dwt.Widgets#ZButton";
 //
 // Public methods
 //
+
+/**
+ * Disposes of the button.
+ * 
+ */
 DwtButton.prototype.dispose =
 function() {
 	if ((this._menu instanceof DwtMenu) && (this._menu.parent == this)) {
@@ -135,8 +161,8 @@ function() {
 /**
  * Adds a listener to be notified when the button is pressed.
  *
- * @param listener	[AjxListener]	a listener
- * @param index		[int]*			index at which to add listener
+ * @param {AjxListener}	listener	the listener
+ * @param {int}	index		the index at which to add listener
  */
 DwtButton.prototype.addSelectionListener =
 function(listener, index) {
@@ -144,38 +170,38 @@ function(listener, index) {
 };
 
 /**
-* Removes a selection listener.
-*
-* @param listener	the listener to remove
-*/
+ * Removes a selection listener.
+ *
+ * @param {AjxListener}		listener	the listener to remove
+ */
 DwtButton.prototype.removeSelectionListener =
 function(listener) {
 	this.removeListener(DwtEvent.SELECTION, listener);
 };
 
 /**
-* Removes all the selection listeners.
-*/
+ * Removes all the selection listeners.
+ */
 DwtButton.prototype.removeSelectionListeners =
 function() {
 	this.removeAllListeners(DwtEvent.SELECTION);
 };
 
 /**
-* Adds a listener to be notified when the dropdown arrow is pressed.
-*
-* @param listener	a listener
-*/
+ * Adds a listener to be notified when the dropdown arrow is pressed.
+ *
+ * @param {AjxListener}		listener	the listener
+ */
 DwtButton.prototype.addDropDownSelectionListener =
 function(listener) {
 	return this._dropDownEvtMgr.addListener(DwtEvent.SELECTION, listener);
 };
 
 /**
-* Removes a dropdown selection listener.
-*
-* @param listener	the listener to remove
-*/
+ * Removes a dropdown selection listener.
+ *
+ * @param listener	the listener to remove
+ */
 DwtButton.prototype.removeDropDownSelectionListener =
 function(listener) {
 	this._dropDownEvtMgr.removeListener(DwtEvent.SELECTION, listener);
@@ -186,6 +212,14 @@ DwtButton.prototype._dropDownImg 	= "SelectPullDownArrow";
 DwtButton.prototype._dropDownDepImg	= "SelectPullDownArrow";
 DwtButton.prototype._dropDownHovImg = "SelectPullDownArrowHover";
 
+/**
+ * Sets the dropdown images.
+ * 
+ * @param	{String}	enabledImg		the enabled image
+ * @param	{String}	disImg		the disabled image
+ * @param	{String}	hovImg		the hover image
+ * @param	{String}	depImg		the depressed image
+ */
 DwtButton.prototype.setDropDownImages =
 function (enabledImg, disImg, hovImg, depImg) {
 	this._dropDownImg = enabledImg;
@@ -193,6 +227,9 @@ function (enabledImg, disImg, hovImg, depImg) {
 	this._dropDownDepImg = depImg;
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._addEventListeners =
 function(listeners, events) {
 	for (var i = 0; i < events.length; i++) {
@@ -200,6 +237,9 @@ function(listeners, events) {
 	}
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._removeEventListeners =
 function(listeners, events) {
 	for (var i = 0; i < events.length; i++) {
@@ -207,6 +247,9 @@ function(listeners, events) {
 	}
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._addMouseListeners =
 function() {
 	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP];
@@ -217,6 +260,9 @@ function() {
 	}
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._removeMouseListeners =
 function() {
 	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP];
@@ -227,6 +273,13 @@ function() {
 	}
 };
 
+/**
+ * Sets the display state.
+ * 
+ * @param	{String}	state		the display state
+ * @param	{Boolean}	force		<code>true</code> to force the state change
+ * @see		DwtControl
+ */
 DwtButton.prototype.setDisplayState =
 function(state, force) {
     if (this._selected && state != DwtControl.SELECTED && !force) {
@@ -236,13 +289,13 @@ function(state, force) {
 };
 
 /**
-* Sets the enabled/disabled state of the button. A disabled button may have a different
-* image, and greyed out text. The button (and its menu) will only have listeners if it
-* is enabled.
-*
-* @param enabled	whether to enable the button
-*
-*/
+ * Sets the enabled/disabled state of the button. A disabled button may have a different
+ * image, and greyed out text. The button (and its menu) will only have listeners if it
+ * is enabled.
+ *
+ * @param {Boolean}	enabled			<code>true</code> to enable the button
+ *
+ */
 DwtButton.prototype.setEnabled =
 function(enabled) {
 	if (enabled != this._enabled) {
@@ -277,18 +330,31 @@ function(enabled) {
 	}
 };
 
+/**
+ * Sets the main (enabled) image. If the button is currently enabled, the image is updated.
+ * 
+ * @param	{String}	imageInfo		the image
+ */
 DwtButton.prototype.setImage =
 function(imageInfo) {
 	DwtLabel.prototype.setImage.call(this, imageInfo);
 	this._setMinWidth();
 };
 
+/**
+ * Sets the text.
+ * 
+ * @param	{String}	text		the text
+ */
 DwtButton.prototype.setText =
 function(text) {
 	DwtLabel.prototype.setText.call(this, text);
 	this._setMinWidth();
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._setMinWidth =
 function() {
 	if (this.getText() != null) {
@@ -298,6 +364,11 @@ function() {
 	}
 };
 
+/**
+ * Sets the hover image.
+ * 
+ * @param	{String}	hoverImageInfo		the image
+ */
 DwtButton.prototype.setHoverImage =
 function (hoverImageInfo) {
     this._hoverImageInfo = hoverImageInfo;
@@ -306,14 +377,14 @@ function (hoverImageInfo) {
 /**
 * Adds a dropdown menu to the button, available through a small down-arrow.
 *
-* @param menuOrCallback		The dropdown menu or an AjxCallback object. If a
+* @param {DwtMenu|AjxCallback}	menuOrCallback		the dropdown menu or a callback. If a
 *                           callback is given, it is called the first time the
 *                           menu is requested. The callback must return a valid
 *                           DwtMenu object.
-* @param shouldToggle
-* @param followIconStyle	style of menu item (should be checked or radio style) for
+* @param {Boolean}	shouldToggle		<code>true</code> to toggle
+* @param {String}	followIconStyle	the style of menu item (should be checked or radio style) for
 *							which the button icon should reflect the menu item icon
-* @param popupAbove         true to pop up the menu above the button
+* @param {Boolean}	popupAbove         <code>true</code> to pop up the menu above the button
 */
 DwtButton.prototype.setMenu =
 function(menuOrCallback, shouldToggle, followIconStyle, popupAbove) {
@@ -348,15 +419,19 @@ function(menuOrCallback, shouldToggle, followIconStyle, popupAbove) {
     }
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._setDropDownCellMouseHandlers =
 function(set) {
 	this._dropDownEventsEnabled = set;
 };
 
 /**
-* Returns the button's menu
+* Gets the button menu.
 *
-* @param dontCreate	 If true the menu will not be lazily created here.
+* @param {Boolean}		dontCreate	 if <code>true</code>, the menu will not be lazily created
+* @return	{DwtMenu}	the menu or <code>null</code> if menu is not set
 */
 DwtButton.prototype.getMenu =
 function(dontCreate) {
@@ -376,18 +451,20 @@ function(dontCreate) {
 };
 
 /**
-* Returns the button display to normal (not hovered or active).
-*/
+ * Resets the button display to normal (not hovered or active).
+ * 
+ */
 DwtButton.prototype.resetClassName =
 function() {
     this.setDisplayState(DwtControl.NORMAL);
 };
 
-/*
- * Sets whether actions for this button should occur on mouse up or mouse
- * down.
+/**
+ * Sets whether actions for this button should occur on mouse up or mouse down.
  *
- * Currently supports DwtButton.ACTION_MOUSEDOWN and DwtButton.ACTION_MOUSEUP
+ * @param	{constant}		actionTiming		the action timing
+ * @see	DwtButton.ACTION_MOUSEDOWN
+ * @see	DwtButton.ACTION_MOUSEUP
  */
 DwtButton.prototype.setActionTiming =
 function(actionTiming) {
@@ -395,26 +472,41 @@ function(actionTiming) {
 };
 
 /**
-* Activates/inactivates the button. A button is hovered when the mouse is over it.
+* Activates/de-activates the button. A button is hovered when the mouse is over it.
 *
-* @param hovered		whether the button is hovered
+* @param {Boolean}	hovered		<code>true</code> if the button is hovered
 */
 DwtButton.prototype.setHovered =
 function(hovered) {
     this.setDisplayState(hovered ? DwtControl.HOVER : DwtControl.NORMAL);
 };
 
+/**
+ * Sets the enabled image
+ * 
+ * @param	{String}	imageInfo	the image
+ */
 DwtButton.prototype.setEnabledImage =
 function (imageInfo) {
 	this._enabledImageInfo = imageInfo;
 	this.setImage(imageInfo);
 };
 
+/**
+ * Sets the depressed image
+ * 
+ * @param	{String}	imageInfo	the image
+ */
 DwtButton.prototype.setDepressedImage =
 function (imageInfo) {
     this._depressedImageInfo = imageInfo;
 };
 
+/**
+ * Sets the button as selected.
+ * 
+ * @param	{Boolean}	selected		<code>true</code> if the button is selected
+ */
 DwtButton.prototype.setSelected =
 function(selected) {
 	if (this._selected != selected) {
@@ -423,11 +515,21 @@ function(selected) {
     }
 };
 
+/**
+ * Checks if the button is toggled.
+ * 
+ * @return	{Boolean}	<code>true</code> if toggled
+ */
 DwtButton.prototype.isToggled =
 function() {
 	return this._selected;
 };
 
+/**
+ * Pops-up the button menu (if present).
+ * 
+ * @param	{DwtMenu}	menu		the menu to use or <code>null</code> to use currently set menu
+ */
 DwtButton.prototype.popup =
 function(menu) {
 	menu = menu || this.getMenu();
@@ -455,11 +557,24 @@ function(menu) {
 	menu.popup(0, x, y);
 };
 
+/**
+ * Gets the key map name.
+ * 
+ * @return	{String}	the key map name
+ */
 DwtButton.prototype.getKeyMapName =
 function() {
 	return "DwtButton";
 };
 
+/**
+ * Handles a key action event.
+ * 
+ * @param	{Object}		actionCode		the action code
+ * @param	{Object}		ev		the event
+ * @return	{Boolean}		<code>true</code> if the event is handled; <code>false</code> otherwise
+ * @see		DwtKeyMap
+ */
 DwtButton.prototype.handleKeyAction =
 function(actionCode, ev) {
 	switch (actionCode) {
@@ -480,6 +595,9 @@ function(actionCode, ev) {
 
 // Private methods
 
+/**
+ * @private
+ */
 DwtButton.prototype._emulateSingleClick =
 function() {
 	this.trigger();
@@ -494,6 +612,9 @@ function() {
 	}
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._emulateDropDownClick =
 function() {
     var htmlEl = this._dropDownEl;
@@ -505,7 +626,11 @@ function() {
 	DwtButton._dropDownCellMouseDownHdlr(mev);
 };
 
-/** This method is called from mouseUpHdlr in <i>DwtControl</i>. */
+/**
+ * This method is called from mouseUpHdlr in {@see DwtControl}.
+ * 
+ * @private
+ */
 DwtButton.prototype._focusByMouseUpEvent =
 function()  {
 	// don't steal focus if on a toolbar that's not part of focus ring
@@ -514,17 +639,27 @@ function()  {
 	}
 };
 
-// NOTE: _focus and _blur will be reworked to reflect styles correctly
+/**
+ * NOTE: _focus and _blur will be reworked to reflect styles correctly
+ * 
+ * @private
+ */
 DwtButton.prototype._focus =
 function() {
     this.setDisplayState(DwtControl.FOCUSED);
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._blur =
 function() {
     this.setDisplayState(DwtControl.NORMAL);
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._toggleMenu =
 function () {
 	if (this._shouldToggleMenu){
@@ -542,6 +677,9 @@ function () {
 	}
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._isDropDownEvent =
 function(ev) {
 	if (this._dropDownEventsEnabled && this._dropDownEl) {
@@ -554,6 +692,9 @@ function(ev) {
 	return false;
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype.trigger =
 function (){
     if (this._depressedImageInfo) {
@@ -563,6 +704,9 @@ function (){
     this.isActive = true;
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype.deactivate =
 function() {
 	this._showHoverImage(true);
@@ -573,6 +717,9 @@ function() {
     this.setDisplayState(DwtControl.HOVER);
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype.dontStealFocus = function(val) {
 	if (val == null)
 		val = true;
@@ -581,6 +728,9 @@ DwtButton.prototype.dontStealFocus = function(val) {
 	this.__preventMenuFocus = val;
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._showHoverImage =
 function(show) {
 	// if the button is image-only, DwtLabel#setImage is bad
@@ -598,6 +748,9 @@ function(show) {
 	}
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._handleClick =
 function(ev) {
 	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
@@ -616,17 +769,27 @@ function(ev) {
 	}
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._setMouseOutClassName =
 function() {
     this.setDisplayState(DwtControl.NORMAL);
 };
 
+/**
+ * @private
+ */
 DwtButton.prototype._createHtmlFromTemplate = function(templateId, data) {
     DwtLabel.prototype._createHtmlFromTemplate.call(this, templateId, data);
     this._dropDownEl = document.getElementById(data.id+"_dropdown");
 };
 
-// Pops up the dropdown menu.
+/**
+ * Pops up the dropdown menu.
+ * 
+ * @private
+ */
 DwtButton._dropDownCellMouseDownHdlr =
 function(ev) {
 	var obj = DwtControl.getTargetControl(ev);
@@ -646,7 +809,11 @@ function(ev) {
 	return false;
 };
 
-// Updates the current mouse event (set from the previous mouse down).
+/**
+ * Updates the current mouse event (set from the previous mouse down).
+ * 
+ * @private
+ */
 DwtButton._dropDownCellMouseUpHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
@@ -687,7 +854,11 @@ function(ev) {
 	return false;
 };
 
-// Activates the button.
+/**
+ * Activates the button.
+ * 
+ * @private
+ */
 DwtButton._mouseOverListener =
 function(ev) {
 	var button = ev.dwtObj;
@@ -704,6 +875,9 @@ function(ev) {
     ev._stopPropagation = true;
 };
 
+/**
+ * @private
+ */
 DwtButton._mouseOutListener =
 function(ev) {
 	var button = ev.dwtObj;
@@ -718,6 +892,9 @@ function(ev) {
     }
 };
 
+/**
+ * @private
+ */
 DwtButton._mouseDownListener =
 function(ev) {
 	var button = ev.dwtObj;
@@ -743,7 +920,11 @@ function(ev) {
 	}
 };
 
-// Button has been pressed, notify selection listeners.
+/**
+ * Button has been pressed, notify selection listeners.
+ * 
+ * @private
+ */
 DwtButton._mouseUpListener =
 function(ev) {
 	var button = ev.dwtObj;

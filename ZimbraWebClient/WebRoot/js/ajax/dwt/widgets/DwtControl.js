@@ -220,14 +220,37 @@ function() {
 //
 
 // Display states
+/**
+ * Defines the "normal" display state.
+ */
 DwtControl.NORMAL = "";
-
+/**
+ * Defines the "active" display state.
+ */
 DwtControl.ACTIVE = "ZActive";
+/**
+ * Defines the "focused" display state.
+ */
 DwtControl.FOCUSED = "ZFocused";
+/**
+ * Defines the "disabled" display state.
+ */
 DwtControl.DISABLED = "ZDisabled";
+/**
+ * Defines the "hover" display state.
+ */
 DwtControl.HOVER = "ZHover";
+/**
+ * Defines the "selected" display state.
+ */
 DwtControl.SELECTED = "ZSelected";
+/**
+ * Defines the "default" display state.
+ */
 DwtControl.DEFAULT = "ZDefault";
+/**
+ * Defines the "error" display state.
+ */
 DwtControl.ERROR = "ZError";
 
 DwtControl._RE_STATES = new RegExp(

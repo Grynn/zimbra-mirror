@@ -13,18 +13,27 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+ * @overview
+ * 
+ * This file defines a label.
+ *
+ */
 
 /**
- * This class implements a label, which consists of an image and/or text. It is used
- * both as a concrete class and as the base class for <i>DwtButton</i>. The label's 
+ * @class
+ * This class represents a label, which consists of an image and/or text. It is used
+ * both as a concrete class and as the base class for {@link DwtButton}. The label
  * components are managed within a table. The label can be enabled or disabled, which are reflected in 
  * its display. A disabled label looks greyed out.
  * 
  * <h4>CSS</h4>
- * <i>.className</i> table - The label's table
- * <i>.className</i> .Icon - class name for the icon image cell
- * <i>.className</i> .Text - enabled text cell 
- * <i>.className</i> .DisabledText - disabled text cell
+ * <ul>
+ * <li><i>.className</i> table - the label table</li>
+ * <li><i>.className</i> .Icon - class name for the icon image cell</li>
+ * <li><i>.className</i> .Text - enabled text cell</li>
+ * <li><i>.className</i> .DisabledText - disabled text cell</li>
+ * </ul>
  * 
  * <h4>Keyboard Actions</h4>
  * None
@@ -34,18 +43,22 @@
  * 
  * @author Ross Dargahi
  * 
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        style			[constant]*			label style: May be one of: <i>DwtLabel.IMAGE_LEFT</i> 
- * 											or <i>DwtLabel.IMAGE_RIGHT</i> arithmetically or'd (|) with  one of:
- * 											<i>DwtLabel.ALIGN_LEFT</i>, <i>DwtLabel.ALIGN_CENTER</i>, or <i>DwtLabel.ALIGN_LEFT</i>
+ * @param {Hash}		params		the hash of parameters:
+ * <ul>
+ * <li>parent	{@link DwtComposite} 		the parent widget</li>
+ * <li>style			{constant}			label style: May be one of: {@link DwtLabel.IMAGE_LEFT} 
+ * 											or {@link DwtLabel.IMAGE_RIGHT} arithmetically or'd (|) with  one of:
+ * 											{@link DwtLabel.ALIGN_LEFT}, {@link DwtLabel.ALIGN_CENTER}, or {@link DwtLabel.ALIGN_LEFT}
  * 											The first determines were in the label the icon will appear (if one is set), the second
  * 											determine how the content of the label will be aligned. The default value for
- * 											this parameter is: <code>DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER</code>
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
- *        id			[string]*			ID to use for the control's HTML element
- *        index 		[int]*				index at which to add this control among parent's children 
+ * 											this parameter is: {@link DwtLabel.IMAGE_LEFT} | {@link DwtLabel.ALIGN_CENTER}</li>
+ * <li>className		{String}			the CSS class</li>
+ * <li>posStyle		{constant}			the positioning style</li>
+ * <li>id			{String}			the to use for the control HTML element</li>
+ * <li>index 		{int}				the index at which to add this control among parent's children</li>
+ * </ul>
+ *        
+ * @extends DwtControl
  */
 DwtLabel = function(params) {
 	if (arguments.length == 0) { return; }
@@ -76,10 +89,9 @@ DwtLabel.prototype = new DwtControl;
 DwtLabel.prototype.constructor = DwtLabel;
 
 /**
- * This method returns the class name for the control.
- *
- * @return class name
- * @type String
+ * Returns a string representation of the object.
+ * 
+ * @return		{String}		a string representation of the object
  */
 DwtLabel.prototype.toString =
 function() {
@@ -91,28 +103,46 @@ function() {
 //
 
 // display styles
-/** Align image to the left of text, if both present
- * @type Int*/
+/**
+ * Defines the "left" align image (i.e. align to the left of text, if both present).
+ * 
+ * @type {int}
+ */
 DwtLabel.IMAGE_LEFT = 1;
 
-/** Align image to the right of text, if both present
- * @type Int*/
+/**
+ * Defines the "right" align image (i.e. align to the right of text, if both present).
+ * 
+ * @type {int}
+ */
 DwtLabel.IMAGE_RIGHT = 2;
 
-/** Align the label to the left
- * @type Int*/
+/**
+ * Defines the "left" align label.
+ * 
+ * @type {int}
+ */
 DwtLabel.ALIGN_LEFT = 4;
 
-/** Align the label to the right
- * @type Int*/
+/**
+ * Defines the "right" align label.
+ * 
+ * @type {int}
+ */
 DwtLabel.ALIGN_RIGHT = 8;
 
-/** Align the label to the center
- * @type Int*/
+/**
+ * Defines the "center" align label.
+ * 
+ * @type {int}
+ */
 DwtLabel.ALIGN_CENTER = 16;
 
-/** The last label style. Used by subclasses when adding styles
- * @type Int*/
+/**
+ * Defines the last style label (used for subclasses).
+ * 
+ * @type {int}
+ */
 DwtLabel._LAST_STYLE = 16;
 
 //
@@ -125,6 +155,10 @@ DwtLabel.prototype.TEMPLATE = "dwt.Widgets#ZLabel";
 // Public methods
 //
 
+/**
+ * Disposes of the label.
+ * 
+ */
 DwtLabel.prototype.dispose =
 function() {
 	delete this._dropDownEl;
@@ -135,9 +169,9 @@ function() {
 
 /**
  * Sets the enabled/disabled state of the label. A disabled label may have a different
- * image, and greyed out text. This method overrides <code>DwtControl.setEnabled</code>
+ * image, and greyed out text. This method overrides {@link DwtControl#setEnabled}.
  *
- * @param {Boolean} enabled True set the label as enabled
+ * @param {Boolean} enabled 		<code>true</code> to set the label as enabled
  */
 DwtLabel.prototype.setEnabled =
 function(enabled) {
@@ -148,16 +182,20 @@ function(enabled) {
 }
 
 /**
-* Returns the current Image Info.
-*/
+ * Gets the current image info.
+ * 
+ * @return	{String}	the image info
+ */
 DwtLabel.prototype.getImage =
 function() {
 	return this.__imageInfo;
 }
 
 /**
-* Sets the main (enabled) image. If the label is currently enabled, its image is updated.
-*/
+ * Sets the main (enabled) image. If the label is currently enabled, the image is updated.
+ * 
+ * @param	{String}	imageInfo		the image
+ */
 DwtLabel.prototype.setImage =
 function(imageInfo) {
 	this.__imageInfo = imageInfo;
@@ -165,10 +203,12 @@ function(imageInfo) {
 }
 
 /**
-* Returns the disabled image. If the label is currently disabled, its image is updated.
-*
-* @param imageSrc	the disabled image
-*/
+ * Sets the disabled image. If the label is currently disabled, its image is updated.
+ *
+ * @param	{String}	imageInfo		the image
+ * @deprecated		no longer support different images for disabled
+ * @see		#setImage
+ */
 DwtLabel.prototype.setDisabledImage =
 function(imageInfo) {
 	// DEPRECATED -- we no longer support different images for disabled.
@@ -176,17 +216,19 @@ function(imageInfo) {
 }
 
 /**
-* Returns the label text.
-*/
+ * Gets the label text.
+ * 
+ * @retur	{String}	the text or <code>null</code> if not set
+ */
 DwtLabel.prototype.getText =
 function() {
 	return (this.__text != null) ? this.__text : null;
 }
 
 /**
-* Sets the label text, and manages its placement and display.
+* Sets the label text, and manages the placement and display.
 *
-* @param text	the new label text
+* @param {String}	text	the new label text
 */
 DwtLabel.prototype.setText =
 function(text) {
@@ -202,6 +244,11 @@ function(text) {
     }
 }
 
+/**
+ * Sets the text background.
+ * 
+ * @param	{String}	color	the background color
+ */
 DwtLabel.prototype.setTextBackground =
 function(color) {
 	this._textBackground = color;
@@ -210,6 +257,11 @@ function(color) {
     }
 }
 
+/**
+ * Sets the text foreground.
+ * 
+ * @param	{String}	color	the foreground color
+ */
 DwtLabel.prototype.setTextForeground =
 function(color) {
 	this._textForeground = color;
@@ -218,7 +270,11 @@ function(color) {
     }
 }
 
-
+/**
+ * Sets the align style.
+ * 
+ * @param		{constant}		alignStyle		the align style
+ */
 DwtLabel.prototype.setAlign =
 function(alignStyle) {
 	this._style = alignStyle;
@@ -227,6 +283,12 @@ function(alignStyle) {
     this.__setImage(this.__imageInfo);
 }
 
+/**
+ * Checks if the given style is set as the current label style.
+ * 
+ * @param	{constant}	style	the style
+ * @return	{Boolean}	<code>true</code> if the style is set
+ */
 DwtLabel.prototype.isStyle = function(style) {
     return this._style & style;
 };
@@ -235,17 +297,25 @@ DwtLabel.prototype.isStyle = function(style) {
 // Protected methods
 //
 
+/**
+ * @private
+ */
 DwtLabel.prototype._createHtml = function(templateId) {
     var data = { id: this._htmlElId };
     this._createHtmlFromTemplate(templateId || this.TEMPLATE, data);
 };
 
+/**
+ * @private
+ */
 DwtLabel.prototype._createHtmlFromTemplate = function(templateId, data) {
     DwtControl.prototype._createHtmlFromTemplate.call(this, templateId, data);
     this._textEl = document.getElementById(data.id+"_title");
 };
 
-
+/**
+ * @private
+ */
 DwtLabel.prototype._getIconEl = function() {
 	// MOW: getting the proper icon element on demand rather than all the time for speed
 	var direction = (this._style & DwtLabel.IMAGE_RIGHT ? "right" : "left");
@@ -257,8 +327,11 @@ DwtLabel.prototype._getIconEl = function() {
 // Private methods
 //
 
-/**Set the label's image, and manage its placement.
- * @private*/
+/**
+ * Set the label's image, and manage its placement.
+ *
+ * @private
+ */
 DwtLabel.prototype.__setImage =
 function(imageInfo) {
 
