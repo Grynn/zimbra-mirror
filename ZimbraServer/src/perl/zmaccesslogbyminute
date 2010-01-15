@@ -1,4 +1,20 @@
 #!/usr/bin/perl -w
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2009 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.2 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# 
+# ***** END LICENSE BLOCK *****
+# 
 
 #10.72.186.147 -  -  [06/May/2009:00:00:05 +0000] "GET /zimbra/img/logo/blank.ico HTTP/1.1" 200 894 "-" "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1.20) Gecko/20081217 Firefox/2.0.0.20"
 
