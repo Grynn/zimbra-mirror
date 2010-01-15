@@ -450,7 +450,7 @@ public class OfflineSyncManager {
                 return true;
             }
         }
-        if (!getInstance().isConnectionDown())
+        if (getInstance().isConnectionDown())
             return true;
 
         Throwable cause = SystemUtil.getInnermostException(exception);
@@ -515,15 +515,17 @@ public class OfflineSyncManager {
         } else if (!isServiceActive()) {
             OfflineLog.offline.info("sync aborted by network: " + targetName);
         } else if (isConnectionDown(exception)) {
-            connectionDown(targetName, null); //offline don't need code
-            OfflineLog.offline.info("sync connection down: " + targetName);
+            connectionDown(targetName, null);
             if (isDebugTraceOn)
                 OfflineLog.offline.debug("sync connection down: " + targetName, exception);
+            else
+                OfflineLog.offline.info("sync connection down: " + targetName);
         } else if (isAuthError(exception)) {
             authFailed(targetName, code, password);
-            OfflineLog.offline.warn("sync remote auth failure: " + targetName);
             if (isDebugTraceOn)
                 OfflineLog.offline.debug("sync remote auth failure: " + targetName, exception);
+            else
+                OfflineLog.offline.warn("sync remote auth failure: " + targetName);
         } else {
             code = code == null ? OfflineServiceException.UNEXPECTED : code;
             if (markSyncFail)
@@ -595,9 +597,9 @@ public class OfflineSyncManager {
                     ss.reset();
             }
         }
+        isConnectionDown = b;
         notifyStateChange();
         lock.lock();
-        isConnectionDown = b;
         if (!isConnectionDown)
             waiting.signalAll();
         lock.unlock();
