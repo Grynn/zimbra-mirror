@@ -19,12 +19,14 @@
 
 	<property name="jarfile" value="zimbraoffline.jar" />
 	<property name="config.dir" value="conf" />
+	<property name="jars.dir" location="jars" />
 	<property name="src.dir" location="src" />
 	<property name="src.java.dir" location="${src.dir}/java" />
-	<property name="jars.dir" location="jars" />
+	<property name='web.dir' value='WebRoot'/>
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="build.src.java.dir" location="${build.dir}/src/java" />
+	<property name="build.web.dir" location="build/WebRoot" />
 	<property name="dist.dir" location="${build.dir}/dist" />
 	<property name="dist.app.dir" location="${dist.dir}/app"/>
 	<property name="dist.data.dir" location="${dist.dir}/data"/>
@@ -40,14 +42,21 @@
 	<property name="server.classes.dir" location="${server.build.dir}/classes" />
 
 	<property name="common.dir" location="../ZimbraCommon" />
-	<property name="common.jars.dir" location="${common.dir}/jars" />
+	<property name="common.build.dir" location="${common.dir}/build" />
 	<property name="common.classes.dir" location="${common.dir}/build/classes" />
+	<property name="common.jars.dir" location="${common.dir}/jars" />
 
 	<property name="im.dir" location="../ZimbraIM" />
 	<property name="im.jars.dir" location="${im.dir}/jars" />
 	<property name="im.classes.dir" location="${im.dir}/build/classes" />
 
+	<property name="taglib.dir" location="../ZimbraTagLib"/>
+	<property name="taglib.build.dir" location="${taglib.dir}/build"/>
+	<property name="taglib.build.classes.dir" location="${taglib.build.dir}/classes"/>
 	<property name="webclient.dir" location="../ZimbraWebClient" />
+	<property name="webclient.build.dir" location="${webclient.dir}/build" />
+	<property name="webclient.jars.dir" location="${webclient.dir}/jars" />
+	<property name="webclient.web.dir" location="${webclient.dir}/WebRoot" />
 
 	<property name="zsync.common.dir" location="../ZimbraSyncCommon" />
 	<property name="zsync.common.build.dir" location="${zsync.common.dir}/build" />
@@ -104,8 +113,7 @@
 	<property name="jetty.home.dir" location="${zimbra.offline.app.dir}/jetty" />
 	<property name="jetty.data.dir" location="${zimbra.offline.data.dir}/jetty"/>
 
-	<property name="webclient.dir" value="../ZimbraWebClient" />
-	<property name="zimbra.warfile" location="${webclient.dir}/build/dist/jetty/webapps/zimbra.war" />
+	<property name="zimbra.warfile" location="${webclient.build.dir}/dist/jetty/webapps/zimbra.war" />
 
 	<property name="jetty.src.dir" location="../ThirdParty/jetty" />
 	<property name="prism.src.dir" location="../ThirdParty/prism" />
@@ -218,10 +226,10 @@
 
 	<target name="offline-webroot">
 		<copy todir="${param.jetty.dir}/webapps/zimbra">
-			<fileset dir="WebRoot" includes="**/*" excludes="WEB-INF/classes/desktop/*"/>
+			<fileset dir="${web.dir}" includes="**/*" excludes="WEB-INF/classes/desktop/*"/>
 		</copy>
 		<copy todir="${param.jetty.dir}/webapps/zimbra/WEB-INF/classes/messages">
-			<fileset dir="WebRoot/WEB-INF/classes/desktop" includes="**/*"/>
+			<fileset dir="${web.dir}/WEB-INF/classes/desktop" includes="**/*"/>
 		</copy>
 	</target>
 
@@ -253,7 +261,7 @@
 			<fileset dir="${build.dir}" includes="offlinejsp.jar"/>
 		</copy>
 
-		<!--<unzip src="../ZimbraWebClient/WebRoot/help/WebHelp.zip" dest="${dist.dir}/jetty/webapps/zimbra" overwrite="true"/>-->
+		<!--<unzip src="${webclient.web.dir}/help/WebHelp.zip" dest="${dist.dir}/jetty/webapps/zimbra" overwrite="true"/>-->
 		<!--<move file="${dist.dir}/jetty/webapps/zimbra/WebHelp" tofile="${dist.dir}/jetty/webapps/zimbra/help" />-->
 		<copy file="src/installer/resources/launcher_16x16.ico" tofile="${dist.dir}/jetty/webapps/zimbra/favicon.ico"/>
 		<copy file="${dist.dir}/jetty/webapps/zimbra/favicon.ico" tofile="${dist.dir}/jetty/webapps/zimbra/img/logo/favicon.ico"/>
@@ -308,7 +316,7 @@
 
 		<taskdef name="try"
 			 classname="com.zimbra.webClient.build.TryTask"
-			 classpath="${webclient.dir}/build/classes"
+			 classpath="${webclient.build.dir}/classes"
 		/>
 
 		<!-- strip debug, minimize js, prepend copyright -->
@@ -351,32 +359,6 @@
 				<delete file="@{var}.tmp"/>
 			</sequential>
 		</for>
-	</target>
-
-	<target name="offline-jspc">
-		<mkdir dir="../ZimbraWebClient/build/WebRoot/desktop"/>
-		<copy todir="../ZimbraWebClient/build/WebRoot/desktop">
-			<fileset dir="WebRoot/desktop" includes="*.jsp"/>
-		</copy>
-		<mkdir dir="../ZimbraWebClient/build/WebRoot/WEB-INF/tags/desktop"/>
-		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tags/desktop">
-			<fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag"/>
-		</copy>
-		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/classes/messages">
-			<fileset dir="WebRoot/WEB-INF/classes/desktop" includes="*.properties"/>
-		</copy>
-		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tlds">
-			<fileset dir="WebRoot/WEB-INF/tlds" />
-		</copy>
-		<mkdir dir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib"/>
-		<copy file="${build.dir}/offlinejsp.jar" todir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib"/>
-
-		<ant dir="../ZimbraWebClient" target="jspc.offline_build" inheritAll="false" />
-		<copy todir="${dist.data.dir}/data/tmp/jetty/zimbra/jsp" overwrite="true">
-			<fileset dir="../ZimbraWebClient/build/dist/jetty/work/zimbra/jsp">
-				<include name="**/*.class"/>
-			</fileset>
-		</copy>
 	</target>
 
 	<target name="offline-db-init" depends="offline-derby-init,offline-sqlite-init" />
@@ -1063,7 +1045,7 @@
 		<antcall target="offline-install-misc" />
 		<antcall target="offline-prep-prism" />
 		<antcall target="offline-prep-launcher" />
-		<antcall target="offline-jspc" />
+		<antcall target="offline-jspc.build" />
 		<antcall target="offline-compress" />
 		<antcall target="offline-jre" />
 
@@ -1096,6 +1078,88 @@
 		<tstamp><format property="build.simpleDate" pattern="yyMMddHHmmss" /></tstamp>
 		<replace file="${jetty.home.dir}/webapps/zimbra/WEB-INF/web.xml" token="@jsVersion@" value="${build.simpleDate}"/>
 		<replace file="${jetty.home.dir}/webapps/zimbra/WEB-INF/web.xml" token="@port@" value="7733"/>
+	</target>
+
+	<!-- JSP PRECOMPILE STUFF -->
+	<property name="jspc.src.dir" value="${build.web.dir}" />
+	<property name="jspc.build.dir" value="${dist.dir}/jetty/work/zimbra/jsp" />
+
+	<path id='jspc.class.path'>
+		<pathelement path="${dist.dir}/jetty/resources" />
+		<fileset dir="${common.jars.dir}" includes="*.jar"/>
+		<fileset dir="${common.build.dir}" includes="zimbracommon.jar"/>
+		<fileset dir="${server.build.dir}" includes="zimbrastore.jar"/>
+		<fileset dir="${taglib.build.dir}" includes="zimbrataglib.jar"/>
+		<fileset dir="${webclient.jars.dir}" includes="standard.jar,servlet-api.jar"/>
+		<fileset dir="${webclient.jars.dir}/jsp-2.1" includes="*.jar"/>
+		<fileset dir="${jspc.src.dir}/WEB-INF/lib" includes="*.jar"/>
+	</path>
+
+	<target name="offline_jspc">
+		<echo>Pre-compiling ${param.jspfiles}</echo>
+		<java classname="org.apache.jasper.JspC" fork="true" classpathref="jspc.class.path">
+			<arg value="-l" />
+			<arg value="-s" />
+			<arg value="-trimSpaces" />
+			<arg value="-d" />
+			<arg value="${jspc.build.dir}" />
+			<arg value="-uriroot" />
+			<arg value="${jspc.src.dir}" />
+			<arg line="${param.jspfiles}" />
+		</java>
+	</target>
+
+	<target name="offline_jspc.precompile">
+		<mkdir dir="${jspc.build.dir}"/>
+		<mkdir dir="${jspc.src.dir}"/>
+		<copy todir="${jspc.src.dir}">
+			<fileset dir="${web.dir}" includes="desktop/*"/>
+			<fileset dir='${webclient.web.dir}' includes="h/print*,WEB-INF/**" excludes="h/printcalls,h/printvoicemails" />
+		</copy>
+		<copy todir="${jspc.src.dir}/WEB-INF/classes/messages">
+			<fileset dir="${web.dir}/WEB-INF/classes/desktop" includes="*.properties"/>
+		</copy>
+		<copy todir="${jspc.src.dir}/WEB-INF/tags/desktop">
+			<fileset dir="${web.dir}/WEB-INF/tags/desktop" includes="*.tag"/>
+		</copy>
+		<copy todir="${jspc.src.dir}/WEB-INF/tlds">
+			<fileset dir="${web.dir}/WEB-INF/tlds" />
+		</copy>
+		<copy file="${build.dir}/offlinejsp.jar" todir="${jspc.src.dir}/WEB-INF/lib"/>
+		<fileset id='jspc.fileset' dir='${jspc.src.dir}' includes="h/*,desktop/*.jsp"/>
+		<pathconvert property='jspc.files' refid='jspc.fileset' pathsep=' ' />
+		<antcall target="offline_jspc">
+			<param name="param.jspfiles" value="${jspc.files}"/>
+		</antcall>
+	</target>
+
+	<target name="offline_jspc.compile">
+		<javac destdir="${jspc.build.dir}" optimize="on" debug="off" srcdir="${jspc.build.dir}" classpathref="jspc.class.path" target="1.5">
+			<include name="**"/>
+		</javac>
+	</target>
+
+	<target name="offline_jspc.build" depends="offline_jspc.precompile,offline_jspc.compile">
+		<copy todir="${dist.data.dir}/data/tmp/jetty/zimbra/jsp">
+			<fileset dir="${dist.dir}/jetty/work/zimbra/jsp">
+				<include name="**/*.class"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="offline_jspc.deploy" depends="offline_jspc.build">
+		<copy todir="${zimbra.offline.data.dir}/data/tmp/jetty/zimbra/jsp">
+			<fileset dir="${jspc.build.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="offline_jspc.clean">
+		<delete>
+		    <fileset dir="${jspc.src.dir}" />
+		    <fileset dir="${jspc.build.dir}" />
+		</delete>
 	</target>
 
 	<!--target name="offline-prism-webapp">
