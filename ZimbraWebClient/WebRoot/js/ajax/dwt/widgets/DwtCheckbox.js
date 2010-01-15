@@ -176,7 +176,7 @@ function(value) {
 DwtCheckbox.prototype.getValue =
 function() {
     var object = this._inputEl || this;
-	return object.value || this.getText();
+	return object.value != null ? object.value : this.getText();
 };
 
 DwtCheckbox.prototype.getInputElement =
