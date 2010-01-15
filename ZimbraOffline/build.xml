@@ -1097,7 +1097,7 @@
 		<fileset dir="${jspc.src.dir}/WEB-INF/lib" includes="*.jar"/>
 	</path>
 
-	<target name="offline_jspc">
+	<target name="offline-jspc">
 		<echo>Pre-compiling ${param.jspfiles}</echo>
 		<java classname="org.apache.jasper.JspC" fork="true" classpathref="jspc.class.path">
 			<arg value="-l" />
@@ -1111,7 +1111,7 @@
 		</java>
 	</target>
 
-	<target name="offline_jspc.precompile">
+	<target name="offline-jspc.precompile">
 		<mkdir dir="${jspc.build.dir}"/>
 		<mkdir dir="${jspc.src.dir}"/>
 		<copy todir="${jspc.src.dir}">
@@ -1130,18 +1130,18 @@
 		<copy file="${build.dir}/offlinejsp.jar" todir="${jspc.src.dir}/WEB-INF/lib"/>
 		<fileset id='jspc.fileset' dir='${jspc.src.dir}' includes="h/*,desktop/*.jsp"/>
 		<pathconvert property='jspc.files' refid='jspc.fileset' pathsep=' ' />
-		<antcall target="offline_jspc">
+		<antcall target="offline-jspc">
 			<param name="param.jspfiles" value="${jspc.files}"/>
 		</antcall>
 	</target>
 
-	<target name="offline_jspc.compile">
+	<target name="offline-jspc.compile">
 		<javac destdir="${jspc.build.dir}" optimize="on" debug="off" srcdir="${jspc.build.dir}" classpathref="jspc.class.path" target="1.5">
 			<include name="**"/>
 		</javac>
 	</target>
 
-	<target name="offline_jspc.build" depends="offline_jspc.precompile,offline_jspc.compile">
+	<target name="offline-jspc.build" depends="offline-jspc.precompile,offline-jspc.compile">
 		<copy todir="${dist.data.dir}/data/tmp/jetty/zimbra/jsp">
 			<fileset dir="${dist.dir}/jetty/work/zimbra/jsp">
 				<include name="**/*.class"/>
@@ -1149,7 +1149,7 @@
 		</copy>
 	</target>
 
-	<target name="offline_jspc.deploy" depends="offline_jspc.build">
+	<target name="offline-jspc.deploy" depends="offline-jspc.build">
 		<copy todir="${zimbra.offline.data.dir}/data/tmp/jetty/zimbra/jsp">
 			<fileset dir="${jspc.build.dir}">
 				<include name="**/*.class"/>
@@ -1157,7 +1157,7 @@
 		</copy>
 	</target>
 
-	<target name="offline_jspc.clean">
+	<target name="offline-jspc.clean">
 		<delete>
 		    <fileset dir="${jspc.src.dir}" />
 		    <fileset dir="${jspc.build.dir}" />
