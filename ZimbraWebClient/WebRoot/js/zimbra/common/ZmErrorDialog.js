@@ -12,12 +12,24 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
+
 /**
- * Creates an error dialog which basically means it will have a "Report" button
- * @constructor
+ * @overview
+ * 
+ * This file defines the Zimbra controller.
+ *
+ */
+
+/**
  * @class
- * A normal DwtMessageDialog w/ a "Report" button that will post user info to the 
+ * Creates an error dialog which will have a "Send Error Report" button.
+ * A normal {@link DwtMessageDialog} with a "Send Error Report" button that will post user info to the 
  * server when clicked.
+ * 
+ * @param	{Object}	parent		the parent
+ * @param	{Hash}		msgs		a hash of messages (msgs.showDetails, msgs.hideDetails)
+ * 
+ * @extends DwtMessageDialog
  */
 ZmErrorDialog = function(parent, msgs) {
 
@@ -39,6 +51,11 @@ ZmErrorDialog = function(parent, msgs) {
 ZmErrorDialog.prototype = new DwtMessageDialog;
 ZmErrorDialog.prototype.constructor = ZmErrorDialog;
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @return		{String}		a string representation of the object
+ */
 ZmErrorDialog.prototype.toString =
 function() {
 	return "ZmErrorDialog";
@@ -63,6 +80,10 @@ ZmErrorDialog.prototype.CONTROLS_TEMPLATE = "zimbra.Widgets#ZmErrorDialogControl
 // Public methods
 //
 
+/**
+ * Resets the dialog.
+ * 
+ */
 ZmErrorDialog.prototype.reset =
 function() {
 	this.setDetailString();
@@ -70,9 +91,9 @@ function() {
 };
 
 /**
-* Sets the text that shows up when the Detail button is pressed.
+* Sets the text to display when the "Show Details" button is pressed.
 *
-* @param text	detail text
+* @param {String}	text	the detail text
 */
 ZmErrorDialog.prototype.setDetailString = 
 function(text) {
@@ -82,6 +103,14 @@ function(text) {
 	this._detailStr = text;
 };
 
+/**
+ * Sets the message style (info/warning/critical) and content.
+ *
+ * @param {String}	msgStr		the message text
+ * @param {String}	detailStr	the detail text
+ * @param {constant}	style		the style (see {@link DwtMessageDialog} <code>_STYLE</code> constants)
+ * @param {String}	title		the dialog box title
+ */
 ZmErrorDialog.prototype.setMessage =
 function(msgStr, detailStr, style, title) {
 	this._msgStr = msgStr;
@@ -97,9 +126,11 @@ function(msgStr, detailStr, style, title) {
 };
 
 /**
- * Popup the error dialog.
- * @param loc				[Object]*		the desired location
- * @param hideReportButton	[Boolean]*		true if dialog shouldn't show "Send Report" button
+ * Pops-up the error dialog.
+ * 
+ * @param {Object}	loc				the desired location
+ * @param {Boolean}	hideReportButton	if <code>true</code>, do not show "Send Error Report" button
+ * 
  */
 ZmErrorDialog.prototype.popup =
 function(loc, hideReportButton) {
@@ -109,6 +140,10 @@ function(loc, hideReportButton) {
 	DwtMessageDialog.prototype.popup.call(this, loc);
 };
 
+/**
+ * Pops-down the dialog.
+ * 
+ */
 ZmErrorDialog.prototype.popdown =
 function() {
 	DwtMessageDialog.prototype.popdown.call(this);
@@ -121,7 +156,9 @@ function() {
 //
 // Protected methods
 //
-
+/**
+ * @private
+ */
 ZmErrorDialog.prototype._getNavigatorInfo =
 function() {
 	var strNav = [];
@@ -142,6 +179,9 @@ function() {
 	return strNav.join("");
 };
 
+/**
+ * @private
+ */
 ZmErrorDialog.prototype._getSubjectPrefix = 
 function() {
 	var strSubj = [];
@@ -165,6 +205,9 @@ function() {
 	return strSubj.join("");
 };
 
+/**
+ * @private
+ */
 ZmErrorDialog.prototype._getUserPrefs = 
 function() {
 	var currSearch = appCtxt.getCurrentSearch();
@@ -194,6 +237,9 @@ function() {
 
 // Callbacks
 
+/**
+ * @private
+ */
 ZmErrorDialog.prototype._reportCallback =
 function() {
 	this._iframe = document.createElement("iframe");
@@ -250,7 +296,11 @@ function() {
 	this.popdown();
 };
 
-// Displays the detail text
+/**
+ * Displays the detail text
+ * 
+ * @private
+ */
 ZmErrorDialog.prototype._showDetail = 
 function() {
 	this._detailsVisible = !this._detailsVisible;
