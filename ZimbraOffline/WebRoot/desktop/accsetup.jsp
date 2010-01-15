@@ -331,8 +331,8 @@ function onEditLink(id, keep, makeInvisible) {
 												<select name="accountFlavor" id="accountFlavor" onchange="accntChange(this)" class="ZSelect">
 													<option value=""><fmt:message key='AccountSelect'/></option>
 													<option value="Zimbra" <c:if test="${accountFlavor eq 'Zimbra'}">selected</c:if> ><fmt:message key='Zimbra'/></option>
-													<option value="YMP" <c:if test="${accountFlavor eq 'YMP'}">selected</c:if> ><fmt:message key='YMP'/></option>
 													<option value="Gmail" <c:if test="${accountFlavor eq 'Gmail'}">selected</c:if> ><fmt:message key='Gmail'/></option>
+													<option value="YMP" <c:if test="${accountFlavor eq 'YMP'}">selected</c:if> ><fmt:message key='YMP'/></option>
 													<c:if test="${extBean.xsyncEnabled}">
 													  <option value="Xsync" <c:if test="${accountFlavor eq 'Xsync'}">selected</c:if> ><fmt:message key='Xsync'/></option>
 													</c:if>

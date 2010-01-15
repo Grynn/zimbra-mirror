@@ -20,13 +20,13 @@
 
 <table class="ZPanelBottom" align="center" cellpadding="4" cellspacing="0">
 	<tr>
-		<td class="ZTip"><a href="http://www.zimbra.com/products/desktop.html" target="_blank"><fmt:message key='TipsHome'/></a></td>
+		<td class="ZTip"><a href="http://www.zimbra.com/products/desktop2.html" target="_blank"><fmt:message key='TipsHome'/></a></td>
 		<td class="ZDot">&#8226;</td>
-		<td class="ZTip"><a href="http://www.zimbra.com/desktop/help/en_US/Zimbra_Mail_Help.htm" target="_blank"><fmt:message key='TipsHelp'/></a></td>
+		<td class="ZTip"><a href="http://www.zimbra.com/desktop2/help/en_US/Zimbra_Mail_Help.htm" target="_blank"><fmt:message key='TipsHelp'/></a></td>
 		<td class="ZDot">&#8226;</td>
-		<td class="ZTip"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop" target="_blank"><fmt:message key='TipsNotes'/></a></td>
+		<td class="ZTip"><a href="http://wiki.zimbra.com/index.php?title=Zimbra_Desktop_2" target="_blank"><fmt:message key='TipsNotes'/></a></td>
 		<td class="ZDot">&#8226;</td>
-		<td class="ZTip"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQ" target="_blank"><fmt:message key='TipsFaq'/></a></td>
+		<td class="ZTip"><a href="http://wiki.zimbra.com/index.php?title=Zimbra_Desktop_2_FAQ" target="_blank"><fmt:message key='TipsFaq'/></a></td>
 		<td class="ZDot">&#8226;</td>
 		<td class="ZTip"><a href="http://www.zimbra.com/forums/zimbra-desktop/" target="_blank"><fmt:message key='TipsForums'/></a></td>
 		<c:if test="${zdf:isPrism(userAgent)}">
