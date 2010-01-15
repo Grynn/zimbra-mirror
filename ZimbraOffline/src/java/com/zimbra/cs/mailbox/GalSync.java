@@ -273,13 +273,9 @@ public class GalSync {
                 syncMan.syncComplete(target);
                 OfflineLog.offline.info("Offline GAL sync completed successfully for " + user);
             } catch (Exception e) {
-                if (OfflineSyncManager.getInstance().isServiceActive()) {
-                    syncMan.processSyncException(target, "", e, traceOn);
-                    OfflineLog.offline.info("Offline GAL sync failed for " + user +
-                        ": " + e.getMessage());
-                } else {
-                    OfflineLog.offline.info("Offline GAL sync terminated: " + user);
-                }
+                syncMan.processSyncException(target, "", e, traceOn);
+                OfflineLog.offline.info("Offline GAL sync failed for " + user +
+                    ": " + e.getMessage());
             }
         }
     };

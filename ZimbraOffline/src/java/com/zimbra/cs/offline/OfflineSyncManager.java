@@ -587,6 +587,7 @@ public class OfflineSyncManager {
     }
 
     public synchronized void setConnectionDown(boolean b) {
+        isConnectionDown = b;
         OfflineLog.offline.info("setting connection status to " + (b ? "down" : "up"));
         for (OfflineSyncStatus ss : syncStatusTable.values()) {
             if (ss.getSyncStatus() != SyncStatus.authfail &&
@@ -597,7 +598,6 @@ public class OfflineSyncManager {
                     ss.reset();
             }
         }
-        isConnectionDown = b;
         notifyStateChange();
         lock.lock();
         if (!isConnectionDown)
