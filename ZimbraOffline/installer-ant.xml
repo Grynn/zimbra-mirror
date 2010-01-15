@@ -47,7 +47,7 @@
         <antcall target="installer-pack-media-windows"/>
         <antcall target="installer-pack-media-linux"/>
 
-	<copy todir="${build.dir}" file="build/dist/ext/exchange.zip"/>
+	<copy tofile="${build.dir}/exchange_${offline.filever}_${offline.branch}_b${offline.buildid}.zip" file="build/dist/ext/exchange.zip"/>
         
         <antcall target="gen-update-php"/>
         <antcall target="symlink-media"/>

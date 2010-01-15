@@ -657,7 +657,7 @@
 		<copy todir="${zimbra.home.dir}" overwrite="true">
 			<fileset dir="${dist.dir}" includes="app/**,data/**"/>
 		</copy>
-		<unzip src="${dist.dir}/ext/exchange.zip" dest="${zimbra.home.dir}/app/lib/ext/exchange" overwrite="true"/>
+		<unzip src="${dist.dir}/ext/exchange.zip" dest="${zimbra.home.dir}/app/lib/ext" overwrite="true"/>
 
 		<mkdir dir="${zimbra.sqlite.dir}" />
 		<if>
@@ -805,11 +805,13 @@
 	<target name="offline-make-dist-ext">
 		<antcall target="offline-ext-jars"/>
 		<mkdir dir="${dist.dir}/ext"/>
-		<zip destfile="${dist.dir}/ext/exchange.zip">
+		<mkdir dir="${dist.dir}/ext/exchange"/>
+		<copy todir="${dist.dir}/ext/exchange">
 			<fileset dir="${zsync.common.build.dir}" includes="zsynccommon.jar"/>
 			<fileset dir="${zsync.client.build.dir}" includes="zsyncclient.jar"/>
 			<fileset dir="${zdext.build.dir}" includes="zdext.jar"/>
-		</zip>
+		</copy>
+		<zip destfile="${dist.dir}/ext/exchange.zip" basedir="${dist.dir}/ext" includes="exchange/*.jar"/>
 	</target>
 
 	<target name="offline-prep-launcher">
