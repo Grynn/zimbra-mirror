@@ -1129,7 +1129,18 @@
 		</copy>
 		<copy file="${build.dir}/offlinejsp.jar" todir="${jspc.src.dir}/WEB-INF/lib"/>
 		<fileset id='jspc.fileset' dir='${jspc.src.dir}' includes="h/*,desktop/*.jsp"/>
-		<pathconvert property='jspc.files' refid='jspc.fileset' pathsep=' ' />
+
+        <if><isset property="is-windows" /><then>
+            <pathconvert property='jspc.files' refid='jspc.fileset' pathsep=' '>
+                <!-- jasper has problem handling the drive letter (e.g. c:) in windows file path.
+                     converting abs. path to rel. path here as a workaround
+                --> 
+                <map from="${jspc.src.dir}" to="" />
+            </pathconvert>
+        </then><else>
+            <pathconvert property='jspc.files' refid='jspc.fileset' pathsep=' ' />
+        </else></if>
+
 		<antcall target="offline-jspc">
 			<param name="param.jspfiles" value="${jspc.files}"/>
 		</antcall>
