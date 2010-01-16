@@ -1,3 +1,3 @@
-tell application "Yahoo! Zimbra Desktop"
+tell application "Zimbra Desktop"
     quit saving no
 end tell
