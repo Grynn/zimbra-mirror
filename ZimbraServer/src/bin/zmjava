@@ -54,7 +54,7 @@ else
 fi 
 
 if [ x${zimbra_zmjava_java_home} = "x" ]; then
-  zimbra_zmjava_java_home=${zimbra_home}
+  zimbra_zmjava_java_home=${zimbra_home}/java
 fi
 
 if [ x${zimbra_zmjava_java_library_path} = "x" ]; then
