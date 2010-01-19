@@ -224,7 +224,8 @@ ZaSettings.init = function () {
 				ZaSettings.postInit();
 			}
 		} else {
-			AjxInclude(["/service/zimlet/res/Zimlets-nodev_all.js.zgz"], null,new AjxCallback(ZaSettings.postInit ));
+			var zimletURL = ["/service/zimlet/res/Zimlets-nodev_all.js.zgz", ".js?v=",appVers,ZaZimbraAdmin.LOCALE_QS].join("");
+			AjxInclude([zimletURL], null,new AjxCallback(ZaSettings.postInit ));
 		}
 	} catch (ex) {
 		ZaSettings.initializing = false ;
