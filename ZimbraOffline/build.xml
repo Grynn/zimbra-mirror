@@ -266,7 +266,7 @@
 		<copy file="src/installer/resources/launcher_16x16.ico" tofile="${dist.dir}/jetty/webapps/zimbra/favicon.ico"/>
 		<copy file="${dist.dir}/jetty/webapps/zimbra/favicon.ico" tofile="${dist.dir}/jetty/webapps/zimbra/img/logo/favicon.ico"/>
 
-		<replace file="${dist.dir}/jetty/webapps/zimbra/skins/_base/base2/splash.html" token="&lt;div id='ZLoginAppName'&gt;&lt;script&gt;document.write(ZmMsg.splashScreenAppName)&lt;/script&gt;&lt;/div&gt;" value=""/>
+		<replace file="${dist.dir}/jetty/webapps/zimbra/skins/_base/base2/splash.html" token="&lt;div id='ZLoginAppName'&gt;&lt;script&gt;document.write(ZmMsg.splashScreenAppName)&lt;/script&gt;&lt;/div&gt;" value="&lt;div id='ZLoginAppName'&gt;&lt;script&gt;document.write(ZmMsg.splashScreenOfflineName)&lt;/script&gt;&lt;/div&gt;"/>
 		<replace file="${dist.dir}/jetty/webapps/zimbra/skins/_base/base2/splash.html" token="&lt;td id='ZLoginSwitchMsg'&gt;&lt;script&gt;document.write(ZmMsg.splashScreenSwitch)&lt;/script&gt;&lt;/td&gt;" value=""/>
 		<!--replace file="${dist.dir}/jetty/webapps/zimbra/skins/_base/base2/splash.html" token="ZmMsg.splashScreenAppName" value="ZmMsg.splashScreenOfflineName"/-->
 		<replace file="${dist.dir}/jetty/webapps/zimbra/skins/_base/base/skin.html" token="&lt;div id='ZLoginAppName'&gt;&lt;script&gt;document.write(ZmMsg.splashScreenAppName)&lt;/script&gt;&lt;/div&gt;" value=""/>
