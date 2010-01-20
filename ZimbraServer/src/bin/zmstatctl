@@ -75,6 +75,7 @@ sub getPidFiles() {
         opendir(DIR, $piddir) || die "Unable to opendir $piddir: $!";
         my @pidfiles = readdir(DIR);
         foreach my $file (@pidfiles) {
+        	next if ($file =~ /zmstat-fd-real/); # can't kill/test: running as root
             if ($file =~ /\.pid$/) {
                 push(@pids, "$piddir/$file");
             }
