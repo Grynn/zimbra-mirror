@@ -1535,9 +1535,7 @@ public class SkinResources
 			String url = dir + name;
 			
 			if (isPNG && isBrowser("MSIE_LOWER_THAN_7")) {
-				return "background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + url + "'"
-							+ (repeat != null && repeat.toLowerCase().indexOf("no") > -1 
-									? "sizingMethod='crop');" : "sizingMethod='scale');")
+				return "background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+url+"',sizingMethod='image');"
 							+ (width != null ? "width:"+width+";" : "")
 							+ (height != null ? "height:"+height+";" : "");
 			} else {

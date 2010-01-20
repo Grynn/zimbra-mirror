@@ -127,12 +127,13 @@ public abstract class DecodedImage {
 		//			it only shows up for IE)
 		String styleBody;
         if (mSuffix.equalsIgnoreCase("png")) {
-			styleBody = "background:" + bgPosStr + " " + bgRptStr + ";" + "\n"
-							+ "#IFDEF MSIE\n" 
-								+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + bgImgStr + "',sizingMethod='scale');\n"
-							+ "#ELSE\n"
-								+ "background-image:url(\""+bgImgStr+"\");"
-							+ "\n#ENDIF\n";
+            styleBody = "\n" +
+                "#IFDEF MSIE\n" +
+                    "filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + bgImgStr + "',sizingMethod='image');\n" +
+                "#ELSE\n" +
+                    "background: url('"+bgImgStr+"') " + bgPosStr + " " + bgRptStr + ";\n" +
+                "#ENDIF\n"
+            ;
 		} else {
 			styleBody = "background:url(\"" + bgImgStr + "\") " + bgPosStr + " " + bgRptStr + ";"
 							+ widthStr + heightStr + "overflow:hidden;";

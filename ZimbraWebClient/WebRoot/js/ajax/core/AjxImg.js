@@ -83,12 +83,12 @@ function(parentEl, imageName, useParentEl, _disabled) {
                 ].join('');
             }
 			parentEl.innerHTML = [
-				"<div style='position:relative;",size,"'>",
+				"<div style='position:relative;overflow:hidden;",size,"'>",
 					"<div style='overflow:hidden;position:relative;",size,"'>",
 						"<img src='",mask.f,"' ",
 							 "style='filter:mask(color=",color,");position:absolute;",position,clip,"'>",
 					"</div>",
-					"<div class='",overlayName,"' style='",size,";position:absolute;top:0;left:0'></div>",
+					"<div class='",overlayName,"' style='",size,";position:absolute;top:",overlay.t,";left:",overlay.l,"'></div>",
 				"</div>"
 			].join("");
 			return;
