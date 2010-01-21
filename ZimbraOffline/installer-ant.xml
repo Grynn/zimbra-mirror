@@ -43,11 +43,12 @@
         <ant dir="." target="offline-make-install-files" inheritAll="false"/>
        	<mkdir dir="${build.dir}" />
  
-		<antcall target="installer-pack-media-mac"/>
+	<move tofile="${build.dir}/exchange_${offline.filever}_${offline.branch}_b${offline.buildid}.zip" file="build/dist/ext/exchange.zip"/>
+	<delete dir="build/dist/ext"/>
+
+	<antcall target="installer-pack-media-mac"/>
         <antcall target="installer-pack-media-windows"/>
         <antcall target="installer-pack-media-linux"/>
-
-	<copy tofile="${build.dir}/exchange_${offline.filever}_${offline.branch}_b${offline.buildid}.zip" file="build/dist/ext/exchange.zip"/>
         
         <antcall target="gen-update-php"/>
         <antcall target="symlink-media"/>
