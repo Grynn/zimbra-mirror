@@ -269,7 +269,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                     newConv = getConversationById(convId);
                     newConv.addChild(msg);
                 }
-                DbMailItem.setParent(newConv, msg);
+                DbMailItem.setParent(msg, newConv);
                 msg.markItemModified(Change.MODIFIED_PARENT);
                 msg.mData.parentId = convId;
                 msg.mData.metadataChanged(this);
