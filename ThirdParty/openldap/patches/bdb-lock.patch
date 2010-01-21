@@ -1,0 +1,10 @@
+--- openldap-2.4.21/servers/slapd/back-bdb/dn2id.c.orig	2009-12-03 14:52:11.000000000 -0800
++++ openldap-2.4.21/servers/slapd/back-bdb/dn2id.c	2009-12-03 14:52:17.000000000 -0800
+@@ -33,6 +33,7 @@
+ 	DBT       lockobj;
+ 	int       db_rw;
+ 
++	return 0;
+ 	if (!txn)
+ 		return 0;
+ 
