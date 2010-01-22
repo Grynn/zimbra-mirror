@@ -45,21 +45,15 @@ public class UTF7 extends Charset {
         private int decoder = 0, bits = 0;
 
         protected UTF7Decoder(Charset cs) {
-			super(cs, (float) 0.4, 1);
-		}
+            super(cs, (float) 0.4, 1);
+        }
 
         @Override protected void implReset() {
             shifted = first = false;
             decoder = bits = 0;
         }
 
-        @Override protected CoderResult implFlush(CharBuffer out) {
-            if (shifted && decoder != 0)
-                return CoderResult.malformedForLength(1);
-            return CoderResult.UNDERFLOW;
-		}
-
-        protected CoderResult decodeLoop(ByteBuffer in, CharBuffer out) {
+        @Override protected CoderResult decodeLoop(ByteBuffer in, CharBuffer out) {
             while (in.hasRemaining()) {
                 if (!out.hasRemaining())
                     return CoderResult.OVERFLOW;
@@ -102,8 +96,17 @@ public class UTF7 extends Charset {
                         out.put((char) c);
                 }
             }
+
+            // must force the flush here because the nio charset framework cannot handle
+            //   anything other than UNDERFLOW or OVERFLOW being returned by implFlush,
+            //   but an encoded triplet interrupted by EOF is still malformed input... 
+            if (shifted && decoder != 0) {
+                implReset();
+                in.position(Math.max(0, in.position() - 1));
+                return CoderResult.malformedForLength(1);
+            }
             return CoderResult.UNDERFLOW;
-		}
+        }
     }
 
     public class UTF7Encoder extends CharsetEncoder {
@@ -111,8 +114,8 @@ public class UTF7 extends Charset {
         private int encoder = 0, bits = 0;
 
         protected UTF7Encoder(Charset cs) {
-			super(cs, (float) 2.5, 5);
-		}
+            super(cs, (float) 2.5, 5);
+        }
 
         @Override protected void implReset() {
             shifted = false;
@@ -134,13 +137,13 @@ public class UTF7 extends Charset {
             return CoderResult.UNDERFLOW;
         }
 
-        protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
-			while (in.hasRemaining()) {
+        @Override protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
+            while (in.hasRemaining()) {
                 if (out.remaining() < 4)
                     return CoderResult.OVERFLOW;
                 char c = in.get();
                 boolean needsShift = c > MAX_UTF7_CHAR_VALUE || !NO_SHIFT_REQUIRED[c];
-                
+
                 if (needsShift && !shifted) {
                     out.put((byte) BEGIN_SHIFT);
                     if (c == BEGIN_SHIFT)
@@ -148,7 +151,7 @@ public class UTF7 extends Charset {
                     else
                         shifted = true;
                 }
-                
+
                 if (shifted) {
                     if (needsShift) {
                         encoder = (encoder << 16) | c;
@@ -161,18 +164,18 @@ public class UTF7 extends Charset {
                     } else
                         implFlush(out);
                 }
-                
+
                 if (!needsShift)
                     out.put((byte) c);
             }
             // need to force a flush (sigh)
             // return CoderResult.UNDERFLOW;
             return implFlush(out);
-		}
+        }
     }
 
     UTF7(String canonicalName, String[] aliases) {
-		super(canonicalName, aliases);
+        super(canonicalName, aliases);
 
         BEGIN_SHIFT = '+';
         END_SHIFT   = '-';
@@ -185,17 +188,17 @@ public class UTF7 extends Charset {
         final String unshifted = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'(),-./:? \t\r\n";
         for (int i = 0; i < unshifted.length(); i++)
             NO_SHIFT_REQUIRED[unshifted.charAt(i)] = true;
-	}
+    }
 
-	public boolean contains(Charset cs) {
-		return true;
-	}
+    @Override public boolean contains(Charset cs) {
+        return true;
+    }
 
-	public CharsetDecoder newDecoder() {
-		return new UTF7Decoder(this);
-	}
+    @Override public CharsetDecoder newDecoder() {
+        return new UTF7Decoder(this);
+    }
 
-	public CharsetEncoder newEncoder() {
-		return new UTF7Encoder(this);
-	}
+    @Override public CharsetEncoder newEncoder() {
+        return new UTF7Encoder(this);
+    }
 }
