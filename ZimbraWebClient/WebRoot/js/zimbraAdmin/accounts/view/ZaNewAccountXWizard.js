@@ -1160,11 +1160,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									showAddOnNextRow:true, 
 									removeButtonLabel:ZaMsg.NAD_RemoveAddress,								
 									items: [
-										{ref:".", type:_TEXTFIELD_, label:null, width:"200px", enableDisableCheks:[]}
+										{ref:".", type:_TEXTFIELD_, label:null, width:"200px", enableDisableChecks:[],visibilityChecks:[]}
 									],
 									nowrap:false,labelWrap:true,
-									visibilityChecks:[ZaAccountXFormView.isSendingFromAnyAddressDisAllowed],
-									visibilityChangeEventSources:[ZaAccount.A_zimbraAllowAnyFromAddress, ZaAccount.A_COSId]										
+									enableDisableChecks:[],
+									visibilityChecks:[ZaAccountXFormView.isSendingFromAnyAddressDisAllowed,[ZaItem.hasWritePermission,ZaAccount.A_zimbraAllowFromAddress]],
+									visibilityChangeEventSources:[ZaAccount.A_zimbraAllowAnyFromAddress, ZaAccount.A_zimbraAllowFromAddress, ZaAccount.A_COSId]										
 								}
 							]
 						});

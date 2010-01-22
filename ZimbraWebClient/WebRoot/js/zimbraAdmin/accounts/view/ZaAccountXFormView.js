@@ -2072,7 +2072,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									removeButtonLabel:ZaMsg.NAD_RemoveAddress,
 									items: [
 										{
-											ref:".", type:_TEXTFIELD_, label:null,width:"200px", enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraAllowFromAddress]],
+											ref:".", type:_TEXTFIELD_, label:null,width:"200px", 
+											enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraAllowFromAddress]],
 											visibilityChecks:[[ZaItem.hasReadPermission,ZaAccount.A_zimbraAllowFromAddress]]
 										}
 									],
