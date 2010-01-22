@@ -22,6 +22,9 @@
   <key name="http_so_timeout">
     <value>30000</value>
   </key>
+  <key name="soap_fault_include_stack_trace">
+    <value>true</value>
+  </key>
   <key name="javamail_imap_debug">
     <value>false</value>
   </key>
