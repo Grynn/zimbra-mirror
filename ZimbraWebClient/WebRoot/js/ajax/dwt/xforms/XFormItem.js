@@ -4169,7 +4169,8 @@ Dwt_ColorPicker_XFormItem = function() {}
 XFormItemFactory.createItemType("_DWT_COLORPICKER_", "dwt_colorpicker", Dwt_ColorPicker_XFormItem, Dwt_Adaptor_XFormItem)
 
 Dwt_ColorPicker_XFormItem.prototype.cssStyle = "width:80px;";
-
+Dwt_ColorPicker_XFormItem.prototype.nowrap = false;
+Dwt_ColorPicker_XFormItem.prototype.labelWrap = true;
 Dwt_ColorPicker_XFormItem.prototype.constructWidget = function () {
     var params = {
         parent: this.getForm(),

@@ -41,6 +41,8 @@ OSelect1_XFormItem.prototype.menuUp = false;
 OSelect1_XFormItem.prototype.noteUp = false;
 OSelect1_XFormItem.prototype.inputSize = 25;
 OSelect1_XFormItem.prototype.bmolsnr = true;
+OSelect1_XFormItem.prototype.nowrap = false;
+OSelect1_XFormItem.prototype.labelWrap = true;
 //TODO: get showing check working for the normal SELECT, requires:
 //		* separate notion of hilited row (for mouseover) and selected row(s)
 //		* teach select1 that more than one value may be selected (same as select)
