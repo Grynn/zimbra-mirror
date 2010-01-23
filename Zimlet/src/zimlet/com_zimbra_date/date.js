@@ -232,7 +232,7 @@ function() {
 		pattern = Com_Zimbra_Date.PATTERNS[i];
 
 		// normalize regex
-		pattern = pattern.replace(/\s+/g, "\\s+");
+		pattern = pattern.replace(/\s+/g, "\\b\\s*\\b");
 		pattern = pattern.replace(/\(([^\)]+)\)/g, "(?:$1)");
 
 		// replace keywords with regex fragment
