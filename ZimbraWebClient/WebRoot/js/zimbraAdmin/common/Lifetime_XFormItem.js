@@ -51,6 +51,8 @@ Lifetime_XFormItem = function() {}
 XFormItemFactory.createItemType("_LIFETIME_", "lifetime", Lifetime_XFormItem, Composite_XFormItem);
 Lifetime_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Lifetime_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
+Lifetime_XFormItem.prototype.nowrap = false;
+Lifetime_XFormItem.prototype.labelWrap = true;
 Lifetime_XFormItem.prototype.items = [
 	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_, cssClass:"admin_xform_number_input", 
 	 	visibilityChecks:[],
@@ -102,6 +104,8 @@ Lifetime_XFormItem.prototype.items = [
 
 Lifetime1_XFormItem = function() {}
 XFormItemFactory.createItemType("_LIFETIME1_", "lifetime1", Lifetime1_XFormItem, Composite_XFormItem);
+Lifetime1_XFormItem.prototype.nowrap = false;
+Lifetime1_XFormItem.prototype.labelWrap = true;
 Lifetime1_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Lifetime1_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 Lifetime1_XFormItem.prototype.items = [
@@ -152,6 +156,8 @@ Lifetime1_XFormItem.prototype.items = [
 ];
 
 Lifetime2_XFormItem = function() {}
+Lifetime2_XFormItem.prototype.nowrap = false;
+Lifetime2_XFormItem.prototype.labelWrap = true;
 XFormItemFactory.createItemType("_LIFETIME2_", "lifetime2", Lifetime2_XFormItem, Lifetime1_XFormItem);
 
 Lifetime2_XFormItem.prototype.items = [
