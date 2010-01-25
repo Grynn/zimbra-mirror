@@ -1,0 +1,10 @@
+<zimlet name="com_zimbra_example_sampleprops" version="1.0" description="Demos accessing i18n properties">
+    <include>com_zimbra_example_sampleprops.js</include>
+    <handlerObject>com_zimbra_example_sampleprops_HandlerObject</handlerObject>
+    <zimletPanelItem label="${msg.helloworld_label}" icon="zimbraIcon">
+      <toolTipText>${msg.helloworld_tooltip}</toolTipText>
+      <contextMenu>
+        <menuItem label="${msg.helloworld_menuitem}"  icon="zimbraIcon" id="sampleprops_menuItemId"/>
+      </contextMenu>
+   </zimletPanelItem>
+</zimlet>

@@ -1,0 +1,4 @@
+<zimlet name="com_zimbra_example_tabiframe" version="1.0" description="Demos a tab that loads an iframe">
+	<include>com_zimbra_example_tabiframe.js</include>
+	<handlerObject>com_zimbra_example_tabiframe_HandlerObject</handlerObject>
+</zimlet>

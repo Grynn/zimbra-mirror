@@ -1,0 +1,13 @@
+<zimlet name="com_zimbra_example_paneldragsourcedetails" version="1.0" description="Demos panel zimlet that accepts drag source objects">
+	<include>com_zimbra_example_paneldragsourcedetails.js</include>
+ 	<handlerObject>com_zimbra_example_paneldragsourcedetails_HandlerObject</handlerObject>
+	<zimletPanelItem label="Drag Source Details">
+		<toolTipText>Drag-and-drop an object</toolTipText>
+		<dragSource type="ZmAppt" />
+		<dragSource type="ZmContact" />
+		<dragSource type="ZmConv" />
+		<dragSource type="ZmMailMsg" />
+		<dragSource type="ZmTask" />
+		<dragSource type="ZmBriefcaseItem" />
+	</zimletPanelItem>
+</zimlet>

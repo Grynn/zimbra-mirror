@@ -1,0 +1,7 @@
+<zimlet name="com_zimbra_example_simpledialog" version="1.0" description="Create a simple custom dialog.">
+    <include>com_zimbra_example_simpledialog.js</include>
+    <handlerObject>com_zimbra_example_simpledialog_HandlerObject</handlerObject>
+    <zimletPanelItem label="${msg.simpledialog_label}" icon="zimbraIcon">
+      <toolTipText>${msg.simpledialog_tooltip}</toolTipText>
+   </zimletPanelItem>
+</zimlet>

@@ -1,0 +1,7 @@
+<zimlet name="com_zimbra_example_simplejspasync" version="1.0" description="An example zimlet using a JSP file.">
+    <include>com_zimbra_example_simplejspasync.js</include>
+    <handlerObject>com_zimbra_example_simplejspasync_HandlerObject</handlerObject>
+    <zimletPanelItem label="JSP Example (via Ajax)" icon="zimbraIcon">
+      <toolTipText>Click to launch the JSP Example</toolTipText>
+   </zimletPanelItem>
+</zimlet>

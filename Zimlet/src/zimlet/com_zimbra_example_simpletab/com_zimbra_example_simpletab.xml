@@ -1,0 +1,4 @@
+<zimlet name="com_zimbra_example_simpletab" version="1.0" description="Demos a simple tab application">
+	<include>com_zimbra_example_simpletab.js</include>
+	<handlerObject>com_zimbra_example_simpletab_HandlerObject</handlerObject>
+</zimlet>

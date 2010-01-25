@@ -1,0 +1,18 @@
+<zimlet name="com_zimbra_example_menuitemsxml" version="1.0" description="Demos menu item with actions in XML">
+	<contentObject>
+		<matchOn>
+			<regex attrs="ig">lab|user|remodel</regex> <!-- matches lab or user or remodel -->
+		</matchOn>
+		<toolTip>Menu Items Example</toolTip> <!-- the tool tip to display when content matches -->
+		<contextMenu>
+			<menuItem label="First Context Menu Item - Go to Yahoo!" icon="Search" id="SOME_ID1">
+				<canvas type="window" width="800" height="600" />
+				<actionUrl target="http://www.yahoo.com" method="get" />
+			</menuItem>
+			<menuItem label="Second Context Menu Item - Go to Yahoo! Sports" icon="NewContact" id="SOME_ID2">
+				<canvas type="window" width="800" height="600" />
+				<actionUrl target="http://sports.yahoo.com" method="get" />
+			</menuItem>
+		</contextMenu>
+	</contentObject>
+</zimlet>

@@ -1,0 +1,14 @@
+<zimlet name="com_zimbra_example_panelitemmenuactionsxml" version="1.0" description="Demos panel item with menus in XML">
+	<zimletPanelItem label="Test Panel Item">
+		<contextMenu>
+			<menuItem label="Test menu 1.0" id="TEST_MENU_SOME_ID1">
+				<canvas type="window" width="300" height="300" />
+				<actionUrl method="get" target="http://www.yahoo.com" />
+			</menuItem>
+			<menuItem label="Test menu 2.0" id="TEST_MENU_SOME_ID2">
+				<actionUrl method="get" target="http://finance.yahoo.com" />
+			</menuItem>
+			<menuItem label="Test menu 3.0" id="TEST_MENU_SOME_ID3" />
+		</contextMenu>
+	</zimletPanelItem>
+</zimlet>

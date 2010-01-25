@@ -1,0 +1,13 @@
+<zimlet name="com_zimbra_example_panelitemclickedxml" version="1.0" description="Demos panel item single and double clicked via XML">
+	<zimletPanelItem label="Panel Item Clicked (via XML) Zimlet">
+		<toolTipText>Single or Double Click</toolTipText>
+		<onClick>
+			<canvas type="window" width="300" height="300" />
+			<actionUrl method="get" target="http://maps.google.com" />
+		</onClick>		
+		<onDoubleClick>
+			<canvas type="window" width="600" height="400" />
+			<actionUrl method="get" target="http://www.yahoo.com" />
+		</onDoubleClick>		
+	</zimletPanelItem>
+</zimlet>

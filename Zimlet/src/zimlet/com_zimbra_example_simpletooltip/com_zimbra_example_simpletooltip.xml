@@ -1,0 +1,8 @@
+ <zimlet name="com_zimbra_example_simpletooltip" version="1.0" description="Simple Tool Tip Example: Hello World!">
+     <contentObject>
+         <matchOn>
+             <regex attrs="ig">lab|user|remodel</regex> <!-- matches lab or user or remodel -->
+         </matchOn>
+         <toolTip>Hello World! Tooltip</toolTip>
+     </contentObject>
+ </zimlet>

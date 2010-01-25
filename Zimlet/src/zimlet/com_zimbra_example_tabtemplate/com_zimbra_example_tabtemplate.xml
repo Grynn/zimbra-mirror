@@ -1,0 +1,5 @@
+<zimlet name="com_zimbra_example_tabtemplate" version="0.1" description="Demos a tab application with a template">
+	<include>com_zimbra_example_tabtemplate.js</include>
+	<include>templates/Tab.template.js</include>
+	<handlerObject>com_zimbra_example_tabtemplate_HandlerObject</handlerObject>
+</zimlet>

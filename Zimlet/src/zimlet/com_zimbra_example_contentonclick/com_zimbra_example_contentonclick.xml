@@ -1,0 +1,12 @@
+ <zimlet name="com_zimbra_example_contentonclick" version="1.0" description="Simple onClick example">
+     <contentObject>
+         <matchOn>
+             <regex attrs="ig">lab|user|remodel</regex> <!-- matches lab or user or remodel -->
+         </matchOn>
+         <toolTip>Hello World! Tooltip</toolTip>
+         <onClick>
+         	<canvas type="window" width="800" height="600" />
+         	<actionUrl target="http://sports.yahoo.com" method="get" />
+         </onClick>
+     </contentObject>
+ </zimlet>

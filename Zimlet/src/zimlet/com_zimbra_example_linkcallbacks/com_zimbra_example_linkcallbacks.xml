@@ -1,0 +1,6 @@
+<zimlet name="com_zimbra_example_linkcallbacks" version="1.0" description="Illustrates how to attach callback methods to links">
+	<include>com_zimbra_example_linkcallbacks.js</include>
+	<handlerObject>com_zimbra_example_linkcallbacks_HandlerObject</handlerObject>
+	<zimletPanelItem label="Link Callback Example">
+	</zimletPanelItem>
+</zimlet>

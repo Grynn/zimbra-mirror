@@ -1,0 +1,9 @@
+<zimlet name="com_zimbra_example_panelitemmenuxml" version="1.0" description="Demos panel item with menus in XML">
+	<zimletPanelItem label="Test Panel Item">
+		<contextMenu>
+			<menuItem label="Test menu 1.0" id="TEST_MENU_SOME_ID1" />
+			<menuItem label="Test menu 2.0" id="TEST_MENU_SOME_ID2" />
+			<menuItem label="Test menu 3.0" id="TEST_MENU_SOME_ID3" />
+		</contextMenu>
+	</zimletPanelItem>
+</zimlet>

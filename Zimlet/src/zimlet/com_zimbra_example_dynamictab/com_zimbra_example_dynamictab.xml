@@ -1,0 +1,11 @@
+<zimlet name="com_zimbra_example_dynamictab" version="1.0" description="Creates a tab application with configurable URL">
+	<include>com_zimbra_example_dynamictab.js</include>
+	<include>com_zimbra_example_dynamictab_TabManager.js</include>
+	<include>com_zimbra_example_dynamictab_EditTabDialog.js</include>
+	<include>com_zimbra_example_dynamictab_Util.js</include>
+	<include>templates/Dialogs.template.js</include>
+	<includeCSS>com_zimbra_example_dynamictab.css</includeCSS>
+	<handlerObject>com_zimbra_example_dynamictab_HandlerObject</handlerObject>
+	<zimletPanelItem label="${msg.panel_label}">
+	</zimletPanelItem>
+</zimlet>

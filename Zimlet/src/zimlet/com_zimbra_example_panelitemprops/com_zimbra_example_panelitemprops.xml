@@ -1,0 +1,27 @@
+<zimlet name="com_zimbra_example_panelitemprops" version="1.0" description="Demos panel item with menus and user properties in XML">
+	<zimletPanelItem label="Test Panel Item with Props">
+		<contextMenu>
+			<menuItem label="Test menu 1.0" id="TEST_MENU_SOME_ID1">
+				<canvas type="window" width="300" height="300" />
+				<actionUrl method="get" target="http://www.yahoo.com" />
+			</menuItem>
+			<menuItem label="Test menu 2.0" id="TEST_MENU_SOME_ID2">
+				<actionUrl method="get" target="http://finance.yahoo.com">
+					<param name="whatismyparam">${prop.my_test_username}</param>
+				</actionUrl>
+			</menuItem>
+		</contextMenu>
+	</zimletPanelItem>
+	<userProperties>
+		<property type="string" label="Your username" name="my_test_username" />
+		<property type="password" label="Your password" name="my_test_password" />
+		<property type="number" label="Your ID number" name="my_test_id_num" />
+		<property type="date" label="Delivery Date" name="my_test_delivery_date" />
+		<property type="boolean" label="Priority?" name="my_test_priority" />
+		<property type="enum" label="Shapes" name="my_test_shapes">
+			<item label="Square" value="square"/>
+			<item label="Circle" value="circle"/>
+			<item label="Rectangle" value="rectangle"/>
+		</property>
+	</userProperties>
+</zimlet>

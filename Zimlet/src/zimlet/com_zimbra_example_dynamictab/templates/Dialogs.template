@@ -1,0 +1,74 @@
+<template id="com_zimbra_example_dynamictab.templates.Dialogs#EditTabs-Main">
+	<div class="DwtPropertyEditor" style="overflow:auto">
+		<form method="POST" action="test" id="${editForm_id}" action="${editForm_action}" >
+			<input type="hidden" id="${editForm_tabIdList_input}" value="${editForm_tabIdList_value}">
+			<table id="${editForm_dynamicTabTable}" cellspacing="0" cellpadding="0" border="0" width="100%"></table>
+		</form>
+	</div>
+	<div>
+		<table id="${editForm_dynamicTabButtonTable}"></table>
+	</div>
+</template>
+
+<template id="com_zimbra_example_dynamictab.templates.Dialogs#EditTabs-AddTab">
+	<table cellspacing="2" cellpadding="0" class="com_zimbra_example_dynamictab_EditTabsDialog-dialogContainer" width="100%">
+		<tr>
+			<td colspan="2">
+				<div style="text-decoration:underline;font-weight:bold;font-size:110%"><$= com_zimbra_example_dynamictab.dialog_tab_details $></div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<$= com_zimbra_example_dynamictab.tab_label_inputlabel $>&nbsp;<span class="redAsteric">*</span>
+			</td>
+			<td class="field">
+				<div class="DwtInputField" style="overflow: visible; position: static;">
+				<input type="text" id="${tabLabel_input}" value="${tabLabel_value}" size="20" maxlength="20">
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<$= com_zimbra_example_dynamictab.tab_tooltip_inputlabel $>&nbsp;<span class="redAsteric">*</span>
+			</td>
+			<td class="field">
+				<div class="DwtInputField" style="overflow: visible; position: static;">
+				<input type="text" id="${tabToolTip_input}" value="${tabToolTip_value}" size="20" maxlength="50">
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<$= com_zimbra_example_dynamictab.tab_url_inputlabel $>&nbsp;<span class="redAsteric">*</span>
+			</td>
+			<td class="field">
+				<div class="DwtInputField" style="overflow: visible; position: static;">
+				<input type="text" id="${tabUrl_input}" value="${tabUrl_value}" size="20" maxlength="250">
+				<div style="font-size: 90%;font-style:italic;"><$= com_zimbra_example_dynamictab.tab_url_sample $></div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<span id="${removeLinkId}" onmouseover='this.style.cursor="pointer"' onmouseout='this.style.cursor="default"' class="com_zimbra_example_dynamictab_EditTabsDialog-removeLink"><$= com_zimbra_example_dynamictab.dialog_link_remove $></span>
+			</td>
+		</tr>
+	</table>
+</template>
+
+<template id="com_zimbra_example_dynamictab.templates.Dialogs#Tab-Main">
+	<iframe name="com_zimbra_example_dynamictab-iframe" src="${iframeSrcUrl}" width="100%" height="100%"></iframe>
+</template>
+
+<template id="com_zimbra_example_dynamictab.templates.Dialogs#Tab-Toolbar">
+	<div style="margin-top: 5px;font-size:10pt"><b><$= com_zimbra_example_dynamictab.tab_url_inputlabel $>&nbsp;</b>${tabUrl}
+		[<a href="#" class="${configure_link}" id="${configure_link}"><$= com_zimbra_example_dynamictab.tab_url_edit $></a>]</div>
+</template>
+
+<template id="com_zimbra_example_dynamictab.templates.Dialogs#Tab-Toolbar-Edit">
+	<div style="margin-top: 5px;font-size:10pt"><b><$= com_zimbra_example_dynamictab.tab_url_inputlabel $>&nbsp;</b>
+		<input type="text" id="${tabUrl_input}" value="${tabUrl_value}" size="20" maxlength="250">
+		[<a href="#" class="${save_link}" id="${save_link}"><$= com_zimbra_example_dynamictab.tab_url_save $></a>]
+		[<a href="#" class="${cancel_link}" id="${cancel_link}"><$= com_zimbra_example_dynamictab.tab_url_cancel $></a>]</div>
+</template>

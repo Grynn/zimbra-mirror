@@ -1,0 +1,14 @@
+<zimlet name="com_zimbra_example_menuitemsjs" version="1.0" description="Demos menu item with actions in JS">
+	<include>com_zimbra_example_menuitemsjs.js</include>
+  <handlerObject>com_zimbra_example_menuitemsjs_HandlerObject</handlerObject>
+	<contentObject>
+		<matchOn>
+			<regex attrs="ig">lab|user|remodel</regex> <!-- matches lab or user or remodel -->
+		</matchOn>
+		<toolTip>Menu Items Example</toolTip> <!-- the tool tip to display when content matches -->
+		<contextMenu>
+			<menuItem label="First Context Menu Item - Go to Yahoo!" icon="Search" id="SOME_MENU_ITEM_ID1" />
+			<menuItem label="Second Context Menu Item - Go to Yahoo! Sports" icon="NewContact" id="SOME_MENU_ITEM_ID2" />
+		</contextMenu>
+	</contentObject>
+</zimlet>

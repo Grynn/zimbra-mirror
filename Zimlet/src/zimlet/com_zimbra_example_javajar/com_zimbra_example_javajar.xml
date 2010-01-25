@@ -1,0 +1,7 @@
+<zimlet name="com_zimbra_example_javajar" version="1.0" description="An example zimlet with a JAR file.">
+    <include>com_zimbra_example_javajar.js</include>
+    <handlerObject>com_zimbra_example_javajar_HandlerObject</handlerObject>
+    <zimletPanelItem label="Java w/JAR Example" icon="zimbraIcon">
+      <toolTipText>Click to launch the JAR Example</toolTipText>
+   </zimletPanelItem>
+</zimlet>
