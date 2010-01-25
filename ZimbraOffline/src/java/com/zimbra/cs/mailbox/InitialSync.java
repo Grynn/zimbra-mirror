@@ -31,9 +31,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HttpStatus;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.BufferStream;
+import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.CopyInputStream;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
@@ -953,9 +955,11 @@ public class InitialSync {
         OfflineAccount acct = ombx.getOfflineAccount();
         UserServlet.HttpInputStream in = null;
         Pair<Header[], UserServlet.HttpInputStream> response;
+        TarInputStream tin = null;
         
         try {
-            String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=tgz&list=" + StringUtil.join(",", ids));
+            String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH +
+                "/~/?fmt=tgz&list=" + StringUtil.join(",", ids));
             
             if (acct.isDebugTraceEnabled())
                 OfflineLog.request.debug("GET " + url);
@@ -971,27 +975,31 @@ public class InitialSync {
                 OfflineLog.offline.error("initial: can't read sync response: " + url, x);
                 throw ServiceException.FAILURE("can't read sync response: " + url, x);
             }
+            if (in.getStatusCode() == HttpStatus.SC_NO_CONTENT) {
+                SyncExceptionHandler.saveFailureReport(ombx, ids.get(0),
+                    "missing msg ids " + ids.toString() + " from server response", null);
+                return;
+            }
             
             Set<Integer> idSet = new HashSet<Integer>();
             idSet.addAll(ids);
-            
-            TarInputStream tis = null;
-            TarEntry te = null;
             try {
-                tis = new TarInputStream(new GZIPInputStream(in), "UTF-8");
                 int msgId = 0;
-                while ((te = tis.getNextEntry()) != null) {
+                TarEntry te;
+
+                tin = new TarInputStream(new GZIPInputStream(in), "UTF-8");
+                while ((te = tin.getNextEntry()) != null) {
                     if (te.getName().endsWith(".meta")) {
-                        ItemData itemData = new ItemData(readTarEntry(tis, te));
+                        ItemData itemData = new ItemData(readTarEntry(tin, te));
                         UnderlyingData ud = itemData.ud;
+                        
                         assert (ud.type == type);
                         assert (ud.getBlobDigest() != null);
                         msgId = ud.id;
-
-                        te = tis.getNextEntry(); //message always has a blob
+                        te = tin.getNextEntry(); //message always has a blob
                         if (te != null) {
                             try {
-                                saveMessage(tis, te.getSize(), ud.id, ud.folderId, type, ud.date,
+                                saveMessage(tin, te.getSize(), ud.id, ud.folderId, type, ud.date,
                                         Flag.flagsToBitmask(itemData.flags), itemData.tags, ud.parentId);
                                 idSet.remove(ud.id);
                             } catch (Exception x) {
@@ -1023,18 +1031,20 @@ public class InitialSync {
                     "missing msg ids " + idSet.toString() + " from server response", null);
             }
         } finally {
-            if (in != null)
-                in.close();
+            ByteUtil.closeStream(tin);
         }
     }
     
     private void syncMessagesAsZip(List<Integer> ids, byte type) throws ServiceException {
         UserServlet.HttpInputStream in = null;
-        
         String zlv = OfflineLC.zdesktop_sync_zip_level.value();
         OfflineAccount acct = ombx.getOfflineAccount();
+        ZipInputStream zin = null;
+
         try {
-            String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=zip&zlv=" + zlv + "&list=" + StringUtil.join(",", ids));
+            String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH +
+                "/~/?fmt=zip&zlv=" + zlv + "&list=" + StringUtil.join(",", ids));
+            
             if (acct.isDebugTraceEnabled())
                 OfflineLog.request.debug("GET " + url);
             try {
@@ -1048,10 +1058,16 @@ public class InitialSync {
                 OfflineLog.offline.error("initial: can't read sync response: " + url, x);
                 throw ServiceException.FAILURE("can't read sync response: " + url, x);
             }
+            if (in == null) {
+                SyncExceptionHandler.saveFailureReport(ombx, ids.get(0),
+                    "missing msg ids " + ids.toString() + " from server response", null);
+                return;
+            }
             
-            ZipInputStream zin = new ZipInputStream(in);
-            ZipEntry entry = null;
             try {
+                ZipEntry entry;
+
+                zin = new ZipInputStream(in);
                 while ((entry = zin.getNextEntry()) != null) {
                     Map<String, String> headers = recoverHeadersFromBytes(entry.getExtra());
                     int id = Integer.parseInt(headers.get("X-Zimbra-ItemId"));
@@ -1074,8 +1090,7 @@ public class InitialSync {
                 OfflineLog.offline.error("Invalid sync format", x);
             }
         } finally {
-            if (in != null)
-                in.close();
+            ByteUtil.closeStream(zin);
         }
     }
         
