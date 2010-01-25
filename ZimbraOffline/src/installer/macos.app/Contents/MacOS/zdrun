@@ -63,12 +63,24 @@ my $app_timestamp = "@INSTALL.APP.TIMESTAMP@";
 my $data_root = "$home_dir/Library/Zimbra Desktop";
 my $is_upgrade = 0;
 my $tmpdir = "$home_dir/Library/.zdtmp";
+my $lockfile = "$home_dir/Library/.zdrun.lock";
+my $lockfh;
 
 my @user_files = ("index", "store", "sqlite", "log", "zimlets-properties", 
 	"conf/keystore", "profile/prefs.js", "profile/persdict.dat", "profile/localstore.json");
 
 sub launch_prism() {
 	exec("\"$data_root/Zimbra Desktop.app/Contents/MacOS/prism\"");
+}
+
+# ensure single running instance of this script per user
+if (!open($lockfh, ">$lockfile")) {
+    print "can not open $lockfile\n";
+    exit 1;
+}
+if (!flock($lockfh, 2 | 4)) { # LOCK_EX | LOCK_NB
+    print "another instance of zdrun is already running !\n";
+    exit 1;
 }
 
 # not new install or upgrade - just run prism
