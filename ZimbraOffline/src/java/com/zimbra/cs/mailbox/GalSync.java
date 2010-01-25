@@ -384,12 +384,9 @@ public class GalSync {
             throw ServiceException.FAILURE("unable to search GAL", null);
         }
         
-
         while (handler.getGroupCount() > 0) {
             fetchContacts(handler, mbox);
             mbox.optimize(null, 0);
-            System.gc();
- 
             if (handler.getGroupCount() > 0) {
                 try {
                     Thread.sleep(OfflineLC.zdesktop_gal_sync_group_interval.longValue());

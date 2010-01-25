@@ -209,16 +209,13 @@ public class OfflineApplication extends ZimbraApplication {
                 OfflineLog.offline.warn("Fail to deploy zimlet " + zimlets[i] + ": " + e.getMessage());
             }
         }
-
-        // On Windows, even associated FileInputStream is closed, File.delete() still may
-        // not work without calling GC first. This seems to be a known issue for Windows JVM
-        if (SystemUtil.ON_WINDOWS) {
-            System.gc();
-        }
         for (File zimletFile : filesToDel) {
-            zimletFile.delete();
+            try {
+                FileUtil.delete(zimletFile);
+            } catch (IOException e) {
+                OfflineLog.offline.warn("Zimlets file delete failed: " + zimletFile);
+            }
         }
-
         OfflineLog.offline.debug("Zimlets deployment done.");
     }
 }
