@@ -213,7 +213,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
     	_tab2 = ++this.TAB_INDEX;
         tabBarChoices.push ({value:_tab2, label:ZaMsg.NAD_Tab_Attachments});
         var case2 = 	
-        {type:_ZATABCASE_, caseKey:_tab2, id:"gs_form_attachment_tab", numCols:2, colSizes: ["50%","50%"], items:[
+        {type:_ZATABCASE_, caseKey:_tab2, id:"gs_form_attachment_tab", numCols:2, colSizes: ["30%","70%"], items:[
  				{type: _GROUP_,  id:"attachment_settings", width: "98%", numCols: 2, colSpan:2, colSizes:[250, "*"], items: [
 					{ref:ZaGlobalConfig.A_zimbraAttachmentsBlocked, type: _CHECKBOX_,
 				  		label: ZaMsg.NAD_GlobalRemoveAllAttachments,
@@ -240,15 +240,15 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 									onSelection:GlobalConfigXFormView.blockedExtSelectionListener
 								},
 								{type:_SPACER_, height:"5"},
-								{type:_GROUP_, width:"100%", numCols:4, colSizes:[85,5, 85,"*"],
+								{type:_GROUP_, width:"100%", numCols:4, colSizes:[125,5, 125,"*"],
 									items:[
-										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, width:80,
+										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, width:120,
 											onActivate:"GlobalConfigXFormView.removeAllExt.call(this)",
 										   	enableDisableChecks:[GlobalConfigXFormView.shouldEnableRemoveAllButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
 									   		enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaBlockedExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
 										},
 										{type:_CELLSPACER_},
-										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, width:80,
+										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, width:120,
 										   	onActivate:"GlobalConfigXFormView.removeExt.call(this)",
 										   	enableDisableChecks:[GlobalConfigXFormView.shouldEnableRemoveButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
 									   		enableDisableChangeEventSources:[ZaGlobalConfig.A2_blocked_extension_selection,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
@@ -275,15 +275,15 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 									onSelection:GlobalConfigXFormView.commonExtSelectionListener
 								},
 							    {type:_SPACER_, height:"5"},
-							    {type:_GROUP_, width:"98%", numCols:7, colSizes:[100,5, 85,5,100,60,85],
+							    {type:_GROUP_, width:"98%", numCols:7, colSizes:[135,5,135,5,100,60,125],
 									items: [
-									   	{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddSelected, width:80,
+									   	{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddSelected, width:130,
 											onActivate:"GlobalConfigXFormView.addCommonExt.call(this)",
 											enableDisableChecks:[GlobalConfigXFormView.shouldEnableAddButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
 											enableDisableChangeEventSources:[ZaGlobalConfig.A2_common_extension_selection,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
 										},
 									    {type:_CELLSPACER_},
-									    {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll, width:80,
+									    {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll, width:130,
 											onActivate:"GlobalConfigXFormView.addAllCommonExt.call(this)",
 											enableDisableChecks:[GlobalConfigXFormView.shouldEnableAddAllButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
 											enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
@@ -295,7 +295,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 											enableDisableChecks:[[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
 											enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaBlockedExtension]
 										},
-										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Attach_AddExtension, width:80,
+										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Attach_AddExtension, width:120,
 											onActivate:"GlobalConfigXFormView.addNewExt.call(this)",
 											enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaGlobalConfig.A_zimbraNewExtension],[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
 											enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraNewExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
