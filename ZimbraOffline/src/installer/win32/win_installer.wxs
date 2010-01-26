@@ -41,7 +41,7 @@
       <SetODBCFolders Sequence="1100">NOT Installed</SetODBCFolders>
       <MigrateFeatureStates Sequence="1200" />
       <InstallValidate Sequence="1400" />
-      <RemoveExistingProducts After="InstallFinalize">OLDER_VERSION_FOUND</RemoveExistingProducts>
+      <RemoveExistingProducts Before="InstallInitialize">OLDER_VERSION_FOUND</RemoveExistingProducts>
       <InstallInitialize Sequence="1500" />
       <ProcessComponents Sequence="1600" />
       <UnpublishComponents Sequence="1680" />
