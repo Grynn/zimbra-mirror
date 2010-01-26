@@ -16,7 +16,7 @@
 ' ZD runner
 '
 
-Dim oFso, oReg, oShellApp, oShell, sScriptPath, sScriptDir, oTokens, sAppRoot, sDataRoot
+Dim oFso, oReg, oShellApp, oShell, oWMI, sScriptPath, sScriptDir, oTokens, sAppRoot, sDataRoot
 Dim sLocalAppDir, bIsUpgrade, sTmpDir, sRestoreDir, aUserDirs, aUserFiles, sVersion, sVerFile
 
 Sub FindAndReplace(sFile, oTokens)
@@ -202,12 +202,31 @@ Function ReadVersion()
     oFin.Close
 End Function
 
+Sub EnsureSingleInstance()
+    Dim oProcs, oProc, bFound
+    Set oProcs = oWMI.ExecQuery("Select * from Win32_Process " & _
+        "where Name='cscript.exe'",, 48) ' 48: forward-only enumerator + return-immediately
+
+    bFound = false      
+    For Each oProc in oProcs
+        If Instr(1, oProc.CommandLine, WScript.ScriptName, 1) > 0 Then
+            If bFound Then
+                WScript.Quit
+            End If
+            bFound = true
+        End If
+    Next
+End Sub
+
 '------------------------------- main ---------------------------------
 
 Set oFso = CreateObject("Scripting.FileSystemObject")
 Set oShellApp = CreateObject("Shell.Application")
 Set oShell = CreateObject("WScript.Shell")
 Set oReg=GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\default:StdRegProv")
+Set oWMI = GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\cimv2")
+
+EnsureSingleInstance
 
 sVersion="@version@"
 aUserDirs = Array("index", "store", "sqlite", "log", "zimlets-properties")
