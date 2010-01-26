@@ -38,7 +38,6 @@ function(dontCallParent) {
 		DwtUiEvent.prototype.reset.call(this);
 	}
 	this.button = 0;
-	this._populated = false;
 };
 
 DwtMouseEvent.prototype.setFromDhtmlEvent =

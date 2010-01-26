@@ -430,7 +430,7 @@ function(htmlElement, cursorName) {
  */
 Dwt.getLocation =
 function(htmlElement, point) {
-	var point = (point) ? point : new DwtPoint(0, 0);
+	point = point || new DwtPoint(0, 0);
 	if (htmlElement.style.position == Dwt.ABSOLUTE_STYLE) {
 		point.set(parseInt(DwtCssStyle.getProperty(htmlElement, "left")),
 		          parseInt(DwtCssStyle.getProperty(htmlElement, "top")));
@@ -1240,4 +1240,35 @@ Dwt.setFavIcon = function(iconURL) {
 Dwt.enableDesignMode =
 function(doc, on) {
 	doc.designMode = on ? "on" : "off";
+};
+
+/**
+ * Hack to work around FF 3.6 change in behavior with regard to mouse down/up in
+ * scrollbar, which breaks this list view's scrollbar. Return true and tell DOM
+ * not to call preventDefault(), since we want default browser behavior.
+ *
+ * Note: Callers should set up their elements so that a click that is not within
+ * a scrollbar goes to a more specific element (and not the one that scrolls).
+ * That way we don't have to perform sketchy math to see if the click was in the
+ * scrollbar.
+ *
+ * Returns true if FF3.6+ scrollbar click was detected and handled.
+ *
+ * https://bugzilla.mozilla.org/show_bug.cgi?id=489667
+ *
+ * @param ev	{DwtMouseEvent}
+ */
+Dwt.ffScrollbarCheck =
+function(ev) {
+
+	if (AjxEnv.isFirefox3_6up) {
+		var t = ev.target;
+		if (t && (t.clientHeight != t.scrollHeight || t.clientWidth != t.scrollWidth)) {
+			ev._dontCallPreventDefault = true;
+			ev._stopPropagation = false;
+			ev._returnValue = true;
+			return true;
+		}
+	}
+	return false;
 };
