@@ -2008,7 +2008,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									width:"30em",
 									enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled,"TRUE"],
 										[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefOutOfOfficeReply]],
-									enableDisableChangeEvantSources:[ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled]
+									enableDisableChangeEventSources:[ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled]
 								},
 								{ref:ZaAccount.A_zimbraPrefMailSendReadReceipts, 
 									type:_SUPER_SELECT1_,

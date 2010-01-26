@@ -1105,7 +1105,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									label:ZaMsg.LBL_zimbraPrefOutOfOfficeReply, 
 									labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em",
 									enableDisableChecks:[ZaAccountXFormView.isOutOfOfficeReplyEnabled],
-									enableDisableChangeEvantSources:[ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled]
+									enableDisableChangeEventSources:[ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled]
 								},
 								{ref:ZaAccount.A_zimbraPrefMailSendReadReceipts, 
 									type:_SUPERWIZ_SELECT1_, 
