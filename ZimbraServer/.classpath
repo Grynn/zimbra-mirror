@@ -94,7 +94,11 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/slf4j-log4j12-1.5.8.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/slf4j-api-1.5.8.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/tnef-1.5.0.jar" sourcepath="/ThirdParty/jtnef/src"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/tnef-1.5.0.jar" sourcepath="/ZimbraCommon/jars-src/tnef-1.5.0-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/tnef-1.5.0-javadoc.zip!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/xercesImpl-2.9.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.4.2-zimbra.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-charset.jar"/>
