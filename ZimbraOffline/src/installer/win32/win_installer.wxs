@@ -168,6 +168,8 @@
     <Property Id="WixAppFolder" Value="WixPerUserFolder" />
     
     <WixVariable Id="WixUILicenseRtf" Value="@build.root@\build\dist\app\License.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="@build.root@\src\installer\win32\background_banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="@build.root@\src\installer\win32\background_dialog.bmp" />
     
     <Feature Id="ID1C787BADDF55E290CC71CB4BDE88B613" Title="Complete" Level="1" Description="The complete package" InstallDefault="local" ConfigurableDirectory="APPLICATIONFOLDER">
 
