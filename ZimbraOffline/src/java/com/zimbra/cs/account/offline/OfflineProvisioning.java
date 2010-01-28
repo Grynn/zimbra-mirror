@@ -1126,22 +1126,18 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public void deleteAccount(String zimbraId) throws ServiceException {
-        Folder fldr;
         Account localAccount = getLocalAccount();
-        Mailbox mbox;
         
         try {
-            mbox = OfflineMailboxManager.getInstance().getMailboxByAccount(
+            Folder fldr;
+            Mailbox mbox = OfflineMailboxManager.getInstance().getMailboxByAccount(
                 localAccount);
+            
             fldr = mbox.getFolderByName(null, DesktopMailbox.ID_FOLDER_NOTIFICATIONS,
                 zimbraId);
             mbox.delete(null, fldr.getId(), MailItem.TYPE_MOUNTPOINT);
         } catch (Exception e) {
         }
-        mbox = OfflineMailboxManager.getInstance().getMailboxByAccount(
-            mAccountCache.getById(zimbraId), false);
-        if (mbox != null && mbox instanceof SyncMailbox)
-            ((SyncMailbox)mbox).cancelCurrentTask();
         deleteGalAccount(zimbraId);
         DbOfflineDirectory.deleteGranterByGrantee(zimbraId);
         deleteOfflineAccount(zimbraId);
@@ -1298,10 +1294,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         for (String zimbraId : getAllAccountIds()) {
             Account acct = get(includeSyncStatus, AccountBy.id, zimbraId);
-            if (acct != null && !isLocalAccount(acct) && !isGalAccount(acct) && !isMountpointAccount(acct)) {
-            	MailboxManager.getInstance().getMailboxByAccount(acct);
+            if (acct != null && !isLocalAccount(acct) && !isGalAccount(acct) &&
+                !isMountpointAccount(acct))
                 accts.add(acct);
-            }
         }
         return accts;
     }
