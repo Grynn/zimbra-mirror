@@ -231,8 +231,7 @@ public class GalSync {
             String logstr = "id=" + id + " name=\"" + fullName + "\"";
             
             ParsedContact contact = new ParsedContact(map);           
-            String ctime, mtime;
-            if (fullSync || ((ctime = map.get("createTimeStamp")) != null && (mtime = map.get("modifyTimeStamp")) != null && mtime.equals(ctime))) {
+            if (fullSync) {
                 createContact(contact, id, logstr);
             } else {
                 int itemId = findContact(id);
