@@ -167,6 +167,8 @@ public class ZUserAgentBean {
     
 	public boolean getIsSafari3Up() { return ((isSafari && browserVersion.greaterOrEqual(3,0)) || isChrome); }
 
+    public boolean getIsSafari4Up() { return ((isSafari && browserVersion.greaterOrEqual(4,0))); }
+
 	public boolean getIsWebTv() { return isWebTv; }
 
     public boolean getIsNav() { return isNav; }
@@ -214,7 +216,9 @@ public class ZUserAgentBean {
     public boolean getIsFirefox1_5up() { return (isFirefox && browserVersion.greaterOrEqual(1,5)); }
 
     public boolean getIsFirefox2up() { return (isFirefox && browserVersion.greaterOrEqual(2,0)); }
-    
+
+    public boolean getIsFirefox3up() { return (isFirefox && browserVersion.greaterOrEqual(3,0)); }
+
 	public boolean getIsGecko1_8up() { return (isGeckoBased && browserVersion.greaterOrEqual(1,8)); }
 
     public boolean getIsGecko() { return isGeckoBased; }
