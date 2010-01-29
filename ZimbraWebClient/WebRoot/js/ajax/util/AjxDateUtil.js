@@ -352,7 +352,7 @@ function (dt, startOfWeek) {
 };
 
 AjxDateUtil.getWeekNumber =
-function(date, firstDayOfWeek, janDate) {
+function(date, firstDayOfWeek, janDate, isISO8601WeekNum) {
 
     // Setup Defaults
     firstDayOfWeek = firstDayOfWeek || 0;
@@ -377,26 +377,53 @@ function(date, firstDayOfWeek, janDate) {
     endOfWeek = new Date(startOfWeek.getTime() + 6*AjxDateUtil.MSEC_PER_DAY);
 
     var weekNum;
-    if (startYear !== endOfWeek.getFullYear() && endOfWeek.getDate() >= janDate) {
-        // If years don't match, endOfWeek is in Jan. and if the
-        // week has WEEK_ONE_JAN_DATE in it, it's week one by definition.
-        weekNum = 1;
-    } else {
-        // Get the 1st day of the 1st week, and
-        // find how many days away we are from it.
-        var weekOne = (new Date(startYear, 0, janDate));
-        weekOne.setHours(12,0,0,0);
-        var weekOneDayOne = AjxDateUtil.getFirstDayOfWeek(weekOne, firstDayOfWeek);
 
-        // Round days to smoothen out 1 hr DST diff
-        var daysDiff  = Math.round((targetDate.getTime() - weekOneDayOne.getTime())/AjxDateUtil.MSEC_PER_DAY);
+    if(!isISO8601WeekNum) {
+        if (startYear !== endOfWeek.getFullYear() && endOfWeek.getDate() >= janDate) {
+            weekNum = 1;
+        } else {
+            var weekOne = (new Date(startYear, 0, janDate));
+            weekOne.setHours(12,0,0,0);
+            var weekOneDayOne = AjxDateUtil.getFirstDayOfWeek(weekOne, firstDayOfWeek);
 
-        // Calc. Full Weeks
-        var rem = daysDiff % 7;
-        var weeksDiff = (daysDiff - rem)/7;
-        weekNum = weeksDiff + 1;
+            // Round days to smoothen out 1 hr DST diff
+            var daysDiff  = Math.round((targetDate.getTime() - weekOneDayOne.getTime())/AjxDateUtil.MSEC_PER_DAY);
+
+            // Calc. Full Weeks
+            var rem = daysDiff % 7;
+            var weeksDiff = (daysDiff - rem)/7;
+            weekNum = weeksDiff + 1;
+        }
+        return weekNum;
+    }else {
+
+        var newYear = new Date(date.getFullYear(),0,1);
+        var day = newYear.getDay() - 1;
+        day = (day >= 0 ? day : day + 7);
+        var dayOftheYear = Math.floor((date.getTime()-newYear.getTime() - (date.getTimezoneOffset()-newYear.getTimezoneOffset())*60000)/AjxDateUtil.MSEC_PER_DAY) + 1;
+
+        if(day < 4)
+        {
+            weekNum = Math.floor((dayOftheYear+day-1)/7) + 1;
+            if(weekNum > 52)
+            {
+                var nxtYear = new Date(date.getFullYear() + 1,0,1);
+                var nxtDay = nxtYear.getDay() - 1;
+                nxtDay = nxtDay >= 0 ? nxtDay : nxtDay + 7;
+                weekNum = nxtDay < 4 ? 1 : 53;
+            }
+        }else {
+            weekNum = Math.floor((dayOftheYear+day -1 )/7);
+            if(weekNum == 0)
+            {
+                var prevYear = new Date(date.getFullYear()-1,0,1);
+                var prevDay = prevYear.getDay()-1;
+                prevDay = (prevDay >= 0 ? prevDay : prevDay + 7);
+                weekNum = ( prevDay==3 || ( AjxDateUtil.isLeapYear(prevYear.getFullYear()) && prevDay==2 ) ) ? 53 : 52;
+            }
+        }
+        return weekNum;
     }
-    return weekNum;
 };
 
 AjxDateUtil.getTimeStr = 

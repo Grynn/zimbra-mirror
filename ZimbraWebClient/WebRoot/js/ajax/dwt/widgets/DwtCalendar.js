@@ -69,6 +69,7 @@ DwtCalendar = function(params) {
 
 	this._weekDays = new Array(7);
 	this._workingDays = params.workingDays || DwtCalendar._DEF_WORKING_DAYS;
+    this._useISO8601WeekNo = params.useISO8601WeekNo;
 	this.setFirstDayOfWeek(params.firstDayOfWeek || DwtCalendar.SUN);
 	
 	this._forceRollOver = (params.forceRollOver !== false);
@@ -375,6 +376,7 @@ function(firstDayOfWeek) {
 		var dowCell = document.getElementById(this._getDOWCellId(i));
 		dowCell.innerHTML = AjxDateUtil.WEEKDAY_SHORT[(firstDayOfWeek + i) % 7];
 	}
+    this._firstDayOfWeek = firstDayOfWeek
 	this._layout();
 };
 
@@ -543,7 +545,7 @@ function() {
 			var kwCell = document.getElementById(kwCellId);
 			if (kwCell) {
 				var firstDayCell = document.getElementById(this._getDayCellId(i * 7));
-				kwCell.innerHTML = AjxDateUtil.getWeekNumber(new Date(firstDayCell._year, firstDayCell._month, firstDayCell._day));
+				kwCell.innerHTML = AjxDateUtil.getWeekNumber(new Date(firstDayCell._year, firstDayCell._month, firstDayCell._day), this._firstDayOfWeek, null, this._useISO8601WeekNo);
 			}
 		}
 	}
