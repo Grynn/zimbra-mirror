@@ -12,6 +12,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
+ 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
@@ -145,9 +146,10 @@ ForceOnline.prototype = {
         obsService.addObserver(this, "profile-change-net-teardown", false);
         
         this._networkLinkService = Cc["@mozilla.org/network/network-link-service;1"].getService(Ci.nsINetworkLinkService);
+        this._online = this._networkLinkService.isLinkUp;
+
         this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
         this._timer.init(this, 1000, Ci.nsITimer.TYPE_REPEATING_SLACK);
-        this._online = this._networkLinkService.isLinkUp;
         break;
       case "profile-change-net-teardown":
         var obsService = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
@@ -173,14 +175,23 @@ ForceOnline.prototype = {
       this._listenerMap[type] = [];
     }
     this._listenerMap[type].push(listener);
-    
-    if ((type == ONLINE_STATUS && !this._ios.offline) || (type == OFFLINE_STATUS && this._ios.offline)) {
+
+    var online = this._networkLinkService.isLinkUp;
+    if ((type == ONLINE_STATUS && online) || (type == OFFLINE_STATUS && !online)) {
       this._dispatchNetworkStatusEvent(type);
     }
   },
   
   removeEventListener : function(type, listener, capture) {
-    // TODO
+    if (type in this._listenerMap) {
+      var listeners = this._listenerMap[type];
+      for (var i=0; i<listeners.length; i++) {
+        if (listeners[i] == listener) {
+          listeners.splice(i, 1);
+          break;
+        }
+      }
+    }   
   },
   
   _dispatchNetworkStatusEvent : function(status) {
