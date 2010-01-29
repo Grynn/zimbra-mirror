@@ -161,13 +161,13 @@ CRYPT_RANDOM := \
 	Crypt-OpenSSL-Random-0.04
 
 CRYPT_RSA := \
-	Crypt-OpenSSL-RSA-0.25
+	Crypt-OpenSSL-RSA-0.26
 
 DBFILE_PERL_LIBS := \
 	DB_File
 
 BDB_PERL_LIBS := \
-	BerkeleyDB-0.39
+	BerkeleyDB-0.41
 
 SA_PERL_LIBS = \
 	Mail-SpamAssassin-$(SA_VERSION)
