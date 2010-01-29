@@ -14,6 +14,10 @@
 # ***** END LICENSE BLOCK *****
 # 
 use strict;
+
+use lib "/opt/zimbra/zimbramon/lib";
+use  Zimbra::Util::Common;
+
 use Getopt::Std;
 use POSIX qw(strftime);
 use File::Spec;
