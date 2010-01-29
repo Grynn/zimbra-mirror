@@ -170,7 +170,7 @@ BDB_PERL_LIBS := \
 	BerkeleyDB-0.39
 
 SA_PERL_LIBS = \
-	Mail-SpamAssassin-3.2.5
+	Mail-SpamAssassin-$(SA_VERSION)
 
 SWATCH = \
 	swatch-3.2.3
