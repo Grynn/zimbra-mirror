@@ -1,0 +1,13 @@
+
+{
+	"classes":
+			[
+{! var idx=0; !}
+<for each="thisClass" in="data">
+	{
+		"className": "{+thisClass.alias+}",
+		"link": "symbols/{+thisClass.alias+}.html"
+	}{! idx++; !}<if test="idx < data.length">,</if>
+</for>
+			]
+}
