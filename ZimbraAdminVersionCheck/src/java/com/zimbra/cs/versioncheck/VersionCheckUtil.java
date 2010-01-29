@@ -88,13 +88,18 @@ public class VersionCheckUtil extends SoapCLI {
         			System.exit(0);
         		} else {
         			long checkInterval = DateUtil.getTimeIntervalSecs(versionInterval,0);
-        			Date lastChecked = DateUtil.parseGeneralizedTime(config.getAttr(Provisioning.A_zimbraVersionCheckLastAttempt));
-        			Date now = new Date();
-        			if( now.getTime()/1000- lastChecked.getTime()/1000 >= checkInterval) {
-        				util.doVersionCheck();
+        			String lastAttempt = config.getAttr(Provisioning.A_zimbraVersionCheckLastAttempt);
+        			if(lastAttempt != null) {
+        				Date lastChecked = DateUtil.parseGeneralizedTime(config.getAttr(Provisioning.A_zimbraVersionCheckLastAttempt));
+        				Date now = new Date();
+        				if	(now.getTime()/1000- lastChecked.getTime()/1000 >= checkInterval) {
+        					util.doVersionCheck();
+        				} else {
+        					System.out.println("Too early");
+        					System.exit(0);
+        				}
         			} else {
-        				System.out.println("Too early");
-        				System.exit(0);
+        				util.doVersionCheck();
         			}
         		}
             } else if (cl.hasOption(OPT_MANUAL_CHECK_VERSION)) {
