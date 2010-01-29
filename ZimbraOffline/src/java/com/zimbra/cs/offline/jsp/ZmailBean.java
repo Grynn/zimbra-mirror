@@ -26,7 +26,8 @@ import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class ZmailBean extends MailBean {
     public ZmailBean() {
-        port = "80";
+        port = "443";
+        connectionType = DataSource.ConnectionType.ssl;
         syncFreqSecs = 0;
         type = "zimbra";
     }
@@ -49,7 +50,7 @@ public class ZmailBean extends MailBean {
         host = account.getAttr(JspConstants.OFFLINE_REMOTE_HOST);
         port = account.getAttr(JspConstants.OFFLINE_REMOTE_PORT);
         boolean ssl = account.getBooleanAttr(JspConstants.OFFLINE_REMOTE_SSL, false);
-        connectionType = ssl ? connectionType = DataSource.ConnectionType.ssl : DataSource.ConnectionType.cleartext;
+        connectionType = ssl ? DataSource.ConnectionType.ssl : DataSource.ConnectionType.cleartext;
         syncFreqSecs = account.getTimeIntervalSecs(OfflineConstants.A_offlineSyncFreq, 0);
         isDebugTraceEnabled = account.getBooleanAttr(OfflineConstants.A_offlineEnableTrace, false);
     }
