@@ -146,6 +146,9 @@ PERL_LIBS 	:= \
 	XML::SAX::Expat \
 	XML::Simple \
 	IO::Socket::INET6 \
+	NetAddr::IP \
+	Mail::SPF \
+	IP::Country \
 	DBD::SQLite
 
 ARRAY_COMPARE	:= \
