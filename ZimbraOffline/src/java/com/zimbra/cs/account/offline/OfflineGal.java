@@ -17,6 +17,8 @@ package com.zimbra.cs.account.offline;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Iterator;
 
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
@@ -35,7 +37,6 @@ import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
-import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
 import com.zimbra.cs.mailbox.ContactAutoComplete;
@@ -151,19 +152,13 @@ public class OfflineGal {
                 Element cn = response.addElement(MailConstants.E_CONTACT);
                 cn.addAttribute(MailConstants.A_ID, id);
             
-                String val;
-                if ((val = contact.get(ContactConstants.A_firstName)) != null)
-                    cn.addKeyValuePair(ContactConstants.A_firstName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-                if ((val = contact.get(ContactConstants.A_lastName)) != null)
-                    cn.addKeyValuePair(ContactConstants.A_lastName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-                if ((val = contact.get(ContactConstants.A_fullName)) != null)
-                    cn.addKeyValuePair(ContactConstants.A_fullName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-                if ((val = contact.get(ContactConstants.A_email)) != null)
-                    cn.addKeyValuePair(ContactConstants.A_email, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-                if ((val = contact.get(ContactConstants.A_email2)) != null)
-                    cn.addKeyValuePair(ContactConstants.A_email2, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-                if ((val = contact.get(ContactConstants.A_email3)) != null)
-                    cn.addKeyValuePair(ContactConstants.A_email3, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                Map<String, String> fields = contact.getFields();
+                Iterator<String> it = fields.keySet().iterator();
+                while (it.hasNext()) {
+                    String key = it.next();
+                    if (!key.equals(MailConstants.A_ID) && !key.equals("type") && !key.equals(OfflineConstants.GAL_LDAP_DN))
+                        cn.addKeyValuePair(key, fields.get(key), MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                }
             }
                     
             response.addAttribute(AccountConstants.A_MORE, zqr.hasNext());
