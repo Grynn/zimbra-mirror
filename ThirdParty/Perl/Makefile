@@ -147,6 +147,7 @@ PERL_LIBS 	:= \
 	XML::Simple \
 	IO::Socket::INET6 \
 	NetAddr::IP \
+	Net::DNS::Resolver::Programmable \
 	Mail::SPF \
 	IP::Country \
 	DBD::SQLite
