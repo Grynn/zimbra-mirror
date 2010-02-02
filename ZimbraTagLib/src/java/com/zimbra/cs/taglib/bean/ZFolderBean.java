@@ -31,7 +31,7 @@ public class  ZFolderBean {
     private ZFolder mFolder;
     private Boolean hasPublicShare;
     private Boolean hasPrivateShare;
-    
+
     public ZFolderBean(ZFolder folder) {
         mFolder = folder;
     }
@@ -297,10 +297,19 @@ public class  ZFolderBean {
         return getIsAppointmentView() && !(getIsMountPoint() || getRemoteURL() != null);
     }
 
+    public boolean getIsMountPointWritable() {
+        //Check if the mount point has write permission
+        if (getIsMountPoint()) {
+                String positivePerm = getEffectivePerm().replace("/-./g", "") ;
+                if(positivePerm != null) {
+                    return (positivePerm.indexOf(ZFolder.PERM_WRITE) != -1);
+                }
+        }
+        return false;
+    }
 
     public boolean getIsTaskMoveTarget() {
-        //TODO: handle perm check on mountpoint!
-        return getIsTaskView() && !(getIsMountPoint() || getRemoteURL() != null);
+        return getIsTaskView() && (getRemoteURL() == null) && (!getIsMountPoint() || getIsMountPointWritable());
     }
 
     public boolean getIsDocumentMoveTarget() {
