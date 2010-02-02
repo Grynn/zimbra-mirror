@@ -674,3 +674,7 @@ ZaSettings.getLocaleChoices = function () {
 
     return ZaSettings.localeChoices ;
 }
+
+ZaSettings.isNetworkVersion = function () {
+    return (ZaSettings.IS_ZCS_NETWORK_VERSION || false );
+}

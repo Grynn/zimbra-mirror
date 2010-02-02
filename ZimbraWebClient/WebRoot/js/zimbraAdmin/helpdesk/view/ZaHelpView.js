@@ -169,8 +169,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
                     {type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.ICAL_MIG_GUIDE_INFO,
                         cssStyle:"padding-right:10px;padding-left:10px;"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
-                    {type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"}
-
+                    {type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"} 
 				]
 			},
         {type: _SPACER_, height: 10 },    
@@ -180,6 +179,38 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
             ]
         }
     ];
+
+    var zwcUserGuideItem = [
+         //ZWC end user guide
+        {type:_GROUP_,numCols:2, id: "zwcEndUserGuide",
+            items: [
+                {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
+                {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label: ZaMsg.ZWC_END_USER_GUIDE,
+                     href:(location.pathname + "help/admin/pdf/ZWC_User_Guide_6_0.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
+            ]
+        },
+        {type:_CELL_SPACER_},
+        {type:_SPACER_, colSpan:"*"},
+        {type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.ZWC_END_USER_GUIDE_INFO,
+            cssStyle:"padding-right:10px;padding-left:10px;"},
+        {type:_CELL_SPACER_},
+        {type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"}
+    ] ;
+
+
+
+    if (ZaSettings.isNetworkVersion ()) {
+        //zwcUserGuide Item will be added in delegated admin extension
+    }else {
+        var helpItems = xFormObject.items ;
+        for (var i=0; i< helpItems.length; i++) {
+            //insert teh networkHelpItems before the About button
+            if (helpItems[i].id == "ZimbraHelpPageDownloadItems") {
+                helpItems [i].items = helpItems[i].items.concat(zwcUserGuideItem) ;
+                break ;
+            }
+        }
+    }
 }
 ZaTabView.XFormModifiers["ZaHelpView"].push(ZaHelpView.myXFormModifier);
 

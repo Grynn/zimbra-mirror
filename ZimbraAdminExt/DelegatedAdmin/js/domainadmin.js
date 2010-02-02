@@ -244,22 +244,39 @@ if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 
 if(ZaTabView.XFormModifiers["ZaHelpView"]) {
 	ZaDomainAdmin.HelpViewXFormModifier = function(xFormObject) {
+            if (!ZaSettings.isNetworkVersion ()) {
+                 return ;
+            }
 			var networkHelpItems = [
 				{type:_GROUP_,numCols:2, items: [
 						{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
 						{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:com_zimbra_delegatedadmin.HELP_OTHER_GUIDES_ISYNC,
 							href:(location.pathname + "help/admin/pdf/ZCS_Apple_iSync.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
-						{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
+                        {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
+                        {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:com_zimbra_delegatedadmin.HELP_OTHER_GUIDES_ISYNC_10_5,
+                            href:(location.pathname + "help/admin/pdf/ZCS_Apple_iSync_6.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)},
+                        {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
 						{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:com_zimbra_delegatedadmin.HELP_OTHER_GUIDES_OUTLOOK,
 							href:(location.pathname + "help/admin/pdf/ZCS%20Connector%20for%20Outlook.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
 
 				 	]
 				},
-				{type:_CELL_SPACER_},
+
+                //ZWC end user guide
+                {type:_GROUP_,numCols:2, id: "zwcEndUserGuide",
+                    items: [
+                        {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
+                        {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label: ZaMsg.ZWC_END_USER_GUIDE,
+                             href:(location.pathname + "help/admin/pdf/ZWC_User_Guide_6_0.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
+                    ]
+                },
+
                 {type:_SPACER_, colSpan:"*"},
 				{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_OTHER_GUIDES_CONNNECTOR_INFO,
 				 	cssStyle:"padding-right:10px;padding-left:10px;"},
-			    {type:_CELL_SPACER_},
+			    {type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.ZWC_END_USER_GUIDE_INFO,
+                    cssStyle:"padding-right:10px;padding-left:10px;"},
+                {type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"}  ,
                 {type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"}
 			];
             var helpItems = xFormObject.items ;
