@@ -149,6 +149,7 @@ PERL_LIBS 	:= \
 	NetAddr::IP \
 	Net::DNS::Resolver::Programmable \
 	Mail::SPF \
+	Geography::Countries \
 	IP::Country \
 	DBD::SQLite
 
