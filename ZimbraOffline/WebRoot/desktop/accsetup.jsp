@@ -326,7 +326,7 @@ function onEditLink(id, keep, makeInvisible) {
 										<td>
 											<div class="ZFieldLabel"><fmt:message key='AccountType'/>:</div>
 										</td>
-										<td>
+										<td width=90%>
 											<form name="newAccnt" action="" method="POST">
 												<select name="accountFlavor" id="accountFlavor" onchange="accntChange(this)" class="ZSelect">
 													<option value=""><fmt:message key='AccountSelect'/></option>
@@ -468,14 +468,14 @@ function onEditLink(id, keep, makeInvisible) {
 												<td>
 													<table border=0 cellpadding=0 cellspacing=0 width=100% class="ZTableInner">
 														<tr>
-															<td>
+															<td width=60%>
 																<input class="ZField" type="text" id="host" name="host" value="${bean.host}">
 															</td>
 															<td align=right>
 																<table border=0>
 																	<tr>
 																		<td>
-																			<div class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldErrorLabel'}"><fmt:message key='Port'/>:&nbsp;</div>
+																			<div class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldErrorLabel'}"><fmt:message key='Port'/>:</div>
 																		</td>
 																		<td>
 																			<input type="text" class="ZField" id="port" name="port" value="${bean.port}" size=5 disabled="disabled">
@@ -495,7 +495,7 @@ function onEditLink(id, keep, makeInvisible) {
 													<div class="ZFieldLabel"><fmt:message key='Security'/>:</div>
 												</td>
 												<td>
-													<table cellpadding=0 cellspacing=0 class="ZTableInner">
+													<table border=0 cellpadding=0 cellspacing=0 class="ZTableInner">
 														<tr>
 															<td>
 																<input type="radio" id="cleartext" name="security" value="cleartext" ${bean.security == 'cleartext' ? 'checked' : ''} onclick="SetPort()">
@@ -539,16 +539,16 @@ function onEditLink(id, keep, makeInvisible) {
 														<div class="${zdf:isValid(bean, 'smtpHost') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='OutMailServer'/>:</div>
 													</td>
 													<td>
-														<table cellpadding=0 cellspacing=0 width=100% border=0 class="ZTableInner">
+														<table border=0 cellpadding=0 cellspacing=0 width=100% class="ZTableInner">
 															<tr>
-																<td>
+																<td width=60%>
 																	<input class="ZField" type="text" id="smtpHost" name="smtpHost" value="${bean.smtpHost}">
 																</td>
 																<td align=right>
 																	<table border=0>
 																		<tr>
 																			<td>
-																				<div class="${zdf:isValid(bean, 'smtpPort') ? 'ZFieldLabel' : 'ZFieldErrorLabel'}"><fmt:message key='Port'/>:&nbsp;</div>
+																				<div class="${zdf:isValid(bean, 'smtpPort') ? 'ZFieldLabel' : 'ZFieldErrorLabel'}"><fmt:message key='Port'/>:</div>
 																			</td>
 																			<td>
 																				<input class="ZField" type="text" id="smtpPort" name="smtpPort" value="${bean.smtpPort}" size=5 disabled="disabled">
@@ -717,6 +717,7 @@ function onEditLink(id, keep, makeInvisible) {
 												</td>
 											</tr>
 										</c:if>
+										<tr><td></td></tr>
 										<tr>
 											<td colspan=2>
 												<table border=0 cellpadding=0 cellspacing=0 width=100% class="ZTableInner">
