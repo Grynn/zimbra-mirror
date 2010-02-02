@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-    version="2.4">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+	version="2.4">
 	<context-param>
 		<param-name>javax.servlet.jsp.jstl.fmt.fallbackLocale</param-name>
 		<param-value>en</param-value>
@@ -19,30 +19,30 @@
 	   <param-value>900</param-value>
 	</context-param>
 
-    <context-param>
-        <!-- how long to cache the result of the zm:getDomainInfo tag result  -->
-       <param-name>zimbra.domaininfo.ttl</param-name>
-	   <param-value>60m</param-value>
+	<context-param>
+		<!-- how long to cache the result of the zm:getDomainInfo tag result  -->
+		<param-name>zimbra.domaininfo.ttl</param-name>
+		<param-value>60m</param-value>
 	</context-param>
 
-    <context-param>
-	   <param-name>zimbraShowAds</param-name>
-	   <param-value>0</param-value>
+	<context-param>
+	       <param-name>zimbraShowAds</param-name>
+	       <param-value>0</param-value>
 	</context-param>
 
-    <context-param>
-        <param-name>zimbraCacheBusterVersion</param-name>
+	<context-param>
+		<param-name>zimbraCacheBusterVersion</param-name>
 		<param-value>@jsVersion@</param-value>
-    </context-param>
+	</context-param>
 
-    <context-param>
-        <param-name>zimbraDefaultSkin</param-name>
+	<context-param>
+		<param-name>zimbraDefaultSkin</param-name>
 		<param-value>twilight</param-value>
-    </context-param>
+	</context-param>
 
-    <context-param>
-	   <param-name>offlineMode</param-name>
-	   <param-value>true</param-value>
+	<context-param>
+	       <param-name>offlineMode</param-name>
+	       <param-value>true</param-value>
 	</context-param>
 
 	<error-page>
@@ -50,7 +50,7 @@
 		<location>/public/404.html</location>
 	</error-page>
 
-    <filter>
+	<filter>
 		<filter-name>Set Header Filter</filter-name>
 		<filter-class>
 			com.zimbra.webClient.filters.SetHeaderFilter
@@ -72,23 +72,23 @@
 			<param-value>604800</param-value>
 		</init-param>
 		<init-param>
-			<param-name>ProdMode</param-name>
-			<param-value>@production@</param-value>
 			<!--
 				This paramater value is filled in by the build depending
 				on whether the build is a dev or prod build. This
 				controls the way the query parameters are interpreted by
 				the filter and the jsp pages.
 			-->
+			<param-name>ProdMode</param-name>
+			<param-value>@production@</param-value>
 		</init-param>
 		<init-param>
+			<!--
+				List of patterns for which no-cache headers will be returned.
+			-->
 			<param-name>noCachePatternList</param-name>
 			<param-value>
 				zimbra/,zimbra/mail,zimbra/auth/,.jsp,zimbra/h/,zimbra/h/.*,/h/.*
 			</param-value>
-			<!--
-				List of patterns for which no-cache headers will be returned.
-			-->
 		</init-param>
 	    <init-param>
 		    <param-name>zimbraResponseHeader.enabled</param-name>
@@ -101,7 +101,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-    <servlet>
+	<servlet>
 		<servlet-name>Forwarder</servlet-name>
 		<servlet-class>
 			com.zimbra.webClient.servlet.Forward
@@ -126,49 +126,52 @@
 	</servlet-mapping>
 
 	<servlet>
-	  <servlet-name>jsp</servlet-name>
-	  <servlet-class>com.zimbra.webClient.servlet.JspServlet</servlet-class>
-	  <init-param>
-		  <param-name>logVerbosityLevel</param-name>
-		  <param-value>DEBUG</param-value>
-	  </init-param>
-	  <init-param>
-		  <param-name>fork</param-name>
-		  <param-value>false</param-value>
-	  </init-param>
-	  <init-param>
-		  <param-name>xpoweredBy</param-name>
-		  <param-value>false</param-value>
-	  </init-param>
-	  <init-param>
-		  <param-name>trimSpaces</param-name>
-		  <param-value>true</param-value>
-	  </init-param>
-	  <!--
-	  <init-param>
-		  <param-name>classpath</param-name>
-		  <param-value>?</param-value>
-	  </init-param>
-	  -->
-	  <load-on-startup>0</load-on-startup>
+		<servlet-name>jsp</servlet-name>
+		<servlet-class>
+			com.zimbra.webClient.servlet.JspServlet</servlet-class>
+		<init-param>
+			<param-name>logVerbosityLevel</param-name>
+			<param-value>DEBUG</param-value>
+		</init-param>
+		<init-param>
+			<param-name>fork</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>xpoweredBy</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>trimSpaces</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<!--
+		<init-param>
+			<param-name>classpath</param-name>
+			<param-value>?</param-value>
+		</init-param>
+		-->
+		<load-on-startup>0</load-on-startup>
 	</servlet>
 
-    <servlet>
-      <servlet-name>ConfigServlet</servlet-name>
-      <servlet-class>com.zimbra.cs.offline.jsp.ConfigServlet</servlet-class>
-      <load-on-startup>1</load-on-startup>
-    </servlet>
+	<servlet>
+		<servlet-name>ConfigServlet</servlet-name>
+		<servlet-class>
+			com.zimbra.cs.offline.jsp.ConfigServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
 	<servlet-mapping>
-	  <servlet-name>jsp</servlet-name>
-	  <url-pattern>*.jsp</url-pattern>
-	  <url-pattern>*.jspf</url-pattern>
-	  <url-pattern>*.jspx</url-pattern>
-	  <url-pattern>*.xsp</url-pattern>
-	  <url-pattern>*.JSP</url-pattern>
-	  <url-pattern>*.JSPF</url-pattern>
-	  <url-pattern>*.JSPX</url-pattern>
-	  <url-pattern>*.XSP</url-pattern>
+		<servlet-name>jsp</servlet-name>
+		<url-pattern>*.jsp</url-pattern>
+		<url-pattern>*.jspf</url-pattern>
+		<url-pattern>*.jspx</url-pattern>
+		<url-pattern>*.xsp</url-pattern>
+		<url-pattern>*.JSP</url-pattern>
+		<url-pattern>*.JSPF</url-pattern>
+		<url-pattern>*.JSPX</url-pattern>
+		<url-pattern>*.XSP</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -183,7 +186,7 @@
 				WEB-INF/classes/messages/${name},
 				WEB-INF/classes/keys/${name},
 				WEB-INF/classes/${dir}/${name},
-                ${zimbra.home}/zimlets-deployed/${name}/${name},
+				${zimbra.home}/zimlets-deployed/${name}/${name},
 				${zimbra.home}/zimlets-deployed/_dev/${name}/${name}
 			</param-value>
 		</init-param>
@@ -211,35 +214,36 @@
 	</servlet-mapping>
 
 	<welcome-file-list>
-        <welcome-file>desktop/console.jsp</welcome-file>
-    </welcome-file-list>
+		<welcome-file>desktop/console.jsp</welcome-file>
+	</welcome-file-list>
 
 	<env-entry>
 		<env-entry-name>protocolMode</env-entry-name>
 		<env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>http</env-entry-value>
+		<env-entry-value>http</env-entry-value>
 	</env-entry>
 
 	<env-entry>
 		<env-entry-name>httpPort</env-entry-name>
-        <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>0</env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>0</env-entry-value>
 	</env-entry>
 
 	<env-entry>
 		<env-entry-name>localHost</env-entry-name>
-        <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>127.0.0.1</env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>127.0.0.1</env-entry-value>
 	</env-entry>
 
 	<env-entry>
 		<env-entry-name>mailUrl</env-entry-name>
-        <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>/zimbra</env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>/zimbra</env-entry-value>
 	</env-entry>
 
-    <jsp-config>
+	<jsp-config>
 		<jsp-property-group>
+			<url-pattern>/h/message</url-pattern>
 			<url-pattern>/h/printcalls</url-pattern>
 			<url-pattern>/h/printcalendar</url-pattern>
 			<url-pattern>/h/printvoicemails</url-pattern>
@@ -251,7 +255,7 @@
 			<url-pattern>/h/rest</url-pattern>
 			<url-pattern>/h/viewimages</url-pattern>
 		</jsp-property-group>
-    </jsp-config>
+	</jsp-config>
 
 </web-app>
 
