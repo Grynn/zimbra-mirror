@@ -785,7 +785,7 @@ public class DbOfflineDirectory {
             stmt.executeUpdate();
             conn.commit();
         } catch (SQLException e) {
-            throw ServiceException.FAILURE("deleting granter by grantee id: " + granteeId, e);
+            throw ServiceException.FAILURE("deleting granter by grantee " + granteeId + ": " + e.getMessage(), e);
         } finally {
             DbPool.closeStatement(stmt);
             DbPool.quietClose(conn);
