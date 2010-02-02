@@ -40,7 +40,6 @@ import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OperationContext;
-import com.zimbra.cs.mailbox.SyncMailbox;
 import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mime.MimeTypeInfo;
@@ -160,7 +159,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	return newZMailbox(options, account.getProxyHost(), account.getProxyPort(), account.getProxyUser(), account.getProxyPass());
     }
     
-    public ZMailbox newZMailbox(String email, String password, Map<String, Object> attrs, String serviceUri) throws ServiceException {
+    private ZMailbox newZMailbox(String email, String password, Map<String, Object> attrs, String serviceUri) throws ServiceException {
     	String proxyHost = (String)attrs.get(A_offlineProxyHost);
     	int proxyPort = 0;
     	String portStr = (String)attrs.get(A_offlineProxyPort);
@@ -188,8 +187,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         options.setTimeout(OfflineLC.zdesktop_request_timeout.intValue());
         options.setRetryCount(1);
         ZMailbox zmbox = ZMailbox.getMailbox(options);
-        if (options.getAuthToken() == null) //it was auth by password
-        	OfflineSyncManager.getInstance().authSuccess(options.getAccount(), options.getPassword(), zmbox.getAuthResult().getAuthToken(), zmbox.getAuthResult().getExpires());
+//        if (options.getAuthToken() == null) //it was auth by password
+//        	OfflineSyncManager.getInstance().authSuccess(options.getAccount(), options.getPassword(), zmbox.getAuthResult().getAuthToken(), zmbox.getAuthResult().getExpires());
         return zmbox;
     }
 
@@ -351,7 +350,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         // fetch the mailbox; this will throw an exception if the username/password/URI are incorrect
         ZMailbox.Options options = new ZMailbox.Options(acct.getAttr(Provisioning.A_mail), AccountBy.name, password, Offline.getServerURI(baseUri, AccountConstants.USER_SERVICE_URI));
         newZMailbox(options, proxyHost, proxyPort, proxyUser, proxyPass);
-        OfflineSyncManager.getInstance().clearErrorCode(acct.getName());
+        OfflineSyncManager.getInstance().clearErrorCode(acct);
     }
 
     @Override
@@ -1243,16 +1242,20 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         if (includeSyncStatus) {
             //There are attributes we don't persist into DB.  This is where we add them:
-            attrs.put(OfflineConstants.A_offlineSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(name).toString());
-            String statusErrorCode = OfflineSyncManager.getInstance().getErrorCode(name);
-            if (statusErrorCode != null)
-                attrs.put(OfflineConstants.A_offlineSyncStatusErrorCode, statusErrorCode);
-            String statusErrorMsg = OfflineSyncManager.getInstance().getErrorMsg(name);
-            if (statusErrorMsg != null)
-                attrs.put(OfflineConstants.A_offlineSyncStatusErrorMsg, statusErrorMsg);
-            String statusException = OfflineSyncManager.getInstance().getException(name);
-            if (statusException != null)
-                attrs.put(OfflineConstants.A_offlineSyncStatusException, statusException);
+            if (acct != null) {
+                attrs.put(OfflineConstants.A_offlineSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(acct).toString());
+                String statusErrorCode = OfflineSyncManager.getInstance().getErrorCode(acct);
+                if (statusErrorCode != null)
+                    attrs.put(OfflineConstants.A_offlineSyncStatusErrorCode, statusErrorCode);
+                String statusErrorMsg = OfflineSyncManager.getInstance().getErrorMsg(acct);
+                if (statusErrorMsg != null)
+                    attrs.put(OfflineConstants.A_offlineSyncStatusErrorMsg, statusErrorMsg);
+                String statusException = OfflineSyncManager.getInstance().getException(acct);
+                if (statusException != null)
+                    attrs.put(OfflineConstants.A_offlineSyncStatusException, statusException);
+            } else {
+                attrs.put(OfflineConstants.A_offlineSyncStatus, OfflineConstants.SyncStatus.unknown.toString());
+            }
         }
 
         if (acct != null) {
@@ -2104,8 +2107,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     		cachedDataSources.put(account.getId(), sources);
     	}
     	for (DataSource ds : sources) {
-    		ds.getAttrs(false).put(OfflineConstants.A_zimbraDataSourceSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(ds.getName()).toString());
-        	String statusErrorCode = OfflineSyncManager.getInstance().getErrorCode(ds.getName());
+    		ds.getAttrs(false).put(OfflineConstants.A_zimbraDataSourceSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(ds).toString());
+        	String statusErrorCode = OfflineSyncManager.getInstance().getErrorCode(ds);
         	if (statusErrorCode != null)
         		ds.getAttrs(false).put(OfflineConstants.A_zimbraDataSourceSyncStatusErrorCode, statusErrorCode);
     	}
@@ -2201,7 +2204,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 testDataSource(new OfflineDataSource(account, ds.getType(),
                     ds.getName(), ds.getId(), attrs, this));
 
-                OfflineSyncManager.getInstance().clearErrorCode(ds.getName());
+                OfflineSyncManager.getInstance().clearErrorCode(ds);
 
                 adjustAccountDisplayName(account, ds, attrs);
             }

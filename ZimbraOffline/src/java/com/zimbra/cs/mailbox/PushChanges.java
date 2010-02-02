@@ -344,7 +344,7 @@ public class PushChanges {
                 }
                 
                 OfflineLog.offline.debug("push: sending mail (" + id + "): " + msg.getSubject());
-                syncMan.syncStart(ombx.getRemoteUser());
+                syncMan.syncStart(ombx.getAccount());
 
                 // try to avoid repeated sends of the same message by tracking "send UIDs" on SendMsg requests
                 String msgKey = ombx.getAccountId() + ':' + id;

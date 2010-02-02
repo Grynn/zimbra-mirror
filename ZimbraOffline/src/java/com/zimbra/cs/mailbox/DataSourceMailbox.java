@@ -410,8 +410,7 @@ public class DataSourceMailbox extends SyncMailbox {
         long freqLimit = syncMan.getSyncFrequencyLimit();
         long frequency = ds.getSyncFrequency() < freqLimit ? freqLimit :
             ds.getSyncFrequency();
-        return System.currentTimeMillis() - syncMan.getLastSyncTime(
-            ds.getName()) >= frequency;
+        return System.currentTimeMillis() - syncMan.getLastSyncTime(ds) >= frequency;
     }
 
     private void syncAllLocalDataSources(boolean force, boolean isOnRequest) throws
@@ -430,9 +429,9 @@ public class DataSourceMailbox extends SyncMailbox {
                     System.getProperty("os.name") + " " +
                     System.getProperty("os.arch") + " " +
                     System.getProperty("os.version"), ds.getType());
-                syncMan.syncStart(ds.getName());
+                syncMan.syncStart(ds);
                 importData(ds, isOnRequest);
-                syncMan.syncComplete(ds.getName());
+                syncMan.syncComplete(ds);
                 OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(
                     ds, OfflineConstants.A_zimbraDataSourceLastSync,
                     Long.toString(System.currentTimeMillis()));
@@ -443,7 +442,7 @@ public class DataSourceMailbox extends SyncMailbox {
                 else
                     syncMan.processSyncException(ds, x);
             } catch (Error e) {
-                syncMan.processSyncError(ds.getName(), e);
+                syncMan.processSyncError(ds, e);
             }
         }
     }

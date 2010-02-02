@@ -228,7 +228,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
     }
 
     void resetSyncStatus() throws ServiceException {
-        OfflineSyncManager.getInstance().resetStatus(accountName);
+        OfflineSyncManager.getInstance().resetStatus(getAccount());
         ((OfflineAccount)getAccount()).resetLastSyncTimestamp();
         OfflineYAuth.deleteRawAuthManager(this);
     }

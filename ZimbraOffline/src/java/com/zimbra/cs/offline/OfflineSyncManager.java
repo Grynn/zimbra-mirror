@@ -50,6 +50,7 @@ import com.zimbra.common.util.SystemUtil;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.offline.DirectorySync;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -239,12 +240,12 @@ public class OfflineSyncManager {
 
     private final Map<String, OfflineSyncStatus> syncStatusTable = Collections.synchronizedMap(new HashMap<String, OfflineSyncStatus>());
 
-    private OfflineSyncStatus getStatus(String targetName) {
+    private OfflineSyncStatus getStatus(NamedEntry entry) {
         synchronized (syncStatusTable) {
-            OfflineSyncStatus status = syncStatusTable.get(targetName);
+            OfflineSyncStatus status = syncStatusTable.get(entry.getId());
             if (status == null) {
                 status = new OfflineSyncStatus();
-                syncStatusTable.put(targetName, status);
+                syncStatusTable.put(entry.getId(), status);
             }
             return status;
         }
@@ -254,89 +255,89 @@ public class OfflineSyncManager {
     // sync activity update
     //
 
-    public String getErrorCode(String targetName) {
+    public String getErrorCode(NamedEntry entry) {
         synchronized (syncStatusTable) {
-            return getStatus(targetName).mCode;
+            return getStatus(entry).mCode;
         }
     }
 
-    public String getErrorMsg(String targetName) {
+    public String getErrorMsg(NamedEntry entry) {
         synchronized (syncStatusTable) {
-            return getStatus(targetName).getErrorMsg();
+            return getStatus(entry).getErrorMsg();
         }
     }
 
-    public String getException(String targetName) {
+    public String getException(NamedEntry entry) {
         synchronized (syncStatusTable) {
-            return getStatus(targetName).getException();
+            return getStatus(entry).getException();
         }
     }
 
-    public long getLastSyncTime(String targetName) {
+    public long getLastSyncTime(NamedEntry entry) {
         synchronized (syncStatusTable) {
-            return getStatus(targetName).mLastSyncTime;
+            return getStatus(entry).mLastSyncTime;
         }
     }
 
-    public boolean isOnLine(String targetName) {
+    public boolean isOnLine(NamedEntry entry) {
         synchronized (syncStatusTable) {
-            return getStatus(targetName).mStatus == SyncStatus.online;
+            return getStatus(entry).mStatus == SyncStatus.online;
         }
     }
 
-    public String getStage(String targetName) {
+    public String getStage(NamedEntry entry) {
         synchronized (syncStatusTable) {
-            return getStatus(targetName).mStage;
+            return getStatus(entry).mStage;
         }
     }
 
-    public void setStage(String targetName, String stage) {
+    public void setStage(NamedEntry entry, String stage) {
         synchronized (syncStatusTable) {
-            getStatus(targetName).mStage = stage;
+            getStatus(entry).mStage = stage;
         }
     }
 
-    public void syncStart(String targetName) {
+    public void syncStart(NamedEntry entry) {
         boolean b;
         synchronized (syncStatusTable) {
-            b = getStatus(targetName).syncStart();
+            b = getStatus(entry).syncStart();
         }
         if (b)
             notifyStateChange();
     }
 
-    public void syncComplete(String targetName) {
+    public void syncComplete(NamedEntry entry) {
         boolean b;
         synchronized (syncStatusTable) {
-            b = getStatus(targetName).syncComplete();
+            b = getStatus(entry).syncComplete();
         }
         if (b)
             notifyStateChange();
     }
 
-    public void resetLastSyncTime(String targetName) {
+    public void resetLastSyncTime(NamedEntry entry) {
         synchronized (syncStatusTable) {
-            getStatus(targetName).resetLastSyncTime();
+            getStatus(entry).resetLastSyncTime();
         }        
     }
 
-    private void connectionDown(String targetName, String code) {
+    private void connectionDown(NamedEntry entry, String code) {
         synchronized (syncStatusTable) {
-            getStatus(targetName).connectionDown(code);
+            getStatus(entry).connectionDown(code);
         }
         notifyStateChange();
     }
 
-    private void authFailed(String targetName, String code, String password) {
+    private void authFailed(NamedEntry entry, String code, String password) {
         synchronized (syncStatusTable) {
-            getStatus(targetName).authFailed(code, password);
+            getStatus(entry).authFailed(code, password);
         }
         notifyStateChange();
     }
 
-    private void syncFailed(String targetName, String code, String message, Throwable t) {
+    private void syncFailed(NamedEntry entry, String code, String message, Throwable t) {
         synchronized (syncStatusTable) {
-            getStatus(targetName).syncFailed(code, message, t);
+            getStatus(entry).syncFailed(code, message, t);
         }
         notifyStateChange();
     }
@@ -349,9 +350,9 @@ public class OfflineSyncManager {
         }
     }
 
-    public void authSuccess(String targetName, String password, ZAuthToken token, long expires) {
+    public void authSuccess(NamedEntry entry, String password, ZAuthToken token, long expires) {
         synchronized (syncStatusTable) {
-            getStatus(targetName).authSuccess(password, token, expires);
+            getStatus(entry).authSuccess(password, token, expires);
         }
     }
 
@@ -361,34 +362,30 @@ public class OfflineSyncManager {
 
     public ZAuthToken lookupAuthToken(Account account) {
         synchronized (syncStatusTable) {
-            return getStatus(account.getName()).lookupAuthToken(((OfflineAccount)account).getRemotePassword());
+            return getStatus(account).lookupAuthToken(((OfflineAccount)account).getRemotePassword());
         }
     }
 
     public void clearAuthToken(Account account) {
         synchronized (syncStatusTable) {
-            getStatus(account.getName()).clearAuthToken();
+            getStatus(account).clearAuthToken();
         }
     }
 
     public boolean reauthOK(Account account) {
         synchronized (syncStatusTable) {
-            return getStatus(account.getName()).reauthOK(((OfflineAccount)account).getRemotePassword());
+            return getStatus(account).reauthOK(((OfflineAccount)account).getRemotePassword());
         }
     }
 
-    public boolean retryOK(Account account) {
-        return retryOK(account.getName());
-    }
-
-    public boolean retryOK(String targetName) {
+    public boolean retryOK(NamedEntry entry) {
         synchronized (syncStatusTable) {
-            return getStatus(targetName).retryOK();
+            return getStatus(entry).retryOK();
         }	    
     }
 
     public void authSuccess(Account account, ZAuthToken token, long expires) {
-        authSuccess(account.getName(), ((OfflineAccount)account).getRemotePassword(), token, expires);
+        authSuccess(account, ((OfflineAccount)account).getRemotePassword(), token, expires);
     }
 
     //
@@ -397,18 +394,12 @@ public class OfflineSyncManager {
 
     public boolean reauthOK(DataSource dataSource) throws ServiceException {
         synchronized (syncStatusTable) {
-            return getStatus(dataSource.getName()).reauthOK(dataSource.getDecryptedPassword());
-        }
-    }
-
-    public boolean retryOK(DataSource dataSource) {
-        synchronized (syncStatusTable) {
-            return getStatus(dataSource.getName()).retryOK();
+            return getStatus(dataSource).reauthOK(dataSource.getDecryptedPassword());
         }
     }
 
     public void authSuccess(DataSource dataSource) throws ServiceException {
-        authSuccess(dataSource.getName(), dataSource.getDecryptedPassword(), null, 0);
+        authSuccess(dataSource, dataSource.getDecryptedPassword(), null, 0);
     }
 
     //
@@ -482,22 +473,22 @@ public class OfflineSyncManager {
     }
 
     public void processSyncException(Account account, Exception exception) {
-        processSyncException(account.getName(), ((OfflineAccount)account).getRemotePassword(), exception, ((OfflineAccount)account).isDebugTraceEnabled());
+        processSyncException(account, ((OfflineAccount)account).getRemotePassword(), exception, ((OfflineAccount)account).isDebugTraceEnabled());
     }
 
     public void processSyncException(Account account, Exception exception, boolean markSyncFail) {
-        processSyncException(account.getName(), ((OfflineAccount)account).getRemotePassword(), exception, ((OfflineAccount)account).isDebugTraceEnabled(), markSyncFail);
+        processSyncException(account, ((OfflineAccount)account).getRemotePassword(), exception, ((OfflineAccount)account).isDebugTraceEnabled(), markSyncFail);
     }
 
     public void processSyncException(DataSource dataSource, Exception exception) throws ServiceException {
-        processSyncException(dataSource.getName(), dataSource.getDecryptedPassword(), exception, dataSource.isDebugTraceEnabled());
+        processSyncException(dataSource, dataSource.getDecryptedPassword(), exception, dataSource.isDebugTraceEnabled());
     }
 
-    public void processSyncException(String targetName, String password, Exception exception, boolean isDebugTraceOn) {
-        processSyncException(targetName, password, exception, isDebugTraceOn, true);
+    public void processSyncException(NamedEntry entry, String password, Exception exception, boolean isDebugTraceOn) {
+        processSyncException(entry, password, exception, isDebugTraceOn, true);
     }
 
-    private void processSyncException(String targetName, String password, Exception exception, boolean isDebugTraceOn, boolean markSyncFail) {
+    private void processSyncException(NamedEntry entry, String password, Exception exception, boolean isDebugTraceOn, boolean markSyncFail) {
         Throwable cause = SystemUtil.getInnermostException(exception);
         String code = null;
         
@@ -511,26 +502,26 @@ public class OfflineSyncManager {
             code = RemoteServiceException.getErrorCode(cause);
 
         if (ZimbraApplication.getInstance().isShutdown()) {
-            OfflineLog.offline.info("sync aborted by shutdown: " + targetName);
+            OfflineLog.offline.info("sync aborted by shutdown: " + entry.getName());
         } else if (!isServiceActive()) {
-            OfflineLog.offline.info("sync aborted by network: " + targetName);
+            OfflineLog.offline.info("sync aborted by network: " + entry.getName());
         } else if (isConnectionDown(exception)) {
-            connectionDown(targetName, null);
+            connectionDown(entry, null);
             if (isDebugTraceOn)
-                OfflineLog.offline.debug("sync connection down: " + targetName, exception);
+                OfflineLog.offline.debug("sync connection down: " + entry.getName(), exception);
             else
-                OfflineLog.offline.info("sync connection down: " + targetName);
+                OfflineLog.offline.info("sync connection down: " + entry.getName());
         } else if (isAuthError(exception)) {
-            authFailed(targetName, code, password);
+            authFailed(entry, code, password);
             if (isDebugTraceOn)
-                OfflineLog.offline.debug("sync remote auth failure: " + targetName, exception);
+                OfflineLog.offline.debug("sync remote auth failure: " + entry.getName(), exception);
             else
-                OfflineLog.offline.warn("sync remote auth failure: " + targetName);
+                OfflineLog.offline.warn("sync remote auth failure: " + entry.getName());
         } else {
             code = code == null ? OfflineServiceException.UNEXPECTED : code;
             if (markSyncFail)
-                syncFailed(targetName, code, cause.getMessage(), exception);
-            OfflineLog.offline.error("sync failure: " + targetName, exception);
+                syncFailed(entry, code, cause.getMessage(), exception);
+            OfflineLog.offline.error("sync failure: " + entry.getName(), exception);
             if (exception instanceof SoapFaultException) {
                 SoapFaultException x = (SoapFaultException)exception;
                 OfflineLog.offline.warn("SoapFaultException: " + x.getReason() + "\nFaultRequest:\n" + x.getFaultRequest() + "\nFaultResponse:\n" + x.getFaultResponse());
@@ -538,26 +529,26 @@ public class OfflineSyncManager {
         }
     }
     
-    public void processSyncError(String targetName, Error error) {
-        syncFailed(targetName, OfflineServiceException.UNEXPECTED, error.getMessage(), error);
-        OfflineLog.offline.error("sync failure: " + targetName, error);
+    public void processSyncError(NamedEntry entry, Error error) {
+        syncFailed(entry, OfflineServiceException.UNEXPECTED, error.getMessage(), error);
+        OfflineLog.offline.error("sync failure: " + entry.getName(), error);
     }
 
-    public SyncStatus getSyncStatus(String targetName) {
+    public SyncStatus getSyncStatus(NamedEntry entry) {
         synchronized (syncStatusTable) {
-            return getStatus(targetName).getSyncStatus();
+            return getStatus(entry).getSyncStatus();
         }
     }
 
-    public void resetStatus(String targetName) {
+    public void resetStatus(NamedEntry entry) {
         synchronized (syncStatusTable) {
-            syncStatusTable.remove(targetName);
+            syncStatusTable.remove(entry.getId());
         }
     }
 
-    public void clearErrorCode(String targetName) {
+    public void clearErrorCode(NamedEntry entry) {
         synchronized (syncStatusTable) {
-            getStatus(targetName).clearErrorCode();
+            getStatus(entry).clearErrorCode();
         }
     }
 
@@ -745,15 +736,14 @@ public class OfflineSyncManager {
             if (!(account instanceof OfflineAccount) || prov.isLocalAccount(account))
                 continue;
 
-            String user = account.getName();
-            Element e = zdsync.addElement(ZDSYNC_ACCOUNT).addAttribute(A_ZDSYNC_NAME, user).addAttribute(A_ZDSYNC_ID, account.getId());
+            Element e = zdsync.addElement(ZDSYNC_ACCOUNT).addAttribute(A_ZDSYNC_NAME, account.getName()).addAttribute(A_ZDSYNC_ID, account.getId());
             if (prov.isZcsAccount(account))
-                getStatus(user).encode(e);
+                getStatus(account).encode(e);
             else if (OfflineProvisioning.isDataSourceAccount(account))
-                getStatus(OfflineProvisioning.getDataSourceName(account)).encode(e);
+                getStatus(prov.getDataSource(account)).encode(e);
             else {
                 e.detach();
-                OfflineLog.offline.warn("Invalid account: " + user);
+                OfflineLog.offline.warn("Invalid account: " + account.getName());
                 continue;
             }
             e.addAttribute(A_ZDSYNC_UNREAD, MailboxManager.getInstance().getMailboxByAccount(account).getFolderById(null, Mailbox.ID_FOLDER_INBOX).getUnreadCount());

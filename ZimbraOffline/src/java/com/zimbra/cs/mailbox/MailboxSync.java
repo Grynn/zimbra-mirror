@@ -132,7 +132,6 @@ public class MailboxSync {
                     ombx.getOfflineAccount().setRequestScopeDebugTraceOn(true);
         	}
                 try {
-                    String user = ombx.getRemoteUser();
                     if (!isOnRequest) {
                         if (ombx.isAutoSyncDisabled() || !syncMan.reauthOK(ombx.getAccount()) || !syncMan.retryOK(ombx.getAccount()))
                             return;
@@ -144,17 +143,17 @@ public class MailboxSync {
                         if (totalSent > 0)
                             forceSync = true;
                         else
-                            syncMan.syncComplete(user); //sendPendingMessages may have called syncStart but then send fails
+                            syncMan.syncComplete(ombx.getAccount()); //sendPendingMessages may have called syncStart but then send fails
                     }
                     if (!forceSync && !isOnRequest) {
                         if (mStage == SyncStage.SYNC) {
                             long freqLimit = syncMan.getSyncFrequencyLimit();
                             long frequency = ombx.getSyncFrequency() < freqLimit ? freqLimit : ombx.getSyncFrequency();
 
-                            if (freqLimit == 0 && syncMan.isOnLine(user) && ombx.isPushEnabled()) {
+                            if (freqLimit == 0 && syncMan.isOnLine(ombx.getAccount()) && ombx.isPushEnabled()) {
                                 if (!poller.hasChanges(mSyncToken))
                                     return;
-                            } else if (System.currentTimeMillis() - syncMan.getLastSyncTime(user) < frequency) {
+                            } else if (System.currentTimeMillis() - syncMan.getLastSyncTime(ombx.getAccount()) < frequency) {
                                 return;
                             }
                         }
@@ -165,7 +164,7 @@ public class MailboxSync {
                         System.getProperty("os.name") + " " + System.getProperty("os.arch") +
                         " " + System.getProperty("os.version"),
                         ombx.getOfflineAccount().getRemoteServerVersion());
-                    syncMan.syncStart(user);
+                    syncMan.syncStart(ombx.getAccount());
                     if (mStage == SyncStage.BLANK)
                         InitialSync.sync(ombx);
                     else if (mStage == SyncStage.INITIAL)
@@ -173,7 +172,7 @@ public class MailboxSync {
                     DeltaSync.sync(ombx);
                     if (PushChanges.sync(ombx, isOnRequest))
                         DeltaSync.sync(ombx);
-                    syncMan.syncComplete(user);
+                    syncMan.syncComplete(ombx.getAccount());
                     OfflineProvisioning.getOfflineInstance().setAccountAttribute(
                         ombx.getAccount(), OfflineConstants.A_offlineLastSync,
                         Long.toString(System.currentTimeMillis()));
@@ -190,7 +189,7 @@ public class MailboxSync {
                         syncMan.processSyncException(ombx.getAccount(), e);
                     }
                 } catch (Error e) {
-                    syncMan.processSyncError(ombx.getAccountName(), e);
+                    syncMan.processSyncError(ombx.getAccount(), e);
                 } finally {
                     if (isOnRequest && isDebugTraceOn) {
                         ombx.getOfflineAccount().setRequestScopeDebugTraceOn(false);
@@ -324,6 +323,6 @@ public class MailboxSync {
     
     private void setStage(SyncStage stage) throws ServiceException {
     	mStage = stage;
-    	OfflineSyncManager.getInstance().setStage(ombx.getRemoteUser(), stage.toString());
+    	OfflineSyncManager.getInstance().setStage(ombx.getAccount(), stage.toString());
     }
 }

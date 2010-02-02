@@ -265,59 +265,57 @@ public class GalSync {
         
         public void run() {
             OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
-            String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;                      
+            //String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;                      
             try {
                 OfflineLog.offline.info("Offline GAL sync started for " + user);
                 syncGal(ombx, galAccount, lastFullSync, traceOn); 
-                syncMan.syncComplete(target);
+                syncMan.syncComplete(galAccount);
                 OfflineLog.offline.info("Offline GAL sync completed successfully for " + user);
             } catch (Exception e) {
-                syncMan.processSyncException(target, "", e, traceOn);
+                syncMan.processSyncException(galAccount, "", e, traceOn);
                 OfflineLog.offline.info("Offline GAL sync failed for " + user +
                     ": " + e.getMessage());
             }
         }
     };
                
-    public static void sync(ZcsMailbox ombx, boolean isOnRequest) throws ServiceException {        
-        OfflineSyncManager syncMan = OfflineSyncManager.getInstance();        
-        String user = ombx.getRemoteUser();
-        String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;
-        if (syncMan.getSyncStatus(target) == SyncStatus.running)
+    public static void sync(ZcsMailbox ombx, boolean isOnRequest) throws ServiceException {
+        OfflineAccount account = (OfflineAccount)ombx.getAccount();
+        if (!account.getBooleanAttr(Provisioning.A_zimbraFeatureGalEnabled , false) ||
+            !account.getBooleanAttr(Provisioning.A_zimbraFeatureGalSyncEnabled , false)) {
+            OfflineLog.offline.debug("Offline GAL sync is disabled: " + ombx.getRemoteUser());
+            ensureGalAccountNotExists(account);
+            //syncMan.resetLastSyncTime(target);
+            return;
+        }
+        OfflineAccount galAccount = ensureGalAccountExists(account);
+        OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
+        //String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;
+        if (syncMan.getSyncStatus(galAccount) == SyncStatus.running)
             return;
                     
         if (!isOnRequest) {
-            if (!syncMan.retryOK(target))
+            if (!syncMan.retryOK(galAccount))
                 return;
             long interval = OfflineLC.zdesktop_gal_sync_interval_secs.longValue();
-            long last = syncMan.getLastSyncTime(target);
+            long last = syncMan.getLastSyncTime(galAccount);
             if (last > 0 && (System.currentTimeMillis() - last) / 1000 < interval)
                 return;
         }
                 
         if (!OfflineLC.zdesktop_sync_gal.booleanValue()) {
             OfflineLog.offline.debug("Offline GAL sync is disabled in local config (zdesktop_sync_gal=false)");
-            syncMan.resetLastSyncTime(target);
+            syncMan.resetLastSyncTime(galAccount);
             return;
         }
         
-        OfflineAccount account = (OfflineAccount)ombx.getAccount();
-        if (!account.getBooleanAttr(Provisioning.A_zimbraFeatureGalEnabled , false) ||
-            !account.getBooleanAttr(Provisioning.A_zimbraFeatureGalSyncEnabled , false)) {
-            OfflineLog.offline.debug("Offline GAL sync is disabled: " + user);
-            ensureGalAccountNotExists(account);
-            syncMan.resetLastSyncTime(target);
-            return;
-        }
-        
-        OfflineAccount galAccount = ensureGalAccountExists(account);
         long lastFullSync = galAccount.getLongAttr(OfflineConstants.A_offlineGalAccountLastFullSync, 0);
-        syncMan.syncStart(target);
+        syncMan.syncStart(galAccount);
         
         /* TODO: allow graceful shutdown of this thread once offline improves its shutdown routines
          * currently if server shuts down during gal sync, we get a nasty redo log exception from this thread, 
          * which is the same as what we would get during mailbox sync. */
-        new SyncThread(ombx, user, galAccount, lastFullSync, account.isDebugTraceEnabled()).start();
+        new SyncThread(ombx, ombx.getRemoteUser(), galAccount, lastFullSync, account.isDebugTraceEnabled()).start();
     }
     
     private static void ensureGalAccountNotExists(OfflineAccount account) throws ServiceException {       

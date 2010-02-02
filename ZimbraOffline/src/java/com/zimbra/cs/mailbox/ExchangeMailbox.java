@@ -210,7 +210,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
             return false;
         long freqLimit = syncMan.getSyncFrequencyLimit();
         long frequency = ds.getSyncFrequency() < freqLimit ? freqLimit : ds.getSyncFrequency();
-        return System.currentTimeMillis() - syncMan.getLastSyncTime(ds.getName()) >= frequency;
+        return System.currentTimeMillis() - syncMan.getLastSyncTime(ds) >= frequency;
     }
     
     @Override
@@ -297,9 +297,9 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
                     ds.getAccount().getName(), OfflineLC.zdesktop_version.value(), OfflineLC.zdesktop_buildid.value(), OfflineLC.zdesktop_relabel.value(),
                     System.getProperty("os.name") + " " + System.getProperty("os.arch") + " " + System.getProperty("os.version"), ds.getType());
 
-            syncMan.syncStart(ds.getName());
+            syncMan.syncStart(ds);
             DataSourceManager.importData(ds, null, true);
-            syncMan.syncComplete(ds.getName());
+            syncMan.syncComplete(ds);
             OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(ds, OfflineConstants.A_zimbraDataSourceLastSync, Long.toString(System.currentTimeMillis()));
         } catch (Exception x) {
             if (isDeleting())
@@ -307,7 +307,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
             else
                 syncMan.processSyncException(ds, x);
         } catch (Error e) {
-            syncMan.processSyncError(ds.getName(), e);
+            syncMan.processSyncError(ds, e);
         }
     }
 }
