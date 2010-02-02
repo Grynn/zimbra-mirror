@@ -14,8 +14,8 @@
  */
 package com.zimbra.cs.mailbox;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -33,6 +33,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.BigByteBuffer;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
@@ -71,16 +72,21 @@ public class PushChanges {
 			this.ombx = ombx;
 		}
 		
-		public byte[] getInviteMime(int calendarItemId, int inviteId) throws ServiceException {
+		public Pair<Integer, InputStream> getInviteMime(int calendarItemId, int inviteId) throws ServiceException {
 			CalendarItem cal = ombx.getCalendarItemById(PushChanges.sContext, calendarItemId);
 			MimeMessage mm = cal.getSubpartMessage(inviteId);
-			
+			BigByteBuffer bbb = null;
 			try {
-				ByteArrayOutputStream bao = new ByteArrayOutputStream();
+			    bbb = new BigByteBuffer(mm.getSize());
 				if (mm != null)
-				    mm.writeTo(bao);
-				return bao.toByteArray();
+				    mm.writeTo(bbb);
+				bbb.doneWriting();
+				return new Pair<Integer, InputStream>(bbb.length(), bbb.getInputStream());
 			} catch (Exception x) {
+			    if (bbb != null)
+			        try {
+			            bbb.destroy();
+			        } catch (IOException e) {}
 				throw ServiceException.FAILURE("calitem=" + calendarItemId + ";inv=" + inviteId, x);
 			}
 		}
@@ -1133,7 +1139,7 @@ public class PushChanges {
 	        if ((mask & Change.MODIFIED_CONFLICT) != 0 || (mask & Change.MODIFIED_CONTENT) != 0 || (mask & Change.MODIFIED_INVITE) != 0) { // need to push to the server
 	        	request = new Element.XMLElement(isAppointment ? MailConstants.SET_APPOINTMENT_REQUEST : MailConstants.SET_TASK_REQUEST);
 	            ToXML.encodeCalendarItemSummary(request, new ItemIdFormatter(true), ombx.getOperationContext(), cal, ToXML.NOTIFY_FIELDS, true);
-	            request = InitialSync.makeSetCalRequest(request.getElement(isAppointment ? MailConstants.E_APPOINTMENT : MailConstants.E_TASK), new LocalInviteMimeLocator(ombx), ombx.getAccount(), isAppointment);
+	            request = InitialSync.makeSetCalRequest(request.getElement(isAppointment ? MailConstants.E_APPOINTMENT : MailConstants.E_TASK), new LocalInviteMimeLocator(ombx), getZMailbox(), ombx.getAccount(), isAppointment);
 	        	create = true; //content mod is considered same as create since we use SetAppointment for both
 	        } else {
 	        	request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);

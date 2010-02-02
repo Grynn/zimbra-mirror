@@ -36,6 +36,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.BufferStream;
 import com.zimbra.common.util.ByteUtil;
+import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.CopyInputStream;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
@@ -79,6 +80,7 @@ import com.zimbra.cs.redolog.op.SaveDocument;
 import com.zimbra.cs.redolog.op.SaveDraft;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.ContentServlet;
+import com.zimbra.cs.service.FileUploadServlet;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.formatter.SyncFormatter;
 import com.zimbra.cs.service.mail.SetCalendarItem;
@@ -90,11 +92,12 @@ import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.Blob;
 import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.util.AccountUtil;
+import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.soap.ZimbraSoapContext;
 
 public class InitialSync {
     public static interface InviteMimeLocator {
-        public byte[] getInviteMime(int calendarItemId, int inviteId) throws ServiceException;
+        public Pair<Integer, InputStream> getInviteMime(int calendarItemId, int inviteId) throws ServiceException;
     }
     
     private static class RemoteInviteMimeLocator implements InviteMimeLocator {
@@ -104,11 +107,15 @@ public class InitialSync {
             this.ombx = mbox;
         }
         
-        public byte[] getInviteMime(int calendarItemId, int inviteId) throws ServiceException {
+        public Pair<Integer, InputStream> getInviteMime(int calendarItemId, int inviteId) throws ServiceException {
             final String contentUrlPrefix = ContentServlet.SERVLET_PATH + ContentServlet.PREFIX_GET + "?" +
                                             ContentServlet.PARAM_MSGID + "=";
             String contentUrl = Offline.getServerURI(ombx.getAccount(), contentUrlPrefix + calendarItemId + "-" + inviteId);
-            return UserServlet.getRemoteContent(ombx.getAuthToken(), contentUrl);
+            try {
+                return UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), contentUrl);
+            } catch (IOException x) {
+                throw ServiceException.FAILURE(contentUrl, x);
+            }
         }
     }
     
@@ -636,7 +643,7 @@ public class InitialSync {
             
             long timestamp = calElement.getAttributeLong(MailConstants.A_CAL_DATETIME, -1000);
             
-            Element setCalRequest = makeSetCalRequest(calElement, new RemoteInviteMimeLocator(ombx), ombx.getAccount(), isAppointment);
+            Element setCalRequest = makeSetCalRequest(calElement, new RemoteInviteMimeLocator(ombx), null, ombx.getAccount(), isAppointment);
             if (ombx.getOfflineAccount().isDebugTraceEnabled())
                 OfflineLog.offline.debug(setCalRequest.prettyPrint());
             
@@ -654,7 +661,7 @@ public class InitialSync {
     }
     
     //Massage the GetAppointmentResponse/GetTaskResponse into a SetAppointmentReqeust/SetTaskRequest
-    static Element makeSetCalRequest(Element resp, InviteMimeLocator imLocator, Account account, boolean isAppointment) throws ServiceException {
+    static Element makeSetCalRequest(Element resp, InviteMimeLocator imLocator, ZMailbox remoteZMailbox, Account account, boolean isAppointment) throws ServiceException {
         String calId = resp.getAttribute(MailConstants.A_ID);
         
         Element req = new Element.XMLElement(isAppointment ? MailConstants.SET_APPOINTMENT_REQUEST : MailConstants.SET_TASK_REQUEST);
@@ -742,10 +749,30 @@ public class InitialSync {
                 msg.addElement(topMp.detach());
             } else {
                 boolean noBlob = comp.getAttributeBool(MailConstants.A_CAL_NO_BLOB, false);
-                if (!noBlob) {
-                    byte[] mimeContent = imLocator.getInviteMime(Integer.parseInt(calId), (int)inv.getAttributeLong(MailConstants.A_ID));
-                    if (mimeContent != null && mimeContent.length > 0)
-                        msg.addElement(MailConstants.E_CONTENT).setText(new String(mimeContent));
+                if (!noBlob) { //we need to include the invite message
+                    int invId = (int)inv.getAttributeLong(MailConstants.A_ID);
+                    Pair<Integer, InputStream> pair = imLocator.getInviteMime(Integer.parseInt(calId), invId);
+                    InputStream invStream = pair.getSecond();
+                    String filename = "inv-" + calId + "-" + invId;
+                    String uploadId = null;
+                    try {
+                        if (remoteZMailbox != null) { //upload to remote
+                            int invMsgSize = pair.getFirst();
+                            int timeout = OfflineLC.http_connection_timeout.intValue() + (invMsgSize > 0 ? (invMsgSize / 25000 * (int)Constants.MILLIS_PER_SECOND) : 0);
+                            uploadId = remoteZMailbox.uploadContentAsStream(filename, invStream, MimeConstants.CT_MESSAGE_RFC822, invMsgSize, timeout);
+                        } else { //upload to local
+                            try {
+                                uploadId = FileUploadServlet.saveUpload(invStream, filename, MimeConstants.CT_MESSAGE_RFC822, account.getId()).getId();
+                            } catch (IOException x) {
+                                throw ServiceException.FAILURE("upload failed: " + filename, x);
+                            }
+                        }
+                    } finally {
+                        try {
+                            invStream.close();
+                        } catch (IOException x) {}
+                    }
+                    msg.addAttribute(MailConstants.A_ATTACHMENT_ID, uploadId);
                 } else {
                     // Add plain/html MIME parts for backward compatibility with older server.
                     String desc = null, descHtml = null;
