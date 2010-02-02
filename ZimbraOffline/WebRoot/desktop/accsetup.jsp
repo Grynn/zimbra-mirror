@@ -187,7 +187,6 @@ function OnDelete() {
 function OnSubmit() {
 	zd.hide("cancelButton");
 	zd.disableButton("saveButton", "<fmt:message key='Processing'/>");
-	zd.enable("accountName");
 	zd.enable("email");
 	zd.enable("password");
 	if (document.getElementById("port"))
@@ -395,7 +394,7 @@ function onEditLink(id, keep, makeInvisible) {
 												<div class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='AccountName'/>:</div>
 											</td>
 											<td>
-												<input class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}" <c:if test="${not empty bean.accountId}">disabled="disabled"</c:if>>
+												<input class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}">
 											</td>
 										</tr>
 										<c:if test="${bean.type ne 'zimbra'}">
