@@ -257,6 +257,19 @@ public class  ZFolderBean {
         return depth;
     }
 
+    /**
+     * @return true if the mount point has write permission
+     */
+    public boolean getIsMountPointWritable() {
+        if (getIsMountPoint()) {
+                String positivePerm = getEffectivePerm().replace("/-./g", "") ;
+                if(positivePerm != null) {
+                    return (positivePerm.indexOf(ZFolder.PERM_WRITE) != -1);
+                }
+        }
+        return false;
+    }
+
     public boolean getIsMessageMoveTarget() {
         return getIsConversationMoveTarget();
     }
@@ -293,19 +306,7 @@ public class  ZFolderBean {
     }
 
     public boolean getIsAppointmentMoveTarget() {
-        //TODO: handle perm check on mountpoint!
-        return getIsAppointmentView() && !(getIsMountPoint() || getRemoteURL() != null);
-    }
-
-    public boolean getIsMountPointWritable() {
-        //Check if the mount point has write permission
-        if (getIsMountPoint()) {
-                String positivePerm = getEffectivePerm().replace("/-./g", "") ;
-                if(positivePerm != null) {
-                    return (positivePerm.indexOf(ZFolder.PERM_WRITE) != -1);
-                }
-        }
-        return false;
+        return getIsAppointmentView() && (getRemoteURL() == null) && (!getIsMountPoint() || getIsMountPointWritable());
     }
 
     public boolean getIsTaskMoveTarget() {
