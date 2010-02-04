@@ -346,10 +346,10 @@ function(str, values) {
 };
 
 /**
-* URL-encodes a string. Replace + with %2B and space with +.
-*
-* @param str	the string to encode
-*/
+ * Encodes a complete URL. Leaves delimiters alone.
+ *
+ * @param str	the string to encode
+ */
 AjxStringUtil.urlEncode =
 function(str) {
 	if (!str) return "";
@@ -360,12 +360,45 @@ function(str) {
 /**
  * Encodes a string as if it were a <em>part</em> of a URL. The
  * difference between this function and {@link AjxStringUtil.urlEncode}
- * is that this will also encode forward slashes.
+ * is that this will also encode the following delimiters:
+ *
+ *  			: / ? & =
  */
-AjxStringUtil.urlComponentEncode = function(str) {
+AjxStringUtil.urlComponentEncode =
+function(str) {
 	if (!str) return "";
 	var func = window.encodeURLComponent || window.encodeURIComponent;
 	return func(str);
+};
+
+/**
+ * Decodes a complete URL.
+ *
+ * @param str	the string to decode
+ */
+AjxStringUtil.urlDecode =
+function(str) {
+	if (!str) return "";
+	var func = window.decodeURL || window.decodeURI;
+	return func(str);
+};
+
+/**
+ * Decodes a string as if it were a <em>part</em> of a URL. Falls back
+ * to unescape() if necessary.
+ */
+AjxStringUtil.urlComponentDecode =
+function(str) {
+	if (!str) return "";
+	var func = window.decodeURLComponent || window.decodeURIComponent;
+	var result;
+	try {
+		result = func(str);
+	} catch(e) {
+		result = unescape(str);
+	}
+
+	return result || str;
 };
 
 /**
