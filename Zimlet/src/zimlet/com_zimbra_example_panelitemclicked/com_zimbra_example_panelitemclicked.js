@@ -34,9 +34,6 @@ com_zimbra_example_panelitemclicked_HandlerObject.prototype.constructor = com_zi
  */
 com_zimbra_example_panelitemclicked_HandlerObject.prototype.singleClicked =
 function() {
-	
-	var t = this.getMessages();
-	
 	this.displayStatusMessage("Single-click performed");
 };
 
@@ -46,8 +43,5 @@ function() {
  */
 com_zimbra_example_panelitemclicked_HandlerObject.prototype.doubleClicked =
 function() {
-	
-	var t = this.getMessages();
-	
 	this.displayStatusMessage("Double-click performed");
 };
