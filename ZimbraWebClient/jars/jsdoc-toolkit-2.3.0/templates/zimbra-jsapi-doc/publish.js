@@ -48,7 +48,7 @@ function publish(symbolSet) {
  	}
  	
  	// get a list of all the classes in the symbolset
- 	var classes = symbols.filter(isaClass).sort(makeSortby("alias"));
+ 	var classes = symbols.filter(isaClass).sort(makeSortby("srcFile"));
 	
 	// create a filemap in which outfiles must be to be named uniquely, ignoring case
 	if (JSDOC.opt.u) {
