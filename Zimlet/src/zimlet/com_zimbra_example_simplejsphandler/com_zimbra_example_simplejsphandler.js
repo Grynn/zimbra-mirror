@@ -13,15 +13,15 @@
  * ***** END LICENSE BLOCK *****
  */
 
-ccom_zimbra_example_simplejsphandler_HandlerObject = function() {
+com_zimbra_example_simplejsphandler_HandlerObject = function() {
 };
-ccom_zimbra_example_simplejsphandler_HandlerObject.prototype = new ZmZimletBase;
-ccom_zimbra_example_simplejsphandler_HandlerObject.prototype.constructor = ccom_zimbra_example_simplejsphandler_HandlerObject;
+com_zimbra_example_simplejsphandler_HandlerObject.prototype = new ZmZimletBase;
+com_zimbra_example_simplejsphandler_HandlerObject.prototype.constructor = com_zimbra_example_simplejsphandler_HandlerObject;
 
 /**
  * Double clicked.
  */
-ccom_zimbra_example_simplejsphandler_HandlerObject.prototype.doubleClicked =
+com_zimbra_example_simplejsphandler_HandlerObject.prototype.doubleClicked =
 function() {
 	this.singleClicked();
 };
@@ -29,7 +29,7 @@ function() {
 /**
  * Single clicked.
  */
-ccom_zimbra_example_simplejsphandler_HandlerObject.prototype.singleClicked =
+com_zimbra_example_simplejsphandler_HandlerObject.prototype.singleClicked =
 function() {
 	this._displayDialog();
 };
@@ -38,7 +38,7 @@ function() {
  * Displays the zimlet jsp page.
  * 
  */
-ccom_zimbra_example_simplejsphandler_HandlerObject.prototype._displayDialog = 
+com_zimbra_example_simplejsphandler_HandlerObject.prototype._displayDialog = 
 function() {
 	
 	var jspUrl = this.getResource("jspfile.jsp");

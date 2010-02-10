@@ -1,6 +1,6 @@
 <zimlet name="com_zimbra_example_simplejsphandler" version="1.0" description="An example zimlet using a JSP file.">
     <include>com_zimbra_example_simplejsphandler.js</include>
-    <handlerObject>ccom_zimbra_example_simplejsphandler_HandlerObject</handlerObject>
+    <handlerObject>com_zimbra_example_simplejsphandler_HandlerObject</handlerObject>
     <zimletPanelItem label="JSP Example (via Handler Object)" icon="zimbraIcon">
       <toolTipText>Click to launch the JSP Example</toolTipText>
    </zimletPanelItem>
