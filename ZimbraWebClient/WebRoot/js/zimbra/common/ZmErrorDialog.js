@@ -15,19 +15,21 @@
 
 /**
  * @overview
- * 
- * This file defines the Zimbra controller.
+ * This file defines the Zimbra error dialog.
  *
  */
 
 /**
+ * Creates an error dialog.
  * @class
  * Creates an error dialog which will have a "Send Error Report" button.
  * A normal {@link DwtMessageDialog} with a "Send Error Report" button that will post user info to the 
  * server when clicked.
  * 
  * @param	{Object}	parent		the parent
- * @param	{Hash}		msgs		a hash of messages (msgs.showDetails, msgs.hideDetails)
+ * @param	{Hash}		msgs		a hash of messages
+ * @param	{String}	msgs.showDetails		the show details message
+ * @param	{String}	msgs.hideDetails		the hide details message
  * 
  * @extends DwtMessageDialog
  */

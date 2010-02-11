@@ -14,17 +14,25 @@
  */
 
 /**
- * Exception returned by the server as a response, generally as a fault. The fault
+ * @overview
+ * This file contains the exception class.
+ */
+/**
+ * Creates an exception.
+ * @class
+ * This class represents an exception returned by the server as a response, generally as a fault. The fault
  * data is converted to properties of the exception.
  *
- * @param params	[hash]		hash of params:
- *        msg		[string]	terse explanation (Fault.Reason.Text)
- *        code		[string]	error code (Fault.Detail.Error.Code)
- *        method	[string]	request name
- *        detail	[string]	Fault.Code.Value
- *        data		[object]*	optional structured fault data (Fault.Detail.Error.a)
- *        trace		[string]*	trace info (Fault.Detail.Error.Trace)
- *        request	[string]*	SOAP or JSON that represents the request
+ * @param {Hash}	params	a hash of parameters
+ * @param {String}      params.msg		the explanation (Fault.Reason.Text)
+ * @param {String}      params.code		the error code (Fault.Detail.Error.Code)
+ * @param {String}      params.method	the request name
+ * @param {String}      params.detail	the Fault.Code.Value
+ * @param {Object}      [params.data]		an optional structured fault data (Fault.Detail.Error.a)
+ * @param {String}      params.trace		the trace info (Fault.Detail.Error.Trace)
+ * @param {String}       params.request	the SOAP or JSON that represents the request
+ * 
+ * @extends		AjxException
  */
 ZmCsfeException = function(params) {
 
@@ -53,6 +61,11 @@ ZmCsfeException.PARAMS = ["msg", "code", "method", "detail", "data", "trace"];
 ZmCsfeException.prototype = new AjxException;
 ZmCsfeException.prototype.constructor = ZmCsfeException;
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @return		{String}		a string representation of the object
+ */
 ZmCsfeException.prototype.toString =
 function() {
 	return "ZmCsfeException";
@@ -70,6 +83,14 @@ ZmCsfeException.MAIL_SEND_ADDRESS_FAILURE_UNSENT = "unsent";
 // Static functions
 //
 
+/**
+ * Gets the error messages.
+ * 
+ * @param	{String}	code	the code
+ * @param	{Array}	args		the message format args
+ * 
+ * @return	{String}	the message
+ */
 ZmCsfeException.getErrorMsg =
 function(code, args) {
 	var msg = ZMsg[code];
@@ -85,11 +106,24 @@ function(code, args) {
 // Public methods
 //
 
+/**
+ * Gets the error message.
+ * 
+ * @param	{Array}	args		the message format args
+ * @return	{String}	the message
+ */
 ZmCsfeException.prototype.getErrorMsg =
 function(args) {
 	return ZmCsfeException.getErrorMsg(this.code, args);
 };
 
+/**
+ * Gets the data.
+ * 
+ * @param	{Object}	key		the key
+ * 
+ * @return	{Object}	the data
+ */
 ZmCsfeException.prototype.getData =
 function(key) {
 	return this.data && this.data[key];

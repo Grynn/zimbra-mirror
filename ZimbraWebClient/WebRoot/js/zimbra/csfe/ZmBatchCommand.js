@@ -14,37 +14,41 @@
  */
 
 /**
- * Creates an empty batch command. Use its add() method to add commands to it,
- * and run() to invoke it.
- * @constructor
+ * @overview
+ * This file contains the batch command class.
+ */
+
+/**
+ * Creates an empty batch command. Use the {@link #add} method to add commands to it,
+ * and {@link #run} to invoke it.
  * @class
  * This class represent a batch command, which is a collection of separate 
  * requests. Each command is a callback with a method, arguments, and (usually) an
  * object on which to call the method. Normally, when the command is run, it creates
- * a SOAP document or JSON object which it hands to the app controller's sendRequest()
+ * a SOAP document or JSON object which it hands to the app controller's <code>sendRequest()</code>
  * method. It may also pass a response callback and/or an error callback.
  * <p>
  * Instead of calling sendRequest(), the command should hand the batch command its SOAP
  * document or JSON object, response callback, and error callback. The last argument that
  * the command receives is a reference to the batch command; that's how it knows it's in batch mode.
- * </p><p>
+ * </p>
+ * <p>
  * After all commands have been added to the batch command, call its run() method. That will
  * create a BatchRequest out of the individual commands' requests and send it to the
  * server. Each subrequest gets an ID. When the BatchResponse comes back, it is broken into
- * individual responses. If a response indicates success (it is a *Response), the corresponding
+ * individual responses. If a response indicates success (it is a <code>*Response</code>), the corresponding
  * response callback is called with the result. If the response is a fault, the corresponding
  * error callback is called with the exception.
- * </p><p>
+ * </p>
+ * <p>
  * A command does not have to be the method that generates a SOAP document or JSON object.
  * It can be higher-level. Just make sure that the reference to the batch command gets passed down to it.
  * </p>
  * @author Conrad Damon
  * 
- * @param continueOnError	[boolean]*	if true, the batch request continues processing
- * 										when a subrequest fails (defaults to true)
- * @param accountName		[string]	The account name to run this batch command as.
- * @param useJson			[boolean]	If true, send JSON rather than XML. Make sure that
- * 										commands return requests as JSON objects!
+ * @param {Boolean}	continueOnError	if <code>true</code>, the batch request continues processing when a subrequest fails (defaults to <code>true</code>)
+ * @param {String}	accountName		the account name to run this batch command as.
+ * @param {Boolean}	useJson			if <code>true</code>, send JSON rather than XML
  */
 ZmBatchCommand = function(continueOnError, accountName, useJson) {
 	
@@ -59,6 +63,11 @@ ZmBatchCommand = function(continueOnError, accountName, useJson) {
 	this._errorCallbacks = [];
 };
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @return		{String}		a string representation of the object
+ */
 ZmBatchCommand.prototype.toString =
 function() {
 	return "ZmBatchCommand";
@@ -73,7 +82,6 @@ ZmBatchCommand.prototype._sensitive = false;
 //
 // Constants
 //
-
 ZmBatchCommand.STOP = "stop";
 ZmBatchCommand.CONTINUE = "continue";
 
@@ -82,12 +90,21 @@ ZmBatchCommand.CONTINUE = "continue";
 //
 
 /**
- * Indicates that this batch command contains a request with sensitive
- * data. Note: There is no way to unset this value for the batch command.
+ * Sets the sensitive flag. This indicates that this batch command
+ * contains a request with sensitive data. Note: There is no way to unset
+ * this value for the batch command.
+ * 
+ * @param	{Boolean}	sensitive		<code>true</code> to set command as sensitive
  */
 ZmBatchCommand.prototype.setSensitive = function(sensitive) {
 	this._sensitive = this._sensitive || sensitive;
 };
+
+/**
+ * Checks if the command is sensitive.
+ * 
+ * @return	{Boolean}	<code>true</code> if the command is sensitive
+ */
 ZmBatchCommand.prototype.isSensitive = function() {
 	return this._sensitive;
 };
@@ -95,26 +112,31 @@ ZmBatchCommand.prototype.isSensitive = function() {
 /**
  * Adds a command to the list of commands to run as part of this batch request.
  * 
- * @param cmd	[AjxCallback]	a command
+ * @param {AjxCallback}	cmd		the command
  */
 ZmBatchCommand.prototype.add =
 function(cmd) {
 	this._cmds.push(cmd);
 };
 
+/**
+ * Gets the number of commands that are part of this batch request.
+ * 
+ * @return	{int}	the size
+ */
 ZmBatchCommand.prototype.size =
 function() {
 	return this.curId;
 };
 
 /**
- * Issues the batch request. For each individual request, either a response or an
+ * Runs the batch request. For each individual request, either a response or an
  * error callback will be called.
  * 
- * @param callback		[AjxCallback]*	callback to run after entire batch request has completed
- * @param errorCallback	[AjxCallback]*	Error callback called if anything fails.
+ * @param {AjxCallback}		callback		the callback to run after entire batch request has completed
+ * @param {AjxCallback}		errorCallback	the error callback called if anything fails.
  *										The error callbacks arguments are all
- *										of the exceptions that occured. Note:
+ *										of the exceptions that occurred. Note:
  *										only the first exception is passed if
  *										this batch command's onError is set to
  *										stop.
@@ -183,6 +205,9 @@ function(callback, errorCallback) {
 	}
 };
 
+/**
+ * @private
+ */
 ZmBatchCommand.prototype._handleResponseRun =
 function(callback, errorCallback, result) {
 	var batchResponse = result.getResponse();
@@ -224,12 +249,14 @@ function(callback, errorCallback, result) {
 
 /**
  * Adds the given command parameters to the batch command, as part of a command's
- * invocation. Should be called by a function that was added via add() earlier; that
+ * invocation. Should be called by a function that was added via {@link #add} earlier; that
  * function should pass the request object.
  * 
- * @param request		[AjxSoapDoc|object]	a SOAP document or JSON object with the command's request
- * @param respCallback	[AjxCallback]*		next callback in chain for async request
- * @param errorCallback	[Object]*			callback to run if there is an exception
+ * @param {AjxSoapDoc|Object}	request		a SOAP document or JSON object with the command's request
+ * @param {AjxCallback}	respCallback	the next callback in chain for async request
+ * @param {AjxCallback}		errorCallback	the callback to run if there is an exception
+ * 
+ * @see		#add
  */
 ZmBatchCommand.prototype.addRequestParams =
 function(request, respCallback, errorCallback) {
@@ -240,12 +267,14 @@ function(request, respCallback, errorCallback) {
 
 /**
  * Adds the given command parameters to the batch command, as part of a command's
- * invocation. Should be called without a previous add() command, when the request
+ * invocation. Should be called without a previous {@link #add} command, when the request
  * object can immediately generate its request object.
  * 
- * @param request		[AjxSoapDoc|object]	a SOAP document or JSON object with the command's request
- * @param respCallback	[AjxCallback]*		next callback in chain for async request
- * @param errorCallback	[Object]*			callback to run if there is an exception
+ * @param {AjxSoapDoc|object}	request		a SOAP document or JSON object with the command's request
+ * @param {AjxCallback}	respCallback	the next callback in chain for async request
+ * @param {AjxCallback}	errorCallback	the callback to run if there is an exception
+ * 
+ * @see		#add
  */
 ZmBatchCommand.prototype.addNewRequestParams =
 function(request, respCallback, errorCallback) {
@@ -253,10 +282,12 @@ function(request, respCallback, errorCallback) {
     this.curId++;
 };
 
-/*
- * Each type of request will return an array of *Response elements. There may also be
+/**
+ * Each type of request will return an array of <code>*Response</code> elements. There may also be
  * an array of Fault elements. Each element has an ID, so we can match it to its
  * response or error callback, and run whichever is appropriate.
+ * 
+ * @private
  */
 ZmBatchCommand.prototype._processResponse =
 function(method, resp) {

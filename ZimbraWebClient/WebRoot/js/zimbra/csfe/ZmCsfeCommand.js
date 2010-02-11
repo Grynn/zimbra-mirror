@@ -13,9 +13,25 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+ * @overview
+ * This file contains the command class.
+ */
+
+/**
+ * Creates a command.
+ * @class
+ * This class represents a command.
+ * 
+ */
 ZmCsfeCommand = function() {
 };
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @return		{String}		a string representation of the object
+ */
 ZmCsfeCommand.prototype.toString =
 function() {
 	return "ZmCsfeCommand";
@@ -34,21 +50,45 @@ ZmCsfeCommand.RETRY		= "retry";
 
 // Static methods
 
+/**
+ * Gets the auth token cookie.
+ * 
+ * @return	{String}	the auth token
+ */
 ZmCsfeCommand.getAuthToken =
 function() {
 	return AjxCookie.getCookie(document, ZmCsfeCommand._COOKIE_NAME);
 };
 
+/**
+ * Sets the auth token cookie name.
+ * 
+ * @param	{String}	cookieName		the cookie name to user
+ */
 ZmCsfeCommand.setCookieName =
 function(cookieName) {
 	ZmCsfeCommand._COOKIE_NAME = cookieName;
 };
 
+/**
+ * Sets the server URI.
+ * 
+ * @param	{String}	uri		the URI
+ */
 ZmCsfeCommand.setServerUri =
 function(uri) {
 	ZmCsfeCommand.serverUri = uri;
 };
 
+/**
+ * Sets the auth token.
+ * 
+ * @param	{String}	authToken		the auth token
+ * @param	{int}		lifetimeMs		the token lifetime in milliseconds
+ * @param	{String}	sessionId		the session id
+ * @param	{Boolean}	secure		<code>true</code> for secure
+ * 
+ */
 ZmCsfeCommand.setAuthToken =
 function(authToken, lifetimeMs, sessionId, secure) {
 	ZmCsfeCommand._curAuthToken = authToken;
@@ -68,16 +108,31 @@ function(authToken, lifetimeMs, sessionId, secure) {
 	}
 };
 
+/**
+ * Clears the auth token cookie.
+ * 
+ */
 ZmCsfeCommand.clearAuthToken =
 function() {
 	AjxCookie.deleteCookie(document, ZmCsfeCommand._COOKIE_NAME, "/");
 };
 
+/**
+ * Gets the session id.
+ * 
+ * @return	{String}	the session id
+ */
 ZmCsfeCommand.getSessionId =
 function() {
 	return ZmCsfeCommand._sessionId;
 };
 
+/**
+ * Sets the session id.
+ * 
+ * @param	{String}	sessionId		the session id
+ * 
+ */
 ZmCsfeCommand.setSessionId =
 function(sessionId) {
 	var id = (sessionId != null)
@@ -86,6 +141,13 @@ function(sessionId) {
 	ZmCsfeCommand._sessionId = id ? parseInt(id) : null;
 };
 
+/**
+ * Converts a fault to an exception.
+ * 
+ * @param	{Hash}	fault		the fault
+ * @param	{Hash}	params		a hash of parameters
+ * @return	{ZmCsfeException}	the exception
+ */
 ZmCsfeCommand.faultToEx =
 function(fault, params) {
 	var newParams = {
@@ -114,10 +176,11 @@ function(fault, params) {
 };
 
 /**
- * Returns the method name (*Request) of the given request, which may be either a SOAP doc
+ * Gets the method name (<code>*Request</code>) of the given request, which may be either a SOAP doc
  * or a JSON object.
  * 
- * @param request	[AjxSoapDoc|object]		request
+ * @param {AjxSoapDoc|Object}	request	the request
+ * @return	{String}		the method name or "[unknown]"
  */
 ZmCsfeCommand.getMethodName =
 function(request) {
@@ -139,23 +202,23 @@ function(request) {
  * Sends a SOAP request to the server and processes the response. The request can be in the form
  * of a SOAP document, or a JSON object.
  *
- * @param params			[hash]				hash of params:
- *        soapDoc			[AjxSoapDoc]		the SOAP document that represents the request
- *        jsonObj			[object]			JSON object that represents the request (alternative to soapDoc)
- *        noAuthToken		[boolean]*			If true, the check for an auth token is skipped
- *        serverUri			[string]*			URI to send the request to
- *        targetServer		[string]*			Host that services the request
- *        useXml			[boolean]*			If true, an XML response is requested
- *        noSession			[boolean]*			If true, no session info is included
- *        changeToken		[string]*			Current change token
- *        highestNotifySeen [int]*  	    	Sequence # of the highest notification we have processed
- *        asyncMode			[boolean]*			If true, request sent asynchronously
- *        callback			[AjxCallback]*		Callback to run when response is received (async mode)
- *        logRequest		[boolean]*			If true, SOAP command name is appended to server URL
- *        accountId			[string]*			ID of account to execute on behalf of
- *        accountName		[string]*			name of account to execute on behalf of
- *        skipAuthCheck		[boolean]*			don't check if auth token has changed
- *        resend			[constant]*			reason for resending request
+ * @param {Hash}	params			a hash of parameters
+ * @param	{AjxSoapDoc}	params.soapDoc			the SOAP document that represents the request
+ * @param	{Object}	params.jsonObj			the JSON object that represents the request (alternative to soapDoc)
+ * @param	{Boolean}	params.noAuthToken		if <code>true</code>, the check for an auth token is skipped
+ * @param	{String}	params.serverUri			the URI to send the request to
+ * @param	{String}	params.targetServer		the host that services the request
+ * @param	{Boolean}	params.useXml			if <code>true</code>, an XML response is requested
+ * @param	{Boolean}	params.noSession			if <code>true</code>, no session info is included
+ * @param	{String}	params.changeToken		the current change token
+ * @param	{int}	params.highestNotifySeen 	the sequence # of the highest notification we have processed
+ * @param	{Boolean}	params.asyncMode			if <code>true</code>, request sent asynchronously
+ * @param	{AjxCallback}	params.callback		the callback to run when response is received (async mode)
+ * @param	{Boolean}	params.logRequest		if <code>true</code>, SOAP command name is appended to server URL
+ * @param	{String}	params.accountId			the ID of account to execute on behalf of
+ * @param	{String}	params.accountName		the name of account to execute on behalf of
+ * @param	{Boolean}	params.skipAuthCheck		if <code>true</code> to skip auth check (i.e. do not check if auth token has changed)
+ * @param	{constant}	params.resend			the reason for resending request
  */
 ZmCsfeCommand.prototype.invoke =
 function(params) {
@@ -191,10 +254,10 @@ function(params) {
 /**
  * Sends a REST request to the server via GET and returns the response.
  *
- * @param params			[hash]				hash of params:
- *        restUri			[string]			REST URI to send the request to
- *        asyncMode			[boolean]*			If true, request sent asynchronously
- *        callback			[AjxCallback]*		Callback to run when response is received (async mode)
+ * @param {Hash}	params			a hash of parameters
+ * @param	{String}       params.restUri			the REST URI to send the request to
+ * @param	{Boolean}       params.asyncMode			if <code>true</code> request sent asynchronously
+ * @param	{AjxCallback}	params.callback			the callback to run when response is received (async mode)
  */
 ZmCsfeCommand.prototype.invokeRest =
 function(params) {
@@ -218,6 +281,7 @@ function(params) {
 
 /**
  * Cancels this request (which must be async).
+ * 
  */
 ZmCsfeCommand.prototype.cancel =
 function() {
@@ -229,11 +293,20 @@ function() {
 	}
 };
 
+/**
+ * Gets the request string.
+ * 
+ * @param	{Hash}	params		a hash of parameters
+ * @return	{String}	the request string
+ */
 ZmCsfeCommand.getRequestStr =
 function(params) {
 	return 	params.soapDoc ? ZmCsfeCommand._getSoapRequestStr(params) : ZmCsfeCommand._getJsonRequestStr(params);
 };
 
+/**
+ * @private
+ */
 ZmCsfeCommand._getJsonRequestStr =
 function(params) {
 
@@ -305,6 +378,9 @@ function(params) {
 	return AjxStringUtil.objToString(obj);
 };
 
+/**
+ * @private
+ */
 ZmCsfeCommand._getSoapRequestStr =
 function(params) {
 
@@ -409,8 +485,10 @@ function(params) {
 /**
  * Runs the callback that was passed to invoke() for an async command.
  *
- * @param callback	[AjxCallback]	Callback to run with response data
- * @param params	[hash]			hash of params (see method invoke())
+ * @param {AjxCallback}	callback	the callback to run with response data
+ * @param {Hash}	params	a hash of parameters (see method invoke())
+ * 
+ * @private
  */
 ZmCsfeCommand.prototype._runCallback =
 function(params, result) {
@@ -435,8 +513,8 @@ function(params, result) {
 /**
  * Takes the response to an RPC request and returns a JS object with the response data.
  *
- * @param response	[Object]		RPC response with properties "text" and "xml"
- * @param params	[hash]			hash of params (see method invoke())
+ * @param {Object}	response	the RPC response with properties "text" and "xml"
+ * @param {Hash}	params	a hash of parameters (see method invoke())
  */
 ZmCsfeCommand.prototype._getResponseData =
 function(response, params) {
@@ -562,6 +640,9 @@ function(response, params) {
 	return params.asyncMode ? result : obj;
 };
 
+/**
+ * @private
+ */
 ZmCsfeCommand.prototype._handleException =
 function(ex, params, callback) {
 	if (!(ex && (ex instanceof ZmCsfeException || ex instanceof AjxSoapException || ex instanceof AjxException))) {
