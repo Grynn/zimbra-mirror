@@ -113,7 +113,7 @@
     <value>com.zimbra.cs.filter.OfflineRuleRewriterFactory</value>
   </key>
   <key name="zimbra_class_sslprotocolsocketfactory">
-    <value>com.zimbra.common.util.CustomSSLProtocolSocketFactory</value>
+    <value>com.zimbra.common.net.CustomSSLProtocolSocketFactory</value>
   </key>
   <key name="zimbra_disk_cache_servlet_flush">
     <value>false</value>

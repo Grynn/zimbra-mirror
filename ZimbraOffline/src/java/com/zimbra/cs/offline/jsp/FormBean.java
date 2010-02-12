@@ -18,9 +18,9 @@ import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.zimbra.common.net.SSLCertInfo;
 import com.zimbra.common.service.RemoteServiceException;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.SSLCertInfo;
 import com.zimbra.cs.offline.jsp.JspConstants.JspVerb;
 
 public abstract class FormBean extends PageBean {

@@ -22,7 +22,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
-import com.zimbra.common.util.CustomTrustManager;
+import com.zimbra.common.net.CustomTrustManager;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.SystemUtil;
 import com.zimbra.common.util.ZimbraLog;

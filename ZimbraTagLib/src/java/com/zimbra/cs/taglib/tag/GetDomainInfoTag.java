@@ -18,7 +18,7 @@ import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.util.DateUtil;
-import com.zimbra.common.util.EasySSLProtocolSocketFactory;
+import com.zimbra.common.net.EasySSLProtocolSocketFactory;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.account.soap.SoapProvisioning;

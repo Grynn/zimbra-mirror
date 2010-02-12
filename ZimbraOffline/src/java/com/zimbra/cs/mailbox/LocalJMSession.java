@@ -23,7 +23,7 @@ import javax.mail.Session;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
-import com.zimbra.common.util.SSLSocketFactoryManager;
+import com.zimbra.common.net.SSLSocketFactoryManager;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
