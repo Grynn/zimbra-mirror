@@ -393,6 +393,7 @@ function() {
 	if (this.getEnabled()) {
 		this._hasFocus = true;
 		this.getInputElement().focus();
+        DwtShell.getShell(window).getKeyboardMgr().grabFocus(this.getTabGroupMember());
 	}
 };
 
