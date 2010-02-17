@@ -101,9 +101,11 @@ function(account, now, isDragProxy) {
 						html[idx++] = AjxImg.getImageHtml("AdminUser");
 					} else if (account.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] == "TRUE") {
 						html[idx++] = AjxImg.getImageHtml("DomainAdminUser");
-					} else {
+					} else if (account.attrs[ZaAccount.A_zimbraIsSystemResource] == "TRUE") {
+						html[idx++] = AjxImg.getImageHtml("SystemResource");
+                    } else {
 						html[idx++] = AjxImg.getImageHtml("Account");
-					}
+					}                          
 				break;
 				case ZaItem.DL:
 					if (account.attrs[ZaDistributionList.A_isAdminGroup] == "TRUE") {
