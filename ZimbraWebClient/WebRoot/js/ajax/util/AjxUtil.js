@@ -712,7 +712,8 @@ function(hash1, hash2) {
 	if (!AjxUtil.arrayCompare(keys1, keys2)) {
 		return false;
 	}
-	for (var key in keys1) {
+	for (var i = 0, len = keys1.length; i < len; i++) {
+		var key = keys1[i];
 		if (hash1[key] != hash2[key]) {
 			return false;
 		}
