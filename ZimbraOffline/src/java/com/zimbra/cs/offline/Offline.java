@@ -17,6 +17,7 @@ package com.zimbra.cs.offline;
 import org.apache.commons.httpclient.params.DefaultHttpParams;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapTransport;
@@ -33,6 +34,9 @@ public class Offline {
     	//Set a couple of HttpClient connection/socket parameters for offline specific tuning
     	DefaultHttpParams.getDefaultParams().setIntParameter(HttpConnectionParams.SO_TIMEOUT, OfflineLC.http_so_timeout.intValue());
     	DefaultHttpParams.getDefaultParams().setIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, OfflineLC.http_connection_timeout.intValue());
+    	
+    	if (LC.httpclient_use_system_proxy.booleanValue())
+    	    System.setProperty("java.net.useSystemProxies","true");
     	
     	System.setProperty("http.agent", OfflineLC.zdesktop_name.value() + " " + OfflineLC.getFullVersion()); //for httpclient
     }

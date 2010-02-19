@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import com.zimbra.common.httpclient.HttpClientUtil;
 import com.zimbra.cs.offline.util.Xml;
 import com.zimbra.cs.util.yauth.Auth;
 import com.zimbra.cs.util.yauth.AuthenticationException;
@@ -93,7 +94,7 @@ public abstract class Request extends Entity {
                 Yab.debug("Sending request: GET %s", method.getURI());
             }
         }
-        int code = session.getHttpClient().executeMethod(method);
+        int code = HttpClientUtil.executeMethod(session.getHttpClient(), method);
         InputStream is = method.getResponseBodyAsStream();
         if (code != 200) {
             if (code != 401 && code != 403) {

@@ -112,7 +112,7 @@ public class InitialSync {
                                             ContentServlet.PARAM_MSGID + "=";
             String contentUrl = Offline.getServerURI(ombx.getAccount(), contentUrlPrefix + calendarItemId + "-" + inviteId);
             try {
-                return UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), contentUrl);
+                return UserServlet.getRemoteResourceAsStreamWithLength(ombx.getAuthToken(), contentUrl);
             } catch (IOException x) {
                 throw ServiceException.FAILURE(contentUrl, x);
             }
@@ -878,8 +878,7 @@ public class InitialSync {
             if (acct.isDebugTraceEnabled())
                 OfflineLog.request.debug("GET " + url);
             try {
-                blob = UserServlet.getRemoteResource(ombx.getAuthToken(), url,
-                        acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass()).getSecond();
+                blob = UserServlet.getRemoteResource(ombx.getAuthToken(), url).getSecond();
             } catch (MailServiceException.NoSuchItemException nsie) {
                 OfflineLog.offline.warn("initial: no blob available for contact " + id);
             } catch (Exception x) {
@@ -991,9 +990,7 @@ public class InitialSync {
             if (acct.isDebugTraceEnabled())
                 OfflineLog.request.debug("GET " + url);
             try {
-                response = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(),
-                    url, acct.getProxyHost(), acct.getProxyPort(),
-                    acct.getProxyUser(), acct.getProxyPass());
+                response = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url);
                 in = response.getSecond();
             } catch (MailServiceException.NoSuchItemException nsie) {
                 OfflineLog.offline.info("initial: messages have been deleted; skipping");
@@ -1075,8 +1072,7 @@ public class InitialSync {
             if (acct.isDebugTraceEnabled())
                 OfflineLog.request.debug("GET " + url);
             try {
-                Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url,
-                        acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
+                Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url);
                 in = response.getSecond();
             } catch (MailServiceException.NoSuchItemException nsie) {
                 OfflineLog.offline.info("initial: messages have been deleted; skipping");
@@ -1132,8 +1128,7 @@ public class InitialSync {
             OfflineLog.request.debug("GET " + url);
         try {
             Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(
-                    ombx.getAuthToken(), url,
-                    acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
+                    ombx.getAuthToken(), url);
             for (Header hdr : response.getFirst())
                 headers.put(hdr.getName(), hdr.getValue());
             
@@ -1313,8 +1308,7 @@ public class InitialSync {
         if (acct.isDebugTraceEnabled())
             OfflineLog.request.debug("GET " + url);
         try {
-            rs = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url,
-                    acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass()).getSecond();
+            rs = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url).getSecond();
         } catch (MailServiceException.NoSuchItemException nsie) {
             OfflineLog.offline.warn("initial: no blob available for document " + itemIdStr);
         } catch (IOException e) {
@@ -1374,8 +1368,7 @@ public class InitialSync {
         int lastId = 0;
         int id = 0;
         try {
-            rs = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url,
-                    acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass()).getSecond();
+            rs = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url).getSecond();
             int statusCode = rs.getStatusCode();
             if (statusCode != 200) {
                 OfflineLog.offline.warn("initial: remote server returned an error " + statusCode);

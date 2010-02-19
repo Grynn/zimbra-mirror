@@ -19,6 +19,8 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 
+import com.zimbra.common.httpclient.HttpClientUtil;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -168,7 +170,7 @@ class FaviconServlet extends HttpServlet {
             // that also allows to configure timeout values (e.g. connect and get data)
             GetMethod get = new GetMethod(url);
             get.setFollowRedirects(true);
-            int response = client.executeMethod(get);
+            int response = HttpClientUtil.executeMethod(client, get);
             if (response < 400) {
                 // Check that the response was successful. Should we also filter 30* code?
                 return get.getResponseBody();

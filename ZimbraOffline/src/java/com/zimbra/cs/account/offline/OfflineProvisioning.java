@@ -156,32 +156,19 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	    options = new ZMailbox.Options(account.getAttr(Provisioning.A_mail), AccountBy.name, account.getAttr(A_offlineRemotePassword), uri);
     	}
         options.setDebugListener(new Offline.OfflineDebugListener(account));
-    	return newZMailbox(options, account.getProxyHost(), account.getProxyPort(), account.getProxyUser(), account.getProxyPass());
+    	return newZMailbox(options);
     }
     
     private ZMailbox newZMailbox(String email, String password, Map<String, Object> attrs, String serviceUri) throws ServiceException {
-    	String proxyHost = (String)attrs.get(A_offlineProxyHost);
-    	int proxyPort = 0;
-    	String portStr = (String)attrs.get(A_offlineProxyPort);
-    	if (portStr != null) {
-            try {
-                proxyPort = Integer.parseInt(portStr);
-            } catch (NumberFormatException x) {}
-    	}
-    	String proxyUser = (String)attrs.get(A_offlineProxyUser);
-    	String proxyPass = (String)attrs.get(A_offlineProxyPass);
-    	
     	String uri = Offline.getServerURI((String)attrs.get(A_offlineRemoteServerUri), serviceUri);
     	ZMailbox.Options options = new ZMailbox.Options(email, AccountBy.name, password, uri);
         options.setDebugListener(new Offline.OfflineDebugListener());
-    	
-    	return newZMailbox(options, proxyHost, proxyPort, proxyUser, proxyPass);
+    	return newZMailbox(options);
     }
     
-    private ZMailbox newZMailbox(ZMailbox.Options options, String proxyHost, int proxyPort, String proxyUser, String proxyPass) throws ServiceException {
+    private ZMailbox newZMailbox(ZMailbox.Options options) throws ServiceException {
     	options.setRequestProtocol(SoapProtocol.Soap12);
     	options.setResponseProtocol(SoapProtocol.Soap12);
-        options.setProxy(proxyHost, proxyPort, proxyUser, proxyPass);
         options.setNoSession(true);
         options.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
         options.setTimeout(OfflineLC.zdesktop_request_timeout.intValue());
@@ -301,11 +288,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         String password = acct.getAttr(A_offlineRemotePassword);
         String baseUri = acct.getAttr(A_offlineRemoteServerUri);
         
-        String proxyHost = acct.getProxyHost();
-        int proxyPort = acct.getProxyPort();
-        String proxyUser = acct.getProxyUser();
-        String proxyPass = acct.getProxyPass();
-        
         boolean hasChange = false;
         for (Map.Entry<String, ? extends Object> change : changes.entrySet()) {
             String name = change.getKey();
@@ -322,25 +304,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 String newBaseUri = (String)change.getValue();
                 hasChange |= !baseUri.equals(newBaseUri);
                 baseUri = newBaseUri;
-            } else if (name.equalsIgnoreCase(A_offlineProxyHost)) {
-                proxyHost = (String)change.getValue();
-                hasChange = true;
-	        } else if (name.equalsIgnoreCase(A_offlineProxyPort)) {
-	        	proxyPort = 0;
-	            String portStr = (String)change.getValue();
-	            if (portStr != null && portStr.length() > 0) {
-	            	try {
-	            		proxyPort = Integer.parseInt(portStr);
-	            	} catch (NumberFormatException x) {}
-	            }
-	            hasChange = true;
-		    } else if (name.equalsIgnoreCase(A_offlineProxyUser)) {
-		        proxyUser = (String)change.getValue();
-		        hasChange = true;
-			} else if (name.equalsIgnoreCase(A_offlineProxyPass)) {
-			    proxyPass = (String)change.getValue();
-			    hasChange = true;
-			}
+            }
         }
         
     	String sslCertAlias = (String)changes.remove(OfflineConstants.A_offlineSslCertAlias);
@@ -349,7 +313,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         // fetch the mailbox; this will throw an exception if the username/password/URI are incorrect
         ZMailbox.Options options = new ZMailbox.Options(acct.getAttr(Provisioning.A_mail), AccountBy.name, password, Offline.getServerURI(baseUri, AccountConstants.USER_SERVICE_URI));
-        newZMailbox(options, proxyHost, proxyPort, proxyUser, proxyPass);
+        newZMailbox(options);
         OfflineSyncManager.getInstance().clearErrorCode(acct);
     }
 

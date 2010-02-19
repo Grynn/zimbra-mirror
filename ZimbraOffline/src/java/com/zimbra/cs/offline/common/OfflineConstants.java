@@ -55,11 +55,6 @@ public interface OfflineConstants {
     public static final String A_offlineRemoteServerUri = "offlineRemoteServerUri";
     public static final String A_offlineWebappUri = "offlineWebappUri";
     
-    public static final String A_offlineProxyHost = "offlineProxyHost";
-    public static final String A_offlineProxyPort = "offlineProxyPort";
-    public static final String A_offlineProxyUser = "offlineProxyUser";
-    public static final String A_offlineProxyPass = "offlineProxyPass";
-
     public static final String A_offlineAccountName = "offlineAccountName";
     public static final String A_offlineAccountFlavor = "offlineAccountFlavor"; 
 

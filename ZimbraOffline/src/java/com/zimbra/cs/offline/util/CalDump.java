@@ -26,6 +26,7 @@ import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 
+import com.zimbra.common.httpclient.HttpClientUtil;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
@@ -101,7 +102,7 @@ public class CalDump {
         client.setState(state);
         GetMethod get = new GetMethod(url);
         try {
-            int statusCode = client.executeMethod(get);
+            int statusCode = HttpClientUtil.executeMethod(client, get);
             if (statusCode == HttpStatus.SC_NOT_FOUND)
                 throw MailServiceException.NO_SUCH_ITEM(-1);
             else if (statusCode != HttpStatus.SC_OK)

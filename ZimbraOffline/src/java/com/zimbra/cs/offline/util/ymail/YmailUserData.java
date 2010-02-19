@@ -27,6 +27,7 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 
+import com.zimbra.common.httpclient.HttpClientUtil;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.AccountServiceException.AuthFailedServiceException;
@@ -85,7 +86,7 @@ public class YmailUserData {
         	throw new IOException(x.getMessage());
         }
         
-        int code = new HttpClient().executeMethod(method);
+        int code = HttpClientUtil.executeMethod(new HttpClient(), method);
         if (code != 200) {
             throw new HttpException("HTTP request failed: " + code + ": " + HttpStatus.getStatusText(code));
         }

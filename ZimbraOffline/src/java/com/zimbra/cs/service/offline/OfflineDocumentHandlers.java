@@ -27,6 +27,7 @@ import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
+import com.zimbra.common.httpclient.HttpClientUtil;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.BufferStreamRequestEntity;
@@ -121,7 +122,7 @@ public class OfflineDocumentHandlers {
             post.getParams().setVersion(HttpVersion.HTTP_1_1);
             post.getParams().setSoTimeout(LC.httpclient_soaphttptransport_so_timeout.intValue());
             post.setRequestHeader("Connection", ka ? "keep-alive" : "close");
-            client.executeMethod(post);
+            HttpClientUtil.executeMethod(client, post);
             if (post.getStatusCode() != HttpStatus.SC_OK)
                 throw ServiceException.FAILURE("http error. failed to upload to " + url, null);
             

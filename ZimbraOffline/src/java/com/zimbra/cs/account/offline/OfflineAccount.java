@@ -87,22 +87,6 @@ public class OfflineAccount extends Account {
         mRemoteServerVersion = null;
     }
 
-    public String getProxyHost() {
-        return getAttr(OfflineProvisioning.A_offlineProxyHost);
-    }
-
-    public int getProxyPort() {
-        return getIntAttr(OfflineProvisioning.A_offlineProxyPort, 0);
-    }
-
-    public String getProxyUser() {
-        return getAttr(OfflineProvisioning.A_offlineProxyUser);
-    }
-
-    public String getProxyPass() {
-        return getAttr(OfflineProvisioning.A_offlineProxyPass);
-    }
-
     public OfflineAccount(String name, String id, Map<String, Object> attrs, Map<String, Object> defaults, Account localAccount, Provisioning prov) {
         super(name, id, attrs, defaults, prov);
         this.localAccount = localAccount;

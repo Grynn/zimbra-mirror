@@ -503,7 +503,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         Map<String, ElementHandler> saxHandlers) throws ServiceException {
         String uri = getSoapUri();
         OfflineAccount acct = getOfflineAccount();
-        SoapHttpTransport transport = new SoapHttpTransport(uri, acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
+        SoapHttpTransport transport = new SoapHttpTransport(uri);
         try {
             transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
             transport.setTimeout(timeout);
@@ -567,9 +567,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH) + "/~"+ URLUtil.urlEscape(item.getPath()) + "?lbfums=1";
     	try {
     	    Pair<Header[], HttpInputStream> resp = 
-    	        UserServlet.putMailItem(getAuthToken(), url, item, 
-    	        acct.getProxyHost(), acct.getProxyPort(), 
-    	        acct.getProxyUser(), acct.getProxyPass());
+    	        UserServlet.putMailItem(getAuthToken(), url, item);
     	    int id = 0, version = 0;
     	    for (Header h : resp.getFirst()) {
     	        if (h.getName().equals("X-Zimbra-ItemId"))

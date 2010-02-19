@@ -14,6 +14,7 @@
  */
 package com.zimbra.cs.offline.util.ymail;
 
+import com.zimbra.common.httpclient.HttpClientUtil;
 import com.zimbra.common.soap.SoapHttpTransport;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.Element;
@@ -334,8 +335,7 @@ public class YMailClient {
         post.setRequestHeader("Cookie", auth.getCookie());
         post.setRequestEntity(
             new MultipartRequestEntity(new Part[] { part }, post.getParams()));
-        HttpClient client = new HttpClient();
-        int status = client.executeMethod(post);
+        int status = HttpClientUtil.executeMethod(new HttpClient(), post);
         if (tmpFile != null) {
             tmpFile.delete();
         }
