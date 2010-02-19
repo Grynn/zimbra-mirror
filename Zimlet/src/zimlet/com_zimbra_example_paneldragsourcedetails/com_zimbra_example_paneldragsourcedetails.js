@@ -120,7 +120,7 @@ function(obj) {
 
 			break;
 		}
-		case "ZmContact": {			
+		case "ZmContact": {	
 			// do something with ZmContact
 			var contact = obj; // {ZmContact}
 			
@@ -130,6 +130,10 @@ function(obj) {
 			var homePhone = contact.homePhone; // {String}
 			var otherPhone = contact.otherPhone; // {String}
 			var workPhone = contact.workPhone; // {String}
+
+			var email = contact.email; // {String}
+			var email2 = contact.email2; // {String}
+			var email3 = contact.email3; // {String}
 
 			break;
 		}
@@ -141,7 +145,10 @@ function(obj) {
 			var hasattach = conv.hasAttach; // {Boolean}
 			var subject= conv.subject; // {String}
 			var tags = conv.tags; // {Array}
-			var participants = conv.participants; // {Array}
+
+			var convCallback = new AjxCallback(this, this._handleConvMsgs, [conv]);
+					
+			this.getMsgsForConv(convCallback, conv);
 			
 			break;
 		}
@@ -153,12 +160,40 @@ function(obj) {
 			var hasattach = msg.hasAttach; // {Boolean}
 			var subject= msg.subject; // {String}
 			var tags = msg.tags; // {Array}
-			var participants = msg.participants; // {Array}
 			var messageid = msg.messageid; // {String}
 
+			var fromAddresses = msg.getAddresses(AjxEmailAddress.FROM);	
+			if (fromAddresses) {
+				var fromArray = fromAddresses.getArray();
+
+				for (var i=0; i< fromArray.length; i++) {
+					var addr = fromArray[i];
+					var address = addr.getAddress(); // {String}
+					var name = addr.getName(); // {String}
+					var typestr = addr.getTypeAsString(); // {String}
+					var displayName = addr.getDispName(); // {String}
+				}
+			}
+			
+			var toAddresses = msg.getAddresses(AjxEmailAddress.TO);
+			var ccAddresses = msg.getAddresses(AjxEmailAddress.CC);
+			
 			break;
 		}
 	}
 
 };
 
+/**
+ * Handles the get messages from conversation.
+ * 
+ * @param	{ZmConv}	conv		the conversation
+ * @param	{Object}	obj			an object
+ * 
+ */
+com_zimbra_example_paneldragsourcedetails_HandlerObject.prototype._handleConvMsgs =
+function(conv,obj) {
+	
+	var msgs = conv.msgs.getArray(); // {Array} of {ZmMailMsg}
+
+};
