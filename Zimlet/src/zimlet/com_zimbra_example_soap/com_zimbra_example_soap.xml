@@ -1,0 +1,11 @@
+<zimlet name="com_zimbra_example_soap" version="1.0" description="Example SOAP request/response">
+	<include>com_zimbra_example_soap.js</include>
+	<handlerObject>com_zimbra_example_soap_HandlerObject</handlerObject>
+	<zimletPanelItem label="Example SOAP Request/Response" icon="zimbraIcon">
+    <toolTipText>Right-click for menu options</toolTipText>
+		 <contextMenu>
+			<menuItem label="Submit SOAP Request (XML)" icon="zimbraIcon" id="menuId_soap_request_xml"/>
+			<menuItem label="Submit SOAP Request (JSON)" icon="zimbraIcon" id="menuId_soap_request_json"/>
+		</contextMenu>
+  </zimletPanelItem>
+</zimlet>
