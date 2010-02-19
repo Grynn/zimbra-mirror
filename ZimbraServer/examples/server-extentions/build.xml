@@ -1,0 +1,47 @@
+<project name="ZimbraExtensionSample" default="package">
+	<property name="src.dir" location="src" />
+	<property name="src.java.dir" location="src/java" />
+	<property name="build.dir" location="build" />
+    <property name="build.classes.dir" location="${build.dir}/classes" />
+
+	<path id="src.java.path">
+		<pathelement location="${src.java.dir}" />
+	</path>
+
+	<target name="build-init">
+		<mkdir dir="${build.classes.dir}" />
+	</target>
+
+	<property name="zimbraServer.dir" value="../../"/>
+	<property name="zimbraCommon.dir" value="../../../ZimbraCommon"/>
+
+	<path id="class.path">
+		<pathelement location="${build.classes.dir}" />
+		<pathelement location="${zimbraServer.dir}/build/classes"/>
+		<pathelement location="${zimbraCommon.dir}/build/classes"/>
+		<fileset dir="${zimbraCommon.dir}/jars">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="compile" depends="build-init" description="Compiles the source code">
+		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
+			<src refid="src.java.path" />
+		</javac>
+	</target>
+
+	<target name="package" depends="compile" description="Creates jar files">
+		<jar manifest="conf/httphandler/MANIFEST.MF"
+             destfile="${build.dir}/zimbra-extns-httphandler.jar"
+             basedir="${build.classes.dir}" 
+             includes="**/httphandler/**"/>
+		<jar manifest="conf/soapservice/MANIFEST.MF"
+             destfile="${build.dir}/zimbra-extns-soapservice.jar"
+             basedir="${build.classes.dir}"
+             includes="**/soapservice/**"/>
+	</target>
+
+	<target name="clean" description="Removes build dir">
+		<delete dir="${build.dir}" />
+	</target>
+</project>
