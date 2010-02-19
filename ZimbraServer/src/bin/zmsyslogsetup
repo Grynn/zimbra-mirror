@@ -200,6 +200,11 @@ updateSyslog() {
   fi
   echo "mail.*                $logfile" >> ${tmpfile2}
   cp -f ${tmpfile2} ${syslogconf}
+  if [ -f "/etc/logrotate.d/zimbra" ]; then
+    if [ $rsyslog = 1 ]; then
+      sed -i -e 's/-HUP\s\+syslog/-HUP rsyslog/g' /etc/logrotate.d/zimbra
+    fi
+  fi
   echo "done."
 }
 
