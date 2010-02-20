@@ -102,6 +102,7 @@ ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled = "zimbraPop3CleartextLoginEnab
 // imap
 ZaGlobalConfig.A_zimbraImapBindPort = "zimbraImapBindPort";
 ZaGlobalConfig.A_zimbraImapServerEnabled = "zimbraImapServerEnabled";
+ZaGlobalConfig.A_zimbraImapNumThreads = "zimbraImapNumThreads"
 ZaGlobalConfig.A_zimbraImapSSLBindPort = "zimbraImapSSLBindPort";
 ZaGlobalConfig.A_zimbraImapSSLServerEnabled = "zimbraImapSSLServerEnabled";
 ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled = "zimbraImapCleartextLoginEnabled";
@@ -346,6 +347,7 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraImapServerEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapServerEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},						
 		{ id:ZaGlobalConfig.A_zimbraImapSSLServerEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapSSLServerEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},								
 		{ id:ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},										
+        { id:ZaGlobalConfig.A_zimbraImapNumThreads, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapNumThreads, type:_NUMBER_,  minInclusive: 0, maxInclusive:2147483647  },
 		{ id:ZaGlobalConfig.A_zimbraImapBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapBindPort, type:_PORT_ },
 		{ id:ZaGlobalConfig.A_zimbraImapSSLBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapSSLBindPort, type:_PORT_ },
 		// anti-spam

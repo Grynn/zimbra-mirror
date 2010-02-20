@@ -169,6 +169,10 @@ GlobalConfigXFormView.INTEROP_TAB_ATTRS = [ZaGlobalConfig.A_zimbraFreebusyExchan
 	ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg];
 GlobalConfigXFormView.INTEROP_TAB_RIGHTS = [ZaGlobalConfig.CHECK_EXCHANGE_AUTH_CONFIG_RIGHT];
 
+GlobalConfigXFormView.SKIN_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSkinForegroundColor, ZaGlobalConfig.A_zimbraSkinBackgroundColor,ZaGlobalConfig.A_zimbraSkinSecondaryColor,
+	ZaGlobalConfig.A_zimbraSkinSelectionColor, ZaGlobalConfig.A_zimbraSkinLogoURL, ZaGlobalConfig.A_zimbraSkinLogoLoginBanner, ZaGlobalConfig.A_zimbraSkinLogoAppBanner ];
+
+GlobalConfigXFormView.SKIN_TAB_RIGHTS = [];
 
 GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
@@ -480,6 +484,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							  trueValue:"TRUE", falseValue:"FALSE"
 						  	},
 							{ ref: ZaGlobalConfig.A_zimbraImapNumThreads, type:_TEXTFIELD_,
+                              enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraImapServerEnabled, ZaGlobalConfig.A_zimbraImapNumThreads],
+                              enableDisableChecks:[[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraImapNumThreads],[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraImapServerEnabled,'TRUE']],
 							  label: ZaMsg.IMAP_NumThreads,
 							  width: "5em"
 						  	}
@@ -665,7 +671,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
         switchItems.push (case7) ;
     }
 
-  	if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.THEMES_TAB_ATTRS, GlobalConfigXFormView.THEMES_TAB_RIGHTS)) {
+  	if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.SKIN_TAB_ATTRS, GlobalConfigXFormView.SKIN_TAB_RIGHTS)) {
     	_tab8 = ++this.TAB_INDEX;
 
         tabBarChoices.push ({value:_tab8, label:ZaMsg.TABT_Themes});

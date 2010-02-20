@@ -579,7 +579,8 @@ ZaDomainXFormView.ZIMLETS_TAB_ATTRS = [ZaDomain.A_zimbraZimletDomainAvailableZim
 ZaDomainXFormView.ZIMLETS_TAB_RIGHTS = [];
 
 ZaDomainXFormView.SKIN_TAB_ATTRS = [ZaDomain.A_zimbraSkinForegroundColor, ZaDomain.A_zimbraSkinBackgroundColor,ZaDomain.A_zimbraSkinSecondaryColor,
-	ZaDomain.A_zimbraSkinSelectionColor];
+	ZaDomain.A_zimbraSkinSelectionColor, ZaDomain.A_zimbraSkinLogoURL, ZaDomain.A_zimbraSkinLogoLoginBanner, ZaDomain.A_zimbraSkinLogoAppBanner ];
+
 ZaDomainXFormView.SKIN_TAB_RIGHTS = [];
 
 ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {	
