@@ -139,7 +139,7 @@ ZaGrantsListView.isDeleteEnabled = function () {
             && grantListItem.getSelection ().length > 0) { 
         return true ;
     } else {
-        return true ;    //TODO: somehow the delete button enabling is not working with enableDisableChecks condition
+        return false ;    //TODO: somehow the delete button enabling is not working with enableDisableChecks condition
     }
 }
 
@@ -152,10 +152,12 @@ ZaGrantsListView.revokeRight = function () {
         var targetInfo = {} ;
         targetInfo [ZaGrant.A_target] = instance.name ;
         targetInfo [ZaGrant.A_target_type] = instance.type ;
-    
+
+        var revokeStatus, statusMsg ;
         for (var i = 0; i < selectedGrants.length; i ++) {
 // TODO: when multiselection enabled, we need a progress dialog to show the progress
-            if (ZaGrant.revokeMethod (selectedGrants[i])) {
+            revokeStatus = ZaGrant.revokeMethod (selectedGrants[i]) ;
+            if (revokeStatus) {
 //                var j = ZaTargetPermission.findIndexOfGrant(currentGrantList, selectedGrants[i]);
                 for (var j = 0; j < currentGrantList.length; j ++) {
                     if (selectedGrants[i] == currentGrantList[j] ) {
@@ -166,9 +168,14 @@ ZaGrantsListView.revokeRight = function () {
                 break ; //jump out if failed.
             }
         }
+
+        if (revokeStatus) {
+            statusMsg = com_zimbra_delegatedadmin.GrantStatus_Revoke ;
+        } else {
+            statusMsg = com_zimbra_delegatedadmin.GrantStatus_Revoke_Failed
+        }
         this.getModel().setInstanceValue(instance, ZaGrant.A2_grantsList, currentGrantList);
-        this.getModel().setInstanceValue(instance,
-                ZaGrant.A2_grantStatus, com_zimbra_delegatedadmin.GrantStatus_Revoke);
+        this.getModel().setInstanceValue(instance, ZaGrant.A2_grantStatus, statusMsg);
         this.setInstanceValue ("TRUE", ZaGrant.A2_showGrantStatus) ;
 
         //need to refresh the form to show the status change ? why the change event is not triggerred ?
@@ -236,7 +243,7 @@ ZaTargetPermission.getGrantsListXFormItem = function (params) {
 
     var grantStatusItem = {
        ref: ZaGrant.A2_grantStatus, id: ZaGrant.A2_grantStatus,
-       type: _DWT_ALERT_, width: "100px",
+       type: _DWT_ALERT_, width: "180px",
 	   style: DwtAlert.INFORMATION, iconVisible: false ,
        bmolsnr: true, 
        visibilityChangeEventSources: [ZaGrant.A2_grantsList, ZaGrant.A2_grantStatus,ZaGrant.A2_showGrantStatus ] ,
@@ -260,14 +267,16 @@ ZaTargetPermission.getGrantsListXFormItem = function (params) {
         cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left: " + marginLeft + "; margin-right:auto;",
         items: [
             {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_grant,width:"100px",
+                enableDisableChecks: [[ZaItem.hasWritePermission,ZaItem.A_zimbraACE]],
                 onActivate:"ZaTargetPermission.grantButtonListener.call (this, '" + by +"');"},
             {type:_CELLSPACER_},
             {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
+                enableDisableChecks: [[ZaItem.hasWritePermission,ZaItem.A_zimbraACE]],
                 onActivate:"ZaTargetPermission.editButtonListener.call (this, '" + by +"');"},
             {type:_CELLSPACER_},
             {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_revoke,width:"100px",// align: _LEFT_ ,
                 enableDisableChangeEventSources: [ZaGrant.A2_grantsListSelectedItems, ZaGrant.A2_grantsList] ,
-                enableDisableChecks:[ZaGrantsListView.isDeleteEnabled],
+                enableDisableChecks: [[ZaItem.hasWritePermission,ZaItem.A_zimbraACE], [ZaGrantsListView.isDeleteEnabled]],
                 onActivate:"ZaTargetPermission.revokeButtonListener.call(this);"
             }
         ]
