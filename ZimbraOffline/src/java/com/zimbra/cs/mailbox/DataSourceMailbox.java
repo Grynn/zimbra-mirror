@@ -522,6 +522,7 @@ public class DataSourceMailbox extends SyncMailbox {
                 folder.getId() == ID_FOLDER_DRAFTS ||
                 folder.getId() == ID_FOLDER_FAILURE ||
                 folder.getId() == ID_FOLDER_OUTBOX ||
+                folder.getId() == ID_FOLDER_SENT ||
                 DataSourceManager.getInstance().isSyncCapable(ds, folder))
                 visible.add(folder);
             else
