@@ -1,0 +1,130 @@
+.ImgSFORCE-panelIcon {
+	background: url("img/sforce.gif") no-repeat 0 0;
+	width: 16px;
+	height: 16px;
+	overflow: hidden;
+}
+
+h3.SForce-sec-label {
+	font-size: 14px;
+	margin: 0.5em 0;
+	border-bottom: 1px solid #777;
+}
+
+.SForce-icon-right {
+	background: url("img/sforce.gif") no-repeat 100% 50%;
+}
+
+.SForce_commentRow {
+    background: #FFFFCC;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+	font-weight:bold;
+}
+.SForce_infoMsg {
+    background: #CC0033;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+	font-weight:bold;
+	height:15px;
+}
+
+table.SForce_table  {
+	border:gray;
+}
+
+.SForce_yellow {
+    background: #FFFFCC;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+}
+.SForce_bar_yellow {
+    background: #FFFFCC;
+    border-bottom: 1px solid #6E6E6E;
+	display:none;
+	overflow:auto;
+	height:150px;
+}
+.SForce_lightyellow {
+    background: #FFFFD7;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+    border-left: 1px solid #BFBFBF;
+}
+
+
+table.SForce_table td {
+	font-size:12px;
+	font-family:'Lucida Grande',sans-serif;
+	color:#333333;
+
+}
+
+
+table.SForce_table input[type="text"]{
+	border-color:#3A73AB;
+	border-width:1;
+	border-style:solid;
+	width:200px;
+	height:20px;
+	padding:2px 4px;
+}
+
+option.sforce_hdr {
+background-color:#808080;
+color:white;
+font-size:12px;
+font-weight:bold;
+}
+
+table.SForce_table [type="password"]{
+	border-color:#3A73AB;
+	border-width:1;
+	border-style:solid;
+	width:200px;
+	height:20px;
+	padding:2px 4px;
+}
+
+table.SForce_table textarea{
+	border-color:#3A73AB;
+	border-width:1;
+	border-style:solid;
+}
+
+table.SForce_table select {
+	border-color:#3A73AB;
+	border-width:1;
+	border-style:solid;
+	font-size:12px;
+	font-family:'arial',sans-serif;
+	width:200px;
+}
+
+table.SForce_table div {
+	font-size:12px;
+}
+
+table.SForce_table a {
+	text-decoration: underline;
+	font-size:12px;
+	cursor:pointer;
+
+}
+
+.SForce_tableLabel {
+	font-size:17px;
+	font-weight:bold;
+	font-family:'Lucida Grande',sans-serif;
+
+}
+
+table.SForce_table th {
+	text-align: left;
+	font-size:13px;
+	font-weight:bold;
+	font-family:'Lucida Grande',sans-serif;
+	text-decoration:underline;
+	cursor:pointer;
+	color:#2D2D2D;
+}

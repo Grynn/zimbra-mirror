@@ -1,0 +1,7 @@
+<zimletConfig name="com_zimbra_sforce" version="2.1">
+    <global>
+        <property name="allowedDomains">*.salesforce.com,*.sforce.com</property>
+        <property name="preauthDomainKey">PRE_AUTH</property>
+        <property name="redirectUser">USER</property>
+    </global>
+</zimletConfig>
