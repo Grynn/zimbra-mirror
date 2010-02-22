@@ -769,13 +769,10 @@ Com_Zimbra_SForce.prototype.noteDropped = function(note, showInBar) {
 			return;
 		}
 		if (typeof a == "string") {
-			if (a.indexOf(ignoreDomain) != -1) {
-				return;
-			}
 			emails.push(a);
 		} else if (a instanceof Array) {
 			for (var i = 0; i < a.length; ++i) {
-				if (a[i].address && a[i].address.indexOf(ignoreDomain) == -1) {
+				if (a[i].address) {
 					emails.push(a[i].address);
 				}
 			}
@@ -812,29 +809,28 @@ Com_Zimbra_SForce.prototype.noteDropped = function(note, showInBar) {
 			}
 		}
 	}
-	if (domains.length == 0) {
-		this.displayErrorMessage("No email addresses or domains found.<br />"
-				+ "We can't determine an Account to add this note to.");
-		this._cleanMainAccountsInfoDiv();
-	} else {
-		if (this._searchAllContacts) {
+
+	if(emails.length == 0) {
+		return;
+	}
+
+	if (this._searchAllContacts) {
 			var q = [ "select Id, FirstName, LastName, Email, AccountId from Contact where Email like '%",
 				domains.join("%' or Email like '%"),
 				"%'" ].join("");
-		} else {
-			//var q = [ "select Id, FirstName, LastName, Email, AccountId from Contact where Email='", emails.join("' or Email='"), "'"].join("");
-			var q = ["Select c.Id,c.Name,c.Email,c.Phone,c.OtherPhone,c.Title,c.MailingStreet,c.MailingCity, c.MailingState,c.MailingCountry,c.MailingPostalCode,c.Account.name,c.Account.Id,",
+	} else {
+		var q = ["Select c.Id,c.Name,c.Email,c.Phone,c.OtherPhone,c.Title,c.MailingStreet,c.MailingCity, c.MailingState,c.MailingCountry,c.MailingPostalCode,c.Account.name,c.Account.Id,",
 										"(select id,role,opportunity.name,Opportunity.Id from opportunitycontactroles where opportunity.stagename !='Closed Won' AND opportunity.stagename != 'Closed Lost'   limit 5),",
 										"(select id,subject,caseNumber,Status from Cases Where Status !='Closed' limit 5),",
 										"(Select id,subject from ActivityHistories limit 5) ,",
 										"(Select id,subject from OpenActivities limit 5) from contact c where Email='", emails.join("' or Email='"), "'"].join("");
-		}
-		if(!showInBar) {
-			this._showNotesDlg(note);
-		}
-		var callback = new AjxCallback(this, this._handleAddNotesRecords, [showInBar]);
-		this.query(q, 10, callback);
 	}
+	if(!showInBar) {
+		this._showNotesDlg(note);
+	}
+	var callback = new AjxCallback(this, this._handleAddNotesRecords, [showInBar]);
+	this.query(q, 10, callback);
+	
 
 	function $search_acct(records) {
 		// Split Opportunities and Contacts into Account groups
