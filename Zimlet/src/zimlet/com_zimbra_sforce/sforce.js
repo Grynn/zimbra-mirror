@@ -1438,7 +1438,6 @@ Com_Zimbra_SForce.prototype._setRecordsToNotesDlg = function(records) {
 // Toolbar related..(START)
 //--------------------------------------------------------------------------------------------------------
 Com_Zimbra_SForce.prototype.initializeToolbar = function(app, toolbar, controller, viewId) {
-	debugger;
 	if (viewId.indexOf("COMPOSE") >= 0) {
 		this._initComposeSFToolbar(toolbar, controller);
 	//}else if (viewId == ZmId.VIEW_CONVLIST || viewId == ZmId.VIEW_CONV || viewId == ZmId.VIEW_TRAD) {
