@@ -21,36 +21,35 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 
 import com.zimbra.common.localconfig.LC;
+import com.zimbra.common.net.SocketFactories;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
-import com.zimbra.common.net.SSLSocketFactoryManager;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.datasource.TlsSocketFactory;
 
-
 /**
  * @author jjzhuang
  */
 public class LocalJMSession {
 
-	private static class SMTPAuthenticator extends javax.mail.Authenticator {
-		
-		private String username;
-		private String password;
-		
-		public SMTPAuthenticator(String username, String password) {
-			this.username = username;
-			this.password = password;
-		}
-		
-		@Override
-		public PasswordAuthentication getPasswordAuthentication() {
-			return new PasswordAuthentication(username, password);
-		}
-	}
+    private static class SMTPAuthenticator extends javax.mail.Authenticator {
+
+        private String username;
+        private String password;
+
+        public SMTPAuthenticator(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
+
+        @Override
+        public PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication(username, password);
+        }
+    }
 	
     static {
         // Assume that most malformed base64 errors occur due to incorrect delimiters,
@@ -82,15 +81,20 @@ public class LocalJMSession {
              props.setProperty("socksProxyPort", proxyPort + "");
     	}
 
+
         if (useSSL) {
             props.setProperty("mail.transport.protocol", "smtps");
             props.setProperty("mail.smtps.connectiontimeout", Long.toString(timeout));
             props.setProperty("mail.smtps.timeout", Long.toString(timeout));
             props.setProperty("mail.smtps.localhost", localhost);
             props.setProperty("mail.smtps.sendpartial", "true");
-            props.put("mail.smtps.socketFactory.class", SSLSocketFactoryManager.getDefaultSSLSocketFactoryClassName());
-            props.put("mail.smtps.socketFactory.fallback", "false");
-    		
+
+            props.put("mail.smtp.socketFactory", SocketFactories.defaultSocketFactory());
+            props.setProperty("mail.smtp.socketFactory.fallback", "false");
+            
+            props.put("mail.smtps.socketFactory", SocketFactories.defaultSSLSocketFactory());
+            props.setProperty("mail.smtps.socketFactory.fallback", "false");
+
             props.setProperty("mail.smtps.host", smtpHost);
             props.setProperty("mail.smtps.port",  smtpPort + "");
             if (isAuthRequired) {
@@ -112,8 +116,8 @@ public class LocalJMSession {
             props.setProperty("mail.smtp.host", smtpHost);
             props.setProperty("mail.smtp.port",  smtpPort + "");
             if (LC.javamail_smtp_enable_starttls.booleanValue()) {
-            	props.put("mail.smtp.starttls.enable","true");
-                props.put("mail.smtp.socketFactory.class", TlsSocketFactory.class.getName());
+            	props.setProperty("mail.smtp.starttls.enable","true");
+                // props.put("mail.smtp.socketFactory.class", TlsSocketFactory.getInstance());
             }
             if (isAuthRequired) {
                 props.setProperty("mail.smtp.auth", "true");
@@ -131,25 +135,25 @@ public class LocalJMSession {
         
         return session;
     }
-    
+
     public static Session getSession(OfflineDataSource ds) {
-    	try {
-	    	String smtpHost = ds.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpHost, null);
-	    	int smtpPort = ds.getIntAttr(OfflineProvisioning.A_zimbraDataSourceSmtpPort, 0);
-	    	boolean isAuthRequired = ds.getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthRequired, false);
-	    	String smtpUser = ds.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthUsername, null);
-	    	
-	    	String smtpPass = ds.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthPassword, null);
-	    	smtpPass = smtpPass == null ? null : DataSource.decryptData(ds.getId(), smtpPass);
-	    	
-	    	boolean useSSL = "ssl".equals(ds.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpConnectionType, null));
-	    	boolean useProxy = ds.getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceUseProxy, false);
-	    	String proxyHost = ds.getAttr(OfflineProvisioning.A_zimbraDataSourceProxyHost, null);
-	    	int proxyPort = ds.getIntAttr(OfflineProvisioning.A_zimbraDataSourceProxyPort, 0);
-	    	return getSession(smtpHost, smtpPort, isAuthRequired, smtpUser, smtpPass, useSSL, useProxy, proxyHost, proxyPort, ds.isDebugTraceEnabled());
-    	} catch (ServiceException x) {
-    		OfflineLog.offline.warn(x.getMessage());
-    		return null;
-    	}
+        try {
+            String smtpHost = ds.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpHost, null);
+            int smtpPort = ds.getIntAttr(OfflineProvisioning.A_zimbraDataSourceSmtpPort, 0);
+            boolean isAuthRequired = ds.getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthRequired, false);
+            String smtpUser = ds.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthUsername, null);
+
+            String smtpPass = ds.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthPassword, null);
+            smtpPass = smtpPass == null ? null : DataSource.decryptData(ds.getId(), smtpPass);
+
+            boolean useSSL = "ssl".equals(ds.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpConnectionType, null));
+            boolean useProxy = ds.getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceUseProxy, false);
+            String proxyHost = ds.getAttr(OfflineProvisioning.A_zimbraDataSourceProxyHost, null);
+            int proxyPort = ds.getIntAttr(OfflineProvisioning.A_zimbraDataSourceProxyPort, 0);
+            return getSession(smtpHost, smtpPort, isAuthRequired, smtpUser, smtpPass, useSSL, useProxy, proxyHost, proxyPort, ds.isDebugTraceEnabled());
+        } catch (ServiceException x) {
+            OfflineLog.offline.warn(x.getMessage());
+            return null;
+        }
     }
 }

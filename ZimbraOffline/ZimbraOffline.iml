@@ -10,8 +10,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="ZimbraServer" />
-    <orderEntry type="module" module-name="ZimbraCommon" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -25,6 +23,8 @@
         <jarDirectory url="file://$MODULE_DIR$/jars" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="ZimbraServer" />
+    <orderEntry type="module" module-name="ZimbraCommon" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>

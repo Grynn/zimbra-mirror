@@ -15,10 +15,10 @@
 package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.localconfig.LC;
+import com.zimbra.common.net.SocketFactories;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.util.DateUtil;
-import com.zimbra.common.net.EasySSLProtocolSocketFactory;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.account.soap.SoapProvisioning;
@@ -32,13 +32,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GetDomainInfoTag extends ZimbraSimpleTag {
+    private static final String CONFIG_ZIMBRA_DOMAININFO_TTL = "zimbra.domaininfo.ttl";
 
     static {
-        if (LC.ssl_allow_untrusted_certs.booleanValue())
-            EasySSLProtocolSocketFactory.init();
+        SocketFactories.registerProtocols();
     }
-
-    private static final String CONFIG_ZIMBRA_DOMAININFO_TTL = "zimbra.domaininfo.ttl";
 
     private String mVar;
     private DomainBy mBy;

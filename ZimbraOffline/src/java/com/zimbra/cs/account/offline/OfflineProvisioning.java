@@ -17,6 +17,7 @@ package com.zimbra.cs.account.offline;
 import com.sun.mail.smtp.SMTPTransport;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.localconfig.LC;
+import com.zimbra.common.net.TrustManagers;
 import com.zimbra.common.service.RemoteServiceException;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
@@ -278,7 +279,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     
     private void acceptSSLCertAlias(String sslCertAlias) throws ServiceException {
 	try {
-            CustomTrustManager.getInstance().acceptCertificates(sslCertAlias);
+            TrustManagers.customTrustManager().acceptCertificates(sslCertAlias);
         } catch (GeneralSecurityException x) {
             throw RemoteServiceException.SSLCERT_NOT_ACCEPTED(x.getMessage(), x);
         }
