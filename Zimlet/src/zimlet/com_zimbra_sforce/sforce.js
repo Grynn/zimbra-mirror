@@ -821,9 +821,9 @@ Com_Zimbra_SForce.prototype.noteDropped = function(note, showInBar) {
 	} else {
 		var q = ["Select c.Id,c.Name,c.Email,c.Phone,c.OtherPhone,c.Title,c.MailingStreet,c.MailingCity, c.MailingState,c.MailingCountry,c.MailingPostalCode,c.Account.name,c.Account.Id,",
 										"(select id,role,opportunity.name,Opportunity.Id from opportunitycontactroles where opportunity.stagename !='Closed Won' AND opportunity.stagename != 'Closed Lost'   limit 5),",
-										"(select id,subject,caseNumber,Status from Cases Where Status !='Closed' limit 5),",
-										"(Select id,subject from ActivityHistories limit 5) ,",
-										"(Select id,subject from OpenActivities limit 5) from contact c where Email='", emails.join("' or Email='"), "'"].join("");
+										"(select id,subject,caseNumber,Status from Cases Where Status !='Closed' limit 5)",
+										//"(Select id,subject from ActivityHistories) ",
+										" from contact c where Email='", emails.join("' or Email='"), "'"].join("");
 	}
 	if(!showInBar) {
 		this._showNotesDlg(note);
