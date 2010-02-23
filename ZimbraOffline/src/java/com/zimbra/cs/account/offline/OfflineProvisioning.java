@@ -2357,7 +2357,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public String getProxyAuthToken(String acctId) throws ServiceException {
         Account account = get(AccountBy.id, acctId);
-        if (isZcsAccount(account) || isMountpointAccount(account)) {
+        if (account != null && (isZcsAccount(account) || isMountpointAccount(account))) {
             String id = isMountpointAccount(account) ? account.getAttr(A_offlineMountpointProxyAccountId) : acctId;
             ZcsMailbox ombx = (ZcsMailbox)MailboxManager.getInstance().getMailboxByAccountId(id, false);
             ZAuthToken at = ombx.getAuthToken(false);
