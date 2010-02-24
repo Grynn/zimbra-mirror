@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
@@ -86,7 +85,7 @@ public class YmailUserData {
         	throw new IOException(x.getMessage());
         }
         
-        int code = HttpClientUtil.executeMethod(new HttpClient(), method);
+        int code = HttpClientUtil.executeMethod(method);
         if (code != 200) {
             throw new HttpException("HTTP request failed: " + code + ": " + HttpStatus.getStatusText(code));
         }

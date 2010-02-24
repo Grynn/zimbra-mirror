@@ -43,6 +43,9 @@
 		<fileset dir="../ThirdParty/jetty/src">
 			<include name="jetty-ant-${jetty.version}.jar" />
 		</fileset>
+		<fileset dir="${jetty_run_base}/app/jetty/common/lib">
+			<include name="zimbra-native.jar" />
+		</fileset>
 	</path>
 
 	<taskdef classpathref="jetty.plugin.classpath" resource="tasks.properties" loaderref="jetty.loader" />
@@ -61,7 +64,7 @@
 			</systemProperties>
 
 			<webApp name="ZimbraServer" warfile="${jetty_webapps}/service" contextpath="/service">
-				<lib dir="${jetty_run_base}/app/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar" />
+				<lib dir="${jetty_run_base}/app/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar,zimbra-native.jar" />
 				<lib dir="${jetty_run_base}/app/lib" includes="*.jar" excludes="not-needed.jar" />
                 		<classes dir="build/classes"/>
 				<classes dir="../ZimbraCommon/build/classes" />
@@ -73,7 +76,7 @@
 			</webApp>
 
 			<webApp name="ZimbraWebClient" warfile="build/dist/app/jetty/webapps/zimbra" contextpath="/zimbra">
-				<lib dir="${jetty_run_base}/app/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar" />
+				<lib dir="${jetty_run_base}/app/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar,zimbra-native.jar" />
 				<classes dir="build/classes"/>
 				<classes dir="../ZimbraCommon/build/classes" />
 				<classes dir="../ZimbraServer/build/classes" />

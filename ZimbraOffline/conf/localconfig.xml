@@ -22,7 +22,13 @@
   <key name="http_so_timeout">
     <value>30000</value>
   </key>
-  <key name="httpclient_use_system_proxy">
+  <key name="socks_enabled">
+    <value>true</value>
+  </key>
+  <key name="client_use_system_proxy">
+    <value>true</value>
+  </key>
+  <key name="client_use_native_proxy_selector">
     <value>true</value>
   </key>
   <key name="soap_fault_include_stack_trace">

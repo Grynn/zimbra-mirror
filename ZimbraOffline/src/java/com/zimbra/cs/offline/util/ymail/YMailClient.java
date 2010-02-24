@@ -335,7 +335,7 @@ public class YMailClient {
         post.setRequestHeader("Cookie", auth.getCookie());
         post.setRequestEntity(
             new MultipartRequestEntity(new Part[] { part }, post.getParams()));
-        int status = HttpClientUtil.executeMethod(new HttpClient(), post);
+        int status = HttpClientUtil.executeMethod(post);
         if (tmpFile != null) {
             tmpFile.delete();
         }

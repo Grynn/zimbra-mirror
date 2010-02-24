@@ -35,7 +35,7 @@ public class Offline {
     	DefaultHttpParams.getDefaultParams().setIntParameter(HttpConnectionParams.SO_TIMEOUT, OfflineLC.http_so_timeout.intValue());
     	DefaultHttpParams.getDefaultParams().setIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, OfflineLC.http_connection_timeout.intValue());
     	
-    	if (LC.httpclient_use_system_proxy.booleanValue())
+    	if (LC.client_use_system_proxy.booleanValue())
     	    System.setProperty("java.net.useSystemProxies","true");
     	
     	System.setProperty("http.agent", OfflineLC.zdesktop_name.value() + " " + OfflineLC.getFullVersion()); //for httpclient

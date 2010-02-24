@@ -14,7 +14,7 @@
  */
 package com.zimbra.cs.offline.util.yab;
 
-import com.zimbra.cs.util.yauth.Auth;
+import com.zimbra.common.util.ZimbraHttpConnectionManager;
 import com.zimbra.cs.util.yauth.AuthenticationException;
 import com.zimbra.cs.util.yauth.Authenticator;
 import com.zimbra.cs.offline.util.Xml;
@@ -61,7 +61,7 @@ public class Session {
         }
         this.format = format;
         this.authenticator = authenticator;
-        httpClient = new HttpClient();
+        httpClient = ZimbraHttpConnectionManager.getInternalHttpConnMgr().newHttpClient();
         docBuilder = Xml.newDocumentBuilder();
         transformer = createTransformer();
         baos = new ByteArrayOutputStream(4096);
