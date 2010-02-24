@@ -39,6 +39,10 @@
              destfile="${build.dir}/zimbra-extns-soapservice.jar"
              basedir="${build.classes.dir}"
              includes="**/soapservice/**"/>
+		<jar manifest="conf/customauth/MANIFEST.MF"
+             destfile="${build.dir}/zimbra-extns-customauth.jar"
+             basedir="${build.classes.dir}"
+             includes="**/customauth/**"/>
 	</target>
 
 	<target name="clean" description="Removes build dir">
