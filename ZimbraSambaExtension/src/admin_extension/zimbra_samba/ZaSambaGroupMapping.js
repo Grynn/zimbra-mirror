@@ -173,7 +173,7 @@ if(ZaTabView.XFormModifiers["ZaPosixGroupXFormView"]) {
 									msgName:zimbra_samba.MSG_SpecialWindowsGroup,
 									label:zimbra_samba.LBL_SpecialWindowsGroup,
 									trueValue:1, falseValue:0, 
-									onChange:ZaTabView.onFormFieldChanged,
+									onChange:ZaTabView.onFormFieldChanged
 								},
 								{ref:ZaSambaGroupMapping.A_specialNTGroupType,
 									visibilityChecks:[[XForm.checkInstanceValue,ZaSambaGroupMapping.A_isSpecialNTGroup,1]],
