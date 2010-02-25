@@ -180,16 +180,14 @@ function(str, dels) {
 };
 
 /**
- * Wraps text to the given length and quotes it, breaking on space when possible.
- * Preserves line breaks. Wrapping is optionally done across line returns that appear in paragraphs.
+ * Wraps text to the given length and optionally quotes it. The level of quoting in the
+ * source text is preserved based on the prefixes. Special lines such as email headers
+ * always start a new line.
  *
  * @param params	[hash]			hash of params:
  *        text 		[string]		the text to be wrapped
- *        len		[int]			the desired line length of the wrapped text, defaults to 80
+ *        len		[int]*			the desired line length of the wrapped text, defaults to 80
  *        pre		[string]*		an optional string to prepend to each line (useful for quoting)
- *        eol		[string]*		the eol sequence for each wrapped line, defaults to '\n'
- *        breakOkay	[boolean]*		whether long words (longer than <code>len</code>) can be broken, default is false
- *        compress	[boolean]*		remove single returns within a paragraph before wrapping
  *        before	[string]*		text to prepend to final result
  *        after		[string]*		text to append to final result
  *
@@ -199,73 +197,90 @@ AjxStringUtil.wordWrap =
 function(params) {
 
 	if (!(params && params.text)) { return ""; }
-	
+
 	var text = params.text;
-	var len = params.len || 80;
-	var pre = params.pre || '';
-	len -= pre.length;
-	var eol = params.eol || (params.htmlMode ? '<br>' : '\n');
 	var before = params.before || "", after = params.after || "";
 
-	// For HTML, just insert the prefix. The browser should handle wrapping.
+	// For HTML, just surround the content with the before and after, which is
+	// typically a block-level element that puts a border on the left
 	if (params.htmlMode) {
-		if (pre) {
-			var lines = text.split(AjxStringUtil.HTML_BR_RE);
-			var lines1 = [];
-			if (lines.length > 0) {
-				for (var i = 0; i < lines.length; i++) {
-					// bug 29491 - prefix block-level elements; should probably look for others,
-					// but <div> is by far the most common one
-					lines1.push(lines[i].replace(/(<div\s+[^>]*>)/gi, "$1" + pre));
-				}
-				text = pre + lines1.join(eol + pre)
-			}
-		}
 		return [before, text, after].join("");
 	}
 
-	var chunks = [];
-	var c = 0;
+	var len = params.len || 80;
+	var pre = params.pre || "";
+	var eol = params.htmlMode ? "<br>" : "\n";
 
-	// preprocess the text: remove leading/trailing space, space at the end of
-	// lines, and set up for wrapping paragraphs
-	text = AjxStringUtil.trim(text, false);
-	text = text.replace(/[ \t]+\n/g, '\n'); // optional tidying, could remove this step
-	if (params.compress) {
-		text = text.replace(/\b\n\b/g, ' ');
-	}
-	var textLen = text.length;
-	// Wrap text by dividing it into chunks. We remember the last space we saw,
-	// and use it to begin a chunk when the length limit is reached.
-	for (var i = 0, bk = 0, sp = -1; i < textLen; i++) {
-		var ch = text.charAt(i);
-		if (ch.match(/[ \t]/)) { // found a space
-			sp = i;
+	text = AjxStringUtil.trim(text);
+	text = text.replace(/\n\r/g, eol);
+	var lines = text.split(eol);
+	var words = [];
+
+	// Divides lines into words. Each word is part of a hash that also has
+	// the word's prefix, whether it's a paragraph break, and whether it's
+	// special (cannot be wrapped into a previous line)
+	for (var l = 0, llen = lines.length; l < llen; l++) {
+		var line = AjxStringUtil.trim(lines[l]);
+		// get this line's prefix
+		var m = line.match(/^([\s>\|]+)/);
+		var prefix = m ? m[1] : "";
+		if (prefix) {
+			line = line.substr(prefix.length);
 		}
-		if (ch == '\n') { // found a return
-			chunks[c++] = pre + text.substring(bk, i);
-			bk = i + 1; // skip the \n (those are added later in the join)
-			sp = -1;
-		}
-		if (i - bk >= len) { // hit the limit
-			if (sp == -1) { // current chunk is bigger than the limit (a 'long' word)
-				if (params.breakOkay) {
-					chunks[c++] = pre + text.substring(bk, i);
-					bk = i;
-					sp = -1;
-				}
-			} else {
-				chunks[c++] = pre + text.substring(bk, sp);
-				bk = sp + 1;
-				sp = -1;
+		line = line.replace(/\s+/g, " ");	// compress all space into single spaces
+		var wds = line.split(" ");
+		if (wds && wds[0] && wds[0].length) {
+			var isSpecial = AjxStringUtil.MSG_SEP_RE.test(line) || AjxStringUtil.COLON_RE.test(line) ||
+							AjxStringUtil.HDR_RE.test(line) || AjxStringUtil.SIG_RE.test(line);
+			for (var w = 0, wlen = wds.length; w < wlen; w++) {
+				words.push({w:wds[w], p:prefix, special:(isSpecial && w == 0)});
 			}
+		} else {
+			words.push({para:true, p:prefix});	// paragraph marker
 		}
 	}
-	// add remaining portion
-	if (i > bk) {
-		chunks[c++] = pre + text.substring(bk, i);
+
+	// Take the array of words and put them back together. We break for a new line
+	// when we hit the max line length, change prefixes, or hit a special word.
+	var max = params.len || 72;
+	var addPrefix = params.pre || "";
+	var apl = addPrefix.length;
+	var result = "", curLen = 0, wds = [], curP = null;
+	for (var i = 0, len = words.length; i < len; i++) {
+		var word = words[i];
+		var w = word.w, p = word.p;
+		var sp = wds.length ? 1 : 0;
+		var pl = (curP === null) ? 0 : curP.length;
+		if (word.para) {
+			// paragraph break - output what we have, add a blank line
+			if (wds.length) {
+				result += addPrefix + (curP || "") + wds.join(" ") + eol;
+			}
+			result += addPrefix + p + eol;
+			wds = [];
+			curLen = 0;
+			curP = null;
+		} else if ((apl + pl + curLen + sp + w.length <= max) && (p == curP || curP === null) && !word.special) {
+			// still room left on the current line, add the word
+			wds.push(w);
+			curLen += w.length + sp;
+			curP = p;
+		} else {
+			// output what we have and start a new line
+			if (wds.length) {
+				result += addPrefix + (curP || "") + wds.join(" ") + eol;
+			}
+			wds = [w];
+			curLen = w.length;
+			curP = p;
+		}
 	}
-	var result = chunks.join(eol) + eol;
+
+	// handle last line
+	if (wds.length) {
+		result += addPrefix + curP + wds.join(" ") + eol;
+	}
+
 	return [before, result, after].join("");
 };
 
