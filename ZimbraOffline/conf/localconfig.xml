@@ -7,6 +7,9 @@
   <key name="data_source_new_sync_enabled">
     <value>true</value>
   </key>
+  <key name="data_source_scheduling_enabled">
+    <value>false</value>
+  </key>
   <key name="data_source_xsync_class">
     <value>com.zimbra.zimbrasync.client.ExchangeSync</value>
   </key>
