@@ -251,7 +251,7 @@ fi
 if [ -z "$JAVA_HOME" ]
 then
     
-   JAVA=`whereis java`
+   JAVA=`which java`
    JAVA_HOME=`dirname $JAVA`
 
    echo "Found JAVA=$JAVA in JAVA_HOME=$JAVA_HOME"
@@ -374,7 +374,7 @@ case "$ACTION" in
             if ps -f -p $PID | grep $JAVA > /dev/null 2>&1
             then
                 sleep 1
-                timeout=$[timeout-1]
+                timeout=$(($timeout - 1))
             else
                 PID=''
                 break
