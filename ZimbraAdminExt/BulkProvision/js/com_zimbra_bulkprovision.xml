@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_bulkprovision" version="6.0"
+<zimlet name="com_zimbra_bulkprovision" version="6.0.6"
 	description="Bulk Provisioning Account Extension for Admin UI"
 	extension="true">
 	<include>com_zimbra_bulkprovision.js</include>
