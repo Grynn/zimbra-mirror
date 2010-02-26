@@ -320,7 +320,7 @@ function (arg) {
 		var msg = [arg.getException().detail,arg.getException().msg,arg.getException().trace].join("\n");
 		this._containedObject[ZaDomain.A_GALSearchTestResultCode] = arg.getException().code;
 		this._containedObject[ZaDomain.A_GALSearchTestMessage] = msg;
-		this._containedObject[ZaDomain.A_GALSearchTestSearchResults] = null;		
+		this._containedObject[ZaDomain.A_GALTestSearchResults] = null;		
 
 		this._containedObject[ZaDomain.A_GALSyncTestResultCode] = arg.getException().code;
 		this._containedObject[ZaDomain.A_GALSyncTestMessage] = msg;
@@ -334,7 +334,7 @@ function (arg) {
 				this._containedObject[ZaDomain.A_GALSearchTestResultCode] = searchResponse.code[0]._content;	
 				if(this._containedObject[ZaDomain.A_GALSearchTestResultCode] != ZaDomain.Check_OK) {
 					this._containedObject[ZaDomain.A_GALSearchTestMessage] = searchResponse.message[0]._content;		
-					this._containedObject[ZaDomain.A_GALSearchTestSearchResults] = null;			
+					this._containedObject[ZaDomain.A_GALTestSearchResults] = null;			
 				} else {
 					this._containedObject[ZaDomain.A_GALTestSearchResults] = new Array();
 					if(searchResponse.cn && searchResponse.cn.length) {
@@ -378,7 +378,7 @@ function (arg) {
 			} else {
 				this._containedObject[ZaDomain.A_GALSearchTestResultCode] = errorCode;
 				this._containedObject[ZaDomain.A_GALSearchTestMessage] = errMsg;
-				this._containedObject[ZaDomain.A_GALSearchTestSearchResults] = null;
+				this._containedObject[ZaDomain.A_GALTestSearchResults] = null;
 				
 				this._containedObject[ZaDomain.A_GALSyncTestResultCode] = ZaDomain.Check_SKIPPED;
 			}
