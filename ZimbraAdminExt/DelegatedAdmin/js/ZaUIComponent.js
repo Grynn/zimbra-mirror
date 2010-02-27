@@ -54,11 +54,14 @@ ZaUIComponent.accountTargetXFormModifier = function (xFormObject, entry) {
                 { type: _DWT_ALERT_, width: "98%",
 				    style: DwtAlert.INFORMATION, iconVisible: false,
                     content: com_zimbra_delegatedadmin.HELP_NOTES_UI_COMP },
+                { type: _DWT_ALERT_, width: "98%",
+                    style: DwtAlert.INFORMATION, iconVisible: true,
+                    visibilityChecks: [ ZaUIComponent.isCartBlancheUISet ],
+                    content: com_zimbra_delegatedadmin.CartBlacheUIEnabled },
                 {type:_TOP_GROUPER_, label: com_zimbra_delegatedadmin.Label_ui_comp, id:"ui_comp_grouper",
                     colSizes:["800px"],numCols:1 ,
                     items : ZaUIComponent.getUIComponentsXFormItem ()
                 }
-
             ]
     };
 
@@ -78,6 +81,23 @@ ZaUIComponent.InheritedUIComponentsItem = {
     type: _LIST_, listItems: { type: _STRING_ }
 };
 
+ZaUIComponent.isCartBlancheUISet = function () {
+    var value = this.getInstanceValue (ZaAccount.A_zimbraAdminConsoleUIComponents) ;
+    if (value != null) {
+        for (var i = 0; i < value.length; i ++) {
+            if (value [i] == ZaSettings.CARTE_BLANCHE_UI)  {
+                return true ;
+            }
+        }
+    }
+
+    return false ;
+}
+
+ZaUIComponent.isCartBlancheUINotSet = function () {
+    return ! ZaUIComponent.isCartBlancheUISet.call (this) ;
+}
+
 ZaUIComponent.getUIComponentsXFormItem  = function (choiceWidth) {
     var w = choiceWidth || 400 ;
     var list =
@@ -91,6 +111,7 @@ ZaUIComponent.getUIComponentsXFormItem  = function (choiceWidth) {
                {type:_ZA_CHECKBOX_LIST_, numCols: 1, colSizes: [ w], choicesWidth: w,
                     selectRef:ZaAccount.A_zimbraAdminConsoleUIComponents,
                     ref:ZaAccount.A_zimbraAdminConsoleUIComponents,
+                    enableDisableChecks : [ ZaUIComponent.isCartBlancheUINotSet ],
                     choices:ZaSettings.ALL_UI_COMPONENTS
                } ,
                { type:_ZA_CHECKBOX_LIST_, numCols: 1, colSizes: [ w], choicesWidth: w,
