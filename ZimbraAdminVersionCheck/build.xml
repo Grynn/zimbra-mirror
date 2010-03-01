@@ -5,7 +5,7 @@
 	<property name="jar.file" value="zimbraadminversioncheck.jar" />
 	<property name="src.dir" location="src" />
 	<property name="src.java.dir" location="${src.dir}/java" />
-	<property name="src.bin.dir" location="${src.dir}/bin" />
+	<property name="src.libexec.dir" location="${src.dir}/libexec" />
 	<property name="src.zimlet.dir" location="${src.dir}/zimlet" />
 	<property name="build.dir" location="build" />
 	<property name="build.zimlet.dir" location="${build.dir}/zimlet" />
@@ -68,8 +68,8 @@
 	</target>
 	
 	<target name="deploy-cli">
-		<copy todir="${zimbra.home.dir}/bin">
-			<fileset dir="${src.bin.dir}" includes="*"/>
+		<copy todir="${zimbra.home.dir}/libexec">
+			<fileset dir="${src.libexec.dir}" includes="*"/>
 		</copy>		
 	</target>
 	<target name="jar" depends="compile" description="Creates the jar file">
