@@ -38,6 +38,8 @@ Com_Zimbra_SForce.prototype.init = function() {
 	this.XMLNS = "urn:enterprise.soap.sforce.com";
 	this._shell = this.getShell();
 	this.loginToSFOnLaunch = this.getUserProperty("loginToSFOnLaunch") == "true";
+	this._force_show_salesforceBar = false;
+	this.loadLoginInfo = false;//used to ensure people has entered valid user/pwd 
 	if(this.loginToSFOnLaunch) {
 		this.login();
 	}
@@ -49,7 +51,6 @@ Com_Zimbra_SForce.prototype.init = function() {
 //-------------------------------------------------------------------------------------------
 /// Called by the Zimbra framework upon an accepted drag'n'drop
 Com_Zimbra_SForce.prototype.doDrop = function(obj) {
-	this._searchAllContacts = false;//set this before calling noteDropped
 	switch (obj.TYPE) {
 		case "ZmMailMsg":
 			if (obj instanceof Array) {
@@ -87,7 +88,7 @@ Com_Zimbra_SForce.prototype.singleClicked = function() {
 /// Called by the Zimbra framework when some menu item that doesn't have an
 /// <actionURL> was selected
 Com_Zimbra_SForce.prototype.menuItemSelected = function(itemId, val) {
-	switch (itemId) {
+	switch (itemId) {		
 		case "PREFERENCES":
 			this._displayLoginDialog();
 			break;
@@ -102,8 +103,201 @@ Com_Zimbra_SForce.prototype.menuItemSelected = function(itemId, val) {
 			this._openCaseOnLaunchInEditMode = true;
 			this.clicked("", this._actionObject, "edit");
 			break;
+		case "SFORCE_SHOW_SALESFORCE_BAR":
+			this._force_show_salesforceBar = true;
+			this._addSForceBar([]);
+			break;
+		case "SFORCE_CASE_CLOSE":
+			var caseNumber = this._getTooltipData(this._actionObject);
+			var callback = new AjxCallback(this, this._closeCase); 
+			this._getCaseId(caseNumber, callback);
+			break;
+		case "SFORCE_CASE_CHANGE":
+			var caseNumber = this._getTooltipData(this._actionObject);
+			this._loadCaseDescriptionObject();
+			this._getCurrentValuesForQuickUpdateDlg(caseNumber);
+			break;
 	}
 };
+
+Com_Zimbra_SForce.prototype._closeCase =
+function(id) {
+	var props = {};
+	var params = [];
+
+	props["Status"] = "Close";
+	props["Id"] = id;
+	params.push(props);
+	var callback = AjxCallback.simpleClosure(this._handleCloseCase, this);
+	this.updateSFObject(params, "Case", callback, true);
+};
+
+Com_Zimbra_SForce.prototype._handleCloseCase =
+function(response) {
+	if(response.success) {
+		appCtxt.setStatusMsg("Support Case updated successfully", ZmStatusView.LEVEL_INFO);
+	}
+};
+
+Com_Zimbra_SForce.prototype._loadCaseDescriptionObject = function() {
+	if(this._caseObjectLoaded) {
+		return;
+	}
+	if(!this.sForceObject) {
+		this.sForceObject = new Com_Zimbra_SForceObject(this);
+	}
+	var map = this.sForceObject.getFieldMap("describeSObject", "Case");
+	var hasItem = false;
+	for(var item in map) {
+		hasItem = true;
+		break;
+	}
+	this._caseObjectLoaded = true;
+	this._sforceCaseObject = map;
+};
+
+Com_Zimbra_SForce.prototype._displayQuickUpdateDialog =
+function(result) {
+	if (this.quDialog) {
+		this.quView.getHtmlElement().innerHTML = this._createQuickUpdateView(result);	
+		this.quDialog.result = result;
+		this._addCaseOwnerLookupBtn();
+		this.quDialog.popup();
+		return;
+	}
+	this.quView = new DwtComposite(this.getShell());
+	this.quView.setSize("410", "240");
+	this.quView.getHtmlElement().style.overflow = "auto";
+	this.quView.getHtmlElement().innerHTML = this._createQuickUpdateView(result);	
+	this.quDialog = this._createDialog({title:"Quick Edit Case", view:this.quView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});	
+	this.quDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._quOKBtnListner));
+	this.quDialog.result = result;
+	this._addCaseOwnerLookupBtn();
+	this.quDialog.popup();
+};
+
+Com_Zimbra_SForce.prototype._quOKBtnListner =
+function() {
+	var props = {};	
+	for(var i =0; i < this._quickUpdateSelectMenuList.length; i++) {
+		var obj = this._quickUpdateSelectMenuList[i];
+		var prevVal = obj.currentValue;
+		var val = document.getElementById(obj.id).value;
+		if((prevVal != undefined && prevVal != val) && (val != "None")) {
+			props[obj.elName] = val;
+		}
+	}
+	if(!this.quDialog.result.Id) {
+		appCtxt.setStatusMsg("Case ID not found, Aborting updating Case", ZmStatusView.LEVEL_WARNING);
+		return;
+	}
+	var id = this.quDialog.result.Id.toString();
+	props["Id"] = id;
+	var ownerId = document.getElementById("sforce_quickUpdate_changeOwner").refObjIdValue;
+	if(ownerId != undefined && ownerId != "") {
+		props["OwnerId"] = ownerId;
+	}
+	var params = [];
+	params.push(props);
+	var callback = AjxCallback.simpleClosure(this._handleQuickUpdateCase, this);
+	this.updateSFObject(params, "Case", callback, true);
+};
+
+Com_Zimbra_SForce.prototype._handleQuickUpdateCase =
+function(result) {
+	if(!result.errors) {
+		appCtxt.setStatusMsg("Support Case Updated", ZmStatusView.LEVEL_INFO);
+		this.quDialog.popdown();
+	} else {
+		var msg = "";
+		if(result.errors && result.errors.message) {
+			msg = result.errors.message.toString();
+		}
+		appCtxt.setStatusMsg("Could not update Case: "+msg, ZmStatusView.LEVEL_WARNING);
+
+	}
+};
+
+Com_Zimbra_SForce.prototype._createQuickUpdateView =
+function(result) {
+	var ownerName = "";
+	var ownerId = ""; 
+	if(result && result.Owner) {
+		ownerName = result.Owner.Name.toString();
+	}
+	if(result && result.OwnerId) {
+		ownerId = result.OwnerId.toString();
+	}
+	var html = new Array();
+	var i = 0;
+	html[i++] = "<table  width=100% cellpadding=4 class='SForce_table'>";
+	html[i++] = "<tr ><td width=120px align=right><strong>Case Owner:</strong></td>";	
+	html[i++] = "<td><div>";
+	html[i++] ="<table>";
+	html[i++] =["<td><div id='sforce_quickUpdate_changeOwner'  refObjIdValue='",ownerId,"'>",ownerName,"</div></td>"].join("");
+	html[i++] ="<td><div id='sforce_quickUpdate_changeOwnerLookupBtn'></div></td>";
+	html[i++] ="<td><div id='sforce_quickUpdate_changeOwnerClearDiv' style='display:none;'><a href=# id='sforce_quickUpdate_changeOwnerClearLink'>clear</a></div></td></tr>";
+	html[i++] = "</table>";
+	html[i++] = "</div></td></tr>";
+	for(var el in this._allQuickUpdatePickLists) {
+		var obj = this._allQuickUpdatePickLists[el];
+		var items = obj.items;
+
+		html[i++] = this._getQuickUpdateListHtml(el, obj.label, items, obj.currentValue);		
+	}
+	html[i++] = "</table>";
+	html[i++] = "</DIV>";
+	return html.join("");
+};
+
+Com_Zimbra_SForce.prototype._addCaseOwnerLookupBtn = function() {
+		var btn = new DwtButton({parent:this._shell});
+		btn.setText("Change");
+		btn.setImage("Search");
+		btn.addSelectionListener(new AjxListener(this, this._changeCaseOwnerBtnHdlr, [ btn]));
+		document.getElementById("sforce_quickUpdate_changeOwnerLookupBtn").appendChild(btn.getHtmlElement());		
+};
+
+Com_Zimbra_SForce.prototype._changeCaseOwnerBtnHdlr = function() { 
+	this.sForceSearchDlg.setProperties("User", "sforce_quickUpdate_changeOwner", null, "sforce_quickUpdate_changeOwnerClearLink");
+	this.sForceSearchDlg.displaySearchDialog();
+};
+
+Com_Zimbra_SForce.prototype._getQuickUpdateListHtml =
+function(elName, label, items, currentValue) {
+	var html = new Array();
+	var i = 0;
+	var id = ["sforce_quickUpdateMenu_",elName].join("");
+	var hideLinkId = ["sforce_quickUpdateMenu_hideLink_",elName].join("");
+
+	if(!this._quickUpdateSelectMenuList) {
+		this._quickUpdateSelectMenuList = [];
+	}
+	this._quickUpdateSelectMenuList.push({elName:elName, id:id, currentValue:currentValue, hideLinkId:hideLinkId});
+	html[i++] = ["<tr ><td width=120px align=right><strong>",label,":</strong></td><td width=200px><select id='",id,"'>"].join("");
+	html[i++] = "<option value='None'>None</option>";
+	for(var j=0; j< items.length; j++) {
+		try{
+			var item = items[j];
+			if(item == "") {
+				continue;
+			}
+			var obj = eval("("+item+")");
+			var label = obj.label;
+			if(currentValue == label) {
+				html[i++] = ["<option  value='",label,"' selected>",label,"</option>"].join("");
+			} else {
+				html[i++] = ["<option  value='",label,"'>",label,"</option>"].join("");
+			}
+		} catch(e) {
+		}
+	}
+	html[i++] = ["</select></td></tr>"].join("");
+	return html.join("");
+};
+
+
+
 //-------------------------------------------------------------------------------------------
 //UI Handlers (END)
 //-------------------------------------------------------------------------------------------
@@ -125,11 +319,11 @@ function(callback, errorMsg) {
 		return;
 	}
 	this._loginDlgView = new DwtComposite(this._shell);
-	this._loginDlgView.setSize("430", "270");
+	this._loginDlgView.setSize("450", "325");
 	this._loginDlgView.getHtmlElement().style.overflow = "auto";
 	this._loginDlgView.getHtmlElement().innerHTML = this._createLoginDlgView();
 
-	this.loginDlg = this._createDialog({title:"Login To Salesforce", view:this._loginDlgView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this.loginDlg = this._createDialog({title:"Salesforce Preferences", view:this._loginDlgView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this.loginDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._loginDlgOKBtnListener));
 	this.loginDlg.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this._loginDlgCancelBtnListener));
 
@@ -153,14 +347,26 @@ Com_Zimbra_SForce.prototype._setLoginValues =
 function() {	//show the checkbox checked if needed
 	var user = this.getUserProperty("user");
 	var passwd = this.getUserProperty("passwd");
+	this.sforce_ignoreDomainsList = this.getUserProperty("sforce_ignoreDomainsList");
+	this.sforce_logindlg_sbarShowOnlyOnResult = this.getUserProperty("sforce_logindlg_sbarShowOnlyOnResult") == "true";
 	if(user) {
 		document.getElementById("sforce_logindlg_userNamefield").value = user;
 	}
 	if(passwd) {
 		document.getElementById("sforce_logindlg_passwordfield").value = passwd;
 	}
+	if(this.sforce_ignoreDomainsList) {
+		document.getElementById("sforce_logindlg_ignoreDomainsfield").value = this.sforce_ignoreDomainsList;
+	}
+
 	if(this.loginToSFOnLaunch) {
 		document.getElementById("sforce_logindlg_loginToSFOnLaunch").checked = true;
+	}
+	if(this.sforce_logindlg_showSendAndAddBtn) {
+		document.getElementById("sforce_logindlg_showSendAndAddBtn").checked = true;
+	}
+	if(this.sforce_logindlg_sbarShowOnlyOnResult) {
+		document.getElementById("sforce_logindlg_sbarShowOnlyOnResult").checked = true;
 	}
 };
 
@@ -172,11 +378,24 @@ function() {
 	html[i++] = "<DIV>";
 	html[i++] = "<TABLE class='SForce_table'  width='100%'><TR><TD style='font-weight:bold'>Salesforce User Name:</TD><TD><INPUT type='text' id='sforce_logindlg_userNamefield'></INPUT></TD></TR>";
 	html[i++] = "<TR><TD  style='font-weight:bold'>Password + SecurityToken*:</TD><TD><INPUT type='password' id='sforce_logindlg_passwordfield'></INPUT></TD></TR>";
+	html[i++] = "<TR><TD style='font-weight:bold'>Ignore emails with following domain(s):<br/><label style=\"font-size: 10px; color: gray;\">(Saperate multiple domains by comma)</label></TD><TD><INPUT type='text' id='sforce_logindlg_ignoreDomainsfield'></INPUT></TD></TR>";
 	html[i++] = "</TABLE></DIV><BR/>";
+
+	html[i++] = "<DIV>";
+	html[i++] = "<TABLE class='SForce_table' width='100%'>";
+	html[i++] = "<TR><TD width=18px><INPUT type='checkbox' id='sforce_logindlg_sbarShowOnlyOnResult'></INPUT></TD><TD  style='font-weight:bold'>Show Salesforce Bar only when there are Salesforce contacts<TD></TD></TR>";
+	html[i++] = "</TABLE></DIV>";
+	html[i++] = "<DIV>";
+	html[i++] = "<TABLE class='SForce_table' width='100%'>";
+	html[i++] = "<TR><TD width=18px><INPUT type='checkbox' id='sforce_logindlg_showSendAndAddBtn'></INPUT></TD><TD  style='font-weight:bold'>Show 'Send & Add' button in mail compose toolbar<TD></TD></TR>";
+	html[i++] = "</TABLE></DIV>";
 	html[i++] = "<DIV>";
 	html[i++] = "<TABLE class='SForce_table' width='100%'>";
 	html[i++] = "<TR><TD width=18px><INPUT type='checkbox' id='sforce_logindlg_loginToSFOnLaunch'></INPUT></TD><TD  style='font-weight:bold'>Login to Salesforce when Zimbra is launched<TD></TD></TR>";
-	html[i++] = "</TABLE></DIV><BR/>";
+	html[i++] = "</TABLE></DIV>";
+
+	
+	"<BR/>";
 	html[i++] = "<DIV class='SForce_yellow'>";
 	html[i++] = "<B>NOTES:</B><BR/>1. If your <b><i>Salesforce password</i></b> is <label style='font-weight:bold;color:red'>mypassword</label>, and your <b><i>Salesforce security token</i></b> is <label style='font-weight:bold;color:blue'>XXXXXXXXXX</label>";
 	html[i++] = " then you must enter <label style='font-weight:bold;color:red'>mypassword</label><label style='font-weight:bold;color:blue'>XXXXXXXXXX</label> in <i>Password + SecuritToken</i> field. <BR/><BR/>2. <b> Steps to get Security token</b>:"; 
@@ -188,20 +407,38 @@ function() {
 
 Com_Zimbra_SForce.prototype._loginDlgOKBtnListener =
 function() {
+	var needRefresh = false;
 	var user = AjxStringUtil.trim(document.getElementById("sforce_logindlg_userNamefield").value);
 	var passwd = AjxStringUtil.trim(document.getElementById("sforce_logindlg_passwordfield").value);
-	var loginToSFOnLaunch =  document.getElementById("sforce_logindlg_loginToSFOnLaunch").checked;
 	if(user == "" || passwd == "") {
 		this._setErrorMsgToLoginDlg("Please fill your Salesforce credentials");
 		return;
-	}	
+	}
+	this.sforce_ignoreDomainsList = AjxStringUtil.trim(document.getElementById("sforce_logindlg_ignoreDomainsfield").value);
+	var loginToSFOnLaunch =  document.getElementById("sforce_logindlg_loginToSFOnLaunch").checked;
+	this.sforce_logindlg_sbarShowOnlyOnResult =  document.getElementById("sforce_logindlg_sbarShowOnlyOnResult").checked;
+	var showSendandAddBtnVal = document.getElementById("sforce_logindlg_showSendAndAddBtn").checked;
+	if(showSendandAddBtnVal != this.sforce_logindlg_showSendAndAddBtn) {
+		needRefresh = true;
+		this.sforce_logindlg_showSendAndAddBtn = showSendandAddBtnVal;
+	}
+
+	this.loadLoginInfo = false;	
+	this._ignoreDomainList = false;
 	this.loginDlg.popdown();//hide the dialog
 
-	this.setUserProperty("user", user, true);
-	this.setUserProperty("passwd", passwd, true);
-	this.setUserProperty("loginToSFOnLaunch", loginToSFOnLaunch, true);
+	this.setUserProperty("user", user);
+	this.setUserProperty("passwd", passwd);
+	this.setUserProperty("sforce_ignoreDomainsList", this.sforce_ignoreDomainsList);
+	this.setUserProperty("sforce_logindlg_sbarShowOnlyOnResult", this.sforce_logindlg_sbarShowOnlyOnResult);
+	this.setUserProperty("sforce_logindlg_showSendAndAddBtn", this.sforce_logindlg_showSendAndAddBtn);
+	this.setUserProperty("loginToSFOnLaunch", loginToSFOnLaunch);
+	var callback = new AjxCallback(this, this._handleSaveProperties, needRefresh);
+	
+	this.saveUserProperties(callback);
 	this.login(this._loginOkCallback, user, passwd);
 };
+
 Com_Zimbra_SForce.prototype._loginDlgCancelBtnListener =
 function() {
 	if(this.sForceViewManager) {
@@ -209,6 +446,42 @@ function() {
 	}
 	this.loginDlg.popdown();
 };
+
+Com_Zimbra_SForce.prototype._handleSaveProperties =
+function(needRefresh) {
+	appCtxt.setStatusMsg("Preferences Saved", ZmStatusView.LEVEL_INFO);
+	if(needRefresh) {
+		this.showYesNoDialog();
+	}
+};
+
+Com_Zimbra_SForce.prototype.showYesNoDialog =
+function() {
+	var dlg = appCtxt.getYesNoMsgDialog();
+	dlg.registerCallback(DwtDialog.YES_BUTTON, this._yesButtonClicked, this, dlg);
+	dlg.registerCallback(DwtDialog.NO_BUTTON, this._NoButtonClicked, this, dlg);
+	dlg.setMessage("The browser must be refreshed for the changes to take effect.  Continue?", DwtMessageDialog.WARNING_STYLE);
+	dlg.popup();
+};
+
+Com_Zimbra_SForce.prototype._yesButtonClicked =
+function(dlg) {
+	dlg.popdown();
+	this._refreshBrowser();
+};
+
+Com_Zimbra_SForce.prototype._NoButtonClicked =
+function(dlg) {
+	dlg.popdown();
+}
+
+Com_Zimbra_SForce.prototype._refreshBrowser =
+function() {
+	window.onbeforeunload = null;
+	var url = AjxUtil.formatUrl({});
+	ZmZimbraMail.sendRedirect(url);
+};
+
 //-------------------------------------------------------------------------------------------
 //Login dialog related (END)
 //-------------------------------------------------------------------------------------------
@@ -223,22 +496,41 @@ function(msg) {
 	this._recordsForCurrentMail = [];
 	this._emailsInSalesforce = [];
 	this.sforce_bar_recordsForThisMsgParsed = false;
-	this._addSForceBar(msg);
-	
-};
+
+	this._emailsForCurrentNote = this._getValidAddressesForCurrentNote(msg);
+	if(this._emailsForCurrentNote.length == 0){
+		return;
+	}
+	if(!this.loadLoginInfo) {
+		this.user = this.getUserProperty("user");
+		this.passwd = this.getUserProperty("passwd");
+		this.sforce_ignoreDomainsList = this.getUserProperty("sforce_ignoreDomainsList");
+		this.sforce_logindlg_sbarShowOnlyOnResult = this.getUserProperty("sforce_logindlg_sbarShowOnlyOnResult") == "true";
+		this.sforce_logindlg_showSendAndAddBtn = this.getUserProperty("sforce_logindlg_showSendAndAddBtn") == "true";
+		this.loadLoginInfo = true;
+	}
+	if(this.user && this.user != "" && this.passwd && this.passwd != "") {
+		this.noteDropped(msg, true);
+	}	
+};		
+
 
 Com_Zimbra_SForce.prototype._addSForceBar =
-function(msg) {
+function(records) {
 	var viewId =  appCtxt.getCurrentViewId();
 	if(viewId == "CLV" && appCtxt.getSettings().getSetting("READING_PANE_LOCATION").value == "off") {
-		setTimeout(AjxCallback.simpleClosure(this._do_addSForceBar, this, msg, "CV"), 1000);
+		setTimeout(AjxCallback.simpleClosure(this._do_addSForceBar, this, "CV"), 1000);
 	} else {
-		this._do_addSForceBar(msg, viewId);
+		this._do_addSForceBar(records, viewId);
 	}
 };
 
 Com_Zimbra_SForce.prototype._do_addSForceBar =
-function(msg, viewId) {
+function(records, viewId) {
+	if(this.sforce_logindlg_sbarShowOnlyOnResult && records.length == 0 && !this._force_show_salesforceBar) {
+		return;
+	}
+
 	if(viewId.indexOf("MSG") == 0) {
 		var infoBar = document.getElementById(["zv__MSG__",viewId,"_infoBar"].join(""));
 	} else {
@@ -256,11 +548,59 @@ function(msg, viewId) {
 	newNode.id = "sforce_bar_frame";
 	newNode.innerHTML = this._getSFBarWidgetHtml();
 	infoBar.parentNode.insertBefore(newNode, infoBar.nextSibling);
+
+	this.changeOpac(0, newNode.style);
+	this.opacity("sforce_bar_frame", 0, 100, 500);
 	this._addWidgetsToSFBar();
+
+	var doc = document.getElementById("sforce_bar_msgCell");
+	if(doc) {
+		if(records.length > 0) {
+			var contacts = "contacts";
+			if(records.length == 1) {
+				contacts = "contact";
+			}
+			doc.innerHTML = [records.length, " ",contacts," found"].join("");
+			doc.style.color = "#0033FF";
+			doc.style.fontWeight = "bold";
+		} else {
+			doc.innerHTML = "";
+		}
+	}	
 	this._searchAllContacts = false;//set this before calling noteDropped
-	this.noteDropped(msg, true);
 };
 
+Com_Zimbra_SForce.prototype.opacity = 
+function(id, opacStart, opacEnd, millisec) {
+    //speed for each frame
+    var speed = Math.round(millisec / 100);
+    var timer = 0;
+	var styleObj =  document.getElementById(id).style;
+    //determine the direction for the blending, if start and end are the same nothing happens
+    if(opacStart > opacEnd) {
+        for(i = opacStart; i >= opacEnd; i--) {
+			setTimeout(AjxCallback.simpleClosure(this.changeOpac, this, i,  styleObj), (timer * speed));
+            //setTimeout("changeOpac(" + i + ",'" + id + "')",(timer * speed));
+            timer++;
+        }
+    } else if(opacStart < opacEnd) {
+        for(i = opacStart; i <= opacEnd; i++)
+            {
+			setTimeout(AjxCallback.simpleClosure(this.changeOpac, this, i,  styleObj), (timer * speed));
+            //setTimeout("changeOpac(" + i + ",'" + id + "')",(timer * speed));
+            timer++;
+        }
+    }
+};
+
+//change the opacity for different browsers
+Com_Zimbra_SForce.prototype.changeOpac = 
+function(opacity, styleObj) {
+    styleObj.opacity = (opacity / 100);
+    styleObj.MozOpacity = (opacity / 100);
+    styleObj.KhtmlOpacity = (opacity / 100);
+    styleObj.filter = "alpha(opacity=" + opacity + ")";
+};
 
 Com_Zimbra_SForce.prototype._getSFBarWidgetHtml =
 function() {
@@ -274,7 +614,7 @@ function() {
 	html[i++] = ["<div style='cursor:pointer' id='sforce_bar_mainHandler'><table cellpadding=0 cellspacing=0><tr><td width=2px></td>",
 		"<td width=11px><div id='sforce_expandCollapseIconDiv' class='ImgHeaderCollapsed'></div></td><td width=2px></td>",
 		"<td>",this._sforceImage_14,"</td>",		
-		"<td width=2px></td><td width='100'><label style='font-weight:bold;color:rgb(45, 45, 45);'>Salesforce Bar</label></td>",
+		"<td width=2px></td><td width='100'><label style='font-weight:bold;color:rgb(45, 45, 45);cursor:pointer'>Salesforce Bar</label></td>",
 		"<td id='sforce_bar_msgCell'></td></tr></table></div></td>"].join("");
 	html[i++] = "<td>";
 	html[i++] = "<div id='sforce_bar_generalToolbar' style='display:none'>";
@@ -355,23 +695,31 @@ function(result) {
 	html[i++] = "<div  style='font-weight:bold;font-size:14px;padding-left:10px' width=100%>";
 	html[i++] = "<table class='SForce_listView' cellpadding=2 cellspacing=2 border=0 width=100%>";
 	html[i++] = "<tr align=left><th width=5%>Type</th><th width=30%>Name or Subject</th><th>Action</th></tr>";
+	var idStr = "sf:Id";
+	var nameStr = "sf:Name";
+	var subjectStr = "sf:Subject";
+	if(AjxEnv.isChrome || AjxEnv.isSafari) {
+		idStr = "Id";
+		nameStr = "Name";
+		subjectStr = "Subject";
+	}
 	for(var j=0; j < records.length; j++) {
 		var rec = records[j];
 		var type = rec.attributes[0].nodeValue.replace("sf:", "");
-		var idObj =  rec.getElementsByTagName("sf:Id")[0];
+		var idObj =  rec.getElementsByTagName(idStr)[0];
 		if(idObj.textContent) {
 			var id = idObj.textContent;
 			if(type != "Case") {
-				var nameOrSubject = rec.getElementsByTagName("sf:Name")[0].textContent;
+				var nameOrSubject = rec.getElementsByTagName(nameStr)[0].textContent;
 			} else {
-				var nameOrSubject = rec.getElementsByTagName("sf:Subject")[0].textContent;
+				var nameOrSubject = rec.getElementsByTagName(subjectStr)[0].textContent;
 			}
 		} else {//IE..
 			var id = idObj.text;
 			if(type != "Case") {
-				var nameOrSubject = rec.getElementsByTagName("sf:Name")[0].text;
+				var nameOrSubject = rec.getElementsByTagName(nameStr)[0].text;
 			} else {
-				var nameOrSubject = rec.getElementsByTagName("sf:Subject")[0].text;
+				var nameOrSubject = rec.getElementsByTagName(subjectStr)[0].text;
 			}
 		}
 		
@@ -638,25 +986,76 @@ function(id) {
 //-------------------------------------------------------------------------------------------
 // Support Case Link in mail related...
 //-------------------------------------------------------------------------------------------
-Com_Zimbra_SForce.prototype.clicked =
-function(element, caseNumber, mode) {
-	var caseNumber = this._getTooltipData(caseNumber);
-	var q =  ["Select Id from  Case where CaseNumber='",caseNumber,"'"].join("");
 
-	var callback = AjxCallback.simpleClosure(this._handleCaseContextmenu, this, mode); 
+Com_Zimbra_SForce.prototype._getCaseId =
+function(caseNumber, callback) {
+	var q =  ["Select Id from  Case where CaseNumber='",caseNumber,"'"].join("");
+	var callback = AjxCallback.simpleClosure(this._handleGetCaseId, this, callback); 
 	this.query(q, 10, callback);
 };
 
-Com_Zimbra_SForce.prototype._handleCaseContextmenu =
-function(mode, result) {
+Com_Zimbra_SForce.prototype._handleGetCaseId =
+function(callback, result) {
 	if(result.length == 0) {
 		appCtxt.setStatusMsg("Unknown case or you are not authorized to view this case", ZmStatusView.LEVEL_WARNING);
 		return;
 	}
+	var id = result[0].Id.toString();
+	if(callback) {
+		callback.run(id);
+	}
+};
+
+Com_Zimbra_SForce.prototype._getCurrentValuesForQuickUpdateDlg =
+function(caseNumber) {
+	this._allQuickUpdatePickLists = [];
+	var pickListNames = [];
+	for(var el in this._sforceCaseObject) {
+		var obj = this._sforceCaseObject[el];
+		if(obj.type != "picklist") {
+			continue;
+		}
+		try{
+			var items = obj.picklistValues.split("=::=");
+			this._allQuickUpdatePickLists[el] = ({name:el, label:obj.label, items:items});
+			pickListNames.push(el);
+		} catch(e) {
+	
+		}
+		
+	}
+	var q =  ["Select Id,Owner.Name,OwnerId,",pickListNames.join(",")," from  Case where CaseNumber='",caseNumber,"'"].join("");
+	var callback = AjxCallback.simpleClosure(this._handleGetCurrentValuesFoQuickUpdateDlg, this); 
+	this.query(q, 10, callback);
+	
+};
+Com_Zimbra_SForce.prototype._handleGetCurrentValuesFoQuickUpdateDlg =
+function(result) {
+	var result = result[0];
+	if(!result) {
+		appCtxt.setStatusMsg("Could not create Quick Edit Dialog.", ZmStatusView.LEVEL_WARNING);
+		return;
+	}
+	for(var item in result) {
+		if(this._allQuickUpdatePickLists[item]) {
+			this._allQuickUpdatePickLists[item]["currentValue"] = result[item].toString();
+		}
+	}
+	this._displayQuickUpdateDialog(result);
+};
+
+Com_Zimbra_SForce.prototype.clicked =
+function(element, caseNumber, mode) {
+	var caseNumber = this._getTooltipData(caseNumber);
+	var callback = new AjxCallback(this, this._handleCaseContextmenu, mode); 
+	this._getCaseId(caseNumber, callback);
+};
+
+Com_Zimbra_SForce.prototype._handleCaseContextmenu =
+function(mode, id) {
 	if(!this.sforceInstanceName) {
 		this.sforceInstanceName =(this.SERVER.split(".")[0]).split("//")[1];
 	}
-	var id = result[0].Id.toString();
 	var baseUrl = ["https://",this.sforceInstanceName,".salesforce.com/secur/frontdoor.jsp?sid=", AjxStringUtil.urlEncode(this.sessionId), "&retURL="].join("");
 	var viewPart = AjxStringUtil.urlEncode(["/",id].join(""));
 	var editPart = AjxStringUtil.urlEncode(["/", id, "/e?retURL=/", id].join(""));
@@ -667,10 +1066,11 @@ function(mode, result) {
 	}
 };
 
+
 Com_Zimbra_SForce.prototype.toolTipPoppedUp =
 function(spanElement, caseNumber, matchContext, canvas) {
 	caseNumber = this._getTooltipData(caseNumber);
-	this._sCaseTooltipFields = "Subject,Priority,Status,Reason,Contact.Name,Contact.Phone,Contact.Email,Account.Name";
+	this._sCaseTooltipFields = "Owner.Name,Subject,Priority,Status,Reason,Contact.Name,Contact.Phone,Contact.Email,Account.Name";
 	var q =  ["Select ",this._sCaseTooltipFields," from  Case where CaseNumber='",caseNumber,"'"].join("");
 	this._setCaseTooltipHtml(canvas);
 
@@ -702,7 +1102,7 @@ function(canvas, obj) {
 	var i = 0;
 	var fields = this._sCaseTooltipFields.split(",");
 	var len = fields.length;
-	html[i++] = "<table cellpadding=2 cellspacing=0 border=0>";
+	html[i++] = "<table  cellpadding=2 cellspacing=0 border=0>";
 	for(var j=0; j < len; j++) {
 		var name = fields[j];
 		var val = this._getVal(name, props);
@@ -760,71 +1160,20 @@ Com_Zimbra_SForce.prototype.noteDropped = function(note, showInBar) {
 	if (!note)
 		return;
 
-	// check out some domains, exclude user's domain
-	var ignoreDomain = this.getUserProperty("ignoreDomain");
-	var emails = [];
 
-	function addEmails(a) {
-		if (!a) {
-			return;
-		}
-		if (typeof a == "string") {
-			emails.push(a);
-		} else if (a instanceof Array) {
-			for (var i = 0; i < a.length; ++i) {
-				if (a[i].address) {
-					emails.push(a[i].address);
-				}
-			}
-		}
-	}
-
-	if (note._addrs) {
-		for (var i = 0; i < ZmMailMsg.ADDRS.length; i++) {
-			var type = ZmMailMsg.ADDRS[i];
-			var a = note._addrs[type];
-			if (a) {
-				addEmails(a._array);
-			}
-		}
-	} else {
-		addEmails(note.participants);
-		addEmails(note.from);
-		addEmails(note.to);
-		addEmails(note.cc);
-	}
-
-	var domains = [], tmp = {};
-	emails = sforce_unique(emails);
-	this.allEmails = emails;
-	for (var i = 0; i < emails.length; ++i) {
-		DBG.println(AjxDebug.DBG3, emails[i]);
-		if (/@([^>]+)>?$/.test(emails[i])) {
-			var d = RegExp.$1;
-			if (!tmp[d]) {
-				tmp[d] = 1;
-				// kind of pointless, but let's make sure we
-				// backslash any apostrophes
-				domains.push(d.replace(/\x27/, "\\'"));
-			}
-		}
-	}
-
-	if(emails.length == 0) {
+	if(!this._emailsForCurrentNote) {
+		this._emailsForCurrentNote = this._getValidAddressesForCurrentNote(note);
+	} 
+	if(this._emailsForCurrentNote.length == 0) {
 		return;
 	}
 
-	if (this._searchAllContacts) {
-			var q = [ "select Id, FirstName, LastName, Email, AccountId from Contact where Email like '%",
-				domains.join("%' or Email like '%"),
-				"%'" ].join("");
-	} else {
-		var q = ["Select c.Id,c.Name,c.Email,c.Phone,c.OtherPhone,c.Title,c.MailingStreet,c.MailingCity, c.MailingState,c.MailingCountry,c.MailingPostalCode,c.Account.name,c.Account.Id,",
-										"(select id,role,opportunity.name,Opportunity.Id from opportunitycontactroles where opportunity.stagename !='Closed Won' AND opportunity.stagename != 'Closed Lost'   limit 5),",
-										"(select id,subject,caseNumber,Status from Cases Where Status !='Closed' limit 5)",
-										//"(Select id,subject from ActivityHistories) ",
-										" from contact c where Email='", emails.join("' or Email='"), "'"].join("");
-	}
+	var q = ["Select c.Id,c.Name,c.Email,c.Phone,c.OtherPhone,c.Title,c.MailingStreet,c.MailingCity, c.MailingState,c.MailingCountry,c.MailingPostalCode,c.Account.name,c.Account.Id,",
+			"(select id,role,opportunity.name,Opportunity.Id from opportunitycontactroles where opportunity.stagename !='Closed Won' AND opportunity.stagename != 'Closed Lost'   limit 5),",
+			"(select id,subject,caseNumber,Status from Cases Where Status !='Closed' limit 5)",
+				//"(Select id,subject from ActivityHistories) ",
+			" from contact c where Email='", this._emailsForCurrentNote.join("' or Email='"), "'"].join("");
+	
 	if(!showInBar) {
 		this._showNotesDlg(note);
 	}
@@ -859,8 +1208,8 @@ Com_Zimbra_SForce.prototype.noteDropped = function(note, showInBar) {
 		var c = Com_Zimbra_SForce._RECENT.Contacts;
 		for (var i = 0; i < c.length; ++i) {
 			var reqC = c[i].Email.__msh_content;
-			for (var j = 0; j < this.allEmails.length; j++) {
-				var currC = this.allEmails[j];
+			for (var j = 0; j < this._emailsForCurrentNote.length; j++) {
+				var currC = this._emailsForCurrentNote[j];
 				if (currC.toLowerCase() == reqC.toLowerCase()) {
 					this._sentContactsMappedIds.push(c[i].Id.__msh_content);
 				}
@@ -878,6 +1227,79 @@ Com_Zimbra_SForce.prototype.noteDropped = function(note, showInBar) {
 	}
 };
 
+Com_Zimbra_SForce.prototype._getValidAddressesForCurrentNote =
+function (note) {
+	var emails = [];
+	if (note._addrs) {
+		for (var i = 0; i < ZmMailMsg.ADDRS.length; i++) {
+			var type = ZmMailMsg.ADDRS[i];
+			var a = note._addrs[type];
+			if (a) {
+				var emls = a._array;
+				if(emls instanceof Array) {
+					if(emls.length < 10) {//skip checking for emails if # is >9
+						emails = emails.concat(this._addEmails(emls));
+					}
+				} else {
+					emails = emails.concat(this._addEmails(emls));
+				}
+			}
+		}
+	} else {
+		if(note.participants.length < 10) {
+			emails = emails.concat(this._addEmails(note.participants));
+		} else {
+			emails = emails.concat(this._addEmails(note.from));
+		}
+	}
+	emails = sforce_unique(emails);
+	return 	emails;
+};
+
+Com_Zimbra_SForce.prototype._addEmails =
+function (a) {
+	var emails = [];
+	if (!a) {
+		return;
+	}
+	if (typeof a == "string") {
+		if(!this._ignoreThisEmail(a)){
+			emails.push(a);
+		}
+	} else if (a instanceof Array) {
+		for (var i = 0; i < a.length; ++i) {
+			var address = a[i].address;
+			if(address && !this._ignoreThisEmail(address)){
+				emails.push(a[i].address);
+			}
+		}
+	}
+	return emails;
+};
+
+
+Com_Zimbra_SForce.prototype._ignoreThisEmail =
+function(email) {
+	email = email.toLowerCase();
+	if(!this._ignoreDomainList) {
+		this._ignoreDomainList = [];
+		var igd = this.getUserProperty("sforce_ignoreDomainsList");
+		if(igd != undefined) {
+			if(igd.indexOf(",") >=0) {
+				this._ignoreDomainList = igd.toLowerCase().split(",");
+			} else {
+				this._ignoreDomainList.push(igd.toLowerCase());
+			}
+		}
+	}
+	for(var i = 0; i < this._ignoreDomainList.length; i++) {
+		if(email.indexOf(this._ignoreDomainList[i]) >=0) {
+			return true;
+		}
+	}
+	return false;
+};
+
 Com_Zimbra_SForce.prototype._handleAddNotesRecords =
 function(showInBar, zimlet, records) {	
 	this._recordsForCurrentMail = records;
@@ -891,20 +1313,7 @@ function(showInBar, zimlet, records) {
 
 Com_Zimbra_SForce.prototype._updateSforceBar =
 function(records) {
-	var doc = document.getElementById("sforce_bar_msgCell");
-	if(doc) {
-		if(records.length > 0) {
-			var contacts = "contacts";
-			if(records.length == 1) {
-				contacts = "contact";
-			}
-			doc.innerHTML = [records.length, " ",contacts," found"].join("");
-			doc.style.color = "blue";
-			doc.style.fontWeight = "bold";
-		} else {
-			doc.innerHTML = "";
-		}
-	}	
+	this._addSForceBar(records);	
 };
 
 
@@ -1434,12 +1843,12 @@ Com_Zimbra_SForce.prototype._setRecordsToNotesDlg = function(records) {
 // Toolbar related..(START)
 //--------------------------------------------------------------------------------------------------------
 Com_Zimbra_SForce.prototype.initializeToolbar = function(app, toolbar, controller, viewId) {
-	if (viewId.indexOf("COMPOSE") >= 0) {
+	if(this.sforce_logindlg_showSendAndAddBtn == undefined) {
+		this.sforce_logindlg_showSendAndAddBtn = this.getUserProperty("sforce_logindlg_showSendAndAddBtn") == "true";
+	}
+
+	if (viewId.indexOf("COMPOSE") >= 0 && this.sforce_logindlg_showSendAndAddBtn) {
 		this._initComposeSFToolbar(toolbar, controller);
-	//}else if (viewId == ZmId.VIEW_CONVLIST || viewId == ZmId.VIEW_CONV || viewId == ZmId.VIEW_TRAD) {
-	//	this._initMailSFToolbar(toolbar, controller);
-	//} else if (viewId == "CNS" || viewId == "CND") { //TODO
-	//	this._initContactSFToolbar(toolbar, controller);
 	}
 };
 
@@ -1485,7 +1894,6 @@ Com_Zimbra_SForce.prototype._initComposeSFToolbar = function(toolbar, controller
 Com_Zimbra_SForce.prototype._sendAddSForce = function(ev) {
 	var msg = this._composeView.getMsg();
 	this._send();
-	this._searchAllContacts = false;//set this before calling noteDropped
 	this._sforce.noteDropped(msg);
 };
 //--------------------------------------------------------------------------------------------------------
@@ -1506,7 +1914,7 @@ Com_Zimbra_SForce._RECENT = {};
 
 /// Utility function that creates a SOAP envelope.  This will also insert the
 /// session header if we already have a session.
-Com_Zimbra_SForce.prototype._makeEnvelope = function(method, limit) {
+Com_Zimbra_SForce.prototype._makeEnvelope = function(method, limit, dontUseSessionId) {
 	var soap = AjxSoapDoc.create(
 			method, this.XMLNS, null,
 			"http://schemas.xmlsoap.org/soap/envelope/");
@@ -1516,7 +1924,7 @@ Com_Zimbra_SForce.prototype._makeEnvelope = function(method, limit) {
 	envEl.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 	envEl.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
 
-	if (this.sessionId) {
+	if (this.sessionId && !dontUseSessionId) {
 		var header = soap.ensureHeader();
 		if(limit) {
 			var qo =  soap.getDoc().createElement("sh:QueryOptions");
@@ -1562,39 +1970,49 @@ Com_Zimbra_SForce.prototype.rpc = function(soap, callback, passErrors) {
 	this.sendRequest(soap, this.SERVER, {SOAPAction: "m", "Content-Type": "text/xml"}, callback, false, passErrors);
 };
 
+Com_Zimbra_SForce.prototype.logout = 
+function() {
+	var soap = this._makeEnvelope("logout");
+
+	this.rpc(soap, new AjxCallback(this, this.done_logout), true);
+};
+
+Com_Zimbra_SForce.prototype.done_logout = 
+function(response) {
+	appCtxt.setStatusMsg("Logged out of Salesforce", ZmStatusView.LEVEL_INFO);
+};
 // SOAP METHOD: login
 
 /// Login to SForce.  The given callback will be called in the case of a
 /// successful login.  Note that callback is a plain function (not AjxCallback)
-Com_Zimbra_SForce.prototype.login = function(callback, user, passwd) {
+Com_Zimbra_SForce.prototype.login = function(callback, user, passwd, dontUseSessionId) {
 	if (!callback) {
 		callback = false;
 	}
 	if(!user || !passwd) {
 		user = this.getUserProperty("user");
 		passwd = this.getUserProperty("passwd");
+		this.sforce_ignoreDomainsList = this.getUserProperty("sforce_ignoreDomainsList");
+		this.sforce_logindlg_sbarShowOnlyOnResult =  this.getUserProperty("sforce_logindlg_sbarShowOnlyOnResult") == "true";
+		this.sforce_logindlg_showSendAndAddBtn = this.getUserProperty("sforce_logindlg_showSendAndAddBtn") == "true";
 	}
 	if (!user || !passwd || user == "" || passwd == "") {
-		if(this.ignoreLoginFailure) {//when we login automatically in when user logs in, dont show dialog
- 			this.ignoreLoginFailure = false;
-			return;
-		}
 		var errMsg = "Please fill your Salesforce credentials";
 		this._displayLoginDialog(callback, errMsg);
 	} else {
-		this._do_login(callback, user, passwd);
+		this._do_login(callback, user, passwd, dontUseSessionId);
 	}
-	this.ignoreLoginFailure = false;
 };
 
-Com_Zimbra_SForce.prototype._do_login = function(callback, user, passwd) {
+Com_Zimbra_SForce.prototype._do_login = function(callback, user, passwd, dontUseSessionId) {
 	this.SFuserName = user;//store username
 
-	var soap = this._makeEnvelope("login");
+	var soap = this._makeEnvelope("login", null, dontUseSessionId);
 	soap.set("username", user);
 	soap.set("password", passwd);
-	if (callback == null)
+	if (callback == null){
 		callback = false;
+	}
 	this.rpc(soap, new AjxCallback(this, this.done_login, [ callback ]), true);
 };
 
@@ -1604,13 +2022,18 @@ Com_Zimbra_SForce.prototype.done_login = function(callback, result) {
 		ans = ans.Body.loginResponse.result;
 		this.SERVER = String(ans.serverUrl);
 		this.sessionId = String(ans.sessionId);
-		this.setUserProperty("sForce_sessionId",this.sessionId, true);
 		this.userId = String(ans.userId);
 		this.userInfo = ans.userInfo;
-		this.displayStatusMessage("Salesforce: " + this.userInfo.userFullName + " logged in.");
 		if(this.loginDlg) {//popdown login dialog on successful login
 			this.loginDlg.popdown();
 		}
+		if(!this._loginTimerStarted) {
+			appCtxt.setStatusMsg("Logged on to salesforce as "+this.userInfo.userFullName.toString(), ZmStatusView.LEVEL_INFO);
+			//login every 10 minutes to keep the session alive
+			setInterval(AjxCallback.simpleClosure(this.login, this, (function() {}), null, null, true), 60*1000*5);
+			this._loginTimerStarted = true;
+		}
+
 		if(callback instanceof AjxCallback) {
 			callback.run(this);
 		} else if (callback) {
@@ -1627,16 +2050,7 @@ Com_Zimbra_SForce.prototype.done_login = function(callback, result) {
 	}
 };
 
-// SOAP METHOD: logout
 
-/// There's no explicit logout command to SForce, we just clear session data
-/// and user information.
-Com_Zimbra_SForce.prototype.logout = function() {
-	this.SERVER = Com_Zimbra_SForce.LOGIN_SERVER;
-	this.sessionId = null;
-	this.userId = null;
-	this.userInfo = null;
-};
 
 
 Com_Zimbra_SForce.prototype.queryMore = function(queryLocator, limit, callback, returnEntireResponse) {
@@ -1707,6 +2121,9 @@ Com_Zimbra_SForce.prototype.done_search = function(callback, returnEntireRespons
 /// Executes a SOQL (SalesForce Object Query Language) and calls the given
 /// callback upon successful execution.
 Com_Zimbra_SForce.prototype.query = function(query, limit, callback, returnEntireResponse, errorCallback) {
+	if(!errorCallback) {
+		var errorCallback = new AjxCallback(this, this._generalQueryErrorHdlr);
+	}
 	if (!this.sessionId) {
 		this.login(function() {
 			this._do_query(query, limit, callback, returnEntireResponse, errorCallback);
@@ -1715,6 +2132,17 @@ Com_Zimbra_SForce.prototype.query = function(query, limit, callback, returnEntir
 		this._do_query(query, limit, callback, returnEntireResponse, errorCallback);
 	}
 };
+
+Com_Zimbra_SForce.prototype._generalQueryErrorHdlr = function() {
+	var response =  arguments[1];
+	if(response) {
+		if(response.text.indexOf("INVALID_SESSION_ID") >=0) {
+			appCtxt.getAppController().setStatusMsg("Salesforce session had expired. Please try again", ZmStatusView.LEVEL_WARNING);
+			this.login(function(){}, null, null, true);
+		}
+	}
+};
+
 
 Com_Zimbra_SForce.prototype._do_query = function(query, limit, callback, returnEntireResponse, errorCallback) {
 	if (!limit || limit < 1) {
@@ -1752,8 +2180,9 @@ Com_Zimbra_SForce.prototype.done_query = function(callback, returnEntireResponse
 			}else {
 				errorCallback.call(this, result);
 			}
-		} 
-		this.displayErrorMessage("An error was returned.<br />Error code: " + result.status, result.text);		
+		} else {
+			this.displayErrorMessage("An error was returned.<br />Error code: " + result.status, result.text);	
+		}
 		return;
 	}
 	var xd = this.xmlToObject(result);

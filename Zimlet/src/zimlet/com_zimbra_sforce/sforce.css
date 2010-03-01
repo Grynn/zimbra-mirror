@@ -101,6 +101,8 @@ table.SForce_table select {
 	width:200px;
 }
 
+
+
 table.SForce_table div {
 	font-size:12px;
 }
@@ -110,6 +112,11 @@ table.SForce_table a {
 	font-size:12px;
 	cursor:pointer;
 
+}
+
+.SForce_listView tr:hover { 
+	background-color:#ccd5e8; 
+	cursor:pointer;
 }
 
 .SForce_tableLabel {

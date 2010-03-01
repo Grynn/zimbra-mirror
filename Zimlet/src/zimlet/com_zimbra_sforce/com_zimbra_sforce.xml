@@ -1,35 +1,35 @@
-<zimlet name="com_zimbra_sforce" version="3.0" description="Salesforce">	
+<zimlet name="com_zimbra_sforce" version="3.0.1" description="Connects Zimbra to Salesforce">	
 <contentObject>
 		<matchOn>
 			<regex attrs="ig">(?:(?:\bCase(?:)?:?\s*#?))(\d+)\b</regex>
 		</matchOn>
 		 <contextMenu>
-			<menuItem label="Open Case" icon="Notebook" id="SFORCE_CASE_OPENCASE"/>
-			<menuItem label="Edit Case" icon="Edit" id="SFORCE_CASE_EDITCASE"/>
+			<menuItem label="View Case (in Salesforce)" icon="Notebook" id="SFORCE_CASE_OPENCASE"/>
+			<menuItem label="Edit Case (in Salesforce)" icon="Edit" id="SFORCE_CASE_EDITCASE"/>
+			<menuItem label="Close Case" icon="Cancel" id="SFORCE_CASE_CLOSE"/>
+			<menuItem/>
+			<menuItem label="Quick Edit" icon="MsgStatusDraft" id="SFORCE_CASE_CHANGE"/>
 		</contextMenu>
     </contentObject>
 
 	<include>sforce.js</include>
+	<include>model/sforceObject.js</include>
 	<include>widgets/sforceSearchDlg.js</include>
 	<includeCSS>sforce.css</includeCSS>
 	<handlerObject>Com_Zimbra_SForce</handlerObject>
 
 	<zimletPanelItem label="Salesforce" icon="SFORCE-panelIcon">
-		<toolTipText>Use drag'n'drop to interact with your Salesforce account</toolTipText>
-			<dragSource type="ZmMailMsg" />
-			<dragSource type="ZmConv" />
-
 		<contextMenu>
-			<menuItem label="Login Preferences" id="PREFERENCES" icon="Preferences"/>
-			<menuItem />
-			<menuItem label="Visit Salesforce" id="WWW.SFORCE.COM" icon="SFORCE-panelIcon">
-				<canvas type="window" title="Salesforce Website" width="800" height="600" />
-				<actionUrl target="http://www.salesforce.com">
-					<param name="referrer">www.zimbra.com</param>
-				</actionUrl>
-			</menuItem>
+			<menuItem label="Salesforce Preferences" id="PREFERENCES" icon="Resource"/>
+			<menuItem/>
+			<menuItem label="Force Show Salesforce Bar" icon="SFORCE-panelIcon" id="SFORCE_SHOW_SALESFORCE_BAR"/>
 		</contextMenu>
 	</zimletPanelItem>
 
+  <userProperties>
+		<property type="string" name="sforce_ignoreDomainsList" value="zimbra.com,vmware.com"/>	
+		<property type="string" name="sforce_logindlg_sbarShowOnlyOnResult" value= "false" />
+		<property type="string" name="sforce_logindlg_showSendAndAddBtn" value= "true" />
+  </userProperties>
 
 </zimlet>
