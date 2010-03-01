@@ -140,7 +140,7 @@ public class VersionCheck extends AdminDocumentHandler {
 								if (isCritical) {
 									criticalStr = "critical";
 								} else {
-									criticalStr = "not critical";
+									criticalStr = "non-critical";
 								}
 								msg = msg.concat(updateTemplate.replaceAll("\\$\\{UPDATE_URL\\}", eUpdate.getAttribute(A_UPDATE_URL))
 								.replaceAll("\\$\\{UPDATE_DESCRIPTION\\}", eUpdate.getAttribute(A_DESCRIPTION))
@@ -166,9 +166,9 @@ public class VersionCheck extends AdminDocumentHandler {
 							}
 						}						
 						if (hasCritical) {
-							criticalStr = "critical";
+							criticalStr = "Critical";
 						} else {
-							criticalStr = "not critical";
+							criticalStr = "Non-critical";
 						}
 						msg = msg.replaceAll("\\$\\{NEWLINE\\}", "\n");
 						String subj = subjTemplate.replaceAll("\\$\\{IS_CRITICAL\\}", criticalStr).replaceAll("\\$\\{NEW_LINE\\}", "\n");
