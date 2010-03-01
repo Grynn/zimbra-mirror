@@ -22,9 +22,9 @@ olcAccess: {6}to attrs=zimbraAllowFromAddress  by dn.children="cn=admins,cn=zi
  mbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read  by * none
 olcAccess: {7}to filter="(!(zimbraHideInGal=TRUE))"  attrs=cn,co,company,dc,di
  splayName,givenName,gn,initials,l,mail,o,ou,physicalDeliveryOfficeName,postal
- Code,sn,st,street,streetAddress,telephoneNumber,title,uid  by dn.children="cn
- =admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" re
- ad  by users read  by * none
+ Code,sn,st,street,streetAddress,telephoneNumber,title,uid,homePhone,mobile,pa
+ ger  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn
+ =appaccts,cn=zimbra" read  by users read  by * none
 olcAccess: {8}to attrs=zimbraId,zimbraMailAddress,zimbraMailAlias,zimbraMailCa
  nonicalAddress,zimbraMailCatchAllAddress,zimbraMailCatchAllCanonicalAddress,z
  imbraMailCatchAllForwardingAddress,zimbraMailDeliveryAddress,zimbraMailForwar
