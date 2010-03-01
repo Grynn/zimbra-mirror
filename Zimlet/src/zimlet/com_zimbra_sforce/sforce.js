@@ -1284,7 +1284,8 @@ function(email) {
 	if(!this._ignoreDomainList) {
 		this._ignoreDomainList = [];
 		var igd = this.getUserProperty("sforce_ignoreDomainsList");
-		if(igd != undefined) {
+		if(igd != "" && igd != undefined) {
+			igd = AjxStringUtil.trim(igd);
 			if(igd.indexOf(",") >=0) {
 				this._ignoreDomainList = igd.toLowerCase().split(",");
 			} else {
@@ -1749,7 +1750,8 @@ Com_Zimbra_SForce.prototype._setRecordsToNotesDlg = function(records) {
 			email = contact.Email.toString();
 		}
 		var id = contact.Id.toString();		
-		html[i++] = ["<option value='Contact_", id, "' selected>Contact - ", name," ", email, "</option>"].join("");
+		var val =  [name," ", email].join("");
+		html[i++] = ["<option title='",val,"' value='Contact_", id, "' selected>Contact: ",val, "</option>"].join("");
 	}
 	html[i++] ="</select></td>";
 	html[i++] =["<td><select id='sforce_relatedTo_selectionMenu' multiple size='10'>"].join("");
@@ -1760,7 +1762,8 @@ Com_Zimbra_SForce.prototype._setRecordsToNotesDlg = function(records) {
 		if(account) {
 			var id = account.Id.toString();
 			var name = account.Name.toString();
-			html[i++] = ["<option value='Account_", id, "'>Account: ", name, "</option>"].join("");			
+
+			html[i++] = ["<option title='",name,"' value='Account_", id, "'>Account: ", name, "</option>"].join("");			
 		}
 		//add opportunities
 		var ocRoles = contact.OpportunityContactRoles;
@@ -1778,7 +1781,8 @@ Com_Zimbra_SForce.prototype._setRecordsToNotesDlg = function(records) {
 				if(item.Role) {
 					role = item.Role.toString();
 				}
-				html[i++] = ["<option value='Opportunity_", id, "' selected>Opportunity: ", name," ", role, "</option>"].join("");
+				var val = [name," ", role].join("");
+				html[i++] = ["<option title='",val,"' value='Opportunity_", id, "' selected>Opportunity: ", val, "</option>"].join("");
 			}
 		}
 		//add cases
@@ -1793,7 +1797,8 @@ Com_Zimbra_SForce.prototype._setRecordsToNotesDlg = function(records) {
 				var id = item.Id.toString();
 				var subject = item.Subject.toString();
 				var caseNumber = item.CaseNumber.toString();
-				html[i++] = ["<option value='Cases_", id, "'>Case: ", caseNumber," ", subject, "</option>"].join("");
+				var val = [caseNumber," ", subject].join("");
+				html[i++] = ["<option title='",val,"' value='Cases_", id, "'>Case: ",val, "</option>"].join("");
 			}
 		}
 
