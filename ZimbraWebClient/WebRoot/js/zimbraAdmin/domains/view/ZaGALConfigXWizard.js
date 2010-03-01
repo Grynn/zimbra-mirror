@@ -238,8 +238,7 @@ function () {
 	ZaDomain.testSyncSettings(instance, callback);	
 }
 
-ZaGALConfigXWizard.checkSyncConfigCallBack = 
-	function (arg) {
+ZaGALConfigXWizard.checkSyncConfigCallBack = function (arg) {
 		if(!arg)
 			return;
 		
@@ -250,20 +249,14 @@ ZaGALConfigXWizard.checkSyncConfigCallBack =
 			var msg = [arg.getException().detail,arg.getException().msg,arg.getException().trace].join("\n");
 			this.getModel().setInstanceValue(instance,ZaDomain.A_GALSyncTestResultCode,arg.getException().code);
 			this.getModel().setInstanceValue(instance,ZaDomain.A_GALSyncTestMessage,msg);
-			this.getModel().setInstanceValue(instance,ZaDomain.A_GALSyncTestSearchResults,null);
 		} else {
 			var searchResponse = arg.getResponse().Body.CheckGalConfigResponse;
 			if(searchResponse) {
-				searchResponse = searchResponse[0];
-				if(searchResponse) {
-					this.getModel().setInstanceValue(instance,ZaDomain.A_GALSyncTestResultCode,searchResponse.code[0]._content);	
-					if(searchResponse.code[0]._content != ZaDomain.Check_OK) {
-						this.getModel().setInstanceValue(instance,ZaDomain.A_GALSyncTestMessage,searchResponse.message[0]._content);
-						this.getModel().setInstanceValue(instance,ZaDomain.A_GALSyncTestSearchResults,null);
-					}				
-				}
+				this.getModel().setInstanceValue(instance,ZaDomain.A_GALSyncTestResultCode,searchResponse.code[0]._content);	
+				if(searchResponse.code[0]._content != ZaDomain.Check_OK) {
+					this.getModel().setInstanceValue(instance,ZaDomain.A_GALSyncTestMessage,searchResponse.message[0]._content);
+				}				
 			}
-
 		}
 
 		this.getForm().parent.goPage(ZaGALConfigXWizard.SYNC_TEST_RESULT_STEP);
@@ -295,28 +288,25 @@ function (arg) {
 	} else {
 		var searchResponse = arg.getResponse().Body.CheckGalConfigResponse;
 		if(searchResponse) {
-			searchResponse = searchResponse[0];
-			if(searchResponse) {
-				this.getModel().setInstanceValue(instance,ZaDomain.A_GALSearchTestResultCode,searchResponse.code[0]._content); 
-				if(searchResponse.code[0]._content != ZaDomain.Check_OK) {
-					this.getModel().setInstanceValue(instance,ZaDomain.A_GALSearchTestMessage,searchResponse.message[0]._content);
-					this.getModel().setInstanceValue(instance,ZaDomain.A_GALTestSearchResults,null);
-				} else {
-					var searchResults = new Array();
-					if(searchResponse.cn && searchResponse.cn.length) {
-						var len = searchResponse.cn.length;
-						for (var ix=0;ix<len;ix++) {
-							var cnObject = new Object();
-							if(searchResponse.cn[ix]._attrs) {
-								for (var a in searchResponse.cn[ix]._attrs) {
-									cnObject[a] = searchResponse.cn[ix]._attrs[a];
-								}
-								searchResults.push(cnObject);						
+			this.getModel().setInstanceValue(instance,ZaDomain.A_GALSearchTestResultCode,searchResponse.code[0]._content); 
+			if(searchResponse.code[0]._content != ZaDomain.Check_OK) {
+				this.getModel().setInstanceValue(instance,ZaDomain.A_GALSearchTestMessage,searchResponse.message[0]._content);
+				this.getModel().setInstanceValue(instance,ZaDomain.A_GALTestSearchResults,null);
+			} else {
+				var searchResults = new Array();
+				if(searchResponse.cn && searchResponse.cn.length) {
+					var len = searchResponse.cn.length;
+					for (var ix=0;ix<len;ix++) {
+						var cnObject = new Object();
+						if(searchResponse.cn[ix]._attrs) {
+							for (var a in searchResponse.cn[ix]._attrs) {
+								cnObject[a] = searchResponse.cn[ix]._attrs[a];
 							}
+							searchResults.push(cnObject);						
 						}
 					}
-					this.getModel().setInstanceValue(instance,ZaDomain.A_GALTestSearchResults,searchResults);
 				}
+				this.getModel().setInstanceValue(instance,ZaDomain.A_GALTestSearchResults,searchResults);
 			}
 		}
 	}

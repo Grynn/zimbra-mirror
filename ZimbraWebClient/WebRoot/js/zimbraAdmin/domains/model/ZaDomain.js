@@ -226,6 +226,7 @@ ZaDomain.A_zimbraAdminConsoleLoginMessage = "zimbraAdminConsoleLoginMessage" ;
 ZaDomain.A2_allowClearTextLDAPAuth = "allowClearTextLdapAuth" ;
 ZaDomain.A2_isTestingGAL = "isTestingGAL";
 ZaDomain.A2_isTestingSync = "isTestingSync";
+ZaDomain.A2_isTestingAuth = "isTestingAuth";
 ZaDomain.A2_acl_selection_cache = "acl_selection_cache";
 ZaDomain.A2_gal_sync_accounts = "gal_sync_accounts";
 ZaDomain.A2_new_gal_sync_account_name = "new_gal_sync_account_name";
@@ -1876,7 +1877,8 @@ ZaDomain.myXModel = {
        { id:ZaDomain.A_zimbraFreebusyExchangeURL, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeURL, type: _COS_STRING_ } ,
        { id:ZaDomain.A_zimbraFreebusyExchangeUserOrg, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeUserOrg, type: _COS_STRING_ },
        {id:ZaDomain.A2_isTestingGAL, ref:ZaDomain.A2_isTestingGAL, type:_NUMBER_},
-       {id:ZaDomain.A2_isTestingSync, ref:ZaDomain.A2_isTestingSync, type:_NUMBER_}
+       {id:ZaDomain.A2_isTestingSync, ref:ZaDomain.A2_isTestingSync, type:_NUMBER_},
+       {id:ZaDomain.A2_isTestingAuth, ref:ZaDomain.A2_isTestingAuth, type:_NUMBER_}
     ]
 };
 
