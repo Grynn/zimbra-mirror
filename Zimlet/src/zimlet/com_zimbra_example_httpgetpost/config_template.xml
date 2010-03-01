@@ -1,0 +1,5 @@
+<zimletConfig name="com_zimbra_example_httpgetpost" version="1.0">
+    <global>
+        <property name="allowedDomains">search.twitter.com</property>
+    </global>
+</zimletConfig>

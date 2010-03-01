@@ -1,0 +1,12 @@
+<zimlet name="com_zimbra_example_httpgetpost" version="1.0" description="An example zimlet using HTTP GET and POST.">
+    <include>com_zimbra_example_httpgetpost.js</include>
+    <handlerObject>com_zimbra_example_httpgetpost_HandlerObject</handlerObject>
+    <zimletPanelItem label="Zimlet Example (HTTP GET and POST)" icon="zimbraIcon">
+      <toolTipText>Right click to display the menu</toolTipText>
+      <contextMenu>
+        <menuItem label="HTTP GET" id="CALL_VIA_HTTP_GET" />
+        <menuItem label="HTTP POST" id="CALL_VIA_HTTP_POST" />
+        <menuItem label="HTTP GET (external)" id="CALL_VIA_HTTP_EXTERNAL_GET" />
+      </contextMenu>
+   </zimletPanelItem>
+</zimlet>
