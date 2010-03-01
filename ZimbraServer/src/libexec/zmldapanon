@@ -87,8 +87,7 @@ if($ldap_is_master eq "true") {
                         scope => "base",
                         attrs => ['1.1'],
                  );
-  my @entries=$mesg->entries;
-  my $size = @entries;
+  my $size = $mesg->count;
   if ($size > 0 ) {
     $dn="olcDatabase={3}hdb,cn=config";
   }
