@@ -207,9 +207,31 @@ function (skipRights,expandDefaults) {
 }
 
 ZaItem.prototype.copyTo = 
-function (target/*, fullRecursion*/) {
+function (target, fullRecursion, maxRecursion, currentRecLevel) {
+	if(!currentRecLevel) {
+		currentRecLevel = 1;
+	} else {
+		currentRecLevel++;
+	}
+	if(!maxRecursion) {
+		maxRecursion = 4;
+	}
 	for(var a in this) {
-		target[a] = this[a];
+		if (this[a] == null || this[a] == undefined) {
+			target[a] = null;
+		} else if(fullRecursion && (currentRecLevel <= maxRecursion)) {
+			if(this[a] instanceof Array) {
+				target[a] = [];
+				ZaItem.prototype.copyTo.call(this[a],target[a],fullRecursion,maxRecursion, currentRecLevel)
+			} else if(typeof(this[a]) == "object") {
+				target[a] = {};
+				ZaItem.prototype.copyTo.call(this[a],target[a],fullRecursion,maxRecursion, currentRecLevel)
+			} else {
+				target[a] = this[a];
+			}
+		} else {
+			target[a] = this[a];
+		}
 	}
 }
 
