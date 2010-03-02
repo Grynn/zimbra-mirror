@@ -138,18 +138,19 @@ function(entry) {
 	this._containedObject = new ZaDomain();
 	//this._containedObject.attrs = new Object();
 
-	for (var a in entry.attrs) {
+	/*for (var a in entry.attrs) {
 		this._containedObject.attrs[a] = entry.attrs[a];
-	}
-
-	this._containedObject.name = entry.name;
+	}*/
+	ZaItem.prototype.copyTo.call(entry,this._containedObject,true,4);
+	/*this._containedObject.name = entry.name;
 	this._containedObject.type = entry.type ;
 	this._containedObject.id = entry.id;
-	this._containedObject[ZaDomain.A2_gal_sync_accounts] = entry[ZaDomain.A2_gal_sync_accounts];
+	this._containedObject[ZaDomain.A2_gal_sync_accounts] = entry[ZaDomain.A2_gal_sync_accounts];*/
 	this._containedObject[ZaDomain.A2_create_gal_acc] = "TRUE";
 	this._containedObject[ZaDomain.A2_isTestingGAL] = 0;
 	this._containedObject[ZaDomain.A2_isTestingSync] = 0;
-	if(entry.rights)
+	
+	/*if(entry.rights)
 		this._containedObject.rights = entry.rights;
 
 	if(entry.setAttrs)
@@ -160,7 +161,7 @@ function(entry) {
 		
 	if(entry._defaultValues)
 		this._containedObject._defaultValues = entry._defaultValues;
-
+	*/
 	
 	this.setTitle(ZaMsg.NCD_GALConfigTitle + " (" + entry.name + ")");
 	this._containedObject[ZaModel.currentStep] = 1;
