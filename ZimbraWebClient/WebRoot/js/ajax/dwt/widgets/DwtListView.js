@@ -488,21 +488,13 @@ function(item, index, skipNotify, itemIndex) {
 };
 
 DwtListView.prototype.removeItem =
-function(item, skipNotify) {
+function(item, skipNotify, skipAlternation) {
+
 	var itemEl = this._getElFromItem(item);
 	if (!itemEl) { return; }
 
-    var sibling = itemEl.nextSibling;
-    if (sibling) {
-        var odd = Boolean(itemEl.className && (itemEl.className.indexOf(DwtListView.ROW_CLASS_ODD) != -1));
-        while (sibling) {
-            odd = !odd;
-            var oclass = odd ? DwtListView.ROW_CLASS_ODD : DwtListView.ROW_CLASS_EVEN;
-            var nclass = odd ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
-            Dwt.delClass(sibling, oclass, nclass);
-            sibling = sibling.nextSibling;
-        }
-    }
+	var altIndex = this._getRowIndex(item);	// get index before we remove row
+
 	this._selectedItems.remove(itemEl);
 	if (this._rightSelItem == itemEl) {
 		this._rightSelItem = null;
@@ -518,6 +510,9 @@ function(item, skipNotify) {
 	if (this._data[id]) {
 		this._data[id] = null;
 		delete this._data[id];
+	}
+	if (!skipAlternation) {
+		this._fixAlternation(altIndex);
 	}
 
 	if (!skipNotify && this._evtMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
@@ -1022,30 +1017,43 @@ function() {
 
 DwtListView.prototype._addRow =
 function(row, index) {
+
 	if (!row || !this._parentEl) { return; }
 
 	// bug fix #1894 - check for childNodes length otherwise IE barfs
 	var len = this._parentEl.childNodes.length;
-
-	var odd = Boolean((index != null ? index : len) % 2);
-	var oclass = odd ? DwtListView.ROW_CLASS_ODD : DwtListView.ROW_CLASS_EVEN;
-	var nclass = odd ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
-	Dwt.delClass(row, oclass, nclass);
-
 	if (index != null && len > 0 && index != len) {
-		var childNodes = this._parentEl.childNodes;
-		this._parentEl.insertBefore(row, childNodes[index]);
-		var sibling = row.nextSibling;
-		while (sibling) {
-			odd = !odd;
-			oclass = odd ? DwtListView.ROW_CLASS_ODD : DwtListView.ROW_CLASS_EVEN;
-			nclass = odd ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
-			Dwt.delClass(sibling, oclass, nclass);
-			sibling = sibling.nextSibling;
-		}
+		this._parentEl.insertBefore(row, this._parentEl.childNodes[index]);
 	} else {
 		this._parentEl.appendChild(row);
 	}
+	this._fixAlternation((index != null) ? index : len);
+};
+
+DwtListView.prototype._fixAlternation =
+function(index) {
+
+	var childNodes = this._parentEl.childNodes;
+	if (!(childNodes && childNodes.length)) { return; }
+	if (!(this._list && this._list.size())) { return; }
+
+	var row = childNodes[index];
+	if (!row) { return; }
+	var odd = Boolean(index % 2);
+	this._setAlternatingRowClass(row, odd);
+	var sibling = row.nextSibling;
+	while (sibling) {
+		odd = !odd;
+		this._setAlternatingRowClass(sibling, odd);
+		sibling = sibling.nextSibling;
+	}
+};
+
+DwtListView.prototype._setAlternatingRowClass =
+function(row, odd) {
+	var oclass = odd ? DwtListView.ROW_CLASS_ODD : DwtListView.ROW_CLASS_EVEN;
+	var nclass = odd ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
+	Dwt.delClass(row, oclass, nclass);
 };
 
 /**
@@ -1158,7 +1166,7 @@ function(item, params, html, idx, count) {
 	html[idx++] = "<div class='";
 	html[idx++] = this._getDivClass(this._normalClass, item, params);
 	html[idx++] = " ";
-	html[idx++] = (count%2) ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
+	html[idx++] = (count % 2) ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
 	html[idx++] = "'";
 
 	var style = [];
