@@ -22,9 +22,10 @@
 * client.
 *
 * @author Conrad Damon
-* @param obj	[Object]				the object to call the function from
-* @param func	[function]				the callback function
-* @param args   [primitive or Array]	default arguments
+* 
+* @param {Object}	obj		the object to call the function from
+* @param {function}	func	the callback function
+* @param {primative|Array}	args   the default arguments
 */
 AjxCallback = function(obj, func, args) {
 	if (arguments.length == 0) return;
@@ -41,6 +42,11 @@ AjxCallback = function(obj, func, args) {
     }
 }
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @return		{String}		a string representation of the object
+ */
 AjxCallback.prototype.toString =
 function() {
 	return "AjxCallback";
@@ -49,16 +55,16 @@ function() {
 AjxCallback.NOP = new AjxCallback(function(){});
 
 /**
-* Runs the callback function, from within the object if there is one. The
-* called function passed arguments are the concatenation of the argument
-* array passed to this object's constructor and the argument array passed
-* to the <code>run</code> method. Whatever the called function returns is
-* returned to the caller.
-*
-* @param arg1	The first argument which will be appended to the argument
-*				array passed to this object's constructor. Any number of
-*				arguments may be passed to the <code>run</code> method.
-*/
+ * Runs the callback function, from within the object if there is one. The
+ * called function passed arguments are the concatenation of the argument
+ * array passed to this object's constructor and the argument array passed
+ * to the <code>run</code> method. Whatever the called function returns is
+ * returned to the caller.
+ *
+ * @param {Object}	[arg1..argN]	the first argument which will be appended to the argument
+ *				array passed to this object's constructor. Any number of
+ *				arguments may be passed to the <code>run</code> method.
+ */
 AjxCallback.prototype.run =
 function(/* arg1 ... argN */) {
 	// combine original args with new ones
@@ -88,16 +94,17 @@ function(/* arg1 ... argN */) {
 };
 
 /**
- * This version of run() is here for AjxDispatcher, because it has a run()
+ * This version of {@link AjxCallback.run} is here for {@link AjxDispatcher}, because it has a <code>run()</code>
  * method in which it marshals arguments into an array. That leads to a problem
  * in which the arguments are marshalled twice, so that by the time AjxDispatcher
- * calls callback.run(args), the args have already been collected into an array.
+ * calls <code>callback.run(args)</code>, the args have already been collected into an array.
  * Then when the function is invoked, it gets passed an actual array instead of the
- * intended arg list. Calling 'callback.run.apply(callback, args)' works on Firefox,
+ * intended arg list. Calling <code>callback.run.apply(callback, args)</code> works on Firefox,
  * but IE throws the error "Object expected", so we do this instead.
  *
- * Takes an array of arguments and treats them as an argument list, instead of as
- * a single argument.
+ * @param	{Array}	argList	 an array of arguments and treats them as an argument list, instead of as a single argument
+ * 
+ * @private
  */
 AjxCallback.prototype.run1 =
 function(argList) {
@@ -130,22 +137,26 @@ function(argList) {
 };
 
 /**
- * The following function is what an AjxCallback should be *all* about.  It
- * returns a plain function that will call your supplied "func" in the context
+ * This method returns a plain function that will call your supplied "func" in the context
  * of "obj" and pass to it, in this order, any additional arguments that you
- * pass to simpleClosure and the arguments that were passed to it at the call
+ * pass to <code>simpleClosure</code> and the arguments that were passed to it at the call
  * time.
  *
+ * <p>
  * An example should do:
  *
+ * <pre>
  *   div.onclick = AjxCallback.simpleClosure(this.handler, this, "some data");
  *   ...
  *   this.handler = function(data, event) {
  *      // event will be passed for DOM2 compliant browsers
  *      // and data is "some data"
  *   };
- *
- * [this is one of the most useful functions I ever wrote :D  -mihai@zimbra.com]
+ * </pre>
+ * 
+ * @param	{function}	func		the function
+ * @param	{Object}	obj			the object to call the function from
+ * @param	{Object}	[arg1...argN]		any number of arguments
  */
 AjxCallback.simpleClosure = function(func, obj) {
 	var args = [];

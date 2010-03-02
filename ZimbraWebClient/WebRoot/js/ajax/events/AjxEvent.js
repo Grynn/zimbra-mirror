@@ -13,7 +13,6 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
 AjxEvent = function() {
 	this.data = null;
 }

@@ -15,6 +15,12 @@
 
 // AjxVector class
 
+/**
+ * Creates a vector.
+ * @class
+ * This class represents a vector.
+ * 
+ */
 AjxVector = function() {
 	this._array = new Array();
 };
@@ -33,6 +39,12 @@ function(sep, compress) {
 	return a.join(sep);
 };
 
+/**
+ * Creates a vector from a given array.
+ * 
+ * @param	{Array}	list		an array
+ * @return	{AjxVector}		the vector
+ */
 AjxVector.fromArray =
 function(list) {
 	var vec = new AjxVector();
@@ -43,11 +55,23 @@ function(list) {
 	return vec;
 };
 
+/**
+ * Gets the size of the vector.
+ * 
+ * @return	{int}	the size
+ */
 AjxVector.prototype.size =
 function() {
 	return this._array.length;
 };
 
+/**
+ * Adds a object to the vector.
+ * 
+ * @param	{Object}	obj		the object
+ * @param	{int}		index	the index where to add
+ * @param	{Boolean}	noDuplicates	if <code>true</code>, confirm the object is not in vector before adding
+ */
 AjxVector.prototype.add =
 function(obj, index, noDuplicates) {
 	// if no duplicates, search for the obj in list and return if found.
@@ -58,6 +82,11 @@ function(obj, index, noDuplicates) {
 	AjxUtil.arrayAdd(this._array, obj, index);
 };
 
+/**
+ * Adds the given array.
+ * 
+ * @param	{Array}		list		an array
+ */
 AjxVector.prototype.addList =
 function(list) {
 	if (!list) return;
@@ -78,11 +107,23 @@ function(list) {
 	}
 };
 
+/**
+ * Removes the object.
+ * 
+ * @param	{Object}	obj		the object to remove
+ * @return	{Boolean}	<code>true</code> if the object is removed
+ */
 AjxVector.prototype.remove =
 function(obj) {
 	return AjxUtil.arrayRemove(this._array, obj);
 };
 
+/**
+ * Removes the object at the given index.
+ * 
+ * @param	{int}	index		the index
+ * @return	{Object}	the object at the index or <code>null</code> if no object at index
+ */
 AjxVector.prototype.removeAt =
 function(index) {
 	if (index >= this._array.length || index < 0)
@@ -96,6 +137,10 @@ function(index) {
 	return ret;
 };
 
+/**
+ * Removes all objects from vector.
+ * 
+ */
 AjxVector.prototype.removeAll =
 function() {
 	// Actually blow away the array items so that garbage
@@ -105,16 +150,31 @@ function() {
 	this._array.length = 0;
 };
 
+/**
+ * Removes the last object in the vector.
+ * 
+ */
 AjxVector.prototype.removeLast =
 function() {
 	return this._array.length > 0 ? this._array.pop() : null;
 };
 
+/**
+ * Reverses the order of the objects in the vector.
+ * 
+ */
 AjxVector.prototype.reverse =
 function() {
 	this._array.reverse();
 };
 
+/**
+ * Replaces the object at a given index.
+ * 
+ * @param	{int}	index		the index
+ * @param	{Object}	newObj	the new object
+ * @return	{Object}	the old object
+ */
 AjxVector.prototype.replace =
 function(index, newObj) {
 	var oldObj = this._array[index];
@@ -122,6 +182,13 @@ function(index, newObj) {
 	return oldObj;
 };
 
+/**
+ * Replaces an object.
+ * 
+ * @param	{Object}	obj		the object to replace
+ * @param	{Object}	newObj	the new object
+ * @return	{Object}	the replaced object or <code>null</code> if not replaced
+ */
 AjxVector.prototype.replaceObject =
 function(obj, newObj) {
 	for (var i = 0; i < this._array.length; i++) {
@@ -134,10 +201,11 @@ function(obj, newObj) {
 };
 
 /**
-* Returns the index of the obj given w/in vector
-*
-* @param obj			the object being looked for
-*/
+ * Returns the index of the obj given w/in vector
+ *
+ * @param {Object}	obj			the object being looked for
+ * @return	{int}	the index or -1 if not found
+ */
 AjxVector.prototype.indexOf =
 function(obj) {
 	if (obj == null)
@@ -151,11 +219,12 @@ function(obj) {
 };
 
 /**
-* Returns the index of the obj given w/in vector
-*
-* @param obj			the object being looked for
-* @param compareFunc	a function for comparing objects
-*/
+ * Returns the index of the obj given w/in vector
+ *
+ * @param {Object}	obj			the object being looked for
+ * @param {function}	compareFunc	a function for comparing objects
+ * @return	{int}	the index or -1 if not found
+ */
 AjxVector.prototype.indexOfLike =
 function(obj, compareFunc) {
 	var value = compareFunc.call(obj);
@@ -168,6 +237,11 @@ function(obj, compareFunc) {
 	return -1;
 };
 
+/**
+ * Clones the vector.
+ * 
+ * @return	{AjxVector}	the new vector
+ */
 AjxVector.prototype.clone =
 function() {
 	var vec = new AjxVector();
@@ -175,6 +249,12 @@ function() {
 	return vec;
 };
 
+/**
+ * Checks if the vector contains an object.
+ * 
+ * @param	{Object}	obj		the object
+ * @return	{Boolean}	<code>true</code> if the object is found
+ */
 AjxVector.prototype.contains =
 function(obj) {
 	for (var i = 0; i < this._array.length; i++) {
@@ -186,14 +266,15 @@ function(obj) {
 
 
 /**
-* Returns true if the vector contains the given object, using the given
-* function to compare objects. The comparison function should return a
-* type for which the equality test (==) is meaningful, such as a string
-* or a base type.
-*
-* @param obj			the object being looked for
-* @param compareFunc	a function for comparing objects
-*/
+ * Returns true if the vector contains the given object, using the given
+ * function to compare objects. The comparison function should return a
+ * type for which the equality test (==) is meaningful, such as a string
+ * or a base type.
+ *
+ * @param {Object}	obj			the object being looked for
+ * @param {function}	compareFunc	a function for comparing objects
+ * @return	{Boolean}	<code>true</code> if the object is found
+ */
 AjxVector.prototype.containsLike =
 function(obj, compareFunc) {
 	var value = compareFunc.call(obj);
@@ -205,23 +286,45 @@ function(obj, compareFunc) {
 	return false;
 };
 
+/**
+ * Gets the object at a given index.
+ * 
+ * @param	{int}	index		the index
+ * @return	{Object}	the object or <code>null</code> if not found
+ */
 AjxVector.prototype.get =
 function(index) {
 	return index >= this._array.length || index < 0
 		? null : this._array[index];
 };
 
+/**
+ * Gets an array of the vector.
+ * 
+ * @return	{Array}	an array
+ */
 AjxVector.prototype.getArray =
 function() {
 	return this._array;
 };
 
+/**
+ * Gets the last object in the vector.
+ * 
+ * @return	{Object}	the object or <code>null</code> if vector is empty
+ */
 AjxVector.prototype.getLast =
 function() {
 	return this._array.length == 0
 		? null : this._array[this._array.length-1];
 };
 
+/**
+ * Gets the next object in the vector after a given object.
+ * 
+ * @param	{Object}	obj		the object
+ * @return	{Object}	the object or <code>null</code> if object not found
+ */
 AjxVector.prototype.getNext =
 function(obj) {
 	var idx = this.indexOf(obj);
@@ -230,6 +333,12 @@ function(obj) {
 	return this.get(++idx);
 };
 
+/**
+ * Gets the previous object in the vector before a given object.
+ * 
+ * @param	{Object}	obj		the object
+ * @return	{Object}	the object or <code>null</code> if object not found
+ */
 AjxVector.prototype.getPrev =
 function(obj) {
 	var idx = this.indexOf(obj);
@@ -238,8 +347,11 @@ function(obj) {
 	return this.get(--idx);
 };
 
-
-
+/**
+ * Sorts the vector.
+ * 
+ * @param	{function}	sortFunc		the function
+ */
 AjxVector.prototype.sort =
 function(sortFunc) {
 	if (!sortFunc) {
@@ -248,6 +360,13 @@ function(sortFunc) {
 	this._array.sort(sortFunc);
 };
 
+/**
+ * Performs a binary search.
+ * 
+ * @param	{Object}	valueToFind		the value
+ * @param	{function}	sortFunc		the sort function
+ * @return	{int}	the index
+ */
 AjxVector.prototype.binarySearch =
 function(valueToFind, sortFunc) {
 	if (!sortFunc) {
@@ -328,15 +447,20 @@ AjxVector.prototype.foreach = function(f, obj) {
 	}
 };
 
-// Return a new AjxVector which contains the results of calling f
-// (optionally in the context obj) for each element of this array.
-//
-// If "f" is a string, then for each element el:
-//
-// - if el[f] is a function, call el[f] and push the result in the
-//   returned array.
-//
-// - otherwise push el[f]
+/**
+ * Return a new AjxVector which contains the results of calling f
+ * (optionally in the context obj) for each element of this array.
+ * <p>
+ * If "f" is a string, then for each element el:
+ * 
+ * <pre>
+ * if el[f] is a function, call el[f] and push the result in the returned array.
+ * - otherwise push el[f]
+ * </pre>
+ * @param	{function}	f 	the function
+ * @param	{Object}	obj		the obj context
+ * @return	{AjxVector}		the resulting vector
+ */
 AjxVector.prototype.map = function(f, obj) {
 	var a = [], i = this.size(), el;
 	if (typeof f == "function") {
@@ -359,16 +483,25 @@ AjxVector.prototype.map = function(f, obj) {
 	return AjxVector.fromArray(a);
 };
 
+/**
+ * Joins the vector.
+ * 
+ * @param	{String}	sep		the string separator
+ * @return	{String}	a string representation of the vector
+ */
 AjxVector.prototype.join = function(sep) {
 	return this._array.join(sep);
 };
 
-// Return a new AjxVector containing the elements from this vector
-// except those for which f(el) returns true.  Otherwise said,
-// "SUBtracts" from this vector those elements for which f(el) returns
-// true.
-//
-// f is called in the obj context.
+/**
+ * Return a new AjxVector containing the elements from this vector
+ * except those for which f(el) returns true.  Otherwise said,
+ * "SUBtracts" from this vector those elements for which f(el) returns true.
+ *
+ * @param	{function}	f 	the function
+ * @param	{Object}	obj		the obj context
+ * @return	{AjxVector}		the resulting vector
+ */
 AjxVector.prototype.sub = function(f, obj) {
 	var a = [], l = this.size(), i = 0, el;
 	while (--l >= 0) {

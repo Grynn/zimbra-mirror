@@ -19,21 +19,16 @@
  * @class
  * This class encapsulates the XML HTTP request, hiding differences between
  * browsers. The internal request object depends on the browser. While it is 
- * possible to use this class directly, <i>AjxRpc</i> provides a managed interface
+ * possible to use this class directly, {@link AjxRpc} provides a managed interface
  * to this class 
  *
  * @author Ross Dargahi
  * @author Conrad Damon
  * 
- * @param {String} Optional ID to identify this object (optional)
+ * @param {String} [id]		the ID to identify this object
  * 
  * @see AjxRpc
  * 
- * @requires AjxCallback
- * @requires AjxDebug
- * @requires AjxEnv
- * @requires AjxException
- * @requires AjxTimedAction
  */
 AjxRpcRequest = function(id) {
 	if (!AjxRpcRequest.__inited) {
@@ -49,13 +44,18 @@ AjxRpcRequest = function(id) {
 		: (new XMLHttpRequest());
 };
 
+/**
+ * Defines the "timed out" exception.
+ * @type	int
+ */
 AjxRpcRequest.TIMEDOUT		= -1000;		// Timed out exception
 AjxRpcRequest.__inited		= false;
 AjxRpcRequest.__msxmlVers	= null;
 
 /**
- * @return class name
- * @type String
+ * Returns a string representation of the object.
+ * 
+ * @return		{String}		a string representation of the object
  */
 AjxRpcRequest.prototype.toString = 
 function() {
@@ -66,23 +66,21 @@ function() {
  * Sends this request to the target URL. If there is a callback, the request is
  * performed asynchronously.
  * 
- * @param {String} requestStr HTTP request string/document
- * @param {String} serverUrl request target 
- * @param {Array} requestHeaders Array of HTTP request headers (optional)
- * @param {AjxCallback} callback callback for asynchronous requests. This callback 
+ * @param {String} [requestStr] 	the HTTP request string/document
+ * @param {String} serverUrl 	the request target 
+ * @param {Array} [requestHeaders] an array of HTTP request headers
+ * @param {AjxCallback} callback 	the callback for asynchronous requests. This callback 
  * 		will be invoked when the requests completes. It will be passed the same
  * 		values as when this method is invoked synchronously (see the return values
  * 		below) with the exception that if the call times out (see timeout param 
  * 		below), then the object passed to the callback will be the same as in the 
  * 		error case with the exception that the status will be set to 
- * 		<code>AjxRpcRequest.TIMEDOUT</code>
- * @param {Boolean} useGet if true use get method, else use post. If ommitted
- * 		defaults to post
- * @param {Int} timeout Timeout (in milliseconds) after which the request is 
- * 		cancelled (optional)
+ * 		{@link AjxRpcRequest.TIMEDOUT}.
+ * @param {Boolean} [useGet=false] 		if <code>true</code>, use get method; otherwise, use post
+ * @param {int} [timeout] 		the timeout (in milliseconds) after which the request is canceled
  * 
- * @return If invoking in asynchronous mode, then it will return the id of the 
- * 		underlying <i>AjxRpcRequest</i> object. Else if invoked synchronously, if
+ * @return {Object}	if invoking in asynchronous mode, then it will return the id of the 
+ * 		underlying {@link AjxRpcRequest} object. Else if invoked synchronously, if
  * 		there is no error (i.e. we get a HTTP result code of 200 from the server),
  * 		an object with the following attributes is returned
  * 		<ul>
@@ -94,14 +92,14 @@ function() {
  * 		<ul>
  * 		<li>text - the string response text<li>
  * 		<li>xml - the string response xml </li>
- * 		<li>success - boolean set to false </li>
- * 		<li>status - http status</li>
+ * 		<li>success - boolean set to <code>false</code></li>
+ * 		<li>status - HTTP status</li>
  * 		</ul>
- * @type Object
  * 
- * @throws AjxException.NETWORK_ERROR, AjxException.UNKNOWN_ERROR
+ * @throws	{AjxException.NETWORK_ERROR}	a network error occurs
+ * @throws	{AjxException.UNKNOWN_ERROR}	an unknown error occurs
  * 
- * @see AjxRpc#invoke
+ * @see AjxRpc.invoke
  */
 AjxRpcRequest.prototype.invoke =
 function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
@@ -146,7 +144,8 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 };
 
 /**
- * Cancels a pending request 
+ * Cancels a pending request.
+ * 
  */
 AjxRpcRequest.prototype.cancel =
 function() {
@@ -157,7 +156,7 @@ function() {
 /**
  * Handler that runs when an asynchronous request timesout.
  *
- * @param {AjxCallback} callback callback to run after timeout
+ * @param {AjxCallback} callback 	the callback to run after timeout
  * 
  * @private
  */
@@ -171,8 +170,8 @@ function(callback) {
  * Handler that runs when an asynchronous response has been received. It runs a
  * callback to initiate the response handling.
  *
- * @param req		[AjxRpcRequest]		request that generated the response
- * @param callback	[AjxCallback]		callback to run after response is received
+ * @param {AjxRpcRequest}	req		the request that generated the response
+ * @param {AjxCallback}	callback	the callback to run after response is received
  * 
  * @private
  */
@@ -211,7 +210,9 @@ function(req, callback) {
 	}
 };
 
-/** @private */
+/**
+ * @private
+ */
 AjxRpcRequest.__init =
 function() {
 	if (!window.XMLHttpRequest && window.ActiveXObject) {

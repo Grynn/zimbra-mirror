@@ -26,19 +26,6 @@
 AjxStringUtil = function() {
 }
 
-/**
-* Removes white space from the beginning and end of a string, optionally compressing internal white space. By default, white
-* space is defined as a sequence of  Unicode whitespace characters (\s in regexes). Optionally, the user can define what
-* white space is by passing it as an argument.
-*
-* <p>TODO: add left/right options</p>
-*
-* @param str      	the string to trim
-* @param compress 	whether to compress internal white space to one space
-* @param space    	a string that represents a user definition of white space
-* @returns			a trimmed string
-*/
-
 AjxStringUtil.TRIM_RE = /^\s+|\s+$/g;
 AjxStringUtil.COMPRESS_RE = /\s+/g;
 AjxStringUtil.ELLIPSIS = " ... ";
@@ -56,9 +43,10 @@ AjxStringUtil.capitalize = function(str) {
  * Converts the given text to mixed-case. The input text is one or more words
  * separated by spaces. The output is a single word in mixed (or camel) case.
  * 
- * @param text		[string]			text to convert
- * @param sep		[string|RegExp]*	text separator (defaults to any space)
- * @param camel		[boolean]*			if true, first character of result is lower-case
+ * @param {String}	text		text to convert
+ * @param {String|RegEx}	sep		text separator (defaults to any space)
+ * @param {Boolean}	camel		if <code>true</code>, first character of result is lower-case
+ * @return	{String}	the resulting string
  */
 AjxStringUtil.toMixed =
 function(text, sep, camel) {
@@ -73,6 +61,18 @@ function(text, sep, camel) {
 	return newText.join("");
 };
 
+/**
+ * Removes white space from the beginning and end of a string, optionally compressing internal white space. By default, white
+ * space is defined as a sequence of  Unicode whitespace characters (\s in regexes). Optionally, the user can define what
+ * white space is by passing it as an argument.
+ *
+ * <p>TODO: add left/right options</p>
+ *
+ * @param {String}	str      	the string to trim
+ * @param {Boolean}	compress 	whether to compress internal white space to one space
+ * @param {String}	space    	a string that represents a user definition of white space
+ * @return	{String}	a trimmed string
+ */
 AjxStringUtil.trim =
 function(str, compress, space) {
 
@@ -96,11 +96,12 @@ function(str, compress, space) {
 };
 
 /**
-* Returns the string repeated the given number of times.
-*
-* @param str		a string
-* @param num		number of times to repeat the string
-*/
+ * Returns the string repeated the given number of times.
+ *
+ * @param {String}	str		a string
+ * @param {int}	num		number of times to repeat the string
+ * @return	{String}	the string
+ */
 AjxStringUtil.repeat =
 function(str, num) {
 	var text = "";
@@ -110,6 +111,12 @@ function(str, num) {
 	return text;
 };
 
+/**
+ * Gets the units from size string.
+ * 
+ * @param	{String}	sizeString	the size string
+ * @return	{String}	the units
+ */
 AjxStringUtil.getUnitsFromSizeString =
 function(sizeString) {
 	var units = "px";
@@ -132,9 +139,9 @@ function(sizeString) {
 *
 * <p>TODO: handle escaped quotes</p>
 *
-* @param str	the string to split
-* @param dels	an optional string of delimiter characters
-* @returns		an array of strings
+* @param {String} str	the string to split
+* @param {String}	[dels]	an optional string of delimiter characters
+* @return	{Array}	an array of strings
 */
 AjxStringUtil.split =
 function(str, dels) {
@@ -184,14 +191,14 @@ function(str, dels) {
  * source text is preserved based on the prefixes. Special lines such as email headers
  * always start a new line.
  *
- * @param params	[hash]			hash of params:
- *        text 		[string]		the text to be wrapped
- *        len		[int]*			the desired line length of the wrapped text, defaults to 80
- *        pre		[string]*		an optional string to prepend to each line (useful for quoting)
- *        before	[string]*		text to prepend to final result
- *        after		[string]*		text to append to final result
+ * @param {Hash}	params	a hash of parameters
+ * @param {String}      params.text 		the text to be wrapped
+ * @param {int}      [params.len=80]		the desired line length of the wrapped text, defaults to 80
+ * @param {String}      [params.pre]		an optional string to prepend to each line (useful for quoting)
+ * @param {String}      [params.before]	text to prepend to final result
+ * @param {String}      [params.after]		text to append to final result
  *
- * @returns			the wrapped/quoted text
+ * @return	{String}	the wrapped/quoted text
  */
 AjxStringUtil.wordWrap =
 function(params) {
@@ -285,12 +292,11 @@ function(params) {
 };
 
 /**
-* Returns true if the character for the given key is considered printable.
-*
-* @param keycode	a numeric keycode (not a character code)
-* @returns 			true if the character for the given key is considered printable
-*/
-
+ * Returns true if the character for the given key is considered printable.
+ *
+ * @param keycode	a numeric keycode (not a character code)
+ * @return	{Boolean}	<code>true</code> if the character for the given key is considered printable
+ */
 AjxStringUtil.IS_PRINT_CODE = {};
 var print_codes = [32,48,49,50,51,52,53,54,55,56,57,59,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,
                    81,82,83,84,85,86,87,88,89,90,96,97,98,99,100,101,102,103,104,105,106,107,109,110,111,186,
@@ -305,30 +311,29 @@ function(keycode) {
 	return AjxStringUtil.IS_PRINT_CODE[keycode];
 };
 
-/**
-* Returns the character for the given key, taking the shift key into consideration.
-*
-* @param keycode	a numeric keycode (not a character code)
-* @param shifted	whether the shift key is down
-* @returns			a character
-*/
-
 AjxStringUtil.SHIFT_CHAR = { 48:')', 49:'!', 50:'@', 51:'#', 52:'$', 53:'%', 54:'^', 55:'&', 56:'*', 57:'(',
 							59:':', 186:':', 187:'+', 188:'<', 189:'_', 190:'>', 191:'?', 192:'~',
 							219:'{', 220:'|', 221:'}', 222:'"' };
 
+/**
+* Returns the character for the given key, taking the shift key into consideration.
+*
+* @param {int}	keycode	a numeric keycode (not a character code)
+* @param {Boolean}	shifted		whether the shift key is down
+* @return	{char}	a character
+*/
 AjxStringUtil.shiftChar =
 function(keycode, shifted) {
 	return shifted ? AjxStringUtil.SHIFT_CHAR[keycode] || String.fromCharCode(keycode) : String.fromCharCode(keycode);
 };
 
 /**
-* Does a diff between two strings, returning the index of the first differing character.
-*
-* @param str1	a string
-* @param str2	another string
-* @returns		the index at which they first differ
-*/
+ * Does a diff between two strings, returning the index of the first differing character.
+ *
+ * @param {String}	str1	a string
+ * @param {String}	str2	another string
+ * @return	{int}	the index at which they first differ
+ */
 AjxStringUtil.diffPoint =
 function(str1, str2) {
 	if (!(str1 && str2)) {
@@ -342,7 +347,7 @@ function(str1, str2) {
 	return i;
 };
 
-/**
+/*
 * DEPRECATED
 *
 * Replaces variables in a string with values from a list. The variables are
@@ -353,6 +358,8 @@ function(str1, str2) {
 * @param str		the string to resolve
 * @param values	 	an array of values to interpolate
 * @returns			a string with the variables replaced
+* 
+* @deprecated
 */
 AjxStringUtil.resolve =
 function(str, values) {
@@ -363,7 +370,8 @@ function(str, values) {
 /**
  * Encodes a complete URL. Leaves delimiters alone.
  *
- * @param str	the string to encode
+ * @param {String}	str	the string to encode
+ * @return	{String}	the encoded string
  */
 AjxStringUtil.urlEncode =
 function(str) {
@@ -377,7 +385,12 @@ function(str) {
  * difference between this function and {@link AjxStringUtil.urlEncode}
  * is that this will also encode the following delimiters:
  *
+ * <pre>
  *  			: / ? & =
+ * </pre>
+ * 
+ * @param	{String}	str		the string to encode
+ * @return	{String}	the resulting string
  */
 AjxStringUtil.urlComponentEncode =
 function(str) {
@@ -389,7 +402,8 @@ function(str) {
 /**
  * Decodes a complete URL.
  *
- * @param str	the string to decode
+ * @param {String}	str	the string to decode
+ * @return	{String}	the decoded string
  */
 AjxStringUtil.urlDecode =
 function(str) {
@@ -401,6 +415,9 @@ function(str) {
 /**
  * Decodes a string as if it were a <em>part</em> of a URL. Falls back
  * to unescape() if necessary.
+ * 
+ * @param	{String}	str		the string to decode
+ * @return	{String}	the decoded string
  */
 AjxStringUtil.urlComponentDecode =
 function(str) {
@@ -416,14 +433,15 @@ function(str) {
 	return result || str;
 };
 
-/**
-* HTML-encodes a string.
-*
-* @param str	the string to encode
-*/
-
 AjxStringUtil.ENCODE_MAP = { '>' : '&gt;', '<' : '&lt;', '&' : '&amp;' };
 
+/**
+ * HTML-encodes a string.
+ *
+ * @param {String}	str	the string to encode
+ * @param	{Boolean}	includeSpaces		if <code>true</code>, to include encoding spaces
+ * @return	{String}	the encoded string
+ */
 AjxStringUtil.htmlEncode =
 function(str, includeSpaces) {
 	if (!str) {return "";}
@@ -443,6 +461,13 @@ function(str, includeSpaces) {
 	}
 };
 
+/**
+ * Decodes the string.
+ * 
+ * @param	{String}	str		the string to decode
+ * @param	{Boolean}	decodeSpaces	if <code>true</code>, decode spaces
+ * @return	{String}	the string
+ */
 AjxStringUtil.htmlDecode =
 function(str, decodeSpaces) {
 	 
@@ -455,8 +480,9 @@ function(str, decodeSpaces) {
 /**
  * Removes HTML tags from the given string.
  * 
- * @param str			[string]	text from which to strip tags
- * @param removeContent	[boolean]*	if true, also remove content within tags
+ * @param {String}	str			text from which to strip tags
+ * @param {Boolean}	removeContent	if <code>true</code>, also remove content within tags
+ * @return	{String}	the resulting HTML string
  */
 AjxStringUtil.stripTags =
 function(str, removeContent) {
@@ -467,6 +493,12 @@ function(str, removeContent) {
 	return str.replace(/<\/?[^>]+>/gi, '');
 };
 
+/**
+ * Converts the string to HTML.
+ * 
+ * @param	{String}	str		the string
+ * @return	{String}	the resulting string
+ */
 AjxStringUtil.convertToHtml =
 function(str) {
 	if (!str) {return "";}
@@ -481,14 +513,15 @@ function(str) {
 	return str;
 };
 
-/**
-* HTML-encodes a string.
-*
-* @param str	the string to encode
-*/
-
 AjxStringUtil.SPACE_ENCODE_MAP = { ' ' : '&nbsp;', '>' : '&gt;', '<' : '&lt;', '&' : '&amp;' , '\n': '<br>'};
 
+/**
+ * HTML-encodes a string.
+ *
+ * @param str	the string to encode
+ * 
+ * @private
+ */
 AjxStringUtil.htmlEncodeSpace =
 function(str) {
 	if (!str) { return ""; }
@@ -566,6 +599,8 @@ function() {
  *
  * NOTE2: MSIE Benchmark - clipping an average of 17 characters each over 190
  * iterations averaged 27ms each (5.1 seconds total for 190)
+ * 
+ * @private
  */
 AjxStringUtil.clip =
 function(origString, pixelWidth, className) {
@@ -597,6 +632,8 @@ function(str,clipLen) {
  * Breaks string on embedded space characters, EOL ("/n") and "&lt;br&gt;" tags when possible.
  *
  * @returns		"origString" with "&lt;br&gt;" tags inserted to force wrapping.
+ * 
+ * @private
  */
 AjxStringUtil.wrap =
 function(origString, pixelWidth, className) {
@@ -704,6 +741,8 @@ AjxStringUtil.HTML_QUOTE_COLOR = "rgb(16, 16, 255)";
  * chunks of original text. That is so they may be separated when they are quoted.
  *
  * @param text		[string]		a message body
+ * 
+ * @private
  */
 AjxStringUtil.getTopLevel =
 function(text, eol, htmlMode) {
@@ -743,6 +782,8 @@ function(text, eol, htmlMode) {
  * @param lines		[array]			lines of text
  * @param i			[int]			index of current line
  * @param htmlMode	[boolean]*		if true, text is HTML
+ * 
+ * @private
  */
 AjxStringUtil._linesToSkip =
 function(lines, i, htmlMode) {
@@ -800,6 +841,8 @@ function(lines, i, htmlMode) {
  * @param lines		[array]			lines of text
  * @param i			[int]			index of current line
  * @param htmlMode	[boolean]*		if true, text is HTML
+ * 
+ * @private
  */
 AjxStringUtil._nextNonBlankLineIndex =
 function(lines, i, htmlMode) {
@@ -816,6 +859,8 @@ function(lines, i, htmlMode) {
  * @param split		[RegExp | string]	used to divide text into lines
  * @param eol		[string]			the eol sequence
  * @param htmlMode	[boolean]*			if true, text is HTML
+ * 
+ * @private
  */
 AjxStringUtil._trimBlankLines =
 function(text, split, eol, htmlMode) {
@@ -956,6 +1001,8 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt) {
  *
  * @param args		[hash]		name/value pairs to add to query string
  * @param qsReset	[boolean]	if true, start with empty query string
+ * 
+ * @private
  */
 AjxStringUtil.queryStringSet =
 function(args, qsReset) {
@@ -986,8 +1033,10 @@ function(args, qsReset) {
 /**
  * Removes the given arg from the query string.
  *
- * @param qs	[string]	a query string
- * @param name	[string]	arg name
+ * @param {String}	qs	a query string
+ * @param {String}	name	the arg name
+ * 
+ * @return	{String}	the resulting query string
  */
 AjxStringUtil.queryStringRemove =
 function(qs, name) {
@@ -1009,7 +1058,8 @@ function(qs, name) {
 /**
  * Returns the given object/primitive as a string.
  *
- * @param o		[object|primitive]		an object or primitive
+ * @param {primitive|Object}	o		an object or primitive
+ * @return	{String}	the string
  */
 AjxStringUtil.getAsString =
 function(o) {
@@ -1151,7 +1201,10 @@ function(sourceUri) {
 };
 
 /**
- *	Parse the query string (part after the "?") and return it as a hash of key/value pairs.
+ * Parse the query string (part after the "?") and return it as a hash of key/value pairs.
+ * 
+ * @param	{String}	sourceUri		the source query string
+ * @return	{Hash}	a hash of query string params
  */
 AjxStringUtil.parseQueryString =
 function(sourceUri) {
@@ -1187,6 +1240,8 @@ AjxStringUtil._CHARS = {
  * 		- no special conversion for Date objects
  * 
  * @param o		[object]	object to convert to string
+ * 
+ * @private
  */
 AjxStringUtil.objToString =
 function(o) {

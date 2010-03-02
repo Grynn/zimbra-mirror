@@ -17,16 +17,16 @@
  * @constructor
  * @class
  * This static class provides an interface for send requests to a server. It
- * essentially wraps <i>AjxRpcRequest</i>. <i>AjxRpc</i> maintainse a cache of
- * <i>AjxRpcRequest</i> objects which it attempts to reuse before allocating additional
- * objects. It also has a mechanism whereby if an <i>AjxRcpRequest</i> object is 
+ * essentially wraps {@link AjxRpcRequest}. This {@link AjxRpc} link maintains a cache of
+ * {@link AjxRpcRequest} objects which it attempts to reuse before allocating additional
+ * objects. It also has a mechanism whereby if an {@link AjxRpcRequest} object is 
  * in a "busy" state for a extended period of time, it will reap it appropriately.
  *
  * @author Ross Dargahi
  * @author Conrad Damon
  * 
  * @see AjxRpcRequest
-**/
+ */
 AjxRpc = function() {
 };
 
@@ -40,23 +40,21 @@ AjxRpc.__RPC_REAP_AGE	= 300000;	// mark any context older than this (in ms) as f
  * Submits a request to a URL. The request is handled through a pool of request
  * contexts (each a wrapped XmlHttpRequest). The context does the real work.
  *
- * @param {String} requestStr HTTP request string/document
- * @param {String} serverUrl request target 
- * @param {Array} requestHeaders Array of HTTP request headers (optional)
- * @param {AjxCallback} callback callback for asynchronous requests. This callback 
+ * @param {String} [requestStr] 	the HTTP request string/document
+ * @param {String} serverUrl 	the request target 
+ * @param {Array} [requestHeaders] an array of HTTP request headers
+ * @param {AjxCallback} callback 	the callback for asynchronous requests. This callback 
  * 		will be invoked when the requests completes. It will be passed the same
  * 		values as when this method is invoked synchronously (see the return values
  * 		below) with the exception that if the call times out (see timeout param 
  * 		below), then the object passed to the callback will be the same as in the 
  * 		error case with the exception that the status will be set to 
- * 		<code>AjxRpcRequest.TIMEDOUT</code>
- * @param {Boolean} useGet if true use get method, else use post. If ommitted
- * 		defaults to post
- * @param {Int} timeout Timeout (in milliseconds) after which the request is 
- * 		cancelled (optional)
+ * 		{@link AjxRpcRequest.TIMEDOUT}.
+ * @param {Boolean} [useGet=false] 		if <code>true</code>, use get method; otherwise, use post
+ * @param {int} [timeout] 		the timeout (in milliseconds) after which the request is canceled
  * 
- * @return If invoking in asynchronous mode, then it will return the id of the 
- * 		underlying <i>AjxRpcRequest</i> object. Else if invoked synchronously, if
+ * @return {Object}	if invoking in asynchronous mode, then it will return the id of the 
+ * 		underlying {@link AjxRpcRequest} object. Else if invoked synchronously, if
  * 		there is no error (i.e. we get a HTTP result code of 200 from the server),
  * 		an object with the following attributes is returned
  * 		<ul>
@@ -68,18 +66,15 @@ AjxRpc.__RPC_REAP_AGE	= 300000;	// mark any context older than this (in ms) as f
  * 		<ul>
  * 		<li>text - the string response text<li>
  * 		<li>xml - the string response xml </li>
- * 		<li>success - boolean set to false </li>
- * 		<li>status - http status</li>
+ * 		<li>success - boolean set to <code>false</code></li>
+ * 		<li>status - HTTP status</li>
  * 		</ul>
- * @type Object
  * 
- * @throws AjxException.NETWORK_ERROR, AjxException.UNKNOWN_ERROR
+ * @throws	{AjxException.NETWORK_ERROR}	a network error occurs
+ * @throws	{AjxException.UNKNOWN_ERROR}	an unknown error occurs
  * 
- * @see AjxRpcRequest#invoke
+ * @see	AjxRpcRequest.invoke
  * 
- * @requires AjxDebug
- * @requires AjxException
- * @requires AjxRpcRequest
  */
 AjxRpc.invoke =
 function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
@@ -113,6 +108,9 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 	return response;
 };
 
+/**
+ * @private
+ */
 AjxRpc.freeRpcCtxt =
 function(rpcCtxt) {
 	// we're done using this rpcCtxt. Add it back to the pool
@@ -131,6 +129,8 @@ function(rpcCtxt) {
  * @return The <i>AjxRpcRequest</i> object associated with <code>id</code> or null
  * 		if no object exists for the supplied id
  * @type AjxRpcRequest
+ * 
+ * @private
  */
 AjxRpc.getRpcRequestById = 
 function(id) {
@@ -139,6 +139,7 @@ function(id) {
 
 /**
  * Factory method for getting context objects.
+ * 
  * @private
  */
 AjxRpc.__getFreeRpcCtxt = 

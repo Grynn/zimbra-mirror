@@ -13,7 +13,13 @@
  * ***** END LICENSE BLOCK *****
  */
 
-// Don't directly instantiate SoapDoc, use one of the create factory methods instead
+/**
+ * Default constructor.
+ * @class
+ * Note: do not directly instantiate AjxSoapDoc. Use one of the <code>create</code> methods instead
+ * 
+ * @see		AjxSoapDoc.create
+ */
 AjxSoapDoc = function() {
 	this._soapURI = AjxSoapDoc._SOAP_URI;
 }
@@ -27,6 +33,15 @@ AjxSoapDoc._SOAP_URI = "http://www.w3.org/2003/05/soap-envelope";
 // AjxSoapDoc._SOAP_URI = "http://schemas.xmlsoap.org/soap/envelope/";
 AjxSoapDoc._XMLNS_URI = "http://www.w3.org/2000/xmlns";
 
+/**
+ * Creates a SOAP document.
+ * 
+ * @param	{String}	method		the soap method
+ * @param	{String}	namespace	the method namespace
+ * @param	{String}	[namespaceId]	the namespace id
+ * @param	{String}	[soapURI]	the SOAP uri
+ * @return	{AjxSoapDoc}		the document
+ */
 AjxSoapDoc.create =
 function(method, namespace, namespaceId, soapURI) {
 	var sd = new AjxSoapDoc();
@@ -57,6 +72,12 @@ function(method, namespace, namespaceId, soapURI) {
 	return sd;
 };
 
+/**
+ * Creates from a DOM object.
+ * 
+ * @param	{Object}	doc		the DOM object
+ * @return	{AjxSoapDoc}		the document
+ */
 AjxSoapDoc.createFromDom =
 function(doc) {
 	var sd = new AjxSoapDoc();
@@ -65,6 +86,12 @@ function(doc) {
 	return sd;
 };
 
+/**
+ * Creates from an XML object.
+ * 
+ * @param	{Object}	xml		the XML object
+ * @return	{AjxSoapDoc}		the document
+ */
 AjxSoapDoc.createFromXml =
 function(xml) {
 	var sd = new AjxSoapDoc();
@@ -96,31 +123,41 @@ function(name, value) {
 /**
  * Creates arguments to pass within the envelope.  "value" can be a JS object
  * or a scalar (string, number, etc.).
- *
+ * <p>
  * When "value" is a JS object, set() will call itself recursively in order to
  * create a complex data structure.  Don't pass a "way-too-complicated" object
  * ("value" should only contain references to simple JS objects, or better put,
  * hashes--don't include a reference to the "window" object as it will kill
  * your browser).
- *
+ * <p>
  * Example:
  *
+ * <pre>
  *    soapDoc.set("user_auth", {
  *       user_name : "foo",
  *       password  : "bar"
  *    });
- *
+ * </pre>
+ * 
  * will create an XML like this under the method tag:
  *
+ * <pre>
  *    <user_auth>
  *      <user_name>foo</user_name>
  *      <password>bar</password>
  *    </user_auth>
- *
+ * </pre>
+ * 
  * Of course, nesting other hashes is allowed and will work as expected.
- *
+ * <p>
  * NOTE: you can pass null for "name", in which case "value" is expected to be
  * an object whose properties will be created directly under the method el.
+ * 
+ * @param	{String}	name	the name
+ * @param	{Hash}	value		the attribute name/value pairs
+ * @param	{String}	[parent]	the parent element to append to
+ * @param	{String}	[namespace]	the namespace
+ * @return	{Element}	the node element
  */
 AjxSoapDoc.prototype.set =
 function(name, value, parent, namespace) {
@@ -158,11 +195,21 @@ function(name, value, parent, namespace) {
 	return parent.appendChild(p);
 };
 
+/**
+ * Gets the method.
+ * 
+ * @return	{String}	the method
+ */
 AjxSoapDoc.prototype.getMethod =
 function() {
 	return this._methodEl;
 };
 
+/**
+ * Creates a header element.
+ * 
+ * @return	{Element}	the header element
+ */
 AjxSoapDoc.prototype.createHeaderElement =
 function() {
 	var d = this._xmlDoc.getDoc();
@@ -177,6 +224,11 @@ function() {
 	return header;
 };
 
+/**
+ * Gets the header.
+ * 
+ * @return	{Element}	the header or <code>null</code> if not created
+ */
 AjxSoapDoc.prototype.getHeader =
 function() {
 	// would love to use getElementsByTagNameNS, but IE does not support it
@@ -188,6 +240,11 @@ function() {
 	return nodeList ? nodeList[0] : null;
 };
 
+/**
+ * Gets the body.
+ * 
+ * @return	{Element}	the body element
+ */
 AjxSoapDoc.prototype.getBody =
 function() {
 	// would love to use getElementsByTagNameNS, but IE does not support it
@@ -217,6 +274,11 @@ function() {
 	return (this.getHeader() || this.createHeaderElement());
 };
 
+/**
+ * Gets the document.
+ * 
+ * @return	{Document}	the document
+ */
 AjxSoapDoc.prototype.getDoc =
 function() {
 	return this._xmlDoc.getDoc();
@@ -224,6 +286,9 @@ function() {
 
 /**
  * Adopts a node from another document to this document.
+ * 
+ * @param	{Element}	node		the node
+ * @private
  */
 AjxSoapDoc.prototype.adoptNode =
 function(node) {
@@ -243,6 +308,11 @@ function(node) {
 	return node.parentNode.removeChild(node);
 };
 
+/**
+ * Gets the XML.
+ * 
+ * @return	{String}	the XML
+ */
 AjxSoapDoc.prototype.getXml =
 function() {
 	return AjxEnv.isSafari || AjxEnv.isOpera
