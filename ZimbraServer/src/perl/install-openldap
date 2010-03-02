@@ -28,10 +28,10 @@ my %BINARIES = (
                 "bdb" => "4.7.25.4",
                 "curl" => "7.19.7",
                 "cyrus-sasl" => "2.1.23.3z",
-                "heimdal" => "1.2.1",
-                "libtool" => "2.2.6a",
-                "openldap" => "2.4.20.4z",
-                "openldap-libs" => "2.4.20.4z",
+                "heimdal" => "1.3.1",
+                "libtool" => "2.2.6b",
+                "openldap" => "2.4.21.3z",
+                "openldap-libs" => "2.4.21.3z",
                 "openssl" => "0.9.8l",
                 "tcmalloc" => "1.4"
                );
