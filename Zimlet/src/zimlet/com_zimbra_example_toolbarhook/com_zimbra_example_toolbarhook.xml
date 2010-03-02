@@ -1,0 +1,4 @@
+<zimlet name="com_zimbra_example_toolbarhook" version="1.0" description="An example zimlet that adds a button to the Compose toolbar.">
+    <include>com_zimbra_example_toolbarhook.js</include>
+    <handlerObject>com_zimbra_example_toolbarhook_HandlerObject</handlerObject>
+</zimlet>
