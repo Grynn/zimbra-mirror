@@ -1,4 +1,4 @@
---- openldap-2.4.21/servers/slapd/daemon.c	13 Nov 2009 22:48:51 -0000	1.442
+--- openldap-2.4.21/servers/slapd/daemon.c.orig	13 Nov 2009 22:48:51 -0000	1.442
 +++ openldap-2.4.21/servers/slapd/daemon.c	30 Dec 2009 19:33:27 -0000	1.443
 @@ -1720,9 +1720,12 @@ close_listeners(
  
