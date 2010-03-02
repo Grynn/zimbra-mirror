@@ -491,16 +491,20 @@ function() {
 //-------------------------------------------------------------------------------------------
 Com_Zimbra_SForce.prototype.onMsgView =
 function(msg) {
+	this._initializeSalesForceForThisMsg(msg);
+	if(this.user && this.user != "" && this.passwd && this.passwd != "") {
+		this.noteDropped(msg, true);
+	}	
+};		
+
+Com_Zimbra_SForce.prototype._initializeSalesForceForThisMsg =
+function(msg) {
 	this._currentSelectedMsg = msg;
 	this.sforce_bar_expanded = false;
 	this._recordsForCurrentMail = [];
 	this._emailsInSalesforce = [];
 	this.sforce_bar_recordsForThisMsgParsed = false;
 
-	this._emailsForCurrentNote = this._getValidAddressesForCurrentNote(msg);
-	if(this._emailsForCurrentNote.length == 0){
-		return;
-	}
 	if(!this.loadLoginInfo) {
 		this.user = this.getUserProperty("user");
 		this.passwd = this.getUserProperty("passwd");
@@ -509,11 +513,9 @@ function(msg) {
 		this.sforce_logindlg_showSendAndAddBtn = this.getUserProperty("sforce_logindlg_showSendAndAddBtn") == "true";
 		this.loadLoginInfo = true;
 	}
-	if(this.user && this.user != "" && this.passwd && this.passwd != "") {
-		this.noteDropped(msg, true);
-	}	
-};		
 
+	this._emailsForCurrentNote = this._getValidAddressesForCurrentNote(msg);
+};
 
 Com_Zimbra_SForce.prototype._addSForceBar =
 function(records) {
@@ -898,13 +900,21 @@ function() {
 		this._emailsInSalesforce.push({email:email, name:name});
 
 		var phone = c.Phone ? c.Phone.toString() : "";
+		var accountName =  c.Account ? (c.Account.Name? c.Account.Name.toString() : "") : "";
+		var editLinksHtml = "";
+		if(accountName != "") {
+			var accId = c.Account ? (c.Account.Id? c.Account.Id.toString() : "") : "";
+			if(accId != "") {
+				 editLinksHtml = this._getSFViewEditLinks(accId);
+			}
+		}
 		html[i++] = "<br/>";
 		html[i++] = "<DIV  class='SForce_lightyellow' style='width:94%; position:relative; left:3%;'>";
 		html[i++] = ["<div class='overviewHeader' style='font-weight:bold;font-size:14px;padding-left:10px' width=100%>Contact: ",name,"<span style='font-size:11px;font-weight:normal'>",this._getSFViewEditLinks(c.Id.toString()),"</span></div>"].join("");
 		html[i++] = "<div  style='font-weight:bold;padding-left:10px' width=100%>";
 		html[i++] = "<table  class='SForce_listView'  cellpadding=2 cellspacing=0 border=0 width=100%>";
 		html[i++] = "<tr align=left><th width=35%>Account</th><th width=width=35%>Email</th><th width=15%>Phone</th><th>Action</th></tr>";
-		html[i++] = ["<tr><td  width=35%>",c.Account.Name.toString(),"</td><td  width=35%>",email,"</td><td width=15%>",phone,"</td><td>", this._getSFViewEditLinks(c.Account.Id.toString()), "</td></tr>"].join("");
+		html[i++] = ["<tr><td  width=35%>",accountName,"</td><td  width=35%>",email,"</td><td width=15%>",phone,"</td><td>",editLinksHtml, "</td></tr>"].join("");
 		html[i++] = "</table>";
 		html[i++] = "</div>";
 		html[i++] = "<br/>";
@@ -921,9 +931,17 @@ function() {
 				html[i++] = "<tr align=left><th width=30%>Case Number</th><th width=30%>Subject</th><th width=15%>Status</th><th>Action</th></tr>";
 				for(var j=0; j < records.length; j++) {
 					var rec = records[j];
-					html[i++] = ["<tr><td  width=35%>",rec.CaseNumber.toString(),"</td>"].join("");
-					html[i++] = ["<td  width=35%>",rec.Subject.toString(),"</td>"].join("");
-					html[i++] = ["<td width=15%>",rec.Status.toString(),"</td><td>", this._getSFViewEditLinks(rec.Id.toString()), "</td></tr>"].join("");
+					var caseNumber = rec.CaseNumber ? rec.CaseNumber.toString() : "";
+					var subject = rec.Subject ? rec.Subject.toString() : "";
+					var status = rec.Status ? rec.Status.toString() : "";
+					var id = rec.Id ? rec.Id.toString() : "";
+					var editLinksHtml = "";
+					if(id != "") {
+						editLinksHtml = this._getSFViewEditLinks(id);
+					}
+					html[i++] = ["<tr><td  width=35%>",caseNumber,"</td>"].join("");
+					html[i++] = ["<td  width=35%>",subject,"</td>"].join("");
+					html[i++] = ["<td width=15%>",status,"</td><td>", editLinksHtml, "</td></tr>"].join("");
 				}
 				html[i++] = "</table>";
 				html[i++] = "</div>";
@@ -944,12 +962,18 @@ function() {
 				html[i++] = "<tr align=left><th width=35%>Name</th><th width=35%>Role</th><th width=15%>Action</th></tr>";
 				for(var j=0; j < records.length; j++) {
 					var rec = records[j];
-					html[i++] = ["<tr><td width=35%>",rec.Opportunity.Name.toString(),"</td>"].join("");
+					var oppName = rec.Opportunity ? (rec.Opportunity.Name ? rec.Opportunity.Name.toString() : "") : "";
+					html[i++] = ["<tr><td width=35%>",oppName,"</td>"].join("");
 					var role = "";
 					if(rec.Role){
 						role = rec.Role.toString();
 					}
-					html[i++] = ["<td width=35%>",role,"</td><td width=15%>", this._getSFViewEditLinks(rec.Id.toString()), "</td></tr>"].join("");
+					var id = rec.Id ? rec.Id.toString() : "";
+					var editLinksHtml = "";
+					if(id != "") {
+						editLinksHtml = this._getSFViewEditLinks(id);
+					}
+					html[i++] = ["<td width=35%>",role,"</td><td width=15%>", editLinksHtml, "</td></tr>"].join("");
 				}
 				html[i++] = "</table>";
 				html[i++] = "</div>";
@@ -1154,77 +1178,33 @@ function(colName, ConProps) {
 //Notes dropped... (START)
 //--------------------------------------------------------------------------------------------------------
 Com_Zimbra_SForce.prototype.noteDropped = function(note, showInBar) {
-	//stores checkboxId and salesforce obj type _dwtIdAndObjType["DWT124"] = "A" or "O" or "C"
-	this._dwtIdAndObjType = [];
-
-	if (!note)
+	if (!note) {
 		return;
-
+	}
+	if(showInBar == undefined) {
+		showInBar = false;
+	}
+	if(!showInBar) {
+		this._showNotesDlg(note);
+	}
 
 	if(!this._emailsForCurrentNote) {
 		this._emailsForCurrentNote = this._getValidAddressesForCurrentNote(note);
 	} 
 	if(this._emailsForCurrentNote.length == 0) {
-		return;
-	}
-
-	var q = ["Select c.Id,c.Name,c.Email,c.Phone,c.OtherPhone,c.Title,c.MailingStreet,c.MailingCity, c.MailingState,c.MailingCountry,c.MailingPostalCode,c.Account.name,c.Account.Id,",
+		if(!showInBar) {
+			this._handleAddNotesRecords(showInBar, this, []);
+		}
+	} else {
+		var q = ["Select c.Id,c.Name,c.Email,c.Phone,c.OtherPhone,c.Title,c.MailingStreet,c.MailingCity, c.MailingState,c.MailingCountry,c.MailingPostalCode,c.Account.name,c.Account.Id,",
 			"(select id,role,opportunity.name,Opportunity.Id from opportunitycontactroles where opportunity.stagename !='Closed Won' AND opportunity.stagename != 'Closed Lost'   limit 5),",
 			"(select id,subject,caseNumber,Status from Cases Where Status !='Closed' limit 5)",
 				//"(Select id,subject from ActivityHistories) ",
 			" from contact c where Email='", this._emailsForCurrentNote.join("' or Email='"), "'"].join("");
 	
-	if(!showInBar) {
-		this._showNotesDlg(note);
-	}
-	var callback = new AjxCallback(this, this._handleAddNotesRecords, [showInBar]);
-	this.query(q, 10, callback);
-	
-
-	function $search_acct(records) {
-		// Split Opportunities and Contacts into Account groups
-		var acctsSorted = {};
-		var a = Com_Zimbra_SForce._RECENT.Accounts;
-		for (var i = 0; i < a.length; ++i) {
-			acctsSorted[a[i].Id] = a[i];
-			acctsSorted[a[i].Id].TYPE = "A";
-			acctsSorted[a[i].Id].Con = [];
-			acctsSorted[a[i].Id].Opp = [];
-		}
-		var c = Com_Zimbra_SForce._RECENT.Contacts;
-		this.contactsIdAndAccountObjMap = [];
-		for (var i = 0; i < c.length; ++i) {
-			c[i].TYPE = "C";
-			var accountId = c[i].AccountId;
-			if (acctsSorted[c[i].AccountId]) {
-				acctsSorted[c[i].AccountId].Con.push(c[i]);
-				//also map account to contactId so we can create associations based on # of contacts
-				this.contactsIdAndAccountObjMap[c[i].Id.toString()] = acctsSorted[c[i].AccountId];
-			}
-		}
-
-		//Get the list of ids for all contacts to which we user has actually sent this email to.
-		this._sentContactsMappedIds = [];
-		var c = Com_Zimbra_SForce._RECENT.Contacts;
-		for (var i = 0; i < c.length; ++i) {
-			var reqC = c[i].Email.__msh_content;
-			for (var j = 0; j < this._emailsForCurrentNote.length; j++) {
-				var currC = this._emailsForCurrentNote[j];
-				if (currC.toLowerCase() == reqC.toLowerCase()) {
-					this._sentContactsMappedIds.push(c[i].Id.__msh_content);
-				}
-			}
-		}
-
-		var o = records;
-		for (var i = 0; i < o.length; ++i) {
-			o[i].TYPE = "O";
-			acctsSorted[o[i].AccountId].Opp.push(o[i]);
-		}
-		this._setRecordsToNotesDlg(acctsSorted);
-		this._addLookupButtons();
-		this._resetAssociationRows();
-	}
+		var callback = new AjxCallback(this, this._handleAddNotesRecords, [showInBar]);
+		this.query(q, 10, callback);
+	}	
 };
 
 Com_Zimbra_SForce.prototype._getValidAddressesForCurrentNote =
@@ -1899,7 +1879,11 @@ Com_Zimbra_SForce.prototype._initComposeSFToolbar = function(toolbar, controller
 Com_Zimbra_SForce.prototype._sendAddSForce = function(ev) {
 	var msg = this._composeView.getMsg();
 	this._send();
-	this._sforce.noteDropped(msg);
+	this._sforce._initializeSalesForceForThisMsg(msg);
+	if(this._sforce.user && this._sforce.user != "" && this._sforce.passwd && this._sforce.passwd != "") {
+		this._sforce.noteDropped(msg);
+	}	
+	//this._sforce.noteDropped(msg);
 };
 //--------------------------------------------------------------------------------------------------------
 // Toolbar related..(END)
