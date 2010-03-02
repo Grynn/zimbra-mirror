@@ -1,4 +1,4 @@
---- openldap-2.4.21/servers/slapd/syncrepl.c	2009/12/08 23:04:58	1.500
+--- openldap-2.4.21/servers/slapd/syncrepl.c.orig	2009/12/08 23:04:58	1.500
 +++ openldap-2.4.21/servers/slapd/syncrepl.c	2010/03/02 20:45:25	1.501
 @@ -1559,10 +1559,11 @@ static slap_verbmasks modops[] = {
  	{ BER_BVNULL, 0 }

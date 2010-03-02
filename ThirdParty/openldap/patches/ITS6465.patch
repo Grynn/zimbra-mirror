@@ -1,4 +1,4 @@
---- openldap-2.4.21/servers/slapd/config.c	2009/12/18 18:07:16	1.512
+--- openldap-2.4.21/servers/slapd/config.c.orig	2009/12/18 18:07:16	1.512
 +++ openldap-2.4.21/servers/slapd/config.c	2010/02/02 13:43:21	1.513
 @@ -1545,23 +1545,31 @@ slap_cf_aux_table_unparse( void *src, st
  			break;
