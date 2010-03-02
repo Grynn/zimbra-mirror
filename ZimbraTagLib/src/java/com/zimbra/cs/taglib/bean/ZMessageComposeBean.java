@@ -790,7 +790,7 @@ public class ZMessageComposeBean {
             if (getContentType() != null) {isText = getContentType().equals("text/plain");} 
         }
 
-        if(isText){
+        if(isText && (zsignature.getType().equals("text/html"))){
            signature = BeanUtils.htmlDecode(signature);
         }
         if (signatureTop && signature != null && signature.length() > 0)

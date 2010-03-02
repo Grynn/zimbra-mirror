@@ -205,7 +205,12 @@ public class BeanUtils {
 
     public static String htmlDecode(String text) {
         if (text == null || text.length() == 0) return "";
-        return replaceAll(text, sHTMLDECODE, "");
+        String s = replaceAll(text, "<br>", "\n");
+        s = replaceAll(s, sHTMLDECODE, "");
+        s = replaceAll(s, "&amp;", "&");
+        s = replaceAll(s,"&lt;","<");
+        s = replaceAll(s,"&gt;",">");
+        return s;
     }
 
     public static String encodeHtmlAttr(String text) {
