@@ -57,13 +57,6 @@ function () {
 	this._toolbarOperations[ZaOperation.DOWNLOAD_GLOBAL_CONFIG] = new ZaOperation(ZaOperation.DOWNLOAD_GLOBAL_CONFIG, ZaMsg.TBB_DownloadConfig, ZaMsg.GLOBTBB_DownloadConfig_tt, "DownloadGlobalConfig", "DownloadGlobalConfig", new AjxListener(this, this.downloadConfigButtonListener));
 	this._toolbarOrder.push(ZaOperation.SAVE);
 	this._toolbarOrder.push(ZaOperation.DOWNLOAD_GLOBAL_CONFIG);
-
-	if (ZaOperation.UPDATELICENSE) {
-		this._toolbarOperations[ZaOperation.UPDATELICENSE] = new ZaOperation(ZaOperation.UPDATELICENSE, ZaMsg.TBB_UpdateLicense, ZaMsg.ALTBB_UpdateLicense_tt, "UpdateLicense", "UpdateLicense",
-			new AjxListener(this, this.updateLicenseButtonListener));
-		this._toolbarOrder.push(ZaOperation.UPDATELICENSE);			
-	}
-	
 }
 ZaController.initToolbarMethods["ZaGlobalConfigViewController"].push(ZaGlobalConfigViewController.initToolbarMethod);
 
