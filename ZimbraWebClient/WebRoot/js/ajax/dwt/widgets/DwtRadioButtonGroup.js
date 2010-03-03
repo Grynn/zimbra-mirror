@@ -147,6 +147,15 @@ function() {
 	return this.getSelectedValue();
 };
 
+DwtRadioButtonGroup.prototype.getData =
+function(key) {
+	var selectedRadio = !AjxUtil.isUndefined(this._selectedId) && this._radioButtons[this._selectedId];
+	if (selectedRadio) {
+		return selectedRadio.getData(key);
+	}
+	// return undefined;
+}
+
 //
 // Protected methods
 //
@@ -155,6 +164,12 @@ DwtRadioButtonGroup.prototype._valueToId =
 function(value) {
 	for (var id in this._values) {
 		if (this._values[id] == value) {
+			return id;
+		}
+		if (value === true && this._values[id] == "true") {
+			return id;
+		}
+		if (value === false && (this._values[id] == "false" || this._values[id] == "")) {
 			return id;
 		}
 	}
