@@ -1,0 +1,25 @@
+table.emailTemplates_table input[type="text"]{
+	border-color:#3A73AB;
+	border-width:1;
+	border-style:solid;
+	width:200px;
+	height:20px;
+	padding:2px 4px;
+}
+
+.emailTemplates_yellow {
+    background: #FFFFCC;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+	font-size:12px;
+	font-weight:bold;
+	font-style:arial;
+}
+
+.emailTemplates_yellowNormal {
+    background: #FFFFCC;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+	font-size:12px;
+	font-style:arial;
+}
