@@ -174,16 +174,16 @@ DBFILE_PERL_LIBS := \
 BDB_PERL_LIBS := \
 	BerkeleyDB-0.41
 
-SA_PERL_LIBS = \
+SA_PERL_LIBS := \
 	Mail-SpamAssassin-$(SA_VERSION)
 
-SWATCH = \
+SWATCH := \
 	swatch-3.2.3
 
-LDAPAPI = \
+LDAPAPI := \
 	Net-LDAPapi-3.0.3
 
-XML_PARSER = \
+XML_PARSER := \
 	XML-Parser-2.36
 
 PERL_MM_USE_DEFAULT	:= 1
@@ -191,7 +191,7 @@ export PERL_MM_USE_DEFAULT
 
 # TARGETS
 
-CLEAN_TARGETS	=	\
+CLEAN_TARGETS	:=	\
 		$(TMPDIR) \
 		$(DEST_DIR) \
 		$(PERL_TGZ_DEST) \
