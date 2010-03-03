@@ -1,0 +1,10 @@
+--- curl-7.19.7/lib/mk-ca-bundle.pl.orig	2010-03-02 17:47:44.000000000 -0800
++++ curl-7.19.7/lib/mk-ca-bundle.pl	2010-03-02 17:48:01.000000000 -0800
+@@ -79,6 +79,7 @@
+ if (!$opt_n || !-e $txt) {
+   print "Downloading '$txt' ...\n" if (!$opt_q);
+   my $ua  = new LWP::UserAgent(agent => "$0/$version");
++  $ua->env_proxy();
+   my $req = new HTTP::Request('GET', $url);
+   my $res = $ua->request($req);
+   if ($res->is_success) {
