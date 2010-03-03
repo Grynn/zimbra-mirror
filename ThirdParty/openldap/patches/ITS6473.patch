@@ -10,7 +10,7 @@
  	syncinfo_t *si,
 -	struct berval *vals
 +	struct berval *vals,
-+	struct Modifications **modres
++	Modifications **modres
  )
  {
  	char *colon;
@@ -53,7 +53,7 @@
  	syncinfo_t *si,
 -	struct berval *vals
 +	struct berval *vals,
-+	struct Modifications **modres
++	Modifications **modres
  )
  {
 -	return NULL;	/* FIXME */
