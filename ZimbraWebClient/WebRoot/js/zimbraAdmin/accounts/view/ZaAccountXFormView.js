@@ -809,6 +809,9 @@ ZaAccountXFormView.isAccountTypeSet = function () {
 }
 
 ZaAccountXFormView.CONTACT_TAB_ATTRS = [ZaAccount.A_telephoneNumber,
+        ZaAccount.A_homePhone,
+        ZaAccount.A_mobile,
+        ZaAccount.A_pager ,
 		ZaAccount.A_company, 
 		ZaAccount.A_street, 
 		ZaAccount.A_city, 
@@ -1370,7 +1373,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 					items: [
 						{type:_ZAGROUP_, 
 							items:[
-								{ref:ZaAccount.A_telephoneNumber, type:_TEXTFIELD_, msgName:ZaMsg.NAD_telephoneNumber,label:ZaMsg.NAD_telephoneNumber, labelLocation:_LEFT_, width:250}
+								{ref:ZaAccount.A_telephoneNumber, type:_TEXTFIELD_, msgName:ZaMsg.NAD_telephoneNumber,label:ZaMsg.NAD_telephoneNumber, labelLocation:_LEFT_, width:250} ,
+                                {ref:ZaAccount.A_homePhone, type:_TEXTFIELD_, msgName:ZaMsg.NAD_homePhone,label:ZaMsg.NAD_homePhone, labelLocation:_LEFT_, width:250} ,
+                                {ref:ZaAccount.A_mobile, type:_TEXTFIELD_, msgName:ZaMsg.NAD_mobile,label:ZaMsg.NAD_mobile, labelLocation:_LEFT_, width:250} ,
+                                {ref:ZaAccount.A_pager, type:_TEXTFIELD_, msgName:ZaMsg.NAD_pager,label:ZaMsg.NAD_pager, labelLocation:_LEFT_, width:250}
 							]
 						},
 						{type:_ZAGROUP_, 

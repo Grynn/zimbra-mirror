@@ -49,6 +49,9 @@ ZaAccount.A_mail = "mail";
 ZaAccount.A_password = "password";
 ZaAccount.A_description = "description";
 ZaAccount.A_telephoneNumber = "telephoneNumber";
+ZaAccount.A_homePhone = "homePhone" ;
+ZaAccount.A_mobile = "mobile";
+ZaAccount.A_pager = "pager" ;
 ZaAccount.A_displayname = "displayName";
 ZaAccount.A_country = "co"; //country
 ZaAccount.A_company = "company";
@@ -1534,6 +1537,9 @@ ZaAccount.myXModel = {
             listItem:{type:_STRING_}
         },    */
         {id:ZaAccount.A_telephoneNumber, type:_STRING_, ref:"attrs/"+ZaAccount.A_telephoneNumber},
+        {id:ZaAccount.A_mobile, type:_STRING_, ref:"attrs/"+ZaAccount.A_mobile},
+        {id:ZaAccount.A_pager, type:_STRING_, ref:"attrs/"+ZaAccount.A_pager},
+        {id:ZaAccount.A_homePhone, type:_STRING_, ref:"attrs/"+ZaAccount.A_homePhone},
         {id:ZaAccount.A_displayname, type:_STRING_, ref:"attrs/"+ZaAccount.A_displayname},
         {id:ZaAccount.A_country, type:_STRING_, ref:"attrs/"+ZaAccount.A_country},
         {id:ZaAccount.A_company, type:_STRING_, ref:"attrs/"+ZaAccount.A_company},
