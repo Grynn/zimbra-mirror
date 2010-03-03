@@ -1,0 +1,29 @@
+--- curl-7.20.0/configure.orig	2010-03-03 09:27:27.000000000 -0800
++++ curl-7.20.0/configure	2010-03-03 09:42:25.000000000 -0800
+@@ -18864,7 +18864,7 @@
+ 
+ else
+ 
+-            for ac_header in gssapi/gssapi.h gssapi/gssapi_generic.h gssapi/gssapi_krb5.h
++            for ac_header in gssapi/gssapi.h gssapi/gssapi_krb5.h
+ do :
+   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+@@ -18900,7 +18900,7 @@
+ 
+       else
+ 
+-$as_echo "#define HAVE_GSSMIT 1" >>confdefs.h
++$as_echo "#define HAVE_GSSHEIMDAL 1" >>confdefs.h
+ 
+                 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if gssapi headers declare GSS_C_NT_HOSTBASED_SERVICE" >&5
+ $as_echo_n "checking if gssapi headers declare GSS_C_NT_HOSTBASED_SERVICE... " >&6; }
+@@ -18936,7 +18936,7 @@
+           { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+ $as_echo "no" >&6; }
+ 
+-$as_echo "#define HAVE_OLD_GSSMIT 1" >>confdefs.h
++$as_echo "#undef HAVE_OLD_GSSMIT" >>confdefs.h
+ 
+ 
+ fi
