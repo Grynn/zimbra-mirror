@@ -85,9 +85,7 @@
 
 	<!-- offline must be able to run from a path with spaces. here we have default dev installation -->
 	<!-- path contain space characters so that if this is broken, we can catch it right away.       -->
-	<condition property="zimbra.home.dir" value="/opt/zimbra/zdesktop" else="/opt/zimbra/zdesktop dev">
-		<isset property="is-windows"/>
-	</condition>
+	<property name="zimbra.home.dir" value="/opt/zimbra/zdesktop dev"/>
 
 	<property name="zimbra.offline.app.dir" location="${zimbra.home.dir}/app" />
 	<property name="zimbra.offline.data.dir" location="${zimbra.home.dir}/data" />
