@@ -169,10 +169,11 @@ function(insertMode) {
 //--------------------------------------------------------------------------------------------------
 
 com_zimbra_emailtemplates.prototype._testTemplateContentForKeys = function(params) {
-	var regex = new RegExp("\\breplace__[a-z0-9A-Z]*", "ig");
+	//var regex = new RegExp("\\breplace__[a-z0-9A-Z]*", "ig");
+	var regex = new RegExp("\\$\\{[-a-zA-Z._0-9]+\\}", "ig");
+	
 	var templateBody = params.templateBody;
 	var templateSubject = params.templateSubject;
-
 	var bodyArry = templateBody.match(regex);
 	var subjectArry;
 	if (templateSubject) {
@@ -215,7 +216,7 @@ function(params) {
 	}
 	var tmpArry = [];
 	for (var j = 0; j < dataArry.length; j++) {
-		tmpArry.push(AjxStringUtil.trim(dataArry[j].toLowerCase()));
+		tmpArry.push(AjxStringUtil.trim(dataArry[j]));
 	}
 	dataArry = emailtemplates_unique(tmpArry);
 	this._replaceFieldIdsMap = [];
@@ -242,6 +243,7 @@ function(params) {
 	for (var i = 0; i < this._replaceFieldIdsMap.length; i++) {
 		var obj = this._replaceFieldIdsMap[i];
 		var key = obj.key;
+		key = key.replace(/\$\{/,"\\$\\{").replace(/\}$/, "\\}");
 		var regEx = new RegExp(key, "ig");
 		var val = document.getElementById(obj.id).value;
 		if (val == "") {
@@ -378,12 +380,16 @@ function() {
 	var i = 0;
 	html[i++] = "<TABLE cellspacing=3 cellpadding=3>";
 	html[i++] = ["<TR><TD><DIV style='font-weight:bold;'>Template Folder's path:</div></TD><TD><DIV style='color:blue;font-weight:bold;' id='emailtemplates_folderInfo'>",str,"</div></TD></TR>"].join("");
-	html[i++] = "<TR><TD colspan=2 align='center'><DIV id='emailtemplates_folderLookupDiv'></DIV></TD></TR></TABLE>";
+	html[i++] = "<TR><TD colspan=2><DIV id='emailtemplates_folderLookupDiv'></DIV></TD></TR></TABLE>";
 
-	html[i++] = "<br/><br/><div class='emailTemplates_yellow'>Template Creation Tips: </div><div  class='emailTemplates_yellowNormal'><br/>1. You can use replace__<somename> to create generic words <br/> and Zimlet will alert you to replace them";
-	html[i++] = "<br/>For example: You can have  <strong>hi replace__firstName</strong> in the body or in the subject";
-	html[i++] = "<br/>2.  replace__ is word replace followed by <strong>two underscores</strong>";
-	html[i++] = "<br/>3. Do not use signatures in templates as you would already have it in mail you are composing</div><BR/>";
+	html[i++] = "<br/><div class='emailTemplates_yellow'>Generic Names </div><div  class='emailTemplates_yellowNormal'>";
+	html[i++] = "<br/>You can use generic names technique to replace common words. Just before inserting the template <br/>Zimlet will alert you to replace them";
+	html[i++] = "<br/> For example: You could have <strong>hi ${firstName}</strong> in the body or in the subject";
+	html[i++] = "<br/><br/><strong>Generic Name Rules:</strong><br/>1. The name of the generic word <strong>can only contain</strong> letters, numbers and underscore ";
+	html[i++] = "<br/>For example: <strong>${firstName}</strong>, <strong>${first123}</strong> or  <strong>${First_Name}</strong>";
+	html[i++] = "<br/>2.The generic names are <strong>case sensitive</strong>."; 
+	html[i++] = "<br/>For example:<strong>${firstName}</strong> and <strong>${FIRSTNAME}</strong> are considered different";
+
 	return html.join("");
 };
 

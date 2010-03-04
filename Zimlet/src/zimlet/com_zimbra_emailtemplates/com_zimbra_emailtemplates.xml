@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_emailtemplates" version="0.1" description="Allows users to insert Email Templates">
+<zimlet name="com_zimbra_emailtemplates" version="0.2" description="Allows users to insert Email Templates">
   <include>emailtemplates.js</include>
 	<includeCSS>emailtemplates.css</includeCSS>
   <handlerObject>com_zimbra_emailtemplates</handlerObject>

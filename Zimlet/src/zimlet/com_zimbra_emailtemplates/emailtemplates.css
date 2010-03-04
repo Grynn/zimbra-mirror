@@ -14,12 +14,14 @@ table.emailTemplates_table input[type="text"]{
 	font-size:12px;
 	font-weight:bold;
 	font-style:arial;
+	padding:4px;
 }
 
 .emailTemplates_yellowNormal {
     background: #FFFFCC;
     border-bottom: 1px solid #6E6E6E;
     border-right: 1px solid #6E6E6E;
-	font-size:12px;
-	font-style:arial;
+	font-size:14px;
+	padding:4px;
+	font-family:"times New Roman";
 }
