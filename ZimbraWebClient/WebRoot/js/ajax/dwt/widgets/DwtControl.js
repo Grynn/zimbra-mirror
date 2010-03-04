@@ -2562,7 +2562,9 @@ function(ev) {
 	if (!obj) { return false; }
 
 	ev = DwtUiEvent.getEvent(ev);
-	if (ev.button == DwtMouseEvent.LEFT) {
+	var mouseEv = DwtShell.mouseEvent;
+	mouseEv.setFromDhtmlEvent(ev, obj);
+	if (mouseEv.button == DwtMouseEvent.LEFT) {
 		obj._focusByMouseDownEvent(ev);
 	}
 
@@ -2574,8 +2576,6 @@ function(ev) {
 	}
 
 	// If we have a dragSource, then we need to start capturing mouse events
-	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev, obj);
 	if (obj._dragSource && (mouseEv.button == DwtMouseEvent.LEFT) && obj._isValidDragObject(mouseEv))	{
 		try {
 			obj._ctrlCaptureObj.capture();
