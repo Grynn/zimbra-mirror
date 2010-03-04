@@ -1,7 +1,7 @@
 /** Called automatically by JsDoc Toolkit. */
 function publish(symbolSet) {
 	publish.conf = {  // trailing slash expected for dirs
-		ext:         ".html",
+		ext:         ".json",
 		outDir:      JSDOC.opt.d || SYS.pwd+"../out/jsdoc/",
 		templatesDir: JSDOC.opt.t || SYS.pwd+"../templates/jsdoc/",
 		symbolsDir:  "symbols/",
