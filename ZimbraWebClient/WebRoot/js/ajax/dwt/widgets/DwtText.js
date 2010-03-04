@@ -54,7 +54,9 @@ function(text) {
 		 this._textNode = document.createTextNode(text);
 		 this.getHtmlElement().appendChild(this._textNode);
 	} else {
-		this._textNode.data = text;
+		try { // IE mysteriously throws an error sometimes, but still does the right thing
+			this._textNode.data = text;
+		} catch (e) {}
 	}
 };
 
