@@ -345,7 +345,7 @@ function(obj, span, context) {
 	}
 
 	var contactsApp = appCtxt.getApp(ZmApp.CONTACTS);
-	var contact = contactsApp && contactsApp.getContactByEmail(obj.address);
+	var contact = contactsApp && contactsApp.getContactByEmail(addr);
 	if (contact) {
 		// contact for this address was found in the cache
 		ZmOperation.setOperation(actionMenu, "NEWCONTACT", ZmOperation.EDIT_CONTACT);
