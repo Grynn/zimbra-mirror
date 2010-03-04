@@ -766,7 +766,7 @@ function(actioned) {
 
 		if (!this._itemDiv) { return; }
 
-		if (actioned && (this._actionEnabled || this._forceNotifyAction) && !this._selected && !this /*&& this._origClassName == "DwtTreeItem"*/) {
+		if (actioned && (this._actionEnabled || this._forceNotifyAction) && !this._selected) {
 			this._itemDiv.className = this._actionedClassName;
 			return true;
 		}

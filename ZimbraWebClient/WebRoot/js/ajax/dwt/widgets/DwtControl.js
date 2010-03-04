@@ -2562,7 +2562,9 @@ function(ev) {
 	if (!obj) { return false; }
 
 	ev = DwtUiEvent.getEvent(ev);
-	obj._focusByMouseDownEvent(ev);
+	if (ev.button == DwtMouseEvent.LEFT) {
+		obj._focusByMouseDownEvent(ev);
+	}
 
 	if (obj.__hasToolTipContent()) {
 		var shell = DwtShell.getShell(window);
@@ -2754,14 +2756,11 @@ function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev, captureObj ? true : obj);
 	if (!obj._dragSource || !captureObj) {
-		//obj._focusByMouseUpEvent(ev);
 		return DwtControl.__processMouseUpEvent(ev, obj, mouseEv);
-
 	} else {
 		captureObj.release();
 		if (obj._dragging != DwtControl._DRAGGING) {
 			obj._dragging = DwtControl._NO_DRAG;
-			//obj._focusByMouseUpEvent(ev);
 			return DwtControl.__processMouseUpEvent(ev, obj, mouseEv);
 		} else {
 			obj.__lastDestDwtObj = null;
