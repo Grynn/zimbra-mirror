@@ -148,6 +148,7 @@ PERL_LIBS 	:= \
 	IO::Socket::INET6 \
 	NetAddr::IP \
 	Net::DNS::Resolver::Programmable \
+	K/KW/KWILLIAMS/Module-Build-0.2805.tar.gz \
 	Mail::SPF \
 	Geography::Countries \
 	IP::Country \
