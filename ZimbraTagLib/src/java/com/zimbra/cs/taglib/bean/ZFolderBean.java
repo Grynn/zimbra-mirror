@@ -301,8 +301,8 @@ public class  ZFolderBean {
     }
 
     public boolean getIsContactMoveTarget() {
-        return (getIsContactView() || getIsTrash()) &&
-                !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null);
+        return (getIsContactView() || getIsTrash()) && (getRemoteURL() == null) && !(getIsDrafts() || getIsSearchFolder()) && (!getIsMountPoint() || getIsMountPointWritable());
+
     }
 
     public boolean getIsAppointmentMoveTarget() {
@@ -324,8 +324,7 @@ public class  ZFolderBean {
     }
 
     public boolean getIsContactCreateTarget() {
-        return (getIsContactView()) &&
-                !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null);
+      return getIsContactView() && (getRemoteURL() == null) && !(getIsDrafts() || getIsSearchFolder()) && (!getIsMountPoint() || getIsMountPointWritable());
     }
 
     public String getStyleColor() {
