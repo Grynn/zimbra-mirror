@@ -116,6 +116,10 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-1.1.7-zimbra.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-filter-ssl-1.1.7.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.22.z6.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/sqlite-jdbc-3.6.19.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/sqlite-jdbc-3.6.20.1.jar" sourcepath="/ZimbraCommon/jars-src/sqlite-jdbc-3.6.20.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/sqlite-jdbc-3.6.20.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
