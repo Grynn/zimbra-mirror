@@ -1,11 +1,14 @@
 http
 {
+    # disable nginx version on error pages
+    server_tokens off
+
     # .Define the collection of upstream HTTP servers to which we will proxy
     #  Define each server:port against a server directive
     # 
     upstream ${web.upstream.name}
     {
-	    ${web.upstream.:servers}
+        ${web.upstream.:servers}
         zmauth;
     }
 
