@@ -61,16 +61,20 @@ public class SyncExceptionHandler {
 
     private static final int MESSAGE_DATA_LIMIT = 4* 1024 * 1024;
     public static void syncMessageFailed(ZcsMailbox ombx, int itemId, ParsedMessage pm, Exception exception) throws ServiceException {
-        ByteArrayOutputStream bao = new ByteArrayOutputStream();
-        InputStream msgStream = null; 
-        try {
-            msgStream = pm.getRawInputStream();
-            ByteUtil.copy(msgStream, true, bao, true, MESSAGE_DATA_LIMIT);
-            saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, bao.toString(), pm.getRawSize(), exception);
-        } catch (IOException x) {
+        if (pm != null) {
+            ByteArrayOutputStream bao = new ByteArrayOutputStream();
+            InputStream msgStream = null; 
+            try {
+                msgStream = pm.getRawInputStream();
+                ByteUtil.copy(msgStream, true, bao, true, MESSAGE_DATA_LIMIT);
+                saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, bao.toString(), pm.getRawSize(), exception);
+            } catch (IOException x) {
+                saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, exception);
+            } finally {
+                ByteUtil.closeStream(msgStream);
+            }
+        } else {
             saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, exception);
-        } finally {
-            ByteUtil.closeStream(msgStream);
         }
     }
 
