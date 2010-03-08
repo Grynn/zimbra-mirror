@@ -215,91 +215,100 @@ function submit(id, name, type, flavor, verb) {
 												<tr>
 													<td>
 														<div class="${not empty account.errorCode ? 'ZAccountBad' : 'ZAccountGood'}">
-															<table width=100% class="${not empty account.errorCode ? 'ZAccountHeaderBad' : 'ZAccountHeaderGood'}">
+															<table border=0 width=100%">
 																<tr>
+																	<td rowspan=2 width=1%>
+																		<img src="<c:url value='/img/imgAccount${account.flavor}48.png'/>" align=absbottom>
+																	</td>
 																	<td>
-																		<table border=0>
+																		<table border=0 width=100% class="${not empty account.errorCode ? 'ZAccountHeaderBad' : 'ZAccountHeaderGood'}">
 																			<tr>
-																				<td><div class="ZAccountName">${account.name}</div></td>
-																				<c:if test="${not default}">
-																					<td>
-																						<a title='<fmt:message key="SetAsDefault"/>' href="javascript:OnDefault('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')">
-																							<img src="/zimbra/img/startup/ImgAccordionClosed.gif" width=12 height=12 align="absbottom" border="0"></a>
-																					</td>
-																				</c:if>
-																			</tr>
-																		</table>
-																	</td>
-																	<td align=right class="ZAccountActions">
-																		<a href="javascript:OnEdit('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Edit"/></a>&nbsp;
-																		<a href="javascript:OnDelete('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Delete"/></a>&nbsp;
-																		<a href="javascript:OnReset('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="ResetData"/></a>&nbsp;
-																		<a href="javascript:OnReindex('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Reindex"/></a>
-																	</td>
-																</tr>
-															</table>
-															<table width=100%>
-																<tr>
-																	<td>
-																		<div class="ZAccountEmail">${account.email}</div>
-																	</td>
-																	<td align=right>
-																		<table border=0>
-																			<tr>
-																				<c:choose>
-																					<c:when test='${account.lastSync != null}'>
-																						<td class="ZAccountLastSync">
-																							<fmt:message key='LastSync'><fmt:param><fmt:formatDate value="${account.lastSync}" type="both" dateStyle="short" timeStyle="short"/></fmt:param></fmt:message>
-																						</td>
-																					</c:when>
-																				</c:choose>
-																				<td class="ZAccountStatus">
-																					<c:choose>
-																						<c:when test="${account.statusUnknown}">
-																							<img src="/zimbra/img/startup/ImgOffline.gif" align="absmiddle">&nbsp;<fmt:message key='StatusUnknown'/>
-																						</c:when>
-																						<c:when test="${account.statusOffline}">
-																							<img src="/zimbra/img/startup/ImgImAway.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOffline'/>
-																						</c:when>
-																						<c:when test="${account.statusOnline}">
-																							<img src="/zimbra/img/startup/ImgImAvailable.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOnline'/>
-																						</c:when>
-																						<c:when test="${account.statusRunning}">
-																							<img src="/zimbra/img/animated/ImgSpinner.gif" align="absmiddle">&nbsp;<fmt:message key='StatusInProg'/>
-																						</c:when>
-																						<c:when test="${account.statusAuthFailed}">
-																							<img src="/zimbra/img/startup/ImgImDnd.gif" align="absmiddle">&nbsp;<fmt:message key='StatusCantLogin'/>
-																						</c:when>
-																						<c:when test="${account.statusError}">
-																							<img height="14" width="14" src="/zimbra/img/dwt/ImgCritical.gif" align="absmiddle">&nbsp;<fmt:message key='StatusErr'/>
-																						</c:when>
-																					</c:choose>
+																				<td>
+																					<table border=0>
+																						<tr>
+																							<td><div class="ZAccountName">${account.name}</div></td>
+																							<c:if test="${not default}">
+																								<td>
+																									<a title='<fmt:message key="SetAsDefault"/>' href="javascript:OnDefault('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')">
+																										<img src="/zimbra/img/startup/ImgAccordionClosed.gif" width=12 height=12 align="absbottom" border="0"></a>
+																								</td>
+																							</c:if>
+																						</tr>
+																					</table>
+																				</td>
+																				<td align=right class="ZAccountActions">
+																					<a href="javascript:OnEdit('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Edit"/></a>&nbsp;
+																					<a href="javascript:OnDelete('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Delete"/></a>&nbsp;
+																					<a href="javascript:OnReset('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="ResetData"/></a>&nbsp;
+																					<a href="javascript:OnReindex('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Reindex"/></a>
 																				</td>
 																			</tr>
 																		</table>
-																	</td>
-																</tr>
-															</table>
-															<c:if test="${not empty account.errorCode}">
-																<div class="ZAccountError">
-																	<div class="ZAccountErrorMessage">${account.userFriendlyErrorMessage}</div>
-																	<c:if test="${not empty account.errorMsg}">
-																		<a href="javascript:zd.toggle('errorDetails')">(<fmt:message key='DebugInfo'/>)</a>
-																		<div id="errorDetails">
-																			<div class="ZAccountErrorDetails">
-																				${account.errorMsg}
-																				<c:if test="${not empty account.exception}">
-																					<b><fmt:message key='DebugStack'/>:</b>
-																					<pre>${account.exception}</pre>
+																		<table border=0 width=100%>
+																			<tr>
+																				<td>
+																					<div class="ZAccountEmail">${account.email}</div>
+																				</td>
+																				<td align=right>
+																					<table border=0>
+																						<tr>
+																							<c:choose>
+																								<c:when test='${account.lastSync != null}'>
+																									<td class="ZAccountLastSync">
+																										<fmt:message key='LastSync'><fmt:param><fmt:formatDate value="${account.lastSync}" type="both" dateStyle="short" timeStyle="short"/></fmt:param></fmt:message>
+																									</td>
+																								</c:when>
+																							</c:choose>
+																							<td class="ZAccountStatus">
+																								<c:choose>
+																									<c:when test="${account.statusUnknown}">
+																										<img src="/zimbra/img/startup/ImgOffline.gif" align="absmiddle">&nbsp;<fmt:message key='StatusUnknown'/>
+																									</c:when>
+																									<c:when test="${account.statusOffline}">
+																										<img src="/zimbra/img/startup/ImgImAway.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOffline'/>
+																									</c:when>
+																									<c:when test="${account.statusOnline}">
+																										<img src="/zimbra/img/startup/ImgImAvailable.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOnline'/>
+																									</c:when>
+																									<c:when test="${account.statusRunning}">
+																										<img src="/zimbra/img/animated/ImgSpinner.gif" align="absmiddle">&nbsp;<fmt:message key='StatusInProg'/>
+																									</c:when>
+																									<c:when test="${account.statusAuthFailed}">
+																										<img src="/zimbra/img/startup/ImgImDnd.gif" align="absmiddle">&nbsp;<fmt:message key='StatusCantLogin'/>
+																									</c:when>
+																									<c:when test="${account.statusError}">
+																										<img height="14" width="14" src="/zimbra/img/dwt/ImgCritical.gif" align="absmiddle">&nbsp;<fmt:message key='StatusErr'/>
+																									</c:when>
+																								</c:choose>
+																							</td>
+																						</tr>
+																					</table>
+																				</td>
+																			</tr>
+																		</table>
+																		<c:if test="${not empty account.errorCode}">
+																			<div class="ZAccountError">
+																				<div class="ZAccountErrorMessage">${account.userFriendlyErrorMessage}</div>
+																				<c:if test="${not empty account.errorMsg}">
+																					<a href="javascript:zd.toggle('errorDetails')">(<fmt:message key='DebugInfo'/>)</a>
+																					<div id="errorDetails">
+																						<div class="ZAccountErrorDetails">
+																							${account.errorMsg}
+																							<c:if test="${not empty account.exception}">
+																								<b><fmt:message key='DebugStack'/>:</b>
+																								<pre>${account.exception}</pre>
+																							</c:if>
+																						</div>
+																						<b><fmt:message key='DebugActionNote'/></b>
+																					</div>
 																				</c:if>
 																			</div>
-																			<b><fmt:message key='DebugActionNote'/></b>
-																		</div>
-																	</c:if>
-																</div>
-															</c:if>
-														</div>
-													</td>
+																		</c:if>
+																	</div>
+																</td>
+															</td>
+														</tr>
+													</table>
 												</tr>
 												<c:set var='default' value='false'/>
 											</c:forEach>

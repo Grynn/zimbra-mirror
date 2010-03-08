@@ -369,7 +369,9 @@ function onEditLink(id, keep, makeInvisible) {
 											<c:when test="${bean.add || empty bean.accountId}">
 												<c:if test="${not empty help || not empty beta}">
 													<tr>
-														<td></td>
+														<td align=right>
+															<nobr><img src="<c:url value='/img/imgAccount${accountFlavor}48.png'/>" align=absbottom>&nbsp;&nbsp;</nobr>
+														</td>
 														<td class="ZAccountHelp">
 															<c:if test="${not empty help}">
 																<div>${help}</div>
