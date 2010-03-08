@@ -436,7 +436,8 @@ function(focusObj) {
 	var dwtInputCtrl = (Dwt.instanceOf(focusObj, "DwtInputField") ||
 						Dwt.instanceOf(focusObj, "DwtHtmlEditor") ||
 						Dwt.instanceOf(focusObj, "DwtCheckbox") ||
-						Dwt.instanceOf(focusObj, "DwtRadioButton"));
+						Dwt.instanceOf(focusObj, "DwtRadioButton") ||
+						Dwt.instanceOf(focusObj, "ZmAdvancedHtmlEditor"));
 //	DBG.println("kbnav", "DwtKeyboardMgr._doGrabFocus: " + focusObj);
 	if (dwtInputCtrl || !(focusObj instanceof DwtControl)) {
 		// dealing with an input field
