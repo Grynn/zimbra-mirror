@@ -1468,7 +1468,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public synchronized DistributionList get(DistributionListBy keyType, String key) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("get(DistributionList)");
+        return null;
     }
 
     @Override
