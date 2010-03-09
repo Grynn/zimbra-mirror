@@ -104,9 +104,9 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-charset.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-native.jar" sourcepath="/ZimbraNative/src/java"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/memcached-2.3.1.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/apache-jsieve-0.3-zimbra.jar" sourcepath="/ThirdParty/apache-james-jsieve-0.3/apache-jsieve-0.3-sources.jar">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/apache-jsieve-0.3-zimbra.jar" sourcepath="/ZimbraCommon/jars-src/apache-jsieve-0.3-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ThirdParty/apache-james-jsieve-0.3/apache-jsieve-0.3-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/apache-jsieve-0.3-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.4.1.jar"/>
