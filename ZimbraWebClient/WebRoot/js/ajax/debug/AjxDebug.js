@@ -477,12 +477,14 @@ function() {
 	}
 	catch (ex) {
 		// IE chokes on the popup window on cold start-up (when IE is started
-		// for the fisrt time after system reboot). This should not prevent the
+		// for the first time after system reboot). This should not prevent the
 		// app from running and should not bother the user
 	}
 
-	this._clearBtn = doc.getElementById(AjxDebug._BOTTOM_FRAME_ID + "_clear");
-	this._pauseBtn = doc.getElementById(AjxDebug._BOTTOM_FRAME_ID + "_pause");
+	if (doc) {
+		this._clearBtn = doc.getElementById(AjxDebug._BOTTOM_FRAME_ID + "_clear");
+		this._pauseBtn = doc.getElementById(AjxDebug._BOTTOM_FRAME_ID + "_pause");
+	}
 
 	this._attachHandlers();
 	this._dbgWindowInited = true;
