@@ -485,14 +485,6 @@
                     <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
                     <arg line="-e debug_disable_mailbox_group=true -f"/>
                 </java>
-                <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-                    <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-                    <arg line="-e sqlite_cache_size=4000 -f"/>
-                </java>
-                <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-                    <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-                    <arg line="-e sqlite_page_size=2048 -f"/>
-                </java>
 			</then>
         </if>
 

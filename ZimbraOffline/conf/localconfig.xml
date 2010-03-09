@@ -49,6 +49,15 @@
   <key name="mailboxd_output_rotate_interval">
     <value>0</value>
   </key>
+  <key name="sqlite_cache_size">
+    <value>4000</value>
+  </key>
+  <key name="sqlite_journal_mode">
+    <value>persist</value>
+  </key>
+  <key name="sqlite_sync_mode">
+    <value>normal</value>
+  </key>
   <key name="ssl_allow_mismatched_certs">
     <value>false</value>
   </key>
