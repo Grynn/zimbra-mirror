@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
  * Copyright (C) 2007, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -44,96 +44,113 @@
  */
 
 DwtIdleTimer = function(timeout, handler) {
-        DwtIdleTimer._initEvents();
-        this.timeout = timeout;
-        this.handler = handler;
-        this.idle = false;
-        this._onIdle = AjxCallback.simpleClosure(this.setIdle, this);
-        this._startTimer();
-        DwtIdleTimer.getHandlers().add(this);
+	DwtIdleTimer._initEvents();
+	this.timeout = timeout;
+	this.handler = handler;
+	this.idle = false;
+	this._onIdle = AjxCallback.simpleClosure(this.setIdle, this);
+	this._startTimer();
+	DwtIdleTimer.getHandlers().add(this);
 };
-
-DwtIdleTimer.prototype._startTimer = function() {
-        this._stopTimer();
-        this._timer = setTimeout(this._onIdle, this.timeout);
-};
-
-DwtIdleTimer.prototype._stopTimer = function() {
-        if (this._timer) {
-                clearTimeout(this._timer);
-                this._timer = null;
-        }
-};
-
-DwtIdleTimer.prototype.kill = function() {
-        this._stopTimer();
-        this.idle = false;
-        DwtIdleTimer.getHandlers().remove(this);
-};
-
-DwtIdleTimer.prototype.resurrect = function(timeout) {
-        this.idle = false; // make sure we start "unidle"
-        DwtIdleTimer.getHandlers().add(this, null, true);
-        if (timeout != null)
-                this.timeout = timeout;
-        this._startTimer();
-};
-
-DwtIdleTimer.prototype.setIdle = function() {
-        if (!this.idle) {
-                DwtIdleTimer.idleHandlers++;
-                this.idle = true;
-                this.handler.run(true);
-                if (AjxEnv.isIE)
-                        document.body.setCapture(true);
-        }
-};
-
-DwtIdleTimer.prototype.resume = function() {
-        if (this.idle) {
-                this.idle = false;
-                this.handler.run(false);
-                DwtIdleTimer.idleHandlers--;
-                if (AjxEnv.isIE)
-                        document.releaseCapture();
-        }
-};
-
-/* class members */
 
 DwtIdleTimer.idleHandlers = 0;
 
-DwtIdleTimer._initEvents = function() {
-        // execute only once per session
-        if (!DwtIdleTimer._initialized) {
-                if (!AjxEnv.isIE) {
-                        window.addEventListener("keydown", DwtIdleTimer.resetIdle, true);
-                        window.addEventListener("mousemove", DwtIdleTimer.resetIdle, true);
-                        window.addEventListener("mousedown", DwtIdleTimer.resetIdle, true);
-                        window.addEventListener("focus", DwtIdleTimer.resetIdle, true);
-                } else {
-                        document.body.attachEvent("onkeydown", DwtIdleTimer.resetIdle);
-                        document.body.attachEvent("onkeyup", DwtIdleTimer.resetIdle);
-                        document.body.attachEvent("onmousedown", DwtIdleTimer.resetIdle);
-                        document.body.attachEvent("onmousemove", DwtIdleTimer.resetIdle);
-                        document.body.attachEvent("onmouseover", DwtIdleTimer.resetIdle);
-                        document.body.attachEvent("onmouseout", DwtIdleTimer.resetIdle);
-                        window.attachEvent("onfocus", DwtIdleTimer.resetIdle);
-                }
-                DwtIdleTimer._initialized = true;
-        }
+DwtIdleTimer.prototype.toString =
+function() {
+	return "DwtIdleTimer";
 };
 
-DwtIdleTimer.getHandlers = function() {
-        var a = DwtIdleTimer.HANDLERS;
-        if (!a)
-                a = DwtIdleTimer.HANDLERS = new AjxVector();
-        return a;
+DwtIdleTimer.prototype.kill =
+function() {
+	this._stopTimer();
+	this.idle = false;
+	DwtIdleTimer.getHandlers().remove(this);
 };
 
-DwtIdleTimer.resetIdle = function() {
-        var a = DwtIdleTimer.getHandlers();
-        a.foreach("_startTimer"); // we need to restart timers anyway...
-        if (DwtIdleTimer.idleHandlers > 0)
-                a.foreach("resume");
+DwtIdleTimer.prototype.resurrect =
+function(timeout) {
+	this.idle = false; // make sure we start "unidle"
+	DwtIdleTimer.getHandlers().add(this, null, true);
+	if (timeout != null) {
+		this.timeout = timeout;
+	}
+	this._startTimer();
+};
+
+DwtIdleTimer.prototype.setIdle =
+function() {
+	if (!this.idle) {
+		DwtIdleTimer.idleHandlers++;
+		this.idle = true;
+		this.handler.run(true);
+		if (AjxEnv.isIE) {
+			document.body.setCapture(true);
+		}
+	}
+};
+
+DwtIdleTimer.prototype.resume =
+function() {
+	if (this.idle) {
+		this.idle = false;
+		this.handler.run(false);
+		DwtIdleTimer.idleHandlers--;
+		if (AjxEnv.isIE) {
+			document.releaseCapture();
+		}
+	}
+};
+
+DwtIdleTimer.prototype._startTimer =
+function() {
+	this._stopTimer();
+	this._timer = setTimeout(this._onIdle, this.timeout);
+};
+
+DwtIdleTimer.prototype._stopTimer =
+function() {
+	if (this._timer) {
+		clearTimeout(this._timer);
+		this._timer = null;
+	}
+};
+
+DwtIdleTimer._initEvents =
+function() {
+	// execute only once per session
+	if (!DwtIdleTimer._initialized) {
+		if (!AjxEnv.isIE) {
+			window.addEventListener("keydown", DwtIdleTimer.resetIdle, true);
+			window.addEventListener("mousemove", DwtIdleTimer.resetIdle, true);
+			window.addEventListener("mousedown", DwtIdleTimer.resetIdle, true);
+			window.addEventListener("focus", DwtIdleTimer.resetIdle, true);
+		} else {
+			document.body.attachEvent("onkeydown", DwtIdleTimer.resetIdle);
+			document.body.attachEvent("onkeyup", DwtIdleTimer.resetIdle);
+			document.body.attachEvent("onmousedown", DwtIdleTimer.resetIdle);
+			document.body.attachEvent("onmousemove", DwtIdleTimer.resetIdle);
+			document.body.attachEvent("onmouseover", DwtIdleTimer.resetIdle);
+			document.body.attachEvent("onmouseout", DwtIdleTimer.resetIdle);
+			window.attachEvent("onfocus", DwtIdleTimer.resetIdle);
+		}
+		DwtIdleTimer._initialized = true;
+	}
+};
+
+DwtIdleTimer.getHandlers =
+function() {
+	var a = DwtIdleTimer.HANDLERS;
+	if (!a) {
+		a = DwtIdleTimer.HANDLERS = new AjxVector();
+	}
+	return a;
+};
+
+DwtIdleTimer.resetIdle =
+function() {
+	var a = DwtIdleTimer.getHandlers();
+	a.foreach("_startTimer"); // we need to restart timers anyway...
+	if (DwtIdleTimer.idleHandlers > 0) {
+		a.foreach("resume");
+	}
 };
