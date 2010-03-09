@@ -34,10 +34,10 @@ function windowTitle()
 <HR>
 <CENTER>
 <H1>
-Zimbra<sup><font size=-2>TM</font></sup> Zimbra SOAP API Reference ${build.version}
+Zimbra<sup><font size=-2>TM</font></sup> SOAP API Reference ${build.version}
 </H1>
 </CENTER>
-This document is the API specification for the Zimbra&nbsp;SOAP API Reference ${build.version}
+This document is the reference specification for the Zimbra SOAP API.
 
 <P>
 
