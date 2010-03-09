@@ -29,7 +29,16 @@ ZaHelpViewController = function(appCtxt, container) {
 
 ZaHelpViewController.prototype = new ZaController();
 ZaHelpViewController.prototype.constructor = ZaHelpViewController;
+ZaController.initToolbarMethods["ZaHelpViewController"] = new Array();
 
+ZaHelpViewController.initToolbarMethod =
+function () {
+	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
+	this._toolbarOrder.push(ZaOperation.NONE);
+	this._toolbarOrder.push(ZaOperation.SEP);
+	this._toolbarOrder.push(ZaOperation.NONE);
+}
+ZaController.initToolbarMethods["ZaHelpViewController"].push(ZaHelpViewController.initToolbarMethod);
 
 ZaHelpViewController.prototype.show = 
 function(openInNewTab) {

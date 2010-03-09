@@ -534,7 +534,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 				icon:"SearchAll", cssClass:"DwtToolbarButton"},
 			
 			{type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect",
-				cssStyle:"margin-left: 5px; height: 22px; border: 1px solid; ",
+				//cssStyle:"margin-left: 5px; height: 22px; border: 1px solid; ",
 				items: [	
 				{type:_TEXTFIELD_, ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
 					elementChanged: function(elementValue,instanceValue, event) {

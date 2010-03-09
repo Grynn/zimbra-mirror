@@ -12,106 +12,204 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-function skin() {}
-
-/*
-skin.hints = {
-	appChooser		: {	style:"chiclet", 	direction:"TB"	},
-	helpButton		: {	style:"link", 		container:"appChooser"	},
-	logoutButton	: { style:"link", 		container:"appChooser"	}
-}*/
-
-skin.hints = {
-	appChooser		: {	style:"tabs", 		direction:"LR"	},
-	helpButton		: {	style:"link", 		container:"quota",
-						url: "@HelpAdminURL@", daUrl: "@HelpDelegatedURL@"	},
-	logoutButton	: { style:"link", 		container:"quota"	},
-	logo			: { url: "@LogoURL@" },
-	tree:			{ minWidth:150, maxWidth:300, containers: ["skin_td_tree_container", "skin_table", "skin_tr_tree", "skin_td_tree", "skin_container_tree"] }
-}
-
-/* PUBLIC API FOR SHOWING/HIDING PIECES OF THE SKIN */
-
-skin.showSkin = function (state) {
-	skin._showEl("skin_outer", state);
-}
-skin.hideSkin = function () {
-	skin.showSkin(false);
-}
-
-skin.showQuota = function (state) {
-	skin._showEl("skin_td_quota_spacer", state);
-	skin._showEl("skin_td_quota", state);
-}
-skin.hideQuota = function () {
-	this.showQuota(false);
-}
-
-skin.showSearchBuilder = function (state) {
-	skin._showEl("search_builder_outer", state);
-	skin._showEl("skin_td_search_builder", state);
-}
-skin.hideSearchBuilder = function () {
-	this.showSearchBuilder(false);
-}
-
-skin.showLoginMsg = function (state) {
-	skin._showEl("skin_container_login_msg", state);
-	skin._showEl("skin_td_login_msg", state);
-}
-skin.hideLoginMsg = function () {
-	this.showLoginMsg(false);
-}
-
-skin.showTopToolbar = function (state) {
-	skin._showEl("skin_tr_top_toolbar", state);
-}
-skin.hideTopToolbar = function () {
-	this.showTopToolbar(false);
+function ZaSkin(hints) {
+    this.hints = this.mergeObjects(ZaSkin.hints, hints);
 }
 
 
-
-skin.showTreeFooter = function (state) {
-	skin._showEl("skin_tr_tree_footer", state);
-}
-skin.hideTreeFooter = function () {
-	this.showTreeFooter(false);
-}
-
+// default hints for all skins
+ZaSkin.hints = {
+	// info
+	name:			"@SkinName@",
+	version:		"@SkinVersion@",
 	
-skin.getTreeWidth = function() {
-	return Dwt.getSize(this._getEl(skin.hints.tree.containers[0])).x;
+	// skin regions
+	skin:		  	{ containers: "skin_outer" },
+	banner:			{ position:"static", url: "@LogoURL@"},		// == "logo"
+	userInfo:		{ position:"static"},
+	search:		  	{ position:"static" },
+	quota:		  	{ position:"static" },
+	presence:	  	{ width:"40px", height: "24px" },
+	appView:		{ position:"static" },
+
+	searchBuilder:  { containers: ["skin_tr_search_builder"] },
+	
+	tree:			{ minWidth:parseInt("@TreeMinWidth@"), maxWidth:parseInt("@TreeMaxWidth@"), 
+					  containers: ["skin_td_tree","skin_td_tree_app_sash"],
+					  resizeContainers : ["skin_td_tree"]
+					},
+	
+	topToolbar:	 	{ containers: "skin_tr_top_toolbar" },
+
+	treeFooter:	 	{ containers: "skin_tr_tree_footer" },
+
+	// specific components
+	helpButton: 	{	style:"link", url: "@HelpAdminURL@", daUrl: "@HelpDelegatedURL@"	},
+	logoutButton: 	{ style: "link" },
+	appChooser:		{ position:"static", direction: "LR" },
+
+	fullScreen:     { containers : ["!skin_td_tree", "!skin_td_tree_app_sash"] }
 };
+
+//
+//	set up the ZaSkin prototype with methods common to all skins
+//
+ZaSkin.prototype = {
+	maxAdminName:21,
 	
-skin.setTreeWidth = function(newWidth) {
-	skin.setSize("skin_col_tree", newWidth, null);
-}
+	skin_container_help_max_str_length:17,
+	
+	skin_container_dw_max_str_length:17,
+	
+	//
+	// Public methods
+	//
+	show : function(name, state) {
+		var containers = this.hints[name] && this.hints[name].containers;
+		if (containers) {
+			if (typeof containers == "function") {
+				containers.apply(this, [state != false]);
+				this._reflowApp();
+				return;
+			}
+			if (typeof containers == "string") {
+				containers = [ containers ];
+			}
+			for (var i = 0; i < containers.length; i++) {
+				var ocontainer = containers[i];
+				var ncontainer = ocontainer.replace(/^!/,"");
+				var inverse = ocontainer != ncontainer;
+				this._showEl(ncontainer, inverse ? !state : state);
+			}
+			this._reflowApp();
+		}
+	},
 
-skin.setSize = function(id, width, height) {
-	var el = skin._getEl(id);
-	if (width != null) el.style.width = width;
-	if (height != null) el.style.height = height;
-}
-
-skin._getEl = function(id) {
-	return document.getElementById(id);
-}
-skin._showEl = function(id, state) {
-	var el = skin._getEl(id);
-	var value;
-	if (!el) return;
-	if (state == false) {
-		value = "none";
-	} else {
-		var tagName = el.tagName;
-		if (tagName == "TD" && document.all == null)		value = "table-cell";
-		else if (tagName == "TR" && document.all == null) 	value = "table-row";
-		else value = "block";
+	hide : function(name) {
+	    this.show(name, false);
+	},
+		
+	mergeObjects : function(dest, src1 /*, ..., srcN */) {
+		if (dest == null) dest = {};
+	
+		// merge all source properties into destination object
+		for (var i = 1; i < arguments.length; i++) {
+			var src = arguments[i];
+			for (var pname in src) {
+				// recurse through properties
+				var prop = dest[pname];
+				if (typeof prop == "object" && !(prop instanceof Array)) {
+					this.mergeObjects(dest[pname], src[pname]);
+					continue;
+				}
+	
+				// insert missing property
+				if (!dest[pname]) {
+					dest[pname] = src[pname];
+				}
+			}
+		}
+	
+		return dest;
+	},
+	
+	getTreeWidth : function() {
+		return Dwt.getSize(this._getEl(this.hints.tree.containers[0])).x;
+	},
+	
+	setTreeWidth : function(width) {
+		this._setContainerSizes("tree", width, null);
+	},
+		
+	showLoginMsg : function (state) {
+		this._showEl("skin_container_login_msg", state);
+		this._showEl("skin_td_login_msg", state);
+		this._showEl("skin_tr_login_msg", state);	
+	},
+	
+	hideLoginMsg : function () {
+		this.showLoginMsg(false);
+	},
+	showSkin : function () {
+		this._showEl("skin_outer", true);
+	},
+	hideSkin : function () {
+		this._hideEl("skin_outer");
+	},
+	showSearchBuilder : function (state) {
+		this._showEl("search_builder_outer", state);
+		this._showEl("skin_td_search_builder", state);
+		this._showEl("skin_tr_search_builder", state);
+	},
+	hideSearchBuilder : function () {
+		this.showSearchBuilder(false);
+	},	
+	//
+	// Protected methods
+	//
+	
+	_getEl : function(id) {
+		return (typeof id == "string" ? document.getElementById(id) : id);
+	},
+	
+	_showEl : function(id, state) {
+		var el = this._getEl(id);
+		if (!el) return;
+	
+		var value;
+		if (state == false) {
+			value = "none";
+		}
+		else {
+			var tagName = el.tagName;
+			if (tagName == "TD" && !document.all) {
+				value = "table-cell";
+			}  else if (tagName == "TR" && !document.all) {
+				value = "table-row";
+			} else {
+				value = "block";
+			}
+		}
+		el.style.display = value;
+	},
+	
+	_hideEl : function(id) {
+		this._showEl(id, false);
+	},
+	
+	_reparentEl : function(id, containerId) {
+		var containerEl = this._getEl(containerId);
+		var el = containerEl && this._getEl(id);
+		if (el) {
+			containerEl.appendChild(el);
+		}
+	},
+	
+	_setSize : function(id, width, height) {
+		var el = this._getEl(id);
+		if (!el) return;
+		if (width != null) el.style.width = width;
+		if (height != null) el.style.height = height;
+	},
+	
+	_setContainerSizes : function(containerName, width, height) {
+		var containers = this.hints[containerName].resizeContainers || this.hints[containerName].containers;
+		for (var i = 0; i < containers.length; i++) {
+			this._setSize(containers[i], width, null);
+		}
+	},
+	
+	_reflowApp : function() {
+		if (ZaZimbraAdmin.getInstance && ZaZimbraAdmin.getInstance()) {
+			ZaZimbraAdmin.getInstance().getAppViewMgr().fitAll();
+		}
 	}
-	el.style.display = value;
-}
+	
+};
 
-skin.maxAdminName = 21;
-skin.skin_container_help_max_str_length = 17;
-skin.skin_container_dw_max_str_length = 17;
+
+//
+//	create an instance as "skin" -- some skins may create another one that overrides this
+//
+window.skin = new ZaSkin();
+

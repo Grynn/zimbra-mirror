@@ -26,7 +26,7 @@ ZaLoginDialog = function(parent, zIndex, className, appCtxt) {
     //license expiration warning won't show before login.
 	//var licenseStatus = ZaZimbraAdmin.getLicenseStatus();
 	var params = ZLoginFactory.copyDefaultParams(ZaMsg);
-	params.showPanelBorder = false;
+	params.showPanelBorder = true;
 	params.showForm = true;
 	params.showUserField = true;
 	params.showPasswordField = true;
@@ -120,7 +120,6 @@ function(loc,bReloginMode) {
 	}
 
 	this._shell._veilOverlay.activeDialogs.push(this);
-
 	// use whichever has a value, local has precedence
 	if (loc) {
 		this._loc.x = loc.x;
@@ -153,8 +152,11 @@ function(visible, transparentBg,bReloginMode) {
 	}
 	
 	if (visible) {
+		this._veilClass = this._shell._veilOverlay.className; 
+		this._shell._veilOverlay.className = "ZaSplashScreen";
 		this.popup(null,bReloginMode);
 	} else {
+		this._shell._veilOverlay.className = this._veilClass;
 		this.popdown();
 	}
 	for (var i = 0; i < ZLoginFactory.TAB_ORDER.length; i++) {

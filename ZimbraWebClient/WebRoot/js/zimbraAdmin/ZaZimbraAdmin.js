@@ -26,6 +26,7 @@ ZaZimbraAdmin = function(appCtxt) {
 	ZaController.call(this, appCtxt, null,"ZaZimbraAdmin");
 
 	ZaZimbraAdmin.showSplash(this._shell);
+	skin.showSkin();
 	appCtxt.setAppController(this);
     
     // handles to various apps
@@ -568,12 +569,15 @@ ZaZimbraAdmin.prototype.closeLoginMsg = function () {
 
     //resize the components
     var appViewMgr = ZaApp.getInstance ().getAppViewMgr () ;
-    var list = [//ZaAppViewMgr.C_LOGIN_MESSAGE,
-                ZaAppViewMgr.C_CURRENT_APP, ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_APP_TABS,
-				ZaAppViewMgr.C_TREE,
-				ZaAppViewMgr.C_TREE_FOOTER, ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT];
-
+    /*var list = [//ZaAppViewMgr.C_LOGIN_MESSAGE,
+                ZaAppViewMgr.C_CURRENT_APP, ZaAppViewMgr.C_APP_TABS,
+				ZaAppViewMgr.C_TREE,ZaAppViewMgr.C_SASH,
+				ZaAppViewMgr.C_TREE_FOOTER ,
+				ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT];
 	appViewMgr._stickToGrid(list);
+     */
+    appViewMgr.fitAll();
+	
 }
 
 //set the html content for logoff, help and download
@@ -668,38 +672,39 @@ function() {
     this._appCtxt.setClientCmdHdlr(new ZaClientCmdHandler());
     //draw stuff
 	var elements = new Object();
-	elements[ZaAppViewMgr.C_BANNER] = this._createBanner();		
+		
 	//elements[ZaAppViewMgr.C_APP_CHOOSER] = this._createAppChooser();
-	elements[ZaAppViewMgr.C_STATUS] = this._statusBox = new DwtText(this._shell, "statusBox", Dwt.ABSOLUTE_STYLE);
-	this._statusBox.setScrollStyle(Dwt.CLIP);
-	this._setLicenseStatusMessage();
+	
+
 
     // the outer element of the entire skin is hidden until this point
 	// so that the skin won't flash (become briefly visible) during app loading
-	if (skin && skin.showSkin){
-		skin.showSkin(true);	
+	if (skin && skin.show){
+		skin.show(true);	
 		//hide the advanced search builder at the beginning
 		skin.showSearchBuilder(false);  
 	}	
-	this._appViewMgr.addComponents(elements, true);
-
-	var elements = new Object();
-	elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
-	elements[ZaAppViewMgr.C_SASH] =  new DwtSash({parent:this._shell, style:DwtSash.HORIZONTAL_STYLE,className:"AppSash-horiz", threshold:20, id:"z_sash"});
-	elements[ZaAppViewMgr.C_SEARCH] = ZaApp.getInstance().getSearchListController().getSearchPanel();		
-	elements[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR] = ZaApp.getInstance().getSearchBuilderToolbarController ().getSearchBuilderTBPanel();
-	elements[ZaAppViewMgr.C_SEARCH_BUILDER] = ZaApp.getInstance().getSearchBuilderController().getSearchBuilderPanel();
-	elements[ZaAppViewMgr.C_LOGIN_MESSAGE]  = this._getLoginMsgPanel();
-    //Use reparentHtmlelement to add the tabs. Reenable this line if it doesn't work well.
-	elements[ZaAppViewMgr.C_APP_TABS] = this._createAppTabs() ;
-	elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
-	this._appViewMgr.addComponents(elements, true);
 
 	//add logoff
 	this._createLogOff();
 	this._createHelpLink();
 	this._createDownloadLink() ;
 	this._setUserName() ;
+	
+	elements[ZaAppViewMgr.C_BANNER] = this._createBanner();	
+	elements[ZaAppViewMgr.C_STATUS] = this._statusBox = new DwtText(this._shell, "statusBox", Dwt.ABSOLUTE_STYLE);
+	this._statusBox.setScrollStyle(Dwt.CLIP);
+	this._setLicenseStatusMessage();	
+	elements[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR] = ZaApp.getInstance().getSearchBuilderToolbarController ().getSearchBuilderTBPanel();
+	elements[ZaAppViewMgr.C_SEARCH_BUILDER] = ZaApp.getInstance().getSearchBuilderController().getSearchBuilderPanel();
+	elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
+	elements[ZaAppViewMgr.C_SASH] =  new DwtSash({parent:this._shell, style:DwtSash.HORIZONTAL_STYLE,className:"AppSash-horiz", threshold:20, id:"z_sash"});
+	elements[ZaAppViewMgr.C_SEARCH] = ZaApp.getInstance().getSearchListController().getSearchPanel();		
+	elements[ZaAppViewMgr.C_LOGIN_MESSAGE]  = this._getLoginMsgPanel();
+    //Use reparentHtmlelement to add the tabs. Reenable this line if it doesn't work well.
+	elements[ZaAppViewMgr.C_APP_TABS] = this._createAppTabs() ;
+	elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
+	this._appViewMgr.addComponents(elements, true);
 	
     ZaApp.getInstance().launch();
 

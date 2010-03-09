@@ -102,17 +102,14 @@ ZaAppViewMgr.PENDING_VIEW = "ZaAppViewMgr.PENDgING_VIEW";
 
 // components
 ZaAppViewMgr.C_BANNER					= "BANNER";
-ZaAppViewMgr.C_USER_INFO				= "USER INFO";
 ZaAppViewMgr.C_SEARCH					= "SEARCH";
 ZaAppViewMgr.C_SEARCH_BUILDER			= "SEARCH BUILDER";
 ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR	= "SEARCH BUILDER TOOLBAR";
 ZaAppViewMgr.C_CURRENT_APP				= "CURRENT APP";
-ZaAppViewMgr.C_APP_CHOOSER				= "APP CHOOSER";
 ZaAppViewMgr.C_APP_TABS					= "APP TABS" ;
 ZaAppViewMgr.C_TREE						= "TREE";
-ZaAppViewMgr.C_TREE_FOOTER				= "TREE FOOTER";
+//ZaAppViewMgr.C_TREE_FOOTER				= "TREE FOOTER";
 ZaAppViewMgr.C_TOOLBAR_TOP				= "TOP TOOLBAR";
-ZaAppViewMgr.C_TOOLBAR_BOTTOM			= "BOTTOM TOOLBAR";
 ZaAppViewMgr.C_APP_CONTENT				= "APP CONTENT";
 ZaAppViewMgr.C_STATUS					= "STATUS";
 ZaAppViewMgr.C_SASH						= "SASH";
@@ -121,16 +118,13 @@ ZaAppViewMgr.C_LOGIN_MESSAGE            = "LOGIN_MESSAGE" ;
 // keys for getting container IDs
 ZaAppViewMgr.CONT_ID_KEY = new Object();
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_BANNER]					= ZaSettings.SKIN_LOGO_ID;
-ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_USER_INFO]				= ZaSettings.SKIN_USER_INFO_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SEARCH]					= ZaSettings.SKIN_SEARCH_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SEARCH_BUILDER]			= ZaSettings.SKIN_SEARCH_BUILDER_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR]	= ZaSettings.SKIN_SEARCH_BUILDER_TOOLBAR_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_CURRENT_APP]			= ZaSettings.SKIN_CURRENT_APP_ID;
-ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_CHOOSER]			= ZaSettings.SKIN_APP_CHOOSER_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TREE]					= ZaSettings.SKIN_TREE_ID;
-ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TREE_FOOTER]			= ZaSettings.SKIN_TREE_FOOTER_ID;
+//ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TREE_FOOTER]			= ZaSettings.SKIN_TREE_FOOTER_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TOOLBAR_TOP]			= ZaSettings.SKIN_APP_TOP_TOOLBAR_ID;
-ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TOOLBAR_BOTTOM]			= ZaSettings.SKIN_APP_BOTTOM_TOOLBAR_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_CONTENT]			= ZaSettings.SKIN_APP_MAIN_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_STATUS]					= ZaSettings.SKIN_STATUS_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SASH]					= ZaSettings.SKIN_SASH_ID;
@@ -308,9 +302,9 @@ function(visible) {
 ZaAppViewMgr.prototype.fitAll = function () {
     var list = [ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR,
                 ZaAppViewMgr.C_LOGIN_MESSAGE,
-                ZaAppViewMgr.C_CURRENT_APP, ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_APP_TABS,
+                ZaAppViewMgr.C_CURRENT_APP, /*ZaAppViewMgr.C_APP_CHOOSER,*/ ZaAppViewMgr.C_APP_TABS,
 				ZaAppViewMgr.C_TREE,ZaAppViewMgr.C_SASH,
-				ZaAppViewMgr.C_TREE_FOOTER, ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT];
+				/*ZaAppViewMgr.C_TREE_FOOTER,*/ ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT];
 	this._stickToGrid(list);
 }
 ZaAppViewMgr.prototype._stickToGrid = 
@@ -326,8 +320,7 @@ function(components) {
 			var comp = this._components[cid];
 			if (
 				cid == ZaAppViewMgr.C_APP_CONTENT || 
-				cid == ZaAppViewMgr.C_TOOLBAR_TOP ||
-				cid == ZaAppViewMgr.C_TOOLBAR_BOTTOM ) {
+				cid == ZaAppViewMgr.C_TOOLBAR_TOP  ) {
 				// make sure we fit the component that's current
 				var elements = this._views[this._currentView];
 				comp = elements[cid];
@@ -335,7 +328,7 @@ function(components) {
 			if (comp && (comp.getZIndex() != Dwt.Z_HIDDEN)) {
                 var y =  contBds.y ;
                 var h =  contBds.height ;
-                if (AjxEnv.isIE && (!this._isAdvancedSearchBuilderDisplayed)) {
+                /*if (AjxEnv.isIE && (!this._isAdvancedSearchBuilderDisplayed)) {
                     //bug  22173: IE hacking. Seems that the banner image size screw the height in IE. Maybe a small banner image on IE is the final solution?
                     //Also the advanced Search Builder expand/collapse will also affect the display behavior. WEIRD! 
                     if ( cid == ZaAppViewMgr.C_TREE )  {
@@ -344,7 +337,7 @@ function(components) {
                     }else if ( cid == ZaAppViewMgr.C_CURRENT_APP ) {
                         y += 5 ;
                     }
-                }
+                }*/
 				try {
                 	comp.setBounds(contBds.x, y, contBds.width, h);
 				} catch (ex) {
@@ -396,9 +389,6 @@ function(ev) {
 			if (topToolbar)
 				topToolbar.setSize(ev.newWidth, Dwt.DEFAULT);
 				
-			var bottomToolbar = this._views[this._currentView][ZaAppViewMgr.C_TOOLBAR_BOTTOM];
-			if (bottomToolbar)
-				bottomToolbar.setSize(ev.newWidth, Dwt.DEFAULT);
 				
 			// make sure to remove height of top toolbar for height of app content
 			var appContent = this._views[this._currentView][ZaAppViewMgr.C_APP_CONTENT];
@@ -413,7 +403,7 @@ function(ev) {
 			if (deltaWidth) {
 				var list = [ZaAppViewMgr.C_BANNER, ZaAppViewMgr.C_APP_TABS, ZaAppViewMgr.C_LOGIN_MESSAGE,
 							ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT, 
-							ZaAppViewMgr.C_TOOLBAR_BOTTOM,ZaAppViewMgr.C_SEARCH,
+							ZaAppViewMgr.C_SEARCH,
 							ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR];
 				this._stickToGrid(list);
 			}

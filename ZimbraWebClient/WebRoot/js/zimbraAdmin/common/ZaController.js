@@ -329,9 +329,9 @@ function(bReloginMode) {
 	ZaZimbraAdmin._killSplash();
 	this._authenticating = true;
 	this._loginDialog.setVisible(true, false,bReloginMode);
-	if(!AjxEnv.isFirefox1up && !AjxEnv.isFirefox3up && !AjxEnv.isFirefox2_0up && !AjxEnv.isNav7 && !AjxEnv.isIE6up && !AjxEnv.isIE7up)
+	/*if(!AjxEnv.isFirefox1up && !AjxEnv.isFirefox3up && !AjxEnv.isFirefox2_0up && !AjxEnv.isNav7 && !AjxEnv.isIE6up && !AjxEnv.isIE7up)
 		this._loginDialog.setError(AjxMessageFormat.format(ZaMsg.ERROR_BROWSER_UNSUPORTED, [navigator.userAgent]));
-		
+	*/	
 	try {
 		if(bReloginMode && ZLoginFactory.get(ZLoginFactory.USER_ID) && ZLoginFactory.get(ZLoginFactory.USER_ID).value=="")
 			bReloginMode = false; //lost login name, enable the user name field
