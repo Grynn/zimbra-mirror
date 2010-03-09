@@ -33,6 +33,7 @@ DwtForm = function(params) {
 	this._dirty = {};
 	this._ignore = {};
 	this._invalid = {};
+	this._errorMessages = {};
 	this.setModel(params.model);
 	this.setForm(params.form);
 	this.reset();
@@ -194,7 +195,7 @@ DwtForm.prototype.isEnabled = function(id) {
 };
 
 DwtForm.prototype.setValid = function(id, valid) {
-	if (typeof id == "boolean") {
+	if (typeof(id) == "boolean") {
 		valid = arguments[0];
 		for (id in this._items) {
 			this.setValid(id, valid);
@@ -209,7 +210,7 @@ DwtForm.prototype.setValid = function(id, valid) {
 	}
 };
 DwtForm.prototype.isValid = function(id) {
-	if (arguments.length == 0) {
+	if (arguments.length == 0 || AjxUtil.isUndefined(id)) {
 		for (var id in this._invalid) {
 			return false;
 		}
@@ -217,6 +218,30 @@ DwtForm.prototype.isValid = function(id) {
 	}
 	return !(id in this._invalid);
 };
+
+DwtForm.prototype.setErrorMessage = function(id, message) {
+	if (!id || id == "") {
+		this._errorMessages = {};
+		return;
+	}
+	if (!message) {
+		delete this._errorMessages[id]; 
+	} else {
+		this._errorMessages[id] = message;
+	}
+};
+
+DwtForm.prototype.getErrorMessage = function(id) {
+	if (arguments.length == 0) {
+		var messages = {};
+		for (var id in this._invalid) {
+			messages[id] = this._errorMessages[id];
+		}
+		return messages;
+	}
+	return this._errorMessages[id];
+};
+
 DwtForm.prototype.getInvalidItems = function() {
 	return AjxUtil.keys(this._invalid);
 };
@@ -310,23 +335,34 @@ DwtForm.prototype.validate = function(id) {
 	if (arguments.length == 0) {
 		this.setValid(true);
 		for (var id in this._items) {
-			var item = this._items[id];
-			try {
-				this.setValid(item.validator ? item.validator(this.getValue(id)) : true);
-			}
-			catch (e) {
-				// TODO: What to do with error message?
-			}
+			this._validateItem(id);
 		}
 		return this.isValid();
 	}
+	return this._validateItem(id);
+};
+
+DwtForm.prototype._validateItem = function(id) {
+	if (!id) return true;
 	var item = this._items[id];
 	if (!item) return true;
 	try {
-		this.setValid(item.validator ? item.validator(this.getValue(id)) : true);
+		var value = this.getValue(id);
+		var outcome = item.validator ? item.validator(value) : ((item.control && item.control.validator) ? item.control.validator(value) : true);
+		// the validator may return false to signify that the validation failed (but preferably throw an error with a message)
+		// it may return true to signify that the field validates
+		// It also may return a string or hash (truthy) that we may put into the value field (for normalization of data; e.g. if 13/10/2009 is transformed to 1/10/2010 by the validator)
+		this.setValid(id, Boolean(outcome) || outcome === "");
+		if (AjxUtil.isString(outcome) || AjxUtil.isObject(outcome)) {
+			this._setControlValue(id, outcome); // Set display value
+			item.value = item.setter ? this._call(item.setter, [outcome]) : outcome; // Set model value
+			var dirty = !Boolean(this._call(item.equals, [item.value,item.ovalue]));
+			this.setDirty(id, dirty);
+		}
 	}
 	catch (e) {
-		// TODO: What to do with error message?
+		this.setErrorMessage(id, AjxUtil.isString(e) ? e : e.message);
+		this.setValid(id, false);
 	}
 	return !(id in this._invalid);
 };
