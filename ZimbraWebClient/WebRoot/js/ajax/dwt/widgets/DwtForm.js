@@ -497,7 +497,8 @@ DwtForm.prototype._createHtmlFromTemplate = function(templateId, data) {
 	for (var i = 0; i < links.length; i++) {
 		var link = links[i];
 		if (!link.href || link.getAttribute("notab") == "true") continue;
-		if (this._items[link.id]) continue;
+        var controlId = link.id && link.id.substr(this.getHTMLElId().length+1);
+		if (this._items[controlId]) continue;
 		tabIndexes.push({
 			tabindex:	link.getAttribute("tabindex") || Number.MAX_VALUE,
 			control:	link

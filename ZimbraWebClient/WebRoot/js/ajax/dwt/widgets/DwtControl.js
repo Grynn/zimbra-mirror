@@ -678,6 +678,11 @@ function() {
 DwtControl.prototype.focus =
 function() {
 	DwtShell.getShell(window).getKeyboardMgr().grabFocus(this);
+    this.__doFocus();
+};
+
+DwtControl.prototype.blur = function() {
+    this.__doBlur();
 };
 
 /**
