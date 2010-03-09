@@ -1,0 +1,64 @@
+<project name="ZimbraSoapDocs" default="generate-soapapi-doc">
+	
+	<property name="src.dir" location="src" />
+	<property name="templates.dir" location="templates" />
+	<property name="jars.dir" location="jars" />
+
+	<property name="zimbra-server.src.dir" location="../src" />
+	<property name="zimbra-server.java.src.dir" location="${zimbra-server.src.dir}/java" />
+	<property name="zimbra-server.build.classes.dir" location="../build/classes" />
+
+    <property name="output.dir" location="../build/docs/soap" />
+
+	<property name="zimbra-common.dir" location="../../ZimbraCommon" />
+	<property name="zimbra-common.jars.dir" location="${zimbra-common.dir}/jars" />
+	<property name="zimbra-common.build.classes.dir" location="${zimbra-common.dir}/build/classes" />
+
+	<property name="build.dir" location="build" />
+    <property name="build.classes.dir" location="${build.dir}/classes" />
+
+    <path id="class.path">
+        <fileset dir="${jars.dir}" includes="**/*.jar" />
+        <fileset dir="${zimbra-common.jars.dir}" includes="**/*.jar" />
+    	<pathelement location="${build.classes.dir}" />
+    	<pathelement location="${zimbra-server.build.classes.dir}" />
+    	<pathelement location="${zimbra-common.build.classes.dir}" />
+    </path>
+
+	<target name="prepare" >
+		<mkdir dir="${build.classes.dir}" />
+		<mkdir dir="${output.dir}" />
+        <condition property="zimbra.buildinfo.version" value="0.0">
+            <not>
+                <isset property="${zimbra.buildinfo.version}"/>
+            </not>
+        </condition>
+        <condition property="zimbra.buildinfo.date" value="${DSTAMP}-${TSTAMP}">
+            <not>
+                <isset property="${zimbra.buildinfo.date}"/>
+            </not>
+        </condition>
+	</target>
+
+	<target name="compile" depends="prepare" description="Compiles the source code">
+		<javac destdir="${build.classes.dir}" classpathref="class.path" debug="true">
+			<src location="${src.dir}" />
+		</javac>
+	</target>
+
+	<target name="generate-soapapi-doc" depends="compile">
+		<java classname="com.zimbra.doc.soap.util.DocGenerator" classpathref="class.path" fork="true" failonerror="true">
+		    <arg line="-service.src.dir ${zimbra-server.java.src.dir}"/>
+		    <arg line="-templates.dir ${templates.dir}"/>
+		    <arg line="-output.dir ${output.dir}"/>
+		    <arg line="-build.version ${zimbra.buildinfo.version}"/>
+		    <arg line="-build.date ${zimbra.buildinfo.date}"/>
+		</java>
+	</target>
+
+	<target name="clean" description="Removes build dir">
+		<delete dir="${build.dir}" />
+		<delete dir="${output.dir}" />
+	</target>
+	
+</project>
