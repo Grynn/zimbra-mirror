@@ -43,7 +43,6 @@ table.SForce_table  {
     border-bottom: 1px solid #6E6E6E;
 	display:none;
 	overflow:auto;
-	height:150px;
 }
 .SForce_lightyellow {
     background: #FFFFD7;
@@ -98,7 +97,7 @@ table.SForce_table select {
 	border-style:solid;
 	font-size:12px;
 	font-family:'arial',sans-serif;
-	width:200px;
+	width:270px;
 }
 
 
@@ -114,9 +113,8 @@ table.SForce_table a {
 
 }
 
-.SForce_listView tr:hover { 
+.SForce_hoverTable tr:hover { 
 	background-color:#ccd5e8; 
-	cursor:pointer;
 }
 
 .SForce_tableLabel {

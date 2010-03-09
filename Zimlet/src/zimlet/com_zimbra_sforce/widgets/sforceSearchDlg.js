@@ -124,20 +124,22 @@ function(ev) {
 		this.objName = "Account";
 	}
 	var val = document.getElementById("sforce_searchItemsField").value;
+
 	var callback = AjxCallback.simpleClosure(this._searchQueryListHandler, this);
 	if(this.objName == "Case") {
-		var q = ["select CaseNumber,Id,Subject from ",this.objName," where CaseNumber like '%",val,"%'"].join("");
+		var q = ["select CaseNumber,Id,Subject from ",this.objName," where CaseNumber like '%",val,"%' limit 25"].join("");
 	} else if(this.objName == "Contract") {
-		var q = ["select ContractNumber,Id,Owner.Alias from ",this.objName," where ContractNumber like '%",val,"%'"].join("");
+		var q = ["select ContractNumber,Id,Owner.Alias from ",this.objName," where ContractNumber like '%",val,"%' limit 25"].join("");
 	}  else if(this.objName == "Product") {//objName for this is 'Product2' (not 'Product')
 		var q = ["select Name,Id from Product2 where Name like '%",val,"%'"].join("");	
 	}  else if(this.objName == "Solution") {
-		var q = ["select SolutionName,Id from Solution where SolutionName like '%",val,"%'"].join("");	
+		var q = ["select SolutionName,Id from Solution where SolutionName like '%",val,"%' limit 25"].join("");	
 	}   else if(this.objName == "Contact" || this.objName == "Lead") {
-		var q = ["select Name,Phone,Email,Id from ",this.objName," where Name like '%",val,"%'"].join("");	
+		var q = ["select Name,Phone,Email,Id from ",this.objName," where Name like '%",val,"%' limit 25"].join("");	
 	} else {
-		var q = ["select Name,Id from ",this.objName," where Name like '%",val,"%'"].join("");
+		var q = ["select Name,Id from ",this.objName," where Name like '%",val,"%' limit 25"].join("");
 	}
+	document.getElementById("sforce_searchResultsDiv").innerHTML = this.zimlet._loadingSalesForceHtml;
 	this.zimlet.query(q, 10, callback);
 };
 
@@ -184,11 +186,17 @@ function(list) {
 			h[k++] = ["<tr><td><strong>Name:</strong> </td><td>", name, "</td></tr>"].join("");
 			var email = item.Email;
 			if(email) {
-				h[k++] = ["<tr><td><strong>Email:</strong> </td><td> ", email.toString(), "</td></tr>"].join("");
+				email = email.toString();
+				h[k++] = ["<tr><td><strong>Email:</strong> </td><td> ", email, "</td></tr>"].join("");
+			} else {
+				email = "";
 			}
 			var phone = item.Phone;
 			if(phone) {
-				h[k++] = ["<tr><td><strong>Phone:</strong>  </td><td>", phone.toString(), "</td></tr>"].join("");
+				phone = phone.toString();
+				h[k++] = ["<tr><td><strong>Phone:</strong>  </td><td>", phone, "</td></tr>"].join("");
+			} else {
+				phone = "";
 			}
 			h[k++] = "</table>";
 			var info = h.join("");						
@@ -216,6 +224,8 @@ function(list) {
 			html[i++] = ["<td width=5px><input type ='radio' name='sforce_searchToAddRadio' id='",rId,"'></input></td><td>",	name,"</td><td>",subject,"</td>"].join("");
 		} else if(this.objName == "Contract") {
 			html[i++] = ["<td width=5px><input type ='radio'  name='sforce_searchToAddRadio' id='",rId,"'></input></td><td>",	name,"</td><td>",ownerAlias,"</td>"].join("");
+		}else if(this.objName == "Contact" || this.objName == "Lead") {
+			html[i++] = ["<td width=5px><input type ='radio'  name='sforce_searchToAddRadio' id='",rId,"'></input></td><td>",	name," <label style='color:darkBlue'>", email, "</label><label style='color:green'> ",phone,"</label></td>"].join("");
 		}else {
 			html[i++] = ["<td width=5px><input type ='radio'  name='sforce_searchToAddRadio' id='",rId,"'></input></td><td>",	name,"</td>"].join("");
 		}

@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_sforce" version="3.0.1.1" description="Connects Zimbra to Salesforce">	
+<zimlet name="com_zimbra_sforce" version="3.0.1.2" description="Connects Zimbra to Salesforce">	
 <contentObject>
 		<matchOn>
 			<regex attrs="ig">(?:(?:\bCase(?:)?:?\s*#?))(\d+)\b</regex>
@@ -7,8 +7,8 @@
 			<menuItem label="View Case (in Salesforce)" icon="Notebook" id="SFORCE_CASE_OPENCASE"/>
 			<menuItem label="Edit Case (in Salesforce)" icon="Edit" id="SFORCE_CASE_EDITCASE"/>
 			<menuItem label="Close Case" icon="Cancel" id="SFORCE_CASE_CLOSE"/>
-			<menuItem/>
-			<menuItem label="Quick Edit" icon="MsgStatusDraft" id="SFORCE_CASE_CHANGE"/>
+			<menuItem label="Change.." icon="SFORCE-panelIcon" id="SFORCE_CASE_CHANGE"/>
+			<menuItem label="Open Link/URL.." icon="Shortcut" id="SFORCE_CASE_OPEN_LINK"/>
 		</contextMenu>
     </contentObject>
 
@@ -30,6 +30,8 @@
 		<property type="string" name="sforce_ignoreDomainsList" value="zimbra.com,vmware.com"/>	
 		<property type="string" name="sforce_logindlg_sbarShowOnlyOnResult" value= "false" />
 		<property type="string" name="sforce_logindlg_showSendAndAddBtn" value= "true" />
+		<property type="string" name="sforce_linkNamesInSalesForceStartsWith" value= "Link_to_" />
+
   </userProperties>
 
 </zimlet>

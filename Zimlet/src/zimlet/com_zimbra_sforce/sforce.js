@@ -38,9 +38,11 @@ Com_Zimbra_SForce.prototype.init = function() {
 	this.XMLNS = "urn:enterprise.soap.sforce.com";
 	this._shell = this.getShell();
 	this.loginToSFOnLaunch = this.getUserProperty("loginToSFOnLaunch") == "true";
+	this.sforce_linkNamesInSalesForceStartsWith = this.getUserProperty("sforce_linkNamesInSalesForceStartsWith");
 	this._force_show_salesforceBar = false;
 	this.loadLoginInfo = false;//used to ensure people has entered valid user/pwd 
-	if(this.loginToSFOnLaunch) {
+	this._loadingSalesForceHtml = ["<table align=center><tr><td><div style='padding:10px'><img   src=\"", this.getResource("img/sf_busy.gif") , "\"  /> <b> Searching SalesForce..</b></div></td></tr></table>"].join("");
+	if (this.loginToSFOnLaunch) {
 		this.login();
 	}
 	this.sForceSearchDlg = new Com_Zimbra_SForceSearchDlg(this);
@@ -82,13 +84,14 @@ Com_Zimbra_SForce.prototype.doDrop = function(obj) {
 
 /// Called by the Zimbra framework when the SForce panel item was clicked
 Com_Zimbra_SForce.prototype.singleClicked = function() {
-	this.login();
+	//this.login();
+	this._displayLoginDialog();
 };
 
 /// Called by the Zimbra framework when some menu item that doesn't have an
 /// <actionURL> was selected
 Com_Zimbra_SForce.prototype.menuItemSelected = function(itemId, val) {
-	switch (itemId) {		
+	switch (itemId) {
 		case "PREFERENCES":
 			this._displayLoginDialog();
 			break;
@@ -97,19 +100,19 @@ Com_Zimbra_SForce.prototype.menuItemSelected = function(itemId, val) {
 			break;
 		case "SFORCE_CASE_OPENCASE":
 			this._openCaseOnLaunchInEditMode = false;
-			this.clicked("", this._actionObject, "open");
+			this.clicked("", this._actionObject, null, "open");
 			break;
 		case "SFORCE_CASE_EDITCASE":
 			this._openCaseOnLaunchInEditMode = true;
-			this.clicked("", this._actionObject, "edit");
+			this.clicked("", this._actionObject, null, "edit");
 			break;
 		case "SFORCE_SHOW_SALESFORCE_BAR":
 			this._force_show_salesforceBar = true;
-			this._addSForceBar([]);
+			this._addSForceBar({cRecords:[], lRecords:[]});
 			break;
 		case "SFORCE_CASE_CLOSE":
 			var caseNumber = this._getTooltipData(this._actionObject);
-			var callback = new AjxCallback(this, this._closeCase); 
+			var callback = new AjxCallback(this, this._closeCase);
 			this._getCaseId(caseNumber, callback);
 			break;
 		case "SFORCE_CASE_CHANGE":
@@ -120,46 +123,156 @@ Com_Zimbra_SForce.prototype.menuItemSelected = function(itemId, val) {
 	}
 };
 
-Com_Zimbra_SForce.prototype._closeCase =
+Com_Zimbra_SForce.prototype.getActionMenu =
+function(obj, span, context) {
+	if (this._zimletContext._contentActionMenu instanceof AjxCallback) {
+		this._zimletContext._contentActionMenu = this._makeMenu(this._zimletContext._contentActionMenu.args);
+		//this._zimletContext._contentActionMenu = this._zimletContext._contentActionMenu.run();
+
+	}
+	this._actionObject = obj;
+	this._actionSpan = span;
+	this._actionContext = context;
+	return this._zimletContext._contentActionMenu;
+};
+
+Com_Zimbra_SForce.prototype._makeMenu =
+function(obj) {
+	var items = obj[0];
+	var menu = new ZmActionMenu({parent:DwtShell.getShell(window), menuItems:ZmOperation.NONE});
+	for (var i = 0; i < items.length; ++i) {
+		var data = items[i];
+		if (!data.id) {
+			menu.createSeparator();
+			continue;
+		}
+		var subMenuItems = data.subMenuItems;
+		var params = {image:data.icon, text:this._zimletContext.process(data.label),disImage:data.disabledIcon,style:data.style};
+		if (data.id == "SFORCE_CASE_CHANGE") {
+			params.style = DwtMenuItem.CASCADE_STYLE;
+			var mainMenuItem = menu.createMenuItem(data.id, params);
+			mainMenuItem.setData("xmlMenuItem", data);
+			var subMenu = new ZmPopupMenu(mainMenuItem); //create submenu
+			mainMenuItem.setMenu(subMenu);//add submenu to menuitem
+			for (var k = 0; k < this.__dynamicMenuItems.length; k++) {
+				var dmi_data = this.__dynamicMenuItems[k];
+				var params = {image:dmi_data.icon, text:this._zimletContext.process(dmi_data.label),disImage:dmi_data.disabledIcon,style:dmi_data.style};
+				var subMenuItem = subMenu.createMenuItem(dmi_data.id, params);
+				subMenuItem.setData("xmlMenuItem", dmi_data);
+				var subsubMenu = new ZmPopupMenu(subMenuItem); //create submenu
+				subMenuItem.setMenu(subsubMenu);//add submenu to menuitem
+				var sssMIs = dmi_data.subMenuItems;
+				for (var j = 0; j < sssMIs.length; j++) {
+					var smiObj = sssMIs[j];
+					if (smiObj == "") {
+						continue;
+					}
+					var obj = eval("(" + smiObj + ")");
+					var label = obj.label;
+					var id = [dmi_data.itemName,"=::=",label].join("");
+					var subsubMenuItem = subsubMenu.createMenuItem(id, {image:"SFORCE-panelIcon", text:label});
+					subsubMenuItem.addSelectionListener(new AjxListener(this, this._handleDynamicMenuItemClick, id));
+				}
+			}
+		} else if (data.id == "SFORCE_CASE_OPEN_LINK") {
+			var mainMenuItem = menu.createMenuItem(data.id, params);
+			mainMenuItem.setData("xmlMenuItem", data);
+			var subMenu = new ZmPopupMenu(mainMenuItem); //create submenu
+			mainMenuItem.setMenu(subMenu);//add submenu to menuitem
+			for (var k = 0; k < this.__dynamicMenuItems_links.length; k++) {
+				var dmi_data = this.__dynamicMenuItems_links[k];
+				var id = [dmi_data.itemName,"=::=",label].join("");
+				var params = {image:"Shortcut", text:this._zimletContext.process(dmi_data.label),disImage:dmi_data.disabledIcon,style:dmi_data.style};
+				var subMenuItem = subMenu.createMenuItem(id, params);
+				subMenuItem.setData("xmlMenuItem", dmi_data);
+				subMenuItem.addSelectionListener(new AjxListener(this, this._handleDynamicMenuItemLinks, id));
+			}
+		} else {
+			var mainMenuItem = menu.createMenuItem(data.id, params);
+			mainMenuItem.setData("xmlMenuItem", data);
+			mainMenuItem.addSelectionListener(this._zimletContext._handleMenuItemSelected);
+		}
+	}
+	return menu;
+};
+
+Com_Zimbra_SForce.prototype._handleDynamicMenuItemLinks =
 function(id) {
+	var caseNumber = this._getTooltipData(this._actionObject);
+	var arry = id.split("=::=");
+	var callback = new AjxCallback(this, this._openSFLink);
+	this._getCaseLink(arry[0], caseNumber, callback);
+};
+
+Com_Zimbra_SForce.prototype._openSFLink =
+function(url) {
+	if (url == "") {
+		appCtxt.getAppController().setStatusMsg("Salesforce Link/URL was empty", ZmStatusView.LEVEL_WARNING);
+		return;
+	}
+	window.open(url);
+};
+
+Com_Zimbra_SForce.prototype._handleDynamicMenuItemClick =
+function(id) {
+	var caseNumber = this._getTooltipData(this._actionObject);
+	var arry = id.split("=::=");
+	var callback = new AjxCallback(this, this._updateCase, [arry[0], arry[1]]);
+	this._getCaseId(caseNumber, callback);
+};
+
+Com_Zimbra_SForce.prototype._updateCase =
+function(field, val, id) {
 	var props = {};
 	var params = [];
-
-	props["Status"] = "Close";
+	props[field] = val;
 	props["Id"] = id;
 	params.push(props);
-	var callback = AjxCallback.simpleClosure(this._handleCloseCase, this);
+	var callback = AjxCallback.simpleClosure(this._handleUpdateCase, this);
 	this.updateSFObject(params, "Case", callback, true);
 };
 
-Com_Zimbra_SForce.prototype._handleCloseCase =
+Com_Zimbra_SForce.prototype._closeCase =
+function(id) {
+	this._updateCase("Status", "Close", id);
+};
+
+Com_Zimbra_SForce.prototype._handleUpdateCase =
 function(response) {
-	if(response.success) {
-		appCtxt.setStatusMsg("Support Case updated successfully", ZmStatusView.LEVEL_INFO);
+	if (response.success) {
+		appCtxt.getAppController().setStatusMsg("Support Case updated successfully", ZmStatusView.LEVEL_INFO);
+	} else {
+		appCtxt.getAppController().setStatusMsg("Problem contacting Salesforce. Please try again", ZmStatusView.LEVEL_WARNING);
 	}
+
 };
 
 Com_Zimbra_SForce.prototype._loadCaseDescriptionObject = function() {
-	if(this._caseObjectLoaded) {
+	if (this._caseObjectLoaded) {
 		return;
 	}
-	if(!this.sForceObject) {
+	if (!this.sForceObject) {
 		this.sForceObject = new Com_Zimbra_SForceObject(this);
 	}
-	var map = this.sForceObject.getFieldMap("describeSObject", "Case");
-	var hasItem = false;
-	for(var item in map) {
-		hasItem = true;
-		break;
+	this._sforceCaseObject = this.sForceObject.getFieldMap("describeSObject", "Case");
+	//var hasItem = false;
+	//	for(var item in map) {
+	//		hasItem = true;
+	//		break;
+	//	}
+	this._sforceCaseObjectNameLabelMap = [];
+	for (var el in this._sforceCaseObject) {
+		var obj = this._sforceCaseObject[el];
+		this._sforceCaseObjectNameLabelMap[el] = obj.label;
 	}
 	this._caseObjectLoaded = true;
-	this._sforceCaseObject = map;
+
 };
 
 Com_Zimbra_SForce.prototype._displayQuickUpdateDialog =
 function(result) {
 	if (this.quDialog) {
-		this.quView.getHtmlElement().innerHTML = this._createQuickUpdateView(result);	
+		this.quView.getHtmlElement().innerHTML = this._createQuickUpdateView(result);
 		this.quDialog.result = result;
 		this._addCaseOwnerLookupBtn();
 		this.quDialog.popup();
@@ -168,8 +281,8 @@ function(result) {
 	this.quView = new DwtComposite(this.getShell());
 	this.quView.setSize("410", "240");
 	this.quView.getHtmlElement().style.overflow = "auto";
-	this.quView.getHtmlElement().innerHTML = this._createQuickUpdateView(result);	
-	this.quDialog = this._createDialog({title:"Quick Edit Case", view:this.quView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});	
+	this.quView.getHtmlElement().innerHTML = this._createQuickUpdateView(result);
+	this.quDialog = this._createDialog({title:"Quick Edit Case", view:this.quView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this.quDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._quOKBtnListner));
 	this.quDialog.result = result;
 	this._addCaseOwnerLookupBtn();
@@ -178,23 +291,23 @@ function(result) {
 
 Com_Zimbra_SForce.prototype._quOKBtnListner =
 function() {
-	var props = {};	
-	for(var i =0; i < this._quickUpdateSelectMenuList.length; i++) {
+	var props = {};
+	for (var i = 0; i < this._quickUpdateSelectMenuList.length; i++) {
 		var obj = this._quickUpdateSelectMenuList[i];
 		var prevVal = obj.currentValue;
 		var val = document.getElementById(obj.id).value;
-		if((prevVal != undefined && prevVal != val) && (val != "None")) {
+		if ((prevVal != undefined && prevVal != val) && (val != "None")) {
 			props[obj.elName] = val;
 		}
 	}
-	if(!this.quDialog.result.Id) {
+	if (!this.quDialog.result.Id) {
 		appCtxt.setStatusMsg("Case ID not found, Aborting updating Case", ZmStatusView.LEVEL_WARNING);
 		return;
 	}
 	var id = this.quDialog.result.Id.toString();
 	props["Id"] = id;
 	var ownerId = document.getElementById("sforce_quickUpdate_changeOwner").refObjIdValue;
-	if(ownerId != undefined && ownerId != "") {
+	if (ownerId != undefined && ownerId != "") {
 		props["OwnerId"] = ownerId;
 	}
 	var params = [];
@@ -205,15 +318,15 @@ function() {
 
 Com_Zimbra_SForce.prototype._handleQuickUpdateCase =
 function(result) {
-	if(!result.errors) {
+	if (!result.errors) {
 		appCtxt.setStatusMsg("Support Case Updated", ZmStatusView.LEVEL_INFO);
 		this.quDialog.popdown();
 	} else {
 		var msg = "";
-		if(result.errors && result.errors.message) {
+		if (result.errors && result.errors.message) {
 			msg = result.errors.message.toString();
 		}
-		appCtxt.setStatusMsg("Could not update Case: "+msg, ZmStatusView.LEVEL_WARNING);
+		appCtxt.setStatusMsg("Could not update Case: " + msg, ZmStatusView.LEVEL_WARNING);
 
 	}
 };
@@ -221,29 +334,29 @@ function(result) {
 Com_Zimbra_SForce.prototype._createQuickUpdateView =
 function(result) {
 	var ownerName = "";
-	var ownerId = ""; 
-	if(result && result.Owner) {
+	var ownerId = "";
+	if (result && result.Owner) {
 		ownerName = result.Owner.Name.toString();
 	}
-	if(result && result.OwnerId) {
+	if (result && result.OwnerId) {
 		ownerId = result.OwnerId.toString();
 	}
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<table  width=100% cellpadding=4 class='SForce_table'>";
-	html[i++] = "<tr ><td width=120px align=right><strong>Case Owner:</strong></td>";	
+	html[i++] = "<tr ><td width=120px align=right><strong>Case Owner:</strong></td>";
 	html[i++] = "<td><div>";
-	html[i++] ="<table>";
-	html[i++] =["<td><div id='sforce_quickUpdate_changeOwner'  refObjIdValue='",ownerId,"'>",ownerName,"</div></td>"].join("");
-	html[i++] ="<td><div id='sforce_quickUpdate_changeOwnerLookupBtn'></div></td>";
-	html[i++] ="<td><div id='sforce_quickUpdate_changeOwnerClearDiv' style='display:none;'><a href=# id='sforce_quickUpdate_changeOwnerClearLink'>clear</a></div></td></tr>";
+	html[i++] = "<table>";
+	html[i++] = ["<td><div id='sforce_quickUpdate_changeOwner'  refObjIdValue='",ownerId,"'>",ownerName,"</div></td>"].join("");
+	html[i++] = "<td><div id='sforce_quickUpdate_changeOwnerLookupBtn'></div></td>";
+	html[i++] = "<td><div id='sforce_quickUpdate_changeOwnerClearDiv' style='display:none;'><a href=# id='sforce_quickUpdate_changeOwnerClearLink'>clear</a></div></td></tr>";
 	html[i++] = "</table>";
 	html[i++] = "</div></td></tr>";
-	for(var el in this._allQuickUpdatePickLists) {
+	for (var el in this._allQuickUpdatePickLists) {
 		var obj = this._allQuickUpdatePickLists[el];
 		var items = obj.items;
 
-		html[i++] = this._getQuickUpdateListHtml(el, obj.label, items, obj.currentValue);		
+		html[i++] = this._getQuickUpdateListHtml(el, obj.label, items, obj.currentValue);
 	}
 	html[i++] = "</table>";
 	html[i++] = "</DIV>";
@@ -251,14 +364,14 @@ function(result) {
 };
 
 Com_Zimbra_SForce.prototype._addCaseOwnerLookupBtn = function() {
-		var btn = new DwtButton({parent:this._shell});
-		btn.setText("Change");
-		btn.setImage("Search");
-		btn.addSelectionListener(new AjxListener(this, this._changeCaseOwnerBtnHdlr, [ btn]));
-		document.getElementById("sforce_quickUpdate_changeOwnerLookupBtn").appendChild(btn.getHtmlElement());		
+	var btn = new DwtButton({parent:this._shell});
+	btn.setText("Change");
+	btn.setImage("Search");
+	btn.addSelectionListener(new AjxListener(this, this._changeCaseOwnerBtnHdlr, [ btn]));
+	document.getElementById("sforce_quickUpdate_changeOwnerLookupBtn").appendChild(btn.getHtmlElement());
 };
 
-Com_Zimbra_SForce.prototype._changeCaseOwnerBtnHdlr = function() { 
+Com_Zimbra_SForce.prototype._changeCaseOwnerBtnHdlr = function() {
 	this.sForceSearchDlg.setProperties("User", "sforce_quickUpdate_changeOwner", null, "sforce_quickUpdate_changeOwnerClearLink");
 	this.sForceSearchDlg.displaySearchDialog();
 };
@@ -270,21 +383,21 @@ function(elName, label, items, currentValue) {
 	var id = ["sforce_quickUpdateMenu_",elName].join("");
 	var hideLinkId = ["sforce_quickUpdateMenu_hideLink_",elName].join("");
 
-	if(!this._quickUpdateSelectMenuList) {
+	if (!this._quickUpdateSelectMenuList) {
 		this._quickUpdateSelectMenuList = [];
 	}
 	this._quickUpdateSelectMenuList.push({elName:elName, id:id, currentValue:currentValue, hideLinkId:hideLinkId});
 	html[i++] = ["<tr ><td width=120px align=right><strong>",label,":</strong></td><td width=200px><select id='",id,"'>"].join("");
 	html[i++] = "<option value='None'>None</option>";
-	for(var j=0; j< items.length; j++) {
-		try{
+	for (var j = 0; j < items.length; j++) {
+		try {
 			var item = items[j];
-			if(item == "") {
+			if (item == "") {
 				continue;
 			}
-			var obj = eval("("+item+")");
+			var obj = eval("(" + item + ")");
 			var label = obj.label;
-			if(currentValue == label) {
+			if (currentValue == label) {
 				html[i++] = ["<option  value='",label,"' selected>",label,"</option>"].join("");
 			} else {
 				html[i++] = ["<option  value='",label,"'>",label,"</option>"].join("");
@@ -295,7 +408,6 @@ function(elName, label, items, currentValue) {
 	html[i++] = ["</select></td></tr>"].join("");
 	return html.join("");
 };
-
 
 
 //-------------------------------------------------------------------------------------------
@@ -309,7 +421,7 @@ function(elName, label, items, currentValue) {
 Com_Zimbra_SForce.prototype._displayLoginDialog =
 function(callback, errorMsg) {
 	//if zimlet dialog already exists...
-	if(callback) {
+	if (callback) {
 		this._loginOkCallback = callback;
 	}
 	if (this.loginDlg) {
@@ -319,7 +431,7 @@ function(callback, errorMsg) {
 		return;
 	}
 	this._loginDlgView = new DwtComposite(this._shell);
-	this._loginDlgView.setSize("450", "325");
+	this._loginDlgView.setSize("500", "350");
 	this._loginDlgView.getHtmlElement().style.overflow = "auto";
 	this._loginDlgView.getHtmlElement().innerHTML = this._createLoginDlgView();
 
@@ -334,7 +446,7 @@ function(callback, errorMsg) {
 
 Com_Zimbra_SForce.prototype._setErrorMsgToLoginDlg =
 function(errorMsg) {
-	if(errorMsg) {
+	if (errorMsg) {
 		document.getElementById("sforce_logindlg_errorDiv").innerHTML = errorMsg;
 		document.getElementById("sforce_logindlg_errorDiv").style.display = "block";
 	} else {
@@ -349,23 +461,23 @@ function() {	//show the checkbox checked if needed
 	var passwd = this.getUserProperty("passwd");
 	this.sforce_ignoreDomainsList = this.getUserProperty("sforce_ignoreDomainsList");
 	this.sforce_logindlg_sbarShowOnlyOnResult = this.getUserProperty("sforce_logindlg_sbarShowOnlyOnResult") == "true";
-	if(user) {
+	if (user) {
 		document.getElementById("sforce_logindlg_userNamefield").value = user;
 	}
-	if(passwd) {
+	if (passwd) {
 		document.getElementById("sforce_logindlg_passwordfield").value = passwd;
 	}
-	if(this.sforce_ignoreDomainsList) {
+	if (this.sforce_ignoreDomainsList) {
 		document.getElementById("sforce_logindlg_ignoreDomainsfield").value = this.sforce_ignoreDomainsList;
 	}
 
-	if(this.loginToSFOnLaunch) {
+	if (this.loginToSFOnLaunch) {
 		document.getElementById("sforce_logindlg_loginToSFOnLaunch").checked = true;
 	}
-	if(this.sforce_logindlg_showSendAndAddBtn) {
+	if (this.sforce_logindlg_showSendAndAddBtn) {
 		document.getElementById("sforce_logindlg_showSendAndAddBtn").checked = true;
 	}
-	if(this.sforce_logindlg_sbarShowOnlyOnResult) {
+	if (this.sforce_logindlg_sbarShowOnlyOnResult) {
 		document.getElementById("sforce_logindlg_sbarShowOnlyOnResult").checked = true;
 	}
 };
@@ -380,7 +492,6 @@ function() {
 	html[i++] = "<TR><TD  style='font-weight:bold'>Password + SecurityToken*:</TD><TD><INPUT type='password' id='sforce_logindlg_passwordfield'></INPUT></TD></TR>";
 	html[i++] = "<TR><TD style='font-weight:bold'>Ignore emails with following domain(s):<br/><label style=\"font-size: 10px; color: gray;\">(Saperate multiple domains by comma)</label></TD><TD><INPUT type='text' id='sforce_logindlg_ignoreDomainsfield'></INPUT></TD></TR>";
 	html[i++] = "</TABLE></DIV><BR/>";
-
 	html[i++] = "<DIV>";
 	html[i++] = "<TABLE class='SForce_table' width='100%'>";
 	html[i++] = "<TR><TD width=18px><INPUT type='checkbox' id='sforce_logindlg_sbarShowOnlyOnResult'></INPUT></TD><TD  style='font-weight:bold'>Show Salesforce Bar only when there are Salesforce contacts<TD></TD></TR>";
@@ -393,12 +504,10 @@ function() {
 	html[i++] = "<TABLE class='SForce_table' width='100%'>";
 	html[i++] = "<TR><TD width=18px><INPUT type='checkbox' id='sforce_logindlg_loginToSFOnLaunch'></INPUT></TD><TD  style='font-weight:bold'>Login to Salesforce when Zimbra is launched<TD></TD></TR>";
 	html[i++] = "</TABLE></DIV>";
-
-	
-	"<BR/>";
+	html[i++] = "<BR/>";
 	html[i++] = "<DIV class='SForce_yellow'>";
 	html[i++] = "<B>NOTES:</B><BR/>1. If your <b><i>Salesforce password</i></b> is <label style='font-weight:bold;color:red'>mypassword</label>, and your <b><i>Salesforce security token</i></b> is <label style='font-weight:bold;color:blue'>XXXXXXXXXX</label>";
-	html[i++] = " then you must enter <label style='font-weight:bold;color:red'>mypassword</label><label style='font-weight:bold;color:blue'>XXXXXXXXXX</label> in <i>Password + SecuritToken</i> field. <BR/><BR/>2. <b> Steps to get Security token</b>:"; 
+	html[i++] = " then you must enter <label style='font-weight:bold;color:red'>mypassword</label><label style='font-weight:bold;color:blue'>XXXXXXXXXX</label> in <i>Password + SecuritToken</i> field. <BR/><BR/>2. <b> Steps to get Security token</b>:";
 	html[i++] = "<BR/>- Login to Salesforce,<BR/>- Click on <b>Setup</b> near top-right corner,<BR/>- Click on <b>Reset your Security Token</b> link and reset it<br/>";
 	html[i++] = "After you have reset security token, Salesforce will send you an email with new security token.";
 	html[i++] = "</DIV>";
@@ -410,20 +519,20 @@ function() {
 	var needRefresh = false;
 	var user = AjxStringUtil.trim(document.getElementById("sforce_logindlg_userNamefield").value);
 	var passwd = AjxStringUtil.trim(document.getElementById("sforce_logindlg_passwordfield").value);
-	if(user == "" || passwd == "") {
+	if (user == "" || passwd == "") {
 		this._setErrorMsgToLoginDlg("Please fill your Salesforce credentials");
 		return;
 	}
 	this.sforce_ignoreDomainsList = AjxStringUtil.trim(document.getElementById("sforce_logindlg_ignoreDomainsfield").value);
-	var loginToSFOnLaunch =  document.getElementById("sforce_logindlg_loginToSFOnLaunch").checked;
-	this.sforce_logindlg_sbarShowOnlyOnResult =  document.getElementById("sforce_logindlg_sbarShowOnlyOnResult").checked;
+	var loginToSFOnLaunch = document.getElementById("sforce_logindlg_loginToSFOnLaunch").checked;
+	this.sforce_logindlg_sbarShowOnlyOnResult = document.getElementById("sforce_logindlg_sbarShowOnlyOnResult").checked;
 	var showSendandAddBtnVal = document.getElementById("sforce_logindlg_showSendAndAddBtn").checked;
-	if(showSendandAddBtnVal != this.sforce_logindlg_showSendAndAddBtn) {
+	if (showSendandAddBtnVal != this.sforce_logindlg_showSendAndAddBtn) {
 		needRefresh = true;
 		this.sforce_logindlg_showSendAndAddBtn = showSendandAddBtnVal;
 	}
 
-	this.loadLoginInfo = false;	
+	this.loadLoginInfo = false;
 	this._ignoreDomainList = false;
 	this.loginDlg.popdown();//hide the dialog
 
@@ -434,14 +543,14 @@ function() {
 	this.setUserProperty("sforce_logindlg_showSendAndAddBtn", this.sforce_logindlg_showSendAndAddBtn);
 	this.setUserProperty("loginToSFOnLaunch", loginToSFOnLaunch);
 	var callback = new AjxCallback(this, this._handleSaveProperties, needRefresh);
-	
+
 	this.saveUserProperties(callback);
 	this.login(this._loginOkCallback, user, passwd);
 };
 
 Com_Zimbra_SForce.prototype._loginDlgCancelBtnListener =
 function() {
-	if(this.sForceViewManager) {
+	if (this.sForceViewManager) {
 		this.sForceViewManager.hideAllViewsIfBusy();
 	}
 	this.loginDlg.popdown();
@@ -450,7 +559,7 @@ function() {
 Com_Zimbra_SForce.prototype._handleSaveProperties =
 function(needRefresh) {
 	appCtxt.setStatusMsg("Preferences Saved", ZmStatusView.LEVEL_INFO);
-	if(needRefresh) {
+	if (needRefresh) {
 		this.showYesNoDialog();
 	}
 };
@@ -492,20 +601,19 @@ function() {
 Com_Zimbra_SForce.prototype.onMsgView =
 function(msg) {
 	this._initializeSalesForceForThisMsg(msg);
-	if(this.user && this.user != "" && this.passwd && this.passwd != "") {
+	if (this.user && this.user != "" && this.passwd && this.passwd != "") {
 		this.noteDropped(msg, true);
-	}	
-};		
+	}
+};
 
 Com_Zimbra_SForce.prototype._initializeSalesForceForThisMsg =
 function(msg) {
 	this._currentSelectedMsg = msg;
 	this.sforce_bar_expanded = false;
-	this._recordsForCurrentMail = [];
 	this._emailsInSalesforce = [];
 	this.sforce_bar_recordsForThisMsgParsed = false;
 
-	if(!this.loadLoginInfo) {
+	if (!this.loadLoginInfo) {
 		this.user = this.getUserProperty("user");
 		this.passwd = this.getUserProperty("passwd");
 		this.sforce_ignoreDomainsList = this.getUserProperty("sforce_ignoreDomainsList");
@@ -513,35 +621,59 @@ function(msg) {
 		this.sforce_logindlg_showSendAndAddBtn = this.getUserProperty("sforce_logindlg_showSendAndAddBtn") == "true";
 		this.loadLoginInfo = true;
 	}
-
 	this._emailsForCurrentNote = this._getValidAddressesForCurrentNote(msg);
 };
 
 Com_Zimbra_SForce.prototype._addSForceBar =
-function(records) {
-	var viewId =  appCtxt.getCurrentViewId();
-	if(viewId == "CLV" && appCtxt.getSettings().getSetting("READING_PANE_LOCATION").value == "off") {
+function(recordsObj) {
+	this._parseAndSetRecordsObj(recordsObj);
+	var viewId = appCtxt.getCurrentViewId();
+	if (viewId == "CLV" && appCtxt.getSettings().getSetting("READING_PANE_LOCATION").value == "off") {
 		setTimeout(AjxCallback.simpleClosure(this._do_addSForceBar, this, "CV"), 1000);
 	} else {
-		this._do_addSForceBar(records, viewId);
+		this._do_addSForceBar(viewId);
 	}
 };
 
+Com_Zimbra_SForce.prototype._parseAndSetRecordsObj =
+function(recordsObj) {
+	this.cRecords = [];
+	this.lRecords = [];
+	this.allRecords = [];
+	var cRecords = recordsObj.cRecords;
+	var lRecords = recordsObj.lRecords;
+	var allRecords = [];
+	if (cRecords && cRecords instanceof Array) {
+		this.cRecords = cRecords;
+		allRecords = cRecords;
+	} else {
+		this.cRecords = [];
+	}
+
+	if (lRecords && lRecords instanceof Array) {
+		this.lRecords = lRecords;
+		allRecords = allRecords.concat(lRecords);
+	} else {
+		this.lRecords = [];
+	}
+	this.allRecords = allRecords;
+};
+
 Com_Zimbra_SForce.prototype._do_addSForceBar =
-function(records, viewId) {
-	if(this.sforce_logindlg_sbarShowOnlyOnResult && records.length == 0 && !this._force_show_salesforceBar) {
+function(viewId) {
+	if (this.sforce_logindlg_sbarShowOnlyOnResult && this.allRecords.length == 0 && !this._force_show_salesforceBar) {
 		return;
 	}
 
-	if(viewId.indexOf("MSG") == 0) {
+	if (viewId.indexOf("MSG") == 0) {
 		var infoBar = document.getElementById(["zv__MSG__",viewId,"_infoBar"].join(""));
 	} else {
 		var infoBar = document.getElementById(["zv__",viewId,"__MSG_infoBar"].join(""));
 	}
-	if(!infoBar) {
+	if (!infoBar) {
 		return;
 	}
-	if(this._previousParentNode && document.getElementById("sforce_bar_frame")) {
+	if (this._previousParentNode && document.getElementById("sforce_bar_frame")) {
 		this._previousParentNode.removeChild(document.getElementById("sforce_bar_frame"));
 	}
 	this._previousParentNode = infoBar.parentNode;
@@ -556,94 +688,123 @@ function(records, viewId) {
 	this._addWidgetsToSFBar();
 
 	var doc = document.getElementById("sforce_bar_msgCell");
-	if(doc) {
-		if(records.length > 0) {
-			var contacts = "contacts";
-			if(records.length == 1) {
-				contacts = "contact";
+	if (doc) {
+		if (this.allRecords.length > 0) {
+			var hasContact = true;
+			var hasLead = true;
+			var contacts;
+			if (this.cRecords.length == 1) {
+				contacts = [this.cRecords.length, " contact"].join("");
+			} else if(this.cRecords.length > 1) {
+				contacts = [this.cRecords.length, " contacts"].join("");
+			} else {
+				hasContact =false;
+				contacts = "";
 			}
-			doc.innerHTML = [records.length, " ",contacts," found"].join("");
+			var leads;
+			if (this.lRecords.length == 1) {
+				leads = [this.lRecords.length, " lead"].join("");
+			} else if(this.lRecords.length > 1) {
+				leads = [this.lRecords.length, " leads"].join("");
+			} else {
+				hasLead = false;
+				leads = "";
+			}
+			var andStr = " & ";
+			if(!hasLead || !hasContact) {
+				andStr = "";
+			}
+			doc.innerHTML = [contacts,andStr,leads," found"].join("");
 			doc.style.color = "#0033FF";
 			doc.style.fontWeight = "bold";
 		} else {
 			doc.innerHTML = "";
 		}
-	}	
+	}
+	var callback = AjxCallback.simpleClosure(this._sforceBarMainOnClickHdlr, this);
+	document.getElementById("sforce_bar_resultsMainDiv").onclick = callback;
 	this._searchAllContacts = false;//set this before calling noteDropped
 };
 
-Com_Zimbra_SForce.prototype.opacity = 
+Com_Zimbra_SForce.prototype.opacity =
 function(id, opacStart, opacEnd, millisec) {
-    //speed for each frame
-    var speed = Math.round(millisec / 100);
-    var timer = 0;
-	var styleObj =  document.getElementById(id).style;
-    //determine the direction for the blending, if start and end are the same nothing happens
-    if(opacStart > opacEnd) {
-        for(i = opacStart; i >= opacEnd; i--) {
-			setTimeout(AjxCallback.simpleClosure(this.changeOpac, this, i,  styleObj), (timer * speed));
-            //setTimeout("changeOpac(" + i + ",'" + id + "')",(timer * speed));
-            timer++;
-        }
-    } else if(opacStart < opacEnd) {
-        for(i = opacStart; i <= opacEnd; i++)
-            {
-			setTimeout(AjxCallback.simpleClosure(this.changeOpac, this, i,  styleObj), (timer * speed));
-            //setTimeout("changeOpac(" + i + ",'" + id + "')",(timer * speed));
-            timer++;
-        }
-    }
+	//speed for each frame
+	var speed = Math.round(millisec / 100);
+	var timer = 0;
+	var styleObj = document.getElementById(id).style;
+	//determine the direction for the blending, if start and end are the same nothing happens
+	if (opacStart > opacEnd) {
+		for (i = opacStart; i >= opacEnd; i--) {
+			setTimeout(AjxCallback.simpleClosure(this.changeOpac, this, i, styleObj), (timer * speed));
+			timer++;
+		}
+	} else if (opacStart < opacEnd) {
+		for (i = opacStart; i <= opacEnd; i++)
+		{
+			setTimeout(AjxCallback.simpleClosure(this.changeOpac, this, i, styleObj), (timer * speed));
+			timer++;
+		}
+	}
 };
 
 //change the opacity for different browsers
-Com_Zimbra_SForce.prototype.changeOpac = 
+Com_Zimbra_SForce.prototype.changeOpac =
 function(opacity, styleObj) {
-    styleObj.opacity = (opacity / 100);
-    styleObj.MozOpacity = (opacity / 100);
-    styleObj.KhtmlOpacity = (opacity / 100);
-    styleObj.filter = "alpha(opacity=" + opacity + ")";
+	styleObj.opacity = (opacity / 100);
+	styleObj.MozOpacity = (opacity / 100);
+	styleObj.KhtmlOpacity = (opacity / 100);
+	styleObj.filter = "alpha(opacity=" + opacity + ")";
 };
 
 Com_Zimbra_SForce.prototype._getSFBarWidgetHtml =
 function() {
 	var html = new Array();
 	var i = 0;
-	if(!this._sforceImage_14){
+	if (!this._sforceImage_14) {
 		this._sforceImage_14 = ["<img  height=14px width=14px src=\"", this.getResource("img/sforce.gif") , "\"  />"].join("");
 	}
 	html[i++] = "<DIV class='overviewHeader'>";
 	html[i++] = "<table cellpadding=0 cellspacing=0 width=100%><tr><td width='500'>";
 	html[i++] = ["<div style='cursor:pointer' id='sforce_bar_mainHandler'><table cellpadding=0 cellspacing=0><tr><td width=2px></td>",
 		"<td width=11px><div id='sforce_expandCollapseIconDiv' class='ImgHeaderCollapsed'></div></td><td width=2px></td>",
-		"<td>",this._sforceImage_14,"</td>",		
+		"<td>",this._sforceImage_14,"</td>",
 		"<td width=2px></td><td width='100'><label style='font-weight:bold;color:rgb(45, 45, 45);cursor:pointer'>Salesforce Bar</label></td>",
 		"<td id='sforce_bar_msgCell'></td></tr></table></div></td>"].join("");
 	html[i++] = "<td>";
 	html[i++] = "<div id='sforce_bar_generalToolbar' style='display:none'>";
 	html[i++] = "<table class='SForce_table'>";
 	html[i++] = "<tr><td><input type=text id='sforce_bar_searchField'></input></td><td id='sforce_bar_searchBtn' width=80%></td>";
-	html[i++] = "<td id='sforce_bar_email2CaseBtn'></td><td id='sforce_bar_addNotesBtn'></td><td><div id='sforce_bar_createNewMenuDiv'></div></td></tr></table></div>";
+	html[i++] = "<td id='sforce_bar_addNotesBtn'></td><td id='sforce_bar_email2CaseBtn'></td><td><div id='sforce_bar_createNewMenuDiv'></div></td></tr></table></div>";
 	html[i++] = "</td></tr></table>";
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV  class='SForce_bar_yellow'  id='sforce_bar_resultsMainDiv'>";
-	html[i++] = "<table align=center width=100%><td align=center>No search result or Salesforce information to display<td></table>"
+	html[i++] = this._getNoSearchResultsFoundHtml();
 	html[i++] = "</DIV>";
 	return html.join("");
+};
+
+Com_Zimbra_SForce.prototype._getNoSearchResultsFoundHtml =
+function() {
+	return "<table align=center width=100%><td align=center>No search result or Salesforce information to display<td></table>";
+};
+Com_Zimbra_SForce.prototype._getSearchingHtml =
+function() {
+	return "<table align=center width=100%><td align=center>Searching..<td></table>";
 };
 
 Com_Zimbra_SForce.prototype._addWidgetsToSFBar =
 function() {
 	var callback = AjxCallback.simpleClosure(this._sforceBarExpandBtnListener, this);
-	document.getElementById("sforce_bar_mainHandler").onclick = callback; 	
+	document.getElementById("sforce_bar_mainHandler").onclick = callback;
 
 	Dwt.setHandler(document.getElementById("sforce_bar_searchField"), DwtEvent.ONKEYPRESS, AjxCallback.simpleClosure(this._searchFieldKeyHdlr, this));
-	
+
 	var btn = new DwtButton({parent:this._shell});
 	btn.setText("Add Notes");
 	btn.setImage("SFORCE-panelIcon");
 	btn.addSelectionListener(new AjxListener(this, this._sforceAddNotesHandler));
 	document.getElementById("sforce_bar_addNotesBtn").appendChild(btn.getHtmlElement());
-	
+
 	btn = new DwtButton({parent:this._shell});
 	btn.setText("Search");
 	btn.setImage("Search");
@@ -665,7 +826,7 @@ function() {
 	document.getElementById("sforce_bar_createNewMenuDiv").appendChild(btn.getHtmlElement());
 
 	var items = ["Account", "Case", "Contact", "Lead", "Opportunity", "Solution","Report", "Campaign", "Product"];
-	for(var i=0; i < items.length; i++) {
+	for (var i = 0; i < items.length; i++) {
 		var itemName = items[i];
 		var mi = menu.createMenuItem(itemName, {image:"SFORCE-panelIcon", text:itemName});
 		mi.addSelectionListener(new AjxListener(this, this._createNewMenuListener, itemName));
@@ -683,52 +844,106 @@ function(ev) {
 
 Com_Zimbra_SForce.prototype._sforceBarSearchHandler =
 function() {
+	var sq = document.getElementById("sforce_bar_searchField").value;
+	if (sq.length <= 1) {
+		this.displayErrorMessage("Search query must have at least 2 characters");
+		return;
+	}
+	document.getElementById("sforce_bar_resultsMainDiv").innerHTML = this._loadingSalesForceHtml; //this._getSearchingHtml();
+
 	var callback = AjxCallback.simpleClosure(this._sforceBarSearchResultHandler, this);
-	var q = ["FIND {",document.getElementById("sforce_bar_searchField").value,"} RETURNING Account(Id,Name),Contact(Id,Name),Lead(Id,Name),Opportunity(Id,Name),Case(Id,Subject)"].join("");
+	var q = ["FIND {",sq,"} RETURNING Account(Id,Name limit 5),Contact(Id,Name, Email Limit 10),Lead(Id,Name, Email Limit 10),Opportunity(Id,Name Limit 5),Case(Id,Subject,caseNumber Limit 5)"].join("");
 	this.search(q, 10, callback, true, true);
 };
 
 Com_Zimbra_SForce.prototype._sforceBarSearchResultHandler =
 function(result) {
 	var records = result.getDoc().getElementsByTagName("record");
+	if (records.length == 0) {
+		document.getElementById("sforce_bar_resultsMainDiv").innerHTML = this._getNoSearchResultsFoundHtml();
+	}
+	;
 	var html = new Array();
 	var i = 0;
-	html[i++] = "<div  style='font-weight:bold;font-size:12px;background-color:#EFE7D4;padding-left:10px' width=100%>Search Result:</div>";
-	html[i++] = "<div  style='font-weight:bold;font-size:14px;padding-left:10px' width=100%>";
-	html[i++] = "<table class='SForce_listView' cellpadding=2 cellspacing=2 border=0 width=100%>";
-	html[i++] = "<tr align=left><th width=5%>Type</th><th width=30%>Name or Subject</th><th>Action</th></tr>";
+	html[i++] = "<div  style='font-weight:bold;font-size:12px;background-color:#EFE7D4;padding:4px' width=100%>Search Result:</div>";
+	html[i++] = "<div  style='font-weight:bold;font-size:14px;' width=100%>";
+	html[i++] = "<table class='SForce_table SForce_hoverTable' cellpadding=2 cellspacing=2 border=0 width=100%>";
+	html[i++] = "<tr align=left><th width=15%>Action</th><th width=10%>Type</th><th width=75%%>Details</th></tr>";
 	var idStr = "sf:Id";
 	var nameStr = "sf:Name";
 	var subjectStr = "sf:Subject";
-	if(AjxEnv.isChrome || AjxEnv.isSafari) {
+	var emailStr = "sf:Email";
+	var caseNumberStr = "sf:CaseNumber";
+	if (AjxEnv.isChrome || AjxEnv.isSafari) {
 		idStr = "Id";
 		nameStr = "Name";
 		subjectStr = "Subject";
+		emailStr = "Email";
+		caseNumberStr = "CaseNumber";
 	}
-	for(var j=0; j < records.length; j++) {
+	for (var j = 0; j < records.length; j++) {
 		var rec = records[j];
 		var type = rec.attributes[0].nodeValue.replace("sf:", "");
-		var idObj =  rec.getElementsByTagName(idStr)[0];
-		if(idObj.textContent) {
+		var idObjArry = rec.getElementsByTagName(idStr);
+		if (idObjArry.length == 0) {
+			continue;
+		}
+		var idObj = idObjArry[0];
+		var details = [];
+		if (idObj.textContent) {
 			var id = idObj.textContent;
-			if(type != "Case") {
-				var nameOrSubject = rec.getElementsByTagName(nameStr)[0].textContent;
-			} else {
-				var nameOrSubject = rec.getElementsByTagName(subjectStr)[0].textContent;
+			if (type != "Case") {
+				var obj = rec.getElementsByTagName(nameStr);
+				if (obj.length > 0) {
+					details.push(["<strong>", obj[0].textContent,"</strong>"].join(""));
+				}
+			} else if (type == "Case") {
+				var obj = rec.getElementsByTagName(subjectStr);
+				if (obj.length > 0) {
+					details.push(["<strong>", obj[0].textContent,"</strong>"].join(""));
+				}
+				obj = rec.getElementsByTagName(caseNumberStr);
+				if (obj.length > 0) {
+					details.push(obj[0].textContent);
+				}
 			}
+
+			if (type == "Contact" || type == "Lead") {
+				var obj = rec.getElementsByTagName(emailStr);
+				if (obj.length > 0) {
+					details.push(obj[0].textContent);
+				}
+			}
+
 		} else {//IE..
 			var id = idObj.text;
-			if(type != "Case") {
-				var nameOrSubject = rec.getElementsByTagName(nameStr)[0].text;
-			} else {
-				var nameOrSubject = rec.getElementsByTagName(subjectStr)[0].text;
+			if (type != "Case") {
+				var obj = rec.getElementsByTagName(nameStr);
+				if (obj.length > 0) {
+					details.push(obj.text);
+				}
+			} else if (type == "Case") {
+				var obj = rec.getElementsByTagName(subjectStr);
+				if (obj.length > 0) {
+					details.push(obj[0].text);
+				}
+				obj = rec.getElementsByTagName(caseNumberStr);
+				if (obj.length > 0) {
+					details.push(obj[0].text);
+				}
+			}
+
+			if (type == "Contact" || type == "Lead") {
+				var obj = rec.getElementsByTagName(emailStr);
+				if (obj.length > 0) {
+					details.push(obj[0].text);
+				}
 			}
 		}
-		
 
-		html[i++] = ["<tr><td  width=5%>",type,"</td>"].join("");
-		html[i++] = ["<td  width=35%>",nameOrSubject,"</td>"].join("");
-		html[i++] = ["<td>", this._getSFViewEditLinks(id), "</td></tr>"].join("");
+		html[i++] = ["<tr><td>", this._getSFViewEditLinks(id), "</td>"].join("");
+		html[i++] = ["<td >",type,"</td>"].join("");
+		html[i++] = ["<td>",details.join(" "),"</td></tr>"].join("");
 	}
 	html[i++] = "</table>";
 	html[i++] = "</div>";
@@ -751,78 +966,89 @@ function() {
 	var body = this.getMailBodyAsText(this._currentSelectedMsg);
 	var fromEmailObj = this._currentSelectedMsg.getAddress(AjxEmailAddress.FROM);
 	var sfName = this._emailExistsInSF(fromEmailObj.address);
-	if(sfName) {
+	if (sfName) {
 		var contactName = sfName;
 	} else {
 		var arry = this._currentSelectedMsg.participants.getArray();
-		for(var i=0; i < arry.length; i++) {
+		for (var i = 0; i < arry.length; i++) {
 			var emailObj = arry[i];
 			var sfName = this._emailExistsInSF(emailObj.address);
-			if(sfName) {
+			if (sfName) {
 				contactName = sfName;
 				break;
 			}
 		}
 	}
-	if(!this.sforceInstanceName) {
-		this.sforceInstanceName =(this.SERVER.split(".")[0]).split("//")[1];
+	if (!this.sforceInstanceName) {
+		this.sforceInstanceName = (this.SERVER.split(".")[0]).split("//")[1];
 	}
-	var win = window.open(["https://", this.sforceInstanceName, ".salesforce.com/500/e?retURL=/500/o",
-		"&cas3=",  AjxStringUtil.urlEncode(contactName), 
-		"&cas14=",   AjxStringUtil.urlComponentEncode(subject),
-		"&cas15=",  AjxStringUtil.urlComponentEncode(AjxStringUtil.htmlDecode( this._getCurrentAddressString() + body))].join(""));
+
+	var url = ["https://", this.sforceInstanceName, ".salesforce.com/500/e?retURL=/500/o",
+		AjxStringUtil.urlEncode("?cas3="),  AjxStringUtil.urlEncode(contactName),
+		AjxStringUtil.urlEncode("&cas14="),   AjxStringUtil.urlComponentEncode(subject),
+		AjxStringUtil.urlEncode("&cas15="),  AjxStringUtil.urlComponentEncode(AjxStringUtil.htmlDecode(this._getCurrentAddressAndDateStr() + body))].join("");
+
+	var callback = new AjxCallback(this, this._openSFLink, url);
+	this.login(callback, null, null, true);
 };
 
 Com_Zimbra_SForce.prototype._emailExistsInSF =
 function(email) {
 	var len = this._emailsInSalesforce.length;
-	for(var i=0; i < len; i++) {
+	for (var i = 0; i < len; i++) {
 		var sfEmail = this._emailsInSalesforce[i].email;
-		if(AjxStringUtil.trim(email.toLowerCase()) == AjxStringUtil.trim(sfEmail.toLowerCase())) {
+		if (AjxStringUtil.trim(email.toLowerCase()) == AjxStringUtil.trim(sfEmail.toLowerCase())) {
 			return this._emailsInSalesforce[i].name;
 		}
 	}
 	return false;
 };
 
-Com_Zimbra_SForce.prototype._getCurrentAddressString =
+Com_Zimbra_SForce.prototype._getCurrentAddressAndDateStr =
 function() {
+	if (!this._currentSelectedMsg) {
+		return;
+	}
 	var frmAdd = this._currentSelectedMsg.getAddresses(AjxEmailAddress.FROM);
 	var toAdd = this._currentSelectedMsg.getAddresses(AjxEmailAddress.TO);
 	var ccAdd = this._currentSelectedMsg.getAddresses(AjxEmailAddress.CC);
-	if(frmAdd) {
+	if (frmAdd) {
 		frmAdd = frmAdd.getArray();
 	}
-	if(toAdd){
+	if (toAdd) {
 		toAdd = toAdd.getArray();
 	}
-	if(ccAdd) {
+	if (ccAdd) {
 		ccAdd = ccAdd.getArray();
 	}
 	var str = "From: ";
-	for(var i=0; i< frmAdd.length; i++) {
+	for (var i = 0; i < frmAdd.length; i++) {
 		str = [str, frmAdd[i].address, ";"].join("");
 	}
-	if(toAdd.length > 0) {
-		str =  [str, "\r\n", "To: "].join("");
+	if (toAdd.length > 0) {
+		str = [str, "\r\n", "To: "].join("");
 	}
-	for(var i=0; i< toAdd.length; i++) {
+	for (var i = 0; i < toAdd.length; i++) {
 		str = [str, toAdd[i].address, ";"].join("");
 	}
-	if(ccAdd.length > 0){
-		str =  [str, "\r\n",  "Cc: "].join("");
+	if (ccAdd.length > 0) {
+		str = [str, "\r\n",  "Cc: "].join("");
 	}
-	for(var i=0; i< ccAdd.length; i++) {
+	for (var i = 0; i < ccAdd.length; i++) {
 		str = [str, ccAdd[i].address, ";"].join("");
 	}
-	return str + "\r\n-----------------------------------\r\n\r\n";
+	var dateFormatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.LONG, AjxDateFormat.SHORT);
+	var dateString = this._currentSelectedMsg.sentDate ? dateFormatter.format(new Date(this._currentSelectedMsg.sentDate)) : dateFormatter.format(new Date(this._currentSelectedMsg.date));
+	str = [str, "\r\nDate: ",dateString,"\r\n"].join("");
+
+	return str + "-----------------------------------\r\n\r\n";
 };
 
 
 Com_Zimbra_SForce.prototype._createNewMenuListener =
 function(itemName) {
 	var itemCode = "";
-	switch(itemName) {
+	switch (itemName) {
 		case "Account":
 			itemCode = "001";
 			break;
@@ -834,30 +1060,30 @@ function(itemName) {
 			break;
 		case "Case":
 			itemCode = "500";
-			break;		
+			break;
 		case "Solution":
 			itemCode = "501";
 			break;		case "Account":
-			itemCode = "001";
-			break;
+		itemCode = "001";
+		break;
 		case "Report":
 			itemCode = "00O";
 			break;		case "Account":
-			itemCode = "001";
-			break;
+		itemCode = "001";
+		break;
 		case "Campaign":
 			itemCode = "701";
-			break;	
+			break;
 		case "Product":
 			itemCode = "01t";
-			break;				
+			break;
 
 	}
-	if(!this.sforceInstanceName) {
-		this.sforceInstanceName =(this.SERVER.split(".")[0]).split("//")[1];
+	if (!this.sforceInstanceName) {
+		this.sforceInstanceName = (this.SERVER.split(".")[0]).split("//")[1];
 	}
-	var completeUrl = ["https://",this.sforceInstanceName,".salesforce.com/secur/frontdoor.jsp?sid=", 
-						AjxStringUtil.urlEncode(this.sessionId), "&retURL=/", itemCode, "/e?retURL=/",itemCode,"/o"].join("");
+	var completeUrl = ["https://",this.sforceInstanceName,".salesforce.com/secur/frontdoor.jsp?sid=",
+		AjxStringUtil.urlEncode(this.sessionId), "&retURL=/", itemCode, "/e?retURL=/",itemCode,"/o"].join("");
 
 	window.open(completeUrl);
 };
@@ -865,13 +1091,17 @@ function(itemName) {
 
 Com_Zimbra_SForce.prototype._sforceBarExpandBtnListener =
 function() {
-	if(!this.sforce_bar_recordsForThisMsgParsed) {
+	if (!this.sforce_bar_recordsForThisMsgParsed) {
 		this._setResultsToSForceBar();
 	}
-	if(!this.sforce_bar_expanded) {
+	if (!this.sforce_bar_expanded) {
 		document.getElementById("sforce_expandCollapseIconDiv").className = "ImgHeaderExpanded";
 		document.getElementById("sforce_bar_generalToolbar").style.display = "block";
+
+		this.changeOpac(0, document.getElementById("sforce_bar_resultsMainDiv").style);
+		this.opacity("sforce_bar_resultsMainDiv", 0, 100, 500);
 		document.getElementById("sforce_bar_resultsMainDiv").style.display = "block";
+
 		document.getElementById("sforce_bar_msgCell").style.display = "none";
 		this.sforce_bar_expanded = true;
 	} else {
@@ -887,120 +1117,272 @@ function() {
 Com_Zimbra_SForce.prototype._setResultsToSForceBar =
 function() {
 	this.sforce_bar_recordsForThisMsgParsed = true;
-	if(this._recordsForCurrentMail.length == 0) {
+	if (this.allRecords.length == 0) {
 		return;
 	}
-	var len = this._recordsForCurrentMail.length;
+	var len = this.cRecords.length;
 	var html = new Array();
 	var i = 0;
-	for(var k=0; k < len; k++) {
-		var c = this._recordsForCurrentMail[k];
+	for (var k = 0; k < len; k++) {
+		var c = this.cRecords[k];
 		var email = c.Email ? c.Email.toString() : "";
 		var name = c.Name ? c.Name.toString() : "";
 		this._emailsInSalesforce.push({email:email, name:name});
 
 		var phone = c.Phone ? c.Phone.toString() : "";
-		var accountName =  c.Account ? (c.Account.Name? c.Account.Name.toString() : "") : "";
-		var editLinksHtml = "";
-		if(accountName != "") {
-			var accId = c.Account ? (c.Account.Id? c.Account.Id.toString() : "") : "";
-			if(accId != "") {
-				 editLinksHtml = this._getSFViewEditLinks(accId);
+		var accountName = c.Account ? (c.Account.Name ? c.Account.Name.toString() : "") : "";
+		var editLinksHtml_accnt = "";
+		if (accountName != "") {
+			var accId = c.Account ? (c.Account.Id ? c.Account.Id.toString() : "") : "";
+			if (accId != "") {
+				editLinksHtml_accnt = this._getSFViewEditLinks(accId, [
+					{name:"add participants", id:("sforce__addContacts___" + accountName + "___" + accId)}
+				]);
 			}
 		}
+		var editLinksHtml_owner = "";
+		var ownerName = c.Owner ? (c.Owner.Name ? c.Owner.Name.toString() : "") : "";
+		if (ownerName != "") {
+			var ownerId = c.OwnerId ? c.OwnerId : "";
+			if (ownerId != "") {
+				editLinksHtml_owner = this._getSFViewEditLinks(ownerId);
+			}
+		}
+
+		var address = [(c.MailingStreet ? c.MailingStreet.toString() : "")," ",
+			(c.MailingState ? c.MailingState.toString() : ""), " ",
+			(c.MailingCity ? c.MailingCity.toString() : ""), " ",
+			(c.MailingPostalCode ? c.MailingPostalCode.toString() : ""), " ",
+			(c.MailingCountry ? c.MailingCountry.toString() : "")].join("");
+
+		var title = (c.Title ? c.Title.toString() : "");
 		html[i++] = "<br/>";
-		html[i++] = "<DIV  class='SForce_lightyellow' style='width:94%; position:relative; left:3%;'>";
-		html[i++] = ["<div class='overviewHeader' style='font-weight:bold;font-size:14px;padding-left:10px' width=100%>Contact: ",name,"<span style='font-size:11px;font-weight:normal'>",this._getSFViewEditLinks(c.Id.toString()),"</span></div>"].join("");
-		html[i++] = "<div  style='font-weight:bold;padding-left:10px' width=100%>";
-		html[i++] = "<table  class='SForce_listView'  cellpadding=2 cellspacing=0 border=0 width=100%>";
-		html[i++] = "<tr align=left><th width=35%>Account</th><th width=width=35%>Email</th><th width=15%>Phone</th><th>Action</th></tr>";
-		html[i++] = ["<tr><td  width=35%>",accountName,"</td><td  width=35%>",email,"</td><td width=15%>",phone,"</td><td>",editLinksHtml, "</td></tr>"].join("");
+		html[i++] = "<DIV  class='SForce_lightyellow SForce_hoverTable' style='width:94%; position:relative; left:3%;'>";
+		html[i++] = ["<div class='overviewHeader' width=100%><table><tr><td><label style='font-weight:bold;font-size:14px;padding:4px' >Contact: "
+			,name,"</td><td><label style='font-size:11px;font-weight:normal'>",this._getSFViewEditLinks(c.Id.toString()),"</label></td></tr></table></div>"].join("");
+		html[i++] = "<div  style='font-weight:bold;' width=100%>";
+		html[i++] = "<table  class='SForce_table'  cellpadding=2 cellspacing=0 border=0 width=100%>";
+		if (title != "") {
+			html[i++] = ["<tr align=left><td><strong>Title:</strong></td><td>",title,"</td></tr>"].join("");
+		}
+		if (accountName != "") {
+			html[i++] = ["<tr align=left><td width=150px><strong>Account:</strong></td><td>",accountName," ", editLinksHtml_accnt,"</td></tr>"].join("");
+		}
+		if (ownerName != "") {
+			html[i++] = ["<tr align=left><td width=150px><strong>Account Owner:</strong></td><td>",ownerName," ", editLinksHtml_owner,"</td></tr>"].join("");
+		}
+
+		if (email != "") {
+			html[i++] = ["<tr align=left><td width=150px> <strong>Email:</strong></td><td>",email,"</td></tr>"].join("");
+		}
+		if (phone != "") {
+			html[i++] = ["<tr align=left><td width=150px><strong>Phone:</strong></td><td>",phone,"</td></tr>"].join("");
+		}
+		if (AjxStringUtil.trim(address) != "") {
+			html[i++] = ["<tr align=left><td width=150px><strong>Address:</strong></td><td>",address,"</td></tr>"].join("");
+		}
+
 		html[i++] = "</table>";
 		html[i++] = "</div>";
-		html[i++] = "<br/>";
 		var cases = c.Cases;
-		if(cases) {
+		if (cases) {
 			var records = cases.records;
-			if(records && !(records instanceof Array)) {
+			if (records && !(records instanceof Array)) {
 				records = [records];
 			}
-			if(records) {
-				html[i++] = "<div  style='font-weight:bold;font-size:12px;background-color:#EFE7D4;padding-left:10px' width=100%>Cases:</div>";
-				html[i++] = "<div  style='font-weight:bold;font-size:14px;padding-left:10px' width=100%>";
-				html[i++] = "<table   class='SForce_listView' cellpadding=2 cellspacing=0 border=0 width=100%>";
-				html[i++] = "<tr align=left><th width=30%>Case Number</th><th width=30%>Subject</th><th width=15%>Status</th><th>Action</th></tr>";
-				for(var j=0; j < records.length; j++) {
+			if (records.length > 0) {
+				html[i++] = "<br/>";
+			}
+			if (records) {
+				html[i++] = "<div  style='font-weight:bold;font-size:12px;background-color:#EFE7D4;padding:3px' width=100%>Cases:</div>";
+				html[i++] = "<div  style='font-weight:bold;font-size:14px;' width=100%>";
+				html[i++] = "<table class='SForce_table' cellpadding=2 cellspacing=0 border=0 width=100%>";
+				html[i++] = "<tr><th width=15%>Action</th><th width=15%>Case Number</th><th width=15%>Case Owner</th><th width=15%>Status</th><th width=55%>Subject</th></tr>";
+				for (var j = 0; j < records.length; j++) {
 					var rec = records[j];
 					var caseNumber = rec.CaseNumber ? rec.CaseNumber.toString() : "";
 					var subject = rec.Subject ? rec.Subject.toString() : "";
 					var status = rec.Status ? rec.Status.toString() : "";
 					var id = rec.Id ? rec.Id.toString() : "";
+					var ownerName = rec.Owner ? (rec.Owner.Name ? rec.Owner.Name.toString() : "") : "";
 					var editLinksHtml = "";
-					if(id != "") {
+					if (id != "") {
 						editLinksHtml = this._getSFViewEditLinks(id);
 					}
-					html[i++] = ["<tr><td  width=35%>",caseNumber,"</td>"].join("");
-					html[i++] = ["<td  width=35%>",subject,"</td>"].join("");
-					html[i++] = ["<td width=15%>",status,"</td><td>", editLinksHtml, "</td></tr>"].join("");
+
+					html[i++] = ["<tr><td>", editLinksHtml, "</td>"].join("");
+					html[i++] = ["<td>",caseNumber,"</td>"].join("");
+					html[i++] = ["<td>",ownerName,"</td>"].join("");
+					html[i++] = ["<td>",status,"</label></td>"].join("");
+					html[i++] = ["<td>",subject,"</td></tr>"].join("");
 				}
 				html[i++] = "</table>";
 				html[i++] = "</div>";
 			}
 		}
 
-		html[i++] = "<br/>";
 		var op = c.OpportunityContactRoles;
-		if(op) {
+		if (op) {
 			var records = op.records;
-			if(records && !(records instanceof Array)) {
+			if (records && !(records instanceof Array)) {
 				records = [records];
 			}
-			if(records) {
-				html[i++] = "<div  style='font-weight:bold;font-size:12px;padding-left:10px;background-color:#EFE7D4;' width=100%>Opportunities:</div>";
-				html[i++] = "<div  style='font-weight:bold;font-size:14px;padding-left:10px' width=100%>";
-				html[i++] = "<table   class='SForce_listView' cellpadding=2 cellspacing=0 border=0 width=100%>";
-				html[i++] = "<tr align=left><th width=35%>Name</th><th width=35%>Role</th><th width=15%>Action</th></tr>";
-				for(var j=0; j < records.length; j++) {
+			if (records.length > 0) {
+				html[i++] = "<br/>";
+			}
+			if (records) {
+				html[i++] = "<div  style='font-weight:bold;font-size:12px;padding:3px;background-color:#EFE7D4;' width=100%>Opportunities:</div>";
+				html[i++] = "<div  style='font-weight:bold;font-size:14px;' width=100%>";
+				html[i++] = "<table   class='SForce_table' cellpadding=2 cellspacing=0 border=0 width=100%>";
+				html[i++] = "<tr><th width=15%>Action</th><th width=15%>Role</th><th>Name</th></tr>";
+				for (var j = 0; j < records.length; j++) {
 					var rec = records[j];
 					var oppName = rec.Opportunity ? (rec.Opportunity.Name ? rec.Opportunity.Name.toString() : "") : "";
-					html[i++] = ["<tr><td width=35%>",oppName,"</td>"].join("");
+					html[i++] = ["<tr><td>", editLinksHtml, "</td>"].join("");
 					var role = "";
-					if(rec.Role){
+					if (rec.Role) {
 						role = rec.Role.toString();
 					}
 					var id = rec.Id ? rec.Id.toString() : "";
 					var editLinksHtml = "";
-					if(id != "") {
+					if (id != "") {
 						editLinksHtml = this._getSFViewEditLinks(id);
 					}
-					html[i++] = ["<td width=35%>",role,"</td><td width=15%>", editLinksHtml, "</td></tr>"].join("");
+					html[i++] = ["<td >",role,"</td><td>",oppName,"</td></tr>"].join("");
 				}
 				html[i++] = "</table>";
 				html[i++] = "</div>";
 			}
 		}
-
 		html[i++] = "</DIV>";
-		html[i++] = "<br/>";
 	}
+	html[i++] = "<br/>";
+	var len = this.lRecords.length;
+	if (len > 0) {
+		var records = this.lRecords;
+		for (var j = 0; j < records.length; j++) {
+			var rec = records[j];
+			var address = [(rec.Street ? rec.Street.toString() : "")," ",
+				(rec.City ? rec.City.toString() : ""), " ",
+				(rec.State ? rec.State.toString() : ""), " ",
+				(rec.PostalCode ? rec.PostalCode.toString() : ""), " ",
+				(rec.Country ? rec.Country.toString() : "")].join("");
 
+			var id = rec.Id ? rec.Id.toString() : "";
+			var editLinksHtml = "";
+			if (id != "") {
+				editLinksHtml = this._getSFViewEditLinks(id);
+			}
+			var name = (rec.Name ? rec.Name.toString() : "");
+			var wSite = (rec.Website ? rec.Website.toString() : "");
+			if (wSite!="" && wSite.toLowerCase().indexOf("http://") == -1) {
+				wSite = ["http://", wSite].join("");
+			}
+			var title = (rec.Title ? rec.Title.toString() : "");
+			var phone = (rec.Phone ? rec.Phone.toString() : "");
+			var status = (rec.Status ? rec.Status.toString() : "");
+			var NumberOfEmployees = (rec.NumberOfEmployees ? rec.NumberOfEmployees.toString() : "");
+
+			html[i++] = "<DIV  class='SForce_lightyellow SForce_hoverTable' style='width:94%; position:relative; left:3%;'>";
+			html[i++] = ["<div class='overviewHeader' width=100%><table><tr><td><label style='font-weight:bold;font-size:14px;padding:4px' >Lead: "
+				,name,"</td><td><label style='font-size:11px;font-weight:normal'>",editLinksHtml,"</label></td></tr></table></div>"].join("");
+
+			//html[i++] = ["<div class='overviewHeader' style='font-weight:bold;font-size:14px;padding:4px' width=100%>Lead: ",name,"<span style='font-size:11px;font-weight:normal'>",editLinksHtml,"</span></div>"].join("");
+			html[i++] = "<div width=\"100%\" style=\"font-weight: bold; \">";
+			html[i++] = "<table class='SForce_table' cellpadding=2 cellspacing=0 border=0 width=100%>";
+			if (title != "") {
+				html[i++] = ["<tr align=left><td width=150px><strong>Title:</strong></td><td>",title,"</td></tr>"].join("");
+			}
+			if (phone != "") {
+				html[i++] = ["<tr align=left><td width=150px><strong>Phone:</strong></td><td>",phone,"</td></tr>"].join("");
+			}
+			if (status != "") {
+				html[i++] = ["<tr align=left><td width=150px><strong>Status:</strong></td><td>",status,"</td></tr>"].join("");
+			}
+			if (NumberOfEmployees != "") {
+				html[i++] = ["<tr align=left><td width=150px><strong>#Employees:</strong></td><td>",NumberOfEmployees,"</td></tr>"].join("");
+			}
+			if (AjxStringUtil.trim(address) != "") {
+				html[i++] = ["<tr align=left><td width=150px><strong>Address:</strong></td><td>",address,"</td></tr>"].join("");
+			}
+			if (wSite != "") {
+				html[i++] = ["<tr align=left><td width=150px><strong>Website:</strong></td><td><a target=_blank  href='",wSite,"'>",wSite,"</a></td></tr>"].join("");
+			}
+			html[i++] = "</table>";
+			html[i++] = "</div>";
+			html[i++] = "</div>";
+			html[i++] = "<br/>";
+		}
+	}
 	document.getElementById("sforce_bar_resultsMainDiv").innerHTML = html.join("");
 };
 
+
 Com_Zimbra_SForce.prototype._getSFViewEditLinks =
-function(id) {
-	if(!this.sforceInstanceName) {
-		this.sforceInstanceName =(this.SERVER.split(".")[0]).split("//")[1];
+function(id, otherLinksArry) {
+	var lnks = ["<a id='sforce_view_",id,"'  style='color: #385495; font-size: 11px;text-decoration:underline'  href='#'>view</a>&nbsp;",
+		"<a id='sforce_edit_",id,"' style='color: #385495; font-size: 11px;text-decoration:underline' href='#'>edit</a>&nbsp;",
+		"<a id='sforce_clone_",id,"'  style='color: #385495; font-size: 11px;text-decoration:underline'  href='#'>clone</a>"];
+
+	if (otherLinksArry == undefined) {
+		return lnks.join("");
+	}
+	for (var i = 0; i < otherLinksArry.length; i++) {
+
+		lnks.push(["&nbsp;<a id='",otherLinksArry[i].id,"'  style='color: #385495; font-size: 11px;text-decoration:underline'  href='#'>",otherLinksArry[i].name,"</a>"].join(""));
+	}
+	return lnks.join("");
+};
+
+Com_Zimbra_SForce.prototype._sforceBarMainOnClickHdlr =
+function(ev) {
+	if (AjxEnv.isIE) {
+		ev = window.event;
+	}
+	var dwtev = DwtShell.mouseEvent;
+	dwtev.setFromDhtmlEvent(ev);
+	var el = dwtev.target;
+	var origTarget = dwtev.target;
+	if (origTarget.nodeName.toLowerCase() != "a") {
+		return;
+	}
+	var origTargetId = origTarget.id;
+	if (origTargetId.indexOf("sforce__addContacts") == 0) {
+		var arry = origTargetId.split("___");
+	} else {
+		var arry = origTarget.id.split("_");
+	}
+	if (arry.length != 3 || arry.length[2] == "") {
+		appCtxt.setStatusMsg("Unknown Link", ZmStatusView.LEVEL_WARNING);
+		return;
+	}
+	var id = arry[2];
+	var mode = arry[1].toLowerCase();
+	if (arry[0].indexOf("sforce__addContacts") == 0) {
+		this._showCreateNewContactOrLeadDlg({id:id, name:arry[1]}, false);
+	} else {
+		var callback = new AjxCallback(this, this._openFrontDoorUrl, [mode, id]);
+		this.login(callback, null, null, true);
+	}
+};
+
+Com_Zimbra_SForce.prototype._openFrontDoorUrl =
+function(mode, id) {
+	if (!this.sforceInstanceName) {
+		this.sforceInstanceName = (this.SERVER.split(".")[0]).split("//")[1];
 	}
 	var baseUrl = ["https://",this.sforceInstanceName,".salesforce.com/secur/frontdoor.jsp?sid=", AjxStringUtil.urlEncode(this.sessionId), "&retURL="].join("");
-	var viewPart = AjxStringUtil.urlEncode(["/",id].join(""));
-	var editPart = AjxStringUtil.urlEncode(["/", id, "/e?retURL=/", id].join(""));
-	var clonePart =AjxStringUtil.urlEncode(["/", id, "/e?retURL=/", id, "&clone=1"].join(""));
-	//var deletePart = AjxStringUtil.urlEncode(["/setup/own/deleteredirect.jsp?delID=", id].join(""));
-	return ["&nbsp;<a target='_blank' href='", baseUrl,viewPart, "'>view</a>&nbsp;",
-			"<a  target='_blank' href='",  baseUrl,editPart, "'>edit</a>&nbsp;",
-			"<a  target='_blank' href='",  baseUrl,clonePart, "'>clone</a>"].join("");
+	var part = ""
+	if (mode == "view") {
+		part = AjxStringUtil.urlEncode(["/",id].join(""));
+	} else if (mode == "edit") {
+		part = AjxStringUtil.urlEncode(["/", id, "/e?retURL=/", id].join(""));
+	} else if (mode == "clone") {
+		part = AjxStringUtil.urlEncode(["/", id, "/e?retURL=/", id, "&clone=1"].join(""));
+	}
+	window.open(baseUrl + part);
 };
+
 
 //-------------------------------------------------------------------------------------------
 //.....Salesforce Bar related (END)
@@ -1013,20 +1395,43 @@ function(id) {
 
 Com_Zimbra_SForce.prototype._getCaseId =
 function(caseNumber, callback) {
-	var q =  ["Select Id from  Case where CaseNumber='",caseNumber,"'"].join("");
-	var callback = AjxCallback.simpleClosure(this._handleGetCaseId, this, callback); 
+	var q = ["Select Id from  Case where CaseNumber='",caseNumber,"'"].join("");
+	var callback = AjxCallback.simpleClosure(this._handleGetCaseId, this, callback);
 	this.query(q, 10, callback);
 };
 
 Com_Zimbra_SForce.prototype._handleGetCaseId =
 function(callback, result) {
-	if(result.length == 0) {
+	if (result.length == 0) {
 		appCtxt.setStatusMsg("Unknown case or you are not authorized to view this case", ZmStatusView.LEVEL_WARNING);
 		return;
 	}
 	var id = result[0].Id.toString();
-	if(callback) {
+	if (callback) {
 		callback.run(id);
+	}
+};
+
+Com_Zimbra_SForce.prototype._getCaseLink =
+function(linkFieldName, caseNumber, callback) {
+	var q = ["Select ",linkFieldName," from  Case where CaseNumber='",caseNumber,"'"].join("");
+	var callback = AjxCallback.simpleClosure(this._handleGetCaseLink, this, linkFieldName, callback);
+	this.query(q, 10, callback);
+};
+
+Com_Zimbra_SForce.prototype._handleGetCaseLink =
+function(linkFieldName, callback, result) {
+	if (result.length == 0) {
+		appCtxt.setStatusMsg("Unknown case or you are not authorized to view this case", ZmStatusView.LEVEL_WARNING);
+		return;
+	}
+	var data = result[0][linkFieldName];
+	var link = "";
+	if (data != undefined) {
+		var link = data.toString();
+	}
+	if (callback) {
+		callback.run(link);
 	}
 };
 
@@ -1034,34 +1439,34 @@ Com_Zimbra_SForce.prototype._getCurrentValuesForQuickUpdateDlg =
 function(caseNumber) {
 	this._allQuickUpdatePickLists = [];
 	var pickListNames = [];
-	for(var el in this._sforceCaseObject) {
+	for (var el in this._sforceCaseObject) {
 		var obj = this._sforceCaseObject[el];
-		if(obj.type != "picklist") {
+		if (obj.type != "picklist") {
 			continue;
 		}
-		try{
+		try {
 			var items = obj.picklistValues.split("=::=");
 			this._allQuickUpdatePickLists[el] = ({name:el, label:obj.label, items:items});
 			pickListNames.push(el);
 		} catch(e) {
-	
+
 		}
-		
+
 	}
-	var q =  ["Select Id,Owner.Name,OwnerId,",pickListNames.join(",")," from  Case where CaseNumber='",caseNumber,"'"].join("");
-	var callback = AjxCallback.simpleClosure(this._handleGetCurrentValuesFoQuickUpdateDlg, this); 
+	var q = ["Select Id,Owner.Name,OwnerId,",pickListNames.join(",")," from  Case where CaseNumber='",caseNumber,"'"].join("");
+	var callback = AjxCallback.simpleClosure(this._handleGetCurrentValuesFoQuickUpdateDlg, this);
 	this.query(q, 10, callback);
-	
+
 };
 Com_Zimbra_SForce.prototype._handleGetCurrentValuesFoQuickUpdateDlg =
 function(result) {
 	var result = result[0];
-	if(!result) {
+	if (!result) {
 		appCtxt.setStatusMsg("Could not create Quick Edit Dialog.", ZmStatusView.LEVEL_WARNING);
 		return;
 	}
-	for(var item in result) {
-		if(this._allQuickUpdatePickLists[item]) {
+	for (var item in result) {
+		if (this._allQuickUpdatePickLists[item]) {
 			this._allQuickUpdatePickLists[item]["currentValue"] = result[item].toString();
 		}
 	}
@@ -1069,21 +1474,24 @@ function(result) {
 };
 
 Com_Zimbra_SForce.prototype.clicked =
-function(element, caseNumber, mode) {
+function(element, caseNumber, parts, mode) {
+	if (!mode) {
+		mode = "open";
+	}
 	var caseNumber = this._getTooltipData(caseNumber);
-	var callback = new AjxCallback(this, this._handleCaseContextmenu, mode); 
+	var callback = new AjxCallback(this, this._handleCaseContextmenu, mode);
 	this._getCaseId(caseNumber, callback);
 };
 
 Com_Zimbra_SForce.prototype._handleCaseContextmenu =
 function(mode, id) {
-	if(!this.sforceInstanceName) {
-		this.sforceInstanceName =(this.SERVER.split(".")[0]).split("//")[1];
+	if (!this.sforceInstanceName) {
+		this.sforceInstanceName = (this.SERVER.split(".")[0]).split("//")[1];
 	}
 	var baseUrl = ["https://",this.sforceInstanceName,".salesforce.com/secur/frontdoor.jsp?sid=", AjxStringUtil.urlEncode(this.sessionId), "&retURL="].join("");
 	var viewPart = AjxStringUtil.urlEncode(["/",id].join(""));
 	var editPart = AjxStringUtil.urlEncode(["/", id, "/e?retURL=/", id].join(""));
-	if(mode == "edit") {
+	if (mode == "edit") {
 		window.open(baseUrl + editPart);
 	} else {
 		window.open(baseUrl + viewPart);
@@ -1094,11 +1502,27 @@ function(mode, id) {
 Com_Zimbra_SForce.prototype.toolTipPoppedUp =
 function(spanElement, caseNumber, matchContext, canvas) {
 	caseNumber = this._getTooltipData(caseNumber);
+	var customFields = [];
+
+
+	if (this._caseObjectLoaded) {
+		for (var itemName in this._sforceCaseObject) {
+			var obj = this._sforceCaseObject[itemName];
+			if (itemName.indexOf("__c") > 0) {
+				customFields.push(itemName);
+			}
+		}
+	}
+
 	this._sCaseTooltipFields = "Owner.Name,Subject,Priority,Status,Reason,Contact.Name,Contact.Phone,Contact.Email,Account.Name";
-	var q =  ["Select ",this._sCaseTooltipFields," from  Case where CaseNumber='",caseNumber,"'"].join("");
+	var cF = customFields.join(",");
+	if (cF != "") {
+		this._sCaseTooltipFields = [this._sCaseTooltipFields, ",",cF].join("");
+	}
+	var q = ["Select ",this._sCaseTooltipFields," from  Case where CaseNumber='",caseNumber,"'"].join("");
 	this._setCaseTooltipHtml(canvas);
 
-	var callback = AjxCallback.simpleClosure(this._setCaseTooltipHtml, this, canvas); 
+	var callback = AjxCallback.simpleClosure(this._setCaseTooltipHtml, this, canvas);
 	this.query(q, 10, callback);
 };
 
@@ -1106,20 +1530,20 @@ function(spanElement, caseNumber, matchContext, canvas) {
 Com_Zimbra_SForce.prototype._getTooltipData =
 function(objData) {
 	objData = objData.toLowerCase();
-	objData = objData.replace("case","").replace(":", "");
+	objData = objData.replace("case", "").replace(":", "");
 	objData = AjxStringUtil.trim(objData);
 	return objData;
 };
 
 Com_Zimbra_SForce.prototype._setCaseTooltipHtml =
 function(canvas, obj) {
-	if(!obj) {
-		canvas.innerHTML =  "Loading..";
+	if (!obj) {
+		canvas.innerHTML = "Loading..";
 		return;
 	}
 	var props = obj[0];
-	if(!props){
-		canvas.innerHTML =  "Case Details could not be retrieved";
+	if (!props) {
+		canvas.innerHTML = "Case Details could not be retrieved";
 		return;
 	}
 	var html = new Array();
@@ -1127,40 +1551,47 @@ function(canvas, obj) {
 	var fields = this._sCaseTooltipFields.split(",");
 	var len = fields.length;
 	html[i++] = "<table  cellpadding=2 cellspacing=0 border=0>";
-	for(var j=0; j < len; j++) {
+	for (var j = 0; j < len; j++) {
 		var name = fields[j];
 		var val = this._getVal(name, props);
-		name = name.replace(".", " ");
-		if(val == "High" && name == "Priority") {
+		if (val == "") {
+			continue;
+		}
+		if (this._sforceCaseObjectNameLabelMap[name]) {
+			name = this._sforceCaseObjectNameLabelMap[name];
+		} else {
+			name = name.replace(".", " ");
+		}
+		if (val == "High" && name == "Priority") {
 			html[i++] = ["<tr align='right'><td><strong>",name, ": </strong></td><td align='left'><label style='color:red;font-weight:bold;'>",val,"</label></td></tr>"].join("");
 		} else {
 			html[i++] = ["<tr align='right'><td><strong>",name, ": </strong></td><td align='left'>",val,"</td></tr>"].join("");
 		}
 	}
-	html[i++] = ["</table>"].join("");	
-	canvas.innerHTML =  html.join("");
+	html[i++] = ["</table>"].join("");
+	canvas.innerHTML = html.join("");
 };
 
 Com_Zimbra_SForce.prototype._getVal =
 function(colName, ConProps) {
-	try{
+	try {
 		var cObj = null;
-		if(colName.indexOf(".") == -1) {
+		if (colName.indexOf(".") == -1) {
 			cObj = ConProps[colName];
 		} else {
 			var objs = colName.split(".");
-			for(var i =0; i < objs.length; i++) {
-				if(i == 0) {
+			for (var i = 0; i < objs.length; i++) {
+				if (i == 0) {
 					cObj = ConProps[objs[i]];
 				} else {
-					if(!cObj){
+					if (!cObj) {
 						return "";
 					}
-					cObj =  cObj[objs[i]];
+					cObj = cObj[objs[i]];
 				}
 			}
 		}
-		if(!cObj){
+		if (!cObj) {
 			return "";
 		}
 		return cObj.__msh_content;
@@ -1181,30 +1612,45 @@ Com_Zimbra_SForce.prototype.noteDropped = function(note, showInBar) {
 	if (!note) {
 		return;
 	}
-	if(showInBar == undefined) {
+	if (showInBar == undefined) {
 		showInBar = false;
 	}
-	if(!showInBar) {
+	if (!showInBar) {
 		this._showNotesDlg(note);
 	}
 
-	if(!this._emailsForCurrentNote) {
+	if (!this._emailsForCurrentNote) {
 		this._emailsForCurrentNote = this._getValidAddressesForCurrentNote(note);
-	} 
-	if(this._emailsForCurrentNote.length == 0) {
-		if(!showInBar) {
+	}
+	if (this._emailsForCurrentNote.length == 0) {
+		if (!showInBar) {
 			this._handleAddNotesRecords(showInBar, this, []);
 		}
 	} else {
-		var q = ["Select c.Id,c.Name,c.Email,c.Phone,c.OtherPhone,c.Title,c.MailingStreet,c.MailingCity, c.MailingState,c.MailingCountry,c.MailingPostalCode,c.Account.name,c.Account.Id,",
-			"(select id,role,opportunity.name,Opportunity.Id from opportunitycontactroles where opportunity.stagename !='Closed Won' AND opportunity.stagename != 'Closed Lost'   limit 5),",
-			"(select id,subject,caseNumber,Status from Cases Where Status !='Closed' limit 5)",
-				//"(Select id,subject from ActivityHistories) ",
+		var q = ["Select c.Id,c.Name,c.Email,c.Phone,c.OtherPhone,c.Title,c.MailingStreet,c.MailingCity, c.MailingState,c.MailingCountry,c.MailingPostalCode,c.Account.name,c.Owner.Name,c.OwnerId,c.Account.Id,",
+			"(select id,role,opportunity.owner.Name,opportunity.name,Opportunity.Id from opportunitycontactroles where opportunity.stagename !='Closed Won' AND opportunity.stagename != 'Closed Lost'   limit 5),",
+			"(select id,Owner.Name,subject,caseNumber,Status from Cases Where Status !='Closed' limit 5)",
+			//"(Select id,subject from ActivityHistories) ",
 			" from contact c where Email='", this._emailsForCurrentNote.join("' or Email='"), "'"].join("");
-	
-		var callback = new AjxCallback(this, this._handleAddNotesRecords, [showInBar]);
+
+		var callback = new AjxCallback(this, this._queryForLeadDetails, [showInBar]);
 		this.query(q, 10, callback);
-	}	
+	}
+};
+
+Com_Zimbra_SForce.prototype._queryForLeadDetails =
+function (showInBar, zimlet, cRecords) {
+	var q = ["Select l.Id, l.Name,l.Title,l.Email,l.Phone,l.Company,l.Status,l.Street,l.State,l.PostalCode,l.Country, l.NumberOfEmployees,l.Website from Lead l where Email='", this._emailsForCurrentNote.join("' or Email='"), "'"].join("");
+
+	//var callback = new AjxCallback(this, this._handleAddNotesRecords, [showInBar]);
+	var callback = new AjxCallback(this, this._mergeLeadAndContactRecords, [showInBar, cRecords]);
+	this.query(q, 10, callback);
+};
+
+Com_Zimbra_SForce.prototype._mergeLeadAndContactRecords =
+function (showInBar, cRecords, zimlet, lRecords) {
+	var recordsObj = {cRecords:cRecords, lRecords:lRecords}
+	this._handleAddNotesRecords(showInBar, this, {cRecords:cRecords, lRecords:lRecords});
 };
 
 Com_Zimbra_SForce.prototype._getValidAddressesForCurrentNote =
@@ -1216,8 +1662,8 @@ function (note) {
 			var a = note._addrs[type];
 			if (a) {
 				var emls = a._array;
-				if(emls instanceof Array) {
-					if(emls.length < 10) {//skip checking for emails if # is >9
+				if (emls instanceof Array) {
+					if (emls.length < 10) {//skip checking for emails if # is >9
 						emails = emails.concat(this._addEmails(emls));
 					}
 				} else {
@@ -1226,14 +1672,14 @@ function (note) {
 			}
 		}
 	} else {
-		if(note.participants.length < 10) {
+		if (note.participants.length < 10) {
 			emails = emails.concat(this._addEmails(note.participants));
 		} else {
 			emails = emails.concat(this._addEmails(note.from));
 		}
 	}
 	emails = sforce_unique(emails);
-	return 	emails;
+	return	 emails;
 };
 
 Com_Zimbra_SForce.prototype._addEmails =
@@ -1243,13 +1689,13 @@ function (a) {
 		return;
 	}
 	if (typeof a == "string") {
-		if(!this._ignoreThisEmail(a)){
+		if (!this._ignoreThisEmail(a)) {
 			emails.push(a);
 		}
 	} else if (a instanceof Array) {
 		for (var i = 0; i < a.length; ++i) {
 			var address = a[i].address;
-			if(address && !this._ignoreThisEmail(address)){
+			if (address && !this._ignoreThisEmail(address)) {
 				emails.push(a[i].address);
 			}
 		}
@@ -1261,20 +1707,20 @@ function (a) {
 Com_Zimbra_SForce.prototype._ignoreThisEmail =
 function(email) {
 	email = email.toLowerCase();
-	if(!this._ignoreDomainList) {
+	if (!this._ignoreDomainList) {
 		this._ignoreDomainList = [];
 		var igd = this.getUserProperty("sforce_ignoreDomainsList");
-		if(igd != "" && igd != undefined) {
+		if (igd != "" && igd != undefined) {
 			igd = AjxStringUtil.trim(igd);
-			if(igd.indexOf(",") >=0) {
+			if (igd.indexOf(",") >= 0) {
 				this._ignoreDomainList = igd.toLowerCase().split(",");
 			} else {
 				this._ignoreDomainList.push(igd.toLowerCase());
 			}
 		}
 	}
-	for(var i = 0; i < this._ignoreDomainList.length; i++) {
-		if(email.indexOf(this._ignoreDomainList[i]) >=0) {
+	for (var i = 0; i < this._ignoreDomainList.length; i++) {
+		if (email.indexOf(this._ignoreDomainList[i]) >= 0) {
 			return true;
 		}
 	}
@@ -1282,21 +1728,15 @@ function(email) {
 };
 
 Com_Zimbra_SForce.prototype._handleAddNotesRecords =
-function(showInBar, zimlet, records) {	
-	this._recordsForCurrentMail = records;
-	if(!showInBar) {
-		this._setRecordsToNotesDlg(records);
+function(showInBar, zimlet, recordsObj) {
+	if (!showInBar) {
+		this._parseAndSetRecordsObj(recordsObj);
+		this._setRecordsToNotesDlg();
 		this._setAddNotesHandlers();
 	} else {
-		this._updateSforceBar(records);
+		this._addSForceBar(recordsObj);
 	}
 };
-
-Com_Zimbra_SForce.prototype._updateSforceBar =
-function(records) {
-	this._addSForceBar(records);	
-};
-
 
 Com_Zimbra_SForce.prototype.call_internalFunc = function(callback, param) {
 	callback.call(this, param);
@@ -1304,184 +1744,278 @@ Com_Zimbra_SForce.prototype.call_internalFunc = function(callback, param) {
 
 Com_Zimbra_SForce.prototype._setAddNotesHandlers = function() {
 	var callback = AjxCallback.simpleClosure(this._sfItemSelectionHandler, this, "sforce_contactLead_lookupMenu", "sforce_contactLead_selectionMenu");
-	document.getElementById("sforce_contactLead_lookupMenu").onchange = callback;	
+	document.getElementById("sforce_contactLead_lookupMenu").onchange = callback;
 	callback = AjxCallback.simpleClosure(this._sfItemSelectionHandler, this, "sforce_relatedTo_lookupMenu", "sforce_relatedTo_selectionMenu");
-	document.getElementById("sforce_relatedTo_lookupMenu").onchange = callback;	
+	document.getElementById("sforce_relatedTo_lookupMenu").onchange = callback;
 
-	//callback = AjxCallback.simpleClosure(this._showCreateNewContactOrLeadDlg, this,"sforce_contactLead_selectionMenu");
-	//document.getElementById("sforce_contactLead_createMenu").onchange = callback;
-
-	callback = AjxCallback.simpleClosure(this._showCreateNewContactOrLeadDlg, this,"Contact");
+	callback = AjxCallback.simpleClosure(this._showCreateNewContactOrLeadDlg, this, "Contact", true);
 	document.getElementById("sforce_quickCreateContactLnk").onclick = callback;
-	
-	callback = AjxCallback.simpleClosure(this._showCreateNewContactOrLeadDlg, this,"Lead");
+
+	callback = AjxCallback.simpleClosure(this._showCreateNewContactOrLeadDlg, this, "Lead", true);
 	document.getElementById("sforce_quickCreateLeadLnk").onclick = callback;
 };
 
 Com_Zimbra_SForce.prototype._showCreateNewContactOrLeadDlg =
-function(val) {
+function(typeOrObj, setResultToAddNotesMenus) {
 	//var val = document.getElementById("sforce_contactLead_createMenu").value;
 	//if zimlet dialog already exists...
+	var radioType = "Contact";
+	if (typeOrObj instanceof String) {
+		radioType = typeOrObj;
+	}
+
 	if (this._sforceCreateNewObjsDlg) {
-		this._resetCreateNewContactOrLeadDlg();
-		this._showHideFields(val);
+		this._sforceCreateNewObjsDlg.setResultToAddNotesMenus = setResultToAddNotesMenus;
+		this._sforceCreateNewView.getHtmlElement().innerHTML = "";
+		this._sforceCreateNewView.getHtmlElement().innerHTML = this._createNewContactOrLeadView(typeOrObj, setResultToAddNotesMenus);
+		this._addAccountLookupBtn();
+		this._showHideFields(typeOrObj);
+
 		this._sforceCreateNewObjsDlg.popup();
 		return;
 	}
 	this._sforceCreateNewView = new DwtComposite(this.getShell());
+	this._sforceCreateNewView.setSize("400", "350");
 	this._sforceCreateNewView.getHtmlElement().style.overflow = "auto";
-	this._sforceCreateNewView.getHtmlElement().innerHTML = this._createNewContactOrLeadView();
+	this._sforceCreateNewView.getHtmlElement().innerHTML = this._createNewContactOrLeadView(typeOrObj, setResultToAddNotesMenus);
 
-	this._sforceCreateNewObjsDlg = this._createDialog({title:"Create New Contact or Lead", view:this._sforceCreateNewView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this._sforceCreateNewObjsDlg = this._createDialog({title:" Quick Create new Contact(s) or Lead(s)", view:this._sforceCreateNewView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this._sforceCreateNewObjsDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._createNewContactOrLeadOKBtnListner));
+	this._sforceCreateNewObjsDlg.setResultToAddNotesMenus = setResultToAddNotesMenus;
+
 	this._addAccountLookupBtn();
-	this._showHideFields(val);
+	this._showHideFields(typeOrObj);
 	this._addCreateNewContactOrLeadHdlrs();
 	this._sforceCreateNewObjsDlg.popup();
 };
 
 Com_Zimbra_SForce.prototype._createNewContactOrLeadView =
-function() {
+function(typeOrObj, setResultToAddNotesMenus) {
+	this._quickCreateContactObjIds = [];
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV>";
-	html[i++] = "<table><tr><td><input type='radio' id='sforce_contactOrLeadC' name='sforce_contactOrLead' ></input>Contact</td>";
-	html[i++] ="<td colspan=3><input  id='sforce_contactOrLeadL' type='radio' name='sforce_contactOrLead' ></input>Lead</td></tr>";
-	html[i++] ="<tr><td>First Name:</td><td colspan=3><input type='text' id='sforce_contactOrleadFN'></input></td></tr>";
-	html[i++] ="<tr><td>Last Name<span style='color:red;font-weight:bold;'>*</span>:</td><td colspan=3><input type='text' id='sforce_contactOrleadLN'></input></td></tr>";
-	
-	html[i++] ="<tr  id='sforce_contactOrLeadAccTR'><td>Account:</td><td><div id='sforce_contactOrLeadAcc'  refObjIdValue=''></div></td>";
-	html[i++] ="<td><div id='sforce_contactOrLeadAccLookupBtn'></div></td>";
-	html[i++] ="<td><div id='sforce_contactOrLeadAccClearDiv' style='display:none;'><a href=# id='sforce_contactOrLeadAccClearLnk'>clear</a></div></td></tr>";
-	html[i++] ="<tr id='sforce_contactOrLeadCompTR'><td>Company<span style='color:red;font-weight:bold;'>*</span>:</td>";
-	html[i++] ="<td colspan=3><input type='text' id='sforce_contactOrleadComp'></input></td></tr>";
-	html[i++] ="<tr><td>Phone:</td><td colspan=3><input type='text' id='sforce_contactOrleadPH'></input></td></tr>";
-	html[i++] ="<tr><td>Email:</td><td colspan=3><input type='text' id='sforce_contactOrleadEm'></input></td></tr>";
-	html[i++] ="</table>";
+	html[i++] = "<table class='SForce_table' width=100% cellpadding=2><tr><td colspan=3><tr><td><input type='radio' id='sforce_contactOrLeadC' name='sforce_contactOrLead' ></input>Create Contact(s)</td>";
+	html[i++] = "<td colspan=3><input  id='sforce_contactOrLeadL' type='radio' name='sforce_contactOrLead' ></input>Create Lead(s)</td></tr></table>";
 	html[i++] = "</DIV>";
+	html[i++] = "<table width=96% align=center><tr><td>";
+	if (!setResultToAddNotesMenus) {
+		var arry = this._currentSelectedMsg.participants.getArray();
+		for (var j = 0; j < arry.length; j++) {
+			var email = arry[j].address;
+			html[i++] = this._getNewContactOrLeadViewHtml(typeOrObj, j, email);
+		}
+	} else {
+		html[i++] = this._getNewContactOrLeadViewHtml(typeOrObj, 0, "");
+	}
+	html[i++] = "</td></tr></table>";
 	return html.join("");
 };
 
+Com_Zimbra_SForce.prototype._getNewContactOrLeadViewHtml =
+function(typeOrObj, indx, email) {
+	var html = new Array();
+	var i = 0;
+	var accName = typeOrObj.name ? typeOrObj.name : "";
+	var refObjId = typeOrObj.id ? typeOrObj.id : "";
+
+	html[i++] = "<DIV class='SForce_lightyellow'>";
+	html[i++] = "<table class='SForce_table' width=100% cellpadding=2><tr><td colspan=3><input type='checkbox' id='sforce_ignoreQuickCreateCheckbox" + indx + "' />Ignore creating this contact or lead.</td></tr>";
+
+	html[i++] = "<tr><td>First Name:</td><td colspan=3><input type='text' id='sforce_contactOrleadFN" + indx + "'></input></td></tr>";
+	html[i++] = "<tr><td>Last Name<span style='color:red;font-weight:bold;'>*</span>:</td><td colspan=3><input type='text' id='sforce_contactOrleadLN" + indx + "'></input></td></tr>";
+
+	html[i++] = "<tr  id='sforce_contactOrLeadAccTR" + indx + "'><td>Account:</td><td><div id='sforce_contactOrLeadAcc" + indx + "'  refObjIdValue='" + refObjId + "'>" + accName + "</div></td>";
+	html[i++] = "<td><div id='sforce_contactOrLeadAccLookupBtn" + indx + "'></div></td>";
+	html[i++] = "<td><div id='sforce_contactOrLeadAccClearDiv" + indx + "' style='display:none;'><a href=# id='sforce_contactOrLeadAccClearLnk" + indx + "'>clear</a></div></td></tr>";
+	html[i++] = "<tr id='sforce_contactOrLeadCompTR" + indx + "'><td>Company<span style='color:red;font-weight:bold;'>*</span>:</td>";
+	html[i++] = "<td colspan=3><input type='text' id='sforce_contactOrleadComp" + indx + "'></input></td></tr>";
+	html[i++] = "<tr><td>Phone:</td><td colspan=3><input type='text' id='sforce_contactOrleadPH" + indx + "'></input></td></tr>";
+	html[i++] = "<tr><td>Email:</td><td colspan=3><input type='text' value='" + email + "' id='sforce_contactOrleadEm" + indx + "'></input></td></tr>";
+	html[i++] = "</table>";
+	html[i++] = "</DIV>";
+	html[i++] = "<BR/>";
+
+	var params = {
+		sforce_contactOrleadFN:"sforce_contactOrleadFN" + indx, sforce_contactOrleadLN:"sforce_contactOrleadLN" + indx,
+		sforce_contactOrLeadAccTR:"sforce_contactOrLeadAccTR" + indx,sforce_contactOrLeadAcc:"sforce_contactOrLeadAcc" + indx,
+		sforce_contactOrLeadAccLookupBtn:"sforce_contactOrLeadAccLookupBtn" + indx,sforce_contactOrLeadAcc:"sforce_contactOrLeadAcc" + indx,
+		sforce_contactOrLeadAccLookupBtn: "sforce_contactOrLeadAccLookupBtn" + indx,sforce_contactOrLeadAccClearDiv:"sforce_contactOrLeadAccClearDiv" + indx,
+		sforce_contactOrLeadCompTR:"sforce_contactOrLeadCompTR" + indx,sforce_contactOrleadComp:"sforce_contactOrleadComp" + indx,
+		sforce_contactOrleadPH:"sforce_contactOrleadPH" + indx, sforce_contactOrleadEm:"sforce_contactOrleadEm" + indx,
+		sforce_contactOrLeadAccClearLnk:"sforce_contactOrLeadAccClearLnk" + indx, sforce_contactOrLead:"sforce_contactOrLead" + indx};
+
+	this._quickCreateContactObjIds.push(params);
+	return html.join("");
+}
+
 Com_Zimbra_SForce.prototype._createNewContactOrLeadOKBtnListner =
 function() {
-	var ln = document.getElementById("sforce_contactOrleadLN").value;
-	if(ln == "") {
-		appCtxt.setStatusMsg("'Last Name' cannot be empty", ZmStatusView.LEVEL_WARNING);		
-		return;
-	}
-
-	if(this._sforceCreateNewObjsDlg.type == "Lead") {
-		var company = document.getElementById("sforce_contactOrleadComp").value;
-		if(company == "") {
-			appCtxt.setStatusMsg("'Company' cannot be empty for a lead", ZmStatusView.LEVEL_WARNING);		
+	var params = [];
+	var isLead = document.getElementById("sforce_contactOrLeadL").checked == true;
+	for (var i = 0; i < this._quickCreateContactObjIds.length; i++) {
+		if (document.getElementById("sforce_ignoreQuickCreateCheckbox" + i).checked) {
+			continue;
+		}
+		var ln = document.getElementById("sforce_contactOrleadLN" + i).value;
+		if (ln == "") {
+			appCtxt.setStatusMsg("'Last Name' cannot be empty", ZmStatusView.LEVEL_WARNING);
 			return;
 		}
-	} else {//contact..
-		var accountId = document.getElementById("sforce_contactOrLeadAcc").refObjIdValue;
+
+		if (isLead) {
+			var company = document.getElementById("sforce_contactOrleadComp" + i).value;
+			if (company == "") {
+				appCtxt.setStatusMsg("'Company' cannot be empty for a lead", ZmStatusView.LEVEL_WARNING);
+				return;
+			}
+		} else {//contact..
+			var accountId = document.getElementById("sforce_contactOrLeadAcc" + i).refObjIdValue;
+		}
+
+		var fn = document.getElementById("sforce_contactOrleadFN" + i).value;
+		var ph = document.getElementById("sforce_contactOrleadPH" + i).value;
+		var em = document.getElementById("sforce_contactOrleadEm" + i).value;
+
+		var props = {};
+		props["FirstName"] = fn;
+		props["LastName"] = ln;
+		if (isLead) {
+			props["Company"] = company;
+		} else {
+			props["AccountId"] = accountId;
+		}
+		props["Phone"] = ph;
+		props["Email"] = em;
+		params.push(props);
 	}
-
-	var fn = document.getElementById("sforce_contactOrleadFN").value;
-	var ph = document.getElementById("sforce_contactOrleadPH").value;
-	var em = document.getElementById("sforce_contactOrleadEm").value;
-
-	var props = {};
-	props["FirstName"] = fn;
-	props["LastName"] = ln;
-	if(this._sforceCreateNewObjsDlg.type == "Lead") {
-		props["Company"] = company;
+	if (params.length == 0) {
+		appCtxt.getAppController().setStatusMsg("There was no Contact or Lead to create", ZmStatusView.LEVEL_WARNING);
+		return;
+	}
+	var type = "Contact";
+	if (isLead) {
+		type = "Lead";
+	}
+	if (this._sforceCreateNewObjsDlg.setResultToAddNotesMenus) {
+		var callback = AjxCallback.simpleClosure(this._updateSelectMenuInNotesDlg, this, type, "sforce_contactLead_selectionMenu", params);
 	} else {
-		props["AccountId"] = accountId;
+		var callback = AjxCallback.simpleClosure(this._handleCreateContactOrLeadCB, this, params);
 	}
-	props["Phone"] = ph;
-	props["Email"] = em;
-	var params = [];
-	params.push(props);
-	var callback = AjxCallback.simpleClosure(this._updateSelectMenuInNotesDlg, this, this._sforceCreateNewObjsDlg.type, "sforce_contactLead_selectionMenu",params);
-	this.createSFObject(props, this._sforceCreateNewObjsDlg.type, callback, true);
+
+	this.createSFObject(params, type, callback, true);
 	this._sforceCreateNewObjsDlg.popdown();//hide the dialog
 };
 
-Com_Zimbra_SForce.prototype._resetCreateNewContactOrLeadDlg =
-function() {
-	document.getElementById("sforce_contactOrleadFN").value = "";
-	document.getElementById("sforce_contactOrleadLN").value = "";
-	document.getElementById("sforce_contactOrleadPH").value = "";
-	document.getElementById("sforce_contactOrleadEm").value = "";
-	this._createNewContactOrLeadClearLinkHdlr();
+Com_Zimbra_SForce.prototype._handleCreateContactOrLeadCB =
+function(params, result) {
+	if (params.length == 1) {
+		if (result.success.toString() != "true") {
+			appCtxt.getAppController().setStatusMsg("Could not create Contact or Lead", ZmStatusView.LEVEL_WARNING);
+		} else {
+			appCtxt.getAppController().setStatusMsg("Contact or Lead was created successfully", ZmStatusView.LEVEL_INFO);
+		}
+	} else {
+		if (!result instanceof Array) {
+			appCtxt.getAppController().setStatusMsg("Could not create 1 or more Contacts or Leads", ZmStatusView.LEVEL_WARNING);
+			return;
+		} else if (params.length != result.length) {
+			appCtxt.getAppController().setStatusMsg("Could not create 1 or more Contacts or Leads", ZmStatusView.LEVEL_WARNING);
+		} else {
+			appCtxt.getAppController().setStatusMsg(params.length + " Contacts or Leads were created successfully", ZmStatusView.LEVEL_INFO);
+		}
+	}
 };
 
-
 Com_Zimbra_SForce.prototype._createNewContactOrLeadClearLinkHdlr =
-function() {
-	document.getElementById("sforce_contactOrLeadAcc").innerHTML =  "";
-	document.getElementById("sforce_contactOrLeadAcc").refObjIdValue = "";//set custom parameter
-	document.getElementById("sforce_contactOrLeadAccClearDiv").style.display = "none";
+function(i) {
+	document.getElementById("sforce_contactOrLeadAcc" + i).innerHTML = "";
+	document.getElementById("sforce_contactOrLeadAcc" + i).refObjIdValue = "";//set custom parameter
+	document.getElementById("sforce_contactOrLeadAccClearDiv" + i).style.display = "none";
 };
 
 Com_Zimbra_SForce.prototype._showHideFields =
-function(type) {
-	if(type.indexOf("Contact") >=0) {
-		this._sforceCreateNewObjsDlg.type = "Contact";
-		document.getElementById("sforce_contactOrLeadAccTR").style.display = "";
-		document.getElementById("sforce_contactOrLeadCompTR").style.display = "none";
+function(typeOrObj, indx) {
+	var type = "Contact";
+	if (typeOrObj.indexOf instanceof Object) {
+		type = typeOrObj;
+	}
+
+	if (type == "Contact") {
 		document.getElementById("sforce_contactOrLeadC").checked = true;
 	} else {
-		this._sforceCreateNewObjsDlg.type = "Lead";
-		document.getElementById("sforce_contactOrLeadAccTR").style.display = "none";
-		document.getElementById("sforce_contactOrLeadCompTR").style.display = "";
 		document.getElementById("sforce_contactOrLeadL").checked = true;
+	}
+	for (var i = 0; i < this._quickCreateContactObjIds.length; i++) {
+		this._do_showHideFields(type, i);
+	}
+};
+
+Com_Zimbra_SForce.prototype._do_showHideFields =
+function(type, indx) {
+	if (indx == undefined) {
+		indx = 1;
+	}
+	if (type.indexOf("Contact") >= 0) {
+		document.getElementById("sforce_contactOrLeadAccTR" + indx).style.display = "";
+		document.getElementById("sforce_contactOrLeadCompTR" + indx).style.display = "none";
+	} else {
+		document.getElementById("sforce_contactOrLeadAccTR" + indx).style.display = "none";
+		document.getElementById("sforce_contactOrLeadCompTR" + indx).style.display = "";
 	}
 };
 
 Com_Zimbra_SForce.prototype._addCreateNewContactOrLeadHdlrs =
 function() {
-	var callback = AjxCallback.simpleClosure(this._showHideFields, this, "Contact");
+	var callback = AjxCallback.simpleClosure(this._showHideFields, this, "Contact", i);
 	document.getElementById("sforce_contactOrLeadC").onclick = callback;
 
-	var callback = AjxCallback.simpleClosure(this._showHideFields, this, "Lead");
+	var callback = AjxCallback.simpleClosure(this._showHideFields, this, "Lead", i);
 	document.getElementById("sforce_contactOrLeadL").onclick = callback;
-
-	var callback = AjxCallback.simpleClosure(this._createNewContactOrLeadClearLinkHdlr, this);
-	document.getElementById("sforce_contactOrLeadAccClearLnk").onclick = callback;
+	for (var i = 0; i < this._quickCreateContactObjIds.length; i++) {
+		var callback = AjxCallback.simpleClosure(this._createNewContactOrLeadClearLinkHdlr, this, i);
+		document.getElementById("sforce_contactOrLeadAccClearLnk" + i).onclick = callback;
+	}
 };
 
 
 Com_Zimbra_SForce.prototype._addAccountLookupBtn = function() {
+	for (var i = 0; i < this._quickCreateContactObjIds.length; i++) {
 		var btn = new DwtButton({parent:this._shell});
 		btn.setText("Lookup");
 		btn.setImage("Search");
-		btn.addSelectionListener(new AjxListener(this, this._accountlookupBtnHdlr, [ btn]));
-		document.getElementById("sforce_contactOrLeadAccLookupBtn").appendChild(btn.getHtmlElement());		
+		btn.addSelectionListener(new AjxListener(this, this._accountlookupBtnHdlr, i));
+		document.getElementById("sforce_contactOrLeadAccLookupBtn" + i).appendChild(btn.getHtmlElement());
+	}
 };
 
-Com_Zimbra_SForce.prototype._accountlookupBtnHdlr = function() {
-	this.sForceSearchDlg.setProperties("Account", "sforce_contactOrLeadAcc", null, "sforce_contactOrLeadAccClearDiv");
+Com_Zimbra_SForce.prototype._accountlookupBtnHdlr = function(i) {
+	this.sForceSearchDlg.setProperties("Account", "sforce_contactOrLeadAcc" + i, null, "sforce_contactOrLeadAccClearDiv" + i);
 	this.sForceSearchDlg.displaySearchDialog();
 };
-
 
 
 Com_Zimbra_SForce.prototype._updateSelectMenuInNotesDlg =
 function(objName, selectMenuId, props, response) {
 	var props = props[0];
 	var name = "";
-	if(props.FirstName) {
+	if (props.FirstName) {
 		name = props.FirstName;
 	}
-	if(props.LastName) {
+	if (props.LastName) {
 		name = [name, " ", props.LastName].join("");
 	}
-	if(props.Email) {
+	if (props.Email) {
 		name = [name, "(", props.Email, ")"].join("");
 	}
 	var id = response.id.__msh_content;
 	var elSel = document.getElementById(selectMenuId);
 	var elOptNew = document.createElement('option');
 	elOptNew.text = [objName, "-", name].join("");
-	elOptNew.value =  [objName, "_", id].join("");
+	elOptNew.value = [objName, "_", id].join("");
 
-	var elOptOld = elSel.options[0];  
-	if(AjxEnv.isIE) {
+	var elOptOld = elSel.options[0];
+	if (AjxEnv.isIE) {
 		elSel.add(elOptNew, 0);
 	} else {
 		elSel.add(elOptNew, elOptOld);
@@ -1501,17 +2035,17 @@ Com_Zimbra_SForce.prototype._sfItemSelectionHandler = function(selectId, objSele
 };
 
 Com_Zimbra_SForce.prototype._addLookupButtons = function() {
-		this._shell = this._shell;
-		this.lookupBtnIdandBtnObjMap = {};
-		for(var lookupBtnDivId in this._lookupBtnDivIdAndObjsMap) {
-			var obj = this._lookupBtnDivIdAndObjsMap[lookupBtnDivId];
-			var btn = new DwtButton({parent:this._shell});
-			btn.setText("Lookup");
-			btn.setImage("Search");
-			this.lookupBtnIdandBtnObjMap[lookupBtnDivId] = btn;
-			btn.addSelectionListener(new AjxListener(this, this._lookupBtnHdlr, [obj, btn]));
-			document.getElementById(lookupBtnDivId).appendChild(btn.getHtmlElement());
-		}
+	this._shell = this._shell;
+	this.lookupBtnIdandBtnObjMap = {};
+	for (var lookupBtnDivId in this._lookupBtnDivIdAndObjsMap) {
+		var obj = this._lookupBtnDivIdAndObjsMap[lookupBtnDivId];
+		var btn = new DwtButton({parent:this._shell});
+		btn.setText("Lookup");
+		btn.setImage("Search");
+		this.lookupBtnIdandBtnObjMap[lookupBtnDivId] = btn;
+		btn.addSelectionListener(new AjxListener(this, this._lookupBtnHdlr, [obj, btn]));
+		document.getElementById(lookupBtnDivId).appendChild(btn.getHtmlElement());
+	}
 };
 
 Com_Zimbra_SForce.prototype._lookupBtnHdlr = function(obj, btn) {
@@ -1534,12 +2068,13 @@ Com_Zimbra_SForce.prototype._cleanMainAccountsInfoDiv = function() {
 
 Com_Zimbra_SForce.prototype._showNotesDlg = function(note) {
 	var subject = AjxStringUtil.htmlEncode(note.subject);
+	var addrDate = this._getCurrentAddressAndDateStr();
 	var body = AjxStringUtil.htmlEncode(this.getMailBodyAsText(note));
-
-	if(this._addNotesDialog) {//if dialog already exists..
+	body = [addrDate, body].join("");
+	if (this._addNotesDialog) {//if dialog already exists..
 		this._setNotesDlgSubjectAndBody(subject, body);
 		this._setNotesDlgAccountsDivAsLoading();
-		if(!this._searchAllContacts) {
+		if (!this._searchAllContacts) {
 			this._hideAlertMsgForNotesDlg();
 		}
 		this._addNotesDialog.popup();
@@ -1614,11 +2149,11 @@ Com_Zimbra_SForce.prototype._setNotesDlgSubjectAndBody = function(subject, body)
 };
 
 Com_Zimbra_SForce.prototype._setNotesDlgAccountsDivAsLoading = function() {
-	document.getElementById("SForce_mainAccountsInfoDiv").innerHTML =  ["<br/> &nbsp;&nbsp;&nbsp;<img   src=\"", this.getResource("img/sf_busy.gif") , "\"  /> <b> Searching SalesForce..</b>"].join("");
+	document.getElementById("SForce_mainAccountsInfoDiv").innerHTML = this._loadingSalesForceHtml;
 };
 
 Com_Zimbra_SForce.prototype._setAlertMsgForNotesDlg = function(msg) {
-	document.getElementById("SForce_MessageInfoDiv").innerHTML =  ["<label style='font-weight:bold;font-size:12px;color:white;'>", msg, "</label>"].join("");
+	document.getElementById("SForce_MessageInfoDiv").innerHTML = ["<label style='font-weight:bold;font-size:12px;color:white;'>", msg, "</label>"].join("");
 	document.getElementById("SForce_MessageInfoDiv").style.display = "block";
 };
 
@@ -1632,33 +2167,45 @@ Com_Zimbra_SForce.prototype._addNotesOKButtonListener = function(dlg) {
 	var hasAtleastOneItem = false;
 	var clMenuOptions = document.getElementById("sforce_contactLead_selectionMenu").options;
 	var rtMenuOptions = document.getElementById("sforce_relatedTo_selectionMenu").options;
-	
 
-	for(var j =0; j < clMenuOptions.length; j++) {
+
+	for (var j = 0; j < clMenuOptions.length; j++) {
 		var clOption = clMenuOptions[j];
 		var hasRelatedToItemForThisContact = false;
-		if(clOption.selected) {
-			var tmpArry =clOption.value.split("_");
+		if (clOption.selected) {
+			var tmpArry = clOption.value.split("_");
 			var whoId = tmpArry[1];
+
+			//if its a lead, ignore relatedTo selection
+			if (tmpArry[0] == "Lead") {
+				if (!ids[indx]) {
+					ids[indx] = {};
+				}
+				ids[indx].WhoId = whoId;
+				hasAtleastOneItem = true;
+				indx++;
+				continue;
+			}
+
 			//check if relatedTo is associated.. if so, add all of them one-by-one
-			for(var k =0; k < rtMenuOptions.length; k++) {
+			for (var k = 0; k < rtMenuOptions.length; k++) {
 				var rtOption = rtMenuOptions[k];
-				if(rtOption.selected) {
-					if(!ids[indx]) {
+				if (rtOption.selected) {
+					if (!ids[indx]) {
 						ids[indx] = {};
 					}
 					var tmpArry = rtOption.value.split("_");
 					var whatId = tmpArry[1];
 					ids[indx].WhoId = whoId;
-					ids[indx].WhatId =whatId;
+					ids[indx].WhatId = whatId;
 					indx++;
 					hasAtleastOneItem = true;
 					hasRelatedToItemForThisContact = true;
 				}
 			}
 			//if there is no relatedTo items, just add contacts
-			if(!hasRelatedToItemForThisContact){
-				if(!ids[indx]) {
+			if (!hasRelatedToItemForThisContact) {
+				if (!ids[indx]) {
 					ids[indx] = {};
 				}
 				ids[indx].WhoId = whoId;
@@ -1669,17 +2216,17 @@ Com_Zimbra_SForce.prototype._addNotesOKButtonListener = function(dlg) {
 
 	}
 	//allow just selecting relatedTo(without contacts)
-	if(!hasAtleastOneItem) {
-		for(var k =0; k < rtMenuOptions.length; k++) {
+	if (!hasAtleastOneItem) {
+		for (var k = 0; k < rtMenuOptions.length; k++) {
 			var rtOption = rtMenuOptions[k];
-			if(clOption.selected) {
-				if(!ids[indx]) {
+			if (clOption.selected) {
+				if (!ids[indx]) {
 					ids[indx] = {};
 					indx++;
 				}
 				var tmpArry = rtOption.value.split("_");
 				var whatId = tmpArry[1];
-				ids[indx].WhatId =whatId;
+				ids[indx].WhatId = whatId;
 				hasAtleastOneItem = true;
 			}
 		}
@@ -1709,56 +2256,71 @@ Com_Zimbra_SForce.prototype._addNotesCancelButtonListener = function(dlg) {
 	dlg.popdown();
 };
 
-Com_Zimbra_SForce.prototype._setRecordsToNotesDlg = function(records) {
+Com_Zimbra_SForce.prototype._setRecordsToNotesDlg = function() {
 	var html = [];
-	var i=0;
+	var i = 0;
 	var contactsSelectId = Dwt.getNextId();
 	var relatedToSelectId = Dwt.getNextId();
 	html[i++] = "<table class='SForce_table' width=100%>";
 	html[i++] = "<tr><td><strong>Contact/Lead Name:</strong></td><td><strong>Related to:</strong></TD></TR>";
 
 	html[i++] = "<tr>";
-	html[i++] ="<td><select id='sforce_contactLead_selectionMenu' multiple size='10'>";
-	for(var m = 0; m < records.length;m++) {
-		var contact = records[m];
+	html[i++] = "<td><select id='sforce_contactLead_selectionMenu' multiple size='10'>";
+	var records = this.cRecords;
+	for (var m = 0; m < this.cRecords.length; m++) {
+		var contact = this.cRecords[m];
 		var name = "";
-		if(contact.Name) {
+		if (contact.Name) {
 			name = contact.Name.toString();
 		}
 		var email = "";
-		if(contact.Email) {
+		if (contact.Email) {
 			email = contact.Email.toString();
 		}
-		var id = contact.Id.toString();		
-		var val =  [name," ", email].join("");
+		var id = contact.Id.toString();
+		var val = [name," ", email].join("");
 		html[i++] = ["<option title='",val,"' value='Contact_", id, "' selected>Contact: ",val, "</option>"].join("");
 	}
-	html[i++] ="</select></td>";
-	html[i++] =["<td><select id='sforce_relatedTo_selectionMenu' multiple size='10'>"].join("");
-	for(var m = 0; m < records.length; m++) {
-		var contact = records[m];
+	for (var m = 0; m < this.lRecords.length; m++) {
+		var lead = this.lRecords[m];
+		var name = "";
+		if (lead.Name) {
+			name = lead.Name.toString();
+		}
+		var email = "";
+		if (lead.Email) {
+			email = lead.Email.toString();
+		}
+		var id = lead.Id.toString();
+		var val = [name," ", email].join("");
+		html[i++] = ["<option title='",val,"' value='Lead_", id, "' selected>Lead: ",val, "</option>"].join("");
+	}
+
+	html[i++] = "</select></td>";
+	html[i++] = ["<td><select id='sforce_relatedTo_selectionMenu' multiple size='10'>"].join("");
+	for (var m = 0; m < this.cRecords.length; m++) {
+		var contact = this.cRecords[m];
 		//add Account
 		var account = contact.Account;
-		if(account) {
+		if (account) {
 			var id = account.Id.toString();
 			var name = account.Name.toString();
 
-			html[i++] = ["<option title='",name,"' value='Account_", id, "'>Account: ", name, "</option>"].join("");			
+			html[i++] = ["<option title='",name,"' value='Account_", id, "'>Account: ", name, "</option>"].join("");
 		}
 		//add opportunities
 		var ocRoles = contact.OpportunityContactRoles;
-		if(ocRoles) {
-
+		if (ocRoles) {
 			var list = ocRoles.records;
-			if(list && !(list instanceof Array)) {
+			if (list && !(list instanceof Array)) {
 				list = [list];
 			}
-			for(var n = 0; n < list.length; n++) {
+			for (var n = 0; n < list.length; n++) {
 				var item = list[n];
 				var id = item.Opportunity.Id.toString();
 				var name = item.Opportunity.Name.toString();
 				var role = "";
-				if(item.Role) {
+				if (item.Role) {
 					role = item.Role.toString();
 				}
 				var val = [name," ", role].join("");
@@ -1767,12 +2329,12 @@ Com_Zimbra_SForce.prototype._setRecordsToNotesDlg = function(records) {
 		}
 		//add cases
 		var cases = contact.Cases;
-		if(cases) {
+		if (cases) {
 			var list = cases.records;
-			if(list && !(list instanceof Array)) {
+			if (list && !(list instanceof Array)) {
 				list = [list];
 			}
-			for(var n = 0; n < list.length; n++) {
+			for (var n = 0; n < list.length; n++) {
 				var item = list[n];
 				var id = item.Id.toString();
 				var subject = item.Subject.toString();
@@ -1783,18 +2345,18 @@ Com_Zimbra_SForce.prototype._setRecordsToNotesDlg = function(records) {
 		}
 
 	}
-	html[i++] ="</select></td>";
-	html[i++] ="</tr>";
+	html[i++] = "</select></td>";
+	html[i++] = "</tr>";
 	html[i++] = "<tr><td><strong>Lookup Contacts or Leads:</strong></td><td><strong>Lookup Related to Items:</strong></TD></TR>";
-		
-	html[i++] ="<tr><td><select id='sforce_contactLead_lookupMenu'>";
-	html[i++] = "<option value='item_lookUp'>------------------ Lookup ------------------</option>";
+
+	html[i++] = "<tr><td><select id='sforce_contactLead_lookupMenu'>";
+	html[i++] = "<option value='item_lookUp'>------------------------- Lookup -------------------------</option>";
 	html[i++] = "<option value='Contact_lookUp'>Contact [lookup]</option>";
 	html[i++] = "<option value='Lead_lookUp'>Lead [lookup]</option>";
 	html[i++] = "</select></td>";
 
-	html[i++] ="<td><select  id='sforce_relatedTo_lookupMenu'>";
-	html[i++] = "<option value='item_lookUp'>------------------ Lookup ------------------</option>";
+	html[i++] = "<td><select  id='sforce_relatedTo_lookupMenu'>";
+	html[i++] = "<option value='item_lookUp'>------------------------- Lookup -------------------------</option>";
 	html[i++] = "<option value='Account_lookUp'>Account [lookup]</option>";
 	html[i++] = "<option value='Asset_lookUp'>Asset [lookup] </option>";
 	html[i++] = "<option value='Campaign_lookUp'>Campaign [lookup] </option>";
@@ -1804,17 +2366,8 @@ Com_Zimbra_SForce.prototype._setRecordsToNotesDlg = function(records) {
 	html[i++] = "<option value='Product_lookUp'>Product [lookup] </option>";
 	html[i++] = "<option value='Solution_lookUp'>Solution [lookup] </option>";
 	html[i++] = "</select></td>";
-	html[i++] ="</tr>";
-	html[i++] ="<tr><td>Quick create: <a href=# id='sforce_quickCreateContactLnk'>Contact</a> or <a href=# id='sforce_quickCreateLeadLnk'>Lead</a></td></tr>";
-	/*
-	html[i++] = "<tr><td colspan=2><strong>Create New contacts or leads:</strong></td></TR>";
-	html[i++] ="<tr><td colspan=2><select id='sforce_contactLead_createMenu'>";
-	html[i++] = "<option value='item_Create'>------------------ Create ------------------</option>";
-	html[i++] = "<option value='Contact_Create'>Create New Contact </option>";
-	html[i++] = "<option value='Lead_Create'>Create New Lead </option>";
-	html[i++] = "</select></td>";
-	html[i++] ="</tr>";
-	*/
+	html[i++] = "</tr>";
+	html[i++] = "<tr><td>Quick create: <a href=# id='sforce_quickCreateContactLnk'>Contact</a> or <a href=# id='sforce_quickCreateLeadLnk'>Lead</a></td></tr>";
 	html[i++] = "</table>";
 	document.getElementById("SForce_mainAccountsInfoDiv").innerHTML = html.join("");
 };
@@ -1828,7 +2381,7 @@ Com_Zimbra_SForce.prototype._setRecordsToNotesDlg = function(records) {
 // Toolbar related..(START)
 //--------------------------------------------------------------------------------------------------------
 Com_Zimbra_SForce.prototype.initializeToolbar = function(app, toolbar, controller, viewId) {
-	if(this.sforce_logindlg_showSendAndAddBtn == undefined) {
+	if (this.sforce_logindlg_showSendAndAddBtn == undefined) {
 		this.sforce_logindlg_showSendAndAddBtn = this.getUserProperty("sforce_logindlg_showSendAndAddBtn") == "true";
 	}
 
@@ -1847,8 +2400,8 @@ Com_Zimbra_SForce.prototype._initContactSFToolbar = function(toolbar, controller
 				break;
 			}
 		}
-		if(buttonIndex == -1) {
-			buttonIndex = i+1;
+		if (buttonIndex == -1) {
+			buttonIndex = i + 1;
 		}
 		ZmMsg.salesforce = "Sync with Salesforce";
 		ZmMsg.sforceMailTooltip = "Syncs a contact with salesforce";
@@ -1861,7 +2414,7 @@ Com_Zimbra_SForce.prototype._initContactSFToolbar = function(toolbar, controller
 Com_Zimbra_SForce.prototype._sfContactTbButtonHdlr = function(controller) {
 	var contact = controller._listView[controller._currentView].getSelection()[0];
 	this.contactDropped(contact);//should really show a dialog with two sections to sync
-	
+
 };
 
 Com_Zimbra_SForce.prototype._initComposeSFToolbar = function(toolbar, controller) {
@@ -1879,10 +2432,14 @@ Com_Zimbra_SForce.prototype._initComposeSFToolbar = function(toolbar, controller
 Com_Zimbra_SForce.prototype._sendAddSForce = function(ev) {
 	var msg = this._composeView.getMsg();
 	this._send();
+	if (msg == undefined) {
+		appCtxt.getAppController().setStatusMsg("Sorry, could not grab email", ZmStatusView.LEVEL_WARNING);
+		return;
+	}
 	this._sforce._initializeSalesForceForThisMsg(msg);
-	if(this._sforce.user && this._sforce.user != "" && this._sforce.passwd && this._sforce.passwd != "") {
+	if (this._sforce.user && this._sforce.user != "" && this._sforce.passwd && this._sforce.passwd != "") {
 		this._sforce.noteDropped(msg);
-	}	
+	}
 	//this._sforce.noteDropped(msg);
 };
 //--------------------------------------------------------------------------------------------------------
@@ -1915,8 +2472,8 @@ Com_Zimbra_SForce.prototype._makeEnvelope = function(method, limit, dontUseSessi
 
 	if (this.sessionId && !dontUseSessionId) {
 		var header = soap.ensureHeader();
-		if(limit) {
-			var qo =  soap.getDoc().createElement("sh:QueryOptions");
+		if (limit) {
+			var qo = soap.getDoc().createElement("sh:QueryOptions");
 			qo.setAttribute("xmlns:sh", "SoapService");
 			qo.setAttribute("soap:mustUnderstand", "0");
 			header.appendChild(qo);
@@ -1924,7 +2481,7 @@ Com_Zimbra_SForce.prototype._makeEnvelope = function(method, limit, dontUseSessi
 			var el = soap.getDoc().createElement("sh:batchSize");
 			el.setAttribute("xmlns:sh", this.XMLNS);
 			el.appendChild(soap.getDoc().createTextNode(200));//always use 200
-			qo.appendChild(el);			 
+			qo.appendChild(el);
 		}
 		var shEl = soap.getDoc().createElement("sh:SessionHeader");
 		shEl.setAttribute("xmlns:sh", this.XMLNS);
@@ -1943,13 +2500,15 @@ Com_Zimbra_SForce.prototype._makeEnvelope = function(method, limit, dontUseSessi
 
 Com_Zimbra_SForce.prototype.xmlToObject = function(result, dontConvertToJSObj) {
 	try {
-		if(dontConvertToJSObj) {
+		if (dontConvertToJSObj) {
 			var xd = new AjxXmlDoc.createFromDom(result.xml);
 		} else {
 			var xd = new AjxXmlDoc.createFromDom(result.xml).toJSObject(true, false);
 		}
 	} catch(ex) {
-		this.displayErrorMessage(ex, result.text, "Problem contacting Salesforce");
+		appCtxt.getAppController().setStatusMsg("Problem contacting Salesforce. Please try again", ZmStatusView.LEVEL_WARNING);
+		this.login(function() {
+		}, null, null, true);
 	}
 	return xd;
 };
@@ -1959,14 +2518,14 @@ Com_Zimbra_SForce.prototype.rpc = function(soap, callback, passErrors) {
 	this.sendRequest(soap, this.SERVER, {SOAPAction: "m", "Content-Type": "text/xml"}, callback, false, passErrors);
 };
 
-Com_Zimbra_SForce.prototype.logout = 
+Com_Zimbra_SForce.prototype.logout =
 function() {
 	var soap = this._makeEnvelope("logout");
 
 	this.rpc(soap, new AjxCallback(this, this.done_logout), true);
 };
 
-Com_Zimbra_SForce.prototype.done_logout = 
+Com_Zimbra_SForce.prototype.done_logout =
 function(response) {
 	appCtxt.setStatusMsg("Logged out of Salesforce", ZmStatusView.LEVEL_INFO);
 };
@@ -1978,11 +2537,11 @@ Com_Zimbra_SForce.prototype.login = function(callback, user, passwd, dontUseSess
 	if (!callback) {
 		callback = false;
 	}
-	if(!user || !passwd) {
+	if (!user || !passwd) {
 		user = this.getUserProperty("user");
 		passwd = this.getUserProperty("passwd");
 		this.sforce_ignoreDomainsList = this.getUserProperty("sforce_ignoreDomainsList");
-		this.sforce_logindlg_sbarShowOnlyOnResult =  this.getUserProperty("sforce_logindlg_sbarShowOnlyOnResult") == "true";
+		this.sforce_logindlg_sbarShowOnlyOnResult = this.getUserProperty("sforce_logindlg_sbarShowOnlyOnResult") == "true";
 		this.sforce_logindlg_showSendAndAddBtn = this.getUserProperty("sforce_logindlg_showSendAndAddBtn") == "true";
 	}
 	if (!user || !passwd || user == "" || passwd == "") {
@@ -1999,7 +2558,7 @@ Com_Zimbra_SForce.prototype._do_login = function(callback, user, passwd, dontUse
 	var soap = this._makeEnvelope("login", null, dontUseSessionId);
 	soap.set("username", user);
 	soap.set("password", passwd);
-	if (callback == null){
+	if (callback == null) {
 		callback = false;
 	}
 	this.rpc(soap, new AjxCallback(this, this.done_login, [ callback ]), true);
@@ -2013,17 +2572,36 @@ Com_Zimbra_SForce.prototype.done_login = function(callback, result) {
 		this.sessionId = String(ans.sessionId);
 		this.userId = String(ans.userId);
 		this.userInfo = ans.userInfo;
-		if(this.loginDlg) {//popdown login dialog on successful login
+		if (this.loginDlg) {//popdown login dialog on successful login
 			this.loginDlg.popdown();
 		}
-		if(!this._loginTimerStarted) {
-			appCtxt.setStatusMsg("Logged on to salesforce as "+this.userInfo.userFullName.toString(), ZmStatusView.LEVEL_INFO);
+		if (!this._caseObjectLoaded) {
+			this.__dynamicMenuItems = [];
+			this.__dynamicMenuItems_links = [];
+			this._loadCaseDescriptionObject();
+			for (var itemName in this._sforceCaseObject) {
+				var obj = this._sforceCaseObject[itemName];
+				if (itemName.indexOf(this.sforce_linkNamesInSalesForceStartsWith) == 0) {
+					this.__dynamicMenuItems_links.push({id:Dwt.getNextId(),icon:"SFORCE-panelIcon", label:obj.label, itemName:itemName});
+					continue;
+				}
+				if (obj.type != "picklist") {
+					continue;
+				}
+				var subMenuItems = obj.picklistValues.split("=::=");
+				this.__dynamicMenuItems.push({id:Dwt.getNextId(),icon:"SFORCE-panelIcon", label:obj.label,
+					style:DwtMenuItem.CASCADE_STYLE, subMenuItems:subMenuItems, itemName:itemName});
+			}
+		}
+		if (!this._loginTimerStarted) {
+			appCtxt.setStatusMsg("Logged on to salesforce as " + this.userInfo.userFullName.toString(), ZmStatusView.LEVEL_INFO);
 			//login every 10 minutes to keep the session alive
-			setInterval(AjxCallback.simpleClosure(this.login, this, (function() {}), null, null, true), 60*1000*5);
+			setInterval(AjxCallback.simpleClosure(this.login, this, (function() {
+			}), null, null, true), 60 * 1000 * 10);
 			this._loginTimerStarted = true;
 		}
 
-		if(callback instanceof AjxCallback) {
+		if (callback instanceof AjxCallback) {
 			callback.run(this);
 		} else if (callback) {
 			callback.call(this);
@@ -2033,13 +2611,14 @@ Com_Zimbra_SForce.prototype.done_login = function(callback, result) {
 		if (ans && ans.Body && ans.Body.Fault && ans.Body.Fault.faultstring) {
 			fault = ans.Body.Fault.faultstring + "<br />";
 		}
-		var errorMsg = ["<b>Login to Salesforce failed!</b><br />&nbsp;&nbsp;&nbsp;&nbsp;", fault , "<br />Check your internet connection and review your preferences."].join("");
-		this._displayLoginDialog(callback, errorMsg);
-
+		var errorMsg = ["<b>Login to Salesforce failed</b><br />&nbsp;&nbsp;", fault].join("");
+		if (this.loginDlg && this.loginDlg.isPoppedUp()) {
+			this._displayLoginDialog(callback, errorMsg);
+		} else {
+			appCtxt.getAppController().setStatusMsg(errorMsg, ZmStatusView.LEVEL_WARNING);
+		}
 	}
 };
-
-
 
 
 Com_Zimbra_SForce.prototype.queryMore = function(queryLocator, limit, callback, returnEntireResponse) {
@@ -2059,7 +2638,7 @@ Com_Zimbra_SForce.prototype._do_queryMore = function(queryLocator, limit, callba
 	var soap = this._makeEnvelope("queryMore", limit);
 	var doc = soap.getDoc();
 	var query = soap.set("queryLocator", queryLocator);
-	query.setAttribute("xmlns",  this.XMLNS);
+	query.setAttribute("xmlns", this.XMLNS);
 	// we sure have a lot of indirection going on..
 	this.rpc(soap, new AjxCallback(this, this.done_queryMore, [ callback, returnEntireResponse ]));
 };
@@ -2088,13 +2667,13 @@ Com_Zimbra_SForce.prototype._do_search = function(query, limit, callback, return
 	var soap = this._makeEnvelope("search", limit);
 	var doc = soap.getDoc();
 	var query = soap.set("queryString", query);
-	query.setAttribute("xmlns:sh",  this.XMLNS);
+	query.setAttribute("xmlns:sh", this.XMLNS);
 	// we sure have a lot of indirection going on..
 	this.rpc(soap, new AjxCallback(this, this.done_search, [ callback, returnEntireResponse, returnResultAsXML ]));
 };
 
 Com_Zimbra_SForce.prototype.done_search = function(callback, returnEntireResponse, returnResultAsXML, result) {
-	if(returnResultAsXML) {
+	if (returnResultAsXML) {
 		var xd = this.xmlToObject(result, true);
 		var resultObj = xd;
 	} else {
@@ -2110,7 +2689,7 @@ Com_Zimbra_SForce.prototype.done_search = function(callback, returnEntireRespons
 /// Executes a SOQL (SalesForce Object Query Language) and calls the given
 /// callback upon successful execution.
 Com_Zimbra_SForce.prototype.query = function(query, limit, callback, returnEntireResponse, errorCallback) {
-	if(!errorCallback) {
+	if (!errorCallback) {
 		var errorCallback = new AjxCallback(this, this._generalQueryErrorHdlr);
 	}
 	if (!this.sessionId) {
@@ -2123,11 +2702,14 @@ Com_Zimbra_SForce.prototype.query = function(query, limit, callback, returnEntir
 };
 
 Com_Zimbra_SForce.prototype._generalQueryErrorHdlr = function() {
-	var response =  arguments[1];
-	if(response) {
-		if(response.text.indexOf("INVALID_SESSION_ID") >=0) {
+	var response = arguments[1];
+	if (response) {
+		if (response.text.indexOf("INVALID_SESSION_ID") >= 0 || response.text.indexOf("HTTP header missing") >= 0) {
 			appCtxt.getAppController().setStatusMsg("Salesforce session had expired. Please try again", ZmStatusView.LEVEL_WARNING);
-			this.login(function(){}, null, null, true);
+			this.login(function() {
+			}, null, null, true);
+		} else {
+			this.displayErrorMessage("Error querying Salesforce<br/>Error code: " + response.status, response.text);
 		}
 	}
 };
@@ -2140,7 +2722,7 @@ Com_Zimbra_SForce.prototype._do_query = function(query, limit, callback, returnE
 	var soap = this._makeEnvelope("query", limit);
 	var doc = soap.getDoc();
 	var query = soap.set("queryString", query);
-	query.setAttribute("xmlns:sh",  this.XMLNS);
+	query.setAttribute("xmlns:sh", this.XMLNS);
 	// we sure have a lot of indirection going on..
 	this.rpc(soap, new AjxCallback(this, this.done_query, [ callback, returnEntireResponse, errorCallback ]), true);
 };
@@ -2158,19 +2740,19 @@ Com_Zimbra_SForce.__query_result_get = function() {
 
 Com_Zimbra_SForce.prototype.done_objQuery = function(callback, result) {
 	var xd = this.xmlToObject(result);
-	callback.call(this,  xd.Body.describeSObjectResponse.result);
+	callback.call(this, xd.Body.describeSObjectResponse.result);
 };
 
 Com_Zimbra_SForce.prototype.done_query = function(callback, returnEntireResponse, errorCallback, result) {
-	if(!result.success) {
-		if(errorCallback) {
-			if(errorCallback instanceof AjxCallback) {
+	if (!result.success) {
+		if (errorCallback) {
+			if (errorCallback instanceof AjxCallback) {
 				errorCallback.run(this, result);
-			}else {
+			} else {
 				errorCallback.call(this, result);
 			}
 		} else {
-			this.displayErrorMessage("An error was returned.<br />Error code: " + result.status, result.text);	
+			this.displayErrorMessage("An error was returned.<br />Error code: " + result.status, result.text);
 		}
 		return;
 	}
@@ -2181,14 +2763,14 @@ Com_Zimbra_SForce.prototype.done_query = function(callback, returnEntireResponse
 
 Com_Zimbra_SForce.prototype._parseResultObjAndCallback = function(resultObj, callback, returnEntireResponse) {
 	//if returnEntireResponse Object is true..
-	if(returnEntireResponse) {
-		if(callback instanceof AjxCallback) {
+	if (returnEntireResponse) {
+		if (callback instanceof AjxCallback) {
 			callback.run(this, resultObj);
-		}else {
+		} else {
 			callback.call(this, resultObj);
 		}
 		return;
-	}	
+	}
 
 
 	var qr = resultObj.records;
@@ -2204,9 +2786,9 @@ Com_Zimbra_SForce.prototype._parseResultObjAndCallback = function(resultObj, cal
 	} else {
 		qr = [];
 	}
-	if(callback instanceof AjxCallback) {
+	if (callback instanceof AjxCallback) {
 		callback.run(this, qr);
-	}else {
+	} else {
 		callback.call(this, qr);
 	}
 };
@@ -2263,7 +2845,7 @@ Com_Zimbra_SForce.prototype._actOnSFObject = function(action, props, type, callb
 	if (!(a instanceof Array)) {
 		a = [ a ];
 	}
-	if(action ==  "delete") {
+	if (action == "delete") {
 		for (var j = 0; j < a.length; ++j) {
 			props = a[j];
 			for (var i in props) {
@@ -2275,27 +2857,27 @@ Com_Zimbra_SForce.prototype._actOnSFObject = function(action, props, type, callb
 			var createData = {};
 			props = a[j];
 			for (var i in props) {
-				if (props[i] != null && props[i] != "undefined" &&  i != "undefined") {
+				if (props[i] != null && props[i] != "undefined" && i != "undefined") {
 					if (i.indexOf(":") == -1)
 						createData["ns3:" + i] = props[i];
 					else
 						createData[i] = props[i];
 				}
 			}
-			var el = soap.set("sObjects", createData);	
+			var el = soap.set("sObjects", createData);
 
 			el.setAttribute("xsi:type", "ns3:" + type);
 			el.setAttribute("xmlns:ns3", this.XMLNS);
 		}
 	}
-	if(action == "create") {
-		var respCallback	= new AjxCallback(this, this.done_createSFObject, [ callback, returnEntireResponse ]);
-	} else if(action == "update") {
-		var respCallback =  new AjxCallback(this, this.done_updateSFObject, [ callback,returnEntireResponse ]);
-	} else if(action == "delete") {
-		var respCallback =  new AjxCallback(this, this.done_deleteSFObject, [ callback,returnEntireResponse ]);
+	if (action == "create") {
+		var respCallback = new AjxCallback(this, this.done_createSFObject, [ callback, returnEntireResponse ]);
+	} else if (action == "update") {
+		var respCallback = new AjxCallback(this, this.done_updateSFObject, [ callback,returnEntireResponse ]);
+	} else if (action == "delete") {
+		var respCallback = new AjxCallback(this, this.done_deleteSFObject, [ callback,returnEntireResponse ]);
 	}
-	
+
 	this.rpc(soap, respCallback);
 };
 
@@ -2303,7 +2885,7 @@ Com_Zimbra_SForce.prototype.done_createSFObject = function(callback, returnEntir
 	var xd = this.xmlToObject(result);
 	if (xd && callback) {
 		result = xd.Body.createResponse.result;
-		if(returnEntireResponse) {//returnEnhtireResult Object
+		if (returnEntireResponse) {//returnEnhtireResult Object
 			callback.call(this, result);
 			return;
 		}
@@ -2320,16 +2902,15 @@ Com_Zimbra_SForce.prototype.done_createSFObject = function(callback, returnEntir
 };
 
 
-
 Com_Zimbra_SForce.prototype.done_updateSFObject = function(callback, returnEntireResponse, result) {
 	var xd = this.xmlToObject(result);
 	if (xd && callback) {
 		result = xd.Body.updateResponse.result;
-		if(returnEntireResponse) {//returnEnhtireResult Object
+		if (returnEntireResponse) {//returnEnhtireResult Object
 			callback.call(this, result);
 			return;
 		}
-		if(result.success) {
+		if (result.success) {
 			callback.call(this, result.success.toString());
 		} else {
 			callback.call(this, "false");
@@ -2341,11 +2922,11 @@ Com_Zimbra_SForce.prototype.done_deleteSFObject = function(callback, returnEntir
 	var xd = this.xmlToObject(result);
 	if (xd && callback) {
 		result = xd.Body.deleteResponse.result;
-		if(returnEntireResponse) {//returnEnhtireResult Object
+		if (returnEntireResponse) {//returnEnhtireResult Object
 			callback.call(this, result);
 			return;
 		}
-		if(result.success) {
+		if (result.success) {
 			callback.call(this, result.success.toString());
 		} else {
 			callback.call(this, "false");
@@ -2357,494 +2938,6 @@ Com_Zimbra_SForce.prototype.done_deleteSFObject = function(callback, returnEntir
 // Salesforce AJAX functionalities..(END)
 //--------------------------------------------------------------------------------------------------------
 
-
-//--------------------------------------------------------------------------------------------------------
-// Contacts dropped..(START)
-//--------------------------------------------------------------------------------------------------------
-/// Called when a new contact has been dropped onto the Zimlet panel item, this
-/// function will analyze data and take appropriate actions to insert a new
-/// contact.
-Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
-	// Note that since all communication is required to be asynchronous,
-	// the only way we can write this function is using a series of
-	// callbacks.  The main entry point is when we call this.query(...),
-	// but then execution will vary depending on the response.
-
-	var acct_Website = "";
-
-	// augment contact with a helper function
-	contact.get = Com_Zimbra_SForce.__query_result_get;
-
-	// this is called after a successful query that should retrieve a
-	// matching account (company).
-	function $search_acct(records) {
-		//Search for an account
-		if (records.length > 0) {
-			// we found a matching account
-			this.dlg_createAccount(records[0], contact);
-		} else {
-			var props = {
-				Name     : contact.get("company"),
-				Website  : acct_Website,
-				Phone    : contact.get("workPhone"),
-
-				// utility function
-				get      : Com_Zimbra_SForce.__query_result_get
-			};
-			this.dlg_createAccount(props, contact);
-		}
-	}
-
-	function $search_acct_company(records) {
-		if (records.length > 0) {
-			$search_acct.call(this, records);
-		} else {
-			var q = "select Id, Website, Name, Phone from Account where Name like '" + contact.company + "%'";
-			this.query(q, 1, $search_acct_email);
-		}
-	}
-
-	function $search_acct_email(records) {
-		if (records.length > 0) {
-			$search_acct.call(this, records)
-		} else {
-			var email = contact.email || contact.email2 || contact.email3;
-			acct_Website = email.replace(/^[^@]+@/, "").replace(/\x27/, "\\'");
-			var q = "select Id, Website, Name, Phone from Account where Website like '%" + acct_Website + "'";
-			this.query(q, 1, $search_acct);
-		}
-	}
-
-	function $search_contact(records) {
-		//Search Contact
-		contact._exists = false;
-		if (records.length > 0) {
-			//Contact already present in Sales Force
-			contact._exists = true;
-			if (records[0].AccountId && records[0].AccountId != "") {
-				contact.AccountId = records[0].AccountId;
-				contact.Id = records[0].Id;
-				var q = "select Id, Website, Name, Phone from Account where Id='" + contact.AccountId + "'";
-				this.query(q, 1, $search_acct);
-				return;
-			}
-		}
-		///New Contact
-		//Search for an account that matches this contact
-		if (contact.company) {
-			//Searching for the Account associated with this account
-			var q = "select Id, Website, Name, Phone from Account where Name='" + contact.company + "'";
-			this.query(q, 1, $search_acct_company);
-		} else if (contact.email || contact.email2 || contact.email3) {
-			//Searching for the Account that has the website like contact website.
-			$search_acct_email.call(this, []);
-		} else {
-			//Just go ahead
-			$search_acct.call(this, []);
-		}
-	}
-
-	//Search for a contact
-	if (contact.email || contact.email2 || contact.email3) {
-		///Serach contacts with the first primary email address
-		///Need to extend the query to OR every email address
-		var email = contact.email || contact.email2 || contact.email3 ;
-		var q = [ "select Id, FirstName, LastName, Email, AccountId from Contact where Email like '",
-			contact.email,"'"].join("");
-		this.query(q, 1, $search_contact);
-	} else if (contact.company) {
-		$search_contact.call(this, []);
-	} else {
-		// clearly we can't search for a matching account, so let's
-		// create one
-		this.dlg_createAccount({ get: Com_Zimbra_SForce.__query_result_get }, contact);
-	}
-
-};
-
-Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data) {
-	var view = new DwtComposite(this._shell);
-
-	///Disable fieldsEditable if contact already exists
-	var fieldsEditable = !(contact_data._exists);
-
-	/// Create a PropertyEditor for the Account data
-	var pe_acct = new DwtPropertyEditor(view, fieldsEditable);
-	var pe_props = [
-
-		{
-			label    : "Account Name",
-			name     : "Name",
-			type     : "string",
-			value    : acct_data.get("Name"),
-			required : true
-		},
-
-		{
-			label    : "Website",
-			name     : "Website",
-			type     : "string",
-			value    : acct_data.get("Website")
-		},
-
-		{
-			label    : "Phone",
-			name     : "Phone",
-			type     : "string",
-			value    : acct_data.get("Phone")
-		}
-	];
-
-	if (acct_data.Id) {
-		var tmp = [
-
-			{
-				label     : "Use existing account?",
-				name      : "_reuse",
-				type      : "enum",
-				value     : "yes",
-				item      : [
-					{
-						label : "Yes",
-						value : "yes"
-					},
-					{
-						label : "No, create a new one",
-						value : "no"
-					}
-				]
-			},
-
-			{
-				label     : "Account Id",
-				name      : "Id",
-				readonly  : true,
-				value     : acct_data.get("Id"),
-				type      : "string",
-				visible   : false
-			}
-
-		];
-		pe_props = contact_data._exists
-				? pe_props.unshift(tmp[1])
-				: pe_props.unshift(tmp[0], tmp[1]);
-	}
-
-	///Do not display for any contact without a corresponding account.
-	if (!(contact_data._exists && !acct_data.Id)) {
-		pe_acct.initProperties(pe_props);
-	}
-
-	var dialogTitle = contact_data._exists
-			? (acct_data.Id ? "Account/Contact in Salesforce" : "Contact in Salesforce")
-			: "Create Account/Contact in Salesforce";
-	var dialog_args = {};
-	///Displaying static content needs only OK button.
-	if (contact_data._exists) {
-		dialog_args = {title : dialogTitle,view  : view,standardButtons : [DwtDialog.OK_BUTTON]};
-	} else {
-		dialog_args = {title : dialogTitle, view  : view};
-	}
-
-	var tmp = document.createElement("h3");
-	tmp.className = "SForce-sec-label SForce-icon-right";
-	DBG.println(AjxDebug.DBG3, "Contact Exists-" + contact_data._exists);
-	tmp.innerHTML = contact_data._exists
-			? "Contact already exists"
-			: "Add to a new account";
-	var el = pe_acct.getHtmlElement();
-	el.parentNode.insertBefore(tmp, el);
-
-	/// Create a PropertyEditor for the new contact data
-	pe_contact = new DwtPropertyEditor(view, fieldsEditable);
-
-	pe_props = [
-
-		{
-			label    : "First name",
-			name     : "FirstName",
-			type     : "string",
-			value    : contact_data.get("firstName")
-		},
-
-		{
-			label    : "Last name",
-			name     : "LastName",
-			type     : "string",
-			value    : contact_data.get("lastName"),
-			required : true
-		},
-
-		{
-			label    : "Title",
-			name     : "Title",
-			type     : "string",
-			value    : contact_data.get("jobTitle")
-		},
-
-		{
-			label    : "Email",
-			name     : "Email",
-			type     : "string",
-			value    : contact_data.get("email", "email2", "email3")
-		},
-
-		{
-			label    : "Work Phone",
-			name     : "Phone",
-			type     : "string",
-			value    : contact_data.get("workPhone")
-		},
-
-		{
-			label    : "Other Phone",
-			name	   : "OtherPhone",
-			type	   : "string",
-			value	   : contact_data.get("workPhone2")
-		},
-
-		{
-			label	   : "Mobile",
-			name     : "MobilePhone",
-			type	   : "string",
-			value    : contact_data.get("mobilePhone")
-		}
-	];
-	pe_contact.initProperties(pe_props);
-
-	if (!(contact_data._exists && !acct_data.Id)) {
-		tmp = document.createElement("h3");
-		tmp.className = "SForce-sec-label";
-		tmp.innerHTML = contact_data._exists ? "Contact info" : "New contact info";
-		el = pe_contact.getHtmlElement();
-		el.parentNode.insertBefore(tmp, el);
-	}
-
-	var dlg = this._createDialog(dialog_args);
-	pe_acct.setFixedLabelWidth();
-	pe_acct.setFixedFieldWidth();
-	pe_contact.setFixedLabelWidth(pe_acct.maxLabelWidth);
-	pe_contact.setFixedFieldWidth();
-	dlg.popup();
-
-	// handle some events
-
-	dlg.setButtonListener(
-			DwtDialog.OK_BUTTON,
-			new AjxListener(this, function() {
-				///If its only static information then its just a simple OK button
-				if (contact_data._exists) {
-					dlg.popdown();
-					dlg.dispose();
-					return;
-				}
-				if (!( pe_acct.validateData() && pe_contact.validateData() ))
-					return;
-				var acct = pe_acct.getProperties();
-				var contact = pe_contact.getProperties();
-
-				function $create_contact() {
-					this.createSFObject(contact, "Contact", function(id) {
-						var name = contact.LastName || contact.FirstName || contact.Email || id;
-						this.displayStatusMessage("SForce contact saved: " + name);
-					});
-				}
-
-				;
-				////
-				// TODO: we should have some checking going on here
-				////
-				if (acct.Id && acct._reuse == "yes") {
-					contact.AccountId = acct.Id;
-					$create_contact.call(this);
-				} else {
-					delete acct.Id;
-					this.createSFObject(acct, "Account", function(id) {
-						var name = acct.Name || contact.Website || id;
-						this.displayStatusMessage("SForce account created: " + name);
-						contact.AccountId = id;
-						$create_contact.call(this);
-					});
-				}
-				dlg.popdown();
-				dlg.dispose();
-			}));
-
-	// We don't really want to mess with things like cache-ing this
-	// dialog...
-	if (!contact_data._exists) {
-		dlg.setButtonListener(
-				DwtDialog.CANCEL_BUTTON,
-				new AjxListener(this, function() {
-					dlg.popdown();
-					dlg.dispose();
-				}));
-	}
-};
-//--------------------------------------------------------------------------------------------------------
-// Contacts dropped..(END)
-//--------------------------------------------------------------------------------------------------------
-
-
-//--------------------------------------------------------------------------------------------------------
-// Appointment dropped..(START)
-//--------------------------------------------------------------------------------------------------------
-Com_Zimbra_SForce.prototype.apptDropped = function(obj) {
-	var appt = {
-		ActivityDate      : Com_Zimbra_SForce.toIsoDate(obj.startDate),
-		ActivityDateTime  : Com_Zimbra_SForce.toIsoDateTime(obj.startDate),
-		DurationInMinutes : Math.round((obj.endDate.getTime() - obj.startDate.getTime()) / 60000),
-		Description       : obj.notes,
-		Subject           : obj.subject,
-		// we need to reverse engineer the salesforce SOAP API first :-\
-		// the official docs. are almost useless.
-		// Type              : "Meeting", // obj.type is always null
-		Location          : obj.location
-	};
-	DBG.dumpObj(appt);
-	this.createSFObject(appt, "Event", function(id) {
-		this.displayStatusMessage("New event registered at Salesforce");
-	});
-};
-
-// rec - The record to generate checkbox HTML for
-// cbid - DWT id of this new check box
-// indent - 0 | 1 | 2, amount to indent
-// checked - default the checkbox to checked?
-// html - array to append html too
-Com_Zimbra_SForce.prototype._checkBoxHtml = function(rec, cbid, indent, checked, html) {
-	this._dwtIdAndObjType[cbid] = rec.TYPE;
-	if (!this._oddRow) {
-		this._oddRow = true;
-	} else {
-		this._oddRow = false;
-	}
-
-	html.push("<tr><td>");
-	if (rec.TYPE == "A") {
-		html.push("<div class='SForce_commentRow'>");
-	} else {
-		if (this._oddRow) {
-			html.push("<div class='RowOdd'>");
-		} else {
-			html.push("<div class='RowEven'>");
-		}
-	}
-	html.push("<table width=100% cellspacing=2px cellpadding=2px><tr>");
-
-	if (rec.TYPE == "A") {
-		html.push("<td width=16px>");
-	} else {
-		html.push("<td width=16px height=16px></td><td width=16px>");
-	}
-	html.push("<input type='checkbox' value='", rec.Id,
-			"' id='", cbid);
-
-	if (checked) {
-		html.push("' checked='checked'/>");
-	} else {
-		html.push("' />");
-	}
-
-	html.push("</td>");
-
-	if (rec.TYPE == "A") {
-		html.push("<td width=16px><div class=\"ImgSFORCE-panelIcon\"/></td>");
-	} else if (rec.TYPE == "C") {
-		html.push("<td width=16px><div class=\"ImgContact\"/></td>");
-	} else if (rec.TYPE == "O") {
-		html.push("<td width=16px><div class=\"ImgSendReceive\"/></td>");
-	}
-
-	html.push("<td>");
-	if (rec.TYPE == "A") {
-		html.push("<label style='font-weight:bold;font-size:12px;color:blue;' id='", cbid, "_label'>");
-	} else {
-		html.push("<label style='font-size:12px' id='", cbid, "_label'>");
-	}
-
-
-	if (rec.TYPE)
-		html.push(rec.TYPE + ":");
-
-	if (rec.Name)
-		html.push(" " + rec.Name);
-
-	if (rec.FirstName)
-		html.push(" " + rec.FirstName);
-
-	if (rec.LastName)
-		html.push(" " + rec.LastName);
-
-	html.push("</label>");
-	html.push("<label style='color:gray;' >");
-
-	if (rec.Email)
-		html.push(" " + rec.Email);
-
-	if (rec.Website)
-		html.push(" " + rec.Website);
-
-	if (rec.Phone)
-		html.push(" " + rec.Phone);
-
-	if (rec.TYPE == "A") {
-		html.push("</label></td><td align=right><a href=# id='", cbid, "_options'>Account options</a></td></tr></table></div></td></tr>");
-		this._optionsLinkArray.push(cbid + "_options");
-	} else {
-		html.push("</label></td></tr></table></div></td></tr>");
-	}
-
-	return html;
-};
-
-Com_Zimbra_SForce.prototype.search_contact =
-function (records) {
-	var contacts = [];
-	if (records.length == 0) {
-		this._asst._setField("Contact", "No Match", false, true);
-	} else if (records.length == 1) {
-		var email = Com_Zimbra_SForce.display_contact(records[0]);
-		DBG.println(AjxDebug.DBG3, "single match: " + email);
-		this._contactEmail = records[0].Email;
-		this._parentId = records[0].Id.__msh_content;
-		this._asst._setField("Contact", email, false);
-	} else {
-		// Limit the number of matches shown to 10
-		var displayLimit = records.length;
-		if (displayLimit > 10) {
-			displayLimit = 10;
-			DBG.println(AjxDebug.DBG3, "Setting limit to 10 returned " + records.length);
-		}
-		for (var i = 0; i < displayLimit; ++i) {
-			var email = Com_Zimbra_SForce.display_contact(records[i]);
-			contacts.push(email);
-			DBG.println(AjxDebug.DBG3, "multi match: " + email);
-		}
-		contacts = contacts.join("<br/>");
-		DBG.println(AjxDebug.DBG3, "search_contact this: " + this);
-		this._asst._setField("Contact", contacts, false);
-	}
-};
-
-Com_Zimbra_SForce.display_contact =
-function (contact) {
-	var ret = "";
-	if (contact.FirstName) {
-		ret = ret + contact.FirstName;
-	}
-	if (contact.LastName) {
-		ret = ret + " " + contact.LastName;
-	}
-	if (contact.Email) {
-		ret = ret + " (" + contact.Email + ")";
-	}
-	return ret;
-};
-
-//--------------------------------------------------------------------------------------------------------
-// Appointment dropped..(END)
-//--------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------
 //Misc/Supporting functions (START)
@@ -2880,15 +2973,15 @@ function sforce_unique(b) {
 
 Com_Zimbra_SForce.prototype.getMailBodyAsText = function(note) {
 	var body = "";
-    if (note.body) {
-        body = AjxStringUtil.htmlEncode(note.body);
-    } else if (note._topPart && note._topPart.getContentForType) {
-        body = AjxStringUtil.htmlEncode(note._topPart.getContentForType(ZmMimeTable.TEXT_PLAIN));
-    } else {
+	if (note.body) {
+		body = AjxStringUtil.htmlEncode(note.body);
+	} else if (note._topPart && note._topPart.getContentForType) {
+		body = AjxStringUtil.htmlEncode(note._topPart.getContentForType(ZmMimeTable.TEXT_PLAIN));
+	} else {
 		body = "";
 	}
 
-	if(!body || body == "") {//If we dont have body, try using getBodyContent api
+	if (!body || body == "") {//If we dont have body, try using getBodyContent api
 		if (!note.isHtmlMail()) {
 			return note.getBodyContent();
 		}
@@ -2900,7 +2993,7 @@ Com_Zimbra_SForce.prototype.getMailBodyAsText = function(note) {
 	}
 };
 
-Com_Zimbra_SForce.prototype.showInfo = 
+Com_Zimbra_SForce.prototype.showInfo =
 function(msg) {
 	var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.FADE_OUT ];
 	appCtxt.getAppController().setStatusMsg(msg, ZmStatusView.LEVEL_INFO, null, transitions);
@@ -2934,35 +3027,35 @@ function(sectionName, callback) {
 	var secNode = soapDoc.set("meta");
 	secNode.setAttribute("section", sectionName);
 	var asyncMode = true;
-	if(!callback) {
+	if (!callback) {
 		asyncMode = false;
 	}
 	return appCtxt.getAppController().sendRequest({soapDoc:soapDoc, asyncMode:asyncMode, callback:callback});
 };
 
 Com_Zimbra_SForce.prototype.deleteMailboxMetaData =
-function(sectionName, keyName,callback) {
+function(sectionName, keyName, callback) {
 	var _attrs = null;
 	var keyValArray = [];
-	if(keyName) {
-		try{
+	if (keyName) {
+		try {
 			var matchFound = false;
 			var response = this.getToMailboxMetaData(sectionName).GetMailboxMetadataResponse.meta[0];
-			if(response._attrs) {
+			if (response._attrs) {
 				_attrs = response._attrs;
-				for(var oKey in _attrs) {
-					if(keyName != oKey) {
+				for (var oKey in _attrs) {
+					if (keyName != oKey) {
 						keyValArray.push({key:oKey, val:_attrs[oKey]});
 					}
 				}
 			}
-			if(!matchFound) {
-				return "Key("+keyName+") not found in section("+sectionName+")";
+			if (!matchFound) {
+				return "Key(" + keyName + ") not found in section(" + sectionName + ")";
 			}
-		}catch(e) {
+		} catch(e) {
 			//consume
 		}
-	} 
+	}
 	return this._doSetMailboxMetaData(sectionName, keyValArray, callback);
 };
 
@@ -2974,31 +3067,31 @@ function(sectionName, keyName,callback) {
 //@override - Boolean; If true, *entire section* will be overwritten with new set of key-val pairs
 Com_Zimbra_SForce.prototype.setMailboxMetaData =
 function(sectionName, keyValArray, callback, override) {
-	if(!keyValArray) {//dont allow deleting section using this function
+	if (!keyValArray) {//dont allow deleting section using this function
 		return "No key=value pair sent. To delete section, use 'deleteMailboxMetaData' API";
 	}
 	var _attrs = null;
-	if(!override) {
-		try{
+	if (!override) {
+		try {
 			var response = this.getMailboxMetaData(sectionName).GetMailboxMetadataResponse.meta[0];
-			if(response._attrs) {
+			if (response._attrs) {
 				_attrs = response._attrs;
 				var oldKeyValArray = [];
-				for(var oKey in _attrs) {
+				for (var oKey in _attrs) {
 					var ignore = false;
-					for(var i=0; i < keyValArray.length; i++) {
+					for (var i = 0; i < keyValArray.length; i++) {
 						var keyVal = keyValArray[i];
-						if(keyVal.key == oKey) {
+						if (keyVal.key == oKey) {
 							ignore = true;
 						}
 					}
-					if(!ignore) {
+					if (!ignore) {
 						oldKeyValArray.push({key:oKey, val:_attrs[oKey]});
 					}
 				}
 				keyValArray = keyValArray.concat(oldKeyValArray);
 			}
-		}catch(e) {
+		} catch(e) {
 			appCtxt.setStatusMsg("There was an exception saving data: " + e, ZmStatusView.LEVEL_WARNING);
 
 		}
@@ -3007,25 +3100,25 @@ function(sectionName, keyValArray, callback, override) {
 };
 
 //internal - dont call directly
-Com_Zimbra_SForce.prototype._doSetMailboxMetaData = 
+Com_Zimbra_SForce.prototype._doSetMailboxMetaData =
 function(sectionName, keyValArray, callback) {
-	if(sectionName.indexOf("zwc:") == -1 &&  sectionName.indexOf("zd:") == -1) {
+	if (sectionName.indexOf("zwc:") == -1 && sectionName.indexOf("zd:") == -1) {
 		return "sectionName must have namespace. send: 'zwc:<sectionName>'";
 	}
 	var soapDoc = AjxSoapDoc.create("SetMailboxMetadataRequest", "urn:zimbraMail");
 	var doc = soapDoc.getDoc();
 	var secNode = soapDoc.set("meta");// property name
 	secNode.setAttribute("section", sectionName);
-	for(var i =0; i < keyValArray.length; i++) {
+	for (var i = 0; i < keyValArray.length; i++) {
 		var keyVal = keyValArray[i];
 		var el = doc.createElement("a");
 		el.setAttribute("n", keyVal.key);
 		el.appendChild(doc.createTextNode(keyVal.val));
 		secNode.appendChild(el);
 	}
-	
+
 	var asyncMode = true;
-	if(!callback) {
+	if (!callback) {
 		asyncMode = false;
 	}
 	return appCtxt.getAppController().sendRequest({soapDoc:soapDoc, asyncMode:asyncMode, callback:callback});
