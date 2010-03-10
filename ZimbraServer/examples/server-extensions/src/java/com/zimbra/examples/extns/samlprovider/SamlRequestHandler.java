@@ -73,7 +73,7 @@ public class SamlRequestHandler extends ExtensionHttpHandler {
             respElt.addAttribute("Version", "2.0");
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-            respEnv.addAttribute("IssueInstant", dateFormat.format(now));
+            respElt.addAttribute("IssueInstant", dateFormat.format(now));
             respElt.addAttribute("InResponseTo", requestElt.getAttribute("ID"));
             Element statusElt = respElt.addElement(new QName("Status", SAML_PROTOCOL_NS));
             Element statusCodeElt = statusElt.addElement(new QName("StatusCode", SAML_PROTOCOL_NS));
