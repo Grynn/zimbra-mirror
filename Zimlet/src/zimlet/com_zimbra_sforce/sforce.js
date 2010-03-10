@@ -1098,8 +1098,8 @@ function() {
 		document.getElementById("sforce_expandCollapseIconDiv").className = "ImgHeaderExpanded";
 		document.getElementById("sforce_bar_generalToolbar").style.display = "block";
 
-		this.changeOpac(0, document.getElementById("sforce_bar_resultsMainDiv").style);
-		this.opacity("sforce_bar_resultsMainDiv", 0, 100, 500);
+		//this.changeOpac(0, document.getElementById("sforce_bar_resultsMainDiv").style);
+		//this.opacity("sforce_bar_resultsMainDiv", 0, 100, 500);
 		document.getElementById("sforce_bar_resultsMainDiv").style.display = "block";
 
 		document.getElementById("sforce_bar_msgCell").style.display = "none";
@@ -1131,6 +1131,16 @@ function() {
 
 		var phone = c.Phone ? c.Phone.toString() : "";
 		var accountName = c.Account ? (c.Account.Name ? c.Account.Name.toString() : "") : "";
+		var accountOwnerName = "";
+		var accountOwnerId = "";
+		var editLinksHtml_AccntOwner = "";
+		if(accountName != "") {
+			accountOwnerName = c.Account.Owner ? (c.Account.Owner.Name ? c.Account.Owner.Name.toString() : "") : "";
+			accountOwnerId = c.Account.OwnerId ? c.Account.OwnerId.toString() : "";
+			if (accountOwnerId != "") {
+				editLinksHtml_AccntOwner = this._getSFViewEditLinks(accountOwnerId);
+			}
+		}
 		var editLinksHtml_accnt = "";
 		if (accountName != "") {
 			var accId = c.Account ? (c.Account.Id ? c.Account.Id.toString() : "") : "";
@@ -1168,10 +1178,12 @@ function() {
 		if (accountName != "") {
 			html[i++] = ["<tr align=left><td width=150px><strong>Account:</strong></td><td>",accountName," ", editLinksHtml_accnt,"</td></tr>"].join("");
 		}
-		if (ownerName != "") {
-			html[i++] = ["<tr align=left><td width=150px><strong>Account Owner:</strong></td><td>",ownerName," ", editLinksHtml_owner,"</td></tr>"].join("");
+		if (accountOwnerName != "") {
+			html[i++] = ["<tr align=left><td width=150px><strong>Account Owner:</strong></td><td>",accountOwnerName," ", editLinksHtml_AccntOwner,"</td></tr>"].join("");
 		}
-
+		if (ownerName != "") {
+			html[i++] = ["<tr align=left><td width=150px><strong>Contact Owner:</strong></td><td>",ownerName," ", editLinksHtml_owner,"</td></tr>"].join("");
+		}
 		if (email != "") {
 			html[i++] = ["<tr align=left><td width=150px> <strong>Email:</strong></td><td>",email,"</td></tr>"].join("");
 		}
@@ -1279,6 +1291,7 @@ function() {
 				wSite = ["http://", wSite].join("");
 			}
 			var title = (rec.Title ? rec.Title.toString() : "");
+			var email = (rec.Email ? rec.Email.toString() : "");
 			var phone = (rec.Phone ? rec.Phone.toString() : "");
 			var status = (rec.Status ? rec.Status.toString() : "");
 			var NumberOfEmployees = (rec.NumberOfEmployees ? rec.NumberOfEmployees.toString() : "");
@@ -1293,6 +1306,9 @@ function() {
 			if (title != "") {
 				html[i++] = ["<tr align=left><td width=150px><strong>Title:</strong></td><td>",title,"</td></tr>"].join("");
 			}
+			if (email != "") {
+				html[i++] = ["<tr align=left><td width=150px><strong>Email:</strong></td><td>",email,"</td></tr>"].join("");
+			}			
 			if (phone != "") {
 				html[i++] = ["<tr align=left><td width=150px><strong>Phone:</strong></td><td>",phone,"</td></tr>"].join("");
 			}
@@ -1627,7 +1643,7 @@ Com_Zimbra_SForce.prototype.noteDropped = function(note, showInBar) {
 			this._handleAddNotesRecords(showInBar, this, []);
 		}
 	} else {
-		var q = ["Select c.Id,c.Name,c.Email,c.Phone,c.OtherPhone,c.Title,c.MailingStreet,c.MailingCity, c.MailingState,c.MailingCountry,c.MailingPostalCode,c.Account.name,c.Owner.Name,c.OwnerId,c.Account.Id,",
+		var q = ["Select c.Id,c.Name,c.Email,c.Phone,c.OtherPhone,c.Title,c.MailingStreet,c.MailingCity, c.MailingState,c.MailingCountry,c.MailingPostalCode,c.Account.name,c.Account.Owner.Name,c.Owner.Name,c.Account.OwnerId,c.OwnerId,c.Account.Id,",
 			"(select id,role,opportunity.owner.Name,opportunity.name,Opportunity.Id from opportunitycontactroles where opportunity.stagename !='Closed Won' AND opportunity.stagename != 'Closed Lost'   limit 5),",
 			"(select id,Owner.Name,subject,caseNumber,Status from Cases Where Status !='Closed' limit 5)",
 			//"(Select id,subject from ActivityHistories) ",
@@ -1792,6 +1808,8 @@ function(typeOrObj, setResultToAddNotesMenus) {
 Com_Zimbra_SForce.prototype._createNewContactOrLeadView =
 function(typeOrObj, setResultToAddNotesMenus) {
 	this._quickCreateContactObjIds = [];
+	this._quickCreateContactAccntRefIdsMap = [];
+
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV>";
@@ -1818,13 +1836,13 @@ function(typeOrObj, indx, email) {
 	var i = 0;
 	var accName = typeOrObj.name ? typeOrObj.name : "";
 	var refObjId = typeOrObj.id ? typeOrObj.id : "";
+	this._quickCreateContactAccntRefIdsMap["sforce_contactOrLeadAcc" + indx] = refObjId;
 
 	html[i++] = "<DIV class='SForce_lightyellow'>";
 	html[i++] = "<table class='SForce_table' width=100% cellpadding=2><tr><td colspan=3><input type='checkbox' id='sforce_ignoreQuickCreateCheckbox" + indx + "' />Ignore creating this contact or lead.</td></tr>";
 
 	html[i++] = "<tr><td>First Name:</td><td colspan=3><input type='text' id='sforce_contactOrleadFN" + indx + "'></input></td></tr>";
 	html[i++] = "<tr><td>Last Name<span style='color:red;font-weight:bold;'>*</span>:</td><td colspan=3><input type='text' id='sforce_contactOrleadLN" + indx + "'></input></td></tr>";
-
 	html[i++] = "<tr  id='sforce_contactOrLeadAccTR" + indx + "'><td>Account:</td><td><div id='sforce_contactOrLeadAcc" + indx + "'  refObjIdValue='" + refObjId + "'>" + accName + "</div></td>";
 	html[i++] = "<td><div id='sforce_contactOrLeadAccLookupBtn" + indx + "'></div></td>";
 	html[i++] = "<td><div id='sforce_contactOrLeadAccClearDiv" + indx + "' style='display:none;'><a href=# id='sforce_contactOrLeadAccClearLnk" + indx + "'>clear</a></div></td></tr>";
@@ -1871,6 +1889,9 @@ function() {
 			}
 		} else {//contact..
 			var accountId = document.getElementById("sforce_contactOrLeadAcc" + i).refObjIdValue;
+			if(accountId == undefined) {//check if it was pre-populated
+				accountId = this._quickCreateContactAccntRefIdsMap["sforce_contactOrLeadAcc" + i]; 
+			}
 		}
 
 		var fn = document.getElementById("sforce_contactOrleadFN" + i).value;
@@ -1883,7 +1904,9 @@ function() {
 		if (isLead) {
 			props["Company"] = company;
 		} else {
-			props["AccountId"] = accountId;
+			if(accountId != undefined && accountId != "") {
+				props["AccountId"] = accountId;
+			}
 		}
 		props["Phone"] = ph;
 		props["Email"] = em;
@@ -2505,10 +2528,14 @@ Com_Zimbra_SForce.prototype.xmlToObject = function(result, dontConvertToJSObj) {
 		} else {
 			var xd = new AjxXmlDoc.createFromDom(result.xml).toJSObject(true, false);
 		}
+		this.__retriedLoginAtLeastOnce = false;
+		return xd;
 	} catch(ex) {
 		appCtxt.getAppController().setStatusMsg("Problem contacting Salesforce. Please try again", ZmStatusView.LEVEL_WARNING);
-		this.login(function() {
-		}, null, null, true);
+		if(!this.__retriedLoginAtLeastOnce) {
+			this.__retriedLoginAtLeastOnce = true;
+			this.login(function() {}, null, null, true);
+		}
 	}
 	return xd;
 };
