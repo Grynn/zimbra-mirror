@@ -14,16 +14,19 @@
  */
 
 /**
+ * Creates an exception.
  * @constructor
  * @class
- * Base class for all exceptions in the toolkit
+ * This is the base class for all exceptions in the Ajax toolkit.
  * 
  * @author Ross Dargahi
  * 
- * @param {string} msg Human readable message (optional)
- * @param {string|number} code Any error or fault code (optional)
- * @param {string} method Name of the method throwing the exception (optional)
- * @param {string} detail Any additional detail (optional)
+ * @param {string} [msg] 		the human readable message
+ * @param {string|number} [code]	 any error or fault code
+ * @param {string} [method] 	the name of the method throwing the exception
+ * @param {string} [detail] 	any additional detail
+ * 
+ * @extends		AjxException
  */
 DwtException = function(msg, code, method, detail) {
 	if (arguments.length === 0) {return;}
@@ -33,30 +36,31 @@ DwtException = function(msg, code, method, detail) {
 DwtException.prototype = new AjxException();
 DwtException.prototype.constructor = DwtException;
 
-/**
- * This method returns this class' name. Subclasses will
- * override this method to return their own name
- * 
- * @return class name
- * @type String
- */
 DwtException.prototype.toString = 
 function() {
 	return "DwtException";
 };
 
-/** Invalid parent exception code
- * @type number */
+/**
+ * Invalid parent exception code.
+ * @type int
+ */
 DwtException.INVALIDPARENT = -1;
 
-/** Invalid operation exception code
- * @type number */
+/**
+ * Invalid operation exception code.
+ * @type int
+ */
 DwtException.INVALID_OP = -2;
 
-/** Internal error exception code
- * @type number */
+/**
+ * Internal error exception code.
+ * @type int
+ */
 DwtException.INTERNAL_ERROR = -3;
 
-/** Invalid parameter exception code
- * @type number */
+/**
+ * Invalid parameter exception code.
+ * @type int
+ */
 DwtException.INVALID_PARAM = -4;

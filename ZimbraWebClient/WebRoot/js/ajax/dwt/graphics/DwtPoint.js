@@ -14,27 +14,35 @@
  */
 
 /**
+ * Creates a point.
  * @constructor
  * @class
- * Represents a point. A point has an x-coordinate and y-coordinate
+ * This class represents a point. A point has an x-coordinate and y-coordinate.
  * 
  * @author Ross Dargahi
  * 
- * @param {number} x x coordinate
- * @param {number} y y coordinate
+ * @param {int} x 	the x coordinate
+ * @param {int} y 	the y coordinate
  */
 DwtPoint = function(x, y) {
+	/**
+	 * The x-coordinate.
+	 * @type	int
+	 */
 	this.x = x || 0;
+	/**
+	 * The y-coordinate.
+	 * @type	int
+	 */
 	this.y = y || 0;
 }
 
 DwtPoint.tmp = new DwtPoint(0, 0);
 
 /**
- * This method returns this class' name.
+ * Returns a string representation of the object.
  * 
- * @return class name
- * @type String
+ * @return		{String}		a string representation of the object
  */
 DwtPoint.prototype.toString = 
 function() {
@@ -42,10 +50,10 @@ function() {
 }
 
 /**
- * This method sets the values of a point
+ * Sets the values of a point
  * 
- * @param {number} x x coordinate
- * @param {number} y y coordinate
+ * @param {int} x the x coordinate
+ * @param {int} y the y coordinate
  */
  DwtPoint.prototype.set =
  function(x, y) {

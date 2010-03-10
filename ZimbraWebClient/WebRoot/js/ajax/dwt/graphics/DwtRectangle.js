@@ -13,25 +13,60 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * Creates a rectangle.
+ * @constructor
+ * @class
+ * This class represents a rectangle. A point has an x-coordinate, y-coordinate, height and width.
+ * 
+ * @author Ross Dargahi
+ * 
+ * @param {int} x 	the x coordinate
+ * @param {int} y 	the y coordinate
+ * @param {int} width 	the width
+ * @param {int} height 	the height
+ */
 DwtRectangle = function(x, y, width, height) {
 
+	/**
+	 * The x-coordinate.
+	 * @type	int
+	 */
 	this.x = x;
+	/**
+	 * The y-coordinate.
+	 * @type	int
+	 */
 	this.y = y;
+	/**
+	 * The width.
+	 * @type	int
+	 */
 	this.width = width;
+	/**
+	 * The height.
+	 * @type	int
+	 */
 	this.height = height;
 }
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @return		{String}		a string representation of the object
+ */
 DwtRectangle.prototype.toString = 
 function() {
 	return "DwtRectangle";
 }
 
 /**
- * This method sets the values of a point
+ * Sets the values of the rectangle.
  * 
- * @param {number} x x coordinate
- * @param {number} y y coordinate
+ * @param {int} x 	the x coordinate
+ * @param {int} y 	the y coordinate
+ * @param {int} width 	the width
+ * @param {int} height 	the height
  */
  DwtRectangle.prototype.set =
  function(x, y, width, height) {

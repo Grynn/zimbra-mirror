@@ -19,11 +19,14 @@
 
 /**
  * Constructs a control that alerts the user to important information.
- *
- * @param parent    The parent container for this control.
- * @param className (optional) The CSS class for this control. Default
- *					value is "DwtAlert".
- * @param posStyle  (optional) The position style of this control.
+ * @class
+ * This class represents an alert.
+ * 
+ * @param {DwtComposite}	parent    the parent container for this control
+ * @param {String}	[className="DwtAlert"] the CSS class for this control
+ * @param {Dwt.STATIC_STYLE|Dwt.ABSOLUTE_STYLE|Dwt.RELATIVE_STYLE|Dwt.FIXED_STYLE}	[posStyle] 	the position style of this control
+ * 
+ * @extends		DwtControl
  */
 DwtAlert = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
@@ -40,9 +43,20 @@ DwtAlert.prototype.constructor = DwtAlert;
 //
 // Constants
 //
-
+/**
+ * Defines the "information" style.
+ * @type	int
+ */
 DwtAlert.INFORMATION = 0;
+/**
+ * Defines the "warning" style.
+ * @type	int
+ */
 DwtAlert.WARNING = 1;
+/**
+ * Defines the "critical" style.
+ * @type	int
+ */
 DwtAlert.CRITICAL = 2;
 
 DwtAlert._ICONS = [ AjxImg.getClassForImage("Information_32"), AjxImg.getClassForImage("Warning_32"), AjxImg.getClassForImage("Critical_32") ];
@@ -61,6 +75,11 @@ DwtAlert.prototype.TEMPLATE = "dwt.Widgets#DwtAlert";
 // Public methods
 //
 
+/**
+ * Sets the style.
+ * 
+ * @param	{DwtAlert.INFORMATION|DwtAlert.WARNING|DwtAlert.CRITICAL}	style		the style
+ */
 DwtAlert.prototype.setStyle = function(style) {
 	this._alertStyle = style || DwtAlert.INFORMATION;
 	if (this._iconDiv) {
@@ -68,25 +87,53 @@ DwtAlert.prototype.setStyle = function(style) {
 	}
 	Dwt.delClass(this.getHtmlElement(), DwtAlert._RE_CLASSES, DwtAlert._CLASSES[this._alertStyle]);
 };
+
+/**
+ * Gets the style.
+ * 
+ * @return	{DwtAlert.INFORMATION|DwtAlert.WARNING|DwtAlert.CRITICAL}		the style
+ */
 DwtAlert.prototype.getStyle = function() {
 	return this._alertStyle;
 };
 
+/**
+ * Sets the icon visibility.
+ * 
+ * @param	{Boolean}	visible		if <code>true</code>, the icon is visible
+ */
 DwtAlert.prototype.setIconVisible = function(visible) {
 	if (this._iconDiv) {
 		Dwt.setVisible(this._iconDiv, visible);
 	}
 };
+
+/**
+ * Gets the icon visibility.
+ * 
+ * @return	{Boolean}	<code>true</code> if the icon is visible
+ */
 DwtAlert.prototype.getIconVisible = function() {
 	return this._iconDiv ? Dwt.getVisible(this._iconDiv) : false;
 };
 
+/**
+ * Sets the title.
+ * 
+ * @param	{String}	title	the title
+ */
 DwtAlert.prototype.setTitle = function(title) {
 	this._alertTitle = title;
 	if (this._titleDiv) {
 		this._titleDiv.innerHTML = title || "";
 	}
 };
+
+/**
+ * Gets the title.
+ * 
+ * @return	{String}	the title
+ */
 DwtAlert.prototype.getTitle = function() {
 	return this._alertTitle;
 };
@@ -120,11 +167,17 @@ DwtAlert.prototype.getTabGroupMember = function() {
 // Protected methods
 //
 
+/**
+ * @private
+ */
 DwtAlert.prototype._createHtml = function(templateId) {
 	var data = { id: this._htmlElId };
 	this._createHtmlFromTemplate(templateId || this.TEMPLATE, data);
 };
 
+/**
+ * @private
+ */
 DwtAlert.prototype._createHtmlFromTemplate = function(templateId, data) {
 	DwtControl.prototype._createHtmlFromTemplate.apply(this, arguments);
 	this._iconDiv = document.getElementById(data.id+"_icon");

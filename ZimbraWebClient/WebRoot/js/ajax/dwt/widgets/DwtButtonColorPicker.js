@@ -12,35 +12,38 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
+
 /**
+ * Creates a button
  * @constructor
  * @class
- *
- * Integrates DwtButton with a popup DwtColorPicker.  This class is useful to
- * present a color picker button with an integrated drop-down for chosing from
- * a color palette.  You can use addSelectionListener to register a handler
+ * This class ntegrates {@link DwtButton} with a popup {@link DwtColorPicker}. This class is useful to
+ * present a color picker button with an integrated drop-down for choosing from
+ * a color palette. You can use addSelectionListener to register a handler
  * that will get called when a new color is selected.  Inspect "ev.detail" to
  * retrieve the color (guaranteed to be in #RRGGBB format).
- *
+ * <p>
  * The button also features a DIV that displays the currently selected color.
  * Upon clicking that DIV, the color will be cleared (in this event, ev.detail
  * will be the empty string in your selection listener).  Note you must call
  * showColorDisplay() in order for this DIV to be displayed.
- *
- * All constructor arguments are passed forward to the DwtButton constructor.
+ * <p>
+ * All constructor arguments are passed forward to the {@link DwtButton} constructor.
  *
  * @extends DwtButton
- * @author Mihai Bazon, <mihai@zimbra.com>
+ * @author Mihai Bazon
  * 
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        style			[constant]*			button style
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
- *        id			[string]*			ID to use for the control's HTML element
- *        index 		[int]*				index at which to add this control among parent's children
- *        allowColorInput [boolean]           allow a text field to allow user to input their customized RGB value
- *        noFillLabel	
+ * @param {Hash}	params		a hash of parameters
+ * @param  {DwtComposite}     params.parent		the parent widget
+ * @param  {constant}     params.style			the button style
+ * @param  {String}     params.className		the CSS class
+ * @param  {constant}     params.posStyle		the positioning style
+ * @param  {String}     params.id			the ID to use for the control's HTML element
+ * @param  {int}     params.index 		the index at which to add this control among parent's children
+ * @param  {Boolean}     params.allowColorInput if <code>true</code>, allow a text field to allow user to input their customized RGB value
+ * @param  {Boolean}     params.noFillLabel	if <code>true</code>, do not fill label
+ * 
+ * @extends		DwtButton
  */
 DwtButtonColorPicker = function(params) {
     if (arguments.length == 0) { return; }
@@ -84,11 +87,13 @@ DwtButtonColorPicker._hexdigits = [ '0', '1', '2', '3', '4', '5', '6', '7', '8',
 // Public methods
 //
 
-/// Utility function that converts the given integer to its hexadecimal
-/// representation.
-///
-/// @param n {int} number to convert
-/// @param pad {int, optional} number of digits in the final number (zero-padded if required).
+/**
+ * Utility function that converts the given integer to its hexadecimal representation.
+ *
+ * @param {int}		n 		the number to convert
+ * @param {int}		[pad] 	the number of digits in the final number (zero-padded if required)
+ * @return	{String}	the hexadecimal representation
+ */
 DwtButtonColorPicker.toHex =
 function(n, pad) {
 	var digits = [];
@@ -106,8 +111,12 @@ function(n, pad) {
 	return digits.join("");
 };
 
-/// Call this function to display a DIV that shows the currently selected
-/// color.  This DIV also has the ability to clear the current color.
+/**
+ * Shows the color display. Call this function to display a DIV that shows the currently
+ * selected color. This DIV also has the ability to clear the current color.
+ * 
+ * @param	{Boolean}	disableMouseOver		if <code>true</code>, disable the mouse over
+ */
 DwtButtonColorPicker.prototype.showColorDisplay =
 function(disableMouseOver) {
     if (!this._colorEl) return;
@@ -119,16 +128,21 @@ function(disableMouseOver) {
 	}
 };
 
-/// @return currently selected color
+/**
+ * Gets the color.
+ * 
+ * @return {String}		the currently selected color
+ */
 DwtButtonColorPicker.prototype.getColor =
 function() {
 	return this.__color;
 };
 
-/// Set the current color.
-///
-/// @param {string} color The desired color.  Pass the empty string to clear
-///                       the selection.
+/**
+ * Set the current color.
+ *
+ * @param {String} color 		the desired color. Pass the empty string "" to clear the selection.
+ */ 
 DwtButtonColorPicker.prototype.setColor =
 function(color) {
 	// let's make sure we keep it in #RRGGBB format

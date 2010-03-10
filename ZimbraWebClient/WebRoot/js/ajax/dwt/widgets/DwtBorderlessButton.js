@@ -14,20 +14,23 @@
  */
 
 /**
+ * Creates a border less button.
  * @constructor
  * @class
- * This class represents a button without a border
+ * This class represents a button without a border.
  *
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        style			[constant]*			button style
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
- *        actionTiming	[constant]*			if DwtButton.ACTION_MOUSEUP, then the button is triggered
- *											on mouseup events, else if DwtButton.ACTION_MOUSEDOWN,
+ * @param params		a hash of parameters
+ * @param {DwtComposite}      params.parent		the parent widget
+ * @param {constant}      params.style			the button style
+ * @param {String}      params.className		the CSS class
+ * @param {constant}      params.posStyle		the positioning style (see {@link Dwt})
+ * @param {DwtButton.ACTION_MOUSEUP|DwtButton.ACTION_MOUSEDOWN}      params.actionTiming	if {@link DwtButton.ACTION_MOUSEUP}, then the button is triggered
+ *											on mouseup events, else if {@link DwtButton.ACTION_MOUSEDOWN},
  * 											then the button is triggered on mousedown events
- *        id			[string]*			ID to use for the control's HTML element
- *        index 		[int]*				index at which to add this control among parent's children
+ * @param {String}      params.id			the ID to use for the control's HTML element
+ * @param {int}      params.index 		the index at which to add this control among parent's children
+ * 
+ * @extends		DwtButton
  */
 DwtBorderlessButton = function(params) {
 	if (arguments.length == 0) { return; }

@@ -15,25 +15,25 @@
 
 /**
  * @overview
- * 
  * This file defines a button.
  *
  */
 
 /**
+ * Creates a button.
  * @class
  * This class represents a button, which is basically a smart label that can handle
  * various UI events. It knows when it has been hovered (the mouse is over it),
  * when it is active (mouse down), and when it has been pressed (mouse up).
  * In addition to a label's image and/or text, a button may have a dropdown menu.
- *
+ * <p>
  * There are several different types of button:
  * <ul>
- * <li>Push - this is the standard push button</li>
- * <li>Toggle - This is a button that exhibits selectable behaviour when clicked
+ * <li><i>Push</i> - This is the standard push button</li>
+ * <li><i>Toggle</i> - This is a button that exhibits selectable behaviour when clicked
  * 		e.g. on/off. To make a button selectable style "or" {@link DwtButton.SELECT_STYLE}
  * 		to the consturctor's style parameter</li>
- * <li>Menu - By setting a mene via the {@link #setMenu} method a button will become
+ * <li><i>Menu</i> - By setting a mene via the {@link #setMenu} method a button will become
  * 		a drop down or menu button.</li>
  * </ul>
  *
@@ -47,26 +47,24 @@
  *
  * <h4>Keyboard Actions</h4>
  * <ul>
- * <li>DwtKeyMap.SELECT - triggers the button</li>
- * <li>DwtKeyMap.SUBMENU - display's the button's submenu if one is set</li>
+ * <li>{@link DwtKeyMap.SELECT} - triggers the button</li>
+ * <li>{@link DwtKeyMap.SUBMENU} - display's the button's submenu if one is set</li>
  * </ul>
  *
  * @author Ross Dargahi
  * @author Conrad Damon
  * 
- * @param {Hash}	params		a hash of parameter:
- * <ul>
- * <li>parent		{@link DwtComposite}		the parent widget
- * <li>style			{constant}			the button style
- * <li>className		{String}			the CSS class
- * <li>posStyle		{constant}			the positioning style
- * <li>actionTiming	{constant}			if {@link DwtButton.ACTION_MOUSEUP}, then the button is triggered
+ * @param {Hash}	params		a hash of parameters
+ * @param {DwtComposite}	params.parent	the parent widget
+ * @param {constant}	params.style		the button style
+ * @param {String}	params.className		the CSS class
+ * @param {constant}	params.posStyle		the positioning style
+ * @param {DwtButton.ACTION_MOUSEUP|DwtButton.ACTION_MOUSEDOWN}	params.actionTiming	if {@link DwtButton.ACTION_MOUSEUP}, then the button is triggered
  *											on mouseup events, else if {@link DwtButton.ACTION_MOUSEDOWN},
  * 											then the button is triggered on mousedown events
- * <li>id			{String}			the id to use for the control HTML element
- * <li>index 		{int}				the index at which to add this control among parent's children
- * <li>listeners		{Hash}				a hash of event listeners
- * </ul>
+ * @param {String}	params.id		the id to use for the control HTML element
+ * @param {int}	params.index 		the index at which to add this control among parent's children
+ * @param {Hash}	params.listeners		a hash of event listeners
  *        
  * @extends		DwtLabel
  */
@@ -128,10 +126,12 @@ DwtButton.ALWAYS_FLAT = DwtLabel._LAST_STYLE * 4;
 DwtButton._LAST_STYLE = DwtButton.ALWAYS_FLAT;
 /**
  * Defines the "mouse-up" action timing.
+ * @type int
  */
 DwtButton.ACTION_MOUSEUP = 1;
 /**
  * Defines the "mouse-down" action timing.
+ * @type int
  */
 DwtButton.ACTION_MOUSEDOWN = 2; // No special appearance when hovered or active
 DwtButton.NOTIFY_WINDOW = 500;  // Time (in ms) during which to block additional clicks from being processed
@@ -277,7 +277,7 @@ function() {
  * Sets the display state.
  * 
  * @param	{String}	state		the display state
- * @param	{Boolean}	force		<code>true</code> to force the state change
+ * @param	{Boolean}	force		if <code>true</code>, force the state change
  * @see		DwtControl
  */
 DwtButton.prototype.setDisplayState =
@@ -293,7 +293,7 @@ function(state, force) {
  * image, and greyed out text. The button (and its menu) will only have listeners if it
  * is enabled.
  *
- * @param {Boolean}	enabled			<code>true</code> to enable the button
+ * @param {Boolean}	enabled			if <code>true</code>, enable the button
  *
  */
 DwtButton.prototype.setEnabled =
@@ -381,10 +381,10 @@ function (hoverImageInfo) {
 *                           callback is given, it is called the first time the
 *                           menu is requested. The callback must return a valid
 *                           DwtMenu object.
-* @param {Boolean}	shouldToggle		<code>true</code> to toggle
-* @param {String}	followIconStyle	the style of menu item (should be checked or radio style) for
+* @param {Boolean}	shouldToggle		if <code>true</code>, toggle
+* @param {String}	followIconStyle		the style of menu item (should be checked or radio style) for
 *							which the button icon should reflect the menu item icon
-* @param {Boolean}	popupAbove         <code>true</code> to pop up the menu above the button
+* @param {Boolean}	popupAbove         if <code>true</code>, pop up the menu above the button
 */
 DwtButton.prototype.setMenu =
 function(menuOrCallback, shouldToggle, followIconStyle, popupAbove) {
@@ -462,9 +462,7 @@ function() {
 /**
  * Sets whether actions for this button should occur on mouse up or mouse down.
  *
- * @param	{constant}		actionTiming		the action timing
- * @see	DwtButton.ACTION_MOUSEDOWN
- * @see	DwtButton.ACTION_MOUSEUP
+ * @param	{DwtButton.ACTION_MOUSEDOWN|DwtButton.ACTION_MOUSEUP}		actionTiming		the action timing
  */
 DwtButton.prototype.setActionTiming =
 function(actionTiming) {
@@ -472,10 +470,10 @@ function(actionTiming) {
 };
 
 /**
-* Activates/de-activates the button. A button is hovered when the mouse is over it.
-*
-* @param {Boolean}	hovered		<code>true</code> if the button is hovered
-*/
+ * Activates/de-activates the button. A button is hovered when the mouse is over it.
+ *
+ * @param {Boolean}	hovered		if <code>true</code>, the button is hovered
+ */
 DwtButton.prototype.setHovered =
 function(hovered) {
     this.setDisplayState(hovered ? DwtControl.HOVER : DwtControl.NORMAL);
@@ -505,7 +503,7 @@ function (imageInfo) {
 /**
  * Sets the button as selected.
  * 
- * @param	{Boolean}	selected		<code>true</code> if the button is selected
+ * @param	{Boolean}	selected		if <code>true</code>, the button is selected
  */
 DwtButton.prototype.setSelected =
 function(selected) {

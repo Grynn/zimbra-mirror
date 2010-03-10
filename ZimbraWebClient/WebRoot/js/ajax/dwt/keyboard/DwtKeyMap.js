@@ -24,6 +24,11 @@
  * those used here.
  * 
  * @author Ross Dargahi
+ * 
+ * 
+ * @param	{Boolean}		subclassInit
+ * 
+ * @private
  */
 DwtKeyMap = function(subclassInit) {
 	if (subclassInit) {	return };
@@ -158,6 +163,8 @@ function() {
  * @param map			[hash]		hash to populate with shortcuts
  * @param keys			[hash]		properties version of shortcuts
  * @param mapNames		[hash]*		additional map for getting internal map names
+ * 
+ * @private
  */
 DwtKeyMap.prototype._load =
 function(map, keys, mapNames) {
@@ -227,6 +234,8 @@ function(map, keys, mapNames) {
  * but subclasses may override to do more checking.
  *
  * @param mapName	[string]	name of map
+ * 
+ * @private
  */
 DwtKeyMap.prototype._checkMap =
 function(mapName) {
@@ -241,6 +250,8 @@ function(mapName) {
  *
  * @param mapName	[string]	name of map
  * @param action	[string]	action to check
+ * 
+ * @private
  */
 DwtKeyMap.prototype._checkAction =
 function(mapName, action) {
@@ -253,6 +264,8 @@ function(mapName, action) {
  * @param key	[string]		ctrl, alt, shift, or meta
  * @param field	[string]		display or keycode
  * @param value	[string|int]	property value
+ * 
+ * @private
  */
 DwtKeyMap.prototype._processKeyDef = 
 function(key, field, value) {
@@ -272,6 +285,8 @@ function(key, field, value) {
  * Example: "Shift+Ctrl+U" will be transformed into "Ctrl+Shift+U"
  * 
  * @param ks	[string]	key sequence
+ * 
+ * @private
  */
 DwtKeyMap.prototype._canonicalize =
 function(ks) {

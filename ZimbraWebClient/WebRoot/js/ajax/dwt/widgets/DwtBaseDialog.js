@@ -15,7 +15,6 @@
 
 /**
  * @overview
- * 
  * This file contains a base Dwt dialog control.
  * 
  */
@@ -25,25 +24,20 @@
  * This is a base class for dialogs. Given content, this class will take care of 
  * showing and hiding the dialog, as well as dragging it.
  * <p>
- * If a subclass is draggable and overrides <code>_createHtml</code>, it needs to create
- * an element with an id of this.getHtmlElement().id + "_handle".
- * <p>
  * Dialogs always hang off the main shell since their stacking order is managed through z-index.
  *
  * @author Ross Dargahi
  * @author Conrad Damon
  * 
  * @param {Hash}	params		a hash of parameters
- * <ul>
- * <li>parent	[DwtComposite]	the parent widget (the shell)</li>
- * <li>className		[String]*		the CSS class</li>
- * <li>title		[String]*		the title</li>
- * <li>zIndex		[int]*			the z-index to set for this dialog when it is visible. Defaults to {@link Dwt.Z_DIALOG}.</li>
- * <li>mode 		[constant]*			the modality of the dialog {@link DwtBaseDialog.MODAL} (default) or {@link DwtBaseDialog.MODELESS}</li>
- * <li>loc			[DwtPoint]*			Location at which to popup the dialog. Defaults to being centered within its parent.</li>
- * <li>view 		[DwtControl]*		the control whose element is to be re-parented
- * <li>dragHandleId 		[String]*	the ID of element used as drag handle</li>
- * </ul>
+ * @param	{DwtComposite}	params.parent	the parent widget (the shell)
+ * @param	{String}	params.className		the CSS class
+ * @param	{String}	params.title		the title
+ * @param	{int}	[params.zIndex=Dwt.Z_DIALOG]		the z-index to set for this dialog when it is visible
+ * @param	{DwtBaseDialog.MODAL|DwtBaseDialog.MODELESS}	[params.mode=DwtBaseDialog.MODAL] 		the modality of the dialog
+ * @param	{DwtPoint}	params.loc			the location at which to popup the dialog. Defaults to being centered within its parent
+ * @param	{DwtControl}	params.view 		the the control whose element is to be re-parented
+ * @param	{String}	params.dragHandleId 		the the ID of element used as drag handle
  * 
  * @extends	DwtComposite
  */
@@ -118,14 +112,14 @@ function() {
 /**
  * Defines a "modeless" dialog.
  * 
- * @type {Number}
+ * @type int
  */
 DwtBaseDialog.MODELESS = 1;
 
 /**
  * Defines a "modal" dialog.
  * 
- * @type {Number}
+ * @type int
  */
 DwtBaseDialog.MODAL = 2;
 
@@ -159,7 +153,7 @@ DwtBaseDialog.prototype.CONTROLS_TEMPLATE = null;
 /**
  * Adds a popup listener.
  * 
- * @param		{Object}	listener		the listener to add
+ * @param		{AjxListener}	listener		the listener to add
  */
 DwtBaseDialog.prototype.addPopupListener =
 function(listener) {
@@ -169,7 +163,7 @@ function(listener) {
 /**
  * Removes a popup listener.
  * 
- * @param		{Object}	listener		the listener to remove
+ * @param		{AjxListener}	listener		the listener to remove
  */
 DwtBaseDialog.prototype.removePopupListener = 
 function(listener) {
@@ -179,7 +173,7 @@ function(listener) {
 /**
  * Adds a popdown listener.
  * 
- * @param		{Object}	listener		the listener to add
+ * @param		{AjxListener}	listener		the listener to add
  */
 DwtBaseDialog.prototype.addPopdownListener = 
 function(listener) {
@@ -189,7 +183,7 @@ function(listener) {
 /**
  * Removes a popdown listener.
  * 
- * @param		{Object}	listener		the listener to remove
+ * @param		{AjxListener}	listener		the listener to remove
  */
 DwtBaseDialog.prototype.removePopdownListener = 
 function(listener) {
@@ -197,13 +191,13 @@ function(listener) {
 }
 
 /**
-* Popup the dialog, makes the dialog visible in places. Everything under the dialog will
-* become veiled if we are modal. Note: popping up a dialog will block
-* keyboard actions from being delivered to the global key action handler (if one
-* is registered).
-*
-* @param {Object}		loc		the desired location
-*/
+ * Pops-up the dialog, makes the dialog visible in places. Everything under the dialog will
+ * become veiled if we are modal. Note: popping up a dialog will block
+ * keyboard actions from being delivered to the global key action handler (if one
+ * is registered).
+ *
+ * @param {DwtPoint}		loc		the desired location
+ */
 DwtBaseDialog.prototype.popup =
 function(loc) {
 	if (this._poppedUp) { return; }
@@ -248,10 +242,6 @@ function(){
     this._tabGroup.resetFocusMember(true);
 };
 
-/**
- * Focus on the dialog.
- * 
- */
 DwtBaseDialog.prototype.focus = 
 function () {
 	// if someone is listening for the focus to happen, give control to them,
@@ -267,7 +257,7 @@ function () {
 };
 
 /**
- * Cheks if the dialog is poppped-up.
+ * Checks if the dialog is popped-up.
  * 
  * @return	{Boolean}	<code>true</code> if the dialog is popped-up; <code>false</code> otherwise
  */
@@ -277,9 +267,9 @@ function () {
 };
 
 /**
-* Popdown and hide the dialog.
-* 
-*/
+ * Pops-down and hides the dialog.
+ * 
+ */
 DwtBaseDialog.prototype.popdown =
 function() {
 
@@ -310,9 +300,9 @@ function() {
 
 /**
  * Sets the content of the dialog to a new view. Essentially re-parents
- * The supplied control's HTML element to the dialogs HTML element
+ * the supplied control's HTML element to the dialogs HTML element
  * 
- * @param {DwtControl} newView		the control whose element is to be re-parented.
+ * @param {DwtControl} newView		the control whose element is to be re-parented
  */
 DwtBaseDialog.prototype.setView =
 function(newView) {
@@ -323,10 +313,10 @@ function(newView) {
 };
 
 /**
-* Resets the dialog back to its original state. Subclasses should override this method
-* to add any additional behavior, but should still call up into this method.
-* 
-*/
+ * Resets the dialog back to its original state. Subclasses should override this method
+ * to add any additional behavior, but should still call up into this method.
+ * 
+ */
 DwtBaseDialog.prototype.reset =
 function() {
 	this._loc.x = this._loc.y = Dwt.LOC_NOWHERE;
@@ -388,7 +378,7 @@ function() {
 /**
  * Adds an enter listener.
  * 
- * @param	{Object}	listener		the listener to add
+ * @param	{AjxListener}	listener		the listener to add
  */
 DwtBaseDialog.prototype.addEnterListener =
 function(listener) {
