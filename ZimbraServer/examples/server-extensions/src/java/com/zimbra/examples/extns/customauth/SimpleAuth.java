@@ -1,13 +1,13 @@
 package com.zimbra.examples.extns.customauth;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.util.SystemUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.auth.ZimbraCustomAuth;
 
 import java.io.FileInputStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -24,13 +24,11 @@ public class SimpleAuth extends ZimbraCustomAuth {
         try {
             Element usersElt = Element.parseXML(new FileInputStream("/opt/zimbra/conf/users.xml"));
             List<Element> userEltList = usersElt.getPathElementList(new String[]{"user"});
-            Iterator<Element> it = userEltList.iterator();
-            while (it.hasNext()) {
-                Element userElt = it.next();
+            for (Element userElt : userEltList) {
                 userPassMap.put(userElt.getAttribute("name"), userElt.getAttribute("password"));
             }
         } catch (Exception e) {
-            ZimbraLog.extensions.error("Exception in reading user/passwords", e);
+            ZimbraLog.extensions.error(SystemUtil.getStackTrace(e));
         }
     }
 
