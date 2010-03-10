@@ -847,6 +847,7 @@
 			<fileset dir="src/installer/linux" includes="zd.desktop user-install.pl" />
 		</copy>
 		<chmod file="${dist.app.dir}/linux/user-install.pl" perm="ugo+x"/>
+		<chmod file="${dist.app.dir}/linux/zd.desktop" perm="ugo+x"/>
 
 		<copy todir="${dist.app.dir}/win32/prism" file="src/installer/win32/prism/application.ini" overwrite="true"/>
 	</target>
