@@ -1,0 +1,4 @@
+<users>
+    <user name="user1@domain_name" password="pass1"/>
+    <user name="user2@domain_name" password="pass2"/>
+</users>
