@@ -1,0 +1,4 @@
+<zimlet name="com_zimbra_tinymce" version="1.0" target="main compose-window view-window" description="Enables TinyMCE Editor">
+	<include>enabletinymce.js</include>
+	<handlerObject>Com_Zimbra_EnableTinyMCE</handlerObject>
+</zimlet>
