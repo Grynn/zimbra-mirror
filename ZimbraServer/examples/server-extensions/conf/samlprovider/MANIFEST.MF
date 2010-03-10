@@ -1,0 +1,2 @@
+Zimbra-Extension-Class: com.zimbra.examples.extns.samlprovider.SamlAuthProviderExtension
+
