@@ -1,15 +1,17 @@
-<project name="ZimbraExtensionSample" default="package">
+<project name="ZimbraExtensionExamples" default="package">
 	<property name="src.dir" location="src" />
 	<property name="src.java.dir" location="src/java" />
 	<property name="build.dir" location="build" />
     <property name="build.classes.dir" location="${build.dir}/classes" />
-
+    <property name="build.jars.dir" location="${build.dir}/jars" />
+    <property name="conf.dir" location="conf"/>
 	<path id="src.java.path">
 		<pathelement location="${src.java.dir}" />
 	</path>
 
 	<target name="build-init">
 		<mkdir dir="${build.classes.dir}" />
+		<mkdir dir="${build.jars.dir}" />
 	</target>
 
 	<property name="zimbraServer.dir" value="../../"/>
@@ -31,20 +33,20 @@
 	</target>
 
 	<target name="package" depends="compile" description="Creates jar files">
-		<jar manifest="conf/httphandler/MANIFEST.MF"
-             destfile="${build.dir}/zimbra-extns-httphandler.jar"
+		<jar manifest="${conf.dir}/httphandler/MANIFEST.MF"
+             destfile="${build.jars.dir}/zimbra-extns-httphandler.jar"
              basedir="${build.classes.dir}" 
              includes="**/httphandler/**"/>
-		<jar manifest="conf/soapservice/MANIFEST.MF"
-             destfile="${build.dir}/zimbra-extns-soapservice.jar"
+		<jar manifest="${conf.dir}/soapservice/MANIFEST.MF"
+             destfile="${build.jars.dir}/zimbra-extns-soapservice.jar"
              basedir="${build.classes.dir}"
              includes="**/soapservice/**"/>
-		<jar manifest="conf/customauth/MANIFEST.MF"
-             destfile="${build.dir}/zimbra-extns-customauth.jar"
+		<jar manifest="${conf.dir}/customauth/MANIFEST.MF"
+             destfile="${build.jars.dir}/zimbra-extns-customauth.jar"
              basedir="${build.classes.dir}"
              includes="**/customauth/**"/>
-		<jar manifest="conf/samlprovider/MANIFEST.MF"
-             destfile="${build.dir}/zimbra-extns-samlprovider.jar"
+		<jar manifest="${conf.dir}/samlprovider/MANIFEST.MF"
+             destfile="${build.jars.dir}/zimbra-extns-samlprovider.jar"
              basedir="${build.classes.dir}"
              includes="**/samlprovider/**"/>
 	</target>
