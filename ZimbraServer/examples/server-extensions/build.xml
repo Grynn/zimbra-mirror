@@ -1,9 +1,10 @@
 <project name="ZimbraExtensionExamples" default="package">
 	<property name="src.dir" location="src" />
-	<property name="src.java.dir" location="src/java" />
+	<property name="src.java.dir" location="${src.dir}/java" />
 	<property name="build.dir" location="build" />
     <property name="build.classes.dir" location="${build.dir}/classes" />
     <property name="build.jars.dir" location="${build.dir}/jars" />
+    <property name="build.docs.dir" location="${build.dir}/docs" />
     <property name="conf.dir" location="conf"/>
 	<path id="src.java.path">
 		<pathelement location="${src.java.dir}" />
@@ -50,6 +51,14 @@
              basedir="${build.classes.dir}"
              includes="**/samlprovider/**"/>
 	</target>
+
+    <target name="javadoc">
+        <javadoc sourcepath="${src.java.dir}"
+                 packagenames="*"       
+                 destdir="${build.docs.dir}/api"
+                 classpathref="class.path">
+        </javadoc>
+    </target>
 
 	<target name="clean" description="Removes build dir">
 		<delete dir="${build.dir}" />
