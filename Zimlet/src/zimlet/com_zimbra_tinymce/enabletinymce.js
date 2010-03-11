@@ -3,7 +3,7 @@ function Com_Zimbra_EnableTinyMCE () {
 }
 
 Com_Zimbra_EnableTinyMCE.prototype = new ZmZimletBase();
-Com_Zimbra_EnableTinyMCE.prototype.constructor = Com_Zimbra_DnDExt;
+Com_Zimbra_EnableTinyMCE.prototype.constructor = Com_Zimbra_EnableTinyMCE;
 
 Com_Zimbra_EnableTinyMCE.prototype.init = function () {
     window.isTinyMCE = true;
