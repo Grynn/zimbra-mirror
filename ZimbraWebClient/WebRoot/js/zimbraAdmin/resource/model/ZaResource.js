@@ -112,6 +112,7 @@ ZaResource.searchAttributes = AjxBuffer.concat(ZaResource.A_displayname,",",
 											   ZaResource.A_description, ",",
 											   ZaResource.A_zimbraCalResType);
 
+ZaResource.VIEW_RESOURCE_MAIL_RIGHT = "adminLoginCalendarResourceAs";
 ZaResource.SET_CALRES_PASSWORD_RIGHT = "setCalendarResourcePassword";
 ZaResource.ADD_CALRES_ALIAS_RIGHT = "addCalendarResourceAlias";
 ZaResource.REMOVE_CALRES_ALIAS_RIGHT = "removeCalendarResourceAlias";

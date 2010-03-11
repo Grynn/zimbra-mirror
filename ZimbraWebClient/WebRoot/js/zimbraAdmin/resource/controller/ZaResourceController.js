@@ -60,8 +60,15 @@ function(entry, openInNewTab, skipRefresh) {
 }
 
 ZaResourceController.changeActionsStateMethod = function () {
-	if(this._toolbarOperations[ZaOperation.SAVE])
+	if(!ZaItem.hasRight(ZaResource.VIEW_RESOURCE_MAIL_RIGHT,this._currentObject))	{
+		this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
+	}
+	if(!ZaItem.hasRight(ZaResource.DELETE_CALRES_RIGHT,this._currentObject))	{
+		this._toolbarOperations[ZaOperation.DELETE].enabled = false;
+	}	
+	if(this._toolbarOperations[ZaOperation.SAVE]) {
 		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+	}
 }
 ZaController.changeActionsStateMethods["ZaResourceController"].push(ZaResourceController.changeActionsStateMethod);
 
@@ -106,21 +113,22 @@ function () {
 			}	
 		}
 	}		
-	this._toolbarOrder.push(ZaOperation.SAVE);
-	this._toolbarOrder.push(ZaOperation.CLOSE);
-	this._toolbarOrder.push(ZaOperation.SEP);
-	if(showNewCalRes) {
-		this._toolbarOrder.push(ZaOperation.NEW);
-	}
-	this._toolbarOrder.push(ZaOperation.DELETE);
-		
+
    	this._toolbarOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
+   	this._toolbarOrder.push(ZaOperation.SAVE);
    	this._toolbarOperations[ZaOperation.CLOSE]=new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));    	
+   	this._toolbarOrder.push(ZaOperation.CLOSE);
    	this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
+	this._toolbarOrder.push(ZaOperation.SEP);
    	if(showNewCalRes) {
-		this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", new AjxListener(this, this.newButtonListener));   			    	
+		this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", new AjxListener(this, this.newButtonListener));
+		this._toolbarOrder.push(ZaOperation.NEW);
    	}
-   	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.RESTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));    	    	
+   	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.RESTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
+   	this._toolbarOrder.push(ZaOperation.DELETE);
+   	this._toolbarOperations[ZaOperation.VIEW_MAIL] = new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._viewMailListener));		
+	this._toolbarOrder.push(ZaOperation.VIEW_MAIL);
+	
 }
 ZaController.initToolbarMethods["ZaResourceController"].push(ZaResourceController.initToolbarMethod);
 
