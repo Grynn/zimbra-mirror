@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A simple authentication mechanism that reads usernames/passwords from a file.
+ * A simple authentication mechanism that reads usernames/passwords from /opt/zimbra/conf/users.xml file.
  *
  * @author vmahajan
  */
@@ -49,10 +49,10 @@ public class SimpleAuth extends ZimbraCustomAuth {
     /**
      * Authenticates account.
      *
-     * @param acct
-     * @param password
-     * @param context
-     * @param args
+     * @param acct account
+     * @param password password
+     * @param context context map
+     * @param args arg list
      * @throws Exception
      */
     public void authenticate(Account acct, String password, Map<String, Object> context, List<String> args)

@@ -37,45 +37,56 @@ import java.util.Map;
 import java.util.TimeZone;
 
 /**
+ * SAML auth provider for SOAP requests.
+ * <p>
+ * It expects the auth token to be present in a SOAP request in the following form:
+ *
+ * <pre>
+ * &lt;soap:Header&gt;
+ *     &lt;context xmlns='urn:zimbra'&gt;
+ *         &lt;authToken type='SAML_AUTH_PROVIDER'&gt;saml_assertion_id&lt;/authToken&gt;
+ *     &lt;/context&gt;
+ * &lt;/soap:Header&gt;
+ * </pre>
+ *
  * @author vmahajan
  */
 public class SamlAuthProvider extends AuthProvider {
 
     private static final Namespace SAML_PROTOCOL_NS = new Namespace("samlp", "urn:oasis:names:tc:SAML:2.0:protocol");
 
+    /**
+     * Constructor.
+     */
     protected SamlAuthProvider() {
         super("SAML_AUTH_PROVIDER");
     }
 
     /**
-     * Returns an AuthToken by auth data in http request
+     * Returns an AuthToken by auth data in http request.
      * <p/>
      * Should never return null.
-     * Throws AuthProviderException.NO_AUTH_TOKEN if auth data for the provider is not present
-     * Throws AuthTokenException if auth data for the provider is present but cannot be resolved into a valid AuthToken
      *
-     * @param req
-     * @param isAdminReq
-     * @return
-     * @throws com.zimbra.cs.account.AuthTokenException
-     *
+     * @param req request message
+     * @param isAdminReq is admin request
+     * @return auth token
+     * @throws AuthProviderException if auth data for the provider is not present
+     * @throws AuthTokenException if auth data for the provider is present but cannot be resolved into a valid AuthToken
      */
     protected AuthToken authToken(HttpServletRequest req, boolean isAdminReq) throws AuthProviderException, AuthTokenException {
         throw AuthProviderException.NO_AUTH_DATA();
     }
 
     /**
-     * Returns an AuthToken by auth data in http request
+     * Returns an AuthToken by auth data in SOAP request.
      * <p/>
      * Should never return null.
-     * Throws AuthProviderException.NO_AUTH_TOKEN if auth data for the provider is not present
-     * Throws AuthTokenException if auth data for the provider is present but cannot be resolved into a valid AuthToken
      *
-     * @param soapCtxt
-     * @param engineCtxt
-     * @return
-     * @throws com.zimbra.cs.account.AuthTokenException
-     *
+     * @param soapCtxt soap context element
+     * @param engineCtxt soap engine context
+     * @return auth token
+     * @throws AuthTokenException if auth data for the provider is not present
+     * @throws AuthProviderException if auth data for the provider is present but cannot be resolved into a valid AuthToken
      */
     protected AuthToken authToken(Element soapCtxt, Map engineCtxt) throws AuthProviderException, AuthTokenException {
 

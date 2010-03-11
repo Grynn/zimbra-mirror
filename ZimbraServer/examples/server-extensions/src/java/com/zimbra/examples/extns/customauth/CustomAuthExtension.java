@@ -28,7 +28,7 @@ public class CustomAuthExtension implements ZimbraExtension {
     /**
      * Defines a name for the extension. It must be an identifier.
      *
-     * @return
+     * @return extension name
      */
     public String getName() {
         return "customAuthExtn";

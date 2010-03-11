@@ -20,13 +20,16 @@ import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.service.AuthProvider;
 
 /**
+ * This extension registers a custom SAML auth provider.
+ * 
  * @author vmahajan
  */
 public class SamlAuthProviderExtension implements ZimbraExtension {
+
     /**
      * Defines a name for the extension. It must be an identifier.
      *
-     * @return
+     * @return extension name
      */
     public String getName() {
         return "samlProviderExtn";

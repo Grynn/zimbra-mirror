@@ -31,7 +31,7 @@ public class DummyHttpHandler extends ExtensionHttpHandler {
     /**
      * The path under which the handler is registered for an extension.
      *
-     * @return
+     * @return path
      */
     @Override
     public String getPath() {
@@ -41,8 +41,8 @@ public class DummyHttpHandler extends ExtensionHttpHandler {
     /**
      * Processes HTTP GET requests.
      *
-     * @param req
-     * @param resp
+     * @param req request message
+     * @param resp response message
      * @throws java.io.IOException
      * @throws javax.servlet.ServletException
      */

@@ -35,6 +35,8 @@ import java.util.Map;
 import java.util.TimeZone;
 
 /**
+ * SAML auth token.
+ *
  * @author vmahajan
  */
 public class SamlAuthToken extends AuthToken {
@@ -43,6 +45,12 @@ public class SamlAuthToken extends AuthToken {
     private String subjectNameId;
     private Date expires;
 
+    /**
+     * Constructs instance from a SAML assertion element.
+     *
+     * @param samlAssertionElt
+     * @throws AuthTokenException
+     */
     public SamlAuthToken(Element samlAssertionElt) throws AuthTokenException {
         Element authnStmtElt;
         try {
@@ -125,10 +133,10 @@ public class SamlAuthToken extends AuthToken {
     /**
      * Encode original auth info into an outgoing http request.
      *
-     * @param client
-     * @param method
-     * @param isAdminReq
-     * @param cookieDomain
+     * @param client http client
+     * @param method http method
+     * @param isAdminReq is admin request
+     * @param cookieDomain cookie domain
      * @throws com.zimbra.common.service.ServiceException
      *
      */
@@ -138,9 +146,9 @@ public class SamlAuthToken extends AuthToken {
     /**
      * Encode original auth info into an outgoing http request cookie.
      *
-     * @param state
-     * @param isAdminReq
-     * @param cookieDomain
+     * @param state http state
+     * @param isAdminReq is admin request
+     * @param cookieDomain cookie domain
      * @throws com.zimbra.common.service.ServiceException
      *
      */
@@ -148,10 +156,12 @@ public class SamlAuthToken extends AuthToken {
     }
 
     /**
-     * Encode original auth info into an HttpServletResponse
+     * Encode original auth info into an HttpServletResponse.
      *
-     * @param resp
-     * @param isAdminReq
+     * @param resp response message
+     * @param isAdminReq is admin request
+     * @param secureCookie secure cookie
+     * @throws com.zimbra.common.service.ServiceException
      */
     public void encode(HttpServletResponse resp, boolean isAdminReq, boolean secureCookie) throws ServiceException {
     }

@@ -31,6 +31,15 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
+ * This HTTP handler handles requests at /service/extension/samlAuthority and acts as a dummy
+ * SAML Authority. It responds to &lt;samlp:AssertionIDRequest&gt; requests. See
+ * <a href="http://www.oasis-open.org/committees/download.php/35711/sstc-saml-core-errata-2.0-wd-06-diff.pdf">
+ * SAML 2.0 Core Spec</a>.
+ *
+ * <p>
+ * It reads /opt/zimbra/conf/issued-saml-assertions.xml file which stores the set of assertions
+ * already issued by this SAML Authority.
+ *
  * @author vmahajan
  */
 public class SamlRequestHandler extends ExtensionHttpHandler {
@@ -55,7 +64,7 @@ public class SamlRequestHandler extends ExtensionHttpHandler {
     /**
      * The path under which the handler is registered for an extension.
      *
-     * @return
+     * @return path
      */
     @Override
     public String getPath() {
@@ -65,8 +74,8 @@ public class SamlRequestHandler extends ExtensionHttpHandler {
     /**
      * Processes HTTP POST requests.
      *
-     * @param req
-     * @param resp
+     * @param req request message
+     * @param resp response message
      * @throws java.io.IOException
      * @throws javax.servlet.ServletException
      */

@@ -15,9 +15,7 @@
 package com.zimbra.examples.extns.soapservice;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.extension.ExtensionDispatcherServlet;
 import com.zimbra.cs.extension.ZimbraExtension;
-import com.zimbra.examples.extns.httphandler.DummyHttpHandler;
 import com.zimbra.soap.SoapServlet;
 
 /**
@@ -30,7 +28,7 @@ public class SoapServiceExtension implements ZimbraExtension {
     /**
      * Defines a name for the extension. It must be an identifier.
      *
-     * @return
+     * @return extension name
      */
     public String getName() {
         return "soapServiceExtn";

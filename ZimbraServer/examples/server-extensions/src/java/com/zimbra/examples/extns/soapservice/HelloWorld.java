@@ -36,8 +36,8 @@ public class HelloWorld extends DocumentHandler {
     /**
      * Handles request.
      *
-     * @param request
-     * @param context
+     * @param request request element
+     * @param context context map
      * @return response
      * @throws ServiceException
      */
@@ -55,8 +55,8 @@ public class HelloWorld extends DocumentHandler {
     /**
      * Returns whether the command's caller must be authenticated.
      *
-     * @param context
-     * @return
+     * @param context context map
+     * @return needs auth or not
      */
     @Override
     public boolean needsAuth(Map<String, Object> context) {
