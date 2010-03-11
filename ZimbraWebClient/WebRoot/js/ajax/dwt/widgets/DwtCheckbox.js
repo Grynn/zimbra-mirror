@@ -14,21 +14,23 @@
  */
 
 /**
+ * Creates a checkbox.
  * @constructor
  * @class
- * This class implements a checkbox.
+ * This class represents a checkbox.
  * 
- * @param params	[hash]			hash of params:
- *        parent	[DwtComposite] 	parent widget
- *        style 	[constant]*		The text style. One of: <i>DwtCheckbox.TEXT_LEFT</i> or
- * 									<i>DwtCheckbox.TEXT_RIGHT</i> (default). 
- *        name		[string]		The input control name. Required for IE.
- *        value     [string]        The input control value.
- *        checked	[boolean]		The input control checked status. Required for IE.
- *        className	[string]*		CSS class
- *        posStyle	[constant]*		positioning style
- *        id		[string]*		an explicit ID to use for the control's HTML element
- *        index 	[int]*			index at which to add this control among parent's children 
+ * @param {Hash}	params	a hash of parameters
+ * @param {DwtComposite}	params.parent	the parent widget
+ * @param {DwtCheckbox.TEXT_LEFT|DwtCheckbox.TEXT_RIGHT}       [params.style=DwtCheckbox.TEXT_RIGHT] 	the text style
+ * @param {String}       params.name		the input control name (required for IE)
+ * @param {String}       params.value     the input control value
+ * @param {Boolean}       params.checked	the input control checked status (required for IE)
+ * @param {String}       params.className	the CSS class
+ * @param {constant}       params.posStyle	the positioning style (see {@link Dwt})
+ * @param {String}       params.id		an explicit ID to use for the control's HTML element
+ * @param {int}       params.index 	the index at which to add this control among parent's children
+ * 
+ *  @extends		DwtControl
  */
 DwtCheckbox = function(params) {
 	if (arguments.length == 0) { return; }
@@ -67,8 +69,20 @@ DwtCheckbox.PARAMS = [
 	"index",
     "value"
 ];
+/**
+ * Defines the "left" text style position.
+ * @type	String
+ */
 DwtCheckbox.TEXT_LEFT			= "left";
+/**
+ * Defines the "right" text style position.
+ * @type	String
+ */
 DwtCheckbox.TEXT_RIGHT			= "right";
+/**
+ * Defines the default text style position.
+ * @type	String
+ */
 DwtCheckbox.DEFAULT_POSITION	= DwtCheckbox.TEXT_RIGHT;
 
 //
@@ -101,11 +115,21 @@ function() {
 
 // listeners
 
+/**
+ * Adds a selection listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtCheckbox.prototype.addSelectionListener =
 function(listener) {
 	this.addListener(DwtEvent.SELECTION, listener);
 };
 
+/**
+ * Removes a selection listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtCheckbox.prototype.removeSelectionListener =
 function(listener) {
 	this.removeListener(DwtEvent.SELECTION, listener);
@@ -113,6 +137,11 @@ function(listener) {
 
 // properties
 
+/**
+ * Sets the enabled state.
+ * 
+ * @param	{Boolean}	enabled		if <code>true</code>, the checkbox is enabled
+ */
 DwtCheckbox.prototype.setEnabled =
 function(enabled) {
 	if (enabled != this._enabled) {
@@ -124,6 +153,11 @@ function(enabled) {
 	}
 };
 
+/**
+ * Sets the selected state.
+ * 
+ * @param	{Boolean}	selected		if <code>true</code>, the checkbox is selected
+ */
 DwtCheckbox.prototype.setSelected =
 function(selected) {
 	if (this._inputEl && this._inputEl.checked != selected) {
@@ -131,11 +165,21 @@ function(selected) {
 	}
 };
 
+/**
+ * Checks if the checkbox is selected state.
+ * 
+ * @return	{Boolean}	<code>true</code> if the checkbox is selected
+ */
 DwtCheckbox.prototype.isSelected =
 function() {
 	return this._inputEl && this._inputEl.checked;
 };
 
+/**
+ * Sets the checkbox text.
+ * 
+ * @param		{String}	text		the text
+ */
 DwtCheckbox.prototype.setText =
 function(text) {
 	if (this._textEl && this._text != text) {
@@ -144,11 +188,21 @@ function(text) {
 	}
 };
 
+/**
+ * Gets the checkbox text.
+ * 
+ * @return	{String}	the text
+ */
 DwtCheckbox.prototype.getText =
 function() {
 	return this._text;
 };
 
+/**
+ * Sets the text position.
+ * 
+ * @param	{DwtCheckbox.TEXT_LEFT|DwtCheckbox.TEXT_RIGHT}		position	the position
+ */
 DwtCheckbox.prototype.setTextPosition =
 function(position) {
 	this._textEl = position == DwtCheckbox.TEXT_LEFT ? this._textElLeft : this._textElRight;
@@ -160,11 +214,21 @@ function(position) {
 	}
 };
 
+/**
+ * Gets the text position.
+ * 
+ * @return	{DwtCheckbox.TEXT_LEFT|DwtCheckbox.TEXT_RIGHT}		the position
+ */
 DwtCheckbox.prototype.getTextPosition =
 function() {
 	return this._textPosition;
 };
 
+/**
+ * Sets the value.
+ * 
+ * @param	{String}		value		the value
+ */
 DwtCheckbox.prototype.setValue =
 function(value) {
     var object = this._inputEl || this;
@@ -173,12 +237,22 @@ function(value) {
     }
 };
 
+/**
+ * Gets the value.
+ * 
+ * @return		{String}		the value
+ */
 DwtCheckbox.prototype.getValue =
 function() {
     var object = this._inputEl || this;
 	return object.value != null ? object.value : this.getText();
 };
 
+/**
+ * Gets the input element.
+ * 
+ * @return		{Element}		the element
+ */
 DwtCheckbox.prototype.getInputElement =
 function() {
 	return this._inputEl;
@@ -188,7 +262,11 @@ function() {
 // Protected methods
 //
 
-/** The input field inherits the id for accessibility purposes. */
+/**
+ * The input field inherits the id for accessibility purposes.
+ * 
+ * @private
+ */
 DwtCheckbox.prototype._replaceElementHook =
 function(oel, nel, inheritClass, inheritStyle) {
 	nel = this.getInputElement();

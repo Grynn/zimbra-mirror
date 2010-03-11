@@ -13,6 +13,16 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+ * Creates a form.
+ * @class
+ * This class represents a form.
+ * @param	{Hash}	params		a hash of parameters
+ * 
+ * @extends		DwtComposite
+ * 
+ * @private
+ */
 DwtForm = function(params) {
 	if (arguments.length == 0) return;
 	params = Dwt.getParams(arguments, DwtForm.PARAMS);
@@ -55,6 +65,13 @@ DwtForm.PARAMS = DwtControl.PARAMS.concat("form", "model");
 // Public methods
 //
 
+/**
+ * Sets the value.
+ * 
+ * @param	{String}	id	the id
+ * @param	{String}	value		the value
+ * @param	{Boolean}	force		if <code>true</code>, to force update
+ */
 DwtForm.prototype.setValue = function(id, value, force) {
 	if (typeof id != "string") id = String(id);
 	if (id.match(/\./) || id.match(/\[/)) {
@@ -71,6 +88,14 @@ DwtForm.prototype.setValue = function(id, value, force) {
 	this._setModelValue(id, value);
 	this._setControlValue(id, value);
 };
+
+/**
+ * Gets the value.
+ * 
+ * @param	{String}	id	the id
+ * @param	{String}	defaultValue		the default value
+ * @return	{String}	the value
+ */
 DwtForm.prototype.getValue = function(id, defaultValue) {
 	if (typeof id != "string") id = String(id);
 	if (id.match(/\./) || id.match(/\[/)) {
@@ -90,13 +115,24 @@ DwtForm.prototype.getValue = function(id, defaultValue) {
 	return value || defaultValue;
 };
 
+/**
+ * Gets the control for the item.
+ * 
+ * @param	{String}	id		the id
+ * @return	{DwtControl}	the control
+ */
 DwtForm.prototype.getControl = function(id) {
 	if (typeof id != "string") id = String(id);
 	var item = this._items[id];
 	return item && item.control;
 };
 
-/** By default, returns <code>isVisible(id) && isEnabled(id)</code>. */
+/**
+ * Checks if the id is relevant (meaning: is visible and is enabled).
+ * 
+ * @param	{String}	id 		the id
+ * @return	 {Boolean}	<code>true</code> if the item is relevant
+ */
 DwtForm.prototype.isRelevant = function(id) {
 	return this.isVisible(id) && this.isEnabled(id);
 };
@@ -107,6 +143,12 @@ DwtForm.prototype.getTabGroupMember = function() {
 
 // control methods
 
+/**
+ * Sets the label.
+ * 
+ * @param	{String}	id 		the id
+ * @param	{String}	label 		the label
+ */
 DwtForm.prototype.setLabel = function(id, label) {
 	var item = this._items[id];
 	if (!item) return;
@@ -117,6 +159,12 @@ DwtForm.prototype.setLabel = function(id, label) {
 	if (control.setText) { control.setText(label); return; }
 };
 
+/**
+ * Gets the label.
+ * 
+ * @param	{String}	id 		the id
+ * @return	{String}	the label
+ */
 DwtForm.prototype.getLabel = function(id) {
 	var item = this._items[id];
 	var control = item && item.control;
@@ -149,6 +197,7 @@ DwtForm.prototype.setVisible = function(id, visible) {
 		Dwt.setVisible(el, visible);
 	}
 };
+
 DwtForm.prototype.isVisible = function(id) {
 	// this form's visibility
 	if (arguments.length == 0) {
@@ -163,6 +212,12 @@ DwtForm.prototype.isVisible = function(id) {
 	return  Dwt.getVisible(control);
 };
 
+/**
+ * Sets the enabled flag.
+ * 
+ * @param	{String}	id 		the id
+ * @param	{Boolean}	enabled		if <code>true</code>, the item is enabled
+ */
 DwtForm.prototype.setEnabled = function(id, enabled) {
 	// set the form enabled
 	if (arguments.length == 1) {
@@ -180,6 +235,13 @@ DwtForm.prototype.setEnabled = function(id, enabled) {
 		control.disabled = !enabled;
 	}
 };
+
+/**
+ * Checks if the item is enabled.
+ * 
+ * @param	{String}	id 		the id
+ * @return	{Boolean}	<code>true</code> if the item is enabled
+ */
 DwtForm.prototype.isEnabled = function(id) {
 	// this form enabled?
 	if (arguments.length == 0) {
@@ -194,6 +256,12 @@ DwtForm.prototype.isEnabled = function(id) {
 	return  !control.disabled;
 };
 
+/**
+ * Sets the valid flag.
+ * 
+ * @param	{String}	id 		the id
+ * @param	{Boolean}	valid		if <code>true</code>, the item is valid
+ */
 DwtForm.prototype.setValid = function(id, valid) {
 	if (typeof(id) == "boolean") {
 		valid = arguments[0];
@@ -209,6 +277,13 @@ DwtForm.prototype.setValid = function(id, valid) {
 		this._invalid[id] = true;
 	}
 };
+
+/**
+ * Checks if the item is valid.
+ * 
+ * @param	{String}	id 		the id
+ * @return	{Boolean}	<code>true</code> if the item is valid
+ */
 DwtForm.prototype.isValid = function(id) {
 	if (arguments.length == 0 || AjxUtil.isUndefined(id)) {
 		for (var id in this._invalid) {
@@ -219,6 +294,12 @@ DwtForm.prototype.isValid = function(id) {
 	return !(id in this._invalid);
 };
 
+/**
+ * Sets the error message.
+ * 
+ * @param	{String}	id 		the id
+ * @param	{String}	message	the message
+ */
 DwtForm.prototype.setErrorMessage = function(id, message) {
 	if (!id || id == "") {
 		this._errorMessages = {};
@@ -231,6 +312,12 @@ DwtForm.prototype.setErrorMessage = function(id, message) {
 	}
 };
 
+/**
+ * Gets the error message.
+ * 
+ * @param	{String}	id 		the id
+ * @return	{String|Array}	the message(s)
+ */
 DwtForm.prototype.getErrorMessage = function(id) {
 	if (arguments.length == 0) {
 		var messages = {};
@@ -1108,6 +1195,12 @@ DwtForm.__hack_fixRadioButtonHandler = function(radio) {
 
 // TODO: tab-group
 
+/**
+ * 
+ * @extends		DwtForm
+ * 
+ * @private
+ */
 DwtFormRows = function(params) {
 	if (arguments.length == 0) return;
 	this._itemDef = params.formItemDef || {};

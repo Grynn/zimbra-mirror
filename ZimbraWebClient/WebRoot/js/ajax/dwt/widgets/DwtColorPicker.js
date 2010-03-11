@@ -15,20 +15,25 @@
 
 
 /**
-* Creates a color picker displaying "Web safe" colours. Instances of this class may be
-* used with DwtMenu to create a ColorPicker menu. Clicking on a color cell generates a
-* DwtSelectionEvent the detail attribute of which contains the color string associated
-* the cell on which the user clicked
-*
-* @constructor
-* @class
-*
-* @author Ross Dargahi
-* @param parent		the parent widget
-* @param className	a CSS class
-* @param posStyle	positioning style
-* @param allowColorInput:  allow a text field to allow user to input their customized RGB value
-*/
+ * Creates a color picker displaying "Web safe" colors.
+ * @constructor
+ * @class
+ * Instances of this class may be
+ * used with {@link DwtMenu} to create a {@link DwtColorPicker} menu. Clicking on a color cell generates a
+ * DwtSelectionEvent the detail attribute of which contains the color string associated
+ * the cell on which the user clicked
+ *
+ *
+ * @author Ross Dargahi
+ * 
+ * @param {DwtComposite}	parent		the parent widget
+ * @param {String}	className	a CSS class
+ * @param {constant}	posStyle	the positioning style
+ * @param {String}	noFillLabel			the no-fill label
+ * @param {Boolean}	allowColorInput		if <code>true</code>, allow a text field to allow user to input their customized RGB value
+ * 
+ * @extends		DwtControl
+ */
 DwtColorPicker = function(parent, className, posStyle, noFillLabel, allowColorInput) {
 	if (arguments.length == 0) return;
 	className = className || "DwtColorPicker";
@@ -57,20 +62,20 @@ function() {
 }
 
 /**
-* Adds a listener to be notified when the button is pressed.
-*
-* @param listener	a listener
-*/
+ * Adds a listener to be notified when the button is pressed.
+ *
+ * @param {AjxListener}	listener	a listener
+ */
 DwtColorPicker.prototype.addSelectionListener = 
 function(listener) {
 	this.addListener(DwtEvent.SELECTION, listener);
 }
 
 /**
-* Removes a selection listener.
-*
-* @param listener	the listener to remove
-*/
+ * Removes a selection listener.
+ *
+ * @param {AjxListener}	listener	a listener
+ */
 DwtColorPicker.prototype.removeSelectionListener = 
 function(listener) { 
 	this.removeListener(DwtEvent.SELECTION, listener);
@@ -363,6 +368,11 @@ function(ev) {
 	return false;
 }
 
+/**
+ * Gets the input color.
+ * 
+ * @return	{String}	the color (in hex) from the input color field
+ */
 DwtColorPicker.prototype.getInputColor = function () {
     var inputField = document.getElementById (this._tdId + ".ColorInputField").firstChild ;
     var inputColor = "#" + inputField.value ;

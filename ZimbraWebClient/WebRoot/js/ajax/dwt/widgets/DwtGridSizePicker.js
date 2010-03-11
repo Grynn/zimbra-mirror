@@ -12,13 +12,21 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
+
 /**
- * Widget that provides the ability to select number of rows/cols similar to
+ * Creates a grid size picker.
+ * @class
+ * This class represents a widget that provides the ability to select number of rows/cols similar to
  * Word's "insert table" popup menu.  Mainly designed for the "insert table"
- * feature in ZmHtmlEditor, this widget will usually be embedded in a DwtMenu
- * with style GENERIC_WIDGET_STYLE.
+ * feature in {@link ZmHtmlEditor}, this widget will usually be embedded in a DwtMenu
+ * with style {@link DwtMenu.GENERIC_WIDGET_STYLE}.
  *
  * @author Mihai Bazon <mihai@zimbra.com>
+ * 
+ * @param	{DwtComposite}	parent 	the parent widget
+ * @param	{String}	title		the title
+ * 
+ * @extends		DwtControl
  */
 DwtGridSizePicker = function(parent, title) {
 	if (arguments.length == 0)
@@ -46,11 +54,21 @@ DwtGridSizePicker = function(parent, title) {
 DwtGridSizePicker.prototype = new DwtControl;
 DwtGridSizePicker.prototype.constructor = DwtGridSizePicker;
 
+/**
+ * Adds a selection listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtGridSizePicker.prototype.addSelectionListener =
 function(listener) {
 	this.addListener(DwtEvent.SELECTION, listener);
 };
 
+/**
+ * Removes a selection listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtGridSizePicker.prototype.removeSelectionListener =
 function(listener) {
 	this.removeListener(DwtEvent.SELECTION, listener);

@@ -13,54 +13,54 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
 /**
-* Creates a control that allows the user to select items from a list, and
-* places the selected items in another list.
-* @constructor
-* @class
-* This class creates and manages a control that lets the user
-* select items from a list. Two lists are maintained, one with items to select 
-* from, and one that contains the selected items. Between them are buttons 
-* to shuffle items back and forth between the two lists.
-* <p>
-* There are two types of buttons: one or more transfer buttons move items from
-* the source list to the target list, and the remove button moves items from the
-* target list to the source list. The client can specify its transfer buttons.
-* If no specification is given, there will be a single transfer button called 
-* "Add".</p>
-* <p>
-* The parent must implement search(columnItem, ascending) if column sorting
-* is supported. It should also create a subclass of DwtChooser which returns
-* the appropriate source and target list views, themselves subclasses of
-* DwtChooserListView. Those subclasses must implement _getHeaderList() and
-* _createItemHtml(item).</p>
-* <p>
-* There are two different layout styles, horizontal (with the list views at the
-* left and right) and vertical (with the list views at the top and bottom). There
-* are two different selection styles, single and multiple, which control how many
-* items may appear in the target list view. There are two different transfer modes:
-* one where items are copied between lists, and one where they're moved.</p>
-*
-* TODO: - column sorting
-*
-* @author Conrad Damon
-*
-* @param parent			[DwtComposite]		containing widget
-* @param className		[string]*			CSS class
-* @param slvClassName	[string]*			CSS class for source list view
-* @param tlvClassName	[string]*			CSS class for target list view
-* @param buttonInfo		[array]*			id/label pairs for transfer buttons
-* @param layoutStyle	[constant]*			layout style (vertical or horizontal)
-* @param selectStyle	[constant]*			multi-select (default) or single-select
-* @param mode			[constant]*			items are moved or copied
-* @param noDuplicates	[boolean]*			if true, prevent duplicates in target list
-* @param singleHeight	[int]*				height of list view for single select style
-* @param listSize		[int]*				list width (if HORIZ) or height (if VERT)
-* @param sourceEmptyOk	[boolean]*			if true, don't show "No Results" in source list view
-* @param allButtons		[boolean]*			if true, offer "Add All" and "Remove All" buttons
-* @param hasTextField	[boolean]*			if true, create a text field for user input
-*/
+ * Creates a control that allows the user to select items from a list, and
+ * places the selected items in another list.
+ * @constructor
+ * @class
+ * This class creates and manages a control that lets the user
+ * select items from a list. Two lists are maintained, one with items to select 
+ * from, and one that contains the selected items. Between them are buttons 
+ * to shuffle items back and forth between the two lists.
+ * <p>
+ * There are two types of buttons: one or more transfer buttons move items from
+ * the source list to the target list, and the remove button moves items from the
+ * target list to the source list. The client can specify its transfer buttons.
+ * If no specification is given, there will be a single transfer button called 
+ * "Add".</p>
+ * <p>
+ * The parent must implement search(columnItem, ascending) if column sorting
+ * is supported. It should also create a subclass of {@link DwtChooser} which returns
+ * the appropriate source and target list views, themselves subclasses of
+ * {@link DwtChooserListView}. Those subclasses must implement _getHeaderList() and
+ * _createItemHtml(item).</p>
+ * <p>
+ * There are two different layout styles, horizontal (with the list views at the
+ * left and right) and vertical (with the list views at the top and bottom). There
+ * are two different selection styles, single and multiple, which control how many
+ * items may appear in the target list view. There are two different transfer modes:
+ * one where items are copied between lists, and one where they're moved.</p>
+ *
+ * @author Conrad Damon
+ *
+ * @param	{Hash}		params		a hash of parameters
+ * @param {DwtComposite}	params.parent			the containing widget
+ * @param {String}	params.className		the CSS class
+ * @param {String}	params.slvClassName	the CSS class for source list view
+ * @param {String}	params.tlvClassName	the CSS class for target list view
+ * @param {Array}	params.buttonInfo		the id/label pairs for transfer buttons
+ * @param {DwtChooser.HORIZ_STYLE|DwtChooser.VERT_STYLE}	params.layoutStyle	the layout style (vertical or horizontal)
+ * @param {DwtChooser.SINGLE_SELECT|DwtChooser.MULTI_SELECT}	params.selectStyle	the multi-select (default) or single-select
+ * @param {constant}	params.mode			the items are moved or copied
+ * @param {Boolean}	params.noDuplicates	if <code>true</code>, prevent duplicates in target list
+ * @param {int}	params.singleHeight	the height of list view for single select style
+ * @param {int}	params.listSize		the list width (if {@link DwtChooser.HORIZ_STYLE}) or height (if {@link DwtChooser.VERT_STYLE})
+ * @param {Boolean}	params.sourceEmptyOk	if <code>true</code>, do not show "No Results" in source list view
+ * @param {Boolean}	params.allButtons		if <code>true</code>, offer "Add All" and "Remove All" buttons
+ * @param {Boolean}	params.hasTextField	if <code>true</code>, create a text field for user input
+ * 
+ * @extends		DwtComposite
+ */
 DwtChooser = function(params) {
 
 	if (arguments.length == 0) return;
@@ -100,11 +100,27 @@ DwtChooser.prototype.constructor = DwtChooser;
 // Consts
 
 // layout style
+/**
+ * Defines a "horizontal" layout style.
+ * @type	int
+ */
 DwtChooser.HORIZ_STYLE	= 1;
+/**
+ * Defines a "vertical" layout style.
+ * @type	int
+ */
 DwtChooser.VERT_STYLE	= 2;
 
 // number of items target list can hold
+/**
+ * Defines a "single" select.
+ * @type	int
+ */
 DwtChooser.SINGLE_SELECT	= 1;
+/**
+ * Defines a "multi" select.
+ * @type	int
+ */
 DwtChooser.MULTI_SELECT		= 2;
 
 // what happens to source items during transfer
@@ -121,12 +137,12 @@ function() {
 };
 
 /**
-* Populates the given list view with the given list. Defaults to source view.
-*
-* @param items			[object]		list of items (AjxVector, array, or single object), or hash of lists
-* @param view			[constant]*		view to set (source or target)
-* @param clearOtherView	[boolean]*		if true, clear out other view
-*/
+ * Sets the given list view with the given list. Defaults to source view.
+ *
+ * @param {AjxVector|Array|Object|Hash}	items			a list of items or hash of lists
+ * @param {DwtChooserListView.SOURCE|DwtChooserListView.TARGET}	view			the view to set
+ * @param {Boolean}	clearOtherView	if <code>true</code>, clear out other view
+ */
 DwtChooser.prototype.setItems =
 function(items, view, clearOtherView) {
 	view = view ? view : DwtChooserListView.SOURCE;
@@ -139,12 +155,13 @@ function(items, view, clearOtherView) {
 };	
 	
 /**
-* Returns a copy of the items in the given list. If that's the target list and 
-* there are multiple transfer buttons, then a hash with a vector for each one
-* is returned. Otherwise, a single vector is returned. Defaults to target view.
-*
-* @param view	[constant]*		view to get items from (source or target)
-*/
+ * Gets a copy of the items in the given list. If that's the target list and 
+ * there are multiple transfer buttons, then a hash with a vector for each one
+ * is returned. Otherwise, a single vector is returned. Defaults to target view.
+ *
+ * @param {DwtChooserListView.SOURCE|DwtChooserListView.TARGET}	view			the view to set
+ * @return	{AjxVector|Array|Object|Hash}		the item(s)
+ */
 DwtChooser.prototype.getItems =
 function(view) {
 	view = view ? view : DwtChooserListView.TARGET;
@@ -164,13 +181,13 @@ function(view) {
 };
 
 /**
-* Adds items to the given list view.
-*
-* @param items		[object]		list of items (AjxVector, array, or single object)
-* @param view		[constant]		view to add to (source or target)
-* @param skipNotify	[boolean]*		if true, don't notify listeners
-* @param id			[string]*		button ID
-*/
+ * Adds items to the given list view.
+ *
+ * @param {AjxVector|Array|Object|Hash}	items			a list of items or hash of lists
+ * @param {DwtChooserListView.SOURCE|DwtChooserListView.TARGET}	view			the view to set
+ * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ * @param {String}	id			the button ID
+ */
 DwtChooser.prototype.addItems =
 function(items, view, skipNotify, id) {
 	view = view ? view : DwtChooserListView.SOURCE;
@@ -199,12 +216,12 @@ function(items, view, skipNotify, id) {
 };
 
 /**
-* Removes items from the given list view.
-*
-* @param list		[object]		list of items (AjxVector, array, or single object)
-* @param view		[constant]		view to remove from (source or target)
-* @param skipNotify	[boolean]*		if true, don't notify listeners
-*/
+ * Removes items from the given list view.
+ *
+ * @param {AjxVector|Array|Object|Hash}	list			a list of items or hash of lists
+ * @param {DwtChooserListView.SOURCE|DwtChooserListView.TARGET}	view			the view to set
+ * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ */
 DwtChooser.prototype.removeItems =
 function(list, view, skipNotify) {
 	list = (list instanceof AjxVector) ? list.getArray() : (list instanceof Array) ? list : [list];
@@ -213,14 +230,14 @@ function(list, view, skipNotify) {
 	}
 };
 
-/*
-* Moves or copies items from the source list to the target list, paying attention
-* to current mode.
-*
-* @param list		[object]	list of items (AjxVector, array, or single object)
-* @param id			[string]*	ID of the transfer button that was used
-* @param skipNotify	[boolean]*	if true, don't notify listeners
-*/
+/**
+ * Moves or copies items from the source list to the target list, paying attention
+ * to current mode.
+ *
+ * @param {AjxVector|Array|Object|Hash}	list			a list of items or hash of lists
+ * @param {String}	id			the ID of the transfer button that was used
+ * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ */
 DwtChooser.prototype.transfer =
 function(list, id, skipNotify) {
 	id = id ? id : this._activeButtonId;
@@ -239,11 +256,11 @@ function(list, id, skipNotify) {
 };
 
 /**
-* Removes items from target list, paying attention to current mode. Also handles button state.
-*
-* @param list		[object]	list of items (AjxVector, array, or single object)
-* @param skipNotify	[boolean]*	if true, don't notify listeners
-*/
+ * Removes items from target list, paying attention to current mode. Also handles button state.
+ *
+ * @param {AjxVector|Array|Object|Hash}	list			a list of items or hash of lists
+ * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ */
 DwtChooser.prototype.remove =
 function(list, skipNotify) {
 	list = (list instanceof AjxVector) ? list.getArray() : (list instanceof Array) ? list : [list];
@@ -258,13 +275,13 @@ function(list, skipNotify) {
 };
 
 /**
-* Sets the select style to the given style (single or multiple). Performs a resize
-* in order to adjust the layout, and changes the label on the transfer button if it's
-* the default one.
-*
-* @param style		[constant]		single or multiple select
-* @param noResize	[boolean]*		if true, don't perform resize
-*/
+ * Sets the select style to the given style. Performs a resize
+ * in order to adjust the layout, and changes the label on the transfer button if it's
+ * the default one.
+ *
+ * @param {DwtChooser.SINGLE_SELECT|DwtChooser.MULTI_SELECT}	style		the style single or multiple select
+ * @param {Boolean}	noResize	if <code>true</code>, do not perform resize
+ */
 DwtChooser.prototype.setSelectStyle =
 function(style, noResize) {
 	if (style == this._selectStyle) return;
@@ -306,10 +323,10 @@ function(style, noResize) {
 };
 
 /**
-* Resets one or both list views, and the buttons. Defaults to resetting both list views.
-*
-* @param view	[constant]		source or target list view
-*/
+ * Resets one or both list views, and the buttons. Defaults to resetting both list views.
+ *
+ * @param {DwtChooser.SINGLE_SELECT|DwtChooser.MULTI_SELECT}	style		the style single or multiple select
+ */
 DwtChooser.prototype.reset =
 function(view) {
 	this._reset(view);
@@ -320,11 +337,13 @@ function(view) {
 	}
 };
 
-/*
-* Resets one or both list views. Defaults to resetting both list views.
-*
-* @param view	[constant]		source or target list view
-*/
+/**
+ * Resets one or both list views. Defaults to resetting both list views.
+ *
+ * @param {DwtChooser.SINGLE_SELECT|DwtChooser.MULTI_SELECT}	style		the style single or multiple select
+ * 
+ * @private
+ */
 DwtChooser.prototype._reset =
 function(view) {
 	// clear out source list view and related data
@@ -342,58 +361,70 @@ function(view) {
 };
 
 /**
-* Adds a change listener.
-*
-* @param listener	[AjxListener]	a listener
-*/
+ * Adds a state change listener.
+ *
+ * @param {AjxListener}		listener	a listener
+ */
 DwtChooser.prototype.addStateChangeListener = 
 function(listener) {
 	this.targetListView.addStateChangeListener(listener);
 };
 
 /**
-* Removes the given change listener.
-*
-* @param listener	[AjxListener]	a listener
-*/
+ * Removes a state change listener.
+ *
+ * @param {AjxListener}		listener	a listener
+ */
 DwtChooser.prototype.removeStateChangeListener = 
 function(listener) {
 	this.targetListView.removeStateChangeListener(listener);
 };
 
 /**
-* Returns the DIV that contains the source list view.
-*/
+ * Gets the source <code>&lt;divgt;</code> that contains the source list view.
+ * 
+ * @return	{Element}		the element
+ */
 DwtChooser.prototype.getSourceListView = 
 function() {
 	return document.getElementById(this._sourceListViewDivId);
 };
 
 /**
-* Returns the DIV that contains the buttons.
-*/
+ * Gets the source <code>&lt;div&gt;</code> that contains the buttons
+ * 
+ * @return	{Element}		the element
+ */
 DwtChooser.prototype.getButtons = 
 function() {
 	return document.getElementById(this._buttonsDivId);
 };
 
 /**
-* Returns the DIV that contains the target list view.
-*/
+ * Gets the source <code>&lt;div&gt;</code> that contains the target list view.
+ * 
+ * @return	{Element}		the element
+ */
 DwtChooser.prototype.getTargetListView = 
 function() {
 	return document.getElementById(this._targetListViewDivId);
 };
 
+/**
+ * Gets the text input field.
+ * 
+ * @return	{DwtInputField}		the text input field
+ */
 DwtChooser.prototype.getTextField =
 function() {
 	return this._textField;
 };
 
-/*
-* Creates the HTML framework, with placeholders for elements which are created
-* later.
-*/
+/**
+ * Creates the HTML framework, with placeholders for elements which are created later.
+ * 
+ * @private
+ */
 DwtChooser.prototype._createHtml = 
 function() {
 
@@ -537,9 +568,11 @@ function(buttonInfo) {
 	this._hasMultiButtons = (this._buttonInfo.length > 1);
 };
 
-/*
-* Creates and places elements into the DOM.
-*/
+/**
+ * Creates and places elements into the DOM.
+ * 
+ * @private
+ */
 DwtChooser.prototype._initialize =
 function() {
 
@@ -600,28 +633,34 @@ function() {
 	}
 };
 
-/*
-* Returns a source list view object.
-*/
+/**
+ * Returns a source list view object.
+ * 
+ * @private
+ */
 DwtChooser.prototype._createSourceListView =
 function() {
 	return new DwtChooserListView(this, DwtChooserListView.SOURCE, this._slvClassName);
 };
 
-/*
-* Returns a target list view object.
-*/
+/**
+ * Returns a target list view object.
+ * 
+ * @private
+ */
 DwtChooser.prototype._createTargetListView =
 function() {
 	return new DwtChooserListView(this, DwtChooserListView.TARGET, this._tlvClassName);
 };
 
-/*
-* Adds a list view into the DOM and sets its size to fit in its container.
-*
-* @param listView		[DwtChooserListView]	the list view
-* @param listViewDivId	[string]				ID of container DIV
-*/
+/**
+ * Adds a list view into the DOM and sets its size to fit in its container.
+ *
+ * @param listView		[DwtChooserListView]	the list view
+ * @param listViewDivId	[string]				ID of container DIV
+ * 
+ * @private
+ */
 DwtChooser.prototype._addListView =
 function(listView, listViewDivId) {
 	var listDiv = document.getElementById(listViewDivId);
@@ -631,11 +670,11 @@ function(listView, listViewDivId) {
 };
 
 /**
-* Sizes the list views based on the given available width and height.
-*
-* @param width	[int]	width in pixels
-* @param height	[int]	height in pixels
-*/
+ * Sizes the list views based on the given available width and height.
+ *
+ * @param {int}	width	the width (in pixels)
+ * @param {int}	height	the height (in pixels)
+ */
 DwtChooser.prototype.resize =
 function(width, height) {
 	if (!width || !height) return;
@@ -660,14 +699,16 @@ function(width, height) {
 	this.targetListView.setSize(w+2, th);
 };
 
-/*
-* Creates a transfer or remove button.
-*
-* @param id					[string]	button ID
-* @param buttonId			[string]	ID of button element
-* @param buttonDivId		[string]	ID of DIV that contains button
-* @param label				[string]	button text
-*/
+/**
+ * Creates a transfer or remove button.
+ *
+ * @param id					[string]	button ID
+ * @param buttonId			[string]	ID of button element
+ * @param buttonDivId		[string]	ID of DIV that contains button
+ * @param label				[string]	button text
+ * 
+ * @private
+ */
 DwtChooser.prototype._setupButton =
 function(id, buttonId, buttonDivId, label) {
 	var button = new DwtButton({parent:this, id:buttonId});
@@ -683,11 +724,13 @@ function(id, buttonId, buttonDivId, label) {
 
 // Listeners
 
-/*
-* Single-click selects an item, double-click adds selected items to target list.
-*
-* @param ev		[DwtEvent]		click event
-*/
+/**
+ * Single-click selects an item, double-click adds selected items to target list.
+ *
+ * @param ev		[DwtEvent]		click event
+ * 
+ * @private
+ */
 DwtChooser.prototype._sourceListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
@@ -703,11 +746,13 @@ function(ev) {
 	this._enableButtons();
 };
 
-/*
-* Single-click selects an item, double-click removes it from the target list.
-*
-* @param ev		[DwtEvent]		click event
-*/
+/**
+ * Single-click selects an item, double-click removes it from the target list.
+ *
+ * @param ev		[DwtEvent]		click event
+ * 
+ * @private
+ */
 DwtChooser.prototype._targetListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
@@ -719,11 +764,13 @@ function(ev) {
 	}
 };
 
-/*
-* Clicking a transfer button moves selected items to the target list.
-*
-* @param ev		[DwtEvent]		click event
-*/
+/**
+ * Clicking a transfer button moves selected items to the target list.
+ *
+ * @param ev		[DwtEvent]		click event
+ * 
+ * @private
+ */
 DwtChooser.prototype._transferButtonListener =
 function(ev) {
 	var button = DwtControl.getTargetControl(ev);
@@ -747,11 +794,13 @@ function(ev) {
 	}
 };
 
-/*
-* Clicking the remove button removes selected items from the target list.
-*
-* @param ev		[DwtEvent]		click event
-*/
+/**
+ * Clicking the remove button removes selected items from the target list.
+ *
+ * @param ev		[DwtEvent]		click event
+ * 
+ * @private
+ */
 DwtChooser.prototype._removeButtonListener =
 function(ev) {
 	this.remove(this.targetListView.getSelection());
@@ -763,22 +812,26 @@ function(ev) {
 	}
 };
 
-/*
-* Populates the target list with all items.
-*
-* @param ev		[DwtEvent]		click event
-*/
+/**
+ * Populates the target list with all items.
+ *
+ * @param ev		[DwtEvent]		click event
+ * 
+ * @private
+ */
 DwtChooser.prototype._addAllButtonListener =
 function(ev) {
 	this.transfer(this.sourceListView.getList().clone());
 	this._selectFirst(DwtChooserListView.TARGET);
 };
 
-/*
-* Clears the target list.
-*
-* @param ev		[DwtEvent]		click event
-*/
+/**
+ * Clears the target list.
+ *
+ * @param ev		[DwtEvent]		click event
+ * 
+ * @private
+ */
 DwtChooser.prototype._removeAllButtonListener =
 function(ev) {
 	this.remove(this.targetListView.getList().clone());
@@ -789,9 +842,11 @@ function(ev) {
 
 // Miscellaneous methods
 
-/*
-* Enable/disable buttons as appropriate.
-*/
+/**
+ * Enable/disable buttons as appropriate.
+ *
+ * @private
+ */
 DwtChooser.prototype._enableButtons =
 function(sForce, tForce) {
 	var sourceList = this.sourceListView.getList();
@@ -812,11 +867,13 @@ function(sForce, tForce) {
 	}
 };
 
-/*
-* Selects the first item in the given list view.
-*
-* @param view	[constant]		source or target
-*/
+/**
+ * Selects the first item in the given list view.
+ *
+ * @param view	[constant]		source or target
+ * 
+ * @private
+ */
 DwtChooser.prototype._selectFirst =
 function(view, index) {
 	var listView = (view == DwtChooserListView.SOURCE) ? this.sourceListView : this.targetListView;
@@ -826,14 +883,16 @@ function(view, index) {
 	}
 };
 
-/*
-* Makes a button "active" (the default for double-clicks). Done by
-* manipulating the style class. The active/non-active class is set as the
-* "_origClassName" so that activation/triggering still work. This only
-* applies if there are multiple transfer buttons.
-*
-* @param id		[string]	ID of button to make active
-*/
+/**
+ * Makes a button "active" (the default for double-clicks). Done by
+ * manipulating the style class. The active/non-active class is set as the
+ * "_origClassName" so that activation/triggering still work. This only
+ * applies if there are multiple transfer buttons.
+ *
+ * @param id		[string]	ID of button to make active
+ * 
+ * @private
+ */
 DwtChooser.prototype._setActiveButton =
 function(id) {
 	if (!this._hasMultiButtons) {
@@ -859,23 +918,27 @@ function(id) {
 	}
 };
 
-/*
-* Returns true if the list contains the item. Default implementation is identity.
-*
-* @param item	[object]			item
-* @param list	[AjxVector]			list to check against
-*/
+/**
+ * Returns true if the list contains the item. Default implementation is identity.
+ *
+ * @param item	[object]			item
+ * @param list	[AjxVector]			list to check against
+ * 
+ * @private
+ */
 DwtChooser.prototype._isDuplicate =
 function(item, list) {
 	return list.contains(item);
 };
 
-/*
-* Adds an item to the end of the source list.
-*
-* @param item		[object]	item to add
-* @param skipNotify	[boolean]*	if true, don't notify listeners
-*/
+/**
+ * Adds an item to the end of the source list.
+ *
+ * @param item		[object]	item to add
+ * @param skipNotify	[boolean]*	if true, don't notify listeners
+ * 
+ * @private
+ */
 DwtChooser.prototype._addToSource =
 function(item, index, skipNotify) {
 	if (!item) return;
@@ -886,14 +949,16 @@ function(item, index, skipNotify) {
 	this.sourceListView.addItem(item, index, skipNotify);
 };
 
-/*
-* Adds an item to the target list. If there are multiple transfer buttons, it keeps
-* the items grouped depending on which button was used to move them.
-*
-* @param item		[object]	item to add
-* @param id			[string]	ID of the transfer button that was used
-* @param skipNotify	[boolean]*	if true, don't notify listeners
-*/
+/**
+ * Adds an item to the target list. If there are multiple transfer buttons, it keeps
+ * the items grouped depending on which button was used to move them.
+ *
+ * @param item		[object]	item to add
+ * @param id			[string]	ID of the transfer button that was used
+ * @param skipNotify	[boolean]*	if true, don't notify listeners
+ * 
+ * @private
+ */
 DwtChooser.prototype._addToTarget =
 function(item, id, skipNotify) {
 	if (!item) return;
@@ -934,12 +999,14 @@ function(item, id, skipNotify) {
 	this.targetListView.addItem(item, idx, skipNotify);
 };
 
-/*
-* Removes an item from the source list.
-*
-* @param item		[object]	item to remove
-* @param skipNotify	[boolean]*	if true, don't notify listeners
-*/
+/**
+ * Removes an item from the source list.
+ *
+ * @param item		[object]	item to remove
+ * @param skipNotify	[boolean]*	if true, don't notify listeners
+ * 
+ * @private
+ */
 DwtChooser.prototype._removeFromSource =
 function(item, skipNotify) {
 	if (!item) return;
@@ -950,12 +1017,14 @@ function(item, skipNotify) {
 	this.sourceListView.removeItem(item, skipNotify);
 };
 
-/*
-* Removes an item from the target list.
-*
-* @param item		[object]	item to remove
-* @param skipNotify	[boolean]*	if true, don't notify listeners
-*/
+/**
+ * Removes an item from the target list.
+ *
+ * @param item		[object]	item to remove
+ * @param skipNotify	[boolean]*	if true, don't notify listeners
+ * 
+ * @private
+ */
 DwtChooser.prototype._removeFromTarget =
 function(item, skipNotify) {
 	if (!item) return;
@@ -1014,11 +1083,13 @@ function(ev) {
  * (source) or to it (target). Subclasses should implement  _getHeaderList(),
  * _sortColumn(), and _createItemHtml().
  *
- * @param params		[hash]			hash of params:
- *        parent		[DwtComposite]	containing widget
- *        type			[constant]		source or target
- *        className		[string]*		CSS class
- *        view			[constant]*		context for use in creating IDs
+ * @param {Hash}	params		a hash of parameters
+ * @param {DwtComposite}      params.parent		the containing widget
+ * @param {constant}      params.type			the source or target
+ * @param {String}      params.className		the CSS class
+ * @param {constant}      params.view			the context for use in creating IDs
+ * 
+ * @extends		DwtListView
  */
 DwtChooserListView = function(params) {
 	
@@ -1034,7 +1105,15 @@ DwtChooserListView = function(params) {
 
 DwtChooserListView.PARAMS = ["parent", "type", "className", "view"];
 
+/**
+ * Defines the "source" list view type.
+ * @type	int
+ */
 DwtChooserListView.SOURCE = 1;
+/**
+ * Defines the "target" list view type.
+ * @type	int
+ */
 DwtChooserListView.TARGET = 2;
 
 DwtChooserListView.prototype = new DwtListView;
@@ -1058,12 +1137,14 @@ function(defaultColumnSort, noResultsOk) {
 	DwtListView.prototype.setUI.call(this, defaultColumnSort, noResultsOk);
 };
 
-/*
-* DwtListView override to ignore right-clicks in list view.
-*
-* @param clickedEl		[element]	element that was clicked
-* @param ev				[DwtEvent]	click event
-*/
+/**
+ * DwtListView override to ignore right-clicks in list view.
+ *
+ * @param clickedEl		[element]	element that was clicked
+ * @param ev				[DwtEvent]	click event
+ * 
+ * @private
+ */
 DwtChooserListView.prototype._itemClicked = 
 function(clickedEl, ev) {
 	// Ignore right-clicks, we don't support action menus
@@ -1074,12 +1155,14 @@ function(clickedEl, ev) {
 	}
 };
 
-/*
-* Called when a column header has been clicked.
-*
-* @param columnItem		[string]	ID for column that was clicked
-* @param ascending		[boolean]	if true, sort in ascending order
-*/
+/**
+ * Called when a column header has been clicked.
+ *
+ * @param columnItem		[string]	ID for column that was clicked
+ * @param ascending		[boolean]	if true, sort in ascending order
+ * 
+ * @private
+ */
 DwtChooserListView.prototype._sortColumn = 
 function(columnItem, ascending) {
 	this._chooserParent.search(columnItem, ascending);

@@ -17,28 +17,29 @@
  * Creates a calendar widget
  * @constructor
  * @class
- * The DwtCalendar widget provides a calendar view.
+ * This class provides a calendar view.
  *
  * @author Ross Dargahi
  * @author Roland Schemers
  *
- * @param params			[hash]				hash of params:
- *        parent			[DwtComposite] 		parent widget
- *        className			[string]*			CSS class
- *        posStyle			[constant]*			positioning style
- * 
- *        firstDayOfWeek	[constant]*			first day of the week - defaults to DwtCalendar.SUN
- *        forceRollOver 	[boolean]*			If true, then clicking on (or setting) the widget to a 
+ * @param {Hash}		params			a hash of parameters
+ * @param {DwtComposite}      params.parent			the parent widget
+ * @param {String}      params.className			the CSS class
+ * @param {constant}      params.posStyle			the positioning style (see {@link Dwt})
+ * @param {constant}     [params.firstDayOfWeek=DwtCalendar.SUN]		the first day of the week
+ * @param {Boolean}	[params.forceRollOver=true] 	if <code>true</code>, then clicking on (or setting) the widget to a 
  *												date that is not part of the current month (i.e. one of 
  *												the grey prev or next month days) will result in the 
- *												widget rolling 	the date to that month. Default is true.
- *        workingDays		[array]*			List of days that are work days. This array assumes that
+ *												widget rolling 	the date to that month.
+ * @param {Array}      params.workingDays		a list of days that are work days. This array assumes that
  * 												index 0 is Sunday. Defaults to Mon-Fri being work days.
- *        hidePrevNextMo 	[boolean]*			flag indicating whether widget should hide days of the 
+ * @param {Boolean}      params.hidePrevNextMo 	a flag indicating whether widget should hide days of the 
  *												previous/next month
- *        readOnly 			[boolean]*			flag indicating that this widget is read-only (should not 
+ * @param {Boolean}      params.readOnly 		a flag indicating that this widget is read-only (should not 
  *												process events such as mouse clicks)
- *        showWeekNumber	[boolean]*			flag indicating whether widget should show week number 
+ * @param {Boolean}      params.showWeekNumber	a flag indicating whether widget should show week number
+ *        
+ * @extends		DwtComposite
  */
 DwtCalendar = function(params) {
 	if (arguments.length == 0) { return; }
@@ -81,18 +82,62 @@ DwtCalendar.PARAMS = ["parent", "className", "posStyle", "firstDayOfWeek", "forc
 DwtCalendar.prototype = new DwtComposite;
 DwtCalendar.prototype.constructor = DwtCalendar;
 
+/**
+ * Sunday
+ * @type	int
+ */
 DwtCalendar.SUN = 0;
+/**
+ * Monday
+ * @type	int
+ */
 DwtCalendar.MON = 1;
+/**
+ * Tuesday
+ * @type	int
+ */
 DwtCalendar.TUE = 2;
+/**
+ * Wednesday
+ * @type	int
+ */
 DwtCalendar.WED = 3;
+/**
+ * Thursday
+ * @type	int
+ */
 DwtCalendar.THU = 4;
+/**
+ * Friday
+ * @type	int
+ */
 DwtCalendar.FRI = 5;
+/**
+ * Saturday
+ * @type	int
+ */
 DwtCalendar.SAT = 6;
 
 // Selection modes
+/**
+ * Defines the "day" selection mode.
+ * @type	int
+ */
 DwtCalendar.DAY = 1;
+/**
+ * Defines the "week" selection mode.
+ * @type	int
+ */
 DwtCalendar.WEEK = 2;
+/**
+ * Defines the "work week" selection mode.
+ * @type	int
+ */
 DwtCalendar.WORK_WEEK = 3;
+/**
+ * Defines the "month" selection mode.
+ * @type	int
+ */
 DwtCalendar.MONTH = 4;
 
 DwtCalendar.RANGE_CHANGE = "DwtCalendar.RANGE_CHANGE";
@@ -126,53 +171,83 @@ DwtCalendar._TITLE_CLASS = "DwtCalendarTitle";
 DwtCalendar._TITLE_HOVERED_CLASS = DwtCalendar._TITLE_CLASS + "-" + DwtCssStyle.HOVER;
 DwtCalendar._TITLE_ACTIVE_CLASS = DwtCalendar._TITLE_CLASS + "-" + DwtCssStyle.ACTIVE;
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @return		{String}		a string representation of the object
+ */
 DwtCalendar.prototype.toString = 
 function() {
 	return "DwtCalendar";
 };
 
+/**
+ * Adds a selection listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtCalendar.prototype.addSelectionListener = 
 function(listener) {
 	this.addListener(DwtEvent.SELECTION, listener);
 };
 
+/**
+ * Removes a selection listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtCalendar.prototype.removeSelectionListener = 
 function(listener) { 
 	this.removeListener(DwtEvent.SELECTION, listener);
 };
 
+/**
+ * Adds an action listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtCalendar.prototype.addActionListener = 
 function(listener) {
 	this.addListener(DwtEvent.ACTION, listener);
 };
 
+/**
+ * Removes an action listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtCalendar.prototype.removeActionListener = 
 function(listener) { 
 	this.removeListener(DwtEvent.ACTION, listener);
 };
 
 /**
- * Date range listeners are called whenever the date range of the calendar
- * changes i.e. when it rolls over due to a programatic action via setDate or
- * via user selection
+ * Adds a date range listener. Date range listeners are called whenever the date range of the calendar
+ * changes (i.e. when it rolls over due to a programatic action via {@link #setDate} or
+ * via user selection).
  *
- * @param 		listener		[AjxListener]
+ * @param 	{AjxListener}		listener		the listener
  */
 DwtCalendar.prototype.addDateRangeListener = 
 function(listener) {
 	this.addListener(DwtEvent.DATE_RANGE, listener);
 };
 
+/**
+ * Removes a date range listener.
+ * 
+ * @param 	{AjxListener}		listener		the listener
+ */
 DwtCalendar.prototype.removeDateRangeListener = 
 function(listener) { 
 	this.removeListener(DwtEvent.DATE_RANGE, listener);
 };
 
 /**
- * call this method with true to not notify selection when paging arrow buttons
- * are clicked
+ * Sets the skip notify on page. This method notify (or not) selection when paging arrow buttons
+ * are clicked.
  *
- * @param		skip		[Boolean]
+ * @param	{Boolean}	skip		if <code>true</code>, do not notify selection
  */
 DwtCalendar.prototype.setSkipNotifyOnPage = 
 function(skip) {
@@ -180,13 +255,26 @@ function(skip) {
 };
 
 /**
- * call this method get whether we are skipping notify on page buttons or not
+ * Gets the skip notify on page setting.
+ * 
+ * @return	{Boolean}	<code>true</code>, do not notify selection
  */
 DwtCalendar.prototype.getSkipNotifyOnPage = 
 function() {
 	return this._skipNotifyOnPage;
 };
 
+/**
+ * Sets the date.
+ * 
+ * @param	{Date}	date	the date
+ * @param	{Boolean}	skipNotify		if <code>true</code>, do not notify selection
+ * @param {Boolean}	forceRollOver 	if <code>true</code>, then clicking on (or setting) the widget to a 
+ *												date that is not part of the current month (i.e. one of 
+ *												the grey prev or next month days) will result in the 
+ *												widget rolling 	the date to that month.
+ * @param	{Boolean}	dblClick		if <code>true</code>, require a double click
+ */
 DwtCalendar.prototype.setDate =
 function(date, skipNotify, forceRollOver, dblClick) {
 
@@ -254,6 +342,12 @@ function(date, skipNotify, forceRollOver, dblClick) {
 	return true;
 };
 
+/**
+ * Checks if the cell is selected.
+ * 
+ * @param	{String}	cellId			the cell id	
+ * @return	{Boolean}	<code>true</code> if the cell is the selected day
+ */
 DwtCalendar.prototype.isSelected =
 function(cellId) {
 	// if cellId is the selected day, then return true, else if we are NOT in
@@ -273,12 +367,25 @@ function(cellId) {
 	return false;
 };
 
+/**
+ * Gets the force roll over setting. Force roll over is occurs when a date that
+ * is not part of the current month (i.e. one of the grey prev or next month
+ * days) will result in the widget rolling 	the date to that month.
+ * 
+ * @return	{Boolean}	<code>true</code> if force roll over is set
+ */
 DwtCalendar.prototype.getForceRollOver =
 function() {
 	return this._forceRollOver;
 };
 
-
+/**
+ * Sets the force roll over setting. Force roll over is occurs when a date that
+ * is not part of the current month (i.e. one of the grey prev or next month
+ * days) will result in the widget rolling 	the date to that month.
+ * 
+ * @param	{Boolean}	force		if <code>true</code>, force roll over
+ */
 DwtCalendar.prototype.setForceRollOver =
 function(force) {
 	if (force == null) { return; }
@@ -289,11 +396,21 @@ function(force) {
 	}
 };
 
+/**
+ * Gets the selection mode.
+ * 
+ * @return	{constant}		the selection mode
+ */
 DwtCalendar.prototype.getSelectionMode =
 function() {
 	return this._selectionMode;
 };
 
+/**
+ * Sets the selection mode.
+ * 
+ * @return	{constant}		selectionMode		the selection mode
+ */
 DwtCalendar.prototype.setSelectionMode =
 function(selectionMode) {
 	if (this._selectionMode == selectionMode) { return; }
@@ -309,8 +426,9 @@ function(selectionMode) {
 };
 
 /**
- * Sets the working week to workingDaysArray (references it). This function
- * assumes that workingDaysArray[0] = Sunday etc.
+ * Sets the working week.
+ * 
+ * @param	{Array}	workingDaysArray		an array of days
  */
 DwtCalendar.prototype.setWorkingWeek =
 function(workingDaysArray) {
@@ -324,11 +442,11 @@ function(workingDaysArray) {
 };
 
 /**
- * Enables/disables the highlite (bolding) on the dates in <dates>.
+ * Enables/disables the highlight (i.e. "bolding") on the dates in <code>&lt;dates&gt;</code>.
  *
- * @param dates	Dates for which to enable/disable highliting
- * @param enable If true enable hiliting
- * @param clear Clear current highliting
+ * @param {Array}	dates	an array of {@link Date} objects for which to enable/disable highlighting
+ * @param {Boolean}	enable 	if <code>true</code>, enable highlighting
+ * @param {Boolean}	clear 	if <code>true</code>, clear current highlighting
  */
 DwtCalendar.prototype.setHilite =
 function(dates, enable, clear) {
@@ -361,11 +479,21 @@ function(dates, enable, clear) {
 	}
 };
 
+/**
+ * Gets the date.
+ * 
+ * @return	{Date}	the date
+ */
 DwtCalendar.prototype.getDate =
 function() {
 	return this._date;
 };
 
+/**
+ * Sets the first date of week.
+ * 
+ * @param	{constant}		firstDayOfWeek		the first day of week
+ */
 DwtCalendar.prototype.setFirstDayOfWeek =
 function(firstDayOfWeek) {
 	for (var i = 0; i < 7; i++) {
@@ -380,6 +508,11 @@ function(firstDayOfWeek) {
 	this._layout();
 };
 
+/**
+ * Gets the date range.
+ * 
+ * @return	{Object}		the range (<code>range.start</code> and <code>range.end</code>)
+ */
 DwtCalendar.prototype.getDateRange =
 function () {
 	return this._range;
@@ -809,20 +942,32 @@ function() {
 	this._calWidgetInited = true;
 };
 
+/**
+ * Sets the mouse over day callback.
+ * 
+ * @param	{AjxCallback}		callback		the callback
+ */
 DwtCalendar.prototype.setMouseOverDayCallback =
 function(callback) {
 	this._mouseOverDayCB = callback;
 };
 
+/**
+ * Sets the mouse out day callback.
+ * 
+ * @param	{AjxCallback}		callback		the callback
+ */
 DwtCalendar.prototype.setMouseOutDayCallback =
 function(callback) {
 	this._mouseOutDayCB = callback;
 };
 
 /**
- * This method will return the date value for the last cell that the most recent
- * Dnd operation occured over. Typically it will be called by a DwtDropTarget
+ * Gets the date value for the last cell that the most recent
+ * Drag-and-drop operation occurred over. Typically it will be called by a DwtDropTarget
  * listener when an item is dropped onto the mini calendar
+ * 
+ * @return	{Date}		the date or <code>null</code> for none
  */
 DwtCalendar.prototype.getDndDate =
 function() {
@@ -998,6 +1143,13 @@ function(ev) {
 	this.setDate(AjxDateUtil.roll(d, AjxDateUtil.YEAR, 1), this._skipNotifyOnPage);
 };
 
+/**
+ * Gets the date formatter.
+ * 
+ * @return	{AjxDateFormat}		the date formatter
+ * 
+ * @private
+ */
 DwtCalendar.getDateFormatter =
 function() {
 	if (!DwtCalendar._dateFormatter) {
@@ -1006,6 +1158,13 @@ function() {
 	return DwtCalendar._dateFormatter;
 };
 
+/**
+ * Gets the date long formatter.
+ * 
+ * @return	{AjxDateFormat}		the date formatter
+ * 
+ * @private
+ */
 DwtCalendar.getDateLongFormatter =
 function() {
 	if (!DwtCalendar._dateLongFormatter) {
@@ -1014,6 +1173,13 @@ function() {
 	return DwtCalendar._dateLongFormatter;
 };
 
+/**
+ * Gets the date full formatter.
+ * 
+ * @return	{AjxDateFormat}		the date formatter
+ * 
+ * @private
+ */
 DwtCalendar.getDateFullFormatter =
 function() {
 	if (!DwtCalendar._dateFullFormatter) {
@@ -1022,6 +1188,13 @@ function() {
 	return DwtCalendar._dateFullFormatter;
 };
 
+/**
+ * Gets the hour formatter.
+ * 
+ * @return	{AjxDateFormat}		the date formatter
+ * 
+ * @private
+ */
 DwtCalendar.getHourFormatter =
 function() {
 	if (!DwtCalendar._hourFormatter) {
@@ -1030,6 +1203,13 @@ function() {
 	return DwtCalendar._hourFormatter;
 };
 
+/**
+ * Gets the day formatter.
+ * 
+ * @return	{AjxDateFormat}		the date formatter
+ * 
+ * @private
+ */
 DwtCalendar.getDayFormatter =
 function() {
 	if (!DwtCalendar._dayFormatter) {
@@ -1038,6 +1218,13 @@ function() {
 	return DwtCalendar._dayFormatter;
 };
 
+/**
+ * Gets the month formatter.
+ * 
+ * @return	{AjxDateFormat}		the date formatter
+ * 
+ * @private
+ */
 DwtCalendar.getMonthFormatter =
 function() {
 	if (!DwtCalendar._monthFormatter) {
@@ -1046,6 +1233,13 @@ function() {
 	return DwtCalendar._monthFormatter;
 };
 
+/**
+ * Gets the short month formatter.
+ * 
+ * @return	{AjxDateFormat}		the date formatter
+ * 
+ * @private
+ */
 DwtCalendar.getShortMonthFormatter =
 function() {
 	if (!DwtCalendar._shortMonthFormatter) {

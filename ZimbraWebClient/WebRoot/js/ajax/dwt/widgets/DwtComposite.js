@@ -15,7 +15,6 @@
 
 /**
  * @overview
- * 
  * This file contains a Dwt composite control.
  * 
  */
@@ -26,14 +25,12 @@
  * (such as menus, trees) should inherit from this class.
  * 
  * @param {Hash}	params		a hash of parameters
- * <ul>
- * <li>parent	[DwtComposite]	the parent widget</li>
- * <li>className		[String]*			CSS class</li>
- * <li>posStyle		[constant]*			positioning style</li>
- * <li>deferred		[Boolean]*			if true, postpone initialization until needed</li>
- * <li>id			[String]*			an explicit ID to use for the control's HTML element</li>
- * <li>index 		[int]*				index at which to add this control among parent's children</li>
- * </ul>
+ * @param {DwtComposite}	params.parent	the parent widget
+ * @param {String}	params.className		the CSS class
+ * @param {constant}	params.posStyle		the positioning style
+ * @param {Boolean}	params.deferred		if <code>true</code>, postpone initialization until needed
+ * @param {String}	params.id			an explicit ID to use for the control's HTML element
+ * @param {int}	params.index 		the index at which to add this control among parent's children
  * 
  * @extends	DwtControl
  */
@@ -62,11 +59,6 @@ DwtComposite.prototype.constructor = DwtComposite;
  */
 DwtComposite._pendingElements = new Object();
 
-/**
- * Returns a string representation of the class.
- * 
- * @return {String}		a string representation of the class
- */
 DwtComposite.prototype.toString = 
 function() {
 	return "DwtComposite";
@@ -103,7 +95,7 @@ function() {
 /**
  * Gets the children of this composite.
  * 
- * @return	{Array}		an array of composites
+ * @return	{Array}		an array of {@link DwtControl} objects
  */
 DwtComposite.prototype.getChildren =
 function() {
@@ -113,7 +105,7 @@ function() {
 /**
  * Gets the number of children of this composite.
  * 
- * @return {Number} 		the number of composite children
+ * @return {int} 		the number of composite children
  */
 DwtComposite.prototype.getNumChildren =
 function() {
@@ -147,7 +139,7 @@ function() {
 * Adds the given child control to this composite at the index (if specified).
 *
 * @param {DwtControl} child		the child control to add
-* @param {Number}	index		the index at which to add the child (may be <code>null</code>)
+* @param {int}	index		the index at which to add the child (may be <code>null</code>)
 */
 DwtComposite.prototype.addChild =
 function(child, index) {

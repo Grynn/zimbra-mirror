@@ -14,17 +14,20 @@
  */
 
 /**
+ * Creates a combo box.
  * @constructor
  * @class
  * This class represents a combo box.
  *
  * @author Dave Comfort
  * 
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        inputParams	[hash]				params for the input (see DwtInputField)
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
+ * @param {Hash}	params		a hash of parameters
+ * @param {DwtComposite}      parent		the parent widget
+ * @param {Hash}	inputParams		params for the input (see {@link DwtInputField})
+ * @param {String}      className		the CSS class
+ * @param {constant}      posStyle		the positioning style (see {@link DwtControl})
+ * 
+ * @extends		DwtComposite
  */
 DwtComboBox = function(params) {
     if (arguments.length == 0) { return; }
@@ -71,19 +74,30 @@ DwtComboBox.prototype.getTabGroupMember = function() {
 	return this._tabGroup;
 };
 
+/**
+ * Adds the change listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtComboBox.prototype.addChangeListener = function(listener) {
 	this.addListener(DwtEvent.ONCHANGE, listener);
 };
+
+/**
+ * Removes the change listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtComboBox.prototype.removeChangeListener = function(listener) {
 	this.removeListener(DwtEvent.ONCHANGE, listener);
 };
 
 /**
- * Adds an entry to the combo box.
+ * Adds an entry to the combo box list.
  * 
- * @param text		the user-visible text for the entry
- * @param value		the value for the entry
- * @param selected	if true, this entry is selected
+ * @param {String}	text		the user-visible text for the entry
+ * @param {String}	value		the value for the entry
+ * @param {Boolean}	selected	if <code>true</code>, the entry is selected
  */
 DwtComboBox.prototype.add =
 function(text, value, selected) {
@@ -100,7 +114,11 @@ function(text, value, selected) {
 	this._updateButton();
 };
 
-/** Removes the specified value from the list. */
+/**
+ * Removes the specified value from the list.
+ *
+ * @param	{String}	value		the value
+ */
 DwtComboBox.prototype.remove = function(value) {
     var item = this._valueToItem[value];
     if (item) {
@@ -117,7 +135,10 @@ DwtComboBox.prototype.remove = function(value) {
 	}
 };
 
-/** Clears the list. */
+/**
+ * Removes all the items in the list.
+ * 
+ */
 DwtComboBox.prototype.removeAll = function() {
     this._button.setMenu(new AjxCallback(this, this._createMenu), true);
     this._hasMenuCallback = true;
@@ -130,9 +151,11 @@ DwtComboBox.prototype.removeAll = function() {
 };
 
 /**
- * Returns the value of the currently selected entry. If the entry
+ * Gets the value of the currently selected entry. If the entry
  * is one that was not added via the add method (that is, if it was
- * typed in by the user) then null is returned.
+ * typed in by the user) then <code>null</code> is returned.
+ * 
+ * @return	{String}	the value
  */
 DwtComboBox.prototype.getValue =
 function() {
@@ -140,13 +163,20 @@ function() {
 	return this._textToValue[text];
 };
 
+/**
+ * Sets the value.
+ * 
+ * @param	{String}	value		the value
+ */
 DwtComboBox.prototype.setValue = function(value) {
 	var text = this._valueToText[value];
 	this.setText(text || value);
 };
 
 /**
- * Returns the text of the currently selected entry.
+ * Gets the text of the currently selected entry.
+ * 
+ * @return	{String}	the text
  */
 DwtComboBox.prototype.getText =
 function() {
@@ -155,6 +185,8 @@ function() {
 
 /**
  * Sets the selected text.
+ * 
+ * @param	{String}	text		the text
  */
 DwtComboBox.prototype.setText =
 function(text) {
@@ -170,7 +202,6 @@ function(enabled) {
     }
 };
 
-/** Focuses the input field. */
 DwtComboBox.prototype.focus = function() {
     this.input.focus();
 };
@@ -268,7 +299,11 @@ DwtComboBox.prototype._createHtmlFromTemplate = function(templateId, data) {
 	this._tabGroup.addMember(this._button);
 };
 
-/** The input field inherits the id for accessibility purposes. */
+/**
+ * The input field inherits the id for accessibility purposes.
+ * 
+ * @private
+ */
 DwtComboBox.prototype._replaceElementHook =
 function(oel, nel, inheritClass, inheritStyle) {
 	DwtComposite.prototype._replaceElementHook.apply(this, arguments);
@@ -288,9 +323,11 @@ function(oel, nel, inheritClass, inheritStyle) {
 /**
  * DwtComboBoxButton: Stylizable button just for use in combo boxes.
  * 
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        className		[string]*			CSS class
+ * @param {Hash}	params		a hash of parameters
+ * @param {DwtComposite}       params.parent		the parent widget
+ * @param	{String}       params.className		the CSS class
+ * 
+ * @extends		DwtButton
  */
 DwtComboBoxButton = function(params) {
 	params = Dwt.getParams(arguments, DwtComboBoxButton.PARAMS);

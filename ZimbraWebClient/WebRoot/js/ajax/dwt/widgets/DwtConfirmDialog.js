@@ -13,7 +13,16 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * Creates a confirmation dialog.
+ * @class
+ * This class represents a confirmation dialog.
+ * 
+ * @param {DwtComposite}	parent  the parent widget (the shell)
+ * @param {String}		className  the CSS class
+ * 
+ * @extends		DwtDialog
+ */
 DwtConfirmDialog = function(parent, className) {
 	if (arguments.length == 0) return;
 	
@@ -47,6 +56,12 @@ function() {
  * If the callback for the No button is not specified, the confirmation
  * dialog assumes that the caller is only concerned with a Yes response
  * and hides the (presumably) extraneous Cancel button.
+ * 
+ * @param	{String}	questionHtml		the question HTML
+ * @param	{AjxCallback}	yesCallback		the "yes" button callback
+ * @param	{AjxCallback}	noCallback		the "no" button callback
+ * @param	{AjxCallback}	cancelCallback		the "cancel" button callback
+ * @param	{DwtPoint}	loc			the location
  */
 DwtConfirmDialog.prototype.popup = 
 function(questionHtml, yesCallback, noCallback, cancelCallback, loc) {

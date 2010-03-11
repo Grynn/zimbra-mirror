@@ -15,7 +15,6 @@
 
 /**
  * @overview
- * 
  * This file contains classes for a Dwt dialog pop-up.
  */
 
@@ -29,24 +28,22 @@
  * @author Conrad Damon
  *
  * @param {Hash}		params			a hash of parameters
- * <ul>
- * <li>parent			{DwtComposite} 		the parent widget (the shell)</li>
- * <li>className		{String}			the CSS class</li>
- * <li>title			{String}			the title of dialog</li>
- * <li>standardButtons	{Array|constant}	an array of standard buttons to include. Defaults to {@link DwtDialog.OK_BUTTON} and {@link DwtDialog.CANCEL_BUTTON}.</li>
- * <li>extraButtons		{Array}  			a list of {@link DwtDialog_ButtonDescriptor} objects describing custom buttons to add to the dialog</li>
- * <li>zIndex			{int}				the z-index to set for this dialog when it is visible. Defaults to <i>Dwt.Z_DIALOG</i>.</li>
- * <li>mode 			{@link DwtDialog.MODELESS}|{@link DwtDialog.MODAL}			the modality of the dialog. Defaults to {@link DwtDialog.MODAL}.</li> 
- * <li>loc				{DwtPoint}			the location at which to popup the dialog. Defaults to centered within its parent.</li>
- * </ul>
+ * @param	{DwtComposite}		parent			 		the parent widget (the shell)
+ * @param	{String}	className					the CSS class
+ * @param	{String}	title						the title of dialog
+ * @param	{Array|constant}	standardButtons		an array of standard buttons to include. Defaults to {@link DwtDialog.OK_BUTTON} and {@link DwtDialog.CANCEL_BUTTON}.
+ * @param	{Array}	extraButtons		  			a list of {@link DwtDialog_ButtonDescriptor} objects describing custom buttons to add to the dialog
+ * @param	{int}	zIndex							the z-index to set for this dialog when it is visible. Defaults to {@link Dwt.Z_DIALOG}.
+ * @param	{DwtDialog.MODELESS|DwtDialog.MODAL}	mode 						the modality of the dialog. Defaults to {@link DwtDialog.MODAL}.
+ * @param	{DwtPoint}		loc						the location at which to popup the dialog. Defaults to centered within its parent.
  * 
- * @see		#.CANCEL_BUTTON
- * @see		#.OK_BUTTON
- * @see		#.DISMISS_BUTTON
- * @see		#.NO_BUTTON
- * @see		#.YES_BUTTON
- * @see		#.ALL_BUTTONS
- * @see		#.NO_BUTTONS
+ * @see		DwtDialog.CANCEL_BUTTON
+ * @see		DwtDialog.OK_BUTTON
+ * @see		DwtDialog.DISMISS_BUTTON
+ * @see		DwtDialog.NO_BUTTON
+ * @see		DwtDialog.YES_BUTTON
+ * @see		DwtDialog.ALL_BUTTONS
+ * @see		DwtDialog.NO_BUTTONS
  * 
  * @extends	DwtBaseDialog
  */
@@ -140,11 +137,6 @@ DwtDialog.PARAMS = ["parent", "className", "title", "standardButtons", "extraBut
 DwtDialog.prototype = new DwtBaseDialog;
 DwtDialog.prototype.constructor = DwtDialog;
 
-/**
- * Returns a string representation of the object.
- * 
- * @return		{String}		a string representation of the object
- */
 DwtDialog.prototype.toString = function() {
 	return "DwtDialog";
 };
@@ -155,20 +147,17 @@ DwtDialog.prototype.toString = function() {
 
 /**
  * Defines the "left" align.
- * 
- * @type {Number}
+ * @type int
  */
 DwtDialog.ALIGN_LEFT 		= 1;
 /**
  * Defines the "right" align.
- * 
- * @type {Number}
+ * @type int
  */
 DwtDialog.ALIGN_RIGHT 		= 2;
 /**
  * Defines the "center" align.
- * 
- * @type {Number}
+ * @type int
  */
 DwtDialog.ALIGN_CENTER 		= 3;
 
@@ -176,32 +165,27 @@ DwtDialog.ALIGN_CENTER 		= 3;
 
 /**
  * Defines the "Cancel" button.
- * 
- * @type {Number}
+ * @type int
  */
 DwtDialog.CANCEL_BUTTON 	= 1;
 /**
  * Defines the "OK" button.
- * 
- * @type {Number}
+ * @type int
  */
 DwtDialog.OK_BUTTON 		= 2;
 /**
  * Defines the "Dismiss" button.
- * 
- * @type {Number}
+ * @type int
  */
 DwtDialog.DISMISS_BUTTON 	= 3;
 /**
  * Defines the "No" button.
- * 
- * @type {Number}
+ * @type int
  */
 DwtDialog.NO_BUTTON 		= 4;
 /**
  * Defines the "Yes" button.
- * 
- * @type {Number}
+ * @type int
  */
 DwtDialog.YES_BUTTON 		= 5;
 
@@ -209,14 +193,12 @@ DwtDialog.LAST_BUTTON 		= 5;
 
 /**
  * Defines "no" buttons. This constant is used to show no buttons.
- * 
- * @type {Number}
+ * @type int
  */
 DwtDialog.NO_BUTTONS 		= 256;
 /**
  * Defines "all" buttons. This constant is used to show all buttons.
- * 
- * @type {Number}
+ * @type int
  */
 DwtDialog.ALL_BUTTONS 		= [DwtDialog.CANCEL_BUTTON, DwtDialog.OK_BUTTON, 
 							   DwtDialog.DISMISS_BUTTON, DwtDialog.NO_BUTTON, 
@@ -262,10 +244,6 @@ DwtDialog.prototype.CONTROLS_TEMPLATE = "dwt.Widgets#DwtDialogControls";
 // Public methods
 //
 
-/**
- * This method will pop-down the dialog.
- * 
- */
 DwtDialog.prototype.popdown =
 function() {
 	DwtBaseDialog.prototype.popdown.call(this);
@@ -275,8 +253,8 @@ function() {
 /**
  * This method will pop-up the dialog.
  * 
- * @param	{String}	loc		the location
- * @param	{String}	focusButtonId		the button Id
+ * @param	{DwtPoint}	loc		the location
+ * @param	{constant}	focusButtonId		the button Id
  */
 DwtDialog.prototype.popup =
 function(loc, focusButtonId) {
@@ -297,11 +275,6 @@ function(){
 	}
 };
 
-/**
-* Resets the dialog back to original state after being constructed by clearing any
-* detail message and resetting the standard button callbacks.
-* 
-*/
 DwtDialog.prototype.reset =
 function() {
 	this._resetCallbacks();
@@ -337,7 +310,7 @@ function(buttonId) {
  * Sets the button enabled state.
  * 
  * @param	{constant}		buttonId		the button Id
- * @param	{Boolean}		enabled		<code>true</code> to enable the button; <code>false</code> otherwise
+ * @param	{Boolean}		enabled		if <code>true</code>, enable the button; <code>false</code> otherwise
  */
 DwtDialog.prototype.setButtonEnabled = 
 function(buttonId, enabled) {
@@ -348,7 +321,7 @@ function(buttonId, enabled) {
  * Sets the button visible state.
  * 
  * @param	{constant}		buttonId		the button Id
- * @param	{Boolean}		enabled		<code>true</code> to make the button visible; <code>false</code> otherwise
+ * @param	{Boolean}		enabled		if <code>true</code>, make the button visible; <code>false</code> otherwise
  */
 DwtDialog.prototype.setButtonVisible = 
 function(buttonId, visible) {
@@ -359,7 +332,7 @@ function(buttonId, visible) {
  * Gets the button enabled state.
  * 
  * @param	{constant}		buttonId		the button Id
- * @return	{Boolean}	if <code>true</code>, the button is enabled; <code>false</code> otherwise
+ * @return	{Boolean}	<code>true</code> if the button is enabled; <code>false</code> otherwise
  */
 DwtDialog.prototype.getButtonEnabled = 
 function(buttonId) {
@@ -424,21 +397,11 @@ function(id) {
 	this._enterButtonId = id;
 };
 
-/**
- * @private
- */
 DwtDialog.prototype.getKeyMapName = 
 function() {
 	return "DwtDialog";
 };
 
-/**
- * Handles a key action.
- * 
- * @param	{DwtKeyMap}	actionCode	the key action code
- * @param	{DwtKeyEvent}	ev		the key event
- * @return	{Boolean}	<code>true</code> if the event is handled; <code>false</code> otherwise
- */
 DwtDialog.prototype.handleKeyAction =
 function(actionCode, ev) {
 	switch (actionCode) {
