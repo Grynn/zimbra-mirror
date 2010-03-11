@@ -305,8 +305,9 @@ Com_Zimbra_Email.prototype.getActionMenu =
 function(obj, span, context) {
 	// call base class first to get the action menu
 	var actionMenu = ZmZimletBase.prototype.getActionMenu.call(this, obj, span, context);
+    var isDetachWindow = appCtxt.isChildWindow;
 
-	if (appCtxt.get(ZmSetting.FILTERS_ENABLED) && actionMenu.getOp("ADDTOFILTER")) {
+	if (!isDetachWindow && appCtxt.get(ZmSetting.FILTERS_ENABLED) && actionMenu.getOp("ADDTOFILTER") ) {
 		this.createFilterMenu(actionMenu);
 	}
 
@@ -324,7 +325,7 @@ function(obj, span, context) {
 
 	var imItem = actionMenu.getOp("NEWIM");
 	if (imItem) {
-		if (!appCtxt.get(ZmSetting.IM_ENABLED)) {
+		if (isDetachWindow || !appCtxt.get(ZmSetting.IM_ENABLED)) {
 			actionMenu.removeOp("NEWIM");
 		} else {
 			var addrObj = obj instanceof AjxEmailAddress ? obj : new AjxEmailAddress(obj);
@@ -332,15 +333,15 @@ function(obj, span, context) {
 		}
 	}
 
-	if (actionMenu.getOp("SEARCH") && !appCtxt.get(ZmSetting.SEARCH_ENABLED)) {
+	if (actionMenu.getOp("SEARCH") && (isDetachWindow || !appCtxt.get(ZmSetting.SEARCH_ENABLED))) {
 		ZmOperation.removeOperation(actionMenu, "SEARCH", actionMenu._menuItems);
 	}
 
-	if (actionMenu.getOp("SEARCHBUILDER") && !appCtxt.get(ZmSetting.BROWSE_ENABLED)) {
+	if (actionMenu.getOp("SEARCHBUILDER") && (isDetachWindow || !appCtxt.get(ZmSetting.BROWSE_ENABLED))) {
 		ZmOperation.removeOperation(actionMenu, "SEARCHBUILDER", actionMenu._menuItems);
 	}
 
-	if (actionMenu.getOp("ADDTOFILTER") && !appCtxt.get(ZmSetting.FILTERS_ENABLED)) {
+	if (actionMenu.getOp("ADDTOFILTER") && (isDetachWindow || !appCtxt.get(ZmSetting.FILTERS_ENABLED))) {
 		ZmOperation.removeOperation(actionMenu, "ADDTOFILTER", actionMenu._menuItems);
 	}
 
