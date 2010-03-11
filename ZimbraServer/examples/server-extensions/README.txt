@@ -1,4 +1,5 @@
-Run 'ant package' - This would package the extensions into jar files inside build dir.
+Run 'ant package' - This would package the extensions into jar files inside build/jars dir.
+Run 'ant javadoc' - This would generate javadoc for examples source code.
 
 
 httphandler example
@@ -6,7 +7,7 @@ httphandler example
 
 1. Copy zimbra-extns-httphandler.jar to /opt/zimbra/lib/ext/httpHandlerExtn dir and restart server.
 
-2. Browse to http://localhost:7070/service/extension/dummyHandler
+2. Browse to http://localhost:7070/service/extension/dummyHandler.
 
 
 soapservice example
@@ -28,12 +29,8 @@ customauth example
 
 1. Copy zimbra-extns-customauth.jar to /opt/zimbra/lib/ext/customAuthExtn dir.
 
-2. Create a file /opt/zimbra/conf/users.xml containing allow username/password pairs in the following format:
-
-   <users>
-       <user name="user1@<domain_name>" password="pass1"/>
-       <user name="user2@<domain_name>" password="pass2"/>
-   </users>
+2. Copy conf/customauth/users.xml to /opt/zimbra/conf dir.
+   Edit usernames and passwords in this file.
 
 3. Execute:
 
@@ -45,7 +42,7 @@ customauth example
 samlprovider example
 --------------------
 
-1. Copy zimbra-extns-samlprovider.jar to /opt/zimbra/lib/ext/samlprovider dir.
+1. Copy zimbra-extns-samlprovider.jar to /opt/zimbra/lib/ext/samlProviderExtn dir.
 
 2. Copy conf/samlprovider/issued-saml-assertions.xml to /opt/zimbra/conf dir.
    Edit the value of <saml:NameID> element in this file.
@@ -54,11 +51,11 @@ samlprovider example
 3. Execute:
 
    zmlocalconfig -e saml_authority_url=http://localhost:7070/service/extension/samlAuthority
-   zmlocalconfig -e zimbra_auth_provider=SAML_AUTH_PROVIDER
+   zmlocalconfig -e zimbra_auth_provider=SAML_AUTH_PROVIDER,zimbra
 
 4. Restart server.
 
-5. Send the following no-op SOAP request to http://localhost:7070/service/soap and expect a good response:
+5. Send a soap request containing auth token as shown below to http://localhost:7070/service/soap and expect a good response:
 
    <soap:Envelope xmlns:soap='http://www.w3.org/2003/05/soap-envelope'>
        <soap:Header>
