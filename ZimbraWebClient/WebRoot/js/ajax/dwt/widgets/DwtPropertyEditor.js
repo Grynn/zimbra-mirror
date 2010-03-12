@@ -14,11 +14,15 @@
  */
 
 
-/** Generic Property Editor Widget.
+/**
+ * Generic Property Editor Widget.
  *
  * @author Mihai Bazon
  *
  * See initProperties() below
+ * 
+ * @extends		DwtComposite
+ * @private
  */
 DwtPropertyEditor = function(parent, useDwtInputField, className, posStyle, deferred) {
 	if (arguments.length > 0) {

@@ -27,6 +27,7 @@
  *
  * @param keyMap [Object]		a keymap
  *
+ * @private
  */
 DwtKeyMapMgr = function(keyMap) {
 	var map = this._map = keyMap.getMap();

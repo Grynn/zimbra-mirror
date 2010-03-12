@@ -22,13 +22,14 @@
  *
  * @author Ross Dargahi
  * 
- * @param params				[hash]				hash of params:
- *        parent				[DwtComposite] 		parent widget
- *        style 				[constant]*			tree style: DwtTree.SINGLE_STYLE (single selection) or
- * 													DwtTree.MULTI_STYLE (multiselection);
- *        className				[string]*			CSS class
- *        posStyle				[constant]*			positioning style
- *        isCheckedByDefault	[boolean]*			default checked state if tree styles is "checked"
+ * @param {Hash}	params				a hash of parameters
+ * @param  {DwtComposite}     params.parent			the parent widget
+ * @param  {DwtTree.SINGLE_STYLE|DwtTree.MULTI_STYLE|DwtTree.CHECKEDITEM_STYLE}     params.style 	the tree style
+ * @param  {String}     params.className				the CSS class
+ * @param  {constant}     params.posStyle				the positioning style (see {@link DwtControl})
+ * @param  {Boolean}     params.isCheckedByDefault	default checked state if tree styles is "checked"
+ * 
+ * @extends		DwtComposite
  */
 DwtTree = function(params) {
 	if (arguments.length == 0) { return; }
@@ -68,8 +69,20 @@ function() {
 	return "DwtTree";
 };
 
+/**
+ * Defines the "single" style.
+ * @type	int
+ */
 DwtTree.SINGLE_STYLE = 1;
+/**
+ * Defines the "multi" style.
+ * @type	int
+ */
 DwtTree.MULTI_STYLE = 2;
+/**
+ * Defines the "checked-item" style.
+ * @type	int
+ */
 DwtTree.CHECKEDITEM_STYLE = 4;
 
 DwtTree.ITEM_SELECTED = 0;
@@ -81,41 +94,80 @@ DwtTree.ITEM_DBL_CLICKED = 4;
 DwtTree.ITEM_EXPANDED = 1;
 DwtTree.ITEM_COLLAPSED = 2;
 
+/**
+ * Gets the style.
+ * 
+ * @return	{constant}	the style
+ */
 DwtTree.prototype.getStyle =
 function() {
 	return this._style;
 };
 
+/**
+ * Adds a selection listener.
+ * 
+ * @param	{AjxListener}	listener	the listener
+ */
 DwtTree.prototype.addSelectionListener = 
 function(listener) {
 	this.addListener(DwtEvent.SELECTION, listener);
 };
 
+/**
+ * Removes a selection listener.
+ * 
+ * @param	{AjxListener}	listener	the listener
+ */
 DwtTree.prototype.removeSelectionListener = 
 function(listener) {
 	this.removeListener(DwtEvent.SELECTION, listener);    	
 };
 
+/**
+ * Adds a tree listener.
+ * 
+ * @param	{AjxListener}	listener	the listener
+ */
 DwtTree.prototype.addTreeListener = 
 function(listener) {
 	this.addListener(DwtEvent.TREE, listener);
 };
 
+/**
+ * Removes a selection listener.
+ * 
+ * @param	{AjxListener}	listener	the listener
+ */
 DwtTree.prototype.removeTreeListener = 
 function(listener) {
 	this.removeListener(DwtEvent.TREE, listener);
 };
 
+/**
+ * Gets the tree item count.
+ * 
+ * @return	{int}	the item count
+ */
 DwtTree.prototype.getItemCount =
 function() {
 	return this._children.size();
 };
 
+/**
+ * Gets the items.
+ * 
+ * @return	{Array}	an array of {@link DwtTreeItem} objects
+ */
 DwtTree.prototype.getItems =
 function() {
 	return this._children.getArray();
 };
 
+/**
+ * De-selects all items.
+ * 
+ */
 DwtTree.prototype.deselectAll =
 function() {
 	var a = this._selectedItems.getArray();
@@ -131,6 +183,11 @@ function() {
 	this._selectedItems.removeAll();
 };
 
+/**
+ * Gets an array of selection items.
+ * 
+ * @return	{Array}	an array of {@link DwtTreeItem} objects
+ */
 DwtTree.prototype.getSelection =
 function() {
 	return this._selectedItems.getArray();
@@ -182,6 +239,10 @@ function() {
 DwtTree.prototype.addChild =
 function(child) {};
 
+/**
+ * Adds a separator.
+ * 
+ */
 DwtTree.prototype.addSeparator =
 function() {
 	var sep = document.createElement("div");
@@ -243,6 +304,8 @@ function(child) {
  * needed.
  *
  * @param next		[boolean]		if true, return next tree item; otherwise, return previous tree item
+ * 
+ * @private
  */
 DwtTree.prototype._getNextTreeItem =
 function(next) {
@@ -273,7 +336,8 @@ function(next) {
 /**
  * Creates a flat list of this tree's items, going depth-first.
  *
- * @param visible	[boolean]*		if true, only include visible/selectable items
+ * @param {Boolean}	visible		if <code>true</code>, only include visible/selectable items
+ * @return	{Array}	an array of {@link DwtTreeItem} objects
  */
 DwtTree.prototype.getTreeItemList =
 function(visible) {

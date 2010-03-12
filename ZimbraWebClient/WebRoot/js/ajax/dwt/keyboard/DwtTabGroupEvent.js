@@ -14,23 +14,27 @@
  */
 
 /**
-* @constructor
-* @class
-* This class represents a the tab event. This event is used to indicate changes in
-* the stat of DwtTabGroups (e.g. member addition and deletion). 
-* 
-* @author Ross Dargahi
-* 
-* @see DwtTabGroup
-*/
+ * @constructor
+ * @class
+ * This class represents a the tab event. This event is used to indicate changes in
+ * the state of {@link DwtTabGroup} objects (e.g. member addition and deletion). 
+ * 
+ * @author Ross Dargahi
+ * 
+ * @see DwtTabGroup
+ * 
+ * @private
+ */
 DwtTabGroupEvent = function() {
-	/** Tab group for which the event is being generated
+	/**
+	 * Tab group for which the event is being generated
 	 * @type DwtTabGroup
 	 */
 	this.tabGroup = null;
 	
-	/** New focus memeber 
-	 * @type {DwtControl|HTMLElement}
+	/**
+	 * New focus member
+	 * @type DwtControl|HTMLElement
 	 */
 	this.newFocusMember = null;
 }

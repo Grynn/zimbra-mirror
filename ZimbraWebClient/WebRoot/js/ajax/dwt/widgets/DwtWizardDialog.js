@@ -15,16 +15,21 @@
 
 
 /**
-* Creates a new wizard dialog.
-* @constructor
-* @class
-* @param parent - parent control (shell)
-* @param className - CSS class name
-* @param title - dialog title
-* @param w - content area width
-* @param h - content area height
-* This class represents a reusable wizard dialog. 
-*/
+ * Creates a new wizard dialog.
+ * @constructor
+ * @class
+ * This class represents a reusable wizard dialog.
+ * 
+ * @param {DwtControl}	parent		the parent control
+ * @param {String}	className		the CSS class name
+ * @param {String}	title	the dialog title
+ * @param {int}	w 		the content area width
+ * @param {int}	h 		the content area height
+ * 
+ * @extends		DwtDialog
+ * 
+ * @private
+ */
 DwtWizardDialog = function(parent, className, title, w, h) {
 	if (arguments.length == 0) { return; }
 	className = className || "DwtDialog";
@@ -315,12 +320,14 @@ function() {
 
 
 /**
-* @class
-* @constructor
-* DwtWizardpage abstract class for a page in a wizard dialog
-* tab pages are responsible for creating there own HTML and populating/collecting 
-* data to/from any form fields that they display
-**/
+ * @class
+ * @constructor
+ * DwtWizardpage abstract class for a page in a wizard dialog
+ * tab pages are responsible for creating there own HTML and populating/collecting 
+ * data to/from any form fields that they display
+ * 
+ * @private
+ */
 DwtWizardPage = function(parent, className) {
 	if (arguments.length == 0) return;
 	var clsName = className || "DwtDialog";
@@ -380,10 +387,13 @@ function() {
 	
 }
 /**
-* @class DwtWizProgressBar
-* @constructor
-* @param parent
-**/
+ * @class DwtWizProgressBar
+ * @constructor
+ * 
+ * @param parent
+ * 
+ * @private
+ */
 DwtWizProgressBar = function(parent) {
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, {parent:parent, className:"DwtWizProgressBar", posStyle:DwtControl.STATIC_STYLE});
@@ -450,10 +460,13 @@ function(child) {
 
 
 /**
-* @class DwtStepLabel
-* @constructor
-* @param parent
-**/
+ * @class DwtStepLabel
+ * @constructor
+ * 
+ * @param parent
+ * 
+ * @private
+ */
 DwtStepLabel = function(parent) {
 	DwtLabel.call(this, {parent:parent, style:DwtLabel.ALIGN_CENTER, className:"DwtStepLabel"});
 }

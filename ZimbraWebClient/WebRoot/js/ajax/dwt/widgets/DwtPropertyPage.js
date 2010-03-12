@@ -15,13 +15,18 @@
 
 
 /**
-* @class
-* @constructor
-* DwtPropertyPage abstract class for a property page (view)
-* It provides ability to keep track of any changes in the form fields on the page
-* @author Greg Solovyev
-**/
-
+ * Creates a property page.
+ * @class
+ * @constructor
+ * This class represents a page (view) for working with properties. It provides ability to
+ * keep track of any changes in the form fields on the page.
+ * 
+ * @author Greg Solovyev
+ * 
+ * @param	{Hash}	params		a hash of parameters
+ * 
+ * @extends		DwtComposite
+ */
 DwtPropertyPage = function(params) {
 	if (arguments.length == 0) return;
 	params = Dwt.getParams(arguments, DwtPropertyPage.PARAMS);
@@ -42,26 +47,32 @@ DwtPropertyPage.prototype.toString = function() {
 DwtPropertyPage.PARAMS = DwtComposite.PARAMS;
 
 /**
-* @param boolean
-* sets the value of _isDirty flag
-**/
+ * @param boolean
+ * sets the value of _isDirty flag
+ * 
+ * @private
+ */
 DwtPropertyPage.prototype.setDirty = 
 function (isD) {
 	this._isDirty = isD;
 }
 
 /**
-* @ return boolean _isDirty flag
-* isDirty indicates whether the user changed any data on the page after the page was initialized
-**/
+ * @return boolean _isDirty flag
+ * isDirty indicates whether the user changed any data on the page after the page was initialized
+ * 
+ * @private
+ */
 DwtPropertyPage.prototype.isDirty = 
 function () {
 	return this._isDirty;
 }
 
 /**
-* @param field either key to the field ID in the _fieldIds or reference to the field
-**/
+ * @param field either key to the field ID in the _fieldIds or reference to the field
+ * 
+ * @private
+ */
 DwtPropertyPage.prototype._installOnKeyUpHandler = 
 function(field, func) {
 	if (!field)	return;
@@ -76,8 +87,10 @@ function(field, func) {
 }
 
 /**
-* @param field either key to the field ID in the _fieldIds or reference to the field
-**/
+ * @param field either key to the field ID in the _fieldIds or reference to the field
+ * 
+ * @private
+ */
 DwtPropertyPage.prototype._installOnClickHandler = 
 function(field, func) {
 	if (!field) return;
@@ -103,8 +116,10 @@ function(ev) {
 }
 
 /**
-* @param field either key to the field ID in the _fieldIds or reference to the field
-**/
+ * @param field either key to the field ID in the _fieldIds or reference to the field
+ * 
+ * @private
+ */
 DwtPropertyPage.prototype._installOnChangeHandler = 
 function(field, func) {
 	if (!field) return;
@@ -202,17 +217,19 @@ function(field, title, html, idx, noWrap) {
 }
 
 /**
-* _addEntryRow
-*	@param field - key of the field id in this._fieldIds
-*	@param title - title string. If title is specified a separate cell will be appended before the form field
-* title will be rendered within that cell
-*	@param html - reference to html array
-*	@param idx - current counter inside the html array
-*	@param type - type of the form field to create (<input type= )
-*	@param fldsize - size of the input field (this value will be assigned to the size property
-*	@param tailTitle - string that will be placed behind the form field
-*	@param titleWidth - width of the title cell
-**/
+ * _addEntryRow
+ *	@param field - key of the field id in this._fieldIds
+ *	@param title - title string. If title is specified a separate cell will be appended before the form field
+ * title will be rendered within that cell
+ *	@param html - reference to html array
+ *	@param idx - current counter inside the html array
+ *	@param type - type of the form field to create (<input type= )
+ *	@param fldsize - size of the input field (this value will be assigned to the size property
+ *	@param tailTitle - string that will be placed behind the form field
+ *	@param titleWidth - width of the title cell
+ * 
+ * @private
+ */
 DwtPropertyPage.prototype._addEntryRow =
 function(field, title, html, idx, type, fldsize, tailTitle, titleWidth, withAsteric) {
 	html[idx++] = "<tr valign='center'>";
@@ -222,17 +239,19 @@ function(field, title, html, idx, type, fldsize, tailTitle, titleWidth, withAste
 }
 
 /**
-* _addEntryCell
-*	@param field - key of the field id in this._fieldIds
-*	@param title - title string. If title is specified a separate cell will be appended before the form field
-* title will be rendered within that cell
-*	@param html - reference to html array
-*	@param idx - current counter inside the html array
-*	@param type - type of the form field to create (<input type= )
-*	@param fldsize - size of the input field (this value will be assigned to the size property
-*	@param tailTitle - string that will be placed behind the form field
-*	@param titleWidth - width of the title cell
-**/
+ * _addEntryCell
+ *	@param field - key of the field id in this._fieldIds
+ *	@param title - title string. If title is specified a separate cell will be appended before the form field
+ * title will be rendered within that cell
+ *	@param html - reference to html array
+ *	@param idx - current counter inside the html array
+ *	@param type - type of the form field to create (<input type= )
+ *	@param fldsize - size of the input field (this value will be assigned to the size property
+ *	@param tailTitle - string that will be placed behind the form field
+ *	@param titleWidth - width of the title cell
+ * 
+ * @private
+ */
 DwtPropertyPage.prototype._addEntryCell =
 function(field, title, html, idx, type, fldsize, tailTitle, titleWidth, withAsteric) {
 	if (type == null) type = "text";
@@ -266,10 +285,13 @@ function(field, title, html, idx, type, fldsize, tailTitle, titleWidth, withAste
 	html[idx++] = "</td>";
 	return idx;
 }
+
 /**
-* Use this method to render HTML form
-* call all other rendering methods from this method.
-**/
+ * Use this method to render HTML form
+ * call all other rendering methods from this method.
+ * 
+ * @private
+ */
 DwtPropertyPage.prototype._createHTML = 
 function () {
  //abstract method

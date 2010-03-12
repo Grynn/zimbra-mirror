@@ -12,7 +12,13 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
+
 /**
+ * Default constructor.
+ * @constructor
+ * @class
+ * This class contains utility functions for using templates.
+ * 
  * @author Andy Clark
  */
 AjxTemplate = function() {};
@@ -55,6 +61,14 @@ AjxTemplate.getParams = function(name) {
     return template && template.params;
 };
 
+/**
+ * Expands the template.
+ * 
+ * @param	{String}		name		the template name
+ * @param	{Array}			[data]		the template date
+ * @param	{Array}			[buffer]	the buffer to use for template content
+ * @return	{String}	the template content		
+ */
 AjxTemplate.expand = function(name, data, buffer) {
 	// allow template text to come from document
 	if (!AjxTemplate._templates[name] && AjxTemplate.compile) {
@@ -102,6 +116,8 @@ AjxTemplate.expand = function(name, data, buffer) {
 /**
  * Force load of template.
  * @return True or false depending whether the template is defined.
+ * 
+ * @private
  */
 AjxTemplate.require = function(name) {
 	AjxPackage.require({

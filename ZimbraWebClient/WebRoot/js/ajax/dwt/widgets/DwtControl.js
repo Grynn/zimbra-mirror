@@ -699,9 +699,9 @@ function() {
  * @param	{DwtKeyMap}	actionCode	the key action code
  * @param	{DwtKeyEvent}	ev		the key event
  * @return	{Boolean}	<code>true</code> if the event is handled; <code>false</code> otherwise
+ * 
+ * @private
  *
- * @see DwtKeyMap
- * @see DwtKeyEvent
  */
 DwtControl.prototype.handleKeyAction =
 function(actionCode, ev) {
@@ -713,8 +713,8 @@ function(actionCode, ev) {
  * which re-parents the controls <i>div</i> within the DOM hierarchy, this method re-parents
  * the whole control.
  *
- * @param {DwtComposite} newParent The control's new parent
- * @param	{Number}	index	the index.
+ * @param {DwtComposite} newParent 	the control's new parent
+ * @param	{int}	index	the index
  * 
  * @see #reparentHtmlElement
  */

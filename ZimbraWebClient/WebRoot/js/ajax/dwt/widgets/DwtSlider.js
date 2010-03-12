@@ -14,13 +14,17 @@
  */
 
 /**
+ * Creates a slider.
+ * @constructor
+ * @class
  * This class represents a slider.
  *
- * @param parent    {DwtControl} Parent widget (required)
- * @param orientation	{contant} Orientation of slider. DwtSlider.HORIZONTAL or DwtSlider.VERTICAL
- * @param className {string} CSS class. If not provided defaults to "DwtHorizontalSlider" or "DwtVerticalSlider" (optional)
- * @param posStyle {string} Positioning style (absolute, static, or relative). If
- *         not provided defaults to DwtControl.STATIC_STYLE (optional)
+ * @param {DwtControl}	parent    the parent widget
+ * @param {DwtSlider.HORIZONTAL|DwtSlider.VERTICAL}	orientation		the orientation of the slider
+ * @param {String}	[className] 	the CSS class. If not provided defaults to "DwtHorizontalSlider" or "DwtVerticalSlider"
+ * @param {constant}	[posStyle=DwtControl.STATIC_STYLE] the positioning style (see {@link DwtControl})
+ * 
+ * @extends		DwtControl
  */
 DwtSlider = function(parent, orientation, className, posStyle) {
     if (arguments.length == 0) return;
@@ -45,7 +49,15 @@ DwtSlider = function(parent, orientation, className, posStyle) {
 DwtSlider.prototype = new DwtControl;
 DwtSlider.prototype.constructor = DwtSlider;
 
+/**
+ * Defines the "horizontal" orientation.
+ * @type	int
+ */
 DwtSlider.HORIZONTAL = 1;
+/**
+ * Defines the "vertical" orientation.
+ * @type	int
+ */
 DwtSlider.VERTICAL = 2;
 
 DwtSlider.prototype.toString =
@@ -56,8 +68,8 @@ function() {
 /**
  * Sets the value of the slider, moving the position button accordingly.
  *
- * @param value		{number} The value
- * @param notify	{boolean} true to notify change listeners of the new value
+ * @param {number}		value		the value
+ * @param {Boolean}	notify			if <code>true</code>, to notify change listeners of the new value
  */
 DwtSlider.prototype.setValue =
 function(value, notify) {
@@ -83,7 +95,9 @@ function(value, notify) {
 };
 
 /**
- * Returns the slider's value.
+ * Gets the slider value.
+ * 
+ * @return	{number}	the value
  */
 DwtSlider.prototype.getValue =
 function() {
@@ -93,10 +107,10 @@ function() {
 /**
  * Sets the range and value of the slider.
  *
- * @param minimum	{number} The minimum allowed value
- * @param maximum	{number} The maximum allowed value
- * @param value		{number} The value
- * @param notify	{boolean} true to notify change listeners of the new value
+ * @param {number}	minimum	the minimum allowed value
+ * @param {number}	maximum	the maximum allowed value
+ * @param {number}	value		the value
+ * @param {Boolean}	notify	if <code>true</code>, notify change listeners of the new value
  */
 DwtSlider.prototype.setRange =
 function(minimum, maximum, newValue, notify) {
@@ -113,7 +127,9 @@ function(minimum, maximum, newValue, notify) {
 };
 
 /**
- * Returns the minimum allowed value
+ * Gets the minimum allowed value.
+ * 
+ * @return	{number}		the minimum value
  */
 DwtSlider.prototype.getMinimum =
 function() {
@@ -121,7 +137,9 @@ function() {
 };
 
 /**
- * Returns the maximum allowed value
+ * Gets the maximum allowed value
+ * 
+ * @return	{number}		the maximum value
  */
 DwtSlider.prototype.getMaximum =
 function() {
@@ -129,7 +147,9 @@ function() {
 };
 
 /**
- * Returns true if the slider is currently dragging.
+ * Checks if the slider is currently dragging.
+ * 
+ * @return	{Boolean}	<code>true</code> if the slider is dragging
  */
 DwtSlider.prototype.isDragging =
 function() {
@@ -139,7 +159,7 @@ function() {
 /**
  * Adds a change listener.
  *
- * @param listener	{AjxListener} The listener
+ * @param {AjxListener} listener	the listener
  */
 DwtSlider.prototype.addChangeListener = 
 function(listener) {

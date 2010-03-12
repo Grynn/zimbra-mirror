@@ -15,20 +15,21 @@
 
 
 /**
- * @class DwtSelect
+ * Creates a select element.
  * @constructor
+ * @class
  * Widget to replace the native select element.
- *
+ * <p>
  * Note: Currently this does not support multiple selection.
  * 
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        options 		[array]				List of options. This can be either an array of DwtSelectOptions or an array of strings.
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
- *        cascade		[boolean]*			should menu cascade (i.e. multiple columns).
- *        									If not specified, default is true
- *        									for backwards compatibility.
+ * @param {Hash}	params		a hash of parameters
+ * @param {DwtComposite}      params.parent		the parent widget
+ * @param {Array}      params.options 		a list of options. This can be either an array of {@link DwtSelectOption} or {String} objects.
+ * @param {String}      params.className		the CSS class
+ * @param {constant}      params.posStyle		the positioning style (see {@link DwtControl})
+ * @param {Boolean}      [cascade=true]		if <code>true</code>, menu should cascade (i.e. multiple columns).
+ *        
+ * @extends		DwtButton
  */
 DwtSelect = function(params) {
 	if (arguments.length == 0) { return; }
@@ -113,11 +114,12 @@ function(element) {
 // other
 
 /**
- * @param option		[String] or [DwtSelectOption]	string for the option value or the option object.
- * @param selected		[Boolean]*						Optional. Indicates whether option should be the selected option.
- * @param value			[Object]						if the option parameter is a DwtSelectOption, this will override the value already set in the option.
- *
- * @return 				[Integer]						A handle to the option added. The handle can be used in other api methods.
+ * Adds an option.
+ * 
+ * @param {String|DwtSelectOption}		option			a {String} for the option value or the {@link DwtSelectOption} object
+ * @param {Boolean}	[selected]		indicates whether option should be the selected option
+ * @param {Object}	value			if the option parameter is a {@link DwtSelectOption}, this will override the value already set in the option.
+ * @return 	{int} a handle to the newly added option
  */
 DwtSelect.prototype.addOption =
 function(option, selected, value) {
@@ -189,8 +191,8 @@ function() {
 /**
  * Renames an option.
  *
- * @param value		[Object]		the value of the option to rename
- * @param newValue	[String]		the new display value
+ * @param {Object}	value		the value of the option to rename
+ * @param {String}	newValue	the new display value
  */
 DwtSelect.prototype.rename =
 function(value, newValue) {
@@ -208,8 +210,8 @@ function(value, newValue) {
 /**
  * Enables or disables an option.
  *
- * @param value		[Object]		the value of the option to enable/disable
- * @param enabled	[Boolean]		true to enable the option
+ * @param {Object}	value		the value of the option to enable/disable
+ * @param {Boolean}	enabled		if <code>true</code>, enable the option
  */
 DwtSelect.prototype.enableOption =
 function(value, enabled) {
@@ -223,6 +225,10 @@ function(value, enabled) {
 	}
 };
 
+/**
+ * Clears the options.
+ * 
+ */
 DwtSelect.prototype.clearOptions =
 function() {
 	var opts = this._options.getArray();
@@ -237,16 +243,31 @@ function() {
 	this._currentSelectionId = -1;
 };
 
+/**
+ * Sets the select name.
+ * 
+ * @param	{String}	name		the name
+ */
 DwtSelect.prototype.setName =
 function(name) {
 	this._name = name;
 };
 
+/**
+ * Gets the select name.
+ * 
+ * @return	{String}	the name
+ */
 DwtSelect.prototype.getName =
 function() {
 	return this._name;
 };
 
+/**
+ * Sets the selected value.
+ * 
+ * @param	{Object}	optionValue		the value of the option to select
+ */
 DwtSelect.prototype.setSelectedValue =
 function(optionValue) {
     var index = this._optionValuesToIndices[optionValue];
@@ -257,7 +278,10 @@ function(optionValue) {
 
 /**
  * Sets the option as the selected option.
- * @param optionHandle (integer) -- handle returned from addOption
+ * 
+ * @param {int}	optionHandle 	a handle to the option
+ * 
+ * @see		#addOption
  */
 DwtSelect.prototype.setSelected =
 function(optionHandle) {
@@ -265,16 +289,33 @@ function(optionHandle) {
 	this.setSelectedOption(optionObj);
 };
 
+/**
+ * Gets the option count.
+ * 
+ * @return	{int}	the option count
+ */
 DwtSelect.prototype.getOptionCount =
 function() {
 	return this._options.size();
 };
 
+/**
+ * Gets the options.
+ * 
+ * @return	{AjxVector}		a vector of {@link DwtSelectOption} objects
+ */
 DwtSelect.prototype.getOptions =
 function() {
 	return this._options;
 };
 
+/**
+ * Gets the option .
+ * 
+ * @param {int}	optionHandle 	a handle to the option
+ * @return	{DwtSelectOption}	the option
+ * @see		#addOption
+ */
 DwtSelect.prototype.getOptionWithHandle =
 function(optionHandle) {
 	return this._options.get(optionHandle);
@@ -282,11 +323,23 @@ function(optionHandle) {
 
 DwtSelect.prototype.getOptionAtIndex = DwtSelect.prototype.getOptionWithHandle;
 
+/**
+ * Gets the index for a given value.
+ * 
+ * @param	{Object}	value		the value
+ * @return	{int}		the index
+ */
 DwtSelect.prototype.getIndexForValue =
 function(value) {
 	return this._optionValuesToIndices[value];
 };
 
+/**
+ * Gets the option for a given value.
+ * 
+ * @param	{Object}	optionValue		the value
+ * @return	{DwtSelectOption}		the option
+ */
 DwtSelect.prototype.getOptionWithValue =
 function(optionValue) {
 	var index = this._optionValuesToIndices[optionValue];
@@ -297,43 +350,79 @@ function(optionValue) {
 	return option;
 };
 
+/**
+ * Sets the selected option.
+ * 
+ * @param	{Object}	optionObj		the object
+ */
 DwtSelect.prototype.setSelectedOption =
 function(optionObj) {
 	if (optionObj) {
 		this._setSelectedOption(optionObj);
-}
+	}
 };
 
+/**
+ * Gets the selected value.
+ * 
+ * @return	{Object}	the value
+ */
 DwtSelect.prototype.getValue =
 function() {
     return this._selectedValue;
 };
 
+/**
+ * Gets the selected option.
+ * 
+ * @return	{DwtSelectOption}	the selected option
+ */
 DwtSelect.prototype.getSelectedOption =
 function() {
 	return this._selectedOption;
 };
 
+/**
+ * Gets the selected option index.
+ * 
+ * @return	{int}	the selected option index
+ */
 DwtSelect.prototype.getSelectedIndex =
 function() {
 	return this.getIndexForValue(this.getValue());
 };
 
+/**
+ * Adds a change listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtSelect.prototype.addChangeListener =
 function(listener) {
     this.addListener(DwtEvent.ONCHANGE, listener);
 };
 
+/**
+ * Gets the count of options.
+ * 
+ * @return	{int}	the count
+ */
 DwtSelect.prototype.size =
 function() {
 	return this._options.size();
 };
 
+/**
+ * Disables the select.
+ */
 DwtSelect.prototype.disable =
 function() {
 	this.setEnabled(false);
 };
 
+/**
+ * Enables the select.
+ */
 DwtSelect.prototype.enable =
 function() {
 	this.setEnabled(true);
@@ -515,12 +604,14 @@ function(newOption) {
 //
 
 /**
-* Greg Solovyev 2/2/2004 added this class to be able to create a list of options 
-* before creating the DwtSelect control. This is a workaround an IE bug, that 
-* causes IE to crash with error R6025 when DwtSelectOption object are added to empty DwtSelect
-* @class DwtSelectOptionData
-* @constructor
-*/
+ * Greg Solovyev 2/2/2004 added this class to be able to create a list of options 
+ * before creating the DwtSelect control. This is a workaround an IE bug, that 
+ * causes IE to crash with error R6025 when DwtSelectOption object are added to empty DwtSelect
+ * @class
+ * @constructor
+ * 
+ * @private
+ */
 DwtSelectOptionData = function(value, displayValue, isSelected, selectedValue, image) {
 	if (value == null || displayValue == null) { return null; }
 
@@ -536,24 +627,17 @@ DwtSelectOptionData = function(value, displayValue, isSelected, selectedValue, i
 //
 
 /**
- * @class DwtSelectOption
+ * Creates a select option.
  * @constructor
+ * @class
+ * This class encapsulates the option object that the {@link DwtSelect} widget uses. 
  *
- * DwtSelectOption encapsulates the option object that the DwtSelect widget
- * uses. 
- *
- * @param value (string) -- this is the value for the object, it will be 
- *                          returned in any onchange event.
- * @param selected (Boolean) -- whether or not the option should be selected
- *                              to start with.
- * @param displayValue (string) -- The value that the user will see 
- *                                 ( html encoding will be done on this 
- *                                 value internally ).
- * @param owner (DwtSelect) -- unused
- * @param optionalDOMId (string) -- unused
- * @param selectedValue 	[string]	Optional. The text value to use
- *										when this value is the currently
- *										selected value.
+ * @param {String}	value this is the value for the object, it will be returned in any onchange event
+ * @param {Boolean}	selected whether or not the option should be selected to start with
+ * @param {String}	displayValue the value that the user will see (HTML encoding will be done on this value internally)
+ * @param {DwtSelect}	owner 	not used
+ * @param {String}	optionalDOMId		not used
+ * @param {String}	[selectedValue] 	the text value to use when this value is the currently selected value
  */
 DwtSelectOption = function(value, selected, displayValue, owner, optionalDOMId, image, selectedValue) {
 	this._value = value;
@@ -566,65 +650,122 @@ DwtSelectOption = function(value, selected, displayValue, owner, optionalDOMId, 
 	this.enabled = true;
 };
 
+/**
+ * Sets the item.
+ * 
+ * @param	{DwtSelectMenuItem}	menuItem		the menu item
+ */
 DwtSelectOption.prototype.setItem = 
 function(menuItem) {
 	this._menuItem = menuItem;
 };
 
+/**
+ * Gets the item.
+ * 
+ * @return	{DwtSelectMenuItem}	the menu item
+ */
 DwtSelectOption.prototype.getItem = 
 function(menuItem) {
 	return this._menuItem;
 };
 
+/**
+ * Gets the display value.
+ * 
+ * @return	{String}	the display value
+ */
 DwtSelectOption.prototype.getDisplayValue = 
 function() {
 	return this._displayValue;
 };
 
+/**
+ * Gets the image.
+ * 
+ * @return	{String}	the image
+ */
 DwtSelectOption.prototype.getImage = 
 function() {
 	return this._image;
 };
 
+/**
+ * Gets the selected value.
+ * 
+ * @return	{String}	the selected value
+ */
 DwtSelectOption.prototype.getSelectedValue =
 function() {
 	return this._selectedValue;
 };
 
+/**
+ * Gets the value.
+ * 
+ * @return	{String}	the value
+ */
 DwtSelectOption.prototype.getValue = 
 function() {
 	return this._value;
 };
 
+/**
+ * Sets the value.
+ * 
+ * @param	{String|Number}	stringOrNumber	the value
+ */
 DwtSelectOption.prototype.setValue = 
 function(stringOrNumber) {
 	this._value = stringOrNumber;
 };
 
+/**
+ * Selects the option.
+ */
 DwtSelectOption.prototype.select = 
 function() {
 	this._selected = true;
 };
 
+/**
+ * De-selects the option.
+ */
 DwtSelectOption.prototype.deSelect = 
 function() {
 	this._selected = false;
 };
 
+/**
+ * Checks if the option is selected.
+ * 
+ * @return	{Boolean}	<code>true</code> if the option is selected
+ */
 DwtSelectOption.prototype.isSelected = 
 function() {
 	return this._selected;
 };
 
+/**
+ * Gets the id.
+ * 
+ * @return	{String}	the id
+ */
 DwtSelectOption.prototype.getIdentifier = 
 function() {
 	return this._internalObjectId;
 };
 
-//
-// Class
-//
-
+/**
+ * Creates a select menu.
+ * @constructor
+ * @class
+ * This class represents a select menu.
+ * 
+ * @param	{DwtComposite}	parent		the parent
+ * 
+ * @extends		DwtMenu
+ */
 DwtSelectMenu = function(parent) {
     DwtMenu.call(this, {parent:parent, style:DwtMenu.DROPDOWN_STYLE, className:"DwtMenu", cascade:parent._cascade});
 };
@@ -633,10 +774,16 @@ DwtSelectMenu.prototype.constructor = DwtSelectMenu;
 
 DwtSelectMenu.prototype.TEMPLATE = "dwt.Widgets#ZSelectMenu";
 
-//
-// Class
-//
-
+/**
+ * Creates a select menu item.
+ * @constructor
+ * @class
+ * This class represents a menu item.
+ * 
+ * @param	{DwtComposite}	parent		the parent
+ * 
+ * @extends 	DwtMenuItem
+ */
 DwtSelectMenuItem = function(parent) {
     DwtMenuItem.call(this, {parent:parent, style:DwtMenuItem.SELECT_STYLE, className:"ZSelectMenuItem"});
 };

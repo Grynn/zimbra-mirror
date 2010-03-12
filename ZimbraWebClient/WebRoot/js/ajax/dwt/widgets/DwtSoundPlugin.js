@@ -14,22 +14,27 @@
  */
 
 /**
+ * Creates a sound plugin control.
+ * @constructor
+ * @class
  * This class represents a widget that plays sounds. It uses a plugin such as Quick Time
  * or Windows Media to play the sounds and to display player controls. Do not invoke the
  * constructor directly. Instead use the create() method, which will choose the right
  * concrete class based on available plugins.
  *
- * @param parent	{DwtControl} Parent widget (required)
- * @param width		{Int} Width of player (required)
- * @param height	{Int} Height of player (required)
- * @param volume	{Int} Volume on a scale of 0-DwtSoundPlugin.MAX_VOLUME
- * @param url		{String} The sound's url
- * @param offscreen	{Boolean} If true, the player is initially offscreen. Use an appropriate position style
- * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player
- * 							  to float in the wrong place when it's first created) (optional)
- * @param className {string} CSS class. If not provided defaults to the class name (optional)
- * @param posStyle {string} Positioning style (absolute, static, or relative). If
- * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
+ * @param	{Hash}	params		a hash of parameters
+ * @param {DwtControl}	params.parent	 the parent widget
+ * @param {int}	params.width		the width of player
+ * @param {int}	params.height		the height of player
+ * @param {int}	params.volume		volume on a scale of 0 - {@link DwtSoundPlugin.MAX_VOLUME}
+ * @param {String}	params.url		{String} the sound url
+ * @param {Boolean}	[params.offscreen]	{Boolean} if <code>true</code>, the player is initially offscreen. Use an appropriate position style
+ * 							  if you set this to <code>true</code>. (This reduces flicker, and a tendency for the QT player
+ * 							  to float in the wrong place when it's first created)
+ * @param {String}	[params.className] the CSS class
+ * @param {constant}	[params.posStyle=DwtControl.STATIC_STYLE] 	the positioning style (see {@link DwtControl})
+ * 
+ * @extends		DwtControl
  */
 DwtSoundPlugin = function(params) {
 	if (arguments.length == 0) return;
@@ -45,6 +50,10 @@ DwtSoundPlugin = function(params) {
 DwtSoundPlugin.prototype = new DwtControl;
 DwtSoundPlugin.prototype.constructor = DwtSoundPlugin;
 
+/**
+ * Defines the "max" volume.
+ * @type	int
+ */
 DwtSoundPlugin.MAX_VOLUME = 256;
 
 // Status codes.
@@ -56,19 +65,18 @@ DwtSoundPlugin.ERROR = 4;
 /**
  * Factory method. Creates an appropriate sound player for whatever plugins are or are not installed.
  *
- * @param parent	{DwtControl} Parent widget (required)
- * @param width		{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed width) (optional)
- * @param height	{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed height) (optional)
- * @param volume	{Int} Volume on a scale of 0-DwtSoundPlugin.MAX_VOLUME
- * @param url		{String} The sound's url
- * @param offscreen	{Boolean} If true, the player is initially offscreen. Use an appropriate position style
- * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player
- * 							  to float in the wrong place when it's first created) (optional)
- * @param className {string} CSS class. If not provided defaults to the class name (optional)
- * @param posStyle {string} Positioning style (absolute, static, or relative). If
- * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
+ * @param	{Hash}	params		a hash of parameters
+ * @param {DwtControl}	params.parent	 the parent widget
+ * @param {int}	params.width		the width of player
+ * @param {int}	params.height		the height of player
+ * @param {int}	params.volume		volume on a scale of 0 - {@link DwtSoundPlugin.MAX_VOLUME}
+ * @param {String}	params.url		{String} the sound url
+ * @param {Boolean}	[params.offscreen]	{Boolean} if <code>true</code>, the player is initially offscreen. Use an appropriate position style
+ * 							  if you set this to <code>true</code>. (This reduces flicker, and a tendency for the QT player
+ * 							  to float in the wrong place when it's first created)
+ * @param {String}	[params.className] the CSS class
+ * @param {constant}	[params.posStyle=DwtControl.STATIC_STYLE] 	the positioning style (see {@link DwtControl})
  */
-
 DwtSoundPlugin.create =
 function(params) {
 	var pluginClass = this._getPluginClass();
@@ -76,12 +84,22 @@ function(params) {
 	return new pluginClass(params);
 };
 
+/**
+ * Checks if the plugin is missing.
+ * 
+ * @return	{Boolean}	<code>true</code> if plugin is missing
+ */
 DwtSoundPlugin.isPluginMissing =
 function() {
 	var pluginClass = this._getPluginClass();
 	return pluginClass._pluginMissing;
 };
 
+/**
+ * Checks if scripting is broken.
+ * 
+ * @return	{Boolean}	<code>true</code> if scripting is broken
+ */
 DwtSoundPlugin.isScriptingBroken =
 function() {
 	var pluginClass = this._getPluginClass();
@@ -120,6 +138,7 @@ function() {
 // "Abstract" methods.
 /**
  * Plays the sound.
+ * 
  */
 DwtSoundPlugin.prototype.play =
 function() {
@@ -127,6 +146,7 @@ function() {
 
 /**
  * Pauses the sound.
+ * 
  */
 DwtSoundPlugin.prototype.pause =
 function() {
@@ -134,6 +154,7 @@ function() {
 
 /**
  * Rewinds the sound.
+ * 
  */
 DwtSoundPlugin.prototype.rewind =
 function() {
@@ -141,6 +162,8 @@ function() {
 
 /**
  * Sets the current time in milliseconds.
+ * 
+ * @param	{int}	time		the time (in milliseconds)
  */
 DwtSoundPlugin.prototype.setTime =
 function(time) {
@@ -149,7 +172,9 @@ function(time) {
 /**
  * Sets the volume.
  *
- * @param volume	{Int} Volume on a scale of 0-DwtSoundPlugin.MAX_VOLUME
+ * @param {int}	volume	the volume
+ * 
+ * @see		DwtSoundPlugin.MAX_VOLUME
  */
 DwtSoundPlugin.prototype.setVolume =
 function(volume) {
@@ -176,10 +201,13 @@ function() {
 /**
  * Adds a change listener to monitor the status of the sound being played.
  * The listener will be passed an event object with the following fields:
- * - status, a constant representing the loaded state of the sound
- * - duration, the length of the sound
- * - time, the current time of the sound
- * @param listener	{AjxListener} listener object
+ * <ul>
+ * <li>status, a constant representing the loaded state of the sound</li>
+ * <li>duration, the length of the sound</li>
+ * <li>time, the current time of the sound</li>
+ * </ul>
+ * 
+ * @param {AjxListener}	listener	the listener
  */
 DwtSoundPlugin.prototype.addChangeListener =
 function(listener) {
@@ -234,15 +262,26 @@ function(params) {
 	];
 	this.getHtmlElement().innerHTML = html.join("");
 };
-//////////////////////////////////////////////////////////////////////////////
-// Sound player that goes through the QuickTime (QT) plugin.
-//
-// Some useful references when dealing with quick time:
-// Quick Time script reference
-//   http://developer.apple.com/documentation/QuickTime/Conceptual/QTScripting_JavaScript/bQTScripting_JavaScri_Document/chapter_1000_section_5.html
-// Quick Time embed tag attributes tutorial
-//   http://www.apple.com/quicktime/tutorials/embed2.html
-//////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Sound player that goes through the QuickTime (QT) plugin.
+ * @class
+ * Some useful references when dealing with quick time:
+ * <ul>
+ * <li>Quick Time script reference
+ * <a href="http://developer.apple.com/documentation/QuickTime/Conceptual/QTScripting_JavaScript/bQTScripting_JavaScri_Document/chapter_1000_section_5.html" target="_blank">http://developer.apple.com/documentation/QuickTime/Conceptual/QTScripting_JavaScript/bQTScripting_JavaScri_Document/chapter_1000_section_5.html</a>
+ * </li>
+ * <li>Quick Time embed tag attributes tutorial
+ * <a href="http://www.apple.com/quicktime/tutorials/embed2.html" target="_blank">http://www.apple.com/quicktime/tutorials/embed2.html</a>
+ * </li>
+ * </ul>
+ * 
+ * @param	{Hash}	params		a hash of parameters
+ * 
+ * @extends		DwtSoundPlugin
+ * 
+ * @private
+ */
 DwtQTSoundPlugin = function(params) {
 	if (arguments.length == 0) return;
 	params.className = params.className || "DwtSoundPlugin";
@@ -260,6 +299,12 @@ function() {
 	return "DwtQTSoundPlugin";
 };
 
+/**
+ * Checks the QuickTime version.
+ * 
+ * @param	{Array}	version	the version as an array (for example: 7.1.6 is [7, 1, 6] )
+ * @return	{Boolean}	<code>true</code> if version is OK
+ */
 DwtQTSoundPlugin.checkVersion =
 function(version) {
 	if (AjxEnv.isFirefox) {
@@ -281,6 +326,11 @@ function(version) {
 	}
 };
 
+/**
+ * Checks scripting.
+ * 
+ * @return	{Boolean}	<code>true</code> if scripting is OK
+ */
 DwtQTSoundPlugin.checkScripting =
 function() {
 	var success = false;

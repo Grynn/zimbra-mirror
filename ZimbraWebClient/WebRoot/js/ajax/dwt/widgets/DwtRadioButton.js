@@ -14,27 +14,30 @@
  */
 
 /**
+ * Creates a radio button.
  * @constructor
  * @class
  * This class implements a radio button.
  * 
- * @param params	[hash]			hash of params:
- *        parent	[DwtComposite] 	parent widget
- *        style 	[constant]*		The text style. May be one of: <i>DwtCheckbox.TEXT_LEFT</i> or
- * 									<i>DwtCheckbox.TEXT_RIGHT</i> arithimatically or'd (|) with one of:
- * 									<i>DwtCheckbox.ALIGN_LEFT</i>, <i>DwtCheckbox.ALIGN_CENTER</i>, or
- * 									<i>DwtCheckbox.ALIGN_LEFT</i>.
+ * @param {Hash}	params	a hash of parameters
+ * @param  {DwtComposite}     parent	theparent widget
+ * @param  {constant}     style 	the text style. May be one of: {@link DwtCheckbox.TEXT_LEFT} or
+ * 									{@link DwtCheckbox.TEXT_RIGHT} arithimatically or'd (|) with one of:
+ * 									{@link DwtCheckbox.ALIGN_LEFT}, {@link DwtCheckbox.ALIGN_CENTER}, or
+ * 									{@link DwtCheckbox.ALIGN_LEFT}.
  * 									The first determines were in the checkbox the text will appear
  * 									(if set), the second determine how the content of the text will be
  * 									aligned. The default value for this parameter is: 
- * 									<code>DwtCheckbox.TEXT_LEFT | DwtCheckbox.ALIGN_CENTER</code>.
- *        name		[string]		The input control name. Required for IE.
- *        value     [string]        The input control value.
- *        checked	[boolean]		The input control checked status. Required for IE.
- *        className	[string]*		CSS class
- *        posStyle	[constant]*		positioning style
- *        id		[string]*		an explicit ID to use for the control's HTML element
- *        index 	[int]*			index at which to add this control among parent's children 
+ * 									{@link DwtCheckbox.TEXT_LEFT} | {@link DwtCheckbox.ALIGN_CENTER}
+ * @param  {String}     name		the input control name (required for IE)
+ * @param  {String}     value     the input control value.
+ * @param  {Boolean}     checked	the input control checked status (required for IE)
+ * @param  {String}     className	the CSS class
+ * @param  {constant}     posStyle	the positioning style (see {@link DwtControl})
+ * @param  {String}     id		an explicit ID to use for the control's HTML element
+ * @param  {int}     index 	the index at which to add this control among parent's children
+ * 
+ * @extends	DwtCheckbox
  */
 DwtRadioButton = function(params) {
 	if (arguments.length == 0) { return; }

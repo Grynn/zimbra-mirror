@@ -20,13 +20,15 @@
  *
  * @author Ross Dargahi
  *
- * @param params			[hash]				hash of params:
- *        parent			[DwtComposite] 		parent widget
- *        className			[string]*			CSS class
- *        posStyle			[constant]*			positioning style
- *        content
- *        mode
- *        blankIframeSrc
+ * @param {Hash}	params			a hash of parameters
+ * @param {DwtComposite}      params.parent			the parent widget
+ * @param {String}      params.className			the CSS class
+ * @param {constant}      params.posStyle			the positioning style (see {@link DwtControl})
+ * @param  {String}     params.content		the content (this can be HTML)
+ * @param  {DwtHtmlEditor.HTML|DwtHtmlEditor.TEXT}     params.mode			the mode
+ * @param  {String}     params.blankIframeSrc	the blank iframe source
+ *        
+ * @extends		DwtComposite
  */
 DwtHtmlEditor = function(params) {
 	if (arguments.length == 0) { return; }
@@ -53,7 +55,15 @@ DwtHtmlEditor.prototype = new DwtComposite();
 DwtHtmlEditor.prototype.constructor = DwtHtmlEditor;
 
 // Modes
+/**
+ * Defines the "HTML" mode.
+ * @type	String
+ */
 DwtHtmlEditor.HTML = "text/html";
+/**
+ * Defines the "TEXT" mode.
+ * @type	String
+ */
 DwtHtmlEditor.TEXT = "text/plain";
 
 // Styles
@@ -215,16 +225,29 @@ function(tryOnTimer) {
 	}
 };
 
+/**
+ * Adds a state change listener.
+ * 
+ * @param	{AjxListener}		listener	the listener
+ */
 DwtHtmlEditor.prototype.addStateChangeListener =
 function(listener) {
 	this.addListener(DwtEvent.STATE_CHANGE, listener);
 }
 
+/**
+ * Removes a state change listener.
+ * 
+ * @param	{AjxListener}		listener	the listener
+ */
 DwtHtmlEditor.prototype.removeStateChangeListener =
 function(listener) {
 	this.removeListener(DwtEvent.STATE_CHANGE, listener);
 }
 
+/**
+ * Clears the content.
+ */
 DwtHtmlEditor.prototype.clear =
 function() {
 	this.setContent("");
@@ -239,6 +262,11 @@ function(enable) {
 		document.getElementById(this._iFrameId).disabled = !enable;
 }
 
+/**
+ * Sets the blank iframe source.
+ * 
+ * @param	{String}	src		the source
+ */
 DwtHtmlEditor.prototype.setBlankIframeSrc =
 function(src) {
 	this._blankIframeSrc = src;
@@ -250,8 +278,10 @@ function() {
 }
 
 /**
- * Get the content
-*/
+ * Get the content.
+ * 
+ * @return	{String}	the content
+ */
 DwtHtmlEditor.prototype.getContent =
 function() {
 	if (this._mode == DwtHtmlEditor.HTML) {
@@ -270,8 +300,10 @@ function(html) {
 };
 
 /**
- * Set the content to be displayed. This can be HTML
-*/
+ * Set the content to be displayed. This can be HTML.
+ * 
+ * @param	{String}	content		the content
+ */
 DwtHtmlEditor.prototype.setContent =
 function(content) {
 	if (AjxEnv.isIE) {
@@ -328,6 +360,8 @@ function(src, dontExecCommand, width, height) {
  * @param cellPadding [Int] - Cell padding in the table
  * @param alignment [String] - The alignment of the table. This is one of valid alignment values for the HTML
  *    <table> element
+ *    
+ * @private
  */
 DwtHtmlEditor.prototype.insertTable =
 function(rows, cols, width, cellSpacing, cellPadding, alignment) {
@@ -629,12 +663,12 @@ function(){
 };
 
 /**
-* Changes the editor mode.
-*
-* @param mode	The new mode
-* @param convert	If new mode -> HTML and convert, then the content of the widget is escaped. If
-*		mode -> Text and convert, then text is stripped out of content
-*/
+ * Changes the editor mode.
+ *
+ * @param {DwtHtmlEditor.HTML|DwtHtmlEditor.TEXT}	mode	the new mode
+ * @param {Boolean}	convert	if new mode -> HTML and convert, then the content of the widget is escaped. If
+ *		mode -> Text and convert, then text is stripped out of content
+ */
 DwtHtmlEditor.prototype.setMode =
 function(mode, convert) {
 
@@ -1659,7 +1693,9 @@ DwtHtmlEditor.prototype.getLinkProps = function() {
         return props;
 };
 
-/** Table Helper Functions **/
+/*
+ * Table Helper Functions
+ */
 // XXX: Hairy code!  It's advisable not to mess with it. ;-)
 DwtHtmlEditor.table_analyzeCells =
 function(currentCell) {

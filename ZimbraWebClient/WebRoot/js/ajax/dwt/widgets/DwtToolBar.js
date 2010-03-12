@@ -15,12 +15,13 @@
 
 /**
  * @overview
- * 
  * This file defines a toolbar.
  *
  */
 
 /**
+ * Creates a toolbar.
+ * @constructor
  * @class
  * Creates a toolbar. Components must be added via the <code>add*()</code> functions.
  * A toolbar is a horizontal or vertical strip of widgets (usually buttons).
@@ -28,13 +29,11 @@
  * @author Ross Dargahi
  * 
  * @param {Hash}	params		a hash of parameters
- * <ul>
- * <li>parent		{@link DwtComposite}	the parent widget
- * <li>className	{String}			the CSS class
- * <li>posStyle		{@link DwtToolBar.HORIZ_STYLE} or {@link DwtToolBar.VERT_STYLE}	the positioning style
- * <li>style		{constant}			the menu style
- * <li>index 		{int}				the index at which to add this control among parent's children
- * </ul>
+ * @param	{DwtComposite}	params.parent	the parent widget
+ * @param	{String}	params.className				the CSS class
+ * @param	{DwtToolBar.HORIZ_STYLE|DwtToolBar.VERT_STYLE}	params.posStyle		the positioning style
+ * @param	{constant}	params.style					the menu style
+ * @param	{int}	params.index 				the index at which to add this control among parent's children
  * 
  * @extends	DwtComposite
  */
@@ -89,10 +88,12 @@ function() {
 
 /**
  * Defines the "horizontal" style.
+ * @type	int
  */
 DwtToolBar.HORIZ_STYLE	= 1;
 /**
  * Defines the "vertical" style.
+ * @type	int
  */
 DwtToolBar.VERT_STYLE	= 2;
 
@@ -134,10 +135,6 @@ DwtToolBar.__itemCount = 0;
 // Public methods
 //
 
-/**
- * Disposes of the toolbar.
- * 
- */
 DwtToolBar.prototype.dispose =
 function() {
 	this._itemsEl = null;
@@ -260,13 +257,6 @@ function() {
     return this._keyMapName;
 };
 
-/**
- * Handles the key action event.
- * 
- * @param	{constant}	actionCode	the action code
- * @param	{Object}	ev		the event
- * @return	{Boolean}	<code>true</code> if the event is handled
- */
 DwtToolBar.prototype.handleKeyAction =
 function(actionCode, ev) {
 
@@ -561,20 +551,20 @@ function(index) {
 //
 
 /**
+ * Creates a tool bar button.
+ * @constructor
  * @class
  * This class represents a toolbar button.
  * 
  * @param	{Hash}		params		a hash of parameters
- * <ul>
- * <li>parent		{@link DwtComposite}	the parent widget
- * <li>style		{constant}			the menu style
- * <li>className	{String}			the CSS class
- * <li>posStyle		{@link DwtToolBar.HORIZ_STYLE} or {@link DwtToolBar.VERT_STYLE}	the positioning style
- * <li>actionTiming {Object}	the action timing</li>
- * <li>id {String}	the id</li>
- * <li>index 		{int}				the index at which to add this control among parent's children
- * </ul>
-
+ * @param {DwtComposite}	parent		the parent widget
+ * @param {constant}	style				the menu style
+ * @param {String}	className				the CSS class
+ * @param {DwtToolBar.HORIZ_STYLE|DwtToolBar.VERT_STYLE}	posStyle		the positioning style
+ * @param {Object}	actionTiming 	the action timing
+ * @param {String}	id 	the id
+ * @param {int}	index 				the index at which to add this control among parent's children
+ *
  * @extends	DwtButton
  */
 DwtToolBarButton = function(params) {

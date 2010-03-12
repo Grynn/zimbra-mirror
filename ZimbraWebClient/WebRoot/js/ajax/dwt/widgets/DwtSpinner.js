@@ -13,40 +13,43 @@
  * ***** END LICENSE BLOCK *****
  */
 /**
+ * Creates a spinner control.
  * @constructor
  * @class
  * Represents a entry field for entering numeric values.  Has 2 arrow buttons
  * that can be used to increment or decrement the current value with a step
  * that can be specified.
  *
- * @extends DwtControl
- *
  * <h4>CSS</h4>
- *
- * - DwtSpinner              -- a table that contains the spinner elements
- * - DwtSpinner-inputCell    -- the TD that holds the input field
- * - DwtSpinner-btnCell      -- a DIV holding the 2 arrow buttons
- * - DwtSpinner-upBtn        -- the DIV button for increment operation
- * - DwtSpinner-downBtn      -- the DIV button for decrement operation
- * - DwtSpinner-up-pressed   -- upBtn while pressed
- * - DwtSpinner-down-pressed -- downBtn while pressed
- * - DwtSpinner-disabled     -- the table gets this class added when the widget is disabled
- *
- * @param {DwtComposite} parent Parent widget, passed to DwtControl
- * @param {String} className the class name for the containing DIV, passed to DwtControl
- * @param {String} posStyle positioning style, passed to DwtControl
- * @param {Number} max The maximum value
- * @param {Number} min The minimum value
- * @param {Number} size Size of the input field, as in <input size="X">
- * @param {Number} value The original value of the input field
- * @param {Number} maxLen The maximum length of the text in the input field
- * @param {Number} step Amount to add or substract when the arrow buttons are pressed
- * @param {Number} decimals Number of decimal digits.  Specify 0 to allow only
- *                 integers (default).  Pass 'null' to allow float numbers but
+ * <ul>
+ * <li><code>DwtSpinner</code>              -- a table that contains the spinner elements
+ * <li><code>DwtSpinner-inputCell</code>    -- the TD that holds the input field
+ * <li><code>DwtSpinner-btnCell</code>      -- a DIV holding the 2 arrow buttons
+ * <li><code>DwtSpinner-upBtn</code>        -- the DIV button for increment operation
+ * <li><code>DwtSpinner-downBtn</code>      -- the DIV button for decrement operation
+ * <li><code>DwtSpinner-up-pressed</code>   -- upBtn while pressed
+ * <li><code>DwtSpinner-down-pressed</code> -- downBtn while pressed
+ * <li><code>DwtSpinner-disabled</code>     -- the table gets this class added when the widget is disabled
+ * </ul>
+ * 
+ * @param	{Hash}	params		a hash of parameters
+ * @param {DwtComposite} params.parent 	the parent widget
+ * @param {String} params.className the class name for the containing DIV (see {@link DwtControl})
+ * @param {String} params.posStyle 	the positioning style (see {@link DwtControl})
+ * @param {Number} params.max 	the maximum value
+ * @param {Number} params.min 	the minimum value
+ * @param {Number} params.size 	size of the input field, as in <code>&lt;input size="X"&gt;</code>
+ * @param {Number} params.value the original value of the input field
+ * @param {Number} params.maxLen the maximum length of the text in the input field
+ * @param {Number} params.step 	the amount to add or substract when the arrow buttons are pressed
+ * @param {Number} [params.decimals=0] Number of decimal digits.  Specify 0 to allow only
+ *                 integers (default). Pass <code>null</code> to allow float numbers but
  *                 not enforce decimals.
- * @param {String} align The align of the input field text; defaults to "right" in dwt.css
+ * @param {String} [params.align="right"] 	the align of the input field text (see <code>dwt.css</code>)
  *
  * @author Mihai Bazon
+ * 
+ * @extends DwtControl
  */
 DwtSpinner = function(params) {
 	if (arguments.length == 0) return;
@@ -157,6 +160,11 @@ DwtSpinner.prototype._getValidValue = function(val) {
 	return n;
 };
 
+/**
+ * Gets the input element.
+ * 
+ * @return	{Element}	the element
+ */
 DwtSpinner.prototype.getInputElement = function() {
 	return document.getElementById(this._idField);
 };
@@ -187,10 +195,20 @@ DwtSpinner.prototype._setBtnState = function(dir, disabled) {
 	}
 };
 
+/**
+ * Gets the value.
+ * 
+ * @return	{Number}	the value
+ */
 DwtSpinner.prototype.getValue = function() {
 	return parseFloat(this._getValidValue(this.getInputElement().value));
 };
 
+/**
+ * Sets the value.
+ * 
+ * @param	{Number}	val		the value
+ */
 DwtSpinner.prototype.setValue = function(val) {
 	if (val == null)
 		val = this.getInputElement().value;

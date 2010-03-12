@@ -53,6 +53,8 @@
  * @see DwtTabGroup
  * @see DwtKeyMap
  * @see DwtKeyMapMgr
+ * 
+ * @private
  */
 DwtKeyboardMgr = function(shell) {
 	DwtKeyboardMgr.__shell = shell;

@@ -20,6 +20,8 @@
 * The code is basically the same as in dom-drag.js from www.youngpup.net
 *
 * @author Ross Dargahi
+* 
+* @private
 */
 DwtDraggable = function() {
 }
@@ -44,6 +46,7 @@ DwtDraggable.dragEl = null;
  * @param {boolean} swapVertRef If true, then mouse motion to the bottom will move element up (optional)
  * @param {function} fXMapper function that overides this classes x coordinate transformations (optional)
  * @param {function} fYMapper function that overides this classes y coordinate transformations (optional)
+ *
  */
 DwtDraggable.init = 
 function(dragEl, rootEl, minX, maxX, minY, maxY, dragStartCB, dragCB, dragEndCB, 

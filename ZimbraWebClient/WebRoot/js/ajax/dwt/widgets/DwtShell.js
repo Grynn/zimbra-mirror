@@ -14,23 +14,28 @@
  */
 
 /**
+ * Creates a shell.
  * @constructor
  * @class
  * This class represents a shell, the first widget that must be instantiated in a Dwt based 
  * application. By default the shell covers the whole browser window, though it may also be 
  * instantiated within an HTML element.
  * <p>
- * DwtShell should <b>NOT</b> be subclassed</p>
+ * {@link DwtShell} should <b>NOT</b> be subclassed.
+ * </p>
  *
  * @author Ross Dargahi
  * 
- * @param className			[string]*		CSS class name
- * @param docBodyScrollable	[boolean]*		if true, then the document body is set to be scrollable
- * @param userShell			[Element]*		an HTML element that will be reparented into an absolutely
+ * @param	{Hash}	params		a hash of parameters
+ * @param {String}	params.className			the CSS class name
+ * @param {Boolean}	params.docBodyScrollable	if <code>true</code>, then the document body is set to be scrollable
+ * @param {Element}	params.userShell			an HTML element that will be reparented into an absolutely
  *											postioned container in this shell. This is useful in the situation where you have an HTML 
  *											template and want to use this in context of Dwt.
- * @param useCurtain			[boolean]*		if true, a curtain overlay is created to be used between hidden and viewable elements 
- *											using z-index. See Dwt.js for various layering constants
+ * @param {Boolean}	params.useCurtain			if <code>true</code>, a curtain overlay is created to be used between hidden and viewable elements 
+ *											using z-index (see {@link Dwt}) for various layering constants)
+ *
+ * @extends		DwtComposite
  */
 DwtShell = function(params) {
 	if (window._dwtShellId) {
@@ -124,7 +129,8 @@ DwtShell = function(params) {
 DwtShell.prototype = new DwtComposite;
 DwtShell.prototype.constructor = DwtShell;
 
-/** DwtDialog not defined yet, can't base ID on it
+/**
+ * DwtDialog not defined yet, can't base ID on it
  * @private
  */
 DwtShell.CANCEL_BUTTON = -1;
@@ -147,17 +153,21 @@ function() {
 }
 
 /**
-* Returns the shell managing the browser window (if any)
-*
-* @return DwtShell or null
-*/
+ * Gets the shell managing the browser window (if any).
+ *
+ * @return {DwtShell}		the shell or <code>null</code>
+ */
 DwtShell.getShell =
 function(win){
 	return DwtControl.fromElementId(win._dwtShellId);
 };
 
 /**
- * Return's the shell's keyboard manager (see DwtKeybaordMgr)
+ * Gets the shell's keyboard manager.
+ * 
+ * @return	{DwtKeyboardMgr}		the keyboard manager
+ * 
+ * @private
  */
 DwtShell.prototype.getKeyboardMgr =
 function() {
@@ -168,14 +178,14 @@ function() {
  * Sets the busy overlay. The busy overlay disables input to the application and makes the 
  * cursor a wait cursor. Optionally a work in progress (WIP) dialog may be requested. Since
  * multiple calls to this method may be interleaved, it accepts a unique ID to keep them
- * separate. We also maintain a count of outstanding calls to setBusy(true). When that count
+ * separate. We also maintain a count of outstanding calls to <code>setBusy(true)</code>. When that count
  * changes between 0 and 1, the busy overlay is applied or removed.
  * 
- * @param busy					[boolean]		if true, set the busy overlay, otherwise hide the busy overlay
- * @param id					[int]*			a unique ID for this instance
- * @param showBusyDialog 		[boolean]*		if true, show the WIP dialog
- * @param busyDialogDelay 		[int]*			number of ms to delay before popping up the WIP dialog
- * @param cancelBusyCallback	[AjxCallback]*	callback to run when OK button is pressed in WIP dialog
+ * @param {Boolean}	busy			if <code>true</code>, set the busy overlay, otherwise hide the busy overlay
+ * @param {int}	id					a unique ID for this instance
+ * @param {Boolean}	showBusyDialog 		if <code>true</code>, show the WIP dialog
+ * @param {int}	busyDialogDelay 		the number of ms to delay before popping up the WIP dialog
+ * @param {AjxCallback}	cancelBusyCallback	the callback to run when OK button is pressed in WIP dialog
  */ 
 DwtShell.prototype.setBusy =
 function(busy, id, showBusyDialog, busyDialogDelay, cancelBusyCallback) {
@@ -229,10 +239,10 @@ function() {
 };
 
 /**
-* Sets the text for the shell's busy dialog
-*
-* @param text The text to set (may be HTML)
-*/
+ * Sets the text for the shell busy dialog
+ *
+ * @param {String}	text 		the text to set (may be HTML)
+ */
 DwtShell.prototype.setBusyDialogText =
 function(text) {
 	this._busyDialogText = text;
@@ -242,10 +252,10 @@ function(text) {
 }
 
 /**
-* Sets shell's busy dialog title.
-*
-* @param title The title text
-*/
+ * Sets the shell busy dialog title.
+ * 
+ * @param {String}	title 		the title text
+ */
 DwtShell.prototype.setBusyDialogTitle =
 function(title) {
 	this._busyDialogTitle = title;
@@ -259,6 +269,11 @@ function() {
 	return this._hoverMgr;
 }
 
+/**
+ * Gets the tool tip.
+ * 
+ * @return	{String}	the tool tip
+ */
 DwtShell.prototype.getToolTip = 
 function() {
 	return this._toolTip;
@@ -311,7 +326,9 @@ function(incScroll) {
  * If the shell is set as a virtual shell, then all children that are 
  * directly added to the shell become children on the page's body element. This
  * is useful in the cases where Dwt is to beused  with existing HTML documents
- * rather than as the foundation for an application
+ * rather than as the foundation for an application.
+ * 
+ * @private
  */
 DwtShell.prototype.setVirtual =
 function() {
@@ -319,6 +336,11 @@ function() {
 	this.setVisible(false);
 }
 
+/**
+ * Adds a focus listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtShell.prototype.addFocusListener =
 function(listener) {
 	if (!this._hasFocusHandler) {
@@ -333,6 +355,11 @@ function(listener) {
 	this.addListener(DwtEvent.ONFOCUS, listener);
 };
 
+/**
+ * Adds a blur listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtShell.prototype.addBlurListener =
 function(listener) {
 	if (!this._hasBlurHandler) {
@@ -347,11 +374,21 @@ function(listener) {
 	this.addListener(DwtEvent.ONBLUR, listener);
 };
 
+/**
+ * Adds a global selection listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtShell.prototype.addGlobalSelectionListener =
 function(listener) {
 	this.addListener(DwtShell._GLOBAL_SELECTION, listener);
 };
 
+/**
+ * Removes a global selection listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtShell.prototype.removeGlobalSelectionListener =
 function(listener) {
 	this.removeListener(DwtShell._GLOBAL_SELECTION, listener);
@@ -363,8 +400,9 @@ function(event) {
 };
 
 /**
- * @return true if the shell is virtual
- * @type Boolean
+ * @return {Boolean}	<code>true</code> if the shell is virtual
+ * 
+ * @private
  */
 DwtShell.prototype.isVirtual =
 function() {

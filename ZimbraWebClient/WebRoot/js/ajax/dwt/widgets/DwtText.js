@@ -15,17 +15,20 @@
 
 
 /**
+ * Creates a text control.
  * @constructor
  * @class
- * Container for a piece of text.
+ * This class represents a container for a piece of text.
  * 
  * @author Ross Dargahi
  * 
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
- *        id			[string]*			an explicit ID to use for the control's HTML element
+ * @param {Hash}	params		a hash of parameters
+ * @param {DwtComposite}      parent	the parent widget
+ * @param {String}      className		CSS class
+ * @param {constant}      posStyle		the positioning style (see {@link DwtControl})
+ * @param {String}      id			an explicit ID to use for the control's HTML element
+ * 
+ * @extends		DwtControl
  */
 DwtText = function(params) {
 	if (arguments.length == 0) return;
@@ -48,6 +51,11 @@ DwtText.prototype.getTabGroupMember = function() {
 	return null;
 };
 
+/**
+ * Sets the text.
+ * 
+ * @param	{String}	text		the text
+ */
 DwtText.prototype.setText =
 function(text) {
 	if (!this._textNode) {
@@ -60,11 +68,21 @@ function(text) {
 	}
 };
 
+/**
+ * Gets the text.
+ * 
+ * @return	{String}	the text
+ */
 DwtText.prototype.getText =
 function() {
 	return this._textNode ? this._textNode.data : "";
 };
 
+/**
+ * Gets the text node.
+ * 
+ * @return	{Object}	the node
+ */
 DwtText.prototype.getTextNode =
 function() {
 	return this._textNode;
