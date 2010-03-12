@@ -19,17 +19,11 @@ ZaUIComponent.A_inheritedUIComponents = "inheritedUIComponents";
 ZaUIComponent.accountTargetXFormModifier = function (xFormObject, entry) {
 
     //check if the UI component is enabled
-    //if (! ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-        var uiEnabled  = ZaTabView.isTAB_ENABLED(entry,[ZaAccount.A_zimbraAdminConsoleUIComponents], []);
-        
-        /*if (this instanceof ZaAccountXFormView) {
-            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.ACCOUNT_UI_COMP_TAB] ;
-        } else if (this instanceof ZaDLXFormView) {
-            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.DL_UI_COMP_TAB] ;
-        } */
+    var uiEnabled  = ZaTabView.isTAB_ENABLED(entry,[ZaAccount.A_zimbraAdminConsoleUIComponents], []);
+    // it should only be meaningful for delegated admins
+    uiEnabled = (uiEnabled && ZaDelegatedAdmin.isDelegatedAdmin (entry));
 
-        if (!uiEnabled) return ;
-    //}
+    if (!uiEnabled) return ;
 
     var tabBar, switchGroup, tabIx ;
     for (var i=0; i < xFormObject.items.length; i ++) {

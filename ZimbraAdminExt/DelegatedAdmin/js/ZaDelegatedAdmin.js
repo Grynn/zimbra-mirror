@@ -4,6 +4,15 @@
 
 ZaDelegatedAdmin = function () {};
 
+ZaDelegatedAdmin.isDelegatedAdmin = function (obj) {
+    var isAdminAccount = (obj.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] &&
+                            (obj.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] == "TRUE")) ;
+    var isAdminGroup = (obj.attrs[ZaDistributionList.A_isAdminGroup] &&
+                            (obj.attrs[ZaDistributionList.A_isAdminGroup] == "TRUE")) ;
+
+    return isAdminAccount || isAdminGroup ;
+}
+
 if (ZaAccount) {
     ZaAccount.A2_adminRoles = "adminRoles" ;
     ZaAccount.adminRolesModelItem = {ref: ZaAccount.A2_adminRoles ,id: ZaAccount.A2_adminRoles,
