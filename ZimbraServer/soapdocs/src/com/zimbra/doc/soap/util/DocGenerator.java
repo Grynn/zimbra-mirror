@@ -96,6 +96,8 @@ public	class	DocGenerator {
        	rootContext.put(Root.PROP_SERVICE_SRC_DIR, serviceSrcDir);
        	Root root = new Root(rootContext);
  
+//       	root.dump();
+       	
        	// create and process templates
        	Properties templateContext = new Properties();
        	templateContext.setProperty(TemplateHandler.PROP_TEMPLATES_DIR, templatesDir);

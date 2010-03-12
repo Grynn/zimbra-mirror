@@ -50,14 +50,4 @@ public 	class ServiceDocletListener	extends	DocletListener {
 		this.service.setDescription(description);
 	}
 	
-	public	String		getTagText(Tag[] tags, String tag) {
-		if (tags.length > 0) {
-			for (int k=0; k < tags.length; k++) {
-				if (tags[k].name().equalsIgnoreCase(tag))
-					return	tags[k].text();
-			}
-		}
-		return	null;
-	}
-	
 } // end ServiceDocletListener class

@@ -42,6 +42,42 @@ public class Command implements java.io.Serializable {
 	}
 	
 	/**
+	 * Gets the response.
+	 * 
+	 * @return	the response
+	 */
+	public	Element	getResponse() {
+		return	this.response;
+	}
+
+	/**
+	 * Sets the response.
+	 * 
+	 * @return	the response
+	 */
+	public	void		setResponse(Element el) {
+		this.response = el;
+	}
+
+	/**
+	 * Gets the request.
+	 * 
+	 * @return	the request
+	 */
+	public	Element	getRequest() {
+		return	this.request;
+	}
+
+	/**
+	 * Sets the request.
+	 * 
+	 * @return	the request
+	 */
+	public	void		setRequest(Element el) {
+		this.request = el;
+	}
+
+	/**
 	 * Gets the namespace.
 	 * 
 	 * @return	the namespace
@@ -57,6 +93,40 @@ public class Command implements java.io.Serializable {
 	 */
 	public	String		getName() {
 		return	this.name;
+	}
+
+	/**
+	 * Gets the name by element type.
+	 * 
+	 * @return	the name by element type
+	 */
+	public	String		getNameByElementType(int type) {
+		switch (type) {
+			case Element.TYPE_REQUEST:
+				return	getRequestName();
+			case Element.TYPE_RESPONSE:
+				return	getResponseName();
+		}
+		
+		return	this.name;
+	}
+
+	/**
+	 * Gets the request name.
+	 * 
+	 * @return	the request name
+	 */
+	public	String		getRequestName() {
+		return	this.name+"Request";
+	}
+
+	/**
+	 * Gets the response name.
+	 * 
+	 * @return	the response name
+	 */
+	public	String		getResponseName() {
+		return	this.name+"Response";
 	}
 
 	/**
@@ -86,10 +156,11 @@ public class Command implements java.io.Serializable {
 		System.out.println("Dump command...");
 		System.out.println(this);
     }
-    
 
     /**
+     * Returns a string representation of this object.
      * 
+     * @return	a string representation of this object
      */
     public	String	toString() {
     	StringBuffer buf = new StringBuffer();
@@ -103,15 +174,27 @@ public class Command implements java.io.Serializable {
 		buf.append(this.getNamespace());
 		buf.append(";className=");
 		buf.append(this.getClassName());
+		buf.append(";request=");
+		buf.append(this.getRequest());
+		buf.append(";response=");
+		buf.append(this.getResponse());
 		buf.append("]");
 
 		return	buf.toString();
     }
 
+    /**
+     * 
+     * @author sposetti
+     *
+     */
     public	static	class		CommandComparator implements java.util.Comparator {
     	
     	/**
+    	 * Compares to objects.
     	 * 
+    	 * @param	o1
+    	 * @param	o2
     	 */
     	public	int		compare(Object o1, Object o2) {
     		if ((o1 instanceof Command) == false)

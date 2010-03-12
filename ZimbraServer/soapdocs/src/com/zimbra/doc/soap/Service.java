@@ -16,6 +16,7 @@
 package com.zimbra.doc.soap;
 
 import java.util.*;
+import com.zimbra.doc.soap.doclet.*;
 import com.zimbra.soap.DocumentService;
 
 /**
@@ -30,6 +31,7 @@ public class Service implements java.io.Serializable {
 	private	List<Command>	commands = new LinkedList<Command>();
 	
 	private	DocumentService		service = null;
+	private	Root		root = null;
 	private	String		className = null;
 	private	String		name = null;
 	public	String		description = null;
@@ -37,9 +39,11 @@ public class Service implements java.io.Serializable {
 	/**
 	 * Constructor.
 	 * 
+	 * @param	root		the root data model
 	 * @param	service		the document service
 	 */
-	public	Service(DocumentService service) {
+	public	Service(Root root, DocumentService service) {
+		this.root = root;
 		this.service = service;
 		this.className = service.getClass().getName();
 		this.name = getClassName(className);
@@ -135,10 +139,26 @@ public class Service implements java.io.Serializable {
 	 * @param namespace
 	 * @return
 	 */
-	public	Command		registerCommand(String className, String namespace) {
-		
+	public	Command		addCommand(String className, String namespace) {
 		Command cmd = new Command(this, className, namespace);
 		
+		if (cmd.getName().equals("Browse")) {
+			// load command file source
+	    	ZmDoclet.registerListener(new CommandDocletListener(this, cmd));
+	
+	    	String cmdClassName = cmd.getClassName();
+	    	String	srcPath = this.root.buildSourcePath(cmdClassName);
+	  
+	    	// read file source
+	    	String[] args = new String[] {
+	    			"-doclet",
+	    			ZmDoclet.class.getName(),
+	    			srcPath
+	    	};
+	
+			com.sun.tools.javadoc.Main.execute(args);
+		}
+
 		commands.add(cmd);
 		
 		return	cmd;
@@ -173,9 +193,10 @@ public class Service implements java.io.Serializable {
 		}
     }
     
-
     /**
+     * Returns a string representation of this object.
      * 
+     * @return	a string representation of this object
      */
     public	String	toString() {
     	StringBuffer buf = new StringBuffer();

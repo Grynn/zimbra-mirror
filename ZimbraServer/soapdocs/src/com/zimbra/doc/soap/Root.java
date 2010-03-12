@@ -113,12 +113,11 @@ public	class	Root {
      * 
      */
     private	Service	addService(DocumentService docService) {
-    	Service s = new Service(docService);
-    	   
+    	Service s = new Service(this, docService);
+
     	ZmDoclet.registerListener(new ServiceDocletListener(s));
 
     	String className = s.getDocumentServiceClassName();
-
     	String	srcPath = buildSourcePath(className);
     	
     	// read file source
@@ -140,7 +139,7 @@ public	class	Root {
      * @param	className		the class name
      * @return	the source file path
      */
-    private	String	buildSourcePath(String className) {
+    public	String	buildSourcePath(String className) {
     	StringBuffer buf = new StringBuffer();
     	
     	String classFilePath = className.replaceAll("\\.", "/");
@@ -217,7 +216,9 @@ public	class	Root {
     }
     
     /**
+     * Returns a string representation of this object.
      * 
+     * @return	a string representation of this object
      */
     public	String	toString() {
     	StringBuffer buf = new StringBuffer();
@@ -233,4 +234,4 @@ public	class	Root {
     }
     
     
-} // end DocEngine class
+} // end Root class

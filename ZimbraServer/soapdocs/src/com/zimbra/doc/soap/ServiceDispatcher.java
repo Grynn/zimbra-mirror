@@ -46,7 +46,7 @@ public	class	ServiceDispatcher extends DocumentDispatcher {
 	 */
 	public void registerHandler(QName qname, DocumentHandler handler) {
 		if (listener.registerCommand(qname, handler))
-			this.service.registerCommand(handler.getClass().getName(), qname.getNamespace().getURI());
+			this.service.addCommand(handler.getClass().getName(), qname.getNamespace().getURI());
 	}
 	
 } // end class ServiceDispatcher

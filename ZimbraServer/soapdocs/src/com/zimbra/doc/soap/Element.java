@@ -15,6 +15,9 @@
 
 package com.zimbra.doc.soap;
 
+import com.zimbra.doc.soap.util.StringUtil;
+import java.util.*;
+
 /**
  * 
  * @author sposetti
@@ -24,62 +27,122 @@ public class Element extends AbstractElement implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public	static	final	int			TYPE_NONE = 0;
-	public	static	final	int			TYPE_REQUEST = 1;
-	public	static	final	int			TYPE_RESPONSE = 2;
+	private	static	final	String				REGEX_ELEMENT_TAG_DELIM = "[ \t]+";
+	private	static	final	String				REGEX_SUBELEMENT_NAME_DELIM = "[,]+";
+	
+	private	List<Element>	subElements = new LinkedList<Element>();
+	private	Map<String,Integer>			subElementsMap = new HashMap<String,Integer>();
+	
+	private	List<Attribute>	attributes = new LinkedList<Attribute>();
 
-	public	static	final	int			OCCURRENCE_REQUIRED_MORE = 2; // one or more
-	public	static	final	int			OCCURRENCE_OPTIONAL_MORE = 3; // zero or more
-
-	private	Element		parent	= null;
-	private	Element[]	elements = new Element[0];
-	private	Attribute[]	attributes = new Attribute[0];
-
-	private	int			type = TYPE_NONE;
+	/**
+	 * Constructor.
+	 * 
+	 * @param	name		the name
+	 * @param	description	the description
+	 * @param	type		the element type (see <code>TYPE_</code> constants)
+	 */
+	private	Element(String name, String description, int type, Map<String,Integer> subElementsMap) {
+		this.name = name;
+		this.description = description;
+		this.type = type;
+		this.subElementsMap = subElementsMap;
+	}
 	
 	/**
-	 * Gets the parent element.
+	 * Creates an element by parsing the tag text.
 	 * 
-	 * @return	the parent element or <code>null</code> for none
+	 * @param	tagText		the tag text
+	 * @param	req		if <code>true</code>, the element is related to the request
+	 * @return	the element
 	 */
-	public	Element	getParent() {
-		return	this.parent;
-	}
+	public	static	Element	createElement(String tagText, int	type) {
+		
+		String[] tokens = tagText.split(REGEX_ELEMENT_TAG_DELIM);
 
+		String	name = tokens[0];
+		String	content = tokens[1];
+		String description = StringUtil.createString(tokens, 2, " ");
+
+		Map	subElementsMap = parseSubElementsFromContent(content);
+
+		return	new Element(name, description, type, subElementsMap);
+	}
+	
 	/**
-	 * Gets the element type.
+	 * Gets the sub-element map.
 	 * 
-	 * @return	the element type (see <code>TYPE_</code> constants
+	 * @return	a map of sub-elements
 	 */
-	public	int		getType() {
-		return	this.type;
+	public	Map<String,Integer>		getSubElementsMap() {
+		return	this.subElementsMap;
 	}
-
+	
 	/**
-	 * Checks if the element is the request.
+	 * Parses the sub-element map from the tag content.
 	 * 
-	 * @return	<code>true</code> if the element is the request
+	 * @param	content		the tag content string
+	 * @return	a map of sub-elements
 	 */
-	public	boolean	isRequest() {
-		return	(this.type == TYPE_REQUEST);
+	private	static	Map<String,Integer>		parseSubElementsFromContent(String content) {
+		Map<String,Integer>		subElementsMap = new HashMap<String,Integer>();
+		
+		if (content.startsWith("(") && content.endsWith(")")) {
+			content = content.substring(1, content.length()-1);
+			String[]	names = content.split(REGEX_SUBELEMENT_NAME_DELIM);
+			for (int i=0; i < names.length; i++) {
+				Object[] obj = parseElementFromContent(names[i]);
+				subElementsMap.put((String)obj[0], (Integer)obj[1]);
+			}
+		}
+			
+		return	subElementsMap;
 	}
-
+	
 	/**
-	 * Checks if the element is the response.
+	 * Parses the sub-element names from the tag content.
 	 * 
-	 * @return	<code>true</code> if the element is the response
+	 * @param	content		the tag content string
+	 * @return	an array of sub-element names or an empty array for none
 	 */
-	public	boolean	isResponse() {
-		return	(this.type == TYPE_RESPONSE);
-	}
+	private	static	Object[]		parseElementFromContent(String elementContent) {
+		Object[] obj = new Object[2];
 
+		int occ = getOccurenceFromString(elementContent);
+		if (occ != OCCURRENCE_REQUIRED)
+			elementContent = elementContent.substring(0, elementContent.length()-1);
+
+		obj[0] = elementContent;
+		obj[1] = new Integer(occ);
+
+		return	obj;
+	}
+	
 	/**
 	 * Checks if the element has elements.
 	 * 
 	 * @return	<code>true</code> if the element has elements
 	 */
-	public	boolean		hasAElements() {
-		return	(elements.length > 0);
+	public	boolean		hasElements() {
+		return	(subElements.size() > 0);
+	}
+
+	/**
+	 * Adds the element.
+	 * 
+	 * @param	e		the element to add
+	 */
+	public	void		addElement(Element e) {
+		this.subElements.add(e);
+	}
+
+	/**
+	 * Adds the attribute.
+	 * 
+	 * @param	attr		the attribute to add
+	 */
+	public	void		addAttribute(Attribute attr) {
+		this.attributes.add(attr);
 	}
 
 	/**
@@ -88,16 +151,25 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	 * @return	<code>true</code> if the element has attributes
 	 */
 	public	boolean		hasAttributes() {
-		return	(attributes.length > 0);
+		return	(attributes.size() > 0);
 	}
 
 	/**
 	 * Gets the attributes.
 	 * 
-	 * @return	an array of values or an empty array for none
+	 * @return	a list of attributes
 	 */
-	public	Attribute[]	getAttributes() {
-		return	attributes;
+	public	List<Attribute>	getAttributes() {
+		return	this.attributes;
+	}
+
+	/**
+	 * Gets the sub-elements.
+	 * 
+	 * @return	a list of elements
+	 */
+	public	List<Element>	getElements() {
+		return	this.subElements;
 	}
 
 	/**
@@ -108,5 +180,31 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	public	boolean		isRequired() {
 		return	(this.occurrence == OCCURRENCE_REQUIRED || this.occurrence == OCCURRENCE_REQUIRED_MORE);
 	}
+
+    /**
+     * Returns a string representation of this object.
+     * 
+     * @return	a string representation of this object
+     */
+    public	String	toString() {
+    	StringBuffer buf = new StringBuffer();
+
+		buf.append("[element");
+		buf.append(";hashCode=");
+		buf.append(hashCode());
+		buf.append(";name=");
+		buf.append(this.getName());
+		buf.append(";type=");
+		buf.append(this.getType());
+		buf.append(";occurrence=");
+		buf.append(this.getOccurrence());
+		buf.append(";subElements-count=");
+		buf.append(this.subElements.size());
+		buf.append(";attributes-count=");
+		buf.append(this.attributes.size());
+		buf.append("]");
+
+		return	buf.toString();
+    }
 
 } // end Element class
