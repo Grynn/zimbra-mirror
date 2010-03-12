@@ -735,6 +735,23 @@ function(hash) {
 	return copy;
 };
 
+/**
+ * updates one hash with attributes from another.
+ *
+ * @param hash1	[hash]
+ * @param hash2 [hash]
+ * @param overwrite [boolean]
+ */
+AjxUtil.hashUpdate =
+function(hash1, hash2, overwrite) {
+	for (var key in hash2) {
+		if (overwrite || !(key in hash1)) {
+			hash1[key] = hash2[key];
+		}
+	}
+	return hash1;
+};
+
 // converts the arg to an array if it isn't one
 AjxUtil.toArray =
 function(arg) {
