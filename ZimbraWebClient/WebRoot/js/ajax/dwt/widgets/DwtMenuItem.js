@@ -15,21 +15,23 @@
 
 
 /**
- * Creates a menu item. Menu items can be part of a radio group, or can be checked style menu items
- *
+ * Creates a menu item.
  * @constructor
  * @class
+ * Menu items can be part of a radio group, or can be checked style menu items.
  *
  * @author Ross Dargahi
  * 
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        style			[constant]*			menu item style
- *        radioGroupId 	[string]*			radio group that the menu item is part of
- *        index 		[int]*				position in menu
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
- *        id			[string]*			an explicit ID to use for the control's HTML element
+ * @param {Hash}	params		a hash of parameters
+ * @param  {DwtComposite}     params.parent		the parent widget
+ * @param  {constant}     params.style			the menu item style
+ * @param  {String}     params.radioGroupId 	the radio group that the menu item is part of
+ * @param  {int}     params.index 			the position in menu
+ * @param  {String}     params.className		the CSS class
+ * @param  {constant}     params.posStyle		the positioning style (see {@link DwtControl})
+ * @param  {String}     params.id			an explicit ID to use for the control's HTML element
+ * 
+ * @extends		DwtButton
  */
 DwtMenuItem = function(params) {
 	if (arguments.length == 0) { return; }
@@ -84,12 +86,41 @@ function() {
 
 DwtMenuItem.CHECKED			= 1;
 DwtMenuItem.UNCHECKED		= 2;
+
+/**
+ * Defines the "no" style.
+ * @type int
+ */
 DwtMenuItem.NO_STYLE		= 0;
+/**
+ * Defines the "check" style.
+ * @type int
+ */
 DwtMenuItem.CHECK_STYLE		= DwtButton._LAST_STYLE * 2;
+/**
+ * Defines the "radio" style.
+ * @type int
+ */
 DwtMenuItem.RADIO_STYLE		= DwtButton._LAST_STYLE * 4;
+/**
+ * Defines the "separator" style.
+ * @type int
+ */
 DwtMenuItem.SEPARATOR_STYLE = DwtButton._LAST_STYLE * 8;
+/**
+ * Defines the "cascade" style.
+ * @type int
+ */
 DwtMenuItem.CASCADE_STYLE	= DwtButton._LAST_STYLE * 16;
+/**
+ * Defines the "push" style.
+ * @type int
+ */
 DwtMenuItem.PUSH_STYLE		= DwtButton._LAST_STYLE * 32;
+/**
+ * Defines the "select" style.
+ * @type int
+ */
 DwtMenuItem.SELECT_STYLE	= DwtButton._LAST_STYLE * 64;
 DwtMenuItem._LAST_STYLE		= DwtMenuItem.SELECT_STYLE;
 
@@ -115,6 +146,11 @@ function() {
 	DwtButton.prototype.dispose.call(this);
 };
 
+/**
+ * Creates the menu item.
+ * 
+ * @param	{Hash}	params		a hash of parameters
+ */
 DwtMenuItem.create =
 function(params) {
 	var mi = new DwtMenuItem(params);
@@ -128,11 +164,22 @@ function(params) {
 	return mi;
 };
 
+/**
+ * Gets the checked flag.
+ * 
+ * @return	{Boolean}	<code>true</code> if the item is checked
+ */
 DwtMenuItem.prototype.getChecked =
 function() {
 	return this._itemChecked;
 };
 
+/**
+ * Sets the checked flag.
+ * 
+ * @param	{Boolean}	checked			if <code>true</code>, check the item
+ * @param	{Boolean}	skipNotify		if <code>true</code>, do not notify listeners
+ */
 DwtMenuItem.prototype.setChecked =
 function(checked, skipNotify) {
 	this._setChecked(checked, null, skipNotify);

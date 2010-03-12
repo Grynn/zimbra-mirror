@@ -14,23 +14,25 @@
  */
 
 /**
+ * Creates an iframe.
  * @class DwtIframe
  * @author Mihai Bazon
- *
- * Simple event proxy.  Creates an IFRAME, inserts the given html into it and
+ * This class represents a simple event proxy. Creates an IFRAME, inserts the given html into it and
  * forwards any events to the parent widget, translating mouse coordinates in
  * between.
  *
- * @param parent - The parent DwtComposite
- * @param html - the HTML code to be inserted in the IFRAME.  There will be
+ * @param {Hash}	params		a hash of parameters
+ * @param	{DwtComposite}		params.parent		the parent 
+ * @param {String}	params.html 	the HTML code to be inserted in the IFRAME.  There will be
  *   slight modifications to it (i.e. the margins and paddings of the HTML
- *   element will be set to 0, also any margins for BODY).  @param
- * @param noscroll - (optional, default false) hide the scroll bars?
- * @param posStyle - (optional, default "static") passed over to DwtControl
- * @param processHtmlCallback - (optional) AjxCallback that will be called
- *   immediately after the HTML code was inserted.  A ref. to the document object
- *   will be passed.
- * @param useKbMgmt	[boolean]*		if true, participate in keyboard mgmt
+ *   element will be set to 0, also any margins for BODY).
+ * @param {Boolean}		[params.noscroll=false] 	if <code>true</code>, do not show the scroll bars
+ * @param {constant}	params.posStyle		the position style (see {@link DwtControl})
+ * @param {AjxCallback}	params.processHtmlCallback		the callback that will be called
+ *   immediately after the HTML code was inserted. A reference to the document object will be passed
+ * @param {Boolean}	params.useKbMgmt	if <code>true</code>, participate in keyboard management
+ * 
+ * @extends		DwtControl
  */
 DwtIframe = function(params) {
 	params.posStyle = params.posStyle || DwtControl.STATIC_STYLE;
@@ -62,10 +64,20 @@ function() {
 	return "DwtIframe";
 };
 
+/**
+ * Gets the iframe.
+ * 
+ * @return	{Element}	the iframe
+ */
 DwtIframe.prototype.getIframe = function() {
 	return document.getElementById(this._iframeID);
 };
 
+/**
+ * Gets the iframe window document.
+ * 
+ * @return	{Document}		the document
+ */
 DwtIframe.prototype.getDocument = function() {
 	return this.getIframe().contentWindow.document;
 };

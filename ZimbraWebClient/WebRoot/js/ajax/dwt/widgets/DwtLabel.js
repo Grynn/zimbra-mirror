@@ -15,12 +15,13 @@
 
 /**
  * @overview
- * 
  * This file defines a label.
  *
  */
 
 /**
+ * Creates a label.
+ * @constructor
  * @class
  * This class represents a label, which consists of an image and/or text. It is used
  * both as a concrete class and as the base class for {@link DwtButton}. The label
@@ -29,10 +30,10 @@
  * 
  * <h4>CSS</h4>
  * <ul>
- * <li><i>.className</i> table - the label table</li>
- * <li><i>.className</i> .Icon - class name for the icon image cell</li>
- * <li><i>.className</i> .Text - enabled text cell</li>
- * <li><i>.className</i> .DisabledText - disabled text cell</li>
+ * <li><code>.className table</code> - the label table</li>
+ * <li><code>.className .Icon</code> - class name for the icon image cell</li>
+ * <li><code>.className .Text</code> - enabled text cell</li>
+ * <li><code>.className .DisabledText</code> - disabled text cell</li>
  * </ul>
  * 
  * <h4>Keyboard Actions</h4>
@@ -43,20 +44,18 @@
  * 
  * @author Ross Dargahi
  * 
- * @param {Hash}		params		the hash of parameters:
- * <ul>
- * <li>parent	{@link DwtComposite} 		the parent widget</li>
- * <li>style			{constant}			label style: May be one of: {@link DwtLabel.IMAGE_LEFT} 
+ * @param {Hash}		params		the hash of parameters
+ * @param	{DwtComposite}	params.parent	the parent widget
+ * @param	{constant}	params.style		the label style: May be one of: {@link DwtLabel.IMAGE_LEFT} 
  * 											or {@link DwtLabel.IMAGE_RIGHT} arithmetically or'd (|) with  one of:
  * 											{@link DwtLabel.ALIGN_LEFT}, {@link DwtLabel.ALIGN_CENTER}, or {@link DwtLabel.ALIGN_LEFT}
  * 											The first determines were in the label the icon will appear (if one is set), the second
  * 											determine how the content of the label will be aligned. The default value for
- * 											this parameter is: {@link DwtLabel.IMAGE_LEFT} | {@link DwtLabel.ALIGN_CENTER}</li>
- * <li>className		{String}			the CSS class</li>
- * <li>posStyle		{constant}			the positioning style</li>
- * <li>id			{String}			the to use for the control HTML element</li>
- * <li>index 		{int}				the index at which to add this control among parent's children</li>
- * </ul>
+ * 											this parameter is: {@link DwtLabel.IMAGE_LEFT} | {@link DwtLabel.ALIGN_CENTER}
+ * @param	{String}	params.className	the CSS class
+ * @param	{constant}	params.posStyle		the positioning style (see {@link DwtControl})
+ * @param	{String}	params.id			the to use for the control HTML element
+ * @param	{int}	params.index 		the index at which to add this control among parent's children
  *        
  * @extends DwtControl
  */
@@ -67,16 +66,21 @@ DwtLabel = function(params) {
 	params.className = params.className || "DwtLabel";
 	DwtControl.call(this, params);
 
-	/**The label's style. See the constructor documentation for more info
-	 * @type Int*/
+	/**
+	 * The label style. See the constructor for more info.
+	 * @type int
+	 */
 	this._style = params.style || (DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER);
 	
-	/**The label text's background color
-	 * @type String*/
+	/**
+	 * The label text background color.
+	 * @type String
+	 */
 	this._textBackground = null;
 	
-	/**The label text's foreground color
-	 * @type String*/
+	/**The label text foreground color.
+	 * @type String
+	 */
 	this._textForeground = null;
 
     this._createHtml();
@@ -106,42 +110,42 @@ function() {
 /**
  * Defines the "left" align image (i.e. align to the left of text, if both present).
  * 
- * @type {int}
+ * @type int
  */
 DwtLabel.IMAGE_LEFT = 1;
 
 /**
  * Defines the "right" align image (i.e. align to the right of text, if both present).
  * 
- * @type {int}
+ * @type int
  */
 DwtLabel.IMAGE_RIGHT = 2;
 
 /**
  * Defines the "left" align label.
  * 
- * @type {int}
+ * @type int
  */
 DwtLabel.ALIGN_LEFT = 4;
 
 /**
  * Defines the "right" align label.
  * 
- * @type {int}
+ * @type int
  */
 DwtLabel.ALIGN_RIGHT = 8;
 
 /**
  * Defines the "center" align label.
  * 
- * @type {int}
+ * @type int
  */
 DwtLabel.ALIGN_CENTER = 16;
 
 /**
  * Defines the last style label (used for subclasses).
- * 
- * @type {int}
+ * @type int
+ * @private
  */
 DwtLabel._LAST_STYLE = 16;
 
@@ -171,7 +175,7 @@ function() {
  * Sets the enabled/disabled state of the label. A disabled label may have a different
  * image, and greyed out text. This method overrides {@link DwtControl#setEnabled}.
  *
- * @param {Boolean} enabled 		<code>true</code> to set the label as enabled
+ * @param {Boolean} enabled 		if <code>true</code>, set the label as enabled
  */
 DwtLabel.prototype.setEnabled =
 function(enabled) {
@@ -218,7 +222,7 @@ function(imageInfo) {
 /**
  * Gets the label text.
  * 
- * @retur	{String}	the text or <code>null</code> if not set
+ * @return	{String}	the text or <code>null</code> if not set
  */
 DwtLabel.prototype.getText =
 function() {
@@ -273,7 +277,7 @@ function(color) {
 /**
  * Sets the align style.
  * 
- * @param		{constant}		alignStyle		the align style
+ * @param		{constant}		alignStyle		the align style (see {@link DwtControl})
  */
 DwtLabel.prototype.setAlign =
 function(alignStyle) {

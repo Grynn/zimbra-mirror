@@ -14,6 +14,7 @@
  */
 
 /**
+ * Creates a list view.
  * @constructor
  * @class
  * A list view presents a list of items as rows with fields (columns).
@@ -21,14 +22,16 @@
  * @author Parag Shah
  * @author Conrad Damon
  * 
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
- *        headerList	[array]*			list of IDs for columns
- *        noMaximize	[boolean]*			if true, all columns are fixed-width (otherwise, one will
+ * @param {Hash}	params		a hash of parameters
+ * @param  {DwtComposite}     parent		the parent widget
+ * @param {String}	className		the CSS class
+ * @param {constant}	posStyle		the positioning style (see {@link DwtControl})
+ * @param  {Array}	headerList	a list of IDs for columns
+ * @param {Boolean}	noMaximize	if <code>true</code>, all columns are fixed-width (otherwise, one will
  * 											expand to fill available space)
- *        view			[constant]*			ID of view
+ * @param  {constant}     view			the ID of view
+ * 
+ * @extends		DwtComposite
  */
 DwtListView = function(params) {
 	if (arguments.length == 0) { return; }
@@ -154,6 +157,11 @@ function() {
 	DwtComposite.prototype.dispose.call(this);
 };
 
+/**
+ * Sets the enabled flag.
+ * 
+ * @param	{Boolean}	enabled		if <code>true</code>, enable the list view
+ */
 DwtListView.prototype.setEnabled =
 function(enabled) {
 	DwtComposite.prototype.setEnabled.call(this, enabled);
@@ -345,8 +353,12 @@ function(htmlArr, idx, headerCol, i, numCols, id, defaultColumnSort) {
 	return idx;
 };
 
-// returns the index of the given item based on its position in the list
-// underlying this view
+/**
+ * Gets the index of the given item.
+ *
+ * @param	{Object}	item		the item
+ * @return	{int}	the index or <code>null</code> if not found
+ */
 DwtListView.prototype.getItemIndex =
 function(item) {
 	var list = this._list;
@@ -361,25 +373,36 @@ function(item) {
 	return null;
 };
 
+/**
+ * Sets the size of the view.
+ * 
+ * @param	{int|String}	width		the width (for example: 100, "100px", "75%")
+ * @param	{int|String}	height		the height (for example: 100, "100px", "75%")
+ */
 DwtListView.prototype.setSize =
 function(width, height) {
 	DwtComposite.prototype.setSize.call(this, width, height);
 	this._sizeChildren(height);
 };
 
+/**
+ * Gets the count of items in the list.
+ * 
+ * @return	{int}	the count of items
+ */
 DwtListView.prototype.size =
 function() {
 	return this._list ? this._list.size() : 0;
 };
 
 /**
-* Creates a list view out of the given vector of items. The derived class should override _createItemHtml()
-* in order to display an item.
-*
-* @param list				[AjxVector]	a vector of items
-* @param defaultColumnSort	[Integer]	default column field to sort (optional)
-* @param noResultsOk		[boolean]*	if true, don't show "No Results" for empty list
-*/
+ * Creates a list view out of the given vector of items. The derived class should override _createItemHtml()
+ * in order to display an item.
+ *
+ * @param {AjxVector}	list			a vector of items
+ * @param {int}	[defaultColumnSort]	the default column field to sort
+ * @param {Boolean}	noResultsOk		if <code>true</code>, do not show "No Results" for empty list
+ */
 DwtListView.prototype.set =
 function(list, defaultColumnSort, noResultsOk) {
 	if (this._selectedItems) {
@@ -393,11 +416,11 @@ function(list, defaultColumnSort, noResultsOk) {
 };
 
 /**
-* Renders the list view using the current list of items.
-*
-* @param defaultColumnSort		[string]	ID of column that represents default sort order
-* @param noResultsOk			[boolean]*	if true, don't show "No Results" for empty list
-*/
+ * Renders the list view using the current list of items.
+ *
+ * @param {String}	defaultColumnSort		the ID of column that represents default sort order
+ * @param {Boolean}	noResultsOk			if <code>true</code>, do not show "No Results" for empty list
+ */
 DwtListView.prototype.setUI =
 function(defaultColumnSort, noResultsOk) {
 	this.removeAll();
@@ -434,6 +457,11 @@ function(list, noResultsOk, doAdd) {
 	}
 };
 
+/**
+ * Adds the items.
+ * 
+ * @param	{Array}		itemArray		an array of items
+ */
 DwtListView.prototype.addItems =
 function(itemArray) {
 	if (AjxUtil.isArray(itemArray)) {
@@ -453,10 +481,10 @@ function(itemArray) {
 /**
  * Adds a row for the given item to the list view.
  *
- * @param item			[object]	data item
- * @param index			[int]*		index at which to add item to list and list view
- * @param skipNotify	[boolean]*	if true, do not notify listeners
- * @param itemIndex		[int]*		index at which to add item to list, if different
+ * @param {Object}	item			the data item
+ * @param {int}	index			the index at which to add item to list and list view
+ * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ * @param {int}	itemIndex		index at which to add item to list, if different
  * 									from the one for the list view
  */
 DwtListView.prototype.addItem =
@@ -487,6 +515,13 @@ function(item, index, skipNotify, itemIndex) {
 	}
 };
 
+/**
+ * Removes a row for the given item to the list view.
+ *
+ * @param {Object}	item			the data item
+ * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ * @param {Boolean}	skipAlternation		if <code>true</code>, do not fix alternation
+ */
 DwtListView.prototype.removeItem =
 function(item, skipNotify, skipAlternation) {
 
@@ -538,36 +573,71 @@ function(item) {
     }
 };
 
+/**
+ * Adds a selection listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtListView.prototype.addSelectionListener =
 function(listener) {
 	this._evtMgr.addListener(DwtEvent.SELECTION, listener);
 };
 
+/**
+ * Removes a selection listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtListView.prototype.removeSelectionListener =
 function(listener) {
 	this._evtMgr.removeListener(DwtEvent.SELECTION, listener);
 };
 
+/**
+ * Adds an action listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtListView.prototype.addActionListener =
 function(listener) {
 	this._evtMgr.addListener(DwtEvent.ACTION, listener);
 };
 
+/**
+ * Removes an action listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtListView.prototype.removeActionListener =
 function(listener) {
 	this._evtMgr.removeListener(DwtEvent.ACTION, listener);
 };
 
+/**
+ * Adds a state change listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtListView.prototype.addStateChangeListener =
 function(listener) {
 	this._evtMgr.addListener(DwtEvent.STATE_CHANGE, listener);
 };
 
+/**
+ * Adds a state change listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtListView.prototype.removeStateChangeListener =
 function(listener) {
 	this._evtMgr.removeListener(DwtEvent.STATE_CHANGE, listener);
 };
 
+/**
+ * Removes all the items from the list.
+ * 
+ * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ */
 DwtListView.prototype.removeAll =
 function(skipNotify) {
 	if (this._parentEl) {
@@ -583,6 +653,10 @@ function(skipNotify) {
 	}
 };
 
+/**
+ * Selects all items in the list.
+ * 
+ */
 DwtListView.prototype.selectAll =
 function() {
 	if (this._list && this._list.size()) {
@@ -590,6 +664,10 @@ function() {
 	}
 };
 
+/**
+ * De-selects all items in the list.
+ * 
+ */
 DwtListView.prototype.deselectAll =
 function() {
 	var a = this._selectedItems.getArray();
@@ -629,6 +707,11 @@ function() {
 	return a;
 };
 
+/**
+ * Gets the selected items.
+ * 
+ * @return	{Array}	an array of selected items
+ */
 DwtListView.prototype.getSelectedItems =
 function() {
 	return this._selectedItems;
@@ -666,11 +749,6 @@ function(item, skipNotify) {
 	}
 };
 
-/*
- * Unlike setSelection method, this method selects the passed in element in
- * addition to the currently selected item(s). If given element is already
- * selected, it will be unselected.
-*/
 DwtListView.prototype.setMultiSelection =
 function(clickedEl, bContained, ev) {
 	if (bContained) {
@@ -709,7 +787,11 @@ function(selectedArray) {
 	}
 };
 
-// Selects or deselects a single item
+/**
+ * Selects or deselects a single item.
+ * 
+ * @param	{Boolean}	selected		if <code>true</code>, select the item
+ */
 DwtListView.prototype.selectItem =
 function(item, selected) {
 
@@ -723,6 +805,11 @@ function(item, selected) {
 	}
 };
 
+/**
+ * Gets the selection count.
+ * 
+ * @return	{int}	the selection count
+ */
 DwtListView.prototype.getSelectionCount =
 function() {
 	return this._rightSelItem ? 1 : this._selectedItems.size();
@@ -742,6 +829,8 @@ function() {
  * @param type		[constant]*		role that element has; defaults to DwtListView.TYPE_LIST_ITEM
  * @param id		[string]*		ID for element; if not provided, one is generated from the item
  * @param data		[hash]*			additional attributes to store
+ * 
+ * @private
  */
 DwtListView.prototype.associateItemWithElement =
 function(item, element, type, id, data) {
@@ -768,7 +857,8 @@ function(el) {
  * Starts with an element and works its way up the element chain until it finds one
  * with an ID that maps to an item, then returns the associated item.
  *
- * @param el	[Element]	element to start with
+ * @param {Element}	el	element to start with
+ * @return	{Object}	the item
  */
 DwtListView.prototype.findItem =
 function(el)  {
@@ -781,7 +871,8 @@ function(el)  {
  * Starts with an element and works its way up the element chain until it finds one
  * with an ID that maps to an item.
  *
- * @param el	[Element]	element to start with
+ * @param {Element}	el	the element to start with
+ * @return	{Element}	the element
  */
 DwtListView.prototype.findItemDiv =
 function(el)  {
@@ -796,11 +887,12 @@ function(el)  {
 };
 
 /**
- * Returns the item associated with the given event. Starts with the
+ * Gets the item associated with the given event. Starts with the
  * event target and works its way up the element chain until it finds one
  * with an ID that maps to an item.
  *
- * @param ev				[DwtEvent]	event
+ * @param {DwtEvent}	ev				the event
+ * @return	{Object}	the item
  */
 DwtListView.prototype.getTargetItem =
 function(ev)  {
@@ -808,11 +900,12 @@ function(ev)  {
 };
 
 /**
- * Returns the item DIV associated with the given event. Starts with the
+ * Gets the item DIV associated with the given event. Starts with the
  * event target and works its way up the element chain until it finds one
  * with an ID that maps to an item.
  *
- * @param ev				[DwtEvent]	event
+ * @param {DwtEvent}	ev				the event
+ * @return	{Object}	the item
  */
 DwtListView.prototype.getTargetItemDiv =
 function(ev)  {
@@ -1070,6 +1163,8 @@ function(row, odd) {
  *        isDragProxy	[boolean]	if true, we are rendering a the row to be a drag proxy (dragged around the screen)
  *        div			[element]	div to fill with content
  *        headerList	[array]		list of column headers
+ *        
+ * @private
  */
 DwtListView.prototype._createItemHtml =
 function(item, params, asHtml, count) {
@@ -1119,6 +1214,8 @@ function(item, params, asHtml, count) {
  *
  * @param item			[object]	item to render
  * @param params		[hash]*		hash of optional params
+ * 
+ * @private
  */
 DwtListView.prototype._addParams = function(item, params) {};
 
@@ -1128,6 +1225,8 @@ DwtListView.prototype._addParams = function(item, params) {};
  *
  * @param item		[object]	item to render
  * @param params	[hash]*		hash of optional params
+ * 
+ * @private
  */
 DwtListView.prototype._getDiv =
 function(item, params) {
@@ -1159,6 +1258,8 @@ function(item, params) {
  * @param html		[Array]		array used to contain HTML code
  * @param idx		[Integer]	index used to contain HTML code
  * @param count		[Integer]	count of row currently being processed
+ * 
+ * @private
  */
 DwtListView.prototype._getDivHtml =
 function(item, params, html, idx, count) {
@@ -1198,6 +1299,8 @@ function(item, params, html, idx, count) {
  * @param base		[string]	name of base class
  * @param item		[object]	item to render
  * @param params	[hash]*		hash of optional params
+ * 
+ * @private
  */
 DwtListView.prototype._getDivClass =
 function(base, item, params) {
@@ -1210,6 +1313,8 @@ function(base, item, params) {
  * @param htmlArr	[array]		array that holds lines of HTML
  * @param idx		[int]		current line of array
  * @param params	[hash]*		hash of optional params
+ * 
+ * @private
  */
 DwtListView.prototype._getTable =
 function(htmlArr, idx, params) {
@@ -1225,6 +1330,8 @@ function(htmlArr, idx, params) {
  * @param idx		[int]		current line of array
  * @param item		[object]	item to render
  * @param params	[hash]*		hash of optional params
+ * 
+ * @private
  */
 DwtListView.prototype._getRow =
 function(htmlArr, idx, item, params) {
@@ -1240,6 +1347,8 @@ function(htmlArr, idx, item, params) {
  *
  * @param item		[object]	item to render
  * @param params	[hash]*		hash of optional params
+ * 
+ * @private
  */
 DwtListView.prototype._getRowClass =
 function(item, params) {
@@ -1251,6 +1360,8 @@ function(item, params) {
  *
  * @param item		[object]	item to render
  * @param params	[hash]*		hash of optional params
+ * 
+ * @private
  */
 DwtListView.prototype._getRowId =
 function(item, params) {
@@ -1267,6 +1378,8 @@ function(item, params) {
  * @param field		[constant]	column identifier
  * @param colIdx	[int]		index of column (starts at 0)
  * @param params	[hash]*		hash of optional params
+ * 
+ * @private
  */
 DwtListView.prototype._getCell =
 function(htmlArr, idx, item, field, colIdx, params) {
@@ -1294,6 +1407,8 @@ function(htmlArr, idx, item, field, colIdx, params) {
  *
  * @param colIdx	[int]		index of column (starts at 0)
  * @param params	[hash]*		hash of optional params
+ * 
+ * @private
  */
 DwtListView.prototype._getCellWidth =
 function(colIdx, params) {
@@ -1324,6 +1439,8 @@ function(colIdx, params) {
  * @param item		[object]	item to render
  * @param field		[constant]	column identifier
  * @param params	[hash]*		hash of optional params
+ * 
+ * @private
  */
 DwtListView.prototype._getCellId =
 function(item, field, params) {
@@ -1336,6 +1453,8 @@ function(item, field, params) {
  * @param item		[object]	item to render
  * @param field		[constant]	column identifier
  * @param params	[hash]*		hash of optional params
+ * 
+ * @private
  */
 DwtListView.prototype._getCellClass =
 function(item, field, params) {
@@ -1348,6 +1467,8 @@ function(item, field, params) {
  * @param item		[object]	item to render
  * @param field		[constant]	column identifier
  * @param params	[hash]*		hash of optional params
+ * 
+ * @private
  */
 DwtListView.prototype._getCellAttrText =
 function(item, field, params) {
@@ -1364,6 +1485,8 @@ function(item, field, params) {
  * @param field		[constant]	column identifier
  * @param colIdx	[int]		index of column (starts at 0)
  * @param params	[hash]*		hash of optional params
+ * 
+ * @private
  */
 DwtListView.prototype._getCellContents =
 function(htmlArr, idx, item, field, colIdx, params) {
@@ -1376,6 +1499,8 @@ function(htmlArr, idx, item, field, colIdx, params) {
  *
  * @param item		[object]	item to render
  * @param field		[constant]	column identifier
+ * 
+ * @private
  */
 DwtListView.prototype._getFieldId =
 function(item, field) {
@@ -1388,6 +1513,8 @@ function(item, field) {
  *
  * @param item		[object]	item to render
  * @param field		[constant]	column identifier
+ * 
+ * @private
  */
 DwtListView.prototype._getElement =
 function(item, field) {
@@ -1518,6 +1645,8 @@ function(item) {
  * @param el		[Element]	an HTML element
  * @param field		[string]	key for desired data
  * @param id		[string]*	ID that overrides element ID (or if element is not provided)
+ * 
+ * @private
  */
 DwtListView.prototype._getItemData =
 function(el, field, id) {
@@ -1533,6 +1662,8 @@ function(el, field, id) {
  * @param field		[string]	key
  * @param value		[object]	value
  * @param id		[string]*	ID that overrides element ID (or if element is not provided)
+ * 
+ * @private
  */
 DwtListView.prototype._setItemData =
 function(el, field, value, id) {
@@ -1741,6 +1872,7 @@ function(element, next) {
 /**
  * This method will scroll the list to ensure that <code>itemDiv</code> is
  * scrolled into view.
+ * 
  * @private
  */
 DwtListView.prototype._scrollList =
@@ -1916,14 +2048,16 @@ function(clickedEl, ev) {
 	}
 };
 
-/* 	
-* Creates a list event from a mouse event. Returns true if it is okay to notify listeners.
-* Subclasses may override to add more properties to the list event.
-*
-* @param	[DwtEvent]		mouse event
-* @param	[DwtEvent]		list event (selection or action)
-* @param	[element]		HTML element that received mouse click
-*/
+/**
+ * Creates a list event from a mouse event. Returns true if it is okay to notify listeners.
+ * Subclasses may override to add more properties to the list event.
+ *
+ * @param	[DwtEvent]		mouse event
+ * @param	[DwtEvent]		list event (selection or action)
+ * @param	[element]		HTML element that received mouse click
+ * 
+ * @private
+ */
 DwtListView.prototype._setListEvent =
 function(ev, listEv, clickedEl) {
 	DwtUiEvent.copy(listEv, ev);
@@ -2214,6 +2348,8 @@ function(columnIdx, newIdx) {
  * MIN_COLUMN_WIDTH.
  *
  * @param ev
+ * 
+ * @private
  */
 DwtListView.prototype._handleColSashDrop =
 function(ev) {
@@ -2333,6 +2469,8 @@ function() {
  *
  * @param start		[int]		index of reference column
  * @param exclude	[array]		list of indices to exclude
+ * 
+ * @private
  */
 DwtListView.prototype._getNextResizeableColumnIndex =
 function(start, exclude) {
@@ -2466,6 +2604,8 @@ function() {
  *        noRemove		[boolean]*	flag indicating whether this column can be removed (overrides visible flag)
  *        view			[constant]	ID of owning view
  *        noSortArrow	[boolean]*	if true, do not show up/down sort arrow in column
+ *        
+ * @private
  */
 DwtListHeaderItem = function(params) {
 

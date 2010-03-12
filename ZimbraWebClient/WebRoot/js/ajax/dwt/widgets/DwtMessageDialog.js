@@ -15,7 +15,6 @@
 
 /**
  * @overview
- * 
  * This file contains classes for a message dialog.
  */
 
@@ -27,13 +26,11 @@
  * 
  * @author Ross Dargahi
  * 
- * @param {Hash}		params			a hash of params
- * <ul>
- * <li>parent	{DwtComposite}	the parent widget (the shell)</li>
- * <li>className {String}		the CSS class</li>
- * <li>buttons	{Array}			the buttons to show. Defaults to {DwtDialog.OK_BUTTON} button</li>
- * <li>extraButtons	{Array}  	a list of {DwtDialog_ButtonDescriptor} objects describing custom buttons to add to the dialog</li>
- * </ul>
+ * @param {Hash}		params			a hash of parameters
+ * @param {DwtComposite}	params.parent		the parent widget (the shell)
+ * @param {String}	params.className 		the CSS class
+ * @param {Array}	params.buttons				the buttons to show. Defaults to {@link DwtDialog.OK_BUTTON} button
+ * @param {Array}	params.extraButtons	  	a list of {@link DwtDialog_ButtonDescriptor} objects describing custom buttons to add to the dialog
  * 
  * @extends	DwtDialog
  */
@@ -56,14 +53,17 @@ DwtMessageDialog.prototype.constructor = DwtMessageDialog;
 
 /**
  * Defines the "critical" style.
+ * @type int
  */
 DwtMessageDialog.CRITICAL_STYLE = 1;
 /**
  * Defines the "info" style.
+ * @type int
  */
 DwtMessageDialog.INFO_STYLE = 2;
 /**
  * Defines the "warning" style.
+ * @type int
  */
 DwtMessageDialog.WARNING_STYLE = 3;
 
@@ -94,7 +94,7 @@ function() {
 * Sets the message style (info/warning/critical) and content.
 *
 * @param {String}	msgStr		the message text
-* @param {constant}	style		the style (see <code>_STYLE</code> constants)
+* @param {constant}	style		the style (see <code>DwtMessageDialog.*_STYLE</code> constants)
 * @param {String}	title		the dialog box title
 */
 DwtMessageDialog.prototype.setMessage =
@@ -116,12 +116,6 @@ function(msgStr, style, title) {
 	}
 };
 
-/**
- * Sets the dialog size.
- * 
- * @param	{int}	width		the width (in pixels)
- * @param	{int}	height		the height (in pixels)
- */
 DwtMessageDialog.prototype.setSize =
 function(width, height) {
 	var msgCell = document.getElementById(this._msgCellId);
@@ -131,9 +125,9 @@ function(width, height) {
 };
 
 /**
-* Resets the message dialog. This should be performed to "reuse" the dialog.
-* 
-*/
+ * Resets the message dialog. This should be performed to "reuse" the dialog.
+ * 
+ */
 DwtMessageDialog.prototype.reset = 
 function() {
 	this._msgCell.innerHTML = "";
@@ -144,9 +138,10 @@ function() {
  * Handles the dialog key action. If the user hits the "Esc" key and no "Cancel" button is present,
  * the key action is treated it as a press of the "OK" button.
  * 
- * @param	{Object}		actionCode	the key action code
+ * @param	{DwtKeyMap}		actionCode	the key action code
  * @param	{DwtKeyEvent}	ev	the key event
- * @see		DwtKeyMap
+ * 
+ * @private
  */
 DwtMessageDialog.prototype.handleKeyAction =
 function(actionCode, ev) {

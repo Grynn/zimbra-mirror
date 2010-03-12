@@ -14,29 +14,30 @@
  */
 
 /**
- * Creates a menu object to menu items can be added. Menus can be created in various styles as
- * follows:
- *
- * DwtMenu.BAR_STYLE - Traditional menu bar.
- * DwtMenu.POPUP_STYLE - Popup menu
- * DwtMenu.DROPDOWN_STYLE - Used when a menu is a drop down (e.g. parent is a button or another menu item);
- * DwtMenu.COLOR_PICKER_STYLE - Menu is hosting a single color picker;
- * DwtMenu.CALENDAR_PICKER_STYLE - Menu is hostng a single calendar;
- * DwtMenu.GENERIC_WIDGET_STYLE - Menu is hosting a single "DwtInsertTableGrid";
- *
+ * Creates a menu.
  * @constructor
  * @class
- *
+ * Creates a menu object to menu items can be added. Menus can be created in various styles as
+ * follows:
+ * <ul>
+ * <li>DwtMenu.BAR_STYLE - Traditional menu bar</li>
+ * <li>DwtMenu.POPUP_STYLE - Popup menu</li>
+ * <li>DwtMenu.DROPDOWN_STYLE - Used when a menu is a drop down (e.g. parent is a button or another menu item)</li>
+ * <li>DwtMenu.COLOR_PICKER_STYLE - Menu is hosting a single color picker</li>
+ * <li>DwtMenu.CALENDAR_PICKER_STYLE - Menu is hostng a single calendar</li>
+ * <li>DwtMenu.GENERIC_WIDGET_STYLE - Menu is hosting a single "DwtInsertTableGrid"</li>
+ * </ul>
+  *
  * @author Ross Dargahi
  * 
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        style			[constant]*			menu style
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
- *        cascade		[boolean]*			should menu cascade (i.e. multiple columns).
- *        									If not specified, default is true
- *        									for backwards compatibility.
+ * @param {Hash}	params		a hash of parameters
+ * @param       {DwtComposite}	params.parent		the parent widget
+ * @param {constant}      params.style			the menu style
+ * @param {String}      params.className		the CSS class
+ * @param {constant}      params.posStyle		the positioning style (see {@link DwtControl})
+ * @param {Boolean}      [params.cascade=true]		if <code>true</code>, menu should cascade (i.e. multiple columns)
+ * 
+ * @extends		DwtComposite
  */
 DwtMenu = function(params) {
 	if (arguments.length == 0) { return; }
@@ -150,11 +151,35 @@ function() {
 	return "DwtMenu";
 };
 
+/**
+ * Defines the "bar" style menu
+ * @type	int
+ */
 DwtMenu.BAR_STYLE = 1;
+/**
+ * Defines the "popup" style menu
+ * @type	int
+ */
 DwtMenu.POPUP_STYLE = 2;
+/**
+ * Defines the "dropdown" style menu
+ * @type	int
+ */
 DwtMenu.DROPDOWN_STYLE = 3;
+/**
+ * Defines the "color" style menu
+ * @type	int
+ */
 DwtMenu.COLOR_PICKER_STYLE =  4;
+/**
+ * Defines the "calendar" style menu
+ * @type	int
+ */
 DwtMenu.CALENDAR_PICKER_STYLE = 5;
+/**
+ * Defines the "generic widget" style menu
+ * @type	int
+ */
 DwtMenu.GENERIC_WIDGET_STYLE = 6;
 
 DwtMenu.HAS_ICON = "ZHasIcon";
@@ -176,31 +201,64 @@ function() {
 	}
 };
 
+/**
+ * Adds a popup listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtMenu.prototype.addPopupListener =
 function(listener) {
 	this.addListener(DwtEvent.POPUP, listener);
 };
 
+/**
+ * Removes a popup listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtMenu.prototype.removePopupListener = 
 function(listener) {
 	this.removeListener(DwtEvent.POPUP, listener);
 };
 
+/**
+ * Adds a popdown listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtMenu.prototype.addPopdownListener = 
 function(listener) {
 	this.addListener(DwtEvent.POPDOWN, listener);
 };
 
+/**
+ * Removes a popdown listener.
+ * 
+ * @param	{AjxListener}	listener		the listener
+ */
 DwtMenu.prototype.removePopdownListener = 
 function(listener) {
 	this.removeListener(DwtEvent.POPDOWN, listener);
 };
 
+/**
+ * Gets a menu item.
+ * 
+ * @param	{String}	index		the index
+ * @return	{DwtMenuItem}		the menu item
+ */
 DwtMenu.prototype.getItem =
 function(index) {
 	return this._children.get(index);
 };
 
+/**
+ * Gets the item by id.
+ * 
+ * @param	{String}	key		the id key
+ * @param	{Object}	id		the id value
+ * @return	{DwtMenuItem}	the menu item
+ */
 DwtMenu.prototype.getItemById =
 function(key, id) {
 	var items = this.getItems();
@@ -212,11 +270,21 @@ function(key, id) {
 	return null;
 };
 
+/**
+ * Gets a count of the items.
+ * 
+ * @return	{int}	the count
+ */
 DwtMenu.prototype.getItemCount =
 function() {
 	return this._children.size();
 };
 
+/**
+ * Gets an array of items.
+ * 
+ * @return	{Array}	an array of {@link DwtMenuItem} objects
+ */
 DwtMenu.prototype.getItems =
 function() {
 	return this._children.getArray();
@@ -233,6 +301,11 @@ function(style) {
 	return null;
 };
 
+/**
+ * Checks if the menu is popped-up.
+ * 
+ * @return	{Boolean}	<code>true</code> if popped-up
+ */
 DwtMenu.prototype.isPoppedUp =
 function() {
 	return this._isPoppedUp;
@@ -436,6 +509,8 @@ function() {
  * elements pertaining to this object, we will think of them as part of the
  * menu. 
  * @see _outsideMouseListener.
+ * 
+ * @private
  */
 DwtMenu.prototype.setAssociatedObj =
 function(dwtObj) {
@@ -447,13 +522,14 @@ function(id){
 	this._associatedElId = id;
 };
 
-/*
-* Checks a menu item (the menu must be radio or checkbox style). The menu item
-* is identified through the given field/value pair.
-*
-* @param field		a key for menu item data
-* @param value		value for the data of the menu item to check
-*/
+/**
+ * Checks a menu item (the menu must be radio or checkbox style). The menu item
+ * is identified through the given field/value pair.
+ *
+ * @param {Object}	field		a key for menu item data
+ * @param {Object}	value		value for the data of the menu item to check
+ * 
+ */
 DwtMenu.prototype.checkItem =
 function(field, value, skipNotify) {
 	var items = this._children.getArray();
@@ -474,9 +550,9 @@ function(field, value, skipNotify) {
  * the new item is a separator or is disabled, it won't be selected. Instead, the
  * next suitable item will be used.
  * 
- * @param which		{boolean|int}	if true, selects the next menu item
- * 									if false, selects the previous menu item
- * 									if int, selects the menu item with that index
+ * @param {Boolean|int}	which		if <code>true</code>, selects the next menu item
+ * 									if <code>false</code>, selects the previous menu item
+ * 									if <code>int</code>, selects the menu item with that index
  */
 DwtMenu.prototype.setSelectedItem =
 function(which) {

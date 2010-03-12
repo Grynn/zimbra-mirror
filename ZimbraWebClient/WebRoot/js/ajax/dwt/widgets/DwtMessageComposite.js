@@ -15,6 +15,9 @@
 
 
 /**
+ * Creates a composite that is populated from a message pattern.
+ * @constructor
+ * @class
  * This class allows you to create a composite that is populated from
  * a message pattern and inserts controls at the appropriate places.
  * For example, say that the message <code>MyMsg.repeatTimes</code> is
@@ -25,15 +28,15 @@
  * and you want to replace "{0}" with an input field or perhaps a
  * drop-down menu that enumerates a specific list of choices as part of
  * the application. To do this, you just create a
- * <code>DwtMessageComposite</code> and set the message format, like so:
+ * {@link DwtMessageComposite} and set the message format, like so:
  * <pre>
  * var comp = new DwtMessageComposite(parent);
  * comp.setFormat(MyMsg.repeatTimes);
  * </pre>
  * <p>
- * The message composite instantiates an <code>AjxMessageFormat</code>
+ * The message composite instantiates an {@link AjxMessageFormat}
  * from the specified message pattern. Then, for each segment it creates
- * static text or a <code>DwtInputField</code> for replacement segments
+ * static text or a {@link DwtInputField} for replacement segments
  * such as "{0}".
  * <p>
  * To have more control over the controls that are created and inserted
@@ -58,9 +61,9 @@
  * <p>
  * The callback can use this information to determine whether or not
  * a custom control should be created for the segment. If the callback
- * returns <code>null</code>, a standard <code>DwtInputField</code> is
+ * returns <code>null</code>, a standard {@link DwtInputField} is
  * created and inserted. Note: if the callback returns a custom control,
- * it <em>must</em> be an instance of <code>AjxControl</code>.
+ * it <em>must</em> be an instance of {@link AjxControl}.
  * <p>
  * Here is an example of a message composite created with a callback
  * that generates a custom control for each replacement segment:
@@ -77,14 +80,13 @@
  * comp.setFormat(message, callback);
  * </pre>
  *
- * @constructor
- * @class
- *
  * @author Andy Clark
  *
- * @param parent    [DwtComposite]  The parent widget.
- * @param className [string]    CSS class.
- * @param posStyle  [number]    Position style.
+ * @param {DwtComposite}	parent    the parent widget.
+ * @param {String}	className 	the CSS class
+ * @param {constant}	posStyle  		the position style (see {@link DwtControl})
+ * 
+ * @extends		DwtComposite
  */
 DwtMessageComposite = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
@@ -108,13 +110,11 @@ DwtMessageComposite.prototype._controls;
 // Public methods
 
 /**
- * @param message   [string]    The message that defines the text and
- *                              controls that comprise this composite.
- * @param callback  [AjxCallback]   (Optional) Callback to create UI
- *                                  components.
- * @param hintsCallback [AjxCallback]   (Optional) Callback to provide
- *                                      display hints for the container
- *                                      element of the UI component.
+ * Sets the format.
+ * 
+ * @param {String}	message   [string]    the message that defines the text and controls that comprise this composite
+ * @param {AjxCallback}	[callback]   the callback to create UI components
+ * @param {AjxCallback}	[hintsCallback]   the callback to provide display hints for the container element of the UI component
  */
 DwtMessageComposite.prototype.setFormat =
 function(message, callback, hintsCallback) {
@@ -184,6 +184,11 @@ function(message, callback, hintsCallback) {
     }
 };
 
+/**
+ * Gets the format.
+ * 
+ * @return	{String}	the format
+ */
 DwtMessageComposite.prototype.format = function() {
     var args = [];
     for (var sindex in this._controls) {

@@ -13,6 +13,31 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+ * Creates a password field.
+ * @constructor
+ * @class
+ * 
+ * @param	{Hash}		params		a hash of parameters
+ * @param {DwtComposite}      params.parent			the parent widget
+ * @param {String}      params.initialValue		the initial value of the field
+ * @param {int}      params.size				size of the input field (in characters)
+ * @param {int}      params.rows				the number of rows (more than 1 means textarea)
+ * @param {Boolean}      params.forceMultiRow		if <code>true</code>, forces use of textarea even if rows == 1
+ * @param {int}      params.maxLen			the maximum length (in characters) of the input
+ * @param {constant}      params.errorIconStyle		the error icon style
+ * @param {constant}      params.validationStyle	the validation type
+ * @param  {function}     params.validator			the custom validation function
+ * @param {Object}      params.validatorCtxtObj		the object context for validation function
+ * @param {String}      params.className			the CSS class
+ * @param {constant}      params.posStyle			the positioning style (see {@link DwtControl})
+ * @param {Boolean}      params.required          if <code>true</code>, mark as required.
+ * @param {String}      params.hint				a hint to display in the input field when the value is empty.
+ * @param {String}      params.id				an explicit ID to use for the control's DIV element
+ * @param {String}      params.inputId			an explicit ID to use for the control's INPUT element
+ * 
+ * @extends		DwtInputField
+ */
 DwtPasswordField = function(params) {
 	if (arguments.length == 0) return;
 
@@ -42,6 +67,11 @@ DwtPasswordField.prototype.getTabGroupMember = function() {
 	return this._tabGroup;
 };
 
+/**
+ * Shows the password.
+ * 
+ * @param	{Boolean}	show		if <code>true</code>, show the password
+ */
 DwtPasswordField.prototype.setShowPassword = function(show) {
 	this._showCheckbox.setSelected(show);
 	this.setInputType(show ? DwtInputField.STRING : DwtInputField.PASSWORD);
