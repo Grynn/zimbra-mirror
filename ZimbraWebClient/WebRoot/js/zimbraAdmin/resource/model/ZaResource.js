@@ -121,6 +121,7 @@ ZaResource.GET_CALRES_SHAREINFO_RIGHT = "getCalendarResourceShareInfo";
 ZaResource.LIST_CALRES_RIGHT = "listCalendarResource";
 ZaResource.PUBLISH_CALRES_SHAREINFO = "publishCalendarResourceShareInfo";
 ZaResource.RENAME_CALRES_RIGHT = "renameCalendarResource";
+ZaResource.GET_CALRES_INFO_RIGHT = "getCalendarResourceInfo";
 ZaResource.checkValues = 
 function(tmpObj) {
 	/**
@@ -465,7 +466,7 @@ ZaItem.loadMethods["ZaResource"].push(ZaResource.loadMethod);
 ZaResource.loadInfoMethod = 
 function(by, val, withCos) {
 
-	if(!ZaItem.hasRight(ZaAccount.GET_ACCOUNT_INFO_RIGHT,this))
+	if(!ZaItem.hasRight(ZaResource.GET_CALRES_INFO_RIGHT,this))
 		return;
 	
 	var soapDoc = AjxSoapDoc.create("GetAccountInfoRequest", ZaZimbraAdmin.URN, null);
