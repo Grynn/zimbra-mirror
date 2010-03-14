@@ -80,6 +80,9 @@ Cos_Number_XModelItem = function (){}
 XModelItemFactory.createItemType("_COS_NUMBER_", "cos_number", Cos_Number_XModelItem, Cos_String_XModelItem);
 Cos_Number_XModelItem.prototype.validateType = XModelItem.prototype.validateNumber;
 
+Cos_Int_XModelItem = function (){}
+XModelItemFactory.createItemType("_COS_INT_", "cos_int", Cos_Int_XModelItem, Cos_String_XModelItem);
+Cos_Int_XModelItem.prototype.validateType = XModelItem.prototype.validateInt;
 
 Cos_Enum_XModelItem = function (){}
 XModelItemFactory.createItemType("_COS_ENUM_", "cos_enum", Cos_Enum_XModelItem, Cos_String_XModelItem);
