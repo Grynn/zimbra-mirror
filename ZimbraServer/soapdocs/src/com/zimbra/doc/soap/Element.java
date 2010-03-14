@@ -31,10 +31,18 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	private	static	final	String				REGEX_SUBELEMENT_NAME_DELIM = "[,]+";
 	
 	private	List<Element>	subElements = new LinkedList<Element>();
-	private	Map<String,Integer>			subElementsMap = new HashMap<String,Integer>();
+	private	List<Object[]>			subElementsMap = new LinkedList<Object[]>();
 	
 	private	List<Attribute>	attributes = new LinkedList<Attribute>();
 
+	/**
+	 * Constructor.
+	 * 
+	 */
+	private	Element() {
+		
+	}
+	
 	/**
 	 * Constructor.
 	 * 
@@ -42,13 +50,31 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	 * @param	description	the description
 	 * @param	type		the element type (see <code>TYPE_</code> constants)
 	 */
-	private	Element(String name, String description, int type, Map<String,Integer> subElementsMap) {
+	private	Element(String name, String description, int type, List<Object[]> subElementsMap) {
 		this.name = name;
 		this.description = description;
 		this.type = type;
 		this.subElementsMap = subElementsMap;
 	}
 	
+	/**
+	 * Creates an empty element.
+	 * 
+	 * @return	the element
+	 */
+	public	static	Element	createElement() {
+		return	new Element();
+	}
+
+	/**
+	 * Creates a copy element.
+	 * 
+	 * @return	the element
+	 */
+	public	Element	createCopy() {
+		return	new Element(this.name, this.description, this.type, this.subElementsMap);
+	}
+
 	/**
 	 * Creates an element by parsing the tag text.
 	 * 
@@ -64,7 +90,7 @@ public class Element extends AbstractElement implements java.io.Serializable {
 		String	content = tokens[1];
 		String description = StringUtil.createString(tokens, 2, " ");
 
-		Map	subElementsMap = parseSubElementsFromContent(content);
+		List<Object[]>	subElementsMap = parseSubElementsMap(content);
 
 		return	new Element(name, description, type, subElementsMap);
 	}
@@ -74,7 +100,7 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	 * 
 	 * @return	a map of sub-elements
 	 */
-	public	Map<String,Integer>		getSubElementsMap() {
+	public	List<Object[]>		getSubElementsMap() {
 		return	this.subElementsMap;
 	}
 	
@@ -84,15 +110,15 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	 * @param	content		the tag content string
 	 * @return	a map of sub-elements
 	 */
-	private	static	Map<String,Integer>		parseSubElementsFromContent(String content) {
-		Map<String,Integer>		subElementsMap = new HashMap<String,Integer>();
+	private	static	List<Object[]>		parseSubElementsMap(String content) {
+		List<Object[]>		subElementsMap = new LinkedList<Object[]>();
 		
 		if (content.startsWith("(") && content.endsWith(")")) {
 			content = content.substring(1, content.length()-1);
 			String[]	names = content.split(REGEX_SUBELEMENT_NAME_DELIM);
 			for (int i=0; i < names.length; i++) {
 				Object[] obj = parseElementFromContent(names[i]);
-				subElementsMap.put((String)obj[0], (Integer)obj[1]);
+				subElementsMap.add(obj);
 			}
 		}
 			
@@ -132,8 +158,13 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	 * 
 	 * @param	e		the element to add
 	 */
-	public	void		addElement(Element e) {
+	public	boolean		addElement(Element e) {
+//		System.out.println("XXXXXXXX ADD "+e+" TO "+this);
 		this.subElements.add(e);
+		if (e.getName().equalsIgnoreCase(this.getName()))
+			return	false;
+		
+		return	true;
 	}
 
 	/**

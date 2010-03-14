@@ -30,6 +30,9 @@ import com.sun.javadoc.*;
  */
 public 	class CommandDocletListener	extends	DocletListener {
 	
+	public	static	final	String			TAG_COMMAND_DESCRIPTION = "@zm-description";
+	public	static	final	String			TAG_COMMAND_REQUEST = "@zm-request";
+	public	static	final	String			TAG_COMMAND_RESPONSE = "@zm-response";
 	public	static	final	String			TAG_COMMAND_REQUEST_ELEMENT = "@zm-request-element";
 	public	static	final	String			TAG_COMMAND_REQUEST_ATTRIBUTE = "@zm-request-attribute";
 	public	static	final	String			TAG_COMMAND_RESPONSE_ELEMENT = "@zm-response-element";
@@ -62,6 +65,17 @@ public 	class CommandDocletListener	extends	DocletListener {
 			String	tagName = tags[i].name();
 
 			int type = getElementType(tagName);
+
+			if (type == -1) {
+				String text = tags[i].text();
+				if (tagName.equals(TAG_COMMAND_DESCRIPTION))
+					command.setDescription(text);
+				else if (tagName.equals(TAG_COMMAND_REQUEST))
+					command.setRequestName(text);
+				else if (tagName.equals(TAG_COMMAND_RESPONSE))
+					command.setResponseName(text);
+				continue;
+			}
 			
 			if (isElementTag(tagName)) {
 				processElementTag(tags[i], type);
@@ -77,43 +91,50 @@ public 	class CommandDocletListener	extends	DocletListener {
 		Element rootRequestElement = buildElementTree(AbstractElement.TYPE_REQUEST);
 		Element rootResponseElement = buildElementTree(AbstractElement.TYPE_RESPONSE);
 
-		List<Attribute> requestAttributes = getAttributesSubList(AbstractElement.TYPE_REQUEST);
-		List<Attribute> responseAttributes = getAttributesSubList(AbstractElement.TYPE_RESPONSE);
-		
+		// load request attributes
+		List<Attribute> requestAttributes = getAttributesSubList(AbstractElement.TYPE_REQUEST);		
+		loadElementAttributes(rootRequestElement, requestAttributes);
 		loadAttributes(rootRequestElement, requestAttributes);
+
+		// load response attributes
+		List<Attribute> responseAttributes = getAttributesSubList(AbstractElement.TYPE_RESPONSE);
+		loadElementAttributes(rootResponseElement, responseAttributes);
 		loadAttributes(rootResponseElement, responseAttributes);
 		
-		this.command.setRequest(rootRequestElement);
-		this.command.setResponse(rootResponseElement);
+		this.command.setRootElements(rootRequestElement, rootResponseElement);
 	}
 	
 	/**
 	 * Loads the elements for the given parent element.
 	 * 
 	 */
-	private	static	void	loadAttributes(Element parent, List<Attribute> attributes) {
+	private	static	void	loadAttributes(Element parent, List<Attribute> allAttributes) {
+		Iterator eit = parent.getElements().iterator();
+		while (eit.hasNext()) {
+			Element e = (Element)eit.next();
+
+			loadElementAttributes(e, allAttributes);
+
+			loadAttributes(e, allAttributes); // no load the attrs for this element
+		}
+	}
+	
+	/**
+	 * Loads the attributes for a given element.
+	 * 
+	 * @param	el		the element
+	 * @param	attributes	the attributes list to read
+	 */
+	private	static	void	loadElementAttributes(Element el, List<Attribute> attributes) {
 		Iterator it = attributes.iterator();
 		while(it.hasNext()) {
 			Attribute attr = (Attribute)it.next();
 
-			if (parent.getName().equalsIgnoreCase(attr.getElementName())) {
-				parent.addAttribute(attr);
-				continue;
-			}
-
-			Iterator eit = parent.getElements().iterator();
-			while (eit.hasNext()) {
-				Element e = (Element)eit.next();
-				if (e.getName().equalsIgnoreCase(attr.getElementName())) {
-					e.addAttribute(attr);
-				} else {
-					loadAttributes(e, attributes);
-				}
-			}
-			
+			if (el.getName().equalsIgnoreCase(attr.getElementName()))
+				el.addAttribute(attr);
 		}
-
 	}
+	
 	/**
 	 * Builds the element tree.
 	 * 
@@ -129,7 +150,9 @@ public 	class CommandDocletListener	extends	DocletListener {
 		while (it.hasNext()) {
 			Element e = (Element)it.next();
 			
-			if (e.getName().equals(this.command.getNameByElementType(type))) {
+			String typeName = this.command.getNameByElementType(type);
+			
+			if (e.getName().equals(typeName)) {
 				root = e;
 				subList.remove(e);
 				break;
@@ -147,21 +170,26 @@ public 	class CommandDocletListener	extends	DocletListener {
 	 * Loads the elements for the given parent element.
 	 * 
 	 */
-	private	static	void	loadElements(Element parent, List<Element> elements) {
-		Iterator se = parent.getSubElementsMap().entrySet().iterator();
+	private	static	void	loadElements(Element parent, List<Element> allElements) {
+		System.out.println("PARENT: "+parent.getName());
+		Iterator se = parent.getSubElementsMap().iterator();
 		while (se.hasNext()) {
-			Map.Entry entry = (Map.Entry)se.next();
+			Object[] obj = (Object[])se.next();
 			
-			String elementName = (String)entry.getKey();
-			Iterator eit = elements.iterator();
+			String elementName = (String)obj[0];
+			System.out.println(" processing sub-elementName: "+elementName+" for parent "+parent.getName());
+			Iterator eit = allElements.iterator();
 			while (eit.hasNext()) {
 				Element e = (Element)eit.next();
 				if (e.getName().equalsIgnoreCase(elementName)) {
-					Integer v = (Integer)entry.getValue();
-					e.setOccurrence(v.intValue());
-					parent.addElement(e);
-					loadElements(e, elements);
+ 					Integer v = (Integer)obj[1];
+ 					Element tmpElement = e.createCopy();
+					tmpElement.setOccurrence(v.intValue());
+					System.out.println(" ADDING "+v.intValue()+" sub-elementName: "+elementName+" for parent "+parent.getName());
+					if (parent.addElement(tmpElement))
+						loadElements(tmpElement, allElements);
 				}
+			
 			}
 			
 		}
@@ -231,14 +259,18 @@ public 	class CommandDocletListener	extends	DocletListener {
 	/**
 	 * Gets the element type.
 	 * 
-	 * @return	the element type (see <code>Element.TYPE_</code> constants)
+	 * @return	the element type (see <code>Element.TYPE_</code> constants) or -1 for neither
 	 */
 	private	static	int		getElementType(String tagName) {
 		if (tagName.equals(TAG_COMMAND_REQUEST_ELEMENT) ||
 				tagName.equals(TAG_COMMAND_REQUEST_ATTRIBUTE) )
 			return	AbstractElement.TYPE_REQUEST;
-		
-		return	AbstractElement.TYPE_RESPONSE;
+
+		if (tagName.equals(TAG_COMMAND_RESPONSE_ELEMENT) ||
+				tagName.equals(TAG_COMMAND_RESPONSE_ATTRIBUTE) )
+			return	AbstractElement.TYPE_RESPONSE;
+
+		return	-1;
 	}
 
 	/**

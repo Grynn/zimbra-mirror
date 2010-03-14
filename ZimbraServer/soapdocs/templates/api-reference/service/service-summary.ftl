@@ -45,7 +45,7 @@ Service ${service.name}
 <#list service.commands as command>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="20%"><B><A HREF="./${command.name}.html">${command.name}</A></B></TD>
-<TD>!!!</TD>
+<TD>${command.shortDescription}</TD>
 </TR>
 </#list>
 </TABLE>

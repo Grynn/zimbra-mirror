@@ -28,7 +28,7 @@ public	class	Attribute	extends	AbstractElement implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private	static	final	String				REGEX_ATTRIBUTE_TAG_DELIM = "[ \t]+";
-	private	static	final	String				REGEX_VALUES_DELIM = "[,]+";
+	private	static	final	String				REGEX_VALUES_DELIM = "[|]+";
 
 	private	List<Value>	values = new LinkedList<Value>();
 	private	String		elementName = null;
@@ -142,11 +142,20 @@ public	class	Attribute	extends	AbstractElement implements java.io.Serializable {
 	public	String[]	getValuesAsStringArray() {
 		String[]	str = new String[values.size()];
 		
-		Value[] array = (Value[])values.toArray();
+		Value[] array = (Value[])values.toArray(new Value[values.size()]);
 		for (int i=0; i < array.length; i++)
 			str[i] = array[i].getName();
 		
 		return	str;
+	}
+
+	/**
+	 * Gets the values as a string.
+	 * 
+	 * @return	a string representation of the values or an empty string for none
+	 */
+	public	String	getValuesAsString() {
+		return	getValuesAsString(", ");
 	}
 
 	/**
@@ -157,11 +166,14 @@ public	class	Attribute	extends	AbstractElement implements java.io.Serializable {
 	 */
 	public	String	getValuesAsString(String delim) {
 		StringBuffer	buf = new StringBuffer();
-		
-		Value[] array = (Value[])values.toArray();
+
+		if (values == null || values.size() <= 0)
+			return	buf.toString();
+
+		Value[] array = (Value[])values.toArray(new Value[values.size()]);
 		for (int i=0; i < array.length; i++) {
 			buf.append(array[i].getName());
-			if (i < array.length)
+			if (i < (array.length-1))
 				buf.append(delim);				
 		}
 
@@ -185,6 +197,8 @@ public	class	Attribute	extends	AbstractElement implements java.io.Serializable {
 		buf.append(this.getType());
 		buf.append(";occurrence=");
 		buf.append(this.getOccurrence());
+		buf.append(";values=");
+		buf.append(this.getValuesAsString());
 		buf.append("]");
 
 		return	buf.toString();

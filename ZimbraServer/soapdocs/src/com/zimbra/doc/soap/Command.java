@@ -15,18 +15,28 @@
 
 package com.zimbra.doc.soap;
 
+import java.util.*;
+
 public class Command implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private	Element		request = null;
-	private	Element		response = null;
+	private	static	final	String				REGEX_DESCRIPTION_SHORT_DELIM = "[.]+";
+
+	private	Element		request = Element.createElement();
+	private	Element		response = Element.createElement();
+	
+	private	List<Element>	allElements = new LinkedList<Element>();
 	
 	private	Service		service = null;
 	private	String		className = null;
 	private	String		name = null;
 	private	String		namespace = null;
-	
+
+	private	String		requestName = null;
+	private	String		responseName = null;
+	private	String		description = null;
+
 	/**
 	 * Constructor.
 	 * 
@@ -51,15 +61,6 @@ public class Command implements java.io.Serializable {
 	}
 
 	/**
-	 * Sets the response.
-	 * 
-	 * @return	the response
-	 */
-	public	void		setResponse(Element el) {
-		this.response = el;
-	}
-
-	/**
 	 * Gets the request.
 	 * 
 	 * @return	the request
@@ -69,12 +70,73 @@ public class Command implements java.io.Serializable {
 	}
 
 	/**
-	 * Sets the request.
+	 * Gets the description.
 	 * 
-	 * @return	the request
+	 * @return	the description
 	 */
-	public	void		setRequest(Element el) {
-		this.request = el;
+	public	String	getDescription() {
+		if (this.description == null)
+			return	""; // worst case
+		
+		return	this.description;
+	}
+
+	/**
+	 * Gets the short description. This is the description up to the first
+	 * period "." in the description.
+	 * 
+	 * @return	the short description
+	 */
+	public	String	getShortDescription() {
+		String desc = getDescription();
+
+		String[] tokens = desc.split(REGEX_DESCRIPTION_SHORT_DELIM);
+
+		if (tokens != null && tokens.length > 0 && tokens[0].length() > 0) {
+			return	tokens[0]+"."; // since we split at the period, make it a sentence again
+		}
+		
+		return	""; // worst case
+	}
+
+	/**
+	 * Sets the description.
+	 * 
+	 * @param	description		the description
+	 */
+	public	void	setDescription(String	description) {
+		this.description = description;
+	}
+
+	/**
+	 * Sets the root request and response elements.
+	 * 
+	 * @param	request		the request element
+	 * @param	response	the response element
+	 */
+	public	void		setRootElements(Element request, Element response) {
+		this.request = request;
+		this.response = response;
+		
+		// load the all elements list
+		this.allElements.add(request);
+		this.allElements.add(response);
+		loadAllElements(request);
+		loadAllElements(response);
+	}
+	
+	/**
+	 * Loads all sub-elements of the root element into the all elements list.
+	 * 
+	 * @param	root	the root element
+	 */
+	private	void	loadAllElements(Element root) {
+		Iterator it = root.getElements().iterator();
+		while(it.hasNext()) {
+			Element e = (Element)it.next();
+			this.allElements.add(e);
+			loadAllElements(e);
+		}
 	}
 
 	/**
@@ -112,12 +174,33 @@ public class Command implements java.io.Serializable {
 	}
 
 	/**
+	 * Sets the request name.
+	 * 
+	 * @param	requestName		the request name
+	 */
+	public	void		setRequestName(String requestName) {
+		this.requestName = requestName;
+	}
+
+	/**
+	 * Sets the response name.
+	 * 
+	 * @param	responseName		the response name
+	 */
+	public	void		setResponseName(String responseName) {
+		this.responseName = responseName;
+	}
+
+	/**
 	 * Gets the request name.
 	 * 
 	 * @return	the request name
 	 */
 	public	String		getRequestName() {
-		return	this.name+"Request";
+		if (this.requestName == null)
+			return	this.name+"Request"; // worst case, just fake it
+
+		return	this.requestName;
 	}
 
 	/**
@@ -126,7 +209,10 @@ public class Command implements java.io.Serializable {
 	 * @return	the response name
 	 */
 	public	String		getResponseName() {
-		return	this.name+"Response";
+		if (this.responseName == null)
+			return	this.name+"Response";  // worst case, just fake it
+
+		return	this.responseName;
 	}
 
 	/**
@@ -136,6 +222,29 @@ public class Command implements java.io.Serializable {
 	 */
 	public	Service	getService() {
 		return	this.service;
+	}
+
+	/**
+	 * Gets a list with all elements.
+	 * 
+	 * @return	a list with all elements
+	 */
+	public	List<Element>	getAllElements() {
+		return	this.allElements;
+	}
+
+	/**
+	 * Gets a list with all sub-elements. This is the list of all elements below 
+	 * 
+	 * @return	a list with all sub-elements
+	 */
+	public	List<Element>	getAllSubElements() {
+		List<Element> els = new LinkedList<Element>(this.allElements);
+		
+		els.remove(this.request);
+		els.remove(this.response);
+		
+		return els;
 	}
 
 	/**
@@ -174,10 +283,18 @@ public class Command implements java.io.Serializable {
 		buf.append(this.getNamespace());
 		buf.append(";className=");
 		buf.append(this.getClassName());
+		buf.append(";requestName=");
+		buf.append(this.getRequestName());
+		buf.append(";responseName=");
+		buf.append(this.getResponseName());
 		buf.append(";request=");
 		buf.append(this.getRequest());
 		buf.append(";response=");
 		buf.append(this.getResponse());
+		buf.append(";allElements=");
+		buf.append(this.getAllElements().size());
+		buf.append(";allSubElements=");
+		buf.append(this.getAllSubElements().size());
 		buf.append("]");
 
 		return	buf.toString();
