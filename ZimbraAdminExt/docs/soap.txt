@@ -43,7 +43,7 @@ isComm (Currently not working/used): is the commercially signed cert exists 0 - 
 
 
 -----------------------------
-<GenCSRRequest new="0|1" type="self|comm" server="server-id">
+<GenCSRRequest new="0|1" type="self|comm" server="server-id" keysize="1024|2048">
   	<name>{value}</name>*
 </GenCSRRequest>
 
@@ -51,7 +51,7 @@ isComm (Currently not working/used): is the commercially signed cert exists 0 - 
 	<name>{value}</name>*
 </GenCSRResponse>
 Request a CSR:
-Subject Attributes: C, ST, L, O, OU, CN, 
+Subject Attributes: C, ST, L, O, OU, CN,
 subject: example /C=US/ST=N_A/L=N_A/O=Zimbra Collaboration Suite/CN=admindev.zimbra.com
 new: 1 - force to create a new CSR, the previous one will be overwrited
 SubjectAltName: 0|*, it is used to add the Subject Alt Name extension in the certificate, so multiple hosts can be supported
@@ -63,7 +63,8 @@ SubjectAltName: 0|*, it is used to add the Subject Alt Name extension in the cer
   	    <{name}>{value}</{name}>*
   	</subject>
   	<SubjectAltName>{value}</SubjectAltName>*
-  	<validation_days>{value}</validation_days>
+  	<validation_days>{value}</validation_days> ?
+  	<keysize>{1024|2048}</keysize>?
   	<comm_cert>
   		<cert>
   			<aid>{value}</aid>
@@ -83,8 +84,9 @@ SubjectAltName: 0|*, it is used to add the Subject Alt Name extension in the cer
 <InstallCertResponse server="server-name" />
 
 Ask server to install the certificates
-validation_days: required, number of the validation days of the self signed license, 
-aid: attachedment ID of the uploaded commercial license
+validation_days: required, number of the validation days of the self signed certificate,
+keysize: 1024|2048, key length of the self-signed certificate
+aid: attachedment ID of the uploaded commercial certificate
 
 --------------------------------------------------
 //Yahoo SMB Soap Request

@@ -144,6 +144,7 @@ function() {
 			validation_days: validationDays,
 			comm_cert: this.uploadResults,
             subject: this._containedObject.attrs,
+            keysize: this._containedObject.keysize,
             //allserver: (this._containedObject[ZaCert.A_target_server] == ZaCert.ALL_SERVERS) ? 1 : 0,
 			callback: callback 
 		}
@@ -372,7 +373,8 @@ function() {
 		try {
 			if ((!this._containedObject[ZaCert.A_csr_exists]) || (this._containedObject[ZaCert.A_force_new_csr] == 'TRUE')){
 				if (!this._containedObject[ZaCert.A_type_self]) {
-                    ZaCert.genCSR (ZaApp.getInstance(), this._containedObject.attrs, type, true,  this._containedObject[ZaCert.A_target_server]) ;
+                    ZaCert.genCSR (ZaApp.getInstance(), this._containedObject.attrs, type, true,
+                            this._containedObject[ZaCert.A_target_server], this._containedObject[ZaCert.A_keysize]) ;
                 } else {
                     if (AjxEnv.hasFirebug) console.log("Self-Signed certificate, skip the CSR generation.") ;                    
                 }
@@ -521,6 +523,9 @@ function(entry) {
 	this._containedObject = entry ;
 	
 	this._containedObject[ZaModel.currentStep] = ZaCertWizard.STEP_SELECT_SERVER;
+    if (this._containedObject [ZaCert.A_keysize] == null) {
+        this._containedObject [ZaCert.A_keysize] = "2048" ;    
+    }
 	this._localXForm.setInstance(this._containedObject);
 }
 
@@ -757,6 +762,13 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 						form.refresh();
 					},
 					trueValue:"TRUE", falseValue:"FALSE", msgName:com_zimbra_cert_manager.FORCE_NEW_CSR },
+
+                  {ref: ZaCert.A_keysize,type:_OSELECT1_,
+					label:com_zimbra_cert_manager.CERT_keysize, 
+					labelLocation:_LEFT_,
+					choices:ZaCert.KEY_SIZE_CHOICES,
+                    visibilityChecks:[],
+                    enableDisableChecks:[] },
 				{ ref: ZaCert.A_commonName, type:_TEXTFIELD_, width: 150,
 					visibilityChecks:[],  bmolsnr:true,
                     enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],

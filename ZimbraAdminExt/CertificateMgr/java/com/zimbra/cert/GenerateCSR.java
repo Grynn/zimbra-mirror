@@ -51,6 +51,7 @@ public class GenerateCSR extends AdminDocumentHandler {
         
         Server server = null;
         String serverId = request.getAttribute("server") ;
+
         if (serverId != null && serverId.equals(ZimbraCertMgrExt.ALL_SERVERS)) {
         	server = prov.getLocalServer() ;
         }else {
@@ -65,7 +66,11 @@ public class GenerateCSR extends AdminDocumentHandler {
         String cmd = ZimbraCertMgrExt.CREATE_CSR_CMD  ;
         String newCSR = request.getAttribute("new") ;
         String type = request.getAttribute("type") ;
-        if (newCSR.equalsIgnoreCase("1")) {            
+        String keysize = request.getAttribute ("keysize") ; 
+        if (keysize == null || (!(keysize.equalsIgnoreCase("1024") || keysize.equalsIgnoreCase("2048")))) {
+            keysize = "2048";
+        }
+        if (newCSR.equalsIgnoreCase("1")) {
             if (type == null || type.length() == 0 ) {
                 throw ServiceException.INVALID_REQUEST("No valid CSR type is set.", null);
             }else if (type.equals(CSR_TYPE_SELF) || type.equals(CSR_TYPE_COMM)) {
@@ -74,7 +79,7 @@ public class GenerateCSR extends AdminDocumentHandler {
                 throw ServiceException.INVALID_REQUEST("Invalid CSR type: " + type +". Must be (self|comm).", null);    
             }
             
-            cmd +=  " -new -keysize 2048 " ;
+            cmd +=  " -new -keysize " + keysize + " " ;
             String subject = getSubject (request);
             
             if (subject != null && subject.length() > 0) {

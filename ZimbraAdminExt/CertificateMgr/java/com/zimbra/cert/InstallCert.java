@@ -50,6 +50,7 @@ public class InstallCert extends AdminDocumentHandler {
     //private final static String ALLSERVER = "allserver" ;
     private final static String ALLSERVER_FLAG = "-allserver" ;
     private final static String VALIDATION_DAYS = "validation_days" ;
+    private final static String KEYSIZE = "keysize" ;
     private Server server = null;
     
     private Provisioning prov = null;
@@ -109,9 +110,22 @@ public class InstallCert extends AdminDocumentHandler {
         String subject = GenerateCSR.getSubject(subjectEl) ;
 
         String subjectAltNames = GenerateCSR.getSubjectAltNames(request) ;
+        Element keysizeEl = request.getElement (KEYSIZE) ;
+        String keysize = null ;
 
+        if (keysizeEl != null)  {
+            if (certType.equals("self")) {
+                keysize = keysizeEl.getText() ;
+                if (!(keysize.equalsIgnoreCase("1024") || keysize.equalsIgnoreCase("2048"))) {
+                    keysize = "2048";
+                }
+            }
+        } else {
+            keysize = "2048";
+        }
+        
         if (certType.equals("self")) {
-            cmd += " -keysize 2048 " ;
+            cmd += " -keysize " + keysize + " " ;
 
             if (subject != null && subject.length() > 0) {
                 cmd += "-subject \"" + subject +"\"";
