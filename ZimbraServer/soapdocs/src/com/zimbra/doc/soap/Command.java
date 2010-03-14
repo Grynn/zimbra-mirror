@@ -50,7 +50,25 @@ public class Command implements java.io.Serializable {
 		this.name = this.service.getClassName(className);
 		this.namespace = namespace;
 	}
-	
+
+	/**
+	 * Checks if the command is loaded.
+	 * 
+	 * @return	<code>true</code> if the command is loaded
+	 */
+	public	boolean	getLoaded() {
+		if (this.response == null || this.request == null)
+			return	false;
+		
+		if (this.response.isLoaded() == false)
+			return false;
+
+		if (this.request.isLoaded() == false)
+			return false;
+
+		return true;
+	}
+
 	/**
 	 * Gets the response.
 	 * 
@@ -115,14 +133,16 @@ public class Command implements java.io.Serializable {
 	 * @param	response	the response element
 	 */
 	public	void		setRootElements(Element request, Element response) {
-		this.request = request;
-		this.response = response;
-		
-		// load the all elements list
-		this.allElements.add(request);
-		this.allElements.add(response);
-		loadAllElements(request);
-		loadAllElements(response);
+		if (request != null) {
+			this.request = request;
+			this.allElements.add(request);
+			loadAllElements(request);
+		}
+		if (response != null) {
+			this.response = response;
+			this.allElements.add(response);
+			loadAllElements(response);
+		}
 	}
 	
 	/**
@@ -134,7 +154,8 @@ public class Command implements java.io.Serializable {
 		Iterator it = root.getElements().iterator();
 		while(it.hasNext()) {
 			Element e = (Element)it.next();
-			this.allElements.add(e);
+			if (this.allElements.contains(e) == false)
+				this.allElements.add(e);
 			loadAllElements(e);
 		}
 	}

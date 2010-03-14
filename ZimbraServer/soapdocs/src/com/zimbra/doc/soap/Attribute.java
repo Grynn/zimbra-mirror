@@ -27,6 +27,8 @@ public	class	Attribute	extends	AbstractElement implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	public	static	final	String				CDATA = "CDATA";
+	
 	private	static	final	String				REGEX_ATTRIBUTE_TAG_DELIM = "[ \t]+";
 	private	static	final	String				REGEX_VALUES_DELIM = "[|]+";
 
@@ -74,6 +76,17 @@ public	class	Attribute	extends	AbstractElement implements java.io.Serializable {
 		return	 new Attribute(elementName, name, description, type, values, occurrence);
 	}
 
+	/**
+	 * Creates an attribute by parsing the tag text.
+	 * 
+	 * @param	tagText		the tag text
+	 * @param	req		if <code>true</code>, the element is related to the request
+	 * @return	the attribute
+	 */
+	public	static	Attribute	createCDATAAttribute(String elementName, String description, int type) {
+		return	new Attribute(elementName, Attribute.CDATA, description, type, new LinkedList(), AbstractElement.OCCURRENCE_REQUIRED);
+	}
+	
 	/**
 	 * Parses the values list from the tag content.
 	 * 
@@ -170,12 +183,16 @@ public	class	Attribute	extends	AbstractElement implements java.io.Serializable {
 		if (values == null || values.size() <= 0)
 			return	buf.toString();
 
+		buf.append("[");
+
 		Value[] array = (Value[])values.toArray(new Value[values.size()]);
 		for (int i=0; i < array.length; i++) {
 			buf.append(array[i].getName());
 			if (i < (array.length-1))
 				buf.append(delim);				
 		}
+
+		buf.append("]");
 
 		return	buf.toString();
 	}

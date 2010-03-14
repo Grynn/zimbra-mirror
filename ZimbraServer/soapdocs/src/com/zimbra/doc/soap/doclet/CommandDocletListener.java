@@ -109,6 +109,9 @@ public 	class CommandDocletListener	extends	DocletListener {
 	 * 
 	 */
 	private	static	void	loadAttributes(Element parent, List<Attribute> allAttributes) {
+		if (parent == null || parent.getElements() == null)
+			return;
+		
 		Iterator eit = parent.getElements().iterator();
 		while (eit.hasNext()) {
 			Element e = (Element)eit.next();
@@ -171,13 +174,19 @@ public 	class CommandDocletListener	extends	DocletListener {
 	 * 
 	 */
 	private	static	void	loadElements(Element parent, List<Element> allElements) {
-		System.out.println("PARENT: "+parent.getName());
+		loadElements(parent, allElements, new LinkedList<String[]>());
+	}
+	
+	/**
+	 * Loads the elements for the given parent element.
+	 * 
+	 */
+	private	static	void	loadElements(Element parent, List<Element> allElements, List<String[]> loadedList) {
 		Iterator se = parent.getSubElementsMap().iterator();
 		while (se.hasNext()) {
 			Object[] obj = (Object[])se.next();
 			
 			String elementName = (String)obj[0];
-			System.out.println(" processing sub-elementName: "+elementName+" for parent "+parent.getName());
 			Iterator eit = allElements.iterator();
 			while (eit.hasNext()) {
 				Element e = (Element)eit.next();
@@ -185,15 +194,49 @@ public 	class CommandDocletListener	extends	DocletListener {
  					Integer v = (Integer)obj[1];
  					Element tmpElement = e.createCopy();
 					tmpElement.setOccurrence(v.intValue());
-					System.out.println(" ADDING "+v.intValue()+" sub-elementName: "+elementName+" for parent "+parent.getName());
-					if (parent.addElement(tmpElement))
-						loadElements(tmpElement, allElements);
+					if (parent.addElement(tmpElement)) {
+						if (isElementLoaded(parent.getName(), elementName, loadedList)) {
+							continue;
+						} else {
+							addElementLoaded(parent.getName(), elementName, loadedList);
+							loadElements(tmpElement, allElements, loadedList);
+						}
+					}
 				}
 			
 			}
 			
 		}
 
+	}
+	
+	/**
+	 * Checks if the parent/child combo is loaded.
+	 * 
+	 * @return	<code>true</code> if loaded
+	 */
+	private	static	boolean	isElementLoaded(String parentName, String childName, List<String[]> loadedList) {
+		
+		Iterator it = loadedList.iterator();
+		while (it.hasNext()) {
+			String[] obj = (String[])it.next();
+			if (obj[0].equals(parentName) && obj[1].equals(childName))
+				return	true;
+		}
+		return	false;
+	}
+	
+	/**
+	 * Adds the parent/child combo to loaded list.
+	 * 
+	 */
+	private	static	void	addElementLoaded(String parentName, String childName, List<String[]> loadedList) {
+		String[] obj = new String[2];
+		
+		obj[0] = parentName;
+		obj[1] = childName;
+		
+		loadedList.add(obj);
 	}
 	
 	/**

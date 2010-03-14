@@ -48,8 +48,8 @@ The <code>&lt;${command.requestName}&gt;</code> element has the following attrib
 </p>
 <table cellspacing="0" cellpadding="5" border="1" width="100%">
 <tbody><tr BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<td><b>Attribute</b></td>
-<td><b>Required / Optional</b></td>
+<td width="1%" nowrap><b>Attribute</b></td>
+<td width="1%" nowrap><b>Required / Optional</b></td>
 <td><b>Range of Values</b></td>
 <td><b>Description</b></td>
 </tr>
@@ -73,9 +73,9 @@ The <code>&lt;${command.requestName}&gt;</code> element has the following attrib
 </td>
 	<td>
 	<#if attribute.values?size == 0>
-	N/A
+	<i>Character data</i>
 	</#if>
-	${attribute.valuesAsString}
+	<code>${attribute.valuesAsString}</code>
 	</td>
 	<td>${attribute.description}</td>
 </tr>
@@ -86,8 +86,8 @@ The following table describes the elements defined within a <code>&lt;${command.
 </p>
 <table cellspacing="0" cellpadding="5" border="1" width="100%">
 <tbody><tr BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<td><b>Element</b></td>
-<td><b>Required / Optional</b></td>
+<td width="1%" nowrap><b>Element</b></td>
+<td width="1%" nowrap><b>Required / Optional</b></td>
 <td><b>Description</b></td>
 </tr>
 <#if command.request.elements?size == 0>
@@ -97,20 +97,23 @@ The following table describes the elements defined within a <code>&lt;${command.
 </#if>
 <#list command.request.elements as element>
 <tr>
-<td>${element.name}</td>
+<td><a href="#element-${element.name}">&lt;${element.name}&gt;</a></td>
 <td>
 		<#switch element.occurrence>
 			  <#case 0>
 			  Required
 			  <#break>
 			  <#case 1>
-			  Optional (0 or 1 allowed)
+			  Optional
+			  <br>(0 or 1 allowed)
 			  <#break>
 			  <#case 2>
-			  Required (1 or more allowed)
+			  Required
+			  <br>(1 or more allowed)
 			  <#break>
 			  <#case 3>
-			  Optional (0 or more allowed)
+			  Optional
+			  <br>(0 or more allowed)
 			  <#break>
 		</#switch>
 </td>
@@ -128,8 +131,8 @@ The <code>&lt;${command.responseName}&gt;</code> element has the following attri
 </p>
 <table cellspacing="0" cellpadding="5" border="1" width="100%">
 <tbody><tr BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<td><b>Attribute</b></td>
-<td><b>Required / Optional</b></td>
+<td width="1%" nowrap><b>Attribute</b></td>
+<td width="1%" nowrap><b>Required / Optional</b></td>
 <td><b>Range of Values</b></td>
 <td><b>Description</b>
 </td></tr>
@@ -153,9 +156,9 @@ The <code>&lt;${command.responseName}&gt;</code> element has the following attri
 </td>
 	<td>
 	<#if attribute.values?size == 0>
-	N/A
+	<i>Character data</i>
 	</#if>
-	${attribute.valuesAsString}
+	<code>${attribute.valuesAsString}</code>
 	</td>
 	<td>${attribute.description}</td>
 </tr>
@@ -166,8 +169,8 @@ The following table describes the elements you can define within a <code>&lt;${c
 </p>
 <table cellspacing="0" cellpadding="5" border="1" width="100%">
 <tbody><tr BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<td><b>Element</b></td>
-<td><b>Required / Optional</b></td>
+<td width="1%" nowrap><b>Element</b></td>
+<td width="1%" nowrap><b>Required / Optional</b></td>
 <td><b>Description</b></td>
 </tr>
 <#if command.response.elements?size == 0>
@@ -181,16 +184,20 @@ The following table describes the elements you can define within a <code>&lt;${c
 <td>
 		<#switch element.occurrence>
 			  <#case 0>
-			  Required (1 and only 1)
+			  Required
+			  <br>(1 and only 1)
 			  <#break>
 			  <#case 1>
-			  Optional (0 or 1)
+			  Optional
+			  <br>(0 or 1)
 			  <#break>
 			  <#case 2>
-			  Required (1 or more)
+			  Required
+			  <br>(1 or more)
 			  <#break>
 			  <#case 3>
-			  Optional (0 or more)
+			  Optional
+			  <br>(0 or more)
 			  <#break>
 		</#switch>
 </td>
@@ -211,14 +218,14 @@ The <code>&lt;${element.name}&gt;</code> element has the following attributes:
 </p>
 <table cellspacing="0" cellpadding="5" border="1" width="100%">
 <tbody><tr BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<td><b>Attribute</b></td>
-<td><b>Required / Optional</b></td>
+<td width="1%" nowrap><b>Attribute</b></td>
+<td width="1%" nowrap><b>Required / Optional</b></td>
 <td><b>Range of Values</b></td>
 <td><b>Description</b>
 </td></tr>
 <#if element.attributes?size == 0>
 <tr>
-	<td colspan="4">None</td>
+	<td colspan="4">CDATA</td>
 </tr>
 </#if>
 <#list element.attributes as attribute>
@@ -236,9 +243,9 @@ The <code>&lt;${element.name}&gt;</code> element has the following attributes:
 </td>
 	<td>
 	<#if attribute.values?size == 0>
-	N/A
+	<i>Character data</i>
 	</#if>
-	${attribute.valuesAsString}
+	<code>${attribute.valuesAsString}</code>
 	</td>
 	<td>${attribute.description}</td>
 </tr>
@@ -249,8 +256,8 @@ The following table describes the elements you can define within a <code>&lt;${e
 </p>
 <table cellspacing="0" cellpadding="5" border="1" width="100%">
 <tbody><tr BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<td><b>Element</b></td>
-<td><b>Required / Optional</b></td>
+<td width="1%" nowrap><b>Element</b></td>
+<td width="1%" nowrap><b>Required / Optional</b></td>
 <td><b>Description</b></td>
 </tr>
 <#if element.elements?size == 0>
@@ -264,16 +271,20 @@ The following table describes the elements you can define within a <code>&lt;${e
 <td>
 		<#switch element.occurrence>
 			  <#case 0>
-			  Required (1 and only 1)
+			  Required
+			  <br>(1 and only 1)
 			  <#break>
 			  <#case 1>
-			  Optional (0 or 1)
+			  Optional
+			  <br>(0 or 1)
 			  <#break>
 			  <#case 2>
-			  Required (1 or more)
+			  Required
+			  <br>(1 or more)
 			  <#break>
 			  <#case 3>
-			  Optional (0 or more)
+			  Optional
+			  <br>(0 or more)
 			  <#break>
 		</#switch>
 </td>

@@ -35,12 +35,14 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	
 	private	List<Attribute>	attributes = new LinkedList<Attribute>();
 
+	private	boolean		loaded = false;
+
 	/**
 	 * Constructor.
 	 * 
 	 */
 	private	Element() {
-		
+		this.loaded = false;
 	}
 	
 	/**
@@ -51,6 +53,7 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	 * @param	type		the element type (see <code>TYPE_</code> constants)
 	 */
 	private	Element(String name, String description, int type, List<Object[]> subElementsMap) {
+		this.loaded = true;
 		this.name = name;
 		this.description = description;
 		this.type = type;
@@ -72,7 +75,11 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	 * @return	the element
 	 */
 	public	Element	createCopy() {
-		return	new Element(this.name, this.description, this.type, this.subElementsMap);
+		Element newEl = new Element(this.name, this.description, this.type, this.subElementsMap);
+		
+		newEl.addAttributes(this.getAttributes());
+		
+		return	newEl;
 	}
 
 	/**
@@ -92,9 +99,25 @@ public class Element extends AbstractElement implements java.io.Serializable {
 
 		List<Object[]>	subElementsMap = parseSubElementsMap(content);
 
-		return	new Element(name, description, type, subElementsMap);
+		Element newEl = new Element(name, description, type, subElementsMap);
+
+		if (content != null && content.equals(Attribute.CDATA)) {
+			Attribute attr = Attribute.createCDATAAttribute(name, description, type);
+			newEl.addAttribute(attr);
+		}
+		
+		return	newEl;
 	}
 	
+	/**
+	 * Checks if this element is loaded.
+	 * 
+	 * @return	<code>true</code> if the element is loaded
+	 */
+	public	boolean	isLoaded() {
+		return	this.loaded;
+	}
+
 	/**
 	 * Gets the sub-element map.
 	 * 
@@ -103,7 +126,7 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	public	List<Object[]>		getSubElementsMap() {
 		return	this.subElementsMap;
 	}
-	
+
 	/**
 	 * Parses the sub-element map from the tag content.
 	 * 
@@ -159,7 +182,6 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	 * @param	e		the element to add
 	 */
 	public	boolean		addElement(Element e) {
-//		System.out.println("XXXXXXXX ADD "+e+" TO "+this);
 		this.subElements.add(e);
 		if (e.getName().equalsIgnoreCase(this.getName()))
 			return	false;
@@ -174,6 +196,15 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	 */
 	public	void		addAttribute(Attribute attr) {
 		this.attributes.add(attr);
+	}
+
+	/**
+	 * Adds the attributes.
+	 * 
+	 * @param	attrs		a list of attributes to add
+	 */
+	public	void		addAttributes(List<Attribute> attrs) {
+		this.attributes.addAll(attrs);
 	}
 
 	/**
@@ -210,6 +241,23 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	 */
 	public	boolean		isRequired() {
 		return	(this.occurrence == OCCURRENCE_REQUIRED || this.occurrence == OCCURRENCE_REQUIRED_MORE);
+	}
+
+	/**
+	 * Checks if this element equals the specified element.
+	 * 
+	 * @return	<code>true</code> if the elements are equal
+	 */
+	public	boolean		equals(Object obj) {
+		if (obj instanceof Element) {
+			Element el = (Element)obj;
+			String n1 = this.getName();
+			String n2 = el.getName();
+			
+			return	n1.equals(n2);
+		}
+		
+		return	false;
 	}
 
     /**

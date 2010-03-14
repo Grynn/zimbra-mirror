@@ -142,7 +142,7 @@ public class Service implements java.io.Serializable {
 	public	Command		addCommand(String className, String namespace) {
 		Command cmd = new Command(this, className, namespace);
 		
-		if (cmd.getName().equals("Browse")) {
+		if (cmd.getName().equals("Browse") || cmd.getName().equals("ChangePassword")) {
 			// load command file source
 	    	ZmDoclet.registerListener(new CommandDocletListener(this, cmd));
 	
