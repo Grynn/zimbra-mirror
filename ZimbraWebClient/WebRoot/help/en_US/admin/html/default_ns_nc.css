@@ -1,0 +1,139 @@
+﻿BODY { 
+      font-family:Arial; 
+      background-color:#ffffff;  }
+H1 { 
+    font-weight:bold; 
+    color:#000080; 
+    font-size:14pt; 
+    font-family:Arial;  }
+LI.H1 { 
+       font-weight:bold; 
+       color:#000080; 
+       font-size:14pt;  }
+H2 { 
+    font-weight:bold; 
+    color:#000080; 
+    font-size:12pt; 
+    font-family:Arial;  }
+LI.H2 { 
+       font-weight:bold; 
+       color:#000080; 
+       font-size:12pt;  }
+H3 { 
+    font-weight:bold; 
+    color:#000080; 
+    font-size:11pt; 
+    font-family:Arial;  }
+LI.H3 { 
+       font-weight:bold; 
+       color:#000080; 
+       font-size:11pt;  }
+H4 { 
+    font-weight:bold; 
+    font-size:11pt; 
+    margin-bottom:6.5pt; 
+    font-family:Arial;  }
+LI.H4 { 
+       font-weight:bold; 
+       font-size:11pt;  }
+H5 { 
+    font-weight:bold; 
+    font-size:10.0pt; 
+    font-family:Arial;  }
+LI.H5 { 
+       font-weight:bold; 
+       font-size:10.0pt;  }
+H6 { 
+    font-weight:bold; 
+    background-color:Transparent; 
+    font-size:10pt; 
+    margin-bottom:6pt; 
+    color:#000080; 
+    margin-top:8pt; 
+    font-family:Arial;  }
+LI.H6 { 
+       font-weight:bold; 
+       font-size:10pt; 
+       color:#000080;  }
+P { 
+   margin-top:1pt; 
+   font-size:10pt; 
+   margin-bottom:6pt; 
+   font-family:Arial;  }
+LI.P { 
+      font-size:10pt;  }
+A.expandspot { 
+              cursor:hand; 
+              font-style:italic; 
+              color:#000080; 
+              text-decoration:none;  }
+SPAN.expandtext { 
+                 font-style:italic; 
+                 font-weight:normal;  }
+A.dropspot { 
+            cursor:hand; 
+            color:#008000; 
+            font-style:italic; 
+            text-decoration:none;  }
+A.glossterm { 
+             color:#800000; 
+             cursor:hand; 
+             font-style:italic; 
+             text-decoration:none;  }
+SPAN.glosstext { 
+                font-style:italic; 
+                font-weight:normal; 
+                color:#0000ff;  }
+OL { 
+    margin-top:0px; 
+    margin-bottom:0px; 
+    font-size:11pt; 
+    font-family:Arial, sans-serif;  }
+UL { 
+    margin-top:0px; 
+    margin-bottom:0px; 
+    font-size:11pt; 
+    font-family:Arial, sans-serif;  }
+P.Reviewstatements { 
+                    color:#ff0000; 
+                    x-next-type:P;  }
+LI.P-Reviewstatements { 
+                       color:#ff0000;  }
+SPAN.REVIEWFOLLOWUP { 
+                     font-style:italic; 
+                     font-weight:normal; 
+                     color:#ff0000;  }
+SPAN.Important { 
+                font-size:11pt; 
+                font-weight:bold; 
+                font-style:normal; 
+                color:#000080;  }
+SPAN.fieldnames { 
+                 font-weight:bold; 
+                 font-style:normal; 
+                 font-size:10pt;  }
+SPAN.code { 
+           font-weight:bold; 
+           font-style:normal; 
+           font-family:"Times New Roman"  , serif;  }
+SPAN.attribute { 
+                font-weight:bold; 
+                font-style:normal;  }
+P.note { 
+        list-style:url(ocean_arrow_med.gif); 
+        color:#000080;  }
+LI.P-note { 
+           list-style:url(ocean_arrow_med.gif); 
+           color:#000080;  }
+SPAN.headingpara { 
+                  font-weight:bold; 
+                  font-style:normal; 
+                  color:#000080;  }
+ol ol { 
+       margin-top:1px;  }
+ol ul { 
+       margin-top:1px;  }
+ul ul { 
+       margin-top:1px;  }
+ul ol { 
+       margin-top:1px;  }
