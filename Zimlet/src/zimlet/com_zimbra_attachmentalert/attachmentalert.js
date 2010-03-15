@@ -19,30 +19,31 @@
 // @author Zimlet author: Raja Rao DV(rrao@zimbra.com)
 //////////////////////////////////////////////////////////////////////////////
 
-function com_zimbra_attachmentalert() {
+function com_zimbra_attachalert() {
 }
 
-com_zimbra_attachmentalert.prototype = new ZmZimletBase();
-com_zimbra_attachmentalert.prototype.constructor = com_zimbra_attachmentalert;
+com_zimbra_attachalert.prototype = new ZmZimletBase();
+com_zimbra_attachalert.prototype.constructor = com_zimbra_attachalert;
 
-com_zimbra_attachmentalert.prototype.init =
+com_zimbra_attachalert.prototype.init =
 function() {
 	this.turnONAttachmentAlertZimletNew = this.getUserProperty("turnONAttachmentAlertZimletNew") == "true";
 };
 
-com_zimbra_attachmentalert.prototype.initializeRegEx =
+com_zimbra_attachalert.prototype.initializeRegEx =
 function() {
 	if (this._attachWordsRegEx)
 		return;
-
-	this._attachWordsList = ["attach"];
+	this._attachStr = this.getMessage("AttachmentAlert_attach");
+	this._errorMsgStr = this.getMessage("AttachmentAlert_errorMsg");
+	this._attachWordsList = [this._attachStr];
 	this._attachWordsRegEx = [];
 	for (var n = 0; n < this._attachWordsList.length; n++) {
 		this._attachWordsRegEx.push(new RegExp("\\b" + this._attachWordsList[n], "ig"));
 	}
 };
 
-com_zimbra_attachmentalert.prototype.emailErrorCheck =
+com_zimbra_attachalert.prototype.emailErrorCheck =
 function(mail, boolAndErrorMsgArray) {
 	if (!this.turnONAttachmentAlertZimletNew)
 		return;
@@ -65,10 +66,7 @@ function(mail, boolAndErrorMsgArray) {
 	var attachWordsThatExists = "";
 	var newMailContent = mail.textBodyContent;
 
-	//if we have word like attachment? ignore(it could be a question)
-	if(/\battach.*\?/.test(newMailContent)) {
-	 return;
-	}
+
 	var hasattachWordStr = false;
 	for (var k = 0; k < this._attachWordsRegEx.length; k++) {
 		var attachWord = this._attachWordsRegEx[k];
@@ -93,11 +91,11 @@ function(mail, boolAndErrorMsgArray) {
 		return null;
 
 	//there is a word "attach*" in new mail but not in old-mail
-	return boolAndErrorMsgArray.push({hasError:true, errorMsg:"No Attachment(s) Found. You might have forgotten to attach it. Continue anyway?", zimletName:"com_zimbra_attachmentalert"});
+	return boolAndErrorMsgArray.push({hasError:true, errorMsg: this._errorMsgStr, zimletName:"com_zimbra_attachalert"});
 };
 
 
-com_zimbra_attachmentalert.prototype._createIgnoreList =
+com_zimbra_attachalert.prototype._createIgnoreList =
 function(origMail) {
 	var bodyContent = origMail.getBodyContent();
 	for (var k = 0; k < this._attachWordsRegEx.length; k++) {
@@ -110,15 +108,15 @@ function(origMail) {
 	}
 };
 
-com_zimbra_attachmentalert.prototype.doubleClicked = function() {
+com_zimbra_attachalert.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
 
-com_zimbra_attachmentalert.prototype.singleClicked = function() {
+com_zimbra_attachalert.prototype.singleClicked = function() {
 	this.showPrefDialog();
 };
 
-com_zimbra_attachmentalert.prototype.showPrefDialog =
+com_zimbra_attachalert.prototype.showPrefDialog =
 function() {
 	//if zimlet dialog already exists...
 	if (this.pbDialog) {
@@ -136,7 +134,7 @@ function() {
 	this.pbDialog.popup();
 };
 
-com_zimbra_attachmentalert.prototype.createPrefView =
+com_zimbra_attachalert.prototype.createPrefView =
 function() {
     var html = new Array();
     var i = 0;
@@ -147,7 +145,7 @@ function() {
 };
 
 
-com_zimbra_attachmentalert.prototype._okBtnListner =
+com_zimbra_attachalert.prototype._okBtnListner =
 function() {
 	this._reloadRequired = false;
 	if (document.getElementById("turnONAttachmentAlertZimletNew_chkbx").checked) {
