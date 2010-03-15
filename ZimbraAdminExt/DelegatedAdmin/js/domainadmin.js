@@ -1152,6 +1152,7 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
                             },
                             { type:_SPACER_, height: 5 },
                             {type:_OUTPUT_, id:ZaDomainXFormView.LogoAppBannerPreviewId,
+                                labelWrap: true,
                                 label:com_zimbra_delegatedadmin.NAD_zimbraLogoAppBannerPreview,
                                 getDisplayValue: ZaDomainXFormView.getAppLogoPreview,
                                 labelLocation:_LEFT_
@@ -1165,6 +1166,7 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
                             },
                             { type:_SPACER_, height: 5 },
                             {type:_OUTPUT_, id:ZaDomainXFormView.LogoLoginBannerPreviewId,
+                                labelWrap: true,
                                 label:com_zimbra_delegatedadmin.NAD_zimbraLogoLoginBannerPreview,
                                 getDisplayValue: ZaDomainXFormView.getLoginLogoPreview,
                                 labelLocation:_LEFT_
@@ -1311,6 +1313,7 @@ ZaDomainAdmin.GlobalConfigXFormModifier = function (xFormObject) {
                     { type:_SPACER_, height: 5 },
                     {type:_OUTPUT_, id:GlobalConfigXFormView.LogoAppBannerPreviewId,
                         label:com_zimbra_delegatedadmin.NAD_zimbraLogoAppBannerPreview,
+                        labelWrap: true,
                         getDisplayValue: ZaDomainXFormView.getAppLogoPreview,
                         labelLocation:_LEFT_
                     },
@@ -1323,6 +1326,7 @@ ZaDomainAdmin.GlobalConfigXFormModifier = function (xFormObject) {
                     } ,
                     { type:_SPACER_, height: 5 },
                     { type:_OUTPUT_, id:GlobalConfigXFormView.LogoLoginBannerPreviewId,
+                        labelWrap: true,
                         label:com_zimbra_delegatedadmin.NAD_zimbraLogoLoginBannerPreview,
                         getDisplayValue: ZaDomainXFormView.getLoginLogoPreview,
                         labelLocation:_LEFT_
