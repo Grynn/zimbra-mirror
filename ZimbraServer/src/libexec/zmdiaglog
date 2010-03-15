@@ -339,6 +339,9 @@ sub run() {
     if (-d "/opt/zimbra/zmstat/$yesterday_stats_dir") {
         logmsg "Copying yesterday's ZCS statistics\n";
         mkdir("$destination/stats/$yesterday_stats_dir");
+        my $zuser = $Zimbra::Mon::Zmstat::LC{zimbra_user};
+        my ($zuid,$zgid) = (getpwnam($zuser))[2,3];
+        chown $zuid, $zgid, "$destination/stats/$yesterday_stats_dir";
         system("cp /opt/zimbra/zmstat/$yesterday_stats_dir/* $destination/stats/$yesterday_stats_dir/");
     }
     
