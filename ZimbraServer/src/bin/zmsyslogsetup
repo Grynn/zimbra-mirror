@@ -168,7 +168,7 @@ updateSyslog() {
     sed -i -e 's/^*.info/*.info;local0.none;local1.none;auth.none/' ${tmpfile}
   fi
 
-  if [ $rsyslog = 1 ]; then
+  if [ $rsyslog = 1  -o -e "/etc/init.d/sysklogd" ]; then
     sed -i -e 's/^\*\.\*;auth,authpriv.none/\*\.\*;auth,authpriv.none;local0.none;local1.none;mail.none/' ${tmpfile}
     sed -i -e 's/^\*\.=debug;\\/\*.=debug;\\\n\tlocal0,local1.none;\\/' ${tmpfile}
     sed -i -e 's/^\*\.=info;\*\.=notice;\*\.=warn;\\/\*.=info;\*.=notice;\*.=warn;\\\n\tlocal0,local1.none;\\/' ${tmpfile}
