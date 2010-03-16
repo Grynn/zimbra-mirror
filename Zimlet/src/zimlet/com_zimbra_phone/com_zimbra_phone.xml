@@ -4,10 +4,6 @@
 	<handlerObject>Com_Zimbra_Phone</handlerObject>
 	<serverExtension hasKeyword="phone" extensionClass="com.zimbra.cs.zimlet.handler.NANPHandler"/>
 	<contentObject type="phone">
-		<matchOn>
-            <regex attrs="g">(((\+\d{2}[-\. ]\d{5}[-\. ]?\d{5})|(\b(\d{1}[-. ])?(\(?\d{3}\)?[-. ])?\d{3}[-.]\d{4}\b)|(\(\d{3}\)[-\. ]?\d{7}))(( x| ext)[-#: ]?\d{1,5}){0,1})</regex>
-            <!-- <regex paren="2">(\W|^)((?:(?:\+|00)\d+[-.\s]?)?(?:(?:\(\d{2,3}\)[-.\s]?|\d{2,3}[-.\s]?))?\d{3}[-.\s]?\d{3,4})(\W|$)</regex> -->
-		</matchOn>
 		<contextMenu>
 			<menuItem label="${msg.search}" icon="Search" id="SEARCH"/>
 			<menuItem label="${msg.addToContacts}" icon="NewContact" id="ADDCONTACT"/>

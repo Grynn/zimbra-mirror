@@ -27,34 +27,25 @@ function(line, startIndex) {
 		var re = a[i];
 		re.lastIndex = startIndex;
 		var m = re.exec(line);
-		if (m && (ret == null || m.index < ret.index)) {
-			if (re.useParen) {
-				for (var j = 1; j < re.useParen; ++j)
-					m.index += m[j].length;
-				m[0] = m[re.useParen];
-			}
-			if (!/^000/.test(m[0]))
-				ret = m;
-		}
+        if (m) {
+            if (!ret || m.index < ret.index) {
+                ret = m;
+            }
+        }
 	}
 	return ret;
 };
 
 Com_Zimbra_Phone.prototype.init =
 function() {
-	var regexps = [];
-	var o = this.xmlObj().contentObject.matchOn[0];
-	var a = o.regex;
-	for (var i = 0; i < a.length; ++i) {
-		o = a[i];
-		var attrs = o.attrs;
-		if (!attrs)
-			attrs = "ig";
-		var re = new RegExp(o._content, attrs);
-		if (o.paren != null)
-			re.useParen = parseInt(o.paren);
-		regexps.push(re);
-	}
+	var regexps = [
+        new RegExp(this.getMessage("northAmericanNumberingPlan"),"ig"),
+        new RegExp(this.getMessage("genericInternational"), "ig")
+    ];
+    var localNumbers = this.getMessage("localNumbers");
+    if (localNumbers && localNumbers != "###") {
+        regexps.push(new RegExp(localNumbers, "ig"));
+    }
 	this.regexps = regexps;
 };
 /**
