@@ -169,6 +169,11 @@ function(entry) {
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 		
 	this._localXForm.setInstance(this._containedObject);
+	
+	this.formDirtyLsnr = new AjxListener(ZaApp.getInstance().getCurrentController(), ZaXFormViewController.prototype.handleXFormChange);
+	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, this.formDirtyLsnr);
+	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, this.formDirtyLsnr);	
+	
 	this.updateTab();
 }
 

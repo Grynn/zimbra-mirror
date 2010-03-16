@@ -52,6 +52,11 @@ function(entry) {
 	}
 }
 
+ZaXFormViewController.prototype.handleXFormChange = function (ev) {
+	if(ev && ev.form.hasErrors() && this._toolbar && this._toolbar.getButton(ZaOperation.SAVE)) { 
+		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+	}
+}
 /**
 * Method that notifies listeners to that the controlled ZaAccount is removed
 * @param details {String}

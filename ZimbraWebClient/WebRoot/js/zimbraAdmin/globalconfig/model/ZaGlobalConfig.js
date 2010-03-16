@@ -347,7 +347,7 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraImapServerEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapServerEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},						
 		{ id:ZaGlobalConfig.A_zimbraImapSSLServerEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapSSLServerEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},								
 		{ id:ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},										
-        { id:ZaGlobalConfig.A_zimbraImapNumThreads, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapNumThreads, type:_NUMBER_,  minInclusive: 0, maxInclusive:2147483647  },
+        { id:ZaGlobalConfig.A_zimbraImapNumThreads, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapNumThreads, type:_INT_,  minInclusive: 0, maxInclusive:2147483647  },
 		{ id:ZaGlobalConfig.A_zimbraImapBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapBindPort, type:_PORT_ },
 		{ id:ZaGlobalConfig.A_zimbraImapSSLBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraImapSSLBindPort, type:_PORT_ },
 		// anti-spam
@@ -367,7 +367,7 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraPop3ProxyBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraPop3ProxyBindPort, type:_PORT_ },
 		{ id:ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort, type:_PORT_ },
 		{ id:ZaGlobalConfig.A_zimbraLmtpBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraLmtpBindPort, type:_PORT_ },
-		{ id:ZaGlobalConfig.A_zimbraLmtpNumThreads, ref:"attrs/" + ZaGlobalConfig.A_zimbraLmtpNumThreads, type:_PORT_ },		
+		{ id:ZaGlobalConfig.A_zimbraPop3NumThreads, ref:"attrs/" + ZaGlobalConfig.A_zimbraPop3NumThreads, type:_INT_, minInclusive: 0, maxInclusive:2147483647 },		
 		{ id:ZaGlobalConfig.A_zimbraInstalledSkin, ref:"attrs/" + ZaGlobalConfig.A_zimbraInstalledSkin, type:_LIST_, listItem:{type:_STRING_}},
 
         //skin properties

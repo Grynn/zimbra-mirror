@@ -80,7 +80,6 @@ ZaServer.A_SmtpTimeout = "zimbraSmtpTimeout";
 ZaServer.A_LmtpAdvertisedName = "zimbraLmtpAdvertisedName";
 ZaServer.A_LmtpBindAddress = "zimbraLmtpBindAddress";
 ZaServer.A_LmtpBindPort = "zimbraLmtpBindPort";
-ZaServer.A_LmtpNumThreads = "zimbraLmtpNumThreads";
 //pop3
 ZaServer.A_zimbraPop3NumThreads = "zimbraPop3NumThreads";
 ZaServer.A_Pop3AdvertisedName ="zimbraPop3AdvertisedName";
@@ -376,7 +375,6 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_LmtpAdvertisedName, ref:"attrs/" +  ZaServer.A_LmtpAdvertisedName, type:_STRING_, maxLength: 128 },
 		{id:ZaServer.A_LmtpBindAddress, ref:"attrs/" +  ZaServer.A_LmtpBindAddress, type:_HOSTNAME_OR_IP_, maxLength: 256 },
 		{id:ZaServer.A_LmtpBindPort, ref:"attrs/" +  ZaServer.A_LmtpBindPort, type:_COS_PORT_},		
-		{id:ZaServer.A_LmtpNumThreads, ref:"attrs/" +  ZaServer.A_LmtpNumThreads, type:_COS_INT_, minInclusive: 0, maxInclusive:2147483647 },
 		{id:ZaServer.A_zimbraScheduledTaskNumThreads, ref:"attrs/" +  ZaServer.A_zimbraScheduledTaskNumThreads, type:_COS_INT_, minInclusive: 1, maxInclusive:2147483647 },
 		{id:ZaServer.A_zimbraMailPurgeSleepInterval, ref:"attrs/" +  ZaServer.A_zimbraMailPurgeSleepInterval, type:_COS_MLIFETIME_, minInclusive: 0, maxInclusive:2147483647 },
 		{id:ZaServer.A_zimbraPop3NumThreads, ref:"attrs/" +  ZaServer.A_zimbraPop3NumThreads, type:_COS_INT_, minInclusive: 0, maxInclusive:2147483647 },		

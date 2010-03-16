@@ -128,7 +128,7 @@ function() {
 }
 
 ZaApp.prototype.getCurrentController = 
-function(ctrlr) {
+function() {
 	return this._controllers[this._currentViewId];
 }
 
