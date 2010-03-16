@@ -412,6 +412,7 @@ if (ZaTabView.XFormModifiers["ZaDLXFormView"]) {
 				labelCssClass:"xform_label", cssStyle:"padding-left:0px",
                 enableDisableChecks:[],
                 visibilityChecks:[],
+                nowrap:false,labelWrap:true,
                 trueValue:"TRUE", falseValue:"FALSE"
             }  ;
 
