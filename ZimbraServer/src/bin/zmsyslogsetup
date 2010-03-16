@@ -54,6 +54,8 @@ else
   fi
 fi
 
+rsyslog=0
+
 usage() {
   echo ""
   echo "$0: set up syslog.conf for local or remote logging"
@@ -129,7 +131,6 @@ updateSyslogNG() {
 }
 
 updateSyslog() {
-  rsyslog=0
   syslogconf=/etc/syslog.conf
   if [ -f "/etc/rsyslog.conf" ]; then
     syslogconf=/etc/rsyslog.conf
@@ -239,12 +240,17 @@ if [ x"$platform" = "xUBUNTU6" -o x"$platform" = "xUBUNTU6_64" \
      -o x"$platform" = "xDEBIAN4.0" -o x"$platform" = "xDEBIAN4.0_64" ]; then
   if [ -e "/etc/init.d/sysklogd" ]; then
     /etc/init.d/sysklogd restart > /dev/null 2>&1 
+    exit 0
+  elif [ $rsyslog = 1 ]; then
+    /etc/init.d/rsyslog restart > /dev/null 2>&1
+    exit 0
   else 
     echo "Unable to restart syslog.  Please do it manually."
   fi
 elif [[ x"$platform" == "xDEBIAN5"* || x"$platform" == "xF10"* || x"$platform" == "xF11"* ]]; then
   if [ -e "/etc/init.d/rsyslog" ]; then
     /etc/init.d/rsyslog restart> /dev/null 2>&1
+    exit 0
   else
     echo "Unable to restart rsyslog.  Please do it manually."
   fi
