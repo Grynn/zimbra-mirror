@@ -96,19 +96,34 @@ updateSyslogNG() {
   fi
 
   grep -v zimbra ${syslogconf} > ${tmpfile}
-  echo 'source zimbra_src {  unix-stream("/dev/log" keep-alive(yes) max-connections(20)); }; # zimbra' >> ${tmpfile}
+  zsrc=zimbra_src
+  if [ x$platform = "xSLES11_64" ]; then
+    #use native src on SLES11_64
+    zsrc=src
+  else
+    echo 'source zimbra_src {  unix-stream("/dev/log" keep-alive(yes) max-connections(20)); }; # zimbra' >> ${tmpfile}
+  fi
   echo 'filter zimbra_local0 { facility(local0); }; # zimbra' >> ${tmpfile}
   echo 'filter zimbra_local1 { facility(local1); }; # zimbra' >> ${tmpfile}
   echo 'filter zimbra_auth { facility(auth); }; # zimbra' >> ${tmpfile}
   echo 'filter zimbra_mail { facility(mail); }; # zimbra' >> ${tmpfile}
-  echo 'destination zimbra_mail { file("/var/log/zimbra.log" owner("zimbra")); }; # zimbra' >> ${tmpfile}
-  echo 'destination zimbra_local1 { file("/var/log/zimbra-stats.log" owner("zimbra")); }; # zimbra' >> ${tmpfile}
-  echo 'destination zimbra_local0 { file("/var/log/zimbra.log" owner("zimbra")); }; # zimbra' >> ${tmpfile}
-  echo 'destination zimbra_auth { file("/var/log/zimbra.log" owner("zimbra")); }; # zimbra' >> ${tmpfile}
-  echo 'log { source(zimbra_src); filter(zimbra_mail); destination(zimbra_mail); }; # zimbra' >> ${tmpfile}
-  echo 'log { source(zimbra_src); filter(zimbra_local0); destination(zimbra_local0); }; # zimbra' >> ${tmpfile}
-  echo 'log { source(zimbra_src); filter(zimbra_local1); destination(zimbra_local1); }; # zimbra' >> ${tmpfile}
-  echo 'log { source(zimbra_src); filter(zimbra_auth); destination(zimbra_auth); }; # zimbra' >> ${tmpfile}
+  #if [ $TYPE = "local" ]; then
+    echo 'destination zimbra_mail { file("/var/log/zimbra.log" owner("zimbra")); }; # zimbra' >> ${tmpfile}
+    echo 'destination zimbra_local1 { file("/var/log/zimbra-stats.log" owner("zimbra")); }; # zimbra' >> ${tmpfile}
+    echo 'destination zimbra_local0 { file("/var/log/zimbra.log" owner("zimbra")); }; # zimbra' >> ${tmpfile}
+    echo 'destination zimbra_auth { file("/var/log/zimbra.log" owner("zimbra")); }; # zimbra' >> ${tmpfile}
+  #fi
+  #if [ $TYPE = "remote" ]; then
+  #  echo '#Replace <ip_address> with your actual remote IP address for remote logging # zimbra' >> ${tmpfile}
+  #  echo '#destination zimbra_mail { udp(ip(<ip_address>) port(514) ); }; # zimbra' >> ${tmpfile}
+  #  echo '#destination zimbra_local1 { udp(ip(<ip_address>) port(514) ); }; # zimbra' >> ${tmpfile}
+  #  echo '#destination zimbra_local0 { udp(ip(<ip_address>) port(514) ); }; # zimbra' >> ${tmpfile}
+  #  echo '#destination zimbra_auth { udp(ip(<ip_address>) port(514) ); }; # zimbra' >> ${tmpfile}
+  #fi
+  echo "log { source($zsrc); filter(zimbra_mail); destination(zimbra_mail); }; # zimbra" >> ${tmpfile}
+  echo "log { source($zsrc); filter(zimbra_local0); destination(zimbra_local0); }; # zimbra" >> ${tmpfile}
+  echo "log { source($zsrc); filter(zimbra_local1); destination(zimbra_local1); }; # zimbra" >> ${tmpfile}
+  echo "log { source($zsrc); filter(zimbra_auth); destination(zimbra_auth); }; # zimbra" >> ${tmpfile}
 
   # remove duplicate logging
   sed -i -e 's:\(^destination mailinfo.*\):#\1:' ${tmpfile}
