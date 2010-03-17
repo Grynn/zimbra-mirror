@@ -186,7 +186,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
             items: [
                 {type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
                 {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label: ZaMsg.ZWC_END_USER_GUIDE,
-                     href:(location.pathname + "help/admin/pdf/ZWC_User_Guide_6_0.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
+                     href:(location.pathname + "help/admin/pdf/ZWC%20User%20Guide_6_0.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
             ]
         },
         {type:_CELL_SPACER_},
