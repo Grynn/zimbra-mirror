@@ -35,14 +35,16 @@ function windowTitle()
 <h2>
 <FONT SIZE="-1"><a href="./service-summary.html">Service: ${service.name}</a></FONT>
 <BR>
-&lt;${command.requestName}&gt; SOAP Command</h2>
+<FONT SIZE="-1">Namespace: "${command.namespace}"</FONT>
+<BR>
+${command.name} SOAP Command</h2>
 <p>
 ${command.description}
 </p>
 <h2><a name="request">${command.requestName}</a></h2>
-<p>
-pseudo code!!!
-</p>
+<pre>
+${command.request.elementAsCode}
+</pre>
 <p>
 The <code>&lt;${command.requestName}&gt;</code> element has the following attributes: 
 </p>
@@ -74,8 +76,9 @@ The <code>&lt;${command.requestName}&gt;</code> element has the following attrib
 	<td>
 	<#if attribute.values?size == 0>
 	<i>Character data</i>
-	</#if>
+	<#else>
 	<code>${attribute.valuesAsString}</code>
+	</#if>
 	</td>
 	<td>${attribute.description}</td>
 </tr>
@@ -124,7 +127,9 @@ The following table describes the elements defined within a <code>&lt;${command.
 
 <h2><a name="response">${command.responseName}</a></h2>
 <p>
-pseudo code!!!
+<pre>
+${command.response.elementAsCode}
+</pre>
 </p>
 <p>
 The <code>&lt;${command.responseName}&gt;</code> element has the following attributes: 
@@ -157,8 +162,9 @@ The <code>&lt;${command.responseName}&gt;</code> element has the following attri
 	<td>
 	<#if attribute.values?size == 0>
 	<i>Character data</i>
-	</#if>
+	<#else>
 	<code>${attribute.valuesAsString}</code>
+	</#if>
 	</td>
 	<td>${attribute.description}</td>
 </tr>
@@ -225,7 +231,7 @@ The <code>&lt;${element.name}&gt;</code> element has the following attributes:
 </td></tr>
 <#if element.attributes?size == 0>
 <tr>
-	<td colspan="4">CDATA</td>
+	<td colspan="4">None</td>
 </tr>
 </#if>
 <#list element.attributes as attribute>
@@ -244,8 +250,9 @@ The <code>&lt;${element.name}&gt;</code> element has the following attributes:
 	<td>
 	<#if attribute.values?size == 0>
 	<i>Character data</i>
-	</#if>
+	<#else>
 	<code>${attribute.valuesAsString}</code>
+	</#if>
 	</td>
 	<td>${attribute.description}</td>
 </tr>

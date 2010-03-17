@@ -30,12 +30,18 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	private	static	final	String				REGEX_ELEMENT_TAG_DELIM = "[ \t]+";
 	private	static	final	String				REGEX_SUBELEMENT_NAME_DELIM = "[,]+";
 	
+	public	static	final	int				CODE_CLOSE = 1;
+	public	static	final	int				CODE_OPEN = 2;
+	public	static	final	int				CODE_OPEN_FRAGMENT = 3;
+	public	static	final	int				CODE_CLOSE_FRAGMENT = 4;
+	
 	private	List<Element>	subElements = new LinkedList<Element>();
 	private	List<Object[]>			subElementsMap = new LinkedList<Object[]>();
 	
 	private	List<Attribute>	attributes = new LinkedList<Attribute>();
 
 	private	boolean		loaded = false;
+	private	boolean		cdata = false;
 
 	/**
 	 * Constructor.
@@ -51,13 +57,16 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	 * @param	name		the name
 	 * @param	description	the description
 	 * @param	type		the element type (see <code>TYPE_</code> constants)
+	 * @param	subElementsMap		a map of sub-element instances {obj[0] = (String)subElementName, obj[1] = (Integer)occurrence}
+	 * @param	cdata		if <code>true</code>, the element can contain character data
 	 */
-	private	Element(String name, String description, int type, List<Object[]> subElementsMap) {
+	private	Element(String name, String description, int type, List<Object[]> subElementsMap, boolean cdata) {
 		this.loaded = true;
 		this.name = name;
 		this.description = description;
 		this.type = type;
 		this.subElementsMap = subElementsMap;
+		this.cdata = cdata;
 	}
 	
 	/**
@@ -75,11 +84,113 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	 * @return	the element
 	 */
 	public	Element	createCopy() {
-		Element newEl = new Element(this.name, this.description, this.type, this.subElementsMap);
+		Element newEl = new Element(this.name, this.description, this.type, this.subElementsMap, this.cdata);
 		
 		newEl.addAttributes(this.getAttributes());
 		
 		return	newEl;
+	}
+
+	/**
+	 * Loads all sub-elements of the root element into the all elements list.
+	 * 
+	 * @param	root	the root element
+	 */
+	private	static	void			writeElements(Element el, StringBuffer buf, int depth) {
+		Iterator it = el.getElements().iterator();
+		while(it.hasNext()) {
+			Element e = (Element)it.next();
+			for(int i=0; i < depth; i++)
+				buf.append("  ");
+			writeElement(e, buf, depth+1);
+			}
+	}
+
+	/**
+	 * Gets the complete element code.
+	 * 
+	 * @return	a string representation of the element
+	 */
+	public	String		getElementAsCode() {
+		if (this.getName() == null || this.getName().length() <= 0)
+			return	"";
+		
+		StringBuffer buf = new StringBuffer();
+		
+		writeElement(this, buf, 1);
+
+		return	buf.toString();
+	}
+
+	/**
+	 * Gets the complete element code.
+	 * 
+	 * @return	a string representation of the element
+	 */
+	private	static	void	writeElement(Element e, StringBuffer buf, int depth) {
+		int	codeOpen = CODE_OPEN;
+		int	codeClose = CODE_CLOSE;
+		
+		if (e.getElements().size() == 0 && e.getCDATA() == false) {
+			codeOpen = CODE_OPEN_FRAGMENT;
+			codeClose = CODE_CLOSE_FRAGMENT;
+		}
+			
+		buf.append(e.getElementCode(codeOpen));
+		if (e.getElements().size() > 0)
+			buf.append("\n");
+		writeElements(e, buf, depth+1);
+		if (e.getCDATA())
+			buf.append("<i>Character data</i>");
+		buf.append(e.getElementCode(codeClose));
+		buf.append(e.getOccurrenceAsString());
+		buf.append("\n");
+	}
+
+	/**
+	 * 
+	 */
+	public	String		getElementCode(int code) {
+		StringBuffer buf = new StringBuffer();
+
+		if (code != CODE_CLOSE_FRAGMENT)
+			buf.append("&lt;");
+		
+		switch (code) {
+			case CODE_CLOSE: {
+				buf.append("/");
+				buf.append(getName());
+				break;
+			}
+			case CODE_CLOSE_FRAGMENT: {
+				buf.append(" /");
+				break;
+			}
+			case CODE_OPEN_FRAGMENT:
+			case CODE_OPEN: {
+				buf.append(getName());
+				Iterator it = this.attributes.iterator();
+				while (it.hasNext()) {
+					Attribute attr = (Attribute)it.next();
+//					if (attr.getName().equals(Attribute.CDATA) == true)
+//						continue;
+					buf.append(" ");
+					if (attr.isRequired() == false)
+						buf.append("[");
+					buf.append(attr.getName());
+					buf.append("=");
+					buf.append(attr.getValuesAsString("\"", "|", "\"", "..."));
+					if (attr.isRequired() == false)
+						buf.append("]");
+				}
+				break;
+			}
+		}
+
+		if (code != CODE_OPEN_FRAGMENT)
+			buf.append(">");
+
+		return	buf.toString();
 	}
 
 	/**
@@ -99,12 +210,11 @@ public class Element extends AbstractElement implements java.io.Serializable {
 
 		List<Object[]>	subElementsMap = parseSubElementsMap(content);
 
-		Element newEl = new Element(name, description, type, subElementsMap);
+		boolean	cdata = false;
+		if (content != null && content.equals(CDATA))
+			cdata = true;
 
-		if (content != null && content.equals(Attribute.CDATA)) {
-			Attribute attr = Attribute.createCDATAAttribute(name, description, type);
-			newEl.addAttribute(attr);
-		}
+		Element newEl = new Element(name, description, type, subElementsMap, cdata);
 		
 		return	newEl;
 	}
@@ -116,6 +226,15 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	 */
 	public	boolean	isLoaded() {
 		return	this.loaded;
+	}
+
+	/**
+	 * Checks if this element can have character data.
+	 * 
+	 * @return	<code>true</code> if the element can have character data
+	 */
+	public	boolean		getCDATA() {
+		return	this.cdata;
 	}
 
 	/**
@@ -157,7 +276,7 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	private	static	Object[]		parseElementFromContent(String elementContent) {
 		Object[] obj = new Object[2];
 
-		int occ = getOccurenceFromString(elementContent);
+		int occ = getOccurrenceFromString(elementContent);
 		if (occ != OCCURRENCE_REQUIRED)
 			elementContent = elementContent.substring(0, elementContent.length()-1);
 
@@ -277,6 +396,8 @@ public class Element extends AbstractElement implements java.io.Serializable {
 		buf.append(this.getType());
 		buf.append(";occurrence=");
 		buf.append(this.getOccurrence());
+		buf.append(";CDATA=");
+		buf.append(this.getCDATA());
 		buf.append(";subElements-count=");
 		buf.append(this.subElements.size());
 		buf.append(";attributes-count=");

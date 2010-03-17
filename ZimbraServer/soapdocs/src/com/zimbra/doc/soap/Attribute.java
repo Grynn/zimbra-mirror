@@ -26,8 +26,6 @@ import java.util.*;
 public	class	Attribute	extends	AbstractElement implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	public	static	final	String				CDATA = "CDATA";
 	
 	private	static	final	String				REGEX_ATTRIBUTE_TAG_DELIM = "[ \t]+";
 	private	static	final	String				REGEX_VALUES_DELIM = "[|]+";
@@ -77,17 +75,6 @@ public	class	Attribute	extends	AbstractElement implements java.io.Serializable {
 	}
 
 	/**
-	 * Creates an attribute by parsing the tag text.
-	 * 
-	 * @param	tagText		the tag text
-	 * @param	req		if <code>true</code>, the element is related to the request
-	 * @return	the attribute
-	 */
-	public	static	Attribute	createCDATAAttribute(String elementName, String description, int type) {
-		return	new Attribute(elementName, Attribute.CDATA, description, type, new LinkedList(), AbstractElement.OCCURRENCE_REQUIRED);
-	}
-	
-	/**
 	 * Parses the values list from the tag content.
 	 * 
 	 * @param	content		the tag content string
@@ -114,7 +101,7 @@ public	class	Attribute	extends	AbstractElement implements java.io.Serializable {
 	 * @return	the occurrence
 	 */
 	private	static	int		parseOccurrence(String occStr) {
-		if (occStr.equals(OCCURRENCE_OPTIONAL_STR))
+		if (occStr.equals(OCCURRENCE_OPTIONAL_TEXT))
 			return	OCCURRENCE_OPTIONAL;
 			
 		return	OCCURRENCE_REQUIRED;
@@ -168,7 +155,7 @@ public	class	Attribute	extends	AbstractElement implements java.io.Serializable {
 	 * @return	a string representation of the values or an empty string for none
 	 */
 	public	String	getValuesAsString() {
-		return	getValuesAsString(", ");
+		return	getValuesAsString("[", "|", "]", "...");
 	}
 
 	/**
@@ -177,13 +164,13 @@ public	class	Attribute	extends	AbstractElement implements java.io.Serializable {
 	 * @param	delim		the delimiter
 	 * @return	a string representation of the values or an empty string for none
 	 */
-	public	String	getValuesAsString(String delim) {
+	public	String	getValuesAsString(String st, String delim, String en, String defValue) {
 		StringBuffer	buf = new StringBuffer();
 
-		if (values == null || values.size() <= 0)
-			return	buf.toString();
+		buf.append(st);
 
-		buf.append("[");
+		if (values == null || values.size() <= 0)
+			buf.append(defValue);
 
 		Value[] array = (Value[])values.toArray(new Value[values.size()]);
 		for (int i=0; i < array.length; i++) {
@@ -192,7 +179,7 @@ public	class	Attribute	extends	AbstractElement implements java.io.Serializable {
 				buf.append(delim);				
 		}
 
-		buf.append("]");
+		buf.append(en);
 
 		return	buf.toString();
 	}

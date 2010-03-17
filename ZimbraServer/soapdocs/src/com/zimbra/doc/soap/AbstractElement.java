@@ -27,8 +27,15 @@ public abstract	class AbstractElement {
 	public	static	final	int			OCCURRENCE_REQUIRED_MORE = 2; // one or more 1:* = "+"
 	public	static	final	int			OCCURRENCE_OPTIONAL_MORE = 3; // zero or more 0:* = "*"
 
-	protected	static	final	String		OCCURRENCE_REQUIRED_STR = "#REQUIRED";
-	protected	static	final	String		OCCURRENCE_OPTIONAL_STR = "#OPTIONAL";
+	public	static	final	String			OCCURRENCE_REQUIRED_STR = ""; // one and only one 1:1 = ""
+	public	static	final	String			OCCURRENCE_OPTIONAL_STR = "?"; // zero or one 0:1 = "?"
+	public	static	final	String			OCCURRENCE_REQUIRED_MORE_STR = "+"; // one or more 1:* = "+"
+	public	static	final	String			OCCURRENCE_OPTIONAL_MORE_STR = "*"; // zero or more 0:* = "*"
+
+	public	static	final	String				CDATA = "CDATA";
+
+	protected	static	final	String		OCCURRENCE_REQUIRED_TEXT = "#REQUIRED";
+	protected	static	final	String		OCCURRENCE_OPTIONAL_TEXT = "#OPTIONAL";
 
 	protected	int			occurrence = OCCURRENCE_REQUIRED;
 
@@ -79,10 +86,10 @@ public abstract	class AbstractElement {
 	/**
 	 * Sets the occurrence.
 	 * 
-	 * @param	occurence	the occurrence (see <code>OCCURRENCE_</code> constants)
+	 * @param	occurrence	the occurrence (see <code>OCCURRENCE_</code> constants)
 	 */
-	public	void	setOccurrence(int occurence) {
-		this.occurrence = occurence;
+	public	void	setOccurrence(int occurrence) {
+		this.occurrence = occurrence;
 	}
 
 	/**
@@ -95,23 +102,45 @@ public abstract	class AbstractElement {
 	}
 
 	/**
-	 * Gets the occurence from the string.
+	 * Gets the occurrence from the string.
 	 * 
 	 * @param	str		the string
-	 * @return	the occurenace (see <code>OCCURENCE_</code> constants)
+	 * @return	the occurrence (see <code>OCCURRENCE_</code> constants)
 	 */
-	protected	static		int		getOccurenceFromString(String str) {
-		if (str.endsWith("?"))
+	protected	static		int		getOccurrenceFromString(String str) {
+		if (str.endsWith(OCCURRENCE_OPTIONAL_STR))
 			return	OCCURRENCE_OPTIONAL;
 
-		if (str.endsWith("+"))
+		if (str.endsWith(OCCURRENCE_REQUIRED_MORE_STR))
 			return	OCCURRENCE_REQUIRED_MORE;
 
-		if (str.endsWith("*"))
+		if (str.endsWith(OCCURRENCE_OPTIONAL_MORE_STR))
 			return	OCCURRENCE_OPTIONAL_MORE;
 
 		
 		return	OCCURRENCE_REQUIRED;
+	}
+
+	/**
+	 * Gets the occurrence from the string.
+	 * 
+	 * @param	str		the string
+	 * @return	the occurrence (see <code>OCCURRENCE_</code> constants)
+	 */
+	public	String	getOccurrenceAsString() {
+		switch(this.occurrence) {
+			case OCCURRENCE_OPTIONAL: {
+				return	OCCURRENCE_OPTIONAL_STR;
+			}
+			case OCCURRENCE_REQUIRED_MORE: {
+				return	OCCURRENCE_REQUIRED_MORE_STR;
+			}
+			case OCCURRENCE_OPTIONAL_MORE: {
+				return	OCCURRENCE_OPTIONAL_MORE_STR;
+			}
+		}
+		
+		return	OCCURRENCE_REQUIRED_STR;
 	}
 
 	/**
