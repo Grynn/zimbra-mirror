@@ -1270,7 +1270,14 @@ public class BeanUtils {
 							phoneDisplay
 					});
 		}
-		return phoneDisplay;
+		if (phoneDisplay != null && phoneDisplay.length() != 0)
+			return phoneDisplay;
+
+		String name = phone.getName();
+		if (!StringUtil.isNullOrEmpty(name))
+			return name;
+
+		return I18nUtil.getLocalizedMessage(pc, "noCallerId");
 	}
 
 	private static Pattern sPHONE_NAME = Pattern.compile("[^\\d]");
