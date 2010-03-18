@@ -91,7 +91,7 @@ ForceOnline.prototype = {
   classID: Components.ID("{1a63c05f-caba-4b26-8d2e-f70d4ccc1e97}"),
   contractID: "@zimbra.com/force-online;1",
   
-  QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver, Ci.nsIDOMEventTarget, Ci.nsIClassInfo, Ci.nsISecurityCheckedComponent]),
+  QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver, Ci.nsIDOMEventTarget, Ci.nsIProtocolProxyFilter, Ci.nsIClassInfo, Ci.nsISecurityCheckedComponent]),
 
   _xpcom_factory : ForceOnlineFactory,
 
@@ -107,6 +107,7 @@ ForceOnline.prototype = {
   getInterfaces: function getInterfaces(aCount) {
     var interfaces = [Ci.nsIObserver,
                       Ci.nsIDOMEventTarget,
+                      Ci.nsIProtocolProxyFilter,
                       Ci.nsISecurityCheckedComponent,
                       Ci.nsIClassInfo];
     aCount.value = interfaces.length;
@@ -134,7 +135,7 @@ ForceOnline.prototype = {
 
   canSetProperty: function canSetProperty(iid, propertyName) {
     Components.utils.reportError(propertyName);
-    return "AllAccess";
+    return "NoAccess";
   },
 
   observe : function(aSubject, aTopic, aData) {
@@ -144,12 +145,15 @@ ForceOnline.prototype = {
                          getService(Ci.nsIObserverService);
         obsService.addObserver(this, "network:offline-status-changed", false);
         obsService.addObserver(this, "profile-change-net-teardown", false);
-        
+        obsService.addObserver(this, "profile-after-change", false);
         this._networkLinkService = Cc["@mozilla.org/network/network-link-service;1"].getService(Ci.nsINetworkLinkService);
-        this._online = this._networkLinkService.isLinkUp;
-
         this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
         this._timer.init(this, 1000, Ci.nsITimer.TYPE_REPEATING_SLACK);
+        this._online = this._networkLinkService.isLinkUp;
+        break;
+      case "profile-after-change":
+        var proxyService = Cc["@mozilla.org/network/protocol-proxy-service;1"].getService(Ci.nsIProtocolProxyService);
+        proxyService.registerFilter(this, 0);
         break;
       case "profile-change-net-teardown":
         var obsService = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
@@ -170,28 +174,24 @@ ForceOnline.prototype = {
     }
   },
   
+  applyFilter : function(ps, uri, proxy) {
+    if (uri.host == "localhost" || uri.host == "127.0.0.1") {
+      return null;
+    }
+    else {
+      return proxy;
+    }
+  },
+  
   addEventListener : function(type, listener, capture) {
     if (!(type in this._listenerMap)) {
       this._listenerMap[type] = [];
     }
     this._listenerMap[type].push(listener);
-
-    var online = this._networkLinkService.isLinkUp;
-    if ((type == ONLINE_STATUS && online) || (type == OFFLINE_STATUS && !online)) {
-      this._dispatchNetworkStatusEvent(type);
-    }
   },
   
   removeEventListener : function(type, listener, capture) {
-    if (type in this._listenerMap) {
-      var listeners = this._listenerMap[type];
-      for (var i=0; i<listeners.length; i++) {
-        if (listeners[i] == listener) {
-          listeners.splice(i, 1);
-          break;
-        }
-      }
-    }   
+    // TODO
   },
   
   _dispatchNetworkStatusEvent : function(status) {
