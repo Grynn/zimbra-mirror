@@ -24,19 +24,41 @@ import freemarker.ext.beans.*;
 
 /**
  * 
+ * This class generates a change log from a template.
+ * 
  * @author sposetti
  *
  */
 public	class	JsChangeLogTemplateUtil {
 	
+	/**
+	 * Defines the template directory.
+	 */
 	public	static	final	String		PROP_TEMPLATE_DIR = "template.dir";
+	/**
+	 * Defines the output directory.
+	 */
 	public	static	final	String		PROP_OUTPUT_DIR = "output.dir";
 
+	/**
+	 * Defines the template file name.
+	 * @see		DEFAULT_TEMPLATE_FILE
+	 */
 	public	static	final	String		PROP_TEMPLATE_FILE = "template.file";
+	/**
+	 * Defines the output file name.
+	 * @see		DEFAULT_OUTPUT_FILE
+	 */
 	public	static	final	String		PROP_OUTPUT_FILE = "output.file";
 	
-	private	static	final	String		DEFAULT_TEMPLATE_FILE = "index.ftl";
-	private	static	final	String		DEFAULT_OUTPUT_FILE = "index.html";
+	/**
+	 * Defines the default template file.
+	 */
+	public	static	final	String		DEFAULT_TEMPLATE_FILE = "index.ftl";
+	/**
+	 * Defines the default output file.
+	 */
+	public	static	final	String		DEFAULT_OUTPUT_FILE = "index.html";
 
 	private	Properties	props = new Properties();
 	
@@ -47,7 +69,7 @@ public	class	JsChangeLogTemplateUtil {
 	/**
 	 * Constructor.
 	 * 
-	 * @param	props			the configuration properties
+	 * @param	props			the configuration properties (see <code>PROP_*</code> constants)
 	 */
 	private	JsChangeLogTemplateUtil(Properties props) 
 	throws	IOException {
@@ -66,8 +88,7 @@ public	class	JsChangeLogTemplateUtil {
 	/**
 	 * Gets a singleton instance of the template utility.
 	 * 
-	 * @param	templateDir		the template directory
-	 * @param	outputDir		the output directory
+	 * @param	props			the configuration properties (see <code>PROP_*</code> constants)
 	 * @return	the template utility
 	 */
 	public	static	synchronized	JsChangeLogTemplateUtil		getInstance(Properties props)
@@ -101,7 +122,7 @@ public	class	JsChangeLogTemplateUtil {
 			try {
 				out.close();
 			} catch (Exception e) {
-				// clean-up quietly
+				// worst case scenario...clean-up quietly
 			}
 		}
 	}

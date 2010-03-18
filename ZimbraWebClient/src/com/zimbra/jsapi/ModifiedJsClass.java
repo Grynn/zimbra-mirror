@@ -27,14 +27,17 @@ public	class	ModifiedJsClass {
 
 	private	String	name;
 	private	String	fullName;
-	private	List<JsClass.Property>	addedProperties = new LinkedList();
-	private	List<JsClass.Property>	removedProperties = new LinkedList();
-	private	List<JsClass.Method>	addedMethods = new LinkedList();
-	private	List<JsClass.Method>	removedMethods = new LinkedList();
-	private	List<ChangedJsMethod>		changedMethods = new LinkedList();
+	private	List<JsClass.Property>	addedProperties = new LinkedList<JsClass.Property>();
+	private	List<JsClass.Property>	removedProperties = new LinkedList<JsClass.Property>();
+	private	List<JsClass.Method>	addedMethods = new LinkedList<JsClass.Method>();
+	private	List<JsClass.Method>	removedMethods = new LinkedList<JsClass.Method>();
+	private	List<ChangedJsMethod>		changedMethods = new LinkedList<ChangedJsMethod>();
 	
 	/**
 	 * Constructor.
+	 * 
+	 * @param	name		the class name
+	 * @param	name		the class fullname (FQDN = package + name)
 	 * 
 	 */
 	public	ModifiedJsClass(String name, String fullName) {
@@ -65,7 +68,7 @@ public	class	ModifiedJsClass {
 	 * 
 	 * @param	addedProperties		the added properties
 	 */
-	public	void	setAddedProperties(List addedProperties) {
+	public	void	setAddedProperties(List<JsClass.Property> addedProperties) {
 		this.addedProperties = addedProperties;
 	}
 
@@ -74,7 +77,7 @@ public	class	ModifiedJsClass {
 	 * 
 	 * @param	removedProperties		the removed properties
 	 */
-	public	void	setRemovedProperties(List removedProperties) {
+	public	void	setRemovedProperties(List<JsClass.Property> removedProperties) {
 		this.removedProperties = removedProperties;
 	}
 
@@ -123,7 +126,7 @@ public	class	ModifiedJsClass {
 	 * 
 	 * @param	addedMethods		the added methods
 	 */
-	public	void	setAddedMethods(List addedMethods) {
+	public	void	setAddedMethods(List<JsClass.Method> addedMethods) {
 		this.addedMethods = addedMethods;
 	}
 
@@ -132,7 +135,7 @@ public	class	ModifiedJsClass {
 	 * 
 	 * @param	removedMethods		the removed methods
 	 */
-	public	void	setRemovedMethods(List removedMethods) {
+	public	void	setRemovedMethods(List<JsClass.Method> removedMethods) {
 		this.removedMethods = removedMethods;
 	}
 

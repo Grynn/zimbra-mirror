@@ -79,6 +79,9 @@ public	class	JsClass {
 	 * Adds the property to the class.
 	 * 
 	 * @param	name		the property name
+	 * @param	isPrivate	if <code>true</code>, the property is private
+	 * @param	isInner		if <code>true</code>, the property is inner
+	 * @param	isStatic	if <code>true</code>, the property is static
 	 * @return	the newly added property
 	 */
 	public	Property	addProperty(String name, boolean isPrivate, boolean isInner, boolean isStatic) {
@@ -94,6 +97,10 @@ public	class	JsClass {
 	 * Adds the method to the class.
 	 * 
 	 * @param	name		the method name
+	 * @param	signature	the method signature
+	 * @param	isPrivate	if <code>true</code>, the property is private
+	 * @param	isInner		if <code>true</code>, the property is inner
+	 * @param	isStatic	if <code>true</code>, the property is static
 	 * @return	the newly added method
 	 */
 	public	Method	addMethod(String name, String signature, boolean isPrivate, boolean isInner, boolean isStatic) {
@@ -108,6 +115,9 @@ public	class	JsClass {
 	/**
 	 * Sets the constructor for the class.
 	 * 
+	 * @param	signature	the constructor signature
+	 * @param	isPrivate	if <code>true</code>, the property is private
+	 * @param	isInner		if <code>true</code>, the property is inner
 	 * @return	the constructor
 	 */
 	public	Method	setConstructor(String signature, boolean isPrivate, boolean isInner) {
@@ -164,7 +174,7 @@ public	class	JsClass {
 	}
 
 	/**
-	 * Compares the object.
+	 * Compares the objects.
 	 * 
 	 */
 	public	boolean	equals(Object obj) {
@@ -280,6 +290,7 @@ public	class	JsClass {
 	
 		/**
 		 * Checks if the method is changed by comparing signatures.
+		 * 
 		 */
 		public	boolean	isChanged(Method method) {
 			if (getName().equals(method.getName()) == false)
