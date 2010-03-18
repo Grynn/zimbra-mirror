@@ -280,7 +280,7 @@ public class DbOfflineMailbox {
         try {
             stmt = conn.prepareStatement("SELECT id, type" +
                     " FROM " + DbMailItem.getMailItemTableName(ombx) + Db.forceIndex("i_change_mask") +
-                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask IS NOT NULL");
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask > 0");
             int pos = 1;
             pos = DbMailItem.setMailboxId(stmt, ombx, pos);
 
@@ -306,7 +306,7 @@ public class DbOfflineMailbox {
         try {
             stmt = conn.prepareStatement("SELECT id, change_mask, folder_id" +
                     " FROM " + DbMailItem.getMailItemTableName(ombx) + Db.forceIndex("i_change_mask") +
-                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask IS NOT NULL AND NOT type=?");
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask > 0 AND NOT type=?");
             int pos = 1;
             pos = DbMailItem.setMailboxId(stmt, ombx, pos);
             stmt.setByte(pos++, MailItem.TYPE_FOLDER);
@@ -333,7 +333,7 @@ public class DbOfflineMailbox {
 		try {
 			stmt = conn.prepareStatement("SELECT id, change_mask, flags" +
 					" FROM " + DbMailItem.getMailItemTableName(ombx) + Db.forceIndex("i_change_mask") +
-					" WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask IS NOT NULL");
+					" WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask > 0");
 			int pos = 1;
             pos = DbMailItem.setMailboxId(stmt, ombx, pos);
 		
