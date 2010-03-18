@@ -946,10 +946,31 @@ ZaController.prototype._showAccountsView = function (defaultType, ev) {
 	}	
 	var acctListController = ZaApp.getInstance().getAccountListController(viewId);
 	
-
-		
+	var query = "";
+	if(!ZaSettings.HAVE_MORE_DOMAINS && ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
+		var queryChunks = [];
+		var domainList = ZaApp.getInstance().getDomainList().getArray();
+		//var domainList = [];
+		var cnt = domainList.length;
+		if(cnt>0) {
+			queryChunks.push("(");	
+		}
+		for(var i = 0; i < cnt; i++) {
+			queryChunks.push("|");
+			queryChunks.push("(zimbraMailDeliveryAddress=*@");
+			queryChunks.push(domainList[i].name);
+			queryChunks.push(")");
+			queryChunks.push("(zimbraMailAlias=*@");
+			queryChunks.push(domainList[i].name);
+			queryChunks.push(")");
+		}
+		if(cnt>0) {
+			queryChunks.push(")");
+			query=queryChunks.join("");
+		}		
+	}		
 	acctListController.setPageNum(1);	
-	acctListController.setQuery("");
+	acctListController.setQuery(query);
 	acctListController.setSortOrder("1");
 	acctListController.setSortField(ZaAccount.A_name);
 	acctListController.setSearchTypes([ZaSearch.TYPES[defaultType]]);
