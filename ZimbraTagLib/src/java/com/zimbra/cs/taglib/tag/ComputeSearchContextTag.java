@@ -141,15 +141,19 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
         params.setTypes(mTypes);
 
         if (mLimit == -1) {
-			if (ZSearchParams.TYPE_CONTACT.equals(mTypes)) {
-				mLimit = (int) mailbox.getPrefs().getContactsPerPage(); 
-			} else if (ZSearchParams.TYPE_VOICE_MAIL.equals(mTypes) || ZSearchParams.TYPE_CALL.equals(mTypes)) {
-				mLimit = (int) mailbox.getPrefs().getVoiceItemsPerPage(); 
-			} else {
-				mLimit = (int) mailbox.getPrefs().getMailItemsPerPage();
-			}
-			if (mLimit == -1)
-                mLimit = DEFAULT_SEARCH_LIMIT;
+                try {
+                        mLimit = Integer.parseInt(trareq.getParameter(QP_SEARCH_LIMIT));
+                } catch (NumberFormatException e) {
+                        if (ZSearchParams.TYPE_CONTACT.equals(mTypes)) {
+                                mLimit = (int) mailbox.getPrefs().getContactsPerPage(); 
+                        } else if (ZSearchParams.TYPE_VOICE_MAIL.equals(mTypes) || ZSearchParams.TYPE_CALL.equals(mTypes)) {
+                                mLimit = (int) mailbox.getPrefs().getVoiceItemsPerPage(); 
+                        } else {
+                                mLimit = (int) mailbox.getPrefs().getMailItemsPerPage();
+                        }
+                }
+                if (mLimit == -1)
+                        mLimit = DEFAULT_SEARCH_LIMIT;
         }
         params.setLimit(mLimit);
         //params.setFetchFirstMessage(mFetch);
