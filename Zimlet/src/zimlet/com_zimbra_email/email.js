@@ -89,7 +89,8 @@ Com_Zimbra_Email.prototype._getHtmlContent =
 function(html, idx, obj, context, spanId) {
 
 	if (obj instanceof AjxEmailAddress) {
-		var contactsApp = appCtxt.getApp(ZmApp.CONTACTS);
+		var context = window.parentAppCtxt || window.appCtxt;
+		var contactsApp = context.getApp(ZmApp.CONTACTS);
 		var contact = contactsApp && contactsApp.getContactByEmail(obj.address); // contact in cache?
 		var buddy = this._getBuddy(contact, obj.address);
 		if (contactsApp && !contact && contact !== null) {
