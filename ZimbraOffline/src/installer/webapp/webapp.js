@@ -19,6 +19,10 @@ function preload() {
   return serverCheck();
 }
 
+function shutdown() {
+  stopServer();
+}
+
 function startServer() {
   return startStopServer("start");
 }
@@ -129,7 +133,6 @@ function load() {
 
     window.platform.icon().menu.addMenuItem("about", bundle.GetStringFromName("AboutDesktop"), function(){window.platform.showAbout();});
     window.platform.icon().menu.addMenuItem("checkForUpdates", bundle.GetStringFromName("CheckUpdates"), function(){checkForUpdates();});
-    window.platform.icon().menu.addMenuItem("shutdownService", bundle.GetStringFromName("ShutdownService"), function(){shutdownService();});
     if (os == "winnt") {
       window.platform.icon().menu.addMenuItem("quitApp", bundle.GetStringFromName("Quit"), function(){quitApp();});
     }
