@@ -15,8 +15,6 @@
 
 package com.zimbra.doc.soap;
 
-import com.zimbra.soap.DocumentService;
-import com.zimbra.doc.soap.doclet.*;
 import java.util.*;
 
 /**
@@ -26,132 +24,26 @@ import java.util.*;
  *
  */
 public	class	Root {
-
-	public	static	final	String			PROP_SERVICE_LIST = "service-list";
-	public	static	final	String			PROP_SERVICE_SRC_DIR = "service-src-dir";
-	public	static	final	String			PROP_SERVICE_REGISTER_LISTENER = "service-register-listener";
-	
+		
 	private	List<Service>	services = new LinkedList<Service>();
-	private	String			serviceSrcDir = null;
-	
+
 	/**
 	 * Constructor.
 	 * 
-	 * @param	context		the context properties
 	 */
-    public Root(Map	context) {
+    Root() {
     	
-    	List<DocumentService> docs = getServiceListProp(context);
-    	this.serviceSrcDir = getServiceSrcDirProp(context);
-    	
-    	Iterator it = docs.iterator();
-    	while(it.hasNext()) {
-    		DocumentService s = (DocumentService)it.next();
-    		addService(s);
-    	}
-    	
-    	ServiceRegisterListener listener = getServiceRegisterListenerProp(context);
-    	initialize(listener);    	
     }
 
     /**
-     * Gets the service list property.
+     * Adds the service.
      * 
-     * @param	context		the doc root context
-     * @return	a list of {@link DocumentService} objects
+     * @param	service		the service
      */
-    private	List<DocumentService>	getServiceListProp(Map context) {
-    	
-    	Object obj = context.get(PROP_SERVICE_LIST);
-    	
-    	if (obj == null)
-    		throw new IllegalArgumentException("must specify the service list");
-
-    	if ((obj instanceof List) == false)
-    		throw new IllegalArgumentException("service list must be a list of DocumentService objects");
-
-    	return	(List)obj;
+    public	void		addService(Service service) {
+    	this.services.add(service);
     }
 
-    /**
-     * Gets the service source directory.
-     * 
-     * @param	context		the doc root context
-     * @return	the service source directory
-     */
-    private	String	getServiceSrcDirProp(Map context) {
-    	
-    	Object obj = context.get(PROP_SERVICE_SRC_DIR);
-    	
-    	if (obj == null)
-    		throw new IllegalArgumentException("must specify the service source directory");
-
-    	return	(String)obj;
-    }
-
-    /**
-     * Gets the service register listener property.
-     * 
-     * @param	context		the doc root context
-     * @return	a register listener
-     */
-    private	ServiceRegisterListener	getServiceRegisterListenerProp(Map context) {
-    	
-    	Object obj = context.get(PROP_SERVICE_REGISTER_LISTENER);
-    	
-    	if (obj == null)
-    		return	new DefaultServiceRegisterListener();
-    	
-    	if ((obj instanceof ServiceRegisterListener) == false)
-    		throw new IllegalArgumentException("service register listener must be an instance of ServiceRegisterListener");
-
-    	return	(ServiceRegisterListener)obj;
-    }
-
-    /**
-     * Registers the service.
-     * 
-     */
-    private	Service	addService(DocumentService docService) {
-    	Service s = new Service(this, docService);
-
-    	ZmDoclet.registerListener(new ServiceDocletListener(s));
-
-    	String className = s.getDocumentServiceClassName();
-    	String	srcPath = buildSourcePath(className);
-    	
-    	// read file source
-    	String[] args = new String[] {
-    			"-doclet",
-    			ZmDoclet.class.getName(),
-    			srcPath
-    	};
-
-		com.sun.tools.javadoc.Main.execute(args);
-
-    	services.add(s);
-    	return	s;
-    }
-
-    /**
-     * Builds the source file path from the class name.
-     * 
-     * @param	className		the class name
-     * @return	the source file path
-     */
-    public	String	buildSourcePath(String className) {
-    	StringBuffer buf = new StringBuffer();
-    	
-    	String classFilePath = className.replaceAll("\\.", "/");
-    	
-    	buf.append(this.serviceSrcDir);
-    	buf.append("/"); // it's OK to use "/" since that's what javadoc is expecting in src files list
-       	buf.append(classFilePath);
-       	buf.append(".java");
-
-       	return	buf.toString();
-    }
-    
     /**
      * Gets the services.
      * 
@@ -161,20 +53,6 @@ public	class	Root {
     	return	Collections.unmodifiableList(this.services);
     }
 
-    /**
-     * Initializes the doc root.
-     * 
-     * @param	listener		the service register listener
-     */
-    private	void	initialize(ServiceRegisterListener listener) {
-    	Iterator it = this.services.iterator();
-    	while (it.hasNext()) {
-    		Service s = (Service)it.next();
-        	ServiceDispatcher serviceDispatcher = new ServiceDispatcher(this, s, listener);
-    		s.getDocumentService().registerHandlers(serviceDispatcher);
-    	}
-    }
-    
     /**
      * Gets a list of all commands in all services.
      * 
@@ -203,7 +81,15 @@ public	class	Root {
      * 
      */
     public	void	dump() {
+    	this.dump(false);
+    }
 
+    /**
+     * Dumps the contents to <code>System.out.println</code>
+     * 
+     * @param	commands		if <code>true</code>, dump commands
+     */
+    public	void	dump(boolean commands) {
 		System.out.println("Dump doc root...");
 		System.out.println(this);
 
@@ -211,7 +97,7 @@ public	class	Root {
     	Iterator it = this.services.iterator();
     	while (it.hasNext()) {
     		Service s = (Service)it.next();
-    		s.dump(true);
+    		s.dump(commands);
     	}
     }
     

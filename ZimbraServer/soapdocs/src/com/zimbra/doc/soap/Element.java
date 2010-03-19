@@ -92,42 +92,29 @@ public class Element extends AbstractElement implements java.io.Serializable {
 	}
 
 	/**
-	 * Loads all sub-elements of the root element into the all elements list.
+	 * Gets the element XML code.
 	 * 
-	 * @param	root	the root element
+	 * @return	an XML representation of the element
 	 */
-	private	static	void			writeElements(Element el, StringBuffer buf, int depth) {
-		Iterator it = el.getElements().iterator();
-		while(it.hasNext()) {
-			Element e = (Element)it.next();
-			for(int i=0; i < depth; i++)
-				buf.append("  ");
-			writeElement(e, buf, depth+1);
-			}
-	}
-
-	/**
-	 * Gets the complete element code.
-	 * 
-	 * @return	a string representation of the element
-	 */
-	public	String		getElementAsCode() {
+	public	String		getElementAsXML() {
 		if (this.getName() == null || this.getName().length() <= 0)
 			return	"";
 		
 		StringBuffer buf = new StringBuffer();
 		
-		writeElement(this, buf, 1);
+		writeElementXML(this, buf, 1);
 
 		return	buf.toString();
 	}
 
 	/**
-	 * Gets the complete element code.
+	 * Wrties the element and sub-elements as XML.
 	 * 
-	 * @return	a string representation of the element
+	 * @param	el		the root element
+	 * @param	buf		the buffer to write to
+	 * @param	depth	the depth
 	 */
-	private	static	void	writeElement(Element e, StringBuffer buf, int depth) {
+	private	static	void	writeElementXML(Element e, StringBuffer buf, int depth) {
 		int	codeOpen = CODE_OPEN;
 		int	codeClose = CODE_CLOSE;
 		
@@ -136,21 +123,41 @@ public class Element extends AbstractElement implements java.io.Serializable {
 			codeClose = CODE_CLOSE_FRAGMENT;
 		}
 			
-		buf.append(e.getElementCode(codeOpen));
+		buf.append(e.getElementXMLCode(codeOpen));
 		if (e.getElements().size() > 0)
 			buf.append("\n");
 		writeElements(e, buf, depth+1);
 		if (e.getCDATA())
 			buf.append("<i>Character data</i>");
-		buf.append(e.getElementCode(codeClose));
+		buf.append(e.getElementXMLCode(codeClose));
 		buf.append(e.getOccurrenceAsString());
 		buf.append("\n");
 	}
 
 	/**
+	 * Wrties the element sub-elements.
 	 * 
+	 * @param	el		the root element
+	 * @param	buf		the buffer to write to
+	 * @param	depth	the depth
 	 */
-	public	String		getElementCode(int code) {
+	private	static	void			writeElements(Element el, StringBuffer buf, int depth) {
+		Iterator it = el.getElements().iterator();
+		while(it.hasNext()) {
+			Element e = (Element)it.next();
+			for(int i=0; i < depth; i++)
+				buf.append("  ");
+			writeElementXML(e, buf, depth+1);
+		}
+	}
+
+	/**
+	 * Gets the element XML code.
+	 * 
+	 * @param	code		the code specifier (see <code>CODE_</code> constants)
+	 * @return	the XML code
+	 */
+	private	String		getElementXMLCode(int code) {
 		StringBuffer buf = new StringBuffer();
 
 		if (code != CODE_CLOSE_FRAGMENT)
@@ -172,8 +179,6 @@ public class Element extends AbstractElement implements java.io.Serializable {
 				Iterator it = this.attributes.iterator();
 				while (it.hasNext()) {
 					Attribute attr = (Attribute)it.next();
-//					if (attr.getName().equals(Attribute.CDATA) == true)
-//						continue;
 					buf.append(" ");
 					if (attr.isRequired() == false)
 						buf.append("[");

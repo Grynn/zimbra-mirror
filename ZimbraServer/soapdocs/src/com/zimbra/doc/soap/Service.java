@@ -16,8 +16,6 @@
 package com.zimbra.doc.soap;
 
 import java.util.*;
-import com.zimbra.doc.soap.doclet.*;
-import com.zimbra.soap.DocumentService;
 
 /**
  * 
@@ -30,7 +28,6 @@ public class Service implements java.io.Serializable {
 
 	private	List<Command>	commands = new LinkedList<Command>();
 	
-	private	DocumentService		service = null;
 	private	Root		root = null;
 	private	String		className = null;
 	private	String		name = null;
@@ -40,31 +37,15 @@ public class Service implements java.io.Serializable {
 	 * Constructor.
 	 * 
 	 * @param	root		the root data model
-	 * @param	service		the document service
+	 * @param	className	the service class name
+	 * @param	name		the service name
 	 */
-	public	Service(Root root, DocumentService service) {
+	public	Service(Root root, String className, String name) {
 		this.root = root;
-		this.service = service;
-		this.className = service.getClass().getName();
-		this.name = getClassName(className);
+		this.className = className;
+		this.name = name;
 	}
-	
-	/**
-	 * Gets the class name from a FQCN.
-	 * 
-	 * return	the class name
-	 */
-	public	static	String	getClassName(String className) {
-		String[]	strs = className.split("\\.");
-		
-		String	cname = strs[strs.length-1];
-		
-		if (cname.endsWith("Service"))
-			cname = cname.substring(0, cname.length() - "Service".length());
-		
-		return	cname;
-	}
-	
+
 	/**
 	 * Gets the name.
 	 * 
@@ -72,6 +53,15 @@ public class Service implements java.io.Serializable {
 	 */
 	public	String		getName() {
 		return	this.name;
+	}
+
+	/**
+	 * Gets the class name.
+	 * 
+	 * @return	the class name
+	 */
+	public	String		getClassName() {
+		return	this.className;
 	}
 
 	/**
@@ -115,53 +105,12 @@ public class Service implements java.io.Serializable {
 	}
 	
 	/**
-	 * Gets the document service.
+	 * Adds the command.
 	 * 
-	 * @return	the document service
+	 * @param	cmd		the command to add
 	 */
-	DocumentService		getDocumentService() {
-		return	this.service;
-	}
-
-	/**
-	 * Gets the document service class name.
-	 * 
-	 * @return	the document service class name
-	 */
-	public	String		getDocumentServiceClassName() {
-		return	this.service.getClass().getName();
-	}
-
-	/**
-	 * Registers the command.
-	 * 
-	 * @param name
-	 * @param namespace
-	 * @return
-	 */
-	public	Command		addCommand(String className, String namespace) {
-		Command cmd = new Command(this, className, namespace);
-		
-		if (cmd.getName().equals("Browse") || cmd.getName().equals("ChangePassword")) {
-			// load command file source
-	    	ZmDoclet.registerListener(new CommandDocletListener(this, cmd));
-	
-	    	String cmdClassName = cmd.getClassName();
-	    	String	srcPath = this.root.buildSourcePath(cmdClassName);
-	  
-	    	// read file source
-	    	String[] args = new String[] {
-	    			"-doclet",
-	    			ZmDoclet.class.getName(),
-	    			srcPath
-	    	};
-	
-			com.sun.tools.javadoc.Main.execute(args);
-		}
-
-		commands.add(cmd);
-		
-		return	cmd;
+	public	void	addCommand(Command cmd) {
+		this.commands.add(cmd);
 	}
 	
     /**

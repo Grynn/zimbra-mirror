@@ -36,7 +36,7 @@ public 	class ServiceDocletListener	extends	DocletListener {
 	 * @param		service		the service
 	 */
 	public	ServiceDocletListener(Service service) {
-		super(service.getDocumentServiceClassName());
+		super(service.getClassName());
 		this.service = service;
 	}
 

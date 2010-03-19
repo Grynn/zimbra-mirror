@@ -35,6 +35,12 @@ public	abstract	class	TemplateHandler {
 
 	public	static	final	String			DEFAULT_BUILD_VERSION = "0.0.0";
 
+	public	static	final	String			KEY_BUILD_INFO = "build";
+	public	static	final	String			KEY_BUILD_INFO_VERSION = "version";
+	public	static	final	String			KEY_BUILD_INFO_DATE = "date";
+
+	public	static	final	String			KEY_SOAP_ROOT = "root";
+
 	protected	String		templatesDir= null;
 	protected	String		outputDir = null;
 	protected	String		buildVersion = null;
@@ -150,9 +156,9 @@ public	abstract	class	TemplateHandler {
     private	Map		getDataModel(Map data) {
     	Map	dataModel = new HashMap();
     	
-    	Map	buildInfo = getBuildInfo();
+    	Map<String,String>	buildInfo = getBuildInfo();
     	
-    	dataModel.put("build", buildInfo);
+    	dataModel.put(KEY_BUILD_INFO, buildInfo);
     	
     	Iterator it = data.entrySet().iterator();
     	while (it.hasNext()) {
@@ -166,14 +172,13 @@ public	abstract	class	TemplateHandler {
     /**
      * Gets the build info.
      * 
-     * @param	root		the root
      * @return	the build info
      */
-    protected	Map		getBuildInfo() {
+    protected	Map<String,String>		getBuildInfo() {
     	Map<String,String>	buildInfo = new HashMap<String,String>();
     	
-    	buildInfo.put("version", this.buildVersion);
-    	buildInfo.put("date", this.buildDate);
+    	buildInfo.put(KEY_BUILD_INFO_VERSION, this.buildVersion);
+    	buildInfo.put(KEY_BUILD_INFO_DATE, this.buildDate);
     	
     	return	buildInfo;
     }
@@ -202,11 +207,11 @@ public	abstract	class	TemplateHandler {
      * @param	outputFile	the output file name
      * @param	template	the template to process
      */
-    protected	void	processTemplate(Root root, Service service, Map data, String outputFile, Template template)
+    protected	void	processTemplate(Root root, Map data, String outputFile, Template template)
     throws	IOException, SoapDocException {
     	File	of = getOutputFile(outputFile);
     	
-    	processTemplate(root, service, data, of, template);
+    	processTemplate(root, data, of, template);
     }
     
     /**
@@ -218,15 +223,14 @@ public	abstract	class	TemplateHandler {
      * @param	outputFile	the output file
      * @param	template	the template to process
      */
-    protected	void	processTemplate(Root root, Service service, Map data, File outputFile, Template template)
+    protected	void	processTemplate(Root root, Map data, File outputFile, Template template)
     throws	IOException, SoapDocException {
 		FileWriter out = new FileWriter(outputFile);
 		
 		if (data == null)
 			data = new HashMap();
 		
-		data.put("root", root);
-		data.put("service", service);
+		data.put(KEY_SOAP_ROOT, root);
 		
 		try {
 			Map	dataModel = getDataModel(data);

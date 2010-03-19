@@ -17,6 +17,7 @@ package com.zimbra.doc.soap.util;
 
 import java.util.*;
 import com.zimbra.doc.soap.*;
+import com.zimbra.doc.soap.doclet.DocletDataModelProvider;
 import com.zimbra.doc.soap.template.*;
 
 /**
@@ -91,12 +92,14 @@ public	class	DocGenerator {
        	services.add(new com.zimbra.cs.service.mail.MailService());
 	
        	// create root services data model
-       	Map rootContext = new HashMap();
-       	rootContext.put(Root.PROP_SERVICE_LIST, services);
-       	rootContext.put(Root.PROP_SERVICE_SRC_DIR, serviceSrcDir);
-       	Root root = new Root(rootContext);
+       	Map providerProps = new HashMap();
+       	providerProps.put(DocletDataModelProvider.PROP_SERVICE_LIST, services);
+       	providerProps.put(DocletDataModelProvider.PROP_SERVICE_SRC_DIR, serviceSrcDir);
+       	DataModelProvider dataModelProvider = new DocletDataModelProvider(providerProps);
+  
+       	Root root = dataModelProvider.getRoot();
  
-//       	root.dump();
+      	root.dump();
        	
        	// create and process templates
        	Properties templateContext = new Properties();

@@ -13,7 +13,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.doc.soap;
+package com.zimbra.doc.soap.doclet;
 
 import java.util.*;
 import com.zimbra.soap.DocumentHandler;
@@ -24,7 +24,7 @@ import org.dom4j.QName;
  * @author sposetti
  *
  */
-public class DefaultServiceRegisterListener implements ServiceRegisterListener {
+public class DefaultServiceDispatcherListener implements ServiceDispatcherListener {
 
 	/**
 	 * Checks if the command should be registered.
@@ -35,4 +35,4 @@ public class DefaultServiceRegisterListener implements ServiceRegisterListener {
 		return	true;
 	}
  
-} // end DefaultServiceRegisterListener class
+} // end DefaultServiceDispatcherListener class
