@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Setting your Preferences</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Setting Your Preferences\nSetting your preferences");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,186 +81,165 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Setting your Preferences</h1>
-<p>Your default user preferences are configured when your account is created 
- and they define how mail, address books, and compose work for you.</p>
-<p>You can change these preference settings from the Preferences<span style="font-weight: bold;"> 
- <B></B></span>tab. &nbsp;If a preference described here is not 
- visible in your view, the preference is not available for your account. 
- </p>
+<p>Your default user preferences are configured when your account is created and they define how mail, address books, and compose work for you.</p>
+<p>You can change these preference settings from the Preferences tab. &#160;If a preference described here is not visible in your view, the preference is not available for your account.</p>
 <h3>General</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>You are logged into the standard web client. To set 
- this to be the default <span style="font-weight: bold;"><B>Client Type</B></span> 
- when you log in, select <span style="font-weight: bold;"><B>Standard</B></span>.</p></li>
-	<li class=p><p class="whs2"><b style="font-weight: bold;"><span 
- style="font-weight: normal;">Standard</span> <span style="font-weight: normal;">is 
- recommended when Internet connections are slow, when using older browsers, 
- or for easier accessibility.</span> </b></p></li>
-	<li class=p><p class="whs2"><b><span style="font-weight: normal;">Advanced</b> 
- off</span>ers the full set of Web collaboration features. This Web Client 
- works best with newer browsers and faster Internet connections. </p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Theme</B></span> select 
- the background color for your mailbox interface.</p></li>
-	<li class=p><p>Select the <span style="font-weight: bold;"><B>time zone</B></span> 
- to set the date and time for messages that you send or receive and to 
- render Calendar appointments correctly. &nbsp;This can 
- be different from your computer time zone configuration. </p></li>
-	<li class=p><p>If <span style="font-weight: bold;"><B>Change password</B></span> 
- is displayed, you can change your password. If you have trouble changing 
- your password, contact you administrator for the password rules.</p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Search Folders</B></span>, 
- you can choose to automatically include the Junk and Trash folders in 
- any search you perform. By default these folders are not searched.</p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Search Language</B></span>, 
- check <span style="font-weight: bold;"><B>Always Show Search String </B></span>to 
- show search string details in the search text box. </p></li>
+<ul type="disc">
+<li class="p">
+<p>You are logged into the standard web client. To set this to be the default <span style="font-weight: bold;"><b>Client Type</b></span> when you log in, select <span style="font-weight: bold;"><b>Standard</b></span>.</p>
+</li>
+<li class="p">
+<p style="margin-left: 40px;"><b style="font-weight: bold;"><span style="font-weight: normal;">Standard</span> <span style="font-weight: normal;">is recommended when Internet connections are slow, when using older browsers, or for easier accessibility.</span></b></p>
+</li>
+<li class="p">
+<p style="margin-left: 40px;"><span style="font-weight: normal;"><b>Advanced</b> off</span>ers the full set of Web collaboration features. This Web Client works best with newer browsers and faster Internet connections.</p>
+</li>
+<li class="p">
+<p>In <span style="font-weight: bold;"><b>Theme</b></span> select the background color for your mailbox interface.</p>
+</li>
+<li class="p">
+<p>Select the <span style="font-weight: bold;"><b>time zone</b></span> to set the date and time for messages that you send or receive and to render Calendar appointments correctly. &#160;This can be different from your computer time zone configuration.</p>
+</li>
+<li class="p">
+<p>If <span style="font-weight: bold;"><b>Change password</b></span> is displayed, you can change your password. If you have trouble changing your password, contact you administrator for the password rules.</p>
+</li>
+<li class="p">
+<p>In <span style="font-weight: bold;"><b>Search Folders</b></span>, you can choose to automatically include the Junk and Trash folders in any search you perform. By default these folders are not searched.</p>
+</li>
+<li class="p">
+<p>In <span style="font-weight: bold;"><b>Search Language</b></span>, check <span style="font-weight: bold;"><b>Always Show Search String</b></span> to show search string details in the search text box.</p>
+</li>
 </ul>
 <h3>Mail</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>Select how many items (messages or conversations) to 
- display per page. The default is to display 25 items per page, but you 
- can select 10, 50, or 100 items per page.</p></li>
-	<li class=p><p>Select how you want to group your mail, by conversation 
- or message. If you have the <a href="../Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm">Conversation 
- feature</a>, Conversations is the default.</p></li>
-	<li class=p><p>Specify whether to view mail as HTML, for messages that 
- have been formatted as HTML. Turning this off causes mail to be displayed 
- as plain text, showing the HTML tags themselves rather than applying them 
- as markup.</p></li>
-	<li class=p><p>The <span style="font-weight: bold;"><B>Reading Pane</B></span> 
- can be used to preview messages in your Inbox and other folders. When 
- this is enabled, messages are displayed in the preview pane. The Reading 
- pane can either be below the list of messages or displayed on the right 
- in a three-pane view.</p></li>
-	<li class=p><p>When <span style="font-weight: bold;"><B>Message Preview 
- </B></span>&nbsp;is enabled, the first several words of the 
- email text display next to the Subject in the Subject column.</p></li>
-	<li class=p><p>The search defined in the <span style="font-weight: bold;"><B>Default 
- Mail Search </B></span>field<span style="font-weight: bold;"> <B></B></span>defines 
- the search to execute when you log in. &nbsp;&nbsp;The 
- default search is your <span style="font-weight: bold;"><B>Inbox</B></span>. 
- &nbsp;When you log in, the results of your Inbox display. 
- You can change this field to have another folder, tag, or a saved search 
- displayed when you first open the Web Client. See <a href="../Search/query_language_description.htm">Query 
- language description</a> for the syntax.</p></li>
-	<li class=p><p>Enable and specify an address to <a href="Setting_a_Forwarding_Address.htm">forward 
- your email</a> to. You can check the box to have the original email message 
- deleted from your mailbox. </p></li>
-	<li class=p><p>Enable and specify an address to send <a href="New_mail_notifications.htm">notifications</a> 
- that you have received new mail. </p></li>
-	<li class=p><p>Enable <span style="font-weight: bold;"><B>Send auto-reply 
- message</B></span> to reply to incoming mail with a<a href="vacation_message.htm"> 
- message</a> saying that you are out of the office. Type the text of this 
- message in the text box, and set the start and end dates for using the 
- message.</p></li>
-	<li class=p><p>Configure <span style="font-weight: bold;"><B>Messages 
- from me...</B></span> to handle messages that you send that include your address 
- as one of the recipients of the message or that go an address such as 
- a mailing list that includes you.</p></li>
-	<li class=p><p>If you are set up to use a POP3 client, you can configure 
- the POP access behavior when messages are downloaded to ZWC.</p></li>
+<ul type="disc">
+<li class="p">
+<p>Select how many items (messages or conversations) to display per page. The default is to display 25 items per page, but you can select 10, 50, or 100 items per page.</p>
+</li>
+<li class="p">
+<p>Select how you want to group your mail, by conversation or message. If you have the <a href="../Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm">Conversation feature</a>, Conversations is the default.</p>
+</li>
+<li class="p">
+<p>Specify whether to view mail as HTML, for messages that have been formatted as HTML. Turning this off causes mail to be displayed as plain text, showing the HTML tags themselves rather than applying them as markup.</p>
+</li>
+<li class="p">
+<p>The <span style="font-weight: bold;"><b>Reading Pane</b></span> can be used to preview messages in your Inbox and other folders. When this is enabled, messages are displayed in the preview pane. The Reading pane can either be below the list of messages or displayed on the right in a three-pane view.</p>
+</li>
+<li class="p">
+<p>When <span style="font-weight: bold;"><b>Message Preview</b></span> &#160;is enabled, the first several words of the email text display next to the Subject in the Subject column.</p>
+</li>
+<li class="p">
+<p>The search defined in the <span style="font-weight: bold;"><b>Default Mail Search</b></span> field defines the search to execute when you log in. &#160;&#160;The default search is your <span style="font-weight: bold;"><b>Inbox</b></span>. &#160;When you log in, the results of your Inbox display. You can change this field to have another folder, tag, or a saved search displayed when you first open the Web Client. See <a href="../Search/query_language_description.htm">Query language description</a> for the syntax.</p>
+</li>
+<li class="p">
+<p>Enable and specify an address to <a href="Setting_a_Forwarding_Address.htm">forward your email</a> to. You can check the box to have the original email message deleted from your mailbox.</p>
+</li>
+<li class="p">
+<p>Enable and specify an address to send <a href="New_mail_notifications.htm">notifications</a> that you have received new mail.</p>
+</li>
+<li class="p">
+<p>Enable <span style="font-weight: bold;"><b>Send auto-reply message</b></span> to reply to incoming mail with a <a href="vacation_message.htm">message</a> saying that you are out of the office. Type the text of this message in the text box, and set the start and end dates for using the message.</p>
+</li>
+<li class="p">
+<p>Configure <span style="font-weight: bold;"><b>Messages from me...</b></span> to handle messages that you send that include your address as one of the recipients of the message or that go an address such as a mailing list that includes you.</p>
+</li>
+<li class="p">
+<p>If you are set up to use a POP3 client, you can configure the POP access behavior when messages are downloaded to ZWC.</p>
+</li>
 </ul>
 <h3>Composing</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>In <span style="font-weight: bold;"><B>Compose</B></span>: 
- select whether to compose your messages using HTML or as plain text. HTML 
- lets you compose messages with text formatting options including font, 
- size, and color.</p></li>
+<ul type="disc">
+<li class="p">
+<p>In <span style="font-weight: bold;"><b>Compose</b></span>: select whether to compose your messages using HTML or as plain text. HTML lets you compose messages with text formatting options including font, size, and color.</p>
+</li>
 </ul>
-<ul type="disc" class="whs1">
-	<li class=p><p>In <span style="font-weight: bold;"><B>Reply/Reply All</B></span>, 
- select whether to include the original text in the body of your reply 
- message. </p></li>
-	<ul type="disc" class="whs1">
-		<li class=p><p><span style="font-weight: bold;"><B>Full text inline</B></span> 
- includes the original message in the body of the message with no special 
- markings.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Full text inline 
- with prefix</B></span> adds a prefix to each line of the previous email message. 
- The prefix character can be either &gt; or |.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>An Attachment</B></span> 
- includes the original message as an attachment to your reply.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Do Not Include</B></span> 
- does not include the original message with your reply.</p></li>
-	</ul>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Forward</B></span>, 
- select how to include the original text of a message when you forward 
- a message - in the body of the message, in the body of the message with 
- a prefix, or as an attachment to the message.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Prefix character</B></span> 
- sets the prefix to use for reply messages and forwarded messages.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Sent Messages</B></span>, 
- select <span style="font-weight: bold;"><B>Save a copy of Sent Messages</B></span> 
- to have a copy of every message you send saved to your Sent folder. </p></li>
+<ul type="disc">
+<li class="p">
+<p>In <span style="font-weight: bold;"><b>Reply/Reply All</b></span>, select whether to include the original text in the body of your reply message.</p>
+</li>
+<li style="list-style: none; display: inline">
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Full text 
+inline</b></span> includes the original message in the body of the message with no special markings.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Full text 
+inline with prefix</b></span> adds a prefix to each line of the previous email message. The prefix character can be either &gt; or |.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>An Attachment</b></span> includes the original message as an attachment to your reply.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Do Not Include</b></span> does not include the original message with your reply.</p>
+</li>
+</ul>
+</li>
+<li class="p">
+<p>In <span style="font-weight: bold;"><b>Forward</b></span>, select how to include the original text of a message when you forward a message - in the body of the message, in the body of the message with a prefix, or as an attachment to the message.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Prefix character</b></span> sets the prefix to use for reply messages and forwarded messages.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Sent Messages</b></span>, select <span style="font-weight: bold;"><b>Save a copy of Sent Messages</b></span> to have a copy of every message you send saved to your Sent folder.</p>
+</li>
 </ul>
 <h3>Signatures</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>You can create signatures for your email messages. Your 
- signature can include your name and additional closing text to the maximum 
- number of characters that your account allows. If you create multiple 
- identities, you can create different signatures and assign them to specific 
- addresses.</p></li>
-	<li class=p><p>Select the placement of the signature. This is the placement 
- of the signature for replied-to messages. Do you want the signature above 
- the messages that are included in the reply or at the end of the message?</p></li>
+<ul type="disc">
+<li class="p">
+<p>You can create signatures for your email messages. Your signature can include your name and additional closing text to the maximum number of characters that your account allows. If you create multiple identities, you can create different signatures and assign them to specific addresses.</p>
+</li>
+<li class="p">
+<p>Select the placement of the signature. This is the placement of the signature for replied-to messages. Do you want the signature above the messages that are included in the reply or at the end of the message?</p>
+</li>
 </ul>
 <h3>Address Book</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>Select the number of contacts to display per page. The 
- default is 25.</p></li>
-	<li class=p><p>Enable the feature to automatically add addresses to 
- your address book when you send mail. If this is enabled, addresses are 
- saved to your Email Contacts Address Book.</p></li>
-	<li class=p><p>The <span style="font-weight: bold;"><B>manage address 
- books</B></span> link takes you to the Address Book edit Contacts page where 
- you can create new address books and link to shared address books, export 
- and import contact lists and delete contacts in the address books. </p></li>
+<ul type="disc">
+<li class="p">
+<p>Select the number of contacts to display per page. The default is 25.</p>
+</li>
+<li class="p">
+<p>Enable the feature to automatically add addresses to your address book when you send mail. If this is enabled, addresses are saved to your Email Contacts Address Book.</p>
+</li>
+<li class="p">
+<p>The <span style="font-weight: bold;"><b>manage address books</b></span> link takes you to the Address Book edit Contacts page where you can create new address books and link to shared address books, export and import contact lists and delete contacts in the address books.</p>
+</li>
 </ul>
 <h3>Calendar</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>Select how you would like to <a href="../Calendar/Calendar_Views.htm">view 
- your calendar</a>. The default is by work week.</p></li>
-	<li class=p><p>Specify which day of the week should be the first day 
- of the week in your calendar.</p></li>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Day/Week View</B></span> 
- section, you can set what time your calendar day starts and ends.</p></li>
-	<li class=p><p>If you travel between time zones, you may want to select 
- to <span style="font-weight: bold;"><B>Show the timezone 
- list in the appointment view</B></span>. </p></li>
-	<li class=p><p>The <span style="font-weight: bold;"><B>manage calendars</B></span> 
- link takes you to the Calendar edit page where you can edit an existing 
- calendar, add new calendars, subscribe to calendars or link to a shared 
- calendar.</p></li>
+<ul type="disc">
+<li class="p">
+<p>Select how you would like to <a href="../Calendar/Calendar_Views.htm">view your calendar</a>. The default is by work week.</p>
+</li>
+<li class="p">
+<p>Specify which day of the week should be the first day of the week in your calendar.</p>
+</li>
+<li class="p">
+<p>In the <span style="font-weight: bold;"><b>Day/Week View</b></span> section, you can set what time your calendar day starts and ends.</p>
+</li>
+<li class="p">
+<p>If you travel between time zones, you may want to select to <span style="font-weight: bold;"><b>Show the 
+timezone list in the appointment view</b></span>.</p>
+</li>
+<li class="p">
+<p>The <span style="font-weight: bold;"><b>manage calendars</b></span> link takes you to the Calendar edit page where you can edit an existing calendar, add new calendars, subscribe to calendars or link to a shared calendar.</p>
+</li>
 </ul>
 <h3>Accounts</h3>
-<p>When you send new email, reply to, or forward an email message, one 
- identity is always associated with the email. &nbsp;This 
- is the default identity created as the account name. You can change the 
- &quot;friendly&quot; name that displays in the From field of your email 
- messages and you can select the signature to automatically be added to 
- your email messages.</p>
+<p>When you send new email, reply to, or forward an email message, one identity is always associated with the email. &#160;This is the default identity created as the account name. You can change the "friendly" name that displays in the From field of your email messages and you can select the signature to automatically be added to your email messages.</p>
 <h3>Mail Filters</h3>
-<p>Filtering applies a set of matching rules to incoming mail and then 
- executes a specified action. Use this tab to define mail filtering rules 
- as described in Filtering 
- your messages.</p>
+<p>Filtering applies a set of matching rules to incoming mail and then executes a specified action. Use this tab to define mail filtering rules as described in Filtering your messages.</p>
 <h3>Shortcuts</h3>
-<p>Keyboard shortcuts let you use the application without going to the 
- mouse. The list shows all the existing keyboard shortcuts. Also see <a 
- href="../Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm">Keyboard 
- Shortcut keys</a>.</p>
-<script type="text/javascript" language="javascript1.2">
+<p>Keyboard shortcuts let you use the application without going to the mouse. The list shows all the existing keyboard shortcuts. Also see <a href="../Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm">Keyboard Shortcut keys</a>.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

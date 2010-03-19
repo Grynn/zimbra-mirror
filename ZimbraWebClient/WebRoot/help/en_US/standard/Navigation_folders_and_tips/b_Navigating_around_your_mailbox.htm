@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Navigating around your mailbox</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; width:697px; height:225px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Navigating Your Mailbox\nNavigating around your mailbox");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,48 +81,24 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Navigating around your mailbox</h1>
-<p>When you log into your mailbox, you see a screen view similar to the 
- one below. </p>
-<p><img src="../75mailboxview.png" x-maintain-ratio="TRUE" width="697px" height="225px" border="0" class="img_whs1"></p>
-<p><span style="font-weight: bold;"><B>1</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>Search Bar</B></span>. Use the search field to 
- find your messages or contacts.</p>
-<p><span style="font-weight: bold;"><B>2</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>User Name, Quota Display, and Log Off link</B></span>. 
- Your email address and mailbox quota are displayed here. The link to log 
- off your mailbox is in the top right corner. </p>
-<p><span style="font-weight: bold;"><B>3</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>Overview pane</B></span>. (Sometimes called the 
- Navigation pane.) Your folders are displayed, including the system folders 
- Inbox, Sent, Drafts, Junk, and Trash. Any custom folders you create are 
- displayed in this pane. Searches you saved and tags you created are also 
- listed here.</p>
-<p><span style="font-weight: bold;"><B>4</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>Application tabs</B></span>. This displays the 
- applications available for your account. You begin your session in the 
- Mail tab. Click on another tab to open that application's Content pane. 
- &nbsp;</p>
-<p><span style="font-weight: bold;"><B>5</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>Toolbar</B></span>. Shows actions available for 
- the current application. The toolbar displays at the top and bottom of 
- the Content pane. The toolbar in this figure is for the Mail application. 
- </p>
-<p><span style="font-weight: bold;"><B>6</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>Content pane</B></span>. The content of this area 
- changes depending on what application is in use. In the Mail view, the 
- Content pane displays all messages or conversations in your Inbox.</p>
-<script type="text/javascript" language="javascript1.2">
+<p>When you log into your mailbox, you see a screen view similar to the one below.</p>
+<p><img src="../75mailboxview.png" style="border: none;" alt="75mailboxview.png" width="697" height="225" border="0" /></p>
+<p><span style="font-weight: bold;"><b>1</b></span> &#160;&#160;<span style="font-weight: bold;"><b>Search Bar</b></span>. Use the search field to find your messages or contacts.</p>
+<p><span style="font-weight: bold;"><b>2</b></span> &#160;&#160;<span style="font-weight: bold;"><b>User Name, Quota Display, and Log Off link</b></span>. Your email address and mailbox quota are displayed here. The link to log off your mailbox is in the top right corner.</p>
+<p><span style="font-weight: bold;"><b>3</b></span> &#160;&#160;<span style="font-weight: bold;"><b>Overview pane</b></span>. (Sometimes called the Navigation pane.) Your folders are displayed, including the system folders Inbox, Sent, Drafts, Junk, and Trash. Any custom folders you create are displayed in this pane. Searches you saved and tags you created are also listed here.</p>
+<p><span style="font-weight: bold;"><b>4</b></span> &#160;&#160;<span style="font-weight: bold;"><b>Application tabs</b></span>. This displays the applications available for your account. You begin your session in the Mail tab. Click on another tab to open that application's Content pane. &#160;</p>
+<p><span style="font-weight: bold;"><b>5</b></span> &#160;&#160;<span style="font-weight: bold;"><b>Toolbar</b></span>. Shows actions available for the current application. The toolbar displays at the top and bottom of the Content pane. The toolbar in this figure is for the Mail application.</p>
+<p><span style="font-weight: bold;"><b>6</b></span> &#160;&#160;<span style="font-weight: bold;"><b>Content pane</b></span>. The content of this area changes depending on what application is in use. In the Mail view, the Content pane displays all messages or conversations in your Inbox.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

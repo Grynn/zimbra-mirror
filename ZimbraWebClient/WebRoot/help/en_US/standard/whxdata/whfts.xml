@@ -1,12 +1,28 @@
-﻿<?xml version='1.0' encoding='utf-8' ?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- saved from url=(0014)about:internet -->
-<fts>
-<chunkinfo url="whfwdata0.xml" first="!" last="conversation"/>
-<chunkinfo url="whfwdata1.xml" first="copi" last="includ"/>
-<chunkinfo url="whfwdata2.xml" first="incom" last="presenc"/>
-<chunkinfo url="whfwdata3.xml" first="preserv" last="txt"/>
-<chunkinfo url="whfwdata4.xml" first="typ" last="|"/>
-
-<tchunkinfo first="0" last="62" url="whftdata0.xml" />
-
-</fts>
+<odb>
+	<odbtype type="WebHelp"/>
+	<language name="en_US"/>
+	<index type="TopicIndex" url="topictableindex.xml"/>
+	<index type="PackageIndex" url="packageindex.xml"/>
+	<index type="Synonym" url="synonym.xml"/>
+	<files>
+		<file url="whxdata\package_0.xml"/>
+		<file url="whxdata\package_1.xml"/>
+		<file url="whxdata\package_2.xml"/>
+		<file url="whxdata\package_3.xml"/>
+		<file url="whxdata\package_4.xml"/>
+		<file url="whxdata\package_5.xml"/>
+		<file url="whxdata\package_6.xml"/>
+		<file url="whxdata\package_7.xml"/>
+		<file url="whxdata\package_8.xml"/>
+		<file url="whxdata\package_9.xml"/>
+		<file url="whxdata\package_10.xml"/>
+		<file url="whxdata\packageindex.xml"/>
+		<file url="whxdata\synonym.xml"/>
+		<file url="whxdata\topictable_0.xml"/>
+		<file url="whxdata\topictable_1.xml"/>
+		<file url="whxdata\topictableindex.xml"/>
+		<file url="whxdata\whfts.xml"/>
+	</files>
+</odb>

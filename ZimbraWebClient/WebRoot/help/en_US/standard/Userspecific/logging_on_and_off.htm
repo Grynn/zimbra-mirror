@@ -1,24 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Logging on and off</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
-p.whs3 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Getting Started\nLogging in and out");
@@ -58,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -77,85 +81,85 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Logging in and logging out</h1>
 <p>You must log in and be authenticated in order to use the Zimbra Web 
- Client. &nbsp;Two versions of the Zimbra Web Client are 
- available, advanced and standard.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Advanced Web Client offers the full set of Ajax based 
- web collaboration features. The advanced web client works with the newer 
- browsers and the faster internet connections. </p></li>
-	<li class=p><p>Standard Web Client is a good option when internet connections 
- are slow or users prefer HTML-based messaging for navigating within their 
- mailbox. </p></li>
+ Client. &#160;Two versions of the Zimbra Web Client are available, advanced 
+ and standard.</p>
+<ul type="disc">
+	<li class="p"><p>Advanced Web Client offers the full set of Ajax based 
+	 web collaboration features. The advanced web client works with the 
+	 newer browsers and the faster internet connections.</p></li>
+	<li class="p"><p>Standard Web Client is a good option when internet 
+	 connections are slow or users prefer HTML-based messaging for navigating 
+	 within their mailbox.</p></li>
 </ul>
-<p>When the login dialog appears, you can select which 
- version you want to log into. </p>
-<ul><li class=p-note><p class=note>In most cases, Advanced Web Client is 
- the default client and is opened automatically when you log in. &nbsp;You 
- can change the default to be the Standard Web Client from your Preferences, 
- General tab after you log in.</p></li>
+<p>When the login dialog appears, you can select 
+ which version you want to log into.</p>
+<ul>
+	<li class="p-note"><p class="note">In most cases, Advanced Web Client 
+	 is the default client and is opened automatically when you log in. 
+	 &#160;You can change the default to be the Standard Web Client from 
+	 your Preferences, General tab after you log in.</p></li>
 </ul>
 <h6>To log in</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>Open a browser window and enter the URL provided by 
- your Zimbra administrator.<span style="margin-left: 40px;"><br>
-	<br>
-	For example:</span><span style="margin-left: 40px; font-weight: bold;"><B><br>
-	<br>
-	http://mail.domain.com/zimbra/mail</B></span></p></li>
-	<li class=p><p>When the login screen appears, type 
- your user name. You may be required to type your full email address as 
- the user name and your password. &nbsp;</p></li>
+<ol type="1">
+	<li class="p"><p>Open a browser window and enter the URL provided by 
+	 your Zimbra administrator.<span style="margin-left: 40px;"><br />
+	<br />
+	For example:</span><span style="margin-left: 40px; font-weight: bold;"><b><br />
+	<br />
+	http:// mail.domain.com/ zimbra/mail</b></span></p></li>
+	<li class="p"><p>When the login screen 
+	 appears, type your user name. You may be required to type your full 
+	 email address as the user name and your password. &#160;</p></li>
 </ol>
-<p class="whs3">Example of a full email address, type:<span 
- style="font-weight: bold;"><B><br>
-<br>
-myra@example.com<br>
-myra123</B></span></p>
-<p class="whs3">Your password displays as ****** on-screen, 
+<p style="margin-left: 40px;">Example of a full email address, type:<span 
+	 style="font-weight: bold;"><b> 
+ <br />
+<br />
+myra@example.com<br />
+myra123</b></span></p>
+<p style="margin-left: 40px;">Your password displays as ****** on-screen, 
  to protect your privacy.</p>
-<ol start="3" type="1" class="whs2">
-	<li class=p><p>To be remembered on this computer until the session 
- expires or you log out, check <span style="font-weight: bold;"><B>Remember 
- me on this computer</B></span>.</p></li>
+<ol start="3" type="1">
+	<li class="p"><p>To be remembered on this computer until the session 
+	 expires or you log out, check <span style="font-weight: bold;"><b>Remember 
+	 me on this computer</b></span>.</p></li>
 </ol>
-<p class="whs3">If you check this, you will not have to log 
- in every time you restart the browser during a day. &nbsp;When 
- this is checked and you do not log out, your session remains active until 
- the session expires. The system administrator configures how long a session 
+<p style="margin-left: 40px;">If you check this, you will not have to log 
+ in every time you restart the browser during a day. &#160;When this is 
+ checked and you do not log out, your session remains active until the 
+ session expires. The system administrator configures how long a session 
  is active.</p>
-<p class="whs3"><span style="font-weight: bold;"><B>Note:</B></span> 
+<p style="margin-left: 40px;"><span style="font-weight: bold;"><b>Note:</b></span> 
  If you leave your web client open in your browser but do not access your 
  mailbox for a period of time, your session may time out and then you will 
  need to log back in.</p>
-<ol start="4" type="1" class="whs2">
-	<li class=p><p>If you do not want the default <a href="../Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm">client 
- type</a>, change the version displayed.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Log In</B></span>.</p></li>
+<ol start="4" type="1">
+	<li class="p"><p>If you do not want the default <a href="../Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm">client 
+	 type</a>, change the version displayed.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Log In</b></span>.</p></li>
 </ol>
-<p>&nbsp;</p>
+<p>&#160;</p>
 <h6>To log out:</h6>
 <p>To prevent others from logging in to your email account, you should 
- always use the <span style="font-weight: bold;"><B>Log Out </B></span>link to 
+ always use the <span style="font-weight: bold;"><b>Log Out</b></span> link to 
  close your Zimbra session.</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Using address lookup</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { margin-left:40px; }
-ul.whs2 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Composing Email\nAutomatic address completion");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,72 +81,78 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Automatic address completion</h1>
-<p>The autocomplete feature suggests names as you type 
- directly into the <span style="font-weight: bold;"><B>To, CC, and BCC </B></span>boxes 
- for a new message. A list of possible addresses from your contacts list 
- that <span style="font-style: italic;"><I>start</I></span> with the text you 
- typed is displayed. </p>
-<p>As you continue to type into the <span style="font-weight: bold;"><B>To:</B></span> 
+<p>The autocomplete feature suggests 
+ names as you type directly into the <span style="font-weight: bold;"><b>To, 
+ CC, and BCC</b></span> boxes for a new message. 
+ A list of possible addresses from your contacts list that <span style="font-style: italic;"><i>start</i></span> 
+ with the text you typed is displayed.</p>
+<p>As you continue to type into the <span style="font-weight: bold;"><b>To:</b></span> 
  field, the list of matching addresses will become smaller, as fewer matches 
  are available. The list disappears if there are no more matches.</p>
 <h4>Example</h4>
 <p>For example, suppose you wanted to send an email message to David Brinks, 
  whose email address happens to be dbrinks@acme.com. 
- As soon as you typed the first &quot;d&quot; into the 
- address field, a list appears showing all possible matches, with the matching 
- portions highlighted. In this case, it might display:</p>
-<p class="whs1"><span style="font-weight: bold;"><B>D</B></span>ale 
- Edwards &lt;<span style="font-weight: bold;"><B>d</B></span>ed@acme.com&gt;</p>
-<p class="whs1"><span style="font-weight: bold;"><B>D</B></span>avid 
- Brinks &lt;<span style="font-weight: bold;"><B>d</B></span>brinks@acme.com&gt;</p>
-<p class="whs1">Erica <span style="font-weight: bold;"><B>D</B></span>odd 
+ As soon as you typed the first &quot; d&quot; 
+ into the address field, a list appears showing all possible matches, with 
+ the matching portions highlighted. In this case, it might display:</p>
+<p style="margin-left: 40px;"><span style="font-weight: bold;"><b>D</b></span>ale 
+ Edwards &lt; 
+ <span style="font-weight: bold;"><b>d</b></span>ed@acme.com&gt;</p>
+<p style="margin-left: 40px;"><span style="font-weight: bold;"><b>D</b></span>avid 
+ Brinks &lt; <span 
+	 style="font-weight: bold;"><b>d</b></span>brinks@acme.com&gt;</p>
+<p style="margin-left: 40px;">Erica <span style="font-weight: bold;"><b>D</b></span>odd 
  &lt;erica878@xyz.com&gt;</p>
-<p>As you type more characters into the <span style="font-weight: bold;"><B>To:</B></span> 
+<p>As you type more characters into the <span style="font-weight: bold;"><b>To:</b></span> 
  field, the corresponding list of matches grows smaller.</p>
 <h3>Matching</h3>
-<p>The autocomplete feature matches the text you type 
- against the following parts of a contact:</p>
-<ul type="disc" class="whs2">
-	<li class=p><p>&nbsp;First name</p></li>
-	<li class=p><p>&nbsp;Last name</p></li>
-	<li class=p><p>Email address</p></li>
+<p>The autocomplete feature matches 
+ the text you type against the following parts of a contact:</p>
+<ul type="disc">
+	<li class="p"><p>&#160;First name</p></li>
+	<li class="p"><p>&#160;Last name</p></li>
+	<li class="p"><p>Email address</p></li>
 </ul>
 <p>Matching is always done against the beginning of the field. The text 
- ”r;bob” will match ”r;bob smith” but not ”r;billybob 
- smith”.</p>
+ ”r;bob” will match ”r;bob smith” but not ”r; 
+ billybob smith”.</p>
 <h3>Using autocomplete</h3>
 <p>Once your text matches one or more of your contacts, the matches will 
  be displayed in a list below the field you are currently editing. By default, 
  the first match will be highlighted.</p>
 <p>Several keys you can type trigger special behavior. The mouse may also 
  be used to select a match.</p>
-<ul type="disc" class="whs2">
-	<li class=p><p>The comma, semicolon, Return/Enter, and Tab keys all 
- trigger completion. The text you have typed will be replaced by the currently 
- selected match.</p></li>
-	<li class=p><p>Click the ESC key hides the list.</p></li>
-	<li class=p><p>Clicking the mouse on a match selects it for completion.</p></li>
+<ul type="disc">
+	<li class="p"><p>The comma, semicolon, Return/Enter, and Tab keys all 
+	 trigger completion. The text you have typed will be replaced by the 
+	 currently selected match.</p></li>
+	<li class="p"><p>Click the ESC key hides the list.</p></li>
+	
+	<li class="p"><p>Clicking the mouse on a match selects it for completion.</p></li>
 </ul>
 <p>The fact that a single key (such as semicolon) causes completion can 
  be used to quickly enter addresses. If you know a few characters that 
  will cause a certain contact to be the first match, you can type those 
  and then a semicolon, and that contact’s address will appear. For example, 
- if I know that ”r;db” results in a first match of David 
- Brinks, I can type ”r;db;” and the full address ”r;David 
- Brinks &lt;dbrinks@acme.com&gt;” will appear in the 
- address box.</p>
-<script type="text/javascript" language="javascript1.2">
+ if I know that ”r; db” 
+ results in a first match of David Brinks, I can type ”r; 
+ db;” and the full address ”r;David Brinks &lt; dbrinks@acme.com&gt;” 
+ will appear in the address box.</p>
+
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,24 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>How to navigate with Mail</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; width:551px; height:123px; float:none; border-style:none; }
-ul.whs2 { list-style:disc; }
-p.whs3 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Navigating Your Mailbox\nNavigating within Mail");
@@ -58,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -77,56 +81,40 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Navigating within the Mail tab</h1>
-<p>When you open the Mail tab, your email messages are listed. From this 
- view you can open and read your messages.</p>
+<p>When you open the Mail tab, your email messages are listed. From this view you can open and read your messages.</p>
 <h6>Typical Inbox view when you open your mailbox.</h6>
-<p><img src="../mail.png" x-maintain-ratio="TRUE" width="551px" height="123px" border="0" class="img_whs1"></p>
-<p><span style="font-weight: bold;"><B>1</B></span> - This row includes Refresh, 
- Compose, Print, Delete, Junk and two action menus, Move to and More Actions. 
- </p>
-<ul type="disc" class="whs2">
-	<li style="margin-left: -20px;" class=p><p class="whs3">Click 
- <span style="font-weight: bold;"><B>Refresh</B></span> to retrieve new email 
- messages. </p></li>
-	<li style="margin-left: -20px;" class=p><p class="whs3">Click 
- <span style="font-weight: bold;"><B>Compose</B></span> to start a new email message. 
- It opens in the Content pane.</p></li>
-	<li style="margin-left: -20px;" class=p><p class="whs3">To 
- delete a message, select a message and then click <span style="font-weight: bold;"><B>Delete</B></span> 
- or <span style="font-weight: bold;"><B>Junk</B></span> to move a marked message 
- to either the Trash folder or Junk folder. &nbsp;</p></li>
-	<li style="margin-left: -20px;" class=p><p class="whs3">Use 
- the <span style="font-weight: bold;"><B>Move to</B></span> action bar to move 
- messages to the folder selected. &nbsp;The arrows and 
- numbers the other side of the <span style="font-weight: bold;"><B>Move to</B></span> 
- action bar display the number of email messages in this page. &nbsp;This 
- may not be the total number of messages on your mailbox. Clicking the 
- right arrow will move you to the next page of email messages. </p></li>
-	<li style="margin-left: -20px;" class=p><p class="whs3"><span>Use 
- the </span><span style="font-weight: bold;"><B>More Actions</B></span> action 
- bar to mark selected messages as read or unread, flagged or unflagged, 
- tagged with an already created tag, or untagged.</p></li>
+<p><img src="../mail.png" style="border: none;" alt="mail.png" width="551" height="123" border="0" /></p>
+<p><span style="font-weight: bold;"><b>1</b></span> - This row includes Refresh, Compose, Print, Delete, Junk and two action menus, Move to and More Actions.</p>
+<ul type="disc">
+<li style="margin-left: -20px;" class="p">
+<p style="margin-left: 40px;">Click <span style="font-weight: bold;"><b>Refresh</b></span> to retrieve new email messages.</p>
+</li>
+<li style="margin-left: -20px;" class="p">
+<p style="margin-left: 40px;">Click <span style="font-weight: bold;"><b>Compose</b></span> to start a new email message. It opens in the Content pane.</p>
+</li>
+<li style="margin-left: -20px;" class="p">
+<p style="margin-left: 40px;">To delete a message, select a message and then click <span style="font-weight: bold;"><b>Delete</b></span> or <span style="font-weight: bold;"><b>Junk</b></span> to move a marked message to either the Trash folder or Junk folder. &#160;</p>
+</li>
+<li style="margin-left: -20px;" class="p">
+<p style="margin-left: 40px;">Use the <span style="font-weight: bold;"><b>Move to</b></span> action bar to move messages to the folder selected. &#160;The arrows and numbers the other side of the <span style="font-weight: bold;"><b>Move to</b></span> action bar display the number of email messages in this page. &#160;This may not be the total number of messages on your mailbox. Clicking the right arrow will move you to the next page of email messages.</p>
+</li>
+<li style="margin-left: -20px;" class="p">
+<p style="margin-left: 40px;"><span>Use the</span> <span style="font-weight: bold;"><b>More Actions</b></span> action bar to mark selected messages as read or unread, flagged or unflagged, tagged with an already created tag, or untagged.</p>
+</li>
 </ul>
-<p><span style="font-weight: bold;"><B>2</B></span> - <span style="font-weight: bold;"><B>Header 
- bar</B></span> for the Content pane. If you check the check-box in the Header, 
- all email messages on that page are also checked. </p>
-<p><span style="font-weight: bold;"><B>3</B></span> - Your messages are displayed 
- as either <a href="b_Managing_how_email_is_displayed.htm">Conversations 
- or as single messages</a>. Use the check box to select the message or 
- conversation when you want to perform a Move to or More Actions task.</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p><span style="font-weight: bold;"><b>2</b></span> - <span style="font-weight: bold;"><b>Header bar</b></span> for the Content pane. If you check the check-box in the Header, all email messages on that page are also checked.</p>
+<p><span style="font-weight: bold;"><b>3</b></span> - Your messages are displayed as either <a href="b_Managing_how_email_is_displayed.htm">Conversations or as single messages</a>. Use the check box to select the message or conversation when you want to perform a Move to or More Actions task.</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

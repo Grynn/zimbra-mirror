@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Create New Calendar</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your  Calendar\nCreate a new Calendar");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,71 +81,76 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Creating new calendars</h1>
-<p>One calendar is created for you, and you can create additional calendars 
- to keep track of different type of functions. &nbsp;For 
- example, you can create a calendar for work, for personal, and for company 
- activities, you can subscribe to a calendar that is available on the Internet, 
- and you can link to a calendar that is being shared with you. </p>
-<p>You can use the Schedule 
- view &nbsp;to see two or more of your calendars side-by-side.</p>
+<p>One calendar is created for you, and you can create additional calendars to keep track of different type of functions. &#160;For example, you can create a calendar for work, for personal, and for company activities, you can subscribe to a calendar that is available on the Internet, and you can link to a calendar that is being shared with you.</p>
+<p>You can use the Schedule view &#160;to see two or more of your calendars side-by-side.</p>
 <h6>To create a calendar</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Select the Calendar tab.</p></li>
-	<li class=p><p>In the Calendar Overview pane, click <span style="font-weight: bold;"><B>edit</B></span>. 
- </p></li>
-	<li class=p><p>In the toolbar click <span style="font-weight: bold;"><B>New 
- Calendar</B></span>. </p></li>
-	<li class=p><p>Type the name of the calendar</p></li>
-	<li class=p><p>Select a color to display the Calendar activities. This 
- lets color-code calendars in your mailbox so that activities for that 
- calendar always displays in the selected color. </p></li>
-	<li class=p><p>If you do not want the calendar activities to be viewed 
- by others, &nbsp;check <span style="font-weight: bold;"><B>Exclude 
- this calendar when reporting free/busy times</B></span>.</p></li>
-	<li class=p><p>By default <span style="font-weight: bold;"><B>Checked 
- in UI</B></span> is enabled. Activities for this calendar 
- will display when you open the Calendar view. &nbsp;If 
- you do not want to see this calendar along with the other calendar, uncheck 
- the box. In that case, to see this calendar's activities, you select the 
- calendar and open it. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Create Calendar</B></span>.</p></li>
+<ol type="1">
+<li class="p">
+<p>Select the Calendar tab.</p>
+</li>
+<li class="p">
+<p>In the Calendar Overview pane, click <span style="font-weight: bold;"><b>edit</b></span>.</p>
+</li>
+<li class="p">
+<p>In the toolbar click <span style="font-weight: bold;"><b>New Calendar</b></span>.</p>
+</li>
+<li class="p">
+<p>Type the name of the calendar</p>
+</li>
+<li class="p">
+<p>Select a color to display the Calendar activities. This lets color-code calendars in your mailbox so that activities for that calendar always displays in the selected color.</p>
+</li>
+<li class="p">
+<p>If you do not want the calendar activities to be viewed by others, &#160;check <span style="font-weight: bold;"><b>Exclude this calendar when reporting free/busy times</b></span>.</p>
+</li>
+<li class="p">
+<p>By default <span style="font-weight: bold;"><b>Checked in 
+UI</b></span> is enabled. Activities for this calendar will display when you open the Calendar view. &#160;If you do not want to see this calendar along with the other calendar, 
+uncheck the box. In that case, to see this calendar's activities, you select the calendar and open it.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Create Calendar</b></span>.</p>
+</li>
 </ol>
 <h6>To subscribe to another calendar</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Select the <span style="font-weight: bold;"><B>Calendar</B></span> 
- tab.</p></li>
-	<li class=p><p>In the Calendar Overview pane, click <span style="font-weight: bold;"><B>edit</B></span>. 
- The default calendar information is displayed. &nbsp;</p></li>
-	<li class=p><p>In the toolbar, click <span style="font-weight: bold;"><B>Subscribe 
- to Calendar. </B></span>&nbsp;</p></li>
-	<li class=p><p>Type the name of the calendar, enter a valid iCal 
- file URL for the remote calendar, select a color to display the Calendar 
- activities.</p></li>
-	<li class=p><p>If you do not want the calendar activities to be viewed 
- by others, &nbsp;check <span style="font-weight: bold;"><B>Exclude 
- this calendar when reporting free/busy times</B></span>.</p></li>
-	<li class=p><p>By default <span style="font-weight: bold;"><B>Checked 
- in UI</B></span> is enabled. Activities for this calendar 
- will display when you open the Calendar view. &nbsp;If 
- you do not want to see this calendar along with the other calendar, uncheck 
- the box. In that case, to see this calendar's activities, you select the 
- calendar and open it. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Create Calendar.</B></span></p></li>
+<ol type="1">
+<li class="p">
+<p>Select the <span style="font-weight: bold;"><b>Calendar</b></span> tab.</p>
+</li>
+<li class="p">
+<p>In the Calendar Overview pane, click <span style="font-weight: bold;"><b>edit</b></span>. The default calendar information is displayed. &#160;</p>
+</li>
+<li class="p">
+<p>In the toolbar, click <span style="font-weight: bold;"><b>Subscribe to Calendar.</b></span> &#160;</p>
+</li>
+<li class="p">
+<p>Type the name of the calendar, enter a valid 
+iCal file URL for the remote calendar, select a color to display the Calendar activities.</p>
+</li>
+<li class="p">
+<p>If you do not want the calendar activities to be viewed by others, &#160;check <span style="font-weight: bold;"><b>Exclude this calendar when reporting free/busy times</b></span>.</p>
+</li>
+<li class="p">
+<p>By default <span style="font-weight: bold;"><b>Checked in 
+UI</b></span> is enabled. Activities for this calendar will display when you open the Calendar view. &#160;If you do not want to see this calendar along with the other calendar, 
+uncheck the box. In that case, to see this calendar's activities, you select the calendar and open it.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Create Calendar.</b></span></p>
+</li>
 </ol>
-<h6>&nbsp;</h6>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<h6>&#160;</h6>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

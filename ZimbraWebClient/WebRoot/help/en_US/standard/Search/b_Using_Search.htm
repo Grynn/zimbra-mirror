@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Using Search</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Searching for Items\nUsing Search");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,81 +81,74 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" x-save-method="compute-relative" src="../ehlpdhtm.js" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
-</script>
-
-
-
-<h1>Using Search </h1>
+//]]></script>
+<script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2"></script>
+<h1>Using Search</h1>
 <p>The Zimbra 
  search feature is a powerful tool. Although you can learn to create complex 
  text queries as described in <a href="query_language_description.htm">Query 
  language description</a>, a quick shortcut is to simply type in a name 
  or word, without any keywords. For example, to find all mail containing 
- the word &quot;tim&quot; anywhere in the subject line, 
- to: from: cc: or bcc: lines, message body, or file 
- attachment, you could simply type <span class=code style="font-size: 12pt;"><font size=3 style="font-size:12pt;">tim</font></span><span 
- style="font-family: 'Lucida Sans Typewriter', monospace; color: #800080;"> 
- <font color=purple ></font></span>into the <span style="font-weight: bold;"><B>Find</B></span> text box 
- and click <span style="font-weight: bold;"><B>Search</B></span>. </p>
-<p>You select where to search: &nbsp;email, contacts, 
- &nbsp;appointments, tasks, &nbsp;Document 
- pages, &nbsp;and files in Briefcase. &nbsp;You 
- can also select to search all folders for the information.</p>
+ the word &quot; tim&quot; 
+ anywhere in the subject line, to: from: cc: or bcc: 
+ lines, message body, or file attachment, you could simply type <span class="code" style="font-size: 12pt;"><font size="3" style="font-size:12pt;">tim</font></span> 
+ into the <span style="font-weight: bold;"><b>Find</b></span> text box and click 
+ <span style="font-weight: bold;"><b>Search</b></span>.</p>
+<p>You select where to search: &#160;email, contacts, &#160;appointments, 
+ tasks, &#160;Document pages, &#160;and files in Briefcase. &#160;You can 
+ also select to search all folders for the information.</p>
 <h6>To search for contacts in your address book</h6>
 <p>To search for contacts in your address books, the query must be a whole 
  word. For example, to search contacts by phone number you would have to 
  enter the full phone number as it appears in the contact entry; you could 
  not search just by the area code alone.</p>
-<ol type="1" class="whs1">
-	<li class=p><p>In the search row, in the drop-down next to the search 
- field, select <span style="font-weight: bold;"><B>Personal</B></span> <span style="font-weight: bold;"><B>Contacts</B></span>. 
- This searches through all of your address books.</p></li>
-	<li class=p><p>Enter a complete name or other contact data in the search 
- text box. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Search, </B></span>to 
- execute the search.</p></li>
+<ol type="1">
+	<li class="p"><p>In the search row, in the drop-down next to the search 
+	 field, select <span style="font-weight: bold;"><b>Personal</b></span> <span 
+	 style="font-weight: bold;"><b>Contacts</b></span>. This searches through 
+	 all of your address books.</p></li>
+	<li class="p"><p>Enter a complete name or other contact data in the 
+	 search text box.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Search,</b></span> 
+	 to execute the search.</p></li>
 </ol>
 <h6>To quick search for other types</h6>
 <p>You can enter any value, such as a word, first name, last name, phone 
- number, or domain name. &nbsp;&nbsp;For more options, 
- you can use the &nbsp;asterisk * as a <a class="dropspot" href="javascript:TextPopup(this)" id="a2">wildcard</a>. 
- &nbsp;</p>
-<div class="droptext" id="POPUP316068296" style="display: 'none'; " x-ss-type="dropdown">
- <h6>Using * as a wildcard in Search</h6>
- <p>The asterisk * can be used as a wildcard &nbsp;in a 
- search to find content that contains words that have similar spellings. 
- &nbsp;</p>
- <p>Use the asterisk * as a wildcard after a prefix. That is search for 
- <span style="font-weight: bold;"><B>do*</B></span> returns 
- items with the word dog, door, etc. </p>
+ number, or domain name. &#160;&#160;For more options, you can use the 
+ &#160;asterisk * as a <a class="dropspot" href="javascript:TextPopup(this)" 
+							 id="a2">wildcard</a>. &#160;</p>
+<div class="droptext" id="POPUP443242009" style="display: none;">
+	<h6>Using * as a wildcard in Search</h6>
+	<p>The asterisk * can be used as a wildcard &#160;in a search to find 
+	 content that contains words that have similar spellings. &#160;</p>
+	<p>Use the asterisk * as a wildcard after a prefix. That is search 
+	 for <span style="font-weight: bold;"><b>do*</b></span> 
+	 returns items with the word dog, door, etc.</p>
 </div>
-<ol type="1" class="whs1">
-	<li class=p><p>In the search row, in the drop-down next to the search 
- field, select the item to search, or select <span style="font-weight: bold;"><B>All 
- Item Types</B></span> to search through all folders in your account.</p></li>
-	<li class=p><p>Enter a word, name or other mail-related data in the 
- search text box.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Search, </B></span>to 
- execute the search.</p></li>
+<ol type="1">
+	<li class="p"><p>In the search row, in the drop-down next to the search 
+	 field, select the item to search, or select <span style="font-weight: bold;"><b>All 
+	 Item Types</b></span> to search through all folders in your account.</p></li>
+	<li class="p"><p>Enter a word, name or other mail-related data in the 
+	 search text box.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Search,</b></span> 
+	 to execute the search.</p></li>
 </ol>
-<p>&nbsp;</p>
-<script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a2','POPUP316068296');
-//--></script><script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a2','POPUP443242009');
+//]]></script>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

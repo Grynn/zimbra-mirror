@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Automatically adding your signature</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Composing Email\nAdding your signature automatically");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,52 +81,75 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Adding your signature automatically</h1>
-<p>You can create signatures for your email messages. Your signature can 
- include your name and additional closing text to the maximum number of 
- characters that your account allows. </p>
+<p>You can create signatures for your email messages. Your signature can include your name and additional closing text to the maximum number of characters that your account allows.</p>
 <p>For example, your signature could read:</p>
-<p>John Smith<br>
-Vice President of Engineering<br>
-Widgets Division<br>
-Acme Corporation, Inc.<br>
-303-555-1212 x111<br>
+<p>John Smith<br />
+Vice President of Engineering<br />
+Widgets Division<br />
+Acme Corporation, 
+Inc.<br />
+303-555-1212 x111
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br />
 john.smith@example.com</p>
-<p>If you create multiple identities, you can create multiple signatures 
- and assign them to different addresses. See Managing 
- your account identities. </p>
+<p>If you create multiple identities, you can create multiple signatures and assign them to different addresses. See Managing your account identities.</p>
 <h6>To create a signature:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Open <span style="font-weight: bold;"><B>Preferences </B></span>and 
- select the <span style="font-weight: bold;"><B>Signatures </B></span>tab. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Edit Signature</B></span><span>.</span></p></li>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Signature Name</B></span> 
- field give your signature and identifiable name. &nbsp;This 
- is not your signature, but an identifiable heading. For example, you could 
- call the signature &quot;Formal&quot; to describe that it includes your 
- name, title, company name, etc. </p></li>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Signature</B></span> 
- text box, type the signature information exactly as you want it to appear 
- in your messages.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span>. 
- </p></li>
-	<li class=p><p>Go to the <span style="font-weight: bold;"><B>Accounts</B></span> 
- tab to select which signature to display in your messages by default.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span>. 
- </p></li>
+<ol type="1">
+<li class="p">
+<p>Open <span style="font-weight: bold;"><b>Preferences</b></span> and select the <span style="font-weight: bold;"><b>Signatures</b></span> tab.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Edit Signature</b></span><span>.</span></p>
+</li>
+<li class="p">
+<p>In the <span style="font-weight: bold;"><b>Signature Name</b></span> field give your signature and identifiable name. &#160;This is not your signature, but an identifiable heading. For example, you could call the signature "Formal" to describe that it includes your name, title, company name, etc.</p>
+</li>
+<li class="p">
+<p>In the <span style="font-weight: bold;"><b>Signature</b></span> text box, type the signature information exactly as you want it to appear in your messages.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Save</b></span>.</p>
+</li>
+<li class="p">
+<p>Go to the <span style="font-weight: bold;"><b>Accounts</b></span> tab to select which signature to display in your messages by default.
+
+
+
+
+
+
+
+</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Save</b></span>.</p>
+</li>
 </ol>
-<p class="whs2">&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 40px;">&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

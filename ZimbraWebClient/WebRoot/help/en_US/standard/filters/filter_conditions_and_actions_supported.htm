@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Filter Conditions and Actions Supported</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Using Mail Filters\nFilter conditions and actions supported");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,122 +81,128 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Filter conditions and actions supported</h1>
 <p>Filter rules are not case-insensitive, meaning that the rules ignore 
  capitalization.</p>
 <h3>Conditions</h3>
 <p>Comparison fields include the following:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>From.</B></span> Use this 
- to specify a name in the From: header of an email message. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>To.</B></span> Same as 
- From, but looks for specified names in the To: header.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Cc.</B></span> Same as 
- From, but looks in the Cc: header.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Subject.</B></span> Looks 
- in the message's Subject header.</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>From.</b></span> Use 
+	 this to specify a name in the From: header of an email message.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>To.</b></span> Same as 
+	 From, but looks for specified names in the To: header.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Cc.</b></span> Same as 
+	 From, but looks in the Cc: header.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Subject.</b></span> Looks 
+	 in the message's Subject header.</p></li>
 </ul>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Header Named.</B></span> 
- When this option is selected, an additional text input field appears before 
- the comparison operator (the &quot;contains&quot; portion). This option 
- allows you to specify any email header. You can specify not only the standard 
- fields of To: or From: but also Date, Reply-To, or other custom fields 
- that may be included in the message header. You could use this option 
- to filter out email messages that have &quot;malformed&quot; headers, 
- meaning they do not contain certain information that is normally considered 
- standard for an email message. Sometimes spam, which is automatically 
- generated, omits information such as the Sender or Reply-To fields. Use 
- the second text field (the field immediately to the right of the comparison 
- operator) to specify the header to test for.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Size.</B></span> Use this 
- to select email messages that are larger or smaller than a specified size. 
- The size of the email includes any file attachments. You can use this 
- to discard email messages that are too large.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Date.</B></span> Use this 
- option to specify email messages sent before or after a specified date. 
- </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Body.</B></span> The options 
- for Body are Contains/Does not contain, and this allows you to specify 
- matching words in the body of the email. You cannot filter for words in 
- file attachments.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Attachment.</B></span> 
- You can filter for email messages that have, or don't have, file attachments.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Address In.</B></span> 
- Tests for the presence of an address in your contacts. The next field 
- allows you to specify which address. </p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Header Named.</b></span> 
+	 When this option is selected, an additional text input field appears 
+	 before the comparison operator (the &quot;contains&quot; portion). 
+	 This option allows you to specify any email header. You can specify 
+	 not only the standard fields of To: or From: but also Date, Reply-To, 
+	 or other custom fields that may be included in the message header. 
+	 You could use this option to filter out email messages that have &quot;malformed&quot; 
+	 headers, meaning they do not contain certain information that is normally 
+	 considered standard for an email message. Sometimes spam, which is 
+	 automatically generated, omits information such as the Sender or Reply-To 
+	 fields. Use the second text field (the field immediately to the right 
+	 of the comparison operator) to specify the header to test for.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Size.</b></span> Use 
+	 this to select email messages that are larger or smaller than a specified 
+	 size. The size of the email includes any file attachments. You can 
+	 use this to discard email messages that are too large.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Date.</b></span> Use 
+	 this option to specify email messages sent before or after a specified 
+	 date.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Body.</b></span> The 
+	 options for Body are Contains/Does not contain, and this allows you 
+	 to specify matching words in the body of the email. You cannot filter 
+	 for words in file attachments.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Attachment.</b></span> 
+	 You can filter for email messages that have, or don't have, file attachments.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Address In.</b></span> 
+	 Tests for the presence of an address in your contacts. The next field 
+	 allows you to specify which address.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Calendar Invite</b></span>. 
+	 You can filter calendar-related messages.</p></li>
 </ul>
 <p>Comparison operators include the following:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Matches exactly/does 
- not match exactly</B></span>. Specifies an exact match. For example, specifying 
- <span style="font-weight: bold;"><B>Subject</B></span> <span style="font-weight: bold;"><B>matches 
- exactly</B></span> &nbsp;<span style="font-weight: bold;"><B>Banana</B></span> 
- would only match &quot;Banana&quot; and not &quot;Bananas&quot; or &quot;A 
- truck full of banana leaves&quot;.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Contains/does not contain</B></span>. 
- Specifies that the subject line must contain the specified substring. 
- &nbsp;For example, specifying <span style="font-weight: bold;"><B>Subject 
- contains Banana</B></span> would match &quot;I'm going bananas&quot;.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Matches wildcard/does 
- not match wildcard condition</B></span>. The wildcard * is a character used 
- in the mail filter comparison field to represent one or more characters 
- in the filter . For example, specifying Subject matches &quot;banana*&quot; 
- would match &quot;bananas&quot; or &quot;banana-leaf casserole&quot; but 
- not &quot;my banana-leaf casserole.&quot;</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Matches exactly/does 
+	 not match exactly</b></span>. Specifies an exact match. For example, specifying 
+	 <span style="font-weight: bold;"><b>Subject</b></span> <span style="font-weight: bold;"><b>matches 
+	 exactly</b></span> &#160;<span style="font-weight: bold;"><b>Banana</b></span> 
+	 would only match &quot;Banana&quot; and not &quot;Bananas&quot; or 
+	 &quot;A truck full of banana leaves&quot;.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Contains/does not 
+	 contain</b></span>. Specifies that the subject line must contain the specified 
+	 substring. &#160;For example, specifying 
+	 <span style="font-weight: bold;"><b>Subject contains Banana</b></span> would 
+	 match &quot;I'm going bananas&quot;.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Matches wildcard/does 
+	 not match wildcard condition</b></span>. The wildcard * is a character 
+	 used in the mail filter comparison field to represent one or more 
+	 characters in the filter . For example, specifying Subject matches 
+	 &quot; banana*&quot; would match &quot;bananas&quot; 
+	 or &quot;banana-leaf casserole&quot; but not &quot;my banana-leaf 
+	 casserole.&quot;</p></li>
 </ul>
 <h3>Actions</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Keep in Inbox.</B></span> 
- Saves mail to Inbox. If none of the filter rules match an email message, 
- this action takes place by default.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>File into folder.</B></span> 
- Moves the mail to a specified folder.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Discard.</B></span> Deletes 
- the mail message without delivering it. The message is not in any of your 
- folders, not even Trash.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Forward</B></span>. Forwards 
- mail to the address you specify</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Mark.</B></span> Select 
- <span style="font-weight: bold;"><B>as Read</B></span> or <span style="font-weight: bold;"><B>as 
- Flagged</B></span>. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Tag with.</B></span> You 
- can tag matching messages with a selected tag.</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Keep in Inbox.</b></span> 
+	 Saves mail to Inbox. If none of the filter rules match an email message, 
+	 this action takes place by default.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>File into folder.</b></span> 
+	 Moves the mail to a specified folder.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Discard.</b></span> Deletes 
+	 the mail message without delivering it. The message is not in any 
+	 of your folders, not even Trash.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Forward</b></span>. Forwards 
+	 mail to the address you specify</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Mark.</b></span> Select 
+	 <span style="font-weight: bold;"><b>as Read</b></span> or <span style="font-weight: bold;"><b>as 
+	 Flagged</b></span>.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Tag with.</b></span> 
+	 You can tag matching messages with a selected tag.</p></li>
 </ul>
 <h3>Multiple Actions</h3>
 <p>You can create a filter rule made up of multiple actions. The combinations 
  of actions in your rule are interpreted as follows:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Discard.</B></span> If 
- combined with other actions, discard is ignored and the other actions 
- take place.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>File into folder.</B></span> 
- Multiple &quot;file into&quot; actions results in multiple copies of the 
- message being stored in different folders. If a specified folder does 
- not exist, the message is saved to the Inbox.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Tag/Mark.</B></span> These 
- actions apply to the message returned from the nearest preceding action. 
- In the case of multiple &quot;File into&quot; actions, this could result 
- in some copies of the message stored without a tag, and others stored 
- with a tag.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Keep in Inbox.</B></span> 
- Multiple &quot;keep&quot; actions can be specified, but only one copy 
- of the message is saved to the Inbox.</p></li>
-	<li class=p><p class="whs2">Forward to address. <span 
- style="font-weight: normal;">Mail is forwarded to the address specified.</span></p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Discard.</b></span> If 
+	 combined with other actions, discard is ignored and the other actions 
+	 take place.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>File into folder.</b></span> 
+	 Multiple &quot;file into&quot; actions results in multiple copies 
+	 of the message being stored in different folders. If a specified folder 
+	 does not exist, the message is saved to the Inbox.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Tag/Mark.</b></span> 
+	 These actions apply to the message returned from the nearest preceding 
+	 action. In the case of multiple &quot;File into&quot; actions, this 
+	 could result in some copies of the message stored without a tag, and 
+	 others stored with a tag.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Keep in Inbox.</b></span> 
+	 Multiple &quot;keep&quot; actions can be specified, but only one copy 
+	 of the message is saved to the Inbox.</p></li>
+	<li class="p"><p style="font-weight: bold;">Forward to address. <span 
+	 style="font-weight: normal;">Mail is forwarded to the address specified.</span></p></li>
 </ul>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

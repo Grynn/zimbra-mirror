@@ -1,24 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>System Folders</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-h2.whs1 { x-condition:BasicWC; }
-p.whs2 { x-condition:BasicWC; }
-ul.whs3 { x-condition:BasicWC; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Navigating Your Mailbox\nMail system folders");
@@ -58,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -77,57 +81,55 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Mail system folders</h1>
-<p>The system folders are <span style="font-weight: bold;"><B>Inbox</B></span>, 
- <span style="font-weight: bold;"><B>Sent</B></span>, <span style="font-weight: bold;"><B>Drafts</B></span>, 
- <span style="font-weight: bold;"><B>Junk</B></span>, and <span style="font-weight: bold;"><B>Trash</B></span>. 
- You cannot move, rename, or delete these folders. System folders are always 
- displayed at the top of your folder list, followed by any folders you 
- create.</p>
+<p>The system folders are <span style="font-weight: bold;"><b>Inbox</b></span>, <span style="font-weight: bold;"><b>Sent</b></span>, <span style="font-weight: bold;"><b>Drafts</b></span>, <span style="font-weight: bold;"><b>Junk</b></span>, and <span style="font-weight: bold;"><b>Trash</b></span>. You cannot move, rename, or delete these folders. System folders are always displayed at the top of your folder list, followed by any folders you create.</p>
+
+
 <h2>Inbox</h2>
-<p>New mail arrives in the <span style="font-weight: bold;"><B>Inbox</B></span>. 
- By default, your Inbox is displayed after you log in. </p>
+<p>New mail arrives in the <span style="font-weight: bold;"><b>Inbox</b></span>. By default, your Inbox is displayed after you log in.</p>
 <h2>Sent</h2>
-<p>A copy of each message you send is saved in the <span style="font-weight: bold;"><B>Sent</B></span> 
- folder. </p>
+<p>A copy of each message you send is saved in the <span style="font-weight: bold;"><b>Sent</b></span> folder.</p>
 <h2>Drafts</h2>
-<p>Messages you have composed but have not sent can be saved in the <span 
- style="font-weight: bold;"><B>Drafts</B></span> folder. If you open a message 
- in the Drafts folder, it opens in the Compose view.</p>
-<h2 class="whs1">Junk</h2>
-<p class="whs2">Most filtering of unsolicited automated 
- mail (aka &quot;spam&quot; or &quot;junk mail&quot;) is handled by a spam 
- filter before those mail messages reach your Inbox. Mail that might possibly 
- be junk mail, but isn't certain to be junk, may be placed in your <span 
- style="font-weight: bold;"><B>Junk </B></span>folder. You can review these messages 
- and either move them or delete them. If you don't delete them, they will 
- &nbsp;be purged after a period of time as specified by 
- your email administrator.</p>
-<ul class="whs3">
-	<li class=p-note><p class=note>If you find that you are receiving a 
- large number of unwanted mail messages, contact your email system administrator. 
- Reporting mail as spam helps your mail administrator to fine-tune any 
- spam filtering that may be in use at your site.</p></li>
+<p>Messages you have composed but have not sent can be saved in the <span style="font-weight: bold;"><b>Drafts</b></span> folder. If you open a message in the Drafts folder, it opens in the Compose view.</p>
+
+
+
+
+
+
+<h2>Junk</h2>
+
+
+<p>Most filtering of unsolicited automated mail (aka "spam" or "junk mail") is handled by a spam filter before those mail messages reach your Inbox. Mail that might possibly be junk mail, but isn't certain to be junk, may be placed in your <span style="font-weight: bold;"><b>Junk</b></span> folder. You can review these messages and either move them or delete them. If you don't delete them, they will &#160;be purged after a period of time as specified by your email administrator.</p>
+
+
+<ul>
+<li class="p-note">
+<p class="note">If you find that you are receiving a large number of unwanted mail messages, contact your email system administrator. Reporting mail as spam helps your mail administrator to fine-tune any spam filtering that may be in use at your site.</p>
+</li>
 </ul>
-<p class="whs2">If you find a message that is clearly 
- not relevant, you can select the message and in the <span style="font-weight: bold;"><B>More 
- Action</B></span> box select Spam.</p>
-<h2>Trash </h2>
-<p>Deleted items are placed in the <span style="font-weight: bold;"><B>Trash</B></span> 
- folder and remain there until you manually empty the trash or until the 
- folder is purged automatically. Mail is purged from this folder after 
- a specified period of time, as specified by your administrator.</p>
-<script type="text/javascript" language="javascript1.2">
+
+
+<p>If you find a message that is clearly not relevant, you can select the message and in the <span style="font-weight: bold;"><b>More Action</b></span> box select Spam.</p>
+
+<h2>Trash</h2>
+<p>Deleted items are placed in the <span style="font-weight: bold;"><b>Trash</b></span> folder and remain there until you manually empty the trash or until the folder is purged automatically. Mail is purged from this folder after a specified period of time, as specified by your administrator.</p>
+
+
+
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

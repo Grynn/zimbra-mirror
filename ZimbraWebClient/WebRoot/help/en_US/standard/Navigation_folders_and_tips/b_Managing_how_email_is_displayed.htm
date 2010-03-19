@@ -1,25 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Managing how email is displayed</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; width:626px; height:102px; float:none; border-style:none; }
-p.whs2 { font-weight:bold; }
-img_whs3 { border:none; width:627px; height:98px; float:none; border-style:none; }
-img_whs4 { border:none; width:22px; height:18px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -30,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your Email \nManaging how email is displayed");
@@ -59,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -78,55 +81,30 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Managing how email is displayed</h1>
-<p>You can view your email messages as either <span style="font-weight: bold;"><B>Messages</B></span> 
- or as <span style="font-weight: bold;"><B>Conversations</B></span>. </p>
-<p>To change how messages are grouped, go to the <span style="font-weight: bold;"><B>Preferences, 
- Mail</B></span> tab and change <span style="font-weight: bold;"><B>Group mail 
- by</B></span>. </p>
-<p>You can also view messages in a three-pane view, with the Reading Pane 
- on the Left.</p>
+<p>You can view your email messages as either <span style="font-weight: bold;"><b>Messages</b></span> or as <span style="font-weight: bold;"><b>Conversations</b></span>.</p>
+<p>To change how messages are grouped, go to the <span style="font-weight: bold;"><b>Preferences, Mail</b></span> tab and change <span style="font-weight: bold;"><b>Group mail by</b></span>.</p>
+<p>You can also view messages in a three-pane view, with the Reading Pane on the Left.</p>
 <h2>Messages</h2>
-<p>Email grouped as messages are displayed with the most recent message 
- first in your email folders. Unread messages are shown in bold. When you 
- review the message line, you can see who the message is from, whether 
- there is an attachment, the subject of the message, in which folder the 
- message is saved, the size of the message, and when it was received. &nbsp;If 
- messages have a flag enabled or tags, these are also shown.</p>
-<p><img src="../message_group75.png" x-maintain-ratio="TRUE" width="626px" height="102px" border="0" class="img_whs1"></p>
+<p>Email grouped as messages are displayed with the most recent message first in your email folders. Unread messages are shown in bold. When you review the message line, you can see who the message is from, whether there is an attachment, the subject of the message, in which folder the message is saved, the size of the message, and when it was received. &#160;If messages have a flag enabled or tags, these are also shown.</p>
+<p><img src="../message_group75.png" style="border: none;" alt="message_group75.png" width="626" height="102" border="0" /></p>
 <h2>Conversations</h2>
-<p>If you group mail by conversations, your messages are grouped by subject. 
- &nbsp;A conversation is a group of messages that have 
- the same subject. &nbsp;If the subject is changed, the 
- message is not included in the conversation.</p>
-<p>The subject displays only once in the conversation view pane. The number 
- of messages in the conversation is displayed in parentheses after the 
- subject. When new email comes in, the conversation is moved to the top 
- of your email messages. Conversations containing unread messages are shown 
- in <span style="font-weight: bold;"><B>bold</B></span>.</p>
-<p class="whs2">Conversation View</p>
-<p><img src="../conversationview.png" x-maintain-ratio="TRUE" width="627px" height="98px" border="0" class="img_whs3"></p>
-<p>&nbsp;</p>
-<p>Double-click the conversation to display the messages within the conversation. 
- Click on a message to display its contents in the reading pane below. 
- In the message toolbar, you can click the <img src="../newwindowbutton.png" x-maintain-ratio="TRUE" width="22px" height="18px" border="0" class="img_whs4"> icon to display the message in a new window.</p>
-<p>All messages related to the conversation are displayed, even if the 
- messages are stored in other folders. The <span style="font-weight: bold;"><B>Folder</B></span> 
- column shows the folder where the message is stored. Conversations do 
- not continue indefinitely. If the last message in the conversation is 
- 30 days old or older, messages sent with the same subject begin a new 
- conversation.</p>
-<script type="text/javascript" language="javascript1.2">
+<p>If you group mail by conversations, your messages are grouped by subject. &#160;A conversation is a group of messages that have the same subject. &#160;If the subject is changed, the message is not included in the conversation.</p>
+<p>The subject displays only once in the conversation view pane. The number of messages in the conversation is displayed in parentheses after the subject. When new email comes in, the conversation is moved to the top of your email messages. Conversations containing unread messages are shown in <span style="font-weight: bold;"><b>bold</b></span>.</p>
+<p style="font-weight: bold;">Conversation View</p>
+<p><img src="../conversationview.png" style="border: none;" alt="conversationview.png" width="627" height="98" border="0" /></p>
+<p>&#160;</p>
+<p>Double-click the conversation to display the messages within the conversation. Click on a message to display its contents in the reading pane below. In the message toolbar, you can click the <img src="../newwindowbutton.png" style="border: none;" alt="newwindowbutton.png" width="22" height="18" border="0" /> icon to display the message in a new window.</p>
+<p>All messages related to the conversation are displayed, even if the messages are stored in other folders. The <span style="font-weight: bold;"><b>Folder</b></span> column shows the folder where the message is stored. Conversations do not continue indefinitely. If the last message in the conversation is 30 days old or older, messages sent with the same subject begin a new conversation.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

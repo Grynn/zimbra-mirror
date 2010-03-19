@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Creating recurring appointments</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Scheduling Appointments, Meetings and Events\nCreating recurring appointments");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,56 +81,50 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Creating recurring meetings</h1>
-<p>Recurring meetings are appointments that repeat on some sort of schedule. 
- You can schedule recurring meetings to repeat daily, weekly, monthly, 
- or yearly. In addition, you can customize recurring appointment schedules.</p>
-<ol start="1" type="1" class="whs1">
-	<li class=p><p>When you <a href="b_Scheduling_a_meeting.htm">create 
- a new appointment</a>, click <span style="font-weight: bold;"><B>Repeat</B></span> 
- on the toolbar to open the recurring appointments configuration page. 
- </p></li>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Basic</B></span> 
- <span style="font-weight: bold;"><B>Repeat</B></span> section, click the radial 
- button to select how often you want the meeting to be repeated - every 
- day, week, month, or year. </p></li>
-	<li class=p><p>If your recurring meeting has an end date, in the <span 
- style="font-weight: bold;"><B>Advanced </B></span>section <span style="font-weight: bold;"><B>End</B></span> 
- box, select either to end the meetings after a specific number of meetings 
- or by a specific date.</p></li>
-	<li class=p><p>The Advanced section lets you schedule more specific 
- patterns.</p></li>
-	<ul><li style="list-style: disc;" type=disc class=p><p><span style="font-weight: bold;"><B>Daily</B></span>. 
- Customize daily repeats to choose whether it is every day or some other 
- sequence such as every two days or four days.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p><span style="font-weight: bold;"><B>Weekly</B></span>. 
- Customize weekly repeats to select whether it is a weekly recurring appointment 
- or some other weekly pattern such as every two weeks. &nbsp;You 
- can select which day of the week you want the meeting.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p><span style="font-weight: bold;"><B>Monthly</B></span>. 
- Customize monthly repeats to select whether it is a monthly recurring 
- appointment or some other monthly pattern such as every two months. &nbsp;A 
- calendar displays and you can select which day or days you want the meeting 
- scheduled.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p><span style="font-weight: bold;"><B>Yearly</B></span>. 
- Customize yearly repeats to select the month and date. </p></li>
-	</ul>
+<p>Recurring meetings are appointments that repeat on some sort of schedule. You can schedule recurring meetings to repeat daily, weekly, monthly, or yearly. In addition, you can customize recurring appointment schedules.</p>
+<ol start="1" type="1">
+<li class="p">
+<p>When you <a href="b_Scheduling_a_meeting.htm">create a new appointment</a>, click <span style="font-weight: bold;"><b>Repeat</b></span> on the toolbar to open the recurring appointments configuration page.</p>
+</li>
+<li class="p">
+<p>In the <span style="font-weight: bold;"><b>Basic</b></span> <span style="font-weight: bold;"><b>Repeat</b></span> section, click the radial button to select how often you want the meeting to be repeated - every day, week, month, or year.</p>
+</li>
+<li class="p">
+<p>If your recurring meeting has an end date, in the <span style="font-weight: bold;"><b>Advanced</b></span> section <span style="font-weight: bold;"><b>End</b></span> box, select either to end the meetings after a specific number of meetings or by a specific date.</p>
+</li>
+<li class="p">
+<p>The Advanced section lets you schedule more specific patterns.</p>
+<ul>
+<li type="disc" class="p">
+<p><span style="font-weight: bold;"><b>Daily</b></span>. Customize daily repeats to choose whether it is every day or some other sequence such as every two days or four days.</p>
+</li>
+<li type="disc" class="p">
+<p><span style="font-weight: bold;"><b>Weekly</b></span>. Customize weekly repeats to select whether it is a weekly recurring appointment or some other weekly pattern such as every two weeks. &#160;You can select which day of the week you want the meeting.</p>
+</li>
+<li type="disc" class="p">
+<p><span style="font-weight: bold;"><b>Monthly</b></span>. Customize monthly repeats to select whether it is a monthly recurring appointment or some other monthly pattern such as every two months. &#160;A calendar displays and you can select which day or days you want the meeting scheduled.</p>
+</li>
+<li type="disc" class="p">
+<p><span style="font-weight: bold;"><b>Yearly</b></span>. Customize yearly repeats to select the month and date.</p>
+</li>
+</ul>
+</li>
 </ol>
-<ol start="5" type="1" class="whs1">
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Done</B></span> to 
- return to the appointment page.</p></li>
+<ol start="5" type="1">
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Done</b></span> to return to the appointment page.</p>
+</li>
 </ol>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>
