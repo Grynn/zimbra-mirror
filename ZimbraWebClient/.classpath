@@ -16,5 +16,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraTagLib"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-6.1.22.z6.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.22.z6.jar"/>
+	<classpathentry kind="lib" path="jars/json-org.jar"/>
+	<classpathentry kind="lib" path="jars/freemarker-2.2.8.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
