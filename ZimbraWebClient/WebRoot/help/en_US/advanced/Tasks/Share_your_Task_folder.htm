@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Share your Task list</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; width:147px; height:97px; float:none; border-style:none; }
-img_whs2 { border:none; width:215px; height:233px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Sharing Folders\nSharing Task Lists\nShare your task list");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,111 +81,108 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" x-save-method="compute-relative" src="../ehlpdhtm.js" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
+//]]></script>
+
+<script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2">
 </script>
-
-
-
 <h1>Share your Task list</h1>
-<p>You can share your task lists with others and you can define the permissions 
- for the shared list as follows:</p>
-<ul class=whs1 style="list-style: disc;" type=disc>
-	<li class=p><p>Internal users or groups. &nbsp;You select the type 
- of privileges to grant, either:</p></li>
-	<ul class=whs1 style="list-style: disc;" type=disc>
-		<li class=p><p><span><b style="font-weight: bold;">Viewer</b></span>. 
- The Grantee can see the content of the task list, but cannot make any 
- changes to the contents of the task list.</p></li>
-		<li class=p><p><b>Manager</b>. The Grantee has permission to create 
- tasks and edit and delete tasks from your task list.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Admin</B></span>. The 
- Grantee has permission to create tasks and edit and delete tasks from 
- your task list and to share your task list with others. </p></li>
-		<li class=p-note><p class=note><span><b style="font-weight: bold;">None</b></span> 
- is an option to temporarily disable access to a grantor's without revoking 
- the share privileges. The Grantee still has the task list in their task 
- list view but cannot view or manage tasks. </p></li>
-	</ul>
-	<li class=p><p>External guests. You create a password to access the 
- shared task list. Guests must enter this password to view the task list. 
- They cannot make changes to any of the tasks.</p></li>
-	<li class=p><p>Public. Anyone that knows the URL to the shared task 
- list can view it. They cannot make any changes.</p></li>
+<p>You can share your task lists with others and you can define the permissions for the shared list as follows:</p>
+<ul class="whs1" type="disc">
+<li class="p">
+<p>Internal users or groups. &#160;You select the type of privileges to grant, either:</p>
+</li>
+<li style="list-style: none; display: inline">
+<ul class="whs1" type="disc">
+<li class="p">
+<p><span><b style="font-weight: bold;">Viewer</b></span>. The Grantee can see the content of the task list, but cannot make any changes to the contents of the task list.</p>
+</li>
+<li class="p">
+<p><b style="font-weight: bold;">Manager</b>. The Grantee has permission to create tasks and edit and delete tasks from your task list.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Admin</b></span>. The Grantee has permission to create tasks and edit and delete tasks from your task list and to share your task list with others.</p>
+</li>
+<li class="p-note">
+<p class="note"><span><b style="font-weight: bold;">None</b></span> is an option to temporarily disable access to a grantor's without revoking the share privileges. The Grantee still has the task list in their task list view but cannot view or manage tasks.</p>
+</li>
+</ul>
+</li>
+<li class="p">
+<p>External guests. You create a password to access the shared task list. Guests must enter this password to view the task list. They cannot make changes to any of the tasks.</p>
+</li>
+<li class="p">
+<p>Public. Anyone that knows the URL to the shared task list can view it. They cannot make any changes.</p>
+</li>
 </ul>
 <h6>To share your Task list</h6>
-<p>Right-click on the task list to share and select Share Task List. </p>
-<p><img src="../click_to_share.png" x-maintain-ratio="TRUE" width="147px" height="97px" border="0" class="img_whs1"></p>
-<p>On the Shared Properties dialog, enter the select whom to share with 
- and configure the appropriate information.</p>
-<p><img src="../shareproperties.png" x-maintain-ratio="TRUE" width="215px" height="233px" border="0" class="img_whs2"></p>
-<p class=whs2>&nbsp;</p>
-<p class=whs2><a class="expandspot" href="javascript:TextPopup(this)" id="a1">Sharing with Internal Users or 
- Groups</a><span class=expandtext style="display: 'none';" id=POPUP316463932 >   1. Select <span style="font-weight: bold;"><B>Internal users or groups</B></span> 
- to share with<br><br>2. In the <span style="font-weight: bold;"><B>Email</B></span> field, type the 
- email addresses of the grantees. As you type an address, list of names 
- that match the letters you type is displayed. &nbsp;You 
- can select the name from the list. <br><br>3. Select the role, Viewer or Manager<br><br>4. In the <span style="font-weight: bold;"><B>Message</B></span> section, select 
- the type of email message to be sent to notify the grantee.<br><br>5. Click <span style="font-weight: bold;"><B>OK</B></span>.</span></p>
-<p class=whs2><a class="dropspot" href="javascript:TextPopup(this)" id="a2">Sharing with external guests</a></p>
-<div class="droptext" id="POPUP316563954" style="display: 'none'; " x-ss-type="dropdown">
- <p>1. In the <span style="font-weight: bold;"><B>Share with</B></span> section, 
- select <span style="font-weight: bold;"><B>External Guests</B></span>. When you 
- select this a Password field displays.</p>
- <p>2. Enter the email addresses for the guests.</p>
- <p>3. Enter the password the guests should use to access this task list.</p>
- <p>4. Select what type of notification message to send them. This message 
- gives them the information they need to access the list. </p>
- <p>5. Click <span style="font-weight: bold;"><B>OK</B></span>. </p>
- <p>&nbsp;</p>
+<p>Right-click on the task list to share and select Share Task List.</p>
+<p><img src="../click_to_share.png" style="border: none;" alt="click_to_share.png" width="147" height="97" border="0" /></p>
+<p>On the Shared Properties dialog, enter the select whom to share with and configure the appropriate information.</p>
+<p><img src="../shareproperties.png" style="border: none;" alt="shareproperties.png" width="215" height="233" border="0" /></p>
+<p class="whs2">&#160;</p>
+<p class="whs2">
+<a class="expandspot" href="javascript:TextPopup(this)" id="a1">Sharing with Internal Users or Groups</a><span class="expandtext" id="POPUP361854245" style="display: none;">1. Select <span style="font-weight: bold;"><b>Internal users or groups</b></span> to share with<br />
+<br />
+2. In the <span style="font-weight: bold;"><b>Email</b></span> field, type the email addresses of the grantees. As you type an address, list of names that match the letters you type is displayed. &#160;You can select the name from the list.<br />
+<br />
+3. Select the role, Viewer or Manager<br />
+<br />
+4. In the <span style="font-weight: bold;"><b>Message</b></span> section, select the type of email message to be sent to notify the grantee.<br />
+<br />
+5. Click <span style="font-weight: bold;"><b>OK</b></span>.</span></p>
+<p class="whs2">
+<a class="dropspot" href="javascript:TextPopup(this)" id="a2">Sharing with external guests</a></p>
+<div class="droptext" id="POPUP361724824" style="display: none;">
+<p>1. In the <span style="font-weight: bold;"><b>Share with</b></span> section, select <span style="font-weight: bold;"><b>External Guests</b></span>. When you select this a Password field displays.</p>
+<p>2. Enter the email addresses for the guests.</p>
+<p>3. Enter the password the guests should use to access this task list.</p>
+<p>4. Select what type of notification message to send them. This message gives them the information they need to access the list.</p>
+<p>5. Click <span style="font-weight: bold;"><b>OK</b></span>.</p>
+<p>&#160;</p>
 </div>
-<p class=whs2><a class="dropspot" href="javascript:TextPopup(this)" id="a3">Sharing with the public</a></p>
-<div class="droptext" id="POPUP316832316" style="display: 'none'; " x-ss-type="dropdown">
- <p>1. In the <span style="font-weight: bold;"><B>Share with</B></span> section, 
- select Public. When you select, the share properties dialog displays the 
- URL for your task list. </p>
- <p>2. Note this URL and notify the &quot;public&quot; users of this email 
- address. When they click the URL, they can read the task list content 
- but cannot change anything.</p>
-</div>
-<div class=droptext id=POPUP212037081 x-ss-type=dropdown style="display: none;">
-<p>When you choose Public, anyone who has the URL can view your calendar. 
- &nbsp;No password is required. </p>
+<p class="whs2">
+<a class="dropspot" href="javascript:TextPopup(this)" id="a3">Sharing with the public</a></p>
+<div class="droptext" id="POPUP361701743" style="display: none;">
+<p>1. In the <span style="font-weight: bold;"><b>Share with</b></span> section, select Public. When you select, the share properties dialog displays the URL for your task list.</p>
+<p>2. Note this URL and notify the "public" users of this email address. When they click the URL, they can read the task list content but cannot change anything.</p>
 </div>
 <h3>Editing or revoking permission</h3>
 <p>You can revoke permissions at any time.</p>
-<ol class=whs8 style="list-style: decimal;" type=1>
-	<li class=p><p>Right-click a shared task list.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>Edit Properties</b></B></span>. 
- Users sharing the folder are listed.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>Edit</b></B></span> 
- to change permissions, or <br>
-	Click <span style="font-weight: bold;"><B><b>Revoke</b></B></span> to remove 
- permissions. </p></li>
-	<li class=p><p>Select whether a message describing the change should 
- be sent.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>OK</b></B></span>.</p></li>
+<ol class="whs8" type="1">
+<li class="p">
+<p>Right-click a shared task list.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b><b>Edit Properties</b></b></span>. Users sharing the folder are listed.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b><b>Edit</b></b></span> to change permissions, or<br />
+Click <span style="font-weight: bold;"><b><b>Revoke</b></b></span> to remove permissions.</p>
+</li>
+<li class="p">
+<p>Select whether a message describing the change should be sent.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b><b>OK</b></b></span>.</p>
+</li>
 </ol>
-<p>&nbsp;</p>
-<script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a1','POPUP316463932');
-//--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a2','POPUP316563954');
-//--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a3','POPUP316832316');
-//--></script><script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a1','POPUP361854245');
+	TextPopupInit('a2','POPUP361724824');
+	TextPopupInit('a3','POPUP361701743');
+//]]></script>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,6 +1,59 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="options, changing" >
+  <topic name="Changing Your User Options" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="options, new mail notification" >
+  <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="overview pane" >
+  <topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+<key name="pages, Documents" >
+  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="password" >
+  <topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="permission denied with meeting invite" >
+  <topic name="Receiving a permission denied message" url="Calendar/Receiving_a_permission_denied_message.htm" />
+</key>
+<key name="permissions, changing access to notebooks" >
+  <topic name="Cancelling access to your Documents wiki folder" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+</key>
+<key name="persona" >
+  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Creating Personas" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="Personal Contacts" >
+  <topic name="Editing a contact" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="personal distribution lists" >
+  <topic name="Creating Group Contact Lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="phone, wipe" >
+  <topic name="Managing your mobile devices" url="Userspecific/Managing_your_mobile_devices.htm" />
+</key>
+<key name="planning a meeting" >
+  <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="polling for new mail" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="POP account" >
+  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="POP account email, receiving" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="POP accounts, adding" >
+  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="POP addresses, adding" >
+  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
+</key>
 <key name="preferences" >
   <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
@@ -88,6 +141,12 @@
 </key>
 <key name="reminders" >
   <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="reply, display heading information" >
+  <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+</key>
+<key name="reply, display subject" >
+  <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="Replying" >
   <topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
@@ -227,6 +286,9 @@
 <key name="spell check" >
   <topic name="Using Spell Check" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
+<key name="spell-check, setting as manadatory" >
+  <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+</key>
 <key name="starting IM chat" >
   <topic name="Starting an IM chat" url="instant_messaging/Starting_an_IM_chat.htm" />
 </key>
@@ -251,61 +313,6 @@
 </key>
 <key name="tags, creating" >
   <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
-</key>
-<key name="three-pane view" >
-  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="tool tips" >
-  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="Trash folder" >
-  <topic name="Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
-</key>
-<key name="Undeliverable mail" >
-  <topic name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />
-</key>
-<key name="User Interface Features" >
-  <topic name="User Interface Features and Shortcuts" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-</key>
-<key name="user preferences" >
-  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="Using tags" >
-  <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
-</key>
-<key name="Vacation message" >
-  <topic name="Vacation message" url="Userspecific/vacation_message.htm" />
-</key>
-<key name="view as HTML" >
-  <topic name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
-</key>
-<key name="view reading pane" >
-  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="view, calendar" >
-  <topic name="About Zimbra Calendar" url="Calendar/About_Calendar.htm" />
-</key>
-<key name="view, calendars by lists" >
-  <topic name="Calendar List View" url="Calendar/Calendar_List_View.htm" />
-</key>
-<key name="white list" >
-  <topic name="Filtering Junk Mail" url="filters/Filtering_Junk_Mail.htm" />
-</key>
-<key name="wildcard, using in search" >
-  <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
-</key>
-<key name="Wildcards" >
-  <topic name="Wildcards" url="filters/wildcards.htm" />
-</key>
-<key name="wipe mobile device" >
-  <topic name="Managing your mobile devices" url="Userspecific/Managing_your_mobile_devices.htm" />
-</key>
-<key name="Zimbra assistant" >
-  <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
-</key>
-<key name="Zimlets" >
-  <topic name="About Zimlets" url="Zimlets/About_Zimlets.htm" />
-  <topic name="Managing your Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
 
 </indexdata>

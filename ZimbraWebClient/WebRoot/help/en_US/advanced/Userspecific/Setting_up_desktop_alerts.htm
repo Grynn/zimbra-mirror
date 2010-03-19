@@ -1,28 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Setting up desktop alerts</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ul.whs2 { list-style:circle; }
-p.whs3 { margin-left:84px; }
-img_whs4 { border:none; width:326px; height:37px; float:none; border-style:none; }
-p.whs5 { margin-left:4px; font-weight:bold; }
-p.whs6 { margin-left:4px; }
-p.whs7 { margin-left:44px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -33,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your Email \nReading Messages\nSetting up desktop alerts");
@@ -62,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -81,83 +81,91 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Setting up desktop alerts and reminders</h1>
-<p>You can create desktop alerts for new email notification, appointment 
- reminders, and instant message notification. To receive alerts, your mailbox 
- must be opened.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Email message alerts</B></span>. 
- You set your preferences in the Preferences&gt;Mail folder. Following 
- are the alert options:</p></li>
-	<ul type="circle" class="whs2">
-		<li class=p><p><span style="font-weight: bold;"><B>Play a sound</B></span>. 
- You are notified by a beep when a new email arrives in the Inbox. &nbsp;If 
- you have your volume set to mute, you will not here a sound. You must 
- have either QuickTime or Windows Media installed.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Highlight the Mail 
- tab</B></span>. The email tab is highlighted when new email arrives in the 
- Inbox if you are not working in the Mail tab.</p></li>
-	</ul>
+<p>You can create desktop alerts for new email notification, appointment reminders, and instant message notification. To receive alerts, your mailbox must be opened.</p>
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Email message alerts</b></span>. You set your preferences in the Preferences&gt;Mail folder. Following are the alert options:</p>
+</li>
+<li style="list-style: none; display: inline">
+<ul type="circle">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Play a sound</b></span>. You are notified by a beep when a new email arrives in the Inbox. &#160;If you have your volume set to mute, you will not here a sound. You must have either 
+QuickTime or Windows Media installed.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Highlight the Mail tab</b></span>. The email tab is highlighted when new email arrives in the Inbox if you are not working in the Mail tab.</p>
+</li>
 </ul>
-<p class="whs3"><img src="../mailnotificationtab.png" x-maintain-ratio="TRUE" width="326px" height="37px" border="0" class="img_whs4"></p>
-<ul type="circle" class="whs2">
-	<ul type="circle" class="whs2">
-		<li style="x-condition: Adv_not_ZD;" class=p><p><span style="font-weight: bold;"><B>Flash 
- the browser title</B></span>. When new email arrives in the Inbox, the browser 
- flashes until you open the Mail folder.</p></li>
-		<li class=p><p class="whs5">Show 
- a popup notification.<span style="font-weight: normal;"> &nbsp;When 
- new mail arrives, a message pops up. You must have <a href="http://browserplus.yahoo.com/" 
- target=_blank>Yahoo! BrowserPlus</a> installed.</span></p></li>
-	</ul>
-	<li style="list-style: disc;" type=disc class=p><p class="whs6"><span 
- style="font-weight: bold;"><B>Appointment Reminder alerts</B></span>. &nbsp;You 
- set your preferences in the Preferences&gt;Calendar folder. &nbsp;Before 
- you can set an alert, set the time to be reminded of your meeting. This 
- can be up to 60 minutes before the meeting. A reminder dialog appears 
- at the designated time before the meeting. If you set reminders to <span 
- style="font-weight: bold;"><B>Never</B></span>, you are not reminded of the meeting 
- even if you have the reminder options enabled. </p></li>
+</li>
 </ul>
-<p class="whs7">The ZWC reminder does not pop up on the top 
- of the page if you are not in ZWC Calendar, enabling one of the following 
- options helps to alert you of the pop-up:</p>
-<ul type="circle" class="whs2">
-	<ul type="circle" class="whs2">
-		<li class=p><p class="whs6"><span style="font-weight: bold;"><B>Play 
- a sound.</B></span> You are notified by a beep when an appointment reminder 
- pops up. If you have your volume set to mute, you will not here a sound.</p></li>
-		<li class=p><p class="whs6"><span style="font-weight: bold;"><B>Flash 
- the browser title</B></span>. When an appointment reminder pops up, the browser 
- flashes until you close the pop-up</p></li>
-	</ul>
-	<li style="list-style: disc; x-condition: Adv_not_ZD;" type=disc class=p><p class="whs6"><span style="font-weight: bold;"><B>IM alerts</B></span>. 
- You set your preferences in the Preferences&gt;IM folder. You must enable 
- instant notification to get an alert. Following are the alert options:</p></li>
-	<ul type="circle" class="whs2">
-		<li style="x-condition: Adv_not_ZD;" class=p><p class="whs6"><span 
- style="font-weight: bold;"><B>Play a sound</B></span>. You are notified by a 
- beep when an IM is received. If you have your volume set to mute, you 
- will not here a sound.</p></li>
-		<li style="x-condition: Adv_not_ZD;" class=p><p class="whs6"><span 
- style="font-weight: bold;"><B>Flash the IM tab</B></span>. The IM folder is highlighted 
- when new IM is received to the IM folder.</p></li>
-		<li style="x-condition: Adv_not_ZD;" class=p><p class="whs6"><span 
- style="font-weight: bold;"><B>Flash the browser title</B></span>. When an IM 
- is received, the browser flashes until you open the IM tab.</p></li>
-	</ul>
+<p style="margin-left: 84px;"><img src="../mailnotificationtab.png" style="border: none;" alt="mailnotificationtab.png" width="326" height="37" border="0" /></p>
+<ul type="circle">
+<li style="list-style:none;display: inline">
+<ul type="circle">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Flash the browser title</b></span>. When new email arrives in the Inbox, the browser flashes until you open the Mail folder.</p>
+</li>
+
+<li class="p">
+<p style="margin-left: 4px; font-weight: bold;">Show a popup notification. <span style="font-weight: normal;">&#160;When new mail arrives, a message pops up. You must have <a href="http://browserplus.yahoo.com/" target="_blank">Yahoo! 
+BrowserPlus</a> installed.</span></p>
+</li>
 </ul>
-<script type="text/javascript" language="javascript1.2">
+</li>
+<li type="disc" class="p">
+<p style="margin-left: 4px;"><span style="font-weight: bold;"><b>Appointment Reminder alerts</b></span>. &#160;You set your preferences in the Preferences&gt;Calendar folder. &#160;Before you can set an alert, set the time to be reminded of your meeting. This can be up to 60 minutes before the meeting. A reminder dialog appears at the designated time before the meeting. If you set reminders to <span style="font-weight: bold;"><b>Never</b></span>, you are not reminded of the meeting even if you have the reminder options enabled.</p>
+</li>
+</ul>
+<p style="margin-left: 44px;">The ZWC reminder does not pop up on the top of the page if you are not in ZWC Calendar, enabling one of the following options helps to alert you of the pop-up:</p>
+<ul type="circle">
+<li style="list-style:none;display: inline">
+<ul type="circle">
+<li class="p">
+<p style="margin-left: 4px;"><span style="font-weight: bold;"><b>Play a sound.</b></span> You are notified by a beep when an appointment reminder pops up. If you have your volume set to mute, you will not here a sound.</p>
+</li>
+<li class="p">
+<p style="margin-left: 4px;"><span style="font-weight: bold;"><b>Flash the browser title</b></span>. When an appointment reminder pops up, the browser flashes until you close the pop-up</p>
+</li>
+</ul>
+
+</li>
+<li type="disc" class="p">
+<p style="margin-left: 4px;"><span style="font-weight: bold;"><b>IM alerts</b></span>. You set your preferences in the Preferences&gt;IM folder. You must enable instant notification to get an alert. Following are the alert options:</p>
+</li>
+
+<li style="list-style: none; display: inline">
+<ul type="circle">
+<li class="p">
+<p style="margin-left: 4px;"><span style="font-weight: bold;"><b>Play a sound</b></span>. You are notified by a beep when an IM is received. If you have your volume set to mute, you will not here a sound.</p>
+</li>
+
+
+<li class="p">
+<p style="margin-left: 4px;"><span style="font-weight: bold;"><b>Flash the IM tab</b></span>. The IM folder is highlighted when new IM is received to the IM folder.</p>
+</li>
+
+
+<li class="p">
+<p style="margin-left: 4px;"><span style="font-weight: bold;"><b>Flash the browser title</b></span>. When an IM is received, the browser flashes until you open the IM tab.</p>
+</li>
+
+</ul>
+</li>
+</ul>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

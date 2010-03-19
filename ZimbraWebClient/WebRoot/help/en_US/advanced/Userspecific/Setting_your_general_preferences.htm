@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Setting your general preferences</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Navigating Your Mailbox\nSetting your general preferences");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,60 +81,61 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Setting your general preferences</h1>
 <p>The General tab includes the following settings that you can change.</p>
-<ul type="disc" class="whs1">
-	<li style="x-condition: Adv_not_ZD;" class=p><p>You are logged into 
- the Advanced web client, but you can define your default client type here.</p></li>
-	<ul type="disc" class="whs1">
-		<li style="x-condition: Adv_not_ZD;" class=p><p><span style="font-weight: bold;"><B>Advanced</B></span> 
- offers the full set of Web collaboration features. This Web Client works 
- best with newer browsers and faster Internet connections. </p></li>
-		<li style="x-condition: Adv_not_ZD;" class=p><p><span style="font-weight: bold;"><B>Standard</B></span> 
- is recommended when Internet connections are slow, when using older browsers, 
- or for easier accessibility. &nbsp;</p></li>
-	</ul>
-	<li class=p><p><span style="font-weight: bold;"><B>Theme</B></span> is the 
- background color for your mailbox interface. In the General tab, Themes 
- displays a list of different background color you can select.</p></li>
-	<li class=p><p>You can change the <span style="font-weight: bold;"><B>Language</B></span> 
- that displays in Zimbra Web Client to one you are more comfortable reading. 
- </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Default Timezone</B></span> 
- determines the date and time for messages that you send or receive and 
- the time to display for Calendar appointments. &nbsp;This 
- can be different from your computer time zone configuration. If the time 
- zone displayed on this tab is not correct, change it here. &nbsp;</p></li>
-	<li style="x-condition: Adv_not_ZD;" class=p><p>If <span style="font-weight: bold;"><B>Change 
- password</B></span> is displayed, you can change your password. If you have 
- trouble changing your password, contact you administrator for the password 
- rules. Contact your system administrator if you do not have this option 
- and want to change your password. </p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Search Setting</B></span>s, 
- you can choose to automatically include the Junk and Trash folders in 
- any search you perform. By default these folders are not searched.</p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Search Language</B></span>, 
- check <span style="font-weight: bold;"><B>Always Show Search String</B></span> 
- to show search string details in the search text box at the top of the 
- ZWC window. &nbsp;</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Settings </B></span><span>c</span>heck 
- <span style="font-weight: bold;"><B>Display check boxes to quickly select 
- items in lists (requires refresh)</B></span> to display a checkbox for each 
- item in the Content pane. When this is enabled, use the checkbox to select 
- one or more items to perform the same action on, such as delete, move, 
- mark as read/unread.</p></li>
-	</ul>
-<script type="text/javascript" language="javascript1.2">
+<ul type="disc">
+<li class="p">
+<p>You are logged into the Advanced web client, but you can define your default client type here.</p>
+</li>
+
+<li style="list-style: none; display: inline">
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Advanced</b></span> offers the full set of Web collaboration features. This Web Client works best with newer browsers and faster Internet connections.</p>
+</li>
+
+
+<li class="p">
+<p><span style="font-weight: bold;"><b>Standard</b></span> is recommended when Internet connections are slow, when using older browsers, or for easier accessibility. &#160;</p>
+</li>
+
+</ul>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Theme</b></span> is the background color for your mailbox interface. In the General tab, Themes displays a list of different background color you can select.</p>
+</li>
+<li class="p">
+<p>You can change the <span style="font-weight: bold;"><b>Language</b></span> that displays in Zimbra Web Client to one you are more comfortable reading.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Default 
+Timezone</b></span> determines the date and time for messages that you send or receive and the time to display for Calendar appointments. &#160;This can be different from your computer time zone configuration. If the time zone displayed on this tab is not correct, change it here. &#160;</p>
+</li>
+
+<li class="p">
+<p>If <span style="font-weight: bold;"><b>Change password</b></span> is displayed, you can change your password. If you have trouble changing your password, contact you administrator for the password rules. Contact your system administrator if you do not have this option and want to change your password.</p>
+</li>
+
+<li class="p">
+<p>In <span style="font-weight: bold;"><b>Search Setting</b></span>s, you can choose to automatically include the Junk and Trash folders in any search you perform. By default these folders are not searched.</p>
+</li>
+<li class="p">
+<p>In <span style="font-weight: bold;"><b>Search Language</b></span>, check <span style="font-weight: bold;"><b>Always Show Search String</b></span> to show search string details in the search text box at the top of the ZWC window. &#160;</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Settings</b></span> <span>c</span>heck <span style="font-weight: bold;"><b>Display check boxes to quickly select items in lists (requires refresh)</b></span> to display a checkbox for each item in the Content pane. When this is enabled, use the checkbox to select one or more items to perform the same action on, such as delete, move, mark as read/unread.</p>
+</li>
+
+</ul>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

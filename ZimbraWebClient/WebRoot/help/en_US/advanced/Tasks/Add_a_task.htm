@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Add a task</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Using Task Lists\nAdd a task");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,75 +81,78 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Add a task</h1>
-<p>Create a new task by simply typing the task name in your tasks list 
- or you can open the task page and add detailed information about the task, 
- including notes and attachments. </p>
-<ul><li style="x-condition: Adv_not_ZD;" class=p-note><p class=note>You 
- can use <a href="../Miscellaneous_one_off_topics/Zimbra_Assistant.htm" 
- style="x-condition: Adv_not_ZD;">Zimbra Assistant</a> to quickly add a 
- task while working within an email message, a meeting within calendar 
- or viewing a contact. &nbsp;When the task is created, 
- any of the information that was available is added to the Task text area. 
- </p></li>
+<p>Create a new task by simply typing the task name in your tasks list or you can open the task page and add detailed information about the task, including notes and attachments.</p>
+<ul>
+<li class="p-note">
+<p class="note">You can use 
+<a href="../Miscellaneous_one_off_topics/Zimbra_Assistant.htm">Zimbra Assistant</a>
+ to quickly add a task while working within an email message, a meeting within calendar or viewing a contact. &#160;When the task is created, any of the information that was available is added to the Task text area.</p>
+</li>
+
 </ul>
 <h6>To quickly add a task</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Select the task list from the Overview pane </p></li>
-	<li class=p><p>In the Content pane, click on the top line that reads 
- <span style="font-weight: bold;"><B>Click here to add a new Task</B></span><span>.</span> 
- &nbsp;&nbsp;&nbsp;</p></li>
-	<li class=p><p>A text field displays. Type the name of the task.</p></li>
-	<li class=p><p>Press <span style="font-weight: bold;"><B>Enter</B></span>. 
- The task is added to your task list.</p></li>
-	<li class=p-note><p class=note>If you created a task in the wrong list 
- open the task and select the correct list from the Task Lists drop-down 
- or you can drag and drop the task on the Content pane to the correct list.</p></li>
+<ol type="1">
+<li class="p">
+<p>Select the task list from the Overview pane</p>
+</li>
+<li class="p">
+<p>In the Content pane, click on the top line that reads <span style="font-weight: bold;"><b>Click here to add a new Task</b></span><span>.</span> &#160;&#160;&#160;</p>
+</li>
+<li class="p">
+<p>A text field displays. Type the name of the task.</p>
+</li>
+<li class="p">
+<p>Press <span style="font-weight: bold;"><b>Enter</b></span>. The task is added to your task list.</p>
+</li>
+<li class="p-note">
+<p class="note">If you created a task in the wrong list open the task and select the correct list from the Task Lists drop-down or you can drag and drop the task on the Content pane to the correct list.</p>
+</li>
 </ol>
 <h6>To add a task with details</h6>
-<p>You can use your task lists to create and track the progress of a task. 
- In addition, you can write notes within your task and attach files for 
- easy access from within the task.<span style="x-condition: Adv_not_ZD;"> 
- Having all the relevant information with your task is useful when you 
- share your task list with others.</span></p>
-<p>&nbsp;You can estimate the length of the project by 
- entering the start date and the due date and set the priority. When you 
- start the task you can select the status such as <span style="font-style: italic;"><I>Not 
- Started</I></span> or <span style="font-style: italic;"><I>In Progress</I></span>, 
- and select the percentage complete. </p>
-<ol type="1" class="whs1">
-	<li class=p><p>Select the task list from the Overview pane.</p></li>
-	<li class=p><p>In the Tasks toolbar, click <span style="font-weight: bold;"><B>New</B></span>. 
- &nbsp;An untitled task page opens.</p></li>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Subject</B></span> 
- field, type the task name.</p></li>
-	<li class=p><p>(Optional) In the <span style="font-weight: bold;"><B>Date</B></span> 
- section, select the <span style="font-weight: bold;"><B>Priority</B></span>, 
- <span style="font-weight: bold;"><B>Start Date</B></span>,<span style="font-weight: bold;"><B> 
- Due Date</B></span>, and status. </p></li>
-	<li class=p-note><p class=note>If you clicked New before you opened 
- the task list you wanted, you can select the correct task list from the 
- <span style="font-weight: bold;"><B>Task List</B></span> drop-down list. &nbsp;</p></li>
+<p>You can use your task lists to create and track the progress of a task. In addition, you can write notes within your task and attach files for easy access from within the task.
+ Having all the relevant information with your task is useful when you share your task list with others.
+</p>
+<p>&#160;You can estimate the length of the project by entering the start date and the due date and set the priority. When you start the task you can select the status such as <span style="font-style: italic;"><i>Not Started</i></span> or <span style="font-style: italic;"><i>In Progress</i></span>, and select the percentage complete.</p>
+<ol type="1">
+<li class="p">
+<p>Select the task list from the Overview pane.</p>
+</li>
+<li class="p">
+<p>In the Tasks toolbar, click <span style="font-weight: bold;"><b>New</b></span>. &#160;An untitled task page opens.</p>
+</li>
+<li class="p">
+<p>In the <span style="font-weight: bold;"><b>Subject</b></span> field, type the task name.</p>
+</li>
+<li class="p">
+<p>(Optional) In the <span style="font-weight: bold;"><b>Date</b></span> section, select the <span style="font-weight: bold;"><b>Priority</b></span>, <span style="font-weight: bold;"><b>Start Date</b></span>, <span style="font-weight: bold;"><b>Due Date</b></span>, and status.</p>
+</li>
+<li class="p-note">
+<p class="note">If you clicked New before you opened the task list you wanted, you can select the correct task list from the <span style="font-weight: bold;"><b>Task List</b></span> drop-down list. &#160;</p>
+</li>
 </ol>
-<ol start="5" type="1" class="whs1">
-	<li class=p><p>Add any notes in the text field and to add attachments, 
- click <span style="font-weight: bold;"><B>Add Attachments</B></span> on the tool 
- bar.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span> to 
- save the task. The new task is added to your task list.</p></li>
+<ol start="5" type="1">
+<li class="p">
+<p>Add any notes in the text field and to add attachments, click <span style="font-weight: bold;"><b>Add Attachments</b></span> on the tool bar.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Save</b></span> to save the task. The new task is added to your task list.</p>
+</li>
 </ol>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

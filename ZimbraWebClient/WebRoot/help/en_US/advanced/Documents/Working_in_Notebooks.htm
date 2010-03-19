@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Working in Zimbra Documents</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Working in Documents \nWorking in Documents");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,51 +81,47 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Working in Documents</h1>
 <p>The Documents application is a document sharing and collaboration application 
- that gives you a central place in your email account to  develop, organize, and share information. Images, 
- spreadsheets, and other rich web content objects can be embedded into 
- Document pages. External documents can also be uploaded. The pages display 
- in your mailbox Content pane.</p>
+ that gives you a central place in your email account to  develop, organize, and share information. 
+ Images, spreadsheets, and other rich web content objects can be embedded 
+ into Document pages. External documents can also be uploaded. The pages 
+ display in your mailbox Content pane.</p>
 <p>The Documents application is made up of notebooks with individual pages 
  that are organized in a table of contents. One notebook, called Notebook, 
  is created for you. You can create other notebooks and you can create 
- notebooks within a notebook to organize your information. &nbsp;You 
- create pages within a notebook and develop the content using a rich-text 
- editor or using HTML formatting.</p>
+ notebooks within a notebook to organize your information. &#160;You create 
+ pages within a notebook and develop the content using a rich-text editor 
+ or using HTML formatting.</p>
 <p>Documents notebooks can be shared with others in your organization and 
- outside of your organization. You can give permissions to others &nbsp;to 
- create and edit pages in a notebook or just view the pages. </p>
-<h2>What you can do in Documents </h2>
-<ul type="disc" class="whs1">
-	<li class=p><p>Create notebooks</p></li>
-	<li class=p><p>Create notebooks within notebooks</p></li>
-	<li class=p><p>Create and design pages using a rich-text editor or 
- using HTML</p></li>
-	<li class=p><p>Import files that become new pages in the specified 
- notebook</p></li>
-	<li class=p><p>Upload and link files and images to different pages</p></li>
-	<li class=p><p><a href="Sharing_Notebooks.htm">Share notebooks</a>, 
- giving either view only or view, add, edit, and delete permissions</p></li>
-	<li class=p><p>Notify users whom you share with when you make changes 
- to a page</p></li>
-	<li class=p><p>Search through all notebooks, pages, and attachments</p></li>
-	<li class=p><p>Send a notebook link via email quickly from the table 
- of contents</p></li>
+ outside of your organization. You can give permissions to others &#160;to 
+ create and edit pages in a notebook or just view the pages.</p>
+<h2>What you can do in Documents</h2>
+<ul type="disc">
+	<li class="p"><p>Create notebooks</p></li>
+	<li class="p"><p>Create notebooks within notebooks</p></li>
+	<li class="p"><p>Create and design pages using a rich-text editor or 
+	 using HTML</p></li>
+	<li class="p"><p>Upload and link files and images to different pages</p></li>
+	<li class="p"><p><a href="Sharing_Notebooks.htm">Share notebooks</a>, 
+	 giving either view only or view, add, edit, and delete permissions</p></li>
+	<li class="p"><p>Notify users whom you share with when you make changes 
+	 to a page</p></li>
+	<li class="p"><p>Search through all notebooks, pages, and attachments</p></li>
+	<li class="p"><p>Send a notebook link via email quickly from the table 
+	 of contents</p></li>
 </ul>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

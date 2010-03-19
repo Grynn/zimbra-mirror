@@ -1,26 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>AND vs OR Searches</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { margin-left:40px; }
-p.whs3 { font-family:'Lucida Console' , monospace; color:#800080; margin-left:40px; }
-img_whs4 { border:none; width:144px; height:168px; float:none; border-style:none; }
-img_whs5 { border:none; width:483px; height:38px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -31,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Searching for Items\nAnd vs. Or type searches");
@@ -60,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -79,54 +81,43 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>And versus Or type searches</h1>
-<p>For searches using multiple criteria, you can either find items that 
- match one of the specified criteria or all of them. You can perform both 
- types of searches using the Advanced search. </p>
+<p>For searches using multiple criteria, you can either find items that match one of the specified criteria or all of them. You can perform both types of searches using the Advanced search.</p>
 <p>For all search panes other than the Basic search, the rules are:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Searching for messages that match any of the specified 
- criteria is called an <span style="font-style: italic;"><I>OR</I></span> search, 
- because if the message contains either X or Y, then 
- it is considered a match. For Advanced search panes with multiple check 
- boxes, making multiple selections within a single pane creates an <span 
- style="font-style: italic;"><I>OR </I></span>search for those items.</p></li>
-	<li class=p><p>Searching for messages that contain both X and Y 
- is called an <span style="font-style: italic;"><I>AND</I></span> search, because 
- the message must meet all the specified criteria in order to be considered 
- a match. For Advanced server &nbsp;panes with check boxes, 
- opening multiple instances of the same pane and making different check 
- box selections in each one causes the criteria to be specified as an <span 
- style="font-style: italic;"><I>AND</I></span> search.</p></li>
+<ul type="disc">
+<li class="p">
+<p>Searching for messages that match any of the specified criteria is called an <span style="font-style: italic;"><i>OR</i></span> search, because if the message contains either X or 
+Y, then it is considered a match. For Advanced search panes with multiple check boxes, making multiple selections within a single pane creates an <span style="font-style: italic;"><i>OR</i></span> search for those items.</p>
+</li>
+<li class="p">
+<p>Searching for messages that contain both X and 
+Y is called an <span style="font-style: italic;"><i>AND</i></span> search, because the message must meet all the specified criteria in order to be considered a match. For Advanced server &#160;panes with check boxes, opening multiple instances of the same pane and making different check box selections in each one causes the criteria to be specified as an <span style="font-style: italic;"><i>AND</i></span> search.</p>
+</li>
 </ul>
-<p>For example, suppose you are searching for messages that contain either 
- Adobe PDF files or JPEG images. 
- You would select both these check boxes within the same Attachments pane. 
- </p>
-<ul><li class=p-note><p class=note>Only &quot;OR&quot; appears in a query. 
- If you selected as an option to show the search query in the Search bar 
- as you make selections in the Advanced search, the Search text box updates 
- to show the resulting query. With the <span style="font-style: italic;"><I>AND</I></span> 
- type of search, the word <span style="font-style: italic;"><I>AND</I></span> 
- does not appear. The following example shows a search specifying that 
- the From: line must contain &quot;martin&quot;, and in addition to this, 
- the name &quot;boxman&quot; must appear in either the 
- To: or the Cc: line.</p></li>
+<p>For example, suppose you are searching for messages that contain either Adobe 
+PDF files or 
+JPEG images. You would select both these check boxes within the same Attachments pane.</p>
+<ul>
+<li class="p-note">
+<p class="note">Only "OR" appears in a query. If you selected as an option to show the search query in the Search bar as you make selections in the Advanced search, the Search text box updates to show the resulting query. With the <span style="font-style: italic;"><i>AND</i></span> type of search, the word <span style="font-style: italic;"><i>AND</i></span> does not appear. The following example shows a search specifying that the From: line must contain "martin", and in addition to this, the name "
+boxman" must appear in either the To: or the Cc: line.</p>
+</li>
 </ul>
-<p class="whs2">&nbsp;</p>
-<p class="whs3"><img src="../basic_search.gif" x-maintain-ratio="TRUE" width="144px" height="168px" border="0" class="img_whs4"> 
- &nbsp;<img src="../searchbar.gif" x-maintain-ratio="TRUE" width="483px" height="38px" border="0" class="img_whs5"></p>
-<script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 40px;">&#160;</p>
+<p style="font-family: 'Lucida Console', monospace; color: #800080; margin-left: 40px;"><img src="../basic_search.gif" style="border: none;" alt="basic_search.gif" width="144" height="168" border="0" /> &#160;<img src="../searchbar.gif" style="border: none;" alt="searchbar.gif" width="483" height="38" border="0" /></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

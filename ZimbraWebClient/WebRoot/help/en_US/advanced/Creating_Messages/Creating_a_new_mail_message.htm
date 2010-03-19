@@ -1,40 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Creating a new mail message</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; width:43px; height:15px; float:none; border-style:none; }
-ul.whs2 { list-style:disc; }
-ol.whs3 { list-style:decimal; }
-ul.whs4 { list-style:decimal; }
-p.whs5 { margin-left:0px; }
-p.whs6 { margin-left:40px; x-condition:Adv_not_ZD; }
-p.whs7 { margin-left:40px; }
-img_whs8 { border:none; width:81px; height:17px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs5 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -45,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Composing Email\nComposing a new mail message");
@@ -74,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -93,102 +81,102 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Composing and sending email messages</h1>
 <p>You can compose and send your email messages as soon as you write them, 
- or you can compose a draft and return to it later to finish and send. 
- </p>
-<p>The first step to composing a new message is to click <img src="../newwitharrow.gif" x-maintain-ratio="TRUE" width="43px" height="15px" border="0" class="img_whs1"> 
+ or you can compose a draft and return to it later to finish and send.</p>
+<p>The first step to composing a new message is to click <img src="../newwitharrow.gif" alt="newwitharrow.gif" style="border: none;" width="43" height="15" border="0" /> 
  on the toolbar to open a blank compose page. You can also right-click 
- the name in the <span style="font-weight: bold;"><B>FROM </B></span>section of 
- an email and select <span style="font-weight: bold;"><B>New Email</B></span>, 
- to open a blank compose page. </p>
+ the name in the <span style="font-weight: bold;"><b>FROM</b></span> section of 
+ an email and select <span style="font-weight: bold;"><b>New Email</b></span>, 
+ to open a blank compose page.</p>
 <p>Depending on your <a href="../Userspecific/Setting_your_user_preferences.htm">Mail 
  preferences</a>, either a Compose tab appears in the Application toolbar 
  and the compose page opens or a separate compose window opens. You can 
  have multiple Compose tabs open and you can move between the different 
- tabs on the toolbar. </p>
+ tabs on the toolbar.</p>
 <p>On the Compose page, type the email address of the person or persons 
- to whom you are sending the message in the <span style="font-weight: bold;"><B>To:</B></span> 
- field. </p>
-<ul type="disc" class="whs2">
-	<li class=p><p>You can click <span style="font-weight: bold;"><B>To</B></span> 
- to look up a person's email address in order to search 
- through your contacts . </p></li>
-	<li class=p><p>To add BCC addresses, click <span style="font-weight: bold;"><B>Show 
- BCC </B></span>next to the <span style="font-weight: bold;"><B>Cc: </B></span>text 
- field in the message header. </p></li>
+ to whom you are sending the message in the <span style="font-weight: bold;"><b>To:</b></span> 
+ field.</p>
+<ul type="disc">
+	<li class="p"><p>You can click <span style="font-weight: bold;"><b>To</b></span> 
+	 to look up a person's email address in order 
+	 to search through your contacts  .</p></li>
+	<li class="p"><p>To add BCC addresses, click 
+	 <span style="font-weight: bold;"><b>Show BCC</b></span> 
+	 next to the <span style="font-weight: bold;"><b>Cc:</b></span> text field 
+	 in the message header.</p></li>
 </ul>
 <p>You can either compose your message in HTML or in plain text. The default 
- format is configured in your Preferences, General &nbsp;tab. 
- To quickly change the format for this message only, click <span style="font-weight: bold;"><B>Options 
- </B></span>on the compose toolbar and select either HTML or Plain Text. </p>
-<ul type="disc" class="whs2">
-	<li class=p><p><span style="font-weight: bold;"><B>Format As HTML</B></span><span> 
- </span>lets you format your message with different font styles, create 
- tables, add color, and insert hyper links.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Format As Plain Text</B></span> 
- produces text with no style or formatting. Any computer can read this 
- type of message. </p></li>
+ format is configured in your Preferences, General &#160;tab. To quickly 
+ change the format for this message only, click <span style="font-weight: bold;"><b>Options</b></span> 
+ on the compose toolbar and select either HTML or Plain Text.</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Format As HTML</b></span> 
+	 lets you format your message with different font styles, create tables, 
+	 add color, and insert hyper links.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Format As Plain Text</b></span> 
+	 produces text with no style or formatting. Any computer can read this 
+	 type of message.</p></li>
 </ul>
 <p>If you want a notification that the recipient of the message opened 
- the message, click <span style="font-weight: bold;"><B>Options</B></span> on 
- the compose toolbar and select<span style="font-weight: bold;"> <B><a href="Requesting_a_Return_Receipt.htm">Request 
- Read Receipt</a></B></span>.</p>
+ the message, click <span style="font-weight: bold;"><b>Options</b></span> on 
+ the compose toolbar and select <span style="font-weight: bold;"><b><a href="Requesting_a_Return_Receipt.htm">Request 
+ Read Receipt</a></b></span>.</p>
 <p>You can <a href="Attachment_File_Types_Supported.htm">attach files</a>, 
  including pictures, documents, spreadsheets, audio files to your message.</p>
 <h6>To compose a new mail message:</h6>
-<ol type="1" class="whs3">
-	<li class=p><p>Click <img src="../newwitharrow.gif" x-maintain-ratio="TRUE" width="43px" height="15px" border="0" class="img_whs1"> from the toolbar. The compose page is displayed.</p></li>
-	<li class=p><p>If you are not using the default identity, in the <span 
- style="font-weight: bold;"><B>Account </B></span>drop-down list, select the identity 
- (also known as persona) to use.</p></li>
-	<li class=p><p>Complete the address, subject line, and body text as 
- needed. </p></li>
-	<ul type="1" class="whs4">
-		<li class=p-note><p class=note>If you supply a first and last name 
- that is not in the form of a valid Internet address (name@domain.com), 
- a confirmation dialog appears advising you that the address does not appear 
- to be valid. You can choose to send the mail anyway, even though it may 
- not be deliverable.</p></li>
-	</ul>
+<ol type="1">
+	<li class="p"><p>Click <img src="../newwitharrow.gif" alt="newwitharrow.gif" style="border: none;" width="43" height="15" border="0" /> from 
+	 the toolbar. The compose page is displayed.</p></li>
+	<li class="p"><p>If you are not using the default identity, in the 
+	 <span style="font-weight: bold;"><b>Account</b></span> drop-down list, select 
+	 the identity (also known as persona) to use. </p></li>
+	<li class="p"><p>Complete the address, subject line, and body text 
+	 as needed.</p>
+	<ul type="1">
+		<li class="p-note"><p class="note">If you supply a first and last 
+		 name that is not in the form of a valid Internet address ( name@domain.com), 
+		 a confirmation dialog appears advising you that the address does 
+		 not appear to be valid. You can choose to send the mail anyway, 
+		 even though it may not be deliverable.</p></li>
+	</ul></li>
 </ol>
-<ol start="4" type="1" class="whs3">
-	<li class=p><p class="whs5">If you want a return read 
- receipt, click <span style="font-weight: bold;"><B>Options</B></span> and select 
- <span style="font-weight: bold;"><B>Request Read Receipt</B></span>.</p></li>
-	<li class=p><p class="whs5">Enter the body of the message 
- in the text box below <span style="font-weight: bold;"><B>Subject</B></span>. 
- </p></li>
+<ol start="4" type="1">
+	<li class="p"><p style="margin-left: 0px;">If you want a return read 
+	 receipt, click <span style="font-weight: bold;"><b>Options</b></span> and 
+	 select <span style="font-weight: bold;"><b>Request Read Receipt</b></span>.</p></li>
+	<li class="p"><p style="margin-left: 0px;">Enter the body of the message 
+	 in the text box below <span style="font-weight: bold;"><b>Subject</b></span>.</p></li>
 </ol>
-<p class="whs6">To check the spelling 
- in the message, click<span style="font-weight: bold;"><B> Spell Check.</B></span></p>
-<p class="whs7">To add an attachment, click <img src="../attachment.gif" x-maintain-ratio="TRUE" width="81px" height="17px" border="0" class="img_whs8">. 
- </p>
-<ol start="6" type="1" class="whs3">
-	<li class=p><p class="whs5">Add your signature. 
- If you have different accounts set up, in the <span style="font-weight: bold;"><B>Accounts</B></span> 
- drop down, select the email address to use for this email. If you have 
- &nbsp;signatures style defined for the account, click 
- <span style="font-weight: bold;"><B>Signature</B></span> on the Compose toolbar 
- to add that signature.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Send</B></span> to 
- send the message. </p></li>
+<p style="margin-left: 40px;">To 
+ check the spelling in the message, click <span style="font-weight: bold;"><b>Spell 
+ Check.</b></span></p>
+<p style="margin-left: 40px;">To add an attachment, click <img src="../attachment.gif" alt="attachment.gif" style="border: none;" width="81" height="17" border="0" />.</p>
+<ol start="6" type="1">
+	<li class="p"><p style="margin-left: 0px;">Add your signature. 
+	 If you have different accounts set up, in the <span style="font-weight: bold;"><b>Accounts</b></span> 
+	 drop down, select the email address to use for this email. If you 
+	 have &#160;signatures style defined for the account, click <span style="font-weight: bold;"><b>Signature</b></span> 
+	 on the Compose toolbar to add that signature.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Send</b></span> 
+	 to send the message.</p></li>
 </ol>
-<p class="whs7">If you don't want to send the message immediately, 
- click <span style="font-weight: bold;"><B>Save Draft</B></span>. The message 
- is saved in the <span style="font-weight: bold;"><B>Drafts</B></span> folder. 
- </p>
-<script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 40px;">If you don't want to send the message immediately, 
+ click <span style="font-weight: bold;"><b>Save Draft</b></span>. The message 
+ is saved in the <span style="font-weight: bold;"><b>Drafts</b></span> folder.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

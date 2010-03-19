@@ -1,41 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Working in Briefcase</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-img_whs2 { border:none; width:139px; height:45px; float:none; border-style:none; }
-p.whs3 { margin-left:40px; }
-img_whs4 { border:none; width:272px; height:43px; float:none; border-style:none; }
-ul.whs5 { list-style:disc; }
-p.whs6 { margin-left:0px; }
-h3.whs7 { x-condition:Adv_not_ZD; }
-p.whs8 { x-condition:Adv_not_ZD; }
-img_whs9 { border:none; width:329px; height:28px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs6 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -46,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Using Briefcase\nWorking in Briefcase");
@@ -75,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -94,39 +81,41 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Working in Briefcase</h1>
 <p>Briefcase lets you save files in your account so that you can access 
- these files whenever you log in to your account from any computer. &nbsp;It 
- is a tool for managing files from any location and </p>
-<p>You can upload documents, spreadsheets, presentations, images, pdf 
- files from your computer or your computer network and you can save attachments 
- sent with your email messages to a Briefcase folder. &nbsp;You 
- can create different briefcase folders to organize the files<span style="x-condition: Adv_not_ZD;"> 
- and you can share the briefcase folder with others</span>.</p>
-<p>Files in Briefcase are copies of the original file. &nbsp;Changes 
- you make to files in your briefcase do not change the original file.</p>
+ these files whenever you log in to your account from any computer. </p>
+<p>You can upload documents, spreadsheets, presentations, images, pdf files from your computer or your computer network 
+ and you can save attachments sent with your email messages to a Briefcase 
+ folder. &#160;You can create different briefcase folders to organize the 
+ files and you can share the briefcase 
+ folder with others .</p>
+<p>Files in Briefcase are copies of the original file. &#160;Changes you 
+ make to files in your briefcase do not change the original file.</p>
 <h3>Creating briefcase folders</h3>
-<ol type="1" class="whs1">
-	<li class=p><p>Click the Briefcase tab. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>New Briefcase</B></span> 
- on the toolbar.<br>
-	<img src="../briefcase_new.png" x-maintain-ratio="TRUE" width="139px" height="45px" border="0" class="img_whs2"></p></li>
-	<li class=p><p>The <span style="font-weight: bold;"><B>Create New Briefcase 
- </B></span>dialog displays. Type a name for the new briefcase folder</p></li>
+<ol type="1">
+	<li class="p"><p>Click the Briefcase tab.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>New Briefcase</b></span> 
+	 on the toolbar.<br />
+	<img src="../briefcase_new.png" alt="briefcase_new.png" style="border: none;" width="139" height="45" border="0" /></p></li>
+	<li class="p"><p>The <span style="font-weight: bold;"><b>Create New Briefcase</b></span> 
+	 dialog displays. Type a name for the new briefcase folder</p></li>
 </ol>
-<p class="whs3">This name must be unique within the hierarchy 
+<p style="margin-left: 40px;">This name must be unique within the hierarchy 
  of your mailbox folders. Briefcase folders cannot have the same name as 
- any top-level folder in your Zimbra mail, calendar, or address 
- book. For example, if you have a calendar named Holidays, you cannot name 
- a top-level briefcase Holidays. Holidays could be a name of a briefcase 
- within another briefcase.</p>
-<ol start="4" type="1" class="whs1">
-	<li class=p><p>Select &nbsp;the folder hierarchy. 
- You can create a new top-level briefcase, or you can place it under an 
- existing briefcase. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. The 
- new briefcase displays in the Overview pane.</p></li>
+ any top-level folder in your Zimbra 
+ mail, calendar, or address book. For example, if you have a calendar named 
+ Holidays, you cannot name a top-level briefcase Holidays. Holidays could 
+ be a name of a briefcase within another briefcase.</p>
+<ol start="4" type="1">
+	<li class="p"><p>Select &#160;the folder hierarchy. You can create 
+	 a new top-level briefcase, or you can place it under an existing briefcase.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>OK</b></span>. 
+	 The new briefcase displays in the Overview pane.</p></li>
 </ol>
 <h3>Uploading Files</h3>
 <p>Uploading a file transfers a file from your personal computer to your 
@@ -134,96 +123,111 @@ else
  account. Your account quota determines how many files can be uploaded 
  to your Briefcase.</p>
 <p>To upload files</p>
-<ol type="1" class="whs1">
-	<li class=p><p>Open Briefcase and click Upload file on the toolbar.<br>
-	<img src="../briefcase_uploadbutton.png" x-maintain-ratio="TRUE" width="272px" height="43px" border="0" class="img_whs4"></p></li>
-	<li class=p><p>In the Upload dialog click browse to find the file to 
- upload. To add another file click <span style="font-weight: bold;"><B>Add</B></span>. 
- </p></li>
+<ol type="1">
+	<li class="p"><p>Open Briefcase and click Upload file on the toolbar.<br />
+	<img src="../briefcase_uploadbutton.png" alt="briefcase_uploadbutton.png" style="border: none;" width="272" height="43" border="0" /></p></li>
+	<li class="p"><p>In the Upload dialog click browse to find the file 
+	 to upload. To add another file click <span style="font-weight: bold;"><b>Add</b></span>.</p></li>
 </ol>
-<p class="whs3">You cannot upload a file with the same name 
+<p style="margin-left: 40px;">You cannot upload a file with the same name 
  to the same briefcase. You can specify on the Upload dialog how to files 
  with the same name should be treated when you attempt to upload the file. 
  When you change this option, the change is saved in the dialog.</p>
-<ul type="disc" class="whs5">
-	<ul type="disc" class="whs5">
-		<li class=p><p>If you want to be notified that you are uploading 
- a file with the same name, select <span style="font-weight: bold;"><B>Ask 
- Me</B></span>. If a file has the same name as an existing upload, the <span 
- style="font-weight: bold;"><B>Upload Conflict</B></span> dialog displays. &nbsp;You 
- can either keep your existing file or replace it with the uploaded file. 
- You can also view the new file. This is the default.</p></li>
-		<li class=p><p>If you always want the file you upload to replace 
- the existing file with the same name, select <span style="font-weight: bold;"><B>Replace 
- With My File</B></span>. The new file is uploaded and replaces the existing 
- file. You are not notified of this.</p></li>
-		<li class=p><p>If you do not want the files in your Briefcase to 
- be replaced, select <span style="font-weight: bold;"><B>Keep Existing File</B></span>. 
- The file is not uploaded and you are not notified.</p></li>
-	</ul>
-</ul>
-<ol start="3" type="1" class="whs1">
-	<li class=p><p class="whs6">When all files are uploaded, 
- click <span style="font-weight: bold;"><B>OK</B></span>. The file is displayed 
- in the Briefcase. &nbsp;</p></li>
-	<li style="x-condition: Adv_not_ZD;" class=p-note><p class=note>Your 
- account may have a maximum size for upload files. If the file is too large, 
- a warning is displayed. <br>
-	Files that you upload impact your account quota. &nbsp;</p></li>
+<ol type="disc">
+	<li style="list-style: none; display: inline;"><ul type="disc">
+		<li class="p"><p>If you want to be notified that you are uploading 
+		 a file with the same name, select <span style="font-weight: bold;"><b>Ask 
+		 Me</b></span>. If a file has the same name as an existing upload, 
+		 the <span style="font-weight: bold;"><b>Upload Conflict</b></span> dialog 
+		 displays. &#160;You can either keep your existing file or replace 
+		 it with the uploaded file. You can also view the new file. This 
+		 is the default.</p></li>
+		<li class="p"><p>If you always want the file you upload to replace 
+		 the existing file with the same name, select <span style="font-weight: bold;"><b>Replace 
+		 With My File</b></span>. The new file is uploaded and replaces the 
+		 existing file. You are not notified of this.</p></li>
+		<li class="p"><p>If you do not want the files in your Briefcase 
+		 to be replaced, select <span style="font-weight: bold;"><b>Keep Existing 
+		 File</b></span>. The file is not uploaded and you are not notified.</p></li>
+	</ul></li>
 </ol>
-<h3 class="whs7">Adding email attachments to Briefcase</h3>
-<p class="whs8">Email attachments can quickly be added 
- to your briefcase. </p>
-<ol type="1" class="whs1">
-	<li style="x-condition: Adv_not_ZD;" class=p><p>To add the attachment, 
- click on the <span style="font-weight: bold;"><B>add to briefcase</B></span> 
- link that is in the message header next to the attachment link.<br>
-	<br>
-	<img src="../briefcase_add_attachment.png" x-maintain-ratio="TRUE" width="329px" height="28px" border="0" class="img_whs9"></p></li>
-	<li style="x-condition: Adv_not_ZD;" class=p><p>In the <span style="font-weight: bold;"><B>Add 
- to Briefcase</B></span> dialog, select the destination folder or create a 
- new briefcase folder. </p></li>
-	<li style="x-condition: Adv_not_ZD;" class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. 
- </p></li>
+<ol start="3" type="1">
+	<li class="p"><p style="margin-left: 0px;">When all files are uploaded, 
+	 click <span style="font-weight: bold;"><b>OK</b></span>. The file is displayed 
+	 in the Briefcase. &#160;</p></li>
+	<li class="p"><p style="margin-left: 0px;">Select <span style="font-weight: bold;"><b>View</b></span> 
+	 to set how you want the files displayed in your briefcase.</p>
+	<ul>
+		<li class="p" type="disc"><p style="margin-left: 0px; font-weight: bold;">Explorer 
+		 View<span style="font-weight: normal;">. Files are displayed by 
+		 type (PDF, Word, PowerPoint, etc.)</span></p></li>
+		<li class="p" type="disc"><p style="margin-left: 0px;"><span style="font-weight: bold;"><b>Detail 
+		 View</b></span><span>. Files are displayed as a list, showing name, 
+		 type of file, size of file, date, and owner.</span> &#160;In Detail 
+		 View, click the header title to sort the files by Name, Size, 
+		 or Date.</p></li>
+		<li class="p" type="disc"><p style="margin-left: 0px;"><span style="font-weight: bold;"><b>Column 
+		 Browser View</b></span><span>. File names are displayed in a columns.</span></p></li>
+	</ul></li>
+	<li class="p-note"><p class="note">Your 
+	 account may have a maximum size for upload files. If the file is too 
+	 large, a warning is displayed.<br />
+	Files that you upload impact your account quota 
+	 . &#160;</p></li>
+</ol>
+<h3>Adding email attachments to 
+ Briefcase</h3>
+<p>Email attachments can quickly 
+ be added to your briefcase.</p>
+<ol type="1">
+	<li class="p"><p>To add the 
+	 attachment, click on the <span style="font-weight: bold;"><b>add to briefcase</b></span> 
+	 link that is in the message header next to the attachment link.<br />
+	<br />
+	<img src="../briefcase_add_attachment.png" alt="briefcase_add_attachment.png" style="border: none;" width="329" height="28" border="0" /></p></li>
+	<li class="p"><p>In the <span 
+	 style="font-weight: bold;"><b>Add to Briefcase</b></span> dialog, select 
+	 the destination folder or create a new briefcase folder.</p></li>
+	<li class="p"><p>Click <span 
+	 style="font-weight: bold;"><b>OK</b></span>.</p></li>
 </ol>
 <h3>Viewing files in Briefcase</h3>
 <p>You can select how to view your files in your Briefcase folders. On 
- the Briefcase toolbar select one of these options from the <span style="font-weight: bold;"><B>View</B></span> 
+ the Briefcase toolbar select one of these options from the <span style="font-weight: bold;"><b>View</b></span> 
  menu.</p>
-<ul type="disc" class="whs5">
-	<li class=p><p><span style="font-weight: bold;"><B>Explorer View</B></span>. 
- Files are displayed as thumbnails.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Detail View</B></span>. 
- Files are displayed in a horizontal line with the file size, date uploaded, 
- owner,<span style="x-condition: Adv_not_ZD;"> if a shared file this may 
- not be you, &nbsp;</span>and which folder the file is 
- in.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Column Browser View</B></span>. 
- Files are displayed vertically. In this view you can click on a file to 
- see information about the file, including size, create date, creator, 
- modified date and modifier.</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Explorer View</b></span>. 
+	 Files are displayed as thumbnails.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Detail View</b></span>. 
+	 Files are displayed in a horizontal line with the file size, date 
+	 uploaded, owner, if a shared 
+	 file this may not be you, &#160;&#160;and which folder 
+	 the file is in.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Column Browser View</b></span>. 
+	 Files are displayed vertically. In this view you can click on a file 
+	 to see information about the file, including size, create date, creator, 
+	 modified date and modifier.</p></li>
 </ul>
-<p>&nbsp;</p>
+<p>&#160;</p>
 <h3>Sharing your Briefcase</h3>
-<p>Briefcase folders can be shared with others in your organization <span 
- style="x-condition: Adv_not_ZD;">and outside of your organization</span>. 
- You can give permissions to others &nbsp;to create and 
- edit the content of a briefcase or just view the pages.</p>
-<p class="whs8">To share your briefcase see <a href="Sharing_your_Briefcase.htm" 
- style="x-condition: Adv_not_ZD;">Sharing your Briefcase</a></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>Briefcase folders can be shared with others in your organization and 
+ outside of your organization . You can give permissions 
+ to others &#160;to create and edit the content of a briefcase or just 
+ view the pages. </p>
+<p>To share your briefcase see 
+ <a href="Sharing_your_Briefcase.htm">Sharing 
+ your Briefcase</a> </p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

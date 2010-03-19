@@ -1,36 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Sharing your mailbox</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:inside decimal; }
-ol.whs3 { list-style:disc; }
-p.whs4 { margin-left:0px; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs4 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -41,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Sharing Folders\nSharing Mail Folders\nSharing your mailbox");
@@ -70,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -89,102 +81,104 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Sharing your mail folder</h1>
 <p>You can share any of your mail folders with the following:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Internal users or groups</B></span>. 
- You select the type of access privileges to grant to internal users.</p></li>
-	<ul type="disc" class="whs1">
-		<li class=p><p><span style="font-weight: bold;"><B>Viewer</B></span>. 
- The Grantee can read the contents of the mail folder, but cannot make 
- changes to the content.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Manager</B></span>. 
- The Grantee has permission to view, edit the contents of a mail folder, 
- create new sub folders, send email on your behalf, and delete email messages.</p></li>
-		<li class=p><p>&nbsp;<span style="font-weight: bold;"><B>Admin</B></span>. 
- The Grantee has full permission to view, edit the content of the mail 
- folder, create new sub folders, send email on your behalf, delete email 
- messages, and share your mail folder with others. </p></li>
-		<li class=p-note><p class=note><span style="font-weight: bold;"><B>None</B></span> 
- is an option to temporarily disable access to a mail folder without revoking 
- the share privileges. The Grantee still has the mail folder in his mailbox 
- but cannot view or manage activities on the grantor's mail folder. </p></li>
-	</ul>
-	<li class=p><p><span style="font-weight: bold;"><B>External guests</B></span>. 
- You create a password for the mail folder that guests must enter to view 
- the email messages. They cannot make any changes to the information they 
- view.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Public</B></span>. Anyone 
- that knows the URL to the mail folder can view the email messages. &nbsp;They 
- cannot make any changes to the information.</p></li>
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Internal users or groups</b></span>. You select the type of access privileges to grant to internal users.</p>
+</li>
+<li style="list-style: none; display: inline">
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Viewer</b></span>. The Grantee can read the contents of the mail folder, but cannot make changes to the content.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Manager</b></span>. The Grantee has permission to view, edit the contents of a mail folder, create new sub folders, send email on your behalf, and delete email messages.</p>
+</li>
+<li class="p">
+<p>&#160;<span style="font-weight: bold;"><b>Admin</b></span>. The Grantee has full permission to view, edit the content of the mail folder, create new sub folders, send email on your behalf, delete email messages, and share your mail folder with others.</p>
+</li>
+<li class="p-note">
+<p class="note"><span style="font-weight: bold;"><b>None</b></span> is an option to temporarily disable access to a mail folder without revoking the share privileges. The Grantee still has the mail folder in his mailbox but cannot view or manage activities on the grantor's mail folder.</p>
+</li>
+</ul>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>External guests</b></span>. You create a password for the mail folder that guests must enter to view the email messages. They cannot make any changes to the information they view.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Public</b></span>. Anyone that knows the URL to the mail folder can view the email messages. &#160;They cannot make any changes to the information.</p>
+</li>
 </ul>
 <h6>To share your folders</h6>
-<p>You can select any mail folder level to share. If you select to share 
- the top-level mail folder, all mail folders within that mail folder are 
- also shared.</p>
-<ol start="1" type="1" class="whs2">
-	<li class=P><p>Right-click on the mail folder you want to share. <span 
- style="font-weight: bold;"><B>Note</B></span>: You cannot share the Trash or 
- Junk folders.</p></li>
-	<li class=P><p>Click <span style="font-weight: bold;"><B>Share Folder</B></span>. 
- The <span style="font-weight: bold;"><B>Shared Properties</B></span> dialog displays. 
- Select whom to share with, Internal user or groups, External guests, or 
- Public.</p></li>
-	<li class=P><p>Depending on with whom you share, you do the following:</p></li>
+<p>You can select any mail folder level to share. If you select to share the top-level mail folder, all mail folders within that mail folder are also shared.</p>
+<ol start="1" type="1">
+<li class="p">
+<p>Right-click on the mail folder you want to share. <span style="font-weight: bold;"><b>Note</b></span>: You cannot share the Trash or Junk folders.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Share Folder</b></span>. The <span style="font-weight: bold;"><b>Shared Properties</b></span> dialog displays. Select whom to share with, Internal user or groups, External guests, or Public.</p>
+</li>
+<li class="p">
+<p>Depending on with whom you share, you do the following:</p>
+</li>
 </ol>
-<ol type="disc" class="whs3">
-	<ul type="disc" class="whs1">
-		<li class=P><p>For <span style="font-weight: bold;"><B>Internal users 
- or groups</B></span>, enter the email addresses and in the <span style="font-weight: bold;"><B>Role 
- </B></span>area select the access privileges.</p></li>
-		<li class=P><p>For <span style="font-weight: bold;"><B>External quests</B></span>, 
- enter quest's addresses and the password to enter to view your mail folder.</p></li>
-		<li class=P><p>For the <span style="font-weight: bold;"><B>Public</B></span>, 
- direct the public to the URL that display in the <span style="font-weight: bold;"><B>URL</B></span> 
- area. For example, you could copy and email this URL to those you want 
- to view the page.</p></li>
-	</ul>
+<ol type="disc">
+<li style="list-style:none;display: inline">
+<ul type="disc">
+<li class="p">
+<p>For <span style="font-weight: bold;"><b>Internal users or groups</b></span>, enter the email addresses and in the <span style="font-weight: bold;"><b>Role</b></span> area select the access privileges.</p>
+</li>
+<li class="p">
+<p>For <span style="font-weight: bold;"><b>External quests</b></span>, enter quest's addresses and the password to enter to view your mail folder.</p>
+</li>
+<li class="p">
+<p>For the <span style="font-weight: bold;"><b>Public</b></span>, direct the public to the URL that display in the <span style="font-weight: bold;"><b>URL</b></span> area. For example, you could copy and email this URL to those you want to view the page.</p>
+</li>
+</ul>
+</li>
 </ol>
-<ol start="4" type="1" class="whs2">
-	<li class=p><p class="whs4">In the <span style="font-weight: bold;"><B>Message</B></span> 
- area select which type of message to send. This message can be sent to 
- internal users and to external quests. The options are as follows:</p></li>
+<ol start="4" type="1">
+<li class="p">
+<p style="margin-left: 0px;">In the <span style="font-weight: bold;"><b>Message</b></span> area select which type of message to send. This message can be sent to internal users and to external quests. The options are as follows:</p>
+</li>
 </ol>
-<ol><ul><li style="list-style: disc;" type=disc class=p><p class="whs4"><span 
- style="font-weight: bold;"><B>Do not send mail about this share</B></span>. No 
- message is sent.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p class="whs4"><span 
- style="font-weight: bold;"><B>Send standard message</B></span>. The standard 
- share notification message is sent to the email address. &nbsp;This 
- message includes the name of the mail folder that is being shared, your 
- address, the grantee's address and the role assigned with a list of the 
- allowed actions.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p class="whs4"><span 
- style="font-weight: bold;"><B>Add a note to standard message</B></span>. You 
- can add additional information to the standard message.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p class="whs4"><span 
- style="font-weight: bold;"><B>Compose email in new window</B></span>. Create 
- and send a new email message.</p></li>
-	</ul>
+<ol>
+<li style="list-style:none;display: inline">
+<ul>
+<li type="disc" class="p">
+<p style="margin-left: 0px;"><span style="font-weight: bold;"><b>Do not send mail about this share</b></span>. No message is sent.</p>
+</li>
+<li type="disc" class="p">
+<p style="margin-left: 0px;"><span style="font-weight: bold;"><b>Send standard message</b></span>. The standard share notification message is sent to the email address. &#160;This message includes the name of the mail folder that is being shared, your address, the grantee's address and the role assigned with a list of the allowed actions.</p>
+</li>
+<li type="disc" class="p">
+<p style="margin-left: 0px;"><span style="font-weight: bold;"><b>Add a note to standard message</b></span>. You can add additional information to the standard message.</p>
+</li>
+<li type="disc" class="p">
+<p style="margin-left: 0px;"><span style="font-weight: bold;"><b>Compose email in new window</b></span>. Create and send a new email message.</p>
+</li>
+</ul>
+</li>
 </ol>
-<ol start="5" type="1" class="whs2">
-	<li class=p><p class="whs4">Click <span style="font-weight: bold;"><B>OK</B></span>. 
- </p></li>
-	<li class=p-note><p class=note>Remember, if you selected Public, you 
- will need to notify the public of the URL.</p></li>
+<ol start="5" type="1">
+<li class="p">
+<p style="margin-left: 0px;">Click <span style="font-weight: bold;"><b>OK</b></span>.</p>
+</li>
+<li class="p-note">
+<p class="note">Remember, if you selected Public, you will need to notify the public of the URL.</p>
+</li>
 </ol>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

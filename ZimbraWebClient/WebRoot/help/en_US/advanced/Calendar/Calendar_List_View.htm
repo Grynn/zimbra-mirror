@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Calendar List View</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your  Calendar\nCalendar List View");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,51 +81,69 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Calendar List View</h1>
-<p>The List view in Calendar gives you the following details that are not 
- available in the other Calendar view. </p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Calendar appointments for a two week period are listed.</p></li>
-	<li class=p><p>Meetings from all selected calendars are listed in a 
- vertical line by date and time, showing: </p></li>
-	<ul type="disc" class="whs1">
-		<li class=p><p>Subject of the meeting</p></li>
-		<li class=p><p>Location of the meeting</p></li>
-		<li class=p><p>Status, whether the meeting is New, Accepted, Tentative</p></li>
-		<li class=p><p>Which calendar the meeting is saved to</p></li>
-		<li class=p><p>Whether it is recurring or not </p></li>
-		<li class=p><p>Date and time of the meeting</p></li>
-	</ul>
-	<li class=p><p>You can change the columns that are displayed by right-clicking 
- the header and deselecting the columns you do not want to display</p></li>
-	<li class=p><p>You can sort by subject, status, calendar or date columns 
- </p></li>
-	<li class=p><p>You can select multiple local appointment to act upon 
- at once, actions include deleting appointments, moving appointments to 
- a new calendar, or tagging appointments. You can drag and drop selected 
- appointments into other calendars or to a tag.</p></li>
-	<li class=p><p>You can search for meetings by subject or location within 
- the two-week list view</p></li>
+<p>The List view in Calendar gives you the following details that are not available in the other Calendar view.</p>
+<ul type="disc">
+<li class="p">
+<p>Calendar appointments for a two week period are listed.</p>
+</li>
+<li class="p">
+<p>Meetings from all selected calendars are listed in a vertical line by date and time, showing:</p>
+</li>
+<li style="list-style: none; display: inline">
+<ul type="disc">
+<li class="p">
+<p>Subject of the meeting</p>
+</li>
+<li class="p">
+<p>Location of the meeting</p>
+</li>
+<li class="p">
+<p>Status, whether the meeting is New, Accepted, Tentative</p>
+</li>
+<li class="p">
+<p>Which calendar the meeting is saved to</p>
+</li>
+<li class="p">
+<p>Whether it is recurring or not</p>
+</li>
+<li class="p">
+<p>Date and time of the meeting</p>
+</li>
 </ul>
-<p>&nbsp;</p>
-<ul><li class=p-note><p class=note>&nbsp;You cannot print 
- the List view. </p></li>
+</li>
+<li class="p">
+<p>You can change the columns that are displayed by right-clicking the header and deselecting the columns you do not want to display</p>
+</li>
+<li class="p">
+<p>You can sort by subject, status, calendar or date columns</p>
+</li>
+<li class="p">
+<p>You can select multiple local appointment to act upon at once, actions include deleting appointments, moving appointments to a new calendar, or tagging appointments. You can drag and drop selected appointments into other calendars or to a tag.</p>
+</li>
+<li class="p">
+<p>You can search for meetings by subject or location within the two-week list view</p>
+</li>
 </ul>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<ul>
+<li class="p-note">
+<p class="note">&#160;You cannot print the List view.</p>
+</li>
+</ul>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

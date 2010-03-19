@@ -1,24 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Assigning tags to messages</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-img_whs2 { border:none; width:144px; height:119px; float:none; border-style:none; }
-img_whs3 { border:none; width:460px; height:34px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Using Tags and Folders to Organize Email\nAssigning Tags to messages");
@@ -58,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -77,66 +81,75 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Assigning Tags to messages and other items</h1>
-<p>Tagging is similar to flagging, except that you can create and apply 
- multiple tags to a single item in order to classify it under several categories 
- simultaneously. After <a href="Using_tags_to_classify_mail_messages.htm">creating 
- a tag</a>, you can apply it to conversations, messages, or contacts.</p>
-<ul></ul>
+<p>Tagging is similar to flagging, except that you can create and apply multiple tags to a single item in order to classify it under several categories simultaneously. After <a href="Using_tags_to_classify_mail_messages.htm">creating a tag</a>, you can apply it to conversations, messages, or contacts.</p>
+<ul>
+</ul>
 <h6>To tag an item using drag and drop:</h6>
-<p>Drag and drop the tag from the left-hand Overview pane onto the item 
- on the Content pane.</p>
+<p>Drag and drop the tag from the left-hand Overview pane onto the item on the Content pane.</p>
 <h6>To apply a tag to an item using menus:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Right-click the item from the Content pane. </p></li>
-	<li class=p><p>Choose <span style="font-weight: bold;"><B>Tag Message 
- </B></span>(or<span style="font-weight: bold;"><B> Tag Conversation</B></span> or<span 
- style="font-weight: bold;"><B> Tag Contact, etc.</B></span>).</p></li>
-	<li class=p><p>Choose the tag name from the list that appears. Only 
- tags not already applied to the selected item are listed.</p></li>
+<ol type="1">
+<li class="p">
+<p>Right-click the item from the Content pane.</p>
+</li>
+<li class="p">
+<p>Choose <span style="font-weight: bold;"><b>Tag Message</b></span> (or <span style="font-weight: bold;"><b>Tag Conversation</b></span> or <span style="font-weight: bold;"><b>Tag Contact, etc.</b></span>).</p>
+</li>
+<li class="p">
+<p>Choose the tag name from the list that appears. Only tags not already applied to the selected item are listed.</p>
+</li>
 </ol>
 <h6>To create a new tag and apply it to an item:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Right-click the item from the list and choose the Tag 
- menu option that appears. </p></li>
-	<li class=p><p>Choose <span style="font-weight: bold;"><B>New Tag</B></span>.</p></li>
-	<li class=p><p>Enter a name for the tag and click <span style="font-weight: bold;"><B>OK</B></span>.</p></li>
+<ol type="1">
+<li class="p">
+<p>Right-click the item from the list and choose the Tag menu option that appears.</p>
+</li>
+<li class="p">
+<p>Choose <span style="font-weight: bold;"><b>New Tag</b></span>.</p>
+</li>
+<li class="p">
+<p>Enter a name for the tag and click <span style="font-weight: bold;"><b>OK</b></span>.</p>
+</li>
 </ol>
 <h6>To remove a tag from an item:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Right-click the item from the list and choose the Tag 
- menu option that appears. </p></li>
-	<li class=p><p>Choose <span style="font-weight: bold;"><B>Remove Tag</B></span>. 
- If the item has multiple tags, you can choose to remove one or all tags.</p></li>
+<ol type="1">
+<li class="p">
+<p>Right-click the item from the list and choose the Tag menu option that appears.</p>
+</li>
+<li class="p">
+<p>Choose <span style="font-weight: bold;"><b>Remove Tag</b></span>. If the item has multiple tags, you can choose to remove one or all tags.</p>
+</li>
 </ol>
 <h6>To apply/remove a tag to multiple items at once:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Select all the items to be tagged using Control-Click 
- or Shift-Click.</p></li>
-	<li class=p><p>Right-click over any one of the selected items and choose 
- the Tag menu option that appears.</p></li>
-	<li class=p><p>Choose the tag to add or remove. </p></li>
+<ol type="1">
+<li class="p">
+<p>Select all the items to be tagged using Control-Click or Shift-Click.</p>
+</li>
+<li class="p">
+<p>Right-click over any one of the selected items and choose the Tag menu option that appears.</p>
+</li>
+<li class="p">
+<p>Choose the tag to add or remove.</p>
+</li>
 </ol>
 <h6>To find tagged messages quickly:</h6>
 <p>Click a tag in the Overview pane.</p>
-<p><img src="../tag-list.gif" x-maintain-ratio="TRUE" width="144px" height="119px" border="0" class="img_whs2"></p>
-<p>Alternatively, you can search for tags. In the <span style="font-weight: bold;"><B>Search</B></span> 
- field enter the query as <span class=code>tag: &lt;&quot;tag name&quot;&gt; 
- </span>and click <span style="font-weight: bold;"><B>Search</B></span>. A query 
- of <span style="font-weight: bold; font-family: 'Lucida Sans Typewriter', monospace;"><B>tag:Purple 
- </B></span>would show all items that had a tag named Purple applied.</p>
-<p><img src="../tag-purple.gif" x-maintain-ratio="TRUE" width="460px" height="34px" border="0" class="img_whs3"></p>
-<script type="text/javascript" language="javascript1.2">
+<p><img src="../tag-list.gif" style="border: none;" alt="tag-list.gif" width="144" height="119" border="0" /></p>
+<p>Alternatively, you can search for tags. In the <span style="font-weight: bold;"><b>Search</b></span> field enter the query as <span class="code">tag: &lt;"tag name"&gt;</span> and click <span style="font-weight: bold;"><b>Search</b></span>. A query of <span style="font-weight: bold; font-family: 'Lucida Sans Typewriter', monospace;"><b>tag:Purple</b></span> would show all items that had a tag named Purple applied.</p>
+<p><img src="../tag-purple.gif" style="border: none;" alt="tag-purple.gif" width="460" height="34" border="0" /></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

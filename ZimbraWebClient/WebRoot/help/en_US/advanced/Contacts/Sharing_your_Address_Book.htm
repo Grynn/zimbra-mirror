@@ -1,40 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Sharing your Address Book</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:inside decimal; }
-p.whs3 { margin-left:40px; font-weight:bold; }
-ol.whs4 { list-style:decimal; }
-p.whs5 { margin-left:40px; }
-p.whs6 { margin-left:80px; }
-p.whs7 { margin-left:0px; }
-ul.whs8 { list-style:inside decimal; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs7 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -45,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Sharing Folders\nSharing Address Books\nSharing your address book");
@@ -74,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -93,158 +81,151 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" x-save-method="compute-relative" src="../ehlpdhtm.js" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
+//]]></script>
+
+<script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2">
 </script>
-
-
-
 <h1>Sharing your address book</h1>
-<p>&nbsp;You can <a href="../Sharing/Sharing_a_folder.htm">share</a> 
- your address books &nbsp;with the following:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Internal users or groups</B></span>. 
- You select the type of privileges to grant to internal users, either:</p></li>
-	<ul type="disc" class="whs1">
-		<li class=p><p><span style="font-weight: bold;"><B>Viewer</B></span>. 
- The Grantee can read &nbsp;but cannot change the address 
- book content</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Manager</B></span>. 
- The Grantee has full permission to view, edit the contacts, add new contacts 
- to the address book and delete contacts.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Admin</B></span>. The 
- Grantee has full permission to view, edit the contacts, add new contacts 
- to the address book, delete contacts and share your contact lists with 
- others. </p></li>
-	</ul>
-	<li style="margin-left: -20px;" class=p-note><p class=note style="margin-left: 80px;"><span 
- style="font-weight: bold;"><B>None</B></span> is an option to temporarily disable 
- access to a grantor's shared address book without revoking the share privileges. 
- The Grantee still has the address book listed but cannot view or manage 
- the content of the address book.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>External guests</B></span>. 
- You create a password for the address book that quests must enter to view 
- the contacts. The address book displays in a .csv file. 
- They cannot make any changes to the address book in your account.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Public</B></span>. Anyone 
- that knows the URL to the address book can view the contact list. &nbsp;The 
- address book displays in a .csv file. They cannot make 
- any changes to the address book in your account.</p></li>
+<p>&#160;You can <a href="../Sharing/Sharing_a_folder.htm">share</a> your address books &#160;with the following:</p>
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Internal users or groups</b></span>. You select the type of privileges to grant to internal users, either:</p>
+</li>
+<li style="list-style: none; display: inline">
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Viewer</b></span>. The Grantee can read &#160;but cannot change the address book content</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Manager</b></span>. The Grantee has full permission to view, edit the contacts, add new contacts to the address book and delete contacts.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Admin</b></span>. The Grantee has full permission to view, edit the contacts, add new contacts to the address book, delete contacts and share your contact lists with others.</p>
+</li>
 </ul>
-<h6>To &nbsp;share your Address Book</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>Right-click on the address book to share and select 
- <span style="font-weight: bold;"><B>Share Address Book</B></span>. </p></li>
-	<li class=p><p>On the <span style="font-weight: bold;"><B>Share Properties</B></span> 
- dialog select whom to share with. </p></li>
+</li>
+<li style="margin-left: -20px;" class="p-note">
+<p class="note" style="margin-left: 80px;"><span style="font-weight: bold;"><b>None</b></span> is an option to temporarily disable access to a grantor's shared address book without revoking the share privileges. The Grantee still has the address book listed but cannot view or manage the content of the address book.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>External guests</b></span>. You create a password for the address book that quests must enter to view the contacts. The address book displays in a .
+csv file. They cannot make any changes to the address book in your account.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Public</b></span>. Anyone that knows the URL to the address book can view the contact list. &#160;The address book displays in a .
+csv file. They cannot make any changes to the address book in your account.</p>
+</li>
+</ul>
+<h6>To &#160;share your Address Book</h6>
+<ol type="1">
+<li class="p">
+<p>Right-click on the address book to share and select <span style="font-weight: bold;"><b>Share Address Book</b></span>.</p>
+</li>
+<li class="p">
+<p>On the <span style="font-weight: bold;"><b>Share Properties</b></span> dialog select whom to share with.</p>
+</li>
 </ol>
-<p class="whs3">&nbsp;<a class="dropspot" href="javascript:TextPopup(this)" id="a1">Internal Users or Groups</a></p>
-<div class="droptext" id="POPUP325042252" style="display: 'none'; " x-ss-type="dropdown">
- <ol type="1" class="whs4">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs5">When 
- you choose Internal, you can choose addresses from the list that appears 
- as you type or type addresses that are not in the list. The user or group 
- must be a valid address in your company's mail server. </p></li>
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs5">In 
- the <span style="font-weight: bold;"><B>Role</B></span> area, selected the access 
- permissions.</p></li>
- </ol>
- <ol start="3" type="1" class="whs4">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs5">In 
- the <span style="font-weight: bold;"><B>Message</B></span> area, select which 
- type of message to send. &nbsp;The options are as follows:</p></li>
- </ol>
- <ul type="disc" class="whs1">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs6"><span 
- style="font-weight: bold;"><B>Send standard message</B></span>. The standard 
- share notification message is sent to the email address. &nbsp;</p></li>
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs6"><span 
- style="font-weight: bold;"><B>Add a note to standard message</B></span>. You 
- can add additional information to the standard message.</p></li>
- </ul>
- <ol start="4" type="1" class="whs4">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs5">Click 
- <span style="font-weight: bold;"><B>OK</B></span>. </p></li>
- </ol>
- <p>&nbsp;</p>
+<p style="margin-left: 40px; font-weight: bold;">&#160;
+<a class="dropspot" href="javascript:TextPopup(this)" id="a1">Internal Users or Groups</a></p>
+<div class="droptext" id="POPUP361136782" style="display: none;">
+<ol type="1">
+<li style="margin-left: -20px;" class="p">
+<p style="margin-left: 40px;">When you choose Internal, you can choose addresses from the list that appears as you type or type addresses that are not in the list. The user or group must be a valid address in your company's mail server.</p>
+</li>
+<li style="margin-left: -20px;" class="p">
+<p style="margin-left: 40px;">In the <span style="font-weight: bold;"><b>Role</b></span> area, selected the access permissions.</p>
+</li>
+</ol>
+<ol start="3" type="1">
+<li style="margin-left: -20px;" class="p">
+<p style="margin-left: 40px;">In the <span style="font-weight: bold;"><b>Message</b></span> area, select which type of message to send. &#160;The options are as follows:</p>
+</li>
+</ol>
+<ul type="disc">
+<li style="margin-left: -20px;" class="p">
+<p style="margin-left: 80px;"><span style="font-weight: bold;"><b>Send standard message</b></span>. The standard share notification message is sent to the email address. &#160;</p>
+</li>
+<li style="margin-left: -20px;" class="p">
+<p style="margin-left: 80px;"><span style="font-weight: bold;"><b>Add a note to standard message</b></span>. You can add additional information to the standard message.</p>
+</li>
+</ul>
+<ol start="4" type="1">
+<li style="margin-left: -20px;" class="p">
+<p style="margin-left: 40px;">Click <span style="font-weight: bold;"><b>OK</b></span>.</p>
+</li>
+</ol>
+<p>&#160;</p>
 </div>
-<p class="whs3"><a class="dropspot" href="javascript:TextPopup(this)" id="a2">External 
- guests</a></p>
-<div class="droptext" id="POPUP322143111" style="display: 'none'; " x-ss-type="dropdown">
- <ol>
-  <li style="list-style: decimal;" type=1 class=p>
-  <p>When you choose 
- External guests, enter the guest email addresses. &nbsp;&nbsp;You 
- can enter more than one address in the Email: field. Put a semi-colon 
- (:) between addresses.</p></li>
-  <li style="list-style: decimal;" type=1 class=p>
-  <p>Enter the password 
- that users must enter to view your address book.</p></li>
- </ol>
- <ol start=3>
-  <li class=p>
-  <p class="whs7">In the <span style="font-weight: bold;"><B>Message</B></span> 
- area, select which type of message to send. &nbsp;The 
- URL to your address book and the password is included in the email message.</p></li>
-  <ul type="1" class="whs8">
-   <li style="list-style: disc;" type=disc class=p>
-   <p class="whs7"><span 
- style="font-weight: bold;"><B>Send standard message</B></span>. The standard 
- share notification message is sent to the email address. </p></li>
-   <li style="list-style: disc;" type=disc class=p>
-   <p class="whs7"><span 
- style="font-weight: bold;"><B>Add a note to standard message</B></span>. You 
- can add additional information to the standard message.</p></li>
-  </ul>
-  <li class=p>
-  <p class="whs7">Click <span style="font-weight: bold;"><B>OK</B></span>. 
- </p></li>
- </ol>
+<p style="margin-left: 40px; font-weight: bold;">
+<a class="dropspot" href="javascript:TextPopup(this)" id="a2">External guests</a></p>
+<div class="droptext" id="POPUP360901795" style="display: none;">
+<ol>
+<li type="1" class="p">
+<p>When you choose External guests, enter the guest email addresses. &#160;&#160;You can enter more than one address in the Email: field. Put a semi-colon (:) between addresses.</p>
+</li>
+<li type="1" class="p">
+<p>Enter the password that users must enter to view your address book.</p>
+</li>
+</ol>
+<ol start="3">
+<li class="p">
+<p style="margin-left: 0px;">In the <span style="font-weight: bold;"><b>Message</b></span> area, select which type of message to send. &#160;The URL to your address book and the password is included in the email message.</p>
+<ul type="1">
+<li type="disc" class="p">
+<p style="margin-left: 0px;"><span style="font-weight: bold;"><b>Send standard message</b></span>. The standard share notification message is sent to the email address.</p>
+</li>
+<li type="disc" class="p">
+<p style="margin-left: 0px;"><span style="font-weight: bold;"><b>Add a note to standard message</b></span>. You can add additional information to the standard message.</p>
+</li>
+</ul>
+</li>
+<li class="p">
+<p style="margin-left: 0px;">Click <span style="font-weight: bold;"><b>OK</b></span>.</p>
+</li>
+</ol>
 </div>
-<p class="whs3"><a class="dropspot" href="javascript:TextPopup(this)" id="a3">Public</a></p>
-<div class="droptext" id="POPUP322522712" style="display: 'none'; " x-ss-type="dropdown">
- <p>When you choose Public, anyone who has the URL can access your address 
- book. &nbsp;No password is required. </p>
+<p style="margin-left: 40px; font-weight: bold;">
+<a class="dropspot" href="javascript:TextPopup(this)" id="a3">Public</a></p>
+<div class="droptext" id="POPUP361196705" style="display: none;">
+<p>When you choose Public, anyone who has the URL can access your address book. &#160;No password is required.</p>
 </div>
 <h3>Editing or revoking permission</h3>
 <p>You can revoke permissions at any time.</p>
-<ol type="1" class="whs2">
-	<li class=p><p>Right-click a shared address book.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Edit Properties</B></span>. 
- Users sharing the folder are listed.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Edit</B></span> to 
- change permissions, or <br>
-	Click <span style="font-weight: bold;"><B>Revoke</B></span> to remove permissions.</p></li>
-	<li class=p><p>Select whether a message describing the change should 
- be sent.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. </p></li>
+<ol type="1">
+<li class="p">
+<p>Right-click a shared address book.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Edit Properties</b></span>. Users sharing the folder are listed.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Edit</b></span> to change permissions, or<br />
+Click <span style="font-weight: bold;"><b>Revoke</b></span> to remove permissions.</p>
+</li>
+<li class="p">
+<p>Select whether a message describing the change should be sent.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>OK</b></span>.</p>
+</li>
 </ol>
-<p>&nbsp;</p>
-<script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a1','POPUP325042252');
-//--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a2','POPUP322143111');
-//--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a3','POPUP322522712');
-//--></script><script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a1','POPUP361136782');
+	TextPopupInit('a2','POPUP360901795');
+	TextPopupInit('a3','POPUP361196705');
+//]]></script>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

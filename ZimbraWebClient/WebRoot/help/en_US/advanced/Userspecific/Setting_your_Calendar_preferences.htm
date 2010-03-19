@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Setting your Calendar preferences</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your  Calendar\nSetting your Calendar preferences");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,66 +81,76 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Setting your Calendar preferences</h1>
 <p>You can set the following options from the Preferences&gt;Calendar folder. 
- Remember to click <span style="font-weight: bold;"><B>Save</B></span> to save 
+ Remember to click <span style="font-weight: bold;"><b>Save</b></span> to save 
  any changes you make to your preferences.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Default View</B></span>. 
- Select how you would like to view your Zimbra calendar. The default is 
- by work week. The view options include: Day, Work Week, 7 Day Week, Month, 
- List, and Schedule.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Start Week On</B></span>. 
- Specify which day of the week should be the first day of the week in your 
- calendar.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Default appointment 
- visibility</B></span>. This can be set to either Public or Private. The default 
- is Public, all incoming calendar invites are marked as Public unless the 
- creator marked the <a href="../Calendar/Marking_an_appointment_as_private.htm">meeting 
- notification as private</a>. &nbsp;When this is set to 
- Private, all incoming calendar invites are marked as Private. Details 
- about events that are marked private do not display. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Always show the mini-calendar</B></span>. 
- Specify whether the mini-calendar is displayed at the bottom of the Overview 
- pane.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Automatically add received 
- appointments to calendar</B></span><span>. When this is checked, email invitations 
- sent to your Inbox are automatically added to your calendar. You can accept 
- or decline the invite from either the Inbox or Calendar. When this is 
- not checked, the appointment is added to your calendar when you click 
- Accept or Tentative. </span></p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>After responding to 
- an invitation</B></span>. When this is checked, invitations are automatically 
- deleted from your Inbox after you respond to the invite.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Show reminders</B></span>. 
- Set the number of minutes before an appointment to be reminded. The default 
- is five minutes. In addition, you can set the <a href="Setting_up_desktop_alerts.htm">type 
- of alert</a> to receive.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Use the QuickAdd dialog 
- when creating new appointments</B></span>. Specify whether to create new appointments 
- using the <a href="../Calendar/Using_QuickAdd_to_Create_an_Appointment.htm">QuickAdd</a> 
- dialog. This is often helpful if you create many appointments without 
- attendees.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Show time zone list 
- in appointment view</B></span>. Select if you often schedule meetings with 
- other in different time zones.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Permissions</B></span>. 
- You can specify the type of users who can see <a href="../Calendar/Setting_permissions_to_see_your_free_busy_information.htm">your 
- Free/Busy information</a> and <a href="../Calendar/Identifying_who_can_invite_you_to_meetings.htm">who 
- can invite you to meetings</a>. The default is to allow all users to see 
- your free/busy and to invite you to meetings. </p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Default View</b></span>. 
+	 Select how you would like to view your Zimbra calendar. The default 
+	 is by work week. The view options include: Day, Work Week, 7 Day Week, 
+	 Month, List, and Schedule.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Start Week On</b></span>. 
+	 Specify which day of the week should be the first day of the week 
+	 in your calendar.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Default appointment 
+	 visibility</b></span>. This can be set to either Public or Private. The 
+	 default is Public, all incoming calendar invites are marked as Public 
+	 unless the creator marked the <a href="../Calendar/Marking_an_appointment_as_private.htm">meeting 
+	 notification as private</a>. &#160;When this is set to Private, all 
+	 incoming calendar invites are marked as Private. Details about events 
+	 that are marked private do not display.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Always show the mini-calendar</b></span>. 
+	 Specify whether the mini-calendar is displayed at the bottom of the 
+	 Overview pane.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Show Calendar with 
+	 week numbers</b></span>. When this is enabled, the week numbers are displayed 
+	 on the mini-calendar.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Automatically add 
+	 received appointments to calendar</b></span>. When this is checked, email 
+	 invitations sent to your Inbox are automatically added to your calendar. 
+	 You can accept or decline the invite from either the Inbox or Calendar. 
+	 When this is not checked, the appointment is added to your calendar 
+	 when you click Accept or Tentative.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Enable delegation 
+	 for Apple iCal CalDav client</b></span>. When this is enabled, shared 
+	 calendars are displayed in the account's Delegation tab on the Mac. 
+	 When this is disabled, all shared calendars display in the &#160;ZWC 
+	 Calendars list. &#160;Available for iCal 4.0 or later.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>After responding 
+	 to an invitation delete invite</b></span>. When this is checked, invitations 
+	 are automatically moved to your Trash folder after you respond to 
+	 the invite.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Forward my invites 
+	 to</b></span><span>.</span> You can forward invite emails you receive 
+	 to one or more users that you have shared your calendar with. &#160;&#160;</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Show reminders</b></span>. 
+	 Set the number of minutes before an appointment to be reminded. The 
+	 default is five minutes. In addition, you can set the <a href="Setting_up_desktop_alerts.htm">type 
+	 of alert</a> to receive.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Use the QuickAdd 
+	 dialog when creating new appointments</b></span>. Specify whether to create 
+	 new appointments using the <a href="../Calendar/Using_QuickAdd_to_Create_an_Appointment.htm">QuickAdd</a> 
+	 dialog. This is often helpful if you create many appointments without 
+	 attendees.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Show time zone list 
+	 in appointment view</b></span>. Select if you often schedule meetings 
+	 with other in different time zones.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Permissions</b></span>. 
+	 You can specify the type of users who can see <a href="../Calendar/Setting_permissions_to_see_your_free_busy_information.htm">your 
+	 Free/Busy information</a> and <a href="../Calendar/Identifying_who_can_invite_you_to_meetings.htm">who 
+	 can invite you to meetings</a>. The default is to allow all users 
+	 to see your free/busy and to invite you to meetings.</p></li>
 </ul>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

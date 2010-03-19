@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Saving search queries</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-img_whs2 { border:none; width:21px; height:22px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Searching for Items\nSaving search queries");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,37 +81,37 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Saving search queries</h1>
-<p>If you create a search that you think you will want to use again, you 
- can save it. </p>
-<ol type="1" class="whs1">
-	<li class=p><p>Create the search query, either by entering text in 
- the <span style="font-weight: bold;"><B>Search</B></span> bar or by creating 
- a query with <span style="font-weight: bold;"><B>Advanced </B></span>search<span 
- style="font-weight: bold;"><B>.</B></span></p></li>
-	<li class=p><p>To save the search click <img src="../searchsavebutton.gif" x-maintain-ratio="TRUE" width="21px" height="22px" border="0" class="img_whs2"> on the <span style="font-weight: bold;"><B>Search</B></span> 
- bar. The <span style="font-weight: bold;"><B>Save Search</B></span> dialog opens. 
- </p></li>
-	<li class=p><p>Type the name for your saved search. Searches are saved 
- as a search folder in the <span style="font-weight: bold;"><B>Searches</B></span> 
- section of the Overview pane by default, but you can select another folder.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. Your 
- search is saved.</p></li>
+<p>If you create a search that you think you will want to use again, you can save it.</p>
+<ol type="1">
+<li class="p">
+<p>Create the search query, either by entering text in the <span style="font-weight: bold;"><b>Search</b></span> bar or by creating a query with <span style="font-weight: bold;"><b>Advanced</b></span> search<span style="font-weight: bold;"><b>.</b></span></p>
+</li>
+<li class="p">
+<p>To save the search click <img src="../searchsavebutton.gif" style="border: none;" alt="searchsavebutton.gif" width="21" height="22" border="0" /> on the <span style="font-weight: bold;"><b>Search</b></span> bar. The <span style="font-weight: bold;"><b>Save Search</b></span> dialog opens.</p>
+</li>
+<li class="p">
+<p>Type the name for your saved search. Searches are saved as a search folder in the <span style="font-weight: bold;"><b>Searches</b></span> section of the Overview pane by default, but you can select another folder.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>OK</b></span>. Your search is saved.</p>
+</li>
 </ol>
-<p>To use a saved search, click the search folder. The search results immediately 
- display in the Content pane.</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>To use a saved search, click the search folder. The search results immediately display in the Content pane.</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Deleting_an_appointment</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Scheduling Appointments, Meetings and Events\nDeleting an appointment");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,48 +81,51 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Deleting an appointment</h1>
-<p>Appointments can be cancelled by the organizer and the attendee can 
- delete a meeting from their calendar.</p>
+<p>Appointments can be cancelled by the organizer and the attendee can delete a meeting from their calendar.</p>
 <h3>Organizer cancels meeting</h3>
 <p>As the organizer of an meeting invitation, to cancel a meeting :</p>
-<ol type="1" class="whs1">
-	<li class=p><p>Click on the appointment to cancel.</p></li>
-	<li class=p><p>Right-click and select <span style="font-weight: bold;"><B>Cancel</B></span>. 
- If the appointment is a <a href="Deleting_recurring_appointments.htm">recurring 
- series</a>, you can delete an instance of the series or the complete series.</p></li>
-	<li class=p><p>A confirmation dialog asks if you want to edit the appointment 
- cancelation message. </p></li>
-	<ul><li style="list-style: disc;" type=disc class=p><p>If you click 
- No, an automatically generated email is sent to the attendees and the 
- appointment is deleted from their calendars. </p></li>
-		<li style="list-style: disc;" type=disc class=p><p>If you click 
- Yes, the compose window opens and you can modify the message before sending. 
- </p></li>
-		<li style="list-style: disc;" type=disc class=p><p>If you click 
- Cancel, the meeting is not deleted. </p></li>
-	</ul>
+<ol type="1">
+<li class="p">
+<p>Click on the appointment to cancel.</p>
+</li>
+<li class="p">
+<p>Right-click and select <span style="font-weight: bold;"><b>Cancel</b></span>. If the appointment is a <a href="Deleting_recurring_appointments.htm">recurring series</a>, you can delete an instance of the series or the complete series.</p>
+</li>
+<li class="p">
+<p>A confirmation dialog asks if you want to edit the appointment cancelation message.</p>
+<ul>
+<li type="disc" class="p">
+<p>If you click No, an automatically generated email is sent to the attendees and the appointment is deleted from their calendars.</p>
+</li>
+<li type="disc" class="p">
+<p>If you click Yes, the compose window opens and you can modify the message before sending.</p>
+</li>
+<li type="disc" class="p">
+<p>If you click Cancel, the meeting is not deleted.</p>
+</li>
+</ul>
+</li>
 </ol>
-<h3>Attendee deletes meeting </h3>
-<p>As an meeting attendee, you can delete meetings from your calendar. 
- When you do so you are given the option to notify the organizer.</p>
-<ol type="1" class="whs1">
-	<li class=p><p>Click on the meeting to delete.</p></li>
-	<li class=p><p>In the confirmation dialog, select whether or not to 
- notify the organizer and click <span style="font-weight: bold;"><B>Yes</B></span> 
- to delete the meeting.</p></li>
+<h3>Attendee deletes meeting</h3>
+<p>As an meeting attendee, you can delete meetings from your calendar. When you do so you are given the option to notify the organizer.</p>
+<ol type="1">
+<li class="p">
+<p>Click on the meeting to delete.</p>
+</li>
+<li class="p">
+<p>In the confirmation dialog, select whether or not to notify the organizer and click <span style="font-weight: bold;"><b>Yes</b></span> to delete the meeting.</p>
+</li>
 </ol>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,25 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Working with files in Briefcase</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
-img_whs3 { border:none; width:31px; height:24px; float:none; border-style:none; }
-img_whs4 { border:none; width:43px; height:28px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -30,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Using Briefcase\nWorking with files in Briefcase");
@@ -59,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -78,46 +81,53 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Working with files in Briefcase</h1>
 <h6>Opening files in Briefcase</h6>
-<p>You can open files in your Briefcase from any computer. You must have 
- the appropriate software application to open and read or update the file. 
- Common file formats such as text files, HTML files, and images such as 
- .gif or .jpg files can be opened 
- in a variety of programs. </p>
-<ul type="disc" class="whs1">
-	<li class=p><p>To open a file, right-click on the file and select <span 
- style="font-weight: bold;"><B>Open</B></span>. If the type is unknown, a dialog 
- displays asking what to do with the file, save to disk or open with a 
- specific application.</p></li>
+<p>You can open files in your Briefcase from any computer. You must have the appropriate software application to open and read or update the file. Common file formats such as text files, HTML files, and images such as .
+gif or .
+jpg files can be opened in a variety of programs.</p>
+<ul type="disc">
+<li class="p">
+<p>To open a file, right-click on the file and select <span style="font-weight: bold;"><b>Open</b></span>. If the type is unknown, a dialog displays asking what to do with the file, save to disk or open with a specific application.</p>
+</li>
 </ul>
 <h6>Moving files</h6>
 <p>You can move files from one briefcase to another.</p>
-<ol type="1" class="whs2">
-	<li class=p><p>On the toolbar, click <img src="../move.png" x-maintain-ratio="TRUE" width="31px" height="24px" border="0" class="img_whs3">. </p></li>
-	<li class=p><p>Select the destination folder or create a new briefcase 
- folder. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. </p></li>
+<ol type="1">
+<li class="p">
+<p>On the toolbar, click <img src="../move.png" style="border: none;" alt="move.png" width="31" height="24" border="0" />.</p>
+</li>
+<li class="p">
+<p>Select the destination folder or create a new briefcase folder.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>OK</b></span>.</p>
+</li>
 </ol>
-<h6>Tag &nbsp;files</h6>
+<h6>Tag &#160;files</h6>
 <p>You can tag files.</p>
-<ol type="1" class="whs2">
-	<li class=p><p>Click on the file and on the toolbar, click <img src="../tag.png" x-maintain-ratio="TRUE" width="43px" height="28px" border="0" class="img_whs4">. 
- </p></li>
-	<li class=p><p>Select the tag. You can see tags in Detail view only.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. </p></li>
+<ol type="1">
+<li class="p">
+<p>Click on the file and on the toolbar, click <img src="../tag.png" style="border: none;" alt="tag.png" width="43" height="28" border="0" />.</p>
+</li>
+<li class="p">
+<p>Select the tag. You can see tags in Detail view only.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>OK</b></span>.</p>
+</li>
 </ol>
-<script type="text/javascript" language="javascript1.2">
+<h6>Sorting files</h6>
+<p>When you are in the <span style="font-weight: bold;"><b>Detail View</b></span>, you can sort files in your briefcase by name, size or date.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

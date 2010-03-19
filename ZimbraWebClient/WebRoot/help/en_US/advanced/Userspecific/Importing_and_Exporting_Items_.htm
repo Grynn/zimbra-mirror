@@ -1,18 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Importing and Exporting Items </title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Importing and Exporting Items</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
@@ -51,10 +63,8 @@ if (window.gbWhTopic)
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -70,83 +80,93 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Importing &nbsp;Items into your account</h1>
-<p>The Preferences Import/Export folder can be used to import your complete 
- account data, specific folders, calendars, and contact lists.</p>
+//]]></script>
+<h1>Importing &#160;Items into your account</h1>
+<p>The Preferences Import/Export folder can be used to import your complete account data, specific folders, calendars, and contact lists.</p>
 <h2>Importing Contacts</h2>
-<p>You can import contact lists &nbsp;that are saved in 
- a comma-separated (.csv) text file format. Import is available from your 
- <span style="font-weight: bold;"><B><b>Preferences</b></B></span><span style="font-weight: bold;"><B><b>&gt;Import/Export</b></B></span> 
- folder.</p>
-<ol class=whs1 style="list-style: decimal;" type=1>
-	<li class=p><p>From the <span style="font-weight: bold;"><B><b>Preferences</b></B></span> 
- tab, click the <span style="font-weight: bold;"><B><b>Import/Export</b></B></span> 
- folder.</p></li>
-	<li class=p><p>In the Import section, &nbsp;select the type as <span 
- style="font-weight: bold;"><B><b>Contacts</b></B></span>. </p></li>
-	<li class=p><p>In the drop-down next to <span style="font-weight: bold;"><B><b>Contacts</b></B></span>, 
- select the type of contact file that is being imported:</p></li>
+<p>You can import contact lists &#160;that are saved in a comma-separated (.csv) text file format. Import is available from your <span style="font-weight: bold;"><b><b>Preferences</b></b></span><span style="font-weight: bold;"><b><b>&gt;Import/Export</b></b></span> folder.</p>
+<ol class="whs1" type="1">
+<li class="p">
+<p>From the <span style="font-weight: bold;"><b><b>Preferences</b></b></span> tab, click the <span style="font-weight: bold;"><b><b>Import/Export</b></b></span> folder.</p>
+</li>
+<li class="p">
+<p>In the Import section, &#160;select the type as <span style="font-weight: bold;"><b><b>Contacts</b></b></span>.</p>
+</li>
+<li class="p">
+<p>In the drop-down next to <span style="font-weight: bold;"><b><b>Contacts</b></b></span>, select the type of contact file that is being imported:</p>
+</li>
 </ol>
-<ol class=whs2 style="list-style: disc;" type=disc>
-	<ul class=whs3 style="list-style: disc;" type=disc>
-		<li class=p><p>Zimbra contacts</p></li>
-		<li class=p><p>Yahoo! contacts</p></li>
-		<li class=p><p>GMail contacts</p></li>
-		<li class=p><p>Outlook 2000 contacts</p></li>
-		<li class=p><p>Outlook 2003 contacts</p></li>
-		<li class=p><p>Outlook contacts</p></li>
-		<li class=p><p>Thunderbird contacts</p></li>
-	</ul>
+<ol class="whs2" type="disc">
+<li style="list-style:none;display: inline">
+<ul class="whs3" type="disc">
+<li class="p">
+<p>Zimbra contacts</p>
+</li>
+<li class="p">
+<p>Yahoo! contacts</p>
+</li>
+<li class="p">
+<p>
+GMail contacts</p>
+</li>
+<li class="p">
+<p>Outlook 2000 contacts</p>
+</li>
+<li class="p">
+<p>Outlook 2003 contacts</p>
+</li>
+<li class="p">
+<p>Outlook contacts</p>
+</li>
+<li class="p">
+<p>
+Thunderbird contacts</p>
+</li>
+</ul>
+</li>
 </ol>
-<p class=whs4><span>&nbsp;Contact lists from different accounts may not 
- display contact information in the same order. Picking the correct type 
- of contact file that is being imported &nbsp;identifies the order of the 
- fields so that the information displays correctly in your Address Book.</span></p>
-<ol start=4 class=whs1 style="list-style: decimal;" type=1>
-	<li class=p><p>Browse to locate the contact .csv file to import. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>Import</b></B></span>. 
- In the <span style="font-weight: bold;"><B><b>Choose Address Book </b></B></span>dialog 
- either select an existing address book to add the contacts or create a 
- new address book to import the file. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>OK</b></B></span>. 
- The content of the contacts file is imported. </p></li>
+<p class="whs4"><span>&#160;Contact lists from different accounts may not display contact information in the same order. Picking the correct type of contact file that is being imported &#160;identifies the order of the fields so that the information displays correctly in your Address Book.</span></p>
+<ol start="4" class="whs1" type="1">
+<li class="p">
+<p>Browse to locate the contact .csv file to import.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b><b>Import</b></b></span>. In the <span style="font-weight: bold;"><b><b>Choose Address Book</b></b></span> dialog either select an existing address book to add the contacts or create a new address book to import the file.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b><b>OK</b></b></span>. The content of the contacts file is imported.</p>
+</li>
 </ol>
 <h2>Importing your iCal calendar</h2>
-<p>You can import iCalendars (iCal) calendars that are saved in the .ics 
- format. iCalendars are the standard for calendar data exchange over the 
- Internet, and .ics is the standard format for iCalendar information. Import 
- is available from your <span>Preferences </span>&gt; Import/Export tab.</p>
-<p>You can import your iCal calendar to an existing calendar or create 
- a new calendar and import the .ics file to it. </p>
+<p>You can import iCalendars (iCal) calendars that are saved in the .ics format. iCalendars are the standard for calendar data exchange over the Internet, and .ics is the standard format for iCalendar information. Import is available from your <span>Preferences</span> &gt; Import/Export tab.</p>
+<p>You can import your iCal calendar to an existing calendar or create a new calendar and import the .ics file to it.</p>
 <p>To import an iCal calendar:</p>
-<ol class=whs1 style="list-style: decimal;" type=1>
-	<li class=p><p>From the<span> </span><span style="font-weight: bold;"><B><b>Preferences 
- </b></B></span>tab, click the <span style="font-weight: bold;"><B><b>Import/Export</b></B></span> 
- tab to open it.</p></li>
-	<li class=p><p>In the Import section's <span style="font-weight: bold;"><B><b>Type</b></B></span> 
- field, &nbsp;select <span style="font-weight: bold;"><B><b>Calendar</b></B></span><span>.</span></p></li>
-	<li class=p><p>In the File field, browse to locate the .ics file to 
- import. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>Import</b></B></span>. 
- In the <span style="font-weight: bold;"><B><b>Choose folder</b></B></span> dialog, 
- select the folder to import the calender, either select one of your existing 
- calendars or create a new calendar. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>OK</b></B></span>. 
- The calendar is imported into our account.</p></li>
+<ol class="whs1" type="1">
+<li class="p">
+<p>From the <span style="font-weight: bold;"><b><b>Preferences</b></b></span> tab, click the <span style="font-weight: bold;"><b><b>Import/Export</b></b></span> tab to open it.</p>
+</li>
+<li class="p">
+<p>In the Import section's <span style="font-weight: bold;"><b><b>Type</b></b></span> field, &#160;select <span style="font-weight: bold;"><b><b>Calendar</b></b></span><span>.</span></p>
+</li>
+<li class="p">
+<p>In the File field, browse to locate the .ics file to import.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b><b>Import</b></b></span>. In the <span style="font-weight: bold;"><b><b>Choose folder</b></b></span> dialog, select the folder to import the calender, either select one of your existing calendars or create a new calendar.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b><b>OK</b></b></span>. The calendar is imported into our account.</p>
+</li>
 </ol>
-<p>iCal calendars are updated periodically according to the remote calendar 
- polling intervals set by the system administrator. </p>
-<script type="text/javascript" language="javascript1.2">
+<p>iCal calendars are updated periodically according to the remote calendar polling intervals set by the system administrator.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

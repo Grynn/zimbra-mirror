@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Creating a new contact</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; width:52px; height:20px; float:none; border-style:none; }
-ol.whs2 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your Address Books\nAdding new contacts");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,66 +81,90 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Adding new contacts</h1>
 <p>You can add new contacts from the toolbar by clicking the arrow in the 
- <img src="../newwitharrow.gif" x-maintain-ratio="TRUE" width="52px" height="20px" border="0" class="img_whs1"> 
- button, or by right-clicking a name in a message header and choosing<span 
- style="font-weight: bold;"><B> Contacts</B></span>. </p>
+ <img src="../newwitharrow.gif" alt="newwitharrow.gif" style="border: none;" width="52" height="20" border="0" /> button, or by right-clicking a name 
+ in a message header and choosing <span style="font-weight: bold;"><b>Contacts</b></span>.</p>
 <p>To create a contact, you can just add a name or you can add detailed 
  information about your contacts, including multiple email addresses, phone 
  numbers, mailing addresses and a picture.</p>
-<h6>To add a new contact </h6>
-<ol type="1" class="whs2">
-	<li class=p><p>From the toolbar, click the arrow next to <span style="font-weight: bold;"><B>New</B></span> 
- and select <span style="font-weight: bold;"><B>Contact</B></span>. The contact 
- form &nbsp;opens. </p></li>
-	<li class=p><p>Enter the contact name and other details. &nbsp;You 
- can even add a picture of the contact. The picture must be accessible 
- from your computer.</p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>File As</B></span>, 
- (on the right) select how you want to name to display in your contact 
- book. The default is to file the contact by last name, first name. </p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Location, </B></span>(on 
- the right)<span style="font-weight: bold;"> <B></B></span>select which address 
- books to save the name to.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span>. 
- </p></li>
+<h6>To add a new contact</h6>
+<ol type="1">
+	<li class="p"><p>From the toolbar, click the arrow next to <span style="font-weight: bold;"><b>New</b></span> 
+	 and select <span style="font-weight: bold;"><b>Contact</b></span>. The contact 
+	 form opens.</p></li>
+	<li class="p"><p>Enter the contact name. Click <img src="../AB_dropdownarrow.png" style="border: none;" alt="AB_dropdownarrow.png" width="18" height="18" border="0" /> 
+	 to add additional names such as the middle name or department name. 
+	 &#160;</p></li>
+	<li class="p"><p>Enter other contact information and upload a photo 
+	 of this contact. The image file must be accessible from your computer.</p></li>
 </ol>
-<p>&nbsp;</p>
-<ul></ul>
-<p>&nbsp;</p>
+<ol>
+	<li style="list-style: none; display: inline;"><ul>
+		<li class="p" type="disc"><p>The &#160;<img src="../AB_plussign.png" alt="AB_plussign.png" style="border: none;" width="24" height="24" border="0" /> sign 
+		 represents fields that can have more than one entry, and the entry 
+		 can be identified with a specific label. For instance the phone 
+		 number can be labeled as Mobile, Work, Home, or &#160;Fax.</p></li>
+		<li class="p" type="disc"><p>The field labeled <span style="font-weight: bold;"><b>Other</b></span> 
+		 allows you to enter custom fields. Two custom fields are identified, 
+		 Birthday and Anniversary. You can create additional custom fields.</p></li>
+		<li style="list-style: none; display: inline;"><ul>
+			<li class="p" type="disc"><p>Where &quot;Birthday&quot; is 
+			 displayed, click the menu and select <span style="font-weight: bold;"><b>Custom</b></span> 
+			 to add a custom field.</p></li>
+			<li class="p" type="disc"><p>Change &quot;Custom&quot; to a 
+			 title for this field and enter the information in the <span 
+			 style="font-weight: bold;"><b>Enter text</b></span> box.</p></li>
+		</ul></li>
+	</ul></li>
+</ol>
+<ol start="4" type="1">
+	<li class="p"><p>In <span style="font-weight: bold;"><b>File As</b></span>, 
+	 (on the right) select how you want the name to display in your address 
+	 book. The default is to file the contact by last name, first name, 
+	 but you can file by First, Last; or by Company.</p></li>
+	<li class="p"><p>In <span style="font-weight: bold;"><b>Location,</b></span> 
+	 (on the right) select the address book to store the name.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Save</b></span>.</p></li>
+</ol>
+<p>&#160;</p>
+<ul>
+	
+</ul>
+<p>&#160;</p>
 <h6>To add a new contact from an existing mail message:</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>Open the mail message, the header is displayed in gray, 
- at top of message detail pane. You can add email addresses in the From:, 
- &nbsp;To:, &nbsp;Cc:, and Bcc: fields.</p></li>
-	<li class=p><p>Right-click the name to add to your contact list and 
- choose <span style="font-weight: bold;"><B>Add to Contacts</B></span>.</p></li>
-	<li class=p><p>The contact &nbsp;form opens pre-populated 
- with whatever information was available from the email header. Add additional 
- information and check the pre-populated fields for correctness as well. 
- </p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>File As</B></span>, 
- select how you want to file the name. The default is to file the contact 
- by last name, first name. </p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Address Book</B></span> 
- select one of your personal address books to save the name to</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span>.</p></li>
+<ol type="1">
+	<li class="p"><p>Open the mail message, the header is displayed in 
+	 gray, at top of message detail pane. You can add email addresses in 
+	 the From:, &#160;To:, &#160;Cc:, and Bcc: fields.</p></li>
+	<li class="p"><p>Right-click the name to add to your contact list and 
+	 choose <span style="font-weight: bold;"><b>Add to Contacts</b></span>.</p></li>
+	<li class="p"><p>The contact&#160;form opens pre-populated with whatever 
+	 information was available from the email header. Add additional information 
+	 and check the pre-populated fields for correctness as well.</p></li>
+	<li class="p"><p>In <span style="font-weight: bold;"><b>File As</b></span>, 
+	 select how you want to file the name. The default is to file the contact 
+	 by last name, first name.</p></li>
+	<li class="p"><p>In <span style="font-weight: bold;"><b>Location, </b></span>select 
+	 the address book to store the name.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Save</b></span>.</p></li>
 </ol>
-<p>&nbsp;</p>
+<p>&#160;</p>
 <p>You can also create <a href="Creating_Group_Contact_Lists.htm">group 
- contact</a> lists. </p>
-<script type="text/javascript" language="javascript1.2">
+ contact</a> lists.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

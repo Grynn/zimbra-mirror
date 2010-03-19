@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Sharing a folder</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Sharing Folders\nSharing  folders");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,82 +81,54 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Sharing Folders</h1>
-<p>You can share your email, address book, calendar, tasks, notebooks and 
- briefcase folders with others either in your organization, external guests, 
- or the public. &nbsp;You right-click a folder and in the dialog that appears 
- specify the type of access permissions to give the Grantee. &nbsp;You 
- can share with internal users who can be given complete manager access 
- to the folder, external guests that must use a password to view the folder 
- content, and public access so that anyone who has the URL can view the 
- content of the folder.</p>
-<p>When internal users share a folder, a copy of the shared folder is put 
- in the Grantee's Folder list on the Overview pane. When the folder is 
- selected, the content displays in the Content pane.</p>
-<p>Go to the Preferences Sharing folder to see a list of folders you shared 
- with others and find folders that are shared with you.</p>
+<p>You can share your email, address book, calendar, tasks, notebooks and briefcase folders with others either in your organization, external guests, or the public. &#160;You right-click a folder and in the dialog that appears specify the type of access permissions to give the Grantee. &#160;You can share with internal users who can be given complete manager access to the folder, external guests that must use a password to view the folder content, and public access so that anyone who has the URL can view the content of the folder.</p>
+<p>When internal users share a folder, a copy of the shared folder is put in the Grantee's Folder list on the Overview pane. When the folder is selected, the content displays in the Content pane.</p>
+<p>Go to the Preferences Sharing folder to see a list of folders you shared with others and find folders that are shared with you.</p>
 <h2>Granting access to your folders</h2>
-<p>You can share folders with internal users or groups, external guests 
- and the public.</p>
-<ul><li class=p-note><p class=note>Email folders can be shared only with 
- internal users or groups</p></li>
+<p>You can share folders with internal users or groups, external guests and the public.</p>
+<ul>
+<li class="p-note">
+<p class="note">Email folders can be shared only with internal users or groups</p>
+</li>
 </ul>
 <h3>Internal users or groups</h3>
-<p>You can share with others in your group or company. When you share with 
- internal users or groups, you enter the email addresses and select the 
- type of access to grant, either:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Viewer</B></span>. The 
- Grantee can view the content in the folder but cannot change the content. 
- &nbsp;</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Manager</B></span>. The 
- Grantee has permissions to view, edit, remove content, accept and decline 
- calendar invitations or requests to share other folders.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Admin</B></span>. The Grantee 
- has full permission to manage the folder, including view, edit, and remove 
- content; accept and decline invitations, share your folder with other 
- people or groups, or revoke access to a shared folder.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>None</B></span>. This is 
- an option to temporarily disable access to a grantor's shared folder without 
- revoking the share privileges. The Grantee still has the folder in their 
- list but cannot view or manage activities in the folder. </p></li>
+<p>You can share with others in your group or company. When you share with internal users or groups, you enter the email addresses and select the type of access to grant, either:</p>
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Viewer</b></span>. The Grantee can view the content in the folder but cannot change the content. &#160;</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Manager</b></span>. The Grantee has permissions to view, edit, remove content, accept and decline calendar invitations or requests to share other folders.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Admin</b></span>. The Grantee has full permission to manage the folder, including view, edit, and remove content; accept and decline invitations, share your folder with other people or groups, or revoke access to a shared folder.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>None</b></span>. This is an option to temporarily disable access to a grantor's shared folder without revoking the share privileges. The Grantee still has the folder in their list but cannot view or manage activities in the folder.</p>
+</li>
 </ul>
 <h3>External guests</h3>
-<p>You can share external guests that must use a password to view the folder 
- content. External guides cannot make changes to your folder. You create 
- the password </p>
+<p>You can share external guests that must use a password to view the folder content. External guides cannot make changes to your folder. You create the password</p>
 <h3>Public URL</h3>
-<p>Anyone who knows the URL to the folder can view the folder content. 
- The public cannot make any changes to the folder. When you select to share 
- with Public, the URL for that displays in the Share Properties dialog 
- is made accessible to the public.</p>
+<p>Anyone who knows the URL to the folder can view the folder content. The public cannot make any changes to the folder. When you select to share with Public, the URL for that displays in the Share Properties dialog is made accessible to the public.</p>
 <h2>Revoking access to shared folders</h2>
-<p>You can edit the access rights and revoke permissions at any time from 
- the folder's Edit Properties page or from the Preferences, Sharing folder.</p>
+<p>You can edit the access rights and revoke permissions at any time from the folder's Edit Properties page or from the Preferences, Sharing folder.</p>
 <h2>Accessing a folder shared with you</h2>
-<p>When a folder is shared with you, you receive an email notification. 
- When you select Accept in the email, the folder link is added to the Overview 
- pane in your mailbox. When you click on the folder, you can see the contents 
- of the Grantor's folder.</p>
-<p>
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','Delegating_Calendar_Access','../Calendar/Delegating_Calendar_Access.htm','Share your Task list','../Tasks/Share_your_Task_folder.htm','Sharing Documents notebooks','../Documents/Sharing_Notebooks.htm','Sharing mail folders','../Delegated_mailboxes/How_sharing_your_mailbox_works.htm','Sharing your Address Book','../Contacts/Sharing_your_Address_Book.htm','Sharing your mailbox','../Delegated_mailboxes/Sharing_your_mailbox.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:normal;font-style:normal;text-decoration:none"><nobr>  Related Topics </nobr></span></a>
-
-
- </p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+<p>When a folder is shared with you, you receive an email notification. When you select Accept in the email, the folder link is added to the Overview pane in your mailbox. When you click on the folder, you can see the contents of the Grantor's folder.</p>
+<p><a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','Delegating_Calendar_Access','../Calendar/Delegating_Calendar_Access.htm','Share your Task list','../Tasks/Share_your_Task_folder.htm','Sharing Documents notebooks','../Documents/Sharing_Notebooks.htm','Sharing mail folders','../Delegated_mailboxes/How_sharing_your_mailbox_works.htm','Sharing your Address Book','../Contacts/Sharing_your_Address_Book.htm','Sharing your mailbox','../Delegated_mailboxes/Sharing_your_mailbox.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:normal;font-style:normal;text-decoration:none"><nobr>  Related Topics </nobr></span></a> </p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

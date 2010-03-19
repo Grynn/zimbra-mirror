@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Importing your iCal calendar</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your  Calendar\nImporting your iCal calendar");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,46 +81,48 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Importing your iCal calendar</h1>
 <p>You can import iCalendars (iCal) calendars that are saved in the .ics 
  format. iCalendars are the standard for calendar data exchange over the 
  Internet, and .ics is the standard format for iCalendar information. Import 
- is available from your <span style="x-condition: Adv_not_ZD;">Preferences 
- </span>&gt; Import/Export 
- tab.</p>
+ is available from your Preferences 
+ &gt; 
+ Import/Export tab.</p>
 <p>You can import your iCal calendar to an existing calendar or create 
- a new calendar and import the .ics file to it. </p>
+ a new calendar and import the .ics file to it.</p>
 <p>To import an iCal calendar:</p>
-<ol type="1" class="whs1">
-	<li class=p><p>Select <span style="font-weight: bold;"><B>Preferences</B></span> 
- and<span style="font-weight: bold;"> <B></B></span>click the <span style="font-weight: bold;"><B>Import 
- / Export</B></span> Folder.</p></li>
-	<li class=p><p>In the Import section's <span style="font-weight: bold;"><B>Type</B></span> 
- field, &nbsp;select <span style="font-weight: bold;"><B>Calendar</B></span><span>.</span></p></li>
-	<li class=p><p>In the File field, browse to locate the .ics file to 
- import. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Import</B></span>. 
- In the <span style="font-weight: bold;"><B>Choose folder</B></span> dialog, select 
- the folder to import the calendar, either select one of your existing 
- calendars or create a new calendar. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. The 
- calendar is imported into our account.</p></li>
+<ol type="1">
+	<li class="p"><p>Select <span style="font-weight: bold;"><b>Preferences</b></span> 
+	 and click the <span style="font-weight: bold;"><b>Import / Export</b></span> 
+	 Folder.</p></li>
+	<li class="p"><p>In the File field, browse to locate the .ics file 
+	 to import.</p></li>
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Destination</b></span> 
+	 field, click <span style="font-weight: bold;"><b>Calendars</b></span> and 
+	 select the folder to import the calendar, either select one of your 
+	 existing calendars or click <span style="font-weight: bold;"><b>New</b></span> 
+	 to create a new calendar.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Import</b></span>. 
+	 &#160;</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>OK</b></span><span>.</span></p></li>
 </ol>
 <p>iCal calendars are updated periodically according to the remote calendar 
- polling intervals set by the system administrator. </p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+ polling intervals set by the system administrator.</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

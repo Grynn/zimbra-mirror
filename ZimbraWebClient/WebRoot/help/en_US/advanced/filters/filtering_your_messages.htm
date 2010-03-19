@@ -1,29 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Filtering your messages</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
-p.whs3 { margin-left:24px; }
-p.whs4 { margin-left:40px; }
-img_whs5 { border:none; width:21px; height:20px; float:none; border-style:none; }
-p.whs6 { font-style:normal; }
-ul.whs7 { list-style:decimal; }
-p.whs8 { x-condition:Advanced_WC; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -34,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Using Mail Filters\nFiltering your messages");
@@ -63,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -82,132 +81,118 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Filtering your messages</h1>
-<p>Filtering applies a set of matching rules to incoming mail and then 
- executes a specified action.</p>
-<p>You can filter your incoming mail messages to sort them into folders, 
- automatically tag them, forward them, or discard them. For example, you 
- could create a rule as follows:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>All mail from your supervisor goes in &quot;Management 
- Directives&quot; folder.</p></li>
-	<li class=p><p>All mail from the &quot;corporate-events&quot; mailing 
- list is tagged with the &quot;Events&quot; tag.</p></li>
+<p>Filtering applies a set of matching rules to incoming mail and then executes a specified action.</p>
+<p>You can filter your incoming mail messages to sort them into folders, automatically tag them, forward them, or discard them. For example, you could create a rule as follows:</p>
+<ul type="disc">
+<li class="p">
+<p>All mail from your supervisor goes in "Management Directives" folder.</p>
+</li>
+<li class="p">
+<p>All mail from the "corporate-events" mailing list is tagged with the "Events" tag.</p>
+</li>
 </ul>
 <h6>To create or edit a new filtering rule:</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>Click the <span style="font-weight: bold;"><B>Preferences 
- &nbsp;</B></span>tab.</p></li>
-	<li class=p><p>Open the <span style="font-weight: bold;"><B>Filters </B></span><span>folder 
- </span>and click <span style="font-weight: bold;"><B>New Filter</B></span>.</p></li>
-	<li class=p><p>The <span style="font-weight: bold;"><B>Add Filter</B></span> 
- dialog displays. This is where you define the rule and the destination 
- for the new filter. </p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Filter Name</B></span>, 
- type a unique name for the filter rule.</p></li>
-	<li class=p><p>In the line &nbsp;<span style="font-weight: bold;"><B>If 
- xxx of the following conditions are met</B></span>, choose a grouping preference. 
- &nbsp;</p></li>
+<ol type="1">
+<li class="p">
+<p>Click the <span style="font-weight: bold;"><b>Preferences &#160;</b></span>tab.</p>
+</li>
+<li class="p">
+<p>Open the <span style="font-weight: bold;"><b>Filters</b></span> <span>folder</span> and click <span style="font-weight: bold;"><b>New Filter</b></span>.</p>
+</li>
+<li class="p">
+<p>The <span style="font-weight: bold;"><b>Add Filter</b></span> dialog displays. This is where you define the rule and the destination for the new filter.</p>
+</li>
+<li class="p">
+<p>In <span style="font-weight: bold;"><b>Filter Name</b></span>, type a unique name for the filter rule.</p>
+</li>
+<li class="p">
+<p>In the line &#160;<span style="font-weight: bold;"><b>If xxx of the following conditions are met</b></span>, choose a grouping preference. &#160;</p>
+</li>
 </ol>
-<ul type="disc" class="whs1">
-	<li class=p><p class="whs3"><span style="font-weight: bold;"><B>Any 
- </B></span>means that if any of the conditions in the filter are met, apply 
- the action. </p></li>
-	<li class=p><p class="whs3"><span style="font-weight: bold;"><B>All 
- </B></span>means that all of the conditions in the filter must be met in order 
- to apply the filter action. &nbsp;</p></li>
+<ul type="disc">
+<li class="p">
+<p style="margin-left: 24px;"><span style="font-weight: bold;"><b>Any</b></span> means that if any of the conditions in the filter are met, apply the action.</p>
+</li>
+<li class="p">
+<p style="margin-left: 24px;"><span style="font-weight: bold;"><b>All</b></span> means that all of the conditions in the filter must be met in order to apply the filter action. &#160;</p>
+</li>
 </ul>
-<p class="whs4">The following steps can be repeated to set 
- up multiple conditions and actions within a single filter. Click the + 
- link to set up multiple conditions.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p class="whs3">Select from the first drop-down 
- list which <a href="filter_conditions_and_actions_supported.htm">condition</a> 
- to use. &nbsp;</p></li>
-	<li class=p><p class="whs3">Choose a <a href="filter_conditions_and_actions_supported.htm">comparison</a> 
- method. The options shown depend on your choice in the previous drop-down. 
- For example, &quot;is&quot; or &quot;is not&quot; could be shown.</p></li>
-	<li class=p><p class="whs3">Enter a word or phrase to 
- compare against in the text field.</p></li>
+<p style="margin-left: 40px;">The following steps can be repeated to set up multiple conditions and actions within a single filter. Click the + link to set up multiple conditions.</p>
+<ul type="disc">
+<li class="p">
+<p style="margin-left: 24px;">Select from the first drop-down list which <a href="filter_conditions_and_actions_supported.htm">condition</a> to use. &#160;</p>
+</li>
+<li class="p">
+<p style="margin-left: 24px;">Choose a <a href="filter_conditions_and_actions_supported.htm">comparison</a> method. The options shown depend on your choice in the previous drop-down. For example, "is" or "is not" could be shown.</p>
+</li>
+<li class="p">
+<p style="margin-left: 24px;">Enter a word or phrase to compare against in the text field.</p>
+</li>
 </ul>
-<p class="whs4">Click<span style="x-condition: Advanced_WC;"> 
- <img src="../plusbutton.gif" x-maintain-ratio="TRUE" width="21px" height="20px" border="0" class="img_whs5"></span>, 
- to add more conditions. You can 
- continue to add more conditions or proceed to the next part, which is 
- to add one or more actions. </p>
-<ol start="6" type="1" class="whs2">
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Perform the 
- following actions</B></span> area, choose an <a href="filter_conditions_and_actions_supported.htm">action</a> 
- from the drop-down list.</p></li>
-</ol>
-<ul type="disc" class="whs1">
-	<li style="margin-left: -20px;" class=p><p class="whs4">Specify 
- a folder or tag name, if necessary. What you specify depends on the action 
- you choose.</p></li>
-</ul>
-<p class="whs4">Click<span style="x-condition: Advanced_WC;"> 
- <img src="../plusbutton.gif" x-maintain-ratio="TRUE" width="21px" height="20px" border="0" class="img_whs5"></span>, 
-  to add 
- more actions. You can continue to add more actions or click <span style="font-weight: bold;"><B>OK</B></span> 
- to finish. </p>
-<ol start="7" type="1" class="whs2">
-	<li style=" font-style: normal; " class=p><p class="whs6">At 
- the top of the Add Filter dialog is an <span style="font-weight: bold;"><B>Active</B></span> 
- check box. Check this box to turn on the filter rule. &nbsp;You 
- can uncheck the Active box if you do not want a rule to run.</p></li>
-	<li style=" font-style: normal; " class=p><p class="whs6">Check 
- <span style="font-weight: bold;"><B>Do not process additional filters</B></span>, 
- if this is the only filter to be run on messages that meet the conditions 
- of this filter. The <span style="font-weight: bold;"><B>Do not process additional 
- filters</B></span> &nbsp;action should be the last action 
- within each filter rule. This prevents the application of any additional 
- filter rules to email messages that match the current rule. </p></li>
-	<ul type="1" class="whs7">
-		<li class=p-note><p class=note>&nbsp;If it is 
- not specified, subsequent filter rules are evaluated for the mail message, 
- even if the current filter is a match. You probably do not want to have 
- the same message match more than one filter rule and undergo multiple, 
- perhaps contradictory actions.</p></li>
-	</ul>
-</ol>
-<p class="whs6">Changes to filter rules are saved immediately. 
- The filter will be applied automatically to all new incoming mail messages 
- as they arrive. &nbsp;</p>
-<p class="whs6">You can also run the filter rules over existing 
- mail. In the Preferences&gt;Filter folder, click &nbsp;<span 
- style="font-weight: bold;"><B>Run Filter</B></span> and select the mail folders 
- to run against the selected filter.</p>
-<ul><li style="x-condition: Advanced_WC;" class=p-note><p class=note>You 
- can also create a new filter from an email message. Right-click on the 
- message, choose <span style="font-weight: bold;"><B>New Filter</B></span>. The 
- <span style="font-weight: bold;"><B>Edit Filter</B></span> dialog displays with 
- <span style="font-weight: bold;"><B>From</B></span>, <span style="font-weight: bold;"><B>To</B></span>, 
- and <span style="font-weight: bold;"><B>Subject</B></span> set with this information 
- from the email message. &nbsp;If the filter conditions 
- are correct, give the filter a name and click OK. </p></li>
-</ul>
-<p class="whs8">&nbsp;</p>
-<p class="whs8">
+<p style="margin-left: 40px;">Click
+ <img src="../plusbutton.gif" style="border: none;" alt="plusbutton.gif" width="21" height="20" border="0" />
+, 
 
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Filter Conditions and Actions Supported','filter_conditions_and_actions_supported.htm','How Filtering Works','how_filtering_works.htm','Wildcards','wildcards.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  Related Topics </nobr></span></a>
+to add more conditions. You can continue to add more conditions or proceed to the next part, which is to add one or more actions.</p>
+<ol start="6" type="1">
+<li class="p">
+<p>In the <span style="font-weight: bold;"><b>Perform the following actions</b></span> area, choose an <a href="filter_conditions_and_actions_supported.htm">action</a> from the drop-down list.</p>
+</li>
+</ol>
+<ul type="disc">
+<li style="margin-left: -20px;" class="p">
+<p style="margin-left: 40px;">Specify a folder or tag name, if necessary. What you specify depends on the action you choose.</p>
+</li>
+</ul>
+<p style="margin-left: 40px;">Click
+ <img src="../plusbutton.gif" style="border: none;" alt="plusbutton.gif" width="21" height="20" border="0" />
+, 
+ to add more actions. You can continue to add more actions or click <span style="font-weight: bold;"><b>OK</b></span> to finish.</p>
+<ol start="7" type="1">
+<li style="font-style: normal;" class="p">
+<p style="font-style: normal;">At the top of the Add Filter dialog is an <span style="font-weight: bold;"><b>Active</b></span> check box. Check this box to turn on the filter rule. &#160;You can uncheck the Active box if you do not want a rule to run.</p>
+</li>
+<li style="font-style: normal;" class="p">
+<p style="font-style: normal;">Check <span style="font-weight: bold;"><b>Do not process additional filters</b></span>, if this is the only filter to be run on messages that meet the conditions of this filter. The <span style="font-weight: bold;"><b>Do not process additional filters</b></span> &#160;action should be the last action within each filter rule. This prevents the application of any additional filter rules to email messages that match the current rule.</p>
+<ul type="1">
+<li class="p-note">
+<p class="note">&#160;If it is not specified, subsequent filter rules are evaluated for the mail message, even if the current filter is a match. You probably do not want to have the same message match more than one filter rule and undergo multiple, perhaps contradictory actions.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p style="font-style: normal;">Changes to filter rules are saved immediately. The filter will be applied automatically to all new incoming mail messages as they arrive. &#160;</p>
+<p style="font-style: normal;">You can also run the filter rules over existing mail. In the Preferences&gt;Filter folder, click &#160;<span style="font-weight: bold;"><b>Run Filter</b></span> and select the mail folders to run against the selected filter.</p>
+<ul>
+<li class="p-note">
+<p class="note">You can also create a new filter from an email message. Right-click on the message, choose <span style="font-weight: bold;"><b>New Filter</b></span>. The <span style="font-weight: bold;"><b>Edit Filter</b></span> dialog displays with <span style="font-weight: bold;"><b>From</b></span>, <span style="font-weight: bold;"><b>To</b></span>, and <span style="font-weight: bold;"><b>Subject</b></span> set with this information from the email message. &#160;If the filter conditions are correct, give the filter a name and click OK.</p>
+</li>
+
+</ul>
+
+<p>&#160;</p>
 
 
- </p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+<p><a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Filter Conditions and Actions Supported','filter_conditions_and_actions_supported.htm','How Filtering Works','how_filtering_works.htm','Wildcards','wildcards.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  Related Topics </nobr></span></a> </p>
+
+<p>&#160;</p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

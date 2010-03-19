@@ -1,6 +1,25 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="events" >
+  <topic name="Scheduling All Day events" url="Calendar/Scheduling_All_Day_events.htm" />
+  <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="export account data" >
+  <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="export iCal calendars" >
+  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="external accounts" >
+  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="external accounts, how to add" >
+  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="external user" >
+  <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+</key>
 <key name="features of Zimbra Web Client" >
   <topic name="About Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
 </key>
@@ -33,6 +52,9 @@
 <key name="folders pane" >
   <topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
+<key name="folders, naming" >
+  <topic name="About folders" url="Navigation_folders_and_tips/about_folders.htm" />
+</key>
 <key name="fonts" >
   <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
@@ -42,11 +64,17 @@
 <key name="Forwarding" >
   <topic name="Forwarding a mail message" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
+<key name="forwarding a message as an attachment" >
+  <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+</key>
 <key name="forwarding email address" >
   <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="forwarding your email" >
   <topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="forwarding, include heading information" >
+  <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="free/busy" >
   <topic name="Seeing free/busy times" url="Calendar/Seeing_free_busy_times.htm" />
@@ -69,6 +97,9 @@
 <key name="group contacts" >
   <topic name="Creating Group Contact Lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
+<key name="headers, include" >
+  <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+</key>
 <key name="how to create appointments" >
   <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
@@ -88,6 +119,9 @@
 <key name="iCal Calendars, import or export" >
   <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
+<key name="ics attachments, saving" >
+  <topic name="Responding_to_an_invitation" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="identities" >
   <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
   <topic name="Creating Personas" url="Userspecific/Creating_Personas.htm" />
@@ -103,6 +137,9 @@
 </key>
 <key name="IM, using other clients" >
   <topic name="Log into other IM clients" url="instant_messaging/Log_into_other_IM_clients.htm" />
+</key>
+<key name="images in signatures" >
+  <topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
 </key>
 <key name="IMAP account" >
   <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
@@ -181,6 +218,9 @@
 <key name="mail notification" >
   <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
 </key>
+<key name="mandatory attendance" >
+  <topic name="Using the Schedule tab when creating a appointment" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
 <key name="mark appointment as private" >
   <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
@@ -230,6 +270,9 @@
 <key name="moving messages to a folder" >
   <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
 </key>
+<key name="naming folders" >
+  <topic name="About folders" url="Navigation_folders_and_tips/about_folders.htm" />
+</key>
 <key name="Navigating" >
   <topic name="Navigating through the user interface" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
@@ -254,64 +297,14 @@
 <key name="option, vacation message" >
   <topic name="Vacation message" url="Userspecific/vacation_message.htm" />
 </key>
+<key name="optional attendance" >
+  <topic name="Using the Schedule tab when creating a appointment" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
 <key name="options" >
   <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="options, Calendar" >
   <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-</key>
-<key name="options, changing" >
-  <topic name="Changing Your User Options" url="Userspecific/Changing_Your_User_Options.htm" />
-</key>
-<key name="options, new mail notification" >
-  <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
-</key>
-<key name="overview pane" >
-  <topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
-</key>
-<key name="pages, Documents" >
-  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="password" >
-  <topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
-</key>
-<key name="permission denied with meeting invite" >
-  <topic name="Receiving a permission denied message" url="Calendar/Receiving_a_permission_denied_message.htm" />
-</key>
-<key name="permissions, changing access to notebooks" >
-  <topic name="Cancelling access to your Documents wiki folder" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-</key>
-<key name="persona" >
-  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
-  <topic name="Creating Personas" url="Userspecific/Creating_Personas.htm" />
-</key>
-<key name="Personal Contacts" >
-  <topic name="Editing a contact" url="Contacts/editing_a_contact.htm" />
-</key>
-<key name="personal distribution lists" >
-  <topic name="Creating Group Contact Lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
-</key>
-<key name="phone, wipe" >
-  <topic name="Managing your mobile devices" url="Userspecific/Managing_your_mobile_devices.htm" />
-</key>
-<key name="planning a meeting" >
-  <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="polling for new mail" >
-  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="POP account" >
-  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
-</key>
-<key name="POP account email, receiving" >
-  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="POP accounts, adding" >
-  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
-</key>
-<key name="POP addresses, adding" >
-  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
 </key>
 
 </indexdata>

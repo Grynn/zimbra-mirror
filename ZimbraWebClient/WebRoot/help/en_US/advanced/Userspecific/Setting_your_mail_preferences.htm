@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Setting your mail preferences</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your Email \nSetting your mail preferences");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,102 +81,117 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Setting your mail preferences</h1>
 <p>The Mail tab includes the following preferences you can change.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Display</B></span>. Select 
- how many items (messages or conversations) to display per page. The default 
- is to display 25 items per page, but you can select more or less items 
- to display per page.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Check for new mail 
- every. </B></span>Select the polling interval, which is how often your computer 
- checks for new email. The default is every 5 minutes. It is not good practice 
- to change this to less than 5 minutes, as checking for email frequently 
- causes a heavy load on the mail server and slows down the performance. 
- If you are expecting an email, you can click <span style="font-weight: bold;"><B>Get 
- Mail</B></span> any time to receive new email immediately. If you select <span 
- style="font-weight: bold;"><B>Never</B></span>, you must click <span style="font-weight: bold;"><B>Get 
- Mail</B></span> on the toolbar to get new email. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Display Mail</B></span>. 
- Select As HTML (when possible) to display messages with HTML formatting, 
- for example bold, colored, otherwise styled text. Select <span style="font-weight: bold;"><B>As 
- Text</B></span> to display messages in plain text format. In plain text format, 
- HTML tags are displayed, not applied as markup to the message.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Message Preview</B></span> 
- options</p></li>
-	<ul type="disc" class="whs1">
-		<li class=p><p><span style="font-weight: bold;"><B>Display snippets 
- of email messages</B></span>. When on, the first line in the email is displayed 
- when the cursor is over the subject of a message. When off, only the first 
- few words of the message are displayed.</p></li>
-		<li class=p><p>If <span style="font-weight: bold;"><B>Double-click 
- opens messages</B></span> in new window is enabled, when you double-click 
- a message, it opens in a new window </p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Check for new mail 
+	 every x.</b></span> Select the polling interval, which is how often your 
+	 computer checks for new email. The default is every 5 minutes. It 
+	 is not good practice to change this to less than 5 minutes, as checking 
+	 for email frequently causes a heavy load on the mail server and slows 
+	 down the performance. If you are expecting an email, you can click 
+	 <span style="font-weight: bold;"><b>Get Mail</b></span> any time to receive 
+	 new email immediately. If you select <span style="font-weight: bold;"><b>Never</b></span>, 
+	 you must click <span style="font-weight: bold;"><b>Get Mail</b></span> on 
+	 the toolbar to get new email.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>When I click Get 
+	 Mail</b></span>. This sets whether or not your mailbox view changes when 
+	 you click Get Mail.</p></li>
+	<ul type="circle">
+		<li class="p"><p>If <span style="font-weight: bold;"><b>Run my default 
+		 search</b></span> is selected, when you click <span style="font-weight: bold;"><b>Get 
+		 Mail</b></span>, the mail search described in the Default Mail Search 
+		 field is run. &#160;If your default search is not the &#160;folder 
+		 you are viewing, your view is automatically redirected to the 
+		 default folder view. In most cases, this is your Inbox. &#160;</p></li>
+		<li class="p"><p>If <span style="font-weight: bold;"><b>Update my 
+		 current view</b></span> is selected, when you click <span style="font-weight: bold;"><b>Get 
+		 Mail</b></span> from a folder, the Get Mail request searches for updates 
+		 to your current folder view and for other new mail. Your current 
+		 folder view does not change. </p></li>
+		<li class="P-note"><p class="note">If new mail is received to other 
+		 folders, those folders are changed to bold and the number of unread 
+		 messages is updated. </p></li>
 	</ul>
-	<li class=p><p>Enable <span style="font-weight: bold;"><B>Images</B></span> 
- to download pictures automatically to your HTML email message. When this 
- is enabled, you do not need to click the display image message to see 
- the image.</p></li>
-	<li class=p><p>When<span style="font-weight: bold;"><B> I read a message 
- in the reading pane</B></span> sets the behavior for marking messages that 
- are viewed from the Reading Pane as read or unread. You can configure 
- to have messages marked as read immediately, marked as read after a defined 
- number of seconds of viewing a message in the Reading Pane, or to always 
- leave messages that are viewed in the Reading pane as unread.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Default Mail Search</B></span> 
- defines the search to execute when you log in. The results of this search 
- are displayed in the Content pane when you log into your mailbox. The 
- default search is your <span style="font-weight: bold;"><B>Inbox</B></span>. 
- Therefore, when you log in, the results of your Inbox display. You can 
- change this field to have another folder, tag, or a saved search displayed 
- when you first open the Zimbra Web Client. See Query language description 
- for the syntax. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>When a message arrives</B></span>. 
- When receiving a message you can set how you want to be notified: play 
- a sound, flash the Mail tab, flash the browser title. See <a href="Setting_up_desktop_alerts.htm">Setting 
- up desktop alerts</a>.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Forward a copy to</B></span>. 
- Specify an address to forward your email to. You can have the original 
- email deleted from your Zimbra mailbox. </p></li>
-	<li class=p><p>Specify whether to send an auto-reply message to incoming 
- mail and set the start and stop date. &nbsp;This is frequently 
- used as an away message or vacation message saying that you are out-of-office, 
- and what the message should say. You can also specify a start and stop 
- date for using this message. See <a href="vacation_message.htm">Vacation 
- message</a>.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Read Receipt</B></span>. 
- Specify how to handle email messages you receive that are flagged to send 
- a <a href="../Creating_Messages/Requesting_a_Return_Receipt.htm">return 
- read receipt</a> message to the originator.</p></li>
-	<li class=p><p>Configure the <span style="font-weight: bold;"><B>Messages 
- from me</B></span> section to handle messages you send that include your address 
- as one of the recipients of the message or that are included in an address, 
- such as a mailing list that includes you.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Junk Mail Options.</B></span> 
- You can identify up to 100 addresses that you always want to block messages 
- from being added to your Inbox and 100 addresses you want to make sure 
- are always added to your Inbox and not sent to Junk. </p></li>
-	<li class=p><p>If you are set up to use a POP3 client, you can configure 
- the POP access behavior when messages are downloaded to ZWC. The POP access 
- options are</p></li>
-	<ul type="disc" class="whs1">
-		<li class=p><p>Allow all mail, including old mail, to be downloaded. 
- </p></li>
-		<li class=p><p>Allow only mail from now (today's date) to be downloaded</p></li>
-	</ul>
+	<li class="p"><p><span style="font-weight: bold;"><b>Display Mail</b></span>. 
+	 Select As HTML (when possible) to display messages with HTML formatting, 
+	 for example bold, colored, otherwise styled text. Select <span style="font-weight: bold;"><b>As 
+	 Text</b></span> to display messages in plain text format. In plain text 
+	 format, HTML tags are displayed, not applied as markup to the message.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Message Preview</b></span> 
+	 options</p></li>
+	<li style="list-style: none; display: inline;"><ul type="disc">
+		<li class="p"><p><span style="font-weight: bold;"><b>Display snippets 
+		 of email messages</b></span>. When on, the first line in the email 
+		 is displayed when the cursor is over the subject of a message. 
+		 When off, only the first few words of the message are displayed.</p></li>
+		<li class="p"><p>If <span style="font-weight: bold;"><b>Double-click 
+		 opens messages</b></span> in new window is enabled, when you double-click 
+		 a message, it opens in a new window</p></li>
+	</ul></li>
+	<li class="p"><p>Enable <span style="font-weight: bold;"><b>Images</b></span> 
+	 to download pictures automatically to your HTML email message. When 
+	 this is enabled, you do not need to click the display image message 
+	 to see the image.</p></li>
+	<li class="p"><p>When <span style="font-weight: bold;"><b>I read a message 
+	 in the reading pane</b></span> sets the behavior for marking messages 
+	 that are viewed from the Reading Pane as read or unread. You can configure 
+	 to have messages marked as read immediately, marked as read after 
+	 a defined number of seconds of viewing a message in the Reading Pane, 
+	 or to always leave messages that are viewed in the Reading pane as 
+	 unread.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Default Mail Search</b></span> 
+	 defines the search to execute when you log in. The results of this 
+	 search are displayed in the Content pane when you log into your mailbox. 
+	 The default search is your <span style="font-weight: bold;"><b>Inbox</b></span>. 
+	 Therefore, when you log in, the results of your Inbox display. You 
+	 can change this field to have another folder, tag, or a saved search 
+	 displayed when you first open the Zimbra Web Client. See Query language 
+	 description for the syntax.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>When a message arrives</b></span>. 
+	 When receiving a message you can set how you want to be notified: 
+	 play a sound, flash the Mail tab, flash the browser title. See <a 
+	 href="Setting_up_desktop_alerts.htm">Setting up desktop alerts</a>.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Forward a copy to</b></span>. 
+	 Specify an address to forward your email to. You can have the original 
+	 email deleted from your Zimbra mailbox.</p></li>
+	<li class="p"><p>Specify whether to send an auto-reply message to incoming 
+	 mail and set the start and stop date. &#160;This is frequently used 
+	 as an away message or vacation message saying that you are out-of-office, 
+	 and what the message should say. You can also specify a start and 
+	 stop date for using this message. See <a href="vacation_message.htm">Vacation 
+	 message</a>.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Read Receipt</b></span>. 
+	 Specify how to handle email messages you receive that are flagged 
+	 to send a <a href="../Creating_Messages/Requesting_a_Return_Receipt.htm">return 
+	 read receipt</a> message to the originator.</p></li>
+	<li class="p"><p>Configure the <span style="font-weight: bold;"><b>Messages 
+	 from me</b></span> section to handle messages you send that include your 
+	 address as one of the recipients of the message or that are included 
+	 in an address, such as a mailing list that includes you.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Junk Mail Options.</b></span> 
+	 You can identify up to 100 addresses that you always want to block 
+	 messages from being added to your Inbox and 100 addresses you want 
+	 to make sure are always added to your Inbox and not sent to Junk.</p></li>
+	<li class="p"><p>If you are set up to use a POP3 client, you can configure 
+	 the POP access behavior when messages are downloaded to ZWC. The POP 
+	 access options are</p></li>
+	<li style="list-style: none; display: inline;"><ul type="disc">
+		<li class="p"><p>Allow all mail, including old mail, to be downloaded.</p></li>
+		<li class="p"><p>Allow only mail from now (today's date) to be 
+		 downloaded</p></li>
+	</ul></li>
 </ul>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

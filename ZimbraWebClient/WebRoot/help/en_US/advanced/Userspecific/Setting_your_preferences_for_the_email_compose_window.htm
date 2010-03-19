@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Setting your preferences for the email compose window</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Composing Email\nSetting your preferences for the email compose window");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,67 +81,71 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Setting your preferences for the email compose window</h1>
 <p>Use the options on the Preferences&gt;Composing tab as follows:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Compose.</B></span> Select 
- your default text editor, either HTML or plain text. </p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Compose.</b></span> Select 
+	 your default text editor, either HTML or plain text.</p></li>
 </ul>
-<p class="whs2">Set the default font settings to be used 
- when using HTML to compose in Mail, Documents and Calendar. &nbsp;You 
+<p style="margin-left: 40px;">Set the default font settings to be used 
+ when using HTML to compose in Mail, Documents and Calendar. &#160;You 
  can define the font style, size and color to use as your default style.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Reply/Forward using 
- format of the original message</B></span>. Even if your default text editor 
- is different from the message received, check this box to reply to the 
- message in the same format as received. &nbsp;This is 
- useful to make sure the recipient can get the message in the best format 
- they can read.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Always compose in new 
- window</B></span> opens a new compose window, that is separate from your Zimbra 
- mailbox. The default is to open a Compose tab on the Application toolbar 
- to compose your messages. In both cases, you can view and navigate within 
- your mailbox while the compose window is open. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Mandatory spell-check 
- before sending a message</B></span>. Select to have your mail spell checked 
- automatically before you send it. &nbsp;If errors are 
- found, a dialog displays the number of misspellings found and ask if you 
- want to correct them before sending. &nbsp;</p></li>
-	<li class=p><p>Messages you compose are <span style="font-weight: bold;"><B>automatically 
- saved as a draft</B></span> every few minutes. If you would prefer not to 
- have this automatically saved, disable the feature. You can manually save 
- a message as a draft.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Reply/Reply All. </B></span>&nbsp;Select 
- whether to include the original text in the body of your reply message. 
- You can choose to include original text, not include it, include it as 
- an attachment, include it in the body with a prefix that you choose, or 
- include only the most recent message. &nbsp;(In other 
- words, it will quote only what was written by the person who sent the 
- message, and not previous text.)</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Forward</B></span>. Select 
- whether to include the original text in the body of when you forward a 
- message. You can chose to include the original message and headers with 
- the prefix below or include original message as an attachment. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Prefix</B></span>. Specify 
- whether to prefix each line with &gt; of | for the previous email messages 
- that are forwarded or replied to, if you chose to quote original text.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Sent Messages</B></span>. 
- By default, <span style="font-weight: bold;"><B>Save a copy to Sent folder</B></span> 
- is enabled. Copies of messages you send are saved to your Sent folder. 
- You can check <span style="font-weight: bold;"><B>Do not save sent messages</B></span> 
- if you do not want this.</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Reply/Forward using 
+	 format of the original message</b></span>. Even if your default text editor 
+	 is different from the message received, check this box to reply to 
+	 the message in the same format as received. &#160;This is useful to 
+	 make sure the recipient can get the message in the best format they 
+	 can read.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Always compose in 
+	 new window</b></span> opens a new compose window, that is separate from 
+	 your Zimbra mailbox. The default is to open a Compose tab on the Application 
+	 toolbar to compose your messages. In both cases, you can view and 
+	 navigate within your mailbox while the compose window is open.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Mandatory spell-check 
+	 before sending a message</b></span>. Check to have your mail spell-checked 
+	 automatically before you send it. &#160;If errors are found, a dialog 
+	 displays the number of misspellings found and ask if you want to correct 
+	 them before sending. &#160;</p></li>
+	<li class="p"><p>Messages you compose are <span style="font-weight: bold;"><b>automatically 
+	 saved as a draft</b></span> every few minutes. If you would prefer not 
+	 to have this automatically saved, disable the feature. You can manually 
+	 save a message as a draft.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Reply/Reply All.</b></span> 
+	 &#160;Select whether to include the original text in the body of your 
+	 reply message. You can choose to include original text, not include 
+	 it, include it as an attachment, include it in the body with a prefix 
+	 that you choose, or include only the most recent message. &#160;(In 
+	 other words, it will quote only what was written by the person who 
+	 sent the message, and not previous text.) When <span style="font-weight: bold;"><b>Include 
+	 headers</b></span> is enabled, the original messages' &#160;To/From and 
+	 Subject header details display in your message. </p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Forward</b></span>. Select 
+	 whether to include the original text in the body of when you forward 
+	 a message. You can chose to include the original message and headers 
+	 with the prefix below or include original message as an attachment. 
+	 &#160;When <span style="font-weight: bold;"><b>Include headers</b></span> 
+	 is enabled, the original messages' &#160;To/From and Subject header 
+	 details display in your message. </p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Prefix</b></span>. Specify 
+	 whether to prefix each line with &gt; of | for the previous email 
+	 messages that are forwarded or replied to, if you chose to quote original 
+	 text.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Sent Messages</b></span>. 
+	 By default, <span style="font-weight: bold;"><b>Save a copy to Sent folder</b></span> 
+	 is enabled. Copies of messages you send are saved to your Sent folder. 
+	 You can check <span style="font-weight: bold;"><b>Do not save sent messages</b></span> 
+	 if you do not want this.</p></li>
 </ul>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

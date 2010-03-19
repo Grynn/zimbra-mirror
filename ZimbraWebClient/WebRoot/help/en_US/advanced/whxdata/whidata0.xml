@@ -25,6 +25,9 @@
 <key name="adding existing accounts" >
   <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
 </key>
+<key name="adding words to my dictionary" >
+  <topic name="Using Spell Check" url="Creating_Messages/Using_Spell_Check.htm" />
+</key>
 <key name="address book sharing" >
   <topic name="Sharing your Address Book" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
@@ -170,6 +173,9 @@
 <key name="checking for new messages" >
   <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
+<key name="checking meeting response" >
+  <topic name="Using the Schedule tab when creating a appointment" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
 <key name="client type" >
   <topic name="Setting your general preferences" url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
@@ -192,6 +198,9 @@
 </key>
 <key name="contacts, adding deleted contact back to list" >
   <topic name="Deleting a contact" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="contacts, creating custom fields on form" >
+  <topic name="Creating a new contact" url="Contacts/creating_a_new_contact.htm" />
 </key>
 <key name="contacts, importing" >
   <topic name="Importing Contacts" url="Contacts/Importing_Contacts.htm" />
@@ -227,6 +236,9 @@
 <key name="creating tags" >
   <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
+<key name="custom contact field" >
+  <topic name="Creating a new contact" url="Contacts/creating_a_new_contact.htm" />
+</key>
 <key name="custom folders" >
   <topic name="Creating custom folders" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
 </key>
@@ -253,6 +265,12 @@
 </key>
 <key name="deleting recurring appointments" >
   <topic name="Changing recurring appointments" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="dictionary, adding words to" >
+  <topic name="Using Spell Check" url="Creating_Messages/Using_Spell_Check.htm" />
+</key>
+<key name="display heading information in reply messages" >
+  <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="Documents, adding tables" >
   <topic name="Adding a table to a Notebook Page" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
@@ -298,25 +316,6 @@
 </key>
 <key name="equipment, reserving" >
   <topic name="Scheduling Resources" url="Calendar/Scheduling_Resources.htm" />
-</key>
-<key name="events" >
-  <topic name="Scheduling All Day events" url="Calendar/Scheduling_All_Day_events.htm" />
-  <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-</key>
-<key name="export account data" >
-  <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="export iCal calendars" >
-  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
-<key name="external accounts" >
-  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
-</key>
-<key name="external accounts, how to add" >
-  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
-</key>
-<key name="external user" >
-  <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 
 </indexdata>

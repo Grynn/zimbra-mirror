@@ -1,5 +1,5 @@
-﻿<html>
-<!-- saved from url=(0014)about:internet -->
+﻿<html><!-- saved from url=(0014)about:internet -->
+
 <script language="javascript1.2" src="whver.js"></script>
 <script language="javascript1.2" src="whmozemu.js"></script>
 <script language="javascript1.2" src="whutils.js"></script>
@@ -41,7 +41,7 @@ var RHWO_SCROLLBARS=0x20;	/*need scrollbars?*/
 var gsStr="";
 var gnId=-1;
 var gsWindow="";
-var gsJava="false";
+var gsNewWnd="true";
 var gbUseStr=false;
 var gbURLReady=false;
 var goWnd=new Object();
@@ -165,11 +165,11 @@ function SwitchURL()
 					sURL+="#";
 				sURL+=strURLOpt;
 			}
-			if(gsJava=="false")
+			if(gsNewWnd=="true")
 			{
 				var strOpt=getBrowserOptionString(oWnd);
 				var sNewName=convertWindowName(oWnd.sName);
-				if(gbNav4)
+				if(gbNav4 || gbSafari)
 				{
 					if (gbNav6)
 					{
@@ -183,13 +183,19 @@ function SwitchURL()
 						var oNewWnd=window.open(sURL,sNewName);
 						window.close();
 						oNewWnd.focus();
+						top.blur();
 					}
 				}
 				else
 				{
 					if(gbIE5)
 					{
-						window.open("about:blank",sNewName,strOpt);
+						var curWnd = null;	
+						curWnd = window.open("about:blank",sNewName,strOpt);
+						if(curWnd)
+						{
+							curWnd.document.location.href = "about:blank";
+						}
 						goNewWnd=window.open(sURL,sNewName);
 					}
 					else
@@ -201,7 +207,18 @@ function SwitchURL()
 				}
 			}
 			else
+			{
+			     if(gsWindow)
+			    {
+			        var nTop=getSValue(oWnd.sBTop,screen.height);
+	                var nLeft=getSValue(oWnd.sBLeft,screen.width);
+	                var nWidth=getSValue(oWnd.sBWidth,screen.width);
+	                var nHeight=getSValue(oWnd.sBHeight,screen.height);
+			        window.resizeTo( nWidth , nHeight);
+			        window.moveTo(nLeft , nTop);
+			     }
 				document.location=sURL;
+			}
 		}
 	}
 }
@@ -233,6 +250,7 @@ function postWindowNSOpen()
 			goNewWnd.document.location.href=gsURL;
 		window.close();
 		goNewWnd.focus();
+		top.blur();
 	}
 }
 
@@ -288,7 +306,7 @@ function parsePart(sPart)
 	else if(sPart.toLowerCase().indexOf("url=")==0)
 	{
 		if(IsInternal(sPart.substring(4)))
-			gsTopicURL=_textToHtml(sPart.substring(4));
+			gsTopicURL=sPart.substring(4);
 		gbURLReady=true;
 	}
 	else if(sPart.toLowerCase().indexOf("cmd=")==0)
@@ -320,9 +338,13 @@ function parsePart(sPart)
 	{
 		gsWindow=_browserStringToText(sPart.substring(4));
 	}
-	else if(sPart.toLowerCase().indexOf("java=")==0)
+	else if(sPart.toLowerCase().indexOf("newwnd=")==0)
 	{
-		gsJava=sPart.substring(5);
+		gsNewWnd=sPart.substring(7);
+	}
+	else if(sPart.toLowerCase().indexOf("topicurl=") ==0)
+	{
+		document.location.href=_getPath(document.location.href)+gHomePage+"#"+ sPart.substring(9); 
 	}
 }
 
@@ -589,13 +611,12 @@ window.onload=window_OnLoad;
 
 function window_OnLoad()
 {
+	var sParam = document.location.hash;
 	if(document.location.hash.length>0)
 	{
-		showCSH(document.location.hash.substring(1));
+		sParam = PatchParametersForEscapeChar(sParam);
+		showCSH(sParam.substring(1));
 	}
-
-	if(gsJava=="false")
-		window.moveTo(screen.width,screen.height);
 }
 //-->
 </script>

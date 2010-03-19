@@ -1,24 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Your Address Book</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-h3.whs1 { x-condition:Advanced_WC; }
-p.whs2 { x-condition:Advanced_WC; }
-ul.whs3 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your Address Books\nYour Address Book");
@@ -58,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -77,69 +81,57 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Your Address Book</h1>
-<p><span style="font-weight: bold;"><B>Address Book</B></span> is where you can 
- store contact details. By default a <span style="font-weight: bold;"><B>Contacts</B></span> 
- and an <span style="font-weight: bold;"><B>Emailed Contacts</B></span> address 
- book are created in Address Book. You can create additional address books<span 
- style="x-condition: Advanced_WC;"> and share them with others</span>.</p>
+<p><span style="font-weight: bold;"><b>Address Book</b></span> is where you can 
+ store contact details. By default a <span style="font-weight: bold;"><b>Contacts</b></span> 
+ and an <span style="font-weight: bold;"><b>Emailed Contacts</b></span> address 
+ book are created in Address Book. You can create additional address books 
+ and share them with other .</p>
 <p>You can <a href="creating_a_new_contact.htm">add contacts</a> to any 
  of your address books. Only a name is required to create a contact, or 
- you can create detailed contact cards that include full name, multiple 
- email addresses, work, home, and other addresses, phone numbers, and notes 
- about that contact. You can also create <a href="Creating_Group_Contact_Lists.htm">group 
+ you can create detailed contact forms that include full name, multiple 
+ email addresses, work, home, and other addresses, phone numbers, and an 
+ image. You can also create <a href="Creating_Group_Contact_Lists.htm">group 
  contact</a> lists.</p>
-<p>The <span style="font-weight: bold;"><B>Emailed Contacts</B></span> address 
+<p>The <span style="font-weight: bold;"><b>Emailed Contacts</b></span> address 
  book is populated when you send an email to a new address that is not 
  in one of your other address books. You can disable this feature from 
- your Preferences, Address Book tab. Remove the check from Settings, <span 
- style="font-weight: bold;"><B>Add new contacts to &quot;Emailed Contacts&quot;</B></span>. 
- </p>
+ Preferences, Address Book. Remove the check from Settings, <span style="font-weight: bold;"><b>Add 
+ new contacts to &quot;Emailed Contacts&quot;</b></span>.</p>
 <p>Your email administrator can set a maximum limit for the number of entries 
  you can have in all of your address books. When you reach this maximum, 
  you cannot add any more contacts. However, you can delete unused contacts 
  to free up space.</p>
 <p>When you compose an email, the auto-complete feature displays a list 
- of names from your address books that match the text you are typing. </p>
-<h2>Viewing your contact information</h2>
-<p>You can view the contact names in a list or as cards. The <span style="font-weight: bold;"><B>List</B></span> 
- view is a vertical list of all of your contacts. The <span style="font-weight: bold;"><B>Cards</B></span> 
- view shows all the information you entered on the contact form. </p>
-<p>You can change the view from the <span style="font-weight: bold;"><B>Address 
- Book View</B></span> drop-down. </p>
-<p>Complete contact information displays as a tool tip when you pass the 
- mouse cursor over a name in an email &nbsp;message or 
- in the email content view, if that name is in one of your address books. 
- </p>
-<h3 class="whs1">Sharing your contact lists</h3>
-<p class="whs2">You can <a href="Sharing_your_Address_Book.htm" 
- style="x-condition: Advanced_WC;">share</a> any of your address books. 
- This is useful if your address books are for specific categories of contacts 
- and what other users to have access to the names. Depending on the role 
- you assign to the grantee, the shared contacts list can be view-only or 
- can have full access privileges to edit, add, and delete names. </p>
+ of names from your address books that match the text you are typing.</p>
+<h3>Sharing your contact lists</h3>
+<p>You can <a 
+	 href="Sharing_your_Address_Book.htm">share</a> any 
+ of your address books. This is useful if your address books are for specific 
+ categories of contacts and what other users to have access to the names. 
+ Depending on the role you assign to the grantee, the shared contacts list 
+ can be view-only or can have full access privileges to edit, add, and 
+ delete names.</p>
 <h3>Additional address book features</h3>
 <p>Other features include the ability to:</p>
-<ul type="disc" class="whs3">
-	<li class=p><p><a href="../Tags_and_flags/Assigning_tags_to_messages.htm">Apply 
- tags</a> to contacts</p></li>
-	<li class=p><p><a href="Importing_Contacts.htm">Import</a> and <a href="Exporting_Address_Books.htm">export</a> 
- address books</p></li>
+<ul type="disc">
+	<li class="p"><p><a href="../Tags_and_flags/Assigning_tags_to_messages.htm">Apply 
+	 tags</a> to contacts</p></li>
+	<li class="p"><p><a href="Importing_Contacts.htm">Import</a> and <a 
+	 href="Exporting_Address_Books.htm">export</a> address books</p></li>
 </ul>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

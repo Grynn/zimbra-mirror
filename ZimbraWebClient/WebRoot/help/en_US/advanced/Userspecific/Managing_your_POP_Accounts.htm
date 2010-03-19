@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Accessing your external accounts</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your Email \nRetrieving Mail from other Accounts\nAccessing your external accounts");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,65 +81,63 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Accessing your External Accounts</h1>
 <p>Instead of logging on to each of your external email accounts, you can 
  retrieve your accounts' email messages directly from the Zimbra Web Client. 
- When you set up your external account on ZWC, you can 
- specify where the messages will be saved and create your persona to be 
- used when you reply to or forward a message received from that external 
- account. </p>
+ When you set up your external account on ZWC, 
+ you can specify where the messages will be saved and create your persona 
+ to be used when you reply to or forward a message received from that external 
+ account.</p>
 <h2>Information you need to set up your external account</h2>
 <p>When you set up your external account you need to know the following 
  details about this account. You may need to contact your email provider 
  for this information.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Account type</B></span>. 
- This is the type of email you service provider uses, &nbsp;POP 
- or IMAP</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>User name on the accoun</B></span>t. 
- The user name associated with this email account. Sometimes your user 
- name is the part of your email address before the @ and other times it 
- is your full email address.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Email server</B></span>. 
- This is the server name for your external account.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Advanced settings</B></span>. 
- Your provider should let you know if they do not use standard IMAP (143) 
- or POP (110) port. Enable <span style="font-weight: bold;"><B>Use an encrypted 
- connection (SSL) when accessing this server</B></span> 
- when you need to connect securely to the external server. &nbsp;The 
- port numbers will change.</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Account type</b></span>. 
+	 This is the type of email you service provider uses, &#160;POP or 
+	 IMAP</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>User name on the 
+	 accoun</b></span>t. The user name associated with this email account. 
+	 Sometimes your user name is the part of your email address before 
+	 the @ and other times it is your full email address.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Email server</b></span>. 
+	 This is the server name for your external account.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Advanced settings</b></span>. 
+	 Your provider should let you know if they do not use standard IMAP 
+	 (143) or POP (110) port. Enable <span style="font-weight: bold;"><b>Use 
+	 an encrypted connection ( SSL) 
+	 when accessing this server</b></span> when you need to connect securely 
+	 to the external server. &#160;The port numbers will change.</p></li>
 </ul>
 <h6>Receiving messages to your account</h6>
 <p>When you retrieve your external email messages, the messages and attachments 
  are saved to the folder you specified when you configured your account 
  information.</p>
 <p>Messages from your external account are not automatically received in 
- your Zimbra Web Client account. </p>
-<ul type="disc" class="whs1">
-	<li class=p><p>&nbsp;If you configured the <span style="font-weight: bold;"><B>Inbox</B></span> 
- to be the folder to save the external account's messages, click <span 
- style="font-weight: bold;"><B>Get Mail</B></span> on the toolbar. Your Inbox 
- folder is updated with all new messages including messages from your external 
- accounts.</p></li>
-	<li class=p><p>If you configured another folder for your external accounts, 
- select that folder and click the <span style="font-weight: bold;"><B>Get 
- Mail</B></span> button from the toolbar. &nbsp;Messages are 
- delivered to your folder. Click <span style="font-weight: bold;"><B>Refresh</B></span> 
- to see the latest messages.</p></li>
+ your Zimbra Web Client account.</p>
+<ul type="disc">
+	<li class="p"><p>&#160;If you configured the <span style="font-weight: bold;"><b>Inbox</b></span> 
+	 to be the folder to save the external account's messages, click <span 
+	 style="font-weight: bold;"><b>Get Mail</b></span> on the toolbar. Your Inbox 
+	 folder is updated with all new messages including messages from your 
+	 external accounts.</p></li>
+	<li class="p"><p>If you configured another folder for your external 
+	 accounts, select that folder and click the <span style="font-weight: bold;"><b>Get 
+	 Mail</b></span> button from the toolbar. &#160;Messages are delivered 
+	 to your folder. Click <span style="font-weight: bold;"><b>Refresh</b></span> 
+	 to see the latest messages.</p></li>
 </ul>
-<p>&nbsp;</p>
-<p class="whs2">&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<p style="margin-left: 40px;">&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

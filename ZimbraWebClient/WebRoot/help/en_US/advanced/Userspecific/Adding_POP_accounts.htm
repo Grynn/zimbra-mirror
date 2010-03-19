@@ -1,37 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Adding external accounts</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-ul.whs2 { list-style:decimal; }
-p.whs3 { margin-left:0px; }
-p.whs4 { font-weight:normal; }
-p.whs5 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs3 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -42,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your Email \nRetrieving Mail from other Accounts\nAdding external accounts");
@@ -71,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -90,85 +81,83 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Adding external accounts </h1>
+//]]></script>
+<h1>Adding external accounts</h1>
 <p>Instead of logging on to each of your external email accounts, you can 
  check these accounts for email messages directly from this account. See 
  <a href="Managing_your_POP_Accounts.htm">Accessing your external accounts</a>.</p>
 <h6>To add external accounts to your Web Client account</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Open the <span style="font-weight: bold;"><B>Preferences</B></span>, 
- <span style="font-weight: bold;"><B>Accounts</B></span> tab and click <span style="font-weight: bold;"><B>Add 
- External Account. </B></span><span>A new external account name is added to 
- your accounts. Now you need to set it up.</span></p></li>
-	<li class=p><p><span>In </span><span style="font-weight: bold;"><B>External 
- Account Settings</B></span> section<span style="font-weight: bold;"><B> Account 
- Names</B></span><span> field </span>enter a name to identify this account. 
- You can select this account name from the From address list when you compose 
- new email messages. </p></li>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Email Address</B></span> 
- field enter the exact email address of the external account.</p></li>
-	<li class=p><p>Now you configure the account settings. You may need 
- to get this information from your email provider.</p></li>
-	<ul type="1" class="whs2">
-		<li style="list-style: disc;" type=disc class=p><p class="whs3">Check 
- the <span style="font-weight: bold;"><B>account type</B></span>, POP or IMAP</p></li>
-		<li style="list-style: disc;" type=disc class=p><p><span style="font-weight: bold;"><B>Username 
- of Account</B></span>. Enter the name of this email account. </p></li>
-		<li style="list-style: disc;" type=disc class=p><p class="whs3"><span 
- style="font-weight: bold;"><B>Email server</B></span>. Enter the email server 
- host name. </p></li>
-		<li style="list-style: disc;" type=disc class=p><p><span style="font-weight: bold;"><B>Password</B></span>. 
- Enter the password you use to log on to this external account. To see 
- that the password you typed is correct, check <span style="font-weight: bold;"><B>Show 
- password</B></span>.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p><span style="font-weight: bold;"><B>Advanced 
- options</B></span><span> If you service provider uses a different port then 
- the default, change it now. If you use a secure connection,</span> enable 
- Use an encrypted connection (SSL) when accessing this 
- server.</p></li>
-	</ul>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Download messages 
- to</B></span> section, select where the messages should be saved. The default 
- is to create a new folder and enable it to receive the messages. &nbsp;But 
- if you want the messages in your Inbox, select Inbox.</p></li>
-	<li class=p><p><span style="margin-left: 0px;">Enable </span><span 
- style="margin-left: 0px; font-weight: bold;"><B>Delete messages on the server 
- after downloading them</B></span><span style="margin-left: 0px;">, if you 
- want </span>the message deleted from your external account when it is 
- sent to your ZWC account.</p></li>
-	<li class=p><p>In the text box below <span style="font-weight: bold;"><B>From:</B></span> 
- type the name that should appear in the From field of your outgoing email 
- messages (for example, John). This is the friendly name that is shown 
- before your email address. </p></li>
-	<li class=p><p>If replies should be sent to a name and address different 
- from that which you configured in From, check <span style="font-weight: bold;"><B>Reply-to</B></span>. 
- Enter the name and address that should receive replies for this identity. 
- For example, replies to training messages John sends should be sent to 
- <span style="font-style: italic;"><I>Team Training</I></span> at training@example.com. 
- </p></li>
-	<li class=p><p>You can select a signature to use for this persona. 
- If you have not created the appropriate signature, you can come back and 
- edit this account information later. If you do not want the signature 
- to be applied automatically, select <span style="font-weight: bold;"><B>Do 
- Not Attach Signature.</B></span></p></li>
-	<li style=" font-weight: normal; " class=p><p class="whs4">Click 
- <span style="font-weight: bold;"><B>Save</B></span> to save this external account.</p></li>
+<ol type="1">
+	<li class="p"><p>Open the <span style="font-weight: bold;"><b>Preferences</b></span>, 
+	 <span style="font-weight: bold;"><b>Accounts</b></span> tab and click <span 
+	 style="font-weight: bold;"><b>Add External Account.</b></span> <span>A new 
+	 external account name is added to your accounts. Now you need to set 
+	 it up.</span></p></li>
+	<li class="p"><p><span>In</span> <span style="font-weight: bold;"><b>External 
+	 Account Settings</b></span> section <span style="font-weight: bold;"><b>Account 
+	 Names</b></span> <span>field</span> enter a name to identify this account. 
+	 You can select this account name from the From address list when you 
+	 compose new email messages.</p></li>
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Email Address</b></span> 
+	 field enter the exact email address of the external account.</p></li>
+	<li class="p"><p>Now you configure the account settings. You may need 
+	 to get this information from your email provider.</p>
+	<ul type="1">
+		<li class="p" type="disc"><p style="margin-left: 0px;">Check the 
+		 <span style="font-weight: bold;"><b>account type</b></span>, POP or IMAP</p></li>
+		<li class="p" type="disc"><p><span style="font-weight: bold;"><b>Username of Account</b></span>. Enter the name of 
+		 this email account.</p></li>
+		<li class="p" type="disc"><p style="margin-left: 0px;"><span style="font-weight: bold;"><b>Email 
+		 server</b></span>. Enter the email server host name.</p></li>
+		<li class="p" type="disc"><p><span style="font-weight: bold;"><b>Password</b></span>. 
+		 Enter the password you use to log on to this external account. 
+		 To see that the password you typed is correct, check <span style="font-weight: bold;"><b>Show 
+		 password</b></span>.</p></li>
+		<li class="p" type="disc"><p><span style="font-weight: bold;"><b>Advanced 
+		 options</b></span> <span>If you service provider uses a different 
+		 port then the default, change it now. If you use a secure connection,</span> 
+		 enable Use an encrypted connection ( 
+		 SSL) when accessing this server.</p></li>
+	</ul></li>
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Download messages 
+	 to</b></span> section, select where the messages should be saved. The 
+	 default is to create a new folder and enable it to receive the messages. 
+	 &#160;But if you want the messages in your Inbox, select Inbox.</p></li>
+	<li class="p"><p><span style="margin-left: 0px;">Enable</span> <span 
+	 style="margin-left: 0px; font-weight: bold;"><b>Delete messages on the 
+	 server after downloading them</b></span><span style="margin-left: 0px;">, 
+	 if you want</span> the message deleted from your external account 
+	 when it is sent to your ZWC account.</p></li>
+	<li class="p"><p>In the text box below <span style="font-weight: bold;"><b>From:</b></span> 
+	 type the name that should appear in the From field of your outgoing 
+	 email messages (for example, John). This is the friendly name that 
+	 is shown before your email address.</p></li>
+	<li class="p"><p>If replies should be sent to a name and address different 
+	 from that which you configured in From, check <span style="font-weight: bold;"><b>Reply-to</b></span>. 
+	 Enter the name and address that should receive replies for this identity. 
+	 For example, replies to training messages John sends should be sent 
+	 to <span style="font-style: italic;"><i>Team Training</i></span> at training@example.com.</p></li>
+	<li class="p"><p>You can select a signature to use for this persona. 
+	 If you have not created the appropriate signature, you can come back 
+	 and edit this account information later. If you do not want the signature 
+	 to be applied automatically, select <span style="font-weight: bold;"><b>Do 
+	 Not Attach Signature.</b></span></p></li>
+	<li class="p" style="font-weight: normal;"><p style="font-weight: normal;">Click 
+	 <span style="font-weight: bold;"><b>Save</b></span> to save this external 
+	 account.</p></li>
 </ol>
-<p class="whs5">If you need to create the signature, go to 
+<p style="margin-left: 40px;">If you need to create the signature, go to 
  the Signature tab after you click Save. See <a href="using_a_signature.htm">Using 
  a signature</a>.</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,39 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Managing items you share</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
-p.whs3 { margin-left:40px; font-weight:bold; }
-p.whs4 { margin-left:40px; }
-p.whs5 { margin-left:80px; }
-p.whs6 { margin-left:0px; }
-ul.whs7 { list-style:inside decimal; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs6 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -44,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Sharing Folders\nManaging items you share");
@@ -73,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -92,163 +81,147 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" x-save-method="compute-relative" src="../ehlpdhtm.js" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
-</script>
-
-
-
+//]]></script>
+<script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2"></script>
 <h1>Managing items you share</h1>
 <p>You can share your email, address book, calendar, tasks, notebooks and 
  briefcase folders with others either in your organization, external guests, 
- or the public. &nbsp;You can share with internal users who can be given 
+ or the public. &#160;You can share with internal users who can be given 
  complete manager access to the folder, external guests that must use a 
  password to view the folder content, and public access so that anyone 
  who has the URL can view the content of the folder.</p>
-<p>You &nbsp;can view and manage your shared items from 
- the <span style="font-weight: bold;"><B>Preferences Sharing</B></span> folder. 
- On this page you can do the following:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>View folders that are shared with you, including those 
- you have not accepted</p></li>
-	<li class=p><p>View folders that you have shared with others, and take 
- action such as edit, revoke or resend</p></li>
-	<li class=p><p>Share folders with others</p></li>
+<p>You &#160;can view and manage your shared items from the <span style="font-weight: bold;"><b>Preferences 
+ Sharing</b></span> folder. On this page you can do the following:</p>
+<ul type="disc">
+	<li class="p"><p>View folders that are shared with you, including those 
+	 you have not accepted</p></li>
+	<li class="p"><p>View folders that you have shared with others, and 
+	 take action such as edit, revoke or resend</p></li>
+	<li class="p"><p>Share folders with others</p></li>
 </ul>
-<h3>Folders shared with me</h3>
-<p>In this section, you toggle between two views:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Show folders shared 
- with me through a distribution list</B></span>. This option is selected by 
- default. If folders are shared with you through a DL, the fields are populated 
- with the shared item information.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Show folders shared 
- with me by the following user</B></span>. When you select this option, enter 
- a name of a user that has shared an item with you. The information is 
- displayed in one of the fields depending on whether you have accepted 
- a share invitation or not. You can view information from one user at a 
- time. The details are not saved.</p></li>
+<h3>Folders shared with me but not yet accepted</h3>
+<p>In this section, folders that have been shared with you but you have 
+ not yet accepted the share are listed. &#160;You toggle between two views:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Show folders shared 
+	 with me through a distribution list</b></span>. This option is selected 
+	 by default.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Show folders shared 
+	 with me by the following user</b></span>. When you select this option, 
+	 enter a name of a user that has shared an item with you. &#160;You 
+	 can view information from one user at a time. The details are not 
+	 saved.</p></li>
 </ul>
+<h3>Folders shared with me that I have accepted</h3>
+<p>This section lists the folders where you have accepted the share. A 
+ description of the shared folder, including your role, type of folder 
+ and with whom the folder is shared, including the distribution list name.</p>
 <h3>Folders shared by me</h3>
 <p>In this section, your shared folders are listed, showing the address 
  of the users you shared your folder with, the location of the shared item, 
  the type of item shared (Mail, Address book, Calendar, Notebook, Task 
- list, or Briefcase), and the role you assigned to the user. </p>
+ list, or Briefcase), and the role you assigned to the user.</p>
 <p>You can edit the share properties, revoke permissions to your share, 
- or resend the invitation. </p>
+ or resend the invitation.</p>
 <h3>Share a Folder</h3>
 <p>You can share your email, address book, calendar, tasks, notebooks, 
- and briefcase folders directly from this Preferences folder. </p>
-<ol type="1" class="whs2">
-	<li class=p><p>Select the folder type.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Share</B></span>.</p></li>
-	<li class=p><p>Select the item to share and click <span style="font-weight: bold;"><B>OK</B></span>. 
- The Share Properties dialog displays.</p></li>
-	<li class=p><p>On the Share Properties dialog select whom to share 
- with.</p></li>
+ and briefcase folders directly from this Preferences folder.</p>
+<ol type="1">
+	<li class="p"><p>Select the folder type.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Share</b></span>.</p></li>
+	<li class="p"><p>Select the item to share and click <span style="font-weight: bold;"><b>OK</b></span>. 
+	 The Share Properties dialog displays.</p></li>
+	<li class="p"><p>On the Share Properties dialog select whom to share 
+	 with.</p></li>
 </ol>
-<p class="whs3"><span style="font-weight: bold;"><B><a class="dropspot" href="javascript:TextPopup(this)" id="a4">Internal Users or Groups</a></B></span></p>
-<div class="droptext" id="POPUP264687692" style="display: 'none'; " x-ss-type="dropdown">
- <ol type="1" class="whs2">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs4">When 
- you choose Internal, you can choose addresses from the list that appears 
- as you type or you can type addresses that are not in the list. The user 
- or group must be a valid address in your company's mail server. </p></li>
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs4">In 
- the <span style="font-weight: bold;"><B>Role</B></span> area, select the access 
- permissions.</p></li>
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs4">If 
- you want to share your private appointment information, check <span style="font-weight: bold;"><B>Allow 
- user(s) to see my private appointments</B></span><span>.</span></p></li>
- </ol>
- <ol start="4" type="1" class="whs2">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs4">In 
- the <span style="font-weight: bold;"><B>Message</B></span> area, select which 
- type of message to send. &nbsp;The options are as follows:</p></li>
- </ol>
- <ul type="disc" class="whs1">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs5"><span 
- style="font-weight: bold;"><B>Send standard message</B></span>. The standard 
- share notification message is sent to the email address. &nbsp;</p></li>
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs5"><span 
- style="font-weight: bold;"><B>Add a note to standard message</B></span>. You 
- can add additional information to the standard message.</p></li>
- </ul>
- <ol start="5" type="1" class="whs2">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs4">Click 
- <span style="font-weight: bold;"><B>OK</B></span>. </p></li>
- </ol>
- <p>&nbsp;</p>
+<p style="margin-left: 40px; font-weight: bold;"><span style="font-weight: bold;"><b><a 
+	 class="dropspot" href="javascript:TextPopup(this)" id="a4">Internal 
+ Users or Groups</a></b></span></p>
+<div class="droptext" id="POPUP443142797" style="display: none;">
+	<ol type="1">
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">When 
+		 you choose Internal, you can choose addresses from the list that 
+		 appears as you type or you can type addresses that are not in 
+		 the list. The user or group must be a valid address in your company's 
+		 mail server.</p></li>
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">In 
+		 the <span style="font-weight: bold;"><b>Role</b></span> area, select 
+		 the access permissions.</p></li>
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">If 
+		 you want to share your private appointment information, check 
+		 <span style="font-weight: bold;"><b>Allow user(s) 
+		 to see my private appointments</b></span><span>.</span></p></li>
+	</ol>
+	<ol start="4" type="1">
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">In 
+		 the <span style="font-weight: bold;"><b>Message</b></span> area, select 
+		 which type of message to send. &#160;The options are as follows:</p></li>
+	</ol>
+	<ul type="disc">
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 80px;"><span 
+		 style="font-weight: bold;"><b>Send standard message</b></span>. The standard 
+		 share notification message is sent to the email address. &#160;</p></li>
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 80px;"><span 
+		 style="font-weight: bold;"><b>Add a note to standard message</b></span>. 
+		 You can add additional information to the standard message.</p></li>
+	</ul>
+	<ol start="5" type="1">
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">Click 
+		 <span style="font-weight: bold;"><b>OK</b></span>.</p></li>
+	</ol>
+	<p>&#160;</p>
 </div>
-<p class="whs3"><a class="dropspot" href="javascript:TextPopup(this)" id="a5">External 
- guests</a></p>
-<div class="droptext" id="POPUP263280264" style="display: 'none'; " x-ss-type="dropdown">
- <ol>
-  <li style="list-style: decimal;" type=1 class=p>
-  <p>When you choose 
- External guests, enter the guest email addresses. &nbsp;&nbsp;You 
- can enter more than one address in the Email: field. Put a semi-colon 
- (;) between addresses.</p></li>
-  <li style="list-style: decimal;" type=1 class=p>
-  <p>Enter the password 
- that users must enter to view your calendar.</p></li>
-  <li style="list-style: decimal;" type=1 class=p>
-  <p>If you want to share 
- your private appointment information, check <span style="font-weight: bold;"><B>Allow 
- user(s) to see my private appointments</B></span>. </p></li>
- </ol>
- <ol start=4>
-  <li class=p>
-  <p class="whs6">In the <span style="font-weight: bold;"><B>Message</B></span> 
- area, select which type of message to send. &nbsp;The 
- URL to your calendar and the password is included in the email message.</p></li>
-  <ul type="1" class="whs7">
-   <li style="list-style: disc;" type=disc class=p>
-   <p class="whs6"><span 
- style="font-weight: bold;"><B>Send standard message</B></span>. The standard 
- share notification message is sent to the email address. </p></li>
-   <li style="list-style: disc;" type=disc class=p>
-   <p class="whs6"><span 
- style="font-weight: bold;"><B>Add a note to standard message</B></span>. You 
- can add additional information to the standard message.</p></li>
-  </ul>
-  <li class=p>
-  <p class="whs6">Click <span style="font-weight: bold;"><B>OK</B></span>. 
- </p></li>
- </ol>
+<p style="margin-left: 40px; font-weight: bold;"><a class="dropspot" href="javascript:TextPopup(this)" 
+													 id="a5">External guests</a></p>
+<div class="droptext" id="POPUP445870680" style="display: none;">
+	<ol>
+		<li class="p" type="1"><p>When you choose External guests, enter 
+		 the guest email addresses. &#160;&#160;You can enter more than 
+		 one address in the Email: field. Put a semi-colon (;) between 
+		 addresses.</p></li>
+		<li class="p" type="1"><p>Enter the password that users must enter 
+		 to view your calendar.</p></li>
+		<li class="p" type="1"><p>If you want to share your private appointment 
+		 information, check <span style="font-weight: bold;"><b>Allow user(s) to see my private appointments</b></span>.</p></li>
+	</ol>
+	<ol start="4">
+		<li class="p"><p style="margin-left: 0px;">In the <span style="font-weight: bold;"><b>Message</b></span> 
+		 area, select which type of message to send. &#160;The URL to your 
+		 calendar and the password is included in the email message.</p>
+		<ul type="1">
+			<li class="p" type="disc"><p style="margin-left: 0px;"><span 
+			 style="font-weight: bold;"><b>Send standard message</b></span>. The 
+			 standard share notification message is sent to the email address.</p></li>
+			<li class="p" type="disc"><p style="margin-left: 0px;"><span 
+			 style="font-weight: bold;"><b>Add a note to standard message</b></span>. 
+			 You can add additional information to the standard message.</p></li>
+		</ul></li>
+		<li class="p"><p style="margin-left: 0px;">Click <span style="font-weight: bold;"><b>OK</b></span>.</p></li>
+	</ol>
 </div>
-<p class="whs3"><a class="dropspot" href="javascript:TextPopup(this)" id="a6">Public</a></p>
-<div class="droptext" id="POPUP264711172" style="display: 'none'; " x-ss-type="dropdown">
- <p>When you choose Public, anyone who has the URL can view your calendar. 
- &nbsp;No password is required. </p>
+<p style="margin-left: 40px; font-weight: bold;"><a class="dropspot" href="javascript:TextPopup(this)" 
+													 id="a6">Public</a></p>
+<div class="droptext" id="POPUP444347590" style="display: none;">
+	<p>When you choose Public, anyone who has the URL can view your calendar. 
+	 &#160;No password is required.</p>
 </div>
-<p>&nbsp;</p>
-<script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a4','POPUP264687692');
-//--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a5','POPUP263280264');
-//--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a6','POPUP264711172');
-//--></script><script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a4','POPUP443142797');
+	TextPopupInit('a5','POPUP445870680');
+	TextPopupInit('a6','POPUP444347590');
+//]]></script>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

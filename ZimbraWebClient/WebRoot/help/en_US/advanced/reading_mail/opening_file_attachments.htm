@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Opening file attachments</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { x-condition:Advanced_WC; }
-ul.whs2 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your Email \nReading Messages\nOpening file attachments");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,63 +81,73 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Opening file attachments</h1>
 <p>Email messages can include attached files such as word processing documents, 
  spreadsheets, text files, ZIP files, images, executable applications, 
  or any other type of computer file that resides on the sender's computer 
  network. Messages that contain attachments display a paper clip next to 
- the subject. </p>
-<p>Some types of files, such as JPEG images or text 
- files, can be opened on almost any computer system. Others, such as Microsoft 
- Word documents, must be opened using the same application that created 
- them.</p>
-<p class="whs1">When you receive a message containing 
- file attachments, you can double-click on the item in the attachments 
+ the subject.</p>
+<p>Some types of files, such as JPEG images 
+ or text files, can be opened on almost any computer system. Others, such 
+ as Microsoft Word documents, must be opened 
+ using the same application that created them.</p>
+
+<p>When you receive a message 
+ containing file attachments, you can double-click on the item in the attachments 
  section of the message header. A dialog appears asking whether you want 
  to open or save the file first.</p>
-<ul type="disc" class="whs2">
-	<li class=p><p>If you choose to view the attachment, you must have 
- an application on your workstation that can read that type of file.</p></li>
-	<li class=p><p>If you choose to download the attachment, a browse dialog 
- appears showing your current file system. Choose an appropriate location 
- and save the file. You can open the file at a later point outside of your 
- email client.</p></li>
+<ul type="disc">
+	<li class="p"><p>If you choose to view the attachment, you must have 
+	 an application on your workstation that can read that type of file.</p></li>
+	<li class="p"><p>If you choose to download the attachment, a browse 
+	 dialog appears showing your current file system. Choose an appropriate 
+	 location and save the file. You can open the file at a later point 
+	 outside of your email client.</p></li>
+</ul>
+<ul>
+	<li class="P-note"><p class="note">Attachments 
+	 can be deleted from your email message. Clicking &#160;<span style="font-weight: bold;"><b>Remove 
+	 all attachments</b></span> deletes the files from your mailbox. When you 
+	 remove an attachment, it is immediately deleted from your mailbox. 
+	 &#160;</p></li>
 </ul>
 <h2>View Attachments as HTML</h2>
 <p>You may have the feature to view attachments as HTML. This allows you 
  to open an attachment even if the corresponding application is not installed. 
- &nbsp;Click <span style="font-weight: bold;"><B>view as 
- html</B></span> to view the content of the file. This feature 
- is set by your system administrator.</p>
+ &#160;Click <span style="font-weight: bold;"><b>view as html</b></span> 
+ to view the content of the file. This feature is set by your system administrator.</p>
 <h3>Virus Safety</h3>
 <p>Computer viruses can spread through email attachments. It is considered 
  standard practice for mail administrators to implement virus filtering 
  for incoming mail as well as virus scanning for personal computers. However, 
- there is always a chance that something could get through. </p>
+ there is always a chance that something could get through.</p>
 <p>In the case of email viruses, the majority of them are activated when 
  a file attachment containing the virus is opened or viewed. Many of these 
  viruses have been known to spread themselves using entries in users' address 
  books. Therefore, we recommend that you use care when opening file attachments, 
  even from senders who appear to be known to you.</p>
 <p>
+
 <a href="javascript:void(0);"  title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  Related Topics </nobr></span></a>
 
 
- </p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+</p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

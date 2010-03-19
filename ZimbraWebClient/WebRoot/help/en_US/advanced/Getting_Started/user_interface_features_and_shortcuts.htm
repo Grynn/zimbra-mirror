@@ -1,43 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>User Interface Features and Shortcuts</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { font-weight:bold; }
-p.whs3 { margin-left:40px; }
-img_whs4 { border:none; width:99px; height:284px; float:none; border-style:none; }
-p.whs5 { text-indent:48px; }
-img_whs6 { border:none; width:530px; height:36px; float:none; border-style:none; }
-p.whs7 { text-indent:36px; }
-img_whs8 { border:none; width:180px; height:42px; float:none; border-style:none; }
-p.whs9 { text-indent:36px; margin-left:0px; }
-img_whs10 { border:none; width:185px; height:75px; float:none; border-style:none; }
-img_whs11 { border:none; width:120px; height:33px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs9 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -48,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Navigating Your Mailbox\nUser interface features and shortcuts");
@@ -77,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -96,70 +81,64 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>User interface features and shortcuts</h1>
 <p>The Zimbra Web Client 
  interface includes many convenience features.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p class="whs2">Down-arrow menus.<span style="font-weight: normal;"> 
- Some command buttons have a small down-arrow icon next to them. Clicking 
- on the button performs one action, and clicking on the down-arrow icon 
- displays additional menu choices.</span></p></li>
+<ul type="disc">
+	<li class="p"><p style="font-weight: bold;">Down-arrow menus. <span 
+	 style="font-weight: normal;">Some command buttons have a small down-arrow 
+	 icon next to them. Clicking on the button performs one action, and 
+	 clicking on the down-arrow icon displays additional menu choices.</span></p></li>
 </ul>
-<p class="whs3"><span style="x-condition: Adv_not_ZD;"><img src="../right-clickmenus80.png" x-maintain-ratio="TRUE" width="99px" height="284px" border="0" class="img_whs4"></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Drag and drop.</B></span> 
- Click on and drag messages or conversations between folders.</p></li>
+<p style="margin-left: 40px;"><img src="../right-clickmenus80.png" alt="right-clickmenus80.png" style="border: none;" width="99" height="284" border="0" /> &#160;&#160;&#160;&#160;&#160;&#160;&#160; </p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Drag and drop.</b></span> 
+	 Click on and drag messages or conversations between folders.</p></li>
 </ul>
-<p class="whs5"><img src="../draganddrop.png" x-maintain-ratio="TRUE" width="530px" height="36px" border="0" class="img_whs6"></p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Right-click menus.</B></span> 
- Right-click on items such as folders, conversations, messages, the &quot;From&quot; 
- column in messages or conversations, or items in mail headers to display 
- a menu of functions that you can perform on that item. </p></li>
+<p style="text-indent: 48px;"><img src="../draganddrop.png" alt="draganddrop.png" style="border: none;" width="530" height="36" border="0" /></p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Right-click menus.</b></span> 
+	 Right-click on items such as folders, conversations, messages, the 
+	 &quot;From&quot; column in messages or conversations, or items in 
+	 mail headers to display a menu of functions that you can perform on 
+	 that item.</p></li>
 </ul>
-<p class="whs7">&nbsp;</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Movable sash.</B></span> 
- For split-pane windows such as the Conversation view, you can use the 
- sash to increase or decrease the relative sizes of the upper and lower 
- panes. Click and drag on the bar separating the panes.</p></li>
+<p style="text-indent: 36px;">&#160;</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Movable sash.</b></span> 
+	 For split-pane windows such as the Conversation view, you can use 
+	 the sash to increase or decrease the relative sizes of the upper and 
+	 lower panes. Click and drag on the bar separating the panes.</p></li>
 </ul>
-<p class="whs3"><img src="../movable_sash.png" x-maintain-ratio="TRUE" width="180px" height="42px" border="0" class="img_whs8"></p>
-<p class="whs3">&nbsp;</p>
-<ul type="disc" class="whs1">
-	<li class=p><p class="whs2">Clickable 
- items.<span style="font-weight: normal;"> Zimbra 
- follows standard browser conventions by changing the mouse cursor to a 
- &quot;hand&quot; when it passes over an active link.</span></p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Tool-tips.</B></span> Passing 
- your mouse cursor over items, such as command buttons, conversations, 
- or mail addresses in message headers, displays a small text box of descriptive 
- information about the item.</p></li>
+<p style="margin-left: 40px;"><img src="../movable_sash.png" alt="movable_sash.png" style="border: none;" width="180" height="42" border="0" /></p>
+<p style="margin-left: 40px;">&#160;</p>
+<ul type="disc">
+	<li class="p"><p style="font-weight: bold;">Clickable 
+	 items. <span style="font-weight: normal;">Zimbra 
+	 follows standard browser conventions by changing the mouse cursor 
+	 to a &quot;hand&quot; when it passes over an active link.</span></p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Tool-tips.</b></span> 
+	 Passing your mouse cursor over items, such as command buttons, conversations, 
+	 or mail addresses in message headers, displays a small text box of 
+	 descriptive information about the item.</p></li>
 </ul>
-<p class="whs9"><span style="x-condition: Adv_not_ZD;"><img src="../tootlips.png" x-maintain-ratio="TRUE" width="185px" height="75px" border="0" class="img_whs10"></span> 
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-<p class="whs9">&nbsp;</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Paging.</B></span> Use 
- the left and right arrows in list windows to page back and forth, if the 
- list is too long to fit into a single window. Note that the paging buttons 
- may behave differently on different screens. The numbers represent the 
- sequence of messages on that page. Use the Tool-tips display to identify 
- what the paging will do on your current screen.</p></li>
-</ul>
-<p class="whs7"><img src="../paging.png" x-maintain-ratio="TRUE" width="120px" height="33px" border="0" class="img_whs11"></p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="text-indent: 36px; margin-left: 0px;"><img src="../tootlips.png" alt="tootlips.png" style="border: none;" width="185" height="75" border="0" /> &#160;&#160;&#160;&#160;&#160; </p>
+<p style="text-indent: 36px; margin-left: 0px;">&#160;</p>
+<p style="text-indent: 36px;">&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Editing a contact</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your Address Books\nEditing contact information");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,65 +81,71 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>&nbsp;Editing contact information</h1>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+<h1>&#160;Editing contact information</h1>
 <h6>To search for and open a contact form:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Open your Address Book tab.</p></li>
-	<li class=p><p>In the Search box on the Search bar, enter search criteria 
- such as a first or last name or group name. </p></li>
+<ol type="1">
+	<li class="p"><p>Open your Address Book tab. The search field displays 
+	 <span style="font-weight: bold;"><b>in:contacts</b></span><span>.</span></p></li>
+	<li class="p"><p>In the Search box, enter search criteria, such as 
+	 a first or last name or group name.</p></li>
 </ol>
-<p class="whs2">To search by email address, the complete 
+<p style="margin-left: 40px;">To search by email address, the complete 
  address must be entered. First or last name must be a whole-word match. 
- For example, you could enter something like <span style="font-weight: bold; font-style: italic;"><I><B>Smith 
- </B></I></span>or <span style="font-style: italic; font-weight: bold;"><I><B>smith@acme.com</B></I></span>.</p>
-<ol start="3" type="1" class="whs1">
-	<li class=p><p>From the drop-down list next to the search field, select 
- <span style="font-weight: bold;"><B>Contacts</B></span> to search your address 
- books<span style="x-condition: Adv_not_ZD;"> or select </span><span style="font-weight: bold; x-condition: Adv_not_ZD;"><B>Global 
- Address List </B></span><span style="x-condition: Adv_not_ZD;">&nbsp;to 
- search the company address book</span> </p></li>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Edit Contact</B></span> 
- form, double-click the record to open the contact for editing.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span> to 
- commit your changes.</p></li>
+ For example, you could enter something like <span style="font-weight: bold; 
+													 font-style: italic;"><i><b>Smith</b></i></span> 
+ or <span style="font-style: italic; 
+												 font-weight: bold;"><i><b>smith@acme.com</b></i></span>.</p>
+<ol start="3" type="1">
+	<li class="p"><p>From the drop-down list next to the search field, 
+	 select <span style="font-weight: bold;"><b>Contacts</b></span> to search 
+	 your address books or select 
+	 <span style="font-weight: bold;"><b>Global 
+	 Address List</b></span> 
+	 &#160;to search the company address book. </p></li>
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Edit Contact</b></span> 
+	 form, double-click the name to open the contact form for editing.</p></li>
+	<li class="p"><p>Make the changes and click <span style="font-weight: bold;"><b>Save</b></span> 
+	 to commit your changes.</p></li>
 </ol>
-<h6>To open a contact form &nbsp;for editing:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>From an Address book, right click on the contact to 
- be edited and choose <span style="font-weight: bold;"><B>Edit Contact</B></span>.</p></li>
-	<li class=p><p>Make the changes and click <span style="font-weight: bold;"><B>Save</B></span> 
- to commit your changes.</p></li>
+<h6>To open a contact form &#160;for editing:</h6>
+<ol type="1">
+	<li class="p"><p>From an Address book, right click on the contact to 
+	 be edited and choose <span style="font-weight: bold;"><b>Edit Contact</b></span>.</p></li>
+	<li class="p"><p>Make the changes and click <span style="font-weight: bold;"><b>Save</b></span> 
+	 to commit your changes.</p></li>
 </ol>
 <h6>To move a contact to another address book:</h6>
 <p>You can move a contact by one of the following:</p>
 <p>From the Contact form</p>
-<ol type="1" class="whs1">
-	<li class=p><p>Select the contact and click <span style="font-weight: bold;"><B>Edit</B></span> 
- to open the contact form.</p></li>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Address Book</B></span> 
- pull-down menu, select the address book where you want to move the contact.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span>. 
- </p></li>
+<ol type="1">
+	<li class="p"><p>Select the contact and click <span style="font-weight: bold;"><b>Edit</b></span> 
+	 to open the contact form.</p></li>
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Address Book</b></span> 
+	 pull-down menu, select the address book where you want to move the 
+	 contact.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Save</b></span>.</p></li>
 </ol>
 <p>From the contact name</p>
-<ol type="1" class="whs1">
-	<li class=p><p>Right-click on the contact to move.</p></li>
-	<li class=p><p>Select <span style="font-weight: bold;"><B>Move</B></span>. 
- In the Move Contact dialog, select the address book to move to</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. </p></li>
+<ol type="1">
+	<li class="p"><p>Right-click on the contact to move.</p></li>
+	<li class="p"><p>Select <span style="font-weight: bold;"><b>Move</b></span>. 
+	 In the Move Contact dialog, select the address book.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>OK</b></span>.</p></li>
 </ol>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

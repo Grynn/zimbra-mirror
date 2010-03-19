@@ -1,37 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>wildcards</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { margin-left:40px; }
-h3.whs2 { margin-left:0px; }
-p.whs3 { margin-left:0px; }
-img_whs4 { border:none; width:589px; height:223px; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "h3.whs2 {margin-left:1pt; }";
-  strNSS += "p.whs3 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -42,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Using Mail Filters\nFilter wildcards");
@@ -71,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -90,52 +81,55 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Filter wildcards</h1>
-<p>Wildcards can be used in comparisons that use the 
- &quot;Matches pattern&quot; comparison operator. The two wildcard 
- characters are <span style="font-weight: bold;"><B>*</B></span> and <span style="font-weight: bold;"><B>?</B></span></p>
-<h3><span style="font-weight: bold;"><B>Asterisk (*)</B></span></h3>
+<p>Wildcards can be used in comparisons 
+ that use the &quot;Matches pattern&quot; comparison operator. The two 
+ wildcard characters are <span style="font-weight: bold;"><b>*</b></span> 
+ and <span style="font-weight: bold;"><b>?</b></span></p>
+<h3><span style="font-weight: bold;"><b>Asterisk (*)</b></span></h3>
 <p>The asterisk * is a placeholder for &quot;zero or more characters of 
  any type&quot;.</p>
-<p>Example subject-line search string: <span style="font-weight: bold;"><B>banana*float</B></span></p>
-<p class="whs1">With<span style="font-style: italic;"><I> Matches:</I></span> 
- Subject lines such as &quot;bananafloat&quot;, &quot;bananas&quot;, 
- &quot;banana-leaf casserole float&quot; but not &quot;super-banana-float&quot;</p>
-<p>Example subject-line search string: <span style="font-weight: bold;"><B>w*bandanna</B></span></p>
-<p class="whs1">With<span style="font-style: italic;"><I> Matches:</I></span> 
+<p>Example subject-line search string: <span style="font-weight: bold;"><b>banana*float</b></span></p>
+<p style="margin-left: 40px;">With <span style="font-style: italic;"><i>Matches:</i></span> 
+ Subject lines such as &quot; bananafloat&quot;, &quot;bananas&quot;, &quot;banana-leaf 
+ casserole float&quot; but not &quot;super-banana-float&quot;</p>
+<p>Example subject-line search string: <span style="font-weight: bold;"><b>w*bandanna</b></span></p>
+<p style="margin-left: 40px;">With <span style="font-style: italic;"><i>Matches:</i></span> 
  Subject lines such as &quot;white bandanna&quot; or &quot;whose bandanna&quot; 
  but not &quot;whose bandanna is this?&quot;</p>
 <h3>Question mark (?)</h3>
 <p>The question mark is a placeholder for &quot;exactly one character&quot;.</p>
-<p>Example subject-line search string: <span style="font-weight: bold;"><B>banana?boat</B></span></p>
-<p class="whs1">With<span style="font-style: italic;"><I> Matches:</I></span> 
- Subject lines such as &quot;bananasboat&quot;, &quot;banana-boat&quot;, 
- &quot;banana!boat&quot;, or &quot;banana boat&quot;</p>
-<h3 class="whs2">Escape character is Slash: \</h3>
-<p class="whs3">There may be times that you will want to specify 
+<p>Example subject-line search string: <span style="font-weight: bold;"><b>banana?boat</b></span></p>
+<p style="margin-left: 40px;">With <span style="font-style: italic;"><i>Matches:</i></span> 
+ Subject lines such as &quot; bananasboat&quot;, &quot;banana-boat&quot;, &quot;banana!boat&quot;, 
+ or &quot;banana boat&quot;</p>
+<h3 style="margin-left: 0px;">Escape character is Slash: \</h3>
+<p style="margin-left: 0px;">There may be times that you will want to specify 
  an exact match on a string that contains characters that normally are 
  considered wildcards. For example, you might want to specify a match on 
  a subject line where the main heading is surrounded on both sides by three 
  asterisks, such as</p>
 <p>***MORE MONEY!!!*** or</p>
 <p>***FREE GIFT***</p>
-<p>To specify a wildcard as itself rather than a substitution 
- for other characters, use the backslash \ immediately before the character. 
- For example the comparison string &quot;\*\*\**\*\*\*&quot; specifies 
- a subject with three asterisks before and after any string in the middle 
- (including spaces).</p>
-<p><img src="../image19.jpg" width="589px" height="223px" border="0" class="img_whs4"></p>
-<script type="text/javascript" language="javascript1.2">
+<p>To specify a wildcard as itself rather 
+ than a substitution for other characters, use the backslash \ immediately 
+ before the character. For example the comparison string &quot;\*\*\**\*\*\*&quot; 
+ specifies a subject with three asterisks before and after any string in 
+ the middle (including spaces).</p>
+<p><img src="../image19.jpg" alt="image19.jpg" style="border: none;" width="589" height="223" border="0" /></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

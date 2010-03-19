@@ -1,27 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Creating Slide Presentations in Briefcase</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
-p.whs3 { margin-left:40px; }
-img_whs4 { border:none; width:253px; height:128px; float:none; }
-ul.whs5 { list-style:decimal; }
-img_whs6 { border:none; width:500px; height:56px; float:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -32,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Using Briefcase\nCreating Slide Presentations in Briefcase");
@@ -61,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -80,62 +81,70 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Creating Slide Presentations in Briefcase (Beta)</h1>
-<p>You can create a slide presentation while working in Briefcase. No other 
- software is required. When you set up the presentation you can</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Select a color from the Themes menu</p></li>
-	<li class=p><p>Insert images that are on your computer</p></li>
-	<li class=p><p>Use the insert text box option to design the layout 
- of the slide</p></li>
-	<li class=p><p>Configure the slide, choosing from several fonts and 
- styles.</p></li>
+<p>You can create a slide presentation while working in Briefcase. No other software is required. When you set up the presentation you can</p>
+<ul type="disc">
+<li class="p">
+<p>Select a color from the Themes menu</p>
+</li>
+<li class="p">
+<p>Insert images that are on your computer</p>
+</li>
+<li class="p">
+<p>Use the insert text box option to design the layout of the slide</p>
+</li>
+<li class="p">
+<p>Configure the slide, choosing from several fonts and styles.</p>
+</li>
 </ul>
-<p>&nbsp;</p>
-<ol type="1" class="whs2">
-	<li class=p><p>In Briefcase, select <span style="font-weight: bold;"><B>New 
- Presentation. </B></span>Enter the name of the presentation in the box above 
- the Overview pane. Click <span style="font-weight: bold;"><B>Save</B></span>. 
- You can start with the slide that is displayed in the Content pane. </p></li>
+<p>&#160;</p>
+<ol type="1">
+<li class="p">
+<p>In Briefcase, select <span style="font-weight: bold;"><b>New Presentation.</b></span> Enter the name of the presentation in the box above the Overview pane. Click <span style="font-weight: bold;"><b>Save</b></span>. You can start with the slide that is displayed in the Content pane.</p>
+</li>
 </ol>
-<p class="whs3"><img src="../Slides_name.png" x-maintain-ratio="TRUE" width="253px" height="128px" border="0" class="img_whs4"></p>
-<ol start="2" type="1" class="whs2">
-	<li class=p><p>You can add more dramatic appearance to your slide by 
- selecting one of the themes. Click the Themes drop-down arrow to select 
- a different theme.</p></li>
-	<li class=p><p>In the slide add the content. Click on the title text 
- box to add a title and the content text box add text to the default text 
- box. You can</p></li>
+<p style="margin-left: 40px;"></p>
+<ol start="2" type="1">
+<li class="p">
+<p>You can add more dramatic appearance to your slide by selecting one of the themes. Click the Themes drop-down arrow to select a different theme.</p>
+</li>
+<li class="p">
+<p>In the slide add the content. Click on the title text box to add a title and the content text box add text to the default text box. You can</p>
+</li>
 </ol>
-<ul type="1" class="whs5">
-	<ul type="disc" class="whs1">
-		<li class=p><p>Resize the text box and insert additional text boxes.</p></li>
-		<li class=p><p>Change the font, style and size from the grey toolbar 
- over the slide.</p></li>
-		<li class=p><p>Click <span style="font-weight: bold;"><B>Insert Images</B></span> 
- to add &nbsp;images. &nbsp;The images 
- are saved to your Briefcase folder.</p></li>
-		<li class=p><p>Click <span style="font-weight: bold;"><B>Insert Slide</B></span> 
- to add another slide</p></li>
-	</ul>
+<ul type="1">
+<li style="list-style:none;display: inline">
+<ul type="disc">
+<li class="p">
+<p>Resize the text box and insert additional text boxes.</p>
+</li>
+<li class="p">
+<p>Change the font, style and size from the grey toolbar over the slide.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Insert Images</b></span> to add &#160;images. &#160;The images are saved to your Briefcase folder.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Insert Slide</b></span> to add another slide</p>
+</li>
 </ul>
-<ol start="4" type="1" class="whs2">
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span> to 
- save the slide. &nbsp;To close the slide click the <span 
- style="font-weight: bold;"><B>X</B></span> in the browser tab.</p></li>
+</li>
+</ul>
+<ol start="4" type="1">
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Save</b></span> to save the slide. &#160;To close the slide click the <span style="font-weight: bold;"><b>X</b></span> in the browser tab.</p>
+</li>
 </ol>
-<p class="whs3"><img src="../slide_close.png" x-maintain-ratio="TRUE" width="500px" height="56px" border="0" class="img_whs6"></p>
-<script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 40px;"></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

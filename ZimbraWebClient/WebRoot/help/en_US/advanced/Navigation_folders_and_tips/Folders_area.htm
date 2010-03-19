@@ -1,24 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Folders area</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; width:172px; height:366px; float:none; border-style:none; }
-ul.whs2 { list-style:disc; }
-img_whs3 { border:none; width:91px; height:72px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Navigating Your Mailbox\nViewing the Overview pane");
@@ -58,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -77,67 +81,67 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Viewing the Overview Pane</h1>
-<p>On the left-hand side of the<span style="x-condition: Adv_not_ZD;"> 
- Zimbra Web Client</span> 
- interface are your folders, searches, tags, and Zimlets <span style="x-condition: Adv_not_ZD;">(for 
- the advanced Web Client).</span></p>
-<p><img src="../overviewpane.png" x-maintain-ratio="TRUE" width="172px" height="366px" border="0" class="img_whs1"></p>
-<p>&nbsp;</p>
+<p>On the left-hand side of the
+ Zimbra Web Client
+
+ interface are your folders, searches, tags, and Zimlets 
+(for the advanced Web Client).
+</p>
+<p><img src="../overviewpane.png" style="border: none;" alt="overviewpane.png" width="172" height="366" border="0" /></p>
+<p>&#160;</p>
 <h2>Folders</h2>
-<ul type="disc" class="whs2">
-	<li class=p><p><span style="font-weight: bold;"><B>Inbox</B></span> is where 
- new mail is placed by default. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Sent</B></span> contains 
- messages that you have sent.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Draft</B></span> contains 
- composed messages that have not yet been sent.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Junk</B></span> contains 
- messages that have been marked as spam either by you or by the system.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Trash</B></span> contains 
- item</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Local Folders</B></span> 
- that you have deleted. This folder is available for ZWC accounts only.</p></li>
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Inbox</b></span> is where new mail is placed by default.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Sent</b></span> contains messages that you have sent.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Draft</b></span> contains composed messages that have not yet been sent.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Junk</b></span> contains messages that have been marked as spam either by you or by the system.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Trash</b></span> contains item</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Local Folders</b></span> that you have deleted. This folder is available for ZWC accounts only.</p>
+</li>
 </ul>
-<ul type="disc" class="whs2">
-	<li class=p><p><span style="font-weight: bold;"><B>Folders</B></span> that 
- you have created follow. If your mail account was migrated from another 
- mail system such as Microsoft<symbol name=Registered>&#174; 
- Outlook, you may see extra folders here that represent folders on the 
- previous mail system.</p></li>
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Folders</b></span> that you have created follow. If your mail account was migrated from another mail system such as Microsoft
+®
+ Outlook, you may see extra folders here that represent folders on the previous mail system.</p>
+</li>
 </ul>
-<p><span style="font-weight: bold;"><B>Unread Message Count.</B></span> The number 
- in parentheses next to each folder is the number of unread messages contained 
- in that folder. <span style="font-weight: bold;"><B>Tags</B></span> folders display 
- unread message count as well. Any item with unread messages is bold.</p>
-<p>To see the number of messages and the total size of the folder, hover 
- the cursor over a folder.</p>
-<p>. <img src="../message_count.png" x-maintain-ratio="TRUE" width="91px" height="72px" border="0" class="img_whs3"></p>
-<h2><span style="font-weight: bold;"><B>Searches</B></span></h2>
-<p><span>This area c</span>ontains search queries that you created and 
- saved for future use.</p>
-<h2><span style="font-weight: bold;"><B>Tags</B></span></h2>
-<p>This area shows the tags you have created. Click on a tag to quickly 
- see all messages that are tagged with that tag. See <a HREF="../Tags_and_flags/Using_tags_to_classify_mail_messages.htm">Using 
- tags to classify mail messages</a> for more information.</p>
+<p><span style="font-weight: bold;"><b>Unread Message Count.</b></span> The number in parentheses next to each folder is the number of unread messages contained in that folder. <span style="font-weight: bold;"><b>Tags</b></span> folders display unread message count as well. Any item with unread messages is bold.</p>
+<p>To see the number of messages and the total size of the folder, hover the cursor over a folder.</p>
+<p>. <img src="../message_count.png" style="border: none;" alt="message_count.png" width="91" height="72" border="0" /></p>
+<h2><span style="font-weight: bold;"><b>Searches</b></span></h2>
+<p><span>This area c</span>ontains search queries that you created and saved for future use.</p>
+<h2><span style="font-weight: bold;"><b>Tags</b></span></h2>
+<p>This area shows the tags you have created. Click on a tag to quickly see all messages that are tagged with that tag. See <a href="../Tags_and_flags/Using_tags_to_classify_mail_messages.htm">Using tags to classify mail messages</a> for more information.</p>
 <h2><span>Zimlets</span></h2>
-<p><a href="../Zimlets/About_Zimlets.htm">Zimlets</a> are created as a 
- mechanism to integrate third-party information and content with the Zimbra Web Client 
- features. Zimlets let you interact with different content types in your 
- email messages. Depending on your configuration, you may not have access 
- to Zimlets from the Overview Pane.</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p><a href="../Zimlets/About_Zimlets.htm">Zimlets</a> are created as a mechanism to integrate third-party information and content with the Zimbra Web Client
+ features. Zimlets let you interact with different content types in your email messages. Depending on your configuration, you may not have access to Zimlets from the Overview Pane.</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

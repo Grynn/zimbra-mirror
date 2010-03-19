@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Right-click menus</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Navigating Your Mailbox\nRight-click menus");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,48 +81,44 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Right-click menus</h1>
-<p>Many portions of the advanced Zimbra Web Client interface allow pop-up 
- action menus that appear when you pass your cursor over an item such as 
- a folder and click your right mouse button. The exact menu choices that 
- appear depend on the type of item. </p>
-<p>Right clicking on the following displays right-click menus: </p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Conversations.</B></span> 
- You can mark conversations as read or unread, apply tags to conversations, 
- delete conversations, or move conversations between folders.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Messages.</B></span> You 
- can reply to or forward the message, edit the message as new, mark it 
- as read or unread, apply tags to the message, delete the message, move 
- it to another folder, print, show original header information, and create 
- a new filter. The option to edit the message as new lets you resend 
- a message without having to forward. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Names in message headers.</B></span> 
- You can perform searches on the name, begin composing a new mail message 
- addressed to that person, or add the person to your personal Contacts 
- list. If the name is an existing contact, you can edit the contact entry.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Folders.</B></span> You 
- can create a new folder, mark all items within the folder as read, delete 
- or rename the folder, move the folder, expand all folders, or search. 
- You cannot delete system folders (Inbox, Sent, Trash, Junk, Drafts).</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Mail tab toolbar</B></span>. 
- You can select which columns to display in the mail Content pane. </p></li>
+<p>Many portions of the advanced Zimbra Web Client interface allow pop-up action menus that appear when you pass your cursor over an item such as a folder and click your right mouse button. The exact menu choices that appear depend on the type of item.</p>
+<p>Right clicking on the following displays right-click menus:</p>
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Conversations.</b></span> You can mark conversations as read or unread, apply tags to conversations, delete conversations, or move conversations between folders.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Messages.</b></span> You can reply to or forward the message, edit the message as new, mark it as read or unread, apply tags to the message, delete the message, move it to another folder, print, show original header information, and create a new filter. The option to edit the message as new lets you 
+resend a message without having to forward.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Names in message headers.</b></span> You can perform searches on the name, begin composing a new mail message addressed to that person, or add the person to your personal Contacts list. If the name is an existing contact, you can edit the contact entry.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Folders.</b></span> You can create a new folder, mark all items within the folder as read, delete or rename the folder, move the folder, expand all folders, or search. You cannot delete system folders (Inbox, Sent, Trash, Junk, Drafts).</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Mail tab toolbar</b></span>. You can select which columns to display in the mail Content pane.</p>
+</li>
 </ul>
-<p>&nbsp;</p>
+<p>&#160;</p>
 <p>See <a href="Customize_your_view.htm">Customize your view</a></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

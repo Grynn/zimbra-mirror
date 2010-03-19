@@ -1,8 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="accepting access to notebooks" last="external user" num="104" />
-<chunkinfo url="whidata1.xml" first="features of Zimbra Web Client" last="POP addresses, adding" num="101" />
-<chunkinfo url="whidata2.xml" first="preferences" last="Zimlets" num="100" />
+<chunkinfo url="whidata0.xml" first="accepting access to notebooks" last="equipment, reserving" num="104" />
+<chunkinfo url="whidata1.xml" first="events" last="options, Calendar" num="99" />
+<chunkinfo url="whidata2.xml" first="options, changing" last="tags, creating" num="102" />
+<chunkinfo url="whidata3.xml" first="three-pane view" last="Zimlets" num="20" />
 
 </index>

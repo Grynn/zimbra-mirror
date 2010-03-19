@@ -1,24 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Search examples</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { margin-left:40px; font-style:italic; }
-p.whs3 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Searching for Items\nSearch examples");
@@ -58,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -77,80 +81,86 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
 <h1>Search examples</h1>
 <p>The different panes in the Advanced search area can be used to search 
  by different criteria. The following examples include which Advanced search 
  panes you would use.</p>
 <p>Here are a few possible search examples:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>To search for a specific 
- type of attachment file</B></span>. A message with next year's budget spreadsheet 
- attached. You don't remember who it's from or what date it was sent, but 
- the filename has an .XLS extension.</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>To search for a specific 
+	 type of attachment file</b></span>. A message with next year's budget 
+	 spreadsheet attached. You don't remember who it's from or what date 
+	 it was sent, but the filename has an . XLS extension.</p></li>
 </ul>
-<p class="whs2">Open just the Attachments 
+<p style="margin-left: 40px; font-style: italic;">Open just the Attachments 
  pane and choose &quot;Specific Attachment.&quot; A list of check boxes 
  appears beneath the radio button. Scroll down and check the box next to 
  &quot;Microsoft Excel.&quot;</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>To search for a contact 
- within a specific company.</B></span> A contact who works at a company called 
- &quot;Rivendell&quot;.</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>To search for a contact 
+	 within a specific company.</b></span> A contact who works at a company 
+	 called &quot; Rivendell&quot;.</p></li>
 </ul>
-<p class="whs3"><span style="font-style: italic;"><I>Use the 
+<p style="margin-left: 40px;"><span style="font-style: italic;"><i>Use the 
  down-arrow to select Search Contacts. In the Advanced search area, open 
- the Basic search pane and enter &quot;Rivendell&quot; 
- under the Content field. (You could also do this search without using 
- Search Builder.)</I></span></p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>To search for an attachment 
- that may be one type or another</B></span>. Messages with either PDF 
- attachments or JPEG attachments.</p></li>
+ the Basic search pane and enter &quot; 
+ Rivendell&quot; under the Content field. 
+ (You could also do this search without using Search Builder.)</i></span></p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>To search for an 
+	 attachment that may be one type or another</b></span>. Messages with either 
+	 PDF attachments or JPEG 
+	 attachments.</p></li>
 </ul>
-<p class="whs2">In the Attachments pane, 
+<p style="margin-left: 40px; font-style: italic;">In the Attachments pane, 
  choose &quot;Specific Attachment&quot; and then check both &quot;Adobe 
- PDF&quot; and &quot;JPEG Image&quot;.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>To search for an item 
- that was tagged</B></span>. Description of the new procedures for your workgroup, 
- which you had tagged as &quot;High Priority&quot;.</p></li>
+ PDF&quot; and &quot; 
+ JPEG Image&quot;.</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>To search for an 
+	 item that was tagged</b></span>. Description of the new procedures for 
+	 your workgroup, which you had tagged 
+	 as &quot;High Priority&quot;.</p></li>
 </ul>
-<p class="whs2">Open the Tags pane and 
+<p style="margin-left: 40px; font-style: italic;">Open the Tags pane and 
  select the check box for the High Priority tag. Note that tags are user-defined, 
  so this assumes that you have previously 1) created the tag definition, 
  and 2) applied it to the mail message.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>To search by a date 
- range</B></span>. A message someone claims to have sent you &quot;in early 
- December&quot;, which you think was never received.</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>To search by a date 
+	 range</b></span>. A message someone claims to have sent you &quot;in early 
+	 December&quot;, which you think was never received.</p></li>
 </ul>
-<p class="whs2">To set a date range, 
+<p style="margin-left: 40px; font-style: italic;">To set a date range, 
  open two instances of the Date pane. In the first one, set the Date drop-down 
  to &quot;is before&quot; and select an end date. Use the other Date pane 
  to specify &quot;is after&quot; and a start date. You can also search 
- by sender. </p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>To search for a specific 
- type of attachment that included a specific phrase.</B></span> A message with 
- a PDF file that contains the phrase &quot;Mixed Nuts&quot;</p></li>
+ by sender.</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>To search for a specific 
+	 type of attachment that included a specific phrase.</b></span> A message 
+	 with a PDF file that contains the phrase 
+	 &quot;Mixed Nuts&quot;</p></li>
 </ul>
-<p class="whs2">In the Basic search pane 
+<p style="margin-left: 40px; font-style: italic;">In the Basic search pane 
  under &quot;Content&quot;, enter &quot;Mixed nuts&quot;. In the Attachments 
- pane, choose &quot;Specific Attachments&quot; and check &quot;Adobe PDF&quot;. 
- Note that the search does not distinguish between content found in the 
- body of an email message versus content found in a file attachment.</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+ pane, choose &quot;Specific Attachments&quot; and check &quot;Adobe PDF&quot;. Note that the search does not distinguish 
+ between content found in the body of an email message versus content found 
+ in a file attachment.</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

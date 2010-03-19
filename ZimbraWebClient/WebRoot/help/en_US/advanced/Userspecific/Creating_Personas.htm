@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Creating Personas</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Setting Your Preferences\nCreating personas");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,67 +81,47 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Creating Personas</h1>
-<p>Persona is the mail identity used in the <span style="font-weight: bold;"><B><b>From</b></B></span> 
- field of email messages you send. Creating different mail identities allows 
- you to use multiple email addresses from your mailbox. You might want 
- to do this to manage different roles in your job and personal life from 
- this single email account. &nbsp;The default account 
- name is defined in the primary identity. </p>
-<p>The <span style="font-weight: bold;"><B><b>Add External Account</b></B></span> 
- button lets you identify your external POP/IMAP accounts so that this 
- web client can retrieve email from your other accounts. &nbsp;You can 
- also set up so that replies to those messages use the corresponding POP/IMAP 
- address.</p>
+<p>Persona is the mail identity used in the <span style="font-weight: bold;"><b><b>From</b></b></span> field of email messages you send. Creating different mail identities allows you to use multiple email addresses from your mailbox. You might want to do this to manage different roles in your job and personal life from this single email account. &#160;The default account name is defined in the primary identity.</p>
+<p>The <span style="font-weight: bold;"><b><b>Add External Account</b></b></span> button lets you identify your external POP/IMAP accounts so that this web client can retrieve email from your other accounts. &#160;You can also set up so that replies to those messages use the corresponding POP/IMAP address.</p>
 <h6>To create a persona configure the following:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>In the<span style="font-weight: bold;"><B> Preferences 
- Accounts</B></span> folder, click <span style="font-weight: bold;"><B>Add Persona</B></span>.</p></li>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Persona Settings</B></span> 
- section enter a name for this persona. This name is used to identify the 
- persona in the From list when composing an email. &nbsp;It 
- does not appear in the email message.</p></li>
-	<li class=p><p>In the text box below <span style="font-weight: bold;"><B>From:</B></span> 
- type the name that should appear in the From field of your outgoing email 
- messages (for example, John). This is the friendly name that is shown 
- before your email address. In the second box, select the email address 
- to send messages from. Depending on your account configuration you may 
- be able create another address. Do this next.</p></li>
-	<li class=p><p>If replies should be sent to a name and address different 
- from that which you configured in From, check <span style="font-weight: bold;"><B>Reply-to</B></span>. 
- Enter the name and address that should receive replies for this identity. 
- For example, replies to training messages John sends should be sent to 
- <span style="font-style: italic;"><I>Team Training</I></span> at training@xample.com. 
- </p></li>
-	<li class=p><p>You can select a signature to use for this persona. 
- If you have not created the signature, you can come back and edit this 
- persona later. If you do not want the signature to be applied automatically, 
- select <span style="font-weight: bold;"><B>Do Not Attach Signature.</B></span></p></li>
-	<li class=p><p>If you want messages in specific folders to automatically 
- use this persona, check <span style="font-weight: bold;"><B>Replying to or 
- forwarding messages in folder(s)</B></span>. Click the 
- folder icon to select one or more folders from the list of existing folders 
- or to create a new folder. Type a comma or semi-colon to separate folders 
- entered in the box.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span> to 
- save this persona. &nbsp;</p></li>
+<ol type="1">
+<li class="p">
+<p>In the <span style="font-weight: bold;"><b>Preferences Accounts</b></span> folder, click <span style="font-weight: bold;"><b>Add Persona</b></span>.</p>
+</li>
+<li class="p">
+<p>In the <span style="font-weight: bold;"><b>Persona Settings</b></span> section enter a name for this persona. This name is used to identify the persona in the From list when composing an email. &#160;It does not appear in the email message.</p>
+</li>
+<li class="p">
+<p>In the text box below <span style="font-weight: bold;"><b>From:</b></span> type the name that should appear in the From field of your outgoing email messages (for example, John). This is the friendly name that is shown before your email address. In the second box, select the email address to send messages from. Depending on your account configuration you may be able create another address. Do this next.</p>
+</li>
+<li class="p">
+<p>If replies should be sent to a name and address different from that which you configured in From, check <span style="font-weight: bold;"><b>Reply-to</b></span>. Enter the name and address that should receive replies for this identity. For example, replies to training messages John sends should be sent to <span style="font-style: italic;"><i>Team Training</i></span> at 
+training@xample.com.</p>
+</li>
+<li class="p">
+<p>You can select a signature to use for this persona. If you have not created the signature, you can come back and edit this persona later. If you do not want the signature to be applied automatically, select <span style="font-weight: bold;"><b>Do Not Attach Signature.</b></span></p>
+</li>
+<li class="p">
+<p>If you want messages in specific folders to automatically use this persona, check <span style="font-weight: bold;"><b>Replying to or forwarding messages in 
+folder(s)</b></span>. Click the folder icon to select one or more folders from the list of existing folders or to create a new folder. Type a comma or semi-colon to separate folders entered in the box.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Save</b></span> to save this persona. &#160;</p>
+</li>
 </ol>
-<p class="whs2">If you need to create the signature, go to 
- the Signature tab after you click Save. See <a href="using_a_signature.htm">Using 
- a signature</a>.</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 40px;">If you need to create the signature, go to the Signature tab after you click Save. See <a href="using_a_signature.htm">Using a signature</a>.</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

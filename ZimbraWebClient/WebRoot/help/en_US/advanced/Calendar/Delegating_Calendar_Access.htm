@@ -1,40 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Delegating_Calendar_Access</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:inside decimal; }
-p.whs3 { margin-left:40px; font-weight:bold; }
-ol.whs4 { list-style:decimal; }
-p.whs5 { margin-left:40px; }
-p.whs6 { margin-left:80px; }
-p.whs7 { margin-left:0px; }
-ul.whs8 { list-style:inside decimal; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs7 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -45,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Sharing Folders\nSharing Calendars\nSharing your calendar");
@@ -74,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -93,174 +81,159 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" x-save-method="compute-relative" src="../ehlpdhtm.js" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
-</script>
-
-
-
+//]]></script>
+<script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2"></script>
 <h1>Sharing your calendar with others</h1>
 <p>You can <a href="../Sharing/Sharing_a_folder.htm">share</a> your calendar 
  information with other people and give them one of the following access 
  privileges:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Internal users or groups</B></span>. 
- &nbsp;You select the type of privileges to grant, either:</p></li>
-	<ul type="disc" class="whs1">
-		<li class=p><p><span style="font-weight: bold;"><B>Viewer</B></span>. 
- The Grantee can see the activities posted to your calendar and the status 
- of meeting requests, but cannot make any changes to your calendar.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Manager</B></span>. 
- The Grantee has permission to create meetings, accept or decline invitations, 
- and edit and delete activities from your calendar. </p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Admin</B></span>. 
- The Grantee has permission to create meetings, accept or decline invitations, 
- edit and delete activities from your calendar, share your calendar with 
- others and remove other Grantees from your shared calendar.</p></li>
-		<li class=p-note><p class=note><span style="font-weight: bold;"><B>None</B></span> 
- is an option to temporarily disable access to a grantor's shared calendar 
- without revoking the share privileges. The Grantee still has the calendar 
- in their calendar list but cannot view or manage activities on the grantor's 
- shared calendar. </p></li>
-	</ul>
-	<li class=p><p><span style="font-weight: bold;"><B>External guests</B></span>. 
- You create a password to access your shared calendar. Guests must enter 
- this password to view the calendar. They cannot make changes to the calendar.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Public</B></span>. Anyone 
- that knows the URL to the shared calendar can view it. They cannot make 
- changes to the calendar.</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Internal users or 
+	 groups</b></span>. &#160;You select the type of privileges to grant, either:</p></li>
+	<li style="list-style: none; display: inline;"><ul type="disc">
+		<li class="p"><p><span style="font-weight: bold;"><b>Viewer</b></span>. 
+		 The Grantee can see the activities posted to your calendar and 
+		 the status of meeting requests, but cannot make any changes to 
+		 your calendar.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Manager</b></span>. 
+		 The Grantee has permission to create meetings, accept or decline 
+		 invitations, and edit and delete activities from your calendar.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Admin</b></span>. The Grantee has permission to create 
+		 meetings, accept or decline invitations, edit and delete activities 
+		 from your calendar, share your calendar with others and remove 
+		 other Grantees from your shared calendar.</p></li>
+		<li class="p-note"><p class="note"><span style="font-weight: bold;"><b>None</b></span> 
+		 is an option to temporarily disable access to a grantor's shared 
+		 calendar without revoking the share privileges. The Grantee still 
+		 has the calendar in their calendar list but cannot view or manage 
+		 activities on the grantor's shared calendar.</p></li>
+	</ul></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>External guests</b></span>. 
+	 You create a password to access your shared calendar. Guests must 
+	 enter this password to view the calendar. They cannot make changes 
+	 to the calendar.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Public</b></span>. Anyone 
+	 that knows the URL to the shared calendar can view it. They cannot 
+	 make changes to the calendar.</p></li>
 </ul>
 <h3>Sharing Private Appointment Details</h3>
-<p>When you share your calendar you can select the check box<span style="font-weight: bold;"><B> 
- Allow user(s) to see my private appointments </B></span>to 
- allow internal users or groups and external guests to see your private 
+<p>When you share your calendar you can select the check box <span style="font-weight: bold;"><b>Allow 
+ user(s) to see my private appointments</b></span> 
+ to allow internal users or groups and external guests to see your private 
  appointments. They will be able to see details of appointments that are 
- marked private. &nbsp;If you do not check the box, the 
- calendar shows only that your are busy during a private appointment time.</p>
+ marked private. &#160;If you do not check the box, the calendar shows 
+ only that your are busy during a private appointment time.</p>
 <h6>To share your Calendar</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>Right-click on the calendar to share and select Share 
- Calendar.</p></li>
-	<li class=p><p>On the Share Properties dialog select whom to share 
- with.</p></li>
+<ol type="1">
+	<li class="p"><p>Right-click on the calendar to share and select Share 
+	 Calendar.</p></li>
+	<li class="p"><p>On the Share Properties dialog select whom to share 
+	 with.</p></li>
 </ol>
-<p class="whs3"><span style="font-weight: bold;"><B><a class="dropspot" href="javascript:TextPopup(this)" id="a4">Internal Users or Groups</a></B></span></p>
-<div class="droptext" id="POPUP320330214" style="display: 'none'; " x-ss-type="dropdown">
- <ol type="1" class="whs4">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs5">When 
- you choose Internal, you can choose addresses from the list that appears 
- as you type or you can type addresses that are not in the list. The user 
- or group must be a valid address in your company's mail server. </p></li>
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs5">In 
- the <span style="font-weight: bold;"><B>Role</B></span> area, select the access 
- permissions.</p></li>
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs5">If 
- you want to share your private appointment information, check <span style="font-weight: bold;"><B>Allow 
- user(s) to see my private appointments</B></span><span>.</span></p></li>
- </ol>
- <ol start="4" type="1" class="whs4">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs5">In 
- the <span style="font-weight: bold;"><B>Message</B></span> area, select which 
- type of message to send. &nbsp;The options are as follows:</p></li>
- </ol>
- <ul type="disc" class="whs1">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs6"><span 
- style="font-weight: bold;"><B>Send standard message</B></span>. The standard 
- share notification message is sent to the email address. &nbsp;</p></li>
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs6"><span 
- style="font-weight: bold;"><B>Add a note to standard message</B></span>. You 
- can add additional information to the standard message.</p></li>
- </ul>
- <ol start="5" type="1" class="whs4">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs5">Click 
- <span style="font-weight: bold;"><B>OK</B></span>. </p></li>
- </ol>
- <p>&nbsp;</p>
+<p style="margin-left: 40px; font-weight: bold;"><span style="font-weight: bold;"><b><a 
+	 class="dropspot" href="javascript:TextPopup(this)" id="a4">Internal 
+ Users or Groups</a></b></span></p>
+<div class="droptext" id="POPUP458132837" style="display: none;">
+	<ol type="1">
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">When 
+		 you choose Internal, you can choose addresses from the list that 
+		 appears as you type or you can type addresses that are not in 
+		 the list. The user or group must be a valid address in your company's 
+		 mail server.</p></li>
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">In 
+		 the <span style="font-weight: bold;"><b>Role</b></span> area, select 
+		 the access permissions.</p></li>
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">If 
+		 you want to share your private appointment information, check 
+		 <span style="font-weight: bold;"><b>Allow user(s) 
+		 to see my private appointments</b></span><span>.</span></p></li>
+	</ol>
+	<ol start="4" type="1">
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">In 
+		 the <span style="font-weight: bold;"><b>Message</b></span> area, select 
+		 which type of message to send. &#160;The options are as follows:</p></li>
+	</ol>
+	<ul type="disc">
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 80px;"><span 
+		 style="font-weight: bold;"><b>Send standard message</b></span>. The standard 
+		 share notification message is sent to the email address. &#160;</p></li>
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 80px;"><span 
+		 style="font-weight: bold;"><b>Add a note to standard message</b></span>. 
+		 You can add additional information to the standard message.</p></li>
+	</ul>
+	<ol start="5" type="1">
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">Click 
+		 <span style="font-weight: bold;"><b>OK</b></span>.</p></li>
+	</ol>
+	<p>&#160;</p>
 </div>
-<p class="whs3"><a class="dropspot" href="javascript:TextPopup(this)" id="a5">External 
- guests</a></p>
-<div class="droptext" id="POPUP320295087" style="display: 'none'; " x-ss-type="dropdown">
- <ol>
-  <li style="list-style: decimal;" type=1 class=p>
-  <p>When you choose 
- External guests, enter the guest email addresses. &nbsp;&nbsp;You 
- can enter more than one address in the Email: field. Put a semi-colon 
- (;) between addresses.</p></li>
-  <li style="list-style: decimal;" type=1 class=p>
-  <p>Enter the password 
- that users must enter to view your calendar.</p></li>
-  <li style="list-style: decimal;" type=1 class=p>
-  <p>If you want to share 
- your private appointment information, check <span style="font-weight: bold;"><B>Allow 
- user(s) to see my private appointments</B></span>. </p></li>
- </ol>
- <ol start=4>
-  <li class=p>
-  <p class="whs7">In the <span style="font-weight: bold;"><B>Message</B></span> 
- area, select which type of message to send. &nbsp;The 
- URL to your calendar and the password is included in the email message.</p></li>
-  <ul type="1" class="whs8">
-   <li style="list-style: disc;" type=disc class=p>
-   <p class="whs7"><span 
- style="font-weight: bold;"><B>Send standard message</B></span>. The standard 
- share notification message is sent to the email address. </p></li>
-   <li style="list-style: disc;" type=disc class=p>
-   <p class="whs7"><span 
- style="font-weight: bold;"><B>Add a note to standard message</B></span>. You 
- can add additional information to the standard message.</p></li>
-  </ul>
-  <li class=p>
-  <p class="whs7">Click <span style="font-weight: bold;"><B>OK</B></span>. 
- </p></li>
- </ol>
+<p style="margin-left: 40px; font-weight: bold;"><a class="dropspot" href="javascript:TextPopup(this)" 
+													 id="a5">External guests</a></p>
+<div class="droptext" id="POPUP458139701" style="display: none;">
+	<ol>
+		<li class="p" type="1"><p>When you choose External guests, enter 
+		 the guest email addresses. &#160;&#160;You can enter more than 
+		 one address in the Email: field. Put a semi-colon (;) between 
+		 addresses.</p></li>
+		<li class="p" type="1"><p>Enter the password that users must enter 
+		 to view your calendar.</p></li>
+		<li class="p" type="1"><p>If you want to share your private appointment 
+		 information, check <span style="font-weight: bold;"><b>Allow user(s) to see my private appointments</b></span>.</p></li>
+	</ol>
+	<ol start="4">
+		<li class="p"><p style="margin-left: 0px;">In the <span style="font-weight: bold;"><b>Message</b></span> 
+		 area, select which type of message to send. &#160;The URL to your 
+		 calendar and the password is included in the email message.</p>
+		<ul type="1">
+			<li class="p" type="disc"><p style="margin-left: 0px;"><span 
+			 style="font-weight: bold;"><b>Send standard message</b></span>. The 
+			 standard share notification message is sent to the email address.</p></li>
+			<li class="p" type="disc"><p style="margin-left: 0px;"><span 
+			 style="font-weight: bold;"><b>Add a note to standard message</b></span>. 
+			 You can add additional information to the standard message.</p></li>
+		</ul></li>
+		<li class="p"><p style="margin-left: 0px;">Click <span style="font-weight: bold;"><b>OK</b></span>.</p></li>
+	</ol>
 </div>
-<p class="whs3"><a class="dropspot" href="javascript:TextPopup(this)" id="a6">Public</a></p>
-<div class="droptext" id="POPUP317436481" style="display: 'none'; " x-ss-type="dropdown">
- <p>When you choose Public, anyone who has the URL can view your calendar. 
- &nbsp;No password is required. </p>
+<p style="margin-left: 40px; font-weight: bold;"><a class="dropspot" href="javascript:TextPopup(this)" 
+													 id="a6">Public</a></p>
+<div class="droptext" id="POPUP457763513" style="display: none;">
+	<p>When you choose Public, anyone who has the URL can view your calendar. 
+	 &#160;No password is required.</p>
 </div>
 <h3>Editing or revoking permission</h3>
 <p>You can edit or revoke permissions to access your calendar at any time.</p>
-<ol type="1" class="whs2">
-	<li class=p><p>Right-click on the shared calendar.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Edit Properties</B></span>. 
- Users sharing the folder are listed.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Edit</B></span> to 
- change permissions, or<br>
-	Click <span style="font-weight: bold;"><B>Revoke</B></span> to remove permissions. 
- </p></li>
-	<li class=p><p>Select whether a message describing the change should 
- be sent.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>.</p></li>
+<ol type="1">
+	<li class="p"><p>Right-click on the shared calendar.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Edit Properties</b></span>. 
+	 Users sharing the folder are listed.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Edit</b></span> 
+	 to change permissions, or<br />
+	Click <span style="font-weight: bold;"><b>Revoke</b></span> to remove permissions.</p></li>
+	<li class="p"><p>Select whether a message describing the change should 
+	 be sent.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>OK</b></span>.</p></li>
 </ol>
-<h6>&nbsp;</h6>
-<p class="whs7">&nbsp;</p>
-<script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a4','POPUP320330214');
-//--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a5','POPUP320295087');
-//--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a6','POPUP317436481');
-//--></script><script type="text/javascript" language="javascript1.2">
+<p>Alternately, you can edit or revoke permissions from your Preferences&gt;Sharing 
+ page.</p>
+<h6>&#160;</h6>
+<p style="margin-left: 0px;">&#160;</p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a4','POPUP458132837');
+	TextPopupInit('a5','POPUP458139701');
+	TextPopupInit('a6','POPUP457763513');
+//]]></script>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

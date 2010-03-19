@@ -1,24 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Adding a contactAutomatically</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; border-style:none; width:259px; height:108px; float:none; }
-img_whs2 { border:none; width:128px; height:100px; float:none; border-style:none; }
-p.whs3 { font-family:Arial, sans-serif; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your Address Books\nAdding contacts automatically");
@@ -58,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -77,50 +81,52 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Adding contacts automatically</h1>
 <p>Contacts can be quickly added to your address books when you select 
  an address on an email message and right-click to add the email address 
- to your address book. Also, if you checked the Address Book option to 
- <span style="font-weight: bold;"><B>Enable auto adding of contacts</B></span>, 
+ to your address book. Also, if you checked the Address Book preference 
+ to <span style="font-weight: bold;"><b>Add new contacts to &quot;Email Contacts&quot;</b></span>, 
  when you send an email to a new address, the address is automatically 
  added to your Emailed Contacts list.</p>
 <h6>Adding contacts from message header</h6>
 <p>You can quickly add email addresses to your address books. You can add 
- email addresses from mail header's &nbsp;From:, To:, 
- Cc:, or Bcc: lines. &nbsp;You can 
- do this from any message or conversation view. </p>
-<p>When you pass your mouse cursor over an address, a tool tips displays 
- the full email address associated with that name. If the name is already 
- in an address book, both contact information is displayed. If the name 
- is not in one of your address books, only the email address is displayed.</p>
-<p><img src="../contacts2.png" x-maintain-ratio="TRUE" width="259px" height="108px" border="0" class="img_whs1"></p>
-<p>&nbsp;</p>
-<p>If you right-click on the address, a menu appears with the option to 
- Add to Contacts. Click <span style="font-weight: bold;"><B>Edit Contact</B></span> 
- to add the name to your contacts list. &nbsp;The contacts 
- form displays the name.</p>
-<p><img src="../contacts_add_right-click.png" x-maintain-ratio="TRUE" width="128px" height="100px" border="0" class="img_whs2"></p>
+ email addresses from mail header's &#160;From:, To:, Cc:, or Bcc: lines. &#160;You can do this from any message or 
+ conversation view.</p>
+<ol type="1">
+	<li><p>When you pass your mouse cursor over an address, a tool tips 
+	 displays the full email address associated with that name. If the 
+	 name is already in an address book, both contact information is displayed. 
+	 If the name is not in one of your address books, only the email address 
+	 is displayed.</p></li>
+</ol>
+<p>&#160;</p>
+<p style="margin-left: 48px;"><img src="../contacts2.png" alt="contacts2.png" style="border: none;" width="259" height="108" border="0" /></p>
+<p>&#160;</p>
+<ol start="2" type="1">
+	<li><p>Right-click on the address, select <span style="font-weight: bold;"><b>Edit 
+	 Contact</b></span> to add the name to your contacts list. &#160;The contacts 
+	 form displays the name.</p></li>
+</ol>
+<p style="margin-left: 48px;"><img src="../contacts_add_right-click.png" alt="contacts_add_right-click.png" style="border: none;" width="128" height="100" border="0" /></p>
 <p>You can add additional contact information and select which address 
- book to save the contact information to. </p>
-<h6>Adding contacts when send a message</h6>
-<p class="whs3"><b style="font-weight: bold;"><span 
- style="font-weight: normal;">An Emailed Contacts address 
- book</span> </b>is automatically created in your mailbox. In your Preferences, 
- Address Book tab, If you checked the setting <span style="font-weight: bold;"><B>Add 
- new contacts to &quot;Emailed Contacts&quot;</B></span><span>, new contact 
- information is automatically added to this address book.</span> &nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+ book to save the contact information.</p>
+<h6>Adding contacts when sending a message</h6>
+<p style="font-family: Arial, sans-serif;"><b><span style="font-weight: normal;">An 
+ Emailed Contacts address book</span></b> 
+ is automatically created in your mailbox. In your Preferences, Address 
+ Book tab, If you checked the setting <span style="font-weight: bold;"><b>Add 
+ new contacts to &quot;Emailed Contacts&quot;</b></span><span>, new contact 
+ information is automatically added to this address book.</span> &#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

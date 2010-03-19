@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Sharing mail folders</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Sharing Folders\nSharing Mail Folders\nSharing mail folders");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,53 +81,32 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Sharing mail folders</h1>
-<p>You can share any of your mail folders, including the Inbox folder and 
- sub-folders. &nbsp;&nbsp;You select the folder(s) 
- and specify the type of access permissions to give the Grantee. &nbsp;You 
- can share with internal users who can be given complete manager access 
- to the folder, external guests that must use a password to view the folder 
- content, and public access so that anyone who has the URL can view the 
- content of the folder.</p>
-<p>When internal users share a mail folder, a copy of the shared folder 
- is put in the Grantee's Folder list on the Overview pane. When the folder 
- is selected, the content displays in the Content pane. The Grantee does 
- not need to log on to the Grantor's mailbox. If the Grantee is given manager 
- or admin permission, the Grantee can open the Grantor's folder, create 
- items, and respond to requests for that person. </p>
+<p>You can share any of your mail folders, including the Inbox folder and sub-folders. &#160;&#160;You select the 
+folder(s) and specify the type of access permissions to give the Grantee. &#160;You can share with internal users who can be given complete manager access to the folder, external guests that must use a password to view the folder content, and public access so that anyone who has the URL can view the content of the folder.</p>
+<p>When internal users share a mail folder, a copy of the shared folder is put in the Grantee's Folder list on the Overview pane. When the folder is selected, the content displays in the Content pane. The Grantee does not need to log on to the Grantor's mailbox. If the Grantee is given manager or admin permission, the Grantee can open the Grantor's folder, create items, and respond to requests for that person.</p>
 <h3>Scenarios for sharing a mail folder</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>Your sales department wants one central mailbox for 
- all email messages requesting information about your product, and everyone 
- in sales should be able to view email messages immediately when they come 
- in. You can give everyone in the department permission to view the mail 
- folder and they can copy the messages to their mailbox, or you can give 
- them permission to manage the mail folder and they can reply on behalf 
- of this address. </p></li>
-	<li class=p><p>A manager is often out of the office and does not have 
- time to respond to her email messages. When the manager delegates access 
- to her Inbox mail folder, her assistant (grantee) can manage the content 
- of her mail, respond to messages on her behalf, create folders to organize 
- message in that mail folder, and delete messages. </p></li>
-	<li class=p><p>Instead of sending email messages to dozens of addresses 
- every time you have an announcement, you can identify one of your folders 
- as a public folder that contains the email announcements. &nbsp;You 
- can create shared access to only specific email addresses and set a password 
- that must be entered to view the content, or you can make it a public 
- URL for anyone who has the URL can view the content. &nbsp;</p></li>
+<ul type="disc">
+<li class="p">
+<p>Your sales department wants one central mailbox for all email messages requesting information about your product, and everyone in sales should be able to view email messages immediately when they come in. You can give everyone in the department permission to view the mail folder and they can copy the messages to their mailbox, or you can give them permission to manage the mail folder and they can reply on behalf of this address.</p>
+</li>
+<li class="p">
+<p>A manager is often out of the office and does not have time to respond to her email messages. When the manager delegates access to her Inbox mail folder, her assistant (grantee) can manage the content of her mail, respond to messages on her behalf, create folders to organize message in that mail folder, and delete messages.</p>
+</li>
+<li class="p">
+<p>Instead of sending email messages to dozens of addresses every time you have an announcement, you can identify one of your folders as a public folder that contains the email announcements. &#160;You can create shared access to only specific email addresses and set a password that must be entered to view the content, or you can make it a public URL for anyone who has the URL can view the content. &#160;</p>
+</li>
 </ul>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>
