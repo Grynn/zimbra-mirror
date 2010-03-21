@@ -822,7 +822,7 @@
 			<fileset dir="src/installer/webapp" />
 		</copy>
 		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/launcher.icns" file="src/installer/resources/launcher_128x128.icns" overwrite="true"/>
-		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/launcher.png" file="src/installer/resources/launcher_32x32.png" overwrite="true"/>
+		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/launcher.png" file="src/installer/resources/launcher_48x48.png" overwrite="true"/>
 		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/launcher.ico" file="src/installer/resources/launcher_128x128.ico" overwrite="true"/>
 		<copy tofile="${dist.data.dir}/zdesktop.webapp/icons/default/newmail.png" file="src/installer/resources/newmail_16x16.png" overwrite="true"/>
 
