@@ -236,8 +236,12 @@ public class GalSync {
             } else {
                 int itemId = findContact(id);
                 if (itemId > 0) {
-                    galMbox.modifyContact(context, itemId, contact);
-                    OfflineLog.offline.debug("Offline GAL contact modified: " + logstr);
+                    try {
+                        galMbox.modifyContact(context, itemId, contact);
+                        OfflineLog.offline.debug("Offline GAL contact modified: " + logstr);
+                    } catch (MailServiceException.NoSuchItemException e) {
+                        OfflineLog.offline.warn("Offline GAL modify error - no such contact: " + logstr + " itemId=" + Integer.toString(itemId));
+                    }
                 } else {                    
                     createContact(contact, id, logstr);               
                 }                
