@@ -19,6 +19,8 @@
 Dim oFso, oReg, oShellApp, oShell, oWMI, sScriptPath, sScriptDir, oTokens, sAppRoot, sDataRoot
 Dim sLocalAppDir, bIsUpgrade, sTmpDir, sRestoreDir, aUserDirs, aUserFiles, sVersion, sVerFile
 
+const HKEY_CURRENT_USER = &H80000001
+
 Sub FindAndReplace(sFile, oTokens)
     Dim oFso, oInFile, oOutFile, sTmpFile
     
@@ -218,6 +220,13 @@ Sub EnsureSingleInstance()
     Next
 End Sub
 
+Function GetDataRoot()
+    oReg.GetStringValue HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop", "DataRoot", GetDataRoot
+    If IsNull(GetDataRoot) Then
+        GetDataRoot = sLocalAppDir & "\Zimbra\Zimbra Desktop"
+    End If
+End Function
+
 '------------------------------- main ---------------------------------
 
 Set oFso = CreateObject("Scripting.FileSystemObject")
@@ -235,7 +244,7 @@ sScriptPath = WScript.ScriptFullName
 sScriptDir = Left(sScriptPath, InStrRev(sScriptPath, WScript.ScriptName) - 2)
 sAppRoot = oFso.GetParentFolderName(sScriptDir)
 sLocalAppDir = oShellApp.Namespace(&H1c&).Self.Path
-sDataRoot = sLocalAppDir & "\Zimbra\Zimbra Desktop"
+sDataRoot = GetDataRoot()
 sVerFile = sDataRoot & "\conf\version"
 sTmpDir = sDataRoot & ".tmp"
 sRestoreDir = sDataRoot & ".rst"
@@ -296,7 +305,6 @@ If bIsUpgrade Then
 	RestoreData sTmpDir
 End If
 
-const HKEY_CURRENT_USER = &H80000001
 oReg.CreateKey HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop"
 oReg.SetStringValue HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop", "DataRoot", sDataRoot
 
