@@ -122,7 +122,20 @@ public	class	DocletDataModelProvider extends	DataModelProvider {
     }
         
 	/**
-	 * @inherits
+	 * Adds a command.
+	 * 
+	 * @param service			the service			
+	 * @param className			the command class name
+	 * @param name				the command name
+	 * @param	namespace		the namespace
+	 * @return	the newly created command 
+	 */
+	protected	Command	addCommand(Service service, String className, String name, String namespace) {
+		return	this.createCommand(service, className, name, namespace);
+	}
+
+	/**
+	 * 
 	 */
 	protected	Root	loadDataModel(Root root) {
 
@@ -134,7 +147,7 @@ public	class	DocletDataModelProvider extends	DataModelProvider {
     		String	name = StringUtil.getClassName(className);
 	    	String	srcPath = buildSourcePath(className);
 
-    	    Service s = new Service(root, className, name);
+    	    Service s = createService(root, className, name);
 
             ServiceDispatcher serviceDispatcher = new ServiceDispatcher(root, s, this, listener);
             serviceDoc.registerHandlers(serviceDispatcher);

@@ -45,7 +45,7 @@ public class Command implements java.io.Serializable {
 	 * @param name				the command name
 	 * @param	namespace		the namespace
 	 */
-	public	Command(Service service, String className, String name, String namespace) {
+	Command(Service service, String className, String name, String namespace) {
 		this.service = service;
 		this.className = className;
 		this.name = name;

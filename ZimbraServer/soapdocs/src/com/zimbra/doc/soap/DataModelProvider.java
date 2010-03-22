@@ -39,6 +39,31 @@ public	abstract	class	DataModelProvider {
 	}
 	
 	/**
+	 * Creates a service.
+	 * 
+	 * @param	root		the root data model
+	 * @param	className	the service class name
+	 * @param	name		the service name
+	 * @return	the newly created service 
+	 */
+	protected	Service	createService(Root root, String className, String name) {
+		return	new Service(root, className, name);
+	}
+
+	/**
+	 * Creates a command.
+	 * 
+	 * @param service			the service			
+	 * @param className			the command class name
+	 * @param name				the command name
+	 * @param	namespace		the namespace
+	 * @return	the newly created command 
+	 */
+	protected	Command	createCommand(Service service, String className, String name, String namespace) {
+		return	new Command(service, className, name, namespace);
+	}
+
+	/**
 	 * Loads the data model.
 	 * 
 	 * @param		root		the root data model

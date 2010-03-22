@@ -40,7 +40,7 @@ public class Service implements java.io.Serializable {
 	 * @param	className	the service class name
 	 * @param	name		the service name
 	 */
-	public	Service(Root root, String className, String name) {
+	Service(Root root, String className, String name) {
 		this.root = root;
 		this.className = className;
 		this.name = name;

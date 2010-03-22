@@ -54,7 +54,7 @@ public	class	ServiceDispatcher extends DocumentDispatcher {
 			String name = StringUtil.getClassName(className);
 			String namespace = qname.getNamespace().getURI();
 			
-			Command cmd = new Command(this.service, className, name, namespace);
+			Command cmd = this.provider.addCommand(this.service, className, name, namespace);
 				
 			if (cmd.getName().equals("Browse") || cmd.getName().equals("ChangePassword")) {
 				// load command file source
