@@ -498,30 +498,53 @@ function(n) {
 }
 
 ZaSearch.getSearchByNameQuery =
-function(n, types) {
-	if (n == null || n == "") {
-		return "";
-	} else {
+function(n, types,excludeClosed) {
+	excludeClosed = excludeClosed ? excludeClosed : false;
+	var query = [];
+	/*if (n == null || n == "") {
+		if(excludeClosed) {
+			return "!(zimbraAccountStatus=closed)";
+		} else {
+			return "";
+		}*/
+	if(excludeClosed) {
+		query.push("(&(!(zimbraAccountStatus=closed))");
+	} 
+	
+	if (!AjxUtil.isEmpty(n)) {
+		query.push("(|");
 		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
         if (!types) types = [ZaSearch.ALIASES, ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.RESOURCES, ZaSearch.DOMAINS] ;
-        var query = [];
+        var addedAddrFields = false;
+        var addedAccResFields = false;
+        var addedDLAliasFields = false;
         for (var i = 0 ; i < types.length; i ++) {
             if (types[i] == "domains") {
                 query.push ("(zimbraDomainName=*"+n+"*)") ;
             } else {
-                query.push("(mail=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)") ;
-                if (types[i] == "accounts" || types[i] == "resources") {
+            	if(!addedAddrFields) {
+            		query.push("(mail=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)") ;
+            		addedAddrFields = true;
+            	}
+                if (!addedAccResFields && (types[i] == "accounts" || types[i] == "resources")) {
                     query.push ("(zimbraMailDeliveryAddress=*"+n+"*)");
-                } else if (types[i] == "distributionlists" || types[i] == "aliases") {
-                    query.push("(zimbraMailAlias=*"+n+"*)(uid=*"+n+"*)")  ;
+                    addedAccResFields = true;
+                } else if (!addedDLAliasFields && (types[i] == "distributionlists" || types[i] == "aliases")) {
+                    query.push("(zimbraMailAlias=*"+n+"*)(uid=*"+n+"*)");
+                    addedDLAliasFields = true;
                 } 
             }
         }
-        return "(|" + query.join("") + ")" ;
-        /*
-        return ("(|(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)(zimbraId="+n+")" +
-                ")"); */
 	}
+	if(excludeClosed) {
+		query.push(")");
+	} 
+	if (!AjxUtil.isEmpty(n)) {
+		query.push(")");
+	}
+	//return "(|" + query.join("") + ")" ;
+	return query.join("");
+	
 }
 
 ZaSearch.getSearchByDisplayNameQuery =
