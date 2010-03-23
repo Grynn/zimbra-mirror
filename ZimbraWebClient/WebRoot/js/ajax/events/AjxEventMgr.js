@@ -13,11 +13,21 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * @class
+ * This class represents the event manager.
+ * 
+ * @private
+ */
 AjxEventMgr = function() {
 	this._listeners = new Object();
 }
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @return	{string}		a string representation of the object
+ */
 AjxEventMgr.prototype.toString = 
 function() {
 	return "AjxEventMgr";

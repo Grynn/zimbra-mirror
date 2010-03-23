@@ -14,14 +14,17 @@
  */
 
 
-/* Represents a SOAP Fault
-*
-* Public attributes:
-*
-* - faultCode: The SOAP fault code
-* - reason: Reason string
-* - errorCode: server error code
-*/
+/**
+ * Represents a SOAP Fault
+ *
+ * Public attributes:
+ *
+ * - faultCode: The SOAP fault code
+ * - reason: Reason string
+ * - errorCode: server error code
+ * 
+ * @private
+ */
 AjxSoapFault = function(faultEl) {
 	if (arguments.length == 0) return;
 	var prefix = faultEl.prefix;

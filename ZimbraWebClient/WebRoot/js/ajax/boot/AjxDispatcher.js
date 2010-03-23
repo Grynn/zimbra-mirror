@@ -18,21 +18,27 @@
  * public API methods. For example, the registration of a public API method for
  * pulling up the compose form might look something like this:
  * 
+ * <pre>
  *		AjxDispatcher.register("Compose", "Mail", new AjxCallback(this, this.doAction));
- *
+ * </pre>
+ * 
  * and a client call of it like this:
  * 
+ * <pre>
  *		AjxDispatcher.run("Compose", {action:ZmOperation.NEW_MESSAGE, inNewWindow:false});
+ * </pre>
  * 
  * Registration will most likely need to happen in a constructor, when 'this' is
  * available, since you'll most likely want the function call to happen in that
  * object's context.
- * 
+ * <p>
  * A package can also register a callback to be run once the package has loaded. One use case for
  * that is to register newly-defined classes as drop targets. There is a wrapper method around
  * AjxPackage.require() that will call that method and then run the post-load callback (if any):
- * 
+ *
+ * <pre>
  * 		AjxDispatcher.require("Calendar");
+ * </pre>
  * 
  * @author Conrad Damon
  */
@@ -52,8 +58,8 @@ AjxDispatcher._timedAction = null;
 /**
  * Adds a function to be called after the given package has been loaded.
  * 
- * @param pkg		[string]			name of package
- * @param callback	[AjxCallback]		callback to run after package has loaded
+ * @param {string}	pkg		the name of package
+ * @param {AjxCallback}	callback	the callback to run after package has loaded
  */
 AjxDispatcher.addPackageLoadFunction =
 function(pkg, callback) {
@@ -69,7 +75,7 @@ function(pkg, callback) {
  * Adds a function to be called while a package is being loaded. A typical use
  * is to display a "Loading..." screen.
  * 
- * @param callback	[AjxCallback]		callback to run after package has loaded
+ * @param {AjxCallback}	callback	the callback to run after package has loaded
  */
 AjxDispatcher.addPreLoadFunction =
 function(callback) {
@@ -80,26 +86,32 @@ function(callback) {
  * Adds a function to be called after a package has been loaded. A typical use
  * is to clear a "Loading..." screen.
  * 
- * @param callback	[AjxCallback]		callback to run after package has loaded
+ * @param {AjxCallback}	callback	the callback to run after package has loaded
  */
 AjxDispatcher.addPostLoadFunction =
 function(callback) {
 	AjxDispatcher._postLoad.push(callback);
 };
 
-/** @deprecated Use addPackageLoadFunction instead. */
+/**
+ * @deprecated Use addPackageLoadFunction instead.
+ */
 AjxDispatcher.setPackageLoadFunction = AjxDispatcher.addPackageLoadFunction;
 
-/** @deprecated Use addPreLoadFunction instead. */
+/**
+ * @deprecated Use addPreLoadFunction instead.
+ */
 AjxDispatcher.setPreLoadFunction = AjxDispatcher.addPreLoadFunction;
 
-/** @deprecated Use addPostLoadFunction instead. */
+/**
+ * @deprecated Use addPostLoadFunction instead.
+ */
 AjxDispatcher.setPostLoadFunction = AjxDispatcher.addPostLoadFunction;
 
 /**
  * Enables/disables the running of the pre/post load functions.
  * 
- * @param enabled	[boolean]	if true, run pre/post load functions
+ * @param {boolean}	enabled		if <code>true</code>, run pre/post load functions
  */
 AjxDispatcher.enableLoadFunctions =
 function(enable) {
@@ -107,7 +119,10 @@ function(enable) {
 };
 
 /**
- * Returns true if the given package has been loaded.
+ * Checks if the given package has been loaded.
+ * 
+ * @param	{string}	pkg		the name of package
+ * @return	{boolean}	<code>true</code> if the package is loaded
  */
 AjxDispatcher.loaded =
 function(pkg) {
@@ -118,8 +133,8 @@ function(pkg) {
 /**
  * Programmatically sets whether the given packages has been loaded. Use with care!
  * 
- * @param pkg		[string]			name of package
- * @param loaded	[boolean]			if true, package has been loaded
+ * @param {string}	pkg		the name of package
+ * @return	{boolean}	if <code>true</code>, the package is loaded
  */
 AjxDispatcher.setLoaded =
 function(pkg, loaded) {
@@ -136,9 +151,9 @@ function(pkg, loaded) {
 /**
  * Registers an API method so that it may be called.
  * 
- * @param method	[string]			name of the API method
- * @param pkg		[string]			name of required package(s)
- * @param callback	[AjxCallback]		callback to run for this API call
+ * @param {string}	method	the name of the API method
+ * @param {string}	pkg		the name of required package(s)
+ * @param {AjxCallback}	callback	the callback to run for this API call
  */
 AjxDispatcher.registerMethod =
 function(method, pkg, callback) {
@@ -152,11 +167,13 @@ function(method, pkg, callback) {
  * 
  * PS: You are in a maze of twisty callbacks, all alike.
  * 
- * @param method		[string]		name of the API method
- * @param async			[boolean]*		if true, load package asynchronously
- * @param callback		[AjxCallback]*	callback to run with results (must be present
+ * @param {string}	method		the name of the API method
+ * @param {boolean}	async			if <code>true</code>, load package asynchronously
+ * @param {AjxCallback}	callback		the callback to run with results (must be present
  * 										if there are pre- or post-load functions)
- * @param preLoadOk		[boolean]*		if true, okay to run registered pre-load function
+ * @param {boolean}		preLoadOk		if <code>true</code>, okay to run registered pre-load function
+ * 
+ * @private
  */
 AjxDispatcher.run =
 function(params /*, arg1 ... argN */) {
@@ -197,11 +214,11 @@ function(params /*, arg1 ... argN */) {
  * be careful not to mix async and sync calls for the same package, in order to avoid
  * race conditions.
  * 
- * @param pkg				[string]		name of the API method
- * @param async				[boolean]*		if true, load package asynchronously
- * @param callback			[AjxCallback]*	callback to run after pkg load
- * @param args				[array]*		args to pass to callback
- * @param preLoadOk			[boolean]*		if true, okay to run registered pre-load function
+ * @param {string}	pkg				the name of the API method
+ * @param {boolean}	async				if <code>true</code>, load package asynchronously
+ * @param {AjxCallback}	callback			the callback to run after pkg load
+ * @param {array}	args				the args to pass to callback
+ * @param {boolean}	preLoadOk			if <code>true</code>, okay to run registered pre-load function
  */
 AjxDispatcher.require =
 function(pkg, async, callback, args, preLoadOk) {

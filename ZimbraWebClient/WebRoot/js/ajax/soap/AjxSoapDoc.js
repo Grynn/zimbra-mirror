@@ -36,10 +36,10 @@ AjxSoapDoc._XMLNS_URI = "http://www.w3.org/2000/xmlns";
 /**
  * Creates a SOAP document.
  * 
- * @param	{String}	method		the soap method
- * @param	{String}	namespace	the method namespace
- * @param	{String}	[namespaceId]	the namespace id
- * @param	{String}	[soapURI]	the SOAP uri
+ * @param	{string}	method		the soap method
+ * @param	{string}	namespace	the method namespace
+ * @param	{string}	[namespaceId]	the namespace id
+ * @param	{string}	[soapURI]	the SOAP uri
  * @return	{AjxSoapDoc}		the document
  */
 AjxSoapDoc.create =
@@ -153,10 +153,10 @@ function(name, value) {
  * NOTE: you can pass null for "name", in which case "value" is expected to be
  * an object whose properties will be created directly under the method el.
  * 
- * @param	{String}	name	the name
- * @param	{Hash}	value		the attribute name/value pairs
- * @param	{String}	[parent]	the parent element to append to
- * @param	{String}	[namespace]	the namespace
+ * @param	{string}	name	the name
+ * @param	{hash}	value		the attribute name/value pairs
+ * @param	{string}	[parent]	the parent element to append to
+ * @param	{string}	[namespace]	the namespace
  * @return	{Element}	the node element
  */
 AjxSoapDoc.prototype.set =
@@ -198,7 +198,7 @@ function(name, value, parent, namespace) {
 /**
  * Gets the method.
  * 
- * @return	{String}	the method
+ * @return	{string}	the method
  */
 AjxSoapDoc.prototype.getMethod =
 function() {
@@ -311,7 +311,7 @@ function(node) {
 /**
  * Gets the XML.
  * 
- * @return	{String}	the XML
+ * @return	{string}	the XML
  */
 AjxSoapDoc.prototype.getXml =
 function() {

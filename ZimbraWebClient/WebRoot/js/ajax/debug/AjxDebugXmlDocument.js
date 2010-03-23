@@ -14,7 +14,11 @@
  */
 
 
-// XmlDocument factory
+/**
+ * XmlDocument factory
+ * 
+ * @private
+ */
 AjxDebugXmlDocument = function() {
 }
 

@@ -14,6 +14,10 @@
  */
 
 
+/**
+ * 
+ * @private
+ */
 AjxCore = function() {}
 
 AjxCore._objectIds = [null];
@@ -87,7 +91,7 @@ function(eventSource, eventName, action) {
 };
 
 /**
- * removes all listeners for a given eventName, and source
+ * Removes all listeners for a given eventName, and source
  */
 AjxCore.removeAllListeners = 
 function(eventSource, eventName) {

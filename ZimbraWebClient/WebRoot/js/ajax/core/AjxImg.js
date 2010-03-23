@@ -15,12 +15,15 @@
 
 
 /**
-* @class
-* This static class provides basic image support by using CSS and background 
-* images rather than &lt;img&gt; tags. 
-* @author Conrad Damon
-* @author Ross Dargahi
-*/
+ * @class
+ * This static class provides basic image support by using CSS and background 
+ * images rather than &lt;img&gt; tags.
+ *  
+ * @author Conrad Damon
+ * @author Ross Dargahi
+ * 
+ * @private
+ */
 AjxImg = function() {};
 
 AjxImg.prototype = new Object;
@@ -33,15 +36,15 @@ AjxImg.DISABLED = true;
 AjxImg.RE_COLOR = /^(.*?),color=(.*)$/;
 
 /**
-* This method will set the image for <i>parentEl</i>. <i>parentEl</i> should 
-* only contain this image and no other children
-*
-* @param parentEl 		The parent element for the image
-* @param imageName 		The name of the image.  The CSS class for the image will be "Img<imageName>".
-* @param useParenEl 	If true will use the parent element as the root for the image and will not create an intermediate DIV
-* @param _disabled		If true, will append " ZDisabledImage" to the CSS class for the image, 
-*							which will make the image partly transparent
-*/
+ * This method will set the image for <i>parentEl</i>. <i>parentEl</i> should 
+ * only contain this image and no other children
+ *
+ * @param parentEl 		the parent element for the image
+ * @param imageName 		the name of the image.  The CSS class for the image will be "Img&lt;imageName&gt;".
+ * @param useParenEl 	if <code>true</code> will use the parent element as the root for the image and will not create an intermediate DIV
+ * @param _disabled		if <code>true</code>, will append " ZDisabledImage" to the CSS class for the image, 
+ *							which will make the image partly transparent
+ */
 AjxImg.setImage =
 function(parentEl, imageName, useParentEl, _disabled) {
 	var color, m = imageName.match(AjxImg.RE_COLOR);
@@ -158,13 +161,14 @@ function(imageEl) {
 };
 
 /**
-* Gets the "image" as an HTML string. 
-*
-* @param imageName		the image you want to render
-* @param styleStr		optional style info e.g. "display:inline"
-* @param attrStr		optional attributes eg. "id=X748"
-* @param wrapInTable	surround the resulting code in a table
-*/
+ * Gets the "image" as an HTML string. 
+ *
+ * @param imageName		the image you want to render
+ * @param styleStr		optional style info (for example, "display:inline")
+ * @param attrStr		optional attributes (for example, "id=X748")
+ * @param wrapInTable	surround the resulting code in a table
+ * @return	{string}	the image string
+ */
 AjxImg.getImageHtml = 
 function(imageName, styleStr, attrStr, wrapInTable) {
 	attrStr = attrStr || "";
@@ -178,13 +182,14 @@ function(imageName, styleStr, attrStr, wrapInTable) {
 };
 
 /**
-* Gets the "image" as an HTML string.
-*
-* @param imageName		the image you want to render
-* @param styleStr		optional style info e.g. "display:inline"
-* @param attrStr		optional attributes eg. "id=X748"
-* @param label			the text that follows this image
-*/
+ * Gets the "image" as an HTML string.
+ *
+ * @param imageName		the image you want to render
+ * @param styleStr		optional style info (for example, "display:inline")
+ * @param attrStr		optional attributes (for example, "id=X748")
+ * @param label			the text that follows this image
+ * @return	{string}	the image string
+ */
 AjxImg.getImageSpanHtml =
 function(imageName, styleStr, attrStr, label) {
 	var className = AjxImg.getClassForImage(imageName);

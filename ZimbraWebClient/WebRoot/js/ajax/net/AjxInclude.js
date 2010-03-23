@@ -26,12 +26,14 @@
  * that time.  DO pass a callback if you want to execute code that rely on
  * those scripts.
  *
- * @param includes [Array] -- an array of strings; each is the URL to some script
- * @param baseurl [String] -- URL that will be prepended to scripts with a
+ * @param {array}	includes 	an array of strings; each is the URL to some script
+ * @param {string}	baseurl 	the URL that will be prepended to scripts with a
  *                            relative address (not starting with http://, ftp:// or /)
- * @param callback [AjxCallback] -- will be called when all scripts were processed
+ * @param {AjxCallback}	callback the callback will be called when all scripts were processed
  *
- * @author Mihai Bazon, <mihai@zimbra.com>
+ * @author Mihai Bazon
+ * 
+ * @private
  */
 AjxInclude = function(includes, baseurl, callback, proxy) {
 	var head = document.getElementsByTagName("head")[0];

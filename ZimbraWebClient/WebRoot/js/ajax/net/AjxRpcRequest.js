@@ -25,7 +25,7 @@
  * @author Ross Dargahi
  * @author Conrad Damon
  * 
- * @param {String} [id]		the ID to identify this object
+ * @param {string} [id]		the ID to identify this object
  * 
  * @see AjxRpc
  * 
@@ -35,10 +35,10 @@ AjxRpcRequest = function(id) {
 		AjxRpcRequest.__init();
 	}
 
-	/** (optional) id for this object.
-	* @type String|Int */
+	/**
+	 * The id for this object.
+	 */
 	this.id = id;
-	/** private*/
 	this.__httpReq = AjxRpcRequest.__msxmlVers
 		? (new ActiveXObject(AjxRpcRequest.__msxmlVers))
 		: (new XMLHttpRequest());
@@ -46,7 +46,6 @@ AjxRpcRequest = function(id) {
 
 /**
  * Defines the "timed out" exception.
- * @type	int
  */
 AjxRpcRequest.TIMEDOUT		= -1000;		// Timed out exception
 AjxRpcRequest.__inited		= false;
@@ -55,7 +54,7 @@ AjxRpcRequest.__msxmlVers	= null;
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 AjxRpcRequest.prototype.toString = 
 function() {
@@ -66,9 +65,9 @@ function() {
  * Sends this request to the target URL. If there is a callback, the request is
  * performed asynchronously.
  * 
- * @param {String} [requestStr] 	the HTTP request string/document
- * @param {String} serverUrl 	the request target 
- * @param {Array} [requestHeaders] an array of HTTP request headers
+ * @param {string} [requestStr] 	the HTTP request string/document
+ * @param {string} serverUrl 	the request target 
+ * @param {array} [requestHeaders] an array of HTTP request headers
  * @param {AjxCallback} callback 	the callback for asynchronous requests. This callback 
  * 		will be invoked when the requests completes. It will be passed the same
  * 		values as when this method is invoked synchronously (see the return values
@@ -76,10 +75,10 @@ function() {
  * 		below), then the object passed to the callback will be the same as in the 
  * 		error case with the exception that the status will be set to 
  * 		{@link AjxRpcRequest.TIMEDOUT}.
- * @param {Boolean} [useGet=false] 		if <code>true</code>, use get method; otherwise, use post
- * @param {int} [timeout] 		the timeout (in milliseconds) after which the request is canceled
+ * @param {boolean} [useGet=false] 		if <code>true</code>, use get method; otherwise, use post
+ * @param {number} [timeout] 		the timeout (in milliseconds) after which the request is canceled
  * 
- * @return {Object}	if invoking in asynchronous mode, then it will return the id of the 
+ * @return {object|hash}	if invoking in asynchronous mode, then it will return the id of the 
  * 		underlying {@link AjxRpcRequest} object. Else if invoked synchronously, if
  * 		there is no error (i.e. we get a HTTP result code of 200 from the server),
  * 		an object with the following attributes is returned

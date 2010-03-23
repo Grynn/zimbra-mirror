@@ -25,6 +25,14 @@ AjxVector = function() {
 	this._array = new Array();
 };
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @param	{string}	sep		the seperator
+ * @param	{boolean}	compress	if <code>true</code>, compress
+ * 
+ * @return	{string}	a string representation of the object
+ */
 AjxVector.prototype.toString =
 function(sep, compress) {
 	if (compress !== true)
@@ -42,7 +50,7 @@ function(sep, compress) {
 /**
  * Creates a vector from a given array.
  * 
- * @param	{Array}	list		an array
+ * @param	{array}	list		an array
  * @return	{AjxVector}		the vector
  */
 AjxVector.fromArray =
@@ -58,7 +66,7 @@ function(list) {
 /**
  * Gets the size of the vector.
  * 
- * @return	{int}	the size
+ * @return	{number}	the size
  */
 AjxVector.prototype.size =
 function() {
@@ -69,8 +77,8 @@ function() {
  * Adds a object to the vector.
  * 
  * @param	{Object}	obj		the object
- * @param	{int}		index	the index where to add
- * @param	{Boolean}	noDuplicates	if <code>true</code>, confirm the object is not in vector before adding
+ * @param	{number}		index	the index where to add
+ * @param	{boolean}	noDuplicates	if <code>true</code>, confirm the object is not in vector before adding
  */
 AjxVector.prototype.add =
 function(obj, index, noDuplicates) {
@@ -85,7 +93,7 @@ function(obj, index, noDuplicates) {
 /**
  * Adds the given array.
  * 
- * @param	{Array}		list		an array
+ * @param	{array}		list		an array
  */
 AjxVector.prototype.addList =
 function(list) {
@@ -111,7 +119,7 @@ function(list) {
  * Removes the object.
  * 
  * @param	{Object}	obj		the object to remove
- * @return	{Boolean}	<code>true</code> if the object is removed
+ * @return	{boolean}	<code>true</code> if the object is removed
  */
 AjxVector.prototype.remove =
 function(obj) {
@@ -121,7 +129,7 @@ function(obj) {
 /**
  * Removes the object at the given index.
  * 
- * @param	{int}	index		the index
+ * @param	{number}	index		the index
  * @return	{Object}	the object at the index or <code>null</code> if no object at index
  */
 AjxVector.prototype.removeAt =
@@ -171,7 +179,7 @@ function() {
 /**
  * Replaces the object at a given index.
  * 
- * @param	{int}	index		the index
+ * @param	{number}	index		the index
  * @param	{Object}	newObj	the new object
  * @return	{Object}	the old object
  */
@@ -204,7 +212,7 @@ function(obj, newObj) {
  * Returns the index of the obj given w/in vector
  *
  * @param {Object}	obj			the object being looked for
- * @return	{int}	the index or -1 if not found
+ * @return	{number}	the index or -1 if not found
  */
 AjxVector.prototype.indexOf =
 function(obj) {
@@ -223,7 +231,7 @@ function(obj) {
  *
  * @param {Object}	obj			the object being looked for
  * @param {function}	compareFunc	a function for comparing objects
- * @return	{int}	the index or -1 if not found
+ * @return	{number}	the index or -1 if not found
  */
 AjxVector.prototype.indexOfLike =
 function(obj, compareFunc) {
@@ -253,7 +261,7 @@ function() {
  * Checks if the vector contains an object.
  * 
  * @param	{Object}	obj		the object
- * @return	{Boolean}	<code>true</code> if the object is found
+ * @return	{boolean}	<code>true</code> if the object is found
  */
 AjxVector.prototype.contains =
 function(obj) {
@@ -273,7 +281,7 @@ function(obj) {
  *
  * @param {Object}	obj			the object being looked for
  * @param {function}	compareFunc	a function for comparing objects
- * @return	{Boolean}	<code>true</code> if the object is found
+ * @return	{boolean}	<code>true</code> if the object is found
  */
 AjxVector.prototype.containsLike =
 function(obj, compareFunc) {
@@ -289,7 +297,7 @@ function(obj, compareFunc) {
 /**
  * Gets the object at a given index.
  * 
- * @param	{int}	index		the index
+ * @param	{number}	index		the index
  * @return	{Object}	the object or <code>null</code> if not found
  */
 AjxVector.prototype.get =
@@ -301,7 +309,7 @@ function(index) {
 /**
  * Gets an array of the vector.
  * 
- * @return	{Array}	an array
+ * @return	{array}	an array
  */
 AjxVector.prototype.getArray =
 function() {
@@ -365,7 +373,7 @@ function(sortFunc) {
  * 
  * @param	{Object}	valueToFind		the value
  * @param	{function}	sortFunc		the sort function
- * @return	{int}	the index
+ * @return	{number}	the index
  */
 AjxVector.prototype.binarySearch =
 function(valueToFind, sortFunc) {
@@ -486,8 +494,8 @@ AjxVector.prototype.map = function(f, obj) {
 /**
  * Joins the vector.
  * 
- * @param	{String}	sep		the string separator
- * @return	{String}	a string representation of the vector
+ * @param	{string}	sep		the string separator
+ * @return	{string}	a string representation of the vector
  */
 AjxVector.prototype.join = function(sep) {
 	return this._array.join(sep);

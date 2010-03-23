@@ -23,9 +23,9 @@
 *
 * @author Conrad Damon
 * 
-* @param {Object}	obj		the object to call the function from
+* @param {object}	obj		the object to call the function from
 * @param {function}	func	the callback function
-* @param {primative|Array}	args   the default arguments
+* @param {array}	args   the default arguments
 */
 AjxCallback = function(obj, func, args) {
 	if (arguments.length == 0) return;
@@ -45,7 +45,7 @@ AjxCallback = function(obj, func, args) {
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 AjxCallback.prototype.toString =
 function() {
@@ -61,7 +61,7 @@ AjxCallback.NOP = new AjxCallback(function(){});
  * to the <code>run</code> method. Whatever the called function returns is
  * returned to the caller.
  *
- * @param {Object}	[arg1..argN]	the first argument which will be appended to the argument
+ * @param {array}	[arg1..argN]	the first argument which will be appended to the argument
  *				array passed to this object's constructor. Any number of
  *				arguments may be passed to the <code>run</code> method.
  */
@@ -102,7 +102,7 @@ function(/* arg1 ... argN */) {
  * intended arg list. Calling <code>callback.run.apply(callback, args)</code> works on Firefox,
  * but IE throws the error "Object expected", so we do this instead.
  *
- * @param	{Array}	argList	 an array of arguments and treats them as an argument list, instead of as a single argument
+ * @param	{array}	argList	 an array of arguments and treats them as an argument list, instead of as a single argument
  * 
  * @private
  */
@@ -155,8 +155,8 @@ function(argList) {
  * </pre>
  * 
  * @param	{function}	func		the function
- * @param	{Object}	obj			the object to call the function from
- * @param	{Object}	[arg1...argN]		any number of arguments
+ * @param	{object}	obj			the object to call the function from
+ * @param	{array}	[arg1...argN]		any number of arguments
  */
 AjxCallback.simpleClosure = function(func, obj) {
 	var args = [];

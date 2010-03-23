@@ -18,7 +18,6 @@
  * @class
  * This class represents a color and is useful for color operations inspired by the code in SkinResources.java.
  * 
- * 
  */
 AjxColor = function(r, g, b) {
 	if (arguments.length == 0) return;
@@ -30,7 +29,7 @@ AjxColor = function(r, g, b) {
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 AjxColor.prototype.toString = function() {
 	return AjxColor.color(this.r, this.g, this.b);
@@ -43,8 +42,8 @@ AjxColor.prototype.toString = function() {
 /**
  * Returns the RGB components (as an array) of the given color.
  *
- * @param {String}	color 	the color string defined as "#rrggbb"
- * @return	{Array}		the color
+ * @param {string}	color 	the color string defined as "#rrggbb"
+ * @return	{array}		the color
  */
 AjxColor.components = function(color) {
 	var m = AjxColor.__RE.exec(color);
@@ -55,10 +54,10 @@ AjxColor.components = function(color) {
  * Returns a color string of the form "#rrggbb" from the given color
  * components.
  *
- * @param {int}	r the Red component value between 0 and 255, inclusive
- * @param {int}	g the Green component value between 0 and 255, inclusive
- * @param {int}	b the Blue component value between 0 and 255, inclusive
- * @return	{String}	the color string
+ * @param {number}	r the Red component value between 0 and 255, inclusive
+ * @param {number}	g the Green component value between 0 and 255, inclusive
+ * @param {number}	b the Blue component value between 0 and 255, inclusive
+ * @return	{string}	the color string
  */
 AjxColor.color = function(r, g, b) {
 	return [
@@ -82,9 +81,9 @@ AjxColor.color = function(r, g, b) {
 /**
  * Lightens the specified color by the given amount.
  *
- * @param {String}	color 	the color value defined as "#rrggbb"
- * @param {int}	delta the amount to change
- * @return	{String}	the color string
+ * @param {string}	color 	the color value defined as "#rrggbb"
+ * @param {number}	delta the amount to change
+ * @return	{string}	the color string
  */
 AjxColor.lighten = function(color, delta) {
 	var comps = AjxColor.components(color);
@@ -98,9 +97,9 @@ AjxColor.lighten = function(color, delta) {
 /**
  * Darkens the specified color by the given amount.
  *
- * @param {String}	color 	the color value defined as "#rrggbb"
- * @param {int}	delta the amount to change
- * @return	{String}	the color string
+ * @param {string}	color 	the color value defined as "#rrggbb"
+ * @param {number}	delta the amount to change
+ * @return	{string}	the color string
  */
 AjxColor.darken = function(color, delta) {
 	var comps = AjxColor.components(color);
@@ -124,9 +123,9 @@ AjxColor.darken = function(color, delta) {
  * or a little less. Typical adjustment values are around 1 such as .9
  * or 1.1.
  *
- * @param {String}	color 	the color value defined as "#rrggbb"
- * @param {int}		[adjustment]	the multiplier adjustment
- * @return	{String}	the color string
+ * @param {string}	color 	the color value defined as "#rrggbb"
+ * @param {number}		[adjustment]	the multiplier adjustment
+ * @return	{string}	the color string
  */
 AjxColor.deepen = function(color, adjustment) {
 	var comps = AjxColor.components(color);

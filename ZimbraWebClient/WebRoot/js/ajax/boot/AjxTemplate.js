@@ -34,9 +34,19 @@ AjxTemplate._stack = [];
 // Public functions
 //
 
+/**
+ * Sets the base path.
+ * 
+ * @param	{string}	basePath		the base path
+ */
 AjxTemplate.setBasePath = function(basePath) {
     AjxTemplate._basePath = basePath;
 };
+/**
+ * Sets the extension.
+ * 
+ * @param	{string}	extension		the extension
+ */
 AjxTemplate.setExtension = function(extension) {
     AjxTemplate._extension = extension;
 };
@@ -64,10 +74,10 @@ AjxTemplate.getParams = function(name) {
 /**
  * Expands the template.
  * 
- * @param	{String}		name		the template name
- * @param	{Array}			[data]		the template date
- * @param	{Array}			[buffer]	the buffer to use for template content
- * @return	{String}	the template content		
+ * @param	{string}		name		the template name
+ * @param	{array}			[data]		the template date
+ * @param	{array}			[buffer]	the buffer to use for template content
+ * @return	{string}	the template content		
  */
 AjxTemplate.expand = function(name, data, buffer) {
 	// allow template text to come from document
@@ -115,7 +125,8 @@ AjxTemplate.expand = function(name, data, buffer) {
 
 /**
  * Force load of template.
- * @return True or false depending whether the template is defined.
+ * 
+ * @return <code>true</code> if the template is defined
  * 
  * @private
  */

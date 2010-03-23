@@ -12,11 +12,14 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
+
 /**
  * This class is a collection of functions for defining packages and
  * loading them dynamically.
  * 
  * @author Andy Clark
+ * 
+ * @private
  */
 AjxPackage = function() {}
 
@@ -24,8 +27,17 @@ AjxPackage = function() {}
 // Constants
 //
 
+/**
+ * Defines the "XHR SYNC" method.
+ */
 AjxPackage.METHOD_XHR_SYNC = "xhr-sync";
+/**
+ * Defines the "XHR ASYNC" method.
+ */
 AjxPackage.METHOD_XHR_ASYNC = "xhr-async";
+/**
+ * Defines the "SCRIPT TAG" method.
+ */
 AjxPackage.METHOD_SCRIPT_TAG = "script-tag";
 
 AjxPackage.DEFAULT_SYNC = AjxPackage.METHOD_XHR_SYNC;
@@ -46,22 +58,47 @@ AjxPackage.__data = {};
 // Static functions
 //
 
+/**
+ * Sets the base path.
+ * 
+ * @param	{string}	basePath		the base path
+ */
 AjxPackage.setBasePath = function(basePath) {
     AjxPackage._basePath = basePath;
 };
+/**
+ * Sets the extension.
+ * 
+ * @param	{string}	extension		the extension
+ */
 AjxPackage.setExtension = function(extension) {
     AjxPackage._extension = extension;
 };
+/**
+ * Sets the query string.
+ * 
+ * @param	{string}	queryString		the query string
+ */
 AjxPackage.setQueryString = function(queryString) {
     AjxPackage._queryString = queryString;
 };
 
-/** Returns true if the specified package has been defined. */
+/**
+ * Checks if the specified package has been defined.
+ * 
+ * @param	{string}	name		the package name
+ * @return	{boolean}	<code>true</code> if the package is defined
+ */
 AjxPackage.isDefined = function(name) {
 	return Boolean(AjxPackage._packages[name]);
 };
 
-/** Defines a package and returns true if this is the first definition. */
+/**
+ * Defines a package and returns true if this is the first definition.
+ * 
+ * @param	{string}	name		the package name
+ * @return	{boolean}	<code>true</code> if this is the first package definition
+ */
 AjxPackage.define = function(name) {
     AjxPackage.__log("DEFINE "+name, "font-weight:bold;font-style:italic");
     name = AjxPackage.__package2path(name);
@@ -72,6 +109,11 @@ AjxPackage.define = function(name) {
     return false;
 };
 
+/**
+ * Undefines a package.
+ * 
+ * @param	{string}	name		the package name
+ */
 AjxPackage.undefine = function(name) {
     AjxPackage.__log("UNDEFINE "+name, "font-weight:bold;font-style:italic");
     name = AjxPackage.__package2path(name);
@@ -89,29 +131,25 @@ AjxPackage.undefine = function(name) {
  * <p>
  * It can be called with either a package name string or a parameters object.
  *
- * @param name      [string]        Package name.
- * @param basePath  [string]        (Optional) Base path of URL to load. If
+ * @param	{hash}		nameOrParams		a hash of parameters
+ * @param {string}	name      		the package name
+ * @param {string}	[basePath]	the base path of URL to load. If
  *                                  not specified, uses the global base path.
- * @param extensi`on [string]        (Optional) Filename extension of URL to
+ * @param {string}	[extension] 	the filename extension of URL to
  *                                  load. If not specified, uses the global
  *                                  filename extension.
- * @param queryString [string]      (Optional) Query string appended to URL.
+ * @param {string}	[queryString] the query string appended to URL.
  *                                  If not specified, uses the global query
  *                                  string.
- * @param userName  [string]        (Optional) The username of the request.
- * @param password  [string]        (Optional) The password of the request.
- * @param callback  [AjxCallback]   (Optional) Callback to run.
- * @param method    [string]        (Optional) The loading method for the
- *                                  package. The value can be one of the
- *                                  following: "xhr-sync", "xhr-async", or
- *                                  "script-tag".
- * @param forceSync [boolean]       (Optional) Overrides the load mode (if
+ * @param {string}	[userName]  The username of the request
+ * @param {string}	[password]  The password of the request
+ * @param {AjxCallback}	[callback] the callback to run
+ * @param {constant}	[method]    	the loading method for the package (see <code>METHOD_*</code> constants)
+ * @param {boolean}	[forceSync] 	overrides the load mode (if
  *                                  this method is called during an async
  *                                  load) and forces the requested package to
  *                                  be loaded synchronously.
- * @param forceReload [boolean]     (Optional) Specifies whether the package
- *                                  is reloaded even if already defined. The
- *                                  default value is <code>false</code>.
+ * @param {boolean}	[forceReload=false]    specifies whether the package is reloaded even if already defined
  */
 AjxPackage.require = function(nameOrParams) {
     var params = nameOrParams;

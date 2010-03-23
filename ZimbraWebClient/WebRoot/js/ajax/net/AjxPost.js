@@ -15,15 +15,19 @@
 
 
 /**
-* Resets the AjxPost object.
-* @constructor
-* @class
-* This singleton class makes an HTTP POST to the server and receives the response, passing returned data
-* to a callback. This class is used to upload files from the client browser to the server using the file
-* upload feature of POST.
-*
-* @author Conrad Damon
-*/
+ * Resets the AjxPost object.
+ * @constructor
+ * @class
+ * This singleton class makes an HTTP POST to the server and receives the response, passing returned data
+ * to a callback. This class is used to upload files from the client browser to the server using the file
+ * upload feature of POST.
+ *
+ * @param	{string}	iframeId		the iframe ID
+ * 
+ * @author Conrad Damon
+ * 
+ * @private
+ */
 AjxPost = function(iframeId) {
 	this._callback = null;
 	this._iframeId = iframeId;
@@ -147,6 +151,11 @@ function(status, reqId, id) {
 	}
 };
 
+/**
+ * @class
+ * 
+ * @private
+ */
 AjxPostRequest = function(form) {
 	this.id = AjxPost._reqIds++;
 	this._cancelled = false;

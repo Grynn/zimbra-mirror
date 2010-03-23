@@ -40,9 +40,9 @@ AjxRpc.__RPC_REAP_AGE	= 300000;	// mark any context older than this (in ms) as f
  * Submits a request to a URL. The request is handled through a pool of request
  * contexts (each a wrapped XmlHttpRequest). The context does the real work.
  *
- * @param {String} [requestStr] 	the HTTP request string/document
- * @param {String} serverUrl 	the request target 
- * @param {Array} [requestHeaders] an array of HTTP request headers
+ * @param {string} [requestStr] 	the HTTP request string/document
+ * @param {string} serverUrl 	the request target 
+ * @param {array} [requestHeaders] an array of HTTP request headers
  * @param {AjxCallback} callback 	the callback for asynchronous requests. This callback 
  * 		will be invoked when the requests completes. It will be passed the same
  * 		values as when this method is invoked synchronously (see the return values
@@ -50,10 +50,10 @@ AjxRpc.__RPC_REAP_AGE	= 300000;	// mark any context older than this (in ms) as f
  * 		below), then the object passed to the callback will be the same as in the 
  * 		error case with the exception that the status will be set to 
  * 		{@link AjxRpcRequest.TIMEDOUT}.
- * @param {Boolean} [useGet=false] 		if <code>true</code>, use get method; otherwise, use post
- * @param {int} [timeout] 		the timeout (in milliseconds) after which the request is canceled
+ * @param {boolean} [useGet=false] 		if <code>true</code>, use get method; otherwise, use post
+ * @param {number} [timeout] 		the timeout (in milliseconds) after which the request is canceled
  * 
- * @return {Object}	if invoking in asynchronous mode, then it will return the id of the 
+ * @return {object|hash}	if invoking in asynchronous mode, then it will return the id of the 
  * 		underlying {@link AjxRpcRequest} object. Else if invoked synchronously, if
  * 		there is no error (i.e. we get a HTTP result code of 200 from the server),
  * 		an object with the following attributes is returned

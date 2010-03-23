@@ -24,9 +24,9 @@
 *
 * @author Ross Dargahi
 * 
-* @param {Object}	[obj]	the object to call the function from
+* @param {Object}	obj	the object to call the function from
 * @param {function}	func	the listener function
-* @param {primative|Array}	args   the default arguments
+* @param {primative|array}	args   the default arguments
 * 
 * @extends		AjxCallback
 */
@@ -45,7 +45,7 @@ function() {
 /**
 * Invoke the listener function.
 *
-* @param {Object}		ev		the event object that gets passed to an event handler
+* @param {AjxEvent}		ev		the event object that gets passed to an event handler
 */
 AjxListener.prototype.handleEvent =
 function(ev) {

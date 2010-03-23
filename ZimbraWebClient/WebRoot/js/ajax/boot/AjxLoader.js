@@ -12,10 +12,13 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
+
 /**
  * Minimal wrapper around XHR, with no dependencies.
  * 
  * @author Andy Clark
+ * 
+ * @private
  */
 AjxLoader = function() {}
 
@@ -53,24 +56,24 @@ else if (window.ActiveXObject) {
  * <p>
  * It can be called with either a URL string or a parameters object.
  *
- * @param url       [string]        URL to load.
- * @param method    [string]        (Optional) The load method (e.g. "GET").
+ * @param	{hash}		urlOrParams			a hash of parameters
+ * @param {string}	urlOrParams.url       the URL to load
+ * @param {string}	[urlOrParams.method]    the load method (e.g. "GET").
  *                                  If this parameter is not specified, then
  *                                  the value is determined by whether content
  *                                  has been specified: "POST" if specified,
  *                                  "GET" otherwise.
- * @param headers   [object]        (Optional) Map of request headers to set.
- * @param async     [boolean]       (Optional) Determines whether the request
+ * @param {hash}	[urlOrParams.headers]  the map of request headers to set.
+ * @param {boolean}	[urlOrParams.async]     determines whether the request
  *                                  is asynchronous or synchronous. If this
  *                                  parameter is not specified, then the value
  *                                  is determined by whether a callback has
  *                                  been specified: async if a callback is
  *                                  specified, sync if no callback.
- * @param content   [string]        (Optional) Content to POST to URL. If
- *                                  not specified, the request method is GET.
- * @param userName  [string]        (Optional) The username of the request.
- * @param password  [string]        (Optional) The password of the request.
- * @param callback  [AjxCallback]   (Optional) Callback to run at end of load.
+ * @param {string}	[urlOrParams.content]   the content to POST to URL. If not specified, the request method is GET.
+ * @param {string}	[urlOrParams.userName]  the username of the request.
+ * @param {string}	[urlOrParams.password]  the password of the request.
+ * @param {AjxCallback}	[urlOrParams.callback]  the callback to run at end of load.
  */
 AjxLoader.load = function(urlOrParams) {
     var params = urlOrParams;

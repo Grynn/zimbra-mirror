@@ -13,6 +13,10 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+ * 
+ * @private
+ */
 AjxLeakDetector = function() {
 	this._controls = [];
 	this._closures = {}; // Map of id to { closure, args }

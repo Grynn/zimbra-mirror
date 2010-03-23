@@ -12,10 +12,12 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
+
 /**
  * @author Andy Clark
+ * 
+ * @private
  */
-
 AjxTemplate.compile = function(pkg, authoritative, define, templateText) {
 	var name = AjxPackage.__package2path(pkg);
 	var lines = templateText != null ? templateText : AjxLoader.load(name).reponseText;

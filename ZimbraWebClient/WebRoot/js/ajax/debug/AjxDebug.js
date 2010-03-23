@@ -28,13 +28,16 @@
 * open the document and use document.write(), but then the document is left open.
 * <p>
 * Any client that uses this class can turn off debugging by changing the first 
-* argument to the constructor to AjxDebug.NONE.
+* argument to the constructor to {@link AjxDebug.NONE}.
 *
 * @author Conrad Damon
 * @author Ross Dargahi
-* @param level	 	[constant]		debug level for the current debugger (no window will be displayed for a level of NONE)
-* @param name 		[string]*		the name of the window. Defaults to "debug_" prepended to the calling window's URL.
-* @param showTime	[boolean]*		if true, display timestamps before debug messages
+* 
+* @param {constant}	level	 	debug level for the current debugger (no window will be displayed for a level of NONE)
+* @param {string}	name 		the name of the window. Defaults to "debug_" prepended to the calling window's URL.
+* @param {boolean}	showTime	if <code>true</code>, display timestamps before debug messages
+* 
+* @private
 */
 AjxDebug = function(level, name, showTime) {
 	this._dbgName = "AjxDebugWin_" + location.hostname.replace(/\./g,'_');
@@ -49,9 +52,21 @@ AjxDebug = function(level, name, showTime) {
 	this._enable(this._level != AjxDebug.NONE);
 };
 
+/**
+ * Defines "no debugging" level.
+ */
 AjxDebug.NONE = 0; // no debugging (window will not come up)
+/**
+ * Defines "minimal" debugging level.
+ */
 AjxDebug.DBG1 = 1; // minimal debugging
+/**
+ * Defines "moderate" debugging level.
+ */
 AjxDebug.DBG2 = 2; // moderate debugging
+/**
+ * Defines "all" debugging level.
+ */
 AjxDebug.DBG3 = 3; // anything goes
 
 AjxDebug.MAX_OUT = 25000; // max length capable of outputting
@@ -61,6 +76,11 @@ AjxDebug._LINK_FRAME_ID		= "AjxDebug_LF";
 AjxDebug._BOTTOM_FRAME_ID	= "AjxDebug_BFI";
 AjxDebug._BOTTOM_FRAME_NAME	= "AjxDebug_BFN";
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @return	{string}		a string representation of the object
+ */
 AjxDebug.prototype.toString =
 function() {
 	return "AjxDebug";
@@ -74,10 +94,10 @@ function(title) {
 };
 
 /**
-* Set debug level. May open or close the debug window if moving to or from level NONE.
-*
-* @param level	 	debug level for the current debugger
-*/
+ * Set debug level. May open or close the debug window if moving to or from level {@link AjxDebug.NONE}.
+ *
+ * @param {constant}	level	 	debug level for the current debugger
+ */
 AjxDebug.prototype.setDebugLevel =
 function(level, disable) {
 	this._level = /^[\d]+$/.test(level) ? Number(level) : level;
@@ -87,19 +107,21 @@ function(level, disable) {
 };
 
 /**
-* Returns the current debug level.
-*/
+ * Gets the current debug level.
+ * 
+ * @return	{constant}	the debug level
+ */
 AjxDebug.prototype.getDebugLevel =
 function() {
 	return this._level;
 };
 
 /**
-* Prints a debug message. Any HTML will be rendered, and a line break is added.
-*
-* @param level	 	debug level for the current debugger
-* @param msg		the text to display
-*/
+ * Prints a debug message. Any HTML will be rendered, and a line break is added.
+ *
+ * @param {constant}	level	 	debug level for the current debugger
+ * @param {string}	msg		the text to display
+ */
 AjxDebug.prototype.println =
 function(level, msg, linkName) {
 	if (!this._isWriteable()) { return; }
@@ -115,21 +137,26 @@ function(level, msg, linkName) {
 	}
 };
 
+/**
+ * Checks if debugging is disabled.
+ * 
+ * @return	{boolean}		<code>true</code> if disabled
+ */
 AjxDebug.prototype.isDisabled =
 function () {
 	return !this._enabled;
 };
 
 /**
-* Prints an object into a table, with a column for properties and a column for values. Above the table is a header with the object
-* class and the CSS class (if any). The properties are sorted (numerically if they're all numbers). Creating and appending table
-* elements worked in Mozilla but not IE. Using the insert* methods works for both. Properties that are function
-* definitions are skipped.
-*
-* @param level	 	debug level for the current debugger
-* @param obj		the object to be printed
-* @param showFuncs	whether to show props that are functions
-*/
+ * Prints an object into a table, with a column for properties and a column for values. Above the table is a header with the object
+ * class and the CSS class (if any). The properties are sorted (numerically if they're all numbers). Creating and appending table
+ * elements worked in Mozilla but not IE. Using the insert* methods works for both. Properties that are function
+ * definitions are skipped.
+ *
+ * @param level	 	debug level for the current debugger
+ * @param obj		the object to be printed
+ * @param showFuncs	whether to show props that are functions
+ */
 AjxDebug.prototype.dumpObj =
 function(level, obj, showFuncs, linkName) {
 	if (!this._isWriteable()) { return; }
@@ -145,11 +172,11 @@ function(level, obj, showFuncs, linkName) {
 };
 
 /**
-* Dumps a bunch of text into a &lt;textarea&gt;, so that it is wrapped and scrollable. HTML will not be rendered.
-*
-* @param level	 	debug level for the current debugger
-* @param text		the text to output as is
-*/
+ * Dumps a bunch of text into a &lt;textarea&gt;, so that it is wrapped and scrollable. HTML will not be rendered.
+ *
+ * @param {constant}	level	 	debug level for the current debugger
+ * @param {string}	text		the text to output as is
+ */
 AjxDebug.prototype.printRaw =
 function(level, text, linkName) {
 	if (!this._isWriteable()) { return; }
@@ -161,11 +188,11 @@ function(level, text, linkName) {
 };
 
 /**
-* Pretty-prints a chunk of XML, doing color highlighting for different types of nodes.
-
-* @param level	 	debug level for the current debugger
-* @param text		some XML
-*/
+ * Pretty-prints a chunk of XML, doing color highlighting for different types of nodes.
+ *
+ * @param {constant}	level	 	debug level for the current debugger
+ * @param {string}	text		some XML
+ */
 AjxDebug.prototype.printXML =
 function(level, text, linkName) {
 	if (!this._isWriteable()) { return; }
@@ -185,11 +212,11 @@ function(level, text, linkName) {
 };
 
 /**
-* Reveals white space in text by replacing it with tags.
-*
-* @param level	 	debug level for the current debugger
-* @param text		the text to be displayed
-*/
+ * Reveals white space in text by replacing it with tags.
+ *
+ * @param {constant}	level	 	debug level for the current debugger
+ * @param {string}	text		the text to be displayed
+ */
 AjxDebug.prototype.display =
 function(level, text) {
 	if (!this._isWriteable()) { return; }
@@ -205,11 +232,11 @@ function(level, text) {
 };
 
 /**
-* Turn the display of timing statements on/off.
-*
-* @param on			[boolean]		if true, display timing statements
-* @param msg		[string]*		message to show when timing is turned on
-*/
+ * Turn the display of timing statements on/off.
+ *
+ * @param {boolean}	on			if <code>true</code>, display timing statements
+ * @param {string}	msg		the message to show when timing is turned on
+ */
 AjxDebug.prototype.showTiming =
 function(on, msg) {
 	this._showTiming = on;
@@ -228,11 +255,11 @@ function(on, msg) {
 };
 
 /**
-* Displays time elapsed since last time point.
-*
-* @param msg		[string]*		text to display with timing info
-* @param restart	[boolean]*		if true, set timer back to zero
-*/
+ * Displays time elapsed since last time point.
+ *
+ * @param {string}	msg		the text to display with timing info
+ * @param {boolean}	restart	if <code>true</code>, set timer back to zero
+ */
 AjxDebug.prototype.timePt =
 function(msg, restart) {
 	if (!this._showTiming || !this._isWriteable()) { return; }

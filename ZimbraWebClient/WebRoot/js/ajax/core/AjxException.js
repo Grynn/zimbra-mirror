@@ -21,35 +21,31 @@
  * 
  * @author Ross Dargahi
  * 
- * @param {String} 		[msg]		the human readable message
- * @param {String|int} 	[code]	any error or fault code
- * @param {String} 		[method] 	the name of the method throwing the exception
- * @param {String} 		[detail]		any additional detail
+ * @param {string} 		[msg]		the human readable message
+ * @param {string|number} 	[code]	any error or fault code
+ * @param {string} 		[method] 	the name of the method throwing the exception
+ * @param {string} 		[detail]		any additional detail
  */
 AjxException = function(msg, code, method, detail) {
 	if (arguments.length == 0) return;
 	
 	/** 
-	 * Human readable message if applicable
-	 * @type String
+	 * Human readable message, if applicable.
 	 */
 	this.msg = msg;
 	
 	/** 
-	 * Error or fault code if applicable
-	 * @type String|int
+	 * Error or fault code, if applicable.
 	 */
 	this.code = code;
 	
 	/**
-	 * Name of the method throwing the exception if applicable
-	 * @type String
+	 * Name of the method throwing the exception, if applicable.
 	 */
 	this.method = method;
 	
 	/**
-	 * Any additional detail
-	 * @type String
+	 * Any additional detail.
 	 */
 	this.detail = detail;
 }
@@ -57,7 +53,7 @@ AjxException = function(msg, code, method, detail) {
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 AjxException.prototype.toString = 
 function() {
@@ -65,9 +61,9 @@ function() {
 }
 
 /**
- * Dumpes the exception.
+ * Dumps the exception.
  * 
- * @return {String}	the state of the exception
+ * @return {string}	the state of the exception
  */
 AjxException.prototype.dump = 
 function() {
@@ -76,42 +72,50 @@ function() {
 
 /**
  * Invalid parent exception code.
- * @type String
  */
 AjxException.INVALIDPARENT 			= "AjxException.INVALIDPARENT";
 
-/** Invalid operation exception code.
- * @type String */
+/**
+ * Invalid operation exception code.
+ */
 AjxException.INVALID_OP 			= "AjxException.INVALID_OP";
 
-/** Internal error exception code.
- * @type String */
+/**
+ * Internal error exception code.
+ */
 AjxException.INTERNAL_ERROR 		= "AjxException.INTERNAL_ERROR";
 
-/** Invalid parameter to method/operation exception code.
- * @type String */
+/**
+ * Invalid parameter to method/operation exception code.
+ */
 AjxException.INVALID_PARAM 			= "AjxException.INVALID_PARAM";
 
-/** Unimplemented method called exception code.
- * @type String */
+/**
+ * Unimplemented method called exception code.
+ */
 AjxException.UNIMPLEMENTED_METHOD 	= "AjxException.UNIMPLEMENTED_METHOD";
 
-/** Network error exception code.
- * @type String */
+/**
+ * Network error exception code.
+ */
 AjxException.NETWORK_ERROR 			= "AjxException.NETWORK_ERROR";
 
-/** Out or RPC cache exception code.
- * @type String */
+/**
+ * Out or RPC cache exception code.
+ */
 AjxException.OUT_OF_RPC_CACHE		= "AjxException.OUT_OF_RPC_CACHE";
 
-/** Unsupported operation code.
- * @type String */
+/**
+ * Unsupported operation code.
+ */
 AjxException.UNSUPPORTED 			= "AjxException.UNSUPPORTED";
 
-/** Unknown error exception code.
- * @type String */
+/**
+ * Unknown error exception code.
+ */
 AjxException.UNKNOWN_ERROR 			= "AjxException.UNKNOWN_ERROR";
 
-/** Operation canceled exception code.
- * @type String */
+/**
+ * Operation canceled exception code.
+ */
 AjxException.CANCELED				= "AjxException.CANCELED";

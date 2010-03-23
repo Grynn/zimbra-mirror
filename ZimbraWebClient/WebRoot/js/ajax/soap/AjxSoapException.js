@@ -13,7 +13,13 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * @class
+ * 
+ * @extends		AjxException
+ * 
+ * @private
+ */
 AjxSoapException = function(msg, code, method, detail) {
 	AjxException.call(this, msg, code, method, detail);
 }
@@ -26,6 +32,15 @@ function() {
 AjxSoapException.prototype = new AjxException;
 AjxSoapException.prototype.constructor = AjxSoapException;
 
+/**
+ * Defines an "internal error" exception.
+ */
 AjxSoapException.INTERNAL_ERROR 	= "INTERNAL_ERROR";
+/**
+ * Defines an "invalid PDU" exception.
+ */
 AjxSoapException.INVALID_PDU 		= "INVALID_PDU";
+/**
+ * Defines an "element exists" exception.
+ */
 AjxSoapException.ELEMENT_EXISTS 	= "ELEMENT_EXISTS";

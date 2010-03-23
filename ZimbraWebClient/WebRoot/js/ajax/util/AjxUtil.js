@@ -13,12 +13,13 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
 /**
  * AjxUtil - static class with some utility methods. This is where to
  * put things when no other class wants them.
  *
  * 12/3/2004 At this point, it only needs AjxEnv to be loaded.
+ * 
+ * @private
  */
 AjxUtil = function() {
 };
