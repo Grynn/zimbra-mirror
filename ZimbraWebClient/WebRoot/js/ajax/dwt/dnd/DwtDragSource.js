@@ -28,7 +28,7 @@
  * 
  * @author Ross Dargahi
  * 
- * @param {int} supportedOps Supported operations. This is an arithmatic ORing of
+ * @param {number} supportedOps Supported operations. This is an arithmetic ORing of
  * 		the operations supported by the drag source. Supported values are: <ul>
  * 			<li><i>Dwt.DND_DROP_NONE</i></li>
  * 			<li><i>Dwt.DND_DROP_COPY</i></li>
@@ -50,8 +50,9 @@ DwtDragSource.__DRAG_LISTENER = "DwtDragSource.__DRAG_LISTENER";
 DwtDragSource.__dragEvent = new DwtDragEvent();
 
 /**
- * @return The name of this class
- * @type String
+ * Returns a string representation of this object.
+ * 
+ * @return {string}	a string representation of this object
  */
 DwtDragSource.prototype.toString = 
 function() {

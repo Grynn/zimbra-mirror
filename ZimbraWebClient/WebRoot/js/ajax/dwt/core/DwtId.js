@@ -37,69 +37,56 @@ DwtId.SEP = "__";
 // widget types (used to prefix IDs)
 /**
  * Defines the widget "list view".
- * @type String
  */
 DwtId.WIDGET_LIST_VIEW		= "zl";			// list view
 /**
  * Defines the widget "list view header".
- * @type String
  */
 DwtId.WIDGET_HDR			= "zlh";		// list view header
 /**
  * Defines the widget "list view header table".
- * @type String
  */
 DwtId.WIDGET_HDR_TABLE		= "zlht";		// list view header table
 /**
  * Defines the widget "list view header icon image".
- * @type String
  */
 DwtId.WIDGET_HDR_ICON		= "zlhi";		// list view header image
 /**
  * Defines the widget "list view header text".
- * @type String
  */
 DwtId.WIDGET_HDR_LABEL		= "zlhl";		// list view header text
 /**
  * Defines the widget "list view header dropdown arrow".
- * @type String
  */
 DwtId.WIDGET_HDR_ARROW		= "zlha";		// list view header dropdown arrow
 /**
  * Defines the widget "sash between list view headers".
- * @type String
  */
 DwtId.WIDGET_HDR_SASH		= "zlhs";		// sash between list view headers
 /**
  * Defines the widget "list view item".
- * @type String
  */
 DwtId.WIDGET_ITEM			= "zli";		// list view item
 /**
  * Defines the widget "list view item row".
- * @type String
  */
 DwtId.WIDGET_ITEM_ROW		= "zlir";		// list view item row
 /**
  * Defines the widget "list view item cell".
- * @type String
  */
 DwtId.WIDGET_ITEM_CELL		= "zlic";		// list view item cell
 /**
  * Defines the widget "list view item field".
- * @type String
  */
 DwtId.WIDGET_ITEM_FIELD		= "zlif";		// list view item field
 
 // list view modifiers
 /**
  * Defines the list view "headers" modifier.
- * @type	String
  */
 DwtId.LIST_VIEW_HEADERS	= "headers";
 /**
  * Defines the list view "rows" modifier.
- * @type	String
  */
 DwtId.LIST_VIEW_ROWS	= "rows";
 
@@ -129,7 +116,7 @@ function() {
  * 
  * @param {constant}	context		the owning view identifier
  * @param {DwtId.LIST_VIEW_HEADERS|DwtId.LIST_VIEW_ROWS}	modifier	indicates element within list view (see <code>DwtId.LIST_VIEW*</code> constants)	
- * @return	{String}	the ID
+ * @return	{string}	the ID
  */
 DwtId.getListViewId =
 function(context, modifier) {
@@ -142,7 +129,7 @@ function(context, modifier) {
  * @param {constant}	type		the type of hdr element (see <code>DwtId.WIDGET_HDR*</code> constants)
  * @param {constant}	context	the the ID of owning view
  * @param {constant}	hdr		the header ID
- * @return	{String}	the ID
+ * @return	{string}	the ID
  */
 DwtId.getListViewHdrId =
 function(type, context, hdr) {
@@ -154,9 +141,9 @@ function(type, context, hdr) {
  * 
  * @param {constant}	type		the type of item element (see <code>DwtId.WIDGET_ITEM*</code> constants)
  * @param {constant}	context		the ID of owning view
- * @param {String}	itemId	the item ID (typically numeric)
- * @param {constant}	field		the field identifier (eg "su" for subject)
- * @return	{String}	the ID
+ * @param {string}	itemId	the item ID (typically numeric)
+ * @param {constant}	field		the field identifier (for example, "su" for subject)
+ * @return	{string}	the ID
  */
 DwtId.getListViewItemId =
 function(type, context, itemId, field) {
@@ -167,7 +154,7 @@ function(type, context, itemId, field) {
  * Gets an ID for an IFRAME.
  * 
  * @param {constant}	context	the ID of owning {@link DwtIframe}
- * @return	{String}	the ID
+ * @return	{string}	the ID
  */
 DwtId.getIframeId =
 function(context) {

@@ -17,19 +17,19 @@
  * @constructor
  * @class
  * A drop target is registered with a control to indicate that the control is 
- * a drop target. Thedrop target is the mechanism by which the DnD framework provides 
+ * a drop target. The drop target is the mechanism by which the DnD framework provides 
  * the binding between the UI components and the application.
  * 
  * Application developers instantiate <i>DwtDropTarget</i> and register it with the control
- * which is to be a drop taget (via <code>DwtControl.prototype.setDropTarget</code>). The
+ * which is to be a drop target (via <code>DwtControl.prototype.setDropTarget</code>). The
  * application should then register a listener with the <i>DwtDropTarget</i>. This way
  * when drop events occur the application will be notified and may act on them 
  * accordingly
  * 
  * @author Ross Dargahi
  * 
- * @param {function...} transferType A list of supported object types that may be dropped onto
- * 		this drop target. Typically the items repreent classes (i.e. functions) whose 
+ * @param {array} transferType	a list of supported object types that may be dropped onto
+ * 		this drop target. Typically the items represent classes (i.e. functions) whose 
  * 		instances may be dropped on this drop target e.g. 
  * 		<code>new DwtDropTarget(MailItem, AppointmentItme)</code>
  * 
@@ -62,8 +62,9 @@ DwtDropTarget.__DROP_LISTENER = "DwtDropTarget.__DROP_LISTENER";
 DwtDropTarget.__dropEvent = new DwtDropEvent();
 
 /**
- * @return The name of this class
- * @type String
+ * Returns a string representation of this object.
+ * 
+ * @return {string}	a string representation of this object
  */
 DwtDropTarget.prototype.toString = 
 function() {
@@ -132,8 +133,9 @@ function() {
 };
 
 /**
- * @return true if the UI component backing this drop target has multiple sub-components
- * @type boolean
+ * Checks if the UI component backing this drop target has multiple sub-components.
+ * 
+ * @return	{boolean}		<code>true</code> if the UI component has multiple sub-components
  */
 DwtDropTarget.prototype.hasMultipleTargets = 
 function () {
@@ -141,8 +143,9 @@ function () {
 };
 
 /**
- * @return the list of transfer types supported by this drop target
- * @type array
+ * Gets the transfer types.
+ * 
+ * @return {array}	the list of transfer types supported by this drop target
  * 
  * @see #setTransferTypes
  */
@@ -154,9 +157,9 @@ function() {
 /**
  * Declares a type of object as valid for being dropped onto this target. The type is provided
  * as a string, since the corresponding class may not yet be defined. The type is eval'ed before
- * it is used for any validation, since the check is done with instanceof.
+ * it is used for any validation, since the check is done with <code>instanceof</code>.
  * 
- * @param type		[string]	name of class
+ * @param {string}	type		the name of class
  */
 DwtDropTarget.prototype.addTransferType =
 function(type) {

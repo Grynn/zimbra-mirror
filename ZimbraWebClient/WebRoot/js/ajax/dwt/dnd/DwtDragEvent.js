@@ -25,52 +25,62 @@
  * @see DwtDragSource
  */
 DwtDragEvent = function() {
-	/** Type of drag operation. One of: <ul>
+	/**
+	 * Type of drag operation. One of:
+	 * <ul>
 	 * <li><i>DwtDragEvent.DRAG_START</i></li>
 	 * <li><i>DwtDragEvent.SET_DATA</i></li>
 	 * <li><i>DwtDragEvent.DRAG_END</i></li>
 	 * </ul>
-	 * @type number	*/
+	 */
 	this.operation = null;
 	
-	/** Drag source control
-	 * @type DwtControl */
+	/**
+	 * Drag source control
+	 * @type DwtControl
+	 */
 	this.srcControl = null;
 	
 	/**
-	 * Action being performed. One of: <ul>
+	 * Action being performed. One of:
+	 * <ul>
 	 * <li><i>Dwt.DND_DROP_NONE</i></li>
 	 * <li><i>Dwt.DND_DROP_COPY</i></li>
 	 * <li><i>Dwt.DND_DROP_MOVE</i></li>
 	 * </ul>
-	 * @type number */
+	 */
 	this.action = null;
 	
 	/**
 	 * Whether the DnD framework should perform the operation. The application is
 	 * responsible for setting this value based on whatever business logic it is
 	 * implementing
-	 * @type boolean */
+	 * @type boolean
+	 */
 	this.doIt = false;
 	
-	/* Drag source data. This is the application data associated with the item being
-	 * dragged
-	 * @type any*/
+	/**
+	 * Drag source data. This is the application data associated with the item being dragged.
+	 */
 	this.srcData = null;
 }
 
-/** Drag is starting
- * @type number*/
+/**
+ * Drag is starting.
+ */
 DwtDragEvent.DRAG_START = 1;
 
-/** Set the <code>srcData</code> field of the event
- * @type number*/
+/**
+ * Set the <code>srcData</code> field of the event.
+ */
 DwtDragEvent.SET_DATA = 2;
 
-/** Drag has ended
- * @type number*/
+/**
+ * Drag has ended.
+ */
 DwtDragEvent.DRAG_END = 3;
 
-/** Drag cancelled (i.e. dropped on invalid target)
- * @type number */
+/**
+ * Drag canceled (i.e. dropped on invalid target).
+ */
 DwtDragEvent.DRAG_CANCEL = 4;

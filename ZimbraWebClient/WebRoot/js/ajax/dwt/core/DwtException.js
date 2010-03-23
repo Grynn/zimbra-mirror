@@ -43,24 +43,20 @@ function() {
 
 /**
  * Invalid parent exception code.
- * @type int
  */
 DwtException.INVALIDPARENT = -1;
 
 /**
  * Invalid operation exception code.
- * @type int
  */
 DwtException.INVALID_OP = -2;
 
 /**
  * Internal error exception code.
- * @type int
  */
 DwtException.INTERNAL_ERROR = -3;
 
 /**
  * Invalid parameter exception code.
- * @type int
  */
 DwtException.INVALID_PARAM = -4;

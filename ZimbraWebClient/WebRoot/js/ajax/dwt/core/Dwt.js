@@ -30,50 +30,42 @@ Dwt = function() {
 // Constants for positioning
 /**
  * Static position style.
- * @type String
  */
 Dwt.STATIC_STYLE = "static";
 
 /**
  * Absolute position style.
- * @type String
  */
 Dwt.ABSOLUTE_STYLE = "absolute";
 
 /**
  * Relative position style.
- * @type String
  */
 Dwt.RELATIVE_STYLE = "relative";
 
 /**
  * Fixed position style.
- * @type String
  */
 Dwt.FIXED_STYLE = "fixed";
 
 // Background repeat
 /**
  * Do not repeat background image.
- * @type String
  */
 Dwt.NO_REPEAT = "no-repeat";
 
 /**
  * Repeat background image.
- * @type String
  */
 Dwt.REPEAT = "repeat";
 
 /**
  * Repeat background image horizontally.
- * @type String
  */
 Dwt.REPEAT_X = "repeat-x";
 
 /**
  * Repeat background image vertically.
- * @type String
  */
 Dwt.REPEAT_Y = "repeat-y";
 
@@ -81,31 +73,26 @@ Dwt.REPEAT_Y = "repeat-y";
 // display style
 /**
  * Inline display style.
- * @type String
  */
 Dwt.DISPLAY_INLINE = "inline";
 
 /**
  * Block display style.
- * @type String
  */
 Dwt.DISPLAY_BLOCK = "block";
 
 /**
  * No display style.
- * @type String
  */
 Dwt.DISPLAY_NONE = "none";
 
 /**
  * Table row style.
- * @type String
  */
 Dwt.DISPLAY_TABLE_ROW = AjxEnv.isIE ? Dwt.DISPLAY_BLOCK : "table-row";
 
 /**
  * Table cell style.
- * @type String
  */
 Dwt.DISPLAY_TABLE_CELL = AjxEnv.isIE ? Dwt.DISPLAY_BLOCK : "table-cell";
 
@@ -126,37 +113,31 @@ Dwt.HEIGHT = 107;
 // Scroll constants
 /**
  * Clip on overflow.
- * @type int
  */
 Dwt.CLIP = 1;
 
 /**
  * Allow overflow to be visible.
- * @type int
  */
 Dwt.VISIBLE = 2;
 
 /**
  * Automatically create scrollbars if content overflows.
- * @type int
  */
 Dwt.SCROLL = 3;
 
 /**
  * Always have scrollbars whether content overflows or not.
- * @type int
  */
 Dwt.FIXED_SCROLL = 4;
 
 /**
  * Only show scrollbars on Y when content overflows.
- * @type int
  */
 Dwt.SCROLL_Y = 5;
 
 /**
  * Only show scrollbars on X when content overflows.
- * @type int
  */
 Dwt.SCROLL_X = 6;
 
@@ -164,7 +145,6 @@ Dwt.SCROLL_X = 6;
 // z-index order
 /** 
  * Hidden layer. Elements at this layer will be hidden from view.
- * @type int
  */
 Dwt.Z_HIDDEN = 100;
 
@@ -178,63 +158,53 @@ Dwt.Z_CURTAIN = 200;
 
 /**
  * Visible layer. Elements at this layer will be in view.
- * @type int
  */
 Dwt.Z_VIEW = 300;
 
 /**
  * Popup menu layer. Used by the menu components.
- * @type int
  */
 Dwt.Z_MENU = 500;
 
 /**
  * Veil layer. The veil appears just behind modal dialogs render other components
  * unable to receive mouse input.
- * @type int
  */
 Dwt.Z_VEIL = 600;
 
 /**
  * Dialog layer. Dialogs are positioned at this layer.
- * @type int
  */
 Dwt.Z_DIALOG = 700;
 
 /**
  * Used by menus that are part of a dialog.
- * @type int
  */
 Dwt.Z_DIALOG_MENU = 750;
 
 /**
  * Tooltips layer.
- * @type int
  */
 Dwt.Z_TOOLTIP = 775;
 
 /**
  * Drag and Drop (DnD) icon layer. DnD icons are positioned at this layer so they
  * move across the top of other components.
- * @type int
  */
 Dwt.Z_DND = 800;		// Drag N Drop icons
 
 /**
  * This layer appears in front of other layers to block all user mouse input.
- * @type int
  */
 Dwt.Z_BUSY = 900;
 
 /**
  * The toast layer.
- * @type int
  */
 Dwt.Z_TOAST = 950;
 
 /**
  * Used by the splash screens.
- * @type int
  */
 Dwt.Z_SPLASH = 1000;
 
@@ -247,44 +217,37 @@ Dwt.Z_SPLASH = 1000;
  * Dwt.setSize(htmlElement, 100, Dwt.DEFAULT)
  * </pre>
  * 
- * @type int
  */
 Dwt.DEFAULT = -123456789;
 
 /**
  * Used to clear a value.
- * @type int
  */
 Dwt.CLEAR = -20000;
 
 /**
  * Offscreen position. Used when setting a elements position.
- * @type int
  */
 Dwt.LOC_NOWHERE = -10000;
 
 // Drag N Drop action constants
 /**
  * No drag and drop operation.
- * @type int
  */
 Dwt.DND_DROP_NONE = 0;
 
 /**
  * Copy drag and drop operation.
- * @type int
  */
 Dwt.DND_DROP_COPY = 1;
 
 /**
  * Move drag and drop operation.
- * @type int
  */
 Dwt.DND_DROP_MOVE = 2;
 
 /**
  * Ballpark figure for width of a scrollbar.
- * @type int
  */
 Dwt.SCROLLBAR_WIDTH = 22;
 
@@ -296,7 +259,6 @@ Dwt.KEY_ID = "_id_";
 
 /**
  * z-index increment unit. Used by components if they need to bump their z-index.
- * @type int
  */
 Dwt._Z_INC = 1;
 
@@ -310,7 +272,7 @@ Dwt.__nextId = {};
  * This method is used to generate a unique id to be used for an HTML element's id
  * attribute.
  *
- * @return {String}	the next available element ID
+ * @return {string}	the next available element ID
  */
 Dwt.getNextId =
 function(prefix) {
@@ -375,7 +337,7 @@ function(domElement, attrName) {
  * Finds an ancestor element with the given attr.
  * 
  * @param {DOMElement} domElement the DOM element (typically an HTML element)
- * @param {String}	attrName	the attribute name
+ * @param {string}	attrName	the attribute name
  * @param {DOMElement} the DOM element
  */
 Dwt.findAncestor =
@@ -454,10 +416,10 @@ function(htmlElement, rect) {
  * actual parameter value to <i>Dwt.DEFAULT</i>
  *
  * @param {HTMLElement} htmlElement absolutely positioned HTML element
- * @param {Int|String} x the x coordinate of the element (for example: 10, "10px", {@link Dwt.DEFAULT})
- * @param {Int|String} y the y coordinate of the element (for example: 10, "10px", {@link Dwt.DEFAULT})
- * @param {Int} width the width of the element (for example: 100, "100px", "75%", {@link Dwt.DEFAULT})
- * @param {Int} height the height of the element  (for example: 100, "100px", "75%", {@link Dwt.DEFAULT})
+ * @param {number|string} x the x coordinate of the element (for example: 10, "10px", {@link Dwt.DEFAULT})
+ * @param {number|string} y the y coordinate of the element (for example: 10, "10px", {@link Dwt.DEFAULT})
+ * @param {number} width the width of the element (for example: 100, "100px", "75%", {@link Dwt.DEFAULT})
+ * @param {number} height the height of the element  (for example: 100, "100px", "75%", {@link Dwt.DEFAULT})
  *
  * @throws DwtException
  *
@@ -476,7 +438,7 @@ function(htmlElement, x, y, width, height) {
  *
  * @param {HTMLElement} htmlElement		the HTML element
  *
- * @return {String}	the html elements cursor
+ * @return {string}	the html elements cursor
  *
  * @see #setCursor
  */
@@ -489,7 +451,7 @@ function(htmlElement) {
  * Sets an HTML element cursor.
  *
  * @param {HTMLElement} htmlElement the element for which to set the cursor
- * @param {String} cursorName name of the new cursor
+ * @param {string} cursorName name of the new cursor
  *
  * @see #setCursor
  */
@@ -528,8 +490,8 @@ function(htmlElement, point) {
  * not to be set
  *
  * @param {HTMLElement} htmlElement the absolutely positioned HTML element
- * @param {int|String} x the x coordinate of the element (for example: 10, "10px", {@link Dwt.DEFAULT})
- * @param {int|String} y the y coordinate of the element (for example: 10, "10px", {@link Dwt.DEFAULT})
+ * @param {number|string} x the x coordinate of the element (for example: 10, "10px", {@link Dwt.DEFAULT})
+ * @param {number|string} y the y coordinate of the element (for example: 10, "10px", {@link Dwt.DEFAULT})
  *
  * @throws DwtException
  *
@@ -675,7 +637,7 @@ function(htmlElement, width, height) {
  * Measure the extent in pixels of a section of html. This is not the worlds cheapest
  * method to invoke so do so judiciously
  *
- * @param {String} html 	the html content for which that extents are to be calculated
+ * @param {string} html 	the html content for which that extents are to be calculated
  *
  * @return {DwtPoint}	the extent of the content
  */
@@ -1003,8 +965,8 @@ function(cell) {
  * optionally add <code>add</code> class name if given provided
  *
  * @param {HTMLElement} el HTML Element to which to add/delete class names
- * @param {String} [del] the class name to delete
- * @param {String} [add] the class name to add
+ * @param {string} [del] the class name to delete
+ * @param {string} [add] the class name to add
  */
 Dwt.delClass =
 function(el, del, add) {
@@ -1025,7 +987,7 @@ Dwt._DELCLASS_CACHE = {};
  * Adds the given class name to the element's CSS class names
  *
  * @param {HTMLElement} el the HTML Element to which to add the class name
- * @param {String} c the class name
+ * @param {string} c the class name
  *
  * @see #delClass
  */
@@ -1038,9 +1000,9 @@ function(el, c) {
  * Conditionally add or remove a class name from an element
  *
  * @param {HTMLElement} el the target element
- * @param {Boolean} condition 	the condition to check
- * @param {String} a the class name when condition is <code>true</code>
- * @param {String} b the class name when condition is <code>false</code>
+ * @param {boolean} condition 	the condition to check
+ * @param {string} a the class name when condition is <code>true</code>
+ * @param {string} b the class name when condition is <code>false</code>
  */
 Dwt.condClass = function(el, condition, a, b) {
 	if (!!condition) {
@@ -1057,8 +1019,8 @@ Dwt.condClass = function(el, condition, a, b) {
  *
  * @param {input|iframe} input input for which to find the selection start point. This
  * 		may be a text input field or an iframe in design mode
- * @param {int} start 	the starting position
- * @param {int} end 	the ending position
+ * @param {number} start 	the starting position
+ * @param {number} end 	the ending position
  *
  * @see #getSelectionStart
  * @see #getSelectionEnd
@@ -1086,7 +1048,7 @@ Dwt.setSelectionRange = function(input, start, end) {
  * @param {input|iframe} input input for which to find the selection start point. This
  * 		may be a text input field or an iframe in design mode
  *
- * @return {int}	starting position of the selection
+ * @return {number}	starting position of the selection
  *
  * @see #getSelectionEnd
  * @see #setSelectionText
@@ -1113,7 +1075,7 @@ Dwt.getSelectionStart = function(input) {
  * @param {input|iframe} input 	the input for which to find the selection start point. This
  * 		may be a text input field or an iframe in design mode
  *
- * @return {int}	the starting position of the selection
+ * @return {number}	the starting position of the selection
  *
  * @see #getSelectionStart
  * @see #setSelectionText
@@ -1139,7 +1101,7 @@ Dwt.getSelectionEnd = function(input) {
  *
  * @param {input|iframe} input	the input for which to find the selection start point. This
  * 		may be a text input field or an iframe in design mode
- * @param {String} text 	the text to set as the selection
+ * @param {string} text 	the text to set as the selection
  *
  * @see #getSelectionStart
  * @see #getSelectionEnd
@@ -1174,8 +1136,8 @@ function(objOrClassName, className) {
  * and returned. Otherwise, the argument list is exploded into a params
  * hash with the given param names.
  * 
- * @param {Hash}	args			a hash of arguments
- * @param {Array}	paramNames	a ordered list of param names
+ * @param {hash}	args			a hash of arguments
+ * @param {array}	paramNames	a ordered list of param names
  */
 Dwt.getParams =
 function(args, paramNames) {

@@ -14,15 +14,23 @@
  */
 
 
+/**
+ * 
+ * @private
+ */
 DwtDragTracker = function() {}
 
 /**
-* @param control        the DwtControl that can be moved/dragged
-* @param threshX        mimimum number of X pixels before we move (default 1)
-* @param threshY        mimimum number of X pixels before we move (default 1)
-* @param callbackFunc   callback function
-* @param callbackObj    object for callback
-*/
+ * Initailizes the tracker.
+ * 
+ * @param {DwtControl}	control        the control that can be moved/dragged
+ * @param {number}	[threshX=1]        mimimum number of X pixels before we move
+ * @param {number}	[threshY=1]        mimimum number of X pixels before we move
+ * @param {function}	callbackFunc   callback function
+ * @param callbackObj    object for callback
+ * @param	userData		the user data
+ * 
+ */
 DwtDragTracker.init = 
 function(control, style, threshX, threshY, callbackFunc, callbackObj, userData) {
 

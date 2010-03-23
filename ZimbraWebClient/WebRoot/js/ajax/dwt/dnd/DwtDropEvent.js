@@ -25,52 +25,62 @@
  * @see DwtDropTarget
  */
 DwtDropEvent = function() {
-	/** Type of drag operation. One of: <ul>
+	/**
+	 * Type of drag operation. One of:
+	 * <ul>
 	 * <li><i>DwtDragEvent.DRAG_START</i></li>
 	 * <li><i>DwtDragEvent.SET_DATA</i></li>
 	 * <li><i>DwtDragEvent.DRAG_END</i></li>
 	 * </ul>
-	 * @type number	*/
+	 */
 	this.operation = null;
 	
-	/** Drop target control
-	 * @type DwtControl */	
+	/**
+	 * Drop target control.
+	 * @type DwtControl
+	 * */	
 	this.targetControl = null;
 	
 	/**
-	 * Action being performed. One of: <ul>
+	 * Action being performed. One of:
+	 * <ul>
 	 * <li><i>Dwt.DND_DROP_NONE</i></li>
 	 * <li><i>Dwt.DND_DROP_COPY</i></li>
 	 * <li><i>Dwt.DND_DROP_MOVE</i></li>
 	 * </ul>
-	 * @type number */
+	 */
 	this.action = null;
 	
-	/* Drag source data. This is the application data associated with the item being
-	 * dragged
-	 * @type any*/
+	/**
+	 * Drag source data. This is the application data associated with the item being dragged.
+	 */
 	this.srcData = null;
 
 	/**
 	 * Whether the DnD framework should perform the operation. The application is
 	 * responsible for setting this value based on whatever business logic it is
 	 * implementing
-	 * @type boolean */
+	 * @type boolean
+	 */
 	this.doIt = false;
 }
 
-/** A draggable object has entered the drop target
- * @type number */
+/**
+ * A draggable object has entered the drop target.
+ */
 DwtDropEvent.DRAG_ENTER = 1;
 
-/** A draggable object has left the drop target
- * @type number */
+/**
+ * A draggable object has left the drop target.
+ */
 DwtDropEvent.DRAG_LEAVE = 2;
 
-/** Drag operation has changed e.g. from move to copy
- * @type number */
+/**
+ * Drag operation has changed e.g. from move to copy.
+ */
 DwtDropEvent.DRAG_OP_CHANGED = 3;
 
-/** A draggable object has been dropped on the drag target
- * @type number */
+/**
+ * A draggable object has been dropped on the drag target.
+ */
 DwtDropEvent.DRAG_DROP = 4;
