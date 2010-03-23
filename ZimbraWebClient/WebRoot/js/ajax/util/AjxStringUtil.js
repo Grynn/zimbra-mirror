@@ -192,11 +192,12 @@ function(str, dels) {
  * always start a new line.
  *
  * @param {hash}	params	a hash of parameters
- * @param {string}      params.text 		the text to be wrapped
- * @param {number}      [params.len=80]		the desired line length of the wrapped text, defaults to 80
- * @param {string}      [params.pre]		an optional string to prepend to each line (useful for quoting)
- * @param {string}      [params.before]	text to prepend to final result
- * @param {string}      [params.after]		text to append to final result
+ * @param {string}      params.text 				the text to be wrapped
+ * @param {number}      [params.len=80]				the desired line length of the wrapped text, defaults to 80
+ * @param {string}      [params.pre]				an optional string to prepend to each line (useful for quoting)
+ * @param {string}      [params.before]				text to prepend to final result
+ * @param {string}      [params.after]				text to append to final result
+ * @param {boolean}		[params.preserveReturns]	if true, don't combine small lines
  *
  * @return	{string}	the wrapped/quoted text
  */
@@ -216,7 +217,7 @@ function(params) {
 
 	var len = params.len || 80;
 	var pre = params.pre || "";
-	var eol = params.htmlMode ? "<br>" : "\n";
+	var eol = "\n";
 
 	text = AjxStringUtil.trim(text);
 	text = text.replace(/\n\r/g, eol);
@@ -240,7 +241,8 @@ function(params) {
 			var isSpecial = AjxStringUtil.MSG_SEP_RE.test(line) || AjxStringUtil.COLON_RE.test(line) ||
 							AjxStringUtil.HDR_RE.test(line) || AjxStringUtil.SIG_RE.test(line);
 			for (var w = 0, wlen = wds.length; w < wlen; w++) {
-				words.push({w:wds[w], p:prefix, special:(isSpecial && w == 0)});
+				var lastWord = params.preserveReturns && (w == wlen - 1);
+				words.push({w:wds[w], p:prefix, special:(isSpecial && w == 0), lastWord:lastWord});
 			}
 		} else {
 			words.push({para:true, p:prefix});	// paragraph marker
@@ -272,6 +274,9 @@ function(params) {
 			wds.push(w);
 			curLen += w.length + sp;
 			curP = p;
+			if (word.lastWord && words[i + 1]) {
+				words[i + 1].special = true;
+			}
 		} else {
 			// output what we have and start a new line
 			if (wds.length) {
