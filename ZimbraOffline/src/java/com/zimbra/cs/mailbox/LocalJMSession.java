@@ -76,11 +76,17 @@ public class LocalJMSession {
         props.setProperty("mail.mime.address.strict", "false");
     	
     	if (useProxy) {
-    	     props.setProperty("proxySet", "true");
-             props.setProperty("socksProxyHost", proxyHost);
-             props.setProperty("socksProxyPort", proxyPort + "");
+    	    props.setProperty("proxySet", "true");
+            props.setProperty("socksProxyHost", proxyHost);
+            props.setProperty("socksProxyPort", proxyPort + "");
     	}
 
+        props.put("mail.smtp.socketFactory", SocketFactories.defaultSocketFactory());
+        props.setProperty("mail.smtp.socketFactory.fallback", "false");
+        props.put("mail.smtp.ssl.socketFactory", SocketFactories.defaultSSLSocketFactory());
+        props.setProperty("mail.smtp.ssl.socketFactory.fallback", "false");
+        props.put("mail.smtps.ssl.socketFactory", SocketFactories.defaultSSLSocketFactory());
+        props.setProperty("mail.smtps.ssl.socketFactory.fallback", "false");
 
         if (useSSL) {
             props.setProperty("mail.transport.protocol", "smtps");
@@ -88,13 +94,6 @@ public class LocalJMSession {
             props.setProperty("mail.smtps.timeout", Long.toString(timeout));
             props.setProperty("mail.smtps.localhost", localhost);
             props.setProperty("mail.smtps.sendpartial", "true");
-
-            props.put("mail.smtp.socketFactory", SocketFactories.defaultSocketFactory());
-            props.setProperty("mail.smtp.socketFactory.fallback", "false");
-            
-            props.put("mail.smtps.socketFactory", SocketFactories.defaultSSLSocketFactory());
-            props.setProperty("mail.smtps.socketFactory.fallback", "false");
-
             props.setProperty("mail.smtps.host", smtpHost);
             props.setProperty("mail.smtps.port",  smtpPort + "");
             if (isAuthRequired) {
@@ -112,7 +111,6 @@ public class LocalJMSession {
             props.setProperty("mail.smtp.timeout", Long.toString(timeout));
             props.setProperty("mail.smtp.localhost", localhost);
             props.setProperty("mail.smtp.sendpartial", "true");
-    		
             props.setProperty("mail.smtp.host", smtpHost);
             props.setProperty("mail.smtp.port",  smtpPort + "");
             if (LC.javamail_smtp_enable_starttls.booleanValue()) {
