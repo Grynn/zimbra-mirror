@@ -27,6 +27,9 @@ public class ZApptDayLayoutBean {
     private int mDay;
     private int mNumDays;
     private String mFolderId;
+    private static final long MSECS_PER_MINUTE = 1000*60;
+    private static final long MSECS_PER_HOUR = MSECS_PER_MINUTE * 60;
+    private static final long MSECS_PER_DAY = MSECS_PER_HOUR * 24;
 
     List<ZAppointmentHit> mAllday; // all all-day appts in this range
     List<ZAppointmentHit> mAppts;  // all non-day appts in this range
@@ -51,11 +54,13 @@ public class ZApptDayLayoutBean {
         return (int)(100.0/mNumDays);
     }
 
-    public ZApptDayLayoutBean(List<ZAppointmentHit> appts, Calendar startCal, int day, int numDays, String folderId, long msecsIncr) {
+    public ZApptDayLayoutBean(List<ZAppointmentHit> appts, long dayStartTime, int day, int numDays, String folderId, long msecsIncr) {
         mAllday = new ArrayList<ZAppointmentHit>();
         mAppts = new ArrayList<ZAppointmentHit>();
-        mStartTime = startCal.getTimeInMillis();
-        mEndTime = BeanUtils.addDay(startCal, 1).getTimeInMillis();
+        //mStartTime = startCal.getTimeInMillis();
+        //mEndTime = BeanUtils.addDay(startCal, 1).getTimeInMillis();
+        mStartTime = dayStartTime;
+        mEndTime = mStartTime + MSECS_PER_DAY;
         mDay = day;
         mNumDays = numDays;
         mFolderId = folderId;

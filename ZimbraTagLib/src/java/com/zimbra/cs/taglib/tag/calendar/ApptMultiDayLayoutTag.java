@@ -41,6 +41,7 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
     private int DEFAULT_HOUR_END = 18;
     private static final long MSECS_PER_MINUTE = 1000*60;
     private static final long MSECS_PER_HOUR = MSECS_PER_MINUTE * 60;
+    private static final long MSECS_PER_DAY = MSECS_PER_HOUR * 24;
     private static final long MSECS_INCR = MSECS_PER_MINUTE * 15;
 
     private String mVar;
@@ -81,18 +82,22 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
             mEnd = BeanUtils.addDay(startCal, 1).getTimeInMillis();
 
             for (int i=0; i < folders.length; i++) {
-                days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), startCal, i, mNumDays, folders[i], MSECS_INCR));
+                days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), mStart, i, mNumDays, folders[i], MSECS_INCR));
             }
         } else {
 
             Calendar startCal = Calendar.getInstance(mTimeZone);
             startCal.setTimeInMillis(mStart);
-
+            long dayStartTime = mStart;
             mEnd = BeanUtils.addDay(startCal, mNumDays).getTimeInMillis();
 
             for (int i=0; i < mNumDays; i++) {
-                days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), startCal, i, mNumDays, null, MSECS_INCR));
-                BeanUtils.getNextDay(startCal);
+                days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), dayStartTime, i, mNumDays, null, MSECS_INCR));
+                /*
+                 * StartTime = Prev Day Start Time + 24hrs( this will respect the DST_OFFSET, if any)
+                 */
+                //BeanUtils.getNextDay(startCal);
+                dayStartTime += MSECS_PER_DAY;
             }
         }
 
