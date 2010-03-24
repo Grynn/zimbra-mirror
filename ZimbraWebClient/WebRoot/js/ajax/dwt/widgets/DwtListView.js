@@ -2372,29 +2372,59 @@ function(ev) {
 	if (headerIdx == null) { return false; }
 
 	var delta = ev.docX - this._headerSashX;
-	var col1 = this._headerList[headerIdx];
-	var col2 = this._variableHeaderCol;
-	if (col1 == col2) {
-		var index = this._getNextResizeableColumnIndex(col2._index);
-		if (index != null) {
-			col2 = this._headerList[index];
-		} else {
-			return false;
-		}
-	} else if (!col2) {
-		var index = this._getNextResizeableColumnIndex(col1._index);
-		if (index != null) {
-			col2 = this._headerList[index];
-		} else {
-			return false;
-		}
-	}
-	col1._width = Math.max(col1._width + delta, DwtListView.MIN_COLUMN_WIDTH);
-	col2._width = Math.max(this._calcRelativeWidth(col2._index) - delta, DwtListView.MIN_COLUMN_WIDTH);
 
-	var index = this._getNextResizeableColumnIndex(-1, [col1._index, col2._index]);
-	if (index != null) {
-		this._headerList[index]._width = "auto";
+	var fcol = this._headerList[headerIdx];
+
+	var col1 = fcol;
+	var col2;// = this._variableHeaderCol;
+	var resized = [];
+
+	if (delta < 0) {
+		if ((col1 == col2) || !col2) {
+			col2 = this._getNextResizeableColumnHeader(col1);
+		}
+		if (!col2) return false;
+		//delta =    - Math.min(fcol._width - DwtListView.MIN_COLUMN_WIDTH, -delta);
+		delta = Math.max(DwtListView.MIN_COLUMN_WIDTH - fcol._width, delta);
+		fcol._width = Math.max(fcol._width + delta, DwtListView.MIN_COLUMN_WIDTH);
+		col2._width = Math.max(this._calcRelativeWidth(col2._index) - delta, DwtListView.MIN_COLUMN_WIDTH);
+		resized.push(fcol, col2);
+		
+	} else if (delta > 0) {
+
+		var remain = delta;
+		while (remain > 0) {
+			if ((col1 == col2) || !col2) {
+				col2 = this._getNextResizeableColumnHeader(col1, [], false);
+			}
+			//if (!col2) return false;
+			if (!col2) {
+				delta -= remain;
+				break;
+			}
+			var col2width = this._calcRelativeWidth(col2._index);
+			var room = col2width - DwtListView.MIN_COLUMN_WIDTH;
+			
+			if (remain > room) { // There column is too small to be fully resized
+				remain -= room;
+				col2width = DwtListView.MIN_COLUMN_WIDTH;
+			} else { // The column is not too small; all the requested delta may be taken from this column
+				col2width -= remain;
+				remain = 0;
+			}
+			col2._width = col2width;
+			resized.push(col2);
+			col1 = col2;
+		}
+	
+		fcol._width = Math.max(fcol._width + delta, DwtListView.MIN_COLUMN_WIDTH);
+		resized.push(fcol);
+
+	}
+
+	var col = this._getNextResizeableColumnHeader(-1, resized, true);
+	if (col) {
+		col._width = "auto";
 	}
 
 	this._relayout();
@@ -2473,7 +2503,7 @@ function() {
  * @private
  */
 DwtListView.prototype._getNextResizeableColumnIndex =
-function(start, exclude) {
+function(start, exclude, wrap) {
 
 	exclude = exclude ? AjxUtil.arrayAsHash(exclude) : {};
 	exclude[start] = true;
@@ -2485,16 +2515,24 @@ function(start, exclude) {
 				return i;
 			}
 		}
-		for (var i = 0; i < start; i++) {
-			if (exclude[i]) { continue; }
-			var col = this._headerList[i];
-			if (col._visible && col._resizeable) {
-				return i;
+		if (wrap) {
+			for (var i = 0; i < start; i++) {
+				if (exclude[i]) { continue; }
+				var col = this._headerList[i];
+				if (col._visible && col._resizeable) {
+					return i;
+				}
 			}
 		}
 	}
 	return null;
 };
+
+DwtListView.prototype._getNextResizeableColumnHeader =
+function(start, exclude, wrap) {
+	var index = this._getNextResizeableColumnIndex(start._index, exclude, wrap);
+	return (index !== null) ? this._headerList[index] : false;
+}
 
 DwtListView.prototype._relayout =
 function() {
