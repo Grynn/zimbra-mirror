@@ -853,7 +853,7 @@
 	</target>
 
 	<property name="prism.version.macos" value="031710"/>
-	<property name="prism.version.win32" value="090709"/>
+	<property name="prism.version.win32" value="031710"/>
 	<property name="prism.version.linux" value="090113"/>
 	<property name="prism.extroot.macos" value="${dist.app.dir}/macos/prism/Prism.app/Contents/Resources"/>
 	<property name="prism.extroot.win32" value="${dist.app.dir}/win32/prism"/>
