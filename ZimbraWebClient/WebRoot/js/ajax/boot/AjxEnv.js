@@ -67,6 +67,8 @@ function() {
 	AjxEnv.isWebKitBased = false;
 	AjxEnv.isOpera = false;
 	AjxEnv.useTransparentPNGs = false;
+	AjxEnv.isDesktop = false;
+	AjxEnv.isDesktop2up = false;
 
 	// screen resolution - ADD MORE RESOLUTION CHECKS AS NEEDED HERE:
 	AjxEnv.is800x600orLower = screen && (screen.width <= 800 && screen.height <= 600);
@@ -155,6 +157,9 @@ function() {
 				AjxEnv.isMac = true;
 			} else if (token.indexOf('linux') != -1) {
 				AjxEnv.isLinux = true;
+			} else if (token.indexOf('zdesktop') != -1) {
+				AjxEnv.isDesktop = true;
+				browserVersion = parseFloat(agtArr[i + 1]);
 			}
 		}
 
@@ -190,10 +195,11 @@ function() {
 		AjxEnv.isSafari3		= (AjxEnv.isSafari && browserVersion >= 3.0 && browserVersion < 4.0) || AjxEnv.isChrome;
         AjxEnv.isSafari4        = (AjxEnv.isSafari && browserVersion >= 4.0);
 		AjxEnv.isSafari3up		= (AjxEnv.isSafari && browserVersion >= 3.0) || AjxEnv.isChrome;
+		AjxEnv.isDesktop2up		= (AjxEnv.isDesktop && browserVersion >= 2.0);
 
 		AjxEnv.browser = "[unknown]";
 		if (AjxEnv.isOpera) 				{	AjxEnv.browser = "OPERA";	}
-		else if (AjxEnv.isSafari3up)			{	AjxEnv.browser = "SAF3";	}
+		else if (AjxEnv.isSafari3up)		{	AjxEnv.browser = "SAF3";	}
 		else if (AjxEnv.isSafari)			{	AjxEnv.browser = "SAF";		}
 		else if (AjxEnv.isCamino)			{	AjxEnv.browser = "CAM";		}
 		else if (isWebTv)					{	AjxEnv.browser = "WEBTV";	}
@@ -203,7 +209,7 @@ function() {
 		else if (AjxEnv.isFirefox1_5up)		{	AjxEnv.browser = "FF1.5";	}
 		else if (AjxEnv.isFirefox1up)		{	AjxEnv.browser = "FF1.0";	}
 		else if (AjxEnv.isFirefox)			{	AjxEnv.browser = "FF";		}
-		else if (AjxEnv.isPrism)			{	AjxEnv.browser = "PRISM";		}
+		else if (AjxEnv.isPrism)			{	AjxEnv.browser = "PRISM";	}
 		else if (AjxEnv.isNav7)				{	AjxEnv.browser = "NAV7";	}
 		else if (AjxEnv.isNav6)				{	AjxEnv.browser = "NAV6";	}
 		else if (AjxEnv.isNav4)				{	AjxEnv.browser = "NAV4";	}
@@ -213,6 +219,7 @@ function() {
 		else if (AjxEnv.isIE5)				{	AjxEnv.browser = "IE5";		}
 		else if (AjxEnv.isIE4)				{	AjxEnv.browser = "IE4";		}
 		else if (AjxEnv.isIE3)				{	AjxEnv.browser = "IE";		}
+		else if (AjxEnv.isDesktop)			{	AjxEnv.browser = "ZDESKTOP";}
 
 		AjxEnv.platform = "[unknown]";
 		if (AjxEnv.isWindows)				{	AjxEnv.platform = "Win";	}
