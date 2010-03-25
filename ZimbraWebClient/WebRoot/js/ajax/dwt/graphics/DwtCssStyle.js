@@ -30,83 +30,66 @@ DwtCssStyle = function() {
 // Common class name constants used in Dwt
 
 /**
- * mouseOver: transitory state while mouse is over the item.
- * @type String
+ * "mouseOver": transitory state while mouse is over the item.
  */
 DwtCssStyle.HOVER = "hover";
 
-
 /**
- * mouseDown: transitory state while left mouse button is being pressed on the item.
- * @type String
+ * "mouseDown": transitory state while left mouse button is being pressed on the item.
  */
 DwtCssStyle.ACTIVE = "active";
 
-
 /**
  * item is "on", (for example: selected tab, select item(s) in list, or button that stays depressed).
- * @type String
  */
 DwtCssStyle.SELECTED = "selected";
 
-
 /**
  * "disabled": item is not actionable (for example: because not appropriate or some other condition needs to be true).
- * @type String
  */
 DwtCssStyle.DISABLED = "disabled";
 
-
 /**
- * item has keyboard focus
- * @type String
+ * "focused": item has keyboard focus.
  */
 DwtCssStyle.FOCUSED = "focused";
 
 /**
  * UI component is target of some external action, for example:
  * <ul>
- * <li>item is the target of right-click (eg: show menu)</li>
+ * <li>item is the target of right-click (for example: show menu)</li>
  * <li>item is the thing being dragged</li>
  * </ul>
- * @type String
  */
 DwtCssStyle.ACTIONED = "actioned";
 
 /**
- * matched item in a list (eg: in conv list view, items that match the search. NOT used if *all* items match the search.)
- * @type String
+ * Matched item in a list (for example: in conv list view, items that match the search. NOT used if *all* items match the search).
  */
 DwtCssStyle.MATCHED	 = "matched";
 
 /**
  * UI component is the current, valid drop target.
- * @type String
  */
 DwtCssStyle.DRAG_OVER = "dragOver";
 
 /**
  * Item being dragged is over a valid drop target.
- * @type String
  */
 DwtCssStyle.DROPPABLE = "droppable";
 
 /**
  * Item being dragged is NOT over a valid drop target.
- * @type String
  */
 DwtCssStyle.NOT_DROPPABLE = "notDroppable";
 
-
 /**
- * Represents of an item *as it is being dragged* (eg: thing moving around the screen).
- * @type String
+ * Represents of an item *as it is being dragged* (for example: thing moving around the screen).
  */
 DwtCssStyle.DRAG_PROXY = "dragProxy";
 
 /**
  * Class applies only to linux browsers.
- * @type String
  */
 DwtCssStyle.LINUX = "linux";
 

@@ -14,6 +14,11 @@
  */
 
 
+/**
+ * 
+ * 
+ * @private
+ */
 XFG = function() {} // XFormGlobal
 
 XFG.prefixList = {};

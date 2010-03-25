@@ -25,7 +25,7 @@
  * 
  * @author Ross Dargahi
  *
- * @param keyMap [Object]		a keymap
+ * @param {DwtKeyMap}	keyMap the keymap
  *
  * @private
  */
@@ -57,16 +57,16 @@ function() {
  * 
  * @param {string}		keySeq				key sequence to lookup
  * @param {string}		mappingName			keymap name in which to search
- * @param {boolean}		forceActionCode		if true, then if the key sequence contains both
+ * @param {boolean}		forceActionCode		if <code>true</code>, then if the key sequence contains both
  * 											a submap and an action code, then return the action code.
  * 											If this parameter is false or omitted, then
- * 											<i>DwtKeyMapMgr.NOT_A_TERMINAL</i> will be returned for
+ * 											{@link DwtKeyMapMgr.NOT_A_TERMINAL} will be returned for
  * 											a key sequence that contains both a submap and an action code.
  * 
- * @return The action code for the provided key map name, null if there is no action code
- * 		or <i>DwtKeyMapMgr.NOT_A_TERMINAL</i> if the key sequence is an intermediate
+ * @return {string|number}	the action code for the provided key map name, null if there is no action code
+ * 		or {@link DwtKeyMapMgr.NOT_A_TERMINAL} if the key sequence is an intermediate
  * 		node in the key map (i.e. has a submap)
- * @type string|number
+ * 
  */
 DwtKeyMapMgr.prototype.getActionCode =
 function(keySeq, mappingName, forceActionCode) {
@@ -111,6 +111,7 @@ function(keySeq, mappingName, forceActionCode) {
 
 /**
  * Returns the action for the given map and key sequence.
+ * 
  */
 DwtKeyMapMgr.prototype.getAction =
 function(mapName, keySeq) {

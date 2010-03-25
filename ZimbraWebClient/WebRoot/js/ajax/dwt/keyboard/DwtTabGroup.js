@@ -25,8 +25,8 @@
  * that the application interacts with. Focus listeners register with the root
  * tab group. The root tab group tracks where focus is.
  * 
- * @param {String}	name					the name of this tab group
- * @param {Boolean}	blockDefaultHandling	if <code>true</code>, do not fall back to default key
+ * @param {string}	name					the name of this tab group
+ * @param {boolean}	blockDefaultHandling	if <code>true</code>, do not fall back to default key
  * 											handler for this tab group
  * 
  * @author Ross Dargahi
@@ -44,8 +44,6 @@ DwtTabGroup = function(name, blockDefaultHandling) {
 /** 
  * Exception string that is thrown when an operation is attempted
  * on a non-root tab group.
- * 
- * @type	String
  */
 DwtTabGroup.NOT_ROOT_TABGROUP = "NOT ROOT TAB GROUP";
 
@@ -54,7 +52,7 @@ DwtTabGroup.__changeEvt = new DwtTabGroupEvent();
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 DwtTabGroup.prototype.toString = 
 function() {
@@ -64,7 +62,7 @@ function() {
 /**
  * Gets the name of this tab group.
  * 
- * @return	{String}	the tab group name
+ * @return	{string}	the tab group name
  */
 DwtTabGroup.prototype.getName = function() {
 	return this.__name;
@@ -103,7 +101,7 @@ function(listener) {
  * Adds a member to the tab group.
  * 
  * @param {Array|DwtControl|DwtTabGroup|HTMLElement} member	the member(s) to be added
- * @param {int} [index] 		the index at which to add the member. If omitted, the member
+ * @param {number} [index] 		the index at which to add the member. If omitted, the member
  * 		will be added to the end of the tab group
  */
 DwtTabGroup.prototype.addMember =
@@ -149,8 +147,8 @@ function(newMember, beforeMember) {
  * previous member. If that fails, we will try the next member.
  * 
  * @param {DwtControl|DwtTabGroup|HTMLElement} member 	the member to be removed
- * @param {Boolean} [checkEnabled] 		if <code>true</code>, then make sure that if we have a newly focused member it is enabled
- * @param {Boolean} [skipNotify] 		if <code>true</code>, notification is not fired. This flag typically set by Dwt tab management framework when it is calling into this method
+ * @param {boolean} [checkEnabled] 		if <code>true</code>, then make sure that if we have a newly focused member it is enabled
+ * @param {boolean} [skipNotify] 		if <code>true</code>, notification is not fired. This flag typically set by Dwt tab management framework when it is calling into this method
  * @return {DwtControl|DwtTabGroup|HTMLElement}	the removed member or <code>null</code> if <code>oldMember</code> is not in the tab groups hierarchy
  */
 DwtTabGroup.prototype.removeMember =
@@ -174,9 +172,9 @@ DwtTabGroup.prototype.removeAllMembers = function() {
  * @param {DwtControl|DwtTabGroup|HTMLElement} oldMember 	the member to be replaced
  * @param {DwtControl|DwtTabGroup|HTMLElement} newMember 	the replacing member
  * 		If this parameter is <code>null</code>, then this method effectively removes <code>oldMember</code>
- * @param {Boolean} [checkEnabled] 	if <code>true</code>, then make sure that if we have a newly focused
+ * @param {boolean} [checkEnabled] 	if <code>true</code>, then make sure that if we have a newly focused
  * 		member it is enabled
- * @param {Boolean} [skipNotify] if <code>true</code>, notification is not fired. This flag is
+ * @param {boolean} [skipNotify] if <code>true</code>, notification is not fired. This flag is
  * 		typically set by the tab management framework when it is calling into this method
  * @return {DwtControl|DwtTabGroup|HTMLElement}	replaced member or <code>null></code> if <code>oldMember</code> is not in the tab group
  */
@@ -223,7 +221,7 @@ function(oldMember, newMember, checkEnabled, skipNotify, focusItem, noFocus) {
  * 
  * @param {DwtControl|DwtTabGroup|HTMLElement} member	the member for which to search
  * 
- * @return {Boolean}	<code>true</code> if the tab group contains member
+ * @return {boolean}	<code>true</code> if the tab group contains member
  */
 DwtTabGroup.prototype.contains =
 function(member) {	
@@ -243,7 +241,7 @@ function(newParent) {
 /**
  * Gets the first member of the tab group.
  * 
- * @param {Boolean} [checkEnabled]		if <code>true</code>, then return first enabled member
+ * @param {boolean} [checkEnabled]		if <code>true</code>, then return first enabled member
  *
  * @return {DwtControl|HTMLElement}	the first member of the tab group
  */
@@ -255,7 +253,7 @@ function(checkEnabled) {
 /**
  * Gets the child tab group member by its name.
  *
- * @param {String}	name		the name of the child tab group
+ * @param {string}	name		the name of the child tab group
  */
 DwtTabGroup.prototype.getTabGroupMemberByName = function(name) {
 	var members = this.__members.getArray();
@@ -270,7 +268,7 @@ DwtTabGroup.prototype.getTabGroupMemberByName = function(name) {
 /**
  * Gets the last member of the tab group.
  * 
- * @param {Boolean} [checkEnabled]		if <code>true</code>, then return last enabled member
+ * @param {boolean} [checkEnabled]		if <code>true</code>, then return last enabled member
  *
  * @return {DwtControl|HTMLElement}	the last member of the tab group
  */
@@ -296,11 +294,11 @@ function(){
  * Sets the current focus member. 
  * 
  * @param {DwtControl|HTMLElement} member 		the member to which to set focus
- * @param {Boolean} [checkEnabled] 	if <code>true</code>, then make sure the member is enabled
- * @param {Boolean} [skipNotify] if <code>true</code>, notification is not fired. This flag
+ * @param {boolean} [checkEnabled] 	if <code>true</code>, then make sure the member is enabled
+ * @param {boolean} [skipNotify] if <code>true</code>, notification is not fired. This flag
  * 		typically set by Dwt tab management framework when it is calling into this method
  * 
- * @return {Boolean}	<code>true</code> if member was part of the tab group hierarchy, else false
+ * @return {boolean}	<code>true</code> if member was part of the tab group hierarchy, else false
  *
  * @throws DwtTabGroup.NOT_ROOT_TABGROUP
  */
@@ -327,9 +325,9 @@ function(member, checkEnabled, skipNotify) {
  * This method sets and returns the next focus member in this tab group. If there is no next
  * member, sets and returns the first member in the tab group.
  * 
- * @param {Boolean} [checkEnabled] 	if <code>true</code>, get the next enabled member
- * @param {Boolean} [skipNotify] if <code>true</code>, notification is not fired. This flag
- * 		typically set by Dwt tab management framework when it is calling into this method
+ * @param {boolean} [checkEnabled] 	if <code>true</code>, get the next enabled member
+ * @param {boolean} [skipNotify] if <code>true</code>, notification is not fired. This flag
+ * 		typically set by {@link Dwt} tab management framework when it is calling into this method
  * 
  * @return {DwtControl|HTMLElement}	new focus member or <code>null</code> if there is no focus member or if the focus
  * 		member has not changed (i.e. only one member in the tabgroup)
@@ -346,8 +344,8 @@ function(checkEnabled, skipNotify) {
  * This method sets and returns the previous focus member in this tab group. If there is no
  * previous member, sets and returns the last member in the tab group.
  * 
- * @param {Boolean} [checkEnabled] 	if <code>true</code>, get the previously enabled member
- * @param {Boolean} [skipNotify] if <code>true</code>, notification is not fired. This flag
+ * @param {boolean} [checkEnabled] 	if <code>true</code>, get the previously enabled member
+ * @param {boolean} [skipNotify] if <code>true</code>, notification is not fired. This flag
  * 		typically set by Dwt tab management framework when it is calling into this method
  * 
  * @return {DwtControl|HTMLElement}	new focus member or <code>null</code> if there is no focus member or if the focus
@@ -364,8 +362,8 @@ function(checkEnabled, skipNotify) {
 /**
  * Resets the the focus member to the first element in the tab group.
  * 
- * @param {Boolean} [checkEnabled] 	if <code>true</code>, then pick a enabled member to which to set focus
- * @param {Boolean} [skipNotify] if <code>true</code>, notification is not fired. This flag
+ * @param {boolean} [checkEnabled] 	if <code>true</code>, then pick a enabled member to which to set focus
+ * @param {boolean} [skipNotify] if <code>true</code>, notification is not fired. This flag
  * 		typically set by Dwt tab management framework when it is calling into this method
  * 
  * @return {DwtControl|HTMLElement}	the new focus member
@@ -409,7 +407,7 @@ function(debugLevel) {
 /**
  * Gets the size of the group.
  * 
- * @return	{int}	the size
+ * @return	{number}	the size
  */
 DwtTabGroup.prototype.size =
 function() {
@@ -467,6 +465,7 @@ function(member, checkEnabled) {
 
 /**
  * Sets and returns the next member in the tag group.
+ * 
  * @private
  */
 DwtTabGroup.prototype.__getNextMember =

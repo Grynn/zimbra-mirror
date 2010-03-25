@@ -22,11 +22,11 @@
  * keyboard events, as well as managing focus and tab groups. It is at the heart of the
  * Dwt keyboard navigation framework.
  * <p>
- * <i>DwtKeyboardMgr</i> intercepts key strokes and translates
+ * {@link DwtKeyboardMgr} intercepts key strokes and translates
  * them into actions which it then dispatches to the component with focus. If the key
  * stroke is a TAB (or Shift-TAB), then focus is moved based on the current tab group.
  * </p><p>
- * A <i>DwtShell</i> instantiates its own <i>DwtKeyboardMgr</i> at construction.
+ * A {@link DwtShell} instantiates its own <i>DwtKeyboardMgr</i> at construction.
  * The keyboard manager may then be retrieved via the shell's <code>getKeyboardMgr()</code>
  * function. Once a handle to the shell's keyboard manager is retrieved, then the user is free
  * to add tab groups and register keymaps and handlers with the keyboard manager.
@@ -42,13 +42,17 @@
  * At any given time there is a default handler, which is responsible for determining what
  * action is associated with a particular key sequence, and then taking it. A handler should support
  * the following methods:
- * 		getKeyMapName()		returns the name of the map that defines shortcuts for this handler
- * 		handleKeyAction()	performs the action associated with a shortcut
- * 		handleKeyEvent()	(optional) override; handler solely responsible for handling event
+ * 
+ * <ul>
+ * <li><i>getKeyMapName()</i> -- returns the name of the map that defines shortcuts for this handler</li>
+ * <li><i>handleKeyAction()</i> -- performs the action associated with a shortcut</li>
+ * <li><i>handleKeyEvent()</i>	-- override; handler solely responsible for handling event</li>
+ * </ul>
  * </p>
  *
  * @author Ross Dargahi
  *
+ * @param	{DwtShell}	shell		the shell
  * @see DwtShell
  * @see DwtTabGroup
  * @see DwtKeyMap
@@ -82,14 +86,17 @@ DwtKeyboardMgr.__KEYSEQ_REPEAT		= 4;
 DwtKeyboardMgr.FOCUS_FIELD_ID = "kbff";
 
 /**
- * Returns true if the event may be a shortcut from within an input (text input or
- * textarea). Since printable characters are echoed, the shortcut must be nonprintable:
+ * Checks if the event may be a shortcut from within an input (text input or
+ * textarea). Since printable characters are echoed, the shortcut must be non-printable:
  * 
- * 		- Alt or Ctrl or Meta plus another key
- * 		- Esc
- * 		- Enter within a text input (but not a textarea)
+ * <ul>
+ * <li>Alt or Ctrl or Meta plus another key</li>
+ * <li>Esc</li>
+ * <li>Enter within a text input (but not a textarea)</li>
+ * </ul>
  * 
- * @param ev	[DwtKeyEvent]		key event
+ * @param {DwtKeyEvent}	ev	the key event
+ * @return	{boolean}	<code>true</code> if the event may be a shortcut
  */
 DwtKeyboardMgr.isPossibleInputShortcut =
 function(ev) {
@@ -100,8 +107,9 @@ function(ev) {
 };
 
 /**
- * @return returns the class name
- * @type String
+ * Returns the string representation of this object.
+ * 
+ * @return	{string}	the string representation of this object
  */
 DwtKeyboardMgr.prototype.toString = 
 function() {
@@ -109,11 +117,11 @@ function() {
 };
 
 /**
- * Pushes <code>tabGroup</code> onto the stack and makes it the active tab group.
+ * Pushes the tab group onto the stack and makes it the active tab group.
  * 
- * @param 	tabGroup	[DwtTabGroup]	tabGroup tab group to push onto the stack
+ * @param 	{DwtTabGroup}	tabGroup	the tab group to push onto the stack
  * 
- * @see		popTabGroup
+ * @see		#popTabGroup
  */
 DwtKeyboardMgr.prototype.pushTabGroup =
 function(tabGroup) {
@@ -138,12 +146,11 @@ function(tabGroup) {
  * Pops the current tab group off the top of the tab group stack. The previous 
  * tab group (if there is one) then becomes the current tab group.
  * 
- * @param {DwtTabGroup} tabGroup Tab group to pop. If supplied, then the tab group
- * 		stack is searched for the tab group and it is removed. If null, then the
+ * @param {DwtTabGroup} [tabGroup]		the tab group to pop. If supplied, then the tab group
+ * 		stack is searched for the tab group and it is removed. If <code>null</code>, then the
  * 		top tab group is popped.
  * 
- * @return the popped tab group, or null if there is one or less tab groups
- * @type DwtTabGroup
+ * @return {DwtTabGroup}	the popped tab group or <code>null</code> if there is one or less tab groups
  */
 DwtKeyboardMgr.prototype.popTabGroup =
 function(tabGroup) {
@@ -201,12 +208,10 @@ function(tabGroup) {
 };
 
 /**
- * Replaces the current tab group with <code>tabGroup</code>
+ * Replaces the current tab group with the given tab group.
  * 
- * @param {DwtTabGroup} tabGroup Tab group to use
- * 
- * @return old tab group
- * @type DwtTabGroup
+ * @param {DwtTabGroup} tabGroup 	the tab group to use
+ * @return {DwtTabGroup}	the old tab group
  */
 DwtKeyboardMgr.prototype.setTabGroup =
 function(tabGroup) {
@@ -241,9 +246,9 @@ function() {
 };
 
 /**
- * Sets the focus to <code>focusObj</code>.
+ * Sets the focus to the given object.
  * 
- * @param {HTMLInputElement|DwtControl} focusObj Object to which to set focus
+ * @param {HTMLInputElement|DwtControl} focusObj		the object to which to set focus
  */ 
 DwtKeyboardMgr.prototype.grabFocus =
 function(focusObj) {
@@ -273,9 +278,9 @@ function(inputCtrl) {
 };
 
 /**
- * Returns the object that has focus
+ * Gets the object that has focus.
  *
- * @return {HTMLInputElement|DwtControl} Object with focus
+ * @return {HTMLInputElement|DwtControl} focusObj		the object with focus
  */
 DwtKeyboardMgr.prototype.getFocusObj =
 function(focusObj) {
@@ -283,13 +288,11 @@ function(focusObj) {
 };
 
 /**
-* Return true if the specified component currently has keyboard focus
-*
-* @param {DwtControl} control Object for which to check focus
-* 
-* @return true if the <code>control</code> has keyboard focus, else false
-* @type Boolean
-*/
+ * Checks if the specified component currently has keyboard focus.
+ *
+ * @param {DwtControl} control		the object for which to check focus
+ * @return {boolean}	<code>true</code> if the control has keyboard focus; otherwise <code>false</code>
+ */
 DwtKeyboardMgr.prototype.dwtControlHasFocus =
 function(control) {
 	if (!this.__enabled) { return false; }
@@ -304,17 +307,17 @@ function(control) {
  * This method is used to register an application key handler. If registered, this
  * handler must support the following methods:
  * <ul>
- * <li> getKeyMapName: This method returns a string representing the key map 
+ * <li><i>getKeyMapName</i>: This method returns a string representing the key map 
  * to be used for looking up actions
- * <li> handleKeyAction: This method should handle the key action and return
- * true if it handled it else false. handleKeyAction has two formal parameters
+ * <li><i>handleKeyAction</i>: This method should handle the key action and return
+ * true if it handled it else false. <i>handleKeyAction</i> has two formal parameters
  *    <ul>
- *    <li> actionCode: The action code to be handled
- *    <li> ev: DwtKeyEvent corresponding to the last key event in the sequence
+ *    <li><i>actionCode</i>: The action code to be handled</li>
+ *    <li><i>ev</i>: the {@link DwtKeyEvent} corresponding to the last key event in the sequence</li>
  *    </ul>
  * </ul>
  * 
- * @param 	hdlr	[function]		hdlr Handler function. This method should have the following
+ * @param 	{function}	hdlr	the handler function. This method should have the following
  * 									signature <code>Boolean hdlr(Int actionCode DwtKeyEvent event);</code>
  * 
  * @see DwtKeyEvent
@@ -326,14 +329,13 @@ function(hdlr) {
 };
 
 /**
-* This method is used to register a keymap with the shell. A keymap typically
-* is a subclass of <i>DwtKeyMap</i> and defines the mappings from key sequences to
-* actions.
-*
-* @param {DwtKeyMap} keyMap keyMap to be registered
-* 
-* @see DwtKeyMap
-**/
+ * Registers a keymap with the shell. A keymap typically
+ * is a subclass of {@link DwtKeyMap} and defines the mappings from key sequences to
+ * actions.
+ *
+ * @param {DwtKeyMap} keyMap		the key map to register
+ * 
+ */
 DwtKeyboardMgr.prototype.registerKeyMap =
 function(keyMap) {
 	if (!this.__checkStatus()) { return; }
@@ -341,17 +343,19 @@ function(keyMap) {
 };
 
 /**
- * Sets the timeout (in milliseconds) between key presses for handling multi-keypress
- * sequences
+ * Sets the timeout (in milliseconds) between key presses for handling multi-keypress sequences.
  * 
- * @param 	timeout		[Integer]	timeout Timeout in milliseconds
+ * @param 	{number}	timeout		the timeout (in milliseconds)
  */
 DwtKeyboardMgr.prototype.setKeyTimeout =
 function(timeout) {
 	this.__keyTimeout = timeout;
 };
 
-// Clears the key sequence. The next key event will begin a new one.
+/**
+ * Clears the key sequence. The next key event will begin a new one.
+ * 
+ */
 DwtKeyboardMgr.prototype.clearKeySeq =
 function() {
 	this.__killKeySeqTimedActionId = -1;
@@ -361,7 +365,7 @@ function() {
 /**
  * Enables/disables keyboard nav.
  * 
- * @param 	enabled		[boolean]	if true, enable keyboard nav
+ * @param 	{boolean}	enabled		if <code>true</code>, enable keyboard nav
  */
 DwtKeyboardMgr.prototype.enable =
 function(enabled) {
@@ -486,6 +490,7 @@ function(focusObj) {
 
 /**
  * Focus handler for keyboard focus input field.
+ * 
  * @private
  */
 DwtKeyboardMgr.__onFocusHdlr =
@@ -502,6 +507,7 @@ function(ev) {
 
 /**
  * Blur handler for keyboard focus input field.
+ * 
  * @private
  */
 DwtKeyboardMgr.__onBlurHdlr =

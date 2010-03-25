@@ -15,10 +15,13 @@
 
 
 /**
-* @class ButtonGrid  example of putting a custom widget in a XForm
-* @constructor
-**/
-
+ * @constructor
+ * @class 
+ * This class is an example of putting a custom widget in a {@link XForm}.
+ * 
+ * @param	{array}	attributes		the attributes
+ * @private
+ */
 ButtonGrid = function(attributes) {
 	XFG.assignUniqueId(this, "__BUTTON_GRID__");
 

@@ -14,6 +14,11 @@
  */
 
 
+/**
+ * 
+ * 
+ * @private
+ */
 DwtXFormsEvent = function(form, formItem, details) {
 	if (arguments.length == 0) return;
 	this.form = form;

@@ -16,6 +16,8 @@
 
 /**
  * static class that wraps around AjxEventManager
+ * 
+ * @private
  */
 DwtEventManager = function() {
 };

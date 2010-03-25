@@ -13,15 +13,38 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * Default constructor. See static constants.
+ * @class
+ * This class contains unit static constants.
+ * 
+ */
 DwtUnits = function() {
 }
 
+/**
+ * Defines the "pixel" unit.
+ */
 DwtUnits.PIXEL_UNIT = "px";
+/**
+ * Defines the "cm" unit.
+ */
 DwtUnits.CM_UNIT = "cm";
+/**
+ * Defines the "mm" unit.
+ */
 DwtUnits.MM_UNIT = "mm";
+/**
+ * Defines the "inch" unit.
+ */
 DwtUnits.INCH_UNIT = "in";
+/**
+ * Defines the "percentage %" unit.
+ */
 DwtUnits.PCT_UNIT = "%";
+/**
+ * Defines the "point" unit.
+ */
 DwtUnits.POINT = "pt";
 
 // pixel widths

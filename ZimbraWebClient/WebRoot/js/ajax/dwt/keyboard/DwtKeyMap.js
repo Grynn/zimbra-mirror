@@ -18,17 +18,15 @@
  * Creates and loads a key map.
  * @constructor
  * @class
- * This class provides the basic keyboard mappings for Dwt components. The
+ * This class provides the basic keyboard mappings for {@link Dwt} components. The
  * key bindings are taken from the class AjxKeys, which is populated from a
  * properties file. The identifiers used in the properties file must match
  * those used here.
  * 
  * @author Ross Dargahi
  * 
+ * @param	{boolean}		subclassInit		if <code>true</code>, the sub-class will initialize
  * 
- * @param	{Boolean}		subclassInit
- * 
- * @private
  */
 DwtKeyMap = function(subclassInit) {
 	if (subclassInit) {	return };
@@ -160,9 +158,9 @@ function() {
  * and inheritance. The properties version is made available via a
  * servlet.
  * 
- * @param map			[hash]		hash to populate with shortcuts
- * @param keys			[hash]		properties version of shortcuts
- * @param mapNames		[hash]*		additional map for getting internal map names
+ * @param {hash}	map			the hash to populate with shortcuts
+ * @param {hash}	keys			the properties version of shortcuts
+ * @param {hash}	[mapNames]		the additional map for getting internal map names
  * 
  * @private
  */
@@ -233,7 +231,7 @@ function(map, keys, mapNames) {
  * Returns true if this map is valid. This class always returns true,
  * but subclasses may override to do more checking.
  *
- * @param mapName	[string]	name of map
+ * @param {string}	mapName		the name of map
  * 
  * @private
  */
@@ -245,12 +243,12 @@ function(mapName) {
 };
 
 /**
- * Returns true if this action is valid. This class always returns true,
+ * Checks if this action is valid. This class always returns <code>true</code>,
  * but subclasses may override to do more checking.
  *
- * @param mapName	[string]	name of map
- * @param action	[string]	action to check
- * 
+ * @param {string}	mapName	the name of map
+ * @param {string}	action	the action to check
+ * @param	{boolean}	<code>true</code> if this action is valid. 
  * @private
  */
 DwtKeyMap.prototype._checkAction =
@@ -261,9 +259,9 @@ function(mapName, action) {
 /**
  * Sets up constants for a modifier key as described in a properties file.
  * 
- * @param key	[string]		ctrl, alt, shift, or meta
- * @param field	[string]		display or keycode
- * @param value	[string|int]	property value
+ * @param {string}	key		the ctrl, alt, shift, or meta
+ * @param {string}	field	the display or keycode
+ * @param {string|number}	value	the property value
  * 
  * @private
  */
@@ -279,12 +277,13 @@ function(key, field, value) {
 
 /**
  * Ensures a predictable order for the modifiers in a key sequence:
- * 
- * 			Alt Ctrl Meta Shift
+ * <pre>
+ * Alt Ctrl Meta Shift
+ * </pre>
  * 
  * Example: "Shift+Ctrl+U" will be transformed into "Ctrl+Shift+U"
  * 
- * @param ks	[string]	key sequence
+ * @param {String}	ks	the key sequence
  * 
  * @private
  */

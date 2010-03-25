@@ -15,23 +15,24 @@
 
 
 /**
- * Helper class for event capturing
- *
+ * Creates a helper class for mouse event capturing.
  * @constructor
- * @class DwtMouseEventCapture
+ * @class
  *
  * @author Ross Dargahi
  *
- * @param params			[hash]		hash of params:
- *        targetObj			[Element]	Target element
- *        id				[string]	ID for this capture instance.
- *        mouseOverHdlr		[function]	Browser event handler
- *        mouseDownHdlr		[function]	Browser event handler
- *        mouseMoveHdlr		[function]	Browser event handler
- *        mouseUpHdlr		[function]	Browser event handler
- *        mouseOutHdlr		[function]	Browser event handler
- *        mouseWheelHdlr	[function]	Browser event handler
- *        hardCapture		[boolean]	If true, event propagation is halted at this element (IE only)
+ * @param {hash}	params			a hash of parameters
+ * @param {Element}      params.targetObj			the target element
+ * @param {string}      params.id				the ID for this capture instance.
+ * @param {function}      params.mouseOverHdlr		the browser event handler
+ * @param {function}      params.mouseDownHdlr		the browser event handler
+ * @param {function}      params.mouseMoveHdlr		the browser event handler
+ * @param {function}      params.mouseUpHdlr		the browser event handler
+ * @param {function}      params.mouseOutHdlr		the browser event handler
+ * @param {function}      params.mouseWheelHdlr	the browser event handler
+ * @param {boolean}      params.hardCapture		if <code>true</code>, event propagation is halted at this element (IE only)
+ * 
+ * @private
  */
 DwtMouseEventCapture = function(params) {
 

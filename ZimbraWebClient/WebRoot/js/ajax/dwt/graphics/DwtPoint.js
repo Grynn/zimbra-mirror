@@ -21,18 +21,19 @@
  * 
  * @author Ross Dargahi
  * 
- * @param {int} x 	the x coordinate
- * @param {int} y 	the y coordinate
+ * @param {number} x 	the x coordinate
+ * @param {number} y 	the y coordinate
+ * 
  */
 DwtPoint = function(x, y) {
 	/**
 	 * The x-coordinate.
-	 * @type	int
+	 * @type	number
 	 */
 	this.x = x || 0;
 	/**
 	 * The y-coordinate.
-	 * @type	int
+	 * @type	number
 	 */
 	this.y = y || 0;
 }
@@ -42,7 +43,7 @@ DwtPoint.tmp = new DwtPoint(0, 0);
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 DwtPoint.prototype.toString = 
 function() {
@@ -52,8 +53,8 @@ function() {
 /**
  * Sets the values of a point
  * 
- * @param {int} x the x coordinate
- * @param {int} y the y coordinate
+ * @param {number} x 	the x coordinate
+ * @param {number} y 	the y coordinate
  */
  DwtPoint.prototype.set =
  function(x, y) {

@@ -13,6 +13,10 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+ * 
+ * @private
+ */
 DwtFocusEvent = function(init) {
 	if (arguments.length == 0) return;
 	DwtEvent.call(this, true);

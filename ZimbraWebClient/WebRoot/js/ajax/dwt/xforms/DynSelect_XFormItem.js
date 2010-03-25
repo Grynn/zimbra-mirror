@@ -14,12 +14,17 @@
  */
 
 /**
-* XFormItem class: "dynselect"
-* A select box with asynchronous autocomplete capability
-* @class DynSelect_XFormItem
-* @constructor DynSelect_XFormItem
-* @author Greg Solovyev
-**/
+ * XFormItem class: "dynselect"
+ * @constructor DynSelect_XFormItem
+ * @class DynSelect_XFormItem
+ * A select box with asynchronous autocomplete capability
+ * 
+ * 
+ * @author Greg Solovyev
+ *
+ * @private
+ *
+ */
 DynSelect_XFormItem = function() {}
 XFormItemFactory.createItemType("_DYNSELECT_", "dynselect", DynSelect_XFormItem, OSelect1_XFormItem);
 DynSelect_XFormItem.prototype.dataFetcherClass = null;

@@ -14,10 +14,10 @@
  */
 
 /**
- * @class DwtIdleTimer
+ * @class
+ * Simple manager for "idle" events. Add a handler like this:
  *
- * Simple manager for "idle" events.  Add a handler like this:
- *
+ * <pre>
  *    var idleTimer = new DwtIdleTimer(10000, new AjxCallback(obj, obj.handler));
  *
  *    obj.handler = function(idle) {
@@ -27,22 +27,28 @@
  *          // user is back
  *       }
  *    }
- *
+ * </pre>
+ * 
  * With this code, when the user is idle for 10 seconds obj.handler(true) will
  * be called.  When the user gets back from idle, obj.handler(false) will be
  * called and the timer restarted.
- *
- * To cancel a timer, say idleTimer.kill().  To restart it later, you can
- * idleTimer.resurrect(timeout).  timeout is optional here, pass it only if you
+ * </p>
+ * <p>
+ * To cancel a timer, call <code>idleTimer.kill()</code>. To restart it later, you can
+ * <code>idleTimer.resurrect(timeout)</coe>. The timeout parameter is optional, pass it only if you
  * want to modify it.
- *
+ * </p>
+ * <p>
  * You can create multiple handlers, each with its own callback and timeout.  A
- * new DwtIdleTimer will start running right away and will continue to do so
- * until you kill() it.
- *
- * @author Mihai Bazon <mihai@zimbra.com>
+ * new {@link DwtIdleTimer} will start running right away and will continue to do so
+ * until you <code>kill()</code> it.
+ * </p>
+ * 
+ * @param	{number}	[timeout]		the timeout 
+ * @param	{AjxCallback}	handler		the callback
+ * 
+ * @private
  */
-
 DwtIdleTimer = function(timeout, handler) {
 	DwtIdleTimer._initEvents();
 	this.timeout = timeout;

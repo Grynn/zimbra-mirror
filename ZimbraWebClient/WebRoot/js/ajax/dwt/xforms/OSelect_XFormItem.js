@@ -15,10 +15,13 @@
 
 
 /**
-* @class OSelect1_XFormItem class -- lightning fast SELECT type widget
-* @constructor
-* @author Owen Williams, Greg Solovyev
-**/
+ * @constructor
+ * @class
+ * OSelect1_XFormItem class -- lightning fast SELECT type widget
+ * @author Owen Williams, Greg Solovyev
+ * 
+ * @private
+ */
 OSelect1_XFormItem = function(){ this._enabled = true; }
 XFormItemFactory.createItemType("_OSELECT1_", "oselect1", OSelect1_XFormItem, Select1_XFormItem);
 

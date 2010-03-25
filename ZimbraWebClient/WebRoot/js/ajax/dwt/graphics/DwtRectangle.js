@@ -21,31 +21,31 @@
  * 
  * @author Ross Dargahi
  * 
- * @param {int} x 	the x coordinate
- * @param {int} y 	the y coordinate
- * @param {int} width 	the width
- * @param {int} height 	the height
+ * @param {number} x 	the x coordinate
+ * @param {number} y 	the y coordinate
+ * @param {number} width 	the width
+ * @param {number} height 	the height
  */
 DwtRectangle = function(x, y, width, height) {
 
 	/**
 	 * The x-coordinate.
-	 * @type	int
+	 * @type	number
 	 */
 	this.x = x;
 	/**
 	 * The y-coordinate.
-	 * @type	int
+	 * @type	number
 	 */
 	this.y = y;
 	/**
 	 * The width.
-	 * @type	int
+	 * @type	number
 	 */
 	this.width = width;
 	/**
 	 * The height.
-	 * @type	int
+	 * @type	number
 	 */
 	this.height = height;
 }
@@ -53,7 +53,7 @@ DwtRectangle = function(x, y, width, height) {
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 DwtRectangle.prototype.toString = 
 function() {
@@ -63,10 +63,10 @@ function() {
 /**
  * Sets the values of the rectangle.
  * 
- * @param {int} x 	the x coordinate
- * @param {int} y 	the y coordinate
- * @param {int} width 	the width
- * @param {int} height 	the height
+ * @param {number} x 	the x coordinate
+ * @param {number} y 	the y coordinate
+ * @param {number} width 	the width
+ * @param {number} height 	the height
  */
  DwtRectangle.prototype.set =
  function(x, y, width, height) {

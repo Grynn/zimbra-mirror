@@ -13,7 +13,10 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * 
+ * @private
+ */
 DwtDisposeEvent = function(init) {
 	if (arguments.length == 0) return;
 	DwtEvent.call(this, true);

@@ -14,6 +14,10 @@
  */
 
 
+/**
+ * 
+ * @private
+ */
 DwtControlEvent = function() {
 	this.reset();
 }

@@ -14,10 +14,10 @@
  */
 
 
-//
-// DwtHoverEvent
-//
-
+/**
+ * 
+ * @private
+ */
 DwtHoverEvent = function(type, delay, object, x, y) {
 	if (arguments.length == 0) return;
 	DwtEvent.call(this, true);

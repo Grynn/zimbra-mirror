@@ -23,11 +23,13 @@ XFormItemFactory = function() {}
 
 /**
  * Creates a form item.
+ * @class
  *
- * @param attributes An object whose properties map to component attribute
- *                   name/value pairs.
- * @param parentItem The parent item of this item.
- * @param xform      The form to which this item is being created.
+ * @param attributes		an object whose properties map to component attribute name/value pairs
+ * @param parentItem 		the parent item of this item
+ * @param {XForm}	xform      the form to which this item is being created
+ * 
+ * @private
  */
 XFormItemFactory.createItem = function (attributes, parentItem, xform) {
 	// assign a modelItem to the item

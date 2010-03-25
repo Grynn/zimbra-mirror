@@ -13,6 +13,11 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+ * 
+ * 
+ * @private
+ */
 DwtXModelEvent = function(instance, modelItem, refPath, details) {
 	if (arguments.length == 0) return;
 	this.instance = instance;

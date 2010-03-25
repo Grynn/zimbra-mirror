@@ -21,8 +21,6 @@
  * 
  * @author Ross Dargahi
  * 
- * @see DwtTabGroup
- * 
  * @private
  */
 DwtTabGroupEvent = function() {
@@ -40,17 +38,18 @@ DwtTabGroupEvent = function() {
 }
 
 /**
- * @return return a string version of the class' name
- * @type String
+ * Returns a string representation of this object.
+ * 
+ * @return {string}	a string representation of this object
  */
 DwtTabGroupEvent.prototype.toString = 
 function() {
 	return "DwtTabGroupEvent";
 }
 
-
 /**
- * Resets the members of the event
+ * Resets the members of the event.
+ * 
  */
 DwtTabGroupEvent.prototype.reset =
 function() {

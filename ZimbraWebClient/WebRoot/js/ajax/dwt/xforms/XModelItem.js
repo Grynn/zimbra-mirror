@@ -18,7 +18,11 @@
 //	Factory to create XModelItems from simple attributes (eg: from JS object literals or XML)
 //
 
-/** This class is never instantiated. 
+/**
+ * 
+ * This class is never instantiated.
+ * 
+ * @private
  */
 XModelItemFactory = function() {}
 

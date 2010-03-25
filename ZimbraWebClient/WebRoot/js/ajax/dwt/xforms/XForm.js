@@ -15,13 +15,16 @@
 
 
 /**
-* @constructor
-* @class
-* @param attributes
-* @param model {XModel} {@link XModel}
-* @param instance {Object} data instance
-* @param dwtContainer - instance of {@link DwtComposite}
-**/
+ * @constructor
+ * @class
+ * 
+ * @param attributes
+ * @param {XModel}	model		the model
+ * @param {Object}	instance  the data instance
+ * @param {DwtComposite}	dwtContainer 	the container
+ * 
+ * @private
+ */
 XForm = function(attributes, model, instance, dwtContainer) {
 	if (attributes) {
 		for (var prop in attributes) {
