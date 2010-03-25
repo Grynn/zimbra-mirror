@@ -83,7 +83,7 @@
  * @author Andy Clark
  *
  * @param {DwtComposite}	parent    the parent widget.
- * @param {String}	className 	the CSS class
+ * @param {string}	className 	the CSS class
  * @param {constant}	posStyle  		the position style (see {@link DwtControl})
  * 
  * @extends		DwtComposite
@@ -112,7 +112,7 @@ DwtMessageComposite.prototype._controls;
 /**
  * Sets the format.
  * 
- * @param {String}	message   [string]    the message that defines the text and controls that comprise this composite
+ * @param {string}	message   the message that defines the text and controls that comprise this composite
  * @param {AjxCallback}	[callback]   the callback to create UI components
  * @param {AjxCallback}	[hintsCallback]   the callback to provide display hints for the container element of the UI component
  */
@@ -187,7 +187,7 @@ function(message, callback, hintsCallback) {
 /**
  * Gets the format.
  * 
- * @return	{String}	the format
+ * @return	{string}	the format
  */
 DwtMessageComposite.prototype.format = function() {
     var args = [];

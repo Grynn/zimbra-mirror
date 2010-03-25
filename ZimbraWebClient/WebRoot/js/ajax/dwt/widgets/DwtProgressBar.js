@@ -21,7 +21,7 @@
  * This class represents a progress bar.
  * 
  * @param {DwtComposite}	parent    the parent container
- * @param {String}	className the CSS class name
+ * @param {string}	className the CSS class name
  * @param {constant}	posStyle  the position style (see {@link DwtControl})
  * 
  * @author Greg Solovyev
@@ -57,7 +57,7 @@ DwtProgressBar.prototype.constructor = DwtProgressBar;
 /**
  * Sets the progress background color.
  * 
- * @param	{String}	var		the color
+ * @param	{string}	var		the color
  */
 DwtProgressBar.prototype.setProgressBgColor = 
 function(val) {
@@ -67,7 +67,7 @@ function(val) {
 /**
  * Sets the whole background color.
  * 
- * @param	{String}	var		the color
+ * @param	{string}	var		the color
  */
 DwtProgressBar.prototype.setWholeBgColor = 
 function(val) {
@@ -77,7 +77,7 @@ function(val) {
 /**
  * Sets the progress CSS class.
  * 
- * @param	{String}	var		the color
+ * @param	{string}	var		the color
  */
 DwtProgressBar.prototype.setProgressCssClass = 
 function(val) {
@@ -87,7 +87,7 @@ function(val) {
 /**
  * Sets the whole CSS class.
  * 
- * @param	{String}	var		the color
+ * @param	{string}	var		the color
  */
 DwtProgressBar.prototype.setWholeCssClass = 
 function(val) {
@@ -97,7 +97,7 @@ function(val) {
 /**
  * Sets the process CSS style.
  * 
- * @param	{String}	var		the color
+ * @param	{string}	var		the color
  */
 DwtProgressBar.prototype.setProgressCssStyle = 
 function(val) {
@@ -107,7 +107,7 @@ function(val) {
 /**
  * Sets the while CSS style.
  * 
- * @param	{String}	var		the color
+ * @param	{string}	var		the color
  */
 DwtProgressBar.prototype.setWholeCssStyle  = 
 function(val) {
@@ -117,7 +117,7 @@ function(val) {
 /**
  * Sets the progress value.
  * 
- * @param	{int}		val		the value
+ * @param	{number}		val		the value
  */
 DwtProgressBar.prototype.setValue = 
 function(val) {
@@ -159,7 +159,7 @@ function(val) {
 /**
  * Sets the value by percentage.
  * 
- * @param	{String}		percent		the value as a percentage (for example: "10%")
+ * @param	{string}		percent		the value as a percentage (for example: "10%")
  */
 DwtProgressBar.prototype.setValueByPercent =
 function (percent){
@@ -170,7 +170,7 @@ function (percent){
 /**
  * Gets the value.
  * 
- * @return	{int}	the value
+ * @return	{number}	the value
  */
 DwtProgressBar.prototype.getValue = 
 function() {
@@ -180,7 +180,7 @@ function() {
 /**
  * Gets the maximum value.
  * 
- * @return	{int}	the maximum value
+ * @return	{number}	the maximum value
  */
 DwtProgressBar.prototype.getMaxValue = 
 function() {
@@ -190,7 +190,7 @@ function() {
 /**
  * Sets the maximum value.
  * 
- * @param	{int}	val		the maximum value
+ * @param	{number}	val		the maximum value
  */
 DwtProgressBar.prototype.setMaxValue = 
 function(val) {
@@ -200,8 +200,8 @@ function(val) {
 /**
  * Sets the label.
  * 
- * @param	{String}		text		the label
- * @param	{Boolean}		isRightAlign	if <code>true</code>, if the label is right aligned
+ * @param	{string}		text		the label
+ * @param	{boolean}		isRightAlign	if <code>true</code>, if the label is right aligned
  */
 DwtProgressBar.prototype.setLabel =
 function( text, isRightAlign) {

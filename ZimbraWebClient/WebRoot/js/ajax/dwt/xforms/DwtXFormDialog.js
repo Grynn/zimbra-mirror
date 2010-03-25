@@ -13,7 +13,11 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * 
+ * 
+ * @private
+ */
 DwtXFormDialog = function(xformDef, xmodelDef, parent, className, title, standardButtons, extraButtons, zIndex, mode, loc) {
 	if (arguments.length == 0) return;
 	className = className || "DwtXFormDialog";

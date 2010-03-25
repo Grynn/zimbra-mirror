@@ -22,12 +22,12 @@
  *
  * @author Ross Dargahi
  * 
- * @param {Hash}	params				a hash of parameters
+ * @param {hash}	params				a hash of parameters
  * @param  {DwtComposite}     params.parent			the parent widget
  * @param  {DwtTree.SINGLE_STYLE|DwtTree.MULTI_STYLE|DwtTree.CHECKEDITEM_STYLE}     params.style 	the tree style
- * @param  {String}     params.className				the CSS class
+ * @param  {string}     params.className				the CSS class
  * @param  {constant}     params.posStyle				the positioning style (see {@link DwtControl})
- * @param  {Boolean}     params.isCheckedByDefault	default checked state if tree styles is "checked"
+ * @param  {boolean}     params.isCheckedByDefault	default checked state if tree styles is "checked"
  * 
  * @extends		DwtComposite
  */
@@ -71,17 +71,14 @@ function() {
 
 /**
  * Defines the "single" style.
- * @type	int
  */
 DwtTree.SINGLE_STYLE = 1;
 /**
  * Defines the "multi" style.
- * @type	int
  */
 DwtTree.MULTI_STYLE = 2;
 /**
  * Defines the "checked-item" style.
- * @type	int
  */
 DwtTree.CHECKEDITEM_STYLE = 4;
 
@@ -147,7 +144,7 @@ function(listener) {
 /**
  * Gets the tree item count.
  * 
- * @return	{int}	the item count
+ * @return	{number}	the item count
  */
 DwtTree.prototype.getItemCount =
 function() {
@@ -157,7 +154,7 @@ function() {
 /**
  * Gets the items.
  * 
- * @return	{Array}	an array of {@link DwtTreeItem} objects
+ * @return	{array}	an array of {@link DwtTreeItem} objects
  */
 DwtTree.prototype.getItems =
 function() {
@@ -186,7 +183,7 @@ function() {
 /**
  * Gets an array of selection items.
  * 
- * @return	{Array}	an array of {@link DwtTreeItem} objects
+ * @return	{array}	an array of {@link DwtTreeItem} objects
  */
 DwtTree.prototype.getSelection =
 function() {
@@ -295,15 +292,15 @@ function(child) {
  * Returns the next (or previous) tree item relative to the currently selected item,
  * in top-to-bottom order as the tree appears visually. Items such as separators (and
  * possibly headers) that cannot be selected are skipped.
- *
+ * </p><p>
  * If there is no currently selected item, return the first or last item. If we go past
  * the beginning or end of the tree, return null.
- *
+ * </p><p>
  * For efficiency, a flattened list of the visible and selectable tree items is maintained.
  * It will be cleared on any change to the tree's display, then regenerated when it is
  * needed.
  *
- * @param next		[boolean]		if true, return next tree item; otherwise, return previous tree item
+ * @param {boolean}	next		if <code>true</code>, return next tree item; otherwise, return previous tree item
  * 
  * @private
  */
@@ -336,8 +333,8 @@ function(next) {
 /**
  * Creates a flat list of this tree's items, going depth-first.
  *
- * @param {Boolean}	visible		if <code>true</code>, only include visible/selectable items
- * @return	{Array}	an array of {@link DwtTreeItem} objects
+ * @param {boolean}	visible		if <code>true</code>, only include visible/selectable items
+ * @return	{array}	an array of {@link DwtTreeItem} objects
  */
 DwtTree.prototype.getTreeItemList =
 function(visible) {

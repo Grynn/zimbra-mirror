@@ -33,15 +33,15 @@
  * @extends DwtButton
  * @author Mihai Bazon
  * 
- * @param {Hash}	params		a hash of parameters
+ * @param {hash}	params		a hash of parameters
  * @param  {DwtComposite}     params.parent		the parent widget
  * @param  {constant}     params.style			the button style
- * @param  {String}     params.className		the CSS class
+ * @param  {string}     params.className		the CSS class
  * @param  {constant}     params.posStyle		the positioning style
- * @param  {String}     params.id			the ID to use for the control's HTML element
- * @param  {int}     params.index 		the index at which to add this control among parent's children
- * @param  {Boolean}     params.allowColorInput if <code>true</code>, allow a text field to allow user to input their customized RGB value
- * @param  {Boolean}     params.noFillLabel	if <code>true</code>, do not fill label
+ * @param  {string}     params.id			the ID to use for the control's HTML element
+ * @param  {number}     params.index 		the index at which to add this control among parent's children
+ * @param  {boolean}     params.allowColorInput if <code>true</code>, allow a text field to allow user to input their customized RGB value
+ * @param  {boolean}     params.noFillLabel	if <code>true</code>, do not fill label
  * 
  * @extends		DwtButton
  */
@@ -90,9 +90,9 @@ DwtButtonColorPicker._hexdigits = [ '0', '1', '2', '3', '4', '5', '6', '7', '8',
 /**
  * Utility function that converts the given integer to its hexadecimal representation.
  *
- * @param {int}		n 		the number to convert
- * @param {int}		[pad] 	the number of digits in the final number (zero-padded if required)
- * @return	{String}	the hexadecimal representation
+ * @param {number}		n 		the number to convert
+ * @param {number}		[pad] 	the number of digits in the final number (zero-padded if required)
+ * @return	{string}	the hexadecimal representation
  */
 DwtButtonColorPicker.toHex =
 function(n, pad) {
@@ -115,7 +115,7 @@ function(n, pad) {
  * Shows the color display. Call this function to display a DIV that shows the currently
  * selected color. This DIV also has the ability to clear the current color.
  * 
- * @param	{Boolean}	disableMouseOver		if <code>true</code>, disable the mouse over
+ * @param	{boolean}	disableMouseOver		if <code>true</code>, disable the mouse over
  */
 DwtButtonColorPicker.prototype.showColorDisplay =
 function(disableMouseOver) {
@@ -131,7 +131,7 @@ function(disableMouseOver) {
 /**
  * Gets the color.
  * 
- * @return {String}		the currently selected color
+ * @return {string}		the currently selected color
  */
 DwtButtonColorPicker.prototype.getColor =
 function() {
@@ -141,7 +141,7 @@ function() {
 /**
  * Set the current color.
  *
- * @param {String} color 		the desired color. Pass the empty string "" to clear the selection.
+ * @param {string} color 		the desired color. Pass the empty string "" to clear the selection.
  */ 
 DwtButtonColorPicker.prototype.setColor =
 function(color) {

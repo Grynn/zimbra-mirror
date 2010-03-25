@@ -13,11 +13,10 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
-//
-// DwtHoverMgr
-//
-
+/**
+ * 
+ * @private
+ */
 DwtHoverMgr = function() {
 	this._hoverOverAction = new AjxTimedAction(this, this._notifyHoverOver);
 	this._hoverOutAction = new AjxTimedAction(this, this._notifyHoverOut);

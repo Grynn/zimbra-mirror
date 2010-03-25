@@ -14,6 +14,10 @@
  */
 
 
+/**
+ * 
+ * @private
+ */
 DwtMouseEvent = function() {
 	DwtUiEvent.call(this, true);
 	this.reset(true);

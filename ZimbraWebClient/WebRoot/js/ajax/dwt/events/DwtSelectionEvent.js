@@ -13,7 +13,11 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * 
+ * 
+ * @private
+ */
 DwtSelectionEvent = function(init) {
 	if (arguments.length == 0) return;
 	DwtUiEvent.call(this, true);

@@ -30,12 +30,12 @@
   *
  * @author Ross Dargahi
  * 
- * @param {Hash}	params		a hash of parameters
+ * @param {hash}	params		a hash of parameters
  * @param       {DwtComposite}	params.parent		the parent widget
  * @param {constant}      params.style			the menu style
- * @param {String}      params.className		the CSS class
+ * @param {string}      params.className		the CSS class
  * @param {constant}      params.posStyle		the positioning style (see {@link DwtControl})
- * @param {Boolean}      [params.cascade=true]		if <code>true</code>, menu should cascade (i.e. multiple columns)
+ * @param {boolean}      [params.cascade=true]		if <code>true</code>, menu should cascade (i.e. multiple columns)
  * 
  * @extends		DwtComposite
  */
@@ -152,33 +152,27 @@ function() {
 };
 
 /**
- * Defines the "bar" style menu
- * @type	int
+ * Defines the "bar" style menu.
  */
 DwtMenu.BAR_STYLE = 1;
 /**
- * Defines the "popup" style menu
- * @type	int
+ * Defines the "popup" style menu.
  */
 DwtMenu.POPUP_STYLE = 2;
 /**
- * Defines the "dropdown" style menu
- * @type	int
+ * Defines the "dropdown" style menu.
  */
 DwtMenu.DROPDOWN_STYLE = 3;
 /**
- * Defines the "color" style menu
- * @type	int
+ * Defines the "color" style menu.
  */
 DwtMenu.COLOR_PICKER_STYLE =  4;
 /**
- * Defines the "calendar" style menu
- * @type	int
+ * Defines the "calendar" style menu.
  */
 DwtMenu.CALENDAR_PICKER_STYLE = 5;
 /**
- * Defines the "generic widget" style menu
- * @type	int
+ * Defines the "generic widget" style menu.
  */
 DwtMenu.GENERIC_WIDGET_STYLE = 6;
 
@@ -244,7 +238,7 @@ function(listener) {
 /**
  * Gets a menu item.
  * 
- * @param	{String}	index		the index
+ * @param	{string}	index		the index
  * @return	{DwtMenuItem}		the menu item
  */
 DwtMenu.prototype.getItem =
@@ -255,7 +249,7 @@ function(index) {
 /**
  * Gets the item by id.
  * 
- * @param	{String}	key		the id key
+ * @param	{string}	key		the id key
  * @param	{Object}	id		the id value
  * @return	{DwtMenuItem}	the menu item
  */
@@ -273,7 +267,7 @@ function(key, id) {
 /**
  * Gets a count of the items.
  * 
- * @return	{int}	the count
+ * @return	{number}	the count
  */
 DwtMenu.prototype.getItemCount =
 function() {
@@ -283,7 +277,7 @@ function() {
 /**
  * Gets an array of items.
  * 
- * @return	{Array}	an array of {@link DwtMenuItem} objects
+ * @return	{array}	an array of {@link DwtMenuItem} objects
  */
 DwtMenu.prototype.getItems =
 function() {
@@ -304,7 +298,7 @@ function(style) {
 /**
  * Checks if the menu is popped-up.
  * 
- * @return	{Boolean}	<code>true</code> if popped-up
+ * @return	{boolean}	<code>true</code> if popped-up
  */
 DwtMenu.prototype.isPoppedUp =
 function() {
@@ -550,7 +544,7 @@ function(field, value, skipNotify) {
  * the new item is a separator or is disabled, it won't be selected. Instead, the
  * next suitable item will be used.
  * 
- * @param {Boolean|int}	which		if <code>true</code>, selects the next menu item
+ * @param {boolean|number}	which		if <code>true</code>, selects the next menu item
  * 									if <code>false</code>, selects the previous menu item
  * 									if <code>int</code>, selects the menu item with that index
  */

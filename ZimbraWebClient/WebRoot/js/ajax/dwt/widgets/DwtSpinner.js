@@ -32,20 +32,20 @@
  * <li><code>DwtSpinner-disabled</code>     -- the table gets this class added when the widget is disabled
  * </ul>
  * 
- * @param	{Hash}	params		a hash of parameters
+ * @param	{hash}	params		a hash of parameters
  * @param {DwtComposite} params.parent 	the parent widget
- * @param {String} params.className the class name for the containing DIV (see {@link DwtControl})
- * @param {String} params.posStyle 	the positioning style (see {@link DwtControl})
- * @param {Number} params.max 	the maximum value
- * @param {Number} params.min 	the minimum value
- * @param {Number} params.size 	size of the input field, as in <code>&lt;input size="X"&gt;</code>
- * @param {Number} params.value the original value of the input field
- * @param {Number} params.maxLen the maximum length of the text in the input field
- * @param {Number} params.step 	the amount to add or substract when the arrow buttons are pressed
- * @param {Number} [params.decimals=0] Number of decimal digits.  Specify 0 to allow only
+ * @param {string} params.className the class name for the containing DIV (see {@link DwtControl})
+ * @param {string} params.posStyle 	the positioning style (see {@link DwtControl})
+ * @param {number} params.max 	the maximum value
+ * @param {number} params.min 	the minimum value
+ * @param {number} params.size 	size of the input field, as in <code>&lt;input size="X"&gt;</code>
+ * @param {number} params.value the original value of the input field
+ * @param {number} params.maxLen the maximum length of the text in the input field
+ * @param {number} params.step 	the amount to add or substract when the arrow buttons are pressed
+ * @param {number} [params.decimals=0] Number of decimal digits.  Specify 0 to allow only
  *                 integers (default). Pass <code>null</code> to allow float numbers but
  *                 not enforce decimals.
- * @param {String} [params.align="right"] 	the align of the input field text (see <code>dwt.css</code>)
+ * @param {string} [params.align="right"] 	the align of the input field text (see <code>dwt.css</code>)
  *
  * @author Mihai Bazon
  * 
@@ -198,7 +198,7 @@ DwtSpinner.prototype._setBtnState = function(dir, disabled) {
 /**
  * Gets the value.
  * 
- * @return	{Number}	the value
+ * @return	{number}	the value
  */
 DwtSpinner.prototype.getValue = function() {
 	return parseFloat(this._getValidValue(this.getInputElement().value));
@@ -207,7 +207,7 @@ DwtSpinner.prototype.getValue = function() {
 /**
  * Sets the value.
  * 
- * @param	{Number}	val		the value
+ * @param	{number}	val		the value
  */
 DwtSpinner.prototype.setValue = function(val) {
 	if (val == null)

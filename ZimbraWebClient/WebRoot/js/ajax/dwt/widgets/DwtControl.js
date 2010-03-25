@@ -55,14 +55,14 @@
  *
  * @author Ross Dargahi
  * 
- * @param {Hash}		params			a hash of parameters
+ * @param {hash}		params			a hash of parameters
  * @param	{DwtComposite}	parent		the parent widget, except in the case of {@link DwtShell}, the parent will be a control that is a subclass of {@link DwtComposite}
- * @param	{String}	className		the CSS class
+ * @param	{string}	className		the CSS class
  * @param	{constant}	posStyle		the positioning style (absolute, static, or relative). Defaults to {@link DwtControl.STATIC_STYLE}.
- * @param	{Boolean}	deferred		if <code>true</code>, postpone initialization until needed
- * @param	{String}	id			an explicit ID to use for the control's HTML element. If not provided, defaults to an auto-generated ID.
- * @param	{String|HTMLElement}	parentElement the parent element
- * @param	{int}	index 		the index at which to add this control among parent's children
+ * @param	{boolean}	deferred		if <code>true</code>, postpone initialization until needed
+ * @param	{string}	id			an explicit ID to use for the control's HTML element. If not provided, defaults to an auto-generated ID.
+ * @param	{string|HTMLElement}	parentElement the parent element
+ * @param	{number}	index 		the index at which to add this control among parent's children
  *
  */
 DwtControl = function(params) {
@@ -90,14 +90,14 @@ DwtControl = function(params) {
 	 * Data object used to store "client data" on the widget via the
 	 * <code>setData</code> and <code>getData</code> methods
 	 * 
-	 * @type Hash
+	 * @type hash
 	 * @private
 	 */
 	this._data = {};
 
 	/**
 	 * The event manager controls the mapping between event types and the registered listeners.
-	 * @type {AjxEventMgr}
+	 * @type AjxEventMgr
 	 * @private
 	 */
 	this._eventMgr = new AjxEventMgr();
@@ -105,7 +105,7 @@ DwtControl = function(params) {
 	/** true if the control is disposed, else false. The public api to this
 	 * member is <code>isDisposed</code>.
 	 * 
-	 * @type {Boolean}
+	 * @type boolean
 	 * @private
 	 */
 	this._disposed = false;
@@ -113,7 +113,7 @@ DwtControl = function(params) {
  	if (!parent) { return; }
 
 	/** CSS class name
-	 * @type {String}
+	 * @type string
 	 * @private
 	 */
 	this._className = params.className || "DwtControl";
@@ -125,45 +125,54 @@ DwtControl = function(params) {
 
 	/**
 	 * id of the control's HTML element
-	 * @type {String}
+	 * @type string
 	 * @private
 	 */
 	if (params.id) {
 		this._htmlElId = params.id;
 	}
 
-	/** @private */
+	/**
+	 * @private
+	 */
 	this.__index = params.index;
 
 	this.__parentElement = params.parentElement;
 
 	/**
 	 * enabled state of this control. Public APIs to this member are
-	 * <code>getEnabled</code> and <code>setEnabled</code>
-	 * @type {Boolean}
+	 * <code>getEnabled</code> and <code>setEnabled</code>.
+	 * 
+	 * @type boolean
 	 * @private
 	 */
 	this._enabled = false;
 
 	/**
-	 * Indicates the drag state of the control. Valid values are:<ul>
+	 * Indicates the drag state of the control. Valid values are:
+	 * <ul>
 	 * <li>DwtControl._NO_DRAG<li>
 	 * <li>DwtControl._DRAGGING<li>
-	 * <li>DwtControl._DRAG_REJECTED<li></ul>
-	 * @type Number
+	 * <li>DwtControl._DRAG_REJECTED<li>
+	 * </ul>
+	 * 
+	 * @type number
 	 * @private
 	 */
 	this._dragging = null;
 
 	/**
-	 * Drag n drop icon. Valid when a drag and drop operation is ocurring
+	 * Drag n drop icon. Valid when a drag and drop operation is occurring.
+	 * 
 	 * @type HTMLElement
 	 * @private
 	 */
 	this._dndProxy = null;
 
-	/** Flag indicating whether the control has keyboard focus or not
-	 * @type Boolean
+	/**
+	 * Flag indicating whether the control has keyboard focus or not.
+	 * 
+	 * @type boolean
 	 * @private
 	 */
 	this._hasFocus = false;
@@ -173,14 +182,16 @@ DwtControl = function(params) {
 	}
 
 	/**
-	 * Hover over listener
+	 * Hover over listener.
+	 * 
 	 * @type AjxListener
 	 * @private
 	 */
 	this._hoverOverListener = new AjxListener(this, this.__handleHoverOver);
 
 	/**
-	 * Hover out listener
+	 * Hover out listener.
+	 * 
 	 * @type AjxListener
 	 * @private
 	 */
@@ -206,7 +217,7 @@ DwtControl.ALL_BY_ID = {};
 /**
  * Returns a string representation of the class.
  * 
- * @return {String}		a string representation of the class
+ * @return {string}		a string representation of the class
  */
 DwtControl.prototype.toString =
 function() {
@@ -220,42 +231,34 @@ function() {
 // Display states
 /**
  * Defines the "normal" display state.
- * @type String
  */
 DwtControl.NORMAL = "";
 /**
  * Defines the "active" display state.
- * @type String
  */
 DwtControl.ACTIVE = "ZActive";
 /**
  * Defines the "focused" display state.
- * @type String
  */
 DwtControl.FOCUSED = "ZFocused";
 /**
  * Defines the "disabled" display state.
- * @type String
  */
 DwtControl.DISABLED = "ZDisabled";
 /**
  * Defines the "hover" display state.
- * @type String
  */
 DwtControl.HOVER = "ZHover";
 /**
  * Defines the "selected" display state.
- * @type String
  */
 DwtControl.SELECTED = "ZSelected";
 /**
  * Defines the "default" display state.
- * @type String
  */
 DwtControl.DEFAULT = "ZDefault";
 /**
  * Defines the "error" display state.
- * @type String
  */
 DwtControl.ERROR = "ZError";
 
@@ -276,7 +279,6 @@ DwtControl._RE_STATES = new RegExp(
 /**
  * Defines the static position style.
  * 
- * @type String
  * @see  Dwt.STATIC_STYLE
  */
 DwtControl.STATIC_STYLE = Dwt.STATIC_STYLE;
@@ -284,7 +286,6 @@ DwtControl.STATIC_STYLE = Dwt.STATIC_STYLE;
 /**
  * Defines the absolute position style.
  * 
- * @type String
  * @see Dwt.ABSOLUTE_STYLE
  */
 DwtControl.ABSOLUTE_STYLE = Dwt.ABSOLUTE_STYLE;
@@ -292,7 +293,6 @@ DwtControl.ABSOLUTE_STYLE = Dwt.ABSOLUTE_STYLE;
 /**
  * Defines the relative position style.
  * 
- * @type String
  * @see Dwt.RELATIVE_STYLE
  */
 DwtControl.RELATIVE_STYLE = Dwt.RELATIVE_STYLE;
@@ -300,7 +300,6 @@ DwtControl.RELATIVE_STYLE = Dwt.RELATIVE_STYLE;
 /**
  * Defines the fixed position style.
  * 
- * @type String
  * @see Dwt.FIXED_STYLE
  */
 DwtControl.FIXED_STYLE = Dwt.FIXED_STYLE;
@@ -316,7 +315,6 @@ DwtControl.FIXED_STYLE = Dwt.FIXED_STYLE;
  * 
  * Defines clip on overflow.
  * 
- * @type int
  * @see Dwt.CLIP
  */
 DwtControl.CLIP = Dwt.CLIP;
@@ -324,7 +322,6 @@ DwtControl.CLIP = Dwt.CLIP;
 /**
  * Defines allow overflow to be visible.
  * 
- * @type int
  * @see Dwt.VISIBLE
  */
 DwtControl.VISIBLE = Dwt.VISIBLE;
@@ -332,7 +329,6 @@ DwtControl.VISIBLE = Dwt.VISIBLE;
 /**
  * Defines automatically create scrollbars if content overflows.
  * 
- * @type int
  * @see Dwt.SCROLL
  */
 DwtControl.SCROLL = Dwt.SCROLL;
@@ -340,7 +336,6 @@ DwtControl.SCROLL = Dwt.SCROLL;
 /**
  * Defines always have scrollbars whether content overflows or not.
  * 
- * @type int
  * @see Dwt.FIXED_SCROLL
  */
 DwtControl.FIXED_SCROLL = Dwt.FIXED_SCROLL;
@@ -349,7 +344,6 @@ DwtControl.FIXED_SCROLL = Dwt.FIXED_SCROLL;
 /**
  * Defines the default value for sizing/position methods.
  * 
- * @type int
  * @see Dwt.DEFAULT
  */
 DwtControl.DEFAULT = Dwt.DEFAULT;
@@ -358,7 +352,6 @@ DwtControl.DEFAULT = Dwt.DEFAULT;
 /**
  * Defines "no drag" in progress.
  * 
- * @type int
  * @private
  */
 DwtControl._NO_DRAG = 1;
@@ -366,7 +359,6 @@ DwtControl._NO_DRAG = 1;
 /**
  * Defines "drag" in progress.
  *
- * @type int
  * @private
  */
 DwtControl._DRAGGING = 2;
@@ -374,7 +366,6 @@ DwtControl._DRAGGING = 2;
 /**
  * Defines "drag rejected".
  * 
- * @type int
  * @private
  */
 DwtControl._DRAG_REJECTED = 3;
@@ -382,7 +373,6 @@ DwtControl._DRAG_REJECTED = 3;
 /**
  * Defines "drag threshold".
  * 
- * @type int
  * @private
  */
 DwtControl.__DRAG_THRESHOLD = 3;
@@ -390,7 +380,6 @@ DwtControl.__DRAG_THRESHOLD = 3;
 /**
  * Defines "tooltip threshold".
  *
- * @type int
  * @private
  */
 DwtControl.__TOOLTIP_THRESHOLD = 5;
@@ -495,9 +484,9 @@ function(listener) {
  * Adds a listener to the control. The listener will be call when events
  * of type <code>eventType</code> fire.
  *
- * @param {String} eventType		the event type for which to listen (may not be <code>null</code>)
+ * @param {string} eventType		the event type for which to listen (may not be <code>null</code>)
  * @param {AjxListener} listener	the listener to register (may not be <code>null</code>)
- * @param {int}		index		the index at which to add listener
+ * @param {number}		index		the index at which to add listener
  *
  * @see DwtEvent
  * @see #removeListener
@@ -512,7 +501,7 @@ function(eventType, listener, index) {
 /**
  * Removes a listener from the control.
  *
- * @param {String} eventType		the event type for which to listen (may not be <code>null</code>)
+ * @param {string} eventType		the event type for which to listen (may not be <code>null</code>)
  * @param {AjxListener} listener	the listener to remove (may not be <code>null</code>)
  *
  * @see DwtEvent
@@ -527,8 +516,8 @@ function(eventType, listener) {
 /**
  * Removes all listeners for a particular event type.
  *
- * @param {String} eventType		the event type (may not be <code>null</code>)
- * @return	{Boolean}	<code>true</code> if all listeners are removed
+ * @param {string} eventType		the event type (may not be <code>null</code>)
+ * @return	{boolean}	<code>true</code> if all listeners are removed
  * 
  * @see DwtEvent
  * @see #addListener
@@ -542,9 +531,9 @@ function(eventType) {
 /**
  * Checks if there are any listeners registered for a particular event type.
  *
- * @param {String} eventType		the event type (may not be <code>null</code>)
+ * @param {string} eventType		the event type (may not be <code>null</code>)
  *
- * @return {Boolean}	<code>true</code> if there is an listener registered for the specified event type
+ * @return {boolean}	<code>true</code> if there is an listener registered for the specified event type
  * @see DwtEvent
  */
 DwtControl.prototype.isListenerRegistered =
@@ -555,7 +544,7 @@ function(eventType) {
 /**
  * Notifies all listeners of type <code>eventType</code> with <code>event</code>.
  *
- * @param {String} eventType		the event type (may not be <code>null</code>)
+ * @param {string} eventType		the event type (may not be <code>null</code>)
  * @param {DwtEvent} event		the event
  */
 DwtControl.prototype.notifyListeners =
@@ -620,7 +609,7 @@ DwtControl.prototype.getTabGroupMember = function() {
 /**
  * Gets the data associated with the specified key.
  *
- * @param {String} key		the key
+ * @param {string} key		the key
  * @return {Object}		the associated data
  * 
  * @see #setData
@@ -633,7 +622,7 @@ function(key) {
 /**
  * Sets the data for a given key. This method is useful for associating client data with a control.
  *
- * @param {String} key		the key
+ * @param {string} key		the key
  * @param {Object} value	the data
  * 
  * @see #getData
@@ -646,7 +635,7 @@ function(key, value) {
 /**
  * Checks if the control is disposed.
  * 
- * @return {Boolean}	<code>true</code> if the control is in a disposed state; <code>false</code> otherwise
+ * @return {boolean}	<code>true</code> if the control is in a disposed state; <code>false</code> otherwise
  *
  * @see #dispose
  * @see #addDisposeListener
@@ -661,7 +650,7 @@ function() {
  * Checks if the control is initialized. In general, a control will not be
  * initialized if it has been created in deferred mode and has not yet been initialized.
  * 
- * @return {Boolean}	<code>true</code> if the control is in a initialized; <code>false</code> otherwise
+ * @return {boolean}	<code>true</code> if the control is in a initialized; <code>false</code> otherwise
  */
 DwtControl.prototype.isInitialized =
 function() {
@@ -685,7 +674,7 @@ DwtControl.prototype.blur = function() {
 /**
  * Checks if this control has focus.
  * 
- * @return {Boolean}	<code>true</code> if this control has keyboard focus; <code>false</code> otherwise
+ * @return {boolean}	<code>true</code> if this control has keyboard focus; <code>false</code> otherwise
  */
 DwtControl.prototype.hasFocus =
 function() {
@@ -698,7 +687,7 @@ function() {
  * 
  * @param	{DwtKeyMap}	actionCode	the key action code
  * @param	{DwtKeyEvent}	ev		the key event
- * @return	{Boolean}	<code>true</code> if the event is handled; <code>false</code> otherwise
+ * @return	{boolean}	<code>true</code> if the event is handled; <code>false</code> otherwise
  * 
  * @private
  *
@@ -714,7 +703,7 @@ function(actionCode, ev) {
  * the whole control.
  *
  * @param {DwtComposite} newParent 	the control's new parent
- * @param	{int}	index	the index
+ * @param	{number}	index	the index
  * 
  * @see #reparentHtmlElement
  */
@@ -736,8 +725,8 @@ function(newParent, index) {
  * element and does not affect the component hierarchy. To re-parent the control within
  * the component hierarchy, use the <i>reparent</i> method.
  *
- * @param {String|HTMLElement} htmlEl a string representing an element ID or an HTML element
- * @param {Number} position 	the position to insert the element
+ * @param {string|HTMLElement} htmlEl a string representing an element ID or an HTML element
+ * @param {number} position 	the position to insert the element
  *
  * @see #reparent
  */
@@ -770,7 +759,7 @@ function(htmlEl, position) {
  * should be used judiciously as it can lead to unexpected results (for example if
  * overriding the control's mouse handlers). This method calls through to <i>Dwt.setHandler</i>
  *
- * @param {String} eventType 	the event type (defined in {@see DwtEvent}) to override 
+ * @param {string} eventType 	the event type (defined in {@see DwtEvent}) to override 
  * @param {function} hdlrFunc Event handler function
  *
  * @see DwtEvent
@@ -788,7 +777,7 @@ function(eventType, hdlrFunc) {
  * should be used judiciously as it can lead to unexpected results (for example if
  * overriding the control's mouse handlers)
  *
- * @param {String} eventType 	the event type (defined in {@see DwtEvent}) to override 
+ * @param {string} eventType 	the event type (defined in {@see DwtEvent}) to override 
  *
  * @see DwtEvent
  */
@@ -831,10 +820,10 @@ function() {
  * be absolute or else an exception is thrown. To omit setting a value set the
  * actual parameter value to <i>Dwt.DEFAULT</i>
  *
- * @param {Int|String} x		the x coordinate of the element (for example: 10, "10px", Dwt.DEFAULT)
- * @param {Int|String} y		the y coordinate of the element (for example: 10, "10px", Dwt.DEFAULT)
- * @param {Int|String} width	the width of the element (for example: 100, "100px", "75%", Dwt.DEFAULT)
- * @param {Int|String} height	the height of the element (for example: 100, "100px", "75%", Dwt.DEFAULT)
+ * @param {number|string} x		the x coordinate of the element (for example: 10, "10px", Dwt.DEFAULT)
+ * @param {number|string} y		the y coordinate of the element (for example: 10, "10px", Dwt.DEFAULT)
+ * @param {number|string} width	the width of the element (for example: 100, "100px", "75%", Dwt.DEFAULT)
+ * @param {number|string} height	the height of the element (for example: 100, "100px", "75%", Dwt.DEFAULT)
  *
  * @return {DwtControl}		this control
  *
@@ -890,7 +879,7 @@ function(x, y, width, height) {
  * based on state may append (or even use different) class names. See the documentation
  * of the specific component for details.
  *
- * @return {String}		the control class name
+ * @return {string}		the control class name
  *
  * @see #setClassName
  */
@@ -904,7 +893,7 @@ function() {
  * class name (i.e. the control htmlElement class name). Subclasses of <i>DwtControl</i>
  * may override this method to perform a different behavior.
  *
- * @param {String} className		the new class name for the control
+ * @param {string} className		the new class name for the control
  *
  * @see #getClassName
  */
@@ -921,7 +910,7 @@ function(className) {
 /**
  * Adds a class name to this control HTML element.
  *
- * @param {String} className		the class name to add
+ * @param {string} className		the class name to add
  */
 DwtControl.prototype.addClassName =
 function(className) {
@@ -931,8 +920,8 @@ function(className) {
 /**
  * Removes a class name from this control's HTML element. Optionally adds a new class name, if specified.
  *
- * @param {String} delClass		the class to remove
- * @param {String} addClass		the class to add (may be <code>null</code>)
+ * @param {string} delClass		the class to remove
+ * @param {string} addClass		the class to add (may be <code>null</code>)
  */
 DwtControl.prototype.delClassName =
 function(delClass, addClass) {
@@ -946,9 +935,9 @@ function(delClass, addClass) {
  * specified).  When condition is false, <code>classWhenTrue</code> is removed and
  * <code>classWhenFalse</code> is added (again, if present and specified).
  *
- * @param {String} condition	the condition
- * @param {String} classWhenTrue	the class name to add when condition is <code>true</code>
- * @param {String} classWhenFalse	the class name to add when contition is <code>false</code> (may be <code>null</code>)
+ * @param {string} condition	the condition
+ * @param {string} classWhenTrue	the class name to add when condition is <code>true</code>
+ * @param {string} classWhenFalse	the class name to add when contition is <code>false</code> (may be <code>null</code>)
  */
 DwtControl.prototype.condClassName = function(condition, classWhenTrue, classWhenFalse) {
 	Dwt.condClass(this.getHtmlElement(), condition, classWhenTrue, classWhenFalse);
@@ -979,7 +968,7 @@ function(state) {
 /**
 * Shows an alert in the control. For example, to indicate that a new message has arrived.
 *
-* @param	{String}	alert		the alert
+* @param	{string}	alert		the alert
 */
 DwtControl.prototype.showAlert =
 function(alert) {
@@ -994,7 +983,7 @@ function(alert) {
 /**
 * Checks if the control is showing an alert.
 * 
-* @return	{Boolean}	<code>true</code> if showing an altert; <code>false</code> otherwise
+* @return	{boolean}	<code>true</code> if showing an altert; <code>false</code> otherwise
 */
 DwtControl.prototype.isAlertShown =
 function() {
@@ -1021,7 +1010,7 @@ function(templateId, data) {
 /**
  * Gets the control cursor.
  * 
- * @return {String}		the control cursor
+ * @return {string}		the control cursor
  *
  * @see #setCursor
  */
@@ -1035,7 +1024,7 @@ function() {
 /**
  * Sets the control cursor.
  *
- * @param {String} cursorName		the name of the new cursor
+ * @param {string} cursorName		the name of the new cursor
  *
  * @see #getCursor
  */
@@ -1112,7 +1101,7 @@ function(dropTarget) {
 /**
  * Gets the enabled state.
  * 
- * @return {Boolean}		<code>true</code> if the control is enabled; <code>false</code> otherwise
+ * @return {boolean}		<code>true</code> if the control is enabled; <code>false</code> otherwise
  *
  * @see #setEnabled
  */
@@ -1127,8 +1116,8 @@ function() {
  * Sets the control enabled state. If <code>setHtmlElement</code> is true, then
  * this method will also set the control HTML element disabled attribute.
  *
- * @param {Boolean} enabled		<code>true</code> if the control is enabled
- * @param {Boolean} setHtmlElement	<code>true</code> to set the control HTML element disabled attribute
+ * @param {boolean} enabled		<code>true</code> if the control is enabled
+ * @param {boolean} setHtmlElement	<code>true</code> to set the control HTML element disabled attribute
  */
 DwtControl.prototype.setEnabled =
 function(enabled, setHtmlElement) {
@@ -1145,7 +1134,7 @@ function(enabled, setHtmlElement) {
 /**
  * Gets the ID of the control containing HTML element.
  *
- * @return {String} 	the ID of the control containing HTML element
+ * @return {string} 	the ID of the control containing HTML element
  */
 DwtControl.prototype.getHTMLElId =
 function () {
@@ -1185,7 +1174,7 @@ function(htmlEl)  {
 /**
  * Returns the control associated with the given element ID, if any.
  * 
- * @param {String}		htmlElId	an HTML element Id
+ * @param {string}		htmlElId	an HTML element Id
  * @return	{DwtControl}		the control element or <code>null</code> for none
  */
 DwtControl.fromElementId =
@@ -1220,7 +1209,7 @@ function(htmlEl)  {
  * with an ID that maps to a {@link DwtControl}.
  * 
  * @param {Event}		ev				the DHTML event
- * @param {Boolean}		useRelatedTarget	if <code>true</code>, use element that was related to this event
+ * @param {boolean}		useRelatedTarget	if <code>true</code>, use element that was related to this event
  * @return {DwtControl}	the control or <code>null</code> for none
  */
 DwtControl.getTargetControl =
@@ -1232,7 +1221,7 @@ function(ev, useRelatedTarget)  {
 /**
  * Sets the control HTML element id attribute.
  *
- * @param {String} id 		the new element Id
+ * @param {string} id 		the new element Id
  */
 DwtControl.prototype.setHtmlElementId =
 function(id) {
@@ -1256,7 +1245,7 @@ function(id) {
 /**
  * Gets the X coordinate of the control (if absolutely positioned).
  * 
- * @return {int}		the X coordinate of the control 
+ * @return {number}		the X coordinate of the control 
  *
  * @see #getBounds
  * @see #getSize
@@ -1280,7 +1269,7 @@ function() {
 /**
  * Gets the horizontal extent of the control (if absolutely positioned).
  * 
- * @return {int} 	the horizontal extent of the control
+ * @return {number} 	the horizontal extent of the control
  *
  * @see #getBounds
  * @see #getSize
@@ -1305,7 +1294,7 @@ function() {
 /**
  * Gets the Y coordinate of the control (if it is absolutely positioned).
  * 
- * @return {int}		the Y coordinate of the control 
+ * @return {number}		the Y coordinate of the control 
  *
  * @see #getBounds
  * @see #getSize
@@ -1329,7 +1318,7 @@ function() {
 /**
  * Gets the vertical extent of the control (if it is absolutely positioned).
  * 
- * @return {int}		the vertical extent of the control
+ * @return {number}		the vertical extent of the control
  *
  * @see #getBounds
  * @see #getSize
@@ -1382,8 +1371,8 @@ function() {
  * not to be set. Any <i>DwtEvent.CONTROL</i> listeners registered on the control
  * will be called.
  *
- * @param {ont|String} x	the x coordinate of the element (for example: 10, "10px", Dwt.DEFAULT)
- * @param {ont|String} y	the y coordinate of the element (for example: 10, "10px", Dwt.DEFAULT)
+ * @param {number|string} x	the x coordinate of the element (for example: 10, "10px", Dwt.DEFAULT)
+ * @param {number|string} y	the y coordinate of the element (for example: 10, "10px", Dwt.DEFAULT)
  *
  * @return {DwtControl}		this control
  *
@@ -1430,7 +1419,7 @@ function(x, y) {
  * <li>{@link Dwt.FIXED_SCROLL} - Always have scrollbars whether content overflows or not</li>
  * </ul>
  *
- * @return {int}		the control scroll style
+ * @return {number}		the control scroll style
  */
 DwtControl.prototype.getScrollStyle =
 function() {
@@ -1467,7 +1456,7 @@ function(scrollStyle) {
  * <li>{@link DwtControl.RELATIVE_STYLE} - Allow browser to control content flow but relative to parent</li>
  * </ul>
  *
- * @param {int} position		the control new position
+ * @param {number} position		the control new position
  */
 DwtControl.prototype.setPosition =
 function(position) {
@@ -1485,7 +1474,7 @@ function(position) {
 /**
  * Gets the width of the control.
  * 
- * @return	{int}		the width of the control
+ * @return	{number}		the width of the control
  *
  * @see #getBounds
  * @see #getSize
@@ -1509,7 +1498,7 @@ function() {
 /**
  * Gets the height of the control.
  * 
- * @return {int}	the height of the control
+ * @return {number}	the height of the control
  *
  * @see #getBounds
  * @see #getSize
@@ -1558,8 +1547,8 @@ function() {
 /**
  * Sets the size of the control
  *
- * @param {int|String} width	the width of the control (for example: 100, "100px", "75%", Dwt.DEFAULT)
- * @param {int|String} height	the height of the control (for example: 100, "100px", "75%", Dwt.DEFAULT)
+ * @param {number|string} width	the width of the control (for example: 100, "100px", "75%", Dwt.DEFAULT)
+ * @param {number|string} height	the height of the control (for example: 100, "100px", "75%", Dwt.DEFAULT)
  *
  * @return {DwtControl}	this control
  *
@@ -1600,7 +1589,7 @@ function(width, height) {
  * that want to return dynamic tooltip content should override this method.
  *
  * @param {DwtEvent}	ev	the mouseover event
- * @return {String}		the tooltip content set for the control
+ * @return {string}		the tooltip content set for the control
  */
 DwtControl.prototype.getToolTipContent =
 function(ev) {
@@ -1612,7 +1601,7 @@ function(ev) {
 /**
  * Sets tooltip content for the control. The content may be plain text or HTML.
  *
- * @param {String} text		the tooltip content
+ * @param {string} text		the tooltip content
  */
 DwtControl.prototype.setToolTipContent =
 function(text) {
@@ -1624,7 +1613,7 @@ function(text) {
 /**
  * Gets the visible state of the control. For example, the control HTML elements display style attribute is not "none".
  * 
- * @return {Boolean}	if <code>true</code>, the control is visible
+ * @return {boolean}	if <code>true</code>, the control is visible
  *
  * @see Dwt#getVisibile
  */
@@ -1639,7 +1628,7 @@ function() {
  * Sets the the visible state of the control HTML element. <i>Note: Gets style
  * "display: none", don't confuse with {@link setVisibility}).</i>
  *
- * @param {Boolean} visible 	if <code>true</code>, the control should be displayed; if <code>false</code>, the control should not be displayed
+ * @param {boolean} visible 	if <code>true</code>, the control should be displayed; if <code>false</code>, the control should not be displayed
  *
  * @see Dwt#setVisible
  */
@@ -1653,7 +1642,7 @@ function(visible) {
 /**
  * Sets the visibility of the control HTML element.
  *
- * @param {Boolean} visible		if <code>true</code> then the control is visible
+ * @param {boolean} visible		if <code>true</code> then the control is visible
  *
  * @see Dwt#setVisibility
  */
@@ -1667,7 +1656,7 @@ function(visible) {
 /**
  * Gets the visibility of the control HTML element.
  * 
- * @return {Boolean}	if <code>true</code>, the control is visible (i.e. the HTML elements visibility play style attribute is not "hidden")
+ * @return {boolean}	if <code>true</code>, the control is visible (i.e. the HTML elements visibility play style attribute is not "hidden")
  *
  * @see Dwt#getVisibility
  */
@@ -1682,7 +1671,7 @@ function() {
 /**
  * Gets the control z-index value.
  *
- * @return	{int}	the z-index value
+ * @return	{number}	the z-index value
  */
 DwtControl.prototype.getZIndex =
 function() {
@@ -1696,7 +1685,7 @@ function() {
  * elements, we make sure that all elements that are being displayed via z-index hang off the
  * main shell.
  *
- * @param {int} idx		the new z-index for this element
+ * @param {number} idx		the new z-index for this element
  */
 DwtControl.prototype.setZIndex =
 function(idx) {
@@ -1710,7 +1699,7 @@ function(idx) {
  * z-indexes ({@link Dwt.Z_VIEW} and {@link Dwt.Z_HIDDEN} respectively). Any further
  * stacking will have to use {@link #setZIndex} directly.
  *
- * @param {Boolean} show		if <code>true</code>, show the element; <code>false</code> to hide the element
+ * @param {boolean} show		if <code>true</code>, show the element; <code>false</code> to hide the element
  *
  * @see #setZIndex
  */
@@ -1722,7 +1711,7 @@ function(show) {
 /**
  * Sets the display.
  * 
- * @param	{String}	value		the display value
+ * @param	{string}	value		the display value
  */
 DwtControl.prototype.setDisplay =
 function(value) {
@@ -1758,7 +1747,7 @@ function(targetEl) {
  * a <i>DwtComposite</i> with children. Generally this method should be used
  * controls which are being directly instantiated and used as a canvas
  *
- * @param {String} content		the HTML content
+ * @param {string} content		the HTML content
  */
 DwtControl.prototype.setContent =
 function(content) {
@@ -1781,7 +1770,7 @@ function() {
 /**
  * Appends this control element to the specified element.
  *
- * @param {Element|String}	elemOrId  the DOM element or an element id
+ * @param {Element|string}	elemOrId  the DOM element or an element id
  */
 DwtControl.prototype.appendElement =
 function(elemOrId) {
@@ -1794,7 +1783,7 @@ function(elemOrId) {
 /**
  * Replaces the specified element with this control element.
  *
- * @param {Element|String}	elemOrId  the DOM element or an element id
+ * @param {Element|string}	elemOrId  the DOM element or an element id
  */
 DwtControl.prototype.replaceElement =
 function(elemOrId, inheritClass, inheritStyle) {
@@ -1895,8 +1884,7 @@ function(ev) {
  * null, it indicates that the drag failed. This method is called when a control is
  * being dragged and it has a valid drag source
  *
- * @return The DnD dragging icon. This is typically a div element
- * @type HTMLElement
+ * @return {HTMLElement}	the DnD dragging icon. This is typically a div element
  *
  * @see #_setDragProxyState
  * @see #_destroyDragProxy
@@ -1924,7 +1912,7 @@ function(dragOp) {
  * from <code>_getDragProxy</code> to DwtCssStyle.DROPPABLE if <code>dropAllowed</code> is true and
  * to DwtCssStyle.NOT_DROPPABLE if false
  *
- * @param {Boolean} dropAllowed If true, then dropping is allowed on the drop zone so set
+ * @param {boolean} dropAllowed		if <code>true</code>, then dropping is allowed on the drop zone so set
  * 		DnD icon to the visually reflect this
  *
  * @see #_getDragProxy
@@ -1992,7 +1980,7 @@ function(icon) {
  * the DwtListView, but which are not really a valid mouse down i.e. on a list item. In
  * such cases this function would return false.
  *
- * @return {Boolean}	<code>true</code> if the object is a valid drag object
+ * @return {boolean}	<code>true</code> if the object is a valid drag object
  *
  * @see #_getDragProxy
  * @see #_setDragProxyState
@@ -2146,9 +2134,9 @@ function(ev) {
 
 /**
  * This convenience methods sets or clears the control's event handler for key
- * press events as defined by <i>DwtEvent.ONKEYPRESS</i>
+ * press events as defined by {@link DwtEvent.ONKEYPRESS}.
  *
- * @param {Boolean} clear	<code>true</code> to clear the keypress events handler
+ * @param {boolean} clear	if <code>true</code>, clear the keypress events handler
  * @private
  */
 DwtControl.prototype._setKeyPressEventHdlr =
@@ -2160,7 +2148,7 @@ function(clear) {
  * This convenience methods sets or clears the control's event handlers for mouse
  * events as defined by <i>DwtEvent.MOUSE_EVENTS</i>
  *
- * @param {Boolean} clear	<code>true</code> to clear the mouse events handlers
+ * @param {boolean} clear	if <code>true</code>, clear the mouse events handlers
  * @private
  */
 DwtControl.prototype._setMouseEventHdlrs =
@@ -2172,7 +2160,7 @@ function(clear) {
  * This protected method will set or clear the event handlers for the provided array
  * of events.
  *
- * @param {Array} events This is an array of events for which to set or clear the
+ * @param {array} events		an array of events for which to set or clear the
  * 		control's event handlers. The set of events supported by the control are:
  * 		<ul>
  * 		<li><i>DwtEvent.ONCONTEXTMENU</i></li>
@@ -2188,7 +2176,7 @@ function(clear) {
  * 		<li><i>DwtEvent.ONSELECTSTART</i></li>
  * 		<li><i>DwtEvent.ONKEYPRESS</i></li>
  * 		</ul>
- * @param {Boolean} clear	if <code>true</code>, the event handlers are cleared for the set of events
+ * @param {boolean} clear	if <code>true</code>, the event handlers are cleared for the set of events
  *
  * @see Dwt#setHandler
  * @see Dwt#clearHandler
@@ -2231,7 +2219,7 @@ function() {
  * @param {DwtMouseEvent}	mev		the mouse event
  * @param {hash}	params		the hash of event properties
  * 
- * {@see DwtUiEvent.copy}
+ * @see DwtUiEvent.copy
  * @private
  */
 DwtControl.prototype._setMouseEvent =
@@ -2269,7 +2257,7 @@ function(ev) {
  * for the control and insert it into the DOM. This is pertinent for controls that
  * were created <i>deferred</i> (see the constructor documentation)
  *
- * @return {Boolean}	<code>true</code> if the control is not disposed; <code>false</code> otherwise
+ * @return {boolean}	<code>true</code> if the control is not disposed; <code>false</code> otherwise
  * @private
  */
 DwtControl.prototype._checkState =
@@ -2285,7 +2273,7 @@ function() {
  * Positions this control at the given point. If no location is provided, centers it
  * within the shell.
  *
- * @param {DwtPoint}*	loc		the point at which to position this control
+ * @param {DwtPoint}	loc		the point at which to position this control
  * @private
  */
 DwtControl.prototype._position =
@@ -2342,14 +2330,15 @@ function(element, container) {
  * the top or bottom edge of the area (only vertical scrolling is done). The scrolling is done via a
  * looping timer, so that the scrolling is smooth and does not depend on additional mouse movement.
  *
- * @param params		[hash]			hash of params:
- *        container		[Element]		DOM element that may need to be scrolled
- *        threshold		[int]			if mouse is within this many pixels of top or bottom of container,
+ * @param {hash}	params		a hash of parameters
+ * @param {Element}      params.container		the DOM element that may need to be scrolled
+ * @param {number}      params.threshold		if mouse is within this many pixels of top or bottom of container,
  * 										check if scrolling is needed
- *        amount		[int]			number of pixels to scroll at each interval
- *        interval		[int]			number of ms to wait before continuing to scroll
- *        id			[string]		ID for determing if we have moved out of container
- * @param ev
+ * @param {number}      params.amount		the number of pixels to scroll at each interval
+ * @param {number}      params.interval		the number of milliseconds to wait before continuing to scroll
+ * @param {string}      params.id			the ID for determining if we have moved out of container
+ * @param {DwtEvent}	ev		the event
+ * 
  * @private
  */
 DwtControl._dndScrollCallback =

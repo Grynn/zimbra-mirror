@@ -13,7 +13,10 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * 
+ * @private
+ */
 DwtPropertySheet = function(parent, className, posStyle, labelSide) {
 	if (arguments.length == 0) return;
 	className = className || "DwtPropertySheet";

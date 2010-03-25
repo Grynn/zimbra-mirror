@@ -43,21 +43,21 @@
  *
  * @author Conrad Damon
  *
- * @param	{Hash}		params		a hash of parameters
+ * @param	{hash}		params		a hash of parameters
  * @param {DwtComposite}	params.parent			the containing widget
- * @param {String}	params.className		the CSS class
- * @param {String}	params.slvClassName	the CSS class for source list view
- * @param {String}	params.tlvClassName	the CSS class for target list view
- * @param {Array}	params.buttonInfo		the id/label pairs for transfer buttons
+ * @param {string}	params.className		the CSS class
+ * @param {string}	params.slvClassName	the CSS class for source list view
+ * @param {string}	params.tlvClassName	the CSS class for target list view
+ * @param {array}	params.buttonInfo		the id/label pairs for transfer buttons
  * @param {DwtChooser.HORIZ_STYLE|DwtChooser.VERT_STYLE}	params.layoutStyle	the layout style (vertical or horizontal)
  * @param {DwtChooser.SINGLE_SELECT|DwtChooser.MULTI_SELECT}	params.selectStyle	the multi-select (default) or single-select
  * @param {constant}	params.mode			the items are moved or copied
- * @param {Boolean}	params.noDuplicates	if <code>true</code>, prevent duplicates in target list
- * @param {int}	params.singleHeight	the height of list view for single select style
- * @param {int}	params.listSize		the list width (if {@link DwtChooser.HORIZ_STYLE}) or height (if {@link DwtChooser.VERT_STYLE})
- * @param {Boolean}	params.sourceEmptyOk	if <code>true</code>, do not show "No Results" in source list view
- * @param {Boolean}	params.allButtons		if <code>true</code>, offer "Add All" and "Remove All" buttons
- * @param {Boolean}	params.hasTextField	if <code>true</code>, create a text field for user input
+ * @param {boolean}	params.noDuplicates	if <code>true</code>, prevent duplicates in target list
+ * @param {number}	params.singleHeight	the height of list view for single select style
+ * @param {number}	params.listSize		the list width (if {@link DwtChooser.HORIZ_STYLE}) or height (if {@link DwtChooser.VERT_STYLE})
+ * @param {boolean}	params.sourceEmptyOk	if <code>true</code>, do not show "No Results" in source list view
+ * @param {boolean}	params.allButtons		if <code>true</code>, offer "Add All" and "Remove All" buttons
+ * @param {boolean}	params.hasTextField	if <code>true</code>, create a text field for user input
  * 
  * @extends		DwtComposite
  */
@@ -102,24 +102,20 @@ DwtChooser.prototype.constructor = DwtChooser;
 // layout style
 /**
  * Defines a "horizontal" layout style.
- * @type	int
  */
 DwtChooser.HORIZ_STYLE	= 1;
 /**
  * Defines a "vertical" layout style.
- * @type	int
  */
 DwtChooser.VERT_STYLE	= 2;
 
 // number of items target list can hold
 /**
  * Defines a "single" select.
- * @type	int
  */
 DwtChooser.SINGLE_SELECT	= 1;
 /**
  * Defines a "multi" select.
- * @type	int
  */
 DwtChooser.MULTI_SELECT		= 2;
 
@@ -141,7 +137,7 @@ function() {
  *
  * @param {AjxVector|Array|Object|Hash}	items			a list of items or hash of lists
  * @param {DwtChooserListView.SOURCE|DwtChooserListView.TARGET}	view			the view to set
- * @param {Boolean}	clearOtherView	if <code>true</code>, clear out other view
+ * @param {boolean}	clearOtherView	if <code>true</code>, clear out other view
  */
 DwtChooser.prototype.setItems =
 function(items, view, clearOtherView) {
@@ -160,7 +156,7 @@ function(items, view, clearOtherView) {
  * is returned. Otherwise, a single vector is returned. Defaults to target view.
  *
  * @param {DwtChooserListView.SOURCE|DwtChooserListView.TARGET}	view			the view to set
- * @return	{AjxVector|Array|Object|Hash}		the item(s)
+ * @return	{AjxVector|array|Object|hash}		the item(s)
  */
 DwtChooser.prototype.getItems =
 function(view) {
@@ -183,10 +179,10 @@ function(view) {
 /**
  * Adds items to the given list view.
  *
- * @param {AjxVector|Array|Object|Hash}	items			a list of items or hash of lists
+ * @param {AjxVector|array|Object|hash}	items			a list of items or hash of lists
  * @param {DwtChooserListView.SOURCE|DwtChooserListView.TARGET}	view			the view to set
- * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
- * @param {String}	id			the button ID
+ * @param {boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ * @param {string}	id			the button ID
  */
 DwtChooser.prototype.addItems =
 function(items, view, skipNotify, id) {
@@ -218,9 +214,9 @@ function(items, view, skipNotify, id) {
 /**
  * Removes items from the given list view.
  *
- * @param {AjxVector|Array|Object|Hash}	list			a list of items or hash of lists
+ * @param {AjxVector|array|Object|hash}	list			a list of items or hash of lists
  * @param {DwtChooserListView.SOURCE|DwtChooserListView.TARGET}	view			the view to set
- * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ * @param {boolean}	skipNotify	if <code>true</code>, do not notify listeners
  */
 DwtChooser.prototype.removeItems =
 function(list, view, skipNotify) {
@@ -234,9 +230,9 @@ function(list, view, skipNotify) {
  * Moves or copies items from the source list to the target list, paying attention
  * to current mode.
  *
- * @param {AjxVector|Array|Object|Hash}	list			a list of items or hash of lists
- * @param {String}	id			the ID of the transfer button that was used
- * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ * @param {AjxVector|array|Object|hash}	list			a list of items or hash of lists
+ * @param {string}	id			the ID of the transfer button that was used
+ * @param {boolean}	skipNotify	if <code>true</code>, do not notify listeners
  */
 DwtChooser.prototype.transfer =
 function(list, id, skipNotify) {
@@ -258,8 +254,8 @@ function(list, id, skipNotify) {
 /**
  * Removes items from target list, paying attention to current mode. Also handles button state.
  *
- * @param {AjxVector|Array|Object|Hash}	list			a list of items or hash of lists
- * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ * @param {AjxVector|array|Object|hash}	list			a list of items or hash of lists
+ * @param {boolean}	skipNotify	if <code>true</code>, do not notify listeners
  */
 DwtChooser.prototype.remove =
 function(list, skipNotify) {
@@ -280,7 +276,7 @@ function(list, skipNotify) {
  * the default one.
  *
  * @param {DwtChooser.SINGLE_SELECT|DwtChooser.MULTI_SELECT}	style		the style single or multiple select
- * @param {Boolean}	noResize	if <code>true</code>, do not perform resize
+ * @param {boolean}	noResize	if <code>true</code>, do not perform resize
  */
 DwtChooser.prototype.setSelectStyle =
 function(style, noResize) {
@@ -672,8 +668,8 @@ function(listView, listViewDivId) {
 /**
  * Sizes the list views based on the given available width and height.
  *
- * @param {int}	width	the width (in pixels)
- * @param {int}	height	the height (in pixels)
+ * @param {number}	width	the width (in pixels)
+ * @param {number}	height	the height (in pixels)
  */
 DwtChooser.prototype.resize =
 function(width, height) {
@@ -702,10 +698,10 @@ function(width, height) {
 /**
  * Creates a transfer or remove button.
  *
- * @param id					[string]	button ID
- * @param buttonId			[string]	ID of button element
- * @param buttonDivId		[string]	ID of DIV that contains button
- * @param label				[string]	button text
+ * @param {string}	id					the button ID
+ * @param {string}	buttonId			the ID of button element
+ * @param {string}	buttonDivId		the ID of DIV that contains button
+ * @param {string}	label				the button text
  * 
  * @private
  */
@@ -727,7 +723,7 @@ function(id, buttonId, buttonDivId, label) {
 /**
  * Single-click selects an item, double-click adds selected items to target list.
  *
- * @param ev		[DwtEvent]		click event
+ * @param {DwtEvent}	ev		the click event
  * 
  * @private
  */
@@ -749,7 +745,7 @@ function(ev) {
 /**
  * Single-click selects an item, double-click removes it from the target list.
  *
- * @param ev		[DwtEvent]		click event
+ * @param {DwtEvent}		ev		the click event
  * 
  * @private
  */
@@ -767,7 +763,7 @@ function(ev) {
 /**
  * Clicking a transfer button moves selected items to the target list.
  *
- * @param ev		[DwtEvent]		click event
+ * @param {DwtEvent}		ev		the click event
  * 
  * @private
  */
@@ -797,7 +793,7 @@ function(ev) {
 /**
  * Clicking the remove button removes selected items from the target list.
  *
- * @param ev		[DwtEvent]		click event
+ * @param {DwtEvent}		ev		the click event
  * 
  * @private
  */
@@ -815,7 +811,7 @@ function(ev) {
 /**
  * Populates the target list with all items.
  *
- * @param ev		[DwtEvent]		click event
+ * @param {DwtEvent}		ev		the click event
  * 
  * @private
  */
@@ -828,7 +824,7 @@ function(ev) {
 /**
  * Clears the target list.
  *
- * @param ev		[DwtEvent]		click event
+ * @param {DwtEvent}		ev		the click event
  * 
  * @private
  */
@@ -870,7 +866,7 @@ function(sForce, tForce) {
 /**
  * Selects the first item in the given list view.
  *
- * @param view	[constant]		source or target
+ * @param {constant}	view	the source or target
  * 
  * @private
  */
@@ -889,7 +885,7 @@ function(view, index) {
  * "_origClassName" so that activation/triggering still work. This only
  * applies if there are multiple transfer buttons.
  *
- * @param id		[string]	ID of button to make active
+ * @param {string}	id		the ID of button to make active
  * 
  * @private
  */
@@ -921,8 +917,8 @@ function(id) {
 /**
  * Returns true if the list contains the item. Default implementation is identity.
  *
- * @param item	[object]			item
- * @param list	[AjxVector]			list to check against
+ * @param {Object}	item	the item
+ * @param {AjxVector}	list	the list to check against
  * 
  * @private
  */
@@ -934,8 +930,8 @@ function(item, list) {
 /**
  * Adds an item to the end of the source list.
  *
- * @param item		[object]	item to add
- * @param skipNotify	[boolean]*	if true, don't notify listeners
+ * @param {Object}	item		the item to add
+ * @param {boolean}	skipNotify	if <code>true</code>, don't notify listeners
  * 
  * @private
  */
@@ -953,9 +949,9 @@ function(item, index, skipNotify) {
  * Adds an item to the target list. If there are multiple transfer buttons, it keeps
  * the items grouped depending on which button was used to move them.
  *
- * @param item		[object]	item to add
- * @param id			[string]	ID of the transfer button that was used
- * @param skipNotify	[boolean]*	if true, don't notify listeners
+ * @param {Object}	item		the item to add
+ * @param {string}	id			the ID of the transfer button that was used
+ * @param {boolean}	skipNotify	if <code>true</code>, don't notify listeners
  * 
  * @private
  */
@@ -1002,8 +998,8 @@ function(item, id, skipNotify) {
 /**
  * Removes an item from the source list.
  *
- * @param item		[object]	item to remove
- * @param skipNotify	[boolean]*	if true, don't notify listeners
+ * @param {Object}	item		the item to remove
+ * @param {boolean}	skipNotify	if <code>true</code>, don't notify listeners
  * 
  * @private
  */
@@ -1020,8 +1016,8 @@ function(item, skipNotify) {
 /**
  * Removes an item from the target list.
  *
- * @param item		[object]	item to remove
- * @param skipNotify	[boolean]*	if true, don't notify listeners
+ * @param {Object}	item		the item to remove
+ * @param {boolean}	skipNotify	if <code>true</code>, don't notify listeners
  * 
  * @private
  */
@@ -1083,10 +1079,10 @@ function(ev) {
  * (source) or to it (target). Subclasses should implement  _getHeaderList(),
  * _sortColumn(), and _createItemHtml().
  *
- * @param {Hash}	params		a hash of parameters
+ * @param {hash}	params		a hash of parameters
  * @param {DwtComposite}      params.parent		the containing widget
  * @param {constant}      params.type			the source or target
- * @param {String}      params.className		the CSS class
+ * @param {string}      params.className		the CSS class
  * @param {constant}      params.view			the context for use in creating IDs
  * 
  * @extends		DwtListView
@@ -1107,12 +1103,10 @@ DwtChooserListView.PARAMS = ["parent", "type", "className", "view"];
 
 /**
  * Defines the "source" list view type.
- * @type	int
  */
 DwtChooserListView.SOURCE = 1;
 /**
  * Defines the "target" list view type.
- * @type	int
  */
 DwtChooserListView.TARGET = 2;
 
@@ -1140,8 +1134,8 @@ function(defaultColumnSort, noResultsOk) {
 /**
  * DwtListView override to ignore right-clicks in list view.
  *
- * @param clickedEl		[element]	element that was clicked
- * @param ev				[DwtEvent]	click event
+ * @param {Element}	clickedEl		the element that was clicked
+ * @param {DwtEvent}	ev				the click event
  * 
  * @private
  */
@@ -1158,8 +1152,8 @@ function(clickedEl, ev) {
 /**
  * Called when a column header has been clicked.
  *
- * @param columnItem		[string]	ID for column that was clicked
- * @param ascending		[boolean]	if true, sort in ascending order
+ * @param {string}	columnItem		the ID for column that was clicked
+ * @param {boolean}	ascending		if <code>true</code>, sort in ascending order
  * 
  * @private
  */

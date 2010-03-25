@@ -22,16 +22,16 @@
  * constructor directly. Instead use the create() method, which will choose the right
  * concrete class based on available plugins.
  *
- * @param	{Hash}	params		a hash of parameters
+ * @param	{hash}	params		a hash of parameters
  * @param {DwtControl}	params.parent	 the parent widget
- * @param {int}	params.width		the width of player
- * @param {int}	params.height		the height of player
- * @param {int}	params.volume		volume on a scale of 0 - {@link DwtSoundPlugin.MAX_VOLUME}
- * @param {String}	params.url		{String} the sound url
- * @param {Boolean}	[params.offscreen]	{Boolean} if <code>true</code>, the player is initially offscreen. Use an appropriate position style
+ * @param {number}	params.width		the width of player
+ * @param {number}	params.height		the height of player
+ * @param {number}	params.volume		volume on a scale of 0 - {@link DwtSoundPlugin.MAX_VOLUME}
+ * @param {string}	params.url		{String} the sound url
+ * @param {boolean}	[params.offscreen]	{Boolean} if <code>true</code>, the player is initially offscreen. Use an appropriate position style
  * 							  if you set this to <code>true</code>. (This reduces flicker, and a tendency for the QT player
  * 							  to float in the wrong place when it's first created)
- * @param {String}	[params.className] the CSS class
+ * @param {string}	[params.className] the CSS class
  * @param {constant}	[params.posStyle=DwtControl.STATIC_STYLE] 	the positioning style (see {@link DwtControl})
  * 
  * @extends		DwtControl
@@ -52,7 +52,6 @@ DwtSoundPlugin.prototype.constructor = DwtSoundPlugin;
 
 /**
  * Defines the "max" volume.
- * @type	int
  */
 DwtSoundPlugin.MAX_VOLUME = 256;
 
@@ -65,16 +64,16 @@ DwtSoundPlugin.ERROR = 4;
 /**
  * Factory method. Creates an appropriate sound player for whatever plugins are or are not installed.
  *
- * @param	{Hash}	params		a hash of parameters
+ * @param	{hash}	params		a hash of parameters
  * @param {DwtControl}	params.parent	 the parent widget
- * @param {int}	params.width		the width of player
- * @param {int}	params.height		the height of player
- * @param {int}	params.volume		volume on a scale of 0 - {@link DwtSoundPlugin.MAX_VOLUME}
- * @param {String}	params.url		{String} the sound url
- * @param {Boolean}	[params.offscreen]	{Boolean} if <code>true</code>, the player is initially offscreen. Use an appropriate position style
+ * @param {number}	params.width		the width of player
+ * @param {number}	params.height		the height of player
+ * @param {number}	params.volume		volume on a scale of 0 - {@link DwtSoundPlugin.MAX_VOLUME}
+ * @param {string}	params.url		{String} the sound url
+ * @param {boolean}	[params.offscreen]	{Boolean} if <code>true</code>, the player is initially offscreen. Use an appropriate position style
  * 							  if you set this to <code>true</code>. (This reduces flicker, and a tendency for the QT player
  * 							  to float in the wrong place when it's first created)
- * @param {String}	[params.className] the CSS class
+ * @param {string}	[params.className] the CSS class
  * @param {constant}	[params.posStyle=DwtControl.STATIC_STYLE] 	the positioning style (see {@link DwtControl})
  */
 DwtSoundPlugin.create =
@@ -87,7 +86,7 @@ function(params) {
 /**
  * Checks if the plugin is missing.
  * 
- * @return	{Boolean}	<code>true</code> if plugin is missing
+ * @return	{boolean}	<code>true</code> if plugin is missing
  */
 DwtSoundPlugin.isPluginMissing =
 function() {
@@ -98,7 +97,7 @@ function() {
 /**
  * Checks if scripting is broken.
  * 
- * @return	{Boolean}	<code>true</code> if scripting is broken
+ * @return	{boolean}	<code>true</code> if scripting is broken
  */
 DwtSoundPlugin.isScriptingBroken =
 function() {
@@ -163,7 +162,7 @@ function() {
 /**
  * Sets the current time in milliseconds.
  * 
- * @param	{int}	time		the time (in milliseconds)
+ * @param	{number}	time		the time (in milliseconds)
  */
 DwtSoundPlugin.prototype.setTime =
 function(time) {
@@ -172,7 +171,7 @@ function(time) {
 /**
  * Sets the volume.
  *
- * @param {int}	volume	the volume
+ * @param {number}	volume	the volume
  * 
  * @see		DwtSoundPlugin.MAX_VOLUME
  */
@@ -276,7 +275,7 @@ function(params) {
  * </li>
  * </ul>
  * 
- * @param	{Hash}	params		a hash of parameters
+ * @param	{hash}	params		a hash of parameters
  * 
  * @extends		DwtSoundPlugin
  * 
@@ -302,8 +301,8 @@ function() {
 /**
  * Checks the QuickTime version.
  * 
- * @param	{Array}	version	the version as an array (for example: 7.1.6 is [7, 1, 6] )
- * @return	{Boolean}	<code>true</code> if version is OK
+ * @param	{array}	version	the version as an array (for example: 7.1.6 is [7, 1, 6] )
+ * @return	{boolean}	<code>true</code> if version is OK
  */
 DwtQTSoundPlugin.checkVersion =
 function(version) {
@@ -329,7 +328,7 @@ function(version) {
 /**
  * Checks scripting.
  * 
- * @return	{Boolean}	<code>true</code> if scripting is OK
+ * @return	{boolean}	<code>true</code> if scripting is OK
  */
 DwtQTSoundPlugin.checkScripting =
 function() {

@@ -21,10 +21,10 @@
  * This class represents a reusable wizard dialog.
  * 
  * @param {DwtControl}	parent		the parent control
- * @param {String}	className		the CSS class name
- * @param {String}	title	the dialog title
- * @param {int}	w 		the content area width
- * @param {int}	h 		the content area height
+ * @param {string}	className		the CSS class name
+ * @param {string}	title	the dialog title
+ * @param {number}	w 		the content area width
+ * @param {number}	h 		the content area height
  * 
  * @extends		DwtDialog
  * 
@@ -91,12 +91,12 @@ function () {
 	this._hideAllPages();
 }
 
-/**
-* Makes the dialog visible, and places it. Everything under the dialog will become veiled
-* if we are modal.
-*
-* @param loc	the desired location
-*//*
+/*
+ * Makes the dialog visible, and places it. Everything under the dialog will become veiled
+ * if we are modal.
+ *
+ * @param loc	the desired location
+ *//*
 DwtWizardDialog.prototype.popup =
 function(loc) {
 
@@ -141,6 +141,7 @@ function(loc) {
 	this.setZIndex(thisZ);
 }
 */
+
 /*
 * @param pageKey - key to the page to be shown. 
 * pageKey is the value returned from @link DwtWizardDialog.prototype.addPage method
@@ -182,10 +183,12 @@ function() {
 }
 
 /**
-* public method getPage
-* @param pageKey  -  key for the page, returned from @link addPage
-* @return - the view tab (DwtPropertyPage) 
-**/
+ * 
+ * @param pageKey  the key for the page, returned from {@link #addPage}
+ * @return {DwtPropertyPage}	the view tab
+ * 
+ * @private
+ */
 DwtWizardDialog.prototype.getPage =
 function (pageKey) {
 	if(this._pages && this._pages[pageKey])
@@ -195,10 +198,11 @@ function (pageKey) {
 }
 
 /**
-* public method addPage
-* @param wizPage - instance of DwtPropertyPage 
-* @return - the key for the added page. This key can be used to retreive the tab using @link getPage.
-**/
+ * @param {DwtPropertyPage}		wizPage 	the wizard page
+ * @return - the key for the added page. This key can be used to retrieve the tab using {@link #getPage}
+ * 
+ * @private
+*/
 DwtWizardDialog.prototype.addPage =
 function (wizPage, stepTitle) {
 	var pageKey = this._pageIx++;	
@@ -223,9 +227,10 @@ function (wizPage, stepTitle) {
 //private and protected methods
 
 /**
-* method _createHtml 
-**/
-
+ * method _createHtm
+ * 
+ * @private
+ */
 DwtWizardDialog.prototype._createContentHtml =
 function () {
 
@@ -284,10 +289,12 @@ function () {
 }
 
 /**
-* Override addChild method. We need internal control over layout of the children in this class.
-* Child elements are added to this control in the _createHTML method.
-* @param child
-**/
+ * Override addChild method. We need internal control over layout of the children in this class.
+ * Child elements are added to this control in the _createHTML method.
+ * @param child
+ * 
+ * @private
+ */
 DwtWizardDialog.prototype.addChild =
 function(child) {
 	this._children.add(child);

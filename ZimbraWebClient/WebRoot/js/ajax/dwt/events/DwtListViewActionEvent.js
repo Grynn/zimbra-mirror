@@ -14,6 +14,10 @@
  */
 
 
+/**
+ * 
+ * @private
+ */
 DwtListViewActionEvent = function() {
 	DwtMouseEvent.call(this);
 	this.reset(true);

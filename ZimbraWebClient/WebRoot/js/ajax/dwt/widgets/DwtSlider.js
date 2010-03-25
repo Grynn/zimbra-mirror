@@ -21,7 +21,7 @@
  *
  * @param {DwtControl}	parent    the parent widget
  * @param {DwtSlider.HORIZONTAL|DwtSlider.VERTICAL}	orientation		the orientation of the slider
- * @param {String}	[className] 	the CSS class. If not provided defaults to "DwtHorizontalSlider" or "DwtVerticalSlider"
+ * @param {string}	[className] 	the CSS class. If not provided defaults to "DwtHorizontalSlider" or "DwtVerticalSlider"
  * @param {constant}	[posStyle=DwtControl.STATIC_STYLE] the positioning style (see {@link DwtControl})
  * 
  * @extends		DwtControl
@@ -51,12 +51,10 @@ DwtSlider.prototype.constructor = DwtSlider;
 
 /**
  * Defines the "horizontal" orientation.
- * @type	int
  */
 DwtSlider.HORIZONTAL = 1;
 /**
  * Defines the "vertical" orientation.
- * @type	int
  */
 DwtSlider.VERTICAL = 2;
 
@@ -69,7 +67,7 @@ function() {
  * Sets the value of the slider, moving the position button accordingly.
  *
  * @param {number}		value		the value
- * @param {Boolean}	notify			if <code>true</code>, to notify change listeners of the new value
+ * @param {boolean}	notify			if <code>true</code>, to notify change listeners of the new value
  */
 DwtSlider.prototype.setValue =
 function(value, notify) {
@@ -110,7 +108,7 @@ function() {
  * @param {number}	minimum	the minimum allowed value
  * @param {number}	maximum	the maximum allowed value
  * @param {number}	value		the value
- * @param {Boolean}	notify	if <code>true</code>, notify change listeners of the new value
+ * @param {boolean}	notify	if <code>true</code>, notify change listeners of the new value
  */
 DwtSlider.prototype.setRange =
 function(minimum, maximum, newValue, notify) {

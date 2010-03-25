@@ -19,9 +19,9 @@
  * @class
  * This class implements a radio button.
  * 
- * @param {Hash}	params	a hash of parameters
- * @param  {DwtComposite}     parent	theparent widget
- * @param  {constant}     style 	the text style. May be one of: {@link DwtCheckbox.TEXT_LEFT} or
+ * @param {hash}	params	a hash of parameters
+ * @param  {DwtComposite}     params.parent	the parent widget
+ * @param  {constant}     params.style 	the text style. May be one of: {@link DwtCheckbox.TEXT_LEFT} or
  * 									{@link DwtCheckbox.TEXT_RIGHT} arithimatically or'd (|) with one of:
  * 									{@link DwtCheckbox.ALIGN_LEFT}, {@link DwtCheckbox.ALIGN_CENTER}, or
  * 									{@link DwtCheckbox.ALIGN_LEFT}.
@@ -29,13 +29,13 @@
  * 									(if set), the second determine how the content of the text will be
  * 									aligned. The default value for this parameter is: 
  * 									{@link DwtCheckbox.TEXT_LEFT} | {@link DwtCheckbox.ALIGN_CENTER}
- * @param  {String}     name		the input control name (required for IE)
- * @param  {String}     value     the input control value.
- * @param  {Boolean}     checked	the input control checked status (required for IE)
- * @param  {String}     className	the CSS class
- * @param  {constant}     posStyle	the positioning style (see {@link DwtControl})
- * @param  {String}     id		an explicit ID to use for the control's HTML element
- * @param  {int}     index 	the index at which to add this control among parent's children
+ * @param  {string}     params.name		the input control name (required for IE)
+ * @param  {string}     params.value     the input control value.
+ * @param  {boolean}     params.checked	the input control checked status (required for IE)
+ * @param  {string}     params.className	the CSS class
+ * @param  {constant}     params.posStyle	the positioning style (see {@link DwtControl})
+ * @param  {string}     params.id		an explicit ID to use for the control's HTML element
+ * @param  {number}     params.index 	the index at which to add this control among parent's children
  * 
  * @extends	DwtCheckbox
  */

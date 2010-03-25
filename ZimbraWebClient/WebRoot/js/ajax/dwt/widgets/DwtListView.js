@@ -22,12 +22,12 @@
  * @author Parag Shah
  * @author Conrad Damon
  * 
- * @param {Hash}	params		a hash of parameters
+ * @param {hash}	params		a hash of parameters
  * @param  {DwtComposite}     parent		the parent widget
- * @param {String}	className		the CSS class
+ * @param {string}	className		the CSS class
  * @param {constant}	posStyle		the positioning style (see {@link DwtControl})
- * @param  {Array}	headerList	a list of IDs for columns
- * @param {Boolean}	noMaximize	if <code>true</code>, all columns are fixed-width (otherwise, one will
+ * @param  {array}	headerList	a list of IDs for columns
+ * @param {boolean}	noMaximize	if <code>true</code>, all columns are fixed-width (otherwise, one will
  * 											expand to fill available space)
  * @param  {constant}     view			the ID of view
  * 
@@ -160,7 +160,7 @@ function() {
 /**
  * Sets the enabled flag.
  * 
- * @param	{Boolean}	enabled		if <code>true</code>, enable the list view
+ * @param	{boolean}	enabled		if <code>true</code>, enable the list view
  */
 DwtListView.prototype.setEnabled =
 function(enabled) {
@@ -357,7 +357,7 @@ function(htmlArr, idx, headerCol, i, numCols, id, defaultColumnSort) {
  * Gets the index of the given item.
  *
  * @param	{Object}	item		the item
- * @return	{int}	the index or <code>null</code> if not found
+ * @return	{number}	the index or <code>null</code> if not found
  */
 DwtListView.prototype.getItemIndex =
 function(item) {
@@ -376,8 +376,8 @@ function(item) {
 /**
  * Sets the size of the view.
  * 
- * @param	{int|String}	width		the width (for example: 100, "100px", "75%")
- * @param	{int|String}	height		the height (for example: 100, "100px", "75%")
+ * @param	{number|string}	width		the width (for example: 100, "100px", "75%")
+ * @param	{number|string}	height		the height (for example: 100, "100px", "75%")
  */
 DwtListView.prototype.setSize =
 function(width, height) {
@@ -388,7 +388,7 @@ function(width, height) {
 /**
  * Gets the count of items in the list.
  * 
- * @return	{int}	the count of items
+ * @return	{number}	the count of items
  */
 DwtListView.prototype.size =
 function() {
@@ -400,8 +400,8 @@ function() {
  * in order to display an item.
  *
  * @param {AjxVector}	list			a vector of items
- * @param {int}	[defaultColumnSort]	the default column field to sort
- * @param {Boolean}	noResultsOk		if <code>true</code>, do not show "No Results" for empty list
+ * @param {number}	[defaultColumnSort]	the default column field to sort
+ * @param {boolean}	noResultsOk		if <code>true</code>, do not show "No Results" for empty list
  */
 DwtListView.prototype.set =
 function(list, defaultColumnSort, noResultsOk) {
@@ -418,8 +418,8 @@ function(list, defaultColumnSort, noResultsOk) {
 /**
  * Renders the list view using the current list of items.
  *
- * @param {String}	defaultColumnSort		the ID of column that represents default sort order
- * @param {Boolean}	noResultsOk			if <code>true</code>, do not show "No Results" for empty list
+ * @param {string}	defaultColumnSort		the ID of column that represents default sort order
+ * @param {boolean}	noResultsOk			if <code>true</code>, do not show "No Results" for empty list
  */
 DwtListView.prototype.setUI =
 function(defaultColumnSort, noResultsOk) {
@@ -460,7 +460,7 @@ function(list, noResultsOk, doAdd) {
 /**
  * Adds the items.
  * 
- * @param	{Array}		itemArray		an array of items
+ * @param	{array}		itemArray		an array of items
  */
 DwtListView.prototype.addItems =
 function(itemArray) {
@@ -482,9 +482,9 @@ function(itemArray) {
  * Adds a row for the given item to the list view.
  *
  * @param {Object}	item			the data item
- * @param {int}	index			the index at which to add item to list and list view
- * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
- * @param {int}	itemIndex		index at which to add item to list, if different
+ * @param {number}	index			the index at which to add item to list and list view
+ * @param {boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ * @param {number}	itemIndex		index at which to add item to list, if different
  * 									from the one for the list view
  */
 DwtListView.prototype.addItem =
@@ -519,8 +519,8 @@ function(item, index, skipNotify, itemIndex) {
  * Removes a row for the given item to the list view.
  *
  * @param {Object}	item			the data item
- * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
- * @param {Boolean}	skipAlternation		if <code>true</code>, do not fix alternation
+ * @param {boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ * @param {boolean}	skipAlternation		if <code>true</code>, do not fix alternation
  */
 DwtListView.prototype.removeItem =
 function(item, skipNotify, skipAlternation) {
@@ -636,7 +636,7 @@ function(listener) {
 /**
  * Removes all the items from the list.
  * 
- * @param {Boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ * @param {boolean}	skipNotify	if <code>true</code>, do not notify listeners
  */
 DwtListView.prototype.removeAll =
 function(skipNotify) {
@@ -790,7 +790,7 @@ function(selectedArray) {
 /**
  * Selects or deselects a single item.
  * 
- * @param	{Boolean}	selected		if <code>true</code>, select the item
+ * @param	{boolean}	selected		if <code>true</code>, select the item
  */
 DwtListView.prototype.selectItem =
 function(item, selected) {
@@ -808,7 +808,7 @@ function(item, selected) {
 /**
  * Gets the selection count.
  * 
- * @return	{int}	the selection count
+ * @return	{number}	the selection count
  */
 DwtListView.prototype.getSelectionCount =
 function() {
@@ -824,11 +824,11 @@ function() {
  * Pairs an item with an element. As a side effect, provides a mechanism for storing
  * data about a particular element, referenced by its ID.
  *
- * @param item		[object]*		an item
- * @param element	[Element]		an HTML element
- * @param type		[constant]*		role that element has; defaults to DwtListView.TYPE_LIST_ITEM
- * @param id		[string]*		ID for element; if not provided, one is generated from the item
- * @param data		[hash]*			additional attributes to store
+ * @param {Object}	item		an item
+ * @param {Element}	element	an HTML element
+ * @param {constant]	[type=DwtListView.TYPE_LIST_ITEM]		a role that element has
+ * @param {string}	[id]		the ID for element; if not provided, one is generated from the item
+ * @param {hash}	[data]		any additional attributes to store
  * 
  * @private
  */
@@ -1157,13 +1157,15 @@ function(row, odd) {
  * in arbitrary info via the params hash, and it will get passed to the
  * support functions.
  *
- * @param item			[object]	item to render
- * @param params		[hash]*		hash of optional params:
- *        now			[Date]		current time
- *        isDragProxy	[boolean]	if true, we are rendering a the row to be a drag proxy (dragged around the screen)
- *        div			[element]	div to fill with content
- *        headerList	[array]		list of column headers
- *        
+ * @param {Object}	item			the item to render
+ * @param {hash}	params		a hash of optional parameters
+ * @param {Date}      params.now			the current time
+ * @param {boolean}      params.isDragProxy	if <code>true</code>, we are rendering a the row to be a drag proxy (dragged around the screen)
+ * @param {Element}      params.div			the <code>div</code> to fill with content
+ * @param {array}      params.headerList	a list of column headers
+ * @param	{boolean}	asHtml
+ * @param	{number}	idx
+ * 
  * @private
  */
 DwtListView.prototype._createItemHtml =
@@ -1212,8 +1214,8 @@ function(item, params, asHtml, count) {
 /**
  * Subclasses can override to add params to pass to functions below.
  *
- * @param item			[object]	item to render
- * @param params		[hash]*		hash of optional params
+ * @param {Object}	item			the item to render
+ * @param {hash}	params		a hash of optional parameters
  * 
  * @private
  */
@@ -1223,8 +1225,8 @@ DwtListView.prototype._addParams = function(item, params) {};
  * Returns the DIV that contains the item HTML, and sets up styles that will
  * be used to represent its selection state.
  *
- * @param item		[object]	item to render
- * @param params	[hash]*		hash of optional params
+ * @param {Object}	item			the item to render
+ * @param {hash}	params		a hash of optional parameters
  * 
  * @private
  */
@@ -1253,11 +1255,11 @@ function(item, params) {
  * This is the "HTML" version of the routine above. Instead of returning a DIV
  * element, it returns HTML containing the DIV.
  *
- * @param item		[object]	item to render
- * @param params	[hash]*		hash of optional params
- * @param html		[Array]		array used to contain HTML code
- * @param idx		[Integer]	index used to contain HTML code
- * @param count		[Integer]	count of row currently being processed
+ * @param {Object}	item		the item to render
+ * @param {hash}	params	a hash of optional parameters
+ * @param {array}	html		the array used to contain HTML code
+ * @param {number}	idx		the index used to contain HTML code
+ * @param {number}	count		the count of row currently being processed
  * 
  * @private
  */
@@ -1296,9 +1298,9 @@ function(item, params, html, idx, count) {
  * Typically, a modifier is added to a base class for certain types of rows. For example,
  * a row that is created to be dragged will get the class "Row-dnd".
  *
- * @param base		[string]	name of base class
- * @param item		[object]	item to render
- * @param params	[hash]*		hash of optional params
+ * @param {string}	base		the name of base class
+ * @param {Object}	item		the item to render
+ * @param {hash}	params	a hash of optional parameters
  * 
  * @private
  */
@@ -1310,9 +1312,9 @@ function(base, item, params) {
 /**
  * Creates the TABLE that holds the items.
  *
- * @param htmlArr	[array]		array that holds lines of HTML
- * @param idx		[int]		current line of array
- * @param params	[hash]*		hash of optional params
+ * @param {array}	htmlArr	the array that holds lines of HTML
+ * @param {number}	idx		the current line of array
+ * @param {hash}	params	a hash of optional parameters
  * 
  * @private
  */
@@ -1326,10 +1328,10 @@ function(htmlArr, idx, params) {
 /**
  * Creates a TR for the given item.
  *
- * @param htmlArr	[array]		array that holds lines of HTML
- * @param idx		[int]		current line of array
- * @param item		[object]	item to render
- * @param params	[hash]*		hash of optional params
+ * @param {array}	htmlArr		the array that holds lines of HTML
+ * @param {number}	idx		the current line of array
+ * @param {object}	item		the item to render
+ * @param {hash}	params	a hash of optional parameters
  * 
  * @private
  */
@@ -1345,8 +1347,8 @@ function(htmlArr, idx, item, params) {
 /**
  * Returns the class name for this item's TR.
  *
- * @param item		[object]	item to render
- * @param params	[hash]*		hash of optional params
+ * @param {Object}	item		the item to render
+ * @param {hash}	params		a hash of optional parameters
  * 
  * @private
  */
@@ -1358,8 +1360,8 @@ function(item, params) {
 /**
  * Returns the DOM ID to be used for this item's TR.
  *
- * @param item		[object]	item to render
- * @param params	[hash]*		hash of optional params
+ * @param {Object}	item		the item to render
+ * @param {hash}	params		a hash of optional parameters
  * 
  * @private
  */

@@ -22,12 +22,12 @@
  * <p>
  * Note: Currently this does not support multiple selection.
  * 
- * @param {Hash}	params		a hash of parameters
+ * @param {hash}	params		a hash of parameters
  * @param {DwtComposite}      params.parent		the parent widget
- * @param {Array}      params.options 		a list of options. This can be either an array of {@link DwtSelectOption} or {String} objects.
- * @param {String}      params.className		the CSS class
+ * @param {array}      params.options 		a list of options. This can be either an array of {@link DwtSelectOption} or {String} objects.
+ * @param {string}      params.className		the CSS class
  * @param {constant}      params.posStyle		the positioning style (see {@link DwtControl})
- * @param {Boolean}      [cascade=true]		if <code>true</code>, menu should cascade (i.e. multiple columns).
+ * @param {boolean}      [cascade=true]		if <code>true</code>, menu should cascade (i.e. multiple columns).
  *        
  * @extends		DwtButton
  */
@@ -83,7 +83,11 @@ function() {
 // Constants
 //
 
-/** This template is only used for the auto-sizing of the select width. */
+/**
+ * This template is only used for the auto-sizing of the select width.
+ * 
+ * @private
+ */
 DwtSelect._CONTAINER_TEMPLATE = "dwt.Widgets#ZSelectAutoSizingContainer";
 
 //
@@ -92,7 +96,11 @@ DwtSelect._CONTAINER_TEMPLATE = "dwt.Widgets#ZSelectAutoSizingContainer";
 
 // static
 
-/** This keeps track of all instances out there **/
+/**
+ * This keeps track of all instances out there
+ * 
+ * @private
+ */
 DwtSelect._objectIds = [null];
 
 // templates
@@ -116,10 +124,10 @@ function(element) {
 /**
  * Adds an option.
  * 
- * @param {String|DwtSelectOption}		option			a {String} for the option value or the {@link DwtSelectOption} object
- * @param {Boolean}	[selected]		indicates whether option should be the selected option
+ * @param {string|DwtSelectOption}		option			a {String} for the option value or the {@link DwtSelectOption} object
+ * @param {boolean}	[selected]		indicates whether option should be the selected option
  * @param {Object}	value			if the option parameter is a {@link DwtSelectOption}, this will override the value already set in the option.
- * @return 	{int} a handle to the newly added option
+ * @return 	{number} a handle to the newly added option
  */
 DwtSelect.prototype.addOption =
 function(option, selected, value) {
@@ -192,7 +200,7 @@ function() {
  * Renames an option.
  *
  * @param {Object}	value		the value of the option to rename
- * @param {String}	newValue	the new display value
+ * @param {string}	newValue	the new display value
  */
 DwtSelect.prototype.rename =
 function(value, newValue) {
@@ -211,7 +219,7 @@ function(value, newValue) {
  * Enables or disables an option.
  *
  * @param {Object}	value		the value of the option to enable/disable
- * @param {Boolean}	enabled		if <code>true</code>, enable the option
+ * @param {boolean}	enabled		if <code>true</code>, enable the option
  */
 DwtSelect.prototype.enableOption =
 function(value, enabled) {
@@ -246,7 +254,7 @@ function() {
 /**
  * Sets the select name.
  * 
- * @param	{String}	name		the name
+ * @param	{string}	name		the name
  */
 DwtSelect.prototype.setName =
 function(name) {
@@ -256,7 +264,7 @@ function(name) {
 /**
  * Gets the select name.
  * 
- * @return	{String}	the name
+ * @return	{string}	the name
  */
 DwtSelect.prototype.getName =
 function() {
@@ -279,7 +287,7 @@ function(optionValue) {
 /**
  * Sets the option as the selected option.
  * 
- * @param {int}	optionHandle 	a handle to the option
+ * @param {number}	optionHandle 	a handle to the option
  * 
  * @see		#addOption
  */
@@ -292,7 +300,7 @@ function(optionHandle) {
 /**
  * Gets the option count.
  * 
- * @return	{int}	the option count
+ * @return	{number}	the option count
  */
 DwtSelect.prototype.getOptionCount =
 function() {
@@ -312,7 +320,7 @@ function() {
 /**
  * Gets the option .
  * 
- * @param {int}	optionHandle 	a handle to the option
+ * @param {number}	optionHandle 	a handle to the option
  * @return	{DwtSelectOption}	the option
  * @see		#addOption
  */
@@ -327,7 +335,7 @@ DwtSelect.prototype.getOptionAtIndex = DwtSelect.prototype.getOptionWithHandle;
  * Gets the index for a given value.
  * 
  * @param	{Object}	value		the value
- * @return	{int}		the index
+ * @return	{number}		the index
  */
 DwtSelect.prototype.getIndexForValue =
 function(value) {
@@ -385,7 +393,7 @@ function() {
 /**
  * Gets the selected option index.
  * 
- * @return	{int}	the selected option index
+ * @return	{number}	the selected option index
  */
 DwtSelect.prototype.getSelectedIndex =
 function() {
@@ -405,7 +413,7 @@ function(listener) {
 /**
  * Gets the count of options.
  * 
- * @return	{int}	the count
+ * @return	{number}	the count
  */
 DwtSelect.prototype.size =
 function() {

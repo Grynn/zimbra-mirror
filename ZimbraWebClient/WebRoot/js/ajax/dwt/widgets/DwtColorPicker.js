@@ -27,10 +27,10 @@
  * @author Ross Dargahi
  * 
  * @param {DwtComposite}	parent		the parent widget
- * @param {String}	className	a CSS class
+ * @param {string}	className	a CSS class
  * @param {constant}	posStyle	the positioning style
- * @param {String}	noFillLabel			the no-fill label
- * @param {Boolean}	allowColorInput		if <code>true</code>, allow a text field to allow user to input their customized RGB value
+ * @param {string}	noFillLabel			the no-fill label
+ * @param {boolean}	allowColorInput		if <code>true</code>, allow a text field to allow user to input their customized RGB value
  * 
  * @extends		DwtControl
  */
@@ -371,7 +371,7 @@ function(ev) {
 /**
  * Gets the input color.
  * 
- * @return	{String}	the color (in hex) from the input color field
+ * @return	{string}	the color (in hex) from the input color field
  */
 DwtColorPicker.prototype.getInputColor = function () {
     var inputField = document.getElementById (this._tdId + ".ColorInputField").firstChild ;

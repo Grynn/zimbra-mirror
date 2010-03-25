@@ -13,7 +13,10 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * 
+ * @private
+ */
 DwtGrouper = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
 	className = className || "DwtGrouper";

@@ -29,15 +29,15 @@
  * @author Ross Dargahi
  * @author Conrad Damon
  * 
- * @param {Hash}	params		a hash of parameters
+ * @param {hash}	params		a hash of parameters
  * @param	{DwtComposite}	params.parent	the parent widget (the shell)
- * @param	{String}	params.className		the CSS class
- * @param	{String}	params.title		the title
- * @param	{int}	[params.zIndex=Dwt.Z_DIALOG]		the z-index to set for this dialog when it is visible
+ * @param	{string}	params.className		the CSS class
+ * @param	{string}	params.title		the title
+ * @param	{number}	[params.zIndex=Dwt.Z_DIALOG]		the z-index to set for this dialog when it is visible
  * @param	{DwtBaseDialog.MODAL|DwtBaseDialog.MODELESS}	[params.mode=DwtBaseDialog.MODAL] 		the modality of the dialog
  * @param	{DwtPoint}	params.loc			the location at which to popup the dialog. Defaults to being centered within its parent
  * @param	{DwtControl}	params.view 		the the control whose element is to be re-parented
- * @param	{String}	params.dragHandleId 		the the ID of element used as drag handle
+ * @param	{string}	params.dragHandleId 		the the ID of element used as drag handle
  * 
  * @extends	DwtComposite
  */
@@ -96,7 +96,7 @@ DwtBaseDialog.prototype.constructor = DwtBaseDialog;
 /**
  * Returns a string representation of the class.
  * 
- * @return {String}		a string representation of the class
+ * @return {string}		a string representation of the class
  */
 DwtBaseDialog.prototype.toString =
 function() {
@@ -111,15 +111,11 @@ function() {
 
 /**
  * Defines a "modeless" dialog.
- * 
- * @type int
  */
 DwtBaseDialog.MODELESS = 1;
 
 /**
  * Defines a "modal" dialog.
- * 
- * @type int
  */
 DwtBaseDialog.MODAL = 2;
 
@@ -259,7 +255,7 @@ function () {
 /**
  * Checks if the dialog is popped-up.
  * 
- * @return	{Boolean}	<code>true</code> if the dialog is popped-up; <code>false</code> otherwise
+ * @return	{boolean}	<code>true</code> if the dialog is popped-up; <code>false</code> otherwise
  */
 DwtBaseDialog.prototype.isPoppedUp =
 function () {
@@ -325,7 +321,7 @@ function() {
 /**
 * Cleans up the dialog so it can be used again later.
 * 
-* @param	{Boolean}		bPoppedUp		if <code>true</code>, the dialog is popped-up; <code>false</code> otherwise
+* @param	{boolean}		bPoppedUp		if <code>true</code>, the dialog is popped-up; <code>false</code> otherwise
 */
 DwtBaseDialog.prototype.cleanup =
 function(bPoppedUp) {
@@ -345,7 +341,7 @@ function(bPoppedUp) {
 /**
  * Sets the title.
  * 
- * @param	{String}		title		the title
+ * @param	{string}		title		the title
  */
 DwtBaseDialog.prototype.setTitle =
 function(title) {
@@ -357,7 +353,7 @@ function(title) {
 /**
 * Sets the dialog content (below the title, above the buttons).
 *
-* @param {String}		text		the dialog content
+* @param {string}		text		the dialog content
 */
 DwtBaseDialog.prototype.setContent =
 function(text) {

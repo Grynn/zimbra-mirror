@@ -23,7 +23,7 @@
  * @author Parag Shah
  *
  * @param {DwtControl}	parent	the parent widget
- * @param {String}	className	the CSS class
+ * @param {string}	className	the CSS class
  * @param {Dwt.STATIC_STYLE|Dwt.ABSOLUTE_STYLE|Dwt.RELATIVE_STYLE}	posStyle	the positioning style
  * 
  * @extends		DwtComposite
@@ -45,7 +45,7 @@ DwtAccordion.prototype.constructor = DwtAccordion;
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 DwtAccordion.prototype.toString =
 function() {
@@ -55,11 +55,11 @@ function() {
 /**
  * Adds an item to the accordion, in the form of a table row.
  *
- * @param {Hash}	params		a hash of parameters
- * @param {String}      params.title			the text for accordion header
- * @param {Hash}      params.data			the item data
- * @param {String}      params.icon			the icon
- * @param {Boolean}      params.hideHeader	if <code>true</code>, do not show header (ideal when there's only one visible header item)
+ * @param {hash}	params		a hash of parameters
+ * @param {string}      params.title			the text for accordion header
+ * @param {hash}      params.data			the item data
+ * @param {string}      params.icon			the icon
+ * @param {boolean}      params.hideHeader	if <code>true</code>, do not show header (ideal when there's only one visible header item)
  */
 DwtAccordion.prototype.addAccordionItem =
 function(params) {
@@ -102,7 +102,7 @@ function(params) {
 /**
  * Gets the ordered list of accordion items.
  * 
- * @return	{Array}	an array of {@link DwtAccordionItem} objects
+ * @return	{array}	an array of {@link DwtAccordionItem} objects
  */
 DwtAccordion.prototype.getItems =
 function() {
@@ -112,7 +112,7 @@ function() {
 /**
  * Gets the accordion item with the given ID.
  *
- * @param {int}	id	the accordion item ID
+ * @param {number}	id	the accordion item ID
  * @return	{DwtAccordionItem}		the item or <code>null</code> if not found
  */
 DwtAccordion.prototype.getItem =
@@ -128,7 +128,7 @@ function(id) {
 /**
  * Gets the item by index.
  * 
- * @param {int}	id	the accordion item index
+ * @param {number}	id	the accordion item index
  * @return	{DwtAccordionItem}		the item or <code>null</code> if not found
  */
 DwtAccordion.prototype.getItemByIndex =
@@ -152,7 +152,7 @@ function() {
 /**
  * Shows single accordion item based on given id.
  *
- * @param {int}	id	the accordion item ID
+ * @param {number}	id	the accordion item ID
  */
 DwtAccordion.prototype.showAccordionItem =
 function(id) {
@@ -166,7 +166,7 @@ function(id) {
  * Allows the accordion items to be clickable or not. If disabled, the label of
  * each accordion item will be grayed out.
  *
- * @param {Boolean}	enabled			if <code>true</code>, enabled.
+ * @param {boolean}	enabled			if <code>true</code>, enabled.
  */
 DwtAccordion.prototype.setEnabled =
 function(enabled) {
@@ -183,10 +183,10 @@ function(enabled) {
 };
 
 /**
- * Resizes the accordian. This override applies accordion size changes to accordion items as well.
+ * Resizes the accordion. This override applies accordion size changes to accordion items as well.
  *
- * @param {int}	width		the new width for accordion
- * @param {int}	height	the new height for accordion
+ * @param {number}	width		the new width for accordion
+ * @param {number}	height		the new height for accordion
  */
 DwtAccordion.prototype.resize =
 function(width, height) {
@@ -245,8 +245,8 @@ function() {
  * Expands the accordion item with the given ID by making its body visible. The bodies of
  * other items are hidden.
  *
- * @param {int}	id	the accordion item ID
- * @param {Boolean}	notify	if <code>true</code>, selection listeners are to be notified
+ * @param {number}	id	the accordion item ID
+ * @param {boolean}	notify	if <code>true</code>, selection listeners are to be notified
  */
 DwtAccordion.prototype.expandItem =
 function(id, notify) {
@@ -290,7 +290,7 @@ function(selectedItem) {
  * Attaches the HTML content of the given control to the accordion item with
  * the given ID.
  *
- * @param {int}	id				the accordion item ID
+ * @param {number}	id				the accordion item ID
  * @param {DwtControl}	contentObject		the control that contains this item's content
  */
 DwtAccordion.prototype.setItemContent =
@@ -307,7 +307,7 @@ function(id, contentObject) {
 /**
  * Gets the <code><body></code> element of the accordion item with the given ID.
  *
- * @param {int}		id	the accordion item ID
+ * @param {number}		id	the accordion item ID
  * @return	{Element}		the element
  */
 DwtAccordion.prototype.getBody =
@@ -318,7 +318,7 @@ function(id) {
 /**
  * Gets the <code><header></code> element of the accordion item with the given ID.
  *
- * @param {int}		id	the accordion item ID
+ * @param {number}		id	the accordion item ID
  * @return	{Element}		the element
  */
 DwtAccordion.prototype.getHeader =
@@ -329,7 +329,7 @@ function(id) {
 /**
  * Shows or hides the accordion.
  *
- * @param {Boolean}	show	if <code>true</code>, show the accordion; otherwise hide it
+ * @param {boolean}	show	if <code>true</code>, show the accordion; otherwise hide it
  */
 DwtAccordion.prototype.show =
 function(show) {
@@ -352,8 +352,8 @@ function(listener) {
 /**
  * Shows or hides an alert (aka orange background) on the accordion header
  *
- * @param {int}	id	the accordion item ID
- * @param {Boolean}	show	if <code>true</code>, show the alert
+ * @param {number}	id	the accordion item ID
+ * @param {boolean}	show	if <code>true</code>, show the alert
  */
 DwtAccordion.prototype.showAlert =
 function(id, show) {
@@ -483,9 +483,9 @@ function(ev) {
  * @class
  * This class represents a single expandable accordion item.
  *
- * @param {String}	id		the unique ID for this item
- * @param {String}	title		the text for the item header
- * @param {Hash}	data		a hash of arbitrary data for this item
+ * @param {string}	id		the unique ID for this item
+ * @param {string}	title		the text for the item header
+ * @param {hash}	data		a hash of arbitrary data for this item
  * @param {DwtAccordion}	accordion	the owning accordion
  */
 DwtAccordionItem = function(id, title, data, accordion) {
@@ -498,7 +498,7 @@ DwtAccordionItem = function(id, title, data, accordion) {
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 DwtAccordionItem.prototype.toString =
 function() {
@@ -508,7 +508,7 @@ function() {
 /**
  * Sets the icon.
  * 
- * @param	{String}	icon		the icon
+ * @param	{string}	icon		the icon
  */
 DwtAccordionItem.prototype.setIcon =
 function(icon) {
@@ -531,7 +531,7 @@ function() {
 /**
  * Sets the title.
  * 
- * @param	{String}	title		the title
+ * @param	{string}	title		the title
  */
 DwtAccordionItem.prototype.setTitle =
 function(title) {
@@ -541,6 +541,9 @@ function(title) {
 	}
 };
 
+/**
+ * @private
+ */
 DwtAccordionItem.prototype._setEnabled =
 function(enabled) {
 	var titleCell = document.getElementById(this.accordion._htmlElId + "_title_" + this.id);

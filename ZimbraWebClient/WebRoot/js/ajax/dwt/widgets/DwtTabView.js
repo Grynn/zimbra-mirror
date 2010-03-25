@@ -20,11 +20,11 @@
  * @class
  * This class represents a tabbed view. {@link DwtTabView} manages the z-index of the contained tabs. 
  * 
- * @param {Hash}	params		a hash of parameters
+ * @param {hash}	params		a hash of parameters
  * @param {DwtComposite}      parent	the parent widget
- * @param {String}      className		the CSS class
+ * @param {string}      className		the CSS class
  * @param {constant}      posStyle	the positioning style (see {@link DwtControl})
- * @param {String}      id			an explicit ID to use for the control's HTML element
+ * @param {string}      id			an explicit ID to use for the control's HTML element
  * 
  * @author Greg Solovyev
  * 
@@ -100,9 +100,9 @@ DwtTabView.prototype.getTabGroupMember = function() {
 /**
  * Adds a tab.
  * 
- * @param {String}	title  the text for the tab button
+ * @param {string}	title  the text for the tab button
  * @param {DwtTabViewPage|AjxCallback}	tabViewOrCallback		an instance of the tab view page or callback that returns an instance of {@link DwtTabViewPage}
- * @return {String}		the key for the added tab. This key can be used to retrieve the tab using {@link #getTab}
+ * @return {string}		the key for the added tab. This key can be used to retrieve the tab using {@link #getTab}
  * 
  * 
  * @see		#getTab
@@ -155,7 +155,7 @@ function(enable) {
 /**
  * Gets the current tab.
  * 
- * @return	{String}	the tab key
+ * @return	{string}	the tab key
  */
 DwtTabView.prototype.getCurrentTab =
 function() {
@@ -165,7 +165,7 @@ function() {
 /**
  * Gets the tab count.
  * 
- * @return	{int}	the number of tabs
+ * @return	{number}	the number of tabs
  */
 DwtTabView.prototype.getNumTabs =
 function() {
@@ -175,7 +175,7 @@ function() {
 /**
  * Gets the tab.
  * 
- * @param {String}	tabKey  the key for the tab
+ * @param {string}	tabKey  the key for the tab
  * @return {DwtTabViewPage}	the view tab
  * 
  * @see		#addTab
@@ -199,8 +199,8 @@ DwtTabView.prototype.getTabBar = function() {
 /**
  * Gets the tab title.
  * 
- * @param	{String}	tabKey		the tab key
- * @return	{String}	the title
+ * @param	{string}	tabKey		the tab key
+ * @return	{string}	the title
  */
 DwtTabView.prototype.getTabTitle =
 function(tabKey) {
@@ -212,7 +212,7 @@ function(tabKey) {
 /**
  * Gets the tab button.
  * 
- * @param	{String}	tabKey		the tab key
+ * @param	{string}	tabKey		the tab key
  * @return	{DwtTabButton}	the tab button
  */
 DwtTabView.prototype.getTabButton =
@@ -225,7 +225,7 @@ function(tabKey) {
 /**
  * Sets the tab view.
  * 
- * @param	{String}	tabKey		the tab key
+ * @param	{string}	tabKey		the tab key
  * @param {DwtTabViewPage|AjxCallback}	tabView		 an instance of the tab view page or callback that returns an instance of {@link DwtTabViewPage}
  */
 DwtTabView.prototype.setTabView =
@@ -246,7 +246,7 @@ function(tabKey, tabView) {
 /**
  * Gets the tab view.
  * 
- * @param	{String}	tabKey		the tab key
+ * @param	{string}	tabKey		the tab key
  * @return {DwtTabViewPage}	the tab view page
  */
 DwtTabView.prototype.getTabView =
@@ -266,7 +266,7 @@ function(tabKey) {
 /**
  * Switches to the tab view.
  * 
- * @param	{String}	tabKey		the tab key
+ * @param	{string}	tabKey		the tab key
  */
 DwtTabView.prototype.switchToTab = 
 function(tabKey) {
@@ -452,7 +452,7 @@ function (ev) {
  * data to/from any form fields that they display.
  * 
  * @param {DwtComposite}      parent	the parent widget
- * @param {String}      className		the CSS class
+ * @param {string}      className		the CSS class
  * @param {constant}      posStyle	the positioning style (see {@link DwtControl})
  * 
  * @extends		DwtPropertyPage
@@ -528,8 +528,8 @@ function() {
 /**
  * Resets the size.
  * 
- * @param	{int|String} newWidth	the width of the control (for example: 100, "100px", "75%", {@link Dwt.DEFAULT})
- * @param	{int|String} newHeight	the height of the control (for example: 100, "100px", "75%", {@link Dwt.DEFAULT})
+ * @param	{number|string} newWidth	the width of the control (for example: 100, "100px", "75%", {@link Dwt.DEFAULT})
+ * @param	{number|string} newHeight	the height of the control (for example: 100, "100px", "75%", {@link Dwt.DEFAULT})
  */
 DwtTabViewPage.prototype.resetSize =
 function(newWidth, newHeight) {
@@ -562,8 +562,8 @@ function(templateId, data) {
  * This class represents the tab bar, which is effectively a tool bar.
  * 
  * @param {DwtComposite}      parent	the parent widget
- * @param {String}      tabCssClass		the tab CSS class
- * @param {String}      btnCssClass		the button CSS class
+ * @param {string}      tabCssClass		the tab CSS class
+ * @param {string}      btnCssClass		the button CSS class
  * 
  * @extends		DwtToolBar 
  */
@@ -598,7 +598,7 @@ function() {
 /**
  * Gets the current tab.
  * 
- * @return	{String}	the tab key
+ * @return	{string}	the tab key
  */
 DwtTabBar.prototype.getCurrentTab =
 function() {
@@ -628,7 +628,7 @@ function(listener) {
 /**
  * Adds a selection listener.
  * 
- * @param {String}	tabKey		the id used to create tab button in {@link DwtTabBar.addButton}
+ * @param {string}	tabKey		the id used to create tab button in {@link DwtTabBar.addButton}
  * @param {AjxListener}	listener	the listener
  */
 DwtTabBar.prototype.addSelectionListener =
@@ -639,7 +639,7 @@ function(tabKey, listener) {
 /**
  * Removes a selection listener.
  * 
- * @param {String}	tabKey		the id used to create tab button in {@link DwtTabBar.addButton}
+ * @param {string}	tabKey		the id used to create tab button in {@link DwtTabBar.addButton}
  * @param {AjxListener}	listener	the listener
  */
 DwtTabBar.prototype.removeSelectionListener =
@@ -650,10 +650,10 @@ function(tabKey, listener) {
 /**
  * Adds a button.
  * 
- * @param {String}	tabKey		the the tab key
- * @param {String}	tabTitle	the tab title
- * @param	{String}	id		the id
- * @param	{int}	index		the index
+ * @param {string}	tabKey		the the tab key
+ * @param {string}	tabTitle	the tab title
+ * @param	{string}	id		the id
+ * @param	{number}	index		the index
  * @return	{DwtTabButton}	the newly added button	
  */
 DwtTabBar.prototype.addButton =
@@ -692,7 +692,7 @@ function(tabKey, tabTitle, id, index) {
 /**
  * Gets the button.
  * 
- * @param {String}	tabKey		the id used to create tab button in {@link DwtTabBar.addButton}
+ * @param {string}	tabKey		the id used to create tab button in {@link DwtTabBar.addButton}
  * @return	{DwtTabButton}		the button
  */
 DwtTabBar.prototype.getButton = 
@@ -705,8 +705,8 @@ function (tabKey) {
 /**
  * Opens the tab.
  *  
- * @param {String}	tabKey		the id used to create tab button in {@link DwtTabBar.addButton}
- * @param	{Boolean}	skipNotify	if <code>true</code>, do not notify listeners
+ * @param {string}	tabKey		the id used to create tab button in {@link DwtTabBar.addButton}
+ * @param	{boolean}	skipNotify	if <code>true</code>, do not notify listeners
  */
 DwtTabBar.prototype.openTab = 
 function(tabK, skipNotify) {
@@ -773,8 +773,8 @@ function(ev) {
  * This class represents the tab in a tab view.
  * 
  * @param {DwtComposite}      parent	the parent widget
- * @param {String}      id		the id
- * @param {int}      index		the index
+ * @param {string}      id		the id
+ * @param {number}      index		the index
  * 
  * @extends		DwtButton
  */
@@ -827,8 +827,8 @@ DwtTabButton.prototype.setDisplayState = function(state) {
  * @constructor
  * 
  * @param {DwtComposite}      parent	the parent widget
- * @param {String}      tabCssClass		the tab CSS class
- * @param {String}      btnCssClass		the button CSS class
+ * @param {string}      tabCssClass		the tab CSS class
+ * @param {string}      btnCssClass		the button CSS class
  *  
  * @extends		DwtTabButton
  * 
@@ -845,9 +845,14 @@ DwtTabBarFloat.prototype.constructor = DwtTabBarFloat;
 DwtTabBarFloat.prototype.TEMPLATE = "dwt.Widgets#ZTabBarFloat";
 
 /**
-* @param tabKey
-* @param tabTitle
-**/
+ * Adds a button.
+ * 
+ * @param {string}	tabKey		the the tab key
+ * @param {string}	tabTitle	the tab title
+ * @param	{string}	id		the id
+ * 
+ * @return	{DwtTabButton}	the newly added button	
+ */
 DwtTabBarFloat.prototype.addButton =
 function(tabKey, tabTitle, id) {
 	var b = this._buttons[tabKey] = new DwtTabButtonFloat(this, id);

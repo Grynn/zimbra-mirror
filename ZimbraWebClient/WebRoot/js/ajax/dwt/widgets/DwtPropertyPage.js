@@ -23,7 +23,7 @@
  * 
  * @author Greg Solovyev
  * 
- * @param	{Hash}	params		a hash of parameters
+ * @param	{hash}	params		a hash of parameters
  * 
  * @extends		DwtComposite
  */
@@ -47,8 +47,9 @@ DwtPropertyPage.prototype.toString = function() {
 DwtPropertyPage.PARAMS = DwtComposite.PARAMS;
 
 /**
- * @param boolean
- * sets the value of _isDirty flag
+ * Sets the value of the dirty flag.
+ * 
+ * @param {boolean}	isD	
  * 
  * @private
  */

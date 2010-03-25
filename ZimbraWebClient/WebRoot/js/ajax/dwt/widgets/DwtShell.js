@@ -26,9 +26,9 @@
  *
  * @author Ross Dargahi
  * 
- * @param	{Hash}	params		a hash of parameters
- * @param {String}	params.className			the CSS class name
- * @param {Boolean}	params.docBodyScrollable	if <code>true</code>, then the document body is set to be scrollable
+ * @param	{hash}	params		a hash of parameters
+ * @param {string}	params.className			the CSS class name
+ * @param {boolean}	params.docBodyScrollable	if <code>true</code>, then the document body is set to be scrollable
  * @param {Element}	params.userShell			an HTML element that will be reparented into an absolutely
  *											postioned container in this shell. This is useful in the situation where you have an HTML 
  *											template and want to use this in context of Dwt.
@@ -181,10 +181,10 @@ function() {
  * separate. We also maintain a count of outstanding calls to <code>setBusy(true)</code>. When that count
  * changes between 0 and 1, the busy overlay is applied or removed.
  * 
- * @param {Boolean}	busy			if <code>true</code>, set the busy overlay, otherwise hide the busy overlay
- * @param {int}	id					a unique ID for this instance
- * @param {Boolean}	showBusyDialog 		if <code>true</code>, show the WIP dialog
- * @param {int}	busyDialogDelay 		the number of ms to delay before popping up the WIP dialog
+ * @param {boolean}	busy			if <code>true</code>, set the busy overlay, otherwise hide the busy overlay
+ * @param {number}	id					a unique ID for this instance
+ * @param {boolean}	showBusyDialog 		if <code>true</code>, show the WIP dialog
+ * @param {number}	busyDialogDelay 		the number of ms to delay before popping up the WIP dialog
  * @param {AjxCallback}	cancelBusyCallback	the callback to run when OK button is pressed in WIP dialog
  */ 
 DwtShell.prototype.setBusy =
@@ -241,7 +241,7 @@ function() {
 /**
  * Sets the text for the shell busy dialog
  *
- * @param {String}	text 		the text to set (may be HTML)
+ * @param {string}	text 		the text to set (may be HTML)
  */
 DwtShell.prototype.setBusyDialogText =
 function(text) {
@@ -254,7 +254,7 @@ function(text) {
 /**
  * Sets the shell busy dialog title.
  * 
- * @param {String}	title 		the title text
+ * @param {string}	title 		the title text
  */
 DwtShell.prototype.setBusyDialogTitle =
 function(title) {
@@ -272,7 +272,7 @@ function() {
 /**
  * Gets the tool tip.
  * 
- * @return	{String}	the tool tip
+ * @return	{string}	the tool tip
  */
 DwtShell.prototype.getToolTip = 
 function() {
@@ -400,7 +400,7 @@ function(event) {
 };
 
 /**
- * @return {Boolean}	<code>true</code> if the shell is virtual
+ * @return {boolean}	<code>true</code> if the shell is virtual
  * 
  * @private
  */

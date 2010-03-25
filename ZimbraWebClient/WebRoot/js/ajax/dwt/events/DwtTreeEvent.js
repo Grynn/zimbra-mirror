@@ -14,6 +14,11 @@
  */
 
 
+/**
+ * 
+ * 
+ * @private
+ */
 DwtTreeEvent = function() {
 	DwtSelectionEvent.call(this, true);
 }

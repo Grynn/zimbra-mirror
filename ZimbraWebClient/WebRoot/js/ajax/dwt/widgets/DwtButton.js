@@ -54,17 +54,17 @@
  * @author Ross Dargahi
  * @author Conrad Damon
  * 
- * @param {Hash}	params		a hash of parameters
+ * @param {hash}	params		a hash of parameters
  * @param {DwtComposite}	params.parent	the parent widget
  * @param {constant}	params.style		the button style
- * @param {String}	params.className		the CSS class
+ * @param {string}	params.className		the CSS class
  * @param {constant}	params.posStyle		the positioning style
  * @param {DwtButton.ACTION_MOUSEUP|DwtButton.ACTION_MOUSEDOWN}	params.actionTiming	if {@link DwtButton.ACTION_MOUSEUP}, then the button is triggered
  *											on mouseup events, else if {@link DwtButton.ACTION_MOUSEDOWN},
  * 											then the button is triggered on mousedown events
- * @param {String}	params.id		the id to use for the control HTML element
- * @param {int}	params.index 		the index at which to add this control among parent's children
- * @param {Hash}	params.listeners		a hash of event listeners
+ * @param {string}	params.id		the id to use for the control HTML element
+ * @param {number}	params.index 		the index at which to add this control among parent's children
+ * @param {hash}	params.listeners		a hash of event listeners
  *        
  * @extends		DwtLabel
  */
@@ -110,7 +110,7 @@ DwtButton.prototype.constructor = DwtButton;
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 DwtButton.prototype.toString =
 function() {
@@ -126,12 +126,10 @@ DwtButton.ALWAYS_FLAT = DwtLabel._LAST_STYLE * 4;
 DwtButton._LAST_STYLE = DwtButton.ALWAYS_FLAT;
 /**
  * Defines the "mouse-up" action timing.
- * @type int
  */
 DwtButton.ACTION_MOUSEUP = 1;
 /**
  * Defines the "mouse-down" action timing.
- * @type int
  */
 DwtButton.ACTION_MOUSEDOWN = 2; // No special appearance when hovered or active
 DwtButton.NOTIFY_WINDOW = 500;  // Time (in ms) during which to block additional clicks from being processed
@@ -162,7 +160,7 @@ function() {
  * Adds a listener to be notified when the button is pressed.
  *
  * @param {AjxListener}	listener	the listener
- * @param {int}	index		the index at which to add listener
+ * @param {number}	index		the index at which to add listener
  */
 DwtButton.prototype.addSelectionListener =
 function(listener, index) {
@@ -200,7 +198,7 @@ function(listener) {
 /**
  * Removes a dropdown selection listener.
  *
- * @param listener	the listener to remove
+ * @param {AjxListener}		listener	the listener to remove
  */
 DwtButton.prototype.removeDropDownSelectionListener =
 function(listener) {
@@ -215,10 +213,10 @@ DwtButton.prototype._dropDownHovImg = "SelectPullDownArrowHover";
 /**
  * Sets the dropdown images.
  * 
- * @param	{String}	enabledImg		the enabled image
- * @param	{String}	disImg		the disabled image
- * @param	{String}	hovImg		the hover image
- * @param	{String}	depImg		the depressed image
+ * @param	{string}	enabledImg		the enabled image
+ * @param	{string}	disImg		the disabled image
+ * @param	{string}	hovImg		the hover image
+ * @param	{string}	depImg		the depressed image
  */
 DwtButton.prototype.setDropDownImages =
 function (enabledImg, disImg, hovImg, depImg) {
@@ -276,8 +274,8 @@ function() {
 /**
  * Sets the display state.
  * 
- * @param	{String}	state		the display state
- * @param	{Boolean}	force		if <code>true</code>, force the state change
+ * @param	{string}	state		the display state
+ * @param	{boolean}	force		if <code>true</code>, force the state change
  * @see		DwtControl
  */
 DwtButton.prototype.setDisplayState =
@@ -293,7 +291,7 @@ function(state, force) {
  * image, and greyed out text. The button (and its menu) will only have listeners if it
  * is enabled.
  *
- * @param {Boolean}	enabled			if <code>true</code>, enable the button
+ * @param {boolean}	enabled			if <code>true</code>, enable the button
  *
  */
 DwtButton.prototype.setEnabled =
@@ -333,7 +331,7 @@ function(enabled) {
 /**
  * Sets the main (enabled) image. If the button is currently enabled, the image is updated.
  * 
- * @param	{String}	imageInfo		the image
+ * @param	{string}	imageInfo		the image
  */
 DwtButton.prototype.setImage =
 function(imageInfo) {
@@ -344,7 +342,7 @@ function(imageInfo) {
 /**
  * Sets the text.
  * 
- * @param	{String}	text		the text
+ * @param	{string}	text		the text
  */
 DwtButton.prototype.setText =
 function(text) {
@@ -367,7 +365,7 @@ function() {
 /**
  * Sets the hover image.
  * 
- * @param	{String}	hoverImageInfo		the image
+ * @param	{string}	hoverImageInfo		the image
  */
 DwtButton.prototype.setHoverImage =
 function (hoverImageInfo) {
@@ -381,10 +379,10 @@ function (hoverImageInfo) {
 *                           callback is given, it is called the first time the
 *                           menu is requested. The callback must return a valid
 *                           DwtMenu object.
-* @param {Boolean}	shouldToggle		if <code>true</code>, toggle
-* @param {String}	followIconStyle		the style of menu item (should be checked or radio style) for
+* @param {boolean}	shouldToggle		if <code>true</code>, toggle
+* @param {string}	followIconStyle		the style of menu item (should be checked or radio style) for
 *							which the button icon should reflect the menu item icon
-* @param {Boolean}	popupAbove         if <code>true</code>, pop up the menu above the button
+* @param {boolean}	popupAbove         if <code>true</code>, pop up the menu above the button
 */
 DwtButton.prototype.setMenu =
 function(menuOrCallback, shouldToggle, followIconStyle, popupAbove) {
@@ -430,7 +428,7 @@ function(set) {
 /**
 * Gets the button menu.
 *
-* @param {Boolean}		dontCreate	 if <code>true</code>, the menu will not be lazily created
+* @param {boolean}		dontCreate	 if <code>true</code>, the menu will not be lazily created
 * @return	{DwtMenu}	the menu or <code>null</code> if menu is not set
 */
 DwtButton.prototype.getMenu =
@@ -472,7 +470,7 @@ function(actionTiming) {
 /**
  * Activates/de-activates the button. A button is hovered when the mouse is over it.
  *
- * @param {Boolean}	hovered		if <code>true</code>, the button is hovered
+ * @param {boolean}	hovered		if <code>true</code>, the button is hovered
  */
 DwtButton.prototype.setHovered =
 function(hovered) {
@@ -482,7 +480,7 @@ function(hovered) {
 /**
  * Sets the enabled image
  * 
- * @param	{String}	imageInfo	the image
+ * @param	{string}	imageInfo	the image
  */
 DwtButton.prototype.setEnabledImage =
 function (imageInfo) {
@@ -493,7 +491,7 @@ function (imageInfo) {
 /**
  * Sets the depressed image
  * 
- * @param	{String}	imageInfo	the image
+ * @param	{string}	imageInfo	the image
  */
 DwtButton.prototype.setDepressedImage =
 function (imageInfo) {
@@ -503,7 +501,7 @@ function (imageInfo) {
 /**
  * Sets the button as selected.
  * 
- * @param	{Boolean}	selected		if <code>true</code>, the button is selected
+ * @param	{boolean}	selected		if <code>true</code>, the button is selected
  */
 DwtButton.prototype.setSelected =
 function(selected) {
@@ -516,7 +514,7 @@ function(selected) {
 /**
  * Checks if the button is toggled.
  * 
- * @return	{Boolean}	<code>true</code> if toggled
+ * @return	{boolean}	<code>true</code> if toggled
  */
 DwtButton.prototype.isToggled =
 function() {
@@ -558,7 +556,7 @@ function(menu) {
 /**
  * Gets the key map name.
  * 
- * @return	{String}	the key map name
+ * @return	{string}	the key map name
  */
 DwtButton.prototype.getKeyMapName =
 function() {
@@ -568,9 +566,9 @@ function() {
 /**
  * Handles a key action event.
  * 
- * @param	{Object}		actionCode		the action code
- * @param	{Object}		ev		the event
- * @return	{Boolean}		<code>true</code> if the event is handled; <code>false</code> otherwise
+ * @param	{constant}		actionCode		the action code (see {@link DwtKeyMap})
+ * @param	{DwtEvent}		ev		the event
+ * @return	{boolean}		<code>true</code> if the event is handled; <code>false</code> otherwise
  * @see		DwtKeyMap
  */
 DwtButton.prototype.handleKeyAction =

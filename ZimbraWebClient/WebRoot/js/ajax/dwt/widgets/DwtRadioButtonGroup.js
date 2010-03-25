@@ -20,9 +20,9 @@
  * @class
  * This class implements a group of radio buttons
  *
- * @param {Hash} [radios] 	a hash whose keys are the ids of the radio button elements
+ * @param {hash} [radios] 	a hash whose keys are the ids of the radio button elements
  * 		and whose values are the values associated with those buttons
- * @param {String} [selectedId]	the id of the button to select initially
+ * @param {string} [selectedId]	the id of the button to select initially
  * 
  * TODO: this really should be a DwtComposite
  * 

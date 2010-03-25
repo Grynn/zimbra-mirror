@@ -13,7 +13,10 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * 
+ * @private
+ */
 DwtKeyEvent = function() {
 	DwtUiEvent.call(this, true);
 	this.reset(true);

@@ -22,11 +22,11 @@
  * 
  * @author Ross Dargahi
  * 
- * @param {Hash}	params		a hash of parameters
+ * @param {hash}	params		a hash of parameters
  * @param {DwtComposite}      parent	the parent widget
- * @param {String}      className		CSS class
+ * @param {string}      className		CSS class
  * @param {constant}      posStyle		the positioning style (see {@link DwtControl})
- * @param {String}      id			an explicit ID to use for the control's HTML element
+ * @param {string}      id			an explicit ID to use for the control's HTML element
  * 
  * @extends		DwtControl
  */
@@ -54,7 +54,7 @@ DwtText.prototype.getTabGroupMember = function() {
 /**
  * Sets the text.
  * 
- * @param	{String}	text		the text
+ * @param	{string}	text		the text
  */
 DwtText.prototype.setText =
 function(text) {
@@ -71,7 +71,7 @@ function(text) {
 /**
  * Gets the text.
  * 
- * @return	{String}	the text
+ * @return	{string}	the text
  */
 DwtText.prototype.getText =
 function() {

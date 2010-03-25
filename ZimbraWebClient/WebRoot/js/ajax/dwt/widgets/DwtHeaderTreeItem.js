@@ -22,18 +22,18 @@
  *
  * @author Dave Comfort
  *
- * @param {Hash}	params				a hash of parameters
+ * @param {hash}	params				a hash of parameters
  * @param {DwtComposite}      params.parent				the parent widget
- * @param {int}      params.index 				the index at which to add this control among parent's children
- * @param {String}      params.text 					the label text for the tree item
- * @param {String}      params.imageInfo				the icon for the tree item
- * @param {Boolean}      params.deferred				if <code>true</code>, postpone initialization until needed.
- * @param {String}      params.className				the CSS class
+ * @param {number}      params.index 				the index at which to add this control among parent's children
+ * @param {string}      params.text 					the label text for the tree item
+ * @param {string}      params.imageInfo				the icon for the tree item
+ * @param {boolean}      params.deferred				if <code>true</code>, postpone initialization until needed.
+ * @param {string}      params.className				the CSS class
  * @param  {constant}	params.posStyle				the positioning style
- * @param {Boolean}      params.forceNotifySelection	force notify selection even if checked style
- * @param {Boolean}      params.forceNotifyAction		force notify action even if checked style
- * @param {Hash}		  params.button				a hash of data for showing a button in the item: image, tooltip, callback
- * @param {Boolean}      params.selectable			if <code>true</code>, this item is selectable
+ * @param {boolean}      params.forceNotifySelection	force notify selection even if checked style
+ * @param {boolean}      params.forceNotifyAction		force notify action even if checked style
+ * @param {hash}		  params.button				a hash of data for showing a button in the item: image, tooltip, callback
+ * @param {boolean}      params.selectable			if <code>true</code>, this item is selectable
  *        
  * @extend		DwtTreeItem
  */

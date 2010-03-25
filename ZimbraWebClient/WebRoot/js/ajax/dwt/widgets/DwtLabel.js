@@ -44,7 +44,7 @@
  * 
  * @author Ross Dargahi
  * 
- * @param {Hash}		params		the hash of parameters
+ * @param {hash}		params		the hash of parameters
  * @param	{DwtComposite}	params.parent	the parent widget
  * @param	{constant}	params.style		the label style: May be one of: {@link DwtLabel.IMAGE_LEFT} 
  * 											or {@link DwtLabel.IMAGE_RIGHT} arithmetically or'd (|) with  one of:
@@ -52,10 +52,10 @@
  * 											The first determines were in the label the icon will appear (if one is set), the second
  * 											determine how the content of the label will be aligned. The default value for
  * 											this parameter is: {@link DwtLabel.IMAGE_LEFT} | {@link DwtLabel.ALIGN_CENTER}
- * @param	{String}	params.className	the CSS class
+ * @param	{string}	params.className	the CSS class
  * @param	{constant}	params.posStyle		the positioning style (see {@link DwtControl})
- * @param	{String}	params.id			the to use for the control HTML element
- * @param	{int}	params.index 		the index at which to add this control among parent's children
+ * @param	{string}	params.id			the to use for the control HTML element
+ * @param	{number}	params.index 		the index at which to add this control among parent's children
  *        
  * @extends DwtControl
  */
@@ -68,18 +68,16 @@ DwtLabel = function(params) {
 
 	/**
 	 * The label style. See the constructor for more info.
-	 * @type int
 	 */
 	this._style = params.style || (DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER);
 	
 	/**
 	 * The label text background color.
-	 * @type String
 	 */
 	this._textBackground = null;
 	
-	/**The label text foreground color.
-	 * @type String
+	/**
+	 * The label text foreground color.
 	 */
 	this._textForeground = null;
 
@@ -95,7 +93,7 @@ DwtLabel.prototype.constructor = DwtLabel;
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 DwtLabel.prototype.toString =
 function() {
@@ -109,42 +107,31 @@ function() {
 // display styles
 /**
  * Defines the "left" align image (i.e. align to the left of text, if both present).
- * 
- * @type int
  */
 DwtLabel.IMAGE_LEFT = 1;
 
 /**
  * Defines the "right" align image (i.e. align to the right of text, if both present).
- * 
- * @type int
  */
 DwtLabel.IMAGE_RIGHT = 2;
 
 /**
  * Defines the "left" align label.
- * 
- * @type int
  */
 DwtLabel.ALIGN_LEFT = 4;
 
 /**
  * Defines the "right" align label.
- * 
- * @type int
  */
 DwtLabel.ALIGN_RIGHT = 8;
 
 /**
  * Defines the "center" align label.
- * 
- * @type int
  */
 DwtLabel.ALIGN_CENTER = 16;
 
 /**
  * Defines the last style label (used for subclasses).
- * @type int
  * @private
  */
 DwtLabel._LAST_STYLE = 16;
@@ -175,7 +162,7 @@ function() {
  * Sets the enabled/disabled state of the label. A disabled label may have a different
  * image, and greyed out text. This method overrides {@link DwtControl#setEnabled}.
  *
- * @param {Boolean} enabled 		if <code>true</code>, set the label as enabled
+ * @param {boolean} enabled 		if <code>true</code>, set the label as enabled
  */
 DwtLabel.prototype.setEnabled =
 function(enabled) {
@@ -188,7 +175,7 @@ function(enabled) {
 /**
  * Gets the current image info.
  * 
- * @return	{String}	the image info
+ * @return	{string}	the image info
  */
 DwtLabel.prototype.getImage =
 function() {
@@ -198,7 +185,7 @@ function() {
 /**
  * Sets the main (enabled) image. If the label is currently enabled, the image is updated.
  * 
- * @param	{String}	imageInfo		the image
+ * @param	{string}	imageInfo		the image
  */
 DwtLabel.prototype.setImage =
 function(imageInfo) {
@@ -209,7 +196,7 @@ function(imageInfo) {
 /**
  * Sets the disabled image. If the label is currently disabled, its image is updated.
  *
- * @param	{String}	imageInfo		the image
+ * @param	{string}	imageInfo		the image
  * @deprecated		no longer support different images for disabled
  * @see		#setImage
  */
@@ -222,7 +209,7 @@ function(imageInfo) {
 /**
  * Gets the label text.
  * 
- * @return	{String}	the text or <code>null</code> if not set
+ * @return	{string}	the text or <code>null</code> if not set
  */
 DwtLabel.prototype.getText =
 function() {
@@ -232,7 +219,7 @@ function() {
 /**
 * Sets the label text, and manages the placement and display.
 *
-* @param {String}	text	the new label text
+* @param {string}	text	the new label text
 */
 DwtLabel.prototype.setText =
 function(text) {
@@ -251,7 +238,7 @@ function(text) {
 /**
  * Sets the text background.
  * 
- * @param	{String}	color	the background color
+ * @param	{string}	color	the background color
  */
 DwtLabel.prototype.setTextBackground =
 function(color) {
@@ -264,7 +251,7 @@ function(color) {
 /**
  * Sets the text foreground.
  * 
- * @param	{String}	color	the foreground color
+ * @param	{string}	color	the foreground color
  */
 DwtLabel.prototype.setTextForeground =
 function(color) {
@@ -291,7 +278,7 @@ function(alignStyle) {
  * Checks if the given style is set as the current label style.
  * 
  * @param	{constant}	style	the style
- * @return	{Boolean}	<code>true</code> if the style is set
+ * @return	{boolean}	<code>true</code> if the style is set
  */
 DwtLabel.prototype.isStyle = function(style) {
     return this._style & style;

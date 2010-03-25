@@ -28,24 +28,24 @@
  *
  * @author Ross Dargahi
  *
- * @param {Hash}	params			a hash of parameters
+ * @param {hash}	params			a hash of parameters
  * @param {DwtComposite}      params.parent			the parent widget
  * @param {constant}      params.type				the data type of the input field
- * @param {String}      params.initialValue		the initial value of the field
- * @param {int}      params.size				size of the input field (in characters)
- * @param {int}      params.rows				the number of rows (more than 1 means textarea)
- * @param {Boolean}      params.forceMultiRow		if <code>true</code>, forces use of textarea even if rows == 1
- * @param {int}      params.maxLen			the maximum length (in characters) of the input
+ * @param {string}      params.initialValue		the initial value of the field
+ * @param {number}      params.size				size of the input field (in characters)
+ * @param {number}      params.rows				the number of rows (more than 1 means textarea)
+ * @param {boolean}      params.forceMultiRow		if <code>true</code>, forces use of textarea even if rows == 1
+ * @param {number}      params.maxLen			the maximum length (in characters) of the input
  * @param {constant}      params.errorIconStyle		the error icon style
  * @param {constant}      params.validationStyle	the validation type
  * @param  {function}     params.validator			the custom validation function
  * @param {Object}      params.validatorCtxtObj		the object context for validation function
- * @param {String}      params.className			the CSS class
+ * @param {string}      params.className			the CSS class
  * @param {constant}      params.posStyle			the positioning style (see {@link DwtControl})
- * @param {Boolean}      params.required          if <code>true</code>, mark as required.
- * @param {String}      params.hint				a hint to display in the input field when the value is empty.
- * @param {String}      params.id				an explicit ID to use for the control's DIV element
- * @param {String}      params.inputId			an explicit ID to use for the control's INPUT element
+ * @param {boolean}      params.required          if <code>true</code>, mark as required.
+ * @param {string}      params.hint				a hint to display in the input field when the value is empty.
+ * @param {string}      params.id				an explicit ID to use for the control's DIV element
+ * @param {string}      params.inputId			an explicit ID to use for the control's INPUT element
  * 
  * @extends		DwtComposite
  */
@@ -166,66 +166,54 @@ function() {
 // Error Icon Style
 /**
  * Defines the "left" error icon style.
- * @type	int
  */
 DwtInputField.ERROR_ICON_LEFT = 1;
 /**
  * Defines the "right" error icon style.
- * @type	int
  */
 DwtInputField.ERROR_ICON_RIGHT = 2;
 /**
  * Defines the "none" error icon style.
- * @type	int
  */
 DwtInputField.ERROR_ICON_NONE = 3;
 
 // Validation Style
 /**
  * Validate field after each character is typed.
- * @type int
  */
 DwtInputField.CONTINUAL_VALIDATION = 1;
 /**
  * Validate the field (i.e. after TAB or CR).
- * @type int
  */
 DwtInputField.ONEXIT_VALIDATION    = 2;
 /**
  * Validate the field  manually.
- * @type int
  */
 DwtInputField.MANUAL_VALIDATION    = 3;
 
 // types
 /**
  * Defines the "Integer or float input field" data type.
- * @type 	int
  */
 DwtInputField.NUMBER 	= 1;
 /**
  * Defines the "Integer input field (no floating point numbers)" data type.
- * @type 	int
  */
 DwtInputField.INTEGER	= 2;
 /**
  * Defines the "Numeric input field" data type.
- * @type 	int
  */
 DwtInputField.FLOAT		= 3;
 /**
  * Defines the "String input field" data type.
- * @type 	int
  */
 DwtInputField.STRING	= 4;
 /**
  * Defines the "Password input field" data type.
- * @type 	int
  */
 DwtInputField.PASSWORD	= 5;
 /**
  * Defines the "Date input field" data type.
- * @type 	int
  */
 DwtInputField.DATE 		= 6;
 
@@ -302,8 +290,8 @@ function(obj, validator) {
 /**
 * Sets the validator to be a regular expression instead of a function.
 *
-* @param {String}	regExp 	the regular expression
-* @param {String}	errorString 		the error string to set for tooltip if the user enters invalid data
+* @param {string}	regExp 	the regular expression
+* @param {string}	errorString 		the error string to set for tooltip if the user enters invalid data
 */
 DwtInputField.prototype.setValidatorRegExp =
 function(regExp, errorString) {
@@ -338,7 +326,7 @@ function() {
 /**
 * Gets the input field current value.
 *
-* @return {String}	 the value
+* @return {string}	 the value
 */
 DwtInputField.prototype.getValue =
 function() {
@@ -348,8 +336,8 @@ function() {
 /**
  * Sets the value for the input field.
  *
- * @param	{String}	value	the value
- * @param	{Boolean}	noValidate		if <code>true</code>, do not validate
+ * @param	{string}	value	the value
+ * @param	{boolean}	noValidate		if <code>true</code>, do not validate
  */
 DwtInputField.prototype.setValue =
 function(value, noValidate) {
@@ -371,7 +359,7 @@ function(value, noValidate) {
 /**
  * Sets the hint for the input field.
  *
- * @param {String}	hint 	the hint
+ * @param {string}	hint 	the hint
  */
 DwtInputField.prototype.setHint =
 function(hint) {
@@ -392,8 +380,8 @@ function(hint) {
  * Sets a valid number range. This method is only applicable for numeric input fields. It sets
  * the valid range (inclusive) of numeric values for the field
  *
- * @param {Number}		min 		the minimum permitted value or <code>null</code> for no minimum
- * @param {Number}	max 		the maximum permitted value or <code>null</code> for no maximum
+ * @param {number}		min 		the minimum permitted value or <code>null</code> for no minimum
+ * @param {number}	max 		the maximum permitted value or <code>null</code> for no maximum
  */
 DwtInputField.prototype.setValidNumberRange =
 function(min, max) {
@@ -407,8 +395,8 @@ function(min, max) {
 /**
  * Sets a valid string length.
  *
- * @param {int}	min 		the minimum length or <code>null</code> for no minimum
- * @param {int}	max 		the maximum length or <code>null</code> for no maximum
+ * @param {number}	min 		the minimum length or <code>null</code> for no minimum
+ * @param {number}	max 		the maximum length or <code>null</code> for no maximum
  */
 DwtInputField.prototype.setValidStringLengths =
 function(minLen, maxLen) {
@@ -422,7 +410,7 @@ function(minLen, maxLen) {
 /**
  * Sets the number precision.
  * 
- * @param	{int}	decimals	the decimals
+ * @param	{number}	decimals	the decimals
  */
 DwtInputField.prototype.setNumberPrecision =
 function(decimals) {
@@ -432,7 +420,7 @@ function(decimals) {
 /**
  * Sets the read only flag.
  * 
- * @param	{Boolean}	readonly		if <code>true</code>, make field read only
+ * @param	{boolean}	readonly		if <code>true</code>, make field read only
  */
 DwtInputField.prototype.setReadOnly =
 function(readonly) {
@@ -442,7 +430,7 @@ function(readonly) {
 /**
  * Sets the required flag.
  * 
- * @param	{Boolean}	required		if <code>true</code>, make field required
+ * @param	{boolean}	required		if <code>true</code>, make field required
  */
 DwtInputField.prototype.setRequired =
 function(required) {
@@ -456,7 +444,7 @@ function(required) {
 /**
  * Gets the enabled flag.
  * 
- * @return	{Boolean}	<code>true</code> if the field is disabled
+ * @return	{boolean}	<code>true</code> if the field is disabled
  */
 DwtInputField.prototype.getEnabled = 
 function() {
@@ -466,7 +454,7 @@ function() {
 /**
  * Sets the enabled flag.
  * 
- * @param	{Boolean}	enabled		if <code>true</code>, enable the field
+ * @param	{boolean}	enabled		if <code>true</code>, enable the field
  */
 DwtInputField.prototype.setEnabled = 
 function(enabled) {	
@@ -495,7 +483,7 @@ function() {
 /**
  * Sets the visibility flag.
  * 
- * @param	{Boolean}	visible		if <code>true</code>, the field is visible
+ * @param	{boolean}	visible		if <code>true</code>, the field is visible
  */
 DwtInputField.prototype.setVisible = function(visible) {
 	DwtComposite.prototype.setVisible.apply(this, arguments);
@@ -505,7 +493,7 @@ DwtInputField.prototype.setVisible = function(visible) {
 /**
  * Checks the validity of the input field value.
  *
- * @return {String}	a canonical value if valid or <code>null</code> if the field value is not valid
+ * @return {string}	a canonical value if valid or <code>null</code> if the field value is not valid
  */
 DwtInputField.prototype.isValid =
 function() {
@@ -533,7 +521,7 @@ function() {
  * if the validation style has been set to DwtInputField.MANUAL_VALIDATION
  * and it is time for the field to be validated
  *
- * @return {Boolean}	<code>true</code> if the field is valid
+ * @return {boolean}	<code>true</code> if the field is valid
  */
 DwtInputField.prototype.validate =
 function() {
@@ -551,8 +539,8 @@ function() {
 /**
  * Validates a number.
  * 
- * @param	{Object}	value		the value
- * @return	{Boolean}	<code>true</code> if valid
+ * @param	{string}	value		the value
+ * @return	{boolean}	<code>true</code> if valid
  */
 DwtInputField.validateNumber =
 function(value) {
@@ -565,8 +553,8 @@ function(value) {
 /**
  * Validates an integer.
  * 
- * @param	{Object}	value		the value
- * @return	{Boolean}	<code>true</code> if valid
+ * @param	{string}	value		the value
+ * @return	{boolean}	<code>true</code> if valid
  */
 DwtInputField.validateInteger =
 function(value) {
@@ -583,8 +571,8 @@ function(value) {
 /**
  * Validates a float.
  * 
- * @param	{Object}	value		the value
- * @return	{Boolean}	<code>true</code> if valid
+ * @param	{string}	value		the value
+ * @return	{boolean}	<code>true</code> if valid
  */
 DwtInputField.validateFloat =
 function(value) {
@@ -615,8 +603,8 @@ function(value) {
 /**
  * Validates a string.
  * 
- * @param	{Object}	value		the value
- * @return	{Boolean}	<code>true</code> if valid
+ * @param	{string}	value		the value
+ * @return	{boolean}	<code>true</code> if valid
  */
 DwtInputField.validateString =
 function(value) {
@@ -632,8 +620,8 @@ function(value) {
 /**
  * Validates a date.
  * 
- * @param	{Object}	value		the value
- * @return	{Boolean}	<code>true</code> if valid
+ * @param	{string}	value		the value
+ * @return	{boolean}	<code>true</code> if valid
  */
 DwtInputField.validateDate = 
 function(value) {
@@ -650,8 +638,8 @@ function(value) {
 /**
  * Validates an email.
  * 
- * @param	{Object}	value		the value
- * @return	{Boolean}	<code>true</code> if valid
+ * @param	{string}	value		the value
+ * @return	{boolean}	<code>true</code> if valid
  */
 DwtInputField.validateEmail = function(value) {
 	if (this._required && value == "")
@@ -826,7 +814,9 @@ function(value) {
 };
 
 /** 
- * Overriding default implementation in DwtControl
+ * Overriding default implementation in {@link DwtControl}.
+ * 
+ * @private
  */
 DwtInputField.prototype._focusByMouseUpEvent =
 function()  {
@@ -835,7 +825,11 @@ function()  {
 	}
 };
 
-/** The input field inherits the id for accessibility purposes. */
+/**
+ * The input field inherits the id for accessibility purposes.
+ *
+ * @private
+ */
 DwtInputField.prototype._replaceElementHook =
 function(oel, nel, inheritClass, inheritStyle) {
     nel = this.getInputElement();

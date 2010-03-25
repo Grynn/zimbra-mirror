@@ -23,7 +23,7 @@
  * This class represents an alert.
  * 
  * @param {DwtComposite}	parent    the parent container for this control
- * @param {String}	[className="DwtAlert"] the CSS class for this control
+ * @param {string}	[className="DwtAlert"] the CSS class for this control
  * @param {Dwt.STATIC_STYLE|Dwt.ABSOLUTE_STYLE|Dwt.RELATIVE_STYLE|Dwt.FIXED_STYLE}	[posStyle] 	the position style of this control
  * 
  * @extends		DwtControl
@@ -45,17 +45,14 @@ DwtAlert.prototype.constructor = DwtAlert;
 //
 /**
  * Defines the "information" style.
- * @type	int
  */
 DwtAlert.INFORMATION = 0;
 /**
  * Defines the "warning" style.
- * @type	int
  */
 DwtAlert.WARNING = 1;
 /**
  * Defines the "critical" style.
- * @type	int
  */
 DwtAlert.CRITICAL = 2;
 
@@ -100,7 +97,7 @@ DwtAlert.prototype.getStyle = function() {
 /**
  * Sets the icon visibility.
  * 
- * @param	{Boolean}	visible		if <code>true</code>, the icon is visible
+ * @param	{boolean}	visible		if <code>true</code>, the icon is visible
  */
 DwtAlert.prototype.setIconVisible = function(visible) {
 	if (this._iconDiv) {
@@ -111,7 +108,7 @@ DwtAlert.prototype.setIconVisible = function(visible) {
 /**
  * Gets the icon visibility.
  * 
- * @return	{Boolean}	<code>true</code> if the icon is visible
+ * @return	{boolean}	<code>true</code> if the icon is visible
  */
 DwtAlert.prototype.getIconVisible = function() {
 	return this._iconDiv ? Dwt.getVisible(this._iconDiv) : false;
@@ -120,7 +117,7 @@ DwtAlert.prototype.getIconVisible = function() {
 /**
  * Sets the title.
  * 
- * @param	{String}	title	the title
+ * @param	{string}	title	the title
  */
 DwtAlert.prototype.setTitle = function(title) {
 	this._alertTitle = title;
@@ -132,7 +129,7 @@ DwtAlert.prototype.setTitle = function(title) {
 /**
  * Gets the title.
  * 
- * @return	{String}	the title
+ * @return	{string}	the title
  */
 DwtAlert.prototype.getTitle = function() {
 	return this._alertTitle;

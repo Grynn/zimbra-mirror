@@ -19,16 +19,16 @@
  * @class
  * This class represents a checkbox.
  * 
- * @param {Hash}	params	a hash of parameters
+ * @param {hash}	params	a hash of parameters
  * @param {DwtComposite}	params.parent	the parent widget
  * @param {DwtCheckbox.TEXT_LEFT|DwtCheckbox.TEXT_RIGHT}       [params.style=DwtCheckbox.TEXT_RIGHT] 	the text style
- * @param {String}       params.name		the input control name (required for IE)
- * @param {String}       params.value     the input control value
- * @param {Boolean}       params.checked	the input control checked status (required for IE)
- * @param {String}       params.className	the CSS class
+ * @param {string}       params.name		the input control name (required for IE)
+ * @param {string}       params.value     the input control value
+ * @param {boolean}       params.checked	the input control checked status (required for IE)
+ * @param {string}       params.className	the CSS class
  * @param {constant}       params.posStyle	the positioning style (see {@link Dwt})
- * @param {String}       params.id		an explicit ID to use for the control's HTML element
- * @param {int}       params.index 	the index at which to add this control among parent's children
+ * @param {string}       params.id		an explicit ID to use for the control's HTML element
+ * @param {number}       params.index 	the index at which to add this control among parent's children
  * 
  *  @extends		DwtControl
  */
@@ -71,17 +71,14 @@ DwtCheckbox.PARAMS = [
 ];
 /**
  * Defines the "left" text style position.
- * @type	String
  */
 DwtCheckbox.TEXT_LEFT			= "left";
 /**
  * Defines the "right" text style position.
- * @type	String
  */
 DwtCheckbox.TEXT_RIGHT			= "right";
 /**
  * Defines the default text style position.
- * @type	String
  */
 DwtCheckbox.DEFAULT_POSITION	= DwtCheckbox.TEXT_RIGHT;
 
@@ -140,7 +137,7 @@ function(listener) {
 /**
  * Sets the enabled state.
  * 
- * @param	{Boolean}	enabled		if <code>true</code>, the checkbox is enabled
+ * @param	{boolean}	enabled		if <code>true</code>, the checkbox is enabled
  */
 DwtCheckbox.prototype.setEnabled =
 function(enabled) {
@@ -156,7 +153,7 @@ function(enabled) {
 /**
  * Sets the selected state.
  * 
- * @param	{Boolean}	selected		if <code>true</code>, the checkbox is selected
+ * @param	{boolean}	selected		if <code>true</code>, the checkbox is selected
  */
 DwtCheckbox.prototype.setSelected =
 function(selected) {
@@ -168,7 +165,7 @@ function(selected) {
 /**
  * Checks if the checkbox is selected state.
  * 
- * @return	{Boolean}	<code>true</code> if the checkbox is selected
+ * @return	{boolean}	<code>true</code> if the checkbox is selected
  */
 DwtCheckbox.prototype.isSelected =
 function() {
@@ -178,7 +175,7 @@ function() {
 /**
  * Sets the checkbox text.
  * 
- * @param		{String}	text		the text
+ * @param		{string}	text		the text
  */
 DwtCheckbox.prototype.setText =
 function(text) {
@@ -191,7 +188,7 @@ function(text) {
 /**
  * Gets the checkbox text.
  * 
- * @return	{String}	the text
+ * @return	{string}	the text
  */
 DwtCheckbox.prototype.getText =
 function() {
@@ -227,7 +224,7 @@ function() {
 /**
  * Sets the value.
  * 
- * @param	{String}		value		the value
+ * @param	{string}		value		the value
  */
 DwtCheckbox.prototype.setValue =
 function(value) {
@@ -240,7 +237,7 @@ function(value) {
 /**
  * Gets the value.
  * 
- * @return		{String}		the value
+ * @return		{string}		the value
  */
 DwtCheckbox.prototype.getValue =
 function() {

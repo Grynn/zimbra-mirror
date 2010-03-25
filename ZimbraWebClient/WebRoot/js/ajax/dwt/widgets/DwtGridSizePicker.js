@@ -24,7 +24,7 @@
  * @author Mihai Bazon <mihai@zimbra.com>
  * 
  * @param	{DwtComposite}	parent 	the parent widget
- * @param	{String}	title		the title
+ * @param	{string}	title		the title
  * 
  * @extends		DwtControl
  */

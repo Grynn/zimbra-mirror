@@ -24,20 +24,20 @@
  *
  * @param {Hash}		params			a hash of parameters
  * @param {DwtComposite}      params.parent			the parent widget
- * @param {String}      params.className			the CSS class
+ * @param {string}      params.className			the CSS class
  * @param {constant}      params.posStyle			the positioning style (see {@link Dwt})
  * @param {constant}     [params.firstDayOfWeek=DwtCalendar.SUN]		the first day of the week
- * @param {Boolean}	[params.forceRollOver=true] 	if <code>true</code>, then clicking on (or setting) the widget to a 
+ * @param {boolean}	[params.forceRollOver=true] 	if <code>true</code>, then clicking on (or setting) the widget to a 
  *												date that is not part of the current month (i.e. one of 
  *												the grey prev or next month days) will result in the 
  *												widget rolling 	the date to that month.
- * @param {Array}      params.workingDays		a list of days that are work days. This array assumes that
+ * @param {array}      params.workingDays		a list of days that are work days. This array assumes that
  * 												index 0 is Sunday. Defaults to Mon-Fri being work days.
- * @param {Boolean}      params.hidePrevNextMo 	a flag indicating whether widget should hide days of the 
+ * @param {boolean}      params.hidePrevNextMo 	a flag indicating whether widget should hide days of the 
  *												previous/next month
- * @param {Boolean}      params.readOnly 		a flag indicating that this widget is read-only (should not 
+ * @param {boolean}      params.readOnly 		a flag indicating that this widget is read-only (should not 
  *												process events such as mouse clicks)
- * @param {Boolean}      params.showWeekNumber	a flag indicating whether widget should show week number
+ * @param {boolean}      params.showWeekNumber	a flag indicating whether widget should show week number
  *        
  * @extends		DwtComposite
  */
@@ -83,60 +83,49 @@ DwtCalendar.prototype = new DwtComposite;
 DwtCalendar.prototype.constructor = DwtCalendar;
 
 /**
- * Sunday
- * @type	int
+ * Sunday.
  */
 DwtCalendar.SUN = 0;
 /**
- * Monday
- * @type	int
+ * Monday.
  */
 DwtCalendar.MON = 1;
 /**
- * Tuesday
- * @type	int
+ * Tuesday.
  */
 DwtCalendar.TUE = 2;
 /**
- * Wednesday
- * @type	int
+ * Wednesday.
  */
 DwtCalendar.WED = 3;
 /**
- * Thursday
- * @type	int
+ * Thursday.
  */
 DwtCalendar.THU = 4;
 /**
- * Friday
- * @type	int
+ * Friday.
  */
 DwtCalendar.FRI = 5;
 /**
- * Saturday
- * @type	int
+ * Saturday.
  */
 DwtCalendar.SAT = 6;
 
 // Selection modes
 /**
  * Defines the "day" selection mode.
- * @type	int
  */
 DwtCalendar.DAY = 1;
 /**
  * Defines the "week" selection mode.
- * @type	int
  */
 DwtCalendar.WEEK = 2;
 /**
  * Defines the "work week" selection mode.
- * @type	int
  */
 DwtCalendar.WORK_WEEK = 3;
 /**
  * Defines the "month" selection mode.
- * @type	int
  */
 DwtCalendar.MONTH = 4;
 
@@ -174,7 +163,7 @@ DwtCalendar._TITLE_ACTIVE_CLASS = DwtCalendar._TITLE_CLASS + "-" + DwtCssStyle.A
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 DwtCalendar.prototype.toString = 
 function() {
@@ -247,7 +236,7 @@ function(listener) {
  * Sets the skip notify on page. This method notify (or not) selection when paging arrow buttons
  * are clicked.
  *
- * @param	{Boolean}	skip		if <code>true</code>, do not notify selection
+ * @param	{boolean}	skip		if <code>true</code>, do not notify selection
  */
 DwtCalendar.prototype.setSkipNotifyOnPage = 
 function(skip) {
@@ -257,7 +246,7 @@ function(skip) {
 /**
  * Gets the skip notify on page setting.
  * 
- * @return	{Boolean}	<code>true</code>, do not notify selection
+ * @return	{boolean}	<code>true</code>, do not notify selection
  */
 DwtCalendar.prototype.getSkipNotifyOnPage = 
 function() {
@@ -268,12 +257,12 @@ function() {
  * Sets the date.
  * 
  * @param	{Date}	date	the date
- * @param	{Boolean}	skipNotify		if <code>true</code>, do not notify selection
- * @param {Boolean}	forceRollOver 	if <code>true</code>, then clicking on (or setting) the widget to a 
+ * @param	{boolean}	skipNotify		if <code>true</code>, do not notify selection
+ * @param {boolean}	forceRollOver 	if <code>true</code>, then clicking on (or setting) the widget to a 
  *												date that is not part of the current month (i.e. one of 
  *												the grey prev or next month days) will result in the 
  *												widget rolling 	the date to that month.
- * @param	{Boolean}	dblClick		if <code>true</code>, require a double click
+ * @param	{boolean}	dblClick		if <code>true</code>, require a double click
  */
 DwtCalendar.prototype.setDate =
 function(date, skipNotify, forceRollOver, dblClick) {
@@ -345,8 +334,8 @@ function(date, skipNotify, forceRollOver, dblClick) {
 /**
  * Checks if the cell is selected.
  * 
- * @param	{String}	cellId			the cell id	
- * @return	{Boolean}	<code>true</code> if the cell is the selected day
+ * @param	{string}	cellId			the cell id	
+ * @return	{boolean}	<code>true</code> if the cell is the selected day
  */
 DwtCalendar.prototype.isSelected =
 function(cellId) {
@@ -372,7 +361,7 @@ function(cellId) {
  * is not part of the current month (i.e. one of the grey prev or next month
  * days) will result in the widget rolling 	the date to that month.
  * 
- * @return	{Boolean}	<code>true</code> if force roll over is set
+ * @return	{boolean}	<code>true</code> if force roll over is set
  */
 DwtCalendar.prototype.getForceRollOver =
 function() {
@@ -384,7 +373,7 @@ function() {
  * is not part of the current month (i.e. one of the grey prev or next month
  * days) will result in the widget rolling 	the date to that month.
  * 
- * @param	{Boolean}	force		if <code>true</code>, force roll over
+ * @param	{boolean}	force		if <code>true</code>, force roll over
  */
 DwtCalendar.prototype.setForceRollOver =
 function(force) {
@@ -428,7 +417,7 @@ function(selectionMode) {
 /**
  * Sets the working week.
  * 
- * @param	{Array}	workingDaysArray		an array of days
+ * @param	{array}	workingDaysArray		an array of days
  */
 DwtCalendar.prototype.setWorkingWeek =
 function(workingDaysArray) {
@@ -444,9 +433,9 @@ function(workingDaysArray) {
 /**
  * Enables/disables the highlight (i.e. "bolding") on the dates in <code>&lt;dates&gt;</code>.
  *
- * @param {Array}	dates	an array of {@link Date} objects for which to enable/disable highlighting
- * @param {Boolean}	enable 	if <code>true</code>, enable highlighting
- * @param {Boolean}	clear 	if <code>true</code>, clear current highlighting
+ * @param {array}	dates	an array of {@link Date} objects for which to enable/disable highlighting
+ * @param {boolean}	enable 	if <code>true</code>, enable highlighting
+ * @param {boolean}	clear 	if <code>true</code>, clear current highlighting
  */
 DwtCalendar.prototype.setHilite =
 function(dates, enable, clear) {

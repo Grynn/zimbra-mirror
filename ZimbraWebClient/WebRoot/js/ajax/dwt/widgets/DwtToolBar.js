@@ -28,12 +28,12 @@
  *
  * @author Ross Dargahi
  * 
- * @param {Hash}	params		a hash of parameters
+ * @param {hash}	params		a hash of parameters
  * @param	{DwtComposite}	params.parent	the parent widget
- * @param	{String}	params.className				the CSS class
+ * @param	{string}	params.className				the CSS class
  * @param	{DwtToolBar.HORIZ_STYLE|DwtToolBar.VERT_STYLE}	params.posStyle		the positioning style
  * @param	{constant}	params.style					the menu style
- * @param	{int}	params.index 				the index at which to add this control among parent's children
+ * @param	{number}	params.index 				the index at which to add this control among parent's children
  * 
  * @extends	DwtComposite
  */
@@ -75,7 +75,7 @@ DwtToolBar.prototype.constructor = DwtToolBar;
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 DwtToolBar.prototype.toString =
 function() {
@@ -88,12 +88,10 @@ function() {
 
 /**
  * Defines the "horizontal" style.
- * @type	int
  */
 DwtToolBar.HORIZ_STYLE	= 1;
 /**
  * Defines the "vertical" style.
- * @type	int
  */
 DwtToolBar.VERT_STYLE	= 2;
 
@@ -157,7 +155,7 @@ function(index) {
 /**
  * Gets the item count.
  * 
- * @return	{int}	the size of the children items
+ * @return	{number}	the size of the children items
  */
 DwtToolBar.prototype.getItemCount =
 function() {
@@ -167,7 +165,7 @@ function() {
 /**
  * Gets the items.
  * 
- * @return	{Array}	an array of children items
+ * @return	{array}	an array of children items
  */
 DwtToolBar.prototype.getItems =
 function() {
@@ -178,8 +176,8 @@ function() {
 /**
  * Adds a spacer.
  * 
- * @param	{int}	size		the space size
- * @param	{int}	index		the index for the spacer
+ * @param	{number}	size		the space size
+ * @param	{number}	index		the index for the spacer
  * @return	{Object}	the newly added element
  */
 DwtToolBar.prototype.addSpacer =
@@ -192,8 +190,8 @@ function(size, index) {
 /**
  * Adds a separator.
  * 
- * @param	{String}	className	the separator CSS class name
- * @param	{int}	index		the index for the separator
+ * @param	{string}	className	the separator CSS class name
+ * @param	{number}	index		the index for the separator
  * @return	{Object}	the newly added element
  */
 DwtToolBar.prototype.addSeparator =
@@ -216,8 +214,8 @@ function(el) {
 /**
  * Adds a filler.
  * 
- * @param	{String}	className	the CSS class name
- * @param	{int}	index		the index for the filler
+ * @param	{string}	className	the CSS class name
+ * @param	{number}	index		the index for the filler
  * @return	{Object}	the newly added element
  */
 DwtToolBar.prototype.addFiller =
@@ -233,7 +231,7 @@ function(className, index) {
  * Adds a child item.
  * 
  * @param	{Object}	child	the child item
- * @param	{int}	index		the index for the child
+ * @param	{number}	index		the index for the child
  */
 DwtToolBar.prototype.addChild =
 function(child, index) {
@@ -250,7 +248,7 @@ function(child, index) {
 /**
  * Gets the key map name.
  * 
- * @return	{String}	the key map name
+ * @return	{string}	the key map name
  */
 DwtToolBar.prototype.getKeyMapName =
 function() {
@@ -451,7 +449,7 @@ function(item) {
  * For now, we only move focus to simple components like buttons. Also,
  * the item must be enabled and visible.
  *
- * @param {int}	index		the index of item within toolbar
+ * @param {number}	index		the index of item within toolbar
  * @return	{Object}	the item
  * 
  * @private
@@ -469,7 +467,7 @@ function(index) {
 /**
  * Moves focus to next or previous item that can take focus.
  *
- * @param {Boolean}	back		if <code>true</code>, move focus to previous item
+ * @param {boolean}	back		if <code>true</code>, move focus to previous item
  * 
  * @private
  */
@@ -556,14 +554,14 @@ function(index) {
  * @class
  * This class represents a toolbar button.
  * 
- * @param	{Hash}		params		a hash of parameters
+ * @param	{hash}		params		a hash of parameters
  * @param {DwtComposite}	parent		the parent widget
  * @param {constant}	style				the menu style
- * @param {String}	className				the CSS class
+ * @param {string}	className				the CSS class
  * @param {DwtToolBar.HORIZ_STYLE|DwtToolBar.VERT_STYLE}	posStyle		the positioning style
  * @param {Object}	actionTiming 	the action timing
- * @param {String}	id 	the id
- * @param {int}	index 				the index at which to add this control among parent's children
+ * @param {string}	id 	the id
+ * @param {number}	index 				the index at which to add this control among parent's children
  *
  * @extends	DwtButton
  */

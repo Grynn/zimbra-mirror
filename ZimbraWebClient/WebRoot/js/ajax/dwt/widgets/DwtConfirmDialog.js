@@ -19,7 +19,7 @@
  * This class represents a confirmation dialog.
  * 
  * @param {DwtComposite}	parent  the parent widget (the shell)
- * @param {String}		className  the CSS class
+ * @param {string}		className  the CSS class
  * 
  * @extends		DwtDialog
  */
@@ -57,7 +57,7 @@ function() {
  * dialog assumes that the caller is only concerned with a Yes response
  * and hides the (presumably) extraneous Cancel button.
  * 
- * @param	{String}	questionHtml		the question HTML
+ * @param	{string}	questionHtml		the question HTML
  * @param	{AjxCallback}	yesCallback		the "yes" button callback
  * @param	{AjxCallback}	noCallback		the "no" button callback
  * @param	{AjxCallback}	cancelCallback		the "cancel" button callback

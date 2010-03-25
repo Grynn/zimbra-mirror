@@ -13,7 +13,11 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * 
+ * 
+ * @private
+ */
 XFormChoices = function(choiceObject, type, valueProperty, labelProperty) {
 	if (arguments.length == 0) return;
 	

@@ -20,13 +20,13 @@
  *
  * @author Ross Dargahi
  *
- * @param {Hash}	params			a hash of parameters
+ * @param {hash}	params			a hash of parameters
  * @param {DwtComposite}      params.parent			the parent widget
- * @param {String}      params.className			the CSS class
+ * @param {string}      params.className			the CSS class
  * @param {constant}      params.posStyle			the positioning style (see {@link DwtControl})
- * @param  {String}     params.content		the content (this can be HTML)
+ * @param  {string}     params.content		the content (this can be HTML)
  * @param  {DwtHtmlEditor.HTML|DwtHtmlEditor.TEXT}     params.mode			the mode
- * @param  {String}     params.blankIframeSrc	the blank iframe source
+ * @param  {string}     params.blankIframeSrc	the blank iframe source
  *        
  * @extends		DwtComposite
  */
@@ -57,12 +57,10 @@ DwtHtmlEditor.prototype.constructor = DwtHtmlEditor;
 // Modes
 /**
  * Defines the "HTML" mode.
- * @type	String
  */
 DwtHtmlEditor.HTML = "text/html";
 /**
  * Defines the "TEXT" mode.
- * @type	String
  */
 DwtHtmlEditor.TEXT = "text/plain";
 
@@ -265,7 +263,7 @@ function(enable) {
 /**
  * Sets the blank iframe source.
  * 
- * @param	{String}	src		the source
+ * @param	{string}	src		the source
  */
 DwtHtmlEditor.prototype.setBlankIframeSrc =
 function(src) {
@@ -280,7 +278,7 @@ function() {
 /**
  * Get the content.
  * 
- * @return	{String}	the content
+ * @return	{string}	the content
  */
 DwtHtmlEditor.prototype.getContent =
 function() {
@@ -302,7 +300,7 @@ function(html) {
 /**
  * Set the content to be displayed. This can be HTML.
  * 
- * @param	{String}	content		the content
+ * @param	{string}	content		the content
  */
 DwtHtmlEditor.prototype.setContent =
 function(content) {
@@ -353,12 +351,12 @@ function(src, dontExecCommand, width, height) {
 
 /** Inserts a table at the current cursor position
  *
- * @param rows [Int] - The number of rows in the table
- * @param cols [Int] - The number of columns in the table
- * @param width [String] - The width of the table. The units should be part of this value e.g. "100%" or "10px"
- * @param cellSpacing [Int] - Cell spacing in the table
- * @param cellPadding [Int] - Cell padding in the table
- * @param alignment [String] - The alignment of the table. This is one of valid alignment values for the HTML
+ * @param {number}	rows	the number of rows in the table
+ * @param {number}	cols	the number of columns in the table
+ * @param {string}	width		the width of the table. The units should be part of this value (for example: "100%" or "10px")
+ * @param {number}	cellSpacing	the cell spacing in the table
+ * @param {number}	cellPadding 	the cell padding in the table
+ * @param {constant}	alignment the alignment of the table. This is one of valid alignment values for the HTML
  *    <table> element
  *    
  * @private
@@ -666,7 +664,7 @@ function(){
  * Changes the editor mode.
  *
  * @param {DwtHtmlEditor.HTML|DwtHtmlEditor.TEXT}	mode	the new mode
- * @param {Boolean}	convert	if new mode -> HTML and convert, then the content of the widget is escaped. If
+ * @param {boolean}	convert	if new mode -> HTML and convert, then the content of the widget is escaped. If
  *		mode -> Text and convert, then text is stripped out of content
  */
 DwtHtmlEditor.prototype.setMode =

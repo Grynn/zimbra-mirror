@@ -22,23 +22,23 @@
  *
  * @author Ross Dargahi
  * 
- * @param {Hash}	params				a hash of parameters
+ * @param {hash}	params				a hash of parameters
  * @param {DwtComposite}      params.parent	the parent widget
- * @param {int}      params.index 			the index at which to add this control among parent's children
- * @param {String}      params.text 					the label text for the tree item
- * @param {String}      params.imageInfo			the icon for the left end of the tree item
- * @param {String}      params.extraInfo				the icon for the right end of the tree item
- * @param {String}      params.expandNodeImage		the icon to use for expanding tree item (instead of default)
- * @param {String}      params.collapseNodeImage     the icon to use for collapsing tree item (instead of default)
- * @param {String}      params.className				the CSS class
+ * @param {number}      params.index 			the index at which to add this control among parent's children
+ * @param {string}      params.text 					the label text for the tree item
+ * @param {string}      params.imageInfo			the icon for the left end of the tree item
+ * @param {string}      params.extraInfo				the icon for the right end of the tree item
+ * @param {string}      params.expandNodeImage		the icon to use for expanding tree item (instead of default)
+ * @param {string}      params.collapseNodeImage     the icon to use for collapsing tree item (instead of default)
+ * @param {string}      params.className				the CSS class
  * @param {constant}      params.posStyle				the positioning style (see {@link DwtControl})
- * @param {Boolean}      params.deferred				if <code>true</code>, postpone initialization until needed.
- * @param {Boolean}      params.selectable			if <code>true</code>, this item is selectable
- * @param {Boolean}      params.forceNotifySelection	force notify selection even if checked style
- * @param {Boolean}      params.forceNotifyAction		force notify action even if checked style
- * @param {Boolean}      params.singleClickAction		if <code>true</code>, an action is performed in single click
+ * @param {boolean}      params.deferred				if <code>true</code>, postpone initialization until needed.
+ * @param {boolean}      params.selectable			if <code>true</code>, this item is selectable
+ * @param {boolean}      params.forceNotifySelection	force notify selection even if checked style
+ * @param {boolean}      params.forceNotifyAction		force notify action even if checked style
+ * @param {boolean}      params.singleClickAction		if <code>true</code>, an action is performed in single click
  * @param {AjxCallback}      params.dndScrollCallback	the callback triggered when scrolling of a drop area for an object being dragged
- * @param {String}      params.dndScrollId			the id
+ * @param {string}      params.dndScrollId			the id
  *        
  * @extends		DwtComposite		
  */
@@ -141,7 +141,7 @@ function() {
 /**
  * Checks if the item is checked.
  * 
- * @return	{Boolean}	<code>true</code> if the item is checked
+ * @return	{boolean}	<code>true</code> if the item is checked
  */
 DwtTreeItem.prototype.getChecked =
 function() {
@@ -151,8 +151,8 @@ function() {
 /**
  * Sets the checked flag.
  * 
- * @param	{Boolean}	checked		if <code>true</code>, check the item
- * @param	{Boolean}	force		if <code>true</code>, force the setting
+ * @param	{boolean}	checked		if <code>true</code>, check the item
+ * @param	{boolean}	force		if <code>true</code>, force the setting
  */
 DwtTreeItem.prototype.setChecked =
 function(checked, force) {
@@ -183,9 +183,9 @@ function() {
 /**
  * Expands or collapses this tree item.
  *
- * @param {Boolean}	expanded		if <code>true</code>, expands this node; otherwise collapses it
- * @param {Boolean}	recurse		if <code>true</code>, expand children recursively (does not apply to collapsing)
- * @param	{Boolean}	skipNotify		if <code>true</code>, do not notify the listeners
+ * @param {boolean}	expanded		if <code>true</code>, expands this node; otherwise collapses it
+ * @param {boolean}	recurse		if <code>true</code>, expand children recursively (does not apply to collapsing)
+ * @param	{boolean}	skipNotify		if <code>true</code>, do not notify the listeners
  */
 DwtTreeItem.prototype.setExpanded =
 function(expanded, recurse, skipNotify) {
@@ -221,7 +221,7 @@ function(expanded, recurse, skipNotify) {
 /**
  * Gets the child item count.
  * 
- * @return	{int}	the child item count
+ * @return	{number}	the child item count
  */
 DwtTreeItem.prototype.getItemCount =
 function() {
@@ -231,7 +231,7 @@ function() {
 /**
  * Gets the items.
  * 
- * @return	{Array}	an array of child {@link DwtTreeItem} objects
+ * @return	{array}	an array of child {@link DwtTreeItem} objects
  */
 DwtTreeItem.prototype.getItems =
 function() {
@@ -241,7 +241,7 @@ function() {
 /**
  * Gets the image.
  * 
- * @return	{String}	the image
+ * @return	{string}	the image
  */
 DwtTreeItem.prototype.getImage =
 function() {
@@ -251,7 +251,7 @@ function() {
 /**
  * Sets the image.
  * 
- * @param	{String}	imageInfo		the image
+ * @param	{string}	imageInfo		the image
  */
 DwtTreeItem.prototype.setImage =
 function(imageInfo) {
@@ -283,7 +283,7 @@ function() {
 /**
  * Gets the text.
  * 
- * @return	{String}	the text
+ * @return	{string}	the text
  */
 DwtTreeItem.prototype.getText =
 function() {
@@ -293,7 +293,7 @@ function() {
 /**
  * Sets the text.
  * 
- * @param	{String}	text		the text
+ * @param	{string}	text		the text
  */
 DwtTreeItem.prototype.setText =
 function(text) {
@@ -308,7 +308,7 @@ function(text) {
 /**
  * Sets the drag-and-drop text.
  * 
- * @param	{String}	text		the text
+ * @param	{string}	text		the text
  */
 DwtTreeItem.prototype.setDndText =
 function(text) {
@@ -318,7 +318,7 @@ function(text) {
 /**
  * Shows (or hides) the check box.
  * 
- * @param	{Boolean}	show		if <code>true</code>, show the check box
+ * @param	{boolean}	show		if <code>true</code>, show the check box
  */
 DwtTreeItem.prototype.showCheckBox =
 function(show) {
@@ -331,7 +331,7 @@ function(show) {
 /**
  * Shows (or hides) the expansion icon.
  * 
- * @param	{Boolean}	show		if <code>true</code>, show the expansion icon
+ * @param	{boolean}	show		if <code>true</code>, show the expansion icon
  */
 DwtTreeItem.prototype.showExpansionIcon =
 function(show) {
@@ -343,7 +343,7 @@ function(show) {
 /**
  * Enables (or disables) the selection.
  * 
- * @param	{Boolean}	enable		if <code>true</code>, enable selection
+ * @param	{boolean}	enable		if <code>true</code>, enable selection
  */
 DwtTreeItem.prototype.enableSelection =
 function(enable) {
@@ -363,7 +363,7 @@ function(enable) {
  * end. A separator cannot currently be added as the first item (the child DIV will
  * not have been created).
  *
- * @param {int}	index		the position at which to add the separator
+ * @param {number}	index		the position at which to add the separator
  */
 DwtTreeItem.prototype.addSeparator =
 function(index) {
@@ -373,9 +373,9 @@ function(index) {
 /**
  * Makes this tree item, or just part of it, visible or hidden.
  *
- * @param {Boolean}	visible		if <code>true</code>, item (or part of it) becomes visible
- * @param {Boolean}	itemOnly		if <code>true</code>, apply to this item's DIV only; child items are unaffected
- * @param {Boolean}	childOnly		if <code>true</code>, apply to this item's child items only
+ * @param {boolean}	visible		if <code>true</code>, item (or part of it) becomes visible
+ * @param {boolean}	itemOnly		if <code>true</code>, apply to this item's DIV only; child items are unaffected
+ * @param {boolean}	childOnly		if <code>true</code>, apply to this item's child items only
  */
 DwtTreeItem.prototype.setVisible =
 function(visible, itemOnly, childOnly) {
@@ -554,7 +554,7 @@ function(index, realizeDeferred, forceNode) {
 /**
  * Sets the tree item color.
  * 
- * @param	{String}	className		the class name
+ * @param	{string}	className		the class name
  */
 DwtTreeItem.prototype.setTreeItemColor = 
 function(className) {

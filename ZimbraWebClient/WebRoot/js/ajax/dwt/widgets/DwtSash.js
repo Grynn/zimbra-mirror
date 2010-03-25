@@ -21,11 +21,11 @@
  * order to change the sizes of the elements on either side. Those one one side
  * will become larger, and those on the other side will become smaller.
  * 
- * @param {Hash}	params		a hash of parameters
+ * @param {hash}	params		a hash of parameters
  * @param {DwtComposite}      params.parent		the parent widget
  * @param {DwtSash.HORIZONTAL_STYLE|DwtSash.VERTICAL_STYLE}      [params.style=DwtSash.VERTICAL_STYLE]			the sash style
- * @param {String}      params.className		the CSS class
- * @param    {int}	[params.threshold=1]		minimum movement (in pixels) that forces a UI update. Clients will likely want to set it higher.
+ * @param {string}      params.className		the CSS class
+ * @param    {number}	[params.threshold=1]		minimum movement (in pixels) that forces a UI update. Clients will likely want to set it higher.
  * @param {constant}       params.posStyle		the positioning style (see {@link DwtControl})
  * 
  * @extends		DwtControl
@@ -77,12 +77,10 @@ function() {
 
 /**
  * Defines the "horizontal" sash style.
- * @type	int
  */
 DwtSash.HORIZONTAL_STYLE  = 1;
 /**
  * Defines the "vertical" sash style.
- * @type	int
  */
 DwtSash.VERTICAL_STYLE = 2;
 

@@ -13,7 +13,10 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * 
+ * @private
+ */
 DwtToolTip = function(shell, className, dialog) {
 	if (arguments.length == 0) return;
 	this.shell = shell;

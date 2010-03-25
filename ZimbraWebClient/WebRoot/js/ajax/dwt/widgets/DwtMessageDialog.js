@@ -26,11 +26,11 @@
  * 
  * @author Ross Dargahi
  * 
- * @param {Hash}		params			a hash of parameters
+ * @param {hash}		params			a hash of parameters
  * @param {DwtComposite}	params.parent		the parent widget (the shell)
- * @param {String}	params.className 		the CSS class
- * @param {Array}	params.buttons				the buttons to show. Defaults to {@link DwtDialog.OK_BUTTON} button
- * @param {Array}	params.extraButtons	  	a list of {@link DwtDialog_ButtonDescriptor} objects describing custom buttons to add to the dialog
+ * @param {string}	params.className 		the CSS class
+ * @param {array}	params.buttons				the buttons to show. Defaults to {@link DwtDialog.OK_BUTTON} button
+ * @param {array}	params.extraButtons	  	a list of {@link DwtDialog_ButtonDescriptor} objects describing custom buttons to add to the dialog
  * 
  * @extends	DwtDialog
  */
@@ -53,17 +53,14 @@ DwtMessageDialog.prototype.constructor = DwtMessageDialog;
 
 /**
  * Defines the "critical" style.
- * @type int
  */
 DwtMessageDialog.CRITICAL_STYLE = 1;
 /**
  * Defines the "info" style.
- * @type int
  */
 DwtMessageDialog.INFO_STYLE = 2;
 /**
  * Defines the "warning" style.
- * @type int
  */
 DwtMessageDialog.WARNING_STYLE = 3;
 
@@ -83,7 +80,7 @@ DwtMessageDialog.ICON[DwtMessageDialog.WARNING_STYLE] = "Warning_32";
 /**
  * Returns a string representation of the object.
  * 
- * @return		{String}		a string representation of the object
+ * @return		{string}		a string representation of the object
  */
 DwtMessageDialog.prototype.toString = 
 function() {
@@ -93,9 +90,9 @@ function() {
 /**
 * Sets the message style (info/warning/critical) and content.
 *
-* @param {String}	msgStr		the message text
+* @param {string}	msgStr		the message text
 * @param {constant}	style		the style (see <code>DwtMessageDialog.*_STYLE</code> constants)
-* @param {String}	title		the dialog box title
+* @param {string}	title		the dialog box title
 */
 DwtMessageDialog.prototype.setMessage =
 function(msgStr, style, title) {
