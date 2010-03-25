@@ -195,7 +195,6 @@ function(entry) {
 	this._containedObject[ZaModel.currentStep] = 1;
 	this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 	this._containedObject[ZaAccount.A2_errorMessage] = "";
-//	var domainName = ZaApp.getInstance()._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
 	var domainName;
 	if(!domainName) {
 		//find out what is the default domain

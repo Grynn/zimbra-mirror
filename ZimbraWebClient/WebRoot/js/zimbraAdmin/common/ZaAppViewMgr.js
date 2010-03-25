@@ -254,6 +254,9 @@ function(components, doFit, noSetZ) {
 		this._htmlEl[cid] = htmlEl;
 		var contId = ZaSettings.get(ZaAppViewMgr.CONT_ID_KEY[cid]);
 		var contEl = document.getElementById(contId);
+		if(!contEl) {
+			continue;
+		}
 		this._containers[cid] = contEl;
 		if (Dwt.contains(contEl, htmlEl))
 			throw new AjxException("element already added to container: " + cid);		

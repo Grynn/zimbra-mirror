@@ -243,9 +243,13 @@ function() {
 
 ZaZimbraAdmin.prototype.getOverviewPanelController =
 function() {
-	if (this._overviewPanelController == null)
-		this._overviewPanelController = new ZaOverviewPanelController(this._appCtxt, this._shell);
-	return this._overviewPanelController;
+	if(ZaSettings.TREE_ENABLED) {
+		if (this._overviewPanelController == null)
+			this._overviewPanelController = new ZaOverviewPanelController(this._appCtxt, this._shell);
+		return this._overviewPanelController;
+	} else {
+		return null;
+	}
 }
 
 /**
@@ -418,11 +422,17 @@ ZaZimbraAdmin.prototype._setLicenseStatusMessage = function () {
 
 ZaZimbraAdmin.prototype.setStatusMsg = 
 function(msg, clear) {
+	if(!ZaSettings.STATUS_ENABLED) {
+		return;
+	}
 	this._statusBox.setText(msg);
 }
 
 ZaZimbraAdmin._clearStatus = 
 function(statusBox) {
+	if(!ZaSettings.STATUS_ENABLED) {
+		return;
+	}
 	statusBox.setText("");
 	statusBox.getHtmlElement().className = "statusBox";
 }
@@ -435,6 +445,10 @@ function () {
 
 ZaZimbraAdmin.prototype._createHelpLink =
 function() {
+	var helpSkinContainer = document.getElementById(ZaSettings.SKIN_HELP_DOM_ID);
+	if(!helpSkinContainer) {
+		return;
+	}
     var helpLabel = new DwtComposite (this._shell, "HelpContainer", Dwt.RELATIVE_STYLE);
     var helpEl = helpLabel.getHtmlElement();
     helpLabel.setCursor ("pointer") ;
@@ -454,6 +468,10 @@ function() {
 
 ZaZimbraAdmin.prototype._createDownloadLink =
 function() {
+	var downloadsContainer = document.getElementById(ZaSettings.SKIN_DW_DOM_ID);
+	if(!downloadsContainer) {
+		return;
+	}
 	var dwLabel = new DwtComposite (this._shell, "DWContainer", Dwt.RELATIVE_STYLE);
 	var listener = new AjxListener(this, this._dwListener);
 	
@@ -470,8 +488,10 @@ function() {
 
 ZaZimbraAdmin.prototype._setUserName =
 function () {
-	var e = document.getElementById("skin_container_username") ;
-	e.innerHTML = (ZaZimbraAdmin.currentUserName!=null && String(ZaZimbraAdmin.currentUserName).length>(skin.maxAdminName+1)) ? String(ZaZimbraAdmin.currentUserName).substr(0,skin.maxAdminName) : ZaZimbraAdmin.currentUserName;
+	var e = document.getElementById(ZaSettings.SKIN_USER_NAME_ID) ;
+	if(e) {
+		e.innerHTML = (ZaZimbraAdmin.currentUserName!=null && String(ZaZimbraAdmin.currentUserName).length>(skin.maxAdminName+1)) ? String(ZaZimbraAdmin.currentUserName).substr(0,skin.maxAdminName) : ZaZimbraAdmin.currentUserName;
+	}
 }
 
 ZaZimbraAdmin.prototype._helpListener =
@@ -506,6 +526,10 @@ function (ev) {
 
 ZaZimbraAdmin.prototype._createBanner =
 function() {
+	var logoContainer = document.getElementById(ZaSettings.SKIN_LOGO_ID);
+	if(!logoContainer) {
+		return;
+	}
 	// The LogoContainer style centers the logo
 	var banner = new DwtComposite(this._shell, "LogoContainer", Dwt.ABSOLUTE_STYLE);
 	var html = new Array();
@@ -527,8 +551,10 @@ function () {
     }
     
     var logoff = document.getElementById(ZaSettings.SKIN_LOGOFF_DOM_ID);
-	if (logoff) logoff.innerHTML = this._getAppLink(logoffMethod, "Logoff",  ZaMsg.logOff);
-	logoff.style.cursor = "pointer" ;
+	if (logoff) {
+		logoff.innerHTML = this._getAppLink(logoffMethod, "Logoff",  ZaMsg.logOff);
+		logoff.style.cursor = "pointer" ;
+	}
 }
 
 
@@ -662,6 +688,11 @@ function() {
 **/
 ZaZimbraAdmin.prototype._launchApp =
 function() {
+	ZaSettings.TREE_ENABLED = (document.getElementById(ZaSettings.SKIN_TREE_ID)!=null);
+	ZaSettings.CURRENT_APP_ENABLED = (document.getElementById(ZaSettings.SKIN_CURRENT_APP_ID)!=null);
+	ZaSettings.BANNER_ENABLED = (document.getElementById(ZaSettings.SKIN_LOGO_ID)!=null);
+	ZaSettings.STATUS_ENABLED = (document.getElementById(ZaSettings.SKIN_STATUS_ID)!=null);
+	
     //console.log("Launching ZimbraAdmin Application ....") ;
     if (!this._app)
 		this._createApp();
@@ -691,19 +722,31 @@ function() {
 	this._createDownloadLink() ;
 	this._setUserName() ;
 	
-	elements[ZaAppViewMgr.C_BANNER] = this._createBanner();	
-	elements[ZaAppViewMgr.C_STATUS] = this._statusBox = new DwtText(this._shell, "statusBox", Dwt.ABSOLUTE_STYLE);
-	this._statusBox.setScrollStyle(Dwt.CLIP);
-	this._setLicenseStatusMessage();	
+	if(ZaSettings.BANNER_ENABLED) {
+		elements[ZaAppViewMgr.C_BANNER] = this._createBanner();
+	}
+	if(ZaSettings.STATUS_ENABLED) {
+		elements[ZaAppViewMgr.C_STATUS] = this._statusBox = new DwtText(this._shell, "statusBox", Dwt.ABSOLUTE_STYLE);
+		this._statusBox.setScrollStyle(Dwt.CLIP);
+		this._setLicenseStatusMessage();	
+	}
+
 	elements[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR] = ZaApp.getInstance().getSearchBuilderToolbarController ().getSearchBuilderTBPanel();
 	elements[ZaAppViewMgr.C_SEARCH_BUILDER] = ZaApp.getInstance().getSearchBuilderController().getSearchBuilderPanel();
-	elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
-	elements[ZaAppViewMgr.C_SASH] =  new DwtSash({parent:this._shell, style:DwtSash.HORIZONTAL_STYLE,className:"AppSash-horiz", threshold:20, id:"z_sash"});
+
+	if(ZaSettings.TREE_ENABLED) {
+		elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
+	} 
+	if(document.getElementById(ZaSettings.SKIN_APP_SASH_ID)) {
+		elements[ZaAppViewMgr.C_SASH] =  new DwtSash({parent:this._shell, style:DwtSash.HORIZONTAL_STYLE,className:"AppSash-horiz", threshold:20, id:"z_sash"});
+	}
 	elements[ZaAppViewMgr.C_SEARCH] = ZaApp.getInstance().getSearchListController().getSearchPanel();		
 	elements[ZaAppViewMgr.C_LOGIN_MESSAGE]  = this._getLoginMsgPanel();
     //Use reparentHtmlelement to add the tabs. Reenable this line if it doesn't work well.
 	elements[ZaAppViewMgr.C_APP_TABS] = this._createAppTabs() ;
-	elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
+	if(ZaSettings.CURRENT_APP_ENABLED) {
+		elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
+	}
 	this._appViewMgr.addComponents(elements, true);
 	
     ZaApp.getInstance().launch();

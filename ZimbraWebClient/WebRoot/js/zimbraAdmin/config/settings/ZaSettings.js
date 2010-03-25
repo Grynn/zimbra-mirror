@@ -412,21 +412,36 @@ ZaSettings.SKIN_PREFS_ENABLED = true;
 ZaSettings.LICENSE_ENABLED = true;
 ZaSettings.ADMIN_ZIMLETS_ENABLED = true;
 ZaSettings.SAVE_SEARCH_ENABLED = true ;
+ZaSettings.TREE_ENABLED = true;
+ZaSettings.CURRENT_APP_ENABLED = true;
+ZaSettings.BANNER_ENABLED = true;
+ZaSettings.STATUS_ENABLED = true;
 
+ZaSettings.SKIN_LOGOFF_DOM_ID = "skin_container_logoff" ;
+ZaSettings.SKIN_HELP_DOM_ID = "skin_container_help" ;
+ZaSettings.SKIN_DW_DOM_ID = "skin_container_dw" ;
+ZaSettings.SKIN_USER_NAME_ID = "skin_container_username";
+ZaSettings.SKIN_LOGO_ID = "skin_container_logo";
+ZaSettings.SKIN_TREE_ID = "skin_container_tree";
+ZaSettings.SKIN_SEARCH_BUILDER_ID = "skin_container_search_builder";
+ZaSettings.SKIN_SEARCH_BUILDER_TB_ID = "skin_container_search_builder_toolbar";
+ZaSettings.SKIN_APP_SASH_ID = "skin_container_tree_app_sash";
+ZaSettings.SKIN_CURRENT_APP_ID = "skin_container_current_app";
+ZaSettings.SKIN_STATUS_ID = "skin_container_status";
 // initialization for settings: [name, type, data type, default value]
 ZaSettings.INIT = new Object();
 // IDs FOR HTML COMPONENTS IN THE SKIN
 ZaSettings.INIT[ZaSettings.SKIN_APP_MAIN_ID]				= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_app_main"];
 ZaSettings.INIT[ZaSettings.SKIN_APP_TOP_TOOLBAR_ID]		= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_top_toolbar"];
-ZaSettings.INIT[ZaSettings.SKIN_CURRENT_APP_ID]			= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_current_app"];
-ZaSettings.INIT[ZaSettings.SKIN_LOGO_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_logo"];
-ZaSettings.INIT[ZaSettings.SKIN_SASH_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_tree_app_sash"];
-ZaSettings.INIT[ZaSettings.SKIN_SEARCH_BUILDER_ID]		= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_search_builder"];
-ZaSettings.INIT[ZaSettings.SKIN_SEARCH_BUILDER_TOOLBAR_ID]= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_search_builder_toolbar"];
+ZaSettings.INIT[ZaSettings.SKIN_CURRENT_APP_ID]			= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_CURRENT_APP_ID];
+ZaSettings.INIT[ZaSettings.SKIN_LOGO_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_LOGO_ID];
+ZaSettings.INIT[ZaSettings.SKIN_SASH_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_APP_SASH_ID];
+ZaSettings.INIT[ZaSettings.SKIN_SEARCH_BUILDER_ID]		= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_SEARCH_BUILDER_ID];
+ZaSettings.INIT[ZaSettings.SKIN_SEARCH_BUILDER_TOOLBAR_ID]= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_SEARCH_BUILDER_TB_ID];
 ZaSettings.INIT[ZaSettings.SKIN_SEARCH_ID]				= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_search"];
 ZaSettings.INIT[ZaSettings.SKIN_SHELL_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_outer"];
-ZaSettings.INIT[ZaSettings.SKIN_STATUS_ID]				= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_status"];
-ZaSettings.INIT[ZaSettings.SKIN_TREE_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_tree"];
+ZaSettings.INIT[ZaSettings.SKIN_STATUS_ID]				= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_STATUS_ID];
+ZaSettings.INIT[ZaSettings.SKIN_TREE_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_TREE_ID];
 //ZaSettings.INIT[ZaSettings.SKIN_TREE_FOOTER_ID]			= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_tree_footer"];
 ZaSettings.INIT[ZaSettings.SKIN_LOGIN_MSG_ID]           = [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_login_msg"];
 //ZaSettings.timeZoneChoices = new XFormChoices(AjxTimezoneData.TIMEZONE_RULES, XFormChoices.OBJECT_LIST, "serverId", "serverId");
@@ -448,9 +463,7 @@ ZaSettings.timeZoneChoices = ZaSettings.getTimeZoneChoices  ;
 
 ZaSettings.INIT[ZaSettings.SKIN_APP_TABS_ID] = [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_app_tabs"];
 
-ZaSettings.SKIN_LOGOFF_DOM_ID = "skin_container_logoff" ;
-ZaSettings.SKIN_HELP_DOM_ID = "skin_container_help" ;
-ZaSettings.SKIN_DW_DOM_ID = "skin_container_dw" ;
+
 //ZaSettings.SKIN_TABS_DOM_ID = "skin_container_app_tabs" ;
 //ZaSettings.SKIN_LOGIN_MSG_ID = "skin_td_login_msg" ;
 

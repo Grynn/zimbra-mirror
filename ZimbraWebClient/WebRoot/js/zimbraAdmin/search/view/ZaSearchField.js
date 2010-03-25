@@ -313,17 +313,10 @@ function (ev) {
 	this._savedSearchActionMenu.popdown();
 	ZaSearch._savedSearchToBeUpdated = true ;
 	var callback = new AjxCallback (this, this.modifySavedSearchCallback) ;
-	
-	/*
-	if (this._savedSearchMenu && this._savedSearchMenu.isPoppedUp()) {
-		callback = new AjxCallback (this, this.showSavedSearchMenus) ;
-	}else{
-		var overviewPanelCtrl = ZaApp.getInstance().getOverviewPanelController() ;
-		callback = new AjxCallback (overviewPanelCtrl. overviewPanelCtrl.updateSavedSearchTreeList ()) ;
-	}*/
+
 	ZaSearch.modifySavedSearches(	
 		[{name: this._currentSavedSearch.name, query: null}], callback ) ;
-	//this.getSaveAndEditSeachDialog().show(this._currentSavedSearch.name, this._currentSavedSearch.query);
+
 }
 
 ZaSearchField.prototype.modifySavedSearchCallback =
@@ -332,9 +325,10 @@ function () {
 	ZaSearch.updateSavedSearch (ZaSearch.getSavedSearches()); 
 	
 	//Update the Search Tree
-	var overviewPanelCtrl = ZaApp.getInstance()._appCtxt.getAppController().getOverviewPanelController() ;
-	overviewPanelCtrl.updateSavedSearchTreeList() ;
-	
+	if(ZaSettings.TREE_ENABLED) {
+		var overviewPanelCtrl = ZaApp.getInstance()._appCtxt.getAppController().getOverviewPanelController() ;
+		overviewPanelCtrl.updateSavedSearchTreeList() ;
+	}
 	//Update the SavedSearchMenu
 	this.updateSavedSearchMenu() ;
 }
