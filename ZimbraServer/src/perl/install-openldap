@@ -32,7 +32,7 @@ my %BINARIES = (
                 "libtool" => "2.2.6b",
                 "openldap" => "2.4.21.7z",
                 "openldap-libs" => "2.4.21.7z",
-                "openssl" => "0.9.8m",
+                "openssl" => "0.9.8n",
                 "tcmalloc" => "1.5"
                );
 my $P4_CMD = "p4";
