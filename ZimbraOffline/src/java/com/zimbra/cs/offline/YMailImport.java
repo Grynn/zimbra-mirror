@@ -29,10 +29,10 @@ public class YMailImport implements DataSource.DataImport {
     public YMailImport(OfflineDataSource ds) throws ServiceException {
         imapImport = OfflineImport.imapImport(ds);
         if (ds.isContactSyncEnabled()) {
-            yabImport = OfflineImport.yabImport(ds);
+            yabImport = OfflineImport.yabImport(ds.getContactSyncDataSource());
         }
         if (ds.isCalendarSyncEnabled()) {
-            calDavImport = OfflineImport.ycalImport(ds);
+            calDavImport = OfflineImport.ycalImport(ds.getCalendarSyncDataSource());
         }
     }
 

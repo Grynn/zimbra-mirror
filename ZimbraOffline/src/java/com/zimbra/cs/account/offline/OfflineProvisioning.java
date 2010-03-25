@@ -23,7 +23,6 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
-import com.zimbra.common.net.CustomTrustManager;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.SystemUtil;
 import com.zimbra.common.util.ZimbraLog;
@@ -548,22 +547,24 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     private void testDataSource(OfflineDataSource ds) throws ServiceException {
-    	try {
-        	DataSourceManager.test(ds);
-    	} catch (ServiceException x) {
-        	Throwable t = SystemUtil.getInnermostException(x);
+        try {
+            DataSourceManager.test(ds);
+        } catch (ServiceException x) {
+            x.printStackTrace();
+            Throwable t = SystemUtil.getInnermostException(x);
+            t.printStackTrace();
             if (x instanceof RemoteServiceException)
-            	throw x;
+                throw x;
             if (t instanceof LoginException)
                 throw RemoteServiceException.AUTH_FAILURE(t.getMessage(), t);
             if (t instanceof AuthenticationException)
-            	throw (AuthenticationException)t;
+                throw (AuthenticationException)t;
             if (t instanceof com.google.gdata.util.ServiceException)
-            	GDataServiceException.doFailures((com.google.gdata.util.ServiceException)t);
+                GDataServiceException.doFailures((com.google.gdata.util.ServiceException)t);
             RemoteServiceException.doConnectionFailures(ds.getHost() + ":" + ds.getPort(), t);
             RemoteServiceException.doSSLFailures(t.getMessage(), t);
             throw x;
-    	}
+        }
         
         // No need to test Live/YMail SOAP access, since successful IMAP/POP3
         // connection implies that SOAP access will succeed with same auth
@@ -593,9 +594,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             }
         }
     }
-    
+
     private synchronized Account createDataSourceAccount(String dsName, String emailAddress, String _password, Map<String, Object> dsAttrs) throws ServiceException {
-        
         emailAddress = emailAddress.toLowerCase().trim();
         String parts[] = emailAddress.split("@");
         if (parts.length != 2)
@@ -614,15 +614,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	DataSource.Type type = DataSource.Type.valueOf(dsType);
         String dsid = UUID.randomUUID().toString();
     	dsAttrs.put(A_zimbraDataSourceId, dsid);
-        String password = (String) dsAttrs.remove(A_zimbraDataSourcePassword);
-    	dsAttrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dsid, password));
-    	String smtpPassword = (String) dsAttrs.get(A_zimbraDataSourceSmtpAuthPassword);
-    	if (smtpPassword != null)
-    		dsAttrs.put(A_zimbraDataSourceSmtpAuthPassword, DataSource.encryptData(dsid, smtpPassword));
-    	
     	String sslCertAlias = (String)dsAttrs.remove(OfflineConstants.A_zimbraDataSourceSslCertAlias);
     	if (sslCertAlias != null)
-    		acceptSSLCertAlias(sslCertAlias);
+            acceptSSLCertAlias(sslCertAlias);
+        encryptPasswords(dsAttrs);
 
         OfflineDataSource testDs = new OfflineDataSource(getLocalAccount(), type, dsName, dsid, dsAttrs, this);
         testDataSource(testDs);
@@ -652,7 +647,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
 
         setDefaultAccountAttributes(attrs);
-        
+
         Object syncEnabled = dsAttrs.get(A_zimbraDataSourceContactSyncEnabled);
         attrs.put(A_zimbraFeatureContactsEnabled, syncEnabled == null ? FALSE : syncEnabled);
         syncEnabled = dsAttrs.get(A_zimbraDataSourceCalendarSyncEnabled);
@@ -692,6 +687,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             OfflineYAuth.deleteRawAuthManager(mbox);
         }
         return account;
+    }
+
+    private static void encryptPasswords(Map<String, Object> dsAttrs) throws ServiceException {
+        String id = (String) dsAttrs.get(A_zimbraDataSourceId);
+        String pass = (String) dsAttrs.get(A_zimbraDataSourcePassword);
+        dsAttrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(id, pass));
+        String smtpPass = (String) dsAttrs.get(A_zimbraDataSourceSmtpAuthPassword);
+        if (smtpPass != null) {
+            dsAttrs.put(A_zimbraDataSourceSmtpAuthPassword, DataSource.encryptData(id, smtpPass));
+        }
     }
 
     public synchronized List<Account> getAllDataSourceAccounts() throws ServiceException {
@@ -2063,21 +2068,21 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public synchronized List<DataSource> getAllDataSources(Account account) throws ServiceException {
     	List<DataSource> sources = cachedDataSources.get(account.getId());
-    	if (sources == null) {
-    		List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(EntryType.DATASOURCE, account);
-    		sources = new ArrayList<DataSource>(names.size());
-    		for (String name : names)
+        if (sources == null) {
+            List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(EntryType.DATASOURCE, account);
+            sources = new ArrayList<DataSource>(names.size());
+            for (String name : names)
                 sources.add(get(account, DataSourceBy.name, name));
             sort(sources);
-    		cachedDataSources.put(account.getId(), sources);
+            cachedDataSources.put(account.getId(), sources);
     	}
-    	for (DataSource ds : sources) {
-    		ds.getAttrs(false).put(OfflineConstants.A_zimbraDataSourceSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(ds).toString());
-        	String statusErrorCode = OfflineSyncManager.getInstance().getErrorCode(ds);
-        	if (statusErrorCode != null)
-        		ds.getAttrs(false).put(OfflineConstants.A_zimbraDataSourceSyncStatusErrorCode, statusErrorCode);
-    	}
-    	return sources;
+        for (DataSource ds : sources) {
+            ds.getAttrs(false).put(OfflineConstants.A_zimbraDataSourceSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(ds).toString());
+            String statusErrorCode = OfflineSyncManager.getInstance().getErrorCode(ds);
+            if (statusErrorCode != null)
+                ds.getAttrs(false).put(OfflineConstants.A_zimbraDataSourceSyncStatusErrorCode, statusErrorCode);
+        }
+        return sources;
     }
 
     private static void sort(List<DataSource> sources) {
@@ -2129,9 +2134,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         if (attrs.get(A_zimbraDataSourcePassword) instanceof String)
             attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dataSourceId, (String) attrs.get(A_zimbraDataSourcePassword)));
-        
+
         if (attrs.get(A_zimbraDataSourceSmtpAuthPassword) instanceof String)
-        	attrs.put(A_zimbraDataSourceSmtpAuthPassword, DataSource.encryptData(dataSourceId, (String) attrs.get(A_zimbraDataSourceSmtpAuthPassword)));
+            attrs.put(A_zimbraDataSourceSmtpAuthPassword, DataSource.encryptData(dataSourceId, (String) attrs.get(A_zimbraDataSourceSmtpAuthPassword)));
 
         if (isDataSourceAccount(account) && attrs.get(A_zimbraDataSourceHost) != null) {
             String decrypted = null;
@@ -2166,8 +2171,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                     // Clear auth token so that it will be regenerated during test...
                     OfflineYAuth.removeToken(ds);
                 }
-                testDataSource(new OfflineDataSource(account, ds.getType(),
-                    ds.getName(), ds.getId(), attrs, this));
+                testDataSource(new OfflineDataSource(
+                    account, ds.getType(), ds.getName(), ds.getId(), attrs, this));
 
                 OfflineSyncManager.getInstance().clearErrorCode(ds);
 
@@ -2213,16 +2218,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public synchronized DataSource get(Account account, DataSourceBy keyType, String key) throws ServiceException {
-    	List<DataSource> cached = cachedDataSources.get(account.getId());
-    	if (cached != null) {
-    		for (DataSource ds : cached) {
-    	        if (keyType == DataSourceBy.name && ds.getName().equals(key) ||
-    	        		keyType == DataSourceBy.id && ds.getId().equals(key))
-    	            return ds;
-    		}
-    		return null;
-    	}
-    	
+        List<DataSource> cached = cachedDataSources.get(account.getId());
+        if (cached != null) {
+            for (DataSource ds : cached) {
+                if (keyType == DataSourceBy.name && ds.getName().equals(key) ||
+                    keyType == DataSourceBy.id && ds.getId().equals(key))
+                    return ds;
+            }
+            return null;
+        }
+
         Map<String,Object> attrs = null;
         if (keyType == DataSourceBy.name) {
             attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.DATASOURCE, account, A_offlineDn, key);
@@ -2231,10 +2236,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
         if (attrs == null)
             return null;
-        
+
         String name = (String)attrs.get(A_zimbraDataSourceName);
         if (name == null)
-        	return null;
+            return null;
 
         DataSource.Type type = DataSource.Type.fromString((String) attrs.get(A_offlineDataSourceType));
         return new OfflineDataSource(account, type, name, (String) attrs.get(A_zimbraDataSourceId), attrs, this);

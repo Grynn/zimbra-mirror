@@ -29,10 +29,10 @@ public class GMailImport implements DataSource.DataImport {
     public GMailImport(OfflineDataSource ds) throws ServiceException {
         imapImport = OfflineImport.imapImport(ds);
         if (ds.isContactSyncEnabled()) {
-            gabImport = OfflineImport.gabImport(ds);
+            gabImport = OfflineImport.gabImport(ds.getContactSyncDataSource());
         }
         if (ds.isCalendarSyncEnabled()) {
-            calDavImport = OfflineImport.gcalImport(ds);
+            calDavImport = OfflineImport.gcalImport(ds.getCalendarSyncDataSource());
         }
     }
 
@@ -53,7 +53,7 @@ public class GMailImport implements DataSource.DataImport {
             imapImport.importData(folderIds, fullSync);
         } catch (ServiceException e) {
             errors.add(e);
-        }
+        }                               
         if (gabImport != null) {
             try {
                 gabImport.importData(null, fullSync);

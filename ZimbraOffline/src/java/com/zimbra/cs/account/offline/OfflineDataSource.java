@@ -17,6 +17,7 @@ package com.zimbra.cs.account.offline;
 import java.io.IOException;
 import java.io.File;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -45,6 +46,8 @@ import com.zimbra.cs.offline.util.ymail.YMailClient;
 
 public class OfflineDataSource extends DataSource {
     private DataSourceConfig.Service knownService;
+    private OfflineDataSource contactSyncDataSource;
+    private OfflineDataSource calendarSyncDataSource;
 
     OfflineDataSource(Account acct, DataSource.Type type, String name, String id, Map<String,Object> attrs, Provisioning prov) {
         super(acct, type, name, id, attrs, prov);
@@ -57,6 +60,42 @@ public class OfflineDataSource extends DataSource {
 
     void setServiceName(String serviceName) {
     	knownService = serviceName == null ? null : config.getService(serviceName);
+    }
+
+    void setContactSyncDataSource(OfflineDataSource ds) {
+        contactSyncDataSource = ds;
+    }
+
+    void setCalendarSyncDataSource(OfflineDataSource ds) {
+        calendarSyncDataSource = ds;
+    }
+
+    public OfflineDataSource getContactSyncDataSource() throws ServiceException {
+        if (!isGmail() && !isYahoo()) return null;
+        if (contactSyncDataSource == null) {
+            String pass = getDecryptedPassword();
+            String suffix = isGmail() ? "-gab" : "-yab";
+            Map<String, Object> attrs = new HashMap<String, Object>(getRawAttrs());
+            String id = getId() + suffix;
+            attrs.put(Provisioning.A_zimbraDataSourcePassword, encryptData(id, pass));
+            contactSyncDataSource = new OfflineDataSource(
+                getAccount(), Type.contacts, getName() + suffix, id, attrs, getProvisioning());
+        }
+        return contactSyncDataSource;
+    }
+
+    public OfflineDataSource getCalendarSyncDataSource() throws ServiceException {
+        if (!isGmail() && !isYahoo()) return null;
+        if (calendarSyncDataSource == null) {
+            String pass = getDecryptedPassword();
+            String suffix = isGmail() ? "-gcal" : "-ycal";
+            Map<String, Object> attrs = new HashMap<String, Object>(getRawAttrs());
+            String id = getId() + suffix;
+            attrs.put(Provisioning.A_zimbraDataSourcePassword, encryptData(id, pass));
+            calendarSyncDataSource = new OfflineDataSource(
+                getAccount(), Type.caldav, getName() + suffix, id, attrs, getProvisioning());
+        }
+        return calendarSyncDataSource;
     }
 
     public DataSourceConfig.Service getKnownService() {
