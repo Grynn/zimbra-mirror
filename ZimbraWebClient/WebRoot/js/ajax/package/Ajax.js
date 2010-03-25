@@ -97,6 +97,7 @@ AjxPackage.require("ajax.dwt.widgets.DwtCheckbox");
 AjxPackage.require("ajax.dwt.widgets.DwtRadioButton");
 AjxPackage.require("ajax.dwt.widgets.DwtListView");
 AjxPackage.require("ajax.dwt.widgets.DwtButton");
+AjxPackage.require("ajax.dwt.widgets.DwtBorderlessButton");
 AjxPackage.require("ajax.dwt.widgets.DwtMenuItem");
 AjxPackage.require("ajax.dwt.widgets.DwtMenu");
 AjxPackage.require("ajax.dwt.widgets.DwtMessageDialog");

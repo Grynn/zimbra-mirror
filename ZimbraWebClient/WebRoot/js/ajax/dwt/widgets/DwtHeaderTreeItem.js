@@ -67,15 +67,11 @@ function() {
 		this._headerButtonId = this._htmlElId + "_headerButton";
 		var buttonEl = document.getElementById(this._headerButtonId);
 		if (buttonEl) {
-			buttonEl.className = "Img" + this._button.image;
-			buttonEl.onclick = AjxCallback.simpleClosure(this._onclickHandler, this);
-			var mouseOverListener = new AjxListener(null, DwtHeaderTreeItem._mouseOverListener);
-			var mouseOutListener = new AjxListener(null, DwtHeaderTreeItem._mouseOutListener);
-			this.addListener(DwtEvent.ONMOUSEOVER, mouseOverListener);
-			this.addListener(DwtEvent.ONMOUSEENTER, mouseOverListener);
-			this.addListener(DwtEvent.ONMOUSEOUT, mouseOutListener);
-			this.addListener(DwtEvent.ONMOUSELEAVE, mouseOutListener);
-			this.addListener(DwtEvent.ONMOUSEUP, new AjxListener(null, DwtHeaderTreeItem._mouseUpListener));
+			this._buttonItem = new DwtBorderlessButton({parent:this, style:DwtLabel.IMAGE_LEFT, className:"Img"+this._button.image});
+			//this._buttonItem.setImage(this._button.image);
+			this._buttonItem.setToolTipContent(this._button.tooltip);
+			this._buttonItem.addSelectionListener(new AjxListener(this, this._onclickHandler));
+			this._buttonItem.replaceElement(this._headerButtonId);
 		}
 	}
 };
@@ -85,29 +81,6 @@ function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev, this);
 	this._button.callback.run(mouseEv);
-};
-
-DwtHeaderTreeItem._mouseOverListener =
-function(ev) {
-	var treeItem = ev.dwtObj;
-	var el = DwtUiEvent.getTarget(ev);
-	if (el && (el.id == treeItem._headerButtonId)) {
-		treeItem.setToolTipContent(treeItem._button.tooltip);
-	}
-};
-
-DwtHeaderTreeItem._mouseOutListener =
-function(ev) {
-	var treeItem = ev.dwtObj;
-	treeItem.setToolTipContent(null);
-};
-
-DwtHeaderTreeItem._mouseUpListener =
-function(ev) {
-	var treeItem = ev.dwtObj;
-	var targetId = ev.target && ev.target.id;
-	if (targetId && (targetId == treeItem._headerButtonId)) { return; }
-	DwtTreeItem._mouseUpListener.apply(null, arguments);
 };
 
 DwtHeaderTreeItem.prototype._focusByMouseUpEvent =
