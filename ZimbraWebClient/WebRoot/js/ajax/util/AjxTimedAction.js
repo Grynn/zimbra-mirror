@@ -13,7 +13,10 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * 
+ * @private
+ */
 AjxTimedAction = function(obj, func, args) {
 	AjxCallback.call(this, obj, func, args);
 	this._tid = -1;

@@ -53,8 +53,9 @@
  * @author Conrad Damon
  * 
  * TODO: - add enable()
+ * 
+ * @private
  */
-
 AjxHistoryMgr = function() {
 
 	this.currentLocation = null;			// Our current hash location, without the "#" symbol.

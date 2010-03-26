@@ -26,9 +26,10 @@ AjxLeakDetector = function() {
 };
 
 /**
- * Executes a command. (This is intended to be run by the client special search handler.) 
- * @param command "begin", "end", or "report"
- * @return an object with 3 attributes: success, message, and details
+ * Executes a command. This is intended to be run by the client special search handler.
+ * 
+ * @param {string}	command 		"begin", "end", or "report"
+ * @return {hash}	an object with 3 attributes: success, message, and details
  */
 AjxLeakDetector.execute =
 function(command) {

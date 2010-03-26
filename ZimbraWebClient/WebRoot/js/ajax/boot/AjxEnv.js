@@ -13,6 +13,10 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+ * 
+ * @private
+ */
 AjxEnv = function() {
 };
 

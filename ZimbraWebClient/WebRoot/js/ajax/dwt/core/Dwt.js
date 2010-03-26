@@ -17,7 +17,7 @@
  * Default constructor.
  * @constructor
  * @class
- * Dwt is a static class that defines a number of contants and helper methods that
+ * Dwt is a static class that defines a number of constants and helper methods that
  * support the <code>ajax.dwt.*</code> package.
  *
  * @author Ross Dargahi
@@ -887,8 +887,8 @@ function(iframeObj) {
 /**
  * Creates and returns an element from a string of HTML.
  *
- * @param {String} html the HTML text
- * @param {Boolean} {isRow} 	if <code>true</code>, if the element is a <code>&lt;tr&gt;</code>
+ * @param {string} html 	the HTML text
+ * @param {boolean} isRow 	if <code>true</code>, if the element is a <code>&lt;tr&gt;</code>
  *
  * @return {HTMLElement}	an HTMLElement with the <code>html</code> as its content. if <code>isRow</code>
  * 		is <code>true</code>, then the element will be a table
@@ -1232,9 +1232,11 @@ Dwt.setInnerHtml = function(htmlEl,html){
 };
 
 /**
- * Sets the favicon
+ * Sets the favicon.
  *
- * @param {String} The url to the icon to display
+ * @param {string} the url to the icon to display
+ * 
+ * @private
  */
 Dwt.setFavIcon = function(iconURL) {
 	if (AjxEnv.isIE) {
@@ -1295,8 +1297,10 @@ function(doc, on) {
  * <p>
  * <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=489667">https://bugzilla.mozilla.org/show_bug.cgi?id=489667</a>
  * </p>
- * @param ev	{DwtMouseEvent}
- * @return	{Boolean}	<code>true</code> if FF3.6+ scrollbar click was detected and handled.
+ * @param {DwtMouseEvent}	ev			the event
+ * @return	{boolean}	<code>true</code> if FF3.6+ scrollbar click was detected and handled
+ * 
+ * @private
  */
 Dwt.ffScrollbarCheck =
 function(ev) {

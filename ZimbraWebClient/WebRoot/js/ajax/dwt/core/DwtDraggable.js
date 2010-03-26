@@ -16,8 +16,8 @@
 
 /**
 * @class
-* This static class enables entities (e.g. DwtDialogs) to be dragged around within an app window. 
-* The code is basically the same as in dom-drag.js from www.youngpup.net
+* This static class enables entities (for example, {@link DwtDialog}s) to be dragged around within
+* an application window. The code is basically the same as in dom-drag.js from www.youngpup.net
 *
 * @author Ross Dargahi
 * 
@@ -31,21 +31,21 @@ DwtDraggable.dragEl = null;
 /**
  * Initializes dragging for <code>dragEl</code>
  * 
- * @param {HTMLElement} dragEl Element being dragged, can also be a handle e.g. the
+ * @param {HTMLElement} dragEl 	the element being dragged, can also be a handle e.g. the
  * 		title bar in a dialog
- * @param {HTMLElement} rootEl The actual element that will be moved. This will be a
- * 		parent element of <i>dragEl</i> (optional) 
- * @param {number} minX Minimum x coord to which we can drag (optional)
- * @param {number} maxX Maximum x coord to which we can drag (optional)
- * @param {number} minY Minimum y coord to which we can drag (optional)
- * @param {number} maxY Maximum x coord to which we can drag (optional)
- * @param {AjxCallback} dragStartCB callback that is called when dragging is started
- * @param {AjxCallback}dragCB callback that is called when dragging
- * @param {AjxCallback}dragEndCB callback that is called when dragging is ended
- * @param {boolean} swapHorizRef If true, then mouse motion to the right will move element left (optional)
- * @param {boolean} swapVertRef If true, then mouse motion to the bottom will move element up (optional)
- * @param {function} fXMapper function that overides this classes x coordinate transformations (optional)
- * @param {function} fYMapper function that overides this classes y coordinate transformations (optional)
+ * @param {HTMLElement} [rootEl]	the actual element that will be moved. This will be a
+ * 		parent element of <i>dragEl</i>
+ * @param {number} [minX] 	the minimum x coord to which we can drag
+ * @param {number} [maxX] 	the maximum x coord to which we can drag
+ * @param {number} [minY] 	the minimum y coord to which we can drag
+ * @param {number} [maxY] 	the maximum x coord to which we can drag
+ * @param {AjxCallback} dragStartCB	the callback that is called when dragging is started
+ * @param {AjxCallback}dragCB		the callback that is called when dragging
+ * @param {AjxCallback}dragEndCB	the callback that is called when dragging is ended
+ * @param {boolean} [swapHorizRef]	if <code>true</code>, then mouse motion to the right will move element left
+ * @param {boolean} [swapVertRef]		if <code>true</code>, then mouse motion to the bottom will move element up
+ * @param {function} [fXMapper] 		the function that overrides this classes x coordinate transformations
+ * @param {function} [fYMapper] 		the function that overrides this classes y coordinate transformations
  *
  */
 DwtDraggable.init = 
@@ -86,10 +86,10 @@ function(dragEl, rootEl, minX, maxX, minY, maxY, dragStartCB, dragCB, dragEndCB,
  * 
  * @param {HTMLElement} dragEl Element being dragged, can also be a handle e.g. the
  * 		title bar in a dialog
- * @param {number} minX Minimum x coordinate
- * @param {number} maxX Maximum x coordinate
- * @param {number} minY Minimum y coordinate
- * @param {number} maxY Maximum y coordinate
+ * @param {number} minX 	the minimum x coordinate
+ * @param {number} maxX 	the maximum x coordinate
+ * @param {number} minY 	the minimum y coordinate
+ * @param {number} maxY 	the maximum y coordinate
  */
 DwtDraggable.setDragBoundaries =
 function (dragEl ,minX, maxX, minY, maxY) {

@@ -22,7 +22,7 @@
  * @author Ross Dargahi
  * 
  * @param {string} 		[msg]		the human readable message
- * @param {string|number} 	[code]	any error or fault code
+ * @param {constant} 	[code]	any error or fault code
  * @param {string} 		[method] 	the name of the method throwing the exception
  * @param {string} 		[detail]		any additional detail
  */

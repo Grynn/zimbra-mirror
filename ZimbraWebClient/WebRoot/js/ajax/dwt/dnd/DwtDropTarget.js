@@ -19,12 +19,13 @@
  * A drop target is registered with a control to indicate that the control is 
  * a drop target. The drop target is the mechanism by which the DnD framework provides 
  * the binding between the UI components and the application.
- * 
- * Application developers instantiate <i>DwtDropTarget</i> and register it with the control
- * which is to be a drop target (via <code>DwtControl.prototype.setDropTarget</code>). The
- * application should then register a listener with the <i>DwtDropTarget</i>. This way
+ * <p>
+ * Application developers instantiate {@link DwtDropTarget} and register it with the control
+ * which is to be a drop target (via {@link DwtControl.setDropTarget}). The
+ * application should then register a listener with the {@link DwtDropTarget}. This way
  * when drop events occur the application will be notified and may act on them 
  * accordingly
+ * </p>
  * 
  * @author Ross Dargahi
  * 
@@ -72,7 +73,7 @@ function() {
 }
 
 /**
- * Registers a listener for <i>DwtDragEvent</i> events.
+ * Registers a listener for {@link DwtDragEvent} events.
  *
  * @param {AjxListener} dropTargetListener Listener to be registered 
  * 

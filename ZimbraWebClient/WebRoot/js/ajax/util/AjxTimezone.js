@@ -118,6 +118,7 @@
  * application can override this value, through a user preference perhaps, 
  * by setting the <code>DEFAULT</code> property's value. The default 
  * timezone is specified using the client identifier.
+ * 
  */
 AjxTimezone = function() {};
 

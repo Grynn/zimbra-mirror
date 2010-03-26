@@ -33,15 +33,18 @@
  * Contributor(s):
  */
 
-/*
+/**
  * browserplus.js
  *
  * Provides a gateway between user JavaScript and the BrowserPlus platform
+ * 
+ * @private
  */
 
 // Note: Members beginning with '_' are not intended for client use.
 
 // handle multiple inclusions of this file without resetting state.
+
 BrowserPlus = (typeof BrowserPlus != "undefined" && BrowserPlus) ? BrowserPlus : (function() {
 
     // private variables

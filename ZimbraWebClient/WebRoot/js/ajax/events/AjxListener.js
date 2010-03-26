@@ -19,7 +19,7 @@
 * @constructor
 * @class
 * This class represents a listener, which is a function to be called in response to an event.
-* A listener is a slightly specialized callback: it has a <code>handleEvent()</code> method, and it does not
+* A listener is a slightly specialized callback: it has a {@link #handleEvent} method, and it does not
 * return a value.
 *
 * @author Ross Dargahi

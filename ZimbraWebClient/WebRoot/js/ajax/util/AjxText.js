@@ -26,13 +26,19 @@
  * Base class for all formats. To format an object, instantiate the
  * format of your choice and call the <code>format</code> method which
  * returns the formatted string.
+ * 
+ * @private
  */
 AjxFormat = function(pattern) {
 	this._pattern = pattern;
 	this._segments = [];
 }
 
-/** Returns string representation of this object. */
+/**
+ * Returns a string representation of this object.
+ * 
+ * @return	{string}	a string representation of this object
+ */
 AjxFormat.prototype.toString = function() { 
 	var s = [];
 	s.push("pattern=\"",this._pattern,'"');

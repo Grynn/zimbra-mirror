@@ -73,7 +73,7 @@ AjxRpc.__RPC_REAP_AGE	= 300000;	// mark any context older than this (in ms) as f
  * @throws	{AjxException.NETWORK_ERROR}	a network error occurs
  * @throws	{AjxException.UNKNOWN_ERROR}	an unknown error occurs
  * 
- * @see	AjxRpcRequest.invoke
+ * @see	AjxRpcRequest#invoke
  * 
  */
 AjxRpc.invoke =

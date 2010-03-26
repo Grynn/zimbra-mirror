@@ -826,7 +826,7 @@ function() {
  *
  * @param {Object}	item		an item
  * @param {Element}	element	an HTML element
- * @param {constant]	[type=DwtListView.TYPE_LIST_ITEM]		a role that element has
+ * @param {constant}	[type=DwtListView.TYPE_LIST_ITEM]		a role that element has
  * @param {string}	[id]		the ID for element; if not provided, one is generated from the item
  * @param {hash}	[data]		any additional attributes to store
  * 

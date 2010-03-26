@@ -13,9 +13,8 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
 /**
- * This requires an "owner" which is the object that owns the full set of items, implmenting:
+ * This requires an "owner" which is the object that owns the full set of items, implementing:
  * getItemCount() to return the number of items
  * getItem(index) to return the item at a given index.
  * 
@@ -25,8 +24,8 @@
  * selectionChanged() which is called after a batch of items have
  *         been selected or deselected with select()
  *
+ * @private
  */
-	
 AjxSelectionManager = function(anOwner) {
 	this._owner = anOwner;
 };

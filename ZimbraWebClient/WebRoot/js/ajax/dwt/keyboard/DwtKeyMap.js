@@ -83,32 +83,107 @@ DwtKeyMap.IS_MODIFIER = {};
 DwtKeyMap.MOD_ORDER		= {};
 
 // Key names
+/**
+ * Defines the "arrow down" key.
+ */
 DwtKeyMap.ARROW_DOWN		= "ArrowDown";
+/**
+ * Defines the "arrow left" key.
+ */
 DwtKeyMap.ARROW_LEFT		= "ArrowLeft";
+/**
+ * Defines the "arrow right" key.
+ */
 DwtKeyMap.ARROW_RIGHT		= "ArrowRight";
+/**
+ * Defines the "arrow up" key.
+ */
 DwtKeyMap.ARROW_UP			= "ArrowUp";
+/**
+ * Defines the "backslash" key.
+ */
 DwtKeyMap.BACKSLASH			= "Backslash";
+/**
+ * Defines the "backspace" key.
+ */
 DwtKeyMap.BACKSPACE			= "Backspace";
+/**
+ * Defines the "comma" key.
+ */
 DwtKeyMap.COMMA				= "Comma";
+/**
+ * Defines the "semicolon" key.
+ */
 DwtKeyMap.SEMICOLON			= "Semicolon";
+/**
+ * Defines the "delete" key.
+ */
 DwtKeyMap.DELETE			= "Del";
+/**
+ * Defines the "end" key.
+ */
 DwtKeyMap.END				= "End";
+/**
+ * Defines the "enter" key.
+ */
 DwtKeyMap.ENTER				= "Enter";
+/**
+ * Defines the "esc" key.
+ */
 DwtKeyMap.ESC				= "Esc";
+/**
+ * Defines the "home" key.
+ */
 DwtKeyMap.HOME				= "Home";
+/**
+ * Defines the "page down" key.
+ */
 DwtKeyMap.PAGE_DOWN			= "PgDown";
+/**
+ * Defines the "page up" key.
+ */
 DwtKeyMap.PAGE_UP			= "PgUp";
+/**
+ * Defines the "space" key.
+ */
 DwtKeyMap.SPACE				= "Space";
+/**
+ * Defines the "tab" key.
+ */
 DwtKeyMap.TAB				= "Tab";
 
 // Action codes
+/**
+ * Defines the "action menu" action.
+ */
 DwtKeyMap.ACTION			= "ContextMenu";
+/**
+ * Defines the "select current" action.
+ */
 DwtKeyMap.SELECT_CURRENT	= "SelectCurrent";
+/**
+ * Defines the "add next" action.
+ */
 DwtKeyMap.ADD_SELECT_NEXT	= "AddNext";
+/**
+ * Defines the "add previous" action.
+ */
 DwtKeyMap.ADD_SELECT_PREV	= "AddPrevious";
+/**
+ * Defines the "cancel" action.
+ */
 DwtKeyMap.CANCEL			= "Cancel";
+/**
+ * Defines the "collapse" action.
+ */
 DwtKeyMap.COLLAPSE			= "Collapse";
+/**
+ * Defines the "double-click" action.
+ */
 DwtKeyMap.DBLCLICK			= "DoubleClick";
+/**
+ * Defines the "expand" action.
+ */
 DwtKeyMap.EXPAND			= "Expand";
 DwtKeyMap.GOTO_TAB			= "GoToTab";
 DwtKeyMap.HEADER1			= "Header1";
@@ -117,26 +192,83 @@ DwtKeyMap.HEADER3			= "Header3";
 DwtKeyMap.HEADER4			= "Header4";
 DwtKeyMap.HEADER5			= "Header5";
 DwtKeyMap.HEADER6			= "Header6";
+/**
+ * Defines the "justify center" action.
+ */
 DwtKeyMap.JUSTIFY_CENTER	= "CenterJustify";
+/**
+ * Defines the "justify left" action.
+ */
 DwtKeyMap.JUSTIFY_LEFT		= "LeftJustify";
+/**
+ * Defines the "justify right" action.
+ */
 DwtKeyMap.JUSTIFY_RIGHT		= "RightJustify";
+/**
+ * Defines the "next" action.
+ */
 DwtKeyMap.NEXT				= "Next";
+/**
+ * Defines the "next tab" action.
+ */
 DwtKeyMap.NEXT_TAB			= "NextTab";
 DwtKeyMap.NO				= "No";
 DwtKeyMap.PARENTMENU		= "ParentMenu";
+/**
+ * Defines the "previous" action.
+ */
 DwtKeyMap.PREV				= "Previous";
+/**
+ * Defines the "previous tab" action.
+ */
 DwtKeyMap.PREV_TAB			= "PreviousTab";
+/**
+ * Defines the "select all" action.
+ */
 DwtKeyMap.SELECT_ALL		= "SelectAll";
+/**
+ * Defines the "select" action.
+ */
 DwtKeyMap.SELECT			= "Select";
+/**
+ * Defines the "select first" action.
+ */
 DwtKeyMap.SELECT_FIRST		= "SelectFirst";
+/**
+ * Defines the "select last" action.
+ */
 DwtKeyMap.SELECT_LAST		= "SelectLast";
+/**
+ * Defines the "select next" action.
+ */
 DwtKeyMap.SELECT_NEXT		= "SelectNext";
+/**
+ * Defines the "select previous" action.
+ */
 DwtKeyMap.SELECT_PREV		= "SelectPrevious";
+/**
+ * Defines the "sub-menu" action.
+ */
 DwtKeyMap.SUBMENU			= "SubMenu";
+/**
+ * Defines the "switch mode" action.
+ */
 DwtKeyMap.SWITCH_MODE		= "SwitchMode";
+/**
+ * Defines the "text bold" action.
+ */
 DwtKeyMap.TEXT_BOLD			= "Bold";
+/**
+ * Defines the "text italic" action.
+ */
 DwtKeyMap.TEXT_ITALIC		= "Italic";
+/**
+ * Defines the "text underline" action.
+ */
 DwtKeyMap.TEXT_UNDERLINE	= "Underline";
+/**
+ * Defines the "text strikethru" action.
+ */
 DwtKeyMap.TEXT_STRIKETHRU	= "Strikethru";
 DwtKeyMap.YES				= "Yes";
 

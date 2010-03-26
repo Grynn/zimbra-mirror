@@ -35,7 +35,7 @@
  * </p>
  * <p>
  * To cancel a timer, call <code>idleTimer.kill()</code>. To restart it later, you can
- * <code>idleTimer.resurrect(timeout)</coe>. The timeout parameter is optional, pass it only if you
+ * <code>idleTimer.resurrect(timeout)</code>. The timeout parameter is optional, pass it only if you
  * want to modify it.
  * </p>
  * <p>

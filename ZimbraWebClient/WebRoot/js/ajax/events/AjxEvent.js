@@ -14,6 +14,8 @@
  */
 
 /**
+ * Default constructor.
+ * @class
  * 
  * @private
  */

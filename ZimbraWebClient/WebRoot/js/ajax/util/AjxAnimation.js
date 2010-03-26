@@ -14,48 +14,53 @@
  */
 
 /**
- *
+ * @class
  * An object useful for implementing accelerated / decelerated animation.
  *
  * @author Mihai Bazon <mihai@zimbra.com>
  *
- * Arguments:
- *
- *    length   -- the number of frames
- *    speed    -- speed of the timer (i.e. argument to setInterval)
- *    f        -- easing function
- *    onUpdate -- AjxCallback that will be called when the timer updates
- *    onStop   -- AjxCallback -- called when the animation is finished
- *
  * This object creates a timer (setInterval) and calls the function
- * (AjxCallback) that you supply at onUpdate every "speed" milliseconds,
+ * ({@link AjxCallback}) that you supply at onUpdate every "speed" milliseconds,
  * passing to it two arguments:
  *
- * - pos -- a float number between 0 and 1
- * - anim -- the animation object
- *
+ * <ul>
+ * <li><i>pos</i> -- a float number between 0 and 1</li>
+ * <li><i>anim</i> -- the animation object</li>
+ * </ul>
+ * 
  * "pos" is computed by an easing function; it is 0 when the animation starts
  * and it approaches 1 as your animation continues; For example, depending on
  * the easing function, it can increase faster initially and slower as it
  * reaches 1 (simulates acceleration).
- *
+ * <p>
  * AjxAnimation supplies 2 very basic easing functions (f_accelerate and
  * f_decelerate).  More complex functions can be easily written, to simulate
  * i.e. bouncing -- you just have to find the mathematical representation.
- *
+ * </p><p>
  * An easing function receives 2 arguments:
- *
- * - i -- the current frame
- * - length -- the total number of frames
- *
+ * <ul>
+ * <li><i>i</i> -- the current frame</li>
+ * <li><i>length</i> -- the total number of frames</li>
+ * </ul>
+ * 
  * It should return 0 when i == 0, 1 when i == length, and a number between 0
  * and 1 otherwise.  You can get a constant speed animation with this
  * uninteresting easing function:
  *
- *    function(i, length) { return i / length; }
+ * <pre>
+ * function(i, length) { return i / length; }
+ * </pre>   
+ *
+ * @param	{hash}		args		a hash of parameters
+ * @param   {number}	args.length   the number of frames
+ * @param   {number}	args.speed    the speed of the timer (i.e. argument to setInterval)
+ * @param   {function}	args.f        the easing function
+ * @param   {AjxCallback}	args.onUpdate called when the timer updates
+ * @param   {AjxCallback}	args.onStop   called when the animation is finished
+ * 
+ * @private
  *
  */
-
 AjxAnimation = function(args) {
 	this.length = args.length || 15;
 	this.speed = args.speed || 50;

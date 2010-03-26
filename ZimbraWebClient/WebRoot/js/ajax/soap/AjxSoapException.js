@@ -14,7 +14,14 @@
  */
 
 /**
+ * Creates a SOAP exception.
  * @class
+ * 
+ * 
+ * @param {string} 		[msg]		the human readable message
+ * @param {constant}		code		the exception code
+ * @param {string} 		[method] 	the name of the method throwing the exception
+ * @param {string} 		[detail]		any additional detail
  * 
  * @extends		AjxException
  * 

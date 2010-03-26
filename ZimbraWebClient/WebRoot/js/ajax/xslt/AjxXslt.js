@@ -15,20 +15,24 @@
 
 
 /**
-* XSLT engine.  (http://www.w3.org/TR/xslt)
-* Supports IE and Firefox.
-*
-* Use the following static methods to create instance.
-*
-* xslt = AjxXslt.createFromUrl(url of the stylesheet)
-* xslt = AjxXslt.createFromString(stylesheet in string)
-*
-* Then apply the transformation on a document.  Two methods are available depending on the needs.
-*
-* dom = xslt.transformToDom(doc);
-* xml = xslt.transformToString(doc);
-*
-*/
+ * XSLT engine <a href="http://www.w3.org/TR/xslt">http://www.w3.org/TR/xslt</a>
+ * @class
+ * Supports IE and Firefox. Use the following static methods to create instance.
+ *
+ * <pre>
+ * xslt = AjxXslt.createFromUrl(url of the stylesheet)
+ * xslt = AjxXslt.createFromString(stylesheet in string)
+ * </pre>
+ *
+ * Then apply the transformation on a document.  Two methods are available depending on the needs.
+ *
+ * <pre>
+ * dom = xslt.transformToDom(doc);
+ * xml = xslt.transformToString(doc);
+ * </pre>
+ * 
+ * @private
+ */
 AjxXslt = function() {
 	var doc = AjxXmlDoc.create();
 	if (AjxEnv.isIE) {

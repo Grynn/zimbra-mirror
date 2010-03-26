@@ -16,7 +16,7 @@
 
 /**
  * Represents a SOAP Fault
- *
+ * @class
  * Public attributes:
  *
  * - faultCode: The SOAP fault code
@@ -57,6 +57,11 @@ AjxSoapFault = function(faultEl) {
 	}
 }
 
+/**
+ * Returns a string representation of this object.
+ * 
+ * @return	{string}	a string representation of this object
+ */
 AjxSoapFault.prototype.toString = 
 function() {
 	return "AjxSoapFault";

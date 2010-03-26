@@ -12,6 +12,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
+
 /**
  * @class
  * This static class serves as a central location for registering and calling
@@ -19,13 +20,13 @@
  * pulling up the compose form might look something like this:
  * 
  * <pre>
- *		AjxDispatcher.register("Compose", "Mail", new AjxCallback(this, this.doAction));
+ * AjxDispatcher.register("Compose", "Mail", new AjxCallback(this, this.doAction));
  * </pre>
  * 
  * and a client call of it like this:
  * 
  * <pre>
- *		AjxDispatcher.run("Compose", {action:ZmOperation.NEW_MESSAGE, inNewWindow:false});
+ * AjxDispatcher.run("Compose", {action:ZmOperation.NEW_MESSAGE, inNewWindow:false});
  * </pre>
  * 
  * Registration will most likely need to happen in a constructor, when 'this' is
@@ -37,7 +38,7 @@
  * AjxPackage.require() that will call that method and then run the post-load callback (if any):
  *
  * <pre>
- * 		AjxDispatcher.require("Calendar");
+ * AjxDispatcher.require("Calendar");
  * </pre>
  * 
  * @author Conrad Damon

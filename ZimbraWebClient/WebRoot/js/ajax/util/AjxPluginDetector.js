@@ -21,8 +21,8 @@
  * This class provides static methods to determine which standard plugins are
  * installed in the browser.
  *
+ * @private
  */
-
 AjxPluginDetector = function() {
 }
 

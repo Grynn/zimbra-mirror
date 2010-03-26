@@ -14,19 +14,21 @@
  */
 
 /**
-* Creates a new AjxEmailAddress, either by parsing an email string or from component parts.
-* @constructor
-* @class
-* This class represents an email address and defines some related constants. The class does not attempt full compliance
-* with RFC2822, so there are limitations for some of the edge cases.
-*
-* @author Conrad Damon
-* @param address	[string]		an email string, or just the address portion
-* @param type		[constant]*		from, to, cc, bcc, or reply-to
-* @param name		[string]*		the personal name portion
-* @param dispName	[string]*		a brief display version of the name
-* @param isGroup	[boolean]*		whether the address param is really a list of email addresses
-*/
+ * Creates a new emal address, either by parsing an email string or from component parts.
+ * @constructor
+ * @class
+ * This class represents an email address and defines some related constants. The class does not attempt full compliance
+ * with RFC2822, so there are limitations for some of the edge cases.
+ *
+ * @author Conrad Damon
+ * 
+ * @param {string}	address		an email string, or just the address portion
+ * @param {constant}	type		from, to, cc, bcc, or reply-to
+ * @param {string}	name		the personal name portion
+ * @param {string}	dispName	a brief display version of the name
+ * @param {boolean}	isGroup		if <code>true</code>, the address param is really a list of email addresses
+ * 
+ */
 AjxEmailAddress = function(address, type, name, dispName, isGroup) {
 	this.address = address;
 	this.name = this._setName(name);
@@ -36,9 +38,21 @@ AjxEmailAddress = function(address, type, name, dispName, isGroup) {
     this.isAjxEmailAddress = true;
 };
 
+/**
+ * Defines the "from" type.
+ */
 AjxEmailAddress.FROM		= "FROM";
+/**
+ * Defines the "to" type.
+ */
 AjxEmailAddress.TO			= "TO";
+/**
+ * Defines the "cc" type.
+ */
 AjxEmailAddress.CC			= "CC";
+/**
+ * Defines the "bcc" type.
+ */
 AjxEmailAddress.BCC			= "BCC";
 AjxEmailAddress.REPLY_TO	= "REPLY_TO";
 AjxEmailAddress.SENDER		= "SENDER";
@@ -98,15 +112,19 @@ AjxEmailAddress.phrasePat = /(((\s*[^\x00-\x1F\x7F()<>\[\]:;@\"\s]+\s*)|(\s*"(([
 AjxEmailAddress.boundAddrPat = /(\s*<?(((\s*([^\x00-\x1F\x7F()<>\[\]:;@\,."\s]+(\.[^\x00-\x1F\x7F()<>\[\]:;@\,."\s]+)*)\s*)|(\s*"(([^\\"])|(\\([^\x0A\x0D])))+"\s*))\@((\s*([^\x00-\x1F\x7F()<>\[\]:;@\,."\s]+(\.[^\x00-\x1F\x7F()<>\[\]:;@\,."\s]+)*)\s*)|(\s*\[(\s*(([^\[\]\\])|(\\([^\x0A\x0D])))+)*\s*\]\s*)))>?\s*)$/;
 
 /**
-* Parses an email address string into its component parts. The parsing is adapted from the perl module 
-* <a href="http://search.cpan.org/~cwest/Email-Address-1.2/lib/Email/Address.pm">Email::Address</a>. Check that out if you
-* want to know how the gory regexes that do the parsing were built. They are based on RFC2822, but don't represent a full 
-* implementation. We don't really need or want that, since we don't want to be overly restrictive or bloated. It was easier
-* to just use the resulting regexes from the Perl module, rather than go through all the rigmarole of building them up from
-* atoms. Plus, I get to use the word "rigmarole".
-* <p>
-* If the address parses successfully, the current object's properties will be set.</p>
-*/
+ * Parses an email address string into its component parts. The parsing is adapted from the perl module 
+ * <a href="http://search.cpan.org/~cwest/Email-Address-1.2/lib/Email/Address.pm">Email::Address</a>. Check that out if you
+ * want to know how the gory regexes that do the parsing were built. They are based on RFC2822, but don't represent a full 
+ * implementation. We don't really need or want that, since we don't want to be overly restrictive or bloated. It was easier
+ * to just use the resulting regexes from the Perl module, rather than go through all the rigmarole of building them up from
+ * atoms.
+ * <p>
+ * If the address parses successfully, the current object's properties will be set.
+ * </p>
+ * 
+ * @param	{string}	str		the string to parse
+ * @return	{AjxEmailAddress}	the email address or <code>null</code>
+ */
 AjxEmailAddress.parse =
 function(str) {
 	var addr, name;
@@ -146,14 +164,15 @@ function(str) {
 };
 
 /**
-* Takes a string with one or more addresses and parses it. An object with lists of good addresses, bad
-* addresses, and all addresses is returned. Strict RFC822 validation (at least as far as it goes in the
-* regexes we have) is optional. If it's off, we'll retry a failed address after quoting the personal part.
-*
-* @param emailStr	[string]	an email string with one or more addresses
-* @param type		[constant]	address type of the string
-* @param strict		[boolean]*	if true, do strict checking
-*/
+ * Parses a string with one or more addresses and parses it. An object with lists of good addresses, bad
+ * addresses, and all addresses is returned. Strict RFC822 validation (at least as far as it goes in the
+ * regexes we have) is optional. If it's off, we'll retry a failed address after quoting the personal part.
+ *
+ * @param {string}	emailStr	an email string with one or more addresses
+ * @param {constant}	type		address type of the string
+ * @param {boolean}	strict		if <code>true</code>, do strict checking
+ * @return	{hash}		the good/bad/all addresses
+ */
 AjxEmailAddress.parseEmailString =
 function(emailStr, type, strict) {
 	var good = new AjxVector();
@@ -190,10 +209,11 @@ function(emailStr, type, strict) {
 };
 
 /**
-* Tests a string to see if it's a valid email string according to our mailbox pattern.
-*
-* @param str		an email string
-*/
+ * Checks if a string to see if it's a valid email string according to our mailbox pattern.
+ *
+ * @param {string}	str		an email string
+ * @return	{boolean}	<code>true</code> if the string is valid
+ */
 AjxEmailAddress.isValid =
 function(str) {
 	str = AjxStringUtil.trim(str);
@@ -212,25 +232,24 @@ function(str) {
 };
 
 /**
-* Splits a string into (possible) email address strings based on delimiters. Tries to
-* be flexible about what it will accept. The following delimiters are recognized, under
-* the following conditions:
-*
-* <p><pre>
-* return		always
-* semicolon		must not be inside quoted or comment text
-* comma			must not be inside quoted or comment text, and must follow an address (which
-*				may be in angle brackets)
-* space			can only separate plain addresses (no quoted or comment text)
-* </pre></p>
-* <p>
-* The requirement that a comma follow an address allows us to be lenient when a mailer
-* doesn't quote the friendly part, so that a string such as the one below is split correctly:
-* 	<code>Smith, John &lt;jsmith@aol.com&gt;</code>
-* </p>
-*
-* @param str	the string to be split
-*/
+ * Splits a string into (possible) email address strings based on delimiters. Tries to
+ * be flexible about what it will accept. The following delimiters are recognized, under
+ * the following conditions:
+ *
+ * <ul>
+ * <li><i>return</i> -- always</li>
+ * <li><i>semicolon</i> -- must not be inside quoted or comment text</li>
+ * <li><i>comma</i> -- must not be inside quoted or comment text, and must follow an address (which may be in angle brackets)</li>
+ * <li><i>space</i> -- can only separate plain addresses (no quoted or comment text)</li>
+ * </ul>
+ * 
+ * The requirement that a comma follow an address allows us to be lenient when a mailer
+ * doesn't quote the friendly part, so that a string such as the one below is split correctly:
+ * <code>Smith, John &lt;jsmith@aol.com&gt;</code>
+ *
+ * @param {string}	str	the string to be split
+ * @return	{array}	the list of {String} addresses
+ */
 AjxEmailAddress.split =
 function(str) {
 	str = AjxStringUtil.trim(str);
@@ -319,6 +338,11 @@ function(str) {
 	return addrList;
 };
 
+/**
+ * Returns a string representation of this object.
+ * 
+ * @return	{string}		a string representation of this object
+ */
 AjxEmailAddress.prototype.toString =
 function() {
 	if (this.name && !this.isGroup) {
@@ -330,41 +354,81 @@ function() {
 	}
 };
 
+/**
+ * Gets the address.
+ * 
+ * @return	{string}	the address
+ */
 AjxEmailAddress.prototype.getAddress =
 function() {
 	return this.address;
 };
 
+/**
+ * Sets the address.
+ * 
+ * @param	{string}	addr		the address
+ */
 AjxEmailAddress.prototype.setAddress =
 function(addr) {
 	this.address = addr;
 };
 
+/**
+ * Gets the type (to/from/cc/bcc).
+ * 
+ * @return	{constant}	the type
+ */
 AjxEmailAddress.prototype.getType =
 function() {
 	return this.type;
 };
 
+/**
+ * Sets the type.
+ * 
+ * @param	{constant}	type		the type (to/from/cc/bcc)
+ */
 AjxEmailAddress.prototype.setType =
 function(type) {
 	this.type = type;
 };
 
+/**
+ * Gets the type as a string.
+ * 
+ * @return	{string}	the type (to/from/cc/bcc)
+ */
 AjxEmailAddress.prototype.getTypeAsString =
 function() {
 	return AjxEmailAddress.TYPE_STRING[this.type];
 };
 
+/**
+ * Gets the name.
+ * 
+ * @return	{string}	the name
+ */
 AjxEmailAddress.prototype.getName =
 function() {
 	return this.name;
 };
 
+/**
+ * Gets the display name.
+ * 
+ * @return	{string}	the name
+ */
 AjxEmailAddress.prototype.getDispName =
 function() {
 	return this.dispName;
 };
 
+/**
+ * Clones this email address.
+ * 
+ * @return	{AjxEmailAddress}	a clone of this email address
+ */
 AjxEmailAddress.prototype.clone =
 function() {
 	var addr = new AjxEmailAddress(this.address, this.type, this.name, this.dispName);
@@ -372,6 +436,12 @@ function() {
 	return addr;
 };
 
+/**
+ * Copies the email address.
+ * 
+ * @param	{AjxEmailAddress}	obj		the email to copy
+ * @return	{AjxEmailAddress}	the newly copied email address
+ */
 AjxEmailAddress.copy =
 function(obj){    
     var addr = new AjxEmailAddress(obj.address, obj.type, obj.name, obj.dispName);

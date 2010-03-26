@@ -19,20 +19,23 @@
  * A drag source is registered with a control to indicate that the control is 
  * draggable. The drag source is the mechanism by which the DnD framework provides 
  * the binding between the UI components and the application.
- * 
- * Application developers instantiate <i>DwtDragSource</i> and register it with the control
- * which is to be draggable (via <code>DwtControl.prototype.setDragSource</code>). The
- * application should then register a listener with the <i>DwtDragSource</i>. This way
+ * <p>
+ * Application developers instantiate {@link DwtDragSource} and register it with the control
+ * which is to be draggable (via {@link DwtControl.setDragSource}). The
+ * application should then register a listener with the {@link DwtDragSource}. This way
  * when drag events occur the application will be notified and may act on them 
  * accordingly
+ * </p>
  * 
  * @author Ross Dargahi
  * 
- * @param {number} supportedOps Supported operations. This is an arithmetic ORing of
- * 		the operations supported by the drag source. Supported values are: <ul>
- * 			<li><i>Dwt.DND_DROP_NONE</i></li>
- * 			<li><i>Dwt.DND_DROP_COPY</i></li>
- * 			<li><i>Dwt.DND_DROP_MOVE</i></li></ul> 
+ * @param {number} supportedOps 	the supported operations. This is an arithmetic OR'ing of
+ * 		the operations supported by the drag source. Supported values are:
+ * 		<ul>
+ * 			<li>{@link Dwt.DND_DROP_NONE}</li>
+ * 			<li>{@link Dwt.DND_DROP_COPY}</li>
+ * 			<li>{@link Dwt.DND_DROP_MOVE}</li>
+ * 		</ul> 
  * 
  * @see DwtDragEvent
  * @see DwtControl
@@ -43,10 +46,10 @@ DwtDragSource = function(supportedOps) {
 	this.__evtMgr = new AjxEventMgr();
 };
 
-/**@private*/
+/** @private */
 DwtDragSource.__DRAG_LISTENER = "DwtDragSource.__DRAG_LISTENER";
 
-/**@private*/
+/** @private */
 DwtDragSource.__dragEvent = new DwtDragEvent();
 
 /**
@@ -122,7 +125,6 @@ function() {
 };
 
 /** @private */
-
 DwtDragSource.prototype._cancelDrag =
 function() {
 	DwtDragSource.__dragEvent.action = DwtDragEvent.DRAG_CANCEL;

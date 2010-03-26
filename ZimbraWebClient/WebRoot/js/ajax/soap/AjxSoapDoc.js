@@ -142,10 +142,10 @@ function(name, value) {
  * will create an XML like this under the method tag:
  *
  * <pre>
- *    <user_auth>
- *      <user_name>foo</user_name>
- *      <password>bar</password>
- *    </user_auth>
+ *    &lt;user_auth>
+ *      &lt;user_name>foo&lt;/user_name>
+ *      &lt;password>bar&lt;/password>
+ *    &lt;/user_auth>
  * </pre>
  * 
  * Of course, nesting other hashes is allowed and will work as expected.

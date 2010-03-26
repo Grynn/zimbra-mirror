@@ -14,12 +14,22 @@
  */
 
 
-// Don't directly instantiate AjxXmlDoc, use one of the create factory methods instead
+/**
+ * Default constructor.
+ * @class
+ * Do not directly instantiate {@link AjxXmlDoc}, use one of the create factory methods instead.
+ * 
+ */
 AjxXmlDoc = function() {
 	if (!AjxXmlDoc._inited)
 		AjxXmlDoc._init();
 }
 
+/**
+ * Returns a string representation of the object.
+ * 
+ * @return	{string}	a string representation of the object
+ */
 AjxXmlDoc.prototype.toString =
 function() {
 	return "AjxXmlDoc";
@@ -31,10 +41,11 @@ function() {
 
 /**
  * <strong>Note:</strong>
- * Anybody that uses these regular expressions MUST reset the lastIndex
- * property to zero or else the results are not guaranteed to be correct.
- * <p>
- * You should use {@link AjxXmlDoc.replaceInvalidChars} instead.
+ * Anybody that uses these regular expressions MUST reset the <code>lastIndex</code>
+ * property to zero or else the results are not guaranteed to be correct. You should
+ * use {@link AjxXmlDoc.replaceInvalidChars} instead.
+ * 
+ * @private
  */
 AjxXmlDoc.INVALID_CHARS_RE = /[\u0000-\u0008\u000B-\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE-\uFFFF]/g;
 AjxXmlDoc.REC_AVOID_CHARS_RE = /[\u007F-\u0084\u0086-\u009F\uFDD0-\uFDDF]/g;
@@ -46,6 +57,11 @@ AjxXmlDoc.REC_AVOID_CHARS_RE = /[\u007F-\u0084\u0086-\u009F\uFDD0-\uFDDF]/g;
 AjxXmlDoc._inited = false;
 AjxXmlDoc._msxmlVers = null;
 
+/**
+ * Creates an XML doc.
+ * 
+ * @return	{AjxXmlDoc}	the XML doc
+ */
 AjxXmlDoc.create =
 function() {
 	var xmlDoc = new AjxXmlDoc();
@@ -66,6 +82,12 @@ function() {
 	return xmlDoc;
 }
 
+/**
+ * Creates an XML doc from a document object.
+ * 
+ * @param	{Document}		doc		the document object
+ * @return	{AjxXmlDoc}		the XML doc
+ */
 AjxXmlDoc.createFromDom =
 function(doc) {
 	var xmlDoc = new AjxXmlDoc();
@@ -73,6 +95,12 @@ function(doc) {
 	return xmlDoc;
 }
 
+/**
+ * Creates an XML doc from an XML string.
+ * 
+ * @param	{string}		xml		the XML string
+ * @return	{AjxXmlDoc}		the XML doc
+ */
 AjxXmlDoc.createFromXml =
 function(xml) {
 	var xmlDoc = AjxXmlDoc.create();
@@ -80,6 +108,12 @@ function(xml) {
 	return xmlDoc;
 }
 
+/**
+ * Replaces invalid characters in the given string.
+ * 
+ * @param	{string}	s	the string
+ * @return	{string}	the resulting string
+ */
 AjxXmlDoc.replaceInvalidChars = function(s) {
 	AjxXmlDoc.INVALID_CHARS_RE.lastIndex = 0;
 	return s.replace(AjxXmlDoc.INVALID_CHARS_RE, "?");
@@ -91,6 +125,11 @@ function(node) {
 	return AjxXmlDoc.replaceInvalidChars(ser.serializeToString(node));
 }
 
+/**
+ * Gets the document.
+ * 
+ * @return	{Document}	the document
+ */
 AjxXmlDoc.prototype.getDoc =
 function() {
 	return this._doc;
@@ -112,57 +151,61 @@ function(url) {
 }
 
 /**
- * This function tries to create a JavaScript representation of the DOM.  Why,
- * because it's so much fun to work with JS objets rather than do DOM lookups
- * using getElementsByTagName 'n stuff.
+ * This function tries to create a JavaScript representation of the DOM. In some cases,
+ * it is easier to work with JS objects rather than do DOM lookups.
  *
+ * <p>
  * Rules:
+ * <ol>
+ * <li>The top-level tag gets lost; only it's content is seen important.</li>
+ * <li>Each node will be represented as a JS object.  It's textual content
+ *      will be saved in node.__msh_content (returned by <code>toString()</code>).</li>
+ * <li>Attributes get discarded.</li>
+ * <li>Each subnode will map to a property with its tagName in the parent
+ *      node <code>parent[subnode.tagName] == subnode</code></li>
+ * <li>If multiple nodes with the same tagName have the same parent node, then
+ *      <code>parent[tagName]</code> will be an array containing the objects, rather than a
+ *      single object.</li>
+ * </ol>
+ * 
+ * So what this function allows us to do is for instance this, starting with this XML doc:
  *
- *   1. The top-level tag gets lost; only it's content is seen important.
- *   2. Each node will be represented as a JS object.  It's textual content
- *      will be saved in node.__msh_content (returned by toString()).
- *   3. Attributes get discarded; this might not be good in general but it's OK
- *      for the application I have in mind now.  IAE, I'll be able to fix this if
- *      anyone requires--mail mihai@zimbra.com.
- *   4. Each subnode will map to a property with its tagName in the parent
- *      node.  So, parent[subnode.tagName] == subnode.
- *   5. If multiple nodes with the same tagName have the same parent node, then
- *      parent[tagName] will be an array containing the objects, rather than a
- *      single object.
- *
- * So what this function allows us to do is for instance this:
- *
- * XML doc:
- *
- * <error>
- *   <code>404</code>
- *   <name>Not Found</name>
- *   <description>Page wasn't found on this server.</description>
- * </error>
- *
+ * <pre>
+ * &lt;error>
+ *   &lt;code>404&lt;/code>
+ *   &lt;name>Not Found&lt;/name>
+ *   &lt;description>Page wasn't found on this server.&lt;/description>
+ * &lt;/error>
+ * </pre>
+ * 
+ * <pre>
  * var obj = AjxXmlDoc.createFromXml(XML).toJSObject();
  * alert(obj.code + " " + obj.name + " " + obj.description);
- *
+ * </pre>
+ * 
  * Here's an array example:
- *
- * <return>
- *   <item>
- *     <name>John Doe</name>
- *     <email>foo@bar.com</email>
- *   </item>
- *   <item>
- *     <name>Johnny Bravo</name>
- *     <email>bravo@cartoonnetwork.com</email>
- *   </item>
- * </return>
- *
+ * <pre>
+ * &lt;return>
+ *   &lt;item>
+ *     &lt;name>John Doe&lt;/name>
+ *     &lt;email>foo@bar.com&lt;/email>
+ *   &lt;/item>
+ *   &lt;item>
+ *     &lt;name>Johnny Bravo&lt;/name>
+ *     &lt;email>bravo@cartoonnetwork.com&lt;/email>
+ *   &lt;/item>
+ * &lt;/return>
+ * </pre>
+ * 
+ * <pre>
  * var obj = AjxXmlDoc.createFromXml(XML).toJSObject();
  * for (var i = 0; i < obj.item.length; ++i) {
  *   alert(obj.item[i].name + " / " + obj.item[i].email);
  * }
+ * </pre>
  *
- * Note that if there's only one <item> tag, then obj.item will be an object
- * rather than an array.  And if there is no <item> tag, then obj.item will be
+ * Note that if there's only one &lt;item> tag, then obj.item will be an object
+ * rather than an array.  And if there is no &lt;item> tag, then obj.item will be
  * undefined.  These are cases that the calling application must take care of.
  */
 AjxXmlDoc.prototype.toJSObject = 
@@ -310,6 +353,12 @@ function() {
       return AjxXmlDoc.replaceInvalidChars(this.getDoc().xml);
 };
 
+/**
+ * Creates an XML document with a root element.
+ * 
+ * @param	{string}	rootName	the root name
+ * @return	{AjxXmlDoc}	the XML document
+ */
 AjxXmlDoc.createRoot =
 function(rootName) {
    var xmldoc = AjxXmlDoc.create();
@@ -320,6 +369,13 @@ function(rootName) {
    return xmldoc;
 };
 
+/**
+ * Creates an XML document with the element.
+ * 
+ * @param	{string}	name	the element name
+ * @param	{string}	value	the element value
+ * @return	{AjxXmlDoc}	the XML document
+ */
 AjxXmlDoc.createElement =
 function(name, value) {
 	

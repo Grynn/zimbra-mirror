@@ -458,13 +458,15 @@ AjxVector.prototype.foreach = function(f, obj) {
 /**
  * Return a new AjxVector which contains the results of calling f
  * (optionally in the context obj) for each element of this array.
- * <p>
- * If "f" is a string, then for each element el:
+ * <ul>
+ * <li>If "f" is a string, then for each element el:
+ * <ul>
+ * <li>if el[f] is a function, call el[f] and push the result in the returned array.</li>
+ * <li>otherwise push el[f]</li>
+ * </ul>
+ * </li>
+ * </ul>
  * 
- * <pre>
- * if el[f] is a function, call el[f] and push the result in the returned array.
- * - otherwise push el[f]
- * </pre>
  * @param	{function}	f 	the function
  * @param	{Object}	obj		the obj context
  * @return	{AjxVector}		the resulting vector

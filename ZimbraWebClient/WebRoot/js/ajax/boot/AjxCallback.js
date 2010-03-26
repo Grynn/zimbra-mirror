@@ -12,21 +12,23 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
+
 /**
-* Creates a callback which consists of at least a function reference, and possibly also
-* an object to call it from.
-* @constructor
-* @class
-* This class represents a callback function which can be called standalone, or from a
-* given object. What the callback takes as arguments and what it returns are left to the
-* client.
-*
-* @author Conrad Damon
-* 
-* @param {object}	obj		the object to call the function from
-* @param {function}	func	the callback function
-* @param {array}	args   the default arguments
-*/
+ * Creates a callback which consists of at least a function reference, and possibly also
+ * an object to call it from.
+ * @constructor
+ * @class
+ * This class represents a callback function which can be called standalone, or from a
+ * given object. What the callback takes as arguments and what it returns are left to the
+ * client.
+ *
+ * @author Conrad Damon
+ * 
+ * @param {object}	obj		the object to call the function from
+ * @param {function}	func	the callback function
+ * @param {array}	args   the default arguments
+ * 
+ */
 AjxCallback = function(obj, func, args) {
 	if (arguments.length == 0) return;
 

@@ -15,33 +15,38 @@
 
 
 /**
-* @class
-* Use this class to implement an efficient String Buffer.
-*	It is especially useful for assembling HTML.
-*
-*	Useage:
-* 	1) For a small amount of text, call it statically as:
-*
-*		AjxBuffer.concat("a", 1, "b", this.getFoo(), ...);
-*
-*	2) Or create an instance and use that to assemble a big pile of HTML:
-*
-*		var buffer = new AjxBuffer();
-*		buffer.append("foo", myObject.someOtherFoo(), ...);
-*		...
-*		buffer.append(fooo.yetMoreFoo());
-*		return buffer.toString()
-*
-*	It is useful (and quicker!) to create a single buffer and then pass that to subroutines
-*	that are doing assembly of HTML pieces for you.
-*
-*	Note that in both modes you can pass as many arguments you like to the
-*	methods -- this is quite a bit faster than concatenating the arguments
-*	with the + sign (eg: don't do  buffer.append("a" + b.foo());	)
-*
-* @author Owen Williams
-*/
-
+ * @class
+ * Use this class to implement an efficient String Buffer. It is especially useful for assembling HTML.
+ * <p>
+ * Usage:
+ * <ol>
+ * <li>For a small amount of text, call it statically as:
+ * <pre>
+ * AjxBuffer.concat("a", 1, "b", this.getFoo(), ...);
+ * </pre>
+ * </li>
+ * <li>Or create an instance and use that to assemble a big pile of HTML:
+ * <pre>
+ * var buffer = new AjxBuffer();
+ * buffer.append("foo", myObject.someOtherFoo(), ...);
+ * ...
+ * buffer.append(fooo.yetMoreFoo());
+ * return buffer.toString();
+ * </pre>
+ * </li>
+ * </ol>
+ * 
+ * It is useful (and quicker!) to create a single buffer and then pass that to subroutines
+ * that are doing assembly of HTML pieces for you.
+ * </p><p>
+ * Note: in both modes you can pass as many arguments you like to the
+ * methods -- this is quite a bit faster than concatenating the arguments
+ * with the + sign (eg: do not do <code>buffer.append("a" + b.foo());</code>).
+ *
+ * @author Owen Williams
+ * 
+ * @private
+ */
 AjxBuffer = function() {
 	this.clear();
 	if (arguments.length > 0) {

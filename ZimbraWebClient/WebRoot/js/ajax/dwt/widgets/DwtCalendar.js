@@ -22,7 +22,7 @@
  * @author Ross Dargahi
  * @author Roland Schemers
  *
- * @param {Hash}		params			a hash of parameters
+ * @param {hash}		params			a hash of parameters
  * @param {DwtComposite}      params.parent			the parent widget
  * @param {string}      params.className			the CSS class
  * @param {constant}      params.posStyle			the positioning style (see {@link Dwt})

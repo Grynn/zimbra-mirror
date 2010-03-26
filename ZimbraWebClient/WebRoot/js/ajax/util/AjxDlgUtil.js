@@ -12,6 +12,12 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
+
+
+/**
+ * 
+ * @private
+ */
 AjxDlgUtil = {
 
 	cache : {},

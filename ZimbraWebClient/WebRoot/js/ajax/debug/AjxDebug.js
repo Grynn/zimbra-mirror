@@ -153,9 +153,9 @@ function () {
  * elements worked in Mozilla but not IE. Using the insert* methods works for both. Properties that are function
  * definitions are skipped.
  *
- * @param level	 	debug level for the current debugger
- * @param obj		the object to be printed
- * @param showFuncs	whether to show props that are functions
+ * @param {constant}	level	 	debug level for the current debugger
+ * @param {object}	obj		the object to be printed
+ * @param {boolean}	showFuncs		if <code>true</code>, show props that are functions
  */
 AjxDebug.prototype.dumpObj =
 function(level, obj, showFuncs, linkName) {
@@ -379,14 +379,16 @@ function(obj, recurse, showFuncs) {
 	return AjxStringUtil.prettyPrint(obj, recurse, showFuncs, {ZmAppCtxt:true});
 };
 
-/*
-* Marshals args to public debug functions. In general, the debug level is an optional
-* first arg. If the first arg is a debug level, check it and then strip it from the args.
-* Returns a normalized list of args.
-*
-* @param args				[array]			arguments list
-* @param linkNameSpecified	[boolean]*		if true, link text for left frame was provided
-*/
+/**
+ * Marshals args to public debug functions. In general, the debug level is an optional
+ * first arg. If the first arg is a debug level, check it and then strip it from the args.
+ * Returns a normalized list of args.
+ *
+ * @param {array}	args				an arguments list
+ * @param {boolean}	linkNameSpecified	if <code>true</code>, link text for left frame was provided
+ * 
+ * @private
+ */
 AjxDebug.prototype._handleArgs =
 function(args, linkNameSpecified) {
 	// don't output anything if debugging is off, or timing is on
@@ -543,10 +545,10 @@ function() {
 };
 
 /**
-* Scrolls to the bottom of the window. How it does that depends on the browser.
-*
-* @private
-*/
+ * Scrolls to the bottom of the window. How it does that depends on the browser.
+ *
+ * @private
+ */
 AjxDebug.prototype._scrollToBottom =
 function() {
 	var contentFrame = this.getContentFrame();
@@ -561,9 +563,9 @@ function() {
 };
 
 /**
-* Returns a timestamp string, if we are showing them.
-* @private
-*/
+ * Returns a timestamp string, if we are showing them.
+ * @private
+ */
 AjxDebug.prototype._timestamp =
 function() {
 	return this._showTime ? this._getTimeStamp() + ": " : "";
@@ -574,9 +576,13 @@ function(show) {
 	this._showTime = show;
 };
 
-// this function takes an xml node and returns an html string that displays that node
-// the indent argument is used to describe what depth the node is at so that
-// the html code can create a nice indention
+/**
+ * This function takes an XML node and returns an HTML string that displays that node
+ * the indent argument is used to describe what depth the node is at so that
+ * the HTML code can create a nice indentation.
+ * 
+ * @private
+ */
 AjxDebug.prototype._createXmlTree =
 function (node, indent) {
 	if (node == null) { return ""; }
@@ -813,7 +819,8 @@ function() {
 };
 
 /**
- * Simple wrapper for log messages
+ * Simple wrapper for log messages.
+ * 
  */
 DebugMessage = function(aMsg, aType, aCategory, aTime, extraHtml, linkName) {
 	this.message = aMsg || "";
