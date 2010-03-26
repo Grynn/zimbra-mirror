@@ -157,9 +157,9 @@ function() {
 				AjxEnv.isMac = true;
 			} else if (token.indexOf('linux') != -1) {
 				AjxEnv.isLinux = true;
-			} else if (token.indexOf('zdesktop') != -1) {
+			} else if ((index = token.indexOf('zdesktop/')) != -1) {
 				AjxEnv.isDesktop = true;
-				browserVersion = parseFloat(agtArr[i + 1]);
+				browserVersion = parseFloat(token.substr(index + 9));
 			}
 		}
 
