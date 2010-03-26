@@ -706,7 +706,7 @@ AjxStringUtil.PREFIX_RE = /^\s*(&gt;|>|\|)/;
 AjxStringUtil.BRACKET_RE = /^\s*\[.+\]\s*$/;
 AjxStringUtil.LINE_RE = /^\s*_{30,}\s*$/;
 AjxStringUtil.BLANK_RE = /^\s*$/;
-AjxStringUtil.SPLIT_RE = /\r|\n|\r\n/;
+AjxStringUtil.SPLIT_RE = /\r\n|\r|\n/;
 AjxStringUtil.HDR_RE = /^\s*\w+:/;
 AjxStringUtil.HTML_BLANK_RE = /^\s*(<br\s*\/?>)*\s*$/i;
 AjxStringUtil.HTML_BR_RE = /<br\s*\/?>/gi;
@@ -768,13 +768,19 @@ function(text, eol, htmlMode) {
 		if (wasSkipping && !skipping) {
 			start = i;
 		} else if (!wasSkipping && skipping && i > start) {
-			chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), split, eol, htmlMode) + eol);
+			var chunk = AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), split, eol, htmlMode);
+			if (chunk && chunk.length) {
+				chunks.push(chunk);
+			}
 		}
 		i += skipping ? skip : 1;
 	}
 
 	if (!skipping && i > start) {
-		chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), split, eol, htmlMode) + eol);
+		var chunk = AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), split, eol, htmlMode);
+		if (chunk && chunk.length) {
+			chunks.push(chunk);
+		}
 	}
 
 	return chunks;
