@@ -1499,8 +1499,10 @@ DwtFormRows.prototype._setControlId = function(control, id) {
 };
 
 DwtFormRows.prototype._handleAddRow = function(rowId) {
-	var index = this.getIndexForRowId(rowId) + 1;
-	this.addRow(null, index);
+	if (this.getRowCount() < this.getMaxRows()) {
+		var index = this.getIndexForRowId(rowId) + 1;
+		this.addRow(null, index);
+	}
 };
 
 DwtFormRows.prototype._handleRemoveRow = function(rowId) {
