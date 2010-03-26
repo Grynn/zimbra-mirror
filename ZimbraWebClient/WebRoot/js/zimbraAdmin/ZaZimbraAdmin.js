@@ -692,6 +692,7 @@ function() {
 	ZaSettings.CURRENT_APP_ENABLED = (document.getElementById(ZaSettings.SKIN_CURRENT_APP_ID)!=null);
 	ZaSettings.BANNER_ENABLED = (document.getElementById(ZaSettings.SKIN_LOGO_ID)!=null);
 	ZaSettings.STATUS_ENABLED = (document.getElementById(ZaSettings.SKIN_STATUS_ID)!=null);
+	ZaSettings.SEARCH_PANEL_ENABLED = (document.getElementById(ZaSettings.SKIN_SEARCH_PANEL_ID)!=null);
 	
     //console.log("Launching ZimbraAdmin Application ....") ;
     if (!this._app)
@@ -731,16 +732,19 @@ function() {
 		this._setLicenseStatusMessage();	
 	}
 
-	elements[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR] = ZaApp.getInstance().getSearchBuilderToolbarController ().getSearchBuilderTBPanel();
-	elements[ZaAppViewMgr.C_SEARCH_BUILDER] = ZaApp.getInstance().getSearchBuilderController().getSearchBuilderPanel();
-
+	if(ZaSettings.SEARCH_PANEL_ENABLED) {
+		elements[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR] = ZaApp.getInstance().getSearchBuilderToolbarController ().getSearchBuilderTBPanel();
+		elements[ZaAppViewMgr.C_SEARCH_BUILDER] = ZaApp.getInstance().getSearchBuilderController().getSearchBuilderPanel();
+	}
 	if(ZaSettings.TREE_ENABLED) {
 		elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
 	} 
 	if(document.getElementById(ZaSettings.SKIN_APP_SASH_ID)) {
 		elements[ZaAppViewMgr.C_SASH] =  new DwtSash({parent:this._shell, style:DwtSash.HORIZONTAL_STYLE,className:"AppSash-horiz", threshold:20, id:"z_sash"});
 	}
-	elements[ZaAppViewMgr.C_SEARCH] = ZaApp.getInstance().getSearchListController().getSearchPanel();		
+	if(ZaSettings.SEARCH_PANEL_ENABLED) {
+		elements[ZaAppViewMgr.C_SEARCH] = ZaApp.getInstance().getSearchListController().getSearchPanel();
+	}
 	elements[ZaAppViewMgr.C_LOGIN_MESSAGE]  = this._getLoginMsgPanel();
     //Use reparentHtmlelement to add the tabs. Reenable this line if it doesn't work well.
 	elements[ZaAppViewMgr.C_APP_TABS] = this._createAppTabs() ;

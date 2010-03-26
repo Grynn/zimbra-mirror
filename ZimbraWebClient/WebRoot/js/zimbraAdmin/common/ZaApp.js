@@ -89,48 +89,52 @@ ZaApp.checkMyRight = function(targetType,targetBy,targetVal,right,attrs) {
 
 ZaApp.prototype.launch =
 function(appCtxt) {
-	if(ZaSettings.TREE_ENABLED) {	
-		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATUS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-			ctl.getOverviewPanel().getFolderTree().setSelection(ctl.statusTi);
-			//this.getStatusViewController().show(false);
-		} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW]) {
-			var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-			ctl.getOverviewPanel().getFolderTree().setSelection(ctl.accountTi);		
-			//this._appCtxt.getAppController()._showAccountsView(ZaItem.ACCOUNT,null);
-		} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW]) {
-			var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-			ctl.getOverviewPanel().getFolderTree().setSelection(ctl.aliasTi);				
-		} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW]) {
-			var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-			ctl.getOverviewPanel().getFolderTree().setSelection(ctl.dlTi);				
-		} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW]) {
-			var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-			ctl.getOverviewPanel().getFolderTree().setSelection(ctl.resourceTi);				
-		} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_LIST_VIEW]) {
-			var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-			ctl.getOverviewPanel().getFolderTree().setSelection(ctl._serversTi);				
-		} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW]) {
-			var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-			ctl.getOverviewPanel().getFolderTree().setSelection(ctl._domainsTi);				
-		} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_LIST_VIEW]) {
-			var ctl = this._appCtxt.getAppController().getOverviewPanelController();
-			ctl.getOverviewPanel().getFolderTree().setSelection(ctl._cosTi);				
-		}
+	if(ZaSettings.DASHBOARD_VIEW && ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DASHBOARD_VIEW]) {
 		
-		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			this.searchDomains("");
-		}		
 	} else {
-		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW]) {
-			ZaController.prototype._showAccountsView.call(ZaItem.ACCOUNT,null);
-		} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW]) {
-			ZaController.prototype._showAccountsView.call(ZaItem.ALIAS,null);
-		} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW]) {
-			ZaController.prototype._showAccountsView.call(ZaItem.DL,null);
-		} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW]) {
-			ZaController.prototype._showAccountsView.call(ZaItem.RESOURCE,null);
-		} 
+		if(ZaSettings.TREE_ENABLED) {	
+			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATUS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
+				ctl.getOverviewPanel().getFolderTree().setSelection(ctl.statusTi);
+				//this.getStatusViewController().show(false);
+			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW]) {
+				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
+				ctl.getOverviewPanel().getFolderTree().setSelection(ctl.accountTi);		
+				//this._appCtxt.getAppController()._showAccountsView(ZaItem.ACCOUNT,null);
+			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW]) {
+				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
+				ctl.getOverviewPanel().getFolderTree().setSelection(ctl.aliasTi);				
+			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW]) {
+				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
+				ctl.getOverviewPanel().getFolderTree().setSelection(ctl.dlTi);				
+			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW]) {
+				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
+				ctl.getOverviewPanel().getFolderTree().setSelection(ctl.resourceTi);				
+			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_LIST_VIEW]) {
+				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
+				ctl.getOverviewPanel().getFolderTree().setSelection(ctl._serversTi);				
+			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW]) {
+				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
+				ctl.getOverviewPanel().getFolderTree().setSelection(ctl._domainsTi);				
+			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_LIST_VIEW]) {
+				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
+				ctl.getOverviewPanel().getFolderTree().setSelection(ctl._cosTi);				
+			}
+			
+			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+				this.searchDomains("");
+			}		
+		} else {
+			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW]) {
+				ZaController.prototype._showAccountsView.call(ZaItem.ACCOUNT,null);
+			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW]) {
+				ZaController.prototype._showAccountsView.call(ZaItem.ALIAS,null);
+			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW]) {
+				ZaController.prototype._showAccountsView.call(ZaItem.DL,null);
+			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW]) {
+				ZaController.prototype._showAccountsView.call(ZaItem.RESOURCE,null);
+			} 
+		}
 	}
 }
 

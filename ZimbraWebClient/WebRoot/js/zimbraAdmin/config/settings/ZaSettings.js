@@ -416,6 +416,7 @@ ZaSettings.TREE_ENABLED = true;
 ZaSettings.CURRENT_APP_ENABLED = true;
 ZaSettings.BANNER_ENABLED = true;
 ZaSettings.STATUS_ENABLED = true;
+ZaSettings.SEARCH_PANEL_ENABLED = true;
 
 ZaSettings.SKIN_LOGOFF_DOM_ID = "skin_container_logoff" ;
 ZaSettings.SKIN_HELP_DOM_ID = "skin_container_help" ;
@@ -428,6 +429,8 @@ ZaSettings.SKIN_SEARCH_BUILDER_TB_ID = "skin_container_search_builder_toolbar";
 ZaSettings.SKIN_APP_SASH_ID = "skin_container_tree_app_sash";
 ZaSettings.SKIN_CURRENT_APP_ID = "skin_container_current_app";
 ZaSettings.SKIN_STATUS_ID = "skin_container_status";
+ZaSettings.SKIN_SEARCH_PANEL_ID = "skin_container_search";
+
 // initialization for settings: [name, type, data type, default value]
 ZaSettings.INIT = new Object();
 // IDs FOR HTML COMPONENTS IN THE SKIN
@@ -438,7 +441,7 @@ ZaSettings.INIT[ZaSettings.SKIN_LOGO_ID]					= [null, ZaSettings.T_CONFIG, ZaSet
 ZaSettings.INIT[ZaSettings.SKIN_SASH_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_APP_SASH_ID];
 ZaSettings.INIT[ZaSettings.SKIN_SEARCH_BUILDER_ID]		= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_SEARCH_BUILDER_ID];
 ZaSettings.INIT[ZaSettings.SKIN_SEARCH_BUILDER_TOOLBAR_ID]= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_SEARCH_BUILDER_TB_ID];
-ZaSettings.INIT[ZaSettings.SKIN_SEARCH_ID]				= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_search"];
+ZaSettings.INIT[ZaSettings.SKIN_SEARCH_ID]				= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_SEARCH_PANEL_ID];
 ZaSettings.INIT[ZaSettings.SKIN_SHELL_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_outer"];
 ZaSettings.INIT[ZaSettings.SKIN_STATUS_ID]				= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_STATUS_ID];
 ZaSettings.INIT[ZaSettings.SKIN_TREE_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SKIN_TREE_ID];
