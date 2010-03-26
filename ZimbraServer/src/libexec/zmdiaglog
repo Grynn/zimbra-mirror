@@ -274,6 +274,7 @@ sub run() {
     
         invoke_thread_dump($i, $TS);
         system("top -bc -n1 > top.$i.$TS 2>&1");
+        system("/bin/ps -auxw > ps.$i.$TS 2>&1");
         my $netstat = "netstat -anp > netstat.$i.$TS 2>&1";
         $netstat = "netstat -an > netstat.$i.$TS 2>&1" if ($isMac);
         system($netstat);
