@@ -48,7 +48,7 @@ public class GabImport implements DataSource.DataImport {
         if (!fullSync && !new LocalData(ds).hasLocalChanges()) {
             return;
         }
-        LOG.info("Importing contacts for account '%s'", ds.getName());
+        LOG.info("Importing contacts for data source '%s'", ds.getName());
         DataSourceManager.getInstance().getMailbox(ds).beginTrackingSync();
         if (session == null) {
             session = new SyncSession(ds);
@@ -59,6 +59,6 @@ public class GabImport implements DataSource.DataImport {
             SyncExceptionHandler.checkRecoverableException(ERROR, e);
             ds.reportError(Mailbox.ID_FOLDER_CONTACTS, ERROR, e);
         }
-        LOG.info("Finished importing contacts for account '%s'", ds.getName());
+        LOG.info("Finished importing contacts for data source '%s'", ds.getName());
     }
 }

@@ -18,7 +18,7 @@ import com.zimbra.common.service.ServiceException;
 
 public class OfflineMailboxVersion {
 
-    private static final short CURRENT_VERSION = 2;
+    private static final short CURRENT_VERSION = 3;
 
     private short version;
 

@@ -62,40 +62,32 @@ public class OfflineDataSource extends DataSource {
     	knownService = serviceName == null ? null : config.getService(serviceName);
     }
 
-    void setContactSyncDataSource(OfflineDataSource ds) {
-        contactSyncDataSource = ds;
-    }
-
-    void setCalendarSyncDataSource(OfflineDataSource ds) {
-        calendarSyncDataSource = ds;
-    }
-
     public OfflineDataSource getContactSyncDataSource() throws ServiceException {
-        if (!isGmail() && !isYahoo()) return null;
-        if (contactSyncDataSource == null) {
-            String pass = getDecryptedPassword();
-            String suffix = isGmail() ? "-gab" : "-yab";
-            Map<String, Object> attrs = new HashMap<String, Object>(getRawAttrs());
-            String id = getId() + suffix;
-            attrs.put(Provisioning.A_zimbraDataSourcePassword, encryptData(id, pass));
-            contactSyncDataSource = new OfflineDataSource(
-                getAccount(), Type.contacts, getName() + suffix, id, attrs, getProvisioning());
+        if (isGmail() || isYahoo()) {
+            if (contactSyncDataSource == null) {
+                contactSyncDataSource = newChildDataSource(Type.contacts);
+            }
         }
         return contactSyncDataSource;
     }
 
     public OfflineDataSource getCalendarSyncDataSource() throws ServiceException {
-        if (!isGmail() && !isYahoo()) return null;
-        if (calendarSyncDataSource == null) {
-            String pass = getDecryptedPassword();
-            String suffix = isGmail() ? "-gcal" : "-ycal";
-            Map<String, Object> attrs = new HashMap<String, Object>(getRawAttrs());
-            String id = getId() + suffix;
-            attrs.put(Provisioning.A_zimbraDataSourcePassword, encryptData(id, pass));
-            calendarSyncDataSource = new OfflineDataSource(
-                getAccount(), Type.caldav, getName() + suffix, id, attrs, getProvisioning());
+        if (isGmail() || isYahoo()) {
+            if (calendarSyncDataSource == null) {
+                calendarSyncDataSource = newChildDataSource(Type.caldav);
+            }
         }
         return calendarSyncDataSource;
+    }
+
+    private OfflineDataSource newChildDataSource(Type type) throws ServiceException {
+        String pass = getDecryptedPassword();
+        String suffix = "-" + type.name();
+        Map<String, Object> attrs = new HashMap<String, Object>(getRawAttrs());
+        String id = getId() + suffix;
+        attrs.put(Provisioning.A_zimbraDataSourcePassword, encryptData(id, pass));
+        return new OfflineDataSource(
+            getAccount(), type, getName() + suffix, id, attrs, getProvisioning());
     }
 
     public DataSourceConfig.Service getKnownService() {

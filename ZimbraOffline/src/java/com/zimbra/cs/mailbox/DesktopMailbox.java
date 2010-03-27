@@ -90,9 +90,12 @@ public abstract class DesktopMailbox extends Mailbox {
                 Metadata md = getConfig(null, CONFIG_OFFLINE_VERSION);
                 offlineVersion = OfflineMailboxVersion.fromMetadata(md);
             }
-            if (!offlineVersion.atLeast(2)) {
-                OfflineMailboxMigrationV2.doMigration(this);
-                updateOfflineVersion(new OfflineMailboxVersion((short)2));
+            if (!offlineVersion.atLeast(3)) {
+                if (!offlineVersion.atLeast(2)) {
+                    OfflineMailboxMigration.doMigrationV2(this);
+                }
+                OfflineMailboxMigration.doMigrationV3(this);
+                updateOfflineVersion(OfflineMailboxVersion.CURRENT());
             }
             isOfflineVerCheckComplete = true;
         }
