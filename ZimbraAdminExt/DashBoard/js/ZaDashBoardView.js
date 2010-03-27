@@ -41,16 +41,16 @@ ZaDashBoardView.myXFormModifier = function(xFormObject) {
 	xFormObject.tableCssStyle="width:100%;overflow:auto;";
 	xFormObject.items = [
         {type:_TOP_GROUPER_, label:com_zimbra_dashboard.AddressesGrouper, id:"dashboard_addresses_group",
-	    	colSpan: "*", numCols: 4, colSizes: ["200px","200px","200px","200px"],
+        	numCols: 4, colSizes: ["200px","200px","200px","200px"],visibilityChecks:[],enableDisableChecks:[],
 	    	items:[
-	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageAddresses, width:80,icon:"Account",
-	    	    	onActivate:"",enableDisableChecks:[],visibilityChecks:[]},
-	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewAccount, width:80,icon:"Account",
-	    	    	onActivate:"",enableDisableChecks:[],visibilityChecks:[]},
-	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewDL, width:80,icon:"DistributionList",
-	    	    	onActivate:"",enableDisableChecks:[],visibilityChecks:[]},
-	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewCalResource, width:80,icon:"Resource",
-	    	    	onActivate:"",enableDisableChecks:[],visibilityChecks:[]}
+	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageAddresses, width:80,
+	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
+	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewAccount, width:80,
+	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
+	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewDL, width:80,
+	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
+	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewCalResource, width:80,
+	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]}
 	    	]
         }
 
