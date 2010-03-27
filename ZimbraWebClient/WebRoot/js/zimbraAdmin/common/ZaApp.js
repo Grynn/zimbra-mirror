@@ -89,8 +89,13 @@ ZaApp.checkMyRight = function(targetType,targetBy,targetVal,right,attrs) {
 
 ZaApp.prototype.launch =
 function(appCtxt) {
-	if(ZaSettings.DASHBOARD_VIEW && ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DASHBOARD_VIEW]) {
-		
+	if(ZaSettings.DASHBOARD_VIEW && ZaApp.prototype.getDashBoardController) {
+		var dashBoardController = ZaApp.getInstance().getDashBoardController(ZaSettings.DASHBOARD_VIEW);
+		if(ZaApp.getInstance().getCurrentController()) {
+			ZaApp.getInstance().getCurrentController().switchToNextView(dashBoardController, ZaDashBoardController.prototype.show,true);
+		} else {					
+			dashBoardController.show(true);
+		}
 	} else {
 		if(ZaSettings.TREE_ENABLED) {	
 			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATUS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
