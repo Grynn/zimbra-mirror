@@ -39,6 +39,7 @@ import com.zimbra.cs.util.ZimbraApplication;
 
 public abstract class SyncMailbox extends DesktopMailbox {
     static final String DELETING_MID_SUFFIX = ":delete";
+    static final long OPTIMIZE_INTERVAL = 48 * Constants.MILLIS_PER_HOUR;
 
     private String accountName;
     private boolean isDeleting;
@@ -253,7 +254,10 @@ public abstract class SyncMailbox extends DesktopMailbox {
                 try {
                     syncOnTimer();
                     now = System.currentTimeMillis();
-                    if (now - lastOptimizeTime > 12 * Constants.MILLIS_PER_HOUR) {
+                    if (lastOptimizeTime == 0) {
+                    	lastOptimizeTime = now - OPTIMIZE_INTERVAL +
+                    		30 * Constants.MILLIS_PER_MINUTE;
+                    } else if (now - lastOptimizeTime > OPTIMIZE_INTERVAL) {
                         optimize(null, 0);
                         lastOptimizeTime = now;
                     }
