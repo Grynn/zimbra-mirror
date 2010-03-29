@@ -443,9 +443,9 @@ public class BeanUtils {
 
 		final int ONE_DAY = 24 * 3600000;
 		String resource;
-		if (nowTime - msgTime < ONE_DAY && cal.getTime().getDay() == msgCal.get(Calendar.DAY_OF_WEEK)) {
+		if (nowTime - msgTime < ONE_DAY && cal.getTime().getDay() == msgCal.getTime().getDate()) {
 			resource = "ZM_formatVoiceDateToday";
-		} else if ((nowTime - msgTime) < (2 * ONE_DAY) && (new Date(nowTime - ONE_DAY).getDay()) == msgCal.get(Calendar.DAY_OF_WEEK)) {
+		} else if ((nowTime - msgTime) < (2 * ONE_DAY) && (new Date(nowTime - ONE_DAY).getDay()) == msgCal.getTime().getDate()) {
 			resource = "ZM_formatVoiceDateYesterday";
 		} else {
 			resource = "ZM_formatVoiceDate";
