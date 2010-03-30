@@ -243,6 +243,7 @@
 
 	<jsp-config>
 		<jsp-property-group>
+			<url-pattern>/h/imessage</url-pattern>
 			<url-pattern>/h/message</url-pattern>
 			<url-pattern>/h/printcalls</url-pattern>
 			<url-pattern>/h/printcalendar</url-pattern>
