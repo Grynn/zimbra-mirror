@@ -107,7 +107,10 @@ sub get_mboxd_pid() {
         if ($@) {
             print STDERR "Unable to find pid file, falling back: $@\n";
         }
+    } else {
+      return 0;
     }
+
     if (!$pid) {
         eval {
             open(PS, "ps -ef | grep [j]etty.xml | awk '{ print \$2 }' |")
