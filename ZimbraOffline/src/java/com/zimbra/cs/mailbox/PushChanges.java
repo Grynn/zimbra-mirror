@@ -77,9 +77,12 @@ public class PushChanges {
 			MimeMessage mm = cal.getSubpartMessage(inviteId);
 			BigByteBuffer bbb = null;
 			try {
-			    bbb = new BigByteBuffer(mm.getSize());
-				if (mm != null)
+				if (mm != null) {
+	                bbb = new BigByteBuffer(mm.getSize());
 				    mm.writeTo(bbb);
+				} else {
+	                bbb = new BigByteBuffer();
+				}
 				bbb.doneWriting();
 				return new Pair<Integer, InputStream>(bbb.length(), bbb.getInputStream());
 			} catch (Exception x) {
