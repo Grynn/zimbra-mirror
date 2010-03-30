@@ -65,7 +65,7 @@ function(line, startIndex) {
 			continue;
 		}
 		var last = m[0].charAt(m[0].length - 1);
-		if (last == '.' || last == "," || last == '!') {
+		if (last == '.' || last == "," || last == '!' || (last == ')' && m[0].indexOf('(') == -1)) {
 			var m2 = {index: m.index };
 			m2[0] = m[0].substring(0, m[0].length - 1);
 			return m2;
@@ -77,23 +77,20 @@ function(line, startIndex) {
 
 Com_Zimbra_Url.prototype._getHtmlContent =
 function(html, idx, obj, context) {
-	var escapedUrl = obj.replace(/\"/g, '\"').replace(/^\s+|\s+$/g,"");
+
+	var escapedUrl = obj.replace(/\"/g, '\"').replace(/^\s+|\s+$/g, "");
 	if (escapedUrl.substr(0, 4) == 'www.') {
 		escapedUrl = "http://" + escapedUrl;
 	}
-	/*if(navigator.appVersion.match(/windows/ig)){
-		escapedUrl = obj.replace(/\//g,'\\');
-	}else{*/
-		escapedUrl = escapedUrl.replace(/\\/g,'/');
-	/*}*/
-	if (escapedUrl.indexOf("\\\\") == 0 || escapedUrl.indexOf("//") == 0){
+	if (escapedUrl.indexOf("\\\\") == 0) {
 		obj.isUNC = true;
-		escapedUrl = "file://"+escapedUrl;
+		escapedUrl = "file://" + escapedUrl;
 	}
+	escapedUrl = escapedUrl.replace(/\\/g, '/');
 
 	var link = "<a target='_blank' href='" + escapedUrl; // Default link to use when ?app= fails
 
-	if (escapedUrl.split(/[\?#]/)[0] == (""+window.location).split(/[\?#]/)[0]) {
+	if (escapedUrl.split(/[\?#]/)[0] == ("" + window.location).split(/[\?#]/)[0]) {
 		var paramStr = escapedUrl.substr(escapedUrl.indexOf("?"));
 		if (paramStr) {
 			var params = AjxStringUtil.parseQueryString(escapedUrl);
@@ -102,7 +99,7 @@ function(html, idx, obj, context) {
 				if (app && app.length > 0) {
 					app = app.toUpperCase();
 					if (appCtxt.getApp(ZmApp[app])) {
-						link = "<a href='javascript:top.appCtxt.getAppController().activateApp(top.ZmApp."+app+", null, null);";
+						link = "<a href='javascript:top.appCtxt.getAppController().activateApp(top.ZmApp." + app + ", null, null);";
 					}
 				}
 			}
@@ -117,21 +114,18 @@ function(html, idx, obj, context) {
 
 Com_Zimbra_Url.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
-	var url = obj.replace(/^\s+|\s+$/g,"");
+
+	var url = obj.replace(/^\s+|\s+$/g, "");
 	if (/^\s*true\s*$/i.test(this.getConfig("stripUrls"))) {
 		url = url.replace(/[?#].*$/, "");
 	}
-	/*if(navigator.appVersion.match(/windows/ig)){
-		url = url.replace(/\//g,'\\');
-	}else{*/
-		url = url.replace(/\\/g,'/');
-	/* }*/
-	if(url.indexOf("\\\\") == 0 || url.indexOf("//") == 0){
-		url = "file://"+url;
+	if (url.indexOf("\\\\") == 0) {
+		url = "file:" + url;
 	}
+	url = url.replace(/\\/g, '/');
 
-	if(this._disablePreview || url.indexOf("file://")==0){  //local files
-		this._showUrlThumbnail(url,canvas);
+	if (this._disablePreview || url.indexOf("file://") == 0) {  // local files
+		this._showUrlThumbnail(url, canvas);
 	} else if (this._alexaId) {
 		this._showAlexaThumbnail(url, canvas);
 	} else {

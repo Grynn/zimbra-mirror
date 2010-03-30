@@ -1,7 +1,7 @@
 <zimletConfig name="com_zimbra_url" version="1.0">
     <global>
-		<property name="ZIMLET_CONFIG_REGEX_VALUE">((telnet:)|((https?|ftp|gopher|news|file):\/\/)|(www.[\w\.\_\-]+))[^\s\&lt;\&gt;\[\]\{\}\&apos;\&quot;]*</property>
-        <property name="ZIMLET_UNC_REGEX_VALUE">\s*\\\\[a-zA-Z0-9.-_]+.*|(\/\/[a-zA-Z0-9-._]+).*\s*</property>
+		<property name="ZIMLET_CONFIG_REGEX_VALUE">((telnet:)|((https?|ftp|gopher|news|file):\/\/)|(www\.[\w\.\_\-]+))[^\s\&lt;\&gt;\[\]\{\}\&apos;\&quot;]*</property>
+        <property name="ZIMLET_UNC_REGEX_VALUE">\s*\\\\[a-zA-Z0-9.-_]+.*\s*</property>
 
         <property name="stripUrls">true</property>
         
