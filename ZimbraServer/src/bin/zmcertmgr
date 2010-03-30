@@ -510,7 +510,7 @@ deployCA() {
 
   echo -n "** Copying CA to ${zimbra_conf_directory}/ca..." 
   if [ -d "${zimbra_conf_directory}/ca" ]; then
-    find ${zimbra_conf_directory}/ca -type f -exec rm {} \;
+    find ${zimbra_conf_directory}/ca -type f -o -type l -exec rm {} \;
   else
     mkdir -p ${zimbra_conf_directory}/ca
   fi
@@ -606,11 +606,12 @@ deployCert() {
       echo "** Appending ca chain ${cli_ca_chain} to ${commercial_crt}"
       cat ${cli_ca_chain} >> ${commercial_crt}
       cp -f ${cli_ca_chain} ${commercial_ca_crt}
+      addCACERT ${commercial_ca_crt}
     elif [ -f "${ca_chain_download_file}" -a x"${cli_comm_crt}" = "x" ]; then
       echo "** Appending ca chain ${ca_chain_download_file} to ${commercial_crt}"
       cat ${ca_chain_download_file} >> ${commercial_crt}
       cp -f ${ca_chain_download_file} ${commercial_ca_crt}
-      
+      addCACERT ${commercial_ca_crt}
     fi
   
     current_crt=${commercial_crt}
@@ -684,7 +685,7 @@ deployCert() {
 
   echo -n "** Installing CA to ${zimbra_conf_directory}/ca..." 
   if [ -d "${zimbra_conf_directory}/ca" ]; then
-    find ${zimbra_conf_directory}/ca -type f -exec rm {} \;
+    find ${zimbra_conf_directory}/ca -type f -o -type l -exec rm {} \;
   else
     mkdir -p ${zimbra_conf_directory}/ca
   fi
