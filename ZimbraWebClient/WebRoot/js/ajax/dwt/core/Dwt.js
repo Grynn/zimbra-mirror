@@ -1281,8 +1281,19 @@ Dwt.setFavIcon = function(iconURL) {
 
 Dwt.enableDesignMode =
 function(doc, on) {
-	doc.designMode = on ? "on" : "off";
+
+	if (!AjxEnv.isIE) {
+		doc.designMode = on ? "on" : "off";
+	} else {
+		var editorBody = doc.body;
+		if (!editorBody || editorBody.contentEditable === undefined) {
+			doc.designMode = on ? "on" : "off";
+		} else {
+			editorBody.contentEditable = on ? true : false;
+		}
+	}
 };
+
 
 /**
  * Hack to work around FF 3.6 change in behavior with regard to mouse down/up in
