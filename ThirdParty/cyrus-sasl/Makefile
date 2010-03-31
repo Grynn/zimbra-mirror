@@ -22,7 +22,7 @@ CYRUS_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl/cyr
 
 files	:= $(wildcard src/cyrus-sasl-$(CYRUS_RELEASE).tar.gz)
 
-all: checksrc allclean build 
+all: checksrc allclean build check
 
 checksrc:
 	$(if $(files), @echo "", exit 1)
