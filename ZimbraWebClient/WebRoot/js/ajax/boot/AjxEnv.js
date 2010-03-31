@@ -65,6 +65,7 @@ function() {
 	AjxEnv.isSafari3 = false;
     AjxEnv.isSafari4 = false;
 	AjxEnv.isSafari3up = false;
+	AjxEnv.isSafari4up = false;
 	AjxEnv.isCamino = false;
 	AjxEnv.isChrome = false;
 	AjxEnv.isGeckoBased = false;
@@ -166,7 +167,6 @@ function() {
 				browserVersion = parseFloat(token.substr(index + 9));
 			}
 		}
-
 		// Note: Opera and WebTV spoof Navigator. We do strict client detection.
 		AjxEnv.isNav 			= (beginsWithMozilla && !isSpoofer && !isCompatible && !AjxEnv.isOpera && !isWebTv && !isHotJava && !AjxEnv.isSafari);
 		AjxEnv.isIE				= (AjxEnv.isIE && !AjxEnv.isOpera);
@@ -199,6 +199,7 @@ function() {
 		AjxEnv.isSafari3		= (AjxEnv.isSafari && browserVersion >= 3.0 && browserVersion < 4.0) || AjxEnv.isChrome;
         AjxEnv.isSafari4        = (AjxEnv.isSafari && browserVersion >= 4.0);
 		AjxEnv.isSafari3up		= (AjxEnv.isSafari && browserVersion >= 3.0) || AjxEnv.isChrome;
+		AjxEnv.isSafari4up		= (AjxEnv.isSafari && browserVersion >= 4.0) || AjxEnv.isChrome;
 		AjxEnv.isDesktop2up		= (AjxEnv.isDesktop && browserVersion >= 2.0);
 
 		AjxEnv.browser = "[unknown]";
