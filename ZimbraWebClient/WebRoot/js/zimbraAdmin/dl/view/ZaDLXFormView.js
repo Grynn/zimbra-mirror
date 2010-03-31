@@ -914,7 +914,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 								enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_optionalAdd]],
 								enableDisableChangeEventSources:[ZaDistributionList.A2_optionalAdd]									
 							},
-						   {type:_OUTPUT_, value:"Separate addresses with comma or return", align:"right"}
+						   {type:_OUTPUT_, value: ZaMsg.DLXV_SeparateAddresses, align:"right"}
 						]
 			       }				       
 				]
