@@ -24,10 +24,15 @@ files	:= $(wildcard src/clamav-$(CLAMAV_VERSION).tar.gz)
 CLAMAV_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/clamav/clamav-$(CLAMAV_VERSION).tgz
 
-all: checksrc allclean build tar
+all: checksrc allclean build check tar
 
 checksrc:
 	$(if $(files), @echo "", exit 1)
+
+check:
+	@echo "Verifying clamav build...";
+	$(CLAMAV_ROOT)/../zmcheck.pl -b $(ZIMBRA_HOME)/clamav-$(CLAMAV_VERSION)/bin/freshclam
+	$(CLAMAV_ROOT)/../zmcheck.pl -s $(ZIMBRA_HOME)/clamav-$(CLAMAV_VERSION)/sbin/clamd
 
 build:
 	(tar xzf src/clamav-$(CLAMAV_VERSION).tar.gz; \

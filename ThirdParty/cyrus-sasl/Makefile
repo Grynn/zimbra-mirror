@@ -27,6 +27,11 @@ all: checksrc allclean build
 checksrc:
 	$(if $(files), @echo "", exit 1)
 
+check:
+	@echo "Verifying cyrus-sasl build...";
+	$(CYRUS_ROOT)/../zmcheck.pl -s $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/sbin/saslauthd
+	$(CYRUS_ROOT)/../zmcheck.pl -l $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib/sasl2/libgssapiv2.so.2.0.23
+
 build: 
 ifneq	(,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	@echo "Building cyrus-sasl for $(BUILD_PLATFORM)"
@@ -45,10 +50,6 @@ else
 	tar czf $(CYRUS_TGZ_TARGET) \
 	cyrus-sasl-$(CYRUS_VERSION))
 endif
-
-/opt/zimbra/libxml2/lib/libxml2.a:
-	$(MAKE) $(MAKEARGS) -C $(P4_ROOT)/ThirdParty/libxml2
-
 
 p4edit: $(CYRUS_TGZ_TARGET)
 	p4 add $(CYRUS_TGZ_TARGET)

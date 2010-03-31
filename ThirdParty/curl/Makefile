@@ -54,10 +54,14 @@ endif
 
 files	:= $(wildcard src/curl-$(CURL_VERSION).tar.gz)
 
-all: checksrc allclean build tar
+all: checksrc allclean build check tar
 
 checksrc:
 	$(if $(files), @echo "", exit 1)
+
+check:
+	@echo "Verifying curl build...";
+	$(CURL_ROOT)/../zmcheck.pl -b $(ZIMBRA_HOME)/curl-$(CURL_VERSION)/bin/curl
 
 build:
 	tar xzf src/curl-$(CURL_VERSION).tar.gz
