@@ -19,7 +19,6 @@ zimbra_home=$(cd "${zimbra_home}"; pwd)
 zimbra_java_home=${zimbra_home}/java
 
 zimbra_zmjava_options="`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmjava_options`"
-zimbra_zmjava_java_home="`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmjava_java_home`"
 zimbra_zmjava_java_library_path="`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmjava_java_library_path`"
 zimbra_zmjava_java_ext_dirs="`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmjava_java_ext_dirs`"
 
@@ -53,10 +52,6 @@ else
   java_options=""
 fi 
 
-if [ x${zimbra_zmjava_java_home} = "x" ]; then
-  zimbra_zmjava_java_home=${zimbra_home}
-fi
-
 if [ x${zimbra_zmjava_java_library_path} = "x" ]; then
   zimbra_zmjava_java_library_path=${zimbra_home}/lib
 fi  
@@ -67,7 +62,7 @@ fi
 
 exec ${zimbra_java_home}/bin/java ${java_options} \
      -client ${zimbra_zmjava_options} \
-     -Dzimbra.home=${zimbra_zmjava_java_home} \
+     -Dzimbra.home=${zimbra_home} \
      -Djava.library.path=${zimbra_zmjava_java_library_path} \
      -Djava.ext.dirs=${zimbra_zmjava_java_ext_dirs} \
      "$@"
