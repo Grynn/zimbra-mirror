@@ -1,0 +1,11 @@
+<zimlet name="com_zimbra_apptsummary" version="0.1" description="Inserts an email with current day's appointments information(on a daily basis)">
+	<include>apptsummary.js</include>
+	<handlerObject>com_zimbra_asummary</handlerObject>
+
+	<zimletPanelItem label="${msg.ApptSummaryZimlet_Label}" icon="CalendarApp">
+	</zimletPanelItem>
+  <userProperties>
+		<property type="string" name="apptSummary_onlySendSummaryWhenThereAreAppts" value="true"/>	
+  </userProperties>
+</zimlet>
+
