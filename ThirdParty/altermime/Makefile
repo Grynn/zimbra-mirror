@@ -22,10 +22,14 @@ endif
 
 files	:= $(wildcard src/$(ALTMIME_NAME)-$(ALTMIME_VERSION).tar.gz)
 
-all: checksrc build tar
+all: checksrc build check tar
 
 checksrc:
 	$(if $(files), @echo "", exit 1)
+
+check:
+	@echo "Verifying altermime build...";
+	$(ALTMIME_ROOT)/zmcheck.pl -b $(ZIMBRA_HOME)/$(ALTMIME_NAME)-$(ALTMIME_VERSION)/bin/altermime >> $(LOGFILE) 2>&1;
 
 build: $(ALTMIME_NAME)-$(ALTMIME_VERSION)
 	(cd $(ALTMIME_NAME)-$(ALTMIME_VERSION); $(MAKE))
