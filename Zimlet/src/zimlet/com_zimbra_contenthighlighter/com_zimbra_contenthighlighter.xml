@@ -1,0 +1,10 @@
+<zimlet name="com_zimbra_contenthighlighter" version="0.1" description="Highlights email contents to differentiate b/w original, Replied and Forwarded parts">
+	<include>contenthighlighter.js</include>
+	<handlerObject>com_zimbra_contenthltr</handlerObject>
+	<contentObject>
+		<matchOn>
+			<regex></regex>
+		</matchOn>
+    </contentObject>
+</zimlet>
+
