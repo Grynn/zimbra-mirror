@@ -29,7 +29,7 @@ checksrc:
 
 check:
 	@echo "Verifying altermime build...";
-	$(ALTMIME_ROOT)/zmcheck.pl -b $(ZIMBRA_HOME)/$(ALTMIME_NAME)-$(ALTMIME_VERSION)/bin/altermime >> $(LOGFILE) 2>&1;
+	$(ALTMIME_ROOT)/zmcheck.pl -b $(ZIMBRA_HOME)/$(ALTMIME_NAME)-$(ALTMIME_VERSION)/bin/altermime
 
 build: $(ALTMIME_NAME)-$(ALTMIME_VERSION)
 	(cd $(ALTMIME_NAME)-$(ALTMIME_VERSION); $(MAKE))
