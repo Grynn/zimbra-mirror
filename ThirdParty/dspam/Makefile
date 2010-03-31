@@ -24,10 +24,14 @@ MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
 
 files	:= $(wildcard src/dspam-$(DSPAM_VERSION).tar.gz)
 
-all: checksrc allclean build tar
+all: checksrc allclean build check tar
 
 checksrc:
 	$(if $(files), @echo "", exit 1)
+
+check:
+	@echo "Verifying dspam build...";
+	$(DSPAM_ROOT)/../zmcheck.pl -b $(ZIMBRA_HOME)/dspam-$(DSPAM_VERSION)/bin/dspam
 
 build:
 	(tar xzf src/dspam-$(DSPAM_VERSION).tar.gz; \

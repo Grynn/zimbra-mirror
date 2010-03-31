@@ -17,9 +17,11 @@ else
 	include $(HEIMDAL_ROOT)/../versions.def
 endif
 
+LIBEXT	:= so
 PATCH	:=
 ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	PATCH   := patch -g0 -N -p1 < ../patches/mac.patch;
+	LIBEXT	:= dylib
 endif
 
 HEIMDAL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/heimdal/heimdal-$(HEIMDAL_VERSION).tgz
@@ -27,10 +29,16 @@ HEIMDAL_SOURCE := $(HEIMDAL_ROOT)/heimdal-$(HEIMDAL_VERSION)
 
 files   := $(wildcard src/heimdal-$(HEIMDAL_VERSION).tar.gz)
 
-all: checksrc allclean build tar
+all: checksrc allclean build check tar
 
 checksrc:
 	$(if $(files), @echo "", exit 1)
+
+check:
+	@echo "Verifying heimdal build...";
+	$(HEIMDAL_ROOT)/../zmcheck.pl -b $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/bin/hxtool
+	$(HEIMDAL_ROOT)/../zmcheck.pl -l $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib/libgssapi.$(LIBEXT)
+	$(HEIMDAL_ROOT)/../zmcheck.pl -l $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib/libkrb5.$(LIBEXT)
 
 build:
 	(tar xzf src/heimdal-$(HEIMDAL_VERSION).tar.gz; \
