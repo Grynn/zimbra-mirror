@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_amzn" version="1.1" description="Search Amazon for products">
+<zimlet name="com_zimbra_amzn" version="1.2" label="Amazon" description="Search Amazon for products">
 	<include>amzn.js</include>
 	<includeCSS>amzn.css</includeCSS>
 	<resource>blank_pixel.gif</resource>
@@ -9,7 +9,7 @@
 			<regex attrs="gm">\b\d{10,13}\b|\b\d{9}[\dxX]\b|\b\d{1,5}[- ]\d{1,7}[- ]\d{1,6}[- ][\dxX]\b|\b\d{3}[-]\d{1,7}[- ]\d{1,7}[- ]\d{1,7}[- ]\d\b|\b\d{3}[- ]\d{10}\b</regex>
 		</matchOn>
 		<onClick>
- 		    <canvas type="window"/>
+			<canvas type="window"/>
 			<actionUrl target="http://www.amazon.com/exec/obidos/external-search/002-8747903-2137627?field-keywords=${src.objectContent}&amp;sourceid=Zimbra"/>
 		</onClick>
 	</contentObject>

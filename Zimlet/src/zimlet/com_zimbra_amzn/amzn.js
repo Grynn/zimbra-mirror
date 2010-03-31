@@ -13,25 +13,45 @@
  * ***** END LICENSE BLOCK *****
  */
 
-//////////////////////////////////////////////////////////////
-//  Amazon Zimlet.  Provides hovers for ISBN numbers.       //
-//  @author Kevin Henrikson                                 //
-//////////////////////////////////////////////////////////////
+/**
+ * Amazon Zimlet. Shows "hover" information for ISBN numbers in context.
+ * 
+ * @author Kevin Henrikson
+ */
 
+/**
+ * Default constructor.
+ */
 function Com_Zimbra_Amzn() {
-}
+};
 
 Com_Zimbra_Amzn.prototype = new ZmZimletBase();
 Com_Zimbra_Amzn.prototype.constructor = Com_Zimbra_Amzn;
 
-Com_Zimbra_Amzn.prototype.init =
-function() { };
+/**
+ * Initializes the Zimlet.
+ * 
+ */
+Com_Zimbra_Amzn.prototype.init = function() {
+	
+};
 
-// AMZN Service URL
+/**
+ * Amazon Service URL.
+ * @type	string
+ */
 Com_Zimbra_Amzn.URL = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=1582H242YD2K3JEANR82&Operation=ItemSearch&SearchIndex=Books&ResponseGroup=Medium&Keywords=";
 
+/**
+ * Content cache.
+ * @type	array
+ */
 Com_Zimbra_Amzn.CACHE = new Array();
 
+/**
+ * This method is called when the tool tip is popped-up.
+ * 
+ */
 Com_Zimbra_Amzn.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
 	canvas.innerHTML = '<img width="110" height="170" id="' + ZmZimletBase.encodeId(obj + "_AIMG") + '" src="'+this.getResource('blank_pixel.gif')+'"/><div style="width:110px;" id="'+ZmZimletBase.encodeId(obj+"_ATXT")+'"> <br/> </div>';
@@ -40,10 +60,14 @@ function(spanElement, obj, context, canvas) {
 	} else {
 		var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(Com_Zimbra_Amzn.URL + obj.replace(/[- A-WY-Z]/ig,''));
 		DBG.println(AjxDebug.DBG2, "Com_Zimbra_Amzn url " + url);
-		AjxRpc.invoke(null, url, null, new AjxCallback(this, this._callback, obj), true);
+		AjxRpc.invoke(null, url, null, new AjxCallback(this, this._toolTipCallback, obj), true);
 	}	
 };
 
+/**
+ * Performs a search.
+ * 
+ */
 Com_Zimbra_Amzn.prototype.searchAmzn =
 function(obj, canvas) {
 	var i = 0;
@@ -73,12 +97,18 @@ function(html, idx, obj, context) {
 	return idx;
 };
 
-// Called by the Zimbra framework when the panel item was double clicked
+/**
+ * This method is called when the panel item is double-clicked.
+ * 
+ */
 Com_Zimbra_Amzn.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
 
-// Called by the Zimbra framework when the panel item was clicked
+/**
+ * This method is called when the panel item is single-clicked.
+ * 
+ */
 Com_Zimbra_Amzn.prototype.singleClicked = function() {
 	var editorProps = [
 		{ label 		 : this.getMessage("amzn_search"),
@@ -95,10 +125,12 @@ Com_Zimbra_Amzn.prototype.singleClicked = function() {
 		var pe = this._propertyEditor;
 		pe.initProperties(editorProps);
 		var dialog_args = {
-			title : this.getMessage("amzn_dialogTitle"),
-			view  : view
+			title	: this.getMessage("amzn_dialogTitle"),
+			view	: view,
+			parent	: this.getShell()
 		};
-		this._dlg_propertyEditor = this._createDialog(dialog_args);
+		this._dlg_propertyEditor = new ZmDialog(dialog_args);
+		
 		var dlg = this._dlg_propertyEditor;
 		pe.setFixedLabelWidth();
 		pe.setFixedFieldWidth();
@@ -111,6 +143,10 @@ Com_Zimbra_Amzn.prototype.singleClicked = function() {
 	this._dlg_propertyEditor.popup();
 };
 
+/**
+ * Performs a search initiated from the property editor dialog.
+ * 
+ */
 Com_Zimbra_Amzn.prototype._doSearch =
 function() {
 	this._dlg_propertyEditor.popdown();
@@ -119,14 +155,19 @@ function() {
 	this._dlg_propertyEditor = null;
 };
 
+/**
+ * Displays the search results a search initiated from the property editor dialog.
+ * 
+ */
 Com_Zimbra_Amzn.prototype._displaySearchResult = 
 function(search) {
 	var view = new DwtComposite(this.getShell());
 	var dialog_args = {
-		view  : view,
-		title : this.getMessage("amzn_dialogResultTitle")
+		view	: view,
+		title	: this.getMessage("amzn_dialogResultTitle"),
+		parent	: this.getShell()
 	};
-	var dlg = this._createDialog(dialog_args);
+	var dlg = new ZmDialog(dialog_args);
 	dlg.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
 	dlg.popup();
 	dlg.setButtonListener(DwtDialog.OK_BUTTON,
@@ -140,7 +181,10 @@ function(search) {
     this.searchAmzn(search, div);
 };
 
-
+/**
+ * Displays book information.
+ * 
+ */
 Com_Zimbra_Amzn.prototype._displayBook = 
 function(imageInfo, bookInfo, obj) {
 	var imgEl = document.getElementById(ZmZimletBase.encodeId(obj + "_AIMG"));
@@ -161,15 +205,17 @@ function(imageInfo, bookInfo, obj) {
 	}
 };
 
+/**
+ * Displays information on multiple books.
+ * 
+ */
 Com_Zimbra_Amzn.prototype._displayBooks = 
 function(itemList, obj) {
-	
 	var items = itemList;
-	
-	if(itemList && (typeof itemList.length  == "undefined") ){
+	if (itemList && (typeof itemList.length  == "undefined") ) {
 		items = [itemList];
 	}
-		
+	
 	for(var i=0; i < 3; i++) {
 		var imgEl = document.getElementById(ZmZimletBase.encodeId(obj + "_AIMG_" + i));
 		var txtEl = document.getElementById(ZmZimletBase.encodeId(obj + "_ATXT_" + i));
@@ -195,7 +241,11 @@ function(itemList, obj) {
 	}
 };
 
-Com_Zimbra_Amzn.prototype._callback = 
+/**
+ * Callback for tool tip.
+ * 
+ */
+Com_Zimbra_Amzn.prototype._toolTipCallback = 
 function(obj, results) {
 	var result = AjxXmlDoc.createFromXml(results.text).toJSObject(true, false);
 	var bookInfo = new Object();
@@ -210,6 +260,10 @@ function(obj, results) {
 	}
 };
 
+/**
+ * Callback for search.
+ * 
+ */
 Com_Zimbra_Amzn.prototype._searchCallback = 
 function(obj,canvas, results) {
     if(results && results.success){
