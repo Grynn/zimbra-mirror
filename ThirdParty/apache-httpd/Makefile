@@ -21,10 +21,14 @@ endif
 
 files	:= $(wildcard src/httpd-$(HTTPD_VERSION).tar.gz)
 
-all: checksrc allclean build
+all: checksrc allclean build check
 
 checksrc:
 	$(if $(files), @echo "", exit 1)
+
+check:
+	@echo "Verifying apache-httpd build...";
+	$(HTTPD_ROOT)/../zmcheck.pl -b $(ZIMBRA_HOME)/httpd-$(HTTPD_VERSION)/bin/httpd $(ZIMBRA_HOME)/httpd-$(HTTPD_VERSION)/bin/apachectl
 
 build:
 	tar xzf src/httpd-$(HTTPD_VERSION).tar.gz

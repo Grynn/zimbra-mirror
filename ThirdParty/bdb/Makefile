@@ -27,10 +27,15 @@ endif
 
 files	:= $(wildcard src/db-$(BDB_RELEASE).tar.gz)
 
-all: checksrc allclean build tar
+all: checksrc allclean build check tar
 
 checksrc:
 	$(if $(files), @echo "", exit 1)
+
+check:
+	@echo "Verifying bdb build...";
+	$(BDB_ROOT)/../zmcheck.pl -b $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/bin/db_recover
+	$(BDB_ROOT)/../zmcheck.pl -l $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib/libdb-4.7.so
 
 build:
 	@echo "Building for Platform $(BUILD_PLATFORM)"
