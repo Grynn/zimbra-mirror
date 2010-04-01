@@ -387,7 +387,6 @@ public class GalSync {
         
         while (handler.getGroupCount() > 0) {
             fetchContacts(handler, mbox);
-            mbox.optimize(null, 0);
             if (handler.getGroupCount() > 0) {
                 try {
                     Thread.sleep(OfflineLC.zdesktop_gal_sync_group_interval.longValue());
@@ -401,8 +400,8 @@ public class GalSync {
             Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
             OperationContext octxt = new OperationContext(galMbox);
             galMbox.emptyFolder(octxt, handler.getDropFolder(), false);
-            galMbox.optimize(null, 1);
             prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastFullSync, Long.toString(System.currentTimeMillis()));
+            galMbox.optimize(null, 0);
         }
     }
     
