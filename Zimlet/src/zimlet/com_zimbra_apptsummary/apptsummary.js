@@ -1,42 +1,76 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
- *
  * Zimbra Collaboration Suite Zimlets
- * Copyright (C) 2006, 2007 Zimbra, Inc.
- *
- * The contents of this file are subject to the Yahoo! Public License
- * Version 1.0 ("License"); you may not use this file except in
+ * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * 
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- *
+ * 
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- *
  * ***** END LICENSE BLOCK *****
- *@Author Raja Rao DV
- * Inserts email with current day's appointments on first login
+ * @author Raja Rao DV
  */
 
-com_zimbra_asummary = function() {
+/**
+ * Inserts email with current day's appointments on first login.
+ * 
+ */
+com_zimbra_apptsummary_HandlerObject = function() {
 };
 
-com_zimbra_asummary.prototype = new ZmZimletBase;
-com_zimbra_asummary.prototype.constructor = com_zimbra_asummary;
+com_zimbra_apptsummary_HandlerObject.prototype = new ZmZimletBase;
+com_zimbra_apptsummary_HandlerObject.prototype.constructor = com_zimbra_apptsummary_HandlerObject;
 
+/**
+ * Defines the "regular only" type for appointment summary HTML.
+ */
+com_zimbra_apptsummary_HandlerObject.TYPE_SHOW_REGULAR_ONLY = "SHOW_REGULAR_ONLY";
+/**
+ * Defines the "free declined" type for appointment summary HTML.
+ */
+com_zimbra_apptsummary_HandlerObject.TYPE_SHOW_FREE_DECLINED = "SHOW_FREE_DECLINED";
 
-com_zimbra_asummary.prototype.init =
+/**
+ * Defines the "last update date" user property.
+ */
+com_zimbra_apptsummary_HandlerObject.USER_PROP_LAST_UPDATE = "apptSummary_emailLastUpdateDate";
+/**
+ * Defines the "only when appointments exist" user property.
+ */
+com_zimbra_apptsummary_HandlerObject.USER_PROP_ONLY_SEND_APPTS = "apptSummary_onlySendSummaryWhenThereAreAppts";
+
+/**
+ * Defines the "only when appointments exist" element ID.
+ */
+com_zimbra_apptsummary_HandlerObject.ELEMENT_ONLY_SEND_APPTS = "apptSummary_onlySendSummaryWhenThereAreAppts";
+
+/**
+ * Initializes the zimlet.
+ * 
+ */
+com_zimbra_apptsummary_HandlerObject.prototype.init =
 function() {
-	var emailLastUpdateDate = this.getUserProperty("emailappts_emailLastUpdateDate");
+	var emailLastUpdateDate = this.getUserProperty(com_zimbra_apptsummary_HandlerObject.USER_PROP_LAST_UPDATE);
 	var todayStr = this._getTodayStr();
-	if (emailLastUpdateDate != todayStr) {
-		this.apptSummary_onlySendSummaryWhenThereAreAppts = this.getUserProperty("apptSummary_onlySendSummaryWhenThereAreAppts") == "true";
+	if (true) { //emailLastUpdateDate != todayStr) {
+		this.apptSummary_onlySendSummaryWhenThereAreAppts = this.getUserProperty(com_zimbra_apptsummary_HandlerObject.USER_PROP_ONLY_SEND_APPTS) == "true";
 		var appts = this._getAppts(new Date());
 		this._parseApptsAndSendEmail(appts);
-		this.setUserProperty("emailappts_emailLastUpdateDate", todayStr, true);
+		this.setUserProperty(com_zimbra_apptsummary_HandlerObject.USER_PROP_LAST_UPDATE, todayStr, true);
 	}
 };
 
-com_zimbra_asummary.prototype._getAppts =
+/**
+ * Gets the appointments.
+ * 
+ * @param	{Date}	date	the date
+ * @param	{boolean}	noheader		not used
+ * @return	{AjxVector} an array of {@link ZmAppt} objects or an empty array for none
+ */
+com_zimbra_apptsummary_HandlerObject.prototype._getAppts =
 function(date, noheader) {
 	try {
 		this._startDate = new Date(date.getTime());
@@ -48,25 +82,42 @@ function(date, noheader) {
 		return result = this._calController.getApptSummaries(params);
 	} catch (ex) {
 		DBG.println(ex);
-		return [];
+		return new AjxVector();
 	}
 };
 
-com_zimbra_asummary.prototype._parseApptsAndSendEmail = function(appts) {
+/**
+ * Parses the appointment array and sends an email summary.
+ * 
+ * @param	{AjxVector}	appts		an array of {@link ZmAppt} objects
+ */
+com_zimbra_apptsummary_HandlerObject.prototype._parseApptsAndSendEmail =
+function(appts) {
 	var hasError = false;
+	var body = "";
 	if (appts instanceof AjxVector) {
 		if (appts.size() == 0 && this.apptSummary_onlySendSummaryWhenThereAreAppts) {
 			return;
 		}
-		var body = this.getAppointsSummartBody(this._startDate, appts, this._calController, null);
+		body = this._getApptsSummaryBody(this._startDate, appts, this._calController, null);
 	} else {
 		hasError = true;
-		var body = "There was an error retrieving appointments - Please contact your administrator";
+		body = this.getMessage("ApptSummaryZimlet_error_unabletogetappointments");
 	}
 	this._sendEmail(body, hasError);
 };
 
-com_zimbra_asummary.prototype.getAppointsSummartBody =
+/**
+ * Gets the appointments summary email body.
+ * 
+ * @param	{date}		date	the date
+ * @param	{AjxVector}	list	an array of {@link ZmAppt} objects
+ * @param	{ZmCalViewController}	controller		the calendar view controller
+ * @param	{boolean}	noheader	not used
+ * @param	{string}	emptyMsg	the empty message body
+ * @return	{string}	the appointment summary email body
+ */
+com_zimbra_apptsummary_HandlerObject.prototype._getApptsSummaryBody =
 function(date, list, controller, noheader, emptyMsg) {
 	this.__apptCount = 0;
 	if (!emptyMsg) {
@@ -75,16 +126,28 @@ function(date, list, controller, noheader, emptyMsg) {
 	var html = new AjxBuffer();
 	var formatter = DwtCalendar.getDateFullFormatter();
 	var title = formatter.format(date);
-	html.append(this._getApptsHtml(date, list, controller, noheader, emptyMsg, "SHOW_REGULAR_ONLY"));
-	html.append("<BR/>");
-	html.append(this._getApptsHtml(date, list, controller, noheader, emptyMsg, "SHOW_FREE_DECLINED"));
+	html.append(this._getApptsHtml(date, list, controller, noheader, emptyMsg, com_zimbra_apptsummary_HandlerObject.TYPE_SHOW_REGULAR_ONLY));
+	html.append("<br/>");
+	html.append(this._getApptsHtml(date, list, controller, noheader, emptyMsg, com_zimbra_apptsummary_HandlerObject.TYPE_SHOW_FREE_DECLINED));
 	return html.toString();
 };
 
-com_zimbra_asummary.prototype._getApptsHtml = function(date, list, controller, noheader, emptyMsg, type) {
+/**
+ * Gets the appointments summary as HTML.
+ * 
+ * @param	{date}		date	the date
+ * @param	{AjxVector}	list	an array of {@link ZmAppt} objects
+ * @param	{ZmCalViewController}	controller		the calendar view controller
+ * @param	{boolean}	noheader	not used
+ * @param	{string}	emptyMsg	the empty message body
+ * @param	{constant}	type		the summary type (see <code>TYPE_*</code> constants)
+ * @return	{string}	the appointment summary email body
+ */
+com_zimbra_apptsummary_HandlerObject.prototype._getApptsHtml =
+function(date, list, controller, noheader, emptyMsg, type) {
 	var html = new AjxBuffer();
 	var apptsFound = false;
-	if (type == "SHOW_REGULAR_ONLY") {
+	if (type == com_zimbra_apptsummary_HandlerObject.TYPE_SHOW_REGULAR_ONLY) {
 		var title = this.getMessage("ApptSummaryZimlet_ApptsHdr");
 	} else {
 		var title = this.getMessage("ApptSummaryZimlet_NotBusyHeader");
@@ -112,12 +175,12 @@ com_zimbra_asummary.prototype._getApptsHtml = function(date, list, controller, n
 	var freeDecCounter = 0;
 	for (var i = 0; i < size; i++) {
 		var ao = list.get(i);
-		if (type == "SHOW_REGULAR_ONLY") {
+		if (type == com_zimbra_apptsummary_HandlerObject.TYPE_SHOW_REGULAR_ONLY) {
 			if (ao.ptst == "DE" || ao.fba == "F" || ao.fba == "O") {//ignore declined and/or free appointments
 				continue;
 			}
 			var counter = ++this.__apptCount;
-		} else if (type == "SHOW_FREE_DECLINED") {
+		} else if (type == com_zimbra_apptsummary_HandlerObject.TYPE_SHOW_FREE_DECLINED) {
 			if (ao.ptst != "DE" && ao.fba != "F" && ao.fba != "O") {//only free/declined appts are allowed
 				continue;
 			}
@@ -186,11 +249,18 @@ com_zimbra_asummary.prototype._getApptsHtml = function(date, list, controller, n
 	}
 };
 
-com_zimbra_asummary.prototype._sendEmail =
+/**
+ * Sends the email.
+ * 
+ * @param	{string}	body		the message body
+ * @param	{boolean}	hasError	if <code>true</code>, the email contains an error message
+ */
+com_zimbra_apptsummary_HandlerObject.prototype._sendEmail =
 function(body, hasError) {
 	if (hasError) {
 		var subject = this.getMessage("ApptSummaryZimlet_subjectError");
 	} else {
+		var test = this.getMessage("ApptSummaryZimlet_subjectSuccess");
 		var subject = this.getMessage("ApptSummaryZimlet_subjectSuccess").replace("{0}", this.__apptCount);
 		if (this.__apptCount != 1) {
 			subject = subject.replace("{1}", this.getMessage("ApptSummaryZimlet_Appointments"));
@@ -245,29 +315,54 @@ function(body, hasError) {
 	return appCtxt.getAppController().sendRequest({jsonObj:jsonObj, asyncMode:true, errorCallback:errCallback, callback:callback});
 };
 
-com_zimbra_asummary.prototype._sendEmailCallack =
+/**
+ * Send email callback.
+ * 
+ * @see		_sendEmail
+ */
+com_zimbra_apptsummary_HandlerObject.prototype._sendEmailCallack =
 function(param1, param2) {
 	//do nothing on success
 };
 
-com_zimbra_asummary.prototype._sendEmailErrCallback =
+/**
+ * Send email error callback.
+ * 
+ * @see		_sendEmail
+ */
+com_zimbra_apptsummary_HandlerObject.prototype._sendEmailErrCallback =
 function(param1, param2) {
 	appCtxt.getAppController().setStatusMsg(this.getMessage("ApptSummaryZimlet_CalParseError"), ZmStatusView.LEVEL_WARNING);
 };
 
 
-//-------------------------------------
-//Preference Dialog related
-//-------------------------------------
-com_zimbra_asummary.prototype.doubleClicked = function() {
+/*
+ * -------------------------------------
+ * Preference Dialog related functions
+ * -------------------------------------
+ */
+
+/**
+ * This method is called when the panel is double-clicked.
+ * 
+ */
+com_zimbra_apptsummary_HandlerObject.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
 
-com_zimbra_asummary.prototype.singleClicked = function() {
+/**
+ * This method is called when the panel is single-clicked.
+ * 
+ */
+com_zimbra_apptsummary_HandlerObject.prototype.singleClicked = function() {
 	this._displayPrefDialog();
 };
 
-com_zimbra_asummary.prototype._displayPrefDialog =
+/**
+ * Displays the preferences dialog.
+ * 
+ */
+com_zimbra_apptsummary_HandlerObject.prototype._displayPrefDialog =
 function() {
 	//if zimlet dialog already exists...
 	if (this.pbDialog) {
@@ -278,50 +373,88 @@ function() {
 	//this.pView.setSize("150", "25");
 	this.pView.getHtmlElement().style.overflow = "auto";
 	this.pView.getHtmlElement().innerHTML = this._createPreferenceView();
-	this.pbDialog = this._createDialog({title:this.getMessage("ApptSummaryZimlet_PrefDlgLabel"), view:this.pView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	
+	var dialog_args = {
+			title	: this.getMessage("ApptSummaryZimlet_PrefDlgLabel"),
+			view	: this.pView,
+			standardButtons : [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON],
+			parent	: this.getShell()
+		};
+	
+	this.pbDialog = new ZmDialog(dialog_args);
 	this.pbDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListner));
 	this._setPreferencesChkBoxVal();
 	this.pbDialog.popup();
 };
 
-com_zimbra_asummary.prototype._setPreferencesChkBoxVal =
+/**
+ * Sets the preferences.
+ */
+com_zimbra_apptsummary_HandlerObject.prototype._setPreferencesChkBoxVal =
 function() {
-	if (this.getUserProperty("apptSummary_onlySendSummaryWhenThereAreAppts") == "true") {
-		document.getElementById("apptSummary_onlySendSummaryWhenThereAreAppts").checked = true;
+	if (this.getUserProperty(com_zimbra_apptsummary_HandlerObject.USER_PROP_ONLY_SEND_APPTS) == "true") {
+		document.getElementById(com_zimbra_apptsummary_HandlerObject.ELEMENT_ONLY_SEND_APPTS).checked = true;
 	}
 };
 
-
-com_zimbra_asummary.prototype._createPreferenceView =
+/**
+ * Creates the preferences view.
+ * 
+ * @return	{string}	the view HTML
+ * @see		_displayPrefDialog
+ */
+com_zimbra_apptsummary_HandlerObject.prototype._createPreferenceView =
 function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='apptSummary_onlySendSummaryWhenThereAreAppts'  type='checkbox'/>";
+	html[i++] = "<input id='";
+	html[i++] = com_zimbra_apptsummary_HandlerObject.ELEMENT_ONLY_SEND_APPTS;
+	html[i++] = "'  type='checkbox'/>";
 	html[i++] = this.getMessage("ApptSummaryZimlet_sendApptEmailOnlyWhenThereAreEmails");
 	html[i++] = "</DIV>";
 	return html.join("");
 };
 
-
-com_zimbra_asummary.prototype._okBtnListner =
+/**
+ * Preferences dialog OK button listener.
+ * 
+ * @see		_displayPrefDialog
+ */
+com_zimbra_apptsummary_HandlerObject.prototype._okBtnListner =
 function() {
-	this.setUserProperty("apptSummary_onlySendSummaryWhenThereAreAppts", document.getElementById("apptSummary_onlySendSummaryWhenThereAreAppts").checked, true);
+	this.setUserProperty(com_zimbra_apptsummary_HandlerObject.USER_PROP_ONLY_SEND_APPTS, document.getElementById(com_zimbra_apptsummary_HandlerObject.ELEMENT_ONLY_SEND_APPTS).checked, true);
 	appCtxt.getAppController().setStatusMsg(this.getMessage("ApptSummaryZimlet_PrefsSaved"), ZmStatusView.LEVEL_INFO);
 	this.pbDialog.popdown();//hide the dialog
 };
 
+/*
+ * -------------------------------------
+ * Supporting functions
+ * -------------------------------------
+ */
 
-//-------------------------------------
-//Supporting functions
-//-------------------------------------
-com_zimbra_asummary.prototype._getTodayStr = function() {
+/**
+ * Gets today as a string.
+ * 
+ * @return	{string}	today as a string
+ */
+com_zimbra_apptsummary_HandlerObject.prototype._getTodayStr =
+function() {
 	var todayDate = new Date();
 	var todayStart = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
-	return this._normalizeDate(todayStart.getMonth() + 1, todayStart.getDate(), todayStart.getFullYear());
+	return this._formatDate(todayStart.getMonth() + 1, todayStart.getDate(), todayStart.getFullYear());
 };
 
-com_zimbra_asummary.prototype._normalizeDate =
+/**
+ * Formats the date.
+ * 
+ * @param	{string}	month		the month
+ * @param	{string}	day		the day
+ * @param	{string}	year		the year
+ * @return	{string}	the formatted date
+ */
+com_zimbra_apptsummary_HandlerObject.prototype._formatDate =
 function(month, day, year) {
 	var fString = [];
 	var ds = I18nMsg.formatDateShort.toLowerCase();
