@@ -168,7 +168,7 @@ fi
 #########################################################################
 # Zimbra tweak, because we want to keep jetty.conf under $JETTY_HOME/etc
 #########################################################################
-JAVA_OPTIONS="-DSTART='${JETTY_HOME}/etc/start.config' -Dzimbra.home='${ZIMBRA_HOME}' -Dzimbra.config='${ZIMBRA_HOME}/conf/localconfig.xml' -Djava.library.path='${JETTY_HOME}/../lib' -Djava.awt.headless=true -Djava.io.tmpdir='${ZIMBRA_HOME}/data/tmp/java' -Djava.net.useSystemProxies=true"
+JAVA_OPTIONS="-DSTART='${JETTY_HOME}/etc/start.config' -Dzimbra.home='${ZIMBRA_HOME}' -Dzimbra.config='${ZIMBRA_HOME}/conf/localconfig.xml' -Djava.library.path='${JETTY_HOME}/../lib' -Djava.awt.headless=true -Djava.io.tmpdir='${ZIMBRA_HOME}/data/tmp/java' -Djava.net.useSystemProxies=true -Dsun.net.inetaddr.ttl=10"
 JETTY_CONSOLE="${ZIMBRA_HOME}/log/zdesktop.out"
 JETTY_RUN="${ZIMBRA_HOME}/log"
 JETTY_PID="$JETTY_RUN/zdesktop.pid"
