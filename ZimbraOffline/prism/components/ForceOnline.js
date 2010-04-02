@@ -62,7 +62,7 @@ DummyEvent.prototype = {
 
   canSetProperty: function canSetProperty(iid, propertyName) {
     Components.utils.reportError(propertyName);
-    return "AllAccess";
+    return "NoAccess";
   }
 }
 
@@ -135,7 +135,7 @@ ForceOnline.prototype = {
 
   canSetProperty: function canSetProperty(iid, propertyName) {
     Components.utils.reportError(propertyName);
-    return "NoAccess";
+    return "AllAccess";
   },
 
   observe : function(aSubject, aTopic, aData) {
