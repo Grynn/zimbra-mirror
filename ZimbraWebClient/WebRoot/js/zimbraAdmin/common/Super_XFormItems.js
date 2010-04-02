@@ -1598,6 +1598,10 @@ ZATabCase_XFormItem.prototype.getHeaderLevel = function () {
     return this.getInheritedProperty("headerLevel") || 1;
 }
 
+ZATabCase_XFormItem.prototype.getHMargin = function () {
+    return this.getInheritedProperty("hMargin") || 0;
+}
+
 ZATabCase_XFormItem.prototype.getCustomHeight = function () {
 	try {
 		var form = this.getForm();
@@ -1647,8 +1651,9 @@ ZATabCase_XFormItem.prototype.getCustomWidth = function () {
 		}
 		if(totalWidth<=0)
 			return "100%";
-		else
-			return totalWidth;
+		else {
+			return totalWidth - this.getHMargin();
+		}
 	} catch (ex) {
         
 	}

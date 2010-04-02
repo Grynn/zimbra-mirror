@@ -137,3 +137,32 @@ body						{	@ChromeBg@	}
 	.ImgAppBanner{filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@AppBannerImg@',sizingMethod='scale');width:@AppBannerWidth@;height:@AppBannerHeight@;}
 	.ImgLoginBanner{filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@LoginBannerImg@',sizingMethod='scale');width:@LoginBannerWidth@;height:@LoginBannerHeight@;}
 #ENDIF
+
+.VAMIDLSource, .VAMIDLTarget  { 
+  border-top: 2px solid #848484;
+  border-left: 2px solid #848484;
+  border-bottom: 2px solid #FAFAFA;
+  border-right: 2px solid #FAFAFA;
+  width: auto;	
+  @ListBg@
+}
+
+.VAMIDLTarget { 
+  height:232px;
+}
+
+.VAMIDLSource { 
+  height:200px;
+}
+
+.VAMIDlSourceRow, .VAMIDLTargetRow {
+  padding-left: .25em;
+  padding-top:3px;
+  padding-bottom:3px;
+}
+
+.VAMIDLSource .DwtListView-Rows {
+	height:90%;
+}
+
+

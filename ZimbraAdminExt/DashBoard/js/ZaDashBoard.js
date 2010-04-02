@@ -12,3 +12,10 @@ function(viewId) {
 		return c ;
 	}
 }
+ZaDashBoard.settingsTab = "settingsTab";
+ZaDashBoard.myXModel = {
+	    items: [
+	       {id:ZaDashBoard.settingsTab,type:_NUMBER_},
+	       {id:ZaGlobalConfig.A_zimbraMtaRelayHost, ref:ZaGlobalConfig.A_zimbraMtaRelayHost, type:_LIST_, listItem:{ type: _HOSTNAME_OR_IP_, maxLength: 256 }}
+	    ]
+};
