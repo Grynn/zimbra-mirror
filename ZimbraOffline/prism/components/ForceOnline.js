@@ -62,7 +62,7 @@ DummyEvent.prototype = {
 
   canSetProperty: function canSetProperty(iid, propertyName) {
     Components.utils.reportError(propertyName);
-    return "NoAccess";
+    return "AllAccess";
   }
 }
 
@@ -147,9 +147,10 @@ ForceOnline.prototype = {
         obsService.addObserver(this, "profile-change-net-teardown", false);
         obsService.addObserver(this, "profile-after-change", false);
         this._networkLinkService = Cc["@mozilla.org/network/network-link-service;1"].getService(Ci.nsINetworkLinkService);
+        this._online = this._networkLinkService.isLinkUp;
+
         this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
         this._timer.init(this, 1000, Ci.nsITimer.TYPE_REPEATING_SLACK);
-        this._online = this._networkLinkService.isLinkUp;
         break;
       case "profile-after-change":
         var proxyService = Cc["@mozilla.org/network/protocol-proxy-service;1"].getService(Ci.nsIProtocolProxyService);
@@ -188,10 +189,23 @@ ForceOnline.prototype = {
       this._listenerMap[type] = [];
     }
     this._listenerMap[type].push(listener);
+
+    var online = this._networkLinkService.isLinkUp;
+    if ((type == ONLINE_STATUS && online) || (type == OFFLINE_STATUS && !online)) {
+      this._dispatchNetworkStatusEvent(type);
+    }
   },
   
   removeEventListener : function(type, listener, capture) {
-    // TODO
+    if (type in this._listenerMap) {
+      var listeners = this._listenerMap[type];
+      for (var i=0; i<listeners.length; i++) {
+        if (listeners[i] == listener) {
+          listeners.splice(i, 1);
+          break;
+        }
+      }
+    }
   },
   
   _dispatchNetworkStatusEvent : function(status) {
