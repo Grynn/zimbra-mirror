@@ -58,6 +58,7 @@ public class OfflineService implements DocumentService {
         dispatcher.registerHandler(MailConstants.REVOKE_PERMISSION_REQUEST, OfflineServiceProxy.RevokePermission());
         dispatcher.registerHandler(MailConstants.CHECK_PERMISSION_REQUEST, OfflineServiceProxy.CheckPermission());
         dispatcher.registerHandler(AccountConstants.GET_SHARE_INFO_REQUEST, OfflineServiceProxy.GetShareInfoRequest());
+        dispatcher.registerHandler(AccountConstants.AUTO_COMPLETE_GAL_REQUEST, OfflineServiceProxy.AutoCompleteGalRequest());
         dispatcher.registerHandler(MailConstants.SAVE_DRAFT_REQUEST, new OfflineSaveDraft());
         
         dispatcher.registerHandler(OfflineConstants.CLIENT_EVENT_NOTIFY_REQUEST, new OfflineClientEventNotify());

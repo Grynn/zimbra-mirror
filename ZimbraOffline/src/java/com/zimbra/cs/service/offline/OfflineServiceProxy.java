@@ -83,6 +83,10 @@ public class OfflineServiceProxy extends DocumentHandler {
     public static OfflineServiceProxy GetShareInfoRequest() {
         return new OfflineServiceProxy("get share info", false, false);
     }
+    
+    public static OfflineServiceProxy AutoCompleteGalRequest() {
+        return new OfflineServiceProxy("auto-complete gal", true, true);
+    }
 }
 
 
