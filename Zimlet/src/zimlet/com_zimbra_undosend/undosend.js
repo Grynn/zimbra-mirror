@@ -117,12 +117,14 @@ function(controller, viewId, timerSpanId) {
 		clearInterval(this.timer);
 		this._verifyAndSendEmail(controller, viewId);
 	} else {
+		if(this._newMenuButton) {
+			this._newMenuButton.setEnabled(false);//make sure that opening-mail action that enables this btn is countered
+		}
 		var el = document.getElementById(timerSpanId);
 		if(el) {	
 			el.innerHTML = --count;
 			this._viewIdAndStatusesMap[viewId].currentCounter = count;
-		}
-		
+		}		
 	}
 };
 
