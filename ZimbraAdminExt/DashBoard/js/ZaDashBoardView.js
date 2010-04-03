@@ -57,9 +57,35 @@ function(entry) {
 }
 
 ZaDashBoardView.openProfilesView = function() {
-	
-	
+	ZaApp.getInstance().getCosListController().show(true,true);
 }
+
+ZaDashBoardView.openDomainsView = function() {
+	ZaApp.getInstance().getDomainListController().show(true,true);
+}
+
+ZaDashBoardView.openAddressesView = function() {
+	var query = "";
+
+	var params = {};
+	var searchListController = ZaApp.getInstance().getSearchListController() ;
+	searchListController._isAdvancedSearch = false;
+	
+	params.types = [ZaSearch.ACCOUNTS,ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.RESOURCES];
+	
+	searchListController._searchFieldInput = query ;
+	params.query = ZaSearch.getSearchByNameQuery(query, params.types);      
+
+	
+	//set the currentController's _currentQuery
+	
+	ZaApp.getInstance().getSearchListController()._currentQuery = params.query ;
+	searchListController._currentQuery = params.query ;
+	
+	this._isSearchButtonClicked = false ;
+	ZaSearchListController.prototype._searchFieldCallback.call(searchListController,params);
+}
+
 ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {	
     var tabBarChoices = [];
     var switchItems = [];
@@ -197,45 +223,36 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 	xFormObject.colSizes=["auto"];
 	xFormObject.items = [
 		{type:_TOP_GROUPER_, label:com_zimbra_dashboard.Services, id:"dashboard_settings_group",
-			numCols:4, colSizes:["200px","200px","200px","200px"],visibilityChecks:[],enableDisableChecks:[],
+			numCols:4, colSizes:["auto","auto","auto","auto"],visibilityChecks:[],enableDisableChecks:[],
 			items:[
-			       {type:_GROUP_,items:[{type:_OUTPUT_, value:com_zimbra_dashboard.MailboxDService},{type:_AJX_IMAGE_,src:"Check"}]},
-			       {type:_GROUP_,items:[{type:_OUTPUT_, value:com_zimbra_dashboard.LDAPService},{type:_AJX_IMAGE_,src:"Check"}]},
-			       {type:_GROUP_,items:[{type:_OUTPUT_, value:com_zimbra_dashboard.MTAService},{type:_AJX_IMAGE_,src:"Check"}]},
-			       {type:_GROUP_,items:[{type:_OUTPUT_, value:com_zimbra_dashboard.AntiSpamService},{type:_AJX_IMAGE_,src:"Check"}]},
-			       {type:_GROUP_,items:[{type:_OUTPUT_, value:com_zimbra_dashboard.AntiVirusService},{type:_AJX_IMAGE_,src:"Check"}]},
-			       {type:_GROUP_,items:[{type:_OUTPUT_, value:com_zimbra_dashboard.SpellCheckerService},{type:_AJX_IMAGE_,src:"Check"}]},
-			       {type:_GROUP_,items:[{type:_OUTPUT_, value:com_zimbra_dashboard.LoggerService},{type:_AJX_IMAGE_,src:"Check"}]},
-			       {type:_CELLSPACER_}
+			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[
+			                            {type:_OUTPUT_, value:com_zimbra_dashboard.MailboxDService},
+			                            {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
+			                            {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]},
+			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[{type:_OUTPUT_, value:com_zimbra_dashboard.LDAPService},
+		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
+		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]},
+			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[{type:_OUTPUT_, value:com_zimbra_dashboard.MTAService},
+		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
+		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]},
+			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[{type:_OUTPUT_, value:com_zimbra_dashboard.AntiSpamService},
+		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
+		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]},
+			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[{type:_OUTPUT_, value:com_zimbra_dashboard.AntiVirusService},
+		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
+		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]},
+			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[{type:_OUTPUT_, value:com_zimbra_dashboard.SpellCheckerService},
+		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
+		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]},
+			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[{type:_OUTPUT_, value:com_zimbra_dashboard.LoggerService},
+		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
+		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]}
 			]
 		}, 	                     
         {type:_TOP_GROUPER_, label:com_zimbra_dashboard.AddressesGrouper, id:"dashboard_addresses_group",
         	numCols: 4, colSizes: ["200px","200px","200px","200px"],visibilityChecks:[],enableDisableChecks:[],
 	    	items:[  
 	    	    {type:_OUTPUT_,colSpan:4,value:"Some description of what this section is about with a link to help topic about email addresses"},
-	    	    {type:_SPACER_,colSpan:4},
-	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageProfiles, icon:"COS", width:80,
-		    	   	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
-		    	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewProfile, icon:"NewCOS", width:80,
-		    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},	
-		    	{type:_SPACER_,colSpan:2},		    	    	
-	    	    {type:_SPACER_,colSpan:4},
-	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageDomains, icon:"Domain", width:80,
-	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]
-	    	    },
-	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewDomain, icon:"Domain", width:80,
-	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
-	    	    {type:_SPACER_,colSpan:2},
-	    	    {type:_SPACER_,colSpan:4},	    	    
-	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageAddresses, icon:"Account", width:80,
-	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
-	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewAccount, icon:"Account", width:80,
-	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
-	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewDL, icon:"DistributionList",width:80,
-	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
-	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewCalResource,icon:"Resource", width:80,
-	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
-
 		    	{type:_SPACER_,colSpan:4},		    	    		    	    	
 	    	    {type:_GROUP_,colSpan:4,numCols:3,colSizes:["100px","600px","100px"],
 	    	    	items:[
@@ -245,7 +262,29 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 	    	    	    },
 	    	    	    {type:_DWT_BUTTON_,label:ZaMsg.search,icon:"Search",enableDisableChecks:[],visibilityChecks:[]}
 	    	    	]	
-	    	    }
+	    	    },	    	   
+	    	    {type:_SPACER_,colSpan:4},
+	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageAddresses, icon:"Account", width:80,
+	    	    	onActivate:"ZaDashBoardView.openAddressesView();",enableDisableChecks:[],visibilityChecks:[]},
+	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewAccount, icon:"Account", width:80,
+	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
+	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewDL, icon:"DistributionList",width:80,
+	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
+	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewCalResource,icon:"Resource", width:80,
+	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},	    	    
+	    	    {type:_SPACER_,colSpan:4},	    	    
+	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageProfiles, icon:"COS", width:80,
+		    	   	onActivate:"ZaDashBoardView.openProfilesView()",enableDisableChecks:[],visibilityChecks:[]},
+		    	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewProfile, icon:"NewCOS", width:80,
+		    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},	
+		    	{type:_SPACER_,colSpan:2},		    	    	
+	    	    {type:_SPACER_,colSpan:4},
+	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageDomains, icon:"Domain", width:80,
+	    	    	onActivate:"ZaDashBoardView.openDomainsView()",enableDisableChecks:[],visibilityChecks:[]
+	    	    },
+	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewDomain, icon:"Domain", width:80,
+	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
+	    	    {type:_SPACER_,colSpan:2}
 	    	]
         },
         {type:_TOP_GROUPER_, label:com_zimbra_dashboard.Settings, id:"dashboard_settings_group",

@@ -36,9 +36,9 @@ ZaController.initToolbarMethods["ZaDomainListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaDomainListController"] = new Array();
 ZaController.changeActionsStateMethods["ZaDomainListController"] = new Array(); 
 
-ZaDomainListController.prototype.show = function (doPush) {
+ZaDomainListController.prototype.show = function (doPush,openInNewTab) {
 	var busyId = Dwt.getNextId();
-	var callback = new AjxCallback(this, this.searchCallback, {limit:ZaDomain.RESULTSPERPAGE,CONS:ZaDomain,show:doPush, busyId:busyId});
+	var callback = new AjxCallback(this, this.searchCallback, {openInNewTab:openInNewTab,limit:ZaDomain.RESULTSPERPAGE,CONS:ZaDomain,show:doPush, busyId:busyId});
 	var searchParams = {
 			query:this._currentQuery, 
 			types:[ZaSearch.DOMAINS],
@@ -65,7 +65,10 @@ function (list,  openInNewTab, openInSearchTab) {
 	
 	if (openInSearchTab) {
 		ZaApp.getInstance().updateSearchTab();
-	}else{
+	} else if(openInNewTab) {
+		var cTab = ZaApp.getInstance().getTabGroup().getTabById( this.getContentViewId());
+		ZaApp.getInstance().updateTab(cTab, ZaApp.getInstance()._currentViewId );
+	} else{
 		ZaApp.getInstance().updateTab(this.getMainTab(), ZaApp.getInstance()._currentViewId );
 	}
 }
@@ -178,9 +181,9 @@ function (openInNewTab, openInSearchTab) {
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
 	//ZaApp.getInstance().createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
 	var tabParams = {
-			openInNewTab: false,
+			openInNewTab: openInNewTab ? openInNewTab : false,
 			tabId: this.getContentViewId(),
-			tab: openInSearchTab ? this.getSearchTab() : this.getMainTab() 
+			tab: openInNewTab ? null : (openInSearchTab ? this.getSearchTab() : this.getMainTab()) 
 		}
 	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 	
