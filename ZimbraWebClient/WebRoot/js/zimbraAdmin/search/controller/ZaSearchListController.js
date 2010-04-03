@@ -309,9 +309,11 @@ function(ev, noPopView, func, obj, params) {
 	}
 	
 	//reset the search text when the search list view/tab is closed
-	var searchFieldXForm = this._searchField._localXForm ;
-	var searchFieldItem = searchFieldXForm.getItemsById(ZaSearch.A_query)[0];
-	searchFieldItem.getElement().value = "" ;
+	if(this._searchField) {
+		var searchFieldXForm = this._searchField._localXForm ;
+		var searchFieldItem = searchFieldXForm.getItemsById(ZaSearch.A_query)[0];
+		searchFieldItem.getElement().value = "" ;
+	}
 }
 
 // new account button was pressed
