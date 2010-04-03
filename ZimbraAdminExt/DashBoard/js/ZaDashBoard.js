@@ -19,3 +19,11 @@ ZaDashBoard.myXModel = {
 	       {id:ZaGlobalConfig.A_zimbraMtaRelayHost, ref:ZaGlobalConfig.A_zimbraMtaRelayHost, type:_LIST_, listItem:{ type: _HOSTNAME_OR_IP_, maxLength: 256 }}
 	    ]
 };
+
+ZaMsg.COS_view_title = com_zimbra_dashboard.COS_view_title;
+ZaMsg.COSTBB_New_tt = com_zimbra_dashboard.COSTBB_New_tt;
+ZaMsg.COSTBB_Edit_tt = com_zimbra_dashboard.COSTBB_Edit_tt;
+ZaMsg.COSTBB_Delete_tt = com_zimbra_dashboard.COSTBB_Delete_tt;
+ZaMsg.COSTBB_Duplicate_tt = com_zimbra_dashboard.COSTBB_Duplicate_tt;
+ZaMsg.COSTBB_Save_tt = com_zimbra_dashboard.COSTBB_Save_tt;
+ZaMsg.Search_view_title = com_zimbra_dashboard.Search_view_title;
