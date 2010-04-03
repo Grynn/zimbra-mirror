@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Zimlets
- * Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -11,35 +11,65 @@
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
- *@Author Raja Rao DV
+ * @author Raja Rao DV
  */
 
-
-function com_zimbra_emailreminderHdlr() {
+/**
+ * Constructor.
+ * 
+ */
+function com_zimbra_emailreminder_HandlerObject() {
 }
 
-com_zimbra_emailreminderHdlr.prototype = new ZmZimletBase();
-com_zimbra_emailreminderHdlr.prototype.constructor = com_zimbra_emailreminderHdlr;
+com_zimbra_emailreminder_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_emailreminder_HandlerObject.prototype.constructor = com_zimbra_emailreminder_HandlerObject;
 
-com_zimbra_emailreminderHdlr.CALENDAR_VIEW = "appointment";
-com_zimbra_emailreminderHdlr.followupFolder = "Email Reminders";
+/**
+ * Defines the "calendar" view.
+ */
+com_zimbra_emailreminder_HandlerObject.VIEW_CALENDAR = "appointment";
+/**
+ * Defines the "follow-up" folder name.
+ */
+com_zimbra_emailreminder_HandlerObject.CALENDAR_EMAIL_REMINDERS = "Email Reminders";
+/**
+ * Defines the "on" user property.
+ */
+com_zimbra_emailreminder_HandlerObject.USER_PROP_TURN_ON = "turnONEmailReminderZimlet";
+/**
+ * Defines the "allow flag" user property.
+ */
+com_zimbra_emailreminder_HandlerObject.USER_PROP_ALLOW_FLAG = "emailReminder_allowFlag";
+/**
+ * Defines the "allow drag" user property.
+ */
+com_zimbra_emailreminder_HandlerObject.USER_PROP_ALLOW_DRAG = "emailReminder_allowDrag";
+/**
+ * Defines the "show in compose" user property.
+ */
+com_zimbra_emailreminder_HandlerObject.USER_PROP_SHOW_IN_COMPOSE = "ereminder_showInCompose";
 
-
-com_zimbra_emailreminderHdlr.prototype.init =
+/**
+ * Initializes the zimlet.
+ * 
+ */
+com_zimbra_emailreminder_HandlerObject.prototype.init =
 function() {
-
-
-	this.emailReminderZimletON = this.getUserProperty("turnONEmailReminderZimlet") == "true";
+	this.emailReminderZimletON = this.getUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_TURN_ON) == "true";
 	if (!this.emailReminderZimletON) {
 		return;
 	}
-	this._allowFlag = this.getUserProperty("emailReminder_allowFlag") == "true";
-	this._allowDrag = this.getUserProperty("emailReminder_allowDrag") == "true";
-	this.ereminder_showInCompose = this.getUserProperty("ereminder_showInCompose") == "true";
-	this._notesPrefix = this.getMessage("EmailReminder_NotesPrefix");
+	this._allowFlag = this.getUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_ALLOW_FLAG) == "true";
+	this._allowDrag = this.getUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_ALLOW_DRAG) == "true";
+	this.ereminder_showInCompose = this.getUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_SHOW_IN_COMPOSE) == "true";
+	this._notesPrefix = this.getMessage("EmailReminder_dialog_reminder_notes_label");
 };
 
-com_zimbra_emailreminderHdlr.prototype.getEmailFollowupFolderId =
+/**
+ * Gets the follow-up folder ID.
+ * 
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._getEmailFollowupFolderId =
 function() {
 	this._justCreatedCalendarFolder = false;
 	var soapDoc = AjxSoapDoc.create("GetFolderRequest", "urn:zimbraMail");
@@ -52,28 +82,33 @@ function() {
 	if (folders) {
 		for (var i = 0; i < folders.length; i++) {
 			var f = folders[i];
-			if (f && f.name == com_zimbra_emailreminderHdlr.followupFolder && f.view == com_zimbra_emailreminderHdlr.CALENDAR_VIEW) {
+			if (f && f.name == com_zimbra_emailreminder_HandlerObject.CALENDAR_EMAIL_REMINDERS && f.view == com_zimbra_emailreminder_HandlerObject.VIEW_CALENDAR) {
 				this.emailFollowupFolderId = f.id;
 				return;
 			}
 		}
 	}
-	//there is no such folder, so create one.
-	this.createEmailFollowupFolder(top.id);
+	
+	// there is no such folder, so create one.
+	this._createEmailFollowupFolder(top.id);
 };
 
-com_zimbra_emailreminderHdlr.prototype.createEmailFollowupFolder =
+/**
+ * Creates the follow-up folder.
+ * 
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._createEmailFollowupFolder =
 function() {
 	var soapDoc = AjxSoapDoc.create("CreateFolderRequest", "urn:zimbraMail");
 	var folderNode = soapDoc.set("folder");
-	folderNode.setAttribute("name", com_zimbra_emailreminderHdlr.followupFolder);
+	folderNode.setAttribute("name", com_zimbra_emailreminder_HandlerObject.CALENDAR_EMAIL_REMINDERS);
 	folderNode.setAttribute("l", appCtxt.getFolderTree().root.id);
-	folderNode.setAttribute("view", com_zimbra_emailreminderHdlr.CALENDAR_VIEW);
+	folderNode.setAttribute("view", com_zimbra_emailreminder_HandlerObject.VIEW_CALENDAR);
 	var command = new ZmCsfeCommand();
 	var resp = command.invoke({soapDoc: soapDoc});
 	var id = resp.Body.CreateFolderResponse.folder[0].id;
 	if (!id) {
-		throw new AjxException(this.getMessage("EmailReminder_CouldNotCreateCal"), AjxException.INTERNAL_ERROR, "createEmailFollowupFolder");
+		throw new AjxException(this.getMessage("EmailReminder_error_createcalendar"), AjxException.INTERNAL_ERROR, "createEmailFollowupFolder");
 	}
 	this.emailFollowupFolderId = id;
 
@@ -85,10 +120,13 @@ function() {
 	command = new ZmCsfeCommand();
 	resp = command.invoke({soapDoc: soapDoc});
 	this._justCreatedCalendarFolder = true;
-
 };
 
-com_zimbra_emailreminderHdlr.prototype._createReminderDialog =
+/**
+ * Creates the reminder dialog.
+ * 
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._createReminderDialog =
 function() {
 	//if zimlet dialog already exists...
 	if (this._erDialog) {
@@ -105,11 +143,22 @@ function() {
 	this._getAbsHoursMenu();
 	this._setTodayToDateField();
 	this._createCalendarWidget();
-	this._erDialog = this._createDialog({title:this.getMessage("EmailReminder_PrefDlgLabel"), view:this.erView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	var dialog_args = {
+			title	: this.getMessage("EmailReminder_dialog_reminder_title"),
+			view	: this.erView,
+			standardButtons : [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON],
+			parent	: this.getShell()
+		};
+	this._erDialog = new ZmDialog(dialog_args);
 	this._erDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListener));
 };
 
-com_zimbra_emailreminderHdlr.prototype._okBtnListener =
+/**
+ * Listener for the reminder dialog OK button.
+ * 
+ * @see		_createReminderDialog
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._okBtnListener =
 function() {
 	var startDate = new Date();
 	var endDate = "";
@@ -132,7 +181,14 @@ function() {
 	this._erDialog.popdown();
 };
 
-com_zimbra_emailreminderHdlr.prototype._createAppt =
+/**
+ * Creates an appointment.
+ * 
+ * @param	{Date}		startDate		the start date
+ * @param	{Date}		endDate			the end date
+ * @param	{string}	subject			the subject
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._createAppt =
 function(startDate, endDate, subject) {
 	var reminderMinutes = appCtxt.getSettings().getSetting("CAL_REMINDER_WARNING_TIME").value;
 	try {
@@ -151,10 +207,15 @@ function(startDate, endDate, subject) {
 		return;
 	}
 	var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.FADE_OUT ];
-	appCtxt.getAppController().setStatusMsg(this.getMessage("EmailReminder_Created"), ZmStatusView.LEVEL_INFO, null, transitions);
+	appCtxt.getAppController().setStatusMsg(this.getMessage("EmailReminder_status_created"), ZmStatusView.LEVEL_INFO, null, transitions);
 };
 
-com_zimbra_emailreminderHdlr.prototype.doDrop =
+/**
+ * Handles the drop event.
+ * 
+ * @param	
+ */
+com_zimbra_emailreminder_HandlerObject.prototype.doDrop =
 function(msg) {
 	if (this._allowDrag && this.emailReminderZimletON) {
 		this._msgObj = msg;
@@ -162,7 +223,12 @@ function(msg) {
 	}
 };
 
-com_zimbra_emailreminderHdlr.prototype.onMailFlagClick =
+/**
+ * Handles the mail flag event.
+ * 
+ * 
+ */
+com_zimbra_emailreminder_HandlerObject.prototype.onMailFlagClick =
 function(msgs, on) {
 	if (this._allowFlag && this.emailReminderZimletON) {
 		this._msgObj = msgs[0];
@@ -175,17 +241,27 @@ function(msgs, on) {
 	}
 };
 
-com_zimbra_emailreminderHdlr.prototype._showDlg =
+/**
+ * Shows the dialog.
+ * 
+ * @param	{boolean}	force
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._showDlg =
 function(force) {
 	if(this._msgObj.isFlagged || force) {
 		this._setSubjectAndShowDlg(this._msgObj.subject);
 	}
 };
 
-com_zimbra_emailreminderHdlr.prototype._setSubjectAndShowDlg =
+/**
+ * Sets the subject and shows the dialog.
+ * 
+ * @param	{string}	subject
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._setSubjectAndShowDlg =
 function(subject) {
 	if (this._apptComposeController == undefined) {//load calendar package when we are creating appt for the first time(since login)
-		this.getEmailFollowupFolderId();
+		this._getEmailFollowupFolderId();
 		this._apptComposeController = AjxDispatcher.run("GetApptComposeController");
 	}
 
@@ -202,20 +278,35 @@ function(subject) {
 	this._erDialog.popup();
 };
 
-com_zimbra_emailreminderHdlr.prototype.initializeToolbar = function(app, toolbar, controller, viewId) {
+/**
+ * Called when on toolbar initialization.
+ * 
+ * @param	{ZmApp}		app
+ * @param	{ZmButtonToolBar}	toolbar		
+ * @param	{ZmController}		controller
+ */
+com_zimbra_emailreminder_HandlerObject.prototype.initializeToolbar =
+function(app, toolbar, controller, viewId) {
 	if(viewId.indexOf("COMPOSE") >=0 && this.ereminder_showInCompose)
 		this._addReminderBtnToCompose(toolbar, controller);
 };
 
-com_zimbra_emailreminderHdlr.prototype._addReminderBtnToCompose = function(toolbar, controller) {
+/**
+ * Adds a reminder button to the Compose toolbar.
+ * 
+ * @param	{ZmButtonToolBar}	toolbar		
+ * @param	{ZmController}		controller
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._addReminderBtnToCompose =
+function(toolbar, controller) {
 	var ID = "EMAIL_REMINDER";
 	// Add button to toolbar
 	if (!toolbar.getButton(ID)) {
 		var btn = toolbar.createOp(
 			ID,
 		{
-			text	: this.getMessage("EmailReminder_SendAndRemind"),
-			tooltip : this.getMessage("EmailReminder_SendAndRemindTT"),
+			text	: this.getMessage("EmailReminder_button_sendandremind_text"),
+			tooltip : this.getMessage("EmailReminder_button_sendandremind_tooltip"),
 			index   : 1,
 			image   : "emailreminder-panelIcon"
 		}
@@ -226,7 +317,12 @@ com_zimbra_emailreminderHdlr.prototype._addReminderBtnToCompose = function(toolb
 	}
 };
 
-com_zimbra_emailreminderHdlr.prototype._createReminderFromCompose =
+/**
+ * Compose reminder button listener.
+ * 
+ * @see		_addReminderBtnToCompose
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._createReminderFromCompose =
 function() {
 	var msg = this._composerCtrl._composeView.getMsg();
 	if (msg) {
@@ -235,9 +331,14 @@ function() {
 	}
 };
 
-com_zimbra_emailreminderHdlr.prototype._createErView =
+/**
+ * Creates the error view.
+ * 
+ * @see		_createReminderDialog
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._createErView =
 function() {
-	var hdrMsg = this.getMessage("EmailReminder_HdrMsg").replace("{0}", "<b><span id='emailReminder_subjectField'></span></b>"); 
+	var hdrMsg = this.getMessage("EmailReminder_dialog_reminder_header").replace("{0}", "<b><span id='emailReminder_subjectField'></span></b>"); 
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV>";
@@ -255,46 +356,61 @@ function() {
 	return html.join("");
 };
 
-com_zimbra_emailreminderHdlr.prototype._createPrefView =
+/**
+ * Creates the preference view.
+ * 
+ * @see		_showPreferenceDlg
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._createPrefView =
 function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='ereminder_flagChkbx'  type='checkbox'/>Show Email Reminder when an email is Flagged";
+	html[i++] = "<input id='ereminder_flagChkbx'  type='checkbox'/>Generate Email Reminder when flagging an email";
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='ereminder_dragChkbx'  type='checkbox'/>Show Email Reminder when an email is drag-dropped";
+	html[i++] = "<input id='ereminder_dragChkbx'  type='checkbox'/>Generate Email Reminder when drag-and-drop an email";
 	html[i++] = "</DIV>";
 	html[i++] = "<BR>";
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='ereminder_showInCompose'  type='checkbox'/>Show 'Send & Remind' Button in Mail Compose.<br>(Sends email and allows creating reminder for that email)";
+	html[i++] = "<input id='ereminder_showInCompose'  type='checkbox'/>Display 'Send & Remind' button in email Compose.<br><i>Sends the email and prompts to create a reminder for the email</i>";
 	html[i++] = "</DIV>";
 	html[i++] = "<BR>";
 	html[i++] = "<BR>";
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='turnONEmailReminderChkbx'  type='checkbox'/>Turn ON 'Email Reminder'-Zimlet";
+	html[i++] = "<input id='turnONEmailReminderChkbx'  type='checkbox'/>Turn ON 'Email Reminder' Zimlet";
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV>";
 	html[i++] = "<BR>";
-	html[i++] = "<FONT size='1pt'>*Changes to the above preferences would refresh the browser</FONT>";
+	html[i++] = "<FONT size='1pt'>* changes to the preferences will request a browser refresh</FONT>";
 	html[i++] = "</DIV>";
 	return html.join("");
 
 };
 
-com_zimbra_emailreminderHdlr.prototype._createReloadBrowserView =
+/**
+ * Creates the reload browser view.
+ * 
+ * @see			_showReloadBrowserDlg
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._createReloadBrowserView =
 function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV>";
-	html[i++] = "Email Reminder Zimlet Setup: We created a Calendar, '";
-	html[i++] = com_zimbra_emailreminderHdlr.followupFolder;
-	html[i++] = "' to store Email Reminders.<br> We need to reload Browser for setup to complete. Reload Browser?";
+	html[i++] = "Email Reminder: Created calendar '";
+	html[i++] = com_zimbra_emailreminder_HandlerObject.CALENDAR_EMAIL_REMINDERS;
+	html[i++] = "' to store Email Reminders.<br>Click OK to reload Browser to complete setup.";
 	html[i++] = "</DIV>";
 	return html.join("");
 };
 
-com_zimbra_emailreminderHdlr.prototype._getAbsHoursMenu =
+/**
+ * Gets the absolute hours menu.
+ * 
+ * @see			_createReminderDialog
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._getAbsHoursMenu =
 function() {
 	var html = new Array();
 	var i = 0;
@@ -343,29 +459,46 @@ function() {
 
 };
 
-com_zimbra_emailreminderHdlr.prototype._createCalendarWidget =
+/**
+ * Creates a mini-calendar widget.
+ * 
+ * @see			_createReminderDialog
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._createCalendarWidget =
 function() {
 	var dateButtonListener = new AjxListener(this, this._dateButtonListener);
 	var dateCalSelectionListener = new AjxListener(this, this._dateCalSelectionListener);
 	this._startDateButton = ZmCalendarApp.createMiniCalButton(this.erView, "emailReminder_calendarMenu", dateButtonListener, dateCalSelectionListener);
-
 };
 
-
-com_zimbra_emailreminderHdlr.prototype._setTodayToDateField =
+/**
+ * Sets the today date field.
+ * 
+ * @see			_createReminderDialog
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._setTodayToDateField =
 function() {
 	document.getElementById("emailReminder_datefield").value = AjxDateUtil.simpleComputeDateStr(new Date());
-	this._setdayName();
+	this._setDayName();
 };
 
-com_zimbra_emailreminderHdlr.prototype._setdayName =
+/**
+ * Sets the day name.
+ * 
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._setDayName =
 function() {
 	var val = AjxDateUtil.simpleParseDateStr(document.getElementById("emailReminder_datefield").value);
 	var dateFormatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.FULL);
 	document.getElementById("emailReminder_dateFriendlyName").innerHTML = dateFormatter.format(new Date(val)).split(",")[0];
 };
 
-com_zimbra_emailreminderHdlr.prototype._dateButtonListener =
+/**
+ * The date button listener.
+ * 
+ * @see			_createCalendarWidget
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._dateButtonListener =
 function(ev) {
 	var calDate = AjxDateUtil.simpleParseDateStr(document.getElementById("emailReminder_datefield").value);
 
@@ -376,26 +509,43 @@ function(ev) {
 	ev.item.popup();
 };
 
-com_zimbra_emailreminderHdlr.prototype._dateCalSelectionListener =
+/**
+ * The date calendar selection listener.
+ * 
+ * @see			_createCalendarWidget
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._dateCalSelectionListener =
 function(ev) {
 	document.getElementById("emailReminder_datefield").value = AjxDateUtil.simpleComputeDateStr(ev.detail);
-	this._setdayName();
+	this._setDayName();
 };
 
-com_zimbra_emailreminderHdlr.prototype.doubleClicked = function() {
+/**
+ * Called when the panel is double-clicked.
+ */
+com_zimbra_emailreminder_HandlerObject.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
-com_zimbra_emailreminderHdlr.prototype.singleClicked = function() {
+
+/**
+ * Called when the panel is single-clicked.
+ */
+com_zimbra_emailreminder_HandlerObject.prototype.singleClicked = function() {
 	this._showPreferenceDlg();
 };
 
-com_zimbra_emailreminderHdlr.prototype._showPreferenceDlg = function() {
-	this._allowFlag = this.getUserProperty("emailReminder_allowFlag") == "true";
-	this._allowDrag = this.getUserProperty("emailReminder_allowDrag") == "true";
+/**
+ * Shows the preferences dialog.
+ * 
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._showPreferenceDlg =
+function() {
+	this._allowFlag = this.getUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_ALLOW_FLAG) == "true";
+	this._allowDrag = this.getUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_ALLOW_DRAG) == "true";
 	this.turnONEmailReminderChkbx = this.getUserProperty("turnONEmailReminderChkbx") == "true";
-	this.ereminder_showInCompose = this.getUserProperty("ereminder_showInCompose") == "true";
+	this.ereminder_showInCompose = this.getUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_SHOW_IN_COMPOSE) == "true";
 
-	//if zimlet dialog already exists...
+	// if zimlet dialog already exists...
 	if (this._preferenceDialog) {
 		this._setZimletCurrentPreferences();
 		this._preferenceDialog.popup();
@@ -405,13 +555,25 @@ com_zimbra_emailreminderHdlr.prototype._showPreferenceDlg = function() {
 	this._preferenceView.getHtmlElement().style.overflow = "auto";
 	this._preferenceView.getHtmlElement().innerHTML = this._createPrefView();
 
-	this._preferenceDialog = this._createDialog({title:"Email Reminder Zimlet Preferences", view:this._preferenceView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	var dialog_args = {
+			title	: this.getMessage("EmailReminder_dialog_preferences_title"),
+			view	: this._preferenceView,
+			standardButtons : [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON],
+			parent	: this.getShell()
+		};
+	this._preferenceDialog = new ZmDialog(dialog_args);
+
 	this._preferenceDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okPreferenceBtnListener));
 	this._setZimletCurrentPreferences();
 	this._preferenceDialog.popup();
 };
 
-com_zimbra_emailreminderHdlr.prototype._showReloadBrowserDlg = function() {
+/**
+ * Shows the reload browser dialog.
+ * 
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._showReloadBrowserDlg =
+function() {
 	//if zimlet dialog already exists...
 	if (this._reloadBrowserDialog) {
 		this._reloadBrowserDialog.popup();
@@ -421,18 +583,35 @@ com_zimbra_emailreminderHdlr.prototype._showReloadBrowserDlg = function() {
 	this._reloadBrowserView.getHtmlElement().style.overflow = "auto";
 	this._reloadBrowserView.getHtmlElement().innerHTML = this._createReloadBrowserView();
 
-	this._reloadBrowserDialog = this._createDialog({title:"Email Reminder Zimlet: Need to Reload Browser", view:this._reloadBrowserView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	var dialog_args = {
+			title	: this.getMessage("EmailReminder_dialog_reload_title"),
+			view	: this._reloadBrowserView,
+			standardButtons : [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON],
+			parent	: this.getShell()
+		};
+	this._reloadBrowserDialog = new ZmDialog(dialog_args);
+
 	this._reloadBrowserDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okReloadBrowserBtnListener));
 	this._reloadBrowserDialog.popup();
 };
 
-com_zimbra_emailreminderHdlr.prototype._okReloadBrowserBtnListener =
+/**
+ * Handles the reload dialog OK button.
+ * 
+ * @see		_showReloadBrowserDlg
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._okReloadBrowserBtnListener =
 function() {
 	this._reloadBrowser();
 	this._reloadBrowserDialog.popdown();
 };
 
-com_zimbra_emailreminderHdlr.prototype._setZimletCurrentPreferences =
+/**
+ * Sets the current preferences.
+ * 
+ * @see			_showPreferenceDlg
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._setZimletCurrentPreferences =
 function() {
 	if (this.emailReminderZimletON) {
 		document.getElementById("turnONEmailReminderChkbx").checked = true;
@@ -448,17 +627,22 @@ function() {
 	}
 };
 
-com_zimbra_emailreminderHdlr.prototype._okPreferenceBtnListener =
+/**
+ * Handles the preferences dialog OK button.
+ * 
+ * @see		_showPreferenceDlg
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._okPreferenceBtnListener =
 function() {
 	this._reloadRequired = false;
 	if (document.getElementById("turnONEmailReminderChkbx").checked) {
 		if (!this.emailReminderZimletON) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("turnONEmailReminderZimlet", "true");
+		this.setUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_TURN_ON, "true");
 
 	} else {
-		this.setUserProperty("turnONEmailReminderZimlet", "false");
+		this.setUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_TURN_ON, "false");
 		if (this.emailReminderZimletON)
 			this._reloadRequired = true;
 	}
@@ -467,10 +651,10 @@ function() {
 		if (!this._allowFlag) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("emailReminder_allowFlag", "true");
+		this.setUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_ALLOW_FLAG, "true");
 
 	} else {
-		this.setUserProperty("emailReminder_allowFlag", "false");
+		this.setUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_ALLOW_FLAG, "false");
 		if (this._allowFlag)
 			this._reloadRequired = true;
 	}
@@ -478,10 +662,10 @@ function() {
 		if (!this._allowDrag) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("emailReminder_allowDrag", "true");
+		this.setUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_ALLOW_DRAG, "true");
 
 	} else {
-		this.setUserProperty("emailReminder_allowDrag", "false");
+		this.setUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_ALLOW_DRAG, "false");
 		if (this._allowDrag)
 			this._reloadRequired = true;
 	}
@@ -489,10 +673,10 @@ function() {
 		if (!this.ereminder_showInCompose) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("ereminder_showInCompose", "true");
+		this.setUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_SHOW_IN_COMPOSE, "true");
 
 	} else {
-		this.setUserProperty("ereminder_showInCompose", "false");
+		this.setUserProperty(com_zimbra_emailreminder_HandlerObject.USER_PROP_SHOW_IN_COMPOSE, "false");
 		if (this.ereminder_showInCompose)
 			this._reloadRequired = true;
 	}
@@ -500,12 +684,16 @@ function() {
 	this._preferenceDialog.popdown();
 	if (this._reloadRequired) {
 		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-		appCtxt.getAppController().setStatusMsg("Please wait. Browser will be refreshed for changes to take effect..", ZmStatusView.LEVEL_INFO, null, transitions);
+		appCtxt.getAppController().setStatusMsg("Please wait. Refreshing browser for changes to take effect...", ZmStatusView.LEVEL_INFO, null, transitions);
 		this.saveUserProperties(new AjxCallback(this, this._reloadBrowser));
 	}
 };
 
-com_zimbra_emailreminderHdlr.prototype._reloadBrowser =
+/**
+ * Reloads the browser.
+ * 
+ */
+com_zimbra_emailreminder_HandlerObject.prototype._reloadBrowser =
 function() {
 	window.onbeforeunload = null;
 	var url = AjxUtil.formatUrl({});
