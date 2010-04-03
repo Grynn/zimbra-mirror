@@ -967,7 +967,7 @@ function(name, openInNewTab, openInSearchTab) {
 	*/
 	//check if there is a tab associated with the view
 	var tabGroup = this.getTabGroup () ;
-	var cTab = tabGroup.getTabById(this._currentViewId)
+	var cTab = tabGroup.getTabById(this._currentViewId);
 	if (cTab) {
 		this.updateTab (cTab, this._currentViewId) ;
 	}else if (openInNewTab) {

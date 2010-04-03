@@ -117,9 +117,26 @@ ZaListViewController.prototype.closeButtonListener =
 function(ev, noPopView, func, obj, params) {
 	if (noPopView) {
 		func.call(obj, params) ;
-	}else{
+	} else{
 		ZaApp.getInstance().popView () ;
 	}
+	this._UICreated = false;
+	if(this._toolbar) {
+		this._toolbar.dispose();
+		this._toolbar = null;
+	}
+	if(this._contentView) {
+		this._contentView.dispose();
+		this._contentView = null;
+	}
+	
+	if(this._actionMenu) {
+		this._actionMenu.dispose();
+		this._actionMenu = null;
+	}
+	this._toolbarOperations = [];
+	this._popupOperations = [];
+	this._toolbarOrder = [];	
 }
 
 ZaListViewController.prototype.searchCallback =
