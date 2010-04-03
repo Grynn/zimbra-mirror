@@ -65,6 +65,14 @@ function(openInNewTab) {
 	}
     var entry = {};
     var gc = ZaApp.getInstance().getGlobalConfig();
+    var statusObj = new ZaStatus();
+    statusObj.load();
+    if(statusObj.serverMap) {
+    	for(var a in statusObj.serverMap) {
+    		entry.serviceMap = statusObj.serverMap[a].serviceMap;
+    		break;
+    	}
+    }
     entry[ZaGlobalConfig.A_zimbraMtaRelayHost] = gc.attrs[ZaGlobalConfig.A_zimbraMtaRelayHost];
 	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._contentView.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	

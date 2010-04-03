@@ -16,7 +16,19 @@ ZaDashBoard.settingsTab = "settingsTab";
 ZaDashBoard.myXModel = {
 	    items: [
 	       {id:ZaDashBoard.settingsTab,type:_NUMBER_},
-	       {id:ZaGlobalConfig.A_zimbraMtaRelayHost, ref:ZaGlobalConfig.A_zimbraMtaRelayHost, type:_LIST_, listItem:{ type: _HOSTNAME_OR_IP_, maxLength: 256 }}
+	       {id:ZaGlobalConfig.A_zimbraMtaRelayHost, ref:ZaGlobalConfig.A_zimbraMtaRelayHost, type:_LIST_, listItem:{ type: _HOSTNAME_OR_IP_, maxLength: 256 }},
+	       {id:ZaStatus.SVC_MAILBOX,ref:"serviceMap/"+ZaStatus.SVC_MAILBOX,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},
+	       {id:ZaStatus.SVC_SPELL,ref:"serviceMap/"+ZaStatus.SVC_SPELL,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},
+	       {id:ZaStatus.SVC_LOGGER,ref:"serviceMap/"+ZaStatus.SVC_LOGGER,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},
+	       {id:ZaStatus.SVC_MTA,ref:"serviceMap/"+ZaStatus.SVC_MTA,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},
+	       {id:ZaStatus.SVC_LDAP,ref:"serviceMap/"+ZaStatus.SVC_LDAP,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},
+	       {id:ZaStatus.SVC_MEMCACHED,ref:"serviceMap/"+ZaStatus.SVC_MEMCACHED,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},
+	       {id:ZaStatus.SVC_CONVERTD,ref:"serviceMap/"+ZaStatus.SVC_CONVERTD,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},
+	       {id:ZaStatus.SVC_IMAPPROXY,ref:"serviceMap/"+ZaStatus.SVC_IMAPPROXY,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},
+	       {id:ZaStatus.SVC_STATS,ref:"serviceMap/"+ZaStatus.SVC_STATS,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},
+	       {id:ZaStatus.SVC_AS,ref:"serviceMap/"+ZaStatus.SVC_AS,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},
+	       {id:ZaStatus.SVC_AV,ref:"serviceMap/"+ZaStatus.SVC_AV,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]}
+	       
 	    ]
 };
 

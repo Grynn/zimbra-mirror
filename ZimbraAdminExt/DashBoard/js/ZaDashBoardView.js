@@ -225,28 +225,134 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 		{type:_TOP_GROUPER_, label:com_zimbra_dashboard.Services, id:"dashboard_settings_group",
 			numCols:4, colSizes:["auto","auto","auto","auto"],visibilityChecks:[],enableDisableChecks:[],
 			items:[
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[
-			                            {type:_OUTPUT_, value:com_zimbra_dashboard.MailboxDService},
-			                            {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
-			                            {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]},
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[{type:_OUTPUT_, value:com_zimbra_dashboard.LDAPService},
-		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
-		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]},
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[{type:_OUTPUT_, value:com_zimbra_dashboard.MTAService},
-		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
-		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]},
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[{type:_OUTPUT_, value:com_zimbra_dashboard.AntiSpamService},
-		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
-		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]},
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[{type:_OUTPUT_, value:com_zimbra_dashboard.AntiVirusService},
-		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
-		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]},
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[{type:_OUTPUT_, value:com_zimbra_dashboard.SpellCheckerService},
-		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
-		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]},
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],items:[{type:_OUTPUT_, value:com_zimbra_dashboard.LoggerService},
-		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,icon:"Refresh",enableDisableChecks:[],visibilityChecks:[]},
-		                            	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,icon:"Cancel",enableDisableChecks:[],visibilityChecks:[]}]}
+			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			    	   items:[
+			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_LDAP+"status",1]]},
+			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_LDAP+"status",1]]},
+			    	          {type:_OUTPUT_, value:ZaStatus.SVC_LDAP},                            
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_LDAP+"status",1]]
+			    	          },
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]
+			    	          },
+			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
+			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_LDAP+"status",1]]
+			        	      }
+			    	    ]
+			       },
+			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			    	   items:[
+			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]},
+			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]},
+			    	          {type:_OUTPUT_, value:ZaStatus.SVC_MAILBOX},                            
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]
+			    	          },
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]
+			    	          },
+			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
+			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]
+			        	      }
+			    	    ]
+			       },	
+			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			    	   items:[
+			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MTA+"status",1]]},
+			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_MTA+"status",1]]},
+			    	          {type:_OUTPUT_, value:ZaStatus.SVC_MTA},                            
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MTA+"status",1]]
+			    	          },
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MTA+"status",1]]
+			    	          },
+			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
+			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_MTA+"status",1]]
+			        	      }
+			    	    ]
+			       },
+			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			    	   items:[
+			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_LOGGER+"status",1]]},
+			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_LOGGER+"status",1]]},
+			    	          {type:_OUTPUT_, value:ZaStatus.SVC_LOGGER},                            
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_LOGGER+"status",1]]
+			    	          },
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_LOGGER+"status",1]]
+			    	          },
+			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
+			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_LOGGER+"status",1]]
+			        	      }
+			    	    ]
+			       },
+			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			    	   items:[
+			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_CONVERTD+"status",1]]},
+			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_CONVERTD+"status",1]]},
+			    	          {type:_OUTPUT_, value:ZaStatus.SVC_CONVERTD},                            
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_CONVERTD+"status",1]]
+			    	          },
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_CONVERTD+"status",1]]
+			    	          },
+			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
+			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_CONVERTD+"status",1]]
+			        	      }
+			    	    ]
+			       },			       
+			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			    	   items:[
+			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AS+"status",1]]},
+			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_AS+"status",1]]},
+			    	          {type:_OUTPUT_, value:ZaStatus.SVC_AS},                            
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AS+"status",1]]
+			    	          },
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AS+"status",1]]
+			    	          },
+			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
+			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_AS+"status",1]]
+			        	      }
+			    	    ]
+			       },
+			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			    	   items:[
+			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AV+"status",1]]},
+			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_AV+"status",1]]},
+			    	          {type:_OUTPUT_, value:ZaStatus.SVC_AV},                            
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AV+"status",1]]
+			    	          },
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AV+"status",1]]
+			    	          },
+			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
+			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_AV+"status",1]]
+			        	      }
+			    	    ]
+			       },	
+			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			    	   items:[
+			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_STATS+"status",1]]},
+			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_STATS+"status",1]]},
+			    	          {type:_OUTPUT_, value:ZaStatus.SVC_STATS},                            
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_STATS+"status",1]]
+			    	          },
+			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
+			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_STATS+"status",1]]
+			    	          },
+			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
+			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_STATS+"status",1]]
+			        	      }
+			    	    ]
+			       }			       
 			]
 		}, 	                     
         {type:_TOP_GROUPER_, label:com_zimbra_dashboard.AddressesGrouper, id:"dashboard_addresses_group",

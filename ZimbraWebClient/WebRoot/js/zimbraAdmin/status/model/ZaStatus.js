@@ -36,6 +36,19 @@ ZaStatus.PRFX_Server = "status_server";
 ZaStatus.PRFX_Service = "status_service";
 ZaStatus.PRFX_Time = "status_time";
 ZaStatus.PRFX_Status = "status_status";
+ZaStatus.SVC_SPELL = "spell";
+ZaStatus.SVC_LOGGER = "logger";
+ZaStatus.SVC_MTA = "mta";
+ZaStatus.SVC_LDAP = "ldap";
+ZaStatus.SVC_MEMCACHED = "memcached";
+ZaStatus.SVC_MAILBOX = "mailbox";
+ZaStatus.SVC_CONVERTD = "convertd";
+ZaStatus.SVC_IMAPPROXY = "imapproxy";
+ZaStatus.SVC_STATS = "stats";
+ZaStatus.SVC_SNMP = "snmp";
+ZaStatus.SVC_AS = "antispam";
+ZaStatus.SVC_AV = "antivirus";
+
 
 ZaStatus.prototype.load = function (by, val) {
 	ZaItem.prototype.load.call(this,by,val,true, false);
