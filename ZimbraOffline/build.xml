@@ -852,7 +852,7 @@
 		<copy todir="${dist.app.dir}/win32/prism" file="src/installer/win32/prism/application.ini" overwrite="true"/>
 	</target>
 
-	<property name="prism.version.macos" value="031710"/>
+	<property name="prism.version.macos" value="040210"/>
 	<property name="prism.version.win32" value="031710"/>
 	<property name="prism.version.linux" value="090113"/>
 	<property name="prism.extroot.macos" value="${dist.app.dir}/macos/prism/Prism.app/Contents/Resources"/>
