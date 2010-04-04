@@ -16,12 +16,16 @@ ZaDashBoard.settingsTab = "settingsTab";
 ZaDashBoard.myXModel = {
 		items: [
 	       {id:ZaDashBoard.settingsTab,type:_NUMBER_},
+	       
+	       //config
 	       {id:ZaGlobalConfig.A_zimbraMtaRelayHost, ref:ZaGlobalConfig.A_zimbraMtaRelayHost, type:_LIST_, listItem:{ type: _HOSTNAME_OR_IP_, maxLength: 256 }},
 	       {id:ZaGlobalConfig.A_zimbraAttachmentsBlocked, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsBlocked, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 	       {id:ZaGlobalConfig.A_zimbraMtaBlockedExtensionWarnRecipient, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaBlockedExtensionWarnRecipient, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
 	       {id:ZaGlobalConfig.A_zimbraMtaBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaBlockedExtension, type: _LIST_, dataType: _STRING_ },
 	       {id:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type: _LIST_, dataType: _STRING_ },
-
+	       //search field
+	       {id:ZaSearch.A_query, type:_STRING_},
+	       //services
 	       {id:ZaStatus.SVC_MAILBOX,ref:"serviceMap/"+ZaStatus.SVC_MAILBOX,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},
 	       {id:ZaStatus.SVC_SPELL,ref:"serviceMap/"+ZaStatus.SVC_SPELL,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},
 	       {id:ZaStatus.SVC_LOGGER,ref:"serviceMap/"+ZaStatus.SVC_LOGGER,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},

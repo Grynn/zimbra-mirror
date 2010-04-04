@@ -73,7 +73,7 @@ function(openInNewTab) {
     		break;
     	}
     }
-    
+
     entry.attrs = gc.attrs;
     entry.rights = gc.rights;
     entry.setAttrs = gc.setAttrs;

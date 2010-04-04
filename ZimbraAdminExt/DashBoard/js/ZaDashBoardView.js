@@ -67,7 +67,8 @@ function(entry) {
 		} else {
 			this._containedObject.attrs[a] = entry.attrs[a];
 		}
-	}		
+	}	
+	this._containedObject[ZaSearch.A_query] = "";
 	this._localXForm.setInstance(this._containedObject);
 	
 	this.formDirtyLsnr = new AjxListener(ZaApp.getInstance().getCurrentController(), ZaXFormViewController.prototype.handleXFormChange);
@@ -87,22 +88,14 @@ ZaDashBoardView.openDomainsView = function() {
 
 ZaDashBoardView.openAddressesView = function() {
 	var query = "";
-
 	var params = {};
 	var searchListController = ZaApp.getInstance().getSearchListController() ;
 	searchListController._isAdvancedSearch = false;
-	
 	params.types = [ZaSearch.ACCOUNTS,ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.RESOURCES];
-	
 	searchListController._searchFieldInput = query ;
 	params.query = ZaSearch.getSearchByNameQuery(query, params.types);      
-
-	
-	//set the currentController's _currentQuery
-	
 	ZaApp.getInstance().getSearchListController()._currentQuery = params.query ;
 	searchListController._currentQuery = params.query ;
-	
 	this._isSearchButtonClicked = false ;
 	ZaSearchListController.prototype._searchFieldCallback.call(searchListController,params);
 }
@@ -128,7 +121,7 @@ ZaDashBoardView.openNewAccountDialog = function() {
 }
 
 
-ZaDashBoardView.openNewResourceDialog = function(ev) {
+ZaDashBoardView.openNewResourceDialog = function() {
 	try {
 		EmailAddr_XFormItem.resetDomainLists.call (ZaApp.getInstance().getCurrentController());
 		var newResource = new ZaResource();
@@ -143,7 +136,7 @@ ZaDashBoardView.openNewResourceDialog = function(ev) {
 	}
 }
 
-ZaDashBoardView.openNewDistributionListView = function(ev) {
+ZaDashBoardView.openNewDistributionListView = function() {
 	try {
 		EmailAddr_XFormItem.resetDomainLists.call (ZaApp.getInstance().getCurrentController());
 		var newDL = new ZaDistributionList();
@@ -161,7 +154,7 @@ ZaDashBoardView.openNewDistributionListView = function(ev) {
 };
 	
 //new button was pressed
-ZaDashBoardView.openNewProfileView = function(ev) {
+ZaDashBoardView.openNewProfileView = function() {
 	var newCos = new ZaCos();
 	//load default COS
 	var defCos = ZaCos.getCosByName("default");
@@ -176,6 +169,32 @@ ZaDashBoardView.openNewProfileView = function(ev) {
 	}
 	
 	ZaApp.getInstance().getCosController().show(newCos);
+}
+
+ZaDashBoardView.openBulkProvisionDialog = function () {
+     try {
+		if(!ZaApp.getInstance().dialogs["bulkProvisionWizard"]) {
+			ZaApp.getInstance().dialogs["bulkProvisionWizard"] = new ZaBulkProvisionWizard(DwtShell.getShell(window));
+		}
+		ZaApp.getInstance().dialogs["bulkProvisionWizard"].setObject(new ZaBulkProvision());
+		ZaApp.getInstance().dialogs["bulkProvisionWizard"].popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountListController.prototype._bulkProvisionListener", null, false);
+	}
+}
+
+ZaDashBoardView.searchAddresses = function () {
+	var query = this.getInstanceValue(ZaSearch.A_query);
+	var params = {};
+	var searchListController = ZaApp.getInstance().getSearchListController() ;
+	searchListController._isAdvancedSearch = false;
+	params.types = [ZaSearch.ACCOUNTS,ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.RESOURCES];
+	searchListController._searchFieldInput = query ;
+	params.query = ZaSearch.getSearchByNameQuery(query, params.types);      
+	ZaApp.getInstance().getSearchListController()._currentQuery = params.query ;
+	searchListController._currentQuery = params.query ;
+	this._isSearchButtonClicked = false ;
+	ZaSearchListController.prototype._searchFieldCallback.call(searchListController,params);	
 }
 
 ZaDashBoardView.restartMailboxD = function () {
@@ -455,19 +474,22 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
         	numCols: 4, colSizes: ["200px","200px","200px","200px"],visibilityChecks:[],enableDisableChecks:[],
 	    	items:[  
 	    	    {type:_OUTPUT_,colSpan:4,value:"Some description of what this section is about with a link to help topic about email addresses"},
-		    	{type:_SPACER_,colSpan:4},		    	    		    	    	
-	    	    {type:_GROUP_,colSpan:4,numCols:3,colSizes:["100px","600px","100px"],
+		    	{type:_SPACER_,colSpan:4},	    	
+	    	    {type:_GROUP_,colSpan:3,numCols:3,colSizes:["100px","600px","100px"],
 	    	    	items:[
 	    	    	    {type:_TEXTFIELD_,label:com_zimbra_dashboard.LookupAddress,labelLocation:_LEFT_,
-	    	    	    	cssStyle:"overflow: hidden;", width:"100%",
+	    	    	    	cssStyle:"overflow: hidden;", width:"100%",ref:ZaSearch.A_query,
 	    	    	    	enableDisableChecks:[],visibilityChecks:[]
 	    	    	    },
-	    	    	    {type:_DWT_BUTTON_,label:ZaMsg.search,icon:"Search",enableDisableChecks:[],visibilityChecks:[]}
+	    	    	    {type:_DWT_BUTTON_,label:ZaMsg.search,icon:"Search",enableDisableChecks:[],visibilityChecks:[],
+	    	    	    	onActivate:ZaDashBoardView.searchAddresses}
 	    	    	]	
-	    	    },	    	   
-	    	    {type:_SPACER_,colSpan:4},
+	    	    },
 	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageAddresses, icon:"Account", width:80,
 	    	    	onActivate:"ZaDashBoardView.openAddressesView();",enableDisableChecks:[],visibilityChecks:[]},
+	    	    {type:_SPACER_,colSpan:4},
+	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ACTBB_BulkProvision, icon:"BulkProvision", width:80,
+	    	    	onActivate:"ZaDashBoardView.openBulkProvisionDialog()",enableDisableChecks:[],visibilityChecks:[]},
 	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewAccount, icon:"Account", width:80,
 	    	    	onActivate:"ZaDashBoardView.openNewAccountDialog()",enableDisableChecks:[],visibilityChecks:[]},
 	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewDL, icon:"DistributionList",width:80,
@@ -479,9 +501,9 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 		    	   	onActivate:"ZaDashBoardView.openProfilesView()",enableDisableChecks:[],visibilityChecks:[]},
 		    	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewProfile, icon:"NewCOS", width:80,
 		    	    	onActivate:"ZaDashBoardView.openNewProfileView()",enableDisableChecks:[],visibilityChecks:[]},	
-		    	{type:_SPACER_,colSpan:2},		    	    	
-	    	    {type:_SPACER_,colSpan:4},
-	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageDomains, icon:"Domain", width:80,
+		    	{type:_CELLSPACER_},{type:_CELLSPACER_},
+		    	{type:_SPACER_,colSpan:4},	 
+		    	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageDomains, icon:"Domain", width:80,
 	    	    	onActivate:"ZaDashBoardView.openDomainsView()",enableDisableChecks:[],visibilityChecks:[]
 	    	    },
 	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewDomain, icon:"Domain", width:80,
