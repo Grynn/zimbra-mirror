@@ -46,7 +46,28 @@ ZaDashBoardView.prototype.setObject =
 function(entry) {
 	this._containedObject = new Object();
 	this._containedObject[ZaDashBoard.settingsTab] = 1;
+	this._containedObject.attrs = new Object();
+	this._containedObject.type = entry.type ;
+
+	if(entry.rights)
+		this._containedObject.rights = entry.rights;
+	
+	if(entry.setAttrs)
+		this._containedObject.setAttrs = entry.setAttrs;
+	
+	if(entry.getAttrs)
+		this._containedObject.getAttrs = entry.getAttrs;
 		
+	if(entry._defaultValues)
+		this._containedObject._defaultValues = entry._defaultValues;
+		
+	for (var a in entry.attrs) {
+		if(entry.attrs[a] instanceof Array) {
+			this._containedObject.attrs[a] = [].concat(entry.attrs[a]);
+		} else {
+			this._containedObject.attrs[a] = entry.attrs[a];
+		}
+	}		
 	this._localXForm.setInstance(this._containedObject);
 	
 	this.formDirtyLsnr = new AjxListener(ZaApp.getInstance().getCurrentController(), ZaXFormViewController.prototype.handleXFormChange);
@@ -84,6 +105,105 @@ ZaDashBoardView.openAddressesView = function() {
 	
 	this._isSearchButtonClicked = false ;
 	ZaSearchListController.prototype._searchFieldCallback.call(searchListController,params);
+}
+
+ZaDashBoardView.openNewAccountDialog = function() {
+	try {
+		EmailAddr_XFormItem.resetDomainLists.call(ZaApp.getInstance().getCurrentController()) ;
+		var newAccount = new ZaAccount();
+		newAccount.loadNewObjectDefaults("name", ZaSettings.myDomainName);
+		
+		if(!ZaApp.getInstance().dialogs["newAccountWizard"])
+			ZaApp.getInstance().dialogs["newAccountWizard"] = new ZaNewAccountXWizard(DwtShell.getShell(window),newAccount);	
+        else { //update the account type if needed
+            ZaApp.getInstance().dialogs["newAccountWizard"].updateAccountType () ;    
+        }
+
+		ZaApp.getInstance().dialogs["newAccountWizard"].setObject(newAccount);
+		ZaApp.getInstance().dialogs["newAccountWizard"].popup();
+	} catch (ex) {
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccountListController.prototype._newAccountListener", null, false);
+	}	
+	
+}
+
+
+ZaDashBoardView.openNewResourceDialog = function(ev) {
+	try {
+		EmailAddr_XFormItem.resetDomainLists.call (ZaApp.getInstance().getCurrentController());
+		var newResource = new ZaResource();
+		newResource.loadNewObjectDefaults("name", ZaSettings.myDomainName);	
+		if(!ZaApp.getInstance().dialogs["newResourceWizard"])
+			ZaApp.getInstance().dialogs["newResourceWizard"] = new ZaNewResourceXWizard(DwtShell.getShell(window));	
+
+		ZaApp.getInstance().dialogs["newResourceWizard"].setObject(newResource);
+		ZaApp.getInstance().dialogs["newResourceWizard"].popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountListController.prototype._newResourceListener", null, false);
+	}
+}
+
+ZaDashBoardView.openNewDistributionListView = function(ev) {
+	try {
+		EmailAddr_XFormItem.resetDomainLists.call (ZaApp.getInstance().getCurrentController());
+		var newDL = new ZaDistributionList();
+		newDL.rights = {};
+		newDL._defaultValues = {attrs:{}};
+		newDL.loadNewObjectDefaults("name", ZaSettings.myDomainName);	
+		newDL.rights[ZaDistributionList.RENAME_DL_RIGHT]=true;
+		newDL.rights[ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]=true;
+		newDL.rights[ZaDistributionList.ADD_DL_MEMBER_RIGHT]=true;
+		ZaApp.getInstance().getDistributionListController().show(newDL);
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountListController.prototype._newDistributionListListener", null, false);
+	}
+
+};
+	
+//new button was pressed
+ZaDashBoardView.openNewProfileView = function(ev) {
+	var newCos = new ZaCos();
+	//load default COS
+	var defCos = ZaCos.getCosByName("default");
+	newCos.loadNewObjectDefaults();
+	newCos.rights[ZaCos.RENAME_COS_RIGHT]=true;
+	newCos.rights[ZaCos.CREATE_COS_RIGHT]=true;
+	//copy values from default cos to the new cos
+	for(var aname in defCos.attrs) {
+		if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) || (aname == ZaItem.A_zimbraCreateTimestamp))
+			continue;			
+		newCos.attrs[aname] = defCos.attrs[aname];
+	}
+	
+	ZaApp.getInstance().getCosController().show(newCos);
+}
+
+ZaDashBoardView.restartMailboxD = function () {
+	var soapDoc = AjxSoapDoc.create("RestartMailboxDRequest", ZaZimbraAdmin.URN, null);
+	var server = soapDoc.set("server","gsolovyev-mbp");
+	server.setAttribute("by", "name");
+	
+	var busyid = Dwt.getNextId ();
+	var callback = new AjxCallback(this, ZaDashBoardView.restartCallback, {busyid:busyid});
+
+	var reqMgrParams = {
+		controller : ZaApp.getInstance().getCurrentController(),
+		busyMsg : ZaMsg.BUSY_FLUSH_CACHE,
+		busyid:busyid
+	}
+		
+	var reqParams = {
+		serverUri:"https://localhost:7070/service/",
+		soapDoc: soapDoc,
+		asyncMode:true,
+		callback: callback
+	}
+	ZaRequestMgr.invoke(reqParams, reqMgrParams) ;	
+	//RestartMailboxDRequest
+}
+
+ZaDashBoardView.restartCallback = function() {
+	
 }
 
 ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {	
@@ -188,7 +308,7 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
     var case2 = {type:_ZATABCASE_, caseKey:_tab2, id:"dashboard_form_advanced_tab", numCols:2, colSizes: ["200px","auto"],
     		caseVarRef:ZaDashBoard.settingsTab,visibilityChangeEventSources:[ZaDashBoard.settingsTab],hMargin:40,
     		items:[ 
-    	{type:_OUTPUT_,value:"Some description of what this section is about with a link to help topic about settings"},    		       
+    	{type:_OUTPUT_,colSpan:2,value:"Some description of what this section is about with a link to help topic about settings"},    		       
     	{type:_SPACER_, height:"10",colSpan:2},
     	{ ref: ZaGlobalConfig.A_zimbraMtaBlockedExtensionWarnRecipient, type: _CHECKBOX_,
     		label: ZaMsg.LBL_zimbraMtaBlockedExtensionWarnRecipient,
@@ -225,7 +345,7 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 		{type:_TOP_GROUPER_, label:com_zimbra_dashboard.Services, id:"dashboard_settings_group",
 			numCols:4, colSizes:["auto","auto","auto","auto"],visibilityChecks:[],enableDisableChecks:[],
 			items:[
-			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			       {type:_GROUP_,numCols:5,colSizes:["auto","auto","auto","auto","auto"],
 			    	   items:[
 			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_LDAP+"status",1]]},
 			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_LDAP+"status",1]]},
@@ -233,15 +353,12 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
 			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_LDAP+"status",1]]
 			    	          },
-			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
-			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]
-			    	          },
 			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
 			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_LDAP+"status",1]]
 			        	      }
 			    	    ]
 			       },
-			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			       {type:_GROUP_,numCols:5,colSizes:["auto","auto","auto","auto","auto"],
 			    	   items:[
 			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]},
 			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]},
@@ -249,15 +366,12 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
 			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]
 			    	          },
-			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
-			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]
-			    	          },
 			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
 			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]
 			        	      }
 			    	    ]
 			       },	
-			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			       {type:_GROUP_,numCols:5,colSizes:["auto","auto","auto","auto","auto"],
 			    	   items:[
 			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MTA+"status",1]]},
 			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_MTA+"status",1]]},
@@ -265,15 +379,12 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
 			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MTA+"status",1]]
 			    	          },
-			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
-			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MTA+"status",1]]
-			    	          },
 			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
 			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_MTA+"status",1]]
 			        	      }
 			    	    ]
 			       },
-			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			       {type:_GROUP_,numCols:5,colSizes:["auto","auto","auto","auto","auto"],
 			    	   items:[
 			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_LOGGER+"status",1]]},
 			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_LOGGER+"status",1]]},
@@ -281,15 +392,12 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
 			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_LOGGER+"status",1]]
 			    	          },
-			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
-			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_LOGGER+"status",1]]
-			    	          },
 			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
 			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_LOGGER+"status",1]]
 			        	      }
 			    	    ]
 			       },
-			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			       {type:_GROUP_,numCols:5,colSizes:["auto","auto","auto","auto","auto"],
 			    	   items:[
 			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_CONVERTD+"status",1]]},
 			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_CONVERTD+"status",1]]},
@@ -297,15 +405,12 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
 			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_CONVERTD+"status",1]]
 			    	          },
-			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
-			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_CONVERTD+"status",1]]
-			    	          },
 			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
 			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_CONVERTD+"status",1]]
 			        	      }
 			    	    ]
 			       },			       
-			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			       {type:_GROUP_,numCols:5,colSizes:["auto","auto","auto","auto","auto"],
 			    	   items:[
 			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AS+"status",1]]},
 			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_AS+"status",1]]},
@@ -313,15 +418,12 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
 			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AS+"status",1]]
 			    	          },
-			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
-			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AS+"status",1]]
-			    	          },
 			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
 			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_AS+"status",1]]
 			        	      }
 			    	    ]
 			       },
-			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			       {type:_GROUP_,numCols:5,colSizes:["auto","auto","auto","auto","auto"],
 			    	   items:[
 			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AV+"status",1]]},
 			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_AV+"status",1]]},
@@ -329,23 +431,17 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
 			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AV+"status",1]]
 			    	          },
-			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
-			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AV+"status",1]]
-			    	          },
 			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
 			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_AV+"status",1]]
 			        	      }
 			    	    ]
 			       },	
-			       {type:_GROUP_,numCols:6,colSizes:["auto","auto","auto","auto","auto","auto"],
+			       {type:_GROUP_,numCols:5,colSizes:["auto","auto","auto","auto","auto"],
 			    	   items:[
 			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_STATS+"status",1]]},
 			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_STATS+"status",1]]},
 			    	          {type:_OUTPUT_, value:ZaStatus.SVC_STATS},                            
 			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
-			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_STATS+"status",1]]
-			    	          },
-			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Restart,enableDisableChecks:[],
 			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_STATS+"status",1]]
 			    	          },
 			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
@@ -373,16 +469,16 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageAddresses, icon:"Account", width:80,
 	    	    	onActivate:"ZaDashBoardView.openAddressesView();",enableDisableChecks:[],visibilityChecks:[]},
 	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewAccount, icon:"Account", width:80,
-	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
+	    	    	onActivate:"ZaDashBoardView.openNewAccountDialog()",enableDisableChecks:[],visibilityChecks:[]},
 	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewDL, icon:"DistributionList",width:80,
-	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},
+	    	    	onActivate:"ZaDashBoardView.openNewDistributionListView()",enableDisableChecks:[],visibilityChecks:[]},
 	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewCalResource,icon:"Resource", width:80,
-	    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},	    	    
+	    	    	onActivate:"ZaDashBoardView.openNewResourceDialog()",enableDisableChecks:[],visibilityChecks:[]},	    	    
 	    	    {type:_SPACER_,colSpan:4},	    	    
 	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageProfiles, icon:"COS", width:80,
 		    	   	onActivate:"ZaDashBoardView.openProfilesView()",enableDisableChecks:[],visibilityChecks:[]},
 		    	{type:_DWT_BUTTON_, label:com_zimbra_dashboard.NewProfile, icon:"NewCOS", width:80,
-		    	    	onActivate:"alert()",enableDisableChecks:[],visibilityChecks:[]},	
+		    	    	onActivate:"ZaDashBoardView.openNewProfileView()",enableDisableChecks:[],visibilityChecks:[]},	
 		    	{type:_SPACER_,colSpan:2},		    	    	
 	    	    {type:_SPACER_,colSpan:4},
 	    	    {type:_DWT_BUTTON_, label:com_zimbra_dashboard.ManageDomains, icon:"Domain", width:80,

@@ -63,7 +63,7 @@ function(openInNewTab) {
 			
 		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	}
-    var entry = {};
+    var entry = {attrs:{}};
     var gc = ZaApp.getInstance().getGlobalConfig();
     var statusObj = new ZaStatus();
     statusObj.load();
@@ -73,7 +73,11 @@ function(openInNewTab) {
     		break;
     	}
     }
-    entry[ZaGlobalConfig.A_zimbraMtaRelayHost] = gc.attrs[ZaGlobalConfig.A_zimbraMtaRelayHost];
+    
+    entry.attrs = gc.attrs;
+    entry.rights = gc.rights;
+    entry.setAttrs = gc.setAttrs;
+    entry.getAttrs = gc.getAttrs;
 	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._contentView.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
