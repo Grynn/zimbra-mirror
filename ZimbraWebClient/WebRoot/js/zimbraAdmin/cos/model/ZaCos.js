@@ -541,7 +541,7 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraMaxPwdAge, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraMaxPwdAge, maxInclusive:2147483647, minInclusive:0},
         {id:ZaCos.A_zimbraEnforcePwdHistory, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraEnforcePwdHistory, maxInclusive:2147483647, minInclusive:0},
         {id:ZaCos.A_zimbraPasswordLocked, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPasswordLocked},
-        {id:ZaCos.A_name, type:_STRING_, ref:"attrs/"+ZaCos.A_name, pattern:/^[A-Za-z0-9]+$/},
+        {id:ZaCos.A_name, type:_STRING_, ref:"attrs/"+ZaCos.A_name},
 //        {id:ZaCos.A_description, type:_STRING_, ref:"attrs/"+ZaCos.A_description},
         ZaItem.descriptionModelItem ,
         {id:ZaCos.A_zimbraAttachmentsBlocked, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraAttachmentsBlocked},
