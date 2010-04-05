@@ -1023,8 +1023,9 @@ public class InitialSync {
                         te = tin.getNextEntry(); //message always has a blob
                         if (te != null) {
                             try {
-                                saveMessage(tin, te.getSize(), ud.id, ud.folderId, type, ud.date,
-                                        Flag.flagsToBitmask(itemData.flags), itemData.tags, ud.parentId);
+                                saveMessage(tin, te.getSize(), ud.id, ud.folderId,
+                                    type, ud.date, Flag.flagsToBitmask(itemData.flags),
+                                    ud.tags, ud.parentId);
                                 idSet.remove(ud.id);
                             } catch (Exception x) {
                                 SyncExceptionHandler.checkRecoverableException("InitialSync.syncMessagesAsTgz", x);
@@ -1147,14 +1148,14 @@ public class InitialSync {
     private void saveMessage(InputStream in, long sizeHint, Map<String, String> headers, int id, int folderId, byte type) throws ServiceException {
         int received = (int) (Long.parseLong(headers.get("X-Zimbra-Received")) / 1000);
         int flags = Flag.flagsToBitmask(headers.get("X-Zimbra-Flags"));
-        String tags = headers.get("X-Zimbra-Tags");
+        long tags = Tag.tagsToBitmask(headers.get("X-Zimbra-Tags"));
         int convId = Integer.parseInt(headers.get("X-Zimbra-Conv"));
 
         saveMessage(in, sizeHint, id, folderId, type, received, flags, tags, convId);
     }
     
     private void saveMessage(InputStream in, long sizeHint, int id, int folderId,
-        byte type, int received, int flags, String tags, int convId) throws ServiceException {
+        byte type, int received, int flags, long tags, int convId) throws ServiceException {
         Blob blob = null;
         int bufLen = Provisioning.getInstance().getLocalServer().getMailDiskStreamingThreshold();
         CopyInputStream cs = new CopyInputStream(in, sizeHint, bufLen, bufLen);
@@ -1164,6 +1165,7 @@ public class InitialSync {
         ParsedMessage pm = null;
         CreateMessage redo;
         int size = 0;
+        String tagStr = Tag.bitmaskToTags(tags);
 
         OfflineSyncManager.getInstance().continueOK();
         if (convId < 0)
@@ -1183,9 +1185,10 @@ public class InitialSync {
                 received * 1000L, false));
             
             if (type == MailItem.TYPE_CHAT)
-                redo = new CreateChat(ombx.getId(), digest, size, folderId, flags, tags);
+                redo = new CreateChat(ombx.getId(), digest, size, folderId, flags, tagStr);
             else
-                redo = new CreateMessage(ombx.getId(), null, received, false, digest, size, folderId, true, flags, tags, null);
+                redo = new CreateMessage(ombx.getId(), null, received, false,
+                    digest, size, folderId, true, flags, tagStr, null);
             cs.release();
             redo.setMessageId(id);
             redo.setConvId(convId);
@@ -1195,12 +1198,13 @@ public class InitialSync {
             // XXX: need to call with noICal = false
             Message msg;
             if (type == MailItem.TYPE_CHAT) {
-                msg = ombx.createChat(new TracelessContext(redo), pm, folderId, flags, tags);
+                msg = ombx.createChat(new TracelessContext(redo), pm, folderId, flags, tagStr);
             } else {
                 DeliveryContext deliveryCtxt = new DeliveryContext();
 
                 deliveryCtxt.setIncomingBlob(blob);
-                msg = ombx.addMessage(new TracelessContext(redo), pm, folderId, true, flags, tags, convId, ":API:", null, deliveryCtxt);
+                msg = ombx.addMessage(new TracelessContext(redo), pm, folderId,
+                    true, flags, tagStr, convId, ":API:", null, deliveryCtxt);
             }
             OfflineLog.offline.debug("initial: created " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
             StoreManager.getInstance().quietDelete(blob);
@@ -1233,7 +1237,7 @@ public class InitialSync {
             if (type == MailItem.TYPE_CHAT || msg.isDraft()) { //other messages are immutable so no content change
                 CreateMessage redo2 = null;
                 if (type == MailItem.TYPE_CHAT)
-                    redo2 = new SaveChat(ombx.getId(), id, digest, size, folderId, flags, tags);
+                    redo2 = new SaveChat(ombx.getId(), id, digest, size, folderId, flags, tagStr);
                 else
                     redo2 = new SaveDraft(ombx.getId(), id, digest, size);
                 redo2.start(received * 1000L);
