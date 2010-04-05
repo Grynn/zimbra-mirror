@@ -102,7 +102,7 @@ sub daemon {
 my $argstr = join(" ",@ARGV);
 
 # We want to call ProvUtil if any flag other than -l is passed
-if ($argstr =~ m/-[hfsLapPyYvdm]/) {
+if ($argstr =~ m/(-[hfsLapPyYvdm]|^exit|^quit)/i) {
 	exec ("/opt/zimbra/bin/zmjava","com.zimbra.cs.account.ProvUtil",@ARGV);
 	die "exec failed!";
 }
