@@ -131,6 +131,10 @@ function(loc,bReloginMode) {
 	
 	this.setZIndex(thisZ);
 	this._poppedUp = true;
+	var testCookie = AjxCookie.getCookie(document, ZaZimbraAdmin.TEST_COOKIE_NAME);
+	if(!testCookie) {
+		this.setError(ZaMsg.ERROR_COOKIES_DISABLED);
+	}
 }
 
 

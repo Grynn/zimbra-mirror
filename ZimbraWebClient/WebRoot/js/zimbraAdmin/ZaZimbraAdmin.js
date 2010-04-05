@@ -85,6 +85,7 @@ ZaZimbraAdmin._ZIMLET_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 
 // do not change the name of the cookie! SoapServlet looks for it
 ZaZimbraAdmin._COOKIE_NAME = "ZM_ADMIN_AUTH_TOKEN";
+ZaZimbraAdmin.TEST_COOKIE_NAME = "ZA_TEST";
 	
 // Public methods
 
