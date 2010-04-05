@@ -183,7 +183,7 @@ sub main() {
                     } else {
                         @statlist = ('utime', 'stime');
                     }
-                    if (exists($prev_stats->{$pid}) && exists($pid_stats->{$pid})) { # delta
+                    if (exists($prev_stats->{$pid}) && exists($pid_stats{$pid})) { # delta
                         for (@statlist) {
                             $stats{$name}->{$_} += delta_stat(
                                     $prev_stats, \%pid_stats, $pid, $_);
