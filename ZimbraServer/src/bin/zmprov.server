@@ -46,14 +46,20 @@ sub daemon {
 		my $self = shift;
 		my $fbuf;
 		my $buf;
-		while (<STDIN>) {
-			chomp;
-			my $answer = ZmClient::sendZmprovRequest($_); # force a scalar response
-			print $answer,"\n";
-			close STDOUT;
-			($answer =~ /^ERROR: service/) && $self->server_close;
-			return;
-		}
+
+		eval {
+			local $SIG{ALRM} = sub { die "alarm\n" };
+			alarm(60); # avoid timeouts when mailstore is down
+			while (<STDIN>) {
+				chomp;
+				my $answer = ZmClient::sendZmprovRequest($_); # force a scalar response
+				print $answer,"\n";
+				close STDOUT;
+				($answer =~ /^ERROR: service/) && $self->server_close;
+				return;
+			}
+		};
+		if ($@) { $self->server_close; }
 	}
 
 	sub pre_loop_hook {
