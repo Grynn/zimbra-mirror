@@ -42,9 +42,11 @@ function(line, startIndex) {
 		var re = a[i];
 		re.lastIndex = startIndex;
 		var m = re.exec(line);
-        if (m) {
+        if (m && m[0] != "") {
             if (!ret || m.index < ret.index) {
                 ret = m;
+				ret.matchLength = m[0].length;
+				return ret;	
             }
         }
 	}
@@ -144,7 +146,7 @@ com_zimbra_srchhltr.prototype.addMenuButton = function(controller, menu) {
 	var ID = "COM_ZIMBRA_SEARCH_WORD_HIGHLIGHTER_ZIMLET";
 	var text = this.getMessage("SearchHighlighterZimlet_MenuLabel"); //TODO - not working
 	//var text = "Clear Search Highlights";
-	if (!menu.getMenuItem(ID)) {
+	if (!menu.getMenuItem(ID)) { 
 		var op = {
 			id:             ID,
 			text:          text,
@@ -158,12 +160,25 @@ com_zimbra_srchhltr.prototype.addMenuButton = function(controller, menu) {
 };
 
 com_zimbra_srchhltr.prototype._clearSearchWordHighlights = function(controller){
-	var msgBody = appCtxt.getAppViewMgr().getCurrentView().getMsgView().getHtmlBodyElement();
+	var msgBody;
+	var bodyEl = appCtxt.getAppViewMgr().getCurrentView().getMsgView().getHtmlBodyElement();
+	if(bodyEl) {
+			msgBody = bodyEl.ownerDocument;
+	} else {
+		var elId = appCtxt.getAppViewMgr().getCurrentView().getMsgView().getHTMLElId();
+		if(elId) {
+			if(!AjxEnv.isIE) {
+				msgBody = document.getElementById(elId+"_body__iframe").contentDocument;
+			} else {
+				msgBody = document.getElementById(elId+"_body__iframe").contentWindow.document;
+			}
+		}
+    }		
 	for(var i =0; i < this._spanIds.length; i++) {
 		var obj = document.getElementById(this._spanIds[i]);
 		var bodyObj;
 		if(msgBody != undefined || msgBody != null) {
-			bodyObj = msgBody.ownerDocument.getElementById(this._spanIds[i]);
+			bodyObj = msgBody.getElementById(this._spanIds[i]);
 		}
 		if((obj != undefined) && (obj.style != undefined)) {
 			obj.style.backgroundColor = "";
