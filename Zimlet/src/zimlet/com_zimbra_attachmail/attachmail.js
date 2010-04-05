@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Zimlets
- * Copyright (C) 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -11,17 +11,24 @@
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
- *@Author Raja Rao DV
- * Allows attaching emails to message thats being composed via attachment dialogbox
+ * @author Raja Rao DV
  */
 
+/**
+ * Constructor.
+ * 
+ */
 function com_zimbra_attachmail() {
 }
 com_zimbra_attachmail.prototype = new ZmZimletBase();
 com_zimbra_attachmail.prototype.constructor = com_zimbra_attachmail;
 
-
-com_zimbra_attachmail.prototype.init = function() {
+/**
+ * Initializes the zimlet.
+ * 
+ */
+com_zimbra_attachmail.prototype.init =
+function() {
 	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
 	var tabview = attachDialog ? attachDialog.getTabView() : null;
 	this.AMV = new AttachMailTabView(tabview, this);
@@ -32,8 +39,32 @@ com_zimbra_attachmail.prototype.init = function() {
 
 };
 
+/**
+ * Called when the panel is double-clicked.
+ */
+com_zimbra_attachmail.prototype.doubleClicked = function() {
+	this.singleClicked();
+};
 
-AttachMailTabView = function(parent, zimlet, className) {
+/**
+ * Called when the panel is single-clicked.
+ */
+com_zimbra_attachmail.prototype.singleClicked = function() {
+	// do nothing
+};
+
+/**
+ * @class
+ * The attach mail tab view.
+ * 
+ * @param	{DwtTabView}	parant		the tab view
+ * @param	{hash}	zimlet				the zimlet
+ * @param	{string}	className		the class name
+ * 
+ * @extends		DwtTabViewPage
+ */
+AttachMailTabView =
+function(parent, zimlet, className) {
 	this.zimlet = zimlet;
 	DwtTabViewPage.call(this, parent, className, Dwt.STATIC_STYLE);
 	this.setScrollStyle(Dwt.SCROLL);
@@ -46,18 +77,28 @@ AttachMailTabView.prototype.toString = function() {
 	return "AttachMailTabView";
 };
 
-AttachMailTabView.prototype.showMe = function() {
+/**
+ * Shows the tab view.
+ * 
+ */
+AttachMailTabView.prototype.showMe =
+function() {
 	DwtTabViewPage.prototype.showMe.call(this);
 	this.setSize(Dwt.DEFAULT, "255");
 	if (this._currentQuery == undefined) {
-		this._currentQuery = this.getQueryFromFolder("2");
+		this._currentQuery = this._getQueryFromFolder("2");
 		this.treeView.setSelected("2");
 	}
 	this.executeQuery(this._currentQuery);
 };
 
-
-AttachMailTabView.prototype._resetQuery = function(newQuery) {
+/**
+ * Resets the query.
+ * 
+ * @param	{string}	newQuery		the new query
+ */
+AttachMailTabView.prototype._resetQuery =
+function(newQuery) {
 	if (this._currentQuery == undefined)
 		return newQuery;
 
@@ -68,17 +109,32 @@ AttachMailTabView.prototype._resetQuery = function(newQuery) {
 	return newQuery;
 };
 
-
-AttachMailTabView.prototype.getQueryFromFolder = function(folderId) {
+/**
+ * Gets the "from folder id" query.
+ * 
+ * @param	{string}		folderId
+ * @return	{string}	the query
+ */
+AttachMailTabView.prototype._getQueryFromFolder =
+function(folderId) {
 	return this._resetQuery('inid:"' + folderId + '"');
 };
 
-AttachMailTabView.prototype.hideMe = function() {
+/**
+ * Hides the tab view.
+ * 
+ */
+AttachMailTabView.prototype.hideMe =
+function() {
 	DwtTabViewPage.prototype.hideMe.call(this);
 };
 
-//Create UI for AttachMail Tab UI
-AttachMailTabView.prototype._createHtml = function() {
+/**
+ * Creates HTML for for the attach mail tab UI.
+ * 
+ */
+AttachMailTabView.prototype._createHtml =
+function() {
 	this._contentEl = this.getContentHtmlElement();
 	this._tableID = Dwt.getNextId();
 	this._folderTreeCellId = Dwt.getNextId();
@@ -130,6 +186,11 @@ AttachMailTabView.prototype._createHtml = function() {
 	//this.executeQuery(ZmOrganizer.ID_BRIEFCASE);
 };
 
+/**
+ * Listens for "search" button events.
+ * 
+ * @see			_createHtml
+ */
 AttachMailTabView.prototype._searchButtonListener =
 function(ev) {
 	this.treeView.deselectAll();
@@ -141,6 +202,11 @@ function(ev) {
 	this.executeQuery(query);
 };
 
+/**
+ * Listens for "view message" button events.
+ * 
+ * @see			_createHtml
+ */
 AttachMailTabView.prototype._viewMsgButtonListener =
 function(ev) {
 	var items = this.getSelectedMsgs();
@@ -150,19 +216,32 @@ function(ev) {
 	}
 };
 
+/**
+ * Listens for "navigation bar" button events.
+ * 
+ * @see			_createHtml
+ */
 AttachMailTabView.prototype._navBarListener =
 function(ev) {
 	var op = ev.item.getData(ZmOperation.KEY_ID);
 	this._paginate(op == ZmOperation.PAGE_FORWARD);
 };
 
+/**
+ * Pagination.
+ * 
+ */
 AttachMailTabView.prototype._paginate =
 function(getNext) {
 	this.executeQuery(this._currentQuery, getNext);
 
 };
 
-
+/**
+ * Performs a folder search.
+ * 
+ * @param	{hash}	params		a hash of parameters
+ */
 AttachMailTabView.prototype.searchFolder =
 function(params) {
 	var soapDoc = AjxSoapDoc.create("SearchRequest", "urn:zimbraMail");
@@ -175,6 +254,11 @@ function(params) {
 	this.handleSearchResponse(params);
 };
 
+/**
+ * Handles the search folder response.
+ * 
+ * @param	{hash}	params		a hash of parameters
+ */
 AttachMailTabView.prototype.handleSearchResponse =
 function(params) {
 	var response = params.response;
@@ -187,6 +271,11 @@ function(params) {
 	}
 };
 
+/**
+ * Processes the search folder doc response.
+ * 
+ * @param	{hash}	params		a hash of parameters
+ */
 AttachMailTabView.prototype.processDocsResponse =
 function(params) {
 	var msgs = params.searchResponse.m;
@@ -201,8 +290,12 @@ function(params) {
 	}
 	return mailList;
 };
-//---------------
 
+/**
+ * Shows the search folder result content.
+ * 
+ * @param	{hash}	params		a hash of parameters
+ */
 AttachMailTabView.prototype.showResultContents =
 function(params) {
 	var items = params.items;
@@ -224,8 +317,13 @@ function(params) {
 	bcView.set(this._list);
 };
 
-
-AttachMailTabView.prototype._handleKeys = function(ev) {
+/**
+ * Handles the view keys events.
+ * 
+ * @param	{DwtKeyEvent}	ev
+ */
+AttachMailTabView.prototype._handleKeys =
+function(ev) {
 	var key = DwtKeyEvent.getCharCode(ev);
 	return (key != DwtKeyEvent.KEY_ENTER && key != DwtKeyEvent.KEY_END_OF_TEXT);
 };
@@ -252,8 +350,6 @@ function(attachmentDlg, docIds) {
 		for (var i in items) {
 			docIds.push(items[i].id);
 		}
-
-
 	}
 
 	this._createHiddenAttachments(docIds);
@@ -278,7 +374,6 @@ function(items) {
 	else
 		name = ZmComposeView.FORWARD_MSG_NAME +  composeView._sessionId;
 
-		
 	for (var i = 0; i < items.length; i++) {
 		html[j++] = "<input type=checkbox name='";
 		html[j++] = name;
@@ -292,7 +387,6 @@ function(items) {
 
 AttachMailTabView.prototype.showAttachMailTreeView =
 function() {
-
 	//Force create deferred folders if not created
 	var aCtxt = appCtxt.isChildWindow ? parentAppCtxt : appCtxt;
 	var briefcaseApp = aCtxt.getApp(ZmApp.MAIL);
@@ -341,7 +435,7 @@ function(ev) {
 		var folder = ti.getData(Dwt.KEY_OBJECT);
 		if (folder) {
 			document.getElementById('attDlg_attMsg_SearchField').value = "in:" + folder.getSearchPath();
-			var query = this.getQueryFromFolder(folder.id);
+			var query = this._getQueryFromFolder(folder.id);
 			this.executeQuery(query);
 		}
 	}
@@ -359,7 +453,6 @@ function(treeView) {
 	ti.setVisible(false, true);
 };
 
-
 AttachMailTabView.prototype.setSize =
 function(width, height) {
 	DwtTabViewPage.prototype.setSize.call(this, width, height);
@@ -373,12 +466,10 @@ function(width, height) {
 	return this;
 };
 
-
 AttachMailTabView.prototype.executeQuery =
 function(query, forward) {
 	if (this._limit == undefined)
 		this._limit = 50;
-
 
 	if (this._offset == undefined)
 		this._offset = 0;
@@ -396,11 +487,12 @@ function(query, forward) {
 	this.searchFolder({query:this._currentQuery, offset:this._offset, limit:this._limit , callback:callback});
 };
 
-
-
-
-
-//------------------ZmAttachMailController----------------------------------------
+/**
+ * @class
+ * The attach mail controller.
+ * 
+ * @extends		ZmListController
+ */
 ZmAttachMailController = function(container, app) {
 	if (arguments.length == 0) { return; }
 
@@ -409,27 +501,24 @@ ZmAttachMailController = function(container, app) {
 ZmAttachMailController.prototype = new ZmListController;
 ZmAttachMailController.prototype.constructor = ZmAttachMailController;
 
-
 ZmAttachMailController.prototype._resetToolbarOperations =
 function() {
-	//override to avoid js expn although we dont have a toolbar per say
+	// override to avoid js expn although we do not have a toolbar per se
 };
-//----------------------ZmAttachMailController------------------------------------
 
-
-
-
-
-//----------------------ZmAttachMailListView------------------------------------
+/**
+ * @class
+ * The attach mail list view.
+ * 
+ * @extends		ZmListView
+ */
 ZmAttachMailListView = function(params) {
 	ZmListView.call(this, params);
 	this._controller = new ZmAttachMailController();
 };
 
-
 ZmAttachMailListView.prototype = new ZmListView;
 ZmAttachMailListView.prototype.constructor = ZmAttachMailListView;
-
 
 ZmAttachMailListView.prototype._getDivClass =
 function(base, item, params) {
@@ -480,5 +569,4 @@ function(htmlArr, idx, item, field, colIdx, params) {
 	}
 	return idx;
 };
-//----------------------ZmAttachMailListView------------------------------------
 
