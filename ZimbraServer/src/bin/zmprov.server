@@ -51,6 +51,7 @@ sub daemon {
 			my $answer = ZmClient::sendZmprovRequest($_); # force a scalar response
 			print $answer,"\n";
 			close STDOUT;
+			($answer =~ /^ERROR: service/) && $self->server_close;
 			return;
 		}
 	}
