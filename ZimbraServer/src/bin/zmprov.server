@@ -53,7 +53,7 @@ sub daemon {
 			while (<STDIN>) {
 				chomp;
 				my $answer = ZmClient::sendZmprovRequest($_); # force a scalar response
-				print $answer,"\n";
+				print $answer;
 				close STDOUT;
 				($answer =~ /^ERROR: service/) && $self->server_close;
 				return;
