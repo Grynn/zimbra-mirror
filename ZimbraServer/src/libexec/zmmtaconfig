@@ -1286,6 +1286,12 @@ sub daemonize {
   exit 0 if $child; # parent dies
 
   #setsid or die "Leadership rejected: $!\n"; #session leader
+  eval {
+  	setsid();
+  };
+  if ($@) {
+  	logMsg(2, "setsid() failed: $@");
+  }
   open(STDIN, "</dev/null") or 
     logMsg(0, "Can't read from /dev/null $!\n");
   open(STDOUT, ">>$config{logFile}") or 
