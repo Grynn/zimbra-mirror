@@ -95,8 +95,10 @@ sub getPlatformDirName() {
 	chomp($version);
 	if ($version eq "8") {
 	    $dirName = "MACOSXx86";
-	} else {
+	} elsif ($version eq "9") {
 	    $dirName = "MACOSXx86_10.5";
+	} else {
+	    $dirName = "MACOSXx86_10.6";
 	}
     } else {
 	if (-f "/etc/redhat-release") {
