@@ -100,7 +100,7 @@
 	<classpathentry kind="lib" path="jars/ant-1.7.0-ziputil-patched.jar"/>
 	<classpathentry kind="lib" path="jars/memcached-2.3.1.jar" sourcepath="/ThirdParty/spymemcached/memcached-2.3.1-sources"/>
 	<classpathentry kind="lib" path="jars/testng-5.8-jdk15.jar" sourcepath="/ThirdParty/testng-5.8/src/main"/>
-	<classpathentry kind="lib" path="jars/apache-jsieve-0.3-zimbra.jar" sourcepath="/ZimbraCommon/jars-src/apache-jsieve-0.3-sources.jar">
+	<classpathentry kind="lib" path="jars/apache-jsieve-0.3-zimbra.jar" sourcepath="jars-src/apache-jsieve-0.3-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/apache-jsieve-0.3-javadoc.jar!/"/>
 		</attributes>
