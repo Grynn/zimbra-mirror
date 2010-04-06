@@ -63,7 +63,11 @@ function(html, idx, obj, spanId, context) {
 
 com_zimbra_srchhltr.prototype._getSearchWords =
 function(searchStr) {
-	var dArry = searchStr.toLowerCase().split(" ");
+	searchStr = searchStr.toLowerCase().replace(/in:"(\w+?\s).*"/, "");//folder with multip-word names
+	var dArry  = searchStr.split(" ");
+	if(dArry == "") {
+		return [];
+	}
 	var result1 = [];
 	for(var i=0; i <  dArry.length; i++) {
 		var d = dArry[i];	
@@ -167,10 +171,15 @@ com_zimbra_srchhltr.prototype._clearSearchWordHighlights = function(controller){
 	} else {
 		var elId = appCtxt.getAppViewMgr().getCurrentView().getMsgView().getHTMLElId();
 		if(elId) {
+			var doc = document.getElementById(elId+"_body__iframe");
 			if(!AjxEnv.isIE) {
-				msgBody = document.getElementById(elId+"_body__iframe").contentDocument;
+				if(doc) {
+					msgBody = doc.contentDocument;
+				}
 			} else {
-				msgBody = document.getElementById(elId+"_body__iframe").contentWindow.document;
+				if(doc) {
+					msgBody = doc.contentWindow.document;
+				}
 			}
 		}
     }		
