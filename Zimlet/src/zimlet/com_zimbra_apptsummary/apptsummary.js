@@ -102,7 +102,7 @@ function(appts) {
 		body = this._getApptsSummaryBody(this._startDate, appts, this._calController, null);
 	} else {
 		hasError = true;
-		body = this.getMessage("ApptSummaryZimlet_error_unabletogetappointments");
+		body = this.getMessage("ApptSummary_error_unabletogetappointments");
 	}
 	this._sendEmail(body, hasError);
 };
@@ -148,9 +148,9 @@ function(date, list, controller, noheader, emptyMsg, type) {
 	var html = new AjxBuffer();
 	var apptsFound = false;
 	if (type == com_zimbra_apptsummary_HandlerObject.TYPE_SHOW_REGULAR_ONLY) {
-		var title = this.getMessage("ApptSummaryZimlet_ApptsHdr");
+		var title = this.getMessage("ApptSummary_header_apts");
 	} else {
-		var title = this.getMessage("ApptSummaryZimlet_NotBusyHeader");
+		var title = this.getMessage("ApptSummary_header_notbusy");
 	}
 	var hdrDivStyle = " style='background-color:#D7CFBE;border-bottom:1px solid #A7A194;'";
 	html.append("<table cellpadding='0' cellspacing='0' border='0' width=94% align=center><tr><td>");
@@ -164,10 +164,10 @@ function(date, list, controller, noheader, emptyMsg, type) {
 	html.append("</td></tr></table>");
 
 	html.append("<table cellpadding='3' cellspacing='0' border='0' width=100% align=center>");
-	html.append("<tr ", hdrDivStyle, " align=left><th width=15px  align=center valign=middle>#</th><th width=150px>", this.getMessage("ApptSummaryZimlet_Calendar"), "</th>");
-	html.append("<th width=100px>", this.getMessage("ApptSummaryZimlet_From"), "</th>");
-	html.append("<th width=100px>", this.getMessage("ApptSummaryZimlet_To"), "</th>");
-	html.append("<th>", this.getMessage("ApptSummaryZimlet_Details"), "</th></tr>");
+	html.append("<tr ", hdrDivStyle, " align=left><th width=15px  align=center valign=middle>#</th><th width=150px>", this.getMessage("ApptSummary_calendar"), "</th>");
+	html.append("<th width=100px>", this.getMessage("ApptSummary_label_from"), "</th>");
+	html.append("<th width=100px>", this.getMessage("ApptSummary_label_to"), "</th>");
+	html.append("<th>", this.getMessage("ApptSummary_label_details"), "</th></tr>");
 	var formatter_med = AjxDateFormat.getTimeInstance(AjxDateFormat.SHORT);
 	var formatter_long = AjxDateFormat.getTimeInstance(AjxDateFormat.LONG);
 	var isRowOdd = true;
@@ -206,8 +206,8 @@ function(date, list, controller, noheader, emptyMsg, type) {
 				var endTime = formatter_med.format(ao.endDate);
 			}
 		} else {
-			var startTime = this.getMessage("ApptSummaryZimlet_AllDay");
-			var endTime = this.getMessage("ApptSummaryZimlet_AllDay");
+			var startTime = this.getMessage("ApptSummary_allday");
+			var endTime = this.getMessage("ApptSummary_allday");
 		}
 
 		var dur = "<td>" + startTime + "&nbsp;" + "</td><td width=100px>" + endTime;
@@ -218,18 +218,18 @@ function(date, list, controller, noheader, emptyMsg, type) {
 		html.append("</td><td>");
 		var isNew = ao.ptst == ZmCalBaseItem.PSTATUS_NEEDS_ACTION;
 		if (isNew) {
-			html.append("<span style='color:red;font-weight:bold;font-size:11px'>[", this.getMessage("ApptSummaryZimlet_New"), "]</span>&nbsp;");
+			html.append("<span style='color:red;font-weight:bold;font-size:11px'>[", this.getMessage("ApptSummary_apt_new"), "]</span>&nbsp;");
 		} else if (ao.ptst == "DE") {
-			html.append("<span style='color:gray;font-size:11px'>[", this.getMessage("ApptSummaryZimlet_Declined"), "]</span>&nbsp;");
+			html.append("<span style='color:gray;font-size:11px'>[", this.getMessage("ApptSummary_apt_declined"), "]</span>&nbsp;");
 		} else if (ao.fba == "F") {
-			html.append("<span style='color:gray;font-size:11px'>[", this.getMessage("ApptSummaryZimlet_Free"), "]</span>&nbsp;");
+			html.append("<span style='color:gray;font-size:11px'>[", this.getMessage("ApptSummary_apt_free"), "]</span>&nbsp;");
 		} else if (ao.fba == "O") {
-			html.append("<span style='color:gray;font-size:11px'>[", this.getMessage("ApptSummaryZimlet_OOO"), "]</span>&nbsp;");
+			html.append("<span style='color:gray;font-size:11px'>[", this.getMessage("ApptSummary_apt_ooo"), "]</span>&nbsp;");
 		}
 		html.append(AjxStringUtil.htmlEncode(ao.getName()));
 		var loc = AjxStringUtil.htmlEncode(ao.getLocation());
 		if (loc != "") {
-			html.append("&nbsp; <span style='color:gray;font-size:11px'> ", this.getMessage("ApptSummaryZimlet_Location"), " - ", loc, "</span>");
+			html.append("&nbsp; <span style='color:gray;font-size:11px'> ", this.getMessage("ApptSummary_label_location"), " - ", loc, "</span>");
 		}
 
 		html.append("</td></tr>");
@@ -258,14 +258,13 @@ function(date, list, controller, noheader, emptyMsg, type) {
 com_zimbra_apptsummary_HandlerObject.prototype._sendEmail =
 function(body, hasError) {
 	if (hasError) {
-		var subject = this.getMessage("ApptSummaryZimlet_subjectError");
+		var subject = this.getMessage("ApptSummary_subject_error");
 	} else {
-		var test = this.getMessage("ApptSummaryZimlet_subjectSuccess");
-		var subject = this.getMessage("ApptSummaryZimlet_subjectSuccess").replace("{0}", this.__apptCount);
+		var subject = this.getMessage("ApptSummary_subject_success").replace("{0}", this.__apptCount);
 		if (this.__apptCount != 1) {
-			subject = subject.replace("{1}", this.getMessage("ApptSummaryZimlet_Appointments"));
+			subject = subject.replace("{1}", this.getMessage("ApptSummary_appointments"));
 		} else {
-			subject = subject.replace("{1}", this.getMessage("ApptSummaryZimlet_Appointment"));
+			subject = subject.replace("{1}", this.getMessage("ApptSummary_appointment"));
 		}
 	}
 	var jsonObj = {SendMsgRequest:{_jsns:"urn:zimbraMail"}};
@@ -332,7 +331,7 @@ function(param1, param2) {
  */
 com_zimbra_apptsummary_HandlerObject.prototype._sendEmailErrCallback =
 function(param1, param2) {
-	appCtxt.getAppController().setStatusMsg(this.getMessage("ApptSummaryZimlet_CalParseError"), ZmStatusView.LEVEL_WARNING);
+	appCtxt.getAppController().setStatusMsg(this.getMessage("ApptSummary_error_calendarparse"), ZmStatusView.LEVEL_WARNING);
 };
 
 
@@ -375,7 +374,7 @@ function() {
 	this.pView.getHtmlElement().innerHTML = this._createPreferenceView();
 	
 	var dialog_args = {
-			title	: this.getMessage("ApptSummaryZimlet_PrefDlgLabel"),
+			title	: this.getMessage("ApptSummary_dialog_preferences_title"),
 			view	: this.pView,
 			standardButtons : [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON],
 			parent	: this.getShell()
@@ -411,7 +410,7 @@ function() {
 	html[i++] = "<input id='";
 	html[i++] = com_zimbra_apptsummary_HandlerObject.ELEMENT_ONLY_SEND_APPTS;
 	html[i++] = "'  type='checkbox'/>";
-	html[i++] = this.getMessage("ApptSummaryZimlet_sendApptEmailOnlyWhenThereAreEmails");
+	html[i++] = this.getMessage("ApptSummary_sendApptEmailOnlyWhenThereAreEmails");
 	html[i++] = "</DIV>";
 	return html.join("");
 };
@@ -424,7 +423,7 @@ function() {
 com_zimbra_apptsummary_HandlerObject.prototype._okBtnListner =
 function() {
 	this.setUserProperty(com_zimbra_apptsummary_HandlerObject.USER_PROP_ONLY_SEND_APPTS, document.getElementById(com_zimbra_apptsummary_HandlerObject.ELEMENT_ONLY_SEND_APPTS).checked, true);
-	appCtxt.getAppController().setStatusMsg(this.getMessage("ApptSummaryZimlet_PrefsSaved"), ZmStatusView.LEVEL_INFO);
+	appCtxt.getAppController().setStatusMsg(this.getMessage("ApptSummary_preferences_saved"), ZmStatusView.LEVEL_INFO);
 	this.pbDialog.popdown();//hide the dialog
 };
 
