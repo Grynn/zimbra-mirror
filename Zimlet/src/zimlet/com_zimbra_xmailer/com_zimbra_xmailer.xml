@@ -1,0 +1,12 @@
+<zimlet name="com_zimbra_xmailer" version="1.1" label="X-Mailer" description="Displays name of the mail client used to send a message.">
+	<include>xmailer.js</include>
+	<includeCSS>xmailer.css</includeCSS>
+	<resource>xmailer-icon.gif</resource>
+	<handlerObject>com_zimbra_xmailer</handlerObject>
+	<zimletPanelItem label="X-Mailer" icon="xmailer-panelIcon">
+		<toolTipText>Displays name of mail client that was used to send a mail(below mail subject)</toolTipText>
+	</zimletPanelItem>
+	<userProperties>
+		<property type="string" name="turnONxmailerZimlet" value="true"/>
+	</userProperties>	
+</zimlet>
