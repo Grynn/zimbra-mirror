@@ -112,7 +112,8 @@ ZaGrant.loadMethod = function (by, val, type) {
 ZaGrant.load = function (params) {
     //need to check if the current admin has the read permission to the zimbraACE attribute of the current object
 
-    if (!ZaItem.hasReadPermission (ZaItem.A_zimbraACE, this)){
+//    if (!ZaItem.hasReadPermission (ZaItem.A_zimbraACE, this)){
+    if (!ZaItem.hasRight (ZaRight.CONFIG_GRANTS_RIGHT, this)){
         return ;
     } ;
 
