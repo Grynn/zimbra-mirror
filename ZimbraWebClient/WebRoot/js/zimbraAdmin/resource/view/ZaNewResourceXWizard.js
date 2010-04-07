@@ -82,7 +82,8 @@ function() {
 		var resource = ZaItem.create(this._containedObject, ZaResource, "ZaResource");
 		if(resource != null) {
 			ZaApp.getInstance().getResourceController().fireCreationEvent(resource);
-			this.popdown();		
+			this.popdown();
+			ZaApp.getInstance().getCurrentController().popupMsgDialog(AjxMessageFormat.format(ZaMsg.ResourceCreated,[resource.name]));
 		}
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaNewResourceXWizard.prototype.finishWizard", null, false);
