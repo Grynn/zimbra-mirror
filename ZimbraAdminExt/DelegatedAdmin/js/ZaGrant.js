@@ -110,6 +110,12 @@ ZaGrant.loadMethod = function (by, val, type) {
   params.grantee.type - grantee type    
  */
 ZaGrant.load = function (params) {
+    //need to check if the current admin has the read permission to the zimbraACE attribute of the current object
+
+    if (!ZaItem.hasReadPermission (ZaItem.A_zimbraACE, this)){
+        return ;
+    } ;
+
     var soapDoc = AjxSoapDoc.create("GetGrantsRequest", ZaZimbraAdmin.URN, null);
     var elTarget, elGrantee ; 
 
