@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_yfinance" version="1.0" description="Stock quotes and financial information using Yahoo! Finance.">
+<zimlet name="com_zimbra_yfinance" version="1.1" label="Yahoo! Finance" description="Stock quotes and financial information using Yahoo! Finance.">
 	<include>calcengine.js</include>
 	<include>YSymbolLookupDialog.js</include>	
 	<include>YSymbolsDialog.js</include>

@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_yfinance" version="1.0">
+<zimletConfig name="com_zimbra_yfinance" version="1.1">
   <global>
     <property name="allowedDomains">*.yahoo.com,*.yimg.com,*.calcxml.com</property>
 	<property name="calcxml_username">zimbra</property>
