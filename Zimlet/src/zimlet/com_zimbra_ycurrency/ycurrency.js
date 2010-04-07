@@ -1,15 +1,23 @@
-
-/**
- * @author rpatil@zimbra.com
- * @version 0.1
- * The handler class for the Yahoo Currency Zimlet...
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ * Zimbra Collaboration Suite Zimlets
+ * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * 
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.3 ("License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ * http://www.zimbra.com/license.
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+ * ***** END LICENSE BLOCK *****
  */
+
 
 String.prototype.trim = function() {
     var a = this.replace(/^\s+/, '');
     return a.replace(/\s+$/, '');
 };
-
 
 Currencies = function(){
 	this.symbols =  [   {currency:"USD", syms: ["$","Dollar","US$","USD"]},
@@ -65,29 +73,56 @@ Currencies.prototype.getAllSymbols = function(){
 	return symbs;
 };
 
-
+/**
+ * Constructor.
+ * 
+ */
 function Com_Zimbra_YCurrency() {
 };
 
 Com_Zimbra_YCurrency.prototype = new ZmZimletBase();
 Com_Zimbra_YCurrency.prototype.constructor = Com_Zimbra_YCurrency;
+
 Com_Zimbra_YCurrency.OPERATORS_RG = "(>|<|<=|>=|==|!=|%|\\+|\\-|\\*|\\/|\\^|power|pow|pwr|sqrt|log|sin|cos|tan|acos|asin|atan|abs|ceil|exp|round|floor)";
 Com_Zimbra_YCurrency.OPERAND_RG = "\\d+(,\\d+)*[.]?\\d*";
 
+/**
+ * Defines the "home currency" user property.
+ */
+Com_Zimbra_YCurrency.USER_PROP_HOME_CURRENCY = "home_currency";
+/**
+ * Defines the "tooltip currencies" user property.
+ */
+Com_Zimbra_YCurrency.USER_PROP_TOOLTIP_CURRENCIES = "tooltip_currs";
+
+/**
+ * Defines the "preferences" menu item.
+ */
+Com_Zimbra_YCurrency.MENU_ITEM_ID_PREFERENCES = "SETTINGS";
+/**
+ * Defines the "convert" menu item.
+ */
+Com_Zimbra_YCurrency.MENU_ITEM_ID_CONVERT = "CONVERT";
+/**
+ * Defines the "goto Y! Finance" menu item.
+ */
+Com_Zimbra_YCurrency.MENU_ITEM_ID_GOTO_YAHOO_FINANCE = "GOTOYF";
+
+/**
+ * Initializes the zimlet.
+ */
 Com_Zimbra_YCurrency.prototype.init =
 function() {
-
     this.currencies = new Currencies();
 	this.URL = "http://finance.yahoo.com/d/quotes.html";
 	this.chartURL= "http://ichart.finance.yahoo.com/t";
     this.yfnURL = "http://finance.yahoo.com";
     this.footerHtml = "<hr/><div><b><i>Powered by yahoo finance.</i></b></div>";
     var myCurr = I18nMsg["currencyCode"];
-    this.setUserProperty("home_currency",myCurr?myCurr:"USD");
-    this.__prev_conv_string = "1 "+this.getUserProperty("home_currency")+" = ?";
+    this.setUserProperty(Com_Zimbra_YCurrency.USER_PROP_HOME_CURRENCY,myCurr?myCurr:"USD");
+    this.__prev_conv_string = "1 "+this.getUserProperty(Com_Zimbra_YCurrency.USER_PROP_HOME_CURRENCY)+" = ?";
     this._initSearchToolbar();
-    this.setUserProperty("tooltip_currs",this.currencies.getAllCurrencies().join(";"));
-
+    this.setUserProperty(Com_Zimbra_YCurrency.USER_PROP_TOOLTIP_CURRENCIES,this.currencies.getAllCurrencies().join(";"));
 };
 
 Com_Zimbra_YCurrency.prototype._getRegex = function(){
@@ -106,7 +141,7 @@ Com_Zimbra_YCurrency.prototype.getTooltipCurrencies =
 function(){
     var toCurrencies = this.currencies.getAllCurrencies();
     try{
-        toCurrencies = this.getUserProperty("tooltip_currs").split(/[;,]/);
+        toCurrencies = this.getUserProperty(Com_Zimbra_YCurrency.USER_PROP_TOOLTIP_CURRENCIES).split(/[;,]/);
     }catch(ex){
         toCurrencies = this.currencies.getAllCurrencies();
    }
@@ -144,8 +179,8 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	var curr = this.currencies.getCurrency(matchContext[1]); //matchContext[3];
 	var amt = matchContext[2]; //matchContext[1]
 
-	if(curr != this.getUserProperty("home_currency")){
-		s += "/convert?amt="+amt+"&from="+curr+"&to="+this.getUserProperty("home_currency")+"&submit=Convert";
+	if(curr != this.getUserProperty(Com_Zimbra_YCurrency.USER_PROP_HOME_CURRENCY)){
+		s += "/convert?amt="+amt+"&from="+curr+"&to="+this.getUserProperty(Com_Zimbra_YCurrency.USER_PROP_HOME_CURRENCY)+"&submit=Convert";
 	}
 	window.open(s);
 };
@@ -163,20 +198,34 @@ function(html, idx, obj, context) {
 	return idx;
 };
 
+/**
+ * Gets the tool tip height.
+ * 
+ * @return	{number}	the tool tip height
+ */
 Com_Zimbra_YCurrency.prototype._getToolTipHeight =
 function(){
     var m = this.getTooltipCurrencies().length < 4 ? 4 : this.getTooltipCurrencies().length;
     return (40 + 40 + (m * 18));
 }
+
+/**
+ * Called when the tool tip is popped-up.
+ * 
+ */
 Com_Zimbra_YCurrency.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
 	canvas.innerHTML = "<div style='width:250px;height:"+this._getToolTipHeight()+"px;vertical-align:middle'><center>Requesting yahoo finance...</center></div>";
-	var callback = new AjxCallback(this, this._callback, [ canvas, matchContext ]);
-	this._makeCall(contentObjText,matchContext,callback);
+	var callback = new AjxCallback(this, this._toolTipPoppedCallback, [ canvas, matchContext ]);
+	this._makeCall(contentObjText, matchContext, callback);
 
 };
 
-Com_Zimbra_YCurrency.prototype._callback =
+/**
+ * Tool tip popped-up callback.
+ * 
+ */
+Com_Zimbra_YCurrency.prototype._toolTipPoppedCallback =
 function(canvas, matchContext, result) { //result.success = true; result.text='1\r\n1\r\n1\r\n1\r\n1\r\n';// hack
     if(result && result.success){
       	var reqCurrency = this.currencies.getCurrency(matchContext[1]); //matchContext[3];
@@ -193,15 +242,15 @@ function(canvas, matchContext, result) { //result.success = true; result.text='1
             if(cur == reqCurrency) continue;
             var val =(rate*reqAmount).toFixed(4);
 			var extra="";
-			if(cur == this.getUserProperty("home_currency")){
+			if(cur == this.getUserProperty(Com_Zimbra_YCurrency.USER_PROP_HOME_CURRENCY)){
 				extra = "style='font-weight:bold;'";
 			}
             htmlData += "<tr><th align='right'>"+val+"</th><td align='right' "+extra+">"+cur+" @</td><td "+extra+" align='right'>"+rate+"</td></tr>";//+D+ " "+cur+"</b></div>";
         }
         htmlData += "</table>";//
-		if(reqCurrency != this.getUserProperty("home_currency")){
+		if(reqCurrency != this.getUserProperty(Com_Zimbra_YCurrency.USER_PROP_HOME_CURRENCY)){
             this.hasChart = true;
-            var homeCur = this.getUserProperty("home_currency");
+            var homeCur = this.getUserProperty(Com_Zimbra_YCurrency.USER_PROP_HOME_CURRENCY);
             var ch_arg = (this.getUserProperty("chart_type")=="O_2_H")?reqCurrency+homeCur:homeCur+reqCurrency;
             htmlData = "<table style='width:250px;'><tr><td>"+htmlData+"</td><td valign='bottom'>";
 			htmlData += "<img style='spacing:1px;border:1px inset gray;' src='"+this.chartURL+"?s="+ch_arg+"=X&f=w4'/></td></tr></table>";
@@ -215,7 +264,8 @@ function(canvas, matchContext, result) { //result.success = true; result.text='1
 	}
 };
 
-Com_Zimbra_YCurrency.prototype._showConvert = function(preVal,showWait){
+Com_Zimbra_YCurrency.prototype._showConvert =
+function(preVal,showWait){
     var view = new DwtComposite(this.getShell());
 	var container = document.createElement("DIV");
 	this.aId = Dwt.getNextId();
@@ -237,9 +287,12 @@ Com_Zimbra_YCurrency.prototype._showConvert = function(preVal,showWait){
 	element.appendChild(container);
 
 	var dialogTitle = 'Currency Converter';
-	var dialogArgs = {title : dialogTitle,view  : view };
-	var dlg = this._createDialog(dialogArgs);
-
+	var dialogArgs = {
+			title : dialogTitle,
+			parent : this.getShell(),
+			view  : view
+		};
+	var dlg = new ZmDialog(dialogArgs);
 
 	dlg.setButtonListener(
 			DwtDialog.CANCEL_BUTTON,
@@ -318,32 +371,38 @@ Com_Zimbra_YCurrency.prototype._makeCall = function(reqString, context,callback,
     AjxRpc.invoke(null, url, null, callback, true);
 };
 
-Com_Zimbra_YCurrency.prototype._convert = function(reqString, context){
+Com_Zimbra_YCurrency.prototype._convert =
+function(reqString, context){
    	var callback = new AjxCallback(this, this._handleConvert, [ context ]);
 	this._makeCall(reqString, context, callback,context[3]);
 };
 
-Com_Zimbra_YCurrency.prototype.menuItemSelected = function(itemId, label, spanElement, contentObjText, canvas) {
+/**
+ * Called when zimlet menu item is selected.
+ * 
+ */
+Com_Zimbra_YCurrency.prototype.menuItemSelected =
+function(itemId, label, spanElement, contentObjText, canvas) {
 	switch (itemId) {
-	    case "SETTINGS":
-		this.createPropertyEditor();
-		break;
-		case "CONVERT":
-        var q = this._actionObject;
-        if(q){
-            _sym = q.replace(/(\d+(,\d+)*[.]?\d*)/ig,"");
-            if(_sym){
-                _sym = _sym.trim();
-                _amt = q.replace(_sym,"").trim();
-                _cc = this.currencies.getCurrency(_sym);
-                q = _amt + " " + _cc + " = ?";
-            }
-        }
-        this._showConvert(q);
-		break;
-        case "GOTOYF":
-        window.open(this.yfnURL);
-        break;
+	    case Com_Zimbra_YCurrency.MENU_ITEM_ID_PREFERENCES:
+			this.createPropertyEditor();
+			break;
+		case Com_Zimbra_YCurrency.MENU_ITEM_ID_CONVERT:
+	        var q = this._actionObject;
+	        if(q){
+	            _sym = q.replace(/(\d+(,\d+)*[.]?\d*)/ig,"");
+	            if(_sym){
+	                _sym = _sym.trim();
+	                _amt = q.replace(_sym,"").trim();
+	                _cc = this.currencies.getCurrency(_sym);
+	                q = _amt + " " + _cc + " = ?";
+	            }
+	        }
+	        this._showConvert(q);
+			break;
+        case Com_Zimbra_YCurrency.MENU_ITEM_ID_GOTO_YAHOO_FINANCE:
+	        window.open(this.yfnURL);
+	        break;
     }
 };
 Com_Zimbra_YCurrency.prototype._initSearchToolbar =
@@ -383,7 +442,7 @@ function(ev) {
               return;
            }
         }else{                                              
-            _m_context[5] = this.getUserProperty("home_currency"); // Convert to home currency
+            _m_context[5] = this.getUserProperty(Com_Zimbra_YCurrency.USER_PROP_HOME_CURRENCY); // Convert to home currency
         }
         if(_m_context[3].trim() == _m_context[5].trim()){ //From to same
             this.displayErrorMessage(_m_context[3]+" is your home currency. Enter currency you wanted to convert it to.");
@@ -405,7 +464,6 @@ function(_m_context, result){
         var val =(rates[0]*reqAmount).toFixed(4);
         this._searchBar.setSearchFieldValue(_m_context[1] + " " + _m_context[3] + " = " + val + " "+_m_context[5] +" @ "+rates[0]);
     }
-
 };
 
 Com_Zimbra_YCurrency.prototype.getValidExpression = function(string){
