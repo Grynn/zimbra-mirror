@@ -94,6 +94,21 @@ function (loc) {
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
 }
 
+ZaNewAccountXWizard.prototype.createDomainAndAccount = function(domainName) {
+	try {
+		var newDomain = new ZaDomain();
+		newDomain.name=domainName;
+		newDomain.attrs[ZaDomain.A_domainName] = domainName;
+		var domain = ZaItem.create(newDomain,ZaDomain,"ZaDomain");
+		if(domain != null) {
+			ZaApp.getInstance().getCurrentController().closeCnfrmDelDlg();
+			this.finishWizard();
+		}
+	} catch(ex) {
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaNewAccountXWizard.prototype.createDomainAndAccount", null, false);	
+	}
+}
+
 ZaNewAccountXWizard.prototype.finishWizard = 
 function() {
 	try {
@@ -116,6 +131,12 @@ function() {
 			case ZmCsfeException.ACCT_INVALID_PASSWORD:
 				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_INVALID, ex);
 				ZaApp.getInstance().getAppCtxt().getErrorDialog().showDetail(true);
+			break;
+			case ZmCsfeException.NO_SUCH_DOMAIN:
+				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].setMessage(AjxMessageFormat.format(ZaMsg.CreateDomain_q,[ZaAccount.getDomain(this._containedObject.name)]), DwtMessageDialog.WARNING_STYLE);
+				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.createDomainAndAccount, this, [ZaAccount.getDomain(this._containedObject.name)]);		
+				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, ZaController.prototype.closeCnfrmDelDlg, ZaApp.getInstance().getCurrentController(), null);				
+				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].popup();  				
 			break;
 			default:
 				ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaNewAccountXWizard.prototype.finishWizard", null, false);
