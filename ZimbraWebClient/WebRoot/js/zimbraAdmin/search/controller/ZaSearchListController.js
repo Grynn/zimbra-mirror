@@ -551,6 +551,9 @@ function () {
 					}
 				}
 			} else if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.RESOURCE))  {
+			   	if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+					this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+				}				
 				if(!item.targetObj)
 					item.targetObj = item.getAliasTargetObj() ;
 					
@@ -586,6 +589,9 @@ function () {
 					}
 				}
 			} else if(item.type == ZaItem.RESOURCE) {
+			   	if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+					this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+				}
 				var enable = false;
 				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
 					enable = true;
