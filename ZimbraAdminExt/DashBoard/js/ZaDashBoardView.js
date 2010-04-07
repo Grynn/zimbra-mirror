@@ -372,9 +372,7 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
 			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_LDAP+"status",1]]
 			    	          },
-			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
-			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_LDAP+"status",1]]
-			        	      }
+			    	          {type:_CELLSPACER_}
 			    	    ]
 			       },
 			       {type:_GROUP_,numCols:5,colSizes:["auto","auto","auto","auto","auto"],
@@ -382,12 +380,10 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]},
 			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]},
 			    	          {type:_OUTPUT_, value:ZaStatus.SVC_MAILBOX},                            
-			    	          {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
-			    	        	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]
-			    	          },
-			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Start,enableDisableChecks:[],
-			        	       	  visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]
-			        	      }
+			        	      {type:_DWT_BUTTON_, label:com_zimbra_dashboard.Stop,enableDisableChecks:[],
+			        	       	  visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]
+			        	      },
+			        	      {type:_CELLSPACER_}
 			    	    ]
 			       },	
 			       {type:_GROUP_,numCols:5,colSizes:["auto","auto","auto","auto","auto"],
