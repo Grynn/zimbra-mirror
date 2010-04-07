@@ -13,11 +13,11 @@
  * ***** END LICENSE BLOCK *****
  */
 
-//////////////////////////////////////////////////////////////////////////////
-// Helps organize contacts by allowing action on multiple contacts
-// @author Zimlet author: RAJA RAO DV (rrao@zimbra.com)
-//////////////////////////////////////////////////////////////////////////////
-
+/**
+ * Helps organize contacts by allowing action on multiple contacts
+ * 
+ * @author RAJA RAO DV (rrao@zimbra.com)
+ */
 function Com_Zimbra_contactOrganizer() {
 }
 
