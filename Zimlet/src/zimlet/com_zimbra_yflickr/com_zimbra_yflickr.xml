@@ -1,22 +1,22 @@
-<zimlet name="com_zimbra_yflickr" version="0.1" description="Flickr">
+<zimlet name="com_zimbra_yflickr" version="0.2" label="Flickr" description="Flickr">
 	<include>com_zimbra_yflickr.js</include>
     <include>photoset.js</include>
     <include>flickr.js</include>
 	<includeCSS>com_zimbra_yflickr.css</includeCSS>
 	<handlerObject>Com_Zimbra_Yflickr</handlerObject>
 
-<zimletPanelItem label="Flickr" icon="FLICKR-panelIcon">
-    <toolTipText>Quick link to Flickr.</toolTipText>
-    <contextMenu>
-    <menuItem label="Authorize" id="YflickrAuthorize" icon="AUTHORIZE-panelIcon" />
-    <menuItem label="Credits" id="YflickrCredits" icon="CREDITS-panelIcon"/>
-    <menuItem label="About" id="YflickrAbout" icon="ABOUT-panelIcon" />
-    <menuItem />
-    <menuItem label="Visit Flickr" id="WWW.FLICKR.COM" icon="FLICKR-panelIcon">
-	    <canvas type="window" title="Flickr Website" width="800" height="600" />
-    	<actionUrl target="http://www.flickr.com" />
-    </menuItem>
-    </contextMenu>
-</zimletPanelItem>
+	<zimletPanelItem label="Flickr" icon="FLICKR-panelIcon">
+    	<toolTipText>Quick link to Flickr.</toolTipText>
+    	<contextMenu>
+			<menuItem label="Authorize" id="YflickrAuthorize" icon="AUTHORIZE-panelIcon" />
+			<menuItem label="Credits" id="YflickrCredits" icon="CREDITS-panelIcon"/>
+			<menuItem label="About" id="YflickrAbout" icon="ABOUT-panelIcon" />
+			<menuItem />
+			<menuItem label="Visit Flickr" id="WWW.FLICKR.COM" icon="FLICKR-panelIcon">
+				<canvas type="window" title="Flickr Website" width="800" height="600" />
+				<actionUrl target="http://www.flickr.com" />
+    		</menuItem>
+    	</contextMenu>
+	</zimletPanelItem>
 
 </zimlet>

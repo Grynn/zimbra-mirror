@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_yflickr" version="0.1">
+<zimletConfig name="com_zimbra_yflickr" version="0.2">
     <global>
         <property name="allowedDomains">*.flickr.com</property>
     </global>
