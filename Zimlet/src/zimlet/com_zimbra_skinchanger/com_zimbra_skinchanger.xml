@@ -1,9 +1,8 @@
-<zimlet name="com_zimbra_skinchanger" version="1.1" description="Automatically changes skin based on day of the week.">
+<zimlet name="com_zimbra_skinchanger" version="1.2" label="Skin Changer" description="Automatically changes skin based on day of the week.">
 	<include>skinchanger.js</include>
 	<includeCSS>skinchanger.css</includeCSS>
 	<resource>skinchanger-icon.gif</resource>
 	<handlerObject>com_zimbra_skinchanger</handlerObject>
-
 	<zimletPanelItem label="Skin Changer" icon="skinchanger-panelIcon">
 		<toolTipText>Automatically changes skin based on day of the week.</toolTipText>
 	</zimletPanelItem>

@@ -13,12 +13,10 @@
  * ***** END LICENSE BLOCK *****
  */
 
-//////////////////////////////////////////////////////////////////////////////
-// This zimlet checks for x-mailer which contains name of the email-client that was used to 
-//send the email and displays that information when the mail is opened
-// @author Zimlet author: Raja Rao DV(rrao@zimbra.com)
-//////////////////////////////////////////////////////////////////////////////
-
+/**
+ * Constructor.
+ * 
+ */
 function com_zimbra_skinpreviewer() {
 }
 

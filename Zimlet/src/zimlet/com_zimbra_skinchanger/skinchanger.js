@@ -13,27 +13,36 @@
  * ***** END LICENSE BLOCK *****
  */
 
-//////////////////////////////////////////////////////////////////////////////
-// This zimlet checks for x-mailer which contains name of the email-client that was used to
-//send the email and displays that information when the mail is opened
-// @author Zimlet author: Raja Rao DV(rrao@zimbra.com)
-//////////////////////////////////////////////////////////////////////////////
-
+/**
+ * Constructor.
+ */
 function com_zimbra_skinchanger() {
 }
 
 com_zimbra_skinchanger.prototype = new ZmZimletBase();
 com_zimbra_skinchanger.prototype.constructor = com_zimbra_skinchanger;
 
+/**
+ * Defines the "enable zimlet" user property.
+ */
+com_zimbra_skinchanger.USER_PROP_ENABLE_ZIMLET = "turnONSkinChangerZimletNew";
+/**
+ * Defines the "frequency" user property.
+ */
+com_zimbra_skinchanger.USER_PROP_FREQUENCY = "skinc_selectedFreq";
+/**
+ * Defines the "changed date" user property.
+ */
+com_zimbra_skinchanger.USER_PROP_CHANGED_DATE = "skinc_skinWasChangedOnDate";
+
 com_zimbra_skinchanger.prototype.init =
 function() {
-	this.turnONSkinChangerZimletNew = this.getUserProperty("turnONSkinChangerZimletNew") == "true";
+	this.turnONSkinChangerZimletNew = this.getUserProperty(com_zimbra_skinchanger.USER_PROP_ENABLE_ZIMLET) == "true";
 	if(!this.turnONSkinChangerZimletNew)
 		return;
 
-	this.skinc_selectedFreq = this.getUserProperty("skinc_selectedFreq");
-	this.skinc_skinWasChangedOnDate = this.getUserProperty("skinc_skinWasChangedOnDate");
-
+	this.skinc_selectedFreq = this.getUserProperty(com_zimbra_skinchanger.USER_PROP_FREQUENCY);
+	this.skinc_skinWasChangedOnDate = this.getUserProperty(com_zimbra_skinchanger.USER_PROP_CHANGED_DATE);
 
 	var weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 	this._day = weekdays[new Date().getDay()];
@@ -87,9 +96,8 @@ function() {
 };
 com_zimbra_skinchanger.prototype._handleSkinChangeResponse =
 function() {
-	this.setUserProperty("skinc_skinWasChangedOnDate", this._formatChangedOnDate(), true);
+	this.setUserProperty(com_zimbra_skinchanger.USER_PROP_CHANGED_DATE, this._formatChangedOnDate(), true);
 };
-
 
 com_zimbra_skinchanger.prototype.doubleClicked = function() {
 	this.singleClicked();
@@ -109,11 +117,18 @@ function() {
 	this.pView = new DwtComposite(this.getShell());
 	this.pView.getHtmlElement().innerHTML = this.createPrefView();
 
-	if (this.getUserProperty("turnONSkinChangerZimletNew") == "true") {
+	if (this.getUserProperty(com_zimbra_skinchanger.USER_PROP_ENABLE_ZIMLET) == "true") {
 		document.getElementById("turnONSkinChangerZimletNew_chkbx").checked = true;
 	}
 
-	this.pbDialog = this._createDialog({title:"'Skin Changer' Zimlet Preferences", view:this.pView, standardButtons:[DwtDialog.OK_BUTTON]});
+	var dialog_args = {
+			title	: "'Skin Changer' Zimlet Preferences",
+			view 	: this.pView,
+			parent	: this.getShell(),
+			standardButtons : [DwtDialog.OK_BUTTON]
+		};
+	
+	this.pbDialog = new ZmDialog(dialog_args);
 	this.pbDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListner));
 	this._updateSelectedItem();
 	this.pbDialog.popup();
@@ -169,15 +184,15 @@ function() {
 		if (!this.turnONSkinChangerZimletNew) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("turnONSkinChangerZimletNew", "true", true);
+		this.setUserProperty(com_zimbra_skinchanger.USER_PROP_ENABLE_ZIMLET, "true", true);
 	} else {
-		this.setUserProperty("turnONSkinChangerZimletNew", "false", true);
+		this.setUserProperty(com_zimbra_skinchanger.USER_PROP_ENABLE_ZIMLET, "false", true);
 		if (this.turnONSkinChangerZimletNew)
 			this._reloadRequired = true;
 	}
 	var lst = document.getElementById("skinc_availSkinList");
 	if (lst.value != this.skinc_selectedFreq) {
-		this.setUserProperty("skinc_selectedFreq", lst.value, true);
+		this.setUserProperty(com_zimbra_skinchanger.USER_PROP_FREQUENCY, lst.value, true);
 		this._reloadRequired = true;
 	}
 
