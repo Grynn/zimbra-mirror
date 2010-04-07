@@ -30,6 +30,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element.XMLElement;
 import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AttributeManager;
 import com.zimbra.cs.account.Entry;
@@ -183,10 +184,13 @@ public class DirectorySync {
             ZMailbox zmbx = prov.newZMailbox((OfflineAccount)acct, AccountConstants.USER_SERVICE_URI);
             syncAccount(prov, acct, zmbx);
             pushAccount(prov, acct, zmbx);
-            if (((OfflineAccount)acct).getRemoteServerVersion().isAtLeast6xx())
+            if (((OfflineAccount)acct).getRemoteServerVersion().isAtLeast6xx()) {
                 syncFilterRules(prov, acct, zmbx);
-            else
+                syncWhiteBlackList(prov, acct, zmbx);
+            }
+            else {
                 syncRules5xx(prov, acct, zmbx);
+            }
 
             // FIXME: there's a race condition here, as <tt>acct</tt> may have been modified during the push
             prov.markAccountClean(acct);
@@ -194,6 +198,59 @@ public class DirectorySync {
         } catch (Exception e) {
             OfflineSyncManager.getInstance().processSyncException(acct, e, false);
             return false;
+        }
+    }
+
+    private void syncWhiteBlackList(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
+        Set<String> modified = acct.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
+        if (modified.contains(Provisioning.A_amavisWhitelistSender)
+                || modified.contains(Provisioning.A_amavisBlacklistSender)) {
+            Element req = zmbx.newRequestElement(AccountConstants.MODIFY_WHITE_BLACK_LIST_REQUEST);
+            if (modified.contains(Provisioning.A_amavisWhitelistSender)) {
+                String[] addrs = acct.getMultiAttr(Provisioning.A_amavisWhitelistSender);
+                addAddrs(req, AccountConstants.E_WHITE_LIST, addrs);
+            }
+            if (modified.contains(Provisioning.A_amavisBlacklistSender)) {
+                String[] addrs = acct.getMultiAttr(Provisioning.A_amavisBlacklistSender);
+                addAddrs(req, AccountConstants.E_BLACK_LIST, addrs);
+            }
+            zmbx.invoke(req);
+            OfflineLog.offline.debug("dsync: pushed white/blacklisted senders: %s", acct.getName());
+        } else {
+            Element req = zmbx.newRequestElement(AccountConstants.GET_WHITE_BLACK_LIST_REQUEST);
+            Element resp = zmbx.invoke(req);
+            HashMap<String, Object> attrs = new HashMap<String, Object>();
+            readAddrs(resp.getOptionalElement(AccountConstants.E_WHITE_LIST),
+                      Provisioning.A_amavisWhitelistSender,
+                      attrs);
+            readAddrs(resp.getOptionalElement(AccountConstants.E_BLACK_LIST),
+                      Provisioning.A_amavisBlacklistSender,
+                      attrs);
+            acct.modify(attrs);
+            OfflineLog.offline.debug("dsync: pulled white/blacklisted senders: %s", acct.getName());
+        }
+    }
+
+    private static void addAddrs(Element req, String list, String[] addrs) {
+        Element eList = req.addElement(list);
+
+        for (String addr : addrs)
+            eList.addElement(AccountConstants.E_ADDR).setText(addr);
+    }
+
+    private static void readAddrs(Element eList, String attrName, HashMap<String, Object> attrs) {
+        if (eList == null)
+            return;
+
+        // empty list, means delete all
+        if (eList.getOptionalElement(AccountConstants.E_ADDR) == null) {
+            StringUtil.addToMultiMap(attrs, attrName, "");
+            return;
+        }
+
+        for (Element eAddr : eList.listElements(AccountConstants.E_ADDR)) {
+            String value = eAddr.getText();
+            StringUtil.addToMultiMap(attrs, attrName, value);
         }
     }
 
