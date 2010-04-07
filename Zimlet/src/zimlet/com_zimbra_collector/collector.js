@@ -13,13 +13,12 @@
  * ***** END LICENSE BLOCK *****
  */
 
-//////////////////////////////////////////////////////////////////////////////
-// Zimlet to collect addresses in messages
-// NOTE: This zimlet should be activated based on user's COS (Contacts app 
-//       should be enabled)
-// @author Zimlet author: Parag Shah.
-//////////////////////////////////////////////////////////////////////////////
-
+/**
+ * Zimlet to collect addresses in messages
+ * NOTE: This zimlet should be activated based on user's COS (Contacts app should be enabled)
+ * 
+ * @author Parag Shah.
+ */
 function Com_Zimbra_Collector() {
 }
 
