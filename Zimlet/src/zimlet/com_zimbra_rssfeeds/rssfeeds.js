@@ -138,10 +138,15 @@ function(postCallback) {
 	this._createFolder(params, postCallback);
 };
 
-com_zimbra_rssfeeds.prototype.singleClicked =
+com_zimbra_rssfeeds.prototype.doubleClicked =
 function() {		
-	this._initializeDlg();
+	this.singleClicked();
 };
+
+com_zimbra_rssfeeds.prototype.singleClicked =
+	function() {		
+		this._initializeDlg();
+	};
 
 com_zimbra_rssfeeds.prototype._createFolder =
 function(params) {
