@@ -12,8 +12,11 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-///  Dialog that can create a webex meeting
-///  @author Sam Khavari <sam@zimbra.com>
+
+/**
+ * Constructor.
+ * 
+ */
 function Com_Zimbra_WebEx_CreateMtgDlg() {
 }
 
@@ -27,8 +30,14 @@ Com_Zimbra_WebEx_CreateMtgDlg.prototype.displayDialog = function( webEx, objMtg 
 	Com_Zimbra_WebEx_CreateMtgDlg.objMtg = objMtg;
 	this.webEx = webEx;
 	var view = new DwtComposite(webEx.getShell());
-	var dialog_args = {view  : view, title : "Create WebEx Meeting" };
-	var dlg = webEx._createDialog(dialog_args);
+	
+	var dialog_args = {
+			view  : view,
+			parent : webEx.getShell(),
+			title : "Create WebEx Meeting"
+		};
+	var dlg = new ZmDialog(dialog_args);
+	
 	dlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(webEx, Com_Zimbra_WebEx_CreateMtgDlg.StartCreateMtg));
 	dlg.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(webEx, function() {dlg.popdown(); dlg.dispose(); }));
 	Com_Zimbra_WebEx_CreateMtgDlg.dlg = dlg;

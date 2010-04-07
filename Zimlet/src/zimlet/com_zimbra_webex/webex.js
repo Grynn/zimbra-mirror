@@ -12,22 +12,35 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
- ///  Zimlet to handle integration with WebEx
-///  @author Sam Khavari <sam@zimbra.com>
+
+/**
+ * Constructor.
+ * 
+ */
 function Com_Zimbra_WebEx() {
 }
 
 Com_Zimbra_WebEx.gInstance;
 
-/// Zimlet handler objects, such as Com_Zimbra_WebEx, must inherit from
-/// ZmZimletBase.  The 2 lines below achieve this.
 Com_Zimbra_WebEx.prototype = new ZmZimletBase();
 Com_Zimbra_WebEx.prototype.constructor = Com_Zimbra_WebEx;
+
+Com_Zimbra_WebEx.USER_PROP_WEBEX_USER = "WebExUser";
+Com_Zimbra_WebEx.USER_PROP_WEBEX_PASSWORD = "WebExPass";
+Com_Zimbra_WebEx.USER_PROP_WEBEX_ID = "WebExId";
+Com_Zimbra_WebEx.USER_PROP_WEBEX_MAX_MEETINGS = "WebExMax";
+
+/**
+ * Initializes the zimlet.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.init = function() {
 	Com_Zimbra_WebEx.gInstance = this;
 };
 
-//// schedule a new meeting
+/**
+ * Schedule a new meeting.
+ */
 Com_Zimbra_WebEx.prototype.scheduleMeeting = function() {
 	this.doScheduleMtgDlg( this.newMtgObject() );
 }
@@ -37,20 +50,29 @@ Com_Zimbra_WebEx.prototype.doScheduleMtgDlg = function( objMtg ) {
 	dlg.displayDialog( this, objMtg );
 }
 
-//// list upcoming meetings
+/**
+ * List up-coming meetings.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.listMeeting = function() {
     this.setBusyIcon();
     var request = this.newLstSummaryMeetingRequest();
 	AjxRpc.invoke(request, this.postUri(), {"Content-Type":"text/xml"}, new AjxCallback(this, this.onListMeetingRpcComplete), false, false);
 }
 
+/**
+ * Shows the message.
+ * 
+ */
 Com_Zimbra_WebEx.ShowMessage = function( msg, style ) {
 	var dlg = appCtxt.getMsgDialog();
 	dlg.setMessage( msg, style );
 	dlg.popup();
 }
 
-//// display the meetings in the meeting dialog box
+/**
+ * Display the meetings in the meeting dialog box.
+ */
 Com_Zimbra_WebEx.prototype.onListMeetingRpcComplete = function(result) {
     this.resetIcon();
     var objResult = this.xmlToObject(result);
@@ -69,8 +91,14 @@ Com_Zimbra_WebEx.prototype.onListMeetingRpcComplete = function(result) {
 	
 	//// if we didn't get a valid response object, yeah, later.
 	var view = new DwtComposite(this.getShell());
-	var dialog_args = {view  : view, title : "WebEx Meetings" };
-	var dlg = this._createDialog(dialog_args);
+	var dialog_args = {
+			view  : view,
+			parent	: this.getShell(),
+			title : "WebEx Meetings"
+		};
+	
+	var dlg = new ZmDialog(dialog_args);
+	
 	dlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, function() { dlg.popdown(); dlg.dispose();}));
 	dlg.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, function() {dlg.popdown(); dlg.dispose(); }));
     var el = view.getHtmlElement();
@@ -100,7 +128,10 @@ Com_Zimbra_WebEx.prototype.onListMeetingRpcComplete = function(result) {
 	dlg.popup();
 }
 
-///convert the webex meeting summary item to a row in the meeting summary table
+/**
+ * Convert the webex meeting summary item to a row in the meeting summary table.
+ * 
+ */
 Com_Zimbra_WebEx.meetingToRow = function( mtg ) {
 
 	var style = "wx_mtglist";
@@ -118,14 +149,17 @@ Com_Zimbra_WebEx.meetingToRow = function( mtg ) {
 }
 
 
-//this kicks off the 'host/join a meeting' process.  makes a request to get the login url
+/**
+ * Launches the 'host/join a meeting' process.  makes a request to get the login url.
+ * 
+ */
 Com_Zimbra_WebEx.Launch = function( meetingKey, hostWebExID ) {
 	
 	var gInstance = Com_Zimbra_WebEx.gInstance;
 	
 	//build the correct request, join or host?
 	var request = gInstance.newGetHostUrlMeetingRequest( meetingKey );
-	var userId = gInstance.getUserProperty("WebExUser");
+	var userId = gInstance.getUserProperty(Com_Zimbra_WebEx.USER_PROP_WEBEX_USER);
 	if( hostWebExID != userId ) {
 		var attendeeName = appCtxt.get(ZmSetting.DISPLAY_NAME);
 		if( !attendeeName ) { 
@@ -144,8 +178,10 @@ Com_Zimbra_WebEx.Launch = function( meetingKey, hostWebExID ) {
 		false);
 }
 
-
-//get the response of a get[join|host]UrlMeeting request and launches the url in a new browser
+/**
+ * Gets the response of a get[join|host]UrlMeeting request and launches the url in a new browser.
+ *
+ */
 Com_Zimbra_WebEx.OnLaunchComplete = function(result) {
 	var objResult = Com_Zimbra_WebEx.gInstance.xmlToObject(result);
 	if( objResult != null && objResult.body != null && objResult.body.bodyContent != null ) {
@@ -158,12 +194,15 @@ Com_Zimbra_WebEx.OnLaunchComplete = function(result) {
 	}
 }
 
-///  if zimlet not configured diplay the configuration UI
+/**
+ * If zimlet not configured diplay the configuration UI.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.ensureConfigured = function() {
-    var wuser = this.getUserProperty("WebExUser");
-    var wpass = this.getUserProperty("WebExPass");
-    var wid   = this.getUserProperty("WebExId");
-    var wmax  = this.getUserProperty("WebExMax");
+    var wuser = this.getUserProperty(Com_Zimbra_WebEx.USER_PROP_WEBEX_USER);
+    var wpass = this.getUserProperty(Com_Zimbra_WebEx.USER_PROP_WEBEX_PASSWORD);
+    var wid   = this.getUserProperty(Com_Zimbra_WebEx.USER_PROP_WEBEX_ID);
+    var wmax  = this.getUserProperty(Com_Zimbra_WebEx.USER_PROP_WEBEX_MAX_MEETINGS);
     
     if( !wuser || !wpass || !wid || !wmax) {
 		this.displayStatusMessage("WebEx configuration required.");
@@ -171,14 +210,20 @@ Com_Zimbra_WebEx.prototype.ensureConfigured = function() {
 	}
 }
 
-///the uri to post all webex xml requests to
+/**
+ * The uri to post all webex xml requests to.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.postUri = function() {
 	return ZmZimletBase.PROXY + 
-		AjxStringUtil.urlComponentEncode("https://" + this.getUserProperty("WebExId") + ".webex.com/WBXService/XMLService");
+		AjxStringUtil.urlComponentEncode("https://" + this.getUserProperty(Com_Zimbra_WebEx.USER_PROP_WEBEX_ID) + ".webex.com/WBXService/XMLService");
 }
 
-//// Called by the Zimbra framework when a menu item is selected
-//// dispatch the call, ensuring the webex configuration is set
+/**
+ * Called by the Zimbra framework when a menu item is selected
+ * dispatch the call, ensuring the webex configuration is set.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.menuItemSelected = function(itemId) {
 
 	switch (itemId) {
@@ -196,9 +241,11 @@ Com_Zimbra_WebEx.prototype.menuItemSelected = function(itemId) {
 	}
 };
 
-
-/// when a contact or list of contacts is dropped on the zimlet,
-/// pop up the createMtg dialog with the contacts as attendees
+/**
+ * When a contact or list of contacts is dropped on the zimlet,
+ * pop up the createMtg dialog with the contacts as attendees.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.contactDropped = function(objContact) {
 	
 	var objMtg = this.newMtgObject();
@@ -218,10 +265,12 @@ Com_Zimbra_WebEx.prototype.contactDropped = function(objContact) {
 	
 	//display the createMtg dialog with the mtg defaults
 	this.doScheduleMtgDlg( objMtg );
-	
 }
 
-/// create an attendee from a zimbra contact object 
+/**
+ * Create an attendee from a zimbra contact object.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.ajxEmailAddressFromContact = function( objContact ) {
 	
 	var email = objContact.email;
@@ -236,8 +285,11 @@ Com_Zimbra_WebEx.prototype.ajxEmailAddressFromContact = function( objContact ) {
 	return AjxEmailAddress.parse( name + " " + email );
 }
 
-/// when an appt is dropped on the zimlet, pop up the createMtg dialog
-/// defaulting the params to the information matching the appt
+/**
+ * When an appt is dropped on the zimlet, pop up the createMtg dialog
+ * defaulting the params to the information matching the appt.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.apptDropped = function(objAppt) {
 	
 	var objMtg = this.newMtgObject();
@@ -268,8 +320,10 @@ Com_Zimbra_WebEx.prototype.apptDropped = function(objAppt) {
 	this.doScheduleMtgDlg( objMtg );
 }
 
-
-//// instantiate a new webex meeting object
+/**
+ * Instantiate a new webex meeting object.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.newMtgObject = function() {
 	var obj = new Object();
 	obj.password = "";
@@ -281,9 +335,10 @@ Com_Zimbra_WebEx.prototype.newMtgObject = function() {
 	return obj;
 }
 
-
-
-/// Called by the Zimbra framework upon an accepted drag'n'drop
+/**
+ * Called by the Zimbra framework upon an accepted drag'n'drop.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.doDrop = function(obj) {
 	switch (obj.TYPE) {
 	    case "ZmContact":
@@ -297,20 +352,16 @@ Com_Zimbra_WebEx.prototype.doDrop = function(obj) {
 	}
 };
 
+/*
+ * 
+ * Xml related helper functions
+ * 
+ */
 
-
-
-
-
-////
-////
-////  Xml related helper functions
-////
-////
-
-
-
-///convert the xml response to a javascript object
+/**
+ * Convert the xml response to a javascript object.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.xmlToObject = function(result) {
     var xd = null;
     try {
@@ -335,19 +386,25 @@ Com_Zimbra_WebEx.prototype.xmlToObject = function(result) {
     return xd;
 };
 
-//// return a string containing the xml for the security context header
+/**
+ * Returns a string containing the xml for the security context header.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.newSecurityContext = function() {
 	
 	return securityContext =
 		"<securityContext>" + 
-			"<webExID>"  + this.getUserProperty("WebExUser") + "</webExID>"  + 
-			"<password>" + this.getUserProperty("WebExPass") + "</password>" + 
-			"<siteName>" + this.getUserProperty("WebExId"  ) + "</siteName>" + 
+			"<webExID>"  + this.getUserProperty(Com_Zimbra_WebEx.USER_PROP_WEBEX_USER) + "</webExID>"  + 
+			"<password>" + this.getUserProperty(Com_Zimbra_WebEx.USER_PROP_WEBEX_PASSWORD) + "</password>" + 
+			"<siteName>" + this.getUserProperty(Com_Zimbra_WebEx.USER_PROP_WEBEX_ID) + "</siteName>" + 
 		"</securityContext>";
 }
 
-//// return an AjxXmlDoc containt the webex request with the given body
-//// appends the security context header
+/**
+ * Return an AjxXmlDoc containt the webex request with the given body
+ * appends the security context header.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.newWebExRequest = function( requestBody ) {
 	
 	return requestXmlStr =
@@ -360,11 +417,12 @@ Com_Zimbra_WebEx.prototype.newWebExRequest = function( requestBody ) {
 		"</serv:message>";
 }
 
-
-//// return an AjxXmlDoc containing a LstSummaryMeeting request
+/**
+ * Returns an AjxXmlDoc containing a LstSummaryMeeting request.
+ */
 Com_Zimbra_WebEx.prototype.newLstSummaryMeetingRequest = function() {
 
-	var max = this.getUserProperty("WebExMax");
+	var max = this.getUserProperty(Com_Zimbra_WebEx.USER_PROP_WEBEX_MAX_MEETINGS);
 
 	var requestBody = 
 		"<bodyContent xsi:type=\"java:com.webex.service.binding.meeting.LstsummaryMeeting\" " +
@@ -376,7 +434,10 @@ Com_Zimbra_WebEx.prototype.newLstSummaryMeetingRequest = function() {
 	return this.newWebExRequest( requestBody );
 }
 
-/// return an AjxXmlDoc containing a GethosturlMeeting request
+/**
+ * Return an AjxXmlDoc containing a GethosturlMeeting request.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.newGetHostUrlMeetingRequest = function( meetingKey ) {
 
 	var requestBody = 
@@ -387,7 +448,10 @@ Com_Zimbra_WebEx.prototype.newGetHostUrlMeetingRequest = function( meetingKey ) 
 	return this.newWebExRequest( requestBody );
 }
 
-/// return an AjxXmlDoc containing a GetjoinurlMeeting request
+/**
+ * Return an AjxXmlDoc containing a GetjoinurlMeeting request.
+ * 
+ */
 Com_Zimbra_WebEx.prototype.newGetJoinUrlMeetingRequest = function( meetingKey, attendeeName ) {
 
 	var requestBody = 
@@ -399,10 +463,11 @@ Com_Zimbra_WebEx.prototype.newGetJoinUrlMeetingRequest = function( meetingKey, a
 	return this.newWebExRequest( requestBody );
 }
 
-
-
-/// return an AjxXmlDoc containing a CreateMeeting request
-/// required: password, confName, agenda, attendees, startDate, duration
+/**
+ * Return an AjxXmlDoc containing a CreateMeeting request.
+ * 
+ * required: password, confName, agenda, attendees, startDate, duration
+ */
 Com_Zimbra_WebEx.prototype.newCreateMeetingRequest = function( mp ) {
 
 	var timeZoneID = mp.TimeZone;
@@ -445,9 +510,10 @@ Com_Zimbra_WebEx.prototype.newCreateMeetingRequest = function( mp ) {
 
 }
 
-
-
-///map the webex timezone identifiers to friendly strings
+/**
+ * Map the webex timezone identifiers to friendly strings.
+ * 
+ */
 Com_Zimbra_WebEx.TZMap = {
 	"0":"Dateline (Eniwetok)",
 	"1":"Samoa (Samoa)",

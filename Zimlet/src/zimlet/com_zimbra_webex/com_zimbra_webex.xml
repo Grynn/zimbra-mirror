@@ -1,29 +1,23 @@
-<zimlet name="com_zimbra_webex" version="0.3" description="Host, join and schedule WebEx Meetings.">
+<zimlet name="com_zimbra_webex" version="0.4" label="WebEx" description="Host, join and schedule WebEx Meetings.">
   <summary>Extend the Zimbra Web Client with WebEx integration</summary>
   <include>webex.js</include>
   <include>createMtgDlg.js</include>
   <includeCSS>webex.css</includeCSS>
   <handlerObject>Com_Zimbra_WebEx</handlerObject>
-  
-  
   <zimletPanelItem label="WebEx" icon="WEBEX-panelIcon">
     <toolTipText>Host, join and schedule WebEx Meetings.</toolTipText>
-    
     <dragSource type="ZmContact" />
     <dragSource type="ZmAppt" />
-
     <contextMenu>
       <menuItem icon="WEBEX-panelIcon" label="Schedule Meeting" id="SCHEDULE_MEETING" />
       <menuItem icon="WEBEX-panelIcon" label="List Meetings"    id="LIST_MEETINGS"	  />
       <menuItem icon="WEBEX-panelIcon" label="Preferences"      id="PREFERENCES" 	  />
     </contextMenu>
   </zimletPanelItem>
-
   <userProperties>
     <property type="string"   name="WebExUser" minLength="1" maxLength="64" label="WebEx Username" />
     <property type="password" name="WebExPass" minLength="1" maxLength="64" label="WebEx Password" />
     <property type="string"   name="WebExId"   minLength="1" maxLength="64" label="WebEx Company Id" />
     <property type="number"   name="WebExMax"                               label="Max # Of Meetings" />
   </userProperties>
-
 </zimlet>
