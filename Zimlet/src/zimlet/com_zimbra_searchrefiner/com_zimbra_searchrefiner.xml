@@ -1,8 +1,7 @@
-<zimlet name="com_zimbra_searchrefiner" version="0.7" description="Allows you to refine a current search.">
+<zimlet name="com_zimbra_searchrefiner" version="0.8" label="Search Refiner" description="Allows you to refine the current search.">
   <include>searchrefiner.js</include>
   <includeCSS>searchrefiner.css</includeCSS>
   <handlerObject>com_zimbra_searchrefiner</handlerObject>
-
   <zimletPanelItem label="Search Refiner" icon="sr-panelIcon">
     <toolTipText>Allows you to refine a current search.</toolTipText>
   </zimletPanelItem>
