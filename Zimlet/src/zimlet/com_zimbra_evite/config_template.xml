@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_evite" version="1.0">
+<zimletConfig name="com_zimbra_evite" version="1.1">
   <global>
     <property name="allowedDomains">*.evite.com</property>
     <property name="authUrl">http://www.evite.com/app/xml/evite/userAuth.do</property>

@@ -13,6 +13,9 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+ * Constructor.
+ */
 function Com_zimbra_evite() {
 }
 
@@ -21,6 +24,37 @@ Com_zimbra_evite.prototype.constructor = Com_zimbra_evite;
 
 Com_zimbra_evite.CALENDAR_VIEW = "appointment";
 
+/**
+ * Defines the "username" user property.
+ */
+Com_zimbra_evite.USER_PROP_USERNAME = "user";
+/**
+ * Defines the "password" user property.
+ */
+Com_zimbra_evite.USER_PROP_PASSWORD = "passwd";
+
+/**
+ * Defines the "auth URL" config property.
+ */
+Com_zimbra_evite.CONFIG_PROP_AUTH_URL = "authUrl";
+/**
+ * Defines the "my URL" config property.
+ */
+Com_zimbra_evite.CONFIG_PROP_MY_URL = "myUrl";
+
+/**
+ * Defines the "sync" menu item.
+ */
+Com_zimbra_evite.MENU_ITEM_ID_SYNC = "sync";
+/**
+ * Defines the "pref" menu item.
+ */
+Com_zimbra_evite.MENU_ITEM_ID_PREF = "pref";
+
+/**
+ * Initializes the zimlet.
+ * 
+ */
 Com_zimbra_evite.prototype.init =
 function() {
 	this.login(null, true);
@@ -31,8 +65,8 @@ function(callback, init) {
 	if (callback == null) {
 		callback = false;
 	}
-	var user = this.getUserProperty("user");
-	var passwd = this.getUserProperty("passwd");
+	var user = this.getUserProperty(Com_zimbra_evite.USER_PROP_USERNAME);
+	var passwd = this.getUserProperty(Com_zimbra_evite.USER_PROP_PASSWORD);
 	if (user && passwd) {
 		this.listFolders();
 		this.eviteAuth(user, passwd, callback, init);
@@ -44,15 +78,20 @@ function(callback, init) {
 Com_zimbra_evite.prototype.menuItemSelected = 
 function(itemId) {
 	switch (itemId) {
-	    case "sync":
-		this.myEvite();
-		break;
-	    case "pref":
-		this.createPropertyEditor();
-		break;
+	    case Com_zimbra_evite.MENU_ITEM_ID_SYNC:
+	    	this.myEvite();
+	    	break;
+	    case Com_zimbra_evite.MENU_ITEM_ID_PREF:
+			this.createPropertyEditor();
+			break;
 	}
 };
 
+/**
+ * Generates a random number.
+ * 
+ * @return	{number}		a random number
+ */
 Com_zimbra_evite.prototype.getRandomNumber =
 function() {
 	return Math.round((Math.random()*1000)+1);
@@ -60,7 +99,7 @@ function() {
 
 Com_zimbra_evite.prototype.eviteAuth =
 function(user, passwd, callback, init) {
-	var authUrl = this.getConfig('authUrl')+'?email='+user+'&pass='+passwd+'&src=zimbra&rndm='+this.getRandomNumber();
+	var authUrl = this.getConfig(Com_zimbra_evite.CONFIG_PROP_AUTH_URL)+'?email='+user+'&pass='+passwd+'&src=zimbra&rndm='+this.getRandomNumber();
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(authUrl);
 	AjxRpc.invoke(null, url, null, new AjxCallback(this, this.authCallback, [ init, callback ]), true);
 };
@@ -71,7 +110,7 @@ function() {
 		this.login(new AjxCallback(this, this.myEvite), false);
 		return;
 	}
-	var myUrl = this.getConfig('myUrl')+'?userID='+this.userID+'&src=zimbra&rndm='+this.getRandomNumber();
+	var myUrl = this.getConfig(Com_zimbra_evite.CONFIG_PROP_MY_URL)+'?userID='+this.userID+'&src=zimbra&rndm='+this.getRandomNumber();
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(myUrl);
 	AjxRpc.invoke(null, url, null, new AjxCallback(this, this.myCallback), true);
 };
@@ -271,12 +310,6 @@ function() {
 	return controller.getApptSummaries(params);
 };
 
-Com_zimbra_evite.prototype.buttonListener =
-function(ev) {
-	//document.createForm.submit();
-	this._dialog.popdown();
-};
-
 Com_zimbra_evite.prototype.doDrop =
 function(obj) {
 	if (obj.TYPE == "ZmAppt") {
@@ -309,3 +342,10 @@ function(obj) {
 		this._dialog.popup();
 	}
 };
+
+Com_zimbra_evite.prototype.buttonListener =
+function(ev) {
+	//document.createForm.submit();
+	this._dialog.popdown();
+};
+
