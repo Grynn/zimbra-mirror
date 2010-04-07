@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_discover" version="0.2" description="Discover new and interesting websites based on selected topics.">
+<zimlet name="com_zimbra_discover" version="0.3" label="Discover!" description="Discover new and interesting websites based on selected topics.">
   <include>discover.js</include>
   <includeCSS>discover.css</includeCSS>
   <handlerObject>com_zimbra_discover</handlerObject>

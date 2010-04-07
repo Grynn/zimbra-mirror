@@ -14,7 +14,9 @@
  *@Author Raja Rao DV
  */
 
-
+/**
+ * Constructor.
+ */
 function com_zimbra_discover() {
 }
 
