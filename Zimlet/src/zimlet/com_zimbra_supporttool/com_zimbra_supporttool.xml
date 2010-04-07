@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_supporttool" version="0.2" description="View, export, email or compare Zimbra account preferences and configuration.">
+<zimlet name="com_zimbra_supporttool" version="0.2" label="Zimbra Support Tool" description="View, export, email or compare Zimbra account preferences and configuration.">
   <include>com_zimbra_supporttool.js</include>
   <includeCSS>com_zimbra_supporttool.css</includeCSS>
   <handlerObject>com_zimbra_supporttool</handlerObject>
