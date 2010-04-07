@@ -1,9 +1,8 @@
-<zimlet name="com_zimbra_contactcleaner" version="1.2" description="Deletes and merges duplicate contacts in the address book.">
+<zimlet name="com_zimbra_contactcleaner" version="1.3" label="Contact Cleaner" description="Deletes and merges duplicate contacts in the address book.">
 	<include>contactcleaner.js</include>
 	<includeCSS>contactcleaner.css</includeCSS>
 	<resource>co.gif</resource>
 	<handlerObject>com_zimbra_contactcleaner</handlerObject>
-
 	<zimletPanelItem label="Contact Cleaner" icon="CC-panelIcon">
 		<toolTipText>Deletes and merges duplicate contacts in the address book.</toolTipText>
 	</zimletPanelItem>

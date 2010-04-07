@@ -13,31 +13,31 @@
  * ***** END LICENSE BLOCK *****
  */
 
-//////////////////////////////////////////////////////////////////////////////
-// Zimlet that scans and deletes duplicate contacts
-// @author Zimlet author: RAJA RAO DV
-//////////////////////////////////////////////////////////////////////////////
-
+/**
+ * Zimlet that scans and deletes duplicate contacts
+ * 
+ */
 function com_zimbra_contactcleaner() {
 }
-
 
 com_zimbra_contactcleaner.prototype = new ZmZimletBase();
 com_zimbra_contactcleaner.prototype.constructor = com_zimbra_contactcleaner;
 
-// Consts
 com_zimbra_contactcleaner.AddressBookOnlyMsg = "You can use this Zimlet from <b>within Address Book application</b> only";
 com_zimbra_contactcleaner.prototype.BEGIN_AT = 0;
 com_zimbra_contactcleaner.prototype.END_AT = 59;
 com_zimbra_contactcleaner.prototype.PROCESS_AT_ONCE = 60;
 
-//consider dblclick as singleClick
+/**
+ * Called on a double-click.
+ */
 com_zimbra_contactcleaner.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
 
-
-
+/**
+ * Called on a single-click.
+ */
 com_zimbra_contactcleaner.prototype.singleClicked =
 function() {
 
