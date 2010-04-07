@@ -13,8 +13,12 @@
  * ***** END LICENSE BLOCK *****
  */
 
+/**
+ * Constructor.
+ * 
+ */
 function WordPress(parent) {
-this.controller = parent;
+	this.controller = parent;
 }
 
 WordPress.prototype.constructor = WordPress;

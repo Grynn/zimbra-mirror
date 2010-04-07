@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_blog" version="1.0" description="Drag-and-drop items to post to a blog">
+<zimlet name="com_zimbra_blog" version="1.1" label="Blog" description="Drag-and-drop items to post to a blog.">
 	<include>wordpress.js</include>
 	<include>typepad.js</include>
 	<include>blog.js</include>
