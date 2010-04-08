@@ -110,7 +110,7 @@ PERL_LIBS 	:= \
 	Cache::FastMmap \
 	Device::SerialPort \
 	Date::Calc \
-	S/SB/SBECK/Date-Manip-5.54.tar.gz \
+	S/SB/SBECK/Date-Manip-5.56.tar.gz \
 	Date::Parse \
 	Time::HiRes \
 	Convert::ASN1 \
