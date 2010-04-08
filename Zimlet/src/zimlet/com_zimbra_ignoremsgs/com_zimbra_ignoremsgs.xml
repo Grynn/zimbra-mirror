@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_ignoremsgs" version="0.1" description="Allows you to ignore message threads.">
+<zimlet name="com_zimbra_ignoremsgs" version="0.2" label="Ignore Messages" description="Allows you to ignore message threads.">
   <include>ignoremsgs.js</include>
   <includeCSS>ignoremsgs.css</includeCSS>
   <handlerObject>com_zimbra_ignoremsgs</handlerObject>
