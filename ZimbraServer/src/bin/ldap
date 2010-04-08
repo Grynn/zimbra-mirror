@@ -85,6 +85,10 @@ status()
 }
 
 case "$1" in 
+	restart)
+		$0 stop
+		$0 start
+		;;
 	start)
 		start
 		;;
