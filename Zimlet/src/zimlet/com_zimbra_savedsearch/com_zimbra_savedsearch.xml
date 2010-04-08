@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_savedsearch" version="0.1" description="Automatically creates a Saved Search after repeated searches.">
+<zimlet name="com_zimbra_savedsearch" version="0.2" label="Saved Search" description="Automatically creates a Saved Search after repeated searches.">
   <include>savedsearch.js</include>
   <includeCSS>savedsearch.css</includeCSS>
   <handlerObject>com_zimbra_savedsearch</handlerObject>
