@@ -542,7 +542,9 @@
 	<target name="offline-refresh-war" depends="offline-war">
 		<antcall target="offline-server-stop" />
 		<delete dir="${jetty.home.dir}/webapps/service" />
-		<unzip src="${warfile}" dest="${jetty.home.dir}/webapps/service" />
+		<copy todir="${jetty.home.dir}/webapps/service">
+            <fileset dir="${dist.dir}/jetty/webapps/service" />
+        </copy>
 		<antcall target="offline-server-start" />
 	</target>
 
