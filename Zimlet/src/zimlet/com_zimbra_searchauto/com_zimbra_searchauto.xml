@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_searchauto" version="1.1" description="Enables search auto-complete based on search history.">
+<zimlet name="com_zimbra_searchauto" version="1.2" label="Search History" description="Enables search auto-complete based on search history.">
   <include>searchauto.js</include>
   <includeCSS>searchauto.css</includeCSS>
   <handlerObject>com_zimbra_searchauto</handlerObject>
