@@ -74,7 +74,7 @@ sub daemon {
 			background => 1,
 			setsid => 1,
 			max_requests => 1000,
-			max_servers => 2,
+			max_servers => 1, # Avoid caching in the ldap processes
 			host => 'localhost',
 			port => $main::port) || die $!;
 	};
