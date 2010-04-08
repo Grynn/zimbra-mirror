@@ -583,6 +583,7 @@ function(event) {
 		if (!event.time) {
 			event.finished = true;
 			keepChecking = false;
+			player.close();
 		}
 	}
 	return keepChecking;
