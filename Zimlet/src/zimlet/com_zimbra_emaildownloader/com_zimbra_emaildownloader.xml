@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_emaildownloader" version="0.1" description="Allows downloading a single email message.">
+<zimlet name="com_zimbra_emaildownloader" version="0.2" label="Email Downloader" description="Allows downloading a single email message.">
 	<include>emaildownloader.js</include>
 	<includeCSS>emaildownloader.css</includeCSS>
 	<resource>emaildownloader-icon.gif</resource>
