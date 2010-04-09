@@ -133,18 +133,18 @@ case "$1" in
   'kill')
     if [ -f /opt/zimbra/log/freshclam.pid ]; then
       cpid=`cat /opt/zimbra/log/freshclam.pid`
-      kill -TERM "$cpid" 2> /dev/null
+      kill -9 "$cpid" 2> /dev/null
     fi
     if [ -f /opt/zimbra/log/clamd.pid ]; then
       cpid=`cat /opt/zimbra/log/clamd.pid`
-      kill -TERM "$cpid" 2> /dev/null
+      kill -9 "$cpid" 2> /dev/null
     fi
     if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
-      killall -TERM freshclam
-      killall -TERM clamd
+      killall -9 freshclam
+      killall -9 clamd
     else
-      killall -TERM ${zimbra_home}/clamav/bin/freshclam
-      killall -TERM ${zimbra_home}/clamav/sbin/clamd
+      killall -9 ${zimbra_home}/clamav/bin/freshclam
+      killall -9 ${zimbra_home}/clamav/sbin/clamd
     fi
     exit 0
    ;;
@@ -156,7 +156,7 @@ case "$1" in
       echo "freshclam is not running.";
     else 
       if [ x"$fpid" != "x" ]; then  
-        kill -TERM "$fpid" 2> /dev/null
+        kill -9 "$fpid" 2> /dev/null
         if [ $? = 0 ]; then
           echo "done."
         else 
