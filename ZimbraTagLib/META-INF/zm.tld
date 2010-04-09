@@ -7082,6 +7082,12 @@
         <function-signature>void clearContactCache(com.zimbra.cs.taglib.bean.ZMailboxBean)</function-signature>
     </function>
 
+     <function>
+        <name>clearApptSummaryCache</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>void clearApptSummaryCache(com.zimbra.cs.taglib.bean.ZMailboxBean)</function-signature>
+    </function>
+
     <function>
         <name>hasShareMountPoint</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>

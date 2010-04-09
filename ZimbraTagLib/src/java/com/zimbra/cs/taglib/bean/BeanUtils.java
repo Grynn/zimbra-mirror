@@ -1108,6 +1108,10 @@ public class BeanUtils {
         mailbox.getMailbox().clearContactCache();
     }
 
+    public static void clearApptSummaryCache(ZMailboxBean mailbox) {
+        mailbox.getMailbox().clearApptSummaryCache();
+    }
+
     public static boolean hasShareMountPoint(ZMailboxBean mailbox, ZMessageBean message) {
         ZShare share = message.getShare();
         if (share == null) return false;
