@@ -48,7 +48,8 @@ static const char *AllowedEnv[] = {
     "LANG",
     "PATH",
     "LOGNAME",
-    "USER"
+    "USER",
+    "TZ"
 };
 
 extern char **environ;
