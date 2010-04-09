@@ -1,16 +1,14 @@
-<zimlet name="com_zimbra_evite" version="1.1" label="Evite" description="View and manage your Evite events.">
+<zimlet name="com_zimbra_evite" version="1.2" label="Evite" description="Syncs Evite events to Zimbra">
   <include>evite.js</include>
   <includeCSS>evite.css</includeCSS>
-  <handlerObject>Com_zimbra_evite</handlerObject>
-  <zimletPanelItem label="Evite" icon="Evite-panelIcon">
-    <toolTipText>View and manage your Evite events.</toolTipText>
-    <dragSource type="ZmMailMsg" />
-    <dragSource type="ZmAppt" />    
+  <handlerObject>Com_Zimbra_Evite_HandlerObject</handlerObject>
+  <zimletPanelItem label="${msg.EviteZimlet_label}" icon="Evite-panelIcon">
+    <toolTipText>${msg.EviteZimlet_panelTooltip}</toolTipText>
     <contextMenu>
-      <menuItem label="Sync with Evite" id="sync" />
-      <menuItem label="Preferences..." id="pref" />
+      <menuItem label="${msg.EviteZimlet_syncWithEvite}" id="sync" icon="Refresh"/>
+      <menuItem label="${msg.EviteZimlet_Preferences}" id="pref" icon="Preferences"/>
       <menuItem />
-      <menuItem label="My Evite" id="myevite" icon="Evite-panelIcon">
+      <menuItem label="${msg.EviteZimlet_MyEvite}" id="myevite" icon="Evite-panelIcon">
         <canvas type="window" width="800" height="600" />
         <actionUrl target="http://www.evite.com/pages/myevite/myEvite.jsp" />
       </menuItem>
