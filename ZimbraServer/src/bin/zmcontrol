@@ -94,7 +94,8 @@ my %DESC = (
 	"startup" => "Start services",
 	"stop" => "Stop services",
 	"shutdown" => "Stop services",
-	"maintenance" => "Toggle maintenance mode",
+  "restart" => "Restart services",
+	#"maintenance" => "Toggle maintenance mode",
 	"status" => "Display service status",
 );
 
@@ -103,7 +104,8 @@ my %COMMANDS = (
 	"startup" => \&doStartup,
 	"stop" => \&doShutdown,
 	"shutdown" => \&doShutdown,
-	"maintenance" => \&setMaintenanceMode,
+  "restart" => \&doRestart,
+	#"maintenance" => \&setMaintenanceMode,
 	"status" => \&doStatus,
 );
 
@@ -112,7 +114,8 @@ my %REMOTECOMMANDS = (
 	"startup" => "startup",
 	"stop" => "shutdown",
 	"shutdown" => "shutdown",
-	"maintenance" => "maintenance",
+  "restart" => "restart",
+	#"maintenance" => "maintenance",
 	"status" => "status",
 );
 
@@ -126,7 +129,7 @@ if ( ! $GlobalOpts{H} ) { $GlobalOpts{H} = $localHostName; chomp $GlobalOpts{H};
 if ( $GlobalOpts{h} ) { usage(); }
 if ( $GlobalOpts{v} ) { displayVersion(); exit 0;}
 
-# Commands: start, stop, maintenance and status
+# Commands: start, stop, restart and status
 my $command = $ARGV[0];
 
 unless (defined ($COMMANDS{$command})) {usage();}
@@ -212,6 +215,11 @@ sub doRewrite {
 	my $rc = 0xffff & system("/opt/zimbra/libexec/zmmtaconfig $rew > $zmcontrolLogfile 2>&1");
 	$rc = $rc >> 8;
 	return $rc;
+}
+
+sub doRestart {
+  &doShutdown;
+  &doStartup;
 }
 
 sub doStartup {
