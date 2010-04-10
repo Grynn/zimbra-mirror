@@ -89,7 +89,7 @@ function(callback, init) {
 /**
  * Called by Zimbra framework when a menu item was selected
  *
- * @param {String} itemId  id of the menuitem
+ * @param {string} itemId  id of the menuitem
  */
 EviteZimlet.prototype.menuItemSelected =
 function(itemId) {
@@ -143,7 +143,7 @@ function() {
 };
 
 /**
- * Helps finding xml element's child
+ *Finds XML element's child
  *
  * @param {XMLElement} elem xml element
  * @param {String} nodeName xml node name
@@ -155,7 +155,7 @@ function(elem, nodeName) {
 };
 
 /**
- * Helps finding xml element's sibling
+ * Finds XML element's sibling
  *
  * @param {XMLElement} elem xml element
  * @param {String} nodeName xml node name
@@ -173,11 +173,11 @@ function(elem, nodeName) {
 };
 
 /**
- * Authintication callback handler
+ * Authentication callback handler
  *
  * @param {boolean} init if <cod>true</code> it was originated from .init
  * @param {AjxCallback} callback a Callback function
- * @param {Object} result Authintication response object
+ * @param {Object} result Authentication response object
  */
 EviteZimlet.prototype._authCallbackHandler =
 function(init, callback, result) {
@@ -276,7 +276,7 @@ function() {
 EviteZimlet.prototype._createAppt =
 function(title, url, date, time) {
 	if (!this.userID || !this.eviteFolderID) {
-		appCtxt.getAppController().setStatusMsg(this.getMessage("EviteZimlet_NotInitiliazed"), ZmStatusView.LEVEL_CRITICAL);
+		appCtxt.getAppController().setStatusMsg(this.getMessage("EviteZimlet_NotInitialized"), ZmStatusView.LEVEL_CRITICAL);
 		return;
 	}
 	var soapDoc = AjxSoapDoc.create("CreateAppointmentRequest", "urn:zimbraMail");
