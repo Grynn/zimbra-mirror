@@ -26,8 +26,8 @@ use Zimbra::Mon::Zmstat;
 
 use vars qw(
     $VERSION $PID_FILE $DEFAULT_DEST $JMAP $JAVA $DEFAULT_TIMEOUT
-    $HAVE_GCORE $HAVE_PSTACK $HAVE_LSOF $LOG_FILE $ZMSTAT_CONF
-    $ZMDUMPENV $ZMPROV $ZMHOSTNAME
+    $HAVE_GCORE $HAVE_PSTACK $HAVE_LSOF $HAVE_DMESG $LOG_FILE $ZMSTAT_CONF
+    $ZMDUMPENV $ZMPROV $ZMHOSTNAME $SU $HAVE_NETSTAT
 );
 
 my $isMac = isMac();
@@ -55,10 +55,14 @@ $VERSION = 0.1;
 $HAVE_GCORE = has_cmd('gcore');
 $HAVE_PSTACK = has_cmd('pstack');
 $HAVE_LSOF = has_cmd('lsof');
+$HAVE_DMESG = has_cmd('dmesg');
+$HAVE_NETSTAT = has_cmd('netstat');
 $LOG_FILE = 'zmdiag.log';
 $ZMSTAT_CONF = '/opt/zimbra/conf/zmstat-chart.xml';
 $ZMDUMPENV = '/opt/zimbra/bin/zmdumpenv';
 $ZMPROV = '/opt/zimbra/bin/zmprov -l';
+$SU = "su - zimbra -c ";
+$SU = "su - zimbra -c -l " if (isMac());
 
 
 sub logmsg($) {
@@ -91,7 +95,7 @@ sub save_heap_info($$$$) {
 	my $dump_file;
 	if ($version eq '1.6') {
 		$histo_cmd = "$JMAP -histo:live $pid";
-		$dump_cmd  = "su - zimbra -c '$JMAP -dump:live,file=$destination/heapdump.live $pid'";
+		$dump_cmd  = "$SU '$JMAP -dump:live,file=$destination/heapdump.live $pid'";
 		$dump_file = "$destination/heapdump.live";
 	} elsif ($version eq '1.5') {
 		$histo_cmd = "$JMAP -histo $pid";
@@ -99,13 +103,13 @@ sub save_heap_info($$$$) {
 		$dump_file = "$destination/heap.bin";
 	}
     logmsg "Retrieving JVM heap histogram\n";
-    exec_with_timeout("su - zimbra -c '$histo_cmd' > heap.histo 2>&1", $timeout);
+    exec_with_timeout("$SU '$histo_cmd' > heap.histo 2>&1", $timeout);
     logmsg "Saving JVM heapdump\n";
     my $success = exec_with_timeout("$dump_cmd", $timeout);
     my $dumped = -f "$dump_file";
     if ((!$dumped || !$success) && $version eq '1.6') {
         logmsg "Failed to save heapdump, attempting forced dump\n";
-        exec_with_timeout("su - zimbra -c '$JMAP -F -dump:file=$destination/heapdump.snapshot $pid'", $timeout);
+        exec_with_timeout("$SU '$JMAP -F -dump:file=$destination/heapdump.snapshot $pid'", $timeout);
         $dumped = -f 'heapdump.snapshot';
     }
     $dumped && $success;
@@ -173,6 +177,7 @@ sub invoke_thread_dump($$) {
 
 sub collect_thread_stats($) {
     my $pid = shift;
+    return undef unless (-d "/proc");
     open(STATS, "cat /proc/$pid/task/*/stat |");
     my @stats = <STATS>;
     close STATS;
@@ -261,10 +266,10 @@ sub run() {
     logmsg "Java version: $JAVA_VERSION\n";
     
     logmsg "Saving output of zmdumpenv\n";
-    exec_with_timeout("su - zimbra -c '$ZMDUMPENV' > zmdumpenv.txt 2>&1", $timeout);
+    exec_with_timeout("$SU '$ZMDUMPENV' > zmdumpenv.txt 2>&1", $timeout);
     logmsg "Saving server configuration\n";
-    exec_with_timeout("su - zimbra -c '$ZMPROV gs $ZMHOSTNAME' > zmprov-gs.txt 2>&1", $timeout);
-    exec_with_timeout("su - zimbra -c '$ZMPROV gacf' > zmprov-gacf.txt 2>&1", $timeout);
+    exec_with_timeout("$SU '$ZMPROV gs $ZMHOSTNAME' > zmprov-gs.txt 2>&1", $timeout);
+    exec_with_timeout("$SU '$ZMPROV gacf' > zmprov-gacf.txt 2>&1", $timeout);
     system("cp /opt/zimbra/conf/localconfig.xml $destination/");
     system("cp /opt/zimbra/conf/my.cnf $destination/");
     
@@ -312,12 +317,27 @@ sub run() {
     } else {
         logmsg "'lsof' is not installed, will not check fd status\n";
     }
+
+    if ($HAVE_DMESG) {
+      logmsg "Saving output of DMESG\n";
+      qx(dmesg > dmesg.out 2>&1);
+    } else {
+      logmsg "'dmesg' is not installed, skipping check.\n";
+    }
+
+    if ($HAVE_NETSTAT) {
+      logmsg "Saving netstat statistics\n";
+      qx(netstat -s > netstat-s.out 2>&1);
+    } else {
+      logmsg "'netstat' is not installed, skipping check.\n";
+    }
+
     mkdir("$destination/logs");
     mkdir("$destination/stats");
     mkdir("$destination/ld.so.conf");
     if (! -f $ZMSTAT_CONF) {
         logmsg "Saving ZCS statistics chart config\n";
-        open(CONF, "su - zimbra -c 'zmstat-chart-config' |");
+        open(CONF, "$SU '/opt/zimbra/bin/zmstat-chart-config' |");
         open(CONF_OUT, ">stats/zmstat-chart.xml");
         while (<CONF>) {
             print CONF_OUT;
@@ -331,7 +351,7 @@ sub run() {
     my $today = strftime("%Y-%m-%d", localtime(time()));
     logmsg "Copying current ZCS logs\n";
     system("cp /opt/zimbra/log/audit.log /opt/zimbra/log/my*.log /opt/zimbra/log/mailbox.log /opt/zimbra/log/zmmailboxd.out /opt/zimbra/jetty/logs/access_log.$today /var/log/zimbra.log $destination/logs/");
-    system("cp /opt/zimbra/db/data/*.err $destination/logs/");
+    system("cp /opt/zimbra/db/data/*.err $destination/logs/ 2> /dev/null");
     logmsg "Copying today's ZCS statistics\n";
     system("cp /opt/zimbra/zmstat/*.csv $destination/stats/");
     
@@ -345,9 +365,20 @@ sub run() {
         chown $zuid, $zgid, "$destination/stats/$yesterday_stats_dir";
         system("cp /opt/zimbra/zmstat/$yesterday_stats_dir/* $destination/stats/$yesterday_stats_dir/");
     }
-    
-    logmsg "Copying ld.so configuration\n";
-    system("cp /etc/ld.so.conf /etc/ld.so.conf.d/* $destination/ld.so.conf/");
+
+    my $systemlogfile = "/var/log/messages";
+      $systemlogfile = "/var/log/system.log" if (isMac());
+    if (-f $systemlogfile) {
+      logmsg "Copying system log $systemlogfile\n";
+      system("cp $systemlogfile $destination/logs/");
+    }
+   
+    if (-f "/etc/ld.so.conf") { 
+      logmsg "Copying ld.so configuration\n";
+      system("cp /etc/ld.so.conf /etc/ld.so.conf.d/* $destination/ld.so.conf/");
+    } else {
+      logmsg "ld.so.conf not present...skipping copy.\n";
+    }
     
     my $dirname = `pwd`;
     chomp($dirname);
