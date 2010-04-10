@@ -347,7 +347,7 @@ function(parent) {
 	var resp = command.invoke({soapDoc: soapDoc});
 	var id = resp.Body.CreateFolderResponse.folder[0].id;
 	if (!id) {
-		throw new AjxException(this.getMessage("EviteZimlet_CannotCreateFolder")"Cannot create evite folder ", AjxException.INTERNAL_ERROR, "createEviteFolder");
+		throw new AjxException(this.getMessage("EviteZimlet_CannotCreateFolder"), AjxException.INTERNAL_ERROR, "createEviteFolder");
 	}
 	this.eviteFolderID = id;
 
