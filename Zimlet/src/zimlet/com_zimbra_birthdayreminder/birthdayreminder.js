@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Zimlets
  * Copyright (C) 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -16,7 +16,7 @@
 
 /**
  * Constructor.
- * 
+ *
  */
 function com_zimbra_birthdayreminder_HandlerObject() {
 }
@@ -25,23 +25,45 @@ com_zimbra_birthdayreminder_HandlerObject.prototype = new ZmZimletBase();
 com_zimbra_birthdayreminder_HandlerObject.prototype.constructor = com_zimbra_birthdayreminder_HandlerObject;
 
 /**
- * Defines the "calendar" view type.
+ * Simplify Zimlet handler name
  */
-com_zimbra_birthdayreminder_HandlerObject.VIEW_CALENDAR = "appointment";
-/**
- * Defines the "birthday reminders" folder name.
- */
-com_zimbra_birthdayreminder_HandlerObject.FOLDER_BIRTHDAY_REMINDERS = "Birthday Reminders";
-/**
- * Defines the "has folder" user property.
- */
-com_zimbra_birthdayreminder_HandlerObject.USER_PROP_HAS_FOLDER = "bReminder_hasFolder";
+var BirthDayReminderZimlet = com_zimbra_birthdayreminder_HandlerObject;
 
 /**
- * Gets the birthday reminder folder id.
+ * Defines the "calendar" view type.
  */
-com_zimbra_birthdayreminder_HandlerObject.prototype._getBirthdayReminderFolderId =
+BirthDayReminderZimlet.CALENDAR_VIEW = "appointment";
+
+
+/**
+ * Defines reminder type. ON_THE_DAY creates reminder on the birth day
+ */
+BirthDayReminderZimlet.REMINDER_TYPE_ON_THE_DAY= "ON_THE_DAY";
+
+/**
+ *  Defines reminder type. DAYS_BEFORE creates reminder x days before Birth day
+ */
+BirthDayReminderZimlet.REMINDER_TYPE_DAYS_BEFORE= "DAYS_BEFORE";
+
+/**
+ *  Defines reminder type. WEEKS_BEFORE creates reminder x days before Birth day
+ */
+BirthDayReminderZimlet.REMINDER_TYPE_WEEKS_BEFORE= "WEEKS_BEFORE";
+
+
+/**
+ *  Initialize
+ */
+BirthDayReminderZimlet.prototype.init =
 function() {
+	this.calendarName = this.getMessage("BirthdayReminder_CalendarName");
+};
+
+/**
+ * Sets the birthday reminder folder id.
+ */
+BirthDayReminderZimlet.prototype._setBirthdayReminderFolderId =
+function(postCallback) {
 	this._justCreatedCalendarFolder = false;
 	var soapDoc = AjxSoapDoc.create("GetFolderRequest", "urn:zimbraMail");
 	var folderNode = soapDoc.set("folder");
@@ -54,69 +76,160 @@ function() {
 	if (folders) {
 		for (var i = 0; i < folders.length; i++) {
 			var f = folders[i];
-			if (f && f.name == com_zimbra_birthdayreminder_HandlerObject.FOLDER_BIRTHDAY_REMINDERS && f.view == com_zimbra_birthdayreminder_HandlerObject.VIEW_CALENDAR) {
+			if (f && f.name == this.calendarName && f.view == BirthDayReminderZimlet.CALENDAR_VIEW) {
 				this.birthdayreminderFolderId = f.id;
+				if(postCallback) {
+					postCallback.run(this);
+				}
 				return;
 			}
 		}
 	}
-
 	//there is no such folder, so create one.
-	this._createBirthdayFolder();
+	var params = {color:3, name:this.calendarName, view:BirthDayReminderZimlet.CALENDAR_VIEW, l:"1", postCallback:postCallback};
+	this._createBirthdayCalendar(params);
+};
+
+
+/**
+ * Creates Calendar folder
+ *
+ * @param {hash} params A hash of parameters
+ * @param  {int} params.color  Id of folder color
+ * @param  {string} params.name  Calendar name
+ * @param  {string} params.view  View name Calendar|Mail etc
+ * @param  {int} params.l  Parent folder id
+ * @param  {AjxCallback} params.postcallback  A function that should be called upon successul AJAX call
+ */
+BirthDayReminderZimlet.prototype._createBirthdayCalendar =
+function(params) {
+	var jsonObj = {CreateFolderRequest:{_jsns:"urn:zimbraMail"}};
+	var folder = jsonObj.CreateFolderRequest.folder = {};
+	for (var i in params) {
+		if (i == "callback" || i == "errorCallback" || i == "postCallback") {
+			continue;
+		}
+
+		var value = params[i];
+		if (value) {
+			folder[i] = value;
+		}
+	}
+	var _createFldrCallback = new AjxCallback(this, this._createFldrCallback, params);
+	var _createFldrErrCallback = new AjxCallback(this, this._createFldrErrCallback, params);
+	return appCtxt.getAppController().sendRequest({jsonObj:jsonObj, asyncMode:true, errorCallback:_createFldrErrCallback, callback:_createFldrCallback});
 };
 
 /**
- * Creates the birthday folder.
- * 
+ *  Handles Create Folder Response on Success
+ *
+ * @param {hash} params A hash of parameters
+ * @param  {int} params.color  Id of folder color
+ * @param  {string} params.name  Calendar name
+ * @param  {string} params.view  View name Calendar|Mail etc
+ * @param  {int} params.l  Parent folder id
+ * @param {object} response Contains createFolderResponse object
  */
-com_zimbra_birthdayreminder_HandlerObject.prototype._createBirthdayFolder =
-function() {
-	var soapDoc = AjxSoapDoc.create("CreateFolderRequest", "urn:zimbraMail");
-	var folderNode = soapDoc.set("folder");
-	folderNode.setAttribute("name", com_zimbra_birthdayreminder_HandlerObject.FOLDER_BIRTHDAY_REMINDERS);
-	folderNode.setAttribute("l", appCtxt.getFolderTree().root.id);
-	folderNode.setAttribute("view", com_zimbra_birthdayreminder_HandlerObject.CALENDAR_VIEW);
-	var command = new ZmCsfeCommand();
-	var resp = command.invoke({soapDoc: soapDoc});
-	var id = resp.Body.CreateFolderResponse.folder[0].id;
-	if (!id) {
-		throw new AjxException("Cannot create 'Birthday Reminder' Calendar folder ", AjxException.INTERNAL_ERROR, "createBirthdayFolder");
+BirthDayReminderZimlet.prototype._createFldrCallback =
+function(params, response) {
+	if (params.name == this.calendarName) {
+		var transitions = [ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.FADE_OUT];
+		appCtxt.getAppController().setStatusMsg(this.getMessage("BirthdayReminder_BRCalendarCreated"), ZmStatusView.LEVEL_INFO, null, transitions);
+		this.birthdayreminderFolderId = response.getResponse().CreateFolderResponse.folder[0].id;
+		if (params.postCallback) {
+			params.postCallback.run(this);
+		}
+	} else {
+		var transitions = [ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.FADE_OUT];
+		appCtxt.getAppController().setStatusMsg(this.getMessage("BirthdayReminder_couldNotCreateCalendar"), ZmStatusView.LEVEL_WARNING, null, transitions);
 	}
-	this.birthdayreminderFolderId = id;
-	soapDoc = AjxSoapDoc.create("FolderActionRequest", "urn:zimbraMail");
-	var actionNode = soapDoc.set("action");
-	actionNode.setAttribute("op", "color");
-	actionNode.setAttribute("id", id);
-	actionNode.setAttribute("color", "3");
-	command = new ZmCsfeCommand();
-	resp = command.invoke({soapDoc: soapDoc});
-	this._justCreatedCalendarFolder = true;
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._create3Appts =
+/**
+ *  Handles Create Folder Response on Error
+ *
+ * @param {hash} params A hash of parameters
+ * @param  {int} params.color  Id of folder color
+ * @param  {string} params.name  Calendar name
+ * @param  {string} params.view  View name Calendar|Mail etc
+ * @param  {int} params.l  Parent folder id
+ * @param {object} ex Contains createFolderResponse object
+ */
+BirthDayReminderZimlet.prototype._createFldrErrCallback =
+function(params, ex) {
+	if (!params.url && !params.name) {
+		return false;
+	}
+	var msg;
+	if (params.name && (ex.code == ZmCsfeException.MAIL_ALREADY_EXISTS)) {
+		msg = AjxMessageFormat.format(ZmMsg.errorAlreadyExists, [params.name]);
+	} else if (params.url) {
+		var errorMsg = (ex.code == ZmCsfeException.SVC_RESOURCE_UNREACHABLE) ? ZmMsg.feedUnreachable : ZmMsg.feedInvalid;
+		msg = AjxMessageFormat.format(errorMsg, params.url);
+	}
+	var transitions = [ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.FADE_OUT];
+	appCtxt.getAppController().setStatusMsg(this.getMessage("BirthdayReminder_couldNotCreateCalendar"), ZmStatusView.LEVEL_WARNING, null, transitions);
+	if (msg) {
+		this._showErrorMsg(msg);
+		return true;
+	}
+	return false;
+};
+/**
+ *  Shows Error message dialog
+ * @param {String} msg  Error message string 
+ */
+BirthDayReminderZimlet.prototype._showErrorMsg =
+function(msg) {
+	var msgDialog = appCtxt.getMsgDialog();
+	msgDialog.reset();
+	msgDialog.setMessage(msg, DwtMessageDialog.CRITICAL_STYLE);
+	msgDialog.popup();
+};
+
+/**
+ * Creates 3 appointments(on the day, days before and weeks before  and  to remind you of Birthday
+ *
+ * @param {hash} obj a hash of parameters
+ * @param  {date} obj.b  Birthday date
+ * @param  {string} obj.email  Email address of  birthday boy/girl
+ * @param  {string} obj.chkbx_id  Id of the checkbox corresponding to the Birthday contact
+ * @param {int} currentCnt Birthday Contact number(used to show status)
+ * @param {int} total Total number of contacts for which Reminders will be created
+ */
+BirthDayReminderZimlet.prototype._create3Appts =
 function(obj, currentCnt, total) {
-	appCtxt.getAppController().setStatusMsg("Creating Reminder(" + currentCnt + " out of " + total + ")..", ZmStatusView.LEVEL_INFO);
+	var msg = this.getMessage("BirthdayReminder_CreatingReminderMsg").replace("{0}", currentCnt).replace("{1}", total);
+	appCtxt.getAppController().setStatusMsg(msg , ZmStatusView.LEVEL_INFO);
 	var chkbx = document.getElementById(obj.chkbx_id);
 	if (!chkbx.checked)
 		return;
 
 	if (document.getElementById("breminder_onTheDayChk").checked) {
-		this._createVariousAppts(obj, "ON_THE_DAY");
+		this._createVariousAppts(obj, BirthDayReminderZimlet.REMINDER_TYPE_ON_THE_DAY);
 	}
 
 	if (document.getElementById("breminder_daysChk").checked) {
-		this._createVariousAppts(obj, "DAYS_BEFORE");
+		this._createVariousAppts(obj, BirthDayReminderZimlet.REMINDER_TYPE_DAYS_BEFORE);
 	}
 	if (document.getElementById("breminder_weeksChk").checked) {
-		this._createVariousAppts(obj, "WEEKS_BEFORE");
+		this._createVariousAppts(obj, BirthDayReminderZimlet.REMINDER_TYPE_WEEKS_BEFORE);
 	}
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._createVariousAppts =
+/**
+ * Creates various kinds of Appointments to setup reminders
+ *
+ * @param {hash} obj a hash of parameters
+ * @param  {date} obj.b  Birthday date
+ * @param  {string} obj.email  Email address of  birthday boy/girl
+ * @param  {string} obj.chkbx_id  Id of the checkbox corresponding to the Birthday contact
+ * @param {string} apptType Can be "ON_THE_DAY" | "DAYS_BEFORE" | "WEEKS_BEFORE"
+ */
+BirthDayReminderZimlet.prototype._createVariousAppts =
 function(obj, apptType) {
-	var tmparry = obj.b.split("-");
-	var todayDate = new Date();
-	var birthday = this._normalizeDate(tmparry[1],  tmparry[2], todayDate.getFullYear());
+	var tmparry = obj.b.split("/");
+	var birthday = this._normalizeDate(tmparry[0],  tmparry[1], tmparry[2]);
 	var subject = "";
 	var startDate = "";
 	var email_name = "";
@@ -127,47 +240,75 @@ function(obj, apptType) {
 	} else {
 		email_name = obj.fn + "(" + obj.e + ")";
 	}
-	if (apptType == "ON_THE_DAY") {
+	if (apptType == BirthDayReminderZimlet.REMINDER_TYPE_ON_THE_DAY) {
 		startDate = AjxDateUtil.simpleParseDateStr(birthday);
-		subject = "Today is Birthday of " + email_name + "!";
-	} else if (apptType == "DAYS_BEFORE") {
+		subject = this.getMessage("BirthdayReminder_TodayIsBirthday").replace("{0}", email_name);
+	} else if (apptType == BirthDayReminderZimlet.REMINDER_TYPE_DAYS_BEFORE) {
 		var breminder_daysSlct = document.getElementById("breminder_daysSlct");
 		var daysCnt = breminder_daysSlct.options[breminder_daysSlct.selectedIndex].text;
 		daysCnt = parseInt(daysCnt);
 		startDate = AjxDateUtil.simpleParseDateStr(birthday);
 		startDate.setHours("0", "00");
 		startDate = new Date(startDate.getTime() - (daysCnt * 24 * 3600 * 1000));
-		subject = "Birthday of " + email_name + " is " + daysCnt + " day(s) away!";
-	} else if (apptType == "WEEKS_BEFORE") {
+		subject = this.getMessage("BirthdayReminder_BirthdayDaysAway").replace("{0}", email_name).replace("{1}", daysCnt);
+	} else if (apptType == BirthDayReminderZimlet.REMINDER_TYPE_WEEKS_BEFORE) {
 		var breminder_weekSlct = document.getElementById("breminder_weekSlct");
 		var weeksCnt = breminder_weekSlct.options[breminder_weekSlct.selectedIndex].text;
 		weeksCnt = parseInt(weeksCnt);
 		startDate = AjxDateUtil.simpleParseDateStr(birthday);
 		startDate.setHours("0", "00");
 		startDate = new Date(startDate.getTime() - (weeksCnt * 7 * 24 * 3600 * 1000));
-		subject = "Birthday of " + email_name + " is " + weeksCnt + " week(s) away!";
+		subject = this.getMessage("BirthdayReminder_BirthdayWeeksAway").replace("{0}", email_name).replace("{1}", weeksCnt);
 	}
-
 	startDate.setHours("5", "00");
 	var endDate = new Date(startDate.getTime() + 4000 * 60 * 60);
 	this._createAppt(startDate, endDate, subject);
-
 };
-com_zimbra_birthdayreminder_HandlerObject.prototype._normalizeDate =
+
+
+
+/**
+ * Takes months, day and year info and returns timezone specific date format
+ * @param {string} month    month
+ * @param {string} day  day
+ * @param {string} year year
+ * @return timezone specific date format
+ */
+BirthDayReminderZimlet.prototype._normalizeDate =
 function(month, day, year) {
-	var tmpArry = (I18nMsg.formatDateShort.toLowerCase()).split("/");
-	if(tmpArry[0].indexOf("d") >=0 && tmpArry[1].indexOf("m") >=0) {
-		return day + "/" + month + "/" + year;
-	} else if(tmpArry[1].indexOf("d") >=0 && tmpArry[0].indexOf("m") >=0) {
-		return month + "/" + day + "/" + year;
-	} else if(tmpArry[1].indexOf("m") >=0 && tmpArry[2].indexOf("d") >=0) {
-		return year + "/"+ month + "/" + day ;
-	} else if(tmpArry[1].indexOf("d") >=0 && tmpArry[2].indexOf("m") >=0) {
-			return year + "/"+ day + "/" + month ;
+	var fString = [];
+	var ds = I18nMsg.formatDateShort.toLowerCase();
+	var arry = [];
+	arry.push({name:"m", indx:ds.indexOf("m")});
+	arry.push({name:"y", indx:ds.indexOf("y")});
+	arry.push({name:"d", indx:ds.indexOf("d")});
+	var sArry = arry.sort(BirthdayReminder_sortTimeObjs);
+	for(var i = 0; i < sArry.length; i++) {
+		var name = sArry[i].name;
+		if(name == "m") {
+			fString.push(month);
+		} else if(name == "y") {
+			fString.push(year);
+		}  else if(name == "d") {
+			fString.push(day);
+		} 
 	}
-
+	return fString.join("/");
 };
-com_zimbra_birthdayreminder_HandlerObject.prototype._createAppt =
+
+function BirthdayReminder_sortTimeObjs(a, b) {
+	var x = parseInt(a.indx);
+	var y = parseInt(b.indx);
+	return ((x > y) ? 1 : ((x < y) ? -1 : 0));
+}
+/**
+ * Creates an Appointment
+ *
+ * @param {date} startDate start date of the appointment
+ * @param {date} endDate end date of the appointment
+ * @param {string} subject Subject of the appointment
+ */
+BirthDayReminderZimlet.prototype._createAppt =
 function(startDate, endDate, subject) {
 	var reminderMinutes = appCtxt.getSettings().getSetting("CAL_REMINDER_WARNING_TIME").value;
 	try {
@@ -186,33 +327,26 @@ function(startDate, endDate, subject) {
 	}
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._initializeBirthdayFolder =
-function() {
-	// if we do not know if the folder exists..
-	if (!this.bReminder_hasFolder) {
-		this._getBirthdayReminderFolderId();
-	}
 
-	// also, confirm that folder was not deleted by user after it was created
-	if (!this.birthdayreminderFolderId) {
-		this._getBirthdayReminderFolderId();
-	}
-	this.setUserProperty(com_zimbra_birthdayreminder_HandlerObject.USER_PROP_HAS_FOLDER, "true", true);
-};
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._createBRView =
+/**
+ * Creates  Birthday Reminder dialog view
+ *
+ * @return {string} Html of the view
+ */
+BirthDayReminderZimlet.prototype._createBRView =
 function() {
 	var html = new Array();
 	var i = 0;
 	var id_indx = 0;
 	this._bDayAndEmail = new Array();
-	html[i++] = "<DIV class='breminder_msgDiv' id='breminder_foundMsgId'><font >Found " + this.filteredContactsArry.length + " contact(s) with Birthdays";
+	html[i++] = "<DIV class='breminder_msgDiv' id='breminder_foundMsgId'>";
+	html[i++]  = this.getMessage("BirthdayReminder_FoundContacts").replace("{0}",this.filteredContactsArry.length);
 	html[i++] = "</DIV>";
 	html[i++] = "<BR>";
 	html[i++] = "<BR>";
 	html[i++] = "<DIV class='breminder_mainDiv' style=\"overflow:auto;height:260px;width:99%\" >";
 	for (var j = 0; j < this.filteredContactsArry.length; j++) {
-
 		var contact = this.filteredContactsArry[j];
 		var card = new Array();
 		var n = 0;
@@ -229,38 +363,31 @@ function() {
 			if (nm == undefined)
 				continue;
 
-			if ((el == "email" || el == "email2") && email == "")
+			if ((el == "email" || el == "email2") && email == "") {
 				email = attr[el];
-
-			if (el == "fullName")
+			}
+			if (el == "fullName") {
 				fullName = attr[el];
-			if (el == "birthday")
+			}
+			if (el == "birthday") {
 				birthday = attr[el];
-
+			}
 			card[n++] = "<TR><TD><B>" + nm + "</B></TD><TD>" + attr[el] + "</TD></TR>";
 		}
 		card[n++] = "</TABLE>";
 		card[n++] = "</DIV>";
 
 		var k = 0;
-		var cardHdr = new Array();
-		cardHdr[k++] = "<DIV id='breminder_cardHdrDiv" + id_indx + "' class='breminder_cardHdrDiv'>";
-		cardHdr[k++] = "<TABLE width='100%' CELLPADDING=3 class='breminder_HdrTable'>";
 		var chkbxId = "breminder_chkbox" + id_indx;
-		cardHdr[k++] = "<TR><TD><input id='" + chkbxId + "'  type='checkbox' checked/></TD><TD width='5%' id='breminder_expCollIcon" + id_indx + "'  class='breminder_expCollIcon'>" + AjxImg.getImageHtml("NodeCollapsed") + "</TD>";
-		if (fullName == "") {
-			cardHdr[k++] = "<TD  width='75%'>" + email + "</TD>";
-		} else if (email == "") {
-			cardHdr[k++] = "<TD  width='75%'>" + fullName + "</TD>";
-		} else {
-			cardHdr[k++] = "<TD  width='75%'>" + fullName + "(" + email + ")</TD>";
-		}
-		var brd = birthday.split("-");
-		cardHdr[k++] = "<TD  width='20%'>" + brd[1] + "/" + brd[2] + "</TD></TR>";
-		cardHdr[k++] = "</TABLE>";
-		cardHdr[k++] = "</DIV>";
+		//var cardHdr = new Array();
+		html[i++] = ["<DIV id='breminder_cardHdrDiv", id_indx, "' class='breminder_cardHdrDiv'>"
+			, "<TABLE width='100%' CELLPADDING=3 class='breminder_HdrTable'>", "<TR><TD><input id='", chkbxId
+			, "'  type='checkbox' checked/></TD><TD width='5%' id='breminder_expCollIcon"
+			, id_indx, "'  class='breminder_expCollIcon'>" , AjxImg.getImageHtml("NodeCollapsed"),"</TD>"
+			,"<TD  width='75%'>", fullName, " ", email,"</TD>"
+			,"<TD  width='20%'>", birthday, "</TD></TR></TABLE></DIV>"].join("");
 
-		html[i++] = cardHdr.join("");
+		//html[i++] = cardHdr.join("");
 		html[i++] = card.join("");
 		html[i++] = "</DIV>";//for breminder_card
 		this._bDayAndEmail[j] = {b:birthday, e:email, fn:fullName, chkbx_id: chkbxId};
@@ -268,55 +395,66 @@ function() {
 	}
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='breminder_onTheDayChk' type='checkbox' checked>Remind me on the day of birthday</input>";
+	html[i++] = ["<input id='breminder_onTheDayChk' type='checkbox' checked>",this.getMessage("BirthdayReminder_RemindMeOnTheDay"),"</input>"].join("");
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='breminder_daysChk' type='checkbox'checked>Also Remind me </input>";
-	html[i++] = this._getDaysMenu() + " day(s) before the birthday";
+	html[i++] = "<input id='breminder_daysChk' type='checkbox' checked> </input>";
+	html[i++] =  this.getMessage("BirthdayReminder_AlsoRemindMeDaysBefore").replace("{0}", this._getDaysMenu());
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV>";
-	html[i++] = "<input  id='breminder_weeksChk' type='checkbox' checked>Also Remind me </input>";
-	html[i++] = this._getWeekMenu() + " week(s) before the birthday";
+	html[i++] = "<input  id='breminder_weeksChk' type='checkbox' checked> </input>";
+	html[i++] =  this.getMessage("BirthdayReminder_AlsoRemindMeWeeksBefore").replace("{0}", this._getWeekMenu());
 	html[i++] = "</DIV>";
-
 	return html.join("");
-
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._getDaysMenu =
+/**
+ * Gets html of days menu
+ *
+ * @return Html select menu for days
+ */
+BirthDayReminderZimlet.prototype._getDaysMenu =
 function() {
 	var html = new Array();
 	var j = 0;
 	html[j++] = "<SELECT id='breminder_daysSlct'>";
 	for (var i = 1; i <= 7; i++) {
-		if (i == 2)
-			html[j++] = "<option value=\"" + i + "days\" selected>" + i + "</option>";
-		else
-			html[j++] = "<option value=\"" + i + "days\" >" + i + "</option>";
+		if (i == 2) {
+			html[j++] = ["<option value=\"", i, "",this.getMessage("BirthdayReminder_days"),"\" selected>", i , "</option>"].join("");
+		} else {
+			html[j++] = ["<option value=\"", i, "",this.getMessage("BirthdayReminder_days"),"\">", i , "</option>"].join("");
+		}
 	}
 	html[j++] = "</SELECT>";
 
 	return html.join("");
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._getWeekMenu =
+/**
+ *   Gets html of weeks  menu
+ * @return Html select menu for weeks
+ */
+BirthDayReminderZimlet.prototype._getWeekMenu =
 function() {
 	var html = new Array();
 	var j = 0;
 	html[j++] = "<SELECT id='breminder_weekSlct'>";
 	for (var i = 1; i <= 8; i++) {
-		if (i == 1)
-			html[j++] = "<option value=\"" + i + "weeks\" selected>" + i + "</option>";
-		else
-			html[j++] = "<option value=\"" + i + "weeks\">" + i + "</option>";
-
+		if (i == 1)  {
+			html[j++] = ["<option value=\"", i, "",this.getMessage("BirthdayReminder_weeks"),"\" selected>", i , "</option>"].join("");
+		} else {
+			html[j++] = ["<option value=\"", i, "",this.getMessage("BirthdayReminder_weeks"),"\">", i , "</option>"].join("");
+		}
 	}
 	html[j++] = "</SELECT>";
 
 	return html.join("");
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._showPrefDialog =
+/**
+ *  Displays preferences dialog
+ */
+BirthDayReminderZimlet.prototype._showPrefDialog =
 function() {
 	//if zimlet dialog already exists...
 	if (this.pbDialog) {
@@ -326,10 +464,10 @@ function() {
 	this.pView = new DwtComposite(this.getShell());
 	this.pView.getHtmlElement().innerHTML = this._createPrefView();
 	var scanABButtonId = Dwt.getNextId();
-	var scanABButton = new DwtDialog_ButtonDescriptor(scanABButtonId, ("Scan Address Book For Birthdays"), DwtDialog.ALIGN_CENTER);
-	
+	var scanABButton = new DwtDialog_ButtonDescriptor(scanABButtonId, this.getMessage("BirthdayReminder_scanForBirthdays"), DwtDialog.ALIGN_CENTER);
+
 	var dialog_args = {
-			title	: "'Birthday Reminder' Zimlet Preferences",
+			title	: this.getMessage("BirthdayReminder_zimletPreferences"),
 			view	: this.pView,
         	parent	: this.getShell(),
 			standardButtons : [DwtDialog.CANCEL_BUTTON],
@@ -342,22 +480,32 @@ function() {
 	this.pbDialog.popup();
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._createPrefView =
+/**
+ * Creates Preferences view
+ *
+ * @return {string} Html of the preferences view
+ */
+BirthDayReminderZimlet.prototype._createPrefView =
 function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV>";
-	html[i++] = "Please Note: We automatically create a Calendar called 'Birthday Reminder' to store all the birthdays(if there is none).";
-	html[i++] = "<br> This would require a browser refresh. After the browser is refreshed, please come back and scan again";
+	html[i++] = this.getMessage("BirthdayReminder_PleaseNote").replace("{0}", this.getMessage("BirthdayReminder_CalendarName"));
 	html[i++] = "</DIV>";
 	return html.join("");
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._scanABListner =
+/**
+ * Scans Address Book
+ */
+BirthDayReminderZimlet.prototype._scanABListner =
 function() {
 	this.pbDialog.popdown();
-	//make sure to create folder to be used for reminders..
-	this._initializeBirthdayFolder();
+	this._setBirthdayReminderFolderId(new AjxCallback(this, this._startScanning));
+};
+
+BirthDayReminderZimlet.prototype._startScanning =
+function() {
 	if (this._apptComposeController == undefined) {//load calendar package when we are creating appt for the first time(since login)
 		this._apptComposeController = AjxDispatcher.run("GetApptComposeController");
 	}
@@ -376,14 +524,20 @@ function() {
 	this._contactsAreLoaded = true;
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._initiateBrowserRefresh =
+/**
+ * Shows Browser will be refreshed dialog
+ */
+BirthDayReminderZimlet.prototype._initiateBrowserRefresh =
 function() {
 	var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.FADE_OUT ];
-	appCtxt.getAppController().setStatusMsg("Browser will be refreshed for changes to take effect..", ZmStatusView.LEVEL_INFO, null, transitions);
+	appCtxt.getAppController().setStatusMsg(this.getMessage("BirthdayReminder_BrowserWillBeRefreshed"), ZmStatusView.LEVEL_INFO, null, transitions);
 	setTimeout(AjxCallback.simpleClosure(this._refreshBrowser, this), 2000);
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._refreshBrowser =
+/**
+ * Refreshes browser
+ */
+BirthDayReminderZimlet.prototype._refreshBrowser =
 function() {
 	window.onbeforeunload = null;
 	var url = AjxUtil.formatUrl({});
@@ -393,19 +547,26 @@ function() {
 /**
  * Called when the zimlet panel is double-clicked.
  */
-com_zimbra_birthdayreminder_HandlerObject.prototype.doubleClicked = function() {
+BirthDayReminderZimlet.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
 
 /**
  * Called when the zimlet panel is single-clicked.
  */
-com_zimbra_birthdayreminder_HandlerObject.prototype.singleClicked = function() {
+BirthDayReminderZimlet.prototype.singleClicked = function() {
 	this._showPrefDialog();
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._waitForContactToLoadAndProcess = function() {
-	appCtxt.getAppController().setStatusMsg("Please wait, scanning Address Book for Birthdays..", ZmStatusView.LEVEL_INFO);
+/**
+ * Waits for all contacts to load by checking their count and waiting if the count increases b/w checks
+ */
+BirthDayReminderZimlet.prototype._waitForContactToLoadAndProcess = function() {
+	if(!this._pleaseWaitShown){
+		var transitions = [ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT];
+		appCtxt.getAppController().setStatusMsg(this.getMessage("BirthdayReminder_PleaseWait"), ZmStatusView.LEVEL_INFO, null, transitions);
+		this._pleaseWaitShown = true;
+	}
 	this._contactList = AjxDispatcher.run("GetContacts");
 	if (!this._contactList)
 		return;
@@ -419,12 +580,15 @@ com_zimbra_birthdayreminder_HandlerObject.prototype._waitForContactToLoadAndProc
 		this.__oldNumContacts = this.__currNumContact;
 		setTimeout(AjxCallback.simpleClosure(this._waitForContactToLoadAndProcess, this), 5000);
 	} else {
-
+		this._pleaseWaitShown = false;//reset
 		this._startProcessing();//start processing
 	}
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._startProcessing = function() {
+/**
+ * Starts processing Address Book
+ */
+BirthDayReminderZimlet.prototype._startProcessing = function() {
 	var _tmpArry = this._contactList.getArray();
 
 	for (var j = 0; j < _tmpArry.length; j++) {
@@ -438,11 +602,14 @@ com_zimbra_birthdayreminder_HandlerObject.prototype._startProcessing = function(
 		} catch(e) {
 		}
 	}
-	appCtxt.getAppController().setStatusMsg("..Scanning completed", ZmStatusView.LEVEL_INFO);
+	appCtxt.getAppController().setStatusMsg(this.getMessage("BirthdayReminder_scanningcCompleted"), ZmStatusView.LEVEL_INFO);
 	this._showBRDlg();
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._showBRDlg = function() {
+/**
+ * Shows Birthday Reminder dialog
+ */
+BirthDayReminderZimlet.prototype._showBRDlg = function() {
 	//if zimlet dialog already exists...
 	if (this._brDialog) {
 		this._brDialog.popup();
@@ -453,10 +620,10 @@ com_zimbra_birthdayreminder_HandlerObject.prototype._showBRDlg = function() {
 	this._brDlgView.getHtmlElement().style.overflow = "auto";
 	this._brDlgView.getHtmlElement().innerHTML = this._createBRView();
 	var reminderBtnId = Dwt.getNextId();
-	var createRemindersBtn = new DwtDialog_ButtonDescriptor(reminderBtnId, ("Create Reminders"), DwtDialog.ALIGN_RIGHT);
+	var createRemindersBtn = new DwtDialog_ButtonDescriptor(reminderBtnId, this.getMessage("BirthdayReminder_createReminders"), DwtDialog.ALIGN_RIGHT);
 
 	var dialog_args = {
-			title	: "Birthday Reminder Zimlet: Create Reminders for Birthdays ",
+			title	: this.getMessage("BirthdayReminder_createRemindersForBirthdays"),
 			view	: this._brDlgView,
         	parent	: this.getShell(),
 			standardButtons : [DwtDialog.CANCEL_BUTTON],
@@ -469,10 +636,13 @@ com_zimbra_birthdayreminder_HandlerObject.prototype._showBRDlg = function() {
 	this._brDialog.popup();
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._createRemindersListener =
+/**
+ * Creates Reminders
+ */
+BirthDayReminderZimlet.prototype._createRemindersListener =
 function() {
 	this._reloadRequired = false;
-	appCtxt.getAppController().setStatusMsg("Please Wait..", ZmStatusView.LEVEL_INFO);
+	appCtxt.getAppController().setStatusMsg(this.getMessage("BirthdayReminder_pleaseWait"), ZmStatusView.LEVEL_INFO);
 	var counter = 1;
 	for (var i = 0; i < this._bDayAndEmail.length; i++) {
 		var obj = this._bDayAndEmail[i];
@@ -493,11 +663,17 @@ function() {
 	}
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._saydone = function() {
-	appCtxt.getAppController().setStatusMsg("..Done creating Birthday Reminders", ZmStatusView.LEVEL_INFO);
+/**
+ * Alerts user after creating Birthday Reminders
+ */
+BirthDayReminderZimlet.prototype._saydone = function() {
+	appCtxt.getAppController().setStatusMsg(this.getMessage("BirthdayReminder_doneCreatingReminders"), ZmStatusView.LEVEL_INFO);
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._addListListeners = function() {
+/**
+ * Adds listeners to Birthday Reminder list items
+ */
+BirthDayReminderZimlet.prototype._addListListeners = function() {
 	var divs = this._brDialog.getHtmlElement().getElementsByTagName("div");
 	for (var i = 0; i < divs.length; i++) {
 		var hdr = divs[i];
@@ -507,7 +683,13 @@ com_zimbra_birthdayreminder_HandlerObject.prototype._addListListeners = function
 	}
 };
 
-com_zimbra_birthdayreminder_HandlerObject.prototype._onListClick = function(hdr, ev) {
+/**
+ *When the list is clicked, this function checks the list-item that was clicked andshows contact details
+ *
+ * @param {object} hdr DIV on which the user has clicked
+ * @param ev event object
+ */
+BirthDayReminderZimlet.prototype._onListClick = function(hdr, ev) {
 	var evnt = ev ? ev : window.event;
 	if (evnt) {
 		var target = evnt.target ? evnt.target : evnt.srcElement;
@@ -530,9 +712,9 @@ com_zimbra_birthdayreminder_HandlerObject.prototype._onListClick = function(hdr,
 
 /**
  * Shows the reload browser dialog.
- * 
+ *
  */
-com_zimbra_birthdayreminder_HandlerObject.prototype._showReloadBrowserDlg =
+BirthDayReminderZimlet.prototype._showReloadBrowserDlg =
 function() {
 	//if zimlet dialog already exists...
 	if (this._reloadBrowserDialog) {
@@ -544,12 +726,12 @@ function() {
 	this._reloadBrowserView.getHtmlElement().innerHTML = this._createReloadBrowserView();
 
 	var dialog_args = {
-			title	: "Birthday Reminder Zimlet: Need to Reload Browser",
+			title	: this.getMessage("BirthdayReminder_needToReloadBrowser"),
 			view	: this._reloadBrowserView,
 			parent	: this.getShell(),
 			standardButtons : [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]
 	};
-	
+
 	this._reloadBrowserDialog = new ZmDialog(dialog_args);
 	this._reloadBrowserDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okReloadBrowserBtnListener));
 	this._reloadBrowserDialog.popup();
@@ -557,27 +739,25 @@ function() {
 
 /**
  * Creates the reload browser view.
- * 
+ *
  * @see		_showReloadBrowserDlg
  */
-com_zimbra_birthdayreminder_HandlerObject.prototype._createReloadBrowserView =
+BirthDayReminderZimlet.prototype._createReloadBrowserView =
 function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV>";
-	html[i++] = "Birthday Reminder Zimlet Setup: We've just created a Calendar: '";
-	html[i++] = com_zimbra_birthdayreminder_HandlerObject.FOLDER_BIRTHDAY_REMINDERS;
-	html[i++] = "' to store Birthday Reminders.<br> We need to reload Browser for setup to complete. <br>Reload Browser?";
+	html[i++] =this.getMessage("BirthdayReminder_createdCalendarReloadBrowser").replace("{0}", this.calendarName);
 	html[i++] = "</DIV>";
 	return html.join("");
 };
 
 /**
  * Listens for the OK button.
- * 
+ *
  * @see			_showReloadBrowserDlg
  */
-com_zimbra_birthdayreminder_HandlerObject.prototype._okReloadBrowserBtnListener =
+BirthDayReminderZimlet.prototype._okReloadBrowserBtnListener =
 function() {
 	this._reloadBrowser();
 	this._reloadBrowserDialog.popdown();
@@ -586,7 +766,7 @@ function() {
 /**
  * Reloads the browser.
  */
-com_zimbra_birthdayreminder_HandlerObject.prototype._reloadBrowser =
+BirthDayReminderZimlet.prototype._reloadBrowser =
 function() {
 	window.onbeforeunload = null;
 	var url = AjxUtil.formatUrl({});
