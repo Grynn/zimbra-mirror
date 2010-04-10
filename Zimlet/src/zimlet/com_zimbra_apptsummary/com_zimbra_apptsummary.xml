@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_apptsummary" version="0.3" label="Appointments Summary" description="Sends a daily email with a summary of appointments for that day.">
+<zimlet name="com_zimbra_apptsummary" version="0.5" label="Appointments Summary" description="Sends a daily email with a summary of appointments for that day.">
 	<include>apptsummary.js</include>
 	<handlerObject>com_zimbra_apptsummary_HandlerObject</handlerObject>
 	<zimletPanelItem label="${msg.ApptSummary_panel_label}" icon="CalendarApp">
