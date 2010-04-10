@@ -2,22 +2,23 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Zimlets
  * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
- * @author Raja Rao DV
+ * @author Raja Rao DV rrao@zimbra.com
+ *
+ * Checks for attach* word in email and also if there is an attachment.
+ * If the email does not have an attachment, throws missing-attachment alert dialog
  */
 
 /**
- * Constructor. Checks for attach* word in email and also if there is an attachment.
- * If the email does not have an attachment, throws missing-attachment alert dialog
- * 
+ * Constructor
  */
 function com_zimbra_attachalert_HandlerObject() {
 }
@@ -26,34 +27,39 @@ com_zimbra_attachalert_HandlerObject.prototype = new ZmZimletBase();
 com_zimbra_attachalert_HandlerObject.prototype.constructor = com_zimbra_attachalert_HandlerObject;
 
 /**
+ * Simplify Zimlet handler name
+ */
+var AttachAlertZimlet = com_zimbra_attachalert_HandlerObject;
+
+/**
  * Defines the "zimlet name".
  */
-com_zimbra_attachalert_HandlerObject.ZIMLET_NAME = "com_zimbra_attachalert_HandlerObject";
+AttachAlertZimlet.ZIMLET_NAME = "AttachAlertZimlet";
 /**
  * Defines the "alert on" user property.
  */
-com_zimbra_attachalert_HandlerObject.USER_PROP_ALERT_ON = "turnONAttachmentAlertZimletNew";
+AttachAlertZimlet.USER_PROP_ALERT_ON = "turnONAttachmentAlertZimletNew";
 
 /**
  * Defines the "alert on checkbox" element.
  */
-com_zimbra_attachalert_HandlerObject.ELEMENT_ID_CHECKBOX_ALERT_ON = "turnONAttachmentAlertZimletNew_chkbx";
+AttachAlertZimlet.ELEMENT_ID_CHECKBOX_ALERT_ON = "turnONAttachmentAlertZimletNew_chkbx";
 
 
 /**
  * Initializes the zimlet.
- * 
+ *
  */
-com_zimbra_attachalert_HandlerObject.prototype.init =
+AttachAlertZimlet.prototype.init =
 function() {
-	this.turnONAttachmentAlertZimletNew = this.getUserProperty(com_zimbra_attachalert_HandlerObject.USER_PROP_ALERT_ON) == "true";
+	this.turnONAttachmentAlertZimletNew = this.getUserProperty(AttachAlertZimlet.USER_PROP_ALERT_ON) == "true";
 };
 
 /**
  * Initializes the regular expression.
- * 
+ *
  */
-com_zimbra_attachalert_HandlerObject.prototype._initializeRegEx =
+AttachAlertZimlet.prototype._initializeRegEx =
 function() {
 	if (this._attachWordsRegEx)
 		return;
@@ -67,10 +73,15 @@ function() {
 };
 
 /**
- * This method is called when sending an email.
- * 
+ * This method is called when sending an email. This function checks and sets/pushes value to
+ * boolAndErrorMsgArray indicating if there was an error or not. If there was an error(i.e. attachment is missing),
+ * then it will push {hasError:true, errorMsg:"Attachment is missing", zimletName:"AttachAlertZimlet"} hash-object to boolAndErrorMsgArray array.
+ *  If there are no errors, it will simply return <code>null</code>.
+ *
+ * @param {@link ZmMailMsg} mail Mail object
+ * @param {Array} boolAndErrorMsgArray An Array of hash objects. Hash objects
  */
-com_zimbra_attachalert_HandlerObject.prototype.emailErrorCheck =
+AttachAlertZimlet.prototype.emailErrorCheck =
 function(mail, boolAndErrorMsgArray) {
 	if (!this.turnONAttachmentAlertZimletNew)
 		return;
@@ -110,7 +121,7 @@ function(mail, boolAndErrorMsgArray) {
 		}
 		hasattachWordStr = true;
 		break;
-		
+
 	}
 
 	if (!hasattachWordStr)
@@ -120,17 +131,18 @@ function(mail, boolAndErrorMsgArray) {
 	var errParams = {
 			hasError:true,
 			errorMsg: this._errorMsgStr,
-			zimletName:com_zimbra_attachalert_HandlerObject.ZIMLET_NAME
+			zimletName:AttachAlertZimlet.ZIMLET_NAME
 	};
-	
+
 	return boolAndErrorMsgArray.push(errParams);
 };
 
 /**
  * Creates an ignore list.
- * 
+ *
+ * @param ZmMailMsg origMail This is the original Mail that the user is replying/fwding to.
  */
-com_zimbra_attachalert_HandlerObject.prototype._createIgnoreList =
+AttachAlertZimlet.prototype._createIgnoreList =
 function(origMail) {
 	var bodyContent = origMail.getBodyContent();
 	for (var k = 0; k < this._attachWordsRegEx.length; k++) {
@@ -146,22 +158,22 @@ function(origMail) {
 /**
  * Called when the zimlet is double-clicked.
  */
-com_zimbra_attachalert_HandlerObject.prototype.doubleClicked = function() {
+AttachAlertZimlet.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
 
 /**
  * Called when the zimlet is single-clicked.
  */
-com_zimbra_attachalert_HandlerObject.prototype.singleClicked = function() {
+AttachAlertZimlet.prototype.singleClicked = function() {
 	this._showPrefDialog();
 };
 
 /**
  * Shows the preferences dialog.
- * 
+ *
  */
-com_zimbra_attachalert_HandlerObject.prototype._showPrefDialog =
+AttachAlertZimlet.prototype._showPrefDialog =
 function() {
 	//if zimlet dialog already exists...
 	if (this.pbDialog) {
@@ -171,8 +183,8 @@ function() {
 	this.pView = new DwtComposite(this.getShell());
 	this.pView.getHtmlElement().innerHTML = this._createPrefView();
 
-	if (this.getUserProperty(com_zimbra_attachalert_HandlerObject.USER_PROP_ALERT_ON) == "true") {
-		document.getElementById(com_zimbra_attachalert_HandlerObject.ELEMENT_ID_CHECKBOX_ALERT_ON).checked = true;
+	if (this.getUserProperty(AttachAlertZimlet.USER_PROP_ALERT_ON) == "true") {
+		document.getElementById(AttachAlertZimlet.ELEMENT_ID_CHECKBOX_ALERT_ON).checked = true;
 	}
 
 	var dialog_args = {
@@ -189,15 +201,15 @@ function() {
 
 /**
  * Creates the preferences view.
- * 
+ *
  */
-com_zimbra_attachalert_HandlerObject.prototype._createPrefView =
+AttachAlertZimlet.prototype._createPrefView =
 function() {
     var html = new Array();
     var i = 0;
     html[i++] = "<div>";
     html[i++] = "<input id='";
-    html[i++] = com_zimbra_attachalert_HandlerObject.ELEMENT_ID_CHECKBOX_ALERT_ON;
+    html[i++] = AttachAlertZimlet.ELEMENT_ID_CHECKBOX_ALERT_ON;
     html[i++] = "'  type='checkbox'/>";
     html[i++] = this.getMessage("AttachmentAlert_dialog_preferences_alert_text");
     html[i++] = "</div>";
@@ -206,25 +218,23 @@ function() {
 
 /**
  * Listens for the OK button event.
- * 
+ *
  * @see		_showPrefDialog
  */
-com_zimbra_attachalert_HandlerObject.prototype._okBtnListner =
+AttachAlertZimlet.prototype._okBtnListner =
 function() {
 	this._reloadRequired = false;
-	if (document.getElementById(com_zimbra_attachalert_HandlerObject.ELEMENT_ID_CHECKBOX_ALERT_ON).checked) {
+	if (document.getElementById(AttachAlertZimlet.ELEMENT_ID_CHECKBOX_ALERT_ON).checked) {
 		if (!this.turnONAttachmentAlertZimletNew) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty(com_zimbra_attachalert_HandlerObject.USER_PROP_ALERT_ON, "true", true);
+		this.setUserProperty(AttachAlertZimlet.USER_PROP_ALERT_ON, "true", true);
 	} else {
-		this.setUserProperty(com_zimbra_attachalert_HandlerObject.USER_PROP_ALERT_ON, "false", true);
+		this.setUserProperty(AttachAlertZimlet.USER_PROP_ALERT_ON, "false", true);
 		if (this.turnONAttachmentAlertZimletNew)
 			this._reloadRequired = true;
 	}
-	
 	this.pbDialog.popdown();
-
 	if (this._reloadRequired) {
 		window.onbeforeunload = null;
 		var url = AjxUtil.formatUrl({});
