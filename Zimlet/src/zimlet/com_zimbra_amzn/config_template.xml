@@ -1,5 +1,0 @@
-<zimletConfig name="com_zimbra_amzn" version="1.2">
-  <global>
-    <property name="allowedDomains">*.amazon.com</property>
-  </global>
-</zimletConfig>
