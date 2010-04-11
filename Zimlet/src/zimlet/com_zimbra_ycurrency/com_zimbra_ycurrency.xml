@@ -1,31 +1,27 @@
-<zimlet name="com_zimbra_ycurrency" version="1.2" label="Yahoo! Currency" description="Highlights and converts currencies.">
+<zimlet name="com_zimbra_ycurrency" version="1.3" label="Yahoo! Currency" description="Highlights and converts currencies.">
     <include>ycurrency.js</include>
     <includeCSS>ycurrency.css</includeCSS>
-    <handlerObject>Com_Zimbra_YCurrency</handlerObject>
+    <handlerObject>Com_Zimbra_YCurrency_HandlerObject</handlerObject>
     <contentObject>
         <contextMenu>
-            <menuItem label="Convert" id="CONVERT"/>
-            <menuItem label="Preferences" id="SETTINGS"/>
+            <menuItem label="${msg.YCurrencyZimlet_convert}" id="CONVERT"/>
+            <menuItem label="${msg.YCurrencyZimlet_preferences}" id="SETTINGS"/>
             <menuItem/>
             <menuItem label="Visit Yahoo! Finance" id="GOTOYF"/>
         </contextMenu>
     </contentObject>
-    <zimletPanelItem label="Currency Converter" icon="YCURRENCY-panelIcon">
+    <zimletPanelItem label="${msg.YCurrencyZimlet_label}" icon="YCURRENCY-panelIcon">
 		<toolTipText>Highlights and converts currencies.</toolTipText>
-        <onClick>
-            <canvas type="window" width="800" height="600" />
-            <actionUrl method="get" target="http://finance.yahoo.com/currency"/>
-        </onClick>
 		<contextMenu>
-			<menuItem label="Preferences" id="SETTINGS"/>
-			<menuItem label="Convert" id="CONVERT"/>
+			<menuItem label="${msg.YCurrencyZimlet_convert}" id="CONVERT"/>
+			<menuItem label="${msg.YCurrencyZimlet_preferences}" id="SETTINGS"/>
             <menuItem/>
-            <menuItem label="Visit yahoo finance" id="GOTOYF"/>
+            <menuItem label="${msg.YCurrencyZimlet_visitY}" id="GOTOYF"/>
         </contextMenu>
     </zimletPanelItem>
     <userProperties>
-	    <property type="string" name="home_currency" minLength="3" maxLength="3" label="Home Currency"/>
-    	<property type="string" name="tooltip_currs" minLength="3" maxLength="40" label="Tooltip Currencies"/>
+	    <property type="string" name="home_currency" minLength="3" maxLength="3" label= "${msg.YCurrencyZimlet_homeCurrency}"/>
+    	<property type="string" name="tooltip_currs" minLength="3" maxLength="40" label= "${msg.YCurrencyZimlet_tooltipCurrencies}"/>
     	<property type="enum" name="chart_type" label="Ex-rate chart" value="H_2_O">
 			<item label="Home currency to other" value="H_2_O"/>
 			<item label="Other to home currency" value="O_2_H"/>
