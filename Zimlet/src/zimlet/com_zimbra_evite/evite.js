@@ -89,7 +89,7 @@ function(callback, init) {
 /**
  * Called by Zimbra framework when a menu item was selected
  *
- * @param {string} itemId  id of the menuitem
+ * @param {string} itemId 		the id of the menu item
  */
 EviteZimlet.prototype.menuItemSelected =
 function(itemId) {
@@ -116,8 +116,8 @@ function() {
 /**
  * Authenticates user to Evite application
  *
- * @param {String} user   username
- * @param {String} passwd  password
+ * @param {string} user   username
+ * @param {string} passwd  password
  * @param {AjxCallback} callback   callback function
  * @param {boolean} init  if<code>true</code> login is called from init function
  */
@@ -129,7 +129,8 @@ function(user, passwd, callback, init) {
 };
 
 /**
- *Makes http call to get Calendar invites
+ * Gets calendar invites.
+ * 
  */
 EviteZimlet.prototype._getCalendarInvites =
 function() {
@@ -143,11 +144,11 @@ function() {
 };
 
 /**
- *Finds XML element's child
+ * Finds the XML element child.
  *
- * @param {XMLElement} elem xml element
- * @param {String} nodeName xml node name
- * @return {XMLElement} returns child element
+ * @param {XMLElement} elem 		the xml element
+ * @param {string} nodeName			the xml node name
+ * @return {XMLElement} the child element
  */
 EviteZimlet.prototype._findChild =
 function(elem, nodeName) {
@@ -155,11 +156,11 @@ function(elem, nodeName) {
 };
 
 /**
- * Finds XML element's sibling
+ * Finds the XML element sibling.
  *
- * @param {XMLElement} elem xml element
- * @param {String} nodeName xml node name
- * @return {XMLElement} returns sibling element
+ * @param {XMLElement} elem 	the xml element
+ * @param {string} nodeName		the xml node name
+ * @return {XMLElement} the sibling element
  */
 EviteZimlet.prototype.findSibling =
 function(elem, nodeName) {
@@ -173,11 +174,11 @@ function(elem, nodeName) {
 };
 
 /**
- * Authentication callback handler
+ * Authentication callback handler.
  *
- * @param {boolean} init if <cod>true</code> it was originated from .init
- * @param {AjxCallback} callback a Callback function
- * @param {Object} result Authentication response object
+ * @param {boolean} init		if <cod>true</code> it was originated from {@link #init}
+ * @param {AjxCallback} callback 	a callback function
+ * @param {Object} result		the authentication result object
  */
 EviteZimlet.prototype._authCallbackHandler =
 function(init, callback, result) {
@@ -217,7 +218,7 @@ function(init, callback, result) {
 /**
  * Handles the result of calendar invite call.
  *
- * @param {object} result contains Calendar invite information
+ * @param {object} result 		the result with Calendar invite information
  */
 EviteZimlet.prototype._getCalInvitesCallback =
 function(result) {
@@ -258,7 +259,7 @@ function(result) {
 };
 
 /**
- *   Returns Zimbra username
+ * Gets the Zimbra username.
  */
 EviteZimlet.prototype._getUsername =
 function() {
@@ -266,12 +267,12 @@ function() {
 };
 
 /**
- *  Creates soap request to create an appointment in Evite-calendar folder
+ * Creates soap request to create an appointment in Evite-calendar folder
  *
- * @param {string} title  Appointment subject
- * @param {string} url Evite url
- * @param {date} date  date of the appointment
- * @param {string} time  of the appointment
+ * @param {string} title  		the appointment subject
+ * @param {string} url			the Evite url
+ * @param {date} date 			the date of the appointment
+ * @param {string} time			the time of the appointment
  */
 EviteZimlet.prototype._createAppt =
 function(title, url, date, time) {
@@ -310,7 +311,7 @@ function(title, url, date, time) {
 };
 
 /**
- * Checks if Evite-calendar exists, if so, sets the id or else creates an Evite-calendar and sets the id
+ * Checks if Evite-calendar exists, if so, sets the id or else creates an Evite-calendar and sets the id.
  */
 EviteZimlet.prototype._listFolders =
 function() {
@@ -332,9 +333,9 @@ function() {
 };
 
 /**
- * Creates Evite Calendar
+ * Creates Evite Calendar.
  *
- * @param {string} parent id of the parent folder
+ * @param {string} parent 		the id of the parent folder
  */
 EviteZimlet.prototype._createEviteFolder =
 function(parent) {
@@ -361,7 +362,8 @@ function(parent) {
 };
 
 /**
- *  Returns list of appointments in Evite-Calendar.
+ * Fetches the list of appointments in Evite-Calendar.
+ * 
  */
 EviteZimlet.prototype._fetchEviteAppts =
 function() {
