@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_birthdayreminder" version="0.6" label="Birthday Reminder" description="Scans your Address Book for birthdays and will create calendar reminders.">
+<zimlet name="com_zimbra_birthdayreminder" version="0.7" label="Birthday Reminder" description="Scans your Address Book for birthdays and will create calendar reminders.">
 	<include>birthdayreminder.js</include>
 	<includeCSS>birthdayreminder.css</includeCSS>
 	<handlerObject>com_zimbra_birthdayreminder_HandlerObject</handlerObject>
