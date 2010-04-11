@@ -27,7 +27,7 @@ com_zimbra_attachalert_HandlerObject.prototype = new ZmZimletBase();
 com_zimbra_attachalert_HandlerObject.prototype.constructor = com_zimbra_attachalert_HandlerObject;
 
 /**
- * Simplify Zimlet handler name
+ * Simplify Zimlet handler name.
  */
 var AttachAlertZimlet = com_zimbra_attachalert_HandlerObject;
 
@@ -78,8 +78,8 @@ function() {
  * then it will push {hasError:true, errorMsg:"Attachment is missing", zimletName:"AttachAlertZimlet"} hash-object to boolAndErrorMsgArray array.
  *  If there are no errors, it will simply return <code>null</code>.
  *
- * @param {@link ZmMailMsg} mail Mail object
- * @param {Array} boolAndErrorMsgArray An Array of hash objects. Hash objects
+ * @param {ZmMailMsg} mail 		the mail object
+ * @param {array} boolAndErrorMsgArray	an array of hash objects
  */
 AttachAlertZimlet.prototype.emailErrorCheck =
 function(mail, boolAndErrorMsgArray) {
@@ -140,7 +140,7 @@ function(mail, boolAndErrorMsgArray) {
 /**
  * Creates an ignore list.
  *
- * @param ZmMailMsg origMail This is the original Mail that the user is replying/fwding to.
+ * @param {ZmMailMsg} origMail		the original Mail message that the user is replying/forwarding
  */
 AttachAlertZimlet.prototype._createIgnoreList =
 function(origMail) {
