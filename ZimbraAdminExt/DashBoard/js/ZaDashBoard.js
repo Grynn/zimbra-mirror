@@ -12,6 +12,7 @@ function(viewId) {
 		return c ;
 	}
 }
+ZaDashBoard.searchResults = "searchResults";
 ZaDashBoard.settingsTab = "settingsTab";
 ZaDashBoard.myXModel = {
 		items: [
@@ -25,6 +26,7 @@ ZaDashBoard.myXModel = {
 	       {id:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type: _LIST_, dataType: _STRING_ },
 	       //search field
 	       {id:ZaSearch.A_query, type:_STRING_},
+	       {id:ZaDashBoard.searchResults, type:_LIST_, listItem:{type:_OBJECT_}},
 	       //services
 	       {id:ZaStatus.SVC_MAILBOX,ref:"serviceMap/"+ZaStatus.SVC_MAILBOX,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},
 	       {id:ZaStatus.SVC_SPELL,ref:"serviceMap/"+ZaStatus.SVC_SPELL,type:_OBJECT_,items:[{id:"status",type:_NUMBER_},{id:"timestamp",type:_NUMBER_}]},

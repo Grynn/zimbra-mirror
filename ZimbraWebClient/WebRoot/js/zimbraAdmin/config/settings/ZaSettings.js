@@ -269,26 +269,25 @@ ZaSettings.CONFIG_PATH = location.pathname + "js/zimbraAdmin/config";
 //ZaSettings.ADMIN_NAME_COOKIE = "ZA_ADMIN_NAME_COOKIE";
 ZaSettings.myDomainName = null;
 
-var i = 1;
+ZaSettings.SKIN_IDX = 1;
 // IDs FOR HTML COMPONENTS IN THE SKIN
-ZaSettings.SKIN_APP_BOTTOM_TOOLBAR_ID	= i++;
-ZaSettings.SKIN_APP_MAIN_ID				= i++;
-ZaSettings.SKIN_APP_TOP_TOOLBAR_ID		= i++;
-ZaSettings.SKIN_CURRENT_APP_ID			= i++;
-ZaSettings.SKIN_LOGO_ID					= i++;
-ZaSettings.SKIN_SASH_ID					= i++;
-ZaSettings.SKIN_SEARCH_BUILDER_ID		= i++;
-ZaSettings.SKIN_SEARCH_BUILDER_TOOLBAR_ID= i++;
-ZaSettings.SKIN_SEARCH_ID				= i++;
-ZaSettings.SKIN_SHELL_ID					= i++;
-ZaSettings.SKIN_STATUS_ID				= i++;
-ZaSettings.SKIN_TREE_ID					= i++;
-//ZaSettings.SKIN_TREE_FOOTER_ID			= i++;
-ZaSettings.SKIN_USER_INFO_ID				= i++;
-ZaSettings.SKIN_APP_TABS_ID				= i++;
-ZaSettings.SKIN_HELP_ID					= i++ ;
-ZaSettings.SKIN_DW_ID					= i++ ;
-ZaSettings.SKIN_LOGIN_MSG_ID            = i++ ;
+ZaSettings.SKIN_APP_BOTTOM_TOOLBAR_ID	= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_APP_MAIN_ID				= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_APP_TOP_TOOLBAR_ID		= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_CURRENT_APP_ID			= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_LOGO_ID					= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_SASH_ID					= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_SEARCH_BUILDER_ID		= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_SEARCH_BUILDER_TOOLBAR_ID= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_SEARCH_ID				= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_SHELL_ID				= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_STATUS_ID				= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_TREE_ID					= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_USER_INFO_ID			= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_APP_TABS_ID				= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_HELP_ID					= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_DW_ID					= ZaSettings.SKIN_IDX++;
+ZaSettings.SKIN_LOGIN_MSG_ID            = ZaSettings.SKIN_IDX++;
 
 //CONSTANTS FOR ROLE-BASED ACCESS
 /**
