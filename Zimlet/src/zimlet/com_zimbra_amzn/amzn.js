@@ -45,10 +45,7 @@ AmazonZimlet.ELEMENT_RESULTS_DIV_ID = "amznZimlet_bookSearchResultsDiv";
 /**
  * This method is called by Zimbra Framework when the tool tip is popped-up.
  *
- * @param {Object} spanElement Html span element
- * @param {object} obj The matched string
- * @param {object} context ZmZimletContext
- * @param {HTMLElement} canvas Main Html element of the tooltip
+ * For more details see {@link ZmZimletBase}
  */
 AmazonZimlet.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
@@ -66,10 +63,7 @@ function(spanElement, obj, context, canvas) {
 /**
  * Called by Framework when isbn link is clicked. This opens Amazon webpage for that isbn number.
  *
- * @param {Object} spanElement Html span element
- * @param {object} contentObjText The matched string
- * @param  {object} matchContext ZmZimletContext
- * @param {object} canvas  Html event object
+ *  For more details see {@link ZmZimletBase}
  */
 AmazonZimlet.prototype.clicked =
 function(spanElement, contentObjText, matchContext, event) {
