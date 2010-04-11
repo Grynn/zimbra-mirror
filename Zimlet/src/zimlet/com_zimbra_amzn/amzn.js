@@ -66,10 +66,10 @@ function(spanElement, obj, context, canvas) {
 /**
  * Called by Framework when isbn link is clicked. This opens Amazon webpage for that isbn number.
  *
- * @param Object} spanElement Html span element
+ * @param {Object} spanElement Html span element
  * @param {object} contentObjText The matched string
  * @param  {object} matchContext ZmZimletContext
- * @param {object} event  Html event object
+ * @param {object} canvas  Html event object
  */
 AmazonZimlet.prototype.clicked =
 function(spanElement, contentObjText, matchContext, event) {
