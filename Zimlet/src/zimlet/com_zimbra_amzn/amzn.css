@@ -1,0 +1,36 @@
+.ImgAMZN-panelIcon {
+  background: url("amazon.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+table.amzn_table input[type="text"]{
+	border-color:#3A73AB;
+	border-width:1;
+	border-style:solid;
+	width:200px;
+	height:20px;
+	padding:2px 4px;
+}
+
+.amznZimlet_HdrTD {
+font-size:12px;
+font-weight:bold;
+}
+
+.amznZimlet_TDBlueBold {
+font-size:12px;
+font-weight:bold;
+color:blue;
+}
+.amznZimlet_TDBlack14Bold {
+font-size:14px;
+font-weight:bold;
+}
+
+.amznZimlet_Yellow {
+    background: #FFFFCC;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+}

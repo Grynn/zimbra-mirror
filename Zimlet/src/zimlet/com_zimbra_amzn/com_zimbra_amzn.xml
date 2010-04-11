@@ -1,0 +1,22 @@
+<zimlet name="com_zimbra_amzn" version="2.0" label="Amazon" description="Search Amazon for Books">
+	<include>amzn.js</include>
+	<includeCSS>amzn.css</includeCSS>
+	<resource>amazon.gif</resource>
+	<handlerObject>Com_Zimbra_Amazon_HandlerObject</handlerObject>
+	<contentObject type="isbn">
+		<matchOn>
+			<regex attrs="gm">\b\d{10,13}\b|\b\d{9}[\dxX]\b|\b\d{1,5}[- ]\d{1,7}[- ]\d{1,6}[- ][\dxX]\b|\b\d{3}[-]\d{1,7}[- ]\d{1,7}[- ]\d{1,7}[- ]\d\b|\b\d{3}[- ]\d{10}\b</regex>
+		</matchOn>
+	</contentObject>
+	<zimletPanelItem label="${msg.AmazonZimlet_label}" icon="AMZN-panelIcon">
+		<toolTipText>${msg.AmazonZimlet_tooltip}</toolTipText>
+		<contextMenu>
+			<menuItem label="${msg.AmazonZimlet_visit}" id="WWW.AMAZON.COM" icon="AMZN-panelIcon">
+				<canvas type="window" width="800" height="600" />
+				<actionUrl target="http://amazon.com">
+					<param name="referrer">www.zimbra.com</param>
+				</actionUrl>
+			</menuItem>
+		</contextMenu>
+	</zimletPanelItem>
+</zimlet>
