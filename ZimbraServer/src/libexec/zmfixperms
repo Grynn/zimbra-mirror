@@ -494,6 +494,13 @@ if [ -L ${zimbra_home}/tomcat ]; then
   fi
 fi
 
+if [ -d ${zimbra_home}/zmstat ]; then
+  printMsg "Fixing ownership and permissions on ${zimbra_home}/zmstat"
+  for i in ${zimbra_home}/zmstat/????-??-??; do
+    chown -R ${zimbra_user}:${zimbra_group} ${i}
+  done
+fi
+
 if [ -d ${zimbra_home}/zimbramon/lib ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/zimbramon/lib"
   chown ${root_user}:${root_group} ${zimbra_home}/zimbramon
