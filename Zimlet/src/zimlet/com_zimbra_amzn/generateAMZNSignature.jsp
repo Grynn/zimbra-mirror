@@ -1,27 +1,3 @@
-<%@ page language="java" import="java.io.UnsupportedEncodingException"%>
-
-<%@ page language="java" import="java.net.URLDecoder"%>
-<%@ page language="java" import="java.net.URLEncoder"%>
-
-<%@ page language="java" import="java.security.InvalidKeyException"%>
-<%@ page language="java" import="java.security.NoSuchAlgorithmException"%>
-
-<%@ page language="java" import="java.text.DateFormat"%>
-<%@ page language="java" import="java.text.SimpleDateFormat"%>
-
-<%@ page language="java" import="java.util.Calendar"%>
-<%@ page language="java" import="java.util.HashMap"%>
-<%@ page language="java" import="java.util.Iterator"%>
-<%@ page language="java" import="java.util.Map"%>
-<%@ page language="java" import="java.util.SortedMap"%>
-<%@ page language="java" import="java.util.TimeZone"%>
-<%@ page language="java" import="java.util.TreeMap"%>
-
-<%@ page language="java" import="javax.crypto.Mac"%>
-<%@ page language="java" import="javax.crypto.spec.SecretKeySpec"%>
-
-<%@ page language="java" import="org.apache.commons.codec.binary.Base64"%>
-
 <%--
 /*
  * ***** BEGIN LICENSE BLOCK *****
@@ -37,9 +13,39 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-// Copyright (C) Amazon (Original Java Format)
-//Author: Raja Rao DV (rrao@zimbra.com) Converted to JSP
+
+/**
+ * Copyright (C) Amazon (Original Java Format)
+ *
+ * Author: Raja Rao DV (rrao@zimbra.com) Converted to JSP
+ */
 --%>
+
+<%@ page language="java" import="java.io.UnsupportedEncodingException"%>
+
+<%@ page language="java" import="java.net.URLDecoder"%>
+<%@ page language="java" import="java.net.URLEncoder"%>
+
+<%@ page language="java" import="java.security.InvalidKeyException"%>
+<%@ page language="java" import="java.security.NoSuchAlgorithmException"%>
+
+<%@ page language="java" import="java.text.DateFormat"%>
+<%@ page language="java" import="java.text.SimpleDateFormat"%>
+
+<%@ page language="java" import="java.util.Calendar"%>
+
+<%@ page language="java" import="java.util.HashMap"%>
+<%@ page language="java" import="java.util.Iterator"%>
+<%@ page language="java" import="java.util.Map"%>
+<%@ page language="java" import="java.util.SortedMap"%>
+<%@ page language="java" import="java.util.TimeZone"%>
+<%@ page language="java" import="java.util.TreeMap"%>
+
+<%@ page language="java" import="javax.crypto.Mac"%>
+<%@ page language="java" import="javax.crypto.spec.SecretKeySpec"%>
+
+<%@ page language="java" import="org.apache.commons.codec.binary.Base64"%>
+
 <%@ page language="java" import="java.io.UnsupportedEncodingException"%>
 
 <%@ page language="java" import="java.net.URLDecoder"%>
@@ -63,25 +69,6 @@
 <%@ page language="java" import="javax.crypto.spec.SecretKeySpec"%>
 
 <%@ page language="java" import="sun.misc.BASE64Encoder"%>
-
-<%--
-/*
- * ***** BEGIN LICENSE BLOCK *****
- * Zimbra Collaboration Suite Zimlets
- * Copyright (C) 2009, 2010 Zimbra, Inc.
- * 
- * The contents of this file are subject to the Zimbra Public License
- * Version 1.3 ("License"); you may not use this file except in
- * compliance with the License.  You may obtain a copy of the License at
- * http://www.zimbra.com/license.
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * ***** END LICENSE BLOCK *****
- */
-// Copyright (C) Amazon (Original Java Format)
-//Author: Raja Rao DV (rrao@zimbra.com) Converted to JSP
---%>
 
 <%!String awsAccessKeyId = "AKIAJMLVLU3IPT6AP7SQ";%>
 <%!String awsSecretKey = "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";%>

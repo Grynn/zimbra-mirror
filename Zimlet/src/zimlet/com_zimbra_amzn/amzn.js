@@ -14,14 +14,12 @@
  */
 
 /**
- * Amazon Zimlet. Performs book search and shows "hover" information for ISBN numbers in mail or appointments
+ * Amazon Zimlet constructor.
+ * @class
+ * Performs book search and shows "hover" information for ISBN numbers in mail and appointments.
  *
  * @author Raja Rao DV (rrao@zimbra.com) - Rewrote most of the Zimlet
  * @author Kevin Henrikson - Original Author
- */
-
-/**
- * Default constructor.
  */
 function Com_Zimbra_Amazon_HandlerObject() {
 }
@@ -38,9 +36,6 @@ var AmazonZimlet = Com_Zimbra_Amazon_HandlerObject;
  * Defines the "alert on checkbox" element.
  */
 AmazonZimlet.ELEMENT_RESULTS_DIV_ID = "amznZimlet_bookSearchResultsDiv";
-
-
-
 
 /**
  * This method is called by Zimbra Framework when the tool tip is popped-up.
@@ -61,9 +56,9 @@ function(spanElement, obj, context, canvas) {
 };
 
 /**
- * Called by Framework when isbn link is clicked. This opens Amazon webpage for that isbn number.
+ * Called by Zimlet Framework when ISBN link is clicked. Opens Amazon for the ISBN number.
  *
- *  For more details see {@link ZmZimletBase}
+ * @see	ZmZimletBase
  */
 AmazonZimlet.prototype.clicked =
 function(spanElement, contentObjText, matchContext, event) {
@@ -71,7 +66,7 @@ function(spanElement, contentObjText, matchContext, event) {
 };
 
 /**
- * Performs Amazon Book Search
+ * Performs Amazon Book Search.
  *
  */
 AmazonZimlet.prototype._doAmazonBookSearch =
@@ -86,10 +81,10 @@ function() {
 };
 
 /**
- * Gets AWS url for ItemSearch API. It internally generates AWS HMAC Version 2 Signature and appends it to the url.
+ * Gets AWS url for ItemSearch API.Internally generates AWS HMAC Version 2 Signature and appends it to the url.
  *
- *@params {Array} args A hash array of keys and value parameters that needs to be sent to generate AWS URL.
- * @params {Array} args[String, String] First item of the array is the Key and 2nd item is the value 
+ * @params {array} args		an array of key and value pair that needs to be sent to generate AWS URL.
+ * 							args[x][0] is the key and args[x][1] is the value 
  */
 AmazonZimlet.prototype._getUrlFromJSP =
 function(args) {
@@ -123,8 +118,8 @@ AmazonZimlet.prototype.singleClicked = function() {
 /**
  * Displays information on multiple books.
  *
- * @param {array} itemList An array of objects representing Book information
- * @param {string} resultsDiv The id of the div into which the generated Html should be inserted into.
+ * @param {array} itemList 		an array of objects representing Book information
+ * @param {string} resultsDiv	the id of the div into which the generated Html should be inserted into.
  */
 AmazonZimlet.prototype._displayBooks =
 function(itemList, resultsDiv) {
@@ -165,7 +160,7 @@ function(itemList, resultsDiv) {
 };
 
 /**
- *  Shows Book Search Dialog
+ * Shows the Search Dialog.
  */
 AmazonZimlet.prototype._showBookSearchDlg = function() {
 	if (this._bookSearchDialog) {
@@ -184,7 +179,9 @@ AmazonZimlet.prototype._showBookSearchDlg = function() {
 };
 
 /**
- *  Sets Search Dialog's listeners
+ * Sets the Search Dialog listeners.
+ * 
+ * @see			_showBookSearchDlg
  */
 AmazonZimlet.prototype._setBookSearchDlgListeners = function() {
 	this._searchField = document.getElementById("amznZimlet_searchField");
@@ -201,7 +198,9 @@ AmazonZimlet.prototype._setBookSearchDlgListeners = function() {
 };
 
 /**
- * Creates an empty Book Search dialog view
+ * Creates an empty Search Dialog view.
+ * 
+ * @see			_showBookSearchDlg
  */
 AmazonZimlet.prototype._createBookSearchView = function() {
 	var html = new Array();
@@ -215,8 +214,9 @@ AmazonZimlet.prototype._createBookSearchView = function() {
 };
 
 /**
- * Listens to Keyboard clicks and performs search when Enter-key is clicked
- * @param ev
+ * Listens to Keyboard clicks and performs search when Enter-key is clicked.
+ * 
+ * @param {Event}		ev		the event
  */
 AmazonZimlet.prototype._searchFieldKeyHdlr =
 function(ev) {
@@ -230,18 +230,11 @@ function(ev) {
 	this._doAmazonBookSearch();
 };
 
-
-
 /**
  * Callback for search.
  *
- */
-
-/**
- * Callback for search.
- *
- * @param {string} resultsDiv Id of the div where the search result should be inserted into
- * @param {object} results Results Object
+ * @param {string} resultsDiv		the ID of the div where the search result should be inserted into
+ * @param {object} results			the results Object
  */
 AmazonZimlet.prototype._searchCallback =
 function(resultsDiv, results) {
