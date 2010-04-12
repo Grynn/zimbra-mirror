@@ -160,12 +160,12 @@ ZaDashBoardController.prototype.editButtonListener = function(ev) {
 		var listWidget = listItems[0].getWidget();
 		if(listWidget) {
 			var item = listWidget.getSelection()[0];
-			this._editItem(item);
+			this.editItem(item);
 		}
 	}
 };
 
-ZaDashBoardController.prototype._editItem = function (item) {
+ZaDashBoardController.prototype.editItem = function (item) {
 	var type = item.type;
 	if (type == ZaItem.ACCOUNT) {
 		ZaApp.getInstance().getAccountViewController().show(item);

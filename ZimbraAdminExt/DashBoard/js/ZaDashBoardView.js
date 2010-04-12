@@ -134,27 +134,6 @@ ZaDashBoardView.onSearchResult = function(params,resp) {
 	
 
 }
-ZaDashBoardView.openProfilesView = function() {
-	ZaApp.getInstance().getCosListController().show(true,true);
-}
-
-ZaDashBoardView.openDomainsView = function() {
-	ZaApp.getInstance().getDomainListController().show(true,true);
-}
-
-ZaDashBoardView.openAddressesView = function() {
-	var query = "";
-	var params = {};
-	var searchListController = ZaApp.getInstance().getSearchListController() ;
-	searchListController._isAdvancedSearch = false;
-	params.types = [ZaSearch.ACCOUNTS,ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.RESOURCES];
-	searchListController._searchFieldInput = query ;
-	params.query = ZaSearch.getSearchByNameQuery(query, params.types);      
-	ZaApp.getInstance().getSearchListController()._currentQuery = params.query ;
-	searchListController._currentQuery = params.query ;
-	this._isSearchButtonClicked = false ;
-	ZaSearchListController.prototype._searchFieldCallback.call(searchListController,params);
-}
 
 ZaDashBoardView.openNewAccountDialog = function() {
 	try {
@@ -281,11 +260,6 @@ ZaDashBoardView.restartMailboxD = function () {
 		callback: callback
 	}
 	ZaRequestMgr.invoke(reqParams, reqMgrParams);	
-}
-
-ZaDashBoardView.onSearchObjectsButtons = function () {
-	var query = this.getInstanceValue(ZaSearch.A_query);
-	var params = {};	
 }
 
 ZaDashBoardView.restartCallback = function() {
@@ -421,6 +395,16 @@ ZaDashBoardView.getCustomWidth = function () {
 	return "100%";  					
 };					
 
+ZaDashBoardView.listSelectionListener = function (ev) {
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		if(ev.item) {
+			this._selectedItem = ev.item;
+			ZaApp.getInstance().getDashBoardController().editItem(ev.item);
+		}
+	} else {
+		//enable/disable toolbar buttons
+	}
+};
 
 ZaDashBoardView.createPopupMenu = function (listWidget) {
 	popupOperations = {};
@@ -643,7 +627,7 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
              	},
              	{type:_SPACER_,colSpan:3, id:"dashBoardSpacer2"},
  	    	    {colSpan:4, ref:ZaDashBoard.searchResults, id:"dashBoardSearchResults",
- 	    	    	onSelection:ZaDashBoardView.labelSelectionListener, type:_DWT_LIST_, 
+ 	    	    	onSelection:ZaDashBoardView.listSelectionListener, type:_DWT_LIST_, 
  	    	   		forceUpdate: true,createPopupMenu:ZaDashBoardView.createPopupMenu,
  	    	   		multiselect:false, widgetClass:ZaDashBoardListView,
  	    	   		getCustomHeight:ZaDashBoardView.getCustomHeight,

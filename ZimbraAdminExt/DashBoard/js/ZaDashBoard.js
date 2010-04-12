@@ -5,12 +5,10 @@ ZaSettings.DASHBOARD_VIEW = "dashboard_view";
 
 ZaApp.prototype.getDashBoardController =
 function(viewId) {
-	if (viewId && this._controllers[viewId] != null) {
-		return this._controllers[viewId];
-	}else{
-		var c = this._controllers[viewId] = new ZaDashBoardController(this._appCtxt, this._container, this);
-		return c ;
-	}
+	if(!this._dashBoardViewController) {
+		this._dashBoardViewController = new ZaDashBoardController(this._appCtxt, this._container, this);
+	} 
+	return this._dashBoardViewController;
 }
 ZaDashBoard.searchResults = "searchResults";
 ZaDashBoard.settingsTab = "settingsTab";
