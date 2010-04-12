@@ -241,7 +241,7 @@ ZaDashBoardView.openBulkProvisionDialog = function () {
 
 ZaDashBoardView.prototype.searchAddresses = function (types) {    
 	var busyId = Dwt.getNextId();
-	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:ZaAccount,busyId:busyId});
+	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:null,busyId:busyId});
 	types = types ? types : [ZaSearch.ACCOUNTS,ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.RESOURCES];
 	var searchParams = {
 		query: ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query],types), 
