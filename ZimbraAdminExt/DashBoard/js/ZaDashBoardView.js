@@ -82,8 +82,8 @@ function(entry) {
 	
 	var searchParams = {
 			query: this._currentQuery, 
-			types:this.searchTypes,
-			sortBy:this._currentSortField,
+			types:[ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES],
+			sortBy:ZaAccount.A_uid,
 			offset:0,
 			limit:ZaSettings.RESULTSPERPAGE,
 			attrs:ZaSearch.standardAttributes,
@@ -239,18 +239,25 @@ ZaDashBoardView.openBulkProvisionDialog = function () {
 	}
 }
 
-ZaDashBoardView.prototype.searchAddresses = function (types) {
-	var query = this.this._containedObject[ZaSearch.A_query];
-	var params = {};
-	var searchListController = ZaApp.getInstance().getSearchListController() ;
-	searchListController._isAdvancedSearch = false;
-	params.types = [ZaSearch.ACCOUNTS,ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.RESOURCES];
-	searchListController._searchFieldInput = query ;
-	params.query = ZaSearch.getSearchByNameQuery(query, params.types);      
-	/*ZaApp.getInstance().getSearchListController()._currentQuery = params.query ;
-	searchListController._currentQuery = params.query ;
-	this._isSearchButtonClicked = false ;
-	ZaSearchListController.prototype._searchFieldCallback.call(searchListController,params);*/	
+ZaDashBoardView.prototype.searchAddresses = function (types) {    
+	var busyId = Dwt.getNextId();
+	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:ZaAccount,busyId:busyId});
+	types = types ? types : [ZaSearch.ACCOUNTS,ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.RESOURCES];
+	var searchParams = {
+		query: ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query],types), 
+		types:types,
+		sortBy:ZaAccount.A_uid,
+		offset:0,
+		limit:ZaSettings.RESULTSPERPAGE,
+		attrs:ZaSearch.standardAttributes,
+		callback:callback,
+		controller: ZaApp.getInstance().getCurrentController(),
+		showBusy:true,
+		busyId:busyId,
+		busyMsg:ZaMsg.BUSY_SEARCHING,
+		skipCallbackIfCancelled:true			
+	}
+	ZaSearch.searchDirectory(searchParams);	
 }
 
 ZaDashBoardView.restartMailboxD = function () {
@@ -287,75 +294,44 @@ ZaDashBoardView.restartCallback = function() {
 
 ZaDashBoardView.prototype.accFilterSelected = function() {	
 	this.setIconForSearchMenuButton ("Account");
-	this._containedObject[ZaSearch.A_fAccounts] = "TRUE";
-	this._containedObject[ZaSearch.A_fdistributionlists] = "FALSE";	
-	this._containedObject[ZaSearch.A_fAliases] = "FALSE";
-	this._containedObject[ZaSearch.A_fResources] = "FALSE";
-	//this._containedObject[ZaSearch.A_fDomains] = "FALSE";	
-
-	//this.setTooltipForSearchButton (ZaMsg.searchForAccounts);
 	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Accounts);
-	
+	this.searchAddresses([ZaSearch.ACCOUNTS]);
 }
 
 ZaDashBoardView.prototype.dlFilterSelected = function() {
 	this.setIconForSearchMenuButton ("DistributionList");
-	this._containedObject[ZaSearch.A_fAccounts] = "FALSE";
-	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
-	this._containedObject[ZaSearch.A_fAliases] = "FALSE";
-	this._containedObject[ZaSearch.A_fResources] = "FALSE";
-	//this._containedObject[ZaSearch.A_fDomains] = "FALSE";	
-	
-	//this.setTooltipForSearchButton (ZaMsg.searchForDLs);	
 	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_DLs);	
+	this.searchAddresses([ZaSearch.DLS]);
 }
 
 ZaDashBoardView.prototype.aliasFilterSelected = function() {
 	this.setIconForSearchMenuButton ("AccountAlias");
-	this._containedObject[ZaSearch.A_fAccounts] = "FALSE";
-	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
-	this._containedObject[ZaSearch.A_fAliases] = "FALSE";
-	this._containedObject[ZaSearch.A_fResources] = "FALSE";
-	//this._containedObject[ZaSearch.A_fDomains] = "FALSE";	
-	
-	//this.setTooltipForSearchButton (ZaMsg.searchForAliases);	
-	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Aliases);		
+	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Aliases);
+	this.searchAddresses([ZaSearch.ALIASES]);
 }
 
 ZaDashBoardView.prototype.resFilterSelected = function() {
-	this.setIconForSearchMenuButton ("Resource");
-	this._containedObject[ZaSearch.A_fAccounts] = "FALSE";
-	this._containedObject[ZaSearch.A_fdistributionlists] = "FALSE";	
-	this._containedObject[ZaSearch.A_fAliases] = "FALSE";
-	this._containedObject[ZaSearch.A_fResources] = "TRUE";
-	//this._containedObject[ZaSearch.A_fDomains] = "FALSE";	
-	
-	//this.setTooltipForSearchButton (ZaMsg.searchForResources);	
-	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Resources);		
+	this.setIconForSearchMenuButton ("Resource");	
+	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Resources);	
+	this.searchAddresses([ZaSearch.RESOURCES]);
 }
 
 ZaDashBoardView.prototype.domainFilterSelected = function() {
 	this.setIconForSearchMenuButton ("Domain");
-	this._containedObject[ZaSearch.A_fAccounts] = "FALSE";
-	this._containedObject[ZaSearch.A_fdistributionlists] = "FALSE";	
-	this._containedObject[ZaSearch.A_fAliases] = "FALSE";
-	this._containedObject[ZaSearch.A_fResources] = "FALSE";
-	//this._containedObject[ZaSearch.A_fDomains] = "TRUE";	
-	
-	//this.setTooltipForSearchButton (ZaMsg.searchForDomains);	
-	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Domains);		
+	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Domains);
+	this.searchAddresses([ZaSearch.DOMAINS]);
 }
 
 ZaDashBoardView.prototype.allFilterSelected = function() {
 	this.setIconForSearchMenuButton ("SearchAll");
-	this._containedObject[ZaSearch.A_fAccounts] = "TRUE";
-	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
-	this._containedObject[ZaSearch.A_fAliases] = "TRUE";
-	this._containedObject[ZaSearch.A_fResources] = "TRUE";
-	//this._containedObject[ZaSearch.A_fDomains] = "TRUE";	
-	
-	//this.setTooltipForSearchButton (ZaMsg.searchForAll);	
 	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_All);	
+	this.searchAddresses([ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES]);
+}
+
+ZaDashBoardView.prototype.cosFilterSelected = function() {
+	this.setIconForSearchMenuButton ("COS");
+	this.setLabelForSearchMenuButton(com_zimbra_dashboard.SearchFilter_Profiles);	
+	this.searchAddresses([ZaSearch.COSES]);
 }
 
 ZaDashBoardView.prototype.setTooltipForSearchButton =	function (tooltip){
@@ -470,7 +446,7 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 	searchMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALL, com_zimbra_dashboard.SearchFilter_All, com_zimbra_dashboard.searchForAll, "SearchAll", "SearchAll", new AjxListener(this, this.allFilterSelected)));
 	searchMenuOpList.push(new ZaOperation(ZaOperation.SEP));
 	searchMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_DOMAINS, ZaMsg.SearchFilter_Domains, ZaMsg.searchForDomains, "Domain", "DomainDis", new AjxListener(this, this.domainFilterSelected)));
-	searchMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_COSES, com_zimbra_dashboard.SearchFilter_Profiles, com_zimbra_dashboard.searchForProfiles, "COS", "COS", new AjxListener(this, this.domainFilterSelected)));				
+	searchMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_COSES, com_zimbra_dashboard.SearchFilter_Profiles, com_zimbra_dashboard.searchForProfiles, "COS", "COS", new AjxListener(this, this.cosFilterSelected)));				
 	ZaDashBoardView.searchChoices.setChoices(searchMenuOpList);
 	
 	/*ZaDashBoardView.newButtonChoices = new XFormChoices([],XFormChoices.OBJECT_REFERENCE_LIST, null, "labelId");
@@ -666,7 +642,7 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
    	    	    	choices:ZaDashBoardView.searchChoices,toolTipContent:ZaMsg.searchToolTip,id:"dashBoardSearchMenuButton"
              	},
              	{type:_SPACER_,colSpan:3, id:"dashBoardSpacer2"},
- 	    	    {colSpan:4, ref:ZaDashBoard.searchResults, 
+ 	    	    {colSpan:4, ref:ZaDashBoard.searchResults, id:"dashBoardSearchResults",
  	    	    	onSelection:ZaDashBoardView.labelSelectionListener, type:_DWT_LIST_, 
  	    	   		forceUpdate: true,createPopupMenu:ZaDashBoardView.createPopupMenu,
  	    	   		multiselect:false, widgetClass:ZaDashBoardListView,

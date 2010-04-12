@@ -69,10 +69,6 @@ function () {
     this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton, com_zimbra_dashboard.NewButton_tt, 
 			"Account", "AccountDis", this._newAcctListener, ZaOperation.TYPE_MENU, newMenuOpList);
 	this._toolbarOrder.push(ZaOperation.NEW_MENU);	
-	//this._toolbarOperations[ZaOperation.MANAGE_DOMAINS] = new ZaOperation(ZaOperation.MANAGE_DOMAINS, com_zimbra_dashboard.ManageDomains, com_zimbra_dashboard.ManageDomains_tt, "Domain", "DomainDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
-	//this._toolbarOrder.push(ZaOperation.MANAGE_DOMAINS);
-	//this._toolbarOperations[ZaOperation.MANAGE_PROFILES] = new ZaOperation(ZaOperation.MANAGE_PROFILES, com_zimbra_dashboard.ManageProfiles, com_zimbra_dashboard.ManageProfiles_tt, "COS", "COSDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
-	//this._toolbarOrder.push(ZaOperation.MANAGE_PROFILES);
     this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, this.editButtonListener));
     this._toolbarOrder.push(ZaOperation.EDIT);
     this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
@@ -115,9 +111,12 @@ function(openInNewTab) {
     	this._serviceBarOperations[ZaOperation.STOP_SERVICES] = new ZaOperation(ZaOperation.STOP_SERVICES, com_zimbra_dashboard.StopServices, com_zimbra_dashboard.StopServices_tt, "Cancel", "Cancel", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
     	this._serviceBarOperations[ZaOperation.RESTART_SERVICES] = new ZaOperation(ZaOperation.RESTART_SERVICES, com_zimbra_dashboard.RestartServices, com_zimbra_dashboard.RestartServices_tt, "Refresh", "Refresh", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
     	this._serviceBar = new ZaToolBar(this._container, this._serviceBarOperations,this._serviceBarOrder,null,"VAMIServicesToolBar");
+    	//this._searchPanel = new DwtComposite(ZaApp.getInstance().getAppCtxt().getShell(), "SearchPanel", DwtControl.ABSOLUTE_STYLE);
+    	//this._serviceBar = new ZaToolBar(this._searchPanel, this._serviceBarOperations,this._serviceBarOrder,null,"VAMIServicesToolBar");
+    	//this._searchPanel.zShow(true);
     	var elements = new Object();
-		this._contentView = new this.tabConstructor(this._container);
-		elements[ZaAppViewMgr.C_SERVICE_BAR] = this._serviceBar;
+		this._contentView = new ZaDashBoardView(this._container);
+		
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
     	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
 		var tabParams = {
@@ -129,6 +128,9 @@ function(openInNewTab) {
 		this._UICreated = true;
 			
 		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
+		elements = {};
+		elements[ZaAppViewMgr.C_SERVICE_BAR] = this._serviceBar;
+		ZaApp.getInstance().getAppViewMgr().addComponents(elements,true);
 	}
     var entry = {attrs:{}};
     var gc = ZaApp.getInstance().getGlobalConfig();
@@ -149,4 +151,41 @@ function(openInNewTab) {
 	entry[ZaDashBoard.searchResults] = [];
 	this._contentView.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
+};
+
+ZaDashBoardController.prototype.editButtonListener = function(ev) {
+	var form = this._contentView._localXForm;
+	var listItems = form.getItemsById("dashBoardSearchResults");
+	if(listItems && listItems[0]) {
+		var listWidget = listItems[0].getWidget();
+		if(listWidget) {
+			var item = listWidget.getSelection()[0];
+			this._editItem(item);
+		}
+	}
+};
+
+ZaDashBoardController.prototype._editItem = function (item) {
+	var type = item.type;
+	if (type == ZaItem.ACCOUNT) {
+		ZaApp.getInstance().getAccountViewController().show(item);
+	} else if (type == ZaItem.DL) {
+		ZaApp.getInstance().getDistributionListController().show(item);
+	} else if(type == ZaItem.ALIAS) {
+		var targetObj = item.getAliasTargetObj() ;
+		
+		if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {			
+			ZaApp.getInstance().getAccountViewController().show(targetObj, true);
+		} else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
+			ZaApp.getInstance().getDistributionListController().show(targetObj, true);
+		}  else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.RESOURCE){
+			ZaApp.getInstance().getResourceController().show(targetObj, true);
+		}
+	} else if (type == ZaItem.RESOURCE ){
+		ZaApp.getInstance().getResourceController().show(item);
+	} else if (type==ZaItem.DOMAIN) {
+		ZaApp.getInstance().getDomainController().show(item);
+	} else if (type==ZaItem.COS) {
+		ZaApp.getInstance().getCosController().show(item);
+	}
 };
