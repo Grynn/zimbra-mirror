@@ -135,90 +135,9 @@ ZaDashBoardView.onSearchResult = function(params,resp) {
 
 }
 
-ZaDashBoardView.openNewAccountDialog = function() {
-	try {
-		EmailAddr_XFormItem.resetDomainLists.call(ZaApp.getInstance().getCurrentController()) ;
-		var newAccount = new ZaAccount();
-		newAccount.loadNewObjectDefaults("name", ZaSettings.myDomainName);
-		
-		if(!ZaApp.getInstance().dialogs["newAccountWizard"])
-			ZaApp.getInstance().dialogs["newAccountWizard"] = new ZaNewAccountXWizard(DwtShell.getShell(window),newAccount);	
-        else { //update the account type if needed
-            ZaApp.getInstance().dialogs["newAccountWizard"].updateAccountType () ;    
-        }
-
-		ZaApp.getInstance().dialogs["newAccountWizard"].setObject(newAccount);
-		ZaApp.getInstance().dialogs["newAccountWizard"].popup();
-	} catch (ex) {
-		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccountListController.prototype._newAccountListener", null, false);
-	}	
 	
-}
-
-
-ZaDashBoardView.openNewResourceDialog = function() {
-	try {
-		EmailAddr_XFormItem.resetDomainLists.call (ZaApp.getInstance().getCurrentController());
-		var newResource = new ZaResource();
-		newResource.loadNewObjectDefaults("name", ZaSettings.myDomainName);	
-		if(!ZaApp.getInstance().dialogs["newResourceWizard"])
-			ZaApp.getInstance().dialogs["newResourceWizard"] = new ZaNewResourceXWizard(DwtShell.getShell(window));	
-
-		ZaApp.getInstance().dialogs["newResourceWizard"].setObject(newResource);
-		ZaApp.getInstance().dialogs["newResourceWizard"].popup();
-	} catch (ex) {
-		this._handleException(ex, "ZaAccountListController.prototype._newResourceListener", null, false);
-	}
-}
-
-ZaDashBoardView.openNewDistributionListView = function() {
-	try {
-		EmailAddr_XFormItem.resetDomainLists.call (ZaApp.getInstance().getCurrentController());
-		var newDL = new ZaDistributionList();
-		newDL.rights = {};
-		newDL._defaultValues = {attrs:{}};
-		newDL.loadNewObjectDefaults("name", ZaSettings.myDomainName);	
-		newDL.rights[ZaDistributionList.RENAME_DL_RIGHT]=true;
-		newDL.rights[ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]=true;
-		newDL.rights[ZaDistributionList.ADD_DL_MEMBER_RIGHT]=true;
-		ZaApp.getInstance().getDistributionListController().show(newDL);
-	} catch (ex) {
-		this._handleException(ex, "ZaAccountListController.prototype._newDistributionListListener", null, false);
-	}
-
-};
-	
-//new button was pressed
-ZaDashBoardView.openNewProfileView = function() {
-	var newCos = new ZaCos();
-	//load default COS
-	var defCos = ZaCos.getCosByName("default");
-	newCos.loadNewObjectDefaults();
-	newCos.rights[ZaCos.RENAME_COS_RIGHT]=true;
-	newCos.rights[ZaCos.CREATE_COS_RIGHT]=true;
-	//copy values from default cos to the new cos
-	for(var aname in defCos.attrs) {
-		if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) || (aname == ZaItem.A_zimbraCreateTimestamp))
-			continue;			
-		newCos.attrs[aname] = defCos.attrs[aname];
-	}
-	
-	ZaApp.getInstance().getCosController().show(newCos);
-}
-
-ZaDashBoardView.openBulkProvisionDialog = function () {
-     try {
-		if(!ZaApp.getInstance().dialogs["bulkProvisionWizard"]) {
-			ZaApp.getInstance().dialogs["bulkProvisionWizard"] = new ZaBulkProvisionWizard(DwtShell.getShell(window));
-		}
-		ZaApp.getInstance().dialogs["bulkProvisionWizard"].setObject(new ZaBulkProvision());
-		ZaApp.getInstance().dialogs["bulkProvisionWizard"].popup();
-	} catch (ex) {
-		this._handleException(ex, "ZaAccountListController.prototype._bulkProvisionListener", null, false);
-	}
-}
-
-ZaDashBoardView.prototype.searchAddresses = function (types) {    
+ZaDashBoardView.prototype.searchAddresses = function (types) {  
+	this.types=types;
 	var busyId = Dwt.getNextId();
 	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:null,busyId:busyId});
 	types = types ? types : [ZaSearch.ACCOUNTS,ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.RESOURCES];
@@ -298,7 +217,7 @@ ZaDashBoardView.prototype.domainFilterSelected = function() {
 
 ZaDashBoardView.prototype.allFilterSelected = function() {
 	this.setIconForSearchMenuButton ("SearchAll");
-	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_All);	
+	this.setLabelForSearchMenuButton(com_zimbra_dashboard.SearchFilter_All);	
 	this.searchAddresses([ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES]);
 }
 
@@ -403,6 +322,7 @@ ZaDashBoardView.listSelectionListener = function (ev) {
 		}
 	} else {
 		//enable/disable toolbar buttons
+		ZaApp.getInstance().getDashBoardController().changeActionsState();
 	}
 };
 
@@ -629,7 +549,7 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
  	    	    {colSpan:4, ref:ZaDashBoard.searchResults, id:"dashBoardSearchResults",
  	    	    	onSelection:ZaDashBoardView.listSelectionListener, type:_DWT_LIST_, 
  	    	   		forceUpdate: true,createPopupMenu:ZaDashBoardView.createPopupMenu,
- 	    	   		multiselect:false, widgetClass:ZaDashBoardListView,
+ 	    	   		multiselect:true, widgetClass:ZaDashBoardListView,
  	    	   		getCustomHeight:ZaDashBoardView.getCustomHeight,
  	    	   		getCustomWidth:ZaDashBoardView.getCustomWidth,
  	    	   		bmolsnr:true,

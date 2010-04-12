@@ -75,6 +75,9 @@ function(account, now, isDragProxy) {
 						case ZaItem.DOMAIN:
 							html[idx++] = AjxImg.getImageHtml("Domain");				
 						break;					
+						case ZaItem.COS:
+							html[idx++] = AjxImg.getImageHtml("COS");				
+						break;					
 						
 						case ZaItem.RESOURCE:
 							if (account.attrs[ZaResource.A_zimbraCalResType] == ZaResource.RESOURCE_TYPE_LOCATION){

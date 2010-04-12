@@ -32,6 +32,7 @@ ZaDashBoardController = function(appCtxt, container) {
 ZaDashBoardController.prototype = new ZaXFormViewController();
 ZaDashBoardController.prototype.constructor = ZaDashBoardController;
 ZaController.initToolbarMethods["ZaDashBoardController"] = new Array();
+ZaController.changeActionsStateMethods["ZaDashBoardController"] = new Array();
 ZaDashBoardController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/provisioning_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaOperation.MANAGE_DOMAINS = ++ZA_OP_INDEX;
 ZaOperation.MANAGE_PROFILES = ++ZA_OP_INDEX;
@@ -64,7 +65,7 @@ function () {
     newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Resource, com_zimbra_dashboard.NewButton_Resource_tt, "Resource", "ResourceDis", new AjxListener(this, this.newResourceSelected)));
     newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Domain, com_zimbra_dashboard.NewButton_Domain_tt, "Domain", "DomainDis", new AjxListener(this, this.newDomainSelected)));
     newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Profile, com_zimbra_dashboard.NewButton_Profile_tt, "NewCOS", "NewCOSDis", new AjxListener(this, this.newProfileSelected)));
-    newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Import, com_zimbra_dashboard.NewButton_Import_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.newImportAccountsSelected))); 
+    newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Import, com_zimbra_dashboard.NewButton_Import_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.openBulkProvisionDialog))); 
 	
     this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton, com_zimbra_dashboard.NewButton_tt, 
 			"Account", "AccountDis", this._newAcctListener, ZaOperation.TYPE_MENU, newMenuOpList);
@@ -73,7 +74,11 @@ function () {
     this._toolbarOrder.push(ZaOperation.EDIT);
     this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
     this._toolbarOrder.push(ZaOperation.DELETE);
-	this._toolbarOrder.push(ZaOperation.SEP);
+    this._toolbarOperations[ZaOperation.CHNG_PWD]=new ZaOperation(ZaOperation.CHNG_PWD,ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, this.chngPwdListener));
+    this._toolbarOrder.push(ZaOperation.CHNG_PWD);
+    this._toolbarOperations[ZaOperation.VIEW_MAIL]=new ZaOperation(ZaOperation.VIEW_MAIL,ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, this.viewMailListener));
+    this._toolbarOrder.push(ZaOperation.VIEW_MAIL);
+    this._toolbarOrder.push(ZaOperation.SEP);
 	this._toolbarOperations[ZaOperation.MANAGE_SETITNGS] = new ZaOperation(ZaOperation.MANAGE_PROFILES, com_zimbra_dashboard.ServerSettings, com_zimbra_dashboard.ServerSettings_tt, "GlobalSettings", "GlobalSettings", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
 	this._toolbarOrder.push(ZaOperation.MANAGE_SETITNGS);
     this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);	
@@ -189,3 +194,458 @@ ZaDashBoardController.prototype.editItem = function (item) {
 		ZaApp.getInstance().getCosController().show(item);
 	}
 };
+
+ZaDashBoardController.prototype.openBulkProvisionDialog = function () {
+    try {
+		if(!ZaApp.getInstance().dialogs["bulkProvisionWizard"]) {
+			ZaApp.getInstance().dialogs["bulkProvisionWizard"] = new ZaBulkProvisionWizard(DwtShell.getShell(window));
+		}
+		ZaApp.getInstance().dialogs["bulkProvisionWizard"].setObject(new ZaBulkProvision());
+		ZaApp.getInstance().dialogs["bulkProvisionWizard"].popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaDashBoardController.prototype._bulkProvisionListener", null, false);
+	}
+};
+
+ZaDashBoardController.prototype.deleteDialogOKBtnhandler = function() {
+	ZaApp.getInstance().dialogs["removeProgressDlg"].popdown();
+	this._contentView.searchAddresses(this._contentView.types);
+};
+
+//new button was pressed
+ZaDashBoardController.prototype.newProfileSelected = function() {
+	var newCos = new ZaCos();
+	//load default COS
+	var defCos = ZaCos.getCosByName("default");
+	newCos.loadNewObjectDefaults();
+	newCos.rights[ZaCos.RENAME_COS_RIGHT]=true;
+	newCos.rights[ZaCos.CREATE_COS_RIGHT]=true;
+	//copy values from default cos to the new cos
+	for(var aname in defCos.attrs) {
+		if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) || (aname == ZaItem.A_zimbraCreateTimestamp))
+			continue;			
+		newCos.attrs[aname] = defCos.attrs[aname];
+	}
+	
+	ZaApp.getInstance().getCosController().show(newCos);
+}
+
+
+ZaDashBoardController.prototype.newAccSelected = function() {
+	try {
+		EmailAddr_XFormItem.resetDomainLists.call(ZaApp.getInstance().getCurrentController()) ;
+		var newAccount = new ZaAccount();
+		newAccount.loadNewObjectDefaults("name", ZaSettings.myDomainName);
+		
+		if(!ZaApp.getInstance().dialogs["newAccountWizard"])
+			ZaApp.getInstance().dialogs["newAccountWizard"] = new ZaNewAccountXWizard(DwtShell.getShell(window),newAccount);	
+        else { //update the account type if needed
+            ZaApp.getInstance().dialogs["newAccountWizard"].updateAccountType () ;    
+        }
+
+		ZaApp.getInstance().dialogs["newAccountWizard"].setObject(newAccount);
+		ZaApp.getInstance().dialogs["newAccountWizard"].popup();
+	} catch (ex) {
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccountListController.prototype._newAccountListener", null, false);
+	}	
+	
+}
+
+
+ZaDashBoardController.prototype.newResourceSelected = function() {
+	try {
+		EmailAddr_XFormItem.resetDomainLists.call (ZaApp.getInstance().getCurrentController());
+		var newResource = new ZaResource();
+		newResource.loadNewObjectDefaults("name", ZaSettings.myDomainName);	
+		if(!ZaApp.getInstance().dialogs["newResourceWizard"])
+			ZaApp.getInstance().dialogs["newResourceWizard"] = new ZaNewResourceXWizard(DwtShell.getShell(window));	
+
+		ZaApp.getInstance().dialogs["newResourceWizard"].setObject(newResource);
+		ZaApp.getInstance().dialogs["newResourceWizard"].popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountListController.prototype._newResourceListener", null, false);
+	}
+}
+
+ZaDashBoardController.prototype.newDLSelected = function() {
+	try {
+		EmailAddr_XFormItem.resetDomainLists.call (ZaApp.getInstance().getCurrentController());
+		var newDL = new ZaDistributionList();
+		newDL.rights = {};
+		newDL._defaultValues = {attrs:{}};
+		newDL.loadNewObjectDefaults("name", ZaSettings.myDomainName);	
+		newDL.rights[ZaDistributionList.RENAME_DL_RIGHT]=true;
+		newDL.rights[ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]=true;
+		newDL.rights[ZaDistributionList.ADD_DL_MEMBER_RIGHT]=true;
+		ZaApp.getInstance().getDistributionListController().show(newDL);
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountListController.prototype._newDistributionListListener", null, false);
+	}
+
+};
+ZaDashBoardController.prototype.deleteButtonListener = function(ev) {
+	this._removeList = new Array();
+	this._itemsInTabList = [] ;
+	this._haveAliases = false;
+	this._haveAccounts = false;
+	this._haveDls = false;
+	this._haveDomains = false;	
+	this._haveCOSes = false;
+	var form = this._contentView._localXForm;
+	var listItems = form.getItemsById("dashBoardSearchResults");
+	var listWidget = null;
+	if(listItems && listItems[0]) {
+		listWidget = listItems[0].getWidget();
+	} else {
+		return;
+	}	
+	if(!ZaApp.getInstance().dialogs["removeProgressDlg"]) {
+		ZaApp.getInstance().dialogs["removeProgressDlg"] = new DeleteAcctsPgrsDlg(this._container, "500px","300px");
+	}
+	ZaApp.getInstance().dialogs["removeProgressDlg"].registerCallback(DwtDialog.OK_BUTTON, this.deleteDialogOKBtnhandler, this, null);
+	if(listWidget.getSelectionCount()>0) {
+		var arrItems = listWidget.getSelection();
+		var cnt = arrItems.length;
+		for(var key =0; key < cnt; key++) {
+			var item = arrItems[key];
+			if (item) {
+				//detect whether the deleting item is open in a tab
+				if (ZaApp.getInstance().getTabGroup().getTabByItemId (item.id)) {
+					this._itemsInTabList.push (item) ;
+				}else{
+					this._removeList.push(item);			
+					if(!this._haveAliases && item.type == ZaItem.ALIAS) {
+						this._haveAliases = true;
+					} else if(!this._haveAccounts && item.type == ZaItem.ACCOUNT) {
+						this._haveAccounts = true;
+					} else if(!this._haveDls && item.type == ZaItem.DL) {
+						this._haveDls = true;
+					}  else if(!this._haveDomains && item.type == ZaItem.DOMAIN) {
+						this._haveDomains = true;
+					} else if(!this._haveCOSes && item.type == ZaItem.COS) {
+						this._haveCOSes = true;
+					}
+				}
+			}
+		}
+	}
+	
+	if (this._itemsInTabList.length > 0) {
+		if(!ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"]) {
+			ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"] = 
+				new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.CANCEL_BUTTON], 
+						[ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON_DESC , ZaMsgDialog.NO_DELETE_BUTTON_DESC]);			
+		}
+		
+		
+		var msg = ZaMsg.dl_warning_delete_accounts_in_tab ; 
+		msg += ZaAccountListController.getDlMsgFromList (this._itemsInTabList) ;
+		
+		ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"].setMessage(msg, DwtMessageDialog.WARNING_STYLE);	
+		ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"].registerCallback(
+				ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON, ZaAccountListController.prototype._closeTabsBeforeRemove, this);
+		ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"].registerCallback(
+				ZaMsgDialog.NO_DELETE_BUTTON, ZaAccountListController.prototype._deleteAccountsInRemoveList, this);		
+		ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"].popup();
+		
+	} else{
+		ZaAccountListController.prototype._deleteAccountsInRemoveList.call (this);
+	}
+	
+};
+
+ZaDashBoardController.prototype._chngPwdListener = function(ev) {
+	var form = this._contentView._localXForm;
+	var listItems = form.getItemsById("dashBoardSearchResults");
+	var listWidget = null;
+	if(listItems && listItems[0]) {
+		listWidget = listItems[0].getWidget();
+	} else {
+		return;
+	}
+	if(listWidget.getSelectionCount()==1) {
+		this._chngPwdDlg = new ZaAccChangePwdXDlg(ZaApp.getInstance().getAppCtxt().getShell(), "400px","90px");
+		var item = listWidget.getSelection()[0];
+		item.loadEffectiveRights("id", item.id, false);
+		this._chngPwdDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountListController._changePwdOKCallback, this, item);				
+		this._chngPwdDlg.setTitle(ZaMsg.CHNP_Title + " (" + item.name + ")");
+		var obj = new Object();
+		obj[ZaAccount.A2_confirmPassword]="";
+		obj.attrs = {};
+		obj.attrs[ZaAccount.A_password]="";
+		obj.attrs[ZaAccount.A_zimbraPasswordMustChange]=false;
+		this._chngPwdDlg.setObject(obj)
+		this._chngPwdDlg.popup();
+	}
+}
+
+ZaDashBoardController.prototype.viewMailListener =
+	function(ev) {
+		try {
+			var form = this._contentView._localXForm;
+			var listItems = form.getItemsById("dashBoardSearchResults");
+			var listWidget = null;
+			if(listItems && listItems[0]) {
+				listWidget = listItems[0].getWidget();
+			} else {
+				return;
+			}
+			var accounts = listWidget.getSelection();
+			if(accounts && accounts.length) {
+				var account = accounts[0];
+				if(account) {
+					ZaAccountListController._viewMailListenerLauncher.call(this, account);
+				}
+			}	
+		} catch (ex) {
+			this._handleException(ex, "ZaDashBoardController.prototype.viewMailListener", null, false);			
+		}
+	}
+
+
+ZaDashBoardController.prototype._expireSessionListener = function(ev) {
+	var form = this._contentView._localXForm;
+	var listItems = form.getItemsById("dashBoardSearchResults");
+	var listWidget = null;
+	if(listItems && listItems[0]) {
+		listWidget = listItems[0].getWidget();
+	} else {
+		return;
+	}
+	if(listWidget.getSelectionCount()==1) {
+		var item = listWidget.getSelection()[0];
+		item.loadEffectiveRights("id", item.id, false);
+		if(ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,item)) {
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.WARN_EXPIRE_SESSIONS, DwtMessageDialog.WARNING_STYLE);
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype.expireSessions, this, [item]);		
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDlg, this, null);				
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
+		} else {
+			this.popupMsgDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_PERMISSION_FOR_OPERATION_ON, [item.name ? item.name : item.attrs[ZaAccount.A_accountName]]), true);
+		}
+	}
+}
+
+ZaDashBoardController.changeActionsStateMethod = function () {
+	var form = this._contentView._localXForm;
+	var listItems = form.getItemsById("dashBoardSearchResults");
+	var listWidget = null;
+	if(listItems && listItems[0]) {
+		listWidget = listItems[0].getWidget();
+	} else {
+		return;
+	}
+	
+	var cnt = listWidget.getSelectionCount();
+	if(cnt == 1) {
+		var item = listWidget.getSelection()[0];
+		if(item) {
+			if(item.type != ZaItem.ALIAS) {
+				if(this._toolbarOperations[ZaOperation.MOVE_ALIAS]) {
+					this._toolbarOperations[ZaOperation.MOVE_ALIAS].enabled = false;
+				}					
+			}
+            if (item.type == ZaItem.ALIAS || item.type == ZaItem.DL) {
+                if(this._toolbarOperations[ZaOperation.CHNG_PWD]) {
+                    this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;
+                }
+            }
+            if(item.type == ZaItem.COS && item.name=="default") {
+				if(this._toolbarOperations[ZaOperation.DELETE])
+				 	this._toolbarOperations[ZaOperation.DELETE].enabled = false;   
+            }
+            if(item.type == ZaItem.DOMAIN || item.type == ZaItem.COS) {
+                if (this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
+                    this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;                                        
+                }   
+                if(this._toolbarOperations[ZaOperation.CHNG_PWD]) {
+                    this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;
+                }	
+			   	if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+					this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+				}                
+            } else if (((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.DL))
+                || (item.type == ZaItem.DL)) {
+                if (this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
+                    this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;                                        
+                }
+
+            } else if (item.type == ZaItem.DL) {
+                if(this._toolbarOperations[ZaOperation.MOVE_ALIAS])	{
+                    this._toolbarOperations[ZaOperation.MOVE_ALIAS].enabled = false;
+                }					 
+				if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
+				 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+                	    
+            } else if (item.type == ZaItem.ACCOUNT) {
+				var enable = false;
+				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+					enable = true;
+				} else if (AjxUtil.isEmpty(item.rights)) {
+					//console.log("loading effective rights for a list item");
+					item.loadEffectiveRights("id", item.id, false);
+					//console.log("loaded rights for a list item");
+				}
+				if(!enable) {
+					if(!ZaItem.hasRight(ZaAccount.VIEW_MAIL_RIGHT,item)) {
+						 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
+						 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+					}
+					if(!ZaItem.hasRight(ZaAccount.DELETE_ACCOUNT_RIGHT,item)) {
+						if(this._toolbarOperations[ZaOperation.DELETE])
+						 	this._toolbarOperations[ZaOperation.DELETE].enabled = false;   
+					}	
+					if(!ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT, item)) {
+						 if(this._toolbarOperations[ZaOperation.CHNG_PWD])
+						 	this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;   
+					}		
+					if(!ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,item)) {    
+					   	if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+							this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+						}
+					}
+				}
+			} else if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT))  {
+				if(!item.targetObj)
+					item.targetObj = item.getAliasTargetObj() ;
+					
+				var enable = false;
+				if (ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+					enable = true;
+				} else if (AjxUtil.isEmpty(item.targetObj.rights)) {
+					item.targetObj.loadEffectiveRights("id", item.id, false);
+				}
+				if(!enable) {
+					if(!ZaItem.hasRight(ZaAccount.VIEW_MAIL_RIGHT,item.targetObj)) {
+						 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
+						 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+					}	
+					if(!ZaItem.hasRight(ZaAccount.DELETE_ACCOUNT_RIGHT,item.targetObj)) {
+						 if(this._toolbarOperations[ZaOperation.DELETE])
+						 	this._toolbarOperations[ZaOperation.DELETE].enabled = false;   
+					}
+					if(!ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT,item.targetObj)) {
+						 if(this._toolbarOperations[ZaOperation.CHNG_PWD])
+						 	this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;   
+					}			
+					if(!ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,item.targetObj)) {    
+					   	if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+							this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+						}
+					}
+				}
+			} else if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.RESOURCE))  {
+			   	if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+					this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+				}				
+				if(!item.targetObj)
+					item.targetObj = item.getAliasTargetObj() ;
+					
+				var enable = false;
+				if (ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+					enable = true;
+				} else if (AjxUtil.isEmpty(item.targetObj.rights)) {
+					item.targetObj.loadEffectiveRights("id", item.id, false);
+				}
+				if(!enable) {
+					if(!enable) {
+						if(!ZaItem.hasRight(ZaResource.VIEW_RESOURCE_MAIL_RIGHT,item.targetObj)) {
+							 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
+							 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+						}
+						if(!ZaItem.hasRight(ZaResource.DELETE_CALRES_RIGHT,item.targetObj)) {
+							 if(this._toolbarOperations[ZaOperation.DELETE])
+							 	this._toolbarOperations[ZaOperation.DELETE].enabled = false;   
+						}	
+						if(!ZaItem.hasRight(ZaResource.SET_CALRES_PASSWORD_RIGHT, item.targetObj)) {
+							 if(this._toolbarOperations[ZaOperation.CHNG_PWD])
+							 	this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;   
+						}		
+					}
+				}
+			} else if(item.type == ZaItem.RESOURCE) {
+			   	if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+					this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+				}
+				var enable = false;
+				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+					enable = true;
+				} else if (AjxUtil.isEmpty(item.rights)) {
+					item.loadEffectiveRights("id", item.id, false);
+				}
+				if(!enable) {
+					if(!ZaItem.hasRight(ZaResource.VIEW_RESOURCE_MAIL_RIGHT,item)) {
+						 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
+						 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+					}
+					if(!ZaItem.hasRight(ZaResource.DELETE_CALRES_RIGHT,item)) {
+						 if(this._toolbarOperations[ZaOperation.DELETE])
+						 	this._toolbarOperations[ZaOperation.DELETE].enabled = false;   
+					}	
+					if(!ZaItem.hasRight(ZaResource.SET_CALRES_PASSWORD_RIGHT, item)) {
+						 if(this._toolbarOperations[ZaOperation.CHNG_PWD])
+						 	this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;   
+					}		
+				}				
+			}
+        } else {
+			if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+				this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+			}	        	
+			if(this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
+				this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
+			}
+			if(this._toolbarOperations[ZaOperation.EDIT]) {	
+				this._toolbarOperations[ZaOperation.EDIT].enabled = false;
+			}	
+			if(this._toolbarOperations[ZaOperation.CHNG_PWD]) {
+				this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;
+			}
+			if(this._toolbarOperations[ZaOperation.MOVE_ALIAS]) {
+				this._toolbarOperations[ZaOperation.MOVE_ALIAS].enabled = false;
+			}	
+			if(this._toolbarOperations[ZaOperation.DELETE]) {	
+				this._toolbarOperations[ZaOperation.DELETE].enabled = false;
+			}
+				
+		}		
+	} else if (cnt > 1){
+		if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+			this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+		}			
+		if(this._toolbarOperations[ZaOperation.EDIT]) {	
+			this._toolbarOperations[ZaOperation.EDIT].enabled = false;
+		}		
+		if(this._toolbarOperations[ZaOperation.CHNG_PWD]) {
+			this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;
+		}		
+		if(this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
+			this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
+		}	
+		if(this._toolbarOperations[ZaOperation.MOVE_ALIAS]) {
+			this._toolbarOperations[ZaOperation.MOVE_ALIAS].enabled = false;		
+		}
+				
+	} else {
+		if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+			this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+		}			
+		if(this._toolbarOperations[ZaOperation.EDIT]) {	
+			this._toolbarOperations[ZaOperation.EDIT].enabled = false;
+		}	
+		if(this._toolbarOperations[ZaOperation.DELETE]) {
+			this._toolbarOperations[ZaOperation.DELETE].enabled = false;
+		}		
+		if(this._toolbarOperations[ZaOperation.CHNG_PWD]) {
+			this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;
+		}	
+		if(this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
+			this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
+		}
+		if(this._toolbarOperations[ZaOperation.MOVE_ALIAS])	{
+			this._toolbarOperations[ZaOperation.MOVE_ALIAS].enabled = false;
+		}	
+
+	}
+};
+ZaController.changeActionsStateMethods["ZaDashBoardController"].push(ZaDashBoardController.changeActionsStateMethod);

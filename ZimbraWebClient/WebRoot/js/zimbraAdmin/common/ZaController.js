@@ -888,7 +888,7 @@ function () {
 				try {
 					methods[i].call(this);
 				} catch (ex) {
-					this._handleException(ex, "ZaListViewController.prototype.changeActionsState");
+					this._handleException(ex, "ZaController.prototype.changeActionsState");
 				}
 			}
 		}

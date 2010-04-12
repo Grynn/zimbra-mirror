@@ -134,14 +134,8 @@ function (result) {
 	}
 	if(stopForError) {
 		//stop deleting
-	/*	var strBuffer = new AjxBuffer(ZaMsg.FAILED_DELETE_ACCOUNT, " ",this._containedObject[this._currentIndex][ZaAccount.A_name],"<br>",
-			ZaMsg.ERROR_CODE, " ", result.getException().code, "<br>",
-			ZaMsg.ERROR_MESSAGE, " ",result.getException().msg, "<br>",
-			ZaMsg.ERROR_DETAILS, " ",result.getException().detail, "<br>");
-		obj[DeleteAcctsPgrsDlg._ERROR_MSG] = strBuffer.toString();*/
 		AjxTimedAction.cancelAction(this._pollHandler);	
-		this._pollHandler = null;	
-//		this._localXForm.setInstance(obj);	
+		this._pollHandler = null;		
 		this._localXForm.refresh();	
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "DeleteAcctsPgrsDlg.prototype.deleteOneAccountCallback", null, false);		
 	} else {
@@ -159,8 +153,7 @@ function (result) {
 			if(!this._aborted) {
 				obj.status = ZaMsg.NAD_FinishedDeletingAccounts;
 			}
-		}
-//		this._localXForm.setInstance(obj);		
+		}	
 		this._localXForm.refresh();
 	}
 }
