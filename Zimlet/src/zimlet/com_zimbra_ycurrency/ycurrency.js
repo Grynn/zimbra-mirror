@@ -34,27 +34,36 @@ var YCurrencyZimlet = Com_Zimbra_YCurrency_HandlerObject;
  * Defines the "home currency" user property.
  */
 YCurrencyZimlet.USER_PROP_HOME_CURRENCY = "home_currency";
-
 /**
  * Defines the "tooltip currencies" user property.
  */
-
 YCurrencyZimlet.USER_PROP_TOOLTIP_CURRENCIES = "tooltip_currs";
+/**
+ * Defines the "chart type" user property.
+ */
+YCurrencyZimlet.USER_PROP_CHART_TYPE = "chart_type";
 
 /**
  * Defines the "preferences" menu item.
  */
 YCurrencyZimlet.MENU_ITEM_ID_PREFERENCES = "SETTINGS";
-
 /**
  * Defines the "convert" menu item.
  */
 YCurrencyZimlet.MENU_ITEM_ID_CONVERT = "CONVERT";
-
 /**
  * Defines the "goto Y! Finance" menu item.
  */
 YCurrencyZimlet.MENU_ITEM_ID_GOTO_YAHOO_FINANCE = "GOTOYF";
+
+/**
+ * Defines the "chart type h2o" item.
+ */
+YCurrencyZimlet.USER_PROP_ENUM_ITEM_H2O = "H_2_O";
+/**
+ * Defines the "chart type o2h" item.
+ */
+YCurrencyZimlet.USER_PROP_ENUM_ITEM_O2H = "O_2_H";
 
 /**
  * Initializes the zimlet.
@@ -73,8 +82,9 @@ function() {
 };
 
 /**
- * Gets regular expressions
+ * Gets the regular expressions.
  *
+ * @return	{RegExp}	the regular expression
  */
 YCurrencyZimlet.prototype._getRegex = function() {
 	//if(!this.regx) {
@@ -91,7 +101,7 @@ YCurrencyZimlet.prototype._getRegex = function() {
 /**
  * Gets all the currencies that needs to be converted and displayed in tooltip
  *
- * @return {Array} An Array of {Currencies}
+ * @return {array} an array of {string} currencies
  */
 YCurrencyZimlet.prototype.getTooltipCurrencies =
 function() {
@@ -105,7 +115,8 @@ function() {
 };
 
 /**
- * Gets regular expressions to match
+ * Gets regular expressions to match.
+ * 
  */
 YCurrencyZimlet.prototype._getMatchRegex = function() {
 	//if(!this.matchReg) {
@@ -120,7 +131,7 @@ YCurrencyZimlet.prototype._getMatchRegex = function() {
 /**
  * Called by Zimbra framework to see if a line of text matches anything
  *
- * See {@link ZmZimletBase} for more details
+ * @see		ZmZimletBase
  */
 YCurrencyZimlet.prototype.match =
 function(line, startIndex) {
@@ -129,9 +140,11 @@ function(line, startIndex) {
 };
 
 /**
- * Gets Quote url
- * @param {string} fromCurr From currency
- * @param {string} toCurrencies To currency
+ * Gets the Quote url.
+ * 
+ * @param {string} fromCurr		the "from" currency
+ * @param {string} toCurrencies the "to" currency
+ * @return	{string}	the url
  */
 YCurrencyZimlet.prototype._getQuoteURL =
 function(fromCurr, toCurrencies) {
@@ -143,9 +156,9 @@ function(fromCurr, toCurrencies) {
 };
 
 /**
- * Called by Framework when isbn link is clicked. This opens Amazon webpage for that isbn number.
+ * Called by Zimlet Framework.
  *
- * See {@link ZmZimletBase} for more details
+ * @see		ZmZimletBase
  */
 YCurrencyZimlet.prototype.clicked =
 function(spanElement, contentObjText, matchContext, canvas) {
@@ -160,9 +173,9 @@ function(spanElement, contentObjText, matchContext, canvas) {
 };
 
 /**
- * Called by the framework. Gets the html for tooltip
+ * Called by the framework to get the html for tooltip.
  *
- * See {@link ZmZimletBase} for more details
+ * @see		ZmZimletBase
  */
 YCurrencyZimlet.prototype._getHtmlContent =
 function(html, idx, obj, context) {
@@ -190,7 +203,7 @@ function() {
 /**
  * Called when the tool tip is popped-up.
  *
- * See {@link ZmZimletBase} for more details
+ * @see		ZmZimletBase
  */
 YCurrencyZimlet.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
@@ -202,13 +215,15 @@ function(spanElement, contentObjText, matchContext, canvas) {
 };
 
 /**
- * Handles Currency conversion results from Y!
- * @param {object} canvas The main tooltip canvas
- * @param  {array} matchContext The Array containing results of match
- * @param {object} result Response from y! currency conversion service
+ * Handles Currency conversion results from Y! Finance.
+ * 
+ * @param {object} canvas		the main tooltip canvas
+ * @param  {array} matchContext	the array containing results of match
+ * @param {object} result 		the response from Y! currency conversion service
  */
 YCurrencyZimlet.prototype._toolTipPoppedCallback =
-function(canvas, matchContext, result) { //result.success = true; result.text='1\r\n1\r\n1\r\n1\r\n1\r\n';// hack
+function(canvas, matchContext, result) {
+	//result.success = true; result.text='1\r\n1\r\n1\r\n1\r\n1\r\n';// hack
 	if (result && result.success) {
 		var reqCurrency = this.currencies.getCurrency(matchContext[1]); //matchContext[3];
 		var reqAmount = matchContext[2].replace(/,/g, ""); //matchContext[1]
@@ -236,7 +251,7 @@ function(canvas, matchContext, result) { //result.success = true; result.text='1
 		if (reqCurrency != this.getUserProperty(YCurrencyZimlet.USER_PROP_HOME_CURRENCY)) {
 			this.hasChart = true;
 			var homeCur = this.getUserProperty(YCurrencyZimlet.USER_PROP_HOME_CURRENCY);
-			var ch_arg = (this.getUserProperty("chart_type") == "O_2_H") ? reqCurrency + homeCur : homeCur + reqCurrency;
+			var ch_arg = (this.getUserProperty(YCurrencyZimlet.USER_PROP_CHART_TYPE) == YCurrencyZimlet.USER_PROP_ENUM_ITEM_O2H) ? reqCurrency + homeCur : homeCur + reqCurrency;
 			htmlData = "<table style='width:250px;'><tr><td>" + htmlData + "</td><td valign='bottom'>";
 			htmlData += "<img style='spacing:1px;border:1px inset gray;' src='" + this.chartURL + "?s=" + ch_arg + "=X&f=w4'/></td></tr></table>";
 		} else {
@@ -251,13 +266,13 @@ function(canvas, matchContext, result) { //result.success = true; result.text='1
 /**
  * Creates a Currency converter dialog
  *
- * @param {string} preVal A string representing a pre-selected currency like 10 USD
- * @param {boolean} showWait if <code>true</code>, shows 'Wait..' status
+ * @param {string} preVal		a string representing a pre-selected currency like 10 USD
+ * @param {boolean} showWait		if <code>true</code>, shows 'Wait..' status
  */
 YCurrencyZimlet.prototype._showCurrencyConverterDialog =
 function(preVal, showWait) {
 	var view = new DwtComposite(this.getShell());
-	view.setSize("300", "200");
+	view.setSize("350", "200");
 
 	var container = document.createElement("DIV");
 	this.aId = Dwt.getNextId();
@@ -274,7 +289,7 @@ function(preVal, showWait) {
 	var element = view.getHtmlElement();
 	element.appendChild(container);
 
-	var dialogTitle = 'Currency Converter';
+	var dialogTitle = this.getMessage("YCurrencyZimlet_dialog_currencyconverter_title");
 	var dialogArgs = {
 		title : dialogTitle,
 		parent : this.getShell(),
@@ -324,8 +339,8 @@ YCurrencyZimlet.prototype._getMatch = function(reqString) {
 /**
  * Converts the currency and displays the result
  *
- * @param  {array} matchContext The Array containing results of match
- * @param {object} result Response from y! currency conversion service
+ * @param  {array} matchContext the array containing results of match
+ * @param {object} result		the response from Y! currency conversion service
  */
 YCurrencyZimlet.prototype._handleConvert = function(matchContext, result) {
 	if (result && result.success) {
@@ -353,12 +368,13 @@ YCurrencyZimlet.prototype._handleConvert = function(matchContext, result) {
 /**
  * Invokes AJAX call
  *
- * @param {string} reqString Currency string that was matched
- * @param {array} context An Array containing results of the match
- * @param {AjxCallback} callback A callback function
- * @param {object} srcCurr From currency
+ * @param {string} reqString	the currency string that was matched
+ * @param {array} context		an Array containing results of the match
+ * @param {AjxCallback} callback	a callback function
+ * @param {object} srcCurr		the "from" currency
  */
-YCurrencyZimlet.prototype._makeCall = function(reqString, context, callback, srcCurr) {
+YCurrencyZimlet.prototype._makeCall =
+function(reqString, context, callback, srcCurr) {
 	var toCurrencies = [];
 	//var fromCurrency = context[3];
 	if (context[5]) {
@@ -378,8 +394,8 @@ YCurrencyZimlet.prototype._makeCall = function(reqString, context, callback, src
 /**
  * Converts Currency
  *
- * @param {string} reqString A currency to convert to
- * @param {Array} context An Array containing the result of Regex match
+ * @param {string} reqString	a currency to convert "to"
+ * @param {Array} context		an array containing the result of Regex match
  */
 YCurrencyZimlet.prototype._convert =
 function(reqString, context) {
@@ -388,9 +404,9 @@ function(reqString, context) {
 };
 
 /**
- * Called when Framesork when Zimlet menu item is selected.
+ * Called when Framesowk when Zimlet menu item is selected.
  *
- *  For more details see {@link ZmZimletBase}
+ * @see	ZmZimletBase
  */
 YCurrencyZimlet.prototype.menuItemSelected =
 function(itemId, label, spanElement, contentObjText, canvas) {
@@ -434,7 +450,8 @@ YCurrencyZimlet.prototype.singleClicked = function() {
 };
 
 /**
- * Trims the string
+ * Trims the string.
+ * 
  */
 String.prototype.trim = function() {
 	var a = this.replace(/^\s+/, '');
@@ -442,7 +459,9 @@ String.prototype.trim = function() {
 };
 
 /**
- * Class representing Currencies
+ * @class
+ * This class represents Currencies.
+ * 
  */
 YCurrencies = function() {
 	this.symbols = [
@@ -461,9 +480,10 @@ YCurrencies = function() {
 };
 
 /**
- * Gets symbols for a give currency
- * @param {string} curr A String representing currencies
- * @return {array} An Array of symbols representing currencies
+ * Gets symbols for a given currency.
+ * 
+ * @param {string} curr		a String representing currencies
+ * @return {array} an Array of symbols representing currencies
  */
 YCurrencies.prototype.getSymbols = function(curr) {
 	for (i = 0; i < this.symbols.length; i++) {
@@ -475,8 +495,10 @@ YCurrencies.prototype.getSymbols = function(curr) {
 };
 
 /**
- * Gets Currency for a given Symbol
- * @param {string} symbol A string representing a Symbol
+ * Gets the Currency for a given Symbol.
+ * 
+ * @param {string} symbol	a string representing a Symbol
+ * @return	{string}	the currency or <code>null</code> if not found
  */
 YCurrencies.prototype.getCurrency = function(symbol) {
 	for (i = 0; i < this.symbols.length; i++) {
@@ -490,9 +512,9 @@ YCurrencies.prototype.getCurrency = function(symbol) {
 };
 
 /**
- * Get all Currencies
+ * Gets all Currencies
  *
- * @return {array} returns an array of all currencies
+ * @return {array} an array of currencies
  */
 YCurrencies.prototype.getAllCurrencies = function() {
 	var currs = [];
@@ -503,9 +525,9 @@ YCurrencies.prototype.getAllCurrencies = function() {
 };
 
 /**
- * Get all Symbols
+ * Gets all Symbols.
  *
- * @return {array} returns an array of all symbols
+ * @return {array} an array of all symbols
  */
 YCurrencies.prototype.getAllSymbols = function() {
 	var symbs = [];
