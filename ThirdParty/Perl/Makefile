@@ -147,8 +147,8 @@ PERL_LIBS 	:= \
 	XML::Simple \
 	IO::Socket::INET6 \
 	NetAddr::IP \
-	Net::DNS::Resolver::Programmable \
 	K/KW/KWILLIAMS/Module-Build-0.2805.tar.gz \
+	Net::DNS::Resolver::Programmable \
 	version \
 	Geography::Countries \
 	IP::Country \
