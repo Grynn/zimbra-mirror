@@ -150,7 +150,6 @@ PERL_LIBS 	:= \
 	Net::DNS::Resolver::Programmable \
 	K/KW/KWILLIAMS/Module-Build-0.2805.tar.gz \
 	version \
-	Mail::SPF \
 	Geography::Countries \
 	IP::Country \
 	DBD::SQLite
@@ -175,6 +174,9 @@ DBFILE_PERL_LIBS := \
 
 BDB_PERL_LIBS := \
 	BerkeleyDB-0.41
+
+MAIL_SPF := \
+	Mail-SPF-v2.007
 
 SA_PERL_LIBS := \
 	Mail-SpamAssassin-$(SA_VERSION)
@@ -299,6 +301,17 @@ build:
 	@echo -n "Compiling perl lib DBD::mysql ..."; \
 	$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"$(ZIMBRA_HOME)/mysql/bin/mysql_config\" --libs=\"-L$(ZIMBRA_HOME)/mysql/lib/mysql -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/lib:/opt/zimbra/mysql/lib/mysql"; force ("install", "DBD::mysql")' >> $(LOGFILE) 2>&1; \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+
+	@for lib in $(MAIL_SPF); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+		mv Build.PL Build.PL.orig; \
+		sed -e "s|'/usr/sbin'|'$(DEST_DIR)/sbin'|g" Build.PL
+		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+		$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
 
 	@for lib in $(SA_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib" ...; \
