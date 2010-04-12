@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_ycurrency" version="1.4" label="Yahoo! Currency" description="Highlights and converts currencies.">
+<zimlet name="com_zimbra_ycurrency" version="1.5" label="Yahoo! Currency" description="Highlights and converts currencies.">
     <include>ycurrency.js</include>
     <includeCSS>ycurrency.css</includeCSS>
     <handlerObject>Com_Zimbra_YCurrency_HandlerObject</handlerObject>
@@ -23,8 +23,8 @@
 	    <property type="string" name="home_currency" minLength="3" maxLength="3" label="${msg.YCurrencyZimlet_homeCurrency}"/>
     	<property type="string" name="tooltip_currs" minLength="3" maxLength="40" label="${msg.YCurrencyZimlet_tooltipCurrencies}"/>
     	<property type="enum" name="chart_type" label="${msg.YCurrencyZimlet_charttype}" value="H_2_O">
-			<item label="Home to other currency" value="H_2_O"/>
-			<item label="Other to home currency" value="O_2_H"/>
+			<item label="${msg.YCurrencyZimlet_charttype_hometoother}" value="H_2_O"/>
+			<item label="${msg.YCurrencyZimlet_charttype_othertohome}" value="O_2_H"/>
 		</property>
   </userProperties>
 </zimlet>
