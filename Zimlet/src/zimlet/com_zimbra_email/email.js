@@ -27,6 +27,7 @@ Com_Zimbra_Email.NEW_FILTER = "__new__";
 Com_Zimbra_Email.prototype.init =
 function() {
 	if (appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
+		AjxDispatcher.require(["ContactsCore", "Contacts"]);
 		this._composeTooltipHint = ZmMsg.leftClickComposeHint + "<br>" + ZmMsg.rightClickHint;
 		this._newTooltipHint = ZmMsg.leftClickNewContactHint + "<br>" + ZmMsg.rightClickHint;
 
