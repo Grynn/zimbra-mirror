@@ -67,11 +67,11 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    type          TINYINT NOT NULL,           -- 1 = folder, 3 = tag, etc.
    parent_id     INTEGER UNSIGNED,
    folder_id     INTEGER UNSIGNED,
-   index_id      VARCHAR(225),
+   index_id      INTEGER UNSIGNED,
    imap_id       INTEGER UNSIGNED,
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
    size          BIGINT UNSIGNED NOT NULL,
-   volume_id     VARCHAR(255),
+   volume_id     TINYINT UNSIGNED,
    blob_digest   VARCHAR(28),                -- reference to blob, meaningful only for certain item types
    unread        INTEGER UNSIGNED,           -- stored separately from the other flags so we can index it
    flags         INTEGER NOT NULL DEFAULT 0,
