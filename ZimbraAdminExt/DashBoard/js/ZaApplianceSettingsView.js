@@ -361,14 +361,6 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
     switchItems.push (case2) ;
  
     xFormObject.items = [
-		{ type: _DWT_ALERT_,
-		  cssClass: "DwtTabTable",
-		  containerCssStyle: "padding-bottom:0px",
-		  style: DwtAlert.WARNING,
-		  iconVisible: false,
-		  content: ZaMsg.Alert_GlobalConfig,
-		  id:"xform_header"
-		},
 		{type:_TAB_BAR_,  ref:ZaModel.currentTab,id:"xform_tabbar",
 		 	containerCssStyle: "padding-top:0px",
 			choices: tabBarChoices 

@@ -51,3 +51,5 @@ ZaMsg.Search_view_title = com_zimbra_dashboard.Search_view_title;
 ZaMsg.NAD_ResetToCOS = com_zimbra_dashboard.NAD_ResetToCOS;
 ZaMsg.Domain_DefaultCOS = com_zimbra_dashboard.Domain_DefaultCOS;
 ZaMsg.NAD_ClassOfService =  com_zimbra_dashboard.NAD_ClassOfService;
+ZaMsg.GlobalConfig_view_title = com_zimbra_dashboard.GlobalConfig_view_title;
+ZaMsg.Domain_DefaultCOS = com_zimbra_dashboard.Domain_DefaultCOS;

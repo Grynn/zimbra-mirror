@@ -37,6 +37,11 @@ ZaController.initToolbarMethods["ZaApplianceSettingsController"] = new Array();
 ZaController.setViewMethods["ZaApplianceSettingsController"] = [];
 ZaController.changeActionsStateMethods["ZaApplianceSettingsController"] = [];
 
+ZaApp.prototype.getApplianceSettingsController = function() {
+	var c  = new ZaApplianceSettingsController(this._appCtxt, this._container, this);
+	return c ;
+}
+
 /**
 * Adds listener to removal of an ZaDomain 
 * @param listener
@@ -46,9 +51,8 @@ function(listener) {
 	this._evtMgr.addListener(ZaEvent.E_MODIFY, listener);
 }
 
-ZaApplianceSettingsController.prototype.show = 
-function(item, openInNewTab) {
-	this._setView(item, false);
+ZaApplianceSettingsController.prototype.show = function(entry, openInNewTab, skipRefresh) {
+	this._setView(entry, openInNewTab, skipRefresh);
 }
 
 ZaApplianceSettingsController.initToolbarMethod =
@@ -63,34 +67,29 @@ ZaController.initToolbarMethods["ZaApplianceSettingsController"].push(ZaApplianc
 
 ZaApplianceSettingsController.setViewMethod = function (item) {
     try {
-	    if ( !this._UICreated || (this._view == null) || (this._toolbar == null)) {
-            this._initToolbar();
-            this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-            this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
-            this._toolbarOrder.push(ZaOperation.NONE);
-            this._toolbarOrder.push(ZaOperation.HELP);
-            this._toolbar = new ZaToolBar(this._container, this._toolbarOperations, this._toolbarOrder);
-            this._contentView = this._view = new this.tabConstructor(this._container,item);
-            var elements = new Object();
-            elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-            elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-            var tabParams = {
-                openInNewTab: false,
-                tabId: this.getContentViewId(),
-                tab: this.getMainTab()
-            }
-            //ZaApp.getInstance().createView(ZaZimbraAdmin._GLOBAL_SETTINGS,elements);
-            ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-            this._UICreated = true;
-            ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
+    	this._initToolbar();
+    	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
+        this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
+        this._toolbarOrder.push(ZaOperation.NONE);
+        this._toolbarOrder.push(ZaOperation.HELP);
+        this._toolbar = new ZaToolBar(this._container, this._toolbarOperations, this._toolbarOrder);
+        this._contentView = this._view = new this.tabConstructor(this._container,item);
+        var elements = new Object();
+        elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+        elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+        var tabParams = {
+            openInNewTab: true,
+            tabId: this.getContentViewId()
         }
-		//ZaApp.getInstance().pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
-		ZaApp.getInstance().pushView(this.getContentViewId());
-		item.load();
-	
-		item[ZaModel.currentTab] = "1"
-		this._view.setDirty(false);
-		this._view.setObject(item);
+        ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
+        ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
+        ZaApp.getInstance().pushView(this.getContentViewId());
+        item.load();
+
+        item[ZaModel.currentTab] = "1"
+        item.id = ZaItem.GLOBAL_CONFIG;
+        this._view.setDirty(false);
+        this._view.setObject(item);
 	} catch (ex) {
 		this._handleException(ex, "ZaApplianceSettingsController.prototype.show", null, false);
 	}
@@ -133,20 +132,18 @@ function () {
 
 	
 	//check if domain is real
-	if(ZaItem.hasWritePermission(ZaGlobalConfig.A_zimbraDefaultDomainName,tmpObj)) {
-		if(tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]) {
-			if(tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName] != this._currentObject.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]) {
-				var testD = new ZaDomain();
-				try {
-					testD.load("name",tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]);
-				} catch (ex) {
-					if (ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
-						this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_WRONG_DOMAIN_IN_GS, [tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]]), null, DwtMessageDialog.CRITICAL_STYLE, null);
-						this._errorDialog.popup();	
-						return false;	
-					} else {
-						throw (ex);
-					}
+	if(tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]) {
+		if(tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName] != this._currentObject.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]) {
+			var testD = new ZaDomain();
+			try {
+				testD.load("name",tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]);
+			} catch (ex) {
+				if (ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
+					this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_WRONG_DOMAIN_IN_GS, [tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]]), null, DwtMessageDialog.CRITICAL_STYLE, null);
+					this._errorDialog.popup();	
+					return false;	
+				} else {
+					throw (ex);
 				}
 			}
 		}
@@ -180,21 +177,20 @@ function () {
 		}
 	}
 	//check if blocked extensions are changed
-	if(ZaItem.hasWritePermission(ZaGlobalConfig.A_zimbraMtaBlockedExtension,tmpObj)) {
-		if(!AjxUtil.isEmpty(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])) {
-			if(
-				(
-					(!this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] || !this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].length))
-					|| (tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].join(""))
-				) {
-				mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension];
-			} 
-		} else if (AjxUtil.isEmpty(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])  && !AjxUtil.isEmpty(this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])) {
-			mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = "";
-		}		
-	}	
+	if(!AjxUtil.isEmpty(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])) {
+		if(
+			(
+				(!this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] || !this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].length))
+				|| (tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].join(""))
+			) {
+			mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension];
+		} 
+	} else if (AjxUtil.isEmpty(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])  && !AjxUtil.isEmpty(this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])) {
+		mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = "";
+	}		
+
 	//save the model
-	//var changeDetails = new Object();
+
 	this._currentObject.modify(mods);
 	
 	return true;

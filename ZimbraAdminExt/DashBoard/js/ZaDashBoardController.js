@@ -79,7 +79,7 @@ function () {
     this._toolbarOperations[ZaOperation.VIEW_MAIL]=new ZaOperation(ZaOperation.VIEW_MAIL,ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, this.viewMailListener));
     this._toolbarOrder.push(ZaOperation.VIEW_MAIL);
     this._toolbarOrder.push(ZaOperation.SEP);
-	this._toolbarOperations[ZaOperation.MANAGE_SETITNGS] = new ZaOperation(ZaOperation.MANAGE_PROFILES, com_zimbra_dashboard.ServerSettings, com_zimbra_dashboard.ServerSettings_tt, "GlobalSettings", "GlobalSettings", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
+	this._toolbarOperations[ZaOperation.MANAGE_SETITNGS] = new ZaOperation(ZaOperation.MANAGE_PROFILES, com_zimbra_dashboard.ServerSettings, com_zimbra_dashboard.ServerSettings_tt, "GlobalSettings", "GlobalSettings", new AjxListener(this, this.openSettingsView));
 	this._toolbarOrder.push(ZaOperation.MANAGE_SETITNGS);
     this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);	
 	this._toolbarOrder.push(ZaOperation.NONE);
@@ -172,26 +172,56 @@ ZaDashBoardController.prototype.editButtonListener = function(ev) {
 
 ZaDashBoardController.prototype.editItem = function (item) {
 	var type = item.type;
+	//check if the item already open in a tab
+	var itemId = item.id ;
+	if((item.type == ZaItem.ALIAS) && item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
+		itemId = item.attrs[ZaAlias.A_AliasTargetId];
+	}
+	var type = item.type;
+	var viewContstructor = ZaAccountXFormView;
 	if (type == ZaItem.ACCOUNT) {
-		ZaApp.getInstance().getAccountViewController().show(item);
+		viewContstructor = ZaAccountXFormView;	
 	} else if (type == ZaItem.DL) {
-		ZaApp.getInstance().getDistributionListController().show(item);
-	} else if(type == ZaItem.ALIAS) {
-		var targetObj = item.getAliasTargetObj() ;
-		
-		if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {			
-			ZaApp.getInstance().getAccountViewController().show(targetObj, true);
-		} else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
-			ZaApp.getInstance().getDistributionListController().show(targetObj, true);
-		}  else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.RESOURCE){
-			ZaApp.getInstance().getResourceController().show(targetObj, true);
-		}
+		viewContstructor = ZaDLXFormView;	
 	} else if (type == ZaItem.RESOURCE ){
-		ZaApp.getInstance().getResourceController().show(item);
-	} else if (type==ZaItem.DOMAIN) {
-		ZaApp.getInstance().getDomainController().show(item);
-	} else if (type==ZaItem.COS) {
-		ZaApp.getInstance().getCosController().show(item);
+		viewContstructor = ZaResourceXFormView;
+	} else if (type == ZaItem.ALIAS) {
+		if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {	
+			viewController = ZaAccountXFormView;
+		}else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
+		    viewController = ZaDLXFormView;
+		}
+	}
+	if (! this.selectExistingTabByItemId(itemId,viewContstructor)){
+		if (type == ZaItem.ACCOUNT) {
+			ZaApp.getInstance().getAccountViewController().show(item,true);
+		} else if (type == ZaItem.DL) {
+			ZaApp.getInstance().getDistributionListController().show(item,true);
+		} else if(type == ZaItem.ALIAS) {
+			var targetObj = item.getAliasTargetObj() ;
+			
+			if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {			
+				ZaApp.getInstance().getAccountViewController().show(targetObj, true);
+			} else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
+				ZaApp.getInstance().getDistributionListController().show(targetObj, true);
+			}  else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.RESOURCE){
+				ZaApp.getInstance().getResourceController().show(targetObj, true);
+			}
+		} else if (type == ZaItem.RESOURCE ){
+			ZaApp.getInstance().getResourceController().show(item,true);
+		} else if (type==ZaItem.DOMAIN) {
+			ZaApp.getInstance().getDomainController().show(item.true);
+		} else if (type==ZaItem.COS) {
+			ZaApp.getInstance().getCosController().show(item,true);
+		}
+	}
+};
+
+ZaDashBoardController.prototype.openSettingsView = function () {
+	var item = ZaApp.getInstance().getGlobalConfig();
+	item.id = ZaItem.GLOBAL_CONFIG;
+	if (! this.selectExistingTabByItemId(ZaItem.GLOBAL_CONFIG,ZaApplianceSettingsView)){
+		ZaApp.getInstance().getApplianceSettingsController().show(item);
 	}
 };
 
@@ -230,6 +260,61 @@ ZaDashBoardController.prototype.newProfileSelected = function() {
 	ZaApp.getInstance().getCosController().show(newCos);
 }
 
+ZaDashBoardController.prototype.newDomainSelected = function () {
+	try {
+		var domain = new ZaDomain();			
+		domain.loadNewObjectDefaults();
+		domain.attrs[ZaDomain.A_GALSyncUseGALSearch]="TRUE";
+		domain[ZaDomain.A2_new_internal_gal_polling_interval] = "2d";
+		domain[ZaDomain.A2_new_external_gal_polling_interval] = "2d";
+		domain.attrs[ZaDomain.A_zimbraGalMaxResults] = 100;
+//		domain[ZaDomain.A_CreateNotebook]="TRUE";
+		
+		this._newDomainWizard = ZaApp.getInstance().dialogs["newDomainWizard"] = new ZaApplianceDomainXWizard(this._container, domain);	
+		this._newDomainWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, this.finishNewDomainButtonListener, this, null);			
+		this._newDomainWizard.setObject(domain);
+		this._newDomainWizard.popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaDashBoardController.prototype.newDomainSelected", null, false);
+	}
+
+}
+
+ZaDashBoardController.prototype.finishNewDomainButtonListener = function() {
+	try {
+		this._newDomainWizard.getButton(ZaXWizardDialog.FINISH_BUTTON).setEnabled(false);
+		this._newDomainWizard.popdown();
+		var obj = this._newDomainWizard.getObject();		
+		var domain = ZaItem.create(obj,ZaDomain,"ZaDomain");
+		if(domain != null) {			
+			//if creation took place - fire an DomainChangeEvent
+			//this._fireDomainCreationEvent(domain);
+			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
+				var params = new Object();
+				params.obj = obj;
+				var callback = new AjxCallback(this, this.initNotebookCallback, params);				
+				ZaDomain.initNotebook(obj,callback, this) ;
+			}			
+			this.popupMsgDialog(AjxMessageFormat.format(com_zimbra_dashboard.DomainCreated,[domain.attrs[ZaDomain.A_domainName]]));
+			//var evt = new ZaEvent(ZaEvent.S_DOMAIN);
+			//evt.set(ZaEvent.E_CREATE, this);
+			//evt.setDetails(domain);
+			//this.handleCreation(evt);
+		} else {
+			this._newDomainWizard.getButton(ZaXWizardDialog.FINISH_BUTTON).setEnabled(true);
+			this._newDomainWizard.popup();
+		}
+	} catch (ex) {
+		this._newDomainWizard.popup();
+		this._newDomainWizard.getButton(ZaXWizardDialog.FINISH_BUTTON).setEnabled(true);
+		if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {
+			this.popupErrorDialog(ZaMsg.ERROR_DOMAIN_EXISTS, ex);
+		} else {
+			this._handleException(ex, "ZaDomainListController.prototype.finishNewDomainButtonListener", null, false);
+		}
+	}
+	return;
+}
 
 ZaDashBoardController.prototype.newAccSelected = function() {
 	try {
@@ -354,7 +439,7 @@ ZaDashBoardController.prototype.deleteButtonListener = function(ev) {
 	
 };
 
-ZaDashBoardController.prototype._chngPwdListener = function(ev) {
+ZaDashBoardController.prototype.chngPwdListener = function(ev) {
 	var form = this._contentView._localXForm;
 	var listItems = form.getItemsById("dashBoardSearchResults");
 	var listWidget = null;
