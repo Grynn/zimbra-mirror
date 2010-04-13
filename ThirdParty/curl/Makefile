@@ -16,7 +16,7 @@ ifdef BETA
 	PATCH	:= patch -N -g0 -p1 < ../patches/krb5-7200.patch; patch -N -g0 -p1 < ../patches/proxy.patch;
 else
 	include $(CURL_ROOT)/../versions.def
-	PATCH	:= patch -N -g0 -p1 < ../patches/krb5.patch; patch -N -g0 -p1 < ../patches/proxy.patch;
+	PATCH	:= patch -N -g0 -p1 < ../patches/krb5-7200.patch; patch -N -g0 -p1 < ../patches/proxy.patch;
 endif
 
 
