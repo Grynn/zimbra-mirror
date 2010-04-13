@@ -48,7 +48,7 @@ ZaDomain = function() {
     this.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts ] = [];
     this.attrs[ZaDomain.A_zimbraDomainFeatureMaxAccounts ] = [];
 }
-ZaDomain.DEF_WIKI_ACC = "wiki";
+ZaDomain.DEF_WIKI_ACC = "domain_wiki";
 ZaDomain.WIKI_FOLDER_ID = "12";
 ZaDomain.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE; 
 ZaDomain.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;

@@ -1342,7 +1342,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						},
 						{ref:ZaDomain.A_zimbraNotebookAccount, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_, 
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_CreateNotebook,"TRUE"]],
-							enableDisableChangeEventSources:[ZaDomain.A_CreateNotebook]							
+							enableDisableChangeEventSources:[ZaDomain.A_CreateNotebook], bmolsnr:true						
 						},						
 						{ref:ZaDomain.A_NotebookAccountPassword, type:_SECRET_, label:ZaMsg.Domain_NotebookAccountPassword, labelLocation:_LEFT_, 
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_CreateNotebook,"TRUE"]],
