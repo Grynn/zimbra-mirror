@@ -431,21 +431,28 @@ public class BeanUtils {
     }
 
 	public static String displayVoiceDate(PageContext pc, Date msg) throws ServiceException, JspException {
+		final int ONE_DAY = 24 * 3600000;
+
 		ZMailbox mbox = ZJspSession.getZMailbox(pc);
 		TimeZone tz = mbox.getPrefs().getTimeZone();
-		Calendar cal = Calendar.getInstance(tz);
+		Calendar nowCal = Calendar.getInstance(tz);
 		Calendar msgCal = Calendar.getInstance(tz);
 
-		long nowTime = cal.getTimeInMillis();
-        msgCal.setTime(msg);
+		long nowTime = nowCal.getTimeInMillis();
+		msgCal.setTime(msg);
 		long msgTime = msgCal.getTimeInMillis();
 
+		Calendar yesterdayCal = Calendar.getInstance(tz);
+		yesterdayCal.setTimeInMillis(nowTime - ONE_DAY);
 
-		final int ONE_DAY = 24 * 3600000;
+		int nowDay = nowCal.get(Calendar.DAY_OF_MONTH);
+		int nowYesterday = yesterdayCal.get(Calendar.DAY_OF_MONTH);
+		int msgDay = msgCal.get(Calendar.DAY_OF_MONTH);
+
 		String resource;
-		if (nowTime - msgTime < ONE_DAY && cal.getTime().getDate() == msgCal.getTime().getDate()) {
+		if (nowTime - msgTime < ONE_DAY && nowDay == msgDay) {
 			resource = "ZM_formatVoiceDateToday";
-		} else if ((nowTime - msgTime) < (2 * ONE_DAY) && (new Date(nowTime - ONE_DAY).getDate()) == msgCal.getTime().getDate()) {
+		} else if ((nowTime - msgTime) < (2 * ONE_DAY) && nowYesterday == msgDay) {
 			resource = "ZM_formatVoiceDateYesterday";
 		} else {
 			resource = "ZM_formatVoiceDate";
