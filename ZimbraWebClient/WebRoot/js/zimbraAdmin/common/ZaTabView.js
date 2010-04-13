@@ -139,9 +139,12 @@ ZaTabView.prototype.setObject =
 function(entry) {
 	this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
-	this._containedObject.type = entry.type ;
-	this._containedObject.name = entry.name ;
-
+	this._containedObject.type = entry.type;
+	this._containedObject.name = entry.name;
+	
+	if(entry.id)
+		this._containedObject.id = entry.id;
+	
 	if(entry.rights)
 		this._containedObject.rights = entry.rights;
 	
