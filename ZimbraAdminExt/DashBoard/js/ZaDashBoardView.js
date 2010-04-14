@@ -121,7 +121,22 @@ ZaDashBoardView.onSearchResult = function(params,resp) {
 				var searchTotal = response.searchTotal;
 				var limit = params.limit ? params.limit : ZaSettings.RESULTSPERPAGE; 
 				var numPages = Math.ceil(searchTotal/params.limit);
-			}
+				ZaApp.getInstance().getDashBoardController().numPages = numPages;
+				ZaApp.getInstance().getDashBoardController().searchTotal = searchTotal;
+				ZaApp.getInstance().getDashBoardController().changeActionsState();
+				var s_result_end_n = 0;
+				var s_result_start_n = 0;				
+				var srCountBt = ZaApp.getInstance().getDashBoardController()._toolbar.getButton (ZaOperation.SEARCH_RESULT_COUNT) ;
+				if (srCountBt ) {
+					s_result_start_n = (ZaApp.getInstance().getDashBoardController().currentPageNum - 1) * ZaSettings.RESULTSPERPAGE + 1;
+					var max = ZaApp.getInstance().getDashBoardController().currentPageNum  * ZaSettings.RESULTSPERPAGE;
+					s_result_end_n = (searchTotal > max) ? max : searchTotal;
+					
+					srCountBt.setText ( AjxMessageFormat.format (ZaMsg.searchResultCount, 
+							[s_result_start_n + " - " + s_result_end_n, searchTotal]));
+				}
+				
+			}						
 			this._localXForm.setInstanceValue(list.getArray(),ZaDashBoard.searchResults);
 		}
 	} catch (ex) {
@@ -136,8 +151,9 @@ ZaDashBoardView.onSearchResult = function(params,resp) {
 }
 
 	
-ZaDashBoardView.prototype.searchAddresses = function (types) {  
+ZaDashBoardView.prototype.searchAddresses = function (types, offset) {  
 	this.types=types;
+	offset = offset ? offset : 0;
 	var busyId = Dwt.getNextId();
 	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:null,busyId:busyId});
 	types = types ? types : [ZaSearch.ACCOUNTS,ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.RESOURCES];
@@ -145,7 +161,7 @@ ZaDashBoardView.prototype.searchAddresses = function (types) {
 		query: ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query],types), 
 		types:types,
 		sortBy:ZaAccount.A_uid,
-		offset:0,
+		offset:offset,
 		limit:ZaSettings.RESULTSPERPAGE,
 		attrs:ZaSearch.standardAttributes,
 		callback:callback,

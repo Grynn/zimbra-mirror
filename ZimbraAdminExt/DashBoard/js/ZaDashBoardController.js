@@ -27,6 +27,7 @@ ZaDashBoardController = function(appCtxt, container) {
 	this._helpURL = ZaDashBoardController.helpURL;
 	this.tabConstructor = ZaDashBoardView;
  	this._toolbarOperations = new Array();
+ 	this.currentPageNum = 1;
 }
 
 ZaDashBoardController.prototype = new ZaXFormViewController();
@@ -49,6 +50,8 @@ ZaOperation.SERVICE_AV = ++ZA_OP_INDEX;
 ZaOperation.SERVICE_STATS = ++ZA_OP_INDEX;
 ZaOperation.RESTART_SERVICES = ++ZA_OP_INDEX;
 ZaOperation.STOP_SERVICES = ++ZA_OP_INDEX;
+ZaOperation.PAGE_FORWARD2 = ++ZA_OP_INDEX;
+ZaOperation.PAGE_BACK2 = ++ZA_OP_INDEX;
 
 ZaSettings.SERVICE_BAR_ID = ZaSettings.SKIN_IDX++;
 ZaSettings.SERVICE_BAR_DOM_ID = "skin_container_service_toolbar";
@@ -83,12 +86,18 @@ function () {
 	this._toolbarOrder.push(ZaOperation.MANAGE_SETITNGS);
     this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);	
 	this._toolbarOrder.push(ZaOperation.NONE);
-	this._toolbarOperations[ZaOperation.PAGE_BACK] = new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Previous, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, this._prevPageListener));
-	this._toolbarOrder.push(ZaOperation.PAGE_BACK);	
+	this._toolbarOperations[ZaOperation.PAGE_BACK2] = new ZaOperation(ZaOperation.PAGE_BACK2, ZaMsg.Previous, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, this.prevPageListener));
+	this._toolbarOrder.push(ZaOperation.PAGE_BACK2);	
 	//add the acount number counts
-	ZaSearch.searchResultCountsView(this._toolbarOperations, this._toolbarOrder);	
-	this._toolbarOperations[ZaOperation.PAGE_FORWARD] = new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Next, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, this._nextPageListener));
-	this._toolbarOrder.push(ZaOperation.PAGE_FORWARD);
+	this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
+    this._toolbarOrder.push(ZaOperation.SEP);
+	this._toolbarOperations[ZaOperation.LABEL] = new ZaOperation(ZaOperation.LABEL, AjxMessageFormat.format (ZaMsg.searchResultCount, [0,0]),
+			 null, null, null, null,null,null,"ZaSearchResultCountLabel",ZaOperation.SEARCH_RESULT_COUNT);
+	this._toolbarOrder.push(ZaOperation.LABEL);
+	this._toolbarOrder.push(ZaOperation.SEP);    
+	//ZaSearch.searchResultCountsView(this._toolbarOperations, this._toolbarOrder);	
+	this._toolbarOperations[ZaOperation.PAGE_FORWARD2] = new ZaOperation(ZaOperation.PAGE_FORWARD2, ZaMsg.Next, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, this.nextPageListener));
+	this._toolbarOrder.push(ZaOperation.PAGE_FORWARD2);
 	this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));				
 	this._toolbarOrder.push(ZaOperation.HELP);
 }
@@ -156,6 +165,7 @@ function(openInNewTab) {
 	entry[ZaDashBoard.searchResults] = [];
 	this._contentView.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
+	this.changeActionsState();
 };
 
 ZaDashBoardController.prototype.editButtonListener = function(ev) {
@@ -352,6 +362,30 @@ ZaDashBoardController.prototype.newResourceSelected = function() {
 	}
 }
 
+ZaDashBoardController.prototype.newAliasSelected = function() {
+	try {
+		EmailAddr_XFormItem.resetDomainLists.call(this) ;
+		var newAlias = new ZaAlias();
+		newAlias.getAttrs = {all:true};
+		newAlias.setAttrs = {all:true};		
+		newAlias._defaultValues = {attrs:{}};
+		newAlias.rights = {};
+		//newAlias.loadNewObjectDefaults("name", ZaSettings.myDomainName);
+		if(!ZaApp.getInstance().dialogs["newAliasDialog"]) {
+			ZaApp.getInstance().dialogs["newAliasDialog"] = new ZaNewAliasXDialog(
+				this._container, "550px", "100px",ZaMsg.New_Alias_Title );	
+			ZaApp.getInstance().dialogs["newAliasDialog"].registerCallback(
+					DwtDialog.OK_BUTTON, ZaAlias.prototype.addAlias, 
+					newAlias, ZaApp.getInstance().dialogs["newAliasDialog"]._localXForm );								
+		}
+
+		ZaApp.getInstance().dialogs["newAliasDialog"].setObject(newAlias);
+		ZaApp.getInstance().dialogs["newAliasDialog"].popup();		
+	} catch (ex) {
+		this._handleException(ex, "ZaDashBoardController.prototype.newAliasSelected", null, false);	
+	}
+};
+
 ZaDashBoardController.prototype.newDLSelected = function() {
 	try {
 		EmailAddr_XFormItem.resetDomainLists.call (ZaApp.getInstance().getCurrentController());
@@ -364,10 +398,11 @@ ZaDashBoardController.prototype.newDLSelected = function() {
 		newDL.rights[ZaDistributionList.ADD_DL_MEMBER_RIGHT]=true;
 		ZaApp.getInstance().getDistributionListController().show(newDL);
 	} catch (ex) {
-		this._handleException(ex, "ZaAccountListController.prototype._newDistributionListListener", null, false);
+		this._handleException(ex, "ZaDashBoardController.prototype.newDLSelected", null, false);
 	}
 
 };
+
 ZaDashBoardController.prototype.deleteButtonListener = function(ev) {
 	this._removeList = new Array();
 	this._itemsInTabList = [] ;
@@ -511,6 +546,49 @@ ZaDashBoardController.prototype._expireSessionListener = function(ev) {
 	}
 }
 
+ZaDashBoardController.prototype.setPageNum = 
+function (pgnum) {
+	this.currentPageNum = Number(pgnum);
+}
+
+ZaDashBoardController.prototype.getPageNum = 
+function () {
+	return this.currentPageNum;
+}
+
+ZaDashBoardController.prototype.nextPageListener = function (ev) {
+	var form = this._contentView._localXForm;
+	var listItems = form.getItemsById("dashBoardSearchResults");
+	var listWidget = null;
+	if(listItems && listItems[0]) {
+		listWidget = listItems[0].getWidget();
+	} else {
+		return;
+	}
+	
+	if(this.currentPageNum < this.numPages) {
+		this.currentPageNum++;
+		this._contentView.searchAddresses(this._contentView.types,ZaSettings.RESULTSPERPAGE*(this.currentPageNum-1))
+	} 
+}
+
+ZaDashBoardController.prototype.prevPageListener = 	function (ev) {
+	var form = this._contentView._localXForm;
+	var listItems = form.getItemsById("dashBoardSearchResults");
+	var listWidget = null;
+	if(listItems && listItems[0]) {
+		listWidget = listItems[0].getWidget();
+	} else {
+		return;
+	}
+		
+	if(this.currentPageNum > 1) {
+		this.currentPageNum--;
+		this._contentView.searchAddresses(this._contentView.types,ZaSettings.RESULTSPERPAGE*(this.currentPageNum-1))
+	} 
+}
+
+	
 ZaDashBoardController.changeActionsStateMethod = function () {
 	var form = this._contentView._localXForm;
 	var listItems = form.getItemsById("dashBoardSearchResults");
@@ -732,5 +810,15 @@ ZaDashBoardController.changeActionsStateMethod = function () {
 		}	
 
 	}
+	
+	var s_result_start_n = (this.currentPageNum - 1) * ZaSettings.RESULTSPERPAGE + 1;
+	var s_result_end_n = this.currentPageNum  * ZaSettings.RESULTSPERPAGE;
+	if(this.numPages <= this.currentPageNum) {
+		s_result_end_n = this.searchTotal ;
+		this._toolbarOperations[ZaOperation.PAGE_FORWARD2].enabled = false;
+	}
+	if(this.currentPageNum == 1) {
+		this._toolbarOperations[ZaOperation.PAGE_BACK2].enabled = false;
+	} 
 };
 ZaController.changeActionsStateMethods["ZaDashBoardController"].push(ZaDashBoardController.changeActionsStateMethod);
