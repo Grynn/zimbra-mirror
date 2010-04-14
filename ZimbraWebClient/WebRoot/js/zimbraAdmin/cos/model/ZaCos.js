@@ -313,12 +313,17 @@ function(newName) {
 * sends DeleteCosRequest SOAP command
 **/
 ZaCos.prototype.remove = 
-function() {
+function(callback) {
 	var soapDoc = AjxSoapDoc.create("DeleteCosRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
+	params.soapDoc = soapDoc;	
+	if(callback) {
+		params.asyncMode = true;
+		params.callback = callback;
+	}	
 	var reqMgrParams = {
 		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_DELETE_COS
