@@ -41,6 +41,31 @@ ZaDashBoard.myXModel = {
 	    ]
 };
 
+ZaAccountXFormView.ADVANCED_TAB_ATTRS = [ZaAccount.A_zimbraAttachmentsBlocked,
+                                     	ZaAccount.A_zimbraQuotaWarnPercent,
+                                     	ZaAccount.A_zimbraQuotaWarnInterval,
+                                     	ZaAccount.A_zimbraQuotaWarnMessage,
+                                     	ZaAccount.A_zimbraPasswordLocked,
+                                     	ZaAccount.A_zimbraMinPwdLength,
+                                     	ZaAccount.A_zimbraMaxPwdLength,
+                                     	ZaAccount.A_zimbraPasswordMinUpperCaseChars,
+                                     	ZaAccount.A_zimbraPasswordMinLowerCaseChars,
+                                     	ZaAccount.A_zimbraPasswordMinPunctuationChars,
+                                     	ZaAccount.A_zimbraPasswordMinNumericChars,
+                                     	ZaAccount.A_zimbraMinPwdAge,
+                                     	ZaAccount.A_zimbraMaxPwdAge,
+                                     	ZaAccount.A_zimbraEnforcePwdHistory,
+                                     	ZaAccount.A_zimbraPasswordLockoutEnabled,
+                                     	ZaAccount.A_zimbraPasswordLockoutMaxFailures,
+                                     	ZaAccount.A_zimbraPasswordLockoutDuration,
+                                     	ZaAccount.A_zimbraPasswordLockoutFailureLifetime,
+                                     	ZaAccount.A_zimbraAdminAuthTokenLifetime,
+                                     	ZaAccount.A_zimbraAuthTokenLifetime,
+                                     	ZaAccount.A_zimbraMailIdleSessionTimeout,
+                                     	ZaAccount.A_zimbraMailMessageLifetime,
+                                     	ZaAccount.A_zimbraMailTrashLifetime,
+                                     	ZaAccount.A_zimbraMailSpamLifetime,
+                                     	ZaAccount.A_zimbraFreebusyExchangeUserOrg];
 ZaMsg.COS_view_title = com_zimbra_dashboard.COS_view_title;
 ZaMsg.COSTBB_New_tt = com_zimbra_dashboard.COSTBB_New_tt;
 ZaMsg.COSTBB_Edit_tt = com_zimbra_dashboard.COSTBB_Edit_tt;
