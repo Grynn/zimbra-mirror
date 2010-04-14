@@ -42,9 +42,11 @@
 	<target name="default">
         <ant dir="." target="offline-make-install-files" inheritAll="false"/>
        	<mkdir dir="${build.dir}" />
- 
-	<move tofile="${build.dir}/exchange_${offline.filever}_${offline.branch}_b${offline.buildid}.zip" file="build/dist/ext/exchange.zip"/>
-	<delete dir="build/dist/ext"/>
+
+	<if><available file="build/dist/ext/exchange.zip" type="file" /><then> 
+		<move tofile="${build.dir}/exchange_${offline.filever}_${offline.branch}_b${offline.buildid}.zip" file="build/dist/ext/exchange.zip"/>
+		<delete dir="build/dist/ext"/>
+	</then></if>    
 
 	<antcall target="installer-pack-media-mac"/>
         <antcall target="installer-pack-media-windows"/>

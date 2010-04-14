@@ -139,6 +139,8 @@
 		<isset property="db-derby" />
 	</condition>
 
+	<available file="${zsync.common.dir}" type="dir" property="build.exchange.ext" />
+
 	<fileset id="gdata.jars" dir="${jars.dir}">
 		<include name="gdata-core-*.jar"/>
 		<include name="gdata-client-*.jar"/>
@@ -215,8 +217,10 @@
 
 	<target name="offline-clean" description="Removes build files and undeploys extension">
 		<delete dir="${build.dir}" />
-		<ant dir="../ZimbraSyncCommon" target="clean" inheritAll="false" />
-		<ant dir="../ZimbraSyncClient" target="clean" inheritAll="false" />
+		<if><isset property="build.exchange.ext" /><then>
+			<ant dir="../ZimbraSyncCommon" target="clean" inheritAll="false" />
+			<ant dir="../ZimbraSyncClient" target="clean" inheritAll="false" />
+		</then></if>	
 		<ant dir="../ZimbraCommon" target="clean" inheritAll="false" />
 		<ant dir="../ZimbraServer" target="clean" inheritAll="false" />
 		<ant dir="../ZimbraWebClient" target="clean" inheritAll="false" />
@@ -794,7 +798,7 @@
 		<antcall target="offline-make-dist-ext"/>
 	</target>
 
-	<target name="offline-make-dist-ext">
+	<target name="offline-make-dist-ext" if="build.exchange.ext">
 		<antcall target="offline-ext-jars"/>
 		<mkdir dir="${dist.dir}/ext"/>
 		<mkdir dir="${dist.dir}/ext/exchange"/>
