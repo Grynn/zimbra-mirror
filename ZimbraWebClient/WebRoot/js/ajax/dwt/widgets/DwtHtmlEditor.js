@@ -1362,6 +1362,10 @@ function(ev) {
 		DwtIdleTimer.resetIdle();
 	}
 
+	// TODO: Find out why this is necessary and do it in a nicer way.
+	if (AjxEnv.isSafari) // Need to break flow to avoid faulty behavior on Safari (this sucks, I know)
+		throw false; // Not really important what we throw
+
 	return retVal;
 };
 
@@ -1522,9 +1526,17 @@ function() {
 		}
 		ev.fontFamily = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_NAME);
 		//bug:25251
-        var fontSize = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_SIZE);
-        if(fontSize == "") { fontSize = (DwtHtmlEditor.FONT_SIZE_VALUES.indexOf(appCtxt.get(ZmSetting.COMPOSE_INIT_FONT_SIZE)) + 1); }
-        ev.fontSize = fontSize;
+		var fontSize = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_SIZE);
+
+		if (fontSize == "") {
+			fontSize = (DwtHtmlEditor.FONT_SIZE_VALUES.indexOf(appCtxt.get(ZmSetting.COMPOSE_INIT_FONT_SIZE)) + 1);
+		} else if (/\d+px/.test(fontSize)) {
+			 fontSize = Math.ceil(0.75 * parseInt(fontSize))+"pt"; // px and pt are USUALLY related this way
+		}
+		if (/\d+pt/.test(fontSize)) {
+			fontSize = (DwtHtmlEditor.FONT_SIZE_VALUES.indexOf(fontSize) + 1);
+		}
+		ev.fontSize = fontSize;
 		ev.backgroundColor = iFrameDoc.queryCommandValue((AjxEnv.isIE) ? "backcolor" : "hilitecolor");
 		ev.color = iFrameDoc.queryCommandValue("forecolor");
 		if (AjxEnv.isIE) {
