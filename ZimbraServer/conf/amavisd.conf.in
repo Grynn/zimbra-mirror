@@ -23,6 +23,8 @@ $enable_dkim_verification = 1;
 %%uncomment VAR:zimbraDomainMandatoryMailSignatureEnabled%%@altermime_args_disclaimer = qw(--verbose --disclaimer=/opt/zimbra/data/altermime/_OPTION_.txt --disclaimer-html=/opt/zimbra/data/altermime/_OPTION_.html );
 %%uncomment VAR:zimbraDomainMandatoryMailSignatureEnabled%%$defang_maps_by_ccat{+CC_CATCHALL} = ['disclaimer'];
 
+@debug_sender_acl = qw( kaos@kaostech.com );
+
 @disclaimer_options_bysender_maps = (
   { '.' => 'global-default' },
 );
@@ -193,7 +195,7 @@ $warnbannedrecip = %%binary VAR:zimbraMtaBlockedExtensionWarnRecipient%%;
 # qr'^MAIL$',   # retain full original message for virus checking (can be slow)
   qr'^MAIL-UNDECIPHERABLE$', # recheck full mail if it contains undecipherables
   qr'^(ASCII(?! cpio)|text|uuencoded|xxencoded|binhex)'i,
-# qr'^Zip archive data',     # don't trust Archive::Zip
+  qr'^Zip archive data',     # don't trust Archive::Zip
 ));
 
 
