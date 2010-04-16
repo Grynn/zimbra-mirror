@@ -607,6 +607,21 @@ function(newOption) {
     }
 };
 
+// Call this function to update the rendering of the element
+// Firefox sometimes renders the element incorrectly on certain DOM updates, so this function rectifies that
+DwtSelect.prototype.updateRendering = 
+function() {
+	var scrollStyle = this.getScrollStyle();
+	this.setScrollStyle(scrollStyle == Dwt.VISIBLE ? Dwt.CLIP : Dwt.VISIBLE);
+	var reset = function() {
+					try {
+						this.setScrollStyle(scrollStyle);
+					} catch(e) {}
+				};
+	var resetAction = new AjxTimedAction(this, reset);
+	AjxTimedAction.scheduleAction(resetAction, 4);
+}
+
 //
 // Class
 //
