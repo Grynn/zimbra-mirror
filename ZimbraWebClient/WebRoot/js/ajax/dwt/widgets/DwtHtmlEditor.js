@@ -949,11 +949,12 @@ function() {
 	var cells = null;
 	var sel = this._getSelection();
 	var range, i = 0;
+	var limit = 1000; // Just to be sure we don't run away
 	var rows = [];
 	var row = null;
 	if (!AjxEnv.isIE) {
 		try {
-			while (range = sel.getRangeAt(i++)) {
+			for (i = 0; range = sel.getRangeAt(i) && i < limit; i++) {
 				var td = range.startContainer.childNodes[range.startOffset];
 				if (td) {
 					if (td.parentNode != row) {
@@ -973,7 +974,7 @@ function() {
 		range = sel.createRange();
 		var orig_range = range.duplicate(); // save selection
 		range.collapse(true); // move to start
-		while (orig_range.compareEndPoints("EndToStart", range) >= 0) {
+		for (i = 0; orig_range.compareEndPoints("EndToStart", range) >= 0 && i < limit; i++) {
 			// search for a TD
 			var td = range.parentElement();
 			while (td && td.nodeName.toLowerCase() != "td")
@@ -1865,6 +1866,7 @@ function(td, after) {
 
 DwtHtmlEditor.table_deleteCol =
 function(td) {
+	if (!td) return;
 	var table = DwtHtmlEditor.table_analyzeCells(td);
 	var rows = table.rows;
 	var index = td.ZmIndex;
@@ -1903,6 +1905,7 @@ function(td) {
 
 DwtHtmlEditor.table_deleteRow =
 function(td) {
+	if (!td) return;
 	var tr = td.parentNode;
 	var table = DwtHtmlEditor.table_analyzeCells(td);
 	td = table.rows[0].cells[table.rows[0].cells.length-1];
