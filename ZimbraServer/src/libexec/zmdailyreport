@@ -63,13 +63,18 @@ if (fork()) {
 	close(MOUT);
 	my $today = strftime("%b %e ", localtime);
 	my $datestring = strftime("%F", localtime);
+	my $ymd = strftime("%Y%m%d", localtime);
 	
 	my $found = 0;
 	my $old_log;
 	if (-f "/var/log/zimbra.log.1.gz") {
 		$old_log = "gzip -dc /var/log/zimbra.log.1.gz |";
+	} elsif (-f "/var/log/zimbra.log-$ymd.gz") {
+		$old_log = "bzip2 -dc /var/log/zimbra.log-$ymd.gz |";
 	} elsif (-f "/var/log/zimbra.log.1.bz2") {
 		$old_log = "bzip2 -dc /var/log/zimbra.log.1.bz2 |";
+	} elsif (-f "/var/log/zimbra.log-$ymd.bz2") {
+		$old_log = "bzip2 -dc /var/log/zimbra.log-$ymd.bz2 |";
 	}
 	if (defined($old_log)) {
 	    if (open(LOG, $old_log)) {
