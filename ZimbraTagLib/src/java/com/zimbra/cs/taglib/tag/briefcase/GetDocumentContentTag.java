@@ -47,7 +47,7 @@ public class GetDocumentContentTag extends ZimbraSimpleTag {
         try {
             ZMailbox mbox = mMailbox != null ? mMailbox.getMailbox() :  getMailbox();
 			ZDocument doc = mbox.getDocument(this.mId);
-            ZFolderBean fb = BeanUtils.getFolder(pc,doc.getFolderId());
+            ZFolderBean fb =  new ZFolderBean(mbox.getFolderById(doc.getFolderId()));
 
             if(fb != null){
                 InputStream is = mbox.getRESTResource(fb.getRootRelativePathURLEncoded()+"/"+doc.getName()+"?fmt=native");
