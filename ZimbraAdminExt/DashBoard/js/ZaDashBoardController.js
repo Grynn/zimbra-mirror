@@ -227,7 +227,7 @@ ZaDashBoardController.prototype.editItem = function (item) {
 		}
 	}
 };
-/*
+
 ZaDashBoardController.prototype.openSettingsView = function () {
 	var item = ZaApp.getInstance().getGlobalConfig();
 	item.id = ZaItem.GLOBAL_CONFIG;
@@ -822,4 +822,3 @@ ZaDashBoardController.changeActionsStateMethod = function () {
 	} 
 };
 ZaController.changeActionsStateMethods["ZaDashBoardController"].push(ZaDashBoardController.changeActionsStateMethod);
-*/
