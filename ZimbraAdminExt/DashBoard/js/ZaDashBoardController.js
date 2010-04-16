@@ -35,6 +35,7 @@ ZaDashBoardController.prototype.constructor = ZaDashBoardController;
 ZaController.initToolbarMethods["ZaDashBoardController"] = new Array();
 ZaController.changeActionsStateMethods["ZaDashBoardController"] = new Array();
 ZaDashBoardController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/provisioning_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+
 ZaOperation.MANAGE_DOMAINS = ++ZA_OP_INDEX;
 ZaOperation.MANAGE_PROFILES = ++ZA_OP_INDEX;
 ZaOperation.MANAGE_SETITNGS = ++ZA_OP_INDEX;
@@ -198,17 +199,17 @@ ZaDashBoardController.prototype.editItem = function (item) {
 	} else if (type == ZaItem.ALIAS) {
 		if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {	
 			viewController = ZaAccountXFormView;
-		}else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
+		} else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
 		    viewController = ZaDLXFormView;
 		}
 	}
-	if (! this.selectExistingTabByItemId(itemId,viewContstructor)){
+	if (!this.selectExistingTabByItemId(itemId,viewContstructor)){
 		if (type == ZaItem.ACCOUNT) {
 			ZaApp.getInstance().getAccountViewController().show(item,true);
 		} else if (type == ZaItem.DL) {
 			ZaApp.getInstance().getDistributionListController().show(item,true);
 		} else if(type == ZaItem.ALIAS) {
-			var targetObj = item.getAliasTargetObj() ;
+			var targetObj = item.getAliasTargetObj();
 			
 			if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {			
 				ZaApp.getInstance().getAccountViewController().show(targetObj, true);
@@ -217,16 +218,16 @@ ZaDashBoardController.prototype.editItem = function (item) {
 			}  else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.RESOURCE){
 				ZaApp.getInstance().getResourceController().show(targetObj, true);
 			}
-		} else if (type == ZaItem.RESOURCE ){
+		} else if (type == ZaItem.RESOURCE){
 			ZaApp.getInstance().getResourceController().show(item,true);
 		} else if (type==ZaItem.DOMAIN) {
-			ZaApp.getInstance().getDomainController().show(item.true);
+			ZaApp.getInstance().getDomainController().show(item,true);
 		} else if (type==ZaItem.COS) {
 			ZaApp.getInstance().getCosController().show(item,true);
 		}
 	}
 };
-
+/*
 ZaDashBoardController.prototype.openSettingsView = function () {
 	var item = ZaApp.getInstance().getGlobalConfig();
 	item.id = ZaItem.GLOBAL_CONFIG;
@@ -268,7 +269,7 @@ ZaDashBoardController.prototype.newProfileSelected = function() {
 	}
 	
 	ZaApp.getInstance().getCosController().show(newCos);
-}
+};
 
 ZaDashBoardController.prototype.newDomainSelected = function () {
 	try {
@@ -288,7 +289,7 @@ ZaDashBoardController.prototype.newDomainSelected = function () {
 		this._handleException(ex, "ZaDashBoardController.prototype.newDomainSelected", null, false);
 	}
 
-}
+};
 
 ZaDashBoardController.prototype.finishNewDomainButtonListener = function() {
 	try {
@@ -324,7 +325,7 @@ ZaDashBoardController.prototype.finishNewDomainButtonListener = function() {
 		}
 	}
 	return;
-}
+};
 
 ZaDashBoardController.prototype.newAccSelected = function() {
 	try {
@@ -344,7 +345,7 @@ ZaDashBoardController.prototype.newAccSelected = function() {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccountListController.prototype._newAccountListener", null, false);
 	}	
 	
-}
+};
 
 
 ZaDashBoardController.prototype.newResourceSelected = function() {
@@ -360,7 +361,7 @@ ZaDashBoardController.prototype.newResourceSelected = function() {
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._newResourceListener", null, false);
 	}
-}
+};
 
 ZaDashBoardController.prototype.newAliasSelected = function() {
 	try {
@@ -497,30 +498,29 @@ ZaDashBoardController.prototype.chngPwdListener = function(ev) {
 		this._chngPwdDlg.setObject(obj)
 		this._chngPwdDlg.popup();
 	}
-}
+};
 
-ZaDashBoardController.prototype.viewMailListener =
-	function(ev) {
-		try {
-			var form = this._contentView._localXForm;
-			var listItems = form.getItemsById("dashBoardSearchResults");
-			var listWidget = null;
-			if(listItems && listItems[0]) {
-				listWidget = listItems[0].getWidget();
-			} else {
-				return;
-			}
-			var accounts = listWidget.getSelection();
-			if(accounts && accounts.length) {
-				var account = accounts[0];
-				if(account) {
-					ZaAccountListController._viewMailListenerLauncher.call(this, account);
-				}
-			}	
-		} catch (ex) {
-			this._handleException(ex, "ZaDashBoardController.prototype.viewMailListener", null, false);			
+ZaDashBoardController.prototype.viewMailListener = function(ev) {
+	try {
+		var form = this._contentView._localXForm;
+		var listItems = form.getItemsById("dashBoardSearchResults");
+		var listWidget = null;
+		if(listItems && listItems[0]) {
+			listWidget = listItems[0].getWidget();
+		} else {
+			return;
 		}
+		var accounts = listWidget.getSelection();
+		if(accounts && accounts.length) {
+			var account = accounts[0];
+			if(account) {
+				ZaAccountListController._viewMailListenerLauncher.call(this, account);
+			}
+		}	
+	} catch (ex) {
+		this._handleException(ex, "ZaDashBoardController.prototype.viewMailListener", null, false);			
 	}
+};
 
 
 ZaDashBoardController.prototype._expireSessionListener = function(ev) {
@@ -544,17 +544,17 @@ ZaDashBoardController.prototype._expireSessionListener = function(ev) {
 			this.popupMsgDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_PERMISSION_FOR_OPERATION_ON, [item.name ? item.name : item.attrs[ZaAccount.A_accountName]]), true);
 		}
 	}
-}
+};
 
 ZaDashBoardController.prototype.setPageNum = 
 function (pgnum) {
 	this.currentPageNum = Number(pgnum);
-}
+};
 
 ZaDashBoardController.prototype.getPageNum = 
 function () {
 	return this.currentPageNum;
-}
+};
 
 ZaDashBoardController.prototype.nextPageListener = function (ev) {
 	var form = this._contentView._localXForm;
@@ -570,7 +570,7 @@ ZaDashBoardController.prototype.nextPageListener = function (ev) {
 		this.currentPageNum++;
 		this._contentView.searchAddresses(this._contentView.types,ZaSettings.RESULTSPERPAGE*(this.currentPageNum-1))
 	} 
-}
+};
 
 ZaDashBoardController.prototype.prevPageListener = 	function (ev) {
 	var form = this._contentView._localXForm;
@@ -586,7 +586,7 @@ ZaDashBoardController.prototype.prevPageListener = 	function (ev) {
 		this.currentPageNum--;
 		this._contentView.searchAddresses(this._contentView.types,ZaSettings.RESULTSPERPAGE*(this.currentPageNum-1))
 	} 
-}
+};
 
 	
 ZaDashBoardController.changeActionsStateMethod = function () {
@@ -822,3 +822,4 @@ ZaDashBoardController.changeActionsStateMethod = function () {
 	} 
 };
 ZaController.changeActionsStateMethods["ZaDashBoardController"].push(ZaDashBoardController.changeActionsStateMethod);
+*/
