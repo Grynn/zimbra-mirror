@@ -36,8 +36,10 @@ zmsetvars -f\
 	ldap_master_url \
 	ldap_port \
 	ldap_root_password \
+	ldap_starttls_supported \
 	zimbra_ldap_password \
 	zimbra_ldap_userdn \
+	zimbra_require_interprocess_security \
 	zimbra_tmp_directory
 
 u=`id -un`
@@ -182,7 +184,7 @@ add: olcUpdateRef
 olcUpdateRef: ${ldap_master_url}
 -
 EOF
-	else
+	elif [ ${ldap_starttls_supported} -eq 1 -a ${zimbra_require_interprocess_security} -eq 1 ]; then
 	cat >> ${zimbra_tmp_directory}/syncprov-replica.mod.$$<<EOF
 dn: olcDatabase={2}hdb,cn=config
 changetype: modify
@@ -190,6 +192,22 @@ add: olcSyncrepl
 olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
  mple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra c
  redentials=${ldap_replication_password} starttls=critical filter="(objectclass=*)" searchbase=""
+  logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase=cn=access
+ log scope=sub schemachecking=off type=refreshAndPersist retry="60 +" syncdat
+ a=accesslog tls_cacertdir=/opt/zimbra/conf/ca
+-
+add: olcUpdateRef
+olcUpdateRef: ${ldap_master_url}
+-
+EOF
+	else
+	cat >> ${zimbra_tmp_directory}/syncprov-replica.mod.$$<<EOF
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+add: olcSyncrepl
+olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
+ mple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra c
+ redentials=${ldap_replication_password} filter="(objectclass=*)" searchbase=""
   logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase=cn=access
  log scope=sub schemachecking=off type=refreshAndPersist retry="60 +" syncdat
  a=accesslog tls_cacertdir=/opt/zimbra/conf/ca
