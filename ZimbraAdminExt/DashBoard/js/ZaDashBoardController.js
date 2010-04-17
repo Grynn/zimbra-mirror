@@ -106,6 +106,12 @@ ZaController.initToolbarMethods["ZaDashBoardController"].push(ZaDashBoardControl
 
 ZaDashBoardController.prototype.show = 
 function(openInNewTab) {
+	ZaZimbraAdmin.isWarnOnExit = false;
+    ZaZimbraAdmin.setOnbeforeunload(null);
+    
+    var statusObj = new ZaApplianceStatus();
+    statusObj.load();
+    
     if (!this._contentView) {
     	this._initToolbar();
     	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder);
@@ -115,16 +121,16 @@ function(openInNewTab) {
     	                         ZaOperation.SERVICE_SPELL,ZaOperation.SERVICE_CONVERTD,ZaOperation.SERVICE_AS,ZaOperation.SERVICE_AV,
     	                         ZaOperation.SERVICE_STATS,ZaOperation.STOP_SERVICES,ZaOperation.RESTART_SERVICES];
     	this._serviceBarOperations[ZaOperation.SERVICES_LABEL] = new ZaOperation(ZaOperation.LABEL,com_zimbra_dashboard.Services,null,null);
-    	this._serviceBarOperations[ZaOperation.SERVICE_LDAP] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_LDAP,ZaStatus.SVC_LDAP,"Check");
-    	this._serviceBarOperations[ZaOperation.SERVICE_MAILBOX] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_MAILBOX,ZaStatus.SVC_MAILBOX,"Check");
-    	this._serviceBarOperations[ZaOperation.SERVICE_MTA] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_MTA,ZaStatus.SVC_MTA,"Check");
-    	this._serviceBarOperations[ZaOperation.SERVICE_SPELL] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_SPELL,ZaStatus.SVC_SPELL,"Check");
-    	this._serviceBarOperations[ZaOperation.SERVICE_CONVERTD] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_CONVERTD,ZaStatus.SVC_CONVERTD,"Check");
-    	this._serviceBarOperations[ZaOperation.SERVICE_AS] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_AS,ZaStatus.SVC_AS,"Check");
-    	this._serviceBarOperations[ZaOperation.SERVICE_AV] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_AV,ZaStatus.SVC_AV,"Check");
-    	this._serviceBarOperations[ZaOperation.SERVICE_STATS] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_STATS,ZaStatus.SVC_STATS,"Check");
-    	this._serviceBarOperations[ZaOperation.STOP_SERVICES] = new ZaOperation(ZaOperation.STOP_SERVICES, com_zimbra_dashboard.StopServices, com_zimbra_dashboard.StopServices_tt, "Cancel", "Cancel", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
-    	this._serviceBarOperations[ZaOperation.RESTART_SERVICES] = new ZaOperation(ZaOperation.RESTART_SERVICES, com_zimbra_dashboard.RestartServices, com_zimbra_dashboard.RestartServices_tt, "Refresh", "Refresh", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
+    	this._serviceBarOperations[ZaOperation.SERVICE_LDAP] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_LDAP,ZaStatus.SVC_LDAP,statusObj.serviceMap["ldap"] ? "Check" : "Cancel");
+    	this._serviceBarOperations[ZaOperation.SERVICE_MAILBOX] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_MAILBOX,ZaStatus.SVC_MAILBOX,statusObj.serviceMap["mailbox"] ? "Check" : "Cancel");
+    	this._serviceBarOperations[ZaOperation.SERVICE_MTA] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_MTA,ZaStatus.SVC_MTA,statusObj.serviceMap["mta"] ? "Check" : "Cancel");
+    	this._serviceBarOperations[ZaOperation.SERVICE_SPELL] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_SPELL,ZaStatus.SVC_SPELL,statusObj.serviceMap["spell"] ? "Check" : "Cancel");
+    	this._serviceBarOperations[ZaOperation.SERVICE_CONVERTD] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_CONVERTD,ZaStatus.SVC_CONVERTD,statusObj.serviceMap["convertd"] ? "Check" : "Cancel");
+    	this._serviceBarOperations[ZaOperation.SERVICE_AS] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_AS,ZaStatus.SVC_AS,statusObj.serviceMap["antivirus"] ? "Check" : "Cancel");
+    	this._serviceBarOperations[ZaOperation.SERVICE_AV] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_AV,ZaStatus.SVC_AV,statusObj.serviceMap["antispam"] ? "Check" : "Cancel");
+    	this._serviceBarOperations[ZaOperation.SERVICE_STATS] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_STATS,ZaStatus.SVC_STATS,statusObj.serviceMap["stats"] ? "Check" : "Cancel");
+    	this._serviceBarOperations[ZaOperation.STOP_SERVICES] = new ZaOperation(ZaOperation.STOP_SERVICES, com_zimbra_dashboard.StopServices, com_zimbra_dashboard.StopServices_tt, "Cancel", "Cancel", new AjxListener(this, this.stopServices));
+    	//this._serviceBarOperations[ZaOperation.RESTART_SERVICES] = new ZaOperation(ZaOperation.RESTART_SERVICES, com_zimbra_dashboard.RestartServices, com_zimbra_dashboard.RestartServices_tt, "Refresh", "Refresh", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
     	this._serviceBar = new ZaToolBar(this._container, this._serviceBarOperations,this._serviceBarOrder,null,"VAMIServicesToolBar");
     	//this._searchPanel = new DwtComposite(ZaApp.getInstance().getAppCtxt().getShell(), "SearchPanel", DwtControl.ABSOLUTE_STYLE);
     	//this._serviceBar = new ZaToolBar(this._searchPanel, this._serviceBarOperations,this._serviceBarOrder,null,"VAMIServicesToolBar");
@@ -149,14 +155,7 @@ function(openInNewTab) {
 	}
     var entry = {attrs:{}};
     var gc = ZaApp.getInstance().getGlobalConfig();
-    var statusObj = new ZaStatus();
-    statusObj.load();
-    if(statusObj.serverMap) {
-    	for(var a in statusObj.serverMap) {
-    		entry.serviceMap = statusObj.serverMap[a].serviceMap;
-    		break;
-    	}
-    }
+
 
     entry.attrs = gc.attrs;
     entry.rights = gc.rights;
@@ -167,6 +166,32 @@ function(openInNewTab) {
 	this._contentView.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
 	this.changeActionsState();
+};
+
+ZaDashBoardController.prototype.stopServicesAndRedirect = function () {
+	ZaZimbraAdmin.isWarnOnExit = false;
+    ZaZimbraAdmin.setOnbeforeunload(null);
+    var restartURL = "https://localhost:5480/cgi-bin/configureZimbra.pl?action=controlservices&control=stop";
+    var url = "/service/proxy?target=" + AjxStringUtil.urlComponentEncode(restartURL);
+    ZaApp.getInstance().dialogs["ConfirmStopServicesDialog"].popdown();
+    DwtShell.getShell(window).setBusyDialogText(com_zimbra_dashboard.RedirectMessage)
+    DwtShell.getShell(window).setBusy(true,  Dwt.getNextId (), true, 50);
+    AjxRpc.invoke(null, url, null, new AjxCallback(this, function(){return;}), true);
+    document.location.href = ["https://", location.hostname,":5480/service/zimbra-configuration/index.html?rand=",Math.random()].join("");
+}
+
+ZaDashBoardController.prototype.stopServices = function(ev) {
+	
+	if(!ZaApp.getInstance().dialogs["ConfirmStopServicesDialog"]) {
+		ZaApp.getInstance().dialogs["ConfirmStopServicesDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);			
+	}
+		
+	ZaApp.getInstance().dialogs["ConfirmStopServicesDialog"].setMessage(com_zimbra_dashboard.StopServicesWarning, DwtMessageDialog.WARNING_STYLE);	
+	ZaApp.getInstance().dialogs["ConfirmStopServicesDialog"].registerCallback(
+			DwtDialog.YES_BUTTON, ZaDashBoardController.prototype.stopServicesAndRedirect, this);
+	ZaApp.getInstance().dialogs["ConfirmStopServicesDialog"].registerCallback(
+			DwtDialog.NO_BUTTON, function () { ZaApp.getInstance().dialogs["ConfirmStopServicesDialog"].popdown(); }, this);	
+	ZaApp.getInstance().dialogs["ConfirmStopServicesDialog"].popup();
 };
 
 ZaDashBoardController.prototype.editButtonListener = function(ev) {
