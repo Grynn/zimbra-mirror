@@ -14,8 +14,8 @@
  */
 package com.zimbra.cs.taglib.tag.briefcase;
 
+import com.zimbra.common.mime.MimeCompoundHeader;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.taglib.bean.BeanUtils;
 import com.zimbra.cs.taglib.bean.ZFolderBean;
 import com.zimbra.cs.taglib.bean.ZMailboxBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
@@ -26,6 +26,7 @@ import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
+import java.net.URLEncoder;
 import java.io.*;
 import java.nio.CharBuffer;
 
@@ -48,9 +49,8 @@ public class GetDocumentContentTag extends ZimbraSimpleTag {
             ZMailbox mbox = mMailbox != null ? mMailbox.getMailbox() :  getMailbox();
 			ZDocument doc = mbox.getDocument(this.mId);
             ZFolderBean fb =  new ZFolderBean(mbox.getFolderById(doc.getFolderId()));
-
             if(fb != null){
-                InputStream is = mbox.getRESTResource(fb.getRootRelativePathURLEncoded()+"/"+doc.getName()+"?fmt=native");
+                InputStream is = mbox.getRESTResource(fb.getRootRelativePathURLEncoded()+"/"+(URLEncoder.encode(doc.getName(),"UTF-8").replace("+", "%20"))+"?fmt=native");
                 InputStreamReader isr = new InputStreamReader(is,mCharset);
                 StringBuffer buffer = new StringBuffer();
                 Reader in = new BufferedReader(isr);
