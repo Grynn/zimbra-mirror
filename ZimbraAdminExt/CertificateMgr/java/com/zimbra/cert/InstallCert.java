@@ -29,6 +29,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
 import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.account.accesscontrol.AdminRight;
+import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 import com.zimbra.cs.rmgmt.RemoteCommands;
 import com.zimbra.cs.rmgmt.RemoteManager;
 import com.zimbra.cs.rmgmt.RemoteResult;
@@ -58,8 +59,6 @@ public class InstallCert extends AdminDocumentHandler {
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
         
-        checkRight(lc, context, null, AdminRight.PR_SYSTEM_ADMIN_ONLY);
-        
         prov = Provisioning.getInstance();
         
         String serverId = request.getAttribute("server") ;
@@ -74,6 +73,7 @@ public class InstallCert extends AdminDocumentHandler {
         if (server == null) {
             throw ServiceException.INVALID_REQUEST("Server with id " + serverId + " could not be found", null);
         }
+        checkRight(lc, context, server, Admin.R_installCertificate);
         ZimbraLog.security.debug("Install the certificateion for server:  " + server.getName()) ;
         //the deployment of certs should happen on the target server
         RemoteManager rmgr = RemoteManager.getRemoteManager(server);
@@ -360,6 +360,6 @@ public class InstallCert extends AdminDocumentHandler {
     
     @Override
     public void docRights(List<AdminRight> relatedRights, List<String> notes) {
-        notes.add(AdminRightCheckPoint.Notes.SYSTEM_ADMINS_ONLY);
+    	relatedRights.add(Admin.R_installCertificate);
     }
 }

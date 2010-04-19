@@ -33,6 +33,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
 import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.account.accesscontrol.AdminRight;
+import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 import com.zimbra.cs.rmgmt.RemoteManager;
 import com.zimbra.cs.rmgmt.RemoteResult;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
@@ -50,8 +51,6 @@ public class GetCSR extends AdminDocumentHandler {
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
         
-        checkRight(lc, context, null, AdminRight.PR_SYSTEM_ADMIN_ONLY);
-        
         Provisioning prov = Provisioning.getInstance();
         
         Server server = null;
@@ -65,6 +64,7 @@ public class GetCSR extends AdminDocumentHandler {
         if (server == null) {
             throw ServiceException.INVALID_REQUEST("Server with id " + serverId + " could not be found", null);
         }
+        checkRight(lc, context, server,Admin.R_getCSR);
         ZimbraLog.security.debug("load the CSR info from server:  " + server.getName()) ;
         
         
@@ -134,6 +134,6 @@ public class GetCSR extends AdminDocumentHandler {
     
     @Override
     public void docRights(List<AdminRight> relatedRights, List<String> notes) {
-        notes.add(AdminRightCheckPoint.Notes.SYSTEM_ADMINS_ONLY);
+    	 relatedRights.add(Admin.R_getCSR);
     }
 }
