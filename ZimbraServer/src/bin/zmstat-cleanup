@@ -59,7 +59,7 @@ do
             ;;
         -k | --keep)
             shift
-            zmstat_max__retention=$1
+            zmstat_max_retention=$1
             ;;
         -l | --list)
             listArchives=TRUE
@@ -76,15 +76,6 @@ do
 done
 
 
-
-if [ "${listArchives}x" == "TRUEx" ]
-then
-    cd ${zmstat_log_directory}
-    /bin/ls -d1 [0-9][0-9][0-9][0-9]*
-    exit
-fi
-
-
 cd ${zmstat_log_directory} 2>/dev/null
 if [ $? -ne 0 -o "${PWD}" != "${zmstat_log_directory}" ]
 then
@@ -92,9 +83,24 @@ then
     exit -1
 fi
 
-if [ ${zmstat_max_retention:-"0"} -gt 0 ]
+
+if [ "${listArchives}x" == "TRUEx" ]
 then
-    DIR_LIST=`find . -type d -print | awk '{ if ($1 ~ /[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/) { print $1 } }' | sort -r | sed -e "1,${zmstat_max_retention}d ; s%./%%"`
+    if [ "`ls -1A | egrep '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$' | wc -l`" -gt 0 ]
+    then
+        /bin/ls -d1 [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]
+    fi
+elif [ "${purgeAll}x" == "TRUEx" ]
+then
+    DIR_LIST=`find . -type d -print | egrep '^\./[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$' | sort -r | sed -e "s%./%%"`
+    for d in ${DIR_LIST}
+    do
+        echo "Deleting ${d} zmstat archive."
+        /bin/rm -rf ${d}
+    done
+elif [ ${zmstat_max_retention:-"0"} -gt 0 ]
+then
+    DIR_LIST=`find . -type d -print | egrep '^\./[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$' | sort -r | sed -e "1,${zmstat_max_retention}d ; s%./%%"`
 
     for d in ${DIR_LIST}
     do
