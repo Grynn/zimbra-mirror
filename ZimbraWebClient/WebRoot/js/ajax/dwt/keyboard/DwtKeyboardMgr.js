@@ -69,9 +69,6 @@ DwtKeyboardMgr = function(shell) {
 	this.__keyTimeout = 750;
 	this.__currTabGroup = null;
 	this.__currDefaultHandler = null;
-
-	this._clearRepeatAction = new AjxTimedAction(null, function() { DwtKeyboardMgr.__keyCode = null; });
-	this._clearRepeatActionId = -1;
 };
 
 /**@private*/
@@ -80,8 +77,6 @@ DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED	= 1;
 DwtKeyboardMgr.__KEYSEQ_HANDLED		= 2;
 /**@private*/
 DwtKeyboardMgr.__KEYSEQ_PENDING		= 3;
-/**@private*/
-DwtKeyboardMgr.__KEYSEQ_REPEAT		= 4;
 
 DwtKeyboardMgr.FOCUS_FIELD_ID = "kbff";
 
@@ -397,10 +392,8 @@ function() {
 
 	/* Create our keyboard focus field. This is a dummy input field that will take text
 	 * input for keyboard shortcuts. */
-//	var kbff = this._kbFocusField = document.createElement("input");
 	var kbff = this._kbFocusField = document.createElement("textarea");
 	kbff.id = DwtKeyboardMgr.FOCUS_FIELD_ID;
-//	kbff.type = "text";
 	kbff.tabIndex = 0;
 	kbff.style.position = Dwt.ABSOLUTE_STYLE;
 	kbff.style.top = kbff.style.left = Dwt.LOC_NOWHERE;
@@ -543,13 +536,8 @@ function(ev) {
 	ev = DwtUiEvent.getEvent(ev);
 //	DBG.println("kbnav", "keyup: " + ev.keyCode);
 
-	// clear saved repeating key
-	DwtKeyboardMgr.__keyCode = null;
-	if (this._clearRepeatActionId != -1) {
-		AjxTimedAction.cancelAction(this._clearRepeatActionId);
-		this._clearRepeatActionId = -1;
-	}
-	
+	// clear saved Gecko key
+	DwtKeyboardMgr.__geckoKeyCode = null;
 	if (AjxEnv.isMac && AjxEnv.isGeckoBased && ev.keyCode == 0) {
 		return DwtKeyboardMgr.__keyDownHdlr(ev);
 	} else {
@@ -564,10 +552,11 @@ DwtKeyboardMgr.__keyPressHdlr =
 function(ev) {
 	ev = DwtUiEvent.getEvent(ev);
 //	DBG.println("kbnav", "keypress: " + (ev.keyCode || ev.charCode));
-	if (DwtKeyboardMgr.__keyCode && AjxEnv.isGeckoBased) {
+	if (DwtKeyboardMgr.__geckoKeyCode && AjxEnv.isGeckoBased) {
 //		DBG.println("kbnav", "Gecko: calling keydown on keypress event");
 		return DwtKeyboardMgr.__keyDownHdlr(ev);
 	} else {
+		DwtKeyboardMgr.__geckoKeyCode = DwtKeyEvent.getCharCode(ev);
 		return DwtKeyboardMgr.__handleKeyEvent(ev);
 	}
 };
@@ -680,10 +669,9 @@ function(ev) {
 	if (!kbMgr || !kbMgr.__checkStatus()) { return false; }
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
-	var keyCode = DwtKeyboardMgr.__keyCode || DwtKeyEvent.getCharCode(ev);
-	var isRepeat = (DwtKeyboardMgr.__keyCode != null);
+	DwtKeyboardMgr.__geckoKeyCode = null;
+	var keyCode = DwtKeyEvent.getCharCode(ev);
 //	DBG.println("kbnav", "keydown: " + keyCode + " -------- " + ev.target);
-//	DBG.println("kbnav", "saved key code: " + DwtKeyboardMgr.__keyCode + " (" + isRepeat + ")");
 
 	// Popdown any tooltip
 	DwtKeyboardMgr.__shell.getToolTip().popdown();
@@ -779,10 +767,10 @@ function(ev) {
 	var obj = kbMgr.__focusObj;
 	if (obj && (obj.handleKeyAction) && (kbMgr.__dwtCtrlHasFocus || kbMgr.__dwtInputCtrl || (obj.hasFocus && obj.hasFocus()))) {
 //		DBG.println("kbnav", obj + " has focus: " + obj.hasFocus());
-		handled = kbMgr.__dispatchKeyEvent(obj, kev, false, isRepeat);
+		handled = kbMgr.__dispatchKeyEvent(obj, kev);
 		while ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && obj.parent && obj.parent.getKeyMapName) {
 			obj = obj.parent;
-			handled = kbMgr.__dispatchKeyEvent(obj, kev, false, isRepeat);
+			handled = kbMgr.__dispatchKeyEvent(obj, kev);
 		}
 	}
 
@@ -790,7 +778,7 @@ function(ev) {
 	// event handler
 	if ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && kbMgr.__currDefaultHandler &&
 		!(kbMgr.__currTabGroup && kbMgr.__currTabGroup.isDefaultHandlingBlocked())) {
-		handled = kbMgr.__dispatchKeyEvent(kbMgr.__currDefaultHandler, kev, false, isRepeat);
+		handled = kbMgr.__dispatchKeyEvent(kbMgr.__currDefaultHandler, kev);
 	}
 
 	kbMgr.__kbEventStatus = handled;
@@ -798,12 +786,6 @@ function(ev) {
 
 	if (handled != DwtKeyboardMgr.__KEYSEQ_PENDING) {
 		kbMgr.clearKeySeq();
-	}
-
-	if (handled == DwtKeyboardMgr.__KEYSEQ_REPEAT) {
-//		DBG.println("kbnav", "saving repeatable keyCode " + keyCode);
-		DwtKeyboardMgr.__keyCode = keyCode;
-		kbMgr._clearRepeatActionId = AjxTimedAction.scheduleAction(kbMgr._clearRepeatAction, 150);
 	}
 
 	return kbMgr.__processKeyEvent(ev, kev, propagate);
@@ -815,7 +797,7 @@ function(ev) {
  * @private
  */
 DwtKeyboardMgr.prototype.__dispatchKeyEvent = 
-function(hdlr, ev, forceActionCode, isRepeat) {
+function(hdlr, ev, forceActionCode) {
 
 	if (hdlr && hdlr.handleKeyEvent) {
 		var handled = hdlr.handleKeyEvent(ev);
@@ -843,22 +825,6 @@ function(hdlr, ev, forceActionCode, isRepeat) {
 		if (!hdlr.handleKeyAction) {
 			return DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 		}
-
-		// Handle first instance of a key that supports auto-repeat. For Gecko, we switch to
-		// calling the handler on keypress events, since it sends one on the initial press and
-		// on the repeats. For non-Gecko, we call the handler on keydown, since the repeats send
-		// that event. Also, keys like the up/down arrows are considered "special" and don't send
-		// keypress.
-		if (!isRepeat && this.__keyMapMgr.repeats(mapName, actionCode)) {
-//			DBG.println("kbnav", mapName + "." + actionCode + " repeats");
-			if (AjxEnv.isGeckoBased) {
-				return DwtKeyboardMgr.__KEYSEQ_REPEAT;
-			} else {
-				var result = hdlr.handleKeyAction(actionCode, ev);
-				return result ? DwtKeyboardMgr.__KEYSEQ_REPEAT : DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
-			}
-		}
-
 		var result = hdlr.handleKeyAction(actionCode, ev);
 		return result ? DwtKeyboardMgr.__KEYSEQ_HANDLED : DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 	} else {	
