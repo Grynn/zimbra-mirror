@@ -18,26 +18,43 @@ source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars \
 	zimbra_home 
 
+if [[ ! -L ${zimbra_home}/openldap && ! -d ${zimbra_home}/openldap ]]; then
+	# No ldap - exit gracefully
+	exit 0
+fi
+
 u=`id -un`
 if [ $u != ${zimbra_user} ]; then
     echo "Error: must be run as ${zimbra_user} user"
     exit 1
 fi
 
-if [[ ! -L ${zimbra_home}/openldap && ! -d ${zimbra_home}/openldap ]]; then
-	# No ldap - exit gracefully
-	exit 0
-fi
-
 if [ x$1 = "x" -o x$1 = "x-h" -o x$1 = "x--help" ]; then
-	echo "USAGE: zmslapcat <DIR>"
+	echo "USAGE: Exports LDAP databases"
+	echo "Main database: zmslapcat <DIR>"
+	echo "Config database: zmslapcat -c <DIR>"
 	exit 1
 fi
-DEST=$1
-
-mkdir -p $DEST
 
 D=`date +%Y%m%d%H%M%S`
-${zimbra_home}/openldap/sbin/slapcat -F ${zimbra_home}/data/ldap/config -b "" -l $DEST/ldap.bak.${D}
-cp -f ${DEST}/ldap.bak.${D} ${DEST}/ldap.bak
+CONFIG=no
+FILE=ldap.bak.${D}
+NFILE=ldap.bak
+if [ x$1 = "x-c" ]; then
+	CONFIG=yes
+	FILE=ldap-config.bak.${D}
+	NFILE=ldap-config.bak
+	DEST=$2
+else
+	DEST=$1
+fi
+
+mkdir -p $DEST
+if [ x$CONFIG = "xyes" ]; then
+	${zimbra_home}/openldap/sbin/slapcat -F ${zimbra_home}/data/ldap/config -n 0 -l ${DEST}/${FILE}
+else
+	${zimbra_home}/openldap/sbin/slapcat -F ${zimbra_home}/data/ldap/config -b "" -l ${DEST}/${FILE}
+fi
+
+cp -f ${DEST}/${FILE} ${DEST}/${NFILE}
 
