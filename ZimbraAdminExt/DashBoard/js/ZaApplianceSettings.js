@@ -24,6 +24,44 @@ ZaApplianceSettings.prototype = new ZaItem;
 ZaApplianceSettings.prototype.constructor = ZaApplianceSettings;
 ZaItem.loadMethods["ZaApplianceSettings"] = new Array();
 ZaItem.modifyMethods["ZaApplianceSettings"] = new Array();
+ZaApplianceSettings.license = "license";
+ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly = "zimbraAttachmentsViewInHtmlOnly";
+
+ZaApplianceSettings.myXModel = {
+		items: [
+			//license
+			{id: ZaApplianceLicense.A_accountsLimit, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_accountsLimit},
+			{id: ZaApplianceLicense.A_attachmentConversionEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_attachmentConversionEnabled},
+			{id: ZaApplianceLicense.A_backupEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_backupEnabled },
+			{id: ZaApplianceLicense.A_crossMailboxSearchEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_crossMailboxSearchEnabled },
+			{id: ZaApplianceLicense.A_hierarchicalStorageManagementEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_hierarchicalStorageManagementEnabled },	
+			{id: ZaApplianceLicense.A_iSyncAccountsLimit, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_iSyncAccountsLimit },
+			{id: ZaApplianceLicense.A_installType, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_installType },
+			{id: ZaApplianceLicense.A_issuedOn, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_issuedOn },
+			{id: ZaApplianceLicense.A_issuedToEmail, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_issuedToEmail },
+			{id: ZaApplianceLicense.A_issuedToName, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_issuedToName },		
+			{id: ZaApplianceLicense.A_licenseId, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_licenseId },
+			{id: ZaApplianceLicense.A_MAPIConnectorAccountsLimit, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_MAPIConnectorAccountsLimit },
+			{id: ZaApplianceLicense.A_mobileSyncEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_mobileSyncEnabled},
+			{id: ZaApplianceLicense.A_mobileSyncAccountsLimit, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_mobileSyncAccountsLimit },
+			{id: ZaApplianceLicense.A_resellerName, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_resellerName },
+			{id: ZaApplianceLicense.A_validFrom, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_validFrom },
+			{id: ZaApplianceLicense.A_validUntil, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_validUntil },
+			{id: ZaApplianceLicense.InstallStatusMsg, type: _STRING_, ref:ZaApplianceSettings.license + "/"+ ZaApplianceLicense.InstallStatusMsg},
+			{id: ZaApplianceLicense.Info_TotalAccounts, type: _STRING_, ref:ZaApplianceSettings.license + "/"+ ZaApplianceLicense.Info_TotalAccounts},
+			
+	       //config
+			{id:ZaGlobalConfig.A_zimbraFileUploadMaxSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES },
+			{id:ZaGlobalConfig.A_zimbraMtaRelayHost, ref:ZaGlobalConfig.A_zimbraMtaRelayHost, type:_LIST_, listItem:{ type: _HOSTNAME_OR_IP_, maxLength: 256 }},
+			{id:ZaGlobalConfig.A_zimbraAttachmentsBlocked, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsBlocked, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+			{id:ZaGlobalConfig.A_zimbraMtaBlockedExtensionWarnRecipient, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaBlockedExtensionWarnRecipient, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
+			{id:ZaGlobalConfig.A_zimbraMtaBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaBlockedExtension, type: _LIST_, dataType: _STRING_ },
+			{id:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type: _LIST_, dataType: _STRING_ },
+			{id:ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+			{id:ZaGlobalConfig.A_zimbraDefaultDomainName, ref:"attrs/" + ZaGlobalConfig.A_zimbraDefaultDomainName, type:_STRING_, maxLength: 256}
+
+			]
+};
 
 ZaApplianceSettings.loadMethod = 
 function(by, val) {
@@ -98,7 +136,7 @@ ZaApplianceSettings.prototype.initFromJS = function(obj) {
 		this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin] = [this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin]];
 	}
 }
-
+	
 ZaApplianceSettings.modifyMethod = function (mods) {
 	var soapDoc = AjxSoapDoc.create("ModifyConfigRequest", ZaZimbraAdmin.URN, null);
 	for (var aname in mods) {
@@ -139,5 +177,3 @@ ZaApplianceSettings.modifyMethod = function (mods) {
 	ZaGlobalConfig.isDirty = true;
 }
 ZaItem.modifyMethods["ZaApplianceSettings"].push(ZaApplianceSettings.modifyMethod);
-
-ZaApplianceSettings.myXModel = ZaGlobalConfig.myXModel;

@@ -23,7 +23,7 @@
 ZaApplianceSettingsView = function(parent, entry) {
 	ZaTabView.call(this, parent, "ZaApplianceSettingsView");
 	this.TAB_INDEX = 0;	
-	this.initForm(ZaGlobalConfig.myXModel,this.getMyXForm(entry), null);
+	this.initForm(ZaApplianceSettings.myXModel,this.getMyXForm(entry), null);
 }
 
 ZaApplianceSettingsView.prototype = new ZaTabView();
@@ -58,6 +58,62 @@ function () {
 	return this.getTitle ();
 }
 
+/**
+* @method setObject sets the object contained in the view
+* @param entry - ZaItem object to display
+**/
+ZaApplianceSettingsView.prototype.setObject =
+function(entry) {
+	this._containedObject = new Object();
+	this._containedObject.attrs = new Object();
+	this._containedObject.type = entry.type;
+	this._containedObject.name = entry.name;
+	
+	if(entry.id)
+		this._containedObject.id = entry.id;
+	
+	if(entry.rights)
+		this._containedObject.rights = entry.rights;
+	
+	if(entry.setAttrs)
+		this._containedObject.setAttrs = entry.setAttrs;
+	
+	if(entry.getAttrs)
+		this._containedObject.getAttrs = entry.getAttrs;
+		
+	if(entry._defaultValues)
+		this._containedObject._defaultValues = entry._defaultValues;
+		
+	for (var a in entry.attrs) {
+		if(entry.attrs[a] instanceof Array) {
+			this._containedObject.attrs[a] = [].concat(entry.attrs[a]);
+		} else {
+			this._containedObject.attrs[a] = entry.attrs[a];
+		}
+	}
+	if(entry[ZaApplianceSettings.license] && entry[ZaApplianceSettings.license].attrs) {
+		this._containedObject[ZaApplianceSettings.license] = {};
+		for (var a in entry[ZaApplianceSettings.license].attrs) {
+			if(entry[ZaApplianceSettings.license].attrs[a] instanceof Array) {
+				this._containedObject[ZaApplianceSettings.license][a] = [].concat(entry[ZaApplianceSettings.license].attrs[a]);
+			} else {
+				this._containedObject[ZaApplianceSettings.license][a] = entry[ZaApplianceSettings.license].attrs[a];
+			}
+		}	
+	}
+	if(!entry[ZaModel.currentTab])
+		this._containedObject[ZaModel.currentTab] = "1";
+	else
+		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
+		
+	this._localXForm.setInstance(this._containedObject);
+	
+	this.formDirtyLsnr = new AjxListener(ZaApp.getInstance().getCurrentController(), ZaXFormViewController.prototype.handleXFormChange);
+	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, this.formDirtyLsnr);
+	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, this.formDirtyLsnr);	
+	
+	this.updateTab();
+}
 
 ZaApplianceSettingsView.blockedExtSelectionListener = function () {
 	var arr = this.widget.getSelection();
@@ -359,7 +415,51 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 			    }
 			]};
     switchItems.push (case2) ;
- 
+	_tab3 = ++this.TAB_INDEX;
+    tabBarChoices.push ({value:_tab3, label:com_zimbra_dashboard.LicenseTabTitle});
+	var case3 = {type:_ZATABCASE_, caseKey:_tab3, numCols:2, colSizes:["300px","*"],
+		items:[
+            {type: _SPACER_, height: 10},
+            //license file installation successful status, need to define relavant variable
+            {type: _OUTPUT_, ref: ZaApplianceLicense.InstallStatusMsg, colSpan: "2",
+                    width: "600px", align: _CENTER_, cssStyle: "border: solid thin",
+                    visibilityChecks:[function() {return ZaLicenseInstallWizard.INSTALL_STATUS >= 0; }]
+            },
+            //title
+            {type: _OUTPUT_, value: com_zimbra_dashboard.LI_INFO_TITLE , colSpan: "2", width: "600px", align: _CENTER_ },
+            //Customer name
+            { type:_OUTPUT_, ref: ZaApplianceLicense.A_issuedToName, label: com_zimbra_dashboard.LB_company_name, align: _LEFT_,visibilityChecks:[],
+            	
+            },
+            { type:_OUTPUT_, ref: ZaApplianceLicense.A_installType, label: com_zimbra_dashboard.LB_license_type, align: _LEFT_,visibilityChecks:[]},
+            { type:_OUTPUT_, ref: ZaApplianceLicense.A_licenseId, label: com_zimbra_dashboard.LB_license_id, align: _LEFT_ },
+            { type:_OUTPUT_, ref: ZaApplianceLicense.A_issuedOn, label: com_zimbra_dashboard.LB_issue_date, align: _LEFT_,
+            	getDisaplayValue:ZaApplianceLicense.getLocaleString
+            },
+            { type:_OUTPUT_, ref: ZaApplianceLicense.A_validFrom, label: com_zimbra_dashboard.LB_effective_date, align: _LEFT_,
+            	getDisaplayValue:ZaApplianceLicense.getLocaleString
+            },
+            { type:_OUTPUT_, ref: ZaApplianceLicense.A_validUntil, label: com_zimbra_dashboard.LB_expiration_date, align: _LEFT_,
+            	getDisaplayValue:ZaApplianceLicense.getLocaleString
+            },
+            { type:_OUTPUT_, ref: ZaApplianceLicense.A_accountsLimit, label: com_zimbra_dashboard.LB_account_limit, align: _LEFT_,visibilityChecks:[],
+            	getDisaplayValue:function(val) {
+            		var totalAccounts = this.getInstanceValue(ZaApplianceLicense.Info_TotalAccounts);
+            		var retVal = val;
+            		if (totalAccounts >= 0){
+            			retVal += " " + AjxMessageFormat.format(com_zimbra_dashboard.LI_ACCOUNTS_USED,[totalAccounts]);
+            		} else if (totalAccounts == -1){
+            			retVal += " " + com_zimbra_dashboard.LI_ACCOUNT_COUNTING ;
+            		} else{
+            			retVal += " " + com_zimbra_dashboard.LI_ACCOUNT_COUNT_ERROR ;
+            		}
+            		return retVal;
+            	}
+            }
+        ]
+    };    
+	switchItems.push(case3);
+    
     xFormObject.items = [
 		{type:_TAB_BAR_,  ref:ZaModel.currentTab,id:"xform_tabbar",
 		 	containerCssStyle: "padding-top:0px",

@@ -86,6 +86,10 @@ ZaApplianceSettingsController.setViewMethod = function (item) {
         ZaApp.getInstance().pushView(this.getContentViewId());
         item.load();
 
+        var licenseObj = new ZaApplianceLicense();
+        licenseObj.load();
+        item[ZaApplianceSettings.license] = licenseObj;
+
         item[ZaModel.currentTab] = "1"
         item.id = ZaItem.GLOBAL_CONFIG;
         this._view.setDirty(false);

@@ -155,12 +155,12 @@ function(openInNewTab) {
 	}
     var entry = {attrs:{}};
     var gc = ZaApp.getInstance().getGlobalConfig();
-
-
+    
     entry.attrs = gc.attrs;
     entry.rights = gc.rights;
     entry.setAttrs = gc.setAttrs;
     entry.getAttrs = gc.getAttrs;
+    
 	ZaApp.getInstance().pushView(this.getContentViewId());
 	entry[ZaDashBoard.searchResults] = [];
 	this._contentView.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	

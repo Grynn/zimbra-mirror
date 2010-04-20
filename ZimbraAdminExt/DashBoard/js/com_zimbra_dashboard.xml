@@ -1,5 +1,7 @@
-<zimlet name="com_zimbra_dashboard" version="6.0.4" description="Dashboard view for Zimbra Admin UI" extension="true">
+<zimlet name="com_zimbra_dashboard" version="6.0.7" description="Dashboard view for Zimbra Admin UI" extension="true">
     <target>admin-main</target>
+    <include>ZaApplianceLicense.js</include>
+    <include>ZaApplianceStatus.js</include>
     <include>ZaDashBoard.js</include>
     <include>ZaApplianceSettings.js</include>
     <include>ZaDashBoardController.js</include>
