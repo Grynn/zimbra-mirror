@@ -77,8 +77,8 @@ items: [
 	{id:ZaApplianceLicense.Info_TotalAccounts, type: _STRING_, ref:ZaApplianceLicense.Info_TotalAccounts},
 	{id:ZaApplianceLicense.InstallStatusCode, type:_NUMBER_, ref:ZaApplianceLicense.InstallStatusCode}
 ]};
-ZaApplianceLicense.getLocaleString =
-function (serverStr) {
+
+ZaApplianceLicense.getLicenseDate = function (serverStr) {
 	if (serverStr == null) return null;
 	
 	var d = new Date();
@@ -89,8 +89,26 @@ function (serverStr) {
 	d.setMonth(MM - 1);
 	d.setMonth(MM - 1); // DON'T remove second call to setMonth (see bug #3839)
 	d.setDate(dd);
-	ZaLicense.parseLicenseTime(serverStr, d);
+	return d;
+};
+
+ZaApplianceLicense.getLocalDate =
+function (serverStr) {
+	if (serverStr == null) return null;	
+	var d = ZaApplianceLicense.getLicenseDate(serverStr);
+	ZaApplianceLicense.parseLicenseTime(serverStr, d);
 	return d;	
+};
+
+ZaApplianceLicense.parseLicenseTime = function(serverStr, date) {
+	var hh = parseInt(serverStr.substr(8,2), 10);
+	var mm = parseInt(serverStr.substr(10,2), 10);
+	var ss = parseInt(serverStr.substr(12,2), 10);
+	if (serverStr.charAt(14) == 'Z') {
+		mm += AjxTimezone.getOffset(AjxTimezone.DEFAULT, date);
+	}
+	date.setHours(hh, mm, ss, 0);
+	return date;
 };
 	
 ZaApplianceLicense.prototype.load = function (by, val) {
@@ -112,8 +130,11 @@ function() {
 		this.attrs = {};
 		this.initFromJS(resp.license[0]);
 		this.initFromJS(resp.info[0]);
+		this.attrs[ZaApplianceLicense.InstallStatusCode] = 0;
 	} catch (ex) {
-		ZaApp.getInstance().getStatusViewController()._handleException(ex, "ZaApplianceStatus.loadMethod", null, false);		
+		this.attrs = {};
+		this.attrs[ZaApplianceLicense.InstallStatusMsg] = ex.msg;
+		this.attrs[ZaApplianceLicense.InstallStatusCode] = -1;				
 	}	
 };
 ZaItem.loadMethods["ZaApplianceLicense"].push(ZaApplianceLicense.loadMethod);
@@ -145,3 +166,23 @@ ZaApplianceLicense.getCause = function (detailMsg) {
 	}
 };
 
+ZaApplianceLicense.removeLicense = function() {
+	try {
+		this.serviceMap = {};
+	    var statusURL = "https://localhost:5480/cgi-bin/uploadLicense.pl?action=removelicense";
+	    var url = "/service/proxy?target=" + AjxStringUtil.urlComponentEncode(statusURL);
+	    var busyId = Dwt.getNextId();
+	    DwtShell.getShell(window).setBusyDialogText(com_zimbra_dashboard.BUSY_REMOVING_EVAL_LICENSE)
+	    DwtShell.getShell(window).setBusy(true,busyId, true, 50);	    
+	    var response = AjxRpc.invoke(null, url, null, null, true);
+	    DwtShell.getShell(window).setBusy(false,busyId,false);
+	    var myDoc = AjxXmlDoc.createFromDom(response.xml);
+	    var successNodes = myDoc.getElementsByTagName("success");
+	    if(!successNodes || successNodes.length==0) {
+	    	ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_dashboard.ERROR_FAILED_REMOVE_EVAL_LICENSE, null, true);
+	    }
+	} catch (ex) {
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaApplianceStatus.loadMethod", null, false);		
+	}	
+	
+};

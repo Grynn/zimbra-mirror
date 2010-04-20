@@ -426,7 +426,7 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
             //license file installation successful status, need to define relavant variable
             {type: _OUTPUT_, ref: ZaApplianceLicense.InstallStatusMsg, colSpan: "2",
                     width: "600px", align: _CENTER_, cssStyle: "border: solid thin",
-                    visibilityChecks:[[XForm.checkInstanceValue,ZaApplianceLicense.InstallStatusCode,1]],bmolsnr:true,
+                    visibilityChecks:[[XForm.checkInstanceValueNot,ZaApplianceLicense.InstallStatusCode,0]],bmolsnr:true,
                     visibilityChangeEventSources:[ZaApplianceLicense.InstallStatusCode]
             },
             //title
@@ -436,13 +436,13 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_installType, label: com_zimbra_dashboard.LB_license_type, align: _LEFT_,visibilityChecks:[],bmolsnr:true},
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_licenseId, label: com_zimbra_dashboard.LB_license_id, align: _LEFT_,bmolsnr:true },
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_issuedOn, label: com_zimbra_dashboard.LB_issue_date, align: _LEFT_,
-            	getDisplayValue:ZaApplianceLicense.getLocaleString,bmolsnr:true
+            	getDisplayValue:ZaApplianceLicense.getLocalDate,bmolsnr:true
             },
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_validFrom, label: com_zimbra_dashboard.LB_effective_date, align: _LEFT_,
-            	getDisplayValue:ZaApplianceLicense.getLocaleString,bmolsnr:true
+            	getDisplayValue:ZaApplianceLicense.getLocalDate,bmolsnr:true
             },
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_validUntil, label: com_zimbra_dashboard.LB_expiration_date, align: _LEFT_,
-            	getDisplayValue:ZaApplianceLicense.getLocaleString,bmolsnr:true
+            	getDisplayValue:ZaApplianceLicense.getLocalDate,bmolsnr:true
             },
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_accountsLimit, label: com_zimbra_dashboard.LB_account_limit, align: _LEFT_,visibilityChecks:[],
             	getDisplayValue:function(val) {
