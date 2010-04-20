@@ -30,7 +30,7 @@ ZaApplianceLicense.prototype.constructor = ZaApplianceLicense;
 ZaItem.loadMethods["ZaApplianceLicense"] = new Array();
 ZaItem.initMethods["ZaApplianceLicense"] = new Array();
 
-if (ZaOperation) ZaOperation.UPDATE_ZCS_LICENSE = ++ZA_OP_INDEX;
+if (ZaOperation) ZaOperation.INSTALL_ZCS_LICENSE = ++ZA_OP_INDEX;
 ZaItem.LICENSE = "license";
 
 ZaApplianceLicense.A_accountsLimit = "AccountsLimit";
@@ -52,7 +52,31 @@ ZaApplianceLicense.A_validFrom = "ValidFrom";
 ZaApplianceLicense.A_validUntil = "ValidUntil";
 ZaApplianceLicense.InstallStatusMsg = "LicenseInstallStatusMsg";
 ZaApplianceLicense.Info_TotalAccounts = "TotalAccounts" ;
-
+ZaApplianceLicense.InstallStatusCode = "LicenseInstallStatusCode";
+ZaApplianceLicense.myXModel = {
+items: [
+	//license
+	{id:ZaApplianceLicense.A_accountsLimit, type: _STRING_, ref: ZaApplianceLicense.A_accountsLimit},
+	{id:ZaApplianceLicense.A_attachmentConversionEnabled, type: _STRING_, ref: ZaApplianceLicense.A_attachmentConversionEnabled},
+	{id:ZaApplianceLicense.A_backupEnabled, type: _STRING_, ref: ZaApplianceLicense.A_backupEnabled },
+	{id:ZaApplianceLicense.A_crossMailboxSearchEnabled, type: _STRING_, ref: ZaApplianceLicense.A_crossMailboxSearchEnabled },
+	{id:ZaApplianceLicense.A_hierarchicalStorageManagementEnabled, type: _STRING_, ref: ZaApplianceLicense.A_hierarchicalStorageManagementEnabled },	
+	{id:ZaApplianceLicense.A_iSyncAccountsLimit, type: _STRING_, ref: ZaApplianceLicense.A_iSyncAccountsLimit },
+	{id:ZaApplianceLicense.A_installType, type: _STRING_, ref: ZaApplianceLicense.A_installType },
+	{id:ZaApplianceLicense.A_issuedOn, type: _STRING_, ref: ZaApplianceLicense.A_issuedOn },
+	{id:ZaApplianceLicense.A_issuedToEmail, type: _STRING_, ref: ZaApplianceLicense.A_issuedToEmail },
+	{id:ZaApplianceLicense.A_issuedToName, type: _STRING_, ref: ZaApplianceLicense.A_issuedToName },		
+	{id:ZaApplianceLicense.A_licenseId, type: _STRING_, ref: ZaApplianceLicense.A_licenseId },
+	{id:ZaApplianceLicense.A_MAPIConnectorAccountsLimit, type: _STRING_, ref: ZaApplianceLicense.A_MAPIConnectorAccountsLimit },
+	{id:ZaApplianceLicense.A_mobileSyncEnabled, type: _STRING_, ref: ZaApplianceLicense.A_mobileSyncEnabled},
+	{id:ZaApplianceLicense.A_mobileSyncAccountsLimit, type: _STRING_, ref: ZaApplianceLicense.A_mobileSyncAccountsLimit },
+	{id:ZaApplianceLicense.A_resellerName, type: _STRING_, ref: ZaApplianceLicense.A_resellerName },
+	{id:ZaApplianceLicense.A_validFrom, type: _STRING_, ref: ZaApplianceLicense.A_validFrom },
+	{id:ZaApplianceLicense.A_validUntil, type: _STRING_, ref: ZaApplianceLicense.A_validUntil },
+	{id:ZaApplianceLicense.InstallStatusMsg, type: _STRING_, ref:ZaApplianceLicense.InstallStatusMsg},
+	{id:ZaApplianceLicense.Info_TotalAccounts, type: _STRING_, ref:ZaApplianceLicense.Info_TotalAccounts},
+	{id:ZaApplianceLicense.InstallStatusCode, type:_NUMBER_, ref:ZaApplianceLicense.InstallStatusCode}
+]};
 ZaApplianceLicense.getLocaleString =
 function (serverStr) {
 	if (serverStr == null) return null;
@@ -94,19 +118,30 @@ function() {
 };
 ZaItem.loadMethods["ZaApplianceLicense"].push(ZaApplianceLicense.loadMethod);
 
-ZaApplianceLicense.prototype.initFromJS = 
-	function (obj) {
-		if(!obj)
-			return;
-		
-		if(obj.attr) {
-			var len = obj.attr.length;
-			for(var ix = 0; ix < len; ix++) {
-				if(!this.attrs[[obj.attr[ix].name]]) {
-					this.attrs[[obj.attr[ix].name]] = obj.attr[ix]._content;
-				} else {
-					this.attrs[[obj.attr[ix].name]].push(obj.attr[ix]._content);
-				}
+ZaApplianceLicense.prototype.initFromJS = function (obj) {
+	if(!obj)
+		return;
+	
+	if(obj.attr) {
+		var len = obj.attr.length;
+		for(var ix = 0; ix < len; ix++) {
+			if(!this.attrs[[obj.attr[ix].name]]) {
+				this.attrs[[obj.attr[ix].name]] = obj.attr[ix]._content;
+			} else {
+				this.attrs[[obj.attr[ix].name]].push(obj.attr[ix]._content);
 			}
 		}
 	}
+};
+
+ZaApplianceLicense.getCause = function (detailMsg) {
+	var causeBy = /Caused by:\s*com.zimbra.cs.license.LicenseException:\s*(.*)/;
+	
+	var result = detailMsg.match(causeBy);
+	if (result != null) {
+    	return result [1] ;
+	}else{
+		return detailMsg ;
+	}
+};
+

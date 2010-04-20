@@ -48,6 +48,7 @@ ZaApplianceSettings.myXModel = {
 			{id: ZaApplianceLicense.A_validFrom, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_validFrom },
 			{id: ZaApplianceLicense.A_validUntil, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_validUntil },
 			{id: ZaApplianceLicense.InstallStatusMsg, type: _STRING_, ref:ZaApplianceSettings.license + "/"+ ZaApplianceLicense.InstallStatusMsg},
+			{id: ZaApplianceLicense.InstallStatusCode, type: _STRING_, ref:ZaApplianceSettings.license + "/"+ ZaApplianceLicense.InstallStatusCode},
 			{id: ZaApplianceLicense.Info_TotalAccounts, type: _STRING_, ref:ZaApplianceSettings.license + "/"+ ZaApplianceLicense.Info_TotalAccounts},
 			
 	       //config

@@ -59,8 +59,10 @@ ZaApplianceSettingsController.initToolbarMethod =
 function () {
 	this._toolbarOperations[ZaOperation.SAVE] = new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));    			
 	this._toolbarOperations[ZaOperation.DOWNLOAD_GLOBAL_CONFIG] = new ZaOperation(ZaOperation.DOWNLOAD_GLOBAL_CONFIG, ZaMsg.TBB_DownloadConfig, ZaMsg.GLOBTBB_DownloadConfig_tt, "DownloadGlobalConfig", "DownloadGlobalConfig", new AjxListener(this, this.downloadConfigButtonListener));
+	this._toolbarOperations[ZaOperation.INSTALL_ZCS_LICENSE] = new ZaOperation(ZaOperation.INSTALL_ZCS_LICENSE, com_zimbra_dashboard.InstallLicenseButton, com_zimbra_dashboard.InstallLicenseButton_tt, "UpdateLicense", "UpdateLicense", new AjxListener(this, this.installLicenseButtonListener));
 	this._toolbarOrder.push(ZaOperation.SAVE);
 	this._toolbarOrder.push(ZaOperation.DOWNLOAD_GLOBAL_CONFIG);
+	this._toolbarOrder.push(ZaOperation.INSTALL_ZCS_LICENSE);
 }
 ZaController.initToolbarMethods["ZaApplianceSettingsController"].push(ZaApplianceSettingsController.initToolbarMethod);
 
@@ -121,7 +123,65 @@ ZaController.changeActionsStateMethods["ZaApplianceSettingsController"].push(ZaA
 ZaApplianceSettingsController.prototype.downloadConfigButtonListener = 
 function(ev) {
 	window.open("/service/collectldapconfig/");
-}
+};
+
+ZaApplianceSettingsController.prototype.installLicenseButtonListener = function (ev) {
+	if(!this.licenseInstallWizard) {
+		this.licenseInstallWizard = ZaApp.getInstance().dialogs["licenseInstallWizard"] = new ZaApplianceLicenseWizard(this._container);
+		this.licenseInstallWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, this.finishLicenseWizard, this, null);
+	}
+				
+	this.licenseInstallWizard.popup();
+};
+
+ZaApplianceSettingsController.prototype.finishLicenseWizard = function() {
+	try {	
+		var xform = this._view._localXForm;
+		xform.setInstanceValue(0, ZaApplianceLicense.InstallStatusCode);
+		var soapDoc = AjxSoapDoc.create("InstallLicenseRequest", "urn:zimbraAdmin", null);
+		var contentElement = soapDoc.set("content", "");
+		contentElement.setAttribute("aid", this.licenseInstallWizard.attId );
+		var installLicenseCmd = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = soapDoc;	
+		var callback = new AjxCallback(this, this.installCallback);
+		params.asyncMode = true;
+		params.callback = callback;		
+		installLicenseCmd.invoke(params);			
+		this.licenseInstallWizard.popdown();		
+	} catch (ex) {
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaApplianceSettingsController.prototype.finishWizard", null, false);
+	}
+};
+
+ZaApplianceSettingsController.prototype.installCallback = function (resp){	
+	var xform = this._view._localXForm;
+	try {
+		if (resp._isException) {
+			var detailMsg = resp._data.msg ;			
+			throw new AjxException(com_zimbra_dashboard.LI_INSTALL_STATUS_1 + ": " + ZaApplianceLicense.getCause(detailMsg), "ZaApplianceSettingsController.prototype.installCallback", AjxException.UNKNOWN_ERROR, detailMsg);
+		} else{
+			var installResponse = resp._data.Body.InstallLicenseResponse ;
+			if (installResponse) {
+		        var licenseObj = new ZaApplianceLicense();
+		        licenseObj.load();
+		        xform.setInstanceValue(licenseObj[ZaApplianceLicense.A_accountsLimit], ZaApplianceLicense.A_accountsLimit);
+		        xform.setInstanceValue(licenseObj[ZaApplianceLicense.A_issuedToName], ZaApplianceLicense.A_issuedToName);
+		        xform.setInstanceValue(licenseObj[ZaApplianceLicense.A_installType], ZaApplianceLicense.A_installType);
+		        xform.setInstanceValue(licenseObj[ZaApplianceLicense.A_licenseId], ZaApplianceLicense.A_licenseId);
+		        xform.setInstanceValue(licenseObj[ZaApplianceLicense.A_issuedOn], ZaApplianceLicense.A_issuedOn);
+		        xform.setInstanceValue(licenseObj[ZaApplianceLicense.A_validFrom], ZaApplianceLicense.A_validFrom);
+		        xform.setInstanceValue(licenseObj[ZaApplianceLicense.A_validUntil], ZaApplianceLicense.A_validUntil);
+			}else{
+				throw new AjxException(com_zimbra_dashboard.LIW_ERROR_0, "ZaApplianceSettingsController.prototype.installCallback", AjxException.UNKNOWN_ERROR) ;
+			}
+		}
+	}catch (ex){
+		xform.setInstanceValue(ex.msg, ZaApplianceLicense.InstallStatusMsg);
+		xform.setInstanceValue(1, ZaApplianceLicense.InstallStatusCode);
+		this.popupErrorDialog(ex.msg, ex, true);
+	}
+};
 
 ZaApplianceSettingsController.prototype._saveChanges =
 function () {

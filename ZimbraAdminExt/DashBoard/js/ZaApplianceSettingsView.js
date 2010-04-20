@@ -91,8 +91,9 @@ function(entry) {
 			this._containedObject.attrs[a] = entry.attrs[a];
 		}
 	}
+	this._containedObject[ZaApplianceSettings.license] = {};
 	if(entry[ZaApplianceSettings.license] && entry[ZaApplianceSettings.license].attrs) {
-		this._containedObject[ZaApplianceSettings.license] = {};
+		
 		for (var a in entry[ZaApplianceSettings.license].attrs) {
 			if(entry[ZaApplianceSettings.license].attrs[a] instanceof Array) {
 				this._containedObject[ZaApplianceSettings.license][a] = [].concat(entry[ZaApplianceSettings.license].attrs[a]);
@@ -101,6 +102,8 @@ function(entry) {
 			}
 		}	
 	}
+	this._containedObject[ZaApplianceSettings.license][ZaApplianceLicense.InstallStatusCode] = 0;
+	this._containedObject[ZaApplianceSettings.license][ZaApplianceLicense.InstallStatusMsg] = "";
 	if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";
 	else
@@ -423,24 +426,23 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
             //license file installation successful status, need to define relavant variable
             {type: _OUTPUT_, ref: ZaApplianceLicense.InstallStatusMsg, colSpan: "2",
                     width: "600px", align: _CENTER_, cssStyle: "border: solid thin",
-                    visibilityChecks:[function() {return ZaLicenseInstallWizard.INSTALL_STATUS >= 0; }]
+                    visibilityChecks:[[XForm.checkInstanceValue,ZaApplianceLicense.InstallStatusCode,1]],bmolsnr:true,
+                    visibilityChangeEventSources:[ZaApplianceLicense.InstallStatusCode]
             },
             //title
             {type: _OUTPUT_, value: com_zimbra_dashboard.LI_INFO_TITLE , colSpan: "2", width: "600px", align: _CENTER_ },
             //Customer name
-            { type:_OUTPUT_, ref: ZaApplianceLicense.A_issuedToName, label: com_zimbra_dashboard.LB_company_name, align: _LEFT_,visibilityChecks:[],
-            	
-            },
-            { type:_OUTPUT_, ref: ZaApplianceLicense.A_installType, label: com_zimbra_dashboard.LB_license_type, align: _LEFT_,visibilityChecks:[]},
-            { type:_OUTPUT_, ref: ZaApplianceLicense.A_licenseId, label: com_zimbra_dashboard.LB_license_id, align: _LEFT_ },
+            { type:_OUTPUT_, ref: ZaApplianceLicense.A_issuedToName, label: com_zimbra_dashboard.LB_company_name, align: _LEFT_,visibilityChecks:[],bmolsnr:true},
+            { type:_OUTPUT_, ref: ZaApplianceLicense.A_installType, label: com_zimbra_dashboard.LB_license_type, align: _LEFT_,visibilityChecks:[],bmolsnr:true},
+            { type:_OUTPUT_, ref: ZaApplianceLicense.A_licenseId, label: com_zimbra_dashboard.LB_license_id, align: _LEFT_,bmolsnr:true },
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_issuedOn, label: com_zimbra_dashboard.LB_issue_date, align: _LEFT_,
-            	getDisplayValue:ZaApplianceLicense.getLocaleString
+            	getDisplayValue:ZaApplianceLicense.getLocaleString,bmolsnr:true
             },
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_validFrom, label: com_zimbra_dashboard.LB_effective_date, align: _LEFT_,
-            	getDisplayValue:ZaApplianceLicense.getLocaleString
+            	getDisplayValue:ZaApplianceLicense.getLocaleString,bmolsnr:true
             },
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_validUntil, label: com_zimbra_dashboard.LB_expiration_date, align: _LEFT_,
-            	getDisplayValue:ZaApplianceLicense.getLocaleString
+            	getDisplayValue:ZaApplianceLicense.getLocaleString,bmolsnr:true
             },
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_accountsLimit, label: com_zimbra_dashboard.LB_account_limit, align: _LEFT_,visibilityChecks:[],
             	getDisplayValue:function(val) {
@@ -454,7 +456,7 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
             			retVal += " " + com_zimbra_dashboard.LI_ACCOUNT_COUNT_ERROR ;
             		}
             		return retVal;
-            	}
+            	},bmolsnr:true
             }
         ]
     };    

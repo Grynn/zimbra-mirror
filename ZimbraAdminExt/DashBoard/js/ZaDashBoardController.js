@@ -304,8 +304,7 @@ ZaDashBoardController.prototype.newDomainSelected = function () {
 		domain[ZaDomain.A2_new_internal_gal_polling_interval] = "2d";
 		domain[ZaDomain.A2_new_external_gal_polling_interval] = "2d";
 		domain.attrs[ZaDomain.A_zimbraGalMaxResults] = 100;
-//		domain[ZaDomain.A_CreateNotebook]="TRUE";
-		
+
 		this._newDomainWizard = ZaApp.getInstance().dialogs["newDomainWizard"] = new ZaApplianceDomainXWizard(this._container, domain);	
 		this._newDomainWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, this.finishNewDomainButtonListener, this, null);			
 		this._newDomainWizard.setObject(domain);
