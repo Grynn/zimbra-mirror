@@ -434,16 +434,16 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_installType, label: com_zimbra_dashboard.LB_license_type, align: _LEFT_,visibilityChecks:[]},
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_licenseId, label: com_zimbra_dashboard.LB_license_id, align: _LEFT_ },
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_issuedOn, label: com_zimbra_dashboard.LB_issue_date, align: _LEFT_,
-            	getDisaplayValue:ZaApplianceLicense.getLocaleString
+            	getDisplayValue:ZaApplianceLicense.getLocaleString
             },
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_validFrom, label: com_zimbra_dashboard.LB_effective_date, align: _LEFT_,
-            	getDisaplayValue:ZaApplianceLicense.getLocaleString
+            	getDisplayValue:ZaApplianceLicense.getLocaleString
             },
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_validUntil, label: com_zimbra_dashboard.LB_expiration_date, align: _LEFT_,
-            	getDisaplayValue:ZaApplianceLicense.getLocaleString
+            	getDisplayValue:ZaApplianceLicense.getLocaleString
             },
             { type:_OUTPUT_, ref: ZaApplianceLicense.A_accountsLimit, label: com_zimbra_dashboard.LB_account_limit, align: _LEFT_,visibilityChecks:[],
-            	getDisaplayValue:function(val) {
+            	getDisplayValue:function(val) {
             		var totalAccounts = this.getInstanceValue(ZaApplianceLicense.Info_TotalAccounts);
             		var retVal = val;
             		if (totalAccounts >= 0){

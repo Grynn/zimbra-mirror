@@ -55,13 +55,8 @@ ZaApplianceLicense.Info_TotalAccounts = "TotalAccounts" ;
 
 ZaApplianceLicense.getLocaleString =
 function (serverStr) {
-	return ZaLicense.parseLicenseDateTime(serverStr).toLocaleString();	
-}
-
-	//Sample license time: 20060617053000Z (UTC)
-ZaApplianceLicense.parseLicenseDateTime = function(serverStr) {
 	if (serverStr == null) return null;
-
+	
 	var d = new Date();
 	var yyyy = parseInt(serverStr.substr(0,4), 10);
 	var MM = parseInt(serverStr.substr(4,2), 10);
@@ -71,12 +66,12 @@ ZaApplianceLicense.parseLicenseDateTime = function(serverStr) {
 	d.setMonth(MM - 1); // DON'T remove second call to setMonth (see bug #3839)
 	d.setDate(dd);
 	ZaLicense.parseLicenseTime(serverStr, d);
-	return d;
+	return d;	
 };
 	
 ZaApplianceLicense.prototype.load = function (by, val) {
 	ZaItem.prototype.load.call(this,by,val,true, false);
-}
+};
 
 ZaApplianceLicense.loadMethod = 
 function() {
@@ -96,7 +91,7 @@ function() {
 	} catch (ex) {
 		ZaApp.getInstance().getStatusViewController()._handleException(ex, "ZaApplianceStatus.loadMethod", null, false);		
 	}	
-}
+};
 ZaItem.loadMethods["ZaApplianceLicense"].push(ZaApplianceLicense.loadMethod);
 
 ZaApplianceLicense.prototype.initFromJS = 
