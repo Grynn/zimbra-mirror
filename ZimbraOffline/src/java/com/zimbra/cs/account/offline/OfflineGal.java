@@ -103,18 +103,9 @@ public class OfflineGal {
         } catch (MailServiceException.NoSuchItemException e) {}
         
         name = name.trim();
-        String[] searchFields = {ContactConstants.A_firstName, ContactConstants.A_lastName, ContactConstants.A_fullName,
-            ContactConstants.A_email, ContactConstants.A_email2, ContactConstants.A_email3};
         String query = "in:\"" + currFolder.getName() + "\"";
-        if (name.length() > 0 && !name.equals(".")) {
-            String qname = ":\"" + name + "*\"";
-            query += " AND (";
-            for (int i = 0; i < searchFields.length; i++)
-                query = query + (i > 0 ? " OR #" : "#") + searchFields[i] + qname;
-            if (!type.equals(CTYPE_ACCOUNT))
-                query = query + " OR #" + A_zimbraCalResLocationDisplayName + qname;
-            query += ")";
-        }
+        if (name.length() > 0 && !name.equals("."))
+            query = query + " AND contact:(" + name + ")";
         if (type.equals(CTYPE_ACCOUNT))
             query = query + " AND #" + ContactConstants.A_type + ":" + CTYPE_ACCOUNT;
         else if (type.equals(CTYPE_RESOURCE))
@@ -178,6 +169,8 @@ public class OfflineGal {
                 Contact contact = (Contact) mGalMbox.getItemById(mOpContext, id, MailItem.TYPE_CONTACT);
                 ItemId iid = new ItemId(mGalMbox, id);
                 ContactAutoComplete.addMatchedContacts(name, contact.getFields(), EMAIL_KEYS, ContactAutoComplete.FOLDER_ID_GAL, iid, result);
+                if (!result.canBeCached)
+                    break;
             }                    
         } finally {
             zqr.doneWithSearchResults();
