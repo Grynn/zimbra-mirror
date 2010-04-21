@@ -26,7 +26,7 @@ ZaItem.loadMethods["ZaApplianceSettings"] = new Array();
 ZaItem.modifyMethods["ZaApplianceSettings"] = new Array();
 ZaApplianceSettings.license = "license";
 ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly = "zimbraAttachmentsViewInHtmlOnly";
-
+ZaApplianceSettings.A_certs = "certs";
 ZaApplianceSettings.myXModel = {
 		items: [
 			//license
@@ -59,9 +59,32 @@ ZaApplianceSettings.myXModel = {
 			{id:ZaGlobalConfig.A_zimbraMtaBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaBlockedExtension, type: _LIST_, dataType: _STRING_ },
 			{id:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type: _LIST_, dataType: _STRING_ },
 			{id:ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-			{id:ZaGlobalConfig.A_zimbraDefaultDomainName, ref:"attrs/" + ZaGlobalConfig.A_zimbraDefaultDomainName, type:_STRING_, maxLength: 256}
-
-			]
+			{id:ZaGlobalConfig.A_zimbraDefaultDomainName, ref:"attrs/" + ZaGlobalConfig.A_zimbraDefaultDomainName, type:_STRING_, maxLength: 256},
+			
+			//certificates
+			{id:ZaApplianceSettings.A_certs, ref:ZaApplianceSettings.A_certs, type:_LIST_, 
+				listItem:{type:_OBJECT_, 
+					items:[
+		       		{id: ZaCert.A_installStatus, type: _STRING_, ref: ZaCert.A_installStatus },
+					{id: ZaCert.A_subject_alt, type: _LIST_, ref:"attrs/" + ZaCert.A_subject_alt, listItem:{type:_STRING_}},
+					{id: ZaCert.A_target_server, type:_STRING_ , ref: ZaCert.A_target_server },
+					{id: ZaCert.A_countryName, type: _STRING_, ref: "attrs/" + ZaCert.A_countryName, length: 2, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\'\*]*$/ },
+			        {id: ZaCert.A_keysize, type: _STRING_, ref: ZaCert.A_keysize},
+					{id: ZaCert.A_commonName, type: _STRING_, ref: "attrs/" + ZaCert.A_commonName },
+					{id: ZaCert.A_state, type: _STRING_, ref: "attrs/" + ZaCert.A_state, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\'\*]*$/ },
+					{id: ZaCert.A_city, type: _STRING_, ref: "attrs/" + ZaCert.A_city, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\'\*\s]*$/ },
+					{id: ZaCert.A_organization, type: _STRING_, ref: "attrs/" + ZaCert.A_organization, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\,\'\*\s]*$/ },
+					{id: ZaCert.A_organizationUnit, type: _STRING_, ref: "attrs/" + ZaCert.A_organizationUnit, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\,\'\*\s]*$/ },
+					{id: ZaCert.A_validation_days, type: _NUMBER_, ref: ZaCert.A_validation_days, required: true },
+					{id: ZaCert.A_type_comm, type: _ENUM_, ref: ZaCert.A_type_comm, choices:ZaModel.BOOLEAN_CHOICES1 },
+					{id: ZaCert.A_type_self, type: _ENUM_, ref: ZaCert.A_type_self, choices:ZaModel.BOOLEAN_CHOICES1 },
+					{id: ZaCert.A_type_csr, type: _ENUM_, ref: ZaCert.A_type_csr, choices:ZaModel.BOOLEAN_CHOICES1 },
+					{id: ZaCert.A_csr_exists, type: _ENUM_, ref: ZaCert.A_csr_exists, choices:ZaModel.BOOLEAN_CHOICES1 },
+					{id: ZaCert.A_force_new_csr, type: _ENUM_, ref: ZaCert.A_force_new_csr, choices:ZaModel.BOOLEAN_CHOICES }
+				    ]
+				}
+			}	
+		]
 };
 
 ZaApplianceSettings.loadMethod = 

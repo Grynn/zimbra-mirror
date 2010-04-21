@@ -153,10 +153,12 @@ body						{	@ChromeBg@	}
 
 .VAMIDLTarget { 
   height:232px;
+  width:350px
 }
 
 .VAMIDLSource { 
   height:200px;
+  width:350px
 }
 
 .VAMIDlSourceRow, .VAMIDLTargetRow {

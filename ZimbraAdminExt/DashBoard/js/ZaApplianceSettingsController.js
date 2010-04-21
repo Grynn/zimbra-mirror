@@ -144,8 +144,9 @@ ZaApplianceSettingsController.prototype.finishLicenseWizard = function() {
 	        var dTo =  ZaApplianceLicense.getLocalDate(licenseObj.attrs[ZaApplianceLicense.A_validUntil]);
 	        var dFrom = ZaApplianceLicense.getLocalDate(licenseObj.attrs[ZaApplianceLicense.A_validFrom]);
 	        var dDelta = dTo.getTime() - dFrom.getTime();
-	        if(dDelta < 873000000 && dDelta > 0) { 
+	        if(dDelta < 1296000000 && dDelta > 0) { 
 	        	ZaApplianceLicense.removeLicense();
+	        	ZaApplianceLicense.flushLicenseCache();
 	        }
         }
 		var xform = this._view._localXForm;

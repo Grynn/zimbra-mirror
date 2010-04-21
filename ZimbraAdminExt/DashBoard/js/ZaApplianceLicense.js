@@ -183,6 +183,22 @@ ZaApplianceLicense.removeLicense = function() {
 	    }
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaApplianceStatus.loadMethod", null, false);		
-	}	
-	
+	}		
 };
+ZaApplianceLicense.flushLicenseCache = function() {
+	var soapDoc = AjxSoapDoc.create("FlushCacheRequest", ZaZimbraAdmin.URN, null);
+	var elCache = soapDoc.set("cache", null);
+
+	elCache.setAttribute("type", "license");		
+
+	var reqMgrParams = {
+		controller : ZaApp.getInstance().getCurrentController(),
+		busyMsg : com_zimbra_dashboard.BUSY_FLUSH_LICENSE_CACHE
+	}
+
+	var reqParams = {
+		soapDoc: soapDoc,
+		asyncMode: false
+	}
+	ZaRequestMgr.invoke(reqParams, reqMgrParams) ;
+}
