@@ -50,7 +50,7 @@ if (@ARGV > 0 && $ARGV[0] eq 'rotate') {
 	my $dir = getPidFileDir();
 	my $pidFile = "$dir/zmstat-fd-real.pid";
 	my $pid = readPidFile($pidFile);
-    kill(1, $pid);
+	kill(1, $pid);
 }
 
 if ($< != 0) {
