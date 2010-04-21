@@ -50,7 +50,7 @@ our $ZMPROV = "/opt/zimbra/bin/zmprov -l";
 our $platform = `/opt/zimbra/libexec/get_plat_tag.sh`;
 chomp ($platform);
 
-my $id = `whoami`;
+my $id = getpwuid($<);
 chomp $id;
 if ($id ne "zimbra") {
     print STDERR "Error: must be run as zimbra user\n";

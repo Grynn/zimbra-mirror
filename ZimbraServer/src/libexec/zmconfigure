@@ -19,7 +19,7 @@ use strict;
 my $sfilename=$ARGV[0];
 my $dfilename=$ARGV[1];
 
-my $id = `whoami`;
+my $id = getpwuid($<);
 chomp $id;
 if ($id ne "zimbra") {
     print STDERR "Error: must be run as zimbra user\n";

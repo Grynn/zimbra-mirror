@@ -31,7 +31,7 @@ my $hostname = getLocalConfig("zimbra_server_hostname");
 our $platform = `/opt/zimbra/libexec/get_plat_tag.sh`;
 chomp $platform;
 
-my $id = `whoami`;
+my $id = getpwuid($<);
 chomp $id;
 
 if ($id ne "zimbra") {
