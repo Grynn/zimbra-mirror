@@ -283,8 +283,8 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 	_tab2 = ++this.TAB_INDEX;
     tabBarChoices.push ({value:_tab2, label:ZaMsg.NAD_Tab_Attachments});
     var case2 = 	
-    {type:_ZATABCASE_, caseKey:_tab2, id:"appliance_settings_form_attachment_tab", numCols:2, colSizes: ["30%","70%"], items:[
-			{type: _GROUP_,  id:"appliance_attachment_settings", width: "98%", numCols: 2, colSpan:2, colSizes:[250, "*"], items: [
+    {type:_ZATABCASE_, caseKey:_tab2, id:"appliance_settings_form_attachment_tab", numCols:1, items:[
+			{type: _GROUP_,  id:"appliance_attachment_settings", width: "98%", numCols: 2, colSizes:[250, "*"], items: [
 				{ref:ZaGlobalConfig.A_zimbraAttachmentsBlocked, type:_RADIO_, groupname:"appliance_attachment_settings",
 					msgName:ZaMsg.NAD_GlobalRemoveAllAttachments,label:ZaMsg.NAD_GlobalRemoveAllAttachments, labelLocation:_RIGHT_, 
 					onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right", align:_LEFT_,
@@ -334,88 +334,91 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 			  		trueValue:"TRUE", falseValue:"FALSE"
 				}					
 			]},
-			{type:_GROUP_, width: "98%", numCols: 1,
-				items:[
-				    {type:_SPACER_, height:"10"},
-    				{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "96%",  //height: 400,
-						items:[
-							{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
-						   		items: [
-									{type:_OUTPUT_, value:ZaMsg.NAD_GlobalBlockedExtensions, cssClass:"RadioGrouperLabel"},
-									{type:_CELLSPACER_}
-								]
-							},
-							{ref:ZaGlobalConfig.A_zimbraMtaBlockedExtension, type:_DWT_LIST_, height:"200", width:"98%",
-								cssClass: "VAMIDLTarget", cssStyle:"margin-left: 5px; ",
-								onSelection:ZaApplianceSettingsView.blockedExtSelectionListener
-							},
-							{type:_SPACER_, height:"5"},
-							{type:_GROUP_, width:"100%", numCols:4, colSizes:[125,5, 125,"*"],
-								items:[
-									{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, width:120,
-										onActivate:"ZaApplianceSettingsView.removeAllExt.call(this)",
-									   	enableDisableChecks:[ZaApplianceSettingsView.shouldEnableRemoveAllButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
-								   		enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaBlockedExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
-									},
-									{type:_CELLSPACER_},
-									{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, width:120,
-									   	onActivate:"ZaApplianceSettingsView.removeExt.call(this)",
-									   	enableDisableChecks:[ZaApplianceSettingsView.shouldEnableRemoveButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
-								   		enableDisableChangeEventSources:[ZaGlobalConfig.A2_blocked_extension_selection,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
-								    },
-									{type:_CELLSPACER_}
-								]
-							}
-						]
-    				}
-				]
-			 },
-			 {type: _GROUP_, width: "98%", numCols: 1,
-				items: [
-				    {type:_SPACER_, height:"10"},
-					{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "96%",  //height: 400,
-						items:[
-							{type:_GROUP_,  numCols:2, width:"98%", colSizes:["auto", "auto"],
-							   	items: [
-									{type:_OUTPUT_, value:ZaMsg.NAD_GlobalCommonExtensions, cssClass:"RadioGrouperLabel"},
-									{type:_CELLSPACER_}
-								]
-							},
-							{ref:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "VAMIDLSource",
-								onSelection:ZaApplianceSettingsView.commonExtSelectionListener
-							},
-						    {type:_SPACER_, height:"5"},
-						    {type:_GROUP_, width:"98%", numCols:7, colSizes:[135,5,135,5,100,60,125],
-								items: [
-								   	{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddSelected, width:130,
-										onActivate:"ZaApplianceSettingsView.addCommonExt.call(this)",
-										enableDisableChecks:[ZaApplianceSettingsView.shouldEnableAddButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
-										enableDisableChangeEventSources:[ZaGlobalConfig.A2_common_extension_selection,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
-									},
-								    {type:_CELLSPACER_},
-								    {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll, width:130,
-										onActivate:"ZaApplianceSettingsView.addAllCommonExt.call(this)",
-										enableDisableChecks:[ZaApplianceSettingsView.shouldEnableAddAllButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
-										enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
-									},
-									{type:_CELLSPACER_},
-									{type:_TEXTFIELD_, cssStyle:"width:60px;", ref:ZaGlobalConfig.A_zimbraNewExtension,
-										label:ZaMsg.NAD_Attach_NewExtension,
-										visibilityChecks:[],
-										enableDisableChecks:[[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
-										enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaBlockedExtension]
-									},
-									{type:_DWT_BUTTON_, label:ZaMsg.NAD_Attach_AddExtension, width:120,
-										onActivate:"ZaApplianceSettingsView.addNewExt.call(this)",
-										enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaGlobalConfig.A_zimbraNewExtension],[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
-										enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraNewExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
-									}
-							  	]
-						    }
-						]
-					  }
-			    	]
-			    }
+			{type: _GROUP_, numCols:2, colSizes: ["330px","470px"], items:[
+				{type:_GROUP_,  numCols: 1,
+					items:[
+					    {type:_SPACER_, height:"10"},
+	    				{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder",//height: 400,
+							items:[
+								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+							   		items: [
+										{type:_OUTPUT_, value:ZaMsg.NAD_GlobalBlockedExtensions, cssClass:"RadioGrouperLabel"},
+										{type:_CELLSPACER_}
+									]
+								},
+								{ref:ZaGlobalConfig.A_zimbraMtaBlockedExtension, type:_DWT_LIST_, height:"200",
+									cssClass: "VAMIDLTarget",
+									onSelection:ZaApplianceSettingsView.blockedExtSelectionListener
+								},
+								{type:_SPACER_, height:"5"},
+								{type:_GROUP_, numCols:4, colSizes:[125,5, 125,"*"],
+									items:[
+										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, 
+											onActivate:"ZaApplianceSettingsView.removeAllExt.call(this)",
+										   	enableDisableChecks:[ZaApplianceSettingsView.shouldEnableRemoveAllButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
+									   		enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaBlockedExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, 
+										   	onActivate:"ZaApplianceSettingsView.removeExt.call(this)",
+										   	enableDisableChecks:[ZaApplianceSettingsView.shouldEnableRemoveButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
+									   		enableDisableChangeEventSources:[ZaGlobalConfig.A2_blocked_extension_selection,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
+									    },
+										{type:_CELLSPACER_}
+									]
+								}
+							]
+	    				}
+					]
+				 },
+				 {type: _GROUP_, numCols: 1,
+					items: [
+					    {type:_SPACER_, height:"10"},
+						{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder",//height: 400,
+							items:[
+								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+								   	items: [
+										{type:_OUTPUT_, value:ZaMsg.NAD_GlobalCommonExtensions, cssClass:"RadioGrouperLabel"},
+										{type:_CELLSPACER_}
+									]
+								},
+								{ref:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type:_DWT_LIST_, height:"200", 
+									cssClass: "VAMIDLSource",
+									onSelection:ZaApplianceSettingsView.commonExtSelectionListener
+								},
+							    {type:_SPACER_, height:"5"},
+							    {type:_GROUP_, numCols:7, colSizes:[100,5,100,5,100,60,100],
+									items: [
+									   	{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddSelected, 
+											onActivate:"ZaApplianceSettingsView.addCommonExt.call(this)",
+											enableDisableChecks:[ZaApplianceSettingsView.shouldEnableAddButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
+											enableDisableChangeEventSources:[ZaGlobalConfig.A2_common_extension_selection,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
+										},
+									    {type:_CELLSPACER_},
+									    {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll,
+											onActivate:"ZaApplianceSettingsView.addAllCommonExt.call(this)",
+											enableDisableChecks:[ZaApplianceSettingsView.shouldEnableAddAllButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
+											enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
+										},
+										{type:_CELLSPACER_},
+										{type:_TEXTFIELD_, cssStyle:"width:60px;", ref:ZaGlobalConfig.A_zimbraNewExtension,
+											label:ZaMsg.NAD_Attach_NewExtension,
+											visibilityChecks:[],
+											enableDisableChecks:[[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
+											enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaBlockedExtension]
+										},
+										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Attach_AddExtension, 
+											onActivate:"ZaApplianceSettingsView.addNewExt.call(this)",
+											enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaGlobalConfig.A_zimbraNewExtension],[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
+											enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraNewExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
+										}
+								  	]
+							    }
+							]
+						  }
+				    	]
+				    }
+				 ]}
 			]};
     switchItems.push (case2) ;
 	_tab3 = ++this.TAB_INDEX;
