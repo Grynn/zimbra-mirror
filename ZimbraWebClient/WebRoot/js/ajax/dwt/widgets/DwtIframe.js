@@ -293,3 +293,17 @@ DwtIframe.prototype._resetEventHandlers = function() {
 		// idoc[DwtEvent.ONCONTEXTMENU] = DwtShell._preventDefaultPrt;
 	})();
 };
+
+DwtIframe.prototype.setSrc =
+function(src){
+
+    src = src || 'javascript:\"\";'
+    var iframe = this.getIframe();
+    iframe.src = src;
+};
+
+DwtIframe.prototype.setIframeContent =
+function(html){    
+    var iDoc = this.getDocument();
+    iDoc.body.innerHTML = html;
+};
