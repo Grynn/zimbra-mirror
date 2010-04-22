@@ -739,10 +739,10 @@ function() {
 	if (this._hint) {
 		var element = this.getInputElement();
 		if (!element.value) {
-			element.title = "";
-			element.value = this._hint;
 			this._hintIsVisible = true;
 			this._updateClassName();
+			element.title = "";
+			element.value = this._hint;
 		}
 	}
 };
