@@ -476,8 +476,8 @@ DwtForm.prototype.reset = function(useCurrentValues) {
 		item.ovalue = item.value;
 	}
 	// clear state
-	this.setDirty(false);
 	this.validate();
+    this.setDirty(false);
 	// call handler
 	if (this._onreset) {
 		this._call(this._onreset);
