@@ -346,7 +346,7 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 										{type:_CELLSPACER_}
 									]
 								},
-								{ref:ZaGlobalConfig.A_zimbraMtaBlockedExtension, type:_DWT_LIST_, height:"200",
+								{ref:ZaGlobalConfig.A_zimbraMtaBlockedExtension, type:_DWT_LIST_,
 									cssClass: "VAMIDLTarget",
 									onSelection:ZaApplianceSettingsView.blockedExtSelectionListener
 								},
@@ -382,7 +382,7 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 										{type:_CELLSPACER_}
 									]
 								},
-								{ref:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type:_DWT_LIST_, height:"200", 
+								{ref:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type:_DWT_LIST_, 
 									cssClass: "VAMIDLSource",
 									onSelection:ZaApplianceSettingsView.commonExtSelectionListener
 								},
