@@ -136,7 +136,7 @@ AjxColor.deepen = function(color, adjustment) {
 		}
 	}
 	for (var i = 0; i < comps.length; i++) {
-		var multiplier = comps[i] / comps[index];
+		var multiplier = comps[index] ? (comps[i] / comps[index]) : 1;
 		comps[i] = Math.floor(comps[i] * multiplier * (adjustment || 1));
 	}
 	return AjxColor.color(comps[0],comps[1],comps[2]);
