@@ -287,7 +287,7 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 			{type: _GROUP_,  id:"appliance_attachment_settings", width: "98%", numCols: 2, colSizes:[250, "*"], items: [
 				{ref:ZaGlobalConfig.A_zimbraAttachmentsBlocked, type:_RADIO_, groupname:"appliance_attachment_settings",
 					msgName:ZaMsg.NAD_GlobalRemoveAllAttachments,label:ZaMsg.NAD_GlobalRemoveAllAttachments, labelLocation:_RIGHT_, 
-					onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right", align:_LEFT_,
+					onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right", align:_RIGHT_,
 					valueChangeEventSources:[ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly,ZaGlobalConfig.A_zimbraAttachmentsBlocked],
 					visibilityChecks:[],
 					updateElement:function () {
@@ -302,7 +302,7 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 				},
 				{ref:ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, type:_RADIO_, groupname:"appliance_attachment_settings", 
 					msgName:ZaMsg.NAD_GlobalAttachmentsViewInHtmlOnly,label:ZaMsg.NAD_GlobalAttachmentsViewInHtmlOnly, labelLocation:_RIGHT_, 
-					onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right", align:_LEFT_,
+					onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right", align:_RIGHT_,
 					visibilityChecks:[],									
 					valueChangeEventSources:[ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly,ZaGlobalConfig.A_zimbraAttachmentsBlocked],
 					updateElement:function () {
@@ -317,7 +317,7 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 				},
 				{ref:ZaGlobalConfig.A_zimbraAttachmentsBlocked, type:_RADIO_, groupname:"appliance_attachment_settings", 
 					msgName:ZaMsg.NAD_GlobalAttachmentsViewCOS,label:ZaMsg.NAD_GlobalAttachmentsViewCOS, labelLocation:_RIGHT_, 
-					onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right", align:_LEFT_,
+					onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right", align:_RIGHT_,
 					visibilityChecks:[],									
 					valueChangeEventSources:[ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly,ZaGlobalConfig.A_zimbraAttachmentsBlocked],
 					updateElement:function () {
