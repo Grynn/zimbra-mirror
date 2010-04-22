@@ -27,29 +27,32 @@ ZaItem.modifyMethods["ZaApplianceSettings"] = new Array();
 ZaApplianceSettings.license = "license";
 ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly = "zimbraAttachmentsViewInHtmlOnly";
 ZaApplianceSettings.A_certs = "certs";
+ZaApplianceSettings.A_serverName = "serverName";
+ZaApplianceSettings.A_server = "server";
 ZaApplianceSettings.myXModel = {
 		items: [
+		    {id:ZaApplianceSettings.A_serverName, type: _STRING_, ref:ZaApplianceSettings.A_server + "/attrs/" + ZaServer.A_ServiceHostname},    
 			//license
-			{id: ZaApplianceLicense.A_accountsLimit, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_accountsLimit},
-			{id: ZaApplianceLicense.A_attachmentConversionEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_attachmentConversionEnabled},
-			{id: ZaApplianceLicense.A_backupEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_backupEnabled },
-			{id: ZaApplianceLicense.A_crossMailboxSearchEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_crossMailboxSearchEnabled },
-			{id: ZaApplianceLicense.A_hierarchicalStorageManagementEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_hierarchicalStorageManagementEnabled },	
-			{id: ZaApplianceLicense.A_iSyncAccountsLimit, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_iSyncAccountsLimit },
-			{id: ZaApplianceLicense.A_installType, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_installType },
-			{id: ZaApplianceLicense.A_issuedOn, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_issuedOn },
-			{id: ZaApplianceLicense.A_issuedToEmail, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_issuedToEmail },
-			{id: ZaApplianceLicense.A_issuedToName, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_issuedToName },		
-			{id: ZaApplianceLicense.A_licenseId, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_licenseId },
-			{id: ZaApplianceLicense.A_MAPIConnectorAccountsLimit, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_MAPIConnectorAccountsLimit },
-			{id: ZaApplianceLicense.A_mobileSyncEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_mobileSyncEnabled},
-			{id: ZaApplianceLicense.A_mobileSyncAccountsLimit, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_mobileSyncAccountsLimit },
-			{id: ZaApplianceLicense.A_resellerName, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_resellerName },
-			{id: ZaApplianceLicense.A_validFrom, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_validFrom },
-			{id: ZaApplianceLicense.A_validUntil, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_validUntil },
-			{id: ZaApplianceLicense.InstallStatusMsg, type: _STRING_, ref:ZaApplianceSettings.license + "/"+ ZaApplianceLicense.InstallStatusMsg},
-			{id: ZaApplianceLicense.InstallStatusCode, type: _STRING_, ref:ZaApplianceSettings.license + "/"+ ZaApplianceLicense.InstallStatusCode},
-			{id: ZaApplianceLicense.Info_TotalAccounts, type: _STRING_, ref:ZaApplianceSettings.license + "/"+ ZaApplianceLicense.Info_TotalAccounts},
+			{id:ZaApplianceLicense.A_accountsLimit, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_accountsLimit},
+			{id:ZaApplianceLicense.A_attachmentConversionEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_attachmentConversionEnabled},
+			{id:ZaApplianceLicense.A_backupEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_backupEnabled },
+			{id:ZaApplianceLicense.A_crossMailboxSearchEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_crossMailboxSearchEnabled },
+			{id:ZaApplianceLicense.A_hierarchicalStorageManagementEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_hierarchicalStorageManagementEnabled },	
+			{id:ZaApplianceLicense.A_iSyncAccountsLimit, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_iSyncAccountsLimit },
+			{id:ZaApplianceLicense.A_installType, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_installType },
+			{id:ZaApplianceLicense.A_issuedOn, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_issuedOn },
+			{id:ZaApplianceLicense.A_issuedToEmail, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_issuedToEmail },
+			{id:ZaApplianceLicense.A_issuedToName, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_issuedToName },		
+			{id:ZaApplianceLicense.A_licenseId, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_licenseId },
+			{id:ZaApplianceLicense.A_MAPIConnectorAccountsLimit, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_MAPIConnectorAccountsLimit },
+			{id:ZaApplianceLicense.A_mobileSyncEnabled, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_mobileSyncEnabled},
+			{id:ZaApplianceLicense.A_mobileSyncAccountsLimit, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_mobileSyncAccountsLimit },
+			{id:ZaApplianceLicense.A_resellerName, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_resellerName },
+			{id:ZaApplianceLicense.A_validFrom, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_validFrom },
+			{id:ZaApplianceLicense.A_validUntil, type: _STRING_, ref:ZaApplianceSettings.license + "/" + ZaApplianceLicense.A_validUntil },
+			{id:ZaApplianceLicense.InstallStatusMsg, type: _STRING_, ref:ZaApplianceSettings.license + "/"+ ZaApplianceLicense.InstallStatusMsg},
+			{id:ZaApplianceLicense.InstallStatusCode, type: _STRING_, ref:ZaApplianceSettings.license + "/"+ ZaApplianceLicense.InstallStatusCode},
+			{id:ZaApplianceLicense.Info_TotalAccounts, type: _STRING_, ref:ZaApplianceSettings.license + "/"+ ZaApplianceLicense.Info_TotalAccounts},
 			
 	       //config
 			{id:ZaGlobalConfig.A_zimbraFileUploadMaxSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES },
@@ -63,26 +66,7 @@ ZaApplianceSettings.myXModel = {
 			
 			//certificates
 			{id:ZaApplianceSettings.A_certs, ref:ZaApplianceSettings.A_certs, type:_LIST_, 
-				listItem:{type:_OBJECT_, 
-					items:[
-		       		{id: ZaCert.A_installStatus, type: _STRING_, ref: ZaCert.A_installStatus },
-					{id: ZaCert.A_subject_alt, type: _LIST_, ref:"attrs/" + ZaCert.A_subject_alt, listItem:{type:_STRING_}},
-					{id: ZaCert.A_target_server, type:_STRING_ , ref: ZaCert.A_target_server },
-					{id: ZaCert.A_countryName, type: _STRING_, ref: "attrs/" + ZaCert.A_countryName, length: 2, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\'\*]*$/ },
-			        {id: ZaCert.A_keysize, type: _STRING_, ref: ZaCert.A_keysize},
-					{id: ZaCert.A_commonName, type: _STRING_, ref: "attrs/" + ZaCert.A_commonName },
-					{id: ZaCert.A_state, type: _STRING_, ref: "attrs/" + ZaCert.A_state, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\'\*]*$/ },
-					{id: ZaCert.A_city, type: _STRING_, ref: "attrs/" + ZaCert.A_city, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\'\*\s]*$/ },
-					{id: ZaCert.A_organization, type: _STRING_, ref: "attrs/" + ZaCert.A_organization, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\,\'\*\s]*$/ },
-					{id: ZaCert.A_organizationUnit, type: _STRING_, ref: "attrs/" + ZaCert.A_organizationUnit, pattern: /^\s*[a-zA-Z0-9\/\.\-\\_:\@\=\,\'\*\s]*$/ },
-					{id: ZaCert.A_validation_days, type: _NUMBER_, ref: ZaCert.A_validation_days, required: true },
-					{id: ZaCert.A_type_comm, type: _ENUM_, ref: ZaCert.A_type_comm, choices:ZaModel.BOOLEAN_CHOICES1 },
-					{id: ZaCert.A_type_self, type: _ENUM_, ref: ZaCert.A_type_self, choices:ZaModel.BOOLEAN_CHOICES1 },
-					{id: ZaCert.A_type_csr, type: _ENUM_, ref: ZaCert.A_type_csr, choices:ZaModel.BOOLEAN_CHOICES1 },
-					{id: ZaCert.A_csr_exists, type: _ENUM_, ref: ZaCert.A_csr_exists, choices:ZaModel.BOOLEAN_CHOICES1 },
-					{id: ZaCert.A_force_new_csr, type: _ENUM_, ref: ZaCert.A_force_new_csr, choices:ZaModel.BOOLEAN_CHOICES }
-				    ]
-				}
+				listItem:{type:_OBJECT_,items:ZaApplianceSSLCert.myXModel.items}
 			}	
 		]
 };

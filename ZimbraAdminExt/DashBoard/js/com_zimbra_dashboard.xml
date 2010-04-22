@@ -2,9 +2,10 @@
     <target>admin-main</target>
     <include>ZaApplianceLicense.js</include>
     <include>ZaApplianceStatus.js</include>
-    <include>ZaApplianceLicenseWizard.js</include>
-    <include>ZaDashBoard.js</include>
+    <include>ZaApplianceSSLCert.js</include>
     <include>ZaApplianceSettings.js</include>
+    <include>ZaDashBoard.js</include>
+    <include>ZaApplianceLicenseWizard.js</include>
     <include>ZaDashBoardController.js</include>
     <include>ZaDashBoardView.js</include>    
     <include>ZaDashBoardListView.js</include>

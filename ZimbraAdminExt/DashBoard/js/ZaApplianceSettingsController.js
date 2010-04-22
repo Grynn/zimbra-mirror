@@ -92,6 +92,19 @@ ZaApplianceSettingsController.setViewMethod = function (item) {
         licenseObj.load();
         item[ZaApplianceSettings.license] = licenseObj;
 
+        var serverArray = [];
+        var serverList = ZaApp.getInstance().getServerList();
+        if(serverList) {
+        	serverArray = serverList.getArray();
+        	if(serverArray && serverArray[0]) {
+        		serverArray[0].load();
+        		item[ZaApplianceSettings.A_server] = serverArray[0];
+        		var certs = ZaApplianceSSLCert.getCerts(serverArray[0].id);
+        		item[ZaApplianceSettings.A_certs] = certs;
+        	}
+        }
+        
+        
         item[ZaModel.currentTab] = "1"
         item.id = ZaItem.GLOBAL_CONFIG;
         this._view.setDirty(false);

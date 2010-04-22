@@ -102,6 +102,13 @@ function(entry) {
 			}
 		}	
 	}
+	
+	if(entry[ZaApplianceSettings.A_server]) {
+		this._containedObject[ZaApplianceSettings.A_server] = entry[ZaApplianceSettings.A_server];
+	}
+	if(entry[ZaApplianceSettings.A_certs]) {
+		this._containedObject[ZaApplianceSettings.A_certs] = entry[ZaApplianceSettings.A_certs];
+	}
 	this._containedObject[ZaApplianceSettings.license][ZaApplianceLicense.InstallStatusCode] = 0;
 	this._containedObject[ZaApplianceSettings.license][ZaApplianceLicense.InstallStatusMsg] = "";
 	if(!entry[ZaModel.currentTab])
@@ -465,6 +472,41 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
     };    
 	switchItems.push(case3);
     
+	_tab4 = ++this.TAB_INDEX;
+    tabBarChoices.push ({value:_tab4, label:com_zimbra_dashboard.CertificatesTabTitle});
+    var case4 = 	
+    {type:_ZATABCASE_, caseKey:_tab4, id:"appliance_settings_form_certificates_tab", colSizes:["275px","275px"],numCols:2, items:[
+		{type:_OUTPUT_,ref:ZaApplianceSettings.A_serverName, label:com_zimbra_dashboard.CERT_SERVER_NAME,labelLocation:_LEFT_},
+		{ type: _DWT_ALERT_,
+			style: DwtAlert.WARNING,
+			iconVisible: true, 
+			content: com_zimbra_dashboard.DidNotFindAnyCertificates,
+			colSpan:2,
+			visibilityChecks:[[XForm.checkInstanceValueEmty,ZaApplianceSettings.A_certs]],ref:null
+		},
+		{type:_REPEAT_,ref:ZaApplianceSettings.A_certs,	showAddButton:false,colSpan:2,
+			visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaApplianceSettings.A_certs]],enableDisableChecks:[],
+			showRemoveButton:false,
+			showAddOnNextRow:false,
+			items:[
+			    {type:_ZAGROUP_, items:[
+					{ type: _OUTPUT_,
+						style: DwtAlert.INFORMATION,colSpan:2,
+						visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaApplianceSSLCert.A_type]],ref:ZaApplianceSSLCert.A_type,
+						getDisplayValue:function(val) {
+							return AjxMessageFormat.format(com_zimbra_dashboard.Cert_Service_title, val);
+						},
+						label:null,labelLocation:_NONE_
+					},
+					{type:_OUTPUT_,ref:ZaApplianceSSLCert.A_subject, label:com_zimbra_dashboard.CERT_INFO_SUBJECT,labelLocation:_LEFT_,visibilityChecks:[]},
+					{type:_OUTPUT_,ref:ZaApplianceSSLCert.A_issuer, label:com_zimbra_dashboard.CERT_INFO_ISSUER,labelLocation:_LEFT_,visibilityChecks:[]},
+					{type:_OUTPUT_,ref:ZaApplianceSSLCert.A_validation_days_ro, label:com_zimbra_dashboard.CERT_INFO_VALIDATION_DAYS,labelLocation:_LEFT_,visibilityChecks:[]},
+					{type:_OUTPUT_,ref:ZaApplianceSSLCert.A_subject_alt, label:com_zimbra_dashboard.CERT_INFO_SubjectAltName,labelLocation:_LEFT_,visibilityChecks:[]}
+				]}
+			]
+		}
+	]}
+    switchItems.push(case4);
     xFormObject.items = [
 		{type:_TAB_BAR_,  ref:ZaModel.currentTab,id:"xform_tabbar",
 		 	containerCssStyle: "padding-top:0px",
