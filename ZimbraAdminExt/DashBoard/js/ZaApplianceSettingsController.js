@@ -60,9 +60,11 @@ function () {
 	this._toolbarOperations[ZaOperation.SAVE] = new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));    			
 	this._toolbarOperations[ZaOperation.DOWNLOAD_GLOBAL_CONFIG] = new ZaOperation(ZaOperation.DOWNLOAD_GLOBAL_CONFIG, ZaMsg.TBB_DownloadConfig, ZaMsg.GLOBTBB_DownloadConfig_tt, "DownloadGlobalConfig", "DownloadGlobalConfig", new AjxListener(this, this.downloadConfigButtonListener));
 	this._toolbarOperations[ZaOperation.INSTALL_ZCS_LICENSE] = new ZaOperation(ZaOperation.INSTALL_ZCS_LICENSE, com_zimbra_dashboard.InstallLicenseButton, com_zimbra_dashboard.InstallLicenseButton_tt, "UpdateLicense", "UpdateLicense", new AjxListener(this, this.installLicenseButtonListener));
+	this._toolbarOperations[ZaOperation.INSTALL_ZCS_CERTIFICATE] = new ZaOperation(ZaOperation.INSTALL_ZCS_CERTIFICATE, com_zimbra_dashboard.TBB_launch_cert_wizard, com_zimbra_dashboard.TBB_launch_cert_wizard_tt, "InstallCertificate", "InstallCertificate", new AjxListener(this, this.installCertListener));
 	this._toolbarOrder.push(ZaOperation.SAVE);
 	this._toolbarOrder.push(ZaOperation.DOWNLOAD_GLOBAL_CONFIG);
 	this._toolbarOrder.push(ZaOperation.INSTALL_ZCS_LICENSE);
+	this._toolbarOrder.push(ZaOperation.INSTALL_ZCS_CERTIFICATE);
 }
 ZaController.initToolbarMethods["ZaApplianceSettingsController"].push(ZaApplianceSettingsController.initToolbarMethod);
 
@@ -98,7 +100,7 @@ ZaApplianceSettingsController.setViewMethod = function (item) {
         	serverArray = serverList.getArray();
         	if(serverArray && serverArray[0]) {
         		serverArray[0].load();
-        		item[ZaApplianceSettings.A_server] = serverArray[0];
+        		this.server = item[ZaApplianceSettings.A_server] = serverArray[0];
         		var certs = ZaApplianceSSLCert.getCerts(serverArray[0].id);
         		item[ZaApplianceSettings.A_certs] = certs;
         	}
@@ -129,7 +131,78 @@ function () {
 }
 ZaController.changeActionsStateMethods["ZaApplianceSettingsController"].push(ZaApplianceSettingsController.changeActionsStateMethod);
 
+ZaApplianceSettingsController.prototype.installCertListener = function(ev) {
+	if(!this.certificateInstallWizard) {
+		this.certificateInstallWizard = ZaApp.getInstance().dialogs["certificateInstallWizard"] = new ZaApplianceSSLCertWizard (this._container);
+		this.certificateInstallWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, this.finishCertificateWizard, this, null);		
+	}
+	var cert = new ZaApplianceSSLCert();
+	cert.setTargetServer (this.server.id);		
+	cert.init() ;
+	this.certificateInstallWizard.setObject(cert);	
+	this.certificateInstallWizard.popup();				
+}
 
+ZaApplianceSettingsController.prototype.finishCertificateWizard = function() {
+	try {	
+		// Basically, it will do two things:
+		//1) install the cert
+		//2) Upon the successful install, the cert tab information will be updated
+		var instance = this.certificateInstallWizard._localXForm.getInstance () ;
+		var validationDays = instance[ZaApplianceSSLCert.A_validation_days] ;
+		
+		var selfType = instance[ZaApplianceSSLCert.A_type_self] ;
+		var commType = instance[ZaApplianceSSLCert.A_type_comm] ;    
+		var csrType = instance[ZaApplianceSSLCert.A_type_csr] ;
+		
+		var contentElement =  null ;
+		if (selfType) {
+			type = ZaApplianceSSLCert.A_type_self ;  
+		}else if (commType) {
+			type = ZaApplianceSSLCert.A_type_comm ;
+		}else if (csrType){
+			this.certificateInstallWizard.popdown();
+			return ;
+		}else{
+			throw new Exeption ("Unknow installation type") ;		
+		}
+		
+		var callback = new AjxCallback(this, this.certificateInstallCallback);
+		var params = {
+			type: type,
+			validation_days: validationDays,
+			comm_cert: this.certificateInstallWizard.uploadResults,
+            subject: this.certificateInstallWizard._containedObject.attrs,
+            keysize: this.certificateInstallWizard._containedObject.keysize,
+			callback: callback 
+		}
+		ZaApplianceSSLCert.installCert (params, this.server.id) ;
+			
+		this.certificateInstallWizard.popdown();	
+			
+	} catch (ex) {
+		this._handleException(ex, "ZaApplianceSettingsController.prototype.finishCertificateWizard", null, false);
+	}	
+}
+
+ZaApplianceSettingsController.prototype.certificateInstallCallback = function (resp){		
+	try {
+		if (resp._isException) {
+			var detailMsg = resp._data.msg ;			
+			throw new AjxException(com_zimbra_cert_manager.CERT_INSTALL_STATUS_1 + ": " + ZaApplianceSSLCert.getCause(detailMsg), "ZaApplianceSettingsController.prototype.certificateInstallCallback", AjxException.UNKNOWN_ERROR, detailMsg) ;
+				//throw new Error(resp._data.msg) ;
+		} else{
+			var installResponse = resp._data.Body.InstallCertResponse ;
+			if (installResponse) {
+				this.popupMsgDialog(com_zimbra_dashboard.CertificateInstallationSuccess);
+        		var certs = ZaApplianceSSLCert.getCerts(this.server.id);
+        		this._contentView._localXForm.setInstanceValue(certs, ZaApplianceSettings.A_certs);
+			}
+		}
+	} catch (ex){
+		this.popupErrorDialog(ex.msg, ex, true);
+	}
+}
 /**
 * handles "download" button click. Launches file download in a new window
 **/
