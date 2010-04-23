@@ -20,9 +20,11 @@ endif
 BDB_TGZ_TARGET	:= $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/bdb/bdb-$(BDB_VERSION).tgz
 
 CONFIG_FLAG := --enable-posixmutexes --with-mutex=POSIX/pthreads
+LIB_EXT := so
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	CONFIG_FLAG := 
+	LIB_EXT := dylib
 endif
 
 files	:= $(wildcard src/db-$(BDB_RELEASE).tar.gz)
@@ -35,7 +37,7 @@ checksrc:
 check:
 	@echo "Verifying bdb build...";
 	$(BDB_ROOT)/../zmcheck.pl -b $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/bin/db_recover
-	$(BDB_ROOT)/../zmcheck.pl -l $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib/libdb-4.7.so
+	$(BDB_ROOT)/../zmcheck.pl -l $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib/libdb-4.7.$(LIB_EXT)
 
 build:
 	@echo "Building for Platform $(BUILD_PLATFORM)"
