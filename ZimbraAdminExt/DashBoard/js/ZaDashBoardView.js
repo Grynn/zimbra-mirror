@@ -78,7 +78,7 @@ function(entry) {
 	
 	this.updateTab();
 	var busyId = Dwt.getNextId();
-	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:ZaAccount,busyId:busyId});
+	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:null,busyId:busyId});
 	
 	var searchParams = {
 			query: this._currentQuery, 
