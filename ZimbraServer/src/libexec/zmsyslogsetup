@@ -1,0 +1,346 @@
+#!/usr/bin/perl
+#
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.3 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+use strict;
+use lib '/opt/zimbra/zimbramon/lib';
+use Zimbra::Util::Common;
+
+use File::Path;
+use File::Copy qw/ cp mv /;
+use File::Temp qw/ tempfile /;
+#use File::Touch;
+use Socket;
+use Sys::Hostname;
+
+my $id=getpwuid($<);
+
+if ( $id ne "root" ) {
+  print "Must be run as root!\n\n";
+  exit 1;
+}
+
+my $platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
+
+my $zimbra_tmp_directory=getLocalConfig("zimbra_tmp_directory");
+
+my ($uid,$gid) = (getpwnam('zimbra'))[2,3];
+if ( !-d $zimbra_tmp_directory ) {
+  File::Path::mkpath("$zimbra_tmp_directory");
+  chown $uid, $gid, $zimbra_tmp_directory;
+}
+
+my $logfile = "-/var/log/zimbra.log";
+my $statsfile = "-/var/log/zimbra-stats.log";
+my $LOCALHOST ||= (gethostbyname(Sys::Hostname::hostname))[0];
+
+if ( $platform =~ /MACOSX/ ) {
+  $logfile="/var/log/zimbra.log";
+  $statsfile="/var/log/zimbra-stats.log";
+}
+
+my $junk;
+my $TYPE;
+my $LOGHOST=`su - zimbra -c '/opt/zimbra/bin/zmprov -m -l gacf zimbraLogHostname'`;
+
+if ( $LOGHOST eq "" ) {
+  $TYPE="local";
+} else {
+  ($junk,$LOGHOST) = split /: /, $LOGHOST, 2;
+  if ( $LOGHOST eq $LOCALHOST ) {
+    $TYPE="local";
+  } else {
+    $TYPE="remote";
+  }
+}
+
+my $rsyslog=0;
+
+sub usage {
+  print "\n";
+  print "$0: set up syslog.conf for local or remote logging\n\n";
+  print "Usage:\n";
+  print "  $0\n\n";
+  exit 1;
+}
+
+sub updateSyslogNG {
+
+  my $syslogconf; 
+  if ( -f "/etc/syslog-ng/syslog-ng.conf.in" ) {
+    $syslogconf="/etc/syslog-ng/syslog-ng.conf.in";
+  } elsif ( -f "/etc/syslog-ng/syslog-ng.conf" ) {
+    $syslogconf="/etc/syslog-ng/syslog-ng.conf";
+  } elsif ( -f "/etc/syslog-ng.conf" ) {
+    $syslogconf="/etc/syslog-ng.conf";
+  } else  {
+    print "Unable to locate syslog-ng.conf\n";
+    exit 1;
+  }
+
+  # Make a backup copy
+  my $rc=cp($syslogconf,"$syslogconf.bak");
+  if (!$rc) {
+    print "Unable to make a backup of ".$syslogconf."\n";
+    exit 1;
+  }
+
+  # create a safe temp file and make sure we have enough space to fill it
+  my (undef, $tmpfile) = tempfile("syslog-ng.conf.XXXX", DIR=>"$zimbra_tmp_directory",  OPEN=>0);
+  cp($syslogconf, $tmpfile);
+  if ( -s $tmpfile ) {
+    print "updateSyslogNG: Updating $syslogconf...";
+  } else {
+    print "updateSyslogNG: Unable to create temp file: $tmpfile\n";
+    exit 1;
+  }
+
+  open (TMPFH, ">$tmpfile");
+  open (SYSFH, "<$syslogconf");
+  while (<SYSFH>) {
+    if ($_ !~ /zimbra/) {
+      print TMPFH $_;
+    }
+  }
+  close(SYSFH);
+  my $zsrc = "zimbra_src";
+  if ( $platform =~ "SLES11_64" ) {
+    #use native src on SLES11_64
+    $zsrc="src";
+  } else {
+    print TMPFH "source zimbra_src {  unix-stream(\"/dev/log\" keep-alive(yes) max-connections(20)); }; # zimbra\n";
+  }
+  print TMPFH "filter zimbra_local0 { facility(local0); }; # zimbra\n";
+  print TMPFH "filter zimbra_local1 { facility(local1); }; # zimbra\n";
+  print TMPFH "filter zimbra_auth { facility(auth); }; # zimbra\n";
+  print TMPFH "filter zimbra_mail { facility(mail); }; # zimbra\n";
+  if ( $TYPE eq "local" ) {
+    print TMPFH "destination zimbra_mail { file(\"/var/log/zimbra.log\" owner(\"zimbra\")); }; # zimbra\n";
+    print TMPFH "destination zimbra_local1 { file(\"/var/log/zimbra-stats.log\" owner(\"zimbra\")); }; # zimbra\n";
+    print TMPFH "destination zimbra_local0 { file(\"/var/log/zimbra.log\" owner(\"zimbra\")); }; # zimbra\n";
+    print TMPFH "destination zimbra_auth { file(\"/var/log/zimbra.log\" owner(\"zimbra\")); }; # zimbra\n";
+  } else {
+    my $remoteIp=inet_ntoa(scalar(gethostbyname($LOGHOST)));
+    print TMPFH "destination zimbra_mail { udp(ip($remoteIp) port(514) ); }; # zimbra\n";
+    print TMPFH "destination zimbra_local1 { udp(ip($remoteIp) port(514) ); }; # zimbra\n";
+    print TMPFH "destination zimbra_local0 { udp(ip($remoteIp) port(514) ); }; # zimbra\n";
+    print TMPFH "destination zimbra_auth { udp(ip($remoteIp) port(514) ); }; # zimbra\n";
+  }
+  print TMPFH "log { source($zsrc); filter(zimbra_mail); destination(zimbra_mail); }; # zimbra\n";
+  print TMPFH "log { source($zsrc); filter(zimbra_local0); destination(zimbra_local0); }; # zimbra\n";
+  print TMPFH "log { source($zsrc); filter(zimbra_local1); destination(zimbra_local1); }; # zimbra\n";
+  print TMPFH "log { source($zsrc); filter(zimbra_auth); destination(zimbra_auth); }; # zimbra\n";
+
+  close(TMPFH);
+
+  # remove duplicate logging
+  do {
+    local $^I="~";
+    local @ARGV="$tmpfile";
+  
+    while (<>) {
+      s/(^destination mailinfo.*)/#$1/;
+      s/(^log.*f_mailinfo)/#$1/;
+      s/(^destination mailwarn.*)/#$1/;
+      s/(^log.*f_mailwarn)/#$1/;
+      s/(^destination mailerr.*)/#$1/;
+      s/(^log.*f_mailerr)/#$1/;
+      s|(^destination mail { file\("/var/log/mail"\); };)|#$1|;
+      s/(^log.*filter\(f_mail\); destination\(mail\); };)/#$1/;
+      print;
+    }
+  };
+  mv($tmpfile, $syslogconf);
+  if ( -f "/etc/logrotate.d/zimbra" ) {
+    local $^I="~";
+    local @ARGV="/etc/logrotate.d/zimbra";
+    while (<>) {
+      s/syslogd/syslog-ng/;
+      print;
+    }
+  }
+  if ( !-f "/var/log/zimbra.log") {
+    open(my $tlog, ">/var/log/zimbra.log");
+  }
+  if ( !-f "/var/log/zimbra-stats.log") {
+    open(my $tlog, ">/var/log/zimbra-stats.log");
+  }
+  chown $uid,$gid,"/var/log/zimbra.log";
+  chown $uid,$gid,"/var/log/zimbra-stats.log";
+  chmod 0644, "/var/log/zimbra.log", "/var/log/zimbra-stats.log";
+  print "done.\n"
+}
+
+sub updateSyslog {
+  my $syslogconf="/etc/syslog.conf";
+  if ( -f "/etc/rsyslog.conf" ) {
+    $syslogconf="/etc/rsyslog.conf";
+    $rsyslog=1 
+  }
+
+  # Make a backup copy
+  my $rc=cp($syslogconf,"$syslogconf.bak");
+  if (!$rc) {
+    print "Unable to make a backup of ".$syslogconf."\n";
+    exit 1;
+  }
+
+  # create a safe temp file and make sure we have enough space to fill it
+  my (undef, $tmpfile) = tempfile("syslog.conf.XXXX", DIR=>"$zimbra_tmp_directory",  OPEN=>0);
+  cp($syslogconf,$tmpfile);
+  if ( -s $tmpfile ) {
+    print "updateSyslog: Updating $syslogconf...";
+  } else  {
+    print "updateSyslog: Unable to create temp file: $tmpfile\n";
+    exit 1;
+  }
+
+  open (TMPFH, ">$tmpfile");
+  open (SYSFH, "<$syslogconf");
+  # Remove existing entries that we may have added.
+  while (<SYSFH>) {
+    if ($_ !~ /^local0\.\*/ && $_ !~ /^local1\.\*/) {
+      if ( $rsyslog == 1 && $_ =~ /^\tlocal0,local1.none;\\/ ) {
+        next;
+      }
+      if ( $_ =~ /^auth\.\* / ) {
+        next;
+      }
+      if ( $_ =~ /^mail.*($LOGHOST|zimbra)/ ) {
+        next;
+      }
+      s/;local0.none//g;
+      s/;local1.none//g;
+      s/;auth.none//g;
+      if ( $rsyslog == 0 ) {
+        s/^\*\.info/\*\.info;local0.none;local1.none;auth.none/;
+      }
+      if ( $rsyslog == 1 || -e "/etc/init.d/sysklogd" ) {
+        s/^\*\.\*;auth,authpriv.none/\*\.\*;auth,authpriv.none;local0.none;local1.none;mail.none/;
+        s/^\*\.=debug;\\/\*.=debug;\\\n\tlocal0,local1.none;\\/;
+        s/^\*\.=info;\*\.=notice;\*\.=warn;\\/\*.=info;\*.=notice;\*.=warn;\\\n\tlocal0,local1.none;\\/;
+      }
+      print TMPFH $_;
+    }
+  }
+  close(SYSFH);
+
+  if ( $TYPE eq "remote" ) {
+    print TMPFH "local0.*                @$LOGHOST\n";
+    print TMPFH "local1.*                @$LOGHOST\n";
+    print TMPFH "auth.*                  @$LOGHOST\n";
+  }
+  print TMPFH "local0.*                $logfile\n";
+  print TMPFH "local1.*                $statsfile\n";
+  print TMPFH "auth.*                  $logfile\n";
+
+  if ($TYPE eq "remote" ) {
+    print TMPFH "mail.*                @$LOGHOST\n";
+  }
+  print TMPFH "mail.*                $logfile\n";
+  close (TMPFH);
+
+  cp($tmpfile,$syslogconf);
+
+  if ( !-f "/var/log/zimbra.log") {
+    open(my $tlog, ">/var/log/zimbra.log");
+  }
+  if ( !-f "/var/log/zimbra-stats.log") {
+    open(my $tlog, ">/var/log/zimbra-stats.log");
+  }
+  chown $uid,$gid,"/var/log/zimbra.log";
+  chown $uid,$gid,"/var/log/zimbra-stats.log";
+  chmod 0644,"/var/log/zimbra.log","/var/log/zimbra-stats.log";
+
+  if ( -f "/etc/logrotate.d/zimbra" ) {
+    if ( $rsyslog == 1 ) {
+      local $^I="~";
+      local @ARGV=("/etc/logrotate.d/zimbra");
+      while (<>) {
+        s/\-HUP\s+syslog/-HUP rsyslog/g;
+        print;
+      }
+    }
+  }
+  print "done.\n";
+}
+
+my $edited=0;
+
+if ( -f "/etc/syslog-ng/syslog-ng.conf" ||
+     -f "/etc/syslog-ng/syslog-ng.conf.in" ||
+     -f "/etc/syslog-ng.conf" ) {
+  &updateSyslogNG;
+  $edited=1;
+}
+
+if ( (-f "/etc/syslog.conf" || -f "/etc/rsyslog.conf") && $edited == 0 ) {
+  &updateSyslog;
+  $edited=1;
+}
+
+if ( !$edited ) {
+  print "ERROR: No syslog configuration edited\n";
+  exit 1;
+}
+
+if ( $platform eq "openSUSE_10.2" ) {
+  `/sbin/rcsyslog restart > /dev/null 2>&1`;
+  exit 0;
+}
+
+if ( $platform eq "SuSE10" || $platform eq "SLES10_64" || $platform eq "SuSEES10" ) {
+  `/sbin/SuSEconfig --module syslog-ng`;
+  exit 0;
+}
+
+if ( $platform eq "SLES11_64" ) {
+  `/etc/init.d/syslog restart > /dev/null 2>&1`;
+  exit 0;
+}
+
+if ( $platform =~ /UBUNTU/ || $platform =~ /DEBIAN4/ ) {
+  if ( -e "/etc/init.d/sysklogd" ) {
+    `/etc/init.d/sysklogd restart > /dev/null 2>&1`;
+    exit 0;
+  } elsif ( $rsyslog == 1 ) {
+    `/etc/init.d/rsyslog restart > /dev/null 2>&1`;
+    exit 0;
+  } else {
+    print "Unable to restart syslog.  Please do it manually.\n";
+    exit 1;
+  }
+} elsif ( $platform =~ /DEBIAN5/ || $platform =~ /F10/ || $platform =~ /F11/ ) {
+  if ( -e "/etc/init.d/rsyslog" ) {
+    `/etc/init.d/rsyslog restart> /dev/null 2>&1`;
+    exit 0;
+  } else {
+    print "Unable to restart rsyslog.  Please do it manually.\n";
+    exit 1;
+  }
+} else {
+  `killall -HUP syslogd`;
+}
+
+sub getLocalConfig {
+  my $key = shift;
+
+  return $main::loaded{lc}{$key}
+    if (exists $main::loaded{lc}{$key});
+
+  my $val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null`;
+  chomp $val;
+  $main::loaded{lc}{$key} = $val;
+  return $val;
+}
+
