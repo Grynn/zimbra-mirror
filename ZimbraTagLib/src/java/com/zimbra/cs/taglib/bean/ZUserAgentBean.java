@@ -42,6 +42,7 @@ public class ZUserAgentBean {
     boolean isHotJava = false;
     boolean isIPhone = false;
     boolean isIPod = false;
+    boolean isIPad = false;
 
     public ZUserAgentBean(String userAgent) {
         mUserAgent = userAgent;
@@ -92,6 +93,8 @@ public class ZUserAgentBean {
                     isIPhone = true;
                 } else if ((token.indexOf("ipod")) != -1) {
                     isIPod = true;
+                } else if ((token.indexOf("ipad")) != -1) {
+                    isIPad = true;
                 } else if ((token.indexOf("hotjava")) != -1) {
                     isHotJava = true;
                     isNav = false;
@@ -228,7 +231,9 @@ public class ZUserAgentBean {
 
     public boolean getIsiPhone() { return isIPhone; }
 
-    public boolean getIsiPod() { return isIPod; } 
+    public boolean getIsiPod() { return isIPod; }
+
+    public boolean getIsiPad() { return isIPad; }
 
     public static class Version {
         
