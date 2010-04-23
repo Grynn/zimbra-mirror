@@ -34,7 +34,8 @@ public class CheckSpellingTag extends ZimbraSimpleTag {
         JspContext jctxt = getJspContext();
         try {
             ZMailbox mbox = getMailbox();
-			ZMailbox.CheckSpellingResult result = mbox.checkSpelling(mText);
+			String trimmed = mText.trim().replaceAll("\\u00A0"," ").replaceAll("\\s\\s+"," ");
+			ZMailbox.CheckSpellingResult result = mbox.checkSpelling(trimmed);
 			JspWriter out = jctxt.getOut();
 			out.print("{\"available\":");
 			out.print(result.getIsAvailable() ? "true" : "false");
