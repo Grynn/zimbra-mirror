@@ -100,6 +100,9 @@
   <key name="zdesktop_volume_compression_threshold">
     <value>131072</value>
   </key>
+  <key name="zdesktop_local_account_id">
+    <value>ffffffff-ffff-ffff-ffff-ffffffffffff</value>
+  </key>
   <key name="zimbra_admin_service_port">
     <value>@port@</value>
   </key>
