@@ -380,7 +380,7 @@ ZaCert.prototype.setTargetServer = function (serverId) {
 ZaCert.launchNewCertWizard = function (serverId) {
 	try {
 		if(!ZaApp.getInstance().dialogs["certInstallWizard"])
-			ZaApp.getInstance().dialogs["certInstallWizard"] = new ZaCertWizard (this._container, ZaApp.getInstance()) ;	
+			ZaApp.getInstance().dialogs["certInstallWizard"] = new ZaCertWizard (this._container);	
 		
 		this._cert = new ZaCert(ZaApp.getInstance());
 		this._cert.setTargetServer (serverId);		
