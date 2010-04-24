@@ -1200,7 +1200,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
                         			ZaAccount.A_initials,
                         			ZaAccount.A_lastName,
                         			ZaAccount.A_displayname,
-                        			ZaAccount.A_zimbraMailCanonicalAddress,
+//                        			ZaAccount.A_zimbraMailCanonicalAddress,
                         			ZaAccount.A_zimbraHideInGal]]],				
 				items:[
 				{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
@@ -1254,9 +1254,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 						}
 					]
 				},
-				{ref:ZaAccount.A_zimbraMailCanonicalAddress, type:_TEXTFIELD_,width:250,
+				/*{ref:ZaAccount.A_zimbraMailCanonicalAddress, type:_TEXTFIELD_,width:250,
 					msgName:ZaMsg.NAD_CanonicalFrom,label:ZaMsg.NAD_CanonicalFrom, labelLocation:_LEFT_, align:_LEFT_
-				},
+				}, */
 				{ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_,
 				  msgName:ZaMsg.LBL_zimbraHideInGal,
 				  label:ZaMsg.LBL_zimbraHideInGal, trueValue:"TRUE", falseValue:"FALSE"
@@ -1783,7 +1783,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
                         			ZaAccount.A_zimbraPrefShowSearchString,
                         			ZaAccount.A_zimbraPrefImapSearchFoldersEnabled,
                         			ZaAccount.A_zimbraPrefUseKeyboardShortcuts,
-                        			ZaAccount.A_zimbraMailCanonicalAddress,
+//                        			ZaAccount.A_zimbraMailCanonicalAddress,
                         			ZaAccount.A_zimbraPrefWarnOnExit,
                         			ZaAccount.A_zimbraPrefAdminConsoleWarnOnExit,
                         			ZaAccount.A_zimbraPrefShowSelectionCheckbox,

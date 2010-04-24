@@ -477,10 +477,10 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 						enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_displayname]]
 					}
 				]
-			},
+			},/*
 			{ref:ZaAccount.A_zimbraMailCanonicalAddress, type:_TEXTFIELD_,width:250,
 				msgName:ZaMsg.NAD_CanonicalFrom,label:ZaMsg.NAD_CanonicalFrom, labelLocation:_LEFT_, align:_LEFT_
-			},
+			},  */
 			{ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_,
 			  msgName:ZaMsg.LBL_zimbraHideInGal,label:ZaMsg.LBL_zimbraHideInGal, trueValue:"TRUE", falseValue:"FALSE"
 			}

@@ -218,7 +218,7 @@ ZaAccount.A_zimbraFeatureOutOfOfficeReplyEnabled = "zimbraFeatureOutOfOfficeRepl
 ZaAccount.A_zimbraFeatureNewMailNotificationEnabled = "zimbraFeatureNewMailNotificationEnabled";
 ZaAccount.A_zimbraFeatureMailPollingIntervalPreferenceEnabled = "zimbraFeatureMailPollingIntervalPreferenceEnabled" ;
 ZaAccount.A_zimbraHideInGal = "zimbraHideInGal";
-ZaAccount.A_zimbraMailCanonicalAddress = "zimbraMailCanonicalAddress";
+//ZaAccount.A_zimbraMailCanonicalAddress = "zimbraMailCanonicalAddress";
 ZaAccount.A_zimbraMailCatchAllAddress = "zimbraMailCatchAllAddress" ;
 ZaAccount.A_zimbraFeatureOptionsEnabled = "zimbraFeatureOptionsEnabled";
 //ZaAccount.A_zimbraFeatureShortcutAliasesEnabled = "zimbraFeatureShortcutAliasesEnabled" ;
@@ -1551,7 +1551,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zip, type:_STRING_, ref:"attrs/"+ZaAccount.A_zip},
         {id:ZaAccount.A_state, type:_STRING_, ref:"attrs/"+ZaAccount.A_state},
         {id:ZaAccount.A_mailDeliveryAddress, type:_EMAIL_ADDRESS_, ref:"attrs/"+ZaAccount.A_mailDeliveryAddress},
-        {id:ZaAccount.A_zimbraMailCanonicalAddress, type:_EMAIL_ADDRESS_, ref:"attrs/"+ZaAccount.A_zimbraMailCanonicalAddress},
+//        {id:ZaAccount.A_zimbraMailCanonicalAddress, type:_EMAIL_ADDRESS_, ref:"attrs/"+ZaAccount.A_zimbraMailCanonicalAddress},
         {id:ZaAccount.A_accountStatus, type:_STRING_, ref:"attrs/"+ZaAccount.A_accountStatus},
         {id:ZaAccount.A_notes, type:_STRING_, ref:"attrs/"+ZaAccount.A_notes},
         {id:ZaAccount.A_zimbraMailQuota, type:_COS_MAILQUOTA_, ref:"attrs/"+ZaAccount.A_zimbraMailQuota},
