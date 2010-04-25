@@ -21,6 +21,7 @@
 **/
 ZaApplianceLicense = function() {
 	ZaItem.call(this,"ZaApplianceLicense");
+	this.attrs = {};
 	this._init();	
 }
 
@@ -117,15 +118,14 @@ ZaApplianceLicense.prototype.load = function (by, val) {
 
 ZaApplianceLicense.loadMethod = 
 function() {
+	var reqMgrParams = {} ;
+	var busyId = Dwt.getNextId();
 	try {
 		var soapDoc = AjxSoapDoc.create("GetLicenseRequest", "urn:zimbraAdmin", null);
 		var params = {};
 		params.soapDoc = soapDoc; 
 		params.asyncMode = false;				
-		var reqMgrParams = {
-			controller : ZaApp.getInstance().getCurrentController(),
-			busyMsg : com_zimbra_dashboard.BUSY_LOADING_LICENSE
-		}
+		reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
 		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetLicenseResponse;
 		this.attrs = {};
 		this.initFromJS(resp.license[0]);
@@ -167,33 +167,37 @@ ZaApplianceLicense.getCause = function (detailMsg) {
 };
 
 ZaApplianceLicense.removeLicense = function() {
+	var busyId = Dwt.getNextId();
 	try {
 		this.serviceMap = {};
 	    var statusURL = "https://localhost:5480/cgi-bin/uploadLicense.pl?action=removelicense";
-	    var url = "/service/proxy?target=" + AjxStringUtil.urlComponentEncode(statusURL);
-	    var busyId = Dwt.getNextId();
+	    var url = "/service/proxy?target=" + AjxStringUtil.urlComponentEncode(statusURL);	    
 	    DwtShell.getShell(window).setBusyDialogText(com_zimbra_dashboard.BUSY_REMOVING_EVAL_LICENSE)
 	    DwtShell.getShell(window).setBusy(true,busyId, true, 50);	    
 	    var response = AjxRpc.invoke(null, url, null, null, true);
-	    DwtShell.getShell(window).setBusy(false,busyId,false);
 	    var myDoc = AjxXmlDoc.createFromDom(response.xml);
 	    var successNodes = myDoc.getElementsByTagName("success");
 	    if(!successNodes || successNodes.length==0) {
 	    	ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_dashboard.ERROR_FAILED_REMOVE_EVAL_LICENSE, null, true);
 	    }
 	} catch (ex) {
+	    DwtShell.getShell(window).setBusy(false,busyId,false);
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaApplianceStatus.loadMethod", null, false);		
-	}		
+	}	
+    DwtShell.getShell(window).setBusy(false,busyId,false);
 };
 ZaApplianceLicense.flushLicenseCache = function() {
 	var soapDoc = AjxSoapDoc.create("FlushCacheRequest", ZaZimbraAdmin.URN, null);
 	var elCache = soapDoc.set("cache", null);
-
+	var busyId = Dwt.getNextId();
 	elCache.setAttribute("type", "license");		
 
 	var reqMgrParams = {
 		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : com_zimbra_dashboard.BUSY_FLUSH_LICENSE_CACHE
+		busyMsg : com_zimbra_dashboard.BUSY_FLUSH_LICENSE_CACHE,
+		busyId:busyId,
+		showBusy:true,
+		delay:0
 	}
 
 	var reqParams = {

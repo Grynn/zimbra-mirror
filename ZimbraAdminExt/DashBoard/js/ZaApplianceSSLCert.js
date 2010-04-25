@@ -206,58 +206,53 @@ ZaApplianceSSLCert.certsServerNodeTreeListener = function (ev) {
 	}
 }
 
+ZaApplianceSSLCert.initFromJS = function(obj) {
+	if(obj[ZaApplianceSSLCert.A_issuer] && obj[ZaApplianceSSLCert.A_issuer][0] && obj[ZaApplianceSSLCert.A_issuer][0]._content) {
+		this[ZaApplianceSSLCert.A_issuer] = obj[ZaApplianceSSLCert.A_issuer][0]._content;
+	}
+	if(obj[ZaApplianceSSLCert.A_subject] && obj[ZaApplianceSSLCert.A_subject][0] && obj[ZaApplianceSSLCert.A_subject][0]._content) {
+		this[ZaApplianceSSLCert.A_subject] = obj[ZaApplianceSSLCert.A_subject][0]._content;
+	}
+	if(obj[ZaApplianceSSLCert.A_subject_alt] && obj[ZaApplianceSSLCert.A_subject_alt][0] && obj[ZaApplianceSSLCert.A_subject_alt][0]._content) {
+		this[ZaApplianceSSLCert.A_subject_alt] = obj[ZaApplianceSSLCert.A_subject_alt][0]._content;
+	}
+	if(obj[ZaApplianceSSLCert.A_type]) {
+		this[ZaApplianceSSLCert.A_type] = obj[ZaApplianceSSLCert.A_type];
+	}
+	if(obj[ZaApplianceSSLCert.A_notBefore] && obj[ZaApplianceSSLCert.A_notBefore][0] && obj[ZaApplianceSSLCert.A_notBefore][0]._content) {
+		this[ZaApplianceSSLCert.A_notBefore] = obj[ZaApplianceSSLCert.A_notBefore][0]._content;
+	}
+	if(obj[ZaApplianceSSLCert.A_notAfter] && obj[ZaApplianceSSLCert.A_notAfter][0] && obj[ZaApplianceSSLCert.A_notAfter][0]._content) {
+		this[ZaApplianceSSLCert.A_notAfter] = obj[ZaApplianceSSLCert.A_notAfter][0]._content;
+	}	
+	if(this[ZaApplianceSSLCert.A_notBefore] && this[ZaApplianceSSLCert.A_notAfter]) {
+		this[ZaApplianceSSLCert.A_validation_days] = AjxMessageFormat.format(com_zimbra_dashboard.CertValidationDaysPattern, [this[ZaApplianceSSLCert.A_notBefore],this[ZaApplianceSSLCert.A_notAfter]]);
+	}		
+}
 ZaApplianceSSLCert.getCerts = function (serverId) {
-	if (AjxEnv.hasFirebug) console.log("Getting certificates for server " + serverId) ;
-	
 	var soapDoc = AjxSoapDoc.create("GetCertRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", "all");
 	var csfeParams = new Object();
-	csfeParams.soapDoc = soapDoc;	
-	if (serverId != null) {
-		soapDoc.getMethod().setAttribute("server", serverId);
-	}else{
-		if (AjxEnv.hasFirebug) console.log("Warning: serverId is missing for ZaApplianceSSLCert.getCerts.") ;
-	}
-	
-	try {
-		var reqMgrParams = {} ;
+	csfeParams.soapDoc = soapDoc;
+	soapDoc.getMethod().setAttribute("server", serverId);
+	var busyId = Dwt.getNextId();
+	var reqMgrParams = {showBusy:true,busyId:busyId,busyMsg:com_zimbra_dashboard.BUSY_RETRIEVE_CERT};
+	try {		
 		reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
-		reqMgrParams.busyMsg = com_zimbra_dashboard.BUSY_RETRIEVE_CERT ;
-		reqMgrParams.showBusy = true;
-		var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetCertResponse;
+		var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetCertResponse;
 		var certsArray = [];
 		if(resp && resp.cert) {			
 			var cnt = resp.cert.length;
 			for(var i=0;i<cnt;i++) {
 				if(resp.cert[i]) {
 					var certObj = {};
-					if(resp.cert[i][ZaApplianceSSLCert.A_issuer] && resp.cert[i][ZaApplianceSSLCert.A_issuer][0] && resp.cert[i][ZaApplianceSSLCert.A_issuer][0]._content) {
-						certObj[ZaApplianceSSLCert.A_issuer] = resp.cert[i][ZaApplianceSSLCert.A_issuer][0]._content;
-					}
-					if(resp.cert[i][ZaApplianceSSLCert.A_subject] && resp.cert[i][ZaApplianceSSLCert.A_subject][0] && resp.cert[i][ZaApplianceSSLCert.A_subject][0]._content) {
-						certObj[ZaApplianceSSLCert.A_subject] = resp.cert[i][ZaApplianceSSLCert.A_subject][0]._content;
-					}
-					if(resp.cert[i][ZaApplianceSSLCert.A_subject_alt] && resp.cert[i][ZaApplianceSSLCert.A_subject_alt][0] && resp.cert[i][ZaApplianceSSLCert.A_subject_alt][0]._content) {
-						certObj[ZaApplianceSSLCert.A_subject_alt] = resp.cert[i][ZaApplianceSSLCert.A_subject_alt][0]._content;
-					}
-					if(resp.cert[i][ZaApplianceSSLCert.A_type]) {
-						certObj[ZaApplianceSSLCert.A_type] = resp.cert[i][ZaApplianceSSLCert.A_type];
-					}
-					if(resp.cert[i][ZaApplianceSSLCert.A_notBefore] && resp.cert[i][ZaApplianceSSLCert.A_notBefore][0] && resp.cert[i][ZaApplianceSSLCert.A_notBefore][0]._content) {
-						certObj[ZaApplianceSSLCert.A_notBefore] = resp.cert[i][ZaApplianceSSLCert.A_notBefore][0]._content;
-					}
-					if(resp.cert[i][ZaApplianceSSLCert.A_notAfter] && resp.cert[i][ZaApplianceSSLCert.A_notAfter][0] && resp.cert[i][ZaApplianceSSLCert.A_notAfter][0]._content) {
-						certObj[ZaApplianceSSLCert.A_notAfter] = resp.cert[i][ZaApplianceSSLCert.A_notAfter][0]._content;
-					}	
-					if(certObj[ZaApplianceSSLCert.A_notBefore] && certObj[ZaApplianceSSLCert.A_notAfter]) {
-						certObj[ZaApplianceSSLCert.A_validation_days] = AjxMessageFormat.format(com_zimbra_dashboard.CertValidationDaysPattern, [certObj[ZaApplianceSSLCert.A_notBefore],certObj[ZaApplianceSSLCert.A_notAfter]]);
-					}
+					ZaApplianceSSLCert.initFromJS.call(certObj,resp.cert[i]);
 				}
 				certsArray.push(certObj);
 			}
 			return certsArray;
 		}
-	}catch (ex) {
+	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaApplianceSSLCert.getCerts", null, false);
 	}
 }
@@ -273,12 +268,13 @@ ZaApplianceSSLCert.getCSR = function (app, serverId, type) {
 	//if (serverId && serverId != ZaApplianceSSLCert.ALL_SERVERS) {
 	if (serverId != null){
 		soapDoc.getMethod().setAttribute("server", serverId);
-	}else{
-		if (AjxEnv.hasFirebug) console.log("Warning: serverId is missing for ZaApplianceSSLCert.getCSR.") ;
 	}
-	
+	var reqMgrParams = {} ;
+	var busyId = Dwt.getNextId();
+	reqMgrParams.busyId = busyId;
+	reqMgrParams.showBusy = true;
 	try {
-		var reqMgrParams = {} ;
+		
 		reqMgrParams.controller = app.getCurrentController();
 		reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_GET_CSR ;
 		resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetCSRResponse;
@@ -320,13 +316,16 @@ ZaApplianceSSLCert.genCSR = function (app, subject_attrs,  type, newCSR, serverI
 	
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
+	var reqMgrParams = {} ;
+	var busyId = Dwt.getNextId();
+	reqMgrParams.busyId = busyId;
+	reqMgrParams.showBusy = true;
 	try {
-		var reqMgrParams = {} ;
 		reqMgrParams.controller = app.getCurrentController();
 		reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_GENERATE_CSR ;
 		resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GenCSRResponse;
 		return resp;
-	}catch (ex) {
+	} catch (ex) {
 		app.getCurrentController()._handleException(ex, "ZaApplianceSSLCert.genCSR", null, false);
 	}
 }
@@ -380,11 +379,17 @@ ZaApplianceSSLCert.installCert = function (params, serverId) {
 	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
 	reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_INSTALL_CERT ;
 	reqMgrParams.showBusy = true;
+	var busyId = Dwt.getNextId();
+	reqMgrParams.busyId = busyId;			
 	if (callback) {
 		csfeParams.callback = callback;
 		csfeParams.asyncMode = true ;	
 	}
-	ZaRequestMgr.invoke(csfeParams, reqMgrParams ) ;
+	try {
+		ZaRequestMgr.invoke(csfeParams, reqMgrParams);
+	} catch (ex) {
+		throw (ex);
+	}
 }
 
 ZaApplianceSSLCert.prototype.setTargetServer = function (serverId) {

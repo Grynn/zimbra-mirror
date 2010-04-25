@@ -130,11 +130,7 @@ function(openInNewTab) {
     	this._serviceBarOperations[ZaOperation.SERVICE_AV] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_AV,ZaStatus.SVC_AV,statusObj.serviceMap["antispam"] ? "Check" : "Cancel");
     	this._serviceBarOperations[ZaOperation.SERVICE_STATS] = new ZaOperation(ZaOperation.LABEL,ZaStatus.SVC_STATS,ZaStatus.SVC_STATS,statusObj.serviceMap["stats"] ? "Check" : "Cancel");
     	this._serviceBarOperations[ZaOperation.STOP_SERVICES] = new ZaOperation(ZaOperation.STOP_SERVICES, com_zimbra_dashboard.StopServices, com_zimbra_dashboard.StopServices_tt, "Cancel", "Cancel", new AjxListener(this, this.stopServices));
-    	//this._serviceBarOperations[ZaOperation.RESTART_SERVICES] = new ZaOperation(ZaOperation.RESTART_SERVICES, com_zimbra_dashboard.RestartServices, com_zimbra_dashboard.RestartServices_tt, "Refresh", "Refresh", new AjxListener(this, ZaAccountListController.prototype._editButtonListener));
     	this._serviceBar = new ZaToolBar(this._container, this._serviceBarOperations,this._serviceBarOrder,null,"VAMIServicesToolBar");
-    	//this._searchPanel = new DwtComposite(ZaApp.getInstance().getAppCtxt().getShell(), "SearchPanel", DwtControl.ABSOLUTE_STYLE);
-    	//this._serviceBar = new ZaToolBar(this._searchPanel, this._serviceBarOperations,this._serviceBarOrder,null,"VAMIServicesToolBar");
-    	//this._searchPanel.zShow(true);
     	var elements = new Object();
 		this._contentView = new ZaDashBoardView(this._container);
 		
@@ -153,19 +149,21 @@ function(openInNewTab) {
 		elements[ZaAppViewMgr.C_SERVICE_BAR] = this._serviceBar;
 		ZaApp.getInstance().getAppViewMgr().addComponents(elements,true);
 	}
-    var entry = {attrs:{}};
-    var gc = ZaApp.getInstance().getGlobalConfig();
-    
-    entry.attrs = gc.attrs;
-    entry.rights = gc.rights;
-    entry.setAttrs = gc.setAttrs;
-    entry.getAttrs = gc.getAttrs;
-    
+    var entry = {attrs:{}};    
 	ZaApp.getInstance().pushView(this.getContentViewId());
 	entry[ZaDashBoard.searchResults] = [];
 	this._contentView.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
 	this.changeActionsState();
+    var serverArray = [];
+    var serverList = ZaApp.getInstance().getServerList();
+    if(serverList) {
+    	serverArray = serverList.getArray();
+    	if(serverArray && serverArray[0]) {
+    		serverArray[0].load();
+    		ZaDashBoard.server = serverArray[0];
+    	}
+    }	
 };
 
 ZaDashBoardController.prototype.stopServicesAndRedirect = function () {
@@ -254,10 +252,8 @@ ZaDashBoardController.prototype.editItem = function (item) {
 };
 
 ZaDashBoardController.prototype.openSettingsView = function () {
-	var item = ZaApp.getInstance().getGlobalConfig();
-	item.id = ZaItem.GLOBAL_CONFIG;
 	if (! this.selectExistingTabByItemId(ZaItem.GLOBAL_CONFIG,ZaApplianceSettingsView)){
-		ZaApp.getInstance().getApplianceSettingsController().show(item);
+		ZaApp.getInstance().getApplianceSettingsController().show(new ZaApplianceSettings());
 	}
 };
 

@@ -17,7 +17,9 @@ ZaApplianceSettings = function() {
 	ZaItem.call(this,"ZaApplianceSettings");
 	this.attrs = new Object();
 	this.type = ZaItem.GLOBAL_CONFIG;
-	this.load();
+	this.attrsToGet = [ZaGlobalConfig.A_zimbraFileUploadMaxSize,ZaGlobalConfig.A_zimbraMtaRelayHost,ZaGlobalConfig.A_zimbraAttachmentsBlocked, 
+	                   ZaGlobalConfig.A_zimbraMtaBlockedExtensionWarnRecipient,ZaGlobalConfig.A_zimbraMtaBlockedExtension,ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension,
+	                   ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly,ZaGlobalConfig.A_zimbraDefaultDomainName];
 }
 
 ZaApplianceSettings.prototype = new ZaItem;
@@ -73,18 +75,88 @@ ZaApplianceSettings.myXModel = {
 
 ZaApplianceSettings.loadMethod = 
 function(by, val) {
-	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", ZaZimbraAdmin.URN, null);
-	if(!this.getAttrs.all && !AjxUtil.isEmpty(this.attrsToGet)) {
-		soapDoc.setMethodAttribute("attrs", this.attrsToGet.join(","));
-	}	
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	var reqMgrParams = {
-		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : ZaMsg.BUSY_GET_ALL_CONFIG
+	var soapDoc, params, resp;
+	
+	soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+    soapDoc.setMethodAttribute("onerror", "continue");
+	
+    var getCfgDoc = soapDoc.set("GetAllConfigRequest", null, null, ZaZimbraAdmin.URN);
+    getCfgDoc.setAttribute("attrs", this.attrsToGet.join(","));
+    
+    var getLicDoc = soapDoc.set("GetLicenseRequest", null, null, ZaZimbraAdmin.URN);
+	
+    var getCertsDoc = soapDoc.set("GetCertRequest", null, null, ZaZimbraAdmin.URN);
+	getCertsDoc.setAttribute("type", "all");
+	getCertsDoc.setAttribute("server", ZaDashBoard.server.id);
+	
+	this[ZaApplianceSettings.license] = new ZaApplianceLicense();
+	this[ZaApplianceSettings.A_certs] = [];
+	params = new Object();
+	params.soapDoc = soapDoc;
+	var busyId = Dwt.getNextId();
+	reqMgrParams.busyId = busyId;
+	reqMgrParams.showBusy = true;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = com_zimbra_dashboard.BUSY_LOADING_SETTINGS;
+	reqMgrParams.delay = 0;
+    var hasError = false ;
+    var lastException;
+	try {
+		var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
+		if(respObj.isException && respObj.isException()) {
+			ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaApplianceSettings.loadMethod", null, false);
+		    hasError  = true ;
+            lastException = ex ;
+        } else if(respObj.Body.BatchResponse.Fault) {
+			var fault = respObj.Body.BatchResponse.Fault;
+			if(fault instanceof Array)
+				fault = fault[0];
+		
+			if (fault) {
+				// JS response with fault
+				var ex = ZmCsfeCommand.faultToEx(fault);
+				ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaApplianceSettings.loadMethod", null, false);
+                hasError = true ;
+                lastException = ex ;
+            }
+		} else {
+			var batchResp = respObj.Body.BatchResponse;
+			
+			if(batchResp.GetAllConfigResponse) {
+				resp = batchResp.GetAllConfigResponse[0];
+				this.initFromJS(resp);
+			}
+			
+			if(batchResp.GetLicenseResponse) {
+				resp = batchResp.GetLicenseResponse[0];
+				if(resp && resp.license && resp.license[0]) {
+					this[ZaApplianceSettings.license].initFromJS(resp.license[0]);
+				}
+				if(resp && resp.info && resp.info[0]) {
+					this[ZaApplianceSettings.license].initFromJS(resp.info[0]);
+				}
+			}
+			
+			if(batchResp.GetCertResponse) {
+				resp = batchResp.GetCertResponse[0];
+				if(resp && resp.cert && resp.cert.length) {
+					var cnt = resp.cert.length;
+					for(var i=0;i<cnt;i++) {
+						if(resp.cert[i]) {
+							var certObj = {};
+							ZaApplianceSSLCert.initFromJS.call(certObj,resp.cert[i]);
+						}
+						this[ZaApplianceSettings.A_certs].push(certObj);
+					}
+				}
+			}			
+		}	
+	    if (hasError) {
+	        throw lastException;
+	    }
+	} catch (ex) {
+		throw(ex);
 	}
-	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllConfigResponse;
-	this.initFromJS(resp);	
 }
 ZaItem.loadMethods["ZaApplianceSettings"].push(ZaApplianceSettings.loadMethod);
 

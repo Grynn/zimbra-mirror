@@ -87,34 +87,16 @@ ZaApplianceSettingsController.setViewMethod = function (item) {
         }
         ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
         ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
-        ZaApp.getInstance().pushView(this.getContentViewId());
+        ZaApp.getInstance().pushView(this.getContentViewId());        		
         item.load();
-
-        var licenseObj = new ZaApplianceLicense();
-        licenseObj.load();
-        item[ZaApplianceSettings.license] = licenseObj;
-
-        var serverArray = [];
-        var serverList = ZaApp.getInstance().getServerList();
-        if(serverList) {
-        	serverArray = serverList.getArray();
-        	if(serverArray && serverArray[0]) {
-        		serverArray[0].load();
-        		this.server = item[ZaApplianceSettings.A_server] = serverArray[0];
-        		var certs = ZaApplianceSSLCert.getCerts(serverArray[0].id);
-        		item[ZaApplianceSettings.A_certs] = certs;
-        	}
-        }
-        
-        
         item[ZaModel.currentTab] = "1"
         item.id = ZaItem.GLOBAL_CONFIG;
         this._view.setDirty(false);
         this._view.setObject(item);
-	} catch (ex) {
+	} catch (ex) {		
 		this._handleException(ex, "ZaApplianceSettingsController.prototype.show", null, false);
 	}
-	this._currentObject = item;
+	this._currentObject = item;	
 }
 ZaController.setViewMethods["ZaApplianceSettingsController"].push(ZaApplianceSettingsController.setViewMethod) ;
 

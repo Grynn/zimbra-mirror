@@ -141,9 +141,9 @@ ZaDashBoardView.onSearchResult = function(params,resp) {
 		}
 	} catch (ex) {
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
-			ZaApp.getApp().getCurrentController()._handleException(ex, "ZaDashBoardView.onSearchResult");	
+			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDashBoardView.onSearchResult");	
 		} else {
-			ZaApp.getApp().getCurrentController().popupErrorDialog(ZaMsg.queryParseError, ex);
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.queryParseError, ex);
 		}		
 	}
 	

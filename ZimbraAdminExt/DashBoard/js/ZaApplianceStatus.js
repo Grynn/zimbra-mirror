@@ -65,6 +65,7 @@ function() {
 	    }
 	    DwtShell.getShell(window).setBusy(false,busyId,false);
 	} catch (ex) {
+		DwtShell.getShell(window).setBusy(false,busyId,false);
 		ZaApp.getInstance().getStatusViewController()._handleException(ex, "ZaApplianceStatus.loadMethod", null, false);		
 	}	
 }
