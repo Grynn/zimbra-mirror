@@ -7,7 +7,7 @@
 		</matchOn>
 		<contextMenu>
 			<menuItem label="${msg.search}" icon="Search" id="SEARCH"/>
-			<menuItem label="${msg.advancedSearch}" icon="NewContact" id="SEARCHBUILDER"/>
+			<menuItem label="${msg.advancedSearch}" icon="SearchBuilder" id="SEARCHBUILDER"/>
 			<menuItem label="${msg.newEmail}" icon="NewMessage" id="NEWEMAIL"/>
             <menuItem label="${msg.newIM}" icon="ImAvailable" id="NEWIM"/>
 			<menuItem label="${msg.newContact}" icon="Edit" id="NEWCONTACT"/>
