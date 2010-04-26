@@ -54,7 +54,7 @@ public class OfflineAutoComplete extends AutoComplete {
         Provisioning.GAL_SEARCH_TYPE stype = getSearchType(typeStr);
         int limit = account.getContactAutoCompleteMaxResults();        
         AutoCompleteResult result = query(request, ctxt, account, true, name, limit, stype);
-        
+        ContactAutoComplete ac = new ContactAutoComplete(account.getId());
         if (galAC && result.entries.size() < limit) {
             int galLimit = limit - result.entries.size();
             
@@ -76,7 +76,7 @@ public class OfflineAutoComplete extends AutoComplete {
                             if (!n.equals("objectClass"))
                                 fields.put(n, eField.getText());
                         }
-                        ContactAutoComplete.addMatchedContacts(name, fields, OfflineGal.EMAIL_KEYS, ContactAutoComplete.FOLDER_ID_GAL, null, result);
+                        ac.addMatchedContacts(name, fields, ContactAutoComplete.FOLDER_ID_GAL, null, result);
                     }      
                 }
             }

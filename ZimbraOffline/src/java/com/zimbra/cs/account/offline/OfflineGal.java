@@ -163,12 +163,13 @@ public class OfflineGal {
         if (zqr == null)
             return;
         
+        ContactAutoComplete ac = new ContactAutoComplete(mAccount.getId());
         try {
             while (zqr.hasNext()) {
                 int id = zqr.getNext().getItemId();            
                 Contact contact = (Contact) mGalMbox.getItemById(mOpContext, id, MailItem.TYPE_CONTACT);
                 ItemId iid = new ItemId(mGalMbox, id);
-                ContactAutoComplete.addMatchedContacts(name, contact.getFields(), EMAIL_KEYS, ContactAutoComplete.FOLDER_ID_GAL, iid, result);
+                ac.addMatchedContacts(name, contact.getFields(), ContactAutoComplete.FOLDER_ID_GAL, iid, result);
                 if (!result.canBeCached)
                     break;
             }                    
