@@ -322,6 +322,20 @@ function(object, level) {
 	return proxy;
 };
 
+AjxUtil.unProxy =
+function(proxy) {
+	var object = proxy && proxy._object_;
+	if (object) {
+		for (var prop in proxy) {
+			if (proxy.hasOwnProperty(prop) && prop!="_object_") {
+				object[prop] = proxy[prop];
+			}
+		}
+		return object;
+	}
+	return null;
+}
+
 /**
 * Returns a copy of a list with empty members removed.
 *
@@ -739,14 +753,15 @@ function(hash) {
 /**
  * updates one hash with attributes from another.
  *
- * @param hash1	[hash]
- * @param hash2 [hash]
- * @param overwrite [boolean]
+ * @param hash1	[hash]			Hash to be updated
+ * @param hash2 [hash]			Hash to update from (values from hash2 will be copied to hash1)
+ * @param overwrite [boolean]	Set to true if existing values in hash1 should be overwritten when keys match (defaults to false)
+ * @param ignore [array]		Array of keys (string) to skip. (defaults to none)
  */
 AjxUtil.hashUpdate =
-function(hash1, hash2, overwrite) {
+function(hash1, hash2, overwrite, ignore) {
 	for (var key in hash2) {
-		if (overwrite || !(key in hash1)) {
+		if ((overwrite || !(key in hash1)) && (!ignore || AjxUtil.indexOf(ignore, key)==-1)) {
 			hash1[key] = hash2[key];
 		}
 	}
