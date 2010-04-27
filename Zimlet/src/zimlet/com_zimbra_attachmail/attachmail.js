@@ -18,22 +18,33 @@
  * Constructor.
  * 
  */
-function com_zimbra_attachmail() {
-}
-com_zimbra_attachmail.prototype = new ZmZimletBase();
-com_zimbra_attachmail.prototype.constructor = com_zimbra_attachmail;
+function com_zimbra_attachmail_HandlerObject() {
+};
+
+com_zimbra_attachmail_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_attachmail_HandlerObject.prototype.constructor = com_zimbra_attachmail_HandlerObject;
+
+/**
+ * Simplify handler object
+ *
+ */
+var AttachMailZimlet = com_zimbra_attachmail_HandlerObject;
 
 /**
  * Initializes the zimlet.
  * 
  */
-com_zimbra_attachmail.prototype.init =
+AttachMailZimlet.prototype.init =
 function() {
 	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
 	var tabview = attachDialog ? attachDialog.getTabView() : null;
+	
 	this.AMV = new AttachMailTabView(tabview, this);
-	var tabkey = attachDialog.addTab("attachmail", "Attach Mail", this.AMV);
+	
+	var tabLabel = this.getMessage("AttachMailZimlet_tab_label");
+	var tabkey = attachDialog.addTab("attachmail", tabLabel, this.AMV);
 	this.AMV.attachDialog = attachDialog;
+	
 	var callback = new AjxCallback(this.AMV, this.AMV.uploadFiles);
 	attachDialog.addOkListener(tabkey, callback);
 
@@ -41,15 +52,17 @@ function() {
 
 /**
  * Called when the panel is double-clicked.
+ * 
  */
-com_zimbra_attachmail.prototype.doubleClicked = function() {
+AttachMailZimlet.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
 
 /**
  * Called when the panel is single-clicked.
+ * 
  */
-com_zimbra_attachmail.prototype.singleClicked = function() {
+AttachMailZimlet.prototype.singleClicked = function() {
 	// do nothing
 };
 
@@ -73,6 +86,27 @@ function(parent, zimlet, className) {
 AttachMailTabView.prototype = new DwtTabViewPage;
 AttachMailTabView.prototype.constructor = AttachMailTabView;
 
+/**
+ * Defines the "search field" element id.
+ */
+AttachMailTabView.ELEMENT_ID_SEARCH_FIELD = "attDlg_attMsg_SearchField";
+/**
+ * Defines the "search button" element id.
+ */
+AttachMailTabView.ELEMENT_ID_SEARCH_BUTTON = "attDlg_attMsg_SearchBtn";
+/**
+ * Defines the "view message button" element id.
+ */
+AttachMailTabView.ELEMENT_ID_VIEW_MESSAGE_BUTTON = "attDlg_attMsg_ViewMsgBtn";
+/**
+ * Defines the "nav button cell" element id.
+ */
+AttachMailTabView.ELEMENT_ID_NAV_BUTTON_CELL = "attDlg_attMsg_NavBtnCell";
+
+/**
+ * Returns a string representation of the object.
+ * 
+ */
 AttachMailTabView.prototype.toString = function() {
 	return "AttachMailTabView";
 };
@@ -143,10 +177,18 @@ function() {
 	var idx = 0;
 
 	html[idx++] = '<table width="100%" height="5%">';
-	html[idx++] = '<TR><td><INPUT type="text" id="attDlg_attMsg_SearchField"></INPUT></td>';
-	html[idx++] = '<td width="50%"><SPAN id="attDlg_attMsg_SearchBtn" /></td>';
-	html[idx++] = '<td width="30%"><SPAN id="attDlg_attMsg_ViewMsgBtn" /></td>';
-	html[idx++] = '<td><SPAN id="attDlg_attMsg_NavBtnCell" /></td></TR></table>';
+	html[idx++] = '<TR><td><INPUT type="text" id="';
+	html[idx++] = AttachMailTabView.ELEMENT_ID_SEARCH_FIELD;
+	html[idx++] = '"></INPUT></td>';
+	html[idx++] = '<td width="50%"><SPAN id="';
+	html[idx++] = AttachMailTabView.ELEMENT_ID_SEARCH_BUTTON;
+	html[idx++] = '" /></td>';
+	html[idx++] = '<td width="30%"><SPAN id="';
+	html[idx++] = AttachMailTabView.ELEMENT_ID_VIEW_MESSAGE_BUTTON;
+	html[idx++] = '" /></td>';
+	html[idx++] = '<td><SPAN id="';
+	html[idx++] = AttachMailTabView.ELEMENT_ID_NAV_BUTTON_CELL;
+	html[idx++] = '" /></td></TR></table>';
 	html[idx++] = '<table>';
 	html[idx++] = '<tr>';
 	html[idx++] = '<td valign="top" id="' + this._folderTreeCellId + '">';
@@ -159,15 +201,17 @@ function() {
 	this._contentEl.innerHTML = html.join("");
 
 	var searchButton = new DwtButton({parent:this});
-	searchButton.setText("Search");
+	var searchButtonLabel = this.zimlet.getMessage("AttachMailZimlet_tab_button_search");
+	searchButton.setText(searchButtonLabel);
 	searchButton.setSize("140");
 	searchButton.addSelectionListener(new AjxListener(this, this._searchButtonListener));
-	document.getElementById("attDlg_attMsg_SearchBtn").appendChild(searchButton.getHtmlElement());
+	document.getElementById(AttachMailTabView.ELEMENT_ID_SEARCH_BUTTON).appendChild(searchButton.getHtmlElement());
 
 	var viewMsgButton = new DwtButton({parent:this});
-	viewMsgButton.setText("View Mail");
+	var viewMsgButtonLabel = this.zimlet.getMessage("AttachMailZimlet_tab_button_view");
+	viewMsgButton.setText(viewMsgButtonLabel);
 	viewMsgButton.addSelectionListener(new AjxListener(this, this._viewMsgButtonListener));
-	document.getElementById("attDlg_attMsg_ViewMsgBtn").appendChild(viewMsgButton.getHtmlElement());
+	document.getElementById(AttachMailTabView.ELEMENT_ID_VIEW_MESSAGE_BUTTON).appendChild(viewMsgButton.getHtmlElement());
 
 	this._navigationContainer = new DwtComposite(appCtxt.getShell());
 	this._navTB = new ZmNavToolBar({parent:this._navigationContainer});
@@ -175,7 +219,7 @@ function() {
 	this._navTB.addSelectionListener(ZmOperation.PAGE_BACK, navBarListener);
 	this._navTB.addSelectionListener(ZmOperation.PAGE_FORWARD, navBarListener);
 
-	document.getElementById("attDlg_attMsg_NavBtnCell").appendChild(this._navTB.getHtmlElement());
+	document.getElementById(AttachMailTabView.ELEMENT_ID_NAV_BUTTON_CELL).appendChild(this._navTB.getHtmlElement());
 	this.showAttachMailTreeView();
 
 	var params = {parent: appCtxt.getShell(), className: "AttachMailTabBox AttachMailList", posStyle: DwtControl.ABSOLUTE_STYLE, view: ZmId.VIEW_BRIEFCASE_ICON, type: ZmItem.ATT};
@@ -194,7 +238,7 @@ function() {
 AttachMailTabView.prototype._searchButtonListener =
 function(ev) {
 	this.treeView.deselectAll();
-	var val = document.getElementById('attDlg_attMsg_SearchField').value;
+	var val = document.getElementById(AttachMailTabView.ELEMENT_ID_SEARCH_FIELD).value;
 	if (val == "")
 		return;
 
@@ -333,12 +377,20 @@ function() {
 	return false;
 };
 
+/**
+ * Gets the selected messages.
+ * 
+ */
 AttachMailTabView.prototype.getSelectedMsgs =
 function() {
 	var bcView = this._tabAttachMailView;
 	return bcView.getSelection();
 };
 
+/**
+ * Uploads the files.
+ * 
+ */
 AttachMailTabView.prototype.uploadFiles =
 function(attachmentDlg, docIds) {
 	if (!docIds) {
@@ -362,6 +414,10 @@ function(attachmentDlg, docIds) {
 	this._hiddenView.getHtmlElement().innerHTML = "";//reset
 };
 
+/**
+ * Creates the hidden attachments.
+ * 
+ */
 AttachMailTabView.prototype._createHiddenAttachments =
 function(items) {
 	var composeView = appCtxt.getAppViewMgr().getCurrentView();
@@ -385,6 +441,10 @@ function(items) {
 
 };
 
+/**
+ * Shows the attach mail tree view.
+ * 
+ */
 AttachMailTabView.prototype.showAttachMailTreeView =
 function() {
 	//Force create deferred folders if not created
@@ -434,7 +494,7 @@ function(ev) {
 		var ti = ev.item;
 		var folder = ti.getData(Dwt.KEY_OBJECT);
 		if (folder) {
-			document.getElementById('attDlg_attMsg_SearchField').value = "in:" + folder.getSearchPath();
+			document.getElementById(AttachMailTabView.ELEMENT_ID_SEARCH_FIELD).value = "in:" + folder.getSearchPath();
 			var query = this._getQueryFromFolder(folder.id);
 			this.executeQuery(query);
 		}
@@ -453,6 +513,13 @@ function(treeView) {
 	ti.setVisible(false, true);
 };
 
+/**
+ * Sets the view size.
+ * 
+ * @param	{number}	width		the width
+ * @param	{number}	height		the height
+ * @return	{AttachMailTabView}	the view
+ */
 AttachMailTabView.prototype.setSize =
 function(width, height) {
 	DwtTabViewPage.prototype.setSize.call(this, width, height);
