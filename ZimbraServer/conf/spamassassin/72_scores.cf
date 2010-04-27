@@ -1,27 +1,46 @@
-score AXB_RCVD_ZOOBSEND              3.577 0.000 3.577 0.000
-score AXB_XTIDX_CHAIN                0.233 3.890 0.233 3.890
-score DOS_PROVISION4                 1.000 0.907 1.000 0.907
-score DOS_REPORT_FIN_INC             1.359 0.929 1.359 0.929
-score DOS_STOCK_CDYV_GENERIC         4.299 4.199 4.299 4.199
-score DOS_STOCK_INCOME_STATEMENT     0.810 0.327 0.810 0.327
-score FB_MED1CAT                     1.363 1.504 1.363 1.504
-score FB_MEDS_PERCENT                0.765 1.000 0.765 1.000
-score FB_WORD1_END_DOLLAR            0.251 0.001 0.251 0.001
-score FH_XMAIL_RND_833               1.065 0.001 1.065 0.001
-score FM_MORTGAGE4PLUS               1.191 2.347 1.191 2.347
-score FS_LOWER_YOUR                  1.655 1.000 1.655 1.000
-score FS_WEIGHT_LOSS                 0.811 1.000 0.811 1.000
-score KAM_LOTTO1                     2.747 2.899 2.747 2.899
-score KAM_LOTTO2                     1.513 1.571 1.513 1.571
-score KAM_LOTTO3                     1.566 0.627 1.566 0.627
-score STOX_RCVD_N_NN_N               4.199 3.971 4.199 3.971
-score TEMPLATE_203_RCVD              1.000 0.000 1.000 0.000
-score TVD_PH_SUBJ_META               1.000 0.000 1.000 0.000
-
-ifplugin Mail::SpamAssassin::Plugin::ReplaceTags
-score FRT_OPPORTUN1                  2.215 1.000 2.215 1.000
-endif
-
-ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
-score OEBOUND                        2.779 0.000 2.779 0.000
-endif
+score AXB_HELO_HOME_UN                      3.899 2.337 3.899 2.337
+score DATE_IN_FUTURE_96_Q                   3.199 2.283 3.199 2.283
+score DATE_IN_FUTURE_Q_PLUS                 0.003 1.264 0.003 1.264
+score DEAR_BENEFICIARY                      2.900 2.699 2.900 2.699
+score DEAR_EMAIL                            0.001 0.482 0.001 0.482
+score DOS_HIGHBIT_HDRS_BODY                 2.601 3.799 2.601 3.799
+score FORGED_TBIRD_IMG_ARROW                3.537 3.651 3.537 3.651
+score FORGED_TBIRD_IMG_SIZE                 2.597 3.504 2.597 3.504
+score FORGED_TBIRD_IMG_TO_MX                1.180 3.915 1.180 3.915
+score FORM_FRAUD_3                          0.000 0.001 0.000 0.001
+score FORM_FRAUD_5                          1.669 3.083 1.669 3.083
+score FROM_41_FREEMAIL                      0.001 0.000 0.001 0.000
+score FROM_MISSP_DYNIP                      1.865 0.805 1.865 0.805
+score FROM_MISSP_FREEMAIL                   3.599 3.399 3.599 3.399
+score FROM_MISSP_MSFT                       0.438 1.648 0.438 1.648
+score FR_TITLE_CONS_6                       2.899 2.578 2.899 2.578
+score FSL_LSPACES_ABUSE                     2.637 3.876 2.637 3.876
+score FS_MORE_CONFIDENT                     3.099 0.419 3.099 0.419
+score HELO_NO_DOMAIN                        2.601 0.001 2.601 0.001
+score HK_FAKENAME_MICROSOFT                 2.799 3.099 2.799 3.099
+score HK_NAME_FREE                          0.700 2.248 0.700 2.248
+score HK_RANDOM_FROM                        2.357 2.941 2.357 2.941
+score HK_SCAM_N2                            1.693 2.999 1.693 2.999
+score IMG_DIRECT_TO_MX                      3.999 0.001 3.999 0.001
+score KHOP_SC_CIDR16                        2.199 0.848 2.199 0.848
+score KHOP_SC_CIDR24                        2.894 2.772 2.894 2.772
+score KHOP_SC_TOP200                        3.999 3.847 3.999 3.847
+score KHOP_SC_TOP_CIDR16                    0.240 3.240 0.240 3.240
+score KHOP_SC_TOP_CIDR8                     2.361 0.001 2.361 0.001
+score LOTTO_AGENT                           3.299 2.799 3.299 2.799
+score MANY_GOOG_PROXY                       2.622 2.315 2.622 2.315
+score MANY_SPAN_IN_TEXT                     0.085 3.144 0.085 3.144
+score MONEY_FRAUD_8                         0.001 0.001 0.001 0.001
+score MONEY_FROM_MISSP                      0.400 0.722 0.400 0.722
+score NSL_RCVD_FROM_41                      3.280 0.000 3.280 0.000
+score NSL_RCVD_FROM_USER                    0.997 0.000 0.997 0.000
+score NSL_RCVD_HELO_USER                    0.001 0.000 0.001 0.000
+score S25R_1                                0.711 0.000 0.711 0.000
+score S25R_6                                3.099 1.521 3.099 1.521
+score SANE_75491b468ec2e117e50f9842d32abfab 2.999 1.729 2.999 1.729
+score STYLE_GIBBERISH                       2.598 3.230 2.598 3.230
+score TAB_IN_FROM                           0.122 0.888 0.122 0.888
+score TINY_FLOAT                            3.599 3.205 3.599 3.205
+score TO_NO_BRKTS_DYNIP                     0.162 0.001 0.162 0.001
+score TVD_PCT_OFF                           2.457 2.167 2.457 2.167
+score TWO_IPS_RCVD                          0.001 1.569 0.001 1.569

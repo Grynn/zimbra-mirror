@@ -63,7 +63,7 @@ describe IP_LINK_PLUS	Dotted-decimal IP address followed by CGI
 # allow ports 80 and 443 which are http and https, respectively
 # we don't want to hit http://www.cnn.com:USArticle1840@www.liquidshirts.com/
 # though, which actually doesn't have a weird port in it.
-uri WEIRD_PORT			m{https?://[^/\s]+?:\d+(?<!:80)(?<!:443)(?<!:8080)(?:/|\s|$)}
+uri WEIRD_PORT			m{https?://[^/?\s]+?:\d+(?<!:80)(?<!:443)(?<!:8080)(?:/|\s|$)}
 describe WEIRD_PORT		Uses non-standard port number for HTTP
 
 # Matt Cline
@@ -101,6 +101,7 @@ describe URI_HEX	URI hostname has long hexadecimal sequence
 
 uri URI_NOVOWEL		m%^https?://[^/?]*[bcdfgjklmnpqrstvwxz]{7}%i
 describe URI_NOVOWEL	URI hostname has long non-vowel sequence
+tflags URI_NOVOWEL      userconf     # lock scores low
 
 uri URI_UNSUBSCRIBE		/\b(?:gone|opened|out)\.php/i
 describe URI_UNSUBSCRIBE	URI contains suspicious unsubscribe link

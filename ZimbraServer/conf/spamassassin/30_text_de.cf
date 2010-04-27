@@ -97,8 +97,6 @@ lang de describe RCVD_IN_XBL Transportiert via Rechner in XBL-Liste (http://www.
 lang de describe DNS_FROM_RFC_DSN Absender in dsn-Liste von www.rfc-ignorant.org
 lang de describe DNS_FROM_RFC_BOGUSMX Absender in bogusmx-Liste von www.rfc-ignorant.org
 lang de describe DNS_FROM_AHBL_RHSBL Absenderadresse in Liste von dnsbl.ahbl.org
-lang de describe RCVD_IN_BSP_TRUSTED Senderechner in Liste von http://www.bondedsender.org/
-lang de describe RCVD_IN_BSP_OTHER Senderechner in Liste von http://www.bondedsender.org/
 lang de describe RCVD_IN_BL_SPAMCOP_NET Transportiert via Rechner in Liste von www.spamcop.net
 lang de describe RCVD_IN_MAPS_RBL Transportiert via Rechner in Liste von http://www.mail-abuse.org/rbl/
 lang de describe RCVD_IN_MAPS_DUL Transportiert via Rechner in Liste von http://www.mail-abuse.org/dul/
@@ -127,11 +125,6 @@ lang de describe DRUGS_SMEAR1 Zwei oder mehr Medikamente in einem Wort
 lang de describe DRUGS_ANXIETY_EREC Erwähnt Medikamente gegen Erektionsstörungen und Angstneurosen
 lang de describe DRUGS_SLEEP_EREC Erwähnt Medikament gegen Erektionsstörungen und Schlafmittel
 lang de describe DRUGS_MANYKINDS Erwähnt mindestens vier Arten von Medikamenten
-lang de describe FAKE_HELO_MSN HELO-Rechnername gehört nicht zu msn.com
-lang de describe FAKE_HELO_MAIL_COM HELO-Rechnername gehört nicht zu mail.com
-lang de describe FAKE_HELO_EMAIL_COM HELO-Rechnername gehört nicht zu email.com
-lang de describe FAKE_HELO_EXCITE HELO-Rechnername gehört nicht zu excite.com
-lang de describe FAKE_HELO_YAHOO_CA HELO-Rechnername gehört nicht zu yahoo.ca
 lang de describe FAKE_HELO_MAIL_COM_DOM HELO-Rechnername verdächtig (mail.com)
 lang de describe HELO_DYNAMIC_IPADDR HELO-Rechnername verdächtig (IP-Adresse 1)
 lang de describe HELO_DYNAMIC_DHCP HELO-Rechnername verdächtig (DHCP)
@@ -190,8 +183,6 @@ lang de describe CONFIRMED_FORGED Gefälschte "Received"-Kopfzeilen
 lang de describe MULTI_FORGED Mehrfach gefälschte "Received"-Kopfzeilen
 lang de describe NONEXISTENT_CHARSET Den angegebenen Zeichensatz gibt es nicht
 lang de describe CHARSET_FARAWAY_HEADER Fremdsprachlicher Zeichensatz in Kopfzeilen benutzt
-lang de describe ROUND_THE_WORLD_LOCAL "Received"-Kopfzeilen belegen Versand rund um die Welt (HELO)
-lang de describe ROUND_THE_WORLD "Received"-Kopfzeilen belegen Versand rund um die Welt (DNS)
 lang de describe MISSING_DATE Datumskopfzeile fehlt
 lang de describe MISSING_HEADERS Empfängeradresse ("To") fehlt
 lang de describe MISSING_SUBJECT Betreff ("Subject") fehlt
@@ -291,7 +282,6 @@ lang de describe NO_MEDICAL Keine medizinischen Examen nötig
 lang de describe DIET_1 Reduzieren Sie Ihr Gewicht
 lang de describe FIN_FREE Finanzielle Unabhängigkeit
 lang de describe FORWARD_LOOKING Enthält Formulierungen aus Aktienprospekten
-lang de describe HG_HORMONE Erwähnt menschliche Wachstumshormone
 lang de describe ONE_TIME Einmaliges Angebot/Gelegenheit
 lang de describe JOIN_MILLIONS Machen Sie es Millionen von Amerikanern nach
 lang de describe MARKETING_PARTNERS Angeblich haben Sie sich bei einem Partnerunternehmen registriert
@@ -322,7 +312,6 @@ lang de describe FORGED_QUALCOMM_TAGS E-Mail-Programm von Qualcomm verwendet die
 lang de describe FORGED_IMS_TAGS Exchange verwendet diese Art HTML nicht
 lang de describe FORGED_OUTLOOK_TAGS Outlook verwendet diese HTML-Markierung nicht
 lang de describe RATWARE_HASH_DASH Enthält Abwehrmaßnahme gegen Anti-Spam-Software ("hashbuster")
-lang de describe RATWARE_GECKO_BUILD Kopfzeilen enthalten gefälschte Hinweise auf Mozilla/Gecko
 lang de describe RATWARE_ZERO_TZ Seltsame Zeitzone (+0000)
 lang de describe X_MESSAGE_INFO Kopfzeile "X-Message-Info"
 lang de describe RATWARE_RCVD_PF Gefälschte "Received"-Kopfzeile von Postfix

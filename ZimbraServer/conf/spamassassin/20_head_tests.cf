@@ -58,8 +58,9 @@ header FROM_NO_USER		From =~ /(?:^\@|<\@| \@[^\)<]*$|<>)/ [if-unset: unset@unset
 describe FROM_NO_USER		From: has no local-part before @ sign
 
 # also 100% valid
-
-header PLING_QUERY		Subject =~ /\?.*!|!.*\?/
+# bug 6149: avoid common .jp false positives
+header __PLING_QUERY		Subject =~ /\?.*!|!.*\?/
+meta PLING_QUERY                (__PLING_QUERY && !__ISO_2022_JP_DELIM)
 describe PLING_QUERY		Subject has exclamation mark and question mark
 
 
@@ -76,8 +77,8 @@ describe MSGID_SPAM_LETTERS	Spam tool Message-Id: (letters variant)
 # negative lookahead exempts this MUA from circa 1997-2000 
 # X-Mailer: Microsoft Outlook Express 4.71.1712.3
 # Message-ID: <01bd45da$2649cdc0$LocalHost@andrew>
-header __MSGID_DOLLARS_OK	MESSAGEID =~ /<[0-9a-f]{4,}\$[0-9a-f]{4,}\$[0-9a-f]{4,}\@\S+>/m
-header __MSGID_DOLLARS_MAYBE	MESSAGEID =~ /<\w{4,}\$\w{4,}\$(?!localhost)\w{4,}\@\S+>/mi
+header __MSGID_DOLLARS_OK	MESSAGEID =~ /<[0-9a-f]{4,}\$[0-9a-f]{4,}\$[0-9a-f]{4,}\@\S+>/
+header __MSGID_DOLLARS_MAYBE	MESSAGEID =~ /<\w{4,}\$\w{4,}\$(?!localhost)\w{4,}\@\S+>/i
 meta MSGID_DOLLARS_RANDOM	__MSGID_DOLLARS_MAYBE && !__MSGID_DOLLARS_OK
 
 # bit of a ratware rule, but catches a bit more than just the one ratware
@@ -122,18 +123,15 @@ describe FORGED_MSGID_YAHOO	Message-ID is forged, (yahoo.com)
 
 ###########################################################################
 
-header __MSGID_BEFORE_RECEIVED	ALL =~ /\nMessage-Id:.*\nReceived:/si
+header __MSGID_BEFORE_RECEIVED	ALL:raw =~ /^Message-Id:.*^Received:/msi
 header __MSGID_BEFORE_OKAY	Message-Id =~ /\@[a-z0-9.-]+\.(?:yahoo|wanadoo)(?:\.[a-z]{2,3}){1,2}>/
-
-# bug 4342: thanks Bob
-header   __FROM_HOTMAIL_COM     From =~ /\@hotmail\.com\b/i
 
 meta MSGID_FROM_MTA_HEADER	(__MSGID_BEFORE_RECEIVED && !__MSGID_BEFORE_OKAY && !__FROM_HOTMAIL_COM)
 describe MSGID_FROM_MTA_HEADER	Message-Id was added by a relay
 
 
 
-header MSGID_SHORT		MESSAGEID =~ /^.{1,15}$|<.{0,4}\@/m
+header MSGID_SHORT		MESSAGEID =~ /^.{1,15}$|<.{0,4}\@/
 describe MSGID_SHORT		Message-ID is unusually short
 
 header MSGID_MULTIPLE_AT	MESSAGEID =~ /<[^>]*\@[^>]*\@/
@@ -147,9 +145,15 @@ describe DATE_SPAMWARE_Y2K	Date header uses unusual Y2K formatting
 # as noted on the dev@ list, ":60" is valid for seconds when there's a leap
 # second (12/31/2005 for instance), so let's accept that as valid.  ISO 8601
 # apparently allows for it.
+# there were a few whitespace issues in the original RE, and I wanted to avoid my
+# two common, but yes invalid, date headers.  specifically / \(GMT\)$/ and
+# / 0000 GMT$/.  dos has / "GMT"$/ - tvd
+# 2.229   2.7267   0.0517    0.981   0.86    0.00  INVALID_DATE
+# 2.263   2.7486   0.1368    0.953   0.78    0.00  INVALID_DATE_OLD
+#
 # WRT the tests, remember that ok and fail are reversed -- so valid dates
 # should be "fail" and invalid dates should be "ok".
-header INVALID_DATE		Date !~ /^\s*(?:(?i:Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s)?\s*(?:[12]\d|3[01]|0?[1-9])\s+(?i:Jan|Feb|Ma[ry]|Apr|Ju[nl]|Aug|Sep|Oct|Nov|Dec)\s+(?:19[7-9]\d|2\d{3})\s+(?:[01]?\d|2[0-3])\:[0-5]\d(?::(?:[0-5]\d|60))?\s+(?:[AP]M\s+)?(?:[+-][0-9]{4}|UT|[A-Z]{2,3}T)(?:\s+\(.*\))?\s*$/ [if-unset: Wed, 31 Jul 2002 16:41:57 +0200]
+header INVALID_DATE		Date !~ /^\s*(?:(?i:Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s)?\s*(?:[12]\d|3[01]|0?[1-9])\s+(?i:Jan|Feb|Ma[ry]|Apr|Ju[nl]|Aug|Sep|Oct|Nov|Dec)\s+(?:19[7-9]\d|2\d{3})\s+(?:[01]?\d|2[0-3])\:[0-5]\d(?::(?:[0-5]\d|60))?(?:\s+[AP]M)?(?:\s+(?:[+-][0-9]{4}|UT|[A-Z]{2,3}T|0000 GMT|"GMT"))?(?:\s*\(.*\))?\s*$/ [if-unset: Wed, 31 Jul 2002 16:41:57 +0200]
 describe INVALID_DATE		Invalid Date: header (not RFC 2822)
 test INVALID_DATE fail    Sat, 31 Dec 2005 23:59:60 -0500
 test INVALID_DATE fail    Wed, 31 Jul 2002 16:41:57 +0200
@@ -158,13 +162,13 @@ test INVALID_DATE ok      Sat, 31 Dec 2005 23:00:00
 test INVALID_DATE ok      Thurs, 31 Jul 2002 16:41:57 +0200
 
 # allow +1300, NZ timezone
-header INVALID_DATE_TZ_ABSURD	Date =~ /[-+](?:1[4-9]\d\d|[2-9]\d\d\d)$/
+header INVALID_DATE_TZ_ABSURD	Date =~ /[-+](?!(?:0\d|1[0-4])(?:[03]0|[14]5))\d{4}$/
 describe INVALID_DATE_TZ_ABSURD	Invalid Date: header (timezone does not exist)
 
-header INVALID_TZ_CST		ALL =~ /[+-]\d\d[30]0(?<!-0600|-0500|\+0800|\+0930|\+1030)\s+(?:\bCST\b|\(CST\))/
+header INVALID_TZ_CST		ALL:raw =~ /[+-]\d\d[30]0(?<!-0600|-0500|\+0800|\+0930|\+1030)\s+(?:\bCST\b|\(CST\))/
 describe INVALID_TZ_CST		Invalid date in header (wrong CST timezone)
 
-header INVALID_TZ_EST		ALL =~ /[+-]\d\d[30]0(?<!-0500|-0300|\+1000|\+1100)\s+(?:\bEST\b|\(EST\))/
+header INVALID_TZ_EST		ALL:raw =~ /[+-]\d\d[30]0(?<!-0500|-0300|\+1000|\+1100)\s+(?:\bEST\b|\(EST\))/
 describe INVALID_TZ_EST		Invalid date in header (wrong EST timezone)
 
 
@@ -254,17 +258,21 @@ describe MULTI_FORGED		Received headers indicate multiple forgeries
 header NONEXISTENT_CHARSET	Content-Type =~ /charset=.?DEFAULT/
 describe NONEXISTENT_CHARSET	Character set doesn't exist
 
-header MISSING_MID              Message-Id =~ /^UNSET$/ [if-unset: UNSET]
+header __HAS_MESSAGE_ID		exists:Message-Id
+meta MISSING_MID		!__HAS_MESSAGE_ID
 describe MISSING_MID            Missing Message-Id: header
 
-header MISSING_DATE             Date =~ /^UNSET$/ [if-unset: UNSET]
+header __HAS_DATE		exists:Date
+meta MISSING_DATE		!__HAS_DATE
 describe MISSING_DATE           Missing Date: header
 
 header __HAS_SUBJECT		exists:Subject
 meta MISSING_SUBJECT		!__HAS_SUBJECT
 describe MISSING_SUBJECT	Missing Subject: header
 
-header GAPPY_SUBJECT		Subject =~ /\b(?:[a-z]([-_. =~\/:,*!\@\#\$\%\^&+;\"\'<>\\])\1{0,2}){4}/i
+# bug 6149: avoid common .jp false positives
+header __GAPPY_SUBJECT		Subject =~ /\b(?:[a-z]([-_. =~\/:,*!\@\#\$\%\^&+;\"\'<>\\])\1{0,2}){4}/i
+meta GAPPY_SUBJECT              (__GAPPY_SUBJECT && !__ISO_2022_JP_DELIM)
 describe GAPPY_SUBJECT		Subject: contains G.a.p.p.y-T.e.x.t
 
 ### header existence tests (description is added automatically)
@@ -361,22 +369,24 @@ describe SUBJ_BUY               Subject line starts with Buy or Buying
 header RCVD_AM_PM		Received =~ /; [A-Z][a-z][a-z], \d{1,2} \d{4} \d{1,2}:\d\d:\d\d [AP]M [+-]\d{4}/
 describe RCVD_AM_PM		Received headers forged (AM/PM)
 
-header __USER_AGENT_MSN             X-Mailer =~ /^MSN Explorer /
+header __USER_AGENT_MSN		X-Mailer =~ /^MSN Explorer /
 
 # host no longer exists according to administrator
 header FAKE_OUTBLAZE_RCVD	Received =~ /\.mr\.outblaze\.com/
 describe FAKE_OUTBLAZE_RCVD	Received header contains faked 'mr.outblaze.com'
 
 
-# thanks to David Ritz for passing this on; ready for post-3.0.0
+# thanks to David Ritz for passing this on
 header UNCLOSED_BRACKET		ALL =~ /\[\d+\r?\n/s
 describe UNCLOSED_BRACKET	Headers contain an unclosed bracket
 
 header FROM_DOMAIN_NOVOWEL	From =~ /\@\S*[bcdfgjklmnpqrstvwxz]{7}/i
 describe FROM_DOMAIN_NOVOWEL	From: domain has series of non-vowel letters
+tflags FROM_DOMAIN_NOVOWEL userconf     # lock scores low
 
 header FROM_LOCAL_NOVOWEL	From =~ /[bcdfgjklmnpqrstvwxz]{7}\S*\@/i
 describe FROM_LOCAL_NOVOWEL	From: localpart has series of non-vowel letters
+tflags FROM_LOCAL_NOVOWEL userconf     # lock scores low
 
 header FROM_LOCAL_HEX		From =~ /[0-9a-f]{11}\S*\@/i
 describe FROM_LOCAL_HEX		From: localpart has long hexadecimal sequence
@@ -386,14 +396,29 @@ describe FROM_LOCAL_DIGITS	From: localpart has long digit sequence
 
 header __TOCC_EXISTS		exists:ToCc
 
-header X_PRIORITY_CC		ALL =~ /\nX-Priority:[^\n]{0,80}\nCc:/si
+header X_PRIORITY_CC		ALL:raw =~ /^X-Priority:[^\n]{0,80}^Cc:/msi
 describe X_PRIORITY_CC		Cc: after X-Priority: (bulk email fingerprint)
 
 # catch non-RFC2047 compliant messages
 # Apple Mail has a bug where headers will have whitespace around the encoded
 # text, so try to ignore that
-header BAD_ENC_HEADER		ALL =~ /=\?[^?\s]+\?[^?\s]\?\s*[^?]+\s(?!\?=)/
+header BAD_ENC_HEADER		ALL:raw =~ /=\?[^?\s]+\?[^?\s]\?\s*[^?]+\s(?!\?=)/
 describe BAD_ENC_HEADER		Message has bad MIME encoding in the header
+
+
+header __ML1  Precedence =~ m{\b(list|bulk)\b}i
+header __ML2  exists:List-Id
+header __ML3  exists:List-Post
+header __ML4  exists:Mailing-List
+header __ML5  Return-Path:addr =~ m{^([^\@]+-(request|bounces|admin|owner)|owner-[^\@]+)(\@|\z)}i
+meta     __VIA_ML  __ML1 || __ML2 || __ML3 || __ML4 || __ML5
+describe __VIA_ML  Mail from a mailing list
+
+
+# must keep it in sync with http://www.iana.org/assignments/ipv4-address-space/
+header RCVD_ILLEGAL_IP		X-Spam-Relays-Untrusted =~ / (?:by|ip)=(?:[057]|22[4-9]|2[3-9]\d|[12]\d{3,}|[3-9]\d\d+)\.\d+\.\d+\.\d+ /
+describe RCVD_ILLEGAL_IP	Received: contains illegal IP address
+
 
 ###########################################################################
 
@@ -411,7 +436,8 @@ tflags CHARSET_FARAWAY_HEADER	userconf
 # might want to exempt users using languages that don't use Latin
 # alphabets, but do it in the eval
 
-header SUBJ_ILLEGAL_CHARS	eval:check_illegal_chars('Subject','0.00','2')
+header __SUBJ_ILLEGAL_CHARS	eval:check_illegal_chars('Subject','0.00','2')
+meta SUBJ_ILLEGAL_CHARS         (__SUBJ_ILLEGAL_CHARS && !__FROM_YAHOO_COM)
 describe SUBJ_ILLEGAL_CHARS	Subject: has too many raw illegal characters
 
 header FROM_ILLEGAL_CHARS	eval:check_illegal_chars('From','0.20','2')
@@ -449,10 +475,6 @@ describe SUSPICIOUS_RECIPS	Similar addresses in recipient list
 header MISSING_HEADERS		eval:check_for_missing_to_header()
 describe MISSING_HEADERS	Missing To: header
 
-# this variant is local, using the Received hdr itself...
-header ROUND_THE_WORLD_LOCAL	eval:check_for_round_the_world_received_helo()
-describe ROUND_THE_WORLD_LOCAL	Received: says mail sent around the world (HELO)
-
 header DATE_IN_PAST_03_06	eval:check_for_shifted_date('-6', '-3')
 describe DATE_IN_PAST_03_06	Date: is 3 to 6 hours before Received: date
 
@@ -484,7 +506,8 @@ describe DATE_IN_FUTURE_24_48	Date: is 24 to 48 hours after Received: date
 header DATE_IN_FUTURE_48_96	eval:check_for_shifted_date('48', '96')
 describe DATE_IN_FUTURE_48_96	Date: is 48 to 96 hours after Received: date
 
-header DATE_IN_FUTURE_96_XX	eval:check_for_shifted_date('96', 'undef')
+#header DATE_IN_FUTURE_96_XX	eval:check_for_shifted_date('96', 'undef')
+meta DATE_IN_FUTURE_96_XX 	(0)
 describe DATE_IN_FUTURE_96_XX	Date: is 96 hours or more after Received: date
 
 header UNRESOLVED_TEMPLATE	eval:check_unresolved_template()
@@ -535,9 +558,6 @@ describe RCVD_HELO_IP_MISMATCH	Received: HELO and IP do not match, but should
 
 header RCVD_NUMERIC_HELO	eval:check_for_numeric_helo()
 describe RCVD_NUMERIC_HELO	Received: contains an IP address used for HELO
-
-header RCVD_ILLEGAL_IP		eval:check_for_illegal_ip()
-describe RCVD_ILLEGAL_IP	Received: contains illegal IP address
 
 # not used directly right now due to FPs; but CONFIRMED_FORGED turns it
 # into a 1.0 S/O rule anyway, so that's not a problem ;)

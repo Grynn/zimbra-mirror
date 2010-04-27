@@ -81,18 +81,11 @@ lang nl describe RCVD_IN_SORBS_ZOMBIE            SORBS: verzender is een gekaapt
 lang nl describe RCVD_IN_SORBS_DUL               SORBS: bericht is direct verstuurd vanaf een dynamisch IP adres
 lang nl describe RCVD_IN_SBL                     Ontvangen via een relay die gevonden is in Spamhaus SBL
 lang nl describe RCVD_IN_XBL                     Ontvangen via een relay die gevonden is in Spamhaus XBL
-lang nl describe RCVD_IN_BSP_TRUSTED             Verzender is opgenomen in het Bonded Sender Program (trusted relay)
-lang nl describe RCVD_IN_BSP_OTHER               Verzender is opgenomen in het Bonded Sender Program (other relay)
 lang nl describe RCVD_IN_BL_SPAMCOP_NET          Ontvangen via een relay die gevonden is in bl.spamcop.net
 lang nl describe RCVD_IN_MAPS_RBL                Relay in RBL, http://www.mail-abuse.org/rbl/
 lang nl describe RCVD_IN_MAPS_DUL                Relay in DUL, http://www.mail-abuse.org/dul/
 lang nl describe RCVD_IN_MAPS_RSS                Relay in RSS, http://www.mail-abuse.org/rss/
 lang nl describe RCVD_IN_MAPS_NML                Relay in NML, http://www.mail-abuse.org/nml/
-lang nl describe FAKE_HELO_MSN                   Host HELO komt niet overeen met rDNS: msn.com
-lang nl describe FAKE_HELO_MAIL_COM              Host HELO komt niet overeen met rDNS: mail.com
-lang nl describe FAKE_HELO_EMAIL_COM             Host HELO komt niet overeen met rDNS: email.com
-lang nl describe FAKE_HELO_EXCITE                Host HELO komt niet overeen met rDNS: excite.com
-lang nl describe FAKE_HELO_YAHOO_CA              Host HELO komt niet overeen met rDNS: yahoo.ca
 lang nl describe FROM_STARTS_WITH_NUMS           Van: begint met nummers
 lang nl describe FROM_OFFERS                     Van: adres is van "at iets-aangeboden"
 lang nl describe FROM_NO_USER                    Van: heeft geen lokaal deel voor het @-tje
@@ -132,8 +125,6 @@ lang nl describe CONFIRMED_FORGED                Received headers zijn vervalst
 lang nl describe MULTI_FORGED                    Received headers wijzen op meerdere vervalsingen
 lang nl describe NONEXISTENT_CHARSET             Karakterset bestaat niet
 lang nl describe CHARSET_FARAWAY_HEADER          Een buitenlandse taal wordt gebruikt in de headers
-lang nl describe ROUND_THE_WORLD_LOCAL           Received: geeft aan dat de mail de hele wereld rond is gestuurd (HELO)
-lang nl describe ROUND_THE_WORLD                 Received: geeft aan dat de mail de hele wereld rond is gestuurd (DNS)
 lang nl describe MISSING_HEADERS                 Ontbrekende Aan: header
 lang nl describe SUSPICIOUS_RECIPS               Vergelijkbare adressen in de ontvangerslijst
 lang nl describe SORTED_RECIPS                   Ontvangerslijst is gesorteerd op alfabet
@@ -215,7 +206,6 @@ lang nl describe REFINANCE_YOUR_HOME             Hyphoteek oversluiten
 lang nl describe REFINANCE_NOW                   Hyphoteek oversluiten
 lang nl describe NO_MEDICAL                      Geen medische keuring
 lang nl describe FORWARD_LOOKING                 Aandelen waarschuwing
-lang nl describe HG_HORMONE                      Heeft het over groeihormomen
 lang nl describe ONE_TIME                        Eenmalige afzettingspraktijk
 lang nl describe JOIN_MILLIONS                   Voeg je bij miljoenen Amerikanen
 lang nl describe ONLINE_PHARMACY                 Online apotheek
@@ -244,7 +234,6 @@ lang nl describe FORGED_QUALCOMM_TAGS            QUALCOMM email programma's vers
 lang nl describe FORGED_IMS_TAGS                 IMS email programma's versturen geen HTML zoals deze
 lang nl describe FORGED_OUTLOOK_TAGS             Outlook verstuurt geen HTML zoals deze
 lang nl describe RATWARE_HASH_DASH               Bevat een hashbuster in Send-Safe opmaak
-lang nl describe RATWARE_GECKO_BUILD             Bulk email signatuur (vervalste Gecko) gevonden
 lang nl describe NUMERIC_HTTP_ADDR               Gebruikt een numeriek IP adres in een URL
 lang nl describe HTTP_ESCAPED_HOST               Gebruikt %-escapes in de hostname van een URL
 lang nl describe HTTP_EXCESSIVE_ESCAPES          Volkomen overbodige %-escapes in een URL

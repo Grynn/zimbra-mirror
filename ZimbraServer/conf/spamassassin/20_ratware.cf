@@ -45,6 +45,22 @@ describe RATWARE_MPOP_WEBMAIL	Bulk email fingerprint (mPOP Web-Mail)
 #
 # NOTE: these rules should specify version numbers!
 
+# first define situations where servers rewrite message id so we can't use message id to detect forgeries
+
+header __HOTMAIL_BAYDAV_MSGID		MESSAGEID =~ /^<[A-Z]{3}\d+-(?:DAV|SMTP)\d+[A-Z0-9]{25}\@phx\.gbl>$/m
+
+header __IPLANET_MESSAGING_SERVER Received =~ /iPlanet Messaging Server/
+
+header __LYRIS_EZLM_REMAILER  List-Unsubscribe =~ /<mailto:(?:leave-\S+|\S+-unsubscribe)\@\S+>$/
+
+header __SYMPATICO_MSGID		MESSAGEID =~ /^<BAYC\d+-PASMTP\d+[A-Z0-9]{25}\@CEZ\.ICE>$/m
+
+header __WACKY_SENDMAIL_VERSION Received =~ /\/CWT\/DCE\)/
+
+meta __UNUSABLE_MSGID (__LYRIS_EZLM_REMAILER || __GATED_THROUGH_RCVD_REMOVER || __WACKY_SENDMAIL_VERSION || __IPLANET_MESSAGING_SERVER || __HOTMAIL_BAYDAV_MSGID || __SYMPATICO_MSGID)
+
+## now on to the forgery rules
+
 # AOL
 header __AOL_MUA		X-Mailer =~ /\bAOL\b/
 
@@ -61,9 +77,7 @@ header __VISTA_MSGID		MESSAGEID =~ /^<[A-F\d]{32}\@\S+>$/m
 header __OE_MUA			X-Mailer =~ /\bOutlook Express [456]\./
 header __OE_MSGID_1		MESSAGEID =~ /^<[A-Za-z0-9-]{7}[A-Za-z0-9]{20}\@hotmail\.com>$/m
 header __OE_MSGID_2		MESSAGEID =~ /^<(?:[0-9a-f]{8}|[0-9a-f]{12})\$[0-9a-f]{8}\$[0-9a-f]{8}\@\S+>$/m
-header __HOTMAIL_BAYDAV_MSGID         MESSAGEID =~ /^<[A-Z]{3}\d+-(?:DAV|SMTP)\d+[A-Z0-9]{25}\@phx\.gbl>$/m
-header __OE_MSGID_4		MESSAGEID =~ /^<BAYC\d+-PASMTP\d+[A-Z0-9]{25}\@CEZ\.ICE>$/m
-meta __FORGED_OE		(__OE_MUA && !__OE_MSGID_1 && !__OE_MSGID_2 && !__HOTMAIL_BAYDAV_MSGID && !__OE_MSGID_4 && !__UNUSABLE_MSGID)
+meta __FORGED_OE		(__OE_MUA && !__OE_MSGID_1 && !__OE_MSGID_2 && !__UNUSABLE_MSGID)
 
 # Outlook versions that usually use "dollar signs"
 header __OUTLOOK_DOLLARS_MUA	X-Mailer =~ /^Microsoft Outlook(?: 8| CWS, Build 9|, Build 10)\./
@@ -81,7 +95,7 @@ describe FORGED_MUA_OUTLOOK	Forged mail pretending to be from MS Outlook
 
 # Outlook IMO (Internet Mail Only)
 header __OIMO_MUA		X-Mailer =~ /Outlook IMO/
-header __OIMO_MSGID		MESSAGEID =~ /^<[A-P]{26}A[ABC]\.[-\w.]+\@\S+>$/m
+header __OIMO_MSGID		MESSAGEID =~ /^<[A-P]{28}\.[-\w.]+\@\S+>$/m
 meta FORGED_MUA_OIMO		(__OIMO_MUA && !__OIMO_MSGID && !__OE_MSGID_2 && !__UNUSABLE_MSGID)
 describe FORGED_MUA_OIMO	Forged mail pretending to be from MS Outlook IMO
 
@@ -100,16 +114,16 @@ meta FORGED_MUA_EUDORA          (__EUDORA_MUA && !__EUDORA_MSGID && !__UNUSABLE_
 describe FORGED_MUA_EUDORA	Forged mail pretending to be from Eudora
   
 # From private mail with developers.  Some top tips here!
-header __THEBAT_MUA		X-Mailer =~ /The Bat!/
+header __THEBAT_MUA		X-Mailer =~ /^The Bat!/
 header __THEBAT_MUA_V1		X-Mailer =~ /^The Bat! \(v1\./
 #header __THEBAT_MUA_V2		X-Mailer =~ /^The Bat! \(v2\./
 #header __THEBAT_MUA_V3		X-Mailer =~ /^The Bat! \(v3\./
 header __CTYPE_CHARSET_QUOTED	Content-Type =~ /charset=\"/i
 header __CTYPE_HAS_BOUNDARY	Content-Type =~ /boundary/i
-header __BAT_BOUNDARY		Content-Type =~ /boundary=\"?-{10}/
+header __BAT_BOUNDARY		Content-Type =~ /boundary=\"-{10}[A-F0-9]{4,}\"/
 header __MAILMAN_21             X-Mailman-Version =~ /\d/
-meta FORGED_MUA_THEBAT_CS	(__THEBAT_MUA && __CTYPE_CHARSET_QUOTED)
-meta FORGED_MUA_THEBAT_BOUN     (__THEBAT_MUA_V1 && __CTYPE_HAS_BOUNDARY && !__BAT_BOUNDARY && !__MAILMAN_21)
+meta FORGED_MUA_THEBAT_CS	(__THEBAT_MUA && __CTYPE_CHARSET_QUOTED && !__MAILMAN_21)
+meta FORGED_MUA_THEBAT_BOUN     (__THEBAT_MUA && __CTYPE_HAS_BOUNDARY && !__BAT_BOUNDARY && !__MAILMAN_21)
 describe FORGED_MUA_THEBAT_CS	Mail pretending to be from The Bat! (charset)
 describe FORGED_MUA_THEBAT_BOUN Mail pretending to be from The Bat! (boundary)
 
@@ -129,11 +143,6 @@ describe FORGED_IMS_HTML	IMS can't send HTML message only
 
 meta FORGED_THEBAT_HTML		(__THEBAT_MUA_V1 && MIME_HTML_ONLY)
 describe FORGED_THEBAT_HTML	The Bat! can't send HTML message only
-
-# bug 2513
-header __REPTO_OVERQUOTE	Reply-To =~ /"[\w. -]+"\s*\</
-meta REPTO_OVERQUOTE_THEBAT	__REPTO_OVERQUOTE && __THEBAT_MUA
-describe REPTO_OVERQUOTE_THEBAT	The Bat! doesn't do quoting like this
 
 # bug 2513
 header __REPTO_QUOTE		Reply-To =~ /".*"\s*\</
@@ -171,7 +180,7 @@ meta __USER_AGENT_APPLEMAIL	!__CTYPE_HTML && __X_MAILER_APPLEMAIL && (__MSGID_AP
 # some useful meta rule sub-elements
 header __CTYPE_HTML		Content-Type =~ /text\/html/i
 header __ANY_IMS_MUA		X-Mailer =~ /^Internet Mail Service\b/
-header __ANY_OUTLOOK_MUA	X-Mailer =~ /^Microsoft Outlook\b/
+header __ANY_OUTLOOK_MUA	X-Mailer =~ /^Microsoft (?:Office )?Outlook\b/
 
 header __ANY_QUALCOMM_MUA       X-Mailer =~ /\bQUALCOMM\b/
 meta FORGED_QUALCOMM_TAGS	(__ANY_QUALCOMM_MUA && __MIME_HTML && !__TAG_EXISTS_HTML)
@@ -196,13 +205,6 @@ describe FORGED_OUTLOOK_TAGS	Outlook can't send HTML in this format
 # http://groups.google.com/groups?selm=atp1ip0n22%40enews3.newsguy.com
 rawbody RATWARE_HASH_DASH	/[a-z\d]-[a-z\d]{16}-[a-z\d]{1,16}(?-i:l)\d/i
 describe RATWARE_HASH_DASH	Contains a hashbuster in Send-Safe format
-
-# spammer tool, sometimes has "netIP with HTTP;" in Received: header
-
-# this is really badly faked.  Also the spammer who uses "25250101"
-# for the build is a total hippie.
-header RATWARE_GECKO_BUILD	User-Agent =~ /Gecko\/(?!200\d\d\d\d\d)\d/
-describe RATWARE_GECKO_BUILD	Bulk email fingerprint (Gecko faked) found
 
 ########################################################################
 # Most ratware uses message templates I would guess.
@@ -251,7 +253,7 @@ describe X_MESSAGE_INFO		Bulk email fingerprint (X-Message-Info) found
 
 # case-sensitive rule
 # only significant rules with no FPs, hit recently, on 2+ corpuses
-header HEADER_SPAM		ALL =~ /^(Alternate-Recipient|Antivirus|Approved|Delivery-Notification|Disclose-Recipients|Error-path|Language|Location|Mime-Subversion|Newsletter-ID|PID|Rot|UID|X-BounceTrace|X-CS-IP|X-Company-Address|X-Company-City|X-Company-Country|X-Company-State|X-Company-Zip|X-E(?:[Mm]ail)?|X-Encoding|X-Originating-Company|X-RMD-Text|X-SG4|X-SP-Track-ID|X-Webmail-Time|X-bounce-to):/m
+header HEADER_SPAM		ALL:raw =~ /^(Alternate-Recipient|Antivirus|Approved|Delivery-Notification|Disclose-Recipients|Error-path|Language|Location|Mime-Subversion|Newsletter-ID|PID|Rot|UID|X-BounceTrace|X-CS-IP|X-Company-Address|X-Company-City|X-Company-Country|X-Company-State|X-Company-Zip|X-E(?:[Mm]ail)?|X-Encoding|X-Originating-Company|X-RMD-Text|X-SG4|X-SP-Track-ID|X-Webmail-Time|X-bounce-to):/m
 describe HEADER_SPAM		Bulk email fingerprint (header-based) found
 
 header RATWARE_RCVD_PF		Received =~ / \(Postfix\) with ESMTP id [^;]+\; \S+ \d+ \S+ \d+ \d+:\d+:\d+ \S+$/s
@@ -275,10 +277,7 @@ describe RATWARE_MS_HASH	Bulk email fingerprint (msgid ms hash) found
 
 ifplugin Mail::SpamAssassin::Plugin::HeaderEval
 
-# Dec 17 2002 jm: this means "message ID is either too old or has been
-# rewritten by a gateway".  Made into an eval test since meta tests cannot
-# (yet) chain from other meta tests.
-header __UNUSABLE_MSGID		eval:check_messageid_not_usable()
+header __GATED_THROUGH_RCVD_REMOVER  eval:gated_through_received_hdr_remover()
 
 header __RATWARE_NAME_ID	eval:check_ratware_name_id()
 meta RATWARE_NAME_ID		__RATWARE_0_TZ_DATE && __RATWARE_NAME_ID

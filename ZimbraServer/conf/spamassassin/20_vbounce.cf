@@ -62,15 +62,15 @@ endif
 # ---------------------------------------------------------------------------
 # General bounce messages
 
-header __BOUNCE_FROM_DAEMON   From =~ /(?:(?:daemon|deamon|majordomo|postmaster|automated-response|mailadmin|mailmaster|surfcontrol|You_Got_Spammed|SMTP.gateway)\@|(?:virus|scanner)\S*\@|<>)/i
+header __BOUNCE_FROM_DAEMON   From =~ /(?:^(?:mail\S+daemon|d[ae][ae]mon|majordomo|postmaster|automated-response|mailadmin|mailmaster|surfcontrol|You_Got_Spammed|SMTP.gateway)\@|scanner\S*\@|<>)/i
 
 header __BOUNCE_RPATH_NULL    Return-Path =~ /<>/
+header __BOUNCE_READ_NOTIFICATION   Subject =~ /^Read: /
 
 header __BOUNCE_RPATH_MD      Return-Path =~ /(?:mailer-(?:daemon|deamon)|quotaagent|pleaseforward|autoresponder|autoresponse-\S+|devnull\S*)\@/i
 
-# __AUTO_GEN_AS can appear in non-bounce mails with __XM_VBULLETIN,
+# can appear in non-bounce mails with __XM_VBULLETIN,
 # or with X-Cron-Env headers, so exclude those cases
-header __AUTO_GEN_AS    Auto-Submitted =~ /auto-(?:generated|replied)/
 header __XM_VBULLETIN   X-Mailer =~ /^vBulletin Mail/
 header __X_CRON_ENV     X-Cron-Env =~ /^</
 
@@ -81,7 +81,7 @@ header __AUTO_GEN_3     X-MailScanner =~ /generated/
 header __AUTO_GEN_4     X-Mailer =~ /autoresponder/i
 header __AUTO_GEN_XXSP  X-XSP-Msgclass =~ /NOTIFICATION/
 header __AUTO_GEN_PREC  Precedence =~ /auto/
-meta __BOUNCE_AUTO_GENERATED     ((__AUTO_GEN_AS||__AUTO_GEN_MS||__AUTO_GEN_3||__AUTO_GEN_4||__AUTO_GEN_AG||__AUTO_GEN_XXSP ||__AUTO_GEN_CM||__AUTO_GEN_PREC) && !__XM_VBULLETIN && !__X_CRON_ENV)
+meta __BOUNCE_AUTO_GENERATED     ((__AUTO_GEN_MS||__AUTO_GEN_3||__AUTO_GEN_4||__AUTO_GEN_AG||__AUTO_GEN_XXSP ||__AUTO_GEN_CM||__AUTO_GEN_PREC) && !__XM_VBULLETIN && !__X_CRON_ENV)
 
 header __BOUNCE_Y_AUTOGEN     Subject =~ /^Yahoo! Auto Response/
 header __BOUNCE_SYMANTEC      Subject =~ /^Returned mail.{0,5}(?:Error During Delivery|see transcript for details|)$/i
@@ -92,7 +92,6 @@ header   __BOUNCE_MSGDELFAIL Subject =~ /^Message Delivery Failure/
 body     __BOUNCE_ESMTP /^This messages was created automatically by mail delivery software/
 # JM: prev versions used "automaticly", that was a typo
 
-body  __BOUNCE_OOO_1      /\bI(?:.m| am| will be|.ll be) (?:(?:out of|away from) the office|on vacation) (?:from|to|until|after)\b/i
 body  __BOUNCE_OOO_2  /\bI ?.m away until .{10,20} and am unable to read your message\b/
 body  __BOUNCE_OOO_3  /\bI am currently out of the office\b/
 header __BOUNCE_OOO_H1   Subject =~ /^Mensaje de respuesta autom.tica/
@@ -120,6 +119,9 @@ header __BOUNCE_DEL_FAIL Subject =~ /^DELIVERY FAILURE/i
 header __BOUNCE_MAIL_DEL_FAIL Subject =~ /^Mail Delivery Failure$/
 
 header __NONBOUNCE_READ_RECEIPT_CTYPE Content-Type =~ /\breport-type=disposition-notification\b/
+# bug 6051, some bounces *do* use that ctype
+header __YESBOUNCE_AUTO_REPLIED_REJ  Auto-Submitted =~ /^auto-replied \(rejected\)/
+meta __NONBOUNCE_READ_RECEIPT   (__NONBOUNCE_READ_RECEIPT_CTYPE && !__YESBOUNCE_AUTO_REPLIED_REJ)
 
 # Return-path: <delete@errmail.kagoya.net>
 # 'Invalid e-mail address.'
@@ -134,8 +136,7 @@ body __BOUNCE_NO_RESEND  /\bPlease do not resend your original message\./
 
 header   __BOUNCE_AUTO_REPLY Subject =~ /\b(automatic reply|AutoReply)\b/
 
-
-meta BOUNCE_MESSAGE         __HAVE_BOUNCE_RELAYS && (!__MY_SERVERS_FOUND && !__NONBOUNCE_READ_RECEIPT_CTYPE && (__BOUNCE_FROM_DAEMON || __BOUNCE_RPATH_NULL || __BOUNCE_RPATH_MD || __BOUNCE_AUTO_GENERATED || __BOUNCE_Y_AUTOGEN || __BOUNCE_SYMANTEC || __BOUNCE_X_ERR_STAT || __BOUNCE_RETURNED || __BOUNCE_MAILDELFAIL || __BOUNCE_MSGDELFAIL || __BOUNCE_ESMTP || __BOUNCE_OOO_1 || __BOUNCE_OOO_2 || __BOUNCE_NEVER_SEE || __BOUNCE_NONWORKING || __BOUNCE_UNDELIVERABLE || __BOUNCE_UNDELIVERABLE_ML || __BOUNCE_NOTDEL || __BOUNCE_CTYPE || __BOUNCE_DEL_FAIL || __BOUNCE_STAT_FAIL || __BOUNCE_ADDR_ERR || __BOUNCE_NO_VAL || __BOUNCE_DATA_FORMAT || __BOUNCE_COULD_NOT || __BOUNCE_UNDEL_MSG || __BOUNCE_OOO_H1 || __BOUNCE_OOO_H2 || __BOUNCE_OOO_H3 || __BOUNCE_RPATH_ERRMAIL || __BOUNCE_OOO_3 || __BOUNCE_INTERSCAN || __BOUNCE_ETRUST || __BOUNCE_AUTO_RESPONSE || __BOUNCE_AUTO_RESPOND || __BOUNCE_NO_RESEND || __BOUNCE_NOTIF || __BOUNCE_RET_MAIL || __BOUNCE_DEL_FAIL || __BOUNCE_MAIL_DEL_FAIL || __BOUNCE_AUTO_REPLY))
+meta BOUNCE_MESSAGE         __HAVE_BOUNCE_RELAYS && (!__MY_SERVERS_FOUND && !ALL_TRUSTED && !__NONBOUNCE_READ_RECEIPT && (__BOUNCE_FROM_DAEMON || (__BOUNCE_RPATH_NULL && !__BOUNCE_READ_NOTIFICATION) || __BOUNCE_RPATH_MD || __BOUNCE_AUTO_GENERATED || __BOUNCE_Y_AUTOGEN || __BOUNCE_SYMANTEC || __BOUNCE_X_ERR_STAT || __BOUNCE_RETURNED || __BOUNCE_MAILDELFAIL || __BOUNCE_MSGDELFAIL || __BOUNCE_ESMTP || __BOUNCE_OOO_2 || __BOUNCE_NEVER_SEE || __BOUNCE_NONWORKING || __BOUNCE_UNDELIVERABLE || __BOUNCE_UNDELIVERABLE_ML || __BOUNCE_NOTDEL || __BOUNCE_CTYPE || __BOUNCE_DEL_FAIL || __BOUNCE_STAT_FAIL || __BOUNCE_ADDR_ERR || __BOUNCE_NO_VAL || __BOUNCE_DATA_FORMAT || __BOUNCE_COULD_NOT || __BOUNCE_UNDEL_MSG || __BOUNCE_OOO_H1 || __BOUNCE_OOO_H2 || __BOUNCE_OOO_H3 || __BOUNCE_RPATH_ERRMAIL || __BOUNCE_OOO_3 || __BOUNCE_INTERSCAN || __BOUNCE_ETRUST || __BOUNCE_AUTO_RESPONSE || __BOUNCE_AUTO_RESPOND || __BOUNCE_NO_RESEND || __BOUNCE_NOTIF || __BOUNCE_RET_MAIL || __BOUNCE_DEL_FAIL || __BOUNCE_MAIL_DEL_FAIL || __BOUNCE_AUTO_REPLY))
 
 describe BOUNCE_MESSAGE     MTA bounce message
 
@@ -152,6 +153,8 @@ header __CRBOUNCE_QURB    Subject =~ /\[Qurb .\d+\]$/
 uri __CRBOUNCE_0SPAM1    /^http:\/\/www\.0spam\.com\/v/
 header __CRBOUNCE_0SPAM2 From:addr =~ /^verify\@0spam.com$/
 meta __CRBOUNCE_0SPAM    (__CRBOUNCE_0SPAM1 && __CRBOUNCE_0SPAM2)
+
+header __CRBOUNCE_SPAMARREST exists:X-Spamarrest-noauth
 
 # http://mailinblack.com , a French C/R system with no other reliable
 # signatures.  annoying!
@@ -182,7 +185,7 @@ header __CRBOUNCE_EXI   X-ExiSpam =~ /ExiSpam/
 header __CRBOUNCE_UNVERIF   Subject =~ /^Unverified email to /
 header __CRBOUNCE_BLOCKED   Subject =~ /^\*\*Message you sent blocked by our bulk email filter\*\*$/
 
-meta __CHALLENGE_RESPONSE     __CRBOUNCE_UOL || __CRBOUNCE_VERIF || __CRBOUNCE_RP || __CRBOUNCE_VANQ || __CRBOUNCE_HEADER || __CRBOUNCE_QURB || __CRBOUNCE_0SPAM || __CRBOUNCE_GETRESP || __CRBOUNCE_TMDA || __CRBOUNCE_ASK || __CRBOUNCE_EXI || __CRBOUNCE_PREC_SPAM || __CRBOUNCE_SZ || __CRBOUNCE_SPAMLION || __CRBOUNCE_MIB || __CRBOUNCE_SI || __CRBOUNCE_UNVERIF || __CRBOUNCE_RP_2 || __CRBOUNCE_BLOCKED
+meta __CHALLENGE_RESPONSE     __CRBOUNCE_UOL || __CRBOUNCE_VERIF || __CRBOUNCE_RP || __CRBOUNCE_VANQ || __CRBOUNCE_HEADER || __CRBOUNCE_QURB || __CRBOUNCE_0SPAM || __CRBOUNCE_GETRESP || __CRBOUNCE_TMDA || __CRBOUNCE_ASK || __CRBOUNCE_EXI || __CRBOUNCE_PREC_SPAM || __CRBOUNCE_SZ || __CRBOUNCE_SPAMLION || __CRBOUNCE_MIB || __CRBOUNCE_SI || __CRBOUNCE_UNVERIF || __CRBOUNCE_RP_2 || __CRBOUNCE_BLOCKED || __CRBOUNCE_SPAMARREST
 meta CHALLENGE_RESPONSE      __MY_SERVERS_FOUND && __CHALLENGE_RESPONSE
 describe CHALLENGE_RESPONSE  Challenge-Response message for mail you sent
 
@@ -278,10 +281,12 @@ header __VBOUNCE_SYM_AVF      Subject =~ /^Symantec AVF detected /
 header __VBOUNCE_SYM_EMP      Subject =~ /^Symantec E-Mail-Proxy /
 header __VBOUNCE_VIR_FOUND    Subject =~ /^Virus Found in message/
 header __VBOUNCE_INFLEX       Subject =~ /^Inflex scan report \[/
+header __VBOUNCE_BITDEFENDER  X-Mailer =~ /^BitDefender VShield/
 header __VBOUNCE_INF_ATTACH   Subject =~ /^\[Mail Delivery .{20,100} infected attachment  *removed/
 
 header __VBOUNCE_RAPPORT      Subject =~ /^Spam rapport \/ Spam report \S+ -\s+\(\S+\)$/
-header __VBOUNCE_GWAVA        Subject =~ /^GWAVA Sender Notification .RBL block.$/
+header __VBOUNCE_GWAVA        Subject =~ /^GWAVA Sender Notification \(RBL block\)$/
+header __VBOUNCE_GWAVA2       Subject =~ /Blocked Message \(RBL block\)$/
 
 header __VBOUNCE_EMANAGER     Subject =~ /^\[MailServer Notification\]/
 header __VBOUNCE_MSGLABS      Return-Path =~ /alert\@notification\.messagelabs\.com/i
@@ -290,7 +295,7 @@ body __VBOUNCE_SECURIQ        /\bGROUP securiQ.Wall\b/
 
 header __VBOUNCE_PT_BLOCKED   Subject =~ /^\*\*\*\s*Mensagem Bloqueada/i
 
-meta VBOUNCE_MESSAGE        !__MY_SERVERS_FOUND && (__VBOUNCE_MSGLABS || __VBOUNCE_EXIM || __VBOUNCE_GUIN || __VBOUNCE_CISCO || __VBOUNCE_SMTP || __VBOUNCE_AOL || __VBOUNCE_DUTCH || __VBOUNCE_MAILMARSHAL || __VBOUNCE_MAILMARSHAL2 || __VBOUNCE_NAVFAIL || __VBOUNCE_REJECTED || __VBOUNCE_PROBLEME || __VBOUNCE_NAV || __VBOUNCE_MELDING || __VBOUNCE_VALERT || __VBOUNCE_REJ_FILT || __VBOUNCE_YOUSENT || __VBOUNCE_MAILSWEEP || __VBOUNCE_SCREENSAVER || __VBOUNCE_DISALLOWED || __VBOUNCE_FROMPT || __VBOUNCE_WARNING || __VBOUNCE_DETECTED || __VBOUNCE_INTERSCAN || __VBOUNCE_VIOLATION || __VBOUNCE_ALERT || __VBOUNCE_NAV2 || __VBOUNCE_NAV3 || __VBOUNCE_INTERSCAN2 || __VBOUNCE_INTERSCAN3 || __VBOUNCE_ANTIGEN || __VBOUNCE_LUTHER || __VBOUNCE_AMAVISD || __VBOUNCE_AMAVISD2 || __VBOUNCE_SCANMAIL || __VBOUNCE_DOMINO1 || __VBOUNCE_DOMINO2 || __VBOUNCE_RAV || __VBOUNCE_GSHIELD || __VBOUNCE_ATTACHMENT0 || __VBOUNCE_AVREPORT0 || __VBOUNCE_SENDER || __VBOUNCE_MAILSWEEP2 || __VBOUNCE_MAILSWEEP3 || __VBOUNCE_CLICKBANK || __VBOUNCE_FORBIDDEN || __VBOUNCE_MMS || __VBOUNCE_QUOTED_EXE || __VBOUNCE_MAJORDOMO_HELP || __VBOUNCE_AV_RESULTS || __VBOUNCE_EMVD || __VBOUNCE_UNDELIV || __VBOUNCE_BANNED_MAT || __VBOUNCE_NAV_DETECT || __VBOUNCE_DEL_WARN || __VBOUNCE_MIME_INFO || __VBOUNCE_EMAIL_REJ || __VBOUNCE_CONT_VIOL || __VBOUNCE_SYM_AVF || __VBOUNCE_SYM_EMP || __VBOUNCE_ATT_QUAR || __VBOUNCE_SECURIQ || __VBOUNCE_VIR_FOUND || __VBOUNCE_EMANAGER || __VBOUNCE_JMAIL || __VBOUNCE_GWAVA || __VBOUNCE_PT_BLOCKED || __VBOUNCE_INFLEX || __VBOUNCE_INF_ATTACH || __VBOUNCE_STRIP_ATTACH)
+meta VBOUNCE_MESSAGE        !__MY_SERVERS_FOUND && (__VBOUNCE_MSGLABS || __VBOUNCE_EXIM || __VBOUNCE_GUIN || __VBOUNCE_CISCO || __VBOUNCE_SMTP || __VBOUNCE_AOL || __VBOUNCE_DUTCH || __VBOUNCE_MAILMARSHAL || __VBOUNCE_MAILMARSHAL2 || __VBOUNCE_NAVFAIL || __VBOUNCE_REJECTED || __VBOUNCE_PROBLEME || __VBOUNCE_NAV || __VBOUNCE_MELDING || __VBOUNCE_VALERT || __VBOUNCE_REJ_FILT || __VBOUNCE_YOUSENT || __VBOUNCE_MAILSWEEP || __VBOUNCE_SCREENSAVER || __VBOUNCE_DISALLOWED || __VBOUNCE_FROMPT || __VBOUNCE_WARNING || __VBOUNCE_DETECTED || __VBOUNCE_INTERSCAN || __VBOUNCE_VIOLATION || __VBOUNCE_ALERT || __VBOUNCE_NAV2 || __VBOUNCE_NAV3 || __VBOUNCE_INTERSCAN2 || __VBOUNCE_INTERSCAN3 || __VBOUNCE_ANTIGEN || __VBOUNCE_LUTHER || __VBOUNCE_AMAVISD || __VBOUNCE_AMAVISD2 || __VBOUNCE_SCANMAIL || __VBOUNCE_DOMINO1 || __VBOUNCE_DOMINO2 || __VBOUNCE_RAV || __VBOUNCE_GSHIELD || __VBOUNCE_ATTACHMENT0 || __VBOUNCE_AVREPORT0 || __VBOUNCE_SENDER || __VBOUNCE_MAILSWEEP2 || __VBOUNCE_MAILSWEEP3 || __VBOUNCE_CLICKBANK || __VBOUNCE_FORBIDDEN || __VBOUNCE_MMS || __VBOUNCE_QUOTED_EXE || __VBOUNCE_MAJORDOMO_HELP || __VBOUNCE_AV_RESULTS || __VBOUNCE_EMVD || __VBOUNCE_UNDELIV || __VBOUNCE_BANNED_MAT || __VBOUNCE_NAV_DETECT || __VBOUNCE_DEL_WARN || __VBOUNCE_MIME_INFO || __VBOUNCE_EMAIL_REJ || __VBOUNCE_CONT_VIOL || __VBOUNCE_SYM_AVF || __VBOUNCE_SYM_EMP || __VBOUNCE_ATT_QUAR || __VBOUNCE_SECURIQ || __VBOUNCE_VIR_FOUND || __VBOUNCE_EMANAGER || __VBOUNCE_JMAIL || __VBOUNCE_GWAVA || __VBOUNCE_GWAVA2 || __VBOUNCE_PT_BLOCKED || __VBOUNCE_INFLEX || __VBOUNCE_INF_ATTACH || __VBOUNCE_STRIP_ATTACH || __VBOUNCE_GWAVA || __VBOUNCE_GWAVA2 || __VBOUNCE_BITDEFENDER)
 
 describe VBOUNCE_MESSAGE    Virus-scanner bounce message
 
