@@ -11,13 +11,14 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
+PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-953.patch; patch -N -g0 -p1 < ../patches/patch-0.95.3-bug1737.patch
+
 ifdef BETA
 	include $(CLAMAV_ROOT)/../beta_versions.def
+	PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-953.patch
 else
 	include $(CLAMAV_ROOT)/../versions.def
 endif
-
-PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-953.patch; patch -N -g0 -p1 < ../patches/patch-0.95.3-bug1737.patch
 
 files	:= $(wildcard src/clamav-$(CLAMAV_VERSION).tar.gz)
 
