@@ -18,7 +18,7 @@ ifdef BETA
 	include $(CLAMAV_ROOT)/../beta_versions.def
 	PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-953.patch
 ifeq ($(BUILD_PLATFORM), MACOSXx86)
-	CONFIG_OPT	:= "--enable-llvm=no"
+	CONFIG_OPT	:= --enable-llvm=no
 endif
 else
 	include $(CLAMAV_ROOT)/../versions.def
