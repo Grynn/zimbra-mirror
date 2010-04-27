@@ -19,7 +19,7 @@ endif
 
 LIBEXT	:= so
 PATCH	:=
-ifeq ($(BUILD_PLATFORM), MACOSXx86)
+ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	PATCH   := patch -g0 -N -p1 < ../patches/mac.patch;
 	LIBEXT	:= dylib
 endif
