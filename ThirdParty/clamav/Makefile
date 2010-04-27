@@ -11,15 +11,15 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
-PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-953.patch; patch -N -g0 -p1 < ../patches/patch-0.95.3-bug1737.patch
+PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-953.patch
 CONFIG_OPT	:=
 
-ifdef BETA
-	include $(CLAMAV_ROOT)/../beta_versions.def
-	PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-953.patch
 ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	CONFIG_OPT	:= --enable-llvm=no
 endif
+
+ifdef BETA
+	include $(CLAMAV_ROOT)/../beta_versions.def
 else
 	include $(CLAMAV_ROOT)/../versions.def
 endif
