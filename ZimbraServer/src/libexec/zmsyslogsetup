@@ -236,16 +236,16 @@ sub updateSyslog {
   close(SYSFH);
 
   if ( $TYPE eq "remote" ) {
-    print TMPFH "local0.*                @$LOGHOST\n";
-    print TMPFH "local1.*                @$LOGHOST\n";
-    print TMPFH "auth.*                  @$LOGHOST\n";
+    print TMPFH "local0.*                @".$LOGHOST."\n";
+    print TMPFH "local1.*                @".$LOGHOST."\n";
+    print TMPFH "auth.*                  @".$LOGHOST."\n";
   }
   print TMPFH "local0.*                $logfile\n";
   print TMPFH "local1.*                $statsfile\n";
   print TMPFH "auth.*                  $logfile\n";
 
   if ($TYPE eq "remote" ) {
-    print TMPFH "mail.*                @$LOGHOST\n";
+    print TMPFH "mail.*                @".$LOGHOST."\n";
   }
   print TMPFH "mail.*                $logfile\n";
   close (TMPFH);
