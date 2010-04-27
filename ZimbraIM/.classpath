@@ -14,11 +14,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/nekohtml.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mysql-connector-java-5.0.8-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.0.8/src"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/mail.jar" sourcepath="/ThirdParty/javamail/mail-src.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://java.sun.com/products/javamail/javadocs/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/mail.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/log4j-1.2.15.jar" sourcepath="/ThirdParty/jakarta-log4j"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jzlib.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/junit-4.4.jar" sourcepath="/ThirdParty/junit-4.4">

@@ -74,9 +74,9 @@
 			<attribute name="javadoc_location" value="http://logging.apache.org/log4j/1.2/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/mail.jar" sourcepath="/ThirdParty/javamail/mail-src.jar">
+	<classpathentry kind="lib" path="jars/mail.jar" sourcepath="jars-src/javamail-1.4.2-src.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="http://java.sun.com/products/javamail/javadocs/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.2-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/mysql-connector-java-5.0.8-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.0.8/src"/>
