@@ -953,6 +953,19 @@ function() {
 	this._listDiv.scrollTop = 0;
 };
 
+/**
+ * Scrolls the list view up or down one page.
+ *
+ * @param {boolean}	up	if true, scroll up
+ */
+DwtListView.prototype.scrollPage =
+function(up) {
+	var el = this._parentEl;
+	if (el.clientHeight >= el.scrollHeight) { return; }
+	el.scrollTop = up ? Math.max(el.scrollTop - el.clientHeight, 0) :
+				   		Math.min(el.scrollTop + el.clientHeight, el.scrollHeight - el.clientHeight);
+};
+
 DwtListView.prototype.setSortByAsc =
 function(column, bSortByAsc) {
 	if (!this._headerList) { return; }
@@ -1064,6 +1077,11 @@ function(actionCode, ev) {
 				var docY = p.y + s.y / 2;
 				this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.RIGHT, docX:docX, docY:docY, kbNavEvent:true});
 			}
+			break;
+
+		case DwtKeyMap.PAGE_UP:
+		case DwtKeyMap.PAGE_DOWN:
+			this.scrollPage(actionCode == DwtKeyMap.PAGE_UP);
 			break;
 
 		default:
@@ -1880,6 +1898,14 @@ function(element, next) {
 DwtListView.prototype._scrollList =
 function(itemDiv) {
 	DwtControl._scrollIntoView(itemDiv, itemDiv.parentNode);
+};
+
+DwtListView.prototype._setRowHeight =
+function() {
+	if (!this._rowHeight) {
+		var row = this._parentEl.firstChild;
+		this._rowHeight = row && Dwt.getSize(row).y;
+	}
 };
 
 DwtListView.prototype._emulateSingleClick =

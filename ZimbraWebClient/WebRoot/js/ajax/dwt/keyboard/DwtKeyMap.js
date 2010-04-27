@@ -137,11 +137,11 @@ DwtKeyMap.HOME				= "Home";
 /**
  * Defines the "page down" key.
  */
-DwtKeyMap.PAGE_DOWN			= "PgDown";
+DwtKeyMap.PGDOWN			= "PgDown";
 /**
  * Defines the "page up" key.
  */
-DwtKeyMap.PAGE_UP			= "PgUp";
+DwtKeyMap.PGUP			= "PgUp";
 /**
  * Defines the "space" key.
  */
@@ -212,6 +212,8 @@ DwtKeyMap.NEXT				= "Next";
  */
 DwtKeyMap.NEXT_TAB			= "NextTab";
 DwtKeyMap.NO				= "No";
+DwtKeyMap.PAGE_UP			= "PageUp";
+DwtKeyMap.PAGE_DOWN			= "PageDown";
 DwtKeyMap.PARENTMENU		= "ParentMenu";
 /**
  * Defines the "previous" action.
