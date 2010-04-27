@@ -178,7 +178,7 @@ olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
  redentials=${ldap_replication_password} filter="(objectclass=*)" searchbase=""
   logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase=cn=access
  log scope=sub schemachecking=off type=refreshAndPersist retry="60 +" syncdat
- a=accesslog tls_cacertdir=/opt/zimbra/conf/ca
+ a=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30
 -
 add: olcUpdateRef
 olcUpdateRef: ${ldap_master_url}
@@ -194,7 +194,7 @@ olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
  redentials=${ldap_replication_password} starttls=critical filter="(objectclass=*)" searchbase=""
   logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase=cn=access
  log scope=sub schemachecking=off type=refreshAndPersist retry="60 +" syncdat
- a=accesslog tls_cacertdir=/opt/zimbra/conf/ca
+ a=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30
 -
 add: olcUpdateRef
 olcUpdateRef: ${ldap_master_url}
@@ -210,7 +210,7 @@ olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
  redentials=${ldap_replication_password} filter="(objectclass=*)" searchbase=""
   logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase=cn=access
  log scope=sub schemachecking=off type=refreshAndPersist retry="60 +" syncdat
- a=accesslog tls_cacertdir=/opt/zimbra/conf/ca
+ a=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30
 -
 add: olcUpdateRef
 olcUpdateRef: ${ldap_master_url}
