@@ -48,7 +48,10 @@ sub getProcList() {
     }
 
     if ($all || arrayContains(\@services, 'mailbox')) {
-        push(@procs, 'mailbox', 'mysql', 'convertd');
+        push(@procs, 'mailbox', 'mysql');
+    }
+    if ($all || arrayContains(\@services, 'convertd')) {
+        push(@procs, 'convertd');
     }
     if ($all || arrayContains(\@services, 'imapproxy')) {
         push(@procs, 'nginx');
@@ -138,10 +141,13 @@ if (defined($cmd)) {
             system("$cmd >> $outfile 2>&1 &");
             
             if (!$isMac) {
-            	 # doMysql implies that convertd is also on the system
-            	 $cmd = "$toolpath/$TOOL_CONVERTD";
-            	 print "Invoking: $cmd\n";
-            	 system("$cmd >> $outfile 2>&1 &");
+                # if "convertd" is not in proc list (not an enabled service), don't try starting zmstat-convertd
+                if ($proc =~ /convertd/) {
+                    # doMysql implies that convertd is also on the system
+                    $cmd = "$toolpath/$TOOL_CONVERTD";
+                    print "Invoking: $cmd\n";
+                    system("$cmd >> $outfile 2>&1 &");
+                }
             }
         }
         if ($doMtaQueue) {
