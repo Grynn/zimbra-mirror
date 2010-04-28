@@ -1,0 +1,26 @@
+--- clamav-0.96/libclamav/c++/configure.orig	2010-04-28 09:14:04.000000000 -0700
++++ clamav-0.96/libclamav/c++/configure	2010-04-28 09:14:28.000000000 -0700
+@@ -14554,6 +14554,10 @@
+ freebsd*)
+     THREAD_LIBS="-lthr"
+     ;;
++darwin*)
++    # none required
++    THREAD_LIBS=
++    ;;
+ *)
+     THREAD_LIBS="-pthread"
+ esac
+--- clamav-0.96/libclamav/c++/configure.ac.orig	2010-04-28 09:14:41.000000000 -0700
++++ clamav-0.96/libclamav/c++/configure.ac	2010-04-28 09:15:01.000000000 -0700
+@@ -139,6 +139,10 @@
+ freebsd*)
+     THREAD_LIBS="-lthr"
+     ;;
++darwin*)
++    # none required
++    THREAD_LIBS=
++    ;;
+ *)
+     THREAD_LIBS="-pthread"
+ esac
