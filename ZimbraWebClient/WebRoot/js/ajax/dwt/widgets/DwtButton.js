@@ -410,6 +410,7 @@ function(menuOrCallback, shouldToggle, followIconStyle, popupAbove) {
 		}
 		if ((this.__preventMenuFocus != null) && (this._menu instanceof DwtMenu))
 			this._menu.dontStealFocus(this.__preventMenuFocus);
+		
     }
     else if (this._dropDownEl) {
 		Dwt.delClass(this.getHtmlElement(), "ZHasDropDown");
@@ -761,6 +762,9 @@ function(ev) {
 			this.shell.notifyGlobalSelection(selEv);
 		}
 	} else if (this._menu) {
+		if(!this.isListenerRegistered(DwtEvent.SELECTION)) {
+			this._menu.setAssociatedObj(this);	
+		}		
 		this._toggleMenu();
 	}
 };
