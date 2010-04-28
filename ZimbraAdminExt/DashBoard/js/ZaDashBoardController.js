@@ -374,12 +374,13 @@ ZaDashBoardController.prototype.newAccSelected = function() {
 		var newAccount = new ZaAccount();
 		newAccount.loadNewObjectDefaults("name", ZaSettings.myDomainName);
 		
-		if(!ZaApp.getInstance().dialogs["newAccountWizard"])
+		if(!ZaApp.getInstance().dialogs["newAccountWizard"]) {
 			ZaApp.getInstance().dialogs["newAccountWizard"] = new ZaNewAccountXWizard(DwtShell.getShell(window),newAccount);	
-        else { //update the account type if needed
+		} else { //update the account type if needed
             ZaApp.getInstance().dialogs["newAccountWizard"].updateAccountType () ;    
         }
-
+		 ZaApp.getInstance().dialogs["newAccountWizard"].registerCallback(DwtWizardDialog.FINISH_BUTTON, this.finishAccountWizard, this, null);
+		
 		ZaApp.getInstance().dialogs["newAccountWizard"].setObject(newAccount);
 		ZaApp.getInstance().dialogs["newAccountWizard"].popup();
 	} catch (ex) {
@@ -443,6 +444,59 @@ ZaDashBoardController.prototype.newDLSelected = function() {
 		this._handleException(ex, "ZaDashBoardController.prototype.newDLSelected", null, false);
 	}
 
+};
+
+
+ZaDashBoardController.prototype.createDomainAndAccount = function(domainName) {
+	try {
+		var newDomain = new ZaDomain();
+		newDomain.name=domainName;
+		newDomain.attrs[ZaDomain.A_domainName] = domainName;
+		var domain = ZaItem.create(newDomain,ZaDomain,"ZaDomain");
+		if(domain != null) {
+			this.closeCnfrmDelDlg();
+			this.finishAccountWizard();
+		}
+	} catch(ex) {
+		this._handleException(ex, "ZaDashBoardController.prototype.createDomainAndAccount", null, false);	
+	}
+};
+
+ZaDashBoardController.prototype.finishAccountWizard = function() {
+	try {
+		var obj = ZaApp.getInstance().dialogs["newAccountWizard"].getObject();
+		if(!ZaAccount.checkValues(obj)) {
+			return false;
+		}
+		var account = ZaItem.create(obj,ZaAccount,"ZaAccount");
+		if(account != null) {
+			//if creation took place - fire an change event
+			ZaApp.getInstance().dialogs["newAccountWizard"].popdown();
+			this.popupMsgDialog(AjxMessageFormat.format(ZaMsg.AccountCreated,[account.name]));	
+			if(this._contentView.types[0] == ZaSearch.ACCOUNTS) {
+				this._contentView.searchAddresses(this._contentView.types,this._contentView.offset);
+			}
+		}
+	} catch (ex) {
+		switch(ex.code) {		
+			case ZmCsfeException.ACCT_EXISTS:
+				this.popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
+			break;
+			case ZmCsfeException.ACCT_INVALID_PASSWORD:
+				this.popupErrorDialog(ZaMsg.ERROR_PASSWORD_INVALID, ex);
+				ZaApp.getInstance().getAppCtxt().getErrorDialog().showDetail(true);
+			break;
+			case ZmCsfeException.NO_SUCH_DOMAIN:
+				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].setMessage(AjxMessageFormat.format(ZaMsg.CreateDomain_q,[ZaAccount.getDomain(obj.name)]), DwtMessageDialog.WARNING_STYLE);
+				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.createDomainAndAccount, this, [ZaAccount.getDomain(obj.name)]);		
+				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, ZaController.prototype.closeCnfrmDelDlg, this, null);				
+				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].popup();  				
+			break;
+			default:
+				this._handleException(ex, "ZaNewAccountXWizard.prototype.finishWizard", null, false);
+			break;		
+		}
+	}
 };
 
 ZaDashBoardController.prototype.deleteButtonListener = function(ev) {

@@ -79,10 +79,12 @@ function(entry) {
 	this.updateTab();
 	var busyId = Dwt.getNextId();
 	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:null,busyId:busyId});
-	
+	this.types = [ZaSearch.ACCOUNTS,ZaSearch.DLS,ZaSearch.ALIASES, ZaSearch.RESOURCES];
+	this.offset = 0;
+	this.query = ZaSearch.getSearchByNameQuery("",this.types);
 	var searchParams = {
-			query: this._currentQuery, 
-			types:[ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES],
+			query: this.query, 
+			types:this.types,
 			sortBy:ZaAccount.A_uid,
 			offset:0,
 			limit:ZaSettings.RESULTSPERPAGE,
@@ -152,13 +154,15 @@ ZaDashBoardView.onSearchResult = function(params,resp) {
 
 	
 ZaDashBoardView.prototype.searchAddresses = function (types, offset) {  
-	this.types=types;
 	offset = offset ? offset : 0;
+	this.offset = offset;
 	var busyId = Dwt.getNextId();
 	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:null,busyId:busyId});
 	types = types ? types : [ZaSearch.ACCOUNTS,ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.RESOURCES];
+	this.types = types;
+	this.query = ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query],types);
 	var searchParams = {
-		query: ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query],types), 
+		query: this.query, 
 		types:types,
 		sortBy:ZaAccount.A_uid,
 		offset:offset,
@@ -234,7 +238,7 @@ ZaDashBoardView.prototype.domainFilterSelected = function() {
 ZaDashBoardView.prototype.allFilterSelected = function() {
 	this.setIconForSearchMenuButton ("SearchAll");
 	this.setLabelForSearchMenuButton(com_zimbra_dashboard.SearchFilter_All);	
-	this.searchAddresses([ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES]);
+	this.searchAddresses([ZaSearch.ACCOUNTS,ZaSearch.DLS,ZaSearch.ALIASES, ZaSearch.RESOURCES]);
 }
 
 ZaDashBoardView.prototype.cosFilterSelected = function() {
