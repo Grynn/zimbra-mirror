@@ -58,8 +58,10 @@ ZaToolBar.prototype.init = function () {
 					this._createLabel(opList[btnOrder[ix]].labelId, opList[btnOrder[ix]].imageId, opList[btnOrder[ix]].caption, opList[btnOrder[ix]].disImageId, opList[btnOrder[ix]].tt, true, opList[btnOrder[ix]].className);
 				} else {
 					this._createButton(opList[btnOrder[ix]].id, opList[btnOrder[ix]].imageId, opList[btnOrder[ix]].caption, opList[btnOrder[ix]].disImageId, opList[btnOrder[ix]].tt, true, opList[btnOrder[ix]].className, opList[btnOrder[ix]].type, opList[btnOrder[ix]].menuOpList);
-
-					this.addSelectionListener(opList[btnOrder[ix]].id, opList[btnOrder[ix]].listener);
+					
+					if(opList[btnOrder[ix]].listener) {
+						this.addSelectionListener(opList[btnOrder[ix]].id, opList[btnOrder[ix]].listener);
+					}
 				}
 			}
 		}
@@ -223,7 +225,7 @@ function(buttonId, imageId, text, disImageId, toolTip, enabled, className, type,
 
 	if (type == ZaOperation.TYPE_MENU) {
 		var menu = new ZaPopupMenu(b, null,null, menuOpList);
-		b.setMenu(menu);
+		b.setMenu(menu,true);
 	}
 	return b;
 }

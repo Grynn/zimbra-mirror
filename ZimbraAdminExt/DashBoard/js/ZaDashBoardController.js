@@ -93,7 +93,7 @@ function () {
     newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Import, com_zimbra_dashboard.NewButton_Import_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.openBulkProvisionDialog))); 
 	
     this._toolbarOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton, com_zimbra_dashboard.NewButton_tt, 
-			"Account", "AccountDis", this._newAcctListener, ZaOperation.TYPE_MENU, newMenuOpList);
+			"Account", "AccountDis", null, ZaOperation.TYPE_MENU, newMenuOpList);
 	this._toolbarOrder.push(ZaOperation.NEW_MENU);	
     this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, this.editButtonListener));
     this._toolbarOrder.push(ZaOperation.EDIT);
