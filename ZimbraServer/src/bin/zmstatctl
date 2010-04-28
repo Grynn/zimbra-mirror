@@ -142,7 +142,7 @@ if (defined($cmd)) {
             
             if (!$isMac) {
                 # if "convertd" is not in proc list (not an enabled service), don't try starting zmstat-convertd
-                if ($proc =~ /convertd/) {
+                if ($procs =~ /convertd/) {
                     # doMysql implies that convertd is also on the system
                     $cmd = "$toolpath/$TOOL_CONVERTD";
                     print "Invoking: $cmd\n";
