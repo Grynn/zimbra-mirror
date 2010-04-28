@@ -1308,6 +1308,7 @@ function(doc, on) {
  * <p>
  * <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=489667">https://bugzilla.mozilla.org/show_bug.cgi?id=489667</a>
  * </p>
+ * <p>It looks like the FF bug will be fixed with the release of 3.6.4.</p>
  * @param {DwtMouseEvent}	ev			the event
  * @return	{boolean}	<code>true</code> if FF3.6+ scrollbar click was detected and handled
  * 
