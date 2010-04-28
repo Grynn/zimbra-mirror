@@ -396,7 +396,13 @@ function(name, value) {
 
 
 AjxXmlDoc.prototype.appendChild =
-function(xmldoc) {
-   this.root.appendChild(xmldoc.root);   
+function(xmldoc){
+   //Security Exception WRONG_DOCUMENT_ERR thrown when we append nodes created of diff. documents
+   //Chrome/Safari does not like it.
+   if(this._doc != xmldoc._doc){
+        this.root.appendChild(this.getDoc().importNode(xmldoc.root, true));
+   }else{
+        this.root.appendChild(xmldoc.root);
+   }
 };
 
