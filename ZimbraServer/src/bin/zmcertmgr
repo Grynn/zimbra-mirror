@@ -227,6 +227,7 @@ loadConfigKey() {
     echo "Unknown config section $location"
     return
   fi
+  TMPDIR=${zimbra_tmp_directory}
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
   chown ${zimbra_uid} ${tmpfile}
   if [ ! -s ${file} ]; then
