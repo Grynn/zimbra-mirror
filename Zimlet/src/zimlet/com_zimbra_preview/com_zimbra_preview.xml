@@ -1,0 +1,4 @@
+<zimlet name="com_zimbra_preview" version="1.0" target="main" description="Enable Preivew View in Briefcase">
+	<include>preview.js</include>
+	<handlerObject>Com_Zimbra_Preview</handlerObject>
+</zimlet>
