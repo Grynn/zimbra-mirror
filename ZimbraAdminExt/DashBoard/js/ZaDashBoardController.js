@@ -28,6 +28,7 @@ ZaDashBoardController = function(appCtxt, container) {
 	this.tabConstructor = ZaDashBoardView;
  	this._toolbarOperations = new Array();
  	this.currentPageNum = 1;
+ 	ZaDashBoardController.hijackMessages();
 }
 
 ZaDashBoardController.prototype = new ZaXFormViewController();
@@ -59,6 +60,26 @@ ZaSettings.SERVICE_BAR_DOM_ID = "skin_container_service_toolbar";
 ZaAppViewMgr.C_SERVICE_BAR = "SERVICE_BAR";
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SERVICE_BAR] = ZaSettings.SERVICE_BAR_ID;
 ZaSettings.INIT[ZaSettings.SERVICE_BAR_ID] = [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, ZaSettings.SERVICE_BAR_DOM_ID];
+
+ZaDashBoardController.hijackMessages = function () {
+	ZaMsg.COS_view_title = com_zimbra_dashboard.COS_view_title;
+	ZaMsg.COSTBB_New_tt = com_zimbra_dashboard.COSTBB_New_tt;
+	ZaMsg.COSTBB_Edit_tt = com_zimbra_dashboard.COSTBB_Edit_tt;
+	ZaMsg.COSTBB_Delete_tt = com_zimbra_dashboard.COSTBB_Delete_tt;
+	ZaMsg.COSTBB_Duplicate_tt = com_zimbra_dashboard.COSTBB_Duplicate_tt;
+	ZaMsg.COSTBB_Save_tt = com_zimbra_dashboard.COSTBB_Save_tt;
+	ZaMsg.Search_view_title = com_zimbra_dashboard.Search_view_title;
+	ZaMsg.NAD_ResetToCOS = com_zimbra_dashboard.NAD_ResetToCOS;
+	ZaMsg.Domain_DefaultCOS = com_zimbra_dashboard.Domain_DefaultCOS;
+	ZaMsg.NAD_ClassOfService =  com_zimbra_dashboard.NAD_ClassOfService;
+	ZaMsg.GlobalConfig_view_title = com_zimbra_dashboard.GlobalConfig_view_title;
+	ZaMsg.Domain_DefaultCOS = com_zimbra_dashboard.Domain_DefaultCOS;
+	ZaMsg.FAILED_RENAME_COS_1 = com_zimbra_dashboard.FAILED_RENAME_COS_1;
+	ZaMsg.FAILED_RENAME_COS = com_zimbra_dashboard.FAILED_RENAME_COS;
+	ZaMsg.FAILED_CREATE_COS_1 = com_zimbra_dashboard.FAILED_CREATE_COS_1;
+	ZaMsg.FAILED_CREATE_COS = com_zimbra_dashboard.FAILED_CREATE_COS;
+	ZaMsg.FAILED_SAVE_COS = com_zimbra_dashboard.FAILED_SAVE_COS;
+}
 
 ZaDashBoardController.initToolbarMethod =
 function () {
