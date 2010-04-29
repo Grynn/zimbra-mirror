@@ -13,21 +13,32 @@
  * ***** END LICENSE BLOCK *****
  */
 
-//////////////////////////////////////////////////////////////////////////////
-// Allows downloading a single email message
-// @author Zimlet author: Raja Rao DV(rrao@zimbra.com)
-//////////////////////////////////////////////////////////////////////////////
-
-function com_zimbra_emaildownloader() {
+/**
+ * Allows downloading a single email message.
+ * 
+ * @author Raja Rao DV
+ */
+function com_zimbra_emaildownloader_HandlerObject() {
 }
 
-com_zimbra_emaildownloader.prototype = new ZmZimletBase();
-com_zimbra_emaildownloader.prototype.constructor = com_zimbra_emaildownloader;
+com_zimbra_emaildownloader_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_emaildownloader_HandlerObject.prototype.constructor = com_zimbra_emaildownloader_HandlerObject;
 
-com_zimbra_emaildownloader.prototype.doDrop =
+/**
+ * Simplify handler object
+ *
+ */
+var EmailDownloaderZimlet = com_zimbra_emaildownloader_HandlerObject;
+
+/**
+ * Called by the framework on an item drop.
+ * 
+ * @param	{ZmConv|ZmMailMsg}	msgObj		the dropped message object
+ */
+EmailDownloaderZimlet.prototype.doDrop =
 function(msgObj) {
 	this.srcMsgObj = msgObj.srcObj;
-	if(this.srcMsgObj.type == "CONV"){
+	if (this.srcMsgObj.type == "CONV"){
 		this.srcMsgObj = this.srcMsgObj.getFirstHotMsg();
 	}
 	var url = [];
