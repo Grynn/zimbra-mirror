@@ -762,7 +762,7 @@ function(ev) {
 			this.shell.notifyGlobalSelection(selEv);
 		}
 	} else if (this._menu) {
-		if(!this.isListenerRegistered(DwtEvent.SELECTION)) {
+		if(this.menu instanceof DwtMenu && !this.isListenerRegistered(DwtEvent.SELECTION)) {
 			this._menu.setAssociatedObj(this);	
 		}		
 		this._toggleMenu();
