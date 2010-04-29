@@ -311,6 +311,57 @@ ZaDashBoardController.prototype.finishNewDomainButtonListener = function() {
 	return;
 };
 
+ZaDashBoardController.prototype.createDomainAndResource = function(domainName) {
+	try {
+		var newDomain = new ZaDomain();
+		newDomain.name=domainName;
+		newDomain.attrs[ZaDomain.A_domainName] = domainName;
+		var domain = ZaItem.create(newDomain,ZaDomain,"ZaDomain");
+		if(domain != null) {
+			this.closeCnfrmDelDlg();
+			this.finishResourceWizard();
+		}
+	} catch(ex) {
+		this._handleException(ex, "ZaDashBoardController.prototype.createDomainAndResource", null, false);	
+	}
+}
+
+ZaDashBoardController.prototype.finishResourceWizard = 
+function() {
+	try {		
+		if(!ZaResource.checkValues(ZaApp.getInstance().dialogs["newResourceWizard"]._containedObject)) {
+			return false;
+		}
+		var resource = ZaItem.create(ZaApp.getInstance().dialogs["newResourceWizard"]._containedObject, ZaResource, "ZaResource");
+		if(resource != null) {
+			ZaApp.getInstance().dialogs["newResourceWizard"].popdown();
+			ZaApp.getInstance().getCurrentController().popupMsgDialog(AjxMessageFormat.format(ZaMsg.ResourceCreated,[resource.name]));
+			if(this._contentView.types[0] == ZaSearch.RESOURCES || this._contentView.types[3] == ZaSearch.RESOURCES) {
+				this._contentView.searchAddresses(this._contentView.types,this._contentView.offset);
+			}			
+		}
+	} catch (ex) {
+		switch(ex.code) {		
+			case ZmCsfeException.ACCT_EXISTS:
+				this.popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
+			break;
+			case ZmCsfeException.ACCT_INVALID_PASSWORD:
+				this.popupErrorDialog(ZaMsg.ERROR_PASSWORD_INVALID, ex);
+				ZaApp.getInstance().getAppCtxt().getErrorDialog().showDetail(true);
+			break;
+			case ZmCsfeException.NO_SUCH_DOMAIN:
+				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].setMessage(AjxMessageFormat.format(ZaMsg.CreateDomain_q,[ZaAccount.getDomain(ZaApp.getInstance().dialogs["newResourceWizard"]._containedObject.name)]), DwtMessageDialog.WARNING_STYLE);
+				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.createDomainAndResource, this, [ZaAccount.getDomain(ZaApp.getInstance().dialogs["newResourceWizard"]._containedObject.name)]);		
+				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, ZaController.prototype.closeCnfrmDelDlg, ZaApp.getInstance().getCurrentController(), null);				
+				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].popup();  				
+			break;
+			default:
+				this._handleException(ex, "ZaNewResourceXWizard.prototype.finishWizard", null, false);
+			break;		
+		}
+	}
+};
+
 ZaDashBoardController.prototype.newAccSelected = function() {
 	try {
 		EmailAddr_XFormItem.resetDomainLists.call(ZaApp.getInstance().getCurrentController()) ;
@@ -319,15 +370,13 @@ ZaDashBoardController.prototype.newAccSelected = function() {
 		
 		if(!ZaApp.getInstance().dialogs["newAccountWizard"]) {
 			ZaApp.getInstance().dialogs["newAccountWizard"] = new ZaNewAccountXWizard(DwtShell.getShell(window),newAccount);	
-		} else { //update the account type if needed
-            ZaApp.getInstance().dialogs["newAccountWizard"].updateAccountType () ;    
-        }
-		 ZaApp.getInstance().dialogs["newAccountWizard"].registerCallback(DwtWizardDialog.FINISH_BUTTON, this.finishAccountWizard, this, null);
+		}
+		ZaApp.getInstance().dialogs["newAccountWizard"].registerCallback(DwtWizardDialog.FINISH_BUTTON, this.finishAccountWizard, this, null);
 		
 		ZaApp.getInstance().dialogs["newAccountWizard"].setObject(newAccount);
 		ZaApp.getInstance().dialogs["newAccountWizard"].popup();
 	} catch (ex) {
-		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccountListController.prototype._newAccountListener", null, false);
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDashBoardController.prototype.newAccSelected", null, false);
 	}	
 	
 };
@@ -341,11 +390,20 @@ ZaDashBoardController.prototype.newResourceSelected = function() {
 		if(!ZaApp.getInstance().dialogs["newResourceWizard"])
 			ZaApp.getInstance().dialogs["newResourceWizard"] = new ZaNewResourceXWizard(DwtShell.getShell(window));	
 
+		ZaApp.getInstance().dialogs["newResourceWizard"].registerCallback(DwtWizardDialog.FINISH_BUTTON, this.finishResourceWizard, this, null);
+		
 		ZaApp.getInstance().dialogs["newResourceWizard"].setObject(newResource);
 		ZaApp.getInstance().dialogs["newResourceWizard"].popup();
 	} catch (ex) {
-		this._handleException(ex, "ZaAccountListController.prototype._newResourceListener", null, false);
+		this._handleException(ex, "ZaDashBoardController.prototype.newResourceSelected", null, false);
 	}
+};
+
+ZaDashBoardController.prototype.finishAliasWizard = function(aliasObj, form) {
+	aliasObj.addAlias(form);
+	if(this._contentView.types[0] == ZaSearch.ALIASES || this._contentView.types[2] == ZaSearch.ALIASES) {
+		this._contentView.searchAddresses(this._contentView.types,this._contentView.offset);
+	}	
 };
 
 ZaDashBoardController.prototype.newAliasSelected = function() {
@@ -360,11 +418,9 @@ ZaDashBoardController.prototype.newAliasSelected = function() {
 		if(!ZaApp.getInstance().dialogs["newAliasDialog"]) {
 			ZaApp.getInstance().dialogs["newAliasDialog"] = new ZaNewAliasXDialog(
 				this._container, "550px", "100px",ZaMsg.New_Alias_Title );	
-			ZaApp.getInstance().dialogs["newAliasDialog"].registerCallback(
-					DwtDialog.OK_BUTTON, ZaAlias.prototype.addAlias, 
-					newAlias, ZaApp.getInstance().dialogs["newAliasDialog"]._localXForm );								
 		}
-
+		ZaApp.getInstance().dialogs["newAliasDialog"].registerCallback(DwtDialog.OK_BUTTON, this.finishAliasWizard, 
+				this, [newAlias,ZaApp.getInstance().dialogs["newAliasDialog"]._localXForm]);
 		ZaApp.getInstance().dialogs["newAliasDialog"].setObject(newAlias);
 		ZaApp.getInstance().dialogs["newAliasDialog"].popup();		
 	} catch (ex) {
