@@ -15,7 +15,7 @@ PATCH	:= patch -N -g0 -p1 < ../patches/fix-configure-953.patch
 CONFIG_OPT	:=
 
 ifeq ($(BUILD_PLATFORM), MACOSXx86)
-	CONFIG_OPT	:= --enable-llvm=no
+	CONFIG_OPT	:= -Xcompiler -fexceptions
 endif
 
 ifdef BETA
@@ -45,9 +45,9 @@ build:
 	$(PATCH); \
 	CFLAGS="-g -O2" \
 	CPPFLAGS="-I/opt/zimbra/sendmail-$(SENDMAIL_VERSION)/include" \
-	LDFLAGS="-L/opt/zimbra/sendmail-$(SENDMAIL_VERSION)/lib" \
+	LDFLAGS="-L/opt/zimbra/sendmail-$(SENDMAIL_VERSION)/lib $(CONFIG_OPT)" \
 	./configure --prefix=/opt/zimbra/clamav-$(CLAMAV_VERSION) --mandir=/opt/zimbra/clamav-$(CLAMAV_VERSION)/man \
-	--with-user=zimbra --with-group=zimbra --disable-zlib-vcheck --disable-gcc-vcheck --disable-clamav --enable-milter $(CONFIG_OPT); \
+	--with-user=zimbra --with-group=zimbra --disable-zlib-vcheck --disable-gcc-vcheck --disable-clamav --enable-milter; \
 	$(MAKE) $(MAKEARGS); $(MAKE) install)
 	-(cd $(ZIMBRA_HOME); ln -s clamav-$(CLAMAV_VERSION) clamav)
 
