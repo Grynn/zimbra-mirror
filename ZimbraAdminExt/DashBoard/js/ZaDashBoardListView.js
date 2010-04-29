@@ -126,7 +126,10 @@ function(account, now, isDragProxy) {
 				break;	
 				case ZaItem.DOMAIN:
 					html[idx++] = AjxImg.getImageHtml("Domain");		
-				break;									
+				break;
+				case ZaItem.COS:
+					html[idx++] = AjxImg.getImageHtml("COS");				
+				break;				
 				default:
 					html[idx++] = account.type;
 				break;
