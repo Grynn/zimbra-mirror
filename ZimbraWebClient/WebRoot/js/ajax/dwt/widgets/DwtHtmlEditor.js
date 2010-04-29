@@ -164,11 +164,15 @@ function() {
 		document.getElementById(this._textAreaId).focus();
 	} else {
 		try {
-                        if (!this._htmlModeInited) {
-                                setTimeout(AjxCallback.simpleClosure(this.focus, this), DwtHtmlEditor._INITDELAY);
-                                return;
-                        }
-			this._getIframeWin().focus();
+			if (!this._htmlModeInited) {
+				setTimeout(AjxCallback.simpleClosure(this.focus, this), DwtHtmlEditor._INITDELAY);
+				return;
+			}
+			if (AjxEnv.isSafari) {
+				document.getElementById(this._iFrameId).focus();
+			} else {
+				this._getIframeWin().focus();
+			}
 			// Hack to fix IE focusing bug
 			if (AjxEnv.isIE) {
 				if (this._currInsPt) {
@@ -1362,10 +1366,6 @@ function(ev) {
 	if (window.DwtIdleTimer) {
 		DwtIdleTimer.resetIdle();
 	}
-
-	// TODO: Find out why this is necessary and do it in a nicer way.
-	if (AjxEnv.isSafari) // Need to break flow to avoid faulty behavior on Safari (this sucks, I know)
-		throw false; // Not really important what we throw
 
 	return retVal;
 };
