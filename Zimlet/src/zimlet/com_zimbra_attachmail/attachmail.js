@@ -11,12 +11,12 @@
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
- * @author Raja Rao DV
  */
 
 /**
  * Constructor.
  * 
+ * @author Raja Rao DV
  */
 function com_zimbra_attachmail_HandlerObject() {
 };
