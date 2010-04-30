@@ -118,7 +118,7 @@ sub updateSyslogNG {
     #use native src on SLES11_64
     $zsrc="src";
   } else {
-    print TMPFH "source zimbra_src {  unix-stream(\"/dev/log\" keep-alive(yes) max-connections(20)); }; # zimbra\n";
+    print TMPFH "source zimbra_src {  unix-stream(\"/dev/log\" keep-alive(yes) max-connections(128)); }; # zimbra\n";
   }
   print TMPFH "filter zimbra_local0 { facility(local0); }; # zimbra\n";
   print TMPFH "filter zimbra_local1 { facility(local1); }; # zimbra\n";
