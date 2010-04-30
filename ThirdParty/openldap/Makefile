@@ -1,7 +1,7 @@
 OPENLDAP_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(OPENLDAP_ROOT)/../..; pwd)
 MAKE ?= make
-MAKEARGS ?= -j2 DEFINES=-DCHECK_CSN
+MAKEARGS ?= -j2 DEFINES="-DCHECK_CSN -DSLAP_SCHEMA_EXPOSE"
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
