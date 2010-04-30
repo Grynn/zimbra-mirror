@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_emailquotes" version="0.4">
+<zimletConfig name="com_zimbra_emailquotes" version="0.5">
     <global>
         <property name="allowedDomains">www.quotedb.com</property>
     </global>

@@ -11,20 +11,46 @@
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
- *@Author Raja Rao DV
  */
 
-
-function com_zimbra_emailquotes() {
+/**
+ * Constructor.
+ * 
+ * @author Raja Rao DV
+ */
+function com_zimbra_emailquotes_HandlerObject() {
 }
 
-com_zimbra_emailquotes.prototype = new ZmZimletBase();
-com_zimbra_emailquotes.prototype.constructor = com_zimbra_emailquotes;
+com_zimbra_emailquotes_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_emailquotes_HandlerObject.prototype.constructor = com_zimbra_emailquotes_HandlerObject;
 
-com_zimbra_emailquotes.prototype.init =
+/**
+ * Simplify handler object
+ *
+ */
+var EmailQuotesZimlet = com_zimbra_emailquotes_HandlerObject;
+
+/**
+ * Defines the "enabled" user property.
+ */
+EmailQuotesZimlet.USER_PROP_ENABLED = "turnEmailQuotesZimletON";
+/**
+ * Defines the "user selections" user property.
+ */
+EmailQuotesZimlet.USER_PROP_USER_SELECTIONS = "equotes_userSelections";
+/**
+ * Defines the "default selections" user property.
+ */
+EmailQuotesZimlet.USER_PROP_DEFAULT_SELECTIONS = "equotes_defaultSelections";
+
+/**
+ * Initializes the zimlet.
+ * 
+ */
+EmailQuotesZimlet.prototype.init =
 function() {
     this.currentQuote = "";
-    this.turnEmailQuotesZimletON = this.getUserProperty("turnEmailQuotesZimletON") == "true";
+    this.turnEmailQuotesZimletON = this.getUserProperty(EmailQuotesZimlet.USER_PROP_ENABLED) == "true";
     if (!this.turnEmailQuotesZimletON) {
         return;
     }
@@ -32,16 +58,24 @@ function() {
     this._initializeVariables();
 };
 
-com_zimbra_emailquotes.prototype._initializeVariables =
+/**
+ * Initializes the variables.
+ * 
+ */
+EmailQuotesZimlet.prototype._initializeVariables =
 function() {
-    this.equotes_userSelections = this.getUserProperty("equotes_userSelections");
-    this.equotes_defaultSelections = this.getUserProperty("equotes_defaultSelections");
+    this.equotes_userSelections = this.getUserProperty(EmailQuotesZimlet.USER_PROP_USER_SELECTIONS);
+    this.equotes_defaultSelections = this.getUserProperty(EmailQuotesZimlet.USER_PROP_DEFAULT_SELECTIONS);
     this.currentQuote = "";
     this._setBaseFeedUrl();
     this._getFeed(this._baseFeed);
 };
 
-com_zimbra_emailquotes.prototype._setBaseFeedUrl =
+/**
+ * Sets the base feed URL.
+ * 
+ */
+EmailQuotesZimlet.prototype._setBaseFeedUrl =
 function() {
     var url_1 = "http://www.quotedb.com/quote/quote.php?action=random_quote_rss";
     var url_2 = "&=&";
@@ -58,14 +92,24 @@ function() {
     this._baseFeed = url_1 + args + url_2;
 };
 
-com_zimbra_emailquotes.prototype._getFeed =
+/**
+ * Gets the feed.
+ * 
+ * @param	{string}	feed		the feed url
+ */
+EmailQuotesZimlet.prototype._getFeed =
 function(feed) {
     var pfeed = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(feed);
     AjxRpc.invoke(null, pfeed, null, new AjxCallback(this, this._feedHandler), true);
 };
 
-//we dont get valid RSS feed due to dtd issue, so parse the text content instead
-com_zimbra_emailquotes.prototype.getXmlFromText =
+/**
+ * Gets the XML from text. Note: we do not get valid RSS feed due to dtd issue, so parse the text content instead.
+ * 
+ * @param	{string}	text		the text
+ * @return	{object}	the xml doc
+ */
+EmailQuotesZimlet.prototype.getXmlFromText =
 function(text) {
     var xmlDoc = null;
     if (AjxEnv.isIE) {
@@ -86,7 +130,12 @@ function(text) {
     return xmlDoc;
 };
 
-com_zimbra_emailquotes.prototype._feedHandler =
+/**
+ * Handles the feed response.
+ * 
+ * @param	{object}	result		the result
+ */
+EmailQuotesZimlet.prototype._feedHandler =
 function(result) {
     var xmlObject = null;
 
@@ -121,21 +170,36 @@ function(result) {
     }
 };
 
-//called by ZmComposeView.js _getSignature method
-com_zimbra_emailquotes.prototype.appendExtraSignature =
+/**
+ * Appends extra signature information. Called by the framework.
+ * 
+ * @param	{array}	buffer		a buffer to append to
+ */
+EmailQuotesZimlet.prototype.appendExtraSignature =
 function(buffer) {
 	if(this.turnEmailQuotesZimletON)
 	    buffer.push(this.currentQuote);
 };
 
-com_zimbra_emailquotes.prototype.doubleClicked = function() {
+/**
+ * Called by the framework on double-click.
+ */
+EmailQuotesZimlet.prototype.doubleClicked = function() {
     this.singleClicked();
 };
 
-com_zimbra_emailquotes.prototype.singleClicked = function() {
+/**
+ * Called by the framework on single-click.
+ */
+EmailQuotesZimlet.prototype.singleClicked = function() {
     this._showPreferenceDlg();
 };
-com_zimbra_emailquotes.prototype._showPreferenceDlg = function() {
+
+/**
+ * Shows the preferences dialog.
+ * 
+ */
+EmailQuotesZimlet.prototype._showPreferenceDlg = function() {
     //if zimlet dialog already exists...
     if (this._preferenceDialog) {
         this._setZimletCurrentPreferences();
@@ -147,8 +211,9 @@ com_zimbra_emailquotes.prototype._showPreferenceDlg = function() {
     this._preferenceView.getHtmlElement().style.background = "white";
     this._preferenceView.getHtmlElement().style.overflow = "auto";
     this._preferenceView.getHtmlElement().innerHTML = this._createPrefView();
-    this._getAbsHoursMenu();
-    this._preferenceDialog = this._createDialog({title:"'Email Quotes' Zimlet Preferences", view:this._preferenceView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+    this._getCategoriesMenu();
+    var dialogTitle = this.getMessage("EmailQuotesZimlet_dialog_preferences_title");
+    this._preferenceDialog = this._createDialog({title:dialogTitle, view:this._preferenceView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
     this._preferenceDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okPreferenceBtnListener));
     this._preferenceDialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this._cancelPreferenceBtnListener));
 
@@ -156,46 +221,57 @@ com_zimbra_emailquotes.prototype._showPreferenceDlg = function() {
     this._preferenceDialog.popup();
 };
 
-
-com_zimbra_emailquotes.prototype._createPrefView =
+/**
+ * Creates the preferences view.
+ * 
+ * @see		_showPreferenceDlg
+ */
+EmailQuotesZimlet.prototype._createPrefView =
 function() {
     var html = new Array();
     var i = 0;
     html[i++] = "<BR>";
     html[i++] = "<TABLE>";
-    html[i++] = "<TR><TD colspan=2><B>Select one or more quotes categories of your choice(use ctrl+click to select multiple items):</B></TD></TR>";
+    html[i++] = "<TR><TD colspan=2><B>";
+    html[i++] = this.getMessage("EmailQuotesZimlet_dialog_preferences_select_text");
+    html[i++] = "</B></TD></TR>";
     html[i++] = "<TR><TD id='equotes_typeMenuTD'></TD><TD><span style=\"font: bold 12pt 'arial', 'sans-serif';color:blue;\"  id='equotes_display'> </span></TD></TR>";
     html[i++] = "</TABLE>";
     html[i++] = "<BR>";
     html[i++] = "<DIV>";
     html[i++] = "<TABLE>";
-    html[i++] = "<TR><TD><input id='turnONEmailQuotesChkbox'  type='checkbox'/>Turn ON 'Email Quotes'-Zimlet</TD></TR>";
+    html[i++] = "<TR><TD><input id='turnONEmailQuotesChkbox' type='checkbox'/>";
+    html[i++] = this.getMessage("EmailQuotesZimlet_dialog_preferences_enable");
+    html[i++] = "</TD></TR>";
     html[i++] = "</TABLE>";
-    html[i++] = "<BR>";
     html[i++] = "<TABLE>";
-    html[i++] = "<TR><TD><FONT size=1>PS:</FONT></TD></TR>";
-    html[i++] = "<TR><TD><FONT size=1>- Quotes are from: http://www.quotedb.com/</FONT></TD></TR>";
-    html[i++] = "<TR><TD><FONT size='1pt'>- Changes to the above preferences would refresh the browser</FONT></TD></TR>";
+    html[i++] = "<TR><TD><FONT size=1>";
+    html[i++] = this.getMessage("EmailQuotesZimlet_dialog_preferences_note");
+    html[i++] = "</FONT></TD></TR>";
+    html[i++] = "<TR><TD><FONT size=1>";
+    html[i++] = this.getMessage("EmailQuotesZimlet_dialog_preferences_fromqdotcom");
+    html[i++] = "</FONT></TD></TR>";
+    html[i++] = "<TR><TD><FONT size='1pt'>";
+    html[i++] = this.getMessage("EmailQuotesZimlet_dialog_preferences_requirerefresh");
+    html[i++] = "</FONT></TD></TR>";
     html[i++] = "</TABLE>";
     html[i++] = "</DIV>";
     return html.join("");
 
 };
 
-com_zimbra_emailquotes.prototype._getAbsHoursMenu =
+/**
+ * Gets the absolute hours menu.
+ */
+EmailQuotesZimlet.prototype._getCategoriesMenu =
 function() {
-    var nameValueStr = "\"\"=Any,54=Age,49=America,69=Anger,96=Animals,44=Art,40=Beauty,50=Children,8=Comedy,126=Computers,38=Education,121=Emotion,98=Envy,80=Experience,31=Faith,";
-    nameValueStr = nameValueStr + "119=Fame,86=Family,48=Fear,77=Food,13=Freedom,6=Friendship,2=God,7=Government,45=Happiness,91=Health,117=History,66=Holidays,115=Hope,74=Humor,";
-    nameValueStr = nameValueStr + "101=Inspiration,93=Justice,27=Leadership,43=Life &amp;Death,5=Love,14=Miscellaneous,37=Money,11=Morality,28=Patriotism,62=Philosophy,";
-    nameValueStr = nameValueStr + "20=Politics,109=Power,84=Pride,29=Race,39=Reading,60=Religion,71=Risk,15=Science,76=Sleep,75=Sports,9=Success,79=Talking,73=Thinking,";
-    nameValueStr = nameValueStr + "51=Time,33=Truth &amp; Lies,64=Virtue,32=War &amp; Peace,81=Wisdom,34=Work,26=Writing";
-
-    var items = nameValueStr.split(",");
-    var html = new Array();
+	var items = this._getCategories();
+	
+	var html = new Array();
     var i = 0;
-    html[i++] = "<select id=\"equotes_typeMenu\" multiple='' size=10>";
+    html[i++] = "<select id=\"equotes_typeMenu\" multiple='' style='width: 150px;' size=10>";
     for (var j = 0; j < items.length; j++) {
-        var itm = items[j].split("=");
+        var itm = items[j];
         html[i++] = "<option value=" + itm[0] + ">" + itm[1] + "</option>";
     }
     html[i++] = "</select>";
@@ -205,7 +281,265 @@ function() {
 
 };
 
-com_zimbra_emailquotes.prototype._setZimletCurrentPreferences =
+/**
+ * Gets the categories array.
+ * 
+ * @return	{array}	an array of categories
+ */
+EmailQuotesZimlet.prototype._getCategories =
+function() {
+	if (this._categories != null)
+		return	this._categories;
+		
+	var tmpCats = new Array();
+	var idx = 0;
+	
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "\"\"";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_any");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "54";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_age");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "49";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_america");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "69";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_anger");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "96";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_animals");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "44";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_art");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "40";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_beauty");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "50";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_children");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "8";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_comedy");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "126";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_computers");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "38";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_education");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "121";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_emotion");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "98";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_envy");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "80";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_experience");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "31";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_faith");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "119";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_fame");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "86";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_family");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "48";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_fear");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "77";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_food");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "13";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_freedom");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "6";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_friendship");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "2";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_god");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "7";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_government");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "45";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_happiness");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "91";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_health");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "117";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_history");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "66";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_holidays");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "115";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_hope");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "74";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_humor");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "101";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_inspiration");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "93";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_justice");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "27";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_leadership");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "43";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_lifeanddeath");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "5";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_love");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "14";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_miscellaneous");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "37";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_money");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "11";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_morality");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "28";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_patriotism");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "62";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_philosophy");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "20";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_politics");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "109";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_power");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "84";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_pride");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "29";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_race");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "39";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_reading");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "60";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_religion");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "71";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_risk");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "15";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_science");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "76";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_sleep");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "75";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_sports");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "9";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_success");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "79";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_talking");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "73";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_thinking");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "51";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_time");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "33";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_truthandlies");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "64";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_virtue");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "32";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_warandpeace");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "81";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_wisdom");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "34";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_work");
+
+	tmpCats[idx] = new Array();
+	tmpCats[idx][0] = "26";
+	tmpCats[idx++][1] = this.getMessage("EmailQuotesZimlet_category_writing");
+
+    this._categories = tmpCats;
+		
+	return	this._categories;
+};
+
+/**
+ * Sets the preferences.
+ * 
+ */
+EmailQuotesZimlet.prototype._setZimletCurrentPreferences =
 function() {
     this._initializeVariables();
     if (this.turnEmailQuotesZimletON) {
@@ -219,13 +553,21 @@ function() {
     this._rotateTimer = setInterval(AjxCallback.simpleClosure(this._rotateQuotes, this), 6000);
 };
 
-com_zimbra_emailquotes.prototype._rotateQuotes =
+/**
+ * Rotate quotes.
+ * 
+ */
+EmailQuotesZimlet.prototype._rotateQuotes =
 function() {
     this._setQuoteToDlgUI();
     this._getFeed(this._baseFeed);	//call again
 };
 
-com_zimbra_emailquotes.prototype._setQuoteToDlgUI =
+/**
+ * Sets the quote dialog.
+ * 
+ */
+EmailQuotesZimlet.prototype._setQuoteToDlgUI =
 function() {
     this._currColor = document.getElementById("equotes_display").style.color;
     var colors = ["red", "blue", "green", "brown", "#FF66FF", "purple","#6E6E6E"];
@@ -240,22 +582,27 @@ function() {
     document.getElementById("equotes_display").innerHTML = this.currentQuote;
 };
 
-com_zimbra_emailquotes.prototype._okPreferenceBtnListener =
+/**
+ * OK button listener.
+ * 
+ * @see		_showPreferenceDlg
+ */
+EmailQuotesZimlet.prototype._okPreferenceBtnListener =
 function() {
     this._reloadRequired = false;
     if (document.getElementById("turnONEmailQuotesChkbox").checked) {
         if (!this.turnEmailQuotesZimletON) {
             this._reloadRequired = true;
         }
-        this.setUserProperty("turnEmailQuotesZimletON", "true", true);
+        this.setUserProperty(EmailQuotesZimlet.USER_PROP_ENABLED, "true", true);
 
     } else {
-        this.setUserProperty("turnEmailQuotesZimletON", "false", true);
+        this.setUserProperty(EmailQuotesZimlet.USER_PROP_ENABLED, "false", true);
         if (this.turnEmailQuotesZimletON)
             this._reloadRequired = true;
     }
     var sitms = this._getSelectedItems();
-    this.setUserProperty("equotes_userSelections", sitms, true);
+    this.setUserProperty(EmailQuotesZimlet.USER_PROP_USER_SELECTIONS, sitms, true);
 
     clearInterval(this._rotateTimer);//clear interval
     this._preferenceDialog.popdown();
@@ -265,7 +612,12 @@ function() {
     }
 };
 
-com_zimbra_emailquotes.prototype._cancelPreferenceBtnListener =
+/**
+ * Cancel button listener.
+ * 
+ * @see		_showPreferenceDlg
+ */
+EmailQuotesZimlet.prototype._cancelPreferenceBtnListener =
 function() {
     clearInterval(this._rotateTimer);//clear interval
     this._preferenceDialog.popdown();
@@ -273,7 +625,11 @@ function() {
 
 };
 
-com_zimbra_emailquotes.prototype._getSelectedItems =
+/**
+ * Gets selected items.
+ * 
+ */
+EmailQuotesZimlet.prototype._getSelectedItems =
 function() {
     var me = document.getElementById("equotes_typeMenu");
     var vals = "";
@@ -289,7 +645,11 @@ function() {
     return vals;
 };
 
-com_zimbra_emailquotes.prototype._highlightCurrentItems =
+/**
+ * Highlights the current items.
+ * 
+ */
+EmailQuotesZimlet.prototype._highlightCurrentItems =
 function() {
     var userSelections = this._selectedItems.split(",");
     var me = document.getElementById("equotes_typeMenu");
@@ -305,7 +665,11 @@ function() {
 
 };
 
-com_zimbra_emailquotes.prototype._reloadBrowser =
+/**
+ * Reloads the browser.
+ * 
+ */
+EmailQuotesZimlet.prototype._reloadBrowser =
 function() {
     window.onbeforeunload = null;
     var url = AjxUtil.formatUrl({});
