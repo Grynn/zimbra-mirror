@@ -1219,7 +1219,9 @@ function(menuId, val) {
 WebExZimlet.prototype._createAccPrefsView =
 function() {
 	var html = [];
-	html.push("<table width=90% align=center><tr><td>");
+	if(!AjxEnv.isIE) {//w/o this, stupid IE will break
+		html.push("<table width=90% align=center><tr><td>");
+	}
 	for (var indx = 1; indx < 6; indx++) {
 		if (indx == 1) {
 			var notes = this.getMessage("WebExZimlet_account1UsedAsDefaultForUnAssociatedCal");
@@ -1228,7 +1230,9 @@ function() {
 		}
 		html.push(this._getAccountPrefsHtml(indx, notes));
 	}
-	html.push("</td></tr></table>");
+	if(!AjxEnv.isIE) {//w/o this, stupid IE will break
+		html.push("</td></tr></table>");
+	}
 	return html.join("");
 };
 
@@ -1251,10 +1255,12 @@ function(indx, notes) {
 	for (var i = 0; i < WebExZimlet.SINGLE_WEBEX_ACCNT_PROPS.length; i++) {
 		var obj = WebExZimlet.SINGLE_WEBEX_ACCNT_PROPS[i];
 		if (obj.propId.indexOf(WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId) == 0) {
-			html.push("<tr><td>", this.getMessage(obj.label), "</td><td>", this._getCalendarFoldersList(indx), this.getMessage(obj.extraLabel), "</td></tr>");
+			html.push("<tr><td>", this.getMessage(obj.label), "</td><td>", this._getCalendarFoldersList(indx), "<label style='color:gray'>", this.getMessage(obj.extraLabel), 
+				"</label></td></tr>");
 		} else {
 			var type = obj.objType ? obj.objType : "text";
-			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", obj.propId, indx, "'  type='", type, "'/>", this.getMessage(obj.extraLabel), "</td></tr>");
+			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", obj.propId, indx, "'  type='", type, "'/>", "<label style='color:gray'>",  
+				this.getMessage(obj.extraLabel), "</label></td></tr>");
 		}
 	}
 	html.push("<tr><td></td><td id='webExZimlet_TestAccountBtn", indx, "' ></td></tr>");
@@ -1263,7 +1269,7 @@ function(indx, notes) {
 	html.push("<table class='webExZimlet_table'>");
 	for (var i = 0; i < WebExZimlet.WEBEX_TELECONF_PROPS.length; i++) {
 		var obj = WebExZimlet.WEBEX_TELECONF_PROPS[i];
-		html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", obj.propId, indx, "'  type='text'/>", this.getMessage(obj.extraLabel), "</td></tr>");
+		html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", obj.propId, indx, "'  type='text'/>","<label style='color:gray'>",  this.getMessage(obj.extraLabel), "</label></td></tr>");
 	}
 	html.push("</table>");
 	html.push("<div><label style='font-style:italic;font-weight:bold;color:blue;'> ", notes, "</label></div>");
