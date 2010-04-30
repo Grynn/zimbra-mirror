@@ -192,25 +192,41 @@ ZaDashBoardController.prototype.editItem = function (item) {
 	}
 	if (!this.selectExistingTabByItemId(itemId,viewContstructor)){
 		if (type == ZaItem.ACCOUNT) {
-			ZaApp.getInstance().getAccountViewController().show(item,true);
+			var c = ZaApp.getInstance().getAccountViewController()
+			c.show(item,true);
+			c.addChangeListener(new AjxListener(this, this.handleAccChange));
 		} else if (type == ZaItem.DL) {
-			ZaApp.getInstance().getDistributionListController().show(item,true);
+			var c = ZaApp.getInstance().getDistributionListController()
+			c.show(item,true);
+			c.addChangeListener(new AjxListener(this, this.handleDLChange));
 		} else if(type == ZaItem.ALIAS) {
 			var targetObj = item.getAliasTargetObj();
 			
 			if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {			
-				ZaApp.getInstance().getAccountViewController().show(targetObj, true);
+				var c = ZaApp.getInstance().getAccountViewController();
+				c.show(targetObj, true);
+				c.addChangeListener(new AjxListener(this, this.handleAccChange));
 			} else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
-				ZaApp.getInstance().getDistributionListController().show(targetObj, true);
+				var c = ZaApp.getInstance().getDistributionListController();
+				c.show(targetObj, true);
+				c.addChangeListener(new AjxListener(this, this.handleDLChange));
 			}  else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.RESOURCE){
-				ZaApp.getInstance().getResourceController().show(targetObj, true);
+				var c = ZaApp.getInstance().getResourceController();
+				c.show(targetObj, true);
+				c.addChangeListener(new AjxListener(this, this.handleResourceChange));
 			}
 		} else if (type == ZaItem.RESOURCE){
-			ZaApp.getInstance().getResourceController().show(item,true);
+			var c = ZaApp.getInstance().getResourceController();
+			c.show(item,true);
+			c.addChangeListener(new AjxListener(this, this.handleResourceChange));
 		} else if (type==ZaItem.DOMAIN) {
-			ZaApp.getInstance().getDomainController().show(item,true);
+			var c = ZaApp.getInstance().getDomainController();
+			c.show(item,true);
+			c.addChangeListener(new AjxListener(this, this.handleDomainChange));
 		} else if (type==ZaItem.COS) {
-			ZaApp.getInstance().getCosController().show(item,true);
+			var c = ZaApp.getInstance().getCosController();
+			c.show(item,true);
+			c.addChangeListener(new AjxListener(this, this.handleProfileChange));
 		}
 	}
 };
@@ -238,6 +254,12 @@ ZaDashBoardController.prototype.deleteDialogOKBtnhandler = function() {
 	this._contentView.searchAddresses(this._contentView.types);
 };
 
+ZaDashBoardController.prototype.handleProfileChange = function() {
+	if(this._contentView.types[0] == ZaSearch.COSES) {
+		this._contentView.searchAddresses(this._contentView.types,this._contentView.offset);
+	}
+};
+
 //new button was pressed
 ZaDashBoardController.prototype.newProfileSelected = function() {
 	var newCos = new ZaCos();
@@ -253,7 +275,9 @@ ZaDashBoardController.prototype.newProfileSelected = function() {
 		newCos.attrs[aname] = defCos.attrs[aname];
 	}
 	
-	ZaApp.getInstance().getCosController().show(newCos);
+	var c = ZaApp.getInstance().getCosController();
+	c.show(newCos);
+	c.addChangeListener(new AjxListener(this, this.handleProfileChange));
 };
 
 ZaDashBoardController.prototype.newDomainSelected = function () {
@@ -275,6 +299,12 @@ ZaDashBoardController.prototype.newDomainSelected = function () {
 
 };
 
+ZaDashBoardController.prototype.handleDomainChange = function() {
+	if(this._contentView.types[0] == ZaSearch.DOMAINS) {
+		this._contentView.searchAddresses(this._contentView.types,this._contentView.offset);
+	}
+};
+
 ZaDashBoardController.prototype.finishNewDomainButtonListener = function() {
 	try {
 		this._newDomainWizard.getButton(ZaXWizardDialog.FINISH_BUTTON).setEnabled(false);
@@ -282,8 +312,6 @@ ZaDashBoardController.prototype.finishNewDomainButtonListener = function() {
 		var obj = this._newDomainWizard.getObject();		
 		var domain = ZaItem.create(obj,ZaDomain,"ZaDomain");
 		if(domain != null) {			
-			//if creation took place - fire an DomainChangeEvent
-			//this._fireDomainCreationEvent(domain);
 			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
 				var params = new Object();
 				params.obj = obj;
@@ -291,10 +319,9 @@ ZaDashBoardController.prototype.finishNewDomainButtonListener = function() {
 				ZaDomain.initNotebook(obj,callback, this) ;
 			}			
 			this.popupMsgDialog(AjxMessageFormat.format(com_zimbra_dashboard.DomainCreated,[domain.attrs[ZaDomain.A_domainName]]));
-			//var evt = new ZaEvent(ZaEvent.S_DOMAIN);
-			//evt.set(ZaEvent.E_CREATE, this);
-			//evt.setDetails(domain);
-			//this.handleCreation(evt);
+			if(this._contentView.types[0] == ZaSearch.DOMAINS) {
+				this._contentView.searchAddresses(this._contentView.types,this._contentView.offset);
+			}						
 		} else {
 			this._newDomainWizard.getButton(ZaXWizardDialog.FINISH_BUTTON).setEnabled(true);
 			this._newDomainWizard.popup();
@@ -318,6 +345,9 @@ ZaDashBoardController.prototype.createDomainAndResource = function(domainName) {
 		newDomain.attrs[ZaDomain.A_domainName] = domainName;
 		var domain = ZaItem.create(newDomain,ZaDomain,"ZaDomain");
 		if(domain != null) {
+			if(this._contentView.types[0] == ZaSearch.DOMAINS) {
+				this._contentView.searchAddresses(this._contentView.types,this._contentView.offset);
+			}			
 			this.closeCnfrmDelDlg();
 			this.finishResourceWizard();
 		}
@@ -401,7 +431,7 @@ ZaDashBoardController.prototype.newResourceSelected = function() {
 
 ZaDashBoardController.prototype.finishAliasWizard = function(aliasObj, form) {
 	aliasObj.addAlias(form);
-	if(this._contentView.types[0] == ZaSearch.ALIASES || this._contentView.types[2] == ZaSearch.ALIASES) {
+	if(this._contentView.types[0] == ZaSearch.ALIASES || this._contentView.types[1] == ZaSearch.ALIASES) {
 		this._contentView.searchAddresses(this._contentView.types,this._contentView.offset);
 	}	
 };
@@ -438,13 +468,32 @@ ZaDashBoardController.prototype.newDLSelected = function() {
 		newDL.rights[ZaDistributionList.RENAME_DL_RIGHT]=true;
 		newDL.rights[ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]=true;
 		newDL.rights[ZaDistributionList.ADD_DL_MEMBER_RIGHT]=true;
-		ZaApp.getInstance().getDistributionListController().show(newDL);
+		var dlc = ZaApp.getInstance().getDistributionListController();
+		dlc.show(newDL);
+		dlc.addChangeListener(new AjxListener(this, this.handleDLChange));			
 	} catch (ex) {
 		this._handleException(ex, "ZaDashBoardController.prototype.newDLSelected", null, false);
 	}
 
 };
 
+ZaDashBoardController.prototype.handleDLChange = function () {
+	if(this._contentView.types[0] == ZaSearch.DLS || this._contentView.types[2] == ZaSearch.DLS) {
+		this._contentView.searchAddresses(this._contentView.types,this._contentView.offset);
+	}	
+};
+
+ZaDashBoardController.prototype.handleAccChange = function () {
+	if(this._contentView.types[0] == ZaSearch.ACCOUNTS) {
+		this._contentView.searchAddresses(this._contentView.types,this._contentView.offset);
+	}	
+};
+
+ZaDashBoardController.prototype.handleResourceChange = function () {
+	if(this._contentView.types[0] == ZaSearch.RESOURCES || this._contentView.types[3] == ZaSearch.RESOURCES) {
+		this._contentView.searchAddresses(this._contentView.types,this._contentView.offset);
+	}	
+};
 
 ZaDashBoardController.prototype.createDomainAndAccount = function(domainName) {
 	try {
@@ -453,7 +502,10 @@ ZaDashBoardController.prototype.createDomainAndAccount = function(domainName) {
 		newDomain.attrs[ZaDomain.A_domainName] = domainName;
 		var domain = ZaItem.create(newDomain,ZaDomain,"ZaDomain");
 		if(domain != null) {
-			this.closeCnfrmDelDlg();
+			if(this._contentView.types[0] == ZaSearch.DOMAINS) {
+				this._contentView.searchAddresses(this._contentView.types,this._contentView.offset);
+			}
+			this.closeCnfrmDelDlg();			
 			this.finishAccountWizard();
 		}
 	} catch(ex) {

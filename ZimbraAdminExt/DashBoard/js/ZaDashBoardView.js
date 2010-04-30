@@ -79,7 +79,7 @@ function(entry) {
 	this.updateTab();
 	var busyId = Dwt.getNextId();
 	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:null,busyId:busyId});
-	this.types = [ZaSearch.ACCOUNTS,ZaSearch.DLS,ZaSearch.ALIASES, ZaSearch.RESOURCES];
+	this.types = [ZaSearch.ACCOUNTS,ZaSearch.ALIASES, ZaSearch.DLS,ZaSearch.RESOURCES];
 	this.offset = 0;
 	this.query = ZaSearch.getSearchByNameQuery("",this.types);
 	var searchParams = {
@@ -238,7 +238,7 @@ ZaDashBoardView.prototype.domainFilterSelected = function() {
 ZaDashBoardView.prototype.allFilterSelected = function() {
 	this.setIconForSearchMenuButton ("SearchAll");
 	this.setLabelForSearchMenuButton(com_zimbra_dashboard.SearchFilter_All);	
-	this.searchAddresses([ZaSearch.ACCOUNTS,ZaSearch.DLS,ZaSearch.ALIASES, ZaSearch.RESOURCES]);
+	this.searchAddresses([ZaSearch.ACCOUNTS, ZaSearch.ALIASES, ZaSearch.DLS, ZaSearch.RESOURCES]);
 }
 
 ZaDashBoardView.prototype.cosFilterSelected = function() {
