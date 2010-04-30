@@ -347,15 +347,8 @@ ZaDashBoardView.listSelectionListener = function (ev) {
 };
 
 ZaDashBoardView.createPopupMenu = function (listWidget) {
-	popupOperations = {};
-    popupOperations[ZaOperation.EDIT]=new ZaOperation(ZaOperation.EDIT,ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaDashBoardView._editButtonListener));
-	popupOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaDashBoardView._deleteButtonListener));
-	popupOperations[ZaOperation.CHNG_PWD]=new ZaOperation(ZaOperation.CHNG_PWD,ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaDashBoardView._chngPwdListener));
-	popupOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, ZaDashBoardView._expireSessionListener));
-	popupOperations[ZaOperation.VIEW_MAIL]=new ZaOperation(ZaOperation.VIEW_MAIL,ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, ZaDashBoardView._viewMailListener));		
-	popupOperations[ZaOperation.MOVE_ALIAS]=new ZaOperation(ZaOperation.MOVE_ALIAS,ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaDashBoardView._moveAliasListener));		    	
-	listWidget.actionMenu = new ZaPopupMenu(listWidget, "ActionMenu", null, popupOperations);
-	listWidget.addActionListener(new AjxListener(listWidget, ZaDashBoardView.listActionListener));		
+	ZaApp.getInstance().getDashBoardController()._actionMenu = listWidget.actionMenu = new ZaPopupMenu(listWidget, "ActionMenu", null, ZaApp.getInstance().getDashBoardController()._popupOperations);
+	listWidget.addActionListener(new AjxListener(ZaApp.getInstance().getDashBoardController(), ZaApp.getInstance().getDashBoardController().listActionListener));		
 	listWidget.xFormItem = this;
 }
 
@@ -373,53 +366,6 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 	searchMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_COSES, com_zimbra_dashboard.SearchFilter_Profiles, com_zimbra_dashboard.searchForProfiles, "COS", "COS", new AjxListener(this, this.cosFilterSelected)));				
 	ZaDashBoardView.searchChoices.setChoices(searchMenuOpList);
 	
-	/*ZaDashBoardView.newButtonChoices = new XFormChoices([],XFormChoices.OBJECT_REFERENCE_LIST, null, "labelId");
-	var newMenuOpList = new Array();
-    newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Account, com_zimbra_dashboard.NewButton_Account_tt, "Account", "AccountDis", new AjxListener(this,this.accFilterSelected)));
-    newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_DL, com_zimbra_dashboard.NewButton_DL_tt, "DistributionList", "DistributionListDis", new AjxListener(this,this.dlFilterSelected)));
-    newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Alias, com_zimbra_dashboard.NewButton_Alias_tt, "AccountAlias", "AccountAlias", new AjxListener(this, this.aliasFilterSelected)));
-    newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Resource, com_zimbra_dashboard.NewButton_Resource_tt, "Resource", "ResourceDis", new AjxListener(this, this.resFilterSelected)));
-    newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Domain, com_zimbra_dashboard.NewButton_Domain_tt, "Domain", "DomainDis", new AjxListener(this, this.domainFilterSelected)));
-	ZaDashBoardView.newButtonChoices.setChoices(newMenuOpList);*/
-	
-/*	var toolbarOperations = {};
-    toolbarOperations[ZaOperation.EDIT]=new ZaOperation(ZaOperation.EDIT,ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaSearchListController.prototype._editButtonListener));
-	toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaSearchListController.prototype._deleteButtonListener));
-	toolbarOperations[ZaOperation.CHNG_PWD]=new ZaOperation(ZaOperation.CHNG_PWD,ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener));
-	toolbarOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, ZaAccountListController.prototype._expireSessionListener));
-	toolbarOperations[ZaOperation.VIEW_MAIL]=new ZaOperation(ZaOperation.VIEW_MAIL,ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, ZaAccountListController.prototype._viewMailListener));		
-	toolbarOperations[ZaOperation.MOVE_ALIAS]=new ZaOperation(ZaOperation.MOVE_ALIAS,ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener));		    	
-	toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);	
-	toolbarOperations[ZaOperation.PAGE_BACK]=new ZaOperation(ZaOperation.PAGE_BACK,ZaMsg.Previous, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, this._prevPageListener));
-	var toolbarOrder = [];
-	toolbarOrder.push(ZaOperation.EDIT);
-	toolbarOrder.push(ZaOperation.DELETE);
-	toolbarOrder.push(ZaOperation.CHNG_PWD);
-	toolbarOrder.push(ZaOperation.EXPIRE_SESSION);
-	toolbarOrder.push(ZaOperation.VIEW_MAIL);
-	toolbarOrder.push(ZaOperation.MOVE_ALIAS);	
-	toolbarOrder.push(ZaOperation.NONE);
-    toolbarOrder.push(ZaOperation.PAGE_BACK);
-	//add the acount number counts
-	ZaSearch.searchResultCountsView(toolbarOperations, toolbarOrder);
-	toolbarOperations[ZaOperation.PAGE_FORWARD]=new ZaOperation(ZaOperation.PAGE_FORWARD,ZaMsg.Next, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, this._nextPageListener));				
-	toolbarOrder.push(ZaOperation.PAGE_FORWARD);
-	*/
-	/*
-	var searchHeaderList = new Array();
-	var sortable = 1;
-	var i = 0
-	searchHeaderList[i++] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", null, null, true, true);
-	this._defaultColumnSortable = sortable ;
-	searchHeaderList[i++] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.CLV_Name_col, null, "220px", null,  null, true, true);
-	
-//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible	
-	searchHeaderList[i++] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px",  null, null, true, true);
-
-	searchHeaderList[i++] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "120px",  null, null, true, true);
-	//searchHeaderList[i++] = new ZaListHeaderItem(ZaAccount.A_zimbraLastLogonTimestamp, ZaMsg.ALV_Last_Login, null, Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.ALV_Last_Login, false, 0), null, null, true, true);
-	searchHeaderList[i++] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, "auto", null, null,true, true );
-		*/
     var switchItems = [];
     var _tab1 = ++this.TAB_INDEX;
     var _tab2 = ++this.TAB_INDEX;
@@ -576,68 +522,7 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
  	    	   		visibilityChecks:[], enableDisableChecks:[]
  	    	   	}             	
    	    	]	
-	   }/*,	
-	   {type:_TOP_GROUPER_, label:com_zimbra_dashboard.Services, id:"dashboard_settings_group",
-			numCols:6, colSizes:["auto","auto","auto","auto"],visibilityChecks:[],enableDisableChecks:[],
-			items:[
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],
-			    	   items:[
-			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_LDAP+"status",1]]},
-			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_LDAP+"status",1]]},
-			    	          {type:_OUTPUT_, value:ZaStatus.SVC_LDAP}
-			    	    ]
-			       },
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],
-			    	   items:[
-			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]},
-			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_MAILBOX+"status",1]]},
-			    	          {type:_OUTPUT_, value:ZaStatus.SVC_MAILBOX}
-			    	    ]
-			       },	
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],
-			    	   items:[
-			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_MTA+"status",1]]},
-			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_MTA+"status",1]]},
-			    	          {type:_OUTPUT_, value:ZaStatus.SVC_MTA}
-			    	    ]
-			       },
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],
-			    	   items:[
-			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_LOGGER+"status",1]]},
-			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_LOGGER+"status",1]]},
-			    	          {type:_OUTPUT_, value:ZaStatus.SVC_LOGGER}
-			    	    ]
-			       },
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],
-			    	   items:[
-			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_CONVERTD+"status",1]]},
-			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_CONVERTD+"status",1]]},
-			    	          {type:_OUTPUT_, value:ZaStatus.SVC_CONVERTD}
-			    	    ]
-			       },			       
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],
-			    	   items:[
-			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AS+"status",1]]},
-			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_AS+"status",1]]},
-			    	          {type:_OUTPUT_, value:ZaStatus.SVC_AS}
-			    	    ]
-			       },
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],
-			    	   items:[
-			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_AV+"status",1]]},
-			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_AV+"status",1]]},
-			    	          {type:_OUTPUT_, value:ZaStatus.SVC_AV}
-			    	    ]
-			       },	
-			       {type:_GROUP_,numCols:3,colSizes:["auto","auto","auto"],
-			    	   items:[
-			    	          {type:_AJX_IMAGE_,src:"Check", visibilityChecks:[[XForm.checkInstanceValue,"serviceMap/"+ZaStatus.SVC_STATS+"status",1]]},
-			    	          {type:_AJX_IMAGE_,src:"Cancel", visibilityChecks:[[XForm.checkInstanceValueNot,"serviceMap/"+ZaStatus.SVC_STATS+"status",1]]},
-			    	          {type:_OUTPUT_, value:ZaStatus.SVC_STATS}
-			    	    ]
-			       }			       
-			]
-		}	*/                     
+	   }                    
       
 	];
 	
