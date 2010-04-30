@@ -11,17 +11,15 @@
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
- *
- *@author Raja Rao DV (rrao@zimbra.com)
  */
 
 /**
  * Constructor.
  *
+ * @author Raja Rao DV (rrao@zimbra.com)
  */
 function com_zimbra_webex_HandlerObject() {
 }
-
 
 com_zimbra_webex_HandlerObject.prototype = new ZmZimletBase();
 com_zimbra_webex_HandlerObject.prototype.constructor = com_zimbra_webex_HandlerObject;
@@ -226,7 +224,7 @@ WebExZimlet.prototype.initializeToolbar = function(app, toolbar, controller, vie
 /**
  * Called by the framework when an appointment is deleted
  *
- * @param {ZmAppointment} appt (or array of appointments) Appointment that was just deleted
+ * @param {ZmAppt|array} appt	the appointment or an array of {@link ZmAppt} objects just deleted
  */
 WebExZimlet.prototype.onAppointmentDelete = function(appt) {
 	if (!(appt instanceof ZmAppt)) {
@@ -246,13 +244,14 @@ WebExZimlet.prototype.onAppointmentDelete = function(appt) {
 };
 
 /**
- * Displays Yes/No dialog
- * @param {hash} webExKeyData  a Hash
- * @param {int} webExKeyData.meetingKey Webex meeting key
- * @param {int} webExKeyData.exceptionMeetingKey Webex meeting key of an exception to the series appt
- * @param {string} webExKeyData.username Webex username
- * @param {string} webExKeyData.password Webex password
- * @param {string} webExKeyData.companyId Webex company id
+ * Displays Yes/No dialog.
+ * 
+ * @param {hash} webExKeyData  a hash of parameters
+ * @param {int} webExKeyData.meetingKey	the Webex meeting key
+ * @param {int} webExKeyData.exceptionMeetingKey	the Webex meeting key of an exception to the series appt
+ * @param {string} webExKeyData.username 	the Webex username
+ * @param {string} webExKeyData.password	the Webex password
+ * @param {string} webExKeyData.companyId	the Webex company id
  */
 WebExZimlet.prototype._showDeleteWebExApptYesNoDlg =
 function(webExKeyData) {
@@ -265,10 +264,12 @@ function(webExKeyData) {
 	dlg.setMessage(this.getMessage("WebExZimlet_entireSeriesWillBeDeleted"), DwtMessageDialog.WARNING_STYLE);
 	dlg.popup();
 };
+
 /**
- * called when yes button is clicked to confirm delete
- * @param {ZmDialog} dlg
- * @param {obj} webExKeyData object containing webex information stored for a particular appointment
+ * Called when yes button is clicked to confirm delete.
+ * 
+ * @param {ZmDialog} dlg		the dialog
+ * @param {obj} webExKeyData 	the object containing webex information stored for a particular appointment
  */
 WebExZimlet.prototype._deleteYesButtonClicked =
 function(dlg, webExKeyData) {
@@ -277,8 +278,11 @@ function(dlg, webExKeyData) {
 };
 
 /**
- * Deletes a WebEx appointment
- * @param {hash} webExKeyData for more details @see this._showDeleteWebExApptYesNoDlg
+ * Deletes a WebEx appointment.
+ * 
+ * @param {hash} webExKeyData	a hash of parameters
+ * 
+ * @see this._showDeleteWebExApptYesNoDlg
  */
 WebExZimlet.prototype._doDeleteWebExAppt =
 function(webExKeyData) {
@@ -305,8 +309,9 @@ function(webExKeyData) {
 };
 
 /**
- * Closes warning dialog when No was clicked to a a warning
- * @param {ZmDialog} dlg a yes/no dialog
+ * Closes warning dialog when No was clicked to a a warning.
+ * 
+ * @param {ZmDialog} dlg 		the yes/no dialog
  */
 WebExZimlet.prototype._deleteNoButtonClicked =
 function(dlg) {
@@ -314,9 +319,10 @@ function(dlg) {
 };
 
 /**
- * Initiates calendar toolbar
- * @param {ZmToolbar} toolbar Zimbra toolbar
- * @param {ZmCalController} controller  Zimbra controller
+ * Initiates calendar toolbar.
+ * 
+ * @param {ZmToolbar} toolbar 	the Zimbra toolbar
+ * @param {ZmCalController} controller  the Zimbra calendar controller
  */
 WebExZimlet.prototype._initCalendarWebexToolbar = function(toolbar, controller) {
 	if (!toolbar.getButton("SAVE_AS_WEBEX")) {
@@ -336,8 +342,9 @@ WebExZimlet.prototype._initCalendarWebexToolbar = function(toolbar, controller) 
 	}
 };
 /**
- * Saves a WebEx appointment
- * @param {event} ev An event object
+ * Saves a WebEx appointment.
+ * 
+ * @param {event} ev		an event object
  */
 WebExZimlet.prototype._saveAsWebExHandler = function(ev) {
 	try {
@@ -364,11 +371,13 @@ WebExZimlet.prototype._saveAsWebExHandler = function(ev) {
 /**
  * Verifies if its a WebEx appointment
  *
- * @param {hash} params a hash
- * @param {ZmCalComposeController} params.apptController Controller
- * @param {ZmCalendarComposeView} params.apptComposeView Calendar compose view
- * @param {ZmAppointment} params.appt An appointment
- * @param {hash} webExKeyData for more details @see {this._showDeleteWebExApptYesNoDlg}
+ * @param {hash} params		a hash of parameters
+ * @param {ZmCalComposeController} params.apptController the calendar Controller
+ * @param {ZmCalendarComposeView} params.apptComposeView the Calendar compose view
+ * @param {ZmAppointment} params.appt	ann appointment
+ * @param {hash} webExKeyData for more details
+ * 
+ * @see {this._showDeleteWebExApptYesNoDlg}
  */
 WebExZimlet.prototype._checkIfItsWebExUpdate =
 function(params, webExKeyData) {
@@ -381,8 +390,11 @@ function(params, webExKeyData) {
 };
 
 /**
- * Shows warning dialog
- * @param params  for more details @see {this._checkIfItsWebExUpdate}
+ * Shows warning dialog.
+ * 
+ * @param {hash}	params  a hash of parameters
+ * 
+ * @see this._checkIfItsWebExUpdate
  */
 WebExZimlet.prototype._showUpdateWebExApptYesNoDlg =
 function(params) {
@@ -394,9 +406,12 @@ function(params) {
 };
 
 /**
- *  Called when Yes is clicked on warning dialog
- * @param {ZmDialog} dlg
- * @param params  for more details @see {this._checkIfItsWebExUpdate}
+ * Called when Yes is clicked on warning dialog.
+ * 
+ * @param {ZmDialog} dlg	the dialog
+ * @param {hash}	params  a hash of parameters
+ *
+ * @see this._checkIfItsWebExUpdate
  */
 WebExZimlet.prototype._updateYesButtonClicked =
 function(dlg, params) {
@@ -405,7 +420,8 @@ function(dlg, params) {
 };
 
 /**
- * Called when no button was clicked
+ * Called when no button was clicked.
+ * 
  * @param {ZmDialog} dlg  a dialog box
  */
 WebExZimlet.prototype._updateNoButtonClicked =
@@ -414,9 +430,11 @@ function(dlg) {
 };
 
 /**
- *  Saves WebEx appointment
+ * Saves WebEx appointment.
  *
- * @param params  for more details see {this._checkIfItsWebExUpdate}
+ * @param {hash}	params  a hash of parameters
+ * 
+ * @see this._checkIfItsWebExUpdate
  */
 WebExZimlet.prototype._doSaveWebExAppt = function(params) {
 	var postCallback2 = new AjxCallback(this, this._createOrUpdateMeeting, params);
@@ -425,9 +443,11 @@ WebExZimlet.prototype._doSaveWebExAppt = function(params) {
 };
 
 /**
- *  Saves WebEx appointment
+ * Saves WebEx appointment.
  *
- * @param params  for more details see {this._checkIfItsWebExUpdate}
+ * @param {hash}	params  a hash of parameters
+ * 
+ * @see	this._checkIfItsWebExUpdate
  */
 WebExZimlet.prototype._createOrUpdateMeeting = function(params) {
 	var newParams = {};
@@ -465,9 +485,9 @@ WebExZimlet.prototype._createOrUpdateMeeting = function(params) {
 };
 
 /**
- *  Saves WebEx appointment
+ * Saves WebEx appointment.
  *
- * @param {ZmAppointment} appt an appointment
+ * @param {ZmAppt} appt 	an appointment
  */
 WebExZimlet.prototype._getRecurrenceString = function(appt) {
 	var rec = appt.getRecurrence();
@@ -540,10 +560,10 @@ WebExZimlet.prototype._getRecurrenceString = function(appt) {
 };
 
 /**
- * Gets day in week string
+ * Gets day in week string.
  *
- * @param {array} repeatWeeklyDays An array of weekdays
- * @param {ZmAppoinment} appt An appointment
+ * @param {array} repeatWeeklyDays		an array of weekdays
+ * @param {ZmAppoinment} appt		an appointment
  * @return {string} a day in week string
  */
 WebExZimlet.prototype._getDayInWeekStr = function(repeatWeeklyDays, appt) {
@@ -563,17 +583,18 @@ WebExZimlet.prototype._getDayInWeekStr = function(repeatWeeklyDays, appt) {
 };
 
 /**
- * Create create or modify WebEx meeting request
+ * Create create or modify WebEx meeting request.
  *
- * @param {hash} params A hash
+ * @param {hash} params	a hash of parameters
  * @param {string} params.subject meeting subject
  * @param {string} params.loc meeting location
- * @param {string} params.emails meeting invittes
+ * @param {string} params.emails meeting invitees
  * @param {string} params.duration meeting duration
  * @param {int} params.timeZoneID WebEx timeZone Id
  * @param {string} params.pwd Meeting password
  * @param {string} params.formattedStartDate Start date string
  * @param {int} params.meetingkey meeting key
+ * 
  * @return {string} a request string
  */
 WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params) {
@@ -638,10 +659,12 @@ WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params) {
 };
 
 /**
- * Handles create or modify meeting response
+ * Handles create or modify meeting response.
  *
- * @param {hash} params for more information  @see {this._showDeleteWebExApptYesNoDlg}
- * @param {object} result Webex Response
+ * @param {hash} params			a hash of parameters
+ * @param {object} result		the WebEx response
+ * 
+ * @see this._showDeleteWebExApptYesNoDlg
  */
 WebExZimlet.prototype._createOrUpdateMeetingResponseHdlr = function(params, result) {
 	var objResult = this.xmlToObject(result);
@@ -677,7 +700,7 @@ WebExZimlet.prototype._createOrUpdateMeetingResponseHdlr = function(params, resu
 };
 
 /**
- * Called by framework
+ * Called by framework.
  */
 WebExZimlet.prototype.onSaveApptSuccess = function(controller, calItem, result) {
 	if (!this._params) {
@@ -692,8 +715,11 @@ WebExZimlet.prototype.onSaveApptSuccess = function(controller, calItem, result) 
 };
 
 /**
- * Appends meeting body and saves meeting
- * @param {hash} params for more information  @see {this._showDeleteWebExApptYesNoDlg}
+ * Appends meeting body and saves meeting.
+ * 
+ * @param {hash} params		 a hash of parameters
+ * 
+ * @see this._showDeleteWebExApptYesNoDlg
  */
 WebExZimlet.prototype._updateMeetingBodyAndSave = function(params) {
 	var composeView = params.apptComposeView;
@@ -729,8 +755,9 @@ WebExZimlet.prototype._updateMeetingBodyAndSave = function(params) {
 };
 
 /**
- * Gets meeting informations string to be appended to location or subject
- * @param {string} joinMeetingUrl  webex meeting url
+ * Gets meeting informations string to be appended to location or subject.
+ * 
+ * @param {string} joinMeetingUrl  the WebEx meeting url
  */
 WebExZimlet.prototype._getAddionalStringToAppend = function(joinMeetingUrl) {
 	if (this._webexZimletGeneralPreferences == undefined) {
@@ -759,12 +786,12 @@ WebExZimlet.prototype._getAddionalStringToAppend = function(joinMeetingUrl) {
 };
 
 /**
- * Gets webex's body string to append
+ * Gets the WebEx body string to append.
  *
- * @param {string} joinMeetingUrl WebEx join meeting url
+ * @param {string} joinMeetingUrl		the WebEx join meeting url
  * @param {string} editorType  "HTML" | "PLAIN_TEXT" | "FIELD" (Field is for edit-fields)
- * @param {boolean} telephoneOnly  if true, then only telephone information is returned
- * @param {boolean} noHeader If true, then html for header is ignored
+ * @param {boolean} telephoneOnly 		if <code>true</code>, then only telephone information is returned
+ * @param {boolean} noHeader		if <code>true</code>, then html for header is ignored
  */
 WebExZimlet.prototype._getWebExBodyString = function(joinMeetingUrl, editorType, telephoneOnly, noHeader) {
 	var html = [];
@@ -820,12 +847,12 @@ WebExZimlet.prototype._getWebExBodyString = function(joinMeetingUrl, editorType,
 };
 
 /**
- * Gets meeting html row
+ * Gets meeting html row.
  *
- * @param {string} name name/label of the item
- * @param {string} val  value string
- * @param {string} editorType type of the editor
- * @param {boolean} noDelimiter If true, delimiter is no appended
+ * @param {string} name 		the name/label of the item
+ * @param {string} val  		the value string
+ * @param {string} editorType 	the type of the editor
+ * @param {boolean} noDelimiter	if <code>true</code>, delimiter is no appended
  */
 WebExZimlet.prototype._getMeetingDetailsRow = function(name, val, editorType, noDelimiter) {
 	if (val == "") {//dont return empty rows
@@ -850,8 +877,8 @@ WebExZimlet.prototype._getMeetingDetailsRow = function(name, val, editorType, no
 /**
  * Gets meeting  section header
  *
- * @param {string} hdrName  Name of the section header
- * @param {string} editorType editor type
+ * @param {string} hdrName 	the name of the section header
+ * @param {string} editorType	the editor type
  */
 WebExZimlet.prototype._getMeetingDetailshdr = function(hdrName, editorType) {
 	if (editorType == "HTML") {
@@ -867,6 +894,12 @@ WebExZimlet.prototype._getMeetingDetailshdr = function(hdrName, editorType) {
 	}
 };
 
+/**
+ * Formats the date.
+ * 
+ * @param	{Date}	d		the date
+ * @return	{string}	the formatted date
+ */
 WebExZimlet.prototype._formatDate = function(d) {
 	var date = new Date();
 	date.setMonth(d.getMonth());
@@ -881,10 +914,12 @@ WebExZimlet.prototype._formatDate = function(d) {
 	return formatter.format(date);
 };
 
-
 /**
  * The uri to post all webex xml requests to.
  *
+ * @param	{hash}	securityParams		a hash of parameters
+ * 
+ * @return	{string}	the resulting uri
  */
 WebExZimlet.prototype.postUri = function(securityParams) {
 	var companyId = securityParams ? securityParams.companyId : this._currentWebExAccount[WebExZimlet.PROP_COMPANY_ID.propId];
@@ -893,9 +928,9 @@ WebExZimlet.prototype.postUri = function(securityParams) {
 		   AjxStringUtil.urlComponentEncode(["https://", companyId, ".webex.com/WBXService/XMLService"].join(""));
 };
 
-
 /**
- * Asks user to right-click for more option
+ * Asks user to right-click for more option.
+ * 
  */
 WebExZimlet.prototype.singleClicked = function() {
 	var dlg = appCtxt.getMsgDialog();
@@ -905,7 +940,8 @@ WebExZimlet.prototype.singleClicked = function() {
 };
 
 /**
- * Calls singleClicked when doubleClicked on panel item
+ * Calls singleClicked when doubleClicked on panel item.
+ * 
  */
 WebExZimlet.prototype.doubleClicked = function() {
 	this.singleClicked();
@@ -935,10 +971,11 @@ WebExZimlet.prototype.menuItemSelected = function(itemId) {
 	}
 };
 
-
 /**
  * Convert the xml response to a javascript object.
  *
+ * @param	{object}	result		the result
+ * @return {hash}	a js object
  */
 WebExZimlet.prototype.xmlToObject = function(result) {
 	var xd = null;
@@ -965,7 +1002,7 @@ WebExZimlet.prototype.xmlToObject = function(result) {
 };
 
 /**
- * Return an AjxXmlDoc containt the webex request with the given body
+ * Return an AjxXmlDoc containing the webex request with the given body
  * appends the security context header.
  *
  */
@@ -981,10 +1018,11 @@ WebExZimlet.prototype.newWebExRequest = function(requestBody, securityParams) {
 
 /**
  * Returns a string containing the xml for the security context header.
- *@params {hash} securityParams A Hash with login information
- *@params {string} securityParams.name WebEx username
- *@params {string} securityParams.pwd WebEx password
- *@params {string} securityParams.companyId WebEx company Id
+ * 
+ * @params {hash} securityParams	a hash of parameters with login information
+ * @params {string} securityParams.name	the WebEx username
+ * @params {string} securityParams.pwd	the WebEx password
+ * @params {string} securityParams.companyId	the WebEx company Id
  */
 WebExZimlet.prototype.newSecurityContext = function(securityParams) {
 	var name = securityParams ? securityParams.hostName : this._currentWebExAccount[WebExZimlet.PROP_USERNAME.propId];
@@ -999,7 +1037,7 @@ WebExZimlet.prototype.newSecurityContext = function(securityParams) {
 }
 
 /**
- * Displays Account preferences dialog
+ * Displays Account preferences dialog.
  */
 WebExZimlet.prototype._displayAccntPrefsDialog =
 function() {
@@ -1020,7 +1058,7 @@ function() {
 };
 
 /**
- * Adds test WebEx account buttons
+ * Adds test WebEx account buttons.
  */
 WebExZimlet.prototype._addTestAccountButtons =
 function() {
@@ -1034,7 +1072,8 @@ function() {
 };
 
 /**
- * Gets Account preferences meta data
+ * Gets Account preferences meta data.
+ * 
  * @param {AjxCallback} postCallback  a callback
  */
 WebExZimlet.prototype._getAccPrefsMetaData =
@@ -1043,9 +1082,10 @@ function(postCallback) {
 };
 
 /**
- * Handles Account preferences metadata callback
+ * Handles Account preferences metadata callback.
+ * 
  * @param {AjxCallback} postCallback  a callback
- * @param {object} result response
+ * @param {object} result 	the response
  */
 WebExZimlet.prototype._handleGetAccPrefsMetaData =
 function(postCallback, result) {
@@ -1063,7 +1103,8 @@ function(postCallback, result) {
 };
 
 /**
- * Sets current account information based on associated calendar
+ * Sets current account information based on associated calendar.
+ * 
  * @param {string} id Calendar id
  */
 WebExZimlet.prototype._setCurrentAccntInfoFromCalendar = function(id) {
@@ -1085,9 +1126,9 @@ WebExZimlet.prototype._setCurrentAccntInfoFromCalendar = function(id) {
 	this._validateCurrentAccount(accntNumber);
 };
 /**
- * Sets an account active based on account number
+ * Sets an account active based on account number.
  *
- * @param {int} accntNumber Account number
+ * @param {number} accntNumber	the account number
  */
 WebExZimlet.prototype._setCurrentAccntInfoFromAccntNumber = function(accntNumber) {
 	if (this._webexZimletAccountPreferences == undefined) {
@@ -1102,8 +1143,9 @@ WebExZimlet.prototype._setCurrentAccntInfoFromAccntNumber = function(accntNumber
 };
 
 /**
- * validates current account
- * @param {int} accntNumber Account number
+ * validates current account.
+ * 
+ * @param {number} accntNumber	the account number
  */
 WebExZimlet.prototype._validateCurrentAccount = function(accntNumber) {
 	var userName = this._currentWebExAccount[WebExZimlet.PROP_USERNAME.propId];
@@ -1116,7 +1158,8 @@ WebExZimlet.prototype._validateCurrentAccount = function(accntNumber) {
 };
 
 /**
- * Sets data to account preferences
+ * Sets data to account preferences.
+ * 
  */
 WebExZimlet.prototype._setDataToAccPrefsDlg =
 function() {
@@ -1154,7 +1197,7 @@ function() {
 };
 
 /**
- * Sets html select value
+ * Sets html select value.
  *
  * @param {string} menuId Menu id
  * @param {string} val Menu value to match and select
@@ -1169,6 +1212,7 @@ function(menuId, val) {
 		}
 	}
 };
+
 /**
  * Creates Account preferences view
  */
@@ -1189,9 +1233,10 @@ function() {
 };
 
 /**
- * Get account preferences dialog html
- * @param {string} indx  Account number
- * @param {string} notes String with some additional notes
+ * Get account preferences dialog html.
+ * 
+ * @param {string} indx  	the account number
+ * @param {string} notes 	the string with some additional notes
  */
 WebExZimlet.prototype._getAccountPrefsHtml =
 function(indx, notes) {
@@ -1229,7 +1274,7 @@ function(indx, notes) {
 /**
  * Tests Webex account
  *
- * @param {int} indx Account number
+ * @param {number} indx	the account number
  */
 WebExZimlet.prototype._testWebExAccount =
 function(indx) {
@@ -1254,7 +1299,7 @@ function(indx) {
 };
 
 /**
- * Listner to Account Preferences dialog
+ * Listener to Account Preferences dialog.
  */
 WebExZimlet.prototype._accPrefsOkBtnListner =
 function() {
@@ -1271,7 +1316,7 @@ function() {
 };
 
 /**
- * Saves Account preferences
+ * Saves Account preferences.
  */
 WebExZimlet.prototype._saveAccPrefsHandler =
 function() {
@@ -1280,11 +1325,10 @@ function() {
 	this.accPrefsDlg.popdown();
 };
 
-
 /**
- *Gets html-select containing all calendars
+ * Gets html-select containing all calendars.
  *
- * @param {int} idNumber Account number
+ * @param {number} idNumber	the account number
  * @return {string} Html-Select
  */
 WebExZimlet.prototype._getCalendarFoldersList =
@@ -1298,9 +1342,9 @@ function(idNumber) {
 };
 
 /**
- * Gets Calendar appointment html
+ * Gets Calendar appointment html.
  *
- * @Returns Calendar Options html
+ * @return {string}	the calendar options html
  */
 WebExZimlet.prototype._getCalendarsOptionsHtml =
 function() {
@@ -1332,7 +1376,8 @@ function() {
 };
 
 /**
- * Display general preferences dialog
+ * Display general preferences dialog.
+ * 
  */
 WebExZimlet.prototype._displayGeneralZimletPrefsDlg =
 function() {
@@ -1352,7 +1397,7 @@ function() {
 };
 
 /**
- * Gets General metadata
+ * Gets General metadata.
  *
  * @param {AjxCallback} postCallback A callback
  */
@@ -1362,7 +1407,7 @@ function(postCallback) {
 };
 
 /**
- * Sets defaultgeneral preferences
+ * Sets default general preferences.
  */
 WebExZimlet.prototype._setDefaultGeneralPreferences = function() {
 	this._webexZimletGeneralPreferences = {};
@@ -1373,9 +1418,10 @@ WebExZimlet.prototype._setDefaultGeneralPreferences = function() {
 };
 
 /**
- * Handles Handles getMetadata response for general preferences
+ * Handles getMetadata response for general preferences.
+ * 
  * @param {AjxCallback} postCallback A Callback
- * @param {boejct} result A response
+ * @param {object} result 	a response
  */
 WebExZimlet.prototype._handleGetGeneralPrefsMetaData =
 function(postCallback, result) {
@@ -1400,7 +1446,8 @@ function(postCallback, result) {
 };
 
 /**
- * Sets default data to general preferences dialog
+ * Sets default data to general preferences dialog.
+ * 
  */
 WebExZimlet.prototype._setDataToGeneralPrefsDlg =
 function() {
@@ -1440,7 +1487,8 @@ function() {
 };
 
 /**
- * Creates Zimlets Preferences view
+ * Creates Zimlets Preferences view.
+ * 
  * @returns {string} html
  */
 WebExZimlet.prototype._createZimletPrefsView =
@@ -1475,7 +1523,8 @@ function() {
 };
 
 /**
- * Handles OK button in General Preferences dialog  and saves General Preferences
+ * Handles OK button in General Preferences dialog and saves General Preferences.
+ * 
  */
 WebExZimlet.prototype._generalPrefsOkBtnListner =
 function() {
@@ -1499,7 +1548,7 @@ function() {
 };
 
 /**
- * Saves General preferences
+ * Saves General preferences.
  */
 WebExZimlet.prototype._saveGeneralPrefsHandler =
 function() {
@@ -1509,7 +1558,8 @@ function() {
 };
 
 /**
- * Gets appointment id and meeting data
+ * Gets appointment id and meeting data.
+ * 
  * @param {string} key Appointment id
  * @param {AjxCallback} postCallback  A callback
  */
@@ -1520,7 +1570,7 @@ function(key, postCallback) {
 };
 
 /**
- * Handles appointment and webex response
+ * Handles appointment and webex response.
  *
  * @param {AjxCallback} postCallback A callback
  * @param {object} result Custom metadata response
@@ -1545,11 +1595,11 @@ function(postCallback, result) {
 };
 
 /**
- * Saves appointment-id and webex meeting key information using customMetaData api
+ * Saves appointment-id and webex meeting key information using customMetaData api.
  *
  * @param {string} key Appointment id
  * @param {string} value Meeting key
- * @param {String} seriesMeetingKey  Series meeting key
+ * @param {string} seriesMeetingKey  Series meeting key
  */
 WebExZimlet.prototype._saveApptIdsHashToServer =
 function(key, value, seriesMeetingKey) {
@@ -1571,7 +1621,7 @@ function(key, value, seriesMeetingKey) {
 };
 
 /**
- * Shows Select Account dialog
+ * Shows Select Account dialog.
  *
  * @param {AjxCallback} postCallback A callback
  */
@@ -1592,7 +1642,8 @@ function(postCallback) {
 };
 
 /**
- * Creates select account html view
+ * Creates select account html view.
+ * 
  * @return {string} html
  */
 WebExZimlet.prototype._createShowSelectAccntView =
@@ -1603,7 +1654,7 @@ function() {
 };
 
 /**
- * OK button listner for Select accounts dialog
+ * OK button listener for Select accounts dialog.
  */
 WebExZimlet.prototype._showSelectAccntDlgOkBtnListner =
 function() {
@@ -1611,8 +1662,9 @@ function() {
 };
 
 /**
- * Shows WebEx appointments list for a given account number
- * @param {int} accountNumber Account number
+ * Shows WebEx appointments list for a given account number.
+ * 
+ * @param {number} accountNumber	the account number
  */
 WebExZimlet.prototype._showAppointmentsList =
 function(accountNumber) {
@@ -1628,7 +1680,7 @@ function(accountNumber) {
 /**
  * Gets WebEx appointment list
  *
- * @param {int} accountNumber Account number
+ * @param {number} accountNumber	the account number
  */
 WebExZimlet.prototype._getMeetingsList =
 function(accountNumber) {
@@ -1659,7 +1711,8 @@ function(accountNumber) {
 };
 
 /**
- * Shows WebEx meeting list dialog
+ * Shows WebEx meeting list dialog.
+ * 
  * @param {object} objResult WebEx meeting list object
  */
 WebExZimlet.prototype._showMeetingListDlg =
@@ -1681,7 +1734,7 @@ function(objResult) {
 };
 
 /**
- * Adds meeting listeners to links that opens WebEx meetings
+ * Adds meeting listeners to links that opens WebEx meetings.
  */
 WebExZimlet.prototype._addShowMeetingListListeners = function() {
 	for (var id in this._startMeetingStartLinkIdMap) {
@@ -1690,8 +1743,9 @@ WebExZimlet.prototype._addShowMeetingListListeners = function() {
 };
 
 /**
- * Opens WebEx meeting
- * @param {hash} params A hash containing meetink key
+ * Opens WebEx meeting.
+ * 
+ * @param {hash} params 	a hash of parameters containing meeting key
  * @param {string} params.meetingKey WebEx meeting key
  * @param {string} params.hostWebExId WebEx host id
  */
@@ -1721,9 +1775,10 @@ WebExZimlet.prototype._onStartLinkClicked = function(params) {
 };
 
 /**
- * Creates Meeting list view
- * @param {object} element Html element
- * @param {object} objResult Object with list of WebEx meetings
+ * Creates Meeting list view.
+ * 
+ * @param {object} element 	the Html element
+ * @param {object} objResult	the Object with list of WebEx meetings
  */
 WebExZimlet.prototype._setMeetingListView = function(element, objResult) {
 	var mtgs = objResult.body.bodyContent.meeting;
@@ -1757,9 +1812,10 @@ WebExZimlet.prototype._setMeetingListView = function(element, objResult) {
 };
 
 /**
- * Gets time Zone  by stripping offset information
- * @param timeZone Timezone
- * @return {string} timezone string without GMT offset
+ * Gets time Zone by stripping offset information.
+ * 
+ * @param {string}	timeZone Timezone
+ * @return {string} the timezone string without GMT offset
  */
 WebExZimlet.prototype._getTimeZoneName =
 function(timeZone) {
@@ -1772,7 +1828,7 @@ function(timeZone) {
 };
 
 /**
- * Shows one click dialog
+ * Shows one click dialog.
  */
 WebExZimlet.prototype._showOneClickDlg =
 function() {
@@ -1789,7 +1845,8 @@ function() {
 };
 
 /**
- * Creates oneclick html view
+ * Creates oneclick html view.
+ * 
  * @returns  {string} html
  */
 WebExZimlet.prototype._createOneClickMeetingView =
@@ -1803,7 +1860,8 @@ function() {
 };
 
 /**
- * Adds OK button listener
+ * Adds OK button listener.
+ * 
  */
 WebExZimlet.prototype._oneClickDlgOkBtnListner =
 function() {
@@ -1819,11 +1877,11 @@ function() {
 };
 
 /**
- * Creates one click meeting and launches WebEx
+ * Creates one click meeting and launches WebEx.
  *
- * @param {hash} params A hash of objects
- * @param {string} params.accntNumber Account number
- * @param {string} params.attendees String of attendee emails
+ * @param {hash} params a hash of parameters
+ * @param {string} params.accntNumber 	the account number
+ * @param {string} params.attendees		the attendee emails
  *
  */
 WebExZimlet.prototype._createOneClickMeetingAndLaunch =
@@ -1857,9 +1915,9 @@ function(params) {
 };
 
 /**
- * Handles one-click meeting response
+ * Handles one-click meeting response.
  *
- * @param {object} result  Create meeting response
+ * @param {object} result  the create meeting response
  */
 WebExZimlet.prototype._createOneClickMeetingHdlr = function(result) {
 	var objResult = this.xmlToObject(result);
@@ -1889,7 +1947,7 @@ WebExZimlet.prototype._createOneClickMeetingHdlr = function(result) {
 };
 
 /**
- * Validates WebEx Result
+ * Validates WebEx Result.
  *
  * @param  {object} objResult  WebEx Result
  * @param {string} customMsg Error message string
@@ -1920,7 +1978,7 @@ function(objResult, customMsg) {
 };
 
 /**
- * Displays error message
+ * Displays error message.
  *
  * @param {string} expnMsg Exception message string
  */
@@ -1939,9 +1997,9 @@ function(expnMsg) {
 };
 
 /**
- * Get html select menu
+ * Gets html select menu.
  *
- * @param {int} id Account number
+ * @param {number} id		the account number
  * @return {string} html
  */
 WebExZimlet.prototype._getAccountsSelectListMenuHtml = function(id) {
@@ -1955,7 +2013,8 @@ WebExZimlet.prototype._getAccountsSelectListMenuHtml = function(id) {
 };
 
 /**
- * Gets TimeZone Id from Zimbra's TimeZone name
+ * Gets TimeZone Id from Zimbra's TimeZone name.
+ * 
  * @param {string} name Timezone name
  */
 WebExZimlet.prototype._getTZIdFromTZName = function(name) {
