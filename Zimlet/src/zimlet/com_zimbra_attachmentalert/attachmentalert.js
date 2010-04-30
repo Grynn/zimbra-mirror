@@ -145,12 +145,15 @@ function(mail, boolAndErrorMsgArray) {
 AttachAlertZimlet.prototype._createIgnoreList =
 function(origMail) {
 	var bodyContent = origMail.getBodyContent();
+	if(!bodyContent) {//do null check
+		return;
+	}
 	for (var k = 0; k < this._attachWordsRegEx.length; k++) {
 		var attachWord = this._attachWordsRegEx[k];
 		var mailArry = bodyContent.match(attachWord);
-		if (!mailArry)
+		if (!mailArry) {
 			continue;
-
+		}
 		this._ignoreWords[attachWord] = mailArry.length;
 	}
 };
