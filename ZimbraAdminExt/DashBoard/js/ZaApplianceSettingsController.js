@@ -119,7 +119,7 @@ ZaApplianceSettingsController.prototype.installCertListener = function(ev) {
 		this.certificateInstallWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, this.finishCertificateWizard, this, null);		
 	}
 	var cert = new ZaApplianceSSLCert();
-	cert.setTargetServer (this.server.id);		
+	cert.setTargetServer (ZaDashBoard.server.id);		
 	cert.init() ;
 	this.certificateInstallWizard.setObject(cert);	
 	this.certificateInstallWizard.popup();				
@@ -158,7 +158,7 @@ ZaApplianceSettingsController.prototype.finishCertificateWizard = function() {
             keysize: this.certificateInstallWizard._containedObject.keysize,
 			callback: callback 
 		}
-		ZaApplianceSSLCert.installCert (params, this.server.id) ;
+		ZaApplianceSSLCert.installCert (params, ZaDashBoard.server.id) ;
 			
 		this.certificateInstallWizard.popdown();	
 			
@@ -177,7 +177,7 @@ ZaApplianceSettingsController.prototype.certificateInstallCallback = function (r
 			var installResponse = resp._data.Body.InstallCertResponse ;
 			if (installResponse) {
 				this.popupMsgDialog(com_zimbra_dashboard.CertificateInstallationSuccess);
-        		var certs = ZaApplianceSSLCert.getCerts(this.server.id);
+        		var certs = ZaApplianceSSLCert.getCerts(ZaDashBoard.server.id);
         		this._contentView._localXForm.setInstanceValue(certs, ZaApplianceSettings.A_certs);
 			}
 		}
