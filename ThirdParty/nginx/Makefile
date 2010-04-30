@@ -15,10 +15,6 @@ else
 	include $(NGINX_ROOT)/../versions.def
 endif
 
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
-	PATCH   := patch -g0 -N -p1 < ../patches/MACOSXx86_10.6.patch;
-endif
-
 NGINX_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx/nginx-$(NGINX_VERSION)-zimbra.tgz
 NGINX_INSTALL := $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
 
@@ -27,7 +23,6 @@ all: allclean build tar
 build:
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
-	$(PATCH) \
 	./configure \
              --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra \
              --with-debug \
