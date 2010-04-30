@@ -293,7 +293,7 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
     {type:_ZATABCASE_, caseKey:_tab2, id:"appliance_settings_form_attachment_tab", numCols:1, items:[
 			{type: _GROUP_,  id:"appliance_attachment_settings", width: "98%", numCols: 2, colSizes:[250, "*"], items: [
 				{ref:ZaGlobalConfig.A_zimbraAttachmentsBlocked, type:_RADIO_, groupname:"appliance_attachment_settings",
-					msgName:ZaMsg.NAD_GlobalRemoveAllAttachments,label:ZaMsg.NAD_GlobalRemoveAllAttachments, labelLocation:_RIGHT_, 
+					com_zimbra_dashboard:ZaMsg.BlocklAllAttachments,label:com_zimbra_dashboard.BlocklAllAttachments, labelLocation:_RIGHT_, 
 					onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right", align:_RIGHT_,
 					valueChangeEventSources:[ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly,ZaGlobalConfig.A_zimbraAttachmentsBlocked],
 					visibilityChecks:[],
@@ -308,7 +308,7 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 					}
 				},
 				{ref:ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, type:_RADIO_, groupname:"appliance_attachment_settings", 
-					msgName:ZaMsg.NAD_GlobalAttachmentsViewInHtmlOnly,label:ZaMsg.NAD_GlobalAttachmentsViewInHtmlOnly, labelLocation:_RIGHT_, 
+					msgName:com_zimbra_dashboard.AttachmentsHTMLOnly,label:com_zimbra_dashboard.AttachmentsHTMLOnly, labelLocation:_RIGHT_, 
 					onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right", align:_RIGHT_,
 					visibilityChecks:[],									
 					valueChangeEventSources:[ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly,ZaGlobalConfig.A_zimbraAttachmentsBlocked],
@@ -323,7 +323,7 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 					}
 				},
 				{ref:ZaGlobalConfig.A_zimbraAttachmentsBlocked, type:_RADIO_, groupname:"appliance_attachment_settings", 
-					msgName:ZaMsg.NAD_GlobalAttachmentsViewCOS,label:ZaMsg.NAD_GlobalAttachmentsViewCOS, labelLocation:_RIGHT_, 
+					msgName:com_zimbra_dashboard.AttachmentsDownloadAndHTML,label:com_zimbra_dashboard.AttachmentsDownloadAndHTML, labelLocation:_RIGHT_, 
 					onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right", align:_RIGHT_,
 					visibilityChecks:[],									
 					valueChangeEventSources:[ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly,ZaGlobalConfig.A_zimbraAttachmentsBlocked],
@@ -430,7 +430,7 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
     switchItems.push (case2) ;
 	_tab3 = ++this.TAB_INDEX;
     tabBarChoices.push ({value:_tab3, label:com_zimbra_dashboard.LicenseTabTitle});
-	var case3 = {type:_ZATABCASE_, caseKey:_tab3, numCols:2, colSizes:["300px","*"],
+	var case3 = {type:_ZATABCASE_, caseKey:_tab3, numCols:2, colSizes:["300px","*"],id:"appliance_settings_license_tab",
 		items:[
             {type: _SPACER_, height: 10},
             //license file installation successful status, need to define relavant variable
