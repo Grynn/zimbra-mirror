@@ -1,0 +1,68 @@
+.ImgWEBEX-panelIcon {
+  background: url("webex.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.webExZimlet_YellowBold {
+    background: #FFFFCC;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+}
+
+.webExZimlet_lightGray {
+    background: #EBEBEB;
+    border-bottom: 1px solid #6E6E6E;
+    border-top: 1px solid #6E6E6E;
+	font-weight:bold;
+	padding:2px;
+}
+.webExZimlet_gray {
+    background: #808080;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+	font-weight:bold;
+	color:white;
+	padding:4px;
+}
+
+table.webExZimlet_table input{
+	border-color:#3A73AB;
+	border-width:1;
+	border-style:solid;
+	width:200px;
+	height:20px;
+	padding:2px 4px;
+}
+
+table.webExZimlet_table select{
+	border-color:#3A73AB;
+	border-width:1;
+	border-style:solid;
+}
+
+.webex_hoverTable tr:hover { 
+	background-color:#ccd5e8; 
+}
+
+.webex_hoverTable td { 
+	border-bottom:1px solid #BBBBBB;
+	height:27px;
+	padding:0.5em;
+	vertical-align:middle;
+
+}
+
+.webex_hoverTable th { 
+	border-bottom:1px solid #333333;
+	height:30px;
+	padding:0.5em;
+	vertical-align:middle;
+}
+
+.webex_hoverTable a { 
+text-decoration:underline;
+}
+
+
