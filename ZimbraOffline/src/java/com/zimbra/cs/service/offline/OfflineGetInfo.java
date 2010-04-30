@@ -20,6 +20,9 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.account.GetInfo;
+import com.zimbra.cs.session.Session;
+import com.zimbra.cs.session.SoapSession;
+import com.zimbra.soap.ZimbraSoapContext;
 
 public class OfflineGetInfo extends GetInfo {
     @Override
@@ -38,5 +41,13 @@ public class OfflineGetInfo extends GetInfo {
                     accountName, AccountConstants.E_ATTR, AccountConstants.A_NAME);
         }
         return elem;
+    }
+    
+    @Override
+    protected Session getSession(ZimbraSoapContext zsc, Session.Type stype) {
+        Session s = super.getSession(zsc, stype);
+        if (!s.isDelegatedSession())
+            ((SoapSession)s).setOfflineSoapSession();
+        return s;
     }
 }
