@@ -586,6 +586,8 @@ function(ev) {
 		obj.attrs = {};
 		obj.attrs[ZaAccount.A_password]="";
 		obj.attrs[ZaAccount.A_zimbraPasswordMustChange]=false;
+		obj.getAttrs = item.getAttrs;
+		obj.setAttrs = item.setAttrs;
 		this._chngPwdDlg.setObject(obj)
 		this._chngPwdDlg.popup();
 	}
