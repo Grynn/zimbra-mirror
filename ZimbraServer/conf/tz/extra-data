@@ -1,6 +1,7 @@
 # primary time zones
 
 PrimaryZone	Etc/GMT+12
+#PrimaryZone	Etc/GMT+11
 PrimaryZone	Pacific/Midway
 PrimaryZone	Pacific/Honolulu
 PrimaryZone	America/Anchorage
@@ -17,19 +18,22 @@ PrimaryZone	America/Bogota
 PrimaryZone	America/New_York
 PrimaryZone	America/Indiana/Indianapolis
 PrimaryZone	America/Caracas
+PrimaryZone	America/Asuncion
 PrimaryZone	America/Halifax
+PrimaryZone	America/Cuiaba
 PrimaryZone	America/Guyana
-PrimaryZone	America/La_Paz
-PrimaryZone	America/Manaus
 PrimaryZone	America/Santiago
 PrimaryZone	America/St_Johns
 PrimaryZone	America/Sao_Paulo
 PrimaryZone	America/Argentina/Buenos_Aires
+PrimaryZone	America/Cayenne
 PrimaryZone	America/Godthab
 PrimaryZone	America/Montevideo
+#PrimaryZone	Etc/GMT+2
 PrimaryZone	Atlantic/South_Georgia
 PrimaryZone	Atlantic/Azores
 PrimaryZone	Atlantic/Cape_Verde
+PrimaryZone	UTC
 PrimaryZone	Africa/Casablanca
 PrimaryZone	Europe/London
 PrimaryZone	Africa/Monrovia
@@ -38,7 +42,6 @@ PrimaryZone	Europe/Belgrade
 PrimaryZone	Europe/Brussels
 PrimaryZone	Europe/Warsaw
 PrimaryZone	Africa/Algiers
-PrimaryZone	Africa/Windhoek
 PrimaryZone	Asia/Amman
 PrimaryZone	Europe/Athens
 PrimaryZone	Asia/Beirut
@@ -47,14 +50,15 @@ PrimaryZone	Africa/Harare
 PrimaryZone	Europe/Helsinki
 PrimaryZone	Asia/Jerusalem
 PrimaryZone	Europe/Minsk
+PrimaryZone	Africa/Windhoek
 PrimaryZone	Asia/Baghdad
 PrimaryZone	Asia/Kuwait
 PrimaryZone	Europe/Moscow
 PrimaryZone	Africa/Nairobi
-PrimaryZone	Asia/Tbilisi
 PrimaryZone	Asia/Tehran
 PrimaryZone	Asia/Muscat
 PrimaryZone	Asia/Baku
+PrimaryZone	Indian/Mauritius
 PrimaryZone	Asia/Tbilisi
 PrimaryZone	Asia/Yerevan
 PrimaryZone	Asia/Kabul
@@ -64,8 +68,9 @@ PrimaryZone	Asia/Tashkent
 PrimaryZone	Asia/Kolkata
 PrimaryZone	Asia/Colombo
 PrimaryZone	Asia/Katmandu
-PrimaryZone	Asia/Novosibirsk
+PrimaryZone	Asia/Almaty
 PrimaryZone	Asia/Dhaka
+PrimaryZone	Asia/Novosibirsk
 PrimaryZone	Asia/Rangoon
 PrimaryZone	Asia/Bangkok
 PrimaryZone	Asia/Krasnoyarsk
@@ -74,6 +79,7 @@ PrimaryZone	Asia/Irkutsk
 PrimaryZone	Asia/Kuala_Lumpur
 PrimaryZone	Australia/Perth
 PrimaryZone	Asia/Taipei
+PrimaryZone	Asia/Ulaanbaatar
 PrimaryZone	Asia/Tokyo
 PrimaryZone	Asia/Seoul
 PrimaryZone	Asia/Yakutsk
@@ -86,7 +92,9 @@ PrimaryZone	Australia/Hobart
 PrimaryZone	Asia/Vladivostok
 PrimaryZone	Asia/Magadan
 PrimaryZone	Pacific/Auckland
+#PrimaryZone	Etc/GMT-12
 PrimaryZone	Pacific/Fiji
+PrimaryZone	Asia/Kamchatka
 PrimaryZone	Pacific/Tongatapu
 
 # Raise the match score of some time zones so they win over other zones with
@@ -100,7 +108,7 @@ ZoneMatchScore	America/Phoenix		200
 ZoneMatchScore	America/Chicago		200
 ZoneMatchScore	America/New_York	200
 ZoneMatchScore	America/Regina		200
-ZoneMatchScore	America/Manaus		200
+#ZoneMatchScore	America/Manaus		200
 ZoneMatchScore	America/Casablanca	200
 ZoneMatchScore	Europe/Berlin		200
 ZoneMatchScore	Europe/Athens		200
