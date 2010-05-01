@@ -100,7 +100,7 @@ function(account, now, isDragProxy) {
 					if(account.attrs[ZaAccount.A_zimbraIsAdminAccount]=="TRUE" ) {
 						html[idx++] = AjxImg.getImageHtml("AdminUser");
 					} else if (account.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] == "TRUE") {
-						html[idx++] = AjxImg.getImageHtml("DomainAdminUser");
+						html[idx++] = AjxImg.getImageHtml("AdminUser");
 					} else if (account.attrs[ZaAccount.A_zimbraIsSystemResource] == "TRUE") {
 						html[idx++] = AjxImg.getImageHtml("SystemResource");
                     } else {
