@@ -346,7 +346,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 						}
 						this.getForm().itemChanged(this, elementValue, event);
 					},
-					visibilityChecks:[]
+					visibilityChecks:[],enableDisableChecks:[ [ZaItem.hasWritePermission,ZaAccount.A_COSId]]
 				}
 			]
 		}

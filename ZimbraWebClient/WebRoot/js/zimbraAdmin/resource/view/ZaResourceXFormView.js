@@ -360,7 +360,9 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
                            ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app);
                        }
                        this.getForm().itemChanged(this, elementValue, event);
-                   }
+                   },
+                   enableDisableChecks:[ [ZaItem.hasWritePermission,ZaAccount.A_COSId]],
+                   visibilityChecks:[]                   
                }
            ]
        }
