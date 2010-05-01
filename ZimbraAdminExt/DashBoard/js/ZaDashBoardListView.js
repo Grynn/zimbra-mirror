@@ -156,7 +156,7 @@ function(account, now, isDragProxy) {
 			if (account.type == ZaItem.ACCOUNT) {
 				status = ZaAccount._accountStatus(account.attrs[ZaAccount.A_accountStatus]);
 			} else if (account.type == ZaItem.DL) {
-				status = account.attrs.zimbraMailStatus;
+				status = ZaDistributionList._dlStatus[account.attrs.zimbraMailStatus];
 			}else if ( account.type == ZaItem.RESOURCE) {
 				status = ZaResource.getAccountStatusLabel(account.attrs[ZaAccount.A_accountStatus]);
 			} 
