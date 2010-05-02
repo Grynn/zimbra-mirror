@@ -74,7 +74,9 @@ public class XmailBean extends MailBean {
         accountFlavor = account.getAttr(OfflineConstants.A_offlineAccountFlavor);
         if (accountFlavor == null)
             accountFlavor = ds.getAttr(OfflineConstants.A_offlineAccountFlavor);
-        accountName = ds.getName();
+        accountName = account.getAttr(Provisioning.A_zimbraPrefLabel);
+        if (accountName == null)
+            accountName = ds.getName();
         username = ds.getUsername();
         password = JspConstants.MASKED_PASSWORD;
         email = ds.getEmailAddress();

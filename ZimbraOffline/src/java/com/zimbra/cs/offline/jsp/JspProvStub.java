@@ -138,9 +138,13 @@ public class JspProvStub {
     	prov.createDataSource(account, dsType, name, dsAttrs);
 	}
     
-    public void modifyOfflineDataSource(String accountId, String dsName, Map<String, Object> dsAttrs) throws ServiceException {
+    public void modifyOfflineDataSource(String accountId, String acctName, Map<String, Object> dsAttrs) throws ServiceException {
     	Account account = prov.get(AccountBy.id, accountId);
+    	String dsName = account.getAttr(OfflineConstants.A_offlineDataSourceName);
     	DataSource ds = prov.get(account, DataSourceBy.name, dsName);
+    	Map<String, Object> attrs = new HashMap<String, Object>(1);
+    	attrs.put(Provisioning.A_zimbraPrefLabel, acctName);
+    	prov.modifyAttrs(account, attrs);
     	prov.modifyDataSource(account, ds.getId(), dsAttrs);
     }
     

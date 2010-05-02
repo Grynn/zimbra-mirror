@@ -175,6 +175,7 @@ public class ConsoleBean extends PageBean {
         for (DataSource ds : dataSources) {
             AccountSummary sum = new AccountSummary();
             sum.id = ds.getAccountId();
+            Account account = stub.getOfflineAccount(sum.id);
 	    sum.type = ds.getType().toString();
             sum.flavor = ds.getAttr(OfflineConstants.A_offlineAccountFlavor);
 	    if (sum.flavor == null) {
@@ -190,7 +191,9 @@ public class ConsoleBean extends PageBean {
 		else
 		    sum.flavor = "Imap";
 	    }
-            sum.name = ds.getName();
+	        sum.name = account.getAttr(Provisioning.A_zimbraPrefLabel);
+	        if (sum.name == null)
+	            sum.name = ds.getName();
             sum.email = ds.getEmailAddress();
             sum.lastSync = ds.getLongAttr(OfflineConstants.A_zimbraDataSourceLastSync, 0);
             String status = ds.getAttr(OfflineConstants.A_zimbraDataSourceSyncStatus);
