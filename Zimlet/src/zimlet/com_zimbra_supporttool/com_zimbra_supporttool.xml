@@ -1,12 +1,10 @@
-<zimlet name="com_zimbra_supporttool" version="0.2" label="Zimbra Support Tool" description="View, export, email or compare Zimbra account preferences and configuration.">
+<zimlet name="com_zimbra_supporttool" version="0.3" label="Zimbra Support Tool" description="View, export and email Zimbra account preferences and version.">
   <include>com_zimbra_supporttool.js</include>
   <includeCSS>com_zimbra_supporttool.css</includeCSS>
-  <handlerObject>com_zimbra_supporttool</handlerObject>
+  <handlerObject>com_zimbra_supporttool_HandlerObject</handlerObject>
 
-  <zimletPanelItem label="Support Tool" icon="supporttool-panelIcon">
-    <toolTipText>View, export, email or compare Zimbra account preferences and configuration.</toolTipText>
-		<dragSource type="ZmConv" />
-		<dragSource type="ZmMailMsg" />
+  <zimletPanelItem label="${msg.SupportToolZimlet_label}" icon="supporttool-panelIcon">
+    <toolTipText>${msg.SupportToolZimlet_tooltip}</toolTipText>
   </zimletPanelItem>
 
 	<userProperties>

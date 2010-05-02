@@ -1,34 +1,49 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Zimlets
- * Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
- * 
+ * Copyright (C) 2007, 2009, 2010 Zimbra, Inc.
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
- *@Author Raja Rao DV
  */
 
-
-function com_zimbra_supporttool() {
+/**
+ * Constructor.
+ *
+ * @author Raja Rao DV (rrao@zimbra.com)
+ */
+function com_zimbra_supporttool_HandlerObject() {
 }
 
-com_zimbra_supporttool.prototype = new ZmZimletBase();
-com_zimbra_supporttool.prototype.constructor = com_zimbra_supporttool;
+com_zimbra_supporttool_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_supporttool_HandlerObject.prototype.constructor = com_zimbra_supporttool_HandlerObject;
+
+/**
+ * Simplify handler object
+ *
+ */
+var SupportToolZimlet = com_zimbra_supporttool_HandlerObject;
 
 
-com_zimbra_supporttool.prototype.init =
+/**
+ * Initializes zimlet
+ */
+SupportToolZimlet.prototype.init =
 function() {
-	this._currentVersion =  appCtxt.getSettings().getInfoResponse.version;
+	this._currentVersion = appCtxt.getSettings().getInfoResponse.version;
 	this._saveVersions();
 };
 
-com_zimbra_supporttool.prototype._saveVersions =
+/**
+ * Saves versions
+ */
+SupportToolZimlet.prototype._saveVersions =
 function() {
 	this.setUserProperty("supporttool_currentVersion", this._currentVersion, true);
 	var pv = this.getUserProperty("supporttool_previousVersions");
@@ -48,70 +63,24 @@ function() {
 	this._createVersionNameValueArray();
 };
 
-com_zimbra_supporttool.prototype._get5PrevVersions =
+/**
+ * Gets 5 latest Zimbra Versions
+ * @param {string} pv Zimbra versions separated by ::
+ */
+SupportToolZimlet.prototype._get5PrevVersions =
 function(pv) {
 	var arry = pv.split("::");
 	var versions = new Array();
-	for(var i = 0; i < arry.length && i < 5; i++) {
+	for (var i = 0; i < arry.length && i < 5; i++) {
 		versions.push(arry[i]);
 	}
-
-	return versions.join("::");		
+	return versions.join("::");
 };
 
-//depricated - we now use appCtxt.getSettings().getInfoResponse.version in .init to get the version. 
-//but, if that breaks, call this method instead
-/*
-com_zimbra_supporttool.prototype._getVersion =
-function() {
-	var soapDoc = AjxSoapDoc.create("GetInfoRequest", "urn:zimbraAccount");
-	var method = soapDoc.getMethod();
-	method.setAttribute("sections", "mbox");
-	var command = new ZmCsfeCommand();
-	var resp = command.invoke({soapDoc: soapDoc});
-	return resp.Body.GetInfoResponse.version;
-
-};
-*/
-
-com_zimbra_supporttool.prototype.sortByType =
-function(a, b) {
-	var x = a.type;
-	var y = b.type;
-	return ((y < x) ? -1 : ((y > x) ? 1 : 0));
-};
-
-com_zimbra_supporttool.prototype._createCompareView =
-function() {
-	var html = new Array();
-	var i = 0;
-	html[i++] = "<DIV class='supporttool_cardHdrDivTB' align=\"center\" style=\"overflow:auto;width:99%; height:22px;\" >";
-	html[i++] = "<TABLE width='100%'  style=\"font-weight:bold;\">";
-	html[i++] = "<TR>";
-	html[i++] = "<TD>Paste Preferences of an account and press 'Compare' button</TD>";
-	html[i++] = "</TR>";
-	html[i++] = "</TABLE>";
-	html[i++] = "</DIV>";
-	html[i++] = "<BR>";
-	html[i++] = "<DIV style=\"overflow:auto;width:99%;height:180px;\" >";
-	html[i++] = "<textarea rows='300' cols='50' id='supporttool_accntPref2TextArea'></textarea>";
-	html[i++] = "</DIV>";
-	html[i++] = "<BR>";
-	html[i++] = "<DIV class='supporttool_cardHdrDivTB' align=\"center\" style=\"overflow:auto;width:99%; height:22px;\" >";
-	html[i++] = "<TABLE width='100%'  style=\"font-weight:bold;\">";
-	html[i++] = "<TR>";
-	html[i++] = "<TD>COMPARISION RESULTS:</TD>";
-	html[i++] = "</TR>";
-	html[i++] = "</TABLE>";
-	html[i++] = "</DIV>";
-	html[i++] = "<DIV id='supporttool_compareResults' >";
-	html[i++] = "</DIV>";
-	html[i++] = "<DIV id='supporttool_mismatchCntDiv'>";
-	html[i++] = "</DIV>";
-
-	return html.join("");
-};
-com_zimbra_supporttool.prototype._createVersionNameValueArray =
+/**
+ * creates  a hash of current and past Zimbra versions
+ */
+SupportToolZimlet.prototype._createVersionNameValueArray =
 function() {
 	var prevVersionCounter = 1;
 	this._versionNameValArray = new Array();
@@ -125,112 +94,31 @@ function() {
 	}
 };
 
-com_zimbra_supporttool.prototype._compareBtnListener =
-function() {
-	var html = new Array();
-	var i = 0;
-	html[i++] = "<DIV class='supporttool_cardHdrDivTB' style=\"overflow:auto;width:99%;height:22px;\" >";
-	html[i++] = "<TABLE width='100%'  style=\"font-weight:bold;\">";
-	html[i++] = "<TR>";
-	html[i++] = "<TD   width='40%'>PREFERENCE NAME</TD><TD align='center' width='30%'>OTHER ACCOUNT</TD><TD align='center' width='30%'>THIS ACCOUNT</TD>";
-	html[i++] = "</TR>";
-	html[i++] = "</TABLE>";
-	html[i++] = "</DIV>";
-	html[i++] = "<DIV  style=\"overflow:auto;height:180px;width:99%\">";
-	var val = document.getElementById("supporttool_accntPref2TextArea").value;
-	var props = val.split("\n");
-	var mismatchCnt = 0;
-	for (var j = 0; j < props.length; j++) {
-
-		try {
-			var err = false;
-			try {
-
-				var line = props[j];
-				if (line == "")//skip
-					continue;
-
-				var nv = line.split("=");
-
-				var name = AjxStringUtil.trim(nv[0]);
-				var otherVal = AjxStringUtil.trim(nv[1]);
-			} catch(e) {//any expn during parsing..
-				err = true;
-			}
-
-			var currentVal = this._getValue(name);
-			currentVal = AjxStringUtil.trim("" + currentVal + "");
-
-			html[i++] = "<DIV class='supporttool_cardListDiv' >";
-			html[i++] = "<TABLE width='100%'>";
-			if (err) {
-				html[i++] = "<TR>";
-				html[i++] = "<TD width='40%' class='supporttool_errTd'>ERROR READING THIS LINE: </TD><TD COLSPAN='2' class='supporttool_errTd'>" + line + "</TD>";
-				html[i++] = "</TR>";
-				mismatchCnt++;
-			} else if (otherVal == currentVal) {
-				html[i++] = "<TR>";
-				html[i++] = "<TD width='40%'>" + name + "</TD><TD align='center' width='30%'>" + otherVal + "</TD><TD align='center' width='30%'>" + currentVal + "</TD>";
-				html[i++] = "</TR>";
-			} else {
-				html[i++] = "<TR  class='supporttool_mismatchRow'>";
-				html[i++] = "<TD width='40%'>" + name + "</TD><TD align='center' width='30%'>" + otherVal + "</TD><TD align='center' width='30%'>" + currentVal + "</TD>";
-				html[i++] = "</TR>";
-				mismatchCnt++;
-			}
-			html[i++] = "</TABLE>";
-			html[i++] = "</DIV>";
-		} catch(e) {
-			html[i++] = "<DIV class='supporttool_cardListDiv' >";
-			html[i++] = "<TABLE width='100%'>";
-			html[i++] = "<TR>";
-			html[i++] = "<TD width='40%' class='supporttool_errTd'>ERROR READING THIS LINE: </TD><TD COLSPAN='2' class='supporttool_errTd'>" + line + "</TD>";
-			html[i++] = "</TR>";
-			html[i++] = "</TABLE>";
-			html[i++] = "</DIV>";
-			mismatchCnt++;
-		}
-	}
-	html[i++] = "</DIV>";
-	document.getElementById("supporttool_compareResults").innerHTML = html.join("");
-	this._updateMismatchCount(mismatchCnt);
-};
-
-
-com_zimbra_supporttool.prototype._updateMismatchCount =
-function(mismatchCnt) {
-	var mm = new Array();
-	var cnt = 0;
-	mm[cnt++] = "<DIV id='supporttool_mismatchCntDiv' class='supporttool_cardHdrDivTB' align=\"center\" style=\"overflow:auto;width:99%; height:22px;\">";
-	mm[cnt++] = "<TABLE width='100%'>";
-	mm[cnt++] = "<TR>";
-	if(mismatchCnt==0){
-		mm[cnt++] = "<TD><B><font color='green'>NUMBER OF ITEMS MISMATCHED: " + mismatchCnt + "</font></B></TD>";
-	}else {
-		mm[cnt++] = "<TD><B><font color='red'>NUMBER OF ITEMS MISMATCHED: " + mismatchCnt + "</font></B></TD>";
-	}
-	mm[cnt++] = "</TR>";
-	mm[cnt++] = "</TABLE>";
-	mm[cnt++] = "</DIV>";
-	document.getElementById("supporttool_mismatchCntDiv").innerHTML = mm.join("");
-};
-
-com_zimbra_supporttool.prototype._exportAsHtmlListener =
+/**
+ * A listener
+ */
+SupportToolZimlet.prototype._exportAsHtmlListener =
 function() {
 	this._expWindow = window.open(this.getResource("exportWindow.html"));
 	setTimeout(AjxCallback.simpleClosure(this._postToExportWindow, this), 1500);
 };
 
-com_zimbra_supporttool.prototype._postToExportWindow = function() {
+/**
+ * Posts Account information to a html-file
+ */
+SupportToolZimlet.prototype._postToExportWindow = function() {
 	this._expWindow.document.getElementById('supporttool_exportPrefDiv').innerHTML = this._prefDetailsHTML;
 };
 
-com_zimbra_supporttool.prototype._sendEmailWithPrefInfo = function() {
+/**
+ * Pastes Account information to Email-compose-window
+ */
+SupportToolZimlet.prototype._sendEmailWithPrefInfo = function() {
 	var action = ZmOperation.NEW_MESSAGE;
 	var msg = new ZmMailMsg();
 	var toOverride = null;
 
-	var subjOverride = "Version and Preferences info of my account";
+	var subjOverride = this.getMessage("SupportToolZimlet_emailSubject");
 	var extraBodyText = this._constructEmailBdy();
 	AjxDispatcher.run("Compose", {action: action, inNewWindow: false, msg: msg,
 		toOverride: toOverride, subjOverride: subjOverride,
@@ -238,14 +126,13 @@ com_zimbra_supporttool.prototype._sendEmailWithPrefInfo = function() {
 	if (this._preferenceDialog) {
 		this._preferenceDialog.popdown();
 	}
-
-
-	if (this._compareDialog) {
-		this._compareDialog.popdown();
-	}
 };
 
-com_zimbra_supporttool.prototype._constructEmailBdy =
+/**
+ * Constructs Html body
+ * @returns {string} html
+ */
+SupportToolZimlet.prototype._constructEmailBdy =
 function() {
 	var newLine = "";
 	if (appCtxt.getSettings().getSetting("COMPOSE_AS_FORMAT").value == "text") {
@@ -256,52 +143,33 @@ function() {
 
 	var html = new Array();
 	var i = 0;
-	html[i++] = newLine + newLine;
-	html[i++] = "PS: You can drag-drop this email onto Support Tool Zimlet to instantly compare version and preferences with your account." + newLine;
-	html[i++] = "-----------------------------------------------------" + newLine;
-	html[i++] = "  -- VERSION AND BROWSER DETAILS --                  " + newLine;
-	html[i++] = "-----------------------------------------------------" + newLine;
+	html.push(newLine, newLine);
+	html.push("-----------------------------------------------------", newLine);
+	html.push("  -- ", this.getMessage("SupportToolZimlet_versionAndBrowser"), " --                  ", newLine);
+	html.push("-----------------------------------------------------",newLine);
 	for (var el in this._versionNameValArray) {
-		html[i++] = el + "=" + this._versionNameValArray[el] + newLine;
+		html.push(el, "=", this._versionNameValArray[el], newLine);
 	}
-	html[i++] = "browserUserAgent=" + navigator.userAgent + newLine;
-	html[i++] = "---------------------END----------------------------" + newLine;
-
-	html[i++] = newLine + newLine + newLine;
-	html[i++] = "-----------------------------------------------------" + newLine;
-	html[i++] = "          -- PREFERENCES DETAILS --                  " + newLine;
-	html[i++] = "-----------------------------------------------------" + newLine;
+	html.push("browserUserAgent=",navigator.userAgent, newLine);
+	html.push("---------------------",this.getMessage("SupportToolZimlet_end"),"----------------------------", newLine);
+	html.push(newLine, newLine, newLine);
+	html.push("-----------------------------------------------------", newLine);
+	html.push("          -- ",this.getMessage("SupportToolZimlet_prefDetails")," --                  " , newLine);
+	html.push("-----------------------------------------------------" , newLine);
 	for (var j = 0; j < this.settingArry.length; j++) {
 		var setting = this.settingArry[j];
 		if (setting.name == undefined || setting.name == null)
 			continue;
-		html[i++] = setting.name + "=" + setting.value + newLine;
+		html.push(setting.name, "=", setting.value , newLine);
 	}
-	html[i++] = "---------------------END----------------------------" + newLine;
+	html.push("---------------------",this.getMessage("SupportToolZimlet_end"),"----------------------------" , newLine);
 	return html.join("");
 };
 
-com_zimbra_supporttool.prototype._getValue =
-function(name) {
-	for (var j = 0; j < this.settingArry.length; j++) {
-		var setting = this.settingArry[j];
-		if (setting.name == name) {
-			return setting.value;
-		}
-	}
-	//also check if its a versionname value we are after.
-	if (this._versionNameValArray[name]) {
-		return this._versionNameValArray[name];
-	}
-
-	if (name == "browserUserAgent") {
-		return   navigator.userAgent;
-	}
-
-	return "PREFERENCE_NOT_FOUND";
-};
-
-com_zimbra_supporttool.prototype._createPrefView =
+/**
+ * Creates preferences view
+ */
+SupportToolZimlet.prototype._createPrefView =
 function() {
 	var html = new Array();
 	var i = 0;
@@ -309,7 +177,7 @@ function() {
 	html[i++] = "<DIV class='supporttool_cardHdrDivTB' align=\"center\" style=\"overflow:auto;width:99%; height:22px;\" >";
 	html[i++] = "<TABLE width='100%'  style=\"font-weight:bold;\">";
 	html[i++] = "<TR>";
-	html[i++] = "<TD align='center'>ZIMBRA VERSION HISTORY</TD>";
+	html[i++] = ["<TD align='center'>",this.getMessage("SupportToolZimlet_versionHistory"),"</TD>"].join("");
 	html[i++] = "</TR>";
 	html[i++] = "</TABLE>";
 	html[i++] = "</DIV>";
@@ -319,9 +187,9 @@ function() {
 		html[i++] = "<DIV class='supporttool_cardListDiv'>";
 		html[i++] = "<TABLE width='100%'>";
 		html[i++] = "<TR>";
-		var vname = "Current Version:";
+		var vname = this.getMessage("SupportToolZimlet_currentVersion");
 		if (k > 0) {
-			vname = "Previous Version" + prevVersionCounter + ":";
+			vname = this.getMessage("SupportToolZimlet_previousVersion")+ prevVersionCounter + ":";
 			prevVersionCounter++;
 		}
 		html[i++] = "<TD width='30%'><B>" + vname + "</B></TD><TD width='70%'>" + this._prevVersions[k] + "</TD>";
@@ -335,7 +203,7 @@ function() {
 	html[i++] = "<DIV class='supporttool_cardHdrDivTB' align=\"center\" style=\"overflow:auto;width:99%; height:22px;\" >";
 	html[i++] = "<TABLE width='100%'  style=\"font-weight:bold;\">";
 	html[i++] = "<TR>";
-	html[i++] = "<TD align='center'>BROWSER AND OPERATING SYSTEM</TD>";
+	html[i++] = ["<TD align='center'>",this.getMessage("SupportToolZimlet_browserAndOS"),"</TD>"].join("");
 	html[i++] = "</TR>";
 	html[i++] = "</TABLE>";
 	html[i++] = "</DIV>";
@@ -343,7 +211,7 @@ function() {
 	html[i++] = "<DIV class='supporttool_cardListDiv'>";
 	html[i++] = "<TABLE width='100%'>";
 	html[i++] = "<TR>";
-	html[i++] = "<TD width='20%'><B>User Agent:</B></TD><TD width='80%'>" + navigator.userAgent + "</TD>";
+	html[i++] = ["<TD width='20%'><B>",this.getMessage("SupportToolZimlet_userAgent"),"</B></TD><TD width='80%'>", navigator.userAgent, "</TD>"].join("");
 	html[i++] = "</TR>";
 	html[i++] = "</TABLE>";
 	html[i++] = "</DIV>";
@@ -354,14 +222,14 @@ function() {
 	html[i++] = "<DIV class='supporttool_cardHdrDivTop' style=\"overflow:auto;width:99%; height:20px;\" >";
 	html[i++] = "<TABLE width='100%'  style=\"font-weight:bold;\">";
 	html[i++] = "<TR>";
-	html[i++] = "<TD align='center'>ZIMBRA PREFERENCES</TD>";
+	html[i++] = ["<TD align='center'>",this.getMessage("SupportToolZimlet_zimbraPrefs"),"</TD>"].join("");
 	html[i++] = "</TR>";
 	html[i++] = "</TABLE>";
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV class='supporttool_cardHdrDivTB' style=\"overflow:auto;width:99%;height:22px;\" >";
 	html[i++] = "<TABLE width='100%'  style=\"font-weight:bold;\">";
 	html[i++] = "<TR>";
-	html[i++] = "<TD   width='40%'>PREFERENCE NAME</TD><TD align='center' width='60%'>CURRENT VALUE</TD>";
+	html[i++] = ["<TD   width='40%'>",this.getMessage("SupportToolZimlet_prefName"),"</TD><TD align='center' width='60%'>",this.getMessage("SupportToolZimlet_currentName"),"</TD>"].join("");
 	html[i++] = "</TR>";
 	html[i++] = "</TABLE>";
 	html[i++] = "</DIV>";
@@ -374,7 +242,6 @@ function() {
 		this.settingArry[m] = eval("settings." + el);
 		m++;
 	}
-	//this.settingArry = this.settingArry.sort(this.sortByType);
 
 	for (var j = 0; j < this.settingArry.length; j++) {
 		var setting = this.settingArry[j];
@@ -399,34 +266,24 @@ function() {
 
 };
 
-com_zimbra_supporttool.prototype.doDrop =
-function(msg) {
-	this._propsFromMail = new Array();
-	var body = msg.body;
-	var lines = body.split("\r\n");
-	for (var i = 0; i < lines.length; i++) {
-		var line = lines[i];
-		if (line.indexOf("zimbra") == 0 || line.indexOf("browser") == 0 && line.indexOf("=") > 0) {
-			this._propsFromMail.push(line);
-		}
-	}
-
-	this.singleClicked();
-	this._showCompareDlg();
-	document.getElementById("supporttool_accntPref2TextArea").value = this._propsFromMail.join("\n");
-	this._compareBtnListener();
-
-};
-
-com_zimbra_supporttool.prototype.doubleClicked = function() {
+/**
+ * Shows preferences dialog when user double-clicks on panel item
+ */
+SupportToolZimlet.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
-com_zimbra_supporttool.prototype.singleClicked = function() {
+
+/**
+ * Shows preferences dialog when user single-clicks on panel item
+ */
+SupportToolZimlet.prototype.singleClicked = function() {
 	this._showPreferenceDlg();
 };
 
-
-com_zimbra_supporttool.prototype._showPreferenceDlg = function() {
+/**
+ *Creates and displays Preferences dialog
+ */
+SupportToolZimlet.prototype._showPreferenceDlg = function() {
 	//if zimlet dialog already exists...
 	if (this._preferenceDialog) {
 		this._preferenceDialog.popup();
@@ -440,50 +297,25 @@ com_zimbra_supporttool.prototype._showPreferenceDlg = function() {
 	var reminderBtnId = Dwt.getNextId();
 	var sendPrefEmailBtnId = Dwt.getNextId();
 	var exportAsHtmlBtnId = Dwt.getNextId();
-
-	var createRemindersBtn = new DwtDialog_ButtonDescriptor(reminderBtnId, ("Compare Preferences Tool"), DwtDialog.ALIGN_LEFT);
-	var sendPrefEmailBtn = new DwtDialog_ButtonDescriptor(sendPrefEmailBtnId, ("Send Email"), DwtDialog.ALIGN_LEFT);
-	var exportAsHtmlBtn = new DwtDialog_ButtonDescriptor(exportAsHtmlBtnId, ("Export As HTML"), DwtDialog.ALIGN_LEFT);
-
-
-	this._preferenceDialog = this._createDialog({title:"Support Tool Zimlet: View, compare or  email Account Preferences", view:this._preferenceView, standardButtons:[DwtDialog.CANCEL_BUTTON], extraButtons:[sendPrefEmailBtn, exportAsHtmlBtn, createRemindersBtn]});
-	this._preferenceDialog.setButtonListener(reminderBtnId, new AjxListener(this, this._showCompareDlg));
+	var sendPrefEmailBtn = new DwtDialog_ButtonDescriptor(sendPrefEmailBtnId, this.getMessage("SupportToolZimlet_sendEmail"), DwtDialog.ALIGN_LEFT);
+	var exportAsHtmlBtn = new DwtDialog_ButtonDescriptor(exportAsHtmlBtnId, this.getMessage("SupportToolZimlet_exportAsHtml"), DwtDialog.ALIGN_LEFT);
+	this._preferenceDialog = new ZmDialog({parent:this.getShell(),title: this.getMessage("SupportToolZimlet_prefDlgHdr"), view:this._preferenceView, standardButtons:[DwtDialog.CANCEL_BUTTON], extraButtons:[sendPrefEmailBtn, exportAsHtmlBtn]});
 	this._preferenceDialog.setButtonListener(sendPrefEmailBtnId, new AjxListener(this, this._sendEmailWithPrefInfo));
 	this._preferenceDialog.setButtonListener(exportAsHtmlBtnId, new AjxListener(this, this._exportAsHtmlListener));
-
-
 	this._formatDlg(this._preferenceView);
-
 	this._preferenceDialog.popup();
 };
 
-com_zimbra_supporttool.prototype._formatDlg = function(view) {
-	//this._preferenceView.getHtmlElement().parentNode.style.background = "white";//can be set AFTER dlg is created
+/**
+ * Formats dialog
+ * @param {object} view Preferences view
+ */
+SupportToolZimlet.prototype._formatDlg = function(view) {
 	var el = view.getHtmlElement();
-
 	while (el != undefined && el != null && el.className != "DwtDialog WindowOuterContainer") {
 		el = el.parentNode;
 	}
-	if (el.className == "DwtDialog WindowOuterContainer")
+	if (el.className == "DwtDialog WindowOuterContainer") {
 		el.style.padding = "0px";
-};
-
-com_zimbra_supporttool.prototype._showCompareDlg = function() {
-	//if zimlet dialog already exists...
-	if (this._compareDialog) {
-		this._compareDialog.popup();
-		return;
 	}
-	this._compareView = new DwtComposite(this.getShell());
-	this._compareView.setSize("500", "500");
-	this._compareView.getHtmlElement().style.overflow = "auto";
-	this._compareView.getHtmlElement().innerHTML = this._createCompareView();
-	var createCompareBtnId = Dwt.getNextId();
-	var createCompareBtn = new DwtDialog_ButtonDescriptor(createCompareBtnId, ("Compare"), DwtDialog.ALIGN_LEFT);
-
-	this._compareDialog = this._createDialog({title:"Compare Preferences of your account with a different account", view:this._compareView, standardButtons:[DwtDialog.CANCEL_BUTTON], extraButtons:[createCompareBtn]});
-	this._compareDialog.setButtonListener(createCompareBtnId, new AjxListener(this, this._compareBtnListener));
-
-	this._formatDlg(this._compareView);
-	this._compareDialog.popup();
 };
