@@ -113,7 +113,7 @@ function(ev, prop, useRelatedTarget)  {
 	var htmlEl = DwtUiEvent.getTarget(ev, useRelatedTarget);
 	while (htmlEl) {
 		var value = Dwt.getAttr(htmlEl, prop);
-		if (value != null && value != "") {
+		if (value != null && value !== "") {
 			return htmlEl;
 		}
 		htmlEl = htmlEl.parentNode;
@@ -134,7 +134,7 @@ function(ev, props)  {
 		var okay = true;
 		for (var i in props) {
 			var val = Dwt.getAttr(htmlEl, props[i]);
-			if (val == null || val == "") {
+			if (val == null || val === "") {
 				htmlEl = htmlEl.parentNode;
 				okay = false;
 				break;
