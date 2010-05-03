@@ -109,6 +109,12 @@ public class NginxLookupExtension implements ZimbraExtension {
         }
     }
     
+    public static class EntryNotFoundException extends NginxLookupException {
+        public EntryNotFoundException(String msg) {
+            super(msg);
+        }
+    }
+    
     static class ReverseProxyCache extends CacheExtension {
         
         public void flushCache() throws ServiceException {
@@ -444,7 +450,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             NamingEnumeration ne = zlc.searchDir(base, query, sc);
             try {
                 if (!ne.hasMore())
-                    throw new NginxLookupException("query returned empty result: "+query);
+                    throw new EntryNotFoundException("query returned empty result: "+query);
                 SearchResult sr = (SearchResult) ne.next();
                 
                 sdr.configuredAttrs = new HashMap<String, String>();
@@ -832,7 +838,9 @@ public class NginxLookupExtension implements ZimbraExtension {
             ZimbraLdapContext zlc = null;
             try {
                 zlc = new ZimbraLdapContext();
-                Config config = Provisioning.getInstance().getConfig();
+                
+                Provisioning prov = Provisioning.getInstance();
+                Config config = prov.getConfig();
                 String authUser = getQualifiedUsername(zlc, config, req);
                 
                 Map<String, Boolean> attrs = new HashMap<String, Boolean>();
@@ -849,21 +857,50 @@ public class NginxLookupExtension implements ZimbraExtension {
                 extraAttrs.add(Provisioning.A_zimbraExternalPop3SSLHostname);
                 extraAttrs.add(Provisioning.A_zimbraExternalImapHostname);
                 extraAttrs.add(Provisioning.A_zimbraExternalImapSSLHostname);
-                        
-                SearchDirResult sdr = searchDirectory(zlc, 
-                                                      getUserSC(config), 
-                                                      config, 
-                                                      Provisioning.A_zimbraReverseProxyMailHostQuery,
-                                                      Provisioning.A_zimbraReverseProxyMailHostSearchBase,
-                                                      "USER",
-                                                      authUser,
-                                                      attrs,
-                                                      extraAttrs);
+                       
+                SearchDirResult sdr = null;
+                
+                String authUserWithRealDomainName = authUser;
+                try {
+                    sdr = searchDirectory(zlc, 
+                                          getUserSC(config), 
+                                          config, 
+                                          Provisioning.A_zimbraReverseProxyMailHostQuery,
+                                          Provisioning.A_zimbraReverseProxyMailHostSearchBase,
+                                          "USER",
+                                          authUser,
+                                          attrs,
+                                          extraAttrs);
+                } catch (EntryNotFoundException e) {
+                    logger.debug("user " + authUser + " not found", e);
+                    
+                    //
+                    // Note: do *not* replace the name to be returned to the client(nginx)
+                    //       the name should not be rewritten when the inout name is an
+                    //       alias or a name with domain alias.
+                    //
+                    authUserWithRealDomainName = prov.getEmailAddrByDomainAlias(authUser);
+                    if (authUserWithRealDomainName == null)
+                        throw e;
+                    else {
+                        // search again
+                        logger.debug("retrying with resolved domain alias: " + authUserWithRealDomainName, e);
+                        sdr = searchDirectory(zlc, 
+                                getUserSC(config), 
+                                config, 
+                                Provisioning.A_zimbraReverseProxyMailHostQuery,
+                                Provisioning.A_zimbraReverseProxyMailHostSearchBase,
+                                "USER",
+                                authUserWithRealDomainName,
+                                attrs,
+                                extraAttrs);
+                    }
+                }
                 
                 Map<String, String> vals = sdr.configuredAttrs;
                 String userName = vals.get(Provisioning.A_zimbraReverseProxyUserNameAttribute);
                 if (userName != null)
-                    authUser = userName;
+                    authUser = authUserWithRealDomainName = userName;
                 
                 String mailhost = null;
                 String port = null;
@@ -878,22 +915,22 @@ public class NginxLookupExtension implements ZimbraExtension {
                     
                     if (mailhost == null || port == null) {
                         // not set or not set completely on account, try domain
-                        String[] parts = authUser.split("@");
+                        String[] parts = authUserWithRealDomainName.split("@");
                         if (parts.length == 2) {
                             String domainName = parts[1];
-                            DomainExternalRouteInfo domain = getDomainExternalRouteInfoByDomainName(zlc, config, domainName, authUser);
+                            DomainExternalRouteInfo domain = getDomainExternalRouteInfoByDomainName(zlc, config, domainName, authUserWithRealDomainName);
                             if (domain != null) {
                                 mailhost = domain.getHostname(req.proto);
                                 port = domain.getPort(req.proto);
                             } else
-                                logger.error("cannot load domain " + domainName + " for auth user " + authUser + ", cannot use external route on domain");
+                                logger.error("cannot load domain " + domainName + " for auth user " + authUserWithRealDomainName + ", cannot use external route on domain");
                         }
                     }    
                         
                     // not set or not set completely on account/domain, null both and  
                     // we will fallback to the internal route
                     if (mailhost == null || port == null) {
-                        logger.info("account " + authUser + " has " + 
+                        logger.info("account " + authUserWithRealDomainName + " has " + 
                                     Provisioning.A_zimbraReverseProxyUseExternalRoute + " set to TRUE " +
                                     " but missing external route info, fallback to use internal route");
                         mailhost = null;
@@ -1108,11 +1145,13 @@ public class NginxLookupExtension implements ZimbraExtension {
     
     public static void main(String args[]) {
         /*
-        test("user1@phoebe.local", "test123", null);
+        test("user1@phoebe.mac", "test123", null);
         test("imapappendthunderbird1190418967@qa07.liquidsys.com/kk", "test123", null);
         test("user1", "test123", null);
         test("user2", "test123", "127.0.0.1");
         test("user3", "test123", "127.0.0.2");
+        test("alias@phoebe.mac", "test123", null);  // zmprov aaa  user1@phoebe.mac alias@phoebe.mac
+        test("user1@alias.com", "test123", null);   // zmprov cad alias.com phoebe.mac
         */
         
         /*
@@ -1169,6 +1208,6 @@ The steps are:
        zmprov mcf zimbraReverseProxyUserNameAttribute zimbraMailDeliveryAddress
        
          */
-        doTest("plain",     "user1%phoebe.mac",        "test123",  "imap",       "1",                "10.11.12.13", "127.0.0.1",   null,        null,                        null,                      null,            true);
+        // doTest("plain",     "user1%phoebe.mac",        "test123",  "imap",       "1",                "10.11.12.13", "127.0.0.1",   null,        null,                        null,                      null,            true);
    }
 }
