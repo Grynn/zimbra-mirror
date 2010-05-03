@@ -23,6 +23,7 @@ Com_Zimbra_Email.prototype.constructor = Com_Zimbra_Email;
 Com_Zimbra_Email.IM_NEW_IM = "im new im";
 Com_Zimbra_Email.IM_NEW_BUDDY = "im new buddy";
 Com_Zimbra_Email.NEW_FILTER = "__new__";
+Com_Zimbra_Email.MAILTO_RE = /^mailto:[\x27\x22]?([^@?&\x22\x27]+@[^@?&]+\.[^@?&\x22\x27]+)[\x27\x22]?/;
 
 Com_Zimbra_Email.prototype.init =
 function() {
@@ -189,7 +190,8 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	var addr = (contentObjText instanceof AjxEmailAddress)
 		? contentObjText.address : contentObjText;
 
-	if (this.isMailToLink(addr)) {
+    var isMailTo = this.isMailToLink(addr);
+	if (isMailTo) {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
 
@@ -210,6 +212,9 @@ function(spanElement, contentObjText, matchContext, canvas) {
 		toolTip = contact.getToolTip(addr, false, hint);
 	} else {
 		var hint = isYahoo ? this._getYahooHint() : this._newTooltipHint;
+        if(isMailTo){
+            hint = this._composeTooltipHint;
+        }
 		var subs = {
 			addrstr: addr.toString(),
 			hint: hint
@@ -381,14 +386,14 @@ function (str){
 Com_Zimbra_Email.prototype.parseMailToLink =
 function(str){
 	var parts = {};
-	var match = str.match(/\bsubject=([^&]+)/);
+	var match = str.match(/\bsubject=([^&]+)/i);
 	parts.subject = match ? decodeURIComponent(match[1]) : null;
 
 	match = str.match(/\bto\:([^&]+)/);
 	if(!match) match = str.match(/\bmailto\:([^\?]+)/i);
 	parts.to = match ? decodeURIComponent(match[1]) : null;
 
-	match = str.match(/\bbody=([^&]+)/);
+	match = str.match(/\bbody=([^&]+)/i);
 	parts.body = match ? decodeURIComponent(match[1]) : null;
 
 	return parts;
@@ -410,15 +415,20 @@ function(spanElement, contentObjText, matchContext, ev) {
 		}
 	}
 
+    var contact = addr;
+    var isMailTo = this.isMailToLink(addr);
+    //extract mailid from mailto:mailid?params 
+    if(isMailTo && Com_Zimbra_Email.MAILTO_RE.test(addr)){
+        contact = RegExp.$1;
+    }
+
 	var contactList = AjxDispatcher.run("GetContacts");
-	var contact = contactList ? contactList.getContactByEmail(addr) : null;
+	var addrContact = contactList ? contactList.getContactByEmail(contact) : null;
 	// if contact found or there is no contact list (i.e. contacts app is disabled), go to compose view
-	if (contact ||
-		contactList == null ||
-		(AjxUtil.isString(addr) && this.isMailToLink(addr)))
+	if ( isMailTo || addrContact || contactList == null )
 	{
 		this._actionObject = null;
-		this._composeListener(ev,addr);
+		this._composeListener(ev, addr);
 	}
 	else
 	{
