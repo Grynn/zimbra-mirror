@@ -22,7 +22,9 @@ import com.zimbra.zcsprov.ZMSoapSession;
 import com.zimbra.zcsprov.ZCSACProvision;
 import com.zimbra.auth.AuthTokens;
 import com.zimbra.common.ZCSProvParams;
+import org.apache.log4j.PropertyConfigurator;
 
+import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.ArrayList;
@@ -418,7 +420,7 @@ class tarMigrator implements Runnable
 public class tarFormatter implements EventNotifier
 {
     private static final String ztozlogFile="ztozlog";
-    private static final String tarMigVersion="1.2";
+    private static final String tarMigVersion="1.3";
     private static final String ztozconfigFile="zmztozmig.conf";
     private static final String ztoz_default_configpath="/opt/zimbra/conf/";
     private String configFile="";
@@ -433,9 +435,25 @@ public class tarFormatter implements EventNotifier
         //
     }
 
+    private void SetdefaultLog4JAppender()
+    {
+        String level = System.getProperty("zimbra.log4j.level");
+        if (level == null)
+        {
+            level = "INFO";
+        }
+        Properties p = new Properties();
+        p.put("log4j.rootLogger", level + ",A1");
+        p.put("log4j.appender.A1", "org.apache.log4j.ConsoleAppender");
+        p.put("log4j.appender.A1.layout", "org.apache.log4j.PatternLayout");
+        p.put("log4j.appender.A1.layout.ConversionPattern", "[%t] [%x] %p: %m%n");
+        PropertyConfigurator.configure(p);
+
+    }
     public boolean Init(String[] args)
     {
         boolean retval=true;
+        SetdefaultLog4JAppender();
         tarfmtparams = new ZtoZImportParams();
         // Initiate the arguments engine.
         ArgsEngine engine = new ArgsEngine();
@@ -758,7 +776,7 @@ public class tarFormatter implements EventNotifier
         System.out.println("                                [default file -> /opt/zimbra/conf/zmztozmig.conf]");
         System.out.println("-d --debug                      prints versbose debug messages");        
     }
-    
+
     public static void main(String[] args)
     {
         tarFormatter tarformatter = new tarFormatter();
