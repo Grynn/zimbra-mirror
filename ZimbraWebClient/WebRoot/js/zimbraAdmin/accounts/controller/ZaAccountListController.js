@@ -635,6 +635,9 @@ function(account) {
 		if(!account[ZaAccount.A2_publicMailURL]) {
 			account.load("id", accId);
 		}
+		if(!account[ZaAccount.A2_publicMailURL]) {
+			account[ZaAccount.A2_publicMailURL] = ["http://",ZaAccount.getDomain(account[ZaAccount.A_name]),":7070"].join("");
+		}
 		if(!obj.authToken || !obj.lifetime)
 			throw new AjxException(ZaMsg.ERROR_FAILED_TO_GET_CREDENTIALS, AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
 
