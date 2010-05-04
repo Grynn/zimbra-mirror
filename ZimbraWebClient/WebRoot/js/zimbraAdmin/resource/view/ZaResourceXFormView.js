@@ -27,7 +27,7 @@ ZaResourceXFormView = function(parent, entry) {
 	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
 	this.initForm(ZaResource.myXModel,this.getMyXForm(entry), null);
 	this._localXForm.setController(ZaApp.getInstance());	
-	this._helpURL = ZaResourceXFormView.helpURL;	
+	this._helpURL = ZaResourceXFormView.helpURL;
 }
 
 ZaResourceXFormView.prototype = new ZaTabView();
@@ -251,6 +251,17 @@ ZaResourceXFormView.CONTACT_TAB_RIGHTS = [];
 * an Account view. 
 **/
 ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {	
+	ZaResource.resTypeChoices = [
+   		{value:ZaResource.RESOURCE_TYPE_LOCATION, label:ZaMsg.resType_location}, 
+   		{value:ZaResource.RESOURCE_TYPE_EQUIPMENT, label:ZaMsg.resType_equipment}
+   	];	
+  		                     	
+  	ZaResource.schedulePolicyChoices = [
+   		{value:ZaResource.SCHEDULE_POLICY_TT, label:ZaMsg.resScheduleTT},
+   		{value:ZaResource.SCHEDULE_POLICY_FT, label:ZaMsg.resScheduleFT},
+   		{value:ZaResource.SCHEDULE_POLICY_TF, label:ZaMsg.resScheduleTF},
+   		{value:ZaResource.SCHEDULE_POLICY_FF, label:ZaMsg.resScheduleFF}
+   	];		
 
 	var domainName;
 	domainName = ZaSettings.myDomainName;

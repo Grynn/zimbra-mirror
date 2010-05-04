@@ -682,15 +682,3 @@ ZaResource.accountStatusChoices = [
 		//{value:ZaResource.ACCOUNT_STATUS_MAINTENANCE, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_MAINTENANCE)}
 	];	
 
-ZaResource.resTypeChoices = [
-		{value:ZaResource.RESOURCE_TYPE_LOCATION, label:ZaMsg.resType_location}, 
-		{value:ZaResource.RESOURCE_TYPE_EQUIPMENT, label:ZaMsg.resType_equipment}
-	];	
-	
-ZaResource.schedulePolicyChoices = [
-		{value:ZaResource.SCHEDULE_POLICY_TT, label:ZaMsg.resScheduleTT},
-		{value:ZaResource.SCHEDULE_POLICY_FT, label:ZaMsg.resScheduleFT},
-		{value:ZaResource.SCHEDULE_POLICY_TF, label:ZaMsg.resScheduleTF},
-		{value:ZaResource.SCHEDULE_POLICY_FF, label:ZaMsg.resScheduleFF}
-	];
-
