@@ -54,17 +54,39 @@ ApptSummaryZimlet.ELEMENT_ONLY_SEND_APPTS = "apptSummary_onlySendSummaryWhenTher
 
 /**
  * Initializes the zimlet.
- * 
  */
 ApptSummaryZimlet.prototype.init =
 function() {
+	//check immediately after login..
+	this._checkDateAndSendApptSummary();
+	//check every 3 hours so it sends summary immediately
+	setInterval(AjxCallback.simpleClosure(this._checkDateAndSendApptSummary, this), 3*60*60*1000);
+
+};
+
+/**
+ * Check everytime a mail is sent, just to make sure setInterval doesnt miss it(if the pc is asleep)
+ */
+ 
+ApptSummaryZimlet.prototype.onSendMsgSuccess = 
+function() {
+	if((this._todayStr == undefined) || (this._todayStr && this._todayStr != this._getTodayStr())) {
+		this._checkDateAndSendApptSummary();
+	}
+};
+
+/**
+ * Sends Appointment Summary if the date is different
+ */
+ApptSummaryZimlet.prototype._checkDateAndSendApptSummary =
+function() {
 	var emailLastUpdateDate = this.getUserProperty(ApptSummaryZimlet.USER_PROP_LAST_UPDATE);
-	var todayStr = this._getTodayStr();
-	if (emailLastUpdateDate != todayStr){
+	this._todayStr = this._getTodayStr();
+	if (emailLastUpdateDate != this._todayStr){
 		this.apptSummary_onlySendSummaryWhenThereAreAppts = this.getUserProperty(ApptSummaryZimlet.USER_PROP_ONLY_SEND_APPTS) == "true";
 		var appts = this._getAppts(new Date());
 		this._parseApptsAndSendEmail(appts);
-		this.setUserProperty(ApptSummaryZimlet.USER_PROP_LAST_UPDATE, todayStr, true);
+		this.setUserProperty(ApptSummaryZimlet.USER_PROP_LAST_UPDATE, this._todayStr, true);
 	}
 };
 
@@ -99,17 +121,21 @@ function(date, noheader) {
 ApptSummaryZimlet.prototype._parseApptsAndSendEmail =
 function(appts) {
 	var hasError = false;
-	var body = "";
+	var bodyHtml = "";
+	var bodyText = "";
 	if (appts instanceof AjxVector) {
 		if (appts.size() == 0 && this.apptSummary_onlySendSummaryWhenThereAreAppts) {
 			return;
 		}
-		body = this._getApptsSummaryBody(this._startDate, appts, this._calController, null);
+		bodyHtml = this._getApptsSummaryBody(this._startDate, appts, this._calController);
+		bodyText = this._getApptsSummaryBody(this._startDate, appts, this._calController, null, null, true);
+
 	} else {
 		hasError = true;
-		body = this.getMessage("ApptSummary_error_unabletogetappointments");
+		bodyHtml = this.getMessage("ApptSummary_error_unabletogetappointments");
+		bodyText = bodyHtml;
 	}
-	this._sendEmail(body, hasError);
+	this._sendEmail(bodyHtml,bodyText, hasError);
 };
 
 /**
@@ -120,10 +146,11 @@ function(appts) {
  * @param	{ZmCalViewController}	controller		the calendar view controller
  * @param	{boolean}	noheader	not used
  * @param	{string}	emptyMsg	the empty message body
+ * @param	{boolean}	textBody	If true, returns Text-body
  * @return	{string}	the appointment summary email body
  */
 ApptSummaryZimlet.prototype._getApptsSummaryBody =
-function(date, list, controller, noheader, emptyMsg) {
+function(date, list, controller, noheader, emptyMsg, textBody) {
 	this.__apptCount = 0;
 	if (!emptyMsg) {
 		emptyMsg = ZmMsg.noAppts;
@@ -131,9 +158,15 @@ function(date, list, controller, noheader, emptyMsg) {
 	var html = new AjxBuffer();
 	var formatter = DwtCalendar.getDateFullFormatter();
 	var title = formatter.format(date);
-	html.append(this._getApptsHtml(date, list, controller, noheader, emptyMsg, ApptSummaryZimlet.TYPE_SHOW_REGULAR_ONLY));
-	html.append("<br/>");
-	html.append(this._getApptsHtml(date, list, controller, noheader, emptyMsg, ApptSummaryZimlet.TYPE_SHOW_FREE_DECLINED));
+	if(!textBody) {
+		html.append(this._getApptsHtml(date, list, controller, noheader, emptyMsg, ApptSummaryZimlet.TYPE_SHOW_REGULAR_ONLY));
+		html.append("<br/>");
+		html.append(this._getApptsHtml(date, list, controller, noheader, emptyMsg, ApptSummaryZimlet.TYPE_SHOW_FREE_DECLINED));
+	} else {
+		html.append(this._getApptsText(date, list, controller, noheader, emptyMsg, ApptSummaryZimlet.TYPE_SHOW_REGULAR_ONLY));
+		html.append("\n\n");
+		html.append(this._getApptsText(date, list, controller, noheader, emptyMsg, ApptSummaryZimlet.TYPE_SHOW_FREE_DECLINED));
+	}
 	return html.toString();
 };
 
@@ -255,13 +288,103 @@ function(date, list, controller, noheader, emptyMsg, type) {
 };
 
 /**
+ * Gets the appointments summary as Text.
+ * @params @see this._getApptsHtml
+ */
+ApptSummaryZimlet.prototype._getApptsText =
+function(date, list, controller, noheader, emptyMsg, type) {
+	var html = new AjxBuffer();
+	var apptsFound = false;
+	if (type == ApptSummaryZimlet.TYPE_SHOW_REGULAR_ONLY) {
+		var title = this.getMessage("ApptSummary_header_apts");
+	} else {
+		var title = this.getMessage("ApptSummary_header_notbusy");
+	}
+
+	html.append(title, "\n");
+	html.append("--------------------------------------------------------------------------------------------------------------------\n");
+	html.append("#", " ", this.getMessage("ApptSummary_calendar"),  "\t\t", this.getMessage("ApptSummary_label_from"),"\t\t",
+		this.getMessage("ApptSummary_label_to"),"\t", this.getMessage("ApptSummary_label_details"), "\n");
+	html.append("--------------------------------------------------------------------------------------------------------------------\n");
+
+	var formatter_med = AjxDateFormat.getTimeInstance(AjxDateFormat.SHORT);
+	var formatter_long = AjxDateFormat.getTimeInstance(AjxDateFormat.LONG);
+	var isRowOdd = true;
+	var size = list ? list.size() : 0;
+	var freeDecCounter = 0;
+	for (var i = 0; i < size; i++) {
+		var ao = list.get(i);
+		if (type == ApptSummaryZimlet.TYPE_SHOW_REGULAR_ONLY) {
+			if (ao.ptst == "DE" || ao.fba == "F" || ao.fba == "O") {//ignore declined and/or free appointments
+				continue;
+			}
+			var counter = ++this.__apptCount;
+		} else if (type == ApptSummaryZimlet.TYPE_SHOW_FREE_DECLINED) {
+			if (ao.ptst != "DE" && ao.fba != "F" && ao.fba != "O") {//only free/declined appts are allowed
+				continue;
+			}
+			var counter = ++freeDecCounter;
+		}
+		apptsFound = true;
+		var calName = controller.getCalendarName(ao.folderId);
+		if(calName.length > 17) {
+			calName = calName.substr(0, 15) + "..";
+		}
+		html.append(counter, " ", calName);
+		if (!ao.isAllDayEvent()) {
+			if (ao.isMultiDay()) {
+				var startTime = formatter_long.format(ao.startDate);
+				var endTime = formatter_long.format(ao.endDate);
+			} else {
+				var startTime = formatter_med.format(ao.startDate);
+				var endTime = formatter_med.format(ao.endDate);
+			}
+		} else {
+			var startTime = this.getMessage("ApptSummary_allday");
+			var endTime = this.getMessage("ApptSummary_allday");
+		}
+		var tab = "\t\t";
+		if(calName.length > 10) {
+			tab = "\t";
+		}
+		html.append(tab, startTime, "\t", endTime, "\t");
+
+		var isNew = ao.ptst == ZmCalBaseItem.PSTATUS_NEEDS_ACTION;
+		if (isNew) {
+			html.append("[", this.getMessage("ApptSummary_apt_new"), "]");
+		} else if (ao.ptst == "DE") {
+			html.append("[", this.getMessage("ApptSummary_apt_declined"), "]");
+		} else if (ao.fba == "F") {
+			html.append("[", this.getMessage("ApptSummary_apt_free"), "]");
+		} else if (ao.fba == "O") {
+			html.append("[", this.getMessage("ApptSummary_apt_ooo"), "]");
+		}
+		html.append(AjxStringUtil.htmlEncode(ao.getName()));
+		var loc = AjxStringUtil.htmlEncode(ao.getLocation());
+		if (loc != "") {
+			html.append(this.getMessage("ApptSummary_label_location"), " - ", loc);
+		}
+		html.append("\n");
+	}
+	if (size == 0) {
+		html.append(emptyMsg);
+	}
+	if (apptsFound) {
+		return html.join("");
+	} else {
+		return "";
+	}
+};
+
+/**
  * Sends the email.
  * 
- * @param	{string}	body		the message body
+ * @param	{string}	bodyHtml		the message body in HTML
+ * @param	{string}	bodyText		the message body in text
  * @param	{boolean}	hasError	if <code>true</code>, the email contains an error message
  */
 ApptSummaryZimlet.prototype._sendEmail =
-function(body, hasError) {
+function(bodyHtml, bodyText, hasError) {
 	if (hasError) {
 		var subject = this.getMessage("ApptSummary_subject_error");
 	} else {
@@ -301,7 +424,7 @@ function(body, hasError) {
 	var partNodes = topNode.mp = [];
 
 	//text part..
-	var content = "";
+	var content = bodyText;
 	var partNode = {ct:"text/plain"};
 	partNode.content = {_content:content};
 	partNodes.push(partNode);
@@ -309,7 +432,7 @@ function(body, hasError) {
 	//html part..
 	var content = ["<html><head><style type='text/css'>p { margin: 0; }</style></head>",
 		"<body><div style='font-family: Times New Roman; font-size: 12pt; color: #000000'>",
-		body,"</div></body></html>"].join("");
+		bodyHtml,"</div></body></html>"].join("");
 
 	var partNode = {ct:"text/html"};
 	partNode.content = {_content:content};
