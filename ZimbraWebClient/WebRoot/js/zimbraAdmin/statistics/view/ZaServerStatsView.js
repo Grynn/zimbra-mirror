@@ -25,35 +25,35 @@ ZaServerStatsView = function(parent) {
 	DwtTabView.call(this, parent);
 	
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_MSG_COUNT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+//    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_MSG_COUNT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
         this._msgCountPage = new ZaServerMessageCountPage(this);
         this.addTab(ZaMsg.TABT_InMsgs, this._msgCountPage);
-    }
+//    }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_MSG_VOL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+//    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_MSG_VOL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
         this._msgsVolumePage = new ZaServerMessageVolumePage(this);
         this.addTab(ZaMsg.TABT_InData, this._msgsVolumePage);
-    }
+//    }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_MSG_ASAV_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+  //  if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_MSG_ASAV_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
         this._spamPage = new ZaServerSpamActivityPage(this);
         this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);
-    }
+//    }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_DISK_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+  //  if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_DISK_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
         this._diskPage = new ZaServerDiskStatsPage(this);
         this.addTab(ZaMsg.TABT_Disk, this._diskPage);
-    }
+//    }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_SESSION_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+  //  if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_SESSION_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
         this._sessionPage = new ZaServerSessionStatsPage(this);
         this.addTab(ZaMsg.TABT_Session, this._sessionPage);
-    }
+//    }
 
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_QUOTA_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+  //  if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_QUOTA_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
         this._mbxPage = new ZaServerMBXStatsPage (this);
         ZaServerMBXStatsPage.TAB_KEY = this.addTab(ZaMsg.TABT_MBX, this._mbxPage);
-    }
+   // }
 }
 
 ZaServerStatsView.prototype = new DwtTabView;

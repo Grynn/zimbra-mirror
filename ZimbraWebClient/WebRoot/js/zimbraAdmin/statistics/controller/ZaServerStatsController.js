@@ -38,13 +38,12 @@ ZaController.setViewMethods["ZaServerStatsController"] = [];
 ZaServerStatsController.prototype.show = 
 function(entry, openInNewTab, skipRefresh) {
 	if (! this.selectExistingTabByItemId(entry.id)){	
-		openInNewTab = true ;
 		this._setView(entry, openInNewTab, skipRefresh);
 	}
 }
 
 ZaServerStatsController.setViewMethod =
-function(item) {	
+function(item,openInNewTab) {	
     if (!this._contentView) {
 		this._view = this._contentView = new this.tabConstructor(this._container);
 		var elements = new Object();
@@ -83,10 +82,13 @@ function(item) {
 		
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
-		//ZaApp.getInstance().createView(ZaZimbraAdmin._STATISTICS_BY_SERVER, elements);
+
 		var tabParams = {
-			openInNewTab: true,
+			openInNewTab: openInNewTab,
 			tabId: this.getContentViewId()
+		};
+		if(!openInNewTab) {
+			tabParams.tab = this.getMainTab();
 		}
 		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 		this._UICreated = true;

@@ -500,8 +500,8 @@ function() {
 			this._statisticsTi.setImage("Statistics");
 			this._statisticsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._STATISTICS);
 		}
-//		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-        if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+//        if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 			try {
 				//add server statistics nodes
 	//			DBG.println(AjxDebug.DBG1, "add server statistics nodes ");	
@@ -713,25 +713,13 @@ ZaOverviewPanelController.statsByServerTreeListener = function (ev) {
 	currentServer.id = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
 	currentServer.attrs[ZaItem.A_zimbraId] = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
 	currentServer.load("id", currentServer.id, false, true);
-	//ZaApp.getInstance().getServerList().getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID));
 	var curController = ZaApp.getInstance().getCurrentController() ;
 	if(curController) {
-		curController.switchToNextView(ZaApp.getInstance().getServerStatsController(), ZaServerStatsController.prototype.show,currentServer);
+		curController.switchToNextView(ZaApp.getInstance().getServerStatsController(), ZaServerStatsController.prototype.show,[currentServer,true]);
 	} else {
 		curController = ZaApp.getInstance().getServerStatsController();			
-		curController.show(currentServer);
+		curController.show(currentServer,true);
 	}
-	//refresh the MbxPage when the server tree item is clicked
-	/* It should be done in the ZaServerMBXStatsPage._render method.
-	var mbxPage = curController._contentView ? curController._contentView._mbxPage : null ;
-	if (mbxPage) {
-		mbxPage._initialized = false ; //force mbxPage.showMe to query the server again.
-		if (curController._contentView._currentTabKey == ZaServerMBXStatsPage.TAB_KEY) { //MbxPage is the current page
-			//we need to manually call the showMe()
-			DBG.println("Invoke the ZaServerMBXStatsPage.showMe() to update the mbx quotas.");
-			mbxPage.showMe();
-		}
-	}*/
 }
 
 ZaOverviewPanelController.statsTreeListener = function (ev) {

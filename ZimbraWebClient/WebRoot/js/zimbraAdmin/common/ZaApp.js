@@ -124,6 +124,19 @@ function(appCtxt) {
 			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_LIST_VIEW]) {
 				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
 				ctl.getOverviewPanel().getFolderTree().setSelection(ctl._cosTi);				
+			} else if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_VIEW]) {
+			    var serverArray = [];
+			    var serverList = ZaApp.getInstance().getServerList();
+			    var currentServer = null;
+			    if(serverList) {
+			    	serverArray = serverList.getArray();
+			    	if(serverArray && serverArray[0]) {
+			    		serverArray[0].load();
+			    		currentServer = serverArray[0];
+			    	}
+			    }
+				var curController = ZaApp.getInstance().getServerStatsController();			
+				curController.show(currentServer,false);				
 			}
 			
 			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {

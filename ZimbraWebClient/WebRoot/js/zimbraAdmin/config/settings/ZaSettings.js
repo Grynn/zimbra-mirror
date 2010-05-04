@@ -327,11 +327,9 @@ ZaSettings.SAVE_SEARCH = "saveSearch";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SAVE_SEARCH, label: ZaMsg.UI_Comp_SaveSearch });
 ZaSettings.MAILQ_VIEW = "mailQueue";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.MAILQ_VIEW, label: ZaMsg.UI_Comp_mailQueueView });
-
-/*   
 ZaSettings.SERVER_STATS_VIEW = "perServerStatisticsView";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_VIEW, label: ZaMsg.UI_Comp_ServerStatsView });
-*/
+
 
 //List view groups
 ZaSettings.OVERVIEW_CONFIG_ITEMS = [ZaSettings.COS_LIST_VIEW,ZaSettings.ZIMLET_LIST_VIEW,ZaSettings.SERVER_LIST_VIEW,ZaSettings.ADMIN_ZIMLET_LIST_VIEW,
@@ -406,6 +404,7 @@ ZaSettings.VIEW_RIGHTS [ZaSettings.MAILQ_VIEW] = "adminConsoleMailQueueRights" ;
 
 ZaSettings.VIEW_RIGHTS [ZaSettings.SAVE_SEARCH] = "adminConsoleSavedSearchRights" ;
 
+ZaSettings.VIEW_RIGHTS [ZaSettings.SERVER_STATS_VIEW] = "adminConsoleServerStatisticRights";
 
 ZaSettings.LICENSE_ENABLED = true;
 ZaSettings.ADMIN_ZIMLETS_ENABLED = true;

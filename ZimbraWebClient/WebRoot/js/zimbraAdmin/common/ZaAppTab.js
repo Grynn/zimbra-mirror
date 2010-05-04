@@ -105,7 +105,13 @@ function () {
 
 ZaAppTab.prototype.getAppView =
 function () {
-	return ZaApp.getInstance().getViewById (this._tabId)[ZaAppViewMgr.C_APP_CONTENT] ;
+	var view = ZaApp.getInstance().getViewById (this._tabId);
+	if(view) {
+		return view[ZaAppViewMgr.C_APP_CONTENT] ;
+	} else {
+		return null;
+	}
+	
 }
 
 ZaAppTab.prototype._selListener =

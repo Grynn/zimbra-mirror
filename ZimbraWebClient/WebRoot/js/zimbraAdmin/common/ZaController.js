@@ -235,7 +235,7 @@ function (nextViewCtrlr, func, params) {
 * @private
 **/
 ZaController.prototype._setView =
-function(entry, openInNewTab) {
+function(entry, openInNewTab, skipRefresh) {
 	if (openInNewTab) { //check whether the tab limit exceeds
 		var cSize = ZaAppTabGroup._TABS.size () ;
 		if (cSize >= ZaAppTabGroup.TAB_LIMIT) {
@@ -250,7 +250,7 @@ function(entry, openInNewTab) {
 		for(var i = 0; i < cnt; i++) {
 			if(typeof(methods[i]) == "function") {
 				try {
-					methods[i].call(this,entry);
+					methods[i].call(this,entry,openInNewTab, skipRefresh);
 				} catch (ex) {
 					this._handleException(ex, "ZaController.prototype._setView");
 					break;
