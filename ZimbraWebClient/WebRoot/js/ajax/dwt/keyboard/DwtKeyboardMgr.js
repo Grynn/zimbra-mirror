@@ -666,6 +666,7 @@ function(ev) {
 	ev = DwtUiEvent.getEvent(ev, this);
 //	DBG.println("kbnav", [ev.type, ev.keyCode, ev.charCode, ev.which].join(" / "));
 	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
+	if (kbMgr && !kbMgr.isEnabled()) { return true; }  // Allow key events to propagate when keyboard manager is disabled (to avoid taking over browser shortcuts). Bugzilla #45469.
 	if (!kbMgr || !kbMgr.__checkStatus()) { return false; }
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
