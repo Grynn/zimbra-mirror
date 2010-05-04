@@ -1399,10 +1399,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								  {ref:ZaAccount.A_zimbraPrefSkin, type:_SUPERWIZ_SELECT1_,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.LBL_zimbraPrefSkin,label:ZaMsg.LBL_zimbraPrefSkin, labelLocation:_LEFT_, 
-									choices:ZaApp.getInstance().getInstalledSkins(),
-//									visibilityChecks:[ZaAccountXFormView.gotSkins]
-                                    visibilityChecks:[]     //always show the current skin in new account wizard, so user can change it                                     
-                                  }
+									choices:ZaNewAccountXWizard.themeChoices,
+									visibilityChecks:[ZaAccountXFormView.gotSkins]                                     
+                                  },
+                                  {type:_OUTPUT_,ref:ZaAccount.A_zimbraPrefSkin,label:ZaMsg.LBL_zimbraPrefSkin, labelLocation:_LEFT_, 
+                                 	  visibilityChecks:[ZaAccountXFormView.gotNoSkins]
+                                  }                                  
 								] 
 							},
 							{type:_SPACER_},
@@ -1410,10 +1412,14 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								selectRef:ZaAccount.A_zimbraAvailableSkin, 
 								ref:ZaAccount.A_zimbraAvailableSkin, 
 								choices:ZaNewAccountXWizard.themeChoices,
-								visibilityChecks:[Case_XFormItem.prototype.isCurrentTab],
+								visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaAccountXFormView.gotSkins],
 								visibilityChangeEventSources:[ZaModel.currentStep],
 								caseKey:ZaNewAccountXWizard.SKINS_STEP, caseVarRef:ZaModel.currentStep,
 								limitLabel:ZaMsg.NAD_LimitThemesTo
+							},
+							{type:_DWT_ALERT_,colSpan:2,style: DwtAlert.WARNING, iconVisible:true,
+								visibilityChecks:[ZaAccountXFormView.gotNoSkins],
+								value:ZaMsg.ERROR_CANNOT_FIND_SKINS_FOR_ACCOUNT
 							}
 						]
 		});			

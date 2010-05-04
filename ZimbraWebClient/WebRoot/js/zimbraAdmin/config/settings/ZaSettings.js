@@ -407,7 +407,6 @@ ZaSettings.VIEW_RIGHTS [ZaSettings.MAILQ_VIEW] = "adminConsoleMailQueueRights" ;
 ZaSettings.VIEW_RIGHTS [ZaSettings.SAVE_SEARCH] = "adminConsoleSavedSearchRights" ;
 
 
-ZaSettings.SKIN_PREFS_ENABLED = true;
 ZaSettings.LICENSE_ENABLED = true;
 ZaSettings.ADMIN_ZIMLETS_ENABLED = true;
 ZaSettings.SAVE_SEARCH_ENABLED = true ;

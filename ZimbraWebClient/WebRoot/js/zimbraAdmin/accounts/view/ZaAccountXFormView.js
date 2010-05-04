@@ -146,7 +146,7 @@ function(entry) {
     var domainObj =  ZaDomain.getDomainByName (domainName) ;
     this._containedObject[ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
     this._containedObject[ZaAccount.A2_currentAccountType] = entry[ZaAccount.A2_currentAccountType]  ;
-	
+    ZaAccountXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 	if(entry.getAttrs[ZaAccount.A_zimbraAvailableSkin] || entry.getAttrs.all) {
 		var skins = ZaApp.getInstance().getInstalledSkins();
 		
@@ -219,13 +219,19 @@ function(entry) {
 	this.updateTab();
 }
 
+ZaAccountXFormView.gotNoSkins = function() {
+	return !ZaAccountXFormView.gotSkins.call(this);
+}
+
 ZaAccountXFormView.gotSkins = function () {
-	if(!ZaSettings.SKIN_PREFS_ENABLED)
-		return false;
-	else 
-		return ((this.getController() != null) &&
-                (this.getController().getInstalledSkins() != null) &&
-                (this.getController().getInstalledSkins().length > 0));
+	return (
+			( (ZaApp.getInstance() != null) 
+			  && (ZaApp.getInstance().getInstalledSkins() != null) 
+			  && (ZaApp.getInstance().getInstalledSkins().length > 0)
+			 ) 
+             || !AjxUtil.isEmpty(this.getInstanceValue(ZaAccount.A_zimbraAvailableSkin))
+             || !AjxUtil.isEmpty(this.getInstance()._defaultValues.attrs[ZaAccount.A_zimbraAvailableSkin])
+           );
 }
 
 ZaAccountXFormView.preProcessCOS = 
@@ -2575,10 +2581,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 				{type:_SPACER_},
 				{type:_GROUP_, 
 					items:[
-					{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
-                        msgName:ZaMsg.LBL_zimbraPrefSkin,label:ZaMsg.LBL_zimbraPrefSkin, labelLocation:_LEFT_,
-                        choices:ZaApp.getInstance().getInstalledSkins(),
-						visibilityChecks:[ZaAccountXFormView.gotSkins]}
+						{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+	                        msgName:ZaMsg.LBL_zimbraPrefSkin,label:ZaMsg.LBL_zimbraPrefSkin, labelLocation:_LEFT_,
+	                        choices:ZaAccountXFormView.themeChoices,
+							visibilityChecks:[ZaAccountXFormView.gotSkins]
+						},
+	                    {type:_OUTPUT_,ref:ZaAccount.A_zimbraPrefSkin,label:ZaMsg.LBL_zimbraPrefSkin, labelLocation:_LEFT_, 
+	                   	  visibilityChecks:[ZaAccountXFormView.gotNoSkins]
+	                    }
 					] 
 				},
 				{type:_SPACER_},
@@ -2586,10 +2596,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 					selectRef:ZaAccount.A_zimbraAvailableSkin, 
 					ref:ZaAccount.A_zimbraAvailableSkin, 
 					choices:ZaAccountXFormView.themeChoices,
-					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab],
+					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaAccountXFormView.gotSkins],
 					visibilityChangeEventSources:[ZaModel.currentTab],
 					caseKey:_tab9, caseVarRef:ZaModel.currentTab,
 					limitLabel:ZaMsg.NAD_LimitThemesTo
+				},
+				{type:_DWT_ALERT_,colSpan:2,style: DwtAlert.WARNING, iconVisible:true,
+					visibilityChecks:[ZaAccountXFormView.gotNoSkins],
+					value:ZaMsg.ERROR_CANNOT_FIND_SKINS_FOR_ACCOUNT
 				}
 			] 
 		});
