@@ -65,7 +65,8 @@ public class OfflineService implements DocumentService {
         dispatcher.registerHandler(OfflineConstants.GET_EXTENSIONS_REQUEST, new OfflineGetExtensions());
 
         dispatcher.registerHandler(MailConstants.SEND_INVITE_REPLY_REQUEST, new OfflineSendInviteReply());
-        
+        dispatcher.registerHandler(MailConstants.SEND_REPORT_REQUEST, new OfflineSendDeliveryReport());
+
         // not the most suitable place to do this, but it's just too easy.
         SoapContextExtension.register(OfflineContextExtension.ZDSYNC, new OfflineContextExtension());
     }
