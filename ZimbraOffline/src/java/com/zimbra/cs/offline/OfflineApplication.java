@@ -111,7 +111,9 @@ public class OfflineApplication extends ZimbraApplication {
         try {
             if (Db.getInstance().databaseExists(conn, ZIMBRA_DB_NAME)) {
                 migrateDb(conn);
+                OfflineLog.offline.debug("zimbra db optimize started...");
                 Db.getInstance().optimize(conn, ZIMBRA_DB_NAME, 0);
+                OfflineLog.offline.debug("zimbra db optimize done");
             } else {
                 File file = null;
                 PreparedStatement stmt = null;
