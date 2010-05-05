@@ -107,8 +107,34 @@ sub updateSyslogNG {
 
   open (TMPFH, ">$tmpfile");
   open (SYSFH, "<$syslogconf");
+
+  my $flocal=0;
   while (<SYSFH>) {
     if ($_ !~ /zimbra/) {
+      if( $platform =~ "SLES" || $platform eq "SuSEES10" ) {
+        if ($flocal) {
+          $flocal=0;
+          if ($_ =~ /, local7\); };/) {
+            $_ =~ s/, local7\); };/, local7) and not/;
+            print TMPFH $_;
+            print TMPFH "                               filter(f_iptables) and not filter(zimbra_local0) and not filter(zimbra_local1)\n";
+            print TMPFH "                               and not filter(zimbra_auth) and not filter(zimbra_mail); };\n";
+            next;
+          }
+        }
+        if ($_ =~ /^filter f_local/) {
+          $flocal=1;
+        }
+        if ($_ =~ /^filter f_messages/) {
+          if ($_ =~ /not filter\(f_iptables\); };/) {
+            $_ =~ s/filter\(f_iptables\); };/filter\(f_iptables) and/;
+            print TMPFH $_;
+            print TMPFH "                               not filter(zimbra_local0) and not filter(zimbra_local1) and not\n";
+            print TMPFH "                               filter(zimbra_auth) and not filter(zimbra_mail); };\n";
+            next;
+          }
+        }
+      }
       print TMPFH $_;
     }
   }
