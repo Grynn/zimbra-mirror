@@ -459,3 +459,13 @@ function(name) {
 		
 	return name;		
 };
+
+AjxEmailAddress.sortCompareByAddress =
+function(a, b) {
+
+	var addrA = a.getAddress() || "";
+	var addrB = b.getAddress() || "";
+	if (addrA.toLowerCase() > addrB.toLowerCase()) { return 1; }
+	if (addrA.toLowerCase() < addrB.toLowerCase()) { return -1; }
+	return 0;
+};
