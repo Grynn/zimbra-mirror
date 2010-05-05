@@ -65,7 +65,8 @@ ZaApplianceSettings.myXModel = {
 			{id:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type: _LIST_, dataType: _STRING_ },
 			{id:ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 			{id:ZaGlobalConfig.A_zimbraDefaultDomainName, ref:"attrs/" + ZaGlobalConfig.A_zimbraDefaultDomainName, type:_STRING_, maxLength: 256},
-			
+	        {id:ZaGlobalConfig.A2_blocked_extension_selection, type:_LIST_},
+	        {id:ZaGlobalConfig.A2_common_extension_selection, type:_LIST_},			
 			//certificates
 			{id:ZaApplianceSettings.A_certs, ref:ZaApplianceSettings.A_certs, type:_LIST_, 
 				listItem:{type:_OBJECT_,items:ZaApplianceSSLCert.myXModel.items}

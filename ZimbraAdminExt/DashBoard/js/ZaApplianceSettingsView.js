@@ -353,11 +353,6 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 										{type:_CELLSPACER_}
 									]
 								},
-								{ref:ZaGlobalConfig.A_zimbraMtaBlockedExtension, type:_DWT_LIST_,
-									cssClass: "VAMIDLTarget",
-									onSelection:ZaApplianceSettingsView.blockedExtSelectionListener
-								},
-								{type:_SPACER_, height:"5"},
 								{type:_GROUP_, numCols:4, colSizes:[125,5, 125,"*"],
 									items:[
 										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, 
@@ -373,6 +368,11 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 									    },
 										{type:_CELLSPACER_}
 									]
+								},
+								{type:_SPACER_, height:"5"},
+								{ref:ZaGlobalConfig.A_zimbraMtaBlockedExtension, type:_DWT_LIST_,
+									cssClass: "VAMIDLTarget",
+									onSelection:ZaApplianceSettingsView.blockedExtSelectionListener
 								}
 							]
 	    				}
@@ -389,11 +389,6 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 										{type:_CELLSPACER_}
 									]
 								},
-								{ref:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type:_DWT_LIST_, 
-									cssClass: "VAMIDLSource",
-									onSelection:ZaApplianceSettingsView.commonExtSelectionListener
-								},
-							    {type:_SPACER_, height:"5"},
 							    {type:_GROUP_, numCols:7, colSizes:[100,5,100,5,100,60,100],
 									items: [
 									   	{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddSelected, 
@@ -420,7 +415,12 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 											enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraNewExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
 										}
 								  	]
-							    }
+							    },			
+							    {type:_SPACER_, height:"5"},
+								{ref:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type:_DWT_LIST_, 
+									cssClass: "VAMIDLSource",
+									onSelection:ZaApplianceSettingsView.commonExtSelectionListener
+								}
 							]
 						  }
 				    	]
