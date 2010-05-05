@@ -112,7 +112,8 @@ DwtForm.prototype.getValue = function(id, defaultValue) {
 	if (item.getter) {
 		return this._call(item.getter) || defaultValue;
 	}
-	var value = this._getControlValue(id) || item.value;
+	var value = this._getControlValue(id);
+    if (value == null) value = item.value;
 	return value || defaultValue;
 };
 
