@@ -12,7 +12,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.common.datasource;
+package com.zimbra.cs.datasource;
 
 public class SyncState {
     private long lastUid = -1;

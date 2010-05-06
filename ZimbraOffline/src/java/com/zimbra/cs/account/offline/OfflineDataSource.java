@@ -23,7 +23,7 @@ import java.util.Map;
 
 import javax.mail.Session;
 
-import com.zimbra.common.datasource.SyncState;
+import com.zimbra.cs.datasource.SyncState;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
