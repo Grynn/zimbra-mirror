@@ -17,7 +17,7 @@ package com.zimbra.cs.offline;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.DataSource.DataImport;
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.datasource.ImapSync;
+import com.zimbra.cs.datasource.imap.ImapSync;
 import com.zimbra.cs.offline.ab.gab.GabImport;
 import com.zimbra.cs.offline.ab.yab.YabImport;
 import com.zimbra.cs.offline.util.OfflineYAuth;

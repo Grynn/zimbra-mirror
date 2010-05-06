@@ -25,7 +25,7 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.datasource.ImapFolder;
+import com.zimbra.cs.datasource.imap.ImapFolder;
 import com.zimbra.cs.db.DbDataSource;
 import com.zimbra.cs.db.DbImapFolder;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
