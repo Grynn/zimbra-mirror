@@ -116,7 +116,15 @@ ZaZimletSelect_XFormItem.prototype.setValue = function (newValue, clearOldValues
 	if(newValue instanceof Array || typeof newValue == "object") {
 		for(a in newValue) {
 			if(typeof newValue[a] == "string" && newValue[a].substr(0,1) != "+" && newValue[a].substr(0,1) != "-") {
-				newValue[a] = "+"+newValue[a];
+				var prefix = "+";
+				for (i = 0; i < normalizedValues.length; i++) {
+					if (normalizedValues[i].value == newValue[a] && normalizedValues[i].prefix) {
+						prefix = normalizedValues[i].prefix;
+						normalizedValues.splice(i,1);
+						break;					
+					}
+				}
+				newValue[a] = prefix+newValue[a];
 			}
 			newValues.push(newValue[a]);
 		}
