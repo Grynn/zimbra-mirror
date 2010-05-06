@@ -26,15 +26,17 @@ $FORMAT_FORMFEED = "\n";
 my $ldappass = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_ldap_password`;
 my $ldapdn  = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_ldap_userdn`;
 my $ldapurl  = `/opt/zimbra/bin/zmlocalconfig -s -m nokey ldap_url`;
+my $starttls = `/opt/zimbra/bin/zmlocalconfig -s -m nokey ldap_starttls_supported`;
 chop($ldappass);
 chop($ldapdn);
 chop($ldapurl);
+chomp($starttls);
 
 if ($ldapurl eq '') {
   $ldapurl = "ldap://localhost";
 }
 my $use_tls ="";
-if ( $ldapurl !~ /^ldaps:/ ) {
+if ( $ldapurl !~ /^ldaps:/  && $starttls ) {
   $use_tls="-Z";
 }
 
