@@ -75,16 +75,13 @@ Sub LaunchPrism()
 End Sub
 
 Sub StopProcesses()
-    Dim sCmd, sPrism, sCScript, sZdCtl
+    Dim sCmd, sCScript, sZdCtl
 
-    sPrism = Chr(34) & sAppRoot & "\win32\prism\zdclient.exe" & Chr(34)
     sCScript = Chr(34) & oFso.GetSpecialFolder(1).Path & "\cscript.exe" & Chr(34)
     sZdCtl = Chr(34) & sDataRoot & "\bin\zdctl.vbs" & Chr(34)
 
-    'Stop backend service
-    oShell.Run sCScript & " " & sZdCtl & " stop", 0, true
-    'Stop prism
-    oShell.Run sPrism & " -close", 0, true
+    'Stop backend service and prism
+    oShell.Run sCScript & " " & sZdCtl & " shutdown", 0, true
 End Sub
 
 Sub BackupFailed(sMsg)
