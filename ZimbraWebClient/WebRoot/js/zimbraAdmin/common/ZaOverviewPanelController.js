@@ -131,7 +131,7 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 			showBusy:true,
 			busyId:busyId,
 			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
-			skipCallbackIfCancelled:true,
+			skipCallbackIfCancelled:false,
 			attrs:[ZaDomain.A_domainName,ZaItem.A_zimbraId]			
 	}
 	ZaSearch.searchDirectory(searchParams);
