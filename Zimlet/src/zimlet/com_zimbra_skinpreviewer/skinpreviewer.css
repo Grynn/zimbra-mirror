@@ -5,9 +5,14 @@
   overflow: hidden;
 }
 
+.skinpreviewer_skinMenuDiv {
+  background:#FFFFCC;
+  border-bottom:1px solid #A7A194;
+  border-right:1px solid #A7A194;
+  padding: 5px;
+  font-weight: bold;
+}
 
-.skinpreviewer_cardDetailDiv{
-background:#FFFFCC;
-border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
-font-weight: bold;
+.skinpreviewer_skinMenuSelect {
+  width: 225px;
 }
