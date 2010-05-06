@@ -262,10 +262,12 @@ public class  ZFolderBean {
      */
     public boolean getIsMountPointWritable() {
         if (getIsMountPoint()) {
-                String positivePerm = getEffectivePerm().replace("/-./g", "") ;
-                if(positivePerm != null) {
+            String perm = getEffectivePerm();
+            if (perm != null) {
+                String positivePerm = perm.replace("/-./g", "") ;
+                if(positivePerm != null)
                     return (positivePerm.indexOf(ZFolder.PERM_WRITE) != -1);
-                }
+            }
         }
         return false;
     }
