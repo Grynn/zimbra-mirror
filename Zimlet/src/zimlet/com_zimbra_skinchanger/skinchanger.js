@@ -61,13 +61,6 @@ SkinChangerZimlet.FREQUENCY_IDX_EVERYDAY = 7;
  */
 SkinChangerZimlet.prototype.init =
 function() {
-	this.turnONSkinChangerZimletNew = this.getUserProperty(SkinChangerZimlet.USER_PROP_ENABLE_ZIMLET) == "true";
-	if(!this.turnONSkinChangerZimletNew)
-		return;
-
-	this.skinc_selectedFreq = this.getUserProperty(SkinChangerZimlet.USER_PROP_FREQUENCY);
-	this.skinc_skinWasChangedOnDate = this.getUserProperty(SkinChangerZimlet.USER_PROP_CHANGED_DATE);
-
 	// index frequency list to day keys...do NOT i18n the keys for backwards compat
 	this._frequencyDaysList = [
 	                	["Sunday", this.getMessage("SkinChangerZimlet_weekday_sunday")], // idx=0
@@ -79,6 +72,13 @@ function() {
 	                	["Saturday", this.getMessage("SkinChangerZimlet_weekday_saturday")], // idx=6
 	                	["Everyday", this.getMessage("SkinChangerZimlet_weekday_everyday")], // idx=7
 	              ];
+
+	this.skinc_selectedFreq = this.getUserProperty(SkinChangerZimlet.USER_PROP_FREQUENCY);
+	this.skinc_skinWasChangedOnDate = this.getUserProperty(SkinChangerZimlet.USER_PROP_CHANGED_DATE);
+
+	this.turnONSkinChangerZimletNew = this.getUserProperty(SkinChangerZimlet.USER_PROP_ENABLE_ZIMLET) == "true";
+	if(!this.turnONSkinChangerZimletNew)
+		return;
 	
 	var todayDay = this._frequencyDaysList[new Date().getDay()][0];
 	// was the skin already changed today? if not, just return
