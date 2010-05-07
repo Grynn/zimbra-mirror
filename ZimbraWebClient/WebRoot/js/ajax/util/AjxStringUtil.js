@@ -285,6 +285,9 @@ function(params) {
 			wds = [w];
 			curLen = w.length;
 			curP = p;
+			if (word.lastWord && words[i + 1]) {
+				words[i + 1].special = true;
+			}
 		}
 	}
 
@@ -294,6 +297,49 @@ function(params) {
 	}
 
 	return [before, result, after].join("");
+};
+
+/**
+ * Quotes text with the given quote character. For HTML, surrounds the text with the
+ * given strings. Does no wrapping.
+ *
+ * @param {hash}	params	a hash of parameters
+ * @param {string}      params.text 				the text to be wrapped
+ * @param {string}      [params.pre]				prefix for quoting
+ * @param {string}      [params.before]				text to prepend to final result
+ * @param {string}      [params.after]				text to append to final result
+ *
+ * @return	{string}	the quoted text
+ */
+AjxStringUtil.quoteText =
+function(params) {
+
+	if (!(params && params.text)) { return ""; }
+
+	var text = params.text;
+	var before = params.before || "", after = params.after || "";
+
+	// For HTML, just surround the content with the before and after, which is
+	// typically a block-level element that puts a border on the left
+	if (params.htmlMode || !params.pre) {
+		return [before, text, after].join("");
+	}
+
+	var len = params.len || 80;
+	var pre = params.pre || "";
+	var eol = "\n";
+
+	text = AjxStringUtil.trim(text);
+	text = text.replace(/\n\r/g, eol);
+	var lines = text.split(eol);
+	var result = [];
+
+	for (var l = 0, llen = lines.length; l < llen; l++) {
+		var line = AjxStringUtil.trim(lines[l]);
+		result.push(pre + line + eol);
+	}
+
+	return before + result.join("") + after;
 };
 
 /**
