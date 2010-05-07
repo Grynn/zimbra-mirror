@@ -335,15 +335,15 @@ function(htmlArr, idx, headerCol, i, numCols, id, defaultColumnSort) {
 
 	// ALWAYS add "sash" separators
 	if (i < (numCols - 1)) {
-		htmlArr[idx++] = "<td width=4>";
-		htmlArr[idx++] = "<table align=right border=0 cellpadding=0 cellspacing=0 width=2 height=100%><tr>";
+		htmlArr[idx++] = "<td width=6>";
+		htmlArr[idx++] = "<table align=right border=0 cellpadding=0 cellspacing=0 width=6 height=100% id='";
+		htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_SASH, this._view, field);
+		htmlArr[idx++] = "'><tr>";
 		htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: ";
 		htmlArr[idx++] = (DwtListView.HEADERITEM_HEIGHT - 2);
-		htmlArr[idx++] = "px; background-color: #8A8A8A'></div></td><td id='";
-		htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_SASH, this._view, field);
-		htmlArr[idx++] = "' class='DwtListView-Sash'><div style='width: 1px; height: ";
+		htmlArr[idx++] = "px; background-color: #8A8A8A;margin-left:2px'></div></td><td class='DwtListView-Sash'><div style='width: 1px; height: ";
 		htmlArr[idx++] = (DwtListView.HEADERITEM_HEIGHT - 2);
-		htmlArr[idx++] = "px; background-color: #FFFFFF'></div></td></tr></table>";
+		htmlArr[idx++] = "px; background-color: #FFFFFF;margin-right:2px'></div></td></tr></table>";
 		htmlArr[idx++] = "</td>";
 	}
 
