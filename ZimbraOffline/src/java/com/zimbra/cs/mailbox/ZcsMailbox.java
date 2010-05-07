@@ -465,22 +465,20 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
     
     public Element proxyRequest(Element request, SoapProtocol resProto, boolean quietWhenOffline, String op) throws ServiceException {
-        Element response;
-        try {
-            response = sendRequest(request, true, true, OfflineLC.zdesktop_request_timeout.intValue(), resProto);
-        } catch (ServiceException e) {
-            if (OfflineSyncManager.isConnectionDown(e)) {
-                if (quietWhenOffline) {
-                    OfflineLog.offline.debug(op + " is unavailable when offline");
-                    response = null;
-                } else {
-                    throw OfflineServiceException.ONLINE_ONLY_OP(op);
-                }
-            } else {
-                throw e;
+        if (!OfflineSyncManager.getInstance().isConnectionDown()) {
+            try {
+                return sendRequest(request, true, true, OfflineLC.zdesktop_request_timeout.intValue(), resProto);         
+            } catch (ServiceException e) {
+                if (!OfflineSyncManager.isConnectionDown(e))
+                    throw e;
             }
-        }
-        return response;
+        }  
+        if (quietWhenOffline) {
+            OfflineLog.offline.debug(op + " is unavailable when offline");
+            return null;
+        } else {
+            throw OfflineServiceException.ONLINE_ONLY_OP(op);
+        }            
     }
     
     public Element sendRequest(Element request) throws ServiceException {
