@@ -32,13 +32,23 @@ function(app, toolbar, controller, viewId) {
 		var sendBtn = toolbar.getButton("SEND");
 		sendBtn.removeSelectionListeners();//remove all selection listeners
 		sendBtn.addSelectionListener(new AjxListener(this, this._sendButtonListener, controller));
-	} else if(app.getName() == "Mail" ){
-		this._newMenuButton = toolbar.getButton("NEW_MENU");
 	}
+};
+
+Com_Zimbra_UndoSendHdlr.prototype._showErrorMsg =
+function(msg) {
+	var msgDialog = appCtxt.getMsgDialog();
+	msgDialog.reset();
+	msgDialog.setMessage(msg, DwtMessageDialog.WARNING_STYLE);
+	msgDialog.popup();
 };
 
 Com_Zimbra_UndoSendHdlr.prototype._sendButtonListener = 
 function(controller) {
+	if(this._alertViewDisplayed) {
+		this._showErrorMsg(this.getMessage("UndoSendZimlet_pleaseWait"));
+		return;
+	}
 	this._totalWaitTimeInSeconds = this.undeSend_howMuchDelay;
 	if(!this._viewIdAndParamsMap) {
 		this._viewIdAndParamsMap = [];
@@ -51,6 +61,7 @@ function(controller) {
 	if(!this._msg) {//there is some compose error..
 		return;
 	}
+	
 	if(!this.appViewMgr) {
 		this.appViewMgr = appCtxt.getAppViewMgr();
 	}
@@ -65,9 +76,8 @@ function(controller) {
 	this._viewIdAndParamsMap[viewId] = {tab:tab, title:title, undoLinkId:undoLinkId, timerSpanId:timerSpanId, sendNowId:sendNowId};
 	this._viewIdAndStatusesMap[viewId] = {undoLinkClicked:false, sendNowLinkClicked:false,  currentCounter:this._totalWaitTimeInSeconds};
 	this.appViewMgr.popView(true, viewId);
-	if(this._newMenuButton) {
-		this._newMenuButton.setEnabled(false);//dont allow creating new mail as we are still using that view
-	}
+	controller.inactive = false; //IMPORTANT! make sure to set this so this view isnt reused
+
 	this._loadMsgs();
 	var html = [this._getMainMsg(timerSpanId),
 		" <a  style='text-decoration:underline;color:#CA0000;font-weight:bold;font-size:12px' href=# id='",undoLinkId,"'>",this._msg_UndoSendZimlet_Undo,"</a> or",
@@ -114,12 +124,11 @@ Com_Zimbra_UndoSendHdlr.prototype._updateCounter =
 function(controller, viewId, timerSpanId) {
 	var count = this._viewIdAndStatusesMap[viewId].currentCounter;
 	if(count == 0) {
+		this._countDownIsON = false;
 		clearInterval(this.timer);
 		this._verifyAndSendEmail(controller, viewId);
 	} else {
-		if(this._newMenuButton) {
-			this._newMenuButton.setEnabled(false);//make sure that opening-mail action that enables this btn is countered
-		}
+		this._countDownIsON = true;
 		var el = document.getElementById(timerSpanId);
 		if(el) {	
 			el.innerHTML = --count;
@@ -130,18 +139,18 @@ function(controller, viewId, timerSpanId) {
 
 Com_Zimbra_UndoSendHdlr.prototype._undoSend = 
 function(controller, viewId) {
-	if(this._newMenuButton) {
-		this._newMenuButton.setEnabled(true);//re-enable newButton(so people can cancel the current view and go-ahead)
-	}
 	this._viewIdAndStatusesMap[viewId].undoLinkClicked = true;
 	clearInterval(this.timer);
 	this._hideAlertView();
 	this.appViewMgr.pushView(viewId, true);
-	
+
+
 	var obj = this._viewIdAndParamsMap[viewId];
 	var tab = obj.tab;
-	var title = obj.title
-	tab.setText(title); //todo - verify why this doesnt work?
+	var title = obj.title;
+	if(tab != undefined) {
+		tab.setText(title);
+	}
 	this._setComposeTabTitle(viewId, title);
 };
 
@@ -185,48 +194,19 @@ Com_Zimbra_UndoSendHdlr.prototype._sendEmail =
 function(controller, viewId) {
 	clearInterval(this.timer);
 	this._hideAlertView();
-	this._adjustAppManagersViews(viewId);
 	this._sendMailViewId = viewId;
 	controller._send();
-};
-
-Com_Zimbra_UndoSendHdlr.prototype.onSendMsgSuccess = 
-function() {
-	if(this._newMenuButton) {
-		this._newMenuButton.setEnabled(true);
-	}
 };
 
 
 Com_Zimbra_UndoSendHdlr.prototype.onSendMsgFailure = 
 function(controller, expn, msg) {
-	if(this._msg.subject == msg.subject) {
-		this.appViewMgr._currentView = this.__appViewMgrOldViewId;
-		this.appViewMgr._hidden = this.__appviewMgrOldHiddenViews;
+	if(this._msg && this._msg.subject == msg.subject) {
 		this._undoSend(controller, this._sendMailViewId);
 	}
 };
 
-Com_Zimbra_UndoSendHdlr.prototype._adjustAppManagersViews = 
-function(viewId) {
-	//store old viewMgr info so we can use it to revert viewChanges if sendMsgFailure is triggered
-	this.__appViewMgrOldViewId = this.appViewMgr._currentView;
-	this.__appviewMgrOldHiddenViews = this.appViewMgr._hidden;
-	this.appViewMgr._currentView = viewId;
-	var hiddenViews = this.appViewMgr._hidden;
-	var newHiddenViews = [];
-	for(var i =0; i < hiddenViews.length; i++) {
-		var currHV = hiddenViews[i];
-		if(viewId != currHV){
-			newHiddenViews.push(currHV);
-		}
-	}
-	//newHiddenViews.push(appCtxt.getAppViewMgr().getAppView(ZmApp.MAIL));
-	newHiddenViews.push(this.__appViewMgrOldViewId);
-	this.appViewMgr._hidden = newHiddenViews;
-};
 
-//----------------------------------
 
 Com_Zimbra_UndoSendHdlr.prototype._setAlertViewContent =
 function(content) {
