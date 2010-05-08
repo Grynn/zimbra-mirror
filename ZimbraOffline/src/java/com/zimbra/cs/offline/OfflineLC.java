@@ -96,8 +96,6 @@ public class OfflineLC {
     public static final KnownKey zdesktop_batched_indexing_size;
     public static final KnownKey zdesktop_mail_disk_streaming_threshold;
     public static final KnownKey zdesktop_mail_file_descriptor_cache_size;
-    public static final KnownKey zdesktop_mail_uncompressed_cache_max_bytes;
-    public static final KnownKey zdesktop_mail_uncompressed_cache_max_files;
     public static final KnownKey zdesktop_message_cache_size;
     public static final KnownKey zdesktop_volume_compression_threshold;
 
@@ -350,8 +348,6 @@ public class OfflineLC {
         zdesktop_batched_indexing_size = new KnownKey("zdesktop_batched_indexing_size", "0", "batch size to use when indexing data");
         zdesktop_mail_disk_streaming_threshold = new KnownKey("zdesktop_mail_disk_streaming_threshold", "1048576", "number of bytes to hold in memory before streaming to disk");
         zdesktop_mail_file_descriptor_cache_size = new KnownKey("zdesktop_mail_file_descriptor_cache_size", "5", "maximum number of file descriptors that are opened for accessing message content");
-        zdesktop_mail_uncompressed_cache_max_bytes = new KnownKey("zdesktop_mail_uncompressed_cache_max_bytes", "5242880", "max number of bytes in the uncompressed blob cache on disk");
-        zdesktop_mail_uncompressed_cache_max_files = new KnownKey("zdesktop_mail_uncompressed_cache_max_files", "10", "max number of files in the uncompressed blob cache on disk");
         zdesktop_message_cache_size = new KnownKey("zdesktop_message_cache_size", "12", "maximum number of JavaMail MimeMessage objects in the message cache");
         zdesktop_volume_compression_threshold = new KnownKey("zdesktop_volume_compression_threshold", "131072", "size threshold for blob store compression");
     }

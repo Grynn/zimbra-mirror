@@ -57,8 +57,6 @@ class OfflineConfig extends Config {
             attrs.put(Provisioning.A_zimbraBatchedIndexingSize, OfflineLC.zdesktop_batched_indexing_size.value());
             attrs.put(Provisioning.A_zimbraMailDiskStreamingThreshold, OfflineLC.zdesktop_mail_disk_streaming_threshold.value());
             attrs.put(Provisioning.A_zimbraMailFileDescriptorCacheSize, OfflineLC.zdesktop_mail_file_descriptor_cache_size.value());
-            attrs.put(Provisioning.A_zimbraMailUncompressedCacheMaxBytes, OfflineLC.zdesktop_mail_uncompressed_cache_max_bytes.value());
-            attrs.put(Provisioning.A_zimbraMailUncompressedCacheMaxFiles, OfflineLC.zdesktop_mail_uncompressed_cache_max_files.value());
             attrs.put(Provisioning.A_zimbraMessageCacheSize, OfflineLC.zdesktop_message_cache_size.value());
             attrs.put(Provisioning.A_zimbraMessageIdDedupeCacheSize, "0");
             attrs.put(Provisioning.A_zimbraNotebookPageCacheSize, "96");

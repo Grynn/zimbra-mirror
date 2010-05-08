@@ -82,12 +82,6 @@
   <key name="zdesktop_mail_file_descriptor_cache_size">
     <value>5</value>
   </key>
-  <key name="zdesktop_mail_uncompressed_cache_max_bytes">
-    <value>5242880</value>
-  </key>
-  <key name="zdesktop_mail_uncompressed_cache_max_files">
-    <value>10</value>
-  </key>
   <key name="zdesktop_message_cache_size">
     <value>12</value>
   </key>
