@@ -1,13 +1,13 @@
-<zimlet name="com_zimbra_undosend" version="0.2" description="Provides option to cancel or undo mail send for few seconds">
+<zimlet name="com_zimbra_undosend" version="0.3" description="Provides option to cancel or undo mail send for few seconds">
 	<include>undosend.js</include>
 	<includeCSS>undosend.css</includeCSS>
-	<handlerObject>Com_Zimbra_UndoSendHdlr</handlerObject>
+	<handlerObject>com_zimbra_undosend_HandlerObject</handlerObject>
 
   <zimletPanelItem label="${msg.UndoSendZimlet_Label}" icon="Send">
   </zimletPanelItem>
 
   <userProperties>
-		<property type="string" name="undeSend_howMuchDelay" value="5"/>	
+		<property type="string" name="undeSend_howMuchDelay" value="7"/>	
   </userProperties>
 </zimlet>
 
