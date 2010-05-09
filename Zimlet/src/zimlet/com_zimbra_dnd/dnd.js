@@ -19,9 +19,56 @@ function Com_Zimbra_DnD() {
 Com_Zimbra_DnD.prototype = new ZmZimletBase();
 Com_Zimbra_DnD.prototype.constructor = Com_Zimbra_DnD;
 
-Com_Zimbra_DnD.prototype.init =
-function () {
-	var outerEl = document.getElementById("skin_outer");
+Com_Zimbra_DnD.attachment_ids = null;
+Com_Zimbra_DnD.flength = null;
+
+Com_Zimbra_DnD.prototype.init = function () {
+
+    this.isHTML5 = false;
+    this.checkHTML5Dnd();
+
+    if (this.isHTML5) {
+       this._initHTML5();
+    } else {
+       this._initNonHTM5();  
+    }
+
+};
+
+Com_Zimbra_DnD.prototype.isDndSupported = function (evntname) {
+
+    var element = document.createElement('div');
+    evntname = 'on' + evntname;
+
+    var isSupported = (evntname in element);
+
+    if (!isSupported && element.setAttribute) {
+        element.setAttribute(evntname, 'return;');
+        isSupported = typeof element[evntname] == 'function';
+    }
+
+    element = null;
+
+    return isSupported;
+};
+
+Com_Zimbra_DnD.prototype.checkHTML5Dnd = function () {
+
+    if(!this.isHTML5) {
+        this.isHTML5 = this.isDndSupported('drag')
+                && this.isDndSupported('dragstart')
+                && this.isDndSupported('dragenter')
+                && this.isDndSupported('dragover')
+                && this.isDndSupported('dragleave')
+                && this.isDndSupported('dragend')
+                && this.isDndSupported('drop');
+    }
+
+};
+
+Com_Zimbra_DnD.prototype._initNonHTM5 = function () {
+
+    var outerEl = document.getElementById("skin_outer");
 	var filesEl = document.getElementById("zdnd_files");
 	if (outerEl && !filesEl) {
 		var fileSpan = document.createElement("span");
@@ -58,7 +105,7 @@ function () {
                     var zDnDUploadFrm = doc.getElementById("zdnd_form");
                     zDnDUploadFrm.setAttribute("action", uploadUri);
                 }
-                
+
                 var ev = document.createEvent("Events");
 			    ev.initEvent("ZimbraDnD", true, false);
                 curView._resetBodySize();
@@ -66,12 +113,39 @@ function () {
 
             }, 1000);
     }
+    
+};
 
+Com_Zimbra_DnD.prototype._initHTML5 = function () {
+
+    var cmd = window.newWindowCommand;
+    if(cmd == 'compose') {
+        setTimeout(AjxCallback.simpleClosure(function() {
+            var curView = appCtxt.getAppViewMgr().getCurrentView();
+            var el = curView.getHtmlElement();
+            this._addHandlers(el);
+            var dndTooltip = document.getElementById(el.id + '_zdnd_tooltip');
+            dndTooltip.style.display = "block";
+        },this),1000);
+    }
+    
 };
 
 Com_Zimbra_DnD.prototype.onShowView =
 function(viewId, isNewView) {
-    if ("createEvent" in document && document.getElementById("zdnd_files")) {
+
+    if(this.isHTML5) {
+        if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf('COMPOSE') != -1)
+        {
+            var curView = appCtxt.getAppViewMgr().getCurrentView();
+            var el = curView.getHtmlElement();
+
+            var ifrEl = el.getElementsByTagName("iframe");
+            this._addHandlers(el);
+            var dndTooltip = document.getElementById(el.id + '_zdnd_tooltip');
+            dndTooltip.style.display = "block";
+        }
+    } else if ("createEvent" in document && document.getElementById("zdnd_files")) {
         if (viewId == ZmId.VIEW_COMPOSE ||
 			viewId == ZmId.VIEW_BRIEFCASE_COLUMN ||
 			viewId == ZmId.VIEW_BRIEFCASE ||
@@ -107,4 +181,114 @@ function() {
 			curView.uploadFiles();
 		}
 	}
+};
+
+Com_Zimbra_DnD.prototype._addHandlers = function(el) {
+    Dwt.setHandler(el,"ondragenter",this._onDragEnter);
+    Dwt.setHandler(el,"ondragover",this._onDragOver);
+    Dwt.setHandler(el,"ondrop",this._onDrop);
+};
+
+Com_Zimbra_DnD.prototype._onDragEnter = function(ev) {
+    ev.stopPropagation();
+    ev.preventDefault();
+    return ev.dataTransfer.types.contains("application/x-moz-file");
+};
+
+Com_Zimbra_DnD.prototype._onDragOver = function(ev) {
+    ev.stopPropagation();
+    ev.preventDefault();
+};
+
+Com_Zimbra_DnD.prototype._onDrop = function(ev) {
+    ev.stopPropagation();
+    ev.preventDefault();
+
+    var dt = ev.dataTransfer;
+    var files = dt.files;
+
+    if(files) {
+        Com_Zimbra_DnD.attachment_ids = [];
+        Com_Zimbra_DnD.flength = files.length;
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            Com_Zimbra_DnD._uploadFiles(file);
+        }
+    }
+
+};
+
+Com_Zimbra_DnD._uploadFiles = function(file) {
+
+    try {
+
+        var req = new XMLHttpRequest();
+
+        req.open("POST", appCtxt.get(ZmSetting.CSFE_UPLOAD_URI)+"&fmt=extended,raw", true);
+        req.setRequestHeader("Cache-Control", "no-cache");
+        req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        req.setRequestHeader("Content-Type", "application/octet-stream;");
+        req.setRequestHeader("Content-Disposition", "attachment; filename="+encodeURIComponent(file.fileName).replace("%20"," "));
+
+        var tempThis = req;
+        req.onreadystatechange = function() {
+            Com_Zimbra_DnD._handleResponse(tempThis);
+        }
+
+        req.send(file);
+
+        delete req;
+
+    } catch(exp) {
+        var msgDlg = appCtxt.getMsgDialog();
+        msgDlg.setMessage(ZmMsg.importErrorUpload, DwtMessageDialog.CRITICAL_STYLE);
+        msgDlg.popup();
+        return false;
+    }
+};
+
+
+Com_Zimbra_DnD._handleErrorResponse = function(respCode) {
+
+    var warngDlg = appCtxt.getMsgDialog();
+    var style = DwtMessageDialog.CRITICAL_STYLE;
+    if (respCode == '200') {
+        return true;
+    } else if(respCode == '413') {
+        warngDlg.setMessage(ZmMsg.errorAttachmentTooBig, style);
+    } else {
+       var msg = AjxMessageFormat.format(ZmMsg.errorAttachment, (respCode || AjxPost.SC_NO_CONTENT));
+       warngDlg.setMessage(msg, style);
+    }
+    warngDlg.popup();
+
+};
+
+Com_Zimbra_DnD._handleResponse = function(req) {
+    if(req) {
+        if(req.readyState == 4 && req.status == 200) {
+            var resp = eval("["+req.responseText+"]");
+
+            Com_Zimbra_DnD._handleErrorResponse(resp[0]);
+
+            if(resp.length > 2) {
+                var respObj = resp[2];
+                for (var i = 0; i < respObj.length; i++) {
+                    if(respObj[i].aid != "undefined") {
+                        Com_Zimbra_DnD.attachment_ids.push(respObj[i].aid);
+                    }
+                }
+
+                if(Com_Zimbra_DnD.attachment_ids.length > 0 && Com_Zimbra_DnD.attachment_ids.length == Com_Zimbra_DnD.flength) {
+
+                    // locate the compose controller and set up the callback handler
+                    var cc = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
+                    var callback = new AjxCallback (cc,cc._handleResponseSaveDraftListener);
+
+                    attachment_list = Com_Zimbra_DnD.attachment_ids.join(",");
+                    cc.sendMsg(attachment_list,ZmComposeController.DRAFT_TYPE_MANUAL,callback);
+                }
+            }
+        }
+    }
 };
