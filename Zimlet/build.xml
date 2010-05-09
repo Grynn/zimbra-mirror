@@ -48,7 +48,7 @@
 	<property name="generated.dir" location="${build.dir}/generated" />
 	<property name="generated.java.dir" location="${generated.dir}/src/java" />
 
-	<property name="zimlets" value="com_zimbra_phone,com_zimbra_url,com_zimbra_email,com_zimbra_date,com_zimbra_ymemoticons"/>
+	<property name="zimlets" value="com_zimbra_phone,com_zimbra_url,com_zimbra_email,com_zimbra_date,com_zimbra_ymemoticons,com_zimbra_dnd"/>
 	<property name="zimlets-offline" value="com_zimbra_dnd"/>
 	<property name="zimlets-example" value="com_zimbra_example_*"/>
     <property name="zimlets-experimental" value="com_zimbra_amzn,com_zimbra_asterisk,com_zimbra_asteriskmwi,com_zimbra_blog,com_zimbra_browserperf,com_zimbra_edu,com_zimbra_evite,com_zimbra_html,com_zimbra_jspsample,com_zimbra_photo,com_zimbra_po,com_zimbra_videos,com_zimbra_webex,com_zimbra_wikipedia,com_zimbra_xslt,com_zimbra_ytraffic,com_zimbra_calscheduler,com_zimbra_ybabelfish,com_zimbra_speak"/>
