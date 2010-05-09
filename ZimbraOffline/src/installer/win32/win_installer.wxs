@@ -186,7 +186,6 @@
       <UIRef Id="WixUI_InstallDir" />
       <UIRef Id="WixUI_ErrorProgressText" />
     </UI>
-    <Condition Message="You must not be an administrator to install this product.">Privileged</Condition>
     <Property Id="ALLUSERS" Value="0" />
     <Condition Message="This product require Windows XP or newer">VersionNT &gt;= 501</Condition>
 
