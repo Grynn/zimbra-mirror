@@ -531,6 +531,63 @@ function(serverStr, date) {
 	return date;
 };
 
+AjxDateUtil.parseISO8601Date = function(s) {
+    var formatters = AjxDateUtil.__ISO8601_formats;
+    if (!formatters) {
+        formatters = AjxDateUtil.__ISO8601_formats = [
+            new AjxDateUtil.TZDFormat("yyyy-MM-dd'T'HH:mm:ss.SZ"),
+            new AjxDateUtil.TZDFormat("yyyy-MM-dd'T'HH:mm:ssZ"),
+            new AjxDateUtil.TZDFormat("yyyy-MM-dd'T'HH:mmZ"),
+            new AjxDateFormat("yyyy-MM-dd"),
+            new AjxDateFormat("yyyy-MM"),
+            new AjxDateFormat("yyyy")
+        ];
+    }
+    for (var i = 0; i < formatters.length; i++) {
+        var date = formatters[i].parse(s);
+        if (date) return date;
+    }
+    return null;
+};
+
+AjxDateUtil.TZDFormat = function(pattern) {
+    if (arguments.length == 0) return;
+    AjxDateFormat.apply(this, arguments);
+    var segments = this._segments || [];
+    for (var i = 0; i < segments.length; i++) {
+        var segment = segments[i];
+        if (segment instanceof AjxDateFormat.TimezoneSegment) {
+            segments[i] = new AjxDateUtil.TZDSegment(segment.toSubPattern());
+        }
+    }
+};
+AjxDateUtil.TZDFormat.prototype = new AjxDateFormat;
+AjxDateUtil.TZDFormat.prototype.constructor = AjxDateUtil.TZDFormat;
+AjxDateUtil.TZDFormat.prototype.toString = function() { return "TZDFormat"; };
+
+AjxDateUtil.TZDSegment = function(pattern) {
+    if (arguments.length == 0) return;
+    AjxDateFormat.TimezoneSegment.apply(this, arguments);
+};
+AjxDateUtil.TZDSegment.prototype = new AjxDateFormat.TimezoneSegment;
+AjxDateUtil.TZDSegment.prototype.constructor = AjxDateUtil.TZDSegment;
+AjxDateUtil.TZDSegment.prototype.toString = function() { return "TZDSegment"; };
+
+AjxDateUtil.TZDSegment.prototype.parse = function(o, s, i) {
+    var m = /^(Z)|^(\+|\-)(\d\d):(\d\d)/.exec(s.substr(i));
+    if (m) {
+        var offset = new Date().getTimezoneOffset();
+        if (m[1]) o.timezone = offset;
+        else {
+            var hours = parseInt(m[3],10), mins = parseInt(m[4],10);
+            o.timezone = hours * 60 + mins;
+            if (m[2] != "-") o.timezone *= -1;
+            o.timezone -= offset;
+        }
+    }
+    return i + (m ? m[0].length : 0);
+};
+
 AjxDateUtil.parseServerDateTime = 
 function(serverStr) {
 	if (serverStr == null) return null;
