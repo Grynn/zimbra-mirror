@@ -206,6 +206,7 @@ function(request) {
  * @param	{AjxSoapDoc}	params.soapDoc			the SOAP document that represents the request
  * @param	{Object}	params.jsonObj			the JSON object that represents the request (alternative to soapDoc)
  * @param	{Boolean}	params.noAuthToken		if <code>true</code>, the check for an auth token is skipped
+ * @param	{Boolean}	params.authToken		authToken to use instead of the local one
  * @param	{String}	params.serverUri			the URI to send the request to
  * @param	{String}	params.targetServer		the host that services the request
  * @param	{Boolean}	params.useXml			if <code>true</code>, an XML response is requested
@@ -356,7 +357,7 @@ function(params) {
 
 	// Get auth token from cookie if required
 	if (!params.noAuthToken) {
-		var authToken = ZmCsfeCommand.getAuthToken();
+		var authToken = params.authToken || ZmCsfeCommand.getAuthToken();
 		if (!authToken) {
 			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
 		}
@@ -443,7 +444,7 @@ function(params) {
 
 	// Get auth token from cookie if required
 	if (!params.noAuthToken) {
-		var authToken = ZmCsfeCommand.getAuthToken();
+		var authToken = params.authToken || ZmCsfeCommand.getAuthToken();
 		if (!authToken) {
 			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
 		}
