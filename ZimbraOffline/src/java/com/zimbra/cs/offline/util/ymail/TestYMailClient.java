@@ -30,7 +30,7 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.mailclient.imap.ImapConnection;
 import com.zimbra.cs.mailclient.imap.ImapConfig;
 import com.zimbra.cs.mailclient.imap.IDInfo;
-import com.zimbra.cs.mailclient.imap.Mailbox;
+import com.zimbra.cs.mailclient.imap.MailboxInfo;
 import com.zimbra.cs.mailclient.imap.MessageData;
 import com.zimbra.cs.mailclient.imap.Body;
 import com.zimbra.cs.mailclient.imap.BodyStructure;
@@ -188,7 +188,7 @@ public class TestYMailClient {
         MimeMessage mm = readMessage(msg);
         System.out.println("Sending message:");
         dump(mm);
-        Mailbox mb = imc.select(SENT);
+        MailboxInfo mb = imc.select(SENT);
         assertNotNull(mb);
         String mid = ymc.sendMessage(mm, true);
         assertNotNull(mid);
