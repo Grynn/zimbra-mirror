@@ -29,7 +29,14 @@ ZaNewResourceXWizard = function(parent) {
 	this.TAB_INDEX = 0;
 	ZaNewResourceXWizard.step1 = ++this.TAB_INDEX;
 	ZaNewResourceXWizard.step2 = ++this.TAB_INDEX;
-	
+	if(!ZaResource.accountStatusChoices) {
+		ZaResource.accountStatusChoices = [
+			{value:ZaResource.ACCOUNT_STATUS_ACTIVE, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_ACTIVE)}, 
+			{value:ZaResource.ACCOUNT_STATUS_CLOSED, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_CLOSED)}
+			//{value:ZaResource.ACCOUNT_STATUS_LOCKED, label: ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_LOCKED)},
+			//{value:ZaResource.ACCOUNT_STATUS_MAINTENANCE, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_MAINTENANCE)}
+		];		
+	}
 	this.stepChoices = [
 		{label:ZaMsg.TABT_ResourceProperties, value:ZaNewResourceXWizard.step1},
 		{label:ZaMsg.TABT_ResLocationContact, value:ZaNewResourceXWizard.step2}

@@ -24,6 +24,14 @@
 ZaResourceXFormView = function(parent, entry) {
 	ZaTabView.call(this, parent,"ZaResourceXFormView");	
 	this.TAB_INDEX = 0;		
+	if(!ZaResource.accountStatusChoices) {
+		ZaResource.accountStatusChoices = [
+	   		{value:ZaResource.ACCOUNT_STATUS_ACTIVE, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_ACTIVE)}, 
+	   		{value:ZaResource.ACCOUNT_STATUS_CLOSED, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_CLOSED)}
+		//{value:ZaResource.ACCOUNT_STATUS_LOCKED, label: ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_LOCKED)},
+		//{value:ZaResource.ACCOUNT_STATUS_MAINTENANCE, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_MAINTENANCE)}
+	   	];		
+	}
 	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
 	this.initForm(ZaResource.myXModel,this.getMyXForm(entry), null);
 	this._localXForm.setController(ZaApp.getInstance());	
