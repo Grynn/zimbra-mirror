@@ -60,7 +60,7 @@ public class GetDocumentContentTag extends ZimbraSimpleTag {
                 }
                 isr.close();
                 in.close();
-                jctxt.setAttribute(mVar, buffer.toString(), PageContext.PAGE_SCOPE);
+                jctxt.setAttribute(mVar, buffer.toString().trim(), PageContext.PAGE_SCOPE);
             }
 
         } catch (ServiceException e) {
