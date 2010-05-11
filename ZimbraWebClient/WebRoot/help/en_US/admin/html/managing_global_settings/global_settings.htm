@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Managing Global Settings</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Global Settings\nManaging Global Settings");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,65 +81,67 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Managing Global Settings</h1>
 <p>Global Settings define the default global values for servers, accounts, 
  COS, and domains. These default values and parameters apply if the values 
- and parameters have not been explicitly defined in settings made elsewhere. 
- </p>
+ and parameters have not been explicitly defined in settings made elsewhere.</p>
 <p>The defaults are configured during installation. You can change the 
- settings at any time from Global Settings. &nbsp;Global 
- settings include tabs to configure the following:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>General</B></span> to set 
- the global ceiling for the number of results from a GAL search, to define 
- the default domain, and to configure the number of threads that can be 
- used to get the content from remote data sources.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Attachments</B></span> 
- to enable rules to reject messages that include attachments of a specific 
- extension, to disable attachments from being read. See <a href="blocking_attachments_to_email.htm">Blocking 
- Attachments to Email</a></p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>MTA</B></span> to enable 
- authentication, set maximum message size, enable or disable protocol and 
- DNS checks, and add X-Originating-IP 
- to message headers. See <a href="configuring_the_mta_tab_for_global_settings.htm">Configuring 
- the MTA Tab for Global Settings</a></p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>POP</B></span> to enable 
- POPS3 service. See <a href="configuring_pop.htm">Configuring POP</a></p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>IMAP</B></span> to enable 
- IMAP service. See <a href="configuring_imap.htm">Configuring IMAP</a></p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>AS/AV</B></span> 
- to set AS and AV rules. See <a href="anti-spam_protection.htm">Anti-Spam 
- Protection</a> and <a href="anti-virus_configuration_options.htm">Anti-Virus 
- Protection</a></p></li>
-	<li class=p><p class="whs2"><span style="font-weight: normal;">Free/Busy</span> 
- Interop<span style="font-weight: normal;"> is used to set up free/busy 
- scheduling across a mix of ZCS servers and third party email server. See 
- </span><a href="making_free_busy_view__available_.htm">Making Free/Busy 
- View Available</a></p></li>
-	<li class=p><p class="whs2">Themes<span style="font-weight: normal;"> 
- to customize the color scheme of existing themes</span><span style="font-weight: normal;">.</span></p></li>
-	</ul>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+ settings at any time from Global Settings. &#160;Global settings include 
+ tabs to configure the following:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>General</b></span> to 
+	 set the global ceiling for the number of results from a GAL search, 
+	 to define the default domain, and to configure the number of threads 
+	 that can be used to get the content from remote data sources. See 
+	 <a href="general_information_for_global_settings.htm">General Information 
+	 for Global Settings</a>.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Attachments</b></span> 
+	 to enable rules to reject messages that include attachments of a specific 
+	 extension, to disable attachments from being read . 
+	 See <a href="blocking_attachments_to_email.htm">Blocking Attachments 
+	 to Email</a></p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>MTA</b></span> to enable 
+	 authentication, set maximum message size, enable or disable protocol 
+	 and DNS checks, and add X-Originating-IP 
+	 to message headers. See <a href="configuring_the_mta_tab_for_global_settings.htm">Configuring 
+	 the MTA Tab for Global Settings</a></p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>POP</b></span> to enable 
+	 POPS3 service. See <a href="configuring_pop.htm">Configuring POP</a></p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>IMAP</b></span> to enable 
+	 IMAP service. See <a href="configuring_imap.htm">Configuring IMAP</a></p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>AS/ 
+	 AV</b></span> to set AS and AV rules. See <a href="anti-spam_protection.htm">Anti-Spam Protection</a> and <a href="anti-virus_configuration_options.htm">Anti-Virus 
+	 Protection</a></p></li>
+	<li class="p"><p style="font-weight: bold;"><span style="font-weight: normal;">Free/Busy</span> 
+	 Interop <span style="font-weight: normal;">is used to set up free/busy 
+	 scheduling across a mix of ZCS servers and third party email server. 
+	 See</span> Making 
+	 Free/Busy View Available</p></li>
+	<li class="p"><p style="font-weight: bold;">Themes <span style="font-weight: normal;">to 
+	 customize the color scheme of existing themes</span> <span style="font-weight: normal;">.</span></p></li>
+	
+	
+	
+	
+</ul>
+<p>&#160;</p>
+<p>&#160;</p>
 <p>
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Anti-Spam Protection','anti-spam_protection.htm','Anti-Virus Protection','anti-virus_configuration_options.htm','Blocking Attachments to Email','blocking_attachments_to_email.htm','Relay MTA for external delivery','relay_mta_for_external_delivery.htm','Using the Global Address List (GAL)','../managing_domains/using_the_global_address_list_(gal).htm','View Server Status','../monitoring/view_server_status.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border=0 height=17 width=81 alt="Related Topics"></a>
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Anti-Spam Protection','anti-spam_protection.htm','Anti-Virus Protection','anti-virus_configuration_options.htm','Blocking Attachments to Email','blocking_attachments_to_email.htm','Relay MTA for external delivery','relay_mta_for_external_delivery.htm','View Server Status','../monitoring/view_server_status.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border="0" height="17" width="81" alt="Related Topics" /></a>
 
-
- </p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+</p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

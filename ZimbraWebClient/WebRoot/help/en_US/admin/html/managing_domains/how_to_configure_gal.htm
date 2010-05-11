@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>How to Configure GAL</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Domains\nHow to Configure GAL");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,85 +81,72 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>How to Configure GAL</h1>
-<p>The Global Address List (GAL) is configured on a per-domain basis. The 
- GAL Configuration Wizard directs you through the steps to configure GAL.. 
- </p>
-<p>GAL is configured when a new <a href="creating_a_domain.htm">domain 
- is created</a> and can be edited from the <span style="font-weight: bold;"><B>Domain</B></span> 
- toolbar. </p>
-<p>To edit the GAL configuration for a domain, select the domain, and click 
- <span style="font-weight: bold;"><B>Configure GAL</B></span>.</p>
+<p>The Global Address List (GAL) is configured on a per-domain basis. The GAL Configuration Wizard directs you through the steps to configure GAL..</p>
+<p>GAL is configured when a new <a href="creating_a_domain.htm">domain is created</a> and can be edited from the <span style="font-weight: bold;"><b>Domain</b></span> toolbar.</p>
+<p>To edit the GAL configuration for a domain, select the domain, and click <span style="font-weight: bold;"><b>Configure GAL</b></span>.</p>
 <h6>To configure the GAL setting:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Select the GAL mode, <span style="font-weight: bold;"><B>Internal, 
- External</B></span>, or<span style="font-weight: bold;"><B> &nbsp;Both</B></span>. 
- </p></li>
+<ol type="1">
+<li class="p">
+<p>Select the GAL mode, <span style="font-weight: bold;"><b>Internal, External</b></span>, or <span style="font-weight: bold;"><b>&#160;Both</b></span>.</p>
+</li>
 </ol>
-<p class="whs2">Enter the value for the maximum results that 
- should be returned from a GAL search. The default is 100.<span style="font-weight: bold;"><B><br>
-<br>
-Note:</B></span> The maximum results settings can also be set in Global Settings. 
- The value entered in Global Settings becomes the default for domains if 
- you do not set it here. </p>
-<ol start="2" type="1" class="whs1">
-	<li class=p><p>Enter the GAL sync account name. &nbsp;This 
- does not need to be an existing account. &nbsp;If the 
- account does not exist, a new account is created. &nbsp;This 
- account is used only to sync the LDAP contacts to the GAL sync account's 
- address book. </p></li>
-	<li class=p><p>For External or Both, enter the LDAP server type; select 
- either <span style="font-weight: bold;"><B>LDAP</B></span> or <span style="font-weight: bold;"><B>Active 
- Directory</B></span>. </p></li>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>LDAP URL:</B></span> 
- field type the external LDAP URL. The external server port is 389. <br>
-	<br>
-	If you check <span style="font-weight: bold;"><B>Use SSL</B></span>, 
- the server port is 636.</p></li>
-	<li class=p><p>To add additional LDAP servers, click <span style="font-weight: bold;"><B>Add</B></span>. 
- A new LDAP URL field displays. </p></li>
-	<li class=p><p>In the LDAP filter: field, enter the search expression 
- that is used. &nbsp;See <a href="using_the_global_address_list_(gal).htm">Configure 
- the Global Address List</a></p></li>
-	<li class=p><p>The LDAP search base is configured by default. Click 
- <span style="font-weight: bold;"><B>Next</B></span>.</p></li>
-	<li class=p><p>To use DN to bind to the external server, check <span 
- style="font-weight: bold;"><B>Use DN/Password to bind 
- to external server.</B></span><br>
-	<br>
-	Enter the Bind DN and Bind Password. Click <span 
- style="font-weight: bold;"><B>Next</B></span>. The GAL Sync Settings dialog displays. 
- You can set GAL search settings and GAL sync settings separately.</p></li>
-	<li class=p><p>If you want to set your sync settings different from 
- your GAL search settings, uncheck the box <span style="font-weight: bold;"><B>Use 
- GAL search settings for GAL sync</B></span>, and continue to complete the 
- GAL sync settings in this and the next dialog.<br>
-	<br>
-	If the GAL Search and GAL sync settings are the same, on the Gal Sync 
- Settings dialog, click <span style="font-weight: bold;"><B>Next</B></span>.</p></li>
-	<li class=p><p>The <span style="font-weight: bold;"><B>GAL Settings Summary</B></span> 
- page displays the information you entered. If the information is correct, 
- to test the GAL settings, enter a name from the directory in the <span 
- style="font-weight: bold;"><B>Please provide a search term</B></span> field. 
- Click <span style="font-weight: bold;"><B>Test</B></span>. </p></li>
-	<li class=p><p>The GAL Test Results page displays the test results. 
- If the results failed, click <span style="font-weight: bold;"><B>Previous</B></span><span>,</span> 
- to resolve the issues described in the <span style="font-weight: bold;"><B>Details</B></span> 
- text box. Click <span style="font-weight: bold;"><B>Finish</B></span>, if the 
- test past. </p></li>
+<p style="margin-left: 40px;">Enter the value for the maximum results that should be returned from a GAL search. The default is 100.<span style="font-weight: bold;"><b><br />
+<br />
+Note:</b></span> The maximum results settings can also be set in Global Settings. The value entered in Global Settings becomes the default for domains if you do not set it here.</p>
+<ol start="2" type="1">
+<li class="p">
+<p>It is recommended that you create a GAL sync account. Enter an account name for the GAL sync account name; the recommended default is 
+galsync. &#160;&#160;If the account does not exist, a new account is created. &#160;This account is used only to sync the LDAP contacts to the GAL sync account's address book.</p>
+</li>
+<li class="p">
+<p>For External or Both, enter the LDAP server type; select either <span style="font-weight: bold;"><b>LDAP</b></span> or <span style="font-weight: bold;"><b>Active Directory</b></span>.</p>
+</li>
+<li class="p">
+<p>In the <span style="font-weight: bold;"><b>LDAP URL:</b></span> field type the external LDAP URL. The external server port is 389.<br />
+<br />
+If you check <span style="font-weight: bold;"><b>Use 
+SSL</b></span>, the server port is 636.</p>
+</li>
+<li class="p">
+<p>To add additional LDAP servers, click <span style="font-weight: bold;"><b>Add</b></span>. A new LDAP URL field displays.</p>
+</li>
+<li class="p">
+<p>In the LDAP filter: field, enter the search expression that is used. &#160;See <a href="using_the_global_address_list_(gal).htm">Configure the Global Address List</a></p>
+</li>
+<li class="p">
+<p>The LDAP search base is configured by default. Click <span style="font-weight: bold;"><b>Next</b></span>.</p>
+</li>
+<li class="p">
+<p>To use DN to bind to the external server, check <span style="font-weight: bold;"><b>Use 
+DN/Password to bind to external server.</b></span><br />
+<br />
+Enter the Bind 
+DN and Bind Password. Click <span style="font-weight: bold;"><b>Next</b></span>. The GAL Sync Settings dialog displays. You can set GAL search settings and GAL sync settings separately.</p>
+</li>
+<li class="p">
+<p>If you want to set your sync settings different from your GAL search settings, 
+uncheck the box <span style="font-weight: bold;"><b>Use GAL search settings for GAL sync</b></span>, and continue to complete the GAL sync settings in this and the next dialog.<br />
+<br />
+If the GAL Search and GAL sync settings are the same, on the Gal Sync Settings dialog, click <span style="font-weight: bold;"><b>Next</b></span>.</p>
+</li>
+<li class="p">
+<p>The <span style="font-weight: bold;"><b>GAL Settings Summary</b></span> page displays the information you entered. If the information is correct, to test the GAL settings, enter a name from the directory in the <span style="font-weight: bold;"><b>Please provide a search term</b></span> field. Click <span style="font-weight: bold;"><b>Test</b></span>.</p>
+</li>
+<li class="p">
+<p>The GAL Test Results page displays the test results. If the results failed, click <span style="font-weight: bold;"><b>Previous</b></span><span>,</span> to resolve the issues described in the <span style="font-weight: bold;"><b>Details</b></span> text box. Click <span style="font-weight: bold;"><b>Finish</b></span>, if the test past.</p>
+</li>
 </ol>
-<p class="whs2">&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 40px;">&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

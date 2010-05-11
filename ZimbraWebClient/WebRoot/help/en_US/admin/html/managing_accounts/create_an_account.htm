@@ -1,35 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Create an Account</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { margin-left:0px; }
-p.whs3 { margin-left:80px; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs2 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -40,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Accounts\nAccounts\nProvisioning Account");
@@ -69,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -88,133 +81,130 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Provisioning &nbsp;Accounts</h1>
+//]]></script>
+<h1>Provisioning &#160;Accounts</h1>
 <p>When you provision user accounts, the mailbox is created on the designated 
- server and a directory account is created on the LDAP server. </p>
+ server and a directory account is created on the LDAP server.</p>
 <p>Each account is assigned a <a href="../cos/class_of_service.htm">Class 
  of Service</a> (COS) that defines features and preferences for the mailbox, 
  but you can override the COS attributes when you configure the account. 
- &nbsp;When you initially create an account, you need 
- to consider how you want to set up the account and whether the configuration 
- should be changed from the COS configuration. </p>
-<ul type="disc" class="whs1">
-	<li class=p><p>What display name should appear in the user's messages? 
- </p></li>
-	<li class=p><p>What <a href="user_interface_features.htm">features</a> 
- and <a href="preferences.htm">preferences</a> should be set for the account? 
- </p></li>
-	<li class=p><p>Will alias and forwarding addresses be required? </p></li>
-	<li class=p><p>What <a href="../passwords/password_options.htm">password 
- restrictions</a> to set? </p></li>
-	<li class=p><p>Can the account 
- receive mail attachments? </p></li>
-	<li class=p><p>What should the account disk space <a href="../managing_servers/viewing_mailbox_quotas.htm">quota</a> 
- be set to? </p></li>
-	<li class=p><p>Is there a set<a href="account_advanced_features.htm"> 
- lifetime for messages</a>? </p></li>
-	<li class=p><p>How long should the mailbox session stay open?</p></li>
-	<li class=p><p>Should the account name be hidden in the Global Address 
- List?</p></li>
-	<li class=p><p>Do you need to set a default time zone for the account 
- that is different than yours?</p></li>
+ &#160;When you initially create an account, you need to consider how you 
+ want to set up the account and whether the configuration should be changed 
+ from the COS configuration.</p>
+<ul type="disc">
+	<li class="p"><p>What display name should appear in the user's messages?</p></li>
+	<li class="p"><p>What features 
+	 and <a href="preferences.htm">preferences</a> should be set for the 
+	 account?</p></li>
+	<li class="p"><p>Will alias and forwarding addresses be required?</p></li>
+	<li class="p"><p>What <a href="../passwords/password_options.htm">password 
+	 restrictions</a> to set?</p></li>
+	<li class="p"><p>Can the account 
+	 receive mail attachments?</p></li>
+	<li class="p"><p>What should the account disk space <a href="../managing_servers/viewing_mailbox_quotas.htm">quota</a> 
+	 be set to?</p></li>
+	<li class="p"><p>Is there a set <a href="account_advanced_features.htm">lifetime 
+	 for messages</a>?</p></li>
+	
+	<li class="p"><p>How long should the mailbox session stay open?</p></li>
+	<li class="p"><p>Should the account name be hidden in the Global Address 
+	 List?</p></li>
+	<li class="p"><p>Do you need to set a default time zone for the account 
+	 that is different than yours?</p></li>
 </ul>
-<p><span class=Important>Important: </span>&nbsp;IMAP 
- and POP client users may not have the restrictions that are configured 
- in their COS or Account settings. </p>
+<p><span class="Important">Important:</span> &#160;IMAP and POP client 
+ users may not have the restrictions that are configured in their COS or 
+ Account settings.</p>
 <h6>To create an account:</h6>
-<ol class=whs2 style="list-style: decimal;" type=1>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Accounts, </B></span>in 
- the navigation pane. </p></li>
-	<li class=p><p>In the Accounts toolbar, click <span style="font-weight: bold;"><B><b>New</b></B></span>.</p></li>
-	<li class=p><p>The <span style="font-weight: bold;"><B>New Account</B></span> 
- <span style="font-weight: bold;"><B>Wizard</B></span> appears. &nbsp;The 
- wizard steps you through a series of dialog boxes to set up contact information, 
- features, mail aliases, forwarding information, mailbox preferences, and 
- advanced features.</p></li>
-	<ul type="disc" class="whs1">
-		<li class=p><p class="whs2"><span style="font-weight: bold;"><B>General 
- Information</B></span>. The minimum account configuration requires completing 
- the fields marked with an asterisk in <span style="font-weight: bold;"><B>General 
- Information</B></span>. You must enter the <span style="font-weight: bold;"><B>Account 
- name</B></span>, select the host name, and enter the <span style="font-weight: bold;"><B>Last 
- name</B></span>. If <span style="font-weight: bold;"><B>auto</B></span> is checked 
- next to the <span style="font-weight: bold;"><B>Display name</B></span> field, 
- the last name is automatically added as the display name. If you enter 
- a canonical address, this address can be displayed in email messages from 
- the account. If you do not want this account displayed in the Global Address 
- List (GAL), check Hide in GAL.</p></li>
-		<li class=p-note><p class=note>An account name cannot have spaces 
- or use symbols. You can type a period (.) between words. Example: john.smith. 
- This becomes the name in the email address, i.e. john.smith@example.com</p></li>
-	</ul>
+<ol class="whs2" type="1">
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Accounts,</b></span> 
+	 in the Navigation pane.</p></li>
+	<li class="p"><p>In the Accounts toolbar, click <span style="font-weight: bold;"><b><b>New</b></b></span>.</p></li>
+	<li class="p"><p>The <span style="font-weight: bold;"><b>New Account</b></span> 
+	 <span style="font-weight: bold;"><b>Wizard</b></span> steps you through a 
+	 series of dialog boxes to set up contact information, features, mail 
+	 aliases, forwarding information, mailbox preferences, and advanced 
+	 features.</p>
+	<ul type="disc">
+		<li class="p"><p style="margin-left: 0px;"><span style="font-weight: bold;"><b>General 
+		 Information</b></span>. The minimum account configuration requires 
+		 completing the fields marked with an asterisk in <span style="font-weight: bold;"><b>General 
+		 Information</b></span>. You must enter the <span style="font-weight: bold;"><b>Account 
+		 name</b></span>, select the host name, and enter the <span style="font-weight: bold;"><b>Last 
+		 name</b></span>. If <span style="font-weight: bold;"><b>auto</b></span> is 
+		 checked next to the <span style="font-weight: bold;"><b>Display name</b></span> 
+		 field, the last name is automatically added as the display name. 
+		 If you do not want this account displayed in the Global Address 
+		 List (GAL), check <span style="font-weight: bold;"><b>Hide in GAL</b></span>.</p></li>
+	</ul></li>
 </ol>
-<p class="whs3">If more than one Class of Service (COS) has 
- been set up for the domain 
- to assign to accounts, the<span style="font-weight: bold;"><B> General 
- Information</B></span> page displays the Account Type section at the top with a list of the available 
- COSs. You must assign a COS to the account before you can go on. </p>
-<p class="whs3">In the <span style="font-weight: bold;"><B>Account 
- Setup</B></span> section, if the account should not be immediately available, 
+<p style="margin-left: 80px;">An account name cannot have spaces or use 
+ symbols. You can type a period (.) between words. Example: john.smith. 
+ This becomes the name in the email address, i.e. john.smith@example.com</p>
+<p style="margin-left: 80px;">In the <span style="font-weight: bold;"><b>Account 
+ Setup</b></span> section, if the account should not be immediately available, 
  you can change the account status from Active to Pending.</p>
-<p class="whs3">If <span style="font-weight: bold;"><B>auto</B></span> 
- is checked next to the <span style="font-weight: bold;"><B>Class of Service</B></span> 
- field, the account is assigned the domain COS. &nbsp;If 
- no domain COS exists, the default COS is automatically assigned. Uncheck 
+<p style="margin-left: 80px;">If <span style="font-weight: bold;"><b>auto</b></span> 
+ is checked next to the <span style="font-weight: bold;"><b>Class of Service</b></span> 
+ field, the account is assigned the domain COS. &#160;If no domain COS 
+ exists, the default COS is automatically assigned. Uncheck 
  the auto box to select a COS for the account. In the Class of Service 
  field, enter a few letters of the COS name and then select the COS name 
- from the list that displays. </p>
-<p class="whs3">You can select the password for this account 
+ from the list that displays.</p>
+<p style="margin-left: 80px;">You can select the password for this account 
  and require the user to change the password the first time he logs on.</p>
-<p class="whs3">The <span style="font-weight: bold;"><B>Notes</B></span> 
+<p style="margin-left: 80px;">The <span style="font-weight: bold;"><b>Notes</b></span> 
  section can be used to add a description of this account and to keep notes 
  about the account. The description is displayed with the account information 
  in the account content pane; notes are not displayed.</p>
-<ul><ul type="disc" class="whs1">
-		<li class=p><p><span style="font-weight: bold;"><B>Contact Information</B></span>. 
- Phone number, company name, and address information can be added. </p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Aliases</B></span>. 
- If the account should have aliases, enter email <a href="creating_a_mail_aliases.htm">aliases</a> 
- for this account. </p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Forwarding</B></span>. 
- <a href="forwarding_mail.htm">Forwarding</a> is enabled by default. </p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Features</B></span>, 
- <span style="font-weight: bold;"><B>Preferences</B></span>, <span style="font-weight: bold;"><B>Themes</B></span>, 
- <span style="font-weight: bold;"><B>Zimlets</B></span>, and <span style="font-weight: bold;"><B>Advanced</B></span>. 
- The default feature, preferences, and advanced features configuration 
- is based on the COS assigned to the account. &nbsp;You 
- can changes these for individual accounts. A <span style="font-weight: bold;"><B>Reset 
- to COS value</B></span> link is displayed when you make a change to let you 
- know that the account configuration overrides the COS configuration.</p></li>
-	</ul>
-</ul>
-<ol class=whs2 start=4 style="list-style: decimal;" type=1>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>Finish</b></B></span> 
- to save.</p></li>
+<ol>
+	<li style="list-style: none; display: inline;"><ul type="disc">
+		<li class="p"><p><span style="font-weight: bold;"><b>Contact Information</b></span>. 
+		 Phone number, company name, and address information can be added.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Aliases</b></span>. 
+		 If the account should have aliases, enter email <a href="creating_a_mail_aliases.htm">aliases</a> 
+		 for this account.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Forwarding</b></span>. 
+		 <a href="forwarding_mail.htm">Forwarding</a> is enabled by default.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Features</b></span>, 
+		 <span style="font-weight: bold;"><b>Preferences</b></span>, <span style="font-weight: bold;"><b>Themes</b></span>, 
+		 <span style="font-weight: bold;"><b>Zimlets</b></span>, and <span style="font-weight: bold;"><b>Advanced</b></span>. 
+		 The default feature, preferences, and advanced features configuration 
+		 is based on the COS assigned to the account. &#160;You can changes 
+		 these for individual accounts. A <span style="font-weight: bold;"><b>Reset 
+		 to COS value</b></span> link is displayed when you make a change to 
+		 let you know that the account configuration overrides the COS 
+		 configuration.</p></li>
+	</ul></li>
 </ol>
-<ul class=whs2 start=6 style="list-style: decimal;" type=1>
-	<li class=p-note><p class=note>Note: To create large numbers of accounts 
- at once use the <a href="bulk_provisioning.htm">Bulk Provision</a> feature.</p></li>
-</ul>
-<p>&nbsp;</p>
-<p>&nbsp;
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Account Advanced Features','account_advanced_features.htm','Bulk Provisioning','bulk_provisioning.htm','Creating a Mail Aliases','creating_a_mail_aliases.htm','Editing Accounts','editing_accounts.htm','Forwarding Mail','forwarding_mail.htm','Password Options','../passwords/password_options.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border=0 height=17 width=81 alt="Related Topics"></a>
+<ol class="whs2" start="4" type="1">
+	<li class="p"><p>Click <span style="font-weight: bold;"><b><b>Finish</b></b></span> 
+	 to save. </p></li>
+</ol>
+<ol class="whs2" start="6" type="1">
+	<ul style="list-style: url('../blue_right.gif');">
+<li class="p-note"><p class="note">Note: To create large numbers of 
+	 accounts at once use the <a href="bulk_provisioning.htm">Bulk Provision</a> 
+	 feature.</p></li>
+</ol>
+<p>&#160;</p>
+<p>&#160;&#160;&#160;&#160;
+
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Account Advanced Features','account_advanced_features.htm','Bulk Provisioning','bulk_provisioning.htm','Creating a Mail Aliases','creating_a_mail_aliases.htm','Editing Accounts','editing_accounts.htm','Forwarding Mail','forwarding_mail.htm','Password Options','../passwords/password_options.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border="0" height="17" width="81" alt="Related Topics" /></a>
 
 
  </p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+<script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

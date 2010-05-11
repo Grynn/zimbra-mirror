@@ -1,29 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Configuring the MTA Tab for Servers</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-table.whs1 { x-cell-content-align:top; width:80%; border-spacing:4px; }
-col.whs2 { width:50%; }
-tr.whs3 { x-cell-content-align:top; }
-td.whs4 { width:50%; padding-right:10px; padding-left:10px; border-top-color:#000000; border-top-style:Solid; border-right-style:Solid; border-right-color:#000000; border-bottom-color:#000000; border-bottom-style:Solid; border-bottom-width:1px; border-right-width:1px; border-left-style:none; border-top-width:1px; }
-p.whs5 { font-weight:bold; }
-td.whs6 { width:50%; padding-right:10px; padding-left:10px; border-top-color:#000000; border-top-style:Solid; border-bottom-color:#000000; border-bottom-style:Solid; border-bottom-width:1px; border-top-width:1px; border-right-style:None; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-right-style:Solid; border-right-color:#000000; border-bottom-color:#000000; border-bottom-style:Solid; border-bottom-width:1px; border-right-width:1px; border-left-style:none; }
-td.whs8 { width:50%; padding-right:10px; padding-left:10px; border-bottom-color:#000000; border-bottom-style:Solid; border-bottom-width:1px; border-right-style:None; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -34,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Servers\nConfiguring the MTA Tab for Servers");
@@ -63,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -82,78 +81,91 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Configuring the MTA Tab for Servers</h1>
-<p>The following MTA settings for servers can be changed. The server settings 
- override the global settings. </p>
-<p>&nbsp;</p>
-<table x-use-null-cells cellspacing="4" width="80%" class="whs1">
-<col class="whs2">
-<col class="whs2">
-
-<tr valign="top" class="whs3">
-<td width="50%" class="whs4">
-<p class="whs5">Enable authentication</td>
-<td width="50%" class="whs6">
-<p>Enables SMTP client authentication, so users can authenticate. Only 
- authenticated users or users from trusted networks are allowed to relay 
- mail.</p>
-<p>&nbsp;</td></tr>
-<tr valign="top" class="whs3">
-<td width="50%" class="whs7">
-<p class="whs5">TLS authentication only</td>
-<td width="50%" class="whs8">
-<p>When checked, forces all SMTP auth to use Transaction Level Security 
- (similar to SSL) to avoid passing passwords in the 
- clear.</p>
-<p>&nbsp;</td></tr>
-<tr valign="top" class="whs3">
-<td width="50%" class="whs7">
-<p class="whs5">Web mail MTA Hostname</td>
-<td width="50%" class="whs8">
+<p>The following MTA settings for servers can be changed. The server settings override the global settings.</p>
+<p>&#160;</p>
+<table style="vertical-align: top;" cellspacing="4" width="80%">
+<col style="width: 50%;" />
+<col style="width: 50%;" />
+<tr style="vertical-align: top;">
+<td style="border-top: Solid 1px #000000; border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Enable authentication</p>
+</td>
+<td style="border-top: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p>Enables SMTP client authentication, so users can authenticate. Only authenticated users or users from trusted networks are allowed to relay mail.</p>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">
+TLS authentication only</p>
+</td>
+<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p>When checked, forces all SMTP auth to use Transaction Level Security (similar to 
+SSL) to avoid passing passwords in the clear.</p>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Web mail MTA Hostname</p>
+</td>
+<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
 <p>The MTA that the web server connects to for sending mail.</p>
-<p>&nbsp;</td></tr>
-<tr valign="top" class="whs3">
-<td width="50%" class="whs7">
-<p class="whs5">Web mail MTA port</td>
-<td width="50%" class="whs8">
-<p>The default is port 25. This cannot be changed from the administration 
- console.</p>
-<p>&nbsp;</td></tr>
-<tr valign="top" class="whs3">
-<td width="50%" class="whs7">
-<p class="whs5">Web mail MTA timeout (s)</td>
-<td width="50%" class="whs8">
-<p>This setting determines how long the MTA will try to connect to the 
- server.</p>
-<p>&nbsp;</td></tr>
-<tr valign="top" class="whs3">
-<td width="50%" class="whs7">
-<p class="whs5">Relay MTA for external delivery</td>
-<td width="50%" class="whs8">
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Web mail MTA port</p>
+</td>
+<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p>The default is port 25. This cannot be changed from the administration console.</p>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Web mail MTA 
+timeout (s)</p>
+</td>
+<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p>This setting determines how long the MTA will try to connect to the server.</p>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Relay MTA for external delivery</p>
+</td>
+<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
 <p>Enter the relay host name. This is the Zimbra MTA to Gateway host.</p>
-<p>&nbsp;</td></tr>
-<tr valign="top" class="whs3">
-<td width="50%" class="whs7">
-<p class="whs5">Enable DNS lookups</td>
-<td width="50%" class="whs8">
-<p>The Zimbra MTA makes an explicit DNS query for the 
- MX record of the recipient domain. The default is enabled. 
- &nbsp;If this option is disabled, set a relay host in 
- the <span style="font-weight: bold;"><B>Relay MTA for external delivery</B></span> 
- field. &nbsp;</p>
-<p>&nbsp;</td></tr>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Enable 
+DNS lookups</p>
+</td>
+<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p>The Zimbra MTA makes an explicit 
+DNS query for the 
+MX record of the recipient domain. The default is enabled. &#160;If this option is disabled, set a relay host in the <span style="font-weight: bold;"><b>Relay MTA for external delivery</b></span> field. &#160;</p>
+<p>&#160;</p>
+</td>
+</tr>
 </table>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

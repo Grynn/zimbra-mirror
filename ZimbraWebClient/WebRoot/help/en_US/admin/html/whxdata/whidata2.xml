@@ -1,129 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="search" >
-  <topic name="Search for Accounts" url="search/search.htm" />
-</key>
-<key name="search by login time" >
-  <topic name="Advanced Search" url="search/advanced_search.htm" />
-</key>
-<key name="search for administrators" >
-  <topic name="Advanced Search" url="search/advanced_search.htm" />
-</key>
-<key name="search, advanced" >
-  <topic name="Advanced Search" url="search/advanced_search.htm" />
-</key>
-<key name="secondary volumes" >
-  <topic name="Volume Management" url="managing_servers/volume_management.htm" />
-</key>
-<key name="self-signed certificates" >
-  <topic name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
-  <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
-</key>
-<key name="server pool" >
-  <topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
-</key>
-<key name="server, monitoring" >
-  <topic name="Monitoring Zimbra Collaboration Suite" url="managing_servers/monitoring_zimbra_collaboration_suite.htm" />
-</key>
-<key name="server, search" >
-  <topic name="Advanced Search" url="search/advanced_search.htm" />
-</key>
-<key name="server, stopping service" >
-  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
-</key>
-<key name="servers" >
-  <topic name="Managing Servers" url="managing_servers/managing_servers.htm" />
-</key>
-<key name="servers, configuring MTA" >
-  <topic name="Configuring the MTA Tab for Servers" url="managing_servers/configuring_the_mta_tab_for_servers.htm" />
-</key>
-<key name="service status" >
-  <topic name="View Server Status" url="monitoring/view_server_status.htm" />
-</key>
-<key name="service, stopping" >
-  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
-</key>
-<key name="services, turning off/on" >
-  <topic name="View Server Status" url="monitoring/view_server_status.htm" />
-</key>
-<key name="session timeout" >
-  <topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
-</key>
-<key name="session token  lifetime" >
-  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
-</key>
-<key name="setting password rules" >
-  <topic name="Setting Password Rules" url="passwords/setting_password_rules.htm" />
-</key>
-<key name="setting passwords" >
-  <topic name="Setting and Changing Passwords" url="passwords/setting_passwords.htm" />
-</key>
-<key name="setting version to view upon login" >
-  <topic name="Setting the Default ZWC Login Version" url="managing_accounts/setting_the_devault_zwc_login_version.htm" />
-</key>
-<key name="showing free busy" >
-  <topic name="Making Free/Busy View  Available " url="managing_global_settings/making_free_busy_view__available_.htm" />
-</key>
-<key name="signature length" >
-  <topic name="Preferences" url="managing_accounts/preferences.htm" />
-</key>
-<key name="skins" >
-  <topic name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
-</key>
-<key name="skins, defining for user interface" >
-  <topic name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
-</key>
-<key name="SMTP restrictions" >
-  <topic name="MTA SMTP Restrictions" url="managing_global_settings/mta_smtp_restrictions.htm" />
-</key>
-<key name="spam" >
-  <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
-</key>
-<key name="spam lifetime" >
-  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
-</key>
-<key name="starting services" >
-  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
-</key>
-<key name="statistics" >
-  <topic name="Checking Usage Statistics" url="monitoring/checking_usage_statistics.htm" />
-</key>
-<key name="status of an account" >
-  <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
-</key>
-<key name="status, domain" >
-  <topic name="Changing Domain Status" url="managing_domains/changing_domain_status.htm" />
-</key>
-<key name="stopping message delivery" >
-  <topic name="Blocking Attachments to Email" url="managing_global_settings/blocking_attachments_to_email.htm" />
-</key>
-<key name="stopping services" >
-  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
-</key>
-<key name="tag percent" >
-  <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
-</key>
-<key name="tasks not in console" >
-  <topic name="Management Tasks not available from the Console" url="getting_started/management_tasks_not_available_from_the_console.htm" />
-</key>
-<key name="tasks, administration" >
-  <topic name="About the Administration Console" url="getting_started/about_the_administration_console.htm" />
-</key>
-<key name="themes" >
-  <topic name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
-</key>
-<key name="themes defining" >
-  <topic name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
-</key>
-<key name="themes, flush cache" >
-  <topic name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
-</key>
-<key name="time zone, setting" >
-  <topic name="Setting time zones for accounts" url="managing_accounts/setting_time_zones_for_accounts.htm" />
-</key>
-<key name="trash lifetime" >
-  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+<key name="updates" >
+  <topic name="Getting the Latest ZCS Software Updates" url="monitoring/getting_latest_software_updates.htm" />
 </key>
 <key name="updating the anti-virus protection" >
   <topic name="Anti-Virus Protection" url="managing_global_settings/anti-virus_configuration_options.htm" />
@@ -131,38 +10,20 @@
 <key name="usage, disk" >
   <topic name="Checking Usage Statistics" url="monitoring/checking_usage_statistics.htm" />
 </key>
-<key name="user features" >
-  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
-</key>
 <key name="user log on" >
   <topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
 </key>
 <key name="user log on, last access time" >
   <topic name="Mailbox usage" url="managing_accounts/mailbox_usage.htm" />
 </key>
-<key name="users mail" >
-  <topic name="Viewing User's Mailbox Content" url="monitoring/viewing_user_s_mailbox_content.htm" />
-</key>
-<key name="view accounts by domain" >
-  <topic name="Viewing Accounts by Domain" url="managing_domains/viewing_accounts_by_domain.htm" />
-</key>
-<key name="viewing mailbox content" >
-  <topic name="Viewing User's Mailbox Content" url="monitoring/viewing_user_s_mailbox_content.htm" />
-</key>
 <key name="viewing status" >
   <topic name="View Server Status" url="monitoring/view_server_status.htm" />
-</key>
-<key name="virtual hosts" >
-  <topic name="Configuring Virtual Hosts" url="managing_domains/configuring_virtual_hosts.htm" />
 </key>
 <key name="volume management" >
   <topic name="Volume Management" url="managing_servers/volume_management.htm" />
 </key>
 <key name="volume, blob compression" >
   <topic name="Volume Management" url="managing_servers/volume_management.htm" />
-</key>
-<key name="wiping mobile devices" >
-  <topic name="Mobile Device Wipe" url="mobile/mobile_device_wipe.htm" />
 </key>
 <key name="Zimbra Web Client Versions" >
   <topic name="Setting the Default ZWC Login Version" url="managing_accounts/setting_the_devault_zwc_login_version.htm" />
@@ -178,6 +39,10 @@
 </key>
 <key name="Zimlets, managing" >
   <topic name="Managing Zimlets" url="zimlets/about_zimlets.htm" />
+</key>
+<key name="zimlets, mandatory" >
+  <topic name="Adding Zimlets to COS and Accounts" url="zimlets/adding_zimlets_to_cos_and_accounts.htm" />
+  <topic name="Setting Up Zimlets in ZCS" url="zimlets/setting_up_zimlets_in_zcs.htm" />
 </key>
 <key name="Zimlets, preconfigured for ZCS" >
   <topic name="Managing Zimlets" url="zimlets/about_zimlets.htm" />

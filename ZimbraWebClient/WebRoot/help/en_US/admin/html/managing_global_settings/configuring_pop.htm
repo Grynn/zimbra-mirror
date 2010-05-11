@@ -1,36 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Configuring POP</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-table.whs1 { width:80%; x-cell-content-align:Top; border-top-style:Solid; border-bottom-style:Solid; border-top-width:4px; border-bottom-width:4px; border-spacing:0px; }
-col.whs2 { width:34.164%; }
-col.whs3 { width:65.836%; }
-tr.whs4 { x-cell-content-align:center; }
-td.whs5 { width:34.164%; padding-right:10px; padding-left:10px; border-top-style:none; border-right-style:none; border-bottom-width:2px; border-bottom-style:Solid; border-left-style:none; }
-p.whs6 { font-weight:bold; }
-td.whs7 { width:65.836%; padding-right:10px; padding-left:10px; border-top-style:none; border-right-style:none; border-bottom-width:2px; border-bottom-style:Solid; }
-td.whs8 { width:34.164%; padding-right:10px; padding-left:10px; border-right-style:none; border-bottom-width:2px; border-bottom-style:Solid; border-left-style:none; }
-td.whs9 { width:65.836%; padding-right:10px; padding-left:10px; border-right-style:none; border-bottom-width:2px; border-bottom-style:Solid; }
-td.whs10 { width:34.164%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-bottom-width:2px; border-bottom-style:Solid; }
-table.whs11 { width:80%; x-cell-content-align:Top; border-top-style:Solid; border-bottom-style:Solid; border-top-width:4px; border-bottom-width:4px; border-spacing:0px; }
-td.whs12 { width:34.164%; padding-right:10px; padding-left:10px; border-right-style:none; border-bottom-style:none; border-left-style:none; border-top-style:none; }
-td.whs13 { width:65.836%; padding-right:10px; padding-left:10px; border-right-style:none; border-bottom-style:none; border-top-style:none; }
-td.whs14 { width:34.164%; padding-right:10px; padding-left:10px; border-right-style:none; border-bottom-style:none; border-left-style:none; }
-td.whs15 { width:65.836%; padding-right:10px; padding-left:10px; border-right-style:none; border-bottom-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -41,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Global Settings\nConfiguring POP");
@@ -70,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -89,91 +81,109 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Configuring POP</h1>
-<p>You can enable the POP3 service and set the following from the Global 
- Settings, POP tab. You can also enable the POP service from a Server's 
- POP tab. The server settings overrule the global settings.</p>
-<p>&nbsp;</p>
-<table x-use-null-cells cellspacing="0" width="80%" class="whs1">
-<col class="whs2">
-<col class="whs3">
-
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs5">
-<p class="whs6">Enable POP3 &nbsp;service</td>
-<td width="65.836%" class="whs7">
-<p>Allows POP connection to the Zimbra servers.</td></tr>
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs8">
-<p class="whs6">Enable SSL for POP service</td>
-<td width="65.836%" class="whs9">
-<p>Enables encrypted connections. &nbsp;(https)</td></tr>
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs8">
-<p class="whs6">Enable clear text login</td>
-<td width="65.836%" class="whs9">
-<p>Enables connections that are not encrypted. &nbsp;(http)</td></tr>
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs8">
-<p class="whs6">POP3 port number</td>
-<td width="65.836%" class="whs9">
-<p>The default port number for http connections is 110. If you use IMAP/POP 
- proxy, the port number is 7110.</td></tr>
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs8">
-<p class="whs6">POP3 SSL port number</td>
-<td width="65.836%" class="whs9">
-<p>The default port number for https connections is 995. If you use IMAP/POP 
- proxy, the port number is 7995.</td></tr>
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs8">
-<p class="whs6">POP3 proxy port number</td>
-<td width="65.836%" class="whs9">
-<p>Only configured if IMAP/POP proxy is set up. The required port number 
- is 110.</td></tr>
-<tr valign="middle" class="whs4">
-<td colspan="1" rowspan="1" width="34.164%" class="whs8">
-<p class="whs6">POP3 SSL proxy port number</td>
-<td colspan="1" rowspan="1" width="65.836%" class="whs9">
-<p>Only configured if IMAP/POP proxy is set up. The required port number 
- is 995.</td></tr>
-<tr valign="middle" class="whs4">
-<td colspan="1" rowspan="1" width="34.164%" class="whs10">
-<p class="whs6">Number of threads</td>
-<td colspan="1" rowspan="1" width="65.836%" class="whs9">
-<p>Number of threads that should be available. The global setting is not 
- set. The server default setting is 20.</td></tr>
+<p>You can enable the POP3 service and set the following from the Global Settings, POP tab. You can also enable the POP service from a Server's POP tab. The server settings overrule the global settings.</p>
+<p>&#160;</p>
+<table style="vertical-align: Top; border-top-style: Solid; border-bottom-style: Solid; border-top-width: 4px; border-bottom-width: 4px;" cellspacing="0" width="80%">
+<col style="width: 34.164%;" />
+<col style="width: 65.836%;" />
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p style="font-weight: bold;">Enable POP3 &#160;service</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p>Allows POP connection to the Zimbra servers.</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p style="font-weight: bold;">Enable SSL for POP service</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p>Enables encrypted connections. &#160;(https)</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p style="font-weight: bold;">Enable clear text login</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p>Enables connections that are not encrypted. &#160;(http)</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p style="font-weight: bold;">POP3 port number</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p>The default port number for http connections is 110. If you use IMAP/POP proxy, the port number is 7110.</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p style="font-weight: bold;">POP3 SSL port number</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p>The default port number for https connections is 995. If you use IMAP/POP proxy, the port number is 7995.</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p style="font-weight: bold;">POP3 proxy port number</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p>Only configured if IMAP/POP proxy is set up. The required port number is 110.</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p style="font-weight: bold;">POP3 SSL proxy port number</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p>Only configured if IMAP/POP proxy is set up. The required port number is 995.</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p style="font-weight: bold;">Number of threads</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; border-bottom-width: 2px; border-bottom-style: Solid;">
+<p>Number of threads that should be available. The global setting is not set. The server default setting is 20.</p>
+</td>
+</tr>
 </table>
-<p>&nbsp;</p>
-<p>The following additional POP information can be configured on the server 
- POP tab.</p>
-<table x-use-null-cells cellspacing="0" width="80%" class="whs11">
-<col class="whs2">
-<col class="whs3">
-
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs12">
-<p class="whs6">Address</td>
-<td width="65.836%" class="whs13">
-<p>&nbsp;</td></tr>
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs14">
-<p class="whs6">Advertised name</td>
-<td width="65.836%" class="whs15">
-<p>&nbsp;</td></tr>
+<p>&#160;</p>
+<p>The following additional POP information can be configured on the server POP tab.</p>
+<table style="vertical-align: Top; border-top-style: Solid; border-bottom-style: Solid; border-top-width: 4px; border-bottom-width: 4px;" cellspacing="0" width="80%">
+<col style="width: 34.164%;" />
+<col style="width: 65.836%;" />
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Address</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Advertised name</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
+<p>&#160;</p>
+</td>
+</tr>
 </table>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

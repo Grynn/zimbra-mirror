@@ -3,10 +3,9 @@
 <tocdata>
 <item name="About Zimbra Collaboration Suite" url="getting_started/about_zcs.htm" />
 <book name="Getting Started" >
-  <item name="About the Administration Console" url="getting_started/about_the_administration_console.htm" />
+  <item name="Navigating the Administration Console" url="getting_started/about_the_administration_console.htm" />
   <item name="Global Administrator's Tasks from Admin Console" url="getting_started/tasks_performed_from_aministration_console.htm" />
   <item name="Global Administrator's Tasks Not Available from Admin Console" url="getting_started/management_tasks_not_available_from_the_console.htm" />
-  <item name="Setting Up the Global Admin Account" url="basic_administration_tasks/adminisrator_s_mailbox.htm" />
 </book>
 <book name="Global Settings" >
   <item name="Managing Global Settings" url="managing_global_settings/global_settings.htm" />
@@ -23,26 +22,9 @@
   <item name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
   <item name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
   <item name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
-  <item name="Making Free/Busy Available" url="managing_global_settings/making_free_busy_view__available_.htm" />
-  <item name="Installing Certificates" url="tools/installing_certificates.htm" />
-</book>
-<book name="Searching" >
-  <item name="Using Search" url="search/search.htm" />
-  <item name="Zimbra Search" url="search/help_search.htm" />
-  <item name="Advanced Search" url="search/advanced_search.htm" />
 </book>
 <book name="Managing Domains" >
-  <item name="Managing Domains" url="managing_domains/managing_domains.htm" />
-  <item name="Configuring Global Address List (GAL)" url="managing_domains/using_the_global_address_list_(gal).htm" />
-  <item name="Configuring Authentication Settings" url="managing_domains/authentication_settings.htm" />
-  <item name="Configuring Virtual Hosts" url="managing_domains/configuring_virtual_hosts.htm" />
-  <item name="How to Configure Authentication" url="managing_domains/how_to_configure_authentication_mode.htm" />
-  <item name="Viewing Accounts by Domain" url="managing_domains/viewing_accounts_by_domain.htm" />
-  <item name="Adding a New Domain" url="managing_domains/creating_a_domain.htm" />
   <item name="Changing a Domain Name" url="managing_domains/changing_a_domain_name.htm" />
-  <item name="How to Configure GAL" url="managing_domains/how_to_configure_gal.htm" />
-  <item name="Changing Domain Status" url="managing_domains/changing_domain_status.htm" />
-  <item name="Suspending a Domain" url="managing_domains/suspending_a_domain.htm" />
 </book>
 <book name="Managing Servers" >
   <item name="Managing Servers" url="managing_servers/managing_servers.htm" />
@@ -59,12 +41,9 @@
 <book name="Managing Accounts" >
   <item name="Setting the Default ZWC Login Version" url="managing_accounts/setting_the_devault_zwc_login_version.htm" />
   <item name="Managing Addresses" url="managing_accounts/provisioning_accounts.htm" />
-  <item name="Re-Indexing a Mailbox" url="managing_accounts/re-indexing_a_mailbox.htm" />
-  <item name="Viewing User's Mailbox Content" url="monitoring/viewing_user_s_mailbox_content.htm" />
   <item name="Changing Quota Settings" url="managing_accounts/changing_quota_settings.htm" />
   <item name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
   <book name="Accounts" >
-    <item name="ZCS Communication Features" url="managing_accounts/zcs__communication_features.htm" />
     <item name="Provisioning Account" url="managing_accounts/create_an_account.htm" />
     <item name="Bulk Provisioning" url="managing_accounts/bulk_provisioning.htm" />
     <item name="How to Provision Multiple Accounts" url="managing_accounts/how_to_provision_multiple_accounts.htm" />
@@ -73,7 +52,6 @@
     <item name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
     <item name="Renaming an Account" url="managing_accounts/renaming_an_account.htm" />
     <item name="Managing Alias Addresses" url="managing_accounts/creating_a_mail_aliases.htm" />
-    <item name="Setting time zones for accounts" url="managing_accounts/setting_time_zones_for_accounts.htm" />
   </book>
   <book name="Distribution Lists" >
     <item name="Creating Distribution Lists" url="managing_accounts/distribution_lists.htm" />
@@ -91,8 +69,6 @@
     <item name="Changing Locked Out Status" url="passwords/changing_locked_out_status.htm" />
   </book>
   <book name="User Features and Preferences Options" >
-    <item name="ZCS Features" url="managing_accounts/zcs__communication_features.htm" />
-    <item name="ZWC Features to Enable" url="managing_accounts/user_interface_features.htm" />
     <item name="User Preferences" url="managing_accounts/preferences.htm" />
     <item name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
     <item name="Enabling the Calendar Feature" url="managing_accounts/enabling_the_calendar_feature.htm" />
@@ -102,14 +78,13 @@
   </book>
 </book>
 <book name="Managing Resources" >
-  <item name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
+  <item name="Managing a Resource Account" url="managing_accounts/managing_resource.htm" />
+  <item name="Create a Resource" url="managing_accounts/create_a_resource.htm" />
   <item name="Making a Resource Unavailable" url="managing_accounts/taking_a_resource_out_of_service.htm" />
 </book>
 <book name="Managing ZCS Documents" >
   <item name="About Zimbra Documents" url="documents/about_zimbra_documents.htm" />
   <item name="Creating Domain Documents Account" url="documents/managing_domain_documents.htm" />
-  <item name="Adding Access to Domain Wiki Notebook folder" url="documents/adding_access_to_domain_wiki_notebook_folder.htm" />
-  <item name="Changing Access Permission for Documents" url="documents/changing_access_permission_for_documents.htm" />
 </book>
 <book name="Managing Zimlets" >
   <item name="About Zimlets" url="zimlets/about_zimlets.htm" />
@@ -123,19 +98,25 @@
   <item name="Monitoring Servers" url="managing_servers/monitoring_zimbra_collaboration_suite.htm" />
   <item name="View Server Status" url="monitoring/view_server_status.htm" />
   <item name="Checking Usage Statistics" url="monitoring/checking_usage_statistics.htm" />
+  <item name="Creating Advanced Server Statistics" url="monitoring/creating_advanced_server_statistics.htm" />
   <item name="Daily Mail Reports" url="monitoring/daily_mail_reports.htm" />
   <item name="About MTA Queues" url="monitoring/about_mta_queues.htm" />
   <item name="Monitoring Zimbra Mail Queues" url="monitoring/monitoring_zimbra_mta_mail_queues.htm" />
   <item name="Disk Space Availability Alert" url="monitoring/disk_space_avability_alert.htm" />
   <item name="Viewing Mailbox Quotas" url="managing_servers/viewing_mailbox_quotas.htm" />
-  <item name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
+  <item name="Getting the Latest ZCS Software Updates" url="monitoring/getting_latest_software_updates.htm" />
+</book>
+<book name="Searching from the Admin Console" >
+  <item name="Zimbra Search" url="search/help_search.htm" />
+  <item name="Advanced Search" url="search/advanced_search.htm" />
 </book>
 <book name="Migration Wizards" >
   <item name="Zimbra Migration Wizard for Exchange" url="migration_wizard/mw_using_the_migration_wizard.htm" />
   <item name="Zimbra Migration Wizard for Lotus Domino" url="migration_wizard/zimbra_migration_wizard_for_lotus_domino.htm" />
 </book>
 <book name="Using the Admin Console" >
-<chunk name="Using the Admin Console" ref="whtdata1.xml" />
+  <item name="Enhancing the Zimbra Admin Console User Interface" url="admin_console_misc/enhancing_the_zimbra_admin_console_user_interface.htm" />
+  <item name="Removing Admin Extension Modules" url="admin_console_misc/removing_admin_extension_modules.htm" />
 </book>
 
 </tocdata>

@@ -1,18 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="MS-HAID" content="Mail Forwarding" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Forwarding Mail</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +20,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Accounts\nAccounts\nForwarding Mail");
@@ -53,10 +66,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -72,54 +83,45 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Enabling Mail Forwarding</h1>
-<p>Allowing users to specify a forwarding address is a COS enabled feature. 
- Users can specify an address to forward mail they receive. You can check 
- <span style="font-weight: bold;"><B>Don't keep a local copy of messages</B></span>, 
- and a copy of the forwarded email message is not kept in the ZWC mailbox. 
- When this feature is enabled in the COS, when you configure the account, 
- you can specify a default forwarding address. You can also manage this 
- feature from individual accounts. </p>
-<p>You can add the forwarding address in the account's Forwarding tab and 
- users can enter a forwarding address from their Zimbra Web Client Options 
- Mail tab. The forwarding address is always displayed in the Account Forwarding 
- tab. &nbsp;</p>
-<p>As mail comes into an account with forwarding enabled and an address 
- configured, a copy is sent to the forwarding address. When a message is 
- forwarded and you want the option to not save a copy in the mailbox, &nbsp;set 
- <span style="font-weight: bold;"><B>Disable local delivery</B></span> on the 
- account's <span style="font-weight: bold;"><B>Preferences</B></span> tab. &nbsp;If 
- this feature is enabled in Accounts, users can toggle <span style="font-weight: bold;"><B>Disable 
- local delivery</B></span> from the ZWC Option Mail tab. 
- </p>
+<p>Allowing users to specify a forwarding address is a feature COS 
+ enabled feature. Users can specify addresses to forward 
+ mail and calendar invitations they receive. You can check <span style="font-weight: bold;"><b>Don't 
+ keep a local copy of messages</b></span>, and a copy of the forwarded message 
+ is not kept in the user's mailbox. </p>
+<p>You can add forwarding addresses in the account's Forwarding tab and 
+ users can manage the forwarding addresses from their Zimbra Web Client 
+ Preferences Mail tab. </p>
+<p>As messages comes into an account with forwarding enabled and an address 
+ configured, a copy is sent to the forwarding address. </p>
 <p>In an account's Forwarding tab, you can specify forwarding addresses 
  that is hidden from the user. When mail is delivered, a copy is forwarded 
- to the address listed. The user does not know that the email was forwarded.</p>
+ to the address listed. The user does not know that the email was forwarded. 
+ If <span style="font-weight: bold;"><b>Don't keep a local copy of messages 
+ </b></span><span>is checked, the message is not saved in the user's account.</span></p>
 <h3>Disabling mail forwarding</h3>
-<p>Mail forwarding can be disabled from the COS or the Account. &nbsp;When 
- mail forwarding is disabled, the option to create a forwarding address 
- and to disable local delivery does not appear on the user's Option Mail 
- tab and Mail Filters tab. You must remove the forwarding address that 
- is in the account's Forwarding tab.</p>
-<ul><li class=p-note><p class=note>If you disable forwarding but a forwarding 
- address is already specified in the user's account, forwarding will continue. 
- </p></li>
-</ul>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>Mail forwarding can be disabled 
+ from the COS or the Account. &#160;When mail forwarding 
+ is disabled, the option to create a forwarding address and to disable 
+ local delivery does not appear on the user's Preferences Mail tab and 
+ Mail Filters tab. </p>
+<p class="note">If you disable forwarding but a forwarding address is already 
+ specified in the user's account, forwarding will continue. In this case, 
+ you must manually remove the forwarding address from the account's Mail 
+ preferences page.</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

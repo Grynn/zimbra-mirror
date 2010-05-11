@@ -1,10 +1,10 @@
-﻿<html>
-<!-- saved from url=(0014)about:internet -->
+﻿<html><!-- saved from url=(0014)about:internet -->
+
 <head>
 <title>Search Form</title>
 
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<meta name="description" content="WebHelp 5.50">
+<meta name="generator" content="Adobe RoboHelp 8" />
+<meta name="description" content="WebHelp 5.50" />
 </head>
 <style>
 <!--
@@ -20,6 +20,9 @@ body {margin:0;}
 <script language="javascript1.2">
 <!--
 var gstrInput = "";
+var gstrSyn = "";
+var nNumRslt = 0 ;
+
 function ftsLookup(bCR)
 {
 	if (bCR)
@@ -32,7 +35,11 @@ function ftsLookup(bCR)
 				gstrInput = strInput;
 			}
 			else
+			{
 				gstrInput = "";
+				gstrSyn = "";
+				nNumRslt = 0 ;
+			}
 		}
 
 		if (gbMac) {
@@ -68,6 +75,10 @@ function window_unload()
 	UnRegisterListener2(this, WH_MSG_BACKUPSEARCH);
 	UnRegisterListener2(this, WH_MSG_HILITESEARCH);
 	UnRegisterListener2(this, WH_MSG_GETSEARCHSTR);
+	UnRegisterListener2(this, WH_MSG_SETSYNSTR);
+	UnRegisterListener2(this, WH_MSG_GETMAXRSLT);
+	UnRegisterListener2(this, WH_MSG_SETNUMRSLT);
+	UnRegisterListener2(this, WH_MSG_GETNUMRSLT);
 }
 
 function onSendMessage(oMsg)
@@ -96,6 +107,8 @@ function onSendMessage(oMsg)
 		{
 			oMsg.oParam = gstrInput;
 			gstrInput = "";
+			gstrSyn = "";
+			nNumRslt = 0 ;
 			return false;
 		}
 	}
@@ -113,8 +126,26 @@ function onSendMessage(oMsg)
 		if (oMsg.oParam != "- Search -")
 		{
 			oMsg.oParam = document.FtsInputForm.keywordField.value;
-		}	}
-
+			oMsg.oParam += " " + gstrSyn;
+		}	
+	}
+	else if(oMsg.nMessageId == WH_MSG_SETSYNSTR)
+	{
+		gstrSyn = oMsg.oParam;
+		
+	}
+	else if(oMsg.nMessageId == WH_MSG_GETMAXRSLT)
+	{
+		oMsg.oParam = document.FtsInputForm.MaxResults.value;	
+	}
+	else if(oMsg.nMessageId == WH_MSG_SETNUMRSLT)
+	{
+		nNumRslt = oMsg.oParam;		
+	}
+	else if(oMsg.nMessageId == WH_MSG_GETNUMRSLT)
+	{
+		oMsg.oParam = nNumRslt;	
+	}
 	return true;
 }
 
@@ -128,6 +159,10 @@ if (window.gbWhForm)
 	RegisterListener2(this, WH_MSG_BACKUPSEARCH);
 	RegisterListener2(this, WH_MSG_HILITESEARCH);
 	RegisterListener2(this, WH_MSG_GETSEARCHSTR);
+	RegisterListener2(this, WH_MSG_SETSYNSTR);
+	RegisterListener2(this, WH_MSG_GETMAXRSLT);
+	RegisterListener2(this, WH_MSG_SETNUMRSLT);
+	RegisterListener2(this, WH_MSG_GETNUMRSLT);
 	gfunLookUp = ftsLookup;
 	gfunInit = null;
 	gstrFormName = "FtsInputForm"
@@ -135,6 +170,8 @@ if (window.gbWhForm)
 	gsTitle = "Type in the word(s) to search for:";
 	gsHiliteSearchTitle = "Highlight search results";
 	gsHiliteSearchTitle = "Highlight search results";
+	gsMaxSearchTitle = "Search results per page" ;
+	gsMaxSearchTitle = "Search results per page";
 	setGoImage1("wht_go.gif");
 	setBackgroundcolor("#e8dcc1");
 	
@@ -147,7 +184,7 @@ if (window.gbWhForm)
 	
 	
 	var strHiliteSearchSetting = "enable,yellow,black";
-	strHiliteSearchSetting = "enable,#ffff99,black";
+	strHiliteSearchSetting = "enable,#33cccc,black";
 	var searchSetting = strHiliteSearchSetting.match("^(.+),(.+),(.*)$");
 	if(searchSetting != null && searchSetting[1] == "enable")
 		setHighlightSearch(true);

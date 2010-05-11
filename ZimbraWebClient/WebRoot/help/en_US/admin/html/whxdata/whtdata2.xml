@@ -1,11 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
-<item name="Quick Custom Color" url="ui_themes/how_to_customize_theme_colors_and_logos.htm" />
-<item name="How to customize themes from admin console" url="ui_themes/how_to_customize_themes_and_logos.htm" />
-<item name="Restricting User Interface Theme Choice" url="ui_themes/restricting_user_interface_theme_choice.htm" />
-<item name="Making UI Themes available by COS" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
-<item name="Making UI Themes Available by Account" url="ui_themes/making_ui_themes_available_by_account.htm" />
+<item name="Enhancing the Zimbra Admin Console User Interface" url="admin_console_misc/enhancing_the_zimbra_admin_console_user_interface.htm" />
+<item name="Removing Admin Extension Modules" url="admin_console_misc/removing_admin_extension_modules.htm" />
+<item name="Using Search" url="search/search.htm" />
 
 </tocdata>

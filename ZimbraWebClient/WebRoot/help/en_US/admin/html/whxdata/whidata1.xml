@@ -1,105 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="find" >
-  <topic name="Search for Accounts" url="search/search.htm" />
-</key>
-<key name="flush cache" >
-  <topic name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
-</key>
-<key name="forwarding address, allowing users to" >
-  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
-</key>
-<key name="forwarding mail" >
-  <topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
-</key>
-<key name="forwarding, disable" >
-  <topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
-</key>
-<key name="free_busy, on 3rd party servers" >
-  <topic name="Making Free/Busy View  Available " url="managing_global_settings/making_free_busy_view__available_.htm" />
-</key>
-<key name="GAL configuration wizard" >
-  <topic name="Using the Global Address List (GAL)" url="managing_domains/using_the_global_address_list_(gal).htm" />
-</key>
-<key name="GAL, how to configure" >
-  <topic name="How to Configure GAL" url="managing_domains/how_to_configure_gal.htm" />
-</key>
-<key name="GAL, using" >
-  <topic name="Using the Global Address List (GAL)" url="managing_domains/using_the_global_address_list_(gal).htm" />
-</key>
-<key name="generate CSR" >
-  <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
-</key>
-<key name="Global Access List" >
-  <topic name="Using the Global Address List (GAL)" url="managing_domains/using_the_global_address_list_(gal).htm" />
-</key>
-<key name="global administrator" >
-  <topic name="Global Administrator Mailbox" url="basic_administration_tasks/adminisrator_s_mailbox.htm" />
-</key>
-<key name="global attachment settings" >
-  <topic name="Global Attachment Settings" url="managing_global_settings/global_attachment_settings.htm" />
-</key>
-<key name="global settings" >
-  <topic name="Global Settings" url="managing_global_settings/global_settings.htm" />
-</key>
-<key name="global settings, configuring MTA" >
-  <topic name="Configuring the MTA Tab for Global Settings" url="managing_global_settings/configuring_the_mta_tab_for_global_settings.htm" />
-</key>
-<key name="group calendar" >
-  <topic name="ZCS Communication Features" url="managing_accounts/zcs__communication_features.htm" />
-</key>
-<key name="group calendars" >
-  <topic name="Enabling the Calendar Feature" url="managing_accounts/enabling_the_calendar_feature.htm" />
-</key>
-<key name="ID number" >
-  <topic name="Managing User Accounts" url="managing_accounts/provisioning_accounts.htm" />
-</key>
-<key name="IMAP" >
-  <topic name="Configuring IMAP" url="managing_global_settings/configuring_imap.htm" />
-</key>
-<key name="IMAP access" >
-  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
-</key>
-<key name="IMAP proxy" >
-  <topic name="Configuring IMAP" url="managing_global_settings/configuring_imap.htm" />
-</key>
-<key name="indexing, junk messages" >
-  <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
-</key>
-<key name="installing certificates" >
-  <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
-</key>
-<key name="junk" >
-  <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
-</key>
-<key name="junk indexing, disable" >
-  <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
-</key>
-<key name="keyboard shortcuts" >
-  <topic name="Preferences" url="managing_accounts/preferences.htm" />
-</key>
-<key name="kill percent" >
-  <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
-</key>
-<key name="LDAP" >
-  <topic name="Using the Global Address List (GAL)" url="managing_domains/using_the_global_address_list_(gal).htm" />
-</key>
-<key name="locale, flush cache" >
-  <topic name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
-</key>
-<key name="location, creating" >
-  <topic name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
-</key>
-<key name="location, remove" >
-  <topic name="Taking a Resource Out of Service" url="managing_accounts/taking_a_resource_out_of_service.htm" />
-</key>
-<key name="locked account" >
-  <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
-</key>
-<key name="locked out" >
-  <topic name="Changing Locked Out Status" url="passwords/changing_locked_out_status.htm" />
-</key>
 <key name="locked password" >
   <topic name="Password Options" url="passwords/password_options.htm" />
 </key>
@@ -114,12 +15,6 @@
 </key>
 <key name="Lotus Domino, migration" >
   <topic name="Zimbra Migration Wizard for Lotus Domino" url="migration_wizard/zimbra_migration_wizard_for_lotus_domino.htm" />
-</key>
-<key name="mail filters" >
-  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
-</key>
-<key name="mail identities" >
-  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
 </key>
 <key name="mail queues" >
   <topic name="Monitoring Zimbra MTA Mail Queues" url="monitoring/monitoring_zimbra_mta_mail_queues.htm" />
@@ -136,9 +31,6 @@
 <key name="mailbox quotas" >
   <topic name="Viewing Mailbox Quotas" url="managing_servers/viewing_mailbox_quotas.htm" />
 </key>
-<key name="mailbox, re-indexing" >
-  <topic name="Re-Indexing a Mailbox" url="managing_accounts/re-indexing_a_mailbox.htm" />
-</key>
 <key name="maintenance mode" >
   <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
 </key>
@@ -153,6 +45,12 @@
 </key>
 <key name="managing Zimlets" >
   <topic name="Managing Zimlets" url="zimlets/about_zimlets.htm" />
+</key>
+<key name="mandatory zimlets" >
+  <topic name="Adding Zimlets to COS and Accounts" url="zimlets/adding_zimlets_to_cos_and_accounts.htm" />
+</key>
+<key name="manually expire session" >
+  <topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
 </key>
 <key name="message delivery, blocking" >
   <topic name="Blocking Attachments to Email" url="managing_global_settings/blocking_attachments_to_email.htm" />
@@ -195,9 +93,6 @@
 </key>
 <key name="number of accounts used" >
   <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
-</key>
-<key name="out of office reply" >
-  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
 </key>
 <key name="Outlook types imported" >
   <topic name="Import Options" url="migration_wizard/mw_import_options.htm" />
@@ -245,17 +140,10 @@
   <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
 </key>
 <key name="personal calendar" >
-  <topic name="ZCS Communication Features" url="managing_accounts/zcs__communication_features.htm" />
   <topic name="Enabling the Calendar Feature" url="managing_accounts/enabling_the_calendar_feature.htm" />
 </key>
 <key name="POP" >
   <topic name="Configuring POP" url="managing_global_settings/configuring_pop.htm" />
-</key>
-<key name="POP access" >
-  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
-</key>
-<key name="POP account" >
-  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
 </key>
 <key name="preferences" >
   <topic name="Configuring Preferences" url="managing_accounts/preferences.htm" />
@@ -299,9 +187,6 @@
 <key name="quotas, changing" >
   <topic name="Changing Quota Settings" url="managing_accounts/changing_quota_settings.htm" />
 </key>
-<key name="re-indexing mailbox" >
-  <topic name="Re-Indexing a Mailbox" url="managing_accounts/re-indexing_a_mailbox.htm" />
-</key>
 <key name="rejecting messages by extension" >
   <topic name="Blocking messages with specific extensions" url="managing_global_settings/blocking_messages_with_specific_extensions.htm" />
 </key>
@@ -329,8 +214,125 @@
 <key name="resources, number used" >
   <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
 </key>
-<key name="save search results" >
-  <topic name="Using Search" url="search/search.htm" />
+<key name="search by login time" >
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
+</key>
+<key name="search for administrators" >
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
+</key>
+<key name="search, advanced" >
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
+</key>
+<key name="secondary volumes" >
+  <topic name="Volume Management" url="managing_servers/volume_management.htm" />
+</key>
+<key name="server pool" >
+  <topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
+</key>
+<key name="server, monitoring" >
+  <topic name="Monitoring Zimbra Collaboration Suite" url="managing_servers/monitoring_zimbra_collaboration_suite.htm" />
+</key>
+<key name="server, search" >
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
+</key>
+<key name="server, stopping service" >
+  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
+</key>
+<key name="servers" >
+  <topic name="Managing Servers" url="managing_servers/managing_servers.htm" />
+</key>
+<key name="servers, configuring MTA" >
+  <topic name="Configuring the MTA Tab for Servers" url="managing_servers/configuring_the_mta_tab_for_servers.htm" />
+</key>
+<key name="service status" >
+  <topic name="View Server Status" url="monitoring/view_server_status.htm" />
+</key>
+<key name="service, stopping" >
+  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
+</key>
+<key name="services, turning off/on" >
+  <topic name="View Server Status" url="monitoring/view_server_status.htm" />
+</key>
+<key name="session timeout" >
+  <topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
+</key>
+<key name="session token  lifetime" >
+  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+</key>
+<key name="session, manually expire" >
+  <topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
+</key>
+<key name="session, stopping" >
+  <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="setting password rules" >
+  <topic name="Setting Password Rules" url="passwords/setting_password_rules.htm" />
+</key>
+<key name="setting passwords" >
+  <topic name="Setting and Changing Passwords" url="passwords/setting_passwords.htm" />
+</key>
+<key name="setting version to view upon login" >
+  <topic name="Setting the Default ZWC Login Version" url="managing_accounts/setting_the_devault_zwc_login_version.htm" />
+</key>
+<key name="signature length" >
+  <topic name="Preferences" url="managing_accounts/preferences.htm" />
+</key>
+<key name="skins" >
+  <topic name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
+</key>
+<key name="skins, defining for user interface" >
+  <topic name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
+</key>
+<key name="SMTP restrictions" >
+  <topic name="MTA SMTP Restrictions" url="managing_global_settings/mta_smtp_restrictions.htm" />
+</key>
+<key name="software updates" >
+  <topic name="Getting the Latest ZCS Software Updates" url="monitoring/getting_latest_software_updates.htm" />
+</key>
+<key name="spam" >
+  <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
+</key>
+<key name="spam lifetime" >
+  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+</key>
+<key name="starting services" >
+  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
+</key>
+<key name="statistics" >
+  <topic name="Checking Usage Statistics" url="monitoring/checking_usage_statistics.htm" />
+</key>
+<key name="status of an account" >
+  <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
+</key>
+<key name="stopping a user's session" >
+  <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="stopping message delivery" >
+  <topic name="Blocking Attachments to Email" url="managing_global_settings/blocking_attachments_to_email.htm" />
+</key>
+<key name="stopping services" >
+  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
+</key>
+<key name="tag percent" >
+  <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
+</key>
+<key name="tasks not in console" >
+  <topic name="Management Tasks not available from the Console" url="getting_started/management_tasks_not_available_from_the_console.htm" />
+</key>
+<key name="tasks, administration" >
+  <topic name="About the Administration Console" url="getting_started/about_the_administration_console.htm" />
+</key>
+<key name="themes" >
+  <topic name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
+</key>
+<key name="themes defining" >
+  <topic name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
+</key>
+<key name="themes, flush cache" >
+  <topic name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
+</key>
+<key name="trash lifetime" >
+  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
 </key>
 
 </indexdata>

@@ -1,36 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Adding a New Domain</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-ul.whs2 { list-style:disc; }
-p.whs3 { margin-left:40px; }
-p.whs4 { margin-left:0px; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs4 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -41,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Domains\nAdding a New Domain");
@@ -70,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -89,15 +81,8 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" x-save-method="compute-relative" src="../ehlpdhtm.js" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
-</script>
-
-
-
+//]]></script>
+<script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2"></script>
 <h1>Adding a New Domain</h1>
 <p>One domain is identified during the installation process and additional 
  domains can be added. When you add a domain you configure the <a href="using_the_global_address_list_(gal).htm">Global 
@@ -105,161 +90,166 @@ if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( t
  mode</a> for the domain. You can also set up virtual hosts, create the 
  domain Documents account, and limit the number of accounts that can be 
  created on the domain.</p>
-<p>To add a domain, click<span style="font-weight: bold; font-size: 12pt;"><font size=3 style="font-size:12pt;"><B> 
- @</B></font></span><span class=attribute style="font-weight: normal;"> on the Domain 
- toolbar</span>. The Create New Domain wizard walks you through the steps 
- to add the new domain. </p>
-<ol type="1" class="whs1">
-	<li class=p><p>On the <span style="font-weight: bold;"><B>General Information</B></span> 
- dialog, enter the following domain information.</p></li>
-	<ul type="disc" class="whs2">
-		<li class=p><p><span style="font-weight: bold;"><B>Domain name</B></span>. 
- Enter the full name of the domain (domainexample.com)</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Public service 
- host name</B></span>. Enter the host name of the REST URL. This is the URL 
- that is used when sharing Documents Notebooks, email folders and Briefcase 
- folders as well as sharing Task lists, Address Books, and Calendars. See 
- Setting up a Public Service Host Name in the Managing ZCS Configurations 
- chapter in the ZCS Administrator's Guide.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Inbound SMTP host 
- name</B></span>. If your MX records point to a spam-relay or any other external 
- non-Zimbra server, enter the name of the server here. </p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Description</B></span>. 
- Text field that displays in the Domain list in the Content pane.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Maximum accounts 
- for this domain</B></span>. Enter the maximum number of accounts that can 
- be created on this domain. &nbsp;The number entered here 
- is displayed in the Account Limits tab. &nbsp;The default 
- is no limit (blank field) </p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Default Class of 
- Service</B></span> (COS) for the domain. If you do not enter a COS, the default 
- COS is used. The COS entered here is &nbsp;automatically 
- assigned to accounts created on the domain if no other COS is entered.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Domain status</B></span>. 
- The <a href="changing_domain_status.htm">domain status</a> is active in 
- the normal state. You may want to change this status when you setting 
- up the domain if you are not ready to use the domain. </p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Notes</B></span> you 
- want to add about the domain. You can also set the maximum number of accounts 
- that can be configured for this domain. &nbsp;</p></li>
-	</ul>
+<p>To add a domain, click <span style="font-weight: bold; font-size: 12pt;"><font size="3" style="font-size:12pt;"><b>@</b></font></span> 
+ <span class="attribute" style="font-weight: normal;">on the Domain toolbar</span>. 
+ The Create New Domain wizard walks you through the steps to add the new 
+ domain.</p>
+<ol type="1">
+	<li class="p"><p>On the <span style="font-weight: bold;"><b>General Information</b></span> 
+	 dialog, enter the following domain information.</p>
+	<ul type="disc">
+		<li class="p"><p><span style="font-weight: bold;"><b>Domain name</b></span>. 
+		 Enter the full name of the domain ( 
+		 domainexample.com)</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Public service 
+		 host name</b></span>. Enter the host name of the REST URL. This is 
+		 the URL that is used when sharing Documents Notebooks, email folders 
+		 and Briefcase folders as well as sharing Task lists, Address Books, 
+		 and Calendars. See Setting up a Public Service Host Name in the 
+		 Managing ZCS Configurations chapter in the ZCS Administrator's 
+		 Guide.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Inbound SMTP 
+		 host name</b></span>. If your MX records point to a spam-relay or 
+		 any other external non-Zimbra server, enter the name of the server 
+		 here.  </p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Description</b></span>. 
+		 Text field that displays in the Domain list in the Content pane.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Maximum accounts 
+		 for this domain</b></span>. Enter the maximum number of accounts that 
+		 can be created on this domain. &#160;The number entered here is 
+		 displayed in the Account Limits tab. &#160;The default is no limit 
+		 (blank field)</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Default Class 
+		 of Service</b></span> (COS) for the domain. If you do not enter a 
+		 COS, the default COS is used. The COS entered here is &#160;automatically 
+		 assigned to accounts created on the domain if no other COS is 
+		 entered.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Domain status</b></span>. 
+		 The <a href="changing_domain_status.htm">domain status</a> is 
+		 active in the normal state. You may want to change this status 
+		 when you setting up the domain if you are not ready to use the 
+		 domain.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Notes</b></span> 
+		 you want to add about the domain. You can also set the maximum 
+		 number of accounts that can be configured for this domain. &#160;</p></li>
+	</ul></li>
 </ol>
-<ol start="2" type="1" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Global Address List 
- Mode.</B></span> Choose the GAL mode, either <span style="font-weight: bold;"><B>Internal</B></span>, 
- <span style="font-weight: bold;"><B>External, </B></span>or <span style="font-weight: bold;"><B>Both</B></span>. 
- The default is Internal. </p></li>
+<ol start="2" type="1">
+	<li class="p"><p><span style="font-weight: bold;"><b>GAL Search Setting.</b></span> 
+	 Choose the GAL mode, either <span style="font-weight: bold;"><b>Internal</b></span>, 
+	 <span style="font-weight: bold;"><b>External,</b></span> or <span style="font-weight: bold;"><b>Both</b></span>. 
+	 The default is Internal.</p></li>
 </ol>
-<p class="whs3">(Optional) Change the maximum number of search 
- results returned for a GAL Search. &nbsp;The default 
- is 100 results. </p>
-<p class="whs3">Enter the <a href="using_the_global_address_list_(gal).htm">GAL 
+<p style="margin-left: 40px;">(Optional) Change the maximum number of search 
+ results returned for a GAL Search. &#160;The default is 100 results.</p>
+<p style="margin-left: 40px;">Enter the <a href="using_the_global_address_list_(gal).htm">GAL 
  Sync Account</a> name. This account syncs to the LDAP and all GAL contacts 
  are added to the Address Book.</p>
-<p class="whs3">Enter the data source name for the GAL sync.</p>
-<p class="whs3">If you selected an external GAL, configure 
+<p style="margin-left: 40px;">Enter the data source name for the GAL sync.</p>
+<p style="margin-left: 40px;">If you selected an external GAL, configure 
  the <a href="using_the_global_address_list_(gal).htm">external LDAP settings</a>.</p>
-<ol start="3" type="1" class="whs1">
-	<li class=p><p><span>Configure the </span><span style="font-weight: bold;"><B>Authentication 
- Mode</B></span>. </p></li>
+<p style="margin-left: 40px;">Set &#160;the Internal GAL polling interval 
+ in days, hours, minutes, or seconds. This is the frequency that the GAL 
+ sync account is updated</p>
+<ol start="3" type="1">
+	<li class="p"><p><span>Configure the</span> <span style="font-weight: bold;"><b>Authentication 
+	 Mode</b></span>.</p></li>
 </ol>
-<ul type="disc" class="whs2">
-	<li class=p><p class="whs3">If you selected <span style="font-weight: bold;"><B>Internal</B></span> 
- as the GAL mode, no other authentication mode configuration is required. 
- Click Next. </p></li>
-	<ul type="disc" class="whs2">
-		<li class=p><p class="whs4">If you selected <span 
- style="font-weight: bold;"><B>External</B></span> or <span style="font-weight: bold;"><B>Both</B></span>, 
- the next step is to configure the <a href="how_to_configure_gal.htm">LDAP 
- server</a></p></li>
-	</ul>
-	<li class=p><p class="whs3">If the authentication mechanism 
- is <span style="font-weight: bold;"><B>External LDAP</B></span> or <span style="font-weight: bold;"><B>External 
- Active Directory,</B></span> the next step is to configure the <a href="how_to_configure_authentication_mode.htm">authentication 
- mechanism</a><a class="dropspot" href="javascript:TextPopup(this)" id="a2">.</a></p>
-<div class="droptext" id="POPUP329088045" style="display: 'none'; " x-ss-type="dropdown">
- <ol type="1" class="whs1">
-  <li style="list-style: lower-alpha;" type=a class=p>
-  <p>Select either 
- <span style="font-weight: bold;"><B>External LDAP</B></span> or <span style="font-weight: bold;"><B>External 
- Active Directory</B></span>.</p></li>
-  <li style="list-style: lower-alpha;" type=a class=p>
-  <p>Enter the external 
- server name</p></li>
-  <li style="list-style: lower-alpha;" type=a class=p>
-  <p>For External 
- Active Directory, enter the active directory domain name. The external 
- server port is 389. </p></li>
-  <li style="list-style: lower-alpha;" type=a class=p>
-  <p>If you will 
- use SSL, check the box to <span style="font-weight: bold;"><B>Use 
- SSL to connect to the server.</B></span></p></li>
-  <li style="list-style: lower-alpha;" type=a class=p>
-  <p>For external 
- LDAP, enter the LDAP Bind Template name.</p></li>
-  <li style="list-style: lower-alpha;" type=a class=p>
-  <p>The Authentication 
- Settings summary page is displayed with the information you just entered. 
- Enter a username and password to test the authentication 
- settings. Click <span style="font-weight: bold;"><B>Test</B></span>. </p></li>
-  <li style="list-style: lower-alpha;" type=a class=p>
-  <p>The Authentication 
- Test Results page displays the test results. If the results failed, click 
- <span style="font-weight: bold;"><B>Previous</B></span>, to resolve the issues 
- described in the <span style="font-weight: bold;"><B>Details</B></span> text 
- box. Click <span style="font-weight: bold;"><B>Finish</B></span>, if the test 
- past. </p></li>
- </ol>
- <p class="whs3">&nbsp;</p>
- <p>&nbsp;</p>
-</div></li>
+<ul type="disc">
+	<li class="p"><p style="margin-left: 40px;">If you selected <span style="font-weight: bold;"><b>Internal</b></span> 
+	 as the GAL mode, no other authentication mode configuration is required. 
+	 Click Next.</p></li>
+	<li style="list-style: none; display: inline;"><ul type="disc">
+		<li class="p"><p style="margin-left: 0px;">If you selected <span 
+		 style="font-weight: bold;"><b>External</b></span> or <span style="font-weight: bold;"><b>Both</b></span>, 
+		 the next step is to configure the <a href="how_to_configure_gal.htm">LDAP 
+		 server</a></p></li>
+	</ul></li>
+	<li class="p"><p style="margin-left: 40px;">If the authentication mechanism 
+	 is <span style="font-weight: bold;"><b>External LDAP</b></span> or <span 
+	 style="font-weight: bold;"><b>External Active Directory,</b></span> the next 
+	 step is to configure the <a href="how_to_configure_authentication_mode.htm">authentication 
+	 mechanism</a> <a class="dropspot" href="javascript:TextPopup(this)" 
+						 id="a2">.</a></p>
+	<div class="droptext" id="POPUP433351747" style="display: none;">
+		<ol type="1">
+			<li class="p" type="a"><p>Select either <span style="font-weight: bold;"><b>External 
+			 LDAP</b></span> or <span style="font-weight: bold;"><b>External Active 
+			 Directory</b></span>.</p></li>
+			<li class="p" type="a"><p>Enter the external server name</p></li>
+			<li class="p" type="a"><p>For External Active Directory, enter 
+			 the active directory domain name. The external server port 
+			 is 389.</p></li>
+			<li class="p" type="a"><p>If you will use SSL, 
+			 check the box to <span style="font-weight: bold;"><b>Use SSL to connect to the server.</b></span></p></li>
+			<li class="p" type="a"><p>For external LDAP, enter the LDAP 
+			 Bind Template name.</p></li>
+			<li class="p" type="a"><p>The Authentication Settings summary 
+			 page is displayed with the information you just entered. Enter 
+			 a username and password to 
+			 test the authentication settings. Click <span style="font-weight: bold;"><b>Test</b></span>.</p></li>
+			<li class="p" type="a"><p>The Authentication Test Results page 
+			 displays the test results. If the results failed, click <span 
+			 style="font-weight: bold;"><b>Previous</b></span>, to resolve the 
+			 issues described in the <span style="font-weight: bold;"><b>Details</b></span> 
+			 text box. Click <span style="font-weight: bold;"><b>Finish</b></span>, 
+			 if the test past.</p></li>
+		</ol>
+		<p style="margin-left: 40px;">&#160;</p>
+		<p>&#160;</p>
+	</div></li>
 </ul>
-<ol start="4" type="1" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Virtual Hosts</B></span>. 
- (Optional) Enter the <a href="configuring_virtual_hosts.htm">virtual host 
- address</a>. Virtual hosting allows you to host more than one domain name 
- on a server. When you create a virtual host, this becomes the default 
- domain user login. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Documents</B></span>. (Optional) 
- Create the domain level Documents wiki account. Documents is a document 
- sharing and collaboration application. See <a href="../documents/about_zimbra_documents.htm">About 
- Zimbra Documents</a> </p></li>
-	<ul><li style="list-style: disc;" type=disc class=p><p>Check the box 
- to create domain Documents.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p>Enter the Documents 
- account name and password. The default account name is &quot;wiki&quot;, 
- but you can change this. &nbsp;</p></li>
-		<li style="list-style: disc;" type=disc class=p><p>On the <span 
- style="font-weight: bold;"><B>Documents Access Control</B></span> dialog, define 
- the global access control privileges. </p></li>
-		<ul type="disc" class="whs2">
-			<li class=p><p>By default all users in the domain can read, 
- write, delete, and insert (add) new pages in the Domain Documents wiki. 
- </p></li>
-			<li class=p><p>Users in all domains can be given read, write, 
- delete, and insert permissions. </p></li>
-			<li class=p><p>Public can be given read-only access to the 
- Documents pages. </p></li>
-			<li class=p><p>Members of distribution lists can be given read, 
- write, delete, and insert permissions. </p></li>
-		</ul>
-	</ul>
-	<li class=p><p class="whs4">When <span style="font-weight: bold;"><B>Finish</B></span> 
- is clicked, the domain is created.</p></li>
+<ol start="4" type="1">
+	<li class="p"><p><span style="font-weight: bold;"><b>Virtual Hosts</b></span>. 
+	 (Optional) Enter the <a href="configuring_virtual_hosts.htm">virtual 
+	 host address</a>. Virtual hosting allows you to host more than one 
+	 domain name on a server. When you create a virtual host, this becomes 
+	 the default domain user login.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Documents</b></span>. 
+	 (Optional) Documents is a document sharing and collaboration application 
+	 that enables users to create, organize and share web documents, and 
+	 other files with users on the domain. Each domain can have their own 
+	 domain documents account. You can now create the domain level Documents 
+	 wiki account and configure access privileges. &#160;&#160;See <a href="../documents/about_zimbra_documents.htm">About 
+	 Zimbra Documents</a></p>
+	<ul>
+		<li class="p" type="disc"><p>Check the box to create domain Documents.</p></li>
+		<li class="p" type="disc"><p>Enter the Documents account name and 
+		 password. The default account name is &quot;wiki&quot;, but you 
+		 can change this. &#160;</p></li>
+		<li class="p" type="disc"><p>On the <span style="font-weight: bold;"><b>Documents 
+		 Access Control</b></span> dialog, define the global access control 
+		 privileges.</p></li>
+		<li style="list-style: none; display: inline;"><ul type="disc">
+			<li class="p"><p>By default all users in the domain can read, 
+			 write, delete, and insert (add) new pages in the Domain Documents 
+			 wiki.</p></li>
+			<li class="p"><p>Users in all domains can be given read, write, 
+			 delete, and insert permissions.</p></li>
+			<li class="p"><p>Public can be given read-only access to the 
+			 Documents pages.</p></li>
+			<li class="p"><p>Members of distribution lists can be given 
+			 read, write, delete, and insert permissions.</p></li>
+		</ul></li>
+	</ul></li>
+	<li class="p"><p style="margin-left: 0px;">When <span style="font-weight: bold;"><b>Finish</b></span> 
+	 is clicked, the domain is created.</p></li>
 </ol>
-<p class="whs3">&nbsp;</p>
-<script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a2','POPUP329088045');
-//--></script><script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 40px;">&#160;</p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a2','POPUP433351747');
+//]]></script>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

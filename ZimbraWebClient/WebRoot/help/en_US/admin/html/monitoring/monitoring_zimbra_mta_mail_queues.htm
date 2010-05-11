@@ -1,34 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Monitoring Zimbra MTA Mail Queues</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { margin-left:0px; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs2 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -39,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Monitoring Tools\nMonitoring Zimbra Mail Queues");
@@ -68,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -87,74 +81,75 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Monitoring Zimbra Mail Queues</h1>
 <p>If you are having problems with mail delivery, you can view the mail 
  queues to see if you can fix the mail delivery problem. When you open 
  the Mail Queues view, you see a snapshot of the Deferred, Incoming, Active, 
  Hold, and Corrupt queues content at that point in time. The number of 
  messages in the queue is displayed on the tab and you can where messages 
- are coming from and going to. </p>
-<p><span style="font-weight: bold;"><B>Note:</B></span> When you open Mail Queues, 
- the information that is downloaded is cached. Messages continue to be 
- delivered. &nbsp;When you refresh the queue, you may 
- see different information. If your queues are large, do not refresh too 
- often while troubleshooting the queues. &nbsp;&nbsp;&nbsp;</p>
-<p>The Mail Queue panes are divided into two sections:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>The <span style="font-weight: bold;"><B>Summary/Filte</B></span>r 
- pane shows a summary of messages by receiver domain, origin IP, 
- sender domain, receiver address, sender address, and, for the Deferred 
- queue, by error type. Click on any of the summaries in the list to see 
- detailed information by messages. You can select more than one summary 
- at a time. These messages are displayed in the Messages pane. </p></li>
+ are coming from and going to.</p>
+<ul style="list-style: url('../blue_right.gif');">
+	<p class="note"><span style="font-weight: bold;"><b>Note:</b></span> When 
+	 you open Mail Queues, the information that is downloaded is cached. 
+	 Messages continue to be delivered. &#160;When you refresh the queue, 
+	 you may see different information. If your queues are large, do not 
+	 refresh too often while troubleshooting the queues. &#160;&#160;&#160;</p>
+	<p>The Mail Queue panes are divided into two sections:</p>
+	<ul type="disc">
+		<li class="p"><p>The <span style="font-weight: bold;"><b>Summary/Filte</b></span>r 
+		 pane shows a summary of messages by receiver domain, origin IP, sender domain, receiver address, sender address, 
+		 and, for the Deferred queue, by error type. Click on any of the 
+		 summaries in the list to see detailed information by messages. 
+		 You can select more than one summary at a time. These messages 
+		 are displayed in the Messages pane.</p></li>
+	</ul>
+	<ul type="disc">
+		<li class="p"><p>The <span style="font-weight: bold;"><b>Messages</b></span> 
+		 pane shows individual message envelope information for the selected 
+		 summaries. &#160;</p></li>
+	</ul>
+	<p>At any time, you can click <span style="font-weight: bold;"><b>Refresh</b></span> 
+	 to update the view.</p>
+	<p>You can manage the contents of the queues, either for all messages 
+	 in the summary or for a single message as follows:</p>
+	<ul type="disc">
+		<li class="p"><p><span style="font-weight: bold;"><b>Re queue</b></span> 
+		 messages in the queues. Message routing is re-evaluated and earlier 
+		 penalties are forgotten.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Hold</b></span> moves 
+		 messages to the Hold queue. &#160;Messages stay in this queue 
+		 until the administrator moves them.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Release</b></span> 
+		 moves messages from the Hold queue. Messages are moved to the 
+		 Deferred queue.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Delete</b></span> 
+		 messages deletes the message from the server.</p></li>
+	</ul>
+	<p style="margin-left: 0px;">Postfix queue file IDs 
+	 are reused. &#160;If you requeue or 
+	 delete a message, note the message envelope information, not the queue 
+	 ID. It is possible that when you refresh the mail queues, the queue 
+	 ID could be used on a different message.</p>
+	<h3>Flushing the Queues</h3>
+	<p>In addition to managing individual messages in a specific queue, 
+	 you can flush all queued mail on a server. When you click the Flush 
+	 button, delivery is attempted for all messages in the Deferred, Incoming, 
+	 and Active queues.</p>
+	<p>See <a href="about_mta_queues.htm">About MTA Queues</a></p>
+	<p>&#160;</p>
+	<p>&#160;</p>
+	<p>&#160;&#160;</p>
+	<p>&#160;</p>
 </ul>
-<ul type="disc" class="whs1">
-	<li class=p><p>The <span style="font-weight: bold;"><B>Messages</B></span> 
- pane shows individual message envelope information for the selected summaries. 
- &nbsp;</p></li>
-</ul>
-<p>At any time, you can click <span style="font-weight: bold;"><B>Refresh</B></span> 
- to update the view.</p>
-<p>You can manage the contents of the queues, either for all messages in 
- the summary or for a single message as follows:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Re queue </B></span>messages 
- in the queues. Message routing is re-evaluated and earlier penalties are 
- forgotten.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Hold</B></span> moves messages 
- to the Hold queue. &nbsp;Messages stay in this queue 
- until the administrator moves them. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Release</B></span> moves 
- messages from the Hold queue. Messages are moved to the Deferred queue.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Delete</B></span> messages 
- deletes the message from the server.</p></li>
-</ul>
-<p class="whs2">Postfix queue file IDs 
- are reused. &nbsp;If you requeue or 
- delete a message, note the message envelope information, not the queue 
- ID. It is possible that when you refresh the mail queues, the queue ID 
- could be used on a different message. </p>
-<h3>Flushing the Queues</h3>
-<p>In addition to managing individual messages in a specific queue, you 
- can flush all queued mail on a server. When you click the Flush button, 
- delivery is attempted for all messages in the Deferred, Incoming, and 
- Active queues.</p>
-<p>See <a href="about_mta_queues.htm">About MTA Queues</a></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

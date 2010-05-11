@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Manage Addresses</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Accounts\nManaging Addresses");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,97 +81,106 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Managing Addresses</h1>
-<p>From <span style="font-weight: bold;"><B>Addresses</B></span> area you can 
- create and manage accounts, aliases, distribution lists, and meeting resources. 
- </p>
+<p>From <span style="font-weight: bold;"><b>Addresses</b></span> &#160;in the 
+ Navigation pane you can create and manage accounts, aliases, distribution 
+ lists, and meeting resources.</p>
 <p>The toolbar for each address type shows the total number of addresses 
  for that type.</p>
-<h2>Accounts </h2>
+<h2>Accounts</h2>
 <p>You manage the following user account tasks from Accounts:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Provisioning new accounts 
- with the New Account Wizard</B></span>. You enter account name, display name, 
- password, user-specific details, assign the class of service, define aliases 
- and forwarding addresses, and select features, themes and Zimlets the 
- account can access.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Editing existing account 
- information</B></span>. &nbsp;When you open an account to 
- edit, the header displays the email name, account ID, assigned class of 
- service, account status, the mail server and the used quota for the mailbox. 
- You can change general and contact information and features, create and 
- delete alias and forwarding addresses.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Changing the password</B></span> 
- for a selected account. The <span style="font-weight: bold;"><B>Change Password</B></span> 
- link from the toolbar is a quick way to change a forgotten password. You 
- can also edit an account to change the password.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Viewing an account&rsquo;s 
- mailbox</B></span>. This lets you log on without the account&rsquo;s password 
- and view the selected account&rsquo;s mailbox content, including all folders, 
- calendar entries, and tags. This feature can be used to assist users, 
- who may be having trouble with their mail account.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Reindexing 
- a mailbox. </B></span><span>I</span>f a mailbox's index file becomes corrupt 
- or is accidentally deleted, you can re-index the messages in the mailbox.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Changing account status</B></span>. 
- Active accounts can receive and send mail. You can change an account status 
- from active to maintenance, locked, or closed. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Deleting an account</B></span>. 
- This removes the account. If you don't want to delete the account, but 
- want the account to be inaccessible, you can change the account status 
- to locked or closed.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>View the date and time 
- that the account was last accessed</B></span>. On the Account Content pane, 
- the <span style="font-weight: bold;"><B>Last Login Time</B></span> 
- column shows when the account was last accessed. You can search for accounts 
- by last login time. </p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Provisioning new 
+	 accounts with the New Account Wizard</b></span>. You enter account name, 
+	 display name, password, user-specific details, assign the class of 
+	 service, define aliases and forwarding addresses, and select features, 
+	 themes and Zimlets the account can access. You can also select to 
+	 <a href="bulk_provisioning.htm">Bulk Provision</a> accounts.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Editing existing 
+	 account information</b></span>. &#160;When you open an account to edit, 
+	 the header displays the email name, account ID, assigned class of 
+	 service, account status, the mail server and the used quota for the 
+	 mailbox. You can change general and contact information and features, 
+	 create and delete alias and forwarding addresses.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Changing the password</b></span> 
+	 for a selected account. The <span style="font-weight: bold;"><b>Change 
+	 Password</b></span> link from the toolbar is a quick way to change a forgotten 
+	 password. You can also edit an account to change the password.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Viewing an account’s 
+	 mailbox</b></span>. This lets you log on without the account’s password 
+	 and view the selected account’s mailbox content, including all folders, 
+	 calendar entries, and tags. This feature can be used to assist users, 
+	 who may be having trouble with their mail account.</p></li>
+	
+	<li class="p"><p><span style="font-weight: bold;"><b>Expire Sessions</b></span>. 
+	 &#160;This link immediately logs users out of their account. When 
+	 selecting an account from the Content pane, if you click <span style="font-weight: bold;"><b>Yes</b></span> 
+	 for Expire Sessions, the current session of the selected account is 
+	 stopped. If the user is logged in, the user sees the login page with 
+	 a notice that the session has expired. If you think the account has 
+	 been compromised, you should change the password to prevent access 
+	 to the account.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Reindexing 
+	 a mailbox.</b></span> If a mailbox's index file becomes corrupt or is 
+	 accidentally deleted, you can re-index the messages in the mailbox.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Changing account 
+	 status</b></span>. Active accounts can receive and send mail. You can 
+	 change an account status from active to maintenance, locked, or closed.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Deleting an account</b></span>. 
+	 This removes the account. If you don't want to delete the account, 
+	 but want the account to be inaccessible, you can change the account 
+	 status to locked or closed.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>View the date and 
+	 time that the account was last accessed</b></span>. On the Account Content 
+	 pane, the <span style="font-weight: bold;"><b>Last Login 
+	 Time</b></span> column shows when the account was last accessed. You can 
+	 search for accounts by last login time.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>View when the account 
+	 was created</b></span>. &#160;This information is on the account header.</p></li>
 </ul>
 <h2>Aliases</h2>
 <p>An alias is an email address that forwards all email to a specified 
- account. An alias is not an email account. You can create, delete, and 
- move aliases. You can view all created aliases from the <span style="font-weight: bold;"><B>Aliases</B></span> 
- content pane. To see which account an alias is configured for, hover the 
- mouse over the alias address. A tool tip shows the account associated 
- with the alias. &nbsp;From the Aliases toolbar, you can 
- create new aliases for an account and move aliases from one account to 
- another. </p>
+ account. &#160;An alias is not an email account. You can create, delete, 
+ and move aliases. &#160;You can view all created aliases from the <span 
+	 style="font-weight: bold;"><b>Aliases</b></span> content pane. To see which 
+ account an alias is configured, hover the mouse over the alias address. 
+ A tool tip shows the account associated with the alias.</p>
 <h2>Distribution Lists</h2>
 <p>A distribution list is a group of mail addresses contained in a list 
  with a common mail address. When you send to a distribution list, you 
- are sending to everyone whose address is included in the list. The<span 
- style="font-weight: bold;"><B> To:</B></span> address line displays the distribution 
+ are sending to everyone whose address is included in the list. The <span 
+	 style="font-weight: bold;"><b>To:</b></span> address line displays the distribution 
  list address; the individual recipient addresses cannot be viewed. You 
  can create, modify, and delete distribution lists for your domain. You 
  can view which other distribution lists this list is a member of and you 
  can add or remove distribution lists from other distribution lists.</p>
 <h2>Resources</h2>
 <p>A resource is a location or a piece of equipment that can be scheduled 
- for meetings. You can create and manage these resources. Resources are 
- setup with a mailbox and can be configured to accept and reject invitations 
- automatically. </p>
-<p>&nbsp;</p>
+ for meetings. You can create and manage these resources. &#160;Resources 
+ are setup with a mailbox and can be configured to accept and reject invitations 
+ automatically.</p>
+<p>&#160;</p>
 <p>
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'_blank','Changing a Password','../passwords/changing_a_password.htm','Changing Account Status','changing_account_status.htm','Class of Service','../cos/class_of_service.htm','Create an Account','create_an_account.htm','Creating a Mail Aliases','creating_a_mail_aliases.htm','Creating a Resource','managing_resource.htm','Creating Distribution Lists','distribution_lists.htm','User Interface Features','user_interface_features.htm','Viewing User\'s Mailbox Content','../monitoring/viewing_user_s_mailbox_content.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border=0 height=17 width=81 alt="Related Topics"></a>
+
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'_blank','Changing a Password','../passwords/changing_a_password.htm','Changing Account Status','changing_account_status.htm','Class of Service','../cos/class_of_service.htm','Create an Account','create_an_account.htm','Creating a Mail Aliases','creating_a_mail_aliases.htm','Creating a Resource','managing_resource.htm','Creating Distribution Lists','distribution_lists.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border="0" height="17" width="81" alt="Related Topics" /></a>
 
 
  </p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

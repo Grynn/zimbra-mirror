@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Enhancing the Zimbra Admin Console User Interface</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Using the Admin Console\nEnhancing the Zimbra Admin Console User Interface");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,45 +81,43 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Enhancing the Zimbra Admin Console User Interface</h1>
 <p>You can create custom modules to add to the Zimbra administration console 
  interface and then you can use the administration console to easily upload 
- and install the modules you created. &nbsp;</p>
-<ul><li class=p-note><p class=note>Click <a href="http://wiki.zimbra.com/index.php?title=Extending_Admin_UI" 
- target=_blank>Extending Admin UI</a> to for documentation about how to 
- create an extended administration console UI module.</p></li>
+ and install the modules you created. &#160;</p>
+<ul>
+	<ul style="list-style: url('../blue_right.gif');">
+<li class="p-note"><p class="note">Click <a href="http://wiki.zimbra.com/index.php?title=Extending_Admin_UI" 
+												 target="_blank">Extending 
+	 Admin UI</a> for documentation about how to create an extended administration 
+	 console UI module.</p></li>
 </ul>
-<p>The Zimbra &nbsp;extensions to the administration console 
- UI are listed in the content pane as view only. Any extension that you 
- add can be <a href="removing_admin_extension_modules.htm">removed</a>. 
- </p>
+<p>The Zimbra &#160;extensions to the administration console UI are listed 
+ in the content pane as view only. Any extension that you add can be <a href="removing_admin_extension_modules.htm">removed</a>.</p>
 <h6>How to deploy new administration console UI modules</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Save the module zip file to the computer you use to 
- access the administration console.</p></li>
-	<li class=p><p>Log on to the administration console and in the navigation 
- pane's Configuration section, click <span style="font-weight: bold;"><B>Admin 
- Extensions</B></span>. The Admin Extensions content pane is displayed. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Deploy new</B></span>. 
- The <span style="font-weight: bold;"><B>Deploying a Zimlet or an extension 
- </B></span>dialog opens. Browse to the custom module zip file to be uploaded. 
- </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Deploy</B></span>. 
- &nbsp;The file is uploaded and the extension is immediately 
- deployed on the server.</p></li>
+<ol type="1">
+	<li class="p"><p>Save the module zip file to the computer you use to 
+	 access the administration console.</p></li>
+	<li class="p"><p>Log on to the administration console and in the Navigation 
+	 pane's Configuration section, click <span style="font-weight: bold;"><b>Admin 
+	 Extensions</b></span>. The Admin Extensions content pane is displayed.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Deploy</b></span>. 
+	 The <span style="font-weight: bold;"><b>Deploying a Zimlet or an extension</b></span> 
+	 dialog opens. Browse to the custom module zip file to be uploaded.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Deploy</b></span>. 
+	 &#160;The file is uploaded and the extension is immediately deployed 
+	 on the server.</p></li>
 </ol>
-<h6>&nbsp;</h6>
-<script type="text/javascript" language="javascript1.2">
+<h6>&#160;</h6>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

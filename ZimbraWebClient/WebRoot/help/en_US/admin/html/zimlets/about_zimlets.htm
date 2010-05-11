@@ -1,28 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Managing Zimlets</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { text-align:center; }
-img_whs3 { border:none; width:158px; height:123px; float:none; border-style:none; }
-img_whs4 { border:none; width:123px; height:62px; float:none; border-style:none; }
-img_whs5 { border:none; width:158px; height:134px; float:none; border-style:none; }
-img_whs6 { border:none; width:353px; height:72px; float:none; border-style:none; }
-img_whs7 { border:none; width:156px; height:73px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -33,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Zimlets\nAbout Zimlets");
@@ -62,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -81,89 +81,86 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Managing Zimlets</h1>
-<p>Zimlets<symbol name=Trademark>&#8482; is a mechanism 
- for integrating the Zimbra Collaboration Suite with third party information 
- systems and content. Zimlets are also used to intermix user interface 
- within the Zimbra Web Client for Email, Calendar, Address Book, and Documents 
- applications. You can create other Zimlets so that users can interact 
- with your company resources or other defined applications from the Zimbra 
- Web Client. </p>
-<ul><li class=p-note><p class=note>For information about how to develop 
- and configure Zimlets see the <span style="font-style: italic;"><I>Zimlet 
- Development on the <a href="http://wiki.zimbra.com/index.php?title=Main_Page" 
- target=_blank>Zimbra wiki</a></I></span>. &nbsp;Go to the 
- Zimbra gallery<a title="Zimbra Gallery" href="http://gallery.zimbra.com/" 
- target=_blank>, http://gallery.zimbra.com</a>, to see 
- the type of Zimlets that can be used within the ZCS. &nbsp;</p></li>
+<p>Zimlets™ is a 
+ mechanism for integrating the Zimbra Collaboration Suite with third party 
+ information systems and content. Zimlets are also used to intermix user 
+ interface within the Zimbra Web Client for Email, Calendar, Address Book, 
+ and Documents applications. You can create other Zimlets so that users 
+ can interact with your company resources or other defined applications 
+ from the Zimbra Web Client.</p>
+<ul>
+	<ul style="list-style: url('../blue_right.gif');">
+		<li class="p-note"><p class="note">For information about how to 
+		 develop and configure Zimlets see the <span style="font-style: italic;"><i>Zimlet 
+		 Development on the <a href="http://wiki.zimbra.com/index.php?title=Main_Page" 
+								 target="_blank">Zimbra wiki</a></i></span>. 
+		 &#160;Go to the Zimbra gallery<a title="Zimbra Gallery" href="http://gallery.zimbra.com/" 
+											 target="_blank">, http:// gallery.zimbra.com</a>, to see the 
+		 type of Zimlets that can be used within the ZCS. &#160;</p></li>
+	</ul>
+	<p>From the administration console, you can add new Zimlets, set access 
+	 privileges by COS and by individual accounts, and disable and uninstall Zimlets from ZCS. &#160;Users can disable 
+	 and enable Zimlets that are not mandatory from their <span style="font-weight: bold;"><b>Preferences&gt;Zimlets</b></span> 
+	 page.</p>
+	<p>If you create a Zimlet that needs additional configuration after 
+	 deployment, you will need to use the ZCS CLI to access and change 
+	 the Zimlet configuration. See the <span style="font-style: italic;"><i>Working 
+	 with Zimlets</i></span> chapter in the Administrator's Guide for details.</p>
+	<p>Zimlets that are deployed are listed on the Zimlets contents pane. 
+	 You can remove Zimlets, disable and enable them from the Zimlets content 
+	 pane.</p>
+	<h2>Default Zimlets Enabled on ZCS</h2>
+	<p>ZCS includes pre-configured Zimlets that enhance the user experience 
+	 while working in the Zimbra Web Client. These Zimlets are already 
+	 deployed and made available from the COS. &#160;You can manage which 
+	 Zimlets are available to users from the COS Zimlets tab.</p>
+	<ul type="disc">
+		<li class="p"><p><span style="font-weight: bold;"><b>com_zimbra_date</b></span>. When users click 
+		 on a date either in the email or on the mini-calendar, their calendar 
+		 schedule for that date displays.</p></li>
+	</ul>
+	<p align="center"><img src="../calendarzimlet2.png" alt="calendarzimlet2.png" style="border: none;" width="158" height="123" border="0" /></p>
+	<ul>
+		<ul style="list-style: url('../blue_right.gif');">
+<li class="p-note"><p class="note">If you disable the date Zimlet, 
+		 the QuickAdd feature and the ability to click on a day and go 
+		 to that date in the calendar does not work.</p></li>
+	</ul>
+	<ul type="disc">
+		<li class="p"><p><span style="font-weight: bold;"><b>com_zimbra_email</b></span>. Highlights 
+		 and previews associated contact for an email address. Users can 
+		 see complete contact information if it is available in their address 
+		 books.</p></li>
+	</ul>
+	<p align="center"><img src="../emailzimlet.png" alt="emailzimlet.png" style="border: none;" width="123" height="62" border="0" /></p>
+	<ul type="disc">
+		<li class="p"><p><span style="font-weight: bold;"><b>com_zimbra_url</b></span>. This highlights 
+		 and links URLs. Users can quickly go to the web site specified 
+		 in an email message.</p></li>
+	</ul>
+	<p align="center">&#160;</p>
+	<ul type="disc">
+		<li class="p"><p><span style="font-weight: bold;"><b>com_zimbra_phone</b></span>. Users can click 
+		 on a phone number that displays in any of the application pages 
+		 to quickly call that number if they have the installed a VOIP software application such as Skype 
+		 or Cisco VOIP. 
+		 &#160;When they click on the phone number, the VOIP 
+		 application is launched.</p></li>
+	</ul>
+	<p align="center"><img src="../phonezimlet.png" alt="phonezimlet.png" style="border: none;" width="353" height="72" border="0" /></p>
+	<p>&#160;</p>
+	<p>&#160;</p>
 </ul>
-<p>From the administration console, you can add new Zimlets, set access 
- privileges by COS and by individual accounts, and disable and uninstall 
- Zimlets from ZCS. &nbsp;Users can disable and enable 
- these Zimlets from their <span style="font-weight: bold;"><B>Preferences&gt;Zimlets</B></span> 
- folder. </p>
-<p>If you create a Zimlet that needs additional configuration after deployment, 
- you will need to use the ZCS CLI to access and change the Zimlet configuration. 
- See the <span style="font-style: italic;"><I>Working with Zimlets</I></span> 
- chapter in the Administrator's Guide for details.</p>
-<p>Zimlets that are deployed are listed on the Zimlets contents pane. You 
- can remove Zimlets, disable and enable them from the Zimlets content pane. 
- </p>
-<h2>Default Zimlets Enabled on ZCS</h2>
-<p>ZCS includes pre-configured Zimlets that enhance the user experience 
- while working in the Zimbra Web Client. These Zimlets are already deployed 
- and made available from the COS. &nbsp;You can manage 
- which Zimlets are available to users from the COS Zimlets tab.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>com_zimbra_date</B></span>. 
- When users click on a date either in the email or on the mini-calendar, 
- their calendar schedule for that date displays.</p></li>
-</ul>
-<p align="center" class="whs2"><img src="../calendarzimlet2.png" x-maintain-ratio="TRUE" width="158px" height="123px" border="0" class="img_whs3"></p>
-<ul><li class=p-note><p class=note>If you disable the date Zimlet, the 
- QuickAdd feature and the ability to click on a day and go to that date 
- in the calendar does not work.</p></li>
-</ul>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>com_zimbra_email</B></span>. 
- Users can see complete contact information if it is available in their 
- address books. </p></li>
-</ul>
-<p align="center" class="whs2"><img src="../emailzimlet.png" x-maintain-ratio="TRUE" width="123px" height="62px" border="0" class="img_whs4"></p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>com_zimbra_url</B></span>. 
- Users can see a thumbnail of the website that is listed 
- in an email message if it is available. They see the screen below if it 
- is not available.</p></li>
-</ul>
-<p align="center" class="whs2"><img src="../thumbnail.png" x-maintain-ratio="TRUE" width="158px" height="134px" border="0" class="img_whs5"></p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>com_zimbra_phone</B></span>. 
- Users can click on a phone number that displays in any of the application 
- pages to quickly call that number if they have the installed a VOIP 
- software application such as Skype or Cisco 
- VOIP. &nbsp;When they click on the 
- phone number, the VOIP application is launched.</p></li>
-</ul>
-<p align="center" class="whs2"><img src="../phonezimlet.png" x-maintain-ratio="TRUE" width="353px" height="72px" border="0" class="img_whs6"></p>
-<p>&nbsp;</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>com_zimbra_search</B></span>. 
- This Zimlet allows users to select to search the Web from Zimbra Search</p></li>
-</ul>
-<p align="center" class="whs2"><img src="../websearch.png" x-maintain-ratio="TRUE" width="156px" height="73px" border="0" class="img_whs7"></p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

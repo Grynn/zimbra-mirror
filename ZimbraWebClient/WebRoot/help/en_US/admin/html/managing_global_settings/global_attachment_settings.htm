@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Global Attachment Settings</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Global Settings\nGlobal Attachment Settings");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,37 +81,40 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Global Attachment Settings</h1>
 <p>Classes of Service and accounts can be configured with rules to reject 
- mail with specific attachment types, and to disable viewing 
- files attached to mail messages. </p>
-<ul><li class=p-note><p class=note>When attachment settings are configured 
- in Global Settings, the global rule takes precedence over COS and Account 
- settings.</p></li>
+ mail with specific attachment types, and to disable 
+ viewing files attached to mail messages.</p>
+<ul>
+	<ul style="list-style: url('../blue_right.jpg');">
+		<li class="p-note"><p class="note">When attachment settings are 
+		 configured in Global Settings, the global rule takes precedence 
+		 over COS and Account settings.</p></li>
+	</ul>
+	<p>The attachment settings are as follows:</p>
+	<ul type="disc">
+		
+		<li class="p"><p><span style="font-weight: bold;"><b>Attachments are 
+		 viewed according to COS</b></span>. The COS sets the rules for how 
+		 email attachments are viewed.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Reject messages 
+		 with attachment extension</b></span> lets you select which file types 
+		 are unauthorized for all accounts. The most common extensions 
+		 are listed. You can also add different extension types to the 
+		 list. Messages with those type of files attached are rejected 
+		 and the sender gets a bounce notice. The recipient does not get 
+		 the mail message and is not notified.</p></li>
+	</ul>
 </ul>
-<p>The attachment settings are as follows:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Attachments are viewed 
- according to COS</B></span>. The COS sets the rules for how email attachments 
- are viewed.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Reject messages with 
- attachment extension</B></span> lets you select which file types are unauthorized 
- for all accounts. The most common extensions are listed. You can also 
- add different extension types to the list. Messages with those type of 
- files attached are rejected and the sender gets a bounce notice. The recipient 
- does not get the mail message and is not notified.</p></li>
-</ul>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

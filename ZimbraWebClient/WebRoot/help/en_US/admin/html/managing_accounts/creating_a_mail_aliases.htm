@@ -1,24 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="MS-HAID" content="Mail Aliases" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Creating a Mail Aliases</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; width:21px; height:20px; float:none; border-style:none; }
-ol.whs2 { list-style:decimal; }
-img_whs3 { border:none; width:20px; height:18px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +20,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Accounts\nAccounts\nManaging Alias Addresses");
@@ -58,10 +65,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -77,71 +82,73 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Managing Alias Addresses</h1>
 <p>An email alias is an email address that redirects all mail to a specified 
  mail account. An alias is not an email account. An unlimited number of 
- aliases can be created for an account. </p>
-<p>You can view all aliases from the <span style="font-weight: bold;"><B>Aliases</B></span> 
+ aliases can be created for an account.</p>
+<p>You can view all aliases from the <span style="font-weight: bold;"><b>Aliases</b></span> 
  content pane. To see which account an alias is configured for, hover the 
  mouse over the alias address. The tool tip shows the account associated 
- with the alias. </p>
+ with the alias.</p>
 <p>Aliases can be created when you create a new account and can be added 
  or changed in existing accounts. From the Aliases toolbar, you can also 
  create new aliases for an account and move aliases from one account to 
- another. </p>
+ another.</p>
 <h6>To add an alias to an existing account:</h6>
-<ol class=whs1 style="list-style: decimal;" type=1>
-	<li class=p><p>On the navigation pane, click <span class=attribute>Accounts</span>.</p></li>
-	<li class=p><p>Double-click the account to which the alias will be 
- added, or highlight the account and click <span style="font-weight: bold;"><B>Edit</B></span>.</p></li>
-	<li class=p><p>Click the <span class=attribute>Aliases</span> tab.</p></li>
-	<li class=p><p>Enter the &nbsp;mail address and select 
- a domain from the drop-down menu, to complete the address.</p></li>
-	<li class=p><p>Click <img src="../plusbutton.gif" x-maintain-ratio="TRUE" width="21px" height="20px" border="0" class="img_whs1">. The alias displays in the list.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>Save,</b></B></span> 
- to commit your changes.</p></li>
+<ol class="whs1" type="1">
+	
+	<li class="p"><p>Double-click the account to which the alias will be 
+	 added, or highlight the account and click <span style="font-weight: bold;"><b>Edit</b></span>.</p></li>
+	<li class="p"><p>Click the <span class="attribute">Aliases</span> tab.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Add</b></span>. 
+	 </p></li>
+	<li class="p"><p>Enter the &#160;mail address and a domain, to complete 
+	 the address.</p></li>
+	<li class="p"><p>Click <b><span style="font-weight: bold;"><b>Save</b></span><span 
+	 style="font-weight: normal;">,</span></b> to commit your changes.</p></li>
 </ol>
 <h6>To move an alias to another account</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>On the navigation pane, click <span style="font-weight: bold;"><B>Aliases</B></span>.</p></li>
-	<li class=p><p>Highlight the alias address to move, and click <span 
- style="font-weight: bold;"><B>Move Alias</B></span>. </p></li>
-	<li class=p><p>In the<span style="font-weight: bold;"><B> Select an account</B></span> 
- dialog, enter a name or partial name and click <span style="font-weight: bold;"><B>Search</B></span>.</p></li>
-	<li class=p><p>Select the account to which the alias will be moved. 
- </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. &nbsp;The 
- alias address is removed from the previous account and added to the moved-to 
- account.</p></li>
+<ol type="1">
+	<li class="p"><p>On the navigation 
+	 pane, click <span style="font-weight: bold;"><b>Aliases</b></span>.</p></li>
+	<li class="p"><p>Highlight the 
+	 alias address to move, and click <span style="font-weight: bold;"><b>Move 
+	 Alias</b></span>. </p></li>
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Select 
+	 an account</b></span> dialog, enter a name or partial name and click <span 
+	 style="font-weight: bold;"><b>Search</b></span>.</p></li>
+	<li class="p"><p>Select the account 
+	 to which the alias will be moved.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>OK</b></span>. 
+	 &#160;The alias address is removed from the previous account and added 
+	 to the moved-to account.</p></li>
 </ol>
 <h6>To remove an alias from a specific account:</h6>
-<ol class=whs1 style="list-style: decimal;" type=1>
-	<li class=p><p>On the navigation pane, click <span class=attribute>Accounts</span>.</p></li>
-	<li class=p><p>Double-click the account from which to remove the alias, 
- or highlight the account and click <span style="font-weight: bold;"><B>Edit</B></span>.</p></li>
-	<li class=p><p>Click the <span class=attribute>Aliases</span> tab.</p></li>
-	<li class=p><p>Select the alias to remove and click <img src="../-button.gif" x-save-file="TRUE" x-save-method="compute-relative" x-maintain-ratio="TRUE" width="20px" height="18px" border="0" class="img_whs3">.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>Save,</b></B></span> 
- to commit your changes.</p></li>
+<ol class="whs1" type="1">
+	
+	<li class="p"><p>Double-click the account from which to remove the 
+	 alias, or highlight the account and click <span style="font-weight: bold;"><b>Edit</b></span>.</p></li>
+	<li class="p"><p>Click the <span class="attribute">Aliases</span> tab.</p></li>
+	<li class="p"><p>Select the alias to remove and click <span style="font-weight: bold;"><b>Delete</b></span>.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b><b>Save,</b></b></span> 
+	 to commit your changes.</p></li>
 </ol>
 <h6>To remove an alias from the Alias List:</h6>
-<ol class=whs1 style="list-style: decimal;" type=1>
-	<li class=p><p>On the navigation pane, click <span class=attribute>Aliases</span>.</p></li>
-	<li class=p><p>Double-click the alias address to be deleted</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Delete</B></span>. 
- The alias address is removed from the account and from the alias list.</p></li>
+<ol class="whs1" type="1">
+	
+	<li class="p"><p>Double-click the alias address to be deleted</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Delete</b></span>. 
+	 The alias address is removed from the account and from the alias list.</p></li>
 </ol>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

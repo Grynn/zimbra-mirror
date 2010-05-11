@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Configuring Virtual Hosts</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Domains\nConfiguring Virtual Hosts");
@@ -52,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,46 +81,45 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Configuring Virtual Hosts</h1>
 <p>Virtual hosting allows you to host more than one domain name on a server. 
  The general domain configuration does not change. When you create a virtual 
  host, Zimbra Web Client users can log in without having to specify the 
- domain name as part of their user name. </p>
-<p>Virtual hosts are entered on the <span style="font-weight: bold;"><B>Domains&gt;Virtual 
- Hosts</B></span> tab. The virtual host requires a valid DNS configuration 
- with an A record. </p>
+ domain name as part of their user name.</p>
+<p>Virtual hosts are entered on the <span style="font-weight: bold;"><b>Domains&gt;Virtual 
+ Hosts</b></span> tab. The virtual host requires a valid DNS configuration 
+ with an A record.</p>
 <p>To get to the Zimbra Web Client login, users enter the virtual host 
- name as the URL address. For example, <span style="font-weight: bold;"><B>https://mail.company.com</B></span>. 
- </p>
+ name as the URL address. For example, <span style="font-weight: bold;"><b>https:// mail.company.com</b></span>.</p>
 <p>When the Zimbra Web Client log in screen displays, users enter only 
  their user name and password. The authentication request searches for 
  a domain with that virtual host name. When the virtual host is found, 
- the authentication is completed against that domain. </p>
+ the authentication is completed against that domain.</p>
 <h3>How to add Virtual Hosts</h3>
-<ul><li class=p-note><p class=note>Make sure that the virtual host has 
- a valid DNS name and an A record.</p></li>
+<ul>
+	<li class="p-note"><p class="note">Make sure that the virtual host 
+	 has a valid DNS name and an A record.</p></li>
 </ul>
-<ol start=1><li style="list-style: decimal;" type=1 class=p><p>From the 
- administration console, click <span style="font-weight: bold;"><B>Domains</B></span>, 
- select the domain name and click <span style="font-weight: bold;"><B>Edit</B></span>.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p>Click the <span 
- style="font-weight: bold;"><B>Virtual Hosts</B></span> tab to open the page. 
- Enter the complete Virtual Host Name in the box on the page. To add more 
- virtual host names, click <span style="font-weight: bold;"><B>Add virtual 
- host </B></span>and continue to add a name.</p></li>
+<ol start="1">
+	<li class="p" type="1"><p>From the administration console, click <span 
+	 style="font-weight: bold;"><b>Domains</b></span>, select the domain name 
+	 and click <span style="font-weight: bold;"><b>Edit</b></span>.</p></li>
+	<li class="p" type="1"><p>Click the <span style="font-weight: bold;"><b>Virtual 
+	 Hosts</b></span> tab to open the page. Enter the complete Virtual Host 
+	 Name in the box on the page. To add more virtual host names, click 
+	 <span style="font-weight: bold;"><b>Add virtual host</b></span> and continue 
+	 to add a name.</p></li>
 </ol>
 <p>You can also set up virtual hosts when you configure a new domain.</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

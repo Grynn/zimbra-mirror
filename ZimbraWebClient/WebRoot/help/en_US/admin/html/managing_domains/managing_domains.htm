@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Managing Domains</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Domains\nManaging Domains");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,83 +81,61 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Managing Domains</h1>
-<p>One domain is identified during the installation process and additional 
- domains can be added from the administration console. </p>
-<p>When you create a new domain, the <span style="font-weight: bold;"><B><a href="creating_a_domain.htm">Create New Domain</a></B></span> wizard guides 
- you through the required steps. After a domain is created you can edit 
- the configuration. </p>
-<p>To edit a domain, click <span style="font-weight: bold;"><B>Domains</B></span> 
- and select the domain. The Domain toolbar becomes active. From the toolbar 
- you can configure GAL and Authentication directly, or you can click <span 
- style="font-weight: bold;"><B>Edit</B></span> to access the Domain configuration 
- tabs.</p>
+<p>One domain is identified during the installation process and additional domains can be added from the administration console.</p>
+<p>When you create a new domain, the <span style="font-weight: bold;"><b><a href="creating_a_domain.htm">Create New Domain</a></b></span> wizard guides you through the required steps. After a domain is created you can edit the configuration.</p>
+<p>To edit a domain, click <span style="font-weight: bold;"><b>Domains</b></span> and select the domain. The Domain toolbar becomes active. From the toolbar you can configure GAL and Authentication directly, or you can click <span style="font-weight: bold;"><b>Edit</b></span> to access the Domain configuration tabs.</p>
 <p>For each domain, you can configure the following:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Domain <span style="font-weight: bold;"><B>General</B></span> 
- settings, including domain name, description, the number of accounts that 
- can be created on the domain, default Class of Service assigned to the 
- domain, and the time zone for accounts provisioned on this domain.</p></li>
-	<li class=p><p>Domain <span style="font-weight: bold;"><B>GAL</B></span> settings. 
- Options are <span style="font-weight: bold;"><B>Internal</B></span> LDAP server, 
- <span style="font-weight: bold;"><B>External</B></span> LDAP server or <span 
- style="font-weight: bold;"><B>Both</B></span> for GAL lookups and the number 
- of results returned for a GAL search.</p></li>
-	<li class=p><p>Domain <span style="font-weight: bold;"><B>Authentication</B></span> 
- settings. Options are <span style="font-weight: bold;"><B>Internal</B></span>, 
- <span style="font-weight: bold;"><B>External</B></span> <span style="font-weight: bold;"><B>LDAP</B></span>, 
- or <span style="font-weight: bold;"><B>External</B></span> <span style="font-weight: bold;"><B>Active</B></span> 
- <span style="font-weight: bold;"><B>Directory</B></span></p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Virtual Hosts</B></span> 
- that are used to establish a default domain for user login. </p></li>
-	<li class=p><p>The domain <span style="font-weight: bold;"><B>Documents</B></span> 
- account and who has permissions to access the Documents pages.</p></li>
-	<li class=p><p>Free/Busy<span style="font-weight: bold;"><B> Interop</B></span> 
- to used to set up free/busy scheduling across a mix of ZCS servers and 
- third party email servers in the domain. See <span style="font-weight: bold;"><B><a href="../managing_global_settings/making_free_busy_view__available_.htm">Making 
- Free/Busy View Available</a></B></span></p></li>
-	<li class=p><p class="whs2">Zimlets<span style="font-weight: normal;"> 
- that are available for the domain. </span></p></li>
-	<li class=p><p class="whs2"><span style="font-weight: normal;">Use 
- the </span>Themes<span style="font-weight: normal;"> tab to quickly </span><span 
- style="font-weight: normal;">change the colors used for the client interface. 
- See </span><a href="../ui_themes/how_to_customize_theme_colors_and_logos.htm">Quick 
- Custom Color</a>.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Account Limits </B></span><span>on 
- the domain. You can set the maximum number of accounts and maximum accounts 
- per COS.</span></p></li>
+<ul type="disc">
+<li class="p">
+<p>Domain <span style="font-weight: bold;"><b>General</b></span> settings, including domain name, description, the number of accounts that can be created on the domain, default Class of Service assigned to the domain, and the time zone for accounts provisioned on this domain.</p>
+</li>
+<li class="p">
+<p>Domain <span style="font-weight: bold;"><b>GAL</b></span> settings. Options are <span style="font-weight: bold;"><b>Internal</b></span> LDAP server, <span style="font-weight: bold;"><b>External</b></span> LDAP server or <span style="font-weight: bold;"><b>Both</b></span> for GAL lookups and the number of results returned for a GAL search.</p>
+</li>
+<li class="p">
+<p>Domain <span style="font-weight: bold;"><b>Authentication</b></span> settings. Options are <span style="font-weight: bold;"><b>Internal</b></span>, <span style="font-weight: bold;"><b>External</b></span> <span style="font-weight: bold;"><b>LDAP</b></span>, or <span style="font-weight: bold;"><b>External</b></span> <span style="font-weight: bold;"><b>Active</b></span> <span style="font-weight: bold;"><b>Directory</b></span></p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Virtual Hosts</b></span> that are used to establish a default domain for user login.</p>
+</li>
+<li class="p">
+<p>The domain <span style="font-weight: bold;"><b>Documents</b></span> account and who has permissions to access the Documents pages.</p>
+</li>
+<li class="p">
+<p>Free/Busy <span style="font-weight: bold;"><b>Interop</b></span> to used to set up free/busy scheduling across a mix of ZCS servers and third party email servers in the domain. See <span style="font-weight: bold;"><b><a href="../managing_global_settings/making_free_busy_view__available_.htm">Making Free/Busy View Available</a></b></span></p>
+</li>
+<li class="p">
+<p style="font-weight: bold;">Zimlets <span style="font-weight: normal;">that are available for the domain.</span></p>
+</li>
+<li class="p">
+<p style="font-weight: bold;"><span style="font-weight: normal;">Use the</span> Themes <span style="font-weight: normal;">tab to quickly</span> 
+<span style="font-weight: normal;">change the colors used for the client interface. See</span> <a href="../ui_themes/how_to_customize_theme_colors_and_logos.htm">Quick Custom Color</a>.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Account Limits</b></span> <span>on the domain. You can set the maximum number of accounts and maximum accounts per COS.</span></p>
+</li>
 </ul>
 <h6>View Accounts on Domains</h6>
-<p>You can view a list of all accounts on a domain. Select the domain and 
- click <span style="font-weight: bold;"><B>View Accounts</B></span> on the domain 
- toolbar. The results display in the Content pane. </p>
-<p>You can save the results displayed in the Content pane to a .csv file. 
- Click <span style="font-weight: bold;"><B>Download</B></span> on the domain toolbar. 
- The can select the location to save the .csv file.</p>
-<p>To <a href="changing_a_domain_name.htm">change a domain name</a> use 
- the CLI utility, <span class=code>zmprov</span>.</p>
-<p>&nbsp;</p>
-<p>
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'_blank','Configure the Global Address List','using_the_global_address_list_(gal).htm','Configuring Authentication Settings','authentication_settings.htm','Configuring Virtual Hosts','configuring_virtual_hosts.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border=0 height=17 width=81 alt="Related Topics"></a>
-
-
- </p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+<p>You can view a list of all accounts on a domain. Select the domain and click <span style="font-weight: bold;"><b>View Accounts</b></span> on the domain toolbar. The results display in the Content pane.</p>
+<p>You can save the results displayed in the Content pane to a .csv file. Click <span style="font-weight: bold;"><b>Download</b></span> on the domain toolbar. The can select the location to save the .csv file.</p>
+<p>To <a href="changing_a_domain_name.htm">change a domain name</a> use the CLI utility, <span class="code">zmprov</span>.</p>
+<p>&#160;</p>
+<p><a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'_blank','Configure the Global Address List','using_the_global_address_list_(gal).htm','Configuring Authentication Settings','authentication_settings.htm','Configuring Virtual Hosts','configuring_virtual_hosts.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border="0" height="17" width="81" alt="Related Topics" /></a> </p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

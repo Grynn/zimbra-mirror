@@ -1,34 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Bulk Provisioning</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-table.whs1 { x-cell-content-align:top; border-spacing:0px; float:aligncenter; }
-col.whs2 { width:188px; }
-col.whs3 { width:102px; }
-col.whs4 { width:144px; }
-tr.whs5 { x-cell-content-align:top; }
-td.whs6 { width:188px; border-left-width:1px; border-left-color:#000000; border-left-style:Solid; border-top-style:Solid; border-top-color:#000000; border-top-width:1px; border-right-width:1px; border-right-color:#000000; border-right-style:Solid; border-bottom-style:Solid; border-bottom-color:#000000; border-bottom-width:1px; padding-right:10px; padding-left:10px; }
-p.whs7 { font-weight:bold; }
-p.whs8 { font-size:11pt; }
-td.whs9 { width:102px; border-top-style:Solid; border-top-color:#000000; border-top-width:1px; border-right-width:1px; border-right-color:#000000; border-right-style:Solid; border-bottom-style:Solid; border-bottom-color:#000000; border-bottom-width:1px; padding-right:10px; padding-left:10px; }
-td.whs10 { width:144px; border-top-style:Solid; border-top-color:#000000; border-top-width:1px; border-right-width:1px; border-right-color:#000000; border-right-style:Solid; border-bottom-style:Solid; border-bottom-color:#000000; border-bottom-width:1px; padding-right:10px; padding-left:10px; }
-ul.whs11 { list-style:disc; }
-col.whs12 { width:319px; }
-td.whs13 { width:319px; padding-right:10px; padding-left:10px; border-left-style:Solid; border-top-style:Solid; border-right-style:Solid; border-bottom-style:Solid; border-left-width:1px; border-top-width:1px; border-bottom-width:1px; border-right-width:1px; background-color:#cce5ff; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -39,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Accounts\nAccounts\nBulk Provisioning");
@@ -68,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -87,89 +81,86 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Using Bulk Provisioning to Create Accounts</h1>
-<p>Use the <span style="font-weight: bold;"><B>Bulk Provisioning</B></span> link 
- on the administration console Account Addresses toolbar to provision many 
- accounts at once. These accounts are provisioned with a user name, display 
- name, and password configured.</p>
-<p>You create a .csv file with three columns, separated 
- by a comma (,). Each row is an account entry. &nbsp;The 
- account information is configured as:</p>
-<div align=center>
-<table x-use-null-cells cellspacing="0" class="whs1">
-<script language='JavaScript'><!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4)) document.write("</table><table x-use-null-cells cellspacing='0' border='1' bordercolor='black' bordercolorlight='black' bordercolordark='black'>");
-//--></script>
-<col class="whs2">
-<col class="whs3">
-<col class="whs4">
+//]]></script>
+<h1>Using Bulk Provisioning to Create 
+ Accounts  
+ </h1>
 
-<tr valign="top" class="whs5">
-<td width="188px" class="whs6">
-<p class="whs7">Column 1 </p>
-<p>&nbsp;</p>
-<p class="whs8">AccountName@example.com</td>
-<td width="102px" class="whs9">
-<p><span style="font-weight: bold;"><B>Column 2</B></span> </p>
-<p>&nbsp;</p>
-<p class="whs8">Display Name</td>
-<td width="144px" class="whs10">
-<p class="whs7">Column 3</p>
-<p>&nbsp;</p>
-<p class="whs8">Password (optional)</td></tr>
-<script language='JavaScript'><!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4)) document.write("</table></table><table>");
-//--></script>
+<p>Use the <span 
+	 style="font-weight: bold;"><b>Bulk Provisioning</b></span> 
+ link on the administration console Account Addresses toolbar to provision 
+ up to 500 accounts at once. </p>
+<p>These accounts are provisioned with a user name, display name, and password 
+ configured.</p>
+<p>You create a . csv file with three columns, 
+ separated by a comma (,). Each row is an account entry. &#160;The account 
+ information is configured as:</p>
+<div align="center" >
+<table style="vertical-align: top;" cellspacing="0">
+	<col width="188" />
+	<col width="102" />
+	<col width="144" />
+	<tr style="vertical-align: top;">
+		<td style="border: Solid 1px #000000; padding-right: 10px; padding-left: 10px;" 
+			 width="188"><p style="font-weight: bold;">Column 1</p>
+		<p>&#160;</p>
+		<p style="font-size: 11pt;">AccountName@example.com</p></td>
+		<td style="border-top: Solid 1px #000000; border-right: Solid 1px #000000; 
+			 border-bottom: Solid 1px #000000; padding-right: 10px; padding-left: 10px;" 
+			 width="102"><p><span style="font-weight: bold;"><b>Column 2</b></span></p>
+		<p>&#160;</p>
+		<p style="font-size: 11pt;">Display Name</p></td>
+		<td style="border-top: Solid 1px #000000; border-right: Solid 1px #000000; 
+			 border-bottom: Solid 1px #000000; padding-right: 10px; padding-left: 10px;" 
+			 width="144"><p style="font-weight: bold;">Column 3</p>
+		<p>&#160;</p>
+		<p style="font-size: 11pt;">Password (optional)</p></td>
+	</tr>
 </table>
 </div>
-<p>&nbsp;</p>
-<ul type="disc" class="whs11">
-	<li class=p><p>An account name cannot have spaces or use symbols. </p></li>
-	<li class=p><p>You can type a period (.) between words. For example: 
- john.smith@example.com. This information creates an 
- account with only required account information configured. </p></li>
-	<li class=p><p>The designated account name is entered as the last name 
- for the account. &nbsp;</p></li>
+<p>&#160;</p>
+<ul type="disc">
+	<li class="p"><p>An account name cannot have spaces or use symbols.</p></li>
+	<li class="p"><p>You can type a period (.) between words. For example: 
+	 john.smith@example.com. 
+	 This information creates an account with only required account information 
+	 configured.</p></li>
+	<li class="p"><p>The designated account name is entered as the last 
+	 name for the account. &#160;</p></li>
 </ul>
 <p>The password is optional. If you do not add the password, you must still 
- include the comma after the display name field. &nbsp;</p>
-<div align=center>
-<table x-use-null-cells cellspacing="0" class="whs1">
-<script language='JavaScript'><!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4)) document.write("</table><table x-use-null-cells cellspacing='0' border='1'>");
-//--></script>
-<col class="whs12">
-
-<tr valign="top" class="whs5">
-<td bgcolor="#CCE5FF" width="319px" class="whs13">
-<p>user1@example.com,Jane Brown,123456</p>
-<p>user2@ example.com,Mark Smith,123456</p>
-<p>user3@ example.com,Karen Vents,123456</p>
-<p>user4@ example.com,Sam Sample,123456</p>
-<p>user5@ example.com,Zeb Jones,</td></tr>
-<script language='JavaScript'><!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4)) document.write("</table></table><table>");
-//--></script>
+ include the comma after the display name field. &#160;</p>
+<div align="center" >
+<table style="vertical-align: top;" cellspacing="0">
+	<col width="319" />
+	<tr style="vertical-align: top;">
+		<td style="padding-right: 10px; padding-left: 10px; border-left-style: Solid; 
+			 border-top-style: Solid; border-right-style: Solid; border-bottom-style: Solid; 
+			 border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; 
+			 border-right-width: 1px;" width="319" bgcolor="#CCE5FF"><p>user1@example.com,Jane 
+		 Brown,123456</p>
+		<p>user2@ example.com,Mark Smith,123456</p>
+		<p>user3@ example.com,Karen Vents,123456</p>
+		<p>user4@ example.com,Sam Sample,123456</p>
+		<p>user5@ example.com,Zeb Jones,</p></td>
+	</tr>
 </table>
 </div>
-<p>&nbsp;</p>
+<p>&#160;</p>
 <p>You use the <a href="how_to_provision_multiple_accounts.htm">Bulk Provisioning 
- wizard</a> to upload the information. </p>
-<p>The accounts are automatically assigned the domain default COS. </p>
+ wizard</a> to upload the information.</p>
+<p>The accounts are automatically assigned the domain default </p>
 <p>If you do not provide a password, a random password is generated for 
  the account. When users log in the first time they are prompted to change 
- the password. </p>
-<script type="text/javascript" language="javascript1.2">
+ the password.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

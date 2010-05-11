@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Account Provisioning</title>
-<link rel="stylesheet" href="default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
@@ -56,10 +63,8 @@ if (window.gbWhTopic)
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,57 +80,48 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Account Provisioning</h1>
-<p>All accounts that had the status of <span style="font-style: italic;"><I>No 
- such account</I></span> are shown in the list box. </p>
-<ol type="1" class="whs1">
-	<li class=p><p>Before creating these accounts, select the <a href="../cos/class_of_service.htm">class 
- of service</a> that these accounts will be assigned. </p></li>
+<p>All accounts that had the status of <span style="font-style: italic;"><i>No such account</i></span> are shown in the list box.</p>
+<ol type="1">
+<li class="p">
+<p>Before creating these accounts, select the <a href="../cos/class_of_service.htm">class of service</a> that these accounts will be assigned.</p>
+</li>
 </ol>
-<p class="whs2">As a minimum two entries are listed. <span 
- style="font-weight: bold;"><B>Default</B></span> refers to the &quot;default&quot; 
- COS that is automatically created by Zimbra. <span style="font-weight: bold;"><B>None</B></span> 
- in the COS field is configured to refer to the domain's default COS, if 
- one has been created. &nbsp;Select <span style="font-weight: bold;"><B>None</B></span> 
- to provision the accounts with the domain COS that you have configured 
- as the default. If <span style="font-weight: bold;"><B>None</B></span> is selected 
- and the domain does not have a default COS, the Zimbra &quot;default&quot; 
- COS is used. &nbsp;</p>
-<ol><ol start=2><li style="list-style: decimal;" type=1 class=p-note><p 
- class=note>If you recently created a COS and it is not listed, click <span 
- style="font-weight: bold;"><B>Refresh COS</B></span>. Any new classes of service 
- will be added to the list. </p></li>
-	</ol>
+<p style="margin-left: 40px;">As a minimum two entries are listed. <span style="font-weight: bold;"><b>Default</b></span> refers to the "default" COS that is automatically created by Zimbra. <span style="font-weight: bold;"><b>None</b></span> in the COS field is configured to refer to the domain's default COS, if one has been created. &#160;Select <span style="font-weight: bold;"><b>None</b></span> to provision the accounts with the domain COS that you have configured as the default. If <span style="font-weight: bold;"><b>None</b></span> is selected and the domain does not have a default COS, the Zimbra "default" COS is used. &#160;</p>
+<ol>
+<li style="list-style:none;display: inline">
+<ol start="2">
+<li type="1" class="p-note">
+<p class="note">If you recently created a COS and it is not listed, click <span style="font-weight: bold;"><b>Refresh COS</b></span>. Any new classes of service will be added to the list.</p>
+</li>
 </ol>
-<ol start=2><li style="list-style: decimal;" type=1 class=p><p>Enter the 
- default password for the accounts. This is the password for every account 
- that is created. Note: If a password is not specified at this time, refer 
- to the migration guide for different options.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p>To provision the 
- listed accounts, click <span style="font-weight: bold;"><B>Next</B></span>. The 
- accounts are created on the Zimbra server. At this point, the provisioning 
- of email accounts on the Zimbra Server is complete.</p></li>
-	<ul><li class=p-note><p class=note>Note: If you do not want to create 
- any of the accounts from this list, check <span style="font-weight: bold;"><B>Do 
- not provision any users</B></span>, and click <span style="font-weight: bold;"><B>Next</B></span>. 
- No accounts are created.</p></li>
-	</ul>
-	<li style="list-style: decimal;" type=1 class=p><p>Before proceeding, 
- you should change the mail relay information for these users to point 
- to the Zimbra server instead of the Exchange server. Any new mail will 
- be sent to the Zimbra mailboxes. </p></li>
+</li>
 </ol>
-<script type="text/javascript" language="javascript1.2">
+<ol start="2">
+<li type="1" class="p">
+<p>Enter the default password for the accounts. This is the password for every account that is created. Note: If a password is not specified at this time, refer to the migration guide for different options.</p>
+</li>
+<li type="1" class="p">
+<p>To provision the listed accounts, click <span style="font-weight: bold;"><b>Next</b></span>. The accounts are created on the Zimbra server. At this point, the provisioning of email accounts on the Zimbra Server is complete.</p>
+<ul>
+<li class="p-note">
+<p class="note">Note: If you do not want to create any of the accounts from this list, check <span style="font-weight: bold;"><b>Do not provision any users</b></span>, and click <span style="font-weight: bold;"><b>Next</b></span>. No accounts are created.</p>
+</li>
+</ul>
+</li>
+<li type="1" class="p">
+<p>Before proceeding, you should change the mail relay information for these users to point to the Zimbra server instead of the Exchange server. Any new mail will be sent to the Zimbra mailboxes.</p>
+</li>
+</ol>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

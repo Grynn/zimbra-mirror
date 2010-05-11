@@ -1,24 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>How to Provision Multiple Accounts</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-p.whs2 { margin-left:40px; }
-ul.whs3 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Accounts\nAccounts\nHow to Provision Multiple Accounts");
@@ -58,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -77,52 +81,48 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>How to Provision Multiple Accounts</h1>
 <p>Before you start using the Bulk Provisioning Accounts wizard, you must 
- have the account information saved in a .csv file. &nbsp;See 
- <a href="bulk_provisioning.htm">Bulk Provisioning</a> for information 
- about creating the .csv file.</p>
-<ol type="1" class="whs1">
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Bulk Provisioning</B></span> 
- to open the Bulk Provisioning Accounts Wizard.</p></li>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Upload the CSV 
- file</B></span> dialog, browse to the .csv to upload. Click <span style="font-weight: bold;"><B>Next. 
- </B></span>&nbsp;</p></li>
+ have the account information saved in a .csv file. &#160;See <a href="bulk_provisioning.htm">Bulk 
+ Provisioning</a> for information about creating the .csv file.</p>
+<ol type="1">
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Bulk Provisioning</b></span> 
+	 to open the Bulk Provisioning Accounts Wizard.</p></li>
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Upload the 
+	 CSV file</b></span> dialog, browse to the .csv to upload. Click <span 
+	 style="font-weight: bold;"><b>Next.</b></span> &#160;</p></li>
 </ol>
-<p class="whs2">The Provision Accounts dialog displays account 
+<p style="margin-left: 40px;">The Provision Accounts dialog displays account 
  information that is in the .csv file. Accounts that were not assigned 
  passwords are automatically assigned a randomly generated password. When 
  the password is automatically generated, users are required to change 
  it when they first log on.</p>
-<ul type="1" class="whs3">
-	<li class=p-note><p class=note>If any errors are displayed, click Cancel. 
- You must fix the .csv files before you can proceed.</p></li>
+<ul type="1">
+	<ul style="list-style: url('../blue_right.gif');">
+<li class="p-note"><p class="note">If any errors are displayed, click 
+	 Cancel. You must fix the .csv files before you can proceed.</p></li>
 </ul>
-<ol start="3" type="1" class="whs1">
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Next</B></span> to 
- provision the accounts. The <span style="font-weight: bold;"><B>Provisioning 
- accounts</B></span> dialog shows the progress as the accounts are created. 
- </p></li>
-	<li class=p><p>When all accounts are provisioned, click <span style="font-weight: bold;"><B>OK</B></span>. 
- &nbsp;A <span style="font-weight: bold;"><B>Summary</B></span> 
- dialog lists the account information again. &nbsp;You 
- can click <span style="font-weight: bold;"><B>Download CSV report</B></span> 
- to save a copy of this information to your computer. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Finish</B></span>. 
- The accounts are listed in the Accounts content page.</p></li>
+<ol start="3" type="1">
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Next</b></span> 
+	 to provision the accounts. The <span style="font-weight: bold;"><b>Provisioning 
+	 accounts</b></span> dialog shows the progress as the accounts are created.</p></li>
+	<li class="p"><p>When all accounts are provisioned, click <span style="font-weight: bold;"><b>OK</b></span>. 
+	 &#160;A <span style="font-weight: bold;"><b>Summary</b></span> dialog lists 
+	 the account information again. &#160;You can click <span style="font-weight: bold;"><b>Download 
+	 CSV report</b></span> to save a copy of this information to your computer.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Finish</b></span>. 
+	 The accounts are listed in the Accounts content page.</p></li>
 </ol>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

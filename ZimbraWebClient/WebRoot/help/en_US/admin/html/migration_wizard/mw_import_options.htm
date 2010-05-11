@@ -1,24 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Import Options</title>
-<link rel="stylesheet" href="default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { margin-left:40px; }
-ol.whs2 { list-style:decimal; }
-p.whs3 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
@@ -57,10 +63,8 @@ if (window.gbWhTopic)
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,68 +80,49 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Import Options</h1>
-<p>When you import account files with the Migration Wizard, only email 
- messages, calendar and contacts are imported. Other types, such as meeting 
- requests, notes/journal, tasks, rules and alerts, personal distribution 
- lists, and files are not imported.</p>
-<p>The Import Options dialog is used to set rules about what files should 
- be imported.</p>
-<ol><li style="list-style: decimal;" type=1 class=p><p>The checkboxes 
- for<span style="font-weight: bold;"><B> Import Junk-Mail Folder</B></span> and 
- <span style="font-weight: bold;"><B>Import Deleted Items Folder</B></span> determine 
- whether or not to include mail currently in those folders in <span style="font-style: italic;"><I>Outlook</I></span>.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p>The check box for 
- <span style="font-weight: bold;"><B>Ignore previously imported items</B></span> 
- can be used in cases where an earlier import operation was interrupted. 
- If checked, the import process picks up where it left off, rather than 
- importing duplicates.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p>Check the <span 
- style="font-weight: bold;"><B>Date Filter</B></span> check box to import mail 
- only after a certain date. Enter the date. Messages before that date are 
- not imported. This option lets you discard older messages.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p>In the <span style="font-weight: bold;"><B>Number 
- of Mailboxes to import simultaneously</B></span> field, set the import concurrence 
- level. Since the import is likely to happen while both Exchange and Zimbra 
- servers continue to service other mail accounts, you should use care when 
- increasing this number, as it may affect server performance.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p>For Domino migration, 
- check <span style="font-weight: bold;"><B>Old-email ID</B></span>, if the old 
- email address of the account should be replaced by the new Zimbra email 
- address in all the meetings organized by that user</p></li>
+<p>When you import account files with the Migration Wizard, only email messages, calendar and contacts are imported. Other types, such as meeting requests, notes/journal, tasks, rules and alerts, personal distribution lists, and files are not imported.</p>
+<p>The Import Options dialog is used to set rules about what files should be imported.</p>
+<ol>
+<li type="1" class="p">
+<p>The 
+checkboxes for <span style="font-weight: bold;"><b>Import Junk-Mail Folder</b></span> and <span style="font-weight: bold;"><b>Import Deleted Items Folder</b></span> determine whether or not to include mail currently in those folders in <span style="font-style: italic;"><i>Outlook</i></span>.</p>
+</li>
+<li type="1" class="p">
+<p>The check box for <span style="font-weight: bold;"><b>Ignore previously imported items</b></span> can be used in cases where an earlier import operation was interrupted. If checked, the import process picks up where it left off, rather than importing duplicates.</p>
+</li>
+<li type="1" class="p">
+<p>Check the <span style="font-weight: bold;"><b>Date Filter</b></span> check box to import mail only after a certain date. Enter the date. Messages before that date are not imported. This option lets you discard older messages.</p>
+</li>
+<li type="1" class="p">
+<p>In the <span style="font-weight: bold;"><b>Number of Mailboxes to import simultaneously</b></span> field, set the import concurrence level. Since the import is likely to happen while both Exchange and Zimbra servers continue to service other mail accounts, you should use care when increasing this number, as it may affect server performance.</p>
+</li>
+<li type="1" class="p">
+<p>For Domino migration, check <span style="font-weight: bold;"><b>Old-email ID</b></span>, if the old email address of the account should be replaced by the new Zimbra email address in all the meetings organized by that user</p>
+</li>
 </ol>
-<p class="whs1">For Exchange migration, Two Calendar options 
- can be set. Check the first box, if the old email address of the user 
- should be replaced by the new email address in all the meetings organized 
- by the user. &nbsp;Check the second box, if users' private 
- appointments should be migrated. These appointments will not be marked 
- as private on the Zimbra server.</p>
-<ol start="6" type="1" class="whs2">
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Next</B></span>. 
- &nbsp;The <span style="font-weight: bold;"><B>Begin Import 
- Process?</B></span> Message box is displayed. Click <span style="font-weight: bold;"><B>OK</B></span> 
- to begin importing.</p></li>
+<p style="margin-left: 40px;">For Exchange migration, Two Calendar options can be set. Check the first box, if the old email address of the user should be replaced by the new email address in all the meetings organized by the user. &#160;Check the second box, if users' private appointments should be migrated. These appointments will not be marked as private on the Zimbra server.</p>
+<ol start="6" type="1">
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Next</b></span>. &#160;The <span style="font-weight: bold;"><b>Begin Import Process?</b></span> Message box is displayed. Click <span style="font-weight: bold;"><b>OK</b></span> to begin importing.</p>
+</li>
 </ol>
-<p class="whs3">&nbsp;</p>
-<ul><li class=p-note><p class=note>Important: Users can continue to work 
- in their mailbox while their mail is being imported, although any operation 
- they do after that mail or folder has been imported will not be picked 
- up on the Zimbra side. To ensure that the imported mailbox is consistent 
- with the old mailbox, we recommend informing users that their mailboxes 
- will be unavailable over some scheduled downtime period. </p></li>
+<p style="font-weight: bold;">&#160;</p>
+<ul>
+<li class="p-note">
+<p class="note">Important: Users can continue to work in their mailbox while their mail is being imported, although any operation they do after that mail or folder has been imported will not be picked up on the Zimbra side. To ensure that the imported mailbox is consistent with the old mailbox, we recommend informing users that their mailboxes will be unavailable over some scheduled downtime period.</p>
+</li>
 </ul>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

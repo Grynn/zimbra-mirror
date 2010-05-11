@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Checking Usage Statistics</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Monitoring Tools\nChecking Usage Statistics");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,76 +81,86 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Checking Usage Statistics</h1>
-<p>If the Zimbra-Logger package is installed on a Zimbra 
- mailbox server, <span style="font-weight: bold;"><B>Server Statistic</B></span> 
- shows bar graphs of the message count, message volume, anti-spam, and 
- anti-virus activity. The information is displayed for the last 48 hours, 
- and 30, 60, and 365 days. </p>
-<p>When <span style="font-weight: bold;"><B>Server Statistics</B></span> &nbsp;is 
- selected in the Navigation pane consolidated statistics for all mailbox 
+<p>If the Zimbra-Logger package is 
+ installed on a Zimbra mailbox server, <span style="font-weight: bold;"><b>Server 
+ Statistic</b></span> shows graphs of the message count, message volume, anti-spam, 
+ and anti-virus activity for all servers or you can get statistics for 
+ a selected server. &#160;The information is displayed for the last 48 
+ hours, and 30, 60, and 365 days.</p>
+<p>When <span style="font-weight: bold;"><b>Server Statistics</b></span> &#160;is 
+ selected in the Navigation pane, consolidated statistics for all mailbox 
  servers is displayed in the Content pane. Selecting a specific server 
- in the Navigation pane shows statistics for that server only, including 
- disk usage.</p>
-<p>The statistics displayed includes the following:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span class=attribute>M</span><span style="font-weight: bold;"><B>essage 
- Count</B></span> counts message transactions. A transaction is defined as 
- either the SMTP receipt of a message per person (by Postfix) 
- or a LMTP delivery of it (by mailboxd) per person. 
- &nbsp;For example, if a message is sent to three people, 
- six transactions are displayed. Three for SMTP to Postfix 
- and three for LMTP to mailboxd. The message count is 
- increased by six. &nbsp;</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Message Volume</B></span> 
- displays the aggregate size in bytes of transactions sent and received 
- per hour and per day. Graphs show the total inbound data by volume in 
- bytes.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Anti-Spam/Anti-Virus 
- Activity</B></span> displays the number of messages that were checked for 
- spam or viruses and the number of messages that were tagged as spam or 
- deemed to contain a virus. The AS/AV count is increased 
- by one per message scanned. One message sent to three people counts as 
- only one message processed by AS/AV. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Disk</B></span> for a selected 
- server displays the disk space used and the disk space available. The 
- information is displayed for the last hour, day, month and year. &nbsp;Administrators 
- are notified when the mailbox server disk is near full. By default, warning 
- alerts are sent when the threshold is 85% and a critical alert is sent 
- when the threshold is 95%. The threshold can be modified from the CLI, 
- zmlocalconfig. &nbsp;See the Administration 
- Guide, Appendix A CLI.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Mailbox Quota</B></span> 
- displays information about each account sorted by mailbox size in descending 
- order. See <a href="../managing_servers/viewing_mailbox_quotas.htm">Viewing 
- Mailbox Quotas</a>.</p></li>
+ in the Navigation pane shows statistics for that server only and includes 
+ additional statistics for disk usage. In addition, specific server information 
+ available includes details about active sessions on the server and mailbox 
+ quota. &#160;</p>
+<p>The statistics displayed includes the following tabs:</p>
+<ul type="disc">
+	<li class="p"><p><span class="attribute">M</span><span style="font-weight: bold;"><b>essage 
+	 Count.</b></span> This tab shows message transactions. A transaction is 
+	 defined as either the SMTP receipt of a message per person (by Postfix) or a LMTP delivery of it (by mailboxd) per person. &#160;For example, if a message 
+	 is sent to three people, six transactions are displayed. Three for 
+	 SMTP to Postfix and three for LMTP to 
+	 mailboxd. The message count is increased 
+	 by six. &#160;</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Message Volume.</b></span> 
+	 This tab displays the aggregate size in bytes of transactions sent 
+	 and received per hour and per day. Graphs show the total inbound data 
+	 by volume in bytes.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Anti-Spam/Anti-Virus 
+	 Activity.</b></span> &#160;This tab displays the number of messages that 
+	 were checked for spam or viruses and the number of messages that were 
+	 tagged as spam or deemed to contain a virus. The AS/AV count is increased 
+	 by one per message scanned. One message sent to three people counts 
+	 as only one message processed by AS/AV.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Advanced Statistics</b></span> 
+	 This tab includes <a href="creating_advanced_server_statistics.htm">advanced 
+	 graphing options</a> to generate various charts based on statistical 
+	 information for the CPU, IO, mailboxd, 
+	 MTA queue, MySQL and other components.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Disk</b></span> tab for 
+	 a selected server displays the disk space used and the disk space 
+	 available. The information is displayed for the last hour, day, month 
+	 and year. &#160;Administrators are notified when the mailbox server 
+	 disk is near full. By default, warning alerts are sent when the threshold 
+	 is 85% and a critical alert is sent when the threshold is 95%. The 
+	 threshold can be modified from the CLI, zmlocalconfig. 
+	 &#160;See the Administration Guide, Appendix A CLI.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Session</b></span> This 
+	 tab shows the total number of active sessions for the selected server. 
+	 &#160;Active sessions for the web client, administrator, &#160;and 
+	 IMAP users are displayed. &#160;The &#160;account name, session ID, 
+	 creation date and last accessed time are displayed. </p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Mailbox Quota.</b></span> 
+	 &#160;&#160;This tab shows the mailbox quota for a specific server. 
+	 Information about each account is displayed sorted by mailbox size 
+	 in descending order. See <a href="../managing_servers/viewing_mailbox_quotas.htm">Viewing 
+	 Mailbox Quotas</a>.</p></li>
 </ul>
-<p>The Message Count and the Anti-spam/Anti-virus Activity 
- graphs display a different message count because: </p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Outbound messages may not go through the Amavisd 
- filter, as the system architecture might not require outbound messages 
- to be checked.</p></li>
-	<li class=p><p>Message are received and checked by Amavisd 
- for spam and viruses before being delivered to all recipients in the message. 
- The message count shows the number of recipients who received messages. 
- </p></li>
+<p>The Message Count and the Anti-spam/Anti-virus 
+ Activity graphs display a different message count because:</p>
+<ul type="disc">
+	<li class="p"><p>Outbound messages may not go through the Amavisd filter, as the system architecture might 
+	 not require outbound messages to be checked.</p></li>
+	<li class="p"><p>Message are received and checked by Amavisd 
+	 for spam and viruses before being delivered to all recipients in the 
+	 message. The message count shows the number of recipients who received 
+	 messages.</p></li>
 </ul>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

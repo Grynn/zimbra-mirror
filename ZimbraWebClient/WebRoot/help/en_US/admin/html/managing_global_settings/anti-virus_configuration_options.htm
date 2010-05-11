@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Anti-Virus Protection</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Global Settings\nAnti-Virus Protection");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,41 +81,33 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Anti-Virus Protection</h1>
-<p>The Zimbra Collaboration Suite installs the Clam Antivirus 
- software as the anti-virus filter. By default, the anti-virus software 
- is automatically enabled. You can modify these settings from the <span 
- style="font-weight: bold;"><B>Global Settings&gt;Anti-Virus</B></span> tab. </p>
-<p>The Zimbra MTA checks every two hours for any new anti-virus updates 
- from ClamAV and updates to the software are automatically 
- downloaded to the server. You can modify how often the MTA checks for 
- updates. The frequency can be set between 1 and 24 hours.</p>
-<p>The global settings for the anti-virus protection are configured with 
- these options enabled:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Block encrypted archives</B></span>, 
- such as password protected zipped files.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Send notification</B></span> 
- to recipient to alert that a mail message to them had a virus and was 
- not delivered.</p></li>
+<p>The Zimbra Collaboration Suite installs the Clam 
+Antivirus software as the anti-virus filter. By default, the anti-virus software is automatically enabled. You can modify these settings from the <span style="font-weight: bold;"><b>Global Settings&gt;Anti-Virus</b></span> tab.</p>
+<p>The Zimbra MTA checks every two hours for any new anti-virus updates from 
+ClamAV and updates to the software are automatically downloaded to the server. You can modify how often the MTA checks for updates. The frequency can be set between 1 and 24 hours.</p>
+<p>The global settings for the anti-virus protection are configured with these options enabled:</p>
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Block encrypted archives</b></span>, such as password protected zipped files.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Send notification</b></span> to recipient to alert that a mail message to them had a virus and was not delivered.</p>
+</li>
 </ul>
-<p><span class=Important>Important: </span>If you defined an anti-virus 
- notification address during the installation of the Zimbra Collaboration 
- Suite, create an anti-virus notification mailbox alias in your admin 
- account, so that notification messages can be delivered to your mailbox.</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p><span class="Important">Important:</span> If you defined an anti-virus notification address during the installation of the Zimbra Collaboration Suite, create an anti-virus notification mailbox alias in your 
+admin account, so that notification messages can be delivered to your mailbox.</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

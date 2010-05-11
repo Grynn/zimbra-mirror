@@ -1,43 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Configuring the MTA Tab for Global Settings</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-table.whs1 { x-cell-content-align:top; width:80%; border-spacing:4px; }
-col.whs2 { width:37.819%; }
-col.whs3 { width:62.181%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:37.819%; padding-right:10px; padding-left:10px; border-top-color:#000000; border-top-style:Solid; border-right-style:Solid; border-right-color:#000000; border-bottom-color:#000000; border-bottom-style:Solid; border-bottom-width:1px; border-right-width:1px; border-left-style:none; border-top-width:1px; }
-p.whs6 { font-weight:bold; }
-td.whs7 { width:62.181%; padding-right:10px; padding-left:10px; border-top-color:#000000; border-top-style:Solid; border-bottom-color:#000000; border-bottom-style:Solid; border-bottom-width:1px; border-top-width:1px; border-right-style:None; }
-ul.whs8 { list-style:disc; }
-p.whs9 { margin-left:0px; }
-td.whs10 { width:37.819%; padding-right:10px; padding-left:10px; border-right-style:Solid; border-right-color:#000000; border-bottom-color:#000000; border-bottom-style:Solid; border-bottom-width:1px; border-right-width:1px; border-left-style:none; }
-td.whs11 { width:62.181%; padding-right:10px; padding-left:10px; border-bottom-color:#000000; border-bottom-style:Solid; border-bottom-width:1px; border-right-style:None; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs9 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -48,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Global Settings\nConfiguring the MTA Tab for Global Settings");
@@ -77,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -96,90 +81,104 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Configuring the MTA Tab for Global Settings</h1>
-<p>The following global MTA settings can be configured. </p>
-<table x-use-null-cells cellspacing="4" width="80%" class="whs1">
-<col class="whs2">
-<col class="whs3">
-
-<tr valign="top" class="whs4">
-<td width="37.819%" class="whs5">
-<p class="whs6">Authentication </td>
-<td width="62.181%" class="whs7">
-<ul type="disc" class="whs8">
-	<li class=p><p class="whs9">Enables SMTP client authentication 
- so users can authenticate. Only authenticated users or users from trusted 
- networks are allowed to relay mail.</p></li>
-	<li class=p><p>When checked, forces all SMTP auth to use Transaction 
- Level Security (similar to SSL) to avoid passing passwords in the clear.</p></li>
+<p>The following global MTA settings can be configured.</p>
+<table style="vertical-align: top;" cellspacing="4" width="80%">
+<col style="width: 37.819%;" />
+<col style="width: 62.181%;" />
+<tr style="vertical-align: top;">
+<td style="border-top: Solid 1px #000000; border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 37.819%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Authentication</p>
+</td>
+<td style="border-top: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 62.181%; padding-right: 10px; padding-left: 10px;">
+<ul type="disc">
+<li class="p">
+<p style="margin-left: 0px;">Enables SMTP client authentication so users can authenticate. Only authenticated users or users from trusted networks are allowed to relay mail.</p>
+</li>
+<li class="p">
+<p>When checked, forces all SMTP auth to use Transaction Level Security (similar to SSL) to avoid passing passwords in the clear.</p>
+</li>
 </ul>
-<p>&nbsp;</td></tr>
-<tr valign="top" class="whs4">
-<td width="37.819%" class="whs10">
-<p class="whs6">Network</td>
-<td width="62.181%" class="whs11">
-<ul type="disc" class="whs8">
-	<li class=p><p>Web mail MTA Host name and Web mail MTA Port. The MTA 
- that the web server connects to for sending mail. The default port number 
- is 25.</p></li>
-	<li class=p><p>External MTA (e.g., the ISP requires that all mail originating 
- from your network be relayed through their MTA) to which the Zimbra Postfix 
- relays non-local email. See <a href="relay_mta_for_external_delivery.htm">Relay 
- MTA for external delivery</a>.</p></li>
-	<li class=p><p>If Enable DNS lookups is checked, the Zimbra MTA makes 
- an explicit DNS query for the MX record of the recipient domain. If this 
- option is disabled, set a relay host in the Relay MTA for external delivery. 
- </p></li>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 37.819%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Network</p>
+</td>
+<td style="border-bottom: Solid 1px #000000; width: 62.181%; padding-right: 10px; padding-left: 10px;">
+<ul type="disc">
+<li class="p">
+<p>Web mail MTA Host name and Web mail MTA Port. The MTA that the web server connects to for sending mail. The default port number is 25.</p>
+</li>
+<li class="p">
+<p>External MTA (e.g., the ISP requires that all mail originating from your network be relayed through their MTA) to which the Zimbra Postfix relays non-local email. See <a href="relay_mta_for_external_delivery.htm">Relay MTA for external delivery</a>.</p>
+</li>
+<li class="p">
+<p>If Enable DNS lookups is checked, the Zimbra MTA makes an explicit DNS query for the MX record of the recipient domain. If this option is disabled, set a relay host in the Relay MTA for external delivery.</p>
+</li>
 </ul>
-<p>&nbsp;</td></tr>
-<tr valign="top" class="whs4">
-<td width="37.819%" class="whs10">
-<p class="whs6">Messages</td>
-<td width="62.181%" class="whs11">
-<ul type="disc" class="whs8">
-	<li class=p><p>Set the Maximum messages size for a message and &nbsp;attachments 
- that can be received. <span style="font-weight: bold;"><B>Note</B></span>: To 
- set the maximum size of an uploaded file to Documents or Briefcase, go 
- to the General Information tab. </p></li>
-	<li class=p><p>This is enabled by default. Every email sent directly 
- from the server includes the X-Originating-IP in the message header. This 
- specifies the original sending IP of the email message the server is forwarding.</p></li>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 37.819%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Messages</p>
+</td>
+<td style="border-bottom: Solid 1px #000000; width: 62.181%; padding-right: 10px; padding-left: 10px;">
+<ul type="disc">
+<li class="p">
+<p>Set the Maximum messages size for a message and &#160;attachments that can be received. <span style="font-weight: bold;"><b>Note</b></span>: To set the maximum size of an uploaded file to Documents or Briefcase, go to the General Information tab.</p>
+</li>
+<li class="p">
+<p>This is enabled by default. Every email sent directly from the server includes the X-Originating-IP in the message header. This specifies the original sending IP of the email message the server is forwarding.</p>
+</li>
 </ul>
-<p>&nbsp;</td></tr>
-<tr valign="top" class="whs4">
-<td width="37.819%" class="whs10">
-<p class="whs6">Protocol checks</td>
-<td width="62.181%" class="whs11">
-<ul type="disc" class="whs8">
-	<li class=p><p>The Protocol fields are checked to reject unsolicited 
- commercial email (UCE), for Spam control.</p></li>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 37.819%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Protocol checks</p>
+</td>
+<td style="border-bottom: Solid 1px #000000; width: 62.181%; padding-right: 10px; padding-left: 10px;">
+<ul type="disc">
+<li class="p">
+<p>The Protocol fields are checked to reject unsolicited commercial email (UCE), for Spam control.</p>
+</li>
 </ul>
-<p>&nbsp;</td></tr>
-<tr valign="top" class="whs4">
-<td colspan="1" rowspan="1" width="37.819%" class="whs10">
-<p class="whs6">DNS checks</td>
-<td colspan="1" rowspan="1" width="62.181%" class="whs11">
-<ul type="disc" class="whs8">
-	<li class=p><p>The DNS fields are checked to reject mail if the client’s 
- IP address is unknown, the hostname in the greeting 
- is unknown, or if the sender’s domain is unknown.</p></li>
-	<li class=p><p>You can enter your RBLs in the<span 
- style="font-weight: bold;"><B> List of RBLs</B></span> field. 
- </p></li>
-</ul></td></tr>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 37.819%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">DNS checks</p>
+</td>
+<td style="border-bottom: Solid 1px #000000; width: 62.181%; padding-right: 10px; padding-left: 10px;">
+<ul type="disc">
+<li class="p">
+<p>The DNS fields are checked to reject mail if the client’s IP address is unknown, the 
+hostname in the greeting is unknown, or if the sender’s domain is unknown.</p>
+</li>
+<li class="p">
+<p>You can enter your 
+RBLs in the <span style="font-weight: bold;"><b>List of 
+RBLs</b></span> field.</p>
+</li>
+</ul>
+</td>
+</tr>
 </table>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

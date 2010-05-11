@@ -120,34 +120,38 @@ else
 <p>You can check for updates any time by clicking the <span style="font-weight: bold;"><b>Check 
  now</b></span> link. </p>
 <h2>Server Updates Settings</h2>
-<p><span style="font-weight: bold;"><b>Server that checks for updates</b></span>. 
- &#160;Only one ZCS server checks for updates. If the Check Now request 
- for an immediate update is sent to a different server, the request is 
- proxied to the server indicated in this 
- field. The result of the update response is stored in LDAP and is accessible 
- by all servers. The server that polls for updates must be able to make 
- outgoing HTTP requests. Note: You may need to make special provisions 
- in your firewall for that to happen. </p>
-<p><span style="font-weight: bold;"><b>Check for updates every</b></span>. The 
- default is to check every 1 day. A job is scheduled in the crontab to 
- check for updates. &#160;The cron job runs every 2 hours to check if the 
- <span style="font-weight: bold;"><b>Check for Updates</b></span> interval has 
- passed. &#160;If you wish to check for updates more often then every two 
- hours, adjust the cron task for &quot;/opt/zimbra/libexec/zmcheckversion&quot;. </p>
-<p><span style="font-weight: bold;"><b>Updates URL</b></span>. This is the URL 
- that the server connects to when checking for an update. The server transmits 
- its ZCS version, platform and build number to this URL. When a server 
- polls the URL, &#160;the response is stored in the LDAP. The Updates tab 
- displays the times that checks were made. </p>
-<p><span style="font-weight: bold;"><b>Send Notification Email To/From Addresses</b></span>: 
- &#160;The <span style="font-weight: bold;"><b>Send notification email to</b></span> 
- address receives an email notification when an update is available. These 
- addresses are configured to be the admin's email address, but you can 
- change this.</p>
-<p><span style="font-weight: bold;"><b>Notification Subject and Message templates</b></span>. 
- &#160;This is the template for the notification message that is sent. 
- </p>
-<p>&#160;</p>
+<ul type="disc">
+	<li><p><span style="font-weight: bold;"><b>Server that checks for updates</b></span>. 
+	 &#160;Only one ZCS server checks for updates. If the Check Now request 
+	 for an immediate update is sent to a different server, the request 
+	 is proxied to the server indicated in 
+	 this field. The result of the update response is stored in LDAP and 
+	 is accessible by all servers. The server that polls for updates must 
+	 be able to make outgoing HTTP requests. Note: You may need to make 
+	 special provisions in your firewall 
+	 for that to happen. </p></li>
+	<li><p><span style="font-weight: bold;"><b>Check for updates every</b></span>. 
+	 The default is to check every 1 day. A job is scheduled in the crontab 
+	 to check for updates. &#160;The cron job runs every 2 hours to check 
+	 if the <span style="font-weight: bold;"><b>Check for Updates</b></span> interval 
+	 has passed. &#160;If you wish to check for updates more often then 
+	 every two hours, adjust the cron task for &quot;/opt/zimbra/libexec/zmcheckversion&quot;. 
+	 </p></li>
+	<li><p><span style="font-weight: bold;"><b>Updates URL</b></span>. This is 
+	 the URL that the server connects to when checking for an update. The 
+	 server transmits its ZCS version, platform and build number to this 
+	 URL. When a server polls the URL, &#160;the response is stored in 
+	 the LDAP. The Updates tab displays the times that checks were made. 
+	 </p></li>
+	<li><p><span style="font-weight: bold;"><b>Send Notification Email To/From 
+	 Addresses</b></span>: &#160;The <span style="font-weight: bold;"><b>Send 
+	 notification email to</b></span> address receives an email notification 
+	 when an update is available. These addresses are configured to be 
+	 the admin's email address, but you can change this.</p></li>
+	<li><p><span style="font-weight: bold;"><b>Notification Subject and Message 
+	 templates</b></span>. &#160;This is the template for the notification 
+	 message that is sent. </p></li>
+</ul>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

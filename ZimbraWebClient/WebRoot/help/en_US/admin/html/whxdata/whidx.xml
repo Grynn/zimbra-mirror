@@ -1,8 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="access control for domain Documents accounts" last="filters" num="108" />
-<chunkinfo url="whidata1.xml" first="find" last="save search results" num="110" />
-<chunkinfo url="whidata2.xml" first="search" last="Zimlets, setting up in COS and accounts" num="62" />
+<chunkinfo url="whidata0.xml" first="access control for domain Documents accounts" last="locked out" num="110" />
+<chunkinfo url="whidata1.xml" first="locked password" last="trash lifetime" num="111" />
+<chunkinfo url="whidata2.xml" first="updates" last="Zimlets, setting up in COS and accounts" num="17" />
 
 </index>

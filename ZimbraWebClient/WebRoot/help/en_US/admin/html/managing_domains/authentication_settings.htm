@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Configuring Authentication Settings</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Domains\nConfiguring Authentication Settings");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,92 +81,91 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Configuring Authentication Settings</h1>
 <p>Authentication is the process of identifying a user or a server to the 
  directory server and granting access to legitimate users based on user 
  name and password information provided when users log in. Zimbra Collaboration 
  Suite offers the following three authentication mechanisms:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Internal</B></span>. The 
- Internal authentication uses the Zimbra directory server for authentication 
- on the domain. When you select Internal, no other configuration is required.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>External LDAP</B></span>. 
- The user name and password is the authentication information supplied 
- in the bind operation to the directory server. You must configure the 
- LDAP URL, LDAP filter, and wither to use DN password to bind to the external 
- server.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>External Active Directory</B></span>. 
- The user name and password is the authentication information supplied 
- to the Active Directory server. You identify the Active Directory domain 
- name and URL.</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Internal</b></span>. 
+	 The Internal authentication uses the Zimbra directory server for authentication 
+	 on the domain. When you select Internal, no other configuration is 
+	 required.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>External LDAP</b></span>. 
+	 The user name and password is the authentication information supplied 
+	 in the bind operation to the directory server. You must configure 
+	 the LDAP URL, LDAP filter, and wither to use DN password to bind to 
+	 the external server.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>External Active Directory</b></span>. 
+	 The user name and password is the authentication information supplied 
+	 to the Active Directory server. You identify the Active Directory 
+	 domain name and URL.</p></li>
 </ul>
-<p>An authentication wizard is used to <a href="how_to_configure_authentication_mode.htm" target="_blank">configure the authentication settings</a> on your domain. 
- </p>
+<p>An authentication wizard is used to <a href="how_to_configure_authentication_mode.htm" target="_blank">configure 
+ the authentication settings</a> on your domain.</p>
 <h2>Internal</h2>
 <p>The Internal authentication method assumes the Zimbra schema, running 
- on the OpenLDAP directory server. &nbsp;No additional 
- configuration is necessary.</p>
+ on the OpenLDAP directory server. &#160;No additional configuration is 
+ necessary.</p>
 <h2>External LDAP</h2>
 <p>The external LDAP authentication mechanism attempts to bind to the specified 
  directory server using the supplied user name and password. If this bind 
  succeeds, the connection is closed and the password is considered valid. 
- &nbsp;You configure the following External LDAP settings:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>LDAP URL </B></span>and<span 
- style="font-weight: bold;"> <B></B></span>whether to use <span style="font-weight: bold;"><B>SSL 
- </B></span>or <span style="font-weight: bold;"><B>StartTLS</B></span>. 
- Enter the LDAP address. Check either to use SSL or StartTLS. 
- <br>
-	The default port is 389. If you use SSL, the default port is 636. <br>
+ &#160;You configure the following External LDAP settings:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>LDAP URL</b></span> and 
+	 whether to use <span style="font-weight: bold;"><b>SSL</b></span> or <span 
+	 style="font-weight: bold;"><b>StartTLS</b></span>. 
+	 Enter the LDAP address. Check either to use SSL or StartTLS.<br />
+	The default port is 389. If you use SSL, the default port is 636.<br />
 	You can configure multiple external LDAP hosts.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>LDAP filter</B></span>. 
- The filter defines the search rules used for directory searches and tries 
- to map the user name to one user on the external LDAP. You should ensure 
- that the filter you enter results in a single entry being matched, otherwise 
- an authentication error is returned to the user.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>LDAP filter</b></span>. 
+	 The filter defines the search rules used for directory searches and 
+	 tries to map the user name to one user on the external LDAP. You should 
+	 ensure that the filter you enter results in a single entry being matched, 
+	 otherwise an authentication error is returned to the user.</p></li>
 </ul>
-<p class="whs2">Example of the search filter is (<span class=code 
- style="font-size: 11pt;"><font size=3 style="font-size:11pt;">mail=%u@mycompany.com)</font></span>. 
- </p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>LDAP search base</B></span>. 
- To search within a specific part of your directory, enter a search base. 
- &nbsp;It would be entered as (<span class=code>dc=server,dc=com)</span>.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Use DN/Password to 
- bind to external server</B></span>. If the filter you entered cannot be run 
- using an anonymous bind, then enter the DN/password for a service account 
- on the external LDAP that has been granted access to the attributes required 
- to do the search.</p></li>
+<p style="margin-left: 40px;">Example of the search filter is (<span class="code" 
+	 style="font-size: 11pt;"><font size="3" style="font-size:11pt;"> 
+ mail=%u@mycompany.com)</font></span>.</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>LDAP search base</b></span>. 
+	 To search within a specific part of your directory, enter a search 
+	 base. &#160;It would be entered as (<span class="code"> dc=server, dc=com)</span>.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Use DN/Password to 
+	 bind to external server</b></span>. If the filter you entered cannot be 
+	 run using an anonymous bind, then enter the DN/password for a service 
+	 account on the external LDAP that has been granted access to the attributes 
+	 required to do the search.</p></li>
 </ul>
 <h2>External Active Directory</h2>
 <p>The external Active Directory authentication mechanism attempts to bind 
  to the Active Directory server using the supplied user name and password. 
  You configure the following settings:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Active Directory domain 
- name</B></span>. The name of the domain for the Active Directory server.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Active Directory LDAP 
- URL</B></span> and whether to use <span style="font-weight: bold;"><B>SSL</B></span>. 
- Enter the Active Directory LDAP address. The default port is 389. If you 
- use SSL, the default port is 636. </p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Active Directory 
+	 domain name</b></span>. The name of the domain for the Active Directory 
+	 server.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Active Directory 
+	 LDAP URL</b></span> and whether to use <span style="font-weight: bold;"><b>SSL</b></span>. 
+	 Enter the Active Directory LDAP address. The default port is 389. 
+	 If you use SSL, the default port is 636.</p></li>
 </ul>
-<p class="whs2">You can configure multiple external Active 
+<p style="margin-left: 40px;">You can configure multiple external Active 
  Directory hosts.</p>
-<h6>&nbsp;</h6>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<h6>&#160;</h6>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

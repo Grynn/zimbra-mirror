@@ -1,36 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="MS-HAID" content="Preferences" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Preferences</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-table.whs1 { x-cell-content-align:top; left:0px; top:137px; width:662px; border-spacing:0px; }
-col.whs2 { width:6.896in; }
-tr.whs3 { x-cell-content-align:top; height:29px; }
-td.whs4 { width:662px; padding-right:10px; padding-left:10px; border-bottom-style:None; border-left-style:None; border-top-style:none; border-right-style:None; }
-tr.whs5 { x-cell-content-align:top; height:18px; }
-td.whs6 { width:662px; padding-right:10px; padding-left:10px; border-bottom-style:None; border-left-style:None; border-right-style:None; }
-tr.whs7 { x-cell-content-align:top; height:42px; }
-ul.whs8 { list-style:disc; }
-tr.whs9 { x-cell-content-align:top; height:66px; }
-tr.whs10 { x-cell-content-align:top; height:26px; }
-p.whs11 { font-weight:bold; }
-tr.whs12 { x-cell-content-align:top; height:44px; }
-tr.whs13 { x-cell-content-align:top; height:58px; }
-p.whs14 { font-weight:normal; }
-tr.whs15 { x-cell-content-align:top; height:74px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -41,23 +20,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Accounts\nUser Features and Preferences Options\nUser Preferences");
@@ -70,10 +65,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -89,263 +82,300 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" src="../ehlpdhtm.js" x-save-method="compute-relative" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( InitEffects ) != 'function' ) InitEffects = new Function();if( typeof( InitTrigger ) != 'function' ) InitTrigger = new Function();if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
-</script>
-
-
+//]]></script>
+<script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2"></script>
 <h1>User Preferences</h1>
 <p>How mailboxes behave when a message is composed or received are preferences 
  that are enabled in the COS. The preferences in the COS become the default 
  settings for accounts.</p>
 <p>The COS default preferences can be changed for individual accounts, 
  and users can modify their preferences from the Zimbra Web Client Options 
- tab. &nbsp;The account's preferences are updated when 
- users change their options in the Web Client.</p>
+ tab. &#160;The account's preferences are updated when users change their 
+ options in the Web Client.</p>
 <p>The following preferences can be configured.</p>
-<table x-use-null-cells cellspacing="0" width="662" class="whs1">
-<col class="whs2">
-
-<tr valign="top" class="whs3">
-<td width="662px" class="whs4">
-<h4>Preference</td></tr>
-<tr valign="top" class="whs5">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<p><span style="font-weight: bold;"><B>General Options</B></span></td></tr>
-<tr valign="top" class="whs7">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Login using</B></span> 
- specifies which version of the ZWC is viewed when the user logs in. The 
- options are <a href="setting_the_devault_zwc_login_version.htm" target="_blank">Advanced 
- and Standard</a>. The user can change this setting before they log in.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs9">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p>When <span style="font-weight: bold;"><B>Show search string</B></span> 
- is enabled, the search field shows the query grammar used to create the 
- search.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Initial mail search</B></span> 
- specified which folder in the mailbox to search first. The default is 
- the Inbox.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs10">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p class="whs11">Show IMAP search folders</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs12">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Enable keyboard shortcuts</B></span>. 
- Allows users to use keyboard shortcut keys. If Keyboard shortcuts aliases 
- is enabled on in Features tab, users can also create their own shortcut 
- keys.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs7">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p class="whs11"><span style="font-weight: normal;">When 
- </span>Display a warning when users try to navigate away from ZCS<span 
- style="font-weight: normal;"> is enabled, &nbsp;the message 
- displays when users click the browser Back button to leave ZWC.</span></p></li>
-</ul></td></tr>
-<tr valign="top" class="whs13">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p class="whs14"><span style="font-weight: bold;"><B>Show 
- selection checkbox for selecting email and contact in a list view for 
- batch operations</B></span>. This makes it easy for users to select multiple 
- items in the Content pane and perform an action such as move, delete, 
- forward, tag, or mark as read/unread.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs7">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p class="whs14">I<span style="font-weight: bold;"><B>ndex 
- Junk Messages</B></span>. &nbsp;This is enabled by default. 
- &nbsp;If you do not want spam to be indexed, disable 
- this message. Users cannot change this</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs5">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p class="whs11">Language. <span style="font-weight: normal;">Select 
- the default language that will display in the &nbsp;Zimbra 
- Web Client view. &nbsp;If no locale is selected, the 
- browser setting is used. </span></p></li>
-</ul></td></tr>
-<tr valign="top" class="whs5">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<p class="whs11">Mail Options</td></tr>
-<tr valign="top" class="whs10">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>View mail as HTML</B></span> 
- (when possible).</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs10">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Display external images 
- in HTML mail</B></span>. If this enabled, images send in an email are displayed.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs10">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Group mail by</B></span> 
- Conversation (default) or Message.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs10">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Number of items to 
- display per page</B></span>, 10, 25, 50, or 100. The default is 25.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs10">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Default Charset 
- for mail composing and parsing</B></span>. The default is UTF-8. You can select 
- another default charset form the list.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs7">
-<td width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Polling interval</B></span>. 
- This is the number of minutes to wait before checking for new mail. The 
- default is 5 minutes. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Minimum mail polling 
- interval</B></span> limits the user's setting their polling frequency.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs7">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Out of office cache 
- lifetime</B></span>. When<span style="font-weight: bold;"><B> Away message enabled</B></span> 
- is checked, a reply message is sent to received messages only once during 
- the cache lifetime. &nbsp;The default is one time every 
- 7 days.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs10">
-<td width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Save to sent</B></span>. 
- A copy of messages that are sent from the account are saved to the Sent 
- folder.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs13">
-<td width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Allow sending email 
- from any address</B></span>. Used with Mail Identities to allow users to create 
- different email addresses. If this is not checked users can only select 
- from email addresses or aliases that you configured. </p></li>
-</ul></td></tr>
-<tr valign="top" class="whs10">
-<td width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Composing Mail</B></span><span> 
- section lets you define the initial user experience when writing an email 
- message. You can set it up to compose messages as Text or HTML, set the 
- font, size and color to use, and </span><span style="font-weight: bold;"><B>Always 
- compose in new window</B></span>. displays the compose page in a new window. 
- </p></li>
-</ul></td></tr>
-<tr valign="top" class="whs10">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Reply/Forward using 
- format of the original message</B></span>. Check this box to reply to the 
- message in the same format as received. This is useful to make sure the 
- recipient can get the message in the best format they can read.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs15">
-<td width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Signature style</B></span>, 
- either Internet standard, with the signature at the end of the message 
- thread or basic, with the signature at the end of the new message. </p></li>
-	<li class=p><p>You can configure the signature length. The maximum 
- length of a mail signature is 1024 characters. </p></li>
-</ul></td></tr>
-<tr valign="top" class="whs5">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<p class="whs11">Address Book Options</td></tr>
-<tr valign="top" class="whs10">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p>Use GAL when <a href="javascript:void(0);" id="a1" onMouseOver="if (parseInt(navigator.appVersion) >= 4 && typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_domains/autocomplete_on_gal.htm',400,300);return false;">autocompleting addresses</a><script type="text/javascript" 
- language=JavaScript1.2><!--
-FilePopupInit('a1');
-//--></script>.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs10">
-<td width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p>Enable automatic adding of contacts.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs10">
-<td width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p>Number of contacts per page, 10, 25, 50, or 100. &nbsp;The 
- default is 25.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs5">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<p class="whs11">Calendar Options</td></tr>
-<tr valign="top" class="whs7">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Timezone</B></span> 
- is used to set the default time zone for &nbsp;new accounts 
- in this COS. The time zone you set during the ZCS install sets the default 
- COS time zone. See <a href="setting_time_zones_for_accounts.htm">Setting 
- time zones for accounts</a>.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs7">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Number of minutes before 
- an appointment to show reminder</B></span>. The default is 5 minutes.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs7">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Always show the mini-calendar</B></span>. 
- A mini-calendar will always display in the lower left corner of the Web 
- client.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs13">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Use the QuickAdd dialog 
- when creating new appointments</B></span>. If the Calendar feature is enabled, 
- users can click on a date to open the QuickAdd dialog to create an appointment.</p></li>
-</ul></td></tr>
-<tr valign="top" class="whs13">
-<td colspan="1" rowspan="1" width="662px" class="whs6">
-<ul type="disc" class="whs8">
-	<li class=p><p><span style="font-weight: bold;"><B>Show timezone 
- list in appointment view</B></span>. The timezone list 
- will be displayed when users create appointments. </p></li>
-</ul></td></tr>
+<table style="vertical-align: top; left: 0px; top: 137px;" cellspacing="0" 
+		 width="662">
+	<col width="662" />
+	<tr style="vertical-align: top; height: 29px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><h4>Preference</h4></td>
+	</tr>
+	<tr style="vertical-align: top; height: 18px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><p><span 
+		 style="font-weight: bold;"><b>General Options</b></span></p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 42px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Login using</b></span> 
+			 specifies which version of the ZWC is viewed when the user 
+			 logs in. The options are <a href="setting_the_devault_zwc_login_version.htm" target="_blank">Advanced and Standard</a>. 
+			 The user can change this setting before they log in.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 66px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p>When <span style="font-weight: bold;"><b>Show 
+			 search string</b></span> is enabled, the search field shows the 
+			 query grammar used to create the search.</p></li>
+			<li class="p"><p><span style="font-weight: bold;"><b>Initial mail 
+			 search</b></span> specified which folder in the mailbox to search 
+			 first. The default is the Inbox.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 26px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p style="font-weight: bold;">Show IMAP search 
+			 folders</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 44px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Enable keyboard 
+			 shortcuts</b></span>. Allows users to use keyboard shortcut keys. 
+			 If Keyboard shortcuts aliases is enabled on in Features tab, 
+			 users can also create their own shortcut keys.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 42px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p style="font-weight: bold;"><span style="font-weight: normal;">When</span> 
+			 Display a warning when users try to navigate away from ZCS 
+			 <span style="font-weight: normal;">is enabled, &#160;the message 
+			 displays when users click the browser Back button to leave 
+			 ZWC.</span></p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 58px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p style="font-weight: normal;"><span style="font-weight: bold;"><b>Show 
+			 selection checkbox for selecting email and contact in a list 
+			 view for batch operations</b></span>. This makes it easy for users 
+			 to select multiple items in the Content pane and perform an 
+			 action such as move, delete, forward, tag, or mark as read/unread.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 42px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p style="font-weight: normal;">I<span style="font-weight: bold;"><b>ndex 
+			 Junk Messages</b></span>. &#160;This is enabled by default. &#160;If 
+			 you do not want spam to be indexed, disable this message. 
+			 Users cannot change this</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 18px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p style="font-weight: bold;">Language. <span 
+			 style="font-weight: normal;">Select the default language that 
+			 will display in the &#160;Zimbra Web Client view. &#160;If 
+			 no locale is selected, the browser setting is used.</span></p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 18px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><p 
+			 style="font-weight: bold;">Mail Options</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 26px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>View mail 
+			 as HTML</b></span> (when possible).</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 26px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Display external 
+			 images in HTML mail</b></span>. If this enabled, images send in 
+			 an email are displayed.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 26px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Group mail 
+			 by</b></span> Conversation (default) or Message.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 26px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Number of 
+			 items to display per page</b></span>, 10, 25, 50, or 100. The 
+			 default is 25.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 26px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Default Charset for mail composing and parsing</b></span>. 
+			 The default is UTF-8. You can select another default charset 
+			 form the list.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 42px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Polling interval</b></span>. 
+			 This is the number of minutes to wait before checking for 
+			 new mail. The default is 5 minutes.</p></li>
+			<li class="p"><p><span style="font-weight: bold;"><b>Minimum mail 
+			 polling interval</b></span> limits the user's setting their polling 
+			 frequency.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 42px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Out of office 
+			 cache lifetime</b></span>. When <span style="font-weight: bold;"><b>Away 
+			 message enabled</b></span> is checked, a reply message is sent 
+			 to received messages only once during the cache lifetime. 
+			 &#160;The default is one time every 7 days.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 26px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Save to sent</b></span>. 
+			 A copy of messages that are sent from the account are saved 
+			 to the Sent folder.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 58px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Allow sending 
+			 email from any address</b></span>. Used with Mail Identities to 
+			 allow users to create different email addresses. If this is 
+			 not checked users can only select from email addresses or 
+			 aliases that you configured.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 26px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Composing 
+			 Mail</b></span> <span>section lets you define the initial user 
+			 experience when writing an email message. You can set it up 
+			 to compose messages as Text or HTML, set the font, size and 
+			 color to use, and</span> <span style="font-weight: bold;"><b>Always 
+			 compose in new window</b></span>. displays the compose page in 
+			 a new window.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 26px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Reply/Forward 
+			 using format of the original message</b></span>. Check this box 
+			 to reply to the message in the same format as received. This 
+			 is useful to make sure the recipient can get the message in 
+			 the best format they can read.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 74px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Signature 
+			 style</b></span>, either Internet standard, with the signature 
+			 at the end of the message thread or basic, with the signature 
+			 at the end of the new message.</p></li>
+			<li class="p"><p>You can configure the signature length. The 
+			 maximum length of a mail signature is 1024 characters.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 18px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><p 
+			 style="font-weight: bold;">Address Book Options</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 26px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p>Use GAL when <a href="javascript:void(0);" id="a1" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_domains/autocomplete_on_gal.htm',400,300);return false;">autocompleting 
+			 addresses</a>.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 26px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p>Enable automatic adding of contacts.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 26px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p>Number of contacts per page, 10, 25, 50, or 
+			 100. &#160;The default is 25.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 18px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><p 
+			 style="font-weight: bold;">Calendar Options</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 42px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Timezone</b></span> 
+			 is used to set the default time zone for &#160;new accounts 
+			 in this COS. The time zone you set during the ZCS install 
+			 sets the default COS time zone. See Setting 
+			 time zones for accounts.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 42px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Number of 
+			 minutes before an appointment to show reminder</b></span>. The 
+			 default is 5 minutes.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 42px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Always show 
+			 the mini-calendar</b></span>. A mini-calendar will always display 
+			 in the lower left corner of the Web client.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 58px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Use the QuickAdd 
+			 dialog when creating new appointments</b></span>. If the Calendar 
+			 feature is enabled, users can click on a date to open the 
+			 QuickAdd dialog to create an appointment.</p></li>
+		</ul></td>
+	</tr>
+	<tr style="vertical-align: top; height: 58px;">
+		<td style="padding-right: 10px; padding-left: 10px;" width="662"><ul 
+				 type="disc">
+			<li class="p"><p><span style="font-weight: bold;"><b>Show timezone list in appointment view</b></span>. 
+			 The timezone list will be displayed 
+			 when users create appointments.</p></li>
+		</ul></td>
+	</tr>
 </table>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();
+	FilePopupInit('a1');
+//]]></script>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

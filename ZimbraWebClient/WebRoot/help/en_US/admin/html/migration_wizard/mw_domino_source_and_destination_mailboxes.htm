@@ -1,36 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Domino Source and Destination Mailboxes</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { font-weight:bold; }
-ol.whs3 { list-style:decimal; }
-p.whs4 { margin-left:0px; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs4 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -41,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
@@ -69,10 +63,8 @@ if (window.gbWhTopic)
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -88,74 +80,82 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Domino Source and Destination Mailboxes</h1>
-<p>In this dialog, list the users who should be migrated to the Zimbra 
- mailbox server. </p>
+<p>In this dialog, list the users who should be migrated to the Zimbra mailbox server.</p>
 <p>You can select users with either of the following applications:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p class="whs2">Object Picker<span style="font-weight: normal;">, 
- to select individual accounts to migrate to Zimbra.</span></p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Query Builder</B></span><span>, 
- to select groups of accounts to migrate to Zimbra.</span></p></li>
+<ul type="disc">
+<li class="p">
+<p style="font-weight: bold;">Object Picker<span style="font-weight: normal;">, to select individual accounts to migrate to Zimbra.</span></p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Query Builder</b></span><span>, to select groups of accounts to migrate to Zimbra.</span></p>
+</li>
 </ul>
 <p>When importing accounts, the migration wizard assumes that:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Imports are by a single domain. For example, you might 
- import users from marketing.domain.com on your Domino 
- server to zimbra.domain.com on your Zimbra server.<span 
- class=code> </span></p></li>
-	<li class=p><p>The user&rsquo;s Common Name (CN) 
- in Domino will be the first portion of the email address on the Zimbra 
- server. To continue the above example, a user who has an account for joe@marketing.zimbra.com 
- on Domino would become joe@marketing.zimbra.example.com, 
- on your Zimbra server.</p></li>
+<ul type="disc">
+<li class="p">
+<p>Imports are by a single domain. For example, you might import users from 
+marketing.domain.com on your Domino server to 
+zimbra.domain.com on your Zimbra server.</p>
+</li>
+<li class="p">
+<p>The user’s Common Name (
+CN) in Domino will be the first portion of the email address on the Zimbra server. To continue the above example, a user who has an account for 
+joe@marketing.zimbra.com on Domino would become 
+joe@marketing.zimbra.example.com, on your Zimbra server.</p>
+</li>
 </ul>
-<p>&nbsp;</p>
-<p>Click <span class=attribute>Object Picker</span> to select specific 
- accounts to migrate. The Object Picker lists all the users in the Domino 
- name and address book (NAB). </p>
-<ul><ol><li style="list-style: decimal;" type=1 class=p><p>Select the users 
- that should be migrated to ZCS. To limit the number of users to migrate 
- at one time, choose specific email addresses . You can include a substring. 
- For example, you can specify to migrate all email addresses with the first 
- letter of A, or adam@*.com, or adam@acme.com. 
- </p></li>
-		<li style="list-style: decimal;" type=1 class=p><p><span style="margin-left: 48px;">You 
- can continue to use the Object Picker to add more names. &nbsp;When 
- complete, click </span><span style="margin-left: 48px; font-weight: bold;"><B>OK</B></span><span 
- style="margin-left: 48px;">.</span></p></li>
-		<li style="list-style: decimal;" type=1 class=p><p>When all the 
- names are displayed in the Source and Destination Mailboxes dialog, click 
- <span style="font-weight: bold;"><B>Next</B></span>. </p></li>
-	</ol>
+<p>&#160;</p>
+<p>Click <span class="attribute">Object Picker</span> to select specific accounts to migrate. The Object Picker lists all the users in the Domino name and address book (NAB).</p>
+<ul>
+<li style="list-style:none;display: inline">
+<ol>
+<li type="1" class="p">
+<p>Select the users that should be migrated to ZCS. To limit the number of users to migrate at one time, choose specific email addresses . You can include a substring. For example, you can specify to migrate all email addresses with the first letter of A, or 
+adam@*.com, or 
+adam@acme.com.</p>
+</li>
+<li type="1" class="p">
+<p><span style="margin-left: 48px;">You can continue to use the Object Picker to add more names. &#160;When complete, click</span> <span style="margin-left: 48px; font-weight: bold;"><b>OK</b></span><span style="margin-left: 48px;">.</span></p>
+</li>
+<li type="1" class="p">
+<p>When all the names are displayed in the Source and Destination Mailboxes dialog, click <span style="font-weight: bold;"><b>Next</b></span>.</p>
+</li>
+</ol>
+</li>
 </ul>
-<p>&nbsp;</p>
-<p>Click <span class=attribute>Query Builder</span> to select groups of 
- accounts to migrate. </p>
-<ul type="disc" class="whs1">
-	<ol type="1" class="whs3">
-		<li class=p><p>&nbsp;Enter the search base for 
- the LDAP query </p></li>
-		<li class=p><p>Construct the filter to identify which mailboxes 
- to import.</p></li>
-		<li class=p><p>Check Subtree to search the entire 
- subtree under the Base DN</p></li>
-		<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>.</p></li>
-	</ol>
+<p>&#160;</p>
+<p>Click <span class="attribute">Query Builder</span> to select groups of accounts to migrate.</p>
+<ul type="disc">
+<li style="list-style:none;display: inline">
+<ol type="1">
+<li class="p">
+<p>&#160;Enter the search base for the LDAP query</p>
+</li>
+<li class="p">
+<p>Construct the filter to identify which mailboxes to import.</p>
+</li>
+<li class="p">
+<p>Check 
+Subtree to search the entire 
+subtree under the Base DN</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>OK</b></span>.</p>
+</li>
+</ol>
+</li>
 </ul>
-<p class="whs4">The Wizard now checks to see if the accounts 
- selected exists on the Zimbra server. </p>
-<script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 0px;">The Wizard now checks to see if the accounts selected exists on the Zimbra server.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

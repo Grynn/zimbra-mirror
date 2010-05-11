@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Installing Certificates</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Global Settings\nInstalling Certificates");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,117 +81,133 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Installing Certificates</h1>
-<p>You can use the Certificate Installation Wizard to </p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Install self-signed certificate</p></li>
-	<li class=p><p>Generate the Certificate Signing Request (CSR) 
- that is sent a commercial certificate authorizer</p></li>
-	<li class=p><p>Install the commercially signed certificate when it 
- has been authorized.</p></li>
+<p>You can use the Certificate Installation Wizard to</p>
+<ul type="disc">
+<li class="p">
+<p>Install self-signed certificate</p>
+</li>
+<li class="p">
+<p>Generate the Certificate Signing Request (
+CSR) that is sent a commercial certificate authorizer</p>
+</li>
+<li class="p">
+<p>Install the commercially signed certificate when it has been authorized.</p>
+</li>
 </ul>
 <p>See <a href="creating_certificates.htm">Generating Certificates</a></p>
-<p>When ZCS is installed, the self-signed certificate is automatically 
- installed and can be used for testing ZCS. You should generate the CSR 
- and install the commercial certificate when ZCS is used in your production 
- environment. &nbsp;</p>
-<p>When you are using a commercially signed certificate, the Certificate 
- Install Wizard is run twice: </p>
-<ul type="disc" class="whs1">
-	<li class=p><p>To generate the CSR and download 
- so you can send it to a Certificate Authority who issues a signed certificate. 
- </p></li>
-	<li class=p><p>To install the signed certificate when it is returned.</p></li>
+<p>When ZCS is installed, the self-signed certificate is automatically installed and can be used for testing ZCS. You should generate the 
+CSR and install the commercial certificate when ZCS is used in your production environment. &#160;</p>
+<p>When you are using a commercially signed certificate, the Certificate Install Wizard is run twice:</p>
+<ul type="disc">
+<li class="p">
+<p>To generate the 
+CSR and download so you can send it to a Certificate Authority who issues a signed certificate.</p>
+</li>
+<li class="p">
+<p>To install the signed certificate when it is returned.</p>
+</li>
 </ul>
 <h3>How to generate a Certificate Signing Request</h3>
-<p>To generate the CSR, you complete a form with details about &nbsp;the 
- domain, company, and country and then generate a CSR 
- with the RSA private key. You save this to your computer 
- and submit it to your commercial certificate authorizer.</p>
-<p>You will be required to enter information about your company. Before 
- you generate the CSR, you must know the following details</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Common Name</B></span> 
- (CN). This is the exact domain name that should be 
- used to access your Web site securely.</p></li>
-	<li class=p><p>Are you going to use a <span style="font-weight: bold;"><B>wildcard</B></span> 
- common name? &nbsp;If you want to manage multiple sub 
- domains on a single domain on the server with a single certificate, check 
- this box. An asterisk (*) is added to the Common Name field. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Country Name</B></span> 
- (C) The country you want the certificate to display as your company location.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>State/Province</B></span> 
- (ST) The state/province you want the certificate to 
- display as your company location.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>City</B></span> (L) 
- The city you want the certificate to display as your company location.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Organization Name</B></span> 
- (O). Your company name. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Organization Unit</B></span> 
- (OU). The unit name (if applicable).</p></li>
-	<li class=p><p>Are you going to use <span style="font-weight: bold;"><B>Subject 
- Alternative Name</B></span> (SAN)? The input should be a valid domain name. 
- When SAN is used the domain name is compared with the common name and 
- then to the SAN to find a match. You can create multiple SANs. 
- When the alternate name is entered here, the client ignores the common 
- name and tries to match the server name to one of the SAN names. </p></li>
+<p>To generate the CSR, you complete a form with details about &#160;the domain, company, and country and then generate a 
+CSR with the 
+RSA private key. You save this to your computer and submit it to your commercial certificate authorizer.</p>
+<p>You will be required to enter information about your company. Before you generate the CSR, you must know the following details</p>
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Common Name</b></span> (
+CN). This is the exact domain name that should be used to access your Web site securely.</p>
+</li>
+<li class="p">
+<p>Are you going to use a <span style="font-weight: bold;"><b>wildcard</b></span> common name? &#160;If you want to manage multiple sub domains on a single domain on the server with a single certificate, check this box. An asterisk (*) is added to the Common Name field.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Country Name</b></span> (C) The country you want the certificate to display as your company location.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>State/Province</b></span> (
+ST) The state/province you want the certificate to display as your company location.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>City</b></span> (
+L) The city you want the certificate to display as your company location.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Organization Name</b></span> (O). Your company name.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Organization Unit</b></span> (
+OU). The unit name (if applicable).</p>
+</li>
+<li class="p">
+<p>Are you going to use <span style="font-weight: bold;"><b>Subject Alternative Name</b></span> (SAN)? The input should be a valid domain name. When SAN is used the domain name is compared with the common name and then to the SAN to find a match. You can create multiple 
+SANs. When the alternate name is entered here, the client ignores the common name and tries to match the server name to one of the SAN names.</p>
+</li>
 </ul>
-<h6>To generate the CSR</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>Select the target server. Select<span style="font-weight: bold;"><B> 
- All Servers</B></span> if you are going to deploy &nbsp;the 
- certificate to all the servers. </p></li>
-	<li class=p><p>Select the server for the certificate. Click <span style="font-weight: bold;"><B>Next</B></span>.</p></li>
-	<li class=p><p>Select <span style="font-weight: bold;"><B>Generate the 
- CSR for the commercial certificate authorizer</B></span>. 
- Click <span style="font-weight: bold;"><B>Next</B></span>.</p></li>
-	<li class=p><p>In the Generate the Certificate Signing Request dialog, 
- enter the server information as described above. &nbsp;Click 
- <span style="font-weight: bold;"><B>Next</B></span>. The CSR 
- including the RSA Private Key is generated. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Download the 
- CSR</B></span><span> and save the file to your computer. Change the default 
- name to your servername.csr.</span></p></li>
-	<li class=p><p>After you save the .csr name, on 
- the Certificate Installation Wizard dialog, click <span style="font-weight: bold;"><B>Finish</B></span>.</p></li>
+<h6>To generate the 
+CSR</h6>
+<ol type="1">
+<li class="p">
+<p>Select the target server. Select <span style="font-weight: bold;"><b>All Servers</b></span> if you are going to deploy &#160;the certificate to all the servers.</p>
+</li>
+<li class="p">
+<p>Select the server for the certificate. Click <span style="font-weight: bold;"><b>Next</b></span>.</p>
+</li>
+<li class="p">
+<p>Select <span style="font-weight: bold;"><b>Generate the 
+CSR for the commercial certificate authorizer</b></span>. Click <span style="font-weight: bold;"><b>Next</b></span>.</p>
+</li>
+<li class="p">
+<p>In the Generate the Certificate Signing Request dialog, enter the server information as described above. &#160;Click <span style="font-weight: bold;"><b>Next</b></span>. The 
+CSR including the 
+RSA Private Key is generated.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Download the CSR</b></span> <span>and save the file to your computer. Change the default name to your servername.csr.</span></p>
+</li>
+<li class="p">
+<p>After you save the .
+csr name, on the Certificate Installation Wizard dialog, click <span style="font-weight: bold;"><b>Finish</b></span>.</p>
+</li>
 </ol>
-<p>Now you submit the .csr file to a commercial certificate 
- authorizer. When they send the digitally signed certificate back, use 
- the Certificates Wizard to install the certificate on the ZCS.</p>
+<p>Now you submit the .
+csr file to a commercial certificate authorizer. When they send the digitally signed certificate back, use the Certificates Wizard to install the certificate on the ZCS.</p>
 <h3>To install the commercial certificate</h3>
-<p>When the commercial certificate is received, save the signed certificate 
- to a folder that you can access from the ZCS administration console. Then 
- start the Certificate Installation Wizard.</p>
-<ol type="1" class="whs2">
-	<li class=p><p>Select the server that the commercial certificate was 
- created for. Click <span style="font-weight: bold;"><B>Next</B></span>.</p></li>
-	<li class=p><p>Select <span style="font-weight: bold;"><B>Install the 
- commercially signed certificate</B></span>. Click <span style="font-weight: bold;"><B>Next</B></span>.</p></li>
-	<li class=p><p>Verify that the information displayed is the correct 
- information for the CSR. Click <span style="font-weight: bold;"><B>Next</B></span>.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Browse</B></span> 
- to find the commercial certificate. Click <span style="font-weight: bold;"><B>Next</B></span>. 
- </p></li>
-	<li class=p><p>The target server is listed. Click <span style="font-weight: bold;"><B>Install</B></span>.</p></li>
-	<li class=p><p>When the certificate is installed, you must restart 
- the server to apply the certificate. Restart the server from the command 
- line. Click <span style="font-weight: bold;"><B>zmcontrol 
- stop</B></span> and then &nbsp;<span style="font-weight: bold;"><B>zmcontrol 
- start</B></span>.</p></li>
+<p>When the commercial certificate is received, save the signed certificate to a folder that you can access from the ZCS administration console. Then start the Certificate Installation Wizard.</p>
+<ol type="1">
+<li class="p">
+<p>Select the server that the commercial certificate was created for. Click <span style="font-weight: bold;"><b>Next</b></span>.</p>
+</li>
+<li class="p">
+<p>Select <span style="font-weight: bold;"><b>Install the commercially signed certificate</b></span>. Click <span style="font-weight: bold;"><b>Next</b></span>.</p>
+</li>
+<li class="p">
+<p>Verify that the information displayed is the correct information for the 
+CSR. Click <span style="font-weight: bold;"><b>Next</b></span>.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Browse</b></span> to find the commercial certificate. Click <span style="font-weight: bold;"><b>Next</b></span>.</p>
+</li>
+<li class="p">
+<p>The target server is listed. Click <span style="font-weight: bold;"><b>Install</b></span>.</p>
+</li>
+<li class="p">
+<p>When the certificate is installed, you must restart the server to apply the certificate. Restart the server from the command line. Click <span style="font-weight: bold;"><b>
+zmcontrol stop</b></span> and then &#160;<span style="font-weight: bold;"><b>
+zmcontrol start</b></span>.</p>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

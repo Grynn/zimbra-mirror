@@ -1,32 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Creating a Resource</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { x-condition:NET_OS; }
-p.whs3 { margin-left:40px; }
-p.whs4 { font-weight:bold; }
-p.whs5 { font-weight:bold; margin-left:80px; }
-p.whs6 { font-weight:normal; }
-h6.whs7 { margin-left:40px; }
-ul.whs8 { list-style:decimal; }
-h3.whs9 { x-condition:NET_OS; }
-ol.whs10 { list-style:decimal; }
-ol.whs11 { list-style:lower-alpha; x-condition:NET_OS; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
+<title>Managing a Resource Account</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -37,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Managing Resources\nCreating a Resource");
+	addTocInfo("Managing Resources\nManaging a Resource Account");
 addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 
 	}
@@ -66,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -85,205 +81,190 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Creating a Resource Account</h1>
+//]]></script>
+<script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2"></script>
+<h1>Managing a Resource Account</h1>
 <p>A resource account is set up for either a location or piece of equipment 
  that can be scheduled for a meeting. The resource has its own mailbox 
- and can accept or reject invitations automatically. &nbsp;The 
- administrator does not need to monitor these mailboxes on a regular basis. 
- The contents of the resource mailboxes are purged according to the restrictions 
- set in the COS for email message and trash lifetime.</p>
+ and can accept or reject invitations automatically based on availability. 
+ &#160;The administrator does not need to monitor these mailboxes on a 
+ regular basis. The contents of the resource mailboxes are purged according 
+ to the mail purge policies.</p>
 <p>When you create a resource account, a directory account is created on 
- the LDAP server. </p>
+ the LDAP server.</p>
 <p>When you initially create a resource, you can configure the following:</p>
-<p><span style="font-weight: bold;"><B>Resource name</B></span>. </p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Name</B></span>: Descriptive 
- name for the location or equipment. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Email</B></span>: The email 
- address for the resource. This field is automatically populated with the 
- name. You can change this. </p></li>
+<p><span style="font-weight: bold;"><b>Resource name</b></span>.</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Name</b></span>: Descriptive 
+	 name for the location or equipment.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Email</b></span>: The 
+	 email address for the resource. This field is automatically populated 
+	 with the name. You can change this.</p></li>
 </ul>
-<p><span style="font-weight: bold;"><B>Resource Setup</B></span>.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Type</B></span> of resource, 
- select either location or equipment.</p></li>
-	<li style=" x-condition: NET_OS; " class=p><p class="whs2"><span 
- style="font-weight: bold;"><B>Class of Service</B></span>. Note: If many resources 
- are going to be created and you are configuring Account Limits, you may 
- want to set up a separate COS for resources and configure the COS with 
- only the features the resource account needs. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Status</B></span>. Active 
- or unavailable. An active resource can be scheduled. When a resource status 
- is <a href="taking_a_resource_out_of_service.htm">unavailable</a>, the 
- resource is not included in resource list. &nbsp;</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Scheduling policy</B></span>. 
- The scheduling policy establishes how the resource's calendar is maintained. 
- </p></li>
+<p><span style="font-weight: bold;"><b>Resource Setup</b></span>.</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Type</b></span> of resource, 
+	 select either location or equipment.</p></li>
+	<li class="p"><p><span 
+	 style="font-weight: bold;"><b>Class of Service</b></span>. Note: If many 
+	 resources are going to be created and you are configuring Account 
+	 Limits, you may want to set up a separate COS for resources and configure 
+	 the COS with only the features the resource account needs.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Status</b></span>. Active 
+	 or unavailable. An active resource can be scheduled. When a resource 
+	 status is <a href="taking_a_resource_out_of_service.htm">unavailable</a>, 
+	 the resource is not included in resource list. &#160;</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Scheduling policy</b></span>. 
+	 The scheduling policy establishes how the resource's calendar is maintained.</p></li>
 </ul>
-<p class="whs3">Check <span style="font-weight: bold;"><B>Auto 
- decline all recurring appointments </B></span>when the resource can be scheduled 
+<p style="margin-left: 40px;">Check <span style="font-weight: bold;"><b>Auto 
+ decline all recurring appointments</b></span> when the resource can be scheduled 
  for only one meeting at a time, no recurring appointments can be scheduled 
- for this resource. </p>
-<p class="whs3"><span style="margin-left: 40px;">Select one 
+ for this resource.</p>
+<p style="margin-left: 40px;"><span style="margin-left: 40px;">Select one 
  of the following to handle other types of requests:</span></p>
-<ul type="disc" class="whs1">
-	<ul type="disc" class="whs1">
-		<li class=p><p class="whs4">Auto accept if available, 
- auto decline on conflict.<span style="font-weight: normal;"> &nbsp;Automatically 
- accept appointments unless the resource is already scheduled. The free/busy 
- times can be viewed. You can set up rules about when conflicting meetings 
- are not declined. </span></p></li>
-		<li class=p><p class="whs4">Manual accept, auto decline 
- on conflict. <span style="font-weight: normal;">Appointment that creates 
- a conflict are declined. All other appointments must be manually accepted. 
- You can set up rules about when conflicting meetings are not declined.</span></p></li>
-	</ul>
-</ul>
-<p class="whs5"><span style="font-weight: normal;">For 
- recurring appointments that are enabled with one of the above options, 
- you can set up a threshold (either as a number of conflicts or a percentage 
- of all the recurring appointments) to use to partially accept recurring 
- appointments.</span> &nbsp;</p>
-<ul type="disc" class="whs1">
-	<ul type="disc" class="whs1">
-		<li class=p><p class="whs6"><span style="font-weight: bold;"><B>Auto 
- accept always. </B></span><span>The resource</span> automatically accept all 
- appointments that are scheduled. &nbsp;In this case free/busy 
- information is not maintained, thus more than one meeting could schedule 
- the resource for the same time. Because the resource always stays free, 
- the suggested use for this policy would be for a frequently used location 
- off premises so that the location address can be included in the invite 
- to attendees. &nbsp;&nbsp;</p></li>
-		<li class=p><p class="whs6"><span style="font-weight: bold;"><B>No 
- auto accept or decline. </B></span>The resource scheduling policy is to manually 
- mange the resource. A delegated user logs into the resource account and 
- accepts or declines the reservation request.</p></li>
-	</ul>
-</ul>
-<h6 class="whs7"><span style="font-weight: bold;"><B>Conflict 
- Rules</B></span></h6>
-<p class="whs3">For <span style="font-weight: bold;"><B>Auto 
- accept if available, auto decline on conflict</B></span> and <span style="font-weight: bold;"><B>Manual 
- accept, auto decline on conflict</B></span>, the scheduling policy can be 
- set up with conflict rules for recurring appointments. &nbsp;<span 
- style="font-weight: bold;"><B>Maximum allowed number of conflicts</B></span> 
- and/or <span style="font-weight: bold;"><B>Maximum allowed percent of conflicts</B></span> 
- can be configured to allow a recurring resource to be scheduled even if 
- it is not available for all the requested recurring appointment dates. 
- The resource accepts appointments even if there are conflicts until either 
- the number of conflicts reaches the maximum allowed or the maximum percentage 
- of conflicts allowed is reached. &nbsp;If you set both 
- fields, the resource declines appointments whenever either of the conditions 
- is met</p>
-<ul type="disc" class="whs1">
-	<ul><li class=p-note><p class=note>If a resource is invited to a single 
- instance appointment if the resource scheduling policy is configured to 
- auto decline, the single instance is always declined. The conflict rules 
- do not apply.</p></li>
-	</ul>
-	<li style="x-condition: NET_OS;" class=p><p><span style="font-weight: bold;"><B>Mail 
- Server</B></span>. You can specify the mail server where the resource account 
- is created. The default is to have the resource created on any of the 
- servers listed in the <a href="../cos/assigning_accounts_to_different_servers.htm" style="x-condition: NET_OS;">COS server pool</a>. </p></li>
-</ul>
-<p class="whs4">Password.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Enter the password for this account and reenter the 
- password to confirm.</p></li>
-</ul>
-<p><span style="font-weight: bold;"><B>Notes.</B></span></p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Description</B></span> 
- of the resource. Description can be helpful information about the resource 
- such as room layout, number of occupants, or type of projector, etc. Details 
- in Description are shown to users as a note attached to the resource. 
- </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Notes</B></span>. Notes 
- can be used to record any type of information. Details in Notes are not 
- exposed to users.</p></li>
-</ul>
-<p class="whs4">Resource Location/Contact Information.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Resource location includes, site details, capacity and 
- street, city, state address. The information from Building, Floor, and 
- Room fields is automatically populated to the Location Display Name field, 
- if <span style="font-weight: bold;"><B>auto</B></span> is checked. If auto is 
- not checked, you can enter a location display name. &nbsp;The 
- content of this field appears as the location information for the resource.</p></li>
-	<li class=p><p>Contact information, including name, email address, 
- and phone number. This information is not exposed to the user. </p></li>
-</ul>
-<p>To schedule a resource or location, users invite the equipment and/or 
- location to a meeting. When they select the resource, they can view the 
- notes about the resource and view free/busy status for the resource, if 
- available. When the meeting invite is sent, an email is sent to the account, 
- and if the resource is free, the meeting is automatically entered in the 
- resource's calendar. </p>
-<h6>To create a resource</h6>
-<ul type="1" class="whs8">
-	<ol class=whs2 style="list-style: decimal;" type=1>
-		<li class=p><p>Click <span style="font-weight: bold;"><B>Resources, 
- </B></span>in the navigation pane.</p></li>
-		<li class=p><p>In the Resources toolbar, click <span style="font-weight: bold;"><B><b>New</b></B></span>.</p></li>
-		<li class=p><p>The <span style="font-weight: bold;"><B>New Resource 
- Wizard</B></span> appears. As a minimum, you must enter the resource name 
- and enter the resource email address. Select the schedule policy and add 
- useful information about the resource in the <span style="font-weight: bold;"><B>Description</B></span> 
- field.</p></li>
-		<li class=p><p>Click <span style="font-weight: bold;"><B>Next</B></span> 
- and add resource location and contact information. If <span style="font-weight: bold;"><B>auto</B></span> 
- is checked, information added to Building, Floor, and Room fields are 
- automatically added to the Location Display Name field. If auto is not 
- checked, you can add a location display name.</p></li>
-		<li class=p><p>Click <span style="font-weight: bold;"><B>Finish</B></span>.</p></li>
-	</ol>
-</ul>
-<h3 class="whs9">Monitoring the Resource Account Calendar</h3>
-<p class="whs2">A resource account can share its resource 
- calendar so that a specified user can manage the resource calendar. You 
- can also configure the resource account to forward a copy of the resource's 
- invitations to this user. &nbsp;When this is set up, 
- the user that is managing the resource does not need to log on directly 
- to the account to view the resource calendar. </p>
-<ol type="1" class="whs10">
-	<li style="x-condition: NET_OS;" class=p><p>Create a resource</p></li>
-	<li style="x-condition: NET_OS;" class=p><p>Select the resource from 
- the Accounts list and click <span style="font-weight: bold;"><B>View Mail</B></span> 
- to open the resource account.</p></li>
-	<li style="x-condition: NET_OS;" class=p><p>Share the resource's calendar:</p></li>
-	<ol type="a" class="whs11">
-		<li class=p><p>In the Resource account's Calendar view, right-click 
- on <span style="font-weight: bold;"><B>Calendar</B></span> and select <span style="font-weight: bold;"><B>Share 
- Calendar with Internal users or groups</B></span></p></li>
-		<li class=p><p>In the <span style="font-weight: bold;"><B>Role</B></span> 
- section, select either <span style="font-weight: bold;"><B>Manager</B></span> 
- or <span style="font-weight: bold;"><B>Admin</B></span> to give the user permission 
- to create, accept or decline invitations and edit the resource calendar. 
- &nbsp;</p></li>
-		<li class=p><p>Select which message to send to the user to notify 
- them that the Resource account's Calendar has been shared.</p></li>
-		<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. 
- </p></li>
-		<li class=p><p>Close the account and return to the administrator 
- console.</p></li>
-	</ol>
-	<li style="x-condition: NET_OS;" class=p><p>Edit the resource account 
- and set the forwarding address to be the user account you delegated to 
- share the resource. A copy of invites are automatically forwarded to the 
- account. <span style="font-weight: bold;"><B>Note</B></span>: The forwarding 
- address can be added when you create the resource account as well.</p></li>
+<ol type="disc">
+	<li style="list-style: none; display: inline;"><ul type="disc">
+		<li class="p"><p style="font-weight: bold;"><a class="dropspot" 
+														 href="javascript:TextPopup(this)" 
+														 id="a1">Auto accept 
+		 if available, auto decline on conflict.</a> <span style="font-weight: normal;">&#160;</span></p>
+		<div class="droptext" id="POPUP426141176" style="display: none;">
+			<p>Automatically accept appointments unless the resource is 
+			 already scheduled. The free/busy times can be viewed. You 
+			 can modify the auto-decline rule to accept some meetings that 
+			 conflict.</p>
+		</div></li>
+		<li class="p"><p style="font-weight: bold;"><a class="dropspot" 
+														 href="javascript:TextPopup(this)" 
+														 id="a2">Manual 
+		 accept, auto decline on conflict.</a> </p>
+		<div class="droptext" id="POPUP427811672" style="display: none;">
+			<p><span style="font-weight: bold;"><b>&#160;</b></span>Appointment 
+			 that creates a conflict are declined. All other appointments 
+			 must be manually accepted. Appointment requests that do not 
+			 conflict are marked as tentative in the resource calendar 
+			 and must be manually accepted. If you use this policy, configure 
+			 the forwarding address so a copy of the invite is sent to 
+			 the account that manages this resource. You can modify the 
+			 auto-decline rule to accept some meetings that conflict.</p>
+		</div></li>
+	</ul></li>
 </ol>
-<script type="text/javascript" language="javascript1.2">
+<p style="font-weight: bold; margin-left: 80px;">Conflict Rules<span style="font-weight: normal;">. 
+ For recurring appointments that are enabled with one of the above options, 
+ you can set up a threshold (either as a number of conflicts or a percentage 
+ of all the recurring appointments) so that some instances of &#160;recurring 
+ appointments can be available for this resource.</span> </p>
+<ul type="disc">
+	<ul type="disc">
+		<li type="disc"><p style="font-weight: bold; margin-left: 48px;"><span 
+		 style="font-weight: normal;">For </span>Auto accept if available, 
+		 auto decline on conflict<span style="font-weight: normal;"> and 
+		 </span>Manual accept, auto decline on conflict<span style="font-weight: normal;">, 
+		 the scheduling policy can be set up with conflict rules for recurring 
+		 appointments. &#160;</span></p></li>
+		<li type="disc"><p style="font-weight: bold; margin-left: 48px;">Maximum 
+		 allowed number of conflicts<span style="font-weight: normal;"> 
+		 and/or </span>Maximum allowed percent of conflicts<span style="font-weight: normal;"> 
+		 can be configured to allow a recurring resource to be scheduled 
+		 even if it is not available for all the requested recurring appointment 
+		 dates. </span></p></li>
+	</ul>
+</ul>
+<p style="font-weight: bold; margin-left: 80px;"><span style="font-weight: normal;">The 
+ resource accepts appointments even if there are conflicts until either 
+ the number of conflicts reaches the maximum allowed or the maximum percentage 
+ of conflicts allowed is reached. &#160;If you set both fields, the resource 
+ declines appointments whenever either of the conditions is met</span></p>
+<ol type="disc">
+	<ol type="disc">
+		<li style="list-style: none; display: inline;"><p class="note">When 
+		 a resource is invited to a single-instance appointment, if the 
+		 resource scheduling policy is configured to auto decline, the 
+		 single instance is always declined. The conflict rules do not 
+		 apply.</p></li>
+	</ol>
+	<li style="list-style: none; display: inline;"><ul type="disc">
+		<li class="p"><p style="font-weight: normal;"><span style="font-weight: bold;"><b><a 
+		 class="dropspot" href="javascript:TextPopup(this)" id="a3">Auto 
+		 accept always.</a></b></span> &#160;&#160;</p>
+		<div class="droptext" id="POPUP429606568" style="display: none;">
+			<p>The resource automatically accept all appointments that 
+			 are scheduled. &#160;In this case free/busy information is 
+			 not maintained, thus more than one meeting could schedule 
+			 the resource for the same time. Because the resource always 
+			 stays free, the suggested use for this policy would be for 
+			 a frequently used location off premises so that the location 
+			 address can be included in the invite to attendees.</p>
+		</div></li>
+		<li class="p"><p style="font-weight: normal;"><span style="font-weight: bold;"><b><a 
+		 class="dropspot" href="javascript:TextPopup(this)" id="a4">No 
+		 auto accept or decline.</a></b></span> </p>
+		<div class="droptext" id="POPUP427843257" style="display: none;">
+			<p>The resource scheduling policy is to manually mange the 
+			 resource. A delegated user logs into the resource account 
+			 and accepts or declines the reservation request.</p>
+		</div></li>
+	</ul></li>
+</ol>
+<ul type="disc">
+	<li class="p"><p><span 
+	 style="font-weight: bold;"><b>Mail Server</b></span>. You can specify the 
+	 mail server where the resource account is created. The default is 
+	 to have the resource created on any of the servers listed in the <a href="../cos/assigning_accounts_to_different_servers.htm">COS server 
+	 pool</a> .</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Forward calendar 
+	 invitations to these addresses.</b></span> You can add one or more forwarding 
+	 addresses of users who manage the resource's Calendar.</p></li>
+</ul>
+<p style="font-weight: bold;">Password.</p>
+<ul type="disc">
+	<li class="p"><p>Enter the password for this account and reenter the 
+	 password to confirm.</p></li>
+</ul>
+<p><span style="font-weight: bold;"><b>Notes.</b></span></p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Description</b></span> 
+	 of the resource. Description can be helpful information about the 
+	 resource such as room layout, number of occupants, or type of projector, 
+	 etc. Details in Description are shown to users as a note attached 
+	 to the resource.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Notes</b></span>. Notes 
+	 can be used to record any type of information. Details in Notes are 
+	 not exposed to users.</p></li>
+</ul>
+<p style="font-weight: bold;">Resource Location/Contact Information.</p>
+<ul type="disc">
+	<li class="p"><p>Resource location includes, site details, capacity 
+	 and street, city, state address. The information from Building, Floor, 
+	 and Room fields is automatically populated to the Location Display 
+	 Name field, if <span style="font-weight: bold;"><b>auto</b></span> is checked. 
+	 If auto is not checked, you can enter a location display name. &#160;The 
+	 content of this field appears as the location information for the 
+	 resource.</p></li>
+	<li class="p"><p>Contact information, including name, email address, 
+	 and phone number. This information is not exposed to the user.</p></li>
+</ul>
+<p>&#160;</p>
+<p>&#160;</p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a1','POPUP426141176');
+	TextPopupInit('a2','POPUP427811672');
+	TextPopupInit('a3','POPUP429606568');
+	TextPopupInit('a4','POPUP427843257');
+//]]></script>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

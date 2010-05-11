@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Monitoring Servers</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Monitoring Tools\nMonitoring Servers");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,65 +81,48 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Monitoring Zimbra Servers</h1>
-<p>You can monitor the following from the administration console. &nbsp;</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Server status</p></li>
-	<li class=p><p>Server performance statistics, including message count, 
- message volume, anti-spam and anti-virus activity</p></li>
-	<li class=p><p>Mailbox Quotas</p></li>
-	<li class=p><p>Mail Queues</p></li>
+<p>You can monitor the following from the administration console. &#160;</p>
+<ul type="disc">
+<li class="p">
+<p>Server status</p>
+</li>
+<li class="p">
+<p>Server performance statistics, including message count, message volume, anti-spam and anti-virus activity</p>
+</li>
+<li class="p">
+<p>Mailbox Quotas</p>
+</li>
+<li class="p">
+<p>Mail Queues</p>
+</li>
 </ul>
-<ul><li class=p-note><p class=note>Server status and server performance 
- statistics are available only if the Logger package is installed. </p></li>
+<ul>
+<li class="p-note">
+<p class="note">Server status and server performance statistics are available only if the Logger package is installed.</p>
+</li>
 </ul>
-<p>If the Logger package is installed, daily mail reports are automatically 
- created. This report runs every morning at 4 a. m. 
- and is sent to the administrator's email address. See the Administrator's 
- Guide, Monitoring chapter for more information.</p>
+<p>If the Logger package is installed, daily mail reports are automatically created. This report runs every morning at 4 a. 
+m. and is sent to the administrator's email address. See the Administrator's Guide, Monitoring chapter for more information.</p>
 <h2>Server Status</h2>
-<p>The <b style="font-weight: normal;"><span style="font-weight: normal;">Server</b> 
- <b style="font-weight: normal;">Status</b></span> content pane lists all 
- installed servers and services, including the services for MTA, mailbox, 
- logger, SNMP, anti-spam, anti-virus, and LDAP. The status, <script type="text/javascript" language="JavaScript"><!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
-{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../check.png' x-maintain-ratio='TRUE' class='img_whs1' width='18' height='14' border='0'>");}
-else
-{   document.write("<img src='../check.png' x-maintain-ratio='TRUE' class='img_whs1' style='width: 18px; height: 14px; float: none; border-style: none;   border-style: none;' width='18' height='14' border='0'>");}
-//--></script><noscript><img src='../check.png' x-maintain-ratio='TRUE' class='img_whs1' style='width: 18px; height: 14px; float: none; border-style: none;   border-style: none;' width='18' height='14' border='0'></noscript> &nbsp;for ON or <script type="text/javascript" language="JavaScript"><!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
-{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../x.png' x-maintain-ratio='TRUE' class='img_whs2' width='13' height='13' border='0'>");}
-else
-{   document.write("<img src='../x.png' x-maintain-ratio='TRUE' class='img_whs2' style='width: 13px; height: 13px; float: none; border-style: none;   border-style: none;' width='13' height='13' border='0'>");}
-//--></script><noscript><img src='../x.png' x-maintain-ratio='TRUE' class='img_whs2' style='width: 13px; height: 13px; float: none; border-style: none;   border-style: none;' width='13' height='13' border='0'></noscript> for OFF, is displayed, 
- along with the time the status last changed. </p>
+<p>The <span style="font-weight: normal;"><b>Server</b> <b style="font-weight: normal;">Status</b></span> content pane lists all installed servers and services, including the services for MTA, mailbox, logger, SNMP, anti-spam, anti-virus, and LDAP. The status, <img src="../check.png" class="img_whs1" alt="" width="18" height="14" border="0" /> &#160;for ON or <img src="../x.png" class="img_whs2" alt="" width="13" height="13" border="0" /> for OFF, is displayed, along with the time the status last changed.</p>
 <h2>Server Performance Statistics</h2>
-<p><b style="font-weight: normal;"><span style="font-weight: normal;">Server 
- Statistic</b> displays in a graphical format the&nbsp;message volume, 
- message</span> count, and spam and virus activity. The statistics are 
- available for the last 48 hours and last 30, 60, and 365 days.</p>
+<p><span style="font-weight: normal;"><b>Server Statistic</b> displays in a graphical format the&#160;message volume, message</span> count, and spam and virus activity. The statistics are available for the last 48 hours and last 30, 60, and 365 days.</p>
 <h2>Mailbox Quotas</h2>
-<p>Mailbox Quota displays the configured quota allocated to the account, 
- the disk space used, and the percentage of quota used for each account, 
- sorted by mailbox size in descending order. </p>
+<p>Mailbox Quota displays the configured quota allocated to the account, the disk space used, and the percentage of quota used for each account, sorted by mailbox size in descending order.</p>
 <h2>Mail Queues</h2>
-<p>Mail Queues display a summary of the contents of the Deferred, Incoming, 
- Active, and Hold queues on a Zimbra MTA server. You can view messages 
- in a queue by domain and delete the contents of the queues by destination 
- domain, origin IP address, or by specific types of errors. </p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>Mail Queues display a summary of the contents of the Deferred, Incoming, Active, and Hold queues on a Zimbra MTA server. You can view messages in a queue by domain and delete the contents of the queues by destination domain, origin IP address, or by specific types of errors.</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>MTA SMTP Restrictions</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Global Settings\nMTA Protocol and DNS Checks");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,42 +81,47 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>MTA Protocol and DNS Checks</h1>
-<p>You can enable restrictions so that the MTA does not accept messages 
- when non standard or other disapproved behavior is exhibited by an incoming 
- SMTP client. These restrictions provide some protection against ill-behaved 
- spam senders. </p>
+<p>You can enable restrictions so that the MTA does not accept messages when non standard or other disapproved behavior is exhibited by an incoming SMTP client. These restrictions provide some protection against ill-behaved spam senders.</p>
 <p>By default, the following SMTP protocol violators are restricted:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Hostname in greeting violates RFC 
- </p></li>
-	<li class=p><p>Client must greet with a fully qualified hostname</p></li>
-	<li class=p><p>Sender address must be fully qualified</p></li>
+<ul type="disc">
+<li class="p">
+<p>Hostname in greeting violates 
+RFC</p>
+</li>
+<li class="p">
+<p>Client must greet with a fully qualified 
+hostname</p>
+</li>
+<li class="p">
+<p>Sender address must be fully qualified</p>
+</li>
 </ul>
 <p>The following DNS based restrictions can also be enabled:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Client's IP address</p></li>
-	<li class=p><p>Hostname in greeting</p></li>
-	<li class=p><p>Sender's domain</p></li>
+<ul type="disc">
+<li class="p">
+<p>Client's 
+IP address</p>
+</li>
+<li class="p">
+<p>Hostname in greeting</p>
+</li>
+<li class="p">
+<p>Sender's domain</p>
+</li>
 </ul>
-<p>&nbsp;</p>
-<p><span class=Important>Important:</span> Before setting these restrictions, 
- identify what type of mails is received outside of your mail system. If 
- a mail system you want to receive mail from is poorly implemented, you 
- may have to compromise your restrictions to accommodate their messages. 
- </p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<p><span class="Important">Important:</span> Before setting these restrictions, identify what type of mails is received outside of your mail system. If a mail system you want to receive mail from is poorly implemented, you may have to compromise your restrictions to accommodate their messages.</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

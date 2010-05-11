@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Class of Service Managing</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing COS\nManaging Classes of Service");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,92 +81,76 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" src="../ehlpdhtm.js" x-save-method="compute-relative" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( InitEffects ) != 'function' ) InitEffects = new Function();if( typeof( InitTrigger ) != 'function' ) InitTrigger = new Function();if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
+//]]></script>
+
+<script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2">
 </script>
-
-
 <h1>Managing Classes of Service</h1>
-<p>Class of Service (COS) is a Zimbra-specific object 
- that determines what default attributes users' accounts have and what 
- features are added or denied. The COS controls mailbox quotas, message 
- lifetime, password restrictions, attachment blocking, and server pool.</p>
-<p>A default COS is automatically created when Zimbra is installed. You 
- can modify the default COS, and you can create new classes of service. 
- A COS is a global object and is not restricted to a particular domain 
- or set of domains. </p>
-<p>COS is used to group accounts and define the feature levels for those 
- accounts. Each account is assigned a COS. &nbsp;You could, 
- for example, create an Executive COS which is configured to enable all 
- features, have unlimited mailbox quotas and never purges messages and 
- create another general-employee COS which enables only the mail feature, 
- sets the mailbox quota and purges messages every 60 days. Grouping accounts 
- to a specific COS lets you update or change account features in block. 
- Change the COS and all accounts assigned to the COS are changed.</p>
-<p>If a COS is not explicitly set for a new account, or if the COS assigned 
- to the user no longer exists, the default COS is automatically assigned.</p>
+<p>Class of Service (COS) is a 
+Zimbra-specific object that determines what default attributes users' accounts have and what features are added or denied. The COS controls mailbox quotas, message lifetime, password restrictions, attachment blocking, and server pool.</p>
+<p>A default COS is automatically created when Zimbra is installed. You can modify the default COS, and you can create new classes of service. A COS is a global object and is not restricted to a particular domain or set of domains.</p>
+<p>COS is used to group accounts and define the feature levels for those accounts. Each account is assigned a COS. &#160;You could, for example, create an Executive COS which is configured to enable all features, have unlimited mailbox quotas and never purges messages and create another general-employee COS which enables only the mail feature, sets the mailbox quota and purges messages every 60 days. Grouping accounts to a specific COS lets you update or change account features in block. Change the COS and all accounts assigned to the COS are changed.</p>
+<p>If a COS is not explicitly set for a new account, or if the COS assigned to the user no longer exists, the default COS is automatically assigned.</p>
 <p>A COS setting includes the following:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span class=attribute>General Information</span> tab<span 
- class=attribute style="font-weight: normal;"> showing the COS display 
- name and a one line description that is displayed in the COS content pane</span><span 
- class=attribute>. </span></p></li>
-	<li class=p><p><span class=attribute>Features</span> tab listing all 
- the <a href="javascript:void(0);" id="a1" onMouseOver="if (parseInt(navigator.appVersion) >= 4 && typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_accounts/user_interface_features.htm',400,500);return false;">features</a><script type="text/javascript" language=JavaScript1.2><!--
-FilePopupInit('a1');
-//--></script>, 
- and whether they are enabled or not.</p></li>
-	<li class=p><p><span class=attribute>Preferences</span> tab showing 
- what mail-view <a href="javascript:void(0);" id="a2" onMouseOver="if (parseInt(navigator.appVersion) >= 4 && typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_accounts/preferences.htm',400,500);return false;">preferences</a><script type="text/javascript" language=JavaScript1.2><!--
-FilePopupInit('a2');
-//--></script> 
- are enabled and you can select the language that displays in the Zimbra 
- Web Client for the accounts in this COS.</p></li>
-	<li class=p><p class="whs2">Themes<span style="font-weight: normal;"> 
- tab showing the default theme, installed themes, and available themes. 
- See </span><a href="../ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm">Defining 
- Theme for the Zimbra Web Client UI</a><span style="font-weight: normal;">.</span></p></li>
-	<li class=p><p class="whs2">Zimlets<span style="font-weight: normal;"> 
- tab showing a list of Zimlets that are installed and available for the 
- user interface. See </span><a href="../zimlets/adding_zimlets_to_cos_and_accounts.htm">Adding 
- Zimlets to COS and Accounts</a><span style="font-weight: normal;">.</span></p></li>
-	<li class=p><p><span class=attribute>Server Pool</span> tab listing 
- the mailbox hosts that are available to be assigned a new mailbox. See 
- <a href="assigning_accounts_to_different_servers.htm" style="font-weight: bold;">Assigning 
- Accounts to Different Servers</a>.</p></li>
-	<li class=p><p><span class=attribute>Advanced</span> tab showing quotas, 
- password constraints, session length, and message lifetimes, and attachment 
- blocking use. See <a href="../managing_accounts/account_advanced_features.htm" style="font-weight: bold;">Account Advanced Features</a>.</p></li>
+<ul type="disc">
+<li class="p">
+<p><span class="attribute">General Information</span> tab <span class="attribute" style="font-weight: normal;">showing the COS display name and a one line description that is displayed in the COS content pane</span><span class="attribute">.</span></p>
+</li>
+<li class="p">
+<p><span class="attribute">Features</span> tab listing all the 
+features, and whether they are enabled or not.</p>
+</li>
+<li class="p">
+<p><span class="attribute">Preferences</span> tab showing what mail-view 
+<a href="javascript:void(0);" id="a2" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_accounts/preferences.htm',400,500);return false;">preferences</a> are enabled and you can select the language that displays in the Zimbra Web Client for the accounts in this COS.</p>
+</li>
+<li class="p">
+<p style="font-weight: bold;">Themes <span style="font-weight: normal;">tab showing the default theme, installed themes, and available themes. See</span> <a href="../ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm">Defining Theme for the Zimbra Web Client 
+UI</a><span style="font-weight: normal;">.</span></p>
+</li>
+<li class="p">
+<p style="font-weight: bold;">Zimlets <span style="font-weight: normal;">tab showing a list of Zimlets that are installed and available for the user interface. See</span> <a href="../zimlets/adding_zimlets_to_cos_and_accounts.htm">Adding Zimlets to COS and Accounts</a><span style="font-weight: normal;">.</span></p>
+</li>
+<li class="p">
+<p><span class="attribute">Server Pool</span> tab listing the mailbox hosts that are available to be assigned a new mailbox. See <a href="assigning_accounts_to_different_servers.htm" style="font-weight: bold;">Assigning Accounts to Different Servers</a>.</p>
+</li>
+<li class="p">
+<p><span class="attribute">Advanced</span> tab showing quotas, password constraints, session length, and message lifetimes, and attachment blocking use. See <a href="../managing_accounts/account_advanced_features.htm" style="font-weight: bold;">Account Advanced Features</a>.</p>
+</li>
 </ul>
-<p>Even though a COS is assigned to an account, the COS attributes can 
- be overridden by:</p>
-<ul class=whs1 style="list-style: disc;" type=disc>
-	<li class=p><p>Changes end users make to their mailbox options &nbsp;</p></li>
-	<li class=p><p>Global settings set to <a href="javascript:void(0);" id="a3" onMouseOver="if (parseInt(navigator.appVersion) >= 4 && typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_global_settings/blocking_attachments_to_email.htm',400,500);return false;">reject attachments</a><script type="text/javascript" language=JavaScript1.2><!--
-FilePopupInit('a3');
-//--></script> 
- </p></li>
-	<li class=p><p>Individual accounts settings <a href="javascript:void(0);" id="a4" onMouseOver="if (parseInt(navigator.appVersion) >= 4 && typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('override_cos_settings.htm',400,500);return false;">changed to override specific COS attributes</a><script 
- type="text/javascript" language=JavaScript1.2><!--
-FilePopupInit('a4');
-//--></script></p></li>
+<p>Even though a COS is assigned to an account, the COS attributes can be overridden by:</p>
+<ul class="whs1" type="disc">
+<li class="p">
+<p>Changes end users make to their mailbox options &#160;</p>
+</li>
+<li class="p">
+<p>Global settings set to 
+<a href="javascript:void(0);" id="a3" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_global_settings/blocking_attachments_to_email.htm',400,500);return false;">reject attachments</a></p>
+</li>
+<li class="p">
+<p>Individual accounts settings 
+<a href="javascript:void(0);" id="a4" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('override_cos_settings.htm',400,500);return false;">changed to override specific COS attributes</a></p>
+</li>
 </ul>
-<p><span class=Important>Important: </span>Mailbox features are enabled 
- or restricted for Zimbra Web Client users. IMAP and POP client users may 
- not have the restrictions that are configured in their COS.</p>
-<script type="text/javascript" language="javascript1.2">
+<p><span class="Important">Important:</span> Mailbox features are enabled or restricted for Zimbra Web Client users. IMAP and POP client users may not have the restrictions that are configured in their COS.</p>
+
+<script type="text/javascript" language="JavaScript1.2">
+//<![CDATA[
+        if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();
+        FilePopupInit('a1');
+        FilePopupInit('a2');
+        FilePopupInit('a3');
+        FilePopupInit('a4');
+//]]>
+</script>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

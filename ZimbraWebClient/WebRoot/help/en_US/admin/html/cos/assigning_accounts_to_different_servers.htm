@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Assigning Accounts to Different Servers</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Servers\nAssigning Accounts to Different Servers");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,48 +81,49 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Assigning Accounts to Different Mail Servers</h1>
-<p>In an environment with multiple mail servers, the Class of Service can 
- be used to assign the next account to a mailbox server or you can specify 
- a specific server when you create the account.</p>
-<p>In the COS, the <span style="font-weight: bold;"><B>Server Pool</B></span> 
- lists the available mailbox servers, and you select which servers should 
- be available or the pool. When a COS is assigned to a new account, a mail 
- server is randomly chosen for the new account from the server pool associated 
- with that COS. </p>
-<p><span class=attribute>To add a server to the server pool</span></p>
-<ol type="1" class="whs1">
-	<li class=p><p>Open a COS or create a new COS, and select the <span 
- style="font-weight: bold;"><B>Server Pool</B></span> tab.</p></li>
-	<li class=p><p>Click the server name from the left column. </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>Add</B></span><span 
- style="font-weight: normal;">,</span></b> to move the name to the right. 
- </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>Save</B></span><span 
- style="font-weight: normal;">,</span></b> to commit your changes.</p></li>
+<p>In an environment with multiple mail servers, the Class of Service can be used to assign the next account to a mailbox server or you can specify a specific server when you create the account.</p>
+<p>In the COS, the <span style="font-weight: bold;"><b>Server Pool</b></span> lists the available mailbox servers, and you select which servers should be available or the pool. When a COS is assigned to a new account, a mail server is randomly chosen for the new account from the server pool associated with that COS.</p>
+<p><span class="attribute">To add a server to the server pool</span></p>
+<ol type="1">
+<li class="p">
+<p>Open a COS or create a new COS, and select the <span style="font-weight: bold;"><b>Server Pool</b></span> tab.</p>
+</li>
+<li class="p">
+<p>Click the server name from the left column.</p>
+</li>
+<li class="p">
+<p>Click <b><span style="font-weight: bold;"><b>Add</b></span><span style="font-weight: normal;">,</span></b> to move the name to the right.</p>
+</li>
+<li class="p">
+<p>Click <b><span style="font-weight: bold;"><b>Save</b></span><span style="font-weight: normal;">,</span></b> to commit your changes.</p>
+</li>
 </ol>
-<p><span class=attribute>To add an account to a specific mail server</span></p>
-<ol type="1" class="whs1">
-	<li class=p><p>In Accounts, select <span style="font-weight: bold;"><B>New 
- Account</B></span>.</p></li>
-	<li class=p><p>On the <span style="font-weight: bold;"><B>General Information</B></span> 
- dialog, in the <span style="font-weight: bold;"><B>Mail Server</B></span> field 
- uncheck <span style="font-weight: bold;"><B>auto</B></span>.</p></li>
-	<li class=p><p>From the drop-down list, select the mail server for 
- the new account. </p></li>
-	<li class=p><p>Continue to create the account and click <span style="font-weight: bold;"><B>Finish</B></span>.</p></li>
+<p><span class="attribute">To add an account to a specific mail server</span></p>
+<ol type="1">
+<li class="p">
+<p>In Accounts, select <span style="font-weight: bold;"><b>New Account</b></span>.</p>
+</li>
+<li class="p">
+<p>On the <span style="font-weight: bold;"><b>General Information</b></span> dialog, in the <span style="font-weight: bold;"><b>Mail Server</b></span> field 
+uncheck <span style="font-weight: bold;"><b>auto</b></span>.</p>
+</li>
+<li class="p">
+<p>From the drop-down list, select the mail server for the new account.</p>
+</li>
+<li class="p">
+<p>Continue to create the account and click <span style="font-weight: bold;"><b>Finish</b></span>.</p>
+</li>
 </ol>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

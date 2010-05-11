@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Volume Management</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Servers\nVolume Management");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,28 +81,28 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Volume Management</h1>
-<p>The Server, Volume Management tab can be used to manage storage volumes 
- on your Zimbra Mailbox server. When Zimbra Collaboration Suite is installed, 
- one index volume and one message volume are configured on each mailbox 
- server.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>The Index volume is /opt/zimbra/index</p></li>
-	<li class=p><p>The Message volume is /opt/zimbra/store</p></li>
+<p>The Server, Volumes tab can be used to manage storage volumes on your 
+ Zimbra Mailbox server. When Zimbra Collaboration Suite is installed, one 
+ index volume and one message volume are configured on each mailbox server.</p>
+<ul type="disc">
+	<li class="p"><p>The Index volume is /opt/ 
+	 zimbra/index</p></li>
+	<li class="p"><p>The Message volume is /opt/ 
+	 zimbra/store</p></li>
 </ul>
 <h2>Index Volume</h2>
 <p>Each Zimbra mailbox server is configured with one current index volume. 
- &nbsp;Each mailbox is assigned to a permanent index directory 
- on the current index volume. When an account is created, the current index 
- volume is automatically defined for the account. &nbsp;You 
- cannot change which index volume the account is assigned. &nbsp;</p>
+ &#160;Each mailbox is assigned to a permanent index directory on the current 
+ index volume. When an account is created, the current index volume is 
+ automatically defined for the account. &#160;You cannot change which index 
+ volume the account is assigned. &#160;</p>
 <p>As volumes become full, you can create a new current index volume for 
- new accounts. The older index volume is no longer assigned new accounts. 
- </p>
+ new accounts. The older index volume is no longer assigned new accounts.</p>
 <p>Index volumes not marked current are still actively in use as the index 
  volumes for accounts assigned to them. Any index volume that is referenced 
- by a mailbox as its index volume cannot be deleted. </p>
+ by a mailbox as its index volume cannot be deleted.</p>
 <h2>Message Volume</h2>
 <p>When a new message is delivered or created, the message is saved in 
  the primary message volume. Additional secondary message volumes can be 
@@ -106,40 +112,68 @@ else
  are never stored in the previous volume.</p>
 <p>A current volume cannot be deleted, and message volumes that have messages 
  referencing the volume cannot be deleted.</p>
-<h2>About the Volume Tab</h2>
-<p>The volume tab shows the following information</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Volume Name</B></span>. 
- The name of the volume. &nbsp;The initial volumes are 
- named index1 and message1.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Volume Root Path</B></span>. 
- The location in the file system where volume data is stored.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Volume Type</B></span>. 
- The volume type is either Index or Primary Message, Secondary Message.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Compress Blobs</B></span>. 
- When this box is checked, message blobs whose size is above the compression 
- threshold are compressed. If Blob compression is turned on, the disk space 
- used is decreased. </p></li>
-	<li class=p-note><p class=note><span style="font-weight: bold;"><B>Note</B></span>: 
- &nbsp;Turning on blob compression will also increase 
- memory requirements for the server.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Compression Threshold</B></span>. 
- Messages larger than the threshold are compressed. The default threshold 
- is 4096 bytes. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Current</B></span>. A check 
- mark is displayed next to volumes that are current. </p></li>
+<h2>About the Volumes Tab</h2>
+<p>The Volumes tab shows the following information</p>
+<ul type="disc">
+	<li class="p"><p style="font-weight: bold;">Manage Volumes section</p></li>
+	<ul type="disc">
+		<li style="font-size: 11pt;" type="circle"><p><span style="font-weight: bold;"><b>Volume 
+		 Name</b></span><span>. The name of the volume. &#160;The initial volumes 
+		 are named index1 and message1.</span></p></li>
+		<li style="font-size: 11pt;" type="circle"><p><span style="font-weight: bold;"><b>Volume 
+		 Root Path</b></span><span>. The location in the file system where 
+		 volume data is stored.</span></p></li>
+		<li style="font-size: 11pt;" type="circle"><p><span style="font-weight: bold;"><b>Volume 
+		 Type</b></span><span>. The volume type is either Index or Primary 
+		 Message, Secondary Message.</span></p></li>
+		<li style="font-size: 11pt;" type="circle"><p><span style="font-weight: bold;"><b>Compress 
+		 Blobs</b></span><span>. When this box is checked, message blobs whose 
+		 size is above the compression threshold are compressed. If Blob 
+		 compression is turned on, the disk space used is decreased.</span><span 
+		 style="font-weight: bold;"><b>&#160;Note</b></span><span>: &#160;Turning 
+		 on blob compression will also increase memory requirements for 
+		 the server.</span></p></li>
+		<li style="font-size: 11pt;" type="circle"><p><span style="font-weight: bold;"><b>Compression 
+		 Threshold</b></span><span>. Messages larger than the threshold are 
+		 compressed. The default threshold is 4096 bytes.</span></p></li>
+		<li style="font-size: 11pt;" type="circle"><p><span style="font-weight: bold;"><b>Current</b></span><span>. 
+		 A check mark is displayed next to volumes that are current.</span></p></li>
+		<li style="font-size: 11pt;" type="circle"><p><span>Assign Current 
+		 Volumes. This can be either the message volume, secondary message 
+		 volume, or the index volume.</span></p></li>
+		<li class="p" style="font-size: 11pt;" type="circle"><p>HSM Policy</p></li>
+	</ul>
 </ul>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 40px;">To manage your disk utilization, you can 
+ implement a global HSM policy 
+ or a different HSM policy for each mailbox server.</p>
+<ul type="circle">
+	<li><p style="margin-left: 40px;"><span style="font-weight: bold;"><b>Types 
+	 of items to move</b></span>. You can select messages, Documents notebooks, 
+	 tasks, appointments, contacts, chats and notes to move from a primary 
+	 volume to the current secondary volume based.</p></li>
+	<li><p style="margin-left: 40px;"><span style="font-weight: bold;"><b>Move 
+	 items older than.</b></span> &#160;The default global HSM policy is to 
+	 move messages and document files more than 30 days old to the secondary 
+	 volume. &#160;The age of items to be moved can be specified by number 
+	 of days, months, weeks, hours, or minutes.</p></li>
+	<li><p style="margin-left: 40px;"><span style="font-weight: bold;"><b>Policy 
+	 String</b></span>. You can use the search query language to set up other 
+	 HSM policies. For example, if you wanted all messages marked as junk 
+	 to be included in messages moved to the current secondary volume, 
+	 you would add the following to the policy: <span style="font-weight: bold;"><b>message:in:junk 
+	 before:-[x] days</b></span>.</p></li>
+</ul>
+<p>&#160;</p>
+
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

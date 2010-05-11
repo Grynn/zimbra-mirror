@@ -1,24 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Creating Classes of Service</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:decimal; }
-p.whs2 { font-weight:normal; }
-p.whs3 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing COS\nCreating or Deleting Classes of Service");
@@ -58,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -77,110 +81,109 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" src="../ehlpdhtm.js" x-save-method="compute-relative" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( InitEffects ) != 'function' ) InitEffects = new Function();if( typeof( InitTrigger ) != 'function' ) InitTrigger = new Function();if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
-</script>
-
-
+//]]></script>
+<script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2"></script>
 <h1>Creating Classes of Service</h1>
-<p>Class of Service (COS) determines what default attributes a mail account 
- has and what features are added or denied. You can create different COS 
- types to manage what features various user types can have. Before you 
- create the COS for your mail system, consider the types of end users and 
- what type of features they may need. </p>
-<p>There is no limit to the number of COSs, you can 
- create. A COS is a global object and is not restricted to a particular 
+<p>Class of Service (COS) determines which default attributes a mail account 
+ has and which features are added or denied. You can create different COS 
+ types to manage features various user types can have. Before you create 
+ the COS for your mail system, consider the types of end users and what 
+ type of features they may need.</p>
+<p>There is no limit to the number of COSs you 
+ can create. A COS is a global object and is not restricted to a particular 
  domain or set of domains.</p>
-<p><span class=attribute>To create a new class of service:</span></p>
-<ol class=whs2 style="list-style: decimal;" type=1>
-	<li class=p><p>Click <span class=attribute>Class of Service</span> 
- in the Navigation pane.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>New</B></span><span 
- style="font-weight: normal;">, from the toolbar.</span></b></p></li>
-	<li class=p><p>In the <span class=attribute>General Information</span> 
- tab, enter the COS display name and a description of the type of COS. 
- The display name cannot contain any spaces. You can use the Notes area 
- to keep a record of changes to the COS.</p></li>
-	<li class=p><p><span class=attribute style="font-weight: normal;">In 
- the</span><span class=attribute> Features</span> tab, all the features 
- available for the COS are displayed. Deselect any <a href="javascript:void(0);" id="a2" onMouseOver="if (parseInt(navigator.appVersion) >= 4 && typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_accounts/user_interface_features.htm',400,500);return false;">features</a><script type="text/javascript" language=JavaScript1.2><!--
-FilePopupInit('a2');
-//--></script> 
- you do not want included in the COS. </p></li>
-	<li class=p><p><span class=attribute style="font-weight: normal;">In 
- the</span><span class=attribute> Preferences</span> tab, define the initial 
- <a href="javascript:void(0);" id="a4" onMouseOver="if (parseInt(navigator.appVersion) >= 4 && typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_accounts/preferences.htm',400,500);return false;">preferences</a><script type="text/javascript" language=JavaScript1.2><!--
-FilePopupInit('a4');
-//--></script> 
- for how messages will be saved and viewed. You can also select a specific 
- locale for the ZWC view. If a locale is not specified, the browser locale 
- is the default.</p></li>
-	<ul type="1" class="whs1">
-		<li class=p-note><p class=note>Users can change the preferences 
- from the Zimbra Web Client, Options tool.</p></li>
-	</ul>
-	<li style=" font-weight: normal; font-weight: normal; " class=p><p class="whs2"><span class=attribute style="font-weight: normal;">In 
- the </span><span class=attribute>Themes</span><span class=attribute style="font-weight: normal;"> 
- tab, select which <a href="javascript:void(0);" id="a1" onMouseOver="if (parseInt(navigator.appVersion) >= 4 && typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm',400,500);return false;">themes</a><script type="text/javascript" language=JavaScript1.2><!--
-FilePopupInit('a1');
-//--></script> 
- should be available in user accounts. In order for themes to be used, 
- the Change UI themes feature must be enabled in the 
- Features tab. &nbsp;Note: If you limit the themes, one 
- of the themes you select must be listed as the default theme.</span></p></li>
-	<li style=" font-weight: normal; font-weight: normal; " class=p><p class="whs2"><span class=attribute style="font-weight: normal;">In 
- the </span><span class=attribute>Zimlets</span><span class=attribute style="font-weight: normal;"> 
- tab, select which <a href="javascript:void(0);" id="a3" onMouseOver="if (parseInt(navigator.appVersion) >= 4 && typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../zimlets/about_zimlets.htm',400,500);return false;">Zimlets</a><script type="text/javascript" language=JavaScript1.2><!--
-FilePopupInit('a3');
-//--></script> 
- should be available in users accounts</span></p></li>
-	<li class=p><p><span class=attribute style="font-weight: normal;">In 
- the</span><span class=attribute> Server Pool</span> tab, select which 
- servers to include in the pool. The servers in the pool are randomly assigned 
- new accounts. </p></li>
-	<ul type="1" class="whs1">
-		<li class=p-note><p class=note>Note: When you create an account, 
- you can override this action and assign the account to a specific mail 
- server.</p></li>
-	</ul>
-	<li class=p><p><span class=attribute style="font-weight: normal;">In 
- the</span><span class=attribute> Advanced</span> tab, set the <a href="javascript:void(0);" id="a5" onMouseOver="if (parseInt(navigator.appVersion) >= 4 && typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_accounts/account_advanced_features.htm',400,600);return false;">advanced</a><script type="text/javascript" language=JavaScript1.2><!--
-FilePopupInit('a5');
-//--></script> 
- settings including quotas, password constraints, session length, and message 
- lifetimes.<br>
-	<br>
+<p><span class="attribute">To create a new class of service:</span></p>
+<ol class="whs2" type="1">
+	<li class="p"><p>Click <span class="attribute">Class of Service</span> 
+	 in the Navigation pane.</p></li>
+	<li class="p"><p>Click <b><span style="font-weight: bold;"><b>New</b></span><span 
+	 style="font-weight: normal;">, from the toolbar.</span></b></p></li>
+	<li class="p"><p>In the <span class="attribute">General Information</span> 
+	 tab, enter the COS display name and a description of the type of COS. 
+	 The display name cannot contain any spaces. You can use the Notes 
+	 area to keep a record of changes to the COS.</p></li>
+	<li class="p"><p><span class="attribute" style="font-weight: normal;">In 
+	 the</span> <span class="attribute">Features</span> tab, all the features 
+	 available for the COS are displayed. Deselect any features 
+	 you do not want included in the COS.</p></li>
+	<li class="p"><p><span class="attribute" style="font-weight: normal;">In 
+	 the</span> <span class="attribute">Preferences</span> tab, define 
+	 the initial <a href="javascript:void(0);" id="a4" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_accounts/preferences.htm',400,500);return false;">preferences</a> for how messages will be saved 
+	 and viewed. You can also select a specific locale for the ZWC view. 
+	 If a locale is not specified, the browser locale is the default.</p>
+	<ul type="1">
+		<ul style="list-style: url('../blue_right.gif');">
+			<li class="p-note"><p class="note">Users can change the preferences 
+			 from the Zimbra Web Client, Options tool.</p></li>
+		</ul>
+	</ul></li>
+	<li class="p" style="font-weight: normal;"><p style="font-weight: normal;"><span 
+	 class="attribute" style="font-weight: normal;">In the</span> <span 
+	 class="attribute">Themes</span> <span class="attribute" style="font-weight: normal;">tab, 
+	 select which <a href="javascript:void(0);" id="a1" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm',400,500);return false;">themes</a> should be available in user accounts. 
+	 In order for themes to be used, the Change UI 
+	 themes feature must be enabled in the Features tab. &#160;Note: If 
+	 you limit the themes, one of the themes you select must be listed 
+	 as the default theme.</span></p></li>
+	<li class="p" style="font-weight: normal;"><p style="font-weight: normal;"><span 
+	 class="attribute" style="font-weight: normal;">In the</span> <span 
+	 class="attribute">Zimlets</span> <span class="attribute" style="font-weight: normal;">tab 
+	 all Zimlets that have been deployed are listed. You can select which 
+	 <a href="javascript:void(0);" id="a3" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../zimlets/about_zimlets.htm',400,500);return false;">Zimlets</a> should be mandatory for all users , which 
+	 are enabled and users can manage usage from their Zimlets Preferences 
+	 page, and which Zimlets should be disabled. &#160;&#160;Zimlets that 
+	 are marked as mandatory are not listed in the user's Zimlets Preferences 
+	 page.</span></p></li>
+	<li class="p"><p><span class="attribute" style="font-weight: normal;">In 
+	 the</span> <span class="attribute">Server Pool</span> tab, select 
+	 which servers to include in the pool. The servers in the pool are 
+	 randomly assigned new accounts.</p>
+	<ul type="1">
+		<ul style="list-style: url('../blue_right.gif');">
+			<li class="p-note"><p class="note">Note: When you create an 
+			 account, you can override this action and assign the account 
+			 to a specific mail server.</p></li>
+		</ul>
+	</ul></li>
+	<li class="p"><p><span class="attribute" style="font-weight: normal;">In 
+	 the</span> <span class="attribute">Advanced</span> tab, set the <a href="javascript:void(0);" id="a5" onmouseover="if (parseInt(navigator.appVersion) >= 4 &amp;&amp; typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('../managing_accounts/account_advanced_features.htm',400,600);return false;">advanced</a> settings including quotas, password constraints, 
+	 session length, and message lifetimes.<br />
+	<br />
 	The Advanced tab is also where you can disable attachment viewing.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>Save</b></B></span>. 
- </p></li>
+	<li class="p"><p>In the Zimbra Mobile tab, set up Zimbra mobile device 
+	 security. See Setting 
+	 Up Zimbra Mobile Device Security Policies.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b><b>Save</b></b></span>.</p></li>
 </ol>
 <p>You can edit a COS at any time.</p>
-<p><span class=attribute>To delete a class of service:</span></p>
-<ol class=whs2 style="list-style: decimal;" type=1>
-	<li class=p><p>Click <span class=attribute>Class of Service</span><span 
- class=attribute style="font-weight: normal;">,</span> in the navigation 
- pane.</p></li>
-	<li class=p><p>Click the <span style="font-weight: bold;"><B>COS</B></span><span>,</span> 
- to be deleted<span style="font-weight: bold;"> <B></B></span>from the contents 
- pane.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B><b>Delete</b></B></span>.</p></li>
+<p><span class="attribute">To delete a class of service:</span></p>
+<ol class="whs2" type="1">
+	<li class="p"><p>Click <span class="attribute">Class of Service</span><span 
+	 class="attribute" style="font-weight: normal;">,</span> in the navigation 
+	 pane.</p></li>
+	<li class="p"><p>Click the <span style="font-weight: bold;"><b>COS</b></span> 
+	 to be deleted from the contents pane.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b><b>Delete</b></b></span>.</p></li>
 </ol>
-<p class="whs3">All accounts associated with the deleted 
- COS are automatically reassigned to the default COS. </p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 40px;">All accounts associated with the deleted 
+ COS are automatically reassigned to the default COS.</p>
+<p>&#160;</p>
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();
+	FilePopupInit('a2');
+	FilePopupInit('a4');
+	FilePopupInit('a1');
+	FilePopupInit('a3');
+	FilePopupInit('a5');
+//]]></script>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

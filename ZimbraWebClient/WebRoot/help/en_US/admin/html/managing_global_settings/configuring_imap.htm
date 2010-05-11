@@ -1,30 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Configuring IMAP</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-table.whs1 { width:80%; border-top-style:Solid; border-bottom-style:Solid; border-top-width:4px; border-bottom-width:4px; x-cell-content-align:Center; border-spacing:6px; }
-col.whs2 { width:34.164%; }
-col.whs3 { width:65.836%; }
-tr.whs4 { x-cell-content-align:center; }
-td.whs5 { width:34.164%; padding-right:10px; padding-left:10px; border-top-style:none; border-right-style:none; border-bottom-style:none; border-left-style:none; }
-p.whs6 { font-weight:bold; }
-td.whs7 { width:65.836%; padding-right:10px; padding-left:10px; border-top-style:none; border-right-style:none; border-bottom-style:none; border-left-style:none; }
-td.whs8 { width:34.164%; padding-right:10px; padding-left:10px; border-right-style:none; border-bottom-style:none; border-left-style:none; }
-td.whs9 { width:65.836%; padding-right:10px; padding-left:10px; border-right-style:none; border-bottom-style:none; border-left-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -35,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Global Settings\nConfiguring IMAP");
@@ -64,10 +64,8 @@ addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -83,79 +81,93 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Configuring IMAP</h1>
-<p>You can enable the IMAP service and set the following from the Global 
- Settings, IMAP tab. You can also enable the IMAP service from a Server's 
- IMAP tab. The server settings overrule the global settings.</p>
-<p>&nbsp;</p>
-<table x-use-null-cells cellspacing="6" width="80%" class="whs1">
-<col class="whs2">
-<col class="whs3">
-
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs5">
-<p class="whs6">Enable IMAP service</td>
-<td width="65.836%" class="whs7">
-<p>Allows IMAP connection to the Zimbra servers.</td></tr>
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs8">
-<p class="whs6">Enable SSL for IMAP service</td>
-<td width="65.836%" class="whs9">
-<p>Enables encrypted connections. &nbsp;(https)</td></tr>
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs8">
-<p class="whs6">Enable clear text login</td>
-<td width="65.836%" class="whs9">
-<p>Enables connections that are not encrypted. &nbsp;(http)</p>
-<p>&nbsp;</td></tr>
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs8">
-<p class="whs6">IMAP port number</td>
-<td width="65.836%" class="whs9">
-<p>The default port number for http connections is 143. If you use IMAP/POP 
- proxy, the port number is 7143.</p>
-<p>&nbsp;</td></tr>
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs8">
-<p class="whs6">IMAP SSL port number</td>
-<td width="65.836%" class="whs9">
-<p>The default port number for https connections is 993. If you use IMAP/POP 
- proxy, the port number is 7993.</p>
-<p>&nbsp;</td></tr>
-<tr valign="middle" class="whs4">
-<td width="34.164%" class="whs8">
-<p class="whs6">IMAP proxy port number</td>
-<td width="65.836%" class="whs9">
-<p>Only configured if IMAP/POP proxy is set up. The required port number 
- is 143.</p>
-<p>&nbsp;</td></tr>
-<tr valign="middle" class="whs4">
-<td colspan="1" rowspan="1" width="34.164%" class="whs8">
-<p class="whs6">IMAP SSL proxy port number</td>
-<td colspan="1" rowspan="1" width="65.836%" class="whs9">
-<p>Only configured if IMAP/POP proxy is set up. The required port number 
- is 993.</p>
-<p>&nbsp;</td></tr>
-<tr valign="middle" class="whs4">
-<td colspan="1" rowspan="1" width="34.164%" class="whs8">
-<p class="whs6">Number of threads</td>
-<td colspan="1" rowspan="1" width="65.836%" class="whs9">
-<p>Number of threads that should be available. The global setting is not 
- set. The server default setting is 200.</td></tr>
+<p>You can enable the IMAP service and set the following from the Global Settings, IMAP tab. You can also enable the IMAP service from a Server's IMAP tab. The server settings overrule the global settings.</p>
+<p>&#160;</p>
+<table style="border-top-style: Solid; border-bottom-style: Solid; border-top-width: 4px; border-bottom-width: 4px; vertical-align: Center;" cellspacing="6" width="80%">
+<col style="width: 34.164%;" />
+<col style="width: 65.836%;" />
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Enable IMAP service</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
+<p>Allows IMAP connection to the Zimbra servers.</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Enable SSL for IMAP service</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
+<p>Enables encrypted connections. &#160;(https)</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Enable clear text login</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
+<p>Enables connections that are not encrypted. &#160;(http)</p>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">IMAP port number</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
+<p>The default port number for http connections is 143. If you use IMAP/POP proxy, the port number is 7143.</p>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">IMAP SSL port number</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
+<p>The default port number for https connections is 993. If you use IMAP/POP proxy, the port number is 7993.</p>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">IMAP proxy port number</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
+<p>Only configured if IMAP/POP proxy is set up. The required port number is 143.</p>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">IMAP SSL proxy port number</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
+<p>Only configured if IMAP/POP proxy is set up. The required port number is 993.</p>
+<p>&#160;</p>
+</td>
+</tr>
+<tr style="vertical-align: center;">
+<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
+<p style="font-weight: bold;">Number of threads</p>
+</td>
+<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
+<p>Number of threads that should be available. The global setting is not set. The server default setting is 200.</p>
+</td>
+</tr>
 </table>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>
