@@ -16,14 +16,11 @@ package com.zimbra.cs.account.offline;
 
 import java.io.IOException;
 import java.io.File;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.mail.Session;
 
-import com.zimbra.cs.datasource.SyncState;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
@@ -155,7 +152,7 @@ public class OfflineDataSource extends DataSource {
     }
 
     @Override
-    public boolean isSyncInboxOnly() {
+    public boolean  qisSyncInboxOnly() {
         return !getBooleanAttr(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, false);
     }
 
@@ -193,68 +190,6 @@ public class OfflineDataSource extends DataSource {
         return knownService != null && knownService.getName().equals(SERVICE_NAME_GMAIL);
     }
     
-    private static final int MAX_ENTRIES = 64 * 1024;
-
-    @SuppressWarnings("serial")
-    private static final Map<Object, SyncState> sSyncStateMap =
-        Collections.synchronizedMap(new LinkedHashMap<Object, SyncState>() {
-            @SuppressWarnings("unchecked")
-            @Override protected boolean removeEldestEntry(Map.Entry eldest) {
-                return size() > MAX_ENTRIES;
-            }
-        });
-
-    @Override
-    public boolean hasSyncState(int folderId) {
-        Object key = key(folderId);
-        return key != null && sSyncStateMap.containsKey(key);
-    }
-
-    @Override
-    public SyncState getSyncState(int folderId) {
-        Object key = key(folderId);
-        SyncState ss = key != null ? sSyncStateMap.get(key) : null;
-        OfflineLog.offline.debug("getSyncState: folder = %d, key = %s, state = %s",
-                                 folderId, key, ss);
-        return ss;
-    }
-    
-    @Override
-    public SyncState removeSyncState(int folderId) {
-        Object key = key(folderId);
-        SyncState ss = key != null ? sSyncStateMap.remove(key) : null;
-        OfflineLog.offline.debug("getSyncState: folder = %d, key = %s, state = %s",
-                                 folderId, key, ss);
-        return ss;
-    }
-    
-    @Override
-    public void putSyncState(int folderId, SyncState ss) {
-        Object key = key(folderId);
-        OfflineLog.offline.debug("putSyncState: folder %d, key = %s, state = %s",
-                                 folderId, key, ss);
-        if (key != null) {
-            sSyncStateMap.put(key, ss);
-        }
-    }
-
-    @Override public void clearSyncState(int folderId) {
-        Object key = key(folderId);
-        OfflineLog.offline.debug("clearSyncState: folder %d, key = %s", folderId, key);
-        if (key != null) {
-            sSyncStateMap.remove(key);
-        }
-    }
-
-    private Object key(int folderId) {
-        try {
-            long mailboxId = getMailbox().getId();
-            return mailboxId << 32 | (folderId & 0xffffffffL);
-        } catch (ServiceException e) {
-            return null;
-        }
-    }
-
     @Override public void reportError(int itemId, String error, Exception e) {
         String data = "";
         try {

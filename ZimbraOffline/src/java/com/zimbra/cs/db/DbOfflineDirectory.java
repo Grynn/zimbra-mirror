@@ -32,7 +32,7 @@ import com.zimbra.cs.account.offline.OfflineProvisioning.EntryType;
 import com.zimbra.cs.db.DbPool.Connection;
 
 public class DbOfflineDirectory {
-    static Object lock = new Object();
+    static final Object lock = new Object();
 
     private static int getLastId(Connection conn, String table) throws ServiceException {
         PreparedStatement stmt = null;

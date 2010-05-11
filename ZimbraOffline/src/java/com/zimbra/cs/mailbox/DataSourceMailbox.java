@@ -430,7 +430,7 @@ public class DataSourceMailbox extends SyncMailbox {
                     System.getProperty("os.arch") + " " +
                     System.getProperty("os.version"), ds.getType());
                 syncMan.syncStart(ds);
-                importData(ds, isOnRequest);
+                DataSourceManager.importData(ds, isOnRequest);
                 syncMan.syncComplete(ds);
                 OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(
                     ds, OfflineConstants.A_zimbraDataSourceLastSync,
@@ -445,28 +445,6 @@ public class DataSourceMailbox extends SyncMailbox {
                 syncMan.processSyncError(ds, e);
             }
         }
-    }
-
-    private static void importData(DataSource ds, boolean isOnRequest)
-        throws ServiceException {
-        // Force a full sync if INBOX sync enabled and has not yet been
-        // successfully sync'd
-        DataSourceManager dsm = DataSourceManager.getInstance();
-        Folder inbox = dsm.getMailbox(ds).getFolderById(Mailbox.ID_FOLDER_INBOX);
-        boolean forceSync = dsm.isSyncEnabled(ds, inbox) && !ds.hasSyncState(inbox.getId());
-        boolean fullSync = isOnRequest || forceSync;
-        List<Integer> folderIds = null;
-        OfflineDataSource ods = (OfflineDataSource)ds;
-        
-        if (!fullSync && ods.isEmail()) {
-            // Import only INBOX and SENT (if not save-to-sent) folders
-            folderIds = new ArrayList<Integer>(2);
-            folderIds.add(Mailbox.ID_FOLDER_INBOX);
-            if (!ds.isSaveToSent()) {
-                folderIds.add(Mailbox.ID_FOLDER_SENT);
-            }
-        }
-        DataSourceManager.importData(ds, folderIds, fullSync);
     }
 
     public void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
