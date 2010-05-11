@@ -135,8 +135,7 @@ Com_Zimbra_DnD.prototype.onShowView =
 function(viewId, isNewView) {
 
     if(this.isHTML5 && !AjxEnv.isIE) {
-        if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf('COMPOSE') != -1)
-        {
+        if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf(ZmId.VIEW_COMPOSE) != -1) {
             var curView = appCtxt.getAppViewMgr().getCurrentView();
             var el = curView.getHtmlElement();
 
@@ -149,14 +148,14 @@ function(viewId, isNewView) {
         if (viewId == ZmId.VIEW_COMPOSE ||
 			viewId == ZmId.VIEW_BRIEFCASE_COLUMN ||
 			viewId == ZmId.VIEW_BRIEFCASE ||
-			viewId == ZmId.VIEW_BRIEFCASE_DETAIL || viewId.indexOf('COMPOSE') != -1)
-		{
+			viewId == ZmId.VIEW_BRIEFCASE_DETAIL || viewId.indexOf(ZmId.VIEW_COMPOSE) != -1) {
+
 			var ev = document.createEvent("Events");
 			ev.initEvent("ZimbraDnD", true, false);
 
 			var curView = appCtxt.getAppViewMgr().getCurrentView();
 
-			if (viewId == ZmId.VIEW_COMPOSE || viewId == viewId.indexOf('COMPOSE') != -1) {
+			if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf(ZmId.VIEW_COMPOSE) != -1) {
 				curView._resetBodySize();
 			}
             var el = curView.getHtmlElement();
