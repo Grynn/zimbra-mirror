@@ -12,7 +12,6 @@
 }
 
 .webExZimlet_lightGray {
-    background: #EBEBEB;
     border-bottom: 1px solid #6E6E6E;
     border-top: 1px solid #6E6E6E;
 	font-weight:bold;
@@ -27,12 +26,29 @@
 	padding:4px;
 }
 
+.webExZimlet_grayAccntHdr {
+    background: #808080;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+	font-weight:bold;
+	color:white;
+	font-size:14px;
+	padding:4px;
+}
+
 table.webExZimlet_table input{
 	border-color:#3A73AB;
 	border-width:1;
 	border-style:solid;
-	width:200px;
+	width:230px;
 	height:20px;
+	padding:2px 4px;
+}
+table.webExZimlet_table textarea{
+	border-color:#3A73AB;
+	border-width:1;
+	border-style:solid;
+	width:230px;
 	padding:2px 4px;
 }
 
