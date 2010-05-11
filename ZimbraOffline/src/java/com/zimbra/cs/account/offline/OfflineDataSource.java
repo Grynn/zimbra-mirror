@@ -152,7 +152,7 @@ public class OfflineDataSource extends DataSource {
     }
 
     @Override
-    public boolean  qisSyncInboxOnly() {
+    public boolean isSyncInboxOnly() {
         return !getBooleanAttr(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, false);
     }
 
