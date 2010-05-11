@@ -191,6 +191,7 @@ function() {
 // Moves the caret to the top of the editor.
 DwtHtmlEditor.prototype.moveCaretToTop =
 function() {
+	var focused = document.activeElement;
 	if (this._mode == DwtHtmlEditor.TEXT) {
 		var control = document.getElementById(this._textAreaId);
 		if (control.createTextRange) { // IE
@@ -203,6 +204,7 @@ function() {
 	} else {
 		this._moveCaretToTopHtml(true);
 	}
+	if (focused) focused.focus();
 };
 
 DwtHtmlEditor.prototype._moveCaretToTopHtml =
