@@ -27,9 +27,9 @@ Com_Zimbra_DnD.prototype.init = function () {
     this.isHTML5 = false;
     this.checkHTML5Dnd();
 
-    if (this.isHTML5) {
+    if (this.isHTML5 && !AjxEnv.isIE) {
        this._initHTML5();
-    } else {
+    } else if(!AjxEnv.isIE) {
        this._initNonHTM5();  
     }
 
@@ -134,7 +134,7 @@ Com_Zimbra_DnD.prototype._initHTML5 = function () {
 Com_Zimbra_DnD.prototype.onShowView =
 function(viewId, isNewView) {
 
-    if(this.isHTML5) {
+    if(this.isHTML5 && !AjxEnv.isIE) {
         if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf('COMPOSE') != -1)
         {
             var curView = appCtxt.getAppViewMgr().getCurrentView();
@@ -145,7 +145,7 @@ function(viewId, isNewView) {
             var dndTooltip = document.getElementById(el.id + '_zdnd_tooltip');
             dndTooltip.style.display = "block";
         }
-    } else if ("createEvent" in document && document.getElementById("zdnd_files")) {
+    } else if ("createEvent" in document && document.getElementById("zdnd_files") && !AjxEnv.isIE) {
         if (viewId == ZmId.VIEW_COMPOSE ||
 			viewId == ZmId.VIEW_BRIEFCASE_COLUMN ||
 			viewId == ZmId.VIEW_BRIEFCASE ||
@@ -192,12 +192,15 @@ Com_Zimbra_DnD.prototype._addHandlers = function(el) {
 Com_Zimbra_DnD.prototype._onDragEnter = function(ev) {
     ev.stopPropagation();
     ev.preventDefault();
-    return ev.dataTransfer.types.contains("application/x-moz-file");
+    if(ev.dataTransfer && ev.dataTransfer.types && (ev.dataTransfer.types.indexOf("Files") != -1 || ev.dataTransfer.types.indexOf("application/x-moz-file"))) {
+        return true;
+    } else {
+        return false;
+    }
 };
 
 Com_Zimbra_DnD.prototype._onDragOver = function(ev) {
-    ev.stopPropagation();
-    ev.preventDefault();
+    return false;
 };
 
 Com_Zimbra_DnD.prototype._onDrop = function(ev) {
