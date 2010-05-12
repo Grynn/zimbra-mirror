@@ -16,6 +16,5 @@ user_pref("network.http.pipelining.maxrequests", "3");
 user_pref("network.prefetch-next", "false");
 
 user_pref("capability.principal.codebase.p1.granted", "UniversalXPConnect UniversalBrowserRead UniversalBrowserWrite UniversalPreferencesRead UniversalPreferencesWrite UniversalFileRead");
-user_pref("capability.principal.codebase.p1.id", "http://127.0.0.1");
 user_pref("capability.principal.codebase.p1.subjectName", "");
 user_pref("signed.applets.codebase_principal_support", true);
