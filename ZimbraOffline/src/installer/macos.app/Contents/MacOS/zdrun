@@ -66,7 +66,7 @@ my $tmpdir = "$home_dir/Library/.zdtmp";
 my $lockfile = "$home_dir/Library/.zdrun.lock";
 my $lockfh;
 
-my @user_files = ("index", "store", "sqlite", "log", "zimlets-properties", 
+my @user_files = ("index", "store", "sqlite", "log", "zimlets-properties", "zimlets-deployed", 
 	"conf/keystore", "profile/prefs.js", "profile/persdict.dat", "profile/localstore.json");
 
 sub launch_prism() {
@@ -95,14 +95,11 @@ if (-e $data_root) {
 	system("rm -rf \"$tmpdir/*\"");
 	mkdir("$tmpdir/profile");
 	mkdir("$tmpdir/conf");
-	mkdir("$tmpdir/zimlets");
 
 	for (@user_files) {
 		my $src = "$data_root/$_";
 		system("mv -f \"$src\" \"$tmpdir/$_\"") if (-e $src);
 	}
-	my $zimbak = "$data_root/zimlets/backup";
-	system("mv -f \"$zimbak\"/* \"$tmpdir/zimlets\"") if (-e $zimbak);
 
 	system("rm -rf \"$data_root\"");
 }
@@ -156,7 +153,6 @@ if ($is_upgrade) {
         	system("mv -f \"$src\" \"$dest\"");
 		}
     } 
-    system("mv -n \"$tmpdir/zimlets\"/* \"$data_root/zimlets\"");
 
     system("rm -rf \"$tmpdir\"");
 }

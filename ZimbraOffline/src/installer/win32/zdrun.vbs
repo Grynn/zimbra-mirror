@@ -121,14 +121,6 @@ Sub BackupData()
 		CopyIfExists sDataRoot & "\" & sFile, sTmpDir & "\" & sFile, true 
 	Next
 
-    If oFso.FolderExists(sDataRoot & "\zimlets\backup") Then    	
-	    oFso.MoveFolder sDataRoot & "\zimlets\backup", sTmpDir & "\zimlets"
-        If Err.number <> 0 Then
-            BackupFailed "File operation failed. Please close any open files under " & _
-                sDataRoot & "\zimlets\backup"
-        End If
-    End If	
-
     Dim iButton, sMsg
     Do	
 	    oFso.DeleteFolder sDataRoot, true
@@ -161,19 +153,6 @@ Sub RestoreData(sSrcRoot)
 	For Each sFile In aUserFiles
 		CopyIfExists sSrcRoot & "\" & sFile, sDataRoot & "\" & sFile, true
 	Next
-	
-	' Restore zimlets, but don't overwrite at destination
-	Dim oZLFolder, oFiles, oFile
-    If oFso.FolderExists(sSrcRoot & "\zimlets") Then
-	    Set oZLFolder = oFso.GetFolder(sSrcRoot & "\zimlets")
-	    Set oFiles = oZLFolder.Files
-	    For Each oFile In oFiles
-		    If Not oFso.FileExists(sDataRoot & "\zimlets\" & oFile.Name) Then 
-			    oFso.CopyFile sSrcRoot & "\zimlets\" & oFile.Name, _
-				    sDataRoot & "\zimlets\" & oFile.Name, true
-		    End If
-	    Next
-    End If
 	
 	oFso.DeleteFolder sSrcRoot, true
 End Sub
@@ -235,7 +214,7 @@ Set oWMI = GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\cimv2")
 EnsureSingleInstance
 
 sVersion="@version@"
-aUserDirs = Array("index", "store", "sqlite", "log", "zimlets-properties")
+aUserDirs = Array("index", "store", "sqlite", "log", "zimlets-properties", "zimlets-deployed")
 aUserFiles = Array("conf\keystore", "profile\prefs.js", "profile\persdict.dat", "profile\localstore.json")
 sScriptPath = WScript.ScriptFullName
 sScriptDir = Left(sScriptPath, InStrRev(sScriptPath, WScript.ScriptName) - 2)

@@ -184,11 +184,6 @@ public class OfflineApplication extends ZimbraApplication {
             return;
         }
         
-        boolean hasBackup = true;
-        File zimletBackupDir = new File(zimletDir.getPath() + File.separator + "backup");
-        if (!zimletBackupDir.exists())
-            hasBackup = zimletBackupDir.mkdir();
-        
         String[] zimlets = zimletDir.list();
         if (zimlets == null) {
             OfflineLog.offline.debug("No zimlets found at " + zimletDir.getPath());
@@ -203,10 +198,7 @@ public class OfflineApplication extends ZimbraApplication {
                     continue;
                 ZimletUtil.deployZimlet(new ZimletFile(zimletDir, zimlets[i]));
                 OfflineLog.offline.debug("Zimlet deployed:  " + zimlets[i]);
-                if (hasBackup) {
-                    FileUtil.copy(zimletFile, new File(zimletBackupDir, zimlets[i]), true);
-                    filesToDel.add(zimletFile);
-                }
+                filesToDel.add(zimletFile);
             } catch (Exception e) {
                 OfflineLog.offline.warn("Fail to deploy zimlet " + zimlets[i] + ": " + e.getMessage());
             }

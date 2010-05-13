@@ -176,7 +176,7 @@ $data_root = dialog_data_root();
 $icon_dir = dialog_desktop_icon();
 
 my $tmpdir = "$data_root" . ".tmp";
-my @user_files = ("index", "store", "sqlite", "log", "zimlets-properties",
+my @user_files = ("index", "store", "sqlite", "log", "zimlets-properties", "zimlets-deployed",
     "conf/keystore", "profile/prefs.js", "profile/persdict.dat", "profile/localstore.json");
 
 my $is_upgrade = 0;
@@ -188,14 +188,11 @@ if (-e $data_root) {
     system("rm -rf \"$tmpdir/*\"");
     mkdir("$tmpdir/profile");
     mkdir("$tmpdir/conf");
-    mkdir("$tmpdir/zimlets");
 
     for (@user_files) {
         my $src = "$data_root/$_";
         system("mv -f \"$src\" \"$tmpdir/$_\"") if (-e $src);
     }
-    my $zimbak = "$data_root/zimlets/backup";
-    system("mv -f \"$zimbak\"/* \"$tmpdir/zimlets\"") if (-e $zimbak);
 
     system("rm -rf \"$data_root\"");
 }
@@ -242,8 +239,6 @@ if ($is_upgrade) {
         }
     }
 	
-    move_no_overwrite("$tmpdir/zimlets", "$data_root/zimlets");
-
     system("rm -rf \"$tmpdir\"");
 }
 
