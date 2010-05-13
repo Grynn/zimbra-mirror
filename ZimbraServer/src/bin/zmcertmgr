@@ -32,6 +32,7 @@ zmsetvars -f \
   zimbra_gid \
   zimbra_zmcertmgr_expiration_threshold \
   ldap_is_master \
+  ldap_host \
   mailboxd_directory \
   mailboxd_server \
   mailboxd_keystore \
@@ -222,13 +223,17 @@ loadConfigKey() {
   if [ $location = "global" ]; then
     local zmprov_opts="gacf"
   elif [ $location = "server" ]; then
-    local zmprov_opts="gs ${zimbra_server_hostname}"
+    local server=$4
+    if [ x"${server}" = "x" ]; then
+      server=${zimbra_server_hostname}
+    fi
+    local zmprov_opts="gs ${server}"
   else 
     echo "Unknown config section $location"
     return
   fi
   TMPDIR=${zimbra_tmp_directory}
-  tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
+  local tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
   chown ${zimbra_uid} ${tmpfile}
   if [ ! -s ${file} ]; then
     echo -n "** Retrieving $location config key $key..."
@@ -453,8 +458,9 @@ createCA() {
   chown ${zimbra_uid} ${tmpfile}
   if [ ! -f ${zimbra_ca_key} -a x"$IS_NEW_CA" = "x" ]; then
     echo -n "** Retrieving CA private key from ldap..."
-    su - zimbra -c "${zimbra_home}/bin/zmprov -m -l -- gacf zimbraCertAuthorityKeySelfSigned | sed  -e 's/^zimbraCertAuthorityKeySelfSigned: //' > ${tmpfile} 2> /dev/null" 2>/dev/null && mv -f ${tmpfile} ${zimbra_ca_key} 2> /dev/null
-    if [ $? = 0 -a -s "${zimbra_ca_key}" ]; then
+    loadConfigKey "zimbraCertAuthorityKeySelfSigned" ${tmpfile} "global" > /dev/null 2>&1
+    if [ -s "${tmpfile}" ]; then
+      mv -f ${tmpfile} ${zimbra_ca_key}
       echo "done."
     else
       echo "failed."
@@ -466,9 +472,27 @@ createCA() {
   chown ${zimbra_uid} ${tmpfile}
   if [ ! -f ${zimbra_ca_crt} -a x"$IS_NEW_CA" = "x" ]; then
     echo -n "** Retrieving CA cert from ldap..."
-    su - zimbra -c "${zimbra_home}/bin/zmprov -m -l -- gacf zimbraCertAuthorityCertSelfSigned | sed  -e 's/^zimbraCertAuthorityCertSelfSigned: //' > ${tmpfile} 2> /dev/null" 2> /dev/null && mv -f ${tmpfile} ${zimbra_ca_crt} 2> /dev/null
-    if [ $? = 0 -a -s "${zimbra_ca_crt}" ]; then
+    loadConfigKey "zimbraCertAuthorityCertSelfSigned" ${tmpfile} "global" > /dev/null 2>&1
+    if [ -s "${tmpfile}" ]; then
+      mv -f ${tmpfile} ${zimbra_ca_crt}
       echo "done."
+    else
+      echo "failed."
+    fi
+  fi
+  rm -f ${tmpfile} 2> /dev/null
+
+  tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
+  chown ${zimbra_uid} ${tmpfile}
+  if [ ! -f ${commercial_ca_crt} -a x"$IS_NEW_CA" = "x" ]; then
+    echo -n "** Retrieving Commercial CA cert from ldap..."
+    loadConfigKey "zimbraSSLCertificate" ${tmpfile} "server" ${ldap_host} > /dev/null 2>&1
+    if [ -s "${tmpfile}" ]; then
+      # recreate the commercial_ca_crt from the concatenated commercial cert stored in ldap.
+      perl -e 'open(C, "$ARGV[0]"); while (<C>) { open(N, ">>$ARGV[1]") if (/BEGIN CERTIFICATE/); print N if ($f>0); if (/END CERTIFICATE/) { close(N); $f++; } }' ${tmpfile} ${commercial_ca_crt}
+      echo "done."
+    elif [ -z "${tmpfile}" ]; then
+      echo "not present."
     else
       echo "failed."
     fi
@@ -647,7 +671,7 @@ deployCert() {
     fi
   fi
 
-  if [ $DEPLOY = "all" -o $DEPLOY = "mta" ]; then
+  if [ x"$DEPLOY" = "xall" -o x"$DEPLOY" = "xmta" ]; then
     echo -n "** Installing mta certificate and key..."
     cp -f ${current_crt} ${postfix_smtpd_tls_cert_file}
     cp -f ${current_key} ${postfix_smtpd_tls_key_file}
@@ -658,7 +682,7 @@ deployCert() {
     echo "done."
   fi
    
-  if [ $DEPLOY = "all" -o $DEPLOY = "ldap" ]; then
+  if [ x"$DEPLOY" = "xall" -o x"$DEPLOY" = "xldap" ]; then
     echo -n "** Installing slapd certificate and key..."
     cp -f ${current_crt} ${zimbra_conf_directory}/slapd.crt
     cp -f ${current_key} ${zimbra_conf_directory}/slapd.key
@@ -668,7 +692,7 @@ deployCert() {
     echo "done."
   fi
       
-  if [ $DEPLOY = "all" -o $DEPLOY = "proxy" ]; then
+  if [ x"$DEPLOY" = "xall" -o x"$DEPLOY" = "xproxy" ]; then
     echo -n "** Installing proxy certificate and key..."
     cp -f ${current_crt} ${zimbra_conf_directory}/nginx.crt
     cp -f ${current_key} ${zimbra_conf_directory}/nginx.key
@@ -678,10 +702,10 @@ deployCert() {
     echo "done."
   fi
 
-  if [ $DEPLOY = "all" -o $DEPLOY = "mailbox" ]; then
-    if [ "x${mailboxd_server}" != "x" ]; then 
+  if [ x"$DEPLOY" = "xall" -o x"$DEPLOY" = "xmailbox" ]; then
+    #if [ "x${mailboxd_server}" != "x" ]; then 
       createKeystore $type
-    fi
+    #fi
   fi
 
   echo -n "** Installing CA to ${zimbra_conf_directory}/ca..." 
