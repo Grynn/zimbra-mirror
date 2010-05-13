@@ -398,8 +398,9 @@ public class BeanUtils {
         cal.setTimeInMillis(msgTime);
         long msgYear = cal.get(Calendar.YEAR);
 
+        Locale locale = I18nUtil.findLocale(pc);
         if (nowYear == msgYear) {
-            DateFormat df = getDateFormat(pc, DateTimeFmt.DTF_DATE_MEDIUM);
+            DateFormat df = new SimpleDateFormat(I18nUtil.getLocalizedMessage(pc, "ZM_formatDateMediumNoYear"),locale);
             df.setTimeZone(tz);
             return df.format(msg);
         } else {
