@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_bugz" version="1.0">
+<zimletConfig name="com_zimbra_bugz" version="1.3">
 	<global>
 		<property name="url">http://bugzilla.zimbra.com/show_bug.cgi</property>
         <property name="allowedDomains">*.zimbra.com</property>

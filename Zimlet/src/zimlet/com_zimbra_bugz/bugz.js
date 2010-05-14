@@ -13,15 +13,22 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function com_zimbra_bugz() {
+/**
+ * Constructor.
+ * 
+ */
+function com_zimbra_bugz_HandlerObject() {
 }
 
-com_zimbra_bugz.prototype = new ZmZimletBase();
-com_zimbra_bugz.prototype.constructor = com_zimbra_bugz;
+com_zimbra_bugz_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_bugz_HandlerObject.prototype.constructor = com_zimbra_bugz_HandlerObject;
 
-com_zimbra_bugz.prototype.generateSpan =
+/**
+ * Called by the framework when generating the span for in-context link.
+ * 
+ */
+com_zimbra_bugz_HandlerObject.prototype.generateSpan =
 function(html, idx, obj, spanId, context) {
-
 	// Create an <a> element that links to the bugzilla entry that was matched.
 	var c = this.xmlObj("contentObject");
 	var actionUrl = c && c.onClick && c.onClick.actionUrl;
@@ -40,7 +47,11 @@ function(html, idx, obj, spanId, context) {
 	return idx;
 };
 
-com_zimbra_bugz.prototype.clicked =
+/**
+ * Called when the in-context link is clicked.
+ * 
+ */
+com_zimbra_bugz_HandlerObject.prototype.clicked =
 function(spanElement, contentObjText, matchContext, event) {
 	// Just let the browser handle the click.
 	event._stopPropagation = false;
