@@ -311,7 +311,7 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
     private static char[] pwdChars = "abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*().,;:`<>?-+|}{[]'\"".toCharArray();
 //    private static char[] pwdPunc = .toCharArray();
     
-    private static char[] generateStrongPassword(int length) {
+    public static char[] generateStrongPassword(int length) {
         char[] pwd = new char[length];
         try {
           java.security.SecureRandom random = java.security.SecureRandom.
