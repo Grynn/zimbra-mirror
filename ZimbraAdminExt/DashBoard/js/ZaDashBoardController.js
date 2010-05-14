@@ -35,7 +35,7 @@ ZaDashBoardController.prototype = new ZaXFormViewController();
 ZaDashBoardController.prototype.constructor = ZaDashBoardController;
 ZaController.initToolbarMethods["ZaDashBoardController"] = new Array();
 ZaController.changeActionsStateMethods["ZaDashBoardController"] = new Array();
-ZaDashBoardController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/provisioning_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+ZaDashBoardController.helpURL = location.pathname + ZaUtil.HELP_URL + "zap_working_in_the_administration_console.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
 ZaOperation.MANAGE_DOMAINS = ++ZA_OP_INDEX;
 ZaOperation.MANAGE_PROFILES = ++ZA_OP_INDEX;
@@ -67,6 +67,8 @@ ZaDashBoardController.hijackMessages = function () {
 	ZaMsg.FAILED_CREATE_COS_1 = com_zimbra_dashboard.FAILED_CREATE_COS_1;
 	ZaMsg.FAILED_CREATE_COS = com_zimbra_dashboard.FAILED_CREATE_COS;
 	ZaMsg.FAILED_SAVE_COS = com_zimbra_dashboard.FAILED_SAVE_COS;
+	
+	ZaNewAccountXWizard.helpURL = location.pathname + ZaUtil.HELP_URL + "zap_provisioning_a_new_account.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 }
 
 ZaDashBoardController.prototype.listActionListener = function (ev) {
@@ -287,6 +289,7 @@ ZaDashBoardController.prototype.newProfileSelected = function() {
 	}
 	
 	var c = ZaApp.getInstance().getCosController();
+	c._helpURL = location.pathname + ZaUtil.HELP_URL + "zap_creating_account_profiles.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	c.show(newCos);
 	c.addChangeListener(new AjxListener(this, this.handleProfileChange));
 };

@@ -28,7 +28,7 @@ ZaDashBoardView = function(parent) {
 	this.initForm(ZaDashBoard.myXModel, this.getMyXForm({}), item);
 //	this._createHTML();
 }
-ZaDashBoardView.mainHelpPage = "administration_console_help.htm";
+ZaDashBoardView.mainHelpPage = "zap_working_in_the_administration_console.htm";
 ZaDashBoardView.prototype = new ZaTabView();
 ZaDashBoardView.prototype.constructor = ZaDashBoardView;
 ZaTabView.XFormModifiers["ZaDashBoardView"] = new Array();
@@ -94,7 +94,7 @@ function(entry) {
 			showBusy:true,
 			busyId:busyId,
 			busyMsg:ZaMsg.BUSY_SEARCHING,
-			skipCallbackIfCancelled:true			
+			skipCallbackIfCancelled:false			
 	}
 	ZaSearch.searchDirectory(searchParams);	
 }
@@ -173,7 +173,7 @@ ZaDashBoardView.prototype.searchAddresses = function (types, offset) {
 		showBusy:true,
 		busyId:busyId,
 		busyMsg:ZaMsg.BUSY_SEARCHING,
-		skipCallbackIfCancelled:true			
+		skipCallbackIfCancelled:false			
 	}
 	ZaSearch.searchDirectory(searchParams);	
 }
