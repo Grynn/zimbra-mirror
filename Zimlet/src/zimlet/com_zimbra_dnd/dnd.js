@@ -26,7 +26,6 @@ Com_Zimbra_DnD.prototype.init = function () {
 
     this.isHTML5 = false;
     this.checkHTML5Dnd();
-
     if (this.isHTML5 && !AjxEnv.isIE) {
        this._initHTML5();
     } else if(!AjxEnv.isIE) {
@@ -41,11 +40,6 @@ Com_Zimbra_DnD.prototype.isDndSupported = function (evntname) {
     evntname = 'on' + evntname;
 
     var isSupported = (evntname in element);
-
-    if (!isSupported && element.setAttribute) {
-        element.setAttribute(evntname, 'return;');
-        isSupported = typeof element[evntname] == 'function';
-    }
 
     element = null;
 
@@ -84,8 +78,8 @@ Com_Zimbra_DnD.prototype._initNonHTM5 = function () {
 		zDnDUploadFrm.setAttribute("action", uploadUri);
 	}
 
-    var cmd = window.newWindowCommand;
-    if(cmd == 'compose') {
+    /*var cmd = window.newWindowCommand;
+    if(cmd == 'compose' || cmd == 'msgViewDetach') {
             var self = this;
             setTimeout(function() {
                 var curView = appCtxt.getAppViewMgr().getCurrentView();
@@ -112,28 +106,29 @@ Com_Zimbra_DnD.prototype._initNonHTM5 = function () {
                 el.dispatchEvent(ev);
 
             }, 1000);
-    }
+    }*/
     
 };
 
 Com_Zimbra_DnD.prototype._initHTML5 = function () {
 
-    var cmd = window.newWindowCommand;
-    if(cmd == 'compose') {
+    /*var cmd = window.newWindowCommand;
+    if(cmd == 'compose' || cmd == 'msgViewDetach') {
         setTimeout(AjxCallback.simpleClosure(function() {
             var curView = appCtxt.getAppViewMgr().getCurrentView();
             var el = curView.getHtmlElement();
+            alert(el);
             this._addHandlers(el);
             var dndTooltip = document.getElementById(el.id + '_zdnd_tooltip');
+            alert(dndTooltip);
             dndTooltip.style.display = "block";
         },this),1000);
-    }
+    }*/
     
 };
 
 Com_Zimbra_DnD.prototype.onShowView =
 function(viewId, isNewView) {
-
     if(this.isHTML5 && !AjxEnv.isIE) {
         if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf(ZmId.VIEW_COMPOSE) != -1) {
             var curView = appCtxt.getAppViewMgr().getCurrentView();
@@ -225,6 +220,7 @@ Com_Zimbra_DnD._uploadFiles = function(file) {
     try {
 
         var req = new XMLHttpRequest();
+        var fileName = null;
 
         req.open("POST", appCtxt.get(ZmSetting.CSFE_UPLOAD_URI)+"&fmt=extended,raw", true);
         req.setRequestHeader("Cache-Control", "no-cache");
