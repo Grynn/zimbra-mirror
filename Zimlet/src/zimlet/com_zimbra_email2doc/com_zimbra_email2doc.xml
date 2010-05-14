@@ -1,17 +1,13 @@
-<zimlet name="com_zimbra_email2doc" version="1.3" label="Email2Doc" description="Drag-and-drop an email message to save as a Document page.">
+<zimlet name="com_zimbra_email2doc" version="1.5" label="Email2Doc" description="Drag-and-drop an email message to save as a Document page.">
 	<include>email2doc.js</include>
 	<includeCSS>email2doc.css</includeCSS>
 	<resource>email2doc-icon.gif</resource>
-	<handlerObject>com_zimbra_email2doc</handlerObject>
+	<handlerObject>com_zimbra_email2doc_HandlerObject</handlerObject>
 
-	<zimletPanelItem label="Email-2-Doc" icon="email2doc-panelIcon">
-		<toolTipText>Drag-and-drop an email message to save as a Document page.</toolTipText>
+	<zimletPanelItem label="${msg.Email2DocZimlet_panel_label}" icon="email2doc-panelIcon">
+		<toolTipText>${msg.Email2DocZimlet_panel_tooltip}</toolTipText>
 		<dragSource type="ZmConv" />
 		<dragSource type="ZmMailMsg" />
 	</zimletPanelItem>
 
-	<userProperties>
-		<property type="string" name="stickyn_data" value=""/>	
-		<property type="string" name="turnONstickynotesZimlet" value="true"/>
-	</userProperties>
 </zimlet>

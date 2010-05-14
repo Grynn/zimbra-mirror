@@ -13,47 +13,77 @@
  * ***** END LICENSE BLOCK *****
  */
 
-//////////////////////////////////////////////////////////////////////////////
-// Drag an email to save it as a document page(including all its attachments)
-// @author Zimlet author: Raja Rao DV
-//////////////////////////////////////////////////////////////////////////////
-
-function com_zimbra_email2doc() {
+/**
+ * Drag-n-drop an email message to save it as a document page (including all its attachments).
+ * 
+ * @author Raja Rao DV
+ */
+function com_zimbra_email2doc_HandlerObject() {
 }
 
-com_zimbra_email2doc.prototype = new ZmZimletBase();
-com_zimbra_email2doc.prototype.constructor = com_zimbra_email2doc;
+com_zimbra_email2doc_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_email2doc_HandlerObject.prototype.constructor = com_zimbra_email2doc_HandlerObject;
 
+/**
+ * Simplify handler object
+ *
+ */
+var Email2DocZimlet = com_zimbra_email2doc_HandlerObject;
 
-com_zimbra_email2doc.prototype.doDrop =
+/**
+ * Handles an object drop action.
+ * 
+ * @param	{object}	zmObject		the dropped object
+ */
+Email2DocZimlet.prototype.doDrop =
 function(zmObject) {
 
 	if (!zmObject.srcObj)
 		return;
 
-	zmObject = zmObject.srcObj;
-	if (zmObject.type == "CONV") {
-		var msg = zmObject.getFirstHotMsg();
-		this._postLoadCB(msg);
-	} else if (zmObject.type == "MSG") {
-		this._postLoadCB(zmObject);
+	var type = zmObject.TYPE;
+	var msg = null;
+	
+	switch (type) {
+		case "ZmConv": {
+			var conv = zmObject.srcObj; // {ZmConv}
+			msg = conv.getFirstHotMsg();
+			break;
+		}
+		case "ZmMailMsg": {
+			msg = zmObject.srcObj; // {ZmMailMsg}
+			break;
+		}
 	}
+	
+	if (msg != null)
+		this._postLoadCB(msg);
 };
 
-com_zimbra_email2doc.prototype.doubleClicked = function() {
+/**
+ * Called by framework on double-click.
+ */
+Email2DocZimlet.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
 
-com_zimbra_email2doc.prototype.singleClicked = function() {
+/**
+ * Called by framework on single-click.
+ */
+Email2DocZimlet.prototype.singleClicked = function() {
 	var dlg = appCtxt.getErrorDialog();
-	dlg.setMessage("Drag an email to save it as a document page(including all its attachments)");
+	dlg.setMessage(this.getMessage("Email2DocZimlet_dialog_info"));
 	dlg.setButtonVisible(ZmErrorDialog.REPORT_BUTTON, false);
 	dlg.popup();
 };
 
-
-com_zimbra_email2doc.prototype._postLoadCB =
-function(msg, response) {
+/**
+ * Presents the document dialog for saving the message.
+ * 
+ * @param	{ZmMailMsg}	msg		the message
+ */
+Email2DocZimlet.prototype._postLoadCB =
+function(msg) {
 
 	AjxDispatcher.run("GetNotebookController");
 	if (!this._fldrDlg) {
@@ -61,10 +91,10 @@ function(msg, response) {
 	}
 
 	var params = {
-		description:	"Select a Document to save message(s)",
+		title:			this.getMessage("Email2DocZimlet_dialog_title_document"),
+		description:	this.getMessage("Email2DocZimlet_dialog_selectdocument"),
 		treeIds:		[ZmOrganizer.NOTEBOOK],
 		overviewId:		this._fldrDlg.getOverviewId(ZmApp.NOTEBOOK),
-		title:			"Document Overview",
 		appName:		ZmApp.NOTEBOOK
 	};
 	this._selectDocCb = new AjxCallback(this, this._selectDocCallBack, msg);
@@ -72,9 +102,17 @@ function(msg, response) {
 	ZmController.showDialog(this._fldrDlg, this._selectDocCb, params);
 };
 
-
-com_zimbra_email2doc.prototype._selectDocCallBack =
+/**
+ * Handles the document dialog callback.
+ * 
+ * @param	{ZmMailMsg}	msg		the message
+ * @param	{ZmNotebook}	fldr		the folder
+ * 
+ * @see			_postLoadCB
+ */
+Email2DocZimlet.prototype._selectDocCallBack =
 function(msg, fldr) {
+
 	this._attachmentLnksStr = "";
 	this._failedToAttachNames = "";
 	this._fldrDlg.popdown();
@@ -95,7 +133,14 @@ function(msg, fldr) {
 	}
 };
 
-com_zimbra_email2doc.prototype._createFromAttachment =
+/**
+ * Creates the attachment.
+ * 
+ * @param	{ZmMailMsg}	msg		the message
+ * @param	{hash}		attachment		the attachment object
+ * @param	{ZmNotebook}	fldr		the folder
+ */
+Email2DocZimlet.prototype._createFromAttachment =
 function(msg, attachment, fldr) {
 
 	this._attachmentCntr++;
@@ -124,7 +169,17 @@ function(msg, attachment, fldr) {
 	appCtxt.getAppController().sendRequest(params);
 };
 
-com_zimbra_email2doc.prototype._handleResponseCreateItem =
+/**
+ * Handles the create item.
+ * 
+ * @param	{hash}	origParams		a hash of original params
+ * @param	{ZmMailMsg}	origParams.msg		the message
+ * @param	{hash}		origParams.attachment		the attachment object
+ * @param	{ZmNotebook}	origParams.fldr		the folder
+ * 
+ * @see			_createFromAttachment
+ */
+Email2DocZimlet.prototype._handleResponseCreateItem =
 function(origParams, response) {
 	var rest = response.getResponse().SaveDocumentResponse.doc[0].rest;
 	var html = new Array();
@@ -142,7 +197,12 @@ function(origParams, response) {
 	this._createPageAndShow(origParams.msg, origParams.fldr);
 };
 
-com_zimbra_email2doc.prototype._addFailedToAttachNames =
+/**
+ * Adds the failed attachment name.
+ * 
+ * @param	{string}	name		the attachment name
+ */
+Email2DocZimlet.prototype._addFailedToAttachNames =
 function(name) {
 	if (this._failedToAttachNames == "")
 		this._failedToAttachNames = this._failedToAttachNames + name;
@@ -151,7 +211,17 @@ function(name) {
 
 };
 
-com_zimbra_email2doc.prototype._handleErrorCreateItem =
+/**
+ * Handles the create item error.
+ * 
+ * @param	{hash}	origParams		a hash of original params
+ * @param	{ZmMailMsg}	origParams.msg		the message
+ * @param	{hash}		origParams.attachment		the attachment object
+ * @param	{ZmNotebook}	origParams.fldr		the folder
+ * 
+ * @see			_createFromAttachment
+ */
+Email2DocZimlet.prototype._handleErrorCreateItem =
 function(origParams, response) {
 
 	this._addFailedToAttachNames(origParams.attachment.filename);
@@ -161,21 +231,40 @@ function(origParams, response) {
 	}
 	this._createPageAndShow(origParams.msg, origParams.fldr);
 	var dlg = appCtxt.getErrorDialog();
-	dlg.setMessage("The following attachment(s) could not be attached since attachment with same name already exists(may be attached to a different page)<br><br>" + this._failedToAttachNames);
+	
+	var errorMsg = AjxMessageFormat.format(this.getMessage("Email2DocZimlet_attachmentfail"), this._failedToAttachNames);
+
+	dlg.setMessage(errorMsg);
 	dlg.setButtonVisible(ZmErrorDialog.REPORT_BUTTON, false);
 	dlg.popup();
+	
 	return true;
 };
 
-com_zimbra_email2doc.prototype._createPageAndShow =
+/**
+ * Creates and shows the document page.
+ * 
+ * @param	{ZmMailMsg}	zmObject		the message
+ * @param	{ZmNotebook}	fldr		the folder
+ */
+Email2DocZimlet.prototype._createPageAndShow =
 function(zmObject, fldr) {
 	var page = new ZmPage();
 	page.name = zmObject.subject;
 	page.folderId = fldr.id;
 	var body = zmObject.getBodyContent().replace(/\r\n|\n/g, "<br>");//notebook page is always html
 	if (this._attachmentLnksStr != "") {
-		body = body + "<br>--------------------<br>Attachments:<br>--------------------" + this._attachmentLnksStr;
+		var html = [];
+		var idx = 0;
+
+		html[idx++] = "<br>--------------------<br>";
+		html[idx++] = this.getMessage("Email2DocZimlet_attachmenttitle");
+		html[idx++] = "<br>--------------------";
+		html[idx++] = this._attachmentLnksStr;
+			
+		body = body + html.join("");
 	}
 	page.setContent(body);
 	AjxDispatcher.run("GetPageEditController").show(page);
 };
+
