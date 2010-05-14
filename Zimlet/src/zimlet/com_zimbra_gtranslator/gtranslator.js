@@ -13,43 +13,67 @@
  * ***** END LICENSE BLOCK *****
  */
 
-//////////////////////////////////////////////////////////////////////////////
-// Zimlet to translate a message
-// @author Zimlet author: Parag Shah.
-//////////////////////////////////////////////////////////////////////////////
-
-function Com_Zimbra_Gtranslator() {
+/**
+ * Zimlet to translate a message using Google.
+ * 
+ * @author Parag Shah
+ */
+function com_zimbra_gtranslator_HandlerObject() {
 }
 
-Com_Zimbra_Gtranslator.prototype = new ZmZimletBase();
-Com_Zimbra_Gtranslator.prototype.constructor = Com_Zimbra_Gtranslator;
+com_zimbra_gtranslator_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_gtranslator_HandlerObject.prototype.constructor = com_zimbra_gtranslator_HandlerObject;
 
+/**
+ * Simplify handler object
+ *
+ */
+var GTranslatorZimlet = com_zimbra_gtranslator_HandlerObject;
 
-// Consts
+/**
+ * Defines the Google Translator URL.
+ */
+GTranslatorZimlet.GOOGLE_TRANSLATOR_URL = "http://translate.google.com/translate_t";
 
-Com_Zimbra_Gtranslator.URL = "http://translate.google.com/translate_t";
-
-
-// Public methods
-
-// This method is called when an item is dropped on the Zimlet item as realized
-// in the UI. At this point the Zimlet should perform the actions it needs to
-// for the drop. This method defines the following formal parameters:
-//
-// - zmObject
-// - canvas
-Com_Zimbra_Gtranslator.prototype.doDrop =
+/**
+ * This method is called when an item is dropped on the Zimlet item as realized
+ * in the UI. At this point the Zimlet should perform the actions it needs to
+ * for the drop. This method defines the following formal parameters:
+ *
+ * @param	{ZmConv|ZmMsg}	zmObject		the dropped object
+ */
+GTranslatorZimlet.prototype.doDrop =
 function(zmObject) {
-	this._zmObject = zmObject;
-	this._isUserInput = false;
 
 	// create a dialog if one does not already exist
 	if (!this._gTranslatorDialog) {
-		this._initialize();
+		this._initializeTranslatorDialog();
 	}
 
+	var type = zmObject.TYPE;
+	var msg = null;
+	
+	switch (type) {
+		case "ZmConv": {
+			var conv = zmObject.srcObj; // {ZmConv}
+			msg = conv.getFirstHotMsg();
+			break;
+		}
+		case "ZmMailMsg": {
+			msg = zmObject.srcObj; // {ZmMailMsg}
+			break;
+		}
+	}
+
+	var body = "";
+	if (msg != null)
+		body = msg.fragment;
+	
+	this._zmObjectBody = body;
+	this._isUserInput = false;
+
 	// reset widgets
-	this._contentDIV.innerHTML = AjxStringUtil.nl2br(this._zmObject.body);
+	this._contentDIV.innerHTML = AjxStringUtil.nl2br(body);
 	this._contentTA.style.visibility = "hidden";
 	this._contentDIV.style.visibility = "visible";
 
@@ -59,13 +83,16 @@ function(zmObject) {
 	this._gTranslatorDialog.popup();
 };
 
-Com_Zimbra_Gtranslator.prototype.doubleClicked =
+/**
+ * Called by framework on double-click.
+ */
+GTranslatorZimlet.prototype.doubleClicked =
 function(canvas) {
 	this._isUserInput = true;
 
 	// create a dialog if one does not already exist
 	if (!this._gTranslatorDialog) {
-		this._initialize();
+		this._initializeTranslatorDialog();
 	}
 
 	// reset widgets
@@ -77,10 +104,13 @@ function(canvas) {
 	this._gTranslatorDialog.popup();
 };
 
-
-// Private methods
-
-Com_Zimbra_Gtranslator.prototype._makeRequest =
+/**
+ * Makes the request to Google.
+ * 
+ * @param	{string}	lang		the language pair
+ * @param	{string}		text	the text to translate
+ */
+GTranslatorZimlet.prototype._makeRequest =
 function(lang, text) {
 	var reqParams = [];
 	var i = 0;
@@ -93,35 +123,39 @@ function(lang, text) {
 	reqParams[i++] = "&hl=en&ie=UTF8";
 
 	var reqHeader = { "User-Agent": navigator.userAgent, "Content-Type": "application/x-www-form-urlencoded", "Referrer": "http://translate.google.com/translate_t" };
-	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(Com_Zimbra_Gtranslator.URL);
+	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(GTranslatorZimlet.GOOGLE_TRANSLATOR_URL);
 
 	AjxRpc.invoke(reqParams.join(""), url, reqHeader, new AjxCallback(this, this._resultCallback));
 };
 
-Com_Zimbra_Gtranslator.prototype._initialize =
+/**
+ * Initializes the zimlet translator dialog.
+ * 
+ */
+GTranslatorZimlet.prototype._initializeTranslatorDialog =
 function() {
 	this._parentView = new DwtComposite(this.getShell());
 	this._parentView.setSize("440", "175");
 
 	this._languages = [
-		{ value: "en|de",		label: "English to German" },
-		{ value: "en|es", 		label: "English to Spanish" },
-		{ value: "en|fr", 		label: "English to French" },
-		{ value: "en|it",		label: "English to Italian" },
-		{ value: "en|pt",		label: "English to Portuguese" },
-		{ value: "en|ja",		label: "English to Japanese BETA" },
-		{ value: "en|ko",		label: "English to Korean BETA" },
-		{ value: "en|zh-CN",	label: "English to Chinese (Simplified) BETA" },
-		{ value: "de|en",		label: "German to English" },
-		{ value: "de|fr",		label: "German to French" },
-		{ value: "es|en",		label: "Spanish to English" },
-		{ value: "fr|en",		label: "French to English" },
-		{ value: "fr|de",		label: "French to German" },
-		{ value: "it|en",		label: "Italian to English" },
-		{ value: "pt|en",		label: "Portuguese to English" },
-		{ value: "ja|en",		label: "Japanese to English BETA" },
-		{ value: "ko|en",		label: "Korean to English BETA" },
-		{ value: "zh-CN|en",	label: "Chinese (Simplified) to English BETA" }
+		{ value: "en|de",		label: this.getMessage("GTranslatorZimlet_language_englishGerman") },
+		{ value: "en|es", 		label: this.getMessage("GTranslatorZimlet_language_englishSpanish") },
+		{ value: "en|fr", 		label: this.getMessage("GTranslatorZimlet_language_englishFrench") },
+		{ value: "en|it",		label: this.getMessage("GTranslatorZimlet_language_englishItalian") },
+		{ value: "en|pt",		label: this.getMessage("GTranslatorZimlet_language_englishPortuguese") },
+		{ value: "en|ja",		label: this.getMessage("GTranslatorZimlet_language_englishJapanese") },
+		{ value: "en|ko",		label: this.getMessage("GTranslatorZimlet_language_englishKorean") },
+		{ value: "en|zh-CN",	label: this.getMessage("GTranslatorZimlet_language_englishChineseSimplified") },
+		{ value: "de|en",		label: this.getMessage("GTranslatorZimlet_language_germanEnglish") },
+		{ value: "de|fr",		label: this.getMessage("GTranslatorZimlet_language_germanFrench") },
+		{ value: "es|en",		label: this.getMessage("GTranslatorZimlet_language_spanishEnglish") },
+		{ value: "fr|en",		label: this.getMessage("GTranslatorZimlet_language_frenchEnglish") },
+		{ value: "fr|de",		label: this.getMessage("GTranslatorZimlet_language_frenchGerman") },
+		{ value: "it|en",		label: this.getMessage("GTranslatorZimlet_language_italianEnglish") },
+		{ value: "pt|en",		label: this.getMessage("GTranslatorZimlet_language_portugueseEnglish") },
+		{ value: "ja|en",		label: this.getMessage("GTranslatorZimlet_language_japaneseEnglish") },
+		{ value: "ko|en",		label: this.getMessage("GTranslatorZimlet_language_koreanEnglish") },
+		{ value: "zh-CN|en",	label: this.getMessage("GTranslatorZimlet_language_chineseSimplifiedEnglish") }
 	];
 
 	// add header section which will hold language DwtSelect and Translate button
@@ -151,8 +185,8 @@ function() {
 	// add translate DwtButton
 	this._translateButton = new DwtButton({parent:this._parentView});
 	this._translateButton.reparentHtmlElement(translateId);
-	this._translateButton.setText("Translate");
-	this._translateButton.addSelectionListener(new AjxListener(this, this._translateListener));
+	this._translateButton.setText(this.getMessage("GTranslatorZimlet_dialog_translateButton"));
+	this._translateButton.addSelectionListener(new AjxListener(this, this._gTranslatorDialogTranslateListener));
 
 	// add textarea holding content
 	this._contentTA = document.createElement("TEXTAREA");
@@ -172,47 +206,71 @@ function() {
 	this._contentDIV.style.overflow = "auto";
 	this._parentView.getHtmlElement().appendChild(this._contentDIV);
 
+	var dialogArgs = {
+				title	: this.getMessage("GTranslatorZimlet_dialog_title"),
+				view	: this._parentView,
+				parent	: this.getShell()
+				};
+	
 	// finally, create dialog holding all these widgets
-	this._gTranslatorDialog = this._createDialog({title:"Google Translator", view:this._parentView});
+	this._gTranslatorDialog = new ZmDialog(dialogArgs);
 	this._gTranslatorDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._gTranslatorDialogOkListener));
 };
 
-Com_Zimbra_Gtranslator.prototype._populate =
+/**
+ * Populates the results.
+ * 
+ */
+GTranslatorZimlet.prototype._populateResults =
 function(resp) {
+	
 	var result = resp.success ? resp.text : null;
-	var divIdx = result ? result.indexOf("<div id=result_box") : null;
-	var div = divIdx ? Dwt.parseHtmlFragment(result.substring(divIdx)) : null;
+	var divIdx = result ? result.indexOf("<span id=result_box") : null;
+	var div = divIdx >= 0 ? Dwt.parseHtmlFragment(result.substring(divIdx)) : null;
 
 	if (this._isUserInput) {
 		this._contentTA.style.visibility = "hidden";
 		this._contentDIV.style.visibility = "visible";
 	}
 
-	this._contentDIV.innerHTML = div
-		? div.innerHTML
-		: "An error occurred attempting to translate this message.";
+	var tmpInnerHTML = this.getMessage("GTranslatorZimlet_dialog_errorTranslating");
+	
+	if (div != null && divIdx >= 0) {
+		tmpInnerHTML = div.innerHTML;
+	}
+	
+	this._contentDIV.innerHTML = tmpInnerHTML;
 };
 
-
-// Listeners
-
-Com_Zimbra_Gtranslator.prototype._gTranslatorDialogOkListener =
+/**
+ * Handles the OK button.
+ * 
+ * @see		_initializeTranslatorDialog
+ */
+GTranslatorZimlet.prototype._gTranslatorDialogOkListener =
 function(ev) {
 	this._gTranslatorDialog.popdown();
 };
 
-Com_Zimbra_Gtranslator.prototype._translateListener =
+/**
+ * Handles the translate button.
+ * 
+ * @see		_initializeTranslatorDialog
+ */
+GTranslatorZimlet.prototype._gTranslatorDialogTranslateListener =
 function(ev) {
-	var value = this._isUserInput ? this._contentTA.value : this._zmObject.body;
+	var value = this._isUserInput ? this._contentTA.value : this._zmObjectBody;
 	this._makeRequest(this._langSelect.getValue(), value);
 };
 
-
-// Callbacks
-
-Com_Zimbra_Gtranslator.prototype._resultCallback =
+/**
+ * Handles the request callback.
+ * 
+ * @see			_makeRequest
+ */
+GTranslatorZimlet.prototype._resultCallback =
 function(obj) {
-	this._populate(obj);
+	this._populateResults(obj);
 
 	if (!this._gTranslatorDialog.isPoppedUp())
 		this._gTranslatorDialog.popup();
