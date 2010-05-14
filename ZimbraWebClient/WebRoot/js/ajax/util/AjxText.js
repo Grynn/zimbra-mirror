@@ -30,7 +30,7 @@
  * @private
  */
 AjxFormat = function(pattern) {
-    if (arguments.length == 0) return;
+    if (arguments.length == 0) { return; }
 	this._pattern = pattern;
 	this._segments = [];
 }
@@ -366,8 +366,9 @@ AjxFormat.Segment._parseInt = function(o, f, adjust, s, index, fixedlen, radix) 
  * http://www.unicode.org/cldr/.
  */
 AjxDateFormat = function(pattern) {
-    if (arguments.length == 0) return;
+    if (arguments.length == 0) { return; }
 	AjxFormat.call(this, pattern);
+	if (pattern == null) { return; }
 	if (typeof pattern == "number") {
 		switch (pattern) {
 			case AjxDateFormat.SHORT: pattern = I18nMsg.formatDateShort; break;
@@ -1103,8 +1104,9 @@ AjxDateFormat.TimezoneSegment.prototype.format = function(date) {
  * </pre>
  */
 AjxMessageFormat = function(pattern) {
-    if (arguments.length == 0) return;
+    if (arguments.length == 0) { return; }
 	AjxFormat.call(this, pattern);
+	if (pattern == null) { return; }
 	for (var i = 0; i < pattern.length; i++) {
 		// literal
 		var c = pattern.charAt(i);
@@ -1353,9 +1355,9 @@ AjxMessageFormat.MessageSegment._split = function(s, delimiter) {
  *                      instantiating a custom number format.
  */
 AjxNumberFormat = function(pattern, skipNegFormat) {
-    if (arguments.length == 0) return;
+    if (arguments.length == 0) { return; }
 	AjxFormat.call(this, pattern);
-	if (pattern == "") return;
+	if (!pattern) { return; }
 
 	var patterns = pattern.split(/;/);
 	var pattern = patterns[0];
@@ -1668,8 +1670,9 @@ AjxNumberFormat.NumberSegment.prototype._normalize = function(s) {
  * For complete details, see the JavaDoc for java.text.ChoiceFormat.
  */
 AjxChoiceFormat = function(pattern) {
-    if (arguments.length == 0) return;
+    if (arguments.length == 0) { return; }
 	AjxFormat.call(this, pattern);
+	if (pattern == null) { return; }
 	var choices = pattern.split("|");
 	if (arguments.length == 1) {
 		this._limits = new Array(choices.length);
@@ -1798,7 +1801,7 @@ AjxChoiceFormat.prototype.format = function(number, index) {
  *                                  is used.
  */
 AjxListFormat = function(formatter, separator, lastSeparator) {
-    if (arguments.length == 0) return;
+    if (arguments.length == 0) { return; }
 	AjxFormat.call(this, formatter ? formatter.toPattern() : "");
 	this._formatter = formatter;
 	this._separator = separator || AjxMsg.listSeparator;
