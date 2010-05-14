@@ -16,22 +16,14 @@ package com.zimbra.cs.offline;
 
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.DataSource.DataImport;
-import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.datasource.imap.ImapSync;
 import com.zimbra.cs.offline.ab.gab.GabImport;
 import com.zimbra.cs.offline.ab.yab.YabImport;
-import com.zimbra.cs.offline.util.OfflineYAuth;
-import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.util.yauth.Authenticator;
-import com.zimbra.cs.util.yauth.XYMEAuthenticator;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.ZimbraLog;
 
-import javax.security.auth.login.LoginException;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.io.IOException;
 
 public class OfflineImport implements DataImport {
     private final OfflineDataSource ds;
@@ -59,7 +51,7 @@ public class OfflineImport implements DataImport {
     public static OfflineImport imapImport(OfflineDataSource ds)
         throws ServiceException {
         return new OfflineImport(ds,
-            ds.isYahoo() ? new YMailSync(ds) : new ImapSync(ds),
+            ds.isYahoo() ? new YMailImapSync(ds) : new ImapSync(ds),
             "imap", IMAP_INTERVAL);
     }
 
@@ -121,43 +113,4 @@ public class OfflineImport implements DataImport {
         }
         return fullSync;
     }
-
-    // Adds support for Yahoo XYMEAuthentication mechanism
-    private static class YMailSync extends ImapSync {
-        YMailSync(DataSource ds) throws ServiceException {
-            super(ds);
-        }
-
-        @Override
-        protected void connect() throws ServiceException {
-            Authenticator auth = OfflineYAuth.newAuthenticator(dataSource);
-            initAuth(auth);
-            try {
-                super.connect();
-            } catch (ServiceException e) {
-                if (!isAuthError(e)) throw e;
-                ZimbraLog.datasource.debug("Invalidating possibly expired cookie and retrying auth");
-                // Invalidate possibly expired cookie so that we will regenerate
-                // and try again
-                auth.invalidate();
-                initAuth(auth);
-                super.connect();
-            }
-        }
-
-        private void initAuth(Authenticator auth) throws ServiceException {
-            try {
-                setAuthenticator(new XYMEAuthenticator(
-                    auth.authenticate(), OfflineConstants.YMAIL_PARTNER_NAME));
-            } catch (IOException e) {
-                throw ServiceException.FAILURE("I/O error during authentication", e);
-            }
-        }
-    }
-
-    private static boolean isAuthError(ServiceException e) {
-        Throwable cause = e.getCause();
-        return cause == null || cause instanceof LoginException;
-    }
-    
 }
