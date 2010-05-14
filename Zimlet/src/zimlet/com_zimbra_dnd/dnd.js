@@ -129,7 +129,8 @@ Com_Zimbra_DnD.prototype._initHTML5 = function () {
 
 Com_Zimbra_DnD.prototype.onShowView =
 function(viewId, isNewView) {
-    if(this.isHTML5 && !AjxEnv.isIE) {
+    var isWindowsSafari = (AjxEnv.isWindows && AjxEnv.isSafari);
+    if(this.isHTML5 && !AjxEnv.isIE && !isWindowsSafari) {
         if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf(ZmId.VIEW_COMPOSE) != -1) {
             var curView = appCtxt.getAppViewMgr().getCurrentView();
             var el = curView.getHtmlElement();
@@ -139,7 +140,7 @@ function(viewId, isNewView) {
             var dndTooltip = document.getElementById(el.id + '_zdnd_tooltip');
             dndTooltip.style.display = "block";
         }
-    } else if ("createEvent" in document && document.getElementById("zdnd_files") && !AjxEnv.isIE) {
+    } else if ("createEvent" in document && document.getElementById("zdnd_files") && !AjxEnv.isIE && !isWindowsSafari) {
         if (viewId == ZmId.VIEW_COMPOSE ||
 			viewId == ZmId.VIEW_BRIEFCASE_COLUMN ||
 			viewId == ZmId.VIEW_BRIEFCASE ||
