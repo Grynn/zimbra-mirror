@@ -46,7 +46,7 @@ public class ZimbraBulkProvisionService  implements DocumentService {
     public void registerHandlers(DocumentDispatcher dispatcher) {
         dispatcher.registerHandler(GET_BULK_PROVISION_ACCOUNTS_REQUEST, new GetBulkProvisionAccounts());
         dispatcher.registerHandler(UPDATE_BULK_PROVISION_STATUS_REQUEST, new UpdateBulkProvisionStatus());
-      //  dispatcher.registerHandler(IMPORT_ACCOUNTS_FROM_LDAP_REQUEST, new ImportAccountsFromLDAP());
+        dispatcher.registerHandler(IMPORT_ACCOUNTS_FROM_LDAP_REQUEST, new ImportAccountsFromLDAP());
         dispatcher.registerHandler(GENERATE_BULK_PROV_FROM_LDAP_REQUEST, new GenerateBulkProvisionFileFromLDAP());
     }
 }

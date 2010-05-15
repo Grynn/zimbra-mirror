@@ -25,12 +25,32 @@ import com.zimbra.common.service.ServiceException;
  */
 public class BulkProvisionException extends ServiceException {
     public static final String BP_TOO_MANY_ACCOUNTS = "bulkprovision.BP_TOO_MANY_ACCOUNTS";
+    public static final String BP_TOO_MANY_THREADS = "bulkprovision.BP_TOO_MANY_THREADS";
+    public static final String BP_IMPORT_THREAD_NOT_INITIALIZED = "bulkprovision.BP_IMPORT_THREAD_NOT_INITIALIZED";
+    public static final String BP_NO_ACCOUNTS_TO_IMPORT = "bulkprovision.BP_NO_ACCOUNTS_TO_IMPORT";
+    public static final String BP_IMPORT_ALREADY_RUNNING = "bulkprovision.BP_IMPORT_ALREADY_RUNNING";
 
     private BulkProvisionException(String message, String code, boolean isReceiversFault) {
         super(message, code, isReceiversFault);
     }
 
-     public static BulkProvisionException BP_TOO_MANY_ACCOUNTS (String desc) {
+    public static BulkProvisionException BP_TOO_MANY_ACCOUNTS (String desc) {
         return new BulkProvisionException("too many accounts: " + desc, BP_TOO_MANY_ACCOUNTS, SENDERS_FAULT);
     }
+    
+    public static BulkProvisionException BP_TOO_MANY_THREADS (int numThreads) {
+        return new BulkProvisionException("Reached the maximum number of simultaneous provisioning threads: " + Integer.toString(numThreads), BP_TOO_MANY_THREADS, SENDERS_FAULT);
+    }    
+    
+    public static BulkProvisionException BP_IMPORT_THREAD_NOT_INITIALIZED () {
+        return new BulkProvisionException("Bulk provisioning thread was not properly initialized", BP_IMPORT_THREAD_NOT_INITIALIZED, SENDERS_FAULT);
+    }    
+    
+    public static BulkProvisionException BP_NO_ACCOUNTS_TO_IMPORT () {
+        return new BulkProvisionException("Did not find any accounts to import", BP_NO_ACCOUNTS_TO_IMPORT, SENDERS_FAULT);
+    }
+    
+    public static BulkProvisionException BP_IMPORT_ALREADY_RUNNING () {
+        return new BulkProvisionException("A bulk provisioning task is already running", BP_IMPORT_ALREADY_RUNNING, SENDERS_FAULT);
+    }    
 }

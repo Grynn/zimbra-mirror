@@ -62,6 +62,7 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 			password = elPassword.getTextTrim();
 		}
 		String generatePwd = request.getElement(A_generatePassword).getTextTrim();
+		Element elPasswordLength = request.getOptionalElement(A_genPasswordLength);
 		String fileFormat = request.getElement(A_fileFormat).getTextTrim();
 		if(fileFormat == null || !(fileFormat.equalsIgnoreCase(FILE_FORMAT_BULK_CSV) || fileFormat.equalsIgnoreCase(FILE_FORMAT_BULK_XML))) {
 			fileFormat = FILE_FORMAT_BULK_CSV;
@@ -69,10 +70,10 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 		int genPwdLength = 0;
 		if(generatePwd == null) {
 			generatePwd = "false";			
-		} else {
-			try {
-				genPwdLength = (Integer)attrs.get(A_genPasswordLength);
-			} catch (Exception e) {
+		} else if(generatePwd.equalsIgnoreCase("true")) {
+			if(elPasswordLength != null) {
+				genPwdLength = Integer.valueOf(elPasswordLength.getTextTrim());
+			} else {
 				genPwdLength = DEFAULT_PWD_LENGTH;
 			}
 			if(genPwdLength < 1) {
