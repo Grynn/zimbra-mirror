@@ -78,10 +78,10 @@ Com_Zimbra_DnD.prototype._initNonHTM5 = function () {
 		zDnDUploadFrm.setAttribute("action", uploadUri);
 	}
 
-    /*var cmd = window.newWindowCommand;
+    var cmd = window.newWindowCommand;
     if(cmd == 'compose' || cmd == 'msgViewDetach') {
             var self = this;
-            setTimeout(function() {
+            setTimeout(AjxCallback.simpleClosure(function(cmd) {
                 var curView = appCtxt.getAppViewMgr().getCurrentView();
                 var el = curView.getHtmlElement();
                 var doc = el.ownerDocument;
@@ -99,14 +99,14 @@ Com_Zimbra_DnD.prototype._initNonHTM5 = function () {
                     var zDnDUploadFrm = doc.getElementById("zdnd_form");
                     zDnDUploadFrm.setAttribute("action", uploadUri);
                 }
-
-                var ev = document.createEvent("Events");
-			    ev.initEvent("ZimbraDnD", true, false);
-                curView._resetBodySize();
-                el.dispatchEvent(ev);
-
-            }, 1000);
-    }*/
+                if(cmd == 'compose') {
+                    var ev = document.createEvent("Events");
+                    ev.initEvent("ZimbraDnD", true, false);
+                    curView._resetBodySize();
+                    el.dispatchEvent(ev);
+                }
+            }, this, cmd), 1000);
+    }
     
 };
 
