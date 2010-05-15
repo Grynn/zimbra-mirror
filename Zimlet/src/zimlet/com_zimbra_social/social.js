@@ -123,7 +123,7 @@ function() {
 	this._allFBLikeLinks = new Array();
 	this._allFBMoreCommentsLinks = new Array();
 	this.cardInfoSectionIdsArray = new Array();//every card's data div (used to reset its height when window is resized)
-	this._migrateOldPropsNames();//from tweetzi to social
+	//this._migrateOldPropsNames();//from tweetzi to social
 	this.isTextPasted = false;
 	this._autoShorten = true;
 
@@ -479,7 +479,7 @@ function(text) {
 	var sText = text.toLowerCase();
 	var urlsToShorten = new Array();
 	for (var i = 0; i < potentialUrlsToShorten.length; i++) {
-		var url = potentialUrlsToShorten[i].toLowerCase();
+		var url = potentialUrlsToShorten[i];
 		if (!this.shortnersRegex.test(url)) {
 			urlsToShorten.push(url);
 		}
@@ -1625,7 +1625,7 @@ function(tableId, jsonObj, type) {
 		} else     if (type == "TWEETMEME") {
 			screen_name = "tweetmeme";
 			created_at = obj.created_at;
-			text = " " + obj.title + " " + obj.alias;
+			text = " " + obj.title + " " + obj.url;
 			source = "tweetmeme";
 			tweetcount = obj.url_count;
 			imageAnchor = "<TD > ";

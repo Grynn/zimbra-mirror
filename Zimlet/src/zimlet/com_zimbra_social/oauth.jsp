@@ -58,11 +58,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <%
     Random RAND = new Random();
-    String consumerKey = "Xz2BKOKObTzpLrMXxJo2ww";//twitter consumer key
-    String consumerSecret = "bh4GXLP2pcu7u05ROylHXT7yCfZJfXhmDYSzvRUxI"; //twitter consumer secret key
+    String consumerKey = "Xz2BKOKObTzpLrMXxJo2ww";
+    String consumerSecret = "bh4GXLP2pcu7u05ROylHXT7yCfZJfXhmDYSzvRUxI"; 
+    String consumerKeyZD = "tE6IZlL1JJzHaRpIVDfljA";
+    String  consumerSecretZD= "oyriZ32PAMNk3F6lGOeEE0GGyDSPHg1EjTMSWOKuIPw"; 
     long timeStamp = System.currentTimeMillis() / 1000;
-    //long nonce = timeStamp + RAND.nextInt();
     String nonce = request.getParameter("nonce");
+	String isZD = request.getParameter("isZD");
+	if(isZD.equals("true")) {
+		consumerKey = consumerKeyZD;
+		consumerSecret = consumerSecretZD;
+	}
 
     String token = request.getParameter("token");
     String tokenSecret = request.getParameter("tokenSecret");

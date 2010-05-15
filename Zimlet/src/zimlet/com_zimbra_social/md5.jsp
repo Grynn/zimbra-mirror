@@ -26,11 +26,18 @@
 
 
 <%
-    String FB_API_KEY = "7af6d68c9d453e392c1ed68b27f95506";//facebook api key(this must match social_facebook_api_key variable in config_template xml file)
-    String FB_SECRET_KEY = "498158ba928b7f41ec0f5038f8f3bdd9";//facebook secret key
+    String FB_API_KEY = "7af6d68c9d453e392c1ed68b27f95506";
+    String FB_SECRET_KEY = "498158ba928b7f41ec0f5038f8f3bdd9";
+	String FB_API_KEY_ZD = "f7377c6deafb69c43fd4c691208b0c6a";
+	String FB_SECRET_KEY_ZD = "42b2fe4d170e1fed20b02213ca784974";
     Map<String, String> map = new HashMap<String, String>();
     String method = request.getParameter("method");
     String auth_token = request.getParameter("auth_token");
+    String isZD = request.getParameter("isZD");
+	if(isZD.equals("true")) {
+		FB_API_KEY = FB_API_KEY_ZD;
+		FB_SECRET_KEY = FB_SECRET_KEY_ZD;
+	}
     map.put("api_key", FB_API_KEY);
     map.put("v", "1.0");
     map.put("format", "json");

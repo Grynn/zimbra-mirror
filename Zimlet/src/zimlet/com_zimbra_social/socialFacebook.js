@@ -18,7 +18,17 @@
 function com_zimbra_socialFacebook(zimlet) {
 	this.zimlet = zimlet;
 	this.waitingForApproval = false;
+	this.isZD = false;
 	this.apiKey = this.zimlet.getConfig("social_facebook_api_key");
+	try{
+		var version = appCtxt.getActiveAccount().settings.getInfoResponse.version;
+		if(version.toLowerCase().indexOf("desktop") > 0) {
+			this.isZD = true;
+			this.apiKey = this.zimlet.getConfig("social_facebook_api_key_zd");
+		}
+	}catch(e) {
+		//ignore
+	}
 }
 
 com_zimbra_socialFacebook.prototype._addFBComment = function(params) {
@@ -283,6 +293,7 @@ function (args) {
 		var item = args[i];
 		params.push(item[0] + "=" + item[1]);
 	}
+	params.push("isZD="+this.isZD);
 	var url = this.zimlet.getResource("md5.jsp") + "?" + params.join("&");
 	var response = AjxRpc.invoke(null, url, null, null, true);
 	var obj = eval("(" + response.text + ")");

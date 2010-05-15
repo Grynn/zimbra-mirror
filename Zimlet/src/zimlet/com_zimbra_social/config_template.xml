@@ -1,15 +1,8 @@
-<zimletConfig name="com_zimbra_social" version="2.1.7.4">
+<zimletConfig name="com_zimbra_social" version="2.1.7.5">
     <global>
         <property name="allowedDomains">twitter.com,*.twitter.com,*.facebook.com,*.tweetmeme.com,api.tr.im,*.digg.com,api.bit.ly</property>
-        <!-- note:
-          Facebook keys:
-          1. Copy Facebook API to: social_facebook_api_key variable in this xml(config_template.xml) file
-          2. Also Set Facebook API key to FB_API_KEY variable in md5.jsp
-          2. Copy facebook API secret key *only* to FB_SECRET_KEY in md5.jsp (dont keep it in this xml file)
-          Twitter keys:
-          1. Copy Twitter's consumer key to consumerKey variable in oauth.jsp
-          2. Copy Twitter's consumer secret key also to consumerSecret variable in oauth.jsp
-          -->
         <property name="social_facebook_api_key">7af6d68c9d453e392c1ed68b27f95506</property>
+        <property name="social_facebook_api_key_zd">f7377c6deafb69c43fd4c691208b0c6a</property>
+
     </global>
 </zimletConfig>

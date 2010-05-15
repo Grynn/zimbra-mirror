@@ -23,6 +23,15 @@ function com_zimbra_socialTwitter(zimlet, preferences) {
 	this.emailContentObj = new Array();
 	this.showAlertObj = new Array();
 	this.loadAllSearchesFromDB();
+	this.isZD = false;
+	try{
+		var version = appCtxt.getActiveAccount().settings.getInfoResponse.version;
+		if(version.toLowerCase().indexOf("desktop") > 0) {
+			this.isZD = true;
+		}
+	}catch(e) {
+		//ignore
+	}
 }
 
 com_zimbra_socialTwitter.prototype._getTodayStr = function() {
@@ -329,6 +338,7 @@ function(actionUrl, profileId, account) {
 	pArray.push("token=" + AjxStringUtil.urlComponentEncode(ot));
 	pArray.push("tokenSecret=" + AjxStringUtil.urlComponentEncode(ts));
 	pArray.push("nonce=" + this._getNonce());
+	pArray.push("isZD="+this.isZD);
 	var jspUrl = this.zimlet.getResource("oauth.jsp") + "?" + pArray.join("&");
 	var response = AjxRpc.invoke(null, jspUrl, null, null, true);
 	var obj = eval("(" + response.text + ")");
@@ -467,6 +477,8 @@ function(params) {
 	pArray.push("token=" + AjxStringUtil.urlComponentEncode(ot));
 	pArray.push("tokenSecret=" + AjxStringUtil.urlComponentEncode(ts));
 	pArray.push("nonce=" + this._getNonce());
+	pArray.push("isZD="+this.isZD);
+
 	for (var itemName in additionalParams) {
 		pArray.push(AjxStringUtil.urlComponentEncode(itemName) + "=" + AjxStringUtil.urlComponentEncode(additionalParams[itemName]));
 	}
@@ -655,7 +667,7 @@ function(showAlertObj) {
 
 	var transitions = [];
 	transitions.push(ZmToast.FADE_IN);
-	for (var i = 0; i < accntsLength * 4; i++) {
+	for (var i = 0; i < accntsLength; i++) {
 		transitions.push(ZmToast.PAUSE);
 	}
 	transitions.push(ZmToast.FADE_OUT);
@@ -766,6 +778,8 @@ function() {
 	pArray.push("method=GET");
 	pArray.push("url=" + AjxStringUtil.urlComponentEncode("https://twitter.com/oauth/request_token"));
 	pArray.push("nonce=" + this._getNonce());
+	pArray.push("isZD="+this.isZD);
+
 	var jspUrl = this.zimlet.getResource("oauth.jsp") + "?" + pArray.join("&");
 	var response = AjxRpc.invoke(null, jspUrl, null, null, true);
 	var obj = eval("(" + response.text + ")");
@@ -779,6 +793,8 @@ function(pin) {
 	pArray.push("url=" + AjxStringUtil.urlComponentEncode("https://twitter.com/oauth/access_token"));
 	pArray.push("tokenSecret=" + AjxStringUtil.urlComponentEncode(this._oauth_token_secret));
 	pArray.push("nonce=" + this._getNonce());
+	pArray.push("isZD="+this.isZD);
+
 	var jspUrl = this.zimlet.getResource("oauth.jsp") + "?" + pArray.join("&");
 	var response = AjxRpc.invoke(null, jspUrl, null, null, true);
 	var obj = eval("(" + response.text + ")");
