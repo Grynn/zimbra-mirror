@@ -27,10 +27,9 @@ import com.zimbra.cs.session.SoapSession;
 import java.util.List;
 
 public class OfflineMailboxManager extends MailboxManager {
-	
-	public static OfflineMailboxManager getOfflineInstance() throws ServiceException {
-		return (OfflineMailboxManager)MailboxManager.getInstance();
-	}
+    public static OfflineMailboxManager getOfflineInstance() throws ServiceException {
+        return (OfflineMailboxManager)MailboxManager.getInstance();
+    }
 	
     public OfflineMailboxManager() throws ServiceException  {
         super();

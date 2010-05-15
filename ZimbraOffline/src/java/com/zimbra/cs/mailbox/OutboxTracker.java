@@ -25,69 +25,68 @@ import java.util.Map;
 import com.zimbra.common.service.ServiceException;
 
 class OutboxTracker {
-	
-    /**
+    /*
      * Outgoing messages in Outbox.  This is an in memory cache so that we don't have to run derby queries all the time
      * 
      * key: mailbox id
-     * value: a map of item-id -> last time tried and failed (0 means never tried)
+     * value: a map of item-id -> last time triesd and failed (0 means never tried)
      */
-    private static Map<Long, Map<Integer, Long>> sOutboxMessageMap = Collections.synchronizedMap(new HashMap<Long, Map<Integer, Long>>());
-    
+    private static final Map<Long, Map<Integer, Long>> sOutboxMessageMap = Collections.synchronizedMap(new HashMap<Long, Map<Integer, Long>>());
+
     static void invalidate(Mailbox mbox) {
-    	synchronized (sOutboxMessageMap) {
-			sOutboxMessageMap.remove(mbox.getId());
-		}
+        synchronized (sOutboxMessageMap) {
+            sOutboxMessageMap.remove(mbox.getId());
+        }
     }
-    
+
     static Iterator<Integer> iterator(Mailbox mbox, long retryDelay) throws ServiceException {
-    	Map<Integer, Long> outboxMap = null;
-    	synchronized (sOutboxMessageMap) {
-			outboxMap = sOutboxMessageMap.get(mbox.getId());
-			if (outboxMap == null) {
-				refresh(mbox);
-				outboxMap = sOutboxMessageMap.get(mbox.getId());
-			}
-    	}
-		List<Integer> msgList = new ArrayList<Integer>();
-		long now = System.currentTimeMillis();
-		for (Map.Entry<Integer, Long> e : outboxMap.entrySet()) {
-			if (now - e.getValue() > retryDelay)
-				msgList.add(e.getKey());
-		}
-		Collections.sort(msgList, new Comparator<Integer>() {
-			public int compare(Integer o1, Integer o2) {
-				return o2 - o1;
-			}
-		});
-    	return msgList.iterator();
+        Map<Integer, Long> outboxMap = null;
+        synchronized (sOutboxMessageMap) {
+            outboxMap = sOutboxMessageMap.get(mbox.getId());
+            if (outboxMap == null) {
+                refresh(mbox);
+                outboxMap = sOutboxMessageMap.get(mbox.getId());
+            }
+        }
+        List<Integer> msgList = new ArrayList<Integer>();
+        long now = System.currentTimeMillis();
+        for (Map.Entry<Integer, Long> e : outboxMap.entrySet()) {
+            if (now - e.getValue() > retryDelay)
+                msgList.add(e.getKey());
+        }
+        Collections.sort(msgList, new Comparator<Integer>() {
+            public int compare(Integer o1, Integer o2) {
+                return o2 - o1;
+            }
+        });
+        return msgList.iterator();
     }
-    
+
     static void recordFailure(Mailbox mbox, int itemId) {
-    	synchronized (sOutboxMessageMap) {
-    		Map<Integer, Long> outboxMap = sOutboxMessageMap.get(mbox.getId());
-    		if (outboxMap != null)
-    			outboxMap.put(itemId, System.currentTimeMillis());
-		}
+        synchronized (sOutboxMessageMap) {
+            Map<Integer, Long> outboxMap = sOutboxMessageMap.get(mbox.getId());
+            if (outboxMap != null)
+                outboxMap.put(itemId, System.currentTimeMillis());
+        }
     }
-	
+
     static void remove(Mailbox mbox, int itemId) {
-    	synchronized (sOutboxMessageMap) {
-    		Map<Integer, Long> outboxMap = sOutboxMessageMap.get(mbox.getId());
-    		if (outboxMap != null)
-    			outboxMap.remove(itemId);
-		}
+        synchronized (sOutboxMessageMap) {
+            Map<Integer, Long> outboxMap = sOutboxMessageMap.get(mbox.getId());
+            if (outboxMap != null)
+                outboxMap.remove(itemId);
+        }
     }
 
     private static void refresh(Mailbox mbox) throws ServiceException {
-    	List<Integer> pendingSends = mbox.listItemIds(new OperationContext(mbox), MailItem.TYPE_MESSAGE, ZcsMailbox.ID_FOLDER_OUTBOX);
-    	synchronized (sOutboxMessageMap) {
-    		Map<Integer, Long> oldMap = sOutboxMessageMap.get(mbox.getId());
-    		Map<Integer, Long> newMap = new HashMap<Integer, Long>();
-    		for (int id : pendingSends) {
-    			newMap.put(id, (oldMap == null ? 0L : (oldMap.get(id) == null ? 0L : oldMap.get(id))));
-    		}
-    		sOutboxMessageMap.put(mbox.getId(), newMap);
-		}
+        List<Integer> pendingSends = mbox.listItemIds(new OperationContext(mbox), MailItem.TYPE_MESSAGE, ZcsMailbox.ID_FOLDER_OUTBOX);
+        synchronized (sOutboxMessageMap) {
+            Map<Integer, Long> oldMap = sOutboxMessageMap.get(mbox.getId());
+            Map<Integer, Long> newMap = new HashMap<Integer, Long>();
+            for (int id : pendingSends) {
+                newMap.put(id, (oldMap == null ? 0L : (oldMap.get(id) == null ? 0L : oldMap.get(id))));
+            }
+            sOutboxMessageMap.put(mbox.getId(), newMap);
+        }
     }
 }
