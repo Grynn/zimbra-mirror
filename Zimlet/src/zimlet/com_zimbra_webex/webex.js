@@ -1126,7 +1126,7 @@ WebExZimlet.prototype._addTestAccountButtons =
 function() {
 	for (var i = 1; i < 6; i++) {
 		var btn = new DwtButton({parent:this.getShell()});
-		btn.setText(this.getMessage("WebExZimlet_validateWebExAccntNumber") + i);
+		btn.setText(AjxMessageFormat.format(this.getMessage("WebExZimlet_validateWebExAccntNumber"),i));
 		btn.setImage("WEBEX-panelIcon");
 		btn.addSelectionListener(new AjxListener(this, this._testWebExAccount, [i]));
 		document.getElementById("webExZimlet_TestAccountBtn" + i).appendChild(btn.getHtmlElement());
@@ -1187,9 +1187,7 @@ WebExZimlet.prototype._setCurrentAccntInfoFromCalendar = function(id) {
  * @param {int} Account number
  */
 WebExZimlet.prototype._getAccountNumberFromFolderId = function(id) {
-	if (this._webexZimletAccountPreferences == undefined) {
-		throw new AjxException(this.getMessage("WebExZimlet_noWebExAccount"), AjxException.INTERNAL_ERROR, this.getMessage("WebExZimlet_label"));
-	}
+	this._isAtLeastOneAccountConfigured();
 	var accntNumber = 1;
 	for (var i = 1; i < 6; i++) {
 		if (this._webexZimletAccountPreferences[WebExZimlet.PROP_ASSOCIATED_CALENDAR.propId + i] == id) {
@@ -1200,6 +1198,27 @@ WebExZimlet.prototype._getAccountNumberFromFolderId = function(id) {
 	return accntNumber;
 };
 
+/**
+ * Checks if at least one Account is configured
+ *
+ * @return {AjxException} If none, it throws exception
+ */
+WebExZimlet.prototype._isAtLeastOneAccountConfigured = function() {
+	if(this._webexZimletAccountPreferences == undefined) {
+		throw new AjxException(this.getMessage("WebExZimlet_noWebExAccount"), AjxException.INTERNAL_ERROR, this.getMessage("WebExZimlet_label"));
+	}
+	for(var i = 1; i < 6; i++) {
+		if(this._webexZimletAccountPreferences[WebExZimlet.PROP_USERNAME.propId + i] != "" && 
+			this._webexZimletAccountPreferences[WebExZimlet.PROP_USERNAME.propId + i] != "N/A"
+			&& this._webexZimletAccountPreferences[WebExZimlet.PROP_PASSWORD.propId + i] != "" && 
+			this._webexZimletAccountPreferences[WebExZimlet.PROP_PASSWORD.propId + i] != "N/A"
+			&& this._webexZimletAccountPreferences[WebExZimlet.PROP_COMPANY_ID.propId + i] != "" && 
+			this._webexZimletAccountPreferences[WebExZimlet.PROP_COMPANY_ID.propId + i] != "N/A") {
+			return true;
+		}
+	}
+	throw new AjxException(this.getMessage("WebExZimlet_noWebExAccount"), AjxException.INTERNAL_ERROR, this.getMessage("WebExZimlet_label"));
+};
 
 /**
  * Sets an account active based on account number.
@@ -1207,9 +1226,7 @@ WebExZimlet.prototype._getAccountNumberFromFolderId = function(id) {
  * @param {number} accntNumber	the account number
  */
 WebExZimlet.prototype._setCurrentAccntInfoFromAccntNumber = function(accntNumber) {
-	if (this._webexZimletAccountPreferences == undefined) {
-		throw new AjxException(this.getMessage("WebExZimlet_noWebExAccount"), AjxException.INTERNAL_ERROR, this.getMessage("WebExZimlet_label"));
-	}
+	this._isAtLeastOneAccountConfigured();
 	this._currentWebExAccount = [];
 	for (var i = 0; i < WebExZimlet.ALL_ACCNT_PROPS.length; i++) {
 		var prop = WebExZimlet.ALL_ACCNT_PROPS[i].propId;
@@ -1892,7 +1909,6 @@ function(accountNumber, listType) {
 	}
 	this._setMeetingListView(objResult, listType);
 	this._addShowMeetingListListeners();
-	//this._showMeetingListDlg(objResult, listType);
 };
 
 /**
@@ -2300,9 +2316,7 @@ function(expnMsg) {
  * @return {string} html
  */
 WebExZimlet.prototype._getAccountsSelectListMenuHtml = function(id) {
-	if (this._webexZimletAccountPreferences == undefined) {
-		throw new AjxException(this.getMessage("WebExZimlet_noWebExAccount"), AjxException.INTERNAL_ERROR, this.getMessage("WebExZimlet_label"));
-	}
+	this._isAtLeastOneAccountConfigured();
 	var html = [];
 	html.push("<select id='", id, "'>");
 	for (var i = 1; i < 6; i++) {
