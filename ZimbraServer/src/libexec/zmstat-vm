@@ -197,10 +197,14 @@ while (1) {
         close($vmstatFH);
         $vmstatFH = runVMSTAT($interval);
     }
-    # Skip the two-line heading Mac iostat prints every minute.
     $line =~ s/^\s+//;    # remove leading whitespaces
     $line =~ s/\s+$//;    # remove trailing whitespaces
-    while ($line !~ /^\d/) {
+    # Skip the two-line heading (plus the system-wide totals line) that Mac OSX vm_stat prints every 20 iterations.
+    if ($line !~ /^\d/) {
+        # If the line does not start with a numeric value, we've hit the first header line.  So, skip these
+        # three lines
+        $line = readLine($vmstatFH, 1);
+        $line = readLine($vmstatFH, 1);
         $line = readLine($vmstatFH, 1);
         $line =~ s/^\s+//;
         $line =~ s/\s+$//;
@@ -219,6 +223,23 @@ while (1) {
                 next;  # leave "faults" column alone
             }
             my $pages = $vals[$i];
+            #
+            # Mac OSX vm_stat converts large counter values to human readable number formatting (using "K", "M", ...).
+            # We need to normalized these values to strictly numeric values to perform math operations.
+            #
+            if ( $pages =~ /^\d+g$/i ) {
+                $pages =~ s/g//i;
+                $pages = $pages * 1000000000;
+            } elsif ( $pages =~ /^\d+m$/i ) {
+                $pages =~ s/m//i;
+                $pages = $pages * 1000000;
+            } elsif ( $pages =~ /^\d+k$/i ) {
+                $pages =~ s/k//i;
+                $pages = $pages * 1000;
+            } elsif ( $pages !~ /^\d$/ ) {
+                print STDERR "Non-numeric value encountered: $pages.  This should never happen!\n";
+            }
+            
             $vals[$i] = $pages * 4;  # page = 4KB; we want KB
         }
         $line = join(', ', @vals);
