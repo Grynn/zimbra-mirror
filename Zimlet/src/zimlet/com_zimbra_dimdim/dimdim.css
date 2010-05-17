@@ -1,0 +1,84 @@
+.ImgDimDim-panelIcon {
+  background: url("dimdim.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.DimDimZimlet_YellowBold {
+    background: #FFFFCC;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+}
+
+.DimDimZimlet_lightGray {
+    border-bottom: 1px solid #6E6E6E;
+    border-top: 1px solid #6E6E6E;
+	font-weight:bold;
+	padding:2px;
+}
+.DimDimZimlet_gray {
+    background: #808080;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+	font-weight:bold;
+	color:white;
+	padding:4px;
+}
+
+.DimDimZimlet_grayAccntHdr {
+    background: #808080;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+	font-weight:bold;
+	color:white;
+	font-size:14px;
+	padding:4px;
+}
+
+table.DimDimZimlet_table input{
+	border-color:#3A73AB;
+	border-width:1;
+	border-style:solid;
+	width:230px;
+	height:20px;
+	padding:2px 4px;
+}
+table.DimDimZimlet_table textarea{
+	border-color:#3A73AB;
+	border-width:1;
+	border-style:solid;
+	width:230px;
+	padding:2px 4px;
+}
+
+table.DimDimZimlet_table select{
+	border-color:#3A73AB;
+	border-width:1;
+	border-style:solid;
+}
+
+.webex_hoverTable tr:hover { 
+	background-color:#ccd5e8; 
+}
+
+.webex_hoverTable td { 
+	border-bottom:1px solid #BBBBBB;
+	height:27px;
+	padding:0.5em;
+	vertical-align:middle;
+
+}
+
+.webex_hoverTable th { 
+	border-bottom:1px solid #333333;
+	height:30px;
+	padding:0.5em;
+	vertical-align:middle;
+}
+
+.webex_hoverTable a { 
+text-decoration:underline;
+}
+
+

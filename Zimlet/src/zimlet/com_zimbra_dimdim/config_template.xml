@@ -1,0 +1,5 @@
+<zimletConfig name="com_zimbra_dimdim" version="0.2">
+    <global>
+        <property name="allowedDomains">zimlet.synchrolive.com,*.dimdim.com</property>
+    </global>
+</zimletConfig>

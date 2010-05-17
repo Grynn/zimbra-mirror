@@ -1,0 +1,20 @@
+<zimlet name="com_zimbra_dimdim" version="0.2" label="DimDim" description="Easily schedule, start or join DimDim meetings.">
+  <include>dimdim.js</include>
+  <includeCSS>dimdim.css</includeCSS>
+  <handlerObject>com_zimbra_dimdim_HandlerObject</handlerObject>
+  <zimletPanelItem label="${msg.DimDimZimlet_label}" icon="DimDim-panelIcon">
+    <toolTipText>${msg.DimDimZimlet_toolTip}</toolTipText>
+	<dragSource type="ZmContact" />
+	<dragSource type="ZmConv" />
+	<dragSource type="ZmMailMsg"/>
+    <dragSource type="ZmAppt" />
+
+    <contextMenu>
+      <menuItem icon="DimDim-panelIcon" label="${msg.DimDimZimlet_quickMeeting}" id="START_QUICK_MEETING"/>
+      <menuItem icon="DimDim-panelIcon" label="${msg.DimDimZimlet_startJoinExistingMeeting}" id="START_JOIN_MEETING"/>
+	 <menuItem />
+      <menuItem icon="Group" label= "${msg.DimDimZimlet_manageAccounts}" id="ACCOUNT_PREFERENCES"/>
+      <menuItem icon="Preferences" label="${msg.DimDimZimlet_generalPreferences}" id="GENERAL_PREFERENCES"/>	  
+    </contextMenu>
+  </zimletPanelItem>
+</zimlet>
