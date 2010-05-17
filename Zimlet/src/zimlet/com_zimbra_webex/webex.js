@@ -125,10 +125,6 @@ WebExZimlet.PROP_APPEND_TOLL_PHONE_NUMBER = {propId:"webexZimlet_appendTollConfN
  */
 WebExZimlet.PROP_APPEND_PHONE_PASSCODE = {propId:"webexZimlet_appendPhonePasscode", label:"WebExZimlet_appendPhonePasscode", defaultVal:"NONE", extraLabel:""};
 
-/**
- * Stores default property
- */
-WebExZimlet.PROP_DEFAULT_TIME_ZONE = {propId:"webExZimlet_defaultTimeZone", label:"", defaultVal:"Pacific (San Jose)", extraLabel:""};
 
 /**
  * Helps draw append options UI
@@ -142,7 +138,7 @@ WebExZimlet.APPEND_SUB_OPTIONS = [WebExZimlet.PROP_APPEND_WEBEX_MEETING_PWD,
  */
 WebExZimlet.ALL_GENERAL_PROPS = [WebExZimlet.PROP_APPEND_WEBEX_MEETING_PWD,
 	WebExZimlet.PROP_APPEND_TOLL_FREE_PHONE_NUMBER,WebExZimlet.PROP_APPEND_TOLL_PHONE_NUMBER,
-	WebExZimlet.PROP_APPEND_PHONE_PASSCODE, WebExZimlet.PROP_DEFAULT_TIME_ZONE];
+	WebExZimlet.PROP_APPEND_PHONE_PASSCODE];
 
 /**
  * Map Zimbra TimeZone Name to WebEx TimeZone Id
@@ -161,26 +157,6 @@ WebExZimlet.WebExToZimbraTZIDMap = {"Etc/GMT+12" : "0", "Pacific/Midway" : "1", 
 	"Australia/Adelaide" : "52", "Australia/Darwin" : "53", "Asia/Vladivostok" : "54", "Australia/Brisbane" : "54", "Australia/Sydney" : "55", "Pacific/Guam" : "56", "Australia/Hobart" : "57",
 	"Asia/Magadan" : "59", "Pacific/Auckland" : "60", "Pacific/Fiji" : "61", "Pacific/Tongatapu" : "61"};
 
-
-/**
- * Map the webex timezoneIds to TimeZone Names
- *
- */
-WebExZimlet.TZMap = {
-	"0":"Dateline (Eniwetok)","1":"Samoa (Samoa)","2":"Hawaii (Honolulu)","3":"Alaska (Anchorage)","4":"Pacific (San Jose)",
-	"5":"Mountain (Arizona)","6":"Mountain (Denver)","7":"Central (Chicago)","8":"Mexico (Mexico City, Tegucigalpa)",
-	"9":"Central (Regina)","10":"America Pacific (Bogota)","11":"Eastern (New York)","12":"Eastern (Indiana)","13":"Atlantic (Halifax)",
-	"14":"S. America Western (Caracas)","15":"Newfoundland (Newfoundland)","16":"S. America Eastern (Brasilia)","17":"S. America Eastern (Buenos Aires)",
-	"18":"Mid-Atlantic (Mid-Atlantic)","19":"Azores (Azores)","20":"Greenwich (Casablanca)","21":"GMT (London)","22":"Europe (Amsterdam)",
-	"23":"Europe (Paris)","24":"Europe (Prague)","25":"Europe (Berlin)","26":"Greece (Athens)","27":"Eastern Europe (Bucharest)","28":"Egypt (Cairo)",
-	"29":"South Africa (Pretoria)","30":"Northern Europe (Helsinki)","31":"Israel (Tel Aviv)","32":"Saudi Arabia (Baghdad)","33":"Russian (Moscow)",
-	"34":"Nairobi (Nairobi)","35":"Iran (Tehran)","36":"Arabian (Abu Dhabi, Muscat)","37":"Baku (Baku)","38":"Afghanistan (Kabul)",
-	"39":"West Asia (Ekaterinburg)","40":"West Asia (Islamabad)","41":"India (Bombay)","42":"Columbo (Columbo)","43":"Central Asia (Almaty)",
-	"44":"Bangkok (Bangkok)","45":"China (Beijing)","46":"Australia Western (Perth)","47":"Singapore (Singapore)","48":"Taipei (Hong Kong)",
-	"49":"Tokyo (Tokyo)","50":"Korea (Seoul)","51":"Yakutsk (Yakutsk)","52":"Australia Central (Adelaide)","53":"Australia Central (Darwin)",
-	"54":"Australia Eastern (Brisbane)","55":"Australia Eastern (Sydney)","56":"West Pacific (Guam)","57":"Tasmania (Hobart)",
-	"58":"Vladivostok (Vladivostok)","59":"Central Pacific (Solomon Is)","60":"New Zealand (Wellington)","61":"Fiji (Fiji)"
-};
 
 /**
  * Map Zimbra's short Weekday name to WebEx's Weekday
@@ -1084,6 +1060,7 @@ WebExZimlet.prototype._displayAccntPrefsDialog =
 function() {
 	if (this.accPrefsDlg) {
 		this.accPrefsDlg.popup();
+		this._addAccntPrefsTabControl();
 		return;
 	}
 	this._accPrefsDlgView = new DwtComposite(this.getShell());
@@ -1091,7 +1068,7 @@ function() {
 	//this._accPrefsDlgView.getHtmlElement().style.background = "white";
 	this._accPrefsDlgView.getHtmlElement().style.overflow = "auto";
 	this._accPrefsDlgView.getHtmlElement().innerHTML = this._createAccPrefsView();
-	this.accPrefsDlg = new ZmDialog({parent:this.getShell(), title:this.getMessage("WebExZimlet_manageUpto5Accnts"), view:this._accPrefsDlgView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this.accPrefsDlg = new ZmDialog({parent:this.getShell(), title:this.getMessage("WebExZimlet_manageAccounts"), view:this._accPrefsDlgView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this.accPrefsDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._accPrefsOkBtnListner));
 	this._addTestAccountButtons();
 	this._addHelpLinkListeners();
@@ -1406,12 +1383,15 @@ function(indx, notes) {
  */
 WebExZimlet.prototype._testWebExAccount =
 function(indx) {
-	appCtxt.getAppController().setStatusMsg(this.getMessage("WebExZimlet_pleaseWait"), ZmStatusView.LEVEL_INFO);
 	var userName = document.getElementById(WebExZimlet.PROP_USERNAME.propId + indx).value;
 	var pwd = document.getElementById(WebExZimlet.PROP_PASSWORD.propId + indx).value;
 	var cId = document.getElementById(WebExZimlet.PROP_COMPANY_ID.propId + indx).value;
 	var params = {hostName: userName, hostPwd:pwd,  companyId: cId}
-
+	if(userName.length == 0 || pwd.length == 0 || cId.length == 0) {
+		appCtxt.getAppController().setStatusMsg(this.getMessage("WebExZimlet_userPwdCIdRequired"), ZmStatusView.LEVEL_WARNING);
+		return;
+	}
+	appCtxt.getAppController().setStatusMsg(this.getMessage("WebExZimlet_pleaseWait"), ZmStatusView.LEVEL_INFO);
 
 	var requestBody = "<bodyContent xsi:type=\"java:com.webex.service.binding.user.GetUser\"><webExId>" + userName + "</webExId></bodyContent>";
 	var request = this.newWebExRequest(requestBody, params);
@@ -1605,7 +1585,6 @@ function() {
 			if (val == "N/A") {
 				continue;
 			}
-			//if (key == WebExZimlet.PROP_DEFAULT_TIME_ZONE.propId) {
 			var optn = document.getElementById(key).options;
 			for (var n = 0; n < optn.length; n++) {
 				if (optn[n].value == val || optn[n].text == val) {
@@ -1632,18 +1611,6 @@ function() {
 WebExZimlet.prototype._createGeneralPrefsView =
 function() {
 	var html = [];
-	html.push("<div class='webExZimlet_YellowBold'>");
-	html.push("<div class='webExZimlet_gray'>", this.getMessage("WebExZimlet_selectDefaultTimeZone"), "</div>");
-	html.push("<div style='padding:7px'>");
-	html.push("<select id='webExZimlet_defaultTimeZone'>");
-	for (var el in WebExZimlet.TZMap) {
-		html.push("<OPTION value=", el, ">", WebExZimlet.TZMap[el], "</OPTION>");
-	}
-	html.push("</select>");
-	html.push("</div>");
-	html.push("</div>");
-
-	html.push("<br/>");
 	html.push("<div class='webExZimlet_YellowBold '>");
 	html.push("<div class='webExZimlet_gray'>", this.getMessage("WebExZimlet_appendMeetingInfoToSubOrLoc"), "</div>");
 	html.push("<table cellpadding=0 cellspacing=4>");
@@ -1668,7 +1635,7 @@ WebExZimlet.prototype._getAppendSelectListMenuHtml = function(id) {
 	html.push("<option value='NONE'>", this.getMessage("WebExZimlet_none"), "</option>");
 	html.push("<option value='SUBJECT'>", this.getMessage("WebExZimlet_subject"), "</option>");
 	html.push("<option value='LOCATION'>", this.getMessage("WebExZimlet_location"), "</option>");
-	html.push("<option value='BOTH'>", this.getMessage("WebExZimlet_both"), "</option>");
+	html.push("<option value='BOTH'>", this.getMessage("WebExZimlet_subjectAndLocation"), "</option>");
 
 	html.push("</select>");
 	return html.join("");
@@ -1685,11 +1652,7 @@ function() {
 		for (var i = 0; i < WebExZimlet.ALL_GENERAL_PROPS.length; i++) {
 			var key = WebExZimlet.ALL_GENERAL_PROPS[i].propId;
 			var lst = document.getElementById(key);
-			if (key == WebExZimlet.PROP_DEFAULT_TIME_ZONE.propId) {
-				var val = lst.options[lst.selectedIndex].text;
-			} else {
-				var val = lst.options[lst.selectedIndex].value;
-			}
+			var val = lst.options[lst.selectedIndex].value;
 			val = val == "" ? "N/A" : val;
 			keyValArray[key] = val;
 		}
@@ -1853,10 +1816,10 @@ function() {
 WebExZimlet.prototype._showAppointmentsList =
 function(accountNumber) {
 	if (!this._webexZimletAccountPreferences) {
-		var postCallback = new AjxCallback(this, this._getMeetingsList, accountNumber);
+		var postCallback = new AjxCallback(this, this._showMeetingListDlg, [accountNumber, "NOW_ON"]);
 		this._getAccPrefsMetaData(postCallback);
 	} else {
-		this._getMeetingsList(accountNumber);
+		this._showMeetingListDlg(accountNumber, "NOW_ON");
 	}
 };
 
@@ -1868,6 +1831,7 @@ function(accountNumber) {
  */
 WebExZimlet.prototype._getMeetingsList =
 function(accountNumber, listType) {
+	appCtxt.getAppController().setStatusMsg(this.getMessage("WebExZimlet_pleaseWait"), ZmStatusView.LEVEL_INFO);
 	try {
 		this._setCurrentAccntInfoFromAccntNumber(accountNumber);
 	} catch(ex) {
@@ -1926,30 +1890,32 @@ function(accountNumber, listType) {
 	if (!this._validateWebExResult(objResult, this.getMessage("WebExZimlet_unableToGetMeetingInfo"))) {
 		return;
 	}
-	this._showMeetingListDlg(objResult, listType);
+	this._setMeetingListView(objResult, listType);
+	this._addShowMeetingListListeners();
+	//this._showMeetingListDlg(objResult, listType);
 };
 
 /**
  * Shows WebEx meeting list dialog.
- *
- * @param {object} objResult WebEx meeting list object
+ * @param {int} accountNumber WebEx Account Number
+ * @param {string} listType Specifies what constraints should be put for the list. If null, then "NOW_ON" is used
  */
 WebExZimlet.prototype._showMeetingListDlg =
-function(objResult, listType) {
+function(accountNumber, listType) {
 	if (this._meetingLstDlg) {
-		this._setMeetingListView(this._meetingListDlgView.getHtmlElement(), objResult, listType);
-		this._addShowMeetingListListeners();
+		this._meetingListDlgView.getHtmlElement().innerHTML = ["<label style='font-weight:bold;font-size:12px;color:blue;'>",this.getMessage("WebExZimlet_pleaseWait"),"</div>"].join("");
 		this._meetingLstDlg.popup();
+		this._getMeetingsList(accountNumber, listType);
 		return;
 	}
 	this._meetingListDlgView = new DwtComposite(this.getShell());
 	this._meetingListDlgView.setSize("570", "200");
 	this._meetingListDlgView.getHtmlElement().style.background = "white";
 	this._meetingListDlgView.getHtmlElement().style.overflow = "auto";
-	this._setMeetingListView(this._meetingListDlgView.getHtmlElement(), objResult, listType);
+	this._meetingListDlgView.getHtmlElement().innerHTML =  ["<label style='font-weight:bold;font-size:12px;color:blue;'>",this.getMessage("WebExZimlet_pleaseWait"),"</div>"].join("");
 	this._meetingLstDlg = new ZmDialog({parent: this.getShell(), title:this.getMessage("WebExZimlet_startOrJoinWebExMeeting") , view:this._meetingListDlgView, standardButtons:[DwtDialog.CANCEL_BUTTON]});
-	this._addShowMeetingListListeners();
 	this._meetingLstDlg.popup();
+	this._getMeetingsList(accountNumber, listType);
 };
 
 /**
@@ -1963,6 +1929,9 @@ WebExZimlet.prototype._addShowMeetingListListeners = function() {
 	document.getElementById("webExZimlet_meetingsListTypesMenu").onchange = callback;
 };
 
+/**
+ * Handler for type menu change
+ */
 WebExZimlet.prototype._meetingListTypesMenuHandler = function() {
 	var type = document.getElementById("webExZimlet_meetingsListTypesMenu").value;
 	this._getMeetingsList(this._currentWebExAccountNumber, type);
@@ -2002,11 +1971,10 @@ WebExZimlet.prototype._onStartLinkClicked = function(params) {
 
 /**
  * Creates Meeting list view.
- *
- * @param {object} element	 the Html element
  * @param {object} objResult	the Object with list of WebEx meetings
+ * @param {string} listType	 Type of the list
  */
-WebExZimlet.prototype._setMeetingListView = function(element, objResult, listType) {
+WebExZimlet.prototype._setMeetingListView = function(objResult, listType) {
 	var mtgs = objResult.body.bodyContent.meeting;
 	if (!mtgs) {
 		mtgs = [];
@@ -2039,7 +2007,7 @@ WebExZimlet.prototype._setMeetingListView = function(element, objResult, listTyp
 	}
 	html.push("</table>");
 
-	element.innerHTML = html.join("");
+	this._meetingListDlgView.getHtmlElement().innerHTML = html.join("");
 };
 
 WebExZimlet.prototype._getMeetingListTypesMenu =
@@ -2220,8 +2188,13 @@ function(params) {
 		newParams["emails"] = [];
 	}
 	newParams["duration"] = 60;
-	var tzName = this._webexZimletGeneralPreferences[WebExZimlet.PROP_DEFAULT_TIME_ZONE.propId];
-	newParams["timeZoneID"] = this._getTZIdFromTZName(tzName);
+	var tzName = "";
+	try { 
+		tzName = appCtxt.getActiveAccount().settings.getInfoResponse.prefs._attrs.zimbraPrefTimeZoneId;
+	} catch(e) {
+		tzName = "America/Los_Angeles";//default
+	}
+	newParams["timeZoneID"] = WebExZimlet.WebExToZimbraTZIDMap[tzName];
 	newParams["pwd"] = this._currentWebExAccount[WebExZimlet.PROP_MEETING_PASSWORD.propId];
 	var d = new Date();
 	var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
@@ -2342,20 +2315,6 @@ WebExZimlet.prototype._getAccountsSelectListMenuHtml = function(id) {
 	}
 	html.push("</select>");
 	return html.join("");
-};
-
-/**
- * Gets TimeZone Id from Zimbra's TimeZone name.
- *
- * @param {string} name Timezone name
- */
-WebExZimlet.prototype._getTZIdFromTZName = function(name) {
-	for (var id in WebExZimlet.TZMap) {
-		if (WebExZimlet.TZMap[id] == name) {
-			return id;
-		}
-	}
-	return "4";//default
 };
 
 /**
