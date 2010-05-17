@@ -1017,7 +1017,7 @@ DimDimZimlet.prototype._addTestAccountButtons =
 function() {
 	for (var i = 1; i < 6; i++) {
 		var btn = new DwtButton({parent:this.getShell()});
-		btn.setText(this.getMessage("DimDimZimlet_validateDimDimAccntNumber") + i);
+		btn.setText(AjxMessageFormat.format(this.getMessage("DimDimZimlet_validateDimDimAccntNumber"), i));
 		btn.setImage("DimDim-panelIcon");
 		btn.addSelectionListener(new AjxListener(this, this._testDimDimAccount, [i]));
 		document.getElementById("DimDimZimlet_TestAccountBtn" + i).appendChild(btn.getHtmlElement());
@@ -1032,6 +1032,28 @@ function() {
 DimDimZimlet.prototype._getAccPrefsMetaData =
 function(postCallback) {
 	this.metaData.get("DimDimZimletAccountPreferences", null, new AjxCallback(this, this._handleGetAccPrefsMetaData, postCallback));
+};
+
+/**
+ * Checks if at least one Account is configured
+ *
+ * @return {AjxException} If none, it throws exception
+ */
+DimDimZimlet.prototype._isAtLeastOneAccountConfigured = function() {
+	if (this._DimDimZimletAccountPreferences == undefined) {
+		throw new AjxException(this.getMessage("DimDimZimlet_noDimDimAccount"), AjxException.INTERNAL_ERROR, this.getMessage("DimDimZimlet_label"));
+	}
+	for(var i = 1; i < 6; i++) {
+		if(this._DimDimZimletAccountPreferences[DimDimZimlet.PROP_USERNAME.propId + i] != "" && 
+			this._DimDimZimletAccountPreferences[DimDimZimlet.PROP_USERNAME.propId + i] != "N/A"
+			&& this._DimDimZimletAccountPreferences[DimDimZimlet.PROP_PASSWORD.propId + i] != "" && 
+			this._DimDimZimletAccountPreferences[DimDimZimlet.PROP_PASSWORD.propId + i] != "N/A"
+			&& this._DimDimZimletAccountPreferences[DimDimZimlet.PROP_COMPANY_ID.propId + i] != "" && 
+			this._DimDimZimletAccountPreferences[DimDimZimlet.PROP_COMPANY_ID.propId + i] != "N/A") {
+			return true;
+		}
+	}
+	throw new AjxException(this.getMessage("DimDimZimlet_noDimDimAccount"), AjxException.INTERNAL_ERROR, this.getMessage("DimDimZimlet_label"));
 };
 
 /**
@@ -1078,9 +1100,7 @@ DimDimZimlet.prototype._setCurrentAccntInfoFromCalendar = function(id) {
  * @param {int} Account number
  */
 DimDimZimlet.prototype._getAccountNumberFromFolderId = function(id) {
-	if (this._DimDimZimletAccountPreferences == undefined) {
-		throw new AjxException(this.getMessage("DimDimZimlet_noDimDimAccount"), AjxException.INTERNAL_ERROR, this.getMessage("DimDimZimlet_label"));
-	}
+	this._isAtLeastOneAccountConfigured();
 	var accntNumber = 1;
 	for (var i = 1; i < 6; i++) {
 		if (this._DimDimZimletAccountPreferences[DimDimZimlet.PROP_ASSOCIATED_CALENDAR.propId + i] == id) {
@@ -1097,9 +1117,7 @@ DimDimZimlet.prototype._getAccountNumberFromFolderId = function(id) {
  * @param {number} accntNumber	the account number
  */
 DimDimZimlet.prototype._setCurrentAccntInfoFromAccntNumber = function(accntNumber) {
-	if (this._DimDimZimletAccountPreferences == undefined) {
-		throw new AjxException(this.getMessage("DimDimZimlet_noDimDimAccount"), AjxException.INTERNAL_ERROR, this.getMessage("DimDimZimlet_label"));
-	}
+	this._isAtLeastOneAccountConfigured();
 	this._currentDimDimAccount = [];
 	for (var i = 0; i < DimDimZimlet.ALL_ACCNT_PROPS.length; i++) {
 		var prop = DimDimZimlet.ALL_ACCNT_PROPS[i].propId;
@@ -2080,9 +2098,7 @@ function(expnMsg) {
  * @return {string} html
  */
 DimDimZimlet.prototype._getAccountsSelectListMenuHtml = function(id) {
-	if (this._DimDimZimletAccountPreferences == undefined) {
-		throw new AjxException(this.getMessage("DimDimZimlet_noDimDimAccount"), AjxException.INTERNAL_ERROR, this.getMessage("DimDimZimlet_label"));
-	}
+	this._isAtLeastOneAccountConfigured();
 	var html = [];
 	html.push("<select id='", id, "'>");
 	for (var i = 1; i < 6; i++) {
