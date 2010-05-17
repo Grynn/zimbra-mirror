@@ -11,58 +11,93 @@
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
- *@Author Raja Rao DV
- * Shows about 25 country's holidays based on ical.mac.com
  */
 
-function com_zimbra_holidaycalendars() {
+/**
+ * View country holidays based on ical.mac.com calendar feeds.
+ * 
+ * @author Raja Rao DV
+ */
+function com_zimbra_holidaycalendars_HandlerObject() {
 }
 
-com_zimbra_holidaycalendars.prototype = new ZmZimletBase();
-com_zimbra_holidaycalendars.prototype.constructor = com_zimbra_holidaycalendars;
-com_zimbra_holidaycalendars.view = "appointment";
-com_zimbra_holidaycalendars.holidaycalendarsFolder = 'Holiday Calendars';
+com_zimbra_holidaycalendars_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_holidaycalendars_HandlerObject.prototype.constructor = com_zimbra_holidaycalendars_HandlerObject;
 
-com_zimbra_holidaycalendars.prototype._loadFeeds =
+/**
+ * Simplify handler object
+ *
+ */
+var HolidayCalendarsZimlet = com_zimbra_holidaycalendars_HandlerObject;
+
+/**
+ * Defines the "appointment" view.
+ */
+HolidayCalendarsZimlet.VIEW = "appointment";
+
+/**
+ * Initializes the zimlet.
+ * 
+ */
+HolidayCalendarsZimlet.prototype.init =
 function() {
-	this.feeds = [];
-	//c = category, i=image, t=title(in the dialog), fn=(folderName)
-	this.feeds["webcal://ical.mac.com/ical/Australian32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagAU",  t:"Australian Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/China32Lunar32Simplified32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagCN",  t:"Chinese Lunar Simplified Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Brazil32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagBR",  t:"Brazil Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Danish32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagDK",  t:"Danish Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Dutch32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagNL",  t:"Dutch Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Irish32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagIE",  t:"Irish Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Finnish32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagFI",  t:"Finnish Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/French32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagFR",  t:"French Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/German32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagDE",  t:"German Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Hong32Kong32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagHK",  t:"Hong Kong Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/India32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagIN",  t:"India Holidays"};
-	//this.feeds["webcal://ical.mac.com/ical/Indonesian32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagAU",  t:"Indonesian Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Italian32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagIT",  t:"Italian Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Japanese32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagJP",  t:"Japanese Holidays"};
-	//this.feeds["webcal://ical.mac.com/ical/Malaysia32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagMY",  t:"Malasian Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Mexican32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagMX",  t:"Mexican Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Norwegian32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagNO",  t:"Norwegian Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/New32Zealand32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagNZ",  t:"New Zealand Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Portuguese32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagPT",  t:"Portuguese Holidays"};
-	//this.feeds["webcal://ical.mac.com/ical/Philippines32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagPI",  t:"Philippines Holidays"};
-	//this.feeds["webcal://ical.mac.com/ical/Singapore32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagSG",  t:"Singapore Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/South32Africa32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagZA",  t:"South African Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/South32Korean32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagKR",  t:"South Korean Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Swedish32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagSE",  t:"Swedish Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Spain32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagES",  t:"Spain Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/Taiwan32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagTW",  t:"Taiwan Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/UK32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagGB",  t:"UK Holidays"};
-	this.feeds["webcal://ical.mac.com/ical/US32Holidays.ics"] = {c:"Holiday Calendars", i:"ImgFlagUS",  t:"US Holidays"};
 };
 
-com_zimbra_holidaycalendars.prototype.singleClicked =
+/**
+ * Loads the calendar feeds.
+ */
+HolidayCalendarsZimlet.prototype._loadFeeds =
+function() {
+	this.feeds = [];
+	//i=image, t=title(in the dialog), fn=(folderName)
+	this.feeds["webcal://ical.mac.com/ical/Australian32Holidays.ics"] = {i:"ImgFlagAU",  t:this.getMessage("HolidayCalendarsZimlet_holidays_australian") };
+	this.feeds["webcal://ical.mac.com/ical/China32Lunar32Simplified32Holidays.ics"] = {i:"ImgFlagCN", t:this.getMessage("HolidayCalendarsZimlet_holidays_chineseSimplified") };
+	this.feeds["webcal://ical.mac.com/ical/Brazil32Holidays.ics"] = {i:"ImgFlagBR",  t:this.getMessage("HolidayCalendarsZimlet_holidays_brazil") };
+	this.feeds["webcal://ical.mac.com/ical/Danish32Holidays.ics"] = {i:"ImgFlagDK",  t:this.getMessage("HolidayCalendarsZimlet_holidays_danish")};
+	this.feeds["webcal://ical.mac.com/ical/Dutch32Holidays.ics"] = {i:"ImgFlagNL",  t:this.getMessage("HolidayCalendarsZimlet_holidays_dutch") };
+	this.feeds["webcal://ical.mac.com/ical/Irish32Holidays.ics"] = {i:"ImgFlagIE",  t:this.getMessage("HolidayCalendarsZimlet_holidays_irish") };
+	this.feeds["webcal://ical.mac.com/ical/Finnish32Holidays.ics"] = {i:"ImgFlagFI",  t:this.getMessage("HolidayCalendarsZimlet_holidays_finnish") };
+	this.feeds["webcal://ical.mac.com/ical/French32Holidays.ics"] = {i:"ImgFlagFR",  t:this.getMessage("HolidayCalendarsZimlet_holidays_french") };
+	this.feeds["webcal://ical.mac.com/ical/German32Holidays.ics"] = {i:"ImgFlagDE",  t:this.getMessage("HolidayCalendarsZimlet_holidays_german") };
+	this.feeds["webcal://ical.mac.com/ical/Hong32Kong32Holidays.ics"] = {i:"ImgFlagHK",  t:this.getMessage("HolidayCalendarsZimlet_holidays_hongKong") };
+	this.feeds["webcal://ical.mac.com/ical/India32Holidays.ics"] = {i:"ImgFlagIN",  t:this.getMessage("HolidayCalendarsZimlet_holidays_india") };
+	this.feeds["webcal://ical.mac.com/ical/Italian32Holidays.ics"] = {i:"ImgFlagIT",  t:this.getMessage("HolidayCalendarsZimlet_holidays_italian") };
+	this.feeds["webcal://ical.mac.com/ical/Japanese32Holidays.ics"] = {i:"ImgFlagJP",  t:this.getMessage("HolidayCalendarsZimlet_holidays_japanese") };
+	this.feeds["webcal://ical.mac.com/ical/Mexican32Holidays.ics"] = {i:"ImgFlagMX",  t:this.getMessage("HolidayCalendarsZimlet_holidays_mexican") };
+	this.feeds["webcal://ical.mac.com/ical/Norwegian32Holidays.ics"] = {i:"ImgFlagNO",  t:this.getMessage("HolidayCalendarsZimlet_holidays_norwegian") };
+	this.feeds["webcal://ical.mac.com/ical/New32Zealand32Holidays.ics"] = {i:"ImgFlagNZ",  t:this.getMessage("HolidayCalendarsZimlet_holidays_newZealand") };
+	this.feeds["webcal://ical.mac.com/ical/Portuguese32Holidays.ics"] = {i:"ImgFlagPT",  t:this.getMessage("HolidayCalendarsZimlet_holidays_portuguese") };
+	this.feeds["webcal://ical.mac.com/ical/South32Africa32Holidays.ics"] = {i:"ImgFlagZA",  t:this.getMessage("HolidayCalendarsZimlet_holidays_southAfrican") };
+	this.feeds["webcal://ical.mac.com/ical/South32Korean32Holidays.ics"] = {i:"ImgFlagKR",  t:this.getMessage("HolidayCalendarsZimlet_holidays_southKorean") };
+	this.feeds["webcal://ical.mac.com/ical/Swedish32Holidays.ics"] = {i:"ImgFlagSE",  t:this.getMessage("HolidayCalendarsZimlet_holidays_swedish") };
+	this.feeds["webcal://ical.mac.com/ical/Spain32Holidays.ics"] = {i:"ImgFlagES",  t:this.getMessage("HolidayCalendarsZimlet_holidays_spain") };
+	this.feeds["webcal://ical.mac.com/ical/Taiwan32Holidays.ics"] = {i:"ImgFlagTW",  t:this.getMessage("HolidayCalendarsZimlet_holidays_taiwan") };
+	this.feeds["webcal://ical.mac.com/ical/UK32Holidays.ics"] = {i:"ImgFlagGB",  t:this.getMessage("HolidayCalendarsZimlet_holidays_uk") };
+	this.feeds["webcal://ical.mac.com/ical/US32Holidays.ics"] = {i:"ImgFlagUS",  t:this.getMessage("HolidayCalendarsZimlet_holidays_us") };
+};
+
+/**
+ * Called by the framework on double-click.
+ */
+HolidayCalendarsZimlet.prototype.doubleClicked =
+function() {
+	this.singleClicked();
+};
+
+/**
+ * Called by the framework on single-click.
+ */
+HolidayCalendarsZimlet.prototype.singleClicked =
 function() {
 	this._initializeDlg();
 };
 
-com_zimbra_holidaycalendars.prototype._createFolder =
+/**
+ * Creates a folder.
+ * 
+ * @param	{hash}	params		a hash of parameters
+ */
+HolidayCalendarsZimlet.prototype._createFolder =
 function(params) {
 	var jsonObj = {CreateFolderRequest:{_jsns:"urn:zimbraMail"}};
 	var folder = jsonObj.CreateFolderRequest.folder = {};
@@ -81,20 +116,26 @@ function(params) {
 	return appCtxt.getAppController().sendRequest({jsonObj:jsonObj, asyncMode:true, errorCallback:_createFldrErrCallback, callback:_createFldrCallback});
 };
 
-com_zimbra_holidaycalendars.prototype._createFldrCallback =
+/**
+ * Callback for create folder.
+ * 
+ * @see		_createFolder
+ */
+HolidayCalendarsZimlet.prototype._createFldrCallback =
 function(params, response) {
-	if (params.name == com_zimbra_holidaycalendars.holidaycalendarsFolder) {
-		this.mainRssFeedFldrId = response.getResponse().CreateFolderResponse.folder[0].id;
-		if (params.postCallback) {
-			params.postCallback.run(this);
-		}
-	} else {
-		var transitions = [ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.FADE_OUT];
-		appCtxt.getAppController().setStatusMsg("Successfully subscribed to holiday calendar", ZmStatusView.LEVEL_INFO, null, transitions);
-	}
+	var transitions = [ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.FADE_OUT];
+	
+	var successMsg = AjxMessageFormat.format(this.getMessage("HolidayCalendarsZimlet_successSubscribing"), params.name);
+		
+	appCtxt.getAppController().setStatusMsg(successMsg, ZmStatusView.LEVEL_INFO, null, transitions);
 };
 
-com_zimbra_holidaycalendars.prototype._createFldrErrCallback =
+/**
+ * Callback for create folder error.
+ * 
+ * @see		_createFldrErrCallback
+ */
+HolidayCalendarsZimlet.prototype._createFldrErrCallback =
 function(params, ex) {
 	if (!params.url && !params.name) {
 		return false;
@@ -108,7 +149,7 @@ function(params, ex) {
 		msg = AjxMessageFormat.format(errorMsg, params.url);
 	}
 	var transitions = [ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.FADE_OUT];
-	appCtxt.getAppController().setStatusMsg("Could Not Subscribe to holiday calendar", ZmStatusView.LEVEL_WARNING, null, transitions);
+	appCtxt.getAppController().setStatusMsg(this.getMessage("HolidayCalendarsZimlet_errorSubscribing"), ZmStatusView.LEVEL_WARNING, null, transitions);
 	if (msg) {
 		this._showErrorMsg(msg);
 		return true;
@@ -116,7 +157,12 @@ function(params, ex) {
 	return false;
 };
 
-com_zimbra_holidaycalendars.prototype._showErrorMsg =
+/**
+ * Shows an error message.
+ * 
+ * @param	{string}	msg		the message
+ */
+HolidayCalendarsZimlet.prototype._showErrorMsg =
 function(msg) {
 	var msgDialog = appCtxt.getMsgDialog();
 	msgDialog.reset();
@@ -124,7 +170,10 @@ function(msg) {
 	msgDialog.popup();
 };
 
-com_zimbra_holidaycalendars.prototype._initializeDlg =
+/**
+ * Initializes the calendar dialog.
+ */
+HolidayCalendarsZimlet.prototype._initializeDlg =
 function() {
 	if (this.rssFeedDialog) {
 		this.rssFeedDialog.popup();
@@ -136,14 +185,26 @@ function() {
 	this._parentView.setSize("550", "300");
 	this._parentView.getHtmlElement().style.overflow = "auto";
 	this._parentView.getHtmlElement().innerHTML = this._constructView();
-	this.rssFeedDialog = this._createDialog({title:"Subscribe to Holiday Calendars", view:this._parentView, standardButtons : [DwtDialog.OK_BUTTON]});
+	
+	var dialogArgs = {
+			title	: this.getMessage("HolidayCalendarsZimlet_dialog_title"),
+			view	: this._parentView,
+			parent	: this.getShell(),
+			standardButtons : [DwtDialog.OK_BUTTON]
+	};
+	
+	this.rssFeedDialog = new ZmDialog(dialogArgs);
 	this._addBtnListeners();
 	this.rssFeedDialog.popup();
 };
 
-com_zimbra_holidaycalendars.prototype._constructView =
+/**
+ * Constructs the view for the calendar dialog.
+ * 
+ * @see			_initializeDlg
+ */
+HolidayCalendarsZimlet.prototype._constructView =
 function() {
-	this._currentCategory = "";
 	var html = new Array();
 	var i = 0;
 	var idCnt = 0;
@@ -152,16 +213,9 @@ function() {
 	for (var el in this.feeds) {
 
 		var img = this.feeds[el].i;
-		var category = this.feeds[el].c;
 		var title = this.feeds[el].t;
 		var btnId = "hcals_btn" + idCnt;
-		this._btnidAndUrl[btnId] = {url:el, foldername:title, category:this.feeds[el].c};
-		if (this._currentCategory != category) {
-			html[i++] = "<div class='hcals_HdrDiv'>";
-			html[i++] = category;
-			html[i++] = "</div>";
-			this._currentCategory = category;
-		}
+		this._btnidAndUrl[btnId] = { url:el, foldername:title };
 		html[i++] = "<div class='hcals_sectionDiv'>";
 		html[i++] = "<TABLE  cellpadding=5>";
 		html[i++] = "<TR>";
@@ -173,7 +227,9 @@ function() {
 		html[i++] = "<BR>";
 		html[i++] = el;
 		html[i++] = "</TD>";
-		html[i++] = "<TD width=10%><button id='hcals_btn" + idCnt + "' type=\"button\">Subscribe</button></TD>";
+		html[i++] = "<TD width=10%><button id='hcals_btn" + idCnt + "' type=\"button\">";
+		html[i++] = this.getMessage("HolidayCalendarsZimlet_dialog_subscribeButton");
+		html[i++] = "</button></TD>";
 		html[i++] = "</TR>";
 		html[i++] = "</TABLE>";
 		html[i++] = "</div>";
@@ -182,25 +238,40 @@ function() {
 	return html.join("");
 };
 
-com_zimbra_holidaycalendars.prototype._addBtnListeners =
+/**
+ * Adds the button listeners.
+ * 
+ * @see			_initializeDlg
+ */
+HolidayCalendarsZimlet.prototype._addBtnListeners =
 function() {
 	for (var id in this._btnidAndUrl) {
 		document.getElementById(id).onclick = AjxCallback.simpleClosure(this._onSubscribeClick, this, this._btnidAndUrl[id]);
 	}
 };
 
-com_zimbra_holidaycalendars.prototype._onSubscribeClick =
+/**
+ * Handles the subscribe button event.
+ * 
+ * @param	{hash}		params		a hash of params
+ * @param	{string}	params.foldername		the folder name
+ * @param	{string}	params.url		the feed url
+ * 
+ * @see			_initializeDlg
+ */
+HolidayCalendarsZimlet.prototype._onSubscribeClick =
 function(params) {
-	this._createRSSFolder(params);
-};
-
-com_zimbra_holidaycalendars.prototype._createRSSFolder =
-function(params) {
+	// create the RSS folder
 	var fldrName = params.foldername;
 	var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT];
-	appCtxt.getAppController().setStatusMsg("Creating '" + fldrName + "' Calendar...", ZmStatusView.LEVEL_INFO, null, transitions);
+	
+	var createFolderMsg = AjxMessageFormat.format(this.getMessage("HolidayCalendarsZimlet_createFolderMsg"), fldrName);
+	
+	appCtxt.getAppController().setStatusMsg(createFolderMsg, ZmStatusView.LEVEL_INFO, null, transitions);
+	
 	var parentFldrId = "1";
 	var randomnumber = Math.floor(Math.random() * 9);
-	var params = {color:null,name:fldrName, url:params.url,  view:com_zimbra_holidaycalendars.view, l:parentFldrId, color:randomnumber};
+	var params = {color:null,name:fldrName, url:params.url,  view:HolidayCalendarsZimlet.VIEW, l:parentFldrId, color:randomnumber};
+	
 	this._createFolder(params);
 };

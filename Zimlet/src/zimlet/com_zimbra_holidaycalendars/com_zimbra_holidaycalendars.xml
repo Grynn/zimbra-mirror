@@ -1,9 +1,8 @@
-<zimlet name="com_zimbra_holidaycalendars" version="0.2" label="Holiday Calendar" description="Subscribe to Holiday Calendars of various countries.">
+<zimlet name="com_zimbra_holidaycalendars" version="0.3" label="Holiday Calendars" description="Subscribe to Holiday Calendars of various countries.">
   <include>holidaycalendars.js</include>
   <includeCSS>holidaycalendars.css</includeCSS>
-  <handlerObject>com_zimbra_holidaycalendars</handlerObject>
-
-  <zimletPanelItem label="Holiday Calendars" icon="holidaycalendars-panelIcon">
-    <toolTipText>Subscribe to Holiday Calendars of various countries.</toolTipText>
+  <handlerObject>com_zimbra_holidaycalendars_HandlerObject</handlerObject>
+  <zimletPanelItem label="${msg.HolidayCalendarsZimlet_panel_label}" icon="holidaycalendars-panelIcon">
+    <toolTipText>${msg.HolidayCalendarsZimlet_panel_tooltip}</toolTipText>
   </zimletPanelItem>
 </zimlet>
