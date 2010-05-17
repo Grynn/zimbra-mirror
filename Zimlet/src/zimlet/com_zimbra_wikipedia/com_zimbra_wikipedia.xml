@@ -1,8 +1,7 @@
-<zimlet name="com_zimbra_wikipedia" version="0.1" description="Used to search Wikipedia.">
+<zimlet name="com_zimbra_wikipedia" version="0.5" label="Wikipedia" description="Search Wikipedia.">
 	<include>wiki.js</include>
 	<includeCSS>wikipedia.css</includeCSS>
-	<handlerObject>Com_Zimbra_Wikipedia</handlerObject>
-	
+	<handlerObject>com_zimbra_wikipedia_HandlerObject</handlerObject>
 	<contentObject type="wikipedia">
 		<matchOn>
 			<regex attrs="ig">\[Wikipedia: ([a-zA-Z 0-9_-]+)\]</regex>
@@ -16,11 +15,11 @@
 			</actionUrl>
 		</onClick>
 		<toolTip>
-			&lt;html:span style="font: 120% Georgia;"&gt;Lookup "&lt;b&gt;${src.$1}&lt;/b&gt;" at Wikipedia&lt;/html:span&gt;
+			Click to search Wikipedia for "&lt;b&gt;${src.$1}&lt;/b&gt;"
 		</toolTip>
 	</contentObject>
 
-	<zimletPanelItem label="Wikipedia" icon="Wikipedia-panelIcon">
-		<toolTipText>Click to get a Wikipedia search dialog.</toolTipText>
+	<zimletPanelItem label="${msg.WikipediaZimlet_panel_label}" icon="Wikipedia-panelIcon">
+		<toolTipText>${msg.WikipediaZimlet_panel_tooltip}</toolTipText>
 	</zimletPanelItem>
 </zimlet>

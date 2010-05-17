@@ -13,31 +13,44 @@
  * ***** END LICENSE BLOCK *****
  */
 
-//////////////////////////////////////////////////////////////
-//  Wikipedia Zimlet.                                       //
-//  @author Kevin Henrikson                                 //
-//////////////////////////////////////////////////////////////
-
-function Com_Zimbra_Wikipedia() {
+/**
+ * Search wikipedia.
+ * 
+ * @author Kevin Henrikson
+ */
+function com_zimbra_wikipedia_HandlerObject() {
 }
 
-Com_Zimbra_Wikipedia.prototype = new ZmZimletBase();
-Com_Zimbra_Wikipedia.prototype.constructor = Com_Zimbra_Wikipedia;
+com_zimbra_wikipedia_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_wikipedia_HandlerObject.prototype.constructor = com_zimbra_wikipedia_HandlerObject;
 
-Com_Zimbra_Wikipedia.prototype.init =
+/**
+ * Simplify handler object
+ *
+ */
+var WikipediaZimlet = com_zimbra_wikipedia_HandlerObject;
+
+/**
+ * Initializes the zimlet.
+ */
+WikipediaZimlet.prototype.init =
 function() {
     //Nothing to init.
 };
 
-// Called by the Zimbra framework when the panel item was double clicked
-Com_Zimbra_Wikipedia.prototype.doubleClicked = function() {
+/**
+ * Called by the Zimbra framework when the panel item was double clicked.
+ */
+WikipediaZimlet.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
 
-// Called by the Zimbra framework when the panel item was clicked
-Com_Zimbra_Wikipedia.prototype.singleClicked = function() {
+/**
+ * Called by the Zimbra framework when the panel item was clicked.
+ */
+WikipediaZimlet.prototype.singleClicked = function() {
 	var editorProps = [
-		{ label 		 : "Search",
+		{ label 		 : this.getMessage("WikipediaZimlet_label_search"),
 		  name           : "search",
 		  type           : "string",
 		  value          : "",
@@ -51,7 +64,7 @@ Com_Zimbra_Wikipedia.prototype.singleClicked = function() {
 		var pe = this._propertyEditor;
 		pe.initProperties(editorProps);
 		var dialog_args = {
-			title : "Search Wikipedia",
+			title : this.getMessage("WikipediaZimlet_dialog_title"),
 			view  : view
 		};
 		this._dlg_propertyEditor = this._createDialog(dialog_args);
@@ -67,7 +80,10 @@ Com_Zimbra_Wikipedia.prototype.singleClicked = function() {
 	this._dlg_propertyEditor.popup();
 };
 
-Com_Zimbra_Wikipedia.prototype._doSearch =
+/**
+ * Perform search.
+ */
+WikipediaZimlet.prototype._doSearch =
 function() {
 	this._dlg_propertyEditor.popdown();
 	this._displaySearchResult(this._propertyEditor.getProperties().search);
@@ -75,7 +91,10 @@ function() {
 	this._dlg_propertyEditor = null;
 };
 
-Com_Zimbra_Wikipedia.prototype._displaySearchResult = 
+/**
+ * Display search results.
+ */
+WikipediaZimlet.prototype._displaySearchResult = 
 function(search) {
 	var props = [ "toolbar=yes,location=yes,status=yes,menubar=yes,scrollbars=yes,resizable=yes,width=800,height=600" ];
 	props = props.join(",");
