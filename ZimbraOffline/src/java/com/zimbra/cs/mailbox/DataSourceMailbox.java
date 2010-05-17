@@ -84,7 +84,8 @@ public class DataSourceMailbox extends SyncMailbox {
         mNoInferiorsFlag = getFlagById(Flag.ID_FLAG_NO_INFERIORS);
     }
 
-    @Override protected synchronized void initialize() throws ServiceException {
+    @Override
+    protected synchronized void initialize() throws ServiceException {
         super.initialize();
         if (hasFolders) {
             List<Pair<Integer, String>> systemMailFolders = new ArrayList<
@@ -419,7 +420,8 @@ public class DataSourceMailbox extends SyncMailbox {
         List<DataSource> dataSources = prov.getAllDataSources(getAccount());
         OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         for (DataSource ds : dataSources) {
-            if (!force && !isOnRequest && !isTimeToSync(ds))
+            boolean needsSync = ds.needsSync(false);
+            if (!needsSync && !force && !isOnRequest && !isTimeToSync(ds))
                 continue;
             try {
                 OfflineLog.offline.info(

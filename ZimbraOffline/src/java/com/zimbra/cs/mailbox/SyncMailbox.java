@@ -17,6 +17,7 @@ package com.zimbra.cs.mailbox;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicLong;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
@@ -47,11 +48,11 @@ public abstract class SyncMailbox extends DesktopMailbox {
     private Timer timer;
     private TimerTask currentTask;
 
-    Object syncLock = new Object();
+    final Object syncLock = new Object();
     private boolean deleteAsync;
     private boolean mSyncRunning;
     private long lastOptimizeTime = 0;
-    private static Long lastGC = new Long(0);
+    private static final AtomicLong lastGC = new AtomicLong();
 
     public SyncMailbox(MailboxData data) throws ServiceException {
         super(data);
@@ -246,7 +247,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
             public void run() {
                 boolean doGC;
                 long now;
-                
+
                 if (ZimbraApplication.getInstance().isShutdown()) {
                     cancelCurrentTask();
                     return;
@@ -269,10 +270,10 @@ public abstract class SyncMailbox extends DesktopMailbox {
                 }
                 synchronized (lastGC) {
                     now = System.currentTimeMillis();
-                    doGC = now - lastGC > 5 * 60 * Constants.MILLIS_PER_SECOND;
+                    doGC = now - lastGC.get() > 5 * 60 * Constants.MILLIS_PER_SECOND;
                     if (doGC) {
                         System.gc();
-                        lastGC = now;
+                        lastGC.set(now);
                     }
                 }
             }

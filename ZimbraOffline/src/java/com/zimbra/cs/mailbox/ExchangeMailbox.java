@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
@@ -82,7 +83,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
             }
         }
     }
-    
+
     @Override
     boolean isPushType(byte type) {
         switch (type) {
@@ -288,7 +289,8 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
 
     private void syncDataSource(boolean force, boolean isOnRequest) throws ServiceException {
         OfflineDataSource ds = getDataSource();
-        if (!force && !isOnRequest && !isTimeToSync(ds))
+        boolean needsSync = ds.needsSync(false);
+        if (!force && !needsSync && !isOnRequest && !isTimeToSync(ds))
             return;
         
         OfflineSyncManager syncMan = OfflineSyncManager.getInstance();

@@ -196,4 +196,7 @@
   <key name="zimbra_slow_logging_threshold">
     <value>5000</value>
   </key>
+  <key name="data_source_imap_reuse_connections">
+    <value>true</value>
+  </key>
 </localconfig>

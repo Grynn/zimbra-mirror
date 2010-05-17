@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.mail.Session;
 
@@ -28,6 +29,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.mailbox.DataSourceMailbox;
 import com.zimbra.cs.mailbox.DesktopMailbox;
+import com.zimbra.cs.mailbox.ExchangeMailbox;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -37,6 +39,7 @@ import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailclient.CommandFailedException;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.util.ymail.YMailClient;
@@ -45,6 +48,7 @@ public class OfflineDataSource extends DataSource {
     private DataSourceConfig.Service knownService;
     private OfflineDataSource contactSyncDataSource;
     private OfflineDataSource calendarSyncDataSource;
+    private final AtomicBoolean needsSync = new AtomicBoolean();
 
     OfflineDataSource(Account acct, DataSource.Type type, String name, String id, Map<String,Object> attrs, Provisioning prov) {
         super(acct, type, name, id, attrs, prov);
@@ -268,15 +272,14 @@ public class OfflineDataSource extends DataSource {
     
     @Override
     public boolean isDebugTraceEnabled() {
-    	if (super.isDebugTraceEnabled())
-    		return true;
-    	boolean accountDebugTrace = false;
-    	try {
-    		accountDebugTrace = ((OfflineAccount)getAccount()).isDebugTraceEnabled();
-    	} catch (ServiceException x) {}
-    	return  accountDebugTrace;
+        if (super.isDebugTraceEnabled())
+            return true;
+        boolean accountDebugTrace = false;
+        try {
+            accountDebugTrace = ((OfflineAccount)getAccount()).isDebugTraceEnabled();
+        } catch (ServiceException x) {}
+        return  accountDebugTrace;
     }
-
 
     /*
      * Returns true if the Yahoo email address associated with the specified
@@ -310,9 +313,13 @@ public class OfflineDataSource extends DataSource {
             isDebugTraceEnabled());
     }
 
-    public Mailbox getMailbox()
-    throws ServiceException {
+    public Mailbox getMailbox() throws ServiceException {
         return DataSourceManager.getInstance().getMailbox(this);
+    }
+
+    @Override
+    public boolean needsSync(boolean newValue) {
+        return needsSync.getAndSet(newValue);
     }
 }
 
