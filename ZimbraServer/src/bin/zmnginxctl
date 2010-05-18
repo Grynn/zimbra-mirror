@@ -15,7 +15,7 @@
 # 
 
 if [ x`whoami` != xzimbra ]; then
-    echo Error: must be run as zimbra user
+    echo "Error: must be run as zimbra user"
   exit 1
 fi
 
@@ -28,6 +28,11 @@ servicename=nginx
 configfile=${zimbra_home}/conf/${servicename}.conf
 pidfile=${zimbra_log_directory}/${servicename}.pid
 pid=""
+
+if [ ! -L /opt/zimbra/nginx ]; then
+  echo "Error: nginx not installed"
+  exit 1
+fi
 
 getpid()
 {
