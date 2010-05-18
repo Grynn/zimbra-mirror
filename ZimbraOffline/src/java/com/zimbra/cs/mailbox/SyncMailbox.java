@@ -51,6 +51,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
     final Object syncLock = new Object();
     private boolean deleteAsync;
     private boolean mSyncRunning;
+    private boolean isGalAcct;
     private long lastOptimizeTime = 0;
     private static final AtomicLong lastGC = new AtomicLong();
 
@@ -64,8 +65,8 @@ public abstract class SyncMailbox extends DesktopMailbox {
             accountName = account.getAttr(OfflineProvisioning.A_offlineDataSourceName);
         else
             accountName = account.getName();
-        deleteAsync = !provisioning.isGalAccount(account) &&
-            !provisioning.isMountpointAccount(account);
+        isGalAcct = provisioning.isGalAccount(account);
+        deleteAsync = !isGalAcct && !provisioning.isMountpointAccount(account);
     }
 
     @Override
@@ -242,6 +243,9 @@ public abstract class SyncMailbox extends DesktopMailbox {
     }
 
     protected synchronized void initSyncTimer() throws ServiceException {
+        if (isGalAcct)
+            return;
+        
         cancelCurrentTask();
         currentTask = new TimerTask() {
             public void run() {
