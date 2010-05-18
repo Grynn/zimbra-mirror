@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/selenium-core/!svn/ver/2081/trunk/src/main/resources/core/scripts
+END
+selenium-version.js
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/selenium-core/!svn/ver/1745/trunk/src/main/resources/core/scripts/selenium-version.js
+END
+selenium-remoterunner.js
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/selenium-core/!svn/ver/2081/trunk/src/main/resources/core/scripts/selenium-remoterunner.js
+END
+selenium-logging.js
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/selenium-core/!svn/ver/1883/trunk/src/main/resources/core/scripts/selenium-logging.js
+END
+selenium-browserbot.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/selenium-core/!svn/ver/2075/trunk/src/main/resources/core/scripts/selenium-browserbot.js
+END
+injection.html
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/selenium-core/!svn/ver/1882/trunk/src/main/resources/core/scripts/injection.html
+END
+user-extensions.js
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/selenium-core/!svn/ver/1822/trunk/src/main/resources/core/scripts/user-extensions.js
+END
+selenium-executionloop.js
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/selenium-core/!svn/ver/1857/trunk/src/main/resources/core/scripts/selenium-executionloop.js
+END
+selenium-commandhandlers.js
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/selenium-core/!svn/ver/1850/trunk/src/main/resources/core/scripts/selenium-commandhandlers.js
+END
+htmlutils.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/selenium-core/!svn/ver/2075/trunk/src/main/resources/core/scripts/htmlutils.js
+END
+xmlextras.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/selenium-core/!svn/ver/1745/trunk/src/main/resources/core/scripts/xmlextras.js
+END
+selenium-testrunner.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/selenium-core/!svn/ver/2015/trunk/src/main/resources/core/scripts/selenium-testrunner.js
+END
+selenium-api.js
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/selenium-core/!svn/ver/2042/trunk/src/main/resources/core/scripts/selenium-api.js
+END
+user-extensions.js.sample
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/selenium-core/!svn/ver/1745/trunk/src/main/resources/core/scripts/user-extensions.js.sample
+END
+selenium-browserdetect.js
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/selenium-core/!svn/ver/1906/trunk/src/main/resources/core/scripts/selenium-browserdetect.js
+END
+find_matching_child.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/selenium-core/!svn/ver/1745/trunk/src/main/resources/core/scripts/find_matching_child.js
+END

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="lib" path="jars/commons-configuration-1.5.jar"/>
+	<classpathentry kind="lib" path="jars/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="jars/libidn-1.0.jar"/>
+	<classpathentry kind="lib" path="jars/ocutil-2.4.2.jar"/>
+	<classpathentry kind="lib" path="jars/selenium-java-client-driver-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="jars/selenium-server-1.0-SNAPSHOT-standalone.jar"/>
+	<classpathentry kind="lib" path="jars/testng-5.8-jdk15.jar"/>
+	<classpathentry kind="lib" path="jars/xalan.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/activation.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://java.sun.com/products/javabeans/glasgow/javadocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-2.0.jar" sourcepath="/ThirdParty/commons-cli-20050601/src/java">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/cli/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-codec-1.4.jar" sourcepath="/ThirdParty/commons-codec/src"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-collections-3.2.1.jar" sourcepath="/ThirdParty/commons-collections-3.2.1/src/java">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/collections/apidocs-COLLECTIONS_3_1/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-digester-2.0.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-httpclient-3.0.jar" sourcepath="/ThirdParty/commons-httpclient-3.0/src">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/httpclient/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-logging.jar" sourcepath="/ThirdParty/commons-logging-1.0.3/src">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/logging/commons-logging-1.0.4/docs/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/dom4j-1.5.2.jar" sourcepath="/ThirdParty/dom4j/src/java">
+		<attributes>
+			<attribute name="javadoc_location" value="http://www.dom4j.org/dom4j-1.5.2/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/log4j-1.2.15.jar" sourcepath="/ThirdParty/jakarta-log4j">
+		<attributes>
+			<attribute name="javadoc_location" value="http://logging.apache.org/log4j/1.2/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/mail.jar" sourcepath="/ZimbraCommon/jars-src/javamail-1.4.2-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.2-javadoc.zip!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

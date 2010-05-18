@@ -1,0 +1,63 @@
+i18n handling and verification
+Java's ResourceBundle is specifically made for i18n related activities. If you give it a folder that contains i18n files and say which language to use, it automatically returns the proper value. I 've added a  wrapper called localize("key") to return current language's text.
+For example: obj.zButton.zClick(localize("forward")); would click Forward button irrespective of which language it is in.
+
+That solved most of the issue but one important one.  Lots of i18n messages would have texts like:  "Folder {1} already exists" which is displayed when folder already exists.  and in Chinese it could be:"{1}asdfd adfd adfds"  Notice that {1} is the first string in Chinese.  Now for these cases, I wrote a simple wrapper that replaces {1} with the real text. localize("folderexistsalert" , "myfolder"), and this simply replaces {1} with localised myFolder name.
+
+ To get the i18n keys, open SelNG/framework/locale/ZmMsg.properties and SelNG/framework/locale/AjxMsg.properties. Most of the keys are in zmMsg.properties while ajxMsg contains alert-messages etc keys.
+
+
+Finally, we also want to use i18n version of the test-data. Its really hard and time-consuming to come up with i18n-ised test-data for all the tests and for all the languages. The work around is a really cool trick.  Thanks to resourceBundle, we already have access i18nized properties file, we simply use those buttonNames/dialogMsgs etc as test-data :) . I created some wrappers to make it very simple.
+If you want to enter some text in chinese... simply say:  getLocalizedData(2) to get a localised data thats taken from 2-keys in localized properties file, similarly if you want to enter lot of data(say you want to fill compose-body with lots of data) then call: getLocalizedData(10)
+also for all the Randomly creates localized test-data(so if we are using Chinese, it automatically enters some random chinese text)
+Now there are some i18n messages -has api support to read i18n strings and also can convert variables in i18n string like {1}, {2} etc
+
+
+=============================================================
+ISSUES and RESOLUTION
+=============================================================
+i18n related...
+Problem: You have used localize("cancel") to perform some action on cancel button, but the test is failing in some languages (but working in someother)
+Cause: i18n translation issue. Harness looks for the key "cancel" in zmMsg.properties(zmMsg_ru.properties if russian etc), if the key is found, it returns
+the translated value from that file. However, there is another set of files ajxMsg.properties(ajxMsg_ru.properties if russian etc) thats also used by Zimbra
+ajax and can also contain cancel-key and Zimbra might be using the translation from ajxMsg.properties instead of zmMsg.properties. But problem araises whtn
+these two files differ.
+e.g:
+zmMsg_ru.properties
+cancel = blabla1
+
+ajxMsg_ru.properties
+cancel =  blabla2
+
+Harness by-default returns value from zmMsg*, so it returns "blabla1". 
+Zimbra in some-cases(like dialogs) might be reading from ajxMsg.properties and might be showing "blabla2".
+
+Solution: 
+Change localize("cancel") to ajxMsg.getString("cancel") only at those places where your script is failing.
+NOTE: Dont change all the places you might be using cancel, since for toolbar buttons(cancel in toolbar), zimbra tends to read from zmMsg.properties,
+in which case harness automatically works.
+
+
+=============================================================
+//i18n related
+Problem: Trying to verify message that has {0} in it, works in some languages but fails in some other
+Scenario:
+Say you want to verify if "Auto draft was saved at 3:55PM", if you read the expected msg from i18n  files 
+like: String expectedMsg = localize(locator.autoDraftMessage);
+expectedMsg will be: "Auto draft was saved at {0}", 
+
+-since the timestamp part is very difficult to verify. In most cases you could just do:
+expectedMsg = expectedMsg.replaceAll("{0}", "");
+now, your expectedMsg is just ""Auto draft was saved at "
+Finally if you try to assert(observedMsg.indexOf(expectedMsg)>=0) would be true, but in ENGLISH!
+
+In chinese the {0} might be in the center like:
+ "bla bla {0} blabla bla"
+In these cases, your assert would always fail.
+
+Solution:
+Split the expected message based on {0} and compare them twice/separately
+String [] temp = expectedMsg.split("{0}");
+
+assert(observedMsg.indexOf(expectedMsg[0])>=0), "Part1 of the expected message didnt match");
+assert(observedMsg.indexOf(expectedMsg[1])>=0), "Part2 of the expected message didnt match");

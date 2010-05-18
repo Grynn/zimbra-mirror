@@ -1,0 +1,400 @@
+Return-Path: mlo@zimbra.com
+Received: from mta02.zimbra.com (LHLO mta02.zimbra.com) (10.113.63.62) by
+ catfood.zimbra.com with LMTP; Thu, 1 Apr 2010 16:05:42 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mta02.zimbra.com (Postfix) with ESMTP id EA111C78B0A
+	for <mlo@zimbra.com>; Thu,  1 Apr 2010 16:05:33 -0700 (PDT)
+X-Virus-Scanned: amavisd-new at zimbra.com
+X-Spam-Flag: NO
+X-Spam-Score: -3.549
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.549 tagged_above=-10 required=3
+	tests=[ALL_TRUSTED=-1.8, AWL=-0.280, BAYES_00=-2.599,
+	DNS_FROM_OPENWHOIS=1.13] autolearn=no
+Received: from mta02.zimbra.com ([127.0.0.1])
+	by localhost (mta02.zimbra.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b0thmq9DxU1m for <mlo@zimbra.com>;
+	Thu,  1 Apr 2010 16:04:54 -0700 (PDT)
+Received: from catfood.zimbra.com (catfood.zimbra.com [10.113.63.60])
+	by mta02.zimbra.com (Postfix) with ESMTP id 40F00C78B04
+	for <mlo@zimbra.com>; Thu,  1 Apr 2010 16:04:54 -0700 (PDT)
+Date: Thu, 1 Apr 2010 16:05:02 -0700 (PDT)
+From: Maria Lo <mlo@zimbra.com>
+To: mlo@zimbra.com
+Message-ID: <1434244237.8527.1270163102708.JavaMail.root@catfood.zimbra.com>
+Subject: Fwd: attached messages
+MIME-Version: 1.0
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_8526_1030965790.1270163102700"
+X-Mailer: Zimbra 6.0.6_GA_2321.RHEL4_64 (ZimbraWebClient - FF3.0 (Mac)/6.0.6_GA_2321.RHEL4_64)
+
+------=_Part_8526_1030965790.1270163102700
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+
+------=_Part_8526_1030965790.1270163102700
+Content-Type: message/rfc822
+Content-Disposition: attachment
+
+Return-Path: rking@zimbra.com
+Received: from mta03.zimbra.com (LHLO mta03.zimbra.com) (10.113.63.63) by
+ catfood.zimbra.com with LMTP; Thu, 1 Apr 2010 14:27:54 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mta03.zimbra.com (Postfix) with ESMTP id B16107802B;
+	Thu,  1 Apr 2010 14:12:36 -0700 (PDT)
+X-Virus-Scanned: amavisd-new at zimbra.com
+X-Spam-Flag: NO
+X-Spam-Score: -3.54
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.54 tagged_above=-10 required=3
+	tests=[ALL_TRUSTED=-1.8, AWL=-0.271, BAYES_00=-2.599,
+	DNS_FROM_OPENWHOIS=1.13] autolearn=no
+Received: from mta03.zimbra.com ([127.0.0.1])
+	by localhost (mta03.zimbra.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nqpKcUwV19aV; Thu,  1 Apr 2010 14:12:27 -0700 (PDT)
+Received: from corp.zimbra.com (corp.zimbra.com [10.113.63.58])
+	by mta03.zimbra.com (Postfix) with ESMTP id 7BB6C7802A;
+	Thu,  1 Apr 2010 14:12:27 -0700 (PDT)
+Date: Thu, 1 Apr 2010 14:26:59 -0700 (PDT)
+From: Rick King <rking@zimbra.com>
+Reply-To: support@zimbra.com
+To: Jiho Hahm <jhahm@zimbra.com>
+Cc: support-team@zimbra.com, calendar-team@zimbra.com, support@zimbra.com
+Message-ID: <703314951.134882.1270157219121.JavaMail.root@corp.zimbra.com>
+In-Reply-To: <16255275.20.1269900233146.JavaMail.jhahm@spike.local>
+Subject: Re: SF: Case 00051542:  - Timezone conversion 24 hour error
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: Zimbra 6.0.5_GA_2213.RHEL4_64 (ZimbraWebClient - FF3.0 (Mac)/6.0.5_GA_2213.RHEL4_64)
+
+[customer removed]
+
+Hello All, 
+
+Is there anything else you need from me? University of Guelph is running into the same issue. 
+
+Best Regards,
+
+--
+Rick King
+Zimbra Support Team
+
+----- Original Message -----
+From: "Jiho Hahm" <jhahm@zimbra.com>
+To: support@zimbra.com
+Cc: support-team@zimbra.com, calendar-team@zimbra.com
+Sent: Monday, March 29, 2010 6:04:01 PM
+Subject: Re: SF: Case 00051542:  - Timezone conversion 24 hour error
+
+Thanks for the data.  It sounds like a JSP client issue.  Can someone from client team help?  The appointment shows on the correct date in month view but not in week/workweek/day views.
+
+-Jiho
+
+----- Original Message -----
+
+From: "Rick King" <rking@zimbra.com>
+To: "Jiho Hahm" <jhahm@zimbra.com>
+Cc: support-team@zimbra.com, calendar-team@zimbra.com, support@zimbra.com
+Sent: Monday, March 29, 2010 2:31:05 PM
+Subject: Re: SF: Case 00051542: - Timezone conversion 24 hour error
+
+Thank you Jiho. Ics file attached. The PC's timezone is US/Eastern. Time
+zone for account preferences is set to US/Eastern as well.
+
+Should be able to repro with their test account.
+
+https://gregor.mendelbio.com
+
+username: zmsupport
+password: 2imbr4
+
+Just now I set my PC Timezone for US/Eastern, created an appt for March
+30 @ 1:00pm, but when I view the public calendar, the appt shows March
+29 @ 1:00pm.
+
+
+Best Regards,
+
+-- Rick King
+Zimbra Support Team
+
+----- Original Message -----
+From: "Jiho Hahm" <jhahm@zimbra.com>
+To: support@zimbra.com
+Cc: support-team@zimbra.com, calendar-team@zimbra.com
+Sent: Monday, March 29, 2010 5:10:14 PM
+Subject: Re: SF: Case 00051542: - Timezone conversion 24 hour error
+
+Rick, can you find out a few things for me?
+
+- ics dump of the appointment
+- what time zone the PC running the ajax client is in
+- time zone set in the account's preference
+
+
+----- Original Message -----
+
+From: "Rick King" <rking@zimbra.com>
+To: "Jiho Hahm" <jhahm@zimbra.com>
+Cc: support-team@zimbra.com, calendar-team@zimbra.com,
+support@zimbra.com
+Sent: Monday, March 29, 2010 1:47:15 PM
+Subject: Re: SF: Case 00051542: - Timezone conversion 24 hour error
+
+Thank you Jiho. In the screen shots below, the correct date is March 29.
+In the example, the appt was created from the ajax-client, and it is
+displayed correctly from the ajax-client; just not from the public
+calendar.
+
+Best Regards,
+
+-- Rick King
+Zimbra Support Team
+
+----- Original Message -----
+From: "Jiho Hahm" <jhahm@zimbra.com>
+To: support@zimbra.com
+Cc: support-team@zimbra.com, calendar-team@zimbra.com
+Sent: Monday, March 29, 2010 2:29:24 PM
+Subject: Re: SF: Case 00051542: - Timezone conversion 24 hour error
+
+What date is the appointment supposed to be on? March 28/29 is right
+around the daylight savings transition, and my guess is ajax client is
+showing the wrong date.
+
+-Jiho
+
+----- Original Message -----
+
+From: "Rick King" <rking@zimbra.com>
+To: calendar-team@zimbra.com
+Cc: support-team@zimbra.com
+Sent: Monday, March 29, 2010 1:11:52 PM
+Subject: Fwd: SF: Case 00051542: - Timezone conversion 24 hour error
+
+[customer removed]
+
+ZCS ver: 6.0.4
+
+Hello Calendar-Team,
+
+Do you have any theories why a public calendar would display
+appointments a day behind ajax/standard clients? ie, Appt created March
+29 @ 5:00pm from ajax, would be displayed March 28 @ 5:00pm from a
+public calendar.
+
+
+Ajax Client
+
+
+
+
+Public Calendar
+
+
+
+Best Regards,
+
+-- Rick King
+Zimbra Support Team
+----- "Omer Ayfer" <oayfer@mendelbio.com> wrote:
+
+| Rick,
+|
+| To answer your question: I am talking about setting the user's
+| timezone in the Zimbra preferences.
+|
+| Take a look at this:
+|
+|
+| https://gregor.mendelbio.com/zimbra/user/zmsupport/calendar.html?view=week&fmt=freebusy
+|
+| Then feel free to login to our server, gregor.mendelbio.com, as this
+| user:
+|
+| username: zmsupport
+| password: 2imbr4
+|
+| You will see that the user's calendar shows the only event for this
+| week was set up on March 30th.
+|
+| Please let me know if I can clarify further. Thanks for your help.
+|
+| -- Omer
+|
+
+------=_Part_8526_1030965790.1270163102700
+Content-Type: message/rfc822
+Content-Disposition: attachment
+
+Return-Path: jhahm@zimbra.com
+Received: from mta02.zimbra.com (LHLO mta02.zimbra.com) (10.113.63.62) by
+ catfood.zimbra.com with LMTP; Mon, 29 Mar 2010 15:03:33 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mta02.zimbra.com (Postfix) with ESMTP id A2A20C78811;
+	Mon, 29 Mar 2010 15:03:24 -0700 (PDT)
+X-Virus-Scanned: amavisd-new at zimbra.com
+X-Spam-Flag: NO
+X-Spam-Score: -3.029
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.029 tagged_above=-10 required=3
+	tests=[ALL_TRUSTED=-1.8, AWL=0.240, BAYES_00=-2.599,
+	DNS_FROM_OPENWHOIS=1.13] autolearn=no
+Received: from mta02.zimbra.com ([127.0.0.1])
+	by localhost (mta02.zimbra.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZLDvXXSSXozU; Mon, 29 Mar 2010 15:03:15 -0700 (PDT)
+Received: from dogfood.zimbra.com (dogfood.zimbra.com [10.113.63.59])
+	by mta02.zimbra.com (Postfix) with ESMTP id B42F2C787CF;
+	Mon, 29 Mar 2010 15:03:15 -0700 (PDT)
+Date: Mon, 29 Mar 2010 15:04:01 -0700 (PDT)
+From: Jiho Hahm <jhahm@zimbra.com>
+To: support@zimbra.com
+Cc: support-team@zimbra.com, calendar-team@zimbra.com
+Message-ID: <16255275.20.1269900233146.JavaMail.jhahm@spike.local>
+In-Reply-To: <1954326971.96982.1269898265355.JavaMail.root@corp.zimbra.com>
+Subject: Re: SF: Case 00051542:  - Timezone conversion 24 hour error
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: Zimbra 6.0.6_GA_2308.RHEL4_64 (Zimbra Desktop/2.0_10401_Mac)
+
+Thanks for the data.  It sounds like a JSP client issue.  Can someone from client team help?  The appointment shows on the correct date in month view but not in week/workweek/day views.
+
+-Jiho
+
+----- Original Message -----
+
+From: "Rick King" <rking@zimbra.com>
+To: "Jiho Hahm" <jhahm@zimbra.com>
+Cc: support-team@zimbra.com, calendar-team@zimbra.com, support@zimbra.com
+Sent: Monday, March 29, 2010 2:31:05 PM
+Subject: Re: SF: Case 00051542: - Timezone conversion 24 hour error
+
+Thank you Jiho. Ics file attached. The PC's timezone is US/Eastern. Time
+zone for account preferences is set to US/Eastern as well.
+
+Should be able to repro with their test account.
+
+https://gregor.mendelbio.com
+
+username: zmsupport
+password: 2imbr4
+
+Just now I set my PC Timezone for US/Eastern, created an appt for March
+30 @ 1:00pm, but when I view the public calendar, the appt shows March
+29 @ 1:00pm.
+
+
+Best Regards,
+
+-- Rick King
+Zimbra Support Team
+
+----- Original Message -----
+From: "Jiho Hahm" <jhahm@zimbra.com>
+To: support@zimbra.com
+Cc: support-team@zimbra.com, calendar-team@zimbra.com
+Sent: Monday, March 29, 2010 5:10:14 PM
+Subject: Re: SF: Case 00051542: - Timezone conversion 24 hour error
+
+Rick, can you find out a few things for me?
+
+- ics dump of the appointment
+- what time zone the PC running the ajax client is in
+- time zone set in the account's preference
+
+
+----- Original Message -----
+
+From: "Rick King" <rking@zimbra.com>
+To: "Jiho Hahm" <jhahm@zimbra.com>
+Cc: support-team@zimbra.com, calendar-team@zimbra.com,
+support@zimbra.com
+Sent: Monday, March 29, 2010 1:47:15 PM
+Subject: Re: SF: Case 00051542: - Timezone conversion 24 hour error
+
+Thank you Jiho. In the screen shots below, the correct date is March 29.
+In the example, the appt was created from the ajax-client, and it is
+displayed correctly from the ajax-client; just not from the public
+calendar.
+
+Best Regards,
+
+-- Rick King
+Zimbra Support Team
+
+----- Original Message -----
+From: "Jiho Hahm" <jhahm@zimbra.com>
+To: support@zimbra.com
+Cc: support-team@zimbra.com, calendar-team@zimbra.com
+Sent: Monday, March 29, 2010 2:29:24 PM
+Subject: Re: SF: Case 00051542: - Timezone conversion 24 hour error
+
+What date is the appointment supposed to be on? March 28/29 is right
+around the daylight savings transition, and my guess is ajax client is
+showing the wrong date.
+
+-Jiho
+
+----- Original Message -----
+
+From: "Rick King" <rking@zimbra.com>
+To: calendar-team@zimbra.com
+Cc: support-team@zimbra.com
+Sent: Monday, March 29, 2010 1:11:52 PM
+Subject: Fwd: SF: Case 00051542: - Timezone conversion 24 hour error
+
+[customer removed]
+
+ZCS ver: 6.0.4
+
+Hello Calendar-Team,
+
+Do you have any theories why a public calendar would display
+appointments a day behind ajax/standard clients? ie, Appt created March
+29 @ 5:00pm from ajax, would be displayed March 28 @ 5:00pm from a
+public calendar.
+
+
+Ajax Client
+
+
+
+
+Public Calendar
+
+
+
+Best Regards,
+
+-- Rick King
+Zimbra Support Team
+----- "Omer Ayfer" <oayfer@mendelbio.com> wrote:
+
+| Rick,
+|
+| To answer your question: I am talking about setting the user's
+| timezone in the Zimbra preferences.
+|
+| Take a look at this:
+|
+|
+| https://gregor.mendelbio.com/zimbra/user/zmsupport/calendar.html?view=week&fmt=freebusy
+|
+| Then feel free to login to our server, gregor.mendelbio.com, as this
+| user:
+|
+| username: zmsupport
+| password: 2imbr4
+|
+| You will see that the user's calendar shows the only event for this
+| week was set up on March 30th.
+|
+| Please let me know if I can clarify further. Thanks for your help.
+|
+| -- Omer
+|
+
+------=_Part_8526_1030965790.1270163102700--

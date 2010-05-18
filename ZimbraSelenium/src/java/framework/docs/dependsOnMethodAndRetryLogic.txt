@@ -1,0 +1,121 @@
+DependOnMethods speeds up the tests and skip tests upon failures but needs lot more logic to implement. 
+If you miss any one of the following, your test wont work as intended.
+
+- If your test-class uses dependsOnMethod, then that entire class must be placed in a separate <test> tag
+- If your test-class uses dependsOnMethod, then retry-logic must call all the depends-on methods with hard-coded datas
+
+
+ex: testMethod3(someDate3) 
+	depends on testMethod2(String somedata2) 
+	depends on testMethod1(String someData1)
+
+Then testMethod3(sometestData3){
+	if(isExecutionARetry) {
+		testMethod3_retry()
+	}
+	TESTSTEP1: Click on somebtn1
+	TESTSTEP2: verify something
+}
+your retry method would look something like:
+ testMethod3_retry() {
+	isExecutionARetry = false // must be present otherwise your test will go to infinite loop
+	login()
+	call testMethod1("this is data1"); //notice the real-data being passed
+	call testMethod2("this is data2");
+}
+
+-Only use dependsOnMethods if the methods that we depend on is not data-driven or has only one set of data coming from data-provider. Or simply
+hard-code the data in the depeding method
+- It is good to update the test-data that you have hard-coded in the retry-method if you change it dataprovider.
+- Keep the dependsOn length to 3 or 4 max.
+
+
+
+=========================================
+How to identify if  dependsOn would help and probably makes sense
+=========================================
+- Only one set of test-data is required/not data-driven
+
+- Matches the following scenario:
+Say you have a scenario and you need to test 3 different things along the way, then you can use dependsOn.
+
+Instead of:
+TestMethod1
+Step 1, Step2, Step3
+... verify 
+..revert so that next method can start
+
+TestMethod2
+Step1, Step2, Step3, Step4, Step5, Step6
+..verify
+..revert so that next method can start
+
+TestMethod3
+Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8, Step9
+..verify
+..revert so that next method can start
+
+
+You can use:
+
+TestMethod1
+Step1,Step2, Step3
+..verify
+
+TestMethod2
+Step4, Step5, Step6
+..verify
+
+TestMethod3
+ Step7, Step8, Step9
+..verify
+...revert
+
+
+Pros:
+- Obviously speeds up the tests by 3x on success(and around 9x faster on failure scenarios)
+- TestNG is smart in that if TestMethod1 fails, it wont execute TestMethod2 and TestMethod3 at all. Since we will have retry-on-failure on each of these
+individual tests, its a huge times saver when thing dont work.
+
+
+==================
+Why we need to keep classes in different <test> tags
+=============================
+[From Email]
+TestNG allows one test to depend on other. This allows us to execute tests much faster and also know which part of the scenario has failed.  Updated several attachments and Drafts related tests to use this technique. But, there is a caveat to this approach: TestNG doesnt run them in sequence if there are multiple Classes with dependsOnMethods defined. i.e.
+Class1
+Method11
+Method12 dependsOn Method13
+Method13 dependsOn Method12
+
+Class2
+Method21
+Method22 dependsOn Method21
+Method23 dependsOn Method22
+
+Expected execution:
+Method11
+Method12
+Method13
+Method21
+Method22
+Method23
+
+Observed:
+Method11
+Method12
+Method21 (jumped to Class2)
+Method22
+Method13(jumped back to class1)
+Method23(jumped back to class2)
+
+--As you can see the methods are executed in same priority(ex: 13 is executed after 11 and 12)  but in different order. The work around for this is to put Class1 and Class2 in  different <Test> tags in TestNG
+
+
+RetryFailedTests:
+If any test fails, that test is automatically re-run upto 2 more times before saying test is failed.
+Pros:
+ If there is any failure due to timing, it should be resolved to a great extent.
+Cons:
+If we have used DependsOnMethod technique for a test, then we will have to write additional retry-logic
+If there is a real failure, it still retries 2 more times.

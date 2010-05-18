@@ -1,0 +1,28 @@
+Eclipse issues:
+ -see setup-framework.txt to solve errors thats causing eclipse not to build
+
+=========================
+ Execution Issues:
+ ========================
+Problem: When we try to execute, you are getting Cannot bind Exception "JVM_Bind" already exists or something to that effect
+- Cause: there is an orphaned java process. 
+- Fix: Go to task manager and kill java.exe and javaw.exe
+
+Problem: Getting ResourceBundle MissingResourceException
+- Cause: ResourceBundle(or locale files are not copied properly for the compiled java files to find them)
+- Fix: Check SelNG/bin/framework/locale has all the *.properties files. Pressing F5 in Eclipse should usually copy it,
+but for some reason it might not have. Simply copy all the *.properties to proper folder(manually create folder if they dont exist)
+i.e Copy files from from SelNG/framework/locale/ folder to SelNG/bin/framework/locale
+
+Problem: Attachments test or tests the physically moves mouse are not working on some remote-test-clients
+- Cause: The test-machine is probably in locked position since you might have used Remote-Desktop(instead of realvnc). And in locked-state, Windows doesnt allow mouse-movements.
+Fix: Unlike RealVnc, remotedesktop actually locks the machines. 
+	- Either re-connect it through real-vnc and unlock the machine
+	- Login using remote-desktop and restart the machine(assumption machine is set to automatically re-login)
+
+
+Problem: AfterSuite is run without any methods run. StopSelenium server error.
+
+- Cause: If none of the test groups in the tests are included in the testng.xml or testng-debug.xml and vice versa. afterSuite is run which tries to stop selenium server even when it is not started.
+
+Fix: include one of the test in testng.xml or testng-debug.xml

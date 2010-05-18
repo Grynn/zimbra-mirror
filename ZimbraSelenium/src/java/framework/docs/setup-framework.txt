@@ -1,0 +1,211 @@
+=============================
+JAVA
+=============================
+1. Download java(JDK not just jre) 1.5 (java 1.6 doesnt work; we use Zimbra's internal api for provisioning that doesnt support 1.6)
+https://cds.sun.com/is-bin/INTERSHOP.enfinity/WFS/CDS-CDS_Developer-Site/en_US/-/USD/ViewProductDetail-Start?ProductRef=jdk-1.5.0_15-oth-JPR@CDS-CDS_Developer
+
+After Installation open command line and 
+Type: java -version
+-- should show java version
+Type javac
+-- should show javac help
+
+If either java or javac fails, your "PATH" isnt set correctly
+Fix: Open Control panel>System>Advanced>Environment variables
+In the System variables section:
+append jdk(not jre) C:\Program Files\Java\jdk1.5.0_15\bin
+close command line
+reopen command line
+and test again
+
+=============================
+ANT
+=============================
+http://apache.siamwebhosting.com/ant/binaries/apache-ant-1.7.0-bin.zip
+Unzip the zip file to:
+C:\ant
+You will end up with C:\ant\ant-1.7.0\ folder
+
+Set JAVA_HOME
+Open Control panel>System>Advanced>Environment variables
+In the User Variables section:
+Add JAVA_HOME and enter path to jdk(not jdk\bin) e.g. C:\Program Files\Java\jdk1.5.0_15\
+
+Set PATH variable(requred to run ant from commandline instead of eclipse):
+ Open Control panel>System>Advanced>Environment variables
+In the System variables section:
+append path all the way till bin including bin. e.g.: C:\ant\ant-1.7.0\\bin
+
+=============================
+PERFORCE
+=============================
+
+1. Download the SelNG-Testharness from Perforce:
+
+P4 Client Setup:
+Tests are branch sensitive, so we need to have client-setup that can cater to this.
+Create folder structures like these:
+C:\p4\<branch1>\ZimbraQA\SelNG\ .. the current branch is FRANKLIN, replace branch1 with FRANKLIN
+C:\p4\<branch2>\ZimbraQA\SelNG\
+
+In the above:
+- *Root* is: c:\p4
+- *path/to/project* is: <branch1>\ZimbraQA\SelNG e.g: Franklin/ZimbraQA/SelNG
+- The package is within ZimbraQA and you might need it for different purposes, download the entire ZimbraQA project.
+//depot/FRANKLIN/ZimbraQA/... //<p4ClientName>/Path/To/ZimbraQA/...
+e.g:
+//depot/FRANKLIN/ZimbraQA/... //RAJA_NEWLaptop/FRANKLIN/ZimbraQA/... 
+
+We Also depend on ZimbraWebClient to support i18n tests. We essentially need to get the i18n files from that project and dump them
+to SelNG/framework/locale folder
+So in P4 also add the following:
+//depot/<Branch>/ZimbraWebClient/WebRoot/messages/... //<ClientName>/path/to/project/framework/locale/... 
+e.g:
+//depot/FRANKLIN/ZimbraWebClient/WebRoot/messages/... //RAJA_NEWLaptop/FRANKLIN/ZimbraQA/SelNG/framework/locale/... 
+
+
+=============================
+ECLIPSE
+=============================
+
+1. Download eclipse classic or J2EE(Ganymede) -classic is good enough
+http://www.eclipse.org/downloads/
+
+
+
+===========================================================
+Import SelNG project (fix issues)
+===========================================================
+
+1. Open Eclipse
+2. When it asks to point to workspace folder during launch: 
+Point to the parent folder that SelNG is present in. 
+Like: point to C:\p4\FRANKLIN\ZimbraQA (if SelNG's path is C:\p4\FRANKLIN\ZimbraQA\SelNG)
+3. Click on New-Project
+---New Project Wizard-----
+4. Select Java-project
+5. Click Next
+6. Enter Project name as SelNG
+.. It might complain that a project already exists
+6.1 If so, select Create "Project from existing Source" radio and point Project(like:  C:\p4\FRANKLIN\ZimbraQA\SelNG)
+7. Click Next
+7.1 you might see default output folder as "/bin or SelNG/bin" - This is the folder that Eclipse uses to copy compile classes
+7.2 leave this as it is
+8. Click on "Libraries"-tab
+... this is the place where you can add all jar files( you can also add this later on)
+Click on "Add Jars"-btn (*Not* "Add external jars"--this will screwup things)
+9. Hit Finish
+
+..You will now notice eclipse building the whole project. If things goes fine, you shouldnt see any errors
+
+
+==============================================================
+FIX ECLIPSE ERRORS (FRESH IMPORT)
+==============================================================
+10. If you see 100s of errors after Step9, 
+<if you have skipped STEP 8(i.e. including jars)>
+To fix:
+- Right click on SelNG project
+- Click on "Properties" context menu
+- Select Java build-path
+- Repeat STEP8(from above)
+- Eclipse usually rebuilds it
+
+11. ..if error still exists (try refresh)
+- Right click on SelNG project
+- Hit F5
+
+12..if still error exists(may be .classpath file is read-only)
+- Close eclipse
+- Open SelNG project using explorer
+- Right click on SelNG\.classpath file and make sure its writable and not-readonly. If read-only uncheck it.
+- Open eclipse
+- Repeat Step 10 & 11
+
+==============================================================
+FIX ECLIPSE ERRORS FRESH IMPORT(continued..) OR DELTA-SYNC(Was working but after sync throws error)
+==============================================================
+13. .. If error still exists (Check if you have all the jars and correct version of the jars)
+PS: You usually dont this this for the fresh import and normally when you sync P4
+- Right click on SelNG project
+- Click on "Properties" context menu
+- Select Java build-path
+- Click on Libraries-tab
+- See if there are any dangling jars. The jar icons will have "exclaimation marks" meaning the jars are missing
+- To fix: first check if the jars are available in framework\lib folder in windows-explorer.
+- Sometimes the jars will be of newer versions(like: testng-5.2.jar vs testng-6.0.jar)
+To update to newer jars:
+Remove the older version of the jar from the dialog-box
+Click "Add jars"- button and browse to framework/lib and add the newer  jars
+Click OK
+
+14. If error still exists(manually copy to SelNG/bin)
+Sometimes none of 10,11,12 and 13 would work if the /bin folder(STEP 7.1) is read-only or some other issue. This is the top-level
+folder eclipse copies the entire project files and compiled-java(.class files) into.
+To fix:
+- Close eclipse.
+- Copy .classpath file from  SelNG/.classpath to SelNG/bin/.classpath
+- delete all older *.jar files from SelNG/bin/framework/*.jar)
+- Copy all the jars    from SelNG/framework/lib/*.jar to SelNG/bin/framework/lib/*.jar 
+- Open Eclipse
+
+
+
+===========================================================
+Install testng plugin:
+===========================================================
+2. Install testng plugin:
+- Open Eclipse> Help > Software Updates
+- Click Available-Softwares tab
+- Click "Add Site" button
+- Enter http://beust.com/eclipse and press OK
+..you should now see this in the dialog
+- Select this package-checkbox
+- Click Install
+- Restart eclipse
+
+
+
+
+===========================================================
+ABYSS SERVER
+===========================================================
+We use Abyss server so tht we can keep selenium's core external to selenium-server. This way we can write custom functions or maniuplate selenium
+to work for more efficiently for our needs.
+The main difference in this is that selenium-server no-longer uses internal selenium-core(javascript files) to execute tests but instead picks up the files from an external folder. The advantage is that if it uses internal one, then we will have to rebuild selenium-server.jar everytime we debug javascript but now we dont have to. But since selenium-server.jar can't access files on file-system due to permission issues, we will have to provide these files through a web-server. So the trick is have a simple web-server running on our machines that listens to some port(3333 in this case) and retrives a files from system-folder.
+
+before it was like: [selenium-server.jar [selenium-core] ]
+now: [selenium-server.jar ] asks abyss-server for selenium-core files ---> [abyss-server [selenium-core]]
+
+For this purpose I am using Abyss web-server and below are the steps to install and configure the server:
+1. Install abyss server on XP:
+Abyss webserver can be downloaded from here:
+http://www.aprelium.com/abyssws/download.php
+2. Open Abyss Server console(it runs in the sys-tray)
+Give some username/pwd to access its console(like adminconsole)
+3. Once the consloe is open,
+click on Configure> General
+3.1 configure the host to run on 3333
+3.2 Configure Documents Path to: c:\path\to\extCore\ folder. In the project it is: \SelNG\framework\lib\extCore  
+4. restart the server
+
+TEST:
+now if you do: http://localhost:3333/scripts/selenium-api.js you should get that javascript file, this means setup is fine.
+
+btw: the externalized selenium-core is here: \SelNG\framework\lib\extCore 
+
+
+===========================
+Windows xp Powertoys
+============================
+XP has several settings or user-preferences hidden. But they provide something called powertoys to fine tune these. One of the things that would help
+us is disabling auto-complete in file-upload dialog. As we enter attachment's path, window's tries to auto-complete it, which occasionally( < 1%) might 
+interfere in entering correct value into that file-upload field. Disabling this auto-complete would help make this bullet-proof.
+
+The powertoys name is: TweakUI.exe
+http://download.microsoft.com/download/f/c/a/fca6767b-9ed9-45a6-b352-839afb2a2679/TweakUiPowertoySetup.exe
+
+After installing it, 
+Click on "common dialogs" and uncheck "Enable autocomplete"
+Click on General and disable "Beep on Errors"
+

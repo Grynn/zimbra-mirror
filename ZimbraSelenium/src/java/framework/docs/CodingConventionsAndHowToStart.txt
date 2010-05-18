@@ -1,0 +1,101 @@
+Some simple coding conventions that we should follow while writing tests
+
+TEST-CLASSES
+1. Write your testclasses under projects/<project>/tests folder
+2. Create a folder like: compose under tests to write all the testclasses related to compose
+- these kinds of folders should be all lower-case
+3. All test-classes must extend from CommonTest.java
+4. They all should have: @SuppressWarnings("static-access") on top of the class-name
+5. Give reasonable test method names that tells what test is being done. Need not start with "z"
+
+6. Go through testTemplate.java.txt to know how to partition the class
+
+7. Formatting: Use Eclipse's formatting: Source>Format
+8. Commenting: Right-click on the class-name/e/MethodName> Source> Generate Element Comment --this will create an empty comment section, fill it up
+
+TEST-WRAPPERS/UI-LEVEL METHODS
+You would want to write several wrappers like: navigateToCompose, EnterValues, etc wrappers
+1. Create a under class that indicates the UI that you are working on like: CalendarComposeView, MailApp, TasksApp etc
+2. All test-classes must extend from CommonTest.java
+3. They all should have: @SuppressWarnings("static-access") on top of the class-name
+4. All the Methods and Static variables MUST START FROM "z" like zNavigateToCompose zFillData etc
+5. If the objects like toolbarbuttons/menus etc have static-ids make them a static-final-variable and store that information here.
+e.g.  public static final String zSendIconBtn = "id=zb|COMPOSE|SEND_left_icon"; 
+ public static final String zCcField = "id=zv|COMPOSE_cc_control";
+
+6.  Add this new class to projects/zcs/PageObjects.java as an object
+ like:
+ public static CalendarComposeView zCalCompose =  new CalendarComposeView();	
+ ..notice that the instance name starts from "z"
+
+ Now all the methods and variables can be accessed in Test-classes or other wrappers by:
+ page.z --will show/contentAssist all the wrapper-classes
+ page.zCalCompose.z will show/contentAssist all the methods and  static-variables
+ so you can easily use page.zCalCompose.zsubject for example
+
+7. Commenting: Right-click on the class-name/MethodName> Source> Generate Element Comment --this will create an empty comment section, fill it up
+
+
+CORE-METHODS(that deal with javascript)
+At times you might want to create a specific core-object like: featureMenu
+1. Create a class under projects/zcs/clients
+2. Extend the class from CommonTest.java
+
+------------------------------------------
+Starting to write tests:
+------------------------------------------
+Instead of manually creating these three types of classes, you can get most of it automatically by simply copy-paste.
+Say you want to add a new TestClass: NewComposeTest.java
+- Open projects/zcs/tests/compose 
+- Select something thats already existing(say compose.java)
+-  Do Ctrl-c Ctrl-v
+- Eclipse asks you to give a new-name, enter NewComposeTest.java
+- Hit OK
+- Eclipse will create a duplicate with proper classname etc.
+- Delete the existing tests or start altering existing info and you are on your way.
+
+- You can do the same thing for wrappers and core-functions
+
+===================================================
+You should be able to access any core-functions by:
+===================================================
+Say you want to click a button whose i18n key is: addAttachment(or probably you just know it by its label: Add Attachment)
+obj.z --should show all the core functions
+obj.zButton.z -- should show all the methods available for a button(like click, dblclick etc)
+obj.zButton.zClick(localize(locator.  should show all 2000 keys
+obj.zButton.zClick(localize(locator.ad (keys almost always have the same letters as the labels,  will filter and 99% show addAttachmen)
+obj.zButton.zClick(localize(locator.addAttachment)); --would translate and click Add Attachment button
+
+
+You might be using id instead of the button-name:
+obj.z --should show all the core functions
+obj.zButton.z -- should show all the methods available for a button(like click, dblclick etc)
+obj.zButton.zClick(ComposeView.zAddAttachmentBtn); --> note: we are not using localize function. Also note, we know that zAddAttachmentBtn is present in project.zcs.ui.ComposeView 
+
+you can also use:
+obj.zButton.zClick(page.zCompose.zAddAttachmentBtn) 
+
+==============================================================
+Accessing methods and variables of Wrappers/UI level classes
+==============================================================
+You should be able to access all the page-ui level functions using:
+1. page.z* 
+2. or import the project.zcs.ui.<classname>
+
+Through page.z*
+1. page.z should show all the classes under project/zcs/ui
+2. page.zCompose -- if you want composeview
+3. page.zCompose.z --will show all the methods of zCompose
+4. page.zCompose.zNavigateToCompose() --call that method
+
+Through import:
+import projects.zcs.ui.ComposeView
+
+1. Now you can say ComposeView.z --would show all the methods of ComposeView
+2. ComposeView.zNavigateToCompose() --calls that metod
+
+you can also use:
+obj.zButton.zClick(page.zCompose.zAddAttachmentBtn) 
+
+
+

@@ -1,0 +1,120 @@
+This Documents how to setup eclipse to help execute and debug tests
+- Assumption: You must have already gone through Setup-framework document and have the project imported successfully.
+- You must also have TestNG plugin for eclipse installed.
+
+PS: If you are seeing errors in eclipse, please go through setup-framework.txt document's fix-eclipse errors sections.
+
+- Author: Raja Rao DV
+
+There are two ways to run tests
+1. Through Debug/Run buttons of eclipse
+2. Through ant's build.xml
+
+==========================================
+1.(**outdated see down below for new version) Execute Through Debug/Run buttons of eclipse 
+==========================================
+Setting this would help you enormousely while you debug.
+
+1. Setup testng.xml
+2. In the project-tree, right click on SelNG/conf/testng.xml
+3. In the context menu, select: Debug As > Open "Debug Configuration"
+..this will bring "Debug Configuration"- dialog
+	4. Select TestNG-folder from the tree
+	5. Click on the + icon(at the top) or right-click and select "New"
+		..This will essentially create a file(like subfolder) under TestNG
+	5.1 Enter the name as: "testng"
+	5.2 Under "Run"- section, 
+		-Select "Suite"-radio button, then hit-browse
+		- Select testng.xml
+	6. Click "{x}=Arguments"-tab
+		- In the "Program Arguments" section enter:  "-reporter framework.util.SummaryReporter" without double-quotes
+			..summaryreporter is a simple java class that creates subject.txt and body.txt with email contents(i.e. email subject and email-body)
+		- In the VM Arguments section enter: -Dfile.encoding=UTF-8
+		.. if you are running/debugging in chinese,korean etc console/output needs this setting to show those chars properly. Otherwise you will
+		see junk chars.
+	7. Click "Common"-tab the very last one
+		- Select Console-encoding to UTF-8
+		- Check "show in run" and also "show in debug"(usually already selected by default)
+		- Check Launch-in background
+
+Click Apply(dont close the dialog, we can duplicate these things for testng-debug.xml)
+
+b. Setup testng-debug.xml(used for debugging, usually one class or one method etc without having to change real testng.xml)
+After configuring testng.xml
+- right-click on that configuratioon and hit "Duplicate"
+- Change the name to "testng-debug" 
+	- Under "Run"- section, 
+		-Select "Suite"-radio button, then hit-browse
+		- Select testng-debug.xml
+
+Hit apply
+Close  the dialog
+
+==========================================
+1.(**New way: debugging through ExecuteTests.java) Execute Through Debug/Run buttons of eclipse 
+==========================================
+1. Find projects/zcs/bin/ExecuteTests.java file 
+2. In the project-tree, right click on  projects/zcs/bin/ExecuteTests.java
+3. In the context menu, select: Debug As > Open "Debug Configuration"
+..this will bring "Debug Configuration"- dialog
+	4. Select "JAVA Application"-folder from the tree
+	5. Click on the + icon(at the top) or right-click and select "New"
+		..This will essentially create a file(like subfolder) under Java Application
+	5.1 Enter the name as: "ExecuteTests-debug"
+	5.2 Under "Main Class"- section, 
+		you should have: projects.zcs.bin.ExecuteTests
+
+	6. Click "{x}=Arguments"-tab
+		- In the "Program Arguments" section enter:  "debugSuite" without double-quotes
+			...Executetests.java takes 1 argument, debugSuite(to run debug-tests) or fullSuite(to run full tests). 
+.		- In the VM Arguments section enter: -Dfile.encoding=UTF-8 
+			.. if you are running/debugging in chinese,korean etc console/output needs this setting to show those chars properly. Otherwise you will
+			see junk chars.
+	7. Click "Common"-tab the very last one
+		- Select Console-encoding to UTF-8
+		- Check "show in run" and also "show in debug"(usually already selected by default)
+		- Check Launch-in background
+
+Click Apply(dont close the dialog, we can duplicate these things for testng-debug.xml)
+
+
+Hit apply
+Close  the dialog
+
+
+===========================================
+CONFIGURING TOOLBAR RUN/DEBUG BUTTONS
+===========================================
+Normally you will use testng-debug.xml to debug since you dont want to run the entire test-suite. So if we put this at the top, it will save a lot of clicks
+In the Debug toolbar Menu-button
+Select "Organize favorites"
+.. if you dont see testng and "ExecuteTests-debug", click Add and add them
+-If you have them,
+Then click on testng-debug and hit "move-up" to move it *all the way to the top*
+Close the dialog
+
+..now you should see "ExecuteTests-debug" at the top of both Debug-menu and Run-menu
+
+
+TEST:
+From Run/Debug menu simply select "ExecuteTests-debug", they should start running the tests.
+
+
+
+
+==============================================================================================================================
+==============================================================================================================================
+==============================================================================================================================
+
+2. Execute through ant's build.xml(used by test clients for real-tests)
+2.1 Simple Open SelNG/build.xml
+2.2 In the overview pane: Right-click on the target "test-zcs" (could be different for different project)
+2.3. Select Run As
+
+
+Note: None of the settings that you might have done to eclipse would affect this. Its virtually like running through command-line.
+In other words, if you look closely, build.xml dumps all the class files to classes folder.  Since none of the eclipse settings applies,
+it also must copy data(projects/zcs/data) and i18n files(framework/locale). It also has to pass information like: 
+-Dfile.encoding=UTF-8 and  listeners="framework.util.SummaryReporter"
+
+

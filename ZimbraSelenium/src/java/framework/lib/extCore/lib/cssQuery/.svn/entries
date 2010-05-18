@@ -1,0 +1,44 @@
+8
+
+dir
+2082
+https://svn.openqa.org/svn/selenium-core/trunk/src/main/resources/core/lib/cssQuery
+https://svn.openqa.org/svn/selenium-core
+
+
+
+2006-09-19T07:09:11.356072Z
+1459
+gigix
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+0891141a-5dea-0310-ad27-ebc607f31677
+
+cssQuery-p.js
+file
+
+
+
+
+2008-05-21T22:29:55.745368Z
+c260e94c53eca2a4c27de8e948664d2b
+2006-09-19T07:09:11.356072Z
+1459
+gigix
+has-props
+
+src
+dir
+

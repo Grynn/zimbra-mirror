@@ -1,0 +1,101 @@
+1. Go to 'tms.lab.zimbra.com'
+2. Click on 'Anthill' link
+3. Click on 'Build' link for any branch e.g. TestToolsFranklin
+4. Click on Build button. This will create a SelNG.jar on the 'tms' machine
+4.1 Wait for the build to complete. Check status on tms.lab.zimbra.com (at the bottom)
+5. Login to tms.lab.zimbra.com using putty
+
+6. Run the following command
+
+/opt/qa/tools/UpdateTestTools.rb -f SelNG
+
+This will extract the SelNG.jar (from step 5) and copy the SelNG folder to the correct branch as below
+
+e.g. /opt/qa/FRANKLIN/SelNG
+
+7. Run the following command
+
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=en_US&s_browser=FF' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+
+This will run the SelNG project on qafe2 client machine. Server = qa62, browser = firefox2 with en_US as locale
+
+=========================================
+Test clients and the browsers they have:
+========================================
+qa33-vista-qtp2 IE7, FF2, SF3
+qa33-vista-qtp1 IE8, FF3, SF3
+qafe1           IE7, FF3, SF3
+qafe2		IE6, FF2, SF3
+browserperf1
+browserperf2
+
+
+========================
+Test clients login info:
+========================
+qafe1.liquidsys.com (hosted on qa58.liquidsys.com esx server)
+username: administrator
+pwd: zimbra
+
+qafe2.liquidsys.com (hosted on qa58.liquidsys.com esx server)
+username: administrator
+pwd: zimbra
+
+qa33-vista-qtp1.liquidsys.com (temporarily hosted on qa33.liquidsys.com vmWorkstation)
+username: zimbra
+pwd: test123
+
+
+qa33-vista-qtp2.liquidsys.com (temporarily hosted on qa33.liquidsys.com vmWorkstation)
+username: zimbra
+pwd: test123
+
+browserperf1 is a XP VMWARE machine on qa61.lab.zimbra.com (also a windows machine)
+username: zimbra
+pwd: test123
+
+browserperf2 is a XP VMWARE machine on qa61.lab.zimbra.com (also a windows machine)
+username: zimbra
+pwd: test123
+
+
+
+
+==================
+Test Servers:
+=================
+qa62 (rhel4)
+qa65 (ubuntu6_64)
+
+=======================================
+current set of test combinations:
+=======================================
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qa33-vista-qtp1&s_locale=en_US&s_browser=FF3' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qa33-vista-qtp1&s_locale=en_US&s_browser=IE' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa65 FRANKLIN RHEL4 'Selng&cmachine=qa33-vista-qtp2&s_locale=en_US&s_browser=SF' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qa33-vista-qtp1&s_locale=zh_CN&s_browser=FF3' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qa33-vista-qtp1&s_locale=zh_CN&s_browser=IE' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=en_US&s_browser=FF' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=en_US&s_browser=IE' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=en_US&s_browser=SF' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=zh_CN&s_browser=FF' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=zh_CN&s_browser=IE' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=da&s_browser=IE' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=de&s_browser=FF' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=es&s_browser=SF' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=fr&s_browser=FF' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=it&s_browser=IE' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=it&s_browser=SF' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=ja&s_browser=FF' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa62 FRANKLIN RHEL4 'Selng&cmachine=qafe2&s_locale=ko&s_browser=IE' N $1 >> /opt/qa/tools/qa62.txt 2>&1
+
+/opt/qa/tools/kickoffTest.rb qa65 FRANKLIN UBUNTU6_64 'Selng&cmachine=qafe1&s_locale=nl&s_browser=SF' N $1 >> /opt/qa/tools/qa65.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa65 FRANKLIN UBUNTU6_64 'Selng&cmachine=qafe1&s_locale=pl&s_browser=IE' N $1 >> /opt/qa/tools/qa65.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa65 FRANKLIN UBUNTU6_64 'Selng&cmachine=qafe1&s_locale=pt_BR&s_browser=FF3' N $1 >> /opt/qa/tools/qa65.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa65 FRANKLIN UBUNTU6_64 'Selng&cmachine=qafe1&s_locale=ru&s_browser=IE' N $1 >> /opt/qa/tools/qa65.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa65 FRANKLIN UBUNTU6_64 'Selng&cmachine=qafe1&s_locale=sv&s_browser=SF' N $1 >> /opt/qa/tools/qa65.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa65 FRANKLIN UBUNTU6_64 'Selng&cmachine=qafe1&s_locale=zh_HK&s_browser=FF3' N $1 >> /opt/qa/tools/qa65.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa65 FRANKLIN UBUNTU6_64 'Selng&cmachine=qafe1&s_locale=en_AU&s_browser=SF' N $1 >> /opt/qa/tools/qa65.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa65 FRANKLIN UBUNTU6_64 'Selng&cmachine=qafe1&s_locale=en_GB&s_browser=IE' N $1 >> /opt/qa/tools/qa65.txt 2>&1
+/opt/qa/tools/kickoffTest.rb qa65 FRANKLIN UBUNTU6_64 'Selng&cmachine=qafe1&s_locale=ja&s_browser=FF3' N $1 >> /opt/qa/tools/qa62.txt 2>&1

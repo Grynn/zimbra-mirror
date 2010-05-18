@@ -1,0 +1,19 @@
+
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name='SelNG'>
+
+  <test verbose="10" name="debug" >
+    	<groups>
+      <run>
+      	 <include name="always" />
+         <include name="smoke" />
+         <!-- <include name="enabled" /> -->
+      </run>        
+    </groups>
+    <classes>
+      <class name="projects.zcs.tests.compose.SendBtnNegativeTest" />
+    </classes>
+  </test>
+  
+</suite>
+

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="testng" default="jar" basedir=".">
+
+	<property name="build.version"      value="6.0.0"/>
+	<property name="dist.version.dir"   value="zimbra-${build.version}"/>
+	<property name="build.dir"          location="build"/>
+	<property name="build.classes.dir"  location="${build.dir}/classes"/>
+	<property name="deployDir"			location="${build.dir}/dist"/> <!-- pass in by Anthill -->
+	<property name="dist.dir.root"      location="${deployDir}"/>
+	<property name="dist.dir"           location="${dist.dir.root}/${dist.version.dir}"/>
+	<property name="dist.lib.dir"       location="${dist.dir}/lib"/>
+	<property name="conf.dir"			location="conf"/>
+	<property name="generated.dir"      location="${build.dir}/generated"/>
+	<property name="generated.java.dir" location="${generated.dir}/src/java"/>
+	<property name="generated.javadocs.dir"		location="${generated.dir}/javadocs"/> 
+	<property name="src.dir"            location="src"/>
+	<property name="src.java.dir"       location="${src.dir}/java"/>
+	<property name="test.log.dir"       location="/tmp"/>
+	<property name="webclient.dir" location="../ZimbraWebClient" />	
+	<property name="server.dir" location="../ZimbraServer" />	
+	<property name="common.dir" location="../ZimbraCommon" />	
+	<property name="common.classes.dir" location="${common.dir}/build/classes" />
+
+	
+	<!-- property file="${basedir}/conf/config.properties" /-->
+	<!-- COMPILE TESTS-->
+	
+	<path id="class.path">
+		<pathelement location="${build.classes.dir}"/>
+
+		<fileset dir="jars">
+			<include name="**/*.jar"/>
+		</fileset>
+
+		<pathelement location="${common.classes.dir}" />		
+		<fileset dir="../ZimbraServer/build">
+			<include name="zimbrastore.jar"/>
+		</fileset>
+
+		<fileset dir="../ZimbraCommon/jars">
+			<include name="**/*.jar"/>
+		</fileset>
+		<fileset dir="../ZimbraCommon/build">
+			<include name="zimbracommon.jar"/>
+		</fileset>			
+	</path>
+
+	<path id="all.java.path">
+		<pathelement location="${src.java.dir}"/>
+		<pathelement location="${generated.java.dir}"/>
+	</path>
+
+	<target name="clean" description="Removes class files">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="build-init">
+		<mkdir dir="${test.log.dir}"/>
+		<mkdir dir="${build.classes.dir}"/>
+		<mkdir dir="${dist.dir.root}"/>
+		<mkdir dir="${dist.dir}"/>
+		<mkdir dir="${dist.lib.dir}"/>
+		<mkdir dir="${generated.java.dir}"/>
+		<mkdir dir="${src.java.dir}/framework/locale"/>
+	</target>
+	<target name="compile" depends="build-init"        description="Compiles the source code">
+		<echo message="compiling framework..." />
+        <ant dir="${common.dir}" target="jar" inheritAll="false"/>
+        <ant dir="${server.dir}" target="jar" inheritAll="false"/>
+		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
+			<src refid="all.java.path"/>
+		</javac>
+	</target>
+	<target name="jar" depends="copy-data,compile" description="Creates the jar file">
+		<jar destfile="${dist.lib.dir}/zimbraselenium.jar"           basedir="${build.classes.dir}"/>
+	</target>
+
+	<target name="generate.locale.files.ZimbraWebClient" description="Grab I18N message files from ZimbraWebClient project">
+		<copy todir="${src.java.dir}/framework/locale">
+			<fileset dir="${webclient.dir}/WebRoot/messages/" />
+		</copy>
+	</target>
+	<target name="generate.local.files.ZimbraServer" description="Grab I18N message files from ZimbraServer project">
+		<copy todir="${src.java.dir}/framework/locale">
+			<fileset dir="${server.dir}/conf/msgs/" />
+		</copy>
+	</target>
+	
+	<target name="generate.locale.files" depends="generate.locale.files.ZimbraWebClient, generate.local.files.ZimbraServer" description="Grab I18N message files"/>
+	
+	<target name="copy-data" depends="generate.locale.files" description="copies i18n and test data">
+		<copy todir="${build.classes.dir}/projects/zcs/data">
+			<fileset dir="${src.java.dir}/projects/zcs/data" />
+		</copy>
+		<copy todir="${build.classes.dir}/framework/locale">
+			<fileset dir="${src.java.dir}/framework/locale" />
+		</copy>
+	</target>
+
+	<!-- RUN TESTS-->
+	<taskdef name="testng" classname="com.beust.testng.TestNGAntTask" classpathref="class.path" />
+
+	<!--
+	<path id="runpath">
+		<path refid="class.path" />
+		<pathelement location="classes" />
+		<pathelement location="${basedir}/projects/zcs/data/zmMsg.properties" />
+	</path>
+	-->
+
+	<target name="test-zcs" depends="jar">	
+		<echo message="running ajax tests..." />		
+		<java classname="projects.zcs.bin.ExecuteTests" classpathref="class.path" fork="true" >
+			<arg value="debugSuite" />
+			<jvmarg value="-ea" />
+			<jvmarg value="-Dfile.encoding=UTF-8" />
+		</java>
+
+		<!--echo message="running  html tests..." />		
+		<java classname="projects.html.bin.ExecuteTests" classpathref="runpath" fork="true">
+			<arg value="fullSuite" />
+			<jvmarg value="-ea" />
+			<jvmarg value="-Dfile.encoding=UTF-8" />
+		</java-->
+
+	</target>
+
+
+
+</project>
