@@ -994,6 +994,12 @@
 		<mkdir dir="${dist.data.dir}/profile/extensions/zimbradnd@zimbra.com"/>
 		<unzip src="../ZimbraWebClient/ffext/build/ZimbraDnD.xpi" dest="${dist.data.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>
 		
+		<!-- unzip zimbra mapi extension for windows -->
+		<if><isset property="is-windows" /><then>
+			<mkdir dir="${dist.data.dir}/profile/extensions/mapi@zimbra.com"/>
+			<unzip src="src/installer/extensions/zimbramapi-0.1.xpi" dest="${dist.data.dir}/profile/extensions/mapi@zimbra.com" overwrite="true"/>
+		</then></if>
+
 		<!-- unzip inquisitor extension
 		<mkdir dir="${dist.data.dir}/profile/extensions/Inquisitor@yahoo"/>
 		<unzip src="src/installer/extensions/inquisitor4prism.xpi" dest="${dist.data.dir}/profile/extensions/Inquisitor@yahoo" overwrite="true"/>
