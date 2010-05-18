@@ -68,7 +68,6 @@ done
 
 SIMPLE_DATE=`date +%y%m%d%H%M%S`
 
-SKIN_SRC=$1
 SKIN_WORK_BASE=`dirname "${skins_directory}"`
 
 BASE_URL=/`basename "${SKIN_WORK_BASE}"`
