@@ -41,6 +41,11 @@ Com_Zimbra_DnD.prototype.isDndSupported = function (evntname) {
 
     var isSupported = (evntname in element);
 
+    if (!isSupported && element.setAttribute && AjxEnv.isFirefox3_6up) {
+       element.setAttribute(evntname, 'return;');
+       isSupported = typeof element[evntname] == 'function';
+    }
+
     element = null;
 
     return isSupported;
@@ -129,7 +134,7 @@ Com_Zimbra_DnD.prototype._initHTML5 = function () {
 
 Com_Zimbra_DnD.prototype.onShowView =
 function(viewId, isNewView) {
-    var isWindowsSafari = (AjxEnv.isWindows && AjxEnv.isSafari);
+    var isWindowsSafari = (AjxEnv.isWindows && !AjxEnv.isChrome && !AjxEnv.isFirefox);
     if(this.isHTML5 && !AjxEnv.isIE && !isWindowsSafari) {
         if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf(ZmId.VIEW_COMPOSE) != -1) {
             var curView = appCtxt.getAppViewMgr().getCurrentView();
