@@ -116,12 +116,12 @@
 			<jvmarg value="-Dfile.encoding=UTF-8" />
 		</java>
 
-		<!--echo message="running  html tests..." />		
+		<echo message="running  html tests..." />		
 		<java classname="projects.html.bin.ExecuteTests" classpathref="runpath" fork="true">
 			<arg value="fullSuite" />
 			<jvmarg value="-ea" />
 			<jvmarg value="-Dfile.encoding=UTF-8" />
-		</java-->
+		</java>
 
 	</target>
 
