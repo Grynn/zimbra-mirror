@@ -146,7 +146,7 @@ function(entry) {
     var domainObj =  ZaDomain.getDomainByName (domainName) ;
     this._containedObject[ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
     this._containedObject[ZaAccount.A2_currentAccountType] = entry[ZaAccount.A2_currentAccountType]  ;
-    ZaAccountXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
+//    ZaAccountXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 	if(entry.getAttrs[ZaAccount.A_zimbraAvailableSkin] || entry.getAttrs.all) {
 		var skins = ZaApp.getInstance().getInstalledSkins();
 		
