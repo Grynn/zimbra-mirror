@@ -8,6 +8,7 @@
 <!ENTITY paste.label                "@prism.exts.Paste@">
 <!ENTITY delete.label               "@prism.exts.Delete@">
 <!ENTITY selectAll.label            "@prism.exts.SelectAll@">
+<!ENTITY saveImage.label            "@prism.exts.SaveImage@">
 <!ENTITY noSuggestions.label        "@prism.exts.NoSuggest@">
 <!ENTITY addToDictionary.label      "@prism.exts.AddToDict@">
 <!ENTITY print.label                "@prism.exts.Print@">

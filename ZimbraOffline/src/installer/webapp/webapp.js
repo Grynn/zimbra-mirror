@@ -21,6 +21,7 @@ function preload() {
 
 function shutdown() {
   stopServer();
+  return true;
 }
 
 function startServer() {
