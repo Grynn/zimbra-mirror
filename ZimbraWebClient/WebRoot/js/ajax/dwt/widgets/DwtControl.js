@@ -2565,6 +2565,8 @@ function(ev) {
 	mouseEv.setFromDhtmlEvent(ev, obj);
 	if (mouseEv.button == DwtMouseEvent.LEFT) {
 		obj._focusByMouseDownEvent(ev);
+		// reset our event - above call can set type to "blur" (at least in FF)
+		mouseEv.setFromDhtmlEvent(ev, obj);
 	}
 
 	if (obj.__hasToolTipContent()) {
@@ -2926,8 +2928,8 @@ function(ev, eventType, obj, mouseEv) {
 	}
 
 	// By default, we halt event processing. Listeners may override
-	var tn = mouseEv.target.tagName.toLowerCase();
-	if (tn != "input" && tn != "textarea" && tn != "a") {
+	var tn = mouseEv.target.tagName && mouseEv.target.tagName.toLowerCase();
+	if (!tn || (tn != "input" && tn != "textarea" && tn != "a")) {
 		mouseEv._stopPropagation = true;
 		mouseEv._returnValue = false;
 	} else {
