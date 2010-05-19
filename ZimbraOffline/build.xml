@@ -368,7 +368,7 @@
 	<target name="offline-derby-init" if="db-derby">
 		<delete dir="${zimbra.derby.dir}"/>
 		<java classname="org.apache.derby.tools.ij" fork="true" classpathref="offline.class.path" failonerror="true">
-			<arg file="${dist.db.dir}/init.sql" />
+			<arg file="${zimbra.offline.app.dir}/db/init.sql" />
 		</java>
 	</target>
 
@@ -377,7 +377,10 @@
 		<delete dir="${zimbra.sqlite.dir}"/>
 		<mkdir dir="${zimbra.sqlite.dir}"/>
 
-		<exec executable="sqlite3" dir="${zimbra.sqlite.dir}" failonerror="true" input="${dist.db.dir}/init.sql">
+		<echo>SQLITE DIR = ${zimbra.sqlite.dir}</echo>
+	    <echo>SCRIPT = ${zimbra.offline.app.dir}/db/init.sql</echo>
+		<exec executable="sqlite3" dir="${zimbra.sqlite.dir}"
+			failonerror="true" failifexecutionfails="true" input="${zimbra.offline.app.dir}/db/init.sql">
 			<arg line="zimbra.db"/>
 		</exec>
 	</target>
@@ -455,7 +458,7 @@
 			<fileset dir="${build.dir}" includes="*.sql"/>
 			<filterset>
 				<filter token="ZIMBRA_HOME" value=""/>
-				<filter token="ZIMBRA_INSTALL" value="${zimbra.offline.data.dir}/"/>
+				<filter token="ZIMBRA_INSTALL" value="${zimbra.offline.app.dir}/"/>
 			</filterset>
 		</copy>
 
@@ -667,6 +670,7 @@
 				<copy tofile="${zimbra.offline.app.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
 			</then>
 		</if>
+		<antcall target="offline-db-init" />
 	</target>
 
 	<target name="offline-reset-the-world-part-2">
