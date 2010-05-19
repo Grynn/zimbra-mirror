@@ -377,8 +377,6 @@
 		<delete dir="${zimbra.sqlite.dir}"/>
 		<mkdir dir="${zimbra.sqlite.dir}"/>
 
-		<echo>SQLITE DIR = ${zimbra.sqlite.dir}</echo>
-	    <echo>SCRIPT = ${zimbra.offline.app.dir}/db/init.sql</echo>
 		<exec executable="sqlite3" dir="${zimbra.sqlite.dir}"
 			failonerror="true" failifexecutionfails="true" input="${zimbra.offline.app.dir}/db/init.sql">
 			<arg line="zimbra.db"/>
@@ -670,7 +668,6 @@
 				<copy tofile="${zimbra.offline.app.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
 			</then>
 		</if>
-		<antcall target="offline-db-init" />
 	</target>
 
 	<target name="offline-reset-the-world-part-2">
