@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_meebo" version="0.2" description="Displays Meebo control bar at the bottom of the Zimbra interface.">
+<zimlet name="com_zimbra_meebo" version="0.5" label="Meebo" description="Displays Meebo control bar at the bottom of the Zimbra interface.">
   <include>meebo.js</include>
-  <handlerObject>com_zimbra_meebo</handlerObject>
+  <handlerObject>com_zimbra_meebo_HandlerObject</handlerObject>
 </zimlet>

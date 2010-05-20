@@ -11,29 +11,56 @@
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
- *@Author Raja Rao DV
  */
 
-function com_zimbra_meebo() {
+/**
+ * Constructor.
+ * 
+ * @author		Raja Rao
+ */
+function com_zimbra_meebo_HandlerObject() {
 }
-com_zimbra_meebo.prototype = new ZmZimletBase();
-com_zimbra_meebo.prototype.constructor = com_zimbra_meebo;
+com_zimbra_meebo_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_meebo_HandlerObject.prototype.constructor = com_zimbra_meebo_HandlerObject;
 
-//meebo class
-   var Meebo = {exec:function(){Meebo._.push(arguments)},_:[]}; 
-   Meebo.disableSharePageButton=true;
+/**
+ * Simplify handler object
+ *
+ */
+var MeeboZimlet = com_zimbra_meebo_HandlerObject;
 
-com_zimbra_meebo.prototype.init =
+/**
+ * Defines the "load" interval (milliseconds).
+ */
+MeeboZimlet.LOAD_INTERVAL = 5000;
+/**
+ * Defines the "load" timeout (milliseconds).
+ */
+MeeboZimlet.LOAD_TIMEOUT = 60000;
+
+/**
+ * Meebo class
+ */
+var Meebo = {exec:function(){Meebo._.push(arguments)},_:[]}; 
+Meebo.disableSharePageButton=true;
+
+/**
+ * Initializes the zimlet.
+ */
+MeeboZimlet.prototype.init =
 function() {
 	this._addResizeHandler();
 	this.callCount = 0;
 	this._createMeeboFrame();
-	//meebo object takes some time to load, we check every 5 seconds for 60 secs before giving up
-	 this.timer = setInterval(AjxCallback.simpleClosure(this._showMeebo, this), 5000);	
+	
+	this.timer = setInterval(AjxCallback.simpleClosure(this._showMeebo, this), MeeboZimlet.LOAD_INTERVAL);	
  };
 
-
-com_zimbra_meebo.prototype._createMeeboFrame =
+/**
+ * Creates the Meebo iframe.
+ * 
+ */
+ MeeboZimlet.prototype._createMeeboFrame =
 function() {
 	var network = "zimbra";
 	var el = document.createElement("div");
@@ -46,30 +73,39 @@ function() {
 	document.body.appendChild(el);
 };
 
-com_zimbra_meebo.prototype._showMeebo =
+/**
+ * Shows the meebo iframe.
+ * 
+ */
+MeeboZimlet.prototype._showMeebo =
 function() {
 	this.callCount++;
-	if(this.callCount == 10) {//after 60 seconds, stop checking
+	if (this.callCount == (MeeboZimlet.LOAD_TIMEOUT/MeeboZimlet.LOAD_INTERVAL) ) { //after 60 seconds, stop checking
 		clearInterval(this.timer);
-		appCtxt.getAppController().setStatusMsg("Could not load Meebo bar even after 60 secs", ZmStatusView.LEVEL_WARNING);
+		var errMsg = AjxMessageFormat.format(this.getMessage("MeeboZimlet_error_loadBar"), MeeboZimlet.LOAD_TIMEOUT/1000);
+		appCtxt.getAppController().setStatusMsg(errMsg, ZmStatusView.LEVEL_WARNING);
 	}
 	if(Meebo) {
 		Meebo.unhide(1);
 		clearInterval(this.timer);
 	}
-
-
 };
 
-
-com_zimbra_meebo.prototype._addResizeHandler =
+/**
+ * Adds the resize handler.
+ * 
+ */
+MeeboZimlet.prototype._addResizeHandler =
 function() {
 	this._view = appCtxt.getCurrentView();
 	this._view.addControlListener(new AjxListener(this, this._resizeHandler));//add resize handler
-
 };
 
-com_zimbra_meebo.prototype._resizeHandler =
+/**
+ * Resize handler.
+ * 
+ */
+MeeboZimlet.prototype._resizeHandler =
 function(ev) {
 	var el = appCtxt.getShell().getHtmlElement();
 	var bodyHeight = el.offsetParent.offsetHeight;
