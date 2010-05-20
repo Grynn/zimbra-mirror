@@ -40,7 +40,7 @@ function (str, callback){
 		params.controller = ZaApp.getInstance().getCurrentController () ;
 		params.showBusy = true;
 		params.busyMsg = ZaMsg.BUSY_SEARCHING;
-		params.skipCallbackIfCancelled = true; 
+		params.skipCallbackIfCancelled = false; 
 		params.busyId = busyId;		
 		ZaSearch.searchDirectory(params);
 	}	catch (ex){

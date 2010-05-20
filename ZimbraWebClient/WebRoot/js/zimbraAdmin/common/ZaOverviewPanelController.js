@@ -115,7 +115,7 @@ function (ev) {
 
 ZaOverviewPanelController.prototype.searchDomains = function() {
 	var busyId = Dwt.getNextId () ;
-	var callback = new AjxCallback(this, this.domainSearchCallback,{busyId:busyId});
+	//var callback = new AjxCallback(this, this.domainSearchCallback,{busyId:busyId});
 	var domainListController = ZaApp.getInstance().getDomainListController ();
 	
 	domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
@@ -126,38 +126,27 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 			offset:"0",
 			sortAscending:"1",
 			limit:ZaDomain.MAXSEARCHRESULTS,
-			callback:callback,
-			controller: this,
-			showBusy:true,
-			busyId:busyId,
-			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
-			skipCallbackIfCancelled:false,
 			attrs:[ZaDomain.A_domainName,ZaItem.A_zimbraId]			
 	}
-	ZaSearch.searchDirectory(searchParams);
+	var resp = ZaSearch.searchDirectory(searchParams);
+	this.domainSearchCallback(searchParams, resp);
 }
 
 ZaOverviewPanelController.prototype.domainSearchCallback = 
 function (params,resp) {
 	try {
-		if(params.busyId)
-			ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
 				
 		if(!resp) {
 			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaOverviewPanelController.prototype.domainSearchCallback"));
 		}
-		if(resp.isException()) {
-			ZaSearch.handleTooManyResultsException(resp.getException(), "ZaOverviewPanelController.prototype.domainSearchCallback");
-		} else {
-			ZaSearch.TOO_MANY_RESULTS_FLAG = false;
-			var response = resp.getResponse().Body.SearchDirectoryResponse;
-			var list = new ZaItemList(ZaDomain);	
-			list.loadFromJS(response);
-			if(response.more) {
-				ZaSettings.HAVE_MORE_DOMAINS = true;
-			}
-			this.updateDomainList(list);
+		ZaSearch.TOO_MANY_RESULTS_FLAG = false;
+		var response = resp.Body.SearchDirectoryResponse;
+		var list = new ZaItemList(ZaDomain);	
+		list.loadFromJS(response);
+		if(response.more) {
+			ZaSettings.HAVE_MORE_DOMAINS = true;
 		}
+		this.updateDomainList(list);
 	} catch (ex) {
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
 			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaOverviewPanelController.prototype.searchCallback");	
@@ -655,7 +644,7 @@ function(ev) {
 				
 			}else if (ev.detail == DwtTree.ITEM_ACTIONED) {
 				if (treeItemType == ZaZimbraAdmin._SEARCH_LIST_VIEW) { //saved search item is actioned.
-					if (AjxEnv.hasFirebug) console.debug("Saved Search tree Item is actioned.") ;
+					//if (AjxEnv.hasFirebug) console.debug("Saved Search tree Item is actioned.") ;
 					eventHandler.call(this, ev) ;
 				}	
 			}
@@ -796,7 +785,7 @@ ZaOverviewPanelController.searchListTreeListener = function (ev) {
 	var name = ev.item.getData("name") ;
 	var query = ev.item.getData("query");
 	if (ev.detail == DwtTree.ITEM_SELECTED) {
-		if (AjxEnv.hasFirebug) console.debug("Run the saved search ...") ;
+		//if (AjxEnv.hasFirebug) console.debug("Run the saved search ...") ;
 		searchField.selectSavedSearch(name, query);
 	}else if (ev.detail == DwtTree.ITEM_ACTIONED){
 		searchField._currentSavedSearch = {name: name, query: query};

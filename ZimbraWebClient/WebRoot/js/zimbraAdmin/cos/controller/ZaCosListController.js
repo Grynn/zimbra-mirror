@@ -52,7 +52,7 @@ ZaCosListController.prototype.show = function (doPush,openInNewTab) {
 			showBusy:true,
 			busyId:busyId,
 			busyMsg:ZaMsg.BUSY_SEARCHING_COSES,
-			skipCallbackIfCancelled:true			
+			skipCallbackIfCancelled:false			
 	}
 	ZaSearch.searchDirectory(searchParams);
 }

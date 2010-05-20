@@ -764,7 +764,7 @@ function () {
         var currentSettingObj = this.getForm().getInstance() ;
         var defaultValues = currentSettingObj._defaultValues ; //it could be the global settings for domain
 
-       if (AjxEnv.hasFirebug) console.log("Checking the interop settings ...") ;
+       //if (AjxEnv.hasFirebug) console.log("Checking the interop settings ...") ;
        var soapCmd  = "CheckExchangeAuthRequest";
        var soapDoc = AjxSoapDoc.create(soapCmd, ZaZimbraAdmin.URN, null);
        var authEl = soapDoc.set("auth", "") ;

@@ -143,15 +143,12 @@ function (value, event, form) {
 			sortBy: ZaDomain.A_domainName,
 			attrs: [ZaDomain.A_domainName],
 			applyCos: "0",
-			//offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
-			//sortAscending:"0",
-			//limit: 20,
 			callback:callback,
 			controller: ZaApp.getInstance().getCurrentController(),
 			showBusy:true,
 			busyId:busyId,
 			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
-			skipCallbackIfCancelled:true			
+			skipCallbackIfCancelled:false			
 	}
 	ZaSearch.searchDirectory(searchParams);
 }

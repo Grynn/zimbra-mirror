@@ -201,9 +201,9 @@ ZaSearch.TOO_MANY_RESULTS_FLAG = false ; //control the no result text of the lis
 ZaSearch.handleTooManyResultsException = function (ex, from) {
 	if (ex.code == ZmCsfeException.TOO_MANY_SEARCH_RESULTS) {
 		//supress the result
-		if (AjxEnv.hasFirebug) {
+		/*if (AjxEnv.hasFirebug) {
 			console.log("Suppressed Exception: " + ex.msg + " from: " + from );
-		}
+		}*/
 		ZaSearch.TOO_MANY_RESULTS_FLAG = true ;
 	}else{
 		throw (ex) ;
@@ -298,7 +298,7 @@ ZaSearch.prototype.dynSelectSearch = function (callArgs) {
 		params.showBusy = true;
 		params.busyId = busyId;
 		params.busyMsg = ZaMsg.BUSY_SEARCHING;
-		params.skipCallbackIfCancelled = true;
+		params.skipCallbackIfCancelled = false;
 		if(callArgs.domain)
 			params.domain = callArgs.domain;
 			 		
@@ -330,7 +330,7 @@ ZaSearch.prototype.dynSelectSearchGroups = function (callArgs) {
 		params.busyId = busyId;
 		params.showBusy = true;
 		params.busyMsg = ZaMsg.BUSY_SEARCHING;
-		params.skipCallbackIfCancelled = true; 		
+		params.skipCallbackIfCancelled = false; 		
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchGroups");		
@@ -357,7 +357,7 @@ ZaSearch.prototype.dynSelectSearchDomains = function (callArgs) {
 		params.showBusy = true;
 		params.busyId = busyId;
 		params.busyMsg = ZaMsg.BUSY_SEARCHING_DOMAINS;
-		params.skipCallbackIfCancelled = true; 		
+		params.skipCallbackIfCancelled = false; 		
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchDomains");		
@@ -384,7 +384,7 @@ ZaSearch.prototype.dynSelectSearchCoses = function (callArgs) {
 		params.showBusy = true;
 		params.busyId = busyId;
 		params.busyMsg = ZaMsg.BUSY_SEARCHING_COSES;
-		params.skipCallbackIfCancelled = true;		
+		params.skipCallbackIfCancelled = false;		
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchCoses");		
@@ -752,7 +752,7 @@ function (searchNameArr, callback) {
 ZaSearch.updateSavedSearch =
 function (resp) {
 
-	if (AjxEnv.hasFirebug) console.debug("Update Saved Search ... ");
+	//if (AjxEnv.hasFirebug) console.debug("Update Saved Search ... ");
 	ZaSearch.SAVED_SEARCHES = [] ;
 	if (resp != null) {
         var respObj = resp._data || resp ;
@@ -777,7 +777,7 @@ function () {
         var currentSavedSearches = ZaSearch.getSavedSearches().Body.GetAdminSavedSearchesResponse.search;
 
         if ((! currentSavedSearches) && (ZaSearchField.canSaveSearch())){//load the predefined searches
-            if (AjxEnv.hasFirebug) console.log("Load the predefined saved searches ...") ;
+            //if (AjxEnv.hasFirebug) console.log("Load the predefined saved searches ...") ;
             var savedSearchArr = [] ;
             //if (!ZaSettings.isDomainAdmin) { //admin only searches
                 for (var m=0; m < ZaSearch.getPredefinedSavedSearchesForAdminOnly().length; m++){

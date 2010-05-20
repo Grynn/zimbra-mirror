@@ -72,7 +72,7 @@ function (offset) {
 
 ZaServerSessionStatsPage.prototype._createHtml =
 function () {
-	if (AjxEnv.hasFirebug) console.debug("Create the session stats page") ;
+	//if (AjxEnv.hasFirebug) console.debug("Create the session stats page") ;
 	DwtTabViewPage.prototype._createHtml.call(this);
 	//this.getHtmlElement().innerHTML = "Session Information" ;
 }
@@ -84,7 +84,7 @@ function () {
  */
 ZaServerSessionStatsPage.prototype.showMe = 
 function (refresh){
-	if (AjxEnv.hasFirebug) console.debug("show the session stats page") ;
+	//if (AjxEnv.hasFirebug) console.debug("show the session stats page") ;
 	
 	if (!this._rendered) {
 		DwtTabViewPage.prototype.showMe.call(this);
@@ -259,7 +259,7 @@ function (params) {
 
 ZaServerSessionStatsPage.prototype.getSessionsCallback =
 function (reqParams, resp) {
-	if (AjxEnv.hasFirebug) console.debug("GetSessionCallback is called. And process the response now ...");
+	//if (AjxEnv.hasFirebug) console.debug("GetSessionCallback is called. And process the response now ...");
 	if (resp._data.Body) {
 		var sessionStats = resp._data.Body.GetSessionsResponse ;
 		var instance = this._localXForm.getInstance();
@@ -329,7 +329,7 @@ function ( sessResp, sessList) {
 
 ZaServerSessionStatsPage.prototype.dumpSessionCallback =
 function (resp) {
-	if (AjxEnv.hasFirebug) console.debug("DumpSessionCallback is called. And process the response now ...");
+	//if (AjxEnv.hasFirebug) console.debug("DumpSessionCallback is called. And process the response now ...");
 	var sessionStats = resp._data.Body.DumpSessionsResponse ;
 	this._activeSessions = sessionStats.activeSessions ;
 	//this._activeAccounts = sessionStats.activeAccounts ;
@@ -492,7 +492,7 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 
 ZaServerSessionStatsPage.tabChanged =
 function (value, event, form) {
-	if (AjxEnv.hasFirebug) console.log("The tabs in the session page is switched. Update the toolbar ...") ; 	
+	//if (AjxEnv.hasFirebug) console.log("The tabs in the session page is switched. Update the toolbar ...") ; 	
 	//set the instance value
 	this.setInstanceValue (value) ;
 	form.parent.updateToolbar(value, false) ;
@@ -629,7 +629,7 @@ ZaServerSessionListView.prototype._setNoResultsHtml = function() {
 ZaServerSessionListView.prototype._sortColumn = 
 function(columnItem, bSortAsc) {
 	var sortBy = columnItem._sortField + (bSortAsc ? "Asc": "Desc") ;
-	if (AjxEnv.hasFirebug) console.log("SortBy: " + sortBy) ;
+	//if (AjxEnv.hasFirebug) console.log("SortBy: " + sortBy) ;
 	try {
 		var controller = ZaApp.getInstance().getCurrentController() ;
 		var sessStatsPage = controller._contentView._sessionPage ;

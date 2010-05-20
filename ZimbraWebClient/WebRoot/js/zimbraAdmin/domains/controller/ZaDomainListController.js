@@ -51,7 +51,7 @@ ZaDomainListController.prototype.show = function (doPush,openInNewTab) {
 			showBusy:true,
 			busyId:busyId,
 			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
-			skipCallbackIfCancelled:true,
+			skipCallbackIfCancelled:false,
 			attrs:[ZaDomain.A_description, ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraI]		
 	}
 	ZaSearch.searchDirectory(searchParams);

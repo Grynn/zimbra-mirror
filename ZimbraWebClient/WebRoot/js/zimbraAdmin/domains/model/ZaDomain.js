@@ -2068,7 +2068,7 @@ function (domainName) {
 				showBusy:true,
 				busyId:busyId,
 				busyMsg:ZaMsg.BUSY_SEARCHING,
-				skipCallbackIfCancelled:true                
+				skipCallbackIfCancelled:false                
         }
         ZaSearch.searchDirectory(searchParams);
     }else {

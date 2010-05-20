@@ -666,7 +666,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 							params.showBusy = true;
 							params.busyMsg = ZaMsg.BUSY_SEARCHING;
 							params.busyId = busyId;
-							params.skipCallbackIfCancelled = true; 							
+							params.skipCallbackIfCancelled = false; 							
 							ZaSearch.searchDirectory(params);
 						} catch (ex) {
 							this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataFetcher");		

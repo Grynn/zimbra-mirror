@@ -25,14 +25,14 @@ ZaRequestMgr.invoke = function (csfeParams, params) {
 		controller._shell.setBusyDialogText(params.busyMsg != null ? params.busyMsg :ZaMsg.splashScreenLoading);
 		controller._currentRequest = command ; //_currentRequest obj will be used in the cancel operation
 		var cancelCallback = new AjxCallback(controller, controller.cancelBusyOverlay, params );
-		if (AjxEnv.hasFirebug) console.log("Set busy for dialog " + id) ;
+		//if (AjxEnv.hasFirebug) console.log("Set busy for dialog " + id) ;
 		controller._shell.setBusy(true, id, true, delay, cancelCallback);
 	}
 	
 	try {
 		var response = command.invoke(csfeParams) ;
 		if (!csfeParams.asyncMode && controller) {
-			if (AjxEnv.hasFirebug) console.log("Clear busy dialog " + id) ;
+			//if (AjxEnv.hasFirebug) console.log("Clear busy dialog " + id) ;
 			controller._shell.setBusy(false, id, false); //remove the busy overlay
 		}
 		if (! csfeParams.asyncMode)	{

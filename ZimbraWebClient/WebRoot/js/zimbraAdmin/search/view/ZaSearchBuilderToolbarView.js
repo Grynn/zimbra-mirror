@@ -109,7 +109,7 @@ function (event) {
 
 ZaSearchBuilderToolbarView.prototype.advancedSelectHndlr =
 function (event) {
-	if (AjxEnv.hasFirebug) console.log("Advanced Attributes search builder button is clicked.") ;
+	//if (AjxEnv.hasFirebug) console.log("Advanced Attributes search builder button is clicked.") ;
 	this._controller.addOptionView (ZaSearchOption.ADVANCED_ID) ;
 	//this._controller.listAll
 }

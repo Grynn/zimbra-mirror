@@ -106,7 +106,7 @@ function(domain) {
 		return;
 	if(!DBG)
 		DBG = new AjxDebug(AjxDebug.NONE, null, false);
-	AjxEnv.hasFirebug = (AjxEnv.isFirefox && (typeof (console) != typeof (_UNDEFINED_)) && DBG && (DBG.getDebugLevel() > 0)) ; 
+	//AjxEnv.hasFirebug = (AjxEnv.isFirefox && (typeof (console) != typeof (_UNDEFINED_)) && DBG && (DBG.getDebugLevel() > 0)) ; 
 		
 	ZmCsfeCommand.setServerUri(location.protocol+"//" + domain + ZaSettings.CSFE_SERVER_URI);
 	ZmCsfeCommand.setCookieName(ZaZimbraAdmin._COOKIE_NAME);
@@ -342,14 +342,13 @@ function() {
 }
 
 ZaZimbraAdmin.reload_msg = function () {
-    if (AjxEnv.hasFirebug)
-        console.log("Reloading the message ...") ;
+    //if (AjxEnv.hasFirebug) console.log("Reloading the message ...") ;
     var includes = [] ;
     includes.push ( [appContextPath , "/res/" , "I18nMsg,AjxMsg,ZMsg,ZaMsg,AjxKeys" , ".js?v=" ,
                         appVers , ZaZimbraAdmin.LOCALE_QS].join("") );
 
     //the dynamic script load is asynchronous, may need a callback to make sure all the messages are actually loaded
-    if (AjxEnv.hasFirebug) console.log("Reload the message file: " + includes.toString()) ;
+    //if (AjxEnv.hasFirebug) console.log("Reload the message file: " + includes.toString()) ;
 
     //reinitialize the AjxFormat after the message files are loaded
     var callback = new AjxCallback (AjxFormat.initialize); 
@@ -655,8 +654,7 @@ function(staticFunc, icon, lbl, max_lbl_length) {
 
 ZaZimbraAdmin._killSplash =
 function() {
-    if (AjxEnv.hasFirebug) 
-        console.log("Killing splash window now ...") ;
+    //if (AjxEnv.hasFirebug) console.log("Killing splash window now ...") ;
     if(ZaZimbraAdmin._splashScreen)
 		ZaZimbraAdmin._splashScreen.setVisible(false);
 }

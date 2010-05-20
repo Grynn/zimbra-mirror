@@ -71,7 +71,7 @@ ZaSearchListController.prototype.show = function (doPush) {
 			showBusy:true,
 			busyId:busyId,
 			busyMsg:ZaMsg.BUSY_SEARCHING,
-			skipCallbackIfCancelled:true			
+			skipCallbackIfCancelled:false			
 	}
 	ZaSearch.searchDirectory(searchParams);
 }
@@ -188,7 +188,7 @@ function(params) {
 			showBusy:true,
 			busyId:busyId,
 			busyMsg:ZaMsg.BUSY_SEARCHING,
-			skipCallbackIfCancelled:true,
+			skipCallbackIfCancelled:false,
 			sortBy:params.sortBy,
 			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
 			sortAscending:this._currentSortOrder,

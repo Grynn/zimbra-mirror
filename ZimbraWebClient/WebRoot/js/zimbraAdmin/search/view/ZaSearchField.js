@@ -182,10 +182,10 @@ function (evt) {
 	var form =this.getForm() ;
 	var searchField = form.parent ;
 	var query = form.getItemsById(ZaSearch.A_query)[0].getElement().value ;
-	if (AjxEnv.hasFirebug) {
+	/*if (AjxEnv.hasFirebug) {
 		console.log("Save current query: " + query) ;
 		//console.log("Current Search types = " + searchField.getSearchTypes()) ;
-	}
+	}*/
 	if (query && query.length > 0) {
 		searchField.getSaveAndEditSeachDialog().show(null, query) ;
 	}
@@ -203,7 +203,7 @@ function() {
 
 ZaSearchField.prototype.showSavedSearchButtonHndlr =
 function (evt) {
-	if (AjxEnv.hasFirebug) console.log("Show saved Searches") ;
+	//if (AjxEnv.hasFirebug) console.log("Show saved Searches") ;
 	var searchField = this.getForm().parent ;
 	searchField.showSavedSearchMenus() ;
 }
@@ -225,7 +225,7 @@ function () {
 
 ZaSearchField.prototype.popupSavedSearch =
 function (resp, searchName) {
-	if (AjxEnv.hasFirebug) console.debug("popup saved searches ...") ;
+	//if (AjxEnv.hasFirebug) console.debug("popup saved searches ...") ;
 	
 	if (resp){
 		ZaSearch.updateSavedSearch (resp);
@@ -266,7 +266,7 @@ function () {
 
 ZaSearchField.prototype.selectSavedSearch =
 function (name, query, event){
-	if (AjxEnv.hasFirebug) console.debug("Item " + name + " is selected - " + query);
+	//if (AjxEnv.hasFirebug) console.debug("Item " + name + " is selected - " + query);
 	this.getSearchFieldElement().value = ZaSearch.parseSavedSearchQuery(query) ;
 	this.invokeCallback() ; //do the real search call (simulate the search button click)
 }
@@ -290,26 +290,26 @@ ZaSearchField.prototype._savedSearchItemMouseUpListener =
 function(name, query, ev) {
 	this.getSavedSearchActionMenu().popdown();
 	if (ev.button == DwtMouseEvent.RIGHT){
-		if (AjxEnv.hasFirebug) console.debug("Right Button of Mouse Up: Item " + name + " is selected - " + query);
+		//if (AjxEnv.hasFirebug) console.debug("Right Button of Mouse Up: Item " + name + " is selected - " + query);
 		
 		this._currentSavedSearch = {name: name, query: query};
-		if (AjxEnv.hasFirebug) console.debug("Saved Search Menu ZIndex = " + this._savedSearchMenu.getZIndex());
+		//if (AjxEnv.hasFirebug) console.debug("Saved Search Menu ZIndex = " + this._savedSearchMenu.getZIndex());
 		this.getSavedSearchActionMenu().popup(0, ev.docX, ev.docY);
 		this.getSavedSearchActionMenu().setZIndex(this._savedSearchMenu.getZIndex() + 1) ;
-		if (AjxEnv.hasFirebug) console.debug("Saved Search Action Menu ZIndex = " + this.getSavedSearchActionMenu().getZIndex());
+		//if (AjxEnv.hasFirebug) console.debug("Saved Search Action Menu ZIndex = " + this.getSavedSearchActionMenu().getZIndex());
 	}
 }
 
 ZaSearchField.prototype._editSavedSearchListener =
 function (ev) {
-	if (AjxEnv.hasFirebug) console.debug("Edit a saved search item");
+	//if (AjxEnv.hasFirebug) console.debug("Edit a saved search item");
 	this._savedSearchActionMenu.popdown();
 	this.getSaveAndEditSeachDialog().show(this._currentSavedSearch.name, this._currentSavedSearch.query);
 }
 
 ZaSearchField.prototype._deleteSavedSearchListener =
 function (ev) {
-	if (AjxEnv.hasFirebug) console.debug("Delete a saved search item");
+	//if (AjxEnv.hasFirebug) console.debug("Delete a saved search item");
 	this._savedSearchActionMenu.popdown();
 	ZaSearch._savedSearchToBeUpdated = true ;
 	var callback = new AjxCallback (this, this.modifySavedSearchCallback) ;
@@ -647,7 +647,7 @@ ZaSaveSearchDialog.prototype.constructor = ZaSaveSearchDialog ;
 
 ZaSaveSearchDialog.prototype.okCallback =
 function() {
-	if (AjxEnv.hasFirebug) console.debug("Ok button of saved search dialog is clicked.");
+	//if (AjxEnv.hasFirebug) console.debug("Ok button of saved search dialog is clicked.");
 	var savedSearchArr = [] ;
 	var nameValue = this._nameInput.value;
 	var queryValue =  this._queryInput.value ;

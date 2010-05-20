@@ -139,9 +139,9 @@ function(appCtxt) {
 				curController.show(currentServer,false);				
 			}
 			
-			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+			/*if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 				this.searchDomains("");
-			}		
+			}	*/	
 		} else {
 			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW]) {
 				ZaController.prototype._showAccountsView.call(ZaItem.ACCOUNT,null);
@@ -490,7 +490,7 @@ ZaApp.prototype.searchDomains = function(query) {
 			showBusy:true,
 			busyId:busyId,
 			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
-			skipCallbackIfCancelled:true,
+			skipCallbackIfCancelled:false,
 			attrs:[ZaDomain.A_domainName, ZaItem.A_zimbraId]			
 	}
 	ZaSearch.searchDirectory(searchParams);
@@ -511,7 +511,7 @@ ZaApp.prototype.scheduledSearchDomains = function(domainItem) {
 			showBusy:true,
 			busyId:busyId,
 			busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
-			skipCallbackIfCancelled:true,
+			skipCallbackIfCancelled:false,
 			attrs:[ZaDomain.A_domainName, ZaItem.A_zimbraId]			
 	}
 	ZaSearch.searchDirectory(searchParams);
