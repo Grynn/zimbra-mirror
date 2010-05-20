@@ -29,6 +29,7 @@ public class BulkProvisionException extends ServiceException {
     public static final String BP_IMPORT_THREAD_NOT_INITIALIZED = "bulkprovision.BP_IMPORT_THREAD_NOT_INITIALIZED";
     public static final String BP_NO_ACCOUNTS_TO_IMPORT = "bulkprovision.BP_NO_ACCOUNTS_TO_IMPORT";
     public static final String BP_IMPORT_ALREADY_RUNNING = "bulkprovision.BP_IMPORT_ALREADY_RUNNING";
+    public static final String BP_IMPORT_TOO_MANY_FAILURES = "bulkprovision.BP_IMPORT_TOO_MANY_FAILURES";
 
     private BulkProvisionException(String message, String code, boolean isReceiversFault) {
         super(message, code, isReceiversFault);
@@ -52,5 +53,9 @@ public class BulkProvisionException extends ServiceException {
     
     public static BulkProvisionException BP_IMPORT_ALREADY_RUNNING () {
         return new BulkProvisionException("A bulk provisioning task is already running", BP_IMPORT_ALREADY_RUNNING, SENDERS_FAULT);
+    }
+    
+    public static BulkProvisionException BP_IMPORT_TOO_MANY_FAILURES (int failNum) {
+        return new BulkProvisionException(String.format("Bulk provisioning task encountered too many errors. Failed to import at least %d accounts",failNum), BP_IMPORT_TOO_MANY_FAILURES, SENDERS_FAULT);
     }    
 }

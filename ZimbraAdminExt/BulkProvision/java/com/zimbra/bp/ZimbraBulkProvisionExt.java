@@ -28,6 +28,13 @@ import com.zimbra.cs.extension.ZimbraExtension;
 public class ZimbraBulkProvisionExt implements ZimbraExtension {
 
     public static final String EXTENSION_NAME_BULKPROVISION = "com_zimbra_bulkprovision";
+	public static final String FILE_FORMAT_BULK_LDAP = "ldap";
+	public static final String A_password = "password" ;
+	public static final String A_generatePassword = "generatePassword";
+	public static final String A_genPasswordLength = "genPasswordLength";
+	public static final String A_fileFormat = "fileFormat";
+	public static final String A_maxResults = "maxResults";
+	public static final String A_setMustChangePwd = "setMustChangePwd";
 
     public void destroy() {
     }

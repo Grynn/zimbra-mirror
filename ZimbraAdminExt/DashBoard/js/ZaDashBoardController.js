@@ -252,13 +252,22 @@ ZaDashBoardController.prototype.openSettingsView = function () {
 
 ZaDashBoardController.prototype.openBulkProvisionDialog = function () {
     try {
-		if(!ZaApp.getInstance().dialogs["bulkProvisionWizard"]) {
-			ZaApp.getInstance().dialogs["bulkProvisionWizard"] = new ZaBulkProvisionWizard(DwtShell.getShell(window));
-		}
-		ZaApp.getInstance().dialogs["bulkProvisionWizard"].setObject(new ZaBulkProvision());
-		ZaApp.getInstance().dialogs["bulkProvisionWizard"].popup();
+		var bp = new ZaBulkProvision();
+		bp[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_IMPORT_LDAP;
+		bp[ZaBulkProvision.A2_generatedFileLink] = null;
+		bp[ZaBulkProvision.A2_maxResults] = 0;
+		bp[ZaBulkProvision.A2_GalLdapFilter] = "(objectClass=organizationalPerson)";
+		bp[ZaBulkProvision.A2_generatePassword] = "TRUE";
+		bp[ZaBulkProvision.A2_genPasswordLength] = 8;
+//		if(!ZaApp.getInstance().dialogs["importAccountsWizard"]) {
+			//ZaApp.getInstance().dialogs["importAccountsWizard"] = new ZaBulkProvisionWizard(DwtShell.getShell(window));
+		ZaApp.getInstance().dialogs["importAccountsWizard"] = new ZaBulkImportXWizard(DwtShell.getShell(window),bp);
+	//	}
+		
+		ZaApp.getInstance().dialogs["importAccountsWizard"].setObject(bp);
+		ZaApp.getInstance().dialogs["importAccountsWizard"].popup();
 	} catch (ex) {
-		this._handleException(ex, "ZaDashBoardController.prototype._bulkProvisionListener", null, false);
+		this._handleException(ex, "ZaDashBoardController.prototype.openBulkProvisionDialog", null, false);
 	}
 };
 

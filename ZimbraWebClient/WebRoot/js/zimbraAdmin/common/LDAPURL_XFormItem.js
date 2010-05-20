@@ -39,7 +39,7 @@ LDAPURL_XFormItem.prototype.initializeItems = function () {
 
 
     var instance = this.getForm().getInstance () ;
-    if ( instance [ZaDomain.A2_allowClearTextLDAPAuth] == "FALSE" )  {
+    if (instance && instance [ZaDomain.A2_allowClearTextLDAPAuth] == "FALSE" )  {
         //force SSL  by default
         this._protocolPart = "ldaps://";
 	    this._portPart = this.defSSLPort;

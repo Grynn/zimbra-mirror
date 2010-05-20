@@ -36,37 +36,39 @@ import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.cs.service.admin.AdminService;
 import com.zimbra.cs.service.admin.AutoCompleteGal;
 import com.zimbra.soap.ZimbraSoapContext;
-
+import com.zimbra.cs.service.admin.AdminFileDownload;
 public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	
-	public static final String A_password = "password" ;
-	public static final String A_generatePassword = "generatePassword";
-	public static final String A_genPasswordLength = "genPasswordLength";
-	public static final String A_fileFormat = "fileFormat";
-	
-	private static final String E_filePath = "filePath";
+	private static final String E_fileToken = "fileToken";
 	private static final String E_ZCSImport = "ZCSImport";
+	private static final String E_Options = "Options";
 	private static final String E_ImportUsers = "ImportUsers";
 	private static final String E_User = "User";
+	private static final String E_ExchangeMail = "ExchangeMail";
+	
+	private static final String E_importMails = "importMails";
+	private static final String E_importContacts = "importContacts";
+	private static final String E_importTasks = "importTasks";
+	private static final String E_importCalendar = "importCalendar";
+	private static final String E_importDeletedItems = "importDeletedItems";
+	private static final String E_importJunk = "importJunk";
+	private static final String E_ignorePreviouslyImported = "ignorePreviouslyImported";
+	private static final String E_InvalidSSLOk = "InvalidSSLOk";
+	
 	
 	private static final int DEFAULT_PWD_LENGTH = 8;
-	private static final String FILE_FORMAT_MIGRATION_XML = "migrationxml";
-	private static final String FILE_FORMAT_BULK_XML = "bulkxml";
-	private static final String FILE_FORMAT_BULK_CSV = "csv";
 	public Element handle(Element request, Map<String, Object> context) throws ServiceException {
 		ZimbraSoapContext zsc = getZimbraSoapContext(context);
 		Map attrs = AdminService.getAttrs(request, true);
 		String password = null;
-		Element elPassword = request.getOptionalElement(A_password);
+		Element elPassword = request.getOptionalElement(ZimbraBulkProvisionExt.A_password);
 		if(elPassword != null) {
 			password = elPassword.getTextTrim();
 		}
-		String generatePwd = request.getElement(A_generatePassword).getTextTrim();
-		Element elPasswordLength = request.getOptionalElement(A_genPasswordLength);
-		String fileFormat = request.getElement(A_fileFormat).getTextTrim();
-		if(fileFormat == null || !(fileFormat.equalsIgnoreCase(FILE_FORMAT_BULK_CSV) || fileFormat.equalsIgnoreCase(FILE_FORMAT_BULK_XML))) {
-			fileFormat = FILE_FORMAT_BULK_CSV;
-		}
+		String generatePwd = request.getElement(ZimbraBulkProvisionExt.A_generatePassword).getTextTrim();
+		Element elPasswordLength = request.getOptionalElement(ZimbraBulkProvisionExt.A_genPasswordLength);
+		String fileFormat = request.getElement(ZimbraBulkProvisionExt.A_fileFormat).getTextTrim();
+
 		int genPwdLength = 0;
 		if(generatePwd == null) {
 			generatePwd = "false";			
@@ -80,18 +82,22 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 				genPwdLength = DEFAULT_PWD_LENGTH;
 			}
 		}
-		
+		int maxResults = 0;
+		Element elMaxResults = request.getOptionalElement(ZimbraBulkProvisionExt.A_maxResults);
+		if(elMaxResults != null) {
+			maxResults = Integer.parseInt(elMaxResults.getTextTrim());
+		}
 		GalParams.ExternalGalParams galParams = new GalParams.ExternalGalParams(attrs, GalOp.search);
 		Element response = zsc.createElement(ZimbraBulkProvisionService.GENERATE_BULK_PROV_FROM_LDAP_RESPONSE);
 		String fileToken = Double.toString(Math.random()*100);
         String[] galAttrs = Provisioning.getInstance().getConfig().getMultiAttr(Provisioning.A_zimbraGalLdapAttrMap);
         LdapGalMapRules rules = new LdapGalMapRules(galAttrs);
 		try {
-			SearchGalResult result = LdapUtil.searchLdapGal(galParams, GalOp.search, "*", 0, rules, null, null);
+			SearchGalResult result = LdapUtil.searchLdapGal(galParams, GalOp.search, "*", maxResults, rules, null, null);
 			List<GalContact> entries = result.getMatches();
             if (entries != null) {
             	String outFileName = null;
-            	if(fileFormat.equalsIgnoreCase(FILE_FORMAT_BULK_CSV)) {
+            	if(AdminFileDownload.FILE_FORMAT_BULK_CSV.equalsIgnoreCase(fileFormat)) {
             		outFileName = String.format("%s%s_bulk_%s_%s.csv", LC.zimbra_tmp_directory.value(),File.separator,zsc.getAuthtokenAccountId(),fileToken);
             		FileOutputStream out = new FileOutputStream (outFileName) ;
             		CSVWriter writer = new CSVWriter(new OutputStreamWriter (out) ) ;	            	
@@ -110,8 +116,8 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	                	}
 	                	writer.writeNext(line);
 	            	}
-	                writer.close();	                	//AutoCompleteGal.addContact(response, entry);
-                } else if (fileFormat.equalsIgnoreCase(FILE_FORMAT_BULK_XML)) {
+	                writer.close();
+                } else if (AdminFileDownload.FILE_FORMAT_BULK_XML.equalsIgnoreCase(fileFormat)) {
                 	outFileName = String.format("%s%s_bulk_%s_%s.xml", LC.zimbra_tmp_directory.value(),File.separator,zsc.getAuthtokenAccountId(),fileToken);
                 	FileWriter fileWriter = new FileWriter(outFileName);
                 	XMLWriter xw = new XMLWriter(fileWriter, org.dom4j.io.OutputFormat.createPrettyPrint());
@@ -153,7 +159,7 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                     		eLastName.setText(lastName);
                     	}
                     	eUser.add(eLastName);
-                    	org.dom4j.Element ePassword = DocumentHelper.createElement(A_password);
+                    	org.dom4j.Element ePassword = DocumentHelper.createElement(ZimbraBulkProvisionExt.A_password);
 	                	if(password != null) {
 	                    	ePassword.setText(password);
 	                	} else if(generatePwd.equalsIgnoreCase("true")) {
@@ -164,8 +170,96 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                     }                	
                     xw.write(doc);
                     xw.flush();
-                }            	
-                response.addElement(E_filePath).setText(outFileName);
+                } else if(AdminFileDownload.FILE_FORMAT_MIGRATION_XML.equalsIgnoreCase(fileFormat)) {
+                	outFileName = String.format("%s%s_migration_%s_%s.xml", LC.zimbra_tmp_directory.value(),File.separator,zsc.getAuthtokenAccountId(),fileToken);
+                	FileWriter fileWriter = new FileWriter(outFileName);
+                	XMLWriter xw = new XMLWriter(fileWriter, org.dom4j.io.OutputFormat.createPrettyPrint());
+                    Document doc = DocumentHelper.createDocument();
+                    org.dom4j.Element rootEl = DocumentHelper.createElement(E_ZCSImport);
+                    
+                    /**
+                     * set Options section
+                     */
+                    org.dom4j.Element optionsEl = DocumentHelper.createElement(E_Options);
+                    org.dom4j.Element importMailsEl = DocumentHelper.createElement(E_importMails);
+                    if("TRUE".equalsIgnoreCase(request.getElement(E_importMails).getTextTrim())) {
+                    	importMailsEl.setText("1");
+                    } else {
+                    	importMailsEl.setText("0");
+                    }
+                	optionsEl.add(importMailsEl);
+                    org.dom4j.Element importContactsEl = DocumentHelper.createElement(E_importContacts);
+                    if("TRUE".equalsIgnoreCase(request.getElement(E_importContacts).getTextTrim())) {
+                    	importContactsEl.setText("1");
+                    } else {
+                    	importContactsEl.setText("0");
+                    }
+                	optionsEl.add(importContactsEl);                    
+                    org.dom4j.Element importCalendarEl = DocumentHelper.createElement(E_importCalendar);
+                    if("TRUE".equalsIgnoreCase(request.getElement(E_importCalendar).getTextTrim())) {
+                    	importCalendarEl.setText("1");
+                    } else {
+                    	importCalendarEl.setText("0");
+                    }   
+                    optionsEl.add(importCalendarEl);
+                    org.dom4j.Element importTasksEl = DocumentHelper.createElement(E_importTasks);
+                    if("TRUE".equalsIgnoreCase(request.getElement(E_importTasks).getTextTrim())) {
+                    	importTasksEl.setText("1");
+                    } else {
+                    	importTasksEl.setText("0");
+                    }
+                    optionsEl.add(importTasksEl);
+                    org.dom4j.Element importJunkEl = DocumentHelper.createElement(E_importJunk);
+                    if("TRUE".equalsIgnoreCase(request.getElement(E_importJunk).getTextTrim())) {
+                    	importJunkEl.setText("1");
+                    } else {
+                    	importJunkEl.setText("0");
+                    }
+                    optionsEl.add(importJunkEl);
+                    org.dom4j.Element importDeletedItemsEl = DocumentHelper.createElement(E_importDeletedItems);
+                    if("TRUE".equalsIgnoreCase(request.getElement(E_importDeletedItems).getTextTrim())) {
+                    	importDeletedItemsEl.setText("1");
+                    } else {
+                    	importDeletedItemsEl.setText("0");	
+                    }
+                    optionsEl.add(importDeletedItemsEl);
+                    org.dom4j.Element ignorePreviouslyImportedEl = DocumentHelper.createElement(E_ignorePreviouslyImported);
+                    if("TRUE".equalsIgnoreCase(request.getElement(E_ignorePreviouslyImported).getTextTrim())) {
+                    	ignorePreviouslyImportedEl.setText("1");
+                    } else {
+                    	ignorePreviouslyImportedEl.setText("0");
+                    }
+                    optionsEl.add(ignorePreviouslyImportedEl);
+                    org.dom4j.Element InvalidSSLOkEl = DocumentHelper.createElement(E_InvalidSSLOk);
+                    if("TRUE".equalsIgnoreCase(request.getElement(E_InvalidSSLOk).getTextTrim())) {
+                    	InvalidSSLOkEl.setText("1");
+                    } else {
+                    	InvalidSSLOkEl.setText("0");
+                    }
+                    optionsEl.add(InvalidSSLOkEl);
+                    
+                    /**
+                     * set ImportUsers section
+                     */
+                    org.dom4j.Element usersEl = DocumentHelper.createElement(E_ImportUsers);
+                    doc.add(rootEl);
+                    rootEl.add(usersEl);
+                    for (GalContact entry : entries) {
+                    	String email = entry.getSingleAttr(ContactConstants.A_email);
+                    	if(email == null)
+                    		continue;
+                    	
+                    	org.dom4j.Element eUser = DocumentHelper.createElement(E_User);
+                    	org.dom4j.Element eExchangeMail = DocumentHelper.createElement(E_ExchangeMail);
+                    	eExchangeMail.setText(email);
+                        usersEl.add(eUser);
+                    }                	
+                    xw.write(doc);
+                    xw.flush();                	
+                } else {
+                	throw(ServiceException.INVALID_REQUEST("Wrong value for fileFormat parameter",null));
+                }
+                response.addElement(E_fileToken).setText(fileToken);
             }
 		} catch (NamingException e) {
 			throw ServiceException.FAILURE(e.getMessage(), e) ;

@@ -2591,7 +2591,17 @@ Url_XFormItem.prototype.updateElement = function (value) {
 	this.getElement().innerHTML = this.getAnchorTag(value, value);
 }
 
+/**
+ * @class defines XFormItem type _DATA_URL_
+ * @constructor
+ * @private
+ */
+DataUrl_XFormItem = function() {}
+XFormItemFactory.createItemType("_DATA_URL_", "rata_url", DataUrl_XFormItem, Anchor_XFormItem)
 
+Url_XFormItem.prototype.updateElement = function (value) {
+	this.getElement().innerHTML = this.getAnchorTag(value, null);
+}
 
 
 
