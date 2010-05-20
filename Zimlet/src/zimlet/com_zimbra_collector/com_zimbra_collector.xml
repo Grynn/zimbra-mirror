@@ -1,11 +1,10 @@
-<zimlet name="com_zimbra_collector" version="1.2" label="Contact Collector" description="Collects contacts with drag-and-drop conversations and messages.">
+<zimlet name="com_zimbra_collector" version="1.5" label="Contact Collector" description="Collect contacts by dragging-and-dropping email conversations and messages.">
 	<include>collector.js</include>
 	<includeCSS>collector.css</includeCSS>
 	<resource>collector-icon.gif</resource>
-	<handlerObject>Com_Zimbra_Collector</handlerObject>
-
-	<zimletPanelItem label="Contact Collector" icon="Collector-panelIcon">
-		<toolTipText>Drag-and-drop a conversation or message to collect contacts.</toolTipText>
+	<handlerObject>com_zimbra_collector_HandlerObject</handlerObject>
+	<zimletPanelItem label="${msg.CollectorZimlet_panel_label}" icon="Collector-panelIcon">
+		<toolTipText>${msg.CollectorZimlet_panel_tooltip}</toolTipText>
 		<dragSource type="ZmConv" />
 		<dragSource type="ZmMailMsg" />
 	</zimletPanelItem>

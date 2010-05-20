@@ -14,27 +14,38 @@
  */
 
 /**
- * Zimlet to collect addresses in messages
+ * Zimlet to collect addresses in messages.
+ * 
  * NOTE: This zimlet should be activated based on user's COS (Contacts app should be enabled)
  * 
  * @author Parag Shah.
  */
-function Com_Zimbra_Collector() {
+function com_zimbra_collector_HandlerObject() {
 }
 
-Com_Zimbra_Collector.prototype = new ZmZimletBase();
-Com_Zimbra_Collector.prototype.constructor = Com_Zimbra_Collector;
+com_zimbra_collector_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_collector_HandlerObject.prototype.constructor = com_zimbra_collector_HandlerObject;
 
-// Consts
-Com_Zimbra_Collector.CHECKBOX_NAME = Dwt.getNextId();
+/**
+ * Simplify handler object
+ *
+ */
+var CollectorZimlet = com_zimbra_collector_HandlerObject;
 
-// This method is called when an item is dropped on the Zimlet item as realized
-// in the UI. At this point the Zimlet should perform the actions it needs to
-// for the drop. This method defines the following formal parameters:
-//
-// - zmObject
-// - canvas
-Com_Zimbra_Collector.prototype.doDrop =
+/**
+ * Defines the contact checkbox.
+ */
+CollectorZimlet.CHECKBOX_NAME = Dwt.getNextId();
+
+/**
+ * This method is called when an item is dropped on the Zimlet item as realized
+ * in the UI. At this point the Zimlet should perform the actions it needs to
+ * for the drop. This method defines the following formal parameters:
+ * 
+ * @param	zmObject
+ * @param	canvas
+ */
+CollectorZimlet.prototype.doDrop =
 function(zmObject) {
 
 	// create a dialog if one does not already exist
@@ -49,15 +60,26 @@ function(zmObject) {
 	this._collectorDialog.popup();
 };
 
-
+//
 // Private methods
-Com_Zimbra_Collector.prototype._initialize = 
+//
+
+/**
+ * Initializes the zimlet.
+ */
+CollectorZimlet.prototype._initialize = 
 function() {
 	this._parentView = new DwtComposite(this.getShell());
 	this._parentView.setSize("400", "150");
 	this._parentView.getHtmlElement().style.overflow = "auto";
 
-	this._collectorDialog = this._createDialog({title:"Contact Collector", view:this._parentView});
+	var dialogArgs = {
+			title	: this.getMessage("CollectorZimlet_dialog_contact_title"),
+			view	: this._parentView,
+			parent	: this.getShell()
+			};
+	
+	this._collectorDialog = this._createDialog(dialogArgs);
 	this._collectorDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._collectorDialogOkListener));
 
 	// get reference to user's contact list (making sure contacts app is enabled as well)
@@ -66,7 +88,12 @@ function() {
 	this._participants = new Array();
 };
 
-Com_Zimbra_Collector.prototype._createHtml = 
+/**
+ * Creates the contact collector HTML.
+ * 
+ * @param	{ZmConv|ZmMailMsg}		zmObjects
+ */
+CollectorZimlet.prototype._createHtml = 
 function(zmObject) {
 	var html = new Array();
 	var i = 0;
@@ -98,7 +125,7 @@ function(zmObject) {
 					html[i++] = "checked disabled>";
 				} else {
 					html[i++] = "name='";
-					html[i++] = Com_Zimbra_Collector.CHECKBOX_NAME;
+					html[i++] = CollectorZimlet.CHECKBOX_NAME;
 					html[i++] = "'>";
 					// save this participant for later use
 					this._participants.push(participant);
@@ -112,21 +139,23 @@ function(zmObject) {
 		}
 		html[i++] = "</table>";
 	} else {
-		html[i++] = "Sorry, unable to retrieve your Contacts. Please contact your System Administrator.";
+		html[i++] = this.getMessage("CollectorZimlet_addedError");
 	}
 
 	this._parentView.getHtmlElement().innerHTML = html.join("");
 };
 
-
-// Listeners
-
-Com_Zimbra_Collector.prototype._collectorDialogOkListener = 
+/**
+ * Handles the OK button.
+ * 
+ * @see		_initialize
+ */
+CollectorZimlet.prototype._collectorDialogOkListener = 
 function(ev) {
 	var soapDoc = null;
 
 	// set up a BatchRequest for all contacts that need to be added
-	var checkedParts = document.getElementsByName(Com_Zimbra_Collector.CHECKBOX_NAME);
+	var checkedParts = document.getElementsByName(CollectorZimlet.CHECKBOX_NAME);
 
 	for (var i = 0; i < checkedParts.length; i++) {
 		if (checkedParts[i].checked) {
@@ -173,17 +202,19 @@ function(ev) {
 	}
 };
 
-
-// Callbacks
-
-Com_Zimbra_Collector.prototype._handleResponseCreate =
+/**
+ * Handles the create contacts callback.
+ * 
+ * @see		_collectorDialogOkListener
+ */
+CollectorZimlet.prototype._handleResponseCreate =
 function(result) {
 	this._collectorDialog.popdown();
 
 	var numAdded = result.getResponse().BatchResponse.CreateContactResponse.length;
 	var msgDialog = appCtxt.getMsgDialog();
-	var msg = numAdded + " contact(s) added successfully.";
-
+	var msg = AjxMessageFormat.format(this.getMessage("CollectorZimlet_addedSuccess"), numAdded);
+	
 	msgDialog.setMessage(msg, DwtMessageDialog.INFO_STYLE);
 	msgDialog.popup();
 };
