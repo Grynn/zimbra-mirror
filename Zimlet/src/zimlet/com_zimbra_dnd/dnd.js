@@ -84,7 +84,7 @@ Com_Zimbra_DnD.prototype._initNonHTM5 = function () {
 	}
 
     var cmd = window.newWindowCommand;
-    if(cmd == 'compose' || cmd == 'msgViewDetach') {
+    if(cmd == 'compose' || cmd == 'msgViewDetach' || cmd == 'composeDetach') {
             var self = this;
             setTimeout(AjxCallback.simpleClosure(function(cmd) {
                 var curView = appCtxt.getAppViewMgr().getCurrentView();
@@ -104,7 +104,7 @@ Com_Zimbra_DnD.prototype._initNonHTM5 = function () {
                     var zDnDUploadFrm = doc.getElementById("zdnd_form");
                     zDnDUploadFrm.setAttribute("action", uploadUri);
                 }
-                if(cmd == 'compose') {
+                if(cmd == 'compose' || cmd == 'composeDetach') {
                     var ev = document.createEvent("Events");
                     ev.initEvent("ZimbraDnD", true, false);
                     curView._resetBodySize();
@@ -192,8 +192,15 @@ Com_Zimbra_DnD.prototype._addHandlers = function(el) {
 Com_Zimbra_DnD.prototype._onDragEnter = function(ev) {
     ev.stopPropagation();
     ev.preventDefault();
-    if(ev.dataTransfer && ev.dataTransfer.types && (ev.dataTransfer.types.indexOf("Files") != -1 || ev.dataTransfer.types.indexOf("application/x-moz-file"))) {
-        return true;
+    if(ev.dataTransfer && ev.dataTransfer.types) {
+        var isFileType = false;
+        for(var i = 0; i < ev.dataTransfer.types.length; i++) {
+            var type = ev.dataTransfer.types[i];
+            if(type == "Files" || type == "application/x-moz-file") {
+                isFileType = true;
+            }
+        }
+        return isFileType;
     } else {
         return false;
     }
