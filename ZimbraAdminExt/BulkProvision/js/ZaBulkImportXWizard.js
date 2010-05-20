@@ -14,10 +14,7 @@
  */
 //ZaBulkImportXWizard
 function ZaBulkImportXWizard (parent, entry) {
-    var w = "550px" ;
-    if (AjxEnv.isIE) {
-        w = "600px" ;
-    }
+    var w = "650px" ;
     ZaXWizardDialog.call(this, parent, null, com_zimbra_bulkprovision.BP_Wizard_title,
                                 w, (AjxEnv.isIE ? "330px" :"320px"),"ZaBulkImportXWizard");
 
@@ -191,7 +188,7 @@ function() {
 			/**
 			 * Generate the file and launch a callback when file is ready
 			 */
-			var callback = new AjxCalback(this, this.generateBulkFileCallback);
+			var callback = new AjxCallback(this, this.generateBulkFileCallback);
 			ZaBulkProvision.generateBulkProvisionFile(this._containedObject,callback);
 		} else if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_LDAP) {
 			/**
@@ -473,43 +470,41 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 					label:com_zimbra_bulkprovision.DomainName,
 					toolTipContent:ZaMsg.tt_StartTypingDomainName,
 					dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
-					dataFetcherClass:ZaSearch,editable:true
+					dataFetcherClass:ZaSearch,editable:true,
+					visibilityChecks:[],enableDisableChecks:[]
 				},		       	
-		       	{ref:ZaBulkProvision.A2_maxResults, type:_TEXTFIELD_, 
-		       		label:com_zimbra_bulkprovision.LDAPMaxResults, labelLocation:_LEFT_,labelWrap:true
+		       	{ref:ZaBulkProvision.A2_maxResults, type:_TEXTFIELD_,cssClass:"admin_xform_number_input", 
+		       		label:com_zimbra_bulkprovision.LDAPMaxResults, labelLocation:_LEFT_,labelWrap:true,
+		       		visibilityChecks:[],enableDisableChecks:[]
 		       	},
-		       	{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
-					visibilityChecks:[[ZaItem.hasWritePermission,ZaDomain.A_GalLdapURL]],
+		       	{type:_GROUP_, numCols:6, colSpan:2,label:"   ",labelLocation:_LEFT_,
+					visibilityChecks:[],
 					items: [
 						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
 						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerName, width:"200px"},
 						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"5px"},									
 						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerPort,  width:"40px"},	
-						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALUseSSL, width:"40px"}									
+						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALUseSSL, width:"*"}									
 					]
 				},		       
-				{ref:ZaBulkProvision.A2_GalLdapURL, type:_LDAPURL_, label:null,ldapSSLPort:"3269",ldapPort:"3268",  labelLocation:_NONE_,
+				{ref:ZaBulkProvision.A2_GalLdapURL, type:_LDAPURL_, label:com_zimbra_bulkprovision.LDAPUrl,ldapSSLPort:"3269",ldapPort:"3268",  labelLocation:_LEFT_,
 					visibilityChecks:[],enableDisableChecks:[]
 				},
 				{ref:ZaBulkProvision.A2_GalLdapBindDn, type:_INPUT_, label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, 
-					enableDisableChecks:[],
-					enableDisableChangeEventSources:[]							
+					enableDisableChecks:[],visibilityChecks:[]				
 				},
 				{ref:ZaBulkProvision.A2_GalLdapBindPassword, type:_SECRET_, label:ZaMsg.Domain_GalLdapBindPassword, labelLocation:_LEFT_, 
-					enableDisableChecks:[],
-					enableDisableChangeEventSources:[]							
+					enableDisableChecks:[],visibilityChecks:[]				
 				},
 				{ref:ZaBulkProvision.A2_GalLdapBindPasswordConfirm, type:_SECRET_, label:ZaMsg.Domain_GalLdapBindPasswordConfirm, labelLocation:_LEFT_, 
-					enableDisableChecks:[],
-					enableDisableChangeEventSources:[]							
+					enableDisableChecks:[],visibilityChecks:[]				
 				},				
 				{ref:ZaBulkProvision.A2_GalLdapFilter, type:_TEXTAREA_, width:380, height:40, 
 					label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, 
-					enableDisableChecks:[],
-					enableDisableChangeEventSources:[]
+					enableDisableChecks:[],visibilityChecks:[]
 				},
 				{ref:ZaBulkProvision.A2_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapSearchBase, 
-					labelLocation:_LEFT_
+					labelLocation:_LEFT_, enableDisableChecks:[],visibilityChecks:[]
 				}					
 		]
 	};

@@ -218,7 +218,7 @@ ZaBulkProvision.initProvisionAccounts = function (accounts) {
 }
 
 ZaBulkProvision.generateBulkProvisionFile = function(obj, callback) {
-	var soapDoc = AjxSoapDoc.create("GenerateBulkProvisionFileFromLDAPRequest", ZaZimbraAdmin.URN, null);
+	var soapDoc = AjxSoapDoc.create("GenerateBulkProvisionFileFromLDAPRequest",ZaBulkProvision.URN, null);
 	var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external);
 	attr.setAttribute("n", ZaDomain.A_zimbraGalMode);
 
