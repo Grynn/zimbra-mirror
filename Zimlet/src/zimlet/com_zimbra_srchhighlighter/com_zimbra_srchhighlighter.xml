@@ -1,8 +1,6 @@
-<zimlet name="com_zimbra_srchhighlighter" version="0.3" description="After a mail search, this Zimlet highlights Search terms with yellow color">
+<zimlet name="com_zimbra_srchhighlighter" version="0.4" description="After a mail search, this Zimlet highlights Search terms with yellow color">
 	<include>searchhighlighter.js</include>
-	<handlerObject>com_zimbra_srchhltr</handlerObject>
-
-
+	<handlerObject>com_zimbra_srchhltr_HandlerObject</handlerObject>
 	<contentObject>
 		<matchOn>
 			<regex></regex>
