@@ -13,51 +13,84 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function Com_Zimbra_Tracking() {
+function com_zimbra_tracking_HandlerObject() {
 }
 
-Com_Zimbra_Tracking.prototype = new ZmZimletBase();
-Com_Zimbra_Tracking.prototype.constructor = Com_Zimbra_Tracking;
+com_zimbra_tracking_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_tracking_HandlerObject.prototype.constructor = com_zimbra_tracking_HandlerObject;
 
-Com_Zimbra_Tracking.UPS = "1[zZ]\\s?\\w{3}\\s?\\w{3}\\s?\\w{2}\\s?\\w{4}\\s?\\w{3}\\s?\\w{1}";
-Com_Zimbra_Tracking.FEDEX = "(\\d{12}|\\d{22})";
-Com_Zimbra_Tracking.TRACKING = "\\b(?:" + Com_Zimbra_Tracking.UPS + "|" + Com_Zimbra_Tracking.FEDEX + ")\\b";
-Com_Zimbra_Tracking.TRACKING_RE = new RegExp(Com_Zimbra_Tracking.TRACKING, "g");
+/**
+ * Simplify handler object
+ *
+ */
+var TrackingZimlet = com_zimbra_tracking_HandlerObject;
 
-Com_Zimbra_Tracking.prototype.match =
+/**
+ * Defines the regular expressions for UPS and FedEx packages.
+ */
+TrackingZimlet.UPS = "1[zZ]\\s?\\w{3}\\s?\\w{3}\\s?\\w{2}\\s?\\w{4}\\s?\\w{3}\\s?\\w{1}";
+TrackingZimlet.FEDEX = "(\\d{12}|\\d{22})";
+TrackingZimlet.TRACKING = "\\b(?:" + TrackingZimlet.UPS + "|" + TrackingZimlet.FEDEX + ")\\b";
+TrackingZimlet.TRACKING_RE = new RegExp(TrackingZimlet.TRACKING, "g");
+
+/**
+ * Defines the UPS context.
+ */
+TrackingZimlet.CONTEXT_UPS = "ups";
+/**
+ * Defines the UPS context.
+ */
+TrackingZimlet.CONTEXT_FEDEX = "fedex";
+
+/**
+ * Matches content.
+ * 
+ */
+TrackingZimlet.prototype.match =
 function(line, startIndex) {
-	Com_Zimbra_Tracking.TRACKING_RE.lastIndex = startIndex;
-	var m = Com_Zimbra_Tracking.TRACKING_RE.exec(line);
+	TrackingZimlet.TRACKING_RE.lastIndex = startIndex;
+	var m = TrackingZimlet.TRACKING_RE.exec(line);
 	if (m) {
 		if (m[0].charAt(1) == 'z' || m[0].charAt(1) == 'Z') {
-			m.context = "ups";
+			m.context = TrackingZimlet.CONTEXT_UPS;
 		} else {
-			m.context = "fedex";
+			m.context = TrackingZimlet.CONTEXT_FEDEX;
 		}
 	}
 	return m;
 };
 
-Com_Zimbra_Tracking.prototype.toolTipPoppedUp =
+/**
+ * Handles tooltip popped-up event.
+ * 
+ */
+TrackingZimlet.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
 	var html;
-	if (matchContext == 'ups') {
-		html = "<b>UPS Tracking Number: </b>" + AjxStringUtil.htmlEncode(contentObjText);
-	} else if (matchContext == 'fedex') {
-		html = "<b>Fedex Tracking Number: </b>" + AjxStringUtil.htmlEncode(contentObjText);
+	if (matchContext == TrackingZimlet.CONTEXT_UPS) {
+		var trackMsg = this.getMessage("TrackingZimlet_tracking_ups");
+		html = AjxMessageFormat.format(trackMsg, AjxStringUtil.htmlEncode(contentObjText));
+	} else if (matchContext == TrackingZimlet.CONTEXT_FEDEX) {
+		var trackMsg = this.getMessage("TrackingZimlet_tracking_fedex");
+		html = AjxMessageFormat.format(trackMsg, AjxStringUtil.htmlEncode(contentObjText));
 	} else {
-		html = "<b>Tracking Number: </b>" + AjxStringUtil.htmlEncode(contentObjText);
+		var trackMsg = this.getMessage("TrackingZimlet_tracking_other");
+		html = AjxMessageFormat.format(trackMsg, AjxStringUtil.htmlEncode(contentObjText));
 	}
 	canvas.innerHTML = html;
 };
 
-Com_Zimbra_Tracking.prototype._getHtmlContent =
+/**
+ * Gets the html content.
+ * 
+ */
+TrackingZimlet.prototype._getHtmlContent =
 function(html, idx, tracking, context) {
 	var t = tracking.replace(/\s/g, '');
 	var url;
-	if (context == 'ups') {
+	if (context == TrackingZimlet.CONTEXT_UPS) {
 		url = "http://wwwapps.ups.com/WebTracking/processInputRequest?" + "sort_by=status&tracknums_displayed=1&TypeOfInquiryNumber=T&loc=en_US&InquiryNumber1=" + t + "&track.x=0&track.y=0";
-	} else if (context == 'fedex') {
+	} else if (context == TrackingZimlet.CONTEXT_FEDEX) {
 		url = "http://www.fedex.com/Tracking?tracknumbers=" + t;
 	}
 

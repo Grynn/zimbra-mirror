@@ -1,7 +1,6 @@
-<zimlet name="com_zimbra_tracking" version="1.2" description="Find shipping information for FedEx and UPS using the tracking number.">
+<zimlet name="com_zimbra_tracking" version="1.5" label="Package Tracker" description="Find shipping information for FedEx and UPS using the tracking number.">
 	<include>shipping.js</include>
-	<handlerObject>Com_Zimbra_Tracking</handlerObject>
-	<serverExtension hasKeyword="tracking" extensionClass="com.zimbra.cs.zimlet.handler.TrackingHandler"/>
+	<handlerObject>com_zimbra_tracking_HandlerObject</handlerObject>
 	<contentObject type="tracking">
 		<matchOn>
 			<regex>Overrode in shipping.js</regex>
