@@ -13,50 +13,60 @@
  * ***** END LICENSE BLOCK *****
  */
 
-//////////////////////////////////////////////////////////////
-//  Zimlet to handle integration with a Yahoo! Maps         //
-//  @author Kevin Henrikson                                 //
-//////////////////////////////////////////////////////////////
-
-function Com_Zimbra_YMaps() {
+/**
+ * Zimlet to handle integration with a Yahoo! Maps
+ * 
+ * @author Kevin Henrikson
+ */
+function com_zimbra_ymaps_HandlerObject() {
 }
 
-Com_Zimbra_YMaps.prototype = new ZmZimletBase();
-Com_Zimbra_YMaps.prototype.constructor = Com_Zimbra_YMaps;
+com_zimbra_ymaps_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_ymaps_HandlerObject.prototype.constructor = com_zimbra_ymaps_HandlerObject;
 
-Com_Zimbra_YMaps.prototype.init =
+/**
+ * Simplify handler object
+ *
+ */
+var YMapsZimlet = com_zimbra_ymaps_HandlerObject;
+
+/**
+ * Y! Maps Webservice URL
+ */
+YMapsZimlet.URL = "http://api.local.yahoo.com/MapsService/V1/mapImage?appid=ZimbraMail&zoom=4&image_height=245&image_width=345&location=";
+
+/**
+ * Map image URI cache.
+ */
+YMapsZimlet.CACHE = [];
+
+/**
+ * Initializes the zimlet.
+ * 
+ */
+YMapsZimlet.prototype.init =
 function() {
-	if (ZmAssistant && ZmAssistant.register) ZmAssistant.register(new Com_Zimbra_YMaps_Asst());
+	if (ZmAssistant && ZmAssistant.register) ZmAssistant.register(new YMapsZimlet_Asst());
 };
 
-// Y! Maps Webservice URL
-Com_Zimbra_YMaps.URL = "http://api.local.yahoo.com/MapsService/V1/mapImage?appid=ZimbraMail&zoom=4&image_height=245&image_width=345&location=";
-
-// Map image URI cache
-Com_Zimbra_YMaps.CACHE = [];
-
-// Panel Zimlet Methods
-// Called by the Zimbra framework when the Ymaps panel item was double clicked
-Com_Zimbra_YMaps.prototype.doubleClicked =
+/**
+ * Called by the Zimbra framework when the Ymaps panel item was double clicked.
+ */
+YMapsZimlet.prototype.doubleClicked =
 function() {
 	this.singleClicked();
 };
 
-// Called when clicked on matched text
-Com_Zimbra_YMaps.prototype.clicked =
-function(spanElem, contentObj, matchContext, canvas) {
-	var url = "http://maps.yahoo.com/maps_result?addr=";
-	var addr = contentObj.replace("\n"," ").replace("\r"," ");
-	canvas = window.open(url+escape(addr));
-};
-
-// Called by the Zimbra framework when the Ymaps panel item was clicked
-Com_Zimbra_YMaps.prototype.singleClicked =
+/**
+ * Called by the Zimbra framework when the Ymaps panel item was clicked.
+ * 
+ */
+YMapsZimlet.prototype.singleClicked =
 function() {
 	var editorProps = [{
-		label: "Address",
-		name: "address",
-		type: "string",
+		label	: this.getMessage("YMapsZimlet_dialog_prefs_address"),
+		name	: "address",
+		type	: "string",
 		minLength: 2,
 		maxLength: 200
 	}];
@@ -65,10 +75,11 @@ function() {
 		var pe = this._propertyEditor = new DwtPropertyEditor(view, true);
 		pe.initProperties(editorProps);
 		var dialog_args = {
-			title: "Yahoo Maps: Enter Address",
-			view: view
+			title	: this.getMessage("YMapsZimlet_dialog_prefs_title"),
+			view	: view,
+			parent	: this.getShell()
 		};
-		this._dlg_propertyEditor = this._createDialog(dialog_args);
+		this._dlg_propertyEditor = new ZmDialog(dialog_args);
 		var dlg = this._dlg_propertyEditor;
 		pe.setFixedLabelWidth();
 		pe.setFixedFieldWidth();
@@ -81,7 +92,11 @@ function() {
 	this._dlg_propertyEditor.popup();
 };
 
-Com_Zimbra_YMaps.prototype._getDisplayCustomMap =
+/**
+ * Displays a custom map.
+ * 
+ */
+YMapsZimlet.prototype._getDisplayCustomMap =
 function() {
 	this._dlg_propertyEditor.popdown();
 	this._displayDialogMap(this._propertyEditor.getProperties().address);
@@ -89,17 +104,22 @@ function() {
 	this._dlg_propertyEditor = null;
 };
 
-Com_Zimbra_YMaps.prototype._displayDialogMap = 
+/**
+ * Display dialog map.
+ * 
+ */
+YMapsZimlet.prototype._displayDialogMap = 
 function(address) {
 	var view = new DwtComposite(this.getShell());
 
 	var dialog_args = {
-		view: view,
-		title: "Yahoo Map",
+		title	: this.getMessage("YMapsZimlet_dialog_map_title"),
+		view	: view,
+		parent	: this.getShell(),
 		standardButtons: [DwtDialog.OK_BUTTON]
 	};
 
-	var dlg = this._createDialog(dialog_args);
+	var dlg = new ZmDialog(dialog_args);
 	dlg.popup();
 	dlg.setButtonListener(DwtDialog.OK_BUTTON,
 			new AjxListener(this, function() {
@@ -113,9 +133,25 @@ function(address) {
 	this.toolTipPoppedUp(null, address, null, div);
 };
 
+//
 // Content Object Methods
+//
 
-Com_Zimbra_YMaps.prototype.toolTipPoppedUp =
+/**
+ * Called when clicked on matched text.
+ */
+YMapsZimlet.prototype.clicked =
+function(spanElem, contentObj, matchContext, canvas) {
+	var url = "http://maps.yahoo.com/maps_result?addr=";
+	var addr = contentObj.replace("\n"," ").replace("\r"," ");
+	canvas = window.open(url+escape(addr));
+};
+
+/**
+ * Handles tooltip popped-up event.
+ * 
+ */
+YMapsZimlet.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
 	canvas.innerHTML = [
 		'<center><img width="345" height="245" id="',
@@ -125,33 +161,44 @@ function(spanElement, obj, context, canvas) {
 		'"/></center>'
 	].join("");
 
-	if (Com_Zimbra_YMaps.CACHE[obj+"img"]) {
-		Com_Zimbra_YMaps._displayImage(Com_Zimbra_YMaps.CACHE[obj+"img"], obj);
+	if (YMapsZimlet.CACHE[obj+"img"]) {
+		YMapsZimlet._displayImage(YMapsZimlet.CACHE[obj+"img"], obj);
 	} else {
-		var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(Com_Zimbra_YMaps.URL + AjxStringUtil.urlComponentEncode(obj));
-		DBG.println(AjxDebug.DBG2, "Com_Zimbra_YMaps URL: " + url);
-		AjxRpc.invoke(null, url, null, new AjxCallback(this, Com_Zimbra_YMaps._callback, obj), true);
+		var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(YMapsZimlet.URL + AjxStringUtil.urlComponentEncode(obj));
+		DBG.println(AjxDebug.DBG2, "YMapsZimlet URL: " + url);
+		AjxRpc.invoke(null, url, null, new AjxCallback(this, YMapsZimlet._callback, obj), true);
 	}
 };
 
+//
 // Private Methods
+//
 
-Com_Zimbra_YMaps._displayImage = 
+/**
+ * Displays an image.
+ * 
+ */
+YMapsZimlet._displayImage = 
 function(img_src, obj) {
 	var imgEl = document.getElementById(ZmZimletBase.encodeId(obj));
 	imgEl.style.backgroundImage = "url("+img_src+")";
 
-	if (!Com_Zimbra_YMaps.CACHE[obj+"img"]) {
-		Com_Zimbra_YMaps.CACHE[obj+"img"] = img_src;
+	if (!YMapsZimlet.CACHE[obj+"img"]) {
+		YMapsZimlet.CACHE[obj+"img"] = img_src;
 	}
 };
 
-Com_Zimbra_YMaps._callback = 
+/**
+ * Handles tooltip callback.
+ * 
+ * @see		toolTipPoppedUp
+ */
+YMapsZimlet._callback = 
 function(obj, result) {
 	var r = result.text;
 	var url = r.substring(r.indexOf("http://gws"),r.indexOf("</Result>"));
 	url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
-	Com_Zimbra_YMaps._displayImage(url, obj);
+	YMapsZimlet._displayImage(url, obj);
 };
 
 
@@ -159,26 +206,26 @@ function(obj, result) {
 // Zimlet assistant class
 // - used by the Assistant dialog to run games via "command-line"
 //////////////////////////////////////////////////////////////////////////
-function Com_Zimbra_YMaps_Asst() {
+function YMapsZimlet_Asst() {
 	// XXX: localize later (does NOT belong in ZmMsg.properties)
 	ZmAssistant.call(this, "Yahoo Maps", "map", "Map an address using Yahoo Maps");
 };
 
-Com_Zimbra_YMaps_Asst.prototype = new ZmAssistant();
-Com_Zimbra_YMaps_Asst.prototype.constructor = Com_Zimbra_YMaps_Asst;
+YMapsZimlet_Asst.prototype = new ZmAssistant();
+YMapsZimlet_Asst.prototype.constructor = YMapsZimlet_Asst;
 
-Com_Zimbra_YMaps_Asst.prototype.okHandler =
+YMapsZimlet_Asst.prototype.okHandler =
 function(dialog) {
 	// get reference to the ymaps zimlet
 	var zm = appCtxt.getZimletMgr();
-	var zimlet = zm ? zm._ZIMLETS_BY_ID["com_zimbra_ymaps"] : null;
+	var zimlet = zm ? zm._ZIMLETS_BY_ID["YMapsZimlet"] : null;
 	if (zimlet && this._address) {
 		zimlet.handlerObject.toolTipPoppedUp(null, this._address, null, dialog.getAssistantDiv());
 	}
 	return false;
 };
 
-Com_Zimbra_YMaps_Asst.prototype.handle =
+YMapsZimlet_Asst.prototype.handle =
 function(dialog, verb, args) {
 	this._address = args;
 	var valid = args.length > 0;

@@ -1,10 +1,9 @@
-<zimlet name="com_zimbra_ymaps" version="1.3" description="Highlights and previews addresses using Yahoo! Maps.">
+<zimlet name="com_zimbra_ymaps" version="1.5" label="Yahoo! Maps" description="Highlights and previews addresses using Yahoo! Maps.">
 	<include>ymaps.js</include>
 	<includeCSS>ymaps.css</includeCSS>
 	<resource>blank_pixel.gif</resource>
 	<resource>ymaps.gif</resource>
-	<handlerObject>Com_Zimbra_YMaps</handlerObject>
-
+	<handlerObject>com_zimbra_ymaps_HandlerObject</handlerObject>
 	<contentObject type="address">
 		<matchOn>
 			<regex attrs="igm">\b\d+[A-Za-z]?[ ]+([ewns]\.?[ ]+)?[A-Za-z0-9]+([ ]+[A-Za-z0-9]+)*[\s,\.](\s*(\#|[A-Za-z]+[,\.]?)[ ]*\d+[\s,\.])?\s*[A-Za-z]+([ ]+[A-Za-z]+)*[ ,][ ]*[A-Za-z]{2}([A-Za-z]+([ ][A-Za-z]+)?)?[ ]+\d{5}(-\d{4})?\b</regex>
@@ -16,9 +15,8 @@
 			</actionUrl>
 		</onClick>-->
 	</contentObject>
-
-	<zimletPanelItem label="Maps" icon="YMAPS-panelIcon">
-		<toolTipText>Drag-and-drop a contact to display a Yahoo! Map.</toolTipText>
+	<zimletPanelItem label="${msg.YMapsZimlet_panel_label}" icon="YMAPS-panelIcon">
+		<toolTipText>${msg.YMapsZimlet_panel_tooltip}</toolTipText>
 		<dragSource type="ZmContact">
 			<canvas type="window" width="800" height="600" />
 			<actionUrl target="http://maps.yahoo.com/maps_result">
@@ -27,7 +25,7 @@
 			</actionUrl>
 		</dragSource>
 		<contextMenu>
-			<menuItem label="Visit Yahoo Maps" id="MAPS.YAHOO.COM" icon="YMAPS-panelIcon">
+			<menuItem label="${msg.YMapsZimlet_panel_menu_visitYahooMaps}" id="MAPS.YAHOO.COM" icon="YMAPS-panelIcon">
 				<canvas type="window" width="800" height="600" />
 				<actionUrl target="http://maps.yahoo.com">
 					<param name="referrer">www.zimbra.com</param>
