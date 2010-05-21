@@ -171,7 +171,7 @@ DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value,lastTy
 	if(lastTypeTime == this._lastTypeTime) {
 		this.getForm().itemChanged(this, val, event);
 	} else {
-		if (AjxEnv.hasFirebug) console.log("typing faster than retreiving data");
+		//if (AjxEnv.hasFirebug) console.log("typing faster than retreiving data");
 		return;
 	}		
 	if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {

@@ -1488,14 +1488,6 @@ function(domName) {
 		try {
 			domain.load("name", domName, false, true);
 		} catch (ex) {
-			/*if(ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
-				return null;
-			} else {
-				throw (ex);
-			}*/
-            /*if (ZaApp.getInstance() && ZaApp.getInstance().getCurrentController()) {
-                ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.getDomainByName", null, false);
-            }*/
             throw (ex);
         }
 

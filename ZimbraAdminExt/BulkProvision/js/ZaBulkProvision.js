@@ -258,11 +258,13 @@ ZaBulkProvision.generateBulkProvisionFile = function(obj, callback) {
 	
 	attr = soapDoc.set(ZaBulkProvision.A2_maxResults,obj[ZaBulkProvision.A2_maxResults]);
 	
-	var command = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	params.asyncMode = true;
-	params.callback = callback;
-	command.invoke(params);	
-	
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;
+	csfeParams.asyncMode = true;
+	csfeParams.callback = callback;
+
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = com_zimbra_bulkprovision.BUSY_GENERATING_BULK_FILE;
+	ZaRequestMgr.invoke(csfeParams, reqMgrParams );
 };

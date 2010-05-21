@@ -176,7 +176,7 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                 	XMLWriter xw = new XMLWriter(fileWriter, org.dom4j.io.OutputFormat.createPrettyPrint());
                     Document doc = DocumentHelper.createDocument();
                     org.dom4j.Element rootEl = DocumentHelper.createElement(E_ZCSImport);
-                    
+                    doc.add(rootEl);
                     /**
                      * set Options section
                      */
@@ -242,7 +242,7 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                      * set ImportUsers section
                      */
                     org.dom4j.Element usersEl = DocumentHelper.createElement(E_ImportUsers);
-                    doc.add(rootEl);
+
                     rootEl.add(usersEl);
                     for (GalContact entry : entries) {
                     	String email = entry.getSingleAttr(ContactConstants.A_email);

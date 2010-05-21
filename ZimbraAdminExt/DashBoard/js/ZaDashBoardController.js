@@ -67,7 +67,7 @@ ZaDashBoardController.hijackMessages = function () {
 	ZaMsg.FAILED_CREATE_COS_1 = com_zimbra_dashboard.FAILED_CREATE_COS_1;
 	ZaMsg.FAILED_CREATE_COS = com_zimbra_dashboard.FAILED_CREATE_COS;
 	ZaMsg.FAILED_SAVE_COS = com_zimbra_dashboard.FAILED_SAVE_COS;
-	
+	ZaMsg.ERROR_NO_SUCH_COS = com_zimbra_dashboard.ERROR_NO_SUCH_COS;
 	ZaNewAccountXWizard.helpURL = location.pathname + ZaUtil.HELP_URL + "zap_provisioning_a_new_account.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 }
 
