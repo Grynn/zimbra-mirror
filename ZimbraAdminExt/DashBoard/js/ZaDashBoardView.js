@@ -78,7 +78,7 @@ function(entry) {
 	
 	this.updateTab();
 	var busyId = Dwt.getNextId();
-	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:null,busyId:busyId});
+	//var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:null,busyId:busyId});
 	this.types = [ZaSearch.ACCOUNTS,ZaSearch.ALIASES, ZaSearch.DLS,ZaSearch.RESOURCES];
 	this.offset = 0;
 	this.query = ZaSearch.getSearchByNameQuery("",this.types);
@@ -88,15 +88,45 @@ function(entry) {
 			sortBy:ZaAccount.A_uid,
 			offset:0,
 			limit:ZaSettings.RESULTSPERPAGE,
-			attrs:ZaSearch.standardAttributes,
-			callback:callback,
-			controller: ZaApp.getInstance().getCurrentController(),
-			showBusy:true,
-			busyId:busyId,
-			busyMsg:ZaMsg.BUSY_SEARCHING,
-			skipCallbackIfCancelled:false			
+			attrs:ZaSearch.standardAttributes
+			//callback:callback,
+			//controller: ZaApp.getInstance().getCurrentController(),
+			//showBusy:true,
+			//busyId:busyId,
+			//busyMsg:ZaMsg.BUSY_SEARCHING,
+			//skipCallbackIfCancelled:false			
 	}
-	ZaSearch.searchDirectory(searchParams);	
+	try {
+		var resp = ZaSearch.searchDirectory(searchParams);
+		var list = new ZaItemList(null);
+		ZaDashBoardView.processSearchResult(resp.Body.SearchDirectoryResponse, list, searchParams);
+		this._localXForm.setInstanceValue(list.getArray(),ZaDashBoard.searchResults);
+	} catch (ex) {
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDashBoardView.onSearchResult");	
+	}
+}
+
+ZaDashBoardView.processSearchResult = function(respBody, list,params) {
+	list.loadFromJS(respBody);
+	var act = new AjxTimedAction(list, ZaItemList.prototype.loadEffectiveRights, null);
+	AjxTimedAction.scheduleAction(act, 150)	
+	var searchTotal = respBody.searchTotal;
+	var limit = params.limit ? params.limit : ZaSettings.RESULTSPERPAGE; 
+	var numPages = Math.ceil(searchTotal/params.limit);
+	ZaApp.getInstance().getDashBoardController().numPages = numPages;
+	ZaApp.getInstance().getDashBoardController().searchTotal = searchTotal;
+	ZaApp.getInstance().getDashBoardController().changeActionsState();
+	var s_result_end_n = 0;
+	var s_result_start_n = 0;				
+	var srCountBt = ZaApp.getInstance().getDashBoardController()._toolbar.getButton (ZaOperation.SEARCH_RESULT_COUNT) ;
+	if (srCountBt ) {
+		s_result_start_n = (ZaApp.getInstance().getDashBoardController().currentPageNum - 1) * ZaSettings.RESULTSPERPAGE + 1;
+		var max = ZaApp.getInstance().getDashBoardController().currentPageNum  * ZaSettings.RESULTSPERPAGE;
+		s_result_end_n = (searchTotal > max) ? max : searchTotal;
+		
+		srCountBt.setText ( AjxMessageFormat.format (ZaMsg.searchResultCount, 
+				[s_result_start_n + " - " + s_result_end_n, searchTotal]));
+	}
 }
 
 ZaDashBoardView.onSearchResult = function(params,resp) {
@@ -117,27 +147,7 @@ ZaDashBoardView.onSearchResult = function(params,resp) {
 			var searchTotal = 0;
 			if(resp && !resp.isException()) {
 				var response = resp.getResponse().Body.SearchDirectoryResponse;
-				list.loadFromJS(response);
-				var act = new AjxTimedAction(list, ZaItemList.prototype.loadEffectiveRights, null);
-				AjxTimedAction.scheduleAction(act, 150)	
-				var searchTotal = response.searchTotal;
-				var limit = params.limit ? params.limit : ZaSettings.RESULTSPERPAGE; 
-				var numPages = Math.ceil(searchTotal/params.limit);
-				ZaApp.getInstance().getDashBoardController().numPages = numPages;
-				ZaApp.getInstance().getDashBoardController().searchTotal = searchTotal;
-				ZaApp.getInstance().getDashBoardController().changeActionsState();
-				var s_result_end_n = 0;
-				var s_result_start_n = 0;				
-				var srCountBt = ZaApp.getInstance().getDashBoardController()._toolbar.getButton (ZaOperation.SEARCH_RESULT_COUNT) ;
-				if (srCountBt ) {
-					s_result_start_n = (ZaApp.getInstance().getDashBoardController().currentPageNum - 1) * ZaSettings.RESULTSPERPAGE + 1;
-					var max = ZaApp.getInstance().getDashBoardController().currentPageNum  * ZaSettings.RESULTSPERPAGE;
-					s_result_end_n = (searchTotal > max) ? max : searchTotal;
-					
-					srCountBt.setText ( AjxMessageFormat.format (ZaMsg.searchResultCount, 
-							[s_result_start_n + " - " + s_result_end_n, searchTotal]));
-				}
-				
+				ZaDashBoardView.processSearchResult(response,list,params);
 			}						
 			this._localXForm.setInstanceValue(list.getArray(),ZaDashBoard.searchResults);
 		}

@@ -518,7 +518,7 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		caseKey:ZaBulkImportXWizard.STEP_DOWNLOAD_FILE,
 		items:[
 		       {type:_DWT_ALERT_, style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.ClickToDownloadGeneratedFile},
-		       {type:_DATA_URL_,label:com_zimbra_bulkprovision.GeneratedBulkProvisionFileLink,ref:ZaBulkProvision.A2_generatedFileLink}
+		       {type:_DATA_URL_,labelLocation:_NONE_,label:com_zimbra_bulkprovision.GeneratedBulkProvisionFileLink,ref:ZaBulkProvision.A2_generatedFileLink}
 		]
 	};
 	cases.push(case_download_file);
