@@ -864,7 +864,7 @@
 	<property name="prism.version.linux" value="051810"/>
 	<property name="prism.extroot.macos" value="${dist.app.dir}/macos/prism/Prism.app/Contents/Resources"/>
 	<property name="prism.extroot.win32" value="${dist.app.dir}/win32/prism"/>
-	<property name="prism.extroot.linux" value="${dist.app.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org"/>
+	<property name="prism.extroot.linux" value="${dist.app.dir}/linux/prism"/>
 
 	<macrodef name="translate-prism-files">
 		<attribute name="language"/> 
@@ -988,7 +988,7 @@
 		<!-- fix things that are specific to each platform -->
 		<copy tofile="${dist.app.dir}/macos/prism/Prism.app/Contents/Resources/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 		<copy tofile="${dist.app.dir}/win32/prism/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
-		<copy tofile="${dist.app.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
+		<copy tofile="${dist.app.dir}/linux/prism/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 	
 		<!-- unzip zimbra drag and drop extension -->
 		<ant dir="../ZimbraWebClient" target="ffext-reset-the-world" inheritAll="false"/>
