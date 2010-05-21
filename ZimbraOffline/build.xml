@@ -861,7 +861,7 @@
 
 	<property name="prism.version.macos" value="051810"/>
 	<property name="prism.version.win32" value="051810"/>
-	<property name="prism.version.linux" value="090113"/>
+	<property name="prism.version.linux" value="051810"/>
 	<property name="prism.extroot.macos" value="${dist.app.dir}/macos/prism/Prism.app/Contents/Resources"/>
 	<property name="prism.extroot.win32" value="${dist.app.dir}/win32/prism"/>
 	<property name="prism.extroot.linux" value="${dist.app.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org"/>
