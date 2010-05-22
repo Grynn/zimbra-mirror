@@ -387,7 +387,7 @@ public class DbOfflineMailbox {
         try {
             stmt = conn.prepareStatement("SELECT id, folder_id, mod_metadata" +
                     " FROM " + DbMailItem.getMailItemTableName(ombx) +
-                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type IN (?, ?, ?, ?, ?) AND change_mask=?");
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type IN (?, ?, ?, ?, ?, ?) AND change_mask=?");
             int pos = 1;
             pos = DbMailItem.setMailboxId(stmt, ombx, pos);
             stmt.setShort(pos++, MailItem.TYPE_CONTACT);
@@ -395,6 +395,7 @@ public class DbOfflineMailbox {
             stmt.setShort(pos++, MailItem.TYPE_CHAT);
             stmt.setShort(pos++, MailItem.TYPE_APPOINTMENT);
             stmt.setShort(pos++, MailItem.TYPE_TASK);
+            stmt.setShort(pos++, MailItem.TYPE_DOCUMENT);
             stmt.setInt(pos++, Change.MODIFIED_FOLDER);
             
             rs = stmt.executeQuery();
