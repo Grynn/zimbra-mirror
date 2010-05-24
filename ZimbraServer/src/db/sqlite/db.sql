@@ -13,7 +13,7 @@
 -- ***** END LICENSE BLOCK *****
 -- 
 
-PRAGMA default_cache_size = 2000;
+PRAGMA default_cache_size = 500;
 PRAGMA encoding = "UTF-8";
 PRAGMA legacy_file_format = OFF;
 

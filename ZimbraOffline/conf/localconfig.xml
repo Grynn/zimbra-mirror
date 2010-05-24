@@ -50,7 +50,7 @@
     <value>0</value>
   </key>
   <key name="sqlite_cache_size">
-    <value>2000</value>
+    <value>500</value>
   </key>
   <key name="sqlite_journal_mode">
     <value>PERSIST</value>
