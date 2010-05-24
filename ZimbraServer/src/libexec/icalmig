@@ -8,7 +8,7 @@
 # Version 1.3 ("License"); you may not use this file except in
 # compliance with the License.  You may obtain a copy of the License at
 # http://www.zimbra.com/license.
-# 
+#
 # Software distributed under the License is distributed on an "AS IS"
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 # ***** END LICENSE BLOCK *****
@@ -22,7 +22,7 @@ use File::Path;
 
 my $DEBUG = 0;
 #global constants
-my $version = "1.38";
+my $version = "1.39";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -336,12 +336,17 @@ sub processfile
   my @attendeearr=();
   my $firstevchkctr=0;
   my $IsfrstevStandalone=0; my $frstevdelpos=0; my $uidchangectr=0;
+  my $OrganizerFound=0; my @resourcearr=(); my $prevneworganizer;
+  my $neworganizer= "ORGANIZER;";
   &log_message("processing file...");
   while (<CFHANDLE>)
   {
     push (@recdata,$_);
     if ($_=~/^BEGIN:VEVENT/)          #start of VEVENT
     {
+      $OrganizerFound=0;
+      $prevneworganizer = $neworganizer;
+      $neworganizer= "ORGANIZER;";
       #print TZHeader before first VEVENT
       if (($useTZcomponent)&&(!$IsTZHeaderPrinted))
       {
@@ -355,6 +360,7 @@ sub processfile
 
       @recdata=();#initialize array
       @attendeearr=();
+      @resourcearr =();
       push (@recdata,$_);
       
       #set to default value
@@ -412,6 +418,7 @@ sub processfile
           #UID for which processing should be done.
           $uidtosrch=$prvuid;
           $g_isrdate=0;
+          $neworganizer = $prevneworganizer;
         }
         #if RDATEs should be deleted and current VEVENT has RDATEs
         elsif (($g_isdelrdate)&&($g_isrdate))
@@ -555,6 +562,11 @@ sub processfile
             }
             #create attendee list
             push(@attendeearr,$cmptline);
+            #If its resource, save it in resource list
+            if ($cmptline =~/CUTYPE=RESOURCE/)
+            {
+              push(@resourcearr,$cmptline);
+            }
             #set to startpos
             seek CFHANDLE,$curpos,0;
           }
@@ -565,6 +577,8 @@ sub processfile
           $tline = readline(*CFHANDLE);
           #trim to avoid any start/end spaces
           $tline = trim($tline);
+          #save cmptline for RESOURCE thing
+          my $itempcmptline = $cmptline;
           #form complete ATTENDEE line as 'mailto' may be divided into more than one line
           $cmptline = $cmptline.$tline;
           #globally replace all line-feeds with nothing
@@ -575,12 +589,59 @@ sub processfile
           if ($tline =~/ATTENDEE|END/)
           {
             $nomailto=1;
+            #save resource.. doesnt matter it has 'mailto' or not
+            if ($itempcmptline =~/CUTYPE=RESOURCE/)
+            {
+              push(@resourcearr,$itempcmptline);
+            }
           }
         }
       }#end while keepmove
     }
+    elsif ($_=~/^ORGANIZER/)
+    {
+      $OrganizerFound=1;
+    }
     elsif ($_=~/^END:VEVENT/)         #end of VEVENT
     {
+      #if no ORGANIZER Found, most probably its resource there{bug#47336}
+      #check if resource available then add it as organizer else just add no_organizer
+      if(!$OrganizerFound)
+      {
+        &log_message("No ORGANIZER Found.Adding custom organizer...");
+        my $resource_count= $#resourcearr;
+        if(($#attendeearr == -1) ||($resource_count == -1))
+        {
+          $neworganizer = "ORGANIZER;CN=no_organizer:mailto:no_organizer";
+          print_outfile("ORGANIZER;CN=no_organizer:mailto:no_organizer");
+          &log_message("no attendee or resource found. Added no_organizer.");
+        }
+        else
+        {
+          my $resstr=$resourcearr[0];
+          my $tcnsidx=index($resstr,"CN=");
+          my $tcneidx=index($resstr,";",$tcnsidx);
+          my $strcn = substr($resstr,$tcnsidx,($tcneidx-$tcnsidx));
+          $neworganizer = $neworganizer.$strcn;
+          if($#attendeearr!= -1)
+          {
+            my $strDomain=GetDomainFromATTENDEE($attendeearr[0]);
+            if($strDomain ne "")
+            {
+              $neworganizer = $neworganizer.":mailto:no_resource@".$strDomain;
+            }
+            else
+            {
+              $neworganizer = $neworganizer.":mailto:no_resource";
+            }
+            print_outfile("$neworganizer");
+            &log_message("Added New ORGANIZER: $neworganizer");
+          }
+        }
+        $write_pos = tell OTHANDLE;
+      }
+      
+      #do rest of work
       foreach my $rdate ( sort keys %hrdate)
       {
         &log_message("$rdate \n");
@@ -1405,6 +1466,16 @@ sub processfile
             print_outfile("$tzdten");
             &log_message("$tzdten");
           }
+          elsif($str=~/^END:VEVENT/)
+          {
+            #if no ORGANIZER found, then add it to master occurrence
+            if(!$OrganizerFound)
+            {
+              print_outfile("$neworganizer");
+              &log_message("Added New ORGANIZER: $neworganizer");
+            }
+            print_outfile("$str");
+          }
           else  #keep writing in Outfile
           {
             print_outfile("$str");
@@ -1679,6 +1750,16 @@ sub processfile
                   #store UID to process it in DTSTART section to create newUID from it.
                   $iUID = $str;
                 }
+              }
+              elsif($str=~/^END:VEVENT/)
+              {
+                #if no ORGANIZER found, then add it to each occurrence
+                if(!$OrganizerFound)
+                {
+                  print_outfile("$neworganizer");
+                  &log_message("Added New ORGANIZER: $neworganizer");
+                }
+                print_outfile("$str");
               }
               else
               {
@@ -2773,6 +2854,40 @@ sub get_weekenddayscountByDateRange
     $tdays++;
   }
   return $retval;
+}
+
+sub GetDomainFromATTENDEE
+{
+  my $attendee=shift;
+  if($attendee =~/mailto:/)
+  {
+    my $tmtosidx=index($attendee,"mailto:");
+    my $tmteidx=index($attendee,";",$tmtosidx);
+    if($tmteidx == -1)
+    {
+      my $atlen=length($attendee);
+      $tmteidx = $atlen;
+    }
+    else
+    {
+      $tmteidx = $tmteidx-1;
+    }
+    my $strmail = substr($attendee,$tmtosidx+7,$tmteidx);
+    if($strmail ne "")
+    {
+      my $atidx=index($strmail,"@");
+      my $strdomain = substr($strmail,$atidx+1,length($strmail));
+      return $strdomain;
+    }
+    else
+    {
+      return ""
+    }
+  }
+  else
+  {
+    return "";
+  }
 }
 #*********TimeZone processing*****************>>>>>>>>>>>
 
