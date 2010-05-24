@@ -1855,6 +1855,7 @@ function(tableId, jsonObj, type) {
 	this._addTwitterDeleteLinkHandlers();
 };
 
+
 com_zimbra_social.prototype._setCardRowsAsRead =
 function(rowIdsToMarkAsRead, showOlderMsgsId) {
 	for (var i = 0; i < rowIdsToMarkAsRead.length; i++) {
@@ -1888,23 +1889,57 @@ function(obj, account) {
 		var counter = 0;
 		var maxItems = 2;
 		var cardW = parseInt(this.preferences.social_pref_cardWidthList.replace("px", ""));
-		if (cardW <= 350)
+		if (cardW <= 350) {
 			maxItems = 1;
-
+		}
 		html[i++] = "<table width=100%>";
 		html[i++] = "<TR>";
 		for (var j = 0; j < medias.length; j++) {
 			var media = medias[j];
-			html[i++] = "<TD width='100px' valign='top'>";
+			var videoEmbedded = false;
+			var isYouTube = false;
+		
+			if(!media.video) {
+				media.src = media.src ?  (media.src.indexOf("/") ==0 ? "https://www.facebook.com"+media.src : media.src) : "";
+			} else if(media.video && media.video.source_url){
+				media.src = media.video.source_url;
+				if(media.src.indexOf("youtube") > 0) {
+					media.src = media.src.replace("autoplay=1", "autoplay=0");
+					media.src = media.src + "&fs=1";//add fullscreen button
+					isYouTube = true;
+				}
+				videoEmbedded = true;
+			} else if(media.video && media.video.preview_img){
+				media.src = media.video.preview_img;
+				videoEmbedded = true;
+			}else {
+				media.src = "";
+			}
+			if(videoEmbedded) {
+				html[i++] = "<TD  valign='top'>";
+			} else {
+				html[i++] = "<TD width='100px' valign='top'>";
+			}
 			html[i++] = "<table cellspacing='0' cellpadding='0' width=100%>";
 			html[i++] = "<TR>";
-			html[i++] = "<TD width='100px'  valign='top'>";
+			html[i++] = "<TD  valign='top'>";
+			var id = Dwt.getNextId();
+			if(media.src != "") {
+				if(isYouTube) {
+					html[i++] = "<object type='application/x-shockwave-flash' style='width:100%; height:350px;' data='" + media.src + "'><param name='movie' value='" + media.src + "' /></object>";
+				} else {
+					html[i++] = "<a  href=\"" + media.href + "\" target=\"_blank\"  style=\"color:white\">";
+					if(AjxEnv.isFirefox && isYouTube) {
+						html[i++] = "<embed  width='100px' src='" + media.src + "' />";
+					} else {
+						html[i++] = "<img width='100px' height='100px' SRC=\""+media.src+"\" />";
+					}
+					html[i++] = "</a>";
 
-			html[i++] = "<a  href=\"" + media.href + "\" target=\"_blank\"  style=\"color:white\">";
-			html[i++] = "<div width='100px' style='border:1px solid #CCCCCC;padding:2px'>";
-			html[i++] = "<img  width='100px'  src=\"" + media.src + "\" />";
-			html[i++] = "</div>";
-			html[i++] = "</a>";
+				}
+			}
+
+			
 
 			html[i++] = "</TD>";
 			html[i++] = "</TR><TR><TD>";
@@ -1919,6 +1954,7 @@ function(obj, account) {
 			html[i++] = "</TD></TR>";
 			html[i++] = "</TABLE>";
 			html[i++] = "</TD>";
+
 			html[i++] = "<TD valign='top'>";
 			if (attachment.name && attachment.href && media.type == "link" && medias.length == 1) {
 				html[i++] = "<a  href=\"" + attachment.href + "\" target='_blank'>";
