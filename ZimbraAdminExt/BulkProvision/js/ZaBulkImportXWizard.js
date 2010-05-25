@@ -157,8 +157,8 @@ ZaBulkImportXWizard.prototype.getProvisionStatusDialog = function () {
 ZaBulkImportXWizard.prototype.generateBulkFileCallback = 
 function(params,resp) {
 	try {
-		if(resp && resp.isException() && !this._currentRequest.cancelled) {
-			ZaSearch.handleTooManyResultsException(resp.getException(), "ZaBulkImportXWizard.prototype.generateBulkFileCallback");
+		if(resp && resp.isException()) {
+			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaBulkImportXWizard.prototype.generateBulkFileCallback");
 		} else {
 			var response = resp.getResponse().Body.GenerateBulkProvisionFileFromLDAPResponse;
 			if(response.fileToken && response.fileToken[0] && response.fileToken[0]._content) {
@@ -203,6 +203,15 @@ function() {
 		}
 	} else if(cStep == ZaBulkImportXWizard.STEP_PROV_OPTIONS) {
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		if(this._containedObject[ZaBulkProvision.A2_generatePassword] == "FALSE") {
+			/**
+			 * Check that passwords match
+			 */
+			if(this._containedObject[ZaBulkProvision.A2_confirmPassword] != this._containedObject[ZaBulkProvision.A2_password]) {
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_PASSWORDS_DONT_MATCH);
+				return;
+			}
+		}
 		if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_MIG_XML) {
 			this.goPage(ZaBulkImportXWizard.STEP_EXCHANGE_INFO);
 		} else {
@@ -212,12 +221,53 @@ function() {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 	} else if(cStep == ZaBulkImportXWizard.STEP_EXCHANGE_INFO) { 
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		/**
+		 * Check that passwords match
+		 */
+		if(this._containedObject[ZaBulkProvision.A2_ZimbraAdminPassword] != this._containedObject[ZaBulkProvision.A2_ZimbraAdminPasswordConfirm]) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_PASSWORDS_DONT_MATCH);
+			return;
+		}		
+		/**
+		 * exch mig wizard requires <domaion> in <ZimbraServer>
+		 */
+		if(!this._containedObject[ZaBulkProvision.A2_TargetDomainName]) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.MUST_SELECT_TARGET_DOMAIN);
+			return;	
+		}
+		
+		/**
+		 * Set defaults
+		 */
+		if(!this._containedObject[ZaBulkProvision.A2_SourceDomainName]) {
+			this._localXForm.setInstanceValue(this._containedObject[ZaBulkProvision.A2_TargetDomainName],ZaBulkProvision.A2_SourceDomainName)
+		}
+		
+		if(!this._containedObject[ZaBulkProvision.A2_GalLdapSearchBase] && typeof this._containedObject[ZaBulkProvision.A2_SourceDomainName] == "string") {
+			var searchBase = "OU=Users,dc=" + this._containedObject[ZaBulkProvision.A2_SourceDomainName].replace(".",",dc=");
+			this._localXForm.setInstanceValue(searchBase,ZaBulkProvision.A2_GalLdapSearchBase);
+		}
+		
+		if(!this._containedObject[ZaBulkProvision.A2_GalLdapBindDn] && typeof this._containedObject[ZaBulkProvision.A2_SourceDomainName] == "string") {
+			var bindDN = "CN=administrator,OU=Users,dc=" + this._containedObject[ZaBulkProvision.A2_SourceDomainName].replace(".",",dc=");
+			this._localXForm.setInstanceValue(bindDN,ZaBulkProvision.A2_GalLdapBindDn);
+		}
+		
 		this.goPage(ZaBulkImportXWizard.STEP_LDAP_INFO);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);		
+				
 	} else if(cStep == ZaBulkImportXWizard.STEP_LDAP_INFO) {
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		/**
+		 * Check that passwords match
+		 */
+		if(this._containedObject[ZaBulkProvision.A2_GalLdapBindPassword] != this._containedObject[ZaBulkProvision.A2_GalLdapConfirmBindPassword]) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_PASSWORDS_DONT_MATCH);
+			return;
+		}		
+		this		
 		if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_MIG_XML || 
 				this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_BULK_XML ||
 				this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_MIG_CSV) {
@@ -451,7 +501,7 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		       {type:_RADIO_, groupname:"action_selection",ref:ZaBulkProvision.A2_provAction,bmolsnr:true,
 					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.ActionGenerateBulkCSV,
 					updateElement:function (newValue) {
-						this.getElement().checked = (newValue == ZaBulkProvision.ACTION_GENERATE_BULK_SCV);
+						this.getElement().checked = (newValue == ZaBulkProvision.ACTION_GENERATE_BULK_CSV);
 					},
 					elementChanged: function(elementValue,instanceValue, event) {
 						this.setInstanceValue(ZaBulkProvision.ACTION_GENERATE_BULK_CSV,ZaBulkProvision.A2_provAction);
@@ -550,6 +600,15 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 			       	{type:_DWT_ALERT_, style:DwtAlert.INFO,iconVisible:false,content:com_zimbra_bulkprovision.ZimbraAdminPasswordNote,
 			       		visibilityChecks:[],enableDisableChecks:[],colSpan:2
 			       	},
+			       	{ref:ZaBulkProvision.A2_TargetDomainName, type:_DYNSELECT_,
+						label:com_zimbra_bulkprovision.TargetDomainName,
+						toolTipContent:ZaMsg.tt_StartTypingDomainName,
+						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
+						dataFetcherClass:ZaSearch,editable:true,
+						visibilityChecks:[],
+						visibilityChangeEventSources:[],
+						enableDisableChecks:[]
+					},
 					{ref:ZaBulkProvision.A2_ZimbraAdminLogin, type:_OUTPUT_, label:com_zimbra_bulkprovision.A2_ZimbraAdminLogin, labelLocation:_LEFT_, 
 						enableDisableChecks:[],visibilityChecks:[]				
 					},
@@ -559,6 +618,9 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 					{ref:ZaBulkProvision.A2_ZimbraAdminPasswordConfirm, type:_SECRET_, label:com_zimbra_bulkprovision.A2_ZimbraAdminPasswordConfirm, labelLocation:_LEFT_, 
 						enableDisableChecks:[],visibilityChecks:[]				
 					},
+					{ref:ZaBulkProvision.A2_provisionUsers,  type:_CHECKBOX_,  
+						label:com_zimbra_bulkprovision.A2_provisionUsers,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[]
+					},					
 					{type:_DWT_ALERT_, style:DwtAlert.INFO,iconVisible:false,content:com_zimbra_bulkprovision.MAPIINfoNote,
 			       		visibilityChecks:[],enableDisableChecks:[],colSpan:2
 			       	},
@@ -570,7 +632,8 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 					},
 					{ref:ZaBulkProvision.A2_MapiLogonUserDN, type:_TEXTFIELD_, width:"380px", label:com_zimbra_bulkprovision.A2_MapiLogonUserDN, labelLocation:_LEFT_, 
 						enableDisableChecks:[],visibilityChecks:[]				
-					}					
+					}
+
 			]
 	};
 	cases.push(case_exchange_options);
@@ -585,14 +648,14 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		       		label:com_zimbra_bulkprovision.LDAPMaxResults, labelLocation:_LEFT_,labelWrap:true,
 		       		visibilityChecks:[],enableDisableChecks:[]
 		       	},
-		       	{ref:ZaBulkProvision.A2_bulkImportDomainName, type:_DYNSELECT_,
-					label:com_zimbra_bulkprovision.DomainName,
+		       	{ref:ZaBulkProvision.A2_SourceDomainName, type:_DYNSELECT_,
+					label:com_zimbra_bulkprovision.SourceDomainName,
 					toolTipContent:ZaMsg.tt_StartTypingDomainName,
 					dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
 					dataFetcherClass:ZaSearch,editable:true,
 					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_provAction,ZaBulkProvision.ACTION_IMPORT_LDAP]],
 					visibilityChangeEventSources:[ZaBulkProvision.A2_provAction],
-					enableDisableChecks:[]
+					enableDisableChecks:[],bmolsnr:true
 				},		 		       	
 		       	{type:_GROUP_, numCols:6, colSpan:2,label:"   ",labelLocation:_LEFT_,
 					visibilityChecks:[],
@@ -608,12 +671,12 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 					visibilityChecks:[],enableDisableChecks:[]
 				},
 				{ref:ZaBulkProvision.A2_GalLdapBindDn, type:_TEXTFIELD_, width:"380px", label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, 
-					enableDisableChecks:[],visibilityChecks:[]				
+					enableDisableChecks:[],visibilityChecks:[],bmolsnr:true				
 				},
 				{ref:ZaBulkProvision.A2_GalLdapBindPassword, type:_SECRET_, label:ZaMsg.Domain_GalLdapBindPassword, labelLocation:_LEFT_, 
 					enableDisableChecks:[],visibilityChecks:[]				
 				},
-				{ref:ZaBulkProvision.A2_GalLdapBindPasswordConfirm, type:_SECRET_, label:ZaMsg.Domain_GalLdapBindPasswordConfirm, labelLocation:_LEFT_, 
+				{ref:ZaBulkProvision.A2_GalLdapConfirmBindPassword, type:_SECRET_, label:ZaMsg.Domain_GalLdapBindPasswordConfirm, labelLocation:_LEFT_, 
 					enableDisableChecks:[],visibilityChecks:[]				
 				},				
 				{ref:ZaBulkProvision.A2_GalLdapFilter, type:_TEXTAREA_, width:380, height:40, 
@@ -621,7 +684,7 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 					enableDisableChecks:[],visibilityChecks:[]
 				},
 				{ref:ZaBulkProvision.A2_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapSearchBase, 
-					labelLocation:_LEFT_, enableDisableChecks:[],visibilityChecks:[]
+					labelLocation:_LEFT_, enableDisableChecks:[],visibilityChecks:[],bmolsnr:true
 				}					
 		]
 	};

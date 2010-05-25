@@ -43,9 +43,25 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	private static final String E_ZCSImport = "ZCSImport";
 	private static final String E_Options = "Options";
 	private static final String E_ImportUsers = "ImportUsers";
+	private static final String E_ZimbraServer = "ZimbraServer";
 	private static final String E_User = "User";
 	private static final String E_ExchangeMail = "ExchangeMail";
-	
+	private static final String E_MapiProfile = "MapiProfile";
+	private static final String E_profile = "profile";
+	private static final String E_server = "server";
+	private static final String E_serverName = "serverName";
+	private static final String E_port = "port";
+	private static final String E_adminUserName = "adminUserName";
+	private static final String E_UserProvision = "UserProvision";
+	private static final String E_TargetDomainName = "TargetDomainName";
+	private static final String E_ZimbraAdminLogin = "ZimbraAdminLogin";
+	private static final String E_ZimbraAdminPassword = "ZimbraAdminPassword";
+	private static final String E_domain = "domain";
+	private static final String E_logonUserDN = "logonUserDN";
+	private static final String E_provisionUsers = "provisionUsers";
+	private static final String E_password = "password";
+	private static final String E_MapiServer = "MapiServer";
+	private static final String E_MapiLogonUserDN = "MapiLogonUserDN";
 	private static final String E_importMails = "importMails";
 	private static final String E_importContacts = "importContacts";
 	private static final String E_importTasks = "importTasks";
@@ -238,6 +254,58 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                     	InvalidSSLOkEl.setText("0");
                     }
                     optionsEl.add(InvalidSSLOkEl);
+                    
+                    /**
+                     * set MapiProfile section
+                     */
+                    org.dom4j.Element mapiProfileEl = DocumentHelper.createElement(E_MapiProfile);
+                    rootEl.add(mapiProfileEl);
+                    org.dom4j.Element profileEl = DocumentHelper.createElement(E_profile);
+                    profileEl.setText(request.getElement(E_MapiProfile).getTextTrim());
+                    mapiProfileEl.add(profileEl);
+                    
+                    org.dom4j.Element serverEl = DocumentHelper.createElement(E_server);
+                    serverEl.setText(request.getElement(E_MapiServer).getTextTrim());
+                    mapiProfileEl.add(serverEl);
+                    
+                    org.dom4j.Element logonUserDNEl = DocumentHelper.createElement(E_logonUserDN);
+                    logonUserDNEl.setText(request.getElement(E_MapiLogonUserDN).getTextTrim());
+                    mapiProfileEl.add(logonUserDNEl); 
+                    
+                    /**
+                     * set ZimbraServer section
+                     */
+                    org.dom4j.Element zimbraSererEl = DocumentHelper.createElement(E_ZimbraServer);
+                    rootEl.add(zimbraSererEl);                    
+                   
+                    org.dom4j.Element serverNameEl = DocumentHelper.createElement(E_serverName);
+                    serverNameEl.setText(Provisioning.getInstance().getLocalServer().getName());
+                    zimbraSererEl.add(serverNameEl); 
+                    
+                    org.dom4j.Element adminUserNameEl = DocumentHelper.createElement(E_adminUserName);
+                    adminUserNameEl.setText(request.getElement(E_ZimbraAdminLogin).getTextTrim());
+                    zimbraSererEl.add(adminUserNameEl);                     
+                    
+                    org.dom4j.Element adminUserPasswordEl = DocumentHelper.createElement(E_password);
+                    adminUserPasswordEl.setText(request.getElement(E_ZimbraAdminPassword).getTextTrim());
+                    zimbraSererEl.add(adminUserPasswordEl);                                         
+
+                    org.dom4j.Element domaindEl = DocumentHelper.createElement(E_domain);
+                    domaindEl.setText(request.getElement(E_TargetDomainName).getTextTrim());
+                    zimbraSererEl.add(domaindEl); 
+                    
+                    /**
+                     * set UserProvision section
+                     */
+                    org.dom4j.Element userProvisionEl = DocumentHelper.createElement(E_UserProvision);
+                    rootEl.add(userProvisionEl); 
+                    org.dom4j.Element provisionUsersEl = DocumentHelper.createElement(E_provisionUsers);
+                    if("TRUE".equalsIgnoreCase(request.getElement(E_provisionUsers).getTextTrim())) {
+                    	provisionUsersEl.setText("1");
+                    } else {
+                    	provisionUsersEl.setText("0");
+                    }    
+                    userProvisionEl.add(provisionUsersEl);
                     
                     /**
                      * set ImportUsers section

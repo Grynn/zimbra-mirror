@@ -255,7 +255,7 @@ ZaDashBoardController.prototype.openBulkProvisionDialog = function () {
 		var bp = new ZaBulkProvision();
 		bp[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_IMPORT_LDAP;
 		bp[ZaBulkProvision.A2_generatedFileLink] = null;
-		bp[ZaBulkProvision.A2_maxResults] = 0;
+		bp[ZaBulkProvision.A2_maxResults] = "0";
 		bp[ZaBulkProvision.A2_GalLdapFilter] = "(objectClass=organizationalPerson)";
 		bp[ZaBulkProvision.A2_generatePassword] = "TRUE";
 		bp[ZaBulkProvision.A2_genPasswordLength] = 8;
