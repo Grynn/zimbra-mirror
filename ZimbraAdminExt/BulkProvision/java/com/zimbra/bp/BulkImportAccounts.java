@@ -1,6 +1,10 @@
 package com.zimbra.bp;
 
 import java.io.File;
+import org.dom4j.io.SAXReader;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,6 +17,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Iterator;
 
 import javax.naming.NamingException;
 
@@ -57,6 +62,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 	private static final String E_attachmentID = "aid";
 	private static final String E_errorReportFileToken = "fileToken";
 	private static final String E_errorCount = "errorCount";
+	private static final String E_mustChangePassword = "mustChangePassword";
 	
 	public static final String ERROR_INVALID_ACCOUNT_NAME = "Invalid account name. " ;
 	
@@ -75,34 +81,6 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 			GalParams.ExternalGalParams galParams = new GalParams.ExternalGalParams(attrs, GalOp.search);
 	        String[] galAttrs = Provisioning.getInstance().getConfig().getMultiAttr(Provisioning.A_zimbraGalLdapAttrMap);
 	        LdapGalMapRules rules = new LdapGalMapRules(galAttrs);
-			Element elPassword = request.getOptionalElement(ZimbraBulkProvisionExt.A_password);
-			Element elPasswordLength = request.getOptionalElement(ZimbraBulkProvisionExt.A_genPasswordLength);
-
-			String setMustChangePwd = "true";
-			String generatePwd = request.getElement(ZimbraBulkProvisionExt.A_generatePassword).getTextTrim();
-
-			
-			int genPwdLength = 0;
-			if(generatePwd == null) {
-				generatePwd = "false";			
-			} else if(generatePwd.equalsIgnoreCase("true")) {
-				if(elPasswordLength != null) {
-					genPwdLength = Integer.valueOf(elPasswordLength.getTextTrim());
-				} else {
-					genPwdLength = DEFAULT_PWD_LENGTH;
-				}
-				if(genPwdLength < 1) {
-					genPwdLength = DEFAULT_PWD_LENGTH;
-				}
-			}	
-			
-			if(!generatePwd.equalsIgnoreCase("true")) {
-				Element elSetMustChangePwd = request.getOptionalElement(ZimbraBulkProvisionExt.A_setMustChangePwd);
-				if(elSetMustChangePwd != null) {
-					setMustChangePwd = elSetMustChangePwd.getTextTrim();
-				}				
-			}
-			
 			/**
 			 * list of entries found in the source (CSV file, XML file or directory)
 			 */
@@ -111,7 +89,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 			if(sourceType.equalsIgnoreCase(AdminFileDownload.FILE_FORMAT_BULK_CSV)) {
 				String aid = request.getElement(E_attachmentID).getText();
 				ZimbraLog.extensions.debug("Uploaded CSV file id = " + aid) ;
-				response.addElement(E_attachmentID).addText(aid);
+				//response.addElement(E_attachmentID).addText(aid);
 		        FileUploadServlet.Upload up = FileUploadServlet.fetchUpload(zsc.getAuthtokenAccountId(), aid, zsc.getAuthToken());
 		        if (up == null) {
 		           throw ServiceException.FAILURE("Uploaded CSV file with id " + aid + " was not found.", null);
@@ -133,7 +111,6 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		            for (int i=0; i < totalNumberOfEntries; i ++) {
 		                nextLine = (String []) allEntries.get(i);
 		                boolean isValidEntry = false ;
-		                String password = null ;
 		                try {
 		                    isValidEntry = validEntry (nextLine, zsc) ;
 		                } catch (ServiceException e) {
@@ -142,26 +119,20 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		                }
 
 		                if (!isValidEntry) {
-		                	throw ServiceException.INVALID_REQUEST(String.format("Entry %d is not valid (%s %s %s)", i,nextLine[0],nextLine[1],nextLine[2]), null);
+		                	throw ServiceException.INVALID_REQUEST(String.format("Entry %d is not valid (%s %s %s %s %s %s)", i,nextLine[0],nextLine[1],nextLine[2],nextLine[3],nextLine[4],nextLine[5]), null);
 		                }
 	                	Map<String, Object> accAttrs = new HashMap<String, Object>();
 	                	
 	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_displayName, nextLine[1].trim());
-	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_givenName, nextLine[3].trim());
-	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_sn, nextLine[4].trim());
-
-	        			if(setMustChangePwd.equalsIgnoreCase("true")) {
-	        				StringUtil.addToMultiMap(accAttrs, Provisioning.A_zimbraPasswordMustChange, "TRUE");
-	        			}
+	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_givenName, nextLine[2].trim());
+	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_sn, nextLine[3].trim());
+        				StringUtil.addToMultiMap(accAttrs, Provisioning.A_zimbraPasswordMustChange, nextLine[5].trim());
+        				
 	        			checkSetAttrsOnCreate(zsc, TargetType.account, nextLine[1].trim(), accAttrs);
 
 	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_mail, nextLine[1].trim());
-
-	                	if(password != null) {
-	                		StringUtil.addToMultiMap(accAttrs, Provisioning.A_userPassword, password);
-	                	} else if(generatePwd.equalsIgnoreCase("true")) {
-	                		StringUtil.addToMultiMap(accAttrs, Provisioning.A_userPassword, String.valueOf(GetBulkProvisionAccounts.generateStrongPassword(genPwdLength)));
-	                	}		          
+                		StringUtil.addToMultiMap(accAttrs, Provisioning.A_userPassword, nextLine[4].trim());
+                		
 	                	sourceEntries.add(accAttrs);
 		            }
 
@@ -177,8 +148,114 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		            }
 		        }		        
 			} else if(sourceType.equalsIgnoreCase(AdminFileDownload.FILE_FORMAT_BULK_XML)) {
-				
+				String aid = request.getElement(E_attachmentID).getText();
+				ZimbraLog.extensions.debug("Uploaded XML file id = " + aid) ;
+		        FileUploadServlet.Upload up = FileUploadServlet.fetchUpload(zsc.getAuthtokenAccountId(), aid, zsc.getAuthToken());
+		        if (up == null) {
+		           throw ServiceException.FAILURE("Uploaded CSV file with id " + aid + " was not found.", null);
+		        }				
+		        SAXReader reader = new SAXReader();
+		        try {
+					Document doc = reader.read(up.getInputStream());
+					org.dom4j.Element root = doc.getRootElement();
+		            if (!root.getName().equals(ZimbraBulkProvisionExt.E_ZCSImport)) {
+		                throw new DocumentException("Bulk provisioning XML file's root element must be " + ZimbraBulkProvisionExt.E_ZCSImport);
+		            }
+		            Iterator  iter = root.elementIterator(ZimbraBulkProvisionExt.E_ImportUsers);
+		            if(!iter.hasNext()) {
+		            	throw new DocumentException("Cannot find element " + ZimbraBulkProvisionExt.E_ImportUsers + " in uploaded bulk provisioning XML file");
+		            }
+		            org.dom4j.Element elImportUsers = (org.dom4j.Element)iter.next();
+		            for(Iterator userIter = elImportUsers.elementIterator(ZimbraBulkProvisionExt.E_User);userIter.hasNext();) {
+		            	org.dom4j.Element elUser  = (org.dom4j.Element)userIter.next();
+		            	String userEmail = "";
+		            	String userFN = "";
+		            	String userLN = "";
+		            	String userDN = "";
+		            	String userPassword = "";
+		            	String userPwdMustChange = "";
+		            	boolean skipUser = false;
+		            	for(Iterator userPropsIter = elUser.elementIterator(); userPropsIter.hasNext();) {
+		            		org.dom4j.Element el = (org.dom4j.Element)userPropsIter.next();
+		            		if(ZimbraBulkProvisionExt.E_ExchangeMail.equalsIgnoreCase(el.getName())) {
+		            			userEmail = el.getTextTrim();
+		            			/**
+		            			 * Check if user exists
+		            			 */
+			                	Account acct = prov.getAccountByName(userEmail);
+			                	if(acct!=null) {
+			                		/**
+			                		 * Skip existing user
+			                		 */
+			                		skipUser = true;
+			                		break;
+			                	}
+		            		}
+		            		if(Provisioning.A_displayName.equalsIgnoreCase(el.getName())) {
+		            			userDN = el.getTextTrim();
+		            		}
+		            		
+		            		if(Provisioning.A_givenName.equalsIgnoreCase(el.getName())) {
+		            			userFN = el.getTextTrim();
+		            		}
+		            		
+		            		if(Provisioning.A_sn.equalsIgnoreCase(el.getName())) {
+		            			userLN = el.getTextTrim();
+		            		}
+		            		
+		            		if(ZimbraBulkProvisionExt.A_password.equalsIgnoreCase(el.getName())) {
+		            			userPassword = el.getTextTrim();
+		            		}
+		            		
+		            		if(Provisioning.A_zimbraPasswordMustChange.equalsIgnoreCase(el.getName())) {
+		            			userPwdMustChange = el.getTextTrim();
+		            		}		            		
+		            	}
+	                	checkDomainRightByEmail(zsc, userEmail, Admin.R_createAccount);
+	                	Map<String, Object> accAttrs = new HashMap<String, Object>();
+	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_givenName, userFN);
+	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_displayName, userDN);
+	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_sn, userLN);
+        				StringUtil.addToMultiMap(accAttrs, Provisioning.A_zimbraPasswordMustChange, userPwdMustChange);
+        				
+	        			checkSetAttrsOnCreate(zsc, TargetType.account, userEmail, accAttrs);
+
+	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_mail, userEmail);
+	                	if(userPassword != null) {
+	                		StringUtil.addToMultiMap(accAttrs, Provisioning.A_userPassword, userPassword);
+	                	}
+	        			
+	                	sourceEntries.add(accAttrs);
+		            	
+		            }
+		            
+				} catch (DocumentException e) {
+					throw ServiceException.FAILURE("Bulk provisioning failed to read uploaded XML document.", e) ;
+				} catch (IOException e) {
+					throw ServiceException.FAILURE("Bulk provisioning failed to read uploaded XML document.", e) ;
+				}
 			} else if(sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_BULK_LDAP)) {
+				Element elPassword = request.getOptionalElement(ZimbraBulkProvisionExt.A_password);
+				Element elPasswordLength = request.getOptionalElement(ZimbraBulkProvisionExt.A_genPasswordLength);
+
+				String generatePwd = request.getElement(ZimbraBulkProvisionExt.A_generatePassword).getTextTrim();
+
+				
+				int genPwdLength = 0;
+				if(generatePwd == null) {
+					generatePwd = "false";			
+				} else if(generatePwd.equalsIgnoreCase("true")) {
+					if(elPasswordLength != null) {
+						genPwdLength = Integer.valueOf(elPasswordLength.getTextTrim());
+					} else {
+						genPwdLength = DEFAULT_PWD_LENGTH;
+					}
+					if(genPwdLength < 1) {
+						genPwdLength = DEFAULT_PWD_LENGTH;
+					}
+				}	
+				
+				
 				int maxResults = 0;
 				Element elMaxResults = request.getOptionalElement(ZimbraBulkProvisionExt.A_maxResults);
 				if(elMaxResults != null) {
@@ -189,7 +266,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 				if(elPassword != null) {
 					password = elPassword.getTextTrim();
 				}
-				
+				String mustChangePassword = request.getElement(E_mustChangePassword).getTextTrim();
 				try {
 					SearchGalResult result = LdapUtil.searchLdapGal(galParams, GalOp.search, "*", maxResults, rules, null, null);
 					List<GalContact> entries = result.getMatches();
@@ -220,7 +297,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_co, entry.getSingleAttr(ContactConstants.A_homeCountry));
 		        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_postalCode, entry.getSingleAttr(ContactConstants.A_homePostalCode));
 		        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_street, entry.getSingleAttr(ContactConstants.A_homeAddress));			
-		        			if(setMustChangePwd.equalsIgnoreCase("true")) {
+		        			if("true".equalsIgnoreCase(mustChangePassword)) {
 		        				StringUtil.addToMultiMap(accAttrs, Provisioning.A_zimbraPasswordMustChange, "TRUE");
 		        			}
 		        			checkSetAttrsOnCreate(zsc, TargetType.account, emailAddress, accAttrs);
@@ -406,7 +483,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
     private boolean validEntry (String [] entries, ZimbraSoapContext lc) throws ServiceException {
         Provisioning prov = Provisioning.getInstance();
         String errorMsg = "" ;
-        if (entries.length != 3) {
+        if (entries.length != 6) {
             errorMsg = "Invalid number of columns." ;
             throw ServiceException.PARSE_ERROR(errorMsg, new Exception(errorMsg)) ;
         }

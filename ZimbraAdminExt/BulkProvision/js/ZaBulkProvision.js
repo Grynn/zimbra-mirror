@@ -13,7 +13,7 @@ ZaBulkProvision.prototype.constructor = ZaBulkProvision;
 
 ZaBulkProvision.A_csv_aid = "csv_aid" ; //uploaded csv file attachment id
 ZaBulkProvision.A_provision_accounts = "provision_accounts";
-ZaBulkProvision.A_mustChangePassword = "setMustChangePwd"; //the value of the must change password check box
+ZaBulkProvision.A_mustChangePassword = "mustChangePassword"; //the value of the must change password check box
 ZaBulkProvision.A_isValidCSV = "isValidCSV" ;
 
 ZaBulkProvision.A2_fileFormat = "fileFormat";
@@ -258,6 +258,7 @@ ZaBulkProvision.generateBulkProvisionFile = function(obj, callback) {
 	}
 	attr = soapDoc.set(ZaBulkProvision.A2_generatePassword,obj[ZaBulkProvision.A2_generatePassword]);
 	attr = soapDoc.set(ZaBulkProvision.A2_genPasswordLength,obj[ZaBulkProvision.A2_genPasswordLength]);
+	attr = soapDoc.set(ZaBulkProvision.A_mustChangePassword,obj[ZaBulkProvision.A_mustChangePassword]);
 	if(obj[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_MIG_XML) {
 		attr = soapDoc.set(ZaBulkProvision.A2_fileFormat,ZaBulkProvision.FILE_FORMAT_MIGRATION_XML);
 		attr = soapDoc.set(ZaBulkProvision.A2_importMails,obj[ZaBulkProvision.A2_importMails]);

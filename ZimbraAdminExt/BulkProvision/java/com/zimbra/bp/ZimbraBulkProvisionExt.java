@@ -35,6 +35,10 @@ public class ZimbraBulkProvisionExt implements ZimbraExtension {
 	public static final String A_fileFormat = "fileFormat";
 	public static final String A_maxResults = "maxResults";
 	public static final String A_setMustChangePwd = "setMustChangePwd";
+	public static final String E_User = "User";
+	public static final String E_ExchangeMail = "ExchangeMail";
+	public static final String E_ZCSImport = "ZCSImport";
+	public static final String E_ImportUsers = "ImportUsers";
 
     public void destroy() {
     }

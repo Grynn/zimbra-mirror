@@ -40,12 +40,8 @@ import com.zimbra.cs.service.admin.AdminFileDownload;
 public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	
 	private static final String E_fileToken = "fileToken";
-	private static final String E_ZCSImport = "ZCSImport";
 	private static final String E_Options = "Options";
-	private static final String E_ImportUsers = "ImportUsers";
 	private static final String E_ZimbraServer = "ZimbraServer";
-	private static final String E_User = "User";
-	private static final String E_ExchangeMail = "ExchangeMail";
 	private static final String E_MapiProfile = "MapiProfile";
 	private static final String E_profile = "profile";
 	private static final String E_server = "server";
@@ -70,7 +66,7 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	private static final String E_importJunk = "importJunk";
 	private static final String E_ignorePreviouslyImported = "ignorePreviouslyImported";
 	private static final String E_InvalidSSLOk = "InvalidSSLOk";
-	
+	private static final String E_mustChangePassword = "mustChangePassword";
 	
 	private static final int DEFAULT_PWD_LENGTH = 8;
 	public Element handle(Element request, Map<String, Object> context) throws ServiceException {
@@ -84,7 +80,8 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 		String generatePwd = request.getElement(ZimbraBulkProvisionExt.A_generatePassword).getTextTrim();
 		Element elPasswordLength = request.getOptionalElement(ZimbraBulkProvisionExt.A_genPasswordLength);
 		String fileFormat = request.getElement(ZimbraBulkProvisionExt.A_fileFormat).getTextTrim();
-
+		String mustChangePassword = request.getElement(E_mustChangePassword).getTextTrim();
+		
 		int genPwdLength = 0;
 		if(generatePwd == null) {
 			generatePwd = "false";			
@@ -122,14 +119,18 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	                	if(mail == null)
 	                		continue;
 	                	
-	                	String [] line = new String [3] ;
+	                	String [] line = new String [6] ;
 	                	line[0] = mail;
 	                	line[1] = entry.getSingleAttr(ContactConstants.A_fullName);
+	                	line[2] = entry.getSingleAttr(ContactConstants.A_firstName);
+	                	line[3] = entry.getSingleAttr(ContactConstants.A_lastName);
 	                	if(password != null) {
-	                		line[2] = password;
+	                		line[4] = password;
 	                	} else if(generatePwd.equalsIgnoreCase("true")) {
-	                		line[2] = String.valueOf(GetBulkProvisionAccounts.generateStrongPassword(genPwdLength));
+	                		line[4] = String.valueOf(GetBulkProvisionAccounts.generateStrongPassword(genPwdLength));
 	                	}
+	                	
+	                	line[5] = mustChangePassword;
 	                	writer.writeNext(line);
 	            	}
 	                writer.close();
@@ -138,8 +139,8 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                 	FileWriter fileWriter = new FileWriter(outFileName);
                 	XMLWriter xw = new XMLWriter(fileWriter, org.dom4j.io.OutputFormat.createPrettyPrint());
                     Document doc = DocumentHelper.createDocument();
-                    org.dom4j.Element rootEl = DocumentHelper.createElement(E_ZCSImport);
-                    org.dom4j.Element usersEl = DocumentHelper.createElement(E_ImportUsers);
+                    org.dom4j.Element rootEl = DocumentHelper.createElement(ZimbraBulkProvisionExt.E_ZCSImport);
+                    org.dom4j.Element usersEl = DocumentHelper.createElement(ZimbraBulkProvisionExt.E_ImportUsers);
                     doc.add(rootEl);
                     rootEl.add(usersEl);
                     for (GalContact entry : entries) {
@@ -147,8 +148,8 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                     	if(email == null)
                     		continue;
                     	
-                    	org.dom4j.Element eUser = DocumentHelper.createElement(E_User);
-                    	org.dom4j.Element eName = DocumentHelper.createElement(AdminConstants.E_NAME);
+                    	org.dom4j.Element eUser = DocumentHelper.createElement(ZimbraBulkProvisionExt.E_User);
+                    	org.dom4j.Element eName = DocumentHelper.createElement(ZimbraBulkProvisionExt.E_ExchangeMail);
                     	
                     	if(email != null) {
                     		eName.setText(email);
@@ -182,6 +183,11 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	                    	ePassword.setText(String.valueOf(GetBulkProvisionAccounts.generateStrongPassword(genPwdLength)));
 	                	}   
 	                	eUser.add(ePassword);
+	                	
+	                	org.dom4j.Element elMustChangePassword = DocumentHelper.createElement(Provisioning.A_zimbraPasswordMustChange);
+	                	elMustChangePassword.setText(mustChangePassword);
+	                	eUser.add(elMustChangePassword);
+	                	
                         usersEl.add(eUser);
                     }                	
                     xw.write(doc);
@@ -191,7 +197,7 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                 	FileWriter fileWriter = new FileWriter(outFileName);
                 	XMLWriter xw = new XMLWriter(fileWriter, org.dom4j.io.OutputFormat.createPrettyPrint());
                     Document doc = DocumentHelper.createDocument();
-                    org.dom4j.Element rootEl = DocumentHelper.createElement(E_ZCSImport);
+                    org.dom4j.Element rootEl = DocumentHelper.createElement(ZimbraBulkProvisionExt.E_ZCSImport);
                     doc.add(rootEl);
                     /**
                      * set Options section
@@ -310,7 +316,7 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                     /**
                      * set ImportUsers section
                      */
-                    org.dom4j.Element usersEl = DocumentHelper.createElement(E_ImportUsers);
+                    org.dom4j.Element usersEl = DocumentHelper.createElement(ZimbraBulkProvisionExt.E_ImportUsers);
 
                     rootEl.add(usersEl);
                     for (GalContact entry : entries) {
@@ -318,8 +324,8 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                     	if(email == null)
                     		continue;
                     	
-                    	org.dom4j.Element eUser = DocumentHelper.createElement(E_User);
-                    	org.dom4j.Element eExchangeMail = DocumentHelper.createElement(E_ExchangeMail);
+                    	org.dom4j.Element eUser = DocumentHelper.createElement(ZimbraBulkProvisionExt.E_User);
+                    	org.dom4j.Element eExchangeMail = DocumentHelper.createElement(ZimbraBulkProvisionExt.E_ExchangeMail);
                     	eExchangeMail.setText(email);
                         eUser.add(eExchangeMail);
                         

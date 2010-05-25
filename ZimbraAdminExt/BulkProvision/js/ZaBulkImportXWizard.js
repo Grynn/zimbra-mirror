@@ -158,6 +158,7 @@ ZaBulkImportXWizard.prototype.generateBulkFileCallback =
 function(params,resp) {
 	try {
 		if(resp && resp.isException()) {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaBulkImportXWizard.prototype.generateBulkFileCallback");
 		} else {
 			var response = resp.getResponse().Body.GenerateBulkProvisionFileFromLDAPResponse;
@@ -167,25 +168,23 @@ function(params,resp) {
 					format = ZaBulkProvision.FILE_FORMAT_MIGRATION_XML;
 				} else if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_BULK_XML) {
 					format = ZaBulkProvision.FILE_FORMAT_BULK_XML;
-				} else if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_MIG_CSV) {
+				} else if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_BULK_CSV) {
 					format = ZaBulkProvision.FILE_FORMAT_BULK_CSV;
 				}
 				this._localXForm.setInstanceValue(
 						AjxMessageFormat.format("{0}//{1}:{2}/service/afd/?action=getBulkFile&fileID={3}&fileFormat={4}",
 								[location.protocol,location.hostname,location.port,response.fileToken[0]._content,format]),
-								ZaBulkProvision.A2_generatedFileLink);	
+								ZaBulkProvision.A2_generatedFileLink);
+				this.goPage(ZaBulkImportXWizard.STEP_DOWNLOAD_FILE);
+				this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			}
-			
 		}
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaBulkImportXWizard.prototype.generateBulkFileCallback");	
 	}
 		
-	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
-	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);	
-	this.goPage(ZaBulkImportXWizard.STEP_DOWNLOAD_FILE);	
-
 };
 
 ZaBulkImportXWizard.prototype.goNext =
@@ -267,10 +266,9 @@ function() {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_PASSWORDS_DONT_MATCH);
 			return;
 		}		
-		this		
 		if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_MIG_XML || 
 				this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_BULK_XML ||
-				this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_MIG_CSV) {
+				this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_BULK_CSV) {
 
 			/**
 			 * Generate the file and launch a callback when file is ready
@@ -452,7 +450,7 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 	var case_choose_action = {type:_CASE_,numCols:2,colSizes:["100px","*"],
 		tabGroupKey:ZaBulkImportXWizard.STEP_CHOOSE_ACTION,caseKey:ZaBulkImportXWizard.STEP_CHOOSE_ACTION,
 		items:[
-		       {type:_DWT_ALERT_, style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.SelectAction,visibilityChecks:[]},
+		       {type:_DWT_ALERT_, style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.SelectAction1,visibilityChecks:[]},
 		       {type:_RADIO_, groupname:"action_selection",ref:ZaBulkProvision.A2_provAction,bmolsnr:true,
 					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.ActionImportFromLDAP,
 					updateElement:function (newValue) {
@@ -480,6 +478,7 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 						this.setInstanceValue(ZaBulkProvision.ACTION_IMPORT_XML,ZaBulkProvision.A2_provAction);
 					},visibilityChecks:[],enableDisableChecks:[]
 		       },
+		       {type:_DWT_ALERT_, style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.SelectAction2,visibilityChecks:[]},
 		       {type:_RADIO_, groupname:"action_selection",ref:ZaBulkProvision.A2_provAction,bmolsnr:true,
 					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.ActionGenerateMigXML,
 					updateElement:function (newValue) {
