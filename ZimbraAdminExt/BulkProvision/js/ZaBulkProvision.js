@@ -59,6 +59,13 @@ ZaBulkProvision.A2_importDeletedItems = "importDeletedItems";
 ZaBulkProvision.A2_importJunk = "importJunk";
 ZaBulkProvision.A2_ignorePreviouslyImported = "ignorePreviouslyImported";
 ZaBulkProvision.A2_InvalidSSLOk = "InvalidSSLOk";
+ZaBulkProvision.A2_MapiProfile = "MapiProfile";
+ZaBulkProvision.A2_MapiServer = "MapiServer";
+ZaBulkProvision.A2_MapiLogonUserDN = "MapiLogonUserDN";
+ZaBulkProvision.A2_ZimbraAdminPassword = "ZimbraAdminPassword";
+ZaBulkProvision.A2_ZimbraAdminLogin = "ZimbraAdminLogin";
+ZaBulkProvision.A2_ZimbraAdminPasswordConfirm = "ZimbraAdminPasswordConfirm";
+ZaBulkProvision.A2_provisionUsers = "provisionUsers";
 
 ZaBulkProvision.iSTATUS_IDLE = 0;
 ZaBulkProvision.iSTATUS_STARTED = 1;
@@ -129,7 +136,14 @@ ZaBulkProvision.getMyXModel = function () {
 	        {id:ZaBulkProvision.A2_importDeletedItems, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_importDeletedItems},
 	        {id:ZaBulkProvision.A2_importJunk, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_importJunk},
 	        {id:ZaBulkProvision.A2_ignorePreviouslyImported, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_ignorePreviouslyImported},
-	        {id:ZaBulkProvision.A2_InvalidSSLOk, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_InvalidSSLOk}	        
+	        {id:ZaBulkProvision.A2_InvalidSSLOk, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_InvalidSSLOk},
+	        {id:ZaBulkProvision.A2_MapiProfile, type:_STRING_, ref:ZaBulkProvision.A2_MapiProfile},
+	        {id:ZaBulkProvision.A2_MapiServer, type:_STRING_, ref:ZaBulkProvision.A2_MapiServer},
+	        {id:ZaBulkProvision.A2_MapiLogonUserDN, type:_STRING_, ref:ZaBulkProvision.A2_MapiLogonUserDN},
+	        {id:ZaBulkProvision.A2_ZimbraAdminPassword, type:_STRING_, ref:ZaBulkProvision.A2_ZimbraAdminPassword},
+	        {id:ZaBulkProvision.A2_ZimbraAdminPasswordConfirm, type:_STRING_, ref:ZaBulkProvision.A2_ZimbraAdminPasswordConfirm},
+	        {id:ZaBulkProvision.A2_ZimbraAdminLogin, type:_STRING_, ref:ZaBulkProvision.A2_ZimbraAdminLogin},
+	        {id:ZaBulkProvision.A2_provisionUsers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_provisionUsers}
         ]
     }
 
@@ -237,7 +251,9 @@ ZaBulkProvision.generateBulkProvisionFile = function(obj, callback) {
 	attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapBindPassword]);
 	attr.setAttribute("n", ZaBulkProvision.A2_GalLdapBindPassword);
 
-	attr = soapDoc.set(ZaBulkProvision.A2_password,obj[ZaBulkProvision.A2_password]);
+	if(obj[ZaBulkProvision.A2_password]) {
+		attr = soapDoc.set(ZaBulkProvision.A2_password,obj[ZaBulkProvision.A2_password]);
+	}
 	attr = soapDoc.set(ZaBulkProvision.A2_generatePassword,obj[ZaBulkProvision.A2_generatePassword]);
 	attr = soapDoc.set(ZaBulkProvision.A2_genPasswordLength,obj[ZaBulkProvision.A2_genPasswordLength]);
 	if(obj[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_MIG_XML) {
@@ -250,6 +266,11 @@ ZaBulkProvision.generateBulkProvisionFile = function(obj, callback) {
 		attr = soapDoc.set(ZaBulkProvision.A2_importJunk,obj[ZaBulkProvision.A2_importJunk]);
 		attr = soapDoc.set(ZaBulkProvision.A2_ignorePreviouslyImported,obj[ZaBulkProvision.A2_ignorePreviouslyImported]);
 		attr = soapDoc.set(ZaBulkProvision.A2_InvalidSSLOk,obj[ZaBulkProvision.A2_InvalidSSLOk]);
+		attr = soapDoc.set(ZaBulkProvision.A2_ZimbraAdminLogin,obj[ZaBulkProvision.A2_ZimbraAdminLogin]);
+		attr = soapDoc.set(ZaBulkProvision.A2_ZimbraAdminPassword,obj[ZaBulkProvision.A2_ZimbraAdminPassword]);
+		attr = soapDoc.set(ZaBulkProvision.A2_MapiProfile,obj[ZaBulkProvision.A2_MapiProfile]);
+		attr = soapDoc.set(ZaBulkProvision.A2_MapiServer,obj[ZaBulkProvision.A2_MapiServer]);
+		attr = soapDoc.set(ZaBulkProvision.A2_MapiLogonUserDN,obj[ZaBulkProvision.A2_MapiLogonUserDN]);
 	} else if(obj[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_BULK_XML) {
 		attr = soapDoc.set(ZaBulkProvision.A2_fileFormat,ZaBulkProvision.FILE_FORMAT_BULK_XML);
 	} else if(obj[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_BULK_CSV) {

@@ -188,6 +188,7 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                     	importMailsEl.setText("0");
                     }
                 	optionsEl.add(importMailsEl);
+                	rootEl.add(optionsEl);
                     org.dom4j.Element importContactsEl = DocumentHelper.createElement(E_importContacts);
                     if("TRUE".equalsIgnoreCase(request.getElement(E_importContacts).getTextTrim())) {
                     	importContactsEl.setText("1");
@@ -252,7 +253,16 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                     	org.dom4j.Element eUser = DocumentHelper.createElement(E_User);
                     	org.dom4j.Element eExchangeMail = DocumentHelper.createElement(E_ExchangeMail);
                     	eExchangeMail.setText(email);
-                        usersEl.add(eUser);
+                        eUser.add(eExchangeMail);
+                        
+                    	org.dom4j.Element ePassword = DocumentHelper.createElement(ZimbraBulkProvisionExt.A_password);
+	                	if(password != null) {
+	                    	ePassword.setText(password);
+	                	} else if(generatePwd.equalsIgnoreCase("true")) {
+	                    	ePassword.setText(String.valueOf(GetBulkProvisionAccounts.generateStrongPassword(genPwdLength)));
+	                	}   
+	                	eUser.add(ePassword);                        
+                    	usersEl.add(eUser);
                     }                	
                     xw.write(doc);
                     xw.flush();                	
