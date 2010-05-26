@@ -275,7 +275,7 @@ ZaBulkImportXWizard.prototype.processBulkImportResponse = function(response) {
 	} else {
 		this._localXForm.setInstanceValue("0%",ZaBulkProvision.A2_progress);
 	}
-	if(status == ZaBulkProvision.iSTATUS_STARTED || status == ZaBulkProvision.iSTATUS_ABORT) {
+	if(status == ZaBulkProvision.iSTATUS_ABORT) {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);
 	}
@@ -313,7 +313,7 @@ ZaBulkImportXWizard.prototype.processBulkImportResponse = function(response) {
 
 ZaBulkImportXWizard.isProvisioningNoteVisible = function() {
 	var status = this.getInstanceValue(ZaBulkProvision.A2_status);
-	return (status == ZaBulkProvision.iSTATUS_STARTED || status == ZaBulkProvision.iSTATUS_STARTING || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS);
+	return (status == ZaBulkProvision.iSTATUS_STARTED || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS);
 }
 
 ZaBulkImportXWizard.prototype.importFromLDAPCallback = function(params,resp) {
@@ -640,7 +640,7 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		type:_CASE_, numCols:2, colSizes:["250px","*"],tabGroupKey:ZaBulkImportXWizard.STEP_PROV_OPTIONS, caseKey:ZaBulkImportXWizard.STEP_PROV_OPTIONS,
 		items:[
 		       	{type:_DWT_ALERT_, style:DwtAlert.INFO,iconVisible:false,content:com_zimbra_bulkprovision.ProvOptionsNote,visibilityChecks:[],enableDisableChecks:[]},
-				{type:_RADIO_, groupname:"account_password_option",ref:ZaBulkProvision.A2_generatePassword,
+		       	{type:_RADIO_, groupname:"account_password_option",ref:ZaBulkProvision.A2_generatePassword,
 					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.GenerateRandomPassword, bmolsnr:true,
 					updateElement:function (newValue) {
 						this.getElement().checked = (newValue == "TRUE");
@@ -654,6 +654,7 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 				   enableDisableChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_generatePassword,"TRUE"]],
 				   cssClass:"admin_xform_number_input"
 				},
+		       	{type:_DWT_ALERT_, style:DwtAlert.WARNING,iconVisible:false,content:com_zimbra_bulkprovision.GeneratePasswordsNote,visibilityChecks:[],enableDisableChecks:[]},				
 				{type:_RADIO_, groupname:"account_password_option",ref:ZaBulkProvision.A2_generatePassword, bmolsnr:true,
 					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.UseSamePassword,
 					updateElement:function (newValue) {
@@ -852,11 +853,6 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		type:_CASE_, numCols:2, colSizes:["250px", "*"], 
 		tabGroupKey:ZaBulkImportXWizard.STEP_PROVISION, caseKey:ZaBulkImportXWizard.STEP_PROVISION,
 		items:[
-		       {type:_DWT_ALERT_, style:DwtAlert.WARNING,iconVisible:false,content:com_zimbra_bulkprovision.ProvisioningStatusNote,
-					visibilityChecks:[ZaBulkImportXWizard.isProvisioningNoteVisible],
-					visibilityChangeEventSources:[ZaBulkProvision.A2_status],
-					enableDisableChecks:[],colSpan:2
-		       },
 		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_status,label:com_zimbra_bulkprovision.ProcessStatus,
 		    	   	getDisplayValue:function(val) {
 		    	   		return ZaBulkImportXWizard.STATUS_LABELS[val];
@@ -867,6 +863,11 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_skippedCount,label:com_zimbra_bulkprovision.Skipped,bmolsnr:true},
 		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_errorCount,label:com_zimbra_bulkprovision.FailedAccounts,bmolsnr:true},
 		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_progress,label:com_zimbra_bulkprovision.Progress,bmolsnr:true},
+		       {type:_DWT_ALERT_, style:DwtAlert.WARNING,iconVisible:false,content:com_zimbra_bulkprovision.ProvisioningStatusNote,
+					visibilityChecks:[ZaBulkImportXWizard.isProvisioningNoteVisible],
+					visibilityChangeEventSources:[ZaBulkProvision.A2_status],
+					enableDisableChecks:[],colSpan:2
+		       },
 		       {type:_DWT_ALERT_, style:DwtAlert.INFO,iconVisible:false,content:com_zimbra_bulkprovision.ProvisioningSuccessReportsNote,
 					visibilityChangeEventSources:[ZaBulkProvision.A2_status],
 					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_status,ZaBulkProvision.iSTATUS_FINISHED]],colSpan:2

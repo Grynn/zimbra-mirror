@@ -420,10 +420,10 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 					try {	
 						FileOutputStream outReport = new FileOutputStream (outSuccessFileName) ;
 						CSVWriter reportWriter = new CSVWriter(new OutputStreamWriter (outReport) ) ;	            	
-						for(String failedAccount : thread.getfailedAccounts().keySet()) {	
+						for(String completedAccount : thread.getCompletedAccounts().keySet()) {	
 							String [] line = new String [2] ;
-							line[0] = failedAccount;
-							line[1] = thread.getfailedAccounts().get(failedAccount).getMessage();
+							line[0] = completedAccount; //account name
+							line[1] = thread.getCompletedAccounts().get(completedAccount); //account password
 							reportWriter.writeNext(line);
 						}
 						reportWriter.close();					

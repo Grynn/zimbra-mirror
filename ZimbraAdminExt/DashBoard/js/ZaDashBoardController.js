@@ -260,6 +260,7 @@ ZaDashBoardController.prototype.openBulkProvisionDialog = function () {
 		bp[ZaBulkProvision.A2_generatePassword] = "TRUE";
 		bp[ZaBulkProvision.A2_genPasswordLength] = 8;
 		bp[ZaBulkProvision.A2_ZimbraAdminLogin] = ZaZimbraAdmin.currentUserLogin;
+		bp[ZaBulkProvision.A2_createDomains] = "TRUE";
 //		if(!ZaApp.getInstance().dialogs["importAccountsWizard"]) {
 			//ZaApp.getInstance().dialogs["importAccountsWizard"] = new ZaBulkProvisionWizard(DwtShell.getShell(window));
 		ZaApp.getInstance().dialogs["importAccountsWizard"] = new ZaBulkImportXWizard(DwtShell.getShell(window),bp);
