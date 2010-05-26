@@ -12,8 +12,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -33,10 +35,12 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
+import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.GalContact;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.DomainBy;
+import com.zimbra.cs.account.Provisioning.GalMode;
 import com.zimbra.cs.account.Provisioning.SearchGalResult;
 import com.zimbra.cs.account.accesscontrol.AdminRight;
 import com.zimbra.cs.account.accesscontrol.PseudoTarget;
@@ -46,6 +50,12 @@ import com.zimbra.cs.account.gal.GalOp;
 import com.zimbra.cs.account.gal.GalParams;
 import com.zimbra.cs.account.ldap.LdapGalMapRules;
 import com.zimbra.cs.account.ldap.LdapUtil;
+import com.zimbra.cs.mailbox.ACL;
+import com.zimbra.cs.mailbox.Folder;
+import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.MailServiceException;
+import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.service.FileUploadServlet;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.cs.service.admin.AdminService;
@@ -378,7 +388,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 					thread.abort();
 					response.addElement(E_status).setText(Integer.toString(thread.getStatus()));
 					response.addElement(E_provisionedCount).setText(Integer.toString(thread.getProvisionedCounter()));
-					response.addElement(E_skippedCount).setText(Integer.toString(thread.getSkipedCounter()));
+					response.addElement(E_skippedCount).setText(Integer.toString(thread.getSkippedCounter()));
 					response.addElement(E_totalCount).setText(Integer.toString(thread.getTotalCount()));
 					if(thread.getWithErrors()) {
 						response.addElement(E_errorCount).addText(Integer.toString(thread.getFailCounter()));
@@ -391,7 +401,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 					response.addElement(E_status).setText(Integer.toString(status));
 				}
 			} else {
-				response.addElement(E_status).setText("-1");
+				response.addElement(E_status).setText(Integer.toString(BulkProvisioningThread.iSTATUS_NOT_RUNNING));
 			}				
 		} else if(op.equalsIgnoreCase(OP_GET_STATUS)) {
 			BulkProvisioningThread thread = BulkProvisioningThread.getThreadInstance(zsc.getAuthtokenAccountId(),false);
@@ -399,7 +409,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 				int status = thread.getStatus();
 				response.addElement(E_status).setText(Integer.toString(status));
 				response.addElement(E_provisionedCount).setText(Integer.toString(thread.getProvisionedCounter()));
-				response.addElement(E_skippedCount).setText(Integer.toString(thread.getSkipedCounter()));
+				response.addElement(E_skippedCount).setText(Integer.toString(thread.getSkippedCounter()));
 				response.addElement(E_totalCount).setText(Integer.toString(thread.getTotalCount()));
 				if(thread.getWithErrors()) {
 					response.addElement(E_errorCount).addText(Integer.toString(thread.getFailCounter()));
@@ -592,7 +602,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
     	    }
     	    checkRight(zsc, context, parentDomain, Admin.R_createSubDomain);
 	    }    
-	    
+	    //create domain
 	    Map<String, Object> attrs = new HashMap<String,Object>();
 	    StringUtil.addToMultiMap(attrs, Provisioning.A_zimbraGalMode, "zimbra");
 	    StringUtil.addToMultiMap(attrs, Provisioning.A_zimbraAuthMech, "zimbra");
@@ -600,6 +610,47 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 	    StringUtil.addToMultiMap(attrs, Provisioning.A_zimbraNotes, "automatically created by bulk provisioning");
 	    checkSetAttrsOnCreate(zsc, TargetType.domain, name, attrs);
 	    Domain domain = Provisioning.getInstance().createDomain(name, attrs);
+	    String acctValue = String.format("%s@%s", "galsync",name);
+	    
+	    //create galsync account
+	    Map<String,Object> accountAttrs = new HashMap<String,Object>();
+	    StringUtil.addToMultiMap(accountAttrs, Provisioning.A_zimbraIsSystemResource, LdapUtil.LDAP_TRUE);
+	    StringUtil.addToMultiMap(accountAttrs, Provisioning.A_zimbraHideInGal, LdapUtil.LDAP_TRUE);
+        StringUtil.addToMultiMap(accountAttrs, Provisioning.A_zimbraContactMaxNumEntries, "0");
+	    checkSetAttrsOnCreate(zsc, TargetType.account, acctValue, accountAttrs);
+    	Account galSyncAccount = Provisioning.getInstance().createAccount(acctValue, null, accountAttrs);	
+    	
+	    String acctId = galSyncAccount.getId();
+    	HashSet<String> galAcctIds = new HashSet<String>();
+   		galAcctIds.add(acctId);
+    	domain.setGalAccountId(galAcctIds.toArray(new String[0]));
+	    
+	    // create folder if not already exists.
+	    String	folder = "/_zimbra";
+	    Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(galSyncAccount);
+	    Folder contactFolder = null;
+	    try {
+	    	contactFolder = mbox.getFolderByPath(null, folder);
+	    } catch (MailServiceException.NoSuchItemException e) {
+	    	contactFolder = mbox.createFolder(null, folder, (byte)0, MailItem.TYPE_CONTACT);
+	    }
+	    
+	    int folderId = contactFolder.getId();
+	   
+        mbox.grantAccess(null, folderId, domain.getId(), ACL.GRANTEE_DOMAIN, ACL.stringToRights("r"), null);
+	    
+	    // create datasource
+	    Map<String,Object> dsAttrs = new HashMap<String,Object>();
+	    try {
+	    	dsAttrs.put(Provisioning.A_zimbraGalType, GalMode.zimbra.name());
+	    	dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, "" + folderId);
+	    	dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, LdapUtil.LDAP_TRUE);
+	    	dsAttrs.put(Provisioning.A_zimbraGalStatus, "enabled");
+	    	Provisioning.getInstance().createDataSource(galSyncAccount, DataSource.Type.gal, "zimbra", dsAttrs);
+	    } catch (ServiceException e) {
+	    	ZimbraLog.extensions.error("error creating datasource for GalSyncAccount", e);
+	    	throw e;
+	    }    	
     	return domain;
     }
     

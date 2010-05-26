@@ -98,7 +98,7 @@ function (loc) {
 		if(resp.Body && resp.Body.BulkImportAccountsResponse) {
 			var response = resp.Body.BulkImportAccountsResponse;
 			if(response && response[ZaBulkProvision.A2_status] && response[ZaBulkProvision.A2_status][0] && response[ZaBulkProvision.A2_status][0]._content) {
-				status = response[ZaBulkProvision.A2_status][0]._content;
+				status = parseInt(response[ZaBulkProvision.A2_status][0]._content);
 				this.processBulkImportResponse(response);
 			}			
 		}
@@ -235,8 +235,9 @@ function(params,resp) {
 };
 
 ZaBulkImportXWizard.prototype.processBulkImportResponse = function(response) {
+	var status = 0;
 	if(response[ZaBulkProvision.A2_status] && response[ZaBulkProvision.A2_status][0] && response[ZaBulkProvision.A2_status][0]._content) {
-		status = response[ZaBulkProvision.A2_status][0]._content;
+		status = parseInt(response[ZaBulkProvision.A2_status][0]._content);
 		if(status == ZaBulkProvision.iSTATUS_STARTED || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS || status == ZaBulkProvision.iSTATUS_ABORT) {	
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 		} else {
@@ -248,20 +249,22 @@ ZaBulkImportXWizard.prototype.processBulkImportResponse = function(response) {
 	var errorCount = 0;
 	var provisionedCount = 0;
 	var skippedCount = 0;
+	var fileToken = null;
 	if(response[ZaBulkProvision.A2_totalCount] && response[ZaBulkProvision.A2_totalCount][0] && response[ZaBulkProvision.A2_totalCount][0]._content) {
-		totalCount = response[ZaBulkProvision.A2_totalCount][0]._content;
+		totalCount = parseInt(response[ZaBulkProvision.A2_totalCount][0]._content);
 	}
 	if(response[ZaBulkProvision.A2_errorCount] && response[ZaBulkProvision.A2_errorCount][0] && response[ZaBulkProvision.A2_errorCount][0]._content) {
-		errorCount = response[ZaBulkProvision.A2_errorCount][0]._content;
+		errorCount = parseInt(response[ZaBulkProvision.A2_errorCount][0]._content);
 	}
 	if(response[ZaBulkProvision.A2_provisionedCount] && response[ZaBulkProvision.A2_provisionedCount][0] && response[ZaBulkProvision.A2_provisionedCount][0]._content) {
-		provisionedCount = response[ZaBulkProvision.A2_provisionedCount][0]._content;
+		provisionedCount = parseInt(response[ZaBulkProvision.A2_provisionedCount][0]._content);
 	}		
 	if(response[ZaBulkProvision.A2_skippedCount] && response[ZaBulkProvision.A2_skippedCount][0] && response[ZaBulkProvision.A2_skippedCount][0]._content) {
-		skippedCount = response[ZaBulkProvision.A2_skippedCount][0]._content;
+		skippedCount = parseInt(response[ZaBulkProvision.A2_skippedCount][0]._content);
 	}	
 	if(response[ZaBulkProvision.A2_fileToken] && response[ZaBulkProvision.A2_fileToken][0] && response[ZaBulkProvision.A2_fileToken][0]._content) {
-		this._localXForm.setInstanceValue(response[ZaBulkProvision.A2_fileToken][0]._content,ZaBulkProvision.A2_fileToken);
+		fileToken = response[ZaBulkProvision.A2_fileToken][0]._content; 
+		this._localXForm.setInstanceValue(fileToken,ZaBulkProvision.A2_fileToken);
 	}
 	this._localXForm.setInstanceValue(totalCount,ZaBulkProvision.A2_totalCount);
 	this._localXForm.setInstanceValue(errorCount,ZaBulkProvision.A2_errorCount);
@@ -281,6 +284,20 @@ ZaBulkImportXWizard.prototype.processBulkImportResponse = function(response) {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);		
 	}
+	var errorsFileLink = null;
+	var sucessFileLink = null;
+	if(status == ZaBulkProvision.iSTATUS_FINISHED || status == ZaBulkProvision.iSTATUS_ABORTED || status == ZaBulkProvision.iSTATUS_ERROR) {
+		sucessFileLink = AjxMessageFormat.format("{0}//{1}:{2}/service/afd/?action=getBulkFile&fileID={3}&fileFormat=reportcsv",
+						[location.protocol,location.hostname,location.port,fileToken]);
+						
+		if(errorCount>0) {
+			errorsFileLink = AjxMessageFormat.format("{0}//{1}:{2}/service/afd/?action=getBulkFile&fileID={3}&fileFormat=errorscsv",
+					[location.protocol,location.hostname,location.port,fileToken]);
+		}
+	}
+	this._localXForm.setInstanceValue(sucessFileLink,ZaBulkProvision.A2_completedAccountsFileLink);
+	this._localXForm.setInstanceValue(errorsFileLink,ZaBulkProvision.A2_failedAccountsFileLink);
+	
 	if(status == ZaBulkProvision.iSTATUS_IDLE || status == ZaBulkProvision.iSTATUS_STARTING || status == ZaBulkProvision.iSTATUS_STARTED || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS || status == ZaBulkProvision.iSTATUS_ABORT) {
 		/**
 		 * schedule next poll
@@ -296,7 +313,7 @@ ZaBulkImportXWizard.prototype.processBulkImportResponse = function(response) {
 
 ZaBulkImportXWizard.isProvisioningNoteVisible = function() {
 	var status = this.getInstanceValue(ZaBulkProvision.A2_status);
-	return (status == ZaBulkProvision.iSTATUS_STARTING || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS);
+	return (status == ZaBulkProvision.iSTATUS_STARTED || status == ZaBulkProvision.iSTATUS_STARTING || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS);
 }
 
 ZaBulkImportXWizard.prototype.importFromLDAPCallback = function(params,resp) {
@@ -308,7 +325,6 @@ ZaBulkImportXWizard.prototype.importFromLDAPCallback = function(params,resp) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaBulkImportXWizard.prototype.importFromLDAPCallback");
 		} else {
-			var status = ZaBulkProvision.iSTATUS_STARTING;
 			var response = resp.getResponse().Body.BulkImportAccountsResponse;
 			this.processBulkImportResponse(response);
 		}
@@ -417,6 +433,7 @@ function() {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 			this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
+			this._localXForm.setInstanceValue(ZaBulkProvision.iSTATUS_STARTING,ZaBulkProvision.A2_status);
 			this.goPage(ZaBulkImportXWizard.STEP_PROVISION);
 			var callback = new AjxCallback(this, ZaBulkImportXWizard.prototype.importFromLDAPCallback,{action:this._containedObject[ZaBulkProvision.A2_provAction]});
 			ZaBulkProvision.importAccountsFromLDAP(this._containedObject,callback);
@@ -749,6 +766,10 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		type:_CASE_, numCols:2, colSizes:["250px","*"],tabGroupKey:ZaBulkImportXWizard.STEP_LDAP_INFO, caseKey:ZaBulkImportXWizard.STEP_LDAP_INFO,
 		items:[
 		       	{type:_DWT_ALERT_, style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.LdapInfoStepNote},
+				{ref:ZaBulkProvision.A2_createDomains,  type:_CHECKBOX_,  
+					label:com_zimbra_bulkprovision.A2_createDomains,trueValue:"TRUE", falseValue:"FALSE",
+					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_provAction,ZaBulkProvision.ACTION_IMPORT_LDAP]],enableDisableChecks:[]
+				},
 		       	{ref:ZaBulkProvision.A2_maxResults, type:_TEXTFIELD_,cssClass:"admin_xform_number_input", 
 		       		label:com_zimbra_bulkprovision.LDAPMaxResults, labelLocation:_LEFT_,labelWrap:true,
 		       		visibilityChecks:[],enableDisableChecks:[]
@@ -831,7 +852,7 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		type:_CASE_, numCols:2, colSizes:["250px", "*"], 
 		tabGroupKey:ZaBulkImportXWizard.STEP_PROVISION, caseKey:ZaBulkImportXWizard.STEP_PROVISION,
 		items:[
-		       {type:_DWT_ALERT_, style:DwtAlert.INFO,iconVisible:false,content:com_zimbra_bulkprovision.ProvisioningStatusNote,
+		       {type:_DWT_ALERT_, style:DwtAlert.WARNING,iconVisible:false,content:com_zimbra_bulkprovision.ProvisioningStatusNote,
 					visibilityChecks:[ZaBulkImportXWizard.isProvisioningNoteVisible],
 					visibilityChangeEventSources:[ZaBulkProvision.A2_status],
 					enableDisableChecks:[],colSpan:2
@@ -839,13 +860,41 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_status,label:com_zimbra_bulkprovision.ProcessStatus,
 		    	   	getDisplayValue:function(val) {
 		    	   		return ZaBulkImportXWizard.STATUS_LABELS[val];
-		       		}
+		       		},bmolsnr:true
 		       },
-		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_totalCount,label:com_zimbra_bulkprovision.TotalAccounts},
-		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_provisionedCount,label:com_zimbra_bulkprovision.ProvisionedAccounts},
-		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_skippedCount,label:com_zimbra_bulkprovision.Skipped},
-		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_errorCount,label:com_zimbra_bulkprovision.FailedAccounts},
-		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_progress,label:com_zimbra_bulkprovision.Progress}
+		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_totalCount,label:com_zimbra_bulkprovision.TotalAccounts,bmolsnr:true},
+		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_provisionedCount,label:com_zimbra_bulkprovision.ProvisionedAccounts,bmolsnr:true},
+		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_skippedCount,label:com_zimbra_bulkprovision.Skipped,bmolsnr:true},
+		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_errorCount,label:com_zimbra_bulkprovision.FailedAccounts,bmolsnr:true},
+		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_progress,label:com_zimbra_bulkprovision.Progress,bmolsnr:true},
+		       {type:_DWT_ALERT_, style:DwtAlert.INFO,iconVisible:false,content:com_zimbra_bulkprovision.ProvisioningSuccessReportsNote,
+					visibilityChangeEventSources:[ZaBulkProvision.A2_status],
+					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_status,ZaBulkProvision.iSTATUS_FINISHED]],colSpan:2
+		       }, 
+		       {type:_DWT_ALERT_, style:DwtAlert.CRITICAL,iconVisible:false,content:com_zimbra_bulkprovision.ProvisioningFailedReportsNote,
+					visibilityChangeEventSources:[ZaBulkProvision.A2_status],
+					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_status,ZaBulkProvision.iSTATUS_ERROR]],colSpan:2
+		       },
+		       {type:_DWT_ALERT_, style:DwtAlert.WARNING,iconVisible:false,content:com_zimbra_bulkprovision.ProvisioningWithErrorsReportsNote,
+					visibilityChangeEventSources:[ZaBulkProvision.A2_status,ZaBulkProvision.A2_errorCount],
+					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_status,ZaBulkProvision.iSTATUS_FINISHED],
+					                     [XForm.checkInstanceValueNot,ZaBulkProvision.A2_errorCount,0]],colSpan:2
+		       },
+		       {type:_DWT_ALERT_, style:DwtAlert.WARNING,iconVisible:false,content:com_zimbra_bulkprovision.ProvisioningAbortedReportsNote,
+					visibilityChangeEventSources:[ZaBulkProvision.A2_status],
+					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_status,ZaBulkProvision.iSTATUS_ABORTED]],colSpan:2
+		       },
+		       {type:_DATA_URL_,labelLocation:_NONE_,label:com_zimbra_bulkprovision.DownloadSuccessReportLink,
+		    	   ref:ZaBulkProvision.A2_completedAccountsFileLink,bmolsnr:true,
+		    	   visibilityChangeEventSources:[ZaBulkProvision.A2_completedAccountsFileLink],
+		    	   visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaBulkProvision.A2_completedAccountsFileLink]]
+		       },
+		       {type:_DATA_URL_,labelLocation:_NONE_,label:com_zimbra_bulkprovision.DownloadErrorReportLink,
+			    	   ref:ZaBulkProvision.A2_failedAccountsFileLink,bmolsnr:true,
+			    	   visibilityChangeEventSources:[ZaBulkProvision.A2_failedAccountsFileLink],
+			    	   visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaBulkProvision.A2_failedAccountsFileLink]]
+		       }
+		    	   
 		]
 	};
 

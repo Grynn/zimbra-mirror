@@ -1,5 +1,6 @@
 package com.zimbra.bp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,11 +39,16 @@ public class BulkProvisioningThread extends Thread {
 		return mFailCounter;
 	}
 	
+	public synchronized void start() {
+		super.start();
+		mStatus = iSTATUS_STARTING;
+	}
+
 	public int getProvisionedCounter() {
 		return mProvisionedCounter;
 	}
 	
-	public int getSkipedCounter() {
+	public int getSkippedCounter() {
 		return mSkippedCounter;
 	}
 	
@@ -56,16 +62,6 @@ public class BulkProvisioningThread extends Thread {
 	
 	public HashMap<String,Exception> getfailedAccounts() {
 		return failedAccounts;
-	}
-	
-	public int getProgress() {
-		if(sourceAccounts == null) {
-			return 0;
-		}
-		if(sourceAccounts.size()==0) {
-			return 0;
-		}		
-		return mProvisionedCounter+mSkippedCounter;
 	}
 	
 	public int getTotalCount() {
@@ -142,6 +138,8 @@ public class BulkProvisioningThread extends Thread {
 				}
 			}
         }
+		mStatus = iSTATUS_FINISHED;
+		return;
 	}
 
 	public void setSourceAccounts(List<Map<String, Object>> sourceAccounts) {
@@ -170,8 +168,8 @@ public class BulkProvisioningThread extends Thread {
 			if(mThreadCache.get(threadId) != null) {
 				if(mThreadCache.get(threadId).isAlive()) {
 					mThreadCache.get(threadId).interrupt();
-					mThreadCache.remove(threadId);
 				}
+				mThreadCache.remove(threadId);
 			}
 		}
 	}
@@ -180,6 +178,7 @@ public class BulkProvisioningThread extends Thread {
 		sourceAccounts = null;
 		failedAccounts = new HashMap<String, Exception>();
 		completedAccounts = new HashMap<String, String>();
+		skippedAccounts = new ArrayList<String>();
 		mStatus = iSTATUS_IDLE;
 	}
 }

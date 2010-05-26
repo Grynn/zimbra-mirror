@@ -31,6 +31,8 @@ ZaBulkProvision.A2_accountLimit = "accountLimit" ;
 ZaBulkProvision.A2_provAction = "provAction";
 ZaBulkProvision.A2_generatedFileLink = "generatedFileLink";
 ZaBulkProvision.A2_TargetDomainName = "TargetDomainName";
+ZaBulkProvision.A2_completedAccountsFileLink = "completedAccountsFileLink";
+ZaBulkProvision.A2_failedAccountsFileLink = "failedAccountsFileLink";
 
 //provisioning options
 ZaBulkProvision.A2_errorReportFileLink = "errorReportFileLink";
@@ -112,8 +114,8 @@ ZaBulkProvision.getMyXModel = function () {
 	                 type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES },
 	        {id:ZaBulkProvision.A2_provAction, ref:ZaBulkProvision.A2_provAction, type:_ENUM_, choices:ZaBulkProvision.ProvActionChoices},
 	        {id:ZaBulkProvision.A2_generatedFileLink, type:_STRING_, ref:ZaBulkProvision.A2_generatedFileLink},
-	        {id:ZaBulkProvision.A2_errorReportFileLink, type:_STRING_, ref:ZaBulkProvision.A2_errorReportFileLink},
-	        {id:ZaBulkProvision.A2_successReportFileLink, type:_STRING_, ref:ZaBulkProvision.A2_successReportFileLink},
+	        {id:ZaBulkProvision.A2_failedAccountsFileLink, type:_STRING_, ref:ZaBulkProvision.A2_failedAccountsFileLink},
+	        {id:ZaBulkProvision.A2_completedAccountsFileLink, type:_STRING_, ref:ZaBulkProvision.A2_completedAccountsFileLink},
 	        {id:ZaBulkProvision.A2_maxResults, type:_NUMBER_, ref:ZaBulkProvision.A2_maxResults},
 	        {id:ZaBulkProvision.A2_errorCount, type:_NUMBER_, ref:ZaBulkProvision.A2_errorCount},
 	        {id:ZaBulkProvision.A2_provisionedCount, type:_NUMBER_, ref:ZaBulkProvision.A2_provisionedCount},
