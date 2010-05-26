@@ -13,7 +13,11 @@
 	<property name="zd.app" value="${basedir}/build/dist/app/macos/Zimbra Desktop.app" />
 	<property name="winperl" value="C:\strawberry\perl\bin\perl.exe" />
 	<property name="wix.home" value="C:\Program Files\Windows Installer XML v3" />
- 
+	<property name="sign.tool" value="C:\signtool\signtool.exe" />
+	<property name="sign.cert" value="C:\signtool\vmw_sign_cert.pfx" />
+	<available file="${sign.tool}" type="file" property="has.sign.tool" />
+	<available file="${sign.cert}" type="file" property="has.sign.cert" />
+	 
   	<condition property="is-mac">
 		<os family="mac"/>
 	</condition>
@@ -28,7 +32,13 @@
             </not>
         </and>
 	</condition>
-  
+	<condition property="sign-installer">
+		<and>
+			<isset property="has.sign.tool" />
+			<isset property="has.sign.cert" />
+		</and>
+	</condition> 
+ 
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
 			<pathelement location="../ZimbraCommon/jars/ant-contrib-1.0b1.jar" />
@@ -149,6 +159,17 @@
 			<arg value="${build.dir}\${media_win32}" />
 			<arg value="${wxs.dir}\win_installer.wixobj" />       
 		</exec>
+
+		<if><isset property="sign-installer" /><then>
+			<exec executable="${sign.tool}" failonerror="true">
+				<arg value="sign" />
+				<arg value="/f" />
+				<arg value="${sign.cert}" />
+				<arg value="/p" />
+				<arg value="zimbra" />
+				<arg value="${build.dir}\${media_win32}" />
+			</exec>
+		</then></if>
 	</target>
 	
 	<target name="installer-pack-media-linux" if="is-linux">
