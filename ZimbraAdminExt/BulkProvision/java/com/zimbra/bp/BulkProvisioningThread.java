@@ -1,23 +1,23 @@
 package com.zimbra.bp;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zimbra.common.mailbox.ContactConstants;
-import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
 /**
  * @author Greg Solovyev
  */
 public class BulkProvisioningThread extends Thread {
 	private static Map<String,BulkProvisioningThread> mThreadCache = new HashMap<String,BulkProvisioningThread>();
-	private static int MAX_PROVISIONING_THREADS = 2;
+	private static int MAX_PROVISIONING_THREADS = 4;
 	private static int MAX_PROVISIONING_FAILURES = 500;
+	public static int iSTATUS_NOT_RUNNING = -1;
 	public static int iSTATUS_IDLE = 0;
 	public static int iSTATUS_STARTED = 1;
+	public static int iSTATUS_STARTING = 2;
 	public static int iSTATUS_CREATING_ACCOUNTS = 3;
 	public static int iSTATUS_FINISHED = 4;
 	public static int iSTATUS_ABORT = 5;
@@ -27,13 +27,23 @@ public class BulkProvisioningThread extends Thread {
 	private List<Map<String, Object>> sourceAccounts;
 	private HashMap<String, Exception> failedAccounts;
 	private HashMap<String, String> completedAccounts;
+	private List<String> skippedAccounts;
 	private int mStatus = 0;
-	private int mProgressCounter = 0;
+	private int mProvisionedCounter = 0;
 	private int mFailCounter = 0;
+	private int mSkippedCounter = 0;
 	private boolean mWithErrors = false;
 	
 	public int getFailCounter() {
 		return mFailCounter;
+	}
+	
+	public int getProvisionedCounter() {
+		return mProvisionedCounter;
+	}
+	
+	public int getSkipedCounter() {
+		return mSkippedCounter;
 	}
 	
 	public boolean getWithErrors() {
@@ -55,7 +65,7 @@ public class BulkProvisioningThread extends Thread {
 		if(sourceAccounts.size()==0) {
 			return 0;
 		}		
-		return mProgressCounter;
+		return mProvisionedCounter+mSkippedCounter;
 	}
 	
 	public int getTotalCount() {
@@ -63,19 +73,6 @@ public class BulkProvisioningThread extends Thread {
 			return 0;
 		}
 		return sourceAccounts.size();
-	}
-	
-	public int getProgressPercent() {
-		if(sourceAccounts == null) {
-			return 0;
-		}
-		if(sourceAccounts.size()==0) {
-			return 0;
-		}
-		if(mProgressCounter == 0) {
-			return 0;
-		}
-		return 100*mProgressCounter/sourceAccounts.size();
 	}
 	
 	public int getStatus() {
@@ -100,7 +97,7 @@ public class BulkProvisioningThread extends Thread {
 			return;
 		}
 		Provisioning prov = Provisioning.getInstance();
-		mProgressCounter = 0;
+		mProvisionedCounter = 0;
 		for (Map<String, Object> entry : sourceAccounts) {
 			String accName = "";
 			if(mStatus == iSTATUS_ABORT) {
@@ -111,13 +108,26 @@ public class BulkProvisioningThread extends Thread {
 			try {
 				accName = String.valueOf(entry.get(Provisioning.A_mail));
 				if(accName != null) {
+	    			/**
+	    			 * Check if user exists
+	    			 */
+	            	Account acct = prov.getAccountByName(accName);
+	            	if(acct!=null) {
+	            		/**
+	            		 * Skip existing user
+	            		 */
+	            		skippedAccounts.add(accName);
+	            		mSkippedCounter++;
+	            		continue;
+	            	}					
 					String accPwd = String.valueOf(entry.get(Provisioning.A_userPassword));
 					entry.remove(Provisioning.A_mail);
 					entry.remove(Provisioning.A_userPassword);
 					prov.createAccount(accName, accPwd, entry);
 					completedAccounts.put(accName, accPwd);
+					mProvisionedCounter++;
 				}
-				mProgressCounter++;
+				
 			} catch (Exception e) {
 				mFailCounter++;
 				mWithErrors = true;

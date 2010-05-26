@@ -12,7 +12,13 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-//ZaBulkImportXWizard
+/**
+* @class ZaBulkImportXWizard
+* @contructor ZaBulkImportXWizard
+* @param parent DwtShell
+* @param entry ZaBulkProvision
+* @author Greg Solovyev
+**/
 function ZaBulkImportXWizard (parent, entry) {
     var w = "650px" ;
     ZaXWizardDialog.call(this, parent, null, com_zimbra_bulkprovision.BP_Wizard_title,
@@ -36,17 +42,22 @@ function ZaBulkImportXWizard (parent, entry) {
 	
 	ZaBulkImportXWizard.STATUS_LABELS[ZaBulkProvision.iSTATUS_IDLE] = com_zimbra_bulkprovision.ProvisioningStatusIdle;
 	ZaBulkImportXWizard.STATUS_LABELS[ZaBulkProvision.iSTATUS_STARTED] = com_zimbra_bulkprovision.ProvisioningStatusStarted;
+	ZaBulkImportXWizard.STATUS_LABELS[ZaBulkProvision.iSTATUS_STARTING] = com_zimbra_bulkprovision.ProvisioningStatusStarting;
 	ZaBulkImportXWizard.STATUS_LABELS[ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS] = com_zimbra_bulkprovision.ProvisioningStatusCreatingAccounts;
 	ZaBulkImportXWizard.STATUS_LABELS[ZaBulkProvision.iSTATUS_FINISHED] = com_zimbra_bulkprovision.ProvisioningStatusFinished;
 	ZaBulkImportXWizard.STATUS_LABELS[ZaBulkProvision.iSTATUS_ABORT] = com_zimbra_bulkprovision.ProvisioningStatusAborting;
 	ZaBulkImportXWizard.STATUS_LABELS[ZaBulkProvision.iSTATUS_ABORTED] = com_zimbra_bulkprovision.ProvisioningStatusAborted;
 	ZaBulkImportXWizard.STATUS_LABELS[ZaBulkProvision.iSTATUS_ERROR] = com_zimbra_bulkprovision.ProvisioningStatusError;
+	ZaBulkImportXWizard.STATUS_LABELS[ZaBulkProvision.iSTATUS_NOT_RUNNING] = com_zimbra_bulkprovision.ProvisioningStatusNotRunning;
+	
+	this.pollAction = new AjxTimedAction(this, this.getImportStatus);
+	this._pollHandler = null;
 	
     this.initForm(ZaBulkProvision.getMyXModel(),this.getMyXForm(entry),null);
 
   	this._helpURL = ZaBulkImportXWizard.helpURL;
 }
-
+ZaBulkImportXWizard.POLL_INTERVAL = 500;
 // -1 : No status, 0: Install succeed, >0 : Install Failed (different number is different error)
 ZaBulkImportXWizard.INSTALL_STATUS = -1;
 ZaBulkImportXWizard.STEP_INDEX = 1;
@@ -69,14 +80,44 @@ ZaBulkImportXWizard.helpURL = location.pathname + "help/admin/html/managing_acco
 * Overwritten methods that control wizard's flow (open, go next,go previous, finish)
 **/
 
-ZaBulkImportXWizard.prototype.popup =
-function (loc) {
-    ZaXWizardDialog.prototype.popup.call(this, loc);
-
-	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+ZaBulkImportXWizard.prototype.popdown = 
+function () {
+	if(this._pollHandler) {
+		//stop polling
+		AjxTimedAction.cancelAction(this._pollHandler);
+	}
+	DwtDialog.prototype.popdown.call(this);
 }
 
+ZaBulkImportXWizard.prototype.popup =
+function (loc) {
+	ZaXWizardDialog.prototype.popup.call(this, loc);
+	try {
+		var status = ZaBulkProvision.iSTATUS_NOT_RUNNING;
+		var resp = ZaBulkProvision.getImportStatus();
+		if(resp.Body && resp.Body.BulkImportAccountsResponse) {
+			var response = resp.Body.BulkImportAccountsResponse;
+			if(response && response[ZaBulkProvision.A2_status] && response[ZaBulkProvision.A2_status][0] && response[ZaBulkProvision.A2_status][0]._content) {
+				status = response[ZaBulkProvision.A2_status][0]._content;
+				this.processBulkImportResponse(response);
+			}			
+		}
+	} catch (ex) {
+		this._app.getCurrentController()._handleException(ex);
+	}
+	if(status == ZaBulkProvision.iSTATUS_NOT_RUNNING) {
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
+	} else {
+		this.goPage(ZaBulkImportXWizard.STEP_PROVISION);
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);
+	}
+    
+    this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+}
 
 ZaBulkImportXWizard.prototype._uploadCallback =
 function (status, uploadResults) {
@@ -154,6 +195,11 @@ ZaBulkImportXWizard.prototype.getProvisionStatusDialog = function () {
     return this._provisionStatusDialog ;
 }
 
+ZaBulkImportXWizard.prototype.getImportStatus = function () {
+	var callback = new AjxCallback(this, ZaBulkImportXWizard.prototype.importFromLDAPCallback,{action:this._containedObject[ZaBulkProvision.A2_provAction]});
+	ZaBulkProvision.getImportStatus(callback);	
+}
+
 ZaBulkImportXWizard.prototype.generateBulkFileCallback = 
 function(params,resp) {
 	try {
@@ -178,6 +224,7 @@ function(params,resp) {
 				this.goPage(ZaBulkImportXWizard.STEP_DOWNLOAD_FILE);
 				this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+				this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);
 			}
 		}
 	} catch (ex) {
@@ -187,6 +234,89 @@ function(params,resp) {
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);	
 };
 
+ZaBulkImportXWizard.prototype.processBulkImportResponse = function(response) {
+	if(response[ZaBulkProvision.A2_status] && response[ZaBulkProvision.A2_status][0] && response[ZaBulkProvision.A2_status][0]._content) {
+		status = response[ZaBulkProvision.A2_status][0]._content;
+		if(status == ZaBulkProvision.iSTATUS_STARTED || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS || status == ZaBulkProvision.iSTATUS_ABORT) {	
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+		} else {
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		}
+		this._localXForm.setInstanceValue(status,ZaBulkProvision.A2_status);
+	}
+	var totalCount = 0;
+	var errorCount = 0;
+	var provisionedCount = 0;
+	var skippedCount = 0;
+	if(response[ZaBulkProvision.A2_totalCount] && response[ZaBulkProvision.A2_totalCount][0] && response[ZaBulkProvision.A2_totalCount][0]._content) {
+		totalCount = response[ZaBulkProvision.A2_totalCount][0]._content;
+	}
+	if(response[ZaBulkProvision.A2_errorCount] && response[ZaBulkProvision.A2_errorCount][0] && response[ZaBulkProvision.A2_errorCount][0]._content) {
+		errorCount = response[ZaBulkProvision.A2_errorCount][0]._content;
+	}
+	if(response[ZaBulkProvision.A2_provisionedCount] && response[ZaBulkProvision.A2_provisionedCount][0] && response[ZaBulkProvision.A2_provisionedCount][0]._content) {
+		provisionedCount = response[ZaBulkProvision.A2_provisionedCount][0]._content;
+	}		
+	if(response[ZaBulkProvision.A2_skippedCount] && response[ZaBulkProvision.A2_skippedCount][0] && response[ZaBulkProvision.A2_skippedCount][0]._content) {
+		skippedCount = response[ZaBulkProvision.A2_skippedCount][0]._content;
+	}	
+	if(response[ZaBulkProvision.A2_fileToken] && response[ZaBulkProvision.A2_fileToken][0] && response[ZaBulkProvision.A2_fileToken][0]._content) {
+		this._localXForm.setInstanceValue(response[ZaBulkProvision.A2_fileToken][0]._content,ZaBulkProvision.A2_fileToken);
+	}
+	this._localXForm.setInstanceValue(totalCount,ZaBulkProvision.A2_totalCount);
+	this._localXForm.setInstanceValue(errorCount,ZaBulkProvision.A2_errorCount);
+	this._localXForm.setInstanceValue(provisionedCount,ZaBulkProvision.A2_provisionedCount);
+	this._localXForm.setInstanceValue(skippedCount,ZaBulkProvision.A2_skippedCount);
+	if(totalCount > 0 && (provisionedCount>0 || skippedCount>0 || errorCount>0)) {
+		this._localXForm.setInstanceValue( Math.round(100*(provisionedCount+skippedCount+errorCount)/totalCount)+"%",ZaBulkProvision.A2_progress)
+	} else {
+		this._localXForm.setInstanceValue("0%",ZaBulkProvision.A2_progress);
+	}
+	if(status == ZaBulkProvision.iSTATUS_STARTED || status == ZaBulkProvision.iSTATUS_ABORT) {
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);
+	}
+	
+	if(status == ZaBulkProvision.iSTATUS_STARTING || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS || status == ZaBulkProvision.iSTATUS_FINISHED || status == ZaBulkProvision.iSTATUS_ABORTED || status == ZaBulkProvision.iSTATUS_ERROR) {
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);		
+	}
+	if(status == ZaBulkProvision.iSTATUS_IDLE || status == ZaBulkProvision.iSTATUS_STARTING || status == ZaBulkProvision.iSTATUS_STARTED || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS || status == ZaBulkProvision.iSTATUS_ABORT) {
+		/**
+		 * schedule next poll
+		 */
+		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, ZaBulkImportXWizard.POLL_INTERVAL);		
+	} else {
+		if(this._pollHandler) {
+			AjxTimedAction.cancelAction(this._pollHandler);
+			this._pollHandler = null;
+		}
+	}	
+}
+
+ZaBulkImportXWizard.isProvisioningNoteVisible = function() {
+	var status = this.getInstanceValue(ZaBulkProvision.A2_status);
+	return (status == ZaBulkProvision.iSTATUS_STARTING || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS);
+}
+
+ZaBulkImportXWizard.prototype.importFromLDAPCallback = function(params,resp) {
+	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+	this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);
+	try {
+		if(resp && resp.isException()) {
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaBulkImportXWizard.prototype.importFromLDAPCallback");
+		} else {
+			var status = ZaBulkProvision.iSTATUS_STARTING;
+			var response = resp.getResponse().Body.BulkImportAccountsResponse;
+			this.processBulkImportResponse(response);
+		}
+	} catch (ex) {
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaBulkImportXWizard.prototype.generateBulkFileCallback");	
+	}
+}
+
 ZaBulkImportXWizard.prototype.goNext =
 function() {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
@@ -194,6 +324,7 @@ function() {
 	if(cStep == ZaBulkImportXWizard.STEP_CHOOSE_ACTION) {
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 		if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_CSV || 
 				this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_XML) {
 			this.goPage(ZaBulkImportXWizard.STEP_UPLOAD_FILE);
@@ -219,6 +350,7 @@ function() {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 	} else if(cStep == ZaBulkImportXWizard.STEP_EXCHANGE_INFO) { 
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		/**
@@ -239,11 +371,8 @@ function() {
 		/**
 		 * Set defaults
 		 */
-		if(!this._containedObject[ZaBulkProvision.A2_SourceDomainName]) {
-			this._localXForm.setInstanceValue(this._containedObject[ZaBulkProvision.A2_TargetDomainName],ZaBulkProvision.A2_SourceDomainName)
-		}
 		
-		if(!this._containedObject[ZaBulkProvision.A2_GalLdapSearchBase] && typeof this._containedObject[ZaBulkProvision.A2_SourceDomainName] == "string") {
+/*		if(!this._containedObject[ZaBulkProvision.A2_GalLdapSearchBase] && typeof this._containedObject[ZaBulkProvision.A2_SourceDomainName] == "string") {
 			var searchBase = "OU=Users,dc=" + this._containedObject[ZaBulkProvision.A2_SourceDomainName].replace(".",",dc=");
 			this._localXForm.setInstanceValue(searchBase,ZaBulkProvision.A2_GalLdapSearchBase);
 		}
@@ -252,8 +381,9 @@ function() {
 			var bindDN = "CN=administrator,OU=Users,dc=" + this._containedObject[ZaBulkProvision.A2_SourceDomainName].replace(".",",dc=");
 			this._localXForm.setInstanceValue(bindDN,ZaBulkProvision.A2_GalLdapBindDn);
 		}
-		
+*/		
 		this.goPage(ZaBulkImportXWizard.STEP_LDAP_INFO);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 				
@@ -276,45 +406,20 @@ function() {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+			this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 			var callback = new AjxCallback(this, ZaBulkImportXWizard.prototype.generateBulkFileCallback,{action:this._containedObject[ZaBulkProvision.A2_provAction]});
 			ZaBulkProvision.generateBulkProvisionFile(this._containedObject,callback);
 		} else if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_LDAP) {
 			/**
-			 * Check if domain exists
-			 */
-			var domainName = this._containedObject[ZaBulkProvision.A2_bulkImportDomainName];
-			if(!domainName) {
-				this._app.getCurrentController().popupErrorDialog (
-                        com_zimbra_bulkprovision.ERROR_MUST_SPECIFY_DOMAIN_NAME
-                    );
-				return;
-			}
-			var domain;
-			try {
-				domain = ZaDomain.getDomainByName(domainName);
-			} catch (ex) {
-				if(ex.code != ZmCsfeException.NO_SUCH_DOMAIN) {
-					this._app.getCurrentController()._handleException(ex);
-				}
-			}
-			if(!domain) {
-				/**
-				 * Create domain if it does not exist yet
-				 */
-				try {
-					var newDomain = new ZaDomain();
-					newDomain.name=domainName;
-					newDomain.attrs[ZaDomain.A_domainName] = domainName;
-					domain = ZaItem.create(newDomain,ZaDomain,"ZaDomain");
-				} catch (ex) {
-					this._app.getCurrentController()._handleException(ex);
-				}
-			}
-
-			/**
 			 * Start import
 			 */
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+			this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 			this.goPage(ZaBulkImportXWizard.STEP_PROVISION);
+			var callback = new AjxCallback(this, ZaBulkImportXWizard.prototype.importFromLDAPCallback,{action:this._containedObject[ZaBulkProvision.A2_provAction]});
+			ZaBulkProvision.importAccountsFromLDAP(this._containedObject,callback);
 		}
 	} else if (cStep == ZaBulkImportXWizard.STEP_UPLOAD_FILE) {
         //1. check if the file name are valid and exists
@@ -380,6 +485,7 @@ function() {
     	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
     }
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+	this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
     this.goPage(prevStep);
 }
 
@@ -647,15 +753,6 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		       		label:com_zimbra_bulkprovision.LDAPMaxResults, labelLocation:_LEFT_,labelWrap:true,
 		       		visibilityChecks:[],enableDisableChecks:[]
 		       	},
-		       	{ref:ZaBulkProvision.A2_SourceDomainName, type:_DYNSELECT_,
-					label:com_zimbra_bulkprovision.SourceDomainName,
-					toolTipContent:ZaMsg.tt_StartTypingDomainName,
-					dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
-					dataFetcherClass:ZaSearch,editable:true,
-					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_provAction,ZaBulkProvision.ACTION_IMPORT_LDAP]],
-					visibilityChangeEventSources:[ZaBulkProvision.A2_provAction],
-					enableDisableChecks:[],bmolsnr:true
-				},		 		       	
 		       	{type:_GROUP_, numCols:6, colSpan:2,label:"   ",labelLocation:_LEFT_,
 					visibilityChecks:[],
 					items: [
@@ -734,17 +831,21 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		type:_CASE_, numCols:2, colSizes:["250px", "*"], 
 		tabGroupKey:ZaBulkImportXWizard.STEP_PROVISION, caseKey:ZaBulkImportXWizard.STEP_PROVISION,
 		items:[
-		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_status,
+		       {type:_DWT_ALERT_, style:DwtAlert.INFO,iconVisible:false,content:com_zimbra_bulkprovision.ProvisioningStatusNote,
+					visibilityChecks:[ZaBulkImportXWizard.isProvisioningNoteVisible],
+					visibilityChangeEventSources:[ZaBulkProvision.A2_status],
+					enableDisableChecks:[],colSpan:2
+		       },
+		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_status,label:com_zimbra_bulkprovision.ProcessStatus,
 		    	   	getDisplayValue:function(val) {
 		    	   		return ZaBulkImportXWizard.STATUS_LABELS[val];
 		       		}
 		       },
 		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_totalCount,label:com_zimbra_bulkprovision.TotalAccounts},
-		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_finishedCount,label:com_zimbra_bulkprovision.ProvisionedAccounts},
+		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_provisionedCount,label:com_zimbra_bulkprovision.ProvisionedAccounts},
+		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_skippedCount,label:com_zimbra_bulkprovision.Skipped},
 		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_errorCount,label:com_zimbra_bulkprovision.FailedAccounts},
-		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_progress,label:com_zimbra_bulkprovision.Progress,
-		    	   getDisplayValue:function(val) { return val+"%"; }
-		       }
+		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_progress,label:com_zimbra_bulkprovision.Progress}
 		]
 	};
 

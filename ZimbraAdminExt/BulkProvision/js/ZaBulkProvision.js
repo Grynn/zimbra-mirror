@@ -30,17 +30,18 @@ ZaBulkProvision.A2_genPasswordLength = "genPasswordLength" ;
 ZaBulkProvision.A2_accountLimit = "accountLimit" ;
 ZaBulkProvision.A2_provAction = "provAction";
 ZaBulkProvision.A2_generatedFileLink = "generatedFileLink";
-ZaBulkProvision.A2_SourceDomainName = "SourceDomainName";
 ZaBulkProvision.A2_TargetDomainName = "TargetDomainName";
 
 //provisioning options
 ZaBulkProvision.A2_errorReportFileLink = "errorReportFileLink";
 ZaBulkProvision.A2_successReportFileLink = "successReportFileLink";
+ZaBulkProvision.A2_skippedCount = "skippedCount";
 ZaBulkProvision.A2_errorCount = "errorCount";
-ZaBulkProvision.A2_finishedCount = "finishedCount";
+ZaBulkProvision.A2_provisionedCount = "provisionedCount";
 ZaBulkProvision.A2_totalCount = "totalCount";
-ZaBulkProvision.A2_fileToken = "fileToken";
 ZaBulkProvision.A2_progress = "progress";
+ZaBulkProvision.A2_fileToken = "fileToken";
+ZaBulkProvision.A2_createDomains = "createDomains";
 
 //LDAP import options
 ZaBulkProvision.A2_maxResults = "maxResults";
@@ -68,8 +69,10 @@ ZaBulkProvision.A2_ZimbraAdminLogin = "ZimbraAdminLogin";
 ZaBulkProvision.A2_ZimbraAdminPasswordConfirm = "ZimbraAdminPasswordConfirm";
 ZaBulkProvision.A2_provisionUsers = "provisionUsers";
 
+ZaBulkProvision.iSTATUS_NOT_RUNNING = -1;
 ZaBulkProvision.iSTATUS_IDLE = 0;
 ZaBulkProvision.iSTATUS_STARTED = 1;
+ZaBulkProvision.iSTATUS_STARTING = 2;
 ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS = 3;
 ZaBulkProvision.iSTATUS_FINISHED = 4;
 ZaBulkProvision.iSTATUS_ABORT = 5;
@@ -113,10 +116,11 @@ ZaBulkProvision.getMyXModel = function () {
 	        {id:ZaBulkProvision.A2_successReportFileLink, type:_STRING_, ref:ZaBulkProvision.A2_successReportFileLink},
 	        {id:ZaBulkProvision.A2_maxResults, type:_NUMBER_, ref:ZaBulkProvision.A2_maxResults},
 	        {id:ZaBulkProvision.A2_errorCount, type:_NUMBER_, ref:ZaBulkProvision.A2_errorCount},
-	        {id:ZaBulkProvision.A2_finishedCount, type:_NUMBER_, ref:ZaBulkProvision.A2_finishedCount},
+	        {id:ZaBulkProvision.A2_provisionedCount, type:_NUMBER_, ref:ZaBulkProvision.A2_provisionedCount},
 	        {id:ZaBulkProvision.A2_totalCount, type:_NUMBER_, ref:ZaBulkProvision.A2_totalCount},
+	        {id:ZaBulkProvision.A2_progress, type:_STRING_, ref:ZaBulkProvision.A2_progress},
 	        {id:ZaBulkProvision.A2_fileToken, type:_NUMBER_, ref:ZaBulkProvision.A2_fileToken},
-	        {id:ZaBulkProvision.A2_progress, type:_NUMBER_, ref:ZaBulkProvision.A2_progress},
+	        {id:ZaBulkProvision.A2_skippedCount, type:_NUMBER_, ref:ZaBulkProvision.A2_skippedCount},
 	        {id:ZaBulkProvision.A2_status, type:_NUMBER_, ref:ZaBulkProvision.A2_status},
 	        {id:ZaBulkProvision.A2_GalLdapURL, type:_SHORT_URL_, ref:ZaBulkProvision.A2_GalLdapURL},
 	        {id:ZaBulkProvision.A2_GalLdapSearchBase, type:_STRING_, ref:ZaBulkProvision.A2_GalLdapSearchBase},
@@ -124,7 +128,6 @@ ZaBulkProvision.getMyXModel = function () {
 	        {id:ZaBulkProvision.A2_GalLdapBindPassword, type:_STRING_, ref:ZaBulkProvision.A2_GalLdapBindPassword},
 	        {id:ZaBulkProvision.A2_GalLdapConfirmBindPassword, type:_STRING_, ref:ZaBulkProvision.A2_GalLdapConfirmBindPassword},
 	        {id:ZaBulkProvision.A2_GalLdapFilter, type:_STRING_, ref:ZaBulkProvision.A2_GalLdapFilter},
-	        {id:ZaBulkProvision.A2_SourceDomainName, type:_STRING_, ref:ZaBulkProvision.A2_SourceDomainName},
 	        {id:ZaBulkProvision.A2_password, type:_STRING_, ref:ZaBulkProvision.A2_password},
 	        {id:ZaBulkProvision.A2_confirmPassword, type:_STRING_, ref:ZaBulkProvision.A2_confirmPassword},
 	        {id:ZaBulkProvision.A2_generatePassword, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_generatePassword},
@@ -145,7 +148,9 @@ ZaBulkProvision.getMyXModel = function () {
 	        {id:ZaBulkProvision.A2_ZimbraAdminPassword, type:_STRING_, ref:ZaBulkProvision.A2_ZimbraAdminPassword},
 	        {id:ZaBulkProvision.A2_ZimbraAdminPasswordConfirm, type:_STRING_, ref:ZaBulkProvision.A2_ZimbraAdminPasswordConfirm},
 	        {id:ZaBulkProvision.A2_ZimbraAdminLogin, type:_STRING_, ref:ZaBulkProvision.A2_ZimbraAdminLogin},
-	        {id:ZaBulkProvision.A2_provisionUsers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_provisionUsers}
+	        {id:ZaBulkProvision.A2_provisionUsers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_provisionUsers},
+	        //direct import from LDAP
+	        {id:ZaBulkProvision.A2_createDomains, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_createDomains}
         ]
     }
 
@@ -233,6 +238,78 @@ ZaBulkProvision.initProvisionAccounts = function (accounts) {
     return accounts ;
 }
 
+ZaBulkProvision.abortImportThread = function(callback) {
+	var soapDoc = AjxSoapDoc.create("BulkImportAccountsRequest",ZaBulkProvision.URN, null);
+	soapDoc.getMethod().setAttribute("op", "abortImport");
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;
+	csfeParams.asyncMode = true;
+	csfeParams.callback = callback;
+
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = com_zimbra_bulkprovision.BUSY_ABORTING_IMPORT_THREAD;
+	ZaRequestMgr.invoke(csfeParams, reqMgrParams);	
+}
+
+ZaBulkProvision.getImportStatus = function(callback) {
+	var soapDoc = AjxSoapDoc.create("BulkImportAccountsRequest",ZaBulkProvision.URN, null);
+	soapDoc.getMethod().setAttribute("op", "getStatus");
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;
+	if(callback) {
+		csfeParams.asyncMode = true;
+		csfeParams.callback = callback;
+	}
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = com_zimbra_bulkprovision.BUSY_GETTING_PROVISIONING_STATUS;
+	return ZaRequestMgr.invoke(csfeParams, reqMgrParams);	
+}
+
+ZaBulkProvision.importAccountsFromLDAP = function (obj, callback) {
+	var soapDoc = AjxSoapDoc.create("BulkImportAccountsRequest",ZaBulkProvision.URN, null);
+	soapDoc.getMethod().setAttribute("op", "startImport");
+
+	var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external);
+	attr.setAttribute("n", ZaDomain.A_zimbraGalMode);
+
+	attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapURL]);
+	attr.setAttribute("n", ZaBulkProvision.A2_GalLdapURL);	
+	
+	attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapSearchBase]);
+	attr.setAttribute("n", ZaBulkProvision.A2_GalLdapSearchBase);	
+
+	attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapFilter]);
+	attr.setAttribute("n", ZaBulkProvision.A2_GalLdapFilter);	
+
+	attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapBindDn]);
+	attr.setAttribute("n", ZaBulkProvision.A2_GalLdapBindDn);
+
+	attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapBindPassword]);
+	attr.setAttribute("n", ZaBulkProvision.A2_GalLdapBindPassword);
+	
+	attr = soapDoc.set("sourceType", "ldap");
+	if(obj[ZaBulkProvision.A2_password]) {
+		attr = soapDoc.set(ZaBulkProvision.A2_password,obj[ZaBulkProvision.A2_password]);
+	}
+	attr = soapDoc.set(ZaBulkProvision.A2_generatePassword,obj[ZaBulkProvision.A2_generatePassword]);
+	attr = soapDoc.set(ZaBulkProvision.A2_genPasswordLength,obj[ZaBulkProvision.A2_genPasswordLength]);
+	attr = soapDoc.set(ZaBulkProvision.A_mustChangePassword,obj[ZaBulkProvision.A_mustChangePassword]);	
+	attr = soapDoc.set(ZaBulkProvision.A2_maxResults,obj[ZaBulkProvision.A2_maxResults]);
+	attr = soapDoc.set(ZaBulkProvision.A2_createDomains,obj[ZaBulkProvision.A2_createDomains]);
+	
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;
+	csfeParams.asyncMode = true;
+	csfeParams.callback = callback;
+
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = com_zimbra_bulkprovision.BUSY_START_PROVISION_ACCOUNTS;
+	ZaRequestMgr.invoke(csfeParams, reqMgrParams);	
+}
+
 ZaBulkProvision.generateBulkProvisionFile = function(obj, callback) {
 	var soapDoc = AjxSoapDoc.create("GenerateBulkProvisionFileFromLDAPRequest",ZaBulkProvision.URN, null);
 	var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external);
@@ -259,6 +336,8 @@ ZaBulkProvision.generateBulkProvisionFile = function(obj, callback) {
 	attr = soapDoc.set(ZaBulkProvision.A2_generatePassword,obj[ZaBulkProvision.A2_generatePassword]);
 	attr = soapDoc.set(ZaBulkProvision.A2_genPasswordLength,obj[ZaBulkProvision.A2_genPasswordLength]);
 	attr = soapDoc.set(ZaBulkProvision.A_mustChangePassword,obj[ZaBulkProvision.A_mustChangePassword]);
+	attr = soapDoc.set(ZaBulkProvision.A2_maxResults,obj[ZaBulkProvision.A2_maxResults]);
+	
 	if(obj[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_MIG_XML) {
 		attr = soapDoc.set(ZaBulkProvision.A2_fileFormat,ZaBulkProvision.FILE_FORMAT_MIGRATION_XML);
 		attr = soapDoc.set(ZaBulkProvision.A2_importMails,obj[ZaBulkProvision.A2_importMails]);
@@ -281,8 +360,6 @@ ZaBulkProvision.generateBulkProvisionFile = function(obj, callback) {
 	} else if(obj[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_BULK_CSV) {
 		attr = soapDoc.set(ZaBulkProvision.A2_fileFormat,ZaBulkProvision.FILE_FORMAT_BULK_CSV);
 	}
-	
-	attr = soapDoc.set(ZaBulkProvision.A2_maxResults,obj[ZaBulkProvision.A2_maxResults]);
 	
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;

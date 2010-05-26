@@ -28,14 +28,18 @@ import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.util.EmailUtil;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.GalContact;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.account.Provisioning.SearchGalResult;
 import com.zimbra.cs.account.accesscontrol.AdminRight;
+import com.zimbra.cs.account.accesscontrol.PseudoTarget;
 import com.zimbra.cs.account.accesscontrol.TargetType;
 import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 import com.zimbra.cs.account.gal.GalOp;
@@ -56,13 +60,15 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 	public static final String A_sourceType = "sourceType";
 	
 	private static final String E_status = "status";
-	private static final String E_progress = "progress";
-	private static final String E_finishedCount = "finishedCount";
+	private static final String E_provisionedCount = "provisionedCount";
+	private static final String E_skippedCount = "skippedCount";
 	private static final String E_totalCount = "totalCount";
 	private static final String E_attachmentID = "aid";
-	private static final String E_errorReportFileToken = "fileToken";
+	private static final String E_reportFileToken = "fileToken";
 	private static final String E_errorCount = "errorCount";
 	private static final String E_mustChangePassword = "mustChangePassword";
+	private static final String E_createDomains = "createDomains";
+	
 	
 	public static final String ERROR_INVALID_ACCOUNT_NAME = "Invalid account name. " ;
 	
@@ -78,6 +84,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		Element response = zsc.createElement(ZimbraBulkProvisionService.BULK_IMPORT_ACCOUNTS_RESPONSE);
 		Provisioning prov = Provisioning.getInstance();
 		if(op.equalsIgnoreCase(OP_START_IMPORT)) {
+			boolean createDomains = "TRUE".equalsIgnoreCase(request.getElement(E_createDomains).getTextTrim());
 			GalParams.ExternalGalParams galParams = new GalParams.ExternalGalParams(attrs, GalOp.search);
 	        String[] galAttrs = Provisioning.getInstance().getConfig().getMultiAttr(Provisioning.A_zimbraGalLdapAttrMap);
 	        LdapGalMapRules rules = new LdapGalMapRules(galAttrs);
@@ -85,6 +92,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 			 * list of entries found in the source (CSV file, XML file or directory)
 			 */
 			List<Map<String, Object>> sourceEntries = new ArrayList<Map<String, Object>>();
+			
 			String sourceType = request.getElement(A_sourceType).getTextTrim();
 			if(sourceType.equalsIgnoreCase(AdminFileDownload.FILE_FORMAT_BULK_CSV)) {
 				String aid = request.getElement(E_attachmentID).getText();
@@ -121,8 +129,21 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		                if (!isValidEntry) {
 		                	throw ServiceException.INVALID_REQUEST(String.format("Entry %d is not valid (%s %s %s %s %s %s)", i,nextLine[0],nextLine[1],nextLine[2],nextLine[3],nextLine[4],nextLine[5]), null);
 		                }
+		                String userEmail = nextLine[0].trim();
+	                    String parts[] = EmailUtil.getLocalPartAndDomain(userEmail);
+	                    if (parts == null)
+	                        throw ServiceException.INVALID_REQUEST("must be valid email address: "+userEmail, null);
+	                    
+	                    Domain domain = prov.getDomainByName(parts[1]);
+	                    if(domain != null) {
+	                    	checkDomainRight(zsc, domain, Admin.R_createAccount);
+	                    } else if(createDomains) {
+	                    	 domain = createMissingDomain(parts[1],zsc,context);
+	                    	 checkDomainRight(zsc, domain, Admin.R_createAccount);
+	                    } else {
+	                    	throw AccountServiceException.NO_SUCH_DOMAIN(parts[1]);
+	                    }
 	                	Map<String, Object> accAttrs = new HashMap<String, Object>();
-	                	
 	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_displayName, nextLine[1].trim());
 	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_givenName, nextLine[2].trim());
 	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_sn, nextLine[3].trim());
@@ -130,7 +151,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
         				
 	        			checkSetAttrsOnCreate(zsc, TargetType.account, nextLine[1].trim(), accAttrs);
 
-	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_mail, nextLine[1].trim());
+	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_mail, userEmail);
                 		StringUtil.addToMultiMap(accAttrs, Provisioning.A_userPassword, nextLine[4].trim());
                 		
 	                	sourceEntries.add(accAttrs);
@@ -174,22 +195,10 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		            	String userDN = "";
 		            	String userPassword = "";
 		            	String userPwdMustChange = "";
-		            	boolean skipUser = false;
 		            	for(Iterator userPropsIter = elUser.elementIterator(); userPropsIter.hasNext();) {
 		            		org.dom4j.Element el = (org.dom4j.Element)userPropsIter.next();
 		            		if(ZimbraBulkProvisionExt.E_ExchangeMail.equalsIgnoreCase(el.getName())) {
 		            			userEmail = el.getTextTrim();
-		            			/**
-		            			 * Check if user exists
-		            			 */
-			                	Account acct = prov.getAccountByName(userEmail);
-			                	if(acct!=null) {
-			                		/**
-			                		 * Skip existing user
-			                		 */
-			                		skipUser = true;
-			                		break;
-			                	}
 		            		}
 		            		if(Provisioning.A_displayName.equalsIgnoreCase(el.getName())) {
 		            			userDN = el.getTextTrim();
@@ -211,7 +220,19 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		            			userPwdMustChange = el.getTextTrim();
 		            		}		            		
 		            	}
-	                	checkDomainRightByEmail(zsc, userEmail, Admin.R_createAccount);
+	                    String parts[] = EmailUtil.getLocalPartAndDomain(userEmail);
+	                    if (parts == null)
+	                        throw ServiceException.INVALID_REQUEST("must be valid email address: "+userEmail, null);
+	                    
+	                    Domain domain = prov.getDomainByName(parts[1]);
+	                    if(domain != null) {
+	                    	checkDomainRight(zsc, domain, Admin.R_createAccount);
+	                    } else if(createDomains) {
+	                    	 domain = createMissingDomain(parts[1],zsc,context);
+	                    	 checkDomainRight(zsc, domain, Admin.R_createAccount);
+	                    } else {
+	                    	throw AccountServiceException.NO_SUCH_DOMAIN(parts[1]);
+	                    }
 	                	Map<String, Object> accAttrs = new HashMap<String, Object>();
 	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_givenName, userFN);
 	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_displayName, userDN);
@@ -278,11 +299,19 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		                		continue;
 		                	}
 		                	
-		                	Account acct = prov.getAccountByName(emailAddress);
-		                	if(acct != null) {
-		                		continue; //skip existing accounts
-		                	}
-		                	checkDomainRightByEmail(zsc, entry.getSingleAttr(ContactConstants.A_email), Admin.R_createAccount);
+		                    String parts[] = EmailUtil.getLocalPartAndDomain(emailAddress);
+		                    if (parts == null)
+		                        throw ServiceException.INVALID_REQUEST("must be valid email address: "+emailAddress, null);
+		                    
+		                    Domain domain = prov.getDomainByName(parts[1]);
+		                    if(domain != null) {
+		                    	checkDomainRight(zsc, domain, Admin.R_createAccount);
+		                    } else if(createDomains) {
+		                    	 domain = createMissingDomain(parts[1],zsc,context);
+		                    	 checkDomainRight(zsc, domain, Admin.R_createAccount);
+		                    } else {
+		                    	throw AccountServiceException.NO_SUCH_DOMAIN(parts[1]);
+		                    }
 		                	Map<String, Object> accAttrs = new HashMap<String, Object>();
 		        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_givenName, entry.getSingleAttr(ContactConstants.A_firstName));
 		        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_displayName, entry.getSingleAttr(ContactConstants.A_fullName));
@@ -348,9 +377,12 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 				if(status != BulkProvisioningThread.iSTATUS_FINISHED) {
 					thread.abort();
 					response.addElement(E_status).setText(Integer.toString(thread.getStatus()));
-					response.addElement(E_progress).setText(Integer.toString(thread.getProgressPercent()));
-					response.addElement(E_finishedCount).setText(Integer.toString(thread.getProgress()));
+					response.addElement(E_provisionedCount).setText(Integer.toString(thread.getProvisionedCounter()));
+					response.addElement(E_skippedCount).setText(Integer.toString(thread.getSkipedCounter()));
 					response.addElement(E_totalCount).setText(Integer.toString(thread.getTotalCount()));
+					if(thread.getWithErrors()) {
+						response.addElement(E_errorCount).addText(Integer.toString(thread.getFailCounter()));
+					}
 					status = thread.getStatus();
 					if(status == BulkProvisioningThread.iSTATUS_ABORTED) {
 						BulkProvisioningThread.deleteThreadInstance(zsc.getAuthtokenAccountId());
@@ -366,8 +398,8 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 			if(thread != null) {
 				int status = thread.getStatus();
 				response.addElement(E_status).setText(Integer.toString(status));
-				response.addElement(E_progress).setText(Integer.toString(thread.getProgressPercent()));
-				response.addElement(E_finishedCount).setText(Integer.toString(thread.getProgress()));
+				response.addElement(E_provisionedCount).setText(Integer.toString(thread.getProvisionedCounter()));
+				response.addElement(E_skippedCount).setText(Integer.toString(thread.getSkipedCounter()));
 				response.addElement(E_totalCount).setText(Integer.toString(thread.getTotalCount()));
 				if(thread.getWithErrors()) {
 					response.addElement(E_errorCount).addText(Integer.toString(thread.getFailCounter()));
@@ -390,7 +422,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 					} catch (IOException e) {
 						throw(ServiceException.FAILURE("Failed to create CSV file with a list of provisioned accounts",e));
 					}	
-					response.addElement(E_errorReportFileToken).addText(fileToken);
+					response.addElement(E_reportFileToken).addText(fileToken);
 					/**
 					 * if thread is done for whichever reason and there are errors, generate an error report
 					 */
@@ -415,7 +447,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 					BulkProvisioningThread.deleteThreadInstance(zsc.getAuthtokenAccountId());
 				}
 			} else {
-				response.addElement(E_status).setText("-1");
+				response.addElement(E_status).setText(Integer.toString(BulkProvisioningThread.iSTATUS_NOT_RUNNING));
 			}			
 		}
 		return response;
@@ -531,12 +563,56 @@ public class BulkImportAccounts extends AdminDocumentHandler {
         return true ;
     }
 
+    private Domain createMissingDomain(String name,ZimbraSoapContext zsc,Map<String, Object> context) throws ServiceException {
+	    // check permission
+	    if (name.indexOf('.') == -1) {
+	        // is a top domain
+	        checkRight(zsc, context, null, Admin.R_createTopDomain);
+	    } else {
+	        // go up the domain hierarchy see if any of the parent domains exist.
+            // If yes, check the createSubDomain right on the lowest existing parent domain.
+            // If not, allow it if the admin has both the createTopDomain on globalgrant; and 
+            // use a pseudo Domain object as the target to check the createSubDomain right
+            // (because createSubDomain is a domain right, we cannot use globalgrant for the target).
+    	    String domainName = name;
+    	    Domain parentDomain = null;
+    	    while (parentDomain == null) {
+    	        int nextDot = domainName.indexOf('.');
+                if (nextDot == -1) {
+                    // reached the top, check if the admin has the createTopDomain right on globalgrant
+                    checkRight(zsc, context, null, Admin.R_createTopDomain);
+                    
+                    // then create a pseudo domain for checking the createSubDomain right
+                    parentDomain = (Domain)PseudoTarget.createPseudoTarget(Provisioning.getInstance(), TargetType.domain, null, null, false, null, null);
+                    break;
+                } else {
+                    domainName = domainName.substring(nextDot+1);
+                    parentDomain = Provisioning.getInstance().get(DomainBy.name, domainName);
+                }
+    	    }
+    	    checkRight(zsc, context, parentDomain, Admin.R_createSubDomain);
+	    }    
+	    
+	    Map<String, Object> attrs = new HashMap<String,Object>();
+	    StringUtil.addToMultiMap(attrs, Provisioning.A_zimbraGalMode, "zimbra");
+	    StringUtil.addToMultiMap(attrs, Provisioning.A_zimbraAuthMech, "zimbra");
+	    StringUtil.addToMultiMap(attrs, Provisioning.A_zimbraGalMaxResults, "100");
+	    StringUtil.addToMultiMap(attrs, Provisioning.A_zimbraNotes, "automatically created by bulk provisioning");
+	    checkSetAttrsOnCreate(zsc, TargetType.domain, name, attrs);
+	    Domain domain = Provisioning.getInstance().createDomain(name, attrs);
+    	return domain;
+    }
+    
+
     public void docRights(List<AdminRight> relatedRights, List<String> notes) {
         relatedRights.add(Admin.R_createAccount);
         relatedRights.add(Admin.R_listAccount);
+        relatedRights.add(Admin.R_createTopDomain);
+        relatedRights.add(Admin.R_createSubDomain);
         
         notes.add("Only accounts on which the authed admin has " + Admin.R_listAccount.getName() +
                 " right will be provisioned.");
-    }    
-
+        notes.add(Admin.R_createTopDomain + " right is required in order to automatically create top level domains.");
+        notes.add(Admin.R_createSubDomain + " right is required in order to automatically create sub-domains.");
+    }       
 }
