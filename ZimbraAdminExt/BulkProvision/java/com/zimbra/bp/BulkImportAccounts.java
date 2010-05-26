@@ -95,9 +95,6 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		Provisioning prov = Provisioning.getInstance();
 		if(op.equalsIgnoreCase(OP_START_IMPORT)) {
 			boolean createDomains = "TRUE".equalsIgnoreCase(request.getElement(E_createDomains).getTextTrim());
-			GalParams.ExternalGalParams galParams = new GalParams.ExternalGalParams(attrs, GalOp.search);
-	        String[] galAttrs = Provisioning.getInstance().getConfig().getMultiAttr(Provisioning.A_zimbraGalLdapAttrMap);
-	        LdapGalMapRules rules = new LdapGalMapRules(galAttrs);
 			/**
 			 * list of entries found in the source (CSV file, XML file or directory)
 			 */
@@ -105,7 +102,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 			
 			String sourceType = request.getElement(A_sourceType).getTextTrim();
 			if(sourceType.equalsIgnoreCase(AdminFileDownload.FILE_FORMAT_BULK_CSV)) {
-				String aid = request.getElement(E_attachmentID).getText();
+				String aid = request.getElement(E_attachmentID).getTextTrim();
 				ZimbraLog.extensions.debug("Uploaded CSV file id = " + aid) ;
 				//response.addElement(E_attachmentID).addText(aid);
 		        FileUploadServlet.Upload up = FileUploadServlet.fetchUpload(zsc.getAuthtokenAccountId(), aid, zsc.getAuthToken());
@@ -159,7 +156,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_sn, nextLine[3].trim());
         				StringUtil.addToMultiMap(accAttrs, Provisioning.A_zimbraPasswordMustChange, nextLine[5].trim());
         				
-	        			checkSetAttrsOnCreate(zsc, TargetType.account, nextLine[1].trim(), accAttrs);
+	        			checkSetAttrsOnCreate(zsc, TargetType.account, userEmail, accAttrs);
 
 	        			StringUtil.addToMultiMap(accAttrs, Provisioning.A_mail, userEmail);
                 		StringUtil.addToMultiMap(accAttrs, Provisioning.A_userPassword, nextLine[4].trim());
@@ -179,7 +176,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		            }
 		        }		        
 			} else if(sourceType.equalsIgnoreCase(AdminFileDownload.FILE_FORMAT_BULK_XML)) {
-				String aid = request.getElement(E_attachmentID).getText();
+				String aid = request.getElement(E_attachmentID).getTextTrim();
 				ZimbraLog.extensions.debug("Uploaded XML file id = " + aid) ;
 		        FileUploadServlet.Upload up = FileUploadServlet.fetchUpload(zsc.getAuthtokenAccountId(), aid, zsc.getAuthToken());
 		        if (up == null) {
@@ -266,6 +263,10 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 					throw ServiceException.FAILURE("Bulk provisioning failed to read uploaded XML document.", e) ;
 				}
 			} else if(sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_BULK_LDAP)) {
+				GalParams.ExternalGalParams galParams = new GalParams.ExternalGalParams(attrs, GalOp.search);
+		        String[] galAttrs = Provisioning.getInstance().getConfig().getMultiAttr(Provisioning.A_zimbraGalLdapAttrMap);
+		        LdapGalMapRules rules = new LdapGalMapRules(galAttrs);
+				
 				Element elPassword = request.getOptionalElement(ZimbraBulkProvisionExt.A_password);
 				Element elPasswordLength = request.getOptionalElement(ZimbraBulkProvisionExt.A_genPasswordLength);
 
@@ -541,34 +542,6 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 
         if (parts.length != 2)
             throw ServiceException.PARSE_ERROR(ERROR_INVALID_ACCOUNT_NAME, new Exception(ERROR_INVALID_ACCOUNT_NAME)) ;
-
-        checkDomainRightByEmail(lc, accountName, Admin.R_createAccount);
- 
-        //2. if account already exists
-        Account acct = null ;
-        try {
-            acct = prov.getAccount(accountName) ;
-        }catch (Exception e) {
-            //ignore
-        }
-        if (acct != null) {
-            errorMsg = "Account " + accountName + " already exists." ;
-            throw ServiceException.PARSE_ERROR(errorMsg, new Exception(errorMsg)) ;
-        }
-
-        String domain = parts[1];
-
-        //domain exists
-        Domain d = null ;
-        try {
-            d = prov.get(Provisioning.DomainBy.name, domain) ;
-        }catch (Exception e) {
-            //ignore
-        }
-        if (d == null) {
-            errorMsg = "domain " + domain + " doesn't exist for account " + accountName ;
-            throw ServiceException.PARSE_ERROR(errorMsg, new Exception(errorMsg)) ;
-        }
 
         return true ;
     }
