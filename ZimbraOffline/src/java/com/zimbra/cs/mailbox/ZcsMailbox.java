@@ -392,7 +392,6 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     synchronized void syncMetadata(OperationContext octxt, int itemId, byte type, int folderId, int flags, long tags, byte color)
         throws ServiceException {
         boolean success = false;
-        String oldFolderPath = null;
         try {
             beginTransaction("syncMetadata", octxt);
             MailItem item = getItemById(itemId, type);
@@ -420,9 +419,6 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             flags &= ~Flag.BITMASK_UNREAD;
 
             String prevIndexId = item.getIndexId();
-            if (item instanceof Folder) {
-                oldFolderPath = ((Folder) item).getPath();
-            }
             item.move(getFolderById(folderId));
             if (!StringUtil.equal(prevIndexId, item.getIndexId())) {
                 queueForIndexing(item, false, null);
@@ -435,10 +431,6 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             success = true;
         } finally {
             endTransaction(success);
-        }
-        
-        if (success && oldFolderPath != null) {
-            updateFilterRules(itemId, oldFolderPath);
         }
     }
 
