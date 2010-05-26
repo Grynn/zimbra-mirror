@@ -40,6 +40,8 @@ DwtToolTip = function(shell, className, dialog) {
 
     // save reference to content div
     this._contentDiv = document.getElementById("tooltipContents");
+
+    Dwt.setHandler(this._div, DwtEvent.ONMOUSEOVER, AjxCallback.simpleClosure(this._mouseOverListener, this));
 }
 
 DwtToolTip.prototype.toString =
@@ -77,11 +79,12 @@ function(content, setInnerHTML) {
 };
 	
 DwtToolTip.prototype.popup = 
-function(x, y, skipInnerHTML) {
+function(x, y, skipInnerHTML, popdownOnMouseOver) {
     if (this._popupAction) {
         AjxTimedAction.cancelAction(this._popupAction);
         this._popupAction = null;
     }
+    this._popdownOnMouseOver = popdownOnMouseOver; // popdownOnMouseOver may be truthy to pop down the tooltip if the mouse hovers over the tooltip. Optionally, it can be an AjxCallback that will be called after popping the tooltip down
     if (this._content != null) {
 		if(!skipInnerHTML) {
             this._contentDiv.innerHTML = this._content;
@@ -94,6 +97,7 @@ function(x, y, skipInnerHTML) {
 
 DwtToolTip.prototype.popdown = 
 function() {
+    this._popdownOnMouseOver = false;
     if (this._popupAction) {
         AjxTimedAction.cancelAction(this._popupAction);
         this._popupAction = null;
@@ -216,4 +220,14 @@ function(startX, startY) {
 	var zIndex = dialog ? dialog.getZIndex() + Dwt._Z_INC : Dwt.Z_TOOLTIP;
 	Dwt.setZIndex(element, zIndex);
     this._poppedUp = true;
+};
+
+DwtToolTip.prototype._mouseOverListener = 
+function(ev) {
+    if (this._popdownOnMouseOver && this._poppedUp) {
+        var callback = (this._popdownOnMouseOver instanceof AjxCallback) ? this._popdownOnMouseOver : null;
+        this.popdown();
+        if (callback)
+            callback.run();
+    }
 };
