@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_discover" version="0.3">
+<zimletConfig name="com_zimbra_discover" version="0.5">
     <global>
         <property name="allowedDomains">search.yahooapis.com,*.yahoo.com,*.stumbleupon.com,*.delicious.com,*.flickr.com,rss.cnn.com,d.yimg.com,rajaraodv.feedpublish.com</property>
     </global>

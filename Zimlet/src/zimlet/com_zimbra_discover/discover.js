@@ -17,20 +17,59 @@
 /**
  * Constructor.
  */
-function com_zimbra_discover() {
+function com_zimbra_discover_HandlerObject() {
 }
 
-com_zimbra_discover.prototype = new ZmZimletBase();
-com_zimbra_discover.prototype.constructor = com_zimbra_discover;
+com_zimbra_discover_HandlerObject.prototype = new ZmZimletBase();
+com_zimbra_discover_HandlerObject.prototype.constructor = com_zimbra_discover_HandlerObject;
+
+/**
+ * Simplify handler object
+ *
+ */
+var DiscoverZimlet = com_zimbra_discover_HandlerObject;
 
 
-com_zimbra_discover.discover = "DISCOVER";
+DiscoverZimlet.discover = "DISCOVER";
 
+/**
+ * Defines the "first time" user property.
+ */
+DiscoverZimlet.USER_PROP_FIRST_TIME = "dy_usingFirstTime";
 
-com_zimbra_discover.prototype.init =
+/**
+ * Defines the "button click" user property.
+ */
+DiscoverZimlet.USER_PROP_BUTTON_CLICK = "dy_discoverBtnClickedOnExternalWindow";
+
+/**
+ * Defines the "enable zimlet" user property.
+ */
+DiscoverZimlet.USER_PROP_ENABLE_ZIMLET = "turnONDiscoverZimletNew";
+
+/**
+ * Defines the "preference prefix" user property.
+ */
+DiscoverZimlet.USER_PROP_PREFERENCE_PREFIX = "dy_pref_";
+
+/**
+ * Initializes the zimlet.
+ * 
+ */
+DiscoverZimlet.prototype.init =
 function() {
-	this.discZimletON = this.getUserProperty("turnONDiscoverZimletNew") == "true";
-	this.selectionsList = ["humor","art","business","entertainment","politics","technology","sports"];
+	this.discZimletON = this.getUserProperty(DiscoverZimlet.USER_PROP_ENABLE_ZIMLET) == "true";
+	
+	this.selectionsList = [
+	              { id:"humor", name:this.getMessage("DiscoverZimlet_topic_humor"), details:this.getMessage("DiscoverZimlet_topic_humor_details") },
+	              { id:"art", name:this.getMessage("DiscoverZimlet_topic_art"), details:this.getMessage("DiscoverZimlet_topic_art_details") },
+            	  { id:"business", name:this.getMessage("DiscoverZimlet_topic_business"), details:this.getMessage("DiscoverZimlet_topic_business_details") },
+            	  { id:"entertainment", name:this.getMessage("DiscoverZimlet_topic_entertainment"), details:this.getMessage("DiscoverZimlet_topic_entertainment_details") },
+            	  { id:"politics", name:this.getMessage("DiscoverZimlet_topic_politics"), details:this.getMessage("DiscoverZimlet_topic_politics_details") },
+            	  { id:"technology", name:this.getMessage("DiscoverZimlet_topic_technology"), details:this.getMessage("DiscoverZimlet_topic_technology_details") },
+            	  { id:"sports", name:this.getMessage("DiscoverZimlet_topic_sports"), details:this.getMessage("DiscoverZimlet_topic_sports_details") }
+              ];
+
 	this.feeds_entertainment = this.feeds_business = this.feeds_art = this.feeds_humor = "";
 	this.feeds_politics = this.feeds_sports = this.feeds_technology = "";
 	if (!this.discZimletON) {
@@ -41,7 +80,12 @@ function() {
 	this._loadFeeds();
 	this.initToolbarButton();
 };
-com_zimbra_discover.prototype._loadFeeds =
+
+/**
+ * Loads the feeds.
+ * 
+ */
+DiscoverZimlet.prototype._loadFeeds =
 function() {
 	//feedpublish is completely flacky, so hardcode.
 	this.feeds_humor = "http://feeds.delicious.com/v2/json/tag/funny+cool+humor+photo?count=200::http://feeds.delicious.com/v2/json/tag/funny+cool+prank?count=25::http://feeds.delicious.com/v2/json/tag/funny+cool+humor?count=25::http://feeds.delicious.com/v2/json/tag/funny+jokes?count=25::http://feeds.delicious.com/v2/json/tag/funny+cool+humor+awesome?count=30::http://rss.stumbleupon.com/buzz/humor::http://feeds.delicious.com/v2/json/tag/funny+pictures+awesome?count=200";
@@ -53,61 +97,7 @@ function() {
 	this.feeds_art = "http://feeds.delicious.com/v2/json/tag/art+awesome+amazing?count=75::http://feeds.delicious.com/v2/json/tag/art+painting+interesting?count=100::http://feeds.delicious.com/v2/json/tag/art+creative+awesome?count=100";
 };
 
-/*
-com_zimbra_discover.prototype._getMasterFeed =
-function() {
-	var feed = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(this._masterFeed);
-	AjxRpc.invoke(null, feed, null, new AjxCallback(this, this._masterFeedHandler), true);
-};
-
-com_zimbra_discover.prototype._masterFeedHandler =
-function(result) {
-	var items = "";
-	try {
-		items = result.xml.getElementsByTagName("item");
-	} catch(e) {//there was some expn getting feed
-		return;
-	}
-	for (var i = 0; i < items.length; i++) {
-		try {
-			var title = desc = "";
-			var titleObj = items[i].getElementsByTagName("title")[0].firstChild;
-			var descObj = items[i].getElementsByTagName("description")[0].firstChild;
-			if (titleObj.textContent) {
-				title = titleObj.textContent;
-				desc = descObj.textContent;
-			} else if (titleObj.text) {
-				title = titleObj.text;
-				desc = descObj.text;
-			}
-
-
-			//feed adds a table to the description, remove it
-			desc = desc.replace("<table border='0'><tr><td valign='top'></td><td valign='top'>", "");
-			desc = desc.replace("</td></tr></table> ", "");
-			desc = desc.replace("\\n", "");
-
-			if (title == "humor")
-				this.feeds_humor = desc;
-			else if (title == "business")
-				this.feeds_business = desc;
-			else if (title == "entertainment")
-					this.feeds_entertainment = desc;
-				else if (title == "politics")
-						this.feeds_politics = desc;
-					else if (title == "technology")
-							this.feeds_technology = desc;
-						else if (title == "sports")
-								this.feeds_sports = desc;
-							else if (title == "art")
-									this.feeds_art = desc;
-		} catch(e) {
-		}
-	}
-	this.initToolbarButton();
-};
-*/
-com_zimbra_discover.prototype._initializeVariables =
+DiscoverZimlet.prototype._initializeVariables =
 function() {
 
 	this.linksString = "";
@@ -117,7 +107,11 @@ function() {
 	this.getFeeds();
 };
 
-com_zimbra_discover.prototype.initToolbarButton = function() {
+/**
+ * Initializes the toolbar "Discover" button.
+ * 
+ */
+DiscoverZimlet.prototype.initToolbarButton = function() {
 	if (!appCtxt.get(ZmSetting.MAIL_ENABLED))
 		this._toolbar = true;
 
@@ -149,25 +143,30 @@ com_zimbra_discover.prototype.initToolbarButton = function() {
 	var indx = this._toolbar.getItemCount() + 1;
 
 	// Add button to toolbar
-	if (!this._toolbar.getButton(com_zimbra_discover.discover)) {
-		ZmMsg.discoverlabel = "discover!";
-		ZmMsg.discovertip = "Opens websites based on topics of your choice";
+	if (!this._toolbar.getButton(DiscoverZimlet.discover)) {
+		ZmMsg.discoverlabel = this.getMessage("DiscoverZimlet_button_discover_label");
+		ZmMsg.discovertip = this.getMessage("DiscoverZimlet_button_discover_tooltip");
 
 		var btn = this._toolbar.createOp(
-			com_zimbra_discover.discover,
-		{
-			text	: ZmMsg.discoverlabel,
-			tooltip : ZmMsg.discovertip,
-			index   :indx,
-			image   : "dy-panelIcon"
-		}
+			DiscoverZimlet.discover,
+				{
+				text	: ZmMsg.discoverlabel,
+				tooltip : ZmMsg.discovertip,
+				index   :indx,
+				image   : "dy-panelIcon"
+				}
 			);
 
-		btn.addSelectionListener(new AjxListener(this, this.discBtnListener));
+		btn.addSelectionListener(new AjxListener(this, this._discoverBtnListener));
 	}
 };
 
-com_zimbra_discover.prototype.discBtnListener =
+/**
+ * Handles discover button event.
+ * 
+ * @see			initToolbarButton
+ */
+DiscoverZimlet.prototype._discoverBtnListener =
 function() {
 	this._initializeVariables();
 	if (this.noOptionsAreSelected) {//if no selections were present, show the dialog again
@@ -177,7 +176,11 @@ function() {
 	this.getLinks();
 };
 
-com_zimbra_discover.prototype.showSelectDialog =
+/**
+ * Shows the select topics dialog.
+ * 
+ */
+DiscoverZimlet.prototype.showSelectDialog =
 function() {
 	//if zimlet dialog already exists...
 	if (this.pbDialog) {
@@ -188,26 +191,37 @@ function() {
 	this.pView.setSize("470", "320");
 	this.pView.getHtmlElement().style.background = "white";
 	this.pView.getHtmlElement().style.overflow = "auto";
-	this.pView.getHtmlElement().innerHTML = this.createPrefView();
+	this.pView.getHtmlElement().innerHTML = this.createSelectView();
 
-	this.pbDialog = this._createDialog({title:"discover! preferences", view:this.pView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	var dialogArgs = {
+			title	: this.getMessage("DiscoverZimlet_dialog_select_title"),
+			view	: this.pView,
+			parent	: this.getShell(),
+			standardButtons	: [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]
+		};
+
+	this.pbDialog = this._createDialog(dialogArgs);
 	this.pbDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListner));
-
-
+	
 	this._checkUncheckPreferredOptions();
 	this.pbDialog.popup();
 
 };
 
-com_zimbra_discover.prototype._okBtnListner =
+/**
+ * Handles the OK button.
+ * 
+ * @see		showSelectDialog
+ */
+DiscoverZimlet.prototype._okBtnListner =
 function() {
 	this.savePreferences();
 	this._topicsJustSelected = true;
-	this.setUserProperty("dy_usingFirstTime", "false");
+	this.setUserProperty(DiscoverZimlet.USER_PROP_FIRST_TIME, "false");
 	this.pbDialog.popdown();
 	this._enableDisableZimlet();
 
-	//it we just enabled, start immediately
+	// if we just enabled, start immediately
 	if (document.getElementById("dy_enableDiscZimlet").checked) {
 		this._initializeVariables();
 		this.getLinks();
@@ -215,46 +229,78 @@ function() {
 
 };
 
-com_zimbra_discover.prototype.savePreferences =
+/**
+ * Saves the zimlet preferences.
+ * 
+ */
+DiscoverZimlet.prototype.savePreferences =
 function() {
 	for (var i = 0; i < this.selectionsList.length; i++) {
-		var optn = this.selectionsList[i];
-		if (document.getElementById("dy_chk_" + optn).checked) {
-			this.setUserProperty("dy_pref_" + optn, "true");
+		var optn = this.selectionsList[i].id;
+		if (document.getElementById(this.getTopicElementId(optn)).checked) {
+			this.setUserProperty(this.getPreferenceUserPropertyName(optn), "true");
 		} else {
-			this.setUserProperty("dy_pref_" + optn, "false");
+			this.setUserProperty(this.getPreferenceUserPropertyName(optn), "false");
 		}
 	}
 };
 
-com_zimbra_discover.prototype._checkUncheckPreferredOptions =
+/**
+ * Gets the preference user property name.
+ * 
+ * @param	{string}	topic	the topic
+ * @return	{string}	the preference name
+ */
+DiscoverZimlet.prototype.getPreferenceUserPropertyName =
+function(topic) {
+	return	DiscoverZimlet.USER_PROP_PREFERENCE_PREFIX + topic;
+};
+
+/**
+ * Gets the topic checkbox element id.
+ * 
+ * @param	{string}	topic	the topic
+ * @return	{string}	the id
+ */
+DiscoverZimlet.prototype.getTopicElementId =
+function(topic) {
+	return	"dy_chk_" + topic;
+};
+
+/**
+ * Checks/unchecks the preferred options.
+ * 
+ */
+DiscoverZimlet.prototype._checkUncheckPreferredOptions =
 function() {
 	for (var i = 0; i < this.selectionsList.length; i++) {
-		var optn = this.selectionsList[i];
-		if (this.getUserProperty("dy_pref_" + optn) == "true") {
-			document.getElementById("dy_chk_" + optn).checked = true;
+		var optn = this.selectionsList[i].id;
+		if (this.getUserProperty(this.getPreferenceUserPropertyName(optn)) == "true") {
+			document.getElementById(this.getTopicElementId(optn)).checked = true;
 		}
 	}
 
-	if (this.getUserProperty("turnONDiscoverZimletNew") == "true") {
+	if (this.getUserProperty(DiscoverZimlet.USER_PROP_ENABLE_ZIMLET) == "true") {
 		document.getElementById("dy_enableDiscZimlet").checked = true;
 	}
-
-
 };
 
-com_zimbra_discover.prototype.getFeeds =
+/**
+ * Gets the feeds.
+ * 
+ */
+DiscoverZimlet.prototype.getFeeds =
 function() {
 	for (var i = 0; i < this.selectionsList.length; i++) {
 		var feeds;
-		var optn = this.selectionsList[i];
+		var optn = this.selectionsList[i].id;
 		if (this._topicsJustSelected != null) {
-			if (document.getElementById("dy_chk_" + optn).checked) {
+			if (document.getElementById(this.getTopicElementId(optn)).checked) {
 				this.noOptionsAreSelected = false;
 				feeds = eval("(this.feeds_" + optn + ")").split("::");
 				this.getFeedsToUse(feeds);
 			}
-		} else if (this.getUserProperty("dy_pref_" + optn) == "true") {
+		} else if (this.getUserProperty(this.getPreferenceUserPropertyName(optn)) == "true") {
 			this.noOptionsAreSelected = false;
 			feeds = eval("(this.feeds_" + optn + ")").split("::");
 			this.getFeedsToUse(feeds);
@@ -263,17 +309,23 @@ function() {
 
 };
 
-com_zimbra_discover.prototype.getFeedsToUse =
+/**
+ * Feeds to use.
+ */
+DiscoverZimlet.prototype.getFeedsToUse =
 function(feedArray) {
 	for (var i = 0; i < feedArray.length; i++) {
 		this.feedsToUse.push(feedArray[i]);
 	}
 };
 
-com_zimbra_discover.prototype.getLinks =
+/**
+ * Gets links.
+ */
+DiscoverZimlet.prototype.getLinks =
 function() {
 
-	if (this.getUserProperty("dy_usingFirstTime") == "true" && this._topicsJustSelected == null) {
+	if (this.getUserProperty(DiscoverZimlet.USER_PROP_FIRST_TIME) == "true" && this._topicsJustSelected == null) {
 		this.showSelectDialog();
 	} else {
 		var feedStr = this.feedsToUse[this._feedCount];
@@ -286,7 +338,7 @@ function() {
 };
 
 //categories muse be 4 char long
-com_zimbra_discover.prototype.getFeedCategory =
+DiscoverZimlet.prototype.getFeedCategory =
 function(feedStr) {
 	if (this.feeds_humor.indexOf(feedStr) >= 0)
 		return "humo";
@@ -304,7 +356,7 @@ function(feedStr) {
 							return "arts";
 };
 
-com_zimbra_discover.prototype.getFullCategoryName =
+DiscoverZimlet.prototype.getFullCategoryName =
 function(shortName) {
 	if (shortName == "humo")
 		return "humor";
@@ -322,14 +374,14 @@ function(shortName) {
 							return "arts";
 };
 
-com_zimbra_discover.prototype.openNewWindow =
+DiscoverZimlet.prototype.openNewWindow =
 function() {
 	this._extWindow = window.open(this.getResource("discoverWindow.html"));
 	setTimeout(AjxCallback.simpleClosure(this.postLinksToNewWindow, this, this.linksString), 1000);
 	setTimeout(AjxCallback.simpleClosure(this.openFirstUrl, this, this.linksString), 1500);
 };
 
-com_zimbra_discover.prototype.openFirstUrl =
+DiscoverZimlet.prototype.openFirstUrl =
 function(ls) {
 	DBG.println(AjxDebug.DBG1, "*****ls: " + ls);
 
@@ -350,8 +402,8 @@ function(ls) {
 
 
 		//for the first time,say that user can click on that..
-		if (this.getUserProperty("dy_discoverBtnClickedOnExternalWindow") == "false" && this._userKnowsAbtDiscBtn == undefined) {
-			this._extWindow.document.getElementById("discover_clickMsg").innerHTML = "click on the button to discover! more webpages";
+		if (this.getUserProperty(DiscoverZimlet.USER_PROP_BUTTON_CLICK) == "false" && this._userKnowsAbtDiscBtn == undefined) {
+			this._extWindow.document.getElementById("discover_clickMsg").innerHTML = this.getMessage("DiscoverZimlet_dialog_select_clickButton");
 			this._clickHereMsgTIid = setInterval(AjxCallback.simpleClosure(this._checkIfDiscBtnOnExtWindowClicked, this), 10000);
 		}
 
@@ -359,14 +411,14 @@ function(ls) {
 	}
 };
 
-com_zimbra_discover.prototype._checkIfDiscBtnOnExtWindowClicked =
+DiscoverZimlet.prototype._checkIfDiscBtnOnExtWindowClicked =
 function() {
 	try {
 		if (this._extWindow && this._extWindow.document &&
 				this._extWindow.document.getElementById("discover_clickMsg").innerHTML == "") 
 			{
 			clearInterval(this._clickHereMsgTIid);
-			this.setUserProperty("dy_discoverBtnClickedOnExternalWindow", "true", true);
+			this.setUserProperty(DiscoverZimlet.USER_PROP_BUTTON_CLICK, "true", true);
 		}
 		this._userKnowsAbtDiscBtn = true;
 	} catch(e) {
@@ -375,7 +427,7 @@ function() {
 
 };
 
-com_zimbra_discover.prototype.postLinksToNewWindow =
+DiscoverZimlet.prototype.postLinksToNewWindow =
 function(ls) {
 	try {
 		this._extWindow.document.getElementById("urls").innerHTML = ls;
@@ -383,7 +435,7 @@ function(ls) {
 	}
 };
 
-com_zimbra_discover.prototype._handleResult =
+DiscoverZimlet.prototype._handleResult =
 function(cat, result) {
 	var checkJson_delicious = true;//json from delicious
 	var checkJson_BOSS = false;//json from BOSS
@@ -475,42 +527,63 @@ function(cat, result) {
 
 };
 
-com_zimbra_discover.prototype.createPrefView =
+/**
+ * Creates the select dialog view.
+ * 
+ * @see		showSelectDialog
+ */
+DiscoverZimlet.prototype.createSelectView =
 function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV align='center' class='dy_selectOptDiv'>";
-	html[i++] = "<TABLE class='dy_selectOptTable'><TR><TD>Select some of your favourite topics to discover!</TD></TR></TABLE>";
+	html[i++] = "<TABLE class='dy_selectOptTable'><TR><TD>";
+	html[i++] = this.getMessage("DiscoverZimlet_dialog_select_selectTopics");
+	html[i++] = "</TD></TR></TABLE>";
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV>";
 	html[i++] = "<TABLE>";
-	html[i++] = "<tr><td><input id='dy_chk_humor'  type='checkbox'/></td><td class='dy_optionsName'>humor<span class='dy_optionsEtc'>(funny photos, blogs, jokes etc)</span></td></tr>";
-	html[i++] = "<tr><td><input id='dy_chk_art'  type='checkbox'/></td><td class='dy_optionsName'>art<span class='dy_optionsEtc'>(photos, websites & articles related art)</span></td></tr>";
-	html[i++] = "<tr><td><input id='dy_chk_business'  type='checkbox'/></td><td class='dy_optionsName'>business<span class='dy_optionsEtc'>(stocks, entrepreneurship, startups etc)</span></td></tr>";
-	html[i++] = "<tr><td><input id='dy_chk_entertainment'  type='checkbox'/></td><td class='dy_optionsName'>entertainment<span class='dy_optionsEtc'>(tv, movies, celebrity news and photos)</span></td></tr>";
-	html[i++] = "<tr><td><input id='dy_chk_politics'  type='checkbox'/></td><td class='dy_optionsName'>politics<span class='dy_optionsEtc'>(anything political)</span></td></tr>";
-	html[i++] = "<tr><td><input id='dy_chk_technology'  type='checkbox'/></td><td class='dy_optionsName'>technology<span class='dy_optionsEtc'>(software, programming, design tips and tricks etc)</span></td></tr>";
-	html[i++] = "<tr><td><input id='dy_chk_sports'  type='checkbox'/></td><td class='dy_optionsName'>sports<span class='dy_optionsEtc'>(nfl, nba, fantasy football, cricket etc)</span></td></tr>";
+	for (var j = 0; j < this.selectionsList.length; j++) {
+		var elementId = this.getTopicElementId(this.selectionsList[j].id);
+		html[i++] = "<tr><td><input id='";
+		html[i++] = elementId;
+		html[i++] = "'  type='checkbox'/></td><td class='dy_optionsName'>";
+		html[i++] = this.selectionsList[j].name;
+		html[i++] = "&nbsp;<span class='dy_optionsEtc'>";
+		html[i++] = this.selectionsList[j].details;
+		html[i++] = "</span></td></tr>";
+	}
 	html[i++] = "</TABLE>";
 	html[i++] = "</DIV>";
 	html[i++] = "<BR>";
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='dy_enableDiscZimlet'  type='checkbox'/><span class='dy_optionsEtc'> Enable discover! zimlet</span>";
+	html[i++] = "<input id='dy_enableDiscZimlet'  type='checkbox'/><span class='dy_optionsEtc'>";
+	html[i++] = this.getMessage("DiscoverZimlet_dialog_select_enableZimlet");
+	html[i++] = "</span>";
 	html[i++] = "</DIV>";
 	return html.join("");
 
 };
 
-com_zimbra_discover.prototype.doubleClicked = function() {
+/**
+ * Called on a double-click.
+ */
+DiscoverZimlet.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
 
-com_zimbra_discover.prototype.singleClicked = function() {
+/**
+ * Called on a single-click.
+ */
+DiscoverZimlet.prototype.singleClicked = function() {
 	this.showSelectDialog();
 };
 
-
-com_zimbra_discover.prototype._enableDisableZimlet =
+/**
+ * Enables/disables the zimlet based on preference.
+ * 
+ */
+DiscoverZimlet.prototype._enableDisableZimlet =
 function() {
 	this._reloadRequired = false;
 
@@ -518,10 +591,10 @@ function() {
 		if (!this.discZimletON) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("turnONDiscoverZimletNew", "true");
+		this.setUserProperty(DiscoverZimlet.USER_PROP_ENABLE_ZIMLET, "true");
 
 	} else {
-		this.setUserProperty("turnONDiscoverZimletNew", "false");
+		this.setUserProperty(DiscoverZimlet.USER_PROP_ENABLE_ZIMLET, "false");
 		if (this.discZimletON)
 			this._reloadRequired = true;
 	}
@@ -534,7 +607,11 @@ function() {
 
 };
 
-com_zimbra_discover.prototype._refreshBrowser =
+/**
+ * Refreshes the browser.
+ * 
+ */
+DiscoverZimlet.prototype._refreshBrowser =
 function() {
 	window.onbeforeunload = null;
 	var url = AjxUtil.formatUrl({});

@@ -1,12 +1,10 @@
-<zimlet name="com_zimbra_discover" version="0.3" label="Discover!" description="Discover new and interesting websites based on selected topics.">
+<zimlet name="com_zimbra_discover" version="0.5" label="Discover!" description="Discover new and interesting websites based on selected topics.">
   <include>discover.js</include>
   <includeCSS>discover.css</includeCSS>
-  <handlerObject>com_zimbra_discover</handlerObject>
-
-  <zimletPanelItem label="Discover!" icon="dy-panelIcon">
-    <toolTipText>Discover new and interesting websites based on selected topics.</toolTipText>
+  <handlerObject>com_zimbra_discover_HandlerObject</handlerObject>
+  <zimletPanelItem label="${msg.DiscoverZimlet_panel_label}" icon="dy-panelIcon">
+    <toolTipText>${msg.DiscoverZimlet_panel_tooltip}</toolTipText>
   </zimletPanelItem>
-
   <userProperties>
    <property type="string" name="dy_usingFirstTime" value="true"/>
    <property type="string" name="dy_discoverBtnClickedOnExternalWindow" value="false"/>
@@ -19,5 +17,4 @@
    <property type="string" name="dy_pref_technology" value="false"/>
    <property type="string" name="dy_pref_sports" value="false"/>
   </userProperties>
-
 </zimlet>
