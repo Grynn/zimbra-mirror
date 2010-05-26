@@ -838,17 +838,26 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 											fileType = "XML";	
 										}
 										return AjxMessageFormat.format(com_zimbra_bulkprovision.UploadFileTitle,[fileType]);
-									}
+									},bmolsnr:true
 								},
 								{ type:_SPACER_ , height: 10 },
                                 { type:_OUTPUT_, 
 									getDisplayValue:function(val) {
 										return ZaBulkImportXWizard.getUploadFormHtml(val);
 									},
-									ref:ZaBulkProvision.A2_provAction
+									ref:ZaBulkProvision.A2_provAction,bmolsnr:true
 								},
                                 { type:_SPACER_ , height: 10 } ,
-                                { type:_OUTPUT_, value: com_zimbra_bulkprovision.CSV_uploadNotes } 
+                                { type:_OUTPUT_, 
+                                	getDisplayValue:function(val) {
+										if(val == ZaBulkProvision.ACTION_IMPORT_XML) {
+											return com_zimbra_bulkprovision.XML_uploadNotes;
+										} else {
+											return com_zimbra_bulkprovision.CSV_uploadNotes;
+										}
+									},
+									ref:ZaBulkProvision.A2_provAction,bmolsnr:true
+								} 
                             ]
 						}
 					]
