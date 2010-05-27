@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_social" version="2.1.7.6">
+<zimletConfig name="com_zimbra_social" version="2.1.7.7">
     <global>
         <property name="allowedDomains">twitter.com,*.twitter.com,*.facebook.com,*.tweetmeme.com,api.tr.im,*.digg.com,api.bit.ly</property>
         <property name="social_facebook_api_key">7af6d68c9d453e392c1ed68b27f95506</property>

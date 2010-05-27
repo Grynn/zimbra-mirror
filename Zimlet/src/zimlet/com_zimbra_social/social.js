@@ -1924,17 +1924,31 @@ function(obj, account) {
 			html[i++] = "<TR>";
 			html[i++] = "<TD  valign='top'>";
 			var id = Dwt.getNextId();
+			var arry = media.href.split("?v=");
+			var vid = "";
+			if(arry.length == 2) {
+				vid = arry[1];
+			}
 			if(media.src != "") {
 				if(isYouTube) {
 					html[i++] = "<object type='application/x-shockwave-flash' style='width:100%; height:350px;' data='" + media.src + "'><param name='movie' value='" + media.src + "' /></object>";
 				} else {
-					html[i++] = "<a  href=\"" + media.href + "\" target=\"_blank\"  style=\"color:white\">";
-					if(AjxEnv.isFirefox && isYouTube) {
-						html[i++] = "<embed  width='100px' src='" + media.src + "' />";
+					if(media.type == "link"){
+						html[i++] = "<a  href=\"" + media.href + "\" target=\"_blank\" >Open external link</a>";
+					} else if(media.type == "video" && vid!=""){
+						html[i++] = "<object width=\"100%\" height=\"224\" >";
+						html[i++] = "<param name=\"allowfullscreen\" value=\"true\" />";
+						html[i++] = "<param name=\"allowscriptaccess\" value=\"always\" />";
+						html[i++] = "<param name=\"movie\" value=\"http://www.facebook.com/v/"+vid+"\" />";
+						html[i++] = "<embed src=\"http://www.facebook.com/v/"+vid+"\" type=\"application/x-shockwave-flash\"";
+						html[i++] = "allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"100%\" height=\"224\">";
+						html[i++] = "</embed>";
+						html[i++] = "</object>";
+					} else if(media.type == "video" && vid==""){
+						html[i++] = "<a  href=\"" + media.href + "\" target=\"_blank\" >Open external link</a>";					
 					} else {
 						html[i++] = "<img width='100px' height='100px' SRC=\""+media.src+"\" />";
 					}
-					html[i++] = "</a>";
 
 				}
 			}
@@ -2023,9 +2037,13 @@ function(comments, totlCmnts, postId, divId, account) {
 	if (this._zimletDiv == undefined) {
 		this._zimletDiv = document.createElement("div");
 	}
-
-	for (var j = 0; j < comments.length; j++) {
+	var actualComments = 0;
+	for (var j = 0; j < totlCmnts; j++) {
+		actualComments = j +1;
 		var comment = comments[j];
+		if(!comment) {			
+			break;
+		}
 		var profile = this.facebook._getFacebookProfile(comment.fromid);
 		html[i++] = "<table width=100% cellpadding=1 cellspacing=1>";
 		html[i++] = "<tr>";
@@ -2058,7 +2076,7 @@ function(comments, totlCmnts, postId, divId, account) {
 		html[i++] = "</TR>";
 		html[i++] = "</table>";
 	}
-	if (comments.length < totlCmnts) {
+	if (actualComments < totlCmnts) {
 		var moreCommentsLinkId = this._getFacebookMoreCommentsLinkId(postId, divId, account);
 		html[i++] = "<table width=100% cellpadding=1 cellspacing=1><tr><td>";
 		html[i++] = "<tr>";
