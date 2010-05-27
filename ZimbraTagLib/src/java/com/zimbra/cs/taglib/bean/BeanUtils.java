@@ -208,6 +208,7 @@ public class BeanUtils {
         String s = replaceAll(text, "<br>", "\n");
         s = replaceAll(s, sHTMLDECODE, "");
         s = replaceAll(s, "&amp;", "&");
+        s = replaceAll(s, "&nbsp;", " ");
         s = replaceAll(s,"&lt;","<");
         s = replaceAll(s,"&gt;",">");
         return s;
