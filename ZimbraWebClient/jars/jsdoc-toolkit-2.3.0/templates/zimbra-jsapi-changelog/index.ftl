@@ -41,7 +41,7 @@
 				<li>None</li>
 			</#if>
 			<#list addedClasses as class>
-				<li><a href="http://files.zimbra.com/docs/zimlet/zcs/${baseline.buildVersion}/jsdocs/symbols/${class.name}.html">${class.fullName}</a></li>
+				<li><a href="http://files.zimbra.com/docs/zimlet/zcs/${comparison.buildVersion}/jsdocs/symbols/${class.name}.html">${class.fullName}</a></li>
 			</#list>
 		</ul>
 		</div>
@@ -52,7 +52,7 @@
 				<li>None</li>
 			</#if>
 			<#list removedClasses as class>
-				<li><a href="http://files.zimbra.com/docs/zimlet/zcs/${comparison.buildVersion}/jsdocs/symbols/${class.name}.html">${class.fullName}</a></li>
+				<li><a href="http://files.zimbra.com/docs/zimlet/zcs/${baseline.buildVersion}/jsdocs/symbols/${class.name}.html">${class.fullName}</a></li>
 			</#list>
 		</ul>
 		</div>
@@ -66,7 +66,7 @@
 			<#list modifiedClasses as modifiedClass>
 				<ul>
 					<li>
-						<h4><a href="http://files.zimbra.com/docs/zimlet/zcs/${baseline.buildVersion}/jsdocs/symbols/${modifiedClass.name}.html">${modifiedClass.fullName}</a></h4>
+						<h4><a href="http://files.zimbra.com/docs/zimlet/zcs/${comparison.buildVersion}/jsdocs/symbols/${modifiedClass.name}.html">${modifiedClass.fullName}</a></h4>
 						<div style="padding-left:25px">
 						<ul>
 							<li><b>PROPERTIES ADDED</b>
