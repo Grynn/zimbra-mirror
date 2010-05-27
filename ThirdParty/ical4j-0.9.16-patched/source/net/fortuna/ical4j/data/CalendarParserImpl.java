@@ -36,13 +36,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StreamTokenizer;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.util.Strings;
+import net.fortuna.ical4j.util.StreamTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -235,7 +234,7 @@ public class CalendarParserImpl implements CalendarParser {
         //assertToken(tokeniser, StreamTokenizer.TT_WORD);
 
         //String value = tokeniser.sval;
-        StringBuffer value = new StringBuffer();
+        StringBuilder value = new StringBuilder();
 
         //assertToken(tokeniser,StreamTokenizer.TT_EOL);
 
@@ -261,7 +260,7 @@ public class CalendarParserImpl implements CalendarParser {
             throw new ParserException("Unexpected end of file at line " + tokeniser.lineno());
         }
 
-        handler.propertyValue(Strings.unescape(value.toString()));
+        handler.propertyValue(value.toString());
         handler.endProperty(name);
     }
 
@@ -305,7 +304,7 @@ public class CalendarParserImpl implements CalendarParser {
 
         assertToken(tokeniser, '=');
 
-        StringBuffer paramValue = new StringBuffer();
+        StringBuilder paramValue = new StringBuilder();
 
         // preserve quote chars..
         if (tokeniser.nextToken() == '"') {
@@ -316,8 +315,7 @@ public class CalendarParserImpl implements CalendarParser {
             paramValue.append(tokeniser.sval);
         }
 
-        handler.parameter(paramName, Strings
-                .unescape(paramValue.toString()));
+        handler.parameter(paramName, paramValue.toString());
     }
 
     /**
