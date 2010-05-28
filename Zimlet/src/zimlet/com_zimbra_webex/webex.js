@@ -195,6 +195,9 @@ WebExZimlet.prototype.onAppointmentDelete = function(appt) {
 		}
 	}
 	this._appt = appt;//store this appt.
+	if(this._appt.id.indexOf(":") > 0) {//current api doesnt support deleting shared-calendar(we get permission-denied)
+		return;
+	}
 	var postCallback;
 	if (appt.viewMode != ZmCalItem.MODE_DELETE_INSTANCE) {
 		postCallback = new AjxCallback(this, this._doDeleteWebExAppt);
@@ -399,7 +402,7 @@ function(dlg) {
  */
 WebExZimlet.prototype._doSaveWebExAppt = function(params) {
 	var postCallback = new AjxCallback(this, this._doCreateOrUpdateMeeting, params);
-	this._showSelectAccountDlg(postCallback, params.appt);
+	this._showSelectAccountDlg({postCallback:postCallback, appt:params.appt, showOptions:true});
 };
 
 WebExZimlet.prototype._doCreateOrUpdateMeeting = function(params, accountNumber) {
@@ -594,6 +597,15 @@ WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params) {
 		emls[j++] = "</person></attendee>";
 	}
 	var altHosts = this._currentWebExAccount.WebExZimlet_altHosts;
+	//use altHosts set in the selectAccnt dlg
+	if(this._showSelectAccntsDlg && document.getElementById(this._showSelectAccntsDlg._altHostFieldId) && this._showSelectAccntsDlg._showOptions) {
+		altHosts = document.getElementById(this._showSelectAccntsDlg._altHostFieldId).value;
+	}
+
+	if(document.getElementById(this._showSelectAccntsDlg._mPwdFieldId)) {///use mPwd set in the selectAccnt dlg
+		pwd = document.getElementById(this._showSelectAccntsDlg._mPwdFieldId).value;
+	}
+
 	if (altHosts != "" && altHosts != "N/A" && altHosts.indexOf(";") > 0) {
 		altHosts = altHosts.split(";");
 	} else if (altHosts != "" && altHosts != "N/A" && altHosts.indexOf(",") > 0) {
@@ -980,7 +992,7 @@ WebExZimlet.prototype.menuItemSelected = function(itemId) {
 			break;
 		case "START_JOIN_MEETING":
 			var postCallback = new AjxCallback(this, this._showAppointmentsList);
-			this._showSelectAccountDlg(postCallback);
+			this._showSelectAccountDlg({postCallback:postCallback, appt:null, showOptions:false});
 			break;
 		case "START_QUICK_MEETING":
 			this._showOneClickDlg();
@@ -1358,7 +1370,7 @@ function(indx, notes) {
 			var helpLinkId = Dwt.getNextId();
 			this._accntPrefsHelpObjsHash.push({helpLinkId:helpLinkId, propId:obj.propId});
 			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", id, "'  type='", type, "'/>",
-				"&nbsp; <a href=# id='",helpLinkId,"' style='color:darkBlue;text-decoration:underline'>help</a></td></tr>");
+				"&nbsp; <a href=# id='",helpLinkId,"' style='color:darkBlue;text-decoration:underline'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>");
 		} else {
 			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", id, "'  type='", type, "'/>",
 				"<label style='color:gray'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
@@ -1729,22 +1741,22 @@ function(postCallback, result) {
 /**
  * Saves appointment-id and webex meeting key information using customMetaData api.
  *
- * @param {string} key Appointment id
- * @param {string} value Meeting key
+ * @param {string} apptId Appointment id
+ * @param {string} meetingKey Meeting key
  * @param {string} seriesMeetingKey  Series meeting key
  */
 WebExZimlet.prototype._saveApptIdsHashToServer =
-function(key, value, seriesMeetingKey) {
-	this._currentMetaData = new ZmMetaData(appCtxt.getActiveAccount(), key);
+function(apptId, meetingKey, seriesMeetingKey) {
+	this._currentMetaData = new ZmMetaData(appCtxt.getActiveAccount(), apptId);
 	var keyValArry = [];
 
 	if (this._appt.viewMode == ZmCalItem.MODE_EDIT_SINGLE_INSTANCE) {
-		keyValArry["exceptionMeetingKey"] = value;
+		keyValArry["exceptionMeetingKey"] = meetingKey;
 		if (seriesMeetingKey && seriesMeetingKey != "") {
 			keyValArry["meetingKey"] = seriesMeetingKey;
 		}
 	} else {
-		keyValArry["meetingKey"] = value;
+		keyValArry["meetingKey"] = meetingKey;
 	}
 	keyValArry["hostName"] = this._currentWebExAccount[WebExZimlet.PROP_USERNAME.propId];
 	keyValArry["hostPwd"] = this._currentWebExAccount[WebExZimlet.PROP_PASSWORD.propId];
@@ -1754,13 +1766,15 @@ function(key, value, seriesMeetingKey) {
 
 /**
  * Shows Select Account dialog.
- *
- * @param {AjxCallback} postCallback2 A callback
- * @param {ZmAppt}	appt An Appointment
+
+ * @param {hash} params	 a hash of parameters containing meeting key
+ * @param {string} params.postCallback A post callback
+ * @param {object} params.appt Appointment
+ * @param {boolean} params.showOptions If true, then account option fields are displayed
  */
 WebExZimlet.prototype._showSelectAccountDlg =
-function(postCallback2, appt) {
-	var postCallback = new AjxCallback(this, this._doShowSelectAccountDlg, [postCallback2, appt]);
+function(params) {
+	var postCallback = new AjxCallback(this, this._doShowSelectAccountDlg, params);
 	this._getAccPrefsMetaData(postCallback);
 };
 
@@ -1770,15 +1784,23 @@ function(postCallback2, appt) {
  * @param {AjxCallback} postCallback A callback
  */
 WebExZimlet.prototype._doShowSelectAccountDlg =
-function(postCallback, appt) {
+function(params) {
+	var postCallback = params.postCallback;
+	var appt = params.appt;
+	var showOptions = params.showOptions ? true : false;
+	var accountNumber = 1;
 	if (appt && appt.folderId) {
-		var accountNumber = this._getAccountNumberFromFolderId(appt.folderId);
+		accountNumber = this._getAccountNumberFromFolderId(appt.folderId);
 	}
 	if (this._showSelectAccntsDlg) {
 		this._showSelectAccntsDlg._postCallback = postCallback;
 		if (accountNumber) {
 			this._setMenuValue("webExZimlet_accountsToSelectList", accountNumber);
 		}
+		this._showSelectAccntsDlg._showOptions = showOptions;
+		this._setSelectAccntDlgData(accountNumber);
+		this._setSelectAccntListeners();
+		this._setSelectAccntOptions();
 		this._showSelectAccntsDlg.popup();
 		return;
 	}
@@ -1788,17 +1810,76 @@ function(postCallback, appt) {
 		this._showErrorMessage(ex);
 		return;
 	}
+	this._showSelectAccntsDlg = new ZmDialog({parent: this.getShell(), title:this.getMessage("WebExZimlet_selectAccntToUse"),  standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this._showSelectAccntsDlg._showOptions = showOptions;
+
 	this._showSelectAccntDlgView = new DwtComposite(this.getShell());
 	this._showSelectAccntDlgView.getHtmlElement().style.overflow = "auto";
 	this._showSelectAccntDlgView.getHtmlElement().innerHTML = this._createShowSelectAccntView(selectHtml);
-	this._showSelectAccntsDlg = new ZmDialog({parent: this.getShell(), title:this.getMessage("WebExZimlet_selectAccntToUse"), view:this._showSelectAccntDlgView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this._showSelectAccntsDlg.setView(this._showSelectAccntDlgView);
 	this._showSelectAccntsDlg._postCallback = postCallback;
 	this._showSelectAccntsDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._showSelectAccntDlgOkBtnListner));
 	if (accountNumber) {
 		this._setMenuValue("webExZimlet_accountsToSelectList", accountNumber);
 	}
+	this._setSelectAccntDlgData(accountNumber);
+	this._setSelectAccntListeners();
+	this._setSelectAccntOptions();
 	this._showSelectAccntsDlg.popup();
 };
+
+/**
+ * Sets  account's name, altHosts & meetingPwd
+ * @param {string} accountNumber Account number
+ */
+WebExZimlet.prototype._setSelectAccntDlgData =
+function(accountNumber) {
+	try {
+		this._setCurrentAccntInfoFromAccntNumber(accountNumber);
+	} catch(ex) {
+		this._showErrorMessage(ex);
+		return;
+	}	
+	document.getElementById(this._showSelectAccntsDlg._altHostFieldId).value = this._currentWebExAccount[WebExZimlet.PROP_ALT_HOSTS.propId];
+	document.getElementById(this._showSelectAccntsDlg._mPwdFieldId).value = this._currentWebExAccount[WebExZimlet.PROP_MEETING_PASSWORD.propId];
+};
+
+/**
+ * Hides or displays account options with in Select Accounts dialog
+ */
+WebExZimlet.prototype._setSelectAccntOptions =
+function() {
+	var display = this._showSelectAccntsDlg._showOptions ? "block" : "none";
+	document.getElementById("webexZimlet_showSelectAccnts_OptionsDiv").style.display = display;
+};
+
+/**
+ * Sets listeners for select account dialog
+ */
+WebExZimlet.prototype._setSelectAccntListeners =
+function() {
+	document.getElementById(this._showSelectAccntsDlg._altHelpLinkId).onclick = AjxCallback.simpleClosure(this._accPrefsShowHelpdialog, this, WebExZimlet.PROP_ALT_HOSTS.propId);
+	document.getElementById("webExZimlet_accountsToSelectList").onchange =  AjxCallback.simpleClosure(this._setNewAccountData, this);
+};
+
+/**
+ * Sets account data based on webExZimlet_accountsToSelectList menu
+ */
+WebExZimlet.prototype._setNewAccountData =
+function() {
+	var accountNumber = document.getElementById("webExZimlet_accountsToSelectList").value;
+	try {
+		this._setCurrentAccntInfoFromAccntNumber(accountNumber);
+	} catch(ex) {
+		this._showErrorMessage(ex);
+		return;
+	}
+	this._setSelectAccntDlgData(accountNumber);
+};
+
+
+
+
 
 /**
  * Creates select account html view.
@@ -1809,7 +1890,21 @@ WebExZimlet.prototype._createShowSelectAccntView =
 function(selectHtml) {
 	try {
 		var html = [];
+		this._showSelectAccntsDlg._altHostFieldId = "WebExZimlet_showSelectAccntsDlg_altHostFieldId";
+		this._showSelectAccntsDlg._altHelpLinkId = "WebExZimlet_showSelectAccntsDlg_altHelpLinkId";
+		this._showSelectAccntsDlg._mPwdFieldId = "WebExZimlet_showSelectAccntsDlg_mPwdFieldId";
 		html.push("<div style='padding:5px'>", this.getMessage("WebExZimlet_webExAccntToUse"), " <span>", selectHtml, "</span></div>");
+		html.push("<br/>");
+		html.push("<div id='webexZimlet_showSelectAccnts_OptionsDiv' >");
+		html.push("<div><b>",this.getMessage("WebExZimlet_getAccounts"),"</b></div>");
+		html.push("<table class='webExZimlet_table'>");
+		html.push("<tr><td>", this.getMessage(WebExZimlet.PROP_ALT_HOSTS.label), "</td><td><input  id='", this._showSelectAccntsDlg._altHostFieldId, "'  type='text'/>",
+				"&nbsp; <a href=# id='",this._showSelectAccntsDlg._altHelpLinkId,"' style='color:darkBlue;text-decoration:underline'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>");
+		html.push("<tr><td>", this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.label), "</td><td><input id='", this._showSelectAccntsDlg._mPwdFieldId, "'  type='text'/>",
+				"<label style='color:gray'>", this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.extraLabel), "</label></td></tr>");
+		html.push("</table>");
+		html.push("</div>");
+
 		return html.join("");
 	} catch(ex) {
 		this._showErrorMessage(ex);
@@ -1821,6 +1916,12 @@ function(selectHtml) {
  */
 WebExZimlet.prototype._showSelectAccntDlgOkBtnListner =
 function() {
+	try {
+		this._validateCurrentAccount(document.getElementById("webExZimlet_accountsToSelectList").value);
+	} catch(ex) {
+		this._showErrorMessage(ex);
+		return;
+	}
 	appCtxt.getAppController().setStatusMsg(this.getMessage("WebExZimlet_pleaseWait"), ZmStatusView.LEVEL_INFO);
 	this._showSelectAccntsDlg.popdown();
 	this._showSelectAccntsDlg._postCallback.run(document.getElementById("webExZimlet_accountsToSelectList").value);

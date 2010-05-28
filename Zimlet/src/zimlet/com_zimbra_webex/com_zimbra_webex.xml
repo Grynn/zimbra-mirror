@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_webex" version="2.0.3.5" label="WebEx" description="Easily schedule, start or join WebEx meetings.">
+<zimlet name="com_zimbra_webex" version="2.1" label="WebEx" description="Easily schedule, start or join WebEx meetings.">
   <include>webex.js</include>
   <includeCSS>webex.css</includeCSS>
   <handlerObject>com_zimbra_webex_HandlerObject</handlerObject>
