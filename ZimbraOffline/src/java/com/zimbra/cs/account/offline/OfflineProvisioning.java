@@ -31,6 +31,7 @@ import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.SyncErrorManager;
+import com.zimbra.cs.datasource.imap.ImapSync;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Folder;
@@ -2063,6 +2064,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         mHasDirtyAccounts |= markChanged;
         
         cachedDataSources.remove(account.getId());
+        ImapSync.dataSourceDeleted(dataSourceId);
     }
 
     @Override

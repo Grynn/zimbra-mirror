@@ -27,9 +27,9 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
+import com.zimbra.cs.datasource.imap.ImapSync;
 import com.zimbra.cs.mailbox.DataSourceMailbox;
 import com.zimbra.cs.mailbox.DesktopMailbox;
-import com.zimbra.cs.mailbox.ExchangeMailbox;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -39,7 +39,6 @@ import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailclient.CommandFailedException;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.util.ymail.YMailClient;
@@ -48,7 +47,6 @@ public class OfflineDataSource extends DataSource {
     private DataSourceConfig.Service knownService;
     private OfflineDataSource contactSyncDataSource;
     private OfflineDataSource calendarSyncDataSource;
-    private final AtomicBoolean needsSync = new AtomicBoolean();
 
     OfflineDataSource(Account acct, DataSource.Type type, String name, String id, Map<String,Object> attrs, Provisioning prov) {
         super(acct, type, name, id, attrs, prov);
@@ -178,7 +176,8 @@ public class OfflineDataSource extends DataSource {
         return isSyncEnabledByDefault(localPath);
     }
 
-    @Override public boolean isSaveToSent() {
+    @Override
+    public boolean isSaveToSent() {
         return getType() == Type.pop3 || knownService == null || knownService.isSaveToSent();
     }
 
@@ -194,7 +193,8 @@ public class OfflineDataSource extends DataSource {
         return knownService != null && knownService.getName().equals(SERVICE_NAME_GMAIL);
     }
     
-    @Override public void reportError(int itemId, String error, Exception e) {
+    @Override
+    public void reportError(int itemId, String error, Exception e) {
         String data = "";
         try {
             // If this is a message, then indicate folder name
@@ -313,13 +313,9 @@ public class OfflineDataSource extends DataSource {
             isDebugTraceEnabled());
     }
 
-    public Mailbox getMailbox() throws ServiceException {
-        return DataSourceManager.getInstance().getMailbox(this);
-    }
-
     @Override
-    public boolean needsSync(boolean newValue) {
-        return needsSync.getAndSet(newValue);
+    public boolean isSyncNeeded() throws ServiceException {
+        return getType() == Type.imap ? ImapSync.isSyncNeeded(this) : null;
     }
 }
 

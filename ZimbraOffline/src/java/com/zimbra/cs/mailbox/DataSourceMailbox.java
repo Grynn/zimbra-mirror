@@ -414,14 +414,13 @@ public class DataSourceMailbox extends SyncMailbox {
         return System.currentTimeMillis() - syncMan.getLastSyncTime(ds) >= frequency;
     }
 
-    private void syncAllLocalDataSources(boolean force, boolean isOnRequest) throws
-        ServiceException {
+    private void syncAllLocalDataSources(boolean force, boolean isOnRequest)
+        throws ServiceException {
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
         List<DataSource> dataSources = prov.getAllDataSources(getAccount());
         OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         for (DataSource ds : dataSources) {
-            boolean needsSync = ds.needsSync(false);
-            if (!needsSync && !force && !isOnRequest && !isTimeToSync(ds))
+            if (!force && !isOnRequest && !isTimeToSync(ds) && !ds.isSyncNeeded())
                 continue;
             try {
                 OfflineLog.offline.info(
