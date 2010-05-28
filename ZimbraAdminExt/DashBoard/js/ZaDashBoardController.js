@@ -253,7 +253,7 @@ ZaDashBoardController.prototype.openSettingsView = function () {
 ZaDashBoardController.prototype.openBulkProvisionDialog = function () {
     try {
 		var bp = new ZaBulkProvision();
-		bp[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_IMPORT_LDAP;
+		bp[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_GENERATE_MIG_XML;
 		bp[ZaBulkProvision.A2_generatedFileLink] = null;
 		bp[ZaBulkProvision.A2_maxResults] = "0";
 		bp[ZaBulkProvision.A2_GalLdapFilter] = "(objectClass=organizationalPerson)";
