@@ -392,6 +392,8 @@ function(ex, method, params, restartOnError, obj) {
         if(!ex.code) {
 			this.popupErrorDialog(ZaMsg.JAVASCRIPT_ERROR + " in method " + method, ex, true);
 		
+		} else if(ex.code == ZmCsfeException.EMPTY_RESPONSE) {
+			this.popupErrorDialog(ZaMsg.ERROR_ZCS_NOT_RUNNING, ex, true);
 		} else if (ex.code == ZmCsfeException.SOAP_ERROR) {
 			this.popupErrorDialog(ZaMsg.SOAP_ERROR, ex, true);
 		} else if (ex.code == ZmCsfeException.NETWORK_ERROR) {

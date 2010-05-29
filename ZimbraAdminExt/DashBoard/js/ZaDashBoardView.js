@@ -134,10 +134,10 @@ ZaDashBoardView.onSearchResult = function(params,resp) {
 		if(params.busyId)
 			ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
 			
-		if(!resp && !this._currentRequest.cancelled) {
+		if(!resp) {
 			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaDashBoardView.onSearchResult"));
 		}
-		if(resp && resp.isException() && !this._currentRequest.cancelled) {
+		if(resp && resp.isException()) {
 			ZaSearch.handleTooManyResultsException(resp.getException(), "ZaDashBoardView.onSearchResult");
 			var list = new ZaItemList(params.CONS);	
 			this._localXForm.setInstanceValue(list,ZaDashboard.searchResults);
