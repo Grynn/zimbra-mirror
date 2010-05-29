@@ -126,6 +126,9 @@ ZaBulkProvision.getMyXModel = function () {
 	        {id:ZaBulkProvision.A2_errorCount, type:_NUMBER_, ref:ZaBulkProvision.A2_errorCount},
 	        {id:ZaBulkProvision.A2_provisionedCount, type:_NUMBER_, ref:ZaBulkProvision.A2_provisionedCount},
 	        {id:ZaBulkProvision.A2_totalCount, type:_NUMBER_, ref:ZaBulkProvision.A2_totalCount},
+	        {id:ZaBulkProvision.A2_domainCount, type:_NUMBER_, ref:ZaBulkProvision.A2_domainCount},
+	        {id:ZaBulkProvision.A2_skippedAccountCount, type:_NUMBER_, ref:ZaBulkProvision.A2_skippedAccountCount},
+	        {id:ZaBulkProvision.A2_skippedDomainCount, type:_NUMBER_, ref:ZaBulkProvision.A2_skippedDomainCount},
 	        {id:ZaBulkProvision.A2_progress, type:_STRING_, ref:ZaBulkProvision.A2_progress},
 	        {id:ZaBulkProvision.A2_fileToken, type:_NUMBER_, ref:ZaBulkProvision.A2_fileToken},
 	        {id:ZaBulkProvision.A2_skippedCount, type:_NUMBER_, ref:ZaBulkProvision.A2_skippedCount},
@@ -373,7 +376,10 @@ ZaBulkProvision.generateBulkProvisionPreview = function(obj, callback) {
 	}
 	attr = soapDoc.set(ZaBulkProvision.A2_maxResults,obj[ZaBulkProvision.A2_maxResults]);
 	attr = soapDoc.set(ZaBulkProvision.A2_fileFormat,ZaBulkProvision.FILE_FORMAT_PREVIEW);
-	
+	attr = soapDoc.set(ZaBulkProvision.A2_generatePassword,obj[ZaBulkProvision.A2_generatePassword]);
+	attr = soapDoc.set(ZaBulkProvision.A2_genPasswordLength,obj[ZaBulkProvision.A2_genPasswordLength]);
+	attr = soapDoc.set(ZaBulkProvision.A_mustChangePassword,obj[ZaBulkProvision.A_mustChangePassword]);
+
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;
 	csfeParams.asyncMode = true;

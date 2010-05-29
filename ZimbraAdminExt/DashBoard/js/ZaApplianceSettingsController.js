@@ -37,6 +37,9 @@ ZaController.initToolbarMethods["ZaApplianceSettingsController"] = new Array();
 ZaController.setViewMethods["ZaApplianceSettingsController"] = [];
 ZaController.changeActionsStateMethods["ZaApplianceSettingsController"] = [];
 
+ZaOperation.ACCOUNT_IMPORT_WIZARD =  ++ZA_OP_INDEX;
+ZaOperation.MIGRATION_WIZARD =  ++ZA_OP_INDEX;
+
 ZaApp.prototype.getApplianceSettingsController = function() {
 	var c  = new ZaApplianceSettingsController(this._appCtxt, this._container, this);
 	return c ;
@@ -61,10 +64,14 @@ function () {
 	this._toolbarOperations[ZaOperation.DOWNLOAD_GLOBAL_CONFIG] = new ZaOperation(ZaOperation.DOWNLOAD_GLOBAL_CONFIG, ZaMsg.TBB_DownloadConfig, ZaMsg.GLOBTBB_DownloadConfig_tt, "DownloadGlobalConfig", "DownloadGlobalConfig", new AjxListener(this, this.downloadConfigButtonListener));
 	this._toolbarOperations[ZaOperation.INSTALL_ZCS_LICENSE] = new ZaOperation(ZaOperation.INSTALL_ZCS_LICENSE, com_zimbra_dashboard.InstallLicenseButton, com_zimbra_dashboard.InstallLicenseButton_tt, "UpdateLicense", "UpdateLicense", new AjxListener(this, this.installLicenseButtonListener));
 	this._toolbarOperations[ZaOperation.INSTALL_ZCS_CERTIFICATE] = new ZaOperation(ZaOperation.INSTALL_ZCS_CERTIFICATE, com_zimbra_dashboard.TBB_launch_cert_wizard, com_zimbra_dashboard.TBB_launch_cert_wizard_tt, "InstallCertificate", "InstallCertificate", new AjxListener(this, this.installCertListener));
+	this._toolbarOperations[ZaOperation.MIGRATION_WIZARD] = new ZaOperation(ZaOperation.MIGRATION_WIZARD, com_zimbra_dashboard.TBB_migration_wizard, com_zimbra_dashboard.TBB_migration_wizard_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.openMigrationWizard));
+	this._toolbarOperations[ZaOperation.ACCOUNT_IMPORT_WIZARD] = new ZaOperation(ZaOperation.ACCOUNT_IMPORT_WIZARD, com_zimbra_dashboard.NewButton_Import, com_zimbra_dashboard.NewButton_Import_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.openBulkProvisionDialog));
 	this._toolbarOrder.push(ZaOperation.SAVE);
 	this._toolbarOrder.push(ZaOperation.DOWNLOAD_GLOBAL_CONFIG);
 	this._toolbarOrder.push(ZaOperation.INSTALL_ZCS_LICENSE);
 	this._toolbarOrder.push(ZaOperation.INSTALL_ZCS_CERTIFICATE);
+	this._toolbarOrder.push(ZaOperation.MIGRATION_WIZARD);
+	this._toolbarOrder.push(ZaOperation.ACCOUNT_IMPORT_WIZARD);
 }
 ZaController.initToolbarMethods["ZaApplianceSettingsController"].push(ZaApplianceSettingsController.initToolbarMethod);
 
@@ -112,6 +119,50 @@ function () {
     }
 }
 ZaController.changeActionsStateMethods["ZaApplianceSettingsController"].push(ZaApplianceSettingsController.changeActionsStateMethod);
+
+ZaApplianceSettingsController.prototype.openMigrationWizard = function () {
+    try {
+		var bp = new ZaBulkProvision();
+		bp[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_GENERATE_MIG_XML;
+		bp[ZaBulkProvision.A2_generatedFileLink] = null;
+		bp[ZaBulkProvision.A2_maxResults] = "0";
+		bp[ZaBulkProvision.A2_GalLdapFilter] = "(objectClass=organizationalPerson)";
+		bp[ZaBulkProvision.A2_generatePassword] = "TRUE";
+		bp[ZaBulkProvision.A2_provisionUsers] = "TRUE";
+		bp[ZaBulkProvision.A2_importMails] = "TRUE";
+		bp[ZaBulkProvision.A2_importContacts] = "TRUE";
+		bp[ZaBulkProvision.A2_importTasks] = "TRUE";
+		bp[ZaBulkProvision.A2_importCalendar] = "TRUE";
+		bp[ZaBulkProvision.A2_InvalidSSLOk] = "TRUE";
+		bp[ZaBulkProvision.A2_genPasswordLength] = 8;
+		bp[ZaBulkProvision.A2_ZimbraAdminLogin] = ZaZimbraAdmin.currentUserLogin;
+		bp[ZaBulkProvision.A2_createDomains] = "TRUE";
+		ZaApp.getInstance().dialogs["migrationWizard"] = new ZaMigrationXWizard(DwtShell.getShell(window),bp);
+		ZaApp.getInstance().dialogs["migrationWizard"].setObject(bp);
+		ZaApp.getInstance().dialogs["migrationWizard"].popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaApplianceSettingsController.prototype.openMigrationWizard", null, false);
+	}
+};
+
+ZaApplianceSettingsController.prototype.openBulkProvisionDialog = function () {
+    try {
+		var bp = new ZaBulkProvision();
+		bp[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_IMPORT_LDAP;
+		bp[ZaBulkProvision.A2_generatedFileLink] = null;
+		bp[ZaBulkProvision.A2_maxResults] = "0";
+		bp[ZaBulkProvision.A2_GalLdapFilter] = "(objectClass=organizationalPerson)";
+		bp[ZaBulkProvision.A2_generatePassword] = "TRUE";
+		bp[ZaBulkProvision.A2_genPasswordLength] = 8;
+		bp[ZaBulkProvision.A2_ZimbraAdminLogin] = ZaZimbraAdmin.currentUserLogin;
+		bp[ZaBulkProvision.A2_createDomains] = "TRUE";
+		ZaApp.getInstance().dialogs["importAccountsWizard"] = new ZaBulkImportXWizard(DwtShell.getShell(window),bp);
+		ZaApp.getInstance().dialogs["importAccountsWizard"].setObject(bp);
+		ZaApp.getInstance().dialogs["importAccountsWizard"].popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaApplianceSettingsController.prototype.openBulkProvisionDialog", null, false);
+	}
+};
 
 ZaApplianceSettingsController.prototype.installCertListener = function(ev) {
 	if(!this.certificateInstallWizard) {

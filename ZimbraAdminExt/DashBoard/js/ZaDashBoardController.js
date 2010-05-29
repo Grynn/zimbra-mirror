@@ -85,7 +85,7 @@ function () {
     newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Resource, com_zimbra_dashboard.NewButton_Resource_tt, "Resource", "ResourceDis", new AjxListener(this, this.newResourceSelected)));
     newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Domain, com_zimbra_dashboard.NewButton_Domain_tt, "Domain", "DomainDis", new AjxListener(this, this.newDomainSelected)));
     newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Profile, com_zimbra_dashboard.NewButton_Profile_tt, "NewCOS", "NewCOSDis", new AjxListener(this, this.newProfileSelected)));
-    newMenuOpList.push(new ZaOperation(ZaOperation.NEW_MENU, com_zimbra_dashboard.NewButton_Import, com_zimbra_dashboard.NewButton_Import_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.openBulkProvisionDialog))); 
+ 
 	this._popupOperations = {};
 	
 	
@@ -247,29 +247,6 @@ ZaDashBoardController.prototype.editItem = function (item) {
 ZaDashBoardController.prototype.openSettingsView = function () {
 	if (! this.selectExistingTabByItemId(ZaItem.GLOBAL_CONFIG,ZaApplianceSettingsView)){
 		ZaApp.getInstance().getApplianceSettingsController().show(new ZaApplianceSettings());
-	}
-};
-
-ZaDashBoardController.prototype.openBulkProvisionDialog = function () {
-    try {
-		var bp = new ZaBulkProvision();
-		bp[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_GENERATE_MIG_XML;
-		bp[ZaBulkProvision.A2_generatedFileLink] = null;
-		bp[ZaBulkProvision.A2_maxResults] = "0";
-		bp[ZaBulkProvision.A2_GalLdapFilter] = "(objectClass=organizationalPerson)";
-		bp[ZaBulkProvision.A2_generatePassword] = "TRUE";
-		bp[ZaBulkProvision.A2_genPasswordLength] = 8;
-		bp[ZaBulkProvision.A2_ZimbraAdminLogin] = ZaZimbraAdmin.currentUserLogin;
-		bp[ZaBulkProvision.A2_createDomains] = "TRUE";
-//		if(!ZaApp.getInstance().dialogs["importAccountsWizard"]) {
-			//ZaApp.getInstance().dialogs["importAccountsWizard"] = new ZaBulkProvisionWizard(DwtShell.getShell(window));
-		ZaApp.getInstance().dialogs["importAccountsWizard"] = new ZaBulkImportXWizard(DwtShell.getShell(window),bp);
-	//	}
-		
-		ZaApp.getInstance().dialogs["importAccountsWizard"].setObject(bp);
-		ZaApp.getInstance().dialogs["importAccountsWizard"].popup();
-	} catch (ex) {
-		this._handleException(ex, "ZaDashBoardController.prototype.openBulkProvisionDialog", null, false);
 	}
 };
 

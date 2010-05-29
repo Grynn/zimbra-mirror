@@ -25,11 +25,11 @@ function ZaMigrationXWizard (parent, entry) {
                                 w, (AjxEnv.isIE ? "330px" :"320px"),"ZaMigrationXWizard");
 
 	this.stepChoices = [
-	    {label:com_zimbra_bulkprovision.BP_Wizard_chooseAction, value:ZaMigrationXWizard.STEP_INTRODUCTION},
-	    {label:com_zimbra_bulkprovision.BP_Wizard_bulkProvOptions, value:ZaMigrationXWizard.STEP_PROV_OPTIONS},
-	    {label:com_zimbra_bulkprovision.BP_Wizard_exchangeOptions, value:ZaMigrationXWizard.STEP_EXCHANGE_INFO},
-	    {label:com_zimbra_bulkprovision.BP_Wizard_ldapOptions, value:ZaMigrationXWizard.STEP_LDAP_INFO},
-	    {label:com_zimbra_bulkprovision.BP_Wizard_ldapOptions, value:ZaMigrationXWizard.STEP_REVIEW},
+	    {label:com_zimbra_bulkprovision.MIG_Wizard_overview, value:ZaMigrationXWizard.STEP_INTRODUCTION},
+	    {label:com_zimbra_bulkprovision.MIG_Wizard_migrationOptions, value:ZaMigrationXWizard.STEP_PROV_OPTIONS},
+	    {label:com_zimbra_bulkprovision.MIG_Wizard_mailServerInfo, value:ZaMigrationXWizard.STEP_EXCHANGE_INFO},
+	    {label:com_zimbra_bulkprovision.MIG_Wizard_ADOptions, value:ZaMigrationXWizard.STEP_LDAP_INFO},
+	    {label:com_zimbra_bulkprovision.MIG_Wizard_review, value:ZaMigrationXWizard.STEP_REVIEW},
 	    {label:com_zimbra_bulkprovision.BP_Wizard_download, value:ZaMigrationXWizard.STEP_DOWNLOAD_FILE}		
 	];
 		
@@ -37,9 +37,6 @@ function ZaMigrationXWizard (parent, entry) {
 
   	this._helpURL = ZaMigrationXWizard.helpURL;
 }
-ZaMigrationXWizard.POLL_INTERVAL = 500;
-// -1 : No status, 0: Install succeed, >0 : Install Failed (different number is different error)
-ZaMigrationXWizard.INSTALL_STATUS = -1;
 ZaMigrationXWizard.STEP_INDEX = 1;
 ZaMigrationXWizard.STEP_INTRODUCTION = ZaMigrationXWizard.STEP_INDEX++;
 ZaMigrationXWizard.STEP_PROV_OPTIONS = ZaMigrationXWizard.STEP_INDEX++;
@@ -55,24 +52,8 @@ ZaXDialog.XFormModifiers["ZaMigrationXWizard"] = new Array();
 ZaMigrationXWizard.helpURL = location.pathname + "help/admin/html/managing_accounts/how_to_provision_multiple_accounts.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
 
 /**
-* Overwritten methods that control wizard's flow (open, go next,go previous, finish)
-**/
-
-ZaMigrationXWizard.prototype.popdown = 
-function () {
-	if(this._pollHandler) {
-		//stop polling
-		AjxTimedAction.cancelAction(this._pollHandler);
-	}
-	DwtDialog.prototype.popdown.call(this);
-}
-
-ZaMigrationXWizard.prototype.popup =
-function (loc) {
-	ZaXWizardDialog.prototype.popup.call(this, loc);
-    this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
-}
-
+ * server callbacks
+ */
 ZaMigrationXWizard.prototype.generateBulkFileCallback = 
 function(params,resp) {
 	try {
@@ -102,15 +83,17 @@ function(params,resp) {
 ZaMigrationXWizard.prototype.previewCallback = function(params,resp) {
 	try {
 		if(resp && resp.isException()) {
-			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaMigrationXWizard.prototype.previewCallback");
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 		} else {
-			var response = resp.getResponse().Body.BulkImportPreviewResponse;
-			var status = 0;
-			var accountCount = 0;
-			var domainCount = 0;
-			var skippedDomainCount = 0;
-			var skippedCount = 0;
+			var response = resp.getResponse().Body.GenerateBulkProvisionFileFromLDAPResponse;
+			var accountCount = "0";
+			var domainCount = "0";
+			var skippedDomainCount = "0";
+			var skippedCount = "0";
 			if(response[ZaBulkProvision.A2_domainCount] && response[ZaBulkProvision.A2_domainCount][0] && response[ZaBulkProvision.A2_domainCount][0]._content) {
 				domainCount = parseInt(response[ZaBulkProvision.A2_domainCount][0]._content);
 			}				
@@ -131,11 +114,10 @@ ZaMigrationXWizard.prototype.previewCallback = function(params,resp) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 			
+			this._localXForm.setInstanceValue(domainCount,ZaBulkProvision.A2_domainCount);
+			this._localXForm.setInstanceValue(skippedDomainCount,ZaBulkProvision.A2_skippedDomainCount);
 			this._localXForm.setInstanceValue(totalCount,ZaBulkProvision.A2_totalCount);
-			this._localXForm.setInstanceValue(provisionedCount,ZaBulkProvision.A2_provisionedCount);
-			this._localXForm.setInstanceValue(domainCount,ZaBulkProvision.A2_provisionedCount);
-			this._localXForm.setInstanceValue(skippedCount,ZaBulkProvision.A2_domainCount);
-			
+			this._localXForm.setInstanceValue(skippedCount,ZaBulkProvision.A2_skippedAccountCount);
 		}
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaMigrationXWizard.prototype.previewCallback");
@@ -144,6 +126,15 @@ ZaMigrationXWizard.prototype.previewCallback = function(params,resp) {
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 	}
+};
+
+/**
+* Overwritten methods that control wizard's flow (open, go next,go previous, finish)
+**/
+ZaMigrationXWizard.prototype.popup =
+function (loc) {
+	ZaXWizardDialog.prototype.popup.call(this, loc);
+    this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 }
 
 ZaMigrationXWizard.prototype.goNext =
@@ -201,13 +192,13 @@ function() {
 		 * Set defaults
 		 */
 		
-		if(!this._containedObject[ZaBulkProvision.A2_GalLdapSearchBase] && typeof this._containedObject[ZaBulkProvision.A2_SourceDomainName] == "string") {
-			var searchBase = "cn=Users,dc=" + this._containedObject[ZaBulkProvision.A2_SourceDomainName].replace(".",",dc=");
+		if(!this._containedObject[ZaBulkProvision.A2_GalLdapSearchBase] && typeof this._containedObject[ZaBulkProvision.A2_TargetDomainName] == "string") {
+			var searchBase = "cn=Users,dc=" + this._containedObject[ZaBulkProvision.A2_TargetDomainName].replace(".",",dc=");
 			this._localXForm.setInstanceValue(searchBase,ZaBulkProvision.A2_GalLdapSearchBase);
 		}
 		
-		if(!this._containedObject[ZaBulkProvision.A2_GalLdapBindDn] && typeof this._containedObject[ZaBulkProvision.A2_SourceDomainName] == "string") {
-			var bindDN = "cn=administrator,cn=Users,dc=" + this._containedObject[ZaBulkProvision.A2_SourceDomainName].replace(".",",dc=");
+		if(!this._containedObject[ZaBulkProvision.A2_GalLdapBindDn] && typeof this._containedObject[ZaBulkProvision.A2_TargetDomainName] == "string") {
+			var bindDN = "cn=administrator,cn=Users,dc=" + this._containedObject[ZaBulkProvision.A2_TargetDomainName].replace(".",",dc=");
 			this._localXForm.setInstanceValue(bindDN,ZaBulkProvision.A2_GalLdapBindDn);
 		}
 		
@@ -252,49 +243,26 @@ function() {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
 	var prevStep ;
 	
-	if (cStep == ZaMigrationXWizard.STEP_UPLOAD_FILE || cStep == ZaMigrationXWizard.STEP_PROV_OPTIONS) {
+	if (cStep == ZaMigrationXWizard.STEP_PROV_OPTIONS) {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);			
-		prevStep = ZaMigrationXWizard.STEP_CHOOSE_ACTION ;
+		prevStep = ZaMigrationXWizard.STEP_INTRODUCTION ;
     } else if (cStep == ZaMigrationXWizard.STEP_LDAP_INFO) {
-    	if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_GENERATE_MIG_XML) {
-    		prevStep = ZaMigrationXWizard.STEP_EXCHANGE_INFO;
-    	} else {
-    		prevStep = ZaMigrationXWizard.STEP_PROV_OPTIONS;
-    	}
+		prevStep = ZaMigrationXWizard.STEP_EXCHANGE_INFO;
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
     } else if (cStep == ZaMigrationXWizard.STEP_EXCHANGE_INFO) {
     	prevStep = ZaMigrationXWizard.STEP_PROV_OPTIONS;
     	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-    } else if(cStep == ZaMigrationXWizard.STEP_DOWNLOAD_FILE || cStep == ZaMigrationXWizard.STEP_PROVISION) {
-    	if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_CSV ||
-    			this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_XML) {
-    		prevStep = ZaMigrationXWizard.STEP_UPLOAD_FILE;
-    	} else {
-    		prevStep = ZaMigrationXWizard.STEP_LDAP_INFO;
-    	}
+    } else if(cStep == ZaMigrationXWizard.STEP_DOWNLOAD_FILE) {
+		prevStep = ZaMigrationXWizard.STEP_REVIEW;
+    	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+    } else if(cStep == ZaMigrationXWizard.STEP_REVIEW) {
+		prevStep = ZaMigrationXWizard.STEP_LDAP_INFO;
     	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
     }
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
     this.goPage(prevStep);
-}
-
-ZaMigrationXWizard.prototype.goPage = function (pageKey) {
-    ZaXWizardDialog.prototype.goPage.call(this, pageKey) ;
-}
-
-ZaMigrationXWizard.getFileName = function (fullPath) {
-    if (fullPath == null) return null ;
-
-    var lastIndex = 0;
-    if (AjxEnv.isWindows) {
-        lastIndex = fullPath.lastIndexOf("\\") ;
-    }else{
-        lastIndex = fullPath.lastIndexOf("/") ;
-    }
-
-    return fullPath.substring(lastIndex + 1) ;
 }
 
 /**
@@ -306,44 +274,21 @@ function(entry) {
 	this._containedObject = new Object();
 	this._containedObject = entry ;
 
-	this._containedObject[ZaModel.currentStep] = ZaMigrationXWizard.STEP_CHOOSE_ACTION;
+	this._containedObject[ZaModel.currentStep] = ZaMigrationXWizard.STEP_INTRODUCTION;
 	this._containedObject[ZaBulkProvision.A_mustChangePassword] = "TRUE";
     this._localXForm.setInstance(this._containedObject);
-}
-
-ZaMigrationXWizard.csvUploadFormId = Dwt.getNextId();
-
-ZaMigrationXWizard.getUploadFormHtml =
-function (fileType){
-	ZaMigrationXWizard.attachmentInputId = Dwt.getNextId();	
-	var uri = appContextPath + "/../service/upload";
-	var html = [];
-	var idx = 0;
-	html[idx++] = "<div style='height:50px;width: 500px; overflow:auto;'>";
-	html[idx++] = "<table border=0 cellspacing=0 cellpadding=2 style='table-layout: fixed;'> " ;
-	//html[idx++] = "<colgroup><col width=50 /><col width='*' /><col width=50 /></colgroup>";
-
-	html[idx++] = "<tbody><tr><td width=65>" + ((fileType == ZaBulkProvision.ACTION_IMPORT_XML) ? com_zimbra_bulkprovision.XML_Upload_file : com_zimbra_bulkprovision.CSV_Upload_file) + "</td>";
-	html[idx++] = "<td>";
-	html[idx++] = "<form method='POST' action='";
-	html[idx++] = uri;
-	html[idx++] = "' id='";
-	html[idx++] = ZaMigrationXWizard.csvUploadFormId;
-	html[idx++] = "' enctype='multipart/form-data'>" ;
-	html[idx++] = "<input type=file  name='bulkFile' size='45' id='";
-	html[idx++] = ZaMigrationXWizard.attachmentInputId;
-	html[idx++] = "'></input></form></td></tr>";
-	html[idx++] = "</tbody></table>";
-	html[idx++] = "</div>";
-
-	return html.join("");
 }
 
 ZaMigrationXWizard.myXFormModifier = function(xFormObject,entry) {
 	var cases = new Array();
 
-
-	
+	var case_introduction = {
+		type:_CASE_,numCols:1,tabGroupKey:ZaMigrationXWizard.STEP_INTRODUCTION,caseKey:ZaMigrationXWizard.STEP_INTRODUCTION,
+		items:[
+		      	{type:_DWT_ALERT_, style:DwtAlert.INFO,iconVisible:false,content:com_zimbra_bulkprovision.ExchMigrationWizardIntro,visibilityChecks:[],enableDisableChecks:[]}
+		]
+	};
+	cases.push(case_introduction);
 	/**
 	 * Enter options for provisioning
 	 */
@@ -427,11 +372,11 @@ ZaMigrationXWizard.myXFormModifier = function(xFormObject,entry) {
 	var case_exchange_options = {
 			type:_CASE_, numCols:2,colSizes:["250px","*"], tabGroupKey:ZaMigrationXWizard.STEP_EXCHANGE_INFO, caseKey:ZaMigrationXWizard.STEP_EXCHANGE_INFO,
 			items:[
-			       	{ref:ZaBulkProvision.A2_TargetDomainName, type:_DYNSELECT_,
+			       	{ref:ZaBulkProvision.A2_TargetDomainName, type:_TEXTFIELD_,
 						label:com_zimbra_bulkprovision.TargetDomainName,
 						toolTipContent:ZaMsg.tt_StartTypingDomainName,
-						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
-						dataFetcherClass:ZaSearch,editable:true,
+						//dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
+						//dataFetcherClass:ZaSearch,editable:true,
 						visibilityChecks:[],
 						visibilityChangeEventSources:[],
 						enableDisableChecks:[]
@@ -470,7 +415,7 @@ ZaMigrationXWizard.myXFormModifier = function(xFormObject,entry) {
 	var case_ldap_info = {
 		type:_CASE_, numCols:2, colSizes:["250px","*"],tabGroupKey:ZaMigrationXWizard.STEP_LDAP_INFO, caseKey:ZaMigrationXWizard.STEP_LDAP_INFO,
 		items:[
-		       	{type:_DWT_ALERT_, style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.LdapInfoStepNote},
+		       	{type:_DWT_ALERT_, style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.ADInfoStepNote,colSpan:2},
 		       	{ref:ZaBulkProvision.A2_maxResults, type:_TEXTFIELD_,cssClass:"admin_xform_number_input", 
 		       		label:com_zimbra_bulkprovision.LDAPMaxResults, labelLocation:_LEFT_,labelWrap:true,
 		       		visibilityChecks:[],enableDisableChecks:[]
@@ -479,10 +424,10 @@ ZaMigrationXWizard.myXFormModifier = function(xFormObject,entry) {
 					visibilityChecks:[],
 					items: [
 						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
-						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerName, width:"200px"},
+						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:com_zimbra_bulkprovision.ADServerName, width:"200px"},
 						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"5px"},									
-						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerPort,  width:"40px"},	
-						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALUseSSL, width:"*"}									
+						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:com_zimbra_bulkprovision.ADServerPort,  width:"40px"},	
+						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:com_zimbra_bulkprovision.ADUseSSL, width:"*"}									
 					]
 				},		       
 				{ref:ZaBulkProvision.A2_GalLdapURL, type:_LDAPURL_, label:com_zimbra_bulkprovision.LDAPUrl,ldapSSLPort:"3269",ldapPort:"3268",  labelLocation:_LEFT_,
@@ -513,12 +458,12 @@ ZaMigrationXWizard.myXFormModifier = function(xFormObject,entry) {
 	 */
 
 	var case_review = {
-		type:_CASE_, numCols:2, colSizes:["250px", "*"], 
-		tabGroupKey:ZaMigrationXWizard.STEP_REVIEW, caseKey:ZaMigrationXWizard.STEP_REVIEW,
+		type:_CASE_, numCols:2, colSizes:["200px", "*"], 
+		caseKey:ZaMigrationXWizard.STEP_REVIEW,
 		items:[
-		       {type:_DWT_ALERT_, style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.ReviewStepNote},
+		       {type:_DWT_ALERT_, style:DwtAlert.INFO,iconVisible:false,content:com_zimbra_bulkprovision.ReviewStepNote,visibilityChecks:[],enableDisableChecks:[]},
 		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_domainCount,label:com_zimbra_bulkprovision.ReviewDomainCount,bmolsnr:true},
-		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_skippedDomainCount,label:com_zimbra_bulkprovision.ReviewTotalAccounts,bmolsnr:true},
+		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_skippedDomainCount,label:com_zimbra_bulkprovision.ReviewSkippedDomainCount,bmolsnr:true},
 		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_totalCount,label:com_zimbra_bulkprovision.ReviewAccountCount,bmolsnr:true},
 		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_skippedAccountCount,label:com_zimbra_bulkprovision.ReviewSkippedAccountCount,bmolsnr:true},
 		       {ref:ZaBulkProvision.A2_TargetDomainName, type:_OUTPUT_,	label:com_zimbra_bulkprovision.TargetDomainName,visibilityChecks:[]},
@@ -526,55 +471,41 @@ ZaMigrationXWizard.myXFormModifier = function(xFormObject,entry) {
 		    	   enableDisableChecks:[],visibilityChecks:[]				
 		       },
 		       {ref:ZaBulkProvision.A2_provisionUsers,  type:_OUTPUT_,  
-		    	   label:com_zimbra_bulkprovision.A2_provisionUsers,visibilityChecks:[],enableDisableChecks:[],
+		    	   label:com_zimbra_bulkprovision.RevA2_provisionUsers,visibilityChecks:[],enableDisableChecks:[],
 		    	   getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}
 		       },
 		       {ref:ZaBulkProvision.A2_importMails,  type:_OUTPUT_,  
-					label:com_zimbra_bulkprovision.MigImportMails,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
+					label:com_zimbra_bulkprovision.RevMigImportMails,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
 					getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}		       
 		       },
 		       {ref:ZaBulkProvision.A2_importContacts,  type:_OUTPUT_,  
-		    	   label:com_zimbra_bulkprovision.MigImportContacts,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
+		    	   label:com_zimbra_bulkprovision.RevMigImportContacts,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
 		    	   getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}
 		       },
 		       {ref:ZaBulkProvision.A2_importTasks,  type:_OUTPUT_,  
-					label:com_zimbra_bulkprovision.MigImportTasks,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
-					getDisplayValue:function(val) {
-				   		return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No;
-				   }
+					label:com_zimbra_bulkprovision.RevMigImportTasks,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
+					getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}
 		       },
 		       {ref:ZaBulkProvision.A2_importCalendar,  type:_OUTPUT_,  
-					label:com_zimbra_bulkprovision.MigImportCalendar,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
-					getDisplayValue:function(val) {
-				   		return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No;
-				   }
+					label:com_zimbra_bulkprovision.RevMigImportCalendar,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
+					getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}
 		       },
 		       {ref:ZaBulkProvision.A2_importDeletedItems,  type:_OUTPUT_,  
-					label:com_zimbra_bulkprovision.MigImportDeletedItems,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
+					label:com_zimbra_bulkprovision.RevMigImportDeletedItems,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
 					getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}
 		       },
 		       {ref:ZaBulkProvision.A2_importJunk,  type:_OUTPUT_,  
-					label:com_zimbra_bulkprovision.MigImportJunk,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
+					label:com_zimbra_bulkprovision.RevMigImportJunk,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
 					getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}
 		       },
 		       {ref:ZaBulkProvision.A2_ignorePreviouslyImported,  type:_OUTPUT_,  
-					label:com_zimbra_bulkprovision.MigIgnorePreviouslyImported,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
+					label:com_zimbra_bulkprovision.RevMigIgnorePreviouslyImported,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
 					getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}
 		       },
 		       {ref:ZaBulkProvision.A2_InvalidSSLOk,  type:_OUTPUT_,  
-		    	   label:com_zimbra_bulkprovision.MigInvalidSSLOk,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
+		    	   label:com_zimbra_bulkprovision.RevMigInvalidSSLOk,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[],
 		    	   getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}
 		       }		       
-		       {ref:ZaBulkProvision.A2_MapiProfile, type:_OUTPUT_, label:com_zimbra_bulkprovision.A2_MapiProfile, labelLocation:_LEFT_, 
-					enableDisableChecks:[],visibilityChecks:[]				
-		       },
-		       {ref:ZaBulkProvision.A2_MapiServer, type:_OUTPUT_, label:com_zimbra_bulkprovision.A2_MapiServer, labelLocation:_LEFT_, 
-					enableDisableChecks:[],visibilityChecks:[]				
-		       },
-		       {ref:ZaBulkProvision.A2_MapiLogonUserDN, type:_OUTPUT_, width:"380px", label:com_zimbra_bulkprovision.A2_MapiLogonUserDN, labelLocation:_LEFT_, 
-					enableDisableChecks:[],visibilityChecks:[]				
-		       }		       
-		    	   
 		]
 	};
 
@@ -583,11 +514,12 @@ ZaMigrationXWizard.myXFormModifier = function(xFormObject,entry) {
 	 * Download generated bulk file
 	 */
 	var case_download_file = {
-		type:_CASE_, numCols:2, colSizes:["250px","*"], tabGroupKey:ZaMigrationXWizard.STEP_DOWNLOAD_FILE, 
+		type:_CASE_, numCols:1, colSizes:["*"], tabGroupKey:ZaMigrationXWizard.STEP_DOWNLOAD_FILE, 
 		caseKey:ZaMigrationXWizard.STEP_DOWNLOAD_FILE,
 		items:[
 		       {type:_DWT_ALERT_, style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.ClickToDownloadGeneratedFile},
-		       {type:_DATA_URL_,labelLocation:_NONE_,label:com_zimbra_bulkprovision.GeneratedBulkProvisionFileLink,ref:ZaBulkProvision.A2_generatedFileLink}
+		       {type:_DATA_URL_,labelLocation:_NONE_,label:com_zimbra_bulkprovision.DownloadMigrationXML,ref:ZaBulkProvision.A2_generatedFileLink},
+		       {type:_ANCHOR_,labelLocation:_NONE_,label:com_zimbra_bulkprovision.DownloadMigrationWizard,href:ZaMsg.MIG_WIZ_DOWNLOAD_LINK}
 		]
 	};
 	cases.push(case_download_file);
@@ -604,10 +536,3 @@ ZaMigrationXWizard.myXFormModifier = function(xFormObject,entry) {
 		];
 };
 ZaXDialog.XFormModifiers["ZaMigrationXWizard"].push(ZaMigrationXWizard.myXFormModifier);
-
-ZaMigrationXWizard.downloadBPStatus = function () {
-    var form = this.getForm() ;
-    var instance = form.getInstance () ;
-    
-    return ;
-}
