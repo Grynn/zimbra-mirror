@@ -470,6 +470,18 @@ ZaMigrationXWizard.myXFormModifier = function(xFormObject,entry) {
 		       {ref:ZaBulkProvision.A2_ZimbraAdminLogin, type:_OUTPUT_, label:com_zimbra_bulkprovision.A2_ZimbraAdminLogin, labelLocation:_LEFT_, 
 		    	   enableDisableChecks:[],visibilityChecks:[]				
 		       },
+		       {ref:ZaBulkProvision.A2_generatePassword,  type:_OUTPUT_,  
+		    	   label:com_zimbra_bulkprovision.RevGenerateRandomPassword,visibilityChecks:[],enableDisableChecks:[],
+		    	   getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}
+		       },
+		       {type:_OUTPUT_,ref:ZaBulkProvision.A2_genPasswordLength,label:com_zimbra_bulkprovision.GeneratedPasswordLength,
+				   visibilityChecks:[],enableDisableChangeEventSources:[ZaBulkProvision.A2_generatePassword],
+				   enableDisableChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_generatePassword,"TRUE"]]
+			   },
+		       {ref:ZaBulkProvision.A_mustChangePassword,  type:_OUTPUT_,  
+		    	   label:com_zimbra_bulkprovision.RevRequireChangePassword,visibilityChecks:[],enableDisableChecks:[],
+		    	   getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}
+		       },		       
 		       {ref:ZaBulkProvision.A2_provisionUsers,  type:_OUTPUT_,  
 		    	   label:com_zimbra_bulkprovision.RevA2_provisionUsers,visibilityChecks:[],enableDisableChecks:[],
 		    	   getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}

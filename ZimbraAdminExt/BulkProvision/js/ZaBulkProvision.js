@@ -91,6 +91,7 @@ ZaBulkProvision.ACTION_IMPORT_LDAP = 3;
 ZaBulkProvision.ACTION_GENERATE_MIG_XML = 4;
 ZaBulkProvision.ACTION_GENERATE_BULK_XML = 5;
 ZaBulkProvision.ACTION_GENERATE_BULK_CSV = 6;
+ZaBulkProvision.ACTION_IMPORT_AD = 7;
 
 ZaBulkProvision.FILE_FORMAT_PREVIEW = "preview";
 ZaBulkProvision.FILE_FORMAT_MIGRATION_XML = "migrationxml";
@@ -105,6 +106,7 @@ ZaBulkProvision.getMyXModel = function () {
 		{value:ZaBulkProvision.ACTION_IMPORT_CSV,label:com_zimbra_bulkprovision.ActionImportFromSCV},
 		{value:ZaBulkProvision.ACTION_IMPORT_XML,label:com_zimbra_bulkprovision.ActionImportFromXML},
 		{value:ZaBulkProvision.ACTION_GENERATE_MIG_XML,label:com_zimbra_bulkprovision.ActionGenerateMigXML},
+		{value:ZaBulkProvision.ACTION_IMPORT_AD,label:com_zimbra_bulkprovision.ActionImportAccountsFromAD},
 		{value:ZaBulkProvision.ACTION_GENERATE_BULK_XML,label:com_zimbra_bulkprovision.ActionGenerateBulkXML},
 		{value:ZaBulkProvision.ACTION_GENERATE_BULK_CSV,label:com_zimbra_bulkprovision.ActionGenerateBulkCSV}
     ];
