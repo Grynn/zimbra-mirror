@@ -45,6 +45,9 @@ ZaBulkProvision.A2_totalCount = "totalCount";
 ZaBulkProvision.A2_progress = "progress";
 ZaBulkProvision.A2_fileToken = "fileToken";
 ZaBulkProvision.A2_createDomains = "createDomains";
+ZaBulkProvision.A2_domainCount = "domainCount";
+ZaBulkProvision.A2_skippedAccountCount = "skippedAccountCount";
+ZaBulkProvision.A2_skippedDomainCount = "skippedDomainCount";
 
 //LDAP import options
 ZaBulkProvision.A2_maxResults = "maxResults";
@@ -89,6 +92,7 @@ ZaBulkProvision.ACTION_GENERATE_MIG_XML = 4;
 ZaBulkProvision.ACTION_GENERATE_BULK_XML = 5;
 ZaBulkProvision.ACTION_GENERATE_BULK_CSV = 6;
 
+ZaBulkProvision.FILE_FORMAT_PREVIEW = "preview";
 ZaBulkProvision.FILE_FORMAT_MIGRATION_XML = "migrationxml";
 ZaBulkProvision.FILE_FORMAT_BULK_XML = "bulkxml";
 ZaBulkProvision.FILE_FORMAT_BULK_CSV = "csv";
@@ -343,6 +347,43 @@ ZaBulkProvision.importAccountsFromLDAP = function (obj, callback) {
 	reqMgrParams.busyMsg = com_zimbra_bulkprovision.BUSY_START_PROVISION_ACCOUNTS;
 	ZaRequestMgr.invoke(csfeParams, reqMgrParams);	
 }
+
+ZaBulkProvision.generateBulkProvisionPreview = function(obj, callback) {
+	var soapDoc = AjxSoapDoc.create("GenerateBulkProvisionFileFromLDAPRequest",ZaBulkProvision.URN, null);
+	var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external);
+	attr.setAttribute("n", ZaDomain.A_zimbraGalMode);
+
+	attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapURL]);
+	attr.setAttribute("n", ZaBulkProvision.A2_GalLdapURL);	
+	
+	attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapSearchBase]);
+	attr.setAttribute("n", ZaBulkProvision.A2_GalLdapSearchBase);	
+
+	attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapFilter]);
+	attr.setAttribute("n", ZaBulkProvision.A2_GalLdapFilter);	
+
+	attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapBindDn]);
+	attr.setAttribute("n", ZaBulkProvision.A2_GalLdapBindDn);
+
+	attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapBindPassword]);
+	attr.setAttribute("n", ZaBulkProvision.A2_GalLdapBindPassword);
+
+	if(obj[ZaBulkProvision.A2_password]) {
+		attr = soapDoc.set(ZaBulkProvision.A2_password,obj[ZaBulkProvision.A2_password]);
+	}
+	attr = soapDoc.set(ZaBulkProvision.A2_maxResults,obj[ZaBulkProvision.A2_maxResults]);
+	attr = soapDoc.set(ZaBulkProvision.A2_fileFormat,ZaBulkProvision.FILE_FORMAT_PREVIEW);
+	
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;
+	csfeParams.asyncMode = true;
+	csfeParams.callback = callback;
+
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = com_zimbra_bulkprovision.BUSY_GENERATING_BULK_FILE;
+	ZaRequestMgr.invoke(csfeParams, reqMgrParams );
+};
 
 ZaBulkProvision.generateBulkProvisionFile = function(obj, callback) {
 	var soapDoc = AjxSoapDoc.create("GenerateBulkProvisionFileFromLDAPRequest",ZaBulkProvision.URN, null);

@@ -31,8 +31,7 @@ function ZaBulkImportXWizard (parent, entry) {
 	    {label:com_zimbra_bulkprovision.BP_Wizard_exchangeOptions, value:ZaBulkImportXWizard.STEP_EXCHANGE_INFO},
 	    {label:com_zimbra_bulkprovision.BP_Wizard_ldapOptions, value:ZaBulkImportXWizard.STEP_LDAP_INFO},
 	    {label:com_zimbra_bulkprovision.BP_Wizard_download, value:ZaBulkImportXWizard.STEP_DOWNLOAD_FILE},		
-		{label:com_zimbra_bulkprovision.BP_Wizard_provision, value:ZaBulkImportXWizard.STEP_PROVISION},
-		{label:com_zimbra_bulkprovision.BP_Wizard_summary, value:ZaBulkImportXWizard.STEP_SUMMARY}
+		{label:com_zimbra_bulkprovision.BP_Wizard_provision, value:ZaBulkImportXWizard.STEP_PROVISION}
 	];
 
 	ZaBulkImportXWizard.STATUS_LABELS = {};
@@ -64,7 +63,6 @@ ZaBulkImportXWizard.STEP_EXCHANGE_INFO = ZaBulkImportXWizard.STEP_INDEX++;
 ZaBulkImportXWizard.STEP_LDAP_INFO = ZaBulkImportXWizard.STEP_INDEX++;
 ZaBulkImportXWizard.STEP_DOWNLOAD_FILE = ZaBulkImportXWizard.STEP_INDEX++;
 ZaBulkImportXWizard.STEP_PROVISION = ZaBulkImportXWizard.STEP_INDEX++;
-ZaBulkImportXWizard.STEP_SUMMARY = ZaBulkImportXWizard.STEP_INDEX++;
 
 ZaBulkImportXWizard.prototype = new ZaXWizardDialog;
 ZaBulkImportXWizard.prototype.constructor = ZaBulkImportXWizard;
@@ -676,7 +674,10 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 				   enableDisableChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_generatePassword,"TRUE"]],
 				   cssClass:"admin_xform_number_input"
 				},
-		       	{type:_DWT_ALERT_, style:DwtAlert.WARNING,iconVisible:false,content:com_zimbra_bulkprovision.GeneratePasswordsNote,visibilityChecks:[],enableDisableChecks:[]},				
+		       	{type:_DWT_ALERT_, style:DwtAlert.WARNING,iconVisible:false,content:com_zimbra_bulkprovision.GeneratePasswordsNote,
+					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_provAction,ZaBulkProvision.ACTION_IMPORT_LDAP]],enableDisableChecks:[],
+					visibilityChangeEventSources:[ZaBulkProvision.A2_provAction]
+		       	},				
 				{type:_RADIO_, groupname:"account_password_option",ref:ZaBulkProvision.A2_generatePassword, bmolsnr:true,
 					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.UseSamePassword,
 					updateElement:function (newValue) {
@@ -940,18 +941,6 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 	};
 
 	cases.push(case_provision);
-
-	var case_summary =
-		{type:_CASE_, numCols:1, colSizes:["*"],
-            tabGroupKey:ZaBulkImportXWizard.STEP_SUMMARY, caseKey:ZaBulkImportXWizard.STEP_SUMMARY,
-			align:_LEFT_, valign:_TOP_ ,
-			items :[
-				{ type:_OUTPUT_, value: com_zimbra_bulkprovision.summary_download }
-            ]
-		}
-
-	cases.push (case_summary) ;
-
 	
     var contentW = 630 ;
     xFormObject.items = [

@@ -1,13 +1,16 @@
 package com.zimbra.bp;
 
 import java.io.File;
+
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 import javax.naming.NamingException;
 
@@ -23,6 +26,9 @@ import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.util.EmailUtil;
+import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.GalContact;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.SearchGalResult;
@@ -67,7 +73,11 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	private static final String E_ignorePreviouslyImported = "ignorePreviouslyImported";
 	private static final String E_InvalidSSLOk = "InvalidSSLOk";
 	private static final String E_mustChangePassword = "mustChangePassword";
-	
+	private static final String FILE_FORMAT_PREVIEW = "preview";
+	private static final String E_totalCount = "totalCount";
+	private static final String E_domainCount = "domainCount";
+	private static final String E_skippedAccountCount = "skippedAccountCount";
+	private static final String E_skippedDomainCount = "skippedDomainCount";
 	private static final int DEFAULT_PWD_LENGTH = 8;
 	public Element handle(Element request, Map<String, Object> context) throws ServiceException {
 		ZimbraSoapContext zsc = getZimbraSoapContext(context);
@@ -108,9 +118,45 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 		try {
 			SearchGalResult result = LdapUtil.searchLdapGal(galParams, GalOp.search, "*", maxResults, rules, null, null);
 			List<GalContact> entries = result.getMatches();
+			int totalAccounts = 0;
+			int totalDomains = 0;
+			int totalExistingDomains = 0;
+			int totalExistingAccounts = 0;
+			List<String> domainList = new ArrayList<String>();
             if (entries != null) {
             	String outFileName = null;
-            	if(AdminFileDownload.FILE_FORMAT_BULK_CSV.equalsIgnoreCase(fileFormat)) {
+            	if(FILE_FORMAT_PREVIEW.equalsIgnoreCase(fileFormat)) {
+	                for (GalContact entry : entries) {	
+	                	String mail = entry.getSingleAttr(ContactConstants.A_email);
+	                	if(mail == null)
+	                		continue;
+	                	
+	                    String parts[] = EmailUtil.getLocalPartAndDomain(mail);
+	                    if (parts == null)
+	                        continue;
+
+                    	if(!domainList.contains(parts[1])) {
+                    		totalDomains++;
+                    		//Check if this domain is in Zimbra
+    	                    Domain domain = Provisioning.getInstance().getDomainByName(parts[1]);
+    	                    if(domain != null) {
+    	                    	totalExistingDomains++;
+    	                    }
+    	                    domainList.add(parts[1]);
+                    	}
+	                    totalAccounts++;
+	                  	Account acct = Provisioning.getInstance().getAccountByName(mail);
+		            	if(acct!=null) {
+		            		totalExistingAccounts++;
+		            	}	
+	                	
+	            	}
+	                response.addElement(E_totalCount).setText(Integer.toString(totalAccounts));
+	                response.addElement(E_domainCount).setText(Integer.toString(totalDomains));
+	                response.addElement(E_skippedAccountCount).setText(Integer.toString(totalExistingAccounts));
+	                response.addElement(E_skippedDomainCount).setText(Integer.toString(totalExistingDomains));
+	                return response;
+            	} else if(AdminFileDownload.FILE_FORMAT_BULK_CSV.equalsIgnoreCase(fileFormat)) {
             		outFileName = String.format("%s%s_bulk_%s_%s.csv", LC.zimbra_tmp_directory.value(),File.separator,zsc.getAuthtokenAccountId(),fileToken);
             		FileOutputStream out = new FileOutputStream (outFileName) ;
             		CSVWriter writer = new CSVWriter(new OutputStreamWriter (out) ) ;	            	
