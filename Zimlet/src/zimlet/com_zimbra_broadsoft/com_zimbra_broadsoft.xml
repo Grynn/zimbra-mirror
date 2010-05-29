@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_broadsoft" version="1.5" description="Access a BroadSoft Voice system.">
+<zimlet name="com_zimbra_broadsoft" version="1.5.1" description="Access a BroadSoft Voice system.">
 	<include>broadsoft.js</include>
 	<include>base64.js</include>
 	<includeCSS>broadsoft.css</includeCSS>

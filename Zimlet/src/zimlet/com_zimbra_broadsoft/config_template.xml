@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_broadsoft" version="1.5">
+<zimletConfig name="com_zimbra_broadsoft" version="1.5.1">
 	<global>
 		<property name="allowedDomains">*.broadsoft.*,xsp.eng.broadsoft.com,*.ihs.broadsoft.com,*.xdp.broadsoft.com</property>
 	</global>

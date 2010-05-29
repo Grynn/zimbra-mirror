@@ -274,6 +274,9 @@ function(folder) {
 			this._addToolbarBtns({enableCallBtn:false, enableSaveBtn:true});
 
 			break;
+		case "Calls":
+			this._getCallLogs(folder.sn);
+			break;
 		default:
 	}
 };
@@ -844,8 +847,6 @@ function(callType, response) {
 	this._storeCallLogs(r, "received");
 	this._showCallLogs(callType);
 	this._addToolbarBtns({enableCallBtn:true, enableSaveBtn:false});
-	this._hasCashedCallLogs = true;
-
 };
 
 /**
@@ -862,6 +863,7 @@ function(callType) {
 	var params = {parent:DwtShell.getShell(window), headerList: this._getHeaderList(), posStyle: Dwt.ABSOLUTE_STYLE};
 
 	this._listView = new BroadSoftListView(params);
+	this._listView._controller = {};//set dummy controller
 	app.setView(this._listView);
 	this._listView.set(this._callLogs[callType], 1, true);
 };
@@ -1161,8 +1163,9 @@ function() {
  */
 com_zimbra_broadsoft.prototype._showPreferenceSavedMsg =
 function() {
-	var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
+	var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.FADE_OUT ];
 	appCtxt.getAppController().setStatusMsg("Preferences Saved", ZmStatusView.LEVEL_INFO, null, transitions);
+	this._setZimletCurrentPreferences();
 };
 
 
