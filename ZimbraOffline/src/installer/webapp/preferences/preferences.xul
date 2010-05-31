@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<overlay id="PrefsOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefwindow id="BrowserPreferences"> 
+    <prefpane id="paneMain" removeelement="true" />
+    <prefpane id="paneTabs" removeelement="true" />
+    <prefpane id="paneContent" removeelement="true" />
+    <prefpane id="panePrivacy" removeelement="true" />
+    <prefpane id="paneSecurity" removeelement="true" />
+    <prefpane id="paneAdvanced" removeelement="true" />
+  </prefwindow>
+</overlay>
