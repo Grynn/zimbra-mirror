@@ -1671,10 +1671,21 @@ DwtHtmlEditor.prototype.insertLink = function(params) {
         return a;
 
     }else{
-        if (params.text)
-            this.insertText(params.text, true);
         var url = "javascript:" + Dwt.getNextId();
-        this._execCommand("createlink", url);
+
+        if (AjxEnv.isIE) { // IE *ought to* be able to handle the general case, but regularly screws it up anyway.
+            var node = this._getIframeDoc().createElement("a");
+            node.href = url;
+            if (params.text)
+                node.innerHTML = params.text;
+            this._insertNodeAtSelection(node, false);
+            this.selectNodeContents(node);
+        } else {
+            if (params.text)
+                this.insertText(params.text, true);
+            this._execCommand("createlink", url);
+        }
+
         var a = doc.getElementsByTagName("a");
         var link;
         for (var i = a.length; --i >= 0;) {
@@ -1683,9 +1694,12 @@ DwtHtmlEditor.prototype.insertLink = function(params) {
                 break;
             }
         }
-        link.href = params.url;
-        if (params.title)
-            link.title = params.title;
+
+        if (link) {
+            link.href = params.url;
+            if (params.title)
+                link.title = params.title;
+        }
         return link;
     }
 };
