@@ -286,7 +286,7 @@ function() {
 		this._controllers[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW].addChangeListener(new AjxListener(this._controllers[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW], this._controllers[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW].handleChange));
 	}
 	
-	return this._controllers[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW]
+	return this._controllers[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW] ;
 }
 
 ZaApp.prototype.getZimletListController =
@@ -298,7 +298,7 @@ function() {
 		this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW].addChangeListener(new AjxListener(this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW], this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW].handleChange));
 	}
 	
-	return this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW]
+	return this._controllers[ZaZimbraAdmin._ZIMLET_LIST_VIEW] ;
 }
 
 ZaApp.prototype.getZimletController =
