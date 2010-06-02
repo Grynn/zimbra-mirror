@@ -208,10 +208,12 @@ ZaDashBoardController.prototype.editItem = function (item) {
 			var c = ZaApp.getInstance().getAccountViewController()
 			c.show(item,true);
 			c.addChangeListener(new AjxListener(this, this.handleAccChange));
-		} else if (type == ZaItem.DL) {
+		    c.addRemovalListener(new AjxListener(this, this.handleAccChange));
+        } else if (type == ZaItem.DL) {
 			var c = ZaApp.getInstance().getDistributionListController()
 			c.show(item,true);
 			c.addChangeListener(new AjxListener(this, this.handleDLChange));
+            c.addRemovalListener(new AjxListener(this, this.handleDLChange));
 		} else if(type == ZaItem.ALIAS) {
 			var targetObj = item.getAliasTargetObj();
 			
@@ -219,27 +221,33 @@ ZaDashBoardController.prototype.editItem = function (item) {
 				var c = ZaApp.getInstance().getAccountViewController();
 				c.show(targetObj, true);
 				c.addChangeListener(new AjxListener(this, this.handleAccChange));
+                c.addRemovalListener(new AjxListener(this, this.handleAccChange));
 			} else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
 				var c = ZaApp.getInstance().getDistributionListController();
 				c.show(targetObj, true);
 				c.addChangeListener(new AjxListener(this, this.handleDLChange));
+                c.addRemovalListener(new AjxListener(this, this.handleDLChange));
 			}  else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.RESOURCE){
 				var c = ZaApp.getInstance().getResourceController();
 				c.show(targetObj, true);
 				c.addChangeListener(new AjxListener(this, this.handleResourceChange));
+                c.addRemovalListener(new AjxListener(this, this.handleResourceChange));
 			}
 		} else if (type == ZaItem.RESOURCE){
 			var c = ZaApp.getInstance().getResourceController();
 			c.show(item,true);
 			c.addChangeListener(new AjxListener(this, this.handleResourceChange));
+            c.addRemovalListener(new AjxListener(this, this.handleResourceChange));
 		} else if (type==ZaItem.DOMAIN) {
 			var c = ZaApp.getInstance().getDomainController();
 			c.show(item,true);
 			c.addChangeListener(new AjxListener(this, this.handleDomainChange));
+            c.addRemovalListener(new AjxListener(this, this.handleDomainChange));
 		} else if (type==ZaItem.COS) {
 			var c = ZaApp.getInstance().getCosController();
 			c.show(item,true);
 			c.addChangeListener(new AjxListener(this, this.handleProfileChange));
+            c.addRemovalListener(new AjxListener(this, this.handleProfileChange));
 		}
 	}
 };
@@ -280,6 +288,7 @@ ZaDashBoardController.prototype.newProfileSelected = function() {
 	c._helpURL = location.pathname + ZaUtil.HELP_URL + "zap_creating_account_profiles.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	c.show(newCos);
 	c.addChangeListener(new AjxListener(this, this.handleProfileChange));
+    c.addRemovalListener(new AjxListener(this, this.handleProfileChange));
 };
 
 ZaDashBoardController.prototype.newDomainSelected = function () {
@@ -472,7 +481,8 @@ ZaDashBoardController.prototype.newDLSelected = function() {
 		newDL.rights[ZaDistributionList.ADD_DL_MEMBER_RIGHT]=true;
 		var dlc = ZaApp.getInstance().getDistributionListController();
 		dlc.show(newDL);
-		dlc.addChangeListener(new AjxListener(this, this.handleDLChange));			
+		dlc.addChangeListener(new AjxListener(this, this.handleDLChange));
+        dlc.addRemovalListener(new AjxListener(this, this.handleDLChange));	
 	} catch (ex) {
 		this._handleException(ex, "ZaDashBoardController.prototype.newDLSelected", null, false);
 	}
