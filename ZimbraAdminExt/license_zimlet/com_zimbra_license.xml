@@ -1,0 +1,5 @@
+<zimlet name="com_zimbra_license" version="6.0" description="License Management for Admin UI" extension="true">
+	<include>com_zimbra_license.js</include>
+	<target>admin-main</target>
+	<disableUIUndeploy>TRUE</disableUIUndeploy>
+</zimlet>
