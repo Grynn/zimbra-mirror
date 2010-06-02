@@ -1256,7 +1256,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								}
 								this.getForm().itemChanged(this, elementValue, event);
 							},
-							enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_displayname]]
+							enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_displayname]],
+                            visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_displayname]]
+
 						}
 					]
 				},
