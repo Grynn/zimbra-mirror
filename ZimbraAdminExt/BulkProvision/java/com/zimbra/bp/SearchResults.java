@@ -143,7 +143,7 @@ public class SearchResults {
 //            options.setSortAscending(sortAscending);
 //            options.setSortAttr(sortBy);
         options.setConvertIDNToAscii(true);
-        List accounts = prov.searchDirectory(options, false);
+        List accounts = prov.searchDirectory(options);
         
         // check rights and only returns allowed entries
         AdminAccessControl aac = AdminAccessControl.getAdminAccessControl(authToken);
