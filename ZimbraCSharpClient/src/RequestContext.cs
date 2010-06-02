@@ -132,10 +132,13 @@ namespace Zimbra.Client
 
 			if( sessionId != null )
 			{
-				XmlElement se = d.CreateElement( ZimbraService.E_SESSIONID, ZimbraService.NAMESPACE_URI );
-				se.InnerText = sessionId;
+				XmlElement se = d.CreateElement( ZimbraService.E_SESSION, ZimbraService.NAMESPACE_URI );
+				se.SetAttribute( ZimbraService.A_ID, sessionId );
 				contextElement.AppendChild( se ); 
-			}
+			} else if( noSession == false)
+			{
+				contextElement.AppendChild( d.CreateElement( ZimbraService.E_SESSION, ZimbraService.NAMESPACE_URI ) );
+			} 
 
 			if( noNotifications )
 			{
@@ -147,11 +150,6 @@ namespace Zimbra.Client
 				XmlElement e = d.CreateElement( ZimbraService.E_NOTIFY, ZimbraService.NAMESPACE_URI );
 				e.SetAttribute( ZimbraService.A_NOTIFY_SEQUENCE, notificationSequence );
 				contextElement.AppendChild( e );
-			}
-
-			if( noSession )
-			{
-				contextElement.AppendChild( d.CreateElement( ZimbraService.E_NOSESSION, ZimbraService.NAMESPACE_URI ) );
 			}
 
 			if( targetAccount != null )

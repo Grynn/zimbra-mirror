@@ -108,7 +108,7 @@ namespace Zimbra.Client.Account
 		{
 			String authToken = XmlUtil.GetNodeText( responseNode, AccountService.Q_AUTHTOKEN );
 			String lifetime  = XmlUtil.GetNodeText( responseNode, AccountService.Q_LIFETIME );
-			String sessionId = XmlUtil.GetNodeText( responseNode, AccountService.Q_SESSIONID);
+			String sessionId = XmlUtil.GetNodeText( responseNode, AccountService.Q_SESSION);
 
 			return new AuthResponse( authToken, lifetime, sessionId );
 		}

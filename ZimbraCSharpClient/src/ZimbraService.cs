@@ -30,11 +30,12 @@ namespace Zimbra.Client
 		public static String NS_PREFIX				= "zimbra";
 		public static String NAMESPACE_URI			= "urn:zimbra";
 
-		public static String E_SESSIONID			= "sessionId";
+//		public static String E_SESSIONID			= "sessionId";
 		public static String E_CONTEXT				= "context";
 		public static String E_AUTHTOKEN			= "authToken";
 		public static String E_NONOTIFY				= "nonotify";
 		public static String E_NOSESSION			= "nosession";
+		public static String E_SESSION				= "session";
 		public static String E_ACCOUNT				= "account";
 		public static String E_TARGET_SERVER		= "targetServer";
 		public static String E_CHANGE				= "change";

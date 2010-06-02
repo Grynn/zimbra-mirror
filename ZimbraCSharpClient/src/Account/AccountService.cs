@@ -37,7 +37,7 @@ namespace Zimbra.Client.Account
 		public static String E_ACCOUNT		= "account";
 		public static String E_PASSWORD		= "password";
 		public static String E_LIFETIME		= "lifetime";
-		public static String E_SESSIONID	= "sessionId";
+		public static String E_SESSION		= "session";
 		public static String E_AUTHTOKEN	= "authToken";
         public static String E_NAME = "name";
 
@@ -50,7 +50,7 @@ namespace Zimbra.Client.Account
 		//qualified names
 		public static String Q_AUTHTOKEN	= NS_PREFIX + ":" + E_AUTHTOKEN;
 		public static String Q_LIFETIME		= NS_PREFIX + ":" + E_LIFETIME;
-		public static String Q_SESSIONID	= NS_PREFIX + ":" + E_SESSIONID;
+		public static String Q_SESSION		= NS_PREFIX + ":" + E_SESSION;
 
         public static Response[] responses = { new AuthResponse() };
 		public String NamespacePrefix{ get{ return NS_PREFIX; }}

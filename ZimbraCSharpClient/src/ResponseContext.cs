@@ -29,7 +29,7 @@ namespace Zimbra.Client
 		{
 			if( contextNode == null )
 				return;
-			sessionId = XmlUtil.GetNodeText( contextNode, ZimbraService.NS_PREFIX + ":" + ZimbraService.E_SESSIONID );
+			sessionId = XmlUtil.GetNodeText( contextNode, ZimbraService.NS_PREFIX + ":" + ZimbraService.E_SESSION );
 			changeToken = XmlUtil.GetAttributeValue( contextNode, ZimbraService.E_CHANGE, ZimbraService.A_TOKEN );
 
 			XmlNode notifyNode = contextNode.SelectSingleNode( ZimbraService.NS_PREFIX + ":" + ZimbraService.E_NOTIFY, XmlUtil.NamespaceManager );
