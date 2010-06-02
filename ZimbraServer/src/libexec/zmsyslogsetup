@@ -57,7 +57,8 @@ if ( $LOGHOST eq "" ) {
   $TYPE="local";
 } else {
   ($junk,$LOGHOST) = split /: /, $LOGHOST, 2;
-  if ( $LOGHOST eq $LOCALHOST ) {
+  chomp($LOGHOST);
+  if ( lc($LOGHOST) eq lc($LOCALHOST) ) {
     $TYPE="local";
   } else {
     $TYPE="remote";
