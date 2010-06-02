@@ -27,7 +27,7 @@ use Zimbra::Mon::Zmstat;
 use vars qw(
     $VERSION $PID_FILE $DEFAULT_DEST $JMAP $JAVA $DEFAULT_TIMEOUT
     $HAVE_GCORE $HAVE_PSTACK $HAVE_LSOF $HAVE_DMESG $LOG_FILE $ZMSTAT_CONF
-    $ZMDUMPENV $ZMPROV $ZMHOSTNAME $SU $HAVE_NETSTAT
+    $ZMDUMPENV $ZMLOCALCONFIG $ZMPROV $ZMHOSTNAME $SU $HAVE_NETSTAT
 );
 
 my $isMac = isMac();
@@ -60,6 +60,7 @@ $HAVE_NETSTAT = has_cmd('netstat');
 $LOG_FILE = 'zmdiag.log';
 $ZMSTAT_CONF = '/opt/zimbra/conf/zmstat-chart.xml';
 $ZMDUMPENV = '/opt/zimbra/bin/zmdumpenv';
+$ZMLOCALCONFIG = '/opt/zimbra/bin/zmlocalconfig';
 $ZMPROV = '/opt/zimbra/bin/zmprov -l';
 $SU = "su - zimbra -c ";
 $SU = "su - zimbra -c -l " if (isMac());
@@ -271,6 +272,8 @@ sub run() {
     exec_with_timeout("$SU '$ZMPROV gs $ZMHOSTNAME' > zmprov-gs.txt 2>&1", $timeout);
     exec_with_timeout("$SU '$ZMPROV gacf' > zmprov-gacf.txt 2>&1", $timeout);
     system("cp /opt/zimbra/conf/localconfig.xml $destination/");
+    exec_with_timeout("$SU '$ZMLOCALCONFIG -x -s' > zmlocalconfig-x-s.txt 2>&1", $timeout);
+    exec_with_timeout("$SU '$ZMLOCALCONFIG -n' > zmlocalconfig-n.txt 2>&1", $timeout);
     system("cp /opt/zimbra/conf/my.cnf $destination/");
     
     for (my $i = 1; $i <= 10; $i++) {
@@ -380,18 +383,19 @@ sub run() {
       logmsg "ld.so.conf not present...skipping copy.\n";
     }
     
+    logmsg "\n *** Diagnostics collection done.  Data stored in $destination/.\n";
     my $dirname = `pwd`;
     chomp($dirname);
     chomp($dirname = `basename $dirname`);
     if ($options{'z'}) {
-        logmsg "Zipping up contents into $destination/$dirname.zip\n";
+        logmsg "Zipping up contents of $destination into $destination.zip\n";
         chdir('..');
         system("nice -n 19 zip -9r $dirname.zip $dirname/");
+        logmsg "\n *** Zipfile \"$destination.zip\" created.\n";
     } else {
-    	logmsg "Skipping zip creation";
+    	logmsg "Skipping zip creation.\n";
     }
     chdir($destination);
-    logmsg "\n *** Diagnostics collection done, stored in $destination/$dirname.zip\n";
 }
 
 run();
