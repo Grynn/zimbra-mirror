@@ -28,7 +28,7 @@ ZaDashBoardView = function(parent) {
 	this.initForm(ZaDashBoard.myXModel, this.getMyXForm({}), item);
 //	this._createHTML();
 }
-ZaDashBoardView.mainHelpPage = "zap_working_in_the_administration_console.htm";
+ZaDashBoardView.mainHelpPage = "administration_console_help.htm";
 ZaDashBoardView.prototype = new ZaTabView();
 ZaDashBoardView.prototype.constructor = ZaDashBoardView;
 ZaTabView.XFormModifiers["ZaDashBoardView"] = new Array();

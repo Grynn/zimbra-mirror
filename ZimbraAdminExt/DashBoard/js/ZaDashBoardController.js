@@ -35,7 +35,7 @@ ZaDashBoardController.prototype = new ZaXFormViewController();
 ZaDashBoardController.prototype.constructor = ZaDashBoardController;
 ZaController.initToolbarMethods["ZaDashBoardController"] = new Array();
 ZaController.changeActionsStateMethods["ZaDashBoardController"] = new Array();
-ZaDashBoardController.helpURL = location.pathname + ZaUtil.HELP_URL + "zap_working_in_the_administration_console.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+ZaDashBoardController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/provisioning_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
 ZaOperation.MANAGE_DOMAINS = ++ZA_OP_INDEX;
 ZaOperation.MANAGE_PROFILES = ++ZA_OP_INDEX;
