@@ -127,11 +127,11 @@ function(level, msg, linkName) {
 	if (!this._isWriteable()) { return; }
 
 	try {
-		var args = this._handleArgs(arguments, linkName);
-		if (!args) { return; }
+		var result = this._handleArgs(arguments);
+		if (!result) { return; }
 
-		msg = args.join("");
-		this._add(this._timestamp() + msg + "<br>", null, null, null, linkName);
+		msg = result.args.join("");
+		this._add(this._timestamp() + msg + "<br>", null, null, null, result.linkName);
 	} catch (ex) {
 		// do nothing
 	}
@@ -161,14 +161,14 @@ AjxDebug.prototype.dumpObj =
 function(level, obj, showFuncs, linkName) {
 	if (!this._isWriteable()) { return; }
 
-	var args = this._handleArgs(arguments, linkName);
-	if (!args) { return; }
+	var result = this._handleArgs(arguments);
+	if (!result) { return; }
 
-	obj = args[0];
+	obj = result.args[0];
 	if (!obj) { return; }
 
-	showFuncs = args[1];
-	this._add(null, obj, false, false, null, showFuncs);
+	showFuncs = result.args[1];
+	this._add(null, obj, false, false, result.linkName, showFuncs);
 };
 
 /**
@@ -181,10 +181,10 @@ AjxDebug.prototype.printRaw =
 function(level, text, linkName) {
 	if (!this._isWriteable()) { return; }
 
-	var args = this._handleArgs(arguments, linkName);
-	if (!args) { return; }
+	var result = this._handleArgs(arguments);
+	if (!result) { return; }
 
-	this._add(null, args[0], false, true);
+	this._add(null, result.args[0], false, true, result.linkName);
 };
 
 /**
@@ -197,10 +197,10 @@ AjxDebug.prototype.printXML =
 function(level, text, linkName) {
 	if (!this._isWriteable()) { return; }
 
-	var args = this._handleArgs(arguments, linkName);
-	if (!args) { return; }
+	var result = this._handleArgs(arguments);
+	if (!result) { return; }
 
-	text = args[0];
+	text = result.args[0];
 	if (!text) { return; }
 
 	// skip generating pretty xml if theres too much data
@@ -208,7 +208,7 @@ function(level, text, linkName) {
 		this.printRaw(text);
 		return;
 	}
-	this._add(null, text, true, false);
+	this._add(null, text, true, false, result.linkName);
 };
 
 /**
@@ -218,17 +218,17 @@ function(level, text, linkName) {
  * @param {string}	text		the text to be displayed
  */
 AjxDebug.prototype.display =
-function(level, text) {
+function(level, text, linkName) {
 	if (!this._isWriteable()) { return; }
 
-	var args = this._handleArgs(arguments);
-	if (!args) { return; }
+	var result = this._handleArgs(arguments);
+	if (!result) { return; }
 
-	text = args[0];
+	text = result.args[0];
 	text = text.replace(/\r?\n/g, '[crlf]');
 	text = text.replace(/ /g, '[space]');
 	text = text.replace(/\t/g, '[tab]');
-	this.printRaw(level, text);
+	this.printRaw(level, text, linkName);
 };
 
 /**
@@ -382,40 +382,56 @@ function(obj, recurse, showFuncs) {
 /**
  * Marshals args to public debug functions. In general, the debug level is an optional
  * first arg. If the first arg is a debug level, check it and then strip it from the args.
- * Returns a normalized list of args.
+ * The last argument is an optional name for the link from the left panel.
+ *
+ * Returns an object with the link name and a list of the arguments (other than level and
+ * link name).
  *
  * @param {array}	args				an arguments list
- * @param {boolean}	linkNameSpecified	if <code>true</code>, link text for left frame was provided
- * 
+ *
  * @private
  */
 AjxDebug.prototype._handleArgs =
-function(args, linkNameSpecified) {
-	// don't output anything if debugging is off, or timing is on
-	if (this._level == AjxDebug.NONE || this._showTiming) { return; }
+function(args) {
 
-	var msgLevel = AjxDebug.DBG1;
-	if (args.length > 1) {
-		if (typeof args[0] == "number" && typeof this._level == "number") {
-			msgLevel = args[0];
-			if (msgLevel > this._level) return;
-		} else {
-			// check for custom debug level
-			if (args[0] && args[0] != this._level) return;
+	// don't output anything if debugging is off, or timing is on
+	if (this._level == AjxDebug.NONE || this._showTiming || args.length == 0) { return; }
+
+	// convert args to a true Array so they're easier to deal with
+	var argsArray = new Array(args.length);
+	for (var i = 0; i < args.length; i++) {
+		argsArray[i] = args[i];
+	}
+
+	var result = {args:null, linkName:null};
+
+	// remove link name from arg list if present - check if last arg is *Request or *Response
+	if (argsArray.length > 1) {
+		var lastArg = argsArray[argsArray.length - 1];
+		if (lastArg && lastArg.indexOf && ((lastArg.indexOf(" ") == -1) && (/Request|Response$/.test(lastArg)))) {
+			result.linkName = lastArg;
+			argsArray.pop();
 		}
 	}
 
-	// NOTE: Can't just slice the items we want because args is not a true Array
-	var array = new Array(args.length);
-	var len = (linkNameSpecified) ? args.length - 1 : args.length;
-	for (var i = 0; i < len; i++) {
-		array[i] = args[i];
+	// check level if provided, strip it from args; level is either a number, or 1-5 lowercase letters
+	var userLevel = null;
+	var firstArg = argsArray[0];
+	var gotUserLevel = (typeof firstArg == "number" || (firstArg.length <= 5 && /^[a-z]+$/.test(firstArg)));
+	if (gotUserLevel) {
+		userLevel = firstArg;
+		argsArray.shift();
 	}
-	if (len > 1) {
-		array.shift();	// remove level
+	if (userLevel) {
+		if (typeof this._level == "number") {
+			if (typeof userLevel != "number" || (userLevel > this._level)) { return; }
+		} else {
+			if (userLevel != this._level) { return; }
+		}
 	}
+	result.args = argsArray;
 
-	return array;
+	return result;
 };
 
 AjxDebug.prototype._openDebugWindow =

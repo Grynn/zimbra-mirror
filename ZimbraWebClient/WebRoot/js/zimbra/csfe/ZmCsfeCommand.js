@@ -370,7 +370,7 @@ function(params) {
 
 	if (window.DBG) {
 		var ts = DBG._getTimeStamp();
-		DBG.println(AjxDebug.DBG1, ["<H4>", params.methodNameStr, params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</H4>"].join(""), params.methodNameStr);
+		DBG.println(["<b>", params.methodNameStr, params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</b>"].join(""), params.methodNameStr);
 		DBG.dumpObj(AjxDebug.DBG1, obj);
 	}
 
@@ -476,7 +476,7 @@ function(params) {
 
 	if (window.DBG) {
 		var ts = DBG._getTimeStamp();
-		DBG.println(AjxDebug.DBG1, ["<H4>", params.methodNameStr, params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</H4>"].join(""), params.methodNameStr);
+		DBG.println(["<b>", params.methodNameStr, params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</b>"].join(""), params.methodNameStr);
 		DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
 	}
 
@@ -580,7 +580,7 @@ function(response, params) {
 	}
 	if (window.DBG) {
 		var ts = DBG._getTimeStamp();
-		DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</H4>"].join(""), linkName);
+		DBG.println(["<b>RESPONSE", params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</b>"].join(""), linkName);
 	}
 
 	var obj = restResponse ? response.text : {};
