@@ -26,8 +26,8 @@ if [ ! -d ${mysql_directory}/bin ]; then
   exit 0
 fi
 
-if [ ! -d ${zimbra_tmp_directory} ]; then
-  mkdir -p ${zimbra_tmp_directory} > /dev/null 2>&1
+if [ ! -d ${zimbra_tmp_directory}/mysql ]; then
+  mkdir -p ${zimbra_tmp_directory}/mysql > /dev/null 2>&1
 fi
 
 zmassert -d ${mysql_directory}
@@ -40,7 +40,7 @@ zmassert -d `dirname ${mysql_pidfile}`
 # innodb will open the database before binding and writing out the pid
 # potentially corrupting the files
 # prevent multiple init scripts from running at the same time.
-initlockfile=${zimbra_tmp_directory}/mysql.server.lock
+initlockfile=${zimbra_tmp_directory}/mysql/mysql.server.lock
 checkInitLock() {
   if [ -f "$initlockfile" ]; then
     initpid=$(cat $initlockfile)
