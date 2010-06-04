@@ -99,10 +99,14 @@ sub collect_stats($$$) {
 }
 
 sub get_nginx_pid {
-    open(PID, "</opt/zimbra/log/nginx.pid") || die "cannot open nginx.pid: $!";
-    chomp(my $pid = <PID>);
-    close(PID);
-    $pid;
+    my $pid = 0;
+    if (open(PID, "</opt/zimbra/log/nginx.pid")) {
+        chomp($pid = <PID>);
+        close(PID);
+    } else {
+        print STDERR "zmstat-nginx: cannot open nginx.pid: $!\n";
+    }
+    return $pid;
 }
 
 sub delta_stat($$$$) {
@@ -128,8 +132,13 @@ sub main() {
         	$date = $currDate;
         }
     
+        my $nginx_pid;
+        while (!($nginx_pid = get_nginx_pid())) {
+            sleep(15);
+        }
         %pid_tree = get_pid_tree();
-        collect_stats(get_nginx_pid(), \%pid_tree, \%pid_stats);
+        collect_stats($nginx_pid, \%pid_tree, \%pid_stats);
+
     
         if ($prev_stats) {
             my %stats;
