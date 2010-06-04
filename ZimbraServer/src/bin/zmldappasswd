@@ -38,12 +38,20 @@ my $zimbra_home = getLocalConfig("zimbra_home");
 my $cur_rootdn_passwd = getLocalConfig("ldap_root_password");
 my $ldap_starttls_supported = getLocalConfig("ldap_starttls_supported");
 my $zimbra_tmp_directory = getLocalConfig("zimbra_tmp_directory");
+my $isLdapMaster = getLocalConfig("ldap_is_master");
+
+chomp($isLdapMaster);
+if ($isLdapMaster eq "true" ) {
+   $isLdapMaster = 1;
+} else {
+   $isLdapMaster = 0;
+}
 
 if ( !-d $zimbra_tmp_directory ) {
   File::Path::mkpath("$zimbra_tmp_directory");
 }
 
-getopts('arlnph',\%options) or die "Unable to set options\n";
+getopts('arclnph',\%options) or die "Unable to set options\n";
 
 if ($options{h})  {
    usage();
@@ -55,10 +63,19 @@ if ( $options{r} + $options{p} + $options{l} + $options{n} + $options{a} > 1) {
     exit 1;
 }
 
+if ( $options{c} && !$options{l} ) {
+  usage();
+  exit 1;
+}
+
+if ( $options{c} && $isLdapMaster ) {
+  usage();
+  exit 1;
+}
+
 if ($#ARGV == -1) {
     usage();
     exit 1;
-
 }
 
 my $password = $ARGV[0];
@@ -73,8 +90,8 @@ my $ldap_master = getLocalConfig("ldap_master_url");
 
 my $ldap;
 
-print "Updating local config and directory\n";
-if (! $options{r}) {
+print "Updating local config and LDAP\n";
+if (!$options{r} && !$options{c}) {
   $ldap = Net::LDAP->new("$ldap_master")  or  die "$@";
 } else {
   $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/')  or  die "$@";
@@ -104,44 +121,70 @@ if ( $options{r}) {
 } elsif ( $options{l} ) {
     setLocalConfig("ldap_replication_password", "$password");
     my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
-    $mesg = $ldap->modify('uid=zmreplica,cn=admins,cn=zimbra',
-                           replace => [ userPassword => $password] );
-    my $infile = "$zimbra_home/conf/zimbra.ldif";
-    my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
-    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
-    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
-    my $entry;
-    while( not $ldifin->eof ( ) ) {
-      $entry = $ldifin->read_entry ( );
-      if ( $ldifin->error ( ) ) {
-        print "Error msg: ", $ldifin->error ( ), "\n";
-        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
-      } else {
-          if ($entry->dn() eq "uid=zmreplica,cn=admins,cn=zimbra") {
-            $entry->replace (
-              userPassword => "$ssha_password",
-            );
+    if (!$options{c}) {
+        $mesg = $ldap->modify('uid=zmreplica,cn=admins,cn=zimbra',
+                               replace => [ userPassword => $password] );
+        my $infile = "$zimbra_home/conf/zimbra.ldif";
+        my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
+        my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+        my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+        my $entry;
+        while( not $ldifin->eof ( ) ) {
+          $entry = $ldifin->read_entry ( );
+          if ( $ldifin->error ( ) ) {
+            print "Error msg: ", $ldifin->error ( ), "\n";
+            print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+          } else {
+              if ($entry->dn() eq "uid=zmreplica,cn=admins,cn=zimbra") {
+                $entry->replace (
+                  userPassword => "$ssha_password",
+                );
+              }
+            $ldifout->write($entry);
           }
-        $ldifout->write($entry);
-      }
-    }
-    $ldifin->done ( ); 
-    $ldifout->done ( );
-    if ( -s $outfile ) {
-      my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
-      if ($rc != 0) {
-        print "Warning: Failed to backup $infile\n";
-      }
-      $rc=0xffff & system("/bin/mv -f $outfile $infile");
-      if ($rc != 0) {
-        print "Failed to move $outfile to $infile\nRestoring old configuration\n";
-        $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
-        if ($rc != 0) {
-          print "Failed to restore backup\n";
         }
-      } else {
-        system("/bin/rm -f $infile.bak");
-      }
+        $ldifin->done ( ); 
+        $ldifout->done ( );
+        if ( -s $outfile ) {
+          my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
+          if ($rc != 0) {
+            print "Warning: Failed to backup $infile\n";
+          }
+          $rc=0xffff & system("/bin/mv -f $outfile $infile");
+          if ($rc != 0) {
+            print "Failed to move $outfile to $infile\nRestoring old configuration\n";
+            $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
+            if ($rc != 0) {
+              print "Failed to restore backup\n";
+            }
+          } else {
+            system("/bin/rm -f $infile.bak");
+          }
+        }
+    } elsif (!$isLdapMaster)  {
+        $mesg = $ldap->search(
+            base => "olcDatabase={2}hdb,cn=config",
+            filter => "(olcSyncrepl=*)",
+            attrs => ['olcSyncrepl']
+        );
+        my $entry=$mesg->entry(0);
+        my $attr = $entry->get_value("olcSyncrepl");
+        my ($attr1, $attr2);
+        ($attr, $attr1) = split (/credentials=/, $attr, 2);
+        ($attr1, $attr2) = split (/filter=/, $attr1, 2);
+        $attr = $attr."credentials=";
+        $attr2 = " filter=".$attr2;
+        $attr1="$password";
+        $attr = $attr . $attr1 . $attr2;
+        $mesg = $ldap->modify(
+            $entry->dn,
+            replace => {
+                olcSyncrepl => "$attr",
+            }
+        );
+    } else {
+       print "Error: Trying to run a replica only change on a master.\n";
+       exit 1;
     }
 } elsif ( $options{p} ) {
     setLocalConfig("ldap_postfix_password", "$password");
@@ -321,15 +364,18 @@ $ldap->disconnect();
 #
 sub usage() {
 
-  print "Usage: $0 [-h] [-r] [-p] [-l] newpassword\n";
+  print "Usage: $0 [-h] [-r] [-p] [[-c]-l] newpassword\n";
   print "\t-h: display this help message\n";
   print "\t-a: change ldap_amavis_password\n";
   print "\t-l: change ldap_replication_password\n";
+  print "\t-c: Update ldap_replication_password on replica. Requires -l\n";
   print "\t-n: change ldap_nginx_password\n";
   print "\t-p: change ldap_postfix_password\n";
   print "\t-r: change ldap_root_passwd\n";
   print "\tOnly one of a, l, n, p, or r may be specified\n";
   print "\tWithout options zimbra_ldap_password is changed\n\n";
+  print "\tOption -c requires -l and must be run on a replica after\n";
+  print "\tchanging the password on the master (using -l by itself).\n\n";
   exit 1;
 
 }
