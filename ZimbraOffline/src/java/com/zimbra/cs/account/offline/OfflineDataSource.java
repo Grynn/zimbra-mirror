@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.mail.Session;
 
@@ -316,6 +315,13 @@ public class OfflineDataSource extends DataSource {
     @Override
     public boolean isSyncNeeded() throws ServiceException {
         return getType() == Type.imap ? ImapSync.isSyncNeeded(this) : null;
+    }
+
+    @Override
+    public void mailboxDeleted() {
+        if (getType() == Type.imap) {
+            ImapSync.reset(this.getId());
+        }
     }
 }
 

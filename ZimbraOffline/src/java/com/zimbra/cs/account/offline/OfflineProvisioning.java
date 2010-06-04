@@ -2064,7 +2064,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         mHasDirtyAccounts |= markChanged;
         
         cachedDataSources.remove(account.getId());
-        ImapSync.dataSourceDeleted(dataSourceId);
+        ImapSync.reset(dataSourceId);
     }
 
     @Override

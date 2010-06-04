@@ -131,7 +131,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
         }
     }
 
-    OfflineDataSource getDataSource() throws ServiceException {
+    private OfflineDataSource getDataSource() throws ServiceException {
         return (OfflineDataSource)OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
     }
     
@@ -308,6 +308,15 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
                 syncMan.processSyncException(ds, x);
         } catch (Error e) {
             syncMan.processSyncError(ds, e);
+        }
+    }
+    
+    @Override
+    public void deleteMailbox() throws ServiceException {
+        super.deleteMailbox();
+        OfflineDataSource ds = getDataSource();
+        if (ds != null) {
+            ds.mailboxDeleted();
         }
     }
 }
