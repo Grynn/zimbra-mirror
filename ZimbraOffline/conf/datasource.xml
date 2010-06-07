@@ -41,10 +41,18 @@
 
     <service name=".msexchange" saveToSent="true">
         <folder remotePath="INBOX" localPath="/Inbox" sync="true"/>
-        <folder remotePath="Junk E-mail" localPath="/Junk" sync="true"/>
-        <folder remotePath="Draft" ignore="true"/>
+        <folder remotePath="Junk E-Mail" localPath="/Junk" sync="true"/>
+        <folder remotePath="Drafts" ignore="true"/>
         <folder remotePath="Deleted Items" localPath="/Trash" sync="false"/>
         <folder remotePath="Sent Items" localPath="/Sent" sync="true"/>
+        <folder remotePath="Calendar" ignore="true"/>
+        <folder remotePath="Contacts" ignore="true"/>
+        <folder remotePath="Tasks" ignore="true"/>
+        <folder remotePath="Outbox" ignore="true"/>
+        <folder remotePath="Sync Issues" ignore="true"/>
+        <folder remotePath="Sync Issues/Conflicts" ignore="true"/>
+        <folder remotePath="Sync Issues/Local Failures" ignore="true"/>
+        <folder remotePath="Sync Issues/Server Failures" ignore="true"/>
     </service>
 
     <service name="me.com" saveToSent="true">
