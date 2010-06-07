@@ -1191,13 +1191,17 @@ function(htmlElId)  {
  */
 DwtControl.findControl =
 function(htmlEl)  {
+
+	// FF 3.5 throws protection error if we dereference a chrome element, so bail
+	if (AjxEnv.isFirefox3_5up && !AjxEnv.isFirefox3_6up) {
+		var s = HTMLElement.prototype.toString.call(htmlEl);
+		if (s == '[xpconnect wrapped native prototype]' || s == '[object XULElement]') { return null; }
+	}
+
 	while (htmlEl) {
-		try {
-			// catch Firefox bug that throws "Permission denied" exception
-			if (htmlEl.id && DwtControl.ALL_BY_ID && DwtControl.ALL_BY_ID[htmlEl.id]) {
-				return DwtControl.ALL_BY_ID[htmlEl.id];
-			}
-		} catch (ex) { return null; }
+		if (htmlEl.id && DwtControl.ALL_BY_ID && DwtControl.ALL_BY_ID[htmlEl.id]) {
+			return DwtControl.ALL_BY_ID[htmlEl.id];
+		}
 		htmlEl = htmlEl.parentNode;
 	}
 	return null;
