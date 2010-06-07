@@ -220,6 +220,46 @@
 	    	<param name="ext.dir" value="BulkProvision"/>
 			<param name="ext.name" value="com_zimbra_bulkprovision" />
 	  	</antcall>
+
+         <antcall target="deploy">
+	    	<param name="ext.dir" value="license_zimlet"/>
+			<param name="ext.name" value="com_zimbra_license" />
+	  	</antcall>
+
+        <antcall target="deploy">
+	    	<param name="ext.dir" value="com_zimbra_convertd"/>
+			<param name="ext.name" value="com_zimbra_convertd" />
+	  	</antcall>
+    </target>
+
+    <target name="deploy-appliance-zimlets"
+            description="deploy all the applicance admin extensions">
+
+		<antcall target="deploy-zimlet">
+	    	<param name="ext.dir" value="Dashboard"/>
+			<param name="ext.name" value="com_zimbra_dashboard" />
+	  	</antcall>
+
+        <antcall target="deploy">
+	    	<param name="ext.dir" value="CertificateMgr"/>
+			<param name="ext.name" value="com_zimbra_cert_manager" />
+	  	</antcall>
+
+        <antcall target="deploy">
+	    	<param name="ext.dir" value="BulkProvision"/>
+			<param name="ext.name" value="com_zimbra_bulkprovision" />
+	  	</antcall>
+
+        <antcall target="deploy">
+	    	<param name="ext.dir" value="license_zimlet"/>
+			<param name="ext.name" value="com_zimbra_license" />
+	  	</antcall>
+
+        <antcall target="deploy">
+	    	<param name="ext.dir" value="com_zimbra_convertd"/>
+			<param name="ext.name" value="com_zimbra_convertd" />
+	  	</antcall>
+        <!-- need to deploy convertd as well -->
     </target>
    
 </project>
