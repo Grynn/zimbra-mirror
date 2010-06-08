@@ -32,7 +32,7 @@ ZaTabView.XFormModifiers["ZaApplianceAdvancedToolsView"] = new Array();
 
 ZaApplianceAdvancedToolsView.prototype.getTitle =
 function () {
-	return ZaMsg.GlobalConfig_view_title;
+	return com_zimbra_dashboard.AdvancedToolsTabTitle;
 }
 
 ZaApplianceAdvancedToolsView.onRepeatRemove =

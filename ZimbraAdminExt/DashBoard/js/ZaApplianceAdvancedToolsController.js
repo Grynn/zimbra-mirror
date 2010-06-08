@@ -58,7 +58,7 @@ ZaApplianceAdvancedToolsController.initToolbarMethod =
 function () {
 	this._toolbarOperations[ZaOperation.INSTALL_ZCS_LICENSE] = new ZaOperation(ZaOperation.INSTALL_ZCS_LICENSE, com_zimbra_dashboard.InstallLicenseButton, com_zimbra_dashboard.InstallLicenseButton_tt, "UpdateLicense", "UpdateLicense", new AjxListener(this, this.installLicenseButtonListener));
 	this._toolbarOperations[ZaOperation.INSTALL_ZCS_CERTIFICATE] = new ZaOperation(ZaOperation.INSTALL_ZCS_CERTIFICATE, com_zimbra_dashboard.TBB_launch_cert_wizard, com_zimbra_dashboard.TBB_launch_cert_wizard_tt, "InstallCertificate", "InstallCertificate", new AjxListener(this, this.installCertListener));
-	this._toolbarOperations[ZaOperation.MIGRATION_WIZARD] = new ZaOperation(ZaOperation.MIGRATION_WIZARD, com_zimbra_dashboard.TBB_migration_wizard, com_zimbra_dashboard.TBB_migration_wizard_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.openMigrationWizard));
+	this._toolbarOperations[ZaOperation.MIGRATION_WIZARD] = new ZaOperation(ZaOperation.MIGRATION_WIZARD, com_zimbra_dashboard.TBB_migration_wizard, com_zimbra_dashboard.TBB_migration_wizard_tt, "MigrationWiz", "MigrationWiz", new AjxListener(this, this.openMigrationWizard));
 	this._toolbarOperations[ZaOperation.ACCOUNT_IMPORT_WIZARD] = new ZaOperation(ZaOperation.ACCOUNT_IMPORT_WIZARD, com_zimbra_dashboard.NewButton_Import, com_zimbra_dashboard.NewButton_Import_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.openBulkProvisionDialog));
 	this._toolbarOrder.push(ZaOperation.INSTALL_ZCS_LICENSE);
 	this._toolbarOrder.push(ZaOperation.INSTALL_ZCS_CERTIFICATE);
