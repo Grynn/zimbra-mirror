@@ -1188,8 +1188,21 @@ function(val, check) {
 /////////////
 //	NEW STUFF FROM OWEN
 /////////////
-Dwt.byId = function(id) {
-	return (typeof id == "string" ? document.getElementById(id) : id);
+Dwt.byId = function(id, ancestor) {
+	if (!ancestor) {
+		return (typeof id == "string" ? document.getElementById(id) : id);
+	} else {
+		// Find node with id that descends from ancestor (also works on DOM trees that are not attached to the document object)
+		if (ancestor == id || ancestor.id == id)
+			return ancestor;
+		for (var i=0; i<ancestor.childNodes.length; i++) {
+			if (ancestor.childNodes[i].nodeType == 1) {
+				var cnode = Dwt.byId(id, ancestor.childNodes[i]);
+				if (cnode) return cnode;
+			}
+		}
+		return null;
+	}
 }
 Dwt.byTag = function(tagName) {
 	return document.getElementsByTagName(tagName);
