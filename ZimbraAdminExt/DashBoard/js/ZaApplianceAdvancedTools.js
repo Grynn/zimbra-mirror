@@ -13,8 +13,8 @@
  * ***** END LICENSE BLOCK *****
  */
 
-ZaApplianceSettings = function() {
-	ZaItem.call(this,"ZaApplianceSettings");
+ZaApplianceAdvancedTools = function() {
+	ZaItem.call(this,"ZaApplianceAdvancedTools");
 	this.attrs = new Object();
 	this.type = ZaItem.GLOBAL_CONFIG;
 	this.attrsToGet = [ZaGlobalConfig.A_zimbraFileUploadMaxSize,ZaGlobalConfig.A_zimbraMtaRelayHost,ZaGlobalConfig.A_zimbraAttachmentsBlocked, 
@@ -22,17 +22,41 @@ ZaApplianceSettings = function() {
 	                   ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly,ZaGlobalConfig.A_zimbraDefaultDomainName];
 }
 
-ZaApplianceSettings.prototype = new ZaItem;
-ZaApplianceSettings.prototype.constructor = ZaApplianceSettings;
-ZaItem.loadMethods["ZaApplianceSettings"] = new Array();
-ZaItem.modifyMethods["ZaApplianceSettings"] = new Array();
-ZaApplianceSettings.license = "license";
+ZaApplianceAdvancedTools.prototype = new ZaItem;
+ZaApplianceAdvancedTools.prototype.constructor = ZaApplianceAdvancedTools;
+ZaItem.loadMethods["ZaApplianceAdvancedTools"] = new Array();
+ZaItem.modifyMethods["ZaApplianceAdvancedTools"] = new Array();
+ZaApplianceAdvancedTools.license = "license";
 ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly = "zimbraAttachmentsViewInHtmlOnly";
-ZaApplianceSettings.A_serverName = "serverName";
-ZaApplianceSettings.A_server = "server";
-ZaApplianceSettings.myXModel = {
+ZaApplianceAdvancedTools.A_certs = "certs";
+ZaApplianceAdvancedTools.A_serverName = "serverName";
+ZaApplianceAdvancedTools.A_server = "server";
+ZaItem.ADVANCED_TOOLS = "advancedtools";
+
+ZaApplianceAdvancedTools.myXModel = {
 		items: [
-		    {id:ZaApplianceSettings.A_serverName, type: _STRING_, ref:ZaApplianceSettings.A_server + "/attrs/" + ZaServer.A_ServiceHostname},    
+		    {id:ZaApplianceAdvancedTools.A_serverName, type: _STRING_, ref:ZaApplianceAdvancedTools.A_server + "/attrs/" + ZaServer.A_ServiceHostname},    
+			//license
+			{id:ZaApplianceLicense.A_accountsLimit, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_accountsLimit},
+			{id:ZaApplianceLicense.A_attachmentConversionEnabled, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_attachmentConversionEnabled},
+			{id:ZaApplianceLicense.A_backupEnabled, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_backupEnabled },
+			{id:ZaApplianceLicense.A_crossMailboxSearchEnabled, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_crossMailboxSearchEnabled },
+			{id:ZaApplianceLicense.A_hierarchicalStorageManagementEnabled, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_hierarchicalStorageManagementEnabled },	
+			{id:ZaApplianceLicense.A_iSyncAccountsLimit, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_iSyncAccountsLimit },
+			{id:ZaApplianceLicense.A_installType, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_installType },
+			{id:ZaApplianceLicense.A_issuedOn, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_issuedOn },
+			{id:ZaApplianceLicense.A_issuedToEmail, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_issuedToEmail },
+			{id:ZaApplianceLicense.A_issuedToName, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_issuedToName },		
+			{id:ZaApplianceLicense.A_licenseId, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_licenseId },
+			{id:ZaApplianceLicense.A_MAPIConnectorAccountsLimit, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_MAPIConnectorAccountsLimit },
+			{id:ZaApplianceLicense.A_mobileSyncEnabled, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_mobileSyncEnabled},
+			{id:ZaApplianceLicense.A_mobileSyncAccountsLimit, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_mobileSyncAccountsLimit },
+			{id:ZaApplianceLicense.A_resellerName, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_resellerName },
+			{id:ZaApplianceLicense.A_validFrom, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_validFrom },
+			{id:ZaApplianceLicense.A_validUntil, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/" + ZaApplianceLicense.A_validUntil },
+			{id:ZaApplianceLicense.InstallStatusMsg, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/"+ ZaApplianceLicense.InstallStatusMsg},
+			{id:ZaApplianceLicense.InstallStatusCode, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/"+ ZaApplianceLicense.InstallStatusCode},
+			{id:ZaApplianceLicense.Info_TotalAccounts, type: _STRING_, ref:ZaApplianceAdvancedTools.license + "/"+ ZaApplianceLicense.Info_TotalAccounts},
 			
 	       //config
 			{id:ZaGlobalConfig.A_zimbraFileUploadMaxSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES },
@@ -44,11 +68,15 @@ ZaApplianceSettings.myXModel = {
 			{id:ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 			{id:ZaGlobalConfig.A_zimbraDefaultDomainName, ref:"attrs/" + ZaGlobalConfig.A_zimbraDefaultDomainName, type:_STRING_, maxLength: 256},
 	        {id:ZaGlobalConfig.A2_blocked_extension_selection, type:_LIST_},
-	        {id:ZaGlobalConfig.A2_common_extension_selection, type:_LIST_}			
+	        {id:ZaGlobalConfig.A2_common_extension_selection, type:_LIST_},			
+			//certificates
+			{id:ZaApplianceAdvancedTools.A_certs, ref:ZaApplianceAdvancedTools.A_certs, type:_LIST_, 
+				listItem:{type:_OBJECT_,items:ZaApplianceSSLCert.myXModel.items}
+			}	
 		]
 };
 
-ZaApplianceSettings.loadMethod = 
+ZaApplianceAdvancedTools.loadMethod = 
 function(by, val) {
 	var soapDoc, params, resp;
 	
@@ -58,6 +86,15 @@ function(by, val) {
     var getCfgDoc = soapDoc.set("GetAllConfigRequest", null, null, ZaZimbraAdmin.URN);
     getCfgDoc.setAttribute("attrs", this.attrsToGet.join(","));
     
+    var getLicDoc = soapDoc.set("GetLicenseRequest", null, null, ZaZimbraAdmin.URN);
+	
+    var getCertsDoc = soapDoc.set("GetCertRequest", null, null, ZaZimbraAdmin.URN);
+	getCertsDoc.setAttribute("type", "all");
+	getCertsDoc.setAttribute("server", ZaDashBoard.server.id);
+	
+	this[ZaApplianceAdvancedTools.license] = new ZaApplianceLicense();
+	this[ZaApplianceAdvancedTools.A_certs] = [];
+	
 	params = new Object();
 	params.soapDoc = soapDoc;
 	var busyId = Dwt.getNextId();
@@ -71,7 +108,7 @@ function(by, val) {
 	try {
 		var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
 		if(respObj.isException && respObj.isException()) {
-			ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaApplianceSettings.loadMethod", null, false);
+			ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaApplianceAdvancedTools.loadMethod", null, false);
 		    hasError  = true ;
             lastException = ex ;
         } else if(respObj.Body.BatchResponse.Fault) {
@@ -82,7 +119,7 @@ function(by, val) {
 			if (fault) {
 				// JS response with fault
 				var ex = ZmCsfeCommand.faultToEx(fault);
-				ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaApplianceSettings.loadMethod", null, false);
+				ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaApplianceAdvancedTools.loadMethod", null, false);
                 hasError = true ;
                 lastException = ex ;
             }
@@ -93,6 +130,30 @@ function(by, val) {
 				resp = batchResp.GetAllConfigResponse[0];
 				this.initFromJS(resp);
 			}
+			
+			if(batchResp.GetLicenseResponse) {
+				resp = batchResp.GetLicenseResponse[0];
+				if(resp && resp.license && resp.license[0]) {
+					this[ZaApplianceAdvancedTools.license].initFromJS(resp.license[0]);
+				}
+				if(resp && resp.info && resp.info[0]) {
+					this[ZaApplianceAdvancedTools.license].initFromJS(resp.info[0]);
+				}
+			}
+			
+			if(batchResp.GetCertResponse) {
+				resp = batchResp.GetCertResponse[0];
+				if(resp && resp.cert && resp.cert.length) {
+					var cnt = resp.cert.length;
+					for(var i=0;i<cnt;i++) {
+						if(resp.cert[i]) {
+							var certObj = {};
+							ZaApplianceSSLCert.initFromJS.call(certObj,resp.cert[i]);
+						}
+						this[ZaApplianceAdvancedTools.A_certs].push(certObj);
+					}
+				}
+			}			
 		}	
 	    if (hasError) {
 	        throw lastException;
@@ -101,9 +162,9 @@ function(by, val) {
 		throw(ex);
 	}
 }
-ZaItem.loadMethods["ZaApplianceSettings"].push(ZaApplianceSettings.loadMethod);
+ZaItem.loadMethods["ZaApplianceAdvancedTools"].push(ZaApplianceAdvancedTools.loadMethod);
 
-ZaApplianceSettings.prototype.initFromJS = function(obj) {
+ZaApplianceAdvancedTools.prototype.initFromJS = function(obj) {
 	ZaItem.prototype.initFromJS.call(this, obj);
 	
 	if(AjxUtil.isString(this.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])) {
@@ -160,7 +221,7 @@ ZaApplianceSettings.prototype.initFromJS = function(obj) {
 	}
 }
 	
-ZaApplianceSettings.modifyMethod = function (mods) {
+ZaApplianceAdvancedTools.modifyMethod = function (mods) {
 	var soapDoc = AjxSoapDoc.create("ModifyConfigRequest", ZaZimbraAdmin.URN, null);
 	for (var aname in mods) {
 		//multy value attribute
@@ -199,4 +260,4 @@ ZaApplianceSettings.modifyMethod = function (mods) {
 	command.invoke(params);
 	ZaGlobalConfig.isDirty = true;
 }
-ZaItem.modifyMethods["ZaApplianceSettings"].push(ZaApplianceSettings.modifyMethod);
+ZaItem.modifyMethods["ZaApplianceAdvancedTools"].push(ZaApplianceAdvancedTools.modifyMethod);

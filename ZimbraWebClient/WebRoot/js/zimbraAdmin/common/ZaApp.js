@@ -907,7 +907,7 @@ function(viewName, elements, tabParams) {
 	 */
 	
 	if (tabParams.openInNewTab) {
-		this.createTab (tabParams.tabId);
+		this.createTab (tabParams);
 	}else{
 		this.updateTab (tabParams.tab, tabParams.tabId);
 	}
@@ -915,7 +915,18 @@ function(viewName, elements, tabParams) {
 }
 
 ZaApp.prototype.createTab =
-function (tabId) {
+function () {
+	if (arguments.length == 0) return;
+	var tabId;
+	var closable = true;
+	var selected = true;
+	if (typeof arguments[0] == "object") {
+		tabId = arguments[0]["tabId"];
+		closable = AjxUtil.isEmpty(arguments[0]["closable"]) ? true : false;
+		selected = AjxUtil.isEmpty(arguments[0]["selected"]) ? true : false;
+	} else {
+		tabId = arguments[0]; 
+	}
 	var tabGroup = this.getTabGroup() ;
 	var appView = this.getViewById(tabId) [ZaAppViewMgr.C_APP_CONTENT] ;
 	var params = {
@@ -923,8 +934,8 @@ function (tabId) {
 		icon: appView.getTabIcon (),
 		label: appView.getTabTitle () ,
 		toolTip: appView.getTabToolTip () || appView.getTabTitle () ,
-		closable: true ,
-		selected: true
+		closable: closable,
+		selected: selected
 	}
 	
 	var tab = new ZaAppTab (tabGroup,params );

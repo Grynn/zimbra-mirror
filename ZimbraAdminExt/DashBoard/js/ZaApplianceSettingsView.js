@@ -428,8 +428,8 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 				 ]}
 			]};
     switchItems.push (case2) ;
-	_tab3 = ++this.TAB_INDEX;
-    tabBarChoices.push ({value:_tab3, label:com_zimbra_dashboard.LicenseTabTitle});
+	//_tab3 = ++this.TAB_INDEX;
+   // tabBarChoices.push ({value:_tab3, label:com_zimbra_dashboard.LicenseTabTitle});
 	var case3 = {type:_ZATABCASE_, caseKey:_tab3, numCols:2, colSizes:["300px","*"],id:"appliance_settings_license_tab",
 		items:[
             {type: _SPACER_, height: 10},
@@ -470,10 +470,10 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
             }
         ]
     };    
-	switchItems.push(case3);
+	//switchItems.push(case3);
     
-	_tab4 = ++this.TAB_INDEX;
-    tabBarChoices.push ({value:_tab4, label:com_zimbra_dashboard.CertificatesTabTitle});
+	//_tab4 = ++this.TAB_INDEX;
+   // tabBarChoices.push ({value:_tab4, label:com_zimbra_dashboard.CertificatesTabTitle});
     var case4 = 	
     {type:_ZATABCASE_, caseKey:_tab4, id:"appliance_settings_form_certificates_tab", colSizes:["275px","275px"],numCols:2, items:[
 		//{type:_OUTPUT_,ref:ZaApplianceSettings.A_serverName, label:com_zimbra_dashboard.CERT_SERVER_NAME,labelLocation:_LEFT_},
@@ -506,7 +506,7 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 			]
 		}
 	]}
-    switchItems.push(case4);
+   // switchItems.push(case4);
     xFormObject.items = [
 		{type:_TAB_BAR_,  ref:ZaModel.currentTab,id:"xform_tabbar",
 		 	containerCssStyle: "padding-top:0px",

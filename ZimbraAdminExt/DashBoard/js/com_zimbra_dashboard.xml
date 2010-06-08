@@ -4,6 +4,7 @@
     <include>ZaApplianceStatus.js</include>
     <include>ZaApplianceSSLCert.js</include>
     <include>ZaApplianceSettings.js</include>
+    <include>ZaApplianceAdvancedTools.js</include>
     <include>ZaDashBoard.js</include>
     <include>ZaApplianceSSLCertWizard.js</include>
     <include>ZaApplianceLicenseWizard.js</include>
@@ -12,6 +13,8 @@
     <include>ZaDashBoardListView.js</include>
     <include>ZaApplianceSettingsView.js</include>
     <include>ZaApplianceSettingsController.js</include>
+    <include>ZaApplianceAdvancedToolsView.js</include>
+    <include>ZaApplianceAdvancedToolsController.js</include>    
     <include>ZaApplianceDomainXWizard.js</include>
     <disableUIUndeploy>FALSE</disableUIUndeploy>
 </zimlet>

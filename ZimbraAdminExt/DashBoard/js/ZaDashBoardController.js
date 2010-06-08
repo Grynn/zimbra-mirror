@@ -105,8 +105,8 @@ function () {
     this._toolbarOrder.push(ZaOperation.VIEW_MAIL);
     this._popupOperations[ZaOperation.VIEW_MAIL]=new ZaOperation(ZaOperation.VIEW_MAIL,ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, this.viewMailListener));
     this._toolbarOrder.push(ZaOperation.SEP);
-	this._toolbarOperations[ZaOperation.MANAGE_SETITNGS] = new ZaOperation(ZaOperation.MANAGE_PROFILES, com_zimbra_dashboard.ServerSettings, com_zimbra_dashboard.ServerSettings_tt, "GlobalSettings", "GlobalSettings", new AjxListener(this, this.openSettingsView));
-	this._toolbarOrder.push(ZaOperation.MANAGE_SETITNGS);
+//	this._toolbarOperations[ZaOperation.MANAGE_SETITNGS] = new ZaOperation(ZaOperation.MANAGE_PROFILES, com_zimbra_dashboard.ServerSettings, com_zimbra_dashboard.ServerSettings_tt, "GlobalSettings", "GlobalSettings", new AjxListener(this, this.openSettingsView));
+//	this._toolbarOrder.push(ZaOperation.MANAGE_SETITNGS);
     this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);	
 	this._toolbarOrder.push(ZaOperation.NONE);
 	this._toolbarOperations[ZaOperation.PAGE_BACK2] = new ZaOperation(ZaOperation.PAGE_BACK2, ZaMsg.Previous, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, this.prevPageListener));
@@ -143,7 +143,8 @@ function(openInNewTab) {
 		var tabParams = {
 			openInNewTab: false,
 			tabId: this.getContentViewId(),
-			tab: this.getMainTab() 
+			tab: this.getMainTab(),
+			closable:false
 		}
 		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 		this._UICreated = true;
@@ -167,6 +168,8 @@ function(openInNewTab) {
     		ZaDashBoard.server = serverArray[0];
     	}
     }	
+    this.openSettingsView();
+    this.openAdvancedToolsView();
 };
 
 ZaDashBoardController.prototype.editButtonListener = function(ev) {
@@ -255,6 +258,12 @@ ZaDashBoardController.prototype.editItem = function (item) {
 ZaDashBoardController.prototype.openSettingsView = function () {
 	if (! this.selectExistingTabByItemId(ZaItem.GLOBAL_CONFIG,ZaApplianceSettingsView)){
 		ZaApp.getInstance().getApplianceSettingsController().show(new ZaApplianceSettings());
+	}
+};
+
+ZaDashBoardController.prototype.openAdvancedToolsView = function () {
+	if (! this.selectExistingTabByItemId(ZaItem.ADVANCED_TOOLS,ZaApplianceAdvancedToolsView)){
+		ZaApp.getInstance().getApplianceAdvancedToolsController().show(new ZaApplianceAdvancedTools());
 	}
 };
 
