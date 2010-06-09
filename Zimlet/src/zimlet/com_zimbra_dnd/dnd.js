@@ -135,6 +135,9 @@ Com_Zimbra_DnD.prototype._initHTML5 = function () {
 Com_Zimbra_DnD.prototype.onShowView =
 function(viewId, isNewView) {
     var isWindowsSafari = (AjxEnv.isWindows && !AjxEnv.isChrome && !AjxEnv.isFirefox);
+    if(AjxEnv.isDesktop) {    //bug:
+    	isWindowsSafari = false;
+    }
     if(this.isHTML5 && !AjxEnv.isIE && !isWindowsSafari) {
         if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf(ZmId.VIEW_COMPOSE) != -1) {
             var curView = appCtxt.getAppViewMgr().getCurrentView();
