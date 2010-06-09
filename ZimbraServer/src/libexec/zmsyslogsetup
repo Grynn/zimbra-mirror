@@ -142,7 +142,7 @@ sub updateSyslogNG {
   }
   close(SYSFH);
   my $zsrc = "zimbra_src";
-  if ( $platform eq "SLES11_64" || $platform eq "SLES11" ) {
+  if ( $platform eq "SLES11_64" || $platform eq "SLES11" || $platform eq "SuSEES10" || $platform eq "SLES10_64" ) {
     #use native src on SLES11_64
     $zsrc="src";
   } elsif ( $platform eq "RHEL5" || $platform eq "RHEL5_64" || $platform eq "CentOS5" || $platform eq "CentOS5_64") {
