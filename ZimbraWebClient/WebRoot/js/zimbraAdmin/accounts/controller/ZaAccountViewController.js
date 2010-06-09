@@ -356,7 +356,9 @@ function () {
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 			this.popupErrorDialog(ZaMsg.FAILED_CREATE_ACCOUNT_1, ex, true);
-		} else {
+		} else if(ex.code == ZmCsfeException.NO_SUCH_COS) {
+			this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[tmpObj.attrs[ZaAccount.A_COSId]]), ex, true);
+        } else {
 			this._handleException(ex, "ZaAccountViewController.prototype._saveChanges", null, false);	
 		}
 		return false;

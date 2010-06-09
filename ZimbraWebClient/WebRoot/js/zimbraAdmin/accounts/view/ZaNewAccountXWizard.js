@@ -128,6 +128,9 @@ function() {
 			case ZmCsfeException.ACCT_EXISTS:
 				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
 			break;
+			case ZmCsfeException.NO_SUCH_COS:
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[this._containedObject.attrs[ZaAccount.A_COSId]]), ex, true);
+		    break;
 			case ZmCsfeException.ACCT_INVALID_PASSWORD:
 				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_INVALID, ex);
 				ZaApp.getInstance().getAppCtxt().getErrorDialog().showDetail(true);
