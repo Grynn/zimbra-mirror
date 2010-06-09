@@ -215,45 +215,56 @@ ZaDashBoardView.restartCallback = function() {
 	
 }
 
+ZaDashBoardView.prototype.resetSearchPageCounts = function () {
+    ZaApp.getInstance().getDashBoardController().currentPageNum = 1;
+}
+
 ZaDashBoardView.prototype.accFilterSelected = function() {	
 	this.setIconForSearchMenuButton ("Account");
+    this.resetSearchPageCounts () ;
 	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Accounts);
 	this.searchAddresses([ZaSearch.ACCOUNTS]);
 }
 
 ZaDashBoardView.prototype.dlFilterSelected = function() {
 	this.setIconForSearchMenuButton ("DistributionList");
-	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_DLs);	
+	this.resetSearchPageCounts () ;
+    this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_DLs);
 	this.searchAddresses([ZaSearch.DLS]);
 }
 
 ZaDashBoardView.prototype.aliasFilterSelected = function() {
 	this.setIconForSearchMenuButton ("AccountAlias");
-	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Aliases);
+	this.resetSearchPageCounts () ;
+    this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Aliases);
 	this.searchAddresses([ZaSearch.ALIASES]);
 }
 
 ZaDashBoardView.prototype.resFilterSelected = function() {
 	this.setIconForSearchMenuButton ("Resource");	
-	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Resources);	
+	this.resetSearchPageCounts () ;
+    this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Resources);
 	this.searchAddresses([ZaSearch.RESOURCES]);
 }
 
 ZaDashBoardView.prototype.domainFilterSelected = function() {
 	this.setIconForSearchMenuButton ("Domain");
-	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Domains);
+	this.resetSearchPageCounts () ;
+    this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Domains);
 	this.searchAddresses([ZaSearch.DOMAINS]);
 }
 
 ZaDashBoardView.prototype.allFilterSelected = function() {
 	this.setIconForSearchMenuButton ("SearchAll");
-	this.setLabelForSearchMenuButton(com_zimbra_dashboard.SearchFilter_All);	
+	this.resetSearchPageCounts () ;
+    this.setLabelForSearchMenuButton(com_zimbra_dashboard.SearchFilter_All);
 	this.searchAddresses([ZaSearch.ACCOUNTS, ZaSearch.ALIASES, ZaSearch.DLS, ZaSearch.RESOURCES]);
 }
 
 ZaDashBoardView.prototype.cosFilterSelected = function() {
 	this.setIconForSearchMenuButton ("COS");
-	this.setLabelForSearchMenuButton(com_zimbra_dashboard.SearchFilter_Profiles);	
+	this.resetSearchPageCounts () ;
+    this.setLabelForSearchMenuButton(com_zimbra_dashboard.SearchFilter_Profiles);
 	this.searchAddresses([ZaSearch.COSES]);
 }
 
