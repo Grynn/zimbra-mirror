@@ -26,7 +26,8 @@ ZaApplianceAdvancedToolsController = function(appCtxt, container) {
 	this._UICreated = false;
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm#appliance/zap_managing_the_server_settings.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this.objType = ZaEvent.S_GLOBALCONFIG;
-	this.tabConstructor = ZaApplianceAdvancedToolsView;					
+	this.tabConstructor = ZaApplianceAdvancedToolsView;	
+	this.loaded = false;
 }
 
 ZaApplianceAdvancedToolsController.prototype = new ZaXFormViewController();
@@ -60,13 +61,25 @@ function () {
 	this._toolbarOperations[ZaOperation.INSTALL_ZCS_CERTIFICATE] = new ZaOperation(ZaOperation.INSTALL_ZCS_CERTIFICATE, com_zimbra_dashboard.TBB_launch_cert_wizard, com_zimbra_dashboard.TBB_launch_cert_wizard_tt, "InstallCertificate", "InstallCertificate", new AjxListener(this, this.installCertListener));
 	this._toolbarOperations[ZaOperation.MIGRATION_WIZARD] = new ZaOperation(ZaOperation.MIGRATION_WIZARD, com_zimbra_dashboard.TBB_migration_wizard, com_zimbra_dashboard.TBB_migration_wizard_tt, "MigrationWiz", "MigrationWiz", new AjxListener(this, this.openMigrationWizard));
 	this._toolbarOperations[ZaOperation.ACCOUNT_IMPORT_WIZARD] = new ZaOperation(ZaOperation.ACCOUNT_IMPORT_WIZARD, com_zimbra_dashboard.NewButton_Import, com_zimbra_dashboard.NewButton_Import_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.openBulkProvisionDialog));
+	this._toolbarOperations[ZaOperation.REFRESH] = new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshButtonListener));
 	this._toolbarOrder.push(ZaOperation.INSTALL_ZCS_LICENSE);
 	this._toolbarOrder.push(ZaOperation.INSTALL_ZCS_CERTIFICATE);
 	this._toolbarOrder.push(ZaOperation.MIGRATION_WIZARD);
 	this._toolbarOrder.push(ZaOperation.ACCOUNT_IMPORT_WIZARD);
+	this._toolbarOrder.push(ZaOperation.REFRESH);
 }
 ZaController.initToolbarMethods["ZaApplianceAdvancedToolsController"].push(ZaApplianceAdvancedToolsController.initToolbarMethod);
 
+ZaApplianceAdvancedToolsController.prototype.onOpen = function () {
+	if(!this.loaded) {
+		this._currentObject.load();
+		this._currentObject[ZaModel.currentTab] = "1"
+		this._currentObject.id = ZaItem.ADVANCED_TOOLS;
+	    this._view.setDirty(false);
+	    this._view.setObject(this._currentObject);
+	    this.loaded = true;
+	}
+}
 
 ZaApplianceAdvancedToolsController.setViewMethod = function (item) {
     try {
@@ -80,16 +93,18 @@ ZaApplianceAdvancedToolsController.setViewMethod = function (item) {
         var elements = new Object();
         elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
         elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+        var selListener = new AjxListener(this, ZaApplianceAdvancedToolsController.prototype.onOpen);
         var tabParams = {
             openInNewTab: true,
             tabId: this.getContentViewId(),
             closable:false,
-            selected:false
+            selected:false,
+            onOpen:selListener
         }
         ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
         ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
-       // ZaApp.getInstance().pushView(this.getContentViewId());        		
-        item.load();
+       // ZaApp.getInstance().pushView(this.getContentViewId()); 
+       // item.load();
         item[ZaModel.currentTab] = "1"
         item.id = ZaItem.GLOBAL_CONFIG;
         this._view.setDirty(false);
@@ -130,6 +145,14 @@ ZaApplianceAdvancedToolsController.prototype.openMigrationWizard = function () {
 		this._handleException(ex, "ZaApplianceAdvancedToolsController.prototype.openMigrationWizard", null, false);
 	}
 };
+
+ZaApplianceAdvancedToolsController.prototype.refreshButtonListener = function(ev) {
+	this._currentObject.load();
+	this._currentObject.id = ZaItem.ADVANCED_TOOLS;
+    this._view.setDirty(false);
+    this._view.setObject(this._currentObject);
+    this.loaded = true;	
+}
 
 ZaApplianceAdvancedToolsController.prototype.openBulkProvisionDialog = function () {
     try {
@@ -185,15 +208,16 @@ ZaApplianceAdvancedToolsController.prototype.finishCertificateWizard = function(
 		}else{
 			throw new Exeption ("Unknow installation type") ;		
 		}
-		
-		var callback = new AjxCallback(this, this.certificateInstallCallback);
+		var busyId = Dwt.getNextId();
+		var callback = new AjxCallback(this, this.certificateInstallCallback, {busyId:busyId});
 		var params = {
 			type: type,
 			validation_days: validationDays,
 			comm_cert: this.certificateInstallWizard.uploadResults,
             subject: this.certificateInstallWizard._containedObject.attrs,
             keysize: this.certificateInstallWizard._containedObject.keysize,
-			callback: callback 
+			callback: callback,
+			busyId:busyId
 		}
 		ZaApplianceSSLCert.installCert (params, ZaDashBoard.server.id) ;
 			
@@ -204,7 +228,7 @@ ZaApplianceAdvancedToolsController.prototype.finishCertificateWizard = function(
 	}	
 }
 
-ZaApplianceAdvancedToolsController.prototype.certificateInstallCallback = function (resp){		
+ZaApplianceAdvancedToolsController.prototype.certificateInstallCallback = function (params,resp){		
 	try {
 		if (resp._isException) {
 			var detailMsg = resp._data.msg ;			
@@ -214,8 +238,9 @@ ZaApplianceAdvancedToolsController.prototype.certificateInstallCallback = functi
 			var installResponse = resp._data.Body.InstallCertResponse ;
 			if (installResponse) {
 				this.popupMsgDialog(com_zimbra_dashboard.CertificateInstallationSuccess);
-        		var certs = ZaApplianceSSLCert.getCerts(ZaDashBoard.server.id);
-        		this._contentView._localXForm.setInstanceValue(certs, ZaApplianceAdvancedTools.A_certs);
+				this._shell.setBusy(false, params.busyId, false); //remove the busy overlay
+        		//var certs = ZaApplianceSSLCert.getCerts(ZaDashBoard.server.id);
+        		//this._contentView._localXForm.setInstanceValue(certs, ZaApplianceAdvancedTools.A_certs);
 			}
 		}
 	} catch (ex){

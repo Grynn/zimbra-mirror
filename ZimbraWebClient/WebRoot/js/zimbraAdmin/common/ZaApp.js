@@ -920,10 +920,12 @@ function () {
 	var tabId;
 	var closable = true;
 	var selected = true;
+	var onOpen = null;
 	if (typeof arguments[0] == "object") {
 		tabId = arguments[0]["tabId"];
 		closable = AjxUtil.isEmpty(arguments[0]["closable"]) ? true : false;
 		selected = AjxUtil.isEmpty(arguments[0]["selected"]) ? true : false;
+		onOpen = AjxUtil.isEmpty(arguments[0]["onOpen"]) ? null : arguments[0]["onOpen"];
 	} else {
 		tabId = arguments[0]; 
 	}
@@ -935,7 +937,8 @@ function () {
 		label: appView.getTabTitle () ,
 		toolTip: appView.getTabToolTip () || appView.getTabTitle () ,
 		closable: closable,
-		selected: selected
+		selected: selected,
+		onOpen:onOpen
 	}
 	
 	var tab = new ZaAppTab (tabGroup,params );

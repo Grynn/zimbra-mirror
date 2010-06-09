@@ -379,8 +379,7 @@ ZaApplianceSSLCert.installCert = function (params, serverId) {
 	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
 	reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_INSTALL_CERT ;
 	reqMgrParams.showBusy = true;
-	var busyId = Dwt.getNextId();
-	reqMgrParams.busyId = busyId;			
+	reqMgrParams.busyId = params.busyId;			
 	if (callback) {
 		csfeParams.callback = callback;
 		csfeParams.asyncMode = true ;	

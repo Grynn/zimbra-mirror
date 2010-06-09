@@ -47,6 +47,10 @@ ZaAppTab = function(parent, params) {
 	var selListener = new AjxListener(this, ZaAppTab.prototype._selListener);
 	this.addSelectionListener(selListener) ;
 
+	if (params.onOpen && params.onOpen instanceof AjxListener) {
+		this.addSelectionListener(params.onOpen);
+	}
+	
 	var mouseoutListener = new AjxListener(this, ZaAppTab.prototype._mouseoutListener) ;
 	this.addListener (DwtEvent.ONMOUSEOUT, mouseoutListener);
 
