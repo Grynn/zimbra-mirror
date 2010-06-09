@@ -250,12 +250,12 @@
 			<param name="ext.name" value="com_zimbra_bulkprovision" />
 	  	</antcall>
 
-        <antcall target="deploy">
+        <antcall target="deploy-zimlet">
 	    	<param name="ext.dir" value="license_zimlet"/>
 			<param name="ext.name" value="com_zimbra_license" />
 	  	</antcall>
 
-        <antcall target="deploy">
+        <antcall target="deploy-zimlet">
 	    	<param name="ext.dir" value="com_zimbra_convertd"/>
 			<param name="ext.name" value="com_zimbra_convertd" />
 	  	</antcall>
