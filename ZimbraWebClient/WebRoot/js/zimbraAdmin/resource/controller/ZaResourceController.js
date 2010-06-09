@@ -319,6 +319,10 @@ function () {
 			if(a==ZaResource.A_uid) {
 				continue; //skip uid, it is changed throw a separate request
 			}
+			if(a == ZaResource.A_COSId && !AjxUtil.isEmpty(tmpObj.attrs[ZaResource.A_COSId]) && !ZaItem.ID_PATTERN.test(tmpObj.attrs[ZaResource.A_COSId])) {
+				this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[tmpObj.attrs[ZaResource.A_COSId]]), null, true);
+				return false;
+			}
 			if(tmpObj.attrs[a] instanceof Array && this._currentObject.attrs[a] instanceof Array) {
 				if(tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf()) {
 					mods[a] = tmpObj.attrs[a];
@@ -335,7 +339,9 @@ function () {
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 			this.popupErrorDialog(ZaMsg.FAILED_CREATE_ACCOUNT_1, ex, true);
-		} else {
+		} else if(ex.code == ZmCsfeException.NO_SUCH_COS) {
+			this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[tmpObj.attrs[ZaResource.A_COSId]]), ex, true);
+        } else {
 			this._handleException(ex, "ZaResourceController.prototype._saveChanges", null, false);	
 		}
 		return false;

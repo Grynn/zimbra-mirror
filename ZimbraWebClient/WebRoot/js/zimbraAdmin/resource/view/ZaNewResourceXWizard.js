@@ -115,6 +115,9 @@ function() {
 				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_INVALID, ex);
 				ZaApp.getInstance().getAppCtxt().getErrorDialog().showDetail(true);
 			break;
+			case ZmCsfeException.NO_SUCH_COS:
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[this._containedObject.attrs[ZaAccount.A_COSId]]), ex, true);
+		    break;			
 			case ZmCsfeException.NO_SUCH_DOMAIN:
 				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].setMessage(AjxMessageFormat.format(ZaMsg.CreateDomain_q,[ZaAccount.getDomain(this._containedObject.name)]), DwtMessageDialog.WARNING_STYLE);
 				ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.createDomainAndAccount, this, [ZaAccount.getDomain(this._containedObject.name)]);		
