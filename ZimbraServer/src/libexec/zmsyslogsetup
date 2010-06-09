@@ -31,6 +31,7 @@ if ( $id ne "root" ) {
 }
 
 my $platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
+chomp($platform);
 
 my $zimbra_tmp_directory=getLocalConfig("zimbra_tmp_directory");
 
