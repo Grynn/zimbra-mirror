@@ -142,7 +142,7 @@ var ZimbraDnD = {
 		}
 	},
     checkDrag: function(ev) {
-        return ev.dataTransfer.types.contains("application/x-moz-file");
+        return true; //ev.dataTransfer.types.contains("application/x-moz-file");
     }
 };
 
