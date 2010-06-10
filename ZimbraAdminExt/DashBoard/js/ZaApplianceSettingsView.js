@@ -291,7 +291,8 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
     tabBarChoices.push ({value:_tab2, label:ZaMsg.NAD_Tab_Attachments});
     var case2 = 	
     {type:_ZATABCASE_, caseKey:_tab2, id:"appliance_settings_form_attachment_tab", numCols:1, items:[
-			{type: _GROUP_,  id:"appliance_attachment_settings", width: "98%", numCols: 2, colSizes:[250, "*"], items: [
+			{type: _ZA_TOP_GROUPER_, label: com_zimbra_dashboard.LB_ViewAttachment, id:"appliance_attachment_settings",
+                width: "98%", numCols: 2, colSizes:[250, "*"], items: [
 				{ref:ZaGlobalConfig.A_zimbraAttachmentsBlocked, type:_RADIO_, groupname:"appliance_attachment_settings",
 					msgName: com_zimbra_dashboard.BlocklAllAttachments,label:com_zimbra_dashboard.BlocklAllAttachments, labelLocation:_RIGHT_, 
 					onChange:ZaTabView.onFormFieldChanged,labelCssClass:"xform_label_right", align:_RIGHT_,
@@ -335,100 +336,107 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 						this.setInstanceValue("FALSE",ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly);
 						this.getForm().parent.setDirty(true);
 					}
-				},				
-				{ ref: ZaGlobalConfig.A_zimbraMtaBlockedExtensionWarnRecipient, type: _CHECKBOX_,
-			  		label: ZaMsg.LBL_zimbraMtaBlockedExtensionWarnRecipient,
-			  		trueValue:"TRUE", falseValue:"FALSE"
-				}					
+				}
 			]},
-			{type: _GROUP_, numCols:2, colSizes: ["330px","470px"],
-                visibilityChecks:[[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraAttachmentsBlocked,"FALSE"]],
-                visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraAttachmentsBlocked],
+
+			 {type: _ZA_TOP_GROUPER_, label: com_zimbra_dashboard.LB_MTAttachment_option, colSizes: ["330px","470px"],
+//                visibilityChecks:[[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraAttachmentsBlocked,"FALSE"]],
+//                visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraAttachmentsBlocked],
+                 width: "98%", numCols: 2,
                 items:[
-				{type:_GROUP_,  numCols: 1,
-                    items:[
-					    {type:_SPACER_, height:"10"},
-	    				{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder",//height: 400,
-                     		items:[
-								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
-							   		items: [
-										{type:_OUTPUT_, value:ZaMsg.NAD_GlobalBlockedExtensions, cssClass:"RadioGrouperLabel"},
-										{type:_CELLSPACER_}
-									]
-								},
-								{type:_GROUP_, numCols:4, colSizes:[125,5, 125,"*"],
-									items:[
-										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, 
-											onActivate:"ZaApplianceSettingsView.removeAllExt.call(this)",
-										   	enableDisableChecks:[ZaApplianceSettingsView.shouldEnableRemoveAllButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
-									   		enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaBlockedExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
-										},
-										{type:_CELLSPACER_},
-										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, 
-										   	onActivate:"ZaApplianceSettingsView.removeExt.call(this)",
-										   	enableDisableChecks:[ZaApplianceSettingsView.shouldEnableRemoveButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
-									   		enableDisableChangeEventSources:[ZaGlobalConfig.A2_blocked_extension_selection,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
-									    },
-										{type:_CELLSPACER_}
-									]
-								},
-								{type:_SPACER_, height:"5"},
-								{ref:ZaGlobalConfig.A_zimbraMtaBlockedExtension, type:_DWT_LIST_,
-									cssClass: "VAMIDLTarget",
-									onSelection:ZaApplianceSettingsView.blockedExtSelectionListener
-								}
-							]
-	    				}
-					]
-				 },
-				 {type: _GROUP_, numCols: 1,
-					items: [
-					    {type:_SPACER_, height:"10"},
-						{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder",//height: 400,
-							items:[
-								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
-								   	items: [
-										{type:_OUTPUT_, value:ZaMsg.NAD_GlobalCommonExtensions, cssClass:"RadioGrouperLabel"},
-										{type:_CELLSPACER_}
-									]
-								},
-							    {type:_GROUP_, numCols:7, colSizes:[100,5,100,5,100,60,100],
-									items: [
-									   	{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddSelected, 
-											onActivate:"ZaApplianceSettingsView.addCommonExt.call(this)",
-											enableDisableChecks:[ZaApplianceSettingsView.shouldEnableAddButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
-											enableDisableChangeEventSources:[ZaGlobalConfig.A2_common_extension_selection,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
-										},
-									    {type:_CELLSPACER_},
-									    {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll,
-											onActivate:"ZaApplianceSettingsView.addAllCommonExt.call(this)",
-											enableDisableChecks:[ZaApplianceSettingsView.shouldEnableAddAllButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
-											enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
-										},
-										{type:_CELLSPACER_},
-										{type:_TEXTFIELD_, cssStyle:"width:60px;", ref:ZaGlobalConfig.A_zimbraNewExtension,
-											label:ZaMsg.NAD_Attach_NewExtension,
-											visibilityChecks:[],
-											enableDisableChecks:[[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
-											enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaBlockedExtension]
-										},
-										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Attach_AddExtension, 
-											onActivate:"ZaApplianceSettingsView.addNewExt.call(this)",
-											enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaGlobalConfig.A_zimbraNewExtension],[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
-											enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraNewExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
-										}
-								  	]
-							    },			
-							    {type:_SPACER_, height:"5"},
-								{ref:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type:_DWT_LIST_, 
-									cssClass: "VAMIDLSource",
-									onSelection:ZaApplianceSettingsView.commonExtSelectionListener
-								}
-							]
-						  }
-				    	]
-				    }
-				 ]}
+                    { type:_GROUP_ , numCols: 2, colSpan: "*", colSizes:[250, "*"], items: [
+                        { ref: ZaGlobalConfig.A_zimbraMtaBlockedExtensionWarnRecipient, type: _CHECKBOX_,
+                            label: ZaMsg.LBL_zimbraMtaBlockedExtensionWarnRecipient,
+                            trueValue:"TRUE", falseValue:"FALSE"
+                        }
+                      ]
+                    },
+
+                    {type:_GROUP_,  numCols: 1,  
+                              items:[
+                            {type:_SPACER_, height:"10"},
+                            {type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder",//height: 400,
+                                items:[
+                                    {type:_GROUP_,
+                                        items: [
+                                            {type:_OUTPUT_, value:ZaMsg.NAD_GlobalBlockedExtensions, cssClass:"RadioGrouperLabel"},
+                                            {type:_CELLSPACER_}
+                                        ]
+                                    },
+                                    {type:_GROUP_, numCols:4, colSizes:[125,5, 125,"*"],
+                                        items:[
+                                            {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll,
+                                                onActivate:"ZaApplianceSettingsView.removeAllExt.call(this)",
+                                                enableDisableChecks:[ZaApplianceSettingsView.shouldEnableRemoveAllButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
+                                                enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaBlockedExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
+                                            },
+                                            {type:_CELLSPACER_},
+                                            {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove,
+                                                onActivate:"ZaApplianceSettingsView.removeExt.call(this)",
+                                                enableDisableChecks:[ZaApplianceSettingsView.shouldEnableRemoveButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
+                                                enableDisableChangeEventSources:[ZaGlobalConfig.A2_blocked_extension_selection,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
+                                            },
+                                            {type:_CELLSPACER_}
+                                        ]
+                                    },
+                                    {type:_SPACER_, height:"5"},
+                                    {ref:ZaGlobalConfig.A_zimbraMtaBlockedExtension, type:_DWT_LIST_,
+                                        cssClass: "VAMIDLTarget",
+                                        onSelection:ZaApplianceSettingsView.blockedExtSelectionListener
+                                    }
+                                ]
+                            }
+                        ]
+                           },
+                    {type: _GROUP_, numCols: 1,
+                              items: [
+                            {type:_SPACER_, height:"10"},
+                            {type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder",//height: 400,
+                                items:[
+                                    {type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+                                        items: [
+                                            {type:_OUTPUT_, value:ZaMsg.NAD_GlobalCommonExtensions, cssClass:"RadioGrouperLabel"},
+                                            {type:_CELLSPACER_}
+                                        ]
+                                    },
+                                    {type:_GROUP_, numCols:7, colSizes:[100,5,100,5,100,60,100],
+                                        items: [
+                                            {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddSelected,
+                                                onActivate:"ZaApplianceSettingsView.addCommonExt.call(this)",
+                                                enableDisableChecks:[ZaApplianceSettingsView.shouldEnableAddButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
+                                                enableDisableChangeEventSources:[ZaGlobalConfig.A2_common_extension_selection,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
+                                            },
+                                            {type:_CELLSPACER_},
+                                            {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll,
+                                                onActivate:"ZaApplianceSettingsView.addAllCommonExt.call(this)",
+                                                enableDisableChecks:[ZaApplianceSettingsView.shouldEnableAddAllButton,[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
+                                                enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
+                                            },
+                                            {type:_CELLSPACER_},
+                                            {type:_TEXTFIELD_, cssStyle:"width:60px;", ref:ZaGlobalConfig.A_zimbraNewExtension,
+                                                label:ZaMsg.NAD_Attach_NewExtension,
+                                                visibilityChecks:[],
+                                                enableDisableChecks:[[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
+                                                enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaBlockedExtension]
+                                            },
+                                            {type:_DWT_BUTTON_, label:ZaMsg.NAD_Attach_AddExtension,
+                                                onActivate:"ZaApplianceSettingsView.addNewExt.call(this)",
+                                                enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaGlobalConfig.A_zimbraNewExtension],[ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMtaBlockedExtension]],
+                                                enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraNewExtension,ZaGlobalConfig.A_zimbraMtaBlockedExtension]
+                                            }
+                                        ]
+                                    },
+                                    {type:_SPACER_, height:"5"},
+                                    {ref:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type:_DWT_LIST_,
+                                        cssClass: "VAMIDLSource",
+                                        onSelection:ZaApplianceSettingsView.commonExtSelectionListener
+                                    }
+                                ]
+                              }
+                            ]
+                        }
+                     ]}
+                  
 			]};
     switchItems.push (case2) ;
 	//_tab3 = ++this.TAB_INDEX;
