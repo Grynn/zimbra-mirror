@@ -1,11 +1,5 @@
-Index: schema_init.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/schema_init.c,v
-retrieving revision 1.469
-retrieving revision 1.470
-diff -u -p -r1.469 -r1.470
---- schema_init.c	13 Apr 2010 20:18:09 -0000	1.469
-+++ schema_init.c	6 Jun 2010 18:32:53 -0000	1.470
+--- openldap-2.4.22/servers/slapd/schema_init.c	13 Apr 2010 20:18:09 -0000	1.469
++++ openldap-2.4.22/servers/slapd/schema_init.c	6 Jun 2010 18:32:53 -0000	1.470
 @@ -1735,8 +1735,9 @@ UTF8StringNormalize(
  		? LDAP_UTF8_APPROX : 0;
  
@@ -17,14 +11,8 @@ diff -u -p -r1.469 -r1.470
  	}
  	
  	/* collapse spaces (in place) */
-Index: modrdn.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/modrdn.c,v
-retrieving revision 1.180
-retrieving revision 1.181
-diff -u -p -r1.180 -r1.181
---- modrdn.c	13 Apr 2010 20:18:07 -0000	1.180
-+++ modrdn.c	6 Jun 2010 18:32:53 -0000	1.181
+--- openldap-2.4.22/servers/slapd/modrdn.c	13 Apr 2010 20:18:07 -0000	1.180
++++ openldap-2.4.22/servers/slapd/modrdn.c	6 Jun 2010 18:32:53 -0000	1.181
 @@ -445,12 +445,19 @@ slap_modrdn2mods(
  		mod_tmp->sml_values[1].bv_val = NULL;
  		if( desc->ad_type->sat_equality->smr_normalize) {
@@ -46,14 +34,8 @@ diff -u -p -r1.180 -r1.181
  			mod_tmp->sml_nvalues[1].bv_val = NULL;
  		} else {
  			mod_tmp->sml_nvalues = NULL;
-Index: dn.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/dn.c,v
-retrieving revision 1.201
-retrieving revision 1.203
-diff -u -p -r1.201 -r1.203
---- dn.c	13 Apr 2010 20:18:06 -0000	1.201
-+++ dn.c	6 Jun 2010 22:02:32 -0000	1.203
+--- openldap-2.4.22/servers/slapd/dn.c	13 Apr 2010 20:18:06 -0000	1.201
++++ openldap-2.4.22/servers/slapd/dn.c	6 Jun 2010 22:02:32 -0000	1.203
 @@ -302,16 +302,13 @@ LDAPRDN_rewrite( LDAPRDN rdn, unsigned f
  		ava->la_attr = ad->ad_cname;
  
