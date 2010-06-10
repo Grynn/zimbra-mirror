@@ -69,6 +69,41 @@ ZaDashBoardController.hijackMessages = function () {
 	ZaMsg.FAILED_SAVE_COS = com_zimbra_dashboard.FAILED_SAVE_COS;
 	ZaMsg.ERROR_NO_SUCH_COS = com_zimbra_dashboard.ERROR_NO_SUCH_COS;
 	ZaNewAccountXWizard.helpURL = location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm#appliance/zap_provisioning_a_new_account.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+	/**
+	 * hack to deprecate notebook/wiki UI
+	 */
+	ZaOperation.INIT_NOTEBOOK = null;
+	ZaDomainXFormView.WIKI_TAB_ATTRS = null;
+	
+	/**
+	 * hack to replace new domain wizard
+	 */
+	ZaDomainController.prototype.newDomain = function () {
+		try {
+			var newName = "";
+			if(!this._currentDomainName) {
+				this._currentDomainName = this._currentObject.attrs[ZaDomain.A_domainName];
+			}	
+			
+			if(this._currentDomainName)
+				newName = "." + this._currentDomainName;
+
+			var domain = new ZaDomain();			
+			domain.loadNewObjectDefaults();
+			domain.attrs[ZaDomain.A_GALSyncUseGALSearch]="TRUE";
+			domain[ZaDomain.A2_new_internal_gal_polling_interval] = "2d";
+			domain[ZaDomain.A2_new_external_gal_polling_interval] = "2d";
+			domain.attrs[ZaDomain.A_zimbraGalMaxResults] = 100;
+			domain.attrs[ZaDomain.A_domainName] = newName;
+			var dashBoardController = ZaApp.getInstance().getDashBoardController(ZaSettings.DASHBOARD_VIEW);
+			dashBoardController._newDomainWizard = ZaApp.getInstance().dialogs["newDomainWizard"] = new ZaApplianceDomainXWizard(dashBoardController._container, domain);	
+			dashBoardController._newDomainWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, dashBoardController.finishNewDomainButtonListener, dashBoardController, null);			
+			dashBoardController._newDomainWizard.setObject(domain);
+			dashBoardController._newDomainWizard.popup();
+		} catch (ex) {
+			this._handleException(ex, "ZaDashBoardController.prototype.newDomainSelected", null, false);
+		}
+	}
 }
 
 ZaDashBoardController.prototype.listActionListener = function (ev) {
@@ -332,12 +367,12 @@ ZaDashBoardController.prototype.finishNewDomainButtonListener = function() {
 		var obj = this._newDomainWizard.getObject();		
 		var domain = ZaItem.create(obj,ZaDomain,"ZaDomain");
 		if(domain != null) {			
-			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
+			/*if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
 				var params = new Object();
 				params.obj = obj;
 				var callback = new AjxCallback(this, this.initNotebookCallback, params);				
 				ZaDomain.initNotebook(obj,callback, this) ;
-			}			
+			}*/			
 			this.popupMsgDialog(AjxMessageFormat.format(com_zimbra_dashboard.DomainCreated,[domain.attrs[ZaDomain.A_domainName]]));
 			if(this._contentView.types[0] == ZaSearch.DOMAINS) {
 				this._contentView.searchAddresses(this._contentView.types,this._contentView.offset);

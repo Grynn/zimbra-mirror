@@ -63,7 +63,7 @@ ZaDomainController.changeActionsStateMethod = function () {
 		if(this._toolbarOperations[ZaOperation.AUTH_WIZARD])
 			this._toolbarOperations[ZaOperation.AUTH_WIZARD].enabled = false;
 
-		if(this._toolbarOperations[ZaOperation.INIT_NOTEBOOK])
+		if(ZaOperation.INIT_NOTEBOOK && this._toolbarOperations[ZaOperation.INIT_NOTEBOOK])
 			this._toolbarOperations[ZaOperation.INIT_NOTEBOOK].enabled = false;
 	} else {
 
@@ -75,7 +75,7 @@ ZaDomainController.changeActionsStateMethod = function () {
 			this._toolbarOperations[ZaOperation.AUTH_WIZARD].enabled = false;
 		}
 
-		if(this._toolbarOperations[ZaOperation.INIT_NOTEBOOK] && !ZaDomain.canConfigureWiki(this._currentObject)) {
+		if(ZaOperation.INIT_NOTEBOOK && this._toolbarOperations[ZaOperation.INIT_NOTEBOOK] && !ZaDomain.canConfigureWiki(this._currentObject)) {
 			this._toolbarOperations[ZaOperation.INIT_NOTEBOOK].enabled = false;
 		}
 	}		
@@ -131,7 +131,7 @@ function () {
 		this._toolbarOrder.push(ZaOperation.AUTH_WIZARD);		   		   		
 	}
 	//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_WIKI_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-	 if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ACCOUNT,this._currentObject) && ZaItem.hasRight(ZaDomain.RIGHT_ADMIN_LOGIN_AS,this._currentObject) ) {
+	 if(ZaOperation.INIT_NOTEBOOK && ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ACCOUNT,this._currentObject) && ZaItem.hasRight(ZaDomain.RIGHT_ADMIN_LOGIN_AS,this._currentObject)) {
 		this._toolbarOperations[ZaOperation.INIT_NOTEBOOK]=new ZaOperation(ZaOperation.INIT_NOTEBOOK,ZaMsg.DTBB_InitNotebook, ZaMsg.DTBB_InitNotebook_tt, "NewNotebook", "NewNotebookDis", new AjxListener(this, ZaDomainController.prototype._initNotebookButtonListener));
 		this._toolbarOrder.push(ZaOperation.INIT_NOTEBOOK);		
 	}	

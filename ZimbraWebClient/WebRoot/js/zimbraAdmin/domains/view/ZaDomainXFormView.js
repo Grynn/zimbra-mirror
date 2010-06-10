@@ -924,7 +924,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 		};
 		switchGroup.items.push(case4);	
 	}
-	if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.WIKI_TAB_ATTRS, ZaDomainXFormView.WIKI_TAB_RIGHTS)) {
+	if(ZaDomainXFormView.WIKI_TAB_ATTRS && ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.WIKI_TAB_ATTRS, ZaDomainXFormView.WIKI_TAB_RIGHTS)) {
 		tabIx = ++this.TAB_INDEX;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_Notebook});
 		var case5 = {type:_ZATABCASE_, caseKey:tabIx,cssStyle:"padding-left:10px",
