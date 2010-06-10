@@ -40,8 +40,8 @@ public class BulkProvisioningThread extends Thread {
 	}
 	
 	public synchronized void start() {
-		super.start();
 		mStatus = iSTATUS_STARTING;
+		super.start();
 	}
 
 	public int getProvisionedCounter() {
