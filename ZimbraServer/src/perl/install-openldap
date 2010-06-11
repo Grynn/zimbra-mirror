@@ -31,7 +31,7 @@ my %BINARIES = (
                 "heimdal" => "1.3.2",
                 "libtool" => "2.2.6b",
                 "openldap" => "2.4.22.3z",
-                "openldap-libs" => "2.4.22.2z",
+                "openldap-libs" => "2.4.22.3z",
                 "openssl" => "0.9.8n",
                 "tcmalloc" => "1.5"
                );
