@@ -29,11 +29,6 @@ configfile=${zimbra_home}/conf/${servicename}.conf
 pidfile=${zimbra_log_directory}/${servicename}.pid
 pid=""
 
-if [ ! -L /opt/zimbra/nginx ]; then
-  echo "Error: nginx not installed"
-  exit 1
-fi
-
 getpid()
 {
   if [ -f ${pidfile} ]; then
@@ -59,6 +54,11 @@ checkrunning()
 
 case "$1" in 
   start)
+    if [ ! -L /opt/zimbra/nginx ]; then
+      echo "Error: nginx not installed"
+      exit 1
+    fi
+
     if [ ! -f ${configfile} ]; then
       echo "${configfile} is missing."
     fi
