@@ -378,10 +378,12 @@ function(array, member, index) {
 
 AjxUtil.arrayRemove =
 function(array, member) {
-	for (var i = 0; i < array.length; i++) {
-		if (array[i] == member) {
-			array.splice(i, 1);
-			return true;
+	if (array) {
+		for (var i = 0; i < array.length; i++) {
+			if (array[i] == member) {
+				array.splice(i, 1);
+				return true;
+			}
 		}
 	}
 	return false;
