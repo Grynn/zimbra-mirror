@@ -601,7 +601,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 					items: [
 						{type:_AJX_IMAGE_, src:"Domain_32", label:null,rowSpan:3},
 						{type:_OUTPUT_, ref:"name", label:null,cssClass:"AdminTitle", rowSpan:3},				
-						{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID},
+						{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID,visibilityChecks:[ZaItem.hasReadPermission]},
 						{type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp, 
 							label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
 							getDisplayValue:function() {

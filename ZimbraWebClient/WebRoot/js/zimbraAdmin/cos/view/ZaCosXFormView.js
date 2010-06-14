@@ -301,7 +301,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 	
 	var headerItems = [	{type:_AJX_IMAGE_, src:"COS_32", label:null,rowSpan:2},
 							{type:_OUTPUT_, ref:ZaCos.A_name, label:null,cssClass:"AdminTitle", rowSpan:2},				
-							{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID},
+							{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID,visibilityChecks:[ZaItem.hasReadPermission]},
 							{type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp, 
 								label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
 								getDisplayValue:function() {

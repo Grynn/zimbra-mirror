@@ -670,9 +670,9 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,  
 									addButtonLabel:ZaMsg.Domain_AddURL, 
 									removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,
-									showAddOnNextRow:true,
+									showAddOnNextRow:true,visibilityChecks:[],enableDisableChecks:[],
 									items: [
-										{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"3269",ldapPort:"3268",  labelLocation:_NONE_}
+										{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"3269",ldapPort:"3268",  labelLocation:_NONE_,visibilityChecks:[],enableDisableChecks:[]}
 									]
 								},
 								{ref:ZaDomain.A_GalLdapFilter, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, 
@@ -696,7 +696,10 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaApplianceDomainXWizard.isDomainModeNotInternal],
 					
 					items: [
-						{ref:ZaDomain.A_UseBindPassword, type:_CHECKBOX_, label:ZaMsg.Domain_UseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},
+						{ref:ZaDomain.A_UseBindPassword, type:_CHECKBOX_, label:ZaMsg.Domain_UseBindPassword, labelLocation:_LEFT_,
+							trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,
+							visibilityChecks:[],enableDisableChecks:[]
+						},
 						{ref:ZaDomain.A_GalLdapBindDn, type:_TEXTFIELD_, label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, 
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_UseBindPassword,"TRUE"]],
 							enableDisableChangeEventSources:[ZaDomain.A_UseBindPassword]
@@ -704,12 +707,12 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						},
 						{ref:ZaDomain.A_GalLdapBindPassword, type:_SECRET_, label:ZaMsg.Domain_GalLdapBindPassword, labelLocation:_LEFT_, 
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_UseBindPassword,"TRUE"]],
-							enableDisableChangeEventSources:[ZaDomain.A_UseBindPassword]
+							enableDisableChangeEventSources:[ZaDomain.A_UseBindPassword],visibilityChecks:[]
 							
 						},
 						{ref:ZaDomain.A_GalLdapBindPasswordConfirm, type:_SECRET_, label:ZaMsg.Domain_GalLdapBindPasswordConfirm, labelLocation:_LEFT_, 
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_UseBindPassword,"TRUE"]],
-							enableDisableChangeEventSources:[ZaDomain.A_UseBindPassword]							
+							enableDisableChangeEventSources:[ZaDomain.A_UseBindPassword],visibilityChecks:[]							
 							
 						}														
 					]			
@@ -731,10 +734,11 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 									visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A2_isTestingGAL,0]],
 									visibilityChangeEventSources:[ZaDomain.A2_isTestingGAL]
 								},							        
-								{ref:ZaDomain.A_GALServerType, type:_OUTPUT_, label:ZaMsg.Domain_GALServerType, choices:this.GALServerTypes, labelLocation:_LEFT_, bmolsnr:true},
-								{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", labelLocation:_LEFT_,showAddButton:false, bmolsnr:true, showRemoveButton:false,
+								{ref:ZaDomain.A_GALServerType, type:_OUTPUT_, label:ZaMsg.Domain_GALServerType, choices:this.GALServerTypes, labelLocation:_LEFT_, bmolsnr:true,visibilityChecks:[]},
+								{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL+":", labelLocation:_LEFT_,showAddButton:false, bmolsnr:true, 
+									showRemoveButton:false,visibilityChecks:[],enableDisableChecks:[],
 									items:[
-										{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_,bmolsnr:true}
+										{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_,bmolsnr:true,visibilityChecks:[],enableDisableChecks:[]}
 									]
 								},	
 								{ref:ZaDomain.A_GalLdapFilter, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_,required:true, 
@@ -742,13 +746,17 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 									visibilityChangeEventSources:[ZaDomain.GAL_ServerType_ldap], bmolsnr:true									
 									
 								},
-								{ref:ZaDomain.A_GalLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_, bmolsnr:true},
-								{ref:ZaDomain.A_UseBindPassword, type:_OUTPUT_, label:ZaMsg.Domain_UseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE", bmolsnr:true},
+								{ref:ZaDomain.A_GalLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_, bmolsnr:true,visibilityChecks:[]},
+								{ref:ZaDomain.A_UseBindPassword, type:_OUTPUT_, label:ZaMsg.Domain_UseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE", bmolsnr:true,
+									visibilityChecks:[]
+								},
 								{ref:ZaDomain.A_GalLdapBindDn, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, 
 									visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_UseBindPassword,"TRUE"]],
 									visibilityChangeEventSources:[ZaDomain.A_UseBindPassword], bmolsnr:true									
 								},
-								{ref:ZaDomain.A_GALSampleQuery, type:_INPUT_, label:ZaMsg.Domain_GALSampleSearchName, labelLocation:_LEFT_, labelWrap:true, cssStyle:"width:100px;", bmolsnr:true},								
+								{ref:ZaDomain.A_GALSampleQuery, type:_INPUT_, label:ZaMsg.Domain_GALSampleSearchName, labelLocation:_LEFT_, labelWrap:true, cssStyle:"width:100px;", bmolsnr:true,
+									visibilityChecks:[],enableDisableChecks:[]
+								},								
 								{type:_CELLSPACER_},
 								{type:_DWT_BUTTON_, 
 									enableDisableChecks:[[XForm.checkInstanceValueNot,ZaDomain.A_GALSampleQuery," "],
@@ -794,7 +802,7 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 								{ref: ZaDomain.A_GALTestSearchResults, type:_DWT_LIST_, height:"140px", width:"260px",colSpan:2,
 			 				    	cssClass: "DLSource", forceUpdate: true, 
 			 				    	widgetClass:ZaGalObjMiniListView, headerList:resultHeaderList,
-			 				    	hideHeader:true
+			 				    	hideHeader:true,visibilityChecks:[],enableDisableChecks:[]
 			 				    }
 							]
 						},
@@ -809,10 +817,13 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 									colSpan:"2",
 									iconVisible: true,
 									align:_CENTER_,				
-									style: DwtAlert.WARNING
+									style: DwtAlert.WARNING,
+									visibilityChecks:[]
 								},							
-								{type:_OUTPUT_, ref:ZaDomain.A_GALSearchTestResultCode, label:ZaMsg.Domain_GALTestResult, choices:this.TestResultChoices},
-								{type:_TEXTAREA_, ref:ZaDomain.A_GALSearchTestMessage, label:ZaMsg.Domain_GALTestMessage, height:"200px", width:"380px"}
+								{type:_OUTPUT_, ref:ZaDomain.A_GALSearchTestResultCode, label:ZaMsg.Domain_GALTestResult, choices:this.TestResultChoices,visibilityChecks:[]},
+								{type:_TEXTAREA_, ref:ZaDomain.A_GALSearchTestMessage, label:ZaMsg.Domain_GALTestMessage, height:"200px", width:"380px",
+									visibilityChecks:[],enableDisableChecks:[]
+								}
 							]
 						},
 						{type:_DWT_ALERT_,content:ZaMsg.Domain_GALSearchTestSkipped,
@@ -828,7 +839,9 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 				},
 				{type:_CASE_, caseKey:ZaApplianceDomainXWizard.AUTH_MODE_STEP, numCols:2,colSizes:["220px","430px"],					
 					items:[
-						{type:_OSELECT1_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs, ref:ZaDomain.A_AuthMech, onChange:ZaApplianceDomainXWizard.onAuthMechChange},
+						{type:_OSELECT1_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs, ref:ZaDomain.A_AuthMech, onChange:ZaApplianceDomainXWizard.onAuthMechChange,
+							visibilityChecks:[],enableDisableChecks:[]
+						},
 						{type:_GROUP_, numCols:2,colSizes:["220px","auto"],colSpan:2,
 							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ad]],
 							visibilityChangeEventSources:[ZaDomain.A_AuthMech],
@@ -846,9 +859,10 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,  
 									addButtonLabel:ZaMsg.Domain_AddURL, 
 									showAddOnNextRow:true,	
-									removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,																						
+									removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,
+									visibilityChecks:[],enableDisableChecks:[],
 									items: [
-										{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_,ldapSSLPort:"3269",ldapPort:"3268"}
+										{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_,ldapSSLPort:"3269",ldapPort:"3268",visibilityChecks:[],enableDisableChecks:[]}
 									]
 								}									
 							]
@@ -870,8 +884,9 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 									addButtonLabel:ZaMsg.Domain_AddURL, 
 									showAddOnNextRow:true,												
 									removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,
+									visibilityChecks:[],enableDisableChecks:[],
 									items: [
-										{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"636",ldapPort:"389", labelLocation:_NONE_}
+										{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"636",ldapPort:"389", labelLocation:_NONE_,visibilityChecks:[],enableDisableChecks:[]}
 									]
 								},
 								{ref:ZaDomain.A_zimbraAuthLdapStartTlsEnabled, type:_CHECKBOX_, label:ZaMsg.Domain_AuthLdapStartTlsEnabled, trueValue:"TRUE", falseValue:"FALSE"},
@@ -885,20 +900,23 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 				{type:_CASE_, numCols:2,colSizes:["220px","auto"],caseKey:ZaApplianceDomainXWizard.AUTH_CONFIG_STEP_2,
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ldap]],
 					items: [
-						{ref:ZaDomain.A_AuthUseBindPassword, type:_CHECKBOX_, label:ZaMsg.Domain_AuthUseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},
+						{ref:ZaDomain.A_AuthUseBindPassword, type:_CHECKBOX_, label:ZaMsg.Domain_AuthUseBindPassword, 
+							visibilityChecks:[],enableDisableChecks:[],
+							labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_
+						},
 						{ref:ZaDomain.A_AuthLdapSearchBindDn, type:_TEXTFIELD_, label:ZaMsg.Domain_AuthLdapBindDn, labelLocation:_LEFT_, 
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthUseBindPassword,"TRUE"]],
-							enableDisableChangeEventSources:[ZaDomain.A_AuthUseBindPassword]
+							enableDisableChangeEventSources:[ZaDomain.A_AuthUseBindPassword],visibilityChecks:[]
 
 						},
 						{ref:ZaDomain.A_AuthLdapSearchBindPassword, type:_SECRET_, label:ZaMsg.Domain_AuthLdapBindPassword, labelLocation:_LEFT_, 
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthUseBindPassword,"TRUE"]],
-							enableDisableChangeEventSources:[ZaDomain.A_AuthUseBindPassword]
+							enableDisableChangeEventSources:[ZaDomain.A_AuthUseBindPassword],visibilityChecks:[]
 
 						},
 						{ref:ZaDomain.A_AuthLdapSearchBindPasswordConfirm, type:_SECRET_, label:ZaMsg.Domain_AuthLdapBindPasswordConfirm, labelLocation:_LEFT_, 
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthUseBindPassword,"TRUE"]],
-							enableDisableChangeEventSources:[ZaDomain.A_AuthUseBindPassword]
+							enableDisableChangeEventSources:[ZaDomain.A_AuthUseBindPassword],visibilityChecks:[]
 
 						}							
 					]						
@@ -919,9 +937,9 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A2_isTestingAuth,0]],
 							visibilityChangeEventSources:[ZaDomain.A2_isTestingAuth],	
 							items:[
-							{type:_OUTPUT_, value:ZaMsg.Domain_Auth_ConfigSummary, align:_CENTER_, colSpan:"*"}, 
+							{type:_OUTPUT_, value:ZaMsg.Domain_Auth_ConfigSummary, align:_CENTER_, colSpan:"*",visibilityChecks:[]}, 
 							{type:_SPACER_, height:10},
-							{ref:ZaDomain.A_AuthMech, type:_OUTPUT_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs, alignment:_LEFT_},
+							{ref:ZaDomain.A_AuthMech, type:_OUTPUT_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs, alignment:_LEFT_,visibilityChecks:[]},
 							{type:_GROUP_, useParentTable:true,
 								visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ad]],
 								visibilityChangeEventSources:[ZaDomain.A_AuthMech],
@@ -929,8 +947,9 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 								items:[
 									{ref:ZaDomain.A_AuthADDomainName, type:_OUTPUT_, label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
 									{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,
+										visibilityChecks:[],enableDisableChecks:[],
 										items:[
-											{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
+											{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_,visibilityChecks:[]}
 										]
 									}											
 								]
@@ -941,8 +960,9 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 	 
 								items:[
 									{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,
+										visibilityChecks:[],enableDisableChecks:[],
 										items:[
-											{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
+											{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_,visibilityChecks:[]}
 										]
 									},					
 									{ref:ZaDomain.A_zimbraAuthLdapStartTlsEnabled, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapStartTlsEnabled, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES},						
@@ -957,15 +977,20 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							},
 							{type:_SPACER_, height:10},
 							{type:_OUTPUT_,value:ZaMsg.Domain_AuthProvideLoginPwd, align:_CENTER_, colSpan:"*"},
-							{type:_TEXTFIELD_, label:ZaMsg.LBL_Domain_AuthTestUserName, ref:ZaDomain.A_AuthTestUserName, alignment:_LEFT_},
-							{type:_SECRET_, label:ZaMsg.LBL_Domain_AuthTestPassword, ref:ZaDomain.A_AuthTestPassword, alignment:_LEFT_},
+							{type:_TEXTFIELD_, label:ZaMsg.LBL_Domain_AuthTestUserName, ref:ZaDomain.A_AuthTestUserName, alignment:_LEFT_,
+								visibilityChecks:[],enableDisableChecks:[]
+							},
+							{type:_SECRET_, label:ZaMsg.LBL_Domain_AuthTestPassword, ref:ZaDomain.A_AuthTestPassword, alignment:_LEFT_,
+								visibilityChecks:[],enableDisableChecks:[]
+							},
 							{type:_CELLSPACER_},
 							{type:_DWT_BUTTON_, 
 								onActivate:"ZaApplianceDomainXWizard.testAuthSettings.call(this)", 
 								label:ZaMsg.Domain_GALTestSettings, 
 								enableDisableChecks:[],
 								visibilityChecks:[],					
-								valign:_BOTTOM_,width:"100px"
+								valign:_BOTTOM_,width:"100px",
+								visibilityChecks:[],enableDisableChecks:[]
 							}
 						]}
 					]
@@ -1025,8 +1050,9 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 								addButtonLabel:ZaMsg.NAD_AddVirtualHost, 
 								showAddOnNextRow:true,
 								removeButtonLabel:ZaMsg.NAD_RemoveVirtualHost,
+								visibilityChecks:[],enableDisableChecks:[],
 								items: [
-									{ref:".", type:_TEXTFIELD_, label:null,width:250}
+									{ref:".", type:_TEXTFIELD_, label:null,width:250,visibilityChecks:[],enableDisableChecks:[]}
 								]
 						}
 					]
