@@ -242,7 +242,7 @@ Com_Zimbra_DnD._uploadFiles = function(file) {
         req.setRequestHeader("Cache-Control", "no-cache");
         req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         req.setRequestHeader("Content-Type", "application/octet-stream;");
-        req.setRequestHeader("Content-Disposition", "attachment; filename="+encodeURIComponent(file.fileName));
+        req.setRequestHeader("Content-Disposition", 'attachment; filename="'+ file.fileName + '"');
 
         var tempThis = req;
         req.onreadystatechange = function() {
