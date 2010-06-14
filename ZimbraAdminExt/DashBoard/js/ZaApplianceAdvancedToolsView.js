@@ -45,7 +45,7 @@ function (index, form) {
 
 ZaApplianceAdvancedToolsView.prototype.getTabIcon =
 function () {
-	return "GlobalSettings";
+	return "AdvancedTools";
 }
 
 ZaApplianceAdvancedToolsView.prototype.getTabTitle =
