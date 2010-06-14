@@ -118,8 +118,7 @@ function () {
 
 
     //if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_GAL_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-    if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ACCOUNT,this._currentObject) && ZaItem.hasRight(ZaDomain.RIGHT_ADMIN_LOGIN_AS,this._currentObject) && 
-    	ZaDomain.canConfigureGal(this._currentObject))	{
+    if(ZaDomain.canConfigureGal(this._currentObject))	{
 		this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
 		this._toolbarOperations[ZaOperation.GAL_WIZARD]=new ZaOperation(ZaOperation.GAL_WIZARD,ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainController.prototype._galWizButtonListener));   		
 		this._toolbarOrder.push(ZaOperation.SEP);
