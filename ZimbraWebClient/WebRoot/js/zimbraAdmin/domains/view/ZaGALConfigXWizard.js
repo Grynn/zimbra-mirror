@@ -514,6 +514,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval), 
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
 							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
+							enableDisableChecks:[],
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
 								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
@@ -524,6 +525,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ref:ZaDomain.A2_new_external_gal_polling_interval, 
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
 							msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval_external,
+							enableDisableChecks:[],
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
 							visibilityChecks:[
 								[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId],
@@ -581,7 +583,9 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 					visibilityChangeEventSources:[ZaModel.currentStep],
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isDomainModeNotInternal],					
 					items: [
-						{ref:ZaDomain.A_UseBindPassword, type:_CHECKBOX_, label:ZaMsg.Domain_UseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},
+						{ref:ZaDomain.A_UseBindPassword, type:_CHECKBOX_, label:ZaMsg.Domain_UseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,
+							enableDisableChecks:[],visibilityChecks:[]
+						},
 						{ref:ZaDomain.A_GalLdapBindDn, type:_INPUT_, label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, 
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_UseBindPassword,"TRUE"]],
 							enableDisableChangeEventSources:[ZaDomain.A_UseBindPassword]							
@@ -592,7 +596,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						},
 						{ref:ZaDomain.A_GalLdapBindPasswordConfirm, type:_SECRET_, label:ZaMsg.Domain_GalLdapBindPasswordConfirm, labelLocation:_LEFT_, 
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_UseBindPassword,"TRUE"]],
-							enableDisableChangeEventSources:[ZaDomain.A_UseBindPassword]							
+							enableDisableChangeEventSources:[ZaDomain.A_UseBindPassword],visibilityChecks:[]							
 						}							
 					]			
 				},				
@@ -602,12 +606,14 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						{ref:ZaDomain.A_GALSyncUseGALSearch, type:_CHECKBOX_, label:ZaMsg.Domain_GALSyncUseGALSearch, 
 							labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",
 							labelCssClass:"xform_label", align:_LEFT_,labelWrap:true,
-							onChange:ZaGALConfigXWizard.onGALSyncChange
+							onChange:ZaGALConfigXWizard.onGALSyncChange,
+							enableDisableChecks:[],visibilityChecks:[]
 						},
 						{ref:ZaDomain.A_GALSyncServerType, type:_OSELECT1_, label:ZaMsg.Domain_GALServerType, labelLocation:_LEFT_, 
 							choices:this.GALServerTypes, onChange:ZaGALConfigXWizard.onGALSyncServerTypeChange,
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]],
-							enableDisableChangeEventSources:[ZaDomain.A_GALSyncUseGALSearch]
+							enableDisableChangeEventSources:[ZaDomain.A_GALSyncUseGALSearch],
+							visibilityChecks:[]
 						},
 						{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]],
@@ -659,7 +665,9 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 					visibilityChangeEventSources:[ZaModel.currentStep],
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isDomainModeNotInternal,[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]],
 					items: [
-						{ref:ZaDomain.A_SyncUseBindPassword, type:_CHECKBOX_, label:ZaMsg.Domain_UseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},
+						{ref:ZaDomain.A_SyncUseBindPassword, type:_CHECKBOX_, label:ZaMsg.Domain_UseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,
+							enableDisableChecks:[],visibilityChecks:[]	
+						},
 						{ref:ZaDomain.A_zimbraGalSyncLdapBindDn, type:_INPUT_, label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, 
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_SyncUseBindPassword,"TRUE"]],
 							enableDisableChangeEventSources:[ZaDomain.A_SyncUseBindPassword]							
@@ -670,7 +678,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						},
 						{ref:ZaDomain.A_GalSyncLdapBindPasswordConfirm, type:_SECRET_, label:ZaMsg.Domain_GalLdapBindPasswordConfirm, labelLocation:_LEFT_, 
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_SyncUseBindPassword,"TRUE"]],
-							enableDisableChangeEventSources:[ZaDomain.A_SyncUseBindPassword]							
+							enableDisableChangeEventSources:[ZaDomain.A_SyncUseBindPassword],visibilityChecks:[]							
 						}							
 					]			
 				},				
@@ -772,7 +780,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 									style: DwtAlert.WARNING
 								},							
 								{type:_OUTPUT_, ref:ZaDomain.A_GALSearchTestResultCode, label:ZaMsg.Domain_GALTestResult, choices:this.TestResultChoices},
-								{type:_TEXTAREA_, ref:ZaDomain.A_GALSearchTestMessage, label:ZaMsg.Domain_GALTestMessage, height:"200px", width:"380px"}
+								{type:_TEXTAREA_, ref:ZaDomain.A_GALSearchTestMessage, label:ZaMsg.Domain_GALTestMessage, height:"200px", width:"380px",enableDisableChecks:[]}
 							]
 						},
 						{type:_DWT_ALERT_,content:ZaMsg.Domain_GALSearchTestSkipped,
