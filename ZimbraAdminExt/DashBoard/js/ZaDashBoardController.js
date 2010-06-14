@@ -727,6 +727,21 @@ ZaDashBoardController.prototype.viewMailListener = function(ev) {
 	}
 };
 
+ZaDashBoardController.viewAccountsButtonListener = function (ev) {
+    var domainName = this._view.getObject().name ;
+
+    if (domainName) {
+        var controller = ZaApp.getInstance().getDashBoardController(ZaSettings.DASHBOARD_VIEW);
+        controller._contentView.allFilterSelected ();
+        var tabGroup = ZaApp.getInstance().getTabGroup ();
+        var mainTab = tabGroup.getMainTab() ;
+        tabGroup.selectTab(mainTab) ;        
+    }else {
+        var currentController = ZaApp.getInstance().getCurrentController () ;
+        currentController.popupErrorDialog(ZaMsg.ERROR_NO_DOMAIN_NAME) ;
+    }  
+};
+ZaDomainController.prototype.viewAccountsButtonListener = ZaDashBoardController.viewAccountsButtonListener ;   
 
 ZaDashBoardController.prototype._expireSessionListener = function(ev) {
 	var form = this._contentView._localXForm;
