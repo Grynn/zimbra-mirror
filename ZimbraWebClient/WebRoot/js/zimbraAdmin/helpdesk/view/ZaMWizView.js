@@ -84,7 +84,7 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 					//Exchange Mig Wiz
 					{type:_GROUP_,numCols:2,
 						items: [
-							{type:_OUTPUT_,  value:AjxImg.getImageHtml("MigrationWiz")},
+							{type:_OUTPUT_,  value:AjxImg.getImageHtml("Migration")},
 							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null,
                                 value: ZaMigrationWizView.getDownloadLink(ZaMsg.MIG_WIZ_DOWNLOAD_LINK, ZaMsg.MIG_WIZ_DOWNLOAD_LINK_MSG)
                             }
@@ -106,7 +106,7 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 					//Domino Mig Wiz
 					{type:_GROUP_,numCols:2,
 						items: [
-							{type:_OUTPUT_,  value:AjxImg.getImageHtml("MigrationWiz")},
+							{type:_OUTPUT_,  value:AjxImg.getImageHtml("Migration")},
 							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null,
                                 value: ZaMigrationWizView.getDownloadLink(ZaMsg.DOMINO_MIG_WIZ_DOWNLOAD_LINK, ZaMsg.DOMINO_MIG_WIZ_DOWNLOAD_LINK_MSG)
                             }
@@ -123,7 +123,7 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 					//PST import
 					{type: _GROUP_ , numCols:3,
 						items: [
-							{type:_OUTPUT_, value:AjxImg.getImageHtml("MigrationWiz")},
+							{type:_OUTPUT_, value:AjxImg.getImageHtml("Migration")},
 							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null,
                                 value: ZaMigrationWizView.getDownloadLink(ZaMsg.IMPORT_WIZ_DOWNLOAD_LINK, ZaMsg.IMPORT_WIZ_DOWNLOAD_LINK_MSG)
                             },

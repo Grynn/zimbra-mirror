@@ -481,7 +481,7 @@ function() {
 	dwLabel.setCursor ("pointer") ;
 	
 	dwLabel.getHtmlElement().innerHTML = 
-		this._getAppLink(null, "MigrationWiz",  ZaMsg.goToMigrationWiz, skin.skin_container_dw_max_str_length);
+		this._getAppLink(null, "Migration",  ZaMsg.goToMigrationWiz, skin.skin_container_dw_max_str_length);
 	
 	dwLabel.reparentHtmlElement (ZaSettings.SKIN_DW_DOM_ID) ;
 }
