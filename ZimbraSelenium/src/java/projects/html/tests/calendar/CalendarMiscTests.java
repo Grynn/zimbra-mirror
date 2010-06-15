@@ -134,18 +134,22 @@ public class CalendarMiscTests extends CommonTest {
 		
 		if(null == someting || someting.trim().length() == 0)
 			someting = getLocalizedData_NoSpecialChar();
-				
+		
+		//open calendar tab
 		selenium.open(urlInitial);
 		
 		Thread.sleep(MEDIUM_WAIT);
 		
+		//check if appointment exists and create if doesn't exist
 		if(obj.zAppointment.zExistsDontWait(someting).equalsIgnoreCase("false"))
 			page.zCalendarApp.zCreateSimpleAppt(someting, "", "", "");
 				
+		//open rest url
 		selenium.open(urlToNavigate);
 
 		Thread.sleep(MEDIUM_WAIT);
 
+		//open different rest views
 		if (view.equals(localize(locator.calViewDay)))
 			obj.zButton.zClick(page.zCalendarApp.calDayViewBtn);
 		else if (view.equals(localize(locator.calViewWorkWeek))){
@@ -160,8 +164,12 @@ public class CalendarMiscTests extends CommonTest {
 		
 		Thread.sleep(MEDIUM_WAIT);
 
+		//verify appointment exists in rest view
 		obj.zAppointment.zExists("Busy");
-
+		
+		//return to initial page
+		selenium.open(urlInitial);
+		
 		needReset = false;
 	}
 
