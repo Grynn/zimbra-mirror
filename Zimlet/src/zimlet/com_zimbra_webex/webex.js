@@ -598,12 +598,14 @@ WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params) {
 	}
 	var altHosts = this._currentWebExAccount.WebExZimlet_altHosts;
 	//use altHosts set in the selectAccnt dlg
-	if(this._showSelectAccntsDlg && document.getElementById(this._showSelectAccntsDlg._altHostFieldId) && this._showSelectAccntsDlg._showOptions) {
-		altHosts = document.getElementById(this._showSelectAccntsDlg._altHostFieldId).value;
-	}
+	if(this._showSelectAccntsDlg) {
+		if(document.getElementById(this._showSelectAccntsDlg._altHostFieldId) && this._showSelectAccntsDlg._showOptions) {
+			altHosts = document.getElementById(this._showSelectAccntsDlg._altHostFieldId).value;
+		}
 
-	if(document.getElementById(this._showSelectAccntsDlg._mPwdFieldId)) {///use mPwd set in the selectAccnt dlg
-		pwd = document.getElementById(this._showSelectAccntsDlg._mPwdFieldId).value;
+		if(document.getElementById(this._showSelectAccntsDlg._mPwdFieldId)) {///use mPwd set in the selectAccnt dlg
+			pwd = document.getElementById(this._showSelectAccntsDlg._mPwdFieldId).value;
+		}
 	}
 
 	if (altHosts != "" && altHosts != "N/A" && altHosts.indexOf(";") > 0) {
@@ -893,7 +895,7 @@ WebExZimlet.prototype._getMeetingDetailsRow = function(name, val, editorType, no
 	if (editorType == "HTML") {
 		val = val.replace(/\n/g, "<br/>");//make sure to replace newLine to br
 		var rStyle = !isRowOdd ? " style='background-color:#FBF9F4' " : " style='background-color:#FEFDFC' ";
-		return ["<tr ",rStyle,"><td width=20%><b>",name,"</b> </td></td> ", val, "</span></td></tr>"].join("");
+		return ["<tr ",rStyle,"><td width=20%><b>",name,"</b> </td><td> ", val, "</td></tr>"].join("");
 	} else {
 		if (noDelimiter) {
 			return [name, val].join("");
@@ -2333,7 +2335,6 @@ WebExZimlet.prototype._createOneClickMeetingHdlr = function(result) {
 	if (!this._validateWebExResult(objResult, "Unable to create meeting")) {
 		return;
 	}
-
 	var meetingKey = null;
 	if (objResult.body.bodyContent.meetingkey) {
 		meetingKey = objResult.body.bodyContent.meetingkey.toString();
@@ -2471,6 +2472,9 @@ WebExZimlet.prototype.apptDropped = function(obj) {
  * @param {Obj} ZmConv | ZmMailMsg
  */
 WebExZimlet.prototype.mailDropped = function(msgObj) {
+	if(msgObj instanceof Array) {
+		msgObj = msgObj[0];
+	}
 	this.srcMsgObj = msgObj.srcObj;
 	if (this.srcMsgObj.type == "CONV") {
 		this.srcMsgObj = this.srcMsgObj.getFirstHotMsg();
