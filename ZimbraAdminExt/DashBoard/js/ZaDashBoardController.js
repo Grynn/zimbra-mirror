@@ -139,6 +139,10 @@ function () {
     this._toolbarOperations[ZaOperation.VIEW_MAIL]=new ZaOperation(ZaOperation.VIEW_MAIL,ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, this.viewMailListener));
     this._toolbarOrder.push(ZaOperation.VIEW_MAIL);
     this._popupOperations[ZaOperation.VIEW_MAIL]=new ZaOperation(ZaOperation.VIEW_MAIL,ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, this.viewMailListener));
+    
+    this._toolbarOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, this.expireSessionListener));
+    this._toolbarOrder.push(ZaOperation.EXPIRE_SESSION);
+    this._popupOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, this.expireSessionListener));
     this._toolbarOrder.push(ZaOperation.SEP);
 //	this._toolbarOperations[ZaOperation.MANAGE_SETITNGS] = new ZaOperation(ZaOperation.MANAGE_PROFILES, com_zimbra_dashboard.ServerSettings, com_zimbra_dashboard.ServerSettings_tt, "GlobalSettings", "GlobalSettings", new AjxListener(this, this.openSettingsView));
 //	this._toolbarOrder.push(ZaOperation.MANAGE_SETITNGS);
@@ -606,6 +610,37 @@ ZaDashBoardController.prototype.finishAccountWizard = function() {
 	}
 };
 
+ZaDashBoardController.prototype.expireSessionListener = 
+function(ev) {
+	var form = this._contentView._localXForm;
+	var listItems = form.getItemsById("dashBoardSearchResults");
+	if(listItems && listItems[0]) {
+		listWidget = listItems[0].getWidget();
+	} else {
+		return;
+	}	
+	if(listWidget.getSelectionCount()==1) {
+		var item = listWidget.getSelection()[0];
+		item.loadEffectiveRights("id", item.id, false);
+		if(ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,item)) {
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.WARN_EXPIRE_SESSIONS, DwtMessageDialog.WARNING_STYLE);
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.expireSessions, this, [item]);		
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDlg, this, null);				
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
+		} else {
+			this.popupMsgDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_PERMISSION_FOR_OPERATION_ON, [item.name ? item.name : item.attrs[ZaAccount.A_accountName]]), true);
+		}
+	}
+}
+
+ZaDashBoardController.prototype.expireSessions = 
+function(acct) {
+	ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
+	mods = {};
+	mods[ZaAccount.A_zimbraAuthTokenValidityValue] = (!acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue] ? 1 : (parseInt(acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue])+1)); 
+	acct.modify(mods,acct);
+}  
+
 ZaDashBoardController.prototype.deleteButtonListener = function(ev) {
 	this._removeList = new Array();
 	this._itemsInTabList = [] ;
@@ -839,6 +874,14 @@ ZaDashBoardController.changeActionsStateMethod = function () {
                 
                 if(this._popupOperations[ZaOperation.CHNG_PWD]) {
                     this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+                }
+                
+                if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+					this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+				}
+                
+                if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {
+                    this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
                 }                
             }
             if(item.type == ZaItem.COS && item.name=="default") {
@@ -858,6 +901,10 @@ ZaDashBoardController.changeActionsStateMethod = function () {
 			   	if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
 					this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
 				} 
+			   	
+			   	if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {
+                    this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+                } 
 			   	
                 if (this._popupOperations[ZaOperation.VIEW_MAIL]) {
                     this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;                                        
