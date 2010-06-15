@@ -58,6 +58,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
+	@SuppressWarnings("unused")
 	@DataProvider(name = "lmtpDataProvider")
 	private Object[][] createData(Method method) throws ServiceException {
 		if (i == 0) {
@@ -120,6 +121,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		i = 0;
 	}
 
+	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
 		if (needReset && !isExecutionARetry) {

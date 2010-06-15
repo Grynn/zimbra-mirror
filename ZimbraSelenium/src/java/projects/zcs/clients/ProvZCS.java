@@ -1,23 +1,27 @@
 package projects.zcs.clients;
 
-import java.util.Date;
-import framework.core.SelNGBase;
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.CliUtil;
-import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.soap.SoapProvisioning;
-import com.zimbra.cs.servlet.ZimbraServlet;
 import java.io.ByteArrayInputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import com.zimbra.common.util.EasySSLProtocolSocketFactory;
+
+import com.zimbra.common.net.SocketFactories;
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.AccountConstants;
+import com.zimbra.common.soap.AdminConstants;
+import com.zimbra.common.util.CliUtil;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
+import com.zimbra.cs.account.auth.AuthContext;
+import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.lmtpserver.utils.LmtpClient;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.zclient.ZMailbox;
+
+import framework.core.SelNGBase;
 
 /**
  * @author raodv
@@ -32,15 +36,19 @@ public class ProvZCS extends SelNGBase {
 
 	public static void setupZCSTestBed() throws ServiceException {
 		try {
-			EasySSLProtocolSocketFactory.init();
-			CliUtil.toolSetup();
+
+	        // Set up SSL
+	        // Always accept self-signed SSL certificates.
+	        SocketFactories.registerProtocols(true);
+
+	        CliUtil.toolSetup();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		SoapProvisioning sp = new SoapProvisioning();
 		String soapuri = "https://" + config.getString("server") + ":7071"
-				+ ZimbraServlet.ADMIN_SERVICE_URI;
+				+ AdminConstants.ADMIN_SERVICE_URI;
 		sp.soapSetURI(soapuri);
 		sp.soapAdminAuthenticate(config.getString("adminName"), config
 				.getString("adminPwd"));
@@ -171,7 +179,7 @@ public class ProvZCS extends SelNGBase {
 		Map<String, Object> acctAttrs = new HashMap<String, Object>();
 		acctAttrs.put(attrName, attrVal);
 		Provisioning prov = Provisioning.getInstance();
-		prov.authAccount(accnt, "test123", "test");
+		prov.authAccount(accnt, "test123", AuthContext.Protocol.test);
 		prov.modifyAttrs(accnt, acctAttrs);
 	}
 
@@ -305,7 +313,7 @@ public class ProvZCS extends SelNGBase {
 		options.setAccountBy(AccountBy.name);
 		options.setPassword(DEFAULT_PASSWORD);
 		String soapuri = "http://qa32.liquidsys.com:80"
-				+ ZimbraServlet.USER_SERVICE_URI;
+				+ AccountConstants.USER_SERVICE_URI;
 		options.setUri(soapuri);
 		return ZMailbox.getMailbox(options);
 	}

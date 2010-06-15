@@ -28,6 +28,7 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
+	@SuppressWarnings("unused")
 	@DataProvider(name = "composeDataProvider")
 	private Object[][] createData(Method method) {
 		String test = method.getName();
@@ -77,6 +78,7 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 		isExecutionARetry = false;
 	}
 
+	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
 		if (needReset && !isExecutionARetry) {

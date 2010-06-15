@@ -53,6 +53,7 @@ public class BriefcaseSharingTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
+	@SuppressWarnings("unused")
 	@DataProvider(name = "BriefcaseSharing")
 	private Object[][] createData(Method method) throws Exception {
 		String test = method.getName();
@@ -98,6 +99,7 @@ public class BriefcaseSharingTests extends CommonTest {
 		isExecutionARetry = false;
 	}
 
+	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
 		if (needReset && !isExecutionARetry) {

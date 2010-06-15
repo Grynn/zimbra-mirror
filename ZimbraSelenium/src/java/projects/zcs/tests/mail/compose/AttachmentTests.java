@@ -20,6 +20,7 @@ public class AttachmentTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
+	@SuppressWarnings("unused")
 	@DataProvider(name = "composeDataProvider")
 	private Object[][] createData(Method method) {
 
@@ -46,6 +47,7 @@ public class AttachmentTests extends CommonTest {
 		isExecutionARetry = false;
 	}
 
+	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
 		if (needReset && !isExecutionARetry) {

@@ -74,6 +74,7 @@ public class TaskSharingTests extends CommonTest {
 		isExecutionARetry = false;
 	}
 
+	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
 		if (needReset && !isExecutionARetry) {

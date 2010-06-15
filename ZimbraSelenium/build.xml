@@ -33,15 +33,16 @@
 		</fileset>
 
 		<pathelement location="${common.classes.dir}" />		
-		<fileset dir="../ZimbraServer/build">
-			<include name="zimbrastore.jar"/>
-		</fileset>
 
 		<fileset dir="../ZimbraCommon/jars">
 			<include name="**/*.jar"/>
 		</fileset>
 		<fileset dir="../ZimbraCommon/build">
 			<include name="zimbracommon.jar"/>
+		</fileset>
+		
+		<fileset dir="../ZimbraServer/build">
+			<include name="zimbrastore.jar"/>
 		</fileset>			
 	</path>
 
