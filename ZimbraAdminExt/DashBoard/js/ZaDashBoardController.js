@@ -69,6 +69,7 @@ ZaDashBoardController.hijackMessages = function () {
 	ZaMsg.FAILED_SAVE_COS = com_zimbra_dashboard.FAILED_SAVE_COS;
 	ZaMsg.ERROR_NO_SUCH_COS = com_zimbra_dashboard.ERROR_NO_SUCH_COS;
 	ZaMsg.Domain_Chameleon_Note = com_zimbra_dashboard.Domain_Chameleon_Note;
+	ZaMsg.tt_StartTypingCOSName = com_zimbra_dashboard.tt_StartTypingCOSName;
 	/**
 	 * Help links
 	 */
