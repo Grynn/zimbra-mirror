@@ -178,6 +178,12 @@ public class CalendarMiscTests extends CommonTest {
 
 		String subject = getLocalizedData_NoSpecialChar();
 		String location = getLocalizedData_NoSpecialChar();
+		String url =  "http://" + config.getString("server") + "/zimbra/h/calendar";
+
+		//open calendar view
+		selenium.open(url);
+		Thread.sleep(MEDIUM_WAIT);
+				
 		// Navigate To Calendar Preferences and set time zone 
 		obj.zButton.zClick(page.zCalendarApp.preferencesTab);
 		Thread.sleep(1000);
