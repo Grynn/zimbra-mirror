@@ -661,7 +661,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},		
 		{type: _SWITCH_,width:650,
 			items: [
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.GENERAL_STEP, colSizes:["220px","430px"],numCols:2,
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.GENERAL_STEP, colSizes:["200px","450px"],numCols:2,
 					items: [
 						{ref:ZaDomain.A_domainName, type:_TEXTFIELD_, label:ZaMsg.Domain_DomainName,labelLocation:_LEFT_, width:200},
 						{ref:ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraPublicServiceHostname,labelLocation:_LEFT_, width:200},						
@@ -681,6 +681,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							choices:this.cosChoices,
 							dataFetcherClass:ZaSearch,
 							emptyText:ZaMsg.enterSearchTerm,
+                            inputSize: 33,
 							editable:true,
 							getDisplayValue:function(newValue) {
 								// dereference through the choices array, if provided
@@ -699,7 +700,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							}
 						},
 						{ref:ZaDomain.A_zimbraDomainStatus, type:_OSELECT1_, msgName:ZaMsg.NAD_DomainStatus,
-							label:ZaMsg.Domain_zimbraDomainStatus, 
+							label:ZaMsg.LBL_zimbraDomainStatus, 
 							labelLocation:_LEFT_, choices:ZaDomain.domainStatusChoices
 						},						
 						{ref:ZaDomain.A_notes, type:_TEXTAREA_, label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:250}

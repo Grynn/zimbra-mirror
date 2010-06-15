@@ -609,7 +609,7 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},		
 		{type: _SWITCH_,width:650,
 			items: [
-				{type:_CASE_, caseKey:ZaApplianceDomainXWizard.GENERAL_STEP, colSizes:["220px","430px"],numCols:2,
+				{type:_CASE_, caseKey:ZaApplianceDomainXWizard.GENERAL_STEP, colSizes:["200px","450px"],numCols:2,
 					items: [
 						{ref:ZaDomain.A_domainName, type:_TEXTFIELD_, label:ZaMsg.Domain_DomainName,labelLocation:_LEFT_, width:200},
 						{ref:ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraPublicServiceHostname,labelLocation:_LEFT_, width:200},						
@@ -629,7 +629,8 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							choices:this.cosChoices,
 							dataFetcherClass:ZaSearch,
 							emptyText:ZaMsg.enterSearchTerm,
-							editable:true,
+                            inputSize: 33,    
+ 							editable:true,
 							getDisplayValue:function(newValue) {
 								// dereference through the choices array, if provided
 								//newValue = this.getChoiceLabel(newValue);

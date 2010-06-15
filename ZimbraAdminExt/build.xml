@@ -201,7 +201,7 @@
 	<!-- deploy the extension for development -->
 	<target name="deploy-dev-cert" depends="package-zimlet, jar, copy-files-to-dev-machine" description="Deploy the extension"/>
 
-    <target name="deploy" depends="clean, deploy-zimlet, deploy-server-extension"
+    <target name="deploy" depends="deploy-zimlet, deploy-server-extension"
             description="Deploy the extension, must have ext.dir and ext.name property set"/>
 
     <target name="deploy-all" description="deploy all the admin extensions in ZimbraAdminExt">
@@ -232,7 +232,7 @@
 	  	</antcall>
     </target>
 
-    <target name="deploy-appliance-zimlets"
+    <target name="deploy-appliance-zimlets" depends="clean"
             description="deploy all the applicance admin extensions">
 
 		<antcall target="deploy-zimlet">
