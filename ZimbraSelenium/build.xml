@@ -155,7 +155,7 @@
 	
 	<target name="Run html tests" depends="jar">
 		<echo message="running  html tests..." />		
-		<java classname="projects.html.bin.ExecuteTests" classpathref="runpath" fork="true">
+		<java classname="projects.html.bin.ExecuteTests" classpathref="class.path" fork="true">
 			<arg value="fullSuite" />
 			<jvmarg value="-ea" />
 			<jvmarg value="-Dfile.encoding=UTF-8" />
@@ -163,7 +163,7 @@
 	</target>
 	<target name="Run ajax tests" depends="jar">
 		<echo message="running ajax tests..." />		
-		<java classname="projects.zcs.bin.ExecuteTests" classpathref="runpath" fork="true">
+		<java classname="projects.zcs.bin.ExecuteTests" classpathref="class.path" fork="true">
 			<arg value="fullSuite" />
 			<jvmarg value="-ea" />
 			<jvmarg value="-Dfile.encoding=UTF-8" />
