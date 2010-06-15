@@ -1,0 +1,2851 @@
+Date: Mon, 14 Apr 2008 03:08:36 -0700 (PDT)
+From: jitesh.sojitra@zimbra.com
+To: Raja Rao <rrao@zimbra.com>, Prashant Jaiswal <pjaiswal@zimbra.com>, 
+	Krishnakumar Sure <krishnakumar.sure@zimbra.com>
+Cc: suryakant <suryakant@zimbra.com>, Matt Rhoades <matt.rhoades@zimbra.com>
+Message-ID: <13900319.561208167705781.JavaMail.SYSTEM@jsojitra>
+In-Reply-To: <000001c89e12$5cc82680$3d8e0a0a@liquidsys.com>
+Subject: Re: QTPResult_FULL_IE7(FRANKLIN 5.0.5_GA_2184.RHEL4.NETWORK qa62
+ QAFEPERF-1): Tests Ran:1446  Passed: 1208   Failed: 238   QTPIssues: 1
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_27_33513333.1208167705750"
+X-Mailer: Zimbra 0.84 (ZimbraWebClient - [unknown] (Win)/dev build)
+X-Mailer: Zimbra 5.0.5_GA_2168.RHEL4_64 (Zimbra Desktop/0.84)
+
+------=_Part_27_33513333.1208167705750
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+Hi All, 
+
+Total 27 scripts failed because of application/script issues and other issues in 18 scripts where QTP says:'Bug Still exists' and Bugzilla says:'I disagree'. 
+
+I have started looking into first 15 scripts from 27 failed scripts. 
+
+Thanks, 
+Jitesh Sojitra 
+
+----- Original Message ----- 
+From: QTPResultEmail@dogfood.zimbra.com 
+To: qa-automation@zimbra.com 
+Sent: Monday, April 14, 2008 3:01:48 PM GMT +05:30 Chennai, Kolkata, Mumbai, New Delhi 
+Subject: QTPResult_FULL_IE7(FRANKLIN 5.0.5_GA_2184.RHEL4.NETWORK qa62 QAFEPERF-1): Tests Ran:1446 Passed: 1208 Failed: 238 QTPIssues: 1 
+
+EXECUTION SUMMARY(IE7, ExecutionTime: 13.43hrs)... 
+
+
+TestCases: 84% have Passed (#Passed: 1208, #Failed: 238, #Issues: 0, #Total:1446) 		
+
+
+
+Scripts: 72% have Passed (#Passed: 100, #Failed: 54, #Issues: 1, #Total:155) 		
+
+Verifications:86% have Passed (#P assed: 2012, #Failed: 337, #Issues: 0, #Total:2349) 		
+
+
+
+Scripts that have failed because of 'known bugs' 
+# QTP Script Name Bug Number Bug Subject Current Status as per Bugzilla 
+1 	TC_VerifyCOS_FeaturesDisabled_InMail 	24985 	View menu not displayed in acc when Conversation is disabled in COS 	STATUS: NEW (PRIORITY: P2 SEVERITY: normal REPORTER: pjaiswal@zimbra.com ASSIGNEDTO: bugs_mail@zimbra.com) 
+2 	TC_AccessPublicFolder_Error_Bug17846 	17846 	Shared Folders: Trying to access a public folder through REST throws 501 error 	STATUS: CLOSED DUPLICATE (PRIORITY: P2 SEVERITY: normal REPORTER: rrao@zimbra.com ASSIGNEDTO: bugs_mail@zimbra.com) 
+3 	TC_Contact_Move_Trash 	18149 	Contact deleted from trash is still getting displayed until view is refreshed 	STATUS: ASSIGNED (PRIORITY: P2 SEVERITY: minor REPORTER: anil_reddy@persistent.co.in ASSIGNEDTO: bugs_contacts@zimbra.com) 
+4 	TC_Contact_ShareBug23560 	23560 	Can't invite shared contact group to appointment 	STATUS: ASSIGNED (PRIORITY: P2 SEVERITY: normal REPORTER: abhullar@zimbra.com ASSIGNEDTO: bugs_contacts@zimbra.com) 
+5 	TC_ItemMove_ToDiffMailbox_Bug7129 	24908 	start date missing in New task window 	STATUS: NEW (PRIORITY: P2 SEVERITY: normal REPORTER: krishnakumar@zimbra.com ASSIGNEDTO: bugs_tasks@zimbra.com) 
+6 	TC_Keyboard_Navigation_Basic 	24298 	Shortcut key (g+d) doesn't opens 'Documents' application in IE7 	STATUS: ASSIGNED (PRIORITY: P2 SEVERITY: normal REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: bugs_mail@zimbra.com) 
+7 	TC_ModifyAppt_WithAttch_Bug22874_And_Bug24183 	24183 	Appointment never removes attachments 	STATUS: ASSIGNED (PRIORITY: P1 SEVERITY: normal REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: bugs_calendar@zimbra.com) 
+8 	TC_Share_Items_Public 	24908 	start date missing in New task window 	STATUS: NEW (PRIORITY: P2 SEVERITY: normal REPORTER: krishnakumar@zimbra.com ASSIGNEDTO: bugs_tasks@zimbra.com) 
+9 	TC_Task_Create_Mod_Del 	24908 	start date missing in New task window 	STATUS: NEW (PRIORITY: P2 SEVERITY: normal REPORTER: krishnakumar@zimbra.com ASSIGNEDTO: bugs_tasks@zimbra.com) 
+10 	TC_Task_Folder_Share 	24908 	start date missing in New task window 	STATUS: NEW (PRIORITY: P2 SEVERITY: normal REPORTER: krishnakumar@zimbra.com ASSIGNEDTO: bugs_tasks@zimbra.com) 
+11 	TC_Task_Tag_RtClkVerify 	24908 	start date missing in New task window 	STATUS: NEW (PRIORITY: P2 SEVERITY: normal REPORTER: krishnakumar@zimbra.com ASSIGNEDTO: bugs_tasks@zimbra.com) 
+12 	TC_UnabletoCreateFilter_FromMail_Bug23637 	26052 	default To: field missing in NewFilter creation 	STATUS: NEW (PRIORITY: P2 SEVERITY: minor REPORTER: pjaiswal@zimbra.com ASSIGNEDTO: bugs_mail@zimbra.com) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QTP:'Bug Still exists' and Bugzilla:'I disagree' (PS: Either, fix the script or reopen the bug) 
+# QTP Script Name Bug Number Bug Subject Current Status as per Bugzilla 
+1 	TC_Admin_Global_Servers_AE_UI 	25358 	'm is not defined' error while click on new folder 	STATUS: VERIFIED FIXED (PRIORITY: P1 SEVERITY: critical REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com) 
+2 	TC_BR_SingleAccount_Cos_Alias 	25358 	'm is not defined' error while click on new folder 	STATUS: VERIFIED FIXED (PRIORITY: P1 SEVERITY: critical REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com) 
+3 	TC_Domain_DefaultCOS 	25358 	'm is not defined' error while click on new folder 	STATUS: VERIFIED FIXED (PRIORITY: P1 SEVERITY: critical REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com) 
+4 	TC_Zimlet_Deploy_UnDeploy 	20709 	Admin>Zimlets>Help: throws 404 	STATUS: VERIFIED FIXED (PRIORITY: P1 SEVERITY: major REPORTER: rrao@zimbra.com ASSIGNEDTO: greg@zimbra.com) 
+5 	TC_Address_Picker 	24914 	Select address : addresses can't be selecting using either To, Cc, or Bcc buttons 	STATUS: VERIFIED WORKSFORME (PRIORITY: P1 SEVERITY: major REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: pshah@zimbra.com) 
+6 	TC_Calendar_Bug22909 	22909 	Schedule View displaying wrong information 	STATUS: VERIFIED FIXED (PRIORITY: P1 SEVERITY: critical REPORTER: Landon.Abney@coffeylabs.com ASSIGNEDTO: satishs@zimbra.com) 
+7 	TC_Contact_Move 	24033 	Contact move from one address book to another doesn't work 	STATUS: VERIFIED FIXED (PRIORITY: P2 SEVERITY: normal REPORTER: pjaiswal@zimbra.com ASSIGNEDTO: pshah@zimbra.com) 
+8 	TC_Contact_Move 	25358 	'm is not defined' error while click on new folder 	STATUS: VERIFIED FIXED (PRIORITY: P1 SEVERITY: critical REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com) 
+9 	TC_Contact_Move_Trash 	18586 	Closing any document/appt./contact takes back to mail application 	STATUS: VERIFIED FIXED (PRIORITY: P1 SEVERITY: major REPORTER: krishnakumar@zimbra.com ASSIGNEDTO: bugs_mail@zimbra.com) 
+10 	TC_Create_Edit_Delete_AlldayAppt 	25358 	'm is not defined' error while click on new folder 	STATUS: VERIFIED FIXED (PRIORITY: P1 SEVERITY: critical REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com) 
+11 	TC_Family_VerifyChildAccount_InChild 	25358 	'm is not defined' error while click on new folder 	STATUS: VERIFIED FIXED (PRIORITY: P1 SEVERITY: critical REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com) 
+12 	TC_Family_VerifyChildAccount_InParent 	25358 	'm is not defined' error while click on new folder 	STATUS: VERIFIED FIXED (PRIORITY: P1 SEVERITY: critical REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com) 
+13 	TC_Family_VerifyParentAccount_InChild 	25358 	'm is not defined' error while click on new folder 	STATUS: VERIFIED FIXED (PRIORITY: P1 SEVERITY: critical REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com) 
+14 	TC_Find_Mail_Contact 	25358 	'm is not defined' error while click on new folder 	STATUS: VERIFIED FIXED (PRIORITY: P1 SEVERITY: critical REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com) 
+15 	TC_ImportContact 	15121 	Failed to import csv 	STATUS: VERIFIED DUPLICATE (PRIORITY: P2 SEVERITY: normal REPORTER: satish@zimbra.com ASSIGNEDTO: jylee@zimbra.com) 
+16 	TC_Mail_Compose 	24994 	New: Send mail functionality broken in new window 	STATUS: VERIFIED WORKSFORME (PRIORITY: P1 SEVERITY: major REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com) 
+17 	TC_Mail_Drafts 	24960 	Attachment dialog doesn't closes after attaching files in new window 	STATUS: VERIFIED WORKSFORME (PRIORITY: P1 SEVERITY: major REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: rajesh.segu@zimbra.com) 
+18 	TC_VerifyBccField_InNewWindow_Bug23044 	23044 	Script error when adding BCC field in new window 	STATUS: VERIFIED FIXED (PRIORITY: P1 SEVERITY: critical REPORTER: dcomfort@zimbra.com ASSIGNEDTO: pshah@zimbra.com) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Following Scripts have script issues 
+
+# Script Name A short description about the test script TestCases Verifications Speed(totalTime/#steps) #Logins 
+	1 	TC_Admin_CreateCOS 	Performs a very comprehensive set of automated-adhoc and -ve testing on all COS objects and verifies COS creation 	1 	5 	- 	3 	12 	- 	(1,097.89/142)=7.73secs/step 	1 
+	2 	TC_Admin_VerifyActiveSessions 	Verify Active sessions value is displayed correctly 	3 	2 	- 	6 	3 	- 	(151.25/38)=3.98secs/step 	2 
+	3 	TC_Certificates_SAN 	Verifies Installation of Certificates through Admin console 	3 	1 	- 	7 	1 	- 	(204.75/39)=5.25secs/step 	1 
+	4 	TC_Create_Delete_DomainAdmin_FromAdmin 	Verifies if domainadmin can login to admin and client. also checks MustChangePwd functionality 	5 	- 	- 	16 	3 	- 	(432.22/68)=6.36secs/step 	4 
+	5 	TC_HelpPdf_404Error_Bug23132 	Verifies all help page links and check whether each link opens correct page (should not through 404 error) - Bug 23132 	9 	1 	- 	30 	- 	- 	(141.33/47)=3.01secs/step 	2 
+	6 	TC_VerifyCOS_Failed_LoginPolicy 	Verifies that account is locked out after minimum number of incorrect allowed logins are exceeded. 	2 	- 	- 	10 	4 	- 	(401.63/73)=5.50secs/step 	10 
+	7 	TC_VerifyCOS_Preferences_NonDefault 	Verifies if non default COS features are properly reflected in the mail client 	8 	5 	- 	8 	4 	- 	(339.48/68)=4.99secs/step 	2 
+	8 	TC_VerifyCOS_TimeOuts 	Verifies if timeouts set in COS are properly reflected in mail client 	3 	3 	- 	11 	16 	- 	(774.06/91)=8.51secs/step 	3 
+	9 	TC_Address_Picker_20969 	This script verifies address deletion fuctionality as in bug 20969 	- 	1 	- 	6 	12 	- 	(123.13/41)=3.00secs/step 	1 
+	10 	TC_Appointment_AcceptDecline 	Executes different test cases for accepting and decling the appointment request 	- 	2 	- 	3 	17 	- 	(274.44/62)=4.43secs/step 	1 
+	11 	TC_Cal_HTMLApptBreaks_Bug22417 	Verifies Calendar html appt doesn't breaks any functionalty if we have 'Download pictures automatically in HTML email parameter' ON in Preference 	1 	2 	- 	5 	11 	- 	(275.52/37)=7.45secs/step 	3 
+	12 	TC_ChangePassword 	Verifies 'Change Password' feature in Options,general-tab including negative TCs) 	20 	3 	- 	8 	- 	- 	(338.05/157)=2.15secs/step 	8 
+	13 	TC_Contact_Edit 	Verifies if editing contacts in various ways works 	8 	5 	- 	13 	9 	- 	(430.50/104)=4.14secs/step 	1 
+	14 	TC_Export_Import_Calendar 	Verifies export and import of calendar to and from ics file 	- 	2 	- 	5 	6 	- 	(380.28/46)=8.27secs/step 	2 
+	15 	TC_Export_Import_Contacts 	Verifies export and import of contacts to and from .csv file 	- 	2 	- 	4 	5 	- 	(344.02/42)=8.19secs/step 	2 
+	16 	TC_Family_VerifyMails 	Verifies family mailboxes functionality 	- 	2 	- 	8 	2 	- 	(121.56/45)=2.70secs/step 	6 
+	17 	TC_Keyboard_Navigation_Advanced 	Verifies advanced keyboard navigaion in Zimbra UI 	- 	- 	- 	13 	- 	- 	(318.22/83)=3.83secs/step 	3 
+	18 	TC_Mail_Fwd 	Verified various ways of mail forwarding functionality 	- 	3 	- 	- 	2 	- 	(3,053.77/13)=234.91secs/step 	1 
+	19 	TC_Mail_Signatures 	This Script verifies the mail signature functionality with different persona 	1 	6 	- 	9 	11 	- 	(133.92/64)=2.09secs/step 	2 
+	20 	TC_New_DropDown 	Tests functionality of the New-menu by creating various mails, contacts and calendar, address books 	4 	17 	- 	3 	14 	- 	(280.70/55)=5.10secs/step 	1 
+	21 	TC_Options_General 	Executes several tests to verify various features in Options-General-tab 	8 	4 	- 	1 	8 	- 	(132.47/47)=2.82secs/step 	1 
+	22 	TC_Options_Mail 	Executes several tests that sets and verifies all the UI features in Options-Mail-tab 	28 	2 	- 	30 	6 	- 	(1,026.41/288)=3.56secs/step 	15 
+	23 	TC_Search 	Verifies that for different search combinations in the Search Builder corresponding search query is formed 	21 	5 	- 	1 	14 	- 	(359.47/256)=1.40secs/step 	1 
+	24 	TC_Subject_Filter 	Verifies if 'subjects' related filter rules for work properly 	18 	5 	- 	13 	7 	- 	(647.69/199)=3.25secs/step 	5 
+	25 	TC_Zimbra_Assistant_Mail 	Verifies Zimra assistant for send-mail functionality 	22 	3 	- 	57 	1 	- 	(584.31/194)=3.01secs/step 	13 
+	26 	TC_obo_appt_edit_sec_boss 	This test appt. created by secretary can be modified by boss and vice versa 	8 	2 	- 	25 	2 	- 	(388.53/136)=2.86secs/step 	6 
+	27 	TC_obo_verify_UI 	This test verifies UI for obo appointments 	5 	2 	- 	4 	- 	- 	(101.58/46)=2.21secs/step 	2 
+
+
+
+
+
+
+
+Following Scripts have passed 
+
+# Script Name A short description about the test script TestCases Verifications Speed(totalTime/#steps) #Logins 
+	1 	TC_Account_Options_FromAdmin 	Following script will validate various menu options for account after login as Admin.. 	8 	- 	- 	13 	- 	- 	(156.91/49)=3.20secs/step 	2 
+	2 	TC_Account_Options_FromDomainAdmin 	Following script will validate various menu options for account after login as Domain Admin 	8 	- 	- 	12 	- 	- 	(142.42/48)=2.97secs/step 	2 
+	3 	TC_Admin_DomainAdmin_Admin_Privileges 	This Script will verify privileges of Admin and DomainAdmin 	11 	- 	- 	27 	- 	- 	(568.28/105)=5.41secs/step 	5 
+	4 	TC_Admin_Folder_CheckExpn 	This Script will check that no expn thrown by click on folders and its sub folders in left overview pane of Admin and DA 	2 	- 	- 	9 	- 	- 	(311.99/24)=13.00secs/step 	4 
+	5 	TC_Admin_Login 	Verifies Admin login functionalities(both positive and -ve) 	10 	- 	- 	32 	- 	- 	(830.11/92)=9.02secs/step 	12 
+	6 	TC_Admin_VerifyTabs 	Verifies Close tab and Close All Tabs functionality for Account tabs in Admin Console 	4 	- 	- 	3 	- 	- 	(118.20/30)=3.94secs/step 	2 
+	7 	TC_Admin_ViewMail 	Verifies ViewMail Functionality 	3 	- 	- 	3 	- 	- 	(91.42/19)=4.81secs/step 	1 
+	8 	TC_Admin_Volume 	Verifies changing some properties of account doesnt change other properties after Saving it 	5 	- 	- 	4 	- 	- 	(91.03/23)=3.96secs/step 	1 
+	9 	TC_Admin_ZimletVerify 	Verifies default Zimlets are loaded or not during installation 	7 	- 	- 	3 	- 	- 	(80.24/22)=3.65secs/step 	1 
+	10 	TC_Cmbx_AttWidget_Bug23334 	Verification of Context menu options 	1 	- 	- 	3 	- 	- 	(82.27/19)=4.33secs/step 	1 
+	11 	TC_Cmbx_Search 	Verify cross mailbox search 	4 	- 	- 	8 	- 	- 	(318.86/85)=3.75secs/step 	10 
+	12 	TC_Create_Delete_Account_From_DomainAdmin 	Verifies if domainadmin can create or delete userAccounts and other DA. Also, checks MustChangePwd functionality 	19 	- 	- 	61 	- 	- 	(1,350.45/279)=4.84secs/step 	17 
+	13 	TC_Create_Edit_Delete_DL_DomainAdmin 	Create DL in domain admin and Send mail to DL. Later Verifies mail in user account who is member of that DL. Edit DL, change name, save it and delete it. 	13 	- 	- 	23 	- 	- 	(479.03/114)=4.20secs/step 	7 
+	14 	TC_Create_Location_Resource 	Verifies if Locations and Equipments created in Admin Console can be searched in mailclient 	6 	- 	- 	9 	- 	- 	(207.64/60)=3.46secs/step 	1 
+	15 	TC_Create_Location_Resource_DA 	Verifies if Locations and Equipments created,edited and deleted as DomainAdmin can be searched in mailclient 	6 	- 	- 	12 	- 	- 	(228.00/62)=3.68secs/step 	1 
+	16 	TC_Create_Verify_DL 	Create DL in admin and Send mail to Distribution List then Verify mail in user accounts who are members of thatDistribution List 	13 	- 	- 	20 	- 	- 	(383.81/96)=4.00secs/step 	6 
+	17 	TC_DomainAdmin_Privileges 	This Script will verify privileges of Domain Admin 	5 	- 	- 	12 	- 	- 	(188.28/54)=3.49secs/step 	2 
+	18 	TC_Domain_Create_Delete 	This script creates a simple domain and deletes the domain 	4 	- 	- 	8 	- 	- 	(93.30/25)=3.73secs/step 	1 
+	19 	TC_Domain_Option 	Verifies all the menu the domain menu tool bar options, domain context menu options 	6 	- 	- 	11 	- 	- 	(102.88/39)=2.64secs/step 	1 
+	20 	TC_Duplicate_COS 	This Script will verify if all the values or features in default COS and duplicateCOS as same. 	38 	- 	- 	10 	- 	- 	(146.44/67)=2.19secs/step 	1 
+	21 	TC_Edit_Account 	Verifies changing some properties of account doesnt change other properties after Saving it 	12 	- 	- 	5 	- 	- 	(442.27/86)=5.14secs/step 	2 
+	22 	TC_InstallCertificates 	Verifies Installation of Certificates through Admin console 	16 	- 	- 	19 	- 	- 	(243.08/120)=2.03secs/step 	1 
+	23 	TC_MailQueue 	This Script will verify that buttons or tabs works fine without throwing expn in Mail Queue 	3 	- 	- 	4 	- 	- 	(172.45/39)=4.42secs/step 	1 
+	24 	TC_NtwkExpirationDateTest 	Verify the expiration date notice(60days from installation date) is displayed on loginpage and toastarea of Admin console(network edition only) 	1 	- 	- 	4 	- 	- 	(65.59/12)=5.47secs/step 	3 
+	25 	TC_VerifyCOS_PwdComplexity_InMail 	Verifies that password complexity rules defined in COS are properly applied 	5 	- 	- 	11 	- 	- 	(392.30/92)=4.26secs/step 	4 
+	26 	TC_VerifyCOS_Quotas 	Verifies the quotas set in COS (for contacts and mail box size) 	4 	- 	- 	11 	- 	- 	(285.31/83)=3.44secs/step 	3 
+	27 	TC_Verify_AliasMove 	Verify moving of alias from one account to another 	1 	- 	- 	17 	- 	- 	(289.86/68)=4.26secs/step 	9 
+	28 	TC_Verify_Aliases 	Verify that aliases of an accounts work 	1 	- 	- 	14 	- 	- 	(201.48/52)=3.87secs/step 	8 
+	29 	TC_Verify_BackupRestore_WizardsUI 	Verifies the Backup and Restore Wizard UIs 	2 	- 	- 	8 	- 	- 	(80.22/25)=3.21secs/step 	1 
+	30 	TC_Verify_FullBackup_SingleAccount 	Verifies Backup and Restore of a single account 	1 	- 	- 	19 	- 	- 	(352.05/79)=4.46secs/step 	5 
+	31 	TC_Auth_Verify 	Verifies mail client authentication by performing several +ve and -ve tests 	7 	- 	- 	21 	- 	- 	(252.84/72)=3.51secs/step 	10 
+	32 	TC_Calendar_Bug15251 	This Script will verify that dragged mail to mini cal respects deleted invitees [bug 15251] 	3 	- 	- 	15 	- 	- 	(164.80/60)=2.75secs/step 	4 
+	33 	TC_Calendar_Share_Role_None 	Verifies sharing Calendar with none role and if sharee can edit,delete etc 	12 	- 	- 	17 	- 	- 	(223.00/90)=2.48secs/step 	4 
+	34 	TC_Check_Appointment_Repeat_Link 	Verifies that correct link is created for all major recurrence options in the recurrence dialog 	40 	- 	- 	21 	- 	- 	(732.89/308)=2.38secs/step 	1 
+	35 	TC_Check_Clear_All 	Verifies display or hide appts by uncheck or checking calendar chkboxes works 	5 	- 	- 	4 	- 	- 	(53.23/21)=2.53secs/step 	1 
+	36 	TC_Compose_WithMultipleAttchmnt_AndDownload 	Verifies multiple attachments and downloading work properly 	3 	- 	- 	12 	- 	- 	(102.64/37)=2.77secs/step 	4 
+	37 	TC_Contact 	Executes several tests that creates and verifies various ways of contact creation 	20 	- 	- 	3 	- 	- 	(383.38/259)=1.48secs/step 	2 
+	38 	TC_ContactGroup_Create_Delete 	Verifies if contactsGroup can be created and deleted 	10 	- 	- 	7 	- 	- 	(138.08/64)=2.16secs/step 	1 
+	39 	TC_ContactGroup_EditTag 	Verifies if ContactGroups can be edited and can have tags 	5 	- 	- 	11 	- 	- 	(122.56/50)=2.45secs/step 	1 
+	40 	TC_ContactGroup_MailCompose 	Verifies if the all members of the contactGroups receives email 	5 	- 	- 	13 	- 	- 	(161.00/53)=3.04secs/step 	4 
+	41 	TC_Contact_Share_Role_Manager 	Verifies sharing contacts with manager role and if sharee can edit,delete etc 	26 	- 	- 	50 	- 	- 	(469.30/174)=2.70secs/step 	3 
+	42 	TC_Contact_Share_Role_None 	Verifies sharing contacts with none role and sharee cant do anything 	5 	- 	- 	7 	- 	- 	(95.48/40)=2.39secs/step 	2 
+	43 	TC_Contact_Share_Role_View 	Verifies sharing contacts with view role and if sharee can only view it and not edit it 	6 	- 	- 	26 	- 	- 	(164.50/81)=2.03secs/step 	2 
+	44 	TC_Create_Appointment 	Verifies appointment creation, appt invite contents and accept/decline etc functionalities 	2 	- 	- 	16 	- 	- 	(204.05/88)=2.32secs/step 	4 
+	45 	TC_Create_Edit_Delete_SimpleAppt 	This script will create edit and delete simple appts 	9 	- 	- 	28 	- 	- 	(586.23/151)=3.88secs/step 	2 
+	46 	TC_CustomLogin_Bug23149 	Verifies search query string is preserved on login 	1 	- 	- 	5 	- 	- 	(23.39/12)=1.95secs/step 	2 
+	47 	TC_Edit_Appt_Cancellation_Message 	This Script will cancel the created appt. and verify that appt. cancellation message is sent to attendee 	1 	- 	- 	6 	- 	- 	(111.77/34)=3.29secs/step 	1 
+	48 	TC_FindAttendees 	Verifies if the attendees added in FindAttendees-tab gets calendar invite 	28 	- 	- 	8 	- 	- 	(159.30/82)=1.94secs/step 	5 
+	49 	TC_FlagToShareMail_Bug23904 	This script verify this script verifies functionality flagging a shared message 	1 	- 	- 	19 	- 	- 	(102.67/52)=1.97secs/step 	3 
+	50 	TC_Folder_Create_Delete 	Verifies creation and deletion of folders or subFolders by performing several +ve and -ve tests 	19 	- 	- 	24 	- 	- 	(156.97/109)=1.44secs/step 	1 
+	51 	TC_Folder_Move 	Verified that subfolders can be moved from one parent folder to another. Tests for different combinations 	8 	- 	- 	13 	- 	- 	(52.16/47)=1.11secs/step 	1 
+	52 	TC_Folder_Share_Role_Manager 	Verifies TaskList Create/Delete and TaskList sharing with different rights 	9 	- 	- 	19 	- 	- 	(117.95/62)=1.90secs/step 	3 
+	53 	TC_Folder_Share_Role_View 	Verifies TaskList Create/Delete and TaskList sharing with different rights 	6 	- 	- 	18 	- 	- 	(104.11/56)=1.86secs/step 	3 
+	54 	TC_Folder_Share_VerifyDelete 	Verifies TaskList Create/Delete and TaskList sharing with different rights 	6 	- 	- 	18 	- 	- 	(111.08/60)=1.85secs/step 	4 
+	55 	TC_Folder_Share_VerifyOBO 	Verifies TaskList Create/Delete and TaskList sharing with different rights 	8 	- 	- 	18 	- 	- 	(129.00/62)=2.08secs/step 	3 
+	56 	TC_Fwd_Multiple_MsgAndConv 	Verifies fwd'ing of mails and conv. 	2 	- 	- 	12 	- 	- 	(253.23/73)=3.47secs/step 	8 
+	57 	TC_GALDisabled_AddPicker_Bug18252 	Verifies Bug 18252 	1 	- 	- 	6 	- 	- 	(110.14/33)=3.34secs/step 	2 
+	58 	TC_HelpVerifyUI 	Verifies if Online help is working and has logos, copyright etc 	1 	- 	- 	6 	- 	- 	(28.63/13)=2.20secs/step 	1 
+	59 	TC_Location 	Verifies search feature of apptLocations and apptResources tabs in Calendar 	43 	- 	- 	26 	- 	- 	(228.61/285)=0.80secs/step 	1 
+	60 	TC_LoginDirectlyToApps 	69 	6 	- 	- 	27 	- 	- 	(228.61/18)=12.70secs/step 	1 
+	61 	TC_Login_RememberMe 	Verifies the 'Remember me on this computer checkbox' functionality 	4 	- 	- 	2 	- 	- 	(68.30/16)=4.27secs/step 	2 
+	62 	TC_Mail_Compose_AttachmentExt 	Compose mails with different Attachment Extension and verify that they are received properly 	28 	- 	- 	31 	- 	- 	(635.28/155)=4.10secs/step 	2 
+	63 	TC_Mail_Delete 	Verifies mail Delete using context menu, Hard-delete and delete using Trash-btn features in both views 	12 	- 	- 	16 	- 	- 	(241.50/74)=3.26secs/step 	2 
+	64 	TC_Mail_Move 	Verifies mail Drag-Drop, Move using Move-btn, move using context-menu b/w various folders and sub-folders 	7 	- 	- 	22 	- 	- 	(508.31/112)=4.54secs/step 	2 
+	65 	TC_Mail_ReadFlag 	Verifies Read,UnRead; Flag, unflag features in both msg and conv views 	10 	- 	- 	18 	- 	- 	(175.78/77)=2.28secs/step 	2 
+	66 	TC_Mail_ReplyFwdJunk 	Verify if mails can be replied, forwarded and marked as junk 	15 	- 	- 	12 	- 	- 	(209.61/73)=2.87secs/step 	2 
+	67 	TC_Mail_Verify_AttchmntandContent 	Performs tests to verify mail content's consistency in both views. 	6 	- 	- 	11 	- 	- 	(138.42/51)=2.71secs/step 	3 
+	68 	TC_Mail_Verify_InSentandDrafts 	Executes several tests that verifies 'Save mails to sent-fldr' and 'Save to drafts' features 	2 	- 	- 	4 	- 	- 	(73.47/25)=2.94secs/step 	1 
+	69 	TC_Modify_Draft 	Related to Bug 7016-Creates a draft-modifies it in new window and then verifies the modification 	2 	- 	- 	3 	- 	- 	(51.30/32)=1.60secs/step 	1 
+	70 	TC_MultipleAttachments_FwdReply 	Verifies attachment behavior while fwd'ing and reply'ing mails 	2 	- 	- 	8 	- 	- 	(147.53/53)=2.78secs/step 	8 
+	71 	TC_Notebook_EditDelete 	Verify edit/delete of document page 	33 	- 	- 	3 	- 	- 	(67.75/56)=1.21secs/step 	1 
+	72 	TC_Notebook_Share_Role_Manager 	This script tests the shared Notebook functionality for Manager role 	15 	- 	- 	23 	- 	- 	(240.05/107)=2.24secs/step 	4 
+	73 	TC_Notebook_Share_Role_None 	This script tests the shared Notebook functionality for None role 	12 	- 	- 	17 	- 	- 	(205.70/80)=2.57secs/step 	4 
+	74 	
+------=_Part_27_33513333.1208167705750
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><style type=3D'text/css'>p { margin: 0; }</style><style type=3D=
+'text/css'>body { font-family: 'Arial'; font-size: 10pt; color: #000000}</s=
+tyle></head><body>Hi All,<br><br>Total 27 scripts failed because of applica=
+tion/script issues and other issues in 18 scripts where QTP says:'Bug Still=
+ exists' and Bugzilla says:'I disagree'.<br><br>I have started looking into=
+ first 15 scripts from 27 failed scripts.<br><br>Thanks,<br>Jitesh Sojitra<=
+br><br>----- Original Message -----<br>From: QTPResultEmail@dogfood.zimbra.=
+com<br>To: qa-automation@zimbra.com<br>Sent: Monday, April 14, 2008 3:01:48=
+ PM GMT +05:30 Chennai, Kolkata, Mumbai, New Delhi<br>Subject: QTPResult_FU=
+LL_IE7(FRANKLIN 5.0.5_GA_2184.RHEL4.NETWORK qa62 QAFEPERF-1): Tests Ran:144=
+6 &nbsp;Passed: 1208 &nbsp; Failed: 238 &nbsp; QTPIssues: 1<br><br><link hr=
+ef=3D"/zimbra/css/msgview.css?v=3D080413060714" rel=3D"stylesheet"><h4>EXEC=
+UTION SUMMARY(IE7, ExecutionTime: 13.43hrs)...</h4><p><table align=3D"cente=
+r" cellspacing=3D"0" width=3D"85%"><tbody><tr><td bgcolor=3D"#008049" width=
+=3D"84%"><font style=3D"color: WHITE;" size=3D"2">TestCases: 84%  have Pass=
+ed</font><font style=3D"color: WHITE;" size=3D"1"> (#Passed: 1208, #Failed:=
+ 238, #Issues: 0, #Total:1446)</font></td><td bgcolor=3D"#cf3830" width=3D"=
+16%"></td><td bgcolor=3D"ORANGE" width=3D"0%"></td></tr></tbody></table></p=
+><p></p><p><table align=3D"center" cellspacing=3D"0" width=3D"85%"><tbody><=
+tr><td bgcolor=3D"#008049" width=3D"72%"><font style=3D"color: WHITE;" size=
+=3D"2">Scripts: 72% have Passed</font><font style=3D"color: WHITE;" size=3D=
+"1"> (#Passed: 100, #Failed: 54, #Issues: 1, #Total:155)</font></td><td bgc=
+olor=3D"#cf3830" width=3D"27%"></td><td bgcolor=3D"ORANGE" width=3D"1%"></t=
+d></tr></tbody></table></p><p><table align=3D"center" cellspacing=3D"0" wid=
+th=3D"85%"><tbody><tr><td bgcolor=3D"#008049" width=3D"86%"><font style=3D"=
+color: WHITE;" size=3D"2">Verifications:86% have Passed</font><font style=
+=3D"color: WHITE;" size=3D"1"> (#P
+ assed: 2012, #Failed: 337, #Issues: 0, #Total:2349)</font></td><td bgcolor=
+=3D"#cf3830" width=3D"14%"></td><td bgcolor=3D"ORANGE" width=3D"0%"></td></=
+tr></tbody></table></p><p><br><br><table align=3D"center" border=3D"1" cell=
+spacing=3D"0" width=3D"100%"><tbody><tr><th colspan=3D"5" bgcolor=3D"#c0c0c=
+0">Scripts that have failed because of 'known bugs' </th></tr><tr bgcolor=
+=3D"#eeeeee"><th>#</th><th>QTP Script Name </th><th>Bug Number</th><th>Bug =
+Subject</th><th>Current Status as per Bugzilla</th></tr>
+<tr align=3D"left"><td>1</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_VerifyCOS_FeaturesDisabled_InMail.=
+html" target=3D"_blank">TC_VerifyCOS_FeaturesDisabled_InMail</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D24985" targ=
+et=3D"_blank">24985</a></u> </td>
+<td>View menu not displayed in acc when Conversation is disabled in COS</td=
+><td><b>STATUS: NEW</b> <font size=3D"2">(PRIORITY: P2 SEVERITY: normal REP=
+ORTER: pjaiswal@zimbra.com ASSIGNEDTO: bugs_mail@zimbra.com)</font></td></t=
+r>
+<tr align=3D"left"><td>2</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_AccessPublicFolder_Error_Bug17846.=
+html" target=3D"_blank">TC_AccessPublicFolder_Error_Bug17846</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D17846" targ=
+et=3D"_blank">17846</a></u> </td>
+<td>Shared Folders: Trying to access a public folder through REST throws 50=
+1 error</td><td><b>STATUS: CLOSED DUPLICATE</b> <font size=3D"2">(PRIORITY:=
+ P2 SEVERITY: normal REPORTER: rrao@zimbra.com ASSIGNEDTO: bugs_mail@zimbra=
+.com)</font></td></tr>
+<tr align=3D"left"><td>3</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Contact_Move_Trash.html" target=3D=
+"_blank">TC_Contact_Move_Trash</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D18149" targ=
+et=3D"_blank">18149</a></u> </td>
+<td>Contact deleted from trash is still getting displayed until view is ref=
+reshed</td><td><b>STATUS: ASSIGNED</b> <font size=3D"2">(PRIORITY: P2 SEVER=
+ITY: minor REPORTER: anil_reddy@persistent.co.in ASSIGNEDTO: bugs_contacts@=
+zimbra.com)</font></td></tr>
+<tr align=3D"left"><td>4</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Contact_ShareBug23560.html" target=
+=3D"_blank">TC_Contact_ShareBug23560</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D23560" targ=
+et=3D"_blank">23560</a></u> </td>
+<td>Can't invite shared contact group to appointment</td><td><b>STATUS: ASS=
+IGNED</b> <font size=3D"2">(PRIORITY: P2 SEVERITY: normal REPORTER: abhulla=
+r@zimbra.com ASSIGNEDTO: bugs_contacts@zimbra.com)</font></td></tr>
+<tr align=3D"left"><td>5</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_ItemMove_ToDiffMailbox_Bug7129.htm=
+l" target=3D"_blank">TC_ItemMove_ToDiffMailbox_Bug7129</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D24908" targ=
+et=3D"_blank">24908</a></u> </td>
+<td>start date missing in New task window</td><td><b>STATUS: NEW</b> <font =
+size=3D"2">(PRIORITY: P2 SEVERITY: normal REPORTER: krishnakumar@zimbra.com=
+ ASSIGNEDTO: bugs_tasks@zimbra.com)</font></td></tr>
+<tr align=3D"left"><td>6</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Keyboard_Navigation_Basic.html" ta=
+rget=3D"_blank">TC_Keyboard_Navigation_Basic</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D24298" targ=
+et=3D"_blank">24298</a></u> </td>
+<td>Shortcut key (g+d) doesn't opens 'Documents' application in IE7</td><td=
+><b>STATUS: ASSIGNED</b> <font size=3D"2">(PRIORITY: P2 SEVERITY: normal RE=
+PORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: bugs_mail@zimbra.com)</font><=
+/td></tr>
+<tr align=3D"left"><td>7</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_ModifyAppt_WithAttch_Bug22874_And_=
+Bug24183.html" target=3D"_blank">TC_ModifyAppt_WithAttch_Bug22874_And_Bug24=
+183</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D24183" targ=
+et=3D"_blank">24183</a></u> </td>
+<td>Appointment never removes attachments</td><td><b>STATUS: ASSIGNED</b> <=
+font size=3D"2">(PRIORITY: P1 SEVERITY: normal REPORTER: jitesh.sojitra@zim=
+bra.com ASSIGNEDTO: bugs_calendar@zimbra.com)</font></td></tr>
+<tr align=3D"left"><td>8</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Share_Items_Public.html" target=3D=
+"_blank">TC_Share_Items_Public</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D24908" targ=
+et=3D"_blank">24908</a></u> </td>
+<td>start date missing in New task window</td><td><b>STATUS: NEW</b> <font =
+size=3D"2">(PRIORITY: P2 SEVERITY: normal REPORTER: krishnakumar@zimbra.com=
+ ASSIGNEDTO: bugs_tasks@zimbra.com)</font></td></tr>
+<tr align=3D"left"><td>9</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Task_Create_Mod_Del.html" target=
+=3D"_blank">TC_Task_Create_Mod_Del</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D24908" targ=
+et=3D"_blank">24908</a></u> </td>
+<td>start date missing in New task window</td><td><b>STATUS: NEW</b> <font =
+size=3D"2">(PRIORITY: P2 SEVERITY: normal REPORTER: krishnakumar@zimbra.com=
+ ASSIGNEDTO: bugs_tasks@zimbra.com)</font></td></tr>
+<tr align=3D"left"><td>10</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Task_Folder_Share.html" target=3D"=
+_blank">TC_Task_Folder_Share</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D24908" targ=
+et=3D"_blank">24908</a></u> </td>
+<td>start date missing in New task window</td><td><b>STATUS: NEW</b> <font =
+size=3D"2">(PRIORITY: P2 SEVERITY: normal REPORTER: krishnakumar@zimbra.com=
+ ASSIGNEDTO: bugs_tasks@zimbra.com)</font></td></tr>
+<tr align=3D"left"><td>11</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Task_Tag_RtClkVerify.html" target=
+=3D"_blank">TC_Task_Tag_RtClkVerify</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D24908" targ=
+et=3D"_blank">24908</a></u> </td>
+<td>start date missing in New task window</td><td><b>STATUS: NEW</b> <font =
+size=3D"2">(PRIORITY: P2 SEVERITY: normal REPORTER: krishnakumar@zimbra.com=
+ ASSIGNEDTO: bugs_tasks@zimbra.com)</font></td></tr>
+<tr align=3D"left"><td>12</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_UnabletoCreateFilter_FromMail_Bug2=
+3637.html" target=3D"_blank">TC_UnabletoCreateFilter_FromMail_Bug23637</a><=
+/td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D26052" targ=
+et=3D"_blank">26052</a></u> </td>
+<td>default  To: field missing in NewFilter creation</td><td><b>STATUS: NEW=
+</b> <font size=3D"2">(PRIORITY: P2 SEVERITY: minor REPORTER: pjaiswal@zimb=
+ra.com ASSIGNEDTO: bugs_mail@zimbra.com)</font></td></tr></tbody></table></=
+p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p><br><br><table align=
+=3D"center" border=3D"1" cellspacing=3D"0" width=3D"100%"><tbody><tr><th co=
+lspan=3D"5" bgcolor=3D"#c0c0c0">QTP:'Bug Still exists' and Bugzilla:'I disa=
+gree' (PS: Either, fix the script or reopen the bug)</th></tr><tr bgcolor=
+=3D"#eeeeee"><th>#</th><th>QTP Script Name </th><th>Bug Number</th><th>Bug =
+Subject</th><th>Current Status as per Bugzilla</th></tr>
+<tr align=3D"left"><td>1</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Admin_Global_Servers_AE_UI.html" t=
+arget=3D"_blank">TC_Admin_Global_Servers_AE_UI</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D25358" targ=
+et=3D"_blank">25358</a></u> </td>
+<td>'m is not defined' error while click on new folder</td><td><b>STATUS: V=
+ERIFIED FIXED</b> <font size=3D"2">(PRIORITY: P1 SEVERITY: critical REPORTE=
+R: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com)</font></td></tr=
+>
+<tr align=3D"left"><td>2</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_BR_SingleAccount_Cos_Alias.html" t=
+arget=3D"_blank">TC_BR_SingleAccount_Cos_Alias</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D25358" targ=
+et=3D"_blank">25358</a></u> </td>
+<td>'m is not defined' error while click on new folder</td><td><b>STATUS: V=
+ERIFIED FIXED</b> <font size=3D"2">(PRIORITY: P1 SEVERITY: critical REPORTE=
+R: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com)</font></td></tr=
+>
+<tr align=3D"left"><td>3</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Domain_DefaultCOS.html" target=3D"=
+_blank">TC_Domain_DefaultCOS</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D25358" targ=
+et=3D"_blank">25358</a></u> </td>
+<td>'m is not defined' error while click on new folder</td><td><b>STATUS: V=
+ERIFIED FIXED</b> <font size=3D"2">(PRIORITY: P1 SEVERITY: critical REPORTE=
+R: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com)</font></td></tr=
+>
+<tr align=3D"left"><td>4</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Zimlet_Deploy_UnDeploy.html" targe=
+t=3D"_blank">TC_Zimlet_Deploy_UnDeploy</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D20709" targ=
+et=3D"_blank">20709</a></u> </td>
+<td>Admin&gt;Zimlets&gt;Help: throws 404</td><td><b>STATUS: VERIFIED FIXED<=
+/b> <font size=3D"2">(PRIORITY: P1 SEVERITY: major REPORTER: rrao@zimbra.co=
+m ASSIGNEDTO: greg@zimbra.com)</font></td></tr>
+<tr align=3D"left"><td>5</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Address_Picker.html" target=3D"_bl=
+ank">TC_Address_Picker</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D24914" targ=
+et=3D"_blank">24914</a></u> </td>
+<td>Select address : addresses can't be selecting using either To, Cc, or B=
+cc buttons</td><td><b>STATUS: VERIFIED WORKSFORME</b> <font size=3D"2">(PRI=
+ORITY: P1 SEVERITY: major REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: p=
+shah@zimbra.com)</font></td></tr>
+<tr align=3D"left"><td>6</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Calendar_Bug22909.html" target=3D"=
+_blank">TC_Calendar_Bug22909</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D22909" targ=
+et=3D"_blank">22909</a></u> </td>
+<td>Schedule View displaying wrong information</td><td><b>STATUS: VERIFIED =
+FIXED</b> <font size=3D"2">(PRIORITY: P1 SEVERITY: critical REPORTER: Lando=
+n.Abney@coffeylabs.com ASSIGNEDTO: satishs@zimbra.com)</font></td></tr>
+<tr align=3D"left"><td>7</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Contact_Move.html" target=3D"_blan=
+k">TC_Contact_Move</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D24033" targ=
+et=3D"_blank">24033</a></u> </td>
+<td>Contact move from one address book to another doesn't work</td><td><b>S=
+TATUS: VERIFIED FIXED</b> <font size=3D"2">(PRIORITY: P2 SEVERITY: normal R=
+EPORTER: pjaiswal@zimbra.com ASSIGNEDTO: pshah@zimbra.com)</font></td></tr>
+<tr align=3D"left"><td>8</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Contact_Move.html" target=3D"_blan=
+k">TC_Contact_Move</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D25358" targ=
+et=3D"_blank">25358</a></u> </td>
+<td>'m is not defined' error while click on new folder</td><td><b>STATUS: V=
+ERIFIED FIXED</b> <font size=3D"2">(PRIORITY: P1 SEVERITY: critical REPORTE=
+R: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com)</font></td></tr=
+>
+<tr align=3D"left"><td>9</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Contact_Move_Trash.html" target=3D=
+"_blank">TC_Contact_Move_Trash</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D18586" targ=
+et=3D"_blank">18586</a></u> </td>
+<td>Closing any document/appt./contact takes back to mail application</td><=
+td><b>STATUS: VERIFIED FIXED</b> <font size=3D"2">(PRIORITY: P1 SEVERITY: m=
+ajor REPORTER: krishnakumar@zimbra.com ASSIGNEDTO: bugs_mail@zimbra.com)</f=
+ont></td></tr>
+<tr align=3D"left"><td>10</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Create_Edit_Delete_AlldayAppt.html=
+" target=3D"_blank">TC_Create_Edit_Delete_AlldayAppt</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D25358" targ=
+et=3D"_blank">25358</a></u> </td>
+<td>'m is not defined' error while click on new folder</td><td><b>STATUS: V=
+ERIFIED FIXED</b> <font size=3D"2">(PRIORITY: P1 SEVERITY: critical REPORTE=
+R: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com)</font></td></tr=
+>
+<tr align=3D"left"><td>11</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Family_VerifyChildAccount_InChild.=
+html" target=3D"_blank">TC_Family_VerifyChildAccount_InChild</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D25358" targ=
+et=3D"_blank">25358</a></u> </td>
+<td>'m is not defined' error while click on new folder</td><td><b>STATUS: V=
+ERIFIED FIXED</b> <font size=3D"2">(PRIORITY: P1 SEVERITY: critical REPORTE=
+R: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com)</font></td></tr=
+>
+<tr align=3D"left"><td>12</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Family_VerifyChildAccount_InParent=
+.html" target=3D"_blank">TC_Family_VerifyChildAccount_InParent</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D25358" targ=
+et=3D"_blank">25358</a></u> </td>
+<td>'m is not defined' error while click on new folder</td><td><b>STATUS: V=
+ERIFIED FIXED</b> <font size=3D"2">(PRIORITY: P1 SEVERITY: critical REPORTE=
+R: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com)</font></td></tr=
+>
+<tr align=3D"left"><td>13</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Family_VerifyParentAccount_InChild=
+.html" target=3D"_blank">TC_Family_VerifyParentAccount_InChild</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D25358" targ=
+et=3D"_blank">25358</a></u> </td>
+<td>'m is not defined' error while click on new folder</td><td><b>STATUS: V=
+ERIFIED FIXED</b> <font size=3D"2">(PRIORITY: P1 SEVERITY: critical REPORTE=
+R: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com)</font></td></tr=
+>
+<tr align=3D"left"><td>14</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Find_Mail_Contact.html" target=3D"=
+_blank">TC_Find_Mail_Contact</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D25358" targ=
+et=3D"_blank">25358</a></u> </td>
+<td>'m is not defined' error while click on new folder</td><td><b>STATUS: V=
+ERIFIED FIXED</b> <font size=3D"2">(PRIORITY: P1 SEVERITY: critical REPORTE=
+R: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com)</font></td></tr=
+>
+<tr align=3D"left"><td>15</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_ImportContact.html" target=3D"_bla=
+nk">TC_ImportContact</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D15121" targ=
+et=3D"_blank">15121</a></u> </td>
+<td>Failed to import csv</td><td><b>STATUS: VERIFIED DUPLICATE</b> <font si=
+ze=3D"2">(PRIORITY: P2 SEVERITY: normal REPORTER: satish@zimbra.com ASSIGNE=
+DTO: jylee@zimbra.com)</font></td></tr>
+<tr align=3D"left"><td>16</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Mail_Compose.html" target=3D"_blan=
+k">TC_Mail_Compose</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D24994" targ=
+et=3D"_blank">24994</a></u> </td>
+<td>New: Send mail functionality broken in new window</td><td><b>STATUS: VE=
+RIFIED WORKSFORME</b> <font size=3D"2">(PRIORITY: P1 SEVERITY: major REPORT=
+ER: jitesh.sojitra@zimbra.com ASSIGNEDTO: cdamon@zimbra.com)</font></td></t=
+r>
+<tr align=3D"left"><td>17</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_Mail_Drafts.html" target=3D"_blank=
+">TC_Mail_Drafts</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D24960" targ=
+et=3D"_blank">24960</a></u> </td>
+<td>Attachment dialog doesn't closes after attaching files in new window</t=
+d><td><b>STATUS: VERIFIED WORKSFORME</b> <font size=3D"2">(PRIORITY: P1 SEV=
+ERITY: major REPORTER: jitesh.sojitra@zimbra.com ASSIGNEDTO: rajesh.segu@zi=
+mbra.com)</font></td></tr>
+<tr align=3D"left"><td>18</td>
+<td><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/20080412183=
+002_NETWORK/qtp/full/1208117028/qa62//TC_VerifyBccField_InNewWindow_Bug2304=
+4.html" target=3D"_blank">TC_VerifyBccField_InNewWindow_Bug23044</a></td>
+<td> <u><a href=3D"http://bugzilla.zimbra.com/show_bug.cgi?id=3D23044" targ=
+et=3D"_blank">23044</a></u> </td>
+<td>Script error when adding BCC field in new window</td><td><b>STATUS: VER=
+IFIED FIXED</b> <font size=3D"2">(PRIORITY: P1 SEVERITY: critical REPORTER:=
+ dcomfort@zimbra.com ASSIGNEDTO: pshah@zimbra.com)</font></td></tr></tbody>=
+</table></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p><table alig=
+n=3D"center" border=3D"1" cellspacing=3D"0" width=3D"100%"><tbody><tr><th c=
+olspan=3D"11" style=3D"color: rgb(207, 56, 48);" bgcolor=3D"#c0c0c0">Follow=
+ing Scripts have script issues</th></tr><tr></tr><tr bgcolor=3D"#eeeeee">
+<th>#</th>
+<th>Script Name</th>
+<th>A short description about the test script</th>
+<th colspan=3D"3">TestCases</th>
+<th colspan=3D"3">Verifications</th>
+<th>Speed(totalTime/#steps)</th>
+<th>#Logins</th>
+</tr>
+</tbody><tbody align=3D"center">
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">1</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Admin_CreateCOS.html" target=
+=3D"_blank">TC_Admin_CreateCOS</a></u> </td>
+<td>Performs a very comprehensive set of automated-adhoc and -ve testing on=
+ all COS objects and verifies COS creation</td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">5</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">12</font></b><font color=3D"#cf3830"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(1,097.89/142)=3D7.73secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">2</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Admin_VerifyActiveSessions.htm=
+l" target=3D"_blank">TC_Admin_VerifyActiveSessions</a></u> </td>
+<td>Verify Active sessions value is displayed correctly</td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">2</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">6</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">3</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(151.25/38)=3D3.98secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">3</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Certificates_SAN.html" target=
+=3D"_blank">TC_Certificates_SAN</a></u> </td>
+<td>Verifies Installation of Certificates through Admin console</td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">1</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">7</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">1</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(204.75/39)=3D5.25secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">4</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Create_Delete_DomainAdmin_From=
+Admin.html" target=3D"_blank">TC_Create_Delete_DomainAdmin_FromAdmin</a></u=
+> </td>
+<td>Verifies if domainadmin can login to admin and client. also checks Must=
+ChangePwd functionality</td>
+<td align=3D"center">
+<b><font color=3D"#008049">5</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">16</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">3</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(432.22/68)=3D6.36secs/step</td>
+<td>4</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">5</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_HelpPdf_404Error_Bug23132.html=
+" target=3D"_blank">TC_HelpPdf_404Error_Bug23132</a></u> </td>
+<td>Verifies all help page links and check whether each link opens correct =
+page (should not through 404 error) - Bug 23132</td>
+<td align=3D"center">
+<b><font color=3D"#008049">9</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">1</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">30</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(141.33/47)=3D3.01secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">6</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_VerifyCOS_Failed_LoginPolicy.h=
+tml" target=3D"_blank">TC_VerifyCOS_Failed_LoginPolicy</a></u> </td>
+<td>Verifies that account is locked out after minimum number of incorrect a=
+llowed logins are exceeded.</td>
+<td align=3D"center">
+<b><font color=3D"#008049">2</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">10</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">4</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(401.63/73)=3D5.50secs/step</td>
+<td>10</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">7</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_VerifyCOS_Preferences_NonDefau=
+lt.html" target=3D"_blank">TC_VerifyCOS_Preferences_NonDefault</a></u> </td=
+>
+<td>Verifies if non default COS features are properly reflected in the mail=
+ client</td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">5</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">4</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(339.48/68)=3D4.99secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">8</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_VerifyCOS_TimeOuts.html" targe=
+t=3D"_blank">TC_VerifyCOS_TimeOuts</a></u> </td>
+<td>Verifies if timeouts set in COS are properly reflected in mail client</=
+td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">3</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">11</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">16</font></b><font color=3D"#cf3830"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(774.06/91)=3D8.51secs/step</td>
+<td>3</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">9</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Address_Picker_20969.html" tar=
+get=3D"_blank">TC_Address_Picker_20969</a></u> </td>
+<td>This script verifies address deletion fuctionality as in bug 20969</td>
+<td align=3D"center">
+<b><font color=3D"#008049">-</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">1</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">6</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">12</font></b><font color=3D"#cf3830"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(123.13/41)=3D3.00secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">10</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Appointment_AcceptDecline.html=
+" target=3D"_blank">TC_Appointment_AcceptDecline</a></u> </td>
+<td>Executes different test cases for accepting and decling the appointment=
+ request</td>
+<td align=3D"center">
+<b><font color=3D"#008049">-</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">2</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">17</font></b><font color=3D"#cf3830"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(274.44/62)=3D4.43secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">11</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Cal_HTMLApptBreaks_Bug22417.ht=
+ml" target=3D"_blank">TC_Cal_HTMLApptBreaks_Bug22417</a></u> </td>
+<td>Verifies Calendar html appt doesn't breaks any functionalty if we have =
+'Download pictures automatically in HTML email parameter' ON in Preference<=
+/td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">2</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">5</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">11</font></b><font color=3D"#cf3830"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(275.52/37)=3D7.45secs/step</td>
+<td>3</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">12</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_ChangePassword.html" target=3D=
+"_blank">TC_ChangePassword</a></u> </td>
+<td>Verifies 'Change Password' feature in Options,general-tab including neg=
+ative TCs)</td>
+<td align=3D"center">
+<b><font color=3D"#008049">20</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">3</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(338.05/157)=3D2.15secs/step</td>
+<td>8</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">13</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Contact_Edit.html" target=3D"_=
+blank">TC_Contact_Edit</a></u> </td>
+<td>Verifies if editing contacts in various ways works</td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">5</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">13</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">9</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(430.50/104)=3D4.14secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">14</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Export_Import_Calendar.html" t=
+arget=3D"_blank">TC_Export_Import_Calendar</a></u> </td>
+<td>Verifies export and import of calendar to and from ics file</td>
+<td align=3D"center">
+<b><font color=3D"#008049">-</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">2</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">5</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">6</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(380.28/46)=3D8.27secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">15</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Export_Import_Contacts.html" t=
+arget=3D"_blank">TC_Export_Import_Contacts</a></u> </td>
+<td>Verifies export and import of contacts to and from .csv file</td>
+<td align=3D"center">
+<b><font color=3D"#008049">-</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">2</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">4</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">5</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(344.02/42)=3D8.19secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">16</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Family_VerifyMails.html" targe=
+t=3D"_blank">TC_Family_VerifyMails</a></u> </td>
+<td>Verifies family mailboxes functionality</td>
+<td align=3D"center">
+<b><font color=3D"#008049">-</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">2</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">2</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(121.56/45)=3D2.70secs/step</td>
+<td>6</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"ORANGE">17</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Keyboard_Navigation_Advanced.h=
+tml" target=3D"_blank">TC_Keyboard_Navigation_Advanced</a></u> </td>
+<td>Verifies advanced keyboard navigaion in Zimbra UI</td>
+<td align=3D"center">
+<b><font color=3D"#008049">-</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">13</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(318.22/83)=3D3.83secs/step</td>
+<td>3</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">18</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Mail_Fwd.html" target=3D"_blan=
+k">TC_Mail_Fwd</a></u> </td>
+<td>Verified various ways of mail forwarding functionality</td>
+<td align=3D"center">
+<b><font color=3D"#008049">-</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">3</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">-</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">2</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(3,053.77/13)=3D234.91secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">19</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Mail_Signatures.html" target=
+=3D"_blank">TC_Mail_Signatures</a></u> </td>
+<td>This Script verifies the mail signature functionality with different pe=
+rsona</td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">6</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">9</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">11</font></b><font color=3D"#cf3830"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(133.92/64)=3D2.09secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">20</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_New_DropDown.html" target=3D"_=
+blank">TC_New_DropDown</a></u> </td>
+<td>Tests functionality of the New-menu  by creating various mails, contact=
+s and calendar, address books</td>
+<td align=3D"center">
+<b><font color=3D"#008049">4</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">17</font></b><font color=3D"#cf3830"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">14</font></b><font color=3D"#cf3830"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(280.70/55)=3D5.10secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">21</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Options_General.html" target=
+=3D"_blank">TC_Options_General</a></u> </td>
+<td>Executes several tests to verify various features in Options-General-ta=
+b</td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">4</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">8</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(132.47/47)=3D2.82secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">22</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Options_Mail.html" target=3D"_=
+blank">TC_Options_Mail</a></u> </td>
+<td>Executes several tests that sets and verifies all the UI features in Op=
+tions-Mail-tab</td>
+<td align=3D"center">
+<b><font color=3D"#008049">28</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">2</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">30</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">6</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(1,026.41/288)=3D3.56secs/step</td>
+<td>15</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">23</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Search.html" target=3D"_blank"=
+>TC_Search</a></u> </td>
+<td>Verifies that for different search combinations in the Search Builder c=
+orresponding search query is formed</td>
+<td align=3D"center">
+<b><font color=3D"#008049">21</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">5</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">14</font></b><font color=3D"#cf3830"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(359.47/256)=3D1.40secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">24</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Subject_Filter.html" target=3D=
+"_blank">TC_Subject_Filter</a></u> </td>
+<td>Verifies if 'subjects' related filter rules for work properly</td>
+<td align=3D"center">
+<b><font color=3D"#008049">18</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">5</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">13</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">7</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(647.69/199)=3D3.25secs/step</td>
+<td>5</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">25</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Zimbra_Assistant_Mail.html" ta=
+rget=3D"_blank">TC_Zimbra_Assistant_Mail</a></u> </td>
+<td>Verifies Zimra assistant for send-mail functionality</td>
+<td align=3D"center">
+<b><font color=3D"#008049">22</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">3</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">57</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">1</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(584.31/194)=3D3.01secs/step</td>
+<td>13</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">26</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_obo_appt_edit_sec_boss.html" t=
+arget=3D"_blank">TC_obo_appt_edit_sec_boss</a></u> </td>
+<td>This test appt. created by secretary can be modified by boss and vice v=
+ersa</td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">2</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">25</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">2</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(388.53/136)=3D2.86secs/step</td>
+<td>6</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#cf3830">27</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_obo_verify_UI.html" target=3D"=
+_blank">TC_obo_verify_UI</a></u> </td>
+<td>This test verifies UI for obo appointments</td>
+<td align=3D"center">
+<b><font color=3D"#008049">5</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">2</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">4</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(101.58/46)=3D2.21secs/step</td>
+<td>2</td>
+</tr></tbody></table></p><p></p><p></p><p></p><p><table align=3D"center" bo=
+rder=3D"1" cellspacing=3D"0" width=3D"100%"><tbody><tr><th colspan=3D"11" s=
+tyle=3D"color: rgb(0, 128, 73);" bgcolor=3D"#c0c0c0">Following Scripts have=
+ passed</th></tr><tr></tr><tr bgcolor=3D"#eeeeee">
+<th>#</th>
+<th>Script Name</th>
+<th>A short description about the test script</th>
+<th colspan=3D"3">TestCases</th>
+<th colspan=3D"3">Verifications</th>
+<th>Speed(totalTime/#steps)</th>
+<th>#Logins</th>
+</tr>
+</tbody><tbody align=3D"center">
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">1</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Account_Options_FromAdmin.html=
+" target=3D"_blank">TC_Account_Options_FromAdmin</a></u> </td>
+<td>Following script will validate various menu options for account after l=
+ogin as Admin..</td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">13</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(156.91/49)=3D3.20secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">2</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Account_Options_FromDomainAdmi=
+n.html" target=3D"_blank">TC_Account_Options_FromDomainAdmin</a></u> </td>
+<td>Following script will validate various menu options for account after l=
+ogin as Domain Admin</td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">12</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(142.42/48)=3D2.97secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">3</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Admin_DomainAdmin_Admin_Privil=
+eges.html" target=3D"_blank">TC_Admin_DomainAdmin_Admin_Privileges</a></u> =
+</td>
+<td>This Script will verify privileges of Admin and DomainAdmin</td>
+<td align=3D"center">
+<b><font color=3D"#008049">11</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">27</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(568.28/105)=3D5.41secs/step</td>
+<td>5</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">4</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Admin_Folder_CheckExpn.html" t=
+arget=3D"_blank">TC_Admin_Folder_CheckExpn</a></u> </td>
+<td>This Script will check that no expn thrown by click on folders and its =
+sub folders in left overview pane of Admin and DA</td>
+<td align=3D"center">
+<b><font color=3D"#008049">2</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">9</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(311.99/24)=3D13.00secs/step</td>
+<td>4</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">5</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Admin_Login.html" target=3D"_b=
+lank">TC_Admin_Login</a></u> </td>
+<td>Verifies Admin login functionalities(both positive and -ve)</td>
+<td align=3D"center">
+<b><font color=3D"#008049">10</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">32</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(830.11/92)=3D9.02secs/step</td>
+<td>12</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">6</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Admin_VerifyTabs.html" target=
+=3D"_blank">TC_Admin_VerifyTabs</a></u> </td>
+<td>Verifies Close tab and Close All Tabs functionality for Account tabs in=
+ Admin Console</td>
+<td align=3D"center">
+<b><font color=3D"#008049">4</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(118.20/30)=3D3.94secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">7</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Admin_ViewMail.html" target=3D=
+"_blank">TC_Admin_ViewMail</a></u> </td>
+<td>Verifies ViewMail Functionality</td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(91.42/19)=3D4.81secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">8</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Admin_Volume.html" target=3D"_=
+blank">TC_Admin_Volume</a></u> </td>
+<td>Verifies changing some properties of account doesnt change other proper=
+ties after Saving it</td>
+<td align=3D"center">
+<b><font color=3D"#008049">5</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">4</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(91.03/23)=3D3.96secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">9</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Admin_ZimletVerify.html" targe=
+t=3D"_blank">TC_Admin_ZimletVerify</a></u> </td>
+<td>Verifies default Zimlets are loaded or not during installation</td>
+<td align=3D"center">
+<b><font color=3D"#008049">7</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(80.24/22)=3D3.65secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">10</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Cmbx_AttWidget_Bug23334.html" =
+target=3D"_blank">TC_Cmbx_AttWidget_Bug23334</a></u> </td>
+<td>Verification of Context menu options</td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(82.27/19)=3D4.33secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">11</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Cmbx_Search.html" target=3D"_b=
+lank">TC_Cmbx_Search</a></u> </td>
+<td>Verify cross mailbox search</td>
+<td align=3D"center">
+<b><font color=3D"#008049">4</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(318.86/85)=3D3.75secs/step</td>
+<td>10</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">12</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Create_Delete_Account_From_Dom=
+ainAdmin.html" target=3D"_blank">TC_Create_Delete_Account_From_DomainAdmin<=
+/a></u> </td>
+<td>Verifies if domainadmin can create or delete userAccounts and other DA.=
+ Also, checks MustChangePwd functionality</td>
+<td align=3D"center">
+<b><font color=3D"#008049">19</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">61</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(1,350.45/279)=3D4.84secs/step</td>
+<td>17</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">13</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Create_Edit_Delete_DL_DomainAd=
+min.html" target=3D"_blank">TC_Create_Edit_Delete_DL_DomainAdmin</a></u> </=
+td>
+<td>Create DL in domain admin and Send mail to DL. Later Verifies mail in u=
+ser account who is member of that DL. Edit DL, change name, save it and del=
+ete it.</td>
+<td align=3D"center">
+<b><font color=3D"#008049">13</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">23</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(479.03/114)=3D4.20secs/step</td>
+<td>7</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">14</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Create_Location_Resource.html"=
+ target=3D"_blank">TC_Create_Location_Resource</a></u> </td>
+<td>Verifies if Locations and Equipments created in  Admin Console can be s=
+earched in mailclient</td>
+<td align=3D"center">
+<b><font color=3D"#008049">6</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">9</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(207.64/60)=3D3.46secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">15</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Create_Location_Resource_DA.ht=
+ml" target=3D"_blank">TC_Create_Location_Resource_DA</a></u> </td>
+<td>Verifies if Locations and Equipments created,edited and deleted as Doma=
+inAdmin can be searched in mailclient</td>
+<td align=3D"center">
+<b><font color=3D"#008049">6</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">12</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(228.00/62)=3D3.68secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">16</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Create_Verify_DL.html" target=
+=3D"_blank">TC_Create_Verify_DL</a></u> </td>
+<td>Create DL in admin and Send mail to Distribution List then Verify mail =
+in user accounts who are members of thatDistribution List</td>
+<td align=3D"center">
+<b><font color=3D"#008049">13</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">20</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(383.81/96)=3D4.00secs/step</td>
+<td>6</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">17</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_DomainAdmin_Privileges.html" t=
+arget=3D"_blank">TC_DomainAdmin_Privileges</a></u> </td>
+<td>This Script will verify privileges of Domain Admin</td>
+<td align=3D"center">
+<b><font color=3D"#008049">5</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">12</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(188.28/54)=3D3.49secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">18</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Domain_Create_Delete.html" tar=
+get=3D"_blank">TC_Domain_Create_Delete</a></u> </td>
+<td>This script creates a simple domain and deletes the domain</td>
+<td align=3D"center">
+<b><font color=3D"#008049">4</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(93.30/25)=3D3.73secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">19</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Domain_Option.html" target=3D"=
+_blank">TC_Domain_Option</a></u> </td>
+<td>Verifies all the menu the domain menu tool bar options, domain context =
+menu options</td>
+<td align=3D"center">
+<b><font color=3D"#008049">6</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">11</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(102.88/39)=3D2.64secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">20</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Duplicate_COS.html" target=3D"=
+_blank">TC_Duplicate_COS</a></u> </td>
+<td>This Script will verify if all the values or features in default COS an=
+d duplicateCOS as same.</td>
+<td align=3D"center">
+<b><font color=3D"#008049">38</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">10</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(146.44/67)=3D2.19secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">21</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Edit_Account.html" target=3D"_=
+blank">TC_Edit_Account</a></u> </td>
+<td>Verifies changing some properties of account doesnt change other proper=
+ties after Saving it</td>
+<td align=3D"center">
+<b><font color=3D"#008049">12</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">5</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(442.27/86)=3D5.14secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">22</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_InstallCertificates.html" targ=
+et=3D"_blank">TC_InstallCertificates</a></u> </td>
+<td>Verifies Installation of Certificates through Admin console</td>
+<td align=3D"center">
+<b><font color=3D"#008049">16</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">19</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(243.08/120)=3D2.03secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">23</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_MailQueue.html" target=3D"_bla=
+nk">TC_MailQueue</a></u> </td>
+<td>This Script will verify that buttons or tabs works fine without  throwi=
+ng expn in Mail Queue</td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">4</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(172.45/39)=3D4.42secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">24</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_NtwkExpirationDateTest.html" t=
+arget=3D"_blank">TC_NtwkExpirationDateTest</a></u> </td>
+<td>Verify the expiration date notice(60days from installation date) is dis=
+played on loginpage and toastarea of Admin console(network edition only)</t=
+d>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">4</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(65.59/12)=3D5.47secs/step</td>
+<td>3</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">25</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_VerifyCOS_PwdComplexity_InMail=
+.html" target=3D"_blank">TC_VerifyCOS_PwdComplexity_InMail</a></u> </td>
+<td>Verifies that password complexity rules defined in COS are properly app=
+lied</td>
+<td align=3D"center">
+<b><font color=3D"#008049">5</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">11</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(392.30/92)=3D4.26secs/step</td>
+<td>4</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">26</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_VerifyCOS_Quotas.html" target=
+=3D"_blank">TC_VerifyCOS_Quotas</a></u> </td>
+<td>Verifies the quotas set in COS (for contacts and mail box size)</td>
+<td align=3D"center">
+<b><font color=3D"#008049">4</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">11</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(285.31/83)=3D3.44secs/step</td>
+<td>3</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">27</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Verify_AliasMove.html" target=
+=3D"_blank">TC_Verify_AliasMove</a></u> </td>
+<td>Verify moving of alias from one account to another</td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">17</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(289.86/68)=3D4.26secs/step</td>
+<td>9</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">28</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Verify_Aliases.html" target=3D=
+"_blank">TC_Verify_Aliases</a></u> </td>
+<td>Verify that aliases of an accounts work</td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">14</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(201.48/52)=3D3.87secs/step</td>
+<td>8</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">29</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Verify_BackupRestore_WizardsUI=
+.html" target=3D"_blank">TC_Verify_BackupRestore_WizardsUI</a></u> </td>
+<td>Verifies the Backup and Restore Wizard UIs</td>
+<td align=3D"center">
+<b><font color=3D"#008049">2</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(80.22/25)=3D3.21secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">30</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Verify_FullBackup_SingleAccoun=
+t.html" target=3D"_blank">TC_Verify_FullBackup_SingleAccount</a></u> </td>
+<td>Verifies Backup and Restore of a single account</td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">19</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(352.05/79)=3D4.46secs/step</td>
+<td>5</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">31</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Auth_Verify.html" target=3D"_b=
+lank">TC_Auth_Verify</a></u> </td>
+<td>Verifies mail client authentication by performing several +ve and -ve t=
+ests</td>
+<td align=3D"center">
+<b><font color=3D"#008049">7</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">21</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(252.84/72)=3D3.51secs/step</td>
+<td>10</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">32</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Calendar_Bug15251.html" target=
+=3D"_blank">TC_Calendar_Bug15251</a></u> </td>
+<td>This Script will verify that dragged mail to mini cal respects deleted =
+invitees [bug  15251]</td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">15</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(164.80/60)=3D2.75secs/step</td>
+<td>4</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">33</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Calendar_Share_Role_None.html"=
+ target=3D"_blank">TC_Calendar_Share_Role_None</a></u> </td>
+<td>Verifies sharing Calendar with none role and if sharee can edit,delete =
+etc</td>
+<td align=3D"center">
+<b><font color=3D"#008049">12</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">17</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(223.00/90)=3D2.48secs/step</td>
+<td>4</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">34</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Check_Appointment_Repeat_Link.=
+html" target=3D"_blank">TC_Check_Appointment_Repeat_Link</a></u> </td>
+<td>Verifies that correct link is created for all major recurrence options =
+in the recurrence dialog</td>
+<td align=3D"center">
+<b><font color=3D"#008049">40</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">21</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(732.89/308)=3D2.38secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">35</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Check_Clear_All.html" target=
+=3D"_blank">TC_Check_Clear_All</a></u> </td>
+<td>Verifies display or hide appts by uncheck or checking calendar chkboxes=
+ works</td>
+<td align=3D"center">
+<b><font color=3D"#008049">5</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">4</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(53.23/21)=3D2.53secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">36</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Compose_WithMultipleAttchmnt_A=
+ndDownload.html" target=3D"_blank">TC_Compose_WithMultipleAttchmnt_AndDownl=
+oad</a></u> </td>
+<td>Verifies multiple attachments and downloading work properly</td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">12</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(102.64/37)=3D2.77secs/step</td>
+<td>4</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">37</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Contact.html" target=3D"_blank=
+">TC_Contact</a></u> </td>
+<td>Executes several tests that creates and verifies various ways of contac=
+t creation</td>
+<td align=3D"center">
+<b><font color=3D"#008049">20</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(383.38/259)=3D1.48secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">38</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_ContactGroup_Create_Delete.htm=
+l" target=3D"_blank">TC_ContactGroup_Create_Delete</a></u> </td>
+<td>Verifies if contactsGroup can be created and deleted</td>
+<td align=3D"center">
+<b><font color=3D"#008049">10</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">7</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(138.08/64)=3D2.16secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">39</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_ContactGroup_EditTag.html" tar=
+get=3D"_blank">TC_ContactGroup_EditTag</a></u> </td>
+<td>Verifies if ContactGroups can be edited and can have tags</td>
+<td align=3D"center">
+<b><font color=3D"#008049">5</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">11</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(122.56/50)=3D2.45secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">40</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_ContactGroup_MailCompose.html"=
+ target=3D"_blank">TC_ContactGroup_MailCompose</a></u> </td>
+<td>Verifies if the all members of the contactGroups receives email</td>
+<td align=3D"center">
+<b><font color=3D"#008049">5</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">13</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(161.00/53)=3D3.04secs/step</td>
+<td>4</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">41</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Contact_Share_Role_Manager.htm=
+l" target=3D"_blank">TC_Contact_Share_Role_Manager</a></u> </td>
+<td>Verifies sharing contacts with manager role and if sharee can edit,dele=
+te etc</td>
+<td align=3D"center">
+<b><font color=3D"#008049">26</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">50</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(469.30/174)=3D2.70secs/step</td>
+<td>3</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">42</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Contact_Share_Role_None.html" =
+target=3D"_blank">TC_Contact_Share_Role_None</a></u> </td>
+<td>Verifies sharing contacts with none role and sharee cant do anything</t=
+d>
+<td align=3D"center">
+<b><font color=3D"#008049">5</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">7</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(95.48/40)=3D2.39secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">43</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Contact_Share_Role_View.html" =
+target=3D"_blank">TC_Contact_Share_Role_View</a></u> </td>
+<td>Verifies sharing contacts with view role and if sharee can only view it=
+ and not edit it</td>
+<td align=3D"center">
+<b><font color=3D"#008049">6</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">26</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(164.50/81)=3D2.03secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">44</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Create_Appointment.html" targe=
+t=3D"_blank">TC_Create_Appointment</a></u> </td>
+<td>Verifies appointment creation, appt invite contents and accept/decline =
+etc functionalities</td>
+<td align=3D"center">
+<b><font color=3D"#008049">2</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">16</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(204.05/88)=3D2.32secs/step</td>
+<td>4</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">45</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Create_Edit_Delete_SimpleAppt.=
+html" target=3D"_blank">TC_Create_Edit_Delete_SimpleAppt</a></u> </td>
+<td>This script will create edit and delete simple appts</td>
+<td align=3D"center">
+<b><font color=3D"#008049">9</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">28</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(586.23/151)=3D3.88secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">46</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_CustomLogin_Bug23149.html" tar=
+get=3D"_blank">TC_CustomLogin_Bug23149</a></u> </td>
+<td>Verifies search query string is preserved on login</td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">5</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(23.39/12)=3D1.95secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">47</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Edit_Appt_Cancellation_Message=
+.html" target=3D"_blank">TC_Edit_Appt_Cancellation_Message</a></u> </td>
+<td>This Script will cancel the created appt. and verify that appt. cancell=
+ation message is sent to attendee</td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">6</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(111.77/34)=3D3.29secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">48</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_FindAttendees.html" target=3D"=
+_blank">TC_FindAttendees</a></u> </td>
+<td>Verifies if the attendees added in FindAttendees-tab gets calendar invi=
+te</td>
+<td align=3D"center">
+<b><font color=3D"#008049">28</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(159.30/82)=3D1.94secs/step</td>
+<td>5</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">49</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_FlagToShareMail_Bug23904.html"=
+ target=3D"_blank">TC_FlagToShareMail_Bug23904</a></u> </td>
+<td>This script verify this script verifies functionality flagging a shared=
+ message</td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">19</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(102.67/52)=3D1.97secs/step</td>
+<td>3</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">50</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Folder_Create_Delete.html" tar=
+get=3D"_blank">TC_Folder_Create_Delete</a></u> </td>
+<td>Verifies creation and deletion of folders or subFolders by performing s=
+everal +ve and -ve tests</td>
+<td align=3D"center">
+<b><font color=3D"#008049">19</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">24</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(156.97/109)=3D1.44secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">51</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Folder_Move.html" target=3D"_b=
+lank">TC_Folder_Move</a></u> </td>
+<td>Verified that subfolders can be moved from one parent folder to another=
+. Tests for different combinations</td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">13</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(52.16/47)=3D1.11secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">52</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Folder_Share_Role_Manager.html=
+" target=3D"_blank">TC_Folder_Share_Role_Manager</a></u> </td>
+<td>Verifies TaskList Create/Delete and TaskList sharing with different rig=
+hts</td>
+<td align=3D"center">
+<b><font color=3D"#008049">9</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">19</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(117.95/62)=3D1.90secs/step</td>
+<td>3</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">53</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Folder_Share_Role_View.html" t=
+arget=3D"_blank">TC_Folder_Share_Role_View</a></u> </td>
+<td>Verifies TaskList Create/Delete and TaskList sharing with different rig=
+hts</td>
+<td align=3D"center">
+<b><font color=3D"#008049">6</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">18</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(104.11/56)=3D1.86secs/step</td>
+<td>3</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">54</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Folder_Share_VerifyDelete.html=
+" target=3D"_blank">TC_Folder_Share_VerifyDelete</a></u> </td>
+<td>Verifies TaskList Create/Delete and TaskList sharing with different rig=
+hts</td>
+<td align=3D"center">
+<b><font color=3D"#008049">6</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">18</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(111.08/60)=3D1.85secs/step</td>
+<td>4</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">55</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Folder_Share_VerifyOBO.html" t=
+arget=3D"_blank">TC_Folder_Share_VerifyOBO</a></u> </td>
+<td>Verifies TaskList Create/Delete and TaskList sharing with different rig=
+hts</td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">18</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(129.00/62)=3D2.08secs/step</td>
+<td>3</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">56</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Fwd_Multiple_MsgAndConv.html" =
+target=3D"_blank">TC_Fwd_Multiple_MsgAndConv</a></u> </td>
+<td>Verifies fwd'ing of mails and conv.</td>
+<td align=3D"center">
+<b><font color=3D"#008049">2</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">12</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(253.23/73)=3D3.47secs/step</td>
+<td>8</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">57</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_GALDisabled_AddPicker_Bug18252=
+.html" target=3D"_blank">TC_GALDisabled_AddPicker_Bug18252</a></u> </td>
+<td>Verifies Bug 18252</td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">6</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(110.14/33)=3D3.34secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">58</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_HelpVerifyUI.html" target=3D"_=
+blank">TC_HelpVerifyUI</a></u> </td>
+<td>Verifies if Online help is working and has logos, copyright etc</td>
+<td align=3D"center">
+<b><font color=3D"#008049">1</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">6</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(28.63/13)=3D2.20secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">59</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Location.html" target=3D"_blan=
+k">TC_Location</a></u> </td>
+<td>Verifies search feature of apptLocations and apptResources tabs in Cale=
+ndar</td>
+<td align=3D"center">
+<b><font color=3D"#008049">43</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">26</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(228.61/285)=3D0.80secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">60</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_LoginDirectlyToApps.html" targ=
+et=3D"_blank">TC_LoginDirectlyToApps</a></u> </td>
+<td>69</td>
+<td align=3D"center">
+<b><font color=3D"#008049">6</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">27</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(228.61/18)=3D12.70secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">61</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Login_RememberMe.html" target=
+=3D"_blank">TC_Login_RememberMe</a></u> </td>
+<td>Verifies the 'Remember me on this computer checkbox' functionality</td>
+<td align=3D"center">
+<b><font color=3D"#008049">4</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">2</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(68.30/16)=3D4.27secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">62</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Mail_Compose_AttachmentExt.htm=
+l" target=3D"_blank">TC_Mail_Compose_AttachmentExt</a></u> </td>
+<td>Compose mails with different Attachment Extension and verify that they =
+are received properly</td>
+<td align=3D"center">
+<b><font color=3D"#008049">28</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">31</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(635.28/155)=3D4.10secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">63</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Mail_Delete.html" target=3D"_b=
+lank">TC_Mail_Delete</a></u> </td>
+<td>Verifies mail Delete using context menu, Hard-delete and delete using T=
+rash-btn features in both views</td>
+<td align=3D"center">
+<b><font color=3D"#008049">12</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">16</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(241.50/74)=3D3.26secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">64</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Mail_Move.html" target=3D"_bla=
+nk">TC_Mail_Move</a></u> </td>
+<td>Verifies mail Drag-Drop, Move using Move-btn, move using context-menu b=
+/w various folders and sub-folders</td>
+<td align=3D"center">
+<b><font color=3D"#008049">7</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">22</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(508.31/112)=3D4.54secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">65</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Mail_ReadFlag.html" target=3D"=
+_blank">TC_Mail_ReadFlag</a></u> </td>
+<td>Verifies Read,UnRead; Flag, unflag features in both msg and conv views<=
+/td>
+<td align=3D"center">
+<b><font color=3D"#008049">10</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">18</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(175.78/77)=3D2.28secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">66</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Mail_ReplyFwdJunk.html" target=
+=3D"_blank">TC_Mail_ReplyFwdJunk</a></u> </td>
+<td>Verify if mails can be replied, forwarded and marked as junk</td>
+<td align=3D"center">
+<b><font color=3D"#008049">15</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">12</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(209.61/73)=3D2.87secs/step</td>
+<td>2</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">67</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Mail_Verify_AttchmntandContent=
+.html" target=3D"_blank">TC_Mail_Verify_AttchmntandContent</a></u> </td>
+<td>Performs tests to verify mail content's consistency in both views.</td>
+<td align=3D"center">
+<b><font color=3D"#008049">6</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">11</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(138.42/51)=3D2.71secs/step</td>
+<td>3</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">68</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Mail_Verify_InSentandDrafts.ht=
+ml" target=3D"_blank">TC_Mail_Verify_InSentandDrafts</a></u> </td>
+<td>Executes several tests that verifies 'Save mails to sent-fldr' and 'Sav=
+e to drafts' features</td>
+<td align=3D"center">
+<b><font color=3D"#008049">2</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">4</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(73.47/25)=3D2.94secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">69</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Modify_Draft.html" target=3D"_=
+blank">TC_Modify_Draft</a></u> </td>
+<td>Related to Bug  7016-Creates a draft-modifies it in new window and then=
+ verifies the modification</td>
+<td align=3D"center">
+<b><font color=3D"#008049">2</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(51.30/32)=3D1.60secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">70</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_MultipleAttachments_FwdReply.h=
+tml" target=3D"_blank">TC_MultipleAttachments_FwdReply</a></u> </td>
+<td>Verifies attachment behavior while fwd'ing and reply'ing mails</td>
+<td align=3D"center">
+<b><font color=3D"#008049">2</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">8</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(147.53/53)=3D2.78secs/step</td>
+<td>8</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">71</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Notebook_EditDelete.html" targ=
+et=3D"_blank">TC_Notebook_EditDelete</a></u> </td>
+<td>Verify edit/delete of document page</td>
+<td align=3D"center">
+<b><font color=3D"#008049">33</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">3</font></b><font color=3D"#008049"></font></td>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(67.75/56)=3D1.21secs/step</td>
+<td>1</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">72</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Notebook_Share_Role_Manager.ht=
+ml" target=3D"_blank">TC_Notebook_Share_Role_Manager</a></u> </td>
+<td>This script tests the shared Notebook functionality for Manager role</t=
+d>
+<td align=3D"center">
+<b><font color=3D"#008049">15</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">23</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(240.05/107)=3D2.24secs/step</td>
+<td>4</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">73</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Notebook_Share_Role_None.html"=
+ target=3D"_blank">TC_Notebook_Share_Role_None</a></u> </td>
+<td>This script tests the shared Notebook functionality for None role</td>
+<td align=3D"center">
+<b><font color=3D"#008049">12</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td align=3D"center">
+<b><font color=3D"#008049">17</font></b><font color=3D"#008049"></font></td=
+>
+<td align=3D"center">
+<b><font color=3D"#cf3830">-</font></b><font color=3D"#cf3830"></font></td>
+<td align=3D"center">
+<b><font color=3D"orange">-</font></b><font color=3D"orange"></font></td>
+<td>(205.70/80)=3D2.57secs/step</td>
+<td>4</td>
+</tr>
+<tr align=3D"left">
+<td style=3D"color: WHITE;" bgcolor=3D"#008049">74</td>
+<td> <u><a href=3D"http://tms.liquidsys.com/testlogs/RHEL4/FRANKLIN/2008041=
+2183002_NETWORK/qtp/full/1208117028/qa62//TC_Notebook_Share_Role_Vi"></a></=
+u></td></tr></tbody></table></p></body></html>
+------=_Part_27_33513333.1208167705750--

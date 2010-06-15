@@ -1,0 +1,567 @@
+Return-Path: ufficiostampa@cia.it
+Received: from mail.informatoreagrario.it (LHLO
+ webmail.informatoreagrario.it) (192.168.50.22) by
+ webmail.informatoreagrario.it with LMTP; Tue, 15 Dec 2009 14:54:54 +0100
+ (CET)
+Received: from nodoa.infagri.lan (nodoa.infagri.lan [192.168.50.4])
+	by webmail.informatoreagrario.it (Postfix) with ESMTP id 919E1202C35B
+	for <l.andreotti@webmail.informatoreagrario.it>; Tue, 15 Dec 2009 14:54:54 +0100 (CET)
+Resent-To: l.andreotti@webmail.informatoreagrario.it
+Resent-From: l.andreotti@informatoreagrario.it
+Resent-Message-Id: <B0003570366@nodoa.infagri.lan>
+Resent-Date: Tue, 15 Dec 2009 14:54:54 +0100
+Received: from mail.informatoreagrario.it (unverified [213.171.100.43]) by informatoreagrario.it
+ (Rockliffe SMTPRA 5.3.11) with SMTP id <B0003570365@nodoa.infagri.lan> for <l.andreotti@informatoreagrario.it>;
+ Tue, 15 Dec 2009 14:54:54 +0100
+Received: from www.agrinform.it ([88.61.38.130]) by eSafe SMTP Relay 1260857651; Tue, 15 Dec 2009 14:51:57 +0100
+Received: from www.agrinform.it (localhost [127.0.0.1]) by www.agrinform.it (8.13.3/8.13.3) with ESMTP id nBFDfPWD005708;
+	 Tue, 15 Dec 2009 14:41:25 +0100
+Message-ID: <31582402.1260884485318.JavaMail.tomcat@www.agrinform.it>
+Date: Tue, 15 Dec 2009 14:41:25 +0100 (CET)
+From: Gestore lista dal Territorio <ufficiostampa@cia.it>
+Subject: dal Territorio
+Mime-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="----=_Part_443_14339790.1260884485291"
+X-ESAFE-STATUS:[mail.informatoreagrario.it] Mail clean
+X-ESAFE-DETAILS:[mail.informatoreagrario.it]
+
+------=_Part_443_14339790.1260884485291
+Content-Type: multipart/related;
+	boundary="----=_Part_442_27272438.1260884485291"
+
+------=_Part_442_27272438.1260884485291
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-ID: bootpol
+
+R0lGODlhaQIlAPcAAAAAAAAAMwAAZgAAmQAAzAAA/wAzAAAzMwAzZgAzmQAzzAAz/wBmAABmMwBm
+ZgBmmQBmzABm/wCZAACZMwCZZgCZmQCZzACZ/wDMAADMMwDMZgDMmQDMzADM/wD/AAD/MwD/ZgD/
+mQD/zAD//zMAADMAMzMAZjMAmTMAzDMA/zMzADMzMzMzZjMzmTMzzDMz/zNmADNmMzNmZjNmmTNm
+zDNm/zOZADOZMzOZZjOZmTOZzDOZ/zPMADPMMzPMZjPMmTPMzDPM/zP/ADP/MzP/ZjP/mTP/zDP/
+/2YAAGYAM2YAZmYAmWYAzGYA/2YzAGYzM2YzZmYzmWYzzGYz/2ZmAGZmM2ZmZmZmmWZmzGZm/2aZ
+AGaZM2aZZmaZmWaZzGaZ/2bMAGbMM2bMZmbMmWbMzGbM/2b/AGb/M2b/Zmb/mWb/zGb//5kAAJkA
+M5kAZpkAmZkAzJkA/5kzAJkzM5kzZpkzmZkzzJkz/5lmAJlmM5lmZplmmZlmzJlm/5mZAJmZM5mZ
+ZpmZmZmZzJmZ/5nMAJnMM5nMZpnMmZnMzJnM/5n/AJn/M5n/Zpn/mZn/zJn//8wAAMwAM8wAZswA
+mcwAzMwA/8wzAMwzM8wzZswzmcwzzMwz/8xmAMxmM8xmZsxmmcxmzMxm/8yZAMyZM8yZZsyZmcyZ
+zMyZ/8zMAMzMM8zMZszMmczMzMzM/8z/AMz/M8z/Zsz/mcz/zMz///8AAP8AM/8AZv8Amf8AzP8A
+//8zAP8zM/8zZv8zmf8zzP8z//9mAP9mM/9mZv9mmf9mzP9m//+ZAP+ZM/+ZZv+Zmf+ZzP+Z///M
+AP/MM//MZv/Mmf/MzP/M////AP//M///Zv//mf//zP///wAAAA0NDRoaGigoKDU1NUNDQ1BQUF1d
+XWtra3h4eIaGhpOTk6Ghoa6urru7u8nJydbW1uTk5PHx8f///wAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAaQIlAAAI/gDpzBlI
+sKDBgwgTKlzIsKHDhxAjSpxIsaLFixgvQnnCpqPHjyBDihxJsqTJkyhTqlzJsqXLlzBjypy5UmDG
+mzhz6tzJs6fPnw1pCh1KtKjRo0iTKpVpE6jTp1CjSp3qdKnVq1izat3K9WRTqmDDih1LlmfXs2jT
+ql3L9mvZt3DjyhXLtq7du3jzpnQ7t6/fv4Aj6h1MuLBhrXwDK17MOO7hx5AjS67ZuLLly1Ina97M
++XFizKBDi4bYubTp02k/j17NejTq17BjH1XdurZtxbJz695N+bbv34B5Cx9OnA1t4MiTQy3OvPnr
+48qjS8fpvLp1zdCna99O+rr374SzuHMfT74g+PPo64ovz157+vfwua5vTx95/Pv4ldbfXz6///9C
+zcffgKIBaOCBLQlI4IKVIejggyUpyOCEwUFo4YXGUaihaxh26OCGIGLm4YgHShjiiVORqOJ/JqLo
+IlArxohfiy/WqJOMOMJn445j5egjejwGmeKPRHon5JFVFalkdTQi6SRCS0bZXJNPVinllcVRWSWS
+WHYpnJZb8ujlmLuBGeaLZKaZm5lnhqjmm7Gx2eaCcNYpW0AA
+
+------=_Part_442_27272438.1260884485291
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-ID: minicp
+
+R0lGODlhKAAUAPcAAABOJgFOJgBOJwFOJwFPJwBPJwJPJwJOJwJPKANQKANQKQRQKQVRKgZSKwZS
+KwdTLAhTLQpULgpVLwtVLwlULg1XMQ1WMQ9YMhVcOBdeORhfOhlfPBthPR5iPx1iPyFkQSFlQyJl
+QyNmRCRnRSRnRCdpRylqSStrSyhpSC5tTS5uTS9uTi9vTi1tTDBvTzFwUDRyUjZzUzZzVDt3WD55
+Wz14WUF7XUB7XUF7XkJ7XkN8X0V9YUZ+YUd/YkZ+YlqzSVuzSVqzSluzSlu0Slq0Slu0SV61Tl61
+TWG2UWC2UGO3U2W4VWa5V2q7W2q7XEqBZUyCZlGGa1OIbVWJb1aJb1eKcFiLcVmMcl2OdV+Pdl+Q
+d2CQeGGSeWOTemSTe2iWfm68YHK+ZHW/Z3jBa3rBbH3DcIHFdITGd4XHeIbIemqXgGyYgWyZgnOd
+iHSeiHWfinegi3ihjHmijXujj3ykj36lkYCnk4KnlIKolYSploarmIismoqtm4ismYyvnY6wn4+x
+oJKzopO0o5S0pJS1pJe3ppi3qJq5qZ27q567rJ+8raC9rqO/sYvJgJLNh5DMhZbOi5jPjZrQkKLU
+maTVm6fWnqjXoK3Zpa/ap7LbqqXBsqfCtKrDtqrEt63FuK/Huq/Hu7HJvbDIvLLJvrLJvbTLv7fM
+wbfNwrvQxbzQxr7Rx7/SyMDTycHUysTVzMXWzcbXz8fYz8nZ0cjZ0czb083c1Mzc1M/d1tHe19Lf
+2Mjlwsvnxsznx83nyM/oytDpy9Pqz9LqzdXr0dfs09ru19ns1NPg2dPg2tfj3dnk39nl3t7v2+Hx
+3tzm4d3n4d3n4t/o4+Hq5ePr5+Lr5uTr5+Xs6OTs6Ofu6ubt6ujv6+jv7Obz4+n05uv16erw7evx
+7u3y7+/37e7z8e3y8PD08vP39fP29PH48PX49vf59/f79/b69fj79/f5+Pj6+fn6+fn6+vr7+/n8
++fv8+/v8+vz8/P39/fz9/f3+/f7+/f3+/v7+/v7+///////+/v79/iH5BAkAAP0ALAAAAAAoABQA
+QAj+APsJHEiQYD1ivuwVXMiQ4L5WEwhIJDCgzb5+8h79AKMr2kWHeiaKlDinXsF5bAaMXMlSIgAU
+39DZGEBzAAAAExfAImhPWjJ0/ASuGzMk0rlzHwvuixdLjxtAx+4xvJZhIgBSH/chazERxbiB9ajg
+lFiB1j5qIwJIHFDiW8OF8yYNOaIr6du7/faZi2LA5RaF++oFY/KjkkKlmxiIHPBAlN1+5Li67OFu
+4L51yEYAiFGOIMqxBBQQumCV8sB7X9RKFECjkJ8PoCVOaMMoDmmXG2rBUD3ygqyk5fJsULk2AY1X
+zaZQAC1gwY5ajwXGa4OAQIAQ1fAKZGcpSRp62sPxN8Sny4gQSfLu7lu/Hq+5OBwu8IB2sZwkXcDM
+PAK/MN6cCSoNgMEf+jAUzxegAQADPHktw0QQZITz2D7ihLBSAChkU5A9XoA2ABTfXBSOE2i4skIP
+6DgEjQexESfABbckRZVVoSS1zzEp4ARDZwLtc8sFxAEQRTxv8DYAJx+Ro0KQT5izXjIoEBcaI/Xs
+Y48pClj1RTNxfJGjSHGYtM8rFYh0UwC8iRQAAGkSUAcyt60EABQp7oPOFdXJiQFsLAHAAXT8kHMI
+H4TOUaZLpFh2zzOFXGFDD2uYQs567cRSRxQ3QNEGKk42ROEdMkghiz0BAQA=
+
+------=_Part_442_27272438.1260884485291
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-ID: sfondo
+
+R0lGODlhgAIdAPcAAG5ubmhoaHBwcHx8fIaGhouLi4mJiY6OjpSUlJqamp6enqWlpaenp6Kioqqq
+qq2trbGxsba2trm5ubu7u729vcPDw8HBwcbGxsXFxcnJycjIyMrKysrOyc3Mys7Myc7LzMrNzczM
+zM3NzczMzs7Ozs/Pz8jPys/LyNDNzMXQzMzL0MnN0MrM0cbN08/K0M/U2tDQ0NHR0dLS0tPT09bW
+0tPV1dTU1NXV1dfW1NbW1tfX19bW1tPT0tnV0tnV1t3W19bZ1tPb09jY1trZ19ja19nZ1dzY193Z
+1dzd1NLW2tbW2NfV2tbW2dHW3dXV3drV2dzX3NXa2tbZ3dLc29jY2NnZ2drY2dja2dra2NjZ29vb
+29ra2trZ293Z2d3c2t3d2dnY3djZ3dnZ3tre3tzc3N3d3dzd393f3t7e3t/f397e3dvd3OHd3eLc
+3Mnf3t7i3Nnk1eHl3+Xk3+jj38vb6NHZ4NPa3t3c4dvb49rX4ePc4ejf5N7m6Nvu6uDg4OHh4eLi
+4uPj4+Li4eXi4eLl4eXk4uXl4uLl5eTk5OXl5eTm5ebm5uXl5uXi5urm4+fn5+Hq5enp5urs5+jt
+5+/v5+Hl6OTl6ePj6Obs7Ojo6Onp6evr6erq6uvr6+ro6+7q6e3r6ent6u3s6u7u6err7ert7ezs
+7O/v7+3t7ezq7fHt7vLr6vTs5uPx7Onx6+z37vHx7vL07vP06/j87+3t8e3r9u3t9evu9Ort+fHs
+8vTq8fbu+eby8u/y8uzy8vHx8fDw8PDx8/Ly8vPz8/Lz8PHz8vb18vLz9fHy9fXy9fT09PX19fb2
+9vf39/f19vT09Pj08/n29vzz9PX68/X+8vb59fP69fr78/n49vn69f359fv78/b3+fX2+fP0+fn3
++Pr2+fn2/v72/f32+vL4+fb6+vf8+fb5/fP8/vj4+Pn5+fr6+vv7+/r6+f36+f39+/r6/Pn5/f35
+/vr///z8/P39/f///f/+/Pz9///9/v7+/v7////////+//7+/vn7+iwAAAAAgAIdAEAI/gDv3etH
+MJ8+fvj48VuH76C+fAKnteqD6RauWrlWsWLlixcuXLdooRpFqSSlUaNUqVSJatWqU7ROqYL5MVcu
+W7ZyqRq1SpeuUah05SrlihYtXq5QmRK16ZPTT5s2mTKFCpVIUp2yat3KtavXr2DDih1LtqzZs2jT
+ql3L9utUU504cfIKt63du3jz6t3Ll5MmTkrldsqE6hSnTJ3g+v2rdW5YuYshS16sqbJlv5kePcr0
+F5HCevrWKeRHjx87helGj543b98+e/dEvXtnrx0xRYu0YNHBu7fv38CDCx9OvLjx48iTK1/OvLnz
+59CjS2dOpUoJGVTQIEoU6E+g7+DD/osfT768+fPo06tfz769+/fw2yMKNN9PoER/0iASQSbduv+q
+BSjggAQWaKCB9DRzigUbVBABBA2wc9Bo8nhCEDGwpDFEFVkw8UIT04Uo4ogklmjiiSimaFwOVeRw
+wxZV2HADCVXQBwh98eWo44489ujjjz4CYl0n9Yh24JFIJqmkgeqEAMMGEziAwAD8HHNML6UocgYR
+QODgpZcqhinmmGSWaSaKW1DR2w0ywADkm3DGKeecdAbiByA5xIDGMBMu6eefgCa5jgg3zLCBBAsU
+QNpofa7zjiaJiNIOO/Zgs8wutXQiySeqUOWKK6KgQlRJKFVFiy212GJUKUSNwskm/6FMIsmsk8g6
+662bpJIKKZh0EkorrUQVSiefuPRJKbxioiwppCBbylKifAIKKG9Va+212F7L17bcduvtt2sJNpUm
+mQSChg4xwGCDFmmQ4e678MYr77z01mvvvfjmq+++/Pbr77/5alEGGmVoYTAZBVdRhQwZVFABGX88
+YsopwijTzDAYZ4yxMspojLEwIIcs8sjC/CLMMB0Dg0onVcBwgQ5/2OBiBhhIIJo++pSm2j740INI
+NPa8AwsifmQhhRQgnqn00kw37XTTauqQwwwzaLEId4DcWOfWXHftdY9/1LdFCPScFujZaA+4TgUh
+UODAAggwo9Al8AhzSiReeCEEDf461BCFFE8HLvjghBf+G4wxlIBGJvZth8jjgWj99eSUVz45ICXo
+YHbanHdOoDoiTH1oAgQgaUo67EQDjjjytL7ONdnAI48448gDDzXUmBOPOdlo4w488bBejjntrAPP
+P9tsY4455bSjzTbXaNPO8OZsow3r2sQOTzbXYJPNP9nMIn42/xkPz/now2P8P+yX7/778Mcffzr0
+12///fjnr//+/Pfv//8ADKAAB0jA/9FjHelQBzsO2Ax1OPCBEIygBCdIwQpa8IIYzKAGN8jBDnrw
+gyBUB+oOyIxlNGMdy1BHPXTmuRZyzkgCGlShDpUofhQkHzEETTM0gQlekGN22P4wBjScAQ5uTGMa
+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
+BZ2AOipUNjCkpvTFpq7GDwEBADs=
+
+------=_Part_442_27272438.1260884485291
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: 7bit
+Content-ID: css
+
+.MenuAS {  
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+ 	color: #006633;
+ 	text-decoration: none;
+ 	font-weight: bold
+}
+a.MenuAS:hover {  
+	color: #FF0000;
+ 	font-weight: bold
+}
+.NewsCentro {  
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 10px;
+ 	color: #006940;
+ 	text-decoration: none
+}
+a.NewsCentro:hover {  
+	color: #0000FF;
+ 	text-decoration: underline
+}
+.MenuHeader {  
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 12px;
+ 	font-weight: bold;
+ 	color: #333333
+}
+.fisse {  
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 10px;
+ 	color: #333333;
+ 	text-decoration: none;
+ 	cursor: hand?, Direction=?)
+}
+a.fisse:hover {  
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 10px;
+ 	color: #FF0000;
+ 	text-decoration: underline
+}
+.MenuAd {  
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 10px;
+ 	color: #000066;
+ 	text-decoration: none
+}
+a.MenuAd:hover {  
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 10px;
+ 	color: #FF0000;
+ 	text-decoration: underline
+}
+.straordinario {  
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 10px;
+ 	font-weight: bold;
+ 	color: #FF3300;
+ 	text-decoration: none
+}
+.NewsCentronuovo { 
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 11px;
+ 	color: #666666;
+ 	text-decoration: none ;
+ 	font-weight: normal
+}
+a.NewsCentronuovo:hover {  
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 11px;
+ 	font-weight: normal;
+ 	color: #FF0000;
+ 	text-decoration: none
+}
+.prova {  
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 11px;
+ 	color: #333333;
+ 	text-decoration: none
+}
+.provatitoli {  
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 13px;
+ 	text-decoration: none;
+ 	color: #006940;
+ 	font-weight: bold
+}
+.congresso {  
+	font-family: Arial, Helvetica, sans-serif;
+ 	font-size: 16px;
+ 	color: #004A23;
+ 	text-decoration: none;
+ 	font-weight: bold
+}
+.titoliag {  
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 12px;
+ 	font-style: normal;
+ 	font-weight: bold;
+ 	color: #BA0000;
+ 	text-decoration: none
+}
+.titolifissi {  
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 11px;
+ 	font-weight: bold;
+ 	color: #000099
+}
+.agenzia {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #333333;
+	line-height: 15px;
+	text-align: justify;
+
+}
+p {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #333333;
+	line-height: 15px;
+	text-align: justify;
+
+}
+.meseanno {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #605DA0;
+	text-align: center;
+
+}
+.tblesterna {
+	border: 0px none;
+}
+.tblinterna {
+	border: 1px solid #333333;
+}
+.cellainterna {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #605DA0;
+	border: 1px solid #666666;
+	text-align: center;
+	font-weight: normal;
+
+}
+.cellainternalnk {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #2B2881;
+	border: 0px none;
+	text-align: center;
+	width: 100%;
+	font-weight: bold;
+
+}
+a:hover.cellainternalnk  {
+	background-color: #CCCC00;
+}
+a:visited.cellainternalnk  {
+
+	font-size: 12px;
+	color: #993300;
+	border: 0px none;
+	text-align: center;
+	width: 100%;
+}
+.caltd {  font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 10px; width: 20px}
+.spazio-2    { font-family: Tahoma; font-size: 2px; color: #FFFFFF }
+.banca-dat   { font-family: Tahoma; font-size: 12pt; color: #EA0F61; text-decoration: none; font-weight: bold }
+.lamp        { font-family: Tahoma; font-size: 8pt; color: #FF0000; text-decoration: blink }
+.caltdint { font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 12px; background-color: #CCCCCC; font-weight: bold; color: #CC0000}
+.caltdoggi { font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 10px ; font-weight: bold; width: 20px}
+.caltdday { font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px; font-weight: bold ; width: 20px}
+.caltddaydom { font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px; font-weight: bold ; color: #FF0000; width: 20px}
+.Link-b      { font-family: Tahoma; font-size: 10 pt; text-decoration: none; font-weight: bold }
+.divisore    { font-size: 3px }
+.text-11px   { font-family: Tahoma; font-size: 11px }
+.text-10pt   { font-family: Tahoma; font-size: 10pt; text-decoration: none;color: #2B2881 }
+.testata-1   { font-family: Tahoma; font-size: 14pt; color: #000080; font-weight: bold }
+.menu-1      { font-family: Tahoma; font-size: 10pt; font-weight: bold }
+.text-10     { font-size: 11px; font-family: Tahoma; font-weight: bold }
+.divisore-2    { font-size: 8px }
+a.button {
+	background-color: #CCCCCC;
+	border: thin outset;
+	padding-top: 2px;
+	padding-right: 5px;
+	padding-bottom: 2px;
+	padding-left: 5px;
+	margin-bottom: 2px;
+	text-align: center;
+	vertical-align: middle;
+	height: 21px;
+}
+a.button:hover {
+
+	background-color: #FFCC33;
+	border: thin outset;
+	padding-top: 2px;
+	padding-right: 5px;
+	padding-bottom: 2px;
+	padding-left: 5px;
+	margin-bottom: 2px;
+	text-align: center;
+	vertical-align: middle;
+	height: 21px;
+}
+
+
+------=_Part_442_27272438.1260884485291
+Content-Type: text/html
+Content-Transfer-Encoding: quoted-printable
+
+<HTML xmlns:xsi=3D"http://www.w3.org/2001/XMLSchema-instance">
+<HEAD>
+<META http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-885=
+9-1">
+<TITLE>CIA - Ufficio Stampa</TITLE>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-885=
+9-1">
+<link rel=3D"stylesheet" href=3D"cid:css" type=3D"text/css">
+</HEAD>
+<BODY bgColor=3D"#FFFFFF" link=3D"#025433" text=3D"#000080" topMargin=3D"=
+0" vLink=3D"#009999">
+<p class=3D"body1"></p>
+<div align=3D"center">
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"617">
+<tr>
+<td valign=3D"middle" align=3D"center">
+<div align=3D"center">
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" ba=
+ckground=3D"cid:sfondo">
+<tr>
+<td width=3D"14%" align=3D"left" valign=3D"middle">
+<p class=3D"text-10pt">
+<b><a name=3D"su"></a></b><img border=3D"0" src=3D"cid:minicp" width=3D"4=
+0" height=3D"20"></p>
+</td><td width=3D"33%" align=3D"center" class=3D"text-10pt-ld"><strong>Te=
+rritorio</strong></td><td width=3D"31%" class=3D"text-10pt"><font color=3D=
+"#008000"><strong>Ufficio Stampa</strong></font></td><td width=3D"7%" ali=
+gn=3D"center" valign=3D"middle"> </td><td width=3D"7%" align=3D"center" v=
+align=3D"middle"> </td><td width=3D"8%" align=3D"center" valign=3D"middle=
+"> </td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div align=3D"center">
+<table border=3D"0" cellpadding=3D"2" cellspacing=3D"0" width=3D"617">
+<tr>
+<td class=3D"text-10pt" bgcolor=3D"#E3E3E3" background=3D"cid:bootpol" wi=
+dth=3D"100%"><b><font color=3D"#FFFFFF"></font></b></td>
+</tr>
+</table>
+</div>
+<table width=3D"617" border=3D"0" align=3D"center">
+<tr>
+<td class=3D"text-10pt"><b>15/12/2009  14:54</b></td>
+</tr>
+<tr>
+<td class=3D"text-10pt"><b>Oltre duecento trattori alle porte di Bologna =
+per richiamare l=92attenzione della politica sui problemi dell=92agricolt=
+ura. Manifestazione di Cia Confagricoltura e Copagri dell=92Emilia Romagn=
+a</b></td>
+</tr>
+<tr>
+<td class=3D"text-10"><P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; =
+TEXT-ALIGN: justify"><FONT face=3DArial><SPAN style=3D"FONT-SIZE: 10pt"><=
+/SPAN><SPAN style=3D"FONT-SIZE: 10pt; FONT-FAMILY: 'Times New Roman'; mso=
+-bidi-font-family: Arial"><?xml:namespace prefix =3D o ns =3D "urn:schema=
+s-microsoft-com:office:office" /><o:p></o:p></SPAN></FONT>&nbsp;</P>
+<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: justify"><=
+FONT face=3DArial><SPAN style=3D"FONT-SIZE: 10pt"></SPAN><SPAN style=3D"F=
+ONT-SIZE: 10pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-family: Ari=
+al"><o:p></o:p></SPAN></FONT></P>
+<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: justify"><=
+FONT face=3DArial><SPAN style=3D"FONT-SIZE: 10pt; COLOR: black">Oltre due=
+cento trattori provenienti dall=92Emilia e dalla Romagna sono giunti alle=
+ porte di Bologna (Borgo Panigale, San Lazzaro e via Mattei) per </SPAN><=
+SPAN style=3D"FONT-SIZE: 10pt">richiamare l=92attenzione della politica s=
+ui problemi dell=92agricoltura italiana. </SPAN><SPAN style=3D"FONT-SIZE:=
+ 10pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-family: Arial"><o:p>=
+</o:p></SPAN></FONT></P>
+<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: justify"><=
+FONT face=3DArial><SPAN style=3D"FONT-SIZE: 10pt">=93Siamo alla paralisi =
+dell'attivit=E0 e si paventa diffuso l'abbandono delle campagne", lamenta=
+no gli agricoltori. Le organizzazioni ritengono che "il maxiemendamento a=
+lla Finanziaria, pur rappresentando un passo in avanti ottenuto anche gra=
+zie alla nostra mobilitazione, non possa bastare e senza una risposta com=
+pleta ed adeguata alla crisi in atto non escludiamo iniziative forti per =
+garantire la sussistenza reddituale di migliaia di famiglie e potremmo es=
+sere costretti alla disobbedienza fiscale della rata contributiva del pro=
+ssimo gennaio 2010 per mancanza di risorse=94. </SPAN><SPAN style=3D"FONT=
+-SIZE: 10pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-family: Arial"><o:p></o:p></SPAN></FONT></P>
+<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: justify"><=
+FONT face=3DArial><SPAN style=3D"FONT-SIZE: 10pt">=93Agricoltura: cos=EC =
+si chiude=94 =E8 lo slogan adottato che racchiude una serie di rivendicaz=
+ioni per salvare il =91primario=92, tra cui il riconoscimento dello stato=
+ di crisi e sospensione del pagamento dei contributi previdenziali ed ass=
+istenziali,la proroga per tutto il 2010 delle agevolazioni contributive, =
+il ripristino delle agevolazioni sul gasolio per il riscaldamento delle s=
+erre, la riattivazione del finanziamento dei contratti di filiera e la pr=
+onta disponibilit=E0 degli aiuti per la diversificazione produttiva nel s=
+ettore bieticolo-saccarifero. Inoltre la stanziamento dei fondi promessi =
+per il settore lattiero-caseario, misure a sostegno del comparto suinicolo, la semplificazione degli adempimenti amministrativi e bur=
+ocratici a carico delle imprese, l=92accesso al credito a tassi agevolati=
+ con garanzia , l=92aumento della </SPAN><SPAN style=3D"FONT-SIZE: 10pt; =
+FONT-FAMILY: 'Times New Roman'; mso-bidi-font-family: Arial"><o:p></o:p><=
+/SPAN></FONT></P>
+<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: justify"><=
+FONT face=3DArial><SPAN style=3D"FONT-SIZE: 10pt">dotazione finanziaria p=
+er il credito d=92imposta per l=92imprenditoria giovanile. Infine le Orga=
+nizzazioni sollecitano l=92 erogazione degli aiuti di Stato fino a 15 mil=
+a euro per azienda, cos=EC come accordato dalla Commissione europea e chi=
+edono sgravi e incentivi fiscali e contributivi per la riduzione dei cost=
+i produttivi e amministrativi per far ripartire gli investimenti.</SPAN><=
+SPAN style=3D"FONT-SIZE: 10pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-f=
+ont-family: Arial"><o:p></o:p></SPAN></FONT></P>
+<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: justify"><=
+FONT face=3DArial><SPAN style=3D"FONT-SIZE: 10pt">La mobilitazione =E8 st=
+ata sostenuta dalle Centrali cooperative Fedagri-Confcooperative e Legaco=
+op Agroalimentare dell=92Emilia Romagna con iniziative nelle strutture di=
+ lavorazione.</SPAN><SPAN style=3D"FONT-SIZE: 10pt; FONT-FAMILY: 'Times N=
+ew Roman'; mso-bidi-font-family: Arial"><o:p></o:p></SPAN></FONT></P>
+<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: justify"><=
+SPAN style=3D"FONT-SIZE: 10pt"><FONT face=3DArial>=93Ogni strumentalizzaz=
+ione dell=92iniziativa, a partire da quella politica -concludono Cia, Con=
+fagricoltura e Copagri- sar=E0 rispedita al mittente poich=E9 il mondo ag=
+ricolo esprimer=E0, come sempre, le proprie opinioni con le forme che tut=
+ti dovrebbero attuare per contribuire ad abbassare i toni e dare libert=E0=
+ alle idee nel rispetto di tutti a partire dalle Istituzioni=94.</FONT></=
+SPAN><SPAN style=3D"FONT-SIZE: 10pt; FONT-FAMILY: 'Times New Roman'; mso-=
+bidi-font-family: Arial"><o:p></o:p></SPAN></P>
+    </td>
+</tr>
+<tr>
+<td class=3D"text-10">La versione completa pu&ograve; essere letta all' i=
+ndirizzo:<br>
+<a class=3D"text-10pt" href=3D"http://www.cia.it/cia/svl/documentiRead?do=
+c_id=3D24007&tpl_id=3D4">http://www.cia.it/cia/svl/documentiRead?doc_id=3D=
+24007&amp;tpl_id=3D4</a>
+=2E</td>
+</tr>
+</table>
+<p></p>
+<DIV align=3D"center">
+<p></p>
+<p></p>
+</DIV>
+<FONT SIZE=3D3 COLOR=3DBLUE><PRE>
+*** eSafe : La mail risulta pulita dopo il controllo antivirus ***
+*** ATTENZIONE: non aprire COMUNQUE gli allegati se il mittente =E8 scono=
+sciuto   ***
+</PRE></FONT>
+</BODY>
+</HTML>
+------=_Part_442_27272438.1260884485291--
+------=_Part_443_14339790.1260884485291
+Content-Type: text/plain;
+	charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+
+CIA - Ufficio Stampa
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Territorio=20
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Oltre duecento trattori alle porte di Bologna per richiamare l=92attenzio=
+ne della politica sui problemi dell=92agricoltura. Manifestazione di Cia =
+Confagricoltura e Copagri dell=92Emilia Romagna
+------------------------------------------------------------
+
+ =A0Oltre duecento trattori provenienti dall=92Emilia e dalla Romagna son=
+o giunti alle porte di Bologna (Borgo Panigale, San Lazzaro e via Mattei)=
+ per richiamare l=92attenzione della politica sui problemi dell=92agricol=
+tura italiana. =93Siamo alla paralisi dell'attivit=E0 e si paventa diffus=
+o l'abbandono... ...
+Per leggere il documento visitate l'indirizzo:
+	http://www.cia.it/cia/svl/documentiRead?doc_id=3D24007&tpl_id=3D4
+------=_Part_443_14339790.1260884485291--
