@@ -65,7 +65,7 @@ case "$1" in
       ${zimbra_home}/libexec/zmmtaconfig mailbox >/dev/null 2>&1
     fi
     for i in $START_ORDER; do
-      ${zimbra_home}/bin/$i start norewrite >/dev/null 2>&1
+      ${zimbra_home}/bin/$i start norewrite
       R=$?
       if [ $R -ne "0" ]; then
         STATUS=$R
@@ -101,7 +101,7 @@ case "$1" in
       if [ $i = "mysql.server" ]; then
         ${zimbra_home}/bin/mysqladmin status > /dev/null 2>&1
       else
-        ${zimbra_home}/bin/$i status > /dev/null 2>&1
+        ${zimbra_home}/bin/$i status
       fi
       R=$?
       if [ $R -ne "0" ]; then
