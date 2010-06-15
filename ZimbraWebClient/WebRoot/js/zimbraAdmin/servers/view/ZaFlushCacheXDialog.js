@@ -115,7 +115,7 @@ function () {
 	var busyid = Dwt.getNextId ();
 	var params = this.getInstance();
 	params.ix = 0;
-	params.busyid = busyid;
+	params.busyId = busyid;
 	var callback = new AjxCallback(this, ZaFlushCacheXDialog.flushCacheCalback, params);
 	params.callback = callback;
 	this.getModel().setInstanceValue(this.getInstance(),"status",1);

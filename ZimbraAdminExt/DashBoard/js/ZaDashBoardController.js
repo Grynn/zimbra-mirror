@@ -68,6 +68,10 @@ ZaDashBoardController.hijackMessages = function () {
 	ZaMsg.FAILED_CREATE_COS = com_zimbra_dashboard.FAILED_CREATE_COS;
 	ZaMsg.FAILED_SAVE_COS = com_zimbra_dashboard.FAILED_SAVE_COS;
 	ZaMsg.ERROR_NO_SUCH_COS = com_zimbra_dashboard.ERROR_NO_SUCH_COS;
+	ZaMsg.Domain_Chameleon_Note = com_zimbra_dashboard.Domain_Chameleon_Note;
+	/**
+	 * Help links
+	 */
 	ZaNewAccountXWizard.helpURL = location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm#appliance/zap_provisioning_a_new_account.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	/**
 	 * hack to deprecate notebook/wiki UI
@@ -103,6 +107,48 @@ ZaDashBoardController.hijackMessages = function () {
 		} catch (ex) {
 			this._handleException(ex, "ZaDashBoardController.prototype.newDomainSelected", null, false);
 		}
+	}
+	
+	/**
+	 * Add Flush Cache button to Domain toolbar
+	 */
+	ZaController.initToolbarMethods["ZaDomainController"].push(ZaDashBoardController.initDomainToolbarMethod);
+}
+
+
+ZaDashBoardController.initDomainToolbarMethod = function() {
+   	this._toolbarOperations[ZaOperation.FLUSH_CACHE]=new ZaOperation(ZaOperation.FLUSH_CACHE,com_zimbra_dashboard.TBB_FlushCache, com_zimbra_dashboard.TBB_FlushCache_tt, "FlushAllQueues", "FlushAllQueues", new AjxListener(this, ZaDashBoardController.flushThemeCacheListener));
+	this._toolbarOrder = [];
+	this._toolbarOrder.push(ZaOperation.SAVE);
+	this._toolbarOrder.push(ZaOperation.CLOSE);
+	this._toolbarOrder.push(ZaOperation.SEP);
+	this._toolbarOrder.push(ZaOperation.NEW);
+	this._toolbarOrder.push(ZaOperation.DELETE);
+	this._toolbarOrder.push(ZaOperation.SEP);
+	this._toolbarOrder.push(ZaOperation.FLUSH_CACHE);
+	this._toolbarOrder.push(ZaOperation.VIEW_DOMAIN_ACCOUNTS);
+	this._toolbarOrder.push(ZaOperation.GAL_WIZARD);
+	this._toolbarOrder.push(ZaOperation.AUTH_WIZARD);
+	this._toolbarOrder.push(ZaOperation.CHECK_MX_RECORD);
+}
+
+ZaDashBoardController.flushThemeCacheListener = function(ev) {
+	var busyId = Dwt.getNextId ();
+	var params = {flushSkin:true,busyMsg:com_zimbra_dashboard.BUSY_FLUSH_THEME_CACHE,serverId:ZaDashBoard.server.id,busyId:busyId};
+	var callback = new AjxCallback(this, ZaDashBoardController.flushCacheCalback, params);
+	params.callback = callback;
+	ZaServer.flushCache(params);
+}
+
+ZaDashBoardController.flushCacheCalback = function(params,resp) {
+	if(params.busyId)
+		ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);	
+	
+	if(resp.isException && resp.isException()) {
+		var msg = AjxMessageFormat.format (com_zimbra_dashboard.ERROR_FAILED_FLUSH_THEME_CACHE);
+		this.popupErrorDialog(msg,resp.getException());
+	}  else {
+		this.popupMsgDialog(com_zimbra_dashboard.FinishedFlushThemeCache);
 	}
 }
 

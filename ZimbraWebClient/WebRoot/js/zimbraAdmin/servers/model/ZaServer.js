@@ -1000,13 +1000,13 @@ ZaServer.flushCache = function (params) {
 	
 	var reqMgrParams = {
 		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : ZaMsg.BUSY_FLUSH_CACHE,
+		busyMsg : params.busyMsg ? params.busyMsg : ZaMsg.BUSY_FLUSH_CACHE,
 		busyId:params.busyId
 	}
 	
 	var reqParams = {
 		soapDoc: soapDoc,
-		targetServer: params.serverList[params.ix].attrs[ZaItem.A_zimbraId],
+		targetServer: params.serverId ? params.serverId : params.serverList[params.ix].attrs[ZaItem.A_zimbraId],
 		asyncMode: params.callback ? true : false,
 		callback: params.callback ? params.callback : null
 	}
