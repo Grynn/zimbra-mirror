@@ -89,6 +89,48 @@
 			</fileset>
    		</javadoc>
    	</target>
+	
+	<target name="jar-staf-selenium" depends="compile" description="Creates the selenium service jar file">
+		<property name="build.staf.selenium.classes.dir"  	location="${build.dir}/staf/selenium/STAF-INF/classes"/>
+		<property name="build.staf.selenium.jars.dir"  		location="${build.dir}/staf/selenium/STAF-INF/jars"/>
+		<copy todir="${build.staf.selenium.classes.dir}">
+			<fileset dir="${build.classes.dir}"/>
+		</copy>
+		<copy todir="${build.staf.selenium.jars.dir}">
+			<fileset dir="jars">
+				<include name="**/*.jar"/>
+			</fileset>
+		</copy>			
+		<copy todir="${build.staf.selenium.jars.dir}">
+			<fileset dir="../ZimbraCommon/jars">
+				<include name="**/*.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="${build.staf.selenium.jars.dir}">
+			<fileset dir="../ZimbraServer/build">
+				<include name="zimbrastore.jar"/>
+			</fileset>
+		</copy>			
+		<copy todir="${build.staf.selenium.jars.dir}">
+			<fileset dir="../ZimbraCommon/build">
+				<include name="zimbracommon.jar"/>
+			</fileset>
+		</copy>
+		<jar destfile="${dist.lib.dir}/zstafselenium.jar" basedir="${build.dir}/staf/selenium">
+			<manifest>
+				<attribute name="Main-Class" value="projects.zcs.bin.ExecuteTests"/>
+				<section name="staf/service/info">
+					<attribute name="Service-Class" value="staf.StafIntegration"/>
+					<attribute name="Packaged-Jars" value="commons-configuration-1.5 commons-lang-2.4 ocutil-2.4.2 selenium-java-client-driver-1.0-SNAPSHOT
+						selenium-server-1.0-SNAPSHOT-standalone testng-5.8-jdk15 xalan activation commons-cli-2.0 commons-codec-1.4 commons-collections-3.2.1 commons-digester-2.0 commons-httpclient-3.0 commons-logging dom4j-1.5.2 log4j-1.2.15 mail libidn-1.15 zimbracommon zimbrastore"/>
+				</section>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="jar-staf" depends="jar-staf-selenium" description="Creates the STAF jar file">
+	</target>
+	
 	<target name="generate.locale.files.ZimbraWebClient" description="Grab I18N message files from ZimbraWebClient project">
 		<copy todir="${src.java.dir}/framework/locale">
 			<fileset dir="${webclient.dir}/WebRoot/messages/" />
@@ -110,27 +152,27 @@
 			<fileset dir="${src.java.dir}/framework/locale" />
 		</copy>
 	</target>
-
-	<!-- RUN TESTS-->
-	<taskdef name="testng" classname="com.beust.testng.TestNGAntTask" classpathref="class.path" />
-
-	<target name="test-zcs" depends="jar">	
-		<echo message="running ajax tests..." />		
-		<java classname="projects.zcs.bin.ExecuteTests" classpathref="class.path" fork="true" >
-			<arg value="debugSuite" />
-			<jvmarg value="-ea" />
-			<jvmarg value="-Dfile.encoding=UTF-8" />
-		</java>
-
+	
+	<target name="Run html tests" depends="jar">
 		<echo message="running  html tests..." />		
-		<java classname="projects.html.bin.ExecuteTests" classpathref="class.path" fork="true">
+		<java classname="projects.html.bin.ExecuteTests" classpathref="runpath" fork="true">
 			<arg value="fullSuite" />
 			<jvmarg value="-ea" />
 			<jvmarg value="-Dfile.encoding=UTF-8" />
 		</java>
-
+	</target>
+	<target name="Run ajax tests" depends="jar">
+		<echo message="running ajax tests..." />		
+		<java classname="projects.zcs.bin.ExecuteTests" classpathref="runpath" fork="true">
+			<arg value="fullSuite" />
+			<jvmarg value="-ea" />
+			<jvmarg value="-Dfile.encoding=UTF-8" />
+		</java>
+	</target>
+	<target name="Run tests" depends="Run html tests, Run ajax tests">
 	</target>
 
-
+	<target name="test-zcs" depends="Run tests">	
+	</target>
 
 </project>

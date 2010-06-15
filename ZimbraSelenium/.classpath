@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="lib" path="jars/commons-configuration-1.5.jar"/>
 	<classpathentry kind="lib" path="jars/commons-lang-2.4.jar"/>
-	<classpathentry kind="lib" path="jars/libidn-1.0.jar"/>
 	<classpathentry kind="lib" path="jars/ocutil-2.4.2.jar"/>
 	<classpathentry kind="lib" path="jars/selenium-java-client-driver-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="jars/selenium-server-1.0-SNAPSHOT-standalone.jar"/>
@@ -54,5 +53,7 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.2-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/libidn-1.15.jar" sourcepath="/ThirdParty/libidn/libidn/src"/>
+	<classpathentry kind="lib" path="/ZimbraQA/jars/JSTAF.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
