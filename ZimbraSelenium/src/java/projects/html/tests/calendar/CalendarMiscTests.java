@@ -187,18 +187,23 @@ public class CalendarMiscTests extends CommonTest {
 		String subject = getLocalizedData_NoSpecialChar();
 		String location = getLocalizedData_NoSpecialChar();
 		String url =  "http://" + config.getString("server") + "/zimbra/h/calendar";
-
+		String timezone;
+		
 		//open calendar view
 		selenium.open(url);
 		Thread.sleep(MEDIUM_WAIT);
 				
-		// Navigate To Calendar Preferences and set time zone 
+		// Navigate To Preferences view 
 		obj.zButton.zClick(page.zCalendarApp.preferencesTab);
-		Thread.sleep(1000);
+		Thread.sleep(2000);	
+		//get initial time zone value
+		timezone = obj.zHtmlMenu.zGetSelectedItemName(page.zCalendarApp.apptComposeTimezoneDropdown);
+		//set time zone to some value on general tab under preferences
 		obj.zHtmlMenu.zClick(page.zCalendarApp.apptComposeTimezoneDropdown, obj.zHtmlMenu.zGetAllItemNames(page.zCalendarApp.apptComposeTimezoneDropdown).split("::")[0]);
-		Thread.sleep(500);
+		Thread.sleep(1000);
 		obj.zButton.zClick(page.zABComposeHTML.zPrefSaveButton);
 		Thread.sleep(1000);
+		//select calendar tab under preferences
 		obj.zTab.zClick(localize(locator.calendar), "2");
 		Thread.sleep(1000);
 		//set option to show time zone list 
@@ -239,6 +244,11 @@ public class CalendarMiscTests extends CommonTest {
 		//verify exception in a single appointment
 		obj.zAppointment.zExistsDontWait("exception");
 		
+		// Navigate To Calendar Preferences and set time zone back to initial value 
+		obj.zButton.zClick(page.zCalendarApp.preferencesTab);
+		Thread.sleep(1000);	
+		obj.zHtmlMenu.zClick(page.zCalendarApp.apptComposeTimezoneDropdown, timezone);
+
 		needReset = false;
 	}
 
