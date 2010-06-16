@@ -65,11 +65,11 @@ public class CommonTest extends SelNGBase {
 	public CommonTest() {
 		try {
 			this.conf = new PropertiesConfiguration("conf/config.properties");
-			zmMsg = ResourceBundle.getBundle("framework.locale.zmMsg",
+			zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg",
 					new Locale(this.conf.getString("locale")));
-			zhMsg = ResourceBundle.getBundle("framework.locale.zhMsg",
+			zhMsg = ResourceBundle.getBundle("framework.locale.ZhMsg",
 					new Locale(this.conf.getString("locale")));
-			ajxMsg = ResourceBundle.getBundle("framework.locale.ajxMsg",
+			ajxMsg = ResourceBundle.getBundle("framework.locale.AjxMsg",
 					new Locale(this.conf.getString("locale")));
 			i18Msg = ResourceBundle.getBundle("framework.locale.I18nMsg",
 					new Locale(this.conf.getString("locale")));
@@ -221,7 +221,7 @@ public class CommonTest extends SelNGBase {
 
 	public void initFramework() {
 		super.initFramework(this.conf);
-		zhMsg = ResourceBundle.getBundle("framework.locale.zhMsg", new Locale(
+		zhMsg = ResourceBundle.getBundle("framework.locale.ZhMsg", new Locale(
 				conf.getString("locale")));
 
 	}
