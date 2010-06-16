@@ -161,10 +161,10 @@ sub updateSyslogNG {
     print TMPFH "destination zimbra_auth { file(\"/var/log/zimbra.log\" owner(\"zimbra\")); }; # zimbra\n";
   } else {
     my $remoteIp=inet_ntoa(scalar(gethostbyname($LOGHOST)));
-    print TMPFH "destination zimbra_mail { udp(ip($remoteIp) port(514) ); }; # zimbra\n";
-    print TMPFH "destination zimbra_local1 { udp(ip($remoteIp) port(514) ); }; # zimbra\n";
-    print TMPFH "destination zimbra_local0 { udp(ip($remoteIp) port(514) ); }; # zimbra\n";
-    print TMPFH "destination zimbra_auth { udp(ip($remoteIp) port(514) ); }; # zimbra\n";
+    print TMPFH "destination zimbra_mail { udp(\"$remoteIp\" port(514) ); }; # zimbra\n";
+    print TMPFH "destination zimbra_local1 { udp(\"$remoteIp\" port(514) ); }; # zimbra\n";
+    print TMPFH "destination zimbra_local0 { udp(\"$remoteIp\" port(514) ); }; # zimbra\n";
+    print TMPFH "destination zimbra_auth { udp(\"$remoteIp\" port(514) ); }; # zimbra\n";
   }
   print TMPFH "log { source($zsrc); filter(zimbra_mail); destination(zimbra_mail); }; # zimbra\n";
   print TMPFH "log { source($zsrc); filter(zimbra_local0); destination(zimbra_local0); }; # zimbra\n";
