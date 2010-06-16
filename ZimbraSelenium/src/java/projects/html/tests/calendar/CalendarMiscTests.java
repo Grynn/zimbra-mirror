@@ -204,7 +204,7 @@ public class CalendarMiscTests extends CommonTest {
 		obj.zButton.zClick(page.zABComposeHTML.zPrefSaveButton);
 		Thread.sleep(1000);
 		//select calendar tab under preferences
-		obj.zTab.zClick(localize(locator.calendar), "2");
+		obj.zTab.zClick("/zimbra/h/options?selected=calendar");
 		Thread.sleep(1000);
 		//set option to show time zone list 
 		if(!obj.zCheckbox.zGetStatus(page.zCalendarApp.calPrefShowTimezoneCheckbox))
