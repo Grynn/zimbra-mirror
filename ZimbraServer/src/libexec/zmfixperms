@@ -240,6 +240,12 @@ if [ -d ${zimbra_home} ]; then
     chmod 640 $i
   done
 
+  if [ ! -d ${zimbra_home}/data ]; do
+    mkdir -p ${zimbra_home}/data
+  fi
+  chmod 755 ${zimbra_home}/data
+  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/data
+
 
 fi
 
