@@ -1917,13 +1917,23 @@ function(params) {
 	this.notifyListeners(DwtEvent.ONMOUSEUP, mev);
 };
 
+/**
+ * Sets the anchor row for selection and keyboard nav.
+ *
+ * @private
+ *
+ * @param {boolean|Element}		next	row to make anchor, or if true, move anchor
+ * 										to next row
+ */
 DwtListView.prototype._setKbFocusElement =
 function(next) {
 	// If there are no elements in the list, then bail
 	if (!this._list) { return; }
 
 	var orig = this._kbAnchor;
-	if (this._kbAnchor) {
+	if (next && next !== true) {
+		this._kbAnchor = next;
+	} else if (this._kbAnchor) {
 		this._kbAnchor = this._getSiblingElement(this._kbAnchor, next);
 	} else {
 		this._kbAnchor = this._parentEl.firstChild;
