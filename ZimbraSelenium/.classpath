@@ -54,6 +54,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/libidn-1.15.jar" sourcepath="/ThirdParty/libidn/libidn/src"/>
-	<classpathentry kind="lib" path="/ZimbraQA/jars/JSTAF.jar"/>
+	<classpathentry kind="lib" path="jars/JSTAF.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
