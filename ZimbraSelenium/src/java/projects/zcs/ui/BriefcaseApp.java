@@ -13,6 +13,7 @@ import projects.zcs.tests.CommonTest;
 public class BriefcaseApp extends CommonTest {
 	public static String zNewBriefcaseOverviewPaneIcon = "id=ztih__main_Briefcase__BRIEFCASE_headerButton";
 	public static String zBriefcaseFolder = "id=zti__main_Briefcase__16_textCell";
+	public static String zTrashFolder = "id=zti__main_Briefcase__3_textCell";
 	public static final String zBriefcaseAppIconBtn = "id=zb__App__Briefcase_left_icon";
 	public static final String zNewMenuIconBtn = "id=zb__BCC__NEW_MENU_left_icon";
 	public static final String zUploadFileIconBtn = "id=zb__BCC__NEW_FILE_left_icon";
