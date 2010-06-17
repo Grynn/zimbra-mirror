@@ -537,7 +537,7 @@ public class BasicContactTests extends CommonTest {
 				cnFirstname);
 		obj.zButton.zClick("id=editcontactform_IMAGE_badge");
 		Thread.sleep(2000);
-		File f = new File("projects/zcs/data/" + filename);
+		File f = new File("src/java/projects/zcs/data/" + filename);
 		String path = f.getAbsolutePath();
 		obj.zBrowseField.zTypeInDlgWithKeyboard(localize(locator.uploadImage),
 				path, "1");

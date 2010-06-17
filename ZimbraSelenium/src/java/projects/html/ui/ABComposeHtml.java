@@ -613,7 +613,7 @@ public class ABComposeHtml extends CommonTest {
 	 */
 	public static void zImportContact(String csvFileName) {
 
-		File f = new File("projects/html/data/" + csvFileName);
+		File f = new File("src/java/projects/html/data/" + csvFileName);
 		String path = f.getAbsolutePath();
 		obj.zBrowseField.zTypeWithKeyboard(zImportContactEditField, path);
 		obj.zButton.zClick(zImportBtn);

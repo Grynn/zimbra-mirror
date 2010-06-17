@@ -278,7 +278,7 @@ public class ComposeView extends CommonTest {
 		obj.zButton.zClick(ComposeView.zAddAttachmentIconBtn);
 		String[] attList = attachments.split(",");
 		for (int i = 0; i < attList.length; i++) {
-			File f = new File("projects/zcs/data/" + attList[i]);
+			File f = new File("src/java/projects/zcs/data/" + attList[i]);
 			String path = f.getAbsolutePath();
 			obj.zBrowseField.zTypeInDlgWithKeyboard(localize(locator.attach)
 					+ ":", path, "" + (i + 1) + "");

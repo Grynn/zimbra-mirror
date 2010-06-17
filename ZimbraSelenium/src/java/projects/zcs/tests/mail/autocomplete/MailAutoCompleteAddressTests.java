@@ -1385,7 +1385,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 
 		page.zABCompose.zNavigateToPrefImportExport();
 		obj.zRadioBtn.zClick(localize(locator.contacts));
-		File f = new File("projects/zcs/data/1000contacts.csv");
+		File f = new File("src/java/projects/zcs/data/1000contacts.csv");
 		String path = f.getAbsolutePath();
 		obj.zBrowseField.zTypeWithKeyboard(localize(locator.fileLabel), path);
 		obj.zButton.zClick(localize(locator._import));

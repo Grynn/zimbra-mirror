@@ -281,7 +281,7 @@ public class ComposeView extends CommonTest {
 		zWaitTillObjectExist("button", zAddAttachDoneBtn);
 		String[] attList = attachments.split(",");
 		for (int i = 0; i < attList.length; i++) {
-			File f = new File("projects/html/data/" + attList[i]);
+			File f = new File("src/java/projects/html/data/" + attList[i]);
 			String path = f.getAbsolutePath();
 			obj.zBrowseField.zTypeInDlgWithKeyboard((i + 1) + ".", path, "");
 		}

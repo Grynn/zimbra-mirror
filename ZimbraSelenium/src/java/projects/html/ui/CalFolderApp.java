@@ -187,7 +187,7 @@ public class CalFolderApp extends CommonTest {
 	public static void zImportFromICSToCalendar(String calName, String fileName)
 			throws Exception {
 
-		File f = new File("projects/html/data/" + fileName);
+		File f = new File("src/java/projects/html/data/" + fileName);
 		String path = f.getAbsolutePath();
 
 		zNavigateToCalendarProperties(calName);

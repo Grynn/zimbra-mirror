@@ -45,7 +45,7 @@ public class BriefcaseApp extends CommonTest {
 		}
 		obj.zButton.zClick(zNewMenuIconBtn);
 		zWaitTillObjectExist("dialog", localize(locator.uploadFileToBriefcase));
-		File f = new File("projects/zcs/data/" + filename);
+		File f = new File("src/java/projects/zcs/data/" + filename);
 		String path = f.getAbsolutePath();
 		obj.zBrowseField.zTypeInDlgWithKeyboard(localize(locator.uploadChoose),
 				path, "1");

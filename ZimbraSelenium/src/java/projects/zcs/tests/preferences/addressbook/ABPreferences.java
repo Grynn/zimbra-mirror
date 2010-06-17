@@ -77,7 +77,7 @@ public class ABPreferences extends CommonTest {
 
 		page.zABCompose.zNavigateToPrefImportExport();
 		obj.zRadioBtn.zClick(localize(locator.contacts));
-		File f = new File("projects/zcs/data/" + csvFile);
+		File f = new File("src/java/projects/zcs/data/" + csvFile);
 		String path = f.getAbsolutePath();
 
 		obj.zBrowseField.zTypeWithKeyboard(localize(locator.fileLabel), path);
