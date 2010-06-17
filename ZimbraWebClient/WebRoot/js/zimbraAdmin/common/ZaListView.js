@@ -150,6 +150,12 @@ function () {
 	}
 }
 
+
+ZaListView.prototype.setHeaderList = function(headerList) {
+	this._headerList = headerList;
+	this.headerColCreated = false;
+}
+
 ZaListHeaderItem = function(idPrefix, text, iconInfo, width, sortable, sortField, resizeable, visible) {
 	DwtListHeaderItem.call(this, {field:idPrefix, text:text, icon:iconInfo, width:width, sortable:sortable,
 								  resizeable:resizeable, visible:visible});

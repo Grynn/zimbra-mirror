@@ -148,7 +148,30 @@ ZaDashBoardView.onSearchResult = function(params,resp) {
 			if(resp && !resp.isException()) {
 				var response = resp.getResponse().Body.SearchDirectoryResponse;
 				ZaDashBoardView.processSearchResult(response,list,params);
-			}						
+			}
+			//change list headers
+			if(params.types && params.types.length > 0) {
+				var showStatus = false;
+				var showDisplayName = false;
+				var types = params.types;
+				var cnt = types.length;
+				for(var i=0;i<cnt;i++) {
+					if(!showStatus && (types[i] == ZaSearch.ACCOUNTS || types[i] == ZaSearch.RESOURCES || types[i] == ZaSearch.DLS || types[i] == ZaSearch.DOMAINS)) {
+						showStatus = true;
+					}
+					if(!showDisplayName && (types[i] == ZaSearch.ACCOUNTS || types[i] == ZaSearch.RESOURCES)) {
+						showDisplayName = true;
+					}
+					if(showStatus && showDisplayName) {
+						break;
+					}
+				}
+				var listItems = this._localXForm.getItemsById("dashBoardSearchResults");
+				if(listItems && listItems[0]) {
+					var listWidget = listItems[0].getWidget();
+					listWidget.setHeaderList(listWidget.getHeaderList(showStatus,showDisplayName));
+				}
+			}
 			this._localXForm.setInstanceValue(list.getArray(),ZaDashBoard.searchResults);
 		}
 	} catch (ex) {
@@ -167,10 +190,10 @@ ZaDashBoardView.prototype.searchAddresses = function (types, offset) {
 	offset = offset ? offset : 0;
 	this.offset = offset;
 	var busyId = Dwt.getNextId();
-	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:null,busyId:busyId});
 	types = types ? types : [ZaSearch.ACCOUNTS,ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.RESOURCES];
 	this.types = types;
 	this.query = ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query],types);
+	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:null,busyId:busyId,types:types,query:this.query});
 	var searchParams = {
 		query: this.query, 
 		types:types,

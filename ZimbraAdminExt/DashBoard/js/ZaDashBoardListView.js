@@ -25,7 +25,7 @@ ZaDashBoardListView = function(parent) {
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
 	
-	var headerList = this._getHeaderList();
+	var headerList = this.getHeaderList(true,true);
 	
 	ZaListView.call(this, parent, className, posStyle, headerList);
 
@@ -157,9 +157,11 @@ function(account, now, isDragProxy) {
 				status = ZaAccount._accountStatus(account.attrs[ZaAccount.A_accountStatus]);
 			} else if (account.type == ZaItem.DL) {
 				status = ZaDistributionList._dlStatus[account.attrs.zimbraMailStatus];
-			}else if ( account.type == ZaItem.RESOURCE) {
+			} else if ( account.type == ZaItem.RESOURCE) {
 				status = ZaResource.getAccountStatusLabel(account.attrs[ZaAccount.A_accountStatus]);
-			} 
+			} else if(account.type==ZaItem.DOMAIN) {
+				status = ZaDomain._domainStatus(account.attrs[ZaDomain.A_zimbraDomainStatus]);	
+			}
 			html[idx++] = status;
 			html[idx++] = "</nobr></td>";		
 		}else if (field == ZaAccount.A_zimbraLastLogonTimestamp) {
@@ -180,21 +182,24 @@ function(account, now, isDragProxy) {
 	return div;
 }
 
-ZaDashBoardListView.prototype._getHeaderList =
-function() {
-
+ZaDashBoardListView.prototype.getHeaderList =
+function(showStatus, showDisplayName) {
 	var headerList = new Array();
 	var sortable = 1;
-	var i = 0
-	headerList[i++] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", null, null, true, true);
-	this._defaultColumnSortable = sortable ;
-	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.CLV_Name_col, null, "220px", null,  null, true, true);
+	var i = 0;
 	
-//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible	
-	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px",  null, null, true, true);
+	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
+	headerList[i++] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", sortable++, null, true, true);
+	
+	this._defaultColumnSortable = sortable;
+	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.CLV_Name_col, null, "220px", sortable++,  null, true, true);
 
-	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "120px",  null, null, true, true);
-	//headerList[i++] = new ZaListHeaderItem(ZaAccount.A_zimbraLastLogonTimestamp, ZaMsg.ALV_Last_Login, null, Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.ALV_Last_Login, false, 0), null, null, true, true);
+	if(showDisplayName)
+		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px",  null, null, true, true);
+	
+	if(showStatus)
+		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "120px",  null, null, true, true);
+
 	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, "auto", null, null,true, true );
 	
 	return headerList;
@@ -212,4 +217,3 @@ function(columnItem, bSortAsc) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex);
 	}
 }
-
