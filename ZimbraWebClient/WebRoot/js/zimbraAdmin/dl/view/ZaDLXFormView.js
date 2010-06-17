@@ -1204,19 +1204,18 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 			]}
 		]};		
 		cases.push(case5);
-	}	
-	xFormObject.items = [
-		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
-			items: [
-				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
-					items: [
-						{type:_AJX_IMAGE_, src:"Group_32", label:null, rowSpan:3},
-						{type:_OUTPUT_, ref:"name", label:null,cssClass:"AdminTitle", rowSpan:3},
-						{type:_OUTPUT_, ref:"id", label:ZaMsg.NAD_ZimbraID},
-						{type:_OUTPUT_, ref:"zimbraMailStatus", label:ZaMsg.NAD_AccountStatus,
-								choices: this.dlStatusChoices
-						},
-						{type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp, 
+	}
+
+
+    var headerItems = [{type:_AJX_IMAGE_, src:"Group_32", label:null, rowSpan:3},
+						{type:_OUTPUT_, ref:"name", label:null,cssClass:"AdminTitle", height: 32, rowSpan:3}
+						] ;
+
+    if (ZaItem.hasReadPermission (ZaItem.A_zimbraId, entry)) 
+        headerItems.push (  {type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID}) ;
+
+    if (ZaItem.hasReadPermission (ZaItem.A_zimbraCreateTimestamp, entry))
+        headerItems.push({type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp,
 							label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
 							getDisplayValue:function() {
 								var val = ZaItem.formatServerTime(this.getInstanceValue());
@@ -1224,10 +1223,20 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 									return ZaMsg.Server_Time_NA;
 								else
 									return val;
-							},
-							visibilityChecks:[ZaItem.hasReadPermission]	
-						}						
-					]
+							}	
+						});
+
+    if (ZaItem.hasReadPermission (ZaDistributionList.A_mailStatus, entry))
+        headerItems.push (  {type:_OUTPUT_, ref:ZaDistributionList.A_mailStatus, label:ZaMsg.NAD_ResourceStatus,
+								choices: this.dlStatusChoices
+						}) ;
+
+
+	xFormObject.items = [
+		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
+			items: [
+				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
+					items: headerItems
 				}
 			],
 			cssStyle:"padding-top:5px; padding-bottom:5px"

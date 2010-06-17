@@ -1040,7 +1040,8 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
 					items: [
 						{type:_AJX_IMAGE_, src:"Server_32", label:null, rowSpan:3},
-						{type:_OUTPUT_, ref:ZaServer.A_name, label:null,cssClass:"AdminTitle", rowSpan:3},				
+						{type:_OUTPUT_, ref:ZaServer.A_name, label:null,cssClass:"AdminTitle",
+                            visibilityChecks:[ZaItem.hasReadPermission], height: 32, rowSpan:3},				
 						{type:_OUTPUT_, ref:ZaServer.A_ServiceHostname, label:ZaMsg.NAD_ServiceHostname+":"},
 						{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID},
 						{type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp, 

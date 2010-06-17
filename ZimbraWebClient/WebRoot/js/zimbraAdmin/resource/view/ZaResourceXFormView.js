@@ -279,7 +279,8 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 						{value:ZaResource.RESOURCE_TYPE_EQUIPMENT, label: "Resource_32"}   ];
 						
 	var headerItems = [	{type:_AJX_IMAGE_, ref:ZaResource.A_zimbraCalResType, src:"Resource_32", label:null, rowSpan:3, choices: imgChoices},
-						{type:_OUTPUT_, ref:ZaResource.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:3,visibilityChecks:[ZaItem.hasReadPermission]}];
+						{type:_OUTPUT_, ref:ZaResource.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:3,
+                            height: 32, visibilityChecks:[ZaItem.hasReadPermission]}];
 						
 	/*headerItems.push({type:_OUTPUT_, ref:ZaResource.A_COSId, labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, 
 		choices:this.cosChoices,getDisplayValue:function(newValue) {
@@ -296,13 +297,21 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 				return newValue;
 			},
 			visibilityChecks:[ZaItem.hasReadPermission]});*/
+    if (ZaItem.hasReadPermission(ZaResource.A_mailHost, entry)) {
+	    headerItems.push({type:_OUTPUT_, ref:ZaResource.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer});
+    }
 
-	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer,visibilityChecks:[ZaItem.hasReadPermission]});
+    if (ZaItem.hasReadPermission(ZaResource.A_accountStatus, entry))
+	    headerItems.push({type:_OUTPUT_,  ref:ZaResource.A_accountStatus, label:ZaMsg.NAD_ResourceStatus, labelLocation:_LEFT_, choices:ZaResource.accountStatusChoices});
 
-	headerItems.push({type:_OUTPUT_,  ref:ZaResource.A_accountStatus, label:ZaMsg.NAD_ResourceStatus, labelLocation:_LEFT_, choices:ZaResource.accountStatusChoices,visibilityChecks:[ZaItem.hasReadPermission]});
-	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_name, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false});
-	headerItems.push({type:_OUTPUT_,  ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID,visibilityChecks:[ZaItem.hasReadPermission]});
-	headerItems.push({type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp, 
+    if (ZaItem.hasReadPermission(ZaResource.A_name, entry))
+    	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_name, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false});
+
+    if (ZaItem.hasReadPermission(ZaItem.A_zimbraId, entry))
+        headerItems.push({type:_OUTPUT_,  ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID});
+
+    if (ZaItem.hasReadPermission(ZaItem.A_zimbraCreateTimestamp, entry))
+        headerItems.push({type:_OUTPUT_, ref:ZaItem.A_zimbraCreateTimestamp,
 							label:ZaMsg.LBL_zimbraCreateTimestamp, labelLocation:_LEFT_,
 							getDisplayValue:function() {
 								var val = ZaItem.formatServerTime(this.getInstanceValue());
@@ -310,11 +319,12 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 									return ZaMsg.Server_Time_NA;
 								else
 									return val;
-							},
-							visibilityChecks:[ZaItem.hasReadPermission]	
+							}	
 						});
-	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_zimbraCalResType, label:ZaMsg.NAD_ResType, labelLocation:_LEFT_, required:false,
-						getDisplayValue: ZaResource.getResTypeLabel,visibilityChecks:[ZaItem.hasReadPermission] });	
+
+    if (ZaItem.hasReadPermission(ZaResource.A_zimbraCalResType, entry))
+        headerItems.push({type:_OUTPUT_, ref:ZaResource.A_zimbraCalResType, label:ZaMsg.NAD_ResType, labelLocation:_LEFT_, required:false,
+						getDisplayValue: ZaResource.getResTypeLabel });	
 
 	this.tabChoices = new Array();
 	var _tab2;

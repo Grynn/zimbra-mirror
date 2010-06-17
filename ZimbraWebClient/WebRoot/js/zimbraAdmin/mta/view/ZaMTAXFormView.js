@@ -494,7 +494,8 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 				{type:_GROUP_,	numCols:2,colSizes:["32px","auto"],
 					items: [
 						{type:_AJX_IMAGE_, src:"Queue_32", label:null},
-						{type:_OUTPUT_, ref:ZaMTA.A_name, label:null,cssClass:"AdminTitle"}
+						{type:_OUTPUT_, ref:ZaMTA.A_name, label:null,cssClass:"AdminTitle",
+                           visibilityChecks:[ZaItem.hasReadPermission], height: 32 }
 					]
 				}
 			],
