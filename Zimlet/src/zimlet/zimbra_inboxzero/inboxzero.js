@@ -129,6 +129,12 @@ InboxZero.prototype.onMsgView = function(msg, oldMsg, msgView) {
                     this._initControl(button, op);
                 }
             }
+            toolbar.addFiller();
+            var help = new DwtToolBarButton({parent:toolbar,className:"DwtToolbarButton"});
+            help.setImage("Help");
+            help.setToolTipContent(this.getMessage("helpTooltip"));
+            var openArgs = ["http://inboxzero.com/inboxzero/","_blank","menubar=yes,resizable=yes,scrollbars=yes"]; 
+            help.addSelectionListener(new AjxListener(window, window.open, openArgs));
 
             this._toolbar = toolbar;
         }
@@ -515,11 +521,4 @@ InboxZero.__handleResponseSendRequest = function(params, result) {
 
     // perform default behavior
     return InboxZero.__ZmRequestMgr_handleResponseSendRequest.apply(this, arguments);
-};
-
-// convenience
-
-InboxZero.__getComputedBackgroundColor = function(el) {
-    var color = el && DwtCssStyle.getProperty(el, "background-color");
-    return color == "transparent" ? arguments.callee(el.parentNode) : color; 
 };
