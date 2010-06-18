@@ -421,7 +421,7 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 		   items:[  	
 	            {type:_SPACER_,colSpan:3, id:"dashBoardSpacer1"},	    	
    	    	    {type:_TEXTFIELD_,label:com_zimbra_dashboard.LookupAddress,labelLocation:_LEFT_,
-   	    	    	cssStyle:"overflow: hidden;", width:"100%",ref:ZaSearch.A_query,
+   	    	    	cssStyle:"overflow: hidden;", width:"100%",ref:ZaSearch.A_query, bmolsnr: true,
    	    	    	enableDisableChecks:[],visibilityChecks:[],id:"dashBoardSearchField"
    	    	    },
    	    	    {type:_MENU_BUTTON_,label:com_zimbra_dashboard.SearchFilter_All,icon:"SearchAll",enableDisableChecks:[],visibilityChecks:[],

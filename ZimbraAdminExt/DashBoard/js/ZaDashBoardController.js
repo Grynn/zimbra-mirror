@@ -814,10 +814,11 @@ ZaDashBoardController.viewAccountsButtonListener = function (ev) {
 
     if (domainName) {
         var controller = ZaApp.getInstance().getDashBoardController(ZaSettings.DASHBOARD_VIEW);
+        controller._contentView._localXForm.setInstanceValue (domainName, ZaSearch.A_query)  ;
         controller._contentView.allFilterSelected ();
         var tabGroup = ZaApp.getInstance().getTabGroup ();
         var mainTab = tabGroup.getMainTab() ;
-        tabGroup.selectTab(mainTab) ;        
+        tabGroup.selectTab(mainTab) ;
     }else {
         var currentController = ZaApp.getInstance().getCurrentController () ;
         currentController.popupErrorDialog(ZaMsg.ERROR_NO_DOMAIN_NAME) ;
