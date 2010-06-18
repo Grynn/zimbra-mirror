@@ -65,6 +65,8 @@ InboxZero.prototype.init = function() {
 
     // start polling of deferred items
     var func = AjxCallback.simpleClosure(this._pollDeferredItems, this);
+    func();
+
     var interval = 10 * 60 * 1000; // 10 minutes
     this.__pollIntervalId = setInterval(func, interval);
 };
@@ -281,6 +283,8 @@ InboxZero.prototype._pollDeferredItems = function() {
     }
     var inbox = appCtxt.getById(ZmOrganizer.ID_INBOX);
     var deferred = inbox.getByName(this.getMessage("deferFolder"));
+    if (!deferred) return;
+
     var params = {
         jsonObj: {
             SearchRequest: {
@@ -471,6 +475,7 @@ InboxZero.prototype._createFolders = function(callback) {
                 ]
             }
         },
+        asyncMode: true,
         callback: new AjxCallback(this, this._createFoldersDone, [callback])
     };
     appCtxt.getAppController().sendRequest(params);
@@ -479,7 +484,11 @@ InboxZero.prototype._createFolders = function(callback) {
 InboxZero.prototype._createFoldersDone = function(callback, resp) {
     // TODO: Check for errors
     appCtxt.setStatusMsg(this.getMessage("foldersCreated"));
-    callback.run();
+
+    // NOTE: We have to let the notifications complete before callback runs
+    var args = [].concat(callback.run, callback, callback.args);
+    var func = AjxCallback.simpleClosure.apply(window, args);
+    setTimeout(func, 0);
 };
 
 //
