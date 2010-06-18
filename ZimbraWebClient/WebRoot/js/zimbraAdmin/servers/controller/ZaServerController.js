@@ -244,7 +244,7 @@ function (params) {
 						excludeMasks.push(_obj);						
 						
 						for(var j=(numIFs-1);j>=0;j--) {
-							if(locals2[j].lAddr >= _obj.lStartingAddr && locals2[j].lAddr <= _obj.lEndingAddr && locals2[j].iNetBits <= _obj.iNetBits) {
+							if(locals2[j].lAddr >= _obj.lStartingAddr && locals2[j].lAddr <= _obj.lEndingAddr /*&& locals2[j].iNetBits <= _obj.iNetBits*/) {
 								throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_LOCAL_ADDR_EXCLUDED,[locals2[j].szAddr, chunks[i]]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
 							}
 						}						
@@ -274,7 +274,7 @@ function (params) {
 						
 					masks.push(_obj);
 					for(var j=(IFCounter-1);j>=0;j--) {
-						if(locals[j].lAddr >= _obj.lStartingAddr && locals[j].lAddr <= _obj.lEndingAddr && locals[j].iNetBits <= _obj.iNetBits) {
+						if(locals[j].lAddr >= _obj.lStartingAddr && locals[j].lAddr <= _obj.lEndingAddr /*&& locals[j].iNetBits <= _obj.iNetBits*/) {
 							locals.splice(j,1);
 							IFCounter--;
 						}
