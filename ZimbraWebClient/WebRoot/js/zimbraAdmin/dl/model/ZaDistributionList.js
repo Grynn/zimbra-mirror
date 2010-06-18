@@ -231,6 +231,10 @@ function(tmpObj, dl) {
 		return null;
 	}
 	dl.initFromJS(resp.dl[0]);
+	dl.loadEffectiveRights("id", dl.id,false);
+	tmpObj.rights = dl.rights;
+	tmpObj.setAttrs = dl.setAttrs;
+	tmpObj.getAttrs = dl.getAttrs;
 	tmpObj.id = dl.id;
 	tmpObj.attrs[ZaItem.A_zimbraId] = dl.attrs[ZaItem.A_zimbraId];
 }

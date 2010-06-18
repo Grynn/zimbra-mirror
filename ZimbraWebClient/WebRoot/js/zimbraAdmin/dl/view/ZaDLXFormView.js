@@ -699,6 +699,10 @@ ZaDLXFormView.addAlias  = function () {
 	}
 }
 
+ZaDLXFormView.isAddAliasEnabled = function() {
+	return (this.getInstance)
+}
+
 ZaDLXFormView.isEditAliasEnabled = function () {
 	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaDistributionList.A2_alias_selection_cache)) && this.getInstanceValue(ZaAccount.A2_alias_selection_cache).length==1);
 }
@@ -1118,6 +1122,14 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 	}		
 				
 	if(_tab4) {
+		var addAliasButton = {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+						onActivate:"ZaDLXFormView.addAliasButtonListener.call(this);"
+					};
+		if(entry.id) { 
+			addAliasButton.enableDisableChecks = [[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_ALIAS_RIGHT]];
+		} else {
+			addAliasButton.enableDisableChecks = [[ZaItem.hasWritePermission, ZaAccount.A_zimbraMailAlias]];
+		}
 		var case4 = {type:_ZATABCASE_, width:"100%", numCols:1, colSizes:["auto"],caseKey:_tab4,
 		items: [
 				{type:_ZA_TOP_GROUPER_, borderCssClass:"LowPadedTopGrouperBorder",
@@ -1143,10 +1155,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 									onActivate:"ZaDLXFormView.editAliasButtonListener.call(this);",id:"editAliasButton"
 								},
 								{type:_CELLSPACER_},
-								{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
-									enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.ADD_DL_ALIAS_RIGHT]],
-									onActivate:"ZaDLXFormView.addAliasButtonListener.call(this);"
-								}
+								addAliasButton
 							]
 						}
 					]
