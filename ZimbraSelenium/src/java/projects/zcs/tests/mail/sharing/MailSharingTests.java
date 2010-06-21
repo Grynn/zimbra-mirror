@@ -715,7 +715,32 @@ public class MailSharingTests extends CommonTest {
 				.ClickCheckMailUntilMailShowsUp(localize(locator.shareCreatedSubject));
 		page.zSharing.zAcceptShare(mountingfoldername);
 		obj.zFolder.zClick(mountingfoldername);
+		
+		
+		/**
+		 * Following code has been added to test bug 23876.
+		 */
+		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
+		obj.zMenuItem.zClick(localize(locator.byMessage));
 		obj.zMessageItem.zClick(subject);
+
+		obj.zButton.zClick(localize(locator.reply));
+		obj.zButton.zClick(localize(locator.send));
+		Thread.sleep(2000);
+		selenium.isElementPresent("//*[contains(@class, 'ImgMsgStatusReply')]");
+
+		obj.zButton.zClick(localize(locator.forward));
+		obj.zTextAreaField.zType(page.zComposeView.zToField, invitedusers);
+		obj.zButton.zClick(localize(locator.send));
+		Thread.sleep(2000);
+		selenium.isElementPresent("//*[contains(@class, 'ImgMsgStatusForward')]");
+		
+		/**
+		 * Code for bug 23876 ended.
+		 */
+
+		
+		
 		if (role.equals(localize(locator.shareRoleAdmin))
 				|| role.equals(localize(locator.shareRoleManager))) {
 			obj.zButton.zIsEnabled(page.zMailApp.zDeleteBtn);
