@@ -118,7 +118,7 @@
  	rc = cursor->c_get( cursor, &key, &data, DB_SET );
 -	if ( rc ) goto finish;
 +	if ( rc ) {
-+		Debug( LDAP_DEBUG_TRACE, "====> bdb_id2entry #2: returning %d\n",rc,0,0);
++		Debug( LDAP_DEBUG_TRACE, "====> bdb_id2entry #2: returning %d, key: %lx, keysize: %d\n",rc,nid,key.size);
 +		goto finish;
 +	}
  
