@@ -216,7 +216,7 @@ ZaBulkImportXWizard.prototype.previewCallback = function(params,resp) {
 			
 			this.goPage(ZaBulkImportXWizard.STEP_REVIEW);
 			
-			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
@@ -228,7 +228,7 @@ ZaBulkImportXWizard.prototype.previewCallback = function(params,resp) {
 		}
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaBulkImportXWizard.prototype.previewCallback");
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
@@ -630,7 +630,7 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 	cases.push(case_ldap_info);
 
 	/**
-	 * Enter options for provisioning
+	 * Review options for provisioning
 	 */
 	var case_review = {
 		type:_CASE_, numCols:2, colSizes:["200px","*"], caseKey:ZaBulkImportXWizard.STEP_REVIEW,
