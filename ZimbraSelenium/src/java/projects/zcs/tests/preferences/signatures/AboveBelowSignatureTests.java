@@ -44,10 +44,11 @@ public class AboveBelowSignatureTests extends CommonTest {
 				|| test
 						.equals("verifyHtmlSignatureAboveIncludedMsgInReplyAll_Bug45880")
 				|| test
-						.equals("verifyHtmlSignatureBelowIncludedMsgInReplyAll_Bug45880")) {
+						.equals("verifyHtmlSignatureBelowIncludedMsgInReplyAll_Bug45880")
+				|| test
+						.equals("twoSignaturesOnSwitching_Bug41404")						) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData_NoSpecialChar(), "_selfAccountName_", "",
-					"", getLocalizedData(2), getLocalizedData(5), "" } };
+					getLocalizedData_NoSpecialChar()} };
 		} else
 			return new Object[][] { {} };
 	}
@@ -769,6 +770,90 @@ public class AboveBelowSignatureTests extends CommonTest {
 
 		needReset = false;
 	}
+	
+	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void twoSignaturesOnSwitching_Bug41404(String signatureName,
+			String signatureBody) throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		String defaultSignature = signatureName + "_default";
+		String defaultSignatureBody = signatureBody + "_default";
+		String nondefaultSignatureBody = signatureBody + "_non_default";
+
+		String subject = "signature test";
+		String body = "This is test body.";
+
+		page.zMailApp.zNavigateToComposingPreferences();
+		obj.zRadioBtn.zClick(localize(locator.composeAsHTML));
+		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
+
+
+		/**
+		 * Create Signature 1
+		 */
+		page.zSignaturePref.zNavigateToPreferenceSignature();
+		page.zSignaturePref.zCreateSignature(defaultSignature, defaultSignatureBody,
+		"TEXT");
+
+		Thread.sleep(1000);
+		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
+		Thread.sleep(1000);
+
+		/**
+		 * Create Signature 2
+		 */
+		page.zSignaturePref.zNavigateToPreferenceSignature();
+		obj.zButton.zClick(localize(locator.addSignature));
+		page.zSignaturePref.zCreateSignature(signatureName, nondefaultSignatureBody,
+		"TEXT");
+		Thread.sleep(1000);
+		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
+		Thread.sleep(1000);
+
+		/**
+		 * Make Signature 1 default
+		 */
+		page.zAccPref.zNavigateToPreferenceAccount();
+		obj.zButton.zClick(localize(locator.signatureDoNotAttach));
+		obj.zMenuItem.zClick(defaultSignature);
+		Thread.sleep(1000);
+		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
+		Thread.sleep(1000);
+
+
+		/**
+		 * 1. Compose Mail. 
+		 * 2. Switch Signature to non-default. 
+		 * 3. Switch back to default signature.
+		 * 4. Send Mail to self and click on received mail.
+		 */
+		page.zMailApp.zNavigateToMailApp();
+		obj.zButton.zClick(page.zMailApp.zNewMenuIconBtn);
+		page.zComposeView.zEnterComposeValues("_selfAccountName_", "", "",
+				subject, body, "");
+		obj.zButton.zClick(ComposeView.zSignatureIconBtn);
+		obj.zMenuItem.zClick(signatureName);
+		obj.zButton.zClick(ComposeView.zSignatureIconBtn);
+		obj.zMenuItem.zClick(defaultSignature);
+		obj.zButton.zClick(ComposeView.zSendIconBtn);
+		Thread.sleep(1000);
+		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
+		zGoToApplication("Mail");
+		obj.zFolder.zClick(localize(locator.inbox));
+		obj.zMessageItem.zClick(subject);
+
+		/**
+		 * 1. Verify Body contains default signature.
+		 * 2. Verify body does not contain non-default signature.
+		 *  
+		 */
+		obj.zMessageItem.zVerifyCurrentMsgBodyText(defaultSignatureBody);
+		obj.zMessageItem.zVerifyCurrentMsgBodyDoesNotHaveText(nondefaultSignatureBody);
+
+		needReset = false;
+	}
+
 
 	// //end
 	private void waitForIE() throws Exception {

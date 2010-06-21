@@ -37,6 +37,10 @@ public class MessageItem extends ListItem{
 		String actual =  selenium.call("msgBodyCore", "", "gettext", "", "");
 		Assert.assertTrue(actual.indexOf(requiredTxt)>=0);
 	}
+	public void zVerifyCurrentMsgBodyDoesNotHaveText(String requiredTxt) {
+		String actual =  selenium.call("msgBodyCore", "", "gettext", "", "");
+		Assert.assertFalse(actual.indexOf(requiredTxt)>=0);
+	}
 	public String zGetCurrentMsgBodyText() {
 		return selenium.call("msgBodyCore", "", "gettext", "", "");
 	}
