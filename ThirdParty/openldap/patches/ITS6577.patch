@@ -1,6 +1,6 @@
 --- openldap-2.4.22/servers/slapd/back-bdb/cache.c	13 Apr 2010 20:18:11 -0000	1.216
 +++ openldap-2.4.22/servers/slapd/back-bdb/cache.c	20 Jun 2010 19:28:04 -0000	1.217
-@@ -482,17 +482,19 @@ bdb_cache_find_ndn(
+@@ -482,17 +482,21 @@ bdb_cache_find_ndn(
  				*res = eip;
  				return rc;
  			}
@@ -11,6 +11,8 @@
  			/* In the midst of deleting? Give it a chance to
  			 * complete.
  			 */
++			Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_ndn: id %ld rdn %s being deleted, state %#x\n",
++				ei2->bei_id, ei2->bei_nrdn.bv_val, ei2->bei_state );
 +			bdb_cache_entryinfo_unlock( ei2 );
  			bdb_cache_entryinfo_unlock( eip );
  			ldap_pvt_thread_yield();
@@ -22,15 +24,6 @@
  		bdb_cache_entryinfo_unlock( eip );
  
  		eip = ei2;
-@@ -488,6 +488,8 @@
- 			/* In the midst of deleting? Give it a chance to
- 			 * complete.
- 			 */
-+			Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_ndn: id %ld rdn %s being deleted, state %#x\n",
-+				ei2->bei_id, ei2->bei_nrdn.bv_val, ei2->bei_state );
- 			bdb_cache_entryinfo_unlock( ei2 );
- 			bdb_cache_entryinfo_unlock( eip );
- 			ldap_pvt_thread_yield();
 @@ -895,6 +897,8 @@
  				 * as if the delete has already finished
  				 */
