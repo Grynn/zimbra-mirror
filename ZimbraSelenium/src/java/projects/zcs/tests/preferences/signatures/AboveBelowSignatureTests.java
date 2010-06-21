@@ -788,6 +788,22 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zRadioBtn.zClick(localize(locator.composeAsHTML));
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
+		
+		/**
+		 * Following code is added to test bug 43244
+		 */
+		page.zSignaturePref.zNavigateToPreferenceSignature();
+		obj.zButton.zClick(localize(locator.formatAsText));
+		obj.zMenuItem.zClick(localize(locator.formatAsHtml));
+		Thread.sleep(1000);
+		selenium.clickAt("//*[contains(@class,'ImgImageDoc')]","");
+		obj.zButton.zClickInDlgByName(localize(locator.cancel), localize(locator.addImg));
+		selenium.clickAt("//*[contains(@class,'ImgInsertImage')]","");
+		obj.zButton.zClickInDlgByName(localize(locator.cancel), localize(locator.uploadImage));
+		/**
+		 * Code for bug 43244 ends here.
+		 */
+		
 
 		/**
 		 * Create Signature 1
