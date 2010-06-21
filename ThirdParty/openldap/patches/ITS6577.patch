@@ -102,7 +102,7 @@
  }
 --- openldap-2.4.22.3z/servers/slapd/back-bdb/id2entry.c.orig	2010-06-21 10:49:38.095094622 -0700
 +++ openldap-2.4.22.3z/servers/slapd/back-bdb/id2entry.c	2010-06-21 11:00:24.195883209 -0700
-@@ -117,25 +117,37 @@
+@@ -117,25 +117,38 @@
  
  	/* fetch it */
  	rc = db->cursor( db, tid, &cursor, bdb->bi_db_opflags );
@@ -118,7 +118,8 @@
  	rc = cursor->c_get( cursor, &key, &data, DB_SET );
 -	if ( rc ) goto finish;
 +	if ( rc ) {
-+		Debug( LDAP_DEBUG_TRACE, "====> bdb_id2entry #2: returning %d, key: %lx, keysize: %d\n",rc,nid,key.size);
++		Debug( LDAP_DEBUG_TRACE, "====> bdb_id2entry #2.1: returning %d, key: %lx, keysize: %d\n",rc,nid,key.size);
++		Debug( LDAP_DEBUG_TRACE, "====> bdb_id2entry #2.2: id: %lx\n",id,0,0);
 +		goto finish;
 +	}
  
