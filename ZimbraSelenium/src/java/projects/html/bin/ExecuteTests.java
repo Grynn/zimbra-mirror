@@ -50,6 +50,7 @@ public class ExecuteTests {
 	private static String browser = "";
 	private static String skippedTableRows = "";
 	private static Configuration conf;
+	public static String WorkingDirectory = ".";
 
 	/**
 	 * Use this to debug a particular testMethod
@@ -186,7 +187,7 @@ public class ExecuteTests {
 	}
 
 	public static void loadConfig() throws ConfigurationException {
-		conf = new PropertiesConfiguration("conf/config.properties");
+		conf = new PropertiesConfiguration(WorkingDirectory +"/conf/config.properties");
 		locale = conf.getString("locale");
 		testoutputfolder = conf.getString("ZimbraLogRoot") + "/" + appType;
 		browser = conf.getString("browser");
@@ -274,7 +275,7 @@ public class ExecuteTests {
 	}
 
 	public static void loadSkipTestsDetails() throws Exception {
-		File file = new File("conf/skipTests.txt");
+		File file = new File(WorkingDirectory + "/conf/skipTests.txt");
 
 		BufferedReader br = new BufferedReader(new BufferedReader(
 				new InputStreamReader(new FileInputStream(file), "UTF8")));
