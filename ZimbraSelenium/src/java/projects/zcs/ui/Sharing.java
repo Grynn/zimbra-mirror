@@ -163,8 +163,14 @@ public class Sharing extends CommonTest {
 				&& (!sharetype.equals(localize(locator.shareWithUserOrGroup)))
 				&& (sharetype.equals(localize(locator.shareWithGuest)))
 				&& (!sharetype.equals(localize(locator.shareWithPublic)))) {
+			
+			if(config.getString("locale").equals("es")){
+				selenium.type("xpath=//div[contains(@id,'DWT')]/div[contains(@id,'DWT') and contains(@class,'DwtInputField')]/input", "test123");
+				
+			}else{
 			obj.zEditField.zTypeInDlgByName(localize(locator.passwordLabel),
 					"test123", localize(locator.shareProperties));
+			}
 
 			// Work around to enable OK button in share properties dialog
 			obj.zRadioBtn.zClickInDlgByName(sharetype,
