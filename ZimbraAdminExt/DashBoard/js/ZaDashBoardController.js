@@ -118,7 +118,7 @@ ZaDashBoardController.hijackMessages = function () {
 
 
 ZaDashBoardController.initDomainToolbarMethod = function() {
-   	this._toolbarOperations[ZaOperation.FLUSH_CACHE]=new ZaOperation(ZaOperation.FLUSH_CACHE,com_zimbra_dashboard.TBB_FlushCache, com_zimbra_dashboard.TBB_FlushCache_tt, "FlushAllQueues", "FlushAllQueues", new AjxListener(this, ZaDashBoardController.flushThemeCacheListener));
+   	this._toolbarOperations[ZaOperation.FLUSH_CACHE]=new ZaOperation(ZaOperation.FLUSH_CACHE,com_zimbra_dashboard.TBB_FlushCache, com_zimbra_dashboard.TBB_FlushCache_tt, "FlushCache", "FlushCache", new AjxListener(this, ZaDashBoardController.flushThemeCacheListener));
 	this._toolbarOrder = [];
 	this._toolbarOrder.push(ZaOperation.SAVE);
 	this._toolbarOrder.push(ZaOperation.CLOSE);
