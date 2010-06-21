@@ -22,7 +22,43 @@
  		bdb_cache_entryinfo_unlock( eip );
  
  		eip = ei2;
-@@ -1118,8 +1118,12 @@
+@@ -488,6 +488,8 @@
+ 			/* In the midst of deleting? Give it a chance to
+ 			 * complete.
+ 			 */
++			Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_ndn: id %ld rdn %s being deleted, state %#x\n",
++				ei2->bei_id, ei2->bei_nrdn.bv_val, ei2->bei_state );
+ 			bdb_cache_entryinfo_unlock( ei2 );
+ 			bdb_cache_entryinfo_unlock( eip );
+ 			ldap_pvt_thread_yield();
+@@ -895,6 +897,8 @@
+ 				 * as if the delete has already finished
+ 				 */
+ 				if ( del ) {
++					Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_id: id %ld rdn %s being deleted, state %#x\n",
++				id, (*eip)->bei_nrdn.bv_val, (*eip)->bei_state );
+ 					return DB_NOTFOUND;
+ 				}
+ 				/* otherwise, wait for the info to free up */
+@@ -947,6 +951,8 @@
+ 		}
+ 
+ 		if ( (*eip)->bei_state & CACHE_ENTRY_DELETED ) {
++			Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_id #2: id %ld rdn %s being deleted, state %#x\n",
++			id, (*eip)->bei_nrdn.bv_val, (*eip)->bei_state );
+ 			rc = DB_NOTFOUND;
+ 		} else {
+ 			(*eip)->bei_finders++;
+@@ -989,6 +995,8 @@
+ 			}
+ 			rc = bdb_cache_entry_db_lock( bdb, tid, *eip, load, 0, lock );
+ 			if ( (*eip)->bei_state & CACHE_ENTRY_DELETED ) {
++				Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_id #3: id %ld rdn %s being deleted, state %#x\n",
++				id, (*eip)->bei_nrdn.bv_val, (*eip)->bei_state );
+ 				rc = DB_NOTFOUND;
+ 				bdb_cache_entry_db_unlock( bdb, lock );
+ 				bdb_cache_entryinfo_lock( *eip );
+@@ -1118,8 +1126,12 @@
  		return DB_NOTFOUND;
  	}
  	rc = bdb_dn2id_children( op, txn, e );
