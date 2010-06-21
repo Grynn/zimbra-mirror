@@ -33,16 +33,16 @@
 CLASS:projects.zcs.tests.mail.MailRightClickMenuTests;METHOD:rtClickToContactAndSubject_TagMessage;LOCALE:na;BROWSERS:IE,SF;BUGS:na;REMARK:zMouseOver method doesn't work for IE & SF (FF works fine), while zClick discards tag sub menu (selenium bug)
 
 #Not able to write condition value in edit field using "fieldLabelIsAnObject" method (selenium bug)
-CLASS:projects.zcs.tests.preferences.FilterTests;METHOD:FromContains_FileToFolder;LOCALE:zh_CN,zh_HK,ja,ko;BROWSERS:na;BUGS:na;REMARK: not able to write condition value in edit field using "fieldLabelIsAnObject" method (selenium bug)
-CLASS:projects.zcs.tests.preferences.FilterTests;METHOD:SubjectContains_FileToFolder;LOCALE:zh_CN,zh_HK,ja,ko;BROWSERS:na;BUGS:na;REMARK: not able to write condition value in edit field using "fieldLabelIsAnObject" method (selenium bug)
-CLASS:projects.zcs.tests.preferences.FilterTests;METHOD:SubjectContains_ForwardTo;LOCALE:zh_CN,zh_HK,ja,ko;BROWSERS:na;BUGS:na;REMARK: not able to write condition value in edit field using "fieldLabelIsAnObject" method (selenium bug)
-CLASS:projects.zcs.tests.preferences.FilterTests;METHOD:FromContains_Discard;LOCALE:zh_CN,zh_HK,ja,ko;BROWSERS:na;BUGS:na;REMARK: not able to write condition value in edit field using "fieldLabelIsAnObject" method (selenium bug)
-CLASS:projects.zcs.tests.preferences.FilterTests;METHOD:CCContains_Discard;LOCALE:zh_CN,zh_HK,ja,ko;BROWSERS:na;BUGS:na;REMARK: not able to write condition value in edit field using "fieldLabelIsAnObject" method (selenium bug)
-CLASS:projects.zcs.tests.preferences.FilterTests;METHOD:SubjectContains_FileToFolder_PriorityTest;LOCALE:zh_CN,zh_HK,ja,ko;BROWSERS:na;BUGS:na;REMARK: not able to write condition value in edit field using "fieldLabelIsAnObject" method (selenium bug)
+#CLASS:projects.zcs.tests.preferences.FilterTests;METHOD:FromContains_FileToFolder;LOCALE:zh_CN,zh_HK,ja,ko;BROWSERS:na;BUGS:na;REMARK: not able to write condition value in edit field using "fieldLabelIsAnObject" method (selenium bug)
+#CLASS:projects.zcs.tests.preferences.FilterTests;METHOD:SubjectContains_FileToFolder;LOCALE:zh_CN,zh_HK,ja,ko;BROWSERS:na;BUGS:na;REMARK: not able to write condition value in edit field using "fieldLabelIsAnObject" method (selenium bug)
+#CLASS:projects.zcs.tests.preferences.FilterTests;METHOD:SubjectContains_ForwardTo;LOCALE:zh_CN,zh_HK,ja,ko;BROWSERS:na;BUGS:na;REMARK: not able to write condition value in edit field using "fieldLabelIsAnObject" method (selenium bug)
+#CLASS:projects.zcs.tests.preferences.FilterTests;METHOD:FromContains_Discard;LOCALE:zh_CN,zh_HK,ja,ko;BROWSERS:na;BUGS:na;REMARK: not able to write condition value in edit field using "fieldLabelIsAnObject" method (selenium bug)
+#CLASS:projects.zcs.tests.preferences.FilterTests;METHOD:CCContains_Discard;LOCALE:zh_CN,zh_HK,ja,ko;BROWSERS:na;BUGS:na;REMARK: not able to write condition value in edit field using "fieldLabelIsAnObject" method (selenium bug)
+#CLASS:projects.zcs.tests.preferences.FilterTests;METHOD:SubjectContains_FileToFolder_PriorityTest;LOCALE:zh_CN,zh_HK,ja,ko;BROWSERS:na;BUGS:na;REMARK: not able to write condition value in edit field using "fieldLabelIsAnObject" method (selenium bug)
 
-CLASS:projects.zcs.tests.sharing.TasksSharingTests;METHOD:sharingFolderToExternalGuest;LOCALE:es;BROWSERS:SF,FF;BUGS:na;REMARK:not able to write password in password edit field in FF & SF - works fine only in IE (selenium bug)
-CLASS:projects.zcs.tests.sharing.ABSharingTest;METHOD:sharingABToExternalGuest;LOCALE:es;BROWSERS:SF,FF;BUGS:na;REMARK:not able to write password in password edit field in FF & SF - works fine only in IE (selenium bug)
-CLASS:projects.zcs.tests.sharing.DocumentSharing;METHOD:sharingDocToExternalGuest;LOCALE:es;BROWSERS:SF,FF;BUGS:na;REMARK:not able to write password in password edit field in FF & SF - works fine only in IE (selenium bug)
+#CLASS:projects.zcs.tests.tasks.sharing.TasksSharingTests;METHOD:sharingFolderToExternalGuest;LOCALE:es;BROWSERS:SF,FF;BUGS:na;REMARK:not able to write password in password edit field in FF & SF - works fine only in IE (selenium bug)
+#CLASS:projects.zcs.tests.addressbook.sharing.AddressBookSharingTests;METHOD:sharingABToExternalGuest;LOCALE:es;BROWSERS:SF,FF;BUGS:na;REMARK:not able to write password in password edit field in FF & SF - works fine only in IE (selenium bug)
+#CLASS:projects.zcs.tests.documents.sharing.DocumentSharingTests;METHOD:sharingDocToExternalGuest;LOCALE:es;BROWSERS:SF,FF;BUGS:na;REMARK:not able to write password in password edit field in FF & SF - works fine only in IE (selenium bug)
 
 
 #Shortcuts do not work with Selenium on SF browser
