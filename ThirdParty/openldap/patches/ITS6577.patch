@@ -22,8 +22,6 @@
  		bdb_cache_entryinfo_unlock( eip );
  
  		eip = ei2;
----  openldap-2.4.22/servers/slapd/back-bdb/cache.c	20 Jun 2010 19:28:04 -0000	1.217
-+++  openldap-2.4.22/servers/slapd/back-bdb/cache.c	21 Jun 2010 01:38:38 -0000
 @@ -1118,8 +1118,12 @@
  		return DB_NOTFOUND;
  	}
