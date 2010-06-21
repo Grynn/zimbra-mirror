@@ -100,3 +100,63 @@
  	}
  	return rc;
  }
+--- openldap-2.4.22.3z/servers/slapd/back-bdb/id2entry.c.orig	2010-06-21 10:49:38.095094622 -0700
++++ openldap-2.4.22.3z/servers/slapd/back-bdb/id2entry.c	2010-06-21 11:00:24.195883209 -0700
+@@ -117,25 +117,37 @@
+ 
+ 	/* fetch it */
+ 	rc = db->cursor( db, tid, &cursor, bdb->bi_db_opflags );
+-	if ( rc ) return rc;
++	if ( rc ) {
++		Debug( LDAP_DEBUG_TRACE, "====> bdb_id2entry #1: returning %d\n",rc,0,0);
++		return rc;
++	}
+ 
+ 	/* Get the nattrs / nvals counts first */
+ 	data.ulen = data.dlen = sizeof(buf);
+ 	data.data = buf;
+ 	rc = cursor->c_get( cursor, &key, &data, DB_SET );
+-	if ( rc ) goto finish;
++	if ( rc ) {
++		Debug( LDAP_DEBUG_TRACE, "====> bdb_id2entry #2: returning %d\n",rc,0,0);
++		goto finish;
++	}
+ 
+ 
+ 	eh.bv.bv_val = buf;
+ 	eh.bv.bv_len = data.size;
+ 	rc = entry_header( &eh );
+-	if ( rc ) goto finish;
++	if ( rc ) {
++		Debug( LDAP_DEBUG_TRACE, "====> bdb_id2entry #3: returning %d\n",rc,0,0);
++		goto finish;
++	}
+ 
+ 	/* Get the size */
+ 	data.flags ^= DB_DBT_PARTIAL;
+ 	data.ulen = 0;
+ 	rc = cursor->c_get( cursor, &key, &data, DB_CURRENT );
+-	if ( rc != DB_BUFFER_SMALL ) goto finish;
++	if ( rc != DB_BUFFER_SMALL ) {
++		Debug( LDAP_DEBUG_TRACE, "====> bdb_id2entry #4: returning %d\n",rc,0,0);
++		goto finish;
++	}
+ 
+ 	/* Allocate a block and retrieve the data */
+ 	off = eh.data - eh.bv.bv_val;
+@@ -154,6 +166,7 @@
+ 	cursor->c_close( cursor );
+ 
+ 	if( rc != 0 ) {
++		Debug( LDAP_DEBUG_TRACE, "====> bdb_id2entry #5: returning %d\n",rc,0,0);
+ 		return rc;
+ 	}
+ 
+@@ -177,6 +190,7 @@
+ 	ch_free(eh.bv.bv_val);
+ #endif
+ 
++	Debug( LDAP_DEBUG_TRACE, "====> bdb_id2entry #6: returning %d\n",rc,0,0);
+ 	return rc;
+ }
+ 
