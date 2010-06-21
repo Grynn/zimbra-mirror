@@ -22,3 +22,19 @@
  		bdb_cache_entryinfo_unlock( eip );
  
  		eip = ei2;
+---  openldap-2.4.22/servers/slapd/back-bdb/cache.c	20 Jun 2010 19:28:04 -0000	1.217
++++  openldap-2.4.22/servers/slapd/back-bdb/cache.c	21 Jun 2010 01:38:38 -0000
+@@ -1118,8 +1118,12 @@
+ 		return DB_NOTFOUND;
+ 	}
+ 	rc = bdb_dn2id_children( op, txn, e );
+-	if ( rc == DB_NOTFOUND ) {
++	if ( rc == DB_NOTFOUND && (BEI(e)->bei_state & 
++		( CACHE_ENTRY_NO_KIDS | CACHE_ENTRY_NO_GRANDKIDS )) !=
++		( CACHE_ENTRY_NO_KIDS | CACHE_ENTRY_NO_GRANDKIDS )) {
++		bdb_cache_entryinfo_lock( BEI(e) );
+ 		BEI(e)->bei_state |= CACHE_ENTRY_NO_KIDS | CACHE_ENTRY_NO_GRANDKIDS;
++		bdb_cache_entryinfo_unlock( BEI(e) );
+ 	}
+ 	return rc;
+ }
