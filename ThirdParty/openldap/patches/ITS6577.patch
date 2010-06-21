@@ -1,6 +1,26 @@
---- openldap-2.4.22/servers/slapd/back-bdb/cache.c	13 Apr 2010 20:18:11 -0000	1.216
-+++ openldap-2.4.22/servers/slapd/back-bdb/cache.c	20 Jun 2010 19:28:04 -0000	1.217
-@@ -482,17 +482,21 @@ bdb_cache_find_ndn(
+--- openldap-2.4.22.3z/servers/slapd/back-bdb/dn2entry.c.orig	2010-06-20 22:27:12.658195104 -0700
++++ openldap-2.4.22.3z/servers/slapd/back-bdb/dn2entry.c	2010-06-20 22:29:44.217532584 -0700
+@@ -50,6 +50,8 @@
+ 			/* Set the return value, whether we have its entry
+ 			 * or not.
+ 			 */
++			Debug( LDAP_DEBUG_TRACE, "====> bdb_dn2entry matched: id %ld rdn %s being deleted, state %#x\n",
++				ei->bei_id, ei->bei_nrdn.bv_val, ei->bei_state );
+ 			*e = ei;
+ 			if ( ei && ei->bei_id ) {
+ 				rc2 = bdb_cache_find_id( op, tid, ei->bei_id,
+@@ -70,6 +72,8 @@
+ 			*e = ei;
+ 		} else if ( matched && rc == DB_NOTFOUND ) {
+ 			/* always return EntryInfo */
++			Debug( LDAP_DEBUG_TRACE, "====> bdb_dn2entry parent return: id %ld rdn %s being deleted, state %#x\n",
++				ei->bei_id, ei->bei_nrdn.bv_val, ei->bei_state );
+ 			if ( ei->bei_parent ) {
+ 				ei = ei->bei_parent;
+ 				rc2 = bdb_cache_find_id( op, tid, ei->bei_id, &ei, 0,
+--- openldap-2.4.22.3z/servers/slapd/back-bdb/cache.c.orig	2010-04-15 13:06:59.000000000 -0700
++++ openldap-2.4.22.3z/servers/slapd/back-bdb/cache.c	2010-06-20 23:07:36.583439246 -0700
+@@ -482,17 +482,21 @@
  				*res = eip;
  				return rc;
  			}
@@ -24,7 +44,7 @@
  		bdb_cache_entryinfo_unlock( eip );
  
  		eip = ei2;
-@@ -895,6 +897,8 @@
+@@ -893,6 +897,8 @@
  				 * as if the delete has already finished
  				 */
  				if ( del ) {
@@ -33,7 +53,7 @@
  					return DB_NOTFOUND;
  				}
  				/* otherwise, wait for the info to free up */
-@@ -947,6 +951,8 @@
+@@ -945,6 +951,8 @@
  		}
  
  		if ( (*eip)->bei_state & CACHE_ENTRY_DELETED ) {
@@ -42,7 +62,7 @@
  			rc = DB_NOTFOUND;
  		} else {
  			(*eip)->bei_finders++;
-@@ -989,6 +995,8 @@
+@@ -987,6 +995,8 @@
  			}
  			rc = bdb_cache_entry_db_lock( bdb, tid, *eip, load, 0, lock );
  			if ( (*eip)->bei_state & CACHE_ENTRY_DELETED ) {
@@ -51,7 +71,22 @@
  				rc = DB_NOTFOUND;
  				bdb_cache_entry_db_unlock( bdb, lock );
  				bdb_cache_entryinfo_lock( *eip );
-@@ -1118,8 +1126,12 @@
+@@ -996,6 +1006,10 @@
+ 				if ( load ) {
+ 					if ( !ep) {
+ 						rc = bdb_id2entry( op->o_bd, tid, id, &ep );
++						if (rc == DB_NOTFOUND) {
++							Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_id #3.5: id %ld rdn %s being deleted, state %#x\n",
++							id, (*eip)->bei_nrdn.bv_val, (*eip)->bei_state );
++						}
+ 					}
+ 					if ( rc == 0 ) {
+ 						ep->e_private = *eip;
+@@ -1113,11 +1127,16 @@
+ 		return 0;
+ 	}
+ 	if ( BEI(e)->bei_state & CACHE_ENTRY_NO_KIDS ) {
++		Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_children: returning DB_NOTFOUND\n");
  		return DB_NOTFOUND;
  	}
  	rc = bdb_dn2id_children( op, txn, e );
@@ -65,23 +100,3 @@
  	}
  	return rc;
  }
---- openldap-2.4.22.3z/servers/slapd/back-bdb/dn2entry.c.orig	2010-06-20 22:27:12.658195104 -0700
-+++ openldap-2.4.22.3z/servers/slapd/back-bdb/dn2entry.c	2010-06-20 22:29:44.217532584 -0700
-@@ -50,6 +50,8 @@
- 			/* Set the return value, whether we have its entry
- 			 * or not.
- 			 */
-+			Debug( LDAP_DEBUG_TRACE, "====> bdb_dn2entry matched: id %ld rdn %s being deleted, state %#x\n",
-+				ei->bei_id, ei->bei_nrdn.bv_val, ei->bei_state );
- 			*e = ei;
- 			if ( ei && ei->bei_id ) {
- 				rc2 = bdb_cache_find_id( op, tid, ei->bei_id,
-@@ -70,6 +72,8 @@
- 			*e = ei;
- 		} else if ( matched && rc == DB_NOTFOUND ) {
- 			/* always return EntryInfo */
-+			Debug( LDAP_DEBUG_TRACE, "====> bdb_dn2entry parent return: id %ld rdn %s being deleted, state %#x\n",
-+				ei->bei_id, ei->bei_nrdn.bv_val, ei->bei_state );
- 			if ( ei->bei_parent ) {
- 				ei = ei->bei_parent;
- 				rc2 = bdb_cache_find_id( op, tid, ei->bei_id, &ei, 0,
