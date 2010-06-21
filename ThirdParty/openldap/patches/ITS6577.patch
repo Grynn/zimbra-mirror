@@ -65,3 +65,23 @@
  	}
  	return rc;
  }
+--- openldap-2.4.22.3z/servers/slapd/back-bdb/dn2entry.c.orig	2010-06-20 22:27:12.658195104 -0700
++++ openldap-2.4.22.3z/servers/slapd/back-bdb/dn2entry.c	2010-06-20 22:29:44.217532584 -0700
+@@ -50,6 +50,8 @@
+ 			/* Set the return value, whether we have its entry
+ 			 * or not.
+ 			 */
++			Debug( LDAP_DEBUG_TRACE, "====> bdb_dn2entry matched: id %ld rdn %s being deleted, state %#x\n",
++				ei->bei_id, ei->bei_nrdn.bv_val, ei->bei_state );
+ 			*e = ei;
+ 			if ( ei && ei->bei_id ) {
+ 				rc2 = bdb_cache_find_id( op, tid, ei->bei_id,
+@@ -70,6 +72,8 @@
+ 			*e = ei;
+ 		} else if ( matched && rc == DB_NOTFOUND ) {
+ 			/* always return EntryInfo */
++			Debug( LDAP_DEBUG_TRACE, "====> bdb_dn2entry parent return: id %ld rdn %s being deleted, state %#x\n",
++				ei->bei_id, ei->bei_nrdn.bv_val, ei->bei_state );
+ 			if ( ei->bei_parent ) {
+ 				ei = ei->bei_parent;
+ 				rc2 = bdb_cache_find_id( op, tid, ei->bei_id, &ei, 0,
