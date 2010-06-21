@@ -86,7 +86,7 @@
  		return 0;
  	}
  	if ( BEI(e)->bei_state & CACHE_ENTRY_NO_KIDS ) {
-+		Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_children: returning DB_NOTFOUND\n");
++		Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_children: returning DB_NOTFOUND\n",0,0,0);
  		return DB_NOTFOUND;
  	}
  	rc = bdb_dn2id_children( op, txn, e );
