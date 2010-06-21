@@ -417,17 +417,18 @@ ZaDashBoardView.myXFormModifier = function(xFormObject,entry) {
 	xFormObject.colSizes=["auto"];
 	xFormObject.items = [
 	   {type:_GROUP_, id:"dashboard_listview_group",
-		   numCols: 3, colSizes: ["200px","500px","100px"],visibilityChecks:[],enableDisableChecks:[],
+		   numCols:4, colSizes: ["200px","500px","5px","125px"],visibilityChecks:[],enableDisableChecks:[],
 		   items:[  	
-	            {type:_SPACER_,colSpan:3, id:"dashBoardSpacer1"},	    	
+	            {type:_SPACER_,colSpan:4, id:"dashBoardSpacer1"},	    	
    	    	    {type:_TEXTFIELD_,label:com_zimbra_dashboard.LookupAddress,labelLocation:_LEFT_,
    	    	    	cssStyle:"overflow: hidden;", width:"100%",ref:ZaSearch.A_query, bmolsnr: true,
    	    	    	enableDisableChecks:[],visibilityChecks:[],id:"dashBoardSearchField"
    	    	    },
+   	    	    {type:_CELLSPACER_,width:"5px"},
    	    	    {type:_MENU_BUTTON_,label:com_zimbra_dashboard.SearchFilter_All,icon:"SearchAll",enableDisableChecks:[],visibilityChecks:[],
    	    	    	choices:ZaDashBoardView.searchChoices,toolTipContent:ZaMsg.searchToolTip,id:"dashBoardSearchMenuButton"
              	},
-             	{type:_SPACER_,colSpan:3, id:"dashBoardSpacer2"},
+             	{type:_SPACER_,colSpan:4, id:"dashBoardSpacer2"},
  	    	    {colSpan:4, ref:ZaDashBoard.searchResults, id:"dashBoardSearchResults",
  	    	    	onSelection:ZaDashBoardView.listSelectionListener, type:_DWT_LIST_, 
  	    	   		forceUpdate: true,createPopupMenu:ZaDashBoardView.createPopupMenu,
