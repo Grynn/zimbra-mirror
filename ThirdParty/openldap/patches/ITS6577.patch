@@ -218,3 +218,26 @@ RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/dn2id.c,v
  	op->o_tmpfree( d, op->o_tmpmemctx );
  	if( rc != 0 ) {
  		Debug( LDAP_DEBUG_TRACE, "<= hdb_dn2id: get failed: %s (%d)\n",
+--- openldap-2.4.22/servers/slapd/back-bdb/add.c	13 Apr 2010 20:18:11 -0000	1.184
++++ openldap-2.4.22/servers/slapd/back-bdb/add.c	22 Jun 2010 05:28:12 -0000
+@@ -513,7 +513,6 @@
+ return_results:
+ 	success = rs->sr_err;
+ 	send_ldap_result( op, rs );
+-	slap_graduate_commit_csn( op );
+ 
+ 	if( ltid != NULL ) {
+ 		TXN_ABORT( ltid );
+@@ -538,10 +537,11 @@
+ 		}
+ 	}
+ 
++	slap_graduate_commit_csn( op );
++
+ 	if( postread_ctrl != NULL && (*postread_ctrl) != NULL ) {
+ 		slap_sl_free( (*postread_ctrl)->ldctl_value.bv_val, op->o_tmpmemctx );
+ 		slap_sl_free( *postread_ctrl, op->o_tmpmemctx );
+ 	}
+-
+ 	return rs->sr_err;
+ }
