@@ -245,6 +245,21 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest{
 		needReset = false;
 	}
 
+
+	@Test(dataProvider = "composeDataProvider",groups = { "smoke", "full"}, retryAnalyzer = RetryFailedTests.class)
+	public  void lossOfDataOnChangingFormat_Bug44545(String to, String cc, String bcc, String subject, String body, String attachments) throws Exception {
+		if (isExecutionARetry)
+		    handleRetry();
+		
+		page.zComposeView.zNavigateToMailCompose();
+		page.zComposeView.zSendMailToSelfAndVerify(to,  cc,  bcc,  subject,  body,  attachments);
+		obj.zButton.zClick(localize(locator.reply));
+		obj.zButton.zClick(ComposeView.zOptionsDownArrowBtn);
+		obj.zMenuItem.zClick(localize(locator.formatAsText));
+		page.zComposeView.zVerifyComposeFilledValues("Reply", "_selfAccountName_",  "",  "",  "Re: "+subject,  body,  attachments);	
+
+		needReset = false;
+	}
 	
 	    //--------------------------------------------------------------------------
 	    //		SECTION 4: RETRY-METHODS
