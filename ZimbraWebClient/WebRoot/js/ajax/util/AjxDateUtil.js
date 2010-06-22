@@ -926,15 +926,6 @@ function(rule, date) {
 			AjxDateUtil.__calculate_add(date, type, amount);
 			continue;
 		}
-		// add ordinal
-		if (m = s.match(AjxDateUtil.RE_ADD_WEEKORD)) {
-			plusminus = m[1];
-			weekord = m[2];
-			daynum = a[++i];
-			amount = plusminus == '+' ? number : number * -1;
-			AjxDateUtil.__calculate_add_ordinal(date, type, amount);
-			continue;
-		}
 		// set
 		if (m = s.match(AjxDateUtil.RE_SET)) {
 			AjxDateUtil.__calculate_set(date, m[1], m[2]);
@@ -989,6 +980,14 @@ AjxDateUtil.S_WEEKORD = [
 	AjxMsg["calc.ordinal.last"]
 ].join("|");
 
+AjxDateUtil.WEEKORD_RE = [
+    new RegExp("(first|"+AjxMsg["calc.ordinal.first"]+")",  "i"),
+    new RegExp("(second|"+AjxMsg["calc.ordinal.second"]+")", "i"),
+    new RegExp("(third|"+AjxMsg["calc.ordinal.third"]+")",  "i"),
+    new RegExp("(fourth|"+AjxMsg["calc.ordinal.fourth"]+")", "i"),
+    new RegExp("(last|"+AjxMsg["calc.ordinal.last"]+")",   "i")
+];
+
 // NOTE: Originally, the keywords for the date calculation rules
 //       were in the message bundle so that they could be translated.
 //       But while the keywords were translated, the rules were not
@@ -1002,16 +1001,18 @@ AjxMsg["calc.now"]	= "now";
 AjxMsg["calc.date"]	= "date";
 
 AjxMsg["calc.duration.year"]		= "year|years";
-AjxMsg["calc.duration.month"]		= "month|months";
+AjxMsg["calc.duration.month"]		= "mon|mons|month|months";
 AjxMsg["calc.duration.day"]			= "day|days";
 AjxMsg["calc.duration.hour"]		= "hour|hours";
 AjxMsg["calc.duration.minute"]		= "min|mins|minute|minutes";
+AjxMsg["calc.duration.week"]        = "week";
 AjxMsg["calc.duration.second"]		= "sec|secs|second|seconds";
 AjxMsg["calc.duration.millisecond"]	= "milli|millis|millisecond|milliseconds";
 
 AjxDateUtil.S_DURATION = [
 	AjxMsg["calc.duration.year"],
 	AjxMsg["calc.duration.month"],
+    AjxMsg["calc.duration.week"],
 	AjxMsg["calc.duration.day"],
 	AjxMsg["calc.duration.hour"],
 	AjxMsg["calc.duration.minute"],
@@ -1066,7 +1067,6 @@ function() {
 	AjxDateUtil.RE_COMMENT = /^#/;
 	AjxDateUtil.RE_NOW = new RegExp("^("+AjxMsg["calc.now"]+")$", "i");
 	AjxDateUtil.RE_ADD_NUMBER = new RegExp("^([+\\-])(\\d+)$", "i");
-	AjxDateUtil.RE_ADD_WEEKORD = new RegExp("^([+\\-])("+AjxDateUtil.S_WEEKORD+")$", "i");
 	AjxDateUtil.RE_SET = new RegExp("^("+AjxDateUtil.S_DURATION+"|"+AjxMsg["calc.date"]+")=(.*)$", "i");
 };
 
@@ -1173,6 +1173,38 @@ function(date, type, value) {
 		date.setMonth.apply(date, args);
 		return;
 	}
+    if (type.match(AjxDateUtil.RE_WEEK)) {
+        var ord = AjxDateUtil.__calculate_week(args[0]); // week
+        var day = args[1] ? AjxDateUtil.__calculate_day(args[1]) : date.getDay(); // day
+
+        var target;
+        if (ord != -1) {
+            var firstday = new Date(date.getFullYear(), date.getMonth(), 1, 12, 0, 0, 0);
+            var firstdow = firstday.getDay();
+            var delta = firstdow - day;
+
+            target = new Date(firstday.getTime());
+            target.setDate(1 - delta);
+            if (delta > 0) {
+                target.setDate(target.getDate() + 7);
+            }
+            target.setDate(target.getDate() + 7 * ord);
+        }
+        else {
+            var lastday = new Date(date.getFullYear(), date.getMonth()+1, 0, 12, 0, 0, 0);
+
+            target = new Date(lastday.getTime());
+            target.setDate(target.getDate() - (target.getDay() - day));
+            if (target.getMonth() != lastday.getMonth()) {
+                target.setDate(target.getDate() - 7);
+            }
+        }
+
+        if (target && (date.getMonth() == target.getMonth())) {
+            date.setTime(target.getTime());
+        }
+        return;
+    }
 	if (type.match(AjxDateUtil.RE_DATE)) {
 		args[0] = parseInt(args[0], 10); // date
 		date.setDate.apply(date, args);
@@ -1220,6 +1252,18 @@ AjxDateUtil.__calculate_month =
 function(value) {
 	var monthnum = AjxDateUtil.MONTHNAME2MONTHNUM[value.toLowerCase()];
 	return monthnum != null ? monthnum : parseInt(value, 10) - 1;
+};
+
+AjxDateUtil.__calculate_week = function(value) {
+    for (var i = 0; i < AjxDateUtil.WEEKORD_RE.length; i++) {
+        if (value.match(AjxDateUtil.WEEKORD_RE[i])) {
+            if (i == AjxDateUtil.WEEKORD_RE.length - 1) {
+                return -1;
+            }
+            return i;
+        }
+    }
+    return 0;
 };
 
 AjxDateUtil.__calculate_day =

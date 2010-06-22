@@ -14,6 +14,7 @@
  */
 
 Com_Zimbra_Date = function(pattern) {
+    // TODO: What is this here for? There is no _generateRegex method anywhere.
 	if (arguments.length == 1) {
 		this._generateRegex(pattern);
 	}
@@ -204,6 +205,7 @@ function() {
 		monthnum:	"(0[1-9]|[1-9]|1[0-2])",
 		monthname:	"("+AjxDateUtil.S_MONTHNAME+")",
 		yearnum:	"(\\d{2}|[1-9]\\d{2,3})",
+        fullyearnum:"(\\d{4})",
 		number:		"(\\d+)"
 	};
 
@@ -226,13 +228,15 @@ function() {
 	}
 
 	// generate regular expressions for patterns
+    var BOUNDARY_TRUE = this.getMessage("boundaryTrue");
 	var boundary, regex;
-	var BOUNDARY_TRUE = this.getMessage("boundaryTrue");
+    var boundary_all = this.getMessage("format.boundary") || BOUNDARY_TRUE;
 	for (i = 0; i < Com_Zimbra_Date.PATTERNS.length; i++) {
 		pattern = Com_Zimbra_Date.PATTERNS[i];
 
 		// normalize regex
-		pattern = pattern.replace(/\s+/g, "\\b\\s*\\b");
+//        pattern = pattern.replace(/\s+/g, "\\b\\s*\\b");
+        pattern = pattern.replace(/\s+/g, "\\s+");
 		pattern = pattern.replace(/\(([^\)]+)\)/g, "(?:$1)");
 
 		// replace keywords with regex fragment
@@ -242,7 +246,7 @@ function() {
 
 		// NOTE: can't use \b with asian characters!
 		boundary = this.getMessage("format"+i+".boundary");
-		if (boundary == null || boundary == BOUNDARY_TRUE) {
+		if ((boundary != "" && boundary == BOUNDARY_TRUE) || boundary_all == BOUNDARY_TRUE) {
 			pattern = "\\b"+pattern+"\\b";
 		}
 
