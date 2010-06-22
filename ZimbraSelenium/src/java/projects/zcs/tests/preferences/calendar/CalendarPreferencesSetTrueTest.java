@@ -171,13 +171,17 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 		page.zCalApp.zNavigateToCalendar();
 
 		page.zCalApp.zNavigateToApptCompose();
-		
+
 		Thread.sleep(1000);
 
-		String timeZone = obj.zMiscObj.zExistsDontWait("ZmApptComposeView ZWidget/*tzoneSelect/ZSelectAutoSizingContainer ZHasDropDown");
-		
-		Assert.assertEquals(timeZone, "true", "Timezone menu doesn't exist on setting the ShowTimeZone pref to True");
-		
+		// String timeZone =
+		// obj.zMiscObj.zExistsDontWait("ZmApptComposeView ZWidget/*tzoneSelect/ZSelectAutoSizingContainer ZHasDropDown");
+
+		// Assert.assertEquals(timeZone, "true",
+		// "Timezone menu doesn't exist on setting the ShowTimeZone pref to True");
+		Assert
+				.assertTrue(selenium
+						.isElementPresent("xpath=//td[contains(@id,'_tzoneSelect')]/div[contains(@class,'ZSelectAutoSizingContainer')]"));
 		needReset = false;
 	}
 	
