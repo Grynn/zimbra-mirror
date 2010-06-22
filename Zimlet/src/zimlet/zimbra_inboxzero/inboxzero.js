@@ -83,7 +83,7 @@ InboxZero.prototype.onMsgView = function(msg, oldMsg, msgView) {
     var id = msgView.getHTMLElId()+"_inboxzero";
     // TODO: Should we show even if it's an invite? or a share notice?
     // TODO: Should our toolbar replace those? be added to those?
-    if (!msg.isInvite() && !msg.share && (!el.firstChild || el.firstChild.id != id)) {
+    if (!msg.isShared() && !msg.isInvite() && !msg.share && (!el.firstChild || el.firstChild.id != id)) {
         // HACK: fix ZmMailMsg#notifyModify, if necessary
         if (!InboxZero.__ZmMailMsg_notifyModify) {
             InboxZero.__ZmMailMsg_notifyModify = ZmMailMsg.prototype.notifyModify;
