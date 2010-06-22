@@ -690,6 +690,10 @@ public class MailPreferencesTestsUI extends CommonTest {
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
 		Thread.sleep(2000);
+		/**
+		 * Following check is added to test bug 44002
+		 */
+		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved), "Valid toast message is present");
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefOutOfOfficeReplyEnabled");
