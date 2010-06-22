@@ -46,20 +46,20 @@ CLASS:projects.zcs.tests.mail.MailRightClickMenuTests;METHOD:rtClickToContactAnd
 
 
 #Shortcuts do not work with Selenium on SF browser
-CLASS:projects.zcs.tests.preferences.ShortcutsCustom;METHOD:shortcutsMailFolder;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
-CLASS:projects.zcs.tests.preferences.ShortcutsCustom;METHOD:shortcutsTag;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
-CLASS:projects.zcs.tests.preferences.ShortcutsGeneral;METHOD:shortcutsGoToApp;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
-CLASS:projects.zcs.tests.preferences.ShortcutsGeneral;METHOD:shortcutsNew;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
-CLASS:projects.zcs.tests.preferences.ShortcutsMail;METHOD:shortcutsMailActions;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
-CLASS:projects.zcs.tests.preferences.ShortcutsMail;METHOD:shortcutsJunkMessage;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
-CLASS:projects.zcs.tests.preferences.ShortcutsMail;METHOD:shortcutsMoveMessage;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
-CLASS:projects.zcs.tests.preferences.ShortcutsMail;METHOD:shortcutsFlagMessage;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
+CLASS:projects.zcs.tests.preferences.shortcuts.ShortcutsCustom;METHOD:shortcutsMailFolder;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
+CLASS:projects.zcs.tests.preferences.shortcuts.ShortcutsCustom;METHOD:shortcutsTag;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
+CLASS:projects.zcs.tests.preferences.shortcuts.ShortcutsGeneral;METHOD:shortcutsGoToApp;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
+CLASS:projects.zcs.tests.preferences.shortcuts.ShortcutsGeneral;METHOD:shortcutsNew;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
+CLASS:projects.zcs.tests.preferences.shortcuts.ShortcutsMail;METHOD:shortcutsMailActions;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
+CLASS:projects.zcs.tests.preferences.shortcuts.ShortcutsMail;METHOD:shortcutsJunkMessage;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
+CLASS:projects.zcs.tests.preferences.shortcuts.ShortcutsMail;METHOD:shortcutsMoveMessage;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
+CLASS:projects.zcs.tests.preferences.shortcuts.ShortcutsMail;METHOD:shortcutsFlagMessage;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
 
-CLASS:projects.zcs.tests.preferences.ShortcutsGeneral;METHOD:shortcutsNew;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Opening calendar fails some times on IE, happens only with selenium.
+CLASS:projects.zcs.tests.preferences.shortcuts.ShortcutsGeneral;METHOD:shortcutsNew;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Opening calendar fails some times on IE, happens only with selenium.
 
-CLASS:projects.zcs.tests.preferences.ComposePreferencesSetTrueTest;METHOD:composePrefAutoSaveDraft;LOCALE:fr;BROWSERS:IE;BUGS:na;REMARK:localization problems
-CLASS:projects.zcs.tests.preferences.CalendarPreferencesSetTrueTest;METHOD:zCalendarPrefShowTimeZone;LOCALE:all;BROWSERS:SF,IE;BUGS:na;REMARK:Timezone menu is not identified in Safari
-CLASS:projects.zcs.tests.preferences.CalendarPreferencesTestsUI;METHOD:zCalendarPrefUseQuickAddUITest;LOCALE:ru;BROWSERS:na;BUGS:na;REMARK:ERROR: Selenium failure.
+#CLASS:projects.zcs.tests.preferences.composing.ComposePreferencesSetTrueTest;METHOD:composePrefAutoSaveDraft;LOCALE:fr;BROWSERS:IE;BUGS:na;REMARK:localization problems
+#CLASS:projects.zcs.tests.preferences.calendar.CalendarPreferencesSetTrueTest;METHOD:zCalendarPrefShowTimeZone;LOCALE:all;BROWSERS:SF,IE;BUGS:na;REMARK:Timezone menu is not identified in Safari
+#CLASS:projects.zcs.tests.preferences.calendar.CalendarPreferencesTestsUI;METHOD:zCalendarPrefUseQuickAddUITest;LOCALE:ru;BROWSERS:na;BUGS:na;REMARK:ERROR: Selenium failure.
 CLASS:projects.zcs.tests.preferences.ComposePreferencesTestsUI;METHOD:zComposingSaveToSent;LOCALE:ru;BROWSERS:na;BUGS:na;REMARK:Selenium failure
 CLASS:projects.zcs.tests.others.ClientURLTests;METHOD:composeURL;LOCALE:hi;BROWSERS:SF;BUGS:na;REMARK:compose related fields replaced by ???? in the URL (selenium bug)
 CLASS:projects.zcs.tests.others.ClientURLTests;METHOD:calendarViewURL;LOCALE:ko;BROWSERS:na;BUGS:na;REMARK:start/end date contains UTF8 char in new appt page so not able to compare with expected value (selenium bug)
