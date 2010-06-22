@@ -352,8 +352,9 @@ sub run() {
         system("cp $ZMSTAT_CONF stats/");
     }
     my $today = strftime("%Y-%m-%d", localtime(time()));
+    my $t_today = strftime("%Y_%m_%d", localtime(time()));
     logmsg "Copying current ZCS logs\n";
-    system("cp /opt/zimbra/log/audit.log /opt/zimbra/log/my*.log /opt/zimbra/log/mailbox.log /opt/zimbra/log/zmmailboxd.out /opt/zimbra/jetty/logs/access_log.$today /var/log/zimbra.log $destination/logs/");
+    system("cp /opt/zimbra/log/audit.log /opt/zimbra/log/my*.log /opt/zimbra/log/mailbox.log /opt/zimbra/log/zmmailboxd.out /opt/zimbra/jetty/logs/access_log.$today /opt/zimbra/jetty/logs/$t_today.trace.log /var/log/zimbra.log $destination/logs/");
     system("cp /opt/zimbra/db/data/*.err $destination/logs/ 2> /dev/null");
     logmsg "Copying today's ZCS statistics\n";
     system("cp /opt/zimbra/zmstat/*.csv $destination/stats/");
@@ -382,7 +383,7 @@ sub run() {
     } else {
       logmsg "ld.so.conf not present...skipping copy.\n";
     }
-    
+
     logmsg "\n *** Diagnostics collection done.  Data stored in $destination/.\n";
     my $dirname = `pwd`;
     chomp($dirname);
