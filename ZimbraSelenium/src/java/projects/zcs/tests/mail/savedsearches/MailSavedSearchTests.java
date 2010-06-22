@@ -1,6 +1,8 @@
 package projects.zcs.tests.mail.savedsearches;
 
 import java.lang.reflect.Method;
+
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -23,7 +25,7 @@ public class MailSavedSearchTests extends CommonTest {
 	@DataProvider(name = "mailDataProvider")
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
-		if (test.equals("saveSearch_Bug34872") ||
+		if (test.equals("saveSearch_Bug34872_And_Bug44871") ||
 			test.equals("saveSearch_Bug44232")
 				) {
 			return new Object[][] { { "_selfAccountName_",
@@ -55,13 +57,18 @@ public class MailSavedSearchTests extends CommonTest {
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void saveSearch_Bug34872(String to, String cc, String bcc,
+	public void saveSearch_Bug34872_And_Bug44871(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
 		to = SelNGBase.selfAccountName;
 		String[] recipients = { to };
+		
+		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
+		obj.zMenuItem.zClick(localize(locator.byConversation));
+		Assert.assertTrue(selenium.isElementPresent("zlhi__CLV__ex"));
+		
 		ProvZCS.injectMessage(to, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		selenium.type("xpath=//input[@class='search_input']", subject);
@@ -72,12 +79,22 @@ public class MailSavedSearchTests extends CommonTest {
 				localize(locator.saveSearch));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.saveSearch));
+
+		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
+		obj.zMenuItem.zClick(localize(locator.byMessage));
+		Assert.assertTrue(selenium.isElementPresent("zlhi__TV__fg"));
+
+		
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		Thread.sleep(1000);
 		String msgExists = obj.zMessageItem.zExistsDontWait(subject);
 		assertReport("false", msgExists, "Sent folder doesn't refresh properly");
 		obj.zFolder.zClick("Srch" + subject);
 		obj.zMessageItem.zClick(subject);
+
+		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
+		obj.zMenuItem.zClick(localize(locator.byMessage));
+		Assert.assertTrue(selenium.isElementPresent("zlhi__TV__fg"));
 
 		needReset = false;
 	}
