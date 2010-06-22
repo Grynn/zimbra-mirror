@@ -161,11 +161,31 @@
  	return rc;
  }
  
-Index: dn2id.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/dn2id.c,v
---- openldap-2.4.22/servers/slapd/back-bdb/dn2id.c	13 Apr 2010 20:18:12 -0000	1.171
-+++ openldap-2.4.22/servers/slapd/back-bdb/dn2id.c	22 Jun 2010 04:22:05 -0000
+--- openldap-2.4.22/servers/slapd/back-bdb/add.c	13 Apr 2010 20:18:11 -0000	1.184
++++ openldap-2.4.22/servers/slapd/back-bdb/add.c	22 Jun 2010 05:28:12 -0000
+@@ -513,7 +513,6 @@
+ return_results:
+ 	success = rs->sr_err;
+ 	send_ldap_result( op, rs );
+-	slap_graduate_commit_csn( op );
+ 
+ 	if( ltid != NULL ) {
+ 		TXN_ABORT( ltid );
+@@ -538,10 +537,11 @@
+ 		}
+ 	}
+ 
++	slap_graduate_commit_csn( op );
++
+ 	if( postread_ctrl != NULL && (*postread_ctrl) != NULL ) {
+ 		slap_sl_free( (*postread_ctrl)->ldctl_value.bv_val, op->o_tmpmemctx );
+ 		slap_sl_free( *postread_ctrl, op->o_tmpmemctx );
+ 	}
+-
+ 	return rs->sr_err;
+ }
+--- openldap-2.4.22/servers/slapd/back-bdb/dn2id.c.orig	2010-06-22 08:45:28.000000000 -0700
++++ openldap-2.4.22/servers/slapd/back-bdb/dn2id.c	2010-06-22 08:46:19.000000000 -0700
 @@ -754,12 +754,13 @@
  	struct bdb_info *bdb = (struct bdb_info *) op->o_bd->be_private;
  	DB *db = bdb->bi_dn2id->bdi_db;
@@ -209,7 +229,20 @@ RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/dn2id.c,v
  
  	rc = cursor->c_get( cursor, &key, &data, DB_GET_BOTH_RANGE );
  	if ( rc == 0 && (dlen[1] != d->nrdnlen[1] || dlen[0] != d->nrdnlen[0] ||
-@@ -819,6 +826,8 @@
+@@ -806,6 +813,7 @@
+ 		ei->bei_rdn.bv_len = data.size - sizeof(diskNode) - nrlen;
+ 		ptr = d->nrdn + nrlen + 1;
+ 		ber_str2bv( ptr, ei->bei_rdn.bv_len, 1, &ei->bei_rdn );
++#if 0
+ 		if ( ei->bei_parent != NULL && !ei->bei_parent->bei_dkids ) {
+ 			db_recno_t dkids;
+ 			/* How many children does the parent have? */
+@@ -815,10 +823,13 @@
+ 			cursor->c_count( cursor, &dkids, 0 );
+ 			ei->bei_parent->bei_dkids = dkids;
+ 		}
++#endif
+ 	}
  
  func_leave:
  	cursor->c_close( cursor );
@@ -218,26 +251,3 @@ RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/dn2id.c,v
  	op->o_tmpfree( d, op->o_tmpmemctx );
  	if( rc != 0 ) {
  		Debug( LDAP_DEBUG_TRACE, "<= hdb_dn2id: get failed: %s (%d)\n",
---- openldap-2.4.22/servers/slapd/back-bdb/add.c	13 Apr 2010 20:18:11 -0000	1.184
-+++ openldap-2.4.22/servers/slapd/back-bdb/add.c	22 Jun 2010 05:28:12 -0000
-@@ -513,7 +513,6 @@
- return_results:
- 	success = rs->sr_err;
- 	send_ldap_result( op, rs );
--	slap_graduate_commit_csn( op );
- 
- 	if( ltid != NULL ) {
- 		TXN_ABORT( ltid );
-@@ -538,10 +537,11 @@
- 		}
- 	}
- 
-+	slap_graduate_commit_csn( op );
-+
- 	if( postread_ctrl != NULL && (*postread_ctrl) != NULL ) {
- 		slap_sl_free( (*postread_ctrl)->ldctl_value.bv_val, op->o_tmpmemctx );
- 		slap_sl_free( *postread_ctrl, op->o_tmpmemctx );
- 	}
--
- 	return rs->sr_err;
- }
