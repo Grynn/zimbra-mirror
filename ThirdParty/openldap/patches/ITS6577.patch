@@ -161,3 +161,60 @@
  	return rc;
  }
  
+Index: dn2id.c
+===================================================================
+RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/dn2id.c,v
+--- openldap-2.4.22/servers/slapd/back-bdb/dn2id.c	13 Apr 2010 20:18:12 -0000	1.171
++++ openldap-2.4.22/servers/slapd/back-bdb/dn2id.c	22 Jun 2010 04:22:05 -0000
+@@ -754,12 +754,13 @@
+ 	struct bdb_info *bdb = (struct bdb_info *) op->o_bd->be_private;
+ 	DB *db = bdb->bi_dn2id->bdi_db;
+ 	DBT		key, data;
+-	DBC	*cursor;
++	DBC	*cursor = NULL;
+ 	int		rc = 0, nrlen;
+ 	diskNode *d;
+ 	char	*ptr;
+ 	unsigned char dlen[2];
+ 	ID idp, parentID;
++	DB_TXN *tx2;
+ 
+ 	Debug( LDAP_DEBUG_TRACE, "=> hdb_dn2id(\"%s\")\n", in->bv_val, 0, 0 );
+ 
+@@ -780,8 +781,14 @@
+ 	data.dlen = data.ulen;
+ 	data.flags = DB_DBT_USERMEM | DB_DBT_PARTIAL;
+ 
+-	rc = db->cursor( db, txn, &cursor, bdb->bi_db_opflags );
+-	if ( rc ) return rc;
++	if ( txn->flags & TXN_READ_COMMITTED ) {
++		rc = TXN_BEGIN( bdb->bi_dbenv, txn, &tx2, bdb->bi_db_opflags );
++		if ( rc ) return rc;
++	} else {
++		tx2 = txn;
++	}
++	rc = db->cursor( db, tx2, &cursor, bdb->bi_db_opflags );
++	if ( rc ) goto func_leave;
+ 
+ 	d = op->o_tmpalloc( data.size * 3, op->o_tmpmemctx );
+ 	d->nrdnlen[1] = nrlen & 0xff;
+@@ -792,8 +799,8 @@
+ 	*ptr = '\0';
+ 	data.data = d;
+ 
+-	rc = bdb_dn2id_lock( bdb, in, 0, txn, lock );
+-	if ( rc ) goto func_leave;
++/*	rc = bdb_dn2id_lock( bdb, in, 0, txn, lock );
++	if ( rc ) goto func_leave; */
+ 
+ 	rc = cursor->c_get( cursor, &key, &data, DB_GET_BOTH_RANGE );
+ 	if ( rc == 0 && (dlen[1] != d->nrdnlen[1] || dlen[0] != d->nrdnlen[0] ||
+@@ -819,6 +826,8 @@
+ 
+ func_leave:
+ 	cursor->c_close( cursor );
++	if ( tx2 != txn )
++		TXN_ABORT( tx2 );
+ 	op->o_tmpfree( d, op->o_tmpmemctx );
+ 	if( rc != 0 ) {
+ 		Debug( LDAP_DEBUG_TRACE, "<= hdb_dn2id: get failed: %s (%d)\n",
