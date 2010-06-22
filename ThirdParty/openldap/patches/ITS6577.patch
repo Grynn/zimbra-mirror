@@ -20,6 +20,50 @@
  				rc2 = bdb_cache_find_id( op, tid, ei->bei_id, &ei, 0,
 --- openldap-2.4.22.3z/servers/slapd/back-bdb/cache.c.orig	2010-04-15 13:06:59.000000000 -0700
 +++ openldap-2.4.22.3z/servers/slapd/back-bdb/cache.c	2010-06-20 23:07:36.583439246 -0700
+@@ -375,20 +375,33 @@
+ 		bdb->bi_cache.c_eiused++;
+ 		ber_dupbv( &ei2->bei_nrdn, &ei->bei_nrdn );
+ 
+-		/* This is a new leaf node. But if parent had no kids, then it was
+-		 * a leaf and we would be decrementing that. So, only increment if
+-		 * the parent already has kids.
+-		 */
+-		if ( ei->bei_parent->bei_kids || !ei->bei_parent->bei_id )
+-			bdb->bi_cache.c_leaves++;
+ 		rc = avl_insert( &ei->bei_parent->bei_kids, ei2, bdb_rdn_cmp,
+-			avl_dup_error );
++			bdb_id_dup_err );
++		if ( rc ) {
++			EntryInfo *eix = ei2->bei_lrunext;
++			avl_delete( &bdb->bi_cache.c_idtree, ei2, bdb_id_cmp );
++			bdb_cache_entryinfo_free( &bdb->bi_cache, ei2 );
++			ei2 = eix;
++			if ( ei2->bei_id < ei->bei_id )
++				ei2->bei_id = ei->bei_id;
+ #ifdef BDB_HIER
+-		/* it's possible for hdb_cache_find_parent to beat us to it */
+-		if ( !rc ) {
++			/* It got freed above because its value was
++			 * assigned to ei2.
++			 */
++			ei->bei_rdn.bv_val = NULL;
++#endif
++		} else {
++			/* This is a new leaf node. But if parent had no kids, then it was
++			 * a leaf and we would be decrementing that. So, only increment if
++			 * the parent already has kids.
++			 */
++			if ( ei->bei_parent->bei_kids || !ei->bei_parent->bei_id )
++				bdb->bi_cache.c_leaves++;
++#ifdef BDB_HIER
++			/* it's possible for hdb_cache_find_parent to beat us to it */
+ 			ei->bei_parent->bei_ckids++;
+-		}
+ #endif
++		}
+ 	}
+ 
+ 	*res = ei2;
 @@ -482,17 +482,21 @@
  				*res = eip;
  				return rc;
