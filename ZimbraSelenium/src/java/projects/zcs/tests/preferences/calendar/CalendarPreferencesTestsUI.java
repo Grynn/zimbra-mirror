@@ -290,8 +290,9 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		String accountName = selfAccountName;
 
 		page.zCalApp.zNavigateToCalendarPreferences();
+		selenium.uncheck("//input[contains(@id,'_CAL_USE_QUICK_ADD')]");
 
-		obj.zCheckbox.zClick(localize(locator.useQuickAdd));
+	//	obj.zCheckbox.zClick(localize(locator.useQuickAdd));
 
 		waitForIE();
 		
@@ -308,7 +309,8 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 
-		obj.zCheckbox.zClick(localize(locator.useQuickAdd));
+		//obj.zCheckbox.zClick(localize(locator.useQuickAdd));
+		selenium.check("//input[contains(@id,'_CAL_USE_QUICK_ADD')]");
 		
 		waitForIE();
 		
