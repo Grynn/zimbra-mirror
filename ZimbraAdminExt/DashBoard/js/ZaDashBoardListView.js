@@ -183,19 +183,21 @@ function(account, now, isDragProxy) {
 }
 
 ZaDashBoardListView.prototype.getHeaderList =
-function(showStatus, showDisplayName) {
+function(showStatus, showDisplayName, typeField, displayNameSortable) {
 	var headerList = new Array();
 	var sortable = 1;
 	var i = 0;
-	
+	if(AjxUtil.isEmpty(typeField)) {
+		typeField = "objectClass";	
+	}
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	headerList[i++] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", sortable++, null, true, true);
+	headerList[i++] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", sortable++, typeField, true, true);
 	
 	this._defaultColumnSortable = sortable;
-	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.CLV_Name_col, null, "220px", sortable++,  null, true, true);
+	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.CLV_Name_col, null, "220px", sortable++,  ZaAccount.A_name, true, true);
 
 	if(showDisplayName)
-		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px",  null, null, true, true);
+		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px",  ( displayNameSortable ? sortable++ : null), (displayNameSortable ? ZaAccount.A_displayname : null), true, true);
 	
 	if(showStatus)
 		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "120px",  null, null, true, true);
@@ -209,10 +211,8 @@ function(showStatus, showDisplayName) {
 ZaDashBoardListView.prototype._sortColumn = 
 function(columnItem, bSortAsc) {
 	try {
-		ZaApp.getInstance().getAccountListController().setSortOrder(bSortAsc);
-		ZaApp.getInstance().getAccountListController().setSortField(columnItem.getSortField());
-		ZaApp.getInstance().getAccountListController().show();
-		//ZaApp.getInstance().getAccountListController().show(searchResult);
+		var dashBoardView = this.parent.parent;
+		dashBoardView.searchAddresses(dashBoardView.types,0,columnItem.getSortField(),bSortAsc);
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex);
 	}

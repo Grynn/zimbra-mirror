@@ -25,6 +25,8 @@ ZaDashBoardView = function(parent) {
 	this.setScrollStyle(Dwt.SCROLL);
 	this.TAB_INDEX = 0;	
 	var item = {};
+	this.sortBy = ZaAccount.A_uid;
+	this.bSortAsc = true;
 	this.initForm(ZaDashBoard.myXModel, this.getMyXForm({}), item);
 //	this._createHTML();
 }
@@ -155,21 +157,31 @@ ZaDashBoardView.onSearchResult = function(params,resp) {
 				var showDisplayName = false;
 				var types = params.types;
 				var cnt = types.length;
+				var typeField = "objectClass";
+				var displayNameSortable = true;
+				if(cnt==1) {
+					if( types[0] == ZaSearch.RESOURCES) {
+						typeField = ZaResource.A_zimbraCalResType;
+					} else if(types[0] == ZaSearch.ACCOUNTS) {
+						typeField = ZaAccount.A_zimbraIsSystemResource;
+					}
+				}
+				
 				for(var i=0;i<cnt;i++) {
+					if(types[i] == ZaSearch.DLS || types[i] == ZaSearch.DOMAINS || types[i]==ZaSearch.COSES || types[i]==ZaSearch.ALIASES) {
+						displayNameSortable = false;
+					}
 					if(!showStatus && (types[i] == ZaSearch.ACCOUNTS || types[i] == ZaSearch.RESOURCES || types[i] == ZaSearch.DLS || types[i] == ZaSearch.DOMAINS)) {
 						showStatus = true;
 					}
 					if(!showDisplayName && (types[i] == ZaSearch.ACCOUNTS || types[i] == ZaSearch.RESOURCES)) {
 						showDisplayName = true;
 					}
-					if(showStatus && showDisplayName) {
-						break;
-					}
 				}
 				var listItems = this._localXForm.getItemsById("dashBoardSearchResults");
 				if(listItems && listItems[0]) {
 					var listWidget = listItems[0].getWidget();
-					listWidget.setHeaderList(listWidget.getHeaderList(showStatus,showDisplayName));
+					listWidget.setHeaderList(listWidget.getHeaderList(showStatus,showDisplayName,typeField,displayNameSortable));
 				}
 			}
 			this._localXForm.setInstanceValue(list.getArray(),ZaDashBoard.searchResults);
@@ -188,18 +200,25 @@ ZaDashBoardView.onSearchResult = function(params,resp) {
 }
 
 	
-ZaDashBoardView.prototype.searchAddresses = function (types, offset) {  
+ZaDashBoardView.prototype.searchAddresses = function (types, offset, sortBy, bSortAsc) {  
 	offset = offset ? offset : 0;
 	this.offset = offset;
 	var busyId = Dwt.getNextId();
 	types = types ? types : [ZaSearch.ACCOUNTS,ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.RESOURCES];
+	if(!AjxUtil.isEmpty(sortBy)) {
+		this.sortBy = sortBy;
+	}
+	if(!AjxUtil.isEmpty(bSortAsc)) {
+		this.bSortAsc = bSortAsc;
+	}
+	
 	this.types = types;
 	this.query = ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query],types);
 	var callback = new AjxCallback(this, ZaDashBoardView.onSearchResult, {limit:ZaSettings.RESULTSPERPAGE,CONS:null,busyId:busyId,types:types,query:this.query});
 	var searchParams = {
 		query: this.query, 
 		types:types,
-		sortBy:ZaAccount.A_uid,
+		sortBy:this.sortBy,
 		offset:offset,
 		limit:ZaSettings.RESULTSPERPAGE,
 		attrs:ZaSearch.standardAttributes,
@@ -208,7 +227,8 @@ ZaDashBoardView.prototype.searchAddresses = function (types, offset) {
 		showBusy:true,
 		busyId:busyId,
 		busyMsg:ZaMsg.BUSY_SEARCHING,
-		skipCallbackIfCancelled:false			
+		skipCallbackIfCancelled:false,
+		sortAscending:(this.bSortAsc ? "1" : "0")
 	}
 	ZaSearch.searchDirectory(searchParams);	
 }
@@ -248,49 +268,49 @@ ZaDashBoardView.prototype.accFilterSelected = function() {
 	this.setIconForSearchMenuButton ("Account");
     this.resetSearchPageCounts () ;
 	this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Accounts);
-	this.searchAddresses([ZaSearch.ACCOUNTS]);
+	this.searchAddresses([ZaSearch.ACCOUNTS],0, null, true);
 }
 
 ZaDashBoardView.prototype.dlFilterSelected = function() {
 	this.setIconForSearchMenuButton ("DistributionList");
 	this.resetSearchPageCounts () ;
     this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_DLs);
-	this.searchAddresses([ZaSearch.DLS]);
+	this.searchAddresses([ZaSearch.DLS],0, null, true);
 }
 
 ZaDashBoardView.prototype.aliasFilterSelected = function() {
 	this.setIconForSearchMenuButton ("AccountAlias");
 	this.resetSearchPageCounts () ;
     this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Aliases);
-	this.searchAddresses([ZaSearch.ALIASES]);
+	this.searchAddresses([ZaSearch.ALIASES],0, null, true);
 }
 
 ZaDashBoardView.prototype.resFilterSelected = function() {
 	this.setIconForSearchMenuButton ("Resource");	
 	this.resetSearchPageCounts () ;
     this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Resources);
-	this.searchAddresses([ZaSearch.RESOURCES]);
+	this.searchAddresses([ZaSearch.RESOURCES],0, null, true);
 }
 
 ZaDashBoardView.prototype.domainFilterSelected = function() {
 	this.setIconForSearchMenuButton ("Domain");
 	this.resetSearchPageCounts () ;
     this.setLabelForSearchMenuButton(ZaMsg.SearchFilter_Domains);
-	this.searchAddresses([ZaSearch.DOMAINS]);
+	this.searchAddresses([ZaSearch.DOMAINS],0, null, true);
 }
 
 ZaDashBoardView.prototype.allFilterSelected = function() {
 	this.setIconForSearchMenuButton ("SearchAll");
 	this.resetSearchPageCounts () ;
     this.setLabelForSearchMenuButton(com_zimbra_dashboard.SearchFilter_All);
-	this.searchAddresses([ZaSearch.ACCOUNTS, ZaSearch.ALIASES, ZaSearch.DLS, ZaSearch.RESOURCES]);
+	this.searchAddresses([ZaSearch.ACCOUNTS, ZaSearch.ALIASES, ZaSearch.DLS, ZaSearch.RESOURCES],0, null, true);
 }
 
 ZaDashBoardView.prototype.cosFilterSelected = function() {
 	this.setIconForSearchMenuButton ("COS");
 	this.resetSearchPageCounts () ;
     this.setLabelForSearchMenuButton(com_zimbra_dashboard.SearchFilter_Profiles);
-	this.searchAddresses([ZaSearch.COSES]);
+	this.searchAddresses([ZaSearch.COSES],0,null,true);
 }
 
 ZaDashBoardView.prototype.setTooltipForSearchButton =	function (tooltip){
