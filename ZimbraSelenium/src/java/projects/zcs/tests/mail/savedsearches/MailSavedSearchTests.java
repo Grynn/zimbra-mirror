@@ -23,7 +23,9 @@ public class MailSavedSearchTests extends CommonTest {
 	@DataProvider(name = "mailDataProvider")
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
-		if (test.equals("saveSearch_Bug34872")) {
+		if (test.equals("saveSearch_Bug34872") ||
+			test.equals("saveSearch_Bug44232")
+				) {
 			return new Object[][] { { "_selfAccountName_",
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData_NoSpecialChar(), getLocalizedData(5), "" } };
@@ -80,6 +82,49 @@ public class MailSavedSearchTests extends CommonTest {
 		needReset = false;
 	}
 
+	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void saveSearch_Bug44232(String to, String cc, String bcc,
+			String subject, String body, String attachments) throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		to = SelNGBase.selfAccountName;
+		String[] recipients = { to };
+		/**
+		 * Send mail and verify that is:flagged search is not returning anything.
+		 */
+		ProvZCS.injectMessage(to, recipients, cc, subject, body);
+		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
+		selenium.type("xpath=//input[@class='search_input']", "is:flagged");
+		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
+		obj.zMessageItem.zNotExists(subject);
+		
+		/**
+		 * Flag mail sent in the previous step.
+		 */
+		obj.zFolder.zClick(localize(locator.inbox));
+		obj.zMessageItem.zClick(subject);
+		selenium.clickAt("//*[contains(@id, '__fg')  and contains(@class, 'ImgBlank')]","");
+		
+		/**
+		 * Send another mail and keep it unflagged.
+		 */
+		String new_subject = "New"+subject;
+		ProvZCS.injectMessage(to, recipients, cc, new_subject, body);
+		page.zMailApp.ClickCheckMailUntilMailShowsUp(new_subject);
+		
+		/**
+		 * is:flagged search should return only first mail. Second mail should not be present after hitting search button.
+		 */
+		selenium.type("xpath=//input[@class='search_input']", "is:flagged");
+		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
+		obj.zMessageItem.zNotExists(new_subject);
+		obj.zMessageItem.zExists(subject);
+
+		needReset = false;
+	}
+	
+	
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
