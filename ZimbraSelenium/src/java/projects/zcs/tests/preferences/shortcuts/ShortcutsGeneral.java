@@ -465,6 +465,40 @@ public class ShortcutsGeneral extends CommonTest {
 		needReset = false;
 	}
 
+	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void listAppointments_L(String test) throws Exception {
+
+		if (isExecutionARetry)
+			handleRetry();
+
+		page.zCalApp.zNavigateToCalendar();
+
+		
+		/**
+		 * Press L to switch to list view of appointments.
+		 */
+		Robot zRobot = new Robot();
+		Thread.sleep(3000);
+		zRobot.keyPress(KeyEvent.VK_L);
+		zRobot.keyRelease(KeyEvent.VK_L);
+		Thread.sleep(4000);
+		
+		/**
+		 * Verification : Check all the headers in list view of appointments are present.
+		 */
+		Assert.assertTrue(selenium.isElementPresent("zlhi__CLL__se"));
+		Assert.assertTrue(selenium.isElementPresent("zlhi__CLL__tg"));
+		Assert.assertTrue(selenium.isElementPresent("zlhi__CLL__at"));
+		Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__su"));
+		Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__lo"));
+		Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__st"));
+		Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__fo"));
+		Assert.assertTrue(selenium.isElementPresent("zlhi__CLL__re"));
+		Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__dt"));
+		
+		needReset = false;
+	}
+
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
 		isExecutionARetry = false;
