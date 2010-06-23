@@ -355,7 +355,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 			items:[
 				{ref:ZaCos.A_name, type:_INPUT_,
 					enableDisableChecks:[[ZaItem.hasRight,ZaCos.RENAME_COS_RIGHT]],
-					msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", required:true, width: "20em"},
+					msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", required:true, width: "30em"},
 				ZaItem.descriptionXFormItem ,
                 {ref:ZaCos.A_zimbraNotes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top",width: "30em"}
 			]
