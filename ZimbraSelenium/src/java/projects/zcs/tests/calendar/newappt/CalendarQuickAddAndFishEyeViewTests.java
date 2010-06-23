@@ -30,7 +30,8 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 				|| test.equals("quickAddAllDayApptWeekView")
 				|| test.equals("quickAddAllDayApptMonthView")
 				|| test.equals("quickAddApptFishEyeMonthView")
-				|| test.equals("quickAddAllDayApptFishEyeMonthView")) {
+				|| test.equals("quickAddAllDayApptFishEyeMonthView")
+				|| test.equals("fishEyeOpensWrongDayOnMonday_Bug45184")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData(1), ProvZCS.getRandomAccount(),
 					getLocalizedData(3), "", "",
@@ -596,6 +597,60 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 
 		needReset = false;
 	}
+	
+	/**
+	 * Steps, 1. Go to Calendar 2. Switch to Month view 3. Find our Monday 4. Open fish eye view >
+	 * add appointment 5. Verify created appointment and dat displayed.
+	 */
+	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void fishEyeOpensWrongDayOnMonday_Bug45184(String subject, String location,
+			String attendees, String body, String startDate, String endDate,
+			String startTime, String endTime) throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		obj.zButton.zClick(page.zCalApp.zViewBtn);
+		obj.zMenuItem.zClick(localize(locator.viewMonth));
+
+		
+		/**
+		 * Find out Monday
+		 */
+		for(int i=11;i<=17;i++) {
+			obj.zButton
+			.zClick("xpath=//div[contains(@id, 'DWT')]/table/tbody/tr/td/div/table/tbody/tr/td[contains (@id,'DWT') and contains(@class, 'calendar_month_day_label') and contains(text(), '"+ i +"')]");
+			Thread.sleep(1000);
+			if(selenium.isElementPresent("//*[contains(text(), 'Monday') and contains(@class,'calendar_heading_day')]")) {
+				obj.zButton
+				.zRtClick("xpath=//div[contains(@class, 'calendar_grid_body_time_text') and contains(text(), 8)]");
+				break;
+			}
+
+		}
+
+		obj.zMenuItem.zClick(localize(locator.newAppt));
+		obj.zEditField.zTypeInDlgByName(localize(locator.subjectLabel),
+				subject, localize(locator.quickAddAppt));
+		page.zCalCompose.zSetStartTimeInQuickAddApptDlg(startTime);
+		page.zCalCompose.zSetEndTimeInQuickAddApptDlg(endTime);
+		obj.zButton.zClickInDlgByName(localize(locator.ok),
+				localize(locator.quickAddAppt));
+		Thread.sleep(1500);
+		selenium
+		.doubleClickAt(
+				"xpath=//div[contains(@class, 'appt_body')]//td[contains(@class, 'appt_name') and contains(text(), "
+				+ subject + ")]", "");
+		obj.zButton.zClick(page.zCalCompose.zApptCloseBtn);
+		closeWarningDlg();
+		selenium
+		.click("xpath=//div[contains(@class, 'appt_body')]//td[contains(@class, 'appt_name') and contains(text(), "
+				+ subject + ")]");
+		Assert.assertTrue(selenium.isElementPresent("//*[contains(text(), 'Monday') and contains(@class,'calendar_heading_day')]"));
+		obj.zButton.zClick("ImgClose");
+
+		needReset = false;
+	}
+	
 
 	private void closeWarningDlg() throws Exception {
 		// if (config.getString("browser").equals("IE")) {
