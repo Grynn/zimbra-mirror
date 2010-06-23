@@ -241,7 +241,7 @@ Com_Zimbra_DnD._uploadFiles = function(file) {
         req.open("POST", appCtxt.get(ZmSetting.CSFE_UPLOAD_URI)+"&fmt=extended,raw", true);
         req.setRequestHeader("Cache-Control", "no-cache");
         req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-        req.setRequestHeader("Content-Type", "application/octet-stream;");
+        req.setRequestHeader("Content-Type",  (file.type || "application/octet-stream") + ";");
         req.setRequestHeader("Content-Disposition", 'attachment; filename="'+ file.fileName + '"');
 
         var tempThis = req;
