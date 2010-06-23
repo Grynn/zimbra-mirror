@@ -755,7 +755,43 @@ function() {
     ZaApp.getInstance().launch();
 
  	ZaZimbraAdmin._killSplash();
+ 	
+	
+ 	
 };
+
+ZaZimbraAdmin.noOpAction = null;
+ZaZimbraAdmin.noOpHandler = null;
+ZaZimbraAdmin.noOpInterval = 120000;
+
+ZaZimbraAdmin.prototype.cancelNoOp = function() {
+	if(ZaZimbraAdmin.noOpHandler) {
+		AjxTimedAction.cancelAction(this.noOpHandler);
+		ZaZimbraAdmin.noOpHandler = null;
+	}	
+}
+
+ZaZimbraAdmin.prototype.scheduleNoOp = function() {
+	if(!ZaZimbraAdmin.noOpAction) {
+		ZaZimbraAdmin.noOpAction = new AjxTimedAction(this, this.sendNoOp);
+	}
+	ZaZimbraAdmin.noOpHandler = AjxTimedAction.scheduleAction(ZaZimbraAdmin.noOpAction, 120000);
+};
+
+ZaZimbraAdmin.prototype.sendNoOp = function () {
+	try {
+		var soapDoc = AjxSoapDoc.create("NoOpRequest", ZaZimbraAdmin.URN, null);
+		var noOpCommand = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = soapDoc;	
+		params.asyncMode = false;
+		noOpCommand.invoke(params);
+		this.scheduleNoOp();
+	} catch (ex) {
+		this._handleException(ex, "ZaZimbraAdmin.prototype.sendNoOp", null, true);
+		this.cancelNoOp();
+	}
+}
 
 // Listeners
 

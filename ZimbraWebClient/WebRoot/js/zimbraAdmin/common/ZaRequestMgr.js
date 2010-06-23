@@ -5,7 +5,6 @@
  * 		1) show the busy dialog when it is a synchronous call and takes long time
  */
 ZaRequestMgr = function () {}
-
 /**
  * 
  * @param csfeParams: the parameters used by ZmCsfeCommand to send the request to the server
@@ -30,15 +29,23 @@ ZaRequestMgr.invoke = function (csfeParams, params) {
 	}
 	
 	try {
+		ZaZimbraAdmin.getInstance().cancelNoOp();
 		var response = command.invoke(csfeParams) ;
 		if (!csfeParams.asyncMode && controller) {
 			//if (AjxEnv.hasFirebug) console.log("Clear busy dialog " + id) ;
 			controller._shell.setBusy(false, id, false); //remove the busy overlay
 		}
 		if (! csfeParams.asyncMode)	{
+			ZaZimbraAdmin.getInstance().scheduleNoOp();
 			return 	response;
 		}	
 	}catch (ex) {
+		if(ex && ex.code && !(ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || 
+				ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || 
+				ex.code == ZmCsfeException.NO_AUTH_TOKEN
+			 )) {
+			ZaZimbraAdmin.getInstance().scheduleNoOp();
+		}
 		if (!csfeParams.asyncMode && controller  || (params.showBusy && controller)) {
 			controller._shell.setBusy(false, id); //remove the busy overlay
 		}
