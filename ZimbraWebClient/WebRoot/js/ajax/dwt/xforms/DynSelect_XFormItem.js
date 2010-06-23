@@ -200,10 +200,12 @@ DynSelect_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 	var id = this.getId();
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ id + "')";	
 	var inputHtml;
-	var inputSize = this.getInheritedProperty("inputSize");		
+	var inputSize = this.getInheritedProperty("inputSize");
+	var inputWidth = this.getInheritedProperty("inputWidth");
+	var inputWidthString = inputWidth ? "style='width:" + inputWidth + "'" : (inputSize ? "size="+inputSize : "")
 	inputHtml = ["<input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
 				" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"",
-				" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"", "size=",inputSize,
+				" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"", inputWidthString,
 				this.getMouseoutHandlerHTML(),
 				">"].join("");
 

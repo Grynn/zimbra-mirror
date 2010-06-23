@@ -611,16 +611,14 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 			items: [
 				{type:_CASE_, caseKey:ZaApplianceDomainXWizard.GENERAL_STEP, colSizes:["200px","450px"],numCols:2,
 					items: [
-						{ref:ZaDomain.A_domainName, type:_TEXTFIELD_, label:ZaMsg.Domain_DomainName,labelLocation:_LEFT_, width:200},
-						{ref:ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraPublicServiceHostname,labelLocation:_LEFT_, width:200},						
+						{ref:ZaDomain.A_domainName, type:_TEXTFIELD_, label:ZaMsg.Domain_DomainName,labelLocation:_LEFT_, width:"30em"},
+						{ref:ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraPublicServiceHostname,labelLocation:_LEFT_, width:"30em"},						
 						{ type: _DWT_ALERT_,containerCssStyle: "padding-bottom:0px",style: DwtAlert.INFO,
 								iconVisible: true,content: ZaMsg.Domain_InboundSMTPNote,colSpan:"*"},
-						{type:_GROUP_,colSpan:"2", colSizes:["200px","250px", "150px"],numCols:2,id:"dns_check_group",items:[
-						
-							{ref: ZaDomain.A_zimbraDNSCheckHostname, type:_SUPERWIZ_TEXTFIELD_, textFieldWidth:200,
-		 						label:null,txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal}/*, {type:_CELLSPACER_}*/	
-						]},	
-						{ref:ZaDomain.A_description, type:_TEXTFIELD_, label:ZaMsg.NAD_Description, labelLocation:_LEFT_, width:250},
+						{ref: ZaDomain.A_zimbraDNSCheckHostname, type:_TEXTFIELD_, width:"30em", labelLocation:_LEFT_,
+		 						label:ZaMsg.Domain_zimbraDNSCheckHostname
+		 				},
+						{ref:ZaDomain.A_description, type:_TEXTFIELD_, label:ZaMsg.NAD_Description, labelLocation:_LEFT_, width:"30em"},
 						{ref:ZaDomain.A_domainDefaultCOSId, type:_DYNSELECT_, 
 							toolTipContent:ZaMsg.tt_StartTypingCOSName,
 							label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
@@ -629,7 +627,7 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							choices:this.cosChoices,
 							dataFetcherClass:ZaSearch,
 							emptyText:ZaMsg.enterSearchTerm,
-                            inputSize: 33,    
+							inputWidth:"30em",    
  							editable:true,
 							getDisplayValue:function(newValue) {
 								// dereference through the choices array, if provided
@@ -647,7 +645,7 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 								return newValue;
 							}
 						},
-						{ref:ZaDomain.A_notes, type:_TEXTAREA_, label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:250}
+						{ref:ZaDomain.A_notes, type:_TEXTAREA_, label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em"}
 					]
 				},
 				{type:_CASE_, caseKey:ZaApplianceDomainXWizard.GALMODE_STEP,numCols:2,colSizes:["220px","430px"],
