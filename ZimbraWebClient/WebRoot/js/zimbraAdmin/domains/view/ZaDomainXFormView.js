@@ -613,7 +613,8 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 									return val;
 							},
 							visibilityChecks:[ZaItem.hasReadPermission]	
-						}						
+						},
+						{type:_OUTPUT_, choices:ZaDomain.domainStatusChoices, bmolsnr:true, ref:ZaDomain.A_zimbraDomainStatus, label:ZaMsg.LBL_zimbraDomainStatus,visibilityChecks:[ZaItem.hasReadPermission]}
 					]
 				}
 			],
