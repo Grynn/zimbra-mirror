@@ -1,4 +1,4 @@
-<zimlet name="zimbra_inboxzero" version="1.0" target="main" description="Adds Inbox Zero actions to message views. http://inboxzero.com/">
+<zimlet name="zimbra_inboxzero" version="1.0" target="main" label="Inbox Zero" description="Adds Inbox Zero actions to message views. http://inboxzero.com/">
 	<include>inboxzero.js</include>
     <handlerObject>InboxZero</handlerObject>
 </zimlet>
