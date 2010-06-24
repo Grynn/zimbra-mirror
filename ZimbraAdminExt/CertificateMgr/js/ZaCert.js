@@ -44,12 +44,12 @@ ZaCert.TARGET_SERVER_CHOICES =  [
 ZaCert.KEY_SIZE_CHOICES = [ {label: "1024", value: "1024"},
                             {label: "2048", value: "2048"}] ;
 
-/* All the cert rights require the system admin rights, so we have no need to expose the view for delegated admin
 if(ZaSettings) {
 	ZaSettings.CERTS_VIEW = "certsView";
 	ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CERTS_VIEW, label: com_zimbra_cert_manager.UI_Comp_certsView });
 	ZaSettings.OVERVIEW_TOOLS_ITEMS.push(ZaSettings.CERTS_VIEW);
-}*/
+	ZaSettings.VIEW_RIGHTS [ZaSettings.CERTS_VIEW] = "adminConsoleCertificateRights";
+}
 
 //Init the ZaCert Object for the new Cert wizard
 ZaCert.prototype.init = function (getCSRResp) {

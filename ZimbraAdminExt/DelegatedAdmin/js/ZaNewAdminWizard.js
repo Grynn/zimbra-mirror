@@ -637,6 +637,7 @@ ZaNewAdminWizard.prototype.setProposedGrants = function () {
                         || selectedViews[i] == ZaSettings.GLOBAL_CONFIG_VIEW
                         || selectedViews[i] == ZaSettings.GLOBAL_STATUS_VIEW
                         || selectedViews[i] == ZaSettings.MAILQ_VIEW
+                        || selectedViews[i] == ZaSettings.CERTS_VIEW
                         || selectedViews[i] == ZaSettings.XMBX_SEARCH_VIEW 
                         || selectedViews[i] == ZaSettings.BACKUP_VIEW  
                         || selectedViews[i] == ZaSettings.SERVER_STATS_VIEW ) {
