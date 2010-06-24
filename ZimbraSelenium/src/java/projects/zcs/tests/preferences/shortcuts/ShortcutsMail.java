@@ -316,6 +316,63 @@ public class ShortcutsMail extends CommonTest {
 		needReset = false;
 	}
 	
+	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void shortcutsMoveToTrash_And_MoveToInbox() throws Exception {
+
+		String[] recipients = { selfAccountName };
+		if (isExecutionARetry)
+			handleRetry();
+		
+		String subject = "Move to Trash";
+
+		ProvZCS.injectMessage(ProvZCS.getRandomAccount(), recipients, ProvZCS
+				.getRandomAccount(), subject, "test content");
+
+		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
+
+		obj.zMessageItem.zClick(subject);
+
+		Thread.sleep(1000);
+
+		Robot zRobot = new Robot();
+
+		zRobot.keyPress(KeyEvent.VK_PERIOD);
+		zRobot.keyPress(KeyEvent.VK_T);
+		zRobot.keyRelease(KeyEvent.VK_PERIOD);
+		zRobot.keyRelease(KeyEvent.VK_T);
+
+		Thread.sleep(1000);
+		obj.zMessageItem.zNotExists(subject);
+
+		obj.zFolder.zClick(localize(locator.trash));
+
+		obj.zMessageItem.zExists(subject);
+		
+		
+		
+		obj.zMessageItem.zClick(subject);
+		
+		Thread.sleep(1000);
+
+		Robot zRobot1 = new Robot();
+
+		zRobot1.keyPress(KeyEvent.VK_PERIOD);
+		zRobot1.keyPress(KeyEvent.VK_I);
+		zRobot1.keyRelease(KeyEvent.VK_PERIOD);
+		zRobot1.keyRelease(KeyEvent.VK_I);
+
+		Thread.sleep(1000);
+		obj.zMessageItem.zNotExists(subject);
+
+		obj.zFolder.zClick(localize(locator.inbox));
+
+		obj.zMessageItem.zExists(subject);
+
+		needReset = false;
+
+	}
+
+	
 	
 	
 	
