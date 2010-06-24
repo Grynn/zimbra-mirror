@@ -37,6 +37,13 @@ ZaVersionCheck.A_zimbraVersionCheckUpdateUpdateURL = "updateURL";
 ZaVersionCheck.A_zimbraVersionCheckUpdateDescription = "description";
 ZaVersionCheck.A_zimbraVersionCheckUpdateShortversion = "shortversion";
 
+if(ZaSettings) {
+	ZaSettings.SOFTWARE_UPDATES_VIEW = "softwareUpdatesView";
+	ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SOFTWARE_UPDATES_VIEW, label: com_zimbra_adminversioncheck.UI_Comp_versionCheck });
+	ZaSettings.OVERVIEW_TOOLS_ITEMS.push(ZaSettings.SOFTWARE_UPDATES_VIEW);
+	ZaSettings.VIEW_RIGHTS [ZaSettings.SOFTWARE_UPDATES_VIEW] = "adminConsoleSoftwareUpdatesRights";
+}
+
 ZaVersionCheck.myXModel = {	items:[
 	{id:ZaVersionCheck.A_zimbraVersionCheckLastAttempt, ref:"attrs/" + ZaVersionCheck.A_zimbraVersionCheckLastAttempt, type: _DATETIME_},
     {id:ZaVersionCheck.A_zimbraVersionCheckLastSuccess, ref:"attrs/" + ZaVersionCheck.A_zimbraVersionCheckLastSuccess, type: _DATETIME_},
@@ -222,12 +229,14 @@ ZaVersionCheck.versionCheckTreeListener = function (ev) {
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getVersionCheckViewController(),ZaVersionCheckViewController.prototype.show, [versionCheck]);
 	} else {					
-		ZaApp.getInstance().getVersionCheckViewController().show(servers);
+		ZaApp.getInstance().getVersionCheckViewController().show(versionCheck);
 	}
 }
 
 ZaVersionCheck.versionCheckTreeModifier = function (tree) {
-	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+	var overviewPanelController = this ;
+	if (!overviewPanelController) throw new Exception("ZaCert.versionCheckTreeModifier: Overview Panel Controller is not set.");	
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SOFTWARE_UPDATES_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		if(!this._toolsTi) {
 			this._toolsTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
 			this._toolsTi.enableSelection(false);	

@@ -23,6 +23,7 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.account.accesscontrol.AdminRight;
+import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.cs.util.AccountUtil;
@@ -65,7 +66,7 @@ public class VersionCheck extends AdminDocumentHandler {
         ZimbraSoapContext zc = getZimbraSoapContext(context);
     	Provisioning prov = Provisioning.getInstance();        
         Config config = prov.getConfig();
-    	checkRight(zc, context, null, AdminRight.PR_SYSTEM_ADMIN_ONLY);      
+    	checkRight(zc, context, null, Admin.R_checkSoftwareUpdates);      
         String action = request.getAttribute(MailConstants.E_ACTION);
     	Element response = zc.createElement(VersionCheckService.VC_RESPONSE);
         if(action.equalsIgnoreCase(VersionCheckService.VERSION_CHECK_CHECK)) {
@@ -303,4 +304,9 @@ public class VersionCheck extends AdminDocumentHandler {
 		}
 		return lastAttempt;
 	}
+	
+	@Override
+	public void docRights(List<AdminRight> relatedRights, List<String> notes) {
+		relatedRights.add(Admin.R_checkSoftwareUpdates);
+	}	
 }

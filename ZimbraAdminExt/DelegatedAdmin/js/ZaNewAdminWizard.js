@@ -639,7 +639,8 @@ ZaNewAdminWizard.prototype.setProposedGrants = function () {
                         || selectedViews[i] == ZaSettings.MAILQ_VIEW
                         || selectedViews[i] == ZaSettings.CERTS_VIEW
                         || selectedViews[i] == ZaSettings.XMBX_SEARCH_VIEW 
-                        || selectedViews[i] == ZaSettings.BACKUP_VIEW  
+                        || selectedViews[i] == ZaSettings.BACKUP_VIEW
+                        || selectedViews[i] == ZaSettings.SOFTWARE_UPDATES_VIEW
                         || selectedViews[i] == ZaSettings.SERVER_STATS_VIEW ) {
                         //here the target are mostly global
                         viewRight [ZaGrant.A_target] = ZaGrant.GLOBAL_TARGET_NAME;
