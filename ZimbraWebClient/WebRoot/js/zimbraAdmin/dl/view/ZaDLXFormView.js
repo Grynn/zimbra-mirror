@@ -699,10 +699,6 @@ ZaDLXFormView.addAlias  = function () {
 	}
 }
 
-ZaDLXFormView.isAddAliasEnabled = function() {
-	return (this.getInstance)
-}
-
 ZaDLXFormView.isEditAliasEnabled = function () {
 	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaDistributionList.A2_alias_selection_cache)) && this.getInstanceValue(ZaAccount.A2_alias_selection_cache).length==1);
 }
