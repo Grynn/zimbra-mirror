@@ -253,21 +253,29 @@ public class SyncSession {
         Result result = event.getResult();
         if (result.isError()) {
             ErrorResult error = (ErrorResult) result;
-            String msg = String.format(
-                "Error code: %s\nError description: %s\nRequest event:\n%s",
-                error.getCode(), error.getUserMessage(), event);
-            localData.syncContactFailed(
-                new SyncException("Sync request event failed"), itemId, msg);
-            return false;
+            if (!ignoreError(error, event)) {
+                String msg = String.format(
+                    "Error code: %s\nError description: %s\nRequest event:\n%s",
+                    error.getCode(), error.getUserMessage(), event);
+                localData.syncContactFailed(
+                    new SyncException("Sync request event failed"), itemId, msg);
+                return false;
+            }
         }
         return true;
     }
-    
+
+    private boolean ignoreError(ErrorResult error, SyncRequestEvent event) {
+        if (event.isRemoveContact() && error.getCode() == ErrorResult.CODE_CONTACT_DOES_NOT_EXIST)
+            return true;
+        return false;
+    }
+
     private void processContactResult(SyncRequestEvent event, int itemId, Stats stats)
         throws ServiceException {
-        SuccessResult result = (SuccessResult) event.getResult();
         Contact contact = pushedContacts.get(itemId);
         if (event.isAddContact()) {
+            SuccessResult result = (SuccessResult) event.getResult();
             contact.setId(result.getContactId());
             updateContactMapping(itemId, contact);
             stats.added++;

@@ -28,6 +28,7 @@ public class ErrorResult extends Result {
     public static final int CODE_CLIENT_TIMED_OUT = 17010;
     public static final int CODE_SERVER_DOWN = 17011;
     public static final int CODE_USER_LOCKED = 50302;
+    public static final int CODE_CONTACT_DOES_NOT_EXIST = -40402;
 
     public static final String TAG = "error";
 
