@@ -126,7 +126,7 @@ function(cmd) {
  */
 ZmBatchCommand.prototype.size =
 function() {
-	return this.curId;
+	return this.curId || this._cmds.length;
 };
 
 /**
