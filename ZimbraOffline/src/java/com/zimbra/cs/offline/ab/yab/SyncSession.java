@@ -266,7 +266,7 @@ public class SyncSession {
     }
 
     private boolean ignoreError(ErrorResult error, SyncRequestEvent event) {
-        if (event.isRemoveContact() && error.getCode() == ErrorResult.CODE_CONTACT_DOES_NOT_EXIST)
+        if ((event.isRemoveContact() || event.isUpdateContact()) && error.getCode() == ErrorResult.CODE_CONTACT_DOES_NOT_EXIST)
             return true;
         return false;
     }
