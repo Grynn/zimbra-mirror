@@ -10,6 +10,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 
 import com.zimbra.common.service.ServiceException;
@@ -33,8 +34,8 @@ public class ShortcutsCalendar extends CommonTest {
 					{ KeyEvent.VK_M, "Month", "calendar_month_header_cells_text"},
 					{ KeyEvent.VK_L, "List","" },
 					{ KeyEvent.VK_S, "Schedule","calendar_heading_day" },
-					{ KeyEvent.VK_D, "Day","calendar_heading_day_today" }
-					//{ KeyEvent.VK_Y, "Today","" } //
+					{ KeyEvent.VK_D, "Day","calendar_heading_day_today" },
+					{ KeyEvent.VK_Y, "Today","" } 
 			};
 
 		}else {
@@ -67,7 +68,10 @@ public class ShortcutsCalendar extends CommonTest {
 	public void shortcutsCalendarActions(int keyToPress, String actionType, String className)
 	throws Exception {
 
-		String verifyTo, verifyCc;
+		String subject = getLocalizedData_NoSpecialChar();
+		String location = getLocalizedData(1);
+		String attendees = ProvZCS.getRandomAccount();
+		String body = getLocalizedData(3);
 
 		if (isExecutionARetry)
 			handleRetry();
@@ -86,9 +90,16 @@ public class ShortcutsCalendar extends CommonTest {
 
 			Assert.assertTrue(getElementStatus(className,""));
 		} else if(actionType.equals("Today")){
+			page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
+			obj.zAppointment.zExists(subject);
+			selenium.clickAt("//*[contains(@class,'ImgRightArrow')]", "");
+			selenium.clickAt("//*[contains(@class,'ImgRightArrow')]", "");
+			selenium.clickAt("//*[contains(@class,'ImgRightArrow')]", "");
+			obj.zAppointment.zNotExists(subject);
 			zRobot.keyPress(keyToPress);
 			zRobot.keyRelease(keyToPress);
 			Thread.sleep(2000);
+			obj.zAppointment.zExists(subject);
 		} else if(actionType.equals("Week")){
 			zRobot.keyPress(keyToPress);
 			zRobot.keyRelease(keyToPress);
