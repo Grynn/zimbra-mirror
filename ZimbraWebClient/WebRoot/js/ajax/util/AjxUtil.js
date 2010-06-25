@@ -567,14 +567,7 @@ function(type, msg) {
 AjxUtil.mergeArrays =
 function(arr1, arr2, orderfunc) {
 	if(!orderfunc) {
-		orderfunc = function (val1,val2) {
-			if(val1>val2)
-				return 1;
-			if (val1 < val2)
-				return -1;
-			if(val1 == val2)
-				return 0;
-		}
+		orderfunc = AjxUtil.__mergeArrays_orderfunc;
 	}
  	var tmpArr1 = [];
  	var cnt1 = arr1.length;
@@ -625,6 +618,12 @@ function(arr1, arr2, orderfunc) {
 		resArr.push(tmpArr2.shift());
 	}
 	return resArr;	
+};
+
+AjxUtil.__mergeArrays_orderfunc = function (val1,val2) {
+    if(val1>val2)    return  1;
+    if (val1 < val2) return -1;
+    if(val1 == val2) return  0;
 };
 
 AjxUtil.arraySubstract = function (arr1, arr2, orderfunc) {

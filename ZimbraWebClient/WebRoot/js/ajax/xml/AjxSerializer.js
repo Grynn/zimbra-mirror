@@ -32,6 +32,9 @@ AjxSerializer.prototype.serialize = function(node) { throw "NOT IMPLEMENTED"; };
 /**
  * This class attempts to serialize a DOM document in the same format
  * as the Zimbra Server.
+ * @class
+ * @constructor
+ * @private
  */
 AjxJsonSerializer = function(minimize) {
     AjxSerializer.call(this, null);

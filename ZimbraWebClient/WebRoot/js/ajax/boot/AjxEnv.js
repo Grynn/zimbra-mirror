@@ -14,14 +14,141 @@
  */
 
 /**
- * 
- * @private
+ * Information about the browser and run-time environment.
+ * @class
  */
 AjxEnv = function() {
 };
 
-AjxEnv._inited = false;
+//
+// Constants
+//
+
+/** User locale. */
 AjxEnv.DEFAULT_LOCALE = window.navigator.userLanguage || window.navigator.language || window.navigator.systemLanguage;
+
+//
+// Data
+//
+
+AjxEnv._inited = false;
+
+// NOTE: These are here so that the documentation tool can pick them up
+
+/** Gecko date. */
+AjxEnv.geckoDate;
+/** Mozilla version. */
+AjxEnv.mozVersion;
+/** WebKit version. */
+AjxEnv.webKitVersion;
+/** Macintosh. */
+AjxEnv.isMac;
+/** Windows. */
+AjxEnv.isWindows;
+/** Linux. */
+AjxEnv.isLinux;
+/** Netscape Navigator compatible. */
+AjxEnv.isNav;
+/** Internet Explorer. */
+AjxEnv.isIE;
+/** Netscape Navigator version 4. */
+AjxEnv.isNav4;
+
+
+AjxEnv.trueNs;
+
+
+/** Netscape Navigator version 6. */
+AjxEnv.isNav6;
+/** Netscape Navigator version 6 (or higher). */
+AjxEnv.isNav6up;
+/** Netscape Navigator version 7. */
+AjxEnv.isNav7;
+/** Internet Explorer version 3. */
+AjxEnv.isIE3;
+/** Internet Explorer version 4. */
+AjxEnv.isIE4;
+/** Internet Explorer version 4 (or higher). */
+AjxEnv.isIE4up;
+/** Internet Explorer version 5. */
+AjxEnv.isIE5;
+/** Internet Explorer version 5.5. */
+AjxEnv.isIE5_5;
+/** Internet Explorer version 5 (or higher). */
+AjxEnv.isIE5up;
+/** Internet Explorer version 5.5 (or higher). */
+AjxEnv.isIE5_5up;
+/** Internet Explorer version 6. */
+AjxEnv.isIE6;
+/** Internet Explorer version 6 (or higher). */
+AjxEnv.isIE6up;
+/** Internet Explorer version 7. */
+AjxEnv.isIE7;
+/** Internet Explorer version 7 (or higher). */
+AjxEnv.isIE7up;
+/** Internet Explorer version 8. */
+AjxEnv.isIE8;
+/** Internet Explorer version 8 (or higher). */
+AjxEnv.isIE8up;
+
+
+AjxEnv.isNormalResolution;
+AjxEnv.ieScaleFactor;
+
+
+/** Mozilla Firefox. */
+AjxEnv.isFirefox;
+/** Mozilla Firefox version 1 (or higher). */
+AjxEnv.isFirefox1up;
+/** Mozilla Firefox version 1.5 (or higher). */
+AjxEnv.isFirefox1_5up;
+/** Mozilla Firefox version 3 (or higher). */
+AjxEnv.isFirefox3up;
+/** Mozilla Firefox version 3.6 (or higher). */
+AjxEnv.isFirefox3_6up;
+/** Mozilla. */
+AjxEnv.isMozilla;
+/** Mozilla version 1.4 (or higher). */
+AjxEnv.isMozilla1_4up;
+/** Safari. */
+AjxEnv.isSafari;
+/** Safari version 2. */
+AjxEnv.isSafari2;
+/** Safari version 3. */
+AjxEnv.isSafari3;
+/** Safari version 3 (or higher). */
+AjxEnv.isSafari3up;
+/** Safari version 4. */
+AjxEnv.isSafari4;
+/** Safari version 4 (or higher). */
+AjxEnv.isSafari4up;
+/** Camino. */
+AjxEnv.isCamino;
+/** Chrome. */
+AjxEnv.isChrome;
+/** Gecko-based. */
+AjxEnv.isGeckoBased;
+/** WebKit-based. */
+AjxEnv.isWebKitBased;
+/** Opera. */
+AjxEnv.isOpera;
+
+
+AjxEnv.useTransparentPNGs;
+
+
+/** Zimbra Desktop. */
+AjxEnv.isDesktop;
+/** Zimbra Desktop version 2 (or higher). */
+AjxEnv.isDesktop2up;
+/** Screen size is less then 800x600. */
+AjxEnv.is800x600orLower;
+/** Screen size is less then 1024x768. */
+AjxEnv.is1024x768orLower;
+
+//
+// Public functions
+//
 
 AjxEnv.reset =
 function() {

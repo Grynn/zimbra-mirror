@@ -18,12 +18,15 @@
 //	Factory to create XFormItems from simple attributes (eg: from JS object literals or XML)
 //
 
-/** This object is never instantiated. */
+/**
+ * This object is never instantiated.
+ * @class
+ * @private 
+ */
 XFormItemFactory = function() {}
 
 /**
  * Creates a form item.
- * @class
  *
  * @param attributes		an object whose properties map to component attribute name/value pairs
  * @param parentItem 		the parent item of this item

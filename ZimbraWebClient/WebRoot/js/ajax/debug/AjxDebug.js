@@ -836,7 +836,7 @@ function() {
 
 /**
  * Simple wrapper for log messages.
- * 
+ * @private
  */
 DebugMessage = function(aMsg, aType, aCategory, aTime, extraHtml, linkName) {
 	this.message = aMsg || "";
