@@ -580,6 +580,7 @@ public class ExecuteTests {
 		cls.add("projects.zcs.tests.preferences.shortcuts.ShortcutsGeneral");
 		cls.add("projects.zcs.tests.preferences.shortcuts.ShortcutsMail");
 		cls.add("projects.zcs.tests.preferences.shortcuts.ShortcutBugTests");
+		cls.add("projects.zcs.tests.preferences.shortcuts.ShortcutsCalendar");
 		addTests(testName, cls);
 
 		// ---------------------------------------------------
