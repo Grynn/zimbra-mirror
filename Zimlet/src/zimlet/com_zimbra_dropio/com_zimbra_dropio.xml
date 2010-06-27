@@ -1,0 +1,21 @@
+<zimlet name="com_zimbra_dropio" label="Drop.io" version="0.1" description="Allows you to upload and attach large files via drop.io" target="main compose-window">
+	<include>dropio.js</include>
+	<include>prefDialog.js</include>
+	<include>dropioTabView.js</include>
+	<includeCSS>dropio.css</includeCSS>
+	<handlerObject>com_zimbra_dropio_HandlerObject</handlerObject>
+	<zimletPanelItem label="${msg.DropioZimlet_label}" icon="dropio-panelIcon">
+		<toolTipText>${msg.DropioZimlet_tooltip}</toolTipText>
+	</zimletPanelItem>
+
+	<userProperties>
+		<property type="string" name="dropioZimlet_apiKey" value="4115e41d17052650b88ea353c201b544c8d50fe4"/>
+		<property type="string" name="dropioZimlet_dropName" value=""/>
+		<property type="string" name="dropioZimlet_dropAdminPwd" value=""/>
+		<property type="string" name="dropioZimlet_dropGuestPwd" value=""/>
+		<!-- As an example, we have vmware's proxy already set -->
+		<property type="string" name="dropioZimlet_proxyHost" value="proxy.vmware.com"/>
+		<property type="string" name="dropioZimlet_proxyPort" value="3128"/>
+		<property type="string" name="dropioZimlet_proxyON" value="false"/>
+	</userProperties>
+</zimlet>

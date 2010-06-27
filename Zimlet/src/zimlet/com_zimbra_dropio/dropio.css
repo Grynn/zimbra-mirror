@@ -1,0 +1,100 @@
+.Imgdropio-panelIcon {
+	background: url("dropio.png") no-repeat 0 0;
+	width: 16px;
+	height: 16px;
+	overflow: hidden;
+}
+
+.DropioTabBox {
+	background-color: #FDFCFA;
+}
+
+table.dropio_table  ul {
+	height: 155px;
+	background: white;
+	overflow: auto;
+	border: 1px solid gray;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+table.dropio_table  li {
+	margin: 0;
+	padding: 0;
+}
+
+table.dropio_table  label {
+	display: block;
+	color: WindowText;
+	background-color: Window;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+table.dropio_table  label:hover {
+	background-color: Highlight;
+	color: HighlightText;
+}
+
+table.dropio_table {
+	border: gray;
+}
+
+table.dropio_table td {
+	font-size: 12px;
+	font-family: 'Lucida Grande', sans-serif;
+	color: #333333;
+
+}
+
+table.dropio_table input[type="text"] {
+	border-color: #3A73AB;
+	border-width: 1;
+	border-style: solid;
+	width: 200px;
+	height: 20px;
+	padding: 2px 4px;
+}
+
+table.dropio_table [type="password"] {
+	border-color: #3A73AB;
+	border-width: 1;
+	border-style: solid;
+	width: 200px;
+	height: 20px;
+	padding: 2px 4px;
+}
+
+table.dropio_table textarea {
+	border-color: #3A73AB;
+	border-width: 1;
+	border-style: solid;
+}
+
+table.dropio_table select {
+	border-color: #3A73AB;
+	border-width: 1;
+	border-style: solid;
+	font-size: 12px;
+	font-family: 'arial', sans-serif;
+	width: 260px;
+}
+
+table.dropio_table div {
+	font-size: 12px;
+}
+
+table.dropio_table a {
+	text-decoration: underline;
+	font-size: 12px;
+	cursor: pointer;
+
+}
+
+table.dropio_table th {
+	font-weight: bold;
+	padding: 2px;
+	font-size: 13px;
+}
