@@ -55,6 +55,8 @@ public class HttpSession
         transformer = createTransformer();
         baos = new ByteArrayOutputStream(4096);
         httpclient =new HttpClient();
+        //default time out 5 minutes
+        httpclient.setTimeout(5*60*1000);
         Security.setProperty( "ssl.SocketFactory.provider", 
                                 "com.zimbra.utils.ZMSSLSocketFactory");
         
@@ -69,6 +71,11 @@ public class HttpSession
     {
         return Statuscode;
     }
+
+    public void SetTimeOut(int miliseconds)
+    {
+        httpclient.setTimeout(miliseconds);
+    }
     
     public InputStream Send(String uri) throws HttpException
     {
@@ -76,14 +83,13 @@ public class HttpSession
         try
         {
             HttpMethod method = GetHttpMethod(uri);
-            httpclient.setTimeout(60*1000);
             Statuscode = httpclient.executeMethod(method);
             if (Statuscode != 200) 
             {
                 throw new HttpException("HTTP request failed: " + Statuscode + ": " +
                                         HttpStatus.getStatusText(Statuscode));
             }
-            is = method.getResponseBodyAsStream();            
+            is = method.getResponseBodyAsStream();
         }
         catch(HttpException he)
         {

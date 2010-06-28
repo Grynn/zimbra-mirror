@@ -538,9 +538,14 @@ public class tarFormatter implements EventNotifier
                     zcsacprov.enable_dump_all();
                 }
                 zcsacprov.Init();
-                tarfmtparams.AccountsList=zcsacprov.GetDomainAllAccountList(Domain);
+                String restUrl= "https://"+zcsprovparams.zcsurl+":"+zcsprovparams.zcsport+"/service/afd/?action=getSR&types=accounts&domain="+Domain;
+                String adminUrl = "https://"+zcsprovparams.zcsurl+":"+zcsprovparams.zcsport+"/service/admin/soap";
+                tarfmt_log.log(Level.INFO,"Going to get accounts from "+zcsprovparams.zcsurl+". It may take few minutes...");
+                tarfmt_log.log(Level.INFO,"REST URL: "+restUrl);
+                tarfmtparams.AccountsList=zcsacprov.GetDomainAllAccountList(Domain,
+                        restUrl,AuthTokens.get_admin_auth_token(adminUrl));
                 AccountsList.SetAccountList(tarfmtparams.AccountsList);
-                System.out.println("Accounts list created.");
+                tarfmt_log.log(Level.INFO,"Accounts list created.");
             }
         }
         return retval;

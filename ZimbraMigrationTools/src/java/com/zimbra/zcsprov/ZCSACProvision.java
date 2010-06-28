@@ -299,10 +299,13 @@ public class ZCSACProvision
         return retval;
     }
 
-    public ArrayList<String> GetDomainAllAccountList(String stDomain)
+    public ArrayList<String> GetDomainAllAccountList(String stDomain,String restURL,String adminAuthToken)
     {
         ArrayList<String> iArList=null;
-        iArList=zcsaccounts.GetAllAccountsList(stDomain);
+        //Don't use it.SearchDirectoryRequest throws exception for large numbers of accounts. 
+        //iArList=zcsaccounts.GetAllAccountsList(stDomain);
+        //rest URL= https://<SourceZCSServer:port>/service/afd/?action=getSR&types=accounts
+        iArList=zcsaccounts.GetAllAccountsListByREST(restURL,adminAuthToken);
         return iArList;
     }
 }

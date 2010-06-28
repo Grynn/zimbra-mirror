@@ -16,6 +16,12 @@
  */
 package com.zimbra.zcsprov;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
 import java.util.logging.*;
 import java.util.Iterator;
 import java.util.HashMap;
@@ -28,6 +34,8 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.Name;
 import com.zimbra.common.user_info;
 import com.zimbra.utils.*;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.NameValuePair;
 
 public class ZCSAccounts
 {
@@ -184,6 +192,71 @@ public class ZCSAccounts
         return retval;
     }
 
+    public ArrayList<String> GetAllAccountsListByREST(String url,String zmauth_token)
+    {
+        ArrayList<String> iAccountList=null;
+        InputStream istr=null;
+        HttpSession httpsession = new HttpSession();
+        try
+        {
+            httpsession.SetPostMethod(false);
+            String uri=url;
+            List<NameValuePair> rparams = new ArrayList <NameValuePair>();
+            NameValuePair param1 = new NameValuePair("Cookie", "ZM_ADMIN_AUTH_TOKEN="+zmauth_token);
+            rparams.add(param1);            
+            httpsession.SetRequestHeader(rparams);
+            httpsession.SetTimeOut(30*60*1000);//30 minutes
+            istr= httpsession.Send(uri);
+            int stcode=httpsession.GetStatusCode();
+            cu_logger.log(Level.INFO, "GetAllAccountsListByREST: HTTP Code: "+Integer.toString(stcode));
+        }
+        catch(HttpException he)
+        {
+            if (httpsession.GetStatusCode()==204) //NO content; Most probably mailbox is empty
+            {
+                cu_logger.log(Level.WARNING,"GetAllAccountsListByREST: "+he.getMessage()+" (MailBox may be empty.)");
+            }
+            else
+            {
+                cu_logger.log(Level.SEVERE,"GetAllAccountsListByREST: "+he.getMessage());
+            }
+            return null;
+        }
+        if (istr!=null)
+        {
+            iAccountList=new ArrayList<String>();
+            String strLine = null;
+            try
+            {
+                BufferedReader br = new BufferedReader(new InputStreamReader(istr,"UTF-8"));
+                while( (strLine = br.readLine()) != null)
+                {
+                    cu_logger.log(Level.INFO,strLine);
+                    String[] values = strLine.split(",");
+                    int startidx=0;
+                    int endidx = values[0].length();
+                    //remove starting and end " (quotes)
+                    if (values[0].startsWith("\""))
+                    {
+                        startidx = 1;
+                    }
+                    if (values[0].startsWith("\""))
+                    {
+                        endidx = endidx-1;
+                    }
+                    String strAccnt= values[0].substring(startidx,endidx);
+                    iAccountList.add(strAccnt);
+                }
+                br.close(); 
+            }
+            catch(Exception e)
+            {
+                cu_logger.log(Level.SEVERE,"GetAllAccountsListByREST: BufferedReader Error: "+e.getMessage());
+            }
+        }
+        return iAccountList;
+    }
+    
     public ArrayList<String> GetAllAccountsList(String stdomain)
     {
         ArrayList<String> iAccountList=null;

@@ -55,7 +55,7 @@ public class ZCSPLogger
             FileHandler tmplfh;
 
             boolean append =true;
-            String lgname = ilogpath+"/"+logname+"_%g.log";
+            String lgname = ilogpath+logname+"_%g.log";
             int limit = log_max_size;
             int numLogFiles = log_max_files;
             tmplfh = new FileHandler(lgname, limit, numLogFiles,append);
