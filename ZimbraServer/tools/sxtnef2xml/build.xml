@@ -1,0 +1,54 @@
+<project name="sxtnef2xml" default="jar">
+	
+	<!-- Diagnostic tool which provides a more friendly, XML-like view
+		 of a TNEF file -->
+
+	<!-- Properties -->
+
+	<property name="javac.target" value="1.5"/>
+
+	<property name="jar.file" value="sxtnef2xml.jar" />
+	<property name="src.java.dir" location="src/java" />
+	<property name="build.dir" location="build" />
+	<property name="build.classes.dir" location="${build.dir}/classes" />
+	<property name="zimbra.home.dir" location="/opt/zimbra" />
+	<property name="common.dir" location="../../../ZimbraCommon"/>
+	<property name="common.jars.dir" location="${common.dir}/jars"/>
+
+	<path id="all.java.path">
+		<pathelement location="${src.java.dir}" />
+	</path>
+
+	<path id="class.path">
+		<pathelement location="${build.classes.dir}" />
+		<fileset dir="${common.jars.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<!-- Targets -->
+	<target name="build-init">
+		<mkdir dir="${build.classes.dir}" />
+	</target>
+
+	<target name="compile" depends="build-init" description="Compiles the source code">
+		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path" target="${javac.target}">
+			<src refid="all.java.path" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile" description="Creates the jar file">
+		<jar destfile="${build.dir}/${jar.file}" basedir="${build.classes.dir}">
+				<zipfileset dir="${build.classes.dir}" prefix="" />
+				<zipfileset src="${common.jars.dir}/tnef-1.6.0.jar" />
+				<manifest>
+					<attribute name="Main-Class" value="com.zimbra.sxtnef2xml.Main" />
+				</manifest>
+			</jar>
+	</target>
+
+	<target name="clean" description="Removes build files and undeploys extension">
+		<delete dir="${build.dir}" />
+	</target>
+	
+</project>
