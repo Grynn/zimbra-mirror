@@ -47,7 +47,7 @@ CLASS:projects.zcs.tests.mail.messageactions.MailRightClickMenuTests;METHOD:rtCl
 
 CLASS:projects.zcs.tests.preferences.shortcuts.ShortcutsGeneral;METHOD:shortcutsNew;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Opening calendar fails some times on IE, happens only with selenium.
 
-CLASS:projects.zcs.tests.preferences.composing.ComposePreferencesTestsUI;METHOD:zComposingSaveToSent;LOCALE:ru;BROWSERS:na;BUGS:na;REMARK:Selenium failure
+#CLASS:projects.zcs.tests.preferences.composing.ComposePreferencesTestsUI;METHOD:zComposingSaveToSent;LOCALE:ru;BROWSERS:na;BUGS:na;REMARK:Selenium failure
 CLASS:projects.zcs.tests.features.ClientURLTests;METHOD:composeURL;LOCALE:hi;BROWSERS:SF;BUGS:na;REMARK:compose related fields replaced by ???? in the URL (selenium bug)
 CLASS:projects.zcs.tests.features.ClientURLTests;METHOD:calendarViewURL;LOCALE:ko;BROWSERS:na;BUGS:na;REMARK:start/end date contains UTF8 char in new appt page so not able to compare with expected value (selenium bug)
 CLASS:projects.zcs.tests.mail.folders.RssFeedFolderTests;METHOD:verifyRssFeedUI;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:zExistsDontWait method directly throws exception for zDialog (expected - should return string value if dialog not present)
@@ -191,7 +191,7 @@ CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:addPOP3Externa
 CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:addBasicPersonaWithEditTextSignature;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
 
 #not able to identify checkbox
-CLASS:projects.zcs.tests.preferences.composing.ComposePreferencesTestsUI;METHOD:zComposingSaveToSent;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Not able to identify checkbox
+#CLASS:projects.zcs.tests.preferences.composing.ComposePreferencesTestsUI;METHOD:zComposingSaveToSent;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Not able to identify checkbox
 
 #SpellCheck test cases are skipped to avoid false alarms. Skipped for all locales except english
 CLASS:projects.zcs.tests.mail.spellcheck.SpellCheckTests;METHOD:illegalCharacters_and_replyAfterSpellCheck_Bug29432_and_Bug41760;LOCALE:ar,da,de,el,es,fr,he,hi,it,id,ja,ko,nl,pl,pt_BR,ru,sv,tr,zh_CN,zh_HK;BROWSERS:na;BUGS:na;REMARK:Skipped for all charset other than english"
