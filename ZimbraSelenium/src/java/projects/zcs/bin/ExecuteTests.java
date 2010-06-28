@@ -254,7 +254,7 @@ public class ExecuteTests {
 		// ---------------------------------------------------
 		testName = "New Appointment";
 		cls = new ArrayList<String>();
-		cls.add("projects.zcs.tests.calendar.newappt.CreateApptTests");
+		cls.add("projects.zcs.tests.calendar.newappt.BasicApptTests");
 		cls.add("projects.zcs.tests.calendar.newappt.ApptInviteTests");
 		cls
 				.add("projects.zcs.tests.calendar.newappt.ApptRSRPAndNotificationTests");
