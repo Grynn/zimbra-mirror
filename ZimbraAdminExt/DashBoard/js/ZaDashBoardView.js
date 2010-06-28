@@ -131,6 +131,22 @@ ZaDashBoardView.processSearchResult = function(respBody, list,params) {
 	}
 }
 
+ZaDashBoardView.ascNameComparator = function(a,b) {
+	return a[ZaAccount.A_name] < b[ZaAccount.A_name] ? -1 : (a[ZaAccount.A_name] > b[ZaAccount.A_name] ? 1 : 0);
+}
+
+ZaDashBoardView.ascTypeComparator = function(a,b) {
+	return a.type < b.type ? -1 : (a.type > b.type ? 1 : 0);
+}
+
+ZaDashBoardView.descNameComparator = function(a,b) {
+	return b[ZaAccount.A_name] < a[ZaAccount.A_name] ? -1 : (b[ZaAccount.A_name] > a[ZaAccount.A_name] ? 1 : 0);
+}
+
+ZaDashBoardView.descTypeComparator = function(a,b) {
+	return b.type < a.type ? -1 : (b.type > a.type ? 1 : 0);
+}
+
 ZaDashBoardView.onSearchResult = function(params,resp) {
 	try {
 		if(params.busyId)
@@ -182,6 +198,18 @@ ZaDashBoardView.onSearchResult = function(params,resp) {
 				if(listItems && listItems[0]) {
 					var listWidget = listItems[0].getWidget();
 					listWidget.setHeaderList(listWidget.getHeaderList(showStatus,showDisplayName,typeField,displayNameSortable));
+				}
+			}
+			if(params.types && params.types.length > 1) {
+				//if we have a mixed view, resort the results as they come grouped by type from server
+				if(this.bSortAsc && this.sortBy==ZaAccount.A_name) {
+					list.getVector().sort(ZaDashBoardView.ascNameComparator);
+				} else if(!this.bSortAsc && this.sortBy==ZaAccount.A_name) {
+					list.getVector().sort(ZaDashBoardView.descNameComparator);
+				}  else if(this.bSortAsc && this.sortBy=="type") {
+					list.getVector().sort(ZaDashBoardView.ascTypeComparator);
+				} else if(!this.bSortAsc && this.sortBy=="type") {
+					list.getVector().sort(ZaDashBoardView.descTypeComparator);
 				}
 			}
 			this._localXForm.setInstanceValue(list.getArray(),ZaDashBoard.searchResults);
