@@ -532,8 +532,9 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		String accountName = selfAccountName;
 
 		page.zMailApp.zNavigateToComposingPreferences();
-
-		obj.zRadioBtn.zClick(localize(locator.saveToSentNOT));
+		selenium.uncheck("//input[contains(@id,'_SAVE_TO_SENT')]");
+		
+		//obj.zRadioBtn.zClick(localize(locator.saveToSentNOT));
 
 		waitForIE();
 
@@ -550,11 +551,13 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
-		if (config.getString("locale").equals("de")) {
+		selenium.check("//input[contains(@id,'_SAVE_TO_SENT')]");
+	/*	if (config.getString("locale").equals("de")) {
 			obj.zRadioBtn.zClick("Kopie im Ordner");
 		} else {
-			obj.zRadioBtn.zClick(localize(locator.saveToSent));
-		}
+			//obj.zRadioBtn.zClick(localize(locator.saveToSent));
+			selenium.check("//input[contains(@id,'_SAVE_TO_SENT')]");
+		}*/
 
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
