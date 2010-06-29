@@ -14,7 +14,8 @@
     <include>ZaApplianceSettingsView.js</include>
     <include>ZaApplianceSettingsController.js</include>
     <include>ZaApplianceAdvancedToolsView.js</include>
-    <include>ZaApplianceAdvancedToolsController.js</include>    
+    <include>ZaApplianceAdvancedToolsController.js</include> 
+    <include>ZaApplianceGALConfigXWizard.js</include>   
     <include>ZaApplianceDomainXWizard.js</include>
     <disableUIUndeploy>FALSE</disableUIUndeploy>
 </zimlet>
