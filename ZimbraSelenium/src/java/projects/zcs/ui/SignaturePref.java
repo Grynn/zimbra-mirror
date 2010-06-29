@@ -82,8 +82,10 @@ public class SignaturePref extends CommonTest {
 			String signatureName, String signatureBody) throws Exception {
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zFeatureMenu.zClick(localize(locator.fromLabel));
-		selenium.windowFocus();
-		Robot zRobot = new Robot();
+		//selenium.windowFocus();
+		selenium.mouseOver("xpath=//td[contains(@id,'_title') and contains(text(),'"+personaName+"')]");
+		selenium.clickAt("xpath=//td[contains(@id,'_title') and contains(text(),'"+personaName+"')]", "");
+		/*Robot zRobot = new Robot();
 		zRobot.keyPress(KeyEvent.VK_DOWN);
 		zRobot.keyRelease(KeyEvent.VK_DOWN);
 		Thread.sleep(1000);
@@ -91,8 +93,8 @@ public class SignaturePref extends CommonTest {
 		zRobot.keyRelease(KeyEvent.VK_DOWN);
 		Thread.sleep(1000);
 		zRobot.keyPress(KeyEvent.VK_ENTER);
-		zRobot.keyRelease(KeyEvent.VK_ENTER);
-		Thread.sleep(1000);
+		zRobot.keyRelease(KeyEvent.VK_ENTER);*/
+		Thread.sleep(2000);
 		String actualSignature = obj.zEditor.zGetInnerText("");
 		Assert.assertTrue(actualSignature.contains(signatureBody),
 				"Signature not included in mail body");
