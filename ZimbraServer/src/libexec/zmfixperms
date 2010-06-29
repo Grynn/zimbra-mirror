@@ -368,7 +368,11 @@ if [ -L ${zimbra_home}/amavisd ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/data/amavisd"
   if [ ! -d "${zimbra_home}/data/amavisd" ]; then
     mkdir -p ${zimbra_home}/data/amavisd/.spamassassin
-  fi  
+  fi
+  if [ ! -d "/var/spamassassin" ]; then
+    mkdir -p /var/spamassassin
+    chown -R ${zimbra_user}:${zimbra_group} /var/spamassassin
+  fi
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/amavisd
   if [ -d ${zimbra_home}/amavisd/.spamassassin ]; then
     chown -R ${root_user}:${root_group} ${zimbra_home}/amavisd/.spamassassin
