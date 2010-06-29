@@ -148,12 +148,12 @@ CLASS:projects.zcs.tests.preferences.SharingPreferencesTests;METHOD:editABShareA
 #CLASS:projects.zcs.tests.calendar.sharing.CalendarSharingTests;METHOD:allowToSeePrivateApptWithManagerRights;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
 
 # zVerifyHasAttachment method not working in IE
-CLASS:projects.zcs.tests.mail.MiscMailTests;METHOD:attachBriefcaseFileInMail;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
-CLASS:projects.zcs.tests.mail.MiscMailTests;METHOD:attachBriefcaseFileInMail_NewWindow;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
-CLASS:projects.zcs.tests.mail.MiscMailTests;METHOD:addingAttachFromMsgToBriefcaseFolder;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
-CLASS:projects.zcs.tests.mail.MiscMailTests;METHOD:removingAttachmentFromMessage;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
-CLASS:projects.zcs.tests.mail.MiscMailTests;METHOD:removingAllAttachmentFromMessage;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
-CLASS:projects.zcs.tests.mail.MiscMailTests;METHOD:attachingFilesFromBothWayAndVerifyAllLinks;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
+#CLASS:projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests;METHOD:attachBriefcaseFileInMail;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
+#CLASS:projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests;METHOD:attachBriefcaseFileInMail_NewWindow;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
+#CLASS:projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests;METHOD:addingAttachFromMsgToBriefcaseFolder;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
+#CLASS:projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests;METHOD:removingAttachmentFromMessage;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
+#CLASS:projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests;METHOD:removingAllAttachmentFromMessage;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
+#CLASS:projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests;METHOD:attachingFilesFromBothWayAndVerifyAllLinks;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
 
 # Need to convert date
 CLASS:projects.zcs.tests.features.ClientURLTests;METHOD:calendarViewURL;LOCALE:zh_CN,zh_HK,ko;BROWSERS:na;BUGS:na;REMARK:Need to convert date
