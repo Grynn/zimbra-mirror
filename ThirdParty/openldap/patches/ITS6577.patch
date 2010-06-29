@@ -1,81 +1,5 @@
---- openldap-2.4.22.3z/servers/slapd/back-bdb/dn2entry.c.orig	2010-06-20 22:27:12.658195104 -0700
-+++ openldap-2.4.22.3z/servers/slapd/back-bdb/dn2entry.c	2010-06-20 22:29:44.217532584 -0700
-@@ -50,6 +50,8 @@
- 			/* Set the return value, whether we have its entry
- 			 * or not.
- 			 */
-+			Debug( LDAP_DEBUG_TRACE, "====> bdb_dn2entry matched: id %ld rdn %s being deleted, state %#x\n",
-+				ei->bei_id, ei->bei_nrdn.bv_val, ei->bei_state );
- 			*e = ei;
- 			if ( ei && ei->bei_id ) {
- 				rc2 = bdb_cache_find_id( op, tid, ei->bei_id,
-@@ -70,6 +72,8 @@
- 			*e = ei;
- 		} else if ( matched && rc == DB_NOTFOUND ) {
- 			/* always return EntryInfo */
-+			Debug( LDAP_DEBUG_TRACE, "====> bdb_dn2entry parent return: id %ld rdn %s being deleted, state %#x\n",
-+				ei->bei_id, ei->bei_nrdn.bv_val, ei->bei_state );
- 			if ( ei->bei_parent ) {
- 				ei = ei->bei_parent;
- 				rc2 = bdb_cache_find_id( op, tid, ei->bei_id, &ei, 0,
 --- openldap-2.4.22.3z/servers/slapd/back-bdb/cache.c.orig	2010-04-15 13:06:59.000000000 -0700
 +++ openldap-2.4.22.3z/servers/slapd/back-bdb/cache.c	2010-06-20 23:07:36.583439246 -0700
-@@ -372,25 +372,44 @@
- 	} else {
- 		int rc;
- 
--		bdb->bi_cache.c_eiused++;
- 		ber_dupbv( &ei2->bei_nrdn, &ei->bei_nrdn );
- 
--		/* This is a new leaf node. But if parent had no kids, then it was
--		 * a leaf and we would be decrementing that. So, only increment if
--		 * the parent already has kids.
--		 */
--		if ( ei->bei_parent->bei_kids || !ei->bei_parent->bei_id )
--			bdb->bi_cache.c_leaves++;
- 		rc = avl_insert( &ei->bei_parent->bei_kids, ei2, bdb_rdn_cmp,
--			avl_dup_error );
-+			bdb_id_dup_err );
-+		if ( rc ) {
-+			EntryInfo *eix = ei2->bei_lrunext;
-+#ifdef BDB_HIER
-+			/* it's possible for hdb_cache_find_parent to beat us to it */
-+			if ( eix == ei2 ) {
-+				ei2->bei_lrunext = NULL;
-+				goto ok;
-+			} else
-+#endif
-+			if ( eix->bei_id < ei->bei_id ) {
-+				avl_delete( &bdb->bi_cache.c_idtree, ei2, bdb_id_cmp );
-+				bdb_cache_entryinfo_free( &bdb->bi_cache, ei2 );
-+				ei2 = eix;
-+#ifdef BDB_HIER
-+				ei->bei_rdn.bv_val = NULL;
-+#endif
-+			} else {
-+				avl_delete( &bdb->bi_cache.c_idtree, eix, bdb_id_cmp );
-+			}
-+		} else {
-+			bdb->bi_cache.c_eiused++;
-+			/* This is a new leaf node. But if parent had no kids, then it was
-+			 * a leaf and we would be decrementing that. So, only increment if
-+			 * the parent already has kids.
-+			 */
-+			if ( ei->bei_parent->bei_kids || !ei->bei_parent->bei_id )
-+				bdb->bi_cache.c_leaves++;
- #ifdef BDB_HIER
--		/* it's possible for hdb_cache_find_parent to beat us to it */
--		if ( !rc ) {
- 			ei->bei_parent->bei_ckids++;
--		}
- #endif
-+		}
- 	}
- 
-+ok:
- 	*res = ei2;
- 	return 0;
- }
 @@ -482,17 +482,21 @@
  				*res = eip;
  				return rc;
@@ -138,24 +62,49 @@
  					}
  					if ( rc == 0 ) {
  						ep->e_private = *eip;
-@@ -1113,11 +1127,16 @@
- 		return 0;
+--- openldap-2.4.22.3z/servers/slapd/back-bdb/add.c	13 Apr 2010 20:18:11 -0000	1.184
++++ openldap-2.4.22.3z/servers/slapd/back-bdb/add.c	29 Jun 2010 22:00:59 -0000	1.185
+@@ -513,7 +513,6 @@ retry:	/* transaction retry */
+ return_results:
+ 	success = rs->sr_err;
+ 	send_ldap_result( op, rs );
+-	slap_graduate_commit_csn( op );
+ 
+ 	if( ltid != NULL ) {
+ 		TXN_ABORT( ltid );
+@@ -538,10 +537,11 @@ return_results:
+ 		}
  	}
- 	if ( BEI(e)->bei_state & CACHE_ENTRY_NO_KIDS ) {
-+		Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_children: returning DB_NOTFOUND\n",0,0,0);
- 		return DB_NOTFOUND;
+ 
++	slap_graduate_commit_csn( op );
++
+ 	if( postread_ctrl != NULL && (*postread_ctrl) != NULL ) {
+ 		slap_sl_free( (*postread_ctrl)->ldctl_value.bv_val, op->o_tmpmemctx );
+ 		slap_sl_free( *postread_ctrl, op->o_tmpmemctx );
  	}
- 	rc = bdb_dn2id_children( op, txn, e );
--	if ( rc == DB_NOTFOUND ) {
-+	if ( rc == DB_NOTFOUND && (BEI(e)->bei_state & 
-+		( CACHE_ENTRY_NO_KIDS | CACHE_ENTRY_NO_GRANDKIDS )) !=
-+		( CACHE_ENTRY_NO_KIDS | CACHE_ENTRY_NO_GRANDKIDS )) {
-+		bdb_cache_entryinfo_lock( BEI(e) );
- 		BEI(e)->bei_state |= CACHE_ENTRY_NO_KIDS | CACHE_ENTRY_NO_GRANDKIDS;
-+		bdb_cache_entryinfo_unlock( BEI(e) );
- 	}
- 	return rc;
+-
+ 	return rs->sr_err;
  }
+--- openldap-2.4.22.3z/servers/slapd/back-bdb/dn2entry.c.orig	2010-06-20 22:27:12.658195104 -0700
++++ openldap-2.4.22.3z/servers/slapd/back-bdb/dn2entry.c	2010-06-20 22:29:44.217532584 -0700
+@@ -50,6 +50,8 @@
+ 			/* Set the return value, whether we have its entry
+ 			 * or not.
+ 			 */
++			Debug( LDAP_DEBUG_TRACE, "====> bdb_dn2entry matched: id %ld rdn %s being deleted, state %#x\n",
++				ei->bei_id, ei->bei_nrdn.bv_val, ei->bei_state );
+ 			*e = ei;
+ 			if ( ei && ei->bei_id ) {
+ 				rc2 = bdb_cache_find_id( op, tid, ei->bei_id,
+@@ -70,6 +72,8 @@
+ 			*e = ei;
+ 		} else if ( matched && rc == DB_NOTFOUND ) {
+ 			/* always return EntryInfo */
++			Debug( LDAP_DEBUG_TRACE, "====> bdb_dn2entry parent return: id %ld rdn %s being deleted, state %#x\n",
++				ei->bei_id, ei->bei_nrdn.bv_val, ei->bei_state );
+ 			if ( ei->bei_parent ) {
+ 				ei = ei->bei_parent;
+ 				rc2 = bdb_cache_find_id( op, tid, ei->bei_id, &ei, 0,
 --- openldap-2.4.22.3z/servers/slapd/back-bdb/id2entry.c.orig	2010-06-21 10:49:38.095094622 -0700
 +++ openldap-2.4.22.3z/servers/slapd/back-bdb/id2entry.c	2010-06-21 11:00:24.195883209 -0700
 @@ -117,25 +117,38 @@
@@ -217,26 +166,3 @@
  	return rc;
  }
  
---- openldap-2.4.22/servers/slapd/back-bdb/add.c	13 Apr 2010 20:18:11 -0000	1.184
-+++ openldap-2.4.22/servers/slapd/back-bdb/add.c	22 Jun 2010 05:28:12 -0000
-@@ -513,7 +513,6 @@
- return_results:
- 	success = rs->sr_err;
- 	send_ldap_result( op, rs );
--	slap_graduate_commit_csn( op );
- 
- 	if( ltid != NULL ) {
- 		TXN_ABORT( ltid );
-@@ -538,10 +537,11 @@
- 		}
- 	}
- 
-+	slap_graduate_commit_csn( op );
-+
- 	if( postread_ctrl != NULL && (*postread_ctrl) != NULL ) {
- 		slap_sl_free( (*postread_ctrl)->ldctl_value.bv_val, op->o_tmpmemctx );
- 		slap_sl_free( *postread_ctrl, op->o_tmpmemctx );
- 	}
--
- 	return rs->sr_err;
- }
