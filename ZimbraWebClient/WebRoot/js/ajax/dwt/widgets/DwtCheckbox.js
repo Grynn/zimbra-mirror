@@ -229,7 +229,7 @@ function() {
 DwtCheckbox.prototype.setValue =
 function(value) {
     var object = this._inputEl || this;
-	if (object.value != value) {
+	if (object.value !== value) {
         object.value = value;
     }
 };
