@@ -1016,7 +1016,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
         var case7 = {type:_ZATABCASE_, numCols:1, colSizes:["auto"], caseKey:_tab7, id:"cos_form_advanced_tab"};
         var case7Items = [
             {type:_ZA_TOP_GROUPER_, id:"cos_attachment_settings",
-                label:ZaMsg.NAD_AttachmentsGrouper,
+                label:ZaMsg.NAD_AttachmentsGrouper,visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                                                          			[ZaCos.A_zimbraAttachmentsBlocked]]],
                 items :[
                     {ref:ZaCos.A_zimbraAttachmentsBlocked, type:_CHECKBOX_,  msgName:ZaMsg.NAD_RemoveAllAttachments,label:ZaMsg.NAD_RemoveAllAttachments, labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label",  align:_LEFT_}
                 ]
@@ -1147,7 +1148,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 ]
             },
             {type:_ZA_TOP_GROUPER_,
-                label:ZaMsg.NAD_InteropGrouper,
+                label:ZaMsg.NAD_InteropGrouper,visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                                                      			[ZaCos.A_zimbraFreebusyExchangeUserOrg]]],
                 items: [
                     {ref:ZaCos.A_zimbraFreebusyExchangeUserOrg, type:_TEXTFIELD_,
                         msgName:ZaMsg.LBL_zimbraFreebusyExchangeUserOrg, width: "250px",
