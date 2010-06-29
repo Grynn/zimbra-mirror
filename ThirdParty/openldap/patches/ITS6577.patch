@@ -166,3 +166,44 @@
  	return rc;
  }
  
+--- openldap-2.4.22.3z/servers/slapd/back-bdb/dn2id.c	13 Apr 2010 20:18:12 -0000	1.171
++++ openldap-2.4.22.3z/servers/slapd/back-bdb/dn2id.c	29 Jun 2010 23:04:16 -0000
+@@ -755,7 +755,7 @@
+ 	DB *db = bdb->bi_dn2id->bdi_db;
+ 	DBT		key, data;
+ 	DBC	*cursor;
+-	int		rc = 0, nrlen;
++	int		rc = 0, nrlen, reader = 0;
+ 	diskNode *d;
+ 	char	*ptr;
+ 	unsigned char dlen[2];
+@@ -783,6 +783,12 @@
+ 	rc = db->cursor( db, txn, &cursor, bdb->bi_db_opflags );
+ 	if ( rc ) return rc;
+ 
++	/* We need regular locking on this cursor */
++	if ( cursor->flags & DBC_READ_COMMITTED ) {
++		cursor->flags ^= DBC_READ_COMMITTED;
++		reader = 1;
++	}
++
+ 	d = op->o_tmpalloc( data.size * 3, op->o_tmpmemctx );
+ 	d->nrdnlen[1] = nrlen & 0xff;
+ 	d->nrdnlen[0] = (nrlen >> 8) | 0x80;
+@@ -818,7 +824,16 @@
+ 	}
+ 
+ func_leave:
++	/* If using the reader txn, restore flags then release all locks */
++	if ( reader )
++		cursor->flags |= DBC_READ_COMMITTED;
+ 	cursor->c_close( cursor );
++	if ( reader ) {
++		DB_LOCKREQ list;
++		list.op = DB_LOCK_PUT_ALL;
++		list.obj = NULL;
++		bdb->bi_dbenv->lock_vec( bdb->bi_dbenv, txn->id( txn ), 0, &list, 1, NULL );
++	}
+ 	op->o_tmpfree( d, op->o_tmpmemctx );
+ 	if( rc != 0 ) {
+ 		Debug( LDAP_DEBUG_TRACE, "<= hdb_dn2id: get failed: %s (%d)\n",
