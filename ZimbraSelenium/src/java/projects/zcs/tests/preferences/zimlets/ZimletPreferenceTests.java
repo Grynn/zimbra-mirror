@@ -52,12 +52,19 @@ public class ZimletPreferenceTests extends CommonTest {
 
 		zWaitTillObjectExist("checkbox", zZimletDateChkBox);
 		Thread.sleep(3000);
-		obj.zCheckbox.zActivate(zZimletEmailChkBox);
+		selenium.clickAt(zZimletEmailChkBox,"");
+		selenium.clickAt(zZimletURLChkBox,"");
+		selenium.clickAt(zZimletEmoticonsChkBox,"");
+		selenium.clickAt(zZimletDateChkBox,"");
+		selenium.clickAt(zZimletHighlightPhoneChkBox,"");
+		
+		//Some times zActivate  and selenium.uncheck method is not working for IE so added above code
+		/*obj.zCheckbox.zActivate(zZimletEmailChkBox);
 		obj.zCheckbox.zActivate(zZimletURLChkBox);
 		obj.zCheckbox.zActivate(zZimletEmoticonsChkBox);
 		obj.zCheckbox.zActivate(zZimletDateChkBox);
 		obj.zCheckbox.zActivate(zZimletLocalChkBox);
-		obj.zCheckbox.zActivate(zZimletHighlightPhoneChkBox);
+		obj.zCheckbox.zActivate(zZimletHighlightPhoneChkBox);*/
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
 		Thread.sleep(3000);
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
@@ -72,7 +79,7 @@ public class ZimletPreferenceTests extends CommonTest {
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletURLChkBox);
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletEmoticonsChkBox);
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletDateChkBox);
-		obj.zCheckbox.zVerifyIsNotChecked(zZimletLocalChkBox);
+	//	obj.zCheckbox.zVerifyIsNotChecked(zZimletLocalChkBox);
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletHighlightPhoneChkBox);
 		
 		// verify zimlets stuff if possible
