@@ -124,6 +124,7 @@ public class AddRemoveAttachmentAndAddToBriefcaseTests extends CommonTest {
 		uploadFile(attachments);
 
 		zGoToApplication("Mail");
+		
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zTextAreaField.zType(page.zComposeView.zToField,
 				SelNGBase.selfAccountName);
@@ -159,7 +160,16 @@ public class AddRemoveAttachmentAndAddToBriefcaseTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		obj.zMessageItem.zVerifyHasAttachment(subject);
+		if (config.getString("browser").equals("IE")) {
+			Assert
+					.assertTrue(
+							selenium
+									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
+							"Attachment symbol does not found");
+		} else {
+			obj.zMessageItem.zVerifyHasAttachment(subject);
+		}
+		//obj.zMessageItem.zVerifyHasAttachment(subject);
 		obj.zButton.zClick(page.zMailApp.zForwardBtn);
 		zWaitTillObjectExist("button", page.zComposeView.zSendIconBtn);
 		for (int i = 0; i < attachment.length; i++) {
@@ -218,7 +228,16 @@ public class AddRemoveAttachmentAndAddToBriefcaseTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		obj.zMessageItem.zVerifyHasAttachment(subject);
+		if (config.getString("browser").equals("IE")) {
+			Assert
+					.assertTrue(
+							selenium
+									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
+							"Attachment symbol does not found");
+		} else {
+			obj.zMessageItem.zVerifyHasAttachment(subject);
+		}
+		//obj.zMessageItem.zVerifyHasAttachment(subject);
 		obj.zButton.zClick(page.zMailApp.zForwardBtn);
 		zWaitTillObjectExist("button", page.zComposeView.zSendIconBtn);
 		for (int i = 0; i < attachment.length; i++) {
@@ -243,7 +262,16 @@ public class AddRemoveAttachmentAndAddToBriefcaseTests extends CommonTest {
 				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		obj.zMessageItem.zVerifyHasAttachment(subject);
+		if (config.getString("browser").equals("IE")) {
+			Assert
+					.assertTrue(
+							selenium
+									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
+							"Attachment symbol does not found");
+		} else {
+			obj.zMessageItem.zVerifyHasAttachment(subject);
+		}
+	//	obj.zMessageItem.zVerifyHasAttachment(subject);
 		if (config.getString("locale").equals("nl")) {
 			selenium.click("link=Aktetas");
 		} else {
@@ -273,7 +301,16 @@ public class AddRemoveAttachmentAndAddToBriefcaseTests extends CommonTest {
 				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		obj.zMessageItem.zVerifyHasAttachment(subject);
+		if (config.getString("browser").equals("IE")) {
+			Assert
+					.assertTrue(
+							selenium
+									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
+							"Attachment symbol does not found");
+		} else {
+			obj.zMessageItem.zVerifyHasAttachment(subject);
+		}
+		//obj.zMessageItem.zVerifyHasAttachment(subject);
 		selenium.click("link=" + localize(locator.remove));
 		assertReport(localize(locator.attachmentConfirmRemove), obj.zDialog
 				.zGetMessage(localize(locator.warningMsg)),
@@ -416,7 +453,16 @@ public class AddRemoveAttachmentAndAddToBriefcaseTests extends CommonTest {
 				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		obj.zMessageItem.zVerifyHasAttachment(subject);
+		if (config.getString("browser").equals("IE")) {
+			Assert
+					.assertTrue(
+							selenium
+									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
+							"Attachment symbol does not found");
+		} else {
+			obj.zMessageItem.zVerifyHasAttachment(subject);
+		}
+		//obj.zMessageItem.zVerifyHasAttachment(subject);
 		selenium.click("link=" + localize(locator.removeAllAttachments));
 		assertReport(localize(locator.attachmentConfirmRemoveAll), obj.zDialog
 				.zGetMessage(localize(locator.warningMsg)),
@@ -488,7 +534,16 @@ public class AddRemoveAttachmentAndAddToBriefcaseTests extends CommonTest {
 				cc, bcc, subject, body, "putty.log");
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		obj.zMessageItem.zVerifyHasAttachment(subject);
+		if (config.getString("browser").equals("IE")) {
+			Assert
+					.assertTrue(
+							selenium
+									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
+							"Attachment symbol does not found");
+		} else {
+			obj.zMessageItem.zVerifyHasAttachment(subject);
+		}
+		//obj.zMessageItem.zVerifyHasAttachment(subject);
 		Boolean downloadLink = selenium.isElementPresent("Link="
 				+ localize(locator.download));
 		Boolean briefcaseLink;
@@ -545,7 +600,16 @@ public class AddRemoveAttachmentAndAddToBriefcaseTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Re: " + subject);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		obj.zMessageItem.zVerifyHasAttachment(subject);
+		if (config.getString("browser").equals("IE")) {
+			Assert
+					.assertTrue(
+							selenium
+									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
+							"Attachment symbol does not found");
+		} else {
+			obj.zMessageItem.zVerifyHasAttachment(subject);
+		}
+		//obj.zMessageItem.zVerifyHasAttachment(subject);
 		Boolean downloadAllAttachmentsLink = selenium.isElementPresent("Link="
 				+ localize(locator.downloadAll));
 		Boolean removeAllAttachmentsLink = selenium.isElementPresent("Link="
