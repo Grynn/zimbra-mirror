@@ -22,16 +22,7 @@
 **/
 ZaAuthConfigXWizard = function(parent) {
 
-	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_AuthConfigTitle, "550px", "300px","ZaAuthConfigXWizard");
-
-	this.stepChoices = [
-		{label:ZaMsg.AuthMode, value:1},				
-		{label:ZaMsg.AuthSettings, value:2},						
-		{label:ZaMsg.AuthSettings, value:3},								
-		{label:ZaMsg.AuthSettings, value:4},										
-		{label:ZaMsg.TestAuthSettings, value:5},				
-		{label:ZaMsg.AuthTestResult, value:6}
-	];
+	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_AuthConfigTitle,"700px", "350px","ZaAuthConfigXWizard");
 	
 	this.AuthMechs = [
 		{label:ZaMsg.AuthMech_zimbra, value:ZaDomain.AuthMech_zimbra},
@@ -53,13 +44,22 @@ ZaAuthConfigXWizard = function(parent) {
 	];
 	this.TAB_INDEX = 0;	
 
-	ZaAuthConfigXWizard.AUTH_MODE_STEP = ++this.TAB_INDEX;
 	ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1 = ++this.TAB_INDEX;
-	ZaAuthConfigXWizard.AUTH_CONFIG_STEP_2 = ++this.TAB_INDEX;
-	ZaAuthConfigXWizard.AUTH_CONFIG_STEP_3 = ++this.TAB_INDEX;
+	ZaAuthConfigXWizard.AUTH_CONFIG_BIND_PWD_STEP = ++this.TAB_INDEX;
+	ZaAuthConfigXWizard.AUTH_CONFIG_SUMMARY_STEP = ++this.TAB_INDEX;
 	ZaAuthConfigXWizard.AUTH_TEST_STEP = ++this.TAB_INDEX;
 	ZaAuthConfigXWizard.AUTH_TEST_RESULT_STEP = ++this.TAB_INDEX;
-		
+	ZaAuthConfigXWizard.CONFIG_COMPLETE_STEP = ++this.TAB_INDEX;
+	
+	this.stepChoices = [
+		{label:ZaMsg.AuthSettings, value:ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1},						
+		{label:ZaMsg.AuthSettings, value:ZaAuthConfigXWizard.AUTH_CONFIG_BIND_PWD_STEP},								
+		{label:ZaMsg.AuthSettings, value:ZaAuthConfigXWizard.AUTH_CONFIG_SUMMARY_STEP},										
+		{label:ZaMsg.TestAuthSettings, value:ZaAuthConfigXWizard.AUTH_TEST_STEP},				
+		{label:ZaMsg.AuthTestResult, value:ZaAuthConfigXWizard.AUTH_TEST_RESULT_STEP},
+		{label:ZaMsg.DomainConfigComplete, value:ZaAuthConfigXWizard.CONFIG_COMPLETE_STEP}
+	];
+	
 	this.initForm(ZaDomain.myXModel,this.getMyXForm());		
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaAuthConfigXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaAuthConfigXWizard.prototype.handleXFormChange));	
@@ -91,27 +91,22 @@ function(stepNum) {
 		if(stepNum>1)
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 	} else {
-		if(stepNum == 1) {
+		if(stepNum == ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
-			if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_zimbra) {
-				this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
-				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-			} else {
-				this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);		
-			}
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);		
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
-		} else if (stepNum == 4) {
+		} else if (stepNum == ZaAuthConfigXWizard.AUTH_CONFIG_SUMMARY_STEP) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_AuthTestSettings);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-		} else if(stepNum == 5) {
+		} else if(stepNum == ZaAuthConfigXWizard.AUTH_TEST_STEP) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		} else if(stepNum == 6) {
+		} else if(stepNum == ZaAuthConfigXWizard.CONFIG_COMPLETE_STEP) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
@@ -119,6 +114,7 @@ function(stepNum) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		}
 	}
 }
@@ -155,22 +151,7 @@ function (arg) {
 			}
 		}
 	}		
-/*	if(arg instanceof AjxException || arg instanceof ZmCsfeException || arg instanceof AjxSoapException) {
-		this._containedObject[ZaDomain.A_AuthTestResultCode] = arg.code;
-		this._containedObject[ZaDomain.A_AuthTestMessage] = arg.detail;
-	} else {
-		this._containedObject[ZaDomain.A_AuthTestResultCode] = arg.getBody().firstChild.firstChild.firstChild.nodeValue;
-		if(this._containedObject[ZaDomain.A_AuthTestResultCode] != ZaDomain.Check_OK) {
-			this._containedObject[ZaDomain.A_AuthTestMessage] = arg.getBody().firstChild.childNodes[1].firstChild.nodeValue;		
-			if(arg.getBody().firstChild.lastChild.firstChild != null) {
-				this._containedObject[ZaDomain.A_AuthComputedBindDn] = arg.getBody().firstChild.lastChild.firstChild.nodeValue;		
-			} else {
-				this._containedObject[ZaDomain.A_AuthComputedBindDn] = "";
-			}
-		}
-	}
-*/
-	this.goPage(6);
+	this.goPage(ZaAuthConfigXWizard.AUTH_TEST_RESULT_STEP);
 }
 
 /**
@@ -182,10 +163,11 @@ function (value, event, form) {
 
 	if(value == ZaDomain.AuthMech_ad) {
 		if(!form.getInstance().attrs[ZaDomain.A_AuthADDomainName]) {
-			form.getInstance().attrs[ZaDomain.A_AuthADDomainName] = form.getInstance().attrs[ZaDomain.A_domainName];
+			this.setInstanceValue(form.getInstance().attrs[ZaDomain.A_domainName], ZaDomain.A_AuthADDomainName);
+			//form.getInstance().attrs[ZaDomain.A_AuthADDomainName] = form.getInstance().attrs[ZaDomain.A_domainName];
 		}
 	}
-	form.parent.changeButtonStateForStep(1);
+	//form.parent.changeButtonStateForStep(1);
 
 }
 
@@ -195,7 +177,7 @@ function (value, event, form) {
 ZaAuthConfigXWizard.prototype.popup = 
 function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
-	this.changeButtonStateForStep(1);
+	this.changeButtonStateForStep(ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1);
 
 }
 
@@ -207,32 +189,30 @@ function(pageNum) {
 
 ZaAuthConfigXWizard.prototype.goPrev =
 function () {
-	if(this._containedObject[ZaModel.currentStep] == 6) {
-		//skip 5rd step
-		this.goPage(4);
-	} else if (this._containedObject[ZaModel.currentStep] == 4 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
-		this.goPage(2);//skip 3rd step for Active Directory
+	if(this._containedObject[ZaModel.currentStep] == ZaAuthConfigXWizard.AUTH_TEST_RESULT_STEP) {
+		//skip ZaAuthConfigXWizard.AUTH_TEST_STEP step
+		this.goPage(ZaAuthConfigXWizard.AUTH_CONFIG_SUMMARY_STEP);
+	} else if (this._containedObject[ZaModel.currentStep] == ZaAuthConfigXWizard.AUTH_CONFIG_SUMMARY_STEP && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
+		this.goPage(ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1);//skip ZaAuthConfigXWizard.AUTH_CONFIG_BIND_PWD_STEP step for Active Directory
+	} else if(this._containedObject[ZaModel.currentStep] == ZaAuthConfigXWizard.CONFIG_COMPLETE_STEP && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_zimbra) {
+		this.goPage(ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1);
 	} else {
-		/*this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
-		if(this._containedObject[ZaModel.currentStep] == 2) {
-			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
-		}*/
 		this.goPage(this._containedObject[ZaModel.currentStep]-1);
 	}
 }
 
 ZaAuthConfigXWizard.prototype.goNext = 
 function() {
-	if(this._containedObject[ZaModel.currentStep] == 4) {
+	if(this._containedObject[ZaModel.currentStep] == ZaAuthConfigXWizard.AUTH_CONFIG_SUMMARY_STEP) {
  		this.testSetings();
-		this.goPage(5);
-	} else if (this._containedObject[ZaModel.currentStep]==2 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
+		this.goPage(ZaAuthConfigXWizard.AUTH_TEST_STEP);
+	} else if (this._containedObject[ZaModel.currentStep]==ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
 		if(!this._containedObject.attrs[ZaDomain.A_AuthLdapURL]) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);
 			return false;
 		}	
-		this.goPage(4);//skip 3rd step for Active Directory
-	} else if(this._containedObject[ZaModel.currentStep]==2 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap) {
+		this.goPage(ZaAuthConfigXWizard.AUTH_CONFIG_SUMMARY_STEP);//skip ZaAuthConfigXWizard.AUTH_CONFIG_BIND_PWD_STEP step for Active Directory
+	} else if(this._containedObject[ZaModel.currentStep]==ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap) {
 		var temp = this._containedObject.attrs[ZaDomain.A_AuthLdapURL].join(" ");
 		if(this._containedObject.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled] == "TRUE") {
 			//check that we don't have ldaps://
@@ -240,8 +220,8 @@ function() {
 				ZaApp.getInstance().getCurrentController().popupWarningDialog(ZaMsg.Domain_WarningStartTLSIgnored)
 			}		
 		}	
-		this.goPage(this._containedObject[ZaModel.currentStep]+1);	 
-	}  else if (this._containedObject[ZaModel.currentStep] == 3) {
+		this.goPage(ZaAuthConfigXWizard.AUTH_CONFIG_BIND_PWD_STEP);	 
+	}  else if (this._containedObject[ZaModel.currentStep] == ZaAuthConfigXWizard.AUTH_CONFIG_BIND_PWD_STEP) {
 			//clear the password if the checkbox is unchecked
 		if(this._containedObject[ZaDomain.A_AuthUseBindPassword]=="FALSE") {
 			this._containedObject.attrs[ZaDomain.A_AuthLdapSearchBindDn] = null;
@@ -253,8 +233,10 @@ function() {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 			return false;
 		}
-		this.goPage(4);
-	}else {
+		this.goPage(ZaAuthConfigXWizard.AUTH_CONFIG_SUMMARY_STEP);
+	} else if(this._containedObject[ZaModel.currentStep]==ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_zimbra) {
+		this.goPage(ZaAuthConfigXWizard.CONFIG_COMPLETE_STEP);
+	} else {
 		this.goPage(this._containedObject[ZaModel.currentStep]+1);
 	}
 }
@@ -297,7 +279,7 @@ function(entry) {
         this._containedObject [ZaDomain.A2_allowClearTextLDAPAuth] = "FALSE" ;
     }
 
-    this._containedObject[ZaModel.currentStep] = 1;
+    this._containedObject[ZaModel.currentStep] = ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1;
 	this._localXForm.setInstance(this._containedObject);	
 }
 
@@ -310,22 +292,22 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep]},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},				
-			{type:_SWITCH_,
+			{type:_SWITCH_,width:650,
 				items:[
-					{type:_CASE_, caseKey:ZaAuthConfigXWizard.AUTH_MODE_STEP, 
+					{type:_CASE_, numCols:2,colSizes:["220px","430px"],	caseKey:ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1,												
 						items:[
-							{type:_OSELECT1_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs, ref:ZaDomain.A_AuthMech, onChange:ZaAuthConfigXWizard.onAuthMechChange}
-						]
-					},
-					{type:_CASE_, 
-						caseKey:ZaAuthConfigXWizard.AUTH_CONFIG_STEP_1,												
-						items:[
-							{type:_GROUP_, isTabGroup:false, deferred:false, 
+						    {type:_OSELECT1_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs, ref:ZaDomain.A_AuthMech, onChange:ZaAuthConfigXWizard.onAuthMechChange,
+						    	enableDisableChecks:[],visibilityChecks:[]
+						    },
+							{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","430px"],
 								visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ad]],
-								visibilityChangeEventSoures:[ZaDomain.A_AuthMech,ZaModel.currentStep],
+								visibilityChangeEventSources:[ZaDomain.A_AuthMech],
 								items:[
-									{ref:ZaDomain.A_AuthADDomainName, type:_INPUT_, width:200,  label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
-									{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
+								    {type:_SPACER_, height:5,colSpan:2},
+									{ref:ZaDomain.A_AuthADDomainName, type:_TEXTFIELD_, label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_,
+										visibilityChecks:[],enableDisableChecks:[],bmolsnr:true
+									},
+									{type:_GROUP_, numCols:6, colSpan:2,label:"   ",labelLocation:_LEFT_,
 										items: [
 											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
 											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthADServerName, width:"200px"},
@@ -346,11 +328,11 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 									}											
 								]
 							},
-							{type:_GROUP_, isTabGroup:false, deferred:false, 
+							{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","430px"],
 								visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ldap]],
-								visibilityChangeEventSoures:[ZaDomain.A_AuthMech,ZaModel.currentStep],										
+								visibilityChangeEventSources:[ZaDomain.A_AuthMech],										
 								items:[
-									{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
+									{type:_GROUP_, numCols:6, colSpan:2,label:"   ",labelLocation:_LEFT_,
 										items: [
 											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
 											{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthLDAPServerName, width:"200px"},
@@ -369,46 +351,44 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 										]
 									},	
 									{ref:ZaDomain.A_zimbraAuthLdapStartTlsEnabled, type:_CHECKBOX_, label:ZaMsg.Domain_AuthLdapStartTlsEnabled, onChange: ZaAuthConfigXWizard.startTlsEnabledChanged,
-										 trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},
-									{ref:ZaDomain.A_AuthLdapSearchFilter, type:_TEXTAREA_, width:380, height:100, label:ZaMsg.Domain_AuthLdapFilter, labelLocation:_LEFT_, textWrapping:"soft"},
-									{ref:ZaDomain.A_AuthLdapSearchBase, type:_TEXTAREA_, width:380, height:50, label:ZaMsg.Domain_AuthLdapSearchBase, labelLocation:_LEFT_, textWrapping:"soft"},
+										 trueValue:"TRUE", falseValue:"FALSE",labelLocation:_RIGHT_
+									},
+									{ref:ZaDomain.A_AuthLdapSearchFilter, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_AuthLdapFilter, labelLocation:_LEFT_, textWrapping:"soft"},
+									{ref:ZaDomain.A_AuthLdapSearchBase, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_AuthLdapSearchBase, labelLocation:_LEFT_, textWrapping:"soft"},
 									{type:_OUTPUT_, value:ZaMsg.NAD_DomainsAuthStr, colSpan:2}
-								]
-							},
-							{type:_GROUP_, isTabGroup:false, deferred:false,
-								visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_zimbra]],
-								visibilityChangeEventSoures:[ZaDomain.A_AuthMech,ZaModel.currentStep],									 
-								items:[
-									{type:_OUTPUT_, value:ZaMsg.Domain_Auth_Config_Complete}
 								]
 							}
 						]
 					},
-					{type:_CASE_, numCols:2, caseKey:ZaAuthConfigXWizard.AUTH_CONFIG_STEP_2,
+					{type:_CASE_, numCols:2, colSizes:["220px","430px"], caseKey:ZaAuthConfigXWizard.AUTH_CONFIG_BIND_PWD_STEP,
 						visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ldap]],
 						items: [
-							{ref:ZaDomain.A_AuthUseBindPassword, type:_CHECKBOX_, label:ZaMsg.Domain_AuthUseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},
+							{ref:ZaDomain.A_AuthUseBindPassword, type:_CHECKBOX_, label:ZaMsg.Domain_AuthUseBindPassword, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,
+							visibilityChecks:[],enableDisableChecks:[]},
 							{ref:ZaDomain.A_AuthLdapSearchBindDn, type:_INPUT_, label:ZaMsg.Domain_AuthLdapBindDn, labelLocation:_LEFT_, 
 								enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthUseBindPassword,"TRUE"]],
-								enableDisableChangeEventSources:[ZaDomain.A_AuthUseBindPassword]								
+								enableDisableChangeEventSources:[ZaDomain.A_AuthUseBindPassword],
+								visibilityChecks:[]
 							},
 							{ref:ZaDomain.A_AuthLdapSearchBindPassword, type:_SECRET_, label:ZaMsg.Domain_AuthLdapBindPassword, labelLocation:_LEFT_, 
 								enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthUseBindPassword,"TRUE"]],
-								enableDisableChangeEventSources:[ZaDomain.A_AuthUseBindPassword]								
+								enableDisableChangeEventSources:[ZaDomain.A_AuthUseBindPassword],
+								visibilityChecks:[]
 							},
 							{ref:ZaDomain.A_AuthLdapSearchBindPasswordConfirm, type:_SECRET_, label:ZaMsg.Domain_AuthLdapBindPasswordConfirm, labelLocation:_LEFT_, 
 								enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthUseBindPassword,"TRUE"]],
-								enableDisableChangeEventSources:[ZaDomain.A_AuthUseBindPassword]								
+								enableDisableChangeEventSources:[ZaDomain.A_AuthUseBindPassword],
+								visibilityChecks:[]
 							}							
 						]						
 					},
-					{type:_CASE_, numCols:2, caseKey:ZaAuthConfigXWizard.AUTH_CONFIG_STEP_3,
+					{type:_CASE_, numCols:2,colSizes:["220px","430px"],	caseKey:ZaAuthConfigXWizard.AUTH_CONFIG_SUMMARY_STEP,
 						visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isAuthMechNotZimbra],					
 						items: [
 							{type:_OUTPUT_, value:ZaMsg.Domain_Auth_ConfigSummary, align:_CENTER_, colSpan:"*"}, 
 							{type:_SPACER_, height:10},
 							{ref:ZaDomain.A_AuthMech, type:_OUTPUT_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs, alignment:_LEFT_},
-							{type:_GROUP_, isTabGroup:false, deferred:false,useParentTable:true, 
+							{type:_GROUP_, useParentTable:true, 
 								visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ad]],
 								visibilityChangeEventSources:[ZaDomain.A_AuthMech],									 
 								items:[
@@ -420,18 +400,19 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 									}											
 								]
 							},
-							{type:_GROUP_, isTabGroup:false, deferred:false, useParentTable:true,
+							{type:_GROUP_, useParentTable:true,
 								visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ldap]],
 								visibilityChangeEventSources:[ZaDomain.A_AuthMech],										 
 								items:[
-									{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false, 
+									{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,visibilityChecks:[], 
 										items:[
-											{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_}
+											{type:_OUTPUT_, ref:".", label:null,labelLocation:_NONE_,visibilityChecks:[]}
 										]
+										
 									},	
-									{ref:ZaDomain.A_zimbraAuthLdapStartTlsEnabled, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapStartTlsEnabled, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES},
-									{ref:ZaDomain.A_AuthLdapSearchFilter, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapFilter, labelLocation:_LEFT_},
-									{ref:ZaDomain.A_AuthLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapSearchBase, labelLocation:_LEFT_},
+									{ref:ZaDomain.A_zimbraAuthLdapStartTlsEnabled, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapStartTlsEnabled, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES,visibilityChecks:[]},
+									{ref:ZaDomain.A_AuthLdapSearchFilter, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapFilter, labelLocation:_LEFT_,visibilityChecks:[]},
+									{ref:ZaDomain.A_AuthLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapSearchBase, labelLocation:_LEFT_,visibilityChecks:[]},
 									{ref:ZaDomain.A_AuthUseBindPassword, type:_OUTPUT_, label:ZaMsg.Domain_AuthUseBindPassword, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES},											
 									{ref:ZaDomain.A_AuthLdapSearchBindDn, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapBindDn, labelLocation:_LEFT_, 
 										visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthUseBindPassword,"TRUE"]],
@@ -440,50 +421,48 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 								]
 							},
 							{type:_SPACER_, height:10},
-							{type:_OUTPUT_,value:ZaMsg.Domain_AuthProvideLoginPwd, align:_CENTER_, colSpan:"*"},
-							{type:_TEXTFIELD_, label:ZaMsg.LBL_Domain_AuthTestUserName, ref:ZaDomain.A_AuthTestUserName, alignment:_LEFT_},
-							{type:_SECRET_, label:ZaMsg.LBL_Domain_AuthTestPassword, ref:ZaDomain.A_AuthTestPassword, alignment:_LEFT_}
+							{type:_OUTPUT_,value:ZaMsg.Domain_AuthProvideLoginPwd, align:_CENTER_, colSpan:"*",visibilityChecks:[]},
+							{type:_TEXTFIELD_, label:ZaMsg.LBL_Domain_AuthTestUserName, ref:ZaDomain.A_AuthTestUserName, alignment:_LEFT_,visibilityChecks:[],enableDisableChecks:[]},
+							{type:_SECRET_, label:ZaMsg.LBL_Domain_AuthTestPassword, ref:ZaDomain.A_AuthTestPassword, alignment:_LEFT_,visibilityChecks:[],enableDisableChecks:[]}
 						]
 					},
-					{type:_CASE_, caseKey:ZaAuthConfigXWizard.AUTH_TEST_STEP, 
+					{type:_CASE_, caseKey:ZaAuthConfigXWizard.AUTH_TEST_STEP,numCols:1,colSizes:["100%"], 
 						visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isAuthMechNotZimbra],
 						visibilityChangeEventSources:[ZaModel.currentStep],					
 						items: [
-							{type:_OUTPUT_,value:ZaMsg.Domain_AuthTestingInProgress}
+							{type:_DWT_ALERT_,content:ZaMsg.Domain_AuthTestingInProgress,style:DwtAlert.WARNING}
 						]
 					},
-					{type:_CASE_,  numCols:1, caseKey:ZaAuthConfigXWizard.AUTH_TEST_RESULT_STEP,
+					{type:_CASE_, numCols:2,colSizes:["220px","430px"], caseKey:ZaAuthConfigXWizard.AUTH_TEST_RESULT_STEP,
 						visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isAuthMechNotZimbra],
 						visibilityChangeEventSources:[ZaModel.currentStep],					
 						items: [
-							{type:_SWITCH_,
-								items: [
-									{type:_CASE_, isTabGroup:false, deferred:false, 
-										visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthTestResultCode,ZaDomain.Check_OK]],
-										visibilityChangeEventSources:[ZaDomain.A_AuthTestResultCode],									
-										items: [
-											{type:_OUTPUT_, value:ZaMsg.Domain_AuthTestSuccessful, alignment:_CENTER_}
-										]
-									},
-									{type:_CASE_, isTabGroup:false, deferred:false, 
-										visibilityChangeEventSources:[ZaDomain.A_AuthTestResultCode],
-										visibilityChecks:[
-											function () {
-												return (this.getInstanceValue(ZaDomain.A_AuthTestResultCode) != ZaDomain.Check_OK);
-											}
-										],										
-										items: [
-											{type:_OUTPUT_, value:ZaMsg.Domain_AuthTestFailed, alignment:_CENTER_, colSpan:2, label:null},
-											{type:_OUTPUT_, ref:ZaDomain.A_AuthTestResultCode, label:ZaMsg.LBL_Domain_AuthTestResultCode, choices:this.TestResultChoices, alignment:_LEFT_},
-											{type:_OUTPUT_, ref:ZaDomain.A_AuthComputedBindDn, label:ZaMsg.LBL_Domain_AuthComputedBindDn, alignment:_LEFT_, 
-												visibilityChangeEventSources:[ZaDomain.A_AuthMech],
-												visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ad]]												
-											},
-											{type:_TEXTAREA_, ref:ZaDomain.A_AuthTestMessage, label:ZaMsg.LBL_Domain_AuthTestMessage, height:150, alignment:_LEFT_, width:"320px"}
-										]
+							{type:_DWT_ALERT_, style:DwtAlert.INFORMATION, content:ZaMsg.Domain_AuthTestSuccessful, alignment:_CENTER_,colSpan:2,
+								visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthTestResultCode,ZaDomain.Check_OK]],
+								visibilityChangeEventSources:[ZaDomain.A_AuthTestResultCode]	
+							},
+							{type:_GROUP_, isTabGroup:false, deferred:false, 
+								visibilityChangeEventSources:[ZaDomain.A_AuthTestResultCode],
+								visibilityChecks:[
+									function () {
+										return (this.getInstanceValue(ZaDomain.A_AuthTestResultCode) != ZaDomain.Check_OK);
 									}
+								],										
+								items: [
+									{type:_DWT_ALERT_, content:ZaMsg.Domain_AuthTestFailed, alignment:_CENTER_, colSpan:2, style:DwtAlert.CRITICAL},
+									{type:_OUTPUT_, ref:ZaDomain.A_AuthTestResultCode, label:ZaMsg.LBL_Domain_AuthTestResultCode, choices:this.TestResultChoices},
+									{type:_OUTPUT_, ref:ZaDomain.A_AuthComputedBindDn, label:ZaMsg.LBL_Domain_AuthComputedBindDn, 
+										visibilityChangeEventSources:[ZaDomain.A_AuthMech],
+										visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ad]]												
+									},
+									{type:_TEXTAREA_, ref:ZaDomain.A_AuthTestMessage, label:ZaMsg.LBL_Domain_AuthTestMessage, height:150, alignment:_LEFT_, width:"320px"}
 								]
 							}
+						]
+					},
+					{type:_CASE_, caseKey:ZaAuthConfigXWizard.CONFIG_COMPLETE_STEP,
+						items: [
+							{type:_OUTPUT_, value:ZaMsg.Domain_Auth_Config_Complete}
 						]
 					}
 				]

@@ -323,7 +323,7 @@ ZaApplianceGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 		{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep]},
 		{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},				
-		{type: _SWITCH_,width:650,
+		{type:_SWITCH_,width:650,
 			items: [
 				{type:_CASE_, caseKey:ZaApplianceGALConfigXWizard.GALMODE_STEP,numCols:2,colSizes:["220px","430px"],
 					items: [
@@ -337,7 +337,7 @@ ZaApplianceGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 									type:_OSELECT1_, label:ZaMsg.Domain_GALServerType, labelLocation:_LEFT_, 
 									choices:this.GALServerTypes, onChange:ZaApplianceGALConfigXWizard.onGALServerTypeChange
 								},
-								{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
+								{type:_GROUP_, numCols:6, colSpan:2,label:"   ",labelLocation:_LEFT_,
 									visibilityChecks:[[ZaItem.hasWritePermission,ZaDomain.A_GalLdapURL]],
 									items: [
 										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
