@@ -782,10 +782,10 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 								},
 								{ref:ZaDomain.A_zimbraGalAutoCompleteLdapFilter, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_zimbraGalAutoCompleteLdapFilter, labelLocation:_LEFT_, 
 									enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
-									enableDisableChangeEventSources:[ZaDomain.A_GALServerType]
+									enableDisableChangeEventSources:[ZaDomain.A_GALServerType],bmolsnr:true
 									
 								},						
-								{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_}
+								{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_,bmolsnr:true}
 							]
 						}
 					]

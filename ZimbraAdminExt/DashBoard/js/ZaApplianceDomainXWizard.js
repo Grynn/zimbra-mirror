@@ -28,38 +28,26 @@ ZaApplianceDomainXWizard = function(parent, entry) {
 	ZaApplianceDomainXWizard.GENERAL_STEP = ++this.TAB_INDEX;
 	ZaApplianceDomainXWizard.GALMODE_STEP = ++this.TAB_INDEX;
 	ZaApplianceDomainXWizard.GAL_CONFIG_STEP_2 = ++this.TAB_INDEX;
-	//ZaApplianceDomainXWizard.GAL_SYNC_CONFIG_STEP_1 = ++this.TAB_INDEX;
-	//ZaApplianceDomainXWizard.GAL_SYNC_CONFIG_STEP_2 = ++this.TAB_INDEX;
 	ZaApplianceDomainXWizard.GAL_CONFIG_SUM_STEP = ++this.TAB_INDEX;
 	ZaApplianceDomainXWizard.GAL_TEST_RESULT_STEP = ++this.TAB_INDEX;
-	//ZaApplianceDomainXWizard.SYNC_CONFIG_SUM_STEP = ++this.TAB_INDEX;
-	//ZaApplianceDomainXWizard.SYNC_TEST_RESULT_STEP = ++this.TAB_INDEX;	
 	ZaApplianceDomainXWizard.AUTH_MODE_STEP = ++this.TAB_INDEX;
 	ZaApplianceDomainXWizard.AUTH_CONFIG_STEP_2 = ++this.TAB_INDEX;
 	ZaApplianceDomainXWizard.AUTH_CONFIG_SUM_STEP = ++this.TAB_INDEX;
 	ZaApplianceDomainXWizard.AUTH_TEST_RESULT_STEP = ++this.TAB_INDEX;
 	ZaApplianceDomainXWizard.VHOST_STEP = ++this.TAB_INDEX;
-	//ZaApplianceDomainXWizard.NOTEBOOK_STEP = ++this.TAB_INDEX;
-	//ZaApplianceDomainXWizard.NOTEBOOK_ACL_STEP = ++this.TAB_INDEX;
 	ZaApplianceDomainXWizard.CONFIG_COMPLETE_STEP = ++this.TAB_INDEX;
 	
 	this.stepChoices = [
 		{label:ZaMsg.TABT_GeneralPage, value:ZaApplianceDomainXWizard.GENERAL_STEP},
 		{label:ZaMsg.GALConfiguration, value:ZaApplianceDomainXWizard.GALMODE_STEP},
 		{label:ZaMsg.GALConfiguration, value:ZaApplianceDomainXWizard.GAL_CONFIG_STEP_2}, 
-		//{label:ZaMsg.GALSyncConfiguration, value:ZaApplianceDomainXWizard.GAL_SYNC_CONFIG_STEP_1},
-		//{label:ZaMsg.GALSyncConfiguration, value:ZaApplianceDomainXWizard.GAL_SYNC_CONFIG_STEP_2},				
 		{label:ZaMsg.GALConfigSummary, value:ZaApplianceDomainXWizard.GAL_CONFIG_SUM_STEP},
 		{label:ZaMsg.GalTestResult, value:ZaApplianceDomainXWizard.GAL_TEST_RESULT_STEP},	
-		//{label:ZaMsg.SyncConfigSummary, value:ZaApplianceDomainXWizard.SYNC_CONFIG_SUM_STEP},
-		//{label:ZaMsg.SyncTestResult, value:ZaApplianceDomainXWizard.SYNC_TEST_RESULT_STEP},		
 		{label:ZaMsg.AuthMode, value:ZaApplianceDomainXWizard.AUTH_MODE_STEP},										
 		{label:ZaMsg.AuthSettings, value:ZaApplianceDomainXWizard.AUTH_CONFIG_STEP_2},								
 		{label:ZaMsg.AuthSettingsSummary, value:ZaApplianceDomainXWizard.AUTH_CONFIG_SUM_STEP},												
 		{label:ZaMsg.AuthTestResult, value:ZaApplianceDomainXWizard.AUTH_TEST_RESULT_STEP},
 		{label:ZaMsg.Domain_Tab_VirtualHost, value:ZaApplianceDomainXWizard.VHOST_STEP},
-		//{label:ZaMsg.Domain_Tab_Notebook, value:ZaApplianceDomainXWizard.NOTEBOOK_STEP},		
-		//{label:ZaMsg.Notebook_Access_Control, value:ZaApplianceDomainXWizard.NOTEBOOK_ACL_STEP},			
 		{label:ZaMsg.DomainConfigComplete, value:ZaApplianceDomainXWizard.CONFIG_COMPLETE_STEP}		
 	];
 		
@@ -131,7 +119,6 @@ function(stepNum) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		} else if(stepNum == ZaApplianceDomainXWizard.GAL_CONFIG_SUM_STEP) {
 			//change next button to "test"
-			//this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
@@ -164,13 +151,13 @@ function(entry) {
 	this._containedObject[ZaDomain.A2_isTestingSync] = 0;
 	this._containedObject[ZaDomain.A2_isTestingAuth] = 0;
 	
-	//this._containedObject[ZaDomain.A_NotebookTemplateFolder]=entry[ZaDomain.A_NotebookTemplateFolder];
-	//this._containedObject[ZaDomain.A_NotebookTemplateDir]=entry[ZaDomain.A_NotebookTemplateDir];	
+	/**
+	 * Set silent defaults for appliance
+	 */
 	this._containedObject[ZaDomain.A2_new_gal_sync_account_name]=entry[ZaDomain.A2_new_gal_sync_account_name];
 	this._containedObject[ZaDomain.A2_new_internal_gal_ds_name]=entry[ZaDomain.A2_new_internal_gal_ds_name];
 	this._containedObject[ZaDomain.A2_new_external_gal_ds_name]=entry[ZaDomain.A2_new_external_gal_ds_name];
 	this._containedObject[ZaDomain.A2_create_gal_acc] = "TRUE";
-	//this._containedObject.notebookAcls = {};
 
 	if(entry.rights)
 		this._containedObject.rights = entry.rights;
@@ -184,30 +171,6 @@ function(entry) {
 	if(entry._defaultValues)
 		this._containedObject._defaultValues = entry._defaultValues;
 
-
-	/*if(entry.notebookAcls) {
-		for(var gt in entry.notebookAcls) {
-			if(!(entry.notebookAcls[gt] instanceof Array)) {
-				this._containedObject.notebookAcls[gt] = {r:0,w:0,i:0,d:0,a:0,x:0};
-				for (var a in entry.notebookAcls[gt]) {
-					this._containedObject.notebookAcls[gt][a] = entry.notebookAcls[gt][a];
-				}
-			} else {
-				this._containedObject.notebookAcls[gt] = [];
-				var cnt = entry.notebookAcls[gt].length;
-				for(var i = 0; i < cnt; i++) {
-					var aclObj = entry.notebookAcls[gt][i];
-					var _newAclObj = {};
-					_newAclObj.name = aclObj.name;
-					_newAclObj.acl = {r:0,w:0,i:0,d:0,a:0,x:0};
-					for (var a in aclObj.acl) {
-						_newAclObj.acl[a] = aclObj.acl[a];
-					}					
-					this._containedObject.notebookAcls[gt][i] = _newAclObj;
-				}
-			}
-		}
-	}	*/
 	this._containedObject[ZaModel.currentStep] = 1;
 	this._localXForm.setInstance(this._containedObject);	
 }
@@ -221,8 +184,26 @@ function (value, event, form) {
 		form.getModel().setInstanceValue(form.getInstance(),ZaDomain.A_GalLdapFilter,"ad");
 		form.getModel().setInstanceValue(form.getInstance(),ZaDomain.A_zimbraGalAutoCompleteLdapFilter,"adAutoComplete");		
 	} else {
-		form.getModel().setInstanceValue(form.getInstance(),ZaDomain.A_GalLdapFilter,"");
-		form.getModel().setInstanceValue(form.getInstance(),ZaDomain.A_zimbraGalAutoCompleteLdapFilter,"(|(cn=%s*)(sn=%s*)(gn=%s*)(mail=%s*))");		
+		if(AjxUtil.isEmpty(form.getModel().getInstanceValue(form.getInstance(),ZaDomain.A_GalLdapSearchBase))) {
+			if(!AjxUtil.isEmpty(form.getModel().getInstanceValue(form.getInstance(),ZaDomain.A_domainName))) {
+				var parts = form.getModel().getInstanceValue(form.getInstance(),ZaDomain.A_domainName).split(".");
+				var szSearchBase = "";
+				var coma = "";
+				for(var ix in parts) {
+					szSearchBase += coma;
+				 	szSearchBase += "dc=";
+				 	szSearchBase += parts[ix];
+					var coma = ",";
+				}
+				this.setInstanceValue(szSearchBase,ZaDomain.A_GalLdapSearchBase);
+			}
+		}
+		if(AjxUtil.isEmpty(form.getModel().getInstanceValue(form.getInstance(),ZaDomain.A_GalLdapFilter))) {
+			this.setInstanceValue("(&(objectClass=organizationalPerson)(mail=*))",ZaDomain.A_GalLdapFilter);	
+		}
+		if(AjxUtil.isEmpty(form.getModel().getInstanceValue(form.getInstance(),ZaDomain.A_zimbraGalAutoCompleteLdapFilter))) {
+			this.setInstanceValue("(|(cn=%s*)(sn=%s*)(gn=%s*)(mail=%s*))",ZaDomain.A_zimbraGalAutoCompleteLdapFilter);
+		}
 	}
 	this.setInstanceValue(value);	
 }
@@ -232,9 +213,8 @@ ZaApplianceDomainXWizard.onGalModeChange =
 function (value, event, form) {
 	this.setInstanceValue(value);
 	if(value != "zimbra") {
-		form.getModel().setInstanceValue(form.getInstance(),ZaDomain.A_GalLdapFilter,"");
 		if(AjxUtil.isEmpty(form.getModel().getInstanceValue(form.getInstance(),ZaDomain.A_GALServerType))) {
-			form.getModel().setInstanceValue(form.getInstance(),ZaDomain.A_GALServerType,"ldap");
+			this.setInstanceValue("ldap",ZaDomain.A_GALServerType);
 		}
 		if(AjxUtil.isEmpty(form.getModel().getInstanceValue(form.getInstance(),ZaDomain.A_GalLdapSearchBase))) {
 			if(!AjxUtil.isEmpty(form.getModel().getInstanceValue(form.getInstance(),ZaDomain.A_domainName))) {
@@ -247,8 +227,14 @@ function (value, event, form) {
 				 	szSearchBase += parts[ix];
 					var coma = ",";
 				}
-				form.getModel().setInstanceValue(form.getInstance(),ZaDomain.A_GalLdapSearchBase,szSearchBase);
+				this.setInstanceValue(szSearchBase,ZaDomain.A_GalLdapSearchBase);
 			}
+		}
+		if(AjxUtil.isEmpty(form.getModel().getInstanceValue(form.getInstance(),ZaDomain.A_GalLdapFilter))) {
+			this.setInstanceValue("(&(objectClass=organizationalPerson)(mail=*))",ZaDomain.A_GalLdapFilter);	
+		}
+		if(AjxUtil.isEmpty(form.getModel().getInstanceValue(form.getInstance(),ZaDomain.A_zimbraGalAutoCompleteLdapFilter))) {
+			this.setInstanceValue("(|(cn=%s*)(sn=%s*)(gn=%s*)(mail=%s*))",ZaDomain.A_zimbraGalAutoCompleteLdapFilter);
 		}
 	}
 }
@@ -449,15 +435,7 @@ function () {
 		} else {
 			this.goPage(ZaApplianceDomainXWizard.AUTH_CONFIG_SUM_STEP);
 		}
-	}/* else if(this._containedObject[ZaModel.currentStep] == ZaApplianceDomainXWizard.CONFIG_COMPLETE_STEP) {
-		if (this._containedObject[ZaDomain.A_CreateNotebook] == "TRUE") {
-			this.goPage(ZaApplianceDomainXWizard.NOTEBOOK_ACL_STEP);
-			this.changeButtonStateForStep(ZaApplianceDomainXWizard.NOTEBOOK_ACL_STEP);	
-		}else{
-			this.goPage(ZaApplianceDomainXWizard.NOTEBOOK_STEP);
-			this.changeButtonStateForStep(ZaApplianceDomainXWizard.NOTEBOOK_STEP);
-		}
-	} */else if (this._containedObject[ZaModel.currentStep] == ZaApplianceDomainXWizard.AUTH_CONFIG_SUM_STEP) {
+	} else if (this._containedObject[ZaModel.currentStep] == ZaApplianceDomainXWizard.AUTH_CONFIG_SUM_STEP) {
 		if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_zimbra) {
 			this.goPage(ZaApplianceDomainXWizard.AUTH_MODE_STEP); //skip all auth configuration
 		} else if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad) {
@@ -553,23 +531,10 @@ function() {
 			return false;
 		}
 		this.goPage(ZaApplianceDomainXWizard.AUTH_CONFIG_SUM_STEP);
-		//this.changeButtonStateForStep(ZaApplianceDomainXWizard.AUTH_CONFIG_SUM_STEP);
 	} else if(this._containedObject[ZaModel.currentStep] == ZaApplianceDomainXWizard.AUTH_CONFIG_SUM_STEP) {
 		this._localXForm.setInstanceValue(ZaDomain.Check_SKIPPED,ZaDomain.A_AuthTestResultCode);
 		this.goPage(ZaApplianceDomainXWizard.AUTH_TEST_RESULT_STEP);
- 		//this.testAuthSettings();
-		//this.changeButtonStateForStep(ZaApplianceDomainXWizard.AUTH_TEST_STEP);
-	} /*else if(this._containedObject[ZaModel.currentStep] == ZaApplianceDomainXWizard.NOTEBOOK_STEP) {
-		if (this._containedObject[ZaDomain.A_CreateNotebook] != "TRUE") {
-			this.goPage(this._containedObject[ZaModel.currentStep] + 2);
-			this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
-		} else if(this._containedObject[ZaDomain.A_NotebookAccountPassword] != this._containedObject[ZaDomain.A_NotebookAccountPassword2]) {
-			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
-		} else {		
-			this.goPage(this._containedObject[ZaModel.currentStep] + 1);
-			this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
-		}
-	}*/ else {
+	} else {
 		this.goPage(this._containedObject[ZaModel.currentStep] + 1);
 		this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
 	}
@@ -656,7 +621,7 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							visibilityChecks:[ZaApplianceDomainXWizard.isDomainModeNotInternal],
 							cssStyle:"overflow:auto",
 							items: [
-								{ref:ZaDomain.A_GALServerType, type:_OSELECT1_, label:ZaMsg.Domain_GALServerType, labelLocation:_LEFT_, choices:this.GALServerTypes, onChange:ZaApplianceDomainXWizard.onGALServerTypeChange},
+								{ref:ZaDomain.A_GALServerType, type:_OSELECT1_,visibilityChecks:[],enableDisableChecks:[], label:ZaMsg.Domain_GALServerType, labelLocation:_LEFT_, choices:this.GALServerTypes, onChange:ZaApplianceDomainXWizard.onGALServerTypeChange},
 								{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
 									items: [
 										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
@@ -675,16 +640,14 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 									]
 								},
 								{ref:ZaDomain.A_GalLdapFilter, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, 
-									enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
+									enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],bmolsnr:true,
 									enableDisableChangeEventSources:[ZaDomain.A_GALServerType]
-									
 								},
 								{ref:ZaDomain.A_zimbraGalAutoCompleteLdapFilter, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_zimbraGalAutoCompleteLdapFilter, labelLocation:_LEFT_, 
 									enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
-									enableDisableChangeEventSources:[ZaDomain.A_GALServerType]
-									
+									enableDisableChangeEventSources:[ZaDomain.A_GALServerType], bmolsnr:true
 								},						
-								{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_}
+								{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_,bmolsnr:true}
 							]
 						}
 					]
@@ -994,7 +957,6 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						]}
 					]
 				},
-
 				{type:_CASE_, numCols:1, caseKey: ZaApplianceDomainXWizard.AUTH_TEST_RESULT_STEP,
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaApplianceDomainXWizard.isAuthMechNotZimbra],
 					visibilityChangeEventSources:[ZaModel.currentStep],
@@ -1056,99 +1018,6 @@ ZaApplianceDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						}
 					]
 				},
-				/*{type:_CASE_, caseKey:ZaApplianceDomainXWizard.NOTEBOOK_STEP, 
-					items: [
-						{ref:ZaDomain.A_CreateNotebook, type:_CHECKBOX_, label:ZaMsg.Domain_CreateNotebook, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,
-							onChange:function(value, event, form){
-								this.setInstanceValue(value);
-								if(!this.getInstanceValue(ZaDomain.A_zimbraNotebookAccount))
-									this.setInstanceValue(ZaDomain.DEF_WIKI_ACC+"@"+this.getInstanceValue(ZaDomain.A_domainName), ZaDomain.A_zimbraNotebookAccount);
-							}
-						},
-						{ref:ZaDomain.A_zimbraNotebookAccount, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_, 
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_CreateNotebook,"TRUE"]],
-							enableDisableChangeEventSources:[ZaDomain.A_CreateNotebook],bmolsnr:true							
-						},						
-						{ref:ZaDomain.A_NotebookAccountPassword, type:_SECRET_, label:ZaMsg.Domain_NotebookAccountPassword, labelLocation:_LEFT_, 
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_CreateNotebook,"TRUE"]],
-							enableDisableChangeEventSources:[ZaDomain.A_CreateNotebook]
-						},
-						{ref:ZaDomain.A_NotebookAccountPassword2, type:_SECRET_, label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, 
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_CreateNotebook,"TRUE"]],
-							enableDisableChangeEventSources:[ZaDomain.A_CreateNotebook]
-						}												
-					]
-				},	
-				{type:_CASE_, caseKey:ZaApplianceDomainXWizard.NOTEBOOK_ACL_STEP, 
-					items: [
-						{type:_ZAWIZ_TOP_GROUPER_,label:ZaMsg.Domain_GlobalAcl,colSizes:["200px","300px"],  width: "500px",
-							items:[
-								{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.LBL_ACL_Dom+":",labelLocation:_LEFT_,
-									visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false}
-								},							
-								{type:_SPACER_, height:10},
-								{ref:ZaDomain.A_NotebookAllACLs, type:_ACL_, label:ZaMsg.LBL_ACL_All+":",labelLocation:_LEFT_,
-									visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false}
-								},
-								{type:_SPACER_, height:10},
-								{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.LBL_ACL_Public+":",labelLocation:_LEFT_,
-									visibleBoxes:{r:true,w:false,a:false,i:false,d:false,x:false}
-								},
-								{type:_SPACER_, height:10}
-
-							]
-						},
-						{type:_SPACER_, height:10},
-						{type:_ZAWIZ_TOP_GROUPER_, numCols:1, colSizes:["100%"], label:ZaMsg.Domain_PerGrp_Acl,width:"500px",
-							items:[
-								{type:_REPEAT_, ref:ZaDomain.A_NotebookGroupACLs,width:"100%",
-									label:null, 
-									repeatInstance:{name:"test@test.com",acl:{r:0,w:0,i:0,d:0,a:0,x:0}}, 
-									showAddButton:true, showRemoveButton:true, 
-									addButtonLabel:ZaMsg.Domain_AddGrpAcl, 
-									addButtonWidth: 100,
-									showAddOnNextRow:true,
-									removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
-									removeButtonWidth:80,											
-									items: [
-										{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
-											visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
-											onChange:null,
-											//forceUpdate:true,
-											dataFetcherMethod:ZaSearch.prototype.dynSelectSearchGroups
-										}
-									]
-								}
-							]
-						},
-						{type:_SPACER_, height:10},
-						{type:_ZAWIZ_TOP_GROUPER_, numCols:1,colSizes:["100%"],label:ZaMsg.Domain_PerUsr_Acl, width: "500px",
-							items:[
-								{type:_REPEAT_, ref:ZaDomain.A_NotebookUserACLs,width:"100%",
-									label:null, 
-									repeatInstance:{name:"test@test.com",acl:{r:0,w:0,i:0,d:0,a:0,x:0}}, 
-									showAddButton:true, showRemoveButton:true, 
-									addButtonLabel:ZaMsg.Domain_AddUsrAcl, 
-									addButtonWidth: 150,
-									showAddOnNextRow:true,
-									removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,
-									removeButtonWidth:80,								
-									items: [
-										{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
-											visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
-											onChange:null,
-											forceUpdate:true,
-											dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,
-											dataFetcherTypes:[ZaSearch.ACCOUNTS],
-											dataFetcherAttrs:[ZaItem.A_zimbraId, ZaItem.A_cn, ZaAccount.A_name, ZaAccount.A_displayname, ZaAccount.A_mail]
-										}
-									]
-								}
-
-							]
-						}					
-					]
-				},*/							
 				{type:_CASE_, caseKey:ZaApplianceDomainXWizard.CONFIG_COMPLETE_STEP,
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.Domain_Config_Complete}

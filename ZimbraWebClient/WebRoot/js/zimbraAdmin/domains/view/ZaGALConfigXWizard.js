@@ -212,7 +212,8 @@ function (value, event, form) {
 	if(value != "zimbra") {
 		//form.getInstance().attrs[ZaDomain.A_GalLdapFilter] = "";
 		if(!form.getInstance().attrs[ZaDomain.A_GALServerType]) {
-			form.getInstance().attrs[ZaDomain.A_GALServerType] = "ldap";
+			this.setInstanceValue("ldap",ZaDomain.A_GALServerType);
+			//form.getInstance().attrs[ZaDomain.A_GALServerType] = "ldap";
 		}
 		if(!form.getInstance().attrs[ZaDomain.A_GalLdapSearchBase]) {
 			if(form.getInstance().attrs[ZaDomain.A_domainName]) {
@@ -225,7 +226,8 @@ function (value, event, form) {
 				 	szSearchBase += parts[ix];
 					var coma = ",";
 				}
-				form.getInstance().attrs[ZaDomain.A_GalLdapSearchBase] = szSearchBase;
+				this.setInstanceValue(szSearchBase,ZaDomain.A_GalLdapSearchBase);
+				//form.getInstance().attrs[ZaDomain.A_GalLdapSearchBase] = szSearchBase;
 			}
 		}
 	} 
@@ -541,6 +543,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							cssStyle:"overflow:auto",
 							items: [
 								{ref:ZaDomain.A_GALServerType, type:_OSELECT1_, label:ZaMsg.Domain_GALServerType, labelLocation:_LEFT_, 
+									visibilityChecks:[],enableDisableChecks:[],
 									choices:this.GALServerTypes, onChange:ZaGALConfigXWizard.onGALServerTypeChange
 								},
 								{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
@@ -565,6 +568,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 								},
 								{ref:ZaDomain.A_GalLdapFilter, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, 
 									enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
+									bmolsnr:true,
 									enableDisableChangeEventSources:[ZaDomain.A_GALServerType]
 									
 								},
@@ -716,7 +720,9 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 									visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_UseBindPassword,"TRUE"]],
 									visibilityChangeEventSources:[ZaDomain.A_UseBindPassword], bmolsnr:true									
 								},
-								{ref:ZaDomain.A_GALSampleQuery, type:_INPUT_, label:ZaMsg.Domain_GALSampleSearchName, labelLocation:_LEFT_, labelWrap:true, cssStyle:"width:100px;", bmolsnr:true},								
+								{ref:ZaDomain.A_GALSampleQuery, type:_TEXTFIELD_, label:ZaMsg.Domain_GALSampleSearchName, labelLocation:_LEFT_, labelWrap:true, cssStyle:"width:100px;", bmolsnr:true,
+									visibilityChecks:[],enableDisableChecks:[]
+								},								
 								{type:_CELLSPACER_},
 								{type:_DWT_BUTTON_, 
 									enableDisableChecks:[[XForm.checkInstanceValueNot,ZaDomain.A_GALSampleQuery," "],
