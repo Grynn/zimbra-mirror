@@ -187,7 +187,60 @@ public class ShortcutsCalendar extends CommonTest {
 		needReset = false;
 	}
 
+	@Test(dataProvider = "shortcutsDataProvider",groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void quickAddAppointment_Q(String testArg)
+	throws Exception {
 
+
+		if (isExecutionARetry)
+			handleRetry();
+
+		selenium.windowFocus();
+		Thread.sleep(2000);
+		page.zCalApp.zNavigateToCalendar();
+
+		Thread.sleep(3000);		
+		Robot zRobot = new Robot();
+
+		zRobot.keyPress(KeyEvent.VK_Q);
+		zRobot.keyRelease(KeyEvent.VK_Q);
+		Thread.sleep(2000);
+		
+		obj.zDialog.zExists(localize(locator.quickAddAppt));
+		needReset = false;
+	}
+
+
+	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void editAppt_E(String testArg)
+	throws Exception {
+
+		String subject = getLocalizedData_NoSpecialChar();
+		String location = getLocalizedData(1);
+		String attendees = ProvZCS.getRandomAccount();
+		String body = getLocalizedData(3);
+
+		if (isExecutionARetry)
+			handleRetry();
+
+		selenium.windowFocus();
+		Thread.sleep(2000);
+		page.zCalApp.zNavigateToCalendar();
+
+		Thread.sleep(3000);		
+		Robot zRobot = new Robot();
+
+		page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
+		obj.zAppointment.zClick(subject);
+
+		zRobot.keyPress(KeyEvent.VK_E);
+		zRobot.keyRelease(KeyEvent.VK_E);
+		Thread.sleep(2000);
+		obj.zEditField.zExists(localize(locator.subject));
+		needReset = false;
+	}
+	
+	
 	public Boolean getElementStatus(String className, String day) throws Exception{
 		return(selenium.isElementPresent("//*[contains(@class,'"+className+"') and contains(text(),'"+day+"')]"));
 	}
