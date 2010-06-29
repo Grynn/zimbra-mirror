@@ -141,11 +141,11 @@ CLASS:projects.zcs.tests.preferences.filters.FilterTests;METHOD:RunFilter;LOCALE
 CLASS:projects.zcs.tests.preferences.SharingPreferencesTests;METHOD:editABShareAndModifyRights;LOCALE:all;BROWSERS:na;BUGS:na;REMARK: Contact can't be saved via java script in new AB UI
 
 # Not able mark ON using checkbox zActivate method
-CLASS:projects.zcs.tests.preferences.ZimletPreferenceTests;METHOD:zimletPreferenceTest;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
-CLASS:projects.zcs.tests.sharing.CalendarSharingTests;METHOD:shareAsViewerVerifyApptAndChangeRoleToNone;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
-CLASS:projects.zcs.tests.sharing.CalendarSharingTests;METHOD:shareAsManagerAndCreateUpdateDelApptVerify;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
-CLASS:projects.zcs.tests.sharing.CalendarSharingTests;METHOD:shareAsAdminAndCreateUpdateDelApptVerify;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
-CLASS:projects.zcs.tests.sharing.CalendarSharingTests;METHOD:allowToSeePrivateApptWithManagerRights;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
+#CLASS:projects.zcs.tests.preferences.zimlets.ZimletPreferenceTests;METHOD:zimletPreferenceTest;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
+#CLASS:projects.zcs.tests.calendar.sharing.CalendarSharingTests;METHOD:shareAsViewerVerifyApptAndChangeRoleToNone;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
+#CLASS:projects.zcs.tests.calendar.sharing.CalendarSharingTests;METHOD:shareAsManagerAndCreateUpdateDelApptVerify;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
+#CLASS:projects.zcs.tests.calendar.sharing.CalendarSharingTests;METHOD:shareAsAdminAndCreateUpdateDelApptVerify;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
+#CLASS:projects.zcs.tests.calendar.sharing.CalendarSharingTests;METHOD:allowToSeePrivateApptWithManagerRights;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
 
 # zVerifyHasAttachment method not working in IE
 CLASS:projects.zcs.tests.mail.MiscMailTests;METHOD:attachBriefcaseFileInMail;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
