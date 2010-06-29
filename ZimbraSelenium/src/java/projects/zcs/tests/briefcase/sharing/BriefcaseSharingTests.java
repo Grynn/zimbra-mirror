@@ -75,7 +75,7 @@ public class BriefcaseSharingTests extends CommonTest {
 					ProvZCS.getRandomAccount(),
 					localize(locator.shareRoleManager), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
-		else if (test.equals("publicBriefcaseSharing_Bug44556"))
+		else if (test.equals("publicBriefcaseSharing_Bug44557"))
 			return new Object[][] { { "structure.jpg", "Briefcase",
 					localize(locator.briefcase),
 					localize(locator.shareWithPublicLong),
@@ -263,7 +263,7 @@ public class BriefcaseSharingTests extends CommonTest {
 	}
 
 	@Test(dataProvider = "BriefcaseSharing", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void publicBriefcaseSharing_Bug44556(String filename,
+	public void publicBriefcaseSharing_Bug44557(String filename,
 			String applicationtab, String sharingfoldername, String sharetype,
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
@@ -276,7 +276,7 @@ public class BriefcaseSharingTests extends CommonTest {
 				sharetype, invitedusers, role, message, sharingnoteifany,
 				allowtoseeprivateappt);
 		page.zLoginpage.logoutOfZimbraAjax();
-		Thread.sleep(1000);
+		Thread.sleep(3000);
 		selenium.open(config.getString("mode") + "://"
 				+ config.getString("server") + "/home/"
 				+ selfAccountName.toLowerCase() + "/" + "Briefcase");
@@ -287,6 +287,7 @@ public class BriefcaseSharingTests extends CommonTest {
 				"//td[contains(@class, 'zmwiki-author') and contains(text(), '"
 						+ selfAccountName.toLowerCase() + "')]");
 		zKillBrowsers();
+		page.zLoginpage.zLoginToZimbraAjax(SelNGBase.selfAccountName);
 
 		needReset = false;
 	}
